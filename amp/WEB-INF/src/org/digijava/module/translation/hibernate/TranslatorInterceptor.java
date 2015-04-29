@@ -29,6 +29,7 @@ public class TranslatorInterceptor extends EmptyInterceptor{
 
     
     /**
+     * COPY-PASTED WITH {@link #onSave(Object, Serializable, Object[], String[], Type[])}
      * Prepare the current object to be saved by Hibernate and it's field translations to be updated
      * @see org.hibernate.Interceptor onFlushDirty
      */
@@ -128,6 +129,7 @@ public class TranslatorInterceptor extends EmptyInterceptor{
 
 
     /**
+     * COPY-PASTED WITH {@link #onFlushDirty(Object, Serializable, Object[], Object[], String[], Type[])}
      * We need to insert into the translation store the initial translation for
      * the current entity
      * @param entity

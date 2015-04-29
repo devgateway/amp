@@ -56,7 +56,7 @@ define([ 'underscore', 'jquery', 'i18next' ], function(_, jQuery) {
 		// Do not call endpoint when there is nothing to translate to save some
 		// extra ms (500ms in Timor!).
 		if (!jQuery.isEmptyObject(postit)) {
-			postJSON('/rest/translations/label-translations', postit, function(data) {
+			TranslationManager.postJSON('/rest/translations/label-translations', postit, function(data) {
 				$.each(data, function(key, value) {
 					putTranslationValueInCache(key, value);
 				});
@@ -80,7 +80,7 @@ define([ 'underscore', 'jquery', 'i18next' ], function(_, jQuery) {
 			var textObject = {};
 			var key = prefix + text;
 			textObject[key] = text;
-			var response = (postJSON('/rest/translations/label-translations', textObject, function(data) {
+			var response = (TranslationManager.postJSON('/rest/translations/label-translations', textObject, function(data) {
 				console.log(data);
 			}));
 			putTranslationValueInCache(key, response.responseJSON[key]);
@@ -88,7 +88,7 @@ define([ 'underscore', 'jquery', 'i18next' ], function(_, jQuery) {
 		}
 	};
 
-	function postJSON(url, data, callback) {
+	TranslationManager.postJSON = function (url, data, callback) {
 		return jQuery.ajax({
 			headers : {
 				'Accept' : 'application/json',

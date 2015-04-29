@@ -60,13 +60,22 @@ require.config({
 	}
 });
 
-require([ 'jquery', 'text!views/html/regions.html' ], function(jQuery, regionsTemplate) {
-	// Need to do this here because of some crazy FF errors.
-	jQuery('#tabs-container').append(regionsTemplate);
-
+require([ 'jquery', 'text!views/html/regions.html','business/translations/translationManager' ], function(jQuery, regionsTemplate,TranslationManager) {
+	
+	var data = {};
+	data["tabs.common:loadingTabs"] = "Loading tabs...";
+	TranslationManager.postJSON('/rest/translations/label-translations', data,
+			function(data) {
+				// Need to do this here because of some crazy FF errors.
+				jQuery('#tabs-container').append(regionsTemplate);
+				$.each(data, function(key, value) {
+					$("*[data-i18n='" + key + "']").text(value);
+				})
+			});
 	// We need to make sure jqueryui is loaded BEFORE bootstrap because both
 	// define some functions with the same name like 'botton' and 'tooltip'
 	// which will mess with the tabs since we use jquery functions.
 	require([ 'jqueryui' ]);
 	require([ 'app' ]);
+
 });

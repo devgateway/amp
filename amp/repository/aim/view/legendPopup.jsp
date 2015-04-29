@@ -24,17 +24,17 @@
 
 
 <div id="show_legend_pop_box" style="font-size: 11px;font-family: Arial,sans-serif; ${divAlign}">
-	<b class="red">*<digi:trn key="aim:redtext">red</digi:trn></b> - <digi:trn key="aim:newDraftText">New Draft. These are new actvities that have been saved as drafts.</digi:trn>
+	<b class="red">*<digi:trn key="aim:redtext">red</digi:trn></b> - <digi:trn key="aim:newDraftText">New Draft. These are new activities that have been saved as drafts.</digi:trn>
 	<hr/>
 	<module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT">
-		<b class="green">*<digi:trn key="aim:greentext">green text</digi:trn></b> - <digi:trn key="aim:newUnvalidatedText">New Unvalidated. These are new activites that have never been approved by the workspace manager</digi:trn>
+		<b class="green">*<digi:trn key="aim:greentext">green text</digi:trn></b> - <digi:trn key="aim:newUnvalidatedText">New Unvalidated. These are new activities that have never been approved by the workspace manager.</digi:trn>
 	</module:display>
 	<hr/>
 	<b class="blue"><digi:trn key="aim:bluetext">blue text</digi:trn></b> - <digi:trn key="aim:validatedText">Validated activities</digi:trn>
 	<hr/>
-	<b class="red"><digi:trn key="aim:redtext">red</digi:trn></b> - <digi:trn key="aim:existingDraftsText">Existing Drafts. These are actvities that have been saved once and edited and saved as drafts.</digi:trn>
+	<b class="red"><digi:trn key="aim:redtext">red</digi:trn></b> - <digi:trn key="aim:existingDraftsText">Existing Drafts. These are activities that have been saved once and edited and saved as drafts.</digi:trn>
 	<hr/>
-	<b class="green"><digi:trn key="aim:greentext">green text</digi:trn></b> - <digi:trn key="aim:existingUnvalidatedText">Existing Un-validated. These are activites that have been approved at least once by the workspace manager. These are edited actvities that are not approved.</digi:trn>
+	<b class="green"><digi:trn key="aim:greentext">green text</digi:trn></b> - <digi:trn key="aim:existingUnvalidatedText">Existing Un-validated. These are activities that have been approved at least once by the workspace manager. These are edited activities that are not approved.</digi:trn>
 </div>
 
 	<c:set var="translation">

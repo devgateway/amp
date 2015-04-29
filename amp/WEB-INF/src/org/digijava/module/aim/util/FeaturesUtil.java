@@ -1288,44 +1288,29 @@ public class FeaturesUtil {
 	 * @author dan
 	 */
 	public static boolean deleteFeatureVisibility(Long id, Session session) {
-
 		try {
-			//Session s=PersistenceManager.getSession();
-//beginTransaction();
-			AmpFeaturesVisibility feature = (AmpFeaturesVisibility) session.load(
-					AmpFeaturesVisibility.class, id);
-			AmpObjectVisibility parent = (AmpObjectVisibility) feature.getParent();
+			AmpFeaturesVisibility feature = (AmpFeaturesVisibility) session.load(AmpFeaturesVisibility.class, id);
+			
+			AmpObjectVisibility parent = feature.getParent();
 			parent.getItems().remove(feature);
-			Iterator i = feature.getTemplates().iterator();
-			//feature.getItems().clear();
 
-			Iterator j = feature.getItems().iterator();
+			Iterator<AmpObjectVisibility> j = feature.getItems().iterator();
 			while (j.hasNext()) {
 				AmpFieldsVisibility field = (AmpFieldsVisibility) j.next();
-				i = feature.getTemplates().iterator();
-				while (i.hasNext()) {
-					AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
+				for (AmpTemplatesVisibility element:feature.getTemplates()) {
 					element.removeField(field);
 				}
-				i = field.getTemplates().iterator();
-				while (i.hasNext()) {
-					AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
+				for (AmpTemplatesVisibility element:field.getTemplates()) {
 					element.removeField(field);
 				}
 			}
-			i = feature.getTemplates().iterator();
-			while (i.hasNext()) {
-				AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
+			for(AmpTemplatesVisibility element:feature.getTemplates()) {
 				element.getFeatures().remove(feature);
 			}
 			session.delete(feature);
-			//tx.commit();
-
-			//s.close();
-
 		}
 		catch (HibernateException e) {
-			logger.error(e);
+			throw new RuntimeException(e);
 		}
 		return true;
 	}

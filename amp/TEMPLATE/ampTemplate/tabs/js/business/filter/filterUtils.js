@@ -57,6 +57,17 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 						}
 					});
 				}
+				//translate filter values
+				_.each(content,function(item, i) {
+					//for now only true or false were asked to be translated. 
+					//Avoid doing a ajax call for all values if we only need 2.
+					if (item.name === "true" || item.name === "false") {
+						item.trnName = TranslationManager.getTranslated(item.name);
+					 }
+					else {
+						item.trnName = item.name;
+					}
+				});
 				var auxFilter = new Filter({
 					trnName : TranslationManager.getTranslated(item),
 					name: item,
@@ -107,7 +118,7 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 	FilterUtils.updateFiltersRegion = function(filtersFromWidgetWithNames) {
 		app.TabsApp.filters.models = [];
 		app.TabsApp.dynamicContentRegion.currentView.filters.currentView.render();
-
+		
 		if (filtersFromWidgetWithNames.columnFilters != undefined) {
 			for ( var propertyName in filtersFromWidgetWithNames.columnFilters) {
 				var auxProperty = filtersFromWidgetWithNames.columnFilters[propertyName];
@@ -117,6 +128,12 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 					if(item.get !== undefined) {
 						auxItem.id = item.get('id');
 						auxItem.name = item.get('name');
+						if (item.get('name') === "true" || item.get('name') === "false") {
+							auxItem.trnName = TranslationManager.getTranslated(item.get('name'));
+						 }
+						else {
+							auxItem.trnName = item.get('name');
+						}
 						content.push(auxItem);
 					} else {
 						console.error(JSON.stringify(auxItem) + " not mapped, we need to check why is not a model.");
@@ -141,11 +158,14 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 						name : propertyName,
 						values : [ {
 							id : dateContent.start,
-							name : dateContent.start
+							name : dateContent.start,
+							trnName : dateContent.start //doesn't need translation for now
 						},
 						{
 							id : dateContent.end,
-							name : dateContent.end
+							name : dateContent.end,
+							trnName : dateContent.end //doesn't need translation for now
+							
 						}]
 					});
 					app.TabsApp.filters.models.push(filter);

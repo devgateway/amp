@@ -51,8 +51,12 @@
 	<br>
 	<div>
 		<div style="margin-right: auto; margin-left: auto; text-align: center;">
-			<input type="button" name="applyFormat" id="applySettingsBtn" class="buttonify" data-i18n="tabs.common:applyFormat" value="Apply Format" /> 
-			<input type="button" name="resetFormat" id="resetSettingsBtn" class="buttonify" data-i18n="tabs.common:reset" onclick="resetSettings()" value="Reset" />
+			<button name="applyFormat" id="applySettingsBtn" class="buttonify" role="button">
+				<span data-i18n="tabs.common:applyFormat">Apply Format</span>
+			</button>
+			<button name="resetFormat" id="resetSettingsBtn" class="buttonify"  onclick="resetSettings()" role="button">
+				<span data-i18n="tabs.common:reset">Reset</span>
+			</button>
 		</div>
 	</div>
 </div>

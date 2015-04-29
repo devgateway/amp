@@ -92,7 +92,19 @@
 "amp.dashboard:filters-chart-legends-Stacked":"Stacked",
 "amp.dashboard:of-total": "of total",
 "amp.dashboard:aid-predictability-actual-disbursements": "Actual Disbursements",
-"amp.dashboard:aid-predictability-planned-disbursements": "Planned Disbursements"
+"amp.dashboard:aid-predictability-planned-disbursements": "Planned Disbursements",
+"amp.dashboard:filters-hide-details": "Hide filter details",
+"amp.dashboard:saving-state": "Saving dashboard state, please wait...",
+"amp.dashboard:date-range": "Date Range",
+"amp.dashboard:currency" : "Currency",
+"amp.dashboard:type" : "Type",
+"amp.dashboard:ftype-actual-commitment": "Actual Commitments",
+"amp.dashboard:ftype-actual-disbursement": "Actual Disbursements",
+"amp.dashboard:ftype-actual-expenditure": "Actual Expenditures",
+"amp.dashboard:ftype-planned-commitment": "Planned Commitments" ,
+"amp.dashboard:ftype-planned-disbursement":	"Planned Disbursements" ,
+"amp.dashboard:ftype-planned-expenditures":	"Planned Expenditures"
+	  			
 
 }
 

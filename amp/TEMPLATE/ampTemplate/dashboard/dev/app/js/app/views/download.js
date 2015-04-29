@@ -13,7 +13,14 @@ var template = _.template(fs.readFileSync(
 
 
 module.exports = BackboneDash.View.extend({
-
+ 
+  adjTypeTranslation : {"Actual Commitments":"amp.dashboard:ftype-actual-commitment",
+			"Actual Disbursements":"amp.dashboard:ftype-actual-disbursement",
+				"Actual Expenditures":"amp.dashboard:ftype-actual-expenditure",
+				"Planned Commitments": "amp.dashboard:ftype-planned-commitment",
+				"Planned Disbursements": "amp.dashboard:ftype-planned-disbursement",
+				"Planned Expenditures": "amp.dashboard:ftype-planned-expenditures"
+			    },
   initialize: function(options) {
     this.app = options.app;
     this.dashChartOptions = _({}).extend(options.chartOptions, {
@@ -132,6 +139,7 @@ module.exports = BackboneDash.View.extend({
         textContent,
         preview;
 
+    var self = this;
     // table of all the data
     csvTransformed = _(data)
       .chain()
@@ -145,7 +153,11 @@ module.exports = BackboneDash.View.extend({
       })
       .map(function(row) {
         row.push(currency || '');
-        if (adjtype) { row.push(adjtype); }
+        if (adjtype) {
+        	var key = self.adjTypeTranslation [adjtype];
+            var trnAdjType = this.app.translator.translateSync(key, adjtype);
+            row.push(trnAdjType);
+        }
         return row;
       })
       .value();
@@ -155,8 +167,10 @@ module.exports = BackboneDash.View.extend({
     headerRow = headerRow.concat(_(data).map(function(col) {
       return col.key || '';  // data headers
     }));
-    headerRow.push('Currency');
-    if (adjtype) { headerRow.push('Type'); }
+    var currencyTrn = this.app.translator.translateSync('amp.dashboard:currency', 'Currency');
+    var typeTrn = this.app.translator.translateSync('amp.dashboard:type', 'Type');
+    headerRow.push(currencyTrn);
+    if (adjtype) { headerRow.push(typeTrn); }
 
     csvTransformed.unshift(headerRow);
 

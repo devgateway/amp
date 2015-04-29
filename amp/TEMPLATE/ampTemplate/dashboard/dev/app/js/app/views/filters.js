@@ -106,33 +106,35 @@ module.exports = BackboneDash.View.extend({
   },
 
   showFilterDetails: function() {
-	    var filters = this.app.filter.serializeToModels();
-	    var applied = _(filters.columnFilters).map(function(filter, key) {
-	      return {
-	        name: filter.filterName || key,
-	        id: key.replace(/[^\w]/g, ''),  // remove anything non-alphanum
-	        detail: _(filter).map(function(value) {
-	        	if (value.attributes !== undefined) {
-	        		return value.get('name');
-	        	} else {       		
-	        		// To fix problem with dates.
-	        		if (value !== key && value !== filter.filterName) {
-	        			return value;
-	        		}
-	        	}
-	        })
-	      };
-	    });
-	    if (filters.otherFilters) {
-	      // Currently assumes that any otherFilters just implies Date Range
-	      // ... there is no obvious way to get nice strings out.
-	      var dateRange = filters.otherFilters.date;
-	      applied.push({
-	        name: 'Date Range',
-	        detail: [dateRange.start + '&mdash;' + dateRange.end]
-	      });
-	    }
-	    this.$('.applied-filters').html(detailsTemplate({ applied: applied }));
+    var filters = this.app.filter.serializeToModels();
+    var applied = _(filters.columnFilters).map(function(filter, key) {
+      return {
+        name: filter.filterName || key,
+        id: key.replace(/[^\w]/g, ''),  // remove anything non-alphanum
+        detail: _(filter).map(function(value) {
+        	if (value.attributes !== undefined) {
+        		return value.get('name');
+        	} else {       		
+        		// To fix problem with dates.
+        		if (value !== key && value !== filter.filterName) {
+        			return value;
+        		}
+        	}
+        })
+      };
+    });
+    if (filters.otherFilters) {
+      // Currently assumes that any otherFilters just implies Date Range
+      // ... there is no obvious way to get nice strings out.
+      var dateRange = filters.otherFilters.date;
+      var dateRangeText = app.translator.translateSync("amp.dashboard:date-range","Date Range");
+	  applied.push({
+        name: dateRangeText,
+        detail: [dateRange.start + '&mdash;' + dateRange.end]
+      });
+    }
+    this.$('.applied-filters').html(detailsTemplate({ applied: applied }));
+    this.app.translator.translateDOM(this.el);
   },
 
   hideFilterDetails: function() {

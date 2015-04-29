@@ -311,6 +311,29 @@ public class SimpleSQLPatcher {
 					" SELECT nextval('amp_measures_seq'), 'Percentage of Total Disbursements', 'Percentage of Total Disbursements', 'A', 'percentageOfTotalDisbursements', 'Actual disbursements for the project / Total actual disbursements * 100' " + 
 					" WHERE (select count(*) FROM amp_measures where measurename='Percentage of Total Disbursements') = 0"));
 
+
+			addPatch(new SimpleSQLPatch("010002", // adds an another batch of measures which are not present, for some reason, in the amp_measures table
+					"INSERT INTO amp_measures(measureid, measurename, aliasname, type, expression, description) " +  
+					" SELECT nextval('amp_measures_seq'), 'Disbursment Ratio', 'Disbursment Ratio', 'A', 'disbursmentRatio', 'Sum of actual disbursment / Total actual disb * 100' " + 
+					" WHERE (select count(*) FROM amp_measures where measurename='Disbursment Ratio') = 0",
+					
+					"INSERT INTO amp_measures(measureid, measurename, aliasname, type, expression, description) " +  
+					" SELECT nextval('amp_measures_seq'), 'Current Month Disbursements', 'Current Month Disbursements', 'A', 'currentMonthDisbursements', 'Sum of Actual Disbursements of the current month' " + 
+					" WHERE (select count(*) FROM amp_measures where measurename='Current Month Disbursements') = 0",
+
+					"INSERT INTO amp_measures(measureid, measurename, aliasname, type, expression, description) " +  
+					" SELECT nextval('amp_measures_seq'), 'Previous Month Disbursements', 'Previous Month Disbursements', 'A', 'previousMonthDisbursements', 'Sum of Actual Disbursements of the previous month' " + 
+					" WHERE (select count(*) FROM amp_measures where measurename='Previous Month Disbursements') = 0",
+
+					"INSERT INTO amp_measures(measureid, measurename, aliasname, type, expression, description) " +  
+					" SELECT nextval('amp_measures_seq'), 'Last Year of Planned Disbursements', 'Last Year of Planned Disbursements', 'A', 'lastYearPlannedDisbursements', 'Previous Year Planned Disbursements' " + 
+					" WHERE (select count(*) FROM amp_measures where measurename='Last Year of Planned Disbursements') = 0",
+					
+					"INSERT INTO amp_measures(measureid, measurename, aliasname, type, expression, description) " +  
+					" SELECT nextval('amp_measures_seq'), 'Percentage of Disbursement', 'Percentage of Disbursement', 'A', 'percentageOfDisbursement', '(Total Actual Disbursements for Year,Quarter,Month / Total Actual Disbursements) * 100' " + 
+					" WHERE (select count(*) FROM amp_measures where measurename='Percentage of Disbursement') = 0"
+					));
+			
             addPatch(new SimpleSQLPatch("011",
 
                     //Has Mondrian reference
@@ -341,6 +364,7 @@ public class SimpleSQLPatcher {
                     "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS national_procurement CASCADE",
                     "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS national_audit CASCADE"
             ));
+            
             addPatch(new SimpleSQLPatch("012",
 
             		"ALTER TABLE IF EXISTS amp_menu_entry DROP COLUMN IF EXISTS is_public CASCADE", 

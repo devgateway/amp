@@ -62,14 +62,14 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	public abstract AmpTemplatesVisibility getTemplate();
 	
 	protected AmpObjectVisibility parent;
-	protected Set templates;
+	protected Set<AmpTemplatesVisibility> templates;
 	
 	public abstract String getVisible();
 
-	public Set getTemplates() {
+	public Set<AmpTemplatesVisibility> getTemplates() {
 		return templates;
 	}
-	public void setTemplates(Set templates) {
+	public void setTemplates(Set<AmpTemplatesVisibility> templates) {
 		this.templates = templates;
 	}
 	public Long getId() {

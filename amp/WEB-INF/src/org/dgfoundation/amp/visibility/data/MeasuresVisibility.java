@@ -79,12 +79,15 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 		put(MeasureConstants.PLEDGES_COMMITMENT_GAP, Arrays.asList(ArConstants.COMMITMENT, MeasureConstants.PLEDGES_ACTUAL_PLEDGE, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.CONSUMPTION_RATE, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual", ADJUSTMENT_PREFIX + "Planned"));
 		put(MeasureConstants.CUMULATED_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
-		put(MeasureConstants.DISBURSMENT_RATIO, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));		
+		put(MeasureConstants.DISBURSMENT_RATIO, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
+		put(MeasureConstants.CURRENT_MONTH_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
+		put(MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
+		put(MeasureConstants.LAST_YEAR_OF_PLANNED_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Planned"));
+		put(MeasureConstants.PERCENTAGE_OF_DISBURSEMENT, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.EXECUTION_RATE, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual", ADJUSTMENT_PREFIX + "Planned"));
 		put(MeasureConstants.PLEDGES_PERCENTAGE_OF_DISBURSEMENT, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual", MeasureConstants.PLEDGES_ACTUAL_PLEDGE));
 		put(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, Arrays.asList(ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
-		put(MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.REAL_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual", DIRECTED_DISBURSEMENTS_ID_NAME));
 		// skipping REAL_COMMITMENTS and REAL_MTEF, as could not find support for those in the AF

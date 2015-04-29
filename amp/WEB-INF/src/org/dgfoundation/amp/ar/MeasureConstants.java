@@ -30,6 +30,7 @@ public class MeasureConstants {
 	public static final String PLANNED_DISBURSEMENTS_EXPENDITURE = "Planned Disbursements - Expenditure";
 	public static final String PLANNED_EXPENDITURES = "Planned Expenditures";
 	public static final String PREVIOUS_MONTH_DISBURSEMENTS = "Previous Month Disbursements";
+	public static final String CURRENT_MONTH_DISBURSEMENTS = "Current Month Disbursements";
 	public static final String PRIOR_ACTUAL_DISBURSEMENTS = "Prior Actual Disbursements";
 	public static final String SELECTED_YEAR_PLANNED_DISBURSEMENTS = "Selected Year Planned Disbursements";
 	public static final String TOTAL_COMMITMENTS = "Total Commitments";
@@ -43,6 +44,8 @@ public class MeasureConstants {
 	public static final String PERCENTAGE_OF_TOTAL_COMMITMENTS = "Percentage of Total Commitments";
 	public static final String PERCENTAGE_OF_TOTAL_DISBURSEMENTS = "Percentage Of Total Disbursements";
 	public static final String ANNUAL_PROPOSED_PROJECT_COST = "Annual Proposed Project Cost";
+	public static final String LAST_YEAR_OF_PLANNED_DISBURSEMENTS = "Last Year of Planned Disbursements";
+	public static final String PERCENTAGE_OF_DISBURSEMENT = "Percentage of Disbursement";
 	 
 	//type = D (?)
 	public static final String ACTUAL_ESTIMATED_DISBURSEMENTS = "Actual Estimated Disbursements";

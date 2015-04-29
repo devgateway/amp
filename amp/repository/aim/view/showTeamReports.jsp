@@ -512,7 +512,7 @@ $(document).ready(function() {
 																							<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}" />
 																						<% } %>
 																					    	
-	 																					  	<a href="${reportLink}" styleClass="h-box" onclick="return popup(this,'');" title="Click here to view the Report">
+	 																					  	<a href="${reportLink}" styleClass="h-box" onclick="return popup(this,'');" title="<digi:trn>Click here to view the Report</digi:trn>">
 																						  	<b>
 								                              										<p style="max-width: 400px;white-space: normal" title='<c:out value="${report.name}"/>'>
 																										<c:choose>

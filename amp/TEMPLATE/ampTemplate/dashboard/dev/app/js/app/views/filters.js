@@ -127,12 +127,14 @@ module.exports = BackboneDash.View.extend({
       // Currently assumes that any otherFilters just implies Date Range
       // ... there is no obvious way to get nice strings out.
       var dateRange = filters.otherFilters.date;
-      applied.push({
-        name: 'Date Range',
+      var dateRangeText = app.translator.translateSync("amp.dashboard:date-range","Date Range");
+	  applied.push({
+        name: dateRangeText,
         detail: [dateRange.start + '&mdash;' + dateRange.end]
       });
     }
     this.$('.applied-filters').html(detailsTemplate({ applied: applied }));
+    this.app.translator.translateDOM(this.el);
   },
 
   hideFilterDetails: function() {

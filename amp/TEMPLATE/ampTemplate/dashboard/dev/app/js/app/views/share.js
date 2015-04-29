@@ -21,9 +21,11 @@ module.exports = BackboneDash.View.extend({
   },
 
   share: function() {
+    var saving = app.translator.translateSync("amp.dashboard:saving-state","Saving dashboard state, please wait...");
+	  
     this.$('#dash-share-url')
       .attr('disabled', 'disabled')
-      .val('Saving dashboard state, please wait...');
+      .val(saving);
 
     var stateBlob = this.app.state.freeze();
 

@@ -28,11 +28,11 @@ public class AmpFundingGroupModel implements IModel<Set<AmpOrganisation>> {
 	@Override
 	public Set<AmpOrganisation> getObject() {
 		Set<AmpOrganisation> orgsSet = new LinkedHashSet<AmpOrganisation>();
-		Set<AmpFunding> fSet = model.getObject();
-		if (fSet == null)
+		Set<AmpFunding> fundingSet = model.getObject();
+		if (fundingSet == null)
 			return orgsSet;
 
-		List<AmpFunding> auxAmpFunding = new ArrayList(fSet);
+		List<AmpFunding> auxAmpFunding = new ArrayList<AmpFunding>(fundingSet);
 		Collections.sort(auxAmpFunding, new Comparator<AmpFunding>() {
 
 			@Override
@@ -51,9 +51,9 @@ public class AmpFundingGroupModel implements IModel<Set<AmpOrganisation>> {
 
 		});
 
-		Iterator<AmpFunding> fSetIt = auxAmpFunding.iterator();
-		while (fSetIt.hasNext()) {
-			AmpFunding funding = (AmpFunding) fSetIt.next();
+		Iterator<AmpFunding> fundingSetIterator = auxAmpFunding.iterator();
+		while (fundingSetIterator.hasNext()) {
+			AmpFunding funding = (AmpFunding) fundingSetIterator.next();
 			orgsSet.add(funding.getAmpDonorOrgId());
 		}
 		return orgsSet;

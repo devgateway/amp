@@ -550,8 +550,10 @@ function collapseAll() {
 		<hr/>
 	<digi:trn>Created in workspace</digi:trn>: <br />
 	<b>
-		<c:out value="${aimEditActivityForm.identification.team.name}"/> - 
-		<c:out value="${aimEditActivityForm.identification.team.accessType}"/>
+		<c:out value="${aimEditActivityForm.identification.team.name}"/> -
+		<digi:trn>
+		    <c:out value="${aimEditActivityForm.identification.team.accessType}"/>
+		</digi:trn>
 	</b>
 	<hr />
  	<digi:trn>Computation</digi:trn>: <br/>

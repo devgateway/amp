@@ -18,7 +18,7 @@ public class MonetMain {
  * 
  * */
 	private static void parseSettings() throws Exception{
-		File file = new File("settings.conf");
+		File file = new File("/opt/apache-tomcat/monetmonitor/MonetMonitor/settings.conf");
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		String line;
 		Map<String, String> parsedValues = new HashMap<String, String>();

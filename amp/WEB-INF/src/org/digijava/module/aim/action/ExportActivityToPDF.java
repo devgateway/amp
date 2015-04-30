@@ -1292,12 +1292,14 @@ public class ExportActivityToPDF extends Action {
 			/**
 			 * Activity created in workspace
 			 */
-			if (identification.getTeam()!= null){
+			if (identification.getTeam() != null) {
 				columnName=TranslatorWorker.translateText("Created in workspace");
-				createGeneralInfoRow(mainLayout,columnName,identification.getTeam()+" "+identification.getTeam().getAccessType());
+				createGeneralInfoRow(mainLayout, columnName, identification.getTeam()
+                        + " "
+                        + TranslatorWorker.translateText(identification.getTeam().getAccessType()));
 				
-				columnName=TranslatorWorker.translateText("Computation");
-				createGeneralInfoRow(mainLayout,columnName,identification.getTeam().getComputation() ?
+				columnName = TranslatorWorker.translateText("Computation");
+				createGeneralInfoRow(mainLayout, columnName, identification.getTeam().getComputation() ?
 						TranslatorWorker.translateText("Yes") : 
 							TranslatorWorker.translateText("No"));
 

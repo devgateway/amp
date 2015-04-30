@@ -3374,13 +3374,12 @@ public class ExportActivityToWord extends Action {
 		generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Activity created by")+": ",columnVal,CELLCOLORGRAY);
 		
 		columnVal = "";
-		if(identification.getCreatedBy() != null)
-		{
-		    if(identification.getCreatedBy().getAmpTeam().getName()!=null){
+		if (identification.getCreatedBy() != null) {
+		    if (identification.getCreatedBy().getAmpTeam().getName() != null) {
 				columnVal +=  identification.getCreatedBy().getAmpTeam().getName();
 			}
-			if(identification.getCreatedBy().getAmpTeam().getAccessType()!=null){
-				columnVal += "-"+identification.getCreatedBy().getAmpTeam().getAccessType();
+			if (identification.getCreatedBy().getAmpTeam().getAccessType() != null) {
+				columnVal += "-" + TranslatorWorker.translateText(identification.getCreatedBy().getAmpTeam().getAccessType());
 			}
 		}
 		generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Workspace of creator")+": ",columnVal,CELLCOLORGRAY);

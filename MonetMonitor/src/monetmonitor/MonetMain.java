@@ -34,7 +34,7 @@ public class MonetMain {
 				index = line.length();
 			}
 			else {
-				value = line.substring(index);	
+				value = line.substring(index + 1);	
 			}
 			name = line.substring(0, index);
 			parsedValues.put(name, value);

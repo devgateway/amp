@@ -120,7 +120,7 @@ public class AddNewLocation extends Action {
                 return mapping.findForward("addEdit");
             default :
                 location = null;
-                if (addRegForm.getEditedId() == null) {
+                if (addRegForm.getEditedId() == null || addRegForm.getEditedId() == 0) {
                     location = new AmpCategoryValueLocations();
                     AmpCategoryValueLocations parentLoc=null;
                     if (addRegForm.getParentLocationId() != -1)
@@ -142,10 +142,11 @@ public class AddNewLocation extends Action {
 
                 try {
 
-                    if (addRegForm.getEditedId() != null)
+                    if (addRegForm.getEditedId() != null && addRegForm.getEditedId() != 0) {
                         LocationUtil.saveLocation(location, true);
-                    else
+                    } else {
                         LocationUtil.saveLocation(location, false);
+                    }
 
                     if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(location.getParentCategoryValue())) {
                         DynLocationManagerUtil.synchronizeCountries();

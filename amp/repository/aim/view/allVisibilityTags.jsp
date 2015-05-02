@@ -209,7 +209,7 @@
 <feature:display module="Report Generator" name="Reports classification"></feature:display>  
 <feature:display name="About AMP" module="HELP"></feature:display> 
 <feature:display name="Activity - Component Step" module="Components"></feature:display> 
-
+<feature:display name="Activity Dashboard" module="M & E"></feature:display>
 <feature:display name="Workspace Info" module="Tools"></feature:display>
 <field:display name="Unassigned Activities" feature="Workspace Info"></field:display>
 <field:display name="Non-archived Activities" feature="Workspace Info"></field:display>
@@ -413,9 +413,13 @@
 <field:display name="Type of Implementation" feature="Identification"></field:display>
 <field:display name="Modalities" feature="Identification"></field:display>
 <field:display name="SSC Modalities" feature="Identification"></field:display>
-    
+<field:display name="Activity Performance" feature="Activity Dashboard"></field:display>
+<field:display name="Activity Printer Friendly Button Performance" feature="Activity Dashboard"></field:display>
+<field:display name="Activity Printer Friendly Button Risk" feature="Activity Dashboard"></field:display>
+
 <field:display name="Activity Updated By" feature="Identification"></field:display>
 <field:display name="Activity Updated On" feature="Identification"></field:display> 
+<field:display name="Activity Without Baseline Button Performance" feature="Activity Dashboard"></field:display>
 <field:display name="Actors" feature="Issues"></field:display>
 <field:display name="Actual Approval Date" feature="Planning" ></field:display>
 <field:display name="Actual Completion Date" feature="Planning"></field:display>
@@ -440,7 +444,7 @@
 <field:display name="Add Donor Funding Button" feature="Funding Information"></field:display> 
 <field:display name="Add Donor Organization" feature="Funding Information"></field:display> 
 <field:display name="Add Expenditure Button" feature="Expenditures"></field:display> 
-<field:display name="Add Funding Button - Proposed Project Cost" feature="Proposed Project Cost"></field:display> 
+<field:display name="Add Funding Button - Proposed Project Cost" feature="Proposed Project Cost"></field:display>
 <field:display name="Add IPA Contract" feature="Contracting"></field:display> 
 <field:display name="Add Indicator Button" feature="Activity"></field:display> 
 <field:display name="Add Issues Button" feature="Issues"></field:display> 
@@ -869,7 +873,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Project Coordinator Phone Number" feature="Project Coordinator Contact Information"></field:display> 
 <field:display name="Project Coordinator Title" feature="Project Coordinator Contact Information"></field:display> 
 <field:display name="Project Fiche Button" feature="Project Fiche" ></field:display> 
-<field:display name="Project Fiche Button" feature="Project Fiche"></field:display> 
+<field:display name="Project Risk" feature="Activity Dashboard"></field:display>
 <field:display name="Project Title" feature="Identification"></field:display>
 <field:display name="Projection Amount" feature="MTEF Projections"></field:display> 
 <field:display name="Projection Currency Code" feature="MTEF Projections"></field:display> 

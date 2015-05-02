@@ -2700,7 +2700,52 @@ body {background:none;}
 											</tr>
 										</module:display>
 									</module:display>
+									
+							 		<field:display name="Activity Performance"  feature="Activity Dashboard">
+									<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap">
+											<b>
+											<digi:trn key="aim:meActivityPerformance">
+										    Activity - Performance</digi:trn>
+											</b>									</td>
+<td bgcolor="#ffffff">
+											<% if (actPerfChartUrl != null) { %>
+												<img src="<%= actPerfChartUrl %>" width="370" height="450" border="0" usemap="#<%= actPerfChartFileName %>"><br><br>
+<% } else { %>
+												<br><span class="red-log"><digi:trn key="aim:noDataPresentFor">No data present for</digi:trn>
+											    <digi:trn key="aim:activityPerformanceChart">Activity-Performance chart</digi:trn>
+											    </span><br><br>
+											<% } %>										</td>
+									</tr>
+									</field:display>
+									<field:display name="Project Risk" feature="Activity Dashboard">
+									<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap">
+											<b>
+											<digi:trn key="aim:meActivityRisk">
+										    Activity - Risk</digi:trn>
+											</b>							</td>
+<td bgcolor="#ffffff">
+											<% if (actRiskChartUrl != null) { %>
+												<bean:define id="riskColor" name="riskColor" scope="request" toScope="page" type="java.lang.String"/>
+												<bean:define id="riskName" name="overallRisk" scope="request" toScope="page" type="java.lang.String"/>
+												<digi:trn key="aim:overallActivityRisk">Overall Risk</digi:trn>:
+												<font color="${riskColor}"/>
 
+												<b><digi:trn key="<%=riskName%>"><%=riskName%></digi:trn></b>
+
+												<img src="<%= actRiskChartUrl %>" width="370" height="350" border="0" usemap="#<%= actRiskChartFileName %>">
+												<br><br>
+											<% } else { %>
+												<br><span class="red-log"><digi:trn key="aim:noDataPresentFor">No data present for</digi:trn>
+										  	    <digi:trn key="aim:activityRiskChart">Activity-Risk chart</digi:trn>
+											    </span><br><br>
+											<% } %>										</td>
+									</tr>
+									</field:display>
+								
+                                    
+                                    
                               <module:display name="/Activity Form/Funding/Overview Section/Proposed Project Cost" parentModule="/Activity Form/Funding/Overview Section">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap">

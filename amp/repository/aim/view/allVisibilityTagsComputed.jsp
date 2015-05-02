@@ -126,7 +126,8 @@
 <feature:display module="Project ID and Planning" name="Budget"></feature:display> 
 <feature:display module="Report Types" name="Contribution Report"></feature:display> 
 <feature:display name="About AMP" module="HELP"></feature:display> 
-<feature:display name="Activity - Component Step" module="Components"></feature:display> 
+<feature:display name="Activity - Component Step" module="Components"></feature:display>
+ <feature:display name="Activity Dashboard" module="M & E"></feature:display>
 
 <feature:display name="Select Base Map" module="Map Module"></feature:display>
 <field:display   name="Show image" feature="Map Options"></field:display>
@@ -289,11 +290,15 @@
 <field:display name="Accession Instrument" feature="Identification"></field:display> 
 <field:display name="Active Funding Organization" feature="Funding Information"></field:display> 
 <field:display name="Activity Approved By" feature="Identification"></field:display> 
-<field:display name="Activity Approved On" feature="Identification"></field:display> 
-<field:display name="Activity Created By" feature="Identification"></field:display> 
+<field:display name="Activity Approved On" feature="Identification"></field:display>
+<field:display name="Activity Performance" feature="Activity Dashboard"></field:display>
+<field:display name="Activity Printer Friendly Button Performance" feature="Activity Dashboard"></field:display>
+<field:display name="Activity Printer Friendly Button Risk" feature="Activity Dashboard"></field:display>
+<field:display name="Activity Created By" feature="Identification"></field:display>
 <field:display name="Activity Created On" feature="Identification"></field:display> 
 <field:display name="Activity Updated By" feature="Identification"></field:display>
-<field:display name="Activity Updated On" feature="Identification"></field:display> 
+<field:display name="Activity Updated On" feature="Identification"></field:display>
+<field:display name="Activity Without Baseline Button Performance" feature="Activity Dashboard"></field:display>
 <field:display name="Actors" feature="Issues"></field:display>
 <field:display name="Actual Approval Date" feature="Planning" ></field:display> 
 <field:display name="Actual Completion Date" feature="Planning"></field:display>
@@ -645,7 +650,7 @@
 <field:display name="Project Coordinator Phone Number" feature="Project Coordinator Contact Information"></field:display> 
 <field:display name="Project Coordinator Title" feature="Project Coordinator Contact Information"></field:display> 
 <field:display name="Project Fiche Button" feature="Project Fiche" ></field:display> 
-<field:display name="Project Fiche Button" feature="Project Fiche"></field:display> 
+<field:display name="Project Risk" feature="Activity Dashboard"></field:display>
 <field:display name="Project Title" feature="Identification"></field:display>
 <field:display name="Projection Amount" feature="MTEF Projections"></field:display> 
 <field:display name="Projection Currency Code" feature="MTEF Projections"></field:display> 

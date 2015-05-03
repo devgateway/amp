@@ -40,7 +40,6 @@ _.extend(GISData.prototype, Backbone.Events, {
     /* stub filled in by Filters service */
     this.filter = new Filter({
       draggable: true,
-      translator: this.translator,
       caller: 'GIS'
     });
     // forces filter to start loading list immediately. TODO: move to an option for filter init.

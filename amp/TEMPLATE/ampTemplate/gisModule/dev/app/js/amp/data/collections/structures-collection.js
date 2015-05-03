@@ -28,7 +28,6 @@ module.exports = Backbone.Collection
       this.activities = new Activities([], options);
       this._joinedActivities = null;
       this._lastFetch = null;
-
       this.palette = new Palette.FromSet();
 
     } else {
@@ -188,10 +187,10 @@ module.exports = Backbone.Collection
             //or planned project with no funding) there needs to be a 'none' option for project sites
             //in the GIS legends
             if (activity.get('matchesFilters')[filterVertical] !== undefined) {
-              return 'None';
+              return self.appData.translator.translateSynce ('amp.gis:legend-none','None');
             } else {
               console.warn('Activity is missing desired vertical');
-              return 'n/a';
+              return self.appData.translator.translateSynce ('amp.gis:legend-na','n/a');
             }
           }
         })

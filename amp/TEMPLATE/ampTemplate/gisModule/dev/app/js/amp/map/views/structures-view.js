@@ -130,8 +130,13 @@ module.exports = Backbone.View
 
       /* maxIcons is maxLocationIcons */
       if (useIconsForSectors !== undefined && useIconsForSectors.get('name') === 'true') {
-        if (maxIcons !== undefined && maxIcons.get('name') !== '' && maxIcons.get('name') !== '0') {
-          self.MAX_NUM_FOR_ICONS = parseInt(maxIcons.get('name'), 10);
+        if (maxIcons !== undefined && maxIcons.get('name') !== '') {
+          if (maxIcons.get('name') === '0') {
+        	  self.MAX_NUM_FOR_ICONS = 99999; //always show  
+          }
+          else {
+        	  self.MAX_NUM_FOR_ICONS = parseInt(maxIcons.get('name'), 10);
+          }
         } else {
           self.MAX_NUM_FOR_ICONS = 0;
         }

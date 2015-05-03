@@ -397,7 +397,7 @@ public class ReportWizardAction extends MultiAction {
         else
             myForm.setBudgetExporter(false);
         myForm.setReportType(reportTypesBiMap.inverse().get(ampReport.getType()));
-
+        myForm.setReportBeingEdited(true);
 
         TreeSet<AmpReportColumn> cols		= new TreeSet<AmpReportColumn> ( new FieldsComparator() );
         TreeSet<AmpReportHierarchy> hiers	= new TreeSet<AmpReportHierarchy> ( new FieldsComparator() );

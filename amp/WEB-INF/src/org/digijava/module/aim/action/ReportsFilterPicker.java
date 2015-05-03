@@ -185,7 +185,7 @@ public class ReportsFilterPicker extends Action {
 			}				
 		}
 		
-		// gone till here -> Apply or Reset Filters form
+		// gone till here -> Apply or Reset Filters form 
 		if (request.getParameter("reset") != null)
 		{
 			AmpARFilter arf = createOrResetFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
@@ -792,18 +792,20 @@ public class ReportsFilterPicker extends Action {
 			Collection<AmpTeam> creatorsList	= TeamUtil.getAllRelatedTeams();
 			List<HierarchyListableImplementation> children	=
 				new ArrayList<HierarchyListableImplementation>();
-
 			HierarchyListableImplementation rootCreators = new HierarchyListableImplementation();
 			rootCreators.setLabel("All");
 			rootCreators.setUniqueId("0");
 			rootCreators.setChildren( children );
 			Iterator<AmpTeam> it = creatorsList.iterator();
 			while(it.hasNext()){
+			//isolated workspaces shouldn't be added
 				AmpTeam ampTeam = it.next();
-				HierarchyListableImplementation creatorsDO	= new HierarchyListableImplementation();
-				creatorsDO.setLabel( ampTeam.getName() + "" );
-				creatorsDO.setUniqueId( ampTeam.getAmpTeamId() + "");
-				children.add(creatorsDO);
+				if (!ampTeam.getIsolated()) {
+					HierarchyListableImplementation creatorsDO	= new HierarchyListableImplementation();
+					creatorsDO.setLabel( ampTeam.getName() + "" );
+					creatorsDO.setUniqueId( ampTeam.getAmpTeamId() + "");
+					children.add(creatorsDO);
+				}
 			}
 
             //sort workspace list
@@ -813,7 +815,7 @@ public class ReportsFilterPicker extends Action {
                     return o1.getLabel().compareTo(o2.getLabel());
                 }
             });
-            
+
 			GroupingElement<HierarchyListableImplementation> activityStatusElement	=
 					new GroupingElement<HierarchyListableImplementation>("Workspace", "filter_workspace_div", 
 							rootCreators, "selectedWorkspaces");

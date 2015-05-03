@@ -199,7 +199,7 @@ public class FilterUtil {
 		
 		form.setSelectedStatuses( FilterUtil.getObjectsIds(filter.getStatuses()) ) ;
 
-		form.setSelectedWorkspaces( FilterUtil.getObjectsIds(filter.getWorkspaces()) ) ;
+		form.setSelectedWorkspaces( FilterUtil.getObjectsIds(filter.getNonPrivateWorkspaces()) ) ;
 
 		form.setSelectedProjectCategory( FilterUtil.getObjectsIds(filter.getProjectCategory()) );
 		

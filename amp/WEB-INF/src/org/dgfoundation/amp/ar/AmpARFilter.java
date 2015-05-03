@@ -2068,7 +2068,21 @@ public class AmpARFilter extends PropertyListable {
 	public Set<AmpTeam> getWorkspaces() {
 		return workspaces;
 	}
-
+	/**
+	 * @return Returns all non-isolated (== private / siloed) workspaces
+	 */	
+	public Set<AmpTeam> getNonPrivateWorkspaces() {
+		Set<AmpTeam> newset = new HashSet<>();
+		if (workspaces != null) {
+			for (AmpTeam team : workspaces) {
+				if (!team.getIsolated()) {
+					newset.add(team);
+				}
+			}
+		}
+		return newset;
+	}
+	
 	/**
 	 * @param workspaces
 	 *            The workspaces to set.

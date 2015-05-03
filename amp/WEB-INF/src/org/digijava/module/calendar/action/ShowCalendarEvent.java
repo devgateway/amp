@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -90,6 +91,8 @@ public class ShowCalendarEvent extends Action {
 //		}
  		
         CalendarEventForm ceform = (CalendarEventForm) form;
+
+        
         Object teamObj = request.getSession().getAttribute("teamHead");
         boolean isManager = (teamObj != null && ((String)teamObj).equalsIgnoreCase("yes"));
         
@@ -160,7 +163,7 @@ public class ShowCalendarEvent extends Action {
       }else{
         ceform.setSelectedCalendarTypeId(selectedCalendarTypeId);
        }
-        ceform.setTeamsMap(loadRecepients());
+        ceform.setTeamsMap(loadRecepients()); //this part is terribly slow!!!
        
         String[] slAtts = ceform.getSelectedAtts();
         if (slAtts != null) {
@@ -173,7 +176,7 @@ public class ShowCalendarEvent extends Action {
                     }
                 } else
                 	if (slAtts[i].startsWith("m:")) {
-                    AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(Long.valueOf(slAtts[i].substring(2)));
+                    AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(Long.valueOf(slAtts[i].substring(2)));//this is terribly slow too!
                     if (member != null) {
                         selectedAttsCol.add(new LabelValueBean(member.getUser().getFirstNames() + " " + member.getUser().getLastName(), slAtts[i]));
                     }

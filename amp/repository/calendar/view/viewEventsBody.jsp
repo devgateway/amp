@@ -80,25 +80,21 @@
 
 </script>
 
- <script src="<digi:file src="module/calendar/dhtmlxScheduler/dhtmlxcommon.js"/>" language="JavaScript" type="text/javascript"></script>
- <script src="<digi:file src="module/calendar/dhtmlxScheduler/scheduler.js"/>" language="JavaScript" type="text/javascript"></script>
- <script src="<digi:file src="module/calendar/dhtmlxScheduler/config.js"/>" language="JavaScript" type="text/javascript"></script>
- <script src="<digi:file src="module/calendar/dhtmlxScheduler/base.js"/>" language="JavaScript" type="text/javascript"></script>
- <script src="<digi:file src="module/calendar/dhtmlxScheduler/locale_sv.js"/>" language="JavaScript" type="text/javascript" ></script>
- <script src="<digi:file src="module/calendar/dhtmlxScheduler/event.js"/>"language="JavaScript" type="text/javascript"></script>
- <script src="<digi:file src="module/calendar/dhtmlxScheduler/load.js"/>" language="JavaScript" type="text/javascript"></script>
- <script src="<digi:file src="module/calendar/dhtmlxScheduler/lightbox.js"/>" language="JavaScript" type="text/javascript"></script>
- <script src="<digi:file src="module/calendar/dhtmlxScheduler/dhtmlxdataprocessor.js"/>" language="JavaScript" type="text/javascript"></script>
- <script src="<digi:file src="module/calendar/dhtmlxScheduler/property.js"/>" language="JavaScript" type="text/javascript"></script>
- <script src="<digi:file src="module/calendar/dhtmlxScheduler/recurring.js"/>" language="JavaScript" type="text/javascript"></script>
- <script src="<digi:file src="module/calendar/dhtmlxScheduler/dhtmlxscheduler_year_view.js"/>" language="JavaScript" type="text/javascript"></script>
+
+ 
+ 
+<link rel="stylesheet"  href="<digi:file src="module/calendar/dhtmlxSchedulerNew/codebase/dhtmlxscheduler.css"/>" type="text/css"/> 
+
+
+<script src="<digi:file src="module/calendar/dhtmlxSchedulerNew/codebase/dhtmlxscheduler.js"/>" type="text/javascript"></script>
+ 
+<script src="<digi:file src="module/calendar/dhtmlxSchedulerNew/codebase/ext/dhtmlxscheduler_year_view.js"/>" type="text/javascript"></script>
+ 
+ 
+ 
+ 
  <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 
- <link rel="stylesheet" href="<digi:file src="module/calendar/css/layout.css"/>"> 
- <link rel="stylesheet" href="<digi:file src="module/calendar/css/note.css"/>"> 
- <link rel="stylesheet" href="<digi:file src="module/calendar/css/recurring.css"/>"> 
- <link rel="stylesheet" href="<digi:file src="module/calendar/css/lightbox.css"/>"> 
- <link rel="stylesheet" href="<digi:file src="module/calendar/css/dhtmlxscheduler_ext.css"/>"> 
 
 <c:set var="printButon"><%=request.getSession().getAttribute("print")%></c:set>
  <c:if test="${printButon}">
@@ -150,7 +146,6 @@
 	<%=CalendarUtil.getEventTypesCss()%>
 </style>
 <script type="text/javascript" charset="utf-8">
-<!--
 
 	function init() {
 		 
@@ -272,30 +267,13 @@
 	        return "<span  title='"+trnLbelTitle+" "+text+"  "+trnLabelStartDate+" "+start_date+" "+trnLabelEndDate+" "+end_date+"'>"+img+""+shortText+"</span>";
 		 }
 	 }else{
-
 		 scheduler.templates.event_bar_text=function(start_date,end_date,ev){
 		        var text = ev.text.substr(0,20);
 		        return "<span style='font-size: 10pt;'>"+text+"</span>";
 			 }
-		 
-
 		 }
 		scheduler.config.dblclick_create = false;
 		scheduler.config.multi_days = true;
-	/*
-		scheduler.attachEvent("onViewChange",function(mode,date){
-
-			if(mode == "month"){
-						submitFilterForm('monthly',date.getTime()/1000); 
-						
-						return true;
-					}
-			});
-		
-	*/
-
-
-
 	} 
 
 function calType(type){
@@ -343,7 +321,7 @@ function getEthiopianCalendarDate(yyyy,mm,dd)
 
   return dateString;
 }	
--->
+
 </script>	
 <body>
 <script type="text/javascript">
@@ -351,52 +329,32 @@ window.onload=init;
 </script>
 <input type="hidden" value=""  id="printView"/>
 <input type="hidden" value=""  id="printDate"/>
-	<div id="scheduler_here" class="dhx_cal_container"  style='padding:2% 0% 2% 0%; width:100%; height:600; max-height:600; position:relative'>
-		<div class="dhx_cal_navline" style="z-index:10; height:22px;">
-<!--			<div class="dhx_cal_prev_button" style="">&nbsp;</div>-->
-<!--			<div class="dhx_cal_date" style=""></div>-->
-<!--			<div class="dhx_cal_next_button" style="">&nbsp;</div>-->
-<!--			<div class="dhx_cal_today_button" style=""></div>-->	
+	<div id="scheduler_here" class="dhx_cal_container"  style="width:98%; height:760px;  position:relative">
+		<div class="dhx_cal_navline" style="z-index:10; margin-top:0px;">
 	 		<div class="dhx_cal_tab" name="year_tab"></div>  	 
 			<div class="dhx_cal_tab" name="month_tab"></div>
 			<div class="dhx_cal_tab" name="week_tab"></div>
 			<div class="dhx_cal_tab" name="day_tab"></div>
-			
+			<div class="dhx_cal_prev_button" >&nbsp;</div>
+			<div class="dhx_cal_date"></div>
+			<div class="dhx_cal_next_button" >&nbsp;</div>
+			<div class="dhx_cal_today_button"></div>							
 		</div>
-		<div id="newContainer" style="width: 100%; height: 630px; position: relative; top: 15px; border: 1px #CCCCCC solid;">
-			<div style="z-index: 1">
-				<table cellpadding="5" cellspacing="5">
-					<tr style="margin-bottom: 10px;">
-						<td>
-							<div class="dhx_cal_prev_button" style="">&nbsp;</div>
-						</td>
-						<td>
-							<div class="dhx_cal_date" style=""></div>
-						</td>
-						<td>
-							<div class="dhx_cal_next_button" style="">&nbsp;</div>
-						</td>
-						<td align="right">
-							<div class="dhx_cal_today_button" style=""></div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="dhx_cal_header" style=""></div>
-							<div class="dhx_cal_data"></div>
-						</td>
-					</tr>
-				</table>
-			</div>
+		
+		
+		<div id="newContainer" style="width: 100%; height: 100%;  position:relative; border: 1px #CCCCCC solid;">
+			<div class="dhx_cal_header" style=""></div>
+			<div class="dhx_cal_data"></div>
+			<feature:display name="Filter" module="Calendar">
+				<div style="width:auto; height:28px;white-space: nowrap;bottom:0;position:absolute;">
+			      	<input type="button" class="buttonx" value="<digi:trn key="calendar:print">Print</digi:trn>"  onclick="openPrinter();" />
+			      	<c:if test="${not empty sessionScope.currentMember}">
+			      	&nbsp;
+			      	<input type="button" class="buttonx" value="<digi:trn>Add New Event</digi:trn>"  onclick="addEvent();" />
+			      	</c:if>
+				</div>
+			</feature:display>
+			
 		</div>		
-		<feature:display name="Filter" module="Calendar">
-			<div style="padding-top:30px;width:250px;height:28px;white-space: nowrap;">
-		      	<input type="button" class="buttonx" value="<digi:trn key="calendar:print">Print</digi:trn>"  onclick="openPrinter();" />
-		      	<c:if test="${not empty sessionScope.currentMember}">
-		      	&nbsp;
-		      	<input type="button" class="buttonx" value="<digi:trn>Add New Event</digi:trn>"  onclick="addEvent();" />
-		      	</c:if>
-			</div>
-		</feature:display>
 	</div>
 </body>

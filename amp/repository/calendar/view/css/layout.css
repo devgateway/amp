@@ -126,7 +126,7 @@ To use it on other terms please contact us at sales@dhtmlx.com
 }
 .dhx_cal_data{
 	border-top:1px solid #CCCCCC;
-	position:absolute;
+	/*position:absolute;*/
 	top:44px;
 	width:600px;
 	overflow-y:auto;

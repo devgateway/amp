@@ -126,6 +126,16 @@ var Palette = Backbone.Model.extend({
     var elements = this.get('elements'),
         maxNamed = DEFAULT.SET.length - 2;  // leave two for "multple" and "other"
 
+    var localizedMultipleItem = [
+                                 '<span data-i18n="amp.gis:legend-multiple">',
+                                 'Multiple ',
+                                 '</span>'
+                               ].join('');
+    var localizedOthersItem = [
+                                 '<span data-i18n="amp.gis:legend-others">',
+                                 'Others ',
+                                 '</span>'
+                               ].join('');
     var topN = _(elements.slice(0, maxNamed)).map(function(el, idx) {
       function toTrueKey(o, k) {
         o[k] = true;
@@ -143,7 +153,7 @@ var Palette = Backbone.Model.extend({
     }, this);
 
     topN.push(_({
-      value: 'Multiple',
+      value: localizedMultipleItem,
       test: function() {
         return false;  // don't match this unless it's asked for
       },
@@ -152,7 +162,7 @@ var Palette = Backbone.Model.extend({
 
     if (elements.length > maxNamed) {
       topN.push(_({
-        value: 'Others',
+        value: localizedOthersItem,
         test: function() {
           return true;  // fall-through default case
         }

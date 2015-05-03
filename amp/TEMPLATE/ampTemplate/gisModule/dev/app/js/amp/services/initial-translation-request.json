@@ -68,6 +68,10 @@
 "amp.gis:legend-no-item": "No layers loaded",
 "amp.gis:legend-no-symbols": "This space is used to explain symbols on the map when Indicator Layers or Point Layers are loaded.",
 "amp.gis:legend-loading": "loading...",
+"amp.gis:legend-others":"Others",
+"amp.gis:legend-none":"None",
+"amp.gis:legend-na":"n/a",
+"amp.gis:legend-multiple":"Multiple",
 "amp.gis:title-settings": "Settings",
 "amp.gis:popup-project-site": "Project Site",
 "amp.gis:popup-project-site-activity": "Project",
@@ -90,4 +94,5 @@
 "amp.gis.fundingType-ActualDisbursements":"Actual Disbursements",
 "amp.gis.fundingType-PlannedDisbursements":"Planned Disbursements",
 "amp.gis.cluster.tooltip-of-total":"of total"
+
 }

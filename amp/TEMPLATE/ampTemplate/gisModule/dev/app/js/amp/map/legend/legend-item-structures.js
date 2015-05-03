@@ -35,8 +35,13 @@ module.exports = Backbone.View.extend({
         return (item.id === 'max-locations-icons');
       });
       if (useIconsForSectors !== undefined && useIconsForSectors.get('name') === 'true') {
-        if (maxLocationIcons !== undefined && maxLocationIcons.get('name') !== '' && maxLocationIcons.get('name') !== '0') {
-          MAX_NUM_FOR_ICONS = parseInt(maxLocationIcons.get('name'), 10);
+        if (maxLocationIcons !== undefined && maxLocationIcons.get('name') !== '') {
+          if (maxLocationIcons.get('name') === '0') {
+        	  MAX_NUM_FOR_ICONS = 99999; //always show 
+          }
+          else {
+        	  MAX_NUM_FOR_ICONS = parseInt(maxLocationIcons.get('name'), 10);
+          }
         } else {
           MAX_NUM_FOR_ICONS = 0;
         }
@@ -59,6 +64,21 @@ module.exports = Backbone.View.extend({
           });
 
       });
+      self.app.translator.translateList({
+          'amp.gis:legend-popover':'If there are less than',
+          'amp.gis:legend-popover-2':'points map will show icons otherwise: show coloured circles.',
+          'amp.gis:title-Region': 'Region'
+        }).then(function(legendPopoverList) {
+          console.log(legendPopoverList, "x");
+          var legendPopover = [legendPopoverList['amp.gis:legend-popover'],
+           ' ',
+           MAX_NUM_FOR_ICONS,
+           ' ',
+           legendPopoverList['amp.gis:legend-popover-2']
+           ].join('');
+          self.$('[data-toggle="popover"]').popover();
+          self.$('[data-toggle="popover"]').attr("data-content",legendPopover);
+        });
 
 
 

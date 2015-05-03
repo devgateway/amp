@@ -121,26 +121,28 @@ module.exports = Backbone.View
     // Calculate only one time and not for all points (we can have thousands).
     if (self.MAX_NUM_FOR_ICONS === -1) {
       //TODO: Move this code to a config class.
-      //IT IS REPEATED IN map/views/legend-item-structures.js
       var useIconsForSectors = _.find(app.data.settings.models, function(item) {
         return (item.id === 'use-icons-for-sectors-in-project-list');
       });
-
-      /* maxIcons is short for maxLocationIcons */
       var maxIcons = _.find(app.data.settings.models, function(item) {
         return (item.id === 'max-locations-icons');
       });
 
+      /* maxIcons is maxLocationIcons */
       if (useIconsForSectors !== undefined && useIconsForSectors.get('name') === 'true') {
-        if (maxIcons && maxIcons.get('name') !== '' && maxIcons.get('name') !== '0') {
-          self.MAX_NUM_FOR_ICONS = parseInt(maxIcons.get('name'), 10);
+        if (maxIcons !== undefined && maxIcons.get('name') !== '') {
+          if (maxIcons.get('name') === '0') {
+        	  self.MAX_NUM_FOR_ICONS = 99999; //always show  
+          }
+          else {
+        	  self.MAX_NUM_FOR_ICONS = parseInt(maxIcons.get('name'), 10);
+          }
         } else {
           self.MAX_NUM_FOR_ICONS = 0;
         }
       } else {
         self.MAX_NUM_FOR_ICONS = 0;
       }
-
       console.log('MAX_NUM_FOR_ICONS: ' + self.MAX_NUM_FOR_ICONS);
     }
     if (self.rawData.features.length < self.MAX_NUM_FOR_ICONS &&
@@ -181,7 +183,7 @@ module.exports = Backbone.View
 //feature.properties.activity.attributes.matchesFilters[filterVertical]
     if (feature.properties.activity.attributes &&
         _.has(feature.properties.activity.attributes.matchesFilters, filterVertical)) {
-      if (feature.properties.activity.attributes.matchesFilters[filterVertical] == null) {
+      if (feature.properties.activity.attributes.matchesFilters[filterVertical] === null) {
         //It has no sector/donor
         sectorCode = '1';
       } else if (feature.properties.activity.attributes.matchesFilters[filterVertical].length > 1) {

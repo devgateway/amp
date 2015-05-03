@@ -28,7 +28,6 @@ module.exports = Backbone.Collection
       this.activities = new Activities([], options);
       this._joinedActivities = null;
       this._lastFetch = null;
-
       this.palette = new Palette.FromSet();
 
     } else {
@@ -188,22 +187,21 @@ module.exports = Backbone.Collection
             //or planned project with no funding) there needs to be a 'none' option for project sites
             //in the GIS legends
             if (activity.get('matchesFilters')[filterVertical] !== undefined) {
-              return 'None';
+              return self.appData.translator.translateSynce ('amp.gis:legend-none','None');
             } else {
               console.warn('Activity is missing desired vertical');
-              return 'n/a';
+              return self.appData.translator.translateSynce ('amp.gis:legend-na','n/a');
             }
-
           }
         })
         .map(function(sites, orgId) {
           var code = -1;
           if (_.has(sites[0].get('activity').get('matchesFilters'), filterVertical)) {
-            if (sites[0].get('activity').get('matchesFilters')[filterVertical] == null) {
-            //no value for sector/donor
+            if (sites[0].get('activity').get('matchesFilters')[filterVertical] === null) {
+              //no value for sector/donor
               code = '1';
             } else if (sites[0].get('activity').get('matchesFilters')[filterVertical][0].get &&
-              sites[0].get('activity').get('matchesFilters')[filterVertical].length > 1) {
+                        sites[0].get('activity').get('matchesFilters')[filterVertical].length > 1) {
               code = '0';
             } else {
               if (sites[0].get('activity').get('matchesFilters')[filterVertical][0] instanceof Object) {

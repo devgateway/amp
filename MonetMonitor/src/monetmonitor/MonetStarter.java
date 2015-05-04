@@ -13,7 +13,6 @@ import java.io.InputStreamReader;
 
 public class MonetStarter {
 
-
 	Process proc = null;
 	MonetThread thread = null;	
 	
@@ -40,8 +39,10 @@ public class MonetStarter {
 		}
 	}
 	
-	
-	
+	/**
+	 * Attempts to start the MonetDB server in a child process
+	 * @return true on success, false on error
+	 */
 	public  boolean startServer() {
 		
 		if (new MonetBeholder().checkMonetServerRunning())

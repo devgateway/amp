@@ -9,8 +9,14 @@ import java.util.List;
  *
  */
 public class Utils {
-	
+	/**
+	 * list of all available status showers
+	 */
 	public static List<StatusShower> statusShowers = new ArrayList<StatusShower>();
+	/**
+	 * logfile reference -- so that some events can be sent there separately
+	 * potential TODO: replace with a list of logfiles, in the case it's required?
+	 */
 	public static StatusShower logfile;
 	/**
 	 * Broadcasts the message across all available status showers

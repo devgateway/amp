@@ -14,7 +14,9 @@ import java.util.Date;
  * path to logfile should be specified in settings.conf 
  */
 public class StatusShowerLog implements StatusShower {
-	
+	/**
+	 * @param status String to be sent over to the logfile. Adds timestamp at the beginning of a log entry.
+	 */
 	public void showStatus(String status) throws Exception {
 		FileWriter writer = new FileWriter(Constants.getLogfilePath(), true);
 		Date now = new Date();
@@ -23,7 +25,9 @@ public class StatusShowerLog implements StatusShower {
 		writer.append("\r\n");
 		writer.close();		
 	}
-
+	/**
+	 * NOP for log status shower
+	 */
 	@Override
 	public void start() {
 	}

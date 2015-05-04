@@ -28,10 +28,13 @@ public class MonitorTimer {
 	  MonetStarter starter;
 	  
 	  boolean prevStatus = false;
-	  
+	  /**
+	   * 
+	   * @param beh reference to the MonetBeholder class (it checks if MonetMonitor is responding)
+	   * @param st reference to the MonetStarter class (starts if MonetBeholder doesn't get an answer from the server)
+	   */
 	  void startTimer(MonetBeholder beh,  MonetStarter st){
 		  this.beholder = beh;
-//		  this.shower = sh;
 		  this.starter = st;
 		    Runnable checkServerTask = new Runnable () {
 				@Override
@@ -42,7 +45,6 @@ public class MonitorTimer {
 			    		if (prevStatus != serverStatus)
 			    			Utils.broadcastStatus(statusMessage);
 			    		prevStatus = serverStatus;
-//			    	shower.showStatus(statusMessage);
 			    	} catch (Exception exc) {
 			    		System.err.println("Error in status shower:" + exc.getMessage());
 			    	}

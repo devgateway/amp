@@ -8,7 +8,8 @@ import java.util.Map;
 /**
  * 
  * @author acartaleanu
- * Class for keeping parameters extracted from settings.conf
+ * Class for keeping parameters extracted from settings.conf.
+ * Methods are self-explanatory.
  *
  */
 public class  Constants {
@@ -22,7 +23,6 @@ public class  Constants {
 	
 	public static boolean getNoGui() {
 		return parametersMap.get("NO_GUI").contains("true");
-		
 	}
 	
 	public static String getMonetExecPath() {

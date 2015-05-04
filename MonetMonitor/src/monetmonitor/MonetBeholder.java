@@ -28,9 +28,9 @@ public class MonetBeholder{
 		}
 	}
 	/**
-	 * 
-	 * @param conn 
-	 * @param query 
+	 * runs a select via the connection supplied 
+	 * @param conn the connection supplied by the JDBC Monet driver
+	 * @param query the SQL query to be ran
 	 * @throws SQLException 
 	 */
 	void runSelect(Connection conn, String query) throws SQLException {
@@ -49,7 +49,7 @@ public class MonetBeholder{
 		}
 	}
 	/**
-	 * runs a select that will always return something 
+	 * runs a select that will always return something (table names)
 	 * @throws SQLException
 	 */
 	void work() throws SQLException {

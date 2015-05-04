@@ -1,3 +1,11 @@
+**Build information** (VERY IMPORTANT)
+
+After making any code changes to the application, build the app and 
+create a .jar of the application (call it monetmonitor_final.jar), 
+then place it in the root of this directory. 
+TODO: Maven target (make this step automatic)
+
+
 **Application purpose**
 
 Monitor the status of the monetdb server (check if it's up) and restart if it's down. 
@@ -51,13 +59,13 @@ NO_GUI - "true" for no GUI  status window to appear
 	14. Input in the admin console "bat\startService.bat"
 	15. You're done. You may now verify that AMP is able to connect properly to the Monet server.
 	16. Make sure Tomcat starts after Monet Monitor
-	Dependency on one other service:
-		sc config ServiceA depend= ServiceB
-	Above means that ServiceA will not start until ServiceB has started. If you stop ServiceB, ServiceA will stop automatically.
-	To remove all dependencies:
-		sc config ServiceA depend= /
-	To list current dependencies:
-		sc qc ServiceA
+		Dependency on one other service:
+			sc config ServiceA depend= ServiceB
+		Above means that ServiceA will not start until ServiceB has started. If you stop ServiceB, ServiceA will stop automatically.
+		To remove all dependencies:
+			sc config ServiceA depend= /
+		To list current dependencies:
+			sc qc ServiceA
 	
 Under a Linux system:
 	
@@ -70,21 +78,25 @@ Under a Linux system:
 	6. Extract the archive yajsw-stable-11.11.zip somewhere (same directory is perfectly fine: "unzip yajsw-stable-11.11.zip")
 	7. Input the following commands
 	 	cd yajsw-stable-11.11
-	 	bin\getConfig.sh <THE_PID> 
+	 	./bin/getConfig.sh <THE_PID> 
 	 	//you may close the jar from the second console now
-	 	bin\runConsole.sh
+	 	./bin/runConsole.sh
 	 After the runConsole.sh, you should see output similar to what's happening after running the .jar.
 	9. Open conf/wrapper.conf
 	10. Find the line "wrapper.ntservice.name" and name the service in an appropriate manner (monetmonitor, for instance)
 	11. Do the same for "wrapper.ntservice.description" (sample text:
 		11.1 "A YAJSW-wrapped Java application for monitoring the status of the monetdb server and restarting it if it's down")
 	12. Save and close wrapper.conf
-	13. Input in the console  "bin\installService.sh" (it might ask you for the sudo password)
-	14. Input in the admin console "bin\startService.sh"
+	13. Input in the console  "./bin/installService.sh" (it might ask you for the sudo password)
+	14. Input in the admin console "./bin/startService.sh"
 	15. You're done. You may now verify that AMP is able to connect properly to the Monet server.
-	
+	16. To make sure MonetMonitor is started after tomcat, do the following:
+		16.1 	go to /etc/rcX.d (x = 0..6) and make sure that the monetmonitor (or whatever you called it) 
+				service has a lower number than the tomcat service. 
+		
 	 
 --Known issues:
 1) If throws error about conflicting JNA, you might have to remove JNA until the service is installed
 2) On Windows, make sure java is added to $PATH
-3) If the monet's .bat file has been modified as i was in Uganda production it won't take the dbfarm parameter and server will not start
+3) If the monet's .bat file has been modified (as it was on Uganda production) it won't take the dbfarm parameter and the server will not start
+//the above comment has been added by Diego, but no solution has been offered. Will contact to ask for one.

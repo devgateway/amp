@@ -372,7 +372,19 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 					// get it from the same position in the prev row
 					value = workbookSheet.getRow(sheetRow.getRowNum() - 1).getCell(y).getStringCellValue();
 				}
-				if (rowsetBody[x][y] instanceof DataCell && ((DataCell) rowsetBody[x][y]).getRawNumber() != null) {
+				if (rowsetBody[x][y] instanceof DataCell && ((DataCell) rowsetBody[x][y]).getRawValue() != null) {
+					String stringValue = ((DataCell) rowsetBody[x][y]).getRawValue();
+					Double numberValue = null;
+					if(!"null".equals(stringValue)) {
+						numberValue = Double.parseDouble(stringValue);
+					}
+					else
+					{
+						numberValue = 0d;
+					}
+					cell.setCellValue(numberValue.doubleValue());
+					applyCellFormatting(cell, x, y);
+				} else if (rowsetBody[x][y] instanceof DataCell && ((DataCell) rowsetBody[x][y]).getRawNumber() != null) {
 					Number numberValue = ((DataCell) rowsetBody[x][y]).getRawNumber();
 					cell.setCellValue(numberValue.doubleValue());
 					applyCellFormatting(cell, x, y);

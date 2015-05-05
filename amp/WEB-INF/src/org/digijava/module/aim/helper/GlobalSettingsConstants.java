@@ -1,6 +1,11 @@
 package org.digijava.module.aim.helper;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 public class GlobalSettingsConstants {
+
     public static final String DEFAULT_COUNTRY = "Default Country";
    
     public static final String FEATURE_TEMPLATE = "Feature Template";
@@ -187,4 +192,11 @@ public class GlobalSettingsConstants {
     public static final String MAX_LOCATIONS_ICONS = "Show icons for Project Sites for locations up to";
     
     public static final String REPORT_WIZARD_VISIBILITY_SOURCE = "Report wizard visibility source";
+    
+    
+    
+    /**
+     * fields which, although existing in the database, should be rendered with a display: none on the GlobalSettings form so that the user never has a chance of changing their value
+     */
+	public final static Set<String> SETTINGS_TO_HIDE = new HashSet<>(Arrays.asList(REPORT_WIZARD_VISIBILITY_SOURCE));
 }

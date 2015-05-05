@@ -339,7 +339,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 									    <%
 									    	int g_range = 0, g_year = 0;
 									    %>
-			                            <tr>
+			                            <tr style='display:<%= GlobalSettingsConstants.SETTINGS_TO_HIDE.contains(globalSett.getGlobalSettingsName()) ? "none" : "auto" %>' >
 			                               <td width="50%" class="inside" align=right>
 			                                 <logic:notEmpty name="globalSett" property="globalSettingsDescription">
 			                                   <img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:Global:Help:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsDescription"/></digi:trn>">                              

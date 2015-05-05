@@ -9,10 +9,10 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="bsh">
-				List haha = new ArrayList();
-				haha.add("");
-				haha.add("Planed Commitments"); // apparently bsh does not support varargs
-				new org.digijava.module.aim.startup.DeleteMeasuresFromFM(haha).work();				
+				List featureNames = new ArrayList();
+				featureNames.add("");
+				featureNames.add("Planed Commitments"); // apparently bsh does not support varargs
+				new org.digijava.module.aim.startup.DeleteMeasuresFromFM(featureNames).work();				
 			</lang>
 		</script>
 	</apply>

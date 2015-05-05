@@ -146,7 +146,7 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 	 * @param visibilityEnum
 	 * @return
 	 */
-	public Set<String> detectVisibleData() {
+	public Set<String> detectVisibleData() {		
 		String measVS = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.REPORT_WIZARD_VISIBILITY_SOURCE);
 		return detectVisibleData(Integer.parseInt(measVS));
 	}

@@ -138,6 +138,10 @@ function selectLocationCallerShape(selectedGraphic){
 
 
 function locate() {
+	var location = $("#address").val();
+	if (location == null || location.trim() === '' ) {
+		return;
+	}
 	$("#loadingImg").show();
 	var location = $("#address").val();
 	$.getJSON("/rest/postgis/location/" + location + "/false", function(data) {

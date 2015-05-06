@@ -267,8 +267,16 @@ public class EndpointUtils {
 				ApiMethod apiAnnotation=
 		    			((Method) mbr).getAnnotation(ApiMethod.class);
 				if (apiAnnotation != null) {
-					final String column = apiAnnotation.column();
-					if (EPConstants.NA.equals(column) || visibleColumns.contains(column)) {
+					final String []columns = apiAnnotation.columns();
+					
+					boolean isVisibleColumn=false; 
+					for(String column:columns){ 
+						if (EPConstants.NA.equals(column) || visibleColumns.contains(column)) {
+							isVisibleColumn=true;
+							break;
+						}
+					}
+					if (isVisibleColumn) {
 						//then we have to add it to the filters list
 						javax.ws.rs.Path methodPath = ((Method) mbr).getAnnotation(javax.ws.rs.Path.class);
 						AvailableMethod filter = new AvailableMethod();
@@ -287,7 +295,15 @@ public class EndpointUtils {
 						filter.setId(apiAnnotation.id());
 						filter.setFilterType(apiAnnotation.filterType());
 						if (includeColumn) {
-							filter.setColumn(apiAnnotation.column());
+							if(apiAnnotation.columns().length>1){ //this should not be empty since it has a default value
+								//If we have more than one column we column to NA (as it was before)
+								filter.setColumn(EPConstants.NA);
+							}else{
+								//if we have only one we set the first element 
+								filter.setColumn(apiAnnotation.columns()[0]);
+							}
+							
+							filter.setColumns(apiAnnotation.columns());
 						}
 						//we check the method exposed
 						if (((Method) mbr).getAnnotation(javax.ws.rs.POST.class) != null){

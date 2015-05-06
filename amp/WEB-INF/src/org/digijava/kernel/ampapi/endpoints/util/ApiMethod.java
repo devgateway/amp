@@ -10,7 +10,8 @@ public @interface  ApiMethod {
 	boolean ui();
 	String name() default "";
 	String id() ;
-	String column() default EPConstants.NA;
+	String []columns() default EPConstants.NA;
 	FilterType [] filterType() default FilterType.ALL;
 	String visibilityCheck() default "";
+	String columnGroup() default EPConstants.NA;;
 }

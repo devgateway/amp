@@ -80,12 +80,23 @@ function validateAndSave() {
 		$(newErrorContent).appendTo($("#errors"));
 		return false;
 	}
-	if (!isDigit($('[name=numberOfClasses]')[0].value)) {
+
+	var numberOfClassesValue = $('[name=numberOfClasses]')[0].value;
+	var minNumOfClasses = <%=org.digijava.module.aim.util.ColorRampUtil.MIN_CLASSES_INDEX%>;
+
+	if (!isDigit(numberOfClassesValue)) {
 		newErrorContent+='<digi:trn jsFriendly="true">Number of classes is not a digit</digi:trn></td></tr></table>';
 		$(newErrorContent).appendTo($("#errors"));
 		return false;
-			
 	}
+
+	if (numberOfClassesValue < minNumOfClasses) {
+		newErrorContent+='<digi:trn jsFriendly="true">Number of classes should be greater than</digi:trn>&nbsp;'
+		    + minNumOfClasses +'</td></tr></table>';
+		$(newErrorContent).appendTo($("#errors"));
+		return false;
+	}
+
 	
     document.aimIndicatorLayerManagerForm.target = window.opener.name;
     document.aimIndicatorLayerManagerForm.submit();

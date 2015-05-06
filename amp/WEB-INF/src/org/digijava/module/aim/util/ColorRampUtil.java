@@ -10,7 +10,7 @@ import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 
 public class ColorRampUtil {
 
-    private static final int MIN_CLASSES_INDEX = 2;
+    public static final int MIN_CLASSES_INDEX = 2;
 
     private static final String[][][] colorRamps = {
             {

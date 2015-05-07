@@ -202,8 +202,12 @@ Settings.Util.numberToString = function(number, settings) {
 	if (settings.useGrouping) {
 		format = "0,0";
 	}
-	if (settings.maxDecimalDigits > 0) {
-		format = format + "." + new Array(settings.maxDecimalDigits + 1).join("0");
+	//AMP-19648: if number is 'x,xxx.00', show 'x,xxx'
+	if (parseInt(number)!==number)
+	{
+		if (parseInt(settings.maxDecimalDigits) > 0) {
+			format = format + "." + new Array(parseInt(settings.maxDecimalDigits) + 1).join("0");	
+		}
 	}
 	// Define a new "language" for Numeral where we can change the default
 	// delimiters.

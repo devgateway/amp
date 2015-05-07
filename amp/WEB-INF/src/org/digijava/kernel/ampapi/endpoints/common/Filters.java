@@ -315,7 +315,7 @@ public class Filters {
 	 *	[
    	 *		{
      * 		id: 0,
-     * 		name: â€œsome org groupâ€?,
+     * 		name: "some org group",
      * 		typeId: :id,                  //id of parent type
      * 		orgIds: [:id, :id, :id]    //ids of child orgs
    	 *		},
@@ -339,7 +339,7 @@ public class Filters {
 	 *	[
    	 *	 	{
      *		id: 0,
-     *		name: â€œsome orgâ€?,
+     *		name: "some org",
      *		groupId: :id,                  //id of parent group
      *		roleIds: [:id, :id, :id]    //ids of all roles this org appears in ie. [0,2]
    	 *		},
@@ -362,7 +362,7 @@ public class Filters {
 	 *	[
 	 *		{
      * 		id: 0,
-     * 		name: â€œDonorâ€?
+     * 		name: "Donor"
    	 *		},
 	 *	...
 	 *	]

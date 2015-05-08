@@ -59,6 +59,8 @@
 		</script>		
 		
 		<!-- END LOADING NEW TABS NECESSARY FILES -->
+		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js"/>"></script>
+		
         
 	</head>
      	

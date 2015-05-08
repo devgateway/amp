@@ -46,6 +46,8 @@
 	<script language="JavaScript" type="text/javascript" src="/repository/aim/view/scripts/common.js"></script>
 	<digi:ref href="css/ampPrint.css" type="text/css" rel="stylesheet" media="print" />
 	<link rel="stylesheet" href="tabs/css/bootstrap.css">
+	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js"/>"></script>
+	
 
 	 
 	

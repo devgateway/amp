@@ -53,50 +53,24 @@ public class AmpResourcesFormSectionFeature extends AmpFormSectionFeaturePanel {
 		final AmpResourcesFormTableFeature resourcesList = new AmpResourcesFormTableFeature("resourcesList", "Resource List", am);
 		resourcesList.setOutputMarkupId(true);
 		add(resourcesList);
-		final String newDocumentGenKey = TranslatorWorker.generateTrnKey("Add New Document");
-     	final AjaxLink addNewDocumentLink = new AjaxLink("addNewDocumentLink"){
-            public void onClick(AjaxRequestTarget target) {
-             target.prependJavaScript(OnePagerUtil.getToggleChildrenJS(this));   
-            }
-            
-            @Override
-        	protected void onConfigure() {
-        		super.onConfigure();
-         		configureTranslationMode(this,newDocumentGenKey, "addNewDocumentH");
-            }
-        };
-        add(addNewDocumentLink);
-        
-        final String newWebLinkGenKey = TranslatorWorker.generateTrnKey("Add New WebLink");
-     	final AjaxLink addNewWebLinkLink = new AjaxLink("addNewWebLinkLink"){
-            public void onClick(AjaxRequestTarget target) {
-             target.prependJavaScript(OnePagerUtil.getToggleChildrenJS(this));   
-            }
-            
-            @Override
-        	protected void onConfigure() {
-        		super.onConfigure();
-        		configureTranslationMode(this,newWebLinkGenKey, "addNewWebResourceH");
-             }
-        };
-        add(addNewWebLinkLink);
-        
+
+
         final String addDocumentGenKey = TranslatorWorker.generateTrnKey("Add document from repository");
      	final AjaxLink addDocumentLink = new AjaxLink("addDocumentLink"){
             public void onClick(AjaxRequestTarget target) {
-             target.prependJavaScript(OnePagerUtil.getToggleChildrenJS(this));   
+             target.prependJavaScript(OnePagerUtil.getToggleChildrenJS(this));
             }
-            
+
             @Override
         	protected void onConfigure() {
         		super.onConfigure();
-        		configureTranslationMode(this,addDocumentGenKey, "addRepoDocumentH");
+        		configureTranslationMode(this, addDocumentGenKey, "addRepoDocumentH");
             }
         };
         add(addDocumentLink);
-		
-        
-		
+
+
+
         final AmpNewResourceFieldPanel newDoc = new AmpNewResourceFieldPanel("addNewDocument", am, "Add New Document", resourcesList, false);
         newDoc.setOutputMarkupId(true);
         add(newDoc);
@@ -166,7 +140,7 @@ public class AmpResourcesFormSectionFeature extends AmpFormSectionFeaturePanel {
 		add(searchDocs);
 	}
 	
-	private void configureTranslationMode (AjaxLink link,String key, String id) {
+	private void configureTranslationMode (AjaxLink link, String key, String id) {
 		if (TranslatorUtil.isTranslatorMode(getSession())){
 			link.setOutputMarkupId(true);
 			link.add(new AttributeAppender("style", new Model<String>("text-decoration: underline; color: #0CAD0C;"), ""));

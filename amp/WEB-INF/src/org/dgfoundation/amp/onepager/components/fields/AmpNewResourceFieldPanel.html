@@ -1,48 +1,60 @@
 <wicket:extend>
+
+
+
 	<span wicket:id="featureLabel"/>
-	<form wicket:id="form">
-		<table width="100%">
-			<tr>
-				<td align="left">
-					<span wicket:id="docTitle" style="text-align:left;" />
-				</td>
-				<td align="left">
-					<span wicket:id="docType" style="text-align:left;" />
-				</td>
-			</tr>
-			<tr>
-				<td align="left">
-					<span wicket:id="docDesc"  style="text-align:left;"/>
-				</td>
-				<td align="left">
-					<span wicket:id="docNote"  style="text-align:left;"/>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2" align="left" >
-				    <div style="white-space: nowrap;" >
-						<span wicket:id="resourceLabel"  style="text-align:left;">...</span>
-						<br />
-					    <span wicket:id="file" />
-					    <span wicket:id="webLink" style="text-align:left;" />
-                    </div>
-				</td>	
-			</tr>
-			<tr>
-				<td colspan="2" align="left">
-                    <div class="clearing">
-                        <span wicket:id="ajaxSubmit" class="wicketFloatLeft" />
-                        <span wicket:id="cancel"/>
-                    </div>
-				</td>
-			</tr>
-			<tr>
-				<td class="inside" align="left" colspan="2">
-					<span wicket:id="webLinkFeedbackContainer" style="color: red;">
-						<span wicket:id="webLinkFeedbackLabel" class="feedbacklabel.error"></span>
-					</span>
-				</td>
-			</tr>			
-		</table>
-	</form>
+
+    <tr><td align="center" background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside">
+        <a href="#" wicket:id="panelLink" class="slider">
+            <wicket:trn>Add New Document</wicket:trn>
+        </a>
+    </td></tr>
+
+    <div>
+        <form wicket:id="form">
+            <table width="100%">
+                <tr>
+                    <td align="left">
+                        <span wicket:id="docTitle" style="text-align:left;" />
+                    </td>
+                    <td align="left">
+                        <span wicket:id="docType" style="text-align:left;" />
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                        <span wicket:id="docDesc"  style="text-align:left;"/>
+                    </td>
+                    <td align="left">
+                        <span wicket:id="docNote"  style="text-align:left;"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="left" >
+                        <div style="white-space: nowrap;" >
+                            <span wicket:id="resourceLabel"  style="text-align:left;">...</span>
+                            <br />
+                            <span wicket:id="file" />
+                            <span wicket:id="webLink" style="text-align:left;" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="left">
+                        <div class="clearing">
+                            <span wicket:id="ajaxSubmit" class="wicketFloatLeft" />
+                            <span wicket:id="cancel"/>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="inside" align="left" colspan="2">
+                        <span wicket:id="webLinkFeedbackContainer" style="color: red;">
+                            <span wicket:id="webLinkFeedbackLabel" class="feedbacklabel.error"></span>
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    <div>
 </wicket:extend>

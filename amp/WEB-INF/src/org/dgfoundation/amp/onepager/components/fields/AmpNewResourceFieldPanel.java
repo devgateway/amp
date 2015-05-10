@@ -11,8 +11,11 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -23,6 +26,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.upload.FileItem;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpResourcesFormTableFeature;
 import org.dgfoundation.amp.onepager.components.upload.FileUploadPanel;
@@ -33,6 +37,7 @@ import org.dgfoundation.amp.onepager.models.ResourceTranslationModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -62,7 +67,11 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 	private  Model<String> newResourceIdModel = new Model <String> ();
 
 	
-    public AmpNewResourceFieldPanel(String id, final IModel<AmpActivityVersion> model, String fmName, final AmpResourcesFormTableFeature resourcesList, boolean newResourceIsWebLink) throws Exception {
+    public AmpNewResourceFieldPanel(final String id,
+                                    final IModel<AmpActivityVersion> model,
+                                    final String fmName,
+                                    final AmpResourcesFormTableFeature resourcesList,
+                                    boolean newResourceIsWebLink) throws Exception {
 		super(id, model, fmName, true);
 		TemporaryDocument tmpDoc= new TemporaryDocument ();
 		String docId =generateResourceKey("newResource");
@@ -133,35 +142,45 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
             			tmp.setFileName(tmp.getWebLink());
                 	}            	
                 	
-                	
-                	if(addTmp){
-                		tmp.setDate(Calendar.getInstance());
-                    	tmp.setYear(String.valueOf((tmp.getDate()).get(Calendar.YEAR)));
-                    	HashSet<TemporaryDocument> newItemsSet = getSession().getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
-                    	if (newItemsSet == null){
-                    		newItemsSet = new HashSet<TemporaryDocument>();
-                    		getSession().setMetaData(OnePagerConst.RESOURCES_NEW_ITEMS, newItemsSet);
-                    	       
-                    	}
-                        tmp.setTranslatedDescriptionList(getTranslationsForField(tmp.getNewTemporaryDocumentId(),"description"));
-                        tmp.setTranslatedTitleList(getTranslationsForField(tmp.getNewTemporaryDocumentId(),"title"));
-                        tmp.setTranslatedNoteList(getTranslationsForField(tmp.getNewTemporaryDocumentId(),"description"));
-                        newItemsSet.add(tmp);
-                        TemporaryDocument tmpDoc= new TemporaryDocument ();
-                        String docId =generateResourceKey("newResource");
-                        newResourceIdModel.setObject(docId);
-                		tmpDoc.setNewTemporaryDocumentId(docId);
-                		td.setObject(tmpDoc);
-                        fileItemModel.setObject(null);
-                	}
+                    tmp.setDate(Calendar.getInstance());
+                    tmp.setYear(String.valueOf((tmp.getDate()).get(Calendar.YEAR)));
+                    HashSet<TemporaryDocument> newItemsSet = getSession().getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
+                    if (newItemsSet == null){
+                        newItemsSet = new HashSet<TemporaryDocument>();
+                        getSession().setMetaData(OnePagerConst.RESOURCES_NEW_ITEMS, newItemsSet);
 
-
+                    }
+                    tmp.setTranslatedDescriptionList(getTranslationsForField(tmp.getNewTemporaryDocumentId(),"description"));
+                    tmp.setTranslatedTitleList(getTranslationsForField(tmp.getNewTemporaryDocumentId(),"title"));
+                    tmp.setTranslatedNoteList(getTranslationsForField(tmp.getNewTemporaryDocumentId(),"description"));
+                    newItemsSet.add(tmp);
+                    TemporaryDocument tmpDoc = new TemporaryDocument ();
+                    String docId = generateResourceKey("newResource");
+                    newResourceIdModel.setObject(docId);
+                    tmpDoc.setNewTemporaryDocumentId(docId);
+                    td.setObject(tmpDoc);
+                    fileItemModel.setObject(null);
             	}
             	
                 //panel.setVisibilityAllowed(false);
             }
             
         };
+
+        final String newDocumentGenKey = TranslatorWorker.generateTrnKey(fmName);
+        final AjaxLink addNewLink = new AjaxLink("panelLink"){
+            public void onClick(AjaxRequestTarget target) {
+                target.prependJavaScript(OnePagerUtil.getToggleChildrenJS(this));
+            }
+
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                configureTranslationMode(this, newDocumentGenKey, id + "H");
+            }
+        };
+        add(addNewLink);
+
         //form.setMaxSize(Bytes.megabytes(1));
         add(form);
 
@@ -194,8 +213,8 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
                 target.add(resourcesList);
                 target.add(webLinkFeedbackContainer);
                 if (updateVisibility(td, resourceIsURL)){
-                    target.appendJavaScript("$('#addNewDocumentH').hide();$('#addNewWebResourceH').hide();");
-                    target.appendJavaScript("$('#addNewDocumentH').find('[role=fileUploadedMsg]').html('');");
+                    target.appendJavaScript("$('#" + id + "H').hide();");
+                    target.appendJavaScript("$('#" + id + "H').find('[role=fileUploadedMsg]').html('');");
              		
                 }
 //                target.add(form);
@@ -207,7 +226,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
         AmpAjaxLinkField cancel = new AmpAjaxLinkField("cancel", "Cancel", "Cancel") {
             @Override
             protected void onClick(AjaxRequestTarget target) {
-                target.appendJavaScript("$('#addNewDocumentH').hide();$('#addNewWebResourceH').hide();");
+                target.appendJavaScript("$('#" + id + "H').hide();");
             }
         };
         form.add(cancel);
@@ -296,5 +315,21 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 		}
 		return translationsList;
 	}
+
+    private void configureTranslationMode (AjaxLink link, String key, String id) {
+        if (TranslatorUtil.isTranslatorMode(getSession())){
+            link.setOutputMarkupId(true);
+            link.add(new AttributeAppender("style", new Model<String>("text-decoration: underline; color: #0CAD0C;"), ""));
+            link.add(new AttributeModifier("key", key));
+            link.add(new AttributeModifier("onclick", "$('#"+id+"').slideToggle();spawnEditBox(this.id)"));
+        }
+        else{
+            link.add(AttributeModifier.remove("key"));
+            link.add(AttributeModifier.remove("style"));
+            link.add(AttributeModifier.remove("onclick"));
+            link.add(new AttributeModifier("onclick", "$('#"+id+"').slideToggle();"));
+
+        }
+    }
 	
 }

@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
 	<jira>AMP-20037.xml</jira>
 	<keyword>Insert missing global setting value </keyword>
-	<author>eperez</author>
+	<author>jdeanquin</author>
 	<description>It seems that for burkina its missing a global settings value</description>
 	<trigger type="all">
 		<condition type="custom">
@@ -25,4 +25,3 @@
 		</script>
 	</apply>
 </tns:patch>
-<

@@ -14,8 +14,7 @@
 
 <script type="text/javascript">
 	        $(document).ready(function() {
-
-            $("#show_login_pop").click(function(e) {          
+		    $("#show_login_pop").click(function(e) {          
 				e.preventDefault();
                 $("div#show_login_pop_box").toggle();
 				$("#show_login_pop").toggleClass("menu-open");
@@ -150,16 +149,8 @@
 					
 </logic:notPresent>
 </digi:secure>
-
-  <!--<script type="text/javascript">
-  function toggle(obj) {
-		var el = document.getElementById(obj);
-		if (el.style.display == 'none' || el.style.display == '') {
-			el.style.display = 'block';
-		}
-		else {
-			el.style.display = 'none';
-		}
-	}
-</script>-->
-  
+<digi:secure authenticated="true">
+<script type="text/javascript">
+document.getElementsByClassName ('login_nav')[0].style.zIndex = -1; 
+</script>
+</digi:secure>

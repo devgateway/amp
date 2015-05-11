@@ -83,6 +83,7 @@ function validateUserInfo(){
 	var firstName=document.getElementById("firstName").value;
 	var lastName=document.getElementById("lastName").value;
 	var country=document.getElementById("country").value;
+	var language = $('select[name="selectedLanguageCode"]').val();
 	var errorMsg='';
 	
 	if(! validateEmail(userMail)) {
@@ -118,6 +119,11 @@ function validateUserInfo(){
     }
 	if(country=='-1'){
 		errorMsg='<digi:trn jsFriendly="true" >Please Select Country</digi:trn>';
+		alert(errorMsg);
+		return false;
+	}
+	if (language == '-1') {
+		errorMsg='<digi:trn jsFriendly="true" >Please Select a Language Settings value</digi:trn>';
 		alert(errorMsg);
 		return false;
 	}

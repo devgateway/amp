@@ -867,8 +867,8 @@ public class LuceneUtil implements Serializable {
                         // Added try/catch because Field can throw an exception if any of the parameters is wrong and that would break the process.
                         try {
                             if ("name".equals(field)){
-                            	logger.info("Adding activity name to lucene index. Name: "+translation.getTranslation()
-                            			+" Locale: "+translation.getLocale());
+                            	/*logger.info("Adding activity name to lucene index. Name: "+translation.getTranslation()
+                            			+" Locale: "+translation.getLocale());*/
                                 doc.add(new Field(field + "_" + translation.getLocale(),
                                         translation.getTranslation(),
                                         Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));

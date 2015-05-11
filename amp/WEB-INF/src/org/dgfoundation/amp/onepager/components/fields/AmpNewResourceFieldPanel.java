@@ -54,8 +54,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 	private WebMarkupContainer webLinkFeedbackContainer;
 	private Label webLinkFeedbackLabel;
 	boolean resourceIsURL = false;
-	private boolean titleSelected;
-	private boolean pathSelected;
+    private boolean pathSelected;
 	private boolean urlSelected;
 	private boolean urlFormatValid;
 	
@@ -77,7 +76,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 		String docId =generateResourceKey("newResource");
 		newResourceIdModel.setObject(docId);
 		tmpDoc.setNewTemporaryDocumentId(docId);
-		final IModel<TemporaryDocument> td = new Model(tmpDoc);
+		final IModel<TemporaryDocument> td = new Model<TemporaryDocument>(tmpDoc);
 		final ResourceTranslationModel titleModel = new ResourceTranslationModel(new PropertyModel<String>(td, "title"),newResourceIdModel);
 		final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("docTitle",titleModel , "Title",AmpFMTypes.MODULE,Boolean.TRUE);
 		name.setTextContainerDefaultMaxSize();
@@ -121,7 +120,6 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
              */
             @Override
             protected void onSubmit() {
-            	boolean addTmp = true;
             	TemporaryDocument tmp = td.getObject();
                 if (fileItemModel.getObject() != null)
                     tmp.setFile(new FileUpload(fileItemModel.getObject()));
@@ -137,19 +135,19 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
                 		tmp.setContentType(tmp.getFile().getContentType());
                 	}
             		
-            		if(tmp.getWebLink() != null){
-            			tmp.setWebLink(DocumentManagerUtil.processUrl(tmp.getWebLink(),null));
+            		if (tmp.getWebLink() != null) {
+            			tmp.setWebLink(DocumentManagerUtil.processUrl(tmp.getWebLink(), null));
             			tmp.setFileName(tmp.getWebLink());
                 	}            	
                 	
                     tmp.setDate(Calendar.getInstance());
                     tmp.setYear(String.valueOf((tmp.getDate()).get(Calendar.YEAR)));
                     HashSet<TemporaryDocument> newItemsSet = getSession().getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
-                    if (newItemsSet == null){
+                    if (newItemsSet == null) {
                         newItemsSet = new HashSet<TemporaryDocument>();
                         getSession().setMetaData(OnePagerConst.RESOURCES_NEW_ITEMS, newItemsSet);
-
                     }
+
                     tmp.setTranslatedDescriptionList(getTranslationsForField(tmp.getNewTemporaryDocumentId(),"description"));
                     tmp.setTranslatedTitleList(getTranslationsForField(tmp.getNewTemporaryDocumentId(),"title"));
                     tmp.setTranslatedNoteList(getTranslationsForField(tmp.getNewTemporaryDocumentId(),"description"));
@@ -232,7 +230,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
         form.add(cancel);
         
         webLinkFeedbackContainer = new WebMarkupContainer("webLinkFeedbackContainer");
-        webLinkFeedbackLabel = new Label("webLinkFeedbackLabel", new Model(defaultMsg));
+        webLinkFeedbackLabel = new Label("webLinkFeedbackLabel", new Model<String>(defaultMsg));
 		webLinkFeedbackContainer.setOutputMarkupId(true);
 		webLinkFeedbackContainer.setOutputMarkupPlaceholderTag(true);
 		webLinkFeedbackContainer.setVisible(false);
@@ -244,50 +242,44 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 	protected boolean updateVisibility(IModel<TemporaryDocument> tempDocModel,boolean newResourceIsWebLink){
 		boolean noErrors = true;
 		TemporaryDocument resource = tempDocModel.getObject();
-		if(resource.getTitle() == null || resource.getTitle().length() == 0){
-			titleSelected = false;
-		}else{
-			titleSelected = true;
-		}
+        boolean titleSelected = !(resource.getTitle() == null || resource.getTitle().length() == 0);
                 
 		if (newResourceIsWebLink){
-			if(resource.getWebLink() == null || resource.getWebLink().length() == 0){
+			if (resource.getWebLink() == null || resource.getWebLink().length() == 0) {
 				urlSelected = false;
-			}else{
+			} else {
 				urlSelected =true;
 				
 				Pattern pattern = Pattern.compile(EXPRESSION,Pattern.MULTILINE);
 				Matcher matcher = pattern.matcher(resource.getWebLink());
 				if (!matcher.find()){
 					urlFormatValid = false;
-				}else{
-					if(!resource.getWebLink().contains("://"))
-						resource.setWebLink("http://" + resource.getWebLink());
+				} else {
+					if (!resource.getWebLink().contains("://")) {
+                        resource.setWebLink("http://" + resource.getWebLink());
+                    }
 					urlFormatValid = true;
 				}
 			}			
-		}else{
-			if(resource.getFile() == null){
-				pathSelected = false;
-			}else{
-				pathSelected =true;
-			}
+		} else {
+            pathSelected = resource.getFile() != null;
 		}
 			
-		if(titleSelected && ((pathSelected && ! newResourceIsWebLink) || (newResourceIsWebLink && urlSelected && urlFormatValid)) ){
+		if (titleSelected && ((pathSelected && ! newResourceIsWebLink)
+                || (newResourceIsWebLink && urlSelected && urlFormatValid))) {
 			webLinkFeedbackContainer.setVisible(false);
-		}else{
+		} else {
 			webLinkFeedbackContainer.setVisible(true);
-			if(! titleSelected){
+			if(!titleSelected) {
 				webLinkFeedbackLabel.setDefaultModelObject(defaultMsg);
 				noErrors = false;
-			}else if( ! pathSelected && ! newResourceIsWebLink){
+			} else if(! pathSelected && ! newResourceIsWebLink) {
 				webLinkFeedbackLabel.setDefaultModelObject(filePathNotSelected);
 				noErrors = false;
-			}else if (! urlSelected && newResourceIsWebLink) {
+			} else if (! urlSelected && newResourceIsWebLink) {
 				webLinkFeedbackLabel.setDefaultModelObject(urlNotSelected);
 				noErrors = false;
-			}else if ( ! urlFormatValid && newResourceIsWebLink){
+			} else if (! urlFormatValid && newResourceIsWebLink) {
 				webLinkFeedbackLabel.setDefaultModelObject(wrongUrlFormat);
 				noErrors = false;
 			}
@@ -313,7 +305,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 				return translationsList;
 			}
 		}
-		return translationsList;
+		return null;
 	}
 
     private void configureTranslationMode (AjaxLink link, String key, String id) {

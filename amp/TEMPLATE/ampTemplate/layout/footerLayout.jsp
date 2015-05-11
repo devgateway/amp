@@ -10,7 +10,8 @@
 <script type="text/javascript">
 var boilerplate = new window.boilerplate(
      	  {
-     		showAdminFooter: true
+     		showAdminFooter: true,
+     		showLogin: false
 		  });
 
 </script>

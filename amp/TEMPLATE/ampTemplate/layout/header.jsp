@@ -14,7 +14,7 @@
 
 <!-- HEADER START -->
 	<c:if test='${empty sessionScope.currentMember}'>
-		<div class="login_nav" style="position: absolute;top: 0px;left: 650px;">
+		<div class="login_nav" style="position: absolute;top: 0px;left:62%;">
 				<digi:insert attribute="loginWidget"/>
 		</div>
 	</c:if>

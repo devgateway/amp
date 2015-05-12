@@ -46,7 +46,6 @@
 	<digi:secure authenticated="true">
 		<jsp:include page="headerTop_2.jsp"/>
 	</digi:secure>
-<center>	
 	<div id="amp-header"></div>  
 	<digi:insert attribute="headerMiddle"/>
 
@@ -58,7 +57,6 @@
 			</div>
 		</div>
 	</div>
-	</center>
 	<!-- BREADCRUMP END -->
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 		<tbody>

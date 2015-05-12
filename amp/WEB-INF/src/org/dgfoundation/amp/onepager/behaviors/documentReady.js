@@ -40,21 +40,15 @@ function computateVisibleSections(){
 }
 
 function adjustQuickLinks(){
-	var mainContentTop = $('#mainContent').offset().top - 23;
 	var mainContentLeft = $('#mainContent').offset().left;
 	var currentScrollLeft = $(window).scrollLeft();
 	mainContentLeft = mainContentLeft + 800 - currentScrollLeft;
-	var currentScrollTop = mainContentTop - $(window).scrollTop();
-	if (currentScrollTop < 0)
-		currentScrollTop = 2;
-	if ( $('#footer').offset() !=null &&  $('#footer').offset().top < $('#rightMenu').offset().top + $('#rightMenu').height())
-		currentScrollTop = $('#footer').offset().top - $('#rightMenu').height() - $(window).scrollTop();
-	
-	$('#rightMenu').css('top', currentScrollTop + "px");
+	$('#rightMenu').css('top', "15%");
 	$('#rightMenu').css('left', mainContentLeft + "px");
 	if (onepagerMode)
 		computateVisibleSections();
 }
+
 
 function highlightQItem(currentItem){
 	$('#qListItems').find('li').removeClass('quickListHighlight');

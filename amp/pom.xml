@@ -1125,22 +1125,7 @@
 					        <downloadRoot>http://nodejs.org/dist/</downloadRoot>
 					    </configuration>
 					</execution>
-					<!-- Running npm -->
-					<execution>
-					    <id>npm install</id>
-					    <goals>
-					        <goal>npm</goal>
-					    </goals>
 					
-					    <!-- optional: default phase is "generate-resources" -->
-					    <phase>generate-sources</phase>
-					
-					    <configuration>
-					        <!-- optional: The default argument is actually  "install", so unless you need to run some other npm command, 
-					        you can remove this whole <configuration> section.-->
-					        <arguments>install</arguments>
-					    </configuration>
-					</execution>
 					<!-- Running gulp -->
 					<execution>
 					    <id>gulp build</id>

@@ -15,3 +15,13 @@
 <div id="iframe-container">
 	<iframe src="/aim/selectPledgeLocation.do?edit=false" width="100%" seamless="seamless" frameborder="0" marginheight="0" marginwidth="0" id="bootstrap_iframe"></iframe>
 </div>
+
+<!-- Given that pledges don't have a footer. We initialize the menu here -->
+<script type="text/javascript">
+var boilerplate = new window.boilerplate(
+     	  {
+     		showAdminFooter: true,
+     		showLogin: false
+		  });
+
+</script>

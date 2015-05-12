@@ -156,9 +156,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 					cell.setFormattedValue(DateCell.parseMondrianDate(cell.getFormattedValue()).right);
 				}
 			}
-
 		}
-
 	}
 	
 	@Override

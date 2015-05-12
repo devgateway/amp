@@ -6,6 +6,7 @@ package org.digijava.kernel.ampapi.saiku.util;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -177,7 +178,6 @@ public class CellDataSetToGeneratedReport {
 	private int addRowData(int rowId, Map<ReportOutputColumn, ReportCell> contents) throws AMPException {
 		int notNullColId = 0;
 		int rowLength = cellDataSet.getCellSetBody()[rowId].length;
-		
 		//adds data to the content
 		for(int colId = 0; colId < rowLength; colId++) {
 			boolean reformat = true;
@@ -188,7 +188,7 @@ public class CellDataSetToGeneratedReport {
 			//textual columns
 			if (colId < spec.getColumns().size() && !CustomAmounts.ACTIVITY_AMOUNTS.contains(roc.originalColumnName)) { 
 				if (DateColumns.ACTIVITY_DATES.contains(roc.originalColumnName)) {
-					cellData = DateCell.buildDateCell(value);
+					cellData = DateCell.buildDateFromRepOut(value);
 				} else { 
 					// do not reformat only text cells (we rely upon formatted value == null) 
 					reformat = false;

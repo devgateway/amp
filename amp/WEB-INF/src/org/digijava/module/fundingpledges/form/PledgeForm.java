@@ -961,7 +961,8 @@ public class PledgeForm extends ActionForm implements Serializable {
 	
 	public String getAcvlValue(Long acvlId){
 		if (acvlId == null) return null;
-		return CategoryManagerUtil.loadAcvOrNull(acvlId).getValue();
+		AmpCategoryValue acv = CategoryManagerUtil.loadAcvOrNull(acvlId);
+		return acv == null ? null : acv.getValue();
 	}
 	
 //	@java.lang.Override

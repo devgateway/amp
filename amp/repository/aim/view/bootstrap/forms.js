@@ -318,7 +318,7 @@ function amp_bootstrap_form_update_area(url, action, replaceId, callback)
 					callback();
 			});*/
 	$(replaceId).load(url, {extraAction: action}, function(data){
-		init_amp_magic(replaceId);
+		init_amp_magic_immediately(replaceId);
 		if (callback != null)
 			callback();
 	});

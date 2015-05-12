@@ -91,7 +91,7 @@ public class AddPledge extends Action {
             HttpServletRequest request,
             HttpServletResponse response) throws java.lang.Exception {
         	
-    		request.setAttribute("bootstrap_insert", true); // for the big layout to know to adapt the page for modern-web-standards insets
+    		//request.setAttribute("bootstrap_insert", true); // for the big layout to know to adapt the page for modern-web-standards insets
     		PledgeForm plForm = (PledgeForm) form;
     		
     		if (request.getParameter("heartBeat") != null)

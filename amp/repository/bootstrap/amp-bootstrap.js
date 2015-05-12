@@ -162,12 +162,16 @@ function init_ajax_upload(divId){
 }
 
 function init_amp_magic(divIdInput){
-	var divId = divIdInput;
 	$(document).ready(function(){
-		if (divId.charAt(0) != '#')
-			divId = '#' + divId;
-		init_custom_looks(divId);
-		init_validation(divId);
-		init_ajax_upload(divId);
+		init_amp_magic_immediately(divIdInput);
 	});
+}
+
+function init_amp_magic_immediately(divIdInput){
+	var divId = divIdInput;
+	if (divId.charAt(0) != '#')
+		divId = '#' + divId;
+	init_custom_looks(divId);
+	init_validation(divId);
+	init_ajax_upload(divId);
 }

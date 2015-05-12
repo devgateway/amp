@@ -1,4 +1,4 @@
-<%-- renders the programs part of the Pledge Form --%>
+<%-- renders the sectors part of the Pledge Form --%>
 <%-- the HTML is ready to be included in the page per se, so no css/javascript includes here! --%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>

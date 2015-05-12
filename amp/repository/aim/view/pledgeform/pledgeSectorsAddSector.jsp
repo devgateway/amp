@@ -37,6 +37,5 @@
 	<div class="col-xs-4 col-xs-offset-0 text-left"><button type="button" class="btn btn-success btn-sm" id='pledge_form_sectors_change_cancel' onclick="sectorsController.cancelClicked(this);" ><digi:trn>Cancel</digi:trn></button></div>
 </c:if>	
 </div>
-</script>
 
 

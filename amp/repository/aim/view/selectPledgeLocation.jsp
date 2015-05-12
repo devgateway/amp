@@ -9,6 +9,7 @@
 		%><jsp:include page="/repository/aim/view/pledgeform/pledgelocationsAddPledge.jsp"></jsp:include><%
     } else 
     { // not ajax: render the full bootstrap iframe 
+    	// System.out.println("rendering the full bootstrap iframe");
 %>
 <jsp:include page="/repository/aim/view/pledgeform/pledgeFormMain.jsp"></jsp:include>
 <%

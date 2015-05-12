@@ -65,7 +65,7 @@
 	</logic:notPresent>
 </div>
 <digi:insert attribute="headerMiddle"/>
-<logic:notPresent name="bootstrap_insert" scope="request">
+<%-- <logic:notPresent name="bootstrap_insert" scope="request">  --%>
 	<div class="breadcrump_1">&nbsp;</div>
 	<div style="width:1000px;margin:0 auto;">
 		<table width="100%" id="homelayout">
@@ -77,10 +77,11 @@
     <div class="footerText" >
     	<digi:insert attribute="footer"/>
     </div>    
-</logic:notPresent>
-<logic:present name="bootstrap_insert" scope="request">
+<%--  </logic:notPresent> --%>
+<%--<logic:present name="bootstrap_insert" scope="request">
 	<digi:insert attribute="body"/>
 	<!-- no footer in boostrap-iframe hacks  -->
 </logic:present>
+ --%>
 </body>
 </html>

@@ -8,17 +8,8 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/struts-nested" prefix="nested" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-	<!-- IFRAME SEAMLESS !!! -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Pledges Form IFrame</title>
 
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="/repository/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="/repository/bootstrap/bootstrap-theme.min.css">   
+
     <!-- Bootstrap-select http://silviomoreto.github.io/bootstrap-select/ -->
     <link href="/repository/bootstrap/bootstrap-select.min.css" rel="stylesheet" type="text/css">
     <link href="/repository/bootstrap/jquery.pnotify.default.css" media="all" rel="stylesheet" type="text/css" />
@@ -28,18 +19,8 @@
     <link href="/repository/bootstrap/amp-bootstrap.css" rel="stylesheet" type="text/css" /> <!-- this should always be included last -->
     
     <!-- THESE 4 FILES SHOULD ALWAYS BE THE FIRST INCLUDED JS, IN THIS ORDER -->
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="/repository/bootstrap/jquery.min.js"></script>
 	<script src="/repository/bootstrap/amp-bootstrap.js" type="text/javascript"></script>       
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
-  <body class="main_side" id="bootstrap-iframe">
-  	
+  <body class="main_side">
   	<logic:present name="PNOTIFY_ERROR_MESSAGE" scope="request">
   		<script type="text/javascript">
   			$(document).ready(function(){
@@ -81,6 +62,3 @@
     <script src="/repository/bootstrap/bootstrap-dialog.min.js" type="text/javascript"></script>
     <script src="/repository/bootstrap/bootstrap-utils.js" type="text/javascript"></script>
  <!--   <script src="/repository/bootstrap/lightbox/ekko-lightbox.min.js" type="text/javascript"></script>  --> 
-	<div id="iframe-hack-end-marker"></div>
-  </body>
-</html>

@@ -412,8 +412,8 @@ public class NodeWrapper{
 		} catch(RepositoryException e) {
 			ActionMessage error	= 
 				new ActionMessage("error.contentrepository.addFile.badPath", "Error adding new document. Please make sure you specify a valid path to the local file and the file is not empty."); 
-			errors.add("title",error);
-			e.printStackTrace();
+			errors.add("title", error);
+			logger.error("could not add document to JCR", e);
 			errorAppeared	= true;
 		} 
 		catch (Exception e) {

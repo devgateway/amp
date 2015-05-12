@@ -1,4 +1,8 @@
 /**
+ * this file should NOT be used starting with AMP 2.11
+ * left here in case it is needed.
+ */
+/**
  * hacks related to loading bootstrap within an iframe
  * include this file in the INCLUDING page (old AMP) if not using bootstrap layout only
  * @param elem

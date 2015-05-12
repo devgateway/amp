@@ -7,17 +7,17 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.fundingpledges.dbentity.FundingPledges;
+import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.fundingpledges.form.PledgeForm;
 
 public class ViewPledge extends Action {
-
+	
 	public ActionForward execute(ActionMapping mapping,
             ActionForm form,
             HttpServletRequest request,
             HttpServletResponse response) throws java.lang.Exception {
         	
-		request.setAttribute("bootstrap_insert", true); // for the big layout to know to adapt the page for modern-web-standards insets
-		return mapping.findForward("forward");
-    		
+		return new ViewPledgeData().execute(mapping, form, request, response);
 	}
 }

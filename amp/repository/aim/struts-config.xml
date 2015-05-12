@@ -220,11 +220,13 @@
     <action name="viewPledgesForm" path="/aim/viewPledgesList" scope="request" type="org.digijava.module.fundingpledges.action.ShowPledgesList">
       <forward name="forward" path="/showLayout.do?layout=viewPledgesList"/>
     </action>
+<!--
 	<action name="emptyForm" path="/aim/viewPledge" scope="request" type="org.digijava.module.fundingpledges.action.ViewPledge">
       <forward name="forward" path="/showLayout.do?layout=viewPledge" />
     </action>
-    <action name="pledgeForm" path="/aim/viewPledgeData" scope="request" type="org.digijava.module.fundingpledges.action.ViewPledgeData">
-		<forward name="forward" path="/showLayout.do?layout=viewPledgeData" />
+-->
+    <action name="pledgeForm" path="/aim/viewPledge" scope="request" type="org.digijava.module.fundingpledges.action.ViewPledgeData">
+		<forward name="forward" path="/showLayout.do?layout=viewPledge" />
     </action>
     <action name="aimViewAhSurveisForm" path="/aim/viewAhSurveis" scope="session" type="org.digijava.module.aim.action.ViewAhSurveis" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewAhSurveis" />

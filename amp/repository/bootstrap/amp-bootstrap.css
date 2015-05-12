@@ -3,7 +3,7 @@
 	include this AFTER all the stock css files - this overrides some of them!
 */
 
-body {
+#pledge_form_big_div {
 	font-size: 12px;
 }
 
@@ -108,9 +108,6 @@ div.amp-subgroup:hover {
 	max-width: 200px !important;
 }
 
-/* copy-paste from amp.css below - we don't want to include that file (full of mess) */
-.main_side {background-color:#EFEFEF; border-left:1px solid #BDBCB5; border-right:1px solid #BDBCB5; border-bottom:1px solid #BDBCB5;}
-
  .fields_group {  /* copypasted off "fieldset" */
 	background-color: #FFFFFF;
 	border-top: 1px solid #DADAD6;
@@ -200,4 +197,36 @@ div.amp-subgroup:hover {
 .label-and-select .h6
 {
 	margin-top: 0px;
+}
+
+.nav {
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+
+.nav > li > a {
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+}
+
+.navbar-nav > li > a {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  line-height: 20px;
+}
+
+@media (min-width: 768px)
+.navbar-nav > li > a {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.navbar-default .navbar-nav > li > a {
+  color: #777;
+}
+
+.nav > li > a {
+  padding: 4px 6px;
 }

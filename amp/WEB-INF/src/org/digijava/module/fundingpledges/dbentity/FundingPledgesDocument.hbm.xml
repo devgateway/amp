@@ -9,7 +9,7 @@
 			</generator>
 		</id>
 		<many-to-one name="pledgeid" column="pledge_id" class="org.digijava.module.fundingpledges.dbentity.FundingPledges" lazy="false"/>
-		<property name="title" column="title" type="java.lang.String" not-null="true" unique-key="pledgeDocumentUnique" />
-		<property name="uuid" column="uuid" type="java.lang.String" not-null="true" index="amp_funding_pledges_document_idx" unique-key="pledgeDocumentUnique" />
+		<property name="title" column="title" type="java.lang.String" not-null="true" />
+		<property name="uuid" column="uuid" type="java.lang.String" not-null="true" index="amp_funding_pledges_document_idx" />
 	</class>
 </hibernate-mapping>

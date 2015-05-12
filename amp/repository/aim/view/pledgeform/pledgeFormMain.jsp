@@ -11,18 +11,9 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-	<!-- IFRAME SEAMLESS !!! -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Pledges Form IFrame</title>
 
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="/repository/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="/repository/bootstrap/bootstrap-theme.min.css">   
     <!-- Bootstrap-select http://silviomoreto.github.io/bootstrap-select/ -->
+    
     <link href="/repository/bootstrap/bootstrap-select.min.css" rel="stylesheet" type="text/css">
     <link href="/repository/bootstrap/jquery.pnotify.default.css" media="all" rel="stylesheet" type="text/css" />
     <link href="/repository/bootstrap/jquery.pnotify.default.icons.css" media="all" rel="stylesheet" type="text/css" />
@@ -34,17 +25,10 @@
     
     <!-- THESE 4 FILES SHOULD ALWAYS BE THE FIRST INCLUDED JS, IN THIS ORDER -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="/repository/bootstrap/jquery.min.js"></script>
 	<script src="/repository/bootstrap/amp-bootstrap.js" type="text/javascript"></script>       
     <script src="/repository/aim/view/pledgeform/pfscripts.js" type="text/javascript"></script>
     <script src="/repository/aim/view/bootstrap/amp_validation.js" type="text/javascript"></script>
 	<script src="/repository/aim/view/bootstrap/forms.js" type="text/javascript"></script>
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
 	<script type="text/javascript">
 		var please_enter_phone_number_message = '<digi:trn jsFriendly="true">Please enter phone</digi:trn>';
 		var please_enter_email_message = '<digi:trn jsFriendly="true">Please enter email</digi:trn>';
@@ -53,8 +37,6 @@
 		var please_enter_year_message = '<digi:trn jsFriendly="true">Please enter an year</digi:trn>';
 		var please_enter_date_message = '<digi:trn jsFriendly="true">Please enter a date</digi:trn>';
 	</script>    
-  </head>
-  <body class="main_side" id="bootstrap-iframe">
   	<logic:present name="PNOTIFY_ERROR_MESSAGE" scope="request">
   		<script type="text/javascript">
   			$(document).ready(function(){
@@ -62,6 +44,7 @@
   			});
   		 </script>
   	</logic:present>
+				
 <logic:notPresent name="PNOTIFY_ERROR_MESSAGE" scope="request">
  	<div id="pledge_form_big_div"> 
 		<aim:renderFormSubsection title="Pledge Identification">
@@ -122,7 +105,6 @@
 	</script>
 </logic:notPresent>	
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="/repository/bootstrap/bootstrap.min.js"></script>
     <script src="/repository/bootstrap/bootstrap-select.min.js" type="text/javascript"></script>
     <script src="/repository/bootstrap/jquery.pnotify.min.js" type="text/javascript"></script>
     <script src="/repository/bootstrap/bootstrap-dialog.min.js" type="text/javascript"></script>
@@ -134,6 +116,4 @@
     <script src="/repository/bootstrap/datetimepicker/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
     <script src="/repository/bootstrap/bootstrap-utils.js" type="text/javascript"></script>
  <!--   <script src="/repository/bootstrap/lightbox/ekko-lightbox.min.js" type="text/javascript"></script>  --> 
-	<div id="iframe-hack-end-marker"></div>
-  </body>
-</html>
+

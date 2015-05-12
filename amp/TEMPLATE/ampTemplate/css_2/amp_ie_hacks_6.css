@@ -1,7 +1,0 @@
-fieldset {position: relative; padding:20px 10px 10px 10px; margin-top:25px;}
-legend {position: absolute;top: -1.1em;left: .2em;}
-.tri {background-image:url(../images/ico_tri_1.gif); background-repeat: no-repeat; list-style:none; display:block; font-size:12px; padding:0px; margin:0px;}
-.tri_adv {padding-left:0px;}
-.desktop_tab {border-top:1px solid #D0D0D0; border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; float:left; margin-right:10px; background-color:#F2F2F2; margin-top:1px;}
-.desktop_tab_sel {background-color:#FFFFFF; border:1px solid #D0D0D0; float:left; margin-right:10px; margin-top:1px; border-bottom:#FFFFFF; margin-top:3px;}
-

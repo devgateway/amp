@@ -166,6 +166,7 @@ public class Security {
 			boolean siteAdmin = DgSecurityManager.permitted(subject, site, ResourcePermission.INT_ADMIN);
 			layout.set("logged",true);
 			layout.set("email", u.getEmail());
+			layout.set("userId",u.getId());
 			layout.set("firstName", u.getFirstNames());
 			layout.set("lastName", u.getLastName());
 			layout.set("administratorMode", siteAdmin);

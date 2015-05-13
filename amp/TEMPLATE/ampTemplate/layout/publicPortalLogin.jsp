@@ -74,8 +74,19 @@ var loginFailed = function(data, status) {
 				<p class="passfield">
 					<label><digi:trn>Password</digi:trn>:</label> <input name="j_password" type="password" id="j_password">
 				</p>
-				<div id="result"></div>
-                <input type="submit" id="amplogin" value="Login"/>
+				<div id="result" hidden="true">
+					<div id="loader" hidden="true">
+						<img src='/TEMPLATE/ampTemplate/img_2/ajax-loader.gif'>
+					</div>
+					<div class="error_text_login">
+						<img src='/TEMPLATE/ampTemplate/img_2/login_error.gif'> <span
+							id="invalid_user_pwd" hidden="true"><digi:trn>Invalid username or password</digi:trn>.</span>
+							<span id="unassigned_user" hidden="true"><digi:trn>You can not login into AMP because you are not assigned to a workspace</digi:trn>.</span>
+							<span id="invalid_user" hidden="true"><digi:trn>Invalid User</digi:trn>.</span>
+							<span id="suspend" hidden="true"></span>
+					</div>
+				</div>
+				<input type="submit" id="amplogin" value="Login"/>
 				<div class="utils">
 				<c:set var="trn1">
                 		<digi:trn key="aim:clickifyouForgotYourPassword">Click here if you have problem with login in</digi:trn>

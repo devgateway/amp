@@ -69,7 +69,7 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 			// TODO: I know, not the best member names but thats defined in the
 			// endpoint.
 			app.TabsApp.appliedSettings = {
-				"2" : firstContent.get('reportMetadata').get('reportSpec').get('settings').get('ampFiscalCalId'),
+				"2" : firstContent.get('reportMetadata').get('reportSpec').get('settings').get('calendar').get('ampFiscalCalId'),
 				"1" : firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode')
 			};
 			app.TabsApp.numericFormatOptions = firstContent.get('reportMetadata').get('settings').models;

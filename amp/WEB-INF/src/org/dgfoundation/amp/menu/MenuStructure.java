@@ -75,7 +75,7 @@ public class MenuStructure {
 			MenuItem item = itemsMap.get(t);
 			MenuItem parentItem = itemsMap.get(ame.getParent());
 			if (parentItem == null) {
-				// null ame parent is defined by "root", thus no NullPointer is expected
+				// null "ame" parent is defined by "root", thus no NullPointer is expected
 				logger.warn(String.format(warnMsg, ame.getName(), ame.getParent().getName()));
 			} else {
 				parentItem.appendChild(item);

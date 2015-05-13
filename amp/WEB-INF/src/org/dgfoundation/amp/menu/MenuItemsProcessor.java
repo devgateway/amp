@@ -98,6 +98,10 @@ public class MenuItemsProcessor {
 		case MenuConstants.NON_TRANSLATOR_VIEW:
 			visible = TranslatorWorker.isTranslationMode(TLSUtils.getRequest());
 			break;
+		case MenuConstants.ADD_ACTIVITY:
+		case MenuConstants.ADD_SSC_ACTIVITY:
+			visible = tm != null && Boolean.TRUE.equals(tm.getAddActivity());
+			break;
 		}
 		// if requestURL (the actual referrer) filter is specified, then display this menu item only for a referrer that matches it
 		visible = visible && (item.requestUrl == null || referer != null && referer.matches(item.requestUrl));

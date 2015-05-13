@@ -24,7 +24,7 @@
 						<% for(var c in currencies) { %> 
 							<% 
 							var selected = ''; 
-							if(selectedCurrency != undefined && selectedCurrency != null && currencies[c].id === selectedCurrency) { 
+							if(currencies[c].id === selectedCurrency) { 
 								selected = "selected = 'selected' ";
 							} 
 							%>
@@ -36,14 +36,13 @@
 				<td data-i18n="tabs.common:calendar">Calendar</td>
 				<td>
 					<select name="calendar" id="calendar"> 
-						<% for(var c in calendars) { %> 
-							<% 
-							var selected = ''; 
-							if(selectedCalendar != undefined && selectedCalendar != null && calendars[c].id === selectedCalendar) { 
+						<% for(var c in calendars) { 
+							var selected = '';
+							if(parseInt(calendars[c].id) === selectedCalendar) { 
 								selected = "selected = 'selected' "; 
-							} 
-							%>
-						<option value="<%= calendars[c].id%>"<%= selected %> ><%=calendars[c].name%></option> <% } %>
+							}%>
+							<option value="<%= calendars[c].id%>"<%= selected %> ><%=calendars[c].name%></option> 
+						<% } %>
 					</select>
 				</td>
 			</tr>

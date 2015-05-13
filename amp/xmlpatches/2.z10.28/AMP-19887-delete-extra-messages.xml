@@ -29,6 +29,8 @@
 			delete from dg_message where message_utf8=  'Existing Drafts. These are actvities that have been saved once and edited and saved as drafts.';
 			delete from dg_message where message_utf8= '			Existing Drafts. These are activities that have been saved once and			edited and saved as drafts.';
 			delete from dg_message where message_utf8=  'Existing Drafts. These are activities that have been saved once and	edited and saved as drafts.';
+			delete from dg_message where message_utf8= 'Show Legends';
+			delete from dg_message where message_utf8= 'Show Legends...';
 			</lang>
 		</script>
 	</apply>

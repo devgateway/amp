@@ -22,11 +22,17 @@
 // other chart styles form Phil
 .dollaz {
   white-space: nowrap;
+  color: rgba(255,255,255,0.8);
 }
 
 
 .nvtooltip {
+	div.panel {
+		background-color: rgba(0,0,0,0.4);
+	}
+	
     .panel-heading {
+      background-color: rgba(0,0,0,0.4);
       h2 {
         margin: 5px 0 0.2em;
         font-size: 1.6em;
@@ -34,12 +40,15 @@
         font-weight: 800;
         color: @amp_emph;
         .big-chart & {
+          background-color: rgba(0,0,0,0.4);
           font-size: 2em;
         }
       }
     }
 
     .panel-footer {
+      background-color: rgba(0,0,0,0.4);
+      color: rgba(255,255,255,0.8);      
       form {
         display: inline-block;
       }
@@ -63,7 +72,7 @@
   }
 
   b {
-    color: @amp_emph;
+    color: rgba(70,194,255,0.8);
   }
 
   .panel-heading,

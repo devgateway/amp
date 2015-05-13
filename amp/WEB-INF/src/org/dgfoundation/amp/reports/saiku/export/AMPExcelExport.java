@@ -45,6 +45,8 @@ import org.slf4j.LoggerFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -92,6 +94,7 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 	private int nonMeasureColumns;
 	private int measureColumns;
 	private Double[] grandColumnsTotals;
+	private final NumberFormat numberFormat = NumberFormat.getNumberInstance();
 
 	public AMPExcelExport(CellDataSet table, List<ThinHierarchy> filters, ExcelBuilderOptions options) {
 		super(table, filters, options);
@@ -690,13 +693,21 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 					// Uncomment to manually create cell without any styling.
 					// auxRow.getCell(lastCol + i).setCellValue(grandTotals.getTotalGroups()[i][j -
 					// headerRowsOffset].getFormattedValue());*/
-	
-					fillTotalCell(auxRow, grandTotals.getTotalGroups()[i][j - headerRowsOffset].getValue(), lastCol + i);
-					// Sum partial values for later.
-					if (grandColumnsTotals[i] == null) {
-						grandColumnsTotals[i] = new Double(0);
+					//TODO please check if the formats are correct in
+					//the api postprocessing 
+					Number number;
+					try {
+						number = numberFormat.parse(grandTotals.getTotalGroups()[i][j - headerRowsOffset].getFormattedValue());
+						fillTotalCell(auxRow, number.doubleValue(), lastCol + i);
+						if (grandColumnsTotals[i] == null) {
+							grandColumnsTotals[i] = new Double(0);
+						}
+						grandColumnsTotals[i] += number.doubleValue();
+					} catch (ParseException e) {
+						e.printStackTrace();
 					}
-					grandColumnsTotals[i] += grandTotals.getTotalGroups()[i][j - headerRowsOffset].getValue();
+					// Sum partial values for later.
+
 				}
 			}		
 
@@ -721,6 +732,7 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 			}
 			Row newRow = workbookSheet.createRow(workbookSheet.getLastRowNum() + 1);
 			for (int i = 0; i < measureColumns; i++) {
+				//TODO
 				fillTotalCell(newRow, columnTotals.getTotalGroups()[0][i].getValue(), nonMeasureColumns + i);
 			}
 		}

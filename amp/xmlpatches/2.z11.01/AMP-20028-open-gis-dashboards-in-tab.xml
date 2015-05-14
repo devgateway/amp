@@ -2,7 +2,7 @@
 <tns:patch closeOnSuccess="true" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-	<jira>AMP-19811</jira>
+	<jira>AMP-20028</jira>
 	<keyword>menu</keyword>
 	<author>nmandrescu</author>
 	<description>fix new Dashboards and GIS to open in a new tab</description>

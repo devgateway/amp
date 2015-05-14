@@ -20,7 +20,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.w3c.dom.Document;
 
 /**
- * Security Endpoint related services like
+ * Security Endpoint related services like menu, footer, user
  * 
  * @author Nadejda Mandrescu
  */
@@ -29,6 +29,7 @@ public class SecurityService {
 	private static final Logger logger = Logger.getLogger(SecurityService.class);
 	private static String ampVersion;
 	private static String buildDate;
+	
 	/**
 	 * @return json structure for the current view + user + state menu
 	 */
@@ -36,10 +37,10 @@ public class SecurityService {
 		List<MenuItem> items = MenuUtils.getCurrentRequestMenuItems();
 		return convert(items);
 	}
-
+	
 	/**
 	 * Converts menu items to JSON structure
-	 * 
+	 *  
 	 * @param items
 	 * @return JsonBean of menu items
 	 */
@@ -74,7 +75,14 @@ public class SecurityService {
 		}
 		return jsonItems;
 	}
-
+	
+	/**
+	 * 
+	 * @param xmlFilePath
+	 * @param siteUrl
+	 * @param isAdmin
+	 * @return
+	 */
 	public static JsonBean getFooter(String xmlFilePath, String siteUrl, boolean isAdmin) {
 		JsonBean jsonItem = new JsonBean();
 		populateBuildValues(xmlFilePath);
@@ -103,10 +111,11 @@ public class SecurityService {
 			jsonItem.set(EPConstants.ADMIN_LINKS, links);
 		}
 		return jsonItem;
-
 	}
+	
 	/**
 	 * Obtains and populates the values for  Amp Version and Build Date
+	 * 
 	 * @param filePath the path to the xml file containing 'buildDate' and
 	 * 'ampVersion' values
 	 */
@@ -125,4 +134,5 @@ public class SecurityService {
 		}
 
 	}
+	
 }

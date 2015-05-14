@@ -108,14 +108,16 @@ public class Security {
 //		return user;
 //	}
 
+	/**
+	 * @return menu structure for the current view, user and state
+	 */
 	@GET
-	@Path("/menus")
+	@Path("/menus")	
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "Menu", name = "Menu")
 	public List<JsonBean> getMenu() {
 		return SecurityService.getMenu();
 	}
-	
 	
 	/**
 	 * For the user response
@@ -193,8 +195,6 @@ public class Security {
 		}
 
 		return layout;
-		
 	}
-
 
 }

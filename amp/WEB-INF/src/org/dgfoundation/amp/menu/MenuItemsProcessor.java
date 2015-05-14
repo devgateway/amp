@@ -93,9 +93,11 @@ public class MenuItemsProcessor {
 		boolean visible = true;
 		switch(item.name) {
 		case MenuConstants.TRANSLATOR_VIEW:
+		case MenuConstants.TRANSLATOR_VIEW_AF:
 			visible = !TranslatorWorker.isTranslationMode(TLSUtils.getRequest());
 			break;
 		case MenuConstants.NON_TRANSLATOR_VIEW:
+		case MenuConstants.NON_TRANSLATOR_VIEW_AF:
 			visible = TranslatorWorker.isTranslationMode(TLSUtils.getRequest());
 			break;
 		case MenuConstants.ADD_ACTIVITY:

@@ -27,7 +27,9 @@ public class MenuConstants {
 	public static final String TOOLS = "Tools";
 	public static final String LANGUAGE = "Language";
 	public static final String TRANSLATOR_VIEW = "Translator View";
+	public static final String TRANSLATOR_VIEW_AF = "Translator View AF";
 	public static final String NON_TRANSLATOR_VIEW = "Non-Translator View";
+	public static final String NON_TRANSLATOR_VIEW_AF = "Non-Translator View AF";
 	public static final String ADVANCED_MODE = "Advanced Mode";
 	public static final String HELP = "Help";
 	public static final String AMP_HELP = "AMP Help";

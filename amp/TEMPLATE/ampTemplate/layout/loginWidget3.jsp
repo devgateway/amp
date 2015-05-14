@@ -69,8 +69,8 @@
 	    							</div>
   									
 	    			</form>
-			<div id="result" hidden="true">
-				<div id="loader" hidden="true">
+			<div id="result" style="display:none;">
+				<div id="loader" style="display:none;">
 					<img src='/TEMPLATE/ampTemplate/img_2/ajax-loader.gif'>
 				</div>
 				<div class="error_text_login">

@@ -24,20 +24,7 @@ var EnabledChartsCollection = require('../models/enabled-charts-collection');
 module.exports = BackboneDash.View.extend({
 
   initialize: function(options) {
-    this.app = options.app;
-
-    // try to load an initial state from the url
-    try {
-      this.app.state.urlMaybeLoad();
-    } catch (e) {
-      if (e instanceof StateLoadError) {
-        this.app.report('Could not load saved dashboard',
-          ['If you are trying to load a shared link, please make sure the entire URL was copied']);
-        this.app.url.hash('');  // clear the bad saved-state hash
-      } else {
-        throw e;
-      }
-    }
+    this.app = options.app;    
 
     this.header = new Header({ app: this.app });    
     this.app.settings.load();  // maybe should go in render or something

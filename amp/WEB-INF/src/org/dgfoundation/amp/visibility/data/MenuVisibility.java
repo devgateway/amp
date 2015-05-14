@@ -58,8 +58,8 @@ public class MenuVisibility extends RuleBasedVisibility {
 		if (visibleData == null) {
 			// rebuild visibleData for the current view or use cached on from visibleDataPerView 
 			super.getEnabledSettings();
-			// filter out duplicate FM configuration
-			filterOutDuplicates();
+			// keep only the 1st FM option for priority lists
+			selectFirstPriorityOnly();
 		}
 		
 		return visibleData;
@@ -68,16 +68,13 @@ public class MenuVisibility extends RuleBasedVisibility {
 	/**
 	 * Filters out duplicate entries (Messages, Calendar), since there can be multiple entries enabled in FM
 	 * and we have to replicate old functionality, i.e. use the last one selected.
-	 * AMP-19837
-	 * 
-	 * Note: normally FM configuration must be done appropriately
 	 */
-	protected void filterOutDuplicates() {
-		filterOutDuplicates(messageEntryPriority.iterator());
-		filterOutDuplicates(calendarEntryPriority.iterator());
+	protected void selectFirstPriorityOnly() {
+		selectFirstPriorityOnly(messageEntryPriority.iterator());
+		selectFirstPriorityOnly(calendarEntryPriority.iterator());
 	}
 	
-	protected void filterOutDuplicates(Iterator<String> priorityIterator) {
+	protected void selectFirstPriorityOnly(Iterator<String> priorityIterator) {
 		while (priorityIterator.hasNext()) {
 			String data = priorityIterator.next();
 			if (visibleData.contains(data)) {

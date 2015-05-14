@@ -1,6 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.gis;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -28,13 +31,13 @@ import javax.ws.rs.core.StreamingOutput;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import net.sf.json.JSONSerializer;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.codehaus.jackson.node.POJONode;
 import org.codehaus.jackson.node.TextNode;
-import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.ReportArea;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
@@ -55,7 +58,9 @@ import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
@@ -71,6 +76,15 @@ import org.digijava.module.esrigis.helpers.MapConstants;
 @Path("gis")
 public class GisEndPoints {
 	private static final Logger logger = Logger.getLogger(GisEndPoints.class);
+
+	@Context
+	private HttpServletRequest httpRequest;
+	private String BOUNDARY_PATH = "TEMPLATE" + System.getProperty("file.separator") + "ampTemplate"
+			+ System.getProperty("file.separator") + "gisModule" + System.getProperty("file.separator") + "dev"
+			+ System.getProperty("file.separator") + "app" + System.getProperty("file.separator") + "mock-api"
+			+ System.getProperty("file.separator") + "data" + System.getProperty("file.separator") + "boundaries"
+			+ System.getProperty("file.separator");
+
 		
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -487,6 +501,27 @@ public class GisEndPoints {
 
 		}
 		return ActivityService.getLastUpdatedActivities(extraColumns, limit,config);
+	}
+	
+
+	@GET
+	@Path("/boundaries")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public JSONArray getBoundaries() {
+		String countryIso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
+		String path = httpRequest.getServletContext().getRealPath("/") + BOUNDARY_PATH + countryIso.toUpperCase()
+				+ System.getProperty("file.separator") + "list.json";
+		JSONArray json = null;
+		try {
+			InputStream is = 
+	                new FileInputStream(path);
+	        String jsonTxt = IOUtils.toString( is );
+	        json = (JSONArray) JSONSerializer.toJSON(jsonTxt);  
+			
+		} catch (IOException e) {
+			logger.warn("couldn't read file " + path, e);
+		}
+		return json;
 	}
 	
 	@GET

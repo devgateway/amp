@@ -74,7 +74,7 @@ public class MenuConstants {
 	public static final String VISUALIZATION_DASHBOARDS_ITEM = "Visualization Dashboards Item";
 	public static final String MESSAGES = "Messages";
 	public static final String MESSAGES_VIEW = "View Messages";
-	public static final String MESSAGES_TAB = "Messages Alert Tab";
+	public static final String MESSAGES_TAB = "Message Tab";
 	public static final String MESSAGES_ALERT_TAB = "Messages Alert Tab";
 	public static final String MESSAGES_APPROVAL = "Messages Approval Tab";
 	public static final String MESSAGES_EVENT_TAB = "Messages Event Tab";

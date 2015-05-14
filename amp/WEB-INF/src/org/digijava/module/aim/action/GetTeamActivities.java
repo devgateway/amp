@@ -197,17 +197,18 @@ public class GetTeamActivities
                 decideArchiveMode(mapping, taForm, request, response);
 
                 int totActivities = taForm.getAllActivities().size();
-                if(numRecords== -1 ){
+                if(numRecords == -1 || numRecords > totActivities){
                 	numRecords = totActivities;
-                }else if(totActivities / numRecords >50)
-                {
+                } else if(totActivities / numRecords > 50) {
                 	numRecords = totActivities / 50;
                 }
+                
+                
                 	
                 int numPages = totActivities / numRecords;
                 numPages += (totActivities % numRecords != 0) ? 1 : 0;
-                if(numPages<page){
-                    page--;
+                if(numPages < page){
+                    page = numPages;
                 }
                 
                 int stIndex = ((page - 1) * numRecords) + 1;

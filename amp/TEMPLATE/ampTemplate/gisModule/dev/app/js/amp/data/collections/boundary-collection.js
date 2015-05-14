@@ -6,9 +6,7 @@ var Boundary = require('../models/boundary-model');
 module.exports = Backbone.Collection
 .extend(LoadOnceMixin).extend({
   model: Boundary,
-  //url: '/rest/gis/boundaries',
-  // temporary so we get path to static files..
   url: function() {
-    return '/TEMPLATE/ampTemplate/gisModule/dev/app/mock-api/data/boundaries/list.json';
+    return '/rest/gis/boundaries';
   }
 });

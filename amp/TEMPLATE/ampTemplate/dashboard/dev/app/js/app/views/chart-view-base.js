@@ -79,10 +79,15 @@ module.exports = BackboneDash.View.extend({
     this.chartContainer = this.$('.dash-chart-wrap');
 
     if (this.model.get('adjtype') !== void 0) {  // this chart has adj settings
-      this.app.settings.load().done(_(function() {
+    	this.app.settings.load().done(_(function() {
         var adjSettings = this.app.settings.get('0');  // id for Funding Type
-        if (!adjSettings) { this.app.report('Could not find Funding Type settings'); }
-
+        if (!adjSettings) { 
+        	this.app.report('Could not find Funding Type settings'); 
+        } else {
+        	if (this.model.get('adjtype') === 'FAKE') {
+        		this.model.set('adjtype', adjSettings.get('defaultId'));
+        	}
+        }
         this.$('.ftype-options').html(
           _(adjSettings.get('options')).map(function(opt) {
             return adjOptTemplate({

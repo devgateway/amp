@@ -6,7 +6,7 @@ module.exports = ChartViewBase.extend({
 
   uiDefaults: {
     big: false,
-    adjtype: 'Actual Commitments',
+    adjtype: 'FAKE',
     view: 'bar'
   },
 

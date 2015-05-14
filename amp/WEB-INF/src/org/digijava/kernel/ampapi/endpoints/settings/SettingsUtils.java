@@ -98,15 +98,24 @@ public class SettingsUtils {
 	 * @return
 	 */
 	public static SettingOptions getFundingTypeSettings(Set<String> measures) {
+		//identifies the default funding type
+		String defaultId = SettingsConstants.DEFAULT_FUNDING_TYPE_ID;				
+		//AMP-20157: We need to check if the default funding type (usually Actual Commitments) is in the list of available active options.
+		boolean found = false;
+				
 		//build funding type options
 		List<SettingOptions.Option> options = new ArrayList<SettingOptions.Option>();
 		for (String measure : measures) {
 			SettingOptions.Option fundingTypeOption = new SettingOptions.Option(
 					measure, measure, true);
 			options.add(fundingTypeOption);
+			if (measure.equalsIgnoreCase(defaultId)) {
+				found = true;
+			}
+		}		
+		if (!found) {
+			defaultId = options.get(0).name;
 		}
-		//identifies the default funding type
-		String defaultId = SettingsConstants.DEFAULT_FUNDING_TYPE_ID;
 		
 		return new SettingOptions(SettingsConstants.FUNDING_TYPE_ID, true,
 				SettingsConstants.ID_NAME_MAP.get(SettingsConstants.FUNDING_TYPE_ID),

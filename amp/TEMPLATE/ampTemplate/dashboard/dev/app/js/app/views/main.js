@@ -34,6 +34,10 @@ module.exports = BackboneDash.View.extend({
     // AMP-19545: We instantiate the collection of enabled charts (from FM) and use it to enable or not each chart.
     var enabledChartsFM = new EnabledChartsCollection();
     enabledChartsFM.fetchData();
+    if(enabledChartsFM.models[0].get('error') !== undefined) {
+    	// The same endpoint will send an error if 'DASHBOARDS' is not active in the Feature Manager.
+    	window.location = '/';
+    }
     var col = [];
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Top Donors'})) {
     	col.push(new TopsChart(

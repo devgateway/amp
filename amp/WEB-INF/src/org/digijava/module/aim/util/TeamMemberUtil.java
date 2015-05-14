@@ -10,11 +10,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -52,6 +54,8 @@ public class TeamMemberUtil {
 	
 	public static Hashtable<Long,User> users = new Hashtable<Long,User>();
 	public static Hashtable<Long,AmpTeamMember> atmUsers = new Hashtable<Long,AmpTeamMember>();
+	
+	public static AmpTeamMemberRoles headRole = getAmpTeamHeadRole();
 	
 	public static User getUserEntityByTMId(Long teamMemberId) {
 		User u	= users.get( teamMemberId );
@@ -337,38 +341,56 @@ public class TeamMemberUtil {
 		return members;
 	}
 
-	public static Collection<TeamMember> getAllTeamMembers(Long teamId) {
-		Session session = null;
-		Query qry = null;
-		Collection<TeamMember> members = new ArrayList<TeamMember>();
-
+	public static List<TeamMember> getAllTeamMembers(Long teamId) {
 		try {
-			session = PersistenceManager.getSession();
-			String queryString = "select tm from "
-					+ AmpTeamMember.class.getName()+" tm ";
-                          if(teamId!=null){
-                              queryString+="  where (tm.ampTeam=:teamId)";
-                          }
-
-			qry = session.createQuery(queryString);
-                        if(teamId!=null){
-			qry.setParameter("teamId", teamId, LongType.INSTANCE);
-                        }
-			Iterator<AmpTeamMember> itr = qry.list().iterator();
-			while (itr.hasNext()) {
-				TeamMember tm = new TeamMember((AmpTeamMember) itr.next());
-				if( tm.getTeamHead() ) {
-					////System.out.println("[team member util] "+ tm.getMemberName() + " is team leader of team with id " +tm.getTeamId());
-					logger.info("[logger] "+ tm.getMemberName() + " is team leader of team with id " +tm.getTeamId());
-				}
-				members.add(tm);
+			Session session = PersistenceManager.getSession();
+			String queryString = "select distinct tm from " + AmpTeamMember.class.getName() + " tm "
+					+ "inner join fetch tm.user as usr "
+					+ "inner join fetch tm.ampMemberRole "
+					+ "inner join fetch tm.ampTeam "
+					+ "inner join fetch usr.groups";
+		
+			if (teamId != null) {
+				queryString += "  where (tm.ampTeam=:teamId)";
 			}
+
+			Query qry = session.createQuery(queryString);
+			
+			if (teamId != null) {
+				qry.setParameter("teamId", teamId, LongType.INSTANCE);
+			}
+			
+			List<AmpTeamMember> atms = qry.list();
+            List<TeamMember> members = new ArrayList<>();
+            
+			for(AmpTeamMember atm:atms) {
+				members.add(new TeamMember(atm));
+			}
+			
+            Collections.sort((List<TeamMember>)members, new TeamMemberUtil.TeamMemberComparator());
+            
+            return members;
 		} catch (Exception e) {
-			logger.error("Unable to get all team members", e);
+			throw new RuntimeException(e);
 		} 
-		logger.debug("returning members");
-		Collections.sort((List<TeamMember>)members, new TeamMemberUtil.TeamMemberComparator());
-		return members;
+	}
+	
+	public static Map<Long, List<TeamMember>> getAllTeamsWithMembers() {
+		Map<Long, List<TeamMember>> result = new HashMap<>();
+		List<TeamMember> teamMembers = getAllTeamMembers(null);
+			
+		for(TeamMember atm : teamMembers) {
+				Long teamId = atm.getTeamId();
+				if (result.get(teamId) == null) {
+					result.put(teamId, new ArrayList<TeamMember>());
+				}
+				
+				result.get(teamId).add(atm);
+			}
+            
+            Iterator<Long> iterator = result.keySet().iterator();
+			
+            return result;
 	}
 	
 	public static List<TeamMember> getAllMembersExcludingTL (Long teamId){
@@ -1620,7 +1642,6 @@ public class TeamMemberUtil {
 	}
 	
 	public static boolean isHeadRole(AmpTeamMemberRoles role){
-		AmpTeamMemberRoles headRole = getAmpTeamHeadRole();
 		return (headRole==null || role==null) ? false: headRole.getAmpTeamMemRoleId().equals(role.getAmpTeamMemRoleId());
 	}
 }

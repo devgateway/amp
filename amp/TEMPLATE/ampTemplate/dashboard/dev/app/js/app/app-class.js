@@ -5,6 +5,7 @@ var supportCheck = require('./check-support');
 
 var URLService = require('amp-url/index');
 var State = require('amp-state/index');
+var StateLoadError = require('amp-state/index').StateLoadError;
 var fs = require('fs');
 var Translator = require('amp-translate');
 var Filter = require('amp-filter/src/main');
@@ -24,6 +25,8 @@ function App() {
 
 
 _.extend(App.prototype, BackboneDash.Events, {
+	
+  rendered: false,
 
   initialize: function(options) {
     var _initDefer = new Deferred(),
@@ -76,6 +79,18 @@ _.extend(App.prototype, BackboneDash.Events, {
         url: this.url,
         saved: this.savedDashes
       });
+      
+      // try to load an initial state from the url
+      try {
+    	  this.state.urlMaybeLoad();
+      } catch (e) {
+          if (e instanceof StateLoadError) {
+        	  this.report('Could not load saved dashboard', ['If you are trying to load a shared link, please make sure the entire URL was copied']);
+        	  this.url.hash('');  // clear the bad saved-state hash
+          } else {
+        	  throw e;
+          }
+      }
 
       var dashboardTranslateKeys = JSON.parse(fs.readFileSync(__dirname +
         '/templates/initial-translation-request.json', 'utf8'));

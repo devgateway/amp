@@ -79,7 +79,7 @@ public class TeamMember implements Comparable, Serializable{
 			this.memberName = u.getName();
 			this.email = u.getEmail();
 			this.pledger = u.getPledger();
-			this.translator = DbUtil.isUserTranslator(u.getId());
+			this.translator = DbUtil.isUserTranslator(u);
 		}
 	}
 	

@@ -727,27 +727,11 @@ public class DbUtil {
 		return ampAppSettings;
 	}
 
-	public static boolean isUserTranslator(Long userId) {
+	public static boolean isUserTranslator(User user) {
 
 		logger.debug("In isUserTranslator()");
-		User user = null;
-		Session session = null;
 		boolean flag = false;
 		try {
-			session = PersistenceManager.getRequestDBSession();
-
-			// modified by Priyajith
-			// desc:used select query instead of session.load
-			// start
-			String queryString = "select u from " + User.class.getName()
-					+ " u " + "where (u.id=:id)";
-			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", userId, LongType.INSTANCE);
-			Iterator itrTemp = qry.list().iterator();
-			while (itrTemp.hasNext()) {
-				user = (User) itrTemp.next();
-			}
-			// end
 
 			Iterator itr = user.getGroups().iterator();
 			if (!itr.hasNext()) {

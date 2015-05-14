@@ -1727,18 +1727,28 @@ public class TeamUtil {
         try {
             session = PersistenceManager.getSession();
             String teamNameHql = AmpTeam.hqlStringForName("t");
-            String queryString = "select t from " + AmpTeam.class.getName() + " t order by " + teamNameHql;
+            String queryString = "select t from " + AmpTeam.class.getName() + " t "
+            		+ "inner join fetch t.organizations "
+            		+ "order by " + teamNameHql;
             qry = session.createQuery(queryString);
             qry.setCacheable(true);
-            teams = qry.list();
-            for (AmpTeam t: teams){
-            	t.getOrganizations().size(); //lazy init
+            
+            List<AmpTeam> rawTeams = qry.list();
+            Set<Long> teamIds = new HashSet<>();
+            
+            for(AmpTeam team:rawTeams) {
+            	if (!teamIds.contains(team.getAmpTeamId())) {
+            		teams.add(team);            		
+            	}
+            	teamIds.add(team.getAmpTeamId());
             }
+            
         } catch(Exception e) {
             logger.debug("cannot get All teams");
             logger.debug(e.toString());
             throw new RuntimeException(e);
         }
+        
         return teams;
     }
     

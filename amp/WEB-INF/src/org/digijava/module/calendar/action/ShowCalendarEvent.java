@@ -163,7 +163,7 @@ public class ShowCalendarEvent extends Action {
       }else{
         ceform.setSelectedCalendarTypeId(selectedCalendarTypeId);
        }
-        ceform.setTeamsMap(loadRecepients()); //this part is terribly slow!!!
+        ceform.setTeamsMap(loadRecepients()); 
        
         String[] slAtts = ceform.getSelectedAtts();
         if (slAtts != null) {
@@ -176,7 +176,7 @@ public class ShowCalendarEvent extends Action {
                     }
                 } else
                 	if (slAtts[i].startsWith("m:")) {
-                    AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(Long.valueOf(slAtts[i].substring(2)));//this is terribly slow too!
+                    AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(Long.valueOf(slAtts[i].substring(2)));
                     if (member != null) {
                         selectedAttsCol.add(new LabelValueBean(member.getUser().getFirstNames() + " " + member.getUser().getLastName(), slAtts[i]));
                     }
@@ -709,19 +709,23 @@ public class ShowCalendarEvent extends Action {
 
     private Map<String, Team> loadRecepients() {
         Map<String, Team> teamMap = new HashMap<String, Team> ();
+             
         List<AmpTeam> teams = (List<AmpTeam>) TeamUtil.getAllTeams();
+        Map<Long, List<TeamMember>> allTeamsWithMembers = TeamMemberUtil.getAllTeamsWithMembers();
+        
         if (teams != null && teams.size() > 0) {
             for (AmpTeam ampTeam : teams) {
                 if (!teamMap.containsKey("t" + ampTeam.getAmpTeamId())) {
-                    Team team = new Team();
+                	Team team = new Team();
                     team.setId(ampTeam.getAmpTeamId());
                     team.setName(ampTeam.getName());
-                    List<TeamMember> teamMembers = (List<TeamMember>) TeamMemberUtil.getAllTeamMembers(team.getId());
-                    team.setMembers(teamMembers);
+                    team.setMembers(allTeamsWithMembers.get(team.getId()));
+                    
                     teamMap.put("t" + team.getId(), team);
                 }
             }
         }
+    
         return teamMap;
     }
     

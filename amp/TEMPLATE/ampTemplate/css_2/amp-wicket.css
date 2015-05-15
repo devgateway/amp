@@ -57,7 +57,7 @@ td.inside {margin: 0; padding: 4px; background-color: #FFF;border:1px solid #b8b
 .welcome_info {font-size:12px; line-height:17px;}
 .welcome_title {font-size:18px; font-weight:bold; margin-bottom:10px;}
 .welcome_note {font-size:11px; font-weight:bold; color:#666666;}
-.login_here {background-image:url(/TEMPLATE/ampTemplate/img_2/login_bg.png); width:90px; height:26px; text-align:center; margin-right:10px;}
+.login_here {  background-color: #65B457;   width: 125px;  height: 33px;  margin-right: 10px;  text-align: center;  margin-top: 10px;}
 .login_here_cont {padding:5px; font-size:12px;}
 .login_here a {color:#000000;}
 .wlc_aid_map {background-color:#F4F4F4; border:1px solid #CCCCCC; padding:10px; font-size:12px; width:650px; margin-left:auto; margin-right:auto;}

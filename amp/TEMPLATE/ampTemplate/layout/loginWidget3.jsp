@@ -82,11 +82,11 @@
 			</div>
 		</div>
 <div id="logincontainer">
-  					<div class="login_here">
+  					<div class="login_here" id="show_login_pop">
   						<div class="login_here_cont">
-  							<a id="show_login_pop" style="color:#000000; font-weight:bold;text-decoration: underline;cursor: pointer;" >
+  							<a  >
   								<digi:trn>Login Here</digi:trn>
-  							</a>
+  							</a> 
   						</div>
                         
   					</div>

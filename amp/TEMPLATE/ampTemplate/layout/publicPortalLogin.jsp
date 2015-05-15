@@ -80,10 +80,10 @@ var loginFailed = function(data, status) {
 					</div>
 					<div class="error_text_login">
 						<img src='/TEMPLATE/ampTemplate/img_2/login_error.gif'> <span
-							id="invalid_user_pwd" hidden="true"><digi:trn>Invalid username or password</digi:trn>.</span>
-							<span id="unassigned_user" hidden="true"><digi:trn>You can not login into AMP because you are not assigned to a workspace</digi:trn>.</span>
-							<span id="invalid_user" hidden="true"><digi:trn>Invalid User</digi:trn>.</span>
-							<span id="suspend" hidden="true"></span>
+							id="invalid_user_pwd"><digi:trn>Invalid username or password</digi:trn>.</span>
+							<span id="unassigned_user"><digi:trn>You can not login into AMP because you are not assigned to a workspace</digi:trn>.</span>
+							<span id="invalid_user"><digi:trn>Invalid User</digi:trn>.</span>
+							<span id="suspend"></span>
 					</div>
 				</div>
 				<input type="submit" id="amplogin" value="Login"/>

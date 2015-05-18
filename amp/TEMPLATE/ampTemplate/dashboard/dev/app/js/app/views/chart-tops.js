@@ -5,7 +5,6 @@ var ChartViewBase = require('./chart-view-base');
 module.exports = ChartViewBase.extend({
 
   uiDefaults: {
-    big: false,
     adjtype: 'FAKE',
     view: 'bar'
   },

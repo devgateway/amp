@@ -38,6 +38,7 @@ public class DashboardsFMSettings extends DataVisibility implements FMSettings {
 				add("Implementing Agencies");
 				add("Beneficiary Agencies");
 				add("Executing Agencies");
+				add("Peace-building and State-building Goals");
 			}});
 	}};
 	
@@ -53,6 +54,7 @@ public class DashboardsFMSettings extends DataVisibility implements FMSettings {
 		add("/Implementing Agencies");
 		add("/Beneficiary Agencies");
 		add("/Executing Agencies");
+		add("/Peace-building and State-building Goals");
 	}};
 	
 	@SuppressWarnings("serial")
@@ -75,7 +77,7 @@ public class DashboardsFMSettings extends DataVisibility implements FMSettings {
 		put("/Implementing Agencies", "Implementing Agencies");
 		put("/Beneficiary Agencies", "Beneficiary Agencies");
 		put("/Executing Agencies", "Executing Agencies");
-		  
+		put("/Peace-building and State-building Goals", "Peace-building and State-building Goals");  
 	}};
 	
 	protected Collection<String> getAllPrecursors() {
@@ -137,6 +139,7 @@ public class DashboardsFMSettings extends DataVisibility implements FMSettings {
 		currentlyVisible.add("/Beneficiary Agencies");
 		currentlyVisible.add("/Implementing Agencies");
 		currentlyVisible.add("/Executing Agencies");
+		currentlyVisible.add("/Peace-building and State-building Goals");
 		
 		return currentlyVisible;
 	}

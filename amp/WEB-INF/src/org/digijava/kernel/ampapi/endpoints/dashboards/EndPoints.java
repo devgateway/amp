@@ -89,6 +89,14 @@ public class EndPoints {
 			@DefaultValue("ac") @QueryParam("adjtype") String adjtype) {
 		return DashboardsService.fundingtype(adjtype,config);
 	}
+	
+	@POST 
+	@Path("/ndd")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = false, id = "ndd")
+	public JsonBean getNDD(JsonBean config) throws Exception {
+		return DashboardsService.getNDD(config);
+	}
 
 	@POST
 	@Path("/saved-charts")

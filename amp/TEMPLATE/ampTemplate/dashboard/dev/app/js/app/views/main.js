@@ -41,22 +41,22 @@ module.exports = BackboneDash.View.extend({
     var col = [];
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Top Donors'})) {
     	col.push(new TopsChart(
-  	          { name: 'Top Donor Agencies' },
+  	          { name: 'Top Donor Agencies', big: false },
   	          { app: this.app, url: '/rest/dashboard/tops/do' }));
     }
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Top Donor Group'})) {
     	col.push(new TopsChart(
-  	          { name: 'Top Donor Groups' },
+  	          { name: 'Top Donor Groups', big: false },
   	          { app: this.app, url: '/rest/dashboard/tops/dg' }));
     }
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Top Regions'})) {
     	col.push(new TopsChart(
-  	          { name: 'Top Regions' },
+  	          { name: 'Top Regions', big: false },
 	          { app: this.app, url: '/rest/dashboard/tops/re' }));
     }
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Top Sectors'})) {
     	col.push(new TopsChart(
-  	          { name: 'Top Sectors' },
+  	          { name: 'Top Sectors', big: false },
 	          { app: this.app, url: '/rest/dashboard/tops/ps' }));
     }
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Aid Predictability'})) {
@@ -71,28 +71,34 @@ module.exports = BackboneDash.View.extend({
     }
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Responsible Organizations'})) {
     	col.push(new TopsChart(
-  	          { name: 'Responsible Organizations' },
+  	          { name: 'Responsible Organizations', big: false },
 	          { app: this.app, url: '/rest/dashboard/tops/ro' }));
     }
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Beneficiary Agencies'})) {
     	col.push(new TopsChart(
-  	          { name: 'Beneficiary Agencies' },
+  	          { name: 'Beneficiary Agencies', big: false },
 	          { app: this.app, url: '/rest/dashboard/tops/ba' }));
     }
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Executing Agencies'})) {
     	col.push(new TopsChart(
-  	          { name: 'Executing Agencies' },
+  	          { name: 'Executing Agencies', big: false },
 	          { app: this.app, url: '/rest/dashboard/tops/ea' }));
     }
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Implementing Agencies'})) {
     	col.push(new TopsChart(
-  	          { name: 'Implementing Agencies' },
+  	          { name: 'Implementing Agencies', big: false },
 	          { app: this.app, url: '/rest/dashboard/tops/ia' }));
     }
+    if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Peace-building and State-building Goals'})) {
+    	col.push(new TopsChart(
+    			{ name: 'Peace-building and State-building Goals', big: true },
+    			{ app: this.app, url: '/rest/dashboard/ndd' }));
+    }
        
+    var chartsCollection = new Charts(col, { app: this.app });
     this.charts = new ChartsView({
       app: this.app,
-      collection: new Charts(col, { app: this.app })
+      collection: chartsCollection
     });
 
     this.footer = new Footer({ app: this.app });

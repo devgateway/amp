@@ -38,6 +38,9 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
  * 
@@ -79,6 +82,114 @@ public class DashboardsService {
 		tops.add(getTopsListBean("re", "Region"));
 		tops.add(getTopsListBean("ps", "Primary Sector"));
 		return tops;
+	}
+	
+	public static JsonBean getNDD(JsonBean config) {
+		String err = null;
+		String column = MoConstants.SECONDARY_PROGRAMS; // MoConstants.PROCUREMENT_SYSTEM
+		JsonBean retlist = new JsonBean();
+		String name = DashboardConstants.PEACE_BUILDING_AND_STATE_BUILDING_GOALS;
+		String title = TranslatorWorker.translateText(DashboardConstants.PEACE_BUILDING_AND_STATE_BUILDING_GOALS);
+		List<JsonBean> values = new ArrayList<JsonBean>();
+
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetNDD", ArConstants.DONOR_TYPE);
+		spec.addColumn(new ReportColumn(column));
+		spec.getHierarchies().addAll(spec.getColumns());
+		// applies settings, including funding type as a measure
+		SettingsUtils.applyExtendedSettings(spec, config);
+		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false, true));
+		spec.setCalculateRowTotals(true);
+		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
+				ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
+		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
+		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
+		GeneratedReport report = null;
+
+		MondrianReportFilters filterRules = null;
+		LinkedHashMap<String, Object> columnFilters = null;
+		LinkedHashMap<String, Object> otherFilter = null;
+		if (config != null) {
+			columnFilters = (LinkedHashMap<String, Object>) config.get("columnFilters");
+			otherFilter = (LinkedHashMap<String, Object>) config.get("otherFilters");
+		}		
+		if (columnFilters == null) {
+			columnFilters = new LinkedHashMap<String, Object>();
+		}
+		if (otherFilter == null) {
+			otherFilter = new LinkedHashMap<String, Object>();
+		}
+		// Add must-have filters for this chart.
+		ArrayList<AmpCategoryValue> catList = new ArrayList<AmpCategoryValue>(
+				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PEACE_MARKERS_KEY));
+		List<Integer> peaceFilterOptions = new ArrayList<Integer>();
+		for (AmpCategoryValue category : catList) {
+			if (category.getLabel().equals("1") || category.getLabel().equals("2") || category.getLabel().equals("3")) {
+				peaceFilterOptions.add(category.getId().intValue());
+			}
+		}
+		LinkedHashMap<String, Object> peaceFilter = new LinkedHashMap<String, Object>();
+		peaceFilter.put(MoConstants.PROCUREMENT_SYSTEM, peaceFilterOptions);
+		columnFilters.putAll(peaceFilter);
+		filterRules = FilterUtils.getFilterRules(columnFilters, otherFilter, null);
+		if (filterRules != null) {
+			spec.setFilters(filterRules);
+		}
+
+		// AMP-18740: For dashboards we need to use the default number formatting and leave the rest of the settings
+		// configurable (calendar, currency, etc).
+		MondrianReportSettings defaultSettings = MondrianReportUtils.getCurrentUserDefaultSettings();
+		MondrianReportSettings currentSettings = (MondrianReportSettings) spec.getSettings();
+		currentSettings.setCurrencyFormat(defaultSettings.getCurrencyFormat());
+
+		try {
+			report = generator.executeReport(spec);
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			err = e.getMessage();
+		}
+
+		// Format the report output return a simple list.
+		// this is the report totals, which is not for the top N, but for ALL
+		// results
+		ReportCell totals = null;
+		if (report.reportContents != null && report.reportContents.getContents() != null
+				&& report.reportContents.getContents().size() > 0) {
+			totals = (ReportCell) report.reportContents.getContents().values().toArray()[1];
+			retlist.set("total", totals.value);
+		} else {
+			retlist.set("total", 0);
+		}
+
+		String currcode = null;
+		currcode = spec.getSettings().getCurrencyCode();
+		retlist.set("currency", currcode);
+		retlist.set("numberformat", numberformat);
+
+		Integer maxLimit = report.reportContents.getChildren().size();
+
+		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
+			JsonBean amountObj = new JsonBean();
+			ReportAreaImpl reportArea = (ReportAreaImpl) iterator.next();
+			LinkedHashMap<ReportOutputColumn, ReportCell> content = (LinkedHashMap<ReportOutputColumn, ReportCell>) reportArea
+					.getContents();
+			org.dgfoundation.amp.newreports.TextCell reportcolumn = (org.dgfoundation.amp.newreports.TextCell) content
+					.values().toArray()[0];
+			ReportCell reportcell = (ReportCell) content.values().toArray()[1];
+			String dvalue = reportcolumn.displayedValue;
+			amountObj.set("name", dvalue);
+			amountObj.set("amount", reportcell.value);
+			amountObj.set("formattedAmount", reportcell.displayedValue);
+			values.add(amountObj);
+		}
+		retlist.set("values", values);
+
+		// report the total number of tops available
+		// retlist.set("maxLimit", maxLimit);
+
+		retlist.set("name", name);
+		retlist.set("title", title);
+
+		return retlist;
 	}
 
 	/**

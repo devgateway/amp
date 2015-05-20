@@ -106,6 +106,8 @@
 "amp.dashboard:ftype-planned-commitment": "Planned Commitments" ,
 "amp.dashboard:ftype-planned-disbursement":	"Planned Disbursements" ,
 "amp.dashboard:ftype-planned-expenditures":	"Planned Expenditures",  			
-"amp.dashboard:dashboard-chart-tops-info-modal": "Category Detail"
+"amp.dashboard:dashboard-chart-tops-info-modal": "Category Detail",
+"amp.dashboard:chart-tops-table-projecttitle": "Project Title",
+"amp.dashboard:chart-tops-table-amount": "Amount"
 }
 

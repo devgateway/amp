@@ -37,6 +37,8 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.dgfoundation.amp.newreports.ReportSettings;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.HTMLUtil;
 import org.slf4j.Logger;
@@ -45,7 +47,7 @@ import org.slf4j.LoggerFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -71,11 +73,11 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 	private int topLeftCornerWidth;
 	private int topLeftCornerHeight;
 	private CellStyle basicCS;
-	private CellStyle numberCS;
+	private CellStyle numberCellStyle;
 	private CellStyle lighterHeaderCellCS;
 	private CellStyle darkerHeaderCellCS;
-	private CellStyle darkNumberCS;
-	private CellStyle darkTotalTextCS;
+	private CellStyle measuresTotalsCellStyle;
+	private CellStyle subReportTotalsCellStyle;
 	private List<ThinHierarchy> queryFilters;
 	private Map<String, Integer> colorCodesMap;
 
@@ -94,7 +96,7 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 	private int nonMeasureColumns;
 	private int measureColumns;
 	private Double[] grandColumnsTotals;
-	private final NumberFormat numberFormat = NumberFormat.getNumberInstance();
+	private ReportSettings settings;
 
 	public AMPExcelExport(CellDataSet table, List<ThinHierarchy> filters, ExcelBuilderOptions options) {
 		super(table, filters, options);
@@ -147,28 +149,28 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 		basicCS.setAlignment(CellStyle.ALIGN_LEFT);
 		setCellBordersColor(basicCS);
 
-		numberCS = excelWorkbook.createCellStyle();
-		numberCS.setFont(font);
-		numberCS.setAlignment(CellStyle.ALIGN_RIGHT);
-		setCellBordersColor(numberCS);
+		numberCellStyle = excelWorkbook.createCellStyle();
+		numberCellStyle.setFont(font);
+		numberCellStyle.setAlignment(CellStyle.ALIGN_RIGHT);
+		setCellBordersColor(numberCellStyle);
 
-		darkNumberCS = excelWorkbook.createCellStyle();
-		darkNumberCS.setFont(font);
-		darkNumberCS.setAlignment(CellStyle.ALIGN_RIGHT);
-		darkNumberCS.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
-		darkNumberCS.setFillPattern(CellStyle.SOLID_FOREGROUND);
-		setCellBordersColor(darkNumberCS);
+		measuresTotalsCellStyle = excelWorkbook.createCellStyle();
+		measuresTotalsCellStyle.setFont(font);
+		measuresTotalsCellStyle.setAlignment(CellStyle.ALIGN_RIGHT);
+		measuresTotalsCellStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+		measuresTotalsCellStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		setCellBordersColor(measuresTotalsCellStyle);
 		
 		Font fontTotals = excelWorkbook.createFont();
 		fontTotals.setFontHeightInPoints(font.getFontHeightInPoints());
 		fontTotals.setFontName(font.getFontName());
 		fontTotals.setBoldweight(Font.BOLDWEIGHT_BOLD);
-		darkTotalTextCS = excelWorkbook.createCellStyle();
-		darkTotalTextCS.setFont(fontTotals);
-		darkTotalTextCS.setAlignment(CellStyle.ALIGN_LEFT);
-		darkTotalTextCS.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
-		darkTotalTextCS.setFillPattern(CellStyle.SOLID_FOREGROUND);
-		setCellBordersColor(darkTotalTextCS);
+		subReportTotalsCellStyle = excelWorkbook.createCellStyle();
+		subReportTotalsCellStyle.setFont(fontTotals);
+		subReportTotalsCellStyle.setAlignment(CellStyle.ALIGN_LEFT);
+		subReportTotalsCellStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+		subReportTotalsCellStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		setCellBordersColor(subReportTotalsCellStyle);
 
 		/*
 		 * justasg: Let's set default format, used if measure has no format at all. More info:
@@ -178,7 +180,10 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 		 */
 		DataFormat fmt = excelWorkbook.createDataFormat();
 		short dataFormat = fmt.getFormat(SaikuProperties.webExportExcelDefaultNumberFormat);
-		numberCS.setDataFormat(dataFormat);
+		
+		numberCellStyle.setDataFormat(dataFormat);
+		measuresTotalsCellStyle.setDataFormat(dataFormat);
+		subReportTotalsCellStyle.setDataFormat(dataFormat);
 
 		Font headerFont = excelWorkbook.createFont();
 		headerFont.setFontHeightInPoints((short) BASIC_SHEET_FONT_SIZE);
@@ -375,23 +380,12 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 					// get it from the same position in the prev row
 					value = workbookSheet.getRow(sheetRow.getRowNum() - 1).getCell(y).getStringCellValue();
 				}
-				if (rowsetBody[x][y] instanceof DataCell && ((DataCell) rowsetBody[x][y]).getRawValue() != null) {
-					String stringValue = ((DataCell) rowsetBody[x][y]).getRawValue();
-					Double numberValue = null;
-					if(!"null".equals(stringValue)) {
-						numberValue = Double.parseDouble(stringValue);
-					}
-					else
-					{
-						numberValue = 0d;
-					}
-					cell.setCellValue(numberValue.doubleValue());
+				if (rowsetBody[x][y] instanceof DataCell && ((DataCell) rowsetBody[x][y]).getFormattedValue() != null) {
+					String formattedString = ((DataCell) rowsetBody[x][y]).getFormattedValue();
+					Double formattedValue = getDoubleFromFormattedString(formattedString);
+					cell.setCellValue(formattedValue);
 					applyCellFormatting(cell, x, y);
-				} else if (rowsetBody[x][y] instanceof DataCell && ((DataCell) rowsetBody[x][y]).getRawNumber() != null) {
-					Number numberValue = ((DataCell) rowsetBody[x][y]).getRawNumber();
-					cell.setCellValue(numberValue.doubleValue());
-					applyCellFormatting(cell, x, y);
-				} else {
+				}  else {
 					cell.setCellStyle(basicCS);
 					cell.setCellValue(HTMLUtil.removeHtml(value, false));
 				}
@@ -408,7 +402,7 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 			if (!cellStyles.containsKey(formatKey)) {
 				// Inherit formatting from cube schema FORMAT_STRING
 				CellStyle numberCSClone = excelWorkbook.createCellStyle();
-				numberCSClone.cloneStyleFrom(numberCS);
+				numberCSClone.cloneStyleFrom(numberCellStyle);
 				DataFormat fmt = excelWorkbook.createDataFormat();
 
 				// the format string can contain macro values such as "Standard" from mondrian.util.Format
@@ -457,12 +451,12 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 				}
 			} else {
 
-				numberCSClone.setFillForegroundColor(numberCS.getFillForegroundColor());
-				numberCSClone.setFillBackgroundColor(numberCS.getFillBackgroundColor());
+				numberCSClone.setFillForegroundColor(numberCellStyle.getFillForegroundColor());
+				numberCSClone.setFillBackgroundColor(numberCellStyle.getFillBackgroundColor());
 			}
 			cell.setCellStyle(numberCSClone);
 		} else {
-			cell.setCellStyle(numberCS);
+			cell.setCellStyle(numberCellStyle);
 		}
 
 	}
@@ -693,24 +687,19 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 					// Uncomment to manually create cell without any styling.
 					// auxRow.getCell(lastCol + i).setCellValue(grandTotals.getTotalGroups()[i][j -
 					// headerRowsOffset].getFormattedValue());*/
-					//TODO please check if the formats are correct in
-					//the api postprocessing 
-					Number number;
-					try {
-						number = numberFormat.parse(grandTotals.getTotalGroups()[i][j - headerRowsOffset].getFormattedValue());
-						fillTotalCell(auxRow, number.doubleValue(), lastCol + i);
-						if (grandColumnsTotals[i] == null) {
-							grandColumnsTotals[i] = new Double(0);
-						}
-						grandColumnsTotals[i] += number.doubleValue();
-					} catch (ParseException e) {
-						e.printStackTrace();
+					String formattedString = grandTotals.getTotalGroups()[i][j - headerRowsOffset].getFormattedValue();
+					double formattedDouble = getDoubleFromFormattedString(formattedString);
+					
+					fillTotalCell(auxRow, formattedDouble, lastCol + i);
+					
+					if (grandColumnsTotals[i] == null) {
+						grandColumnsTotals[i] = new Double(0);
 					}
-					// Sum partial values for later.
-
+					
+					grandColumnsTotals[i] += formattedDouble;
 				}
 			}		
-
+			
 			// Recalculate columns correct size.
 			for (int i = 0; i < grandTotals.getMemberCaptions().length; i++) {
 				workbookSheet.autoSizeColumn(lastCol + i);
@@ -732,8 +721,9 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 			}
 			Row newRow = workbookSheet.createRow(workbookSheet.getLastRowNum() + 1);
 			for (int i = 0; i < measureColumns; i++) {
-				//TODO
-				fillTotalCell(newRow, columnTotals.getTotalGroups()[0][i].getValue(), nonMeasureColumns + i);
+				String formattedString = columnTotals.getTotalGroups()[0][i].getFormattedValue();
+				double formattedDouble = getDoubleFromFormattedString(formattedString);
+				fillTotalCell(newRow, formattedDouble, nonMeasureColumns + i);
 			}
 		}
 
@@ -745,11 +735,11 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 			}
 			Cell totalTextCell = absoluteTotalsRow.createCell(0);
 			totalTextCell.setCellValue(TranslatorWorker.translateText("Report Totals"));
-			totalTextCell.setCellStyle(darkTotalTextCS);
+			totalTextCell.setCellStyle(subReportTotalsCellStyle);
 			for (int j = 1; j < nonMeasureColumns; j++) {
 				Cell emptyTextCell = absoluteTotalsRow.createCell(j);
 				emptyTextCell.setCellValue("");
-				emptyTextCell.setCellStyle(darkTotalTextCS);
+				emptyTextCell.setCellStyle(subReportTotalsCellStyle);
 			}
 		}
 	}
@@ -757,7 +747,33 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 	private Cell fillTotalCell(Row sheetRow, Double value, int y) {
 		Cell cell = sheetRow.createCell(y);
 		cell.setCellValue(value);
-		cell.setCellStyle(darkNumberCS);
+		cell.setCellStyle(measuresTotalsCellStyle);
+		
 		return cell;
+	}
+
+	public void setReportSettings(ReportSettings reportSettings) {
+		settings = reportSettings == null ? MondrianReportUtils.getCurrentUserDefaultSettings() : reportSettings;
+		DataFormat fmt = excelWorkbook.createDataFormat();
+		DecimalFormat currencyFormat = settings.getCurrencyFormat();
+		short format = fmt.getFormat(currencyFormat.toPattern());
+		
+		numberCellStyle.setDataFormat(format);
+		measuresTotalsCellStyle.setDataFormat(format);
+		subReportTotalsCellStyle.setDataFormat(format);
+	}
+	
+	double getDoubleFromFormattedString(String formattedString) {
+		
+		if(StringUtils.isEmpty(formattedString) || formattedString.indexOf("null") > 0) {
+			return 0d;
+		}
+		
+		try {
+			DecimalFormat currencyFormat = settings.getCurrencyFormat();
+			return currencyFormat.parse(formattedString).doubleValue();
+		} catch (ParseException e) {
+			throw new SaikuServiceException("Error creating excel export for query. ParseException for [" + formattedString + "]", e);
+		}
 	}
 }

@@ -22,6 +22,7 @@ import javax.ws.rs.core.Response;
 
 import mondrian.util.Pair;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -30,7 +31,7 @@ import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
-import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
@@ -487,25 +488,36 @@ public class Reports {
 			result = getSaikuCellDataSet(queryObject, reportId);
 
 			byte[] doc = null;
-			String filename = "";
+			
+			String filename = "export";
+			ReportSpecificationImpl report = ReportsUtil.getReport(reportId);
+			if (report != null && !StringUtils.isEmpty(report.getReportName()));
+				filename = report.getReportName();
+			filename += "." + type;
 			
 			switch(type) {
 				case "xls": 
 					ExcelBuilderOptions options = new ExcelBuilderOptions();
 					options.repeatValues = true;
 					AMPExcelExport worksheetBuilder = new AMPExcelExport(result, new ArrayList<ThinHierarchy>(), options);
+					
+					// We will use report settings to get the DecimalFormat in order to parse the formatted values
+					ReportSettings settings = null;
+					
+					if (report != null) {
+						settings = report.getSettings();
+					}
+					worksheetBuilder.setReportSettings(settings);
+					
 			        doc = worksheetBuilder.build();
-					filename = "export.xls";
 					break;
 				case "csv":
 					doc = SaikuUtils.getCsv(result, ",", "\"");
-					filename = "export.csv";
 					break;
 				case "pdf":
 		            PdfReport pdf = new AMPPdfExport();
 		    		QueryResult qr = RestUtil.convert(result);
 		            doc  = pdf.pdf(qr, null);
-					filename = "export.pdf";
 					break;
 			}
 			

@@ -1182,3 +1182,6 @@ table.component-funding-table tr
 #TipLayer table td table:nth-of-type(2) {
 	background-color: #F2F2F2;
 }
+div.footer {
+	margin-top:15px;
+}

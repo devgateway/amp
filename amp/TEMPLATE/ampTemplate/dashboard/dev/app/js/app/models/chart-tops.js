@@ -53,7 +53,8 @@ module.exports = ChartModel.extend({
       return {
         x: localizedName,
         y: v.amount,
-        z: v.formattedAmount
+        z: v.formattedAmount,
+        id: v.id
       };
     }, this);
 

@@ -16,6 +16,7 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
+import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
@@ -86,14 +87,14 @@ public class DashboardsService {
 	
 	public static JsonBean getNDD(JsonBean config) {
 		String err = null;
-		String column = MoConstants.SECONDARY_PROGRAMS; // MoConstants.PROCUREMENT_SYSTEM
 		JsonBean retlist = new JsonBean();
 		String name = DashboardConstants.PEACE_BUILDING_AND_STATE_BUILDING_GOALS;
 		String title = TranslatorWorker.translateText(DashboardConstants.PEACE_BUILDING_AND_STATE_BUILDING_GOALS);
 		List<JsonBean> values = new ArrayList<JsonBean>();
 
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetNDD", ArConstants.DONOR_TYPE);
-		spec.addColumn(new ReportColumn(column));
+		spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_PROGRAM));
+		spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1_ID));
 		spec.getHierarchies().addAll(spec.getColumns());
 		// applies settings, including funding type as a measure
 		SettingsUtils.applyExtendedSettings(spec, config);
@@ -101,7 +102,6 @@ public class DashboardsService {
 		spec.setCalculateRowTotals(true);
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
 				ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
-		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
 		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
 		GeneratedReport report = null;
 
@@ -111,7 +111,7 @@ public class DashboardsService {
 		if (config != null) {
 			columnFilters = (LinkedHashMap<String, Object>) config.get("columnFilters");
 			otherFilter = (LinkedHashMap<String, Object>) config.get("otherFilters");
-		}		
+		}
 		if (columnFilters == null) {
 			columnFilters = new LinkedHashMap<String, Object>();
 		}
@@ -123,7 +123,11 @@ public class DashboardsService {
 				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PEACE_MARKERS_KEY));
 		List<Integer> peaceFilterOptions = new ArrayList<Integer>();
 		for (AmpCategoryValue category : catList) {
-			if (category.getLabel().equals("1") || category.getLabel().equals("2") || category.getLabel().equals("3")) {
+			if (category.getValue().equals("Relevant for peacebuilding but peacebuilding objectives not articulated")
+					|| category.getLabel().equals("Articulate peacebuilding outcomes but as a secondary objective")
+					|| category.getLabel().equals("Articulates peacebuilding as the main objective")
+					|| category.getValue().equals("1") || category.getLabel().equals("2")
+					|| category.getLabel().equals("3")) {
 				peaceFilterOptions.add(category.getId().intValue());
 			}
 		}
@@ -154,7 +158,7 @@ public class DashboardsService {
 		ReportCell totals = null;
 		if (report.reportContents != null && report.reportContents.getContents() != null
 				&& report.reportContents.getContents().size() > 0) {
-			totals = (ReportCell) report.reportContents.getContents().values().toArray()[1];
+			totals = (ReportCell) report.reportContents.getContents().values().toArray()[2];
 			retlist.set("total", totals.value);
 		} else {
 			retlist.set("total", 0);
@@ -165,27 +169,22 @@ public class DashboardsService {
 		retlist.set("currency", currcode);
 		retlist.set("numberformat", numberformat);
 
-		Integer maxLimit = report.reportContents.getChildren().size();
-
 		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
-			JsonBean amountObj = new JsonBean();
 			ReportAreaImpl reportArea = (ReportAreaImpl) iterator.next();
-			LinkedHashMap<ReportOutputColumn, ReportCell> content = (LinkedHashMap<ReportOutputColumn, ReportCell>) reportArea
-					.getContents();
-			org.dgfoundation.amp.newreports.TextCell reportcolumn = (org.dgfoundation.amp.newreports.TextCell) content
-					.values().toArray()[0];
-			ReportCell reportcell = (ReportCell) content.values().toArray()[1];
-			String dvalue = reportcolumn.displayedValue;
-			amountObj.set("name", dvalue);
-			amountObj.set("amount", reportcell.value);
-			amountObj.set("formattedAmount", reportcell.displayedValue);
-			values.add(amountObj);
+			Iterator<ReportArea> iChildren = reportArea.getChildren().iterator();
+			while (iChildren.hasNext()) {
+				ReportArea ra = iChildren.next();
+				LinkedHashMap<ReportOutputColumn, ReportCell> contents = (LinkedHashMap<ReportOutputColumn, ReportCell>) ra
+						.getContents();
+				JsonBean row = new JsonBean();
+				row.set("name", ((ReportCell) contents.values().toArray()[0]).displayedValue);
+				row.set("amount", ((ReportCell) contents.values().toArray()[2]).value);
+				row.set("formattedAmount", ((ReportCell) contents.values().toArray()[2]).displayedValue);
+				row.set("id", ((ReportCell) contents.values().toArray()[1]).value);
+				values.add(row);
+			}
 		}
 		retlist.set("values", values);
-
-		// report the total number of tops available
-		// retlist.set("maxLimit", maxLimit);
-
 		retlist.set("name", name);
 		retlist.set("title", title);
 
@@ -542,6 +541,95 @@ public class DashboardsService {
 		retlist.set("name", DashboardConstants.FUNDING_TYPE);
 		retlist.set("title", TranslatorWorker.translateText(DashboardConstants.FUNDING_TYPE));
 		
+		return retlist;
+	}
+	
+	public static JsonBean getPeaceMarkerProjectsByCategory(JsonBean config, Integer id) {
+		String err = null;
+		JsonBean retlist = new JsonBean();
+		List<JsonBean> values = new ArrayList<JsonBean>();
+
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetNDD", ArConstants.DONOR_TYPE);
+		spec.addColumn(new ReportColumn(MoConstants.ATTR_ACTIVITY_ID));
+		spec.addColumn(new ReportColumn(MoConstants.ATTR_PROJECT_TITLE));		
+		spec.getHierarchies().addAll(spec.getColumns());
+		// applies settings, including funding type as a measure
+		SettingsUtils.applyExtendedSettings(spec, config);
+		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false, true));
+		spec.setCalculateRowTotals(true);
+		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
+				ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
+		GeneratedReport report = null;
+
+		MondrianReportFilters filterRules = null;
+		LinkedHashMap<String, Object> columnFilters = null;
+		LinkedHashMap<String, Object> otherFilter = null;
+		if (config != null) {
+			columnFilters = (LinkedHashMap<String, Object>) config.get("columnFilters");
+			otherFilter = (LinkedHashMap<String, Object>) config.get("otherFilters");
+		}		
+		if (columnFilters == null) {
+			columnFilters = new LinkedHashMap<String, Object>();
+		}
+		if (otherFilter == null) {
+			otherFilter = new LinkedHashMap<String, Object>();
+		}
+		// Add must-have filters for this chart.
+		ArrayList<AmpCategoryValue> catList = new ArrayList<AmpCategoryValue>(
+				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PEACE_MARKERS_KEY));
+		List<Integer> peaceFilterOptions = new ArrayList<Integer>();
+		for (AmpCategoryValue category : catList) {
+			if (category.getValue().equals("Relevant for peacebuilding but peacebuilding objectives not articulated")
+					|| category.getLabel().equals("Articulate peacebuilding outcomes but as a secondary objective")
+					|| category.getLabel().equals("Articulates peacebuilding as the main objective")
+					|| category.getValue().equals("1") || category.getLabel().equals("2")
+					|| category.getLabel().equals("3")) {
+				peaceFilterOptions.add(category.getId().intValue());
+			}
+		}
+		LinkedHashMap<String, Object> peaceFilter = new LinkedHashMap<String, Object>();
+		peaceFilter.put(MoConstants.PROCUREMENT_SYSTEM, peaceFilterOptions);
+		columnFilters.putAll(peaceFilter);
+		// Add filter for secondary program.
+		LinkedHashMap<String, Object> secondaryProgramFilter = new LinkedHashMap<String, Object>();
+		List<Integer> secondaryProgramIds = new ArrayList<Integer>();
+		secondaryProgramIds.add(id);
+		secondaryProgramFilter.put(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1_ID, secondaryProgramIds);
+		columnFilters.putAll(secondaryProgramFilter);
+		filterRules = FilterUtils.getFilterRules(columnFilters, otherFilter, null);
+		if (filterRules != null) {
+			spec.setFilters(filterRules);
+		}
+
+		// AMP-18740: For dashboards we need to use the default number formatting and leave the rest of the settings
+		// configurable (calendar, currency, etc).
+		MondrianReportSettings defaultSettings = MondrianReportUtils.getCurrentUserDefaultSettings();
+		MondrianReportSettings currentSettings = (MondrianReportSettings) spec.getSettings();
+		currentSettings.setCurrencyFormat(defaultSettings.getCurrencyFormat());
+
+		try {
+			report = generator.executeReport(spec);
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			err = e.getMessage();
+		}
+
+		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {			
+			ReportAreaImpl reportArea = (ReportAreaImpl) iterator.next();
+			Iterator<ReportArea> iChildren = reportArea.getChildren().iterator();
+			while(iChildren.hasNext()){
+				JsonBean row = new JsonBean();
+				ReportArea ra = iChildren.next();
+				LinkedHashMap<ReportOutputColumn, ReportCell> contents = (LinkedHashMap<ReportOutputColumn, ReportCell>) ra.getContents();
+				row.set("name", ((ReportCell) contents.values().toArray()[1]).displayedValue);
+				row.set("amount", ((ReportCell) contents.values().toArray()[2]).value);
+				row.set("formattedAmount", ((ReportCell) contents.values().toArray()[2]).displayedValue);
+				row.set("id", ((ReportCell) contents.values().toArray()[0]).value);
+				values.add(row);
+			}						
+		}
+		retlist.set("values", values);
+
 		return retlist;
 	}
 }

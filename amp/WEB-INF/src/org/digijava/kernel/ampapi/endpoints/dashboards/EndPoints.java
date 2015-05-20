@@ -122,5 +122,13 @@ public class EndPoints {
 	public List<JsonBean> savedCharts() {
 		String type="C";
 		return EndpointUtils.getApiStateList(type);
-	}	
+	}
+	
+	@POST
+	@Path("/ndd/{id}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = false, id = "ndd_projects")
+	public JsonBean getAdminLevelsTotals(JsonBean config, @PathParam("id") Integer id) {
+		return DashboardsService.getPeaceMarkerProjectsByCategory(config, id);
+	}
 }

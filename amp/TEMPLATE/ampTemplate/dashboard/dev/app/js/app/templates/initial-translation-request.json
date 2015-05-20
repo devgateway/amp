@@ -105,8 +105,7 @@
 "amp.dashboard:ftype-actual-expenditure": "Actual Expenditures",
 "amp.dashboard:ftype-planned-commitment": "Planned Commitments" ,
 "amp.dashboard:ftype-planned-disbursement":	"Planned Disbursements" ,
-"amp.dashboard:ftype-planned-expenditures":	"Planned Expenditures"
-	  			
-
+"amp.dashboard:ftype-planned-expenditures":	"Planned Expenditures",  			
+"amp.dashboard:dashboard-chart-tops-info-modal": "Category Detail"
 }
 

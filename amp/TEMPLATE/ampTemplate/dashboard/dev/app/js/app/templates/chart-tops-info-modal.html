@@ -14,7 +14,11 @@
 			<span data-i18n="amp.dashboard:download-rendering">Rendering...</span>
 		<% } else { %>
 			<% var rowClass = ''; %>
-			<table>			
+			<table>
+				<tr>
+					<th><span data-i18n="amp.dashboard:chart-tops-table-projecttitle">Project Title</span></th>
+					<th><span data-i18n="amp.dashboard:chart-tops-table-amount">Amount</span></th>
+				</tr>			
 			<% _(values).each(function(row, i) { %>
           		<% 	if (i % 2 === 0) rowClass = 'odd_row';
     				else rowClass = ''; %>

@@ -17,6 +17,7 @@
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jdigestauth/md5-min.js"/>" ></script>
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jdigestauth/digest-auth.js"/>" ></script>
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jdigestauth/sha1.js"/>" ></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js"></script>
 
 <digi:ref href="/TEMPLATE/ampTemplate/css_2/amp_public_portal_login.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript">
@@ -46,7 +47,7 @@ var loginFailed = function(data, status) {
 						<tr>
 							<td width="50" style="vertical-align: middle;">
 								<a href="/" style="text-decoration: none"> 
-									<img src="/aim/default/displayFlag.do" border="0" width="50px" height="34px"><br />
+									<img src="/aim/default/displayFlag.do" border="0" width="30px" height="20px"><br />
 								</a>
 							</td>
 							<td style="padding-left: 10px;text-align: left;"><a href="/"

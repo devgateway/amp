@@ -1,4 +1,4 @@
-html{background:url(/TEMPLATE/ampTemplate/img_2/bg.jpg) repeat-x #fff;font-family:arial;}
+html{font-family:arial;}
 *{padding:0px;margin:0px;text-decoration:none;}
 input{background:none;border:transparent;}
 h1{color:#fff;font-size:14px;text-shadow: 1px 1px 5px #2b3942;}
@@ -24,7 +24,7 @@ a{color:#454545;font-size:12px;font-weight:bold;}
 #changePassword a{font-size:11px;color:#4c6b7d;}
 .login_nav {float:right; padding-top:13px; width:500px;text-align:right;z-index:9999; height:51px;overflow:visible;margin:0px 20px 0px 0px;}
 #toplnk{float:right;width:200px;}
-#toplnk a{color:#fff;text-shadow: 1px 1px 5px #2b3942; font-size:12px;}
+#toplnk a{color:#777; font-size:12px;}
 #loginbox li{list-style:none;}
 #loginbox select#actions{width:352px;margin:0 auto;margin-top:5px;height:25px;color:#48677b;font-size:11px;}
 #loginbox select option{font-weight:normal;color:#48677b;font-size:11px;}
@@ -39,7 +39,33 @@ div.addnew{clear:both;padding:5px 0px;width:340px;}
 .footer {background-color: #8B8B8B;color: #FFFFFF;font-size: 11px;margin-top: 25px;padding-bottom: 10px;width:100%;padding-top: 10px; text-align:center;}
 .dgf_footer {margin-top:15px; margin-bottom:15px; text-align:center; font-size:11px; color:#8B8B8B; line-height:18px;}
 .dgf_logo_footer {margin-bottom:5px;}
-.header { height:51px;text-align:center;width:1000px;margin:0 auto;position:relative;}
+.header {
+	height: 51px;
+	text-align: center;
+	width: 100%;
+	margin: 0 auto;
+	position: relative;
+	background-color: #f8f8f8;
+	border-color: #e7e7e7;
+	min-height: 50px;
+	margin-bottom: 20px;
+	border: 1px solid transparent;
+	border-color: #e7e7e7;
+}
+
 .logo {color:#FFFFFF; font-size:18px; font-weight:bold; float:left;padding:5px 0px 0px 0px;}
 .logo a {color:#FFFFFF; font-size:18px; font-weight:bold;}
-.amp_label {padding-top:10px;font-size:14px;}
+.amp_label {
+	padding-top: 10px;
+	font-size: 14px;
+	overflow-y: hidden;
+	max-height: 40px;
+	max-width: 25em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	color: #777;
+}
+div.footer {
+	margin-top: 15px;
+}

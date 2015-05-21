@@ -5,6 +5,7 @@ import java.util.*;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -83,19 +84,18 @@ import org.digijava.module.calendar.util.AmpUtil;
     }
     
     String alpha = eaForm.getAlpha(); //request.getParameter("alpha");
-    if (alpha == null || alpha.trim().length() == 0) {
+    if (StringUtils.isBlank(alpha)) {
     	eaForm.setOrgTypes(DbUtil.getAllOrgTypes()); 
     }
     eaForm.setNumResults(eaForm.getTempNumResults());
-    col = new ArrayList();
+    col = new ArrayList<AmpOrganisation>();
     if (eaForm.getAlphaPages() != null) //
         eaForm.setAlphaPages(null); //
 
       if (eaForm.getAmpOrgTypeId() != null &&
           !eaForm.getAmpOrgTypeId().equals(new Long( -1))) {
-        if (eaForm.getKeyword().trim().length() != 0) {
-          // serach for organisations based on the keyword and the
-          // organisation type
+        if (StringUtils.isNotEmpty(eaForm.getKeyword())) {
+          // serach for organisations based on the keyword and the organisation type
           col = DbUtil.searchForOrganisation(eaForm.getKeyword().trim(),
                                              eaForm.getAmpOrgTypeId());
         }
@@ -104,10 +104,9 @@ import org.digijava.module.calendar.util.AmpUtil;
           col = DbUtil.searchForOrganisationByType(eaForm.getAmpOrgTypeId());
         }
       }
-      else if (eaForm.getKeyword() != null &&
-               eaForm.getKeyword().trim().length() != 0) {
+      else if (StringUtils.isNotBlank(eaForm.getKeyword())) {
         // search based on the given keyword only.
-        col = DbUtil.searchForOrganisation(eaForm.getKeyword().trim().replace("'","''" ));
+        col = DbUtil.searchForOrganisation(eaForm.getKeyword().trim());
       }
       else {
         // get all organisations since keyword field is blank and org type field has 'ALL'.

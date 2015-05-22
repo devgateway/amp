@@ -15,7 +15,6 @@
  */
 package org.dgfoundation.amp.reports.saiku.export;
 
-import org.olap4j.metadata.Measure;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.olap.dto.resultset.DataCell;
@@ -97,7 +96,6 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 	private int nonMeasureColumns;
 	private int measureColumns;
 	private Double[] grandColumnsTotals;
-	private Measure[] tableMeasures;
 	private ReportSettings settings;
 
 	public AMPExcelExport(CellDataSet table, List<ThinHierarchy> filters, ExcelBuilderOptions options) {
@@ -128,7 +126,6 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 		this.sheetName = options.sheetName;
 		rowsetHeader = table.getCellSetHeaders();
 		rowsetBody = table.getCellSetBody();
-		tableMeasures = table.getSelectedMeasures();
 
 		if(table.getColTotalsLists() != null) {
 			grandTotals = table.getColTotalsLists()[0].get(0);
@@ -672,32 +669,14 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 		// 1st rows are always titles.
 		int headerRowsOffset = 2;
 		Row titleRow = workbookSheet.getRow(1);
-		// Add missing grand total columns. We know all the measure columns and how many measure captions are. 
+		// Add missing grand total columns.
 		if(grandTotals != null) {
 			for (int i = 0; i < grandTotals.getMemberCaptions().length; i++) {
 				String columnHeader = TranslatorWorker.translateText(grandTotals.getMemberCaptions()[i] + " Grand Total");
 				fillHeaderCell(titleRow, columnHeader, lastCol + i);
 			}
-			
+			// Calculate grand column totals for each column (not provided by saiku).
 			grandColumnsTotals = new Double[grandTotals.getMemberCaptions().length];
-			
-			// Populate grand total cells (the sum of the totals)
-			if (tableMeasures.length > 0) {
-				int idx = 0;
-				do {
-					int j = idx %  tableMeasures.length;
-					String formattedString = columnTotals.getTotalGroups()[0][idx].getFormattedValue();
-					
-					double formattedDouble = getDoubleFromFormattedString(formattedString);
-					
-					if (grandColumnsTotals[j] == null) {
-						grandColumnsTotals[j] = new Double(0);
-					}
-					
-					grandColumnsTotals[j] += formattedDouble;
-					idx++;
-				} while (idx < columnTotals.getTotalGroups()[0].length);
-			}
 	
 			// Populate grand total columns.
 			for (int i = 0; i < grandTotals.getTotalGroups().length; i++) {
@@ -712,6 +691,12 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 					double formattedDouble = getDoubleFromFormattedString(formattedString);
 					
 					fillTotalCell(auxRow, formattedDouble, lastCol + i);
+					
+					if (grandColumnsTotals[i] == null) {
+						grandColumnsTotals[i] = new Double(0);
+					}
+					
+					grandColumnsTotals[i] += formattedDouble;
 				}
 			}		
 			

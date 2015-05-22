@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.apache.commons.lang.WordUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.menu.MenuConstants;
 import org.dgfoundation.amp.menu.MenuItem;
@@ -48,7 +50,15 @@ public class SecurityService {
 		List<JsonBean> jsonItems = new ArrayList<JsonBean>();
 		for (MenuItem item : items) {
 			JsonBean jsonItem = new JsonBean();
-			jsonItem.set(EPConstants.MENU_NAME, TranslatorWorker.translateText(item.title));
+			// we use old menu names definition to use existing translations
+			String name = TranslatorWorker.translateText(item.title);
+			// AMP-20030: do top menu item All caps and all menu items underneath it capitalized
+			if (item.getParent().getParent() == null) { // we have a common root parent, that's why we check for grandparent
+				name = name.toUpperCase();
+			} else {
+				name = WordUtils.capitalize(name.toLowerCase());
+			}
+			jsonItem.set(EPConstants.MENU_NAME, name);
 			if (item.tooltip != null) {
 				jsonItem.set(EPConstants.MENU_TOOLTIP, TranslatorWorker.translateText(item.tooltip));
 			}

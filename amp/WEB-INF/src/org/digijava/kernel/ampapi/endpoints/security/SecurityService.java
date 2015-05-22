@@ -53,7 +53,7 @@ public class SecurityService {
 			// we use old menu names definition to use existing translations
 			String name = TranslatorWorker.translateText(item.title);
 			// AMP-20030: do top menu item All caps and all menu items underneath it capitalized
-			if (item.getParent().getParent() == null) { // we have a common root parent, that's why we check for grandparent
+			if (item.getParent() == null || item.getParent().getParent() == null) { // we have a common root parent, that's why we check for grandparent
 				name = name.toUpperCase();
 			} else {
 				name = WordUtils.capitalize(name.toLowerCase());

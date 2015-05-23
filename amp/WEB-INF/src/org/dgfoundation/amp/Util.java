@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
 import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.entity.Locale;
@@ -156,41 +157,45 @@ public final class Util {
 	}
 	
 	
-	public static String toCSStringForIN(Collection col)
-	{
+	public static String toCSStringForIN(Collection<?> col) {
 		if (col == null  || col.isEmpty())
-			return "-32768"; // the most unlikely ID one is supposed to find in an AMP database
+			return "-32768"; // the most unlikely ID one is supposed to find in an AMP database		
 		return toCSString(col);
 	}
+	
 	/**
-	 * Returns comma separated view string representation of the collection
-	 * items
+	 * Returns comma separated list of the values in the collection
 	 * 
-	 * @param col
-	 *            the collectoin
+	 * @param col the collection
 	 * @return the comma separated string
 	 * @author mihai 06.05.2007
 	 */
-	public static String toCSString(Collection col) {
-		StringBuilder ret = new StringBuilder("");
+	public static String toCSString(Collection<?> col) {
 		if (col == null || col.size() == 0)
-			return ret.toString();
-		Iterator i = col.iterator();
-		while (i.hasNext()) {
-			Object element = (Object) i.next();
+			return "";
+		
+		StringBuilder ret = new StringBuilder();
+		boolean isFirst = true;
+		
+		for (Object element:col) {
+			
 			if (element == null)
-				continue;			
-			Object item=element;
-			if(element instanceof Identifiable) item=((Identifiable)element).getIdentifier();
+				continue;
+			
+			if (!isFirst)
+				ret.append(",");
+			
+			Object item = element;
+			if (element instanceof Identifiable) item = ((Identifiable) element).getIdentifier();
 			
 			if (item instanceof String)
-				ret.append("'" + (String) item + "'"); else
-			if (item instanceof PropertyListable)
+				ret.append("'" + SQLUtils.sqlEscapeStr(item.toString()) + "'");
+			else if (item instanceof PropertyListable)
 				ret.append(((PropertyListable)item).getBeanName());			
 			else
 				ret.append(item.toString());
-			if (i.hasNext())
-				ret.append(",");
+			
+			isFirst = false;
 		}
 		return ret.toString();
 	}

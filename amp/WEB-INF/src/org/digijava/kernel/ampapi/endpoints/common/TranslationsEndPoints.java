@@ -49,8 +49,9 @@ public class TranslationsEndPoints {
 	public JsonBean getLangPack(final JsonBean param){
 		
 		for (String key:param.any().keySet()) {
-			String newValue=
-			TranslatorWorker.translateText(param.get(key).toString());
+			String translating = param.get(key).toString();
+			String newValue= TranslatorWorker.translateText(translating);
+			//LOGGER.error("translating <" + translating + "> to <" + newValue + ">");
 			param.set(key, newValue);
 		}
 		return param;

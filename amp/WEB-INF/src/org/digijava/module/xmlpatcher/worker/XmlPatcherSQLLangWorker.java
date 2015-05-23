@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
@@ -18,6 +19,8 @@ import org.digijava.module.xmlpatcher.jaxb.Lang;
 import org.digijava.module.xmlpatcher.jaxb.Script;
 import org.digijava.module.xmlpatcher.util.XmlPatcherUtil;
 import org.hibernate.HibernateException;
+
+import com.itextpdf.text.List;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
@@ -82,10 +85,10 @@ public class XmlPatcherSQLLangWorker extends XmlPatcherLangWorker {
 			// (default=";")
 			StringTokenizer stok = new StringTokenizer(getEntity().getValue()
 					.trim(), getEntity().getDelimiter());
+			java.util.List<String> statements = new ArrayList<>();
 			while (stok.hasMoreTokens()) {
 				String sqlCommand = stok.nextToken();
-//				logger.info("XML PATCH preparing to run " + sqlCommand);
-//				System.out.println("running XML statement: " + sqlCommand);
+				statements.add(sqlCommand);
 				if (sqlCommand.trim().equals(""))
 					continue;
 				statement.addBatch(sqlCommand);
@@ -95,9 +98,11 @@ public class XmlPatcherSQLLangWorker extends XmlPatcherLangWorker {
 			// if things go wrong, rollback the connection and set it back to
 			// autocommit=true
 			try {
+				logger.info(String.format("running statements: %s", statements));
 				statement.executeBatch();
 				con.commit();
 			} catch (BatchUpdateException e) {
+				logger.error(String.format("\t====>the query FAILED!\n: %s", statements));
 				con.rollback();
 				throw new XmlPatcherLangWorkerException(e);
 			} finally {

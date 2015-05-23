@@ -81,6 +81,8 @@
       </div>
     <?php endif; ?>
   </div>
+
+  <input type="hidden" name="language" value="<?php print $GLOBALS['language']->language ?>" />
 </div>
 
 <div class="views-actions">

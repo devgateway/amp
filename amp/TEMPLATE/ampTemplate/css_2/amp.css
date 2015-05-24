@@ -126,7 +126,7 @@ top_nav a {color:#FFFFFF;}
 html.ie .workspace_info {width:100px; margin:0 auto; height:30px; color:#000000; font-size:11px; padding:5px 10px;text-align:right;margin:-0px 0px 0px 50px;z-index:9990;position:absolute; top:5px;right:10px;}
 .workspace_info select{width:150px;font-size:10px;}
 .workspace_choose {line-height:25px; font-size:13px; margin-top:25px;}
-#login_menu{width:330px; float:right; margin:10px 0px 0px 0px;color:#fff;}
+#login_menu{width:330px; float:right; margin:10px 30px 0px 0px;color:#fff;}
 
 /* MENU */
 .main_menu {height:25px;   margin:0 auto;text-align:center;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;z-index:9000;}

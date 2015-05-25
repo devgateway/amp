@@ -8,6 +8,10 @@
  * Implements hook_page_alter().
  */
 function ampcounter_page_alter(&$page) {
+  if ($GLOBALS['theme'] != 'ampcms') {
+    return;
+  }
+
   // Only increment counter for anonymous users.
   if (empty($GLOBALS['user']->uid)) {
     $url_options = array(

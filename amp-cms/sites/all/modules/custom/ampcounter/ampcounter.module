@@ -1,0 +1,78 @@
+<?php
+/**
+ * @file
+ * Exposes a light weigh alternative to the contrib counter module, based on most_viewed.
+ */
+
+/**
+ * Implements hook_page_alter().
+ */
+function ampcounter_page_alter(&$page) {
+  // Only increment counter for anonymous users.
+  if (empty($GLOBALS['user']->uid)) {
+    $url_options = array(
+      'query' => array(
+        'rt' => REQUEST_TIME,
+      )
+    );
+    $url = url(drupal_get_path('module', 'ampcounter') . '/ampcounter.php', $url_options);
+
+    $page['page_bottom']['ampcounter_update']['#markup'] = '<img style="position: fixed;" src="' . $url . '" width="1" height="1" />';
+  }
+
+  // Display the site counter in the page footer.
+  $page['page_bottom']['ampcounter'] = ampcounter_get_counter_markup();
+}
+
+
+function ampcounter_get_counter_markup() {
+  $element = array(
+    '#type' => 'container',
+    '#attributes' => array(
+      'class' => array('ampcounter-wrapper'),
+    ),
+  );
+
+  $element['title'] = array(
+    '#markup' => '<h3 class="element-invisible">' . t('Site Counter') . '</h3>',
+  );
+
+  $element['value'] = array(
+    '#type' => 'container',
+    '#attributes' => array(
+      'class' => array('value-wrapper'),
+      'title' => t('Site Counter'),
+    ),
+  );
+
+  $counter_value = variable_get('ampcounter_value', 0);
+
+  // Display at least 4 figures.
+  $counter_value = str_pad($counter_value, 4, '0', STR_PAD_LEFT);
+
+  // Parse number figure by figure and generate HTML for the counter.
+  $counter_value_array = str_split($counter_value);
+  for ($i = 0; $i < count($counter_value_array); $i++) {
+    $offset = count($counter_value_array) - $i;
+
+    // Add the separator between element.
+    if ($i > 0 && $offset % 3 == 0) {
+      // @TODO: Use locale data to determine the separator type.
+      $element['value']['separator-' . $i] = array(
+        '#markup' => '',
+        '#prefix' => '<span class="separator">',
+        '#suffix' => '</span>',
+      );
+    }
+
+    $attributes = array();
+    $attributes['class'][] = 'value';
+    $element['value']['item-' . $i] = array(
+      '#markup' => $counter_value_array[$i],
+      '#prefix' => '<span' . drupal_attributes($attributes) . '>',
+      '#suffix' => '</span>',
+    );
+  }
+
+  return $element;
+}

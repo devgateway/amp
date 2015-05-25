@@ -223,11 +223,13 @@ class ampAPIEntityQueryHelper {
 
     // Get the number formatting pattern.
     $number_format = NULL;
-    foreach ($response_data->settings as $info) {
-      if ($info->id != 'ammountPattern') {
-        continue;
+    if (is_array($response_data->settings)) {
+      foreach ($response_data->settings as $info) {
+        if ($info->id != 'ammountPattern') {
+          continue;
+        }
+        $number_format = $info->value;
       }
-      $number_format = $info->value;
     }
 
     $entities = array();

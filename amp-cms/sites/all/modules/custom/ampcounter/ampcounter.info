@@ -1,0 +1,5 @@
+
+name = AMP Counter
+description = Exposes a light weigh alternative to the contrib counter module, based on most_viewed.
+core = 7.x
+package = Custom

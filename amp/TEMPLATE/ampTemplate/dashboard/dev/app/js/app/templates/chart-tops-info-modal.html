@@ -6,7 +6,7 @@
 
 <div class='chart-tops-info-category'>
 	<span>
-		<b><%= context.x.fmt %></b> - <%= model.get('adjtype')%> -  		
+		<b><%= (context.x.fmt || context.x.raw) %></b> - <%= model.get('adjtype')%> -  		
 		<span data-i18n="<%= app.settings.numberMultiplierDescription %>"></span>
 		<%= model.get('currency') %>
 	</span>

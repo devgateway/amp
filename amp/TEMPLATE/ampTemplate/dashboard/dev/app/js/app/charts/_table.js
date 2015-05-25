@@ -13,10 +13,10 @@ function fakeRawContext(e, data) {
       seriesIndex = parseInt(util.data(t, 'seriesIndex'), 10) || 0,
       xIndex = parseInt(util.data(t, 'xIndex'), 10);
   return {
-    label: xIndex && data[seriesIndex].values[xIndex].x,
+    label: data[seriesIndex].values[xIndex].x || xIndex,
     seriesIndex: seriesIndex,
     pointIndex: xIndex,
-    point: xIndex && data[seriesIndex].values[xIndex]
+    point: data[seriesIndex].values[xIndex] || xIndex
   };
 }
 

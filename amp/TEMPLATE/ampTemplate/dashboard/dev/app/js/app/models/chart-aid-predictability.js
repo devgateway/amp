@@ -30,7 +30,8 @@ module.exports = ChartModel.extend({
       return function(d) {
         return {
           x: d.year,
-          y: d[which]
+          y: d[which]['amount'],
+          z: d[which]['formattedAmount']
         };
       };
     }

@@ -67,7 +67,8 @@ module.exports = ChartModel.extend({
             var yearValue = _(y.values).findWhere({type: s});
             return {
               x: y.Year,
-              y: yearValue && yearValue.amount || 0
+              y: yearValue && yearValue.amount || 0,
+              z: yearValue && yearValue.formattedAmount || 0,
             };
           })
         };
@@ -102,7 +103,8 @@ module.exports = ChartModel.extend({
           .map(function(othersYear) {
             return {
               x: othersYear[0].x,
-              y: _(othersYear).reduce(function(t, s) { return t + s.y; }, 0)
+              y: _(othersYear).reduce(function(t, s) { return t + s.y; }, 0),
+              z: _(othersYear).reduce(function(t, s) { return t + s.z; }, 0)
             };
           })
           .value()

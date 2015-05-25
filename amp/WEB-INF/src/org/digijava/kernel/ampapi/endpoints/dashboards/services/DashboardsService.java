@@ -39,6 +39,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -124,10 +125,10 @@ public class DashboardsService {
 		List<Integer> peaceFilterOptions = new ArrayList<Integer>();
 		for (AmpCategoryValue category : catList) {
 			if (category.getValue().equals("Relevant for peacebuilding but peacebuilding objectives not articulated")
-					|| category.getLabel().equals("Articulate peacebuilding outcomes but as a secondary objective")
-					|| category.getLabel().equals("Articulates peacebuilding as the main objective")
-					|| category.getValue().equals("1") || category.getLabel().equals("2")
-					|| category.getLabel().equals("3")) {
+					|| category.getValue().equals("Articulate peacebuilding outcomes but as a secondary objective")
+					|| category.getValue().equals("Articulates peacebuilding as the main objective")
+					|| category.getValue().equals("1") || category.getValue().equals("2")
+					|| category.getValue().equals("3")) {
 				peaceFilterOptions.add(category.getId().intValue());
 			}
 		}
@@ -141,9 +142,7 @@ public class DashboardsService {
 
 		// AMP-18740: For dashboards we need to use the default number formatting and leave the rest of the settings
 		// configurable (calendar, currency, etc).
-		MondrianReportSettings defaultSettings = MondrianReportUtils.getCurrentUserDefaultSettings();
-		MondrianReportSettings currentSettings = (MondrianReportSettings) spec.getSettings();
-		currentSettings.setCurrencyFormat(defaultSettings.getCurrencyFormat());
+		setCustomSettings(config, spec);
 
 		try {
 			report = generator.executeReport(spec);
@@ -160,8 +159,10 @@ public class DashboardsService {
 				&& report.reportContents.getContents().size() > 0) {
 			totals = (ReportCell) report.reportContents.getContents().values().toArray()[2];
 			retlist.set("total", totals.value);
+			retlist.set("sumarizedTotal", calculateSumarizedTotals(Double.valueOf(totals.value.toString()), spec));
 		} else {
 			retlist.set("total", 0);
+			retlist.set("sumarizedTotal", "");
 		}
 
 		String currcode = null;
@@ -287,9 +288,7 @@ public class DashboardsService {
  		
 		// AMP-18740: For dashboards we need to use the default number formatting and leave the rest of the settings
 		// configurable (calendar, currency, etc).
-		MondrianReportSettings defaultSettings = MondrianReportUtils.getCurrentUserDefaultSettings();
-		MondrianReportSettings currentSettings = (MondrianReportSettings) spec.getSettings();
-		currentSettings.setCurrencyFormat(defaultSettings.getCurrencyFormat());
+ 		setCustomSettings(config, spec);
  		
  		try {
 			report = generator.executeReport(spec);
@@ -306,8 +305,10 @@ public class DashboardsService {
 				&& report.reportContents.getContents().size() > 0) {
 			totals = (ReportCell) report.reportContents.getContents().values().toArray()[1];
 			retlist.set("total", totals.value);
+			retlist.set("sumarizedTotal", calculateSumarizedTotals(Double.valueOf(totals.value.toString()), spec));
 		} else {
 			retlist.set("total", 0);
+			retlist.set("sumarizedTotal", "");
 		}
 
 		String currcode = null;
@@ -370,7 +371,6 @@ public class DashboardsService {
 	 */
 	
 	public static JSONObject getAidPredictability(JsonBean filter) throws Exception {
-
 		JSONObject retlist = new JSONObject();
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetAidPredictability", ArConstants.DONOR_TYPE);
 		spec.addColumn(new ReportColumn(ColumnConstants.COUNTRY));
@@ -389,16 +389,18 @@ public class DashboardsService {
  					otherFilter, null);
  			if(filterRules!=null){
  				spec.setFilters(filterRules);
- 			}
- 		
+ 			} 		
  		}
  	
-
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
 				ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
 		
 		SettingsUtils.applySettings(spec, filter);
+		
+		// AMP-18740: For dashboards we need to use the default number formatting and leave the rest of the settings
+		// configurable (calendar, currency, etc).
+		setCustomSettings(filter, spec);
 		
 		GeneratedReport report = generator.executeReport(spec);
 		//Not only years, we can have values like 'Fiscal calendar 2010-2011', so the Map should be <String,JSONObject>
@@ -420,7 +422,10 @@ public class DashboardsService {
 					results.put(yearValue, buildEmptyJSon("planned disbursements", "actual disbursements"));
 				JSONObject amountObj = results.get(yearValue);
 	
-				amountObj.put(destination, report.reportContents.getContents().get(outputColumn).value);
+				JSONObject amounts = new JSONObject();
+				amounts.put("amount", report.reportContents.getContents().get(outputColumn).value);
+				amounts.put("formattedAmount", report.reportContents.getContents().get(outputColumn).displayedValue);
+				amountObj.put(destination, amounts);
 			}
 		}
 		JSONArray yearsArray = new JSONArray ();
@@ -483,6 +488,10 @@ public class DashboardsService {
  			}
  		
  		}
+ 		
+ 		// AMP-18740: For dashboards we need to use the default number formatting and leave the rest of the settings
+ 		// configurable (calendar, currency, etc).
+ 		setCustomSettings(filter, spec);
 		
 		try {
 			report = generator.executeReport(spec);
@@ -495,8 +504,10 @@ public class DashboardsService {
 		if (report.reportContents != null && report.reportContents.getContents() != null && report.reportContents.getContents().size() > 0) {
 			ReportCell totals = (ReportCell)report.reportContents.getContents().values().toArray()[2];
 			retlist.set("total", totals.value);
+			retlist.set("sumarizedTotal", calculateSumarizedTotals(Double.valueOf(totals.value.toString()), spec));
 		} else {
 			retlist.set("total", 0);
+			retlist.set("sumarizedTotal", "");
 		}
 		
 		String currcode = null;
@@ -526,9 +537,10 @@ public class DashboardsService {
 						break;
 					default:
 						amountObj.set("amount", value.value);
+						amountObj.set("formattedAmount", value.displayedValue);
 						break;
 					}
-					if (amountObj.getSize()==2){
+					if (amountObj.getSize()==3){
 						subvalues.add(amountObj);
 					}
 				}
@@ -580,10 +592,10 @@ public class DashboardsService {
 		List<Integer> peaceFilterOptions = new ArrayList<Integer>();
 		for (AmpCategoryValue category : catList) {
 			if (category.getValue().equals("Relevant for peacebuilding but peacebuilding objectives not articulated")
-					|| category.getLabel().equals("Articulate peacebuilding outcomes but as a secondary objective")
-					|| category.getLabel().equals("Articulates peacebuilding as the main objective")
-					|| category.getValue().equals("1") || category.getLabel().equals("2")
-					|| category.getLabel().equals("3")) {
+					|| category.getValue().equals("Articulate peacebuilding outcomes but as a secondary objective")
+					|| category.getValue().equals("Articulates peacebuilding as the main objective")
+					|| category.getValue().equals("1") || category.getValue().equals("2")
+					|| category.getValue().equals("3")) {
 				peaceFilterOptions.add(category.getId().intValue());
 			}
 		}
@@ -603,10 +615,8 @@ public class DashboardsService {
 
 		// AMP-18740: For dashboards we need to use the default number formatting and leave the rest of the settings
 		// configurable (calendar, currency, etc).
-		MondrianReportSettings defaultSettings = MondrianReportUtils.getCurrentUserDefaultSettings();
-		MondrianReportSettings currentSettings = (MondrianReportSettings) spec.getSettings();
-		currentSettings.setCurrencyFormat(defaultSettings.getCurrencyFormat());
-
+		setCustomSettings(config, spec);
+		
 		try {
 			report = generator.executeReport(spec);
 		} catch (Exception e) {
@@ -631,5 +641,59 @@ public class DashboardsService {
 		retlist.set("values", values);
 
 		return retlist;
+	}
+
+	
+	/**
+	 * Use this method to set the default settings from GS and then customize them with the values from the UI.
+	 * @param config Is the JsonBean object from UI.
+	 * @param spec Is the current Mondrian Report specification.
+	 */
+	private static void setCustomSettings(JsonBean config, ReportSpecificationImpl spec) {
+		LinkedHashMap<String, Object> userSettings = (LinkedHashMap<String, Object>) config.get("settings");
+		MondrianReportSettings defaultSettings = MondrianReportUtils.getCurrentUserDefaultSettings();
+		defaultSettings.setUnitsMultiplier(MondrianReportUtils.getAmountMultiplier(Integer.valueOf(FeaturesUtil
+				.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))));
+		if (userSettings.get("1") != null) {
+			defaultSettings.setCurrencyCode(userSettings.get("1").toString());
+		}
+
+		if (userSettings.get("2") != null) {
+			defaultSettings.setCalendar(FiscalCalendarUtil.getAmpFiscalCalendar(new Long(userSettings.get("2")
+					.toString()).longValue()));
+		}
+		spec.setSettings(defaultSettings);
+	}
+	
+	/**
+	 * Generate a smaller version of any number (big or small) by adding a suffix kMBT.
+	 * @param total
+	 * @param spec
+	 * @return
+	 */
+	private static String calculateSumarizedTotals(double total, ReportSpecificationImpl spec) {
+		// Convert the number back to units (depending of GS total could be in millions or thousands).
+		total = total / spec.getSettings().getUnitsMultiplier();
+		String formatted = "";
+		boolean addSufix = false;
+		int exp = (int) (Math.log(total) / Math.log(1000));
+		if (total < 1000) {
+			formatted = String.format("%.1f", total);
+		} else {
+			addSufix = true;
+			// total = Math.round(total / Math.pow(1000, exp));
+			total = total / Math.pow(1000, exp);
+			formatted = String.format("%.1f", total);
+		}
+		formatted = formatted.replace('.', spec.getSettings().getCurrencyFormat().getDecimalFormatSymbols()
+				.getDecimalSeparator());
+		if (formatted.endsWith(spec.getSettings().getCurrencyFormat().getDecimalFormatSymbols().getDecimalSeparator()
+				+ "0")) {
+			formatted = formatted.substring(0, formatted.length() - 2);
+		}
+		if (addSufix) {
+			formatted = formatted + "kMBTPE".charAt(exp - 1);
+		}
+		return formatted;
 	}
 }

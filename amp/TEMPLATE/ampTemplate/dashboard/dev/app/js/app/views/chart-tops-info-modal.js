@@ -10,6 +10,7 @@ module.exports = BackboneDash.View.extend({
 		this.app = options.app;
 		this.context = options.context;
 		this.model = options.model;
+		this.numberMultiplier = app.settings.find(function(item) {return item.id === 'number-multiplier'});
 	},
 
 	render: function() {
@@ -17,8 +18,11 @@ module.exports = BackboneDash.View.extend({
 		this.$el.html(template({
 			model: this.model,
 			context: this.context,
-			values: undefined
+			values: undefined,
+			numberMultiplier: this.numberMultiplier
 		}));
+		app.translator.translateDOM($(".dash-settings-modal"));
+		
 		//TODO: move this code to a new model so the API call is made automatically.
     	var config = this.app.filter.serialize();
     	config.settings = this.app.settings.toAPI();
@@ -36,8 +40,10 @@ module.exports = BackboneDash.View.extend({
     		self.$el.html(template({
     			model: self.model,
     			context: self.context,
-    			values: data.values
+    			values: data.values,
+    			numberMultiplier: self.numberMultiplier
     		}));
+    		app.translator.translateDOM($(".dash-settings-modal"));
     	});
     	
 		return this;

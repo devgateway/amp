@@ -21,9 +21,10 @@ module.exports = ChartViewBase.extend({
 
   getTTContent: function(context) {
 	var ofTotal = app.translator.translateSync("amp.dashboard:of-total","of total");
+	var units = app.translator.translateSync(app.settings.numberMultiplierDescription);
     return {tt: {
       heading: context.x.raw,
-      bodyText: '<b>' + context.y.fmt + '</b> ' + this.model.get('currency'),
+      bodyText: '<b>' + context.y.fmt + '</b> ' + this.model.get('currency') + ' (' + units + ')',
       footerText: '<b>' + d3.format('%')(context.y.raw / this.model.get('total')) + '</b>&nbsp<span>' + ofTotal + '</span>'
     }};
   },

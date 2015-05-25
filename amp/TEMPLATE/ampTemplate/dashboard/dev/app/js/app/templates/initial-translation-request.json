@@ -108,6 +108,8 @@
 "amp.dashboard:ftype-planned-expenditures":	"Planned Expenditures",  			
 "amp.dashboard:dashboard-chart-tops-info-modal": "Category Detail",
 "amp.dashboard:chart-tops-table-projecttitle": "Project Title",
-"amp.dashboard:chart-tops-table-amount": "Amount"
+"amp.dashboard:chart-tops-inunits": "In units",
+"amp.dashboard:chart-tops-inthousands": "In thousands",
+"amp.dashboard:chart-tops-inmillions": "In millions"
 }
 

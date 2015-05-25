@@ -666,8 +666,8 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 	// AMP-18959.
 	private void addGrandTotalRows() {
 		int lastCol = rowsetBody[0].length;
-		// 1st rows are always titles.
-		int headerRowsOffset = 2;
+		// 1st rows are always titles. All rows except header rows will be processed
+		int headerRowsOffset = (rowsetHeader != null) ? rowsetHeader.length : 0;
 		Row titleRow = workbookSheet.getRow(1);
 		// Add missing grand total columns.
 		if(grandTotals != null) {

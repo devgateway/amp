@@ -39,6 +39,7 @@ function ampsettings_wysiwyg_default_profiles() {
           'Redo' => 1,
           'Link' => 1,
           'Unlink' => 1,
+          'TextColor' => 1,
           'Source' => 1,
           'HorizontalRule' => 1,
           'PasteText' => 1,
@@ -64,7 +65,6 @@ function ampsettings_wysiwyg_default_profiles() {
       'css_path' => '%bsites/all/modules/custom/helpertheme/styles/helpertheme.wysiwyg.css',
       'stylesSet' => '',
       'block_formats' => 'p,address,pre,h2,h3,h4,h5,h6,div',
-      'advanced__active_tab' => 'edit-paste',
       'forcePasteAsPlainText' => 1,
     ),
   );

@@ -166,7 +166,7 @@ public class AidEffectivenessIndicatorsAction extends Action {
                 if (! AidEffectivenessIndicatorUtil.hasIndicatorActivities(indicatorId)) {
                     AidEffectivenessIndicatorUtil.deleteIndicator(indicatorId);
                 }  else {
-                    handleLocalException(request, new RuntimeException(), "error.admin.aidEffectivenessIndicator.hasRelatedActivities",
+                    handleLocalException(request, null, "error.admin.aidEffectivenessIndicator.hasRelatedActivities",
                             indicator.getAmpIndicatorName());
                     executeSearch(request, indicatorForm);
                     return mapping.findForward("search");

@@ -104,15 +104,21 @@ module.exports = BackboneDash.Collection.extend({
   
   extractNumberFormatSettings: function(settings) {
 	  var numberFormat = {};
-	  numberFormat.groupSeparator = _.find(settings, function(item) {
-		  return item['id'] === 'number-group-separator';
-	  }).name || ',';
-	  numberFormat.decimalSeparator = _.find(settings, function(item) {
-			return item['id'] === 'number-decimal-separator';
-	  }).name || '.';
 	  numberFormat.numberFormat = _.find(settings, function(item) {
 			return item['id'] === 'number-format';
 	  }).name || '#,#.#';
+	  // If the format pattern doesnt have thousands grouping then ignore 'number-group-separator' param or it will 
+	  // be used by JS to group by thousands (ie: in the 'Others' columns).
+	  if(numberFormat.numberFormat.indexOf(',') !== -1) {
+		  numberFormat.groupSeparator = _.find(settings, function(item) {
+			  return item['id'] === 'number-group-separator';
+		  }).name || ',';
+	  } else {
+		  numberFormat.groupSeparator = '';
+	  }	  	  
+	  numberFormat.decimalSeparator = _.find(settings, function(item) {
+			return item['id'] === 'number-decimal-separator';
+	  }).name || ('.');	  
 	  this.app.settings.numberFormatSettings = numberFormat;
 	  
 	  this.app.settings.numberMultiplier = settings.find(function(item) {return item.id === 'number-multiplier'});

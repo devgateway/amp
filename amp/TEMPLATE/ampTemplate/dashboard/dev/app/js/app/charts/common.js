@@ -191,8 +191,8 @@ function formatNumber(number) {
 	// delimiters.
 	var ampLang = {
 		delimiters : {
-			thousands : app.settings.numberFormatSettings.groupSeparator || ',',
-			decimal : app.settings.numberFormatSettings.decimalSeparator || '.'
+			thousands : app.settings.numberFormatSettings.groupSeparator,
+			decimal : app.settings.numberFormatSettings.decimalSeparator
 		},
 		abbreviations : {
 			thousand : 'K',

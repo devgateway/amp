@@ -84,7 +84,8 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 	 */
 	public void roleAdded(AjaxRequestTarget target, AmpOrgRole ampOrgRole) {
 		orgAddedOrRemoved = true;
-        changeSearchVisibility(target);
+        updateSearchVisibility();
+        target.add(searchOrganization);
         addFundingAutomatically(target, ampOrgRole);
 	}
 
@@ -94,7 +95,8 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
      */
     public void roleRemoved(AjaxRequestTarget target,AmpOrgRole ampOrgRole) {
     	orgAddedOrRemoved = true;
-        changeSearchVisibility(target);
+        updateSearchVisibility();
+        target.add(searchOrganization);
         removeFundingAutomatically(target, ampOrgRole);
     }
 
@@ -127,7 +129,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
         }
     }
 
-    private void changeSearchVisibility(AjaxRequestTarget target) {
+    private void updateSearchVisibility() {
         if (maxSizeCollectionValidationField.isVisible()){
             List<AmpOrgRole> tmpList = listModel.getObject();
             if (tmpList != null && tmpList.size() > 0){
@@ -136,7 +138,6 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
             else{
                 searchOrganization.setVisibilityAllowed(true);
             }
-            target.add(searchOrganization);
         }
     }
 
@@ -281,10 +282,13 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 				ampOrgRole.setActivity(am.getObject());
 				ampOrgRole.setRole(specificRole);
 				//ampOrgRole.setAmpOrgRoleId(choice.getAmpOrgId());
-				if(list.getObject().size()>0)
-					ampOrgRole.setPercentage(0f);
-				else
-					ampOrgRole.setPercentage(100f);
+				if (percentageValidationField.isVisible()) {
+					if(list.getObject().size() > 0)
+						ampOrgRole.setPercentage(0f);
+					else 
+						ampOrgRole.setPercentage(100f);
+				}
+				
 				if (setModel.getObject() == null)
                     setModel.setObject(new HashSet<AmpOrgRole>());
                 
@@ -312,6 +316,9 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 		};
 		searchOrgs.add(UpdateEventBehavior.of(FundingOrgListUpdateEvent.class));
     	searchOrganization = new AmpSearchOrganizationComponent<String>("search", new Model<String> (), "Search Organizations", searchOrgs, availableOrgGroupChoices);
+    	
+    	updateSearchVisibility();
+    	
 		add(searchOrganization);
 	}
 //	private boolean existOrganization(Set<AmpOrgRole> set, AmpOrgRole ampOrgRole) {

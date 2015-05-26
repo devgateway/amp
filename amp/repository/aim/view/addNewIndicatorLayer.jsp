@@ -92,7 +92,7 @@ function validateAndSave() {
 
 	if (numberOfClassesValue < minNumOfClasses) {
 		newErrorContent+='<digi:trn jsFriendly="true">Number of classes should be greater than</digi:trn>&nbsp;'
-		    + minNumOfClasses +'</td></tr></table>';
+		    + (minNumOfClasses - 1) +'</td></tr></table>';
 		$(newErrorContent).appendTo($("#errors"));
 		return false;
 	}

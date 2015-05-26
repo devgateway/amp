@@ -103,7 +103,6 @@ public class DashboardsService {
 		spec.setCalculateRowTotals(true);
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
 				ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
-		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
 		GeneratedReport report = null;
 
 		MondrianReportFilters filterRules = null;
@@ -168,7 +167,6 @@ public class DashboardsService {
 		String currcode = null;
 		currcode = spec.getSettings().getCurrencyCode();
 		retlist.set("currency", currcode);
-		retlist.set("numberformat", numberformat);
 
 		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
 			ReportAreaImpl reportArea = (ReportAreaImpl) iterator.next();
@@ -271,7 +269,6 @@ public class DashboardsService {
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
 				ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
-		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
 		GeneratedReport report = null;
 		
 		MondrianReportFilters filterRules = null;
@@ -304,7 +301,7 @@ public class DashboardsService {
 		if (report.reportContents != null && report.reportContents.getContents() != null
 				&& report.reportContents.getContents().size() > 0) {
 			totals = (ReportCell) report.reportContents.getContents().values().toArray()[1];
-			retlist.set("total", totals.value);
+			retlist.set("total", ((Double) totals.value) / spec.getSettings().getUnitsMultiplier());
 			retlist.set("sumarizedTotal", calculateSumarizedTotals(Double.valueOf(totals.value.toString()), spec));
 		} else {
 			retlist.set("total", 0);
@@ -314,9 +311,6 @@ public class DashboardsService {
 		String currcode = null;
 		currcode = spec.getSettings().getCurrencyCode();
 		retlist.set("currency", currcode);
-
-		retlist.set("numberformat", numberformat);
-		
 		
 		Integer maxLimit = report.reportContents.getChildren().size();
 		
@@ -330,7 +324,7 @@ public class DashboardsService {
 			//Remove undefined from region's chart AMP-18632
 			if(!dvalue.equalsIgnoreCase(MoConstants.REGION_UNDEFINED)){
 				amountObj.set("name", dvalue);
-				amountObj.set("amount", reportcell.value);
+				amountObj.set("amount", ((Double) reportcell.value) / spec.getSettings().getUnitsMultiplier());
 				amountObj.set("formattedAmount", reportcell.displayedValue);
 				values.add(amountObj);
 			}else{
@@ -394,7 +388,6 @@ public class DashboardsService {
  	
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
 				ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
-		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
 		
 		SettingsUtils.applySettings(spec, filter);
 		
@@ -441,8 +434,6 @@ public class DashboardsService {
 		currcode = spec.getSettings().getCurrencyCode();
 		retlist.put("currency", currcode);
 		
-		retlist.put("numberformat", numberformat);
-		
 		retlist.put("name", DashboardConstants.AID_PREDICTABILITY);
 		retlist.put("title", TranslatorWorker.translateText(DashboardConstants.AID_PREDICTABILITY));
 		retlist.put("measure", "disbursements");
@@ -474,7 +465,6 @@ public class DashboardsService {
 		
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
-		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
 		GeneratedReport report = null;
 		
 		MondrianReportFilters filterRules = null;
@@ -514,7 +504,6 @@ public class DashboardsService {
 		currcode = spec.getSettings().getCurrencyCode();
 		retlist.set("currency", currcode);
 		
-		retlist.set("Numberformat",numberformat);
 		List<JsonBean> values = new ArrayList<JsonBean>();
 		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
 			List<JsonBean> subvalues = new ArrayList<JsonBean>();

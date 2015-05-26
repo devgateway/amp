@@ -361,7 +361,7 @@ public class SettingsUtils {
 				.getGlobalSettingValue(GlobalSettingsConstants.MAX_LOCATIONS_ICONS), null, null));
 		
 		settings.add(new SettingOptions("number-format", false, 
-				FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT), null, null));
+				MondrianReportUtils.getCurrentUserDefaultSettings().getCurrencyFormat().toPattern(), null, null));
 		int amountOptionId = Integer.valueOf(
 				FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));		
 		settings.add(new SettingOptions("number-group-separator", false, 

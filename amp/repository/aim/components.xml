@@ -315,6 +315,7 @@
 
 
 	<page name="auditLoggerManager" title=" - Audit Logger Manager" />
+	<page name="scorecardManager" title=" - Donor Scorecard Manager" />
 
 	<page page="filters/filterPicker2" name="aim_filterPicker2" title="AMP - Reports Filter Picker" />
 	

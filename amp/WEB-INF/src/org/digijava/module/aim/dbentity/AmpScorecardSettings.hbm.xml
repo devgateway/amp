@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpScorecardSettingsr" table="AMP_SCORECARD_SETTINGS">
+		<cache usage="read-write" />
+		<id name="ampScorecardSettingsId" column="id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_SCORECARD_SETTINGS_seq</param>
+			</generator>
+		</id>
+
+		<property name="validationPeriod" column="validation_period" type="java.lang.Boolean" />
+		<property name="validationTime" column="validation_time" type="java.lang.Integer" />
+	
+	</class>
+</hibernate-mapping>

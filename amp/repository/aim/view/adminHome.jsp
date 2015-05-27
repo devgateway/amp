@@ -458,6 +458,19 @@
     	</td>
   	</tr>
   	</module:display>  
+  	<module:display name="Scorecard Manager" parentModule="ADMINISTRATIVE SECTION">
+	 <tr>
+     	<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    	<td class="admin_box_label">
+	    	<c:set var="trnScorecardManager">
+				<digi:trn invisibleLinks="true">Click here to view Scorecard Manager</digi:trn>
+	        </c:set>
+			<digi:link href="/scorecardManager.do" title="${trnScorecardManager}" >
+	        	<digi:trn>Scorecard Manager</digi:trn>
+	        </digi:link>
+    	</td>
+  	</tr>
+  	</module:display>   
 </table>
 
 	</div></td>

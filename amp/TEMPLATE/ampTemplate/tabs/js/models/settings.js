@@ -14,7 +14,7 @@ define([ 'underscore', 'backbone', 'business/translations/translationManager' ],
 					console.error('error loading settings');
 				},
 				success : function(collection, response) {
-					_self.attributes.currencies = _.find(collection.attributes, function(item) {return item.name === 'currency'}).options;
+					_self.attributes.currencies = _.find(collection.attributes, function(item) {return item.name === 'Currency'}).options;
 					_self.attributes.calendars = _.find(collection.attributes, function(item) {return item.name === 'Calendar Type'}).options;
 					_self.teamId = _.find(collection.attributes, function(item) {return item.id === 'team-id'});
 					_self.teamLead = _.find(collection.attributes, function(item) {return item.id === 'team-lead'});

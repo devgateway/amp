@@ -377,7 +377,7 @@ public class SettingsUtils {
 		if (tm != null){ 
 			settings.add(new SettingOptions("team-id", false, 
 					EndpointUtils.getAppSettings().getTeam().getAmpTeamId().toString(), null, null));
-			settings.add(new SettingOptions("tean-lead", false, String.valueOf(tm.getTeamHead()), null, null));
+			settings.add(new SettingOptions("team-lead", false, String.valueOf(tm.getTeamHead()), null, null));
 			settings.add(new SettingOptions("team-validator", false, String.valueOf(tm.isApprover()), null, null));
 			// Cross Team validation
 			settings.add(new SettingOptions("cross_team_validation", false, 

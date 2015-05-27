@@ -371,46 +371,54 @@ public class EditActivity extends Action {
       Collection ampFields 			= DbUtil.getAmpFields();
       HashMap allComments 			= new HashMap();
       
-      if (ampFields!=null) {
-      	for (Iterator itAux = ampFields.iterator(); itAux.hasNext(); ) {
-              AmpField field = (AmpField) itAux.next();
-              	colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(), activityId);
+      if (ampFields != null) {
+          for (Object ampField : ampFields) {
+              AmpField field = (AmpField) ampField;
+              colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(), activityId);
               allComments.put(field.getFieldName(), colAux);
-            }
+          }
       }
       
       eaForm.getComments().setAllComments(allComments);
 
 
-      if (tm != null && tm.getAppSettings() != null && tm.getAppSettings()
-          .getCurrencyId() != null) {
-              String currCode="";
-              String currName="";
-              AmpCurrency curr=CurrencyUtil.
-                  getAmpcurrency(
-                          tm.getAppSettings()
-                                  .getCurrencyId());
-              if(curr!=null){
-                      currCode = curr.getCurrencyCode();
-                      currName=curr.getCurrencyName();
-              }
-              eaForm.setCurrCode(currCode);
-              eaForm.setCurrName(currName);
-              if(eaForm.getFundingCurrCode()==null){
+      if (tm != null && tm.getAppSettings() != null && tm.getAppSettings().getCurrencyId() != null) {
+          String currCode = "";
+          String currName = "";
+          AmpCurrency curr = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId());
+
+          if (curr != null) {
+              currCode = curr.getCurrencyCode();
+              currName = curr.getCurrencyName();
+          }
+
+          eaForm.setCurrCode(currCode);
+          eaForm.setCurrName(currName);
+
+          if (eaForm.getFundingCurrCode() == null) {
               eaForm.setFundingCurrCode(currCode);
-              }
+          }
+
           if (eaForm.getRegFundingPageCurrCode() == null) {
               eaForm.setRegFundingPageCurrCode(currCode);
           }
-      }else{
+      } else {
     	  String currCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
-          eaForm.setCurrCode(currCode);
-          if(eaForm.getFundingCurrCode()==null){
-          eaForm.setFundingCurrCode(currCode);
+          if (currCode != null) {
+              AmpCurrency curr = CurrencyUtil.getAmpcurrency(currCode);
+
+              eaForm.setCurrCode(currCode);
+              eaForm.setCurrName(curr.getCurrencyName());
+
+              if (eaForm.getFundingCurrCode() == null) {
+                  eaForm.setFundingCurrCode(currCode);
+              }
+
+              if (eaForm.getRegFundingPageCurrCode() == null) {
+                  eaForm.setRegFundingPageCurrCode(currCode);
+              }
           }
-      if (eaForm.getRegFundingPageCurrCode() == null) {
-          eaForm.setRegFundingPageCurrCode(currCode);
-      }
+
       }
 
 
@@ -424,8 +432,7 @@ public class EditActivity extends Action {
             Long timeStamp = (Long) tsaMap.get(activityId);
             if (timeStamp != null) {
 
-              if ( (System.currentTimeMillis() - timeStamp
-                    .longValue()) > Constants.MAX_TIME_LIMIT) {
+              if ((System.currentTimeMillis() - timeStamp) > Constants.MAX_TIME_LIMIT) {
                 // time limit has execeeded. invalidate the activity references
                 tsaMap.remove(activityId);
                 HashMap userActList = (HashMap) ampContext

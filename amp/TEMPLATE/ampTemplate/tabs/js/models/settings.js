@@ -1,33 +1,36 @@
-define([ 'underscore', 'backbone' ], function(_, Backbone) {
+define([ 'underscore', 'backbone', 'business/translations/translationManager' ], function(_, Backbone, TranslationManager) {
 
 	var Settings = Backbone.Model.extend({
 		url : '/rest/amp/settings',
 		defaults : {
 			selectedCurrency : null,
-			selectedCalendar : null,
-			crossteamvalidation : null,
-			TeamManager : null,
-			TeamValidator : null,
-			TeamId : null
+			selectedCalendar : null
 		},
 		initialize : function() {
 			var _self = this;
-			console.log('Initialized Settings');
 			this.fetch({
 				async : false,
 				error : function(collection, response) {
 					console.error('error loading settings');
 				},
 				success : function(collection, response) {
-					console.log(response);
-					_self.attributes.currencies = collection.get('0').options;
-					_self.attributes.calendars = collection.get('1').options;
-					_self.attributes.teamid = collection.get('5');
-					_self.attributes.teamlead = collection.get('6');
-					_self.attributes.validator = collection.get('7');
-					_self.attributes.crossteamenable = collection.get('8');
-					//workspace type
-					_self.attributes.accestype = collection.get('13');
+					_self.attributes.currencies = _.find(collection.attributes, function(item) {return item.name === 'currency'}).options;
+					_self.attributes.calendars = _.find(collection.attributes, function(item) {return item.name === 'Calendar Type'}).options;
+					_self.teamId = _.find(collection.attributes, function(item) {return item.id === 'team-id'});
+					_self.teamLead = _.find(collection.attributes, function(item) {return item.id === 'team-lead'});
+					_self.validator = _.find(collection.attributes, function(item) {return item.id === 'team-validator'});
+					_self.crossTeamEnable = _.find(collection.attributes, function(item) {return item.id === 'cross_team_validation'});
+					// workspace_type
+					_self.accessType = _.find(collection.attributes, function(item) {return item.id === 'workspace_type'});
+					
+					var numberMultiplier = _.find(collection.attributes, function(item) {return item.id === 'number-multiplier'});
+					if (numberMultiplier.name === '1.0') {
+						_self.numberMultiplierDescription = TranslationManager.getTranslated('Amounts in units');
+					} else if(numberMultiplier.name === '0.001') {
+						_self.numberMultiplierDescription = TranslationManager.getTranslated('Amounts in thousands');
+					} else {
+						_self.numberMultiplierDescription = TranslationManager.getTranslated('Amounts in millions');
+					}
 				}
 			});
 		}

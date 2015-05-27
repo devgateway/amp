@@ -156,12 +156,12 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 							var validator;
 							var teamtype;
 							
-							if(app.TabsApp.settings.attributes.teamid){
-								teamid = app.TabsApp.settings.attributes.teamid.name;
-								crossTeamValidation = (app.TabsApp.settings.attributes.crossteamenable.name === 'true');
-								teamlead = (app.TabsApp.settings.attributes.teamlead.name === 'true');
-								validator = (app.TabsApp.settings.attributes.validator.name === 'true');
-								teamtype = app.TabsApp.settings.attributes.accestype.name;
+							if(app.TabsApp.settings.teamId){
+								teamid = app.TabsApp.settings.teamId.name;
+								crossTeamValidation = (app.TabsApp.settings.crossTeamEnable.name === 'true');
+								teamlead = (app.TabsApp.settings.teamLead.name === 'true');
+								validator = (app.TabsApp.settings.validator.name === 'true');
+								teamtype = app.TabsApp.settings.accessType.name;
 							}
 
 							for (iRow = 0; iRow < cRows; iRow++) {
@@ -190,11 +190,11 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 								//check public view - no team present
 								if(!teamid) continue;
 								
-								teamid = app.TabsApp.settings.attributes.teamid.name;
-								crossTeamValidation = (app.TabsApp.settings.attributes.crossteamenable.name === 'true');
-								teamlead = (app.TabsApp.settings.attributes.teamlead.name === 'true');
-								validator = (app.TabsApp.settings.attributes.validator.name === 'true');
-								teamtype = app.TabsApp.settings.attributes.accestype.name;
+								teamid = app.TabsApp.settings.teamId.name;
+								crossTeamValidation = (app.TabsApp.settings.crossTeamEnable.name === 'true');
+								teamlead = (app.TabsApp.settings.teamLead.name === 'true');
+								validator = (app.TabsApp.settings.validator.name === 'true');
+								teamtype = app.TabsApp.settings.accessType.name;
 								
 								// Set font color according to status.
 								var draft = row.cells[3].textContent;

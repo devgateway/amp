@@ -121,7 +121,7 @@ module.exports = BackboneDash.Collection.extend({
 	  }).name || ('.');	  
 	  this.app.settings.numberFormatSettings = numberFormat;
 	  
-	  this.app.settings.numberMultiplier = settings.find(function(item) {return item.id === 'number-multiplier'});
+	  this.app.settings.numberMultiplier = _.find(settings, function(item) {return item.id === 'number-multiplier'});
 	  if (this.app.settings.numberMultiplier.name === '1.0') {
 		  this.app.settings.numberMultiplierDescription = 'amp.dashboard:chart-tops-inunits';
 	  } else if(this.app.settings.numberMultiplier.name === '0.001') {

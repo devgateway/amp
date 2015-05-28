@@ -9,7 +9,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				insert into amp_modules_visibility values (nextval('amp_modules_visibility_seq'), '/Dashboards', 'Dashboards Re-engineered from 2.10', true, null);
+				INSERT INTO amp_modules_visibility(id, name, description, haslevel, parent) VALUES (nextval('amp_modules_visibility_seq'), '/Dashboards', 'Dashboards Re-engineered from 2.10', true, null);
         	</lang>
 		</script>
 	</apply>

@@ -91,7 +91,7 @@ module.exports = BackboneDash.View.extend({
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Peace-building and State-building Goals'})) {
     	col.push(new TopsChart(
     			{ name: 'Peace-building and State-building Goals', big: true, showCategoriesInfo: true, view: 'pie' },
-    			{ app: this.app, url: '/rest/dashboard/ndd' }));
+    			{ app: this.app, url: '/rest/dashboard/tops/ndd' }));
     }
        
     var chartsCollection = new Charts(col, { app: this.app });

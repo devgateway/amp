@@ -90,14 +90,6 @@ public class EndPoints {
 		return DashboardsService.fundingtype(adjtype,config);
 	}
 	
-	@POST 
-	@Path("/ndd")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = false, id = "ndd")
-	public JsonBean getNDD(JsonBean config) throws Exception {
-		return DashboardsService.getNDD(config);
-	}
-
 	@POST
 	@Path("/saved-charts")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -125,10 +117,12 @@ public class EndPoints {
 	}
 	
 	@POST
-	@Path("/ndd/{id}")
+	@Path("/tops/ndd/{id}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "ndd_projects")
 	public JsonBean getAdminLevelsTotals(JsonBean config, @PathParam("id") Integer id) {
+		//TODO: Once we implement details for all top charts we can change the path to '/tops/details/' 
+		// and send the type of chart and category id as params. 
 		return DashboardsService.getPeaceMarkerProjectsByCategory(config, id);
 	}
 }

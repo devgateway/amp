@@ -86,24 +86,22 @@ public class DashboardsService {
 		return tops;
 	}
 	
-	public static JsonBean getNDD(JsonBean config) {
+	/**
+	 * Return (n) Donors sorted by amount
+	 * 
+	 * @param type
+	 *            (Donor, Regions, Primary Sector)
+	 * @param n
+	 * @param config request configuration that stores filters, settings and any other options
+	 * @return
+	 */
+	public static JsonBean getTops(String type, Integer n, JsonBean config) {
 		String err = null;
 		JsonBean retlist = new JsonBean();
-		String name = DashboardConstants.PEACE_BUILDING_AND_STATE_BUILDING_GOALS;
-		String title = TranslatorWorker.translateText(DashboardConstants.PEACE_BUILDING_AND_STATE_BUILDING_GOALS);
+		String name = "";
+		String title = "";
 		List<JsonBean> values = new ArrayList<JsonBean>();
-
-		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetNDD", ArConstants.DONOR_TYPE);
-		spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_PROGRAM));
-		spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1_ID));
-		spec.getHierarchies().addAll(spec.getColumns());
-		// applies settings, including funding type as a measure
-		SettingsUtils.applyExtendedSettings(spec, config);
-		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false, true));
-		spec.setCalculateRowTotals(true);
-		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
-				ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
-		GeneratedReport report = null;
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetTops", ArConstants.DONOR_TYPE);
 
 		MondrianReportFilters filterRules = null;
 		LinkedHashMap<String, Object> columnFilters = null;
@@ -118,22 +116,101 @@ public class DashboardsService {
 		if (otherFilter == null) {
 			otherFilter = new LinkedHashMap<String, Object>();
 		}
-		// Add must-have filters for this chart.
-		ArrayList<AmpCategoryValue> catList = new ArrayList<AmpCategoryValue>(
-				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PEACE_MARKERS_KEY));
-		List<Integer> peaceFilterOptions = new ArrayList<Integer>();
-		for (AmpCategoryValue category : catList) {
-			if (category.getValue().equals("Relevant for peacebuilding but peacebuilding objectives not articulated")
-					|| category.getValue().equals("Articulate peacebuilding outcomes but as a secondary objective")
-					|| category.getValue().equals("Articulates peacebuilding as the main objective")
-					|| category.getValue().equals("1") || category.getValue().equals("2")
-					|| category.getValue().equals("3")) {
-				peaceFilterOptions.add(category.getId().intValue());
+
+		switch (type.toUpperCase()) {
+		case "DO":
+			if (FeaturesUtil.isVisibleField("/Show Names As Acronyms")) {
+				spec.addColumn(new ReportColumn(MoConstants.ATTR_ORG_ACRONYM));
+				spec.addColumn(new ReportColumn(ColumnConstants.DONOR_ID));
+			} else {
+				spec.addColumn(new ReportColumn(MoConstants.DONOR_AGENCY));
+				spec.addColumn(new ReportColumn(ColumnConstants.DONOR_ID));
 			}
+			title = TranslatorWorker.translateText(DashboardConstants.TOP_DONOR_AGENCIES);
+			name = DashboardConstants.TOP_DONOR_AGENCIES;
+			break;
+		case "RO":
+			spec.addColumn(new ReportColumn(MoConstants.RESPONSIBLE_AGENCY));
+			spec.addColumn(new ReportColumn(ColumnConstants.RESPONSIBLE_ORGANIZATION_ID));
+			title = TranslatorWorker.translateText(DashboardConstants.TOP_RESPONSIBLE_ORGS);
+			name = DashboardConstants.TOP_RESPONSIBLE_ORGS;
+			break;
+		case "BA":
+			spec.addColumn(new ReportColumn(MoConstants.BENEFICIARY_AGENCY));
+			spec.addColumn(new ReportColumn(ColumnConstants.BENEFICIARY_AGENCY_ID));
+			title = TranslatorWorker.translateText(DashboardConstants.TOP_BENEFICIARY_ORGS);
+			name = DashboardConstants.TOP_BENEFICIARY_ORGS;
+			break;
+		case "IA":
+			spec.addColumn(new ReportColumn(MoConstants.IMPLEMENTING_AGENCY));
+			spec.addColumn(new ReportColumn(ColumnConstants.IMPLEMENTING_AGENCY_ID));
+			title = TranslatorWorker.translateText(DashboardConstants.TOP_IMPLEMENTING_ORGS);
+			name = DashboardConstants.TOP_IMPLEMENTING_ORGS;
+			break;
+		case "EA":
+			spec.addColumn(new ReportColumn(MoConstants.EXECUTING_AGENCY));
+			spec.addColumn(new ReportColumn(ColumnConstants.EXECUTING_AGENCY_ID));
+			title = TranslatorWorker.translateText(DashboardConstants.TOP_EXECUTING_ORGS);
+			name = DashboardConstants.TOP_EXECUTING_ORGS;
+			break;
+		case "RE":
+			spec.addColumn(new ReportColumn(MoConstants.H_REGIONS));
+			spec.addColumn(new ReportColumn(ColumnConstants.REGIONAL_GROUP_ID));
+			title = TranslatorWorker.translateText(DashboardConstants.TOP_REGIONS);
+			name = DashboardConstants.TOP_REGIONS;
+			break;
+		case "PS":
+			spec.addColumn(new ReportColumn(MoConstants.PRIMARY_SECTOR));
+			spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_ID));
+			title = TranslatorWorker.translateText(DashboardConstants.TOP_SECTORS);
+			name = DashboardConstants.TOP_SECTORS;
+			break;
+		case "DG":
+			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
+			// TODO: Change this column where we implement donor group id column.
+			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_TYPE));
+			title = TranslatorWorker.translateText(DashboardConstants.TOP_DONOR_GROUPS);
+			name = DashboardConstants.TOP_DONOR_GROUPS;
+			break;
+		case "NDD":
+			spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_PROGRAM));
+			spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1_ID));
+			name = DashboardConstants.PEACE_BUILDING_AND_STATE_BUILDING_GOALS;
+			title = TranslatorWorker.translateText(DashboardConstants.PEACE_BUILDING_AND_STATE_BUILDING_GOALS);
+			n = 99999; // This chart has no limit of categories (no 'Others').
+
+			// Add must-have filters for this chart.
+			ArrayList<AmpCategoryValue> catList = new ArrayList<AmpCategoryValue>(
+					CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PEACE_MARKERS_KEY));
+			List<Integer> peaceFilterOptions = new ArrayList<Integer>();
+			for (AmpCategoryValue category : catList) {
+				if (category.getValue().equals("1") || category.getValue().equals("2")
+						|| category.getValue().equals("3")) {
+					peaceFilterOptions.add(category.getId().intValue());
+				}
+			}
+			LinkedHashMap<String, Object> peaceFilter = new LinkedHashMap<String, Object>();
+			peaceFilter.put(MoConstants.PROCUREMENT_SYSTEM, peaceFilterOptions);
+			columnFilters.putAll(peaceFilter);
+
+			break;
+		default:
+			spec.addColumn(new ReportColumn(MoConstants.DONOR_AGENCY));
+			spec.addColumn(new ReportColumn(ColumnConstants.DONOR_ID));
+			title = TranslatorWorker.translateText(DashboardConstants.TOP_DONOR_AGENCIES);
+			name = DashboardConstants.TOP_DONOR_AGENCIES;
+			break;
 		}
-		LinkedHashMap<String, Object> peaceFilter = new LinkedHashMap<String, Object>();
-		peaceFilter.put(MoConstants.PROCUREMENT_SYSTEM, peaceFilterOptions);
-		columnFilters.putAll(peaceFilter);
+
+		spec.getHierarchies().addAll(spec.getColumns());
+		// applies settings, including funding type as a measure
+		SettingsUtils.applyExtendedSettings(spec, config);
+		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false, true));
+		spec.setCalculateRowTotals(true);
+		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
+				ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
+		GeneratedReport report = null;
+
 		filterRules = FilterUtils.getFilterRules(columnFilters, otherFilter, null);
 		if (filterRules != null) {
 			spec.setFilters(filterRules);
@@ -148,206 +225,68 @@ public class DashboardsService {
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			err = e.getMessage();
+			retlist.set("error", err);
 		}
 
-		// Format the report output return a simple list.
+		// Format the report output return a simple list. 
 		// this is the report totals, which is not for the top N, but for ALL
 		// results
 		ReportCell totals = null;
+		Double rawTotal = null;
 		if (report.reportContents != null && report.reportContents.getContents() != null
 				&& report.reportContents.getContents().size() > 0) {
 			totals = (ReportCell) report.reportContents.getContents().values().toArray()[2];
-			retlist.set("total", totals.value);
-			retlist.set("sumarizedTotal", calculateSumarizedTotals(Double.valueOf(totals.value.toString()), spec));
+			rawTotal = (Double) totals.value / spec.getSettings().getUnitsMultiplier(); // Save total in units.
 		} else {
-			retlist.set("total", 0);
-			retlist.set("sumarizedTotal", "");
+			rawTotal = new Double("0");
 		}
 
-		String currcode = null;
-		currcode = spec.getSettings().getCurrencyCode();
+		String currcode = spec.getSettings().getCurrencyCode();
 		retlist.set("currency", currcode);
+
+		Integer maxLimit = report.reportContents.getChildren().size();
 
 		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
 			ReportAreaImpl reportArea = (ReportAreaImpl) iterator.next();
 			Iterator<ReportArea> iChildren = reportArea.getChildren().iterator();
 			while (iChildren.hasNext()) {
+				if (values.size() >= n) {
+					break;
+				}
 				ReportArea ra = iChildren.next();
 				LinkedHashMap<ReportOutputColumn, ReportCell> contents = (LinkedHashMap<ReportOutputColumn, ReportCell>) ra
 						.getContents();
 				JsonBean row = new JsonBean();
 				row.set("name", ((ReportCell) contents.values().toArray()[0]).displayedValue);
-				row.set("amount", ((ReportCell) contents.values().toArray()[2]).value);
-				row.set("formattedAmount", ((ReportCell) contents.values().toArray()[2]).displayedValue);
 				row.set("id", ((ReportCell) contents.values().toArray()[1]).value);
+				row.set("amount", ((Double) ((ReportCell) contents.values().toArray()[2]).value)
+						/ spec.getSettings().getUnitsMultiplier());
+				row.set("formattedAmount", ((ReportCell) contents.values().toArray()[2]).displayedValue);				
+
+				// Commented this code for recheck when working on AMP-18632. 
+				/*
+				// Remove undefined from region's chart AMP-18632 (TODO: find a cross-country way to filter by id)
+				if (type.toUpperCase().equals("RE")
+						&& row.get("name").toString().toLowerCase().indexOf("undefined") > -1) {
+					// Subtract National from the total
+					rawTotal = rawTotal - (Double) row.get("amount");
+					// Remove National's bar from the chart
+					maxLimit--;
+				} else {
+					values.add(row);
+				}*/
 				values.add(row);
 			}
 		}
 		retlist.set("values", values);
-		retlist.set("name", name);
-		retlist.set("title", title);
 
-		return retlist;
-	}
-
-	/**
-	 * Return (n) Donors sorted by amount
-	 * 
-	 * @param type
-	 *            (Donor, Regions, Primary Sector)
-	 * @param n
-	 * @param config request configuration that stores filters, settings and any other options
-	 * @return
-	 */
-	public static JsonBean getTops(String type, Integer n, JsonBean config) {
-		String err = null;
-		String column = "";
-		JsonBean retlist = new JsonBean();
-		String name = "";
-		String title = "";
-		List<JsonBean> values = new ArrayList<JsonBean>();
-
-		switch (type.toUpperCase()) {
-		case "DO":
-			if (FeaturesUtil.isVisibleField("/Show Names As Acronyms")){
-				column = MoConstants.ATTR_ORG_ACRONYM;
-			} else {
-				column = MoConstants.DONOR_AGENCY;
-			}
-			title = TranslatorWorker.translateText(DashboardConstants.TOP_DONOR_AGENCIES);
-			name = DashboardConstants.TOP_DONOR_AGENCIES;
-			break;
-		case "RO":
-			column = MoConstants.RESPONSIBLE_AGENCY;
-			title = TranslatorWorker.translateText(DashboardConstants.TOP_RESPONSIBLE_ORGS);
-			name = DashboardConstants.TOP_RESPONSIBLE_ORGS;
-			break;
-		case "BA":
-			column = MoConstants.BENEFICIARY_AGENCY;
-			title = TranslatorWorker.translateText(DashboardConstants.TOP_BENEFICIARY_ORGS);
-			name = DashboardConstants.TOP_BENEFICIARY_ORGS;
-			break;
-		case "IA":
-			column = MoConstants.IMPLEMENTING_AGENCY;
-			title = TranslatorWorker.translateText(DashboardConstants.TOP_IMPLEMENTING_ORGS);
-			name = DashboardConstants.TOP_IMPLEMENTING_ORGS;
-			break;
-		case "EA":
-			column = MoConstants.EXECUTING_AGENCY;
-			title = TranslatorWorker.translateText(DashboardConstants.TOP_EXECUTING_ORGS);
-			name = DashboardConstants.TOP_EXECUTING_ORGS;
-			break;
-		case "RE":
-			column = MoConstants.H_REGIONS;
-			title = TranslatorWorker.translateText(DashboardConstants.TOP_REGIONS);
-			name = DashboardConstants.TOP_REGIONS;
-			break;
-		case "PS":
-			column = MoConstants.PRIMARY_SECTOR;
-			title = TranslatorWorker.translateText(DashboardConstants.TOP_SECTORS);
-			name = DashboardConstants.TOP_SECTORS;
-			break;
-		case "DG":
-			column = ColumnConstants.DONOR_GROUP;
-			title = TranslatorWorker.translateText(DashboardConstants.TOP_DONOR_GROUPS);
-			name = DashboardConstants.TOP_DONOR_GROUPS;
-			break;
-		default:
-			column = MoConstants.DONOR_AGENCY;
-			title = TranslatorWorker.translateText(DashboardConstants.TOP_DONOR_AGENCIES);
-			name = DashboardConstants.TOP_DONOR_AGENCIES;
-			break;
-		}
-
-		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetTops", ArConstants.DONOR_TYPE);
-		spec.addColumn(new ReportColumn(column));
-		spec.getHierarchies().addAll(spec.getColumns());
-		// applies settings, including funding type as a measure
-		SettingsUtils.applyExtendedSettings(spec, config);
-		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false, true));
-		spec.setCalculateRowTotals(true);
-		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
-				ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
-		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
-		GeneratedReport report = null;
-		
-		MondrianReportFilters filterRules = null;
- 		if(config!=null){
- 			LinkedHashMap<String, Object> columnFilters=(LinkedHashMap<String, Object>)config.get("columnFilters");
- 			LinkedHashMap<String, Object> otherFilter=(LinkedHashMap<String, Object>)config.get("otherFilters");
-			filterRules = FilterUtils.getFilterRules(columnFilters,
- 					otherFilter, null);
- 			if(filterRules!=null){
- 				spec.setFilters(filterRules);
- 			}
- 		
- 		}
- 		
-		// AMP-18740: For dashboards we need to use the default number formatting and leave the rest of the settings
-		// configurable (calendar, currency, etc).
- 		setCustomSettings(config, spec);
- 		
- 		try {
-			report = generator.executeReport(spec);
-		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			err = e.getMessage();
-		}
-
-		// Format the report output return a simple list.
-		// this is the report totals, which is not for the top N, but for ALL
-		// results
- 		ReportCell totals = null;
-		if (report.reportContents != null && report.reportContents.getContents() != null
-				&& report.reportContents.getContents().size() > 0) {
-			totals = (ReportCell) report.reportContents.getContents().values().toArray()[1];
-			retlist.set("total", ((Double) totals.value) / spec.getSettings().getUnitsMultiplier());
-			retlist.set("sumarizedTotal", calculateSumarizedTotals(Double.valueOf(totals.value.toString()), spec));
-		} else {
-			retlist.set("total", 0);
-			retlist.set("sumarizedTotal", "");
-		}
-
-		String currcode = null;
-		currcode = spec.getSettings().getCurrencyCode();
-		retlist.set("currency", currcode);
-		
-		Integer maxLimit = report.reportContents.getChildren().size();
-		
-		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
-			JsonBean amountObj = new JsonBean();
-			ReportAreaImpl reportArea = (ReportAreaImpl) iterator.next();
-			LinkedHashMap<ReportOutputColumn, ReportCell> content = (LinkedHashMap<ReportOutputColumn, ReportCell>) reportArea.getContents();
-			org.dgfoundation.amp.newreports.TextCell reportcolumn = (org.dgfoundation.amp.newreports.TextCell) content.values().toArray()[0];
-			ReportCell reportcell = (ReportCell) content.values().toArray()[1];
-			String dvalue = reportcolumn.displayedValue;
-			//Remove undefined from region's chart AMP-18632
-			if(!dvalue.equalsIgnoreCase(MoConstants.REGION_UNDEFINED)){
-				amountObj.set("name", dvalue);
-				amountObj.set("amount", ((Double) reportcell.value) / spec.getSettings().getUnitsMultiplier());
-				amountObj.set("formattedAmount", reportcell.displayedValue);
-				values.add(amountObj);
-			}else{
-				//Subtract National from the total 
-				if ((Double) retlist.get("total") != 0){
-					retlist.set("total",(Double) retlist.get("total") - (Double) reportcell.value);
-				}
-				//Remove National's bar from the chart
-				maxLimit --;
-			}
-			
-			if (values.size() >= n) {
-				break;
-			}
-		}
-		retlist.set("values", values);
-
+		retlist.set("total", rawTotal);
+		retlist.set("sumarizedTotal",
+				calculateSumarizedTotals(rawTotal * spec.getSettings().getUnitsMultiplier(), spec));
 		// report the total number of tops available
-		retlist.set("maxLimit", maxLimit );
-		
+		retlist.set("maxLimit", maxLimit);
 		retlist.set("name", name);
 		retlist.set("title", title);
-
 		return retlist;
 	}
 	
@@ -366,6 +305,7 @@ public class DashboardsService {
 	
 	public static JSONObject getAidPredictability(JsonBean filter) throws Exception {
 		JSONObject retlist = new JSONObject();
+		String err = null;
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetAidPredictability", ArConstants.DONOR_TYPE);
 		spec.addColumn(new ReportColumn(ColumnConstants.COUNTRY));
 		spec.getHierarchies().add(new ReportColumn(ColumnConstants.COUNTRY));
@@ -395,7 +335,15 @@ public class DashboardsService {
 		// configurable (calendar, currency, etc).
 		setCustomSettings(filter, spec);
 		
-		GeneratedReport report = generator.executeReport(spec);
+		GeneratedReport report = null;
+		try {
+			report = generator.executeReport(spec);
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			err = e.getMessage();
+			retlist.put("error", err);
+		}
+		
 		//Not only years, we can have values like 'Fiscal calendar 2010-2011', so the Map should be <String,JSONObject>
 		Map<String, JSONObject> results = new TreeMap<>(); // accumulator of per-year results
 				
@@ -488,6 +436,7 @@ public class DashboardsService {
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			err = e.getMessage();
+			retlist.set("error", err);
 		}
 		
 		//Get total
@@ -552,7 +501,7 @@ public class DashboardsService {
 
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetNDD", ArConstants.DONOR_TYPE);
 		spec.addColumn(new ReportColumn(MoConstants.ATTR_ACTIVITY_ID));
-		spec.addColumn(new ReportColumn(MoConstants.ATTR_PROJECT_TITLE));		
+		spec.addColumn(new ReportColumn(MoConstants.ATTR_PROJECT_TITLE));
 		spec.getHierarchies().addAll(spec.getColumns());
 		// applies settings, including funding type as a measure
 		SettingsUtils.applyExtendedSettings(spec, config);
@@ -568,7 +517,7 @@ public class DashboardsService {
 		if (config != null) {
 			columnFilters = (LinkedHashMap<String, Object>) config.get("columnFilters");
 			otherFilter = (LinkedHashMap<String, Object>) config.get("otherFilters");
-		}		
+		}
 		if (columnFilters == null) {
 			columnFilters = new LinkedHashMap<String, Object>();
 		}
@@ -580,11 +529,7 @@ public class DashboardsService {
 				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PEACE_MARKERS_KEY));
 		List<Integer> peaceFilterOptions = new ArrayList<Integer>();
 		for (AmpCategoryValue category : catList) {
-			if (category.getValue().equals("Relevant for peacebuilding but peacebuilding objectives not articulated")
-					|| category.getValue().equals("Articulate peacebuilding outcomes but as a secondary objective")
-					|| category.getValue().equals("Articulates peacebuilding as the main objective")
-					|| category.getValue().equals("1") || category.getValue().equals("2")
-					|| category.getValue().equals("3")) {
+			if (category.getValue().equals("1") || category.getValue().equals("2") || category.getValue().equals("3")) {
 				peaceFilterOptions.add(category.getId().intValue());
 			}
 		}
@@ -605,27 +550,29 @@ public class DashboardsService {
 		// AMP-18740: For dashboards we need to use the default number formatting and leave the rest of the settings
 		// configurable (calendar, currency, etc).
 		setCustomSettings(config, spec);
-		
+
 		try {
 			report = generator.executeReport(spec);
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			err = e.getMessage();
+			retlist.set("error", err);
 		}
 
-		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {			
+		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
 			ReportAreaImpl reportArea = (ReportAreaImpl) iterator.next();
 			Iterator<ReportArea> iChildren = reportArea.getChildren().iterator();
-			while(iChildren.hasNext()){
+			while (iChildren.hasNext()) {
 				JsonBean row = new JsonBean();
 				ReportArea ra = iChildren.next();
-				LinkedHashMap<ReportOutputColumn, ReportCell> contents = (LinkedHashMap<ReportOutputColumn, ReportCell>) ra.getContents();
+				LinkedHashMap<ReportOutputColumn, ReportCell> contents = (LinkedHashMap<ReportOutputColumn, ReportCell>) ra
+						.getContents();
 				row.set("name", ((ReportCell) contents.values().toArray()[1]).displayedValue);
 				row.set("amount", ((ReportCell) contents.values().toArray()[2]).value);
 				row.set("formattedAmount", ((ReportCell) contents.values().toArray()[2]).displayedValue);
 				row.set("id", ((ReportCell) contents.values().toArray()[0]).value);
 				values.add(row);
-			}						
+			}
 		}
 		retlist.set("values", values);
 

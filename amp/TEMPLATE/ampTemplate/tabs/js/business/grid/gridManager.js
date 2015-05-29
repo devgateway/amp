@@ -6,7 +6,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 	var gridBaseName = 'tab_grid_';
 	var gridPagerBaseName = 'tab_grid_pager_';
 	var partialTotals = null;
-
+	var DEFAULT_ONE_PAGER_PARAMETER='activity';
 	// This variable will contain the mappings between different column names
 	// (tab structure vs report data).
 	var headers = [];
@@ -155,6 +155,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 							var teamlead;
 							var validator;
 							var teamtype;
+							var onePagerParameter = DEFAULT_ONE_PAGER_PARAMETER;
 							
 							if(app.TabsApp.settings.teamId){
 								teamid = app.TabsApp.settings.teamId.name;
@@ -162,6 +163,9 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 								teamlead = (app.TabsApp.settings.teamLead.name === 'true');
 								validator = (app.TabsApp.settings.validator.name === 'true');
 								teamtype = app.TabsApp.settings.accessType.name;
+							}
+							if(app.TabsApp.settings.attributes.workspacePrefix && app.TabsApp.settings.attributes.workspacePrefix.defaultId ){
+								onePagerParameter = app.TabsApp.settings.attributes.workspacePrefix.defaultId.toLowerCase();
 							}
 
 							for (iRow = 0; iRow < cRows; iRow++) {
@@ -177,11 +181,11 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 								className = row.className;
 								var id = row.cells[1].textContent;
 								
-								var iconedit = "<a href='/wicket/onepager/activity/" + id
+								var iconedit = "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id
 									+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/ico_edit.gif'/></a>";
-								var iconvalidated = "<a href='/wicket/onepager/activity/" + id
+								var iconvalidated = "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id
 									+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/validate.png'/></a>";
-								var link = "<a href='/wicket/onepager/activity/" + id + "'>";
+								var link = "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id + "'>";
 								
 								
 								row.className = className + ' status_1';

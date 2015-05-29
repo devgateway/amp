@@ -385,7 +385,14 @@ public class SettingsUtils {
 			settings.add(new SettingOptions("workspace_type", false, String.valueOf(EndpointUtils.getAppSettings().getTeam().getAccessType())
 					, null, null));
 			settings.add(new SettingOptions("language", false, 
-					tm.getAppSettings().getLanguage(), null, null)); 
+					tm.getAppSettings().getLanguage(), null, null));
+			//AMP-19389 Only add the workspace prefix when its configured for the team
+			String wsPrefix=null;
+			if(EndpointUtils.getAppSettings().getTeam().getWorkspacePrefix()!=null){
+				wsPrefix=EndpointUtils.getAppSettings().getTeam().getWorkspacePrefix().getValue();
+				wsPrefix=wsPrefix.substring(0, wsPrefix.length()-1);
+			}
+			settings.add(new SettingOptions("workspace_prefix", false, null, wsPrefix, null));
 			
 		}
 		

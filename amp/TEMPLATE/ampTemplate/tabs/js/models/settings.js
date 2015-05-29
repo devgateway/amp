@@ -22,6 +22,7 @@ define([ 'underscore', 'backbone', 'business/translations/translationManager' ],
 					_self.crossTeamEnable = _.find(collection.attributes, function(item) {return item.id === 'cross_team_validation'});
 					// workspace_type
 					_self.accessType = _.find(collection.attributes, function(item) {return item.id === 'workspace_type'});
+					_self.workspacePrefix = _.find(collection.attributes, function(item) {return item.id === 'workspace_prefix'});
 					
 					var numberMultiplier = _.find(collection.attributes, function(item) {return item.id === 'number-multiplier'});
 					if (numberMultiplier.name === '1.0') {

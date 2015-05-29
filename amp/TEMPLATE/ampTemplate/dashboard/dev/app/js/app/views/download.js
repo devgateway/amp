@@ -14,6 +14,7 @@ var template = _.template(fs.readFileSync(
 
 module.exports = BackboneDash.View.extend({
  
+  //TODO: This is wrong because different countries have other measures (ie: ssc).	
   adjTypeTranslation : {"Actual Commitments":"amp.dashboard:ftype-actual-commitment",
 			"Actual Disbursements":"amp.dashboard:ftype-actual-disbursement",
 				"Actual Expenditures":"amp.dashboard:ftype-actual-expenditure",
@@ -83,7 +84,7 @@ module.exports = BackboneDash.View.extend({
 
   prepareCanvas: function(canvas, h, w) {
     var ctx = canvas.getContext('2d'),
-        moneyContext = this.model.get('currency'),
+        moneyContext = (this.model.get('sumarizedTotal') !== undefined ? this.model.get('sumarizedTotal') + ' ': '') + this.model.get('currency'),        
         adjType = this.model.get('adjtype');
 
     if (adjType) {

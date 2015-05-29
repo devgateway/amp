@@ -21,7 +21,7 @@ public class ScorecardManager extends Action {
 			HttpServletResponse response) throws java.lang.Exception {
 		ScorecardManagerForm scorecardSettingsForm = (ScorecardManagerForm) form;
 		Collection<AmpScorecardSettings> scorecardSettingsList = DbUtil.getAll(AmpScorecardSettings.class);
-		if (scorecardSettingsForm.getAction().equals(UPDATE)) {
+		if (scorecardSettingsForm.getAction()!=null && scorecardSettingsForm.getAction().equals(UPDATE)) {
 			AmpScorecardSettings settings;
 			if (scorecardSettingsList.isEmpty()) {
 				settings = new AmpScorecardSettings();
@@ -29,8 +29,11 @@ public class ScorecardManager extends Action {
 			else {
 				settings = scorecardSettingsList.iterator().next();
 			}
+			
 			settings.setValidationPeriod(scorecardSettingsForm.getValidationPeriod());
-			settings.setValidationTime(scorecardSettingsForm.getValidationTime());
+			settings.setValidationTime(scorecardSettingsForm.getValidationTime() == null
+					|| scorecardSettingsForm.getValidationTime().equals(0) ? null : scorecardSettingsForm
+					.getValidationTime());
 			DbUtil.saveOrUpdateObject(settings);
 			return mapping.findForward("index");
 

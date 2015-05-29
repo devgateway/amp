@@ -13,14 +13,16 @@
 </h1>
 <digi:form action="/scorecardManager.do" method="post">
 	<html:hidden property="action" value="UPDATE"/>
-	<table cellPadding="5" cellspacing="1">
+	<table  style="min-height:150px;border-collapse: separate; border-spacing: 5px; padding: 5px;">
 		<tr>
 			<td><digi:trn>Validation Period</digi:trn></td>
-			<td><html:checkbox property="validationPeriod" value="true" /></td>
+			<td><html:checkbox property="validationPeriod"  onclick="handleValidationPeriodClick(this);"/></td>
 		</tr>
 		<tr>
 			<td><digi:trn>Validation Time</digi:trn></td>
 			<td><html:select property="validationTime">
+					<html:option value=""><digi:trn>Select value...</digi:trn>
+					</html:option>
 					<html:option value="1">1 <digi:trn>Week</digi:trn>
 					</html:option>
 					<html:option value="2">2 <digi:trn>Weeks</digi:trn>
@@ -32,13 +34,10 @@
 				</html:select></td>
 		</tr>
 		<tr>
-		
-		<tr>
-			<td>&nbsp;</td>
 			<td align="right" class="addUserButContainer"><c:set
 					var="btnSubmit">
 					<digi:trn key="btn:submit">Submit</digi:trn>
-				</c:set> <html:submit value="${btnSubmit}" styleClass="dr-menu" /></td>
+				</c:set> <html:submit value="${btnSubmit}" styleClass="dr-menu" onclick="return saveScoreCardSetting();" /></td>
 			<td align="left" class="addUserButContainer"><c:set
 					var="btnCancel">
 					<digi:trn key="btn:cancel">Cancel</digi:trn>
@@ -50,3 +49,26 @@
 
 	</table>
 </digi:form>
+<script language="JavaScript" type="text/javascript" src="/repository/aim/view/scripts/common.js"></script>
+
+<script type="text/javascript">
+
+function saveScoreCardSetting() {
+  return  validate();
+
+}
+function validate(){
+	if( $("input[name=validationPeriod]").is(":checked") && isEmpty($('select[name="validationTime"]').val())){
+		alert("<digi:trn jsFriendly='true'>Please select validation period</digi:trn>");
+		return false;
+	}
+	return true;
+}
+function handleValidationPeriodClick(chkbox){
+	if(!chkbox.checked){
+		$('select[name="validationTime"]').val("");
+	}
+
+}
+
+</script>

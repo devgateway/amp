@@ -72,7 +72,7 @@ public class GPIExportUseCase {
 				exporter = new JRPdfExporter();
 			}
 			if (type.equalsIgnoreCase("XLS")) {
-				response.setHeader("Content-Disposition", ResponseUtil.encodeContentDispositionForDownload(request, "GPI" + reportCode + ".pdf"));
+				response.setHeader("Content-Disposition", ResponseUtil.encodeContentDispositionForDownload(request, "GPI" + reportCode + ".xls"));
 				response.setContentType("application/vnd.ms-excel");
 				exporter = new JRXlsExporter();
 				exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);

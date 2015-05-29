@@ -502,4 +502,47 @@ public static List<JsonBean> getOrgGroups() {
 
 		return location;
 	}
+	
+	public static List<JsonBean> getDonors () {
+		final List<JsonBean> donors = new ArrayList<JsonBean>();
+		PersistenceManager.getSession().doWork(new Work() {
+			public void execute(Connection conn) throws SQLException {
+				Map<Long, String> organisationsNames = QueryUtil.getTranslatedName(conn,"amp_organisation","amp_org_id","name");
+				String query = 
+
+						"SELECT distinct ( o.amp_org_id) orgId, o.name,o.acronym "+
+					    "FROM  amp_organisation o "+
+						 "WHERE EXISTS(SELECT af.amp_donor_org_id "+ 
+						 "                   FROM   amp_funding af "+
+						 "                   WHERE  o.amp_org_id = af.amp_donor_org_id "+ 
+						 "AND ( ( af.source_role_id IS NULL ) "+
+						 "OR af.source_role_id = (SELECT amp_role_id "+
+						 "FROM   amp_role "+
+						 "WHERE   role_code = 'DN') )) "+ 
+						 "AND ( o.deleted IS NULL "+
+						 "OR o.deleted = false ) "+
+						 "order by o.amp_org_id";
+					try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
+					ResultSet rs = rsi.rs;
+					Long lastOrgId = 0L;
+					while (rs.next()) {
+						if (!lastOrgId .equals(rs.getLong("orgId"))) {
+							lastOrgId  = rs.getLong("orgId");
+							JsonBean org = new JsonBean();
+							org.set("id", lastOrgId);
+							if (ContentTranslationUtil.multilingualIsEnabled()) {
+								org.set("name", organisationsNames.get(lastOrgId));
+							} else {
+								org.set("name", rs.getString("name"));
+							}
+							org.set("acronym", rs.getString("acronym"));
+							donors.add(org);
+						}
+					}
+				}
+
+			}
+		});
+		return donors;
+	}
 }

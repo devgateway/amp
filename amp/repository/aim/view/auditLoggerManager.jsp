@@ -129,17 +129,23 @@ function setHoveredTable(tableId, hasHeaders) {
 	}
 }
 function toggleSettings(){
-	var currentDisplaySettings = document.getElementById('currentDisplaySettings');
-	var displaySettingsButton = document.getElementById('displaySettingsButton');
-	if(currentDisplaySettings.style.display == "block"){
-		currentDisplaySettings.style.display = "none";
-		displaySettingsButton.innerHTML = '<digi:trn key="aim:Showcleanupoptions">Show cleanup options</digi:trn>'+ ' &gt;&gt;';
+	var currentDisplaySettings = $('#currentDisplaySettings');
+	var displaySettingsButton = $('#displaySettingsButton');
+	if(currentDisplaySettings.css('display') == "inline-flex"){
+		currentDisplaySettings.hide();
+		$('#exportScorecard').hide();
+		displaySettingsButton.html('<digi:trn key="aim:Showcleanupoptions">Show cleanup options</digi:trn>'+ ' &gt;&gt;');
 	}
 	else
 	{
-		currentDisplaySettings.style.display = "block";
-		displaySettingsButton.innerHTML = '<digi:trn key="aim:Hidecleanupoptions">Hide cleanup options</digi:trn>'+ ' &lt;&lt;';
+		currentDisplaySettings.css('display', 'inline-flex');
+		$('#exportScorecard').css('display','inline-flex');
+		displaySettingsButton.html('<digi:trn key="aim:Hidecleanupoptions">Hide cleanup options</digi:trn>'+ ' &lt;&lt;');
 	}
+}
+
+function exportScorecard () {
+	window.location =  "/rest/scorecard/export";
 }
 </script>
 
@@ -237,7 +243,19 @@ function toggleSettings(){
                                  </tr>
                                  </table>
                                  </div>
-                                </div>                        
+										<span  id="exportScorecard" style="margin-left: 15%;display:none;">
+										<table>
+										<tr><td><label><digi:trn>Export Scorecard</digi:trn></label>
+										</td></tr>
+										<tr><td>				<input class="dr-menu" type="button" onclick="exportScorecard()"
+											value="<digi:trn>OK</digi:trn>"> <input
+											class="dr-menu" type="button"
+											value="<digi:trn>Cancel</digi:trn>"
+											onclick="document.aimAuditLoggerManagerForm.reset();toggleSettings()">
+							</td></tr>
+										</table>
+										</span>
+									</div>                        
                             	</div>
                           		<br>
 				<table width="100%" height="100%" cellpadding="0" cellspacing="0" bgColor=#ffffff id="auditloggertable">

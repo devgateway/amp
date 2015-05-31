@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.NoUpdateOrganisation" table="no_update_organisation">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">NO_UPDATE_ORGANISATION_seq</param>
+			</generator>
+		</id>
+
+		<property name="modifyDate" column="modify_date" type="java.util.Date" />
+		<property name="ampDonorId" column="amp_donor_id" type="java.lang.Long" />
+	
+	</class>
+</hibernate-mapping>

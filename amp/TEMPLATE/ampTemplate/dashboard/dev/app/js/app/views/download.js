@@ -150,6 +150,7 @@ module.exports = BackboneDash.View.extend({
         preview;
 
     var self = this;
+    var keys = _(data).pluck('key');
     // table of all the data
     csvTransformed = _(data)
       .chain()
@@ -170,21 +171,40 @@ module.exports = BackboneDash.View.extend({
         }
         return row;
       })
-      .value();
-
+      .value();  
+    
     // prepend a header row
-    headerRow = [''];  // no header value for x-axis
-    headerRow = headerRow.concat(_(data).map(function(col) {
-      return col.key || '';  // data headers
-    }));
+    headerRow = [];
+    var amountTrn = this.app.translator.translateSync('amp.dashboard:download-amount', 'Amount');
     var currencyTrn = this.app.translator.translateSync('amp.dashboard:currency', 'Currency');
     var typeTrn = this.app.translator.translateSync('amp.dashboard:type', 'Type');
-    headerRow.push(currencyTrn);
-    if (adjtype) { headerRow.push(typeTrn); }
+    var yearTrn = this.app.translator.translateSync('amp.dashboard:year', 'Year');
+    
+	if (this.model.url.indexOf('/tops') > -1) {
+	    headerRow.push(this.model.get('title'));
+	    headerRow.push(amountTrn);
+	    headerRow.push(currencyTrn);
+	    headerRow.push(typeTrn);
+	} else if (this.model.url.indexOf('/aid-predictability') > -1) {
+	    headerRow.push(yearTrn);
+	    _.each(keys, function(item) {
+	    	headerRow.push(item);
+	    });
+	    headerRow.push(currencyTrn);
+	} else if (this.model.url.indexOf('/ftype') > -1) {
+		headerRow.push(yearTrn);
+	    _.each(keys, function(item) {
+	    	headerRow.push(item);
+	    });
+	    headerRow.push(currencyTrn);
+	    headerRow.push(typeTrn);
+	}    
 
     csvTransformed.unshift(headerRow);
 
-    textContent = baby.unparse(csvTransformed);
+    textContent = baby.unparse(csvTransformed, {
+    	quotes: true
+    });
 
     preview = document.createElement('textarea');
     preview.setAttribute('class', 'csv-preview');

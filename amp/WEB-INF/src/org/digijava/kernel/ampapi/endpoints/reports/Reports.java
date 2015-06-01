@@ -490,7 +490,15 @@ public class Reports {
 			byte[] doc = null;
 			
 			String filename = "export";
+			
+			// We will use report settings to get the DecimalFormat in order to parse the formatted values
 			ReportSpecificationImpl report = ReportsUtil.getReport(reportId);
+			ReportSettings settings = null;
+			
+			if (report != null) {
+				settings = report.getSettings();
+			}
+			
 			if (report != null && !StringUtils.isEmpty(report.getReportName()));
 				filename = report.getReportName();
 			filename += "." + type;
@@ -499,20 +507,13 @@ public class Reports {
 				case "xls": 
 					ExcelBuilderOptions options = new ExcelBuilderOptions();
 					options.repeatValues = true;
+					
 					AMPExcelExport worksheetBuilder = new AMPExcelExport(result, new ArrayList<ThinHierarchy>(), options);
-					
-					// We will use report settings to get the DecimalFormat in order to parse the formatted values
-					ReportSettings settings = null;
-					
-					if (report != null) {
-						settings = report.getSettings();
-					}
 					worksheetBuilder.setReportSettings(settings);
-					
 			        doc = worksheetBuilder.build();
 					break;
 				case "csv":
-					doc = SaikuUtils.getCsv(result, ",", "\"");
+					doc = SaikuUtils.getCsv(result, settings, ",", "\"");
 					break;
 				case "pdf":
 		            PdfReport pdf = new AMPPdfExport();

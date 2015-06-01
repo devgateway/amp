@@ -16,6 +16,9 @@
 package org.digijava.kernel.ampapi.saiku.util;
 
 import java.lang.reflect.Array;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -23,6 +26,7 @@ import java.util.SortedSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -405,8 +409,17 @@ public class SaikuUtils {
 	
 	
 	//Export taken directly from class org.saiku.service.util.export.CsvExporter because it's private
-	public static byte[] getCsv( CellDataSet table, String delimiter, String enclosing ) {
+	public static byte[] getCsv( CellDataSet table, ReportSettings settings, String delimiter, String enclosing ) {
 	    if ( table != null ) {
+	    	if (settings == null) {
+	    		settings = MondrianReportUtils.getCurrentUserDefaultSettings();
+	    	}
+	    	
+	    	DecimalFormat currencyFormat = settings.getCurrencyFormat();
+	    	DecimalFormat newFormat = (DecimalFormat) currencyFormat.clone();
+  			newFormat.setGroupingUsed(false);
+	    
+	    	
 	      AbstractBaseCell[][] rowData = table.getCellSetBody();
 	      AbstractBaseCell[][] rowHeader = table.getCellSetHeaders();
 
@@ -445,7 +458,13 @@ public class SaikuUtils {
 	          String value = rowData[ x ][ y ].getFormattedValue();
 	          if ( !SaikuProperties.webExportCsvUseFormattedValue ) {
 	            if ( rowData[ x ][ y ] instanceof DataCell && ( (DataCell) rowData[ x ][ y ] ).getRawNumber() != null ) {
-	              value = ( (DataCell) rowData[ x ][ y ] ).getFormattedValue().toString();
+	              value = ( (DataCell) rowData[ x ][ y ] ).getFormattedValue();
+	              try {
+	      			Double doubleValue = currencyFormat.parse(value).doubleValue();
+	      			value = newFormat.format(doubleValue);
+		      		} catch (ParseException e) {
+		      			throw new SaikuServiceException("Error parsing number in CSV export. ParseException for [" + value + "]", e);
+		      		}
 	            }
 	          }
 	          if ( rowData[ x ][ y ] instanceof MemberCell && StringUtils.isNotBlank( value ) && !"null".equals( value ) ) {

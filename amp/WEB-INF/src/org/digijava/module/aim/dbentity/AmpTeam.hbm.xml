@@ -36,7 +36,7 @@
 				column="amp_activity_id" />
 		</set>
 
-		<set name="organizations" table="AMP_TEAM_ORGS" lazy="true">
+		<set name="organizations" table="AMP_TEAM_ORGS" lazy="false" inverse="true" fetch="join">
 			<cache usage="read-write" />
 			<key column="amp_team_id" />
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation"

@@ -135,14 +135,15 @@ public class WorkspaceManager extends Action {
 		
 		//pages
 		int numPages = 0;
-		if (NUM_RECORDS!=0) {numPages=workspaces.size() / NUM_RECORDS;
-		numPages += (workspaces.size() % NUM_RECORDS != 0) ? 1 : 0;
+		if (NUM_RECORDS != 0) {
+            numPages = workspaces.size() / NUM_RECORDS;
+		    numPages += (workspaces.size() % NUM_RECORDS != 0) ? 1 : 0;
 		}
 		//workspaces for current page
-		if(edIndex>workspaces.size()){
-			edIndex=workspaces.size();
+		if (edIndex > workspaces.size()) {
+			edIndex = workspaces.size();
 		}
-		workspaces=((List<AmpTeam>)workspaces).subList(stIndex, edIndex);
+		workspaces = ((List<AmpTeam>)workspaces).subList(stIndex, edIndex);
 		
 		Collection<Integer> pages = null;
 		if (numPages > 1) {
@@ -160,7 +161,9 @@ public class WorkspaceManager extends Action {
 					java.util.Locale currentLocale = new java.util.Locale(TLSUtils.getEffectiveLangCode());
 					found |= SearchUtil.TeamContainsKeyword(team, keyword, currentLocale);
 				}
-				if(found) workspacesFiltered.add(team);
+				if (found) {
+                    workspacesFiltered.add(team);
+                }
 			}
 		}
 

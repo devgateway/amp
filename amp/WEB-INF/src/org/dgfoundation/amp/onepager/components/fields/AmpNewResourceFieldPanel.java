@@ -113,7 +113,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 		TrnLabel resourceLabel = new TrnLabel("resourceLabel", resourceLabelModel);
 
 		// create the form
-        Form<?> form = new Form<Void>("form") {
+        final Form<?> form = new Form<Void>("form") {
         	
             /**
              * @see org.apache.wicket.markup.html.form.Form#onSubmit()
@@ -223,6 +223,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
                 if (updateVisibility(td, resourceIsURL)){
                     target.appendJavaScript("$('#" + id + "H').hide();");
                     target.appendJavaScript("$('#" + id + "H').find('[role=fileUploadedMsg]').html('');");
+                    target.appendJavaScript("$('#uploadLabel').text('" + TranslatorWorker.translateText("No file chosen") + "');");
              		
                 }
 //                target.add(form);
@@ -235,6 +236,9 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
             @Override
             protected void onClick(AjaxRequestTarget target) {
                 target.appendJavaScript("$('#" + id + "H').hide();");
+                target.appendJavaScript("$('#" + id + "H').find('[role=fileUploadedMsg]').html('');");
+                target.appendJavaScript("$('#uploadLabel').text('" + TranslatorWorker.translateText("No file chosen") + "');");
+                webLinkFeedbackContainer.setVisible(false);
             }
         };
         form.add(cancel);

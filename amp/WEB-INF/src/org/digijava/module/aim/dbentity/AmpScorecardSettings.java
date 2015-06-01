@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.Set;
 
 public class AmpScorecardSettings implements Serializable{
 
@@ -11,6 +12,8 @@ public class AmpScorecardSettings implements Serializable{
 	private Long ampScorecardSettingsId;
 	private Boolean validationPeriod;
 	private Integer validationTime;
+	private Double percentageThreshold;
+	private Set<AmpScorecardSettingsCategoryValue> closedStatuses;
 	
 	public Long getAmpScorecardSettingsId() {
 		return ampScorecardSettingsId;
@@ -30,7 +33,17 @@ public class AmpScorecardSettings implements Serializable{
 	public void setValidationTime(Integer validationTime) {
 		this.validationTime = validationTime;
 	}
-	
-
+	public Set<AmpScorecardSettingsCategoryValue> getClosedStatuses() {
+		return closedStatuses;
+	}
+	public void setClosedStatuses(Set<AmpScorecardSettingsCategoryValue> closedStatuses) {
+		this.closedStatuses = closedStatuses;
+	}
+	public Double getPercentageThreshold() {
+		return percentageThreshold;
+	}
+	public void setPercentageThreshold(Double percentageThreshold) {
+		this.percentageThreshold = percentageThreshold;
+	}
 
 }

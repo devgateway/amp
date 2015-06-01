@@ -33,6 +33,7 @@ import org.dgfoundation.amp.onepager.models.ResourceTranslationModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -68,7 +69,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 		String docId =generateResourceKey("newResource");
 		newResourceIdModel.setObject(docId);
 		tmpDoc.setNewTemporaryDocumentId(docId);
-		final IModel<TemporaryDocument> td = new Model(tmpDoc);
+		final IModel<TemporaryDocument> td = new Model<TemporaryDocument>(tmpDoc);
 		final ResourceTranslationModel titleModel = new ResourceTranslationModel(new PropertyModel<String>(td, "title"),newResourceIdModel);
 		final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("docTitle",titleModel , "Title",AmpFMTypes.MODULE,Boolean.TRUE);
 		name.setTextContainerDefaultMaxSize();
@@ -105,7 +106,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 		TrnLabel resourceLabel = new TrnLabel("resourceLabel", resourceLabelModel);
 
 		// create the form
-        Form<?> form = new Form<Void>("form") {
+        final Form<?> form = new Form<Void>("form") {
         	
             /**
              * @see org.apache.wicket.markup.html.form.Form#onSubmit()
@@ -152,7 +153,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
                         newResourceIdModel.setObject(docId);
                 		tmpDoc.setNewTemporaryDocumentId(docId);
                 		td.setObject(tmpDoc);
-                        fileItemModel.setObject(null);
+                		fileItemModel.setObject(null);
                 	}
 
 
@@ -196,7 +197,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
                 if (updateVisibility(td, resourceIsURL)){
                     target.appendJavaScript("$('#addNewDocumentH').hide();$('#addNewWebResourceH').hide();");
                     target.appendJavaScript("$('#addNewDocumentH').find('[role=fileUploadedMsg]').html('');");
-             		
+                    target.appendJavaScript("$('#uploadLabel').text('" + TranslatorWorker.translateText("No file chosen") + "');");
                 }
 //                target.add(form);
 //                AmpNewResourceFieldPanel panel = this.findParent(AmpNewResourceFieldPanel.class);
@@ -208,6 +209,9 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
             @Override
             protected void onClick(AjaxRequestTarget target) {
                 target.appendJavaScript("$('#addNewDocumentH').hide();$('#addNewWebResourceH').hide();");
+                target.appendJavaScript("$('#addNewDocumentH').find('[role=fileUploadedMsg]').html('');");
+                target.appendJavaScript("$('#uploadLabel').text('" + TranslatorWorker.translateText("No file chosen") + "');");
+                webLinkFeedbackContainer.setVisible(false);
             }
         };
         form.add(cancel);

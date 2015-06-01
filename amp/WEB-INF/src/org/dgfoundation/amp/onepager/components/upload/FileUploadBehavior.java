@@ -1,5 +1,8 @@
 package org.dgfoundation.amp.onepager.components.upload;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -11,11 +14,12 @@ import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.resource.TextTemplateResourceReference;
+import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.upload.FileItem;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * Contributes all CSS/JS resources needed by http://blueimp.github.com/jQuery-File-Upload/
@@ -64,13 +68,19 @@ public class FileUploadBehavior extends Behavior {
         String uploadUrl = RequestCycle.get().getUrlRenderer().renderFullUrl(
                 Url.parse(component.urlFor(new FileUploadResourceReference(activityId, fileItemModel), null).toString()));
         String markupId = component.getMarkupId();
+        
+        String maxFileSizeGS = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CR_MAX_FILE_SIZE);
+        
         final Map<String, CharSequence> variables = new HashMap<String, CharSequence>();
         variables.put("componentMarkupId", markupId);
         uploadUrl +="?activityId=" + activityId;
         variables.put("url", uploadUrl);
         variables.put("paramName", PARAM_NAME);
         variables.put("uploadFailedMsg", TranslatorUtil.getTranslatedText("Upload failed! Please try again."));
-        variables.put("uploadStartedMsg", TranslatorUtil.getTranslatedText("Upload started, please wait ..."));
+        variables.put("uploadStartedMsg", TranslatorUtil.getTranslatedText("Upload started, please wait..."));
+        variables.put("uploadFailedTooBigMsg", TranslatorUtil.getTranslatedText("The file size limit is {size} MB. This file exceeds the limit.").replace("{size}", maxFileSizeGS));
+        variables.put("uploadMaxFileSize", Long.toString(Bytes.megabytes(Long.parseLong(maxFileSizeGS)).bytes()));
+        variables.put("uploadNoFileLabel", TranslatorWorker.translateText("No file chosen"));
 
         IModel variablesModel = new AbstractReadOnlyModel() {
             public Map getObject() {

@@ -1,5 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.scorecard.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class ColoredCell {
 
 	public static enum Colors {
@@ -9,7 +12,11 @@ public class ColoredCell {
 	private Colors color;
 	private Long donorId;
 	private Quarter quarter;
-	private Integer amountOfUpdatedActivites = 0;
+	//updated activities on the current quarter
+	private Set <String> updatedActivites = new HashSet <String> ();
+	
+	//updated activities on the grace period of the next quarter
+	private Set <String> updatedActivitiesOnGracePeriod = new HashSet <String> ();;
 
 	public ColoredCell (Colors color) {
 		this.color = color;
@@ -42,12 +49,22 @@ public class ColoredCell {
 		this.quarter = quarter;
 	}
 
-	public Integer getAmountOfUpdatedActivites() {
-		return amountOfUpdatedActivites;
+	public Set<String> getUpdatedActivites() {
+		return updatedActivites;
 	}
 
-	public void setAmountOfUpdatedActivites(Integer amountOfUpdatedActivites) {
-		this.amountOfUpdatedActivites = amountOfUpdatedActivites;
+	public void setUpdatedActivites(Set<String> updatedActivites) {
+		this.updatedActivites = updatedActivites;
 	}
+
+	public Set<String> getUpdatedActivitiesOnGracePeriod() {
+		return updatedActivitiesOnGracePeriod;
+	}
+
+	public void setUpdatedActivitiesOnGracePeriod(Set<String> updatedActivitiesOnGracePeriod) {
+		this.updatedActivitiesOnGracePeriod = updatedActivitiesOnGracePeriod;
+	}
+
+	
 
 }

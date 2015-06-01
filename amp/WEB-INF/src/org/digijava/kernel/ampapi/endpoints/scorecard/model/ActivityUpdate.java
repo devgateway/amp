@@ -11,7 +11,7 @@ import java.util.Date;
 public class ActivityUpdate {
 
 	private Long donorId;
-	private Long activityId;
+	private String activityId;
 	private Date modifyDate;
 	private String userName;
 	private Long auditLoggerId;
@@ -24,10 +24,10 @@ public class ActivityUpdate {
 	public void setDonorId(Long donorId) {
 		this.donorId = donorId;
 	}
-	public Long getActivityId() {
+	public String getActivityId() {
 		return activityId;
 	}
-	public void setActivityId(Long activityId) {
+	public void setActivityId(String activityId) {
 		this.activityId = activityId;
 	}
 	public Date getModifyDate() {

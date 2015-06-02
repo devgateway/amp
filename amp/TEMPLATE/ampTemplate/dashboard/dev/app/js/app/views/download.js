@@ -84,7 +84,7 @@ module.exports = BackboneDash.View.extend({
 
   prepareCanvas: function(canvas, h, w) {
     var ctx = canvas.getContext('2d'),
-        moneyContext = (this.model.get('sumarizedTotal') !== undefined ? this.model.get('sumarizedTotal') + ' ': '') + this.model.get('currency'),        
+        moneyContext = (this.model.get('sumarizedTotal') !== undefined ? ': ' + this.model.get('sumarizedTotal') + ' ': ' ') + this.model.get('currency'),        
         adjType = this.model.get('adjtype');
 
     if (adjType) {
@@ -96,7 +96,7 @@ module.exports = BackboneDash.View.extend({
 
       // var localAdj = this.app.translator.translateSync()
       // TODO: localize adjtype? is that necessary?
-      moneyContext = adjName + ' (' + moneyContext + ')';
+      moneyContext = adjName + moneyContext;
     }
 
     // size the canvas

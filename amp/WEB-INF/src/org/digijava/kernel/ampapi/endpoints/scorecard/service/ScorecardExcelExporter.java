@@ -81,7 +81,7 @@ public class ScorecardExcelExporter {
 	 * @param worksheet the HSSFSheet
 	 */
 	private void createColumns(List<AmpOrganisation> columns, HSSFWorkbook workbook, HSSFSheet worksheet) {
-		int rowIndex = 1;
+		int rowIndex = 0;
 		CellStyle style = workbook.createCellStyle();
 		style.setWrapText(true);
 		for (AmpOrganisation column : columns) {

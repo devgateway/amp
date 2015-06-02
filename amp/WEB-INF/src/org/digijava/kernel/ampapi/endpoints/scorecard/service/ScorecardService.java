@@ -40,6 +40,7 @@ import clover.org.apache.commons.lang.StringUtils;
 import clover.org.apache.log4j.Logger;
 
 /**
+ * Service class for Scorecard generation
  * 
  * @author Emanuel Perez
  * 
@@ -162,18 +163,26 @@ public class ScorecardService {
 		String gsCalendarId = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
 		Date startDate = CalendarUtil.getStartDate(Long.valueOf(gsCalendarId), startYear);
 		Date endDate = CalendarUtil.getEndDate(Long.valueOf(gsCalendarId), endYear);
-
-		Date currentDate = new Date(startDate.getTime());
-		while (currentDate.compareTo(endDate) < 1) {
-			for (int i = 1; i <= 4; i++) {
-				Calendar cal = Calendar.getInstance();
-				cal.setTime(currentDate);
-				Quarter quarter = new Quarter(fiscalCalendar, i, cal.get(Calendar.YEAR));
-				quarters.add(quarter);
-				cal.add(Calendar.MONTH, 3);
-				currentDate.setTime(cal.getTimeInMillis());
+		try {
+			ICalendarWorker worker = fiscalCalendar.getworker();
+			Date currentDate = new Date (startDate.getTime());
+			int index = 1;
+			while (currentDate.compareTo(endDate) < 1) {
+				for (int i = 1; i <= 4; i++) {
+					worker.setTime(currentDate);
+					Quarter quarter = new Quarter(fiscalCalendar, i, worker.getYear());
+					quarters.add(quarter);
+					Calendar cal = Calendar.getInstance();
+					cal.setTime(startDate);
+					cal.add(Calendar.MONTH, 3 * index);
+					index ++;
+					currentDate.setTime(cal.getTimeInMillis());
+				}
 			}
+		} catch (Exception e) {
+			LOGGER.error("Couldn't generate quarters ", e);
 		}
+
 		return quarters;
 	}
 
@@ -225,7 +234,8 @@ public class ScorecardService {
 							Long donorId = rs.getLong("donor_id");
 							ColoredCell cell = data.get(donorId).get(quarter.toString());
 							Integer totalUpdatedActivities = cell.getUpdatedActivites().size();
-							Integer totalUpdatedActivitiesOnGracePeriod = cell.getUpdatedActivitiesOnGracePeriod().size();
+							Integer totalUpdatedActivitiesOnGracePeriod = cell.getUpdatedActivitiesOnGracePeriod()
+									.size();
 							if (totalUpdatedActivities >= (totalActivities * (threshold / 100))) {
 								cell.setColor(Colors.GREEN);
 							} else if ((totalUpdatedActivities + totalUpdatedActivitiesOnGracePeriod) >= (totalActivities * (threshold / 100))) {
@@ -264,7 +274,7 @@ public class ScorecardService {
 			if (isUpdateOnGracePeriod(activityUpdate.getModifyDate())) {
 				Quarter previousQuarter = quarter.getPreviousQuarter();
 				ColoredCell previousQuarterCell = data.get(donorId).get(previousQuarter.toString());
-				cell.getUpdatedActivitiesOnGracePeriod().add(activityUpdate.getActivityId());
+				previousQuarterCell.getUpdatedActivitiesOnGracePeriod().add(activityUpdate.getActivityId());
 			}
 			cell.getUpdatedActivites().add(activityUpdate.getActivityId());
 		}
@@ -328,6 +338,7 @@ public class ScorecardService {
 	 */
 	private Map<Long, Map<String, ColoredCell>> markNoUpdateDonorCells(Map<Long, Map<String, ColoredCell>> data) {
 		Collection<NoUpdateOrganisation> noUpdateDonors = DbUtil.getAll(NoUpdateOrganisation.class);
+		
 		for (NoUpdateOrganisation noUpdateDonor : noUpdateDonors) {
 			Quarter quarter = new Quarter(fiscalCalendar, noUpdateDonor.getModifyDate());
 			ColoredCell noUpdateCell = data.get(noUpdateDonor.getAmpDonorId()).get(quarter.toString());

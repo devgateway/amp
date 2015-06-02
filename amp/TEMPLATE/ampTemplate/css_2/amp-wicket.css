@@ -601,3 +601,18 @@ tr.wicketFundingRowItem:nth-child(odd) {background: #FFFFFF}
 	position: relative;
 	top: -11px;
 }
+
+.custom-file-input{
+	box-sizing: content-box;
+}
+.custom-file-input p{margin: 10px 0}
+.button_green_btm{
+  box-sizing: content-box;
+  height: 12px;
+  line-height: normal;
+}
+
+.fileupload-progress .progress {
+  height: auto;
+  margin: 0;
+}

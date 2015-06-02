@@ -15,8 +15,9 @@
 		<buildVersion>2.11-SNAPSHOT</buildVersion>
  		<jersey.version>1.18</jersey.version>
 		<saiku.version>3.0-RC2</saiku.version> 
-		<saiku3.version>3.0-RC2-DG</saiku3.version> 
-	</properties>
+		<saiku3.version>3.0-RC2-DG</saiku3.version>
+        <apidocs>false</apidocs>
+    </properties>
 	<repositories>
 		<repository>
 			<snapshots>
@@ -967,7 +968,6 @@
 		
 		<outputDirectory>${project.basedir}/WEB-INF/classes</outputDirectory>
 		<plugins>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
@@ -1286,6 +1286,56 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+
+    <profiles>
+        <profile>
+            <id>swagger-api-docs</id>
+
+            <properties>
+                <docBasePath>/rest</docBasePath>
+                <apiBasePath>/api-docs</apiBasePath>
+            </properties>
+
+            <activation>
+                <property>
+                    <name>apidocs</name>
+                    <value>true</value>
+                </property>
+            </activation>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <executions>
+                            <execution>
+                                <id>generate-service-docs</id>
+                                <phase>generate-resources</phase>
+                                <configuration>
+                                    <doclet>com.carma.swagger.doclet.ServiceDoclet</doclet>
+                                    <docletArtifact>
+                                        <groupId>com.carma</groupId>
+                                        <artifactId>swagger-doclet</artifactId>
+                                        <version>1.0.4.2</version>
+                                    </docletArtifact>
+                                    <sourcepath>${project.basedir}/WEB-INF/src/org/digijava/kernel/ampapi</sourcepath>
+                                    <reportOutputDirectory>${project.build.outputDirectory}</reportOutputDirectory>
+                                    <useStandardDocletOptions>false</useStandardDocletOptions>
+                                    <additionalparam>-apiVersion 1 -docBasePath ${docBasePath} -apiBasePath ${apiBasePath} -d ${project.basedir}/api-docs</additionalparam>
+                                </configuration>
+                                <goals>
+                                    <goal>javadoc</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 	<organization>
 		<name>Development Gateway</name>
 		<url>http://developmentgateway.org</url>

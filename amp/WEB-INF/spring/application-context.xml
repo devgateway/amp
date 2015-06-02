@@ -61,7 +61,7 @@
     
     <http pattern="/aim/exportActToPDF.do**" security="none"  />
   
-	 <http pattern="/aim/exportActToWord.do**" security="none"  />
+	<http pattern="/aim/exportActToWord.do**" security="none"  />
   
 	<http pattern="/aim/default/previewActivity.do**" security="none" />
 	
@@ -90,10 +90,12 @@
 	
 	<http pattern="/esrigis/**" security="none" />
 	<http pattern="/rest/**" security="none" />
+    <http pattern="/api-docs/**" security="none" />
+
 	<http pattern="/TEMPLATE/ampTEMPLATE**" security="none" />
 	<http pattern="/TEMPLATE/ampTemplate/gisModule/dist/**" security="none" />
-  <http pattern="/TEMPLATE/ampTemplate/gisModule/dev/**" security="none" />
-  <http pattern="/TEMPLATE/ampTemplate/gisModule/**" security="none" />
+    <http pattern="/TEMPLATE/ampTemplate/gisModule/dev/**" security="none" />
+    <http pattern="/TEMPLATE/ampTemplate/gisModule/**" security="none" />
 
 	<http pattern="/TEMPLATE/ampTemplate/dashboard/**" security="none" />
 	<http pattern="/TEMPLATE/ampTemplate/dashboard/build/**" security="none" />

@@ -8,6 +8,12 @@ import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 
 import clover.org.apache.log4j.Logger;
 
+/**
+ * Representation of a quarter (3 month period)
+ * 
+ * @author Emanuel Perez
+ *
+ */
 public class Quarter {
 
 	private Logger LOGGER = Logger.getLogger(Quarter.class);
@@ -28,7 +34,7 @@ public class Quarter {
 				this.yearCode += "-" + (worker.getYear() + 1);
 			}
 		} catch (Exception e) {
-			LOGGER.warn("Couldn't get qarter for date: " + date);
+			LOGGER.warn("Couldn't get quarter for date: " + date);
 		}
 
 	}
@@ -56,6 +62,11 @@ public class Quarter {
 		return yearCode + " " + "Q" + quarterNumber;
 	}
 
+	/**
+	 * Gets the quarter before the current one
+	 * 
+	 * @return Quarter, the previous quarter
+	 */
 	public Quarter getPreviousQuarter() {
 		Quarter quarter;
 		if (quarterNumber > 1) {
@@ -68,6 +79,11 @@ public class Quarter {
 		return quarter;
 	}
 
+	/**
+	 * Gets the date on which the current quarter starts
+	 * 
+	 * @return the date on which the current quarter starts
+	 */
 	public Date getQuarterStartDate() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.YEAR, year);
@@ -75,6 +91,9 @@ public class Quarter {
 		//fiscal Calendar month are 1 based, but Java is 0 based.
 		//from the starting month, we add 3 months X number of quarters
 		calendar.set(Calendar.MONTH, (fiscalCalendar.getStartMonthNum() - 1) + (quarterNumber - 1) * 3);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 1);
 		return calendar.getTime();
 	}
 

@@ -4,6 +4,7 @@ import java.util.Date;
 
 
 /**
+ * Class representing an Activity that has been updated
  * 
  * @author Emanuel Perez
  * 

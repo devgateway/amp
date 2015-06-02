@@ -2,7 +2,6 @@ package org.digijava.kernel.ampapi.endpoints.scorecard;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;

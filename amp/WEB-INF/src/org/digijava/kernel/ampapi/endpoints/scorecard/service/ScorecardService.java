@@ -68,6 +68,12 @@ public class ScorecardService {
 		return getDonorActivityUpdates(null);
 	}
 
+	/**
+	 * Returns the list of all ActivityUpdates that occurred on the system
+	 * 
+	 * @param allowedStatuses
+	 * @return List<ActivityUpdate> , list with all ActivityUpdates
+	 */
 	public List<ActivityUpdate> getDonorActivityUpdates(final List<String> allowedStatuses) {
 		final List<ActivityUpdate> activityUpdateList = new ArrayList<ActivityUpdate>();
 		int startYear = getDefaultStartYear();
@@ -119,6 +125,12 @@ public class ScorecardService {
 		return activityUpdateList;
 	}
 
+	/**
+	 * Gets the default start year for the donor scorecard.
+	 * It tries to get it from Global Settings, if it is not defined it uses a default value of 2010.
+	 * 
+	 * @return the default start year for generating the donor scorecard
+	 */
 	private int getDefaultStartYear() {
 		String defaultStartYear = FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
 		int startYear = DEFAULT_START_YEAR;
@@ -129,6 +141,12 @@ public class ScorecardService {
 		return startYear;
 	}
 
+	/**
+	 * Gets the default end year for the donor scorecard.
+	 * It tries to get it from Global Settings, if it is not defined it uses the current year.
+	 * 
+	 * @return the default end year for generating the donor scorecard
+	 */
 	private int getDefaultEndYear() {
 		String defaultEndYear = FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE);
 		int endYear = Calendar.getInstance().get(Calendar.YEAR);
@@ -156,6 +174,13 @@ public class ScorecardService {
 		return donors;
 	}
 
+	/**
+	 * Returns a list of all quarters that will span the donor scorecard.
+	 * The start and end of the period is defined through Global Settings: START_YEAR_DEFAULT_VALUE
+	 * and END_YEAR_DEFAULT_VALUE
+	 * 
+	 * @return List<Quarter>, the list of the quarters that will represent the headers of the donor scorecard file.
+	 */
 	public List<Quarter> getQuarters() {
 		final List<Quarter> quarters = new ArrayList<Quarter>();
 		int startYear = getDefaultStartYear();
@@ -186,6 +211,15 @@ public class ScorecardService {
 		return quarters;
 	}
 
+	/**
+	 * Generates the Map<Long, Map<String, ColoredCell>> with the data of the ColoredCells that will be used to 
+	 * create the donor scorecard
+	 * 
+	 * @param activityUpdates the List of all ActivityUpdates that took place during the period for which
+	 * the scorecard will be generated. 
+	 * @return a Map<Long, Map<String, ColoredCell>> with all ColoredCells filled with the appropiate colors.
+	 * For each quarter and donor there is a ColoredCell.
+	 */
 	public Map<Long, Map<String, ColoredCell>> getOrderedScorecardCells(List<ActivityUpdate> activityUpdates) {
 		Map<Long, Map<String, ColoredCell>> data = initializeScorecardCellData();
 		data = countActivityUpdates(activityUpdates, data);
@@ -193,6 +227,19 @@ public class ScorecardService {
 		return data;
 	}
 
+	/**
+	 * Sets the fill color for every ColoredCell on Map<Long, Map<String, ColoredCell>> based on the rules: 
+	 * - Green cell: If a donor has updated more projects that the number defined by doing:
+     * Number of Updated Projects by donor on a quarter > = Threshold (determined from AmoScorecardSettings)  X Total live projects 
+     * of a donor on a given quarter
+	 * -Yellow cell: if a donor updates projects during the grace period, the update occurred is counted double.
+	 *  It is counted on the quarter to which the grace period belongs; and it is also counted on the current quarter. 
+	 *  If the updates  performed on the grace period make the number of updates to reach or surpass the threshold for 
+	 *  that quarter, then the previous quarter is marked with yellow. 
+     *
+	 * @param data Map<Long, Map<String, ColoredCell>>
+	 * @return the Map<Long, Map<String, ColoredCell>> with the ColoredCell filled with colors.
+	 */
 	private Map<Long, Map<String, ColoredCell>> processCells(final Map<Long, Map<String, ColoredCell>> data) {
 		Set<AmpScorecardSettingsCategoryValue> statuses = settings.getClosedStatuses();
 		String closedStatuses = "";
@@ -281,6 +328,16 @@ public class ScorecardService {
 		return data;
 	}
 
+	/**
+	 * Checks if a given date is on the Grace period of a quarter.
+	 * If AmpScorecardSettings property's validationPeriod is set to false, then Grace period is disabled
+	 * and the result is always false. Otherwise it checks if the current date is between the 
+	 * current quarter start date and the (current Quarter start date + number of weeks of the validation period)
+	 * if that is the case, the result is true
+	 * 
+	 * @param updateDate, the date to check whether it is in the grave period or not.
+	 * @return true if it is in the grace period (validation period), false otherwise
+	 */
 	private boolean isUpdateOnGracePeriod(Date updateDate) {
 		boolean isOnGracePeriod = false;
 		if (settings != null && settings.getValidationPeriod()) {
@@ -303,6 +360,13 @@ public class ScorecardService {
 		return isOnGracePeriod;
 	}
 
+	/**
+	 * Populates the Map<Long, Map<String, ColoredCell>> with all the donors and quarters that will be included 
+	 * on the donor scorecard. It also creates the ColoredCells for every donor/quarter pair and fill it 
+	 * with Colors.Gray if it is in the NoUpdateDonor list for the given quarter
+	 * 
+	 * @return the initialized Map<Long, Map<String, ColoredCell>> with the populated quarters and donors
+	 */
 	private Map<Long, Map<String, ColoredCell>> initializeScorecardCellData() {
 		Map<Long, Map<String, ColoredCell>> data = new HashMap<Long, Map<String, ColoredCell>>();
 		List<Quarter> quarters = getQuarters();

@@ -42,6 +42,11 @@ public class ColoredCell {
 		this.color = color;
 	}
 
+	/**
+	 * Creates a new ColoredCell. 
+	 * New ColoredCells are given Colors.Red as default color
+	 * 
+	 */
 	public ColoredCell() {
 		this.color = Colors.RED;
 	}

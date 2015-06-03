@@ -75,5 +75,18 @@ function ampi18n_locale_default_languages() {
     'prefix' => 'ru',
     'weight' => 0,
   );
+  // Exported language: sq.
+  $languages['sq'] = array(
+    'language' => 'sq',
+    'name' => 'Albanian',
+    'native' => 'Shqip',
+    'direction' => 0,
+    'enabled' => 1,
+    'plurals' => 0,
+    'formula' => '',
+    'domain' => '',
+    'prefix' => 'sq',
+    'weight' => 0,
+  );
   return $languages;
 }

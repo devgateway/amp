@@ -13,6 +13,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -34,95 +35,156 @@ LoggerIdentifiable, Cloneable {
 
 	protected static String [] IMPLEMENTED_ACTIONS=new String[]{GatePermConst.Actions.EDIT};
 
+	@Interchangeable(fieldTitle = "Created By")
 	@VersionableFieldSimple(fieldTitle = "Created By", blockSingleChange = true)
 	protected AmpTeamMember createdBy;
+	
+	@Interchangeable(fieldTitle = "Project Impact")
 	@VersionableFieldTextEditor(fieldTitle = "Project Impact")
 	protected String projectImpact;
+	
+	@Interchangeable(fieldTitle = "Activity Summary")
 	@VersionableFieldTextEditor(fieldTitle = "Activity Summary")
 	protected String activitySummary;
-
+	
+	@Interchangeable(fieldTitle = "Conditionality")
 	@VersionableFieldTextEditor(fieldTitle = "Conditionality")
 	protected String conditionality;
+	
+	@Interchangeable(fieldTitle = "Project Management")
 	@VersionableFieldTextEditor(fieldTitle = "Project Management")
 	protected String projectManagement;
 
+	@Interchangeable(fieldTitle = "Activity Budget")
 	@VersionableFieldSimple(fieldTitle = "Activity Budget")
 	protected Integer budget;
+	
+	@Interchangeable(fieldTitle = "Government Agreement Number")
 	@VersionableFieldSimple(fieldTitle = "Government Agreement Number")
 	protected String govAgreementNumber;
+	
+	@Interchangeable(fieldTitle = "Budget Code Project ID")
 	@VersionableFieldSimple(fieldTitle = "Budget Code Project ID")
 	protected String budgetCodeProjectID;
+	
+	@Interchangeable(fieldTitle = "Budget Sector")
 	@VersionableFieldSimple(fieldTitle = "Budget Sector")
 	protected Long budgetsector;
+	
+	@Interchangeable(fieldTitle = "Budget Organization")
 	@VersionableFieldSimple(fieldTitle = "Budget Organization")
 	protected Long budgetorganization;
+	
+	@Interchangeable(fieldTitle = "Budget Department")
 	@VersionableFieldSimple(fieldTitle = "Budget Department")
 	protected Long budgetdepartment;
+	
+	@Interchangeable(fieldTitle = "Budget Program")
 	@VersionableFieldSimple(fieldTitle = "Budget Program")
 	protected Long budgetprogram;
 
 	//protected String govAgreementNumber;
 
-
+	@Interchangeable(fieldTitle = "Internal ID")
 	@PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_ID})
 	@VersionableFieldSimple(fieldTitle = "Internal ID", blockSingleChange = true)
 	protected Long ampActivityId ;
 
+	@Interchangeable(fieldTitle = "AMP Id")
 	@VersionableFieldSimple(fieldTitle = "AMP Id", blockSingleChange = true)
 	protected String ampId ;
 
+	@Interchangeable(fieldTitle = "Name")
 	@PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL})
 	@VersionableFieldSimple(fieldTitle = "Name", mandatoryForSingleChange = true)
 	@TranslatableField
 	protected String name ;
+	
+	@Interchangeable(fieldTitle = "Activity Description")
 	@VersionableFieldTextEditor(fieldTitle = "Activity Description")
 	protected String description ;
 
+	@Interchangeable(fieldTitle = "Project Comments")
 	@VersionableFieldTextEditor(fieldTitle = "Project Comments")
 	protected String projectComments ;
+	
+	@Interchangeable(fieldTitle = "Lessons Learned")
 	@VersionableFieldTextEditor(fieldTitle = "Lessons Learned")
 	protected String lessonsLearned;
+	
+	@Interchangeable(fieldTitle = "Objective")
 	@VersionableFieldTextEditor(fieldTitle = "Objective")
 	protected String objective ;
+	
+	@Interchangeable(fieldTitle = "Purpose")
 	@VersionableFieldTextEditor(fieldTitle = "Purpose")
 	protected String purpose;
+	
+	@Interchangeable(fieldTitle = "Results")
 	@VersionableFieldTextEditor(fieldTitle = "Results")
 	protected String results;
+	
+	@Interchangeable(fieldTitle = "Document Space")
 	@VersionableFieldSimple(fieldTitle = "Document Space")
 	protected String documentSpace;
 
+	@Interchangeable(fieldTitle = "Is Draft?")
 	@VersionableFieldSimple(fieldTitle = "Is Draft?")
 	protected Boolean draft;
 
+	@Interchangeable(fieldTitle = "Equal Oportunity")
 	@VersionableFieldTextEditor(fieldTitle = "Equal Oportunity")
 	protected String equalOpportunity;
+	
+	@Interchangeable(fieldTitle = "Environment")
 	@VersionableFieldTextEditor(fieldTitle = "Environment")
 	protected String environment;
+	
+	@Interchangeable(fieldTitle = "Minorities")
 	@VersionableFieldTextEditor(fieldTitle = "Minorities")
 	protected String minorities;
 
+	@Interchangeable(fieldTitle = "Language")
 	@VersionableFieldSimple(fieldTitle = "Language")
 	protected String language ;
 
+	@Interchangeable(fieldTitle = "Original Date")
 	@VersionableFieldSimple(fieldTitle = "Original Date")
 	protected Date originalCompDate;
+	
+	@Interchangeable(fieldTitle = "Contracting Date")
 	@VersionableFieldSimple(fieldTitle = "Contracting Date")
 	protected Date contractingDate;
+	
+	@Interchangeable(fieldTitle = "Disbursement Date")
 	@VersionableFieldSimple(fieldTitle = "Disbursement Date")
 	protected Date disbursmentsDate;
+	
+	@Interchangeable(fieldTitle = "Sectors")
 	@VersionableCollection(fieldTitle = "Sectors")
 	protected Set sectors ;
+	
+	@Interchangeable(fieldTitle = "Contracts")
 	@VersionableCollection(fieldTitle = "Contracts")
 	protected Set contracts;
+	
+	@Interchangeable(fieldTitle = "Locations")
 	@VersionableCollection(fieldTitle = "Locations")
 	protected Set<AmpActivityLocation> locations ;
+	
+	@Interchangeable(fieldTitle = "Org. Role")
 	@VersionableCollection(fieldTitle = "Org. Role")
 	protected Set<AmpOrgRole> orgrole;
-	//protected AmpLevel level ; //TO BE DELETED
+	
+	@Interchangeable(fieldTitle = "Internal IDs")
 	@VersionableCollection(fieldTitle = "Internal IDs")
 	protected Set internalIds ;
+	
+	@Interchangeable(fieldTitle = "Fundings")
 	@VersionableCollection(fieldTitle = "Fundings")
 	protected Set<AmpFunding> funding ;
+	
+	@Interchangeable(fieldTitle = "Progress")
 	@VersionableCollection(fieldTitle = "Progress")
 	protected Set progress;
 	
@@ -132,31 +194,46 @@ LoggerIdentifiable, Cloneable {
 	 */
 	@Deprecated
 	protected Set documents ;
+	
+	@Interchangeable(fieldTitle = "Issues")
 	@VersionableCollection(fieldTitle = "Issues")
 	protected Set<AmpIssues> issues;
 
+	@Interchangeable(fieldTitle = "Regional Observations")
 	@VersionableCollection(fieldTitle = "Regional Observations")
 	protected Set<AmpRegionalObservation> regionalObservations;
 
+	@Interchangeable(fieldTitle = "Line Ministry Observations")
 	@VersionableCollection(fieldTitle = "Line Ministry Observations")
 	protected Set<AmpLineMinistryObservation> lineMinistryObservations;
 
+	@Interchangeable(fieldTitle = "Costs")
 	@VersionableCollection(fieldTitle = "Costs")
 	protected Set costs;
+	
+	@Interchangeable(fieldTitle = "Program Description")
 	@VersionableFieldTextEditor(fieldTitle = "Program Description")
 	protected String programDescription;
+	
+	@Interchangeable(fieldTitle = "Team")
 	@VersionableFieldSimple(fieldTitle = "Team")
 	protected AmpTeam team;
 	//@VersionableCollection(fieldTitle = "Members")
 	protected Set member;
 
+	@Interchangeable(fieldTitle = "Contact Name") //slightly fishy here
 	protected String contactName;
 	//protected AmpTeamMember updatedBy; !!! Use modifiedBy
 
+	@Interchangeable(fieldTitle = "Fun Amount")
 	@VersionableFieldSimple(fieldTitle = "Fun Amount")
 	protected Double funAmount;
+	
+	@Interchangeable(fieldTitle = "Currency Code")
 	@VersionableFieldSimple(fieldTitle = "Currency Code")
 	protected String currencyCode;
+	
+	@Interchangeable(fieldTitle = "Fun Date")
 	@VersionableFieldSimple(fieldTitle = "Fun Date")
 	protected Date funDate;
 
@@ -177,218 +254,200 @@ LoggerIdentifiable, Cloneable {
 	// The field is defunct
 
 	// Donor contact information
+	@Interchangeable(fieldTitle = "Contact First Name")
 	protected String contFirstName;
+	@Interchangeable(fieldTitle = "Contact Last Name")
 	protected String contLastName;
+	@Interchangeable(fieldTitle = "Email")
 	protected String email;
+	@Interchangeable(fieldTitle = "Donor Contact Title")
 	protected String dnrCntTitle;
+	@Interchangeable(fieldTitle = "Donor Contact Organization")
 	protected String dnrCntOrganization;
+	@Interchangeable(fieldTitle = "Donor Contact Phone Number")
 	protected String dnrCntPhoneNumber;
+	@Interchangeable(fieldTitle = "Donor Contact Fax Number")
 	protected String dnrCntFaxNumber;
 
 	// MOFED contact information
+	@Interchangeable(fieldTitle = "MOFED Contact First Name")
 	protected String mofedCntFirstName;
+	@Interchangeable(fieldTitle = "MOFED Contact Last Name")
 	protected String mofedCntLastName;
+	@Interchangeable(fieldTitle = "MOFED Contact Email")
 	protected String mofedCntEmail;
+	@Interchangeable(fieldTitle = "MOFED Contact Title")
 	protected String mfdCntTitle;
+	@Interchangeable(fieldTitle = "MOFED Contact Organization")
 	protected String mfdCntOrganization;
+	@Interchangeable(fieldTitle = "MOFED Contact Phone Number")
 	protected String mfdCntPhoneNumber;
+	@Interchangeable(fieldTitle = "MOFED Contact Fax Number")
 	protected String mfdCntFaxNumber;
 
 	// Project Coordinator contact information
+	@Interchangeable(fieldTitle = "Project Coordinator First Name")
 	protected String prjCoFirstName;
+	@Interchangeable(fieldTitle = "Project Coordinator Last Name")
 	protected String prjCoLastName;
+	@Interchangeable(fieldTitle = "Project Coordinator Email")
 	protected String prjCoEmail;
+	@Interchangeable(fieldTitle = "Project Coordinator Title")
 	protected String prjCoTitle;
+	@Interchangeable(fieldTitle = "Project Coordinator Organization")
 	protected String prjCoOrganization;
+	@Interchangeable(fieldTitle = "Project Coordinator Phone Number")
 	protected String prjCoPhoneNumber;
+	@Interchangeable(fieldTitle = "Project Coordinator Fax Number")
 	protected String prjCoFaxNumber;
 
 	// Sector Ministry contact information
+	
+	@Interchangeable(fieldTitle = "Sector Ministry Contact First Name")
 	protected String secMiCntFirstName;
+	@Interchangeable(fieldTitle = "Sector Ministry Contact Last Name")
 	protected String secMiCntLastName;
+	@Interchangeable(fieldTitle = "Sector Ministry Contact Email")
 	protected String secMiCntEmail;
+	@Interchangeable(fieldTitle = "Sector Ministry Contact Title")
 	protected String secMiCntTitle;
+	@Interchangeable(fieldTitle = "Sector Ministry Contact Organization")
 	protected String secMiCntOrganization;
+	@Interchangeable(fieldTitle = "Sector Ministry Contact Phone Number")
 	protected String secMiCntPhoneNumber;
+	@Interchangeable(fieldTitle = "Sector Ministry Contact Fax Number")
 	protected String secMiCntFaxNumber;
 
+	@Interchangeable(fieldTitle = "Activity Contacts")
 	@VersionableCollection(fieldTitle = "Activity Contacts")
 	protected Set<AmpActivityContact> activityContacts;
 
 
-
+	@Interchangeable(fieldTitle = "Status Reason")
 	@VersionableFieldTextEditor(fieldTitle = "Status Reason")
 	protected String statusReason;
+	
+	@Interchangeable(fieldTitle = "Components")
 	@VersionableCollection(fieldTitle = "Components")
 	protected Set<AmpComponent> components;
 
+	@Interchangeable(fieldTitle = "Structures")
 	@VersionableCollection(fieldTitle = "Structures")
 	protected Set<AmpStructure> structures;
 
+	@Interchangeable(fieldTitle = "Component Fundings")
 	@VersionableCollection(fieldTitle = "Component Fundings")
 	protected Set<AmpComponentFunding> componentFundings;
 
 
+	@Interchangeable(fieldTitle = "Proposed Start Date")
 	@VersionableFieldSimple(fieldTitle = "Proposed Start Date")
 	protected Date proposedStartDate;
+
+	@Interchangeable(fieldTitle = "Actual Start Date")
 	@VersionableFieldSimple(fieldTitle = "Actual Start Date")
 	protected Date actualStartDate;
+	
+	@Interchangeable(fieldTitle = "Proposed Approval Date")
 	@VersionableFieldSimple(fieldTitle = "Proposed Approval Date")
 	protected Date proposedApprovalDate;
+	
+	@Interchangeable(fieldTitle = "Actual Approval Date")
 	@VersionableFieldSimple(fieldTitle = "Actual Approval Date")
 	protected Date actualApprovalDate;
+	
+	@Interchangeable(fieldTitle = "Actual Completion Date")
 	@VersionableFieldSimple(fieldTitle = "Actual Completion Date")
 	protected Date actualCompletionDate;
+	
+	@Interchangeable(fieldTitle = "Proposed Completion Date")
 	@VersionableFieldSimple(fieldTitle = "Proposed Completion Date")
 	protected Date proposedCompletionDate;
 
 	// This field is defunct
 
+	@Interchangeable(fieldTitle = "Created By")
 	@VersionableFieldSimple(fieldTitle = "Created By", blockSingleChange = true)
 	protected AmpTeamMember activityCreator;
+	
+	@Interchangeable(fieldTitle = "Creation Date")
 	@VersionableFieldSimple(fieldTitle = "Creation Date", blockSingleChange = true)
 	protected Date createdDate;
+	
+	@Interchangeable(fieldTitle = "Update Date")
 	@VersionableFieldSimple(fieldTitle = "Update Date", blockSingleChange = true)
 	protected Date updatedDate;
 
+	@Interchangeable(fieldTitle = "Iati Last Update Date")
 	@VersionableFieldSimple(fieldTitle = "Iati Last Update Date", blockSingleChange = true)
 	protected Date iatiLastUpdatedDate;
 	
 	
-	public Date getIatiLastUpdatedDate() {
-		return iatiLastUpdatedDate;
-	}
-
-	public void setIatiLastUpdatedDate(Date iatiLastUpdatedDate) {
-		this.iatiLastUpdatedDate = iatiLastUpdatedDate;
-	}
-
+	
 	protected AmpTeamMember approvedBy;
+	@Interchangeable(fieldTitle = "Approval Date")
 	protected Date approvalDate;
 
+	@Interchangeable(fieldTitle = "Regional Fundings")
 	@VersionableCollection(fieldTitle = "Regional Fundings")
 	protected Set regionalFundings;
 
+	@Interchangeable(fieldTitle = "Approval Status")
 	@VersionableFieldSimple(fieldTitle = "Approval Status", blockSingleChange = true)
 	protected String approvalStatus;
 
 	// Aid Harmonization Survey Set
+	@Interchangeable(fieldTitle = "Surveys")
 	@VersionableCollection(fieldTitle = "Surveys")
 	protected Set<AmpAhsurvey> survey;
 	
+	@Interchangeable(fieldTitle = "GPI Surveys")
 	@VersionableCollection(fieldTitle = "GPI Surveys")
 	protected Set <AmpGPISurvey> gpiSurvey;
 
+	@Interchangeable(fieldTitle = "Line Ministry Rank")
 	@VersionableFieldSimple(fieldTitle = "Line Ministry Rank")
 	protected Integer lineMinRank;
 
 	protected Collection actRankColl;
 
+	@Interchangeable(fieldTitle = "Archived")
 	@VersionableFieldSimple(fieldTitle = "Archived")
 	protected Boolean archived;
 
+	@Interchangeable(fieldTitle = "Deleted")
 	@VersionableFieldSimple(fieldTitle = "Deleted")
 	protected Boolean deleted;
 	//for AMP-14784
+	@Interchangeable(fieldTitle = "Project Implementation Unit")
 	@VersionableFieldSimple(fieldTitle = "Project Implementation Unit")
 	protected String projectImplementationUnit;
-	@VersionableFieldSimple(fieldTitle = "IMAC Approved")	
+	@Interchangeable(fieldTitle = "IMAC Approved")
+	@VersionableFieldSimple(fieldTitle = "IMAC Approved")
 	protected String imacApproved;
+	@Interchangeable(fieldTitle = "National Oversight")
 	@VersionableFieldSimple(fieldTitle = "National Oversight")	
 	protected String nationalOversight;
+	@Interchangeable(fieldTitle = "On Budget")
 	@VersionableFieldSimple(fieldTitle = "On Budget")	
 	protected String onBudget;
+	@Interchangeable(fieldTitle = "On Parliament")
 	@VersionableFieldSimple(fieldTitle = "On Parliament")	
 	protected String onParliament;
+	@Interchangeable(fieldTitle = "On Treasury")
 	@VersionableFieldSimple(fieldTitle = "On Treasury")	
 	protected String onTreasury;
+	@Interchangeable(fieldTitle = "National Financial Management")
 	@VersionableFieldSimple(fieldTitle = "National Financial Management")	
 	protected String nationalFinancialManagement;
+	@Interchangeable(fieldTitle = "National Procurement")
 	@VersionableFieldSimple(fieldTitle = "National Procurement")	
 	protected String nationalProcurement;
+	@Interchangeable(fieldTitle = "National Audit")
 	@VersionableFieldSimple(fieldTitle = "National Audit")	
 	protected String nationalAudit;
 	
 	
-    public String getProjectImplementationUnit() {
-		return projectImplementationUnit;
-	}
-
-	public void setProjectImplementationUnit(String projectImplementationUnit) {
-		this.projectImplementationUnit = projectImplementationUnit;
-	}
-
-	public String getImacApproved() {
-		return imacApproved;
-	}
-
-	public void setImacApproved(String imacApproved) {
-		this.imacApproved = imacApproved;
-	}
-
-	public String getNationalOversight() {
-		return nationalOversight;
-	}
-
-	public void setNationalOversight(String nationalOversight) {
-		this.nationalOversight = nationalOversight;
-	}
-
-	public String getOnBudget() {
-		return onBudget;
-	}
-
-	public void setOnBudget(String onBudget) {
-		this.onBudget = onBudget;
-	}
-
-	public String getOnParliament() {
-		return onParliament;
-	}
-
-	public void setOnParliament(String onParliament) {
-		this.onParliament = onParliament;
-	}
-
-	public String getOnTreasury() {
-		return onTreasury;
-	}
-
-	public void setOnTreasury(String onTreasury) {
-		this.onTreasury = onTreasury;
-	}
-
-	public String getNationalFinancialManagement() {
-		return nationalFinancialManagement;
-	}
-
-	public void setNationalFinancialManagement(String nationalFinancialManagement) {
-		this.nationalFinancialManagement = nationalFinancialManagement;
-	}
-
-	public String getNationalProcurement() {
-		return nationalProcurement;
-	}
-
-	public void setNationalProcurement(String nationalProcurement) {
-		this.nationalProcurement = nationalProcurement;
-	}
-
-	public String getNationalAudit() {
-		return nationalAudit;
-	}
-
-	public void setNationalAudit(String nationalAudit) {
-		this.nationalAudit = nationalAudit;
-	}
-
-	public Boolean getDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(Boolean deleted) {
-		this.deleted = deleted;
-	}
 
 	/**
 	 * Indicator connections.
@@ -396,52 +455,65 @@ LoggerIdentifiable, Cloneable {
 	 * and contain set of values for this connection.
 	 * Please refer to AmpActivity.hbm.xml and IndicatorConnection.hbm.xml for details.
 	 */
+	@Interchangeable(fieldTitle = "Indicators")
 	@VersionableCollection(fieldTitle = "Indicators")
 	protected Set<IndicatorActivity> indicators;
 
-
+	@Interchangeable(fieldTitle = "Activity Documents")
 	@VersionableCollection(fieldTitle = "Activity Documents")
 	protected Set<AmpActivityDocument> activityDocuments	= null;
 	/* Categories */
+	@Interchangeable(fieldTitle = "Categories")
 	@VersionableCollection(fieldTitle = "Categories")
 	protected Set<AmpCategoryValue> categories;
 
 	/*
 	 * Tanzania adds
 	 */
+	@Interchangeable(fieldTitle = "Indirect On Budget")
     @VersionableFieldSimple(fieldTitle = "Indirect On Budget")
     protected Boolean indirectOnBudget;
+	@Interchangeable(fieldTitle = "FY")
 	@VersionableFieldSimple(fieldTitle = "FY")
 	protected String FY;
+	@Interchangeable(fieldTitle = "Vote")
 	@VersionableFieldSimple(fieldTitle = "Vote")
 	protected String vote;
+	@Interchangeable(fieldTitle = "Sub Vote")
 	@VersionableFieldSimple(fieldTitle = "Sub Vote")
 	protected String subVote;
+	@Interchangeable(fieldTitle = "Sub Program")
 	@VersionableFieldSimple(fieldTitle = "Sub Program")
 	protected String subProgram;
+	@Interchangeable(fieldTitle = "Project Code")
 	@VersionableFieldSimple(fieldTitle = "Project Code")
 	protected String projectCode;
+	@Interchangeable(fieldTitle = "Ministry Code")
 	@VersionableFieldSimple(fieldTitle = "Ministry Code")
 	protected String ministryCode;
 
 	
-	
+	@Interchangeable(fieldTitle = "CRIS Number")
 	@VersionableFieldSimple(fieldTitle = "CRIS Number")
 	protected String crisNumber;
 
 	
-
+	@Interchangeable(fieldTitle = "Government Approval Procedures")
 	@VersionableFieldSimple(fieldTitle = "Government Approval Procedures")
 	protected Boolean governmentApprovalProcedures;
 
+	@Interchangeable(fieldTitle = "Joint Criteria")
 	@VersionableFieldSimple(fieldTitle = "Joint Criteria")
 	protected Boolean jointCriteria;
+	@Interchangeable(fieldTitle = "Humanitarian Aid")
 	@VersionableFieldSimple(fieldTitle = "Humanitarian Aid")
 	protected Boolean humanitarianAid;
 
+	@Interchangeable(fieldTitle = "Act. Programs")
 	@VersionableCollection(fieldTitle = "Act. Programs")
 	protected Set actPrograms;
 	
+	@Interchangeable(fieldTitle = "Act. Budget Structure")
 	@VersionableCollection(fieldTitle = "Act. Budget Structure")
 	protected Set actBudgetStructure;
 
@@ -457,6 +529,7 @@ LoggerIdentifiable, Cloneable {
 	
 	protected Date modifiedDate;
 
+	@Interchangeable(fieldTitle = "Modified By")
 	@VersionableFieldSimple(fieldTitle = "Modified By")
 	protected AmpTeamMember modifiedBy;
 	
@@ -464,9 +537,11 @@ LoggerIdentifiable, Cloneable {
 	protected AmpActivityVersion mergeSource1;
 	protected AmpActivityVersion mergeSource2;
 
+	@Interchangeable(fieldTitle = CategoryConstants.FUNDING_SOURCES_NUMBER_NAME)
     @VersionableFieldSimple(fieldTitle = CategoryConstants.FUNDING_SOURCES_NUMBER_NAME)
     protected Integer fundingSourcesNumber;
     
+	@Interchangeable(fieldTitle = "Proposed Project Life")
     @VersionableFieldSimple(fieldTitle = "Proposed Project Life")
     protected Integer proposedProjectLife;
 
@@ -475,6 +550,7 @@ LoggerIdentifiable, Cloneable {
 	 */
     protected Long activityType = org.dgfoundation.amp.onepager.util.ActivityUtil.ACTIVITY_TYPE_PROJECT; //default type
 
+    @Interchangeable(fieldTitle = "Annual Project Budgets")
     @VersionableCollection(fieldTitle = "Annual Project Budgets")
 	protected Set<AmpAnnualProjectBudget> annualProjectBudgets;
 	//protected Set <AmpActivityContact> activityContacts;
@@ -1852,4 +1928,91 @@ LoggerIdentifiable, Cloneable {
 			Set<AmpAnnualProjectBudget> annualProjectBudgets) {
 		this.annualProjectBudgets = annualProjectBudgets;
 	}
+	public Date getIatiLastUpdatedDate() {
+		return iatiLastUpdatedDate;
+	}
+
+	public void setIatiLastUpdatedDate(Date iatiLastUpdatedDate) {
+		this.iatiLastUpdatedDate = iatiLastUpdatedDate;
+	}
+    public String getProjectImplementationUnit() {
+		return projectImplementationUnit;
+	}
+
+	public void setProjectImplementationUnit(String projectImplementationUnit) {
+		this.projectImplementationUnit = projectImplementationUnit;
+	}
+
+	public String getImacApproved() {
+		return imacApproved;
+	}
+
+	public void setImacApproved(String imacApproved) {
+		this.imacApproved = imacApproved;
+	}
+
+	public String getNationalOversight() {
+		return nationalOversight;
+	}
+
+	public void setNationalOversight(String nationalOversight) {
+		this.nationalOversight = nationalOversight;
+	}
+
+	public String getOnBudget() {
+		return onBudget;
+	}
+
+	public void setOnBudget(String onBudget) {
+		this.onBudget = onBudget;
+	}
+
+	public String getOnParliament() {
+		return onParliament;
+	}
+
+	public void setOnParliament(String onParliament) {
+		this.onParliament = onParliament;
+	}
+
+	public String getOnTreasury() {
+		return onTreasury;
+	}
+
+	public void setOnTreasury(String onTreasury) {
+		this.onTreasury = onTreasury;
+	}
+
+	public String getNationalFinancialManagement() {
+		return nationalFinancialManagement;
+	}
+
+	public void setNationalFinancialManagement(String nationalFinancialManagement) {
+		this.nationalFinancialManagement = nationalFinancialManagement;
+	}
+
+	public String getNationalProcurement() {
+		return nationalProcurement;
+	}
+
+	public void setNationalProcurement(String nationalProcurement) {
+		this.nationalProcurement = nationalProcurement;
+	}
+
+	public String getNationalAudit() {
+		return nationalAudit;
+	}
+
+	public void setNationalAudit(String nationalAudit) {
+		this.nationalAudit = nationalAudit;
+	}
+
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
+
 }

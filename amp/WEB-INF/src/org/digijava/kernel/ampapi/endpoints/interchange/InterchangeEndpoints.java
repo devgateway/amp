@@ -1,14 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.interchange;
 
+import java.util.List;
+
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.digijava.kernel.ampapi.endpoints.common.fm.FMService;
-import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 
@@ -27,5 +25,13 @@ public class InterchangeEndpoints {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public JsonBean getAvailableFields() {
 		return InterchangeUtils.getAllAvailableFields();
+	}
+	
+	
+	@GET
+	@Path("/projects")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public List<JsonBean> getProjects() {
+		return InterchangeUtils.getActivityList();
 	}
 }

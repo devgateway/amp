@@ -14,7 +14,7 @@
 		<property name="percentageThreshold" column="percentage_threshold" type="java.lang.Double" />
 
 		<set name="closedStatuses" table="AMP_SCORECARD_SETTINGS_CATEGORY_VALUE"
-			inverse="true" lazy="true" fetch="select">
+			inverse="true" lazy="true" fetch="select" cascade="save-update, all-delete-orphan">
 			<key>
 				<column name="AMP_SCORECARD_SETTINGS_ID" not-null="true" />
 			</key>

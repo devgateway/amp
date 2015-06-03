@@ -34,6 +34,9 @@ import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 
 import clover.org.apache.commons.lang.StringUtils;
@@ -123,6 +126,23 @@ public class ScorecardService {
 		});
 
 		return activityUpdateList;
+	}
+	
+	/** 
+	 * Returns the list of all Activity Statuses from category values table (amp_category_value)
+	 * 
+	 * @return Collection<AmpCategoryValue>, the list with of all activity statuses
+	 */	
+	public static Collection<AmpCategoryValue> getAllCategoryValues() {
+		Collection<AmpCategoryValue> responses = new ArrayList<AmpCategoryValue>();
+		
+		
+		Session session = PersistenceManager.getRequestDBSession();
+        String queryString = "from " + AmpCategoryValue.class.getName() + " acv where acv.ampCategoryClass.id = 6";
+        Query query = session.createQuery(queryString);
+        responses = query.list();
+
+        return responses;
 	}
 
 	/**

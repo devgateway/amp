@@ -34,6 +34,17 @@
 				</html:select></td>
 		</tr>
 		<tr>
+			<td><digi:trn>Percentage Threshold</digi:trn></td>
+			<td><html:text property="percentageThreshold" styleClass="inp-text"/></td>
+		</tr>
+		<tr>
+			<td><digi:trn>Activity Status</digi:trn></td>
+			<td><html:select property="selectedCategoryValues" multiple="true">
+				<html:optionsCollection name="aimScorecardManagerForm" property="categoryValues" value="id" label="value" />
+			</html:select></td>
+		
+		</tr>
+		<tr>
 			<td align="right" class="addUserButContainer"><c:set
 					var="btnSubmit">
 					<digi:trn key="btn:submit">Submit</digi:trn>
@@ -62,6 +73,11 @@ function validate(){
 		alert("<digi:trn jsFriendly='true'>Please select validation period</digi:trn>");
 		return false;
 	}
+	
+	if (!validatePercentage()) {
+		return false;
+	}
+	
 	return true;
 }
 function handleValidationPeriodClick(chkbox){
@@ -69,6 +85,18 @@ function handleValidationPeriodClick(chkbox){
 		$('select[name="validationTime"]').val("");
 	}
 
+}
+
+function validatePercentage() {
+	var percentage = $('input[name="percentageThreshold"]').val();
+	var floatValue = parseFloat(percentage);
+	
+	if (isNaN(floatValue) || (floatValue < 0) || (floatValue > 100)) {
+		alert("<digi:trn jsFriendly='true'>Please enter a valid percentage (0.00 - 100.00)</digi:trn>");
+		return false;
+	}
+	
+	return true;
 }
 
 </script>

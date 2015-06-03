@@ -37,8 +37,8 @@ function ampapi_ctools_plugin_type() {
 /**
  * Fetch metadata on a specific mapper plugin.
  *
- * @param $mapper
- *   Name of an activity filter.
+ * @param $mapper_name
+ *   Name of a mapper plugin.
  *
  * @return
  *   An array with information about the requested activity filter.
@@ -50,10 +50,22 @@ function ampapi_get_mapper($mapper_name) {
 }
 
 /**
+ * Fetch metadata for all mapper plugins.
+ *
+ * @return
+ *   An array of arrays with information about all available activity filters.
+ */
+function ampapi_get_mappers() {
+  ctools_include('context');
+  ctools_include('plugins');
+  return ctools_get_plugins('ampapi', 'mapper');
+}
+
+/**
  * Fetch mapper plugin metadata for a specific property.
  *
- * @param $mapper
- *   Name of an activity filter.
+ * @param $property_name
+ *   Name of an property.
  *
  * @return
  *   An array with information about the requested activity filter.
@@ -82,19 +94,7 @@ function ampapi_get_mapper_by_property_name($property_name) {
 }
 
 /**
- * Fetch metadata for all mapper plugins.
- *
- * @return
- *   An array of arrays with information about all available activity filters.
- */
-function ampapi_get_mappers() {
-  ctools_include('context');
-  ctools_include('plugins');
-  return ctools_get_plugins('ampapi', 'mapper');
-}
-
-/**
- * Renturs a list information about AMP document fields.
+ * Returns a list information about AMP document fields.
  */
 function ampapi_get_schema_info($entity_type) {
   $info = entity_get_info($entity_type);

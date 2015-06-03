@@ -66,7 +66,7 @@ function contentwidget_topprojects_widget_retrieve_data($widget_settings, $langc
     $request_body = array();
 
     // Display SSC projects instead.
-    if (!empty($widget_settings['ssc']) && variable_get('helpergeneric_amp_ssc_status', FALSE)) {
+    if (!empty($widget_settings['ssc']) && ampapi_activity_ssc_status()) {
       // Some magic strings, see the API docs.
       $request_body['reportType'] = 'C';
       $request_body['projectType'] = array('S');
@@ -191,7 +191,7 @@ function contentwidget_topprojects_widget_settings(&$element, &$form_state, $plu
   );
   $form_state['topprojects']['wrapper_id'] = drupal_html_class($form_state['topprojects']['input_name_prefix'] . '-options');
 
-  if (variable_get('helpergeneric_amp_ssc_status', FALSE)) {
+  if (ampapi_activity_ssc_status()) {
     $settings_form['ssc'] = array(
       '#type' => 'checkbox',
       '#title' => t('South-South Cooperation'),

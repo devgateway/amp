@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Menu callback; Retrieve a JSON object containing autocomplete suggestions for existing surveys.
+ * Menu callback: Retrieve a JSON object containing autocomplete suggestions for existing surveys.
  */
 function ampapi_activity_autocomplete($property_name, $string = '') {
   $matches = array();
@@ -44,6 +44,9 @@ function ampapi_activity_autocomplete($property_name, $string = '') {
   drupal_json_output($matches);
 }
 
+/**
+ * Menu callback: Activity search export.
+ */
 function ampapi_activity_search_export() {
   $output = array();
 
@@ -58,8 +61,6 @@ function ampapi_activity_search_export() {
     exit;
   }
 
-  $view->set_display($display_id);
-
   $exposed_input = $_GET;
   unset($exposed_input['q']);
   unset($exposed_input['_']);
@@ -67,6 +68,8 @@ function ampapi_activity_search_export() {
   $exposed_input = array_filter($exposed_input);
   $view->set_exposed_input($exposed_input);
 
+  $view->set_display($display_id);
+  $view->pre_execute();
   $data = $view->render($display_id);
 
   // Make sure data is UTF-8 with BOM for Microsoft Excel compliance
@@ -107,3 +110,4 @@ function ampapi_activity_search_export() {
 
   drupal_json_output($output);
 }
+

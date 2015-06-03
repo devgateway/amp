@@ -32,6 +32,11 @@ class ampAPIEntityQueryHelper {
   public $api_resource_path = NULL;
 
   /**
+   * Whether or not SSC search has been selected.
+   */
+  public $current_search_ssc_status = FALSE;
+
+  /**
    * Constructor: sets the connection.
    */
   function __construct($entity_type) {
@@ -54,13 +59,9 @@ class ampAPIEntityQueryHelper {
    * Queries entity collections stored in AMP.
    *
    * @see EntityFieldQuery::queryCallback().
-   *
-   * @return
-   *   The return value description for EntityFieldQuery::execute().
    */
   function executeQuery(EntityFieldQuery $query) {
     global $language_content;
-    $ssc_search_enabled = NULL;
 
     static $api_status;
     if (!isset($api_status)) {
@@ -89,15 +90,15 @@ class ampAPIEntityQueryHelper {
 
     // Build an array of parameters for the API.
     foreach ($query->entityConditions as $column => $condition) {
-      // Exclude entity_type condition since we use a collection per entity.
+      // Exclude entity_type condition since we use a query handler per entity_type.
       if ($column == 'entity_type') {
         continue;
       }
 
       // Special filter for requesting SSC activities.
       if ($column == 'activities_search_type') {
-        if ($condition['value'] && variable_get('helpergeneric_amp_ssc_status', FALSE)) {
-          $ssc_search_enabled = TRUE;
+        if (!empty($condition['value']) && ampapi_activity_ssc_status()) {
+          $this->current_search_ssc_status = TRUE;
           // Some magic strings, see the API docs.
           $request_body['reportType'] = 'C';
           $request_body['projectType'] = array('S');
@@ -107,6 +108,7 @@ class ampAPIEntityQueryHelper {
 
       $plugin = ampapi_get_mapper_by_property_name($condition['column']);
       if ($class_name = ctools_plugin_get_class($plugin, 'handler')) {
+        /** @var activityMapperInterface $handler */
         $handler = new $class_name();
         $handler->filter($plugin, $api_parameters, $request_body, $condition);
       }
@@ -116,6 +118,7 @@ class ampAPIEntityQueryHelper {
     foreach ($query->propertyConditions as $condition) {
       $plugin = ampapi_get_mapper_by_property_name($condition['column']);
       if ($class_name = ctools_plugin_get_class($plugin, 'handler')) {
+        /** @var activityMapperInterface $handler */
         $handler = new $class_name();
         $handler->filter($plugin, $api_parameters, $request_body, $condition);
       }
@@ -124,7 +127,7 @@ class ampAPIEntityQueryHelper {
     // Add a list of fields to load.
     // @TODO: Add a settings page.
     if (!empty($query->metaData['view']->field)) {
-      $this->_api_add_fields($query, $request_body, $ssc_search_enabled);
+      $this->_api_add_fields($query, $request_body);
     }
 
     // Add a "report" name, required for API cache.
@@ -166,6 +169,7 @@ class ampAPIEntityQueryHelper {
       $plugin = ampapi_get_mapper_by_property_name($order['specifier']);
 
       if ($class_name = ctools_plugin_get_class($plugin, 'handler')) {
+        /** @var activityMapperInterface $handler */
         $handler = new $class_name();
         $handler->sort($plugin, $api_parameters, $request_body, $order);
       }
@@ -234,7 +238,7 @@ class ampAPIEntityQueryHelper {
 
     $entities = array();
     if (!empty($response_data->page->pageArea->children)) {
-      $entities = $this->process_response_data($response_data, $query, $ssc_search_enabled, $number_format);
+      $entities = $this->process_response_data($response_data, $query, $number_format);
     }
 
     // Tell efq_views that the entities are already loaded.
@@ -248,7 +252,7 @@ class ampAPIEntityQueryHelper {
   /**
    * Adds fields enabled in the view to the API request.
    */
-  function _api_add_fields($query, &$request_body, $ssc_search_enabled) {
+  function _api_add_fields($query, &$request_body) {
 
     // Get a list of enabled columns and measures.
     // GET /rest/data/report/columns
@@ -279,18 +283,7 @@ class ampAPIEntityQueryHelper {
             continue;
           }
 
-          // Switch between SSC fields and normal fields.
-          $is_visible = FALSE;
-          if ($ssc_search_enabled && !empty($plugin['report field ssc'])) {
-            $is_visible = TRUE;
-          }
-          else if (!$ssc_search_enabled && empty($plugin['report field ssc'])) {
-            $is_visible = TRUE;
-          }
-
-          if ($is_visible) {
-            $request_body['add_measures'][] = $plugin['report field key'];
-          }
+          $request_body['add_measures'][] = $plugin['report field key'];
           break;
       }
     }
@@ -299,7 +292,8 @@ class ampAPIEntityQueryHelper {
   /**
    * Adds extra information from the API to be used in Views at a later point.
    */
-  function _api_add_query_metadata($response_data, $query, $number_format) {
+  function _api_add_query_metadata($response_data, EntityFieldQuery $query, $number_format) {
+    $search_settings = ampapi_activity_get_search_settings();
     $query->addMetaData('entities_preloaded', TRUE);
 
     // Add the currency to the query metadata.
@@ -314,19 +308,33 @@ class ampAPIEntityQueryHelper {
     // Add the totals to the query metadata.
     if (!empty($response_data->page->pageArea->contents)) {
       $response_totals = $response_data->page->pageArea->contents;
+      $report_totals = array();
 
       // @see https://php.net/manual/en/numberformatter.create.php
       // @see http://www.icu-project.org/apiref/icu4c/classDecimalFormat.html#details
       $formatter_locale = NULL;
       $formatter = new NumberFormatter($formatter_locale, NumberFormatter::PATTERN_DECIMAL, $number_format);
 
-      $headers_list = array(
-        '[Actual Commitments]',
-        '[Actual Disbursements]',
-        '[Bilateral SSC Commitments]',
-        '[Triangular SSC Commitments]',
-      );
-      $report_totals = array();
+      $headers_list = array();
+      $mappers = ampapi_get_mappers();
+      foreach ($mappers as $key => $plugin) {
+        if (empty($plugin['property name'])) {
+          continue;
+        }
+
+        if ($plugin['report field group'] != 'measures') {
+          continue;
+        }
+
+        // Hide SSC specific fields when SSC functionality is disabled.
+        if (!in_array($plugin['property name'], $search_settings['enabled_columns'])) {
+          continue;
+        }
+
+        // Only display enabled measures in the totals table.
+        $headers_list[$plugin['property name']] = '[' . $plugin['report field key'] . ']';
+      }
+
       foreach ($response_data->headers as $h_info) {
         // @TODO: use mappers.
         if (!in_array($h_info->hierarchicalName, $headers_list)) {
@@ -356,7 +364,7 @@ class ampAPIEntityQueryHelper {
   /**
    * Creates entities out of data from the API.
    */
-  function process_response_data($data, $query, $ssc_search_enabled, $number_format = NULL) {
+  function process_response_data($data, EntityFieldQuery $query, $number_format = NULL) {
     $entities = array();
 
     $headers = $data->headers;
@@ -375,22 +383,6 @@ class ampAPIEntityQueryHelper {
         }
         else {
           $plugin = ampapi_get_mapper_by_property_name($field_handler->real_field);
-        }
-
-        // Switch between SSC fields and normal fields.
-        if ($plugin['report field group'] == 'measures') {
-          // Filter SSC fields or normal fields based on the settings.
-          $is_visible = FALSE;
-          if ($ssc_search_enabled && !empty($plugin['report field ssc'])) {
-            $is_visible = TRUE;
-          }
-          else if (!$ssc_search_enabled && empty($plugin['report field ssc'])) {
-            $is_visible = TRUE;
-          }
-
-          if (!$is_visible) {
-            continue;
-          }
         }
 
         $formatter = NULL;

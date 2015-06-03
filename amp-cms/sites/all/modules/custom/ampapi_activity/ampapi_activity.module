@@ -154,6 +154,15 @@ function ampapi_activity_menu() {
     'file' => 'ampapi_activity.pages.inc',
   );
 
+  $items['admin/settings/search'] = array(
+    'title' => 'Search settings',
+    'description' => 'AMP search settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ampapi_activity_search_settings_form'),
+    'access arguments' => array('helpergeneric administer settings'),
+    'file' => 'ampapi_activity.admin.inc',
+  );
+
   return $items;
 }
 
@@ -175,50 +184,139 @@ function _ampapi_human_filesize($path, $decimals = 2) {
  *
  * Update all displays of the Activities view and remove disabled fields and filters.
  */
-function ampapi_activity_views_pre_build(&$view) {
+function ampapi_activity_views_pre_build(View &$view) {
   if ($view->name != 'activities') {
     return;
   }
+
+  // Populate the exposed_input array.
+  $view->get_exposed_input();
+
+  // Determine if the current search is a SSC search.
+  $ssc_search_enabled = FALSE;
+  if (ampapi_activity_ssc_status()) {
+    if (isset($view->exposed_input['stype']) && $view->exposed_input['stype'] == 'ssc') {
+      $ssc_search_enabled = TRUE;
+    }
+  }
+  $search_settings = ampapi_activity_get_search_settings();
 
   // Get a list of enabled columns and measures.
   $columns_data = ampapi_request('get', 'data/report/columns', TRUE);
   $measures_data = ampapi_request('get', 'data/report/measures', TRUE);
 
   foreach ($view->field as $field_name => $field_handler) {
+    $field_enabled = TRUE;
     $plugin = ampapi_get_mapper_by_property_name($field_handler->real_field);
+    $field_key = $plugin['report field key'];
 
-    switch ($plugin['report field group']) {
-      case 'columns':
-        if (empty($columns_data->{$plugin['report field key']})) {
-          unset($view->field[$field_name]);
-          unset($view->display_handler->handlers['field'][$field_name]);
-        }
-        break;
-      case 'measures':
-        if (empty($measures_data->{$plugin['report field key']})) {
-          unset($view->field[$field_name]);
-          unset($view->display_handler->handlers['field'][$field_name]);
-        }
-        break;
+    // Hide fields disabled in the PP search settings.
+    if (!in_array($field_name, $search_settings['enabled_columns'])) {
+      $field_enabled = FALSE;
+    }
+
+    // Hide fields disabled in AMP.
+    if ($plugin['report field group'] == 'columns') {
+      if (empty($columns_data->{$field_key})) {
+        $field_enabled = FALSE;
+      }
+    }
+    else if ($plugin['report field group'] == 'measures') {
+      if (empty($measures_data->{$field_key})) {
+        $field_enabled = FALSE;
+      }
+
+      // Disable SSC specific columns if SSC functionality is disabled.
+      if (!$ssc_search_enabled && !empty($plugin['report field ssc'])) {
+        $field_enabled = FALSE;
+      }
+      else if ($ssc_search_enabled && empty($plugin['report field ssc'])) {
+        $field_enabled = FALSE;
+      }
+    }
+
+    // Hide external_url field in exports.
+    if ($field_name == 'external_url' && $view->current_display == 'export_page') {
+      $field_enabled = FALSE;
+    }
+
+    if (!$field_enabled) {
+      unset($view->field[$field_name]);
+      unset($view->display_handler->handlers['field'][$field_name]);
     }
   }
 
   foreach ($view->filter as $filter_name => $filter_handler) {
+    $filter_enabled = TRUE;
     $plugin = ampapi_get_mapper_by_property_name($filter_handler->real_field);
+    $filter_key = $plugin['report field key'];
 
-    switch ($plugin['report field group']) {
-      case 'columns':
-        if (empty($columns_data->{$plugin['report field key']})) {
-          unset($view->filter[$filter_name]);
-          unset($view->display_handler->handlers['filter'][$filter_name]);
-        }
-        break;
-      case 'measures':
-        if (empty($measures_data->{$plugin['report field key']})) {
-          unset($view->filter[$filter_name]);
-          unset($view->display_handler->handlers['filter'][$filter_name]);
-        }
-        break;
+    // Hide Search type selector for SSC activities.
+    if ($filter_key == 'activities_search_type' && !$ssc_search_enabled) {
+      $filter_enabled = FALSE;
+    }
+
+    // Hide filters disabled in AMP.
+    if ($plugin['report field group'] == 'columns') {
+      if (empty($columns_data->{$filter_key})) {
+        $filter_enabled = FALSE;
+      }
+    }
+    else if ($plugin['report field group'] == 'measures') {
+      if (empty($measures_data->{$filter_key})) {
+        $filter_enabled = FALSE;
+      }
+    }
+
+    if (!$filter_enabled) {
+      unset($view->filter[$filter_name]);
+      unset($view->display_handler->handlers['filter'][$filter_name]);
     }
   }
+}
+
+/**
+ * Returns the Activities search settings.
+ */
+function ampapi_activity_get_search_settings() {
+  $settings = variable_get('ampapi_activity_search_settings', array());
+
+  // Enable default fields.
+  if (empty($settings['enabled_columns'])) {
+    $settings['enabled_columns'] = drupal_map_assoc(array(
+      'actual_commitments',
+      'actual_disbursements',
+      'actual_completion_date',
+      'beneficiary_agency',
+      'donor_agency',
+      'location',
+      'primary_sector',
+    ));
+  }
+
+  // Always enable the activity ID, title an external URL.
+  $settings['enabled_columns'] += drupal_map_assoc(array(
+    'id',
+    'title',
+    'external_url',
+  ));
+
+  if (empty($settings['default_sort'])) {
+    $settings['default_sort'] = 'title';
+  }
+
+  if (empty($settings['ssc_status'])) {
+    $settings['ssc_status'] = FALSE;
+  }
+
+  return $settings;
+}
+
+/**
+ * Returns the status of the SSC functionality.
+ */
+function ampapi_activity_ssc_status() {
+  $search_settings = ampapi_activity_get_search_settings();
+
+  return $search_settings['ssc_status'];
 }

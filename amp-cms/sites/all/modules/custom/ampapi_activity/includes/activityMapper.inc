@@ -86,9 +86,14 @@ class activityMapperBase implements activityMapperInterface {
    * Value handler.
    */
   public static function getValue($plugin, $column, $formatter = NULL) {
+    if ($column->value == '#null') {
+      return NULL;
+    }
+
     if ($formatter && $plugin['report field group'] == 'measures') {
       return $formatter->format($column->value);
     }
+
     return filter_xss($column->displayedValue, array());
   }
 }

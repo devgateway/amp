@@ -120,10 +120,6 @@ table {
     background-color: @header_color;
     text-align: left;
   }
-  .col-actual-commitments,
-  .col-actual-disbursements {
-    text-align: right;
-  }
 }
 // @HACK: We don't have responsive tables, so we overflow the content and display a scrollbar.
 .xMediumAndDown() {
@@ -168,6 +164,21 @@ table {
     th, td {
       font-size: 0.625em;
     }
+  }
+
+  .views-align-left-type-currency {
+    text-align: left;
+  }
+  .views-align-right-type-currency {
+    text-align: right;
+  }
+
+  // @HACK: Temporary reduce the length of the location field.
+  .views-field-location {
+    white-space: nowrap;
+    max-width: 20em;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .views-field-external-url {

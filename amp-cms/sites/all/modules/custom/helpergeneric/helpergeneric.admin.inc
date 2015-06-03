@@ -105,19 +105,6 @@ function helpergeneric_api_settings_form($form, &$form_state) {
     '#default_value' => $amp_hostname,
   );
 
-  $form['ssc'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('South-South Cooperation'),
-    '#collapsible' => FALSE,
-    '#collapsed' => FALSE,
-  );
-
-  $form['ssc']['helpergeneric_amp_ssc_status'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Enable SSC search and widgets.'),
-    '#default_value' => (bool) variable_get('helpergeneric_amp_ssc_status', FALSE),
-  );
-
   $form['#validate'][] = 'helpergeneric_api_settings_form_validate';
   $form['#submit'][] = 'helpergeneric_api_settings_form_submit';
 

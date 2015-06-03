@@ -20,11 +20,4 @@ $plugin = array(
 );
 
 class actualCompletionDateMapper extends activityMapperBase {
-  public static function getValue($plugin, $column) {
-    if ($column->value == '#null') {
-      return NULL;
-    }
-
-    return parent::getValue($plugin, $column);
-  }
 }

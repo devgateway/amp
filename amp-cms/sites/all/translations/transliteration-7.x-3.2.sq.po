@@ -1,0 +1,18 @@
+# Albanian translation of Transliteration (7.x-3.2)
+# Copyright (c) 2014 by the Albanian translation team
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Transliteration (7.x-3.2)\n"
+"POT-Creation-Date: 2014-03-18 18:23+0000\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Language-Team: Albanian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+msgid "This action cannot be undone."
+msgstr "Ky veprim nuk mund të anullohet."
+msgid "Settings"
+msgstr "Rregullimet"

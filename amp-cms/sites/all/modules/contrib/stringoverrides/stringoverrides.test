@@ -1,0 +1,78 @@
+<?php
+
+/**
+ * @file
+ * Provides tests for the String Overrides module.
+ */
+
+/**
+ * Tests the functionality of the Simpletest example content type.
+ */
+class StringOverridesTestCase extends DrupalWebTestCase {
+  /**
+   * The install profile to use when installing Drupal to test.
+   */
+  protected $profile = 'testing';
+
+  /**
+   * The logged in user.
+   */
+  private $user;
+
+  /**
+   * Retrieves information about the test.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'String Overrides',
+      'description' => 'Tests out the String Overrides user interface.',
+      'group' => 'String Overrides',
+    );
+  }
+
+  /**
+   * Set up the testing environment.
+   */
+  function setUp() {
+    // Install the String Overrides module.
+    parent::setUp('stringoverrides');
+
+    // Create the user to test on.
+    $this->user = $this->drupalCreateUser();
+  }
+
+  /**
+   * Tests String Overrides.
+   */
+  function testStringOverrides() {
+    // Login as a user with permissions.
+    $this->drupalLogin($this->user);
+    $this->drupalGet('user');
+    $this->assertResponse(200, 'User has logged in.');
+
+    // Ensure unauthenticated users do not have access.
+    $this->drupalGet('admin/config/regional/stringoverrides');
+    $this->assertResponse(403, 'Unauthenticated users correctly do not have access to String Overrides.');
+
+    // Create a user with proper permissions.
+    $this->user = $this->drupalCreateUser(array('administer string overrides'));
+    $this->drupalLogin($this->user);
+
+    // Check the page to see if it's presented correctly.
+    $this->drupalGet('admin/config/regional/stringoverrides');
+    $this->assertResponse(200, 'Authenticated users have access to String Overrides.');
+    $this->assertText('Original', 'Original column is presented.');
+
+    // Use the interface to add a String Override.
+    $edit = array(
+      'string[0][source]' => 'Original',
+      'string[0][translation]' => 'Initial',
+    );
+    $this->drupalPost('admin/config/regional/stringoverrides', $edit, t('Save configuration'));
+
+    // Check whether the Original column header was renamed to Initial.
+    $this->assertRaw('Initial</th>', 'Original column has been overriden correctly.');
+    $this->assertRaw('Original</textarea>', 'Original replacement value is saved.');
+    $this->assertRaw('Initial</textarea>', 'Initial replacement value is saved.');
+  }
+}

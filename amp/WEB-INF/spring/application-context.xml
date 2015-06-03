@@ -90,6 +90,8 @@
   <http pattern="/TEMPLATE/ampTemplate/gisModule/**" security="none" />
 
 	<http pattern="/TEMPLATE/ampTemplate/dashboard/**" security="none" />
+    <http pattern="/src/main/resources/gis/boundaries/**" security="none" />
+	
 	<http pattern="/TEMPLATE/ampTemplate/dashboard/build/**" security="none" />
 
 

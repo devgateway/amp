@@ -71,6 +71,21 @@ public class ScorecardService {
 		return getDonorActivityUpdates(null);
 	}
 
+	@SuppressWarnings("unchecked")
+	public List <NoUpdateOrganisation> getAllNoUpdateDonors () {
+		int startYear = getDefaultStartYear();
+		int endYear = getDefaultEndYear();
+		Date startDate = CalendarUtil.getStartDate(fiscalCalendar.getAmpFiscalCalId(), startYear);
+		Date endDate = CalendarUtil.getEndDate(fiscalCalendar.getAmpFiscalCalId(), endYear);
+		Session session = PersistenceManager.getRequestDBSession();
+		String queryString = "from " + NoUpdateOrganisation.class.getName()
+				+ " nuo where nuo.modifyDate >= :startDate and nuo.modifyDate <= :endDate";
+		Query query = session.createQuery(queryString);
+		query.setParameter("startDate", startDate);
+		query.setParameter("endDate", endDate);
+		return query.list();
+	}
+	
 	/**
 	 * Returns the list of all ActivityUpdates that occurred on the system
 	 * 
@@ -341,11 +356,17 @@ public class ScorecardService {
 			if (isUpdateOnGracePeriod(activityUpdate.getModifyDate())) {
 				Quarter previousQuarter = quarter.getPreviousQuarter();
 				ColoredCell previousQuarterCell = data.get(donorId).get(previousQuarter.toString());
-				previousQuarterCell.getUpdatedActivitiesOnGracePeriod().add(activityUpdate.getActivityId());
+				if (!isFirstQuarterOfPeriod (previousQuarterCell)) {
+					previousQuarterCell.getUpdatedActivitiesOnGracePeriod().add(activityUpdate.getActivityId());
+				}
 			}
 			cell.getUpdatedActivites().add(activityUpdate.getActivityId());
 		}
 		return data;
+	}
+
+	private boolean isFirstQuarterOfPeriod(ColoredCell previousQuarterCell) {
+		return (previousQuarterCell == null);
 	}
 
 	/**
@@ -421,7 +442,7 @@ public class ScorecardService {
 	 *         the donor/quarter don't have a project update
 	 */
 	private Map<Long, Map<String, ColoredCell>> markNoUpdateDonorCells(Map<Long, Map<String, ColoredCell>> data) {
-		Collection<NoUpdateOrganisation> noUpdateDonors = DbUtil.getAll(NoUpdateOrganisation.class);
+		Collection<NoUpdateOrganisation> noUpdateDonors = this.getAllNoUpdateDonors();
 		
 		for (NoUpdateOrganisation noUpdateDonor : noUpdateDonors) {
 			Quarter quarter = new Quarter(fiscalCalendar, noUpdateDonor.getModifyDate());
@@ -430,5 +451,7 @@ public class ScorecardService {
 		}
 		return data;
 	}
+	
+	
 
 }

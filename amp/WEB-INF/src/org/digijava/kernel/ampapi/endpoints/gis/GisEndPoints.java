@@ -79,10 +79,9 @@ public class GisEndPoints {
 
 	@Context
 	private HttpServletRequest httpRequest;
-	private String BOUNDARY_PATH = "TEMPLATE" + System.getProperty("file.separator") + "ampTemplate"
-			+ System.getProperty("file.separator") + "gisModule" + System.getProperty("file.separator") + "dev"
-			+ System.getProperty("file.separator") + "app" + System.getProperty("file.separator") + "mock-api"
-			+ System.getProperty("file.separator") + "data" + System.getProperty("file.separator") + "boundaries"
+	private String BOUNDARY_PATH = "src" + System.getProperty("file.separator") + "main"
+			+ System.getProperty("file.separator") + "resources" + System.getProperty("file.separator") + "gis"
+			+ System.getProperty("file.separator") + "boundaries" 
 			+ System.getProperty("file.separator");
 
 		

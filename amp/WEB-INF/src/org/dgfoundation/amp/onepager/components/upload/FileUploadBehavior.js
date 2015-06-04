@@ -4,6 +4,7 @@ Wicket.Event.add(window, "domready", function(event){
 
 function setupFileUpload(componentId, componentUrl, componentParamName){
     $(function () {
+    	if($(componentId).fileupload===undefined)return;
         $(componentId).fileupload({
             url: componentUrl,
             paramName: componentParamName,
@@ -13,9 +14,6 @@ function setupFileUpload(componentId, componentUrl, componentParamName){
             minFileSize: 1,
             maxFileSize: 20000000,
             add: function (e, data) {
-                //$.each(data.files, function (index, file) {
-                //    alert('Added file: ' + file.name);
-                //});
             	if (data.files[0].size > parseFloat('${uploadMaxFileSize}')) {
             		alert('${uploadFailedTooBigMsg}');
             		$('#uploadLabel').text('${uploadNoFileLabel}');
@@ -28,12 +26,10 @@ function setupFileUpload(componentId, componentUrl, componentParamName){
             	}
             },
             done: function (e, data){
-                //alert('upload done! result[' + JSON.stringify(data.result) + '] status[' + data.textStatus + '] jqXHR[' + JSON.stringify(data.jqXHR) +']');
             	var result = eval(data.result)[0];
                 $(this).find('[role=fileUploadedMsg]').html(result.uploadTxt);
             },
             fail: function (e, data){
-                //alert('upload failed! result[' + JSON.stringify(data.result) + '] status[' + data.textStatus + '] jqXHR[' + JSON.stringify(data.jqXHR) +']');
                 alert('${uploadFailedMsg}');
                 $('#uploadLabel').text('${uploadNoFileLabel}');
                 $(this).find('[role=fileUploadedMsg]').html('');

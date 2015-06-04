@@ -43,6 +43,7 @@ public class InterchangeUtils {
 			put(ColumnConstants.ACTIVITY_CREATED_ON, "created_date");
 			put(ColumnConstants.AMP_ID, "amp_id");
 			put(ColumnConstants.PROJECT_CODE, "project_code");
+			put(ColumnConstants.ACTIVITY_UPDATED_ON, "update_date");
 
 		}
 	};
@@ -97,6 +98,7 @@ public class InterchangeUtils {
 		spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
 		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
 		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_CREATED_ON));
+		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON));
 		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_CODE));
 
 		// spec.addColumn(new ReportColumn(ColumnConstants.TEAM));

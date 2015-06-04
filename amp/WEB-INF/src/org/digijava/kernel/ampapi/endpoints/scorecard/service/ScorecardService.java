@@ -34,6 +34,7 @@ import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -153,7 +154,8 @@ public class ScorecardService {
 		
 		
 		Session session = PersistenceManager.getRequestDBSession();
-        String queryString = "from " + AmpCategoryValue.class.getName() + " acv where acv.ampCategoryClass.id = 6";
+        String queryString = "FROM " + AmpCategoryValue.class.getName() + " acv "
+        		+ "WHERE acv.ampCategoryClass.keyName = 'activity_status'";
         Query query = session.createQuery(queryString);
         responses = query.list();
 
@@ -300,7 +302,7 @@ public class ScorecardService {
 							+ "from amp_activity_version a, amp_org_role r " + " WHERE  r.activity=a.amp_activity_id ";
 
 					if (!status.equals("")) {
-						query += "approval_status not in (" + status + " ) ";
+						query += "AND approval_status not in (" + status + " ) ";
 					}
 					query += "AND    (EXISTS  (SELECT af.amp_donor_org_id " + " FROM   amp_funding af "
 							+ " WHERE  r.organisation = af.amp_donor_org_id "

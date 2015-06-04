@@ -1121,7 +1121,8 @@ table.component-funding-table tr
 }
 .nav.navbar-nav.ampUserLoggedIn {
   top: 10px;
-  position: relative;		
+  position: relative;	
+  width: 20%;	
 }
 .nav.navbar-nav.ampPublic {
   top: 10px;

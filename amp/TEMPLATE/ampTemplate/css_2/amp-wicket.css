@@ -616,3 +616,7 @@ tr.wicketFundingRowItem:nth-child(odd) {background: #FFFFFF}
   height: auto;
   margin: 0;
 }
+
+.inputx{
+    min-height: 26px;
+}

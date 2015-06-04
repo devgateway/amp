@@ -156,7 +156,6 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 							var validator;
 							var teamtype;
 							var onePagerParameter = DEFAULT_ONE_PAGER_PARAMETER;
-							
 							if(app.TabsApp.settings.teamId){
 								teamid = app.TabsApp.settings.teamId.name;
 								crossTeamValidation = (app.TabsApp.settings.crossTeamEnable.name === 'true');
@@ -164,8 +163,8 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 								validator = (app.TabsApp.settings.validator.name === 'true');
 								teamtype = app.TabsApp.settings.accessType.name;
 							}
-							if(app.TabsApp.settings.attributes.workspacePrefix && app.TabsApp.settings.attributes.workspacePrefix.defaultId ){
-								onePagerParameter = app.TabsApp.settings.attributes.workspacePrefix.defaultId.toLowerCase();
+							if(app.TabsApp.settings.workspacePrefix && app.TabsApp.settings.workspacePrefix.defaultId ){
+								onePagerParameter = app.TabsApp.settings.workspacePrefix.defaultId.toLowerCase();
 							}
 
 							for (iRow = 0; iRow < cRows; iRow++) {

@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,7 +35,6 @@ import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -58,13 +58,23 @@ public class ScorecardService {
 	private Double DEFAULT_THRESHOLD = 70d;
 
 	public ScorecardService() {
-		Collection<AmpScorecardSettings> settingsList = DbUtil.getAll(AmpScorecardSettings.class);
-		if (settingsList != null && !settingsList.isEmpty()) {
-			settings = settingsList.iterator().next();
-		}
+		getAmpScorecardSettings();
 		Long gsCalendarId = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR);
 		this.fiscalCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(gsCalendarId);
 
+	}
+
+	private void getAmpScorecardSettings() {
+		Collection<AmpScorecardSettings> settingsList = DbUtil.getAll(AmpScorecardSettings.class);
+		if (settingsList != null && !settingsList.isEmpty()) {
+			settings = settingsList.iterator().next();
+		} else {
+			// set default values
+			settings = new AmpScorecardSettings();
+			settings.setPercentageThreshold(DEFAULT_THRESHOLD);
+			settings.setValidationPeriod(false);
+			settings.setClosedStatuses(new HashSet<AmpScorecardSettingsCategoryValue> ());
+		}
 	}
 
 	public List<ActivityUpdate> getDonorActivityUpdates() {
@@ -73,7 +83,7 @@ public class ScorecardService {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List <NoUpdateOrganisation> getAllNoUpdateDonors () {
+	public List<NoUpdateOrganisation> getAllNoUpdateDonors() {
 		int startYear = getDefaultStartYear();
 		int endYear = getDefaultEndYear();
 		Date startDate = CalendarUtil.getStartDate(fiscalCalendar.getAmpFiscalCalId(), startYear);
@@ -86,7 +96,7 @@ public class ScorecardService {
 		query.setParameter("endDate", endDate);
 		return query.list();
 	}
-	
+
 	/**
 	 * Returns the list of all ActivityUpdates that occurred on the system
 	 * 
@@ -143,28 +153,30 @@ public class ScorecardService {
 
 		return activityUpdateList;
 	}
-	
-	/** 
-	 * Returns the list of all Activity Statuses from category values table (amp_category_value)
+
+	/**
+	 * Returns the list of all Activity Statuses from category values table
+	 * (amp_category_value)
 	 * 
-	 * @return Collection<AmpCategoryValue>, the list with of all activity statuses
-	 */	
+	 * @return Collection<AmpCategoryValue>, the list with of all activity
+	 *         statuses
+	 */
 	public static Collection<AmpCategoryValue> getAllCategoryValues() {
 		Collection<AmpCategoryValue> responses = new ArrayList<AmpCategoryValue>();
-		
-		
+
 		Session session = PersistenceManager.getRequestDBSession();
-        String queryString = "FROM " + AmpCategoryValue.class.getName() + " acv "
+		String queryString = "FROM " + AmpCategoryValue.class.getName() + " acv "
         		+ "WHERE acv.ampCategoryClass.keyName = 'activity_status'";
         Query query = session.createQuery(queryString);
         responses = query.list();
 
-        return responses;
+		return responses;
 	}
 
 	/**
-	 * Gets the default start year for the donor scorecard.
-	 * It tries to get it from Global Settings, if it is not defined it uses a default value of 2010.
+	 * Gets the default start year for the donor scorecard. It tries to get it
+	 * from Global Settings, if it is not defined it uses a default value of
+	 * 2010.
 	 * 
 	 * @return the default start year for generating the donor scorecard
 	 */
@@ -179,8 +191,8 @@ public class ScorecardService {
 	}
 
 	/**
-	 * Gets the default end year for the donor scorecard.
-	 * It tries to get it from Global Settings, if it is not defined it uses the current year.
+	 * Gets the default end year for the donor scorecard. It tries to get it
+	 * from Global Settings, if it is not defined it uses the current year.
 	 * 
 	 * @return the default end year for generating the donor scorecard
 	 */
@@ -212,11 +224,12 @@ public class ScorecardService {
 	}
 
 	/**
-	 * Returns a list of all quarters that will span the donor scorecard.
-	 * The start and end of the period is defined through Global Settings: START_YEAR_DEFAULT_VALUE
-	 * and END_YEAR_DEFAULT_VALUE
+	 * Returns a list of all quarters that will span the donor scorecard. The
+	 * start and end of the period is defined through Global Settings:
+	 * START_YEAR_DEFAULT_VALUE and END_YEAR_DEFAULT_VALUE
 	 * 
-	 * @return List<Quarter>, the list of the quarters that will represent the headers of the donor scorecard file.
+	 * @return List<Quarter>, the list of the quarters that will represent the
+	 *         headers of the donor scorecard file.
 	 */
 	public List<Quarter> getQuarters() {
 		final List<Quarter> quarters = new ArrayList<Quarter>();
@@ -227,7 +240,7 @@ public class ScorecardService {
 		Date endDate = CalendarUtil.getEndDate(Long.valueOf(gsCalendarId), endYear);
 		try {
 			ICalendarWorker worker = fiscalCalendar.getworker();
-			Date currentDate = new Date (startDate.getTime());
+			Date currentDate = new Date(startDate.getTime());
 			int index = 1;
 			while (currentDate.compareTo(endDate) < 1) {
 				for (int i = 1; i <= 4; i++) {
@@ -237,7 +250,7 @@ public class ScorecardService {
 					Calendar cal = Calendar.getInstance();
 					cal.setTime(startDate);
 					cal.add(Calendar.MONTH, 3 * index);
-					index ++;
+					index++;
 					currentDate.setTime(cal.getTimeInMillis());
 				}
 			}
@@ -249,13 +262,15 @@ public class ScorecardService {
 	}
 
 	/**
-	 * Generates the Map<Long, Map<String, ColoredCell>> with the data of the ColoredCells that will be used to 
-	 * create the donor scorecard
+	 * Generates the Map<Long, Map<String, ColoredCell>> with the data of the
+	 * ColoredCells that will be used to create the donor scorecard
 	 * 
-	 * @param activityUpdates the List of all ActivityUpdates that took place during the period for which
-	 * the scorecard will be generated. 
-	 * @return a Map<Long, Map<String, ColoredCell>> with all ColoredCells filled with the appropiate colors.
-	 * For each quarter and donor there is a ColoredCell.
+	 * @param activityUpdates
+	 *            the List of all ActivityUpdates that took place during the
+	 *            period for which the scorecard will be generated.
+	 * @return a Map<Long, Map<String, ColoredCell>> with all ColoredCells
+	 *         filled with the appropiate colors. For each quarter and donor
+	 *         there is a ColoredCell.
 	 */
 	public Map<Long, Map<String, ColoredCell>> getOrderedScorecardCells(List<ActivityUpdate> activityUpdates) {
 		Map<Long, Map<String, ColoredCell>> data = initializeScorecardCellData();
@@ -265,17 +280,22 @@ public class ScorecardService {
 	}
 
 	/**
-	 * Sets the fill color for every ColoredCell on Map<Long, Map<String, ColoredCell>> based on the rules: 
-	 * - Green cell: If a donor has updated more projects that the number defined by doing:
-     * Number of Updated Projects by donor on a quarter > = Threshold (determined from AmoScorecardSettings)  X Total live projects 
-     * of a donor on a given quarter
-	 * -Yellow cell: if a donor updates projects during the grace period, the update occurred is counted double.
-	 *  It is counted on the quarter to which the grace period belongs; and it is also counted on the current quarter. 
-	 *  If the updates  performed on the grace period make the number of updates to reach or surpass the threshold for 
-	 *  that quarter, then the previous quarter is marked with yellow. 
-     *
-	 * @param data Map<Long, Map<String, ColoredCell>>
-	 * @return the Map<Long, Map<String, ColoredCell>> with the ColoredCell filled with colors.
+	 * Sets the fill color for every ColoredCell on Map<Long, Map<String,
+	 * ColoredCell>> based on the rules: - Green cell: If a donor has updated
+	 * more projects that the number defined by doing: Number of Updated
+	 * Projects by donor on a quarter > = Threshold (determined from
+	 * AmoScorecardSettings) X Total live projects of a donor on a given quarter
+	 * -Yellow cell: if a donor updates projects during the grace period, the
+	 * update occurred is counted double. It is counted on the quarter to which
+	 * the grace period belongs; and it is also counted on the current quarter.
+	 * If the updates performed on the grace period make the number of updates
+	 * to reach or surpass the threshold for that quarter, then the previous
+	 * quarter is marked with yellow.
+	 * 
+	 * @param data
+	 *            Map<Long, Map<String, ColoredCell>>
+	 * @return the Map<Long, Map<String, ColoredCell>> with the ColoredCell
+	 *         filled with colors.
 	 */
 	private Map<Long, Map<String, ColoredCell>> processCells(final Map<Long, Map<String, ColoredCell>> data) {
 		Set<AmpScorecardSettingsCategoryValue> statuses = settings.getClosedStatuses();
@@ -358,7 +378,7 @@ public class ScorecardService {
 			if (isUpdateOnGracePeriod(activityUpdate.getModifyDate())) {
 				Quarter previousQuarter = quarter.getPreviousQuarter();
 				ColoredCell previousQuarterCell = data.get(donorId).get(previousQuarter.toString());
-				if (!isFirstQuarterOfPeriod (previousQuarterCell)) {
+				if (!isFirstQuarterOfPeriod(previousQuarterCell)) {
 					previousQuarterCell.getUpdatedActivitiesOnGracePeriod().add(activityUpdate.getActivityId());
 				}
 			}
@@ -372,14 +392,17 @@ public class ScorecardService {
 	}
 
 	/**
-	 * Checks if a given date is on the Grace period of a quarter.
-	 * If AmpScorecardSettings property's validationPeriod is set to false, then Grace period is disabled
-	 * and the result is always false. Otherwise it checks if the current date is between the 
-	 * current quarter start date and the (current Quarter start date + number of weeks of the validation period)
-	 * if that is the case, the result is true
+	 * Checks if a given date is on the Grace period of a quarter. If
+	 * AmpScorecardSettings property's validationPeriod is set to false, then
+	 * Grace period is disabled and the result is always false. Otherwise it
+	 * checks if the current date is between the current quarter start date and
+	 * the (current Quarter start date + number of weeks of the validation
+	 * period) if that is the case, the result is true
 	 * 
-	 * @param updateDate, the date to check whether it is in the grave period or not.
-	 * @return true if it is in the grace period (validation period), false otherwise
+	 * @param updateDate
+	 *            , the date to check whether it is in the grave period or not.
+	 * @return true if it is in the grace period (validation period), false
+	 *         otherwise
 	 */
 	private boolean isUpdateOnGracePeriod(Date updateDate) {
 		boolean isOnGracePeriod = false;
@@ -404,11 +427,13 @@ public class ScorecardService {
 	}
 
 	/**
-	 * Populates the Map<Long, Map<String, ColoredCell>> with all the donors and quarters that will be included 
-	 * on the donor scorecard. It also creates the ColoredCells for every donor/quarter pair and fill it 
-	 * with Colors.Gray if it is in the NoUpdateDonor list for the given quarter
+	 * Populates the Map<Long, Map<String, ColoredCell>> with all the donors and
+	 * quarters that will be included on the donor scorecard. It also creates
+	 * the ColoredCells for every donor/quarter pair and fill it with
+	 * Colors.Gray if it is in the NoUpdateDonor list for the given quarter
 	 * 
-	 * @return the initialized Map<Long, Map<String, ColoredCell>> with the populated quarters and donors
+	 * @return the initialized Map<Long, Map<String, ColoredCell>> with the
+	 *         populated quarters and donors
 	 */
 	private Map<Long, Map<String, ColoredCell>> initializeScorecardCellData() {
 		Map<Long, Map<String, ColoredCell>> data = new HashMap<Long, Map<String, ColoredCell>>();
@@ -445,7 +470,7 @@ public class ScorecardService {
 	 */
 	private Map<Long, Map<String, ColoredCell>> markNoUpdateDonorCells(Map<Long, Map<String, ColoredCell>> data) {
 		Collection<NoUpdateOrganisation> noUpdateDonors = this.getAllNoUpdateDonors();
-		
+
 		for (NoUpdateOrganisation noUpdateDonor : noUpdateDonors) {
 			Quarter quarter = new Quarter(fiscalCalendar, noUpdateDonor.getModifyDate());
 			ColoredCell noUpdateCell = data.get(noUpdateDonor.getAmpDonorId()).get(quarter.toString());
@@ -453,7 +478,5 @@ public class ScorecardService {
 		}
 		return data;
 	}
-	
-	
 
 }

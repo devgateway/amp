@@ -40,7 +40,7 @@ function generateHeaderHtml(headers) {
 	// Reorder matrix rows.
 	this.headerMatrix.reverse();
 	// Generate header HTML.
-	var header = "";
+	var header = "<thead>";
 	for (var i = 0; i < this.headerMatrix.length; i++) {
 		var row = "<tr>";
 		for (var j = 0; j < this.headerMatrix[i].length; j++) {
@@ -69,6 +69,7 @@ function generateHeaderHtml(headers) {
 		row += "</tr>";
 		header += row;
 	}
+	header += "</thead>";
 	return header;
 }
 
@@ -96,7 +97,7 @@ function findSameHeaderHorizontally(matrix, i, j) {
 
 function generateContentHtml(page) {
 	var self = this;
-	var content = "";
+	var content = "<tbody>";
 	this.lastHeaderRow = this.headerMatrix.length - 1;
 	// Add data rows.
 	var dataHtml = generateDataRows(page);
@@ -112,6 +113,7 @@ function generateContentHtml(page) {
 	}
 	totalRow += "<tr>";
 	content += totalRow;
+	content += "</tbody>";
 	return content;
 }
 
@@ -139,6 +141,11 @@ function generateDataRows(page) {
 		var row = "<tr>";
 		for (var j = 0; j < this.contentMatrix[i].length; j++) {
 			if (j < this.metadataColumns.length) {
+				if (this.contentMatrix[i][j].isGrouped === true) {
+					continue;
+				}
+				var group = findGroupVertically(this.contentMatrix, i, j);
+				var rowSpan = " rowspan='" + group + "' ";
 				var styleClass = "";
 				var value = this.contentMatrix[i][j].displayedValue;
 				var cleanValue = cleanText(value);
@@ -175,7 +182,7 @@ function generateDataRows(page) {
 					cleanValue.text = '';
 				}
 
-				var cell = "<th" + styleClass + ">";
+				var cell = "<th" + styleClass + rowSpan + ">";
 				cell += cleanValue.text;
 				cell += "</th>";
 			} else {
@@ -196,6 +203,31 @@ function generateDataRows(page) {
 		content += row;
 	}
 	return content;
+}
+
+/**
+ * Return > 1 if the current group cell can be merged with other cells below it.
+ */
+function findGroupVertically(matrix, i, j) {
+	var count = 1;
+	// Only process if the column is in the list of hierarchical columns (which
+	// are always in the beginning).
+	if (j < this.metadataHierarchies.length) {
+		for (var k = i + 1; k < matrix.length; k++) {
+			// Due to the way the tree data is structured we dont need to check
+			// for cells with the same value than the one being compared but
+			// with empty cells.
+			if (matrix[k][j].displayedValue.length === 0) {
+				count++;
+				// Mark the cell so we dont draw it later.
+				matrix[k][j].isGrouped = true;
+			} else {
+				// Add the last row which has the total label and exit.
+				break;
+			}
+		}
+	}
+	return count;
 }
 
 /**

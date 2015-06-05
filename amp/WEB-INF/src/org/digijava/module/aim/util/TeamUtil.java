@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
@@ -1728,7 +1727,7 @@ public class TeamUtil {
             session = PersistenceManager.getSession();
             String teamNameHql = AmpTeam.hqlStringForName("t");
             String queryString = "select t from " + AmpTeam.class.getName() + " t "
-            		+ "inner join fetch t.organizations "
+            		+ "left outer join fetch t.organizations "
             		+ "order by " + teamNameHql;
             qry = session.createQuery(queryString);
             qry.setCacheable(true);

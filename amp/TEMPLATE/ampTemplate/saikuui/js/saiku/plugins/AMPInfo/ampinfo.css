@@ -1,7 +1,8 @@
 #amp_info_filters {
+	float: right;
 	width: 500px;
 	position: relative;
-	float:left;
+	top: -17px;
 }
 
 #amp_info_settings  {

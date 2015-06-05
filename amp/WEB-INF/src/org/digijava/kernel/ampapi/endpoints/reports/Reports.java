@@ -344,10 +344,24 @@ public class Reports {
 	@POST
 	@Path("/saikureport/{report_id}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public final QueryResult getSaikuReport(JsonBean queryObject, @PathParam("report_id") Long reportId) {
-		//here we fetch te report by reportId
-		return getSaikuReport(queryObject, DbUtil.getAmpReport(reportId));
+	public final JsonBean getSaikuReport(JsonBean queryObject, @PathParam("report_id") Long reportId) {
+		QueryResult result;
+		List<Map<String, Object>> sorting = new ArrayList<Map<String, Object>>();
+				
+		JsonBean report = getReportResultByPage(ReportsUtil.convertSaikuParamsToReports(queryObject), reportId);
+		
+		// Add data needed on Saiku UI.
+		// TODO: Make a mayor refactoring on the js code so it doesnt need these extra parameters to work properly.
+		JsonBean queryProperties = new JsonBean();
+		queryProperties.set("properties", new ArrayList<String>());
+		report.set("query", queryProperties);
+		List<String> cellset = new ArrayList<String>();
+		cellset.add("dummy");
+		report.set("cellset", cellset);
+		
+		return report;
 	}
+	
 	@POST
 	@Path("/saikureport/run/{report_token}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -369,6 +383,7 @@ public class Reports {
 		return ampReport;
 	}
 	
+	@Deprecated
 	private QueryResult getSaikuReport(JsonBean queryObject, AmpReports ampReport) {
 		QueryResult result;
 		List<Map<String, Object>> sorting = new ArrayList<Map<String, Object>>();
@@ -413,6 +428,7 @@ public class Reports {
 		return result;
 	}	
 
+	@Deprecated
 	public final CellDataSet getSaikuCellDataSet(JsonBean queryObject, AmpReports ampReport) throws Exception {
 
 		//TODO: Move this to util classes, check with Tabs to see how it's done there for uniformity

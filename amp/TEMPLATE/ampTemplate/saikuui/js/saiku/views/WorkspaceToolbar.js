@@ -74,6 +74,7 @@ var WorkspaceToolbar = Backbone.View.extend({
             	//Hide Parent
             	$(button.parentElement).hide();
             });
+            $(this.workspace.el).find('.workspace_fields').addClass('hide');
     	}
     	else
     		{

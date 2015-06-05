@@ -159,6 +159,24 @@ public class ReportsUtil {
 		return result;
 	}
 	
+	protected static JsonBean convertSaikuParamsToReports(JsonBean original) {
+		JsonBean newParams = new JsonBean();
+		LinkedHashMap queryModel = (LinkedHashMap) original.get("queryModel"); 
+		if (queryModel != null) {
+			if (queryModel.get("page") != null) {
+				// Saiku is 0 based so we add 1.
+				newParams.set("page", ((Integer) queryModel.get("page")) + 1);
+			}
+			if(queryModel.get("filters") != null) {
+				newParams.set("filters", queryModel.get("filters"));
+			}
+			if(queryModel.get("settings") != null) {
+				newParams.set("settings", queryModel.get("settings"));
+			}
+		}
+		return newParams;
+	}
+	
 	private static CachedReportData getCachedReportData(Long reportId, JsonBean formParams) {
 		boolean regenerate = mustRegenerate(reportId, formParams);
 		boolean resort = formParams.get(EPConstants.SORTING) != null; 

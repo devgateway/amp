@@ -326,50 +326,25 @@ public class Reports {
 	@POST
 	@Path("/saikureport/{report_id}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public final QueryResult getSaikuReport(JsonBean queryObject, @PathParam("report_id") Long reportId) {
+	public final JsonBean getSaikuReport(JsonBean queryObject, @PathParam("report_id") Long reportId) {
 		QueryResult result;
 		List<Map<String, Object>> sorting = new ArrayList<Map<String, Object>>();
-		try {
-			// Convert frontend sorting params into ReportUtils sorting params.
-			if (((HashMap) queryObject.get("queryModel")).get(EPConstants.SORTING) != null) {				
-				List<Map> auxColumns = ((List) ((HashMap) queryObject.get("queryModel")).get(EPConstants.SORTING));
-				Iterator<Map> iCols = auxColumns.iterator();
-				while (iCols.hasNext()) {
-					Map<String, Object> newCol = new HashMap<String, Object>();
-					Boolean asc = true;
-					Map<String, Object> auxCol = iCols.next();
-					if (auxCol.get("asc").equals(true)) {
-						asc = true;
-					} else {
-						asc = false;
-					}
-					List<String> auxColNames = new ArrayList<String>();
-					String[] composedNames = auxCol.get("columnName").toString().split(",");
-					for(int i = 0; i < composedNames.length; i++) {
-						auxColNames.add(composedNames[i].toString().trim());
-						newCol.put("columns", auxColNames);
-						newCol.put("asc", asc);
-					}					
-					sorting.add(newCol);
-				}
-				queryObject.set(EPConstants.SORTING, sorting);				
-				logger.info(sorting);
-			}
-					
-			CellDataSet cellDataSet = getSaikuCellDataSet(queryObject, reportId);
-			result = RestUtil.convert(cellDataSet);
-			result.setQuery(new ThinQuery());
-			// set additional properties to be considered during front end processing
-			SaikuUtils.addCustomProperties((ThinQuery) result.getQuery(), cellDataSet, (GeneratedReport) queryObject.get("report"));
-
-		} catch (Exception e) {
-			String error = ExceptionUtils.getRootCauseMessage(e);
-			e.printStackTrace();
-			return new QueryResult(error);
-		}
-		return result;
+				
+		JsonBean report = getReportResultByPage(ReportsUtil.convertSaikuParamsToReports(queryObject), reportId);
+		
+		// Add data needed on Saiku UI.
+		// TODO: Make a mayor refactoring on the js code so it doesnt need these extra parameters to work properly.
+		JsonBean queryProperties = new JsonBean();
+		queryProperties.set("properties", new ArrayList<String>());
+		report.set("query", queryProperties);
+		List<String> cellset = new ArrayList<String>();
+		cellset.add("dummy");
+		report.set("cellset", cellset);
+		
+		return report;
 	}	
 
+	@Deprecated
 	public final CellDataSet getSaikuCellDataSet(JsonBean queryObject, Long reportId) throws Exception {
 
 		//TODO: Move this to util classes, check with Tabs to see how it's done there for uniformity

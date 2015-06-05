@@ -352,6 +352,11 @@ function sanitizeRows(rowData, data) {
 }
 
 SaikuTableRenderer.prototype.internalRender = function(allData, options) {
+	if (Settings.AMP_REPORT_API_BRIDGE) {
+		var ampTableRenderer = new AMPTableRenderer();
+		return ampTableRenderer.render(allData, options);
+	}
+	
     var tableContent = "";
     var rowContent = "";
 	var data = allData.cellset;

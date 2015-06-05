@@ -1,6 +1,8 @@
 #amp_info_filters {
 	float: right;
 	width: 500px;
+	position: relative;
+	top: -17px;
 }
 #amp_notification {
 	color: red;

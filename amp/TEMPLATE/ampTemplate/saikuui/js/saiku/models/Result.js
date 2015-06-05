@@ -37,7 +37,11 @@ var Result = Backbone.Model.extend({
         }
         this.firstRun = true;
 		//Start Custom Code for Pagination
-        this.query.set({'total_rows': response.height});
+        if (Settings.AMP_REPORT_API_BRIDGE === false) {
+        	this.query.set({'total_rows': response.height});
+        } else {
+        	this.query.set({'total_rows': response.page.totalRecords});
+        }
         this.updatePagination();
         //End Custom Code for Pagination
 

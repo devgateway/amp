@@ -212,7 +212,7 @@ function findGroupVertically(matrix, i, j) {
 	var count = 1;
 	// Only process if the column is in the list of hierarchical columns (which
 	// are always in the beginning).
-	if (j < this.metadataHierarchies.length) {
+	if (j < this.metadataHierarchies.length && matrix[i][j].isTotal !== true) {
 		for (var k = i + 1; k < matrix.length; k++) {
 			// Due to the way the tree data is structured we dont need to check
 			// for cells with the same value than the one being compared but

@@ -327,9 +327,6 @@ public class Reports {
 	@Path("/saikureport/{report_id}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final JsonBean getSaikuReport(JsonBean queryObject, @PathParam("report_id") Long reportId) {
-		QueryResult result;
-		List<Map<String, Object>> sorting = new ArrayList<Map<String, Object>>();
-				
 		JsonBean report = getReportResultByPage(ReportsUtil.convertSaikuParamsToReports(queryObject), reportId);
 		
 		// Add data needed on Saiku UI.
@@ -391,6 +388,7 @@ public class Reports {
 		return getPage(report.cellDataSet, queryModel.get("page"));
 	}
 	
+	@Deprecated
 	private CellDataSet getPage(CellDataSet cellDataSet, Object pageParam) {
 		//Assuming page is zero indexed
 		AbstractBaseCell[][] result = cellDataSet.getCellSetBody();

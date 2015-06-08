@@ -39,22 +39,46 @@ function generateHeaderHtml(headers) {
 	}
 	// Reorder matrix rows.
 	this.headerMatrix.reverse();
+	// Check columns metadata
+	calculateColumnsDisposition();
 	// Generate header HTML.
 	var header = "<thead>";
 	for (var i = 0; i < this.headerMatrix.length; i++) {
 		var row = "<tr>";
 		for (var j = 0; j < this.headerMatrix[i].length; j++) {
 			if (this.headerMatrix[i][j] !== undefined) {
-				var groupCount = findSameHeaderHorizontally(this.headerMatrix,
-						i, j);
+				// Add sorting info: HEADER_HIERARCHY for first columns that
+				// define a hierarchy (if any), HEADER_COMMON for non
+				// hierarchical columns and HEADER_MEASURE for measures (only in
+				// the last header row).
+				var sortingType = "";
+				if (j < this.metadataHierarchies.length) {
+					sortingType = " data-sorting-type='HEADER_HIERARCHY'";
+				} else if (j < this.metadataColumns.length) {
+					sortingType = " data-sorting-type='HEADER_COMMON'";
+				} else if (i === this.headerMatrix.length - 1) {
+					sortingType = " data-sorting-type='HEADER_MEASURE'";
+				}
 				// Since groupCount is 0 when no column grouping is applicable
 				// then we don't need an extra IF for creating the 'col'
 				// variable.
-				var col = "<th class='col hand-pointer' id='"
-						+ this.headerMatrix[i][j].hierarchicalName
-						+ "' data-header-level='" + i + "' colspan='"
-						+ groupCount + "'>"
-						+ this.headerMatrix[i][j].columnName + "</th>";
+				var groupCount = findSameHeaderHorizontally(this.headerMatrix,
+						i, j);
+				// Define styles for the header.
+				var style = " class='col";
+				if (sortingType.length > 0) {
+					style += " hand-pointer";
+				}
+				style += "'";
+				// Define id based on its hierarchy.
+				var id = " id='"
+						+ convertHierarchicalNameToId(this.headerMatrix[i][j].hierarchicalName)
+						+ "'";
+
+				var col = "<th" + style + id + " data-header-level='" + i + "'"
+						+ sortingType + " colspan='" + +groupCount + "'><div>"
+						+ this.headerMatrix[i][j].columnName + "</div></th>";
+
 				// We change 'j' in order to skip the next N columns.
 				j += groupCount;
 				if (groupCount > 0) {
@@ -71,6 +95,31 @@ function generateHeaderHtml(headers) {
 	}
 	header += "</thead>";
 	return header;
+}
+
+/**
+ * We need to calculate how many hierarchical and common columns come from the
+ * endpoint (we can't trust the metadata). Hierarchical columns (if any) come
+ * always first in the list, then common columns and last measure columns.
+ */
+function calculateColumnsDisposition() {
+	var self = this;
+	this.metadataHierarchies = Saiku.tabs._tabs[0].content.query.attributes.hierarchies;
+	this.metadataColumns = Saiku.tabs._tabs[0].content.query.attributes.columns;
+	var tempColumns = new Array();
+	var lastRowColumns = this.headerMatrix.length - 1;
+	for (var i = 0; i < this.metadataColumns.length; i++) {
+		var found = _
+				.find(
+						this.headerMatrix[lastRowColumns],
+						function(item) {
+							return item.originalColumnName === this.metadataColumns[i].entityName;
+						});
+		if (found !== undefined) {
+			tempColumns.push(this.metadataColumns[i]);
+		}
+	}
+	this.metadataColumns = tempColumns;
 }
 
 /**
@@ -119,8 +168,6 @@ function generateContentHtml(page) {
 
 function generateDataRows(page) {
 	var self = this;
-	this.metadataHierarchies = Saiku.tabs._tabs[0].content.query.attributes.hierarchies;
-	this.metadataColumns = Saiku.tabs._tabs[0].content.query.attributes.columns;
 	var content = "";
 	// Transform the tree data structure to 2d matrix.
 	this.numberOfRows = -1;
@@ -211,15 +258,16 @@ function generateDataRows(page) {
 function findGroupVertically(matrix, i, j) {
 	var count = 1;
 	// Only process if the column is in the list of hierarchical columns (which
-	// are always in the beginning).
+	// are always in the beginning). Also skip cells that represent the start of
+	// a total row.
 	if (j < this.metadataHierarchies.length && matrix[i][j].isTotal !== true) {
 		for (var k = i + 1; k < matrix.length; k++) {
-			// Due to the way the tree data is structured we dont need to check
+			// Due to the way the tree data is structured we don't need to check
 			// for cells with the same value than the one being compared but
 			// with empty cells.
 			if (matrix[k][j].displayedValue.length === 0) {
 				count++;
-				// Mark the cell so we dont draw it later.
+				// Mark the cell so we don't draw it later.
 				matrix[k][j].isGrouped = true;
 			} else {
 				// Add the last row which has the total label and exit.
@@ -311,4 +359,14 @@ function cleanText(text) {
 		text : text,
 		tooltip : tooltip
 	}
+}
+
+/**
+ * Convert a string like "[2014][Actual Commitments]" to "-2014--Actual
+ * Commitments-" that woun't break the search by id in jquery.
+ */
+function convertHierarchicalNameToId(hierarchy) {
+	var id = "";
+	id = hierarchy.replace(/\[/g, '-').replace(/\]/g, '-');
+	return id;
 }

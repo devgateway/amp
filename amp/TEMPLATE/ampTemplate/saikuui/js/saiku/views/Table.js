@@ -22,7 +22,7 @@ var Table = Backbone.View.extend({
     events: {
         'click th.row' : 'clicked_cell',
         /*'click th.col' : 'clicked_cell',*/
-        'click th.col' : 'clicked_header_cell_measure',
+        'click th.col' : 'clicked_header_cell',
         'click th.row_header' : 'clicked_header_cell'
     },
 
@@ -39,13 +39,7 @@ var Table = Backbone.View.extend({
     
     clicked_header_cell : function(event) {
     	if(Saiku.Sorting != undefined) {
-    		Saiku.Sorting.processClickOnHeader(event, 'HEADER_CELL');
-    	}
-    },
-    
-    clicked_header_cell_measure : function(event) {
-    	if(Saiku.Sorting != undefined) {
-    		Saiku.Sorting.processClickOnHeader(event, 'HEADER_CELL_MEASURE');
+    		Saiku.Sorting.processClickOnHeader(event);
     	}
     },
     

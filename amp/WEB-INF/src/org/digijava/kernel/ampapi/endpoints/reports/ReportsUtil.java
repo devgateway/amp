@@ -161,17 +161,20 @@ public class ReportsUtil {
 	
 	protected static JsonBean convertSaikuParamsToReports(JsonBean original) {
 		JsonBean newParams = new JsonBean();
-		LinkedHashMap queryModel = (LinkedHashMap) original.get("queryModel"); 
+		LinkedHashMap queryModel = (LinkedHashMap) original.get("queryModel");
 		if (queryModel != null) {
 			if (queryModel.get("page") != null) {
 				// Saiku is 0 based so we add 1.
 				newParams.set("page", ((Integer) queryModel.get("page")) + 1);
 			}
-			if(queryModel.get("filters") != null) {
+			if (queryModel.get("filters") != null) {
 				newParams.set("filters", queryModel.get("filters"));
 			}
-			if(queryModel.get("settings") != null) {
-				newParams.set("settings", queryModel.get("settings"));
+			if (queryModel.get(EPConstants.SETTINGS) != null) {
+				newParams.set(EPConstants.SETTINGS, queryModel.get(EPConstants.SETTINGS));
+			}
+			if (queryModel.get(EPConstants.SORTING) != null) {
+				newParams.set(EPConstants.SORTING, queryModel.get(EPConstants.SORTING));
 			}
 		}
 		return newParams;

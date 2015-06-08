@@ -344,10 +344,7 @@ public class Reports {
 	@POST
 	@Path("/saikureport/{report_id}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public final JsonBean getSaikuReport(JsonBean queryObject, @PathParam("report_id") Long reportId) {
-		QueryResult result;
-		List<Map<String, Object>> sorting = new ArrayList<Map<String, Object>>();
-				
+	public final JsonBean getSaikuReport(JsonBean queryObject, @PathParam("report_id") Long reportId) {			
 		JsonBean report = getReportResultByPage(ReportsUtil.convertSaikuParamsToReports(queryObject), reportId);
 		
 		// Add data needed on Saiku UI.

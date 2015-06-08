@@ -10,7 +10,6 @@ import java.io.Serializable;
 import java.util.*;
 
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 public class AmpTemplatesVisibility extends AmpObjectVisibility implements Serializable, Cloneable {
@@ -18,9 +17,7 @@ public class AmpTemplatesVisibility extends AmpObjectVisibility implements Seria
 	 * 
 	 */
 	private static final long serialVersionUID = -4765301740400470276L;
-	/**
-	 * 
-	 */
+
 	private Set<AmpFeaturesVisibility> features;
 	private Set<AmpFieldsVisibility> fields;
 	private String visible;
@@ -64,8 +61,8 @@ public class AmpTemplatesVisibility extends AmpObjectVisibility implements Seria
 		this.visible = visible;
 	}
 	
-	public boolean isDefault(){
-		return this.getId().equals(FeaturesUtil.getDefaultAmpTemplateVisibility());
+	public boolean isDefault() {
+		return FeaturesUtil.getDefaultAmpTemplateVisibility().getId().equals(this.getId());
 	}
 
 	@Override
@@ -84,13 +81,14 @@ public class AmpTemplatesVisibility extends AmpObjectVisibility implements Seria
 	 * fields indexed by name, for easy lookup: we don't want to iterate through 450 items for each and every of the 220 columns
 	 */
 	private transient Map<String, AmpFieldsVisibility> namesCache = null;
-	private synchronized void buildNamesCache()
-	{
-		if (fields == null)
-			return;
+	private synchronized void buildNamesCache() {
+		if (fields == null) {
+            return;
+        }
 		Map<String, AmpFieldsVisibility> tempNamesCache = new HashMap<String, AmpFieldsVisibility>();
-		for(AmpFieldsVisibility vis:getFields())
-			tempNamesCache.put(vis.getName(), vis);
+		for (AmpFieldsVisibility vis : getFields()) {
+            tempNamesCache.put(vis.getName(), vis);
+        }
 		namesCache = tempNamesCache;
 	}
 	
@@ -99,13 +97,14 @@ public class AmpTemplatesVisibility extends AmpObjectVisibility implements Seria
 	 * @param name
 	 * @return
 	 */
-	public boolean fieldExists(String name)
-	{
-		if (fields == null)
-			return false;
+	public boolean fieldExists(String name) {
+		if (fields == null) {
+            return false;
+        }
 		
-		if (namesCache == null)
-			buildNamesCache();
+		if (namesCache == null) {
+            buildNamesCache();
+        }
 		return namesCache.containsKey(name);
 	}
 	
@@ -113,17 +112,17 @@ public class AmpTemplatesVisibility extends AmpObjectVisibility implements Seria
 	 * removed a field from the internal fields list and invalidates cache
 	 * @param field
 	 */
-	public void removeField(AmpFieldsVisibility field)
-	{
-		if (fields != null)
-			fields.remove(field);
+	public void removeField(AmpFieldsVisibility field) {
+		if (fields != null) {
+            fields.remove(field);
+        }
 		invalidateCache();
 	}
 	
-	public void clearFields()
-	{
-		if (fields != null)
-			fields.clear();
+	public void clearFields() {
+		if (fields != null) {
+            fields.clear();
+        }
 		invalidateCache();
 	}
 	
@@ -131,14 +130,12 @@ public class AmpTemplatesVisibility extends AmpObjectVisibility implements Seria
 	 * SLOW, but seldomly called
 	 * @param field
 	 */
-	public void addField(AmpFieldsVisibility field)
-	{
+	public void addField(AmpFieldsVisibility field) {
 		fields.add(field);
 		invalidateCache(); // don't change cache here, as this is not thread safe
 	}
 	
-	public void invalidateCache()
-	{
+	public void invalidateCache() {
 		namesCache = null;
 	}
 
@@ -148,18 +145,21 @@ public class AmpTemplatesVisibility extends AmpObjectVisibility implements Seria
 
         //create new sets
         SortedSet tmp = new TreeSet();
-        for (Object o: n.getFeatures())
+        for (Object o : n.getFeatures()) {
             tmp.add(o);
+        }
         n.setFeatures(tmp);
 
         tmp = new TreeSet();
-        for (Object o: n.getFields())
+        for (Object o : n.getFields()) {
             tmp.add(o);
+        }
         n.setFields(tmp);
 
         tmp = new TreeSet();
-        for (Object o: n.getItems())
+        for (Object o : n.getItems()) {
             tmp.add(o);
+        }
         n.setItems(tmp);
 
         return n;

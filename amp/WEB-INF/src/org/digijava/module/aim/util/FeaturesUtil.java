@@ -1,6 +1,5 @@
 package org.digijava.module.aim.util;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -64,7 +63,7 @@ public class FeaturesUtil {
 
 	//private ServletContext ampContext = null;
 
-	public static String errorLog="";
+	public static String errorLog = "";
 	
 	public final static String AMP_TREE_VISIBILITY_ATTR = "ampTreeVisibility";
 	
@@ -83,17 +82,15 @@ public class FeaturesUtil {
 
 	public static synchronized void buildGlobalSettingsCache(List<AmpGlobalSettings> globalSettings) {
 		globalSettingsCache = new HashMap<String, AmpGlobalSettings>();
-		for(AmpGlobalSettings sett:globalSettings)
-			globalSettingsCache.put(sett.getGlobalSettingsName(), sett);
+		for (AmpGlobalSettings sett : globalSettings) {
+            globalSettingsCache.put(sett.getGlobalSettingsName(), sett);
+        }
 	}
 
 	public static boolean isDefault(Long templateId) {
 		String s = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.FEATURE_TEMPLATE);
-		if (s != null)
-			if (templateId.compareTo(new Long(Long.parseLong(s))) == 0)
-				return true;
-		return false;
-	}
+        return s != null && templateId == Long.parseLong(s);
+    }
 
 
     public static List<String> getAssignedToTeams (Long templateId) {
@@ -693,16 +690,12 @@ public class FeaturesUtil {
 	 */
 	public static Long getGlobalSettingValueLong(String globalSettingName) {
 		String globalValue = getGlobalSettingValue(globalSettingName);
-		if (globalValue != null)
-			return new Long(Long.parseLong(globalValue));
-		return new Long( -1);
+        return globalValue != null ? Long.parseLong(globalValue) : -1l;
 	}
 
 	public static Double getGlobalSettingDouble(String globalSettingName) {
 		String globalValue = getGlobalSettingValue(globalSettingName);
-		if (globalValue != null)
-			return new Double(Double.parseDouble(globalValue));
-		return new Double( -1);
+        return globalValue != null ? Double.parseDouble(globalValue) : -1;
 	}
 
 	public static String[] getGlobalSettingsStringArray(String key) {
@@ -1017,14 +1010,16 @@ public class FeaturesUtil {
 	 */
 	public static AmpTemplatesVisibility getCurrentTemplate() {
 		long tId = getCurrentTemplateId();
-		AmpTemplatesVisibility currentTemplate = getTemplateVisibility(tId);
-		return currentTemplate;
+		return getTemplateVisibility(tId);
 	}
-	
+
+    /**
+     * Returns the default AMP template
+     * @return
+     */
 	public static AmpTemplatesVisibility getDefaultAmpTemplateVisibility() {
 		// get the default amp template
-		AmpTemplatesVisibility currentTemplate = getTemplateVisibility(getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE));
-		return currentTemplate;
+		return getTemplateVisibility(getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE));
 	}
 	
 	public static boolean existTemplateVisibility(String templateName,Long templateId) {
@@ -1180,7 +1175,7 @@ public class FeaturesUtil {
 	 */
 	public static AmpTemplatesVisibility getTemplateVisibility(Long id) {
 		AmpTemplatesVisibility ft = (AmpTemplatesVisibility) PersistenceManager.getSession().load(AmpTemplatesVisibility.class, id);
-		TreeSet<AmpTemplatesVisibility> mySet = new TreeSet<>(FeaturesUtil.ALPHA_ORDER);
+		TreeSet<AmpTemplatesVisibility> mySet = new TreeSet<AmpTemplatesVisibility>(FeaturesUtil.ALPHA_ORDER);
 		mySet.addAll(PersistenceManager.getSession().createQuery("from " + AmpModulesVisibility.class.getName()).list());
 		ft.setAllItems(mySet);
 		return ft;

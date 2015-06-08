@@ -179,7 +179,9 @@ function convertIdToName(id, type) {
 		name = id.replace(/\-/g, '');
 		break;
 	case 'HEADER_MEASURE':
-		name = id.replace(/\--/g, ',');
+		// TODO: Replace 'Total Measures' with a value from the endpoint.
+		name = id.replace("-Total Measures-", '');
+		name = name.replace(/\--/g, ',');
 		name = name.replace(/\-/g, '');
 		name = name.split(",");
 		break;

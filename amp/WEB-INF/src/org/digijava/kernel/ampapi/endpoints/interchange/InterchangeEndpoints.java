@@ -44,12 +44,6 @@ public class InterchangeEndpoints {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Collection<JsonBean> getProjects() {
 		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
-		String ampAdmin = (String) httpRequest.getSession().getAttribute("ampAdmin");
-		boolean isAdmin = ampAdmin!=null && ampAdmin.equals("yes");
-		//Admin users or users that didn't select a workspace get an empty list
-		if (isAdmin || tm == null) {
-			return new ArrayList<JsonBean>();
-		}
-		return InterchangeUtils.getActivityList(tm,TLSUtils.getRequest().getSession());
+		return InterchangeUtils.getActivityList(tm);
 	}
 }

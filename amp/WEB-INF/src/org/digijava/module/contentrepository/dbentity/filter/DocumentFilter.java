@@ -154,8 +154,8 @@ public class DocumentFilter {
 				if (this.filterKeywords !=null && this.filterKeywords.size() > 0){
 					int iterationNo = 0;
 					for (String keyword : this.filterKeywords) {
-						if (dd.getTitle().toLowerCase().indexOf(keyword.toLowerCase()) != -1
-								|| dd.getName().toLowerCase().indexOf(keyword.toLowerCase()) != -1 ){
+						if ((dd.getTitle() != null && dd.getTitle().toLowerCase().indexOf(keyword.toLowerCase()) != -1)
+								|| (dd.getName() != null && dd.getName().toLowerCase().indexOf(keyword.toLowerCase()) != -1)){
 							pass &= true;
 							break;
 						}else if (iterationNo == (this.filterKeywords.size() - 1)){

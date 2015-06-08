@@ -152,7 +152,7 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 		this.description = description;
 	}
 	public String getEscapedAmpTitle() {
-		return title.replace("'", "\\'");
+		return title == null ? "" : title.replace("'", "\\'");
 	}
 	public String getTitle() {
 		return title;

@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,21 +22,23 @@ import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.jdbc.Work;
 
 import clover.org.apache.commons.lang.StringUtils;
+import clover.org.apache.log4j.helpers.ISO8601DateFormat;
 
 public class InterchangeUtils {
 
 	public static final Logger LOGGER = Logger.getLogger(InterchangeUtils.class);
+	private static final ISO8601DateFormat dateFormatter = new ISO8601DateFormat();
 
 	@SuppressWarnings("serial")
 	protected static final Map<Class<?>, String> classToCustomType = new HashMap<Class<?>, String>() {
@@ -55,38 +58,42 @@ public class InterchangeUtils {
 
 	}
 
-	public static Collection<JsonBean> getActivityList(TeamMember tm, HttpSession session) {
+	public static Collection<JsonBean> getActivityList(TeamMember tm) {
 		Map<String, JsonBean> activityMap = new HashMap<String, JsonBean>();
-		List<AmpActivityVersion> viewableActivities = new ArrayList<AmpActivityVersion>();
-		List<AmpActivityVersion> editableActivities = new ArrayList<AmpActivityVersion>();
+		List<JsonBean> viewableActivities = new ArrayList<JsonBean>();
+		List<JsonBean> editableActivities = new ArrayList<JsonBean>();
 		final List<Long> viewableIds = getViewableActivityIds(tm);
-		List<Long> editableIds = getEditableActivityIds(session);
-		List<AmpActivityVersion> notViewableActivities = getActivitiesByIds(viewableIds, false);
+		List<Long> editableIds = getEditableActivityIds();
+		List<JsonBean> notViewableActivities = getActivitiesByIds(viewableIds, false, false, false);
 		if (viewableIds.size() > 0) {
-			viewableActivities = getActivitiesByIds(viewableIds, true);
+			viewableIds.removeAll(editableIds);
+			viewableActivities = getActivitiesByIds(viewableIds, true, true, false);
 		}
 		if (editableIds.size() > 0) {
-			editableActivities = getActivitiesByIds(editableIds, true);
+			editableActivities = getActivitiesByIds(editableIds, true, true, true);
 		}
-		for (AmpActivityVersion editable : editableActivities) {
-			JsonBean activityOnMap = activityMap.get(editable.getAmpId());
+		for (JsonBean editable : editableActivities) {
+			JsonBean activityOnMap = activityMap.get((String) editable.get("amp_id"));
 			// if it is not on the map, or editable activity is a newer
 			// version than the one already on the Map
 			// then we put it on the Map
-			if (activityOnMap == null || editable.getAmpActivityId() > (Long) activityOnMap.get("amp_activity_id")) {
-				activityMap.put(editable.getAmpId(), convertToJsonBean(editable, true, true));
+			if (activityOnMap == null
+					|| (Long) editable.get("amp_activity_id") > (Long) activityOnMap.get("amp_activity_id")) {
+				activityMap.put((String) editable.get("amp_id"), editable);
 			}
 		}
-		for (AmpActivityVersion notViewable : notViewableActivities) {
-			JsonBean activityOnMap = activityMap.get(notViewable.getAmpId());
-			if (activityOnMap == null || notViewable.getAmpActivityId() > (Long) activityOnMap.get("amp_activity_id")) {
-				activityMap.put(notViewable.getAmpId(), convertToJsonBean(notViewable, false, false));
+		for (JsonBean notViewable : notViewableActivities) {
+			JsonBean activityOnMap = activityMap.get((String) notViewable.get("amp_id"));
+			if (activityOnMap == null
+					|| (Long) notViewable.get("amp_activity_id") > (Long) activityOnMap.get("amp_activity_id")) {
+				activityMap.put((String) notViewable.get("amp_id"), notViewable);
 			}
 		}
-		for (AmpActivityVersion viewable : viewableActivities) {
-			JsonBean activityOnMap = activityMap.get(viewable.getAmpId());
-			if (activityOnMap == null || viewable.getAmpActivityId() > (Long) activityOnMap.get("amp_activity_id")) {
-				activityMap.put(viewable.getAmpId(), convertToJsonBean(viewable, true, false));
+		for (JsonBean viewable : viewableActivities) {
+			JsonBean activityOnMap = activityMap.get((String) viewable.get("amp_id"));
+			if (activityOnMap == null
+					|| (Long) viewable.get("amp_activity_id") > (Long) activityOnMap.get("amp_activity_id")) {
+				activityMap.put((String) viewable.get("amp_id"), viewable);
 			}
 		}
 		return activityMap.values();
@@ -95,26 +102,15 @@ public class InterchangeUtils {
 	/**
 	 * Get the activities ids for the current workspace
 	 * 
-	 * @param session HttpSession
+	 * @param session
+	 *            HttpSession
 	 * @return List<Long> with the editable activity Ids
 	 */
-	private static List<Long> getEditableActivityIds(HttpSession session) {
+	private static List<Long> getEditableActivityIds() {
+		HttpSession session = TLSUtils.getRequest().getSession();
 		String query = WorkspaceFilter.getWorkspaceFilterQuery(session);
 		return PersistenceManager.getSession().createSQLQuery(query).list();
 
-	}
-
-	public static JsonBean convertToJsonBean(AmpActivityVersion activity, boolean viewable, boolean editable) {
-		JsonBean bean = new JsonBean();
-		bean.set("amp_activity_id", activity.getAmpActivityId());
-		bean.set("created_date", activity.getCreatedDate());
-		bean.set("title", activity.getName());
-		bean.set("project_code", activity.getProjectCode());
-		bean.set("update_date", activity.getUpdatedDate());
-		bean.set("amp_id", activity.getAmpId());
-		bean.set("edit", editable);
-		bean.set("view", viewable);
-		return bean;
 	}
 
 	/**
@@ -126,7 +122,7 @@ public class InterchangeUtils {
 	 *         view.
 	 */
 	private static List<Long> getViewableActivityIds(TeamMember tm) {
-		final List<Long> viewableActivityIds = new ArrayList<Long>();
+		List<Long> viewableActivityIds = new ArrayList<Long>();
 		try {
 			StringBuffer finalActivityQuery = new StringBuffer();
 			User user = UserUtils.getUserByEmail(tm.getEmail());
@@ -143,20 +139,10 @@ public class InterchangeUtils {
 			}
 			int index = finalActivityQuery.lastIndexOf("UNION");
 			final String query = finalActivityQuery.substring(0, index);
-			PersistenceManager.getSession().doWork(new Work() {
-				public void execute(Connection conn) throws SQLException {
-					try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
-						ResultSet rs = rsi.rs;
-						while (rs.next()) {
-							Long id = rs.getLong("amp_activity_id");
-							viewableActivityIds.add(id);
-						}
-					}
-
-				}
-			});
+			viewableActivityIds = PersistenceManager.getSession().createSQLQuery(query).list();
 		} catch (DgException e1) {
 			LOGGER.warn("Couldn't generate the List of viewable activity ids", e1);
+			throw new RuntimeException(e1);
 		}
 		return viewableActivityIds;
 	}
@@ -171,11 +157,16 @@ public class InterchangeUtils {
 	 * @param activityIds
 	 *            List with the ids (amp_activity_id) of the activities to
 	 *            include or exclude
-	 * @return List <AmpActivityVersion> of the activities generated from
+	 * @param viewable
+	 *            whether the list of activities is viewable or not
+	 * @param editable
+	 *            whether the list of activities is editable or not
+	 * @return List <JsonBean> of the activities generated from
 	 *         including/excluding the List<Long> of activityIds
 	 */
-	private static List<AmpActivityVersion> getActivitiesByIds(final List<Long> activityIds, final boolean include) {
-		final List<AmpActivityVersion> activitiesList = new ArrayList<AmpActivityVersion>();
+	private static List<JsonBean> getActivitiesByIds(final List<Long> activityIds, final boolean include,
+			final boolean viewable, final boolean editable) {
+		final List<JsonBean> activitiesList = new ArrayList<JsonBean>();
 
 		PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {
@@ -191,14 +182,26 @@ public class InterchangeUtils {
 				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allActivitiesQuery, null)) {
 					ResultSet rs = rsi.rs;
 					while (rs.next()) {
-						AmpActivityVersion activity = new AmpActivityVersion();
-						activity.setName(rs.getString("name"));
-						activity.setAmpId(rs.getString("amp_id"));
-						activity.setCreatedDate(rs.getDate("date_created"));
-						activity.setProjectCode(rs.getString("project_code"));
-						activity.setUpdatedDate(rs.getDate("date_updated"));
-						activity.setAmpActivityId(rs.getLong("amp_activity_id"));
-						activitiesList.add(activity);
+						JsonBean bean = new JsonBean();
+						bean.set("amp_activity_id", rs.getLong("amp_activity_id"));
+						Date dateCreated = rs.getDate("date_created");
+						String dateCreatedString = "null";
+						if (dateCreated != null) {
+							dateCreatedString = dateFormatter.format(dateCreated);
+						}
+						bean.set("created_date", dateCreatedString);
+						bean.set("title", rs.getString("name"));
+						bean.set("project_code", rs.getString("project_code"));
+						Date dateUpdated = rs.getDate("date_updated");
+						String dateUpdatedString = "null";
+						if (dateUpdated != null) {
+							dateUpdatedString = dateFormatter.format(dateUpdated);
+						}
+						bean.set("update_date", dateUpdatedString);
+						bean.set("amp_id", rs.getString("amp_id"));
+						bean.set("edit", editable);
+						bean.set("view", viewable);
+						activitiesList.add(bean);
 					}
 				}
 

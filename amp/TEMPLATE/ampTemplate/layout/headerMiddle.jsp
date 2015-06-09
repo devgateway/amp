@@ -684,8 +684,7 @@ function openAdmin () {
 					</div></li>
 			</module:display>
 			<%
-				boolean showDashboard = FeaturesUtil.isVisibleFeature("NPD Dashboard") || FeaturesUtil.isVisibleModule("GIS DASHBOARD") || FeaturesUtil.isVisibleModule("Map Module") || FeaturesUtil.isVisibleModule("Visualization Dashboards")
-						 || FeaturesUtil.isVisibleModule("/GIS")|| FeaturesUtil.isVisibleModule("/Dashboards");
+				boolean showDashboard = FeaturesUtil.isVisibleFeature("NPD Dashboard") || FeaturesUtil.isVisibleModule("GIS DASHBOARD") || FeaturesUtil.isVisibleModule("Map Module") || FeaturesUtil.isVisibleModule("Visualization Dashboards");
 				if (showDashboard) {
 			%>
 			<li class="yuiampmenuitem">

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -42,8 +43,17 @@ public class InterchangeEndpoints {
 	@GET
 	@Path("/projects")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public Collection<JsonBean> getProjects() {
+	public Collection<JsonBean> getProjects(@QueryParam ("pid") String pid,@QueryParam("offset") Integer startFrom, @QueryParam("count") Integer size) {
 		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
-		return InterchangeUtils.getActivityList(tm);
+		Collection<JsonBean> activityCollection = InterchangeUtils.getActivityList(pid, tm);
+		int start = 0;
+		int end = activityCollection.size() - 1;
+		if (startFrom != null && size != null && startFrom < activityCollection.size()) {
+			start = startFrom.intValue();
+			if (activityCollection.size() > (startFrom + size)) {
+				end = startFrom + size;
+			}
+		}
+		return new ArrayList(activityCollection).subList(start, end);
 	}
 }

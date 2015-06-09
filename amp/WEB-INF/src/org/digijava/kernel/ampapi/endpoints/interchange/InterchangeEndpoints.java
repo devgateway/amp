@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.interchange;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -34,7 +35,7 @@ public class InterchangeEndpoints {
 	@Path("/fields")
 //	@Produces(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public JsonBean getAvailableFields() {
+	public List<JsonBean> getAvailableFields() {
 		return InterchangeUtils.getAllAvailableFields();
 	}
 	

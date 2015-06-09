@@ -7,6 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 
 public @interface Interchangeable {
 	String fieldTitle();
+	boolean multipleValues() default false;
 	boolean exportable() default true;
 	boolean importable() default true;
 }

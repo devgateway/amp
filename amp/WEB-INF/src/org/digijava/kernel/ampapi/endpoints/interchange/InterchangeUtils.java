@@ -20,9 +20,12 @@ import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -53,14 +56,38 @@ public class InterchangeUtils {
 		}
 	};
 
-	public static String getCustomFieldType(Field field) {
-		if (classToCustomType.containsKey(field.getClass())) {
-			return classToCustomType.get(field.getClass());
-		}
+	private static String getCustomFieldType(Field field) {
 		return "bred";
 
 	}
-
+	
+	private static Map<String, String> getLabelsForField(String fieldName) {
+		Map<String,String> translations = new HashMap<String, String>();
+		try {
+			Collection<Message> messages = TranslatorWorker.getAllTranslationOfBody(fieldName, Long.valueOf(3));
+			for (Message m : messages) {
+				translations.put(m.getLocale(), m.getMessage());
+			}
+		} catch (WorkerException e) {
+			//MEANINGFUL ERROR HERE
+		}
+		return translations;
+	}
+	
+	public static JsonBean mapToBean(Map<String, String> map) {
+		JsonBean bean = new JsonBean();
+		for (Map.Entry<String, String> entry : map.entrySet()) {
+			bean.set(entry.getKey(), entry.getValue());
+		}
+		return bean;
+	}
+	
+	
+	public static List<JsonBean> getChildrenDescribed(Field field) {
+		return new ArrayList<JsonBean>();
+//		for (field.)
+	}
+	
 	public static Collection<JsonBean> getActivityList(TeamMember tm) {
 		Map<String, JsonBean> activityMap = new HashMap<String, JsonBean>();
 		List<JsonBean> viewableActivities = new ArrayList<JsonBean>();
@@ -195,8 +222,45 @@ public class InterchangeUtils {
 		return activitiesList;
 	}
 
-	public static JsonBean getAllAvailableFields() {
-		JsonBean result = new JsonBean();
+
+	public static JsonBean describeField(Field field) {
+		Interchangeable ant2 = field.getAnnotation(Interchangeable.class);
+		if (ant2 == null)
+			return null;
+		JsonBean bean = new JsonBean();
+
+//		Map<String,String> structure = new HashMap<String, String>(); 
+		boolean b = classToCustomType.containsKey(field.getClass());
+		
+//		bean.set("field_type", field.getType());
+		bean.set("field_type", classToCustomType.containsKey(field.getType()) ? classToCustomType.get(field.getType()) : "list");
+
+		if (!classToCustomType.containsKey(field.getClass())) {/*list type*/
+			/**/
+			bean.set("multiple_values", ant2.multipleValues() ? true : false);
+			/*left alone for now. would be draggable from wicket*/
+			//structure.put("allow_empty", )
+			/*link to the db*/
+		}
+		bean.set("field_name", field.getName());
+		bean.set("field_label", mapToBean(getLabelsForField(field.getName())));
+//		bean.set("children", )
+		return bean;
+	}
+	
+	private static List<Field> getVisibleFields(Class clazz) {
+		Field[] fields = clazz.getDeclaredFields();
+		List<Field> exportableFields = new ArrayList<Field>();
+		for (Field field : fields) {
+            if (field.getAnnotation(Interchangeable.class) != null) {
+            	exportableFields.add(field);
+            }
+		}
+		return exportableFields;
+	}
+
+	public static List<JsonBean> getAllAvailableFields() {
+		List<JsonBean> result = new ArrayList<JsonBean>();
 
 		Set<String> visibleColumnNames = ColumnsVisibility.getVisibleColumns();
 		Field[] fields = AmpActivityFields.class.getDeclaredFields();
@@ -209,7 +273,9 @@ public class InterchangeUtils {
 		}
 
 		for (Field field : exportableFields) {
-			result.set(field.getName(), field.getType().toString());
+			result.add(describeField(field));
+			
+
 		}
 
 		// for (String col : visibleColumnNames) {
@@ -219,7 +285,9 @@ public class InterchangeUtils {
 		// }
 		return result;
 	}
-    /**
+
+	
+	/**
      * Gets a date formatted in ISO 8601 format. If the date is null, returns "null" string
      * 
      * @param date the date to be formatted

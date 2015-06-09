@@ -511,8 +511,9 @@ public static List<JsonBean> getOrgGroups() {
 				String query = 
 
 						"SELECT distinct ( o.amp_org_id) orgId, o.name,o.acronym "+
-					    "FROM  amp_organisation o "+
-						 "WHERE EXISTS(SELECT af.amp_donor_org_id "+ 
+					    "FROM  amp_organisation o,amp_org_role r "+
+						 "WHERE o.amp_org_id = r.organisation " +
+						 "AND EXISTS(SELECT af.amp_donor_org_id "+ 
 						 "                   FROM   amp_funding af "+
 						 "                   WHERE  o.amp_org_id = af.amp_donor_org_id "+ 
 						 "AND ( ( af.source_role_id IS NULL ) "+

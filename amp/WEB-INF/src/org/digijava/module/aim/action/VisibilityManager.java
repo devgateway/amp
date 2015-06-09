@@ -436,6 +436,8 @@ public class VisibilityManager extends MultiAction {
 			request.setAttribute("templateId", templateId);
 			
 			form.addMessage("aim:ampfeaturemanager:visibilityTreeUpdated", Constants.FEATURE_MANAGER_VISIBILITY_TREE_UPDATED);
+			// we need to refresh FM cache for non-default templates, since a user can continue to use a WS based on it  
+			FeaturesUtil.setAmpTreeVisibility(this.getServlet().getServletContext(), session, ampTreeVisibility);
 
 			AmpTemplatesVisibility currentTemplate = FeaturesUtil.getDefaultAmpTemplateVisibility();
 			ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);

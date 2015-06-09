@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,11 +27,8 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.jdbc.Work;
 
@@ -44,6 +40,7 @@ public class InterchangeUtils {
 	public static final Logger LOGGER = Logger.getLogger(InterchangeUtils.class);
 	private static final ISO8601DateFormat dateFormatter = new ISO8601DateFormat();
 	private static final String NULL_STRING = "null";
+	private static ProjectListCacher cacher= new ProjectListCacher ();
 
 	
 	@SuppressWarnings("serial")
@@ -237,5 +234,29 @@ public class InterchangeUtils {
 
 	}
 
+	/**
+	 * Gets the List <JsonBean> of activities the user can and can't view, edit using a LRU caching mechanism.
+	 * The pid is used as the cache key.
+	 * 
+	 * @param pid current pagination request reference (random id) to keep a snapshot for the pagination chunks
+	 * @param tm TeamMember, current logged user
+	 * @return the Collection <JsonBean> with the list of activities for the user
+	 */
+	public static Collection<JsonBean> getActivityList(String pid, TeamMember tm) {
+		Collection<JsonBean> projectList = null;
+		if (pid != null) {
+			projectList = cacher.getCachedProjectList(pid);
+
+		}
+		if (projectList == null) 
+		{
+			projectList = getActivityList(tm);
+			if (pid != null) {
+				cacher.addCachedProjectList(pid, projectList);
+			}
+		}
+
+		return projectList;
+	}
 	
 }

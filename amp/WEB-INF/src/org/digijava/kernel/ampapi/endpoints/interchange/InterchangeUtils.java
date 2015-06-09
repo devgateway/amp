@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,8 +28,11 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.jdbc.Work;
 
@@ -39,7 +43,9 @@ public class InterchangeUtils {
 
 	public static final Logger LOGGER = Logger.getLogger(InterchangeUtils.class);
 	private static final ISO8601DateFormat dateFormatter = new ISO8601DateFormat();
+	private static final String NULL_STRING = "null";
 
+	
 	@SuppressWarnings("serial")
 	protected static final Map<Class<?>, String> classToCustomType = new HashMap<Class<?>, String>() {
 		{
@@ -72,31 +78,23 @@ public class InterchangeUtils {
 		if (editableIds.size() > 0) {
 			editableActivities = getActivitiesByIds(editableIds, true, true, true);
 		}
-		for (JsonBean editable : editableActivities) {
-			JsonBean activityOnMap = activityMap.get((String) editable.get("amp_id"));
-			// if it is not on the map, or editable activity is a newer
+		populateActivityMap(activityMap, editableActivities);
+		populateActivityMap(activityMap, notViewableActivities);
+		populateActivityMap(activityMap, viewableActivities);
+		return activityMap.values();
+	}
+
+	private static void populateActivityMap(Map<String, JsonBean> activityMap, List<JsonBean> activities) {
+		for (JsonBean activity : activities) {
+			JsonBean activityOnMap = activityMap.get((String) activity.get("amp_id"));
+			// if it is not on the map, or activity is a newer
 			// version than the one already on the Map
 			// then we put it on the Map
 			if (activityOnMap == null
-					|| (Long) editable.get("amp_activity_id") > (Long) activityOnMap.get("amp_activity_id")) {
-				activityMap.put((String) editable.get("amp_id"), editable);
+					|| (Long) activity.get("amp_activity_id") > (Long) activityOnMap.get("amp_activity_id")) {
+				activityMap.put((String) activity.get("amp_id"), activity);
 			}
 		}
-		for (JsonBean notViewable : notViewableActivities) {
-			JsonBean activityOnMap = activityMap.get((String) notViewable.get("amp_id"));
-			if (activityOnMap == null
-					|| (Long) notViewable.get("amp_activity_id") > (Long) activityOnMap.get("amp_activity_id")) {
-				activityMap.put((String) notViewable.get("amp_id"), notViewable);
-			}
-		}
-		for (JsonBean viewable : viewableActivities) {
-			JsonBean activityOnMap = activityMap.get((String) viewable.get("amp_id"));
-			if (activityOnMap == null
-					|| (Long) viewable.get("amp_activity_id") > (Long) activityOnMap.get("amp_activity_id")) {
-				activityMap.put((String) viewable.get("amp_id"), viewable);
-			}
-		}
-		return activityMap.values();
 	}
 
 	/**
@@ -184,20 +182,10 @@ public class InterchangeUtils {
 					while (rs.next()) {
 						JsonBean bean = new JsonBean();
 						bean.set("amp_activity_id", rs.getLong("amp_activity_id"));
-						Date dateCreated = rs.getDate("date_created");
-						String dateCreatedString = "null";
-						if (dateCreated != null) {
-							dateCreatedString = dateFormatter.format(dateCreated);
-						}
-						bean.set("created_date", dateCreatedString);
+						bean.set("created_date", formatISO8601Date (rs.getDate("date_created")));
 						bean.set("title", rs.getString("name"));
 						bean.set("project_code", rs.getString("project_code"));
-						Date dateUpdated = rs.getDate("date_updated");
-						String dateUpdatedString = "null";
-						if (dateUpdated != null) {
-							dateUpdatedString = dateFormatter.format(dateUpdated);
-						}
-						bean.set("update_date", dateUpdatedString);
+						bean.set("update_date", formatISO8601Date (rs.getDate("date_updated")));
 						bean.set("amp_id", rs.getString("amp_id"));
 						bean.set("edit", editable);
 						bean.set("view", viewable);
@@ -234,5 +222,20 @@ public class InterchangeUtils {
 		// }
 		return result;
 	}
+    /**
+     * Gets a date formatted in ISO 8601 format. If the date is null, returns "null" string
+     * 
+     * @param date the date to be formatted
+     * @return String, date in ISO 8601 format
+     */
+	public static String formatISO8601Date(Date date) {
+		if (date == null) {
+			return NULL_STRING;
+		} else {
+			return dateFormatter.format(date);
+		}
 
+	}
+
+	
 }

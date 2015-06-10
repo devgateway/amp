@@ -300,7 +300,7 @@ public class InterchangeUtils {
 
 	/**
 	 * Gets a date formatted in ISO 8601 format. If the date is null, returns
-	 * "null" string
+	 * null.
 	 * 
 	 * @param date
 	 *            the date to be formatted

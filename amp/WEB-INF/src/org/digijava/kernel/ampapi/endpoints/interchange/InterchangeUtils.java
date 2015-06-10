@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,10 +43,8 @@ public class InterchangeUtils {
 
 	public static final Logger LOGGER = Logger.getLogger(InterchangeUtils.class);
 	private static final ISO8601DateFormat dateFormatter = new ISO8601DateFormat();
-	private static final String NULL_STRING = "null";
-	private static ProjectListCacher cacher= new ProjectListCacher ();
+	private static ProjectListCacher cacher = new ProjectListCacher();
 
-	
 	@SuppressWarnings("serial")
 	protected static final Map<Class<?>, String> classToCustomType = new HashMap<Class<?>, String>() {
 		{
@@ -55,25 +54,40 @@ public class InterchangeUtils {
 
 		}
 	};
+	
+	private static Set<Class<?>> JSON_SUPPORTED_CLASSES = new HashSet<Class<?>>() {
+	    {
+	        add(Boolean.class);
+	        add(Character.class);
+	        add(Byte.class);
+	        add(Short.class);
+	        add(Integer.class);
+	        add(Long.class);
+	        add(Float.class);
+	        add(Double.class);
+	        add (String.class);
+	        add (Date.class);
+	    }
+	};
 
 	private static String getCustomFieldType(Field field) {
 		return "bred";
 
 	}
-	
+
 	private static Map<String, String> getLabelsForField(String fieldName) {
-		Map<String,String> translations = new HashMap<String, String>();
+		Map<String, String> translations = new HashMap<String, String>();
 		try {
 			Collection<Message> messages = TranslatorWorker.getAllTranslationOfBody(fieldName, Long.valueOf(3));
 			for (Message m : messages) {
 				translations.put(m.getLocale(), m.getMessage());
 			}
 		} catch (WorkerException e) {
-			//MEANINGFUL ERROR HERE
+			// MEANINGFUL ERROR HERE
 		}
 		return translations;
 	}
-	
+
 	public static JsonBean mapToBean(Map<String, String> map) {
 		JsonBean bean = new JsonBean();
 		for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -81,13 +95,12 @@ public class InterchangeUtils {
 		}
 		return bean;
 	}
-	
-	
+
 	public static List<JsonBean> getChildrenDescribed(Field field) {
 		return new ArrayList<JsonBean>();
-//		for (field.)
+		// for (field.)
 	}
-	
+
 	public static Collection<JsonBean> getActivityList(TeamMember tm) {
 		Map<String, JsonBean> activityMap = new HashMap<String, JsonBean>();
 		List<JsonBean> viewableActivities = new ArrayList<JsonBean>();
@@ -206,10 +219,10 @@ public class InterchangeUtils {
 					while (rs.next()) {
 						JsonBean bean = new JsonBean();
 						bean.set("amp_activity_id", rs.getLong("amp_activity_id"));
-						bean.set("created_date", formatISO8601Date (rs.getDate("date_created")));
+						bean.set("created_date", formatISO8601Date(rs.getDate("date_created")));
 						bean.set("title", rs.getString("name"));
 						bean.set("project_code", rs.getString("project_code"));
-						bean.set("update_date", formatISO8601Date (rs.getDate("date_updated")));
+						bean.set("update_date", formatISO8601Date(rs.getDate("date_updated")));
 						bean.set("amp_id", rs.getString("amp_id"));
 						bean.set("edit", editable);
 						bean.set("view", viewable);
@@ -222,39 +235,39 @@ public class InterchangeUtils {
 		return activitiesList;
 	}
 
-
 	public static JsonBean describeField(Field field) {
 		Interchangeable ant2 = field.getAnnotation(Interchangeable.class);
 		if (ant2 == null)
 			return null;
 		JsonBean bean = new JsonBean();
 
-//		Map<String,String> structure = new HashMap<String, String>(); 
+		// Map<String,String> structure = new HashMap<String, String>();
 		boolean b = classToCustomType.containsKey(field.getClass());
-		
-//		bean.set("field_type", field.getType());
-		bean.set("field_type", classToCustomType.containsKey(field.getType()) ? classToCustomType.get(field.getType()) : "list");
 
-		if (!classToCustomType.containsKey(field.getClass())) {/*list type*/
+		// bean.set("field_type", field.getType());
+		bean.set("field_type", classToCustomType.containsKey(field.getType()) ? classToCustomType.get(field.getType())
+				: "list");
+
+		if (!classToCustomType.containsKey(field.getClass())) {/* list type */
 			/**/
 			bean.set("multiple_values", ant2.multipleValues() ? true : false);
-			/*left alone for now. would be draggable from wicket*/
-			//structure.put("allow_empty", )
-			/*link to the db*/
+			/* left alone for now. would be draggable from wicket */
+			// structure.put("allow_empty", )
+			/* link to the db */
 		}
 		bean.set("field_name", field.getName());
 		bean.set("field_label", mapToBean(getLabelsForField(field.getName())));
-//		bean.set("children", )
+		// bean.set("children", )
 		return bean;
 	}
-	
+
 	private static List<Field> getVisibleFields(Class clazz) {
 		Field[] fields = clazz.getDeclaredFields();
 		List<Field> exportableFields = new ArrayList<Field>();
 		for (Field field : fields) {
-            if (field.getAnnotation(Interchangeable.class) != null) {
-            	exportableFields.add(field);
-            }
+			if (field.getAnnotation(Interchangeable.class) != null) {
+				exportableFields.add(field);
+			}
 		}
 		return exportableFields;
 	}
@@ -274,7 +287,6 @@ public class InterchangeUtils {
 
 		for (Field field : exportableFields) {
 			result.add(describeField(field));
-			
 
 		}
 
@@ -286,16 +298,17 @@ public class InterchangeUtils {
 		return result;
 	}
 
-	
 	/**
-     * Gets a date formatted in ISO 8601 format. If the date is null, returns "null" string
-     * 
-     * @param date the date to be formatted
-     * @return String, date in ISO 8601 format
-     */
+	 * Gets a date formatted in ISO 8601 format. If the date is null, returns
+	 * "null" string
+	 * 
+	 * @param date
+	 *            the date to be formatted
+	 * @return String, date in ISO 8601 format
+	 */
 	public static String formatISO8601Date(Date date) {
 		if (date == null) {
-			return NULL_STRING;
+			return null;
 		} else {
 			return dateFormatter.format(date);
 		}
@@ -303,12 +316,16 @@ public class InterchangeUtils {
 	}
 
 	/**
-	 * Gets the List <JsonBean> of activities the user can and can't view, edit using a LRU caching mechanism.
-	 * The pid is used as the cache key.
+	 * Gets the List <JsonBean> of activities the user can and can't view, edit
+	 * using a LRU caching mechanism. The pid is used as the cache key.
 	 * 
-	 * @param pid current pagination request reference (random id) to keep a snapshot for the pagination chunks
-	 * @param tm TeamMember, current logged user
-	 * @return the Collection <JsonBean> with the list of activities for the user
+	 * @param pid
+	 *            current pagination request reference (random id) to keep a
+	 *            snapshot for the pagination chunks
+	 * @param tm
+	 *            TeamMember, current logged user
+	 * @return the Collection <JsonBean> with the list of activities for the
+	 *         user
 	 */
 	public static Collection<JsonBean> getActivityList(String pid, TeamMember tm) {
 		Collection<JsonBean> projectList = null;
@@ -316,8 +333,7 @@ public class InterchangeUtils {
 			projectList = cacher.getCachedProjectList(pid);
 
 		}
-		if (projectList == null) 
-		{
+		if (projectList == null) {
 			projectList = getActivityList(tm);
 			if (pid != null) {
 				cacher.addCachedProjectList(pid, projectList);
@@ -326,5 +342,6 @@ public class InterchangeUtils {
 
 		return projectList;
 	}
+
 	
 }

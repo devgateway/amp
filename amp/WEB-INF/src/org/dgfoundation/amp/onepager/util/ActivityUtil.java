@@ -60,6 +60,7 @@ import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -144,7 +145,27 @@ public class ActivityUtil {
 		//we will check what is comming in funding
 		Set<AmpFunding> af = a.getFunding();
 
-		
+		//check if we have funding items with null in ammount
+		//this is not a valid use case but a possible due to the flexibility of the configurations in FM mode
+		if (af != null && Hibernate.isInitialized(af)) {
+			Iterator<AmpFunding> fundingIterator = af.iterator();
+			while (fundingIterator.hasNext()) {
+				AmpFunding ampFunding = fundingIterator.next();
+
+				if (Hibernate.isInitialized(ampFunding.getFundingDetails())) {
+					Iterator ampFundingDetailsIterator = ampFunding.getFundingDetails().iterator();
+					removeFundingNullAmount(ampFundingDetailsIterator);
+				}
+				if (ampFunding.getMtefProjections() != null && Hibernate.isInitialized(ampFunding.getMtefProjections())) {
+					Iterator<AmpFundingMTEFProjection> ampFundingMTEFProjectionIterator = ampFunding
+							.getMtefProjections().iterator();
+					removeFundingNullAmount(ampFundingMTEFProjectionIterator);
+
+				}
+			}
+
+		}
+
         if (ContentTranslationUtil.multilingualIsEnabled())
             ContentTranslationUtil.cloneTranslations(a, translations);
 
@@ -237,6 +258,19 @@ public class ActivityUtil {
         return a;
 	}
 
+	/**
+	 * Remove funding items with null amount (that means that the form is missconfigured)
+	 * @param ampFundingDetailsIterator
+	 */
+	private static void removeFundingNullAmount(Iterator ampFundingDetailsIterator) {
+		while (ampFundingDetailsIterator.hasNext()) {
+			FundingInformationItem ampFundingDetail = (FundingInformationItem) ampFundingDetailsIterator.next();
+			if (ampFundingDetail.getTransactionAmount() == null) {
+				// this shouldnt be null, so we remove it
+				ampFundingDetailsIterator.remove();
+			}
+		}
+	}
 	
 	private static void setCreationTimeOnStructureImages(AmpActivityVersion activity){
 		if (activity.getStructures() != null){

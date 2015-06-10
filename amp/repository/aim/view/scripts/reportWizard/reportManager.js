@@ -100,8 +100,6 @@ function continueInitialization( e, rmParams ){
 		treeObj.init();
 		//treeObj.minusImage = 'DHTMLSuite_plus.gif';
 		treeObj.showHideNode(false,'dhtmlgoodies_tree');
-
-		
 		
 		if ( rmParams.desktopTab )
 			if ( rmParams.onePager )

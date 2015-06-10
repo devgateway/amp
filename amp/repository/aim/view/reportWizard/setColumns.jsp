@@ -23,6 +23,14 @@
 <digi:instance property="aimReportWizardForm" />
 <bean:define name="aimReportWizardForm" id="myForm" type="org.digijava.module.aim.form.reportwizard.ReportWizardForm"/>
 	<p id="columnTree">
+	
+	<c:if test="${empty aimReportWizardForm.ampTreeColumns}">  <!-- this element needs to exist at all times, else report wizard will crash later in
+		== var menuItems = DHTMLSuite_tree.getElementsByTagName('LI'); == 
+		dhtmlSuite-dragDropTree.js is library code and we do not want to make local changes to library code
+	-->
+		<ul id="dhtmlgoodies_tree" class="DHTMLSuite_tree"></ul>
+	</c:if>
+	
 	<c:if test="${!empty aimReportWizardForm.ampTreeColumns}">
 		<bean:define name="aimReportWizardForm" property="ampTreeColumns" id="ampTreeColumns" type="java.util.Map"  toScope="page"/>
 		<logic:iterate name="ampTreeColumns" id="ampTreeColumn" type="java.util.Map.Entry" >

@@ -42,7 +42,6 @@ public class InterchangeUtils {
 
 	public static final Logger LOGGER = Logger.getLogger(InterchangeUtils.class);
 	private static final ISO8601DateFormat dateFormatter = new ISO8601DateFormat();
-	private static final String NULL_STRING = "null";
 	private static ProjectListCacher cacher= new ProjectListCacher ();
 
 	
@@ -288,14 +287,14 @@ public class InterchangeUtils {
 
 	
 	/**
-     * Gets a date formatted in ISO 8601 format. If the date is null, returns "null" string
+     * Gets a date formatted in ISO 8601 format. If the date is null, returns null
      * 
      * @param date the date to be formatted
      * @return String, date in ISO 8601 format
      */
 	public static String formatISO8601Date(Date date) {
 		if (date == null) {
-			return NULL_STRING;
+			return null;
 		} else {
 			return dateFormatter.format(date);
 		}

@@ -338,6 +338,11 @@ public class Reports {
 		cellset.add("dummy");
 		report.set("cellset", cellset);
 		
+		// Add some missing metadata when running through Rhino.
+		ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
+		report.set("columns", spec.getColumns());
+		report.set("hierarchies", spec.getHierarchies());
+		
 		return report;
 	}	
 

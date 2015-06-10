@@ -27,6 +27,14 @@ this.numberOfRows = undefined;
 this.type = undefined;
 
 AMPTableRenderer.prototype.render = function(data, options) {
+	// When using this class to export the report we receive these extra
+	// parameters from the endpoint because are unavailable in the constructor
+	// call when using Rhino.
+	if (type === 'PDF') {
+		metadataColumns = data.columns;
+		metadataHierarchies = data.hierarchies;
+	}
+
 	// Create HTML table, with header + content.
 	var table = "<table>";
 	var headerHtml = generateHeaderHtml(data.headers);
@@ -120,6 +128,7 @@ function generateHeaderHtml(headers) {
  * always first in the list, then common columns and last measure columns.
  */
 function calculateColumnsDisposition() {
+	var self = this;
 	var tempColumns = new Array();
 	var lastRowColumns = this.headerMatrix.length - 1;
 	for (var i = 0; i < this.metadataColumns.length; i++) {
@@ -127,7 +136,7 @@ function calculateColumnsDisposition() {
 				.find(
 						this.headerMatrix[lastRowColumns],
 						function(item) {
-							return item.originalColumnName === this.metadataColumns[i].entityName;
+							return item.originalColumnName === self.metadataColumns[i].entityName;
 						});
 		if (found !== undefined) {
 			tempColumns.push(this.metadataColumns[i]);
@@ -240,7 +249,9 @@ function generateDataRows(page) {
 					} else {
 						styleClass = " class='row' ";
 					}
-					cleanValue.text = '';
+					if (type === 'HTML') {
+						cleanValue.text = '';
+					}
 				}
 
 				var cell = "<th" + styleClass + rowSpan + ">";
@@ -301,6 +312,15 @@ function extractDataFromTree(node) {
 		// the header's last row.
 		for (var i = 0; i < this.headerMatrix[this.lastHeaderRow].length; i++) {
 			var dataValue = node.contents[this.headerMatrix[this.lastHeaderRow][i].hierarchicalName];
+			if (this.type === 'CSV') {
+				// If this is a hierarchy column.
+				if (i < this.metadataHierarchies.length) {
+					// If current cell is empty then take the above cell value.
+					if (dataValue.displayedValue.length === 0) {
+						dataValue = this.contentMatrix[this.currentContentIndexRow - 1][i];
+					}
+				}
+			}
 			// Save isTotal flag.
 			dataValue.isTotal = node.isTotal;
 			this.contentMatrix[this.currentContentIndexRow][i] = dataValue;

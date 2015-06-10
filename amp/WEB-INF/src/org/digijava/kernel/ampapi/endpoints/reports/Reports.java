@@ -451,66 +451,57 @@ public class Reports {
 	}
 
 	public final Response exportSaikuReport(String query, Long reportId, String type) {
-        CellDataSet result;
+		JsonBean result;
 		try {
 			String decodedQuery = java.net.URLDecoder.decode(query);
 			decodedQuery = decodedQuery.replace("query=", "");
 			JsonBean queryObject = JsonBean.getJsonBeanFromString(decodedQuery);
 			LinkedHashMap<String, Object> queryModel = (LinkedHashMap<String, Object>) queryObject.get("queryModel");
 			queryModel.remove("page");
-			result = getSaikuCellDataSet(queryObject, reportId);
+			queryModel.put("page", 0);
+			queryModel.put("recordsPerPage", -1);
+			result = getSaikuReport(queryObject, reportId);
 
 			byte[] doc = null;
-			
 			String filename = "export";
-			
+
 			// We will use report settings to get the DecimalFormat in order to parse the formatted values
 			ReportSpecificationImpl report = ReportsUtil.getReport(reportId);
-			ReportSettings settings = null;
-			
-			if (report != null) {
-				settings = report.getSettings();
-			}
-			
-			if (report != null && !StringUtils.isEmpty(report.getReportName()));
+
+			if (report != null && !StringUtils.isEmpty(report.getReportName())) {
 				filename = report.getReportName();
+			}
 			filename += "." + type;
-			
-			switch(type) {
-				case "xls": 
-					ExcelBuilderOptions options = new ExcelBuilderOptions();
-					options.repeatValues = true;
-					
-					AMPExcelExport worksheetBuilder = new AMPExcelExport(result, new ArrayList<ThinHierarchy>(), options);
-					worksheetBuilder.setReportSettings(settings);
-			        doc = worksheetBuilder.build();
-					break;
-				case "csv":
-					doc = SaikuUtils.getCsv(result, settings, ",", "\"");
-					break;
-				case "pdf":
-		            PdfReport pdf = new AMPPdfExport();
-		    		QueryResult qr = RestUtil.convert(result);
-		            doc  = pdf.pdf(qr, null);
-					break;
+			filename = filename.replaceAll(" ", "_");
+
+			switch (type) {
+			// TODO: Uncomment when xls and csv is ready.
+			/*
+			 * case "xls": ExcelBuilderOptions options = new ExcelBuilderOptions(); options.repeatValues = true;
+			 * 
+			 * AMPExcelExport worksheetBuilder = new AMPExcelExport(result, new ArrayList<ThinHierarchy>(), options);
+			 * worksheetBuilder.setReportSettings(settings); doc = worksheetBuilder.build(); break; case "csv": doc =
+			 * SaikuUtils.getCsv(result, settings, ",", "\""); break;
+			 */
+			case "pdf":
+				AMPPdfExport pdf = new AMPPdfExport();
+				doc = pdf.pdf(result, null);
+				break;
 			}
-			
-			if(doc != null) {
-				return Response.ok(doc, MediaType.APPLICATION_OCTET_STREAM).header(
-		                "content-disposition",
-		                "attachment; filename = " + filename).header(
-		                "content-length",doc.length).build();
-			}
-			else
-			{
+
+			if (doc != null) {
+				return Response.ok(doc, MediaType.APPLICATION_OCTET_STREAM)
+						.header("content-disposition", "attachment; filename = " + filename)
+						.header("content-length", doc.length).build();
+			} else {
 				throw new Exception("Empty response while exporting.");
 			}
-			
+
 		} catch (Exception e) {
 			logger.error(e);
 			return Response.serverError().build();
 		}
-        
+
 	}
 
 	private JsonBean extractSettings(LinkedHashMap<String, Object> queryModel) {

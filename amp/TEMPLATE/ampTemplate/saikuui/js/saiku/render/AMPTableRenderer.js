@@ -1,4 +1,20 @@
-var AMPTableRenderer = function() {
+var AMPTableRenderer = function(options) {
+	type = "HTML";
+	metadataHierarchies = new Array();
+	metadataColumns = new Array();
+	// We receive the structure metadata as parameter because Rhino will
+	// complain about missing variables when exporting to PDF.
+	if (options !== undefined) {
+		if (options.type !== undefined) {
+			type = options.type;
+		}
+		if (options.hierarchies !== undefined) {
+			metadataHierarchies = options.hierarchies;
+		}
+		if (options.columns !== undefined) {
+			metadataColumns = options.columns;
+		}
+	}
 };
 
 this.headerMatrix = undefined;
@@ -8,6 +24,7 @@ this.contentMatrix = undefined;
 this.lastHeaderRow = undefined;
 this.currentContentIndexRow = undefined;
 this.numberOfRows = undefined;
+this.type = undefined;
 
 AMPTableRenderer.prototype.render = function(data, options) {
 	// Create HTML table, with header + content.
@@ -86,7 +103,7 @@ function generateHeaderHtml(headers) {
 					j -= 1;
 				}
 			} else {
-				var col = "<th class='all_null'>&nbsp</th>";
+				var col = "<th class='all_null'>&nbsp;</th>";
 			}
 			row += col;
 		}
@@ -103,9 +120,6 @@ function generateHeaderHtml(headers) {
  * always first in the list, then common columns and last measure columns.
  */
 function calculateColumnsDisposition() {
-	var self = this;
-	this.metadataHierarchies = Saiku.tabs._tabs[0].content.query.attributes.hierarchies;
-	this.metadataColumns = Saiku.tabs._tabs[0].content.query.attributes.columns;
 	var tempColumns = new Array();
 	var lastRowColumns = this.headerMatrix.length - 1;
 	for (var i = 0; i < this.metadataColumns.length; i++) {
@@ -160,7 +174,7 @@ function generateContentHtml(page) {
 				+ "</td>";
 		totalRow += totalValue;
 	}
-	totalRow += "<tr>";
+	totalRow += "</tr>";
 	content += totalRow;
 	content += "</tbody>";
 	return content;

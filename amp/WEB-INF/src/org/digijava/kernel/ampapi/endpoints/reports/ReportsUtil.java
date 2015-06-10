@@ -157,6 +157,9 @@ public class ReportsUtil {
 				// Saiku is 0 based so we add 1.
 				newParams.set("page", ((Integer) queryModel.get("page")) + 1);
 			}
+			if (queryModel.get("recordsPerPage") != null) {
+				newParams.set("recordsPerPage", ((Integer) queryModel.get("recordsPerPage")));
+			}
 			if (queryModel.get("filters") != null) {
 				newParams.set("filters", queryModel.get("filters"));
 			}

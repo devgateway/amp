@@ -47,7 +47,8 @@ var paths = {
 
 
 function _browserifier(entry, destFolder, destName, options) {
-  var bundler = browserify(entry, options);
+  options.entries = entry;
+  var bundler = browserify(options);
   bundler.external([
     'backbone',
     // don't need bootstrap here, as it just registers jQ plugins

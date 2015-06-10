@@ -100,8 +100,6 @@ function continueInitialization( e, rmParams ){
 		treeObj.init();
 		//treeObj.minusImage = 'DHTMLSuite_plus.gif';
 		treeObj.showHideNode(false,'dhtmlgoodies_tree');
-
-		
 		
 		if ( rmParams.desktopTab )
 			if ( rmParams.onePager )
@@ -114,6 +112,7 @@ function continueInitialization( e, rmParams ){
 			else
 				repManager		= new NormalReportManager();
 		
+		debugger;
 		repManager.hierarchiesVisibility	= new ShowHideElement("hierarchies_step_div");
 		repManager.hFieldsetVisibility		= new ShowHideElement("hierarchiesInfoFieldset");
 		

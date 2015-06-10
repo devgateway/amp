@@ -96,6 +96,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 , 'Modalities'
                 , 'Budget Structure'
                 , 'Indirect On Budget'
+                , 'Humanitarian Aid'
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(

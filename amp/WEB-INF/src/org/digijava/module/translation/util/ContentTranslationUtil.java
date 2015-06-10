@@ -306,7 +306,7 @@ public class ContentTranslationUtil {
         } catch (Exception e){
             logger.error("Can't clone translations", e);
         }
-        logger.info("Done cloning " + obj.getClass().getName());
+        //logger.info("Done cloning " + obj.getClass().getName());
     }
 
     /**

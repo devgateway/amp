@@ -165,6 +165,7 @@ public class ColumnConstants {
 	public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_8_ID = "National Planning Objectives Level 8 Id";
 	public static final String OBJECTIVE = "Objective";
 	public static final String ON_OFF_TREASURY_BUDGET = "On/Off/Treasury Budget";
+	public static final String HUMANITARIAN_AID = "Humanitarian Aid";
 	public static final String ORGANIZATIONS_AND_PROJECT_ID = "Organizations and Project ID";
 	public static final String ORIGINAL_COMPLETION_DATE = "Original Completion Date";
 	public static final String OVERAGE = "Overage";

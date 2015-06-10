@@ -254,13 +254,15 @@
 			<Level name="Implementation Location" column="impl_location_id" type="String" nameColumn="impl_location_name" />
 		</Hierarchy>
 
-
-
 		<Hierarchy hasAll="true" allMemberName="All On/Off/Treasury Budget" primaryKey="amp_activity_id" name="On/Off/Treasury Budget">
 			<Table name="mondrian_activity_trn_texts@@locale@@" />
 			<Level name="On/Off/Treasury Budget" column="on_off_budget_id" type="String" nameColumn="on_off_budget_name" /> 
 		</Hierarchy>		
 		
+		<Hierarchy hasAll="true" allMemberName="All Humanitarian Aid" primaryKey="amp_activity_id" name="Humanitarian Aid">
+			<Table name="mondrian_activity_trn_texts@@locale@@" />
+			<Level name="Humanitarian Aid" column="humanitarian_aid_id" type="String" nameColumn="humanitarian_aid_name" /> 
+		</Hierarchy>		
 		
 	</Dimension>
 	

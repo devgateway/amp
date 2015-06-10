@@ -548,7 +548,7 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 	
 	@Test
 	public void testDraftFilter() {
-		List<String> draft = Arrays.asList("true"); // ssc workspace
+		List<String> draft = Arrays.asList("true");
 		List<String> activities = Arrays.asList("TAC_activity_1", "new activity with contracting");
 		
 		ReportSpecificationImpl spec = buildActivityListingReportSpec("simple report filtered by draft"); 
@@ -563,10 +563,7 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 		runMondrianTestCase(spec, "en", activities, cr1);
 		
 		spec.setFilters(buildSimpleFilter(ColumnConstants.DRAFT, "true", true));
-		runMondrianTestCase(spec, "en", activities, cr1);
-		
-		spec.setFilters(buildSimpleFilter(ColumnConstants.DRAFT, "true", true));
-		runMondrianTestCase(spec, "en", activities, cr1);
+		runMondrianTestCase(spec, "en", activities, cr1);		
 		
 		// draft unselected area
 		ReportAreaForTests cr2 = new ReportAreaForTests()
@@ -581,6 +578,44 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 		runMondrianTestCase(spec, "en", activities, cr2);
 		
 		spec.setFilters(buildSimpleFilter(ColumnConstants.DRAFT, "false", true));
+		runMondrianTestCase(spec, "en", activities, cr2);
+	}
+	
+	@Test
+	public void testHumanitarianAidFilter() {
+		List<String> humanitarianAid = Arrays.asList("true");
+		List<String> activities = Arrays.asList("TAC_activity_1", "date-filters-activity", "crazy funding 1", "Activity with planned disbursements", // these have HA defined
+				"Activity Linked With Pledge", "pledged 2");
+		
+		ReportSpecificationImpl spec = buildActivityListingReportSpec("simple report filtered by humanitarian aid"); 
+		
+		// humanitarian aid selected area
+		ReportAreaForTests cr1 = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Actual Commitments", "546 564", "Actual Disbursements", "123 321")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "TAC_activity_1", "Actual Commitments", "213 231", "Actual Disbursements", "123 321"),
+	      new ReportAreaForTests().withContents("Project Title", "crazy funding 1", "Actual Commitments", "333 333", "Actual Disbursements", "0"));
+		
+		spec.setFilters(buildSimpleFilter(ColumnConstants.HUMANITARIAN_AID, humanitarianAid, true));
+		runMondrianTestCase(spec, "en", activities, cr1);
+		
+		spec.setFilters(buildSimpleFilter(ColumnConstants.HUMANITARIAN_AID, "true", true));
+		runMondrianTestCase(spec, "en", activities, cr1);
+				
+		// humanitarian aid unselected area
+		ReportAreaForTests cr2 = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Actual Commitments", "125 000", "Actual Disbursements", "72 770")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "date-filters-activity", "Actual Commitments", "125 000", "Actual Disbursements", "72 000"),
+	      new ReportAreaForTests().withContents("Project Title", "Activity with planned disbursements", "Actual Commitments", "0", "Actual Disbursements", "770"));
+		
+		spec.setFilters(buildSimpleFilter(ColumnConstants.HUMANITARIAN_AID, humanitarianAid, false));
+		runMondrianTestCase(spec, "en", activities, cr2);
+		
+		spec.setFilters(buildSimpleFilter(ColumnConstants.HUMANITARIAN_AID, "true", false));
+		runMondrianTestCase(spec, "en", activities, cr2);
+		
+		spec.setFilters(buildSimpleFilter(ColumnConstants.HUMANITARIAN_AID, "false", true));
 		runMondrianTestCase(spec, "en", activities, cr2);
 	}
 }

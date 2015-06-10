@@ -353,7 +353,13 @@ function sanitizeRows(rowData, data) {
 
 SaikuTableRenderer.prototype.internalRender = function(allData, options) {
 	if (Settings.AMP_REPORT_API_BRIDGE) {
-		var ampTableRenderer = new AMPTableRenderer();
+		// We pass these 2 more values to options to avoid a problem with Rhino
+		// and PDF export.
+		var metadata = {
+			hierarchies: Saiku.tabs._tabs[0].content.query.attributes.hierarchies,
+			columns: Saiku.tabs._tabs[0].content.query.attributes.columns
+		};
+		var ampTableRenderer = new AMPTableRenderer(metadata);
 		return ampTableRenderer.render(allData, options);
 	}
 	

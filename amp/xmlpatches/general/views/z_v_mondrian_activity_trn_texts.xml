@@ -37,11 +37,15 @@
 			   			 
 
 			   			COALESCE(on_off_budget.budget_id, 999999999) AS on_off_budget_id,
-			   			COALESCE(on_off_budget.budget,  'Undefined') AS on_off_budget_name 
+			   			COALESCE(on_off_budget.budget,  'Undefined') AS on_off_budget_name,
+			   			 
+			   			COALESCE(humanitarian_aid.val_id, 999999999) AS humanitarian_aid_id,
+			   			COALESCE(humanitarian_aid.val,  'Undefined') AS humanitarian_aid_name			   			
 			   			
 						FROM amp_activity_version aav
 							LEFT JOIN v_implementation_level impl_level ON impl_level.amp_activity_id = aav.amp_activity_id
-							LEFT JOIN v_on_off_budget on_off_budget ON on_off_budget.amp_activity_id = aav.amp_activity_id;
+							LEFT JOIN v_on_off_budget on_off_budget ON on_off_budget.amp_activity_id = aav.amp_activity_id
+							LEFT JOIN v_humanitarian_aid humanitarian_aid ON humanitarian_aid.amp_activity_id = aav.amp_activity_id
 							
 			</lang>
 		</script>

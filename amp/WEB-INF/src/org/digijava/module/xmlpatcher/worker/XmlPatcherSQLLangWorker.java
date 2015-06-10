@@ -98,11 +98,11 @@ public class XmlPatcherSQLLangWorker extends XmlPatcherLangWorker {
 			// if things go wrong, rollback the connection and set it back to
 			// autocommit=true
 			try {
-				logger.info(String.format("running statements: %s", statements));
+				//logger.info(String.format("running statements: %s", statements));
 				statement.executeBatch();
 				con.commit();
 			} catch (BatchUpdateException e) {
-				logger.error(String.format("\t====>the query FAILED!\n: %s", statements));
+				//logger.error(String.format("\t====>the query FAILED!\n: %s", statements));
 				con.rollback();
 				throw new XmlPatcherLangWorkerException(e);
 			} finally {

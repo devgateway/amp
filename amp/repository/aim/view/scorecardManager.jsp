@@ -70,7 +70,7 @@ function saveScoreCardSetting() {
 }
 function validate(){
 	if( $("input[name=validationPeriod]").is(":checked") && isEmpty($('select[name="validationTime"]').val())){
-		alert("<digi:trn jsFriendly='true'>Please select validation period</digi:trn>");
+		alert("<digi:trn jsFriendly='true'>Please select validation time</digi:trn>");
 		return false;
 	}
 	

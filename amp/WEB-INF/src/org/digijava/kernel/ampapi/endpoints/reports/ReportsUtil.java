@@ -169,6 +169,9 @@ public class ReportsUtil {
 			if (queryModel.get(EPConstants.SORTING) != null) {
 				newParams.set(EPConstants.SORTING, queryModel.get(EPConstants.SORTING));
 			}
+			if (queryModel.get("regenerate") != null) {
+				newParams.set("regenerate", queryModel.get("regenerate"));
+			}
 		}
 		return newParams;
 	}

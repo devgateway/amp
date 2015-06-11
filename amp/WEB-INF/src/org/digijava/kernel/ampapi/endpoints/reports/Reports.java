@@ -41,6 +41,8 @@ import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecif
 import org.dgfoundation.amp.reports.mondrian.converters.MondrianReportFiltersConverter;
 import org.dgfoundation.amp.reports.saiku.export.AMPExcelExport;
 import org.dgfoundation.amp.reports.saiku.export.AMPPdfExport;
+import org.dgfoundation.amp.reports.saiku.export.AMPReportExcelExport;
+import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
@@ -438,7 +440,7 @@ public class Reports {
 	@Path("/saikureport/export/xls/{report_id}")
 	@Produces({"application/vnd.ms-excel" })
 	public final Response exportXlsSaikuReport(String query, @PathParam("report_id") Long reportId) {
-		return exportSaikuReport(query, reportId, "xls");
+		return exportSaikuReport(query, reportId, "xlsx");
 		
 	}
 	@POST
@@ -465,6 +467,7 @@ public class Reports {
 			queryModel.remove("page");
 			queryModel.put("page", 0);
 			queryModel.put("recordsPerPage", -1);
+			queryModel.put("regenerate", false);
 			result = getSaikuReport(queryObject, reportId);
 
 			byte[] doc = null;
@@ -480,17 +483,16 @@ public class Reports {
 			filename = filename.replaceAll(" ", "_");
 
 			switch (type) {
-			// TODO: Uncomment when xls and csv is ready.
+			// TODO: Uncomment when csv is ready.
+			case "xlsx":
+				doc = AMPReportExcelExport.generateExcel(result, AMPReportExportConstants.XLSX);
+				break;
 			/*
-			 * case "xls": ExcelBuilderOptions options = new ExcelBuilderOptions(); options.repeatValues = true;
-			 * 
-			 * AMPExcelExport worksheetBuilder = new AMPExcelExport(result, new ArrayList<ThinHierarchy>(), options);
-			 * worksheetBuilder.setReportSettings(settings); doc = worksheetBuilder.build(); break; case "csv": doc =
-			 * SaikuUtils.getCsv(result, settings, ",", "\""); break;
+			 * case "csv": doc = SaikuUtils.getCsv(result, settings, ",", "\""); break;
 			 */
 			case "pdf":
 				AMPPdfExport pdf = new AMPPdfExport();
-				doc = pdf.pdf(result, null);
+				doc = pdf.pdf(result, AMPReportExportConstants.PDF);
 				break;
 			}
 

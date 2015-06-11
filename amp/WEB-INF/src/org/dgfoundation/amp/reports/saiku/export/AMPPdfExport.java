@@ -34,25 +34,21 @@ import com.itextpdf.tool.xml.pipeline.html.HtmlPipelineContext;
 
 public class AMPPdfExport extends PdfReport {
 
-	public byte[] pdf(QueryResult qr, String svg) throws Exception {
-		return super.pdf(qr, svg);
-	}
-
-	public byte[] pdf(JsonBean qr, String svg) throws Exception {
+	public byte[] pdf(JsonBean jb, String type) throws Exception {
 		Rectangle size = PageSize.A4.rotate();
 		Document doc = new Document(size);
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		PdfWriter writer = PdfWriter.getInstance(doc, os);
 		doc.open();
-		populatePdf(doc, writer, qr);
+		populatePdf(doc, writer, jb, type);
 		doc.close();
 		return os.toByteArray();
 	}
 
-	public void populatePdf(Document doc, PdfWriter writer, JsonBean jb) throws Exception {
+	public void populatePdf(Document doc, PdfWriter writer, JsonBean jb, String type) throws Exception {
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		Date date = new Date();
-		String content = AMPJSConverter.convertToHtml(jb);
+		String content = AMPJSConverter.convertToHtml(jb, type);
 		content = "<div>" + "AMP Export - " + dateFormat.format(date) + "</div><div>&nbsp;</div>" + content;
 
 		InputStream contentIs = new ByteArrayInputStream(content.getBytes("UTF-8"));

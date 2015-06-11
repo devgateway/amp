@@ -9,6 +9,7 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
 public class AmpAhsurveyResponse implements Versionable, Cloneable, Serializable {
@@ -17,11 +18,14 @@ public class AmpAhsurveyResponse implements Versionable, Cloneable, Serializable
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+	@Interchangeable(fieldTitle="ID")
 	private Long ampReponseId;
 	private AmpAhsurvey ampAHSurveyId;
+	@Interchangeable(fieldTitle="Survey Question ID")
 	private AmpAhsurveyQuestion ampQuestionId;
+	@Interchangeable(fieldTitle="Response")
 	private String response;
+	@Interchangeable(fieldTitle="References")
     private String references;
 
 

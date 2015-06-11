@@ -16,6 +16,7 @@ import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTe
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.helper.RegionalFunding;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -35,8 +36,6 @@ LoggerIdentifiable, Cloneable {
 
 	protected static String [] IMPLEMENTED_ACTIONS=new String[]{GatePermConst.Actions.EDIT};
 
-	@Interchangeable(fieldTitle = "Created By")
-	@VersionableFieldSimple(fieldTitle = "Created By", blockSingleChange = true)
 	protected AmpTeamMember createdBy;
 	
 	@Interchangeable(fieldTitle = "Project Impact")
@@ -162,11 +161,11 @@ LoggerIdentifiable, Cloneable {
 	
 	@Interchangeable(fieldTitle = "Sectors")
 	@VersionableCollection(fieldTitle = "Sectors")
-	protected Set sectors ;
+	protected Set<AmpSector> sectors ;
 	
 	@Interchangeable(fieldTitle = "Contracts")
 	@VersionableCollection(fieldTitle = "Contracts")
-	protected Set contracts;
+	protected Set<IPAContract> contracts;
 	
 	@Interchangeable(fieldTitle = "Locations")
 	@VersionableCollection(fieldTitle = "Locations")
@@ -178,13 +177,15 @@ LoggerIdentifiable, Cloneable {
 	
 	@Interchangeable(fieldTitle = "Internal IDs")
 	@VersionableCollection(fieldTitle = "Internal IDs")
-	protected Set internalIds ;
+	protected Set<AmpActivityInternalId> internalIds ;
 	
 	@Interchangeable(fieldTitle = "Fundings")
 	@VersionableCollection(fieldTitle = "Fundings")
 	protected Set<AmpFunding> funding ;
 	
-	@Interchangeable(fieldTitle = "Progress")
+	
+	/*seems obsolete*/
+//	@Interchangeable(fieldTitle = "Progress") 
 	@VersionableCollection(fieldTitle = "Progress")
 	protected Set progress;
 	
@@ -207,7 +208,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableCollection(fieldTitle = "Line Ministry Observations")
 	protected Set<AmpLineMinistryObservation> lineMinistryObservations;
 
-	@Interchangeable(fieldTitle = "Costs")
+//	@Interchangeable(fieldTitle = "Costs") 
 	@VersionableCollection(fieldTitle = "Costs")
 	protected Set costs;
 	
@@ -215,7 +216,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldTextEditor(fieldTitle = "Program Description")
 	protected String programDescription;
 	
-	@Interchangeable(fieldTitle = "Team")
+//	@Interchangeable(fieldTitle = "Team")
 	@VersionableFieldSimple(fieldTitle = "Team")
 	protected AmpTeam team;
 	//@VersionableCollection(fieldTitle = "Members")
@@ -322,8 +323,8 @@ LoggerIdentifiable, Cloneable {
 	@VersionableCollection(fieldTitle = "Activity Contacts")
 	protected Set<AmpActivityContact> activityContacts;
 
-
-	@Interchangeable(fieldTitle = "Status Reason")
+	//UPDATE_IT_AFTER
+//	@Interchangeable(fieldTitle = "Status Reason")
 	@VersionableFieldTextEditor(fieldTitle = "Status Reason")
 	protected String statusReason;
 	
@@ -364,9 +365,9 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Proposed Completion Date")
 	protected Date proposedCompletionDate;
 
-	// This field is defunct
 
-	@Interchangeable(fieldTitle = "Created By")
+
+//	@Interchangeable(fieldTitle = "Created By")
 	@VersionableFieldSimple(fieldTitle = "Created By", blockSingleChange = true)
 	protected AmpTeamMember activityCreator;
 	
@@ -382,15 +383,14 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Iati Last Update Date", blockSingleChange = true)
 	protected Date iatiLastUpdatedDate;
 	
-	
-	
 	protected AmpTeamMember approvedBy;
+	
 	@Interchangeable(fieldTitle = "Approval Date")
 	protected Date approvalDate;
 
 	@Interchangeable(fieldTitle = "Regional Fundings")
 	@VersionableCollection(fieldTitle = "Regional Fundings")
-	protected Set regionalFundings;
+	protected Set<RegionalFunding> regionalFundings;
 
 	@Interchangeable(fieldTitle = "Approval Status")
 	@VersionableFieldSimple(fieldTitle = "Approval Status", blockSingleChange = true)
@@ -403,7 +403,7 @@ LoggerIdentifiable, Cloneable {
 	
 	@Interchangeable(fieldTitle = "GPI Surveys")
 	@VersionableCollection(fieldTitle = "GPI Surveys")
-	protected Set <AmpGPISurvey> gpiSurvey;
+	protected Set<AmpGPISurvey> gpiSurvey;
 
 	@Interchangeable(fieldTitle = "Line Ministry Rank")
 	@VersionableFieldSimple(fieldTitle = "Line Ministry Rank")
@@ -509,11 +509,12 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Humanitarian Aid")
 	protected Boolean humanitarianAid;
 
-	@Interchangeable(fieldTitle = "Act. Programs")
+//	@Interchangeable(fieldTitle = "Act. Programs")
 	@VersionableCollection(fieldTitle = "Act. Programs")
 	protected Set actPrograms;
 	
-	@Interchangeable(fieldTitle = "Act. Budget Structure")
+	//UPDATE_IT_AFTER
+//	@Interchangeable(fieldTitle = "Act. Budget Structure")
 	@VersionableCollection(fieldTitle = "Act. Budget Structure")
 	protected Set actBudgetStructure;
 
@@ -529,7 +530,7 @@ LoggerIdentifiable, Cloneable {
 	
 	protected Date modifiedDate;
 
-	@Interchangeable(fieldTitle = "Modified By")
+//	@Interchangeable(fieldTitle = "Modified By")
 	@VersionableFieldSimple(fieldTitle = "Modified By")
 	protected AmpTeamMember modifiedBy;
 	
@@ -662,7 +663,7 @@ LoggerIdentifiable, Cloneable {
 	/**
 	 * @return
 	 */
-	public Set getInternalIds() {
+	public Set<AmpActivityInternalId> getInternalIds() {
 		return internalIds;
 	}
 
@@ -1697,11 +1698,11 @@ LoggerIdentifiable, Cloneable {
 		this.crisNumber = crisNumber;
 	}
 
-	public Set getContracts() {
+	public Set<IPAContract> getContracts() {
 		return contracts;
 	}
 
-	public void setContracts(Set contracts) {
+	public void setContracts(Set<IPAContract> contracts) {
 		this.contracts = contracts;
 	}
 

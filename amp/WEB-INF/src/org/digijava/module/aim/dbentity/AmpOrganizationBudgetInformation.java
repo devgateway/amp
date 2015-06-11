@@ -8,19 +8,27 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
 import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 
 public class AmpOrganizationBudgetInformation implements Serializable,OrgProfileValue{
+	@Interchangeable(fieldTitle="ID")
     private Long id;
+	@Interchangeable(fieldTitle="Type")
     private AmpCategoryValue type;
+	@Interchangeable(fieldTitle="Year")
     private Long year;
+	@Interchangeable(fieldTitle="Amount")
     private Double amount;
+	@Interchangeable(fieldTitle="Currency")
     private AmpCurrency currency;
+//	@Interchangeable(fieldTitle="Organization", recursive=true)
     private AmpOrganisation organization;
     private boolean newlyCreated;
+//    @Interchangeable(fieldTitle="Organizations", recursive=true)
     private Set<AmpOrganisation> organizations;
 
 

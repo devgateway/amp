@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
@@ -14,13 +15,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class AmpAgreement implements Serializable, Versionable {
 	private static final long serialVersionUID = 1L;
 
+	@Interchangeable(fieldTitle="ID")
 	private Long id;
+	@Interchangeable(fieldTitle="Code")
 	private String code;
+	@Interchangeable(fieldTitle="Title")
 	@TranslatableField
 	private String title;
+	@Interchangeable(fieldTitle="Effective Date")
 	private Date effectiveDate;
+	@Interchangeable(fieldTitle="Signature Date")
 	private Date signatureDate;
+	@Interchangeable(fieldTitle="Close Date")
 	private Date closeDate;
+	@Interchangeable(fieldTitle="Parlimentary Approval Date")
 	private Date parlimentaryApprovalDate;
 	
 	public AmpAgreement() {

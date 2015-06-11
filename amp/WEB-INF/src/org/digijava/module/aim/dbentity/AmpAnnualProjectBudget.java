@@ -5,15 +5,21 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
 public class AmpAnnualProjectBudget implements Serializable, Versionable, Cloneable, Comparable {
 
 	private static final Logger logger = Logger.getLogger(AmpAnnualProjectBudget.class);
+	@Interchangeable(fieldTitle="Annual Project Budget ID")
 	private Long ampAnnualProjectBudgetId;
+	@Interchangeable(fieldTitle="Amount")
 	private Double amount;
+	@Interchangeable(fieldTitle="Year")
 	private Date year;
+	
 	private AmpActivityVersion activity;
+	@Interchangeable(fieldTitle="Currency")
 	protected AmpCurrency ampCurrencyId;
 
 	public Long getAmpAnnualProjectBudgetId() {

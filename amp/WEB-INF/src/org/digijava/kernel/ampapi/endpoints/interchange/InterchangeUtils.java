@@ -37,6 +37,8 @@ import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.time.StopWatch;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.jdbc.Work;
 
 import clover.org.apache.commons.lang.StringUtils;
@@ -55,6 +57,9 @@ public class InterchangeUtils {
 			put(java.util.Date.class, "date");
 			put(java.lang.Double.class, "float");
 			put(java.lang.Boolean.class, "boolean");
+			put(java.lang.Long.class, "int");
+			put(java.lang.Float.class, "float");
+//			put(AmpCategoryValue.class, "string");
 
 		}
 	};
@@ -233,13 +238,14 @@ public class InterchangeUtils {
 	}
 
 	
+	private static boolean isCollection(Field field) {
+		return Collection.class.isAssignableFrom( field.getType());
+	}
 	
-	private static List<JsonBean> getChildrenOfField(Field field) {
-//		List<JsonBean> children = new ArrayList<JsonBean>();
-		if (!Collection.class.isAssignableFrom( field.getType()) )
-			return null;
+	private static Class<?> getGenericClass(Field field) {
+		ParameterizedType collectionType = null;
 
-		ParameterizedType collectionType = (ParameterizedType) field.getGenericType();
+		collectionType = (ParameterizedType) field.getGenericType();
 		Type[] genericTypes = collectionType.getActualTypeArguments();
 		if (genericTypes.length > 1)
 		{
@@ -248,18 +254,20 @@ public class InterchangeUtils {
 			throw new RuntimeException("Only sets and lists expected");
 		}
 		if (genericTypes.length == 0) {
-			return null;
+//			return null;
 			//dealing with a raw type
 			//throw an exception, it won't be complete with no parameterization
-//			throw new RuntimeException("Raw types are not allowed");
+			throw new RuntimeException("Raw types are not allowed");
 		}
-		
-
-		
-		return getAllAvailableFields((Class<?>) genericTypes[0]);
-//		return null;
-		
-//		return children;
+		return ((Class<?>) genericTypes[0]);
+	}
+	
+	
+	private static List<JsonBean> getChildrenOfField(Field field) {
+		if (!isCollection(field))
+			return getAllAvailableFields(field.getType());
+		else
+			return getAllAvailableFields(getGenericClass(field));
 	}
 	
 	public static String underscorify(String input) {
@@ -290,11 +298,10 @@ public class InterchangeUtils {
 
 		if (!classToCustomType.containsKey(field.getClass())) {/* list type */
 			/**/
-			bean.set("multiple_values", ant2.multipleValues() ? true : false);
-
-			
-
-
+//			bean.set("multiple_values", ant2.multipleValues() ? true : false);
+			bean.set("importable", ant2.importable()? true: false);
+			if (isCollection(field))
+				bean.set("multiple_values", true);
 			if (!ant2.recursive()){
 				List<JsonBean> children = getChildrenOfField(field);
 				if (children != null && children.size() > 0)
@@ -330,7 +337,9 @@ public class InterchangeUtils {
 	
 	private static List<JsonBean> getAllAvailableFields(Class clazz) {
 		List<JsonBean> result = new ArrayList<JsonBean>();
-
+		StopWatch.next("Descending into", false, clazz.getName());
+//		LOGGER.error("descending into" + clazz.toString());
+//		LOGGER.
 //		Set<String> visibleColumnNames = ColumnsVisibility.getVisibleColumns();
 		Field[] fields = clazz.getDeclaredFields();
 

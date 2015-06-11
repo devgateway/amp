@@ -8,6 +8,8 @@ package org.digijava.module.aim.helper;
 import java.util.Collection;
 import java.util.Comparator;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+
 /**
  * The class represents a regional funding object which contains 
  * data about a region and the funding allocated to that region
@@ -35,13 +37,21 @@ public class RegionalFunding {
 	 * The collection of funding details object which is of type
 	 * org.digijava.module.aim.helper.FundingDetail
 	 */
-	private Collection commitments;
-	private Collection disbursements;
-	private Collection expenditures;
+	@Interchangeable(fieldTitle="Commitments")
+	private Collection<FundingDetail> commitments;
+	@Interchangeable(fieldTitle="Disbursements")
+	private Collection<FundingDetail> disbursements;
+	@Interchangeable(fieldTitle="Expenditures")
+	private Collection<FundingDetail> expenditures;
+	@Interchangeable(fieldTitle="Total Commitments")
 	private double totCommitments;
+	@Interchangeable(fieldTitle="Total Disbursements")
 	private double totDisbursements;
+	@Interchangeable(fieldTitle="Total Expenditures")
 	private double totExpenditures;
+	@Interchangeable(fieldTitle="Total Undisbursed")
 	private double totUnDisbursed;
+	@Interchangeable(fieldTitle="Total Unexpended")
 	private double totUnExpended;
 	
 	public RegionalFunding() {
@@ -83,42 +93,42 @@ public class RegionalFunding {
 	/**
 	 * @return Returns the commitments.
 	 */
-	public Collection getCommitments() {
+	public Collection<FundingDetail> getCommitments() {
 		return commitments;
 	}
 
 	/**
 	 * @param commitments The commitments to set.
 	 */
-	public void setCommitments(Collection commitments) {
+	public void setCommitments(Collection<FundingDetail> commitments) {
 		this.commitments = commitments;
 	}
 
 	/**
 	 * @return Returns the disbursements.
 	 */
-	public Collection getDisbursements() {
+	public Collection<FundingDetail> getDisbursements() {
 		return disbursements;
 	}
 
 	/**
 	 * @param disbursements The disbursements to set.
 	 */
-	public void setDisbursements(Collection disbursements) {
+	public void setDisbursements(Collection<FundingDetail> disbursements) {
 		this.disbursements = disbursements;
 	}
 
 	/**
 	 * @return Returns the expenditures.
 	 */
-	public Collection getExpenditures() {
+	public Collection<FundingDetail> getExpenditures() {
 		return expenditures;
 	}
 
 	/**
 	 * @param expenditures The expenditures to set.
 	 */
-	public void setExpenditures(Collection expenditures) {
+	public void setExpenditures(Collection<FundingDetail> expenditures) {
 		this.expenditures = expenditures;
 	}
 

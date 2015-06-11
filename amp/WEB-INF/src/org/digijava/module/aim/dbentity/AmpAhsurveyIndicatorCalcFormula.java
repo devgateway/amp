@@ -2,14 +2,23 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+
 public class AmpAhsurveyIndicatorCalcFormula implements Serializable {
 
+	@Interchangeable(fieldTitle="ID")
     private Long id;
+	@Interchangeable(fieldTitle="Formula")
     private String calcFormula;
+	@Interchangeable(fieldTitle="Column Index")
     private Long columnIndex;
+	@Interchangeable(fieldTitle="Constant Name")
     private String constantName;
+	@Interchangeable(fieldTitle="Base Line Value")
     private String baseLineValue;
+	@Interchangeable(fieldTitle="Target Value")
     private String targetValue;
+	@Interchangeable(fieldTitle="Enabled")
     private Boolean enabled;
     private AmpAhsurveyIndicator parentIndicator;
 

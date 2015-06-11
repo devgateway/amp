@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -12,19 +13,29 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 public class AmpIndicator implements Serializable
 {
 	private static final long serialVersionUID = 1L;
-
+	@Interchangeable(fieldTitle="Indicator ID")
 	private Long indicatorId;
+	@Interchangeable(fieldTitle="Default Indicator")
 	private boolean defaultInd;
+	@Interchangeable(fieldTitle="Name")
     @TranslatableField
 	private String name;
+	@Interchangeable(fieldTitle="Code")
 	private String code;
+	@Interchangeable(fieldTitle="Type")
 	private String type;
+	@Interchangeable(fieldTitle="Creation Date")
 	private Date creationDate;
+	@Interchangeable(fieldTitle="Category")
 	private int category;
     @TranslatableField
+    @Interchangeable(fieldTitle="Description")
 	private String description;
-	private Set sectors;
+    @Interchangeable(fieldTitle="Sectors", recursive=true)
+	private Set<AmpSector> sectors;
+    @Interchangeable(fieldTitle="Comments")
 	private String comments;
+    @Interchangeable(fieldTitle="Unit")
         private String unit;
 	/**
 	 * Indicator connections with activities.
@@ -32,6 +43,7 @@ public class AmpIndicator implements Serializable
 	 * Please look carefully in IndicatorConnection.hbm.xml before changing anything, because {@link IndicatorActivity} is subclass of {@link IndicatorConnection}
 	 * @see IndicatorConnection
 	 */
+    
 	private Set<IndicatorActivity> valuesActivity;
 
 	/**
@@ -40,11 +52,13 @@ public class AmpIndicator implements Serializable
 	 * Please look carefully in IndicatorConnection.hbm.xml before changing anything, because {@link IndicatorTheme} is subclass of {@link IndicatorConnection}
 	 * @see IndicatorConnection
 	 */
+    
 	private Set<IndicatorTheme> valuesTheme;
 
-
+    @Interchangeable(fieldTitle="Indicator Category")
 	private AmpCategoryValue indicatorsCategory;
 
+    @Interchangeable(fieldTitle="Risk")
 	private AmpIndicatorRiskRatings risk;
 
 
@@ -90,10 +104,10 @@ public class AmpIndicator implements Serializable
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Set getSectors() {
+	public Set<AmpSector> getSectors() {
 		return sectors;
 	}
-	public void setSectors(Set sectors) {
+	public void setSectors(Set<AmpSector> sectors) {
 		this.sectors = sectors;
 	}
 	public boolean isDefaultInd() {

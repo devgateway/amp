@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
+
 import org.apache.log4j.Logger;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
@@ -21,13 +23,19 @@ import org.digijava.module.aim.util.Output;
  */
 @TranslatableClass (displayName = "Component")
 public class AmpComponent implements Serializable,Comparable<AmpComponent>, Versionable, Cloneable {
+	
 	private static Logger logger = Logger.getLogger(AmpComponent.class);
+	@Interchangeable(fieldTitle="ID")
 	private Long ampComponentId;
+	@Interchangeable(fieldTitle="Title")
 	@TranslatableField
 	private String title;
+	@Interchangeable(fieldTitle="Description")
 	@TranslatableField
 	private String description;
+//	@Interchangeable(fieldTitle="") //I gladly would export this, if I could
 	private java.sql.Timestamp creationdate;
+	@Interchangeable(fieldTitle="Code")
 	private String code;
 	
 	public static class AmpComponentComparator implements Comparator<AmpComponent>{

@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
 
@@ -24,12 +25,14 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
 	/**
 	 * Activity
 	 */
+//	@Interchangeable(fieldTitle="Activity", recursive=true)
 	private AmpActivityVersion activity;
 	
 	/**
 	 * Indicator risk.
 	 * Actually risk is in each connection of indicator and activity.
 	 */
+	@Interchangeable(fieldTitle="Risk")
 	private AmpIndicatorRiskRatings risk;
         
 

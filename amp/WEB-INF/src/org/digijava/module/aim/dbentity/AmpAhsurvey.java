@@ -9,11 +9,13 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.*;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
 
 public class AmpAhsurvey implements Versionable, Serializable, Cloneable, Comparable<AmpAhsurvey> {
 
+	@Interchangeable(fieldTitle="ID")
 	private Long ampAHSurveyId;
 
 	//private AmpFunding ampFundingId;
@@ -22,7 +24,9 @@ public class AmpAhsurvey implements Versionable, Serializable, Cloneable, Compar
 	private AmpActivityVersion ampActivityId;
 	private AmpOrganisation ampDonorOrgId;
     private AmpOrganisation pointOfDeliveryDonor;
+    @Interchangeable(fieldTitle="Responses")
 	private Set<AmpAhsurveyResponse> responses;
+	@Interchangeable(fieldTitle="Survey Date")
     private Date surveyDate;
 
     public Date getSurveyDate() {

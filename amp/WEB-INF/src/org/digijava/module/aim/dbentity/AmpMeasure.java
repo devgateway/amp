@@ -4,18 +4,22 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 
 @TranslatableClass (displayName = "Measure")
 public class AmpMeasure  implements Serializable, Cloneable
 {
-
+	@Interchangeable(fieldTitle="ID")
 	private Long ampMeasureId ;
 	@TranslatableField
+	@Interchangeable(fieldTitle="Name")
 	private String name ;
 	private AmpIssues issue;
+	@Interchangeable(fieldTitle="Actors")
 	private Set<AmpActor> actors;
+	@Interchangeable(fieldTitle="Measure Date")
 	private Date measureDate;
 	
 	

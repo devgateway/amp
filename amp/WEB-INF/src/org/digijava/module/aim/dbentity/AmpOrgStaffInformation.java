@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
 import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -14,10 +15,15 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class AmpOrgStaffInformation implements Serializable,OrgProfileValue{
     private static final long serialVersionUID = 1L;
+    @Interchangeable(fieldTitle="ID")
     private Long id;
+    @Interchangeable(fieldTitle="Year")
     private Long year;
+    @Interchangeable(fieldTitle="Staff Number")
     private Long staffNumber;
+    @Interchangeable(fieldTitle="Type")
     private AmpCategoryValue type;
+    @Interchangeable(fieldTitle="Organization")
     private AmpOrganisation organization;
     // helper field, not for saving in db..
     private boolean newlyCreated;

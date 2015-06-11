@@ -6,23 +6,35 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
 public class AmpLocation implements Serializable, Versionable, Cloneable
 {
+	@Interchangeable(fieldTitle="AMP Location ID")
 	private Long ampLocationId ;
+	@Interchangeable(fieldTitle="ISO3 Code")
 	private String iso3Code ;
+	@Interchangeable(fieldTitle="Name")
 	private String name ;
+	@Interchangeable(fieldTitle="Description")
 	private String description ;
+	@Interchangeable(fieldTitle="GIS Coordinates")
 	private String gisCoordinates ;
+	@Interchangeable(fieldTitle="Language")
 	private String language ;
+	@Interchangeable(fieldTitle="Version")
 	private String version ;
+	@Interchangeable(fieldTitle="Geocode")
 	private String geoCode;
 	
-	private Set activities;
+	@Interchangeable(fieldTitle="Activities", recursive=true)
+	private Set<AmpActivityVersion> activities;
 	
+	@Interchangeable(fieldTitle="Location")
 	private AmpCategoryValueLocations location;
 	
+	@Interchangeable(fieldTitle="Region Location")
 	private AmpCategoryValueLocations regionLocation;
 	
 	public AmpCategoryValueLocations getLocation() {
@@ -47,11 +59,11 @@ public class AmpLocation implements Serializable, Versionable, Cloneable
 		this.regionLocation = regionLocation;
 	}
 
-	public Set getActivities() {
+	public Set<AmpActivityVersion> getActivities() {
 		return activities;
 	}
 
-	public void setActivities(Set activities) {
+	public void setActivities(Set<AmpActivityVersion> activities) {
 		this.activities = activities;
 	}
 	
@@ -215,7 +227,7 @@ public class AmpLocation implements Serializable, Versionable, Cloneable
 	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
 		AmpLocation aux = (AmpLocation) clone();
 		if (aux.activities == null) {
-			aux.activities = new HashSet();
+			aux.activities = new HashSet<AmpActivityVersion>();
 		}
 		aux.activities.add(newActivity);
 		// this.ampLocationId = null;

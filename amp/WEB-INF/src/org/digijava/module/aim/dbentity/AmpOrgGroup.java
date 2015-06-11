@@ -9,6 +9,7 @@ import java.util.List;
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.DonorGroupDimension;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
@@ -20,28 +21,34 @@ import org.digijava.module.aim.util.NameableOrIdentifiable;
 @TranslatableClass (displayName = "Organisation Group")
 public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDimensionable, HierarchyListable,OrgProfileValue, NameableOrIdentifiable
 {
+	@Interchangeable(fieldTitle="Organization Group ID")
 	private Long ampOrgGrpId;
 	
+	@Interchangeable(fieldTitle="Organization Group Name")
 	@TranslatableField
 	private String orgGrpName;
 	
+	@Interchangeable(fieldTitle="Organization Group Code")
 	@TranslatableField
 	private String orgGrpCode;
 	
 	//private Set organizations; 
-	
+	@Interchangeable(fieldTitle="Organization Type")
 	private AmpOrgType orgType;	// a mandatory field, added for donor-access
 	
 	
 	private boolean translateable	= true;
     // this field is saved in Organization Dashboard and not from organization manager in admin
+	@Interchangeable(fieldTitle="Organization Background (Dashboard)")
     private String orgGrpBackground;
     /*
      *this field is saved in Organization Dashboard and not from organization manager in admin
      * don't confuse it with Description field
      */
+	@Interchangeable(fieldTitle="Organization Group Description (Dashboard)")
     private String orgGrpDescription;
     // this field is saved in  Organization Dashboard and not from organization manager in admin
+	@Interchangeable(fieldTitle="Organization Group Key Areas (Dashboard)")
     private String orgGrpKeyAreas;
 	
 	/**

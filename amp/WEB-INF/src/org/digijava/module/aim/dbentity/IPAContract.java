@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -36,73 +37,108 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
     private static final long serialVersionUID = 2485772788422409800L;
     private Long id;
     @TranslatableField
+	@Interchangeable(fieldTitle = "Contract Name")
     private String contractName;
+    
     @TranslatableField
+    @Interchangeable(fieldTitle = "Description")
     private String description;
+    @Interchangeable(fieldTitle = "Contracting Organization Text")
     private String contractingOrganizationText;
+    @Interchangeable(fieldTitle = "Activity Category")
     private transient AmpCategoryValue activityCategory;
+    @Interchangeable(fieldTitle = "Start of Tendering")
     private Date startOfTendering;
+    @Interchangeable(fieldTitle = "Signature of Contract")
     private Date signatureOfContract;
+    @Interchangeable(fieldTitle = "Contract Validity")
     private Date contractValidity;
+    @Interchangeable(fieldTitle = "Contract Completion")    
     private Date contractCompletion;
     
     
-    
+    @Interchangeable(fieldTitle = "Total Private Contrib Amount Date")
     private Date totalPrivateContribAmountDate;
+    @Interchangeable(fieldTitle = "Total National Contrib Regional Amount Date")
     private Date totalNationalContribRegionalAmountDate;
+    @Interchangeable(fieldTitle = "Total NationalContrib IFI Amount Date")
     private Date totalNationalContribIFIAmountDate;
+    @Interchangeable(fieldTitle = "Total National Contrib Central Amount Date")
     private Date totalNationalContribCentralAmountDate;
+    @Interchangeable(fieldTitle = "Total EC Contrib INV Amount Date")
     private Date totalECContribINVAmountDate;
+    @Interchangeable(fieldTitle = "Total EC Contrib IB Amount Date")
     private Date totalECContribIBAmountDate;
     
+    @Interchangeable(fieldTitle = "Total EC Contrib IB Amount")
     private Double totalECContribIBAmount;
+    @Interchangeable(fieldTitle = "Total Amount")
     private Double totalAmount;
+    @Interchangeable(fieldTitle = "Contract Total Value")
     private Double contractTotalValue;
+    @Interchangeable(fieldTitle = "Total Amount Currency")
     private transient AmpCurrency totalAmountCurrency;
+    @Interchangeable(fieldTitle = "Disbursements Global Currency")
     private transient AmpCurrency dibusrsementsGlobalCurrency;
+    @Interchangeable(fieldTitle = "Total EC Contrib INV Amount")
     private Double totalECContribINVAmount;
+    @Interchangeable(fieldTitle = "Total National Contrib Central Amount")
     private Double totalNationalContribCentralAmount;
+    @Interchangeable(fieldTitle = "Total National Contrib Regional Amount")
     private Double totalNationalContribRegionalAmount;
+    @Interchangeable(fieldTitle = "Total National Contrib IFI Amount")
     private Double totalNationalContribIFIAmount;
+    @Interchangeable(fieldTitle = "Total Private Contrib Amount")
     private Double totalPrivateContribAmount;
+    @Interchangeable(fieldTitle = "Disbursements")
     private transient Set<IPAContractDisbursement> disbursements;
+    
+//    @Interchangeable(fieldTitle = "Activity")
     private transient AmpActivityVersion activity;
+    
+    
+    @Interchangeable(fieldTitle = "Organization")
     private transient AmpOrganisation organization;
+    @Interchangeable(fieldTitle = "Organizations")
     private transient Set<AmpOrganisation> organizations;
+    @Interchangeable(fieldTitle = "Status")
     private transient AmpCategoryValue status;
     //this disbursements and executionRate are used in Montenegro
+    @Interchangeable(fieldTitle = "Total Disbursements")
     private Double totalDisbursements;
+    @Interchangeable(fieldTitle = "Execution Rate")
     private Double executionRate;
     //burkina mission - exchange rate is computed based on the disbursement entered in funding step and total amount
     //of the contract (contractTotalValue)
+    @Interchangeable(fieldTitle = "Funding Total Disbursements")
     private Double fundingTotalDisbursements;
+    @Interchangeable(fieldTitle = "Funding Execution Rate")
     private Double fundingExecutionRate;
-    
+    @Interchangeable(fieldTitle = "Type")
     private transient AmpCategoryValue type;
+    @Interchangeable(fieldTitle = "Contract Type")
     private transient AmpCategoryValue contractType;
     
     
     /**
      * 
      */
+    @Interchangeable(fieldTitle = "Donor Contract Funding Amount")
     private Double donorContractFundinAmount;
+    @Interchangeable(fieldTitle = "Donor Contract Funding Currency")
     private transient AmpCurrency donorContractFundingCurrency;
     
+    @Interchangeable(fieldTitle = "Total Amount Donor Contract Funding")
     private Double totAmountDonorContractFunding;
+    @Interchangeable(fieldTitle = "Total Amount Currency Donor")
     private transient AmpCurrency totalAmountCurrencyDonor; 
     
+    @Interchangeable(fieldTitle = "Total Amount Country Contract Funding")
     private Double totAmountCountryContractFunding;
+    @Interchangeable(fieldTitle = "Total Amount Currency Country")
     private transient AmpCurrency totalAmountCurrencyCountry;  
     
-    /**
-     * @Deprecated
-     * They don't seem to be used no more
-     */
-    @Deprecated
-    private transient Set amendments;    
-    /**
-     * 
-     */
+
     
     public AmpCategoryValue getType() {
         return type;
@@ -504,14 +540,7 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 		this.totalAmountCurrencyCountry = totalAmountCurrencyCountry;
 	}
 
-	@Deprecated
-	public Set getAmendments() {
-		return amendments;
-	}
-	@Deprecated
-	public void setAmendments(Set amendments) {
-		this.amendments = amendments;
-	}
+
 	
 	@Override
 	public boolean equalsForVersioning(Object obj) {
@@ -810,7 +839,7 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 			}
 		}
 		*/
-		aux.setAmendments(null);
+
 		
 		return aux;
 	}

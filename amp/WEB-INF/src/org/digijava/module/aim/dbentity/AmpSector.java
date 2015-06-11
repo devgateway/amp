@@ -6,6 +6,7 @@ import java.util.*;
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.SectorDimension;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
@@ -22,36 +23,49 @@ import java.util.Arrays;
 public class AmpSector implements Serializable, Comparable, Identifiable,
 		ARDimensionable, HierarchyListable, AmpAutoCompleteDisplayable,
 		Cloneable, OrgProfileValue, NameableOrIdentifiable {
+	@Interchangeable(fieldTitle="Sector ID")
 	private Long ampSectorId;
+	@Interchangeable(fieldTitle="Parent Sector ID", recursive=true)
 	private AmpSector parentSectorId;
+	@Interchangeable(fieldTitle="Sector Code")
 	private String sectorCode;
+	@Interchangeable(fieldTitle="Name")
 	@TranslatableField
 	private String name;
+	@Interchangeable(fieldTitle="Type")
 	private String type;
+	@Interchangeable(fieldTitle="AMP Organization ID")
 	private AmpOrganisation ampOrgId;
+	@Interchangeable(fieldTitle="AMP Sector Scheme ID")
 	private AmpSectorScheme ampSecSchemeId;
 	@TranslatableField
+	@Interchangeable(fieldTitle="Description")
 	private String description;
+	@Interchangeable(fieldTitle="Language")
 	private String language;
+	@Interchangeable(fieldTitle="Version")
 	private String version;
+	
+	//unused anywhere
+	@Deprecated
 	private Set aidlist;
-	private Set indicators;
+	
+	
+	@Interchangeable(fieldTitle="Indicators")
+	private Set<AmpIndicator> indicators;
+	@Interchangeable(fieldTitle="Sectors", recursive=true)
 	private Set<AmpSector> sectors;
+	@Interchangeable(fieldTitle="Deleted")
 	private Boolean deleted;
 
 	private boolean translateable = true;
 
-	public Set<AmpSector> getSectors() {
-		return sectors;
-	}
-
-	public void setSectors(Set<AmpSector> sectors) {
-		this.sectors = sectors;
-	}
-
+	@Interchangeable(fieldTitle="Sector Code Official")
 	private String sectorCodeOfficial;
 
+	@Interchangeable(fieldTitle="Segment Code")
 	private String segmentCode;
+	
 	private transient Collection<AmpSector> transientChildren;
 
 	public String getSegmentCode() {
@@ -61,10 +75,11 @@ public class AmpSector implements Serializable, Comparable, Identifiable,
 	public void setSegmentCode(String segmentCode) {
 		this.segmentCode = segmentCode;
 	}
-
-	/**
-	 * @return
-	 */
+//
+//	/**
+//	 * @return
+//	 */
+	@Deprecated
 	public Set getAidlist() {
 		return aidlist;
 	}
@@ -72,6 +87,17 @@ public class AmpSector implements Serializable, Comparable, Identifiable,
 	/**
 	 * @return
 	 */
+	public Set<AmpSector> getSectors() {
+		return sectors;
+	}
+
+	public void setSectors(Set<AmpSector> sectors) {
+		this.sectors = sectors;
+	}
+
+
+	
+	
 	public AmpSector getParentSectorId() {
 		return parentSectorId;
 	}
@@ -128,6 +154,7 @@ public class AmpSector implements Serializable, Comparable, Identifiable,
 	/**
 	 * @param set
 	 */
+	@Deprecated
 	public void setAidlist(Set set) {
 		aidlist = set;
 	}
@@ -219,11 +246,11 @@ public class AmpSector implements Serializable, Comparable, Identifiable,
 		return this.getAmpSectorId();
 	}
 
-	public Set getIndicators() {
+	public Set<AmpIndicator> getIndicators() {
 		return indicators;
 	}
 
-	public void setIndicators(Set indicators) {
+	public void setIndicators(Set<AmpIndicator> indicators) {
 		this.indicators = indicators;
 	}
 
@@ -301,7 +328,7 @@ public class AmpSector implements Serializable, Comparable, Identifiable,
 	}
 
 	@Override
-	public Collection getVisibleSiblings() {
+	public Collection<AmpSector> getVisibleSiblings() {
 		return getChildren();
 	}
 

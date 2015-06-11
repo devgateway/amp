@@ -1,6 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.interchange;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.management.RuntimeErrorException;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -51,6 +54,7 @@ public class InterchangeUtils {
 			put(java.lang.String.class, "string");
 			put(java.util.Date.class, "date");
 			put(java.lang.Double.class, "float");
+			put(java.lang.Boolean.class, "boolean");
 
 		}
 	};
@@ -70,10 +74,6 @@ public class InterchangeUtils {
 	    }
 	};
 
-	private static String getCustomFieldType(Field field) {
-		return "bred";
-
-	}
 
 	private static Map<String, String> getLabelsForField(String fieldName) {
 		Map<String, String> translations = new HashMap<String, String>();
@@ -89,6 +89,8 @@ public class InterchangeUtils {
 	}
 
 	public static JsonBean mapToBean(Map<String, String> map) {
+		if (map.isEmpty())
+			return null;
 		JsonBean bean = new JsonBean();
 		for (Map.Entry<String, String> entry : map.entrySet()) {
 			bean.set(entry.getKey(), entry.getValue());
@@ -96,10 +98,6 @@ public class InterchangeUtils {
 		return bean;
 	}
 
-	public static List<JsonBean> getChildrenDescribed(Field field) {
-		return new ArrayList<JsonBean>();
-		// for (field.)
-	}
 
 	public static Collection<JsonBean> getActivityList(TeamMember tm) {
 		Map<String, JsonBean> activityMap = new HashMap<String, JsonBean>();
@@ -229,34 +227,87 @@ public class InterchangeUtils {
 						activitiesList.add(bean);
 					}
 				}
-
 			}
 		});
 		return activitiesList;
 	}
 
-	public static JsonBean describeField(Field field) {
+	
+	
+	private static List<JsonBean> getChildrenOfField(Field field) {
+//		List<JsonBean> children = new ArrayList<JsonBean>();
+		if (!Collection.class.isAssignableFrom( field.getType()) )
+			return null;
+
+		ParameterizedType collectionType = (ParameterizedType) field.getGenericType();
+		Type[] genericTypes = collectionType.getActualTypeArguments();
+		if (genericTypes.length > 1)
+		{
+			//dealing with a map or anything else having > 1 parameterized types 
+			//throw an exception, this is a very unexpected case
+			throw new RuntimeException("Only sets and lists expected");
+		}
+		if (genericTypes.length == 0) {
+			return null;
+			//dealing with a raw type
+			//throw an exception, it won't be complete with no parameterization
+//			throw new RuntimeException("Raw types are not allowed");
+		}
+		
+
+		
+		return getAllAvailableFields((Class<?>) genericTypes[0]);
+//		return null;
+		
+//		return children;
+	}
+	
+	public static String underscorify(String input) {
+		StringBuilder bld = new StringBuilder();
+		for (int i = 0; i < input.length(); i++) {
+			if (input.charAt(i) == ' ' || input.charAt(i) == '?')
+				continue;
+			if (Character.isUpperCase(input.charAt(i))) {
+				if (i > 0)
+					bld.append('_');
+				bld.append(Character.toLowerCase(input.charAt(i)));
+			}
+			else
+				bld.append(input.charAt(i));
+		}
+		return bld.toString();
+	}
+	
+	private static JsonBean describeField(Field field) {
 		Interchangeable ant2 = field.getAnnotation(Interchangeable.class);
 		if (ant2 == null)
 			return null;
 		JsonBean bean = new JsonBean();
 
-		// Map<String,String> structure = new HashMap<String, String>();
-		boolean b = classToCustomType.containsKey(field.getClass());
-
-		// bean.set("field_type", field.getType());
-		bean.set("field_type", classToCustomType.containsKey(field.getType()) ? classToCustomType.get(field.getType())
-				: "list");
+		bean.set("field_type", classToCustomType.containsKey(field.getType()) ? classToCustomType.get(field.getType()) : "list");
+		bean.set("field_name", underscorify(ant2.fieldTitle()));
+		bean.set("field_label", mapToBean(getLabelsForField(field.getName())));
 
 		if (!classToCustomType.containsKey(field.getClass())) {/* list type */
 			/**/
 			bean.set("multiple_values", ant2.multipleValues() ? true : false);
-			/* left alone for now. would be draggable from wicket */
-			// structure.put("allow_empty", )
-			/* link to the db */
+
+			
+
+
+			if (!ant2.recursive()){
+				List<JsonBean> children = getChildrenOfField(field);
+				if (children != null && children.size() > 0)
+					bean.set("children", children);
+			}
+			else
+			{
+				bean.set("recursive", true);
+			}
+			/*left alone for now. would be draggable from wicket*/
+			//structure.put("allow_empty", )
+			/*link to the db*/
 		}
-		bean.set("field_name", field.getName());
-		bean.set("field_label", mapToBean(getLabelsForField(field.getName())));
 		// bean.set("children", )
 		return bean;
 	}
@@ -273,21 +324,20 @@ public class InterchangeUtils {
 	}
 
 	public static List<JsonBean> getAllAvailableFields() {
+		return getAllAvailableFields(AmpActivityFields.class);
+	}
+	
+	
+	private static List<JsonBean> getAllAvailableFields(Class clazz) {
 		List<JsonBean> result = new ArrayList<JsonBean>();
 
-		Set<String> visibleColumnNames = ColumnsVisibility.getVisibleColumns();
-		Field[] fields = AmpActivityFields.class.getDeclaredFields();
+//		Set<String> visibleColumnNames = ColumnsVisibility.getVisibleColumns();
+		Field[] fields = clazz.getDeclaredFields();
 
-		List<Field> exportableFields = new ArrayList<Field>();
 		for (Field field : fields) {
-			if (field.getAnnotation(Interchangeable.class) != null) {
-				exportableFields.add(field);
-			}
-		}
-
-		for (Field field : exportableFields) {
-			result.add(describeField(field));
-
+			JsonBean descr = describeField(field);
+			if (descr != null)
+				result.add(descr);
 		}
 
 		// for (String col : visibleColumnNames) {

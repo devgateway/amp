@@ -312,7 +312,7 @@ function extractDataFromTree(node) {
 		// the header's last row.
 		for (var i = 0; i < this.headerMatrix[this.lastHeaderRow].length; i++) {
 			var dataValue = node.contents[this.headerMatrix[this.lastHeaderRow][i].hierarchicalName];
-			if (this.type === 'CSV') {
+			if (this.type === 'CSV' || this.type === 'XLSX') {
 				// If this is a hierarchy column.
 				if (i < this.metadataHierarchies.length) {
 					// If current cell is empty then take the above cell value.

@@ -406,7 +406,7 @@ public class ScorecardService {
 	 */
 	private boolean isUpdateOnGracePeriod(Date updateDate) {
 		boolean isOnGracePeriod = false;
-		if (settings != null && settings.getValidationPeriod()) {
+		if (settings != null && settings.getValidationPeriod() != null && settings.getValidationPeriod()) {
 			Integer weekNumber = settings.getValidationTime();
 			try {
 				Quarter quarter = new Quarter(fiscalCalendar, updateDate);

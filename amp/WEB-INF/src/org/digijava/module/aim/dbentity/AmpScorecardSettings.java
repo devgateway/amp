@@ -11,7 +11,7 @@ public class AmpScorecardSettings implements Serializable {
 	 */
 	private static final long serialVersionUID = -2696192720129725674L;
 	private Long ampScorecardSettingsId;
-	private Boolean validationPeriod;
+	private Boolean validationPeriod = Boolean.FALSE;
 	private Integer validationTime;
 	private Double percentageThreshold;
 	private Set<AmpScorecardSettingsCategoryValue> closedStatuses = new HashSet<AmpScorecardSettingsCategoryValue>();

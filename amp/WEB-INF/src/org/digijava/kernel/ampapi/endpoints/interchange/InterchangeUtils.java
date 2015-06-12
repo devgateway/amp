@@ -1,6 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.interchange;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,10 +10,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.management.RuntimeErrorException;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -33,6 +37,8 @@ import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.time.StopWatch;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.jdbc.Work;
 
 import clover.org.apache.commons.lang.StringUtils;
@@ -42,51 +48,74 @@ public class InterchangeUtils {
 
 	public static final Logger LOGGER = Logger.getLogger(InterchangeUtils.class);
 	private static final ISO8601DateFormat dateFormatter = new ISO8601DateFormat();
-	private static ProjectListCacher cacher= new ProjectListCacher ();
+	private static ProjectListCacher cacher = new ProjectListCacher();
 
-	
 	@SuppressWarnings("serial")
 	protected static final Map<Class<?>, String> classToCustomType = new HashMap<Class<?>, String>() {
 		{
 			put(java.lang.String.class, "string");
 			put(java.util.Date.class, "date");
 			put(java.lang.Double.class, "float");
+			put(java.lang.Boolean.class, "boolean");
+			put(java.lang.Long.class, "string");
+//			put(java.lang.Long.class, "int");
+			put(java.lang.Float.class, "float");
+//			put(AmpCategoryValue.class, "string");
 
 		}
 	};
-
-	private static String getCustomFieldType(Field field) {
-		return "bred";
-
-	}
 	
+	private static Set<Class<?>> JSON_SUPPORTED_CLASSES = new HashSet<Class<?>>() {
+	    {
+	        add(Boolean.class);
+	        add(Character.class);
+	        add(Byte.class);
+	        add(Short.class);
+	        add(Integer.class);
+	        add(Long.class);
+	        add(Float.class);
+	        add(Double.class);
+	        add (String.class);
+	        add (Date.class);
+	    }
+	};
+
+/**
+ * Picks available translations for a string (supposedly field name)
+ * @param fieldName the field name to be translated
+ * @return a map from the ISO2 code -> translation in said text
+ */
 	private static Map<String, String> getLabelsForField(String fieldName) {
-		Map<String,String> translations = new HashMap<String, String>();
+		Map<String, String> translations = new HashMap<String, String>();
 		try {
 			Collection<Message> messages = TranslatorWorker.getAllTranslationOfBody(fieldName, Long.valueOf(3));
 			for (Message m : messages) {
 				translations.put(m.getLocale(), m.getMessage());
 			}
 		} catch (WorkerException e) {
-			//MEANINGFUL ERROR HERE
+			// MEANINGFUL ERROR HERE
 		}
 		return translations;
 	}
-	
+
+	/**
+	 * transforms a Map<String,String> to a JsonBean with equal structure
+	 * @param map the map to be transformed
+	 * @return a JsonBean of the structure
+	 * {"\<code1\>":"\<translation1\>", 
+	 * 	"\<code2\>":"\<translation2\>", ...}
+	 */
 	public static JsonBean mapToBean(Map<String, String> map) {
+		if (map.isEmpty())
+			return null;
 		JsonBean bean = new JsonBean();
 		for (Map.Entry<String, String> entry : map.entrySet()) {
 			bean.set(entry.getKey(), entry.getValue());
 		}
 		return bean;
 	}
-	
-	
-	public static List<JsonBean> getChildrenDescribed(Field field) {
-		return new ArrayList<JsonBean>();
-//		for (field.)
-	}
-	
+
+
 	public static Collection<JsonBean> getActivityList(TeamMember tm) {
 		Map<String, JsonBean> activityMap = new HashMap<String, JsonBean>();
 		List<JsonBean> viewableActivities = new ArrayList<JsonBean>();
@@ -205,125 +234,194 @@ public class InterchangeUtils {
 					while (rs.next()) {
 						JsonBean bean = new JsonBean();
 						bean.set("amp_activity_id", rs.getLong("amp_activity_id"));
-						bean.set("created_date", formatISO8601Date (rs.getDate("date_created")));
+						bean.set("created_date", formatISO8601Date(rs.getDate("date_created")));
 						bean.set("title", rs.getString("name"));
 						bean.set("project_code", rs.getString("project_code"));
-						bean.set("update_date", formatISO8601Date (rs.getDate("date_updated")));
+						bean.set("update_date", formatISO8601Date(rs.getDate("date_updated")));
 						bean.set("amp_id", rs.getString("amp_id"));
 						bean.set("edit", editable);
 						bean.set("view", viewable);
 						activitiesList.add(bean);
 					}
 				}
-
 			}
 		});
 		return activitiesList;
 	}
 
-
-	public static JsonBean describeField(Field field) {
+	/**
+	 * checks whether a Field is assignable from a Collection
+	 * @param field a Field
+	 * @return true/false
+	 */
+	private static boolean isCollection(Field field) {
+		return Collection.class.isAssignableFrom( field.getType());
+	}
+	
+	/**
+	 * returns the generic class defined within a Collection,
+	 * e.g. Collection<Class_returned>
+	 * @param field
+	 * @return the generic class  
+	 */
+	private static Class<?> getGenericClass(Field field) {
+		if (!isCollection(field))
+			throw new RuntimeException("Not a collection: " + field.toString());
+		ParameterizedType collectionType = null;
+		collectionType = (ParameterizedType) field.getGenericType();
+		Type[] genericTypes = collectionType.getActualTypeArguments();
+		if (genericTypes.length > 1)
+		{
+			//dealing with a map or anything else having > 1 parameterized types 
+			//throw an exception, this is a very unexpected case
+			throw new RuntimeException("Only collections with one generic type expected!");
+		}
+		if (genericTypes.length == 0) {
+//			return null;
+			//dealing with a raw type
+			//throw an exception, it won't be complete with no parameterization
+			throw new RuntimeException("Raw types are not allowed!");
+		}
+		return ((Class<?>) genericTypes[0]);
+	}
+	
+	/**
+	 * gets fields from the type of the field
+	 * @param field
+	 * @return a list of JsonBeans, each a description of @Interchangeable 
+	 * fields in the definition of the field's class, or field's generic type,
+	 * if it's a collection  
+	 */
+	private static List<JsonBean> getChildrenOfField(Field field) {
+		if (!isCollection(field))
+			return getAllAvailableFields(field.getType());
+		else
+			return getAllAvailableFields(getGenericClass(field));
+	}
+	
+	/**
+	 * converts the uppercase letters of a string to underscore + lowercase
+	 * (except for first one)
+	 * @param input String to be converted
+	 * @return converted string
+	 */
+	public static String underscorify(String input) {
+		StringBuilder bld = new StringBuilder();
+		for (int i = 0; i < input.length(); i++) {
+			if (input.charAt(i) == ' ' || input.charAt(i) == '?')
+				continue;
+			if (Character.isUpperCase(input.charAt(i))) {
+				if (i > 0)
+					bld.append('_');
+				bld.append(Character.toLowerCase(input.charAt(i)));
+			}
+			else
+				bld.append(input.charAt(i));
+		}
+		return bld.toString();
+	}
+	
+	/**
+	 * describes a field in a JSON structure of:
+	 * 		field_type: one of the types {string, boolean, float, list}
+	 * 		field_name: the field name, obtained from the fieldTitle attribute from the @Interchangeable annotation
+	 * 		field_label: translations of the field in the available languages
+	 * 		multiple_values: true if it's a collection, false otherwise
+	 * 		importable: whether the field is to be imported, or had been exported just for the sake of matching
+	 * 		children: if the field is not a basic type (string, boolean, or float), its class may contain other @Interchangeable fields,
+	 * 					  which are recursively added here
+	 * 		recursive: defined by @Interchangeable.recursive; true for the purpose of avoiding loops
+	 * 		allow_empty: specifies whether said field is allowed to be transmitted empty
+	 * @param field
+	 * @return
+	 */
+	private static JsonBean describeField(Field field) {
 		Interchangeable ant2 = field.getAnnotation(Interchangeable.class);
 		if (ant2 == null)
 			return null;
 		JsonBean bean = new JsonBean();
-
-//		Map<String,String> structure = new HashMap<String, String>(); 
-		boolean b = classToCustomType.containsKey(field.getClass());
-		
-//		bean.set("field_type", field.getType());
+		bean.set("field_name", underscorify(ant2.fieldTitle()));
 		bean.set("field_type", classToCustomType.containsKey(field.getType()) ? classToCustomType.get(field.getType()) : "list");
-
-		if (!classToCustomType.containsKey(field.getClass())) {/*list type*/
-			/**/
-			bean.set("multiple_values", ant2.multipleValues() ? true : false);
-			/*left alone for now. would be draggable from wicket*/
-			//structure.put("allow_empty", )
-			/*link to the db*/
-		}
-		bean.set("field_name", field.getName());
 		bean.set("field_label", mapToBean(getLabelsForField(field.getName())));
-//		bean.set("children", )
+		if (!classToCustomType.containsKey(field.getClass())) {/* list type */
+			bean.set("importable", ant2.importable()? true: false);
+			if (isCollection(field))
+				bean.set("multiple_values", true);
+			if (!ant2.recursive()){
+				List<JsonBean> children = getChildrenOfField(field);
+				if (children != null && children.size() > 0)
+					bean.set("children", children);
+			}
+			else
+			{
+				bean.set("recursive", true);
+			}
+			/*left alone for now. would be draggable from wicket*/
+			//structure.put("allow_empty", ???)
+		}
 		return bean;
 	}
-	
-	private static List<Field> getVisibleFields(Class clazz) {
-		Field[] fields = clazz.getDeclaredFields();
-		List<Field> exportableFields = new ArrayList<Field>();
-		for (Field field : fields) {
-            if (field.getAnnotation(Interchangeable.class) != null) {
-            	exportableFields.add(field);
-            }
-		}
-		return exportableFields;
-	}
+
 
 	public static List<JsonBean> getAllAvailableFields() {
+		return getAllAvailableFields(AmpActivityFields.class);
+	}
+	
+
+	/**
+	 * Describes each @Interchangeable field of a class
+	 * @param clazz the class to be described
+	 * @return 
+	 */
+	private static List<JsonBean> getAllAvailableFields(Class clazz) {
 		List<JsonBean> result = new ArrayList<JsonBean>();
-
-		Set<String> visibleColumnNames = ColumnsVisibility.getVisibleColumns();
-		Field[] fields = AmpActivityFields.class.getDeclaredFields();
-
-		List<Field> exportableFields = new ArrayList<Field>();
+		StopWatch.next("Descending into", false, clazz.getName());
+		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
-			if (field.getAnnotation(Interchangeable.class) != null) {
-				exportableFields.add(field);
-			}
+			JsonBean descr = describeField(field);
+			if (descr != null)
+				result.add(descr);
 		}
-
-		for (Field field : exportableFields) {
-			result.add(describeField(field));
-			
-
-		}
-
-		// for (String col : visibleColumnNames) {
-		// result.set(, value);
-		// // fieldSet.contains(arg0)
-		// // result.set(col, );
-		// }
 		return result;
 	}
 
-	
 	/**
-     * Gets a date formatted in ISO 8601 format. If the date is null, returns null
-     * 
-     * @param date the date to be formatted
-     * @return String, date in ISO 8601 format
-     */
+	 * Gets a date formatted in ISO 8601 format. If the date is null, returns
+	 * null.
+	 * 
+	 * @param date
+	 *            the date to be formatted
+	 * @return String, date in ISO 8601 format
+	 */
 	public static String formatISO8601Date(Date date) {
-		if (date == null) {
-			return null;
-		} else {
-			return dateFormatter.format(date);
-		}
-
+		return date == null ? null : dateFormatter.format(date);  
 	}
 
 	/**
-	 * Gets the List <JsonBean> of activities the user can and can't view, edit using a LRU caching mechanism.
-	 * The pid is used as the cache key.
+	 * Gets the List <JsonBean> of activities the user can and can't view, edit
+	 * using a LRU caching mechanism. The pid is used as the cache key.
 	 * 
-	 * @param pid current pagination request reference (random id) to keep a snapshot for the pagination chunks
-	 * @param tm TeamMember, current logged user
-	 * @return the Collection <JsonBean> with the list of activities for the user
+	 * @param pid
+	 *            current pagination request reference (random id) to keep a
+	 *            snapshot for the pagination chunks
+	 * @param tm
+	 *            TeamMember, current logged user
+	 * @return the Collection <JsonBean> with the list of activities for the
+	 *         user
 	 */
 	public static Collection<JsonBean> getActivityList(String pid, TeamMember tm) {
 		Collection<JsonBean> projectList = null;
 		if (pid != null) {
 			projectList = cacher.getCachedProjectList(pid);
-
 		}
-		if (projectList == null) 
-		{
+		if (projectList == null) {
 			projectList = getActivityList(tm);
 			if (pid != null) {
 				cacher.addCachedProjectList(pid, projectList);
 			}
 		}
-
 		return projectList;
 	}
+
 	
 }

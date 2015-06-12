@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
@@ -18,23 +19,31 @@ import org.digijava.module.aim.util.Output;
 @TranslatableClass (displayName = "Structure")
 public class AmpStructure implements Serializable,Comparable, Versionable, Cloneable {
 	private static Logger logger = Logger.getLogger(AmpStructure.class);
+	@Interchangeable(fieldTitle="ID")
 	private Long ampStructureId;
 	@TranslatableField
+	@Interchangeable(fieldTitle="Title")
 	private String title;
 	@TranslatableField
+	@Interchangeable(fieldTitle="Description")
 	private String description;
+	@Interchangeable(fieldTitle="Latitude")
 	private String latitude;
+	@Interchangeable(fieldTitle="Longitude")
 	private String longitude;
+	@Interchangeable(fieldTitle="Shape")
 	private String shape;
 	private java.sql.Timestamp creationdate;
+	@Interchangeable(fieldTitle="Type")
 	private AmpStructureType type;
-	private Set activities;
+	@Interchangeable(fieldTitle="")
+	private Set<AmpActivityVersion> activities;
 	private Set<AmpStructureImg> images;
 	
-	public Set getActivities() {
+	public Set<AmpActivityVersion> getActivities() {
 		return activities;
 	}
-	public void setActivities(Set activities) {
+	public void setActivities(Set<AmpActivityVersion> activities) {
 		this.activities = activities;
 	}
 	public Long getAmpStructureId() {

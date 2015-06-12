@@ -10,6 +10,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
@@ -20,50 +22,86 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 public class AmpFunding implements Serializable, Versionable, Cloneable {
 	
 	private static final long serialVersionUID = 1L;
+	@Interchangeable(fieldTitle="AMP Funding ID")
 	private Long ampFundingId;
+	@Interchangeable(fieldTitle="Donor Organization ID", recursive=true)
 	private AmpOrganisation ampDonorOrgId;
+	@Interchangeable(fieldTitle="Activity ID", recursive=true)
 	private AmpActivityVersion ampActivityId;
+	@Interchangeable(fieldTitle="CRS Transaction Number")
 	private Long crsTransactionNo;
+	@Interchangeable(fieldTitle="Financing ID")
 	private String financingId;
+	@Interchangeable(fieldTitle="Funding Terms Code")
 	private String fundingTermsCode;
+	@Interchangeable(fieldTitle="Planned Start Date")
 	private Date plannedStartDate;
+	@Interchangeable(fieldTitle="Planned Completion Date")
 	private Date plannedCompletionDate;
+	@Interchangeable(fieldTitle="Actual Start Date")
 	private Date actualStartDate;
+	@Interchangeable(fieldTitle="Actual Completion Date")
 	private Date actualCompletionDate;
+	@Interchangeable(fieldTitle="Original Completion Date")
 	private Date originalCompDate;
+	@Interchangeable(fieldTitle="Last Audit Date")
 	private Date lastAuditDate;
+	@Interchangeable(fieldTitle="Reporting Date")
 	private Date reportingDate;
 	
+	@Interchangeable(fieldTitle="Conditions")
 	@TranslatableField
 	private String conditions;
 	
+	@Interchangeable(fieldTitle="Donor Objective")
 	@TranslatableField
 	private String donorObjective;
+	@Interchangeable(fieldTitle="Language")
 	private String language;
+	@Interchangeable(fieldTitle="Version")
 	private String version;
+	@Interchangeable(fieldTitle="Cal Type") //????????????
 	private String calType;
+	@Interchangeable(fieldTitle="Comments")
 	private String comments;
+	@Interchangeable(fieldTitle="Signature Date")
 	private Date signatureDate;
+	@Interchangeable(fieldTitle="Funding Details")
 	private Set<AmpFundingDetail> fundingDetails;
+	@Interchangeable(fieldTitle="MTEF Projections")
 	private Set<AmpFundingMTEFProjection> mtefProjections;
 	// private AmpTermsAssist ampTermsAssistId ;
 	/*
 	 * tanzania adds funding amp-1707
 	 */
+	@Interchangeable(fieldTitle="Active")
 	private Boolean active;
+	@Interchangeable(fieldTitle="Delegated Cooperation")
 	private Boolean delegatedCooperation;
+	@Interchangeable(fieldTitle="Delegated Partner")
 	private Boolean delegatedPartner;
+	@Interchangeable(fieldTitle="Active List")
 	private ArrayList<Boolean> activeList;
 	// private AmpModality modalityId;
+	@Interchangeable(fieldTitle="Type of Assistance")
 	private AmpCategoryValue typeOfAssistance;
+	@Interchangeable(fieldTitle="Financing Instrument")
 	private AmpCategoryValue financingInstrument;
+	@Interchangeable(fieldTitle="Funding Status")
 	private AmpCategoryValue fundingStatus;
+	@Interchangeable(fieldTitle="Mode of Payment")
 	private AmpCategoryValue modeOfPayment;
+	@Interchangeable(fieldTitle="Loan Terms")
 	private String loanTerms;
+	@Interchangeable(fieldTitle="Group Versioned Funding")
 	private Long groupVersionedFunding;
+	@Interchangeable(fieldTitle="Capital Spending Percentage")
 	private Float capitalSpendingPercentage;
+	@Interchangeable(fieldTitle="Agreement")
 	private AmpAgreement agreement;
+	@Interchangeable(fieldTitle="Source Role")
 	private AmpRole sourceRole;
+	@Interchangeable(fieldTitle="Funding Classification Date")
 	private Date fundingClassificationDate;
 	
 	@Override

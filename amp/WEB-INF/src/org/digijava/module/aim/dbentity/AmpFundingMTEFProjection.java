@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -37,13 +38,19 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 		
 	}
 	
-
+		@Interchangeable(fieldTitle="ID")
 		private Long ampFundingMTEFProjectionId ;
-		private AmpCategoryValue projected; 
+		@Interchangeable(fieldTitle="Projected")
+		private AmpCategoryValue projected;
+		@Interchangeable(fieldTitle="Amount")
 		private Double amount;
+		@Interchangeable(fieldTitle="Currency")
 		private AmpCurrency ampCurrency;
+		@Interchangeable(fieldTitle="Projection Date")
 		private Date projectionDate;
+		@Interchangeable(fieldTitle="Funding", recursive = true)
 		private AmpFunding  ampFunding;
+		@Interchangeable(fieldTitle="Reporting Date")
 		private Date reportingDate;
 		
 		private AmpOrganisation recipientOrg;

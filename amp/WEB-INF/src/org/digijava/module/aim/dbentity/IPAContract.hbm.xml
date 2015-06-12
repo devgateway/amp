@@ -98,9 +98,5 @@
 		<many-to-one name="totalAmountCurrencyCountry" column="total_amount_currency_country"
 			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 
-		<set name="amendments" cascade="all-delete-orphan" inverse="true">
-			<key column="ipa_contract_id" />
-			<one-to-many class="org.digijava.module.aim.dbentity.IPAContractAmendment" />
-		</set>
 	</class>
 </hibernate-mapping>

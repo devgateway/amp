@@ -3,6 +3,7 @@ package org.digijava.module.aim.dbentity ;
 import java.io.Serializable;
 
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -13,11 +14,16 @@ import org.hibernate.Query;
 @TranslatableClass (displayName = "Currency")
 public class AmpCurrency implements Serializable,Comparable, Identifiable
 {
+	@Interchangeable(fieldTitle="ID")
 	private Long ampCurrencyId;
+	@Interchangeable(fieldTitle="Currency Code")
 	private String currencyCode;
+	@Interchangeable(fieldTitle="Country Name")
     private String countryName;
-    @TranslatableField
+	@Interchangeable(fieldTitle="Currency Name")
+	@TranslatableField
     private String currencyName;
+	@Interchangeable(fieldTitle="Country Location")
     private AmpCategoryValueLocations countryLocation;
 	private Integer activeFlag;
 

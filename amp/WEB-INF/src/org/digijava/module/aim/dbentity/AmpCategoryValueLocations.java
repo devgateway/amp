@@ -6,6 +6,7 @@ import java.util.*;
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.LocationsDimension;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
@@ -25,19 +26,37 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCategoryValueLocations>, 
 		HierarchyListable, ARDimensionable, Serializable, AmpAutoCompleteDisplayable,OrgProfileValue, NameableOrIdentifiable {
 
+	@Interchangeable(fieldTitle="ID")
 	private Long id;
+	@Interchangeable(fieldTitle="Name")
 	@TranslatableField
 	private String name;
+	@Interchangeable(fieldTitle="Parent Category Value")
 	private AmpCategoryValue parentCategoryValue;
+	@Interchangeable(fieldTitle="Parent Location", recursive=true)
 	private AmpCategoryValueLocations parentLocation;
+	@Interchangeable(fieldTitle="Child Locations", recursive = true)
 	private Set<AmpCategoryValueLocations> childLocations;
+	@Interchangeable(fieldTitle="Description")
 	private String description;
+	@Interchangeable(fieldTitle="GS Latitude")
 	private String gsLat;
+	@Interchangeable(fieldTitle="GS Longiture")
 	private String gsLong;
+	@Interchangeable(fieldTitle="Geo code")
 	private String geoCode;
+	@Interchangeable(fieldTitle="Code")
 	private String code;
+	@Interchangeable(fieldTitle="ISO3")
 	private String iso3;
+	@Interchangeable(fieldTitle="Full Name")
 	private String fullName;
+
+	
+	private boolean translateable	= false;
+	@Interchangeable(fieldTitle="ISO")
+	private String iso;
+	
 	
 	public String getFullName() {
 		return fullName;
@@ -47,7 +66,7 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
 		this.fullName = fullName;
 	}
 
-	private boolean translateable	= false;
+	
 
 	public String getCode() {
 		return code;
@@ -105,7 +124,7 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
 		this.iso3 = iso3;
 	}
 
-	private String iso;
+
 
 	public Long getId() {
 		return id;

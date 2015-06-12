@@ -2,14 +2,18 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 @TranslatableClass (displayName = "Line Ministry Observation Actor")
 public class AmpLineMinistryObservationActor implements Serializable, Cloneable {
 
+	@Interchangeable(fieldTitle="ID")
 	private Long ampLineMinistryObservationActorId;
+	@Interchangeable(fieldTitle="Name")
 	@TranslatableField
 	private String name;
+	@Interchangeable(fieldTitle="Name Trimmed")
 	private String nameTrimmed;
 	private AmpLineMinistryObservationMeasure measure;
 

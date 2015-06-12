@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -19,11 +20,17 @@ import org.digijava.module.common.util.DateTimeUtil;
  */
 public class IPAContractDisbursement implements Serializable, Cloneable {
 	private static final long serialVersionUID = -4688757182074104911L;
+	@Interchangeable(fieldTitle="ID")
 	private Long id;
+	@Interchangeable(fieldTitle="Adjustment Type")
 	private AmpCategoryValue adjustmentType;
+	@Interchangeable(fieldTitle="Amount")
 	private Double amount;
+	@Interchangeable(fieldTitle="Currency")
 	private AmpCurrency currency;
+	@Interchangeable(fieldTitle="Date")
 	private Date date;
+	@Interchangeable(fieldTitle="Contract", recursive=true)
         private IPAContract contract;
 
         public IPAContract getContract() {

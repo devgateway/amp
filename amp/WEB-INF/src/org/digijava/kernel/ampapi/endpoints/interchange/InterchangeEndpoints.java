@@ -56,5 +56,4 @@ public class InterchangeEndpoints {
 		}
 		return new ArrayList(activityCollection).subList(start, end);
 	}
-	
 }

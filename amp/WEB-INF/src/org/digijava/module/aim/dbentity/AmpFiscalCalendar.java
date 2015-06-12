@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
 import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.aim.helper.fiscalcalendar.EthiopianBasedWorker;
@@ -18,13 +19,21 @@ import org.digijava.module.aim.util.Identifiable;
 import java.util.Arrays;
 
 public class AmpFiscalCalendar implements Serializable, Identifiable,OrgProfileValue {
+	@Interchangeable(fieldTitle="Fiscal Calendar ID")
 	private Long ampFiscalCalId;
+	@Interchangeable(fieldTitle="Start Month Number")
 	private Integer startMonthNum;
+	@Interchangeable(fieldTitle="Year Offset")
 	private Integer yearOffset;
+	@Interchangeable(fieldTitle="Start Day Number")
 	private Integer startDayNum;
+	@Interchangeable(fieldTitle="Name")
 	private String name;
+	@Interchangeable(fieldTitle="Description")
 	private String description;
+	@Interchangeable(fieldTitle="Base Calendar")
 	private String baseCal;
+	@Interchangeable(fieldTitle="Is Fiscal")
 	private Boolean isFiscal; // This indicates whether calendar is fiscal or
 
 	// not.

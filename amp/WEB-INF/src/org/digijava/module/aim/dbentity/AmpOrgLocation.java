@@ -6,15 +6,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
 import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 
 
 public class AmpOrgLocation implements Serializable,OrgProfileValue {
     private static final long serialVersionUID = 1L;
+    @Interchangeable(fieldTitle="AMP Organization Location ID")
     private Long ampOrgLocId;
+    @Interchangeable(fieldTitle="Percent")
     private Double percent;
+    @Interchangeable(fieldTitle="Organization")
     private AmpOrganisation organization;
+    @Interchangeable(fieldTitle="Location")
     private AmpCategoryValueLocations location;
 
     public Long getAmpOrgLocId() {

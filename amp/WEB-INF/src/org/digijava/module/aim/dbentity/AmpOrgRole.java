@@ -6,17 +6,25 @@ import java.util.Comparator;
 import java.util.Set;
 
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
 
 public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Versionable, Cloneable
 {
+	@Interchangeable(fieldTitle="AMP Organization Role ID")
     private Long ampOrgRoleId;
+	@Interchangeable(fieldTitle="Activity")
     private AmpActivityVersion activity;
+	@Interchangeable(fieldTitle="Organization")
 	private AmpOrganisation organisation;
+	@Interchangeable(fieldTitle="Role")
 	private AmpRole role;
+	@Interchangeable(fieldTitle="Percentage")
 	private Float 	percentage;
+	@Interchangeable(fieldTitle="Budgets")
 	private Set <AmpOrgRoleBudget> budgets;
+	@Interchangeable(fieldTitle="Additional Info")
 	private String additionalInfo;
 	
 	

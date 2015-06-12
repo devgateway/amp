@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -33,8 +34,11 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 			return arg0.hashCode() - arg1.hashCode();
 		}
 	}
+	@Interchangeable(fieldTitle="ID")
 	private Long ampFundDetailId;
+	@Interchangeable(fieldTitle="Fiscal Year")
 	private Integer fiscalYear;
+	@Interchangeable(fieldTitle="Fiscal Quarter")
 	private Integer fiscalQuarter;
 	
 	/**
@@ -45,29 +49,52 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	 * public static final int DISBURSEMENT_ORDER = 4 ;
 	 * public static final int MTEFPROJECTION = 3 ;
 	 */
+	@Interchangeable(fieldTitle="Transaction Type")
 	private Integer transactionType;
+	@Interchangeable(fieldTitle="Adjustment Type")
 	private AmpCategoryValue adjustmentType;
+	@Interchangeable(fieldTitle="Transaction Date")
 	private Date transactionDate;
+	@Interchangeable(fieldTitle="Transaction Date 2")
 	private Date transactionDate2;
+	@Interchangeable(fieldTitle="Reporting Date")
 	private Date reportingDate;
+	@Interchangeable(fieldTitle="Transaction Amount")
 	private Double transactionAmount;
+	@Interchangeable(fieldTitle="Thousands Transaction Amount")
 	private Double thousandsTransactionAmount;
+	@Interchangeable(fieldTitle="Language")
 	private String language;
+	@Interchangeable(fieldTitle="Version")
 	private String version;
+	@Interchangeable(fieldTitle="Calendar Type") //why isn't this an ACV?
 	private String calType;
 	private String orgRoleCode; // defunct
+	@Interchangeable(fieldTitle="Currency")
 	private AmpCurrency ampCurrencyId;
+	@Interchangeable(fieldTitle="Reporting Organization")
 	private AmpOrganisation reportingOrgId;
+	@Interchangeable(fieldTitle="Funding", recursive=true)
 	private AmpFunding ampFundingId;
+	@Interchangeable(fieldTitle="Fixed Exchange Rate")
 	private Double fixedExchangeRate;
+	@Interchangeable(fieldTitle="Fixed Base Currency")
 	private AmpCurrency fixedRateBaseCurrency;
+	@Interchangeable(fieldTitle="Disbursement Order Rejected")
 	private Boolean disbursementOrderRejected;
+	@Interchangeable(fieldTitle="Pledge")
 	private FundingPledges pledgeid;
+	@Interchangeable(fieldTitle="Capital Spending Percentage")
 	private Float capitalSpendingPercentage;
+	@Interchangeable(fieldTitle="Recipient Organization")
 	private AmpOrganisation recipientOrg;
+	@Interchangeable(fieldTitle="Recipient Role")
 	private AmpRole recipientRole;
+	@Interchangeable(fieldTitle="Expenditure Category")
 	private String expCategory;
+	@Interchangeable(fieldTitle="Disbursement Order ID")
 	private String disbOrderId;
+	@Interchangeable(fieldTitle="Contract")
 	private IPAContract contract;
 	private boolean iatiAdded = false; //nonpersistant
 

@@ -8,10 +8,15 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+
 public class AmpAhsurveyQuestionType implements Serializable{
 
+	@Interchangeable(fieldTitle="ID")
 	private Long ampTypeId;
+	@Interchangeable(fieldTitle="Name")
 	private String name;	// 'yes-no', 'calculated'
+	@Interchangeable(fieldTitle="Description")
 	private String desc;
 	
 	/**

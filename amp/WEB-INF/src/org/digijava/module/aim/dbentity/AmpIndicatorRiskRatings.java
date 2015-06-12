@@ -2,12 +2,17 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Identifiable;
 
 public class AmpIndicatorRiskRatings implements Identifiable, Serializable {
+	@Interchangeable(fieldTitle="Indicator Risk Ratings ID")
 	private Long ampIndRiskRatingsId;
+	@Interchangeable(fieldTitle="Rating Name")
 	private String ratingName;
+	@Interchangeable(fieldTitle="Translated Rating Name")
 	private String translatedRatingName;
+	@Interchangeable(fieldTitle="Rating Value")
 	private int ratingValue;
 	
 	public Long getAmpIndRiskRatingsId() {

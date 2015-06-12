@@ -2,6 +2,7 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
 /**
@@ -11,11 +12,16 @@ import org.digijava.module.aim.util.Output;
  *
  */
 public class AmpActivityLocation implements Versionable,Serializable, Cloneable {
+	@Interchangeable(fieldTitle="ID")
 	private Long id;
 	private AmpActivityVersion activity;
+	@Interchangeable(fieldTitle="Location", recursive=true)
 	private AmpLocation location;
+	@Interchangeable(fieldTitle="Location Percentage")
 	private Float locationPercentage;
+	@Interchangeable(fieldTitle="Latitude")
 	private String latitude;
+	@Interchangeable(fieldTitle="Longitude")
 	private String longitude;
 	
 	public Long getId() {

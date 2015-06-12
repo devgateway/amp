@@ -10,16 +10,26 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Set;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+
 public class AmpAhsurveyIndicator implements Serializable {
 
+	@Interchangeable(fieldTitle="ID")
     private Long ampIndicatorId;
+	@Interchangeable(fieldTitle="Name")
     private String name;
+	@Interchangeable(fieldTitle="Total Questions")
     private Integer totalQuestions;
+	@Interchangeable(fieldTitle="Indicator Number")
     private Integer indicatorNumber;
+	@Interchangeable(fieldTitle="Indicator Code")
     private String indicatorCode;
+	@Interchangeable(fieldTitle="Status")
     private String status;
-    private Set questions;
-    private Set calcFormulas;
+	@Interchangeable(fieldTitle="Questions", recursive=true)
+    private Set<AmpAhsurveyQuestion> questions;
+	@Interchangeable(fieldTitle="Calc Formulas")
+    private Set<AmpAhsurveyIndicatorCalcFormula> calcFormulas;
 
     
     public static class AhsurveyIndicatorComparator implements Comparator<AmpAhsurveyIndicator>, Serializable {
@@ -120,22 +130,22 @@ public class AmpAhsurveyIndicator implements Serializable {
     /**
      * @return Returns the questions.
      */
-    public Set getQuestions() {
+    public Set<AmpAhsurveyQuestion> getQuestions() {
         return questions;
     }
 
-    public Set getCalcFormulas() {
+    public Set<AmpAhsurveyIndicatorCalcFormula> getCalcFormulas() {
         return calcFormulas;
     }
 
     /**
      * @param questions The questions to set.
      */
-    public void setQuestions(Set questions) {
+    public void setQuestions(Set<AmpAhsurveyQuestion> questions) {
         this.questions = questions;
     }
 
-    public void setCalcFormulas(Set calcFormulas) {
+    public void setCalcFormulas(Set<AmpAhsurveyIndicatorCalcFormula> calcFormulas) {
         this.calcFormulas = calcFormulas;
     }
 

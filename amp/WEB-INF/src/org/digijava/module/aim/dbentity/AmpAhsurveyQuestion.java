@@ -10,15 +10,25 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Set;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+
 public class AmpAhsurveyQuestion implements Serializable{
 
+	@Interchangeable(fieldTitle="Question ID")
 	private Long ampQuestionId;
+	@Interchangeable(fieldTitle="Question Text")
 	private String questionText;
+	@Interchangeable(fieldTitle="Parent Question", recursive=true)
 	private AmpAhsurveyQuestion parentQuestion;
+	@Interchangeable(fieldTitle="Indicator ID")
 	private AmpAhsurveyIndicator ampIndicatorId;
+	@Interchangeable(fieldTitle="Question Number")
 	private Integer questionNumber;
+	@Interchangeable(fieldTitle="Type ID")
 	private AmpAhsurveyQuestionType ampTypeId;
+	@Interchangeable(fieldTitle="Status")
 	private String status;
+	@Interchangeable(fieldTitle="Questions", recursive=true)
 	private Set<AmpAhsurveyQuestion> questions;
 	
 

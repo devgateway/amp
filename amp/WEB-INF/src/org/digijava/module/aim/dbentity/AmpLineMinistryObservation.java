@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
@@ -15,12 +16,15 @@ import org.digijava.module.aim.util.Output;
 @TranslatableClass (displayName = "Line Ministry Observation")
 public class AmpLineMinistryObservation implements Serializable, Versionable, Cloneable {
 	private static final long serialVersionUID = 1L;
-	
+	@Interchangeable(fieldTitle="ID")
 	private Long ampLineMinistryObservationId;
 	@TranslatableField
+	@Interchangeable(fieldTitle="Name")
 	private String name;
 	private AmpActivityVersion activity;
+	@Interchangeable(fieldTitle="Line Ministry Observation Measures")
 	private Set<AmpLineMinistryObservationMeasure> lineMinistryObservationMeasures;
+	@Interchangeable(fieldTitle="Observation Date")
 	private Date observationDate;
 
 	public String getName() {

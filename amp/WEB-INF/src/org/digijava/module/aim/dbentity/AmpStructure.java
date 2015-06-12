@@ -36,7 +36,7 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
 	private java.sql.Timestamp creationdate;
 	@Interchangeable(fieldTitle="Type")
 	private AmpStructureType type;
-	@Interchangeable(fieldTitle="")
+
 	private Set<AmpActivityVersion> activities;
 	private Set<AmpStructureImg> images;
 	

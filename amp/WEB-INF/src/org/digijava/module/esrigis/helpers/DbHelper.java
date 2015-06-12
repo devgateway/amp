@@ -1283,10 +1283,10 @@ public class DbHelper {
 		return stt;
 	}
 
-	public static Set<AmpActivity> getActivityByAmpId(String id) {
+	public static Set<AmpActivityVersion> getActivityByAmpId(String id) {
 		Session session = null;
 		Query q = null;
-		Set<AmpActivity> activities = null;
+		Set<AmpActivityVersion> activities = null;
 		StringBuilder queryString = new StringBuilder("select a from "
 				+ AmpActivity.class.getName() + " a ");
 		queryString.append("where a.ampId=:id");
@@ -1294,7 +1294,7 @@ public class DbHelper {
 			session = PersistenceManager.getRequestDBSession();
 			q = session.createQuery(queryString.toString());
 			q.setString("id", id);
-			activities = new HashSet<AmpActivity>(q.list());
+			activities = new HashSet<AmpActivityVersion>(q.list());
 
 		} catch (Exception ex) {
 			logger.error("Unable to get Amp Structure Type from database ", ex);

@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.bouncycastle.cms.CMSException;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.dbentity.Country;
@@ -2423,86 +2424,105 @@ public class DbUtil {
         return col;
 	}
 
-	public static Collection<CountryBean> getTranlatedCountries(
-			HttpServletRequest request) {
-		Collection<CountryBean> trnCnCol = null;
-		org.digijava.kernel.entity.Locale navLang = RequestUtils
-				.getNavigationLanguage(request);
+	public static Collection<CountryBean> getTranlatedCountries(HttpServletRequest request) {
+		Collection<CountryBean> trnCnCol;
+		org.digijava.kernel.entity.Locale navLang = RequestUtils.getNavigationLanguage(request);
 
 		try {
-			trnCnCol = new ArrayList<CountryBean>();
-			Collection<Country> cnCol = FeaturesUtil.getAllDgCountries();
-			if (cnCol != null && cnCol.size() != 0) {
-				for (Iterator cnIter = cnCol.iterator(); cnIter.hasNext();) {
-					Country cn = (Country) cnIter.next();
-					cn = getTranlatedCountry(request, cn);
-
-					CountryBean trnCn = new CountryBean();
-					trnCn.setId(cn.getCountryId());
-					trnCn.setIso(cn.getIso());
-					trnCn.setIso3(cn.getIso3());
-					trnCn.setName(cn.getCountryName());
-					trnCnCol.add(trnCn);
-				}
-
+			trnCnCol = new ArrayList<>();
+			List<Country> cnCol = FeaturesUtil.getAllDgCountries();
+			updateCountryNameTranslations(request, cnCol);
+			
+			for (Country cn:cnCol) {
+				CountryBean trnCn = new CountryBean();
+				trnCn.setId(cn.getCountryId());
+				trnCn.setIso(cn.getIso());
+				trnCn.setIso3(cn.getIso3());
+				trnCn.setName(cn.getCountryName());
+				trnCnCol.add(trnCn);
 			}
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
-		if (trnCnCol != null && trnCnCol.size() != 0) {
-			List<CountryBean> sortedCountrieList = new ArrayList<CountryBean>(
-					trnCnCol);
-			Collections.sort(sortedCountrieList,
-					new HelperTrnCountryNameComparator(navLang.getCode()));
-			return sortedCountrieList;
-		} else {
-			return null;
-		}
+		
+		List<CountryBean> sortedCountrieList = new ArrayList<>(trnCnCol);
+		Collections.sort(sortedCountrieList, new HelperTrnCountryNameComparator(navLang.getCode()));
+		return sortedCountrieList;
 	}
 
-	public static Country getTranlatedCountry(HttpServletRequest request,
-			Country country) {
-		Session session = null;
-		Collection msgCol = null;
-		Query qry = null;
-
-		org.digijava.kernel.entity.Locale navLang = RequestUtils
-				.getNavigationLanguage(request);
+	public static void updateCountryNameTranslations(HttpServletRequest request, Collection<Country> countries) {
+		org.digijava.kernel.entity.Locale navLang = RequestUtils.getNavigationLanguage(request);
 		Site site = RequestUtils.getSite(request);
-
+		Map<String, List<Country>> countriesByMsgKey = AmpCollections.distribute(countries, Country.DISTRIBUTE_BY_MSGKEY);
+		
 		try {
-			if (country != null) {
-				session = PersistenceManager.getRequestDBSession();
-				String queryString = "select msg "
-						+ " from "
-						+ Message.class.getName()
-						+ " msg"
-						+ " where (msg.key=:msgLangKey) and (msg.siteId=:siteId) and (msg.locale=:locale)";
+			long start = System.currentTimeMillis();
+			String queryString = "select msg from " + Message.class.getName() + " msg"
+						+ " where (msg.key IN (:msgLangKey)) and (msg.siteId=:siteId) and (msg.locale=:locale)";
 
-				qry = session.createQuery(queryString);
-				qry.setParameter("siteId", site.getId().toString(),
-						StringType.INSTANCE);
-				qry.setParameter("locale", navLang.getCode(), StringType.INSTANCE);
-				qry.setParameter("msgLangKey", country.getMessageLangKey(),
-						StringType.INSTANCE);
-				msgCol = qry.list();
-
-				if (msgCol != null && msgCol.size() != 0) {
-					for (Iterator msgIter = msgCol.iterator(); msgIter
-							.hasNext();) {
-						Message msg = (Message) msgIter.next();
-						if (msg != null) {
-							country.setCountryName(msg.getMessage());
-							break;
-						}
-					}
+			Query qry = PersistenceManager.getSession().createQuery(queryString);
+			qry.setString("siteId", site.getId().toString());
+			qry.setString("locale", navLang.getCode());
+			qry.setParameterList("msgLangKey", countriesByMsgKey.keySet());
+			
+			List<Message> translations = qry.list();
+			logger.error("found " + translations.size() + " entries in " + (System.currentTimeMillis() - start) + " millies");
+			for(Message msg:translations) {
+				if (msg.getKey() != null && !msg.getKey().isEmpty() && countriesByMsgKey.containsKey(msg.getKey())) {
+					for(Country c:countriesByMsgKey.get(msg.getKey()))
+						c.setCountryName(msg.getMessage());
 				}
 			}
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
-		return country;
 	}
+
+//	public static Country getTranlatedCountry(HttpServletRequest request,
+//			Country country) {
+//		Session session = null;
+//		Collection msgCol = null;
+//		Query qry = null;
+//
+//		org.digijava.kernel.entity.Locale navLang = RequestUtils
+//				.getNavigationLanguage(request);
+//		Site site = RequestUtils.getSite(request);
+//
+//		try {
+//			if (country != null) {
+//				session = PersistenceManager.getRequestDBSession();
+//				long start = System.currentTimeMillis();
+//				String queryString = "select msg "
+//						+ " from "
+//						+ Message.class.getName()
+//						+ " msg"
+//						+ " where (msg.key=:msgLangKey) and (msg.siteId=:siteId) and (msg.locale=:locale)";
+//
+//				qry = session.createQuery(queryString);
+//				qry.setParameter("siteId", site.getId().toString(),
+//						StringType.INSTANCE);
+//				qry.setParameter("locale", navLang.getCode(), StringType.INSTANCE);
+//				qry.setParameter("msgLangKey", country.getMessageLangKey(),
+//						StringType.INSTANCE);
+//				msgCol = qry.list();
+//				logger.error("found " + msgCol.size() + " entries in " + (System.currentTimeMillis() - start) + " millies");
+//
+//				if (msgCol != null && msgCol.size() != 0) {
+//					for (Iterator msgIter = msgCol.iterator(); msgIter
+//							.hasNext();) {
+//						Message msg = (Message) msgIter.next();
+//						if (msg != null) {
+//							country.setCountryName(msg.getMessage());
+//							break;
+//						}
+//					}
+//				}
+//			}
+//		} catch (Exception ex) {
+//			throw new RuntimeException(ex);
+//		}
+//		return country;
+//	}
 
 	public static void deleteUserExt(AmpOrgGroup orgGrp, AmpOrgType orgType,
 			AmpOrganisation org) {

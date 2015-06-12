@@ -2,6 +2,7 @@ package org.digijava.module.aim.action;
 /*
 * @ author Govind G Dalwani
 */
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -291,17 +292,18 @@ public class GlobalSettings extends Action {
 
 
 
-	private Collection<KeyValue> getPossibleValues(String tableName)
+	private List<KeyValue> getPossibleValues(String tableName)
 	{
-		Collection<KeyValue> ret 	= new Vector<KeyValue>();
-
+//		logger.error("getting possible values for " + tableName);
+		List<KeyValue> ret = new ArrayList<>();
+		
 		if (tableName == null || tableName.length() == 0)
 			return ret;
-
-		List<Object[]> ls 	= PersistenceManager.getSession().createSQLQuery("select id, value from " + tableName).list();
-		for(Object[] obj:ls){
+		
+		List<Object[]> ls = PersistenceManager.getSession().createSQLQuery("select id, value from " + tableName).list();
+		for(Object[] obj:ls) {
 			KeyValue keyValue = new KeyValue(PersistenceManager.getString(obj[0]), PersistenceManager.getString(obj[1]));
-			ret.add( keyValue );
+			ret.add(keyValue);
 		}
 		return ret;
 	}

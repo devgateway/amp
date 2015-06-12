@@ -735,12 +735,22 @@ public class DashboardUtil {
     public static Date getGregorianCalendarDate(AmpFiscalCalendar fiscalCalendar, int year, boolean startDate) {
        return getCalendar(fiscalCalendar, startDate, year);
     }
-    /**
-	 * This was replaced by new class for new dashboards
-	 *
-	 * @deprecated use {@link org.digijava.kernel.ampapi.endpoints.util.CalendarUtil} instead.  
+    
+	@Deprecated
+	/**
+	 * RULES IN LIFE OF A CODER:
+	 * 1. do not copy-paste
+	 * 2. if you copy-paste, at least copy-paste code you understand
+	 * 3. if you don't understand some code, do not copy-paste it
+	 * 4. this code is buggy
+	 * ===============
+	 * ergo rule #5: DO NOT COPY-PASTE THIS FUNCTION, it is part of an old buggy module
+	 * 
+	 * @param fiscalCalendar
+	 * @param startDate
+	 * @param year
+	 * @return
 	 */
-    @Deprecated
     public static Date getCalendar(AmpFiscalCalendar fiscalCalendar, boolean startDate, int year) {
         DateTime dt = null;
         String calendarType = fiscalCalendar.getBaseCal();

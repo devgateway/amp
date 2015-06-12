@@ -1292,8 +1292,8 @@
             <id>swagger-api-docs</id>
 
             <properties>
-                <docBasePath>/rest</docBasePath>
-                <apiBasePath>/api-docs</apiBasePath>
+                <docBasePath>/api-docs</docBasePath>
+                <apiBasePath>/rest</apiBasePath>
             </properties>
 
             <activation>
@@ -1323,7 +1323,7 @@
                                     <sourcepath>${project.basedir}/WEB-INF/src/org/digijava/kernel/ampapi</sourcepath>
                                     <reportOutputDirectory>${project.build.outputDirectory}</reportOutputDirectory>
                                     <useStandardDocletOptions>false</useStandardDocletOptions>
-                                    <additionalparam>-apiVersion 1 -docBasePath ${docBasePath} -apiBasePath ${apiBasePath} -d ${project.basedir}/api-docs</additionalparam>
+                                    <additionalparam>-apiVersion 1 -docBasePath ${docBasePath} -apiBasePath ${apiBasePath} -d ${project.basedir}/api-docs -swaggerUiPath ${project.basedir}/swagger-ui-src</additionalparam>
                                 </configuration>
                                 <goals>
                                     <goal>javadoc</goal>

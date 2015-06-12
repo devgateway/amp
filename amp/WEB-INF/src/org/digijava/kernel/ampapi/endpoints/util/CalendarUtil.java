@@ -5,8 +5,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.helper.fiscalcalendar.NepaliBasedWorker;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.joda.time.Chronology;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.EthiopicChronology;
 import org.joda.time.chrono.GregorianChronology;
 
@@ -81,23 +84,15 @@ public class CalendarUtil {
 	public static Date getCalendar(AmpFiscalCalendar fiscalCalendar, boolean startDate, int year) {
 		DateTime dt = null;
 		String calendarType = fiscalCalendar.getBaseCal();
-		if (calendarType.equals("ETH-CAL")) {
-			DateTime dtEth = new DateTime(year, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum(), 0,
-					0, 0, 0, GregorianChronology.getInstance());
-			DateTime dt1 = dtEth.withChronology(EthiopicChronology.getInstance());
-			dt = new DateTime();
-			dt = dt.withDate(dt1.getYear(), dt1.getMonthOfYear(), dt1.getDayOfMonth());
-		} else {
-			if (calendarType.equals("NEP-CAL")) {
-				dt = new DateTime(year, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum(), 0, 0, 0, 0,
-						GregorianChronology.getInstance());
-				dt = dt.plusYears(56);
-				dt = dt.plusMonths(8);
-				dt = dt.plusDays(17); // this is to convert gregorian to nepali calendar
-			} else
-				dt = new DateTime(year, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum(), 0, 0, 0, 0,
-						GregorianChronology.getInstance());
-		}
+		if (calendarType.equals("ETH-CAL"))
+			dt = shiftGregorianDate(year, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum(), EthiopicChronology.getInstance(), 0, 0, 0);
+		else if (calendarType.equals("GREG-CAL"))
+			dt = shiftGregorianDate(year, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum(), null, 0, 0, 0);
+		else if (calendarType.equals("NEP-CAL"))
+			dt = NepaliBasedWorker.fromGregorianToNepali(year, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum());
+		else 
+			throw new RuntimeException("unknown calendar: " + calendarType); 
+		
 		if (!startDate) {
 			dt = dt.plusYears(1);
 			dt = dt.minusDays(1);
@@ -105,4 +100,48 @@ public class CalendarUtil {
 		return dt.toDate();
 	}
 
+	/**
+	 * converts a date from Gregorian to any other calendar delta'ed by a given number of years/months/days.
+	 * Because of: 
+	 * 	http://beust.com/weblog/2013/03/30/the-time-that-never-was/, 
+	 * 	http://stackoverflow.com/questions/5451152/how-to-handle-jodatime-illegal-instant-due-to-time-zone-offset-transition,
+	 * 	http://www.javased.com/?post=5451152,
+	 *   this hacky function has been written (technically 3 iterations would be enough, but you never know)
+	 * 
+	 * Original ticket: https://jira.dgfoundation.org/browse/AMP-20282
+	 * @param gregYear
+	 * @param gregMonth
+	 * @param gregDay
+	 * @param chronology: the Chronology to use. if null, then Gregorian would be used
+	 * @param deltaYear - the number of yrs to delta by
+	 * @param deltaMonth - the number of months to delta by
+	 * @param deltaDay - the number of days to delta by
+	 * @return
+	 */
+	public static DateTime shiftGregorianDate(int gregYear, int gregMonth, int gregDay,
+			Chronology chronology,
+			int deltaYear, int deltaMonth, int deltaDay) {
+		
+		int hod = 3; // hour of day: timeshifts usually happen between 22:00 and 02:00, so this sounds like a safest first bet
+		LocalDateTime ldt = new LocalDateTime(chronology == null ? GregorianChronology.getInstanceUTC() : chronology)
+			.withYear(gregYear)
+			.withMonthOfYear(gregMonth)
+			.withDayOfMonth(gregDay)
+			.plusYears(deltaYear)
+			.plusMonths(deltaMonth)
+			.plusDays(deltaDay);
+		
+		while(true) {
+			try {
+				return ldt.withHourOfDay(hod).toDateTime();
+			}
+			catch(Exception e) {
+				hod ++;
+				if (hod >= 22) {
+					// screwed up
+					throw new IllegalArgumentException(String.format("could not create a date for (gregYear, gregMonth, gregDay) = (%d, %d, %d)", gregYear, gregMonth, gregDay));
+				}
+			}
+		}
+	}
 }

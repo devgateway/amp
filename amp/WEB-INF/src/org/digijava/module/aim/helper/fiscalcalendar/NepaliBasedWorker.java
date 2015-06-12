@@ -6,8 +6,10 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.digijava.kernel.ampapi.endpoints.util.CalendarUtil;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.GregorianChronology;
 
 public class NepaliBasedWorker implements ICalendarWorker {
@@ -34,13 +36,21 @@ public class NepaliBasedWorker implements ICalendarWorker {
 		int gregDay = cal.get(Calendar.DAY_OF_MONTH);
 
 		if (fiscalCalendar != null) {
-			nepaliCalendar = new DateTime(gregYear, gregMonth, gregDay,0,0,0,0,GregorianChronology.getInstance());
-			nepaliCalendar = nepaliCalendar.plusYears(56);
-			nepaliCalendar = nepaliCalendar.plusMonths(8);
-			nepaliCalendar = nepaliCalendar.plusDays(17); //this is to convert gregorian to nepali calendar
+			nepaliCalendar = fromGregorianToNepali(gregYear, gregMonth, gregDay);
 		}
 	}
-
+	
+	/**
+	 * translates a year from Gregorian to Nepali
+	 * @param gregYear
+	 * @param gregMonth
+	 * @param gregDay
+	 * @return
+	 */
+	public static DateTime fromGregorianToNepali(int gregYear, int gregMonth, int gregDay) {
+		return CalendarUtil.shiftGregorianDate(gregYear, gregMonth, gregDay, null, 56, 8, 17);
+	}
+	
 	/*public Comparable getMonth() throws Exception {
 		return this.getMonthName(nepaliCalendar.getMonth()) +"-"+ nepaliCalendar.getMonth();
 	}*/

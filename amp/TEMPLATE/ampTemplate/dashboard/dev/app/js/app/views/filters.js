@@ -18,7 +18,8 @@ module.exports = BackboneDash.View.extend({
   },
 
   initialize: function(options) {
-    this.app = options.app;
+    this.finishedFirstLoad = false;
+	this.app = options.app;
     this.listenTo(this.app.filter, 'cancel', this.hideFilter);
     this.listenTo(this.app.filter, 'apply', this.applyFilter);
 
@@ -59,7 +60,8 @@ module.exports = BackboneDash.View.extend({
 	        		console.log('Using default filter dates.');
 	        		state.filter = blob;
 	        	}
-	        	this.app.filter.deserialize(state.filter); 
+	        	this.app.filter.deserialize(state.filter);
+	        	this.app.filter.finishedFirstLoad = true;
 	        }).bind(this),
 	        empty: {filter: {}}
 	      });

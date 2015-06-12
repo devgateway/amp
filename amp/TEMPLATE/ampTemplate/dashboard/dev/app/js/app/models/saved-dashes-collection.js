@@ -9,12 +9,18 @@ module.exports = BackboneDash.Collection.extend({
   url: '/rest/dashboard/saved-charts',
 
   model: SavedChart,
+  timer: undefined,
+  initializedOnce: false,
 
   initialize: function(models, options) {
     this.app = options.app;
   },
 
   load: function(stateId) {
+	var self = this;
+	if (self.initializedOnce !== false) { return; }
+	self.initializedOnce = true;
+	 
 	//console.log('load saved dashboard: ' + stateId);
     var deferred = new Deferred();
     var loaded = this.get(stateId);
@@ -26,22 +32,22 @@ module.exports = BackboneDash.Collection.extend({
       model.fetch().done(function() {
           deferred.resolve(model);
           
-          // AMP-19803: Here we wait until the filter widget has been loaded to trigger the 'apply' event and force each chart to redraw with the saved filters.
+          // AMP-19803 and AMP-20206: Here we wait until the filter widget has been loaded to trigger the 'apply' event and force each chart to redraw with the saved filters.
 	      // Tried to do something similar before we reach this stage (ie: in app-class.js, chart-view-base.js, charts.js, etc) but without luck because the render is triggered automatically.
-	      // TODO: We need more time to evaluate a solution using this.app.filter.loaded promise but that didnt work consistently on IE.
-	      var time = setInterval(function() {
-	    	  if (this.app.filter !== undefined) {
-	    		  clearInterval(time);
-	    		  this.app.filter.trigger('apply');
-	    		  // Only make 1 render call to the main app view, this will prevent other bugs (ie: the double and triple chart rendering).
-	    		  if (this.app.rendered === false) {
-	    			  this.app.rendered = true;
-	    			  //console.log('Render!!!');
-	    			  app.render();
-	    		  }
-	    	  }
-	      }, 1500);	               
-
+	      // TODO: We need more time to evaluate a solution using this.app.filter.loaded promise but that didnt work consistently on IE.          
+          if (self.timer === undefined) {
+        	  self.timer = setInterval(function() {
+		    	  if (this.app !== undefined && this.app.filter !== undefined && this.app.filter.finishedFirstLoad === true) {
+		    		  clearInterval(self.timer);
+		    		  this.app.filter.trigger('apply');			    		  
+		    		  // Only make 1 render call to the main app view, this will prevent other bugs (ie: the double and triple chart rendering).
+		    		  if (this.app.rendered === false) {
+		    			  this.app.rendered = true;
+		    			  app.render();
+		    		  }
+		    	  }
+		      }, 100);
+          }
         }).fail(_(function() {
           this.app.report('Failed to load saved dashboard', ['Could not retrieve the saved state.']);
           deferred.reject();
@@ -49,5 +55,5 @@ module.exports = BackboneDash.Collection.extend({
     }
 
     return deferred.promise();
-  }
+   }
 });

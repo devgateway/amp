@@ -57,7 +57,8 @@ public class InterchangeUtils {
 			put(java.util.Date.class, "date");
 			put(java.lang.Double.class, "float");
 			put(java.lang.Boolean.class, "boolean");
-			put(java.lang.Long.class, "int");
+			put(java.lang.Long.class, "string");
+//			put(java.lang.Long.class, "int");
 			put(java.lang.Float.class, "float");
 //			put(AmpCategoryValue.class, "string");
 
@@ -79,7 +80,11 @@ public class InterchangeUtils {
 	    }
 	};
 
-
+/**
+ * Picks available translations for a string (supposedly field name)
+ * @param fieldName the field name to be translated
+ * @return a map from the ISO2 code -> translation in said text
+ */
 	private static Map<String, String> getLabelsForField(String fieldName) {
 		Map<String, String> translations = new HashMap<String, String>();
 		try {
@@ -93,6 +98,13 @@ public class InterchangeUtils {
 		return translations;
 	}
 
+	/**
+	 * transforms a Map<String,String> to a JsonBean with equal structure
+	 * @param map the map to be transformed
+	 * @return a JsonBean of the structure
+	 * {"\<code1\>":"\<translation1\>", 
+	 * 	"\<code2\>":"\<translation2\>", ...}
+	 */
 	public static JsonBean mapToBean(Map<String, String> map) {
 		if (map.isEmpty())
 			return null;
@@ -237,32 +249,49 @@ public class InterchangeUtils {
 		return activitiesList;
 	}
 
-	
+	/**
+	 * checks whether a Field is assignable from a Collection
+	 * @param field a Field
+	 * @return true/false
+	 */
 	private static boolean isCollection(Field field) {
 		return Collection.class.isAssignableFrom( field.getType());
 	}
 	
+	/**
+	 * returns the generic class defined within a Collection,
+	 * e.g. Collection<Class_returned>
+	 * @param field
+	 * @return the generic class  
+	 */
 	private static Class<?> getGenericClass(Field field) {
+		if (!isCollection(field))
+			throw new RuntimeException("Not a collection: " + field.toString());
 		ParameterizedType collectionType = null;
-
 		collectionType = (ParameterizedType) field.getGenericType();
 		Type[] genericTypes = collectionType.getActualTypeArguments();
 		if (genericTypes.length > 1)
 		{
 			//dealing with a map or anything else having > 1 parameterized types 
 			//throw an exception, this is a very unexpected case
-			throw new RuntimeException("Only sets and lists expected");
+			throw new RuntimeException("Only collections with one generic type expected!");
 		}
 		if (genericTypes.length == 0) {
 //			return null;
 			//dealing with a raw type
 			//throw an exception, it won't be complete with no parameterization
-			throw new RuntimeException("Raw types are not allowed");
+			throw new RuntimeException("Raw types are not allowed!");
 		}
 		return ((Class<?>) genericTypes[0]);
 	}
 	
-	
+	/**
+	 * gets fields from the type of the field
+	 * @param field
+	 * @return a list of JsonBeans, each a description of @Interchangeable 
+	 * fields in the definition of the field's class, or field's generic type,
+	 * if it's a collection  
+	 */
 	private static List<JsonBean> getChildrenOfField(Field field) {
 		if (!isCollection(field))
 			return getAllAvailableFields(field.getType());
@@ -270,6 +299,12 @@ public class InterchangeUtils {
 			return getAllAvailableFields(getGenericClass(field));
 	}
 	
+	/**
+	 * converts the uppercase letters of a string to underscore + lowercase
+	 * (except for first one)
+	 * @param input String to be converted
+	 * @return converted string
+	 */
 	public static String underscorify(String input) {
 		StringBuilder bld = new StringBuilder();
 		for (int i = 0; i < input.length(); i++) {
@@ -286,19 +321,29 @@ public class InterchangeUtils {
 		return bld.toString();
 	}
 	
+	/**
+	 * describes a field in a JSON structure of:
+	 * 		field_type: one of the types {string, boolean, float, list}
+	 * 		field_name: the field name, obtained from the fieldTitle attribute from the @Interchangeable annotation
+	 * 		field_label: translations of the field in the available languages
+	 * 		multiple_values: true if it's a collection, false otherwise
+	 * 		importable: whether the field is to be imported, or had been exported just for the sake of matching
+	 * 		children: if the field is not a basic type (string, boolean, or float), its class may contain other @Interchangeable fields,
+	 * 					  which are recursively added here
+	 * 		recursive: defined by @Interchangeable.recursive; true for the purpose of avoiding loops
+	 * 		allow_empty: specifies whether said field is allowed to be transmitted empty
+	 * @param field
+	 * @return
+	 */
 	private static JsonBean describeField(Field field) {
 		Interchangeable ant2 = field.getAnnotation(Interchangeable.class);
 		if (ant2 == null)
 			return null;
 		JsonBean bean = new JsonBean();
-
-		bean.set("field_type", classToCustomType.containsKey(field.getType()) ? classToCustomType.get(field.getType()) : "list");
 		bean.set("field_name", underscorify(ant2.fieldTitle()));
+		bean.set("field_type", classToCustomType.containsKey(field.getType()) ? classToCustomType.get(field.getType()) : "list");
 		bean.set("field_label", mapToBean(getLabelsForField(field.getName())));
-
 		if (!classToCustomType.containsKey(field.getClass())) {/* list type */
-			/**/
-//			bean.set("multiple_values", ant2.multipleValues() ? true : false);
 			bean.set("importable", ant2.importable()? true: false);
 			if (isCollection(field))
 				bean.set("multiple_values", true);
@@ -312,48 +357,31 @@ public class InterchangeUtils {
 				bean.set("recursive", true);
 			}
 			/*left alone for now. would be draggable from wicket*/
-			//structure.put("allow_empty", )
-			/*link to the db*/
+			//structure.put("allow_empty", ???)
 		}
-		// bean.set("children", )
 		return bean;
 	}
 
-	private static List<Field> getVisibleFields(Class clazz) {
-		Field[] fields = clazz.getDeclaredFields();
-		List<Field> exportableFields = new ArrayList<Field>();
-		for (Field field : fields) {
-			if (field.getAnnotation(Interchangeable.class) != null) {
-				exportableFields.add(field);
-			}
-		}
-		return exportableFields;
-	}
 
 	public static List<JsonBean> getAllAvailableFields() {
 		return getAllAvailableFields(AmpActivityFields.class);
 	}
 	
-	
+
+	/**
+	 * Describes each @Interchangeable field of a class
+	 * @param clazz the class to be described
+	 * @return 
+	 */
 	private static List<JsonBean> getAllAvailableFields(Class clazz) {
 		List<JsonBean> result = new ArrayList<JsonBean>();
 		StopWatch.next("Descending into", false, clazz.getName());
-//		LOGGER.error("descending into" + clazz.toString());
-//		LOGGER.
-//		Set<String> visibleColumnNames = ColumnsVisibility.getVisibleColumns();
 		Field[] fields = clazz.getDeclaredFields();
-
 		for (Field field : fields) {
 			JsonBean descr = describeField(field);
 			if (descr != null)
 				result.add(descr);
 		}
-
-		// for (String col : visibleColumnNames) {
-		// result.set(, value);
-		// // fieldSet.contains(arg0)
-		// // result.set(col, );
-		// }
 		return result;
 	}
 
@@ -366,12 +394,7 @@ public class InterchangeUtils {
 	 * @return String, date in ISO 8601 format
 	 */
 	public static String formatISO8601Date(Date date) {
-		if (date == null) {
-			return null;
-		} else {
-			return dateFormatter.format(date);
-		}
-
+		return date == null ? null : dateFormatter.format(date);  
 	}
 
 	/**
@@ -390,7 +413,6 @@ public class InterchangeUtils {
 		Collection<JsonBean> projectList = null;
 		if (pid != null) {
 			projectList = cacher.getCachedProjectList(pid);
-
 		}
 		if (projectList == null) {
 			projectList = getActivityList(tm);
@@ -398,7 +420,6 @@ public class InterchangeUtils {
 				cacher.addCachedProjectList(pid, projectList);
 			}
 		}
-
 		return projectList;
 	}
 

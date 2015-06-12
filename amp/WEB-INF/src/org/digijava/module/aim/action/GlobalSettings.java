@@ -2,6 +2,7 @@ package org.digijava.module.aim.action;
 /*
 * @ author Govind G Dalwani
 */
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -295,10 +296,9 @@ public class GlobalSettings extends Action {
 
 
 
-	private Collection<KeyValue> getPossibleValues(String tableName)
-	{
-		Collection<KeyValue> ret 	= new Vector<KeyValue>();
-	
+	private List<KeyValue> getPossibleValues(String tableName) {
+		List<KeyValue> ret = new ArrayList<>();
+		
 		if (tableName == null || tableName.length() == 0)
 			return ret;
 

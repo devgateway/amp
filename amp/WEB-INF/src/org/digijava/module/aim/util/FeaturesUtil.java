@@ -447,8 +447,7 @@ public class FeaturesUtil {
 		return countryName;
 	}
 
-	public static Collection<Country> getAllDgCountries() {
-		List<AmpOrganisation> orgs = PersistenceManager.getSession().createQuery("from " + AmpOrganisation.class.getName()).list();
+	public static List<Country> getAllDgCountries() {
 		String qryStr = "select c from " + Country.class.getName() + " c";
 		return PersistenceManager.getSession().createQuery(qryStr).list();
 	}

@@ -66,8 +66,7 @@ module.exports = BackboneDash.View.extend({
     if (this.chartClickHandler) { _.bindAll(this, 'chartClickHandler'); }
   },
 
-  render: function() {
-    this.rendered = true;
+  render: function() {    
     var renderOptions = {
       views: this.chartViews,
       model: this.model,
@@ -80,6 +79,7 @@ module.exports = BackboneDash.View.extend({
 
     if (this.model.get('adjtype') !== void 0) {  // this chart has adj settings
     	this.app.settings.load().done(_(function() {
+    	this.rendered = true;
         var adjSettings = this.app.settings.get('0');  // id for Funding Type
         if (!adjSettings) { 
         	this.app.report('Could not find Funding Type settings'); 
@@ -97,6 +97,8 @@ module.exports = BackboneDash.View.extend({
           }, this)
         );
       }).bind(this));
+    } else {
+        this.rendered = true;
     }
 
     if (this._stateWait.state() !== 'pending') {
@@ -108,6 +110,7 @@ module.exports = BackboneDash.View.extend({
   },
 
   updateData: function() {
+	if(this.app.rendered !== true) { return; }  
     if (!this.rendered) { return; }  // short-circuit on early filters apply event
     if (this._stateWait.state() === 'pending') {  // short-circuit until we have state
       this.message.html('Loading saved settings...').attr('data-i18n', 'amp.dashboard:chart-loading-saved-settings');
@@ -142,7 +145,6 @@ module.exports = BackboneDash.View.extend({
 
   showChart: function() {
     // TODO: why are we triggering twice on load???
-
     if (!this.model.hasData()) {
       this.message.html('No Data Available').attr('data-i18n','amp.dashboard:chart-no-data-available');
       app.translator.translateDOM($('.chart-container'));

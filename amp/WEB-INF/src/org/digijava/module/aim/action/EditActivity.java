@@ -5,6 +5,7 @@
 
 package org.digijava.module.aim.action;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -31,6 +32,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -189,6 +191,30 @@ public class EditActivity extends Action {
     	}
 
         activity = (AmpActivityVersion) hsession.load(AmpActivityVersion.class, activityId);
+        ///TODO this is only for testing AMP-20375 will be removed
+				if (request.getParameter("simulateUpdate") != null) {
+					try{
+					if (request.getParameter("simulateUpdateDate") != null) {
+						String strDateUpdated = request.getParameter("simulateUpdateDate");
+						SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+						Date dateUpdated = format.parse(strDateUpdated);
+						activity.setUpdatedDate(dateUpdated);
+						activity.setModifiedDate(dateUpdated);
+						if (tm != null && tm.getMemberId() != null) {
+							AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberCached(tm.getMemberId());
+							activity.setModifiedBy(teamMember);
+							hsession.update(activity);
+							ARUtil.writeResponse(response, "Activity *" + activity.getName() +"* successfully updated " );
+							return null;
+						}
+					}
+					}catch(Exception ex){
+						ARUtil.writeResponse(response, "Could not update activity please check logs ----" + ex.getMessage() );
+						ex.printStackTrace();
+						return null;
+					}
+				}
+
         eaForm.getIdentification().setWasDraft(activity.isCreatedAsDraft());
         if(activity!=null)
         {

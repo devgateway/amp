@@ -40,10 +40,10 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
 	private Set<AmpActivityVersion> activities;
 	private Set<AmpStructureImg> images;
 	
-	public Set<AmpActivityVersion> getActivities() {
+	public Set getActivities() {
 		return activities;
 	}
-	public void setActivities(Set<AmpActivityVersion> activities) {
+	public void setActivities(Set activities) {
 		this.activities = activities;
 	}
 	public Long getAmpStructureId() {

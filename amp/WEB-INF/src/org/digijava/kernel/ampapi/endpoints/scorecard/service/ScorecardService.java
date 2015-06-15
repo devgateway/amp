@@ -319,12 +319,14 @@ public class ScorecardService {
 					String quarterStartDate = new SimpleDateFormat("yyyy-MM-dd").format(quarter.getQuarterStartDate());
 
 					String query = "select count (distinct (a.amp_id)) as total_activities,r.organisation as donor_id "
-							+ "from amp_activity_version a, amp_org_role r " + " WHERE  r.activity=a.amp_activity_id ";
+							+ "from amp_activity_version a, amp_org_role r,amp_organisation o  WHERE  r.activity=a.amp_activity_id ";
 
 					if (!status.equals("")) {
 						query += "AND approval_status not in (" + status + " ) ";
 					}
-					query += "AND    (EXISTS  (SELECT af.amp_donor_org_id " + " FROM   amp_funding af "
+					query += "AND o.amp_org_id = r.organisation "+
+							 "AND ( o.deleted IS NULL OR o.deleted = false ) "+ 
+						 	"AND    (EXISTS  (SELECT af.amp_donor_org_id " + " FROM   amp_funding af "
 							+ " WHERE  r.organisation = af.amp_donor_org_id "
 							+ " AND    (( af.source_role_id IS NULL) "
 							+ " OR     af.source_role_id =( SELECT amp_role_id         FROM   amp_role "

@@ -363,6 +363,10 @@ public class Reports {
 		report.set("columns", spec.getColumns());
 		report.set("hierarchies", spec.getHierarchies());
 		
+		// In caseIf this is a summarized report without hierarchies then we need to change the word 'constant' for 'Report
+        // Totals' (translated).
+        report.set("reportTotalsString", TranslatorWorker.translateText("Report Totals"));
+		
 		return report;
 	}
 	

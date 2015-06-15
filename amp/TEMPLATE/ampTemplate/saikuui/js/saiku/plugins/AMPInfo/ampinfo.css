@@ -36,8 +36,8 @@
 	min-height: 200px;
 	z-index: 2;
 	width: inherit;
-	position: absolute;
-	top:26px;
+	/*position: absolute;
+	top:26px;*/
 }
 
 .ui-widget {

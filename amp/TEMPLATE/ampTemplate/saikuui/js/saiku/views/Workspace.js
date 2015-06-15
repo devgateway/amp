@@ -717,7 +717,9 @@ var Workspace = Backbone.View.extend({
 
         this.update_parameters();
 
-        $(this.el).find(".workspace_results_info").html(info);
+        if (!Settings.AMP_REPORT_API_BRIDGE) {
+	        $(this.el).find(".workspace_results_info").html(info);
+	    }    
         this.adjust();
         return;
     },

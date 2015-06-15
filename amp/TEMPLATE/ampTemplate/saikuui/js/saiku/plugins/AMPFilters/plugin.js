@@ -37,7 +37,7 @@ var AMPFilters = Backbone.View.extend({
 				Saiku.events.listenTo(window.currentFilter, 'apply', function(data) {
 					if(data.columnFilters || data.otherFilters) {
 						self.workspace.query.run_query(window.currentFilter.serialize(), null);
-						//self.filters_button.removeClass('on');
+						self.filters_button.removeClass('on');
 					}
 					$('#filters-container').hide();
 				});

@@ -1,3 +1,4 @@
+
 #amp_info_filters {
 	float: right;
 	width: 500px;
@@ -26,8 +27,8 @@
 	min-height: 200px;
 	z-index: 2;
 	width: inherit;
-	position: absolute;
-	top:130px;
+	/*position: absolute;
+	top:130px;*/
 }
 
 .ui-widget {

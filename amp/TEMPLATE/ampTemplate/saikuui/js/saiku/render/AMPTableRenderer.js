@@ -25,6 +25,7 @@ this.lastHeaderRow = undefined;
 this.currentContentIndexRow = undefined;
 this.numberOfRows = undefined;
 this.type = undefined;
+this.summarizedReport = undefined;
 
 AMPTableRenderer.prototype.render = function(data, options) {
 	// When using this class to export the report we receive these extra
@@ -35,13 +36,39 @@ AMPTableRenderer.prototype.render = function(data, options) {
 		metadataHierarchies = data.hierarchies;
 	}
 
-	// Create HTML table, with header + content.
-	var table = "<table>";
-	var headerHtml = generateHeaderHtml(data.headers);
-	var contentHtml = generateContentHtml(data.page);
-	table += headerHtml + contentHtml + "</table>";
-	return table;
+	if (data.page !== null && data.page.pageArea !== null) {
+		summarizedReport = checkIfSummarizedReportWithConstant(data.page);
+		// Make an adjustment in the hierarchies list when showing a summarized
+		// report.
+		preprocessHierarchies();
+
+		// Create HTML table, with header + content.
+		var table = "<table>";
+		var headerHtml = generateHeaderHtml(data.headers);
+		var contentHtml = generateContentHtml(data.page, {
+			reportTotalsString : data.reportTotalsString
+		});
+		table += headerHtml + contentHtml + "</table>";
+		return table;
+	} else {
+		return "";
+	}
 };
+
+/**
+ * We dont have the parameter for summarized reports so if metadataColumns has
+ * the same number of elements than metadataHierarchies then we remove the last
+ * element from metadataHierarchies to avoid a visual defect shown in AMP-20295.
+ * (The endpoint is not consistent in this case because it doesnt provide the
+ * 'totals' row for the last hierarchy)
+ */
+function preprocessHierarchies() {
+	if (this.metadataColumns !== undefined
+			&& this.metadataHierarchies !== undefined
+			&& this.metadataColumns.length === this.metadataHierarchies.length) {
+		this.metadataHierarchies.splice(this.metadataHierarchies.length - 1, 1);
+	}
+}
 
 function generateHeaderHtml(headers) {
 	// Discover tree depth.
@@ -87,8 +114,7 @@ function generateHeaderHtml(headers) {
 				// Since groupCount is 0 when no column grouping is applicable
 				// then we don't need an extra IF for creating the 'col'
 				// variable.
-				var groupCount = findSameHeaderHorizontally(this.headerMatrix,
-						i, j);
+				var groupCount = findSameHeaderHorizontally(i, j);
 				// Define styles for the header.
 				var style = " class='col";
 				if (sortingType.length > 0) {
@@ -99,6 +125,13 @@ function generateHeaderHtml(headers) {
 				var id = " id='"
 						+ convertHierarchicalNameToId(this.headerMatrix[i][j].hierarchicalName)
 						+ "'";
+
+				// Change columnName when the endpoint sends "Constant" in a
+				// summarized report.
+				if (this.summarizedReport === true
+						&& this.headerMatrix[i][j].hierarchicalName === "[Constant]") {
+					this.headerMatrix[i][j].columnName = "-";
+				}
 
 				var col = "<th" + style + id + " data-header-level='" + i + "'"
 						+ sortingType + " colspan='" + +groupCount + "'><div>"
@@ -149,17 +182,28 @@ function calculateColumnsDisposition() {
  * Return a number > 0 if the current header cell can be merged with other cells
  * on its right side.
  */
-function findSameHeaderHorizontally(matrix, i, j) {
+function findSameHeaderHorizontally(i, j) {
 	var count = 0;
-	if (i === matrix.length - 1) {
+	if (i === this.headerMatrix.length - 1) {
 		// The last row can never be grouped.
 		return 0;
 	}
-	var currentLabel = matrix[i][j].columnName;
-	for (var k = j; k < matrix[i].length; k++) {
-		if (matrix[i][k] !== undefined
-				&& matrix[i][k].columnName === currentLabel) {
-			count++;
+	var currentLabel = this.headerMatrix[i][j].columnName;
+	for (var k = j; k < this.headerMatrix[i].length; k++) {
+		if (this.headerMatrix[i][k] !== undefined
+				&& this.headerMatrix[i][k].columnName === currentLabel) {
+			if (this.headerMatrix[i][j].parentColumn === null
+					&& this.headerMatrix[i][k].parentColumn === null) {
+				// This is the top row or we dont have a parent.
+				count++;
+			} else {
+				if (this.headerMatrix[i][j].parentColumn.hierarchicalName === this.headerMatrix[i][k].parentColumn.hierarchicalName) {
+					// Same parent and same value, so we can group them.
+					count++;
+				} else {
+					break;
+				}
+			}
 		} else {
 			break;
 		}
@@ -167,21 +211,25 @@ function findSameHeaderHorizontally(matrix, i, j) {
 	return count;
 }
 
-function generateContentHtml(page) {
+function generateContentHtml(page, options) {
 	var self = this;
 	var content = "<tbody>";
 	this.lastHeaderRow = this.headerMatrix.length - 1;
 	// Add data rows.
-	var dataHtml = generateDataRows(page);
+	var dataHtml = generateDataRows(page, options);
 	content += dataHtml;
 
 	// Add last row with totals.
 	var totalRow = "<tr>";
 	for (var i = 0; i < this.headerMatrix[this.lastHeaderRow].length; i++) {
-		var totalValue = "<td class='data total'>"
-				+ page.pageArea.contents[this.headerMatrix[this.lastHeaderRow][i].hierarchicalName].displayedValue
-				+ "</td>";
-		totalRow += totalValue;
+		// This check is for those summarized reports that dont return any
+		// content.
+		if (page.pageArea.contents !== null) {
+			var totalValue = "<td class='data total'>"
+					+ page.pageArea.contents[this.headerMatrix[this.lastHeaderRow][i].hierarchicalName].displayedValue
+					+ "</td>";
+			totalRow += totalValue;
+		}
 	}
 	totalRow += "</tr>";
 	content += totalRow;
@@ -189,7 +237,7 @@ function generateContentHtml(page) {
 	return content;
 }
 
-function generateDataRows(page) {
+function generateDataRows(page, options) {
 	var self = this;
 	var content = "";
 	// Transform the tree data structure to 2d matrix.
@@ -230,15 +278,18 @@ function generateDataRows(page) {
 				if (this.contentMatrix[i][j].isTotal === true) {
 					if (applyTotalRowStyle === false
 							&& cleanValue.text.length > 0) {
-						// This flag indicates in which column we start applying
+						// This flag indicates in which column we start
+						// applying
 						// the total style.
 						applyTotalRowStyle = true;
 					}
 
-					// Apply the special style for subtotal rows but starting in
+					// Apply the special style for subtotal rows but
+					// starting in
 					// the right column index.
 					if (applyTotalRowStyle === true) {
-						// Trying something new here: show tooltip on the now
+						// Trying something new here: show tooltip on the
+						// now
 						// empty "Hierarchy Value Totals" row.
 						if (cleanValue.text != undefined) {
 							styleClass = " class='row_total tooltipped' original-title='"
@@ -265,7 +316,13 @@ function generateDataRows(page) {
 					cell += "</td>";
 				} else {
 					var cell = "<td class='data'>";
-					cell += this.contentMatrix[i][j].displayedValue;
+					// Special case we receive the word "constant" from the
+					// endpoint (summarized reports).
+					if (this.summarizedReport === true && i === 0 && j === 0) {
+						cell += options.reportTotalsString;
+					} else {
+						cell += this.contentMatrix[i][j].displayedValue;
+					}
 					cell += "</td>";
 				}
 			}
@@ -403,4 +460,18 @@ function convertHierarchicalNameToId(hierarchy) {
 	var id = "";
 	id = hierarchy.replace(/\[/g, '-').replace(/\]/g, '-');
 	return id;
+}
+
+/**
+ * Check if this is a summarized report with only one row, this kind of report
+ * has a different structure with no total data, only 1 children and the word
+ * "constant" hardcoded instead of "Report Totals" or similar.
+ */
+function checkIfSummarizedReportWithConstant(page) {
+	var summarized = false;
+	if (page.pageArea.contents === null && page.totalRecords === 1
+			&& page.pageArea.children[0].contents['[Constant]'] !== undefined) {
+		summarized = true;
+	}
+	return summarized;
 }

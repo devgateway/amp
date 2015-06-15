@@ -162,6 +162,7 @@ public class ReportsUtil {
 			}
 			if (queryModel.get("filters") != null) {
 				newParams.set("filters", queryModel.get("filters"));
+				newParams.set("page", new Integer("1"));
 			}
 			if (queryModel.get(EPConstants.SETTINGS) != null) {
 				newParams.set(EPConstants.SETTINGS, queryModel.get(EPConstants.SETTINGS));

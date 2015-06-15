@@ -40,16 +40,16 @@ public class InterchangeEndpoints {
 	}
 	
 	/**
-	 * Returns a Json object with the list of all projects on the system, including its view and edit status for the current logged user.
+	 * Returns a JSON object with the list of all projects on the system, including its view and edit status for the current logged user.
 	 * If the user can view the project, the 'view' property of the project is set to true. False otherwise.
-	 * If the user can edit the project, the 'edit' property of the project on the json is set to true. False otherwise.
+	 * If the user can edit the project, the 'edit' property of the project on the JSON is set to true. False otherwise.
 	 * Pagination can be used if the parameters are sent on the request. If not parameters are sent, the full list
 	 * of projects is returned. 
 	 * 
 	 * 
 	 * @param pid  current pagination request reference (random id). It acts as a key for a LRU caching mechanism that holds the 
 	 * full list of projects for the current user. If it is not provided no caching is used
-	 * @param offset, Integer used for pagination. It represents which is the first project to return. It helps to skip the unncesary 
+	 * @param offset, Integer used for pagination. It represents which is the first project to return. It helps to skip the unnecessary 
 	 * records.
 	 * @param size, Integer used for pagination. It tells how many projects to return
 	 * @return list of JsonBean with all the projects on the system
@@ -70,6 +70,7 @@ public class InterchangeEndpoints {
 		}
 		return new ArrayList(activityCollection).subList(start, end);
 	}
+	
 	
 	
 }

@@ -154,15 +154,13 @@ public class ReportsUtil {
 		LinkedHashMap queryModel = (LinkedHashMap) original.get("queryModel");
 		if (queryModel != null) {
 			if (queryModel.get("page") != null) {
-				// Saiku is 0 based so we add 1.
-				newParams.set("page", ((Integer) queryModel.get("page")) + 1);
+				newParams.set("page", ((Integer) queryModel.get("page")));
 			}
 			if (queryModel.get("recordsPerPage") != null) {
 				newParams.set("recordsPerPage", ((Integer) queryModel.get("recordsPerPage")));
 			}
 			if (queryModel.get("filters") != null) {
 				newParams.set("filters", queryModel.get("filters"));
-				newParams.set("page", new Integer("1"));
 			}
 			if (queryModel.get(EPConstants.SETTINGS) != null) {
 				newParams.set(EPConstants.SETTINGS, queryModel.get(EPConstants.SETTINGS));

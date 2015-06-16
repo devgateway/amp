@@ -96,5 +96,20 @@ public class Quarter {
 		calendar.set(Calendar.SECOND, 1);
 		return calendar.getTime();
 	}
+	
+	/**
+	 * Gets the date on which the current quarter ends
+	 * 
+	 * @return the date on which the current quarter ends
+	 */
+	public Date getQuarterEndDate () {
+		Date start = getQuarterStartDate();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(start);
+		calendar.add(Calendar.DAY_OF_YEAR, 90);
+		calendar.add(Calendar.SECOND, -2);
+		//it adds 90 days to the start of the quarter, and substracts 2 secs so time is 23:59:59
+		return calendar.getTime();
+	}
 
 }

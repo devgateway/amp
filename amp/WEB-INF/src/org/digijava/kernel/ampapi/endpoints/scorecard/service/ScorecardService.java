@@ -375,7 +375,7 @@ public class ScorecardService {
 					if (threshold == null) {
 						threshold = DEFAULT_THRESHOLD;
 					}
-					String quarterStartDate = new SimpleDateFormat("yyyy-MM-dd").format(quarter.getQuarterStartDate());
+					String quarterEndDate = new SimpleDateFormat("yyyy-MM-dd").format(quarter.getQuarterEndDate());
 
 					String query = "select count (distinct (a.amp_id)) as total_activities,r.organisation as donor_id "
 							+ "from amp_activity_version a, amp_org_role r,amp_organisation o  WHERE  r.activity=a.amp_activity_id ";
@@ -389,7 +389,7 @@ public class ScorecardService {
 							+ " WHERE  r.organisation = af.amp_donor_org_id "
 							+ " AND    (( af.source_role_id IS NULL) "
 							+ " OR     af.source_role_id =( SELECT amp_role_id         FROM   amp_role "
-							+ " WHERE  role_code='DN')))) " + " and date_created <= '" + quarterStartDate + "' "
+							+ " WHERE  role_code='DN')))) " + " and date_created <= '" + quarterEndDate + "' "
 							+ " group by r.organisation; ";
 
 					try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {

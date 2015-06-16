@@ -1061,7 +1061,9 @@
     <action name="aimAuditLoggerManagerForm" path="/aim/auditLoggerManager" scope="request" type="org.digijava.module.aim.action.AuditLoggerManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=auditLoggerManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />
+      <forward name="gotoScorecardManager" path="/aim/scorecardManager" redirect="true"/>
     </action>
+
 	<action name="aimScorecardManagerForm" path="/aim/scorecardManager" scope="request" type="org.digijava.module.aim.action.ScorecardManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=scorecardManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />

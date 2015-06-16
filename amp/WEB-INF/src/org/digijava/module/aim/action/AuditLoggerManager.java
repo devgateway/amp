@@ -33,6 +33,10 @@ public class AuditLoggerManager extends MultiAction {
 	public ActionForward modePrepare(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+		
+		if (request.getParameter("export") != null) {
+			mapping.findForward("gotoScorecardManager");
+		}
 		AuditLoggerManagerForm vForm = (AuditLoggerManagerForm) form;
 		if (request.getParameter("clean") != null) {
 			if (vForm.getUseraction().equalsIgnoreCase("delete")) {

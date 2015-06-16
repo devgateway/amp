@@ -11,7 +11,7 @@ import java.util.Date;
  * @author Emanuel Perez
  *
  */
-public class NoUpdateOrganisation {
+public class AmpScorecardNoUpdateOrganisation {
 
 	private Long ampDonorId;
 	private Long id;

@@ -75,6 +75,11 @@ function toggleLoggs(){
 	document.aimAuditLoggerManagerForm.submit();
 }
 
+function submitExport() {
+	document.aimAuditLoggerManagerForm.action = "/aim/scorecardManager.do";
+	document.aimAuditLoggerManagerForm.submit();
+}
+
 function show_hide(divID){
 	var divArea = document.getElementById(divID)
 	
@@ -147,6 +152,7 @@ function toggleSettings(){
 function exportScorecard () {
 	window.location =  "/rest/scorecard/export";
 }
+
 </script>
 
 <h1 class="admintitle"><digi:trn key="aim:AuditLoggerManager">Audit Logger Manager</digi:trn></h1> 
@@ -252,7 +258,7 @@ function exportScorecard () {
 												</tr>
 												<tr>
 													<td>
-													  <input class="dr-menu" type="button" onclick="exportScorecard()"
+													  <input class="dr-menu" type="button" onclick="submitExport()"
 														value="<digi:trn>OK</digi:trn>"> 
 														<input 	class="dr-menu" type="button" value="<digi:trn>Cancel</digi:trn>"
 														onclick="document.aimAuditLoggerManagerForm.reset();toggleSettings()">
@@ -263,6 +269,9 @@ function exportScorecard () {
 									</div>                        
                             	</div>
                           		<br>
+                          		
+                          		<jsp:include page="loggerQuickView.jsp" />  
+                          		
 				<table width="100%" height="100%" cellpadding="0" cellspacing="0" bgColor=#ffffff id="auditloggertable">
 				<tr>
 						<td colspan="2" valign="top" >

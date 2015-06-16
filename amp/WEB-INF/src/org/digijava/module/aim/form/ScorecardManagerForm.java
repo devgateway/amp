@@ -18,7 +18,7 @@ public class ScorecardManagerForm extends ActionForm {
 	private String[] selectedCategoryValues;
 	private Collection<AmpCategoryValue> categoryValues = null;
 	private Set<AmpScorecardSettingsCategoryValue> closedStatuses;
-
+	
 	public Boolean getValidationPeriod() {
 		return validationPeriod;
 	}
@@ -74,5 +74,4 @@ public class ScorecardManagerForm extends ActionForm {
 	public void setSelectedCategoryValues(String[] selectedCategoryValues) {
 		this.selectedCategoryValues = selectedCategoryValues;
 	}
-
 }

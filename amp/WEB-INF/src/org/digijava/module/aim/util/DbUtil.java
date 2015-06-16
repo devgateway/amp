@@ -1611,7 +1611,23 @@ public class DbUtil {
 		}
 	}
 	
-	
+	public static void deleteAllNoUpdateOrgs() {
+		Connection con;
+		try {
+			Session session = PersistenceManager.getSession();
+			session.doWork(new Work() {
+				@Override
+				public void execute(Connection con) throws SQLException {
+					con.setAutoCommit(false);
+					con.createStatement().execute("DELETE FROM no_update_organisation");
+					con.commit();
+
+				}
+			});
+		} catch (Exception e) {
+			logger.error("Error while trying to delete Lucene db stamps: ", e);
+		}
+	}
 
 	public static Collection getQuarters(Long ampFundingId,
 			Integer transactionType, Integer adjustmentType, Integer fiscalYear) {

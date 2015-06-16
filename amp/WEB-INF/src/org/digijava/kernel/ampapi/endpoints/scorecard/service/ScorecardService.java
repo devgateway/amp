@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.ActivityUpdate;
@@ -24,11 +25,12 @@ import org.digijava.kernel.ampapi.endpoints.util.CalendarUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpScorecardNoUpdateOrganisation;
 import org.digijava.module.aim.dbentity.AmpScorecardSettings;
 import org.digijava.module.aim.dbentity.AmpScorecardSettingsCategoryValue;
-import org.digijava.module.aim.dbentity.NoUpdateOrganisation;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
@@ -83,13 +85,13 @@ public class ScorecardService {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<NoUpdateOrganisation> getAllNoUpdateDonors() {
+	public List<AmpScorecardNoUpdateOrganisation> getAllNoUpdateDonors() {
 		int startYear = getDefaultStartYear();
 		int endYear = getDefaultEndYear();
 		Date startDate = CalendarUtil.getStartDate(fiscalCalendar.getAmpFiscalCalId(), startYear);
 		Date endDate = CalendarUtil.getEndDate(fiscalCalendar.getAmpFiscalCalId(), endYear);
 		Session session = PersistenceManager.getRequestDBSession();
-		String queryString = "from " + NoUpdateOrganisation.class.getName()
+		String queryString = "from " + AmpScorecardNoUpdateOrganisation.class.getName()
 				+ " nuo where nuo.modifyDate >= :startDate and nuo.modifyDate <= :endDate";
 		Query query = session.createQuery(queryString);
 		query.setParameter("startDate", startDate);
@@ -153,6 +155,42 @@ public class ScorecardService {
 
 		return activityUpdateList;
 	}
+	
+	public List<ScorecardNoUpdateDonor> getAllDonors(final boolean filterNoUpdates, final boolean noUpdates) {
+		
+		final List<ScorecardNoUpdateDonor> donorsList = new ArrayList<ScorecardNoUpdateDonor>();
+		
+		PersistenceManager.getSession().doWork(new Work() {
+			public void execute(Connection conn) throws SQLException {
+				String query = "SELECT o.name, o.amp_org_id  FROM   amp_organisation o  "
+						+ "WHERE (EXISTS (SELECT af.amp_donor_org_id "
+						+ "FROM  amp_funding af WHERE  o.amp_org_id = af.amp_donor_org_id "
+						+ "AND ((af.source_role_id IS NULL) OR af.source_role_id = (SELECT amp_role_id FROM amp_role WHERE role_code = 'DN')))) "
+						+ "AND ( o.deleted IS NULL OR o.deleted = false ) ";
+				
+				if (filterNoUpdates) {
+					query += "AND o.amp_org_id ";
+					if (noUpdates) {
+						query += "NOT ";
+					}
+					query += "IN (SELECT amp_donor_id from no_update_organisation)";
+				}
+				
+				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
+					ResultSet rs = rsi.rs;
+					while (rs.next()) {
+						ScorecardNoUpdateDonor donor = new ScorecardNoUpdateDonor();
+						donor.setAmpDonorId(rs.getLong("amp_org_id"));
+						donor.setName(rs.getString("name"));
+						donorsList.add(donor);
+					}
+				}
+			}
+		});
+			
+		return donorsList;
+	}
+	
 
 	/**
 	 * Returns the list of all Activity Statuses from category values table
@@ -259,6 +297,27 @@ public class ScorecardService {
 		}
 
 		return quarters;
+	}
+	
+	/**
+	 * Returns the last past quarter
+	 * 
+	 * @return Quarter, the last past quarter
+	 */
+	public Quarter getPastQuarter() {
+		List<Quarter> quarters = getQuarters();
+		Quarter quarter = null;
+		
+		int i = 1;
+		if (quarters.size() > 0) {
+			while ( i < quarters.size() && quarters.get(i).getQuarterStartDate().before(new Date())) {
+				i++;
+			};
+			
+			quarter = quarters.get(i-1);
+		} 
+		
+		return quarter;
 	}
 
 	/**
@@ -471,14 +530,104 @@ public class ScorecardService {
 	 *         the donor/quarter don't have a project update
 	 */
 	private Map<Long, Map<String, ColoredCell>> markNoUpdateDonorCells(Map<Long, Map<String, ColoredCell>> data) {
-		Collection<NoUpdateOrganisation> noUpdateDonors = this.getAllNoUpdateDonors();
+		Collection<AmpScorecardNoUpdateOrganisation> noUpdateDonors = this.getAllNoUpdateDonors();
 
-		for (NoUpdateOrganisation noUpdateDonor : noUpdateDonors) {
+		for (AmpScorecardNoUpdateOrganisation noUpdateDonor : noUpdateDonors) {
 			Quarter quarter = new Quarter(fiscalCalendar, noUpdateDonor.getModifyDate());
 			ColoredCell noUpdateCell = data.get(noUpdateDonor.getAmpDonorId()).get(quarter.toString());
 			noUpdateCell.setColor(Colors.GRAY);
 		}
 		return data;
 	}
+	
+	/**
+	 * Gets the count of active organisations for the past quarter
+	 * 
+	 * @return int the count of active organisations for the past quarter 
+	 */
+	public int getPastQuarterOrganizationsCount() {
+		
+		final IntWrapper orgCount = new IntWrapper();
+		
+		Quarter lastQuarter = getPastQuarter();
+		Date startDate = lastQuarter == null ? new Date() : lastQuarter.getQuarterStartDate();
+		String pattern = "yyyy-MM-dd";
+		final String formattedStartDate = new SimpleDateFormat(pattern).format(startDate);
+		final String formattedEndDate = new SimpleDateFormat(pattern).format(new Date());
+		
+		PersistenceManager.getSession().doWork(new Work() {
+			public void execute(Connection conn) throws SQLException {
+				String query = "SELECT count(DISTINCT(r.organisation)) "
+						+ "		FROM   amp_org_role r, amp_activity_version v, amp_organisation o "
+						+ "WHERE  r.activity= v.amp_activity_id	AND  r.organisation=o.amp_org_id "
+						+ "AND (EXISTS (SELECT af.amp_donor_org_id FROM amp_funding af "
+						+ "WHERE  organisation = af.amp_donor_org_id AND  (( af.source_role_id IS NULL) "
+						+ "OR af.source_role_id = (SELECT amp_role_id FROM amp_role WHERE  role_code='DN'))) OR r.role=1) "
+						+ "AND (o.deleted IS NULL OR o.deleted = FALSE) "
+						+ "AND  v.date_updated <= '"+ formattedEndDate + "'"
+						+ "AND  v.date_updated >= '"+ formattedStartDate + "'";
+				
+				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
+					ResultSet rs = rsi.rs;
+					while (rs.next()) {
+						orgCount.inc(rs.getInt("count"));
+					}
+				}  catch (Exception e) {
+					LOGGER.error("Exception while getting org types amount:" + e.getMessage());
+				}
+			}
+		});
+		
+		return orgCount.intValue();
+	}
+	
+	/**
+	 * Gets the count of users logged into the System in the past quarter
+	 * 
+	 * @return int the count of logged users in the past quarter
+	 */
+	public int getPastQuarterUsersCount() {
+		String queryString = "select count(distinct o.authorName) from " + AmpAuditLogger.class.getName()
+							+ " o where o.action = 'login'";
+		
+		return getPastQuarterObjectsCount(queryString, "loggedDate");
+	}
+	
+	/**
+	 * Gets the count of projects with action in the past quarter
+	 * 
+	 * @return int the count of projects with action in the past quarter
+	 */
+	public int getPastQuarterProjectsCount() {
+		String queryString = "select count(distinct o.objectName) from " + AmpAuditLogger.class.getName()
+							+ " o where o.objecttype = 'org.digijava.module.aim.dbentity.AmpActivityVersion'";
+		
+		return getPastQuarterObjectsCount(queryString, "modifyDate");
+	}
+	
+	private int getPastQuarterObjectsCount(String queryString, String paramDate) {
+		Quarter lastQuarter = getPastQuarter();
+		Date startDate = lastQuarter == null ? new Date() : lastQuarter.getQuarterStartDate();
+		
+		String pattern = "yyyy-MM-dd";
+		final String formattedStartDate = new SimpleDateFormat(pattern).format(startDate);
+		final String formattedEndDate = new SimpleDateFormat(pattern).format(new Date());
+		
+		Session session = null;
+		Query qry = null;
+		int count = 0;
 
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			queryString += " AND o." + paramDate + " >= '" + formattedStartDate + "' "
+						  + "AND o." + paramDate + " <= '" + formattedEndDate + "'";
+			
+			qry = session.createQuery(queryString);
+			count = ((Integer) qry.uniqueResult()).intValue();
+		} catch (Exception e) {
+			LOGGER.error("Exception while getting past quarter projects count:" + e.getMessage());
+		}
+		
+		return count;
+	}
 }

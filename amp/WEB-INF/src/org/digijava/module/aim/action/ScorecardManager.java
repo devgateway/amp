@@ -1,9 +1,7 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,67 +16,30 @@ import org.digijava.module.aim.dbentity.AmpScorecardSettings;
 import org.digijava.module.aim.dbentity.AmpScorecardSettingsCategoryValue;
 import org.digijava.module.aim.form.ScorecardManagerForm;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class ScorecardManager extends Action {
+	
+	private final static String CANCEL = "CANCEL";
 
-	private final static String UPDATE = "UPDATE";
-
-	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws java.lang.Exception {
+	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 		ScorecardManagerForm scorecardSettingsForm = (ScorecardManagerForm) form;
 		scorecardSettingsForm.setCategoryValues(ScorecardService.getAllCategoryValues());
-		Collection<AmpScorecardSettings> scorecardSettingsList = DbUtil.getAll(AmpScorecardSettings.class);
-		if (scorecardSettingsForm.getAction()!=null && scorecardSettingsForm.getAction().equals(UPDATE)) {
-			AmpScorecardSettings settings;
-			if (scorecardSettingsList.isEmpty()) {
-				settings = new AmpScorecardSettings();
-			}
-			else {
-				settings = scorecardSettingsList.iterator().next();
-			}
-			
-			settings.setValidationPeriod(scorecardSettingsForm.getValidationPeriod());
-			settings.setPercentageThreshold(scorecardSettingsForm.getPercentageThreshold());
-			
-			// We use in hbm files delete-orphan-all clause. We have to delete all children and then we should add the new list
-			settings.getClosedStatuses().clear();
-			settings.getClosedStatuses().addAll((getClosedStatusesCollection(scorecardSettingsForm.getCategoryValues(), scorecardSettingsForm.getSelectedCategoryValues(), settings)));
-			
-			settings.setValidationTime(scorecardSettingsForm.getValidationTime() == null
-					|| scorecardSettingsForm.getValidationTime().equals(0) ? null : scorecardSettingsForm
-					.getValidationTime());
-			DbUtil.saveOrUpdateObject(settings);
+		
+		List<AmpScorecardSettings> scorecardSettingsList = (List<AmpScorecardSettings>) DbUtil.getAll(AmpScorecardSettings.class);
+		AmpScorecardSettings settings = scorecardSettingsList.isEmpty() ? new AmpScorecardSettings() : scorecardSettingsList.get(0);
+		
+		if (scorecardSettingsForm.getAction() != null && scorecardSettingsForm.getAction().equals(CANCEL)) {
 			return mapping.findForward("index");
-
 		} else {
 			if (!scorecardSettingsList.isEmpty()) {
-				AmpScorecardSettings settings = scorecardSettingsList.iterator().next();
-				scorecardSettingsForm.setValidationPeriod(settings.getValidationPeriod());
-				scorecardSettingsForm.setValidationTime(settings.getValidationTime());
-				scorecardSettingsForm.setPercentageThreshold(settings.getPercentageThreshold());
-				scorecardSettingsForm.setSelectedCategoryValues(getSelectedClosedStatuses(settings.getClosedStatuses()));
+					scorecardSettingsForm.setValidationPeriod(settings.getValidationPeriod());
+					scorecardSettingsForm.setValidationTime(settings.getValidationTime());
+					scorecardSettingsForm.setPercentageThreshold(settings.getPercentageThreshold());
+					scorecardSettingsForm.setSelectedCategoryValues(getSelectedClosedStatuses(settings.getClosedStatuses()));
 			}
+			
 			return mapping.findForward("forward");
-
 		}
-	}
-	
-	Set<AmpScorecardSettingsCategoryValue> getClosedStatusesCollection(Collection<AmpCategoryValue> categoryValues, String[] selectedValues, AmpScorecardSettings settings) {
-		Set <AmpScorecardSettingsCategoryValue> closedStatuses = new HashSet<AmpScorecardSettingsCategoryValue>();
-		
-		if (selectedValues != null) {
-			for (AmpCategoryValue categoryValue : categoryValues) {
-				if (Arrays.asList(selectedValues).contains(Long.toString(categoryValue.getId()))) {
-					AmpScorecardSettingsCategoryValue scSettingsCategoryValue = new AmpScorecardSettingsCategoryValue();
-					scSettingsCategoryValue.setAmpCategoryValueStatus(categoryValue);
-					scSettingsCategoryValue.setAmpScorecardSettings(settings);
-					closedStatuses.add(scSettingsCategoryValue);
-				}
-			}
-		}
-		
-		return closedStatuses;
 	}
 	
 	String[] getSelectedClosedStatuses(Set<AmpScorecardSettingsCategoryValue> categoryValues) {

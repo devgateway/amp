@@ -182,14 +182,10 @@
 		</div>
 	</div>
 	<div style="text-align:center">
-		<c:set var="btnNext"><digi:trn key="btn:next">Next</digi:trn></c:set>
-		<c:set var="btnPrevious"><digi:trn key="btn:previous">Previous</digi:trn></c:set> 
-		<c:set var="btnExport"><digi:trn key="btn:export">Export</digi:trn></c:set> 
-		<c:set var="btnCancel"><digi:trn key="btn:cancel">Cancel</digi:trn></c:set> 
-		<input id="btnPrev" type="button" class="dr-menu" value="Previous" name="" onclick="handleWizardPrevious()" style="display:none" />
-		<input id="btnNext" type="button" class="dr-menu" value="Next" name="Step2"  onclick="handleWizardNext()" />
-		<input id="btnSubmit" type="button" class="dr-menu" value="Export" style="display:none" onclick="exportScorecard()" />
-		<input id="btnCancel" type="submit" class="dr-menu" value="Cancel" />
+		<input id="btnPrev" type="button" class="dr-menu" value="<digi:trn>Previous</digi:trn>" name="" onclick="handleWizardPrevious()" style="display:none" />
+		<input id="btnNext" type="button" class="dr-menu" value="<digi:trn>Next</digi:trn>" name="Step2"  onclick="handleWizardNext()" />
+		<input id="btnSubmit" type="button" class="dr-menu" value="<digi:trn>Export</digi:trn>" style="display:none" onclick="exportScorecard()" />
+		<input id="btnCancel" type="submit" class="dr-menu" value="<digi:trn>Cancel</digi:trn>" />
 	</div>
 </div>
 </digi:form>

@@ -1,0 +1,61 @@
+<%@ page pageEncoding="UTF-8"%>
+
+<style>
+
+.quickView {
+    border: 1;
+    width: 100%;
+    text-align: center;
+    border: 1px solid #000000; 
+    border-right: none; 
+}
+
+div.quickView span  {
+    font-size:25pt;
+    font-weight: bold;
+    white-space:nowrap;
+    display: block;
+    padding-top:20px;
+}
+
+div.quickView div {
+	height: 120px;
+	border-right: 1px solid #000000; 
+}
+
+.column-left {float: left; width: 33%; border-right: 0;}
+.column-right {float: right; width: 34%; border-left: 0;}
+.column-center {display: inline-block; width: 33%; }
+
+</style>
+
+<script language="javascript">
+
+$.ajax({
+	  url: "/rest/scorecard/quickStats",
+	  method: "GET",
+	  context: document.body,
+	  dataType: "text",
+}).done(function(data) {
+		var result = JSON.parse(data);
+		$('#countOrgs').text(result.organizations);
+		$('#countUsers').text(result.users);
+		$('#countProjects').text(result.projects);
+});
+	
+</script>
+
+<div class="quickView">
+	<div class="column-left">
+		<br/>Active Organisations Past Quarter
+		<span id="countOrgs"></span>
+	</div>
+   	<div class="column-center">
+		<br/>Users Logged into the System Past Quarter
+		<span id="countUsers"></span>
+	</div>
+   <div class="column-right">
+   		<br/>Number of Projects with Action Past Quarter
+		<span id="countProjects"></span>
+   </div>
+</div>

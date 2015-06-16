@@ -84,7 +84,8 @@ function buildDonorsTree(treeData) {
 		  	select: function(event, data) {
 		  		// Get a list of all selected nodes, and convert to a key array:
 				var selKeys = $.map(data.tree.getSelectedNodes(), function(node) {
-					return node.key;
+					if (!node.isFolder()) 
+						return node.key;
 				});
 				$("#echoSelection3").text(selKeys.join(","));
 		  	},

@@ -100,10 +100,6 @@ function buildDonorsTree(treeData) {
 		  	},
 		});
 	});
-	
-	$("#donorsTree").fancytree("getTree").visit(function(node){
-        node.setSelected(true);
-	});
 }
 
 // Step 3 - No Updates Donors

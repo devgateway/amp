@@ -120,7 +120,7 @@
 			
 		<div id="Step2" class="step-container">
 			<fieldset>
-				<legend><digi:trn>Donors Filter</digi:trn></legend>
+				<legend><digi:trn>Donors to exclude</digi:trn></legend>
 				<div>
 					<div id="filters-container" class="panel panel-primary">
 					  <div id="donorsTree"></div>

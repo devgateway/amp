@@ -201,7 +201,7 @@ public class DonorScorecard {
 		}
 		
 		for (ScorecardNoUpdateDonor donor : allDonors) {
-			if (donorIds.contains(donor.getAmpDonorId())) {
+			if (!donorIds.contains(donor.getAmpDonorId())) {
 				JsonBean jsonDonor = new JsonBean();
 				jsonDonor.set("id", donor.getAmpDonorId());
 				jsonDonor.set("name",  donor.getName());
@@ -213,7 +213,7 @@ public class DonorScorecard {
 		List<ScorecardNoUpdateDonor> noUpdatedDonors = scorecardService.getAllDonors(true, false);
 		
 		for (ScorecardNoUpdateDonor noUpdateDonor: noUpdatedDonors) {
-			if (donorIds.contains(noUpdateDonor.getAmpDonorId())) {
+			if (!donorIds.contains(noUpdateDonor.getAmpDonorId())) {
 				JsonBean jsonDonor = new JsonBean();
 				jsonDonor.set("id", noUpdateDonor.getAmpDonorId());
 				jsonDonor.set("name",  noUpdateDonor.getName());

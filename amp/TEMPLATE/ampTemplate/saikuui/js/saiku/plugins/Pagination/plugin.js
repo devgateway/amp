@@ -9,9 +9,13 @@ Saiku.events.bind('session:new', function(session) {
 	        	if(Settings.PAGINATION) {
 	        		$(".pagination_sprite").show();
 	        		$(".pagination_info").show();
-		        	var current_page = this.query.get('page')+1;
-		        	var total_pages = this.query.get('max_page_no') + 1;
-		        	$(this.el).find(".pagination_info").val(current_page + "/" + total_pages);
+	        		if (!Settings.AMP_REPORT_API_BRIDGE) {		        		
+			        	var current_page = this.query.get('page')+1;
+			        	var total_pages = this.query.get('max_page_no') + 1;
+			        	$(this.el).find(".pagination_info").val(current_page + "/" + total_pages);
+	        		} else {
+	        			$(this.el).find(".pagination_info").val(this.query.get('page') + "/" + this.query.get('max_page_no'));
+	        		}
 	        	}
 	        	else
         		{

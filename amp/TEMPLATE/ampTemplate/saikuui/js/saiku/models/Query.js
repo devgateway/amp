@@ -48,7 +48,11 @@ var Query = Backbone.Model.extend({
         this.result = new Result({ limit: Settings.RESULT_LIMIT }, { query: this });
         this.scenario = new QueryScenario({}, { query: this });
         //Start Custom Code for Pagination
-        this.set({page:0}) ;
+        if (!Settings.AMP_REPORT_API_BRIDGE) {
+        	this.set({page:0});
+        } else {
+        	this.set({page:1});
+        }
         window.currentQuery = this;
         //End Custom Code for Pagination
     },
@@ -85,15 +89,30 @@ var Query = Backbone.Model.extend({
     },
 
     run_query: function(filters, settings) {
+    	if (Settings.AMP_REPORT_API_BRIDGE) {
+    		this.set({page: 1});
+    	}
     	this.run(null, null, filters, settings);
     },
 	//Start Custom Code for Pagination    
     first_page: function() {
-    	this.set({page: 0});
+    	if (!Settings.AMP_REPORT_API_BRIDGE) {
+        	this.set({page:0}) ;
+        } else {
+        	if (this.get('max_page_no') > 0) {
+        		this.set({page:1}) ;
+			} else {
+				this.set({page:0}) ;
+			}
+        }
     	this.run(true);
     },
     prev_page: function() {
-    	var prev_page = this.get('page') == 0 ? 0 : (this.get('page')-1);
+    	if (!Settings.AMP_REPORT_API_BRIDGE) {
+    		var prev_page = this.get('page') == 0 ? 0 : (this.get('page')-1);
+        } else {
+        	var prev_page = this.get('page') > 1 ? this.get('page') - 1 : this.get('page'); 
+        }    	
     	this.set({page: prev_page});
     	this.run(true);
     },

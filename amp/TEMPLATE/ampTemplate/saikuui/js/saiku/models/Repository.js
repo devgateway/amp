@@ -96,6 +96,10 @@ var SavedQuery = Backbone.Model.extend({
         var json = JSON.stringify(response);
         var filename = model.get('file');
 
+        if(model.get('report_id') || model.get('report_token')) {
+        	Settings.AMP_REPORT_API_BRIDGE = true;
+        }
+        
         var query = new Query({ 
             json: json,
             formatter: Settings.CELLSET_FORMATTER,
@@ -108,10 +112,7 @@ var SavedQuery = Backbone.Model.extend({
         },{
             name: filename
         });
-        
-        if(model.get('report_id') || model.get('report_token')) {
-        	Settings.AMP_REPORT_API_BRIDGE = true;
-        }
+                
         query.set('name', filename);
         var tab = Saiku.tabs.add(new Workspace({ query: query }));
     }

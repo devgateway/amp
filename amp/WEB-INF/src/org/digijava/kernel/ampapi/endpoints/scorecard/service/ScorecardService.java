@@ -360,7 +360,7 @@ public class ScorecardService {
 		Set<AmpScorecardSettingsCategoryValue> statuses = settings.getClosedStatuses();
 		String closedStatuses = "";
 		for (AmpScorecardSettingsCategoryValue status : statuses) {
-			closedStatuses += "'" + status.getAmpCategoryValueStatus().getValue() + "',";
+			closedStatuses += "" + status.getAmpCategoryValueStatus().getId() + ",";
 		}
 		if (!closedStatuses.equals("")) {
 			closedStatuses = closedStatuses.substring(0, closedStatuses.length() - 1);
@@ -377,21 +377,27 @@ public class ScorecardService {
 					}
 					String quarterEndDate = new SimpleDateFormat("yyyy-MM-dd").format(quarter.getQuarterEndDate());
 					//Get total (not completed nor deleted) activities  by donor at the end of a given quarter
+					Object [] activityIds = getLatestActivityIdsByDate(quarterEndDate);
 					String query = "select count (distinct (a.amp_id)) as total_activities,r.organisation as donor_id "
-							+ "from amp_activity_version a, amp_org_role r,amp_organisation o  WHERE  r.activity=a.amp_activity_id ";
-
+							+ "from amp_activity_version a, amp_org_role r,amp_organisation o,amp_activities_categoryvalues c,amp_category_value v "+
+							" WHERE  r.activity=a.amp_activity_id  AND a.amp_activity_id = c.amp_activity_id "+
+							"AND c.amp_categoryvalue_id = v.id "+
+							"AND v.amp_category_class_id = (select id from amp_category_class where keyname='activity_status') ";
 					if (!status.equals("")) {
-						query += "AND approval_status not in (" + status + " ) ";
+						query += "AND c.amp_categoryvalue_id not in (" + status + " ) ";
 					}
-					query += "AND o.amp_org_id = r.organisation "+
-							 "AND ( o.deleted IS NULL OR o.deleted = false ) "+ 
-						 	"AND    (EXISTS  (SELECT af.amp_donor_org_id " + " FROM   amp_funding af "
+					query += "AND o.amp_org_id = r.organisation " + "AND ( o.deleted IS NULL OR o.deleted = false ) "
+							+ "AND    (EXISTS  (SELECT af.amp_donor_org_id " + " FROM   amp_funding af "
 							+ " WHERE  r.organisation = af.amp_donor_org_id "
 							+ " AND    (( af.source_role_id IS NULL) "
 							+ " OR     af.source_role_id =( SELECT amp_role_id         FROM   amp_role "
 							+ " WHERE  role_code='DN')))) " + " and date_created <= '" + quarterEndDate + "' "
-							+ " AND a.deleted is false " 
-							+ " group by r.organisation; ";
+							+ " AND a.deleted is false ";
+					if (activityIds.length > 0) {
+						query += "AND a.amp_activity_id in (" + StringUtils.join(activityIds, ",") + ") ";
+					}
+
+					query += " group by r.organisation; ";
 
 					try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
 						ResultSet rs = rsi.rs;
@@ -402,6 +408,10 @@ public class ScorecardService {
 							Integer totalUpdatedActivities = cell.getUpdatedActivites().size();
 							Integer totalUpdatedActivitiesOnGracePeriod = cell.getUpdatedActivitiesOnGracePeriod()
 									.size();
+							//we don't process process cells for no update donors
+							if (cell.getColor().equals(Colors.GRAY)) {
+								continue;
+							}
 							if (totalUpdatedActivities >= (totalActivities * (threshold / 100))) {
 								cell.setColor(Colors.GREEN);
 							} else if ((totalUpdatedActivities + totalUpdatedActivitiesOnGracePeriod) >= (totalActivities * (threshold / 100))) {
@@ -414,6 +424,35 @@ public class ScorecardService {
 			});
 		}
 		return data;
+	}
+	
+	/**
+	 * Gets the latest activity ids for all existing activity that were updated before the end of a quarter.
+	 *  
+	 * We can have an activity that is 'on going' on Quarter 3 and 'completed' on quarter 4. In order to 
+	 * validate quarter 3 correctly we need to know which is the latest version of the activity that was updated
+	 * before the quarter end and we should also omit updates and versions that happened after the end of the quarter.
+	 *   
+	 * @param endPeriodDate, the end date of a quarter
+	 * @return Object [] with the ids of the latest versions of an activity for the quarter
+	 */
+	public Object [] getLatestActivityIdsByDate (final String endPeriodDate) {
+		final List <Long> activityIds = new ArrayList <Long> ();
+		PersistenceManager.getSession().doWork(new Work() {
+			public void execute(Connection conn) throws SQLException {
+				String query = "select max(amp_activity_id) as amp_activity_id,amp_id from amp_activity_version "+
+								"where deleted is false and date_updated <= '"+endPeriodDate+"' "+
+								"group by amp_id";
+				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
+					ResultSet rs = rsi.rs;
+					while (rs.next()) {
+						activityIds.add(rs.getLong("amp_activity_id"));
+					}
+				}
+				
+			}});
+		return activityIds.toArray();
+		
 	}
 
 	/**

@@ -37,60 +37,60 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
     private static final long serialVersionUID = 2485772788422409800L;
     private Long id;
     @TranslatableField
-	@Interchangeable(fieldTitle = "Contract Name")
+	@Interchangeable(fieldTitle = "Contract Name", fmPath="/Activity Form/Contracts/Contract Item/Contract Info/Contract Name")
     private String contractName;
     
     @TranslatableField
-    @Interchangeable(fieldTitle = "Description")
+    @Interchangeable(fieldTitle = "Description",fmPath="/Activity Form/Contracts/Contract Item/Contract Info/Contract Description")
     private String description;
     @Interchangeable(fieldTitle = "Contracting Organization Text")
     private String contractingOrganizationText;
     @Interchangeable(fieldTitle = "Activity Category")
     private transient AmpCategoryValue activityCategory;
-    @Interchangeable(fieldTitle = "Start of Tendering")
+    @Interchangeable(fieldTitle = "Start of Tendering",fmPath="/Activity Form/Contracts/Contract Item/Contract Details/Start of Tendering")
     private Date startOfTendering;
-    @Interchangeable(fieldTitle = "Signature of Contract")
+    @Interchangeable(fieldTitle = "Signature of Contract",fmPath="/Activity Form/Contracts/Contract Item/Contract Details/Signature")
     private Date signatureOfContract;
-    @Interchangeable(fieldTitle = "Contract Validity")
+    @Interchangeable(fieldTitle = "Contract Validity",fmPath="/Activity Form/Contracts/Contract Item/Contract Details/Validity")
     private Date contractValidity;
-    @Interchangeable(fieldTitle = "Contract Completion")    
+    @Interchangeable(fieldTitle = "Contract Completion",fmPath="/Activity Form/Contracts/Contract Item/Contract Details/Completion")    
     private Date contractCompletion;
     
     
-    @Interchangeable(fieldTitle = "Total Private Contrib Amount Date")
+    @Interchangeable(fieldTitle = "Total Private Contrib Amount Date",fmPath="/Activity Form/Contracts/Contract Item/Funding Allocation/IB Date")
     private Date totalPrivateContribAmountDate;
-    @Interchangeable(fieldTitle = "Total National Contrib Regional Amount Date")
+    @Interchangeable(fieldTitle = "Total National Contrib Regional Amount Date",fmPath="/Activity Form/Contracts/Contract Item/Funding Allocation/Regional Date")
     private Date totalNationalContribRegionalAmountDate;
-    @Interchangeable(fieldTitle = "Total NationalContrib IFI Amount Date")
+    @Interchangeable(fieldTitle = "Total NationalContrib IFI Amount Date",fmPath="/Activity Form/Contracts/Contract Item/Funding Allocation/IFI Date")
     private Date totalNationalContribIFIAmountDate;
-    @Interchangeable(fieldTitle = "Total National Contrib Central Amount Date")
+    @Interchangeable(fieldTitle = "Total National Contrib Central Amount Date",fmPath="/Activity Form/Contracts/Contract Item/Funding Allocation/Central Date")
     private Date totalNationalContribCentralAmountDate;
-    @Interchangeable(fieldTitle = "Total EC Contrib INV Amount Date")
+    @Interchangeable(fieldTitle = "Total EC Contrib INV Amount Date",fmPath="/Activity Form/Contracts/Contract Item/Funding Allocation/INV Date")
     private Date totalECContribINVAmountDate;
-    @Interchangeable(fieldTitle = "Total EC Contrib IB Amount Date")
+    @Interchangeable(fieldTitle = "Total EC Contrib IB Amount Date",fmPath="/Activity Form/Contracts/Contract Item/Funding Allocation/IB Date")
     private Date totalECContribIBAmountDate;
     
-    @Interchangeable(fieldTitle = "Total EC Contrib IB Amount")
+    @Interchangeable(fieldTitle = "Total EC Contrib IB Amount",fmPath="/Activity Form/Contracts/Contract Item/Funding Allocation/IB Amount")
     private Double totalECContribIBAmount;
-    @Interchangeable(fieldTitle = "Total Amount")
+    @Interchangeable(fieldTitle = "Total Amount",fmPath="/Activity Form/Contracts/Contract Item/Funding Allocation/Contract Total Amount")
     private Double totalAmount;
-    @Interchangeable(fieldTitle = "Contract Total Value")
+    @Interchangeable(fieldTitle = "Contract Total Value",fmPath="/Activity Form/Contracts/Contract Item/Funding Allocation/Contract Total Value")
     private Double contractTotalValue;
-    @Interchangeable(fieldTitle = "Total Amount Currency")
+    @Interchangeable(fieldTitle = "Total Amount Currency",fmPath="/Activity Form/Contracts/Contract Item/Funding Allocation/Currency")
     private transient AmpCurrency totalAmountCurrency;
     @Interchangeable(fieldTitle = "Disbursements Global Currency")
     private transient AmpCurrency dibusrsementsGlobalCurrency;
-    @Interchangeable(fieldTitle = "Total EC Contrib INV Amount")
+    @Interchangeable(fieldTitle = "Total EC Contrib INV Amount",fmPath="/Activity Form/Contracts/Contract Item/Funding Allocation/INV Amount")
     private Double totalECContribINVAmount;
-    @Interchangeable(fieldTitle = "Total National Contrib Central Amount")
+    @Interchangeable(fieldTitle = "Total National Contrib Central Amount",fmPath="/Activity Form/Contracts/Contract Item/Funding Allocation/Central Amount")
     private Double totalNationalContribCentralAmount;
-    @Interchangeable(fieldTitle = "Total National Contrib Regional Amount")
+    @Interchangeable(fieldTitle = "Total National Contrib Regional Amount",fmPath="/Activity Form/Contracts/Contract Item/Funding Allocation/Regional Amount")
     private Double totalNationalContribRegionalAmount;
-    @Interchangeable(fieldTitle = "Total National Contrib IFI Amount")
+    @Interchangeable(fieldTitle = "Total National Contrib IFI Amount",fmPath="/Activity Form/Contracts/Contract Item/Funding Allocation/IFI Amount")
     private Double totalNationalContribIFIAmount;
-    @Interchangeable(fieldTitle = "Total Private Contrib Amount")
+    @Interchangeable(fieldTitle = "Total Private Contrib Amount",fmPath="/Activity Form/Contracts/Contract Item/Funding Allocation/IB Amount")
     private Double totalPrivateContribAmount;
-    @Interchangeable(fieldTitle = "Disbursements")
+    @Interchangeable(fieldTitle = "Disbursements",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements")
     private transient Set<IPAContractDisbursement> disbursements;
     
 //    @Interchangeable(fieldTitle = "Activity")
@@ -99,9 +99,9 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
     
     @Interchangeable(fieldTitle = "Organization")
     private transient AmpOrganisation organization;
-    @Interchangeable(fieldTitle = "Organizations")
+    @Interchangeable(fieldTitle = "Organizations",fmPath="/Activity Form/Contracts/Contract Item/Contract Organizations")
     private transient Set<AmpOrganisation> organizations;
-    @Interchangeable(fieldTitle = "Status")
+    @Interchangeable(fieldTitle = "Status",fmPath="/Activity Form/Contracts/Contract Item/Contract Details/Status")
     private transient AmpCategoryValue status;
     //this disbursements and executionRate are used in Montenegro
     @Interchangeable(fieldTitle = "Total Disbursements")
@@ -114,9 +114,9 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
     private Double fundingTotalDisbursements;
     @Interchangeable(fieldTitle = "Funding Execution Rate")
     private Double fundingExecutionRate;
-    @Interchangeable(fieldTitle = "Type")
+    @Interchangeable(fieldTitle = "Type",fmPath="/Activity Form/Contracts/Contract Item/Contract Info/Activity Type")
     private transient AmpCategoryValue type;
-    @Interchangeable(fieldTitle = "Contract Type")
+    @Interchangeable(fieldTitle = "Contract Type",fmPath="/Activity Form/Contracts/Contract Item/Contract Info/Contract Type")
     private transient AmpCategoryValue contractType;
     
     

@@ -18,9 +18,9 @@ public class AmpIssues  implements Serializable, Versionable, Cloneable
 	@Interchangeable(fieldTitle="Name")
 	private String name ;
 	private AmpActivityVersion activity;
-	@Interchangeable(fieldTitle="Measures")
+	@Interchangeable(fieldTitle="Measures",fmPath="/Activity Form/Issues Section/Issue/Measure")
 	private Set<AmpMeasure> measures;
-	@Interchangeable(fieldTitle="Issue Date")
+	@Interchangeable(fieldTitle="Issue Date",fmPath="/Activity Form/Issues Section/Issue/Date")
 	private Date issueDate;
  
 	public String getName() {

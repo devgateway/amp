@@ -3,6 +3,7 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.util.Output;
 
 /**
@@ -17,11 +18,12 @@ public class AmpActivityLocation implements Versionable,Serializable, Cloneable 
 	private AmpActivityVersion activity;
 	@Interchangeable(fieldTitle="Location", recursive=true)
 	private AmpLocation location;
-	@Interchangeable(fieldTitle="Location Percentage")
+	@Interchangeable(fieldTitle="Location Percentage",fmPath="/Activity Form/Location/Locations/Location Item/location Percentage",required="/Activity Form/Location/Locations/Location percentage required")
+	@Validators (percentage="/Activity Form/Location/Locations/locationPercentageTotal" )
 	private Float locationPercentage;
-	@Interchangeable(fieldTitle="Latitude")
+	@Interchangeable(fieldTitle="Latitude",fmPath="/Activity Form/Location/Locations/Location Item/Latitude")
 	private String latitude;
-	@Interchangeable(fieldTitle="Longitude")
+	@Interchangeable(fieldTitle="Longitude",fmPath="/Activity Form/Location/Locations/Location Item/Logitude")
 	private String longitude;
 	
 	public Long getId() {

@@ -6,8 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Interchangeable {
 	String fieldTitle();
+	String fmPath() default "";
 	boolean multipleValues() default false;
 	boolean importable() default true;
+	String required () default "_NONE_";
 	/**
 	 * to be set 'true' for the fields whose type or generic subtype is 
 	 * the same as of one of the containing classes above 

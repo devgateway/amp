@@ -22,13 +22,13 @@ public class IPAContractDisbursement implements Serializable, Cloneable {
 	private static final long serialVersionUID = -4688757182074104911L;
 	@Interchangeable(fieldTitle="ID")
 	private Long id;
-	@Interchangeable(fieldTitle="Adjustment Type")
+	@Interchangeable(fieldTitle="Adjustment Type",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Adjustment Type")
 	private AmpCategoryValue adjustmentType;
-	@Interchangeable(fieldTitle="Amount")
+	@Interchangeable(fieldTitle="Amount",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Amount")
 	private Double amount;
-	@Interchangeable(fieldTitle="Currency")
+	@Interchangeable(fieldTitle="Currency",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency")
 	private AmpCurrency currency;
-	@Interchangeable(fieldTitle="Date")
+	@Interchangeable(fieldTitle="Date",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date")
 	private Date date;
 	@Interchangeable(fieldTitle="Contract", recursive=true)
         private IPAContract contract;

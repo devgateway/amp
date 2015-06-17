@@ -22,19 +22,18 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
 	@Interchangeable(fieldTitle="ID")
 	private Long ampStructureId;
 	@TranslatableField
-	@Interchangeable(fieldTitle="Title")
+	@Interchangeable(fieldTitle="Title",fmPath="/Activity Form/Structures/Structure Title")
 	private String title;
 	@TranslatableField
-	@Interchangeable(fieldTitle="Description")
+	@Interchangeable(fieldTitle="Description",fmPath="/Activity Form/Structures/Structure Description")
 	private String description;
-	@Interchangeable(fieldTitle="Latitude")
+	@Interchangeable(fieldTitle="Latitude",fmPath="/Activity Form/Structures/Structure Latitude")
 	private String latitude;
-	@Interchangeable(fieldTitle="Longitude")
+	@Interchangeable(fieldTitle="Longitude",fmPath="/Activity Form/Structures/Structure Longitude")
 	private String longitude;
-	@Interchangeable(fieldTitle="Shape")
+	@Interchangeable(fieldTitle="Shape",fmPath="/Activity Form/Structures/Structure Shape")
 	private String shape;
 	private java.sql.Timestamp creationdate;
-	@Interchangeable(fieldTitle="Type")
 	private AmpStructureType type;
 
 	private Set<AmpActivityVersion> activities;

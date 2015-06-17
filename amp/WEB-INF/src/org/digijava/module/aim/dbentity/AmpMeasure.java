@@ -17,9 +17,9 @@ public class AmpMeasure  implements Serializable, Cloneable
 	@Interchangeable(fieldTitle="Name")
 	private String name ;
 	private AmpIssues issue;
-	@Interchangeable(fieldTitle="Actors")
+	@Interchangeable(fieldTitle="Actors",fmPath="/Activity Form/Issues Section/Issue/Measure/Actor")
 	private Set<AmpActor> actors;
-	@Interchangeable(fieldTitle="Measure Date")
+	@Interchangeable(fieldTitle="Measure Date",fmPath="/Activity Form/Issues Section/Issue/Date")
 	private Date measureDate;
 	
 	

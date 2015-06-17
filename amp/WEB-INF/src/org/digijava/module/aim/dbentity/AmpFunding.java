@@ -30,30 +30,30 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	private AmpActivityVersion ampActivityId;
 	@Interchangeable(fieldTitle="CRS Transaction Number")
 	private Long crsTransactionNo;
-	@Interchangeable(fieldTitle="Financing ID")
+	@Interchangeable(fieldTitle="Financing ID",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Organization Id")
 	private String financingId;
 	@Interchangeable(fieldTitle="Funding Terms Code")
 	private String fundingTermsCode;
 	@Interchangeable(fieldTitle="Planned Start Date")
 	private Date plannedStartDate;
-	@Interchangeable(fieldTitle="Planned Completion Date")
+	@Interchangeable(fieldTitle="Planned Completion Date",fmPath="/Activity Form/Planning/Date of Planned Completion")
 	private Date plannedCompletionDate;
-	@Interchangeable(fieldTitle="Actual Start Date")
+	@Interchangeable(fieldTitle="Actual Start Date",fmPath="/Activity Form/Planning/Actual Start Date")
 	private Date actualStartDate;
-	@Interchangeable(fieldTitle="Actual Completion Date")
+	@Interchangeable(fieldTitle="Actual Completion Date",fmPath="/Activity Form/Planning/Actual Completion Date")
 	private Date actualCompletionDate;
-	@Interchangeable(fieldTitle="Original Completion Date")
+	@Interchangeable(fieldTitle="Original Completion Date",fmPath="/Activity Form/Planning/Original Completion Date",required="/Activity Form/Planning/Required Validator for Original Completion Date")
 	private Date originalCompDate;
 	@Interchangeable(fieldTitle="Last Audit Date")
 	private Date lastAuditDate;
 	@Interchangeable(fieldTitle="Reporting Date")
 	private Date reportingDate;
 	
-	@Interchangeable(fieldTitle="Conditions")
+	@Interchangeable(fieldTitle="Conditions",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Conditions")
 	@TranslatableField
 	private String conditions;
 	
-	@Interchangeable(fieldTitle="Donor Objective")
+	@Interchangeable(fieldTitle="Donor Objective",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Donor Objective")
 	@TranslatableField
 	private String donorObjective;
 	@Interchangeable(fieldTitle="Language")
@@ -68,40 +68,40 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	private Date signatureDate;
 	@Interchangeable(fieldTitle="Funding Details")
 	private Set<AmpFundingDetail> fundingDetails;
-	@Interchangeable(fieldTitle="MTEF Projections")
+	@Interchangeable(fieldTitle="MTEF Projections",fmPath="/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections")
 	private Set<AmpFundingMTEFProjection> mtefProjections;
 	// private AmpTermsAssist ampTermsAssistId ;
 	/*
 	 * tanzania adds funding amp-1707
 	 */
-	@Interchangeable(fieldTitle="Active")
+	@Interchangeable(fieldTitle="Active",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Active")
 	private Boolean active;
-	@Interchangeable(fieldTitle="Delegated Cooperation")
+	@Interchangeable(fieldTitle="Delegated Cooperation",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Delegated Cooperation")
 	private Boolean delegatedCooperation;
-	@Interchangeable(fieldTitle="Delegated Partner")
+	@Interchangeable(fieldTitle="Delegated Partner",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Delegated Partner")
 	private Boolean delegatedPartner;
 	@Interchangeable(fieldTitle="Active List")
 	private ArrayList<Boolean> activeList;
 	// private AmpModality modalityId;
-	@Interchangeable(fieldTitle="Type of Assistance")
+	@Interchangeable(fieldTitle="Type of Assistance",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence")
 	private AmpCategoryValue typeOfAssistance;
-	@Interchangeable(fieldTitle="Financing Instrument")
+	@Interchangeable(fieldTitle="Financing Instrument",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument")
 	private AmpCategoryValue financingInstrument;
-	@Interchangeable(fieldTitle="Funding Status")
+	@Interchangeable(fieldTitle="Funding Status",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status")
 	private AmpCategoryValue fundingStatus;
-	@Interchangeable(fieldTitle="Mode of Payment")
+	@Interchangeable(fieldTitle="Mode of Payment",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Mode of Payment")
 	private AmpCategoryValue modeOfPayment;
-	@Interchangeable(fieldTitle="Loan Terms")
+	@Interchangeable(fieldTitle="Loan Terms",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Loan Terms")
 	private String loanTerms;
 	@Interchangeable(fieldTitle="Group Versioned Funding")
 	private Long groupVersionedFunding;
-	@Interchangeable(fieldTitle="Capital Spending Percentage")
+	@Interchangeable(fieldTitle="Capital Spending Percentage",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Capital Spending Percentage")
 	private Float capitalSpendingPercentage;
-	@Interchangeable(fieldTitle="Agreement")
+	@Interchangeable(fieldTitle="Agreement",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement")
 	private AmpAgreement agreement;
-	@Interchangeable(fieldTitle="Source Role")
+	@Interchangeable(fieldTitle="Source Role",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Source Role")
 	private AmpRole sourceRole;
-	@Interchangeable(fieldTitle="Funding Classification Date")
+	@Interchangeable(fieldTitle="Funding Classification Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Classification Date")
 	private Date fundingClassificationDate;
 	
 	@Override

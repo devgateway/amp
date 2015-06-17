@@ -22,9 +22,9 @@ public class AmpLineMinistryObservation implements Serializable, Versionable, Cl
 	@Interchangeable(fieldTitle="Name")
 	private String name;
 	private AmpActivityVersion activity;
-	@Interchangeable(fieldTitle="Line Ministry Observation Measures")
+	@Interchangeable(fieldTitle="Line Ministry Observation Measures",fmPath="/Activity Form/Line Ministry Observations/Observation/Measure")
 	private Set<AmpLineMinistryObservationMeasure> lineMinistryObservationMeasures;
-	@Interchangeable(fieldTitle="Observation Date")
+	@Interchangeable(fieldTitle="Observation Date",fmPath="/Activity Form/Line Ministry Observations/Observation/Date")
 	private Date observationDate;
 
 	public String getName() {

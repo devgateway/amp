@@ -16,7 +16,7 @@ public class AmpLineMinistryObservationMeasure implements Serializable, Cloneabl
 	@TranslatableField
 	private String name;
 	private AmpLineMinistryObservation lineMinistryObservation;
-	@Interchangeable(fieldTitle="Actors")
+	@Interchangeable(fieldTitle="Actors",fmPath="/Activity Form/Line Ministry Observations/Observation/Measure/Actor")
 	private Set<AmpLineMinistryObservationActor> actors;
 
 	public String getName() {

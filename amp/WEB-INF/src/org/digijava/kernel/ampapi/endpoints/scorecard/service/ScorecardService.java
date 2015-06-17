@@ -166,8 +166,8 @@ public class ScorecardService {
 			public void execute(Connection conn) throws SQLException {
 				Map<Long, String> organisationsNames = QueryUtil.getTranslatedName(conn,"amp_organisation","amp_org_id","name");
 				
-				String query = "SELECT o.amp_org_id, o.name FROM  amp_organisation o  "
-						+ "WHERE (EXISTS (SELECT af.amp_donor_org_id "
+				String query = "SELECT distinct(o.amp_org_id ),o.name  FROM   amp_organisation o,amp_org_role r   "
+						+ "WHERE o.amp_org_id = r.organisation  AND (EXISTS (SELECT af.amp_donor_org_id "
 						+ "FROM  amp_funding af WHERE  o.amp_org_id = af.amp_donor_org_id "
 						+ "AND ((af.source_role_id IS NULL) OR af.source_role_id = (SELECT amp_role_id FROM amp_role WHERE role_code = 'DN')))) "
 						+ "AND ( o.deleted IS NULL OR o.deleted = false ) ";

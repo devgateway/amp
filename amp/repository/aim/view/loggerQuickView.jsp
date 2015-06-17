@@ -47,15 +47,15 @@ $.ajax({
 
 <div class="quickView">
 	<div class="column-left">
-		<br/>Active Organisations Past Quarter
+		<br/><digi:trn>Active Organisations Past Quarter</digi:trn>
 		<span id="countOrgs"></span>
 	</div>
    	<div class="column-center">
-		<br/>Users Logged into the System Past Quarter
+		<br/><digi:trn>Users Logged into the System Past Quarter</digi:trn>
 		<span id="countUsers"></span>
 	</div>
    <div class="column-right">
-   		<br/>Number of Projects with Action Past Quarter
+   		<br/><digi:trn>Number of Projects with Action Past Quarter</digi:trn>
 		<span id="countProjects"></span>
    </div>
 </div>

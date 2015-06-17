@@ -249,23 +249,6 @@ function exportScorecard () {
                                  </tr>
                                  </table>
                                  </div>
-										<span id="exportScorecard"
-											style="margin-left: 15%; display: none;">
-											<table>
-												<tr>
-													<td><label><digi:trn>Export Scorecard</digi:trn></label>
-													</td>
-												</tr>
-												<tr>
-													<td>
-													  <input class="dr-menu" type="button" onclick="submitExport()"
-														value="<digi:trn>OK</digi:trn>"> 
-														<input 	class="dr-menu" type="button" value="<digi:trn>Cancel</digi:trn>"
-														onclick="document.aimAuditLoggerManagerForm.reset();toggleSettings()">
-													</td>
-												</tr>
-											</table>
-										</span>
 									</div>                        
                             	</div>
                           		<br>

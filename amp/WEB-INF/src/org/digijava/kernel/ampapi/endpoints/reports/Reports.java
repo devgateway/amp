@@ -489,7 +489,7 @@ public class Reports {
 			switch (type) {
 			// TODO: Uncomment when csv is ready.
 			case "xlsx":
-				doc = AMPReportExcelExport.generateExcel(result, AMPReportExportConstants.XLSX);
+				doc = AMPReportExcelExport.generateExcel(result, AMPReportExportConstants.XLSX, report.getRowsHierarchiesTotals());
 				break;
 			/*
 			 * case "csv": doc = SaikuUtils.getCsv(result, settings, ",", "\""); break;

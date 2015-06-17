@@ -36,7 +36,7 @@ AMPTableRenderer.prototype.render = function(data, options) {
 		metadataHierarchies = data.hierarchies;
 	}
 
-	if (data.page !== null && data.page.pageArea !== null) {
+	if (data!== undefined && data.page !== null && data.page.pageArea !== null) {
 		summarizedReport = checkIfSummarizedReportWithConstant(data.page);
 		// Make an adjustment in the hierarchies list when showing a summarized
 		// report.

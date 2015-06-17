@@ -123,18 +123,18 @@ public class AMPReportExcelExport {
 	 */
 	private static void createStyles(Workbook wb) {
 		Font fontHeaderAndTotal = wb.createFont();
-		fontHeaderAndTotal.setColor(IndexedColors.WHITE.getIndex());
+		fontHeaderAndTotal.setColor(IndexedColors.BLACK.getIndex());
 		fontHeaderAndTotal.setBoldweight(Font.BOLDWEIGHT_BOLD);
 		styleHeader = wb.createCellStyle();
 		styleHeader.setFillPattern(CellStyle.SOLID_FOREGROUND);
-		styleHeader.setFillForegroundColor(IndexedColors.ROYAL_BLUE.getIndex());
+		styleHeader.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
 		styleHeader.setAlignment(CellStyle.ALIGN_CENTER);
 		styleHeader.setWrapText(true);
 		styleHeader.setFont(fontHeaderAndTotal);
 
 		styleTotal = wb.createCellStyle();
 		styleTotal.setFillPattern(CellStyle.SOLID_FOREGROUND);
-		styleTotal.setFillForegroundColor(IndexedColors.BLACK.getIndex());
+		styleTotal.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
 		styleTotal.setAlignment(CellStyle.ALIGN_CENTER);
 		styleTotal.setFont(fontHeaderAndTotal);
 		styleTotal.setWrapText(true);

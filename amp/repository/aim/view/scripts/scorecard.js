@@ -206,7 +206,8 @@ function loadFinalReview() {
     var activityStautus = $('select[name="selectedCategoryValues"]');
     // Copy rows from selectSource to selectDestination from bottom to top
     if (activityStautus.find(":selected").length > 0) {
-    	activityStautus.find(':selected').removeAttr("selected").clone().appendTo(selectActivitySummary);
+    	selectActivitySummary.empty();
+    	activityStautus.find(':selected').clone().removeAttr("selected").appendTo(selectActivitySummary);
     	selectActivitySummary.show();
     } else {
     	selectActivitySummary.hide();
@@ -216,6 +217,7 @@ function loadFinalReview() {
     var noUpdateDonors = $('#noUpdateDonors').first();
     // Copy rows from selectSource to selectDestination from bottom to top
     if (noUpdateDonors.find('option').length > 0) {
+    	selectSummary.empty();
     	noUpdateDonors.find('option').clone().appendTo(selectSummary);
 	    selectSummary.show();
     } else {

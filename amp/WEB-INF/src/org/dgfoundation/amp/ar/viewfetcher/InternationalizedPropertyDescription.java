@@ -177,7 +177,7 @@ public class InternationalizedPropertyDescription implements PropertyDescription
 	 * @return
 	 */
 	public String getSQLFunctionCall(String idSource){
-		return getSQLFunctionCall(idSource, TLSUtils.getLangCode());
+		return getSQLFunctionCall(idSource, TLSUtils.getEffectiveLangCode());
 	}
 		
 	/**

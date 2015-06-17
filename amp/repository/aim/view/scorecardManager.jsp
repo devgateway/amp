@@ -86,7 +86,7 @@
   						<div class="settings-right"><html:checkbox property="validationPeriod"  onclick="handleValidationPeriodClick(this);"/></div>
   					</div>
   					<div class="settings-blocks">
-  						<div class="settings-left">Validation Time</div>
+  						<div class="settings-left"><digi:trn>Validation Time</digi:trn></div>
   						<div class="settings-right">
   							<html:select property="validationTime">
 								<html:option value=""><digi:trn>Select value...</digi:trn>
@@ -124,7 +124,7 @@
 				<div>
 					<div id="filters-container" class="panel panel-primary">
 					  <div id="donorsTree"></div>
-					  <div style="display:none;"><digi:trn>Selected keys</digi:trn>: <span id="echoSelection3">-</span></div>
+					  <div style="display:none;"><digi:trn>Selected keys</digi:trn>: <span id="echoSelection3"></span></div>
 					</div>
 				</div>
 			</fieldset>
@@ -138,9 +138,9 @@
 						<select id="allDonors" multiple="true" size="15" style="width:210px"></select>
 					</div>
 					<div class="nodonors-center">
-						<input class="dr-menu" type="button" onclick="addDonors();" value="<digi:trn>Add >></digi:trn>"> 
+						<input class="dr-menu" type="button" onclick="addDonors();" value="<digi:trn>Add</digi:trn> >>"> 
 						<div style="padding-top:10px"></div>
-						<input class="dr-menu" type="button" onclick="removeDonors();" value="<digi:trn>>> Remove</digi:trn>"> 
+						<input class="dr-menu" type="button" onclick="removeDonors();" value=">> <digi:trn>Remove</digi:trn>"> 
 					</div>
 					<div class="nodonors-right">
 						<select id="noUpdateDonors" multiple="true" size="15" style="width:210px"></select>
@@ -182,9 +182,9 @@
 		</div>
 	</div>
 	<div style="text-align:center">
-		<input id="btnPrev" type="button" class="dr-menu" value="<digi:trn>Previous</digi:trn>" name="" onclick="handleWizardPrevious()" style="display:none" />
-		<input id="btnNext" type="button" class="dr-menu" value="<digi:trn>Next</digi:trn>" name="Step2"  onclick="handleWizardNext()" />
-		<input id="btnSubmit" type="button" class="dr-menu" value="<digi:trn>Export</digi:trn>" style="display:none" onclick="exportScorecard()" />
+		<input id="btnPrev" type="button" class="dr-menu" name="" onclick="handleWizardPrevious()" style="display:none" value="<digi:trn>Previous</digi:trn>"/>
+		<input id="btnNext" type="button" class="dr-menu" name="Step2"  onclick="handleWizardNext()" value="<digi:trn>Next</digi:trn>"/>
+		<input id="btnSubmit" type="button" class="dr-menu" style="display:none" onclick="exportScorecard()" value="<digi:trn>Export</digi:trn>"/>
 		<input id="btnCancel" type="submit" class="dr-menu" value="<digi:trn>Cancel</digi:trn>" />
 	</div>
 </div>

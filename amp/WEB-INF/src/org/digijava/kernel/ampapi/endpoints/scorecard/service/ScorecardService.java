@@ -25,6 +25,7 @@ import org.digijava.kernel.ampapi.endpoints.util.CalendarUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -38,6 +39,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
@@ -162,7 +164,9 @@ public class ScorecardService {
 		
 		PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {
-				String query = "SELECT o.name, o.amp_org_id  FROM   amp_organisation o  "
+				Map<Long, String> organisationsNames = QueryUtil.getTranslatedName(conn,"amp_organisation","amp_org_id","name");
+				
+				String query = "SELECT o.amp_org_id, o.name FROM  amp_organisation o  "
 						+ "WHERE (EXISTS (SELECT af.amp_donor_org_id "
 						+ "FROM  amp_funding af WHERE  o.amp_org_id = af.amp_donor_org_id "
 						+ "AND ((af.source_role_id IS NULL) OR af.source_role_id = (SELECT amp_role_id FROM amp_role WHERE role_code = 'DN')))) "
@@ -181,7 +185,11 @@ public class ScorecardService {
 					while (rs.next()) {
 						ScorecardNoUpdateDonor donor = new ScorecardNoUpdateDonor();
 						donor.setAmpDonorId(rs.getLong("amp_org_id"));
-						donor.setName(rs.getString("name"));
+						if (ContentTranslationUtil.multilingualIsEnabled()) {
+							donor.setName(organisationsNames.get(rs.getLong("amp_org_id")));
+						} else {
+							donor.setName(rs.getString("name"));
+						}
 						donorsList.add(donor);
 					}
 				}
@@ -207,6 +215,10 @@ public class ScorecardService {
         		+ "WHERE acv.ampCategoryClass.keyName = 'activity_status'";
         Query query = session.createQuery(queryString);
         responses = query.list();
+        
+        for (AmpCategoryValue acv : responses) {
+        	acv.setValue(TranslatorWorker.translateText(acv.getValue()));
+        }
 
 		return responses;
 	}

@@ -308,7 +308,7 @@ public static List<JsonBean> getOrgGroups() {
 		return orgs;
 	}
 	
-	private static Map<Long, String> getTranslatedName(Connection conn,String tableName,String id,String name)
+	public static Map<Long, String> getTranslatedName(Connection conn,String tableName,String id,String name)
 			throws SQLException {
 		Map<Long, String> names = null;
 		if (ContentTranslationUtil.multilingualIsEnabled()) {

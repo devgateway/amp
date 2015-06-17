@@ -104,6 +104,24 @@ public class FilterUtil {
 	}
 	
 	/**
+	 * copies the values of a collection into an array. Returns an empty array if the collection is null
+	 * @param col
+	 * @return
+	 */
+	public static Object[] collectValues(Collection<?> col) {
+		if (col == null)
+			return null;
+		
+		Object[] res = new Object[col.size()];
+		int i = 0;
+		for(Object obj:col) {
+			res[i] = obj;
+			i++;
+		}
+		return res;
+	}
+	
+	/**
 	 * pumps data from the filter to the form
 	 * @param form
 	 * @param filter
@@ -259,6 +277,7 @@ public class FilterUtil {
 		if ( filter.getGroupingsize() != null ){
 			form.setCustomGroupSize(filter.getGroupingsize());
 		}
+		form.setSelectedHumanitarianAid(collectValues(filter.getHumanitarianAid()));
 		
 		return filter;
 	}

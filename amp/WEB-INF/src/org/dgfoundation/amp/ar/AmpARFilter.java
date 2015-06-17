@@ -378,6 +378,12 @@ public class AmpARFilter extends PropertyListable {
 	private Collection<Integer> lineMinRank;
 	
 	/**
+	 * if set is null - "all", else the elements in the set mean
+	 * 1 - yes, 2 - no
+	 */
+	private Set<Integer> humanitarianAid;
+	
+	/**
 	 * the date is stored in the {@link #sdfIn} hardcoded format
 	 */
 	private String fromDate;
@@ -1572,8 +1578,13 @@ public class AmpARFilter extends PropertyListable {
 				queryAppend(params.getTeamFilter().getGeneratedFilterQuery());
 			}
 		}
+		
 		if (statuses != null && statuses.size() > 0)
 			queryAppend(STATUS_FILTER);
+		
+		if (humanitarianAid != null)
+			queryAppend(String.format("SELECT v.amp_activity_id FROM v_humanitarian_aid v WHERE val_id IN (%s)", Util.toCSStringForIN(humanitarianAid)));
+			
 		if (workspaces != null && workspaces.size() > 0)
 			queryAppend(WORKSPACE_FILTER);
 		// if(donors!=null && donors.size()>0) queryAppend(ORG_FILTER);
@@ -3455,5 +3466,13 @@ public class AmpARFilter extends PropertyListable {
 		}
 		ret.append(" )");
 		return ret.toString();
+	}
+
+	public Set<Integer> getHumanitarianAid() {
+		return humanitarianAid;
+	}
+
+	public void setHumanitarianAid(Set<Integer> humanitarianAid) {
+		this.humanitarianAid = humanitarianAid;
 	}
 }

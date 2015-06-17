@@ -95,10 +95,7 @@ public class PIUseCase {
 		if (form.getFinancingInstrumentsElements() == null || form.getFinancingInstrumentsElements().isEmpty()) {
 			form.setFinancingInstrumentsElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
 			Collection<AmpCategoryValue> finInstrValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
-			HierarchyListableImplementation rootFinancingInstrument = new HierarchyListableImplementation();
-			rootFinancingInstrument.setLabel("All Financing Instrument Values");
-			rootFinancingInstrument.setUniqueId("0");
-			rootFinancingInstrument.setChildren(finInstrValues);
+			HierarchyListableImplementation rootFinancingInstrument = new HierarchyListableImplementation("All Financing Instrument Values", "0", finInstrValues);
 			GroupingElement<HierarchyListableImplementation> finInstrElement = new GroupingElement<HierarchyListableImplementation>("Financing Instrument", "filter_financing_instr_div",
 					rootFinancingInstrument, "selectedFinancingIstruments");
 			form.getFinancingInstrumentsElements().add(finInstrElement);
@@ -106,20 +103,14 @@ public class PIUseCase {
 		if (form.getDonorElements() == null || form.getDonorElements().isEmpty()) {
 			Collection<AmpOrgGroup> donorGroups = DbUtil.getAllOrgGroups();
 			form.setDonorElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
-			HierarchyListableImplementation rootOrgGroup = new HierarchyListableImplementation();
-			rootOrgGroup.setLabel("All Donor Groups");
-			rootOrgGroup.setUniqueId("0");
-			rootOrgGroup.setChildren(donorGroups);
+			HierarchyListableImplementation rootOrgGroup = new HierarchyListableImplementation("All Donor Groups", "0", donorGroups);
 			GroupingElement<HierarchyListableImplementation> donorGroupElement = new GroupingElement<HierarchyListableImplementation>("Donor Groups", "filter_donor_groups_div", rootOrgGroup,
 					"selectedDonorGroups");
 			form.getDonorElements().add(donorGroupElement);
 			HierarchyListableUtil.changeTranslateable(donorGroupElement.getRootHierarchyListable(), false);
 
 			Collection<AmpOrganisation> donors = DbUtil.getAllDonorOrgs();
-			HierarchyListableImplementation rootDonors = new HierarchyListableImplementation();
-			rootDonors.setLabel("All Donors");
-			rootDonors.setUniqueId("0");
-			rootDonors.setChildren(donors);
+			HierarchyListableImplementation rootDonors = new HierarchyListableImplementation("All Donors", "0", donors);
 			GroupingElement<HierarchyListableImplementation> donorsElement = new GroupingElement<HierarchyListableImplementation>("Donor Agencies", "filter_donor_agencies_div", rootDonors,
 					"selectedDonors");
 			form.getDonorElements().add(donorsElement);
@@ -128,20 +119,14 @@ public class PIUseCase {
 		if (form.getSectorStatusesElements() == null || form.getSectorStatusesElements().isEmpty()) {
 			form.setSectorStatusesElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
 			Collection<AmpCategoryValue> activityStatusValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY);
-			HierarchyListableImplementation rootActivityStatus = new HierarchyListableImplementation();
-			rootActivityStatus.setLabel("All");
-			rootActivityStatus.setUniqueId("0");
-			rootActivityStatus.setChildren(activityStatusValues);
+			HierarchyListableImplementation rootActivityStatus = new HierarchyListableImplementation("All", "0", activityStatusValues);
 			GroupingElement<HierarchyListableImplementation> activityStatusElement = new GroupingElement<HierarchyListableImplementation>("Status", "filter_activity_status_div", rootActivityStatus,
 					"selectedStatuses");
 			form.getSectorStatusesElements().add(activityStatusElement);
 
 			if (FeaturesUtil.isVisibleField("Sector")) {
-				HierarchyListableImplementation rootAmpSectors = new HierarchyListableImplementation();
-				rootAmpSectors.setLabel("Primary Sectors");
-				rootAmpSectors.setUniqueId(0 + "");
-				List<AmpSector> ampSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME);
-				rootAmpSectors.setChildren(ampSectors);
+				HierarchyListableImplementation rootAmpSectors = new HierarchyListableImplementation("Primary Sectors", Integer.toString(0), 
+						SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME));
 				GroupingElement<HierarchyListableImplementation> sectorsElement = new GroupingElement<HierarchyListableImplementation>("Primary Sectors", "filter_sectors_div", rootAmpSectors,
 						"selectedSectors");
 				form.getSectorStatusesElements().add(sectorsElement);
@@ -149,11 +134,8 @@ public class PIUseCase {
 			}
 
 			if (FeaturesUtil.isVisibleField("Secondary Sector")) {
-				HierarchyListableImplementation rootSecondaryAmpSectors = new HierarchyListableImplementation();
-				rootSecondaryAmpSectors.setLabel("Secondary Sectors");
-				rootSecondaryAmpSectors.setUniqueId("0");
-				List<AmpSector> secondaryAmpSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME);
-				rootSecondaryAmpSectors.setChildren(secondaryAmpSectors);
+				HierarchyListableImplementation rootSecondaryAmpSectors = new HierarchyListableImplementation("Secondary Sectors", "0",
+						SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME));
 				GroupingElement<HierarchyListableImplementation> secondarySectorsElement = new GroupingElement<HierarchyListableImplementation>("Secondary Sectors", "filter_secondary_sectors_div",
 						rootSecondaryAmpSectors, "selectedSectors");
 				form.getSectorStatusesElements().add(secondarySectorsElement);
@@ -161,11 +143,8 @@ public class PIUseCase {
 			}
 
 			if (FeaturesUtil.isVisibleField("Tertiary Sector")) {
-				HierarchyListableImplementation rootTertiaryAmpSectors = new HierarchyListableImplementation();
-				rootTertiaryAmpSectors.setLabel("Tertiary Sector");
-				rootTertiaryAmpSectors.setUniqueId("0");
-				List<AmpSector> tertiaryAmpSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME);
-				rootTertiaryAmpSectors.setChildren(tertiaryAmpSectors);
+				HierarchyListableImplementation rootTertiaryAmpSectors = new HierarchyListableImplementation("Tertiary Sector", "0",
+						SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME));
 				GroupingElement<HierarchyListableImplementation> tertiarySectorsElement = new GroupingElement<HierarchyListableImplementation>("Tertiary Sectors", "filter_tertiary_sectors_div",
 						rootTertiaryAmpSectors, "selectedSectors");
 				form.getSectorStatusesElements().add(tertiarySectorsElement);

@@ -227,51 +227,39 @@ public class ReportsFilterPicker extends Action {
     									DynamicDateFilter dynamicDateFilterObj, String htmlDivId) {
     		if (fmField == null || FeaturesUtil.isVisibleField(fmField) ) {
 			
-				Collection<DateListableImplementation> children		= 
-						new ArrayList<DateListableImplementation>();
-				DateListableImplementation fromDate			= new DateListableImplementation();	
-				fromDate.setLabel("From");
-				fromDate.setUniqueId("from" + baseFormProperty + "Date");
+				Collection<DateListableImplementation> children = new ArrayList<DateListableImplementation>();
+				DateListableImplementation fromDate = new DateListableImplementation("From", "from" + baseFormProperty + "Date");
 				fromDate.setActionFormProperty("from" + baseFormProperty + "Date");
 				fromDate.setTranslateable(true);
 				children.add(fromDate);
 				
-				DateListableImplementation toDate			= new DateListableImplementation();	
-				toDate.setLabel("To");
-				toDate.setUniqueId("to" + baseFormProperty + "Date");
+				DateListableImplementation toDate = new DateListableImplementation("To", "to" + baseFormProperty + "Date");
 				toDate.setActionFormProperty("to" + baseFormProperty + "Date");
 				toDate.setTranslateable(true);
 				children.add(toDate);
 				
-				DateListableImplementation groupFromTo = new DateListableImplementation();
-				groupFromTo.setLabel("");
-				groupFromTo.setUniqueId("0");
+				DateListableImplementation groupFromTo = new DateListableImplementation("", "0");
 				groupFromTo.setTranslateable(false);
 				groupFromTo.setChildren(children);
 				
-				children		= 
-						new ArrayList<DateListableImplementation>();
+				children = new ArrayList<DateListableImplementation>();
 				children.add(groupFromTo);
 				
 				// little ugly hack
-				String dynamicFilterBaseFormProperty	= "".equals(baseFormProperty)?"Date":baseFormProperty;
-				DateListableImplementation dynamicFilter			= new DateListableImplementation();	
-				dynamicFilter.setLabel("Dynamic Date Filter");
-				dynamicFilter.setUniqueId("dynamic" + dynamicFilterBaseFormProperty + "Filter");
+				String dynamicFilterBaseFormProperty	= "".equals(baseFormProperty) ? "Date" : baseFormProperty;
+				DateListableImplementation dynamicFilter = new DateListableImplementation("Dynamic Date Filter", "dynamic" + dynamicFilterBaseFormProperty + "Filter");
 				dynamicFilter.setActionFormProperty("dynamic" + dynamicFilterBaseFormProperty + "Filter");
 				dynamicFilter.setTranslateable(true);
 				children.add(dynamicFilter);
 				
-				if(dynamicDateFilterObj.getCurrentPeriod() != null){
+				if (dynamicDateFilterObj.getCurrentPeriod() != null) {
 					dynamicFilter.setSelected(true);
-				}else{
+				} else {
 					groupFromTo.setSelected(true);
 				}
 				
-				DateListableImplementation rootDate			= new DateListableImplementation();
-				rootDate.setLabel( label );
+				DateListableImplementation rootDate = new DateListableImplementation(label, "root" + baseFormProperty);
 				rootDate.setTranslateable(true);
-				rootDate.setUniqueId("root" + baseFormProperty );
 				rootDate.setChildren(children);
 				GroupingElement<HierarchyListableImplementation> filterByDate	= 
 						new GroupingElement<HierarchyListableImplementation>(label, htmlDivId, rootDate, "", GroupingElement.GROUPING_ELEMENT_FIELD_TYPE_DATE);
@@ -313,19 +301,14 @@ public class ReportsFilterPicker extends Action {
 	 	if (FeaturesUtil.isVisibleFeature(featureName) ) {
  	 		Collection<AmpOrganisation> relevantAgencies = (ReportsUtil.getAllOrgByRoleOfPortfolio(roleCode));
  	 		HierarchyListableUtil.changeTranslateable(relevantAgencies, false);
- 	 		HierarchyListableImplementation rootRelevantAgencies = new HierarchyListableImplementation();
- 	 		rootRelevantAgencies.setLabel("All " + rootElementName);
- 	 		rootRelevantAgencies.setUniqueId("0");
- 	 		rootRelevantAgencies.setChildren( relevantAgencies );
+ 	 		HierarchyListableImplementation rootRelevantAgencies = new HierarchyListableImplementation("All " + rootElementName, "0", relevantAgencies);
  	 		GroupingElement<HierarchyListableImplementation> relevantAgenciesElement = new GroupingElement<HierarchyListableImplementation>(rootElementName, filterDivId, rootRelevantAgencies, selectId);
  	 		filterForm.getRelatedAgenciesElements().add(relevantAgenciesElement);
  	 	 	if (includeParent) {
- 	 	 	for (AmpOrganisation donor:relevantAgencies) {
- 	 	 		rootRelevantAgencies.getParentMapping().put(donor.getAmpOrgId(),donor.getOrgGrpId().getAmpOrgGrpId());
+ 	 	 		for (AmpOrganisation donor:relevantAgencies) {
+ 	 	 			rootRelevantAgencies.getParentMapping().put(donor.getAmpOrgId(),donor.getOrgGrpId().getAmpOrgGrpId());
+ 	 	 		}
  	 	 	}
- 	 	 	}
- 	 		
-     	 
 		}	
 	}	
 	
@@ -335,19 +318,14 @@ public class ReportsFilterPicker extends Action {
 	 	if (FeaturesUtil.isVisibleFeature(featureName) ) {
  	 		List<OrganizationSkeleton> relevantAgencies = ReportsUtil.getAllOrgByRoleOfPortfolioFaster(roleCode);
  	 		HierarchyListableUtil.changeTranslateable(relevantAgencies, false);
- 	 		HierarchyListableImplementation rootRelevantAgencies = new HierarchyListableImplementation();
- 	 		rootRelevantAgencies.setLabel("All " + rootElementName);
- 	 		rootRelevantAgencies.setUniqueId("0");
- 	 		rootRelevantAgencies.setChildren( relevantAgencies );
+ 	 		HierarchyListableImplementation rootRelevantAgencies = new HierarchyListableImplementation("All " + rootElementName, "0", relevantAgencies);
  	 		GroupingElement<HierarchyListableImplementation> relevantAgenciesElement = new GroupingElement<HierarchyListableImplementation>(rootElementName, filterDivId, rootRelevantAgencies, selectId);
  	 		filterForm.getRelatedAgenciesElements().add(relevantAgenciesElement);
  	 	 	if (includeParent) {
- 	 	 	for (OrganizationSkeleton donor:relevantAgencies) {
- 	 	 		rootRelevantAgencies.getParentMapping().put(donor.getAmpOrgId(),donor.getOrgGrpId());
+ 	 	 		for (OrganizationSkeleton donor:relevantAgencies) {
+ 	 	 			rootRelevantAgencies.getParentMapping().put(donor.getAmpOrgId(),donor.getOrgGrpId());
+ 	 	 		}
  	 	 	}
- 	 	 	}
- 	 		
-     	 
 		}	
 	}
 	
@@ -367,10 +345,7 @@ public class ReportsFilterPicker extends Action {
 	 		Collection<SectorSkeleton> ampSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchyFaster(sectorName);
 	 		HierarchyListableUtil.changeTranslateable(ampSectors, false);
 	 		
- 	 		HierarchyListableImplementation rootAmpSectors  = new HierarchyListableImplementation();
- 	 		rootAmpSectors.setLabel(rootLabel);
- 	 		rootAmpSectors.setUniqueId("0");
- 	 		rootAmpSectors.setChildren(ampSectors);
+ 	 		HierarchyListableImplementation rootAmpSectors  = new HierarchyListableImplementation(rootLabel, "0", ampSectors);
  	 		GroupingElement<HierarchyListableImplementation> sectorsElement = new GroupingElement<HierarchyListableImplementation>(rootLabel, filterDiv, rootAmpSectors, selectId);
  	 		filterForm.getSectorElements().add(sectorsElement);
  	 	}
@@ -395,12 +370,8 @@ public class ReportsFilterPicker extends Action {
 				((fieldName != null) && (FeaturesUtil.isVisibleField(fieldName)));
 		
 		if (enabled) { 
-			Collection<AmpCategoryValue> modeOfPaymentValues	=
-				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(financingModeKey, true);	
-			HierarchyListableImplementation rootModeOfPayment	= new HierarchyListableImplementation();
-			rootModeOfPayment.setLabel(rootLabel);
-			rootModeOfPayment.setUniqueId("0");
-			rootModeOfPayment.setChildren(modeOfPaymentValues);
+			Collection<AmpCategoryValue> modeOfPaymentValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(financingModeKey, true);	
+			HierarchyListableImplementation rootModeOfPayment = new HierarchyListableImplementation(rootLabel, "0", modeOfPaymentValues);
 			GroupingElement<HierarchyListableImplementation> modeOfPaymentElement	=
 					new GroupingElement<HierarchyListableImplementation>(elementName, filterId,	rootModeOfPayment, selectId);
 			filterForm.getFinancingLocationElements().add(modeOfPaymentElement);
@@ -680,17 +651,11 @@ public class ReportsFilterPicker extends Action {
  	 	
  	 	filterForm.setDonorElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
  	 	
- 	 	HierarchyListableImplementation rootOrgType = new HierarchyListableImplementation();
- 	 	rootOrgType.setLabel("All Donor Types");
- 	 	rootOrgType.setUniqueId("0");
- 	 	rootOrgType.setChildren(donorTypes);
+ 	 	HierarchyListableImplementation rootOrgType = new HierarchyListableImplementation("All Donor Types", "0", donorTypes);
  	 	GroupingElement<HierarchyListableImplementation> donorTypeElement = new GroupingElement<HierarchyListableImplementation>("Donor Types", "filter_donor_types_div", rootOrgType, "selectedDonorTypes");
  	 	filterForm.getDonorElements().add(donorTypeElement);
  	 	
- 	 	HierarchyListableImplementation rootOrgGroup = new HierarchyListableImplementation();
- 	 	rootOrgGroup.setLabel("All Donor Groups");
- 	 	rootOrgGroup.setUniqueId("0");
- 	 	rootOrgGroup.setChildren(donorGroups);
+ 	 	HierarchyListableImplementation rootOrgGroup = new HierarchyListableImplementation("All Donor Groups", "0", donorGroups);
  	 	GroupingElement<HierarchyListableImplementation> donorGroupElement = new GroupingElement<HierarchyListableImplementation>("Donor Groups", "filter_donor_groups_div", rootOrgGroup, "selectedDonorGroups");
  	 	for (OrgGroupSkeleton group:donorGroups) {
  	 		rootOrgGroup.getParentMapping().put(group.getAmpOrgGrpId(),group.getOrgTypeId());
@@ -699,10 +664,8 @@ public class ReportsFilterPicker extends Action {
  	 	StopWatch.next("Filters", true, "After beta1");
  	 	Collection<AmpOrganisation> donors = ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_DONOR);
  	 	HierarchyListableUtil.changeTranslateable(donors, false);
- 	 	HierarchyListableImplementation rootDonors = new HierarchyListableImplementation();
- 	 	rootDonors.setLabel("All Donors");
- 	 	rootDonors.setUniqueId("0");
- 	 	rootDonors.setChildren(donors);
+ 	 	HierarchyListableImplementation rootDonors = new HierarchyListableImplementation("All Donors", "0", donors);
+ 	 	
  	 	GroupingElement<HierarchyListableImplementation> donorsElement  = new GroupingElement<HierarchyListableImplementation>("Donor Agencies", "filter_donor_agencies_div", rootDonors, "selectedDonnorAgency");
  	 	for (AmpOrganisation donor:donors) {
  	 		if (donor.getAmpOrgId() == null || donor.getOrgGrpId() == null || donor.getOrgGrpId().getAmpOrgGrpId() == null) {
@@ -744,10 +707,7 @@ public class ReportsFilterPicker extends Action {
             Collection<AmpOrgGroup> contractingAgencyGroups = /*ARUtil.filterDonorGroups(*/DbUtil.getAllContractingAgencyGroupsOfPortfolio()/*)*/;
             HierarchyListableUtil.changeTranslateable(contractingAgencyGroups, false);
     
-            HierarchyListableImplementation rootContractingAgenciesGroup = new HierarchyListableImplementation();
-            rootContractingAgenciesGroup.setLabel("All Contracting Agency Groups");
-            rootContractingAgenciesGroup.setUniqueId("0");
-            rootContractingAgenciesGroup.setChildren(contractingAgencyGroups);
+            HierarchyListableImplementation rootContractingAgenciesGroup = new HierarchyListableImplementation("All Contracting Agency Groups", "0", contractingAgencyGroups);
      	 	GroupingElement<HierarchyListableImplementation> contractingAgencyGroupElement  = new GroupingElement<HierarchyListableImplementation>("Contracting Agency Groups", "filter_contracting_agency_groups_div", rootContractingAgenciesGroup, "selectedContractingAgencyGroups");
  	        filterForm.getRelatedAgenciesElements().add(contractingAgencyGroupElement);
         }
@@ -779,10 +739,7 @@ public class ReportsFilterPicker extends Action {
 		filterForm.setOtherCriteriaElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>() );
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
 			Collection<AmpCategoryValue> activityStatusValues	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY, true);	
-			HierarchyListableImplementation rootActivityStatus	= new HierarchyListableImplementation();
-			rootActivityStatus.setLabel("All");
-			rootActivityStatus.setUniqueId("0");
-			rootActivityStatus.setChildren( activityStatusValues );
+			HierarchyListableImplementation rootActivityStatus	= new HierarchyListableImplementation("All", "0", activityStatusValues);
 			GroupingElement<HierarchyListableImplementation> activityStatusElement	=
 					new GroupingElement<HierarchyListableImplementation>("Status", "filter_activity_status_div", 
 							rootActivityStatus, "selectedStatuses");
@@ -790,21 +747,12 @@ public class ReportsFilterPicker extends Action {
 		}
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
 			Collection<AmpTeam> creatorsList	= TeamUtil.getAllRelatedTeams();
-			List<HierarchyListableImplementation> children	=
-				new ArrayList<HierarchyListableImplementation>();
-			HierarchyListableImplementation rootCreators = new HierarchyListableImplementation();
-			rootCreators.setLabel("All");
-			rootCreators.setUniqueId("0");
-			rootCreators.setChildren( children );
-			Iterator<AmpTeam> it = creatorsList.iterator();
-			while(it.hasNext()){
-			//isolated workspaces shouldn't be added
-				AmpTeam ampTeam = it.next();
+			List<HierarchyListableImplementation> children	= new ArrayList<HierarchyListableImplementation>();
+			HierarchyListableImplementation rootCreators = new HierarchyListableImplementation("All", "0", children);
+			for(AmpTeam ampTeam:creatorsList) {
+				// isolated workspaces shouldn't be added
 				if (!ampTeam.getIsolated()) {
-					HierarchyListableImplementation creatorsDO	= new HierarchyListableImplementation();
-					creatorsDO.setLabel( ampTeam.getName() + "" );
-					creatorsDO.setUniqueId( ampTeam.getAmpTeamId() + "");
-					children.add(creatorsDO);
+					children.add(new HierarchyListableImplementation(ampTeam.getName(), ampTeam.getAmpTeamId().toString()));
 				}
 			}
 
@@ -821,12 +769,9 @@ public class ReportsFilterPicker extends Action {
 							rootCreators, "selectedWorkspaces");
 			filterForm.getOtherCriteriaElements().add(activityStatusElement);
 		}
-		if(FeaturesUtil.isVisibleField("Project Implementing Unit")){			
+		if (FeaturesUtil.isVisibleField("Project Implementing Unit")) {			
 			Collection<AmpCategoryValue> projectImplementingUnits	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY, true);
-			HierarchyListableImplementation rootProjectImplementingUnit	= new HierarchyListableImplementation();
-			rootProjectImplementingUnit.setLabel("All Project Implementing Units");
-			rootProjectImplementingUnit.setUniqueId("0");
-			rootProjectImplementingUnit.setChildren(projectImplementingUnits);
+			HierarchyListableImplementation rootProjectImplementingUnit	= new HierarchyListableImplementation("All Project Implementing Units", "0", projectImplementingUnits);
 			GroupingElement<HierarchyListableImplementation> projectImplUnitElement	=new GroupingElement<HierarchyListableImplementation>("Project Implementing Unit", "filter_project_impl_unit_div", 
 					rootProjectImplementingUnit, "selectedProjectImplUnit");
 			filterForm.getOtherCriteriaElements().add(projectImplUnitElement);
@@ -836,32 +781,18 @@ public class ReportsFilterPicker extends Action {
 		
 		if (FeaturesUtil.isVisibleFeature("Disbursement Orders")) { 
 			Collection<HierarchyListableImplementation> children	= new ArrayList<HierarchyListableImplementation>();
-			HierarchyListableImplementation rootDisbursementOrders	= new HierarchyListableImplementation();
-			rootDisbursementOrders.setLabel("All");
-			rootDisbursementOrders.setUniqueId("-1");
-			rootDisbursementOrders.setChildren( children );
-			HierarchyListableImplementation notRejectedDO	= new HierarchyListableImplementation();
-			notRejectedDO.setLabel("Not Rejected");
-			notRejectedDO.setUniqueId("0");
-			children.add(notRejectedDO);
-			HierarchyListableImplementation rejectedDO	= new HierarchyListableImplementation();
-			rejectedDO.setLabel("Rejected");
-			rejectedDO.setUniqueId("1");
-			children.add(rejectedDO);
+			HierarchyListableImplementation rootDisbursementOrders	= new HierarchyListableImplementation("All", "-1", children);
+			children.add(new HierarchyListableImplementation("Not Rejected", "0"));
+			children.add(new HierarchyListableImplementation("Rejected", "1"));
 			GroupingElement<HierarchyListableImplementation> disbOrdersElement	=
-					new GroupingElement<HierarchyListableImplementation>("Disbursement Orders", "filter_disb_orders_div", 
-							rootDisbursementOrders, "disbursementOrders");
+					new GroupingElement<HierarchyListableImplementation>("Disbursement Orders", "filter_disb_orders_div", rootDisbursementOrders, "disbursementOrders");
 			filterForm.getFinancingLocationElements().add(disbOrdersElement);
 		}
 		if (true && isFalse(filterForm.getPledged())) {//Here needs to be a check to see if the field/feature is enabled
 			Collection<AmpCategoryValue> budgetCategoryValues	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_BUDGET_KEY, true);	
-			HierarchyListableImplementation rootBudgetCategory	= new HierarchyListableImplementation();
-			rootBudgetCategory.setLabel("All");
-			rootBudgetCategory.setUniqueId("0");
-			rootBudgetCategory.setChildren( budgetCategoryValues );
+			HierarchyListableImplementation rootBudgetCategory	= new HierarchyListableImplementation("All", "0", budgetCategoryValues);
 			GroupingElement<HierarchyListableImplementation> disbOrdersElement	=
-				new GroupingElement<HierarchyListableImplementation>("Activity Budget", "filter_on_budget_div", 
-						rootBudgetCategory, "selectedBudgets");
+				new GroupingElement<HierarchyListableImplementation>("Activity Budget", "filter_on_budget_div", rootBudgetCategory, "selectedBudgets");
 			filterForm.getFinancingLocationElements().add(disbOrdersElement);
 		}
 		else 
@@ -873,27 +804,19 @@ public class ReportsFilterPicker extends Action {
 
             List<LocationSkeleton> filterCountries = getRootLocations();
 			StopWatch.next("Filters", true, "after get root locations");
-
-            
-            
-            
-			HierarchyListableImplementation rootRegions	= new HierarchyListableImplementation();
+          
+			HierarchyListableImplementation rootRegions;
 
             if (filterCountries.size() > 1) {
-                rootRegions.setLabel("All Locations");
-                rootRegions.setUniqueId("0");
-                rootRegions.setChildren(filterCountries);
-                
+            	rootRegions = new HierarchyListableImplementation("All Locations", "0", filterCountries);
+
+            	// this code makes no sense, added in http://tools.digijava.org/fisheye/changelog/amp?cs=22910 and then perpetuated via refactorings
                 for (LocationSkeleton country: filterCountries) {
-                    HierarchyListableImplementation countryRoot	= new HierarchyListableImplementation();
-                    countryRoot.setLabel(country.getLabel());
-                    countryRoot.setUniqueId(country.getUniqueId());
-                    countryRoot.setChildren(country.getChildren());
+                    HierarchyListableImplementation countryRoot	= new HierarchyListableImplementation(country.getLabel(), country.getUniqueId(), country.getChildren());
                 }
 
             } else {
-                rootRegions.setLabel("All Regions");
-                rootRegions.setUniqueId("0");
+            	rootRegions = new HierarchyListableImplementation("All Regions", "0");
                 for (LocationSkeleton rootCandidate:filterCountries) {
                 	rootRegions.setChildren(rootCandidate.getChildren());
                 	break;
@@ -912,23 +835,16 @@ public class ReportsFilterPicker extends Action {
 			StopWatch.next("Filters", true, "end rendering regions");
 		}
 		if( FeaturesUtil.isVisibleField("Joint Criteria") && 
-				FeaturesUtil.isVisibleField("Government Approval Procedures") ) {
+				FeaturesUtil.isVisibleField("Government Approval Procedures")) {
 			Collection<HierarchyListableImplementation> children	= 
 				new ArrayList<HierarchyListableImplementation>();
-			HierarchyListableImplementation activitySettings	= new HierarchyListableImplementation();
-			activitySettings.setLabel("Both Settings");
-			activitySettings.setUniqueId("-1");
-			activitySettings.setChildren( children );
+			HierarchyListableImplementation activitySettings	= new HierarchyListableImplementation("Both Settings", "-1", children);
 			if ( FeaturesUtil.isVisibleField("Joint Criteria") ) {
-				HierarchyListableImplementation jointCriteriaDO	= new HierarchyListableImplementation();
-				jointCriteriaDO.setLabel("Only Projects Under Joint Criteria");
-				jointCriteriaDO.setUniqueId(ONLY_JOINT_CRITERIA);
+				HierarchyListableImplementation jointCriteriaDO	= new HierarchyListableImplementation("Only Projects Under Joint Criteria", ONLY_JOINT_CRITERIA);
 				children.add(jointCriteriaDO);
 			}
-			if ( FeaturesUtil.isVisibleField("Government Approval Procedures") ) {
-				HierarchyListableImplementation govProceduresDO	= new HierarchyListableImplementation();
-				govProceduresDO.setLabel("Only Projects Having Government Approval Procedures");
-				govProceduresDO.setUniqueId(ONLY_GOV_PROCEDURES);
+			if ( FeaturesUtil.isVisibleField("Government Approval Procedures")) {
+				HierarchyListableImplementation govProceduresDO	= new HierarchyListableImplementation("Only Projects Having Government Approval Procedures", ONLY_GOV_PROCEDURES);
 				children.add(govProceduresDO);
 			}
 			
@@ -940,16 +856,11 @@ public class ReportsFilterPicker extends Action {
 		}
 		
 		if ((!filterForm.isPledgeReport()) && (FeaturesUtil.isVisibleField("Only show projects related to pledges"))) {
-			Collection<HierarchyListableImplementation> children	= 
-				new ArrayList<HierarchyListableImplementation>();
-			HierarchyListableImplementation activitySettings	= new HierarchyListableImplementation();
-			activitySettings.setLabel("All Activities");
-			activitySettings.setUniqueId("-1");
-			activitySettings.setChildren( children );
+			List<HierarchyListableImplementation> children = new ArrayList<HierarchyListableImplementation>();
+			HierarchyListableImplementation activitySettings = new HierarchyListableImplementation("All Activities", "-1", children);
 			{
-				HierarchyListableImplementation jointCriteriaDO	= new HierarchyListableImplementation();
-				jointCriteriaDO.setLabel("Only show activities related to pledges");
-				jointCriteriaDO.setUniqueId(Integer.toString(AmpARFilter.SELECTED_ACTIVITY_PLEDGES_SETTINGS_WITH_PLEDGES_ONLY));
+				HierarchyListableImplementation jointCriteriaDO	= new HierarchyListableImplementation("Only show activities related to pledges", 
+						Integer.toString(AmpARFilter.SELECTED_ACTIVITY_PLEDGES_SETTINGS_WITH_PLEDGES_ONLY));
 				children.add(jointCriteriaDO);
 			}
 //			{
@@ -966,99 +877,66 @@ public class ReportsFilterPicker extends Action {
 		
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
 			if (teamMember != null){
-				Collection<HierarchyListableImplementation> children	= 
-					new ArrayList<HierarchyListableImplementation>();
-				HierarchyListableImplementation rootApprovalStatus	= new HierarchyListableImplementation();
-				rootApprovalStatus.setLabel("All");
-				rootApprovalStatus.setUniqueId("-1");
-				rootApprovalStatus.setChildren( children );
-				HierarchyListableImplementation newDraftDO	= new HierarchyListableImplementation();
-				newDraftDO.setLabel( TranslatorWorker.translateText("New Draft") );
-				newDraftDO.setUniqueId("1");
-				children.add(newDraftDO);
-				HierarchyListableImplementation newUnvalidatedDO	= new HierarchyListableImplementation();
-				newUnvalidatedDO.setLabel( TranslatorWorker.translateText("New Unvalidated") );
-				newUnvalidatedDO.setUniqueId("2");
-				children.add(newUnvalidatedDO);
-				HierarchyListableImplementation validatedActDO	= new HierarchyListableImplementation();
-				validatedActDO.setLabel( TranslatorWorker.translateText("Validated Activities") );
-				validatedActDO.setUniqueId("4");
-				children.add(validatedActDO);
-				HierarchyListableImplementation existingDraftDO	= new HierarchyListableImplementation();
-				existingDraftDO.setLabel( TranslatorWorker.translateText("Existing Draft") );
-				existingDraftDO.setUniqueId("3");
-				children.add(existingDraftDO);
-				HierarchyListableImplementation existingUnvalidatedDO	= new HierarchyListableImplementation();
-				existingUnvalidatedDO.setLabel( TranslatorWorker.translateText("Existing Unvalidated") );
-				existingUnvalidatedDO.setUniqueId("0");
-				children.add(existingUnvalidatedDO);
+				List<HierarchyListableImplementation> children = new ArrayList<HierarchyListableImplementation>();
+				HierarchyListableImplementation rootApprovalStatus	= new HierarchyListableImplementation("All", "-1", children);
+				children.add(new HierarchyListableImplementation(TranslatorWorker.translateText("New Draft"), "1"));
+				children.add(new HierarchyListableImplementation(TranslatorWorker.translateText("New Unvalidated"), "2"));
+				children.add(new HierarchyListableImplementation(TranslatorWorker.translateText("Validated Activities"), "4"));
+				children.add(new HierarchyListableImplementation(TranslatorWorker.translateText("Existing Draft"), "3"));
+				children.add(new HierarchyListableImplementation(TranslatorWorker.translateText("Existing Unvalidated"), "0"));
+				
 				GroupingElement<HierarchyListableImplementation> approvalStatusElement	=
-						new GroupingElement<HierarchyListableImplementation>("Approval Status", "filter_approval_status_div", 
-								rootApprovalStatus, "approvalStatusSelected");
+						new GroupingElement<HierarchyListableImplementation>("Approval Status", "filter_approval_status_div",  rootApprovalStatus, "approvalStatusSelected");
 				filterForm.getOtherCriteriaElements().add(approvalStatusElement);
 			}
 		}
 		
 		if ( FeaturesUtil.isVisibleField("Line Ministry Rank")) {
-			Collection<HierarchyListableImplementation> children	= 
-				new ArrayList<HierarchyListableImplementation>();
-			HierarchyListableImplementation rootLineMinRank	= new HierarchyListableImplementation();
-			rootLineMinRank.setLabel("All");
-			rootLineMinRank.setUniqueId("-1");
-			rootLineMinRank.setChildren( children );
-			for (int i=1; i<6 ; i++) {
-				HierarchyListableImplementation lineMinDO	= new HierarchyListableImplementation();
-				lineMinDO.setLabel( i + "" );
-				lineMinDO.setUniqueId( i + "");
-				children.add(lineMinDO);
+			Collection<HierarchyListableImplementation> children = new ArrayList<HierarchyListableImplementation>();
+			HierarchyListableImplementation rootLineMinRank	= new HierarchyListableImplementation("All", "-1", children);
+			for (int i = 1; i < 6 ; i ++) {
+				children.add(new HierarchyListableImplementation(Integer.toString(i), Integer.toString(i)));
 			}
 			GroupingElement<HierarchyListableImplementation> lineMinRankElement	=
-					new GroupingElement<HierarchyListableImplementation>("Line Ministry Rank", "filter_line_min_rank_div", 
-							rootLineMinRank, "lineMinRanks");
+					new GroupingElement<HierarchyListableImplementation>("Line Ministry Rank", "filter_line_min_rank_div", rootLineMinRank, "lineMinRanks");
 			filterForm.getOtherCriteriaElements().add(lineMinRankElement);
 		}
+		
 		if (FeaturesUtil.isVisibleFeature("Archived")) {
-			if(teamMember!=null){
+			if (teamMember != null) {
 				Collection<HierarchyListableImplementation> children	= 
 					new ArrayList<HierarchyListableImplementation>();
-				HierarchyListableImplementation rootArchivedStatus	= new HierarchyListableImplementation();
-				rootArchivedStatus.setLabel("All");
-				rootArchivedStatus.setUniqueId("0");
-				rootArchivedStatus.setChildren( children );
-				HierarchyListableImplementation unarchivedDO	= new HierarchyListableImplementation();
-				unarchivedDO.setLabel( TranslatorWorker.translateText("Non-archived Activities") );
-				unarchivedDO.setUniqueId("1");
-				children.add(unarchivedDO);
-				HierarchyListableImplementation archivedDO	= new HierarchyListableImplementation();
-				archivedDO.setLabel( TranslatorWorker.translateText("Archived Activities") );
-				archivedDO.setUniqueId("2");
-				children.add(archivedDO);
-				GroupingElement<HierarchyListableImplementation> archivedElement	=
-						new GroupingElement<HierarchyListableImplementation>("Archived", "filter_archived_div", 
-								rootArchivedStatus, "selectedArchivedStatus");
+				HierarchyListableImplementation rootArchivedStatus	= new HierarchyListableImplementation("All", "0", children);
+				children.add(new HierarchyListableImplementation(TranslatorWorker.translateText("Non-archived Activities"), "1"));
+				children.add(new HierarchyListableImplementation(TranslatorWorker.translateText("Archived Activities"), "2"));
+
+				GroupingElement<HierarchyListableImplementation> archivedElement =
+						new GroupingElement<HierarchyListableImplementation>("Archived", "filter_archived_div", rootArchivedStatus, "selectedArchivedStatus");
+				filterForm.getOtherCriteriaElements().add(archivedElement);
+			}
+		}
+		
+		if (FeaturesUtil.isVisibleField("Humanitarian Aid") && !filterForm.isPledgeReport()) {
+			if (teamMember != null) {
+				Collection<HierarchyListableImplementation> children = new ArrayList<HierarchyListableImplementation>();
+				HierarchyListableImplementation rootArchivedStatus	= new HierarchyListableImplementation("All", "0", children);
+				children.add(new HierarchyListableImplementation(TranslatorWorker.translateText("Yes"), "1"));
+				children.add(new HierarchyListableImplementation(TranslatorWorker.translateText("No"), "2"));
+
+				GroupingElement<HierarchyListableImplementation> archivedElement =
+						new GroupingElement<HierarchyListableImplementation>("Humanitarian Aid", "filter_humanitarian_aid_div", rootArchivedStatus, "selectedHumanitarianAid");
 				filterForm.getOtherCriteriaElements().add(archivedElement);
 			}
 		}
 		if ( FeaturesUtil.isVisibleFeature("Multi Donor")) {
 			Collection<HierarchyListableImplementation> children	= 
 				new ArrayList<HierarchyListableImplementation>();
-			HierarchyListableImplementation rootMultiDonor	= new HierarchyListableImplementation();
-			rootMultiDonor.setLabel("All");
-			rootMultiDonor.setUniqueId("-1");
-			rootMultiDonor.setChildren( children );
-			HierarchyListableImplementation trueMulti	= new HierarchyListableImplementation();
-			trueMulti.setLabel( "Yes");
-			trueMulti.setUniqueId( "yes" );
-			children.add(trueMulti);
-			
-			HierarchyListableImplementation falseMulti	= new HierarchyListableImplementation();
-			falseMulti.setLabel( "No");
-			falseMulti.setUniqueId( "no" );
-			children.add(falseMulti);
+			HierarchyListableImplementation rootMultiDonor	= new HierarchyListableImplementation("All", "-1", children);
+			children.add(new HierarchyListableImplementation("Yes", "yes"));
+			children.add(new HierarchyListableImplementation("No", "no"));
 			
 			GroupingElement<HierarchyListableImplementation> lineMinRankElement	=
-					new GroupingElement<HierarchyListableImplementation>("Multiple Donors", "filter_multi_donor_div", 
-							rootMultiDonor, "selectedMultiDonor");
+					new GroupingElement<HierarchyListableImplementation>("Multiple Donors", "filter_multi_donor_div", rootMultiDonor, "selectedMultiDonor");
 			filterForm.getOtherCriteriaElements().add(lineMinRankElement);
 		}
 		
@@ -1622,7 +1500,20 @@ public class ReportsFilterPicker extends Action {
 			else
 				arf.setShowArchived(true);
 		}
+		
+		arf.setHumanitarianAid(buildHumanitarianAid(filterForm));
 		arf.postprocess();
 	}
-	
+
+	protected static Set<Integer> buildHumanitarianAid(ReportsFilterPickerForm filterForm) {
+		if (filterForm.getSelectedHumanitarianAid() == null)
+			return null;
+		
+		Set<Integer> humanitarianAid = new HashSet<>();
+		for(Object obj:filterForm.getSelectedHumanitarianAid()) {
+			if (obj != null && Integer.parseInt(obj.toString()) > 0)
+				humanitarianAid.add(Integer.parseInt(obj.toString()));
+			}
+		return humanitarianAid;
+	}
 }

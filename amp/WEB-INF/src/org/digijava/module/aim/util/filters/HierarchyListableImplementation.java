@@ -12,15 +12,25 @@ import org.digijava.module.aim.util.HierarchyListable;
  */
 public class HierarchyListableImplementation implements HierarchyListable {
 	
-	private String label;
+	private final String label;
+	private final String uniqueId;
+	
     private String additionalSearchableString;
-	private String uniqueId;
 	private Collection<? extends HierarchyListable> children;
 	//children id-parent id mapping for all children
 	private Map <Long,Long> parentMapping= new HashMap<Long,Long>(); 
 	private boolean translateable	= true;
 
 
+	public HierarchyListableImplementation(String label, String uniqueId) {
+		this(label, uniqueId, null);
+	}
+	
+	public HierarchyListableImplementation(String label, String uniqueId, Collection<? extends HierarchyListable> children) {
+		this.label = label;
+		this.uniqueId = uniqueId;
+		this.children = children;
+	}
 	
 	public String getType () {
 		return "checkboxlist";
@@ -49,26 +59,10 @@ public class HierarchyListableImplementation implements HierarchyListable {
 
 
 	/**
-	 * @param label the label to set
-	 */
-	public void setLabel(String label) {
-		this.label = label;
-	}
-
-
-	/**
 	 * @return the uniqueId
 	 */
 	public String getUniqueId() {
 		return uniqueId;
-	}
-
-
-	/**
-	 * @param uniqueId the uniqueId to set
-	 */
-	public void setUniqueId(String uniqueId) {
-		this.uniqueId = uniqueId;
 	}
 
 

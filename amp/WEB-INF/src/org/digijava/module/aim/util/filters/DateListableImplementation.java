@@ -13,8 +13,6 @@ import org.digijava.module.aim.util.HierarchyListable;
  */
 public class DateListableImplementation extends HierarchyListableImplementation {
 
-	private String label;
-	private String uniqueId;
 	private boolean translateable;
 	private boolean selected;
 	
@@ -31,8 +29,8 @@ public class DateListableImplementation extends HierarchyListableImplementation 
 	/**
 	 * 
 	 */
-	public DateListableImplementation() {
-		// TODO Auto-generated constructor stub
+	public DateListableImplementation(String label, String uniqueId) {
+		super(label, uniqueId);
 	}
 
 	
@@ -40,38 +38,6 @@ public class DateListableImplementation extends HierarchyListableImplementation 
 		return "datelist";
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.digijava.module.aim.util.HierarchyListable#getLabel()
-	 */
-	@Override
-	public String getLabel() {
-		
-		return label;
-	}
-
-	/**
-	 * @param label the label to set
-	 */
-	public void setLabel(String label) {
-		this.label = label;
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.digijava.module.aim.util.HierarchyListable#getUniqueId()
-	 */
-	@Override
-	public String getUniqueId() {
-		return uniqueId;
-	}
-	
-
-	/**
-	 * @param uniqueId the uniqueId to set
-	 */
-	public void setUniqueId(String uniqueId) {
-		this.uniqueId = uniqueId;
-	}
-
 	/* (non-Javadoc)
 	 * @see org.digijava.module.aim.util.HierarchyListable#getAdditionalSearchString()
 	 */

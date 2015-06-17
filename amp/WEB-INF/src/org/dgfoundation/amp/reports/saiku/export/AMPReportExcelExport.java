@@ -3,6 +3,7 @@ package org.dgfoundation.amp.reports.saiku.export;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -18,8 +19,9 @@ public class AMPReportExcelExport {
 	private static CellStyle styleSubTotalLvl2 = null;
 	private static CellStyle styleSubTotalLvl3 = null;
 	private static CellStyle styleTotal = null;
+	private static CellStyle styleHierarchy = null;
 
-	public static byte[] generateExcel(JsonBean jb, String type) throws IOException {
+	public static byte[] generateExcel(JsonBean jb, String type, int hierarchies) throws IOException {
 		// Generate html table.
 		String content = AMPJSConverter.convertToHtml(jb, type);
 		// Parse the string.
@@ -33,6 +35,7 @@ public class AMPReportExcelExport {
 		// Process header.
 		Element headerRows = doc.getElementsByTag("thead").first();
 		int i = 0;
+		int headers;
 		int totalColNumber = 0;
 		for (Element headerRowElement : headerRows.getElementsByTag("tr")) {
 			Row row = mainSheet.createRow(i);
@@ -67,6 +70,7 @@ public class AMPReportExcelExport {
 			}
 			i++;
 		}
+		headers = i;
 
 		// Process data.
 		Element contentRows = doc.getElementsByTag("tbody").first();
@@ -106,6 +110,8 @@ public class AMPReportExcelExport {
 			i++;
 		}
 
+		mergeHierarchyRows(mainSheet, hierarchies, headers);
+
 		for (int l = 0; l < totalColNumber; l++) {
 			mainSheet.autoSizeColumn(l, true);
 		}
@@ -114,6 +120,58 @@ public class AMPReportExcelExport {
 		os.flush();
 		os.close();
 		return os.toByteArray();
+	}
+
+	/**
+	 * Postprocess the sheet by merging vertically all empty hierarchy cells.
+	 * 
+	 * @param sheet
+	 * @param hierarchies
+	 * @param headers
+	 */
+	private static void mergeHierarchyRows(Sheet sheet, int hierarchies, int headers) {
+		if (sheet.getRow(0) != null) {
+			String prevCellValue = null;
+			int group = 0;
+			int groupStart = 0;
+			for (int j = 0; j < hierarchies; j++) {
+				for (int i = headers; i < sheet.getPhysicalNumberOfRows() - 1; i++) {
+					if (prevCellValue == null) {
+						// Beginning a hierarchy.
+						prevCellValue = sheet.getRow(i).getCell(j).getStringCellValue();
+						group = 0;
+						groupStart = i;
+					} else {
+						String currentCellValue = sheet.getRow(i).getCell(j).getStringCellValue();
+						if (currentCellValue.isEmpty()) {
+							// Empty cell means we are in the same hierarchy.
+							group++;
+						} else {
+							// We reached the end of the hierarchy (its the total row).
+							if (group > 0) {
+								sheet.addMergedRegion(new CellRangeAddress(groupStart, groupStart + group, j, j));
+								sheet.getRow(groupStart).getCell(j).setCellStyle(styleHierarchy);
+							}
+							prevCellValue = null;
+							if (j > 0) {
+								// If this is not the first column then we need to check if below this 'total' row there
+								// are 1 or more rows that are also the 'total' for a higher hierarchy (ie: sector ->
+								// sub sector -> sub sub sector, etc).
+								int mustSkipRows = 0;
+								for (int k = 1; k < hierarchies; k++) {
+									if (sheet.getRow(i + k).getCell(j).getStringCellValue().isEmpty()) {
+										mustSkipRows++;
+									} else {
+										break;
+									}
+								}
+								i += mustSkipRows;
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -159,6 +217,8 @@ public class AMPReportExcelExport {
 		styleSubTotalLvl3.setAlignment(CellStyle.ALIGN_LEFT);
 		styleSubTotalLvl3.setWrapText(true);
 		styleSubTotalLvl3.setFont(fontHeaderAndTotal);
-	}
 
+		styleHierarchy = wb.createCellStyle();
+		styleHierarchy.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+	}
 }

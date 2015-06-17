@@ -16,7 +16,7 @@ import org.saiku.web.rest.objects.resultset.QueryResult;
 
 public class AMPJSConverter extends JSConverter {
 
-	public static String convertToHtml(JsonBean jb, boolean wrapcontent, String type) throws IOException {
+	public static String convertToHtml(JsonBean jb, String type) throws IOException {
 		ObjectMapper om = new ObjectMapper();
 		StringWriter sw = new StringWriter();
 		Context context = Context.enter();
@@ -35,15 +35,10 @@ public class AMPJSConverter extends JSConverter {
 		Object wrappedOut = Context.javaToJS(sw, globalScope);
 		ScriptableObject.putProperty(globalScope, "out", wrappedOut);
 		String code = "eval('var cellset = ' + data); \nvar renderer = new AMPTableRenderer({type: '" + type
-				+ "'}); \nvar html = renderer.render(cellset, { wrapContent : " + wrapcontent + " }); out.write(html);";
+				+ "'}); \nvar html = renderer.render(cellset, {}); out.write(html);";
 		context.evaluateString(globalScope, code, "<mem>", 1, null);
 		Context.exit();
 		String content = sw.toString();
 		return content;
 	}
-
-	public static String convertToHtml(JsonBean jb, String type) throws IOException {
-		return convertToHtml(jb, false, type);
-	}
-
 }

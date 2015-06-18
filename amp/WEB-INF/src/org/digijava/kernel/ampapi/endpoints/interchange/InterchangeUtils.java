@@ -346,6 +346,8 @@ public class InterchangeUtils {
 			bean.set("importable", ant2.importable()? true: false);
 			if (isCollection(field))
 				bean.set("multiple_values", true);
+			else 
+				bean.set("multiple_values", false);
 			if (!ant2.recursive()){
 				List<JsonBean> children = getChildrenOfField(field);
 				if (children != null && children.size() > 0)

@@ -24,7 +24,7 @@ import org.digijava.module.aim.helper.TeamMember;
  * Endpoints for the Interchange module of AMP -- activity export / import 
  */
 
-@Path("interchange")
+@Path("activity")
 public class InterchangeEndpoints {
 	
 	@Context

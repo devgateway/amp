@@ -1195,14 +1195,13 @@ public class AmpARFilter extends PropertyListable {
 
 
 
+        Set<AmpTeam> checkedWorkspaces;
         boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));
-        Set<AmpTeam> checkedWorkspaces = null;
-
-        if (loggedInTeamMember != null &&
-        		Constants.ACCESS_TYPE_TEAM.equals(loggedInTeamMember.getTeamAccessType()) &&
-                !showWorkspaceFilterInTeamWorkspace) {
-            checkedWorkspaces = new HashSet<AmpTeam>();
+        // https://jira.dgfoundation.org/browse/AMP-15117: ignore the "workspace" filter settings only in case of "team workspace without computation"
+        if (loggedInTeamMember != null && Constants.ACCESS_TYPE_TEAM.equals(loggedInTeamMember.getTeamAccessType()) &&
+        	!isTrue(loggedInTeamMember.getComputation()) && !showWorkspaceFilterInTeamWorkspace) {
             AmpTeam selTeam = TeamUtil.getTeamByName(loggedInTeamMember.getTeamName());
+            checkedWorkspaces = new HashSet<AmpTeam>();
             checkedWorkspaces.add(selTeam);
         } else {
             checkedWorkspaces = workspaces;
@@ -3438,5 +3437,9 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setHumanitarianAid(Set<Integer> humanitarianAid) {
 		this.humanitarianAid = humanitarianAid;
+	}
+	
+	public static boolean isTrue(Boolean b) {
+		return b != null && b;
 	}
 }

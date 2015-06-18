@@ -15,19 +15,15 @@ import javax.servlet.http.HttpSession;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 
-
-
-
 public class AmpARFilterParams {
-	
 	
 	/*TeamMember tm, String searchModeParam, String realPath, AmpARFilter teamFilter, AmpTeam team, boolean workspaceFilter, boolean skipPledgeCheck*/
 	private TeamMember member;
 	private String luceneSearchModeParam;
 	private String luceneRealPath;
 	private AmpARFilter teamFilter;
-	private Boolean workspaceFilter;
-	private Boolean skipPledgeCheck;	
+	private boolean workspaceFilter;
+	private boolean skipPledgeCheck;	
 	private Long activityIdFilter;
 	
 	
@@ -50,11 +46,11 @@ public class AmpARFilterParams {
 	public AmpARFilter getTeamFilter() {
 		return teamFilter;
 	}
-	public Boolean getWorkspaceFilter() {
+	public boolean getWorkspaceFilter() {
 		return workspaceFilter;
 	}
 
-	public Boolean getSkipPledgeCheck() {
+	public boolean getSkipPledgeCheck() {
 		return skipPledgeCheck;
 	}
 

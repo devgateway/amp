@@ -178,7 +178,7 @@ public class FilterUtils {
 	}
 	
 	/**
-	 * 
+	 * TODO: why are the items here renumbered compared to AmpARFilter.activityStatusToNr? Why is element "startedApproved" missing?
 	 * @param status
 	 * @return
 	 */

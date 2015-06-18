@@ -55,10 +55,10 @@ public class MondrianReportFiltersConverter {
 			this.ampARFilter = new AmpARFilter();
 		}
 
-		// Donor's section.
+		// Donors section.
 		addFilter(ColumnConstants.DONOR_ID, AmpOrganisation.class, "donnorgAgency", true);
 
-		// Related organization's section.
+		// Related organizations section.
 		addFilter(ColumnConstants.BENEFICIARY_AGENCY_ID, AmpOrganisation.class, "beneficiaryAgency", true);
 		addFilter(ColumnConstants.EXECUTING_AGENCY_ID, AmpOrganisation.class, "executingAgency", true);
 		addFilter(ColumnConstants.CONTRACTING_AGENCY_ID, AmpOrganisation.class, "contractingAgency", true);

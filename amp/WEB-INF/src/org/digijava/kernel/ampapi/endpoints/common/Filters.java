@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -53,10 +54,10 @@ import org.hibernate.ObjectNotFoundException;
 public class Filters {
 	private static final Logger logger = Logger.getLogger(Filters.class);
 
-	AmpARFilter filters;
+	//AmpARFilter filters;
 	
 	public Filters() {
-		filters = new AmpARFilter();
+		//filters = new AmpARFilter();
 	}
 
 	@GET
@@ -409,7 +410,7 @@ public class Filters {
 
 
 	/**
-	 * Return financing instruments 
+	 * Return type of assistance 
 	 * 
 	 * @return
 	 */
@@ -500,6 +501,24 @@ public class Filters {
 	public JsonBean getLocations() {
 		return QueryUtil.getLocationsForFilter();
 	}
+	
+	@GET
+	@Path("/humanitarianAid/")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = true, id = "HumanitarianAidValues", columns = ColumnConstants.HUMANITARIAN_AID, name="Humanitarian Aid")
+	public JsonBean getHumanitarianAid() {
+		JsonBean res = new JsonBean();
+		res.set("filterId", ColumnConstants.HUMANITARIAN_AID);
+		res.set("name", ColumnConstants.HUMANITARIAN_AID);
+		res.set("translatedName", ColumnConstants.HUMANITARIAN_AID);
+		res.set("values", 
+				Arrays.asList(
+					new SimpleJsonBean(1, "Yes", null, TranslatorWorker.translateText("Yes")),
+					new SimpleJsonBean(2, "No", null, TranslatorWorker.translateText("No"))
+				));
+		return res;
+	}
+	
 /**
  * used to return AmpCategoryClass values wrapped to be provided to the filter widget
  * @param categoryKey

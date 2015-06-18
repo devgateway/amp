@@ -56,8 +56,7 @@ public class JsonBean {
 
 	public static JsonBean getJsonBeanFromString(String jb) {
 		try {
-			if (jb == null)
-			{
+			if (jb == null) {
 				return null;
 			}
 			ObjectMapper mapper11 = new ObjectMapper();

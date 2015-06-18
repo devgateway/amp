@@ -343,4 +343,8 @@ public class MondrianReportFilters implements ReportFilters {
 	public void setComputedYear(Integer computedYear) {
 		this.computedYear = computedYear;
 	}
+	
+	@Override public String toString() {
+		return String.format("{filterRules: %s, dateFilterRules: %s, sqlFilterRules: %s}", filterRules, dateFilterRules, sqlFilterRules);
+	}
 }

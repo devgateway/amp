@@ -43,12 +43,15 @@ public class MondrianHumanitarianAidFilter extends MondrianActivityFilter {
 					throw new RuntimeException("amp_id range unimplemented!");
 				
 				case SINGLE_VALUE:
-					ids = new HashSet<>(Arrays.asList(rule.value));
+					ids = new HashSet<>(Arrays.asList(valueToBoolean(rule.value)));
 					break;
 				
 				case VALUES:
-					if (rule.values != null && rule.values.size() > 0)
-						ids = new HashSet<>(rule.values);
+					if (rule.values != null && rule.values.size() > 0) {
+						ids = new HashSet<>();
+						for(String value:rule.values)
+							ids.add(valueToBoolean(value));
+					}
 					break;
 			
 				default:
@@ -64,5 +67,11 @@ public class MondrianHumanitarianAidFilter extends MondrianActivityFilter {
 	
 	@Override protected List<FilterRule> getFilterElements(MondrianReportFilters mrf) {
 		return mrf.getFilterRules().get(new ReportElement(new ReportColumn(ColumnConstants.HUMANITARIAN_AID)));
+	}
+	
+	public static String valueToBoolean(String value) {
+		if (value.equals("1")) return "true";
+		if (value.equals("2")) return "false";
+		throw new RuntimeException("unsupported ternary-encoding-integer: " + value);
 	}
 }

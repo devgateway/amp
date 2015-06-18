@@ -583,7 +583,10 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 	
 	@Test
 	public void testHumanitarianAidFilter() {
-		List<String> humanitarianAid = Arrays.asList("true");
+		String TRUE = "1";
+		String FALSE = "2";
+		
+		List<String> humanitarianAid = Arrays.asList(TRUE);
 		List<String> activities = Arrays.asList("TAC_activity_1", "date-filters-activity", "crazy funding 1", "Activity with planned disbursements", // these have HA defined
 				"Activity Linked With Pledge", "pledged 2");
 		
@@ -599,7 +602,7 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 		spec.setFilters(buildSimpleFilter(ColumnConstants.HUMANITARIAN_AID, humanitarianAid, true));
 		runMondrianTestCase(spec, "en", activities, cr1);
 		
-		spec.setFilters(buildSimpleFilter(ColumnConstants.HUMANITARIAN_AID, "true", true));
+		spec.setFilters(buildSimpleFilter(ColumnConstants.HUMANITARIAN_AID, TRUE, true));
 		runMondrianTestCase(spec, "en", activities, cr1);
 				
 		// humanitarian aid unselected area
@@ -612,10 +615,10 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 		spec.setFilters(buildSimpleFilter(ColumnConstants.HUMANITARIAN_AID, humanitarianAid, false));
 		runMondrianTestCase(spec, "en", activities, cr2);
 		
-		spec.setFilters(buildSimpleFilter(ColumnConstants.HUMANITARIAN_AID, "true", false));
+		spec.setFilters(buildSimpleFilter(ColumnConstants.HUMANITARIAN_AID, TRUE, false));
 		runMondrianTestCase(spec, "en", activities, cr2);
 		
-		spec.setFilters(buildSimpleFilter(ColumnConstants.HUMANITARIAN_AID, "false", true));
+		spec.setFilters(buildSimpleFilter(ColumnConstants.HUMANITARIAN_AID, FALSE, true));
 		runMondrianTestCase(spec, "en", activities, cr2);
 	}
 }

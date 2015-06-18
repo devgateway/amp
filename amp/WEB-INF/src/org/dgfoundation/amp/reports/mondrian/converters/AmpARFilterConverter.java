@@ -22,6 +22,7 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.reports.mondrian.MondrianHumanitarianAidFilter;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
@@ -140,11 +141,22 @@ public class AmpARFilterConverter {
 		addCategoryValueNamesFilter(arFilter.getStatuses(), ColumnConstants.STATUS);
 		addFilter(arFilter.getWorkspaces(), ColumnConstants.TEAM);
 		addApprovalStatus();
+		addHumanitarianAidFilter();
 		addBooleanFilter(arFilter.getGovernmentApprovalProcedures(), ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES);
 		addBooleanFilter(arFilter.getJointCriteria(), ColumnConstants.JOINT_CRITERIA);
 		addBooleanFilter(arFilter.getShowArchived(), ColumnConstants.ARCHIVED);
 		addCategoryValueNamesFilter(arFilter.getProjectImplementingUnits(), ColumnConstants.PROJECT_IMPLEMENTING_UNIT);
 		addCategoryValueNamesFilter(arFilter.getActivityPledgesTitle(), ColumnConstants.PLEDGES_TITLES);
+	}
+	
+	private void addHumanitarianAidFilter() {
+		if (arFilter.isPledgeFilter()) return;
+		if (arFilter.getHumanitarianAid() == null) return;
+		List<String> values = new ArrayList<>();
+		for(int v:arFilter.getHumanitarianAid()) {
+			values.add(Integer.toString(v));
+		}
+		filterRules.addFilterRule(new ReportColumn(ColumnConstants.HUMANITARIAN_AID), new FilterRule(values, true));
 	}
 	
 	private void addApprovalStatus() {

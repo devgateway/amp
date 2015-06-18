@@ -94,7 +94,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "AMP Id", blockSingleChange = true)
 	protected String ampId ;
 
-	@Interchangeable(fieldTitle = "Name")
+	@Interchangeable(fieldTitle = "Project Title")
 	@PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL})
 	@VersionableFieldSimple(fieldTitle = "Name", mandatoryForSingleChange = true)
 	@TranslatableField
@@ -128,7 +128,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Document Space")
 	protected String documentSpace;
 
-	@Interchangeable(fieldTitle = "Is Draft?")
+	@Interchangeable(fieldTitle = "Is Draft")
 	@VersionableFieldSimple(fieldTitle = "Is Draft?")
 	protected Boolean draft;
 

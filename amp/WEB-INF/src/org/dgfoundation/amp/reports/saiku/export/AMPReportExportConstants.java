@@ -2,9 +2,9 @@ package org.dgfoundation.amp.reports.saiku.export;
 
 public class AMPReportExportConstants {
 
-	public static final String PDF = "PDF";
-	public static final String CSV = "CSV";
-	public static final String XLSX = "XLSX";
-	public static final String HTML = "HTML";
+	public static final String PDF = "pdf";
+	public static final String CSV = "csv";
+	public static final String XLSX = "xlsx";
+	public static final String HTML = "html";
 
 }

@@ -458,7 +458,7 @@ public class Reports {
 	@Path("/saikureport/export/pdf/{report_id}")
 	@Produces({"application/pdf"})
 	public final Response exportPdfSaikuReport(String query, @PathParam("report_id") Long reportId) {
-		return exportSaikuReport(query, reportId, "pdf");
+		return exportSaikuReport(query, reportId, AMPReportExportConstants.PDF);
 	}
 
 	public final Response exportSaikuReport(String query, Long reportId, String type) {
@@ -488,13 +488,13 @@ public class Reports {
 
 			switch (type) {
 			// TODO: Uncomment when csv is ready.
-			case "xlsx":
-				doc = AMPReportExcelExport.generateExcel(result, AMPReportExportConstants.XLSX, report.getRowsHierarchiesTotals());
+			case AMPReportExportConstants.XLSX:
+				doc = AMPReportExcelExport.generateExcel(result, AMPReportExportConstants.XLSX, report.getRowsHierarchiesTotals(), report.getColumns().size());
 				break;
 			/*
 			 * case "csv": doc = SaikuUtils.getCsv(result, settings, ",", "\""); break;
 			 */
-			case "pdf":
+			case AMPReportExportConstants.PDF:
 				AMPPdfExport pdf = new AMPPdfExport();
 				doc = pdf.pdf(result, AMPReportExportConstants.PDF);
 				break;

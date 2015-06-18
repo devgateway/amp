@@ -8,6 +8,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -20,8 +21,15 @@ public class AMPReportExcelExport {
 	private static CellStyle styleSubTotalLvl3 = null;
 	private static CellStyle styleTotal = null;
 	private static CellStyle styleHierarchy = null;
+	private static CellStyle styleHeaderClean = null;
+	private static CellStyle styleTotalClean = null;
 
-	public static byte[] generateExcel(JsonBean jb, String type, int hierarchies) throws IOException {
+	private static final int TYPE_STYLED = 0;
+	private static final int TYPE_PLAIN = 1;
+
+	private static final short cellHeight = 300;
+
+	public static byte[] generateExcel(JsonBean jb, String type, int hierarchies, int columns) throws IOException {
 		// Generate html table.
 		String content = AMPJSConverter.convertToHtml(jb, type);
 		// Parse the string.
@@ -29,16 +37,27 @@ public class AMPReportExcelExport {
 
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		Workbook wb = new XSSFWorkbook();
-		Sheet mainSheet = wb.createSheet();
+		Sheet mainSheet = wb.createSheet(TranslatorWorker.translateText("Formatted"));
+		Sheet plainSheet = wb.createSheet(TranslatorWorker.translateText("Plain"));
 		createStyles(wb);
 
+		generateSheet(wb, mainSheet, doc, hierarchies, columns, TYPE_STYLED);
+		generateSheet(wb, plainSheet, doc, hierarchies, columns, TYPE_PLAIN);
+
+		wb.write(os);
+		os.flush();
+		os.close();
+		return os.toByteArray();
+	}
+
+	private static void generateSheet(Workbook wb, Sheet sheet, Document doc, int hierarchies, int columns, int type) {
 		// Process header.
 		Element headerRows = doc.getElementsByTag("thead").first();
 		int i = 0;
 		int headers;
 		int totalColNumber = 0;
 		for (Element headerRowElement : headerRows.getElementsByTag("tr")) {
-			Row row = mainSheet.createRow(i);
+			Row row = sheet.createRow(i);
 			int j = 0;
 			int colSpan;
 			for (Element headerColElement : headerRowElement.getElementsByTag("th")) {
@@ -51,19 +70,35 @@ public class AMPReportExcelExport {
 					cellContent = ((Element) headerColElement.getElementsByTag("div").toArray()[0]).text();
 					if (headerColElement.hasAttr("colspan")) {
 						colSpan = Integer.valueOf(headerColElement.attr("colspan").toString()).intValue();
-						// If this cell is being grouped with other cells on its right we merge them.
-						if (colSpan > 1) {
-							for (int k = 0; k < colSpan; k++) {
-								// Create the merged cells to avoid problems.
-								Cell mergedCell = row.createCell(j + k);
-								mergedCell.setCellStyle(styleHeader);
+						if (type == TYPE_PLAIN) {
+							// "Unmerge" these header columns.
+							if (colSpan > 1) {
+								for (int k = 1; k < colSpan; k++) {
+									Cell auxCell = row.createCell(j + k);
+									auxCell.setCellValue(cellContent);
+									auxCell.setCellStyle(styleHeaderClean);
+								}
+								j += colSpan - 1;
 							}
-							mainSheet.addMergedRegion(new CellRangeAddress(i, i, j, j + colSpan - 1));
-							j += colSpan - 1;
+						} else {
+							// If this cell is being grouped with other cells on its right we merge them.
+							if (colSpan > 1) {
+								for (int k = 0; k < colSpan; k++) {
+									// Create the merged cells to avoid problems.
+									Cell mergedCell = row.createCell(j + k);
+									mergedCell.setCellStyle(styleHeader);
+								}
+								sheet.addMergedRegion(new CellRangeAddress(i, i, j, j + colSpan - 1));
+								j += colSpan - 1;
+							}
 						}
 					}
 					cell.setCellValue(cellContent);
-					cell.setCellStyle(styleHeader);
+					if (type == TYPE_PLAIN) {
+						cell.setCellStyle(styleHeaderClean);
+					} else {
+						cell.setCellStyle(styleHeader);
+					}
 				}
 				j++;
 				totalColNumber++;
@@ -72,54 +107,176 @@ public class AMPReportExcelExport {
 		}
 		headers = i;
 
+		// Check special case when summarized report has only 1 column and 1 row for "report totals".
+		String reportTotalsString = TranslatorWorker.translateText("Report Totals");
+
 		// Process data.
 		Element contentRows = doc.getElementsByTag("tbody").first();
 		int totalRows = contentRows.getElementsByTag("tr").size() + i - 1;
 		for (Element contentRowElement : contentRows.getElementsByTag("tr")) {
-			Row row = mainSheet.createRow(i);
+			Row row = sheet.createRow(i);
 			CellStyle styleForCurrentRow = null;
 			int j = 0;
 			for (Element contentColElement : contentRowElement.getElementsByTag("td")) {
+				boolean isNumber = false;
 				Cell cell = row.createCell(j);
 				String cellContent = ((Element) contentColElement).text();
-				cell.setCellValue(cellContent);
+				if (j >= columns && !reportTotalsString.equals(cellContent)) {
+					isNumber = true;
+					try {
+						cell.setCellValue(new Double(cellContent));
+					} catch (NumberFormatException e) {
+						cell.setCellValue(new Double(0));
+					}
+				} else {
+					isNumber = false;
+					cell.setCellValue(cellContent);
+				}
+
 				if (i == totalRows) {
 					// Style last total row.
-					cell.setCellStyle(styleTotal);
+					if (type == TYPE_STYLED) {
+						cell.setCellStyle(styleTotal);
+					} else {
+						cell.setCellStyle(styleTotalClean);
+					}
 				} else if (contentColElement.hasClass("total")) {
-					// Start applying the subtotal style in the right column (not the first).
-					if (styleForCurrentRow == null && !cellContent.equals("")) {
-						switch (j) {
-						case 0:
-							styleForCurrentRow = styleSubTotalLvl1;
-							break;
-						case 1:
-							styleForCurrentRow = styleSubTotalLvl2;
-							break;
-						case 2:
-							styleForCurrentRow = styleSubTotalLvl3;
-							break;
+					if (type == TYPE_STYLED) {
+						// Start applying the subtotal style in the right column (not the first).
+						if (styleForCurrentRow == null && !cellContent.equals("")) {
+							switch (j) {
+							case 0:
+								styleForCurrentRow = styleSubTotalLvl1;
+								break;
+							case 1:
+								styleForCurrentRow = styleSubTotalLvl2;
+								break;
+							case 2:
+								styleForCurrentRow = styleSubTotalLvl3;
+								break;
+							}
 						}
 					}
 				}
 				if (styleForCurrentRow != null) {
 					cell.setCellStyle(styleForCurrentRow);
 				}
+				if (isNumber) {
+					CellStyle auxStyle = wb.createCellStyle();
+					auxStyle.cloneStyleFrom(cell.getCellStyle());
+					auxStyle.setAlignment(CellStyle.ALIGN_RIGHT);
+					cell.setCellStyle(auxStyle);
+				}
 				j++;
 			}
+			row.setHeight(cellHeight);
 			i++;
 		}
 
-		mergeHierarchyRows(mainSheet, hierarchies, headers);
-
-		for (int l = 0; l < totalColNumber; l++) {
-			mainSheet.autoSizeColumn(l, true);
+		// Postprocess according to sheet type.
+		switch (type) {
+		case TYPE_STYLED:
+			mergeHierarchyRows(sheet, hierarchies, headers);
+			break;
+		case TYPE_PLAIN:
+			refillHierarchyRows(sheet, hierarchies, headers);
+			deleteHierarchyTotalRows(sheet, hierarchies, headers, columns);
+			break;
 		}
 
-		wb.write(os);
-		os.flush();
-		os.close();
-		return os.toByteArray();
+		for (int l = 0; l < totalColNumber; l++) {
+			sheet.autoSizeColumn(l, true);
+		}
+	}
+
+	/**
+	 * Delete hierarchy total rows (useful for plain excel export).
+	 * 
+	 * @param sheet
+	 * @param hierarchies
+	 * @param headers
+	 */
+	private static void deleteHierarchyTotalRows(Sheet sheet, int hierarchies, int headers, int columns) {
+		if (sheet.getRow(0) != null) {
+			int totalRows = sheet.getPhysicalNumberOfRows();
+			if (columns > hierarchies) {
+				// Iterate columns from right to left, then rows from bottom to top.
+				// Notice 'j = hierarchies' instead of 'j = hierarchies - 1' because we start on the first non
+				// hierarchical
+				// column to get the last hierarchy empty total cells.
+				for (int j = hierarchies; j > 0; j--) {
+					for (int i = sheet.getPhysicalNumberOfRows() - 2; i >= headers - 1; i--) {
+						Row row = sheet.getRow(i);
+						if (row != null) {
+							if (row.getCell(j).getStringCellValue().isEmpty()) {
+								sheet.removeRow(row);
+							}
+						}
+					}
+				}
+				// Now shift rows to fill the gaps created by removing columns with POI.
+				int shift = 0;
+				for (int i = headers; i < totalRows; i++) {
+					Row row = sheet.getRow(i);
+					// row is null when was deleted by POI, but still exists in the sheet.
+					if (row == null || row.getCell(0).getStringCellValue().isEmpty()) {
+						shift++;
+					} else {
+						if (shift > 0) {
+							// Move up this row 'shift' positions and restart the loop.
+							sheet.shiftRows(i, i, -1 * shift);
+							i = headers;
+							shift = 0;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Postprocess the sheet by filling empty hierarchy cells with the right value.
+	 * 
+	 * @param sheet
+	 * @param hierarchies
+	 * @param headers
+	 */
+	private static void refillHierarchyRows(Sheet sheet, int hierarchies, int headers) {
+		if (sheet.getRow(0) != null) {
+			String prevCellValue = null;
+			// Iterate columns then rows.
+			for (int j = 0; j < hierarchies; j++) {
+				for (int i = headers; i < sheet.getPhysicalNumberOfRows() - 1; i++) {
+					if (prevCellValue == null) {
+						// Beginning a hierarchy.
+						prevCellValue = sheet.getRow(i).getCell(j).getStringCellValue();
+					} else {
+						String currentCellValue = sheet.getRow(i).getCell(j).getStringCellValue();
+						if (currentCellValue.isEmpty()) {
+							// Empty cell means we are in the same hierarchy.
+							sheet.getRow(i).getCell(j).setCellValue(prevCellValue);
+						} else {
+							// We reached the end of the hierarchy (its the total row).
+							prevCellValue = null;
+							if (j > 0) {
+								// If this is not the first column then we need to check if below this 'total' row there
+								// are 1 or more rows that are also the 'total' for a higher hierarchy (ie: sector ->
+								// sub sector -> sub sub sector, etc).
+								int mustSkipRows = 0;
+								for (int k = 1; k < hierarchies; k++) {
+									if (sheet.getRow(i + k).getCell(j).getStringCellValue().isEmpty()) {
+										mustSkipRows++;
+									} else {
+										break;
+									}
+								}
+								i += mustSkipRows;
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -134,6 +291,7 @@ public class AMPReportExcelExport {
 			String prevCellValue = null;
 			int group = 0;
 			int groupStart = 0;
+			// Iterate columns then rows.
 			for (int j = 0; j < hierarchies; j++) {
 				for (int i = headers; i < sheet.getPhysicalNumberOfRows() - 1; i++) {
 					if (prevCellValue == null) {
@@ -182,13 +340,22 @@ public class AMPReportExcelExport {
 	private static void createStyles(Workbook wb) {
 		Font fontHeaderAndTotal = wb.createFont();
 		fontHeaderAndTotal.setColor(IndexedColors.BLACK.getIndex());
-		fontHeaderAndTotal.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		// fontHeaderAndTotal.setBoldweight(Font.BOLDWEIGHT_BOLD);
 		styleHeader = wb.createCellStyle();
 		styleHeader.setFillPattern(CellStyle.SOLID_FOREGROUND);
 		styleHeader.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
 		styleHeader.setAlignment(CellStyle.ALIGN_CENTER);
 		styleHeader.setWrapText(true);
+		styleHeader.setBorderTop(CellStyle.BORDER_THIN);
+		styleHeader.setBorderBottom(CellStyle.BORDER_THIN);
+		styleHeader.setBorderRight(CellStyle.BORDER_THIN);
+		styleHeader.setBorderLeft(CellStyle.BORDER_THIN);
 		styleHeader.setFont(fontHeaderAndTotal);
+
+		styleHeaderClean = wb.createCellStyle();
+		styleHeaderClean.setAlignment(CellStyle.ALIGN_CENTER);
+		styleHeaderClean.setWrapText(true);
+		styleHeaderClean.setFont(fontHeaderAndTotal);
 
 		styleTotal = wb.createCellStyle();
 		styleTotal.setFillPattern(CellStyle.SOLID_FOREGROUND);
@@ -196,6 +363,11 @@ public class AMPReportExcelExport {
 		styleTotal.setAlignment(CellStyle.ALIGN_CENTER);
 		styleTotal.setFont(fontHeaderAndTotal);
 		styleTotal.setWrapText(true);
+
+		styleTotalClean = wb.createCellStyle();
+		styleTotalClean.setAlignment(CellStyle.ALIGN_LEFT);
+		styleTotalClean.setFont(fontHeaderAndTotal);
+		styleTotalClean.setWrapText(true);
 
 		styleSubTotalLvl1 = wb.createCellStyle();
 		styleSubTotalLvl1.setFillPattern(CellStyle.SOLID_FOREGROUND);

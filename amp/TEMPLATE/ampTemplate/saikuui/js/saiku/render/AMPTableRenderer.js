@@ -1,5 +1,5 @@
 var AMPTableRenderer = function(options) {
-	type = "HTML";
+	type = "html";
 	metadataHierarchies = new Array();
 	metadataColumns = new Array();
 	// We receive the structure metadata as parameter because Rhino will
@@ -31,12 +31,12 @@ AMPTableRenderer.prototype.render = function(data, options) {
 	// When using this class to export the report we receive these extra
 	// parameters from the endpoint because are unavailable in the constructor
 	// call when using Rhino.
-	if (type === 'PDF') {
+	if (type === 'pdf') {
 		metadataColumns = data.columns;
 		metadataHierarchies = data.hierarchies;
 	}
 
-	if (data!== undefined && data.page !== null && data.page.pageArea !== null) {
+	if (data !== undefined && data.page !== null && data.page.pageArea !== null) {
 		summarizedReport = checkIfSummarizedReportWithConstant(data.page);
 		// Make an adjustment in the hierarchies list when showing a summarized
 		// report.
@@ -225,9 +225,14 @@ function generateContentHtml(page, options) {
 		// This check is for those summarized reports that dont return any
 		// content.
 		if (page.pageArea.contents !== null) {
-			var totalValue = "<td class='data total'>"
-					+ page.pageArea.contents[this.headerMatrix[this.lastHeaderRow][i].hierarchicalName].displayedValue
-					+ "</td>";
+			var totalValue = "<td class='data total'>";
+			var cell = page.pageArea.contents[this.headerMatrix[this.lastHeaderRow][i].hierarchicalName];
+			if (this.type === 'xlsx') {
+				totalValue += cell.value;
+			} else {
+				totalValue += cell.displayedValue;
+			}
+			totalValue += "</td>";
 			totalRow += totalValue;
 		}
 	}
@@ -265,7 +270,11 @@ function generateDataRows(page, options) {
 				var group = findGroupVertically(this.contentMatrix, i, j);
 				var rowSpan = " rowspan='" + group + "' ";
 				var styleClass = "";
-				var value = this.contentMatrix[i][j].displayedValue;
+				if (this.type === 'xlsx') {
+					var value = this.contentMatrix[i][j].value;
+				} else {
+					var value = this.contentMatrix[i][j].displayedValue;
+				}
 				var cleanValue = cleanText(value);
 				if (cleanValue.tooltip !== undefined) {
 					styleClass = " class='row tooltipped' original-title='"
@@ -300,7 +309,7 @@ function generateDataRows(page, options) {
 					} else {
 						styleClass = " class='row' ";
 					}
-					if (type === 'HTML') {
+					if (type === 'html') {
 						cleanValue.text = '';
 					}
 				}
@@ -312,7 +321,11 @@ function generateDataRows(page, options) {
 				// Change amount styles if is a subtotal.
 				if (this.contentMatrix[i][j].isTotal === true) {
 					var cell = "<td class='data total'>";
-					cell += this.contentMatrix[i][j].displayedValue;
+					if (this.type === 'xlsx') {
+						cell += this.contentMatrix[i][j].value;
+					} else {
+						cell += this.contentMatrix[i][j].displayedValue;
+					}
 					cell += "</td>";
 				} else {
 					var cell = "<td class='data'>";
@@ -321,7 +334,11 @@ function generateDataRows(page, options) {
 					if (this.summarizedReport === true && i === 0 && j === 0) {
 						cell += options.reportTotalsString;
 					} else {
-						cell += this.contentMatrix[i][j].displayedValue;
+						if (this.type === 'xlsx') {
+							cell += this.contentMatrix[i][j].value;
+						} else {
+							cell += this.contentMatrix[i][j].displayedValue;
+						}
 					}
 					cell += "</td>";
 				}
@@ -369,7 +386,7 @@ function extractDataFromTree(node) {
 		// the header's last row.
 		for (var i = 0; i < this.headerMatrix[this.lastHeaderRow].length; i++) {
 			var dataValue = node.contents[this.headerMatrix[this.lastHeaderRow][i].hierarchicalName];
-			if (this.type === 'CSV' || this.type === 'XLSX') {
+			if (this.type === 'csv' || this.type === 'xlsx') {
 				// If this is a hierarchy column.
 				if (i < this.metadataHierarchies.length) {
 					// If current cell is empty then take the above cell value.

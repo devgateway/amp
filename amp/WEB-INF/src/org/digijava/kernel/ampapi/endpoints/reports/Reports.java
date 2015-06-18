@@ -521,13 +521,13 @@ public class Reports {
 	@Path("/saikureport/export/xls/{report_id}")
 	@Produces({"application/vnd.ms-excel" })
 	public final Response exportXlsSaikuReport(String query, @PathParam("report_id") Long reportId) {
-		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), "xlsx");
+		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.XLSX);
 	}
 	@POST
 	@Path("/saikureport/export/xls/run/{report_token}")
 	@Produces({"application/vnd.ms-excel" })
 	public final Response exportXlsSaikuReport(String query, @PathParam("report_token") String reportToken) {
-		return exportSaikuReport(query,getAmpReportFromSession(reportToken), "xlsx");
+		return exportSaikuReport(query,getAmpReportFromSession(reportToken), AMPReportExportConstants.XLSX);
 	}	
 	@POST
 	@Path("/saikureport/export/csv/{report_id}")
@@ -549,7 +549,7 @@ public class Reports {
 	@Produces({"application/pdf"})
 	public final Response exportPdfSaikuReport(String query, @PathParam("report_id") Long reportId) {
 
-		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), "pdf");
+		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.PDF);
 	}
 
 	@POST
@@ -557,7 +557,7 @@ public class Reports {
 	@Produces({"application/pdf"})
 	public final Response exportPdfSaikuReport(String query, @PathParam("report_token") String reportToken) {
 
-		return exportSaikuReport(query, getAmpReportFromSession(reportToken), "pdf");
+		return exportSaikuReport(query, getAmpReportFromSession(reportToken), AMPReportExportConstants.PDF);
 	}
 	
 	public final Response exportSaikuReport(String query, AmpReports ampReport, String type) {
@@ -592,13 +592,13 @@ public class Reports {
 
 			switch (type) {
 			// TODO: Uncomment when xls and csv is ready.
-			case "xlsx":
-				doc = AMPReportExcelExport.generateExcel(result, AMPReportExportConstants.XLSX, report.getRowsHierarchiesTotals());
+			case AMPReportExportConstants.XLSX:
+				doc = AMPReportExcelExport.generateExcel(result, AMPReportExportConstants.XLSX, report.getRowsHierarchiesTotals(), report.getColumns().size());
 				break;
 			/*
 			 * case "csv": doc = SaikuUtils.getCsv(result, settings, ",", "\""); break;
 			 */
-			case "pdf":
+			case AMPReportExportConstants.PDF:
 				AMPPdfExport pdf = new AMPPdfExport();
 				doc = pdf.pdf(result, AMPReportExportConstants.PDF);
 				break;

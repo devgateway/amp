@@ -97,7 +97,7 @@ function showUser(email){
 		previewWorkspaceframe('/aim/default/userProfile.do',param);
 	}
 	else{
-		var trasnlation = "<digi:trn key='aim:userblankmail'>The user does not have a valid email address</digi:trn>";
+		var trasnlation = '<digi:trn key="aim:userblankmail">The user does not have a valid email address</digi:trn>';
 		alert (trasnlation);
 	}
 }

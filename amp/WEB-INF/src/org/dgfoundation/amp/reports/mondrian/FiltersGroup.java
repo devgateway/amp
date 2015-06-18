@@ -173,6 +173,8 @@ public class FiltersGroup {
 		addIdentityMapping(filterGroupMap, ColumnConstants.ACTIVITY_CREATED_BY);
 		addIdentityMapping(filterGroupMap, ColumnConstants.ACTIVITY_UPDATED_BY);
 		
+		//addIdentityMapping(filterGroupMap, ColumnConstants.HUMANITARIAN_AID);
+		
 		return filterGroupMap;
 	}
 	

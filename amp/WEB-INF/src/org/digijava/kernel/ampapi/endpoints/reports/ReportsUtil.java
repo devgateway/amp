@@ -230,7 +230,7 @@ public class ReportsUtil {
 	}
 	
 	/**
-	 * Updates report specification with the configuration comming from   
+	 * Updates report specification with the configuration coming from   
 	 * @param spec - the specification that will be updated
 	 * @param formParams
 	 * @return the updated spec

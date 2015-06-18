@@ -2911,29 +2911,28 @@ public class AmpARFilter extends PropertyListable {
 		ArrayList<String> approvalStatuses = new ArrayList<String>();
 		if (approvalStatusSelected == null)
 			return approvalStatuses;
+		
 		for (String status:approvalStatusSelected) {
 			switch (Integer.parseInt(status)) {
+			
 			case 1:
-				approvalStatuses.add(TranslatorWorker
-						.translateText("New Draft"));
+				approvalStatuses.add(TranslatorWorker.translateText("New Draft"));
 				break;
+				
 			case 2:
-				approvalStatuses.add(TranslatorWorker
-						.translateText("New Unvalidated"));
+				approvalStatuses.add(TranslatorWorker.translateText("New Unvalidated"));
 				break;
+				
 			case 3:
-
-				approvalStatuses.add(TranslatorWorker
-						.translateText("Existing Draft"));
+				approvalStatuses.add(TranslatorWorker.translateText("Existing Draft"));
 				break;
+				
 			case 4:
-
-				approvalStatuses.add(TranslatorWorker
-						.translateText("Validated Activities"));
+				approvalStatuses.add(TranslatorWorker.translateText("Validated Activities"));
 				break;
+				
 			case 0:
-				approvalStatuses.add(TranslatorWorker
-						.translateText("Existing Unvalidated"));
+				approvalStatuses.add(TranslatorWorker.translateText("Existing Unvalidated"));
 				break;
 			}
 		}

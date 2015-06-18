@@ -85,7 +85,7 @@ LoggerIdentifiable, Cloneable {
 
 	//protected String govAgreementNumber;
 
-	@Interchangeable(fieldTitle = "Internal ID")
+	@Interchangeable(fieldTitle = "Internal ID", importable=false)
 	@PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_ID})
 	@VersionableFieldSimple(fieldTitle = "Internal ID", blockSingleChange = true)
 	protected Long ampActivityId ;
@@ -372,22 +372,22 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Created By", blockSingleChange = true)
 	protected AmpTeamMember activityCreator;
 	
-	@Interchangeable(fieldTitle = "Creation Date")
+	@Interchangeable(fieldTitle = "Creation Date", importable=false)
 	@VersionableFieldSimple(fieldTitle = "Creation Date", blockSingleChange = true)
 	protected Date createdDate;
 	
-	@Interchangeable(fieldTitle = "Update Date")
+	@Interchangeable(fieldTitle = "Update Date", importable=false)
 	@VersionableFieldSimple(fieldTitle = "Update Date", blockSingleChange = true)
 	protected Date updatedDate;
 
-	@Interchangeable(fieldTitle = "Iati Last Update Date")
+	@Interchangeable(fieldTitle = "Iati Last Update Date", importable=false)
 	@VersionableFieldSimple(fieldTitle = "Iati Last Update Date", blockSingleChange = true)
 	protected Date iatiLastUpdatedDate;
 	
 	
 	protected AmpTeamMember approvedBy;
 	
-	@Interchangeable(fieldTitle = "Approval Date")
+	@Interchangeable(fieldTitle = "Approval Date", importable=false)
 	protected Date approvalDate;
 
 	@Interchangeable(fieldTitle = "Regional Fundings")
@@ -413,11 +413,11 @@ LoggerIdentifiable, Cloneable {
 
 	protected Collection actRankColl;
 
-	@Interchangeable(fieldTitle = "Archived")
+	@Interchangeable(fieldTitle = "Archived", importable=false)
 	@VersionableFieldSimple(fieldTitle = "Archived")
 	protected Boolean archived;
 
-	@Interchangeable(fieldTitle = "Deleted")
+	@Interchangeable(fieldTitle = "Deleted", importable=false)
 	@VersionableFieldSimple(fieldTitle = "Deleted")
 	protected Boolean deleted;
 	//for AMP-14784

@@ -320,13 +320,13 @@ public class ScorecardService {
 		List<Quarter> quarters = getQuarters();
 		Quarter quarter = null;
 		
-		int i = 1;
+		int i = 0;
 		if (quarters.size() > 0) {
-			while ( i < quarters.size() && quarters.get(i).getQuarterStartDate().before(new Date())) {
+			while ( i < quarters.size() && quarters.get(i).getQuarterEndDate().before(new Date())) {
 				i++;
 			};
 			
-			quarter = quarters.get(i-1);
+			quarter = i > 0 ? quarters.get(i-1) : quarters.get(0);
 		} 
 		
 		return quarter;
@@ -658,12 +658,13 @@ public class ScorecardService {
 	}
 	
 	private int getPastQuarterObjectsCount(String queryString, String paramDate) {
-		Quarter lastQuarter = getPastQuarter();
-		Date startDate = lastQuarter == null ? new Date() : lastQuarter.getQuarterStartDate();
+		Quarter pastQuarter = getPastQuarter();
+		Date startDate = pastQuarter == null ? new Date() : pastQuarter.getQuarterStartDate();
+		Date endDate = pastQuarter == null ? new Date() : pastQuarter.getQuarterEndDate();
 		
 		String pattern = "yyyy-MM-dd";
 		final String formattedStartDate = new SimpleDateFormat(pattern).format(startDate);
-		final String formattedEndDate = new SimpleDateFormat(pattern).format(new Date());
+		final String formattedEndDate = new SimpleDateFormat(pattern).format(endDate);
 		
 		Session session = null;
 		Query qry = null;

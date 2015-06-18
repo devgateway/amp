@@ -92,6 +92,10 @@ public class InterchangeUtils {
 			for (Message m : messages) {
 				translations.put(m.getLocale(), m.getMessage());
 			}
+			if (translations.isEmpty())
+			{
+				translations.put("EN", fieldName);
+			}
 		} catch (WorkerException e) {
 			// MEANINGFUL ERROR HERE
 		}
@@ -308,15 +312,10 @@ public class InterchangeUtils {
 	public static String underscorify(String input) {
 		StringBuilder bld = new StringBuilder();
 		for (int i = 0; i < input.length(); i++) {
-			if (input.charAt(i) == ' ' || input.charAt(i) == '?')
-				continue;
-			if (Character.isUpperCase(input.charAt(i))) {
-				if (i > 0)
-					bld.append('_');
-				bld.append(Character.toLowerCase(input.charAt(i)));
-			}
+			if (input.charAt(i) == ' ')
+				bld.append('_');
 			else
-				bld.append(input.charAt(i));
+				bld.append(Character.toLowerCase(input.charAt(i)));
 		}
 		return bld.toString();
 	}

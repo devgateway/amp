@@ -444,7 +444,7 @@ public class Reports {
 	@Path("/saikureport/export/xls/{report_id}")
 	@Produces({"application/vnd.ms-excel" })
 	public final Response exportXlsSaikuReport(String query, @PathParam("report_id") Long reportId) {
-		return exportSaikuReport(query, reportId, "xlsx");
+		return exportSaikuReport(query, reportId, AMPReportExportConstants.XLSX);
 		
 	}
 	@POST

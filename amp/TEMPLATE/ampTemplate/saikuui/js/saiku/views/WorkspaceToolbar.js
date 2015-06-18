@@ -797,4 +797,7 @@ $.postDownload = function (path, params, method) {
     }
     document.body.appendChild(form);
     form.submit();
+    // Due to AMP-20337 we need to destroy this form after using it.
+    $(form).empty();
+    $(form).remove();
 }

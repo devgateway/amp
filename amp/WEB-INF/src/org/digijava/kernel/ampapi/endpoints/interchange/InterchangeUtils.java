@@ -341,7 +341,7 @@ public class InterchangeUtils {
 		JsonBean bean = new JsonBean();
 		bean.set("field_name", underscorify(ant2.fieldTitle()));
 		bean.set("field_type", classToCustomType.containsKey(field.getType()) ? classToCustomType.get(field.getType()) : "list");
-		bean.set("field_label", mapToBean(getLabelsForField(field.getName())));
+		bean.set("field_label", mapToBean(getLabelsForField(ant2.fieldTitle())));
 		if (!classToCustomType.containsKey(field.getClass())) {/* list type */
 			bean.set("importable", ant2.importable()? true: false);
 			if (isCollection(field))

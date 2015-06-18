@@ -133,10 +133,6 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	public void setAllItems(Set allItems) {
 		this.allItems = allItems;
 	}
-	
-	public String toString() {
-		return this.name+" - id="+super.toString();
-	}
 
 	@Override
 	public Object getIdentifier() {
@@ -205,5 +201,9 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
     	if (this.getId() == null)
     		return this.getClass().hashCode();
     	return this.getId().hashCode();
+    }
+    
+    @Override public String toString() {
+    	return String.format("%s name: %s, id: %d", this.getClass().getSimpleName(), this.getName(), this.getId());
     }
 }

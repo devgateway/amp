@@ -1164,18 +1164,17 @@ public class AmpARFilter extends PropertyListable {
 
 
 
-        boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));
-        Set<AmpTeam> checkedWorkspaces = null;
-
-        if (loggedInTeamMember != null &&
-                loggedInTeamMember.getTeamAccessType().equals(Constants.ACCESS_TYPE_TEAM) &&
-                !showWorkspaceFilterInTeamWorkspace) {
-            checkedWorkspaces = new HashSet<AmpTeam>();
-            AmpTeam selTeam = TeamUtil.getTeamByName(loggedInTeamMember.getTeamName());
-            checkedWorkspaces.add(selTeam);
-        } else {
-            checkedWorkspaces = workspaces;
-        }
+		Set<AmpTeam> checkedWorkspaces;
+		boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));
+		// https://jira.dgfoundation.org/browse/AMP-15117: ignore the "workspace" filter settings only in case of "team workspace without computation"
+		if (loggedInTeamMember != null && Constants.ACCESS_TYPE_TEAM.equals(loggedInTeamMember.getTeamAccessType()) &&
+				!isTrue(loggedInTeamMember.getComputation()) && !showWorkspaceFilterInTeamWorkspace) {
+			AmpTeam selTeam = TeamUtil.getTeamByName(loggedInTeamMember.getTeamName());
+			checkedWorkspaces = new HashSet<AmpTeam>();
+			checkedWorkspaces.add(selTeam);
+		} else {
+			checkedWorkspaces = workspaces;
+		}
 
 		String WORKSPACE_FILTER = "select amp_activity_id from amp_activity where amp_team_id IN ("
 			+ Util.toCSStringForIN(checkedWorkspaces) + ")";
@@ -3230,5 +3229,9 @@ public class AmpARFilter extends PropertyListable {
 		catch(Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public static boolean isTrue(Boolean b) {
+		return b != null && b;
 	}
 }

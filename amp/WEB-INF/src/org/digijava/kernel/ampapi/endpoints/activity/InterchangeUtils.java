@@ -23,6 +23,7 @@ import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
+import org.digijava.kernel.ampapi.endpoints.activity.visibility.FieldVisibility;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
@@ -382,6 +383,9 @@ public class InterchangeUtils {
 		StopWatch.next("Descending into", false, clazz.getName());
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
+			if (!FieldVisibility.isVisible(field)) {
+				continue;
+			}
 			JsonBean descr = describeField(field);
 			if (descr != null)
 				result.add(descr);

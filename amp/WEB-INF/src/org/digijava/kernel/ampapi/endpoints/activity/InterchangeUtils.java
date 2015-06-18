@@ -34,12 +34,15 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.time.StopWatch;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.jdbc.Work;
+import org.springframework.util.ClassUtils;
 
 import clover.org.apache.commons.lang.StringUtils;
 import clover.org.apache.log4j.helpers.ISO8601DateFormat;
@@ -424,5 +427,84 @@ public class InterchangeUtils {
 		return projectList;
 	}
 
+	public static JsonBean getActivity(Long projectId) {
+		JsonBean activityJson = new JsonBean();
+		try {
+			AmpActivityVersion activity = ActivityUtil.loadActivity(projectId);
+			activityJson.set("amp_activity_id", activity.getAmpActivityId());
+			activityJson.set("amp_id", activity.getAmpId());
+			Field[] fields = activity.getClass().getSuperclass().getDeclaredFields();
+
+			for (Field field : fields) {
+				Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
+				if (interchangeable != null) {
+					field.setAccessible(true);
+					if (field.getType().isAssignableFrom(Set.class)) {
+						Set setObject = (Set) field.get(activity);
+						if (setObject != null) {
+							for (Object obj : setObject) {
+
+								Field[] setFields = obj.getClass().getDeclaredFields();
+								for (Field setField : setFields) {
+									Interchangeable interchangeableSetField = setField
+											.getAnnotation(Interchangeable.class);
+
+									if (interchangeableSetField != null) {
+										setField.setAccessible(true);
+										activityJson.set(interchangeableSetField.fieldTitle(), setField.get(obj));
+
+									}
+								}
+							}
+						}
+					}
+					else {
+						Object object = field.get(activity);
+						if (object != null) {
+							ClassUtils.isPrimitiveOrWrapper(object.getClass());
+							//@VersionableFieldTextEditor
+							if (!JSON_SUPPORTED_CLASSES.contains(object.getClass())) {
+								System.out.println("not supported");
+							}
+							else {
+								activityJson.set(interchangeable.fieldTitle(), object);
+											
+							}
+						}		
+					}
+				
+				}
+			}
+
+			/*
+			 * activityJson.set("title", activity.getName());
+			 * activityJson.set("created_date",
+			 * formatISO8601Date(activity.getCreatedDate()));
+			 * activityJson.set("updated_date",
+			 * formatISO8601Date(activity.getUpdatedDate())); if
+			 * (activity.getSectors().size() > 0) { List<JsonBean> sectors = new
+			 * ArrayList<JsonBean>(); Iterator<AmpActivitySector> it =
+			 * activity.getSectors().iterator(); while (it.hasNext()) {
+			 * AmpActivitySector sector = it.next(); JsonBean sectorBean = new
+			 * JsonBean(); sectorBean.set("id",
+			 * sector.getSectorId().getAmpSectorId()); sectorBean.set("name",
+			 * sector.getSectorId().getName()); sectorBean.set("percentage",
+			 * sector.getSectorPercentage()); sectors.add(sectorBean); }
+			 * activityJson.set("sectors", sectors); } //activityJson.set(name,
+			 * activity.)
+			 */
+
+		} catch (DgException e) {
+			LOGGER.warn("Coudn't load activity with id: " + projectId);
+			throw new RuntimeException(e);
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return activityJson;
+	}
 	
 }

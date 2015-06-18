@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -71,6 +72,13 @@ public class InterchangeEndpoints {
 		return new ArrayList(activityCollection).subList(start, end);
 	}
 	
-	
+
+	@GET
+	@Path("/projects/{projectId}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public JsonBean getProject(@PathParam("projectId") Long projectId) {
+		return InterchangeUtils.getActivity(projectId);
+
+	}
 	
 }

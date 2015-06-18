@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.interchange;
+package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,9 +40,9 @@ public class InterchangeEndpoints {
 	}
 	
 	/**
-	 * Returns a Json object with the list of all projects on the system, including its view and edit status for the current logged user.
+	 * Returns a JSON object with the list of all projects on the system, including its view and edit status for the current logged user.
 	 * If the user can view the project, the 'view' property of the project is set to true. False otherwise.
-	 * If the user can edit the project, the 'edit' property of the project on the json is set to true. False otherwise.
+	 * If the user can edit the project, the 'edit' property of the project on the JSON is set to true. False otherwise.
 	 * Pagination can be used if the parameters are sent on the request. If not parameters are sent, the full list
 	 * of projects is returned. 
 	 * 
@@ -70,6 +70,7 @@ public class InterchangeEndpoints {
 		}
 		return new ArrayList(activityCollection).subList(start, end);
 	}
+	
 	
 	
 }

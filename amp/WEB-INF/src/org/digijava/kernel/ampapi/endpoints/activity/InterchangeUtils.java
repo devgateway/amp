@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.interchange;
+package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;

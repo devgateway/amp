@@ -44,9 +44,5 @@ public class GisConstants {
 		add(MeasureConstants.PLANNED_COMMITMENTS);
 		add(MeasureConstants.PLANNED_DISBURSEMENTS);
 		add(MeasureConstants.PLANNED_EXPENDITURES);
-		add(MeasureConstants.BILATERAL_SSC_COMMITMENTS);
-		add(MeasureConstants.TRIANGULAR_SSC_COMMITMENTS);
-		add(MeasureConstants.UNDISBURSED_BALANCE);
-		add(MeasureConstants.OFFICIAL_DEVELOPMENT_AID_COMMITMENTS);
 	}};
 }

@@ -242,10 +242,10 @@ public class InterchangeUtils {
 					while (rs.next()) {
 						JsonBean bean = new JsonBean();
 						bean.set("amp_activity_id", rs.getLong("amp_activity_id"));
-						bean.set("created_date", formatISO8601Date(rs.getDate("date_created")));
+						bean.set("created_date", formatISO8601Date(rs.getTimestamp("date_created")));
 						bean.set("title", rs.getString("name"));
 						bean.set("project_code", rs.getString("project_code"));
-						bean.set("update_date", formatISO8601Date(rs.getDate("date_updated")));
+						bean.set("update_date", formatISO8601Date(rs.getTimestamp("date_updated")));
 						bean.set("amp_id", rs.getString("amp_id"));
 						bean.set("edit", editable);
 						bean.set("view", viewable);

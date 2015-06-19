@@ -233,7 +233,7 @@ public class InterchangeUtils {
 				if (!include) {
 					negate = " NOT ";
 				}
-				String allActivitiesQuery = "SELECT amp_activity_id,amp_id,name,date_created,project_code,date_updated from amp_activity_version ";
+				String allActivitiesQuery = "SELECT amp_activity_id,amp_id,name,date_created,project_code,date_updated from amp_activity ";
 				if (activityIds.size() > 0) {
 					allActivitiesQuery += " where amp_activity_id " + negate + " in (" + ids + ")";
 				}

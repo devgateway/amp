@@ -640,8 +640,7 @@ public class ScorecardService {
 	 * @return int the count of logged users in the past quarter
 	 */
 	public int getPastQuarterUsersCount() {
-		String queryString = "select count(distinct o.authorName) from " + AmpAuditLogger.class.getName()
-							+ " o where o.action = 'login'";
+		String queryString = "select count(distinct o.authorName) from amp_audit_logger o where o.action = 'login'";
 		
 		return getPastQuarterObjectsCount(queryString, "loggedDate");
 	}
@@ -652,13 +651,13 @@ public class ScorecardService {
 	 * @return int the count of projects with action in the past quarter
 	 */
 	public int getPastQuarterProjectsCount() {
-		String queryString = "select count(distinct o.objectName) from " + AmpAuditLogger.class.getName()
-							+ " o where o.objecttype = 'org.digijava.module.aim.dbentity.AmpActivityVersion'";
+		String queryString = "select count(distinct o.objectName) from amp_audit_logger o "
+							+ " where o.objecttype = 'org.digijava.module.aim.dbentity.AmpActivityVersion'";
 		
 		return getPastQuarterObjectsCount(queryString, "modifyDate");
 	}
 	
-	private int getPastQuarterObjectsCount(String queryString, String paramDate) {
+	private int getPastQuarterObjectsCount(String inputQuery, final String paramDate) {
 		Quarter pastQuarter = getPastQuarter();
 		Date startDate = pastQuarter == null ? new Date() : pastQuarter.getQuarterStartDate();
 		Date endDate = pastQuarter == null ? new Date() : pastQuarter.getQuarterEndDate();
@@ -667,21 +666,25 @@ public class ScorecardService {
 		final String formattedStartDate = new SimpleDateFormat(pattern).format(startDate);
 		final String formattedEndDate = new SimpleDateFormat(pattern).format(endDate);
 		
-		Session session = null;
-		Query qry = null;
-		int count = 0;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			queryString += " AND o." + paramDate + " >= '" + formattedStartDate + "' "
-						  + "AND o." + paramDate + " <= '" + formattedEndDate + "'";
-			
-			qry = session.createQuery(queryString);
-			count = ((Integer) qry.uniqueResult()).intValue();
-		} catch (Exception e) {
-			LOGGER.error("Exception while getting past quarter projects count:" + e.getMessage());
-		}
+		final String queryString = inputQuery + " AND o." + paramDate + " >= '" + formattedStartDate + "' "
+				  							   + "AND o." + paramDate + " <= '" + formattedEndDate + "'";
 		
-		return count;
+		final IntWrapper count = new IntWrapper();
+
+		PersistenceManager.getSession().doWork(new Work() {
+			public void execute(Connection conn) throws SQLException {
+				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, queryString, null)) {
+					ResultSet rs = rsi.rs;
+					while (rs.next()) {
+						count.inc(rs.getInt("count"));
+					}
+				}  catch (Exception e) {
+					LOGGER.error("Exception while getting past quarter objects:" + e.getMessage());
+				}
+			}
+		});
+		
+		
+		return count.intValue();
 	}
 }

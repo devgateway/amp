@@ -2,6 +2,8 @@ package org.dgfoundation.amp.reports.saiku.export;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.*;
@@ -23,6 +25,7 @@ public class AMPReportExcelExport {
 	private static CellStyle styleHierarchy = null;
 	private static CellStyle styleHeaderClean = null;
 	private static CellStyle styleTotalClean = null;
+	private static CellStyle styleNumber = null;
 
 	private static final int TYPE_STYLED = 0;
 	private static final int TYPE_PLAIN = 1;
@@ -109,7 +112,10 @@ public class AMPReportExcelExport {
 
 		// Check special case when summarized report has only 1 column and 1 row for "report totals".
 		String reportTotalsString = TranslatorWorker.translateText("Report Totals");
-
+		// Create a map with the styles we will be cloning so we can add or change them (without breaking the WorkBook
+		// with too many styles).
+		Map<String, CellStyle> clonedStyles = new HashMap<String, CellStyle>();
+		String clonedSufixAlignRight = "_align_right";
 		// Process data.
 		Element contentRows = doc.getElementsByTag("tbody").first();
 		int totalRows = contentRows.getElementsByTag("tr").size() + i - 1;
@@ -136,9 +142,9 @@ public class AMPReportExcelExport {
 				if (i == totalRows) {
 					// Style last total row.
 					if (type == TYPE_STYLED) {
-						cell.setCellStyle(styleTotal);
+						styleForCurrentRow = styleTotal;
 					} else {
-						cell.setCellStyle(styleTotalClean);
+						styleForCurrentRow = styleTotalClean;
 					}
 				} else if (contentColElement.hasClass("total")) {
 					if (type == TYPE_STYLED) {
@@ -162,10 +168,26 @@ public class AMPReportExcelExport {
 					cell.setCellStyle(styleForCurrentRow);
 				}
 				if (isNumber) {
-					CellStyle auxStyle = wb.createCellStyle();
-					auxStyle.cloneStyleFrom(cell.getCellStyle());
-					auxStyle.setAlignment(CellStyle.ALIGN_RIGHT);
-					cell.setCellStyle(auxStyle);
+					// If this is a number then we need to keep the current format style (if any) and apply some extra
+					// properties like 'align', if we create a new style for each cell that will break POI so we will
+					// use a map to cache the few new styles we will create and use.
+					if (styleForCurrentRow != null) {
+						String key = styleForCurrentRow.toString() + clonedSufixAlignRight;
+						if (clonedStyles.containsKey(key)) {
+							CellStyle auxStyle = clonedStyles.get(key);
+							cell.setCellStyle(auxStyle);
+						} else {
+							CellStyle auxStyle = wb.createCellStyle();
+							auxStyle.cloneStyleFrom(cell.getCellStyle());
+							auxStyle.setAlignment(CellStyle.ALIGN_RIGHT);
+							cell.setCellStyle(auxStyle);
+							clonedStyles.put(key, auxStyle);
+						}
+					} else {
+						// Use a predefined basic number style with the align we need (and more properties if we need in
+						// the future).
+						cell.setCellStyle(styleNumber);
+					}
 				}
 				j++;
 			}
@@ -392,5 +414,8 @@ public class AMPReportExcelExport {
 
 		styleHierarchy = wb.createCellStyle();
 		styleHierarchy.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+
+		styleNumber = wb.createCellStyle();
+		styleNumber.setAlignment(CellStyle.ALIGN_RIGHT);
 	}
 }

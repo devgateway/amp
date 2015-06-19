@@ -68,7 +68,7 @@ public class GPIReport1 extends GPIAbstractReport {
 		int yearRange = filter.getEndYer() - filter.getStartYear() + 1;
 		Date[] startDates = new Date[yearRange];
 		Date[] endDates = new Date[yearRange];
-		BigInteger currentFundingId = null;
+		BigInteger currentActivityId = null;
 
 		try {
 			// Setup year ranges according the selected calendar.
@@ -93,17 +93,17 @@ public class GPIReport1 extends GPIAbstractReport {
 			Set<Integer> yearsFromFunding = new HashSet<Integer>();
 
 			//After refactoring we iterate over a sorted list of funding details ([activity_id, funding_id, funding_detail_id, transaction_date])
-			Iterator iter = commonData.iterator();
+			Iterator<Object[]> iter = commonData.iterator();
 			while (iter.hasNext()) {				
-				Object[] data = (Object[]) iter.next();
+				Object[] data = iter.next();
 				Date transactionDate = (Date) data[3];
 
-				// Detect when we change funding to reset the years collection.
-				if (currentFundingId == null) {
-					currentFundingId = (BigInteger) data[1];
+				// Detect when we change activity to reset the years collection.
+				if (currentActivityId == null) {
+					currentActivityId = (BigInteger) data[0];
 				} else {
-					if (!currentFundingId.equals((BigInteger) data[1])) {
-						currentFundingId = (BigInteger) data[1];
+					if (!currentActivityId.equals((BigInteger) data[0])) {
+						currentActivityId = (BigInteger) data[0];
 						yearsFromFunding = new HashSet<Integer>();
 					}
 				}

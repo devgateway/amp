@@ -114,9 +114,7 @@ public class SettingsUtils {
 			}
 		}		
 		if (!found) {
-			if(options.size() > 0) {
-				defaultId = options.get(0).name;
-			}
+			defaultId = options.get(0).name;
 		}
 		
 		return new SettingOptions(SettingsConstants.FUNDING_TYPE_ID, true,

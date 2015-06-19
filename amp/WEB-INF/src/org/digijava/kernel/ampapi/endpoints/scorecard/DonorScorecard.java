@@ -160,10 +160,9 @@ public class DonorScorecard {
 			selectedDonorsValues[i] = donorsArray.get(i).toString();
 		}
 		
-		if (selectedDonorsValues.length > 0) {
-			
-			DbUtil.deleteAllNoUpdateOrgs();
+		DbUtil.deleteAllNoUpdateOrgs();
 		
+		if (selectedDonorsValues.length > 0) {
 			for (int i=0; i<selectedDonorsValues.length; i++) {
 				AmpScorecardNoUpdateOrganisation org = new AmpScorecardNoUpdateOrganisation();
 				org.setAmpDonorId(Long.parseLong(selectedDonorsValues[i]));

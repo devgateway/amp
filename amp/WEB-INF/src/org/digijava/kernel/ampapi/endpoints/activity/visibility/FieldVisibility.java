@@ -57,6 +57,12 @@ public class FieldVisibility {
 		return isVisible;
 	}
 
+	/**
+	 * Checks if there was any update under Feature Manager tree visibility.
+	 * If that the case all FM paths need to be rechecked again.
+	 * 
+	 * @param session, HttpSession containing the tree last modification date.
+	 */
 	private static void checkTreeVisibilityUpdate(HttpSession session) {
 		Date lastUpdate = (Date) session.getAttribute("ampTreeVisibilityModificationDate");
 		if (lastTreeVisibilityUpdate!=null && lastUpdate.after(lastTreeVisibilityUpdate)) {
@@ -66,20 +72,38 @@ public class FieldVisibility {
 
 	}
 
-	private static boolean isVisibleInFM(AmpTreeVisibility ampTreeVisibility, String path,String lastVerifiedPath) {
+	/**
+	 * Checks if a FM Path is visible. In order to be visible, the FM path and all its ancestors need to be checked.
+	 * 
+	 * @param ampTreeVisibility, the AmpTreeVisibility that contains all modules visibility
+	 * @param fmPath, the path to check for its visibility
+	 * @param lastVerifiedPath, the last FM verified path. This is needed in order to avoid checking all FM path ancestors 
+	 * multiple times
+	 * @return, whether a FM path is visible or not
+	 */
+	private static boolean isVisibleInFM(AmpTreeVisibility ampTreeVisibility, String fmPath,String lastVerifiedPath) {
 		boolean isVisible = false;
 		AmpModulesVisibility modulesVisibility = ampTreeVisibility.getModuleByNameFromRoot(lastVerifiedPath);
 		if (modulesVisibility != null) {
 			isVisible = modulesVisibility.isVisibleTemplateObj((AmpTemplatesVisibility) ampTreeVisibility.getRoot());
 			visibilityMap.put(lastVerifiedPath, isVisible);
 		}
-		if (!path.equals(lastVerifiedPath) && isVisible) {
-			lastVerifiedPath = getChildFMPath(path, lastVerifiedPath);
-			isVisible = isVisibleInFM(ampTreeVisibility, path, lastVerifiedPath);
+		if (!fmPath.equals(lastVerifiedPath) && isVisible) {
+			lastVerifiedPath = getChildFMPath(fmPath, lastVerifiedPath);
+			isVisible = isVisibleInFM(ampTreeVisibility, fmPath, lastVerifiedPath);
 		}
 		return isVisible;
 	}
 
+	/**
+	 * Starting from the last FM verified Path, it returns its next child for the FM path we are searching for.
+	 * If lastVerifiedPath is '/Activity Form', and we are searching for the visibility of 
+	 * fmPath = '/Activity Form/Identification/Description' then the next child will be
+	 * '/Activity Form/Identification'
+	 * @param fmPath, the FM path to check if it is visible or not.
+	 * @param lastVerifiedPath, the last FM ancestor path that was already verified for its visibility
+	 * @return a String with the child FM path 
+	 */
 	private static String getChildFMPath(String fmPath, String lastVerifiedPath) {
 		String pathDifference ;
 		if (lastVerifiedPath.equals("")) {
@@ -96,6 +120,16 @@ public class FieldVisibility {
 		return lastVerifiedPath;
 	}
 
+	/**
+	 * Given a FM Path like '/Activity Form/Identification/Description' it checks which was the last verified FM path.
+	 * Starting from fmPath parameter and going up until the last verified is found. That is, if '/Activity Form/Identification/Description'
+	 * was not already verified, it checks if '/Activity Form/Identification' was and after that it checks for the root 
+	 *'/Activity Form'. Checking is stopped when a fm path that was already verified is found.
+	 * 
+	 * 
+	 * @param fmPath, the path to check if it was already verified
+	 * @return the last verified FM path.
+	 */
 	private static String getLastVerifiedPath(String fmPath) {
 		String fmPathToCheck = fmPath;
 		boolean alreadyVerified = false;
@@ -111,6 +145,12 @@ public class FieldVisibility {
 		return fmPath;
 	}
 
+	/**
+	 * Verifies if a FM Path was already checked.
+	 * 
+	 * @param fmPath, the path under Feature Manager
+	 * @return true if it was already verified, false otherwise
+	 */
 	private static boolean isInMap(String fmPath) {
 		return visibilityMap.containsKey(fmPath);
 	}

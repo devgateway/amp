@@ -1,5 +1,7 @@
 <%@ page pageEncoding="UTF-8"%>
 
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+
 <style>
 
 .quickView {

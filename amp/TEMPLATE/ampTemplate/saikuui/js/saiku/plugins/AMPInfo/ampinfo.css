@@ -20,6 +20,12 @@
 	margin-bottom: 5px;
 }
 
+.no_results {
+	color: red;
+	font-weight:800;
+	font-size: 1.1em;
+}
+
 .round-filter {
 	border: 1px solid #376091;
 	border-radius: 4px;
@@ -27,6 +33,15 @@
 	margin-right: 5px;
 	background: #ffffff;
 	margin-bottom: 3px;
+	float: left;
+}
+
+.round-filter-group {
+	border: 1px solid #376091;
+	border-radius: 4px;
+	padding-left: 7px;
+	margin-right: 10px;
+	margin-bottom: 10px;
 	float: left;
 }
 
@@ -82,7 +97,7 @@
   margin-top: -8px;
 }
 .ui-accordion .ui-accordion-content {
-  padding: 1em 2.2em;
+  padding: 0.5em;
   border-top: 0;
   overflow: auto;
 }

@@ -11,11 +11,13 @@ import java.util.Date;
  * @author Emanuel Perez
  *
  */
-public class AmpScorecardNoUpdateOrganisation {
+public class AmpScorecardOrganisation {
 
 	private Long ampDonorId;
 	private Long id;
 	private Date modifyDate;
+	private boolean toExclude;
+
 	
 	/**
 	 * Returns the id of the donor that doesn't have activity/projects updates on a given quarter
@@ -60,6 +62,13 @@ public class AmpScorecardNoUpdateOrganisation {
 	public void setModifyDate(Date modifyDate) {
 		this.modifyDate = modifyDate;
 	}
-	
+
+	public boolean isToExclude() {
+		return toExclude;
+	}
+
+	public void setToExclude(boolean toExclude) {
+		this.toExclude = toExclude;
+	}
 
 }

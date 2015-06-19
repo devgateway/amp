@@ -31,7 +31,7 @@ import org.digijava.kernel.ampapi.endpoints.scorecard.service.ScorecardService;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
-import org.digijava.module.aim.dbentity.AmpScorecardNoUpdateOrganisation;
+import org.digijava.module.aim.dbentity.AmpScorecardOrganisation;
 import org.digijava.module.aim.dbentity.AmpScorecardSettings;
 import org.digijava.module.aim.dbentity.AmpScorecardSettingsCategoryValue;
 import org.digijava.module.aim.util.DbUtil;
@@ -164,9 +164,10 @@ public class DonorScorecard {
 		
 		if (selectedDonorsValues.length > 0) {
 			for (int i=0; i<selectedDonorsValues.length; i++) {
-				AmpScorecardNoUpdateOrganisation org = new AmpScorecardNoUpdateOrganisation();
+				AmpScorecardOrganisation org = new AmpScorecardOrganisation();
 				org.setAmpDonorId(Long.parseLong(selectedDonorsValues[i]));
 				org.setModifyDate(new Date());
+				org.setToExclude(false);
 				try {
 					DbUtil.saveOrUpdateObject(org);
 				} catch (Exception e) {

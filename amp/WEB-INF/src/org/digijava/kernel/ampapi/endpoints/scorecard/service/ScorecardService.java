@@ -28,7 +28,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpScorecardNoUpdateOrganisation;
+import org.digijava.module.aim.dbentity.AmpScorecardOrganisation;
 import org.digijava.module.aim.dbentity.AmpScorecardSettings;
 import org.digijava.module.aim.dbentity.AmpScorecardSettingsCategoryValue;
 import org.digijava.module.aim.helper.Constants;
@@ -86,14 +86,14 @@ public class ScorecardService {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<AmpScorecardNoUpdateOrganisation> getAllNoUpdateDonors() {
+	public List<AmpScorecardOrganisation> getAllNoUpdateDonors() {
 		int startYear = getDefaultStartYear();
 		int endYear = getDefaultEndYear();
 		Date startDate = CalendarUtil.getStartDate(fiscalCalendar.getAmpFiscalCalId(), startYear);
 		Date endDate = CalendarUtil.getEndDate(fiscalCalendar.getAmpFiscalCalId(), endYear);
 		Session session = PersistenceManager.getRequestDBSession();
-		String queryString = "from " + AmpScorecardNoUpdateOrganisation.class.getName()
-				+ " nuo where nuo.modifyDate >= :startDate and nuo.modifyDate <= :endDate";
+		String queryString = "from " + AmpScorecardOrganisation.class.getName()
+				+ " nuo where nuo.modifyDate >= :startDate and nuo.modifyDate <= :endDate and nuo.toExclude = false";
 		Query query = session.createQuery(queryString);
 		query.setParameter("startDate", startDate);
 		query.setParameter("endDate", endDate);
@@ -177,7 +177,7 @@ public class ScorecardService {
 					if (noUpdates) {
 						query += "NOT ";
 					}
-					query += "IN (SELECT amp_donor_id from no_update_organisation)";
+					query += "IN (SELECT amp_donor_id from amp_scorecard_organisation and to_exclude = false)";
 				}
 				
 				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
@@ -588,9 +588,9 @@ public class ScorecardService {
 	 *         the donor/quarter don't have a project update
 	 */
 	private Map<Long, Map<String, ColoredCell>> markNoUpdateDonorCells(Map<Long, Map<String, ColoredCell>> data) {
-		Collection<AmpScorecardNoUpdateOrganisation> noUpdateDonors = this.getAllNoUpdateDonors();
+		Collection<AmpScorecardOrganisation> noUpdateDonors = this.getAllNoUpdateDonors();
 
-		for (AmpScorecardNoUpdateOrganisation noUpdateDonor : noUpdateDonors) {
+		for (AmpScorecardOrganisation noUpdateDonor : noUpdateDonors) {
 			Quarter quarter = new Quarter(fiscalCalendar, noUpdateDonor.getModifyDate());
 			ColoredCell noUpdateCell = data.get(noUpdateDonor.getAmpDonorId()).get(quarter.toString());
 			noUpdateCell.setColor(Colors.GRAY);

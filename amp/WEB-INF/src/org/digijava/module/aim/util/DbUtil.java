@@ -1619,7 +1619,7 @@ public class DbUtil {
 				@Override
 				public void execute(Connection con) throws SQLException {
 					con.setAutoCommit(false);
-					con.createStatement().execute("DELETE FROM no_update_organisation");
+					con.createStatement().execute("DELETE FROM amp_scorecard_organisation where to_exclude=false");
 					con.commit();
 
 				}

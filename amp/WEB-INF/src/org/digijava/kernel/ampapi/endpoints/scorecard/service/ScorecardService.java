@@ -601,11 +601,12 @@ public class ScorecardService {
 		
 		final IntWrapper orgCount = new IntWrapper();
 		
-		Quarter lastQuarter = getPastQuarter();
-		Date startDate = lastQuarter == null ? new Date() : lastQuarter.getQuarterStartDate();
+		Quarter pastQuarter = getPastQuarter();
+		Date startDate = pastQuarter == null ? new Date() : pastQuarter.getQuarterStartDate();
+		Date endDate = pastQuarter == null ? new Date() : pastQuarter.getQuarterEndDate();
 		String pattern = "yyyy-MM-dd";
 		final String formattedStartDate = new SimpleDateFormat(pattern).format(startDate);
-		final String formattedEndDate = new SimpleDateFormat(pattern).format(new Date());
+		final String formattedEndDate = new SimpleDateFormat(pattern).format(endDate);
 		
 		PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {

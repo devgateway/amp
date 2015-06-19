@@ -26,7 +26,6 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpScorecardNoUpdateOrganisation;
@@ -150,8 +149,9 @@ public class ScorecardService {
 						activityUpdate.setModifyDate(rs.getDate("modifydate"));
 						activityUpdateList.add(activityUpdate);
 					}
+					rsi.close();
 				}
-
+			
 			}
 		});
 
@@ -192,6 +192,8 @@ public class ScorecardService {
 						}
 						donorsList.add(donor);
 					}
+					rsi.close();
+					
 				}
 			}
 		});
@@ -430,6 +432,8 @@ public class ScorecardService {
 								cell.setColor(Colors.YELLOW);
 							}
 						}
+						rsi.close();
+						
 					}
 
 				}
@@ -460,6 +464,8 @@ public class ScorecardService {
 					while (rs.next()) {
 						activityIds.add(rs.getLong("amp_activity_id"));
 					}
+					rsi.close();
+					
 				}
 				
 			}});
@@ -625,6 +631,8 @@ public class ScorecardService {
 					while (rs.next()) {
 						orgCount.inc(rs.getInt("count"));
 					}
+					rsi.close();
+					
 				}  catch (Exception e) {
 					LOGGER.error("Exception while getting org types amount:" + e.getMessage());
 				}
@@ -678,6 +686,8 @@ public class ScorecardService {
 					while (rs.next()) {
 						count.inc(rs.getInt("count"));
 					}
+					rsi.close();
+					
 				}  catch (Exception e) {
 					LOGGER.error("Exception while getting past quarter objects:" + e.getMessage());
 				}

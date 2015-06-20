@@ -13,6 +13,7 @@ import org.digijava.module.aim.annotations.activityversioning.VersionableCollect
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.DbUtil;
@@ -168,6 +169,7 @@ LoggerIdentifiable, Cloneable {
 	protected Set<IPAContract> contracts;
 	
 	@Interchangeable(fieldTitle = "Locations",fmPath="/Activity Form/Location",required="/Activity Form/Location/Locations/Location required validator")
+	@Validators (unique="/Activity Form/Location/Locations/uniqueLocationsValidator")
 	@VersionableCollection(fieldTitle = "Locations")
 	protected Set<AmpActivityLocation> locations ;
 	
@@ -462,6 +464,7 @@ LoggerIdentifiable, Cloneable {
 	 */
 	@Interchangeable(fieldTitle = "Indicators",fmPath="/Activity Form/M&E")
 	@VersionableCollection(fieldTitle = "Indicators")
+	@Validators (unique="/Activity Form/M&E/Unique MEs Validator")
 	protected Set<IndicatorActivity> indicators;
 
 	@Interchangeable(fieldTitle = "Activity Documents",fmPath="/Activity Form/Related Documents")
@@ -522,6 +525,7 @@ LoggerIdentifiable, Cloneable {
 	
 	//UPDATE_IT_AFTER
 //	@Interchangeable(fieldTitle = "Act. Budget Structure",fmPath="/Activity Form/Budget Structure")
+	//@Validators (unique ="/Activity Form/Budget Structure/Budget Structure/uniqueProgramsValidator", minSize="/Activity Form/Budget Structure/Budget Structure/minSizeProgramValidator")
 	@VersionableCollection(fieldTitle = "Act. Budget Structure")
 	protected Set <AmpActivityBudgetStructure> actBudgetStructure;
 
@@ -709,7 +713,7 @@ LoggerIdentifiable, Cloneable {
 	/**
 	 * @return
 	 */
-	public Set getSectors() {
+	public Set <AmpSector> getSectors() {
 		return sectors;
 	}
 
@@ -796,7 +800,7 @@ LoggerIdentifiable, Cloneable {
 	/**
 	 * @param set
 	 */
-	public void setSectors(Set set) {
+	public void setSectors(Set <AmpSector> set) {
 		sectors = set;
 	}
 

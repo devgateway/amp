@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Set;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -17,21 +18,22 @@ public class AmpIndicator implements Serializable
 	private Long indicatorId;
 	@Interchangeable(fieldTitle="Default Indicator")
 	private boolean defaultInd;
-	@Interchangeable(fieldTitle="Name")
+	@Interchangeable(fieldTitle="Name",fmPath="/Activity Form/M&E/Name")
     @TranslatableField
 	private String name;
-	@Interchangeable(fieldTitle="Code")
+	@Interchangeable(fieldTitle="Code",fmPath="/Activity Form/M&E/Code")
 	private String code;
 	@Interchangeable(fieldTitle="Type")
 	private String type;
-	@Interchangeable(fieldTitle="Creation Date")
+	@Interchangeable(fieldTitle="Creation Date",fmPath="/Activity Form/M&E/Creation Date")
 	private Date creationDate;
 	@Interchangeable(fieldTitle="Category")
 	private int category;
     @TranslatableField
-    @Interchangeable(fieldTitle="Description")
+    @Interchangeable(fieldTitle="Description",fmPath="/Activity Form/M&E/Description")
 	private String description;
     @Interchangeable(fieldTitle="Sectors", recursive=true)
+    @Validators (unique="/Activity Form/M&E/uniqueSectorsValidator")
 	private Set<AmpSector> sectors;
     @Interchangeable(fieldTitle="Comments")
 	private String comments;

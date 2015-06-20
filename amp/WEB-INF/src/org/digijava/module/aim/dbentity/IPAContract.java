@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -100,6 +101,7 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
     @Interchangeable(fieldTitle = "Organization")
     private transient AmpOrganisation organization;
     @Interchangeable(fieldTitle = "Organizations",fmPath="/Activity Form/Contracts/Contract Item/Contract Organizations")
+    @Validators (unique="/Activity Form/Organizations/Donor Organization/Unique Orgs Validator")
     private transient Set<AmpOrganisation> organizations;
     @Interchangeable(fieldTitle = "Status",fmPath="/Activity Form/Contracts/Contract Item/Contract Details/Status")
     private transient AmpCategoryValue status;

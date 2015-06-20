@@ -3,13 +3,17 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.util.Output;
 
 public class AmpActivityBudgetStructure implements Versionable, Serializable, Cloneable{
 	
 	private Long ampActivityBudgetStructureId;
 	private String budgetStructureName;
+	
+	//@Interchangeable (fieldTitle ="Budget Structure Percentage" ,fmPath="/Activity Form/Budget Structure/Budget Structure/budgetStructurePercentage")
+	//@Validators (percentage = "/Activity Form/Budget Structure/Budget Structure/programPercentageTotal")
     private Float budgetStructurePercentage;
     private AmpActivityVersion activity;
     

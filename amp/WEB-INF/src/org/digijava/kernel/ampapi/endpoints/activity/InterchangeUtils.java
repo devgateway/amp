@@ -51,6 +51,8 @@ import clover.org.apache.log4j.helpers.ISO8601DateFormat;
 
 public class InterchangeUtils {
 
+	private static final String NOT_REQUIRED = "_NONE_";
+	private static final String ALWAYS_REQUIRED = "_ALWAYS_";
 	public static final Logger LOGGER = Logger.getLogger(InterchangeUtils.class);
 	private static final ISO8601DateFormat dateFormatter = new ISO8601DateFormat();
 	private static ProjectListCacher cacher = new ProjectListCacher();
@@ -362,8 +364,7 @@ public class InterchangeUtils {
 			{
 				bean.set("recursive", true);
 			}
-			/*left alone for now. would be draggable from wicket*/
-			//structure.put("allow_empty", ???)
+			bean.set("allow_empty", !isRequired(field));
 		}
 		return bean;
 	}
@@ -524,5 +525,27 @@ public class InterchangeUtils {
 		
 		return isEnabled;
 		
+	}
+	
+	/**
+	 * Checks if a given field is required or not
+	 * 
+	 * @param field the field to validate
+	 * @return true if the field is required, false if it is not.
+	 */
+	public static boolean isRequired(Field field) {
+		boolean isRequired = false;
+		String minSize = "";
+		Validators validators = field.getAnnotation(Validators.class);
+		Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
+		if (validators != null) {
+			minSize = validators.minSize();
+		}
+		String required = interchangeable.required();
+		if (required.equals(ALWAYS_REQUIRED) || (!required.equals(NOT_REQUIRED) && FMVisibility.isFmPathEnabled(required))
+				|| (!minSize.isEmpty() && FMVisibility.isFmPathEnabled(minSize))) {
+			isRequired = true;
+		}
+		return isRequired;
 	}
 }

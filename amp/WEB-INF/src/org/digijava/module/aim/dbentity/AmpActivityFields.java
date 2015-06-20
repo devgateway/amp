@@ -162,7 +162,7 @@ LoggerIdentifiable, Cloneable {
 	
 	@Interchangeable(fieldTitle = "Sectors",fmPath="/Activity Form/Sectors")
 	@VersionableCollection(fieldTitle = "Sectors")
-	protected Set sectors ;
+	protected Set <AmpSector> sectors ;
 	
 	@Interchangeable(fieldTitle = "Contracts",fmPath="/Activity Form/Contracts")
 	@VersionableCollection(fieldTitle = "Contracts")

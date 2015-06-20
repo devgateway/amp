@@ -16,11 +16,29 @@ import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
 
-public class FieldVisibility {
+public class FMVisibility {
 
 	private final static Map<String, Boolean> visibilityMap = new HashMap<String, Boolean>();
 	private static Date lastTreeVisibilityUpdate;
 
+	/**
+	 * Checks if a given FM path is enabled 
+	 * @param fmPath, the String with the FM path
+	 * @return true if is enabled, false otherwise
+	 */
+	public static boolean isFmPathEnabled (String fmPath) {
+		boolean isEnabled = false;
+		HttpSession session = TLSUtils.getRequest().getSession();
+		ServletContext ampContext = session.getServletContext();
+		AmpTreeVisibility ampTreeVisibility = FeaturesUtil.getAmpTreeVisibility(ampContext, session);
+		String ancestorVerifiedPath = getLastVerifiedPath(fmPath);
+		if (ancestorVerifiedPath.equals("")) {
+			ancestorVerifiedPath = getChildFMPath(fmPath, ancestorVerifiedPath);
+		}
+		isEnabled = isVisibleInFM(ampTreeVisibility, fmPath,ancestorVerifiedPath);
+
+		return isEnabled;
+	}
 	/**
 	 * Checks whether a Field is visible or not according to the Feature
 	 * Manager. It checks the @Interchangeable annotation for its fmPath. If the
@@ -34,11 +52,7 @@ public class FieldVisibility {
 	 */
 	public static boolean isVisible(Field field) {
 		HttpSession session = TLSUtils.getRequest().getSession();
-
-		ServletContext ampContext = session.getServletContext();
-		AmpTreeVisibility ampTreeVisibility = FeaturesUtil.getAmpTreeVisibility(ampContext, session);
 		checkTreeVisibilityUpdate(session);
-
 		boolean isVisible = false;
 		Interchangeable annotation = field.getAnnotation(Interchangeable.class);
 		if (annotation == null) {
@@ -48,11 +62,7 @@ public class FieldVisibility {
 		if (path.equals("")) {
 			isVisible = true;
 		} else {
-			String ancestorVerifiedPath = getLastVerifiedPath(path);
-			if (ancestorVerifiedPath.equals("")) {
-				ancestorVerifiedPath = getChildFMPath(path, ancestorVerifiedPath);
-			}
-			isVisible = isVisibleInFM(ampTreeVisibility, path,ancestorVerifiedPath);
+			isVisible = isFmPathEnabled (path);
 		}
 		return isVisible;
 	}

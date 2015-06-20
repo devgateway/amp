@@ -23,7 +23,7 @@ import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
-import org.digijava.kernel.ampapi.endpoints.activity.visibility.FieldVisibility;
+import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
@@ -34,6 +34,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -348,7 +349,7 @@ public class InterchangeUtils {
 		bean.set("field_label", mapToBean(getLabelsForField(ant2.fieldTitle())));
 		if (!classToCustomType.containsKey(field.getClass())) {/* list type */
 			bean.set("importable", ant2.importable()? true: false);
-			if (isCollection(field))
+			if (isCollection(field) && !hasUniqueValidatorEnabled (field))
 				bean.set("multiple_values", true);
 			else 
 				bean.set("multiple_values", false);
@@ -367,7 +368,7 @@ public class InterchangeUtils {
 		return bean;
 	}
 
-
+	
 	public static List<JsonBean> getAllAvailableFields() {
 		return getAllAvailableFields(AmpActivityFields.class);
 	}
@@ -383,7 +384,7 @@ public class InterchangeUtils {
 		StopWatch.next("Descending into", false, clazz.getName());
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
-			if (!FieldVisibility.isVisible(field)) {
+			if (!FMVisibility.isVisible(field)) {
 				continue;
 			}
 			JsonBean descr = describeField(field);
@@ -511,4 +512,17 @@ public class InterchangeUtils {
 		return activityJson;
 	}
 	
+	public static boolean hasUniqueValidatorEnabled (Field field){
+		boolean isEnabled = false;
+		Validators validators = field.getAnnotation(Validators.class);
+		if (validators != null) {
+			String uniqueValidator = validators.unique();
+			if (!uniqueValidator.isEmpty()) {
+				isEnabled = FMVisibility.isFmPathEnabled(uniqueValidator);
+			}
+		}
+		
+		return isEnabled;
+		
+	}
 }

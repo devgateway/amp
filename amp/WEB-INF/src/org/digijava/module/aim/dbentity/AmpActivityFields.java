@@ -162,7 +162,7 @@ LoggerIdentifiable, Cloneable {
 	
 	@Interchangeable(fieldTitle = "Sectors",fmPath="/Activity Form/Sectors")
 	@VersionableCollection(fieldTitle = "Sectors")
-	protected Set<AmpSector> sectors ;
+	protected Set sectors ;
 	
 	@Interchangeable(fieldTitle = "Contracts",fmPath="/Activity Form/Contracts")
 	@VersionableCollection(fieldTitle = "Contracts")
@@ -713,7 +713,7 @@ LoggerIdentifiable, Cloneable {
 	/**
 	 * @return
 	 */
-	public Set <AmpSector> getSectors() {
+	public Set  getSectors() {
 		return sectors;
 	}
 
@@ -800,7 +800,7 @@ LoggerIdentifiable, Cloneable {
 	/**
 	 * @param set
 	 */
-	public void setSectors(Set <AmpSector> set) {
+	public void setSectors(Set  set) {
 		sectors = set;
 	}
 

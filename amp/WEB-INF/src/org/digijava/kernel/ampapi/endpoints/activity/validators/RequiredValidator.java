@@ -23,7 +23,7 @@ public class RequiredValidator extends InputValidator {
 
 	@Override
 	public ApiErrorMessage getErrorMessage() {
-		return ActivityErrors.REQUIRED;
+		return ActivityErrors.FIELD_REQUIRED;
 	}
 
 }

@@ -121,7 +121,7 @@ public class ApiError {
 		
 		StringBuilder sb = new StringBuilder();
 		Formatter formatter = new Formatter(sb);
-		formatter.format(apiErrorMessage.pattern, apiErrorMessage.value);
+		formatter.format(apiErrorMessage.prefix, apiErrorMessage.value);
 		formatter.close();
 		
 		String errorText = sb + " (" + apiErrorMessage.description + ")";

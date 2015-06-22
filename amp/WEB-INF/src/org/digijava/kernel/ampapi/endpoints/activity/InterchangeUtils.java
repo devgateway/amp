@@ -247,6 +247,7 @@ public class InterchangeUtils {
 						bean.set("view", viewable);
 						activitiesList.add(bean);
 					}
+					rsi.close();
 				}
 			}
 		});

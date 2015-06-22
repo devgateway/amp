@@ -6,8 +6,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -15,7 +13,7 @@ import org.digijava.module.contentrepository.jcrentity.Label;
 import org.digijava.module.contentrepository.util.DocToOrgDAO;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
-public class DocumentData implements Comparable<DocumentData>, Serializable{
+public class DocumentData implements Comparable<DocumentData>, Serializable {
 	public static final Comparator<DocumentData> COMPARATOR_BY_NAME = new Comparator<DocumentData>(){
 		@Override
 		public int compare(DocumentData arg0, DocumentData arg1) {
@@ -460,11 +458,12 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 		this.creatorEmail = creatorEmail;
 	}
 	
-	public String getGeneralLink(){
-		if ( webLink != null)
-			return webLink;
-		else
-			return "/contentrepository/downloadFile.do?uuid=" + uuid;
+	public String getGeneralLink() {
+		if (webLink != null && !"".equals(webLink)) {
+            return webLink;
+        } else {
+            return "/contentrepository/downloadFile.do?uuid=" + uuid;
+        }
 	}
 	
 	public String getCategory() {

@@ -433,10 +433,6 @@
 		myTabs.jsp
 	</teaser>
 
-	<teaser name="myLinks" action="getDesktopLinks.do">
-		myLinks.jsp
-	</teaser>
-
 	<teaser name="myTeamMembers" action="getDesktopTeamMembers.do">
 		myTeamMembers.jsp
 	</teaser>

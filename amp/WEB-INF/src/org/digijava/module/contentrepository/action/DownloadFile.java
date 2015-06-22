@@ -1,13 +1,10 @@
 package org.digijava.module.contentrepository.action;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.Calendar;
 import java.util.Comparator;
 
 import javax.jcr.Node;
 import javax.jcr.Property;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -21,7 +18,6 @@ import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
-import org.springframework.util.FileCopyUtils;
 /**
  * 
  * @author Alex Gartner
@@ -33,18 +29,19 @@ public class DownloadFile extends Action {
 			javax.servlet.http.HttpServletResponse response)
 			throws java.lang.Exception {
 
-		String nodeUUID		= request.getParameter("uuid"); 
+		String nodeUUID	= request.getParameter("uuid");
 		
 		if (nodeUUID != null) {
-			Node node				= DocumentManagerUtil.getReadNode(nodeUUID, request);
-			if (node == null)
-				throw new RuntimeException("node with uuid = " + nodeUUID + " not found!");
-			Property contentType	= node.getProperty(CrConstants.PROPERTY_CONTENT_TYPE);
-			Property name			= node.getProperty(CrConstants.PROPERTY_NAME);
-			Property data			= node.getProperty(CrConstants.PROPERTY_DATA);
+			Node node = DocumentManagerUtil.getReadNode(nodeUUID, request);
+			if (node == null) {
+                throw new RuntimeException("node with uuid = " + nodeUUID + " not found!");
+            }
+
+			Property contentType = node.getProperty(CrConstants.PROPERTY_CONTENT_TYPE);
+			Property name = node.getProperty(CrConstants.PROPERTY_NAME);
+			Property data = node.getProperty(CrConstants.PROPERTY_DATA);
 			
-			if (request.getSession().getAttribute(Constants.MOST_RECENT_RESOURCES) == null)
-			{
+			if (request.getSession().getAttribute(Constants.MOST_RECENT_RESOURCES) == null) {
 				Comparator<DocumentData> documentDataComparator = new Comparator<DocumentData>()
 				{
 					public int compare(DocumentData a, DocumentData b)
@@ -57,10 +54,16 @@ public class DownloadFile extends Action {
 			
 			NodeWrapper nodeWrapper = new NodeWrapper(node);
 			DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, nodeWrapper.getName(), null, null);
+
+            /**
+             * We do not save this date to the document repository node
+             * Just refresh it for display purposes, indicating that document has just been accessed
+             */
+            documentData.setDate(Calendar.getInstance());
 			BoundedList<DocumentData> recentUUIDs = (BoundedList<DocumentData>)(request.getSession().getAttribute(Constants.MOST_RECENT_RESOURCES));
 			recentUUIDs.add(documentData);
 			
-			if ( contentType != null && name != null && data != null) {
+			if (contentType != null && name != null && data != null) {
 				ResponseUtil.writeFile(request, response, contentType.getString(), name.getString(), data.getStream());
 			}
 		}

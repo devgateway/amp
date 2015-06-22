@@ -268,7 +268,6 @@
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action path="/aim/getDesktopReports" scope="session" type="org.digijava.module.aim.action.GetDesktopReports" validate="false" />
-    <action path="/aim/getDesktopLinks" scope="session" type="org.digijava.module.aim.action.GetDesktopLinks" validate="false" />
     <action path="/aim/getDesktopTeamMembers" scope="session" type="org.digijava.module.aim.action.GetDesktopTeamMembers" validate="false" />
     <action path="/aim/getDesktopTasks" scope="session" type="org.digijava.module.aim.action.GetDesktopTasks" validate="false" />
     <action name="aimDesktopForm" path="/aim/showDesktopActivities" scope="session" type="org.digijava.module.aim.action.ShowDesktopActivities" validate="false" />

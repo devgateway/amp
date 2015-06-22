@@ -1,10 +1,6 @@
 package org.digijava.module.aim.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -13,10 +9,11 @@ import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.digijava.kernel.ampapi.endpoints.documents.Documents;
+import org.dgfoundation.amp.utils.BoundedList;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
+import org.digijava.module.contentrepository.exception.CrException;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerRights;
@@ -29,73 +26,92 @@ public class DesktopDocumentsUtil {
 
 	public Collection<DocumentData> getLatestDesktopLinks(HttpServletRequest request, int top) {
 		ArrayList<DocumentData> reducedList = null;
-		try {
-			HttpSession session = request.getSession();
-			TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 
-			// TODO: Check why this is so slow.
-			Session jcrWriteSession = DocumentManagerUtil.getWriteSession(request);
+        HttpSession session = request.getSession();
+        TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 
-			ArrayList<DocumentData> list = new ArrayList<DocumentData>();
+        Session readSession = DocumentManagerUtil.getReadSession(request);
 
-			DesktopDocumentsUtil desktopDocumentUtils = new DesktopDocumentsUtil();
-			Collection<DocumentData> tmp = desktopDocumentUtils.getTeamDocuments(tm, jcrWriteSession.getRootNode(), request);
-			// just keeps last top
-			list.addAll(tmp);
-			Collections.sort(list);
-			Collections.reverse(list);
+        DesktopDocumentsUtil desktopDocumentUtils = new DesktopDocumentsUtil();
 
-			reducedList = new ArrayList<DocumentData>();
-			Iterator<DocumentData> it = list.iterator();
-			while (it.hasNext() && reducedList.size() <= top) {
-				DocumentData document = it.next();
-				// Checking to skip URLs
-				if (!document.getContentType().equalsIgnoreCase("URL")) {
-					reducedList.add(document);
-				}
-			}
-			DocumentManagerUtil.logoutJcrSessions(request);
-		} catch (Exception e) {
-			logger.error(e);
-		}
+        Node rootNode = null;
+        try {
+            rootNode = readSession.getRootNode();
+        } catch (RepositoryException ex) {
+            logger.warn("Failed to read documents from repository", ex);
+            return Collections.emptyList();
+        }
+
+        List<DocumentData> allDocuments = new ArrayList<>();
+        List<DocumentData> privateDocs = desktopDocumentUtils.getPrivateDocuments(tm, rootNode, request);
+        List<DocumentData> teamDocs = desktopDocumentUtils.getTeamDocuments(tm, rootNode, request);
+        BoundedList<DocumentData> downloadedDocs =
+                (BoundedList<DocumentData>)(request.getSession().getAttribute(Constants.MOST_RECENT_RESOURCES));
+
+        allDocuments.addAll(privateDocs);
+        allDocuments.addAll(teamDocs);
+        if (downloadedDocs != null) {
+            allDocuments.addAll(downloadedDocs);
+        }
+        Collections.sort(allDocuments, new Comparator<DocumentData>() {
+            @Override
+            public int compare(DocumentData o1, DocumentData o2) {
+                if (o1 == null || o2 == null || o1.getDate() == null || o2.getDate() == null) {
+                    return 0;
+                } else {
+                    return o2.getDate().compareTo(o1.getDate());
+                }
+
+            }
+        });
+
+        reducedList = new ArrayList<DocumentData>();
+        Iterator<DocumentData> it = allDocuments.listIterator();
+        while (it.hasNext() && reducedList.size() <= top) {
+            DocumentData document = it.next();
+            // Checking to skip URLs
+            if (!document.getContentType().equalsIgnoreCase("URL")) {
+                reducedList.add(document);
+            }
+        }
+        DocumentManagerUtil.logoutJcrSessions(request);
+
 		return reducedList;
 	}
 
-	public Collection<DocumentData> getPrivateDocuments(TeamMember teamMember, Node rootNode, HttpServletRequest request) {
+	public List<DocumentData> getPrivateDocuments(TeamMember teamMember, Node rootNode, HttpServletRequest request) {
 		Node userNode;
 		try {
-
 			userNode = DocumentManagerUtil.getUserPrivateNode(rootNode.getSession(), teamMember);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+		} catch (RepositoryException e) {
+			logger.warn("Failed to read user private documents from the Repository", e);
+			return Collections.emptyList();
 		}
 		return getDocuments(userNode, request);
 	}
 
-	public Collection<DocumentData> getTeamDocuments(TeamMember teamMember, Node rootNode, HttpServletRequest request) {
+	public List<DocumentData> getTeamDocuments(TeamMember teamMember, Node rootNode, HttpServletRequest request) {
 		Node teamNode;
 		try {
 			teamNode = DocumentManagerUtil.getTeamNode(rootNode.getSession(), teamMember.getTeamId());
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+		} catch (RepositoryException e) {
+            logger.warn("Failed to read team documents from the Repository", e);
+            return Collections.emptyList();
 		}
 		return getDocuments(teamNode, request);
 	}
 
-	private Collection<DocumentData> getDocuments(Node node, HttpServletRequest request) {
+	private List<DocumentData> getDocuments(Node node, HttpServletRequest request) {
 		try {
 			NodeIterator nodeIterator = node.getNodes();
 			return getDocuments(nodeIterator, request);
 		} catch (RepositoryException e) {
-			e.printStackTrace();
-			return null;
+            logger.warn("Failed to read documents from the Repository", e);
+            return Collections.emptyList();
 		}
-
 	}
 
-	private Collection<DocumentData> getDocuments(Iterator nodeIterator, HttpServletRequest request) {
+	private List<DocumentData> getDocuments(Iterator nodeIterator, HttpServletRequest request) {
 		ArrayList<DocumentData> documents = new ArrayList<DocumentData>();
 		HashMap<String, CrDocumentNodeAttributes> uuidMapOrg = CrDocumentNodeAttributes.getPublicDocumentsMap(false);
 		HashMap<String, CrDocumentNodeAttributes> uuidMapVer = CrDocumentNodeAttributes.getPublicDocumentsMap(true);
@@ -119,7 +135,7 @@ public class DesktopDocumentsUtil {
 				} else
 					hasViewRights = DocumentManagerRights.hasViewRights(documentNode, request);
 
-				if (hasViewRights == null || !hasViewRights.booleanValue()) {
+				if (hasViewRights == null || !hasViewRights) {
 					continue;
 				}
 
@@ -136,20 +152,22 @@ public class DesktopDocumentsUtil {
 
 					hasVersioningRights = DocumentManagerRights.hasVersioningRights(documentNode, request);
 					if (hasVersioningRights != null) {
-						documentData.setHasVersioningRights(hasVersioningRights.booleanValue());
+						documentData.setHasVersioningRights(hasVersioningRights);
 					}
+
 					hasDeleteRights = DocumentManagerRights.hasDeleteRights(documentNode, request);
 					if (hasDeleteRights != null) {
-						documentData.setHasDeleteRights(hasDeleteRights.booleanValue());
+						documentData.setHasDeleteRights(hasDeleteRights);
 					}
+
 					hasMakePublicRights = DocumentManagerRights.hasMakePublicRights(documentNode, request);
 					if (hasMakePublicRights != null) {
-						documentData.setHasMakePublicRights(hasMakePublicRights.booleanValue());
+						documentData.setHasMakePublicRights(hasMakePublicRights);
 					}
 
 					hasDeleteRightsOnPublicVersion = DocumentManagerRights.hasDeleteRightsOnPublicVersion(documentNode, request);
 					if (hasDeleteRightsOnPublicVersion != null) {
-						documentData.setHasDeleteRightsOnPublicVersion(hasDeleteRightsOnPublicVersion.booleanValue());
+						documentData.setHasDeleteRightsOnPublicVersion(hasDeleteRightsOnPublicVersion);
 					}
 
 					if (uuidMapOrg.containsKey(uuid)) {
@@ -176,10 +194,9 @@ public class DesktopDocumentsUtil {
 				documents.add(documentData);
 			}
 
-			/* } */
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+		} catch (RepositoryException | CrException e) {
+            logger.warn("Failed to read documents from the Repository", e);
+			return Collections.emptyList();
 		}
 
 		return documents;

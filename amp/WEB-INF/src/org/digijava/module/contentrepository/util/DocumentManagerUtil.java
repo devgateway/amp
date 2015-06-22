@@ -796,33 +796,27 @@ public class DocumentManagerUtil {
 		return size;
 	}
 	
-	public static Node getTeamNode(Session jcrWriteSession, Long teamId){
-		//String teamId		= "" + team.getAmpTeamId();		
+	public static Node getTeamNode(Session jcrWriteSession, Long teamId) {
 		return	DocumentManagerUtil.getNodeByPath(jcrWriteSession, null, "team/"+teamId);
 	}
 	
 	@Deprecated
 	//please use getTeamNode(Session jcrWriteSession, Long teamId) instead
-	public static Node getTeamNode(Session jcrWriteSession, TeamMember teamMember){
-		String teamId		= "" + teamMember.getTeamId();
-		
-		return	DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "team/"+teamId);
+	public static Node getTeamNode(Session jcrWriteSession, TeamMember teamMember) {
+		return	DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "team/"+teamMember.getTeamId());
 	}
-	public static Node getUserPrivateNode(Session jcrWriteSession, TeamMember teamMember){
-		String userName		= teamMember.getEmail();
-		String teamId		= "" + teamMember.getTeamId();
-			
-				
+
+	public static Node getUserPrivateNode(Session jcrWriteSession, TeamMember teamMember) {
+		String userName	= teamMember.getEmail();
+		String teamId = "" + teamMember.getTeamId();
 		return	DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "private/"+teamId+"/"+userName);
 	}
 	
-	public static Node getTeamPendingNode(Session jcrWriteSession, TeamMember teamMember){
-		String teamId		= "" + teamMember.getTeamId();
-		return	DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "pending/"+teamId);
-		
+	public static Node getTeamPendingNode(Session jcrWriteSession, TeamMember teamMember) {
+		String teamId = "" + teamMember.getTeamId();
+		return DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "pending/"+teamId);
 	}
-	
-	
+
 	public static String getWebLinkByUuid(String uuid, HttpServletRequest request) {
 		if ( uuid==null || request==null )
 			return null;

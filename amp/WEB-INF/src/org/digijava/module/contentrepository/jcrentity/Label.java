@@ -23,7 +23,7 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
  * @author Alex Gartner
  *
  */
-public class Label implements Serializable{
+public class Label implements Serializable {
 	
 	private String name;
 	
@@ -34,7 +34,7 @@ public class Label implements Serializable{
 	private String backgroundColor;
 	private String uuid;
 	
-	private Node node;
+	transient private Node node;
 	
 	public Label ( Node node ) {
 		this.node			= node;

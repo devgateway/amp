@@ -3,10 +3,6 @@
  */
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
 /**
@@ -14,14 +10,13 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
  * @author Nadejda Mandrescu
  */
 public class ActivityErrors {
-	public static final ApiErrorMessage REQUIRED = new ApiErrorMessage(1, "Required field", "Invalid field type: %s");
-	public static final ApiErrorMessage INVALID_TYPE = new ApiErrorMessage(2, "Invalid field type", "Invalid field type: %s");
-	/** Maps existing error messages to the field error code*/
-	public static final Map<ApiErrorMessage, String> FIELD_ERROR_CODE_MAP = Collections.unmodifiableMap(
-			new HashMap<ApiErrorMessage, String>(){{
-		put(REQUIRED, "R");
-		put(INVALID_TYPE, "T");
-	}});
-	
+	public static final ApiErrorMessage FIELD_REQUIRED = new ApiErrorMessage(1, "Required field");
+	public static final ApiErrorMessage FIELD_INVALID_TYPE = new ApiErrorMessage(2, "Invalid field type");
+	public static final ApiErrorMessage FIELD_INVALID_VALUE = new ApiErrorMessage(3, "Invalid field value");
+	public static final ApiErrorMessage FIELD_READ_ONLY = new ApiErrorMessage(4, "Read-only field");
+	public static final ApiErrorMessage FIELD_MULTIPLE_VALUES_NOT_ALLOWED = new ApiErrorMessage(5, "Multiple values not allowed");
+	public static final ApiErrorMessage FIELD_UNQUE_VALUES = new ApiErrorMessage(6, "Unique values required");
+	public static final ApiErrorMessage FIELD_INVALID = new ApiErrorMessage(7, "Invalid field");
+		
 	public static final String GENERIC_FIELD_ERROR_CODE = "E";
 }

@@ -12,22 +12,28 @@ public class ApiErrorMessage {
 	public final Integer id;
 	/** General error description (laconic) */
 	public final String description;
-	/** (Optional) Error message pattern, e.g. "Missing fields: %s". <br> 
-	 * Set to "" if no pattern and direct value must be displayed. <br>
-	 * Set to null if no pattern and description + " %s" pattern must be used 
-	 */
-	public final String pattern;
-	/** Error details (e.g. "project_title"), without prefix (use pattern for prefix) */
+	/** (Optional) Error message prefix, e.g. "Missing fields: "*/
+	public final String prefix;
+	/** Error details (e.g. "project_title"), without prefix */
 	public final String value;
 	
 	/**
 	 * Defines an ApiErrorMessage 
 	 * @param id see {@link #id}
 	 * @param description see {@link #description}
-	 * @param pattern see {@link #pattern}
+	 * @param prefix see {@link #prefix}
 	 */
-	public ApiErrorMessage(Integer id, String description, String pattern) {
-		this(id, description, pattern, null);
+	public ApiErrorMessage(Integer id, String description, String prefix) {
+		this(id, description, prefix, null);
+	}
+	
+	/**
+	 * Defines an ApiErrorMessahe 
+	 * @param id see {@link #id}
+	 * @param description see {@link #description}
+	 */
+	public ApiErrorMessage(Integer id, String description) {
+		this(id, description, null, null);
 	}
 	
 	/**
@@ -36,10 +42,10 @@ public class ApiErrorMessage {
 	 * @param value details, see {@link #value}
 	 */
 	public ApiErrorMessage(ApiErrorMessage aem, String value) {
-		this(aem.id, aem.description, aem.pattern, aem.value == null ? value : aem.value + ", " + value);
+		this(aem.id, aem.description, aem.prefix, aem.value == null ? value : aem.value + ", " + value);
 	}
 	
-	private ApiErrorMessage(int id, String description, String pattern, String value) {
+	private ApiErrorMessage(int id, String description, String prefix, String value) {
 		if (id <0 || id > 99) {
 			throw new RuntimeException(String.format("Invalid id = %n, must be within [0..99] range.", id));
 		}
@@ -48,7 +54,7 @@ public class ApiErrorMessage {
 		}
 		this.id = id;
 		this.description = description;
-		this.pattern = pattern;
+		this.prefix = prefix;
 		this.value = value;
 	}
 	

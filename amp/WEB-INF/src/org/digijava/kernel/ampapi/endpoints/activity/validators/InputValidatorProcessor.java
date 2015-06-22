@@ -52,7 +52,7 @@ public class InputValidatorProcessor {
 	}
 	
 	protected void addError(JsonBean newFieldValue, ApiErrorMessage error, Map<Integer, ApiErrorMessage> errors) {
-		String errorCode = ActivityErrors.FIELD_ERROR_CODE_MAP.get(error);
+		String errorCode = "01" + error.id; // TODO: replace with utility method that will generate the error id
 		// configure field level invalid flag
 		Set<String> fieldErrors = (Set<String>) newFieldValue.get(EPConstants.INVALID); 
 		if (fieldErrors == null) {

@@ -84,8 +84,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 	 */
 	public void roleAdded(AjaxRequestTarget target, AmpOrgRole ampOrgRole) {
 		orgAddedOrRemoved = true;
-		updateSearchVisibility();
-		target.add(searchOrganization);
+		updateSearchVisibility(target);
         addFundingAutomatically(target, ampOrgRole);
 	}
 
@@ -95,8 +94,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
      */
     public void roleRemoved(AjaxRequestTarget target,AmpOrgRole ampOrgRole) {
     	orgAddedOrRemoved = true;
-    	updateSearchVisibility();
-    	target.add(searchOrganization);
+    	updateSearchVisibility(target);
         removeFundingAutomatically(target, ampOrgRole);
     }
 
@@ -133,8 +131,12 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
             target.add(donorFundingSection);
         }
     }
-
+    
     private void updateSearchVisibility() {
+    	updateSearchVisibility(null);
+    }
+    
+    private void updateSearchVisibility(AjaxRequestTarget target ) {
         if (maxSizeCollectionValidationField.isVisible()){
             List<AmpOrgRole> tmpList = listModel.getObject();
             if (tmpList != null && tmpList.size() > 0){
@@ -142,6 +144,9 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
             }
             else{
                 searchOrganization.setVisibilityAllowed(true);
+            }
+            if(target!=null){
+            	target.add(searchOrganization);
             }
         }
     }
@@ -218,7 +223,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
         maxSizeCollectionValidationField = new AmpMaxSizeCollectionValidationField<AmpOrgRole>("maxSizeValidator", listModel, "Max Size Validator");
         maxSizeCollectionValidationField.setOutputMarkupPlaceholderTag(true);
         add(maxSizeCollectionValidationField);
-
+        
         addFundingItemAutomatically = new AmpComponentPanel("addFundingItemAutomatically", "Add Funding Item Automatically"){};
         add(addFundingItemAutomatically);
 
@@ -320,11 +325,14 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 			}
 		};
 		searchOrgs.add(UpdateEventBehavior.of(FundingOrgListUpdateEvent.class));
-    	searchOrganization = new AmpSearchOrganizationComponent<String>("search", new Model<String> (), "Search Organizations", searchOrgs, availableOrgGroupChoices);
+    	searchOrganization = new AmpSearchOrganizationComponent<String>("search", new Model<String> (), "Search Organizations", searchOrgs, availableOrgGroupChoices){
+            protected void onConfigure() {
+                super.onConfigure();
+                updateSearchVisibility();
+            }
+    	};
     	
-    	updateSearchVisibility();
-    	
-		add(searchOrganization);
+    	add(searchOrganization);
 	}
 //	private boolean existOrganization(Set<AmpOrgRole> set, AmpOrgRole ampOrgRole) {
 //		return existOrganization( set, ampOrgRole,null);

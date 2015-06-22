@@ -254,6 +254,7 @@ public class InterchangeUtils {
 						bean.set("view", viewable);
 						activitiesList.add(bean);
 					}
+					rs.close();
 				}
 			}
 		});

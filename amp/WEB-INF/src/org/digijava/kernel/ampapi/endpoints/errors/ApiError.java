@@ -15,14 +15,16 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 public class ApiError {
 	
-	public final static String GENERAL_ERROR_CODE = "0000";
-	public final static String UNHANDLED_ERROR_CODE = "0100";
+	public final static int GENERAL_ERROR_CODE = 0;
+	public final static int GENERIC_HANDLED_ERROR_CODE = 0;
+	public final static int GENERIC_UNHANDLED_ERROR_CODE = 1;
+	
 	public final static String JSON_ERROR_CODE = "error";
+	public final static String API_ERROR_PATTERN = "%02d%02d";
 	
 	/**  Will store the mapping between the component and it's Id (C). */
 	public static final Map<String, Integer> COMPONENT_ID_CLASS_MAP = new HashMap<String, Integer>() {{
 		put(InterchangeEndpoints.class.getName(), 1);
-		put(ApiError.class.getName(), 2);
 	}};
 	
 	/**
@@ -32,7 +34,7 @@ public class ApiError {
 	 */
 	public static JsonBean toError(String errorMessage) {
 		JsonBean errorBean = new JsonBean();
-		errorBean.set(GENERAL_ERROR_CODE, new String[] {errorMessage});
+		errorBean.set(String.format(API_ERROR_PATTERN, GENERAL_ERROR_CODE, GENERIC_HANDLED_ERROR_CODE), new String[] {errorMessage});
 		
 		return getResultErrorBean(errorBean);
 	};
@@ -50,11 +52,12 @@ public class ApiError {
 		if (errorMessages != null && errorMessages.size() > 0) {
 			if (errorMessages.get(0) instanceof String) {
 				for(Object errorMessage : errorMessages) {
-					if (errors.get(GENERAL_ERROR_CODE) == null) {
-						errors.put(GENERAL_ERROR_CODE, new ArrayList<String>());
+					String generalErrorCode = String.format(API_ERROR_PATTERN, GENERAL_ERROR_CODE, GENERIC_HANDLED_ERROR_CODE);
+					if (errors.get(generalErrorCode) == null) {
+						errors.put(generalErrorCode, new ArrayList<String>());
 					}
 					
-					errors.get(GENERAL_ERROR_CODE).add((String) errorMessage);
+					errors.get(generalErrorCode).add((String) errorMessage);
 				}
 			} else if (errorMessages.get(0) instanceof ApiErrorMessage) {
 				int componentId = getErrorComponentId((ApiErrorMessage) errorMessages.get(0));
@@ -100,9 +103,9 @@ public class ApiError {
 	 */
 	private static String getErrorId(int componentId, int errorId) {
 		if (componentId != 0) {
-			return String.format("%02d%02d", componentId, errorId);
+			return String.format(API_ERROR_PATTERN, componentId, errorId);
 		} else {
-			return GENERAL_ERROR_CODE;
+			return String.format(API_ERROR_PATTERN, GENERAL_ERROR_CODE, errorId);
 		}
 	}
 	
@@ -117,7 +120,7 @@ public class ApiError {
 			}
 		}
 		
-		return 0;
+		return GENERAL_ERROR_CODE;
 	}
 	
 	/**

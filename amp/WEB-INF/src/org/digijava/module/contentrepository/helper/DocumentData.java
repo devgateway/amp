@@ -27,6 +27,8 @@ public class DocumentData implements Comparable<DocumentData>, Serializable {
 	String calendar			= null;
 	String contentType		= null;
 	String webLink			= null;
+    // generated field, but need to keep it to be serialized by the ObjectMapper
+    String generalLink      = null;
 	String cmDocType		= "";
 	
 	String category = null;
@@ -269,6 +271,11 @@ public class DocumentData implements Comparable<DocumentData>, Serializable {
 	
 	public void setWebLink(String webLink) {
 		this.webLink = webLink;
+        if (webLink != null && !"".equals(webLink)) {
+            generalLink = webLink;
+        } else {
+            generalLink = "/contentrepository/downloadFile.do?uuid=" + this.uuid;
+        }
 	}
 	
 	public boolean isHasShareRights() {
@@ -459,11 +466,7 @@ public class DocumentData implements Comparable<DocumentData>, Serializable {
 	}
 	
 	public String getGeneralLink() {
-		if (webLink != null && !"".equals(webLink)) {
-            return webLink;
-        } else {
-            return "/contentrepository/downloadFile.do?uuid=" + uuid;
-        }
+		return generalLink;
 	}
 	
 	public String getCategory() {

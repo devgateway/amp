@@ -62,7 +62,7 @@ public class DonorScorecard {
 					ScorecardService service = new ScorecardService ();
 					List<Quarter> quarters = service.getQuarters ();
 					ScorecardExcelExporter exporter = new ScorecardExcelExporter();
-					HSSFWorkbook wb = exporter.generateExcel(service.getDonors(), quarters,
+					HSSFWorkbook wb = exporter.generateExcel(service.getFilteredDonors(), quarters,
 							service.getOrderedScorecardCells(service.getDonorActivityUpdates()));
 					wb.write(output);
 				} catch (Exception e) {
@@ -160,7 +160,7 @@ public class DonorScorecard {
 			selectedDonorsValues[i] = donorsArray.get(i).toString();
 		}
 		
-		DbUtil.deleteAllNoUpdateOrgs();
+		DbUtil.deleteAllNoUpdateOrgs(false);
 		
 		if (selectedDonorsValues.length > 0) {
 			for (int i=0; i<selectedDonorsValues.length; i++) {
@@ -190,15 +190,31 @@ public class DonorScorecard {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public JsonBean getFilteredDonors(final JSONObject donorsBean) {
 		ScorecardService scorecardService = new ScorecardService();
+		String message = null;
 		
-		List<ScorecardNoUpdateDonor> allDonors = scorecardService.getAllDonors(true, true);
-		List<JsonBean> allFilteredDonors = new ArrayList<JsonBean>();
+		// delete all excluded organizations from the amp_scorecard_organisation table having to_exclude = true
+		DbUtil.deleteAllNoUpdateOrgs(true);
 		
 		JSONArray donorsArray = (JSONArray) donorsBean.get("donorIds");
 		Set<Long> donorIds = new HashSet<Long>();
 		for (int i=0; i < donorsArray.size(); i++) {
-			donorIds.add(Long.parseLong(donorsArray.getString(i)));
+			Long donorId = Long.parseLong(donorsArray.getString(i));
+			AmpScorecardOrganisation org = new AmpScorecardOrganisation();
+			org.setAmpDonorId(donorId);
+			org.setModifyDate(new Date());
+			org.setToExclude(true);
+			
+			try {
+				DbUtil.saveOrUpdateObject(org);
+			} catch (Exception e) {
+				message = e.getLocalizedMessage();
+			}
+			
+			donorIds.add(donorId);
 		}
+		
+		List<ScorecardNoUpdateDonor> allDonors = scorecardService.getScorecardDonors(true);
+		List<JsonBean> allFilteredDonors = new ArrayList<JsonBean>();
 		
 		for (ScorecardNoUpdateDonor donor : allDonors) {
 			if (!donorIds.contains(donor.getAmpDonorId())) {
@@ -210,7 +226,7 @@ public class DonorScorecard {
 		}
 		
 		List<JsonBean> noUpdatesFilteredDonors = new ArrayList<JsonBean>();
-		List<ScorecardNoUpdateDonor> noUpdatedDonors = scorecardService.getAllDonors(true, false);
+		List<ScorecardNoUpdateDonor> noUpdatedDonors = scorecardService.getScorecardDonors(false);
 		
 		for (ScorecardNoUpdateDonor noUpdateDonor: noUpdatedDonors) {
 			if (!donorIds.contains(noUpdateDonor.getAmpDonorId())) {
@@ -237,7 +253,7 @@ public class DonorScorecard {
 	@Produces(MediaType.APPLICATION_JSON)
 	public JsonBean getAllDonors() {
 		
-		List<JsonBean> orgs = QueryUtil.getDonors();
+		List<JsonBean> orgs = QueryUtil.getDonors(false);
 		List<JsonBean> orgTypes = QueryUtil.getOrgTypes();
 		List<JsonBean> orgGroups = QueryUtil.getOrgGroups();
 		
@@ -265,6 +281,7 @@ public class DonorScorecard {
 							currentOrg.set("key", org.get("id"));
 							currentOrg.set("title",  org.get("name"));
 							currentOrg.set("folder", false);
+							currentOrg.set("selected", true);
 							groupChildren.add(currentOrg);
 						}
 					}

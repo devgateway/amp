@@ -1,7 +1,12 @@
 // Step 1 - Scorecard Settings
 
  $('#Step1').show();
+ 
+ var excludedDonors = {};
 
+function unselectAllActivities() {
+	$('select[name=selectedCategoryValues]').find(":selected").prop('selected', false);
+}
 function isValidScorecardSetting() {
 	  return validate();
 }
@@ -84,8 +89,12 @@ function buildDonorsTree(treeData) {
 		  	select: function(event, data) {
 		  		// Get a list of all selected nodes, and convert to a key array:
 				var selKeys = $.map(data.tree.getSelectedNodes(), function(node) {
-					if (!node.isFolder()) 
+					if (!node.isFolder()) {
+						var title = node.title;
+						var key = node.key;
+						excludedDonors[key] = title;
 						return node.key;
+					}
 				});
 				$("#echoSelection3").text(selKeys.join(","));
 		  	},
@@ -202,15 +211,32 @@ function loadFinalReview() {
     	$('#validationNone').show();
     }
     
-    var selectActivitySummary = $('#summaryAcitivityStatus').first();
+    var summaryAcitivityStatus = $('#summaryAcitivityStatus');
     var activityStautus = $('select[name="selectedCategoryValues"]');
     // Copy rows from selectSource to selectDestination from bottom to top
     if (activityStautus.find(":selected").length > 0) {
-    	selectActivitySummary.empty();
-    	activityStautus.find(':selected').clone().removeAttr("selected").appendTo(selectActivitySummary);
-    	selectActivitySummary.show();
+    	summaryAcitivityStatus.empty();
+    	var selActivities = activityStautus.find(':selected').map(function() {return $(this).text();}).get();
+    	summaryAcitivityStatus.text(selActivities.join(", "));
+    	$('#validationActivityStatusesNone').hide();
     } else {
-    	selectActivitySummary.hide();
+    	$('#validationActivityStatusesNone').show();
+    }
+    
+    var selectExcludedSummary = $('#summaryExcludedDonors').first();
+  
+	
+    if (Object.keys(excludedDonors).length > 0) {
+    	selectExcludedSummary.empty();
+    	$.each(excludedDonors, function(id, label) {
+    		selectExcludedSummary.append($("<option></option>")
+    		         .attr("option" + id, label)
+    		         .text(label));
+    		
+    	});
+    	selectExcludedSummary.show();
+    } else {
+    	selectExcludedSummary.hide();
     }
     
     var selectSummary = $('#summaryNoUpdateDonors').first();

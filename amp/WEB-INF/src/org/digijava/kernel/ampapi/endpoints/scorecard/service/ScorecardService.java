@@ -127,7 +127,9 @@ public class ScorecardService {
 						+ "       FROM   amp_funding af " + "      WHERE  r.organisation = af.amp_donor_org_id "
 						+ "     AND    (( af.source_role_id IS NULL) "
 						+ "     OR     af.source_role_id =( SELECT amp_role_id         FROM   amp_role "
-						+ "  WHERE  role_code='DN')))) " + " AND modifydate>='" + formattedStartDate
+						+ "  WHERE  role_code='DN')) "
+						+ "AND af.amp_donor_org_id NOT IN (SELECT amp_donor_id FROM amp_scorecard_organisation WHERE to_exclude = true))) "
+						+ " AND modifydate>='" + formattedStartDate
 						+ "' AND modifydate <= '" + formattedEndDate + "' ";
 
 				if (allowedStatuses != null && !allowedStatuses.isEmpty()) {
@@ -158,7 +160,15 @@ public class ScorecardService {
 		return activityUpdateList;
 	}
 	
-	public List<ScorecardNoUpdateDonor> getAllDonors(final boolean filterNoUpdates, final boolean noUpdates) {
+	/**
+	 * Returns the list of Scorecard Donors
+	 * 
+	 * @param toExlcude
+	 * @return List<ScorecardNoUpdateDonor> , list with donors 
+	 * if toExclude param is true, the method will return all the donors except the excluded donors
+	 * if toExclude param is false, the method will return the no update donors
+	 */
+	public List<ScorecardNoUpdateDonor> getScorecardDonors(final boolean toExlcude) {
 		
 		final List<ScorecardNoUpdateDonor> donorsList = new ArrayList<ScorecardNoUpdateDonor>();
 		
@@ -170,15 +180,17 @@ public class ScorecardService {
 						+ "WHERE o.amp_org_id = r.organisation  AND (EXISTS (SELECT af.amp_donor_org_id "
 						+ "FROM  amp_funding af WHERE  o.amp_org_id = af.amp_donor_org_id "
 						+ "AND ((af.source_role_id IS NULL) OR af.source_role_id = (SELECT amp_role_id FROM amp_role WHERE role_code = 'DN')))) "
-						+ "AND ( o.deleted IS NULL OR o.deleted = false ) ";
-				
-				if (filterNoUpdates) {
-					query += "AND o.amp_org_id ";
-					if (noUpdates) {
+						+ "AND ( o.deleted IS NULL OR o.deleted = false ) "
+						+ "AND o.amp_org_id ";
+					if (toExlcude) {
 						query += "NOT ";
 					}
-					query += "IN (SELECT amp_donor_id from amp_scorecard_organisation and to_exclude = false)";
-				}
+					query += "IN (SELECT amp_donor_id FROM amp_scorecard_organisation";
+					
+					if (!toExlcude)
+						query +=" WHERE to_exclude = " + toExlcude;
+					
+					query += ")";
 				
 				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
 					ResultSet rs = rsi.rs;
@@ -218,10 +230,6 @@ public class ScorecardService {
         Query query = session.createQuery(queryString);
         responses = query.list();
         
-        for (AmpCategoryValue acv : responses) {
-        	acv.setValue(TranslatorWorker.translateText(acv.getValue()));
-        }
-
 		return responses;
 	}
 
@@ -262,9 +270,9 @@ public class ScorecardService {
 	 * 
 	 * @return List <String>
 	 */
-	public List<AmpOrganisation> getDonors() {
+	public List<AmpOrganisation> getFilteredDonors() {
 		List<AmpOrganisation> donors = new ArrayList<AmpOrganisation>();
-		List<JsonBean> donorJson = QueryUtil.getDonors();
+		List<JsonBean> donorJson = QueryUtil.getDonors(true);
 		for (JsonBean bean : donorJson) {
 			AmpOrganisation donor = new AmpOrganisation();
 			donor.setName(bean.getString("name"));
@@ -410,7 +418,7 @@ public class ScorecardService {
 					if (activityIds.length > 0) {
 						query += "AND a.amp_activity_id in (" + StringUtils.join(activityIds, ",") + ") ";
 					}
-
+					query += "AND r.organisation NOT IN (SELECT amp_donor_id FROM amp_scorecard_organisation WHERE to_exclude = true)";
 					query += " group by r.organisation; ";
 
 					try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
@@ -557,7 +565,7 @@ public class ScorecardService {
 	private Map<Long, Map<String, ColoredCell>> initializeScorecardCellData() {
 		Map<Long, Map<String, ColoredCell>> data = new HashMap<Long, Map<String, ColoredCell>>();
 		List<Quarter> quarters = getQuarters();
-		List<JsonBean> donors = QueryUtil.getDonors();
+		List<JsonBean> donors = QueryUtil.getDonors(true);
 		for (JsonBean donor : donors) {
 			Long donorId = (Long) donor.get("id");
 			Map<String, ColoredCell> quarterCellMap = new HashMap<String, ColoredCell>();

@@ -503,7 +503,7 @@ public static List<JsonBean> getOrgGroups() {
 		return location;
 	}
 	
-	public static List<JsonBean> getDonors () {
+	public static List<JsonBean> getDonors(final boolean toExcludeFilter) {
 		final List<JsonBean> donors = new ArrayList<JsonBean>();
 		PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {
@@ -521,8 +521,14 @@ public static List<JsonBean> getOrgGroups() {
 						 "FROM   amp_role "+
 						 "WHERE   role_code = 'DN') )) "+ 
 						 "AND ( o.deleted IS NULL "+
-						 "OR o.deleted = false ) "+
-						 "order by o.amp_org_id";
+						 "OR o.deleted = false ) ";
+						 
+						if (toExcludeFilter) {
+							query += "AND o.amp_org_id NOT IN (SELECT amp_donor_id FROM amp_scorecard_organisation WHERE to_exclude = true) ";
+						}
+						
+						query +="order by o.amp_org_id";
+				
 					try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
 					ResultSet rs = rsi.rs;
 					Long lastOrgId = 0L;

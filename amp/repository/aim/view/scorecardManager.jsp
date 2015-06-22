@@ -31,7 +31,7 @@
 .settings-left {
     width:225px;
     display: inline-block;  
-    padding-bottom: 20px;
+    padding-bottom: 10px;
     text-align: right;
 }
 
@@ -108,10 +108,11 @@
   					</div>
   					<div class="settings-blocks">
   						<div class="settings-left"><digi:trn>Activity Status</digi:trn></div>
-  						<div class="settings-right">
+  						<div class="settings-right"><br/>
 	  						<html:select property="selectedCategoryValues" multiple="true" size="6">
 								<html:optionsCollection name="aimScorecardManagerForm" property="categoryValues" value="id" label="value" />
 							</html:select>
+							<input id="btnUnselect" type="button" class="dr-menu" name="actUnselect" onclick="unselectAllActivities()" value="<digi:trn>Unselect All</digi:trn>"/>
   						</div>
   					</div>
   				</div>
@@ -165,17 +166,24 @@
 						</div>
 					</div>
 					<div class="settings-blocks">
-						<div class="settings-left summary-text-left"><digi:trn>Percentage Threshold</digi:trn>: <b><span id="percentageThreshold"></span></b></div>
-						<div class="settings-right"></div>
+						<div class="settings-left summary-text-left">
+							<digi:trn>Activity status</digi:trn>: <br/>
+							<b><span id="summaryAcitivityStatus"></span>
+							<span id="validationActivityStatusesNone" style="display:none;"><digi:trn>None</digi:trn></span>
+							</b>
+						</div>
+						<div class="settings-right">
+							<digi:trn>Percentage Threshold</digi:trn>: <b><span id="percentageThreshold"></span></b>
+						</div>
 					</div>
 					<div class="settings-blocks summary-text-left">
 						<div class="settings-left summary-text-left">
-						<digi:trn>Donors with no updates</digi:trn>: <br/>
-						<select id="summaryNoUpdateDonors" size="8" style="width:210px;" style="display:none;" disabled></select>
+						<digi:trn>Excluded donors</digi:trn>: <br/>
+						<select id="summaryExcludedDonors" size="8" style="width:210px;" style="display:none;" disabled></select>
 						</div>
 						<div class="settings-right">
-						<digi:trn>Activity status</digi:trn><br/>
-						<select id="summaryAcitivityStatus" size="8" style="display:none;" disabled></select></div>
+						<digi:trn>Donors with no updates</digi:trn>: <br/>
+						<select id="summaryNoUpdateDonors" size="8" style="width:210px;" style="display:none;" disabled></select>
 					</div>
 				</div>
 			</fieldset>

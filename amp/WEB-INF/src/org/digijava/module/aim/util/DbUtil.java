@@ -1611,7 +1611,7 @@ public class DbUtil {
 		}
 	}
 	
-	public static void deleteAllNoUpdateOrgs() {
+	public static void deleteAllNoUpdateOrgs(final boolean toExclude) {
 		Connection con;
 		try {
 			Session session = PersistenceManager.getSession();
@@ -1619,7 +1619,7 @@ public class DbUtil {
 				@Override
 				public void execute(Connection con) throws SQLException {
 					con.setAutoCommit(false);
-					con.createStatement().execute("DELETE FROM amp_scorecard_organisation where to_exclude=false");
+					con.createStatement().execute("DELETE FROM amp_scorecard_organisation where to_exclude=" + toExclude);
 					con.commit();
 
 				}
@@ -1628,7 +1628,7 @@ public class DbUtil {
 			logger.error("Error while trying to delete Lucene db stamps: ", e);
 		}
 	}
-
+	
 	public static Collection getQuarters(Long ampFundingId,
 			Integer transactionType, Integer adjustmentType, Integer fiscalYear) {
 		logger.debug("getQuarters() with ampFundingId="

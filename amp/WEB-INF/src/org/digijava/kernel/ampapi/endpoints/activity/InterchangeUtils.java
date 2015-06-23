@@ -602,7 +602,7 @@ public class InterchangeUtils {
 		}
 		return isRequired;
 	}
-<<<<<<< .mine
+
 	
 	
 //

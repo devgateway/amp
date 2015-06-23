@@ -753,9 +753,9 @@ public class ExportActivityToPDF extends Action {
              */
             if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Humanitarian Aid")){
                 String value="";
-                if(activity.getHumanitarianAid()!=null && activity.getHumanitarianAid()){
+                if(activity.isHumanitarianAid()!=null && activity.isHumanitarianAid()){
                     value="Yes";
-                }else if(activity.getHumanitarianAid()!=null && ! activity.getHumanitarianAid()){
+                }else if(activity.isHumanitarianAid()!=null && ! activity.isHumanitarianAid()){
                     value="No";
                 }
 

@@ -14,6 +14,7 @@ import org.digijava.module.aim.annotations.activityversioning.VersionableCollect
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.RegionalFunding;
@@ -39,47 +40,47 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Created By", blockSingleChange = true)
 	protected AmpTeamMember createdBy;
 
-	@Interchangeable(fieldTitle = "Project Impact")
+	@Interchangeable(fieldTitle = "Project Impact",fmPath="/Activity Form/Identification/Project Impact")
 	@VersionableFieldTextEditor(fieldTitle = "Project Impact")
 	protected String projectImpact;
 	
-	@Interchangeable(fieldTitle = "Activity Summary")
+	@Interchangeable(fieldTitle = "Activity Summary",fmPath="/Activity Form/Identification/Activity Summary")
 	@VersionableFieldTextEditor(fieldTitle = "Activity Summary")
 	protected String activitySummary;
 	
-	@Interchangeable(fieldTitle = "Conditionality")
+	@Interchangeable(fieldTitle = "Conditionality",fmPath="/Activity Form/Identification/Conditionalities")
 	@VersionableFieldTextEditor(fieldTitle = "Conditionality")
 	protected String conditionality;
 	
-	@Interchangeable(fieldTitle = "Project Management")
+	@Interchangeable(fieldTitle = "Project Management",fmPath="/Activity Form/Identification/Project Management")
 	@VersionableFieldTextEditor(fieldTitle = "Project Management")
 	protected String projectManagement;
 
-	@Interchangeable(fieldTitle = "Activity Budget")
+	@Interchangeable(fieldTitle = "Activity Budget",fmPath="/Activity Form/Identification/Activity Budget", required="_ALWAYS_")
 	@VersionableFieldSimple(fieldTitle = "Activity Budget")
 	protected Integer budget;
 	
-	@Interchangeable(fieldTitle = "Government Agreement Number")
+	@Interchangeable(fieldTitle = "Government Agreement Number",fmPath="/Activity Form/Identification/Government Agreement Number")
 	@VersionableFieldSimple(fieldTitle = "Government Agreement Number")
 	protected String govAgreementNumber;
 	
-	@Interchangeable(fieldTitle = "Budget Code Project ID")
+	@Interchangeable(fieldTitle = "Budget Code Project ID",fmPath="/Activity Form/Identification/Budget Code Project ID")
 	@VersionableFieldSimple(fieldTitle = "Budget Code Project ID")
 	protected String budgetCodeProjectID;
 	
-	@Interchangeable(fieldTitle = "Budget Sector")
+	@Interchangeable(fieldTitle = "Budget Sector",fmPath="/Activity Form/Identification/Budget Classification")
 	@VersionableFieldSimple(fieldTitle = "Budget Sector")
 	protected Long budgetsector;
 	
-	@Interchangeable(fieldTitle = "Budget Organization")
+	@Interchangeable(fieldTitle = "Budget Organization",fmPath="/Activity Form/Identification/Budget Classification")
 	@VersionableFieldSimple(fieldTitle = "Budget Organization")
 	protected Long budgetorganization;
 	
-	@Interchangeable(fieldTitle = "Budget Department")
+	@Interchangeable(fieldTitle = "Budget Department",fmPath="/Activity Form/Identification/Budget Classification")
 	@VersionableFieldSimple(fieldTitle = "Budget Department")
 	protected Long budgetdepartment;
 	
-	@Interchangeable(fieldTitle = "Budget Program")
+	@Interchangeable(fieldTitle = "Budget Program",fmPath="/Activity Form/Identification/Budget Classification")
 	@VersionableFieldSimple(fieldTitle = "Budget Program")
 	protected Long budgetprogram;
 
@@ -90,37 +91,38 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Internal ID", blockSingleChange = true)
 	protected Long ampActivityId ;
 
-	@Interchangeable(fieldTitle = "AMP Id")
+	@Interchangeable(fieldTitle = "AMP Id", required="_ALWAYS_")
 	@VersionableFieldSimple(fieldTitle = "AMP Id", blockSingleChange = true)
 	protected String ampId ;
 
-	@Interchangeable(fieldTitle = "Project Title")
+
+	@Interchangeable(fieldTitle = "Project Title",fmPath="/Activity Form/Identification/Project Title", required = "_ALWAYS_")
 	@PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL})
 	@VersionableFieldSimple(fieldTitle = "Name", mandatoryForSingleChange = true)
 	@TranslatableField
 	protected String name ;
 	
-	@Interchangeable(fieldTitle = "Activity Description")
+	@Interchangeable(fieldTitle = "Activity Description",fmPath="/Activity Form/Identification/Description")
 	@VersionableFieldTextEditor(fieldTitle = "Activity Description")
 	protected String description ;
 
-	@Interchangeable(fieldTitle = "Project Comments")
+	@Interchangeable(fieldTitle = "Project Comments",fmPath="/Activity Form/Identification/Project Comments")
 	@VersionableFieldTextEditor(fieldTitle = "Project Comments")
 	protected String projectComments ;
 	
-	@Interchangeable(fieldTitle = "Lessons Learned")
+	@Interchangeable(fieldTitle = "Lessons Learned",fmPath="/Activity Form/Identification/Lessons Learned")
 	@VersionableFieldTextEditor(fieldTitle = "Lessons Learned")
 	protected String lessonsLearned;
 	
-	@Interchangeable(fieldTitle = "Objective")
+	@Interchangeable(fieldTitle = "Objective",fmPath="/Activity Form/Identification/Objective")
 	@VersionableFieldTextEditor(fieldTitle = "Objective")
 	protected String objective ;
 	
-	@Interchangeable(fieldTitle = "Purpose")
+	@Interchangeable(fieldTitle = "Purpose",fmPath="/Activity Form/Identification/Purpose")
 	@VersionableFieldTextEditor(fieldTitle = "Purpose")
 	protected String purpose;
 	
-	@Interchangeable(fieldTitle = "Results")
+	@Interchangeable(fieldTitle = "Results",fmPath="/Activity Form/Identification/Results")
 	@VersionableFieldTextEditor(fieldTitle = "Results")
 	protected String results;
 	
@@ -128,65 +130,68 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Document Space")
 	protected String documentSpace;
 
-	@Interchangeable(fieldTitle = "Is Draft")
+
+	@Interchangeable(fieldTitle = "Is Draft", required="_ALWAYS_")
 	@VersionableFieldSimple(fieldTitle = "Is Draft?")
 	protected Boolean draft;
 
-	@Interchangeable(fieldTitle = "Equal Oportunity")
+	@Interchangeable(fieldTitle = "Equal Oportunity",fmPath="/Activity Form/Cross Cutting Issues/Equal Opportunity")
 	@VersionableFieldTextEditor(fieldTitle = "Equal Oportunity")
 	protected String equalOpportunity;
 	
-	@Interchangeable(fieldTitle = "Environment")
+	@Interchangeable(fieldTitle = "Environment",fmPath="/Activity Form/Cross Cutting Issues/Environment")
 	@VersionableFieldTextEditor(fieldTitle = "Environment")
 	protected String environment;
 	
-	@Interchangeable(fieldTitle = "Minorities")
+	@Interchangeable(fieldTitle = "Minorities",fmPath="/Activity Form/Cross Cutting Issues/Minorities")
 	@VersionableFieldTextEditor(fieldTitle = "Minorities")
 	protected String minorities;
 
+	//TODO do we show? never used
 	@Interchangeable(fieldTitle = "Language")
 	@VersionableFieldSimple(fieldTitle = "Language")
 	protected String language ;
 
-	@Interchangeable(fieldTitle = "Original Date")
+	@Interchangeable(fieldTitle = "Original Date",fmPath="/Activity Form/Planning/Original Completion Date", required="/Activity Form/Planning/Required Validator for Original Completion Date")
 	@VersionableFieldSimple(fieldTitle = "Original Date")
 	protected Date originalCompDate;
 	
-	@Interchangeable(fieldTitle = "Contracting Date")
+	@Interchangeable(fieldTitle = "Contracting Date",fmPath="/Activity Form/Planning/Final Date for Contracting")
 	@VersionableFieldSimple(fieldTitle = "Contracting Date")
 	protected Date contractingDate;
 	
-	@Interchangeable(fieldTitle = "Disbursement Date")
+	@Interchangeable(fieldTitle = "Disbursement Date",fmPath="/Activity Form/Planning/Final Date for Disbursements")
 	@VersionableFieldSimple(fieldTitle = "Disbursement Date")
 	protected Date disbursmentsDate;
 	
-	@Interchangeable(fieldTitle = "Sectors")
+	@Interchangeable(fieldTitle = "Sectors",fmPath="/Activity Form/Sectors")
 	@VersionableCollection(fieldTitle = "Sectors")
-	protected Set<AmpSector> sectors ;
+	protected Set sectors ;
 	
-	@Interchangeable(fieldTitle = "Contracts")
+	@Interchangeable(fieldTitle = "Contracts",fmPath="/Activity Form/Contracts")
 	@VersionableCollection(fieldTitle = "Contracts")
 	protected Set<IPAContract> contracts;
 	
-	@Interchangeable(fieldTitle = "Locations")
+	@Interchangeable(fieldTitle = "Locations",fmPath="/Activity Form/Location",required="/Activity Form/Location/Locations/Location required validator")
+	@Validators (unique="/Activity Form/Location/Locations/uniqueLocationsValidator")
 	@VersionableCollection(fieldTitle = "Locations")
 	protected Set<AmpActivityLocation> locations ;
 	
-	@Interchangeable(fieldTitle = "Org. Role")
+	@Interchangeable(fieldTitle = "Org. Role",fmPath="/Activity Form/Funding/Org Role")
 	@VersionableCollection(fieldTitle = "Org. Role")
 	protected Set<AmpOrgRole> orgrole;
 	
-	@Interchangeable(fieldTitle = "Internal IDs")
+	@Interchangeable(fieldTitle = "Internal IDs",fmPath="/Activity Form/Activity Internal IDs")
 	@VersionableCollection(fieldTitle = "Internal IDs")
 	protected Set<AmpActivityInternalId> internalIds ;
 	
-	@Interchangeable(fieldTitle = "Fundings")
+	@Interchangeable(fieldTitle = "Fundings",fmPath="/Activity Form/Funding")
 	@VersionableCollection(fieldTitle = "Fundings")
 	protected Set<AmpFunding> funding ;
 	
-	
+	//TODO show this field?
 	/*seems obsolete*/
-//	@Interchangeable(fieldTitle = "Progress") 
+	//@Interchangeable(fieldTitle = "Progress",)
 	@VersionableCollection(fieldTitle = "Progress")
 	protected Set progress;
 	
@@ -197,45 +202,47 @@ LoggerIdentifiable, Cloneable {
 	@Deprecated
 	protected Set documents ;
 	
-	@Interchangeable(fieldTitle = "Issues")
+	@Interchangeable(fieldTitle = "Issues",fmPath="/Activity Form/Issues Section")
 	@VersionableCollection(fieldTitle = "Issues")
 	protected Set<AmpIssues> issues;
 
-	@Interchangeable(fieldTitle = "Regional Observations")
+	@Interchangeable(fieldTitle = "Regional Observations",fmPath="/Activity Form/Regional Observations")
 	@VersionableCollection(fieldTitle = "Regional Observations")
 	protected Set<AmpRegionalObservation> regionalObservations;
 
-	@Interchangeable(fieldTitle = "Line Ministry Observations")
+	@Interchangeable(fieldTitle = "Line Ministry Observations",fmPath="/Activity Form/Line Ministry Observations")
 	@VersionableCollection(fieldTitle = "Line Ministry Observations")
 	protected Set<AmpLineMinistryObservation> lineMinistryObservations;
 
-//	@Interchangeable(fieldTitle = "Costs") 
+	//seems obsolete
+	//@Interchangeable(fieldTitle = "Costs",)
 	@VersionableCollection(fieldTitle = "Costs")
 	protected Set costs;
 	
-	@Interchangeable(fieldTitle = "Program Description")
+	@Interchangeable(fieldTitle = "Program Description",fmPath="/Activity Form/Program/Program Description")
 	@VersionableFieldTextEditor(fieldTitle = "Program Description")
 	protected String programDescription;
 	
-//	@Interchangeable(fieldTitle = "Team")
+	//@Interchangeable(fieldTitle = "Team",)
 	@VersionableFieldSimple(fieldTitle = "Team")
 	protected AmpTeam team;
 	//@VersionableCollection(fieldTitle = "Members")
 	protected Set member;
 
+	//TODO never used. What we do on IATI?
 	@Interchangeable(fieldTitle = "Contact Name") //slightly fishy here
 	protected String contactName;
 	//protected AmpTeamMember updatedBy; !!! Use modifiedBy
 
-	@Interchangeable(fieldTitle = "Fun Amount")
+	@Interchangeable(fieldTitle = "Fun Amount",fmPath="/Activity Form/Funding/Proposed Project Cost/Amount")
 	@VersionableFieldSimple(fieldTitle = "Fun Amount")
 	protected Double funAmount;
 	
-	@Interchangeable(fieldTitle = "Currency Code")
+	@Interchangeable(fieldTitle = "Currency Code",fmPath="/Activity Form/Funding/Proposed Project Cost/Amount")
 	@VersionableFieldSimple(fieldTitle = "Currency Code")
 	protected String currencyCode;
 	
-	@Interchangeable(fieldTitle = "Fun Date")
+	@Interchangeable(fieldTitle = "Fun Date",fmPath="/Activity Form/Funding/Proposed Project Cost/Date")
 	@VersionableFieldSimple(fieldTitle = "Fun Date")
 	protected Date funDate;
 
@@ -256,113 +263,114 @@ LoggerIdentifiable, Cloneable {
 	// The field is defunct
 
 	// Donor contact information
-	@Interchangeable(fieldTitle = "Contact First Name")
+	@Interchangeable(fieldTitle = "Contact First Name",fmPath="/Activity Form/Contacts/Donor Contact Information/contact first name")
 	protected String contFirstName;
-	@Interchangeable(fieldTitle = "Contact Last Name")
+	@Interchangeable(fieldTitle = "Contact Last Name",fmPath="/Activity Form/Contacts/Donor Contact Information/contact lastname")
 	protected String contLastName;
-	@Interchangeable(fieldTitle = "Email")
+	@Interchangeable(fieldTitle = "Email",fmPath="/Activity Form/Contacts/Donor Contact Information/Add Contact Email/Add Contact Email")
 	protected String email;
-	@Interchangeable(fieldTitle = "Donor Contact Title")
+	@Interchangeable(fieldTitle = "Donor Contact Title",fmPath="/Activity Form/Contacts/Donor Contact Information/Contact Title")
 	protected String dnrCntTitle;
-	@Interchangeable(fieldTitle = "Donor Contact Organization")
+	@Interchangeable(fieldTitle = "Donor Contact Organization",fmPath="/Activity Form/Contacts/Donor Contact Information/Contact Organizations")
 	protected String dnrCntOrganization;
-	@Interchangeable(fieldTitle = "Donor Contact Phone Number")
+	@Interchangeable(fieldTitle = "Donor Contact Phone Number",fmPath="/Activity Form/Contacts/Donor Contact Information/Add Contact Phone")
 	protected String dnrCntPhoneNumber;
-	@Interchangeable(fieldTitle = "Donor Contact Fax Number")
+	@Interchangeable(fieldTitle = "Donor Contact Fax Number",fmPath="/Activity Form/Contacts/Donor Contact Information/Add Contact Fax/Add Contact Fax")
 	protected String dnrCntFaxNumber;
 
 	// MOFED contact information
-	@Interchangeable(fieldTitle = "MOFED Contact First Name")
+	@Interchangeable(fieldTitle = "MOFED Contact First Name",fmPath="/Activity Form/Contacts/Mofed Contact Information/contact first name")
 	protected String mofedCntFirstName;
-	@Interchangeable(fieldTitle = "MOFED Contact Last Name")
+	@Interchangeable(fieldTitle = "MOFED Contact Last Name",fmPath="/Activity Form/Contacts/Mofed Contact Information/contact lastname")
 	protected String mofedCntLastName;
-	@Interchangeable(fieldTitle = "MOFED Contact Email")
+	@Interchangeable(fieldTitle = "MOFED Contact Email",fmPath="/Activity Form/Contacts/Mofed Contact Information/Add Contact Email/Add Contact Email")
 	protected String mofedCntEmail;
-	@Interchangeable(fieldTitle = "MOFED Contact Title")
+	@Interchangeable(fieldTitle = "MOFED Contact Title",fmPath="/Activity Form/Contacts/Mofed Contact Information/Contact Title")
 	protected String mfdCntTitle;
-	@Interchangeable(fieldTitle = "MOFED Contact Organization")
+	@Interchangeable(fieldTitle = "MOFED Contact Organization",fmPath="/Activity Form/Contacts/Mofed Contact Information/Contact Organizations")
 	protected String mfdCntOrganization;
-	@Interchangeable(fieldTitle = "MOFED Contact Phone Number")
+	@Interchangeable(fieldTitle = "MOFED Contact Phone Number",fmPath="/Activity Form/Contacts/Mofed Contact Information/Add Contact Phone")
 	protected String mfdCntPhoneNumber;
-	@Interchangeable(fieldTitle = "MOFED Contact Fax Number")
+	@Interchangeable(fieldTitle = "MOFED Contact Fax Number",fmPath="/Activity Form/Contacts/Mofed Contact Information/Add Contact Fax")
 	protected String mfdCntFaxNumber;
 
 	// Project Coordinator contact information
-	@Interchangeable(fieldTitle = "Project Coordinator First Name")
+	@Interchangeable(fieldTitle = "Project Coordinator First Name",fmPath="/Activity Form/Contacts/Project Coordinator Contact Information/contact first name")
 	protected String prjCoFirstName;
-	@Interchangeable(fieldTitle = "Project Coordinator Last Name")
+	@Interchangeable(fieldTitle = "Project Coordinator Last Name",fmPath="/Activity Form/Contacts/Project Coordinator Contact Information/contact lastname")
 	protected String prjCoLastName;
-	@Interchangeable(fieldTitle = "Project Coordinator Email")
+	@Interchangeable(fieldTitle = "Project Coordinator Email",fmPath="/Activity Form/Contacts/Project Coordinator Contact Information/Add Contact Email/Add Contact Email")
 	protected String prjCoEmail;
-	@Interchangeable(fieldTitle = "Project Coordinator Title")
+	@Interchangeable(fieldTitle = "Project Coordinator Title",fmPath="/Activity Form/Contacts/Project Coordinator Contact Information/Contact Title")
 	protected String prjCoTitle;
-	@Interchangeable(fieldTitle = "Project Coordinator Organization")
+	@Interchangeable(fieldTitle = "Project Coordinator Organization",fmPath="/Activity Form/Contacts/Project Coordinator Contact Information/Contact Organizations")
 	protected String prjCoOrganization;
-	@Interchangeable(fieldTitle = "Project Coordinator Phone Number")
+	@Interchangeable(fieldTitle = "Project Coordinator Phone Number",fmPath="/Activity Form/Contacts/Project Coordinator Contact Information/Add Contact Phone")
 	protected String prjCoPhoneNumber;
-	@Interchangeable(fieldTitle = "Project Coordinator Fax Number")
+	@Interchangeable(fieldTitle = "Project Coordinator Fax Number",fmPath="/Activity Form/Contacts/Project Coordinator Contact Information/Add Contact Fax")
 	protected String prjCoFaxNumber;
 
 	// Sector Ministry contact information
 	
-	@Interchangeable(fieldTitle = "Sector Ministry Contact First Name")
+	@Interchangeable(fieldTitle = "Sector Ministry Contact First Name",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/contact first name")
 	protected String secMiCntFirstName;
-	@Interchangeable(fieldTitle = "Sector Ministry Contact Last Name")
+	@Interchangeable(fieldTitle = "Sector Ministry Contact Last Name",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/contact lastname")
 	protected String secMiCntLastName;
-	@Interchangeable(fieldTitle = "Sector Ministry Contact Email")
+	@Interchangeable(fieldTitle = "Sector Ministry Contact Email",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Add Contact Email/Add Contact Email")
 	protected String secMiCntEmail;
-	@Interchangeable(fieldTitle = "Sector Ministry Contact Title")
+	@Interchangeable(fieldTitle = "Sector Ministry Contact Title",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Contact Title")
 	protected String secMiCntTitle;
-	@Interchangeable(fieldTitle = "Sector Ministry Contact Organization")
+	@Interchangeable(fieldTitle = "Sector Ministry Contact Organization",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Contact Organizations")
 	protected String secMiCntOrganization;
-	@Interchangeable(fieldTitle = "Sector Ministry Contact Phone Number")
+	@Interchangeable(fieldTitle = "Sector Ministry Contact Phone Number",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Add Contact Phone")
 	protected String secMiCntPhoneNumber;
-	@Interchangeable(fieldTitle = "Sector Ministry Contact Fax Number")
+	@Interchangeable(fieldTitle = "Sector Ministry Contact Fax Number",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Add Contact Fax")
 	protected String secMiCntFaxNumber;
 
-	@Interchangeable(fieldTitle = "Activity Contacts")
+	@Interchangeable(fieldTitle = "Activity Contacts",fmPath="/Activity Form/Contacts")
 	@VersionableCollection(fieldTitle = "Activity Contacts")
 	protected Set<AmpActivityContact> activityContacts;
 
-	//UPDATE_IT_AFTER
-//	@Interchangeable(fieldTitle = "Status Reason")
+	//UPDATE IT_AFTER
+	//@Interchangeable(fieldTitle = "Status Reason",fmPath="/Activity Form/Identification/Status Reason")
 	@VersionableFieldTextEditor(fieldTitle = "Status Reason")
 	protected String statusReason;
 	
-	@Interchangeable(fieldTitle = "Components")
+	@Interchangeable(fieldTitle = "Components",fmPath="/Activity Form/Components")
 	@VersionableCollection(fieldTitle = "Components")
 	protected Set<AmpComponent> components;
 
-	@Interchangeable(fieldTitle = "Structures")
+	@Interchangeable(fieldTitle = "Structures",fmPath="/Activity Form/Structures")
 	@VersionableCollection(fieldTitle = "Structures")
 	protected Set<AmpStructure> structures;
 
-	@Interchangeable(fieldTitle = "Component Fundings")
+	//TODO can be Component Commintment, Disbursement or Expenditures
+	@Interchangeable(fieldTitle = "Component Fundings",fmPath="/Activity Form/Component")
 	@VersionableCollection(fieldTitle = "Component Fundings")
 	protected Set<AmpComponentFunding> componentFundings;
 
 
-	@Interchangeable(fieldTitle = "Proposed Start Date")
+	@Interchangeable(fieldTitle = "Proposed Start Date",fmPath="/Activity Form/Planning/Proposed Start Date")
 	@VersionableFieldSimple(fieldTitle = "Proposed Start Date")
 	protected Date proposedStartDate;
 
-	@Interchangeable(fieldTitle = "Actual Start Date")
+	@Interchangeable(fieldTitle = "Actual Start Date",fmPath="/Activity Form/Planning/Actual Start Date")
 	@VersionableFieldSimple(fieldTitle = "Actual Start Date")
 	protected Date actualStartDate;
 	
-	@Interchangeable(fieldTitle = "Proposed Approval Date")
+	@Interchangeable(fieldTitle = "Proposed Approval Date",fmPath="/Activity Form/Planning/Proposed Approval Date")
 	@VersionableFieldSimple(fieldTitle = "Proposed Approval Date")
 	protected Date proposedApprovalDate;
 	
-	@Interchangeable(fieldTitle = "Actual Approval Date")
+	@Interchangeable(fieldTitle = "Actual Approval Date",fmPath="/Activity Form/Planning/Actual Approval Date")
 	@VersionableFieldSimple(fieldTitle = "Actual Approval Date")
 	protected Date actualApprovalDate;
 	
-	@Interchangeable(fieldTitle = "Actual Completion Date")
+	@Interchangeable(fieldTitle = "Actual Completion Date",fmPath="/Activity Form/Planning/Actual Completion Date")
 	@VersionableFieldSimple(fieldTitle = "Actual Completion Date")
 	protected Date actualCompletionDate;
 	
-	@Interchangeable(fieldTitle = "Proposed Completion Date")
+	@Interchangeable(fieldTitle = "Proposed Completion Date",fmPath="/Activity Form/Planning/Proposed Completion Date")
 	@VersionableFieldSimple(fieldTitle = "Proposed Completion Date")
 	protected Date proposedCompletionDate;
 
@@ -385,29 +393,30 @@ LoggerIdentifiable, Cloneable {
 	protected Date iatiLastUpdatedDate;
 	
 	
+	
 	protected AmpTeamMember approvedBy;
 	
 	@Interchangeable(fieldTitle = "Approval Date", importable=false)
 	protected Date approvalDate;
 
-	@Interchangeable(fieldTitle = "Regional Fundings")
+	@Interchangeable(fieldTitle = "Regional Fundings",fmPath="/Activity Form/Regional Funding")
 	@VersionableCollection(fieldTitle = "Regional Fundings")
-	protected Set<RegionalFunding> regionalFundings;
+	protected Set <AmpRegionalFunding> regionalFundings;
 
 	@Interchangeable(fieldTitle = "Approval Status")
 	@VersionableFieldSimple(fieldTitle = "Approval Status", blockSingleChange = true)
 	protected String approvalStatus;
 
 	// Aid Harmonization Survey Set
-	@Interchangeable(fieldTitle = "Surveys")
+	@Interchangeable(fieldTitle = "Surveys",fmPath="/Activity Form/Paris Indicators")
 	@VersionableCollection(fieldTitle = "Surveys")
 	protected Set<AmpAhsurvey> survey;
 	
-	@Interchangeable(fieldTitle = "GPI Surveys")
+	@Interchangeable(fieldTitle = "GPI Surveys",fmPath="/Activity Form/GPI")
 	@VersionableCollection(fieldTitle = "GPI Surveys")
-	protected Set<AmpGPISurvey> gpiSurvey;
+	protected Set <AmpGPISurvey> gpiSurvey;
 
-	@Interchangeable(fieldTitle = "Line Ministry Rank")
+	@Interchangeable(fieldTitle = "Line Ministry Rank",fmPath="/Activity Form/Planning/Line Ministry Rank")
 	@VersionableFieldSimple(fieldTitle = "Line Ministry Rank")
 	protected Integer lineMinRank;
 
@@ -421,143 +430,148 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Deleted")
 	protected Boolean deleted;
 	//for AMP-14784
-	@Interchangeable(fieldTitle = "Project Implementation Unit")
+	@Interchangeable(fieldTitle = "Project Implementation Unit",fmPath="/Activity Form/Aid Effectivenes/Project uses parallel project implementation unit")
 	@VersionableFieldSimple(fieldTitle = "Project Implementation Unit")
 	protected String projectImplementationUnit;
-	@Interchangeable(fieldTitle = "IMAC Approved")
+	@Interchangeable(fieldTitle = "IMAC Approved",fmPath="/Activity Form/Aid Effectivenes/Project has been approved by IMAC")
 	@VersionableFieldSimple(fieldTitle = "IMAC Approved")
 	protected String imacApproved;
-	@Interchangeable(fieldTitle = "National Oversight")
+	@Interchangeable(fieldTitle = "National Oversight",fmPath="/Activity Form/Aid Effectivenes/Government is meber of project steering committee")
 	@VersionableFieldSimple(fieldTitle = "National Oversight")	
 	protected String nationalOversight;
-	@Interchangeable(fieldTitle = "On Budget")
+	@Interchangeable(fieldTitle =  "On Budget",fmPath="/Activity Form/Aid Effectivenes/Project is on budget")
 	@VersionableFieldSimple(fieldTitle = "On Budget")	
 	protected String onBudget;
-	@Interchangeable(fieldTitle = "On Parliament")
+	@Interchangeable(fieldTitle = "On Parliament",fmPath="/Activity Form/Aid Effectivenes/Project is on parliament")
 	@VersionableFieldSimple(fieldTitle = "On Parliament")	
 	protected String onParliament;
-	@Interchangeable(fieldTitle = "On Treasury")
+	@Interchangeable(fieldTitle = "On Treasury",fmPath="/Activity Form/Aid Effectivenes/Project disburses directly into the Goverment single treasury account")
 	@VersionableFieldSimple(fieldTitle = "On Treasury")	
 	protected String onTreasury;
-	@Interchangeable(fieldTitle = "National Financial Management")
+	@Interchangeable(fieldTitle = "National Financial Management",fmPath="/Activity Form/Aid Effectivenes/Project uses national financial management systems")
 	@VersionableFieldSimple(fieldTitle = "National Financial Management")	
 	protected String nationalFinancialManagement;
-	@Interchangeable(fieldTitle = "National Procurement")
+	@Interchangeable(fieldTitle = "National Procurement",fmPath="/Activity Form/Aid Effectivenes/Project uses national procurement systems")
 	@VersionableFieldSimple(fieldTitle = "National Procurement")	
 	protected String nationalProcurement;
-	@Interchangeable(fieldTitle = "National Audit")
+	@Interchangeable(fieldTitle = "National Audit",fmPath="/Activity Form/Aid Effectivenes/Project uses national audit systems")
 	@VersionableFieldSimple(fieldTitle = "National Audit")	
 	protected String nationalAudit;
-	   @VersionableCollection(fieldTitle = "Aid Effectiveness")
+	 @VersionableCollection(fieldTitle = "Aid Effectiveness")
 	    protected Set<AmpAidEffectivenessIndicatorOption> selectedEffectivenessIndicatorOptions;
 		
+	
 
-		/**
-		 * Indicator connections.
-		 * This field contains {@link IndicatorActivity} beans which represent activity-indicator connections 
-		 * and contain set of values for this connection.
-		 * Please refer to AmpActivity.hbm.xml and IndicatorConnection.hbm.xml for details.
-		 */
-		@Interchangeable(fieldTitle = "Indicators")
-		@VersionableCollection(fieldTitle = "Indicators")
-		protected Set<IndicatorActivity> indicators;
+	/**
+	 * Indicator connections.
+	 * This field contains {@link IndicatorActivity} beans which represent activity-indicator connections 
+	 * and contain set of values for this connection.
+	 * Please refer to AmpActivity.hbm.xml and IndicatorConnection.hbm.xml for details.
+	 */
+	@Interchangeable(fieldTitle = "Indicators",fmPath="/Activity Form/M&E")
+	@VersionableCollection(fieldTitle = "Indicators")
+	@Validators (unique="/Activity Form/M&E/Unique MEs Validator")
+	protected Set<IndicatorActivity> indicators;
 
-		@Interchangeable(fieldTitle = "Activity Documents")
-		@VersionableCollection(fieldTitle = "Activity Documents")
-		protected Set<AmpActivityDocument> activityDocuments	= null;
-		/* Categories */
-		@Interchangeable(fieldTitle = "Categories")
-		@VersionableCollection(fieldTitle = "Categories")
-		protected Set<AmpCategoryValue> categories;
+	@Interchangeable(fieldTitle = "Activity Documents",fmPath="/Activity Form/Related Documents")
+	@VersionableCollection(fieldTitle = "Activity Documents")
+	protected Set<AmpActivityDocument> activityDocuments	= null;
+	/* Categories */
+	//TODO always on?
+	@Interchangeable(fieldTitle = "Categories")
+	@VersionableCollection(fieldTitle = "Categories")
+	protected Set<AmpCategoryValue> categories;
 
-		/*
-		 * Tanzania adds
-		 */
-		@Interchangeable(fieldTitle = "Indirect On Budget")
-	    @VersionableFieldSimple(fieldTitle = "Indirect On Budget")
-	    protected Boolean indirectOnBudget;
-		@Interchangeable(fieldTitle = "FY")
-		@VersionableFieldSimple(fieldTitle = "FY")
-		protected String FY;
-		@Interchangeable(fieldTitle = "Vote")
-		@VersionableFieldSimple(fieldTitle = "Vote")
-		protected String vote;
-		@Interchangeable(fieldTitle = "Sub Vote")
-		@VersionableFieldSimple(fieldTitle = "Sub Vote")
-		protected String subVote;
-		@Interchangeable(fieldTitle = "Sub Program")
-		@VersionableFieldSimple(fieldTitle = "Sub Program")
-		protected String subProgram;
-		@Interchangeable(fieldTitle = "Project Code")
-		@VersionableFieldSimple(fieldTitle = "Project Code")
-		protected String projectCode;
-		@Interchangeable(fieldTitle = "Ministry Code")
-		@VersionableFieldSimple(fieldTitle = "Ministry Code")
-		protected String ministryCode;
+	/*
+	 * Tanzania adds
+	 */
+	@Interchangeable(fieldTitle = "Indirect On Budget",fmPath="/Activity Form/Identification/Budget Extras/Indirect On Budget")
+    @VersionableFieldSimple(fieldTitle = "Indirect On Budget")
+    protected Boolean indirectOnBudget;
+	@Interchangeable(fieldTitle = "FY",fmPath="/Activity Form/Identification/Budget Extras/FY")
+	@VersionableFieldSimple(fieldTitle = "FY")
+	protected String FY;
+	@Interchangeable(fieldTitle = "Vote",fmPath="/Activity Form/Identification/Budget Extras/Vote")
+	@VersionableFieldSimple(fieldTitle = "Vote")
+	protected String vote;
+	@Interchangeable(fieldTitle = "Sub Vote",fmPath="/Activity Form/Identification/Budget Extras/Sub-Vote")
+	@VersionableFieldSimple(fieldTitle = "Sub Vote")
+	protected String subVote;
+	@Interchangeable(fieldTitle = "Sub Program",fmPath="/Activity Form/Identification/Budget Extras/Sub-Program")
+	@VersionableFieldSimple(fieldTitle = "Sub Program")
+	protected String subProgram;
+	@Interchangeable(fieldTitle = "Project Code",fmPath="/Activity Form/Identification/Budget Extras/Project Code")
+	@VersionableFieldSimple(fieldTitle = "Project Code")
+	protected String projectCode;
+	@Interchangeable(fieldTitle = "Ministry Code",fmPath="/Activity Form/Identification/Budget Extras/Ministry Code")
+	@VersionableFieldSimple(fieldTitle = "Ministry Code")
+	protected String ministryCode;
 
-		
-		@Interchangeable(fieldTitle = "CRIS Number")
-		@VersionableFieldSimple(fieldTitle = "CRIS Number")
-		protected String crisNumber;
+	
+	@Interchangeable(fieldTitle = "CRIS Number",fmPath="/Activity Form/Identification/CRIS Number")
+	@VersionableFieldSimple(fieldTitle = "CRIS Number")
+	protected String crisNumber;
 
-		
-		@Interchangeable(fieldTitle = "Government Approval Procedures")
-		@VersionableFieldSimple(fieldTitle = "Government Approval Procedures")
-		protected Boolean governmentApprovalProcedures;
+	
+	@Interchangeable(fieldTitle = "Government Approval Procedures",fmPath="/Activity Form/Identification/Government Approval Procedures")
+	@VersionableFieldSimple(fieldTitle = "Government Approval Procedures")
+	protected Boolean governmentApprovalProcedures;
 
-		@Interchangeable(fieldTitle = "Joint Criteria")
-		@VersionableFieldSimple(fieldTitle = "Joint Criteria")
-		protected Boolean jointCriteria;
-		@Interchangeable(fieldTitle = "Humanitarian Aid")
-		@VersionableFieldSimple(fieldTitle = "Humanitarian Aid")
-		protected Boolean humanitarianAid;
+	@Interchangeable(fieldTitle = "Joint Criteria",fmPath="/Activity Form/Identification/Joint Criteria")
+	@VersionableFieldSimple(fieldTitle = "Joint Criteria")
+	protected Boolean jointCriteria;
+	@Interchangeable(fieldTitle = "Humanitarian Aid",fmPath="/Activity Form/Identification/Humanitarian Aid")
+	@VersionableFieldSimple(fieldTitle = "Humanitarian Aid")
+	protected Boolean humanitarianAid;
 
-//		@Interchangeable(fieldTitle = "Act. Programs")
-		@VersionableCollection(fieldTitle = "Act. Programs")
-		protected Set actPrograms;
-		
-		//UPDATE_IT_AFTER
-//		@Interchangeable(fieldTitle = "Act. Budget Structure")
-		@VersionableCollection(fieldTitle = "Act. Budget Structure")
-		protected Set actBudgetStructure;
+	//TODO can be Primary, Secondary,Tertiary or National Plan Objective
+	//@Interchangeable(fieldTitle = "Act. Programs",fmPath="/Activity Form/Program")
+	@VersionableCollection(fieldTitle = "Act. Programs")
+	protected Set <AmpActivityProgram> actPrograms;
+	
+	//UPDATE_IT_AFTER
+//	@Interchangeable(fieldTitle = "Act. Budget Structure",fmPath="/Activity Form/Budget Structure")
+	//@Validators (unique ="/Activity Form/Budget Structure/Budget Structure/uniqueProgramsValidator", minSize="/Activity Form/Budget Structure/Budget Structure/minSizeProgramValidator")
+	@VersionableCollection(fieldTitle = "Act. Budget Structure")
+	protected Set <AmpActivityBudgetStructure> actBudgetStructure;
 
-		protected boolean createdAsDraft;
-		
+	protected boolean createdAsDraft;
+	
 
 
-		/**
-		 * Fields for activity versioning.
-		 */
-		protected AmpActivityGroup ampActivityGroup;
-		
-		
-		protected Date modifiedDate;
+	/**
+	 * Fields for activity versioning.
+	 */
+	protected AmpActivityGroup ampActivityGroup;
+	
+	
+	protected Date modifiedDate;
 
-//		@Interchangeable(fieldTitle = "Modified By")
-		@VersionableFieldSimple(fieldTitle = "Modified By")
-		protected AmpTeamMember modifiedBy;
-		
-		protected Boolean mergedActivity;
-		protected AmpActivityVersion mergeSource1;
-		protected AmpActivityVersion mergeSource2;
+//	@Interchangeable(fieldTitle = "Modified By")
+	@VersionableFieldSimple(fieldTitle = "Modified By")
+	protected AmpTeamMember modifiedBy;
+	
+	protected Boolean mergedActivity;
+	protected AmpActivityVersion mergeSource1;
+	protected AmpActivityVersion mergeSource2;
 
-		@Interchangeable(fieldTitle = CategoryConstants.FUNDING_SOURCES_NUMBER_NAME)
-	    @VersionableFieldSimple(fieldTitle = CategoryConstants.FUNDING_SOURCES_NUMBER_NAME)
-	    protected Integer fundingSourcesNumber;
-	    
-		@Interchangeable(fieldTitle = "Proposed Project Life")
-	    @VersionableFieldSimple(fieldTitle = "Proposed Project Life")
-	    protected Integer proposedProjectLife;
+	@Interchangeable(fieldTitle = CategoryConstants.FUNDING_SOURCES_NUMBER_NAME,fmPath="/Activity Form/Funding/Total Number of Funding Sources")
+    @VersionableFieldSimple(fieldTitle = CategoryConstants.FUNDING_SOURCES_NUMBER_NAME)
+    protected Integer fundingSourcesNumber;
+    
+	@Interchangeable(fieldTitle = "Proposed Project Life",fmPath="/Activity Form/Planning/Proposed Project Life")
+    @VersionableFieldSimple(fieldTitle = "Proposed Project Life")
+    protected Integer proposedProjectLife;
 
-		/**
-		 * whether this is a PROJECT or a South-South Cooperation
-		 */
-	    protected Long activityType = org.dgfoundation.amp.onepager.util.ActivityUtil.ACTIVITY_TYPE_PROJECT; //default type
+	/**
+	 * whether this is a PROJECT or a South-South Cooperation
+	 */
+    protected Long activityType = org.dgfoundation.amp.onepager.util.ActivityUtil.ACTIVITY_TYPE_PROJECT; //default type
 
-	    @Interchangeable(fieldTitle = "Annual Project Budgets")
-	    @VersionableCollection(fieldTitle = "Annual Project Budgets")
-		protected Set<AmpAnnualProjectBudget> annualProjectBudgets;
-		//protected Set <AmpActivityContact> activityContacts;
+    @Interchangeable(fieldTitle = "Annual Project Budgets",fmPath="/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")
+    @VersionableCollection(fieldTitle = "Annual Project Budgets")
+	protected Set<AmpAnnualProjectBudget> annualProjectBudgets;
+	//protected Set <AmpActivityContact> activityContacts;
 
 		public Boolean getMergedActivity() {
 			return mergedActivity;
@@ -1672,11 +1686,7 @@ LoggerIdentifiable, Cloneable {
 		public void setHumanitarianAid(Boolean humanitarianAid) {
 			this.humanitarianAid = humanitarianAid;
 		}
-
-		public Boolean getHumanitarianAid() {
-			return humanitarianAid;
-		}
-
+		
 		public AmpTeamMember getApprovedBy() {
 			return approvedBy;
 		}

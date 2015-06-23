@@ -833,7 +833,7 @@ public class EditActivity extends Action {
           AmpCategoryValue budgetOn = CategoryConstants.ACTIVITY_BUDGET_ON.getAmpCategoryValueFromDB();
           eaForm.getIdentification().setBudgetCVOn(budgetOn == null ? 1 : budgetOn.getId());
 
-          eaForm.getIdentification().setHumanitarianAid(activity.getHumanitarianAid());
+          eaForm.getIdentification().setHumanitarianAid(activity.isHumanitarianAid());
           eaForm.getIdentification().setGovAgreementNumber(activity.getGovAgreementNumber());
 
           if(activity.getBudgetCodeProjectID()!=null)

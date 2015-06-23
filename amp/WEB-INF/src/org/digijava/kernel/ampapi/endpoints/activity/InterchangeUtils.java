@@ -352,7 +352,7 @@ public class InterchangeUtils {
 		bean.set("field_label", mapToBean(getLabelsForField(ant2.fieldTitle())));
 		if (!classToCustomType.containsKey(field.getClass())) {/* list type */
 			bean.set("importable", ant2.importable()? true: false);
-			if (isCollection(field) && !hasUniqueValidatorEnabled (field))
+			if (isCollection(field) && !hasMaxSizeValidatorEnabled (field))
 				bean.set("multiple_values", true);
 			else 
 				bean.set("multiple_values", false);
@@ -365,6 +365,7 @@ public class InterchangeUtils {
 			{
 				bean.set("recursive", true);
 			}
+			bean.set("unique", hasUniqueValidatorEnabled (field));
 			bean.set("allow_empty", !isRequired(field));
 		}
 		return bean;
@@ -528,6 +529,17 @@ public class InterchangeUtils {
 		
 	}
 	
+	public static boolean hasMaxSizeValidatorEnabled (Field field) {
+		boolean isEnabled = false;
+		Validators validators = field.getAnnotation(Validators.class);
+		if (validators != null) {
+			String maxSize = validators.maxSize();
+			if (!maxSize.isEmpty()) {
+				isEnabled = FMVisibility.isFmPathEnabled(maxSize);
+			}
+		}
+		return isEnabled;	
+	}
 	/**
 	 * Checks if a given field is required or not
 	 * 

@@ -27,10 +27,10 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
 	private static Logger logger = Logger.getLogger(AmpComponent.class);
 	@Interchangeable(fieldTitle="ID")
 	private Long ampComponentId;
-	@Interchangeable(fieldTitle="Title")
+	@Interchangeable(fieldTitle="Title",fmPath="/Activity Form/Components/Component/Component Information/Component Title")
 	@TranslatableField
 	private String title;
-	@Interchangeable(fieldTitle="Description")
+	@Interchangeable(fieldTitle="Description",fmPath="/Activity Form/Components/Component/Component Information/Description")
 	@TranslatableField
 	private String description;
 //	@Interchangeable(fieldTitle="") //I gladly would export this, if I could

@@ -16,8 +16,9 @@ public class AmpRegionalObservationMeasure implements Serializable, Cloneable {
 	@TranslatableField
 	private String name;
 	private AmpRegionalObservation regionalObservation;
-	@Interchangeable(fieldTitle="Actors")
+	@Interchangeable(fieldTitle="Actors",fmPath="/Activity Form/Regional Observations/Observation/Measure/Actor")
 	private Set<AmpRegionalObservationActor> actors;
+
 
 	public String getName() {
 		return name;

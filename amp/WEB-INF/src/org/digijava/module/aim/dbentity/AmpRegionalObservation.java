@@ -21,9 +21,9 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
 	@TranslatableField
 	private String name;
 	private AmpActivityVersion activity;
-	@Interchangeable(fieldTitle="Regional Observation Measures")
+	@Interchangeable(fieldTitle="Regional Observation Measures",fmPath="/Activity Form/Regional Observations/Observation/Measure")
 	private Set<AmpRegionalObservationMeasure> regionalObservationMeasures;
-	@Interchangeable(fieldTitle="Observation Date")
+	@Interchangeable(fieldTitle="Observation Date",fmPath="/Activity Form/Regional Observations/Observation/Date")
 	private Date observationDate;
 
 	public String getName() {

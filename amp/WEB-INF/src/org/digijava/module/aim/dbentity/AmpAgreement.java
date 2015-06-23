@@ -17,18 +17,18 @@ public class AmpAgreement implements Serializable, Versionable {
 
 	@Interchangeable(fieldTitle="ID")
 	private Long id;
-	@Interchangeable(fieldTitle="Code")
+	@Interchangeable(fieldTitle="Code",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Code")
 	private String code;
-	@Interchangeable(fieldTitle="Title")
+	@Interchangeable(fieldTitle="Title",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Title")
 	@TranslatableField
 	private String title;
-	@Interchangeable(fieldTitle="Effective Date")
+	@Interchangeable(fieldTitle="Effective Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Effective Date")
 	private Date effectiveDate;
-	@Interchangeable(fieldTitle="Signature Date")
+	@Interchangeable(fieldTitle="Signature Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Signature Date")
 	private Date signatureDate;
-	@Interchangeable(fieldTitle="Close Date")
+	@Interchangeable(fieldTitle="Close Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Close Date")
 	private Date closeDate;
-	@Interchangeable(fieldTitle="Parlimentary Approval Date")
+	@Interchangeable(fieldTitle="Parlimentary Approval Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Parlimentary Approval Date")
 	private Date parlimentaryApprovalDate;
 	
 	public AmpAgreement() {

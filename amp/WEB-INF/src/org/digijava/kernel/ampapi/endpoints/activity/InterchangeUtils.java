@@ -23,6 +23,7 @@ import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
+import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
@@ -33,19 +34,25 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.time.StopWatch;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.jdbc.Work;
+import org.springframework.util.ClassUtils;
 
 import clover.org.apache.commons.lang.StringUtils;
 import clover.org.apache.log4j.helpers.ISO8601DateFormat;
 
 public class InterchangeUtils {
 
+	private static final String NOT_REQUIRED = "_NONE_";
+	private static final String ALWAYS_REQUIRED = "_ALWAYS_";
 	public static final Logger LOGGER = Logger.getLogger(InterchangeUtils.class);
 	private static final ISO8601DateFormat dateFormatter = new ISO8601DateFormat();
 	private static ProjectListCacher cacher = new ProjectListCacher();
@@ -345,7 +352,7 @@ public class InterchangeUtils {
 		bean.set("field_label", mapToBean(getLabelsForField(ant2.fieldTitle())));
 		if (!classToCustomType.containsKey(field.getClass())) {/* list type */
 			bean.set("importable", ant2.importable()? true: false);
-			if (isCollection(field))
+			if (isCollection(field) && !hasMaxSizeValidatorEnabled (field))
 				bean.set("multiple_values", true);
 			else 
 				bean.set("multiple_values", false);
@@ -358,13 +365,13 @@ public class InterchangeUtils {
 			{
 				bean.set("recursive", true);
 			}
-			/*left alone for now. would be draggable from wicket*/
-			//structure.put("allow_empty", ???)
+			bean.set("unique", hasUniqueValidatorEnabled (field));
+			bean.set("allow_empty", !isRequired(field));
 		}
 		return bean;
 	}
 
-
+	
 	public static List<JsonBean> getAllAvailableFields() {
 		return getAllAvailableFields(AmpActivityFields.class);
 	}
@@ -380,6 +387,9 @@ public class InterchangeUtils {
 		StopWatch.next("Descending into", false, clazz.getName());
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
+			if (!FMVisibility.isVisible(field)) {
+				continue;
+			}
 			JsonBean descr = describeField(field);
 			if (descr != null)
 				result.add(descr);
@@ -425,5 +435,130 @@ public class InterchangeUtils {
 		return projectList;
 	}
 
+	public static JsonBean getActivity(Long projectId) {
+		JsonBean activityJson = new JsonBean();
+		try {
+			AmpActivityVersion activity = ActivityUtil.loadActivity(projectId);
+			activityJson.set("amp_activity_id", activity.getAmpActivityId());
+			activityJson.set("amp_id", activity.getAmpId());
+			Field[] fields = activity.getClass().getSuperclass().getDeclaredFields();
+
+			for (Field field : fields) {
+				Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
+				if (interchangeable != null) {
+					field.setAccessible(true);
+					if (field.getType().isAssignableFrom(Set.class)) {
+						Set setObject = (Set) field.get(activity);
+						if (setObject != null) {
+							for (Object obj : setObject) {
+
+								Field[] setFields = obj.getClass().getDeclaredFields();
+								for (Field setField : setFields) {
+									Interchangeable interchangeableSetField = setField
+											.getAnnotation(Interchangeable.class);
+
+									if (interchangeableSetField != null) {
+										setField.setAccessible(true);
+										activityJson.set(interchangeableSetField.fieldTitle(), setField.get(obj));
+
+									}
+								}
+							}
+						}
+					}
+					else {
+						Object object = field.get(activity);
+						if (object != null) {
+							ClassUtils.isPrimitiveOrWrapper(object.getClass());
+							//@VersionableFieldTextEditor
+							if (!JSON_SUPPORTED_CLASSES.contains(object.getClass())) {
+								System.out.println("not supported");
+							}
+							else {
+								activityJson.set(interchangeable.fieldTitle(), object);
+											
+							}
+						}		
+					}
+				
+				}
+			}
+
+			/*
+			 * activityJson.set("title", activity.getName());
+			 * activityJson.set("created_date",
+			 * formatISO8601Date(activity.getCreatedDate()));
+			 * activityJson.set("updated_date",
+			 * formatISO8601Date(activity.getUpdatedDate())); if
+			 * (activity.getSectors().size() > 0) { List<JsonBean> sectors = new
+			 * ArrayList<JsonBean>(); Iterator<AmpActivitySector> it =
+			 * activity.getSectors().iterator(); while (it.hasNext()) {
+			 * AmpActivitySector sector = it.next(); JsonBean sectorBean = new
+			 * JsonBean(); sectorBean.set("id",
+			 * sector.getSectorId().getAmpSectorId()); sectorBean.set("name",
+			 * sector.getSectorId().getName()); sectorBean.set("percentage",
+			 * sector.getSectorPercentage()); sectors.add(sectorBean); }
+			 * activityJson.set("sectors", sectors); } //activityJson.set(name,
+			 * activity.)
+			 */
+
+		} catch (DgException e) {
+			LOGGER.warn("Coudn't load activity with id: " + projectId);
+			throw new RuntimeException(e);
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return activityJson;
+	}
 	
+	public static boolean hasUniqueValidatorEnabled (Field field){
+		boolean isEnabled = false;
+		Validators validators = field.getAnnotation(Validators.class);
+		if (validators != null) {
+			String uniqueValidator = validators.unique();
+			if (!uniqueValidator.isEmpty()) {
+				isEnabled = FMVisibility.isFmPathEnabled(uniqueValidator);
+			}
+		}
+		
+		return isEnabled;
+		
+	}
+	
+	public static boolean hasMaxSizeValidatorEnabled (Field field) {
+		boolean isEnabled = false;
+		Validators validators = field.getAnnotation(Validators.class);
+		if (validators != null) {
+			String maxSize = validators.maxSize();
+			if (!maxSize.isEmpty()) {
+				isEnabled = FMVisibility.isFmPathEnabled(maxSize);
+			}
+		}
+		return isEnabled;	
+	}
+	/**
+	 * Checks if a given field is required or not
+	 * 
+	 * @param field the field to validate
+	 * @return true if the field is required, false if it is not.
+	 */
+	public static boolean isRequired(Field field) {
+		boolean isRequired = false;
+		String minSize = "";
+		Validators validators = field.getAnnotation(Validators.class);
+		Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
+		if (validators != null) {
+			minSize = validators.minSize();
+		}
+		String required = interchangeable.required();
+		if (required.equals(ALWAYS_REQUIRED) || (!required.equals(NOT_REQUIRED) && FMVisibility.isFmPathEnabled(required))
+				|| (!minSize.isEmpty() && FMVisibility.isFmPathEnabled(minSize))) {
+			isRequired = true;
+		}
+		return isRequired;
+	}
 }

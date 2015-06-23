@@ -25,7 +25,7 @@ public class ApiError {
 	public final static String UNKOWN_ERROR = "Unknown Error";
 	
 	/**  Will store the mapping between the component and it's Id (C). */
-	public static final Map<String, Integer> COMPONENT_ID_CLASS_MAP = new HashMap<String, Integer>() {{
+	public final static Map<String, Integer> COMPONENT_ID_CLASS_MAP = new HashMap<String, Integer>() {{
 		put(InterchangeEndpoints.class.getName(), 1);
 	}};
 	
@@ -53,14 +53,8 @@ public class ApiError {
 		
 		if (errorMessages != null && errorMessages.size() > 0) {
 			if (errorMessages.get(0) instanceof String) {
-				for(Object errorMessage : errorMessages) {
-					String generalErrorCode = String.format(API_ERROR_PATTERN, GENERAL_ERROR_CODE, GENERIC_HANDLED_ERROR_CODE);
-					if (errors.get(generalErrorCode) == null) {
-						errors.put(generalErrorCode, new ArrayList<String>());
-					}
-					
-					errors.get(generalErrorCode).add((String) errorMessage);
-				}
+				String generalErrorCode = String.format(API_ERROR_PATTERN, GENERAL_ERROR_CODE, GENERIC_HANDLED_ERROR_CODE);
+				errors.put(generalErrorCode, (List<String>) errorMessages);
 			} else if (errorMessages.get(0) instanceof ApiErrorMessage) {
 				int componentId = getErrorComponentId();
 				for(Object errorMessage : errorMessages) {
@@ -127,7 +121,7 @@ public class ApiError {
 		
 		for (StackTraceElement st : stackTrace) {
 			for (String componentName : COMPONENT_ID_CLASS_MAP.keySet()) {
-				if (st.toString().indexOf((componentName)) >= 0) {
+				if (st.getClassName().contains(componentName)) {
 					return COMPONENT_ID_CLASS_MAP.get(componentName);
 				}
 			}
@@ -143,17 +137,14 @@ public class ApiError {
 	 * @return the message of the error
 	 */
 	private static String getErrorText(ApiErrorMessage apiErrorMessage) {
-		if (apiErrorMessage.prefix != null && apiErrorMessage.value != null) {
-			String errorText = "";
-			try {
-				errorText = String.format(apiErrorMessage.prefix, apiErrorMessage.value) + " (" + apiErrorMessage.description + ")";
-			} catch(Exception e) {
-				errorText = apiErrorMessage.description + " (Exception during formatting the error message - " + e.getMessage() + ")";
-			}
+		String errorText = "(" + apiErrorMessage.description + ")";
+		if (apiErrorMessage.prefix != null)
+			errorText += " " + apiErrorMessage.prefix;
+		
+		if (apiErrorMessage.value != null) {
+			errorText += " " + apiErrorMessage.value;
+		}
 			
-			return errorText;
-		} 
-			
-		return apiErrorMessage.description;
+		return errorText;
 	}
 }

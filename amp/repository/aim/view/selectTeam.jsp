@@ -32,6 +32,7 @@
 									<div class="subtitle-blue" style="border-bottom:1px dotted #8ba7c2; padding:0px 0px 5px 0px;margin:0px 0px 10px 0px;width:1000px;"><digi:trn><c:out value="${workspaceGroup}"/></digi:trn></div>
 							</td>
 							</tr>
+							
 							<c:forEach var="members" items="${aimLoginForm.members}">
 								<c:set var="nonEmptyGroup">false</c:set>
 								<c:if test="${members.ampTeam.workspaceGroup.id eq workspaceGroup.id}">
@@ -42,8 +43,17 @@
 												<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 												<c:set target="${urlParams}" property="id">
 													<c:out value="${members.ampTeamMemId}"/>
-												</c:set>								
-												<digi:link href="/selectTeam.do" name="urlParams">
+												</c:set>
+												<c:if test="${aimLoginForm.generateToken}" >
+													<c:set target="${urlParams}" property="generateToken">
+														<c:out value="${aimLoginForm.generateToken}"/>
+													</c:set>
+													<c:set target="${urlParams}" property="callbackUrl">	
+														<c:out value="${aimLoginForm.callbackUrl}"/>
+													</c:set>
+
+															</c:if>																
+												<digi:link href="/selectTeam.do" name="urlParams" friendlyUrl="false">
 													<c:out value="${members.ampTeam.name}"/>
 												</digi:link>
 											</div>

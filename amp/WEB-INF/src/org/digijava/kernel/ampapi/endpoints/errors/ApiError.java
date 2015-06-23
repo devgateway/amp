@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeEndpoints;
+import org.digijava.kernel.ampapi.endpoints.security.Security;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
@@ -27,6 +28,7 @@ public class ApiError {
 	/**  Will store the mapping between the component and it's Id (C). */
 	public final static Map<String, Integer> COMPONENT_ID_CLASS_MAP = new HashMap<String, Integer>() {{
 		put(InterchangeEndpoints.class.getName(), 1);
+		put(Security.class.getName(), 2);
 	}};
 	
 	/**

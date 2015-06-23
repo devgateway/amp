@@ -106,7 +106,10 @@ var loginFailed = function(data, status) {
 				<digi:link module="aim" href="/showRegisterUser.do?init=true" styleId="new" title="${trn3}"><digi:trn key="aim:newUserRegistration"> New user registration</digi:trn></digi:link></div>
 				</feature:display>
 				</form>
-            
+          <form action="/aim/index.do" id="selectWorkspaceForm" method="post">
+	          	<input type="hidden" id="generateToken" name="generateToken"/>
+	          	<input type="hidden" id="callbackUrl" name="callbackUrl"/>
+		</form>
         <div>
 
      <div id="footer"></div>

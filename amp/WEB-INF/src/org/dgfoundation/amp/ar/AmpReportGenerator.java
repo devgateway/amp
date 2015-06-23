@@ -349,7 +349,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		FilterCacher filterCacher = new NopFilterCacher(filter);
 		Column<Cell> column;
 		try {
-			ce.setFilterCacher(new NopFilterCacher(filter));
+			ce.setFilterCacher(filterCacher);
 		
 			ce.setDebugMode(debugMode);
 			ce.setPledge(true);

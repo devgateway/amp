@@ -84,9 +84,9 @@ var Query = Backbone.Model.extend({
         }
         this.model = _.extend(this.model, response);
         this.model.properties = _.extend({}, Settings.QUERY_PROPERTIES, this.model.properties);
-        if (Settings.AMP_REPORT_API_BRIDGE) {
+        /*if (Settings.AMP_REPORT_API_BRIDGE) {
         	this.initFilters();
-        }
+        }*/
     },
     
     setProperty: function(key, value) {

@@ -42,6 +42,7 @@ var AMPFilters = Backbone.View.extend({
 					//}
 					$('#filters-container').hide();
 				});
+				this.workspace.query.initFilters();
 			},
 
 			add_button : function() {

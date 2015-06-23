@@ -1,6 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.sql.Connection;
@@ -34,7 +36,6 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
-import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.Validators;
@@ -57,8 +58,6 @@ import clover.org.apache.log4j.helpers.ISO8601DateFormat;
  */
 public class InterchangeUtils {
 
-	private static final String VIEW = "view";
-	private static final String EDIT = "edit";
 	private static final String NOT_REQUIRED = "_NONE_";
 	private static final String ALWAYS_REQUIRED = "_ALWAYS_";
 	public static final Logger LOGGER = Logger.getLogger(InterchangeUtils.class);
@@ -155,14 +154,13 @@ public class InterchangeUtils {
 
 	private static void populateActivityMap(Map<String, JsonBean> activityMap, List<JsonBean> activities) {
 		for (JsonBean activity : activities) {
-			JsonBean activityOnMap = activityMap.get((String) activity.get(underscorify(ActivityFieldsConstants.AMP_ID)));
+			JsonBean activityOnMap = activityMap.get((String) activity.get("amp_id"));
 			// if it is not on the map, or activity is a newer
 			// version than the one already on the Map
 			// then we put it on the Map
 			if (activityOnMap == null
-					|| (Long) activity.get(underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID)) > (Long) activityOnMap
-							.get(underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID))) {
-				activityMap.put((String) activity.get(underscorify(ActivityFieldsConstants.AMP_ID)), activity);
+					|| (Long) activity.get("amp_activity_id") > (Long) activityOnMap.get("amp_activity_id")) {
+				activityMap.put((String) activity.get("amp_id"), activity);
 			}
 		}
 	}
@@ -241,14 +239,14 @@ public class InterchangeUtils {
 					ResultSet rs = rsi.rs;
 					while (rs.next()) {
 						JsonBean bean = new JsonBean();
-						bean.set(underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID), rs.getLong("amp_activity_id"));
-						bean.set(underscorify(ActivityFieldsConstants.CREATED_DATE), formatISO8601Date(rs.getTimestamp("date_created")));
-						bean.set(underscorify(ActivityFieldsConstants.PROJECT_TITLE), rs.getString("name"));
-						bean.set(underscorify(ActivityFieldsConstants.PROJECT_CODE), rs.getString("project_code"));
-						bean.set(underscorify(ActivityFieldsConstants.UPDATE_DATE), formatISO8601Date(rs.getTimestamp("date_updated")));
-						bean.set(underscorify(ActivityFieldsConstants.AMP_ID), rs.getString("amp_id"));
-						bean.set(EDIT, editable);
-						bean.set(VIEW, viewable);
+						bean.set("amp_activity_id", rs.getLong("amp_activity_id"));
+						bean.set("created_date", formatISO8601Date(rs.getTimestamp("date_created")));
+						bean.set("title", rs.getString("name"));
+						bean.set("project_code", rs.getString("project_code"));
+						bean.set("update_date", formatISO8601Date(rs.getTimestamp("date_updated")));
+						bean.set("amp_id", rs.getString("amp_id"));
+						bean.set("edit", editable);
+						bean.set("view", viewable);
 						activitiesList.add(bean);
 					}
 					rs.close();
@@ -331,6 +329,23 @@ public class InterchangeUtils {
 		return bld.toString();
 	}
 
+	private static String deunderscorify(String input) {
+		StringBuilder bld = new StringBuilder();
+		boolean upcaseMarker = false;
+		for (int i = 0; i < input.length(); i++) {
+			if (upcaseMarker) {
+				bld.append(Character.toUpperCase(input.charAt(i)));
+				upcaseMarker = false;
+			}
+			if (input.charAt(i) == '_') {
+				upcaseMarker = true;
+			} else {
+				bld.append(input.charAt(i));
+			}
+			
+		}
+		return bld.toString();
+	}
 	/**
 	 * describes a field in a JSON structure of: field_type: one of the types
 	 * {string, boolean, float, list} field_name: the field name, obtained from
@@ -419,7 +434,7 @@ public class InterchangeUtils {
 	}
 
 	private static boolean isCompositeField(Field field) {
-		return field.getAnnotation(InterchangeableDiscriminator.class) == null;
+		return field.getAnnotation(InterchangeableDiscriminator.class) != null;
 	}
 
 	/**
@@ -587,6 +602,226 @@ public class InterchangeUtils {
 		}
 		return isRequired;
 	}
+
+	
+	
+//
+//	private static void populateFieldNamesWithClass(String appendix, Class<?> clazz) {
+//		Field[] fields = clazz.getDeclaredFields();
+//		for (Field field : fields ) {
+//			Interchangeable ant = field.getAnnotation(Interchangeable.class);
+//			if (ant != null) {
+//				fieldNames.put(appendix + "~" + underscorify(ant.fieldTitle()), field);
+//				if (!ant.recursive() && !isSimpleType(getClassOfField(field)))
+//					populateFieldNamesWithClass(appendix + "~" + underscorify(ant.fieldTitle()), getClassOfField(field));
+//			}
+//			
+//		}
+//		
+//	}
+//	
+//	
+//	private static void populateFieldNamesMap() {
+//		fieldNames = new HashMap<String, Field>();
+//		populateFieldNamesWithClass("", AmpActivityFields.class);
+////		Field[] fields = AmpActivityFields.class.getDeclaredFields();
+////		for (Field field : fields) {
+////			Interchangeable ant = field.getAnnotation(Interchangeable.class);
+////			if (ant != null)
+////				fieldNames.put(underscorify(ant.fieldTitle()), field);
+////		}
+//	}
+//	
+	private static boolean isSimpleType(Class<?> clazz) {
+		return classToCustomType.containsKey(clazz);
+	}
+	
+	
+	
+	private static String getValue(Object obj) throws NoSuchMethodException, 
+	SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		if (isSimpleType(obj.getClass())) {
+			return null;
+		} else {
+			for (Field field : obj.getClass().getDeclaredFields()) {
+				Interchangeable ant = field.getAnnotation(Interchangeable.class);
+				if (ant != null) {
+					if (ant.value()) {
+						Method meth = obj.getClass().getMethod(getGetterMethodName(field.getName()));
+						if (String.class.isAssignableFrom(field.getType())) {
+							return (String) meth.invoke(obj);
+						} else {
+							/*we need to go deeper*/
+							return getValue(meth.invoke(obj));
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	private static JsonBean setProperties(Object obj) throws NoSuchMethodException, 
+	SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		if (isSimpleType(obj.getClass())) {
+			return null;
+		} else {
+			JsonBean result = new JsonBean();
+			for (Field field : obj.getClass().getDeclaredFields()) {
+				Interchangeable ant = field.getAnnotation(Interchangeable.class);
+				if (ant != null) {
+					Method meth = obj.getClass().getMethod(getGetterMethodName(field.getName()));
+					Object property = meth.invoke(obj);
+					if (ant.id()) {
+						if (Long.class.isAssignableFrom(field.getType())) {
+							result.set("id", property);
+						} else {
+							/*we need to go deeper*/
+							result.set("id", getId(property));
+						}
+					} 
+					if (ant.value()) {
+						if (String.class.isAssignableFrom(field.getType())) {
+							result.set("value", property);
+						} else {
+							/*we need to go deeper*/
+							result.set("value", getValue(property));
+						}
+					}
+					if (ant.recursive() && property != null) {
+						result.set(underscorify(ant.fieldTitle()), getId(property));
+					}
+					if (!(ant.value() || ant.id())) {
+						//additional property
+
+						if (isSimpleType(meth.getReturnType()) && property != null)
+							result.set(underscorify(ant.fieldTitle()), property);
+					}
+					
+				}
+			}
+			return result;
+		}
+	}
+	
+	
+	private static Long  getId(Object obj) throws NoSuchMethodException, 
+	SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		if (isSimpleType(obj.getClass())) {
+			return null;
+		} else {
+			for (Field field : obj.getClass().getDeclaredFields()) {
+				Interchangeable ant = field.getAnnotation(Interchangeable.class);
+				if (ant != null) {
+					if (ant.id()) {
+						Method meth = obj.getClass().getMethod(getGetterMethodName(field.getName()));
+						if (Long.class.isAssignableFrom(field.getType())) {
+							return (Long) meth.invoke(obj);
+						} else {
+							/*we need to go deeper*/
+							return getId(meth.invoke(obj));
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+
+	
+	private static String getGetterMethodName(String fieldName) {
+		
+		if (fieldName.length() == 1)
+			return "get" + Character.toUpperCase(fieldName.charAt(0));
+		return "get" + Character.toUpperCase(fieldName.charAt(0)) + 
+				((fieldName.length() > 1) ? fieldName.substring(1) : "");
+	}
+	
+	
+	private static Field getDescendField(Class clazz) {
+		for (Field field : clazz.getDeclaredFields()) {
+			Interchangeable ant = field.getAnnotation(Interchangeable.class);
+			if (ant != null && ant.descend())
+				return field;
+		}
+		return null;
+	}
+
+	@SuppressWarnings("rawtypes")
+	private static Class getClassOfField(Field field) {
+		if (!isCollection(field))
+			return field.getType();
+		else
+			return getGenericClass(field);
+		
+	}
+	
+	
+	private static List<JsonBean> getPossibleValuesForField(Field field) {
+		List<JsonBean> result = new ArrayList<JsonBean>();
+		Class<?> clazz = getClassOfField(field);
+		
+		Field potentialDescend = getDescendField(clazz);
+		if (potentialDescend != null) {
+			return getPossibleValuesForField(potentialDescend);
+		}
+		
+		String queryString = "select cls from " + clazz.getName() + " cls ";
+		List<Object> objectList= PersistenceManager.getSession().createQuery(queryString).list();
+		for (Object obj : objectList) {
+			JsonBean item = null;
+			try {
+				item = setProperties(obj);
+			} catch (Exception exc) {
+				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.SOME_OTHER_ERROR, field.getName())));
+			}
+			result.add(item);
+		}
+		return result;
+	}
+	
+	
+	
+	public static List<JsonBean> getPossibleValuesForField(String compositeFieldName, Class<?> clazz) {
+//		if (fieldNames == null) {
+//			populateFieldNamesMap();
+//		}
+//		if (!fieldNames.containsKey(fieldName)) {
+//			List<JsonBean> result = new ArrayList<JsonBean>();
+//			result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.NO_SUCH_FIELD, fieldName)));
+//			return result; 
+//		}
+		String fieldName = "";
+		if (compositeFieldName.contains("~")) {
+			fieldName = compositeFieldName.substring(0, compositeFieldName.indexOf('~') - 1);
+			try {
+				Field descendField = clazz.getDeclaredField(deunderscorify(fieldName));
+				return getPossibleValuesForField(compositeFieldName.substring(compositeFieldName.indexOf('~') + 1), getClassOfField(descendField));
+				
+			} catch (NoSuchFieldException | SecurityException e) {
+				List<JsonBean> result = new ArrayList<JsonBean>();
+				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, fieldName)));
+				return result;
+//				e.printStackTrace();
+			}
+		} else {
+			try {
+				Field finalField = clazz.getDeclaredField(deunderscorify(compositeFieldName));
+				return getPossibleValuesForField(finalField);
+
+			} catch (NoSuchFieldException | SecurityException e) {
+				List<JsonBean> result = new ArrayList<JsonBean>();
+				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, fieldName)));
+				return result;
+			}
+			
+		}
+		
+//		System.out.println();
+//		List<JsonBean>
+//		return getPossibleValuesForField(fieldNames.get(fieldName));
+	}
 	
 	/**
 	 * Imports or Updates an activity
@@ -621,4 +856,7 @@ public class InterchangeUtils {
 		return result;
 	}
 	
+
 }
+
+

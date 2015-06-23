@@ -23,13 +23,13 @@ import java.util.Arrays;
 public class AmpSector implements Serializable, Comparable, Identifiable,
 		ARDimensionable, HierarchyListable, AmpAutoCompleteDisplayable,
 		Cloneable, OrgProfileValue, NameableOrIdentifiable {
-	@Interchangeable(fieldTitle="Sector ID")
+	@Interchangeable(fieldTitle="Sector ID", id=true)
 	private Long ampSectorId;
 	@Interchangeable(fieldTitle="Parent Sector ID", recursive=true)
 	private AmpSector parentSectorId;
 	@Interchangeable(fieldTitle="Sector Code")
 	private String sectorCode;
-	@Interchangeable(fieldTitle="Name")
+	@Interchangeable(fieldTitle="Name", value=true)
 	@TranslatableField
 	private String name;
 	@Interchangeable(fieldTitle="Type")

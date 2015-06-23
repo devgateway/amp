@@ -17,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 
@@ -33,6 +34,12 @@ public class InterchangeEndpoints {
 	@Context
 	private HttpServletRequest httpRequest;
 
+	@GET
+	@Path("/fields/{fieldName}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public List<JsonBean> getValues(@PathParam("fieldName") String fieldName) {
+		return InterchangeUtils.getPossibleValuesForField(fieldName, AmpActivityFields.class);
+	}
 	
 	@GET
 	@Path("/fields")

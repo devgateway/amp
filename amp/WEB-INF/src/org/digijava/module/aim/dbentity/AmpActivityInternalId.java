@@ -9,13 +9,13 @@ import org.digijava.module.aim.util.Output;
 public class AmpActivityInternalId implements Serializable, Versionable, Cloneable {
 
 	private static final long serialVersionUID = 469552292854192522L;
-	@Interchangeable(fieldTitle="ID")
+//	@Interchangeable(fieldTitle="ID")
 	private Long id;
-	@Interchangeable(fieldTitle="Organization")
+//	@Interchangeable(fieldTitle="Organization")
 	private AmpOrganisation organisation;
 //	@Interchangeable(fieldTitle="AMP Activity",recursive=true)
 	private AmpActivityVersion ampActivity;
-	@Interchangeable(fieldTitle="Internal ID")
+	@Interchangeable(fieldTitle="Internal ID", id = true, value = true)
 	private String internalId;
 
 	public Long getId() {

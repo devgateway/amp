@@ -8,7 +8,7 @@ package org.digijava.kernel.ampapi.endpoints.errors;
  * @author Nadejda Mandrescu
  */
 public class ApiErrorMessage {
-	/** Message custom Error Code [0..99] within it's component/method*/
+	/** Message custom Error Code [0..99] within its component/method*/
 	public final Integer id;
 	/** General error description (laconic) */
 	public final String description;

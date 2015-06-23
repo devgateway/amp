@@ -3,13 +3,16 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.ProgramUtil;
 
 public class AmpActivityProgram implements Versionable, Serializable, Cloneable {
 
         private Long ampActivityProgramId;
+        @Interchangeable(fieldTitle="Program Percentage")
         private Float programPercentage;
+        @Interchangeable(fieldTitle="Program", id=true, value=true)
         private AmpTheme program;
         private AmpActivityVersion activity;
         private AmpActivityProgramSettings programSetting;

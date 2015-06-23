@@ -10,7 +10,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
  * @author Nadejda Mandrescu
  */
 public class ActivityErrors {
-	
+
 	// Validation errors
 	public static final ApiErrorMessage FIELD_REQUIRED = new ApiErrorMessage(1, "Required field");
 	public static final ApiErrorMessage FIELD_INVALID_TYPE = new ApiErrorMessage(2, "Invalid field type");
@@ -19,5 +19,7 @@ public class ActivityErrors {
 	public static final ApiErrorMessage FIELD_MULTIPLE_VALUES_NOT_ALLOWED = new ApiErrorMessage(5, "Multiple values not allowed");
 	public static final ApiErrorMessage FIELD_UNQUE_VALUES = new ApiErrorMessage(6, "Unique values required");
 	public static final ApiErrorMessage FIELD_INVALID = new ApiErrorMessage(7, "Invalid field");
+	public static final ApiErrorMessage SOME_OTHER_ERROR = new ApiErrorMessage(8, "Other non-specific error");
+	
 	
 }

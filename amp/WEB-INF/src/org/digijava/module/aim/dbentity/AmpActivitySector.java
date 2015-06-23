@@ -3,16 +3,18 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
 public class AmpActivitySector implements Versionable, Serializable, Cloneable {
 
 	private Long ampActivitySectorId;
 	
+	@Interchangeable(fieldTitle="Activity ID")
 	private AmpActivityVersion activityId;
-	
+	@Interchangeable(fieldTitle="Sector ID", id = true, value = true)
 	private AmpSector sectorId;
-	
+	@Interchangeable(fieldTitle="Sector Percentage")
 	private Float sectorPercentage;
         
         private AmpClassificationConfiguration classificationConfig;

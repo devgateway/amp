@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,15 +16,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.management.RuntimeErrorException;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
@@ -43,13 +44,16 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.time.StopWatch;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.jdbc.Work;
 import org.springframework.util.ClassUtils;
 
 import clover.org.apache.commons.lang.StringUtils;
 import clover.org.apache.log4j.helpers.ISO8601DateFormat;
 
+/**
+ * Activity Import/Export Utility methods 
+ * 
+ */
 public class InterchangeUtils {
 
 	private static final String NOT_REQUIRED = "_NONE_";
@@ -91,8 +95,7 @@ public class InterchangeUtils {
 	/**
 	 * Picks available translations for a string (supposedly field name)
 	 * 
-	 * @param fieldName
-	 *            the field name to be translated
+	 * @param fieldName the field name to be translated
 	 * @return a map from the ISO2 code -> translation in said text
 	 */
 	private static Map<String, String> getLabelsForField(String fieldName) {
@@ -114,10 +117,8 @@ public class InterchangeUtils {
 	/**
 	 * transforms a Map<String,String> to a JsonBean with equal structure
 	 * 
-	 * @param map
-	 *            the map to be transformed
-	 * @return a JsonBean of the structure {"\<code1\>":"\<translation1\>",
-	 *         "\<code2\>":"\<translation2\>", ...}
+	 * @param map the map to be transformed
+	 * @return a JsonBean of the structure {"\<code1\>":"\<translation1\>", "\<code2\>":"\<translation2\>", ...}
 	 */
 	public static JsonBean mapToBean(Map<String, String> map) {
 		if (map.isEmpty())
@@ -165,8 +166,7 @@ public class InterchangeUtils {
 	/**
 	 * Get the activities ids for the current workspace
 	 * 
-	 * @param session
-	 *            HttpSession
+	 * @param session HttpSession
 	 * @return List<Long> with the editable activity Ids
 	 */
 	private static List<Long> getEditableActivityIds() {
@@ -179,10 +179,8 @@ public class InterchangeUtils {
 	/**
 	 * Gets the list of ids of the activities that the logged user can view.
 	 * 
-	 * @param tm
-	 *            Logged teamMember
-	 * @return the List<Long> of ids of the activities that the logged user can
-	 *         view.
+	 * @param tm Logged teamMember
+	 * @return the List<Long> of ids of the activities that the logged user can view.
 	 */
 	private static List<Long> getViewableActivityIds(TeamMember tm) {
 		List<Long> viewableActivityIds = new ArrayList<Long>();
@@ -214,18 +212,11 @@ public class InterchangeUtils {
 	 * Returns all AmpActivityVersions from AMP that are included/excluded from
 	 * the activityIds parameter
 	 * 
-	 * @param include
-	 *            whether to include or exclude the ids of the List<Long>
-	 *            activityIds into the result
-	 * @param activityIds
-	 *            List with the ids (amp_activity_id) of the activities to
-	 *            include or exclude
-	 * @param viewable
-	 *            whether the list of activities is viewable or not
-	 * @param editable
-	 *            whether the list of activities is editable or not
-	 * @return List <JsonBean> of the activities generated from
-	 *         including/excluding the List<Long> of activityIds
+	 * @param include whether to include or exclude the ids of the List<Long> activityIds into the result
+	 * @param activityIds List with the ids (amp_activity_id) of the activities to include or exclude
+	 * @param viewable whether the list of activities is viewable or not
+	 * @param editable whether the list of activities is editable or not
+	 * @return List <JsonBean> of the activities generated from including/excluding the List<Long> of activityIds
 	 */
 	private static List<JsonBean> getActivitiesByIds(final List<Long> activityIds, final boolean include,
 			final boolean viewable, final boolean editable) {
@@ -443,13 +434,9 @@ public class InterchangeUtils {
 	 * Gets the List <JsonBean> of activities the user can and can't view, edit
 	 * using a LRU caching mechanism. The pid is used as the cache key.
 	 * 
-	 * @param pid
-	 *            current pagination request reference (random id) to keep a
-	 *            snapshot for the pagination chunks
-	 * @param tm
-	 *            TeamMember, current logged user
-	 * @return the Collection <JsonBean> with the list of activities for the
-	 *         user
+	 * @param pid current pagination request reference (random id) to keep a snapshot for the pagination chunks
+	 * @param tm TeamMember, current logged user 
+	 * @return the Collection <JsonBean> with the list of activities for the user
 	 */
 	public static Collection<JsonBean> getActivityList(String pid, TeamMember tm) {
 		Collection<JsonBean> projectList = null;
@@ -464,7 +451,12 @@ public class InterchangeUtils {
 		}
 		return projectList;
 	}
-
+	
+	/**
+	 * 
+	 * @param projectId
+	 * @return
+	 */
 	public static JsonBean getActivity(Long projectId) {
 		JsonBean activityJson = new JsonBean();
 		try {
@@ -572,8 +564,7 @@ public class InterchangeUtils {
 	/**
 	 * Checks if a given field is required or not
 	 * 
-	 * @param field
-	 *            the field to validate
+	 * @param field the field to validate
 	 * @return true if the field is required, false if it is not.
 	 */
 	public static boolean isRequired(Field field) {
@@ -592,4 +583,38 @@ public class InterchangeUtils {
 		}
 		return isRequired;
 	}
+	
+	/**
+	 * Imports or Updates an activity
+	 * @param json new activity configuration
+	 * @param update flags whether this is an import or an update request 
+	 * @return latest project overview or an error if invalid configuration is received 
+	 */
+	public static JsonBean importActivity(JsonBean newJson, boolean update) {
+		ActivityImporter importer = new ActivityImporter();
+		List<ApiErrorMessage> errors = importer.importOrUpdate(newJson, update);
+		
+		return getImportResult(importer.getNewActivity(), importer.getOldJson(), errors);
+		
+	}
+	
+	protected static JsonBean getImportResult(AmpActivityVersion newActivity, JsonBean oldJson, 
+			List<ApiErrorMessage> errors) {
+		JsonBean result = null;
+		if (errors.size() == 0 && newActivity == null) {
+			result = ApiError.toError(ApiError.UNKOWN_ERROR); 
+		} else if (errors.size() > 0) {
+			result = ApiError.toError(errors);
+			result.set(ActivityEPConstants.ACTIVITY, oldJson);
+		} else {
+			List<JsonBean> activities = getActivitiesByIds(Arrays.asList(newActivity.getAmpActivityId()), true, true, true);
+			if (activities == null || activities.size() == 0) {
+				result = ApiError.toError(ApiError.UNKOWN_ERROR);
+			} else {
+				result = activities.get(0);
+			}
+		}
+		return result;
+	}
+	
 }

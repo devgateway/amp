@@ -6,7 +6,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -19,9 +22,9 @@ import org.digijava.module.aim.helper.TeamMember;
 
 
 /**
+ * AMP Activity Endpoints for Activity Import / Export
  * 
  * @author acartaleanu
- * Endpoints for the Interchange module of AMP -- activity export / import 
  */
 
 @Path("activity")
@@ -33,7 +36,6 @@ public class InterchangeEndpoints {
 	
 	@GET
 	@Path("/fields")
-//	@Produces(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public List<JsonBean> getAvailableFields() {
 		return InterchangeUtils.getAllAvailableFields();
@@ -44,8 +46,7 @@ public class InterchangeEndpoints {
 	 * If the user can view the project, the 'view' property of the project is set to true. False otherwise.
 	 * If the user can edit the project, the 'edit' property of the project on the JSON is set to true. False otherwise.
 	 * Pagination can be used if the parameters are sent on the request. If not parameters are sent, the full list
-	 * of projects is returned. 
-	 * 
+	 * of projects is returned.
 	 * 
 	 * @param pid  current pagination request reference (random id). It acts as a key for a LRU caching mechanism that holds the 
 	 * full list of projects for the current user. If it is not provided no caching is used
@@ -71,6 +72,42 @@ public class InterchangeEndpoints {
 		return new ArrayList(activityCollection).subList(start, end);
 	}
 	
+
+
+	/**
+	 * Provides full project information 
+	 * @param projectId project id
+	 * @return project with full set of configured fields and their values 
+	 */
+	@GET
+	@Path("/projects/{projectId}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public JsonBean getProject(@PathParam("projectId") Long projectId) {
+		return InterchangeUtils.getActivity(projectId);
+	}
 	
 	
+	/**
+	 * Imports an activity
+	 * @param newJson activity configuration
+	 * @return latest project overview or an error if invalid configuration is received
+	 */
+	@POST
+	@Path("/")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public JsonBean addProject(JsonBean newJson) {
+		return InterchangeUtils.importActivity(newJson, false);
+	}
+	
+	/**
+	 * Updates an activity
+	 * @param newJson activity configuration
+	 * @return latest project overview or an error if invalid configuration is received
+	 */
+	@PUT
+	@Path("/")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8") 
+	public JsonBean updateProject(JsonBean newJson) {
+		return InterchangeUtils.importActivity(newJson, true);
+	}
 }

@@ -9,14 +9,14 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
- * Validates if required data is provided
+ * Verifies if the field is found under the current level of fields enumeration
  * @author Nadejda Mandrescu
  */
-public class RequiredValidator extends InputValidator {
+public class ValidFieldValidator extends InputValidator {
 
 	@Override
 	public ApiErrorMessage getErrorMessage() {
-		return ActivityErrors.FIELD_REQUIRED;
+		return ActivityErrors.FIELD_INVALID;
 	}
 
 	@Override

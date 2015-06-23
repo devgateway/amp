@@ -9,8 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -20,8 +21,17 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
  * @author Nadejda Mandrescu
  */
 public class InputValidatorProcessor {
+	/** defines validators list and their execution order */
 	private List<InputValidator> validators = new ArrayList<InputValidator>() {{
+			add(new ValidFieldValidator());
 			add(new RequiredValidator());
+			add(new AllowedInputValidator());
+			add(new InputTypeValidator());
+			add(new ActivityTitleValidator());
+			add(new AmpActivityIdValidator());
+			add(new MultipleEntriesValidator());
+			add(new UniqueValidator());
+			add(new ValueValidator());
 			}};
 	
 	/**
@@ -32,16 +42,16 @@ public class InputValidatorProcessor {
 	 * @param errors
 	 * @return true if the current field passes the full validation chain
 	 */
-	public boolean isValid(AmpActivityVersion oldActivity, JsonBean newFieldValue, JsonBean oldFieldValue, 
-			JsonBean fieldDescription, Map<Integer, ApiErrorMessage> errors) {
+	public boolean isValid(AmpActivityVersion oldActivity, JsonBean newField, JsonBean oldField, 
+			JsonBean fieldDescription, Map<Integer, ApiErrorMessage> errors, boolean update) {
 		boolean valid = true;
 		
 		for (InputValidator current : validators) {
-			boolean currentValid = current.isValid(oldActivity, newFieldValue, oldFieldValue, fieldDescription);
+			boolean currentValid = current.isValid(oldActivity, newField, oldField, fieldDescription, update);
 			valid = currentValid && valid;
 			
 			if (!currentValid) {
-				addError(newFieldValue, current.getErrorMessage(), errors);
+				addError(newField, current.getErrorMessage(), errors);
 			}
 			
 			if (!(currentValid && current.isContinueOnSuccess() || !currentValid && current.isContinueOnError())) {
@@ -52,18 +62,17 @@ public class InputValidatorProcessor {
 	}
 	
 	protected void addError(JsonBean newFieldValue, ApiErrorMessage error, Map<Integer, ApiErrorMessage> errors) {
-		String errorCode = "01" + error.id; // TODO: replace with utility method that will generate the error id
+		String errorCode = ApiError.getErrorCode(error);
 		// configure field level invalid flag
 		Set<String> fieldErrors = (Set<String>) newFieldValue.get(EPConstants.INVALID); 
 		if (fieldErrors == null) {
 			fieldErrors = new HashSet<String>();
 			newFieldValue.set(EPConstants.INVALID, fieldErrors);
 		}
-		fieldErrors.add(errorCode == null ? ActivityErrors.GENERIC_FIELD_ERROR_CODE : errorCode);
+		fieldErrors.add(errorCode);
 		
 		// record general errors for the request
-		// TODO: replace with constant ref once Enumeration Endpoint will define them
-		String value = newFieldValue.getString("field_name");
+		String value = newFieldValue.getString(ActivityEPConstants.FIELD_NAME);
 		ApiErrorMessage generalError = errors.get(error.id);
 		generalError = new ApiErrorMessage(generalError == null ? error : generalError, value);
 		errors.put(error.id, generalError);

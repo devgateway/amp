@@ -9,14 +9,14 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
- * Validates if required data is provided
+ * Validates that unique values are provided when within a list required to have unique values 
  * @author Nadejda Mandrescu
  */
-public class RequiredValidator extends InputValidator {
+public class UniqueValidator extends InputValidator {
 
 	@Override
 	public ApiErrorMessage getErrorMessage() {
-		return ActivityErrors.FIELD_REQUIRED;
+		return ActivityErrors.FIELD_UNQUE_VALUES;
 	}
 
 	@Override

@@ -147,7 +147,8 @@ public class InterchangeUtils {
 			viewableActivities = getActivitiesByIds(viewableIds, true, true, false);
 		}
 		if (editableIds.size() > 0) {
-			editableActivities = getActivitiesByIds(editableIds, true, true, true);
+			
+			editableActivities = getActivitiesByIds(editableIds, true, true, !TeamMemberUtil.isManagementWorkspace(tm));
 		}
 		populateActivityMap(activityMap, editableActivities);
 		populateActivityMap(activityMap, notViewableActivities);
@@ -438,7 +439,7 @@ public class InterchangeUtils {
 	}
 
 	private static boolean isCompositeField(Field field) {
-		return field.getAnnotation(InterchangeableDiscriminator.class) == null;
+		return field.getAnnotation(InterchangeableDiscriminator.class) != null;
 	}
 
 	/**

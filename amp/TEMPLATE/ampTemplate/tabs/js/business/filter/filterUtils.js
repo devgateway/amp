@@ -261,6 +261,7 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 				case 'On/Off/Treasury Budget':
 				case 'Zone':
 				case 'Region':
+				case 'District':
 					blob.columnFilters[item.get('name')] = _.map(item.get('values'), function(item_) {
 						return parseInt(item_.id);
 					});

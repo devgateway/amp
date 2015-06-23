@@ -53,6 +53,8 @@ var Query = Backbone.Model.extend({
         } else {
         	this.set({page:1});
         }
+        // Use this flag to force using the saved filters (if any) for the report the first time is loaded.
+        this.firstLoad = true;
         window.currentQuery = this;
         //End Custom Code for Pagination
     },
@@ -60,12 +62,16 @@ var Query = Backbone.Model.extend({
     // AMP-18921: workaround to the filters until they will be properly initialized, 
 	// that should be done as part of filters widget improvement as a whole
     initFilters: function() {
-    	if (!window.currentFilter.converted) {
-			window.currentFilter.converted = true;
-			var blob = FilterUtils.convertJavaFiltersToJS(this.get('filters'));
-			window.currentFilter.deserialize(blob, {
-				silent : true
-			});
+    	if (window.currentFilter !== undefined && window.currentFilter.converted !== true) {
+    		window.currentFilter.converted = true;
+    		var extractedFiltersFromSpecs = FilterUtils.extractFilters(this.get('filters'));
+			var blob = FilterUtils.convertJavaFiltersToJS(extractedFiltersFromSpecs);
+			window.currentFilter.loaded.done(function() {
+				window.currentFilter.deserialize(blob, {
+					silent : true
+				});
+			});			
+			this.set('filters', blob);			
 		}
     },
     
@@ -78,6 +84,9 @@ var Query = Backbone.Model.extend({
         }
         this.model = _.extend(this.model, response);
         this.model.properties = _.extend({}, Settings.QUERY_PROPERTIES, this.model.properties);
+        if (Settings.AMP_REPORT_API_BRIDGE) {
+        	this.initFilters();
+        }
     },
     
     setProperty: function(key, value) {
@@ -157,17 +166,19 @@ var Query = Backbone.Model.extend({
         	 * We need filters & settings to be always applied
         	 * See AMP-19159, AMP-19135 and AMP-18826
         	 */
-        	if (filters == undefined) {
-        		filters = this.get('filters');
-        	}
-        	if (settings == undefined) {
-        		settings = this.get('settings');
-        	}
-        	
-        	var filtersApplied = false;
-        	if(filters) {
-        		this.set('filters', filters);
-        		filtersApplied = true;
+        	if (this.firstLoad === false) {
+	        	if (filters == undefined) {
+	        		filters = this.get('filters');
+	        	}
+	        	if (settings == undefined) {
+	        		settings = this.get('settings');
+	        	}
+	        	
+	        	var filtersApplied = false;
+	        	if(filters) {
+	        		this.set('filters', filters);
+	        		filtersApplied = true;
+	        	}
         	}
 
         	var settingsApplied = false;
@@ -181,9 +192,11 @@ var Query = Backbone.Model.extend({
         	}
 
         	exModel = this.workspace.currentQueryModel;
-        	exModel.queryModel.filters = this.get('filters');
-        	exModel.queryModel.settings = this.get('settings');
-        	exModel.queryModel.filtersApplied = filtersApplied;
+        	if (this.firstLoad === false) {
+        		exModel.queryModel.filters = this.get('filters');
+        		exModel.queryModel.filtersApplied = filtersApplied;
+        	}
+        	exModel.queryModel.settings = this.get('settings');        	
         	exModel.queryModel.settingsApplied = settingsApplied;
         	if(Settings.PAGINATION) {
         		exModel.queryModel.page = this.get('page');
@@ -223,7 +236,7 @@ var Query = Backbone.Model.extend({
             Saiku.i18n.translate();
             return;
         }
-
+        this.firstLoad = false;
 
         // Run it
         this.workspace.table.clearOut();

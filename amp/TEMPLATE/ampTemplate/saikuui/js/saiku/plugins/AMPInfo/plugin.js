@@ -16,7 +16,6 @@ var AMPInfo = Backbone.View.extend({
     },
     
     render: function() {
-    	
 		var filters = this.workspace.query.get('filters');
 		var settings = window.currentSettings;
 		var content = this.render_info(filters, settings);
@@ -24,40 +23,23 @@ var AMPInfo = Backbone.View.extend({
 		$("#amp_info_filters").accordion({	
 			collapsible : true,
 			active : false,
-			animate : "linear" 
+			animate : "linear",
+			activate: function (event, ui) {
+				$("#amp_info_filters_block").empty();
+				var modelFilters = window.currentFilter.serializeToModels();				
+				$("#amp_info_filters_block").html(filtersToHtml(modelFilters));
+				Saiku.i18n.translate();
+			}
 		});
         $(this.el).show();
     },
     
     render_info: function(filters, settings) {
+    	//TODO: Move all these html into a template + view.
     	var content = "<div id='amp_notification' class='amp_notification'><span class='i18n'>{0}</span></div>" 
     		+ "<div id='amp_info_filters'>";
     	content += "<h3><span class='i18n'>Applied filters</span></h3>";
-    	content += "<div id='amp_info_filters_block'>";
-    	var processed_items = {};
-    	if(filters.columnFilterRules !== undefined) {
-    		_.each(filters.columnFilterRules, function(v, k){
-    			var key = k;
-    			var values = extract_values(v[0]);
-    			processed_items[k] = values;
-    		});
-    	}
-    	if(filters.columnDateFilterRules !== undefined) {
-    		_.each(filters.columnDateFilterRules, function(v, k){
-    			var key = k;
-    			var values = extract_values(v[0]);
-    			processed_items[k] = values;
-    		});
-    	}
-    	_.each(processed_items, function(v,k) {
-        	content += "<div>";
-            content += "<b>" + k + "</b>:<br>";
-            _.each(v, function(item, i) {
-            	content += "<div class='round-filter'>" + item + "</div>";
-            });
-        	content += "<hr></div>";
-    	});
-    	content += "</div>";
+    	content += "<div id='amp_info_filters_block'></div>";
     	content += "</div>";
     	if(settings){
         	content += "<div id='amp_info_settings'><span class='i18n'>Currency</span>: " +  settings["1"];
@@ -111,6 +93,71 @@ var extract_values = function(object_value) {
     		break;
 	}
 	return values;
+}
+
+var filtersToHtml = function(filters) {
+	console.log(filters);
+	//TODO: Move all these html into a template + view.
+	var html = "";
+	if (filters.columnFilters != undefined) {
+		for ( var propertyName in filters.columnFilters) {
+			var auxProperty = filters.columnFilters[propertyName];
+			var content = [];
+			_.each(auxProperty, function(item, i) {
+				var auxItem = {};
+				if(item.get !== undefined) {
+					auxItem.id = item.get('id');
+					auxItem.name = item.get('name');
+					if (item.get('name') === "true" || item.get('name') === "false") {
+						//auxItem.trnName = TranslationManager.getTranslated(item.get('name'));
+						auxItem.trnName = item.get('name');
+					 }
+					else {
+						auxItem.trnName = item.get('name');
+					}
+					content.push(auxItem);
+				} else {
+					console.error(JSON.stringify(auxItem) + " not mapped, we need to check why is not a model.");
+				}
+			});
+			/*var name = TranslationManager.getTranslated(auxProperty.filterName) || TranslationManager.getTranslated(propertyName)*/
+			var trnName = auxProperty.filterName || propertyName;
+			html += "<div class='round-filter-group'><b class='i18n'>" + trnName + "</b><br>" + filterContentToHtml(content) + "</div>";
+		}
+	}
+	if (filters.otherFilters != undefined) {
+		for ( var propertyName in filters.otherFilters) {
+			var dateContent = filters.otherFilters[propertyName];
+			if (dateContent != undefined
+					&& dateContent.start != undefined) {
+				var filter = {
+					trnName : propertyName, /*TranslationManager.getTranslated(propertyName),*/
+					name : propertyName,
+					values : [ {
+						id : dateContent.start,
+						name : dateContent.start,
+						trnName : dateContent.start //doesn't need translation for now
+					},
+					{
+						id : dateContent.end,
+						name : dateContent.end,
+						trnName : dateContent.end //doesn't need translation for now
+						
+					}]
+				};
+				html += "<div class='round-filter-group'><b class='i18n'>" + filter.trnName + "</b><br>" + filterContentToHtml(filter.values) + "</div>";
+			}
+		}
+	}
+	return html;
+}
+
+var filterContentToHtml = function(content) {
+	var html = "";
+	_.each(content, function(item) {
+		html += "<div class='round-filter'>" + item.trnName + "</div>";
+	});
+	return html;
 }
 
 /**

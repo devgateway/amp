@@ -60,6 +60,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import java.lang.reflect.Constructor;
@@ -148,9 +149,13 @@ public class OnePager extends AmpHeaderFooter {
 		
 	public OnePager() {
 		super();
+		
 		PageParameters parameters = decodePageParameters(getRequest());
 		AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
 		session.reset();
+		if(parameters==null){
+			redirectToDesktopWithError("Accessing the form with out parameters, redirecting to desktop");
+			}
 		StringValue activityParam = parameters.get(OnePagerConst.ONEPAGER_URL_PARAMETER_ACTIVITY);
         if (activityParam.toString() == null){
             activityParam = parameters.get(OnePagerConst.ONEPAGER_URL_PARAMETER_SSC);
@@ -197,9 +202,11 @@ public class OnePager extends AmpHeaderFooter {
 			}
 			if (!ActivityGatekeeper.allowedToEditActivity(activityId))
 				throw new RedirectToUrlException(ActivityGatekeeper.buildPermissionRedirectLink(activityId));
-			
-			am = new AmpActivityModel(Long.valueOf(activityId), key);
-			
+			try{ 
+				am = new AmpActivityModel(Long.valueOf(activityId), key);
+			}catch(NumberFormatException ex){
+				redirectToDesktopWithError("Form accessed with out activity id");
+			}
 			//check the permissions					
 			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_MEMBER, session.getCurrentMember());
 			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.ACTIVITY, am.getObject());
@@ -276,7 +283,11 @@ public class OnePager extends AmpHeaderFooter {
 		editLockRefresher.add(timer);
 		add(editLockRefresher);
 	}
-	
+	private void redirectToDesktopWithError(String error){
+		logger.error("*****" + error);
+		throw new RedirectToUrlException( "/aim");		
+
+	}
 	/**
      * Decodes a URL in the form:
      * 
@@ -300,8 +311,18 @@ public class OnePager extends AmpHeaderFooter {
         	if (value != null)
         		parameters.add(key, value);
         }
-        
-        return parameters.isEmpty() ? null : parameters;
+    	        	
+    	
+        if(parameters.isEmpty()){
+        	logger.error("****** parameter list to access the form was empty. It was accesed with the following url " +  request.getUrl());
+        	HttpServletRequest httpRequest = ((HttpServletRequest) getRequest().getContainerRequest());
+        	logger.error("Refererer was " + httpRequest.getHeader("referer"));
+        	return null;
+        }
+        else{
+        	return parameters;
+        }
+
     }
 
 

@@ -299,7 +299,15 @@ var Table = Backbone.View.extend({
         this.workspace.adjust();
         // Append the table
         this.clearOut();
-        $(this.el).html('<table></table>');
+        if (!Settings.AMP_REPORT_API_BRIDGE) {
+        	$(this.el).html('<table></table>');
+        } else {
+        	if (data.page.pageArea !== null) {
+        		$(this.el).html('<table></table>');
+        	} else {
+        		$(this.el).html("<br><div class='i18n no_results'>The specified filtered report does not hold any data. Either pick a different filter criteria or use another report.</div>");
+        	}
+        }
         data.workspace = this.workspace;
         var contents = this.renderer.render(data, { 
             htmlObject:         $(this.el).find('table'),

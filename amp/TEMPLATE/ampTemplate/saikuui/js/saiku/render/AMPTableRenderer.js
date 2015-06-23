@@ -51,7 +51,7 @@ AMPTableRenderer.prototype.render = function(data, options) {
 		table += headerHtml + contentHtml + "</table>";
 		return table;
 	} else {
-		return "<br><div class='i18n no_results'>No results</div>";
+		return "";
 	}
 };
 

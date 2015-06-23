@@ -93,12 +93,12 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Internal ID", blockSingleChange = true)
 	protected Long ampActivityId ;
 
-	@Interchangeable(fieldTitle = "AMP Id", required="_ALWAYS_")
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.AMP_ID, required="_ALWAYS_")
 	@VersionableFieldSimple(fieldTitle = "AMP Id", blockSingleChange = true)
 	protected String ampId ;
 
 
-	@Interchangeable(fieldTitle = "Project Title",fmPath="/Activity Form/Identification/Project Title", required = "_ALWAYS_")
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_TITLE,fmPath="/Activity Form/Identification/Project Title", required = "_ALWAYS_")
 	@PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL})
 	@VersionableFieldSimple(fieldTitle = "Name", mandatoryForSingleChange = true)
 	@TranslatableField
@@ -390,12 +390,12 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Created By", blockSingleChange = true)
 	protected AmpTeamMember activityCreator;
 	
-	@Interchangeable(fieldTitle = "Creation Date", importable=false)
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.CREATED_DATE, importable=false)
 	@VersionableFieldSimple(fieldTitle = "Creation Date", blockSingleChange = true)
 	protected Date createdDate;
 	
-	@Interchangeable(fieldTitle = "Update Date", importable=false)
-	@VersionableFieldSimple(fieldTitle = "Update Date", blockSingleChange = true)
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.UPDATE_DATE, importable=false)
+    @VersionableFieldSimple(fieldTitle = "Update Date", blockSingleChange = true)
 	protected Date updatedDate;
 
 	@Interchangeable(fieldTitle = "Iati Last Update Date", importable=false)
@@ -510,7 +510,7 @@ LoggerIdentifiable, Cloneable {
 	@Interchangeable(fieldTitle = "Sub Program",fmPath="/Activity Form/Identification/Budget Extras/Sub-Program")
 	@VersionableFieldSimple(fieldTitle = "Sub Program")
 	protected String subProgram;
-	@Interchangeable(fieldTitle = "Project Code",fmPath="/Activity Form/Identification/Budget Extras/Project Code")
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_CODE,fmPath="/Activity Form/Identification/Budget Extras/Project Code")
 	@VersionableFieldSimple(fieldTitle = "Project Code")
 	protected String projectCode;
 	@Interchangeable(fieldTitle = "Ministry Code",fmPath="/Activity Form/Identification/Budget Extras/Ministry Code")

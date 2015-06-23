@@ -34,6 +34,7 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.Validators;
@@ -56,6 +57,8 @@ import clover.org.apache.log4j.helpers.ISO8601DateFormat;
  */
 public class InterchangeUtils {
 
+	private static final String VIEW = "view";
+	private static final String EDIT = "edit";
 	private static final String NOT_REQUIRED = "_NONE_";
 	private static final String ALWAYS_REQUIRED = "_ALWAYS_";
 	public static final Logger LOGGER = Logger.getLogger(InterchangeUtils.class);
@@ -152,13 +155,14 @@ public class InterchangeUtils {
 
 	private static void populateActivityMap(Map<String, JsonBean> activityMap, List<JsonBean> activities) {
 		for (JsonBean activity : activities) {
-			JsonBean activityOnMap = activityMap.get((String) activity.get("amp_id"));
+			JsonBean activityOnMap = activityMap.get((String) activity.get(underscorify(ActivityFieldsConstants.AMP_ID)));
 			// if it is not on the map, or activity is a newer
 			// version than the one already on the Map
 			// then we put it on the Map
 			if (activityOnMap == null
-					|| (Long) activity.get("amp_activity_id") > (Long) activityOnMap.get("amp_activity_id")) {
-				activityMap.put((String) activity.get("amp_id"), activity);
+					|| (Long) activity.get(underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID)) > (Long) activityOnMap
+							.get(underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID))) {
+				activityMap.put((String) activity.get(underscorify(ActivityFieldsConstants.AMP_ID)), activity);
 			}
 		}
 	}
@@ -237,14 +241,14 @@ public class InterchangeUtils {
 					ResultSet rs = rsi.rs;
 					while (rs.next()) {
 						JsonBean bean = new JsonBean();
-						bean.set("amp_activity_id", rs.getLong("amp_activity_id"));
-						bean.set("created_date", formatISO8601Date(rs.getTimestamp("date_created")));
-						bean.set("title", rs.getString("name"));
-						bean.set("project_code", rs.getString("project_code"));
-						bean.set("update_date", formatISO8601Date(rs.getTimestamp("date_updated")));
-						bean.set("amp_id", rs.getString("amp_id"));
-						bean.set("edit", editable);
-						bean.set("view", viewable);
+						bean.set(underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID), rs.getLong("amp_activity_id"));
+						bean.set(underscorify(ActivityFieldsConstants.CREATED_DATE), formatISO8601Date(rs.getTimestamp("date_created")));
+						bean.set(underscorify(ActivityFieldsConstants.PROJECT_TITLE), rs.getString("name"));
+						bean.set(underscorify(ActivityFieldsConstants.PROJECT_CODE), rs.getString("project_code"));
+						bean.set(underscorify(ActivityFieldsConstants.UPDATE_DATE), formatISO8601Date(rs.getTimestamp("date_updated")));
+						bean.set(underscorify(ActivityFieldsConstants.AMP_ID), rs.getString("amp_id"));
+						bean.set(EDIT, editable);
+						bean.set(VIEW, viewable);
 						activitiesList.add(bean);
 					}
 					rs.close();

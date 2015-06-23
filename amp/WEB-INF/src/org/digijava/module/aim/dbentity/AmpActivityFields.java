@@ -89,7 +89,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Internal ID", blockSingleChange = true)
 	protected Long ampActivityId ;
 
-	@Interchangeable(fieldTitle = ActivityFieldsConstants.AMP_ID, required="_ALWAYS_")
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.AMP_ID, required="_ALWAYS_" ,importable=false)
 	@VersionableFieldSimple(fieldTitle = "AMP Id", blockSingleChange = true)
 	protected String ampId ;
 
@@ -129,7 +129,7 @@ LoggerIdentifiable, Cloneable {
 	protected String documentSpace;
 
 
-	@Interchangeable(fieldTitle = "Is Draft", required="_ALWAYS_")
+	@Interchangeable(fieldTitle = "Is Draft", required="_ALWAYS_",importable=false)
 	@VersionableFieldSimple(fieldTitle = "Is Draft?")
 	protected Boolean draft;
 
@@ -145,8 +145,6 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldTextEditor(fieldTitle = "Minorities")
 	protected String minorities;
 
-	//TODO do we show? never used
-	@Interchangeable(fieldTitle = "Language")
 	@VersionableFieldSimple(fieldTitle = "Language")
 	protected String language ;
 
@@ -197,7 +195,6 @@ LoggerIdentifiable, Cloneable {
 	
 	//TODO show this field?
 	/*seems obsolete*/
-	//@Interchangeable(fieldTitle = "Progress",)
 	@VersionableCollection(fieldTitle = "Progress")
 	protected Set progress;
 	
@@ -221,7 +218,6 @@ LoggerIdentifiable, Cloneable {
 	protected Set<AmpLineMinistryObservation> lineMinistryObservations;
 
 	//seems obsolete
-	//@Interchangeable(fieldTitle = "Costs",)
 	@VersionableCollection(fieldTitle = "Costs")
 	protected Set costs;
 	
@@ -229,7 +225,6 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldTextEditor(fieldTitle = "Program Description")
 	protected String programDescription;
 	
-	//@Interchangeable(fieldTitle = "Team",)
 	@VersionableFieldSimple(fieldTitle = "Team")
 	protected AmpTeam team;
 	//@VersionableCollection(fieldTitle = "Members")
@@ -417,7 +412,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableCollection(fieldTitle = "Regional Fundings")
 	protected Set <AmpRegionalFunding> regionalFundings;
 
-	@Interchangeable(fieldTitle = "Approval Status")
+	@Interchangeable(fieldTitle = "Approval Status",importable=false)
 	@VersionableFieldSimple(fieldTitle = "Approval Status", blockSingleChange = true)
 	protected String approvalStatus;
 

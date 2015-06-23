@@ -74,6 +74,15 @@ var WorkspaceToolbar = Backbone.View.extend({
             	$(button.parentElement).hide();
             });
             $(this.workspace.el).find('.workspace_fields').addClass('hide');
+            
+            if (this.workspace.query.result.hasRun() && 
+            		this.workspace.query.result.result.page.pageArea === null) {
+            	$(this.el).find('a.export_xls').addClass('disabled_toolbar');            	
+            	$(this.el).find('a.export_csv').addClass('disabled_toolbar');
+            	$(this.el).find('a.export_pdf').addClass('disabled_toolbar');
+            	$(this.el).find('a.export_to_map').addClass('disabled_toolbar');
+            	$(this.el).find('a.fullscreen').addClass('disabled_toolbar');
+            }
     	}
     	else
     		{

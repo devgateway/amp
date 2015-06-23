@@ -26,4 +26,7 @@ public @interface Interchangeable {
 	 * 
 	 */
 	boolean recursive() default false;
+	
+	/** configured with option value, like "Primary Sector" */
+    String discriminatorOption() default "";
 }

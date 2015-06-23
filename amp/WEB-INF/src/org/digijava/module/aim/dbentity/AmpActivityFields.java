@@ -13,6 +13,7 @@ import org.digijava.module.aim.annotations.activityversioning.VersionableCollect
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -162,7 +163,15 @@ LoggerIdentifiable, Cloneable {
 	
 	@Interchangeable(fieldTitle = "Sectors",fmPath="/Activity Form/Sectors")
 	@VersionableCollection(fieldTitle = "Sectors")
-	protected Set <AmpSector> sectors ;
+	@InterchangeableDiscriminator(
+	        discriminatorField = "classificationConfig.name",
+	        settings = {
+	 @Interchangeable(fieldTitle ="Primary Sectors",discriminatorOption = "Primary", fmPath="/Activity Form/Sectors/Primary Sectors"),
+	 @Interchangeable(fieldTitle ="Secondary Sectors",discriminatorOption = "Secondary", fmPath="/Activity Form/Sectors/Secondary Sectors"),
+	 @Interchangeable(fieldTitle ="Tertiary Sectors",discriminatorOption = "Tertiary", fmPath="/Activity Form/Sectors/Tertiary Sectors"),
+	 }
+	)
+	protected Set <AmpActivitySector> sectors ;
 	
 	@Interchangeable(fieldTitle = "Contracts",fmPath="/Activity Form/Contracts")
 	@VersionableCollection(fieldTitle = "Contracts")
@@ -341,8 +350,16 @@ LoggerIdentifiable, Cloneable {
 	protected Set<AmpStructure> structures;
 
 	//TODO can be Component Commintment, Disbursement or Expenditures
-	@Interchangeable(fieldTitle = "Component Fundings",fmPath="/Activity Form/Component")
+	@Interchangeable(fieldTitle = "Component Fundings",fmPath="/Activity Form/Components")
 	@VersionableCollection(fieldTitle = "Component Fundings")
+	@InterchangeableDiscriminator(
+	        discriminatorField = "transactionType",
+	        settings = {
+	 @Interchangeable(fieldTitle ="Components Commitments",discriminatorOption = "0", fmPath="/Activity Form/Components/Component/Components Commitments"),
+	 @Interchangeable(fieldTitle ="Components Disbursements",discriminatorOption = "1", fmPath="/Activity Form/Components/Component/Components Disbursements"),
+	 @Interchangeable(fieldTitle ="Components Expenditures",discriminatorOption = "2", fmPath="/Activity Form/Components/Component/Components Expenditures"),
+	 }
+	)
 	protected Set<AmpComponentFunding> componentFundings;
 
 
@@ -519,8 +536,16 @@ LoggerIdentifiable, Cloneable {
 	protected Boolean humanitarianAid;
 
 	//TODO can be Primary, Secondary,Tertiary or National Plan Objective
-	//@Interchangeable(fieldTitle = "Act. Programs",fmPath="/Activity Form/Program")
+	@Interchangeable(fieldTitle = "Act. Programs",fmPath="/Activity Form/Program")
 	@VersionableCollection(fieldTitle = "Act. Programs")
+	@InterchangeableDiscriminator(
+	        discriminatorField = "programSetting.name",
+	        settings = {
+	 @Interchangeable(fieldTitle ="National Plan Objective",discriminatorOption = "National Plan Objective", fmPath="/Activity Form/Program/National Plan Objective"),
+	 @Interchangeable(fieldTitle ="Primary Programs",discriminatorOption = "Primary Program", fmPath="/Activity Form/Program/Primary Programs"),
+	 @Interchangeable(fieldTitle ="Secondary Programs",discriminatorOption = "Secondary Program", fmPath="/Activity Form/Program/Secondary Programs"),
+	 @Interchangeable(fieldTitle ="Tertiary Programs",discriminatorOption = "Tertiary Program", fmPath="/Activity Form/Program/Tertiary Programs"),
+	 })
 	protected Set <AmpActivityProgram> actPrograms;
 	
 	//UPDATE_IT_AFTER
@@ -713,7 +738,7 @@ LoggerIdentifiable, Cloneable {
 	/**
 	 * @return
 	 */
-	public Set  getSectors() {
+	public Set <AmpActivitySector> getSectors() {
 		return sectors;
 	}
 
@@ -800,7 +825,7 @@ LoggerIdentifiable, Cloneable {
 	/**
 	 * @param set
 	 */
-	public void setSectors(Set  set) {
+	public void setSectors(Set <AmpActivitySector> set) {
 		sectors = set;
 	}
 

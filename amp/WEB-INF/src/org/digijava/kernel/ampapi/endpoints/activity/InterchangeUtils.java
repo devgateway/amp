@@ -34,6 +34,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -65,33 +66,35 @@ public class InterchangeUtils {
 			put(java.lang.Double.class, "float");
 			put(java.lang.Boolean.class, "boolean");
 			put(java.lang.Long.class, "string");
-//			put(java.lang.Long.class, "int");
+			// put(java.lang.Long.class, "int");
 			put(java.lang.Float.class, "float");
-//			put(AmpCategoryValue.class, "string");
+			// put(AmpCategoryValue.class, "string");
 
 		}
 	};
-	
+
 	private static Set<Class<?>> JSON_SUPPORTED_CLASSES = new HashSet<Class<?>>() {
-	    {
-	        add(Boolean.class);
-	        add(Character.class);
-	        add(Byte.class);
-	        add(Short.class);
-	        add(Integer.class);
-	        add(Long.class);
-	        add(Float.class);
-	        add(Double.class);
-	        add (String.class);
-	        add (Date.class);
-	    }
+		{
+			add(Boolean.class);
+			add(Character.class);
+			add(Byte.class);
+			add(Short.class);
+			add(Integer.class);
+			add(Long.class);
+			add(Float.class);
+			add(Double.class);
+			add(String.class);
+			add(Date.class);
+		}
 	};
 
-/**
- * Picks available translations for a string (supposedly field name)
- * @param fieldName the field name to be translated
- * @return a map from the ISO2 code -> translation in said text
- */
+	/**
+	 * Picks available translations for a string (supposedly field name)
+	 * 
+	 * @param fieldName
+	 *            the field name to be translated
+	 * @return a map from the ISO2 code -> translation in said text
+	 */
 	private static Map<String, String> getLabelsForField(String fieldName) {
 		Map<String, String> translations = new HashMap<String, String>();
 		try {
@@ -99,8 +102,7 @@ public class InterchangeUtils {
 			for (Message m : messages) {
 				translations.put(m.getLocale(), m.getMessage());
 			}
-			if (translations.isEmpty())
-			{
+			if (translations.isEmpty()) {
 				translations.put("EN", fieldName);
 			}
 		} catch (WorkerException e) {
@@ -111,10 +113,11 @@ public class InterchangeUtils {
 
 	/**
 	 * transforms a Map<String,String> to a JsonBean with equal structure
-	 * @param map the map to be transformed
-	 * @return a JsonBean of the structure
-	 * {"\<code1\>":"\<translation1\>", 
-	 * 	"\<code2\>":"\<translation2\>", ...}
+	 * 
+	 * @param map
+	 *            the map to be transformed
+	 * @return a JsonBean of the structure {"\<code1\>":"\<translation1\>",
+	 *         "\<code2\>":"\<translation2\>", ...}
 	 */
 	public static JsonBean mapToBean(Map<String, String> map) {
 		if (map.isEmpty())
@@ -125,7 +128,6 @@ public class InterchangeUtils {
 		}
 		return bean;
 	}
-
 
 	public static Collection<JsonBean> getActivityList(TeamMember tm) {
 		Map<String, JsonBean> activityMap = new HashMap<String, JsonBean>();
@@ -263,18 +265,21 @@ public class InterchangeUtils {
 
 	/**
 	 * checks whether a Field is assignable from a Collection
-	 * @param field a Field
+	 * 
+	 * @param field
+	 *            a Field
 	 * @return true/false
 	 */
 	private static boolean isCollection(Field field) {
-		return Collection.class.isAssignableFrom( field.getType());
+		return Collection.class.isAssignableFrom(field.getType());
 	}
-	
+
 	/**
-	 * returns the generic class defined within a Collection,
-	 * e.g. Collection<Class_returned>
+	 * returns the generic class defined within a Collection, e.g.
+	 * Collection<Class_returned>
+	 * 
 	 * @param field
-	 * @return the generic class  
+	 * @return the generic class
 	 */
 	private static Class<?> getGenericClass(Field field) {
 		if (!isCollection(field))
@@ -282,27 +287,28 @@ public class InterchangeUtils {
 		ParameterizedType collectionType = null;
 		collectionType = (ParameterizedType) field.getGenericType();
 		Type[] genericTypes = collectionType.getActualTypeArguments();
-		if (genericTypes.length > 1)
-		{
-			//dealing with a map or anything else having > 1 parameterized types 
-			//throw an exception, this is a very unexpected case
+		if (genericTypes.length > 1) {
+			// dealing with a map or anything else having > 1 parameterized
+			// types
+			// throw an exception, this is a very unexpected case
 			throw new RuntimeException("Only collections with one generic type expected!");
 		}
 		if (genericTypes.length == 0) {
-//			return null;
-			//dealing with a raw type
-			//throw an exception, it won't be complete with no parameterization
+			// return null;
+			// dealing with a raw type
+			// throw an exception, it won't be complete with no parameterization
 			throw new RuntimeException("Raw types are not allowed!");
 		}
 		return ((Class<?>) genericTypes[0]);
 	}
-	
+
 	/**
 	 * gets fields from the type of the field
+	 * 
 	 * @param field
-	 * @return a list of JsonBeans, each a description of @Interchangeable 
-	 * fields in the definition of the field's class, or field's generic type,
-	 * if it's a collection  
+	 * @return a list of JsonBeans, each a description of @Interchangeable
+	 *         fields in the definition of the field's class, or field's generic
+	 *         type, if it's a collection
 	 */
 	private static List<JsonBean> getChildrenOfField(Field field) {
 		if (!isCollection(field))
@@ -310,11 +316,13 @@ public class InterchangeUtils {
 		else
 			return getAllAvailableFields(getGenericClass(field));
 	}
-	
+
 	/**
 	 * converts the uppercase letters of a string to underscore + lowercase
 	 * (except for first one)
-	 * @param input String to be converted
+	 * 
+	 * @param input
+	 *            String to be converted
 	 * @return converted string
 	 */
 	public static String underscorify(String input) {
@@ -327,74 +335,96 @@ public class InterchangeUtils {
 		}
 		return bld.toString();
 	}
-	
+
 	/**
-	 * describes a field in a JSON structure of:
-	 * 		field_type: one of the types {string, boolean, float, list}
-	 * 		field_name: the field name, obtained from the fieldTitle attribute from the @Interchangeable annotation
-	 * 		field_label: translations of the field in the available languages
-	 * 		multiple_values: true if it's a collection, false otherwise
-	 * 		importable: whether the field is to be imported, or had been exported just for the sake of matching
-	 * 		children: if the field is not a basic type (string, boolean, or float), its class may contain other @Interchangeable fields,
-	 * 					  which are recursively added here
-	 * 		recursive: defined by @Interchangeable.recursive; true for the purpose of avoiding loops
-	 * 		allow_empty: specifies whether said field is allowed to be transmitted empty
+	 * describes a field in a JSON structure of: field_type: one of the types
+	 * {string, boolean, float, list} field_name: the field name, obtained from
+	 * the fieldTitle attribute from the @Interchangeable annotation
+	 * field_label: translations of the field in the available languages
+	 * multiple_values: true if it's a collection, false otherwise importable:
+	 * whether the field is to be imported, or had been exported just for the
+	 * sake of matching children: if the field is not a basic type (string,
+	 * boolean, or float), its class may contain other @Interchangeable fields,
+	 * which are recursively added here recursive: defined by
+	 * @Interchangeable.recursive; true for the purpose of avoiding loops
+	 * allow_empty: specifies whether said field is allowed to be transmitted
+	 * empty
+	 * 
 	 * @param field
 	 * @return
 	 */
-	private static JsonBean describeField(Field field) {
-		Interchangeable ant2 = field.getAnnotation(Interchangeable.class);
-		if (ant2 == null)
+	private static JsonBean describeField(Field field, Interchangeable interchangeble) {
+		if (interchangeble == null)
 			return null;
 		JsonBean bean = new JsonBean();
-		bean.set("field_name", underscorify(ant2.fieldTitle()));
-		bean.set("field_type", classToCustomType.containsKey(field.getType()) ? classToCustomType.get(field.getType()) : "list");
-		bean.set("field_label", mapToBean(getLabelsForField(ant2.fieldTitle())));
+		bean.set("field_name", underscorify(interchangeble.fieldTitle()));
+		bean.set("field_type", classToCustomType.containsKey(field.getType()) ? classToCustomType.get(field.getType())
+				: "list");
+		bean.set("field_label", mapToBean(getLabelsForField(interchangeble.fieldTitle())));
 		if (!classToCustomType.containsKey(field.getClass())) {/* list type */
-			bean.set("importable", ant2.importable()? true: false);
-			if (isCollection(field) && !hasMaxSizeValidatorEnabled (field))
+			bean.set("importable", interchangeble.importable() ? true : false);
+			if (isCollection(field) && !hasMaxSizeValidatorEnabled(field))
 				bean.set("multiple_values", true);
-			else 
+			else
 				bean.set("multiple_values", false);
-			if (!ant2.recursive()){
+			if (!interchangeble.recursive()) {
 				List<JsonBean> children = getChildrenOfField(field);
 				if (children != null && children.size() > 0)
 					bean.set("children", children);
-			}
-			else
-			{
+			} else {
 				bean.set("recursive", true);
 			}
-			bean.set("unique", hasUniqueValidatorEnabled (field));
+			bean.set("unique", hasUniqueValidatorEnabled(field));
 			bean.set("allow_empty", !isRequired(field));
 		}
 		return bean;
 	}
 
-	
 	public static List<JsonBean> getAllAvailableFields() {
 		return getAllAvailableFields(AmpActivityFields.class);
 	}
-	
 
 	/**
 	 * Describes each @Interchangeable field of a class
-	 * @param clazz the class to be described
-	 * @return 
+	 * 
+	 * @param clazz
+	 *            the class to be described
+	 * @return
 	 */
 	private static List<JsonBean> getAllAvailableFields(Class clazz) {
 		List<JsonBean> result = new ArrayList<JsonBean>();
 		StopWatch.next("Descending into", false, clazz.getName());
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
+			
 			if (!FMVisibility.isVisible(field)) {
 				continue;
 			}
-			JsonBean descr = describeField(field);
-			if (descr != null)
-				result.add(descr);
+			
+			if (!isCompositeField(field)) {
+				Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
+				JsonBean descr = describeField(field, interchangeable);
+				if (descr != null) {
+					result.add(descr);
+				}
+			} else {
+				InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
+				Interchangeable[] settings = discriminator.settings();
+				for (int i = 0; i < settings.length; i++) {
+					JsonBean descr = describeField(field, settings[i]);
+					if (descr != null) {
+						result.add(descr);
+
+					}
+				}
+			}
+			
 		}
 		return result;
+	}
+
+	private static boolean isCompositeField(Field field) {
+		return field.getAnnotation(InterchangeableDiscriminator.class) == null;
 	}
 
 	/**
@@ -406,7 +436,7 @@ public class InterchangeUtils {
 	 * @return String, date in ISO 8601 format
 	 */
 	public static String formatISO8601Date(Date date) {
-		return date == null ? null : dateFormatter.format(date);  
+		return date == null ? null : dateFormatter.format(date);
 	}
 
 	/**
@@ -465,22 +495,20 @@ public class InterchangeUtils {
 								}
 							}
 						}
-					}
-					else {
+					} else {
 						Object object = field.get(activity);
 						if (object != null) {
 							ClassUtils.isPrimitiveOrWrapper(object.getClass());
-							//@VersionableFieldTextEditor
+							// @VersionableFieldTextEditor
 							if (!JSON_SUPPORTED_CLASSES.contains(object.getClass())) {
 								System.out.println("not supported");
-							}
-							else {
+							} else {
 								activityJson.set(interchangeable.fieldTitle(), object);
-											
+
 							}
-						}		
+						}
 					}
-				
+
 				}
 			}
 
@@ -514,8 +542,8 @@ public class InterchangeUtils {
 		}
 		return activityJson;
 	}
-	
-	public static boolean hasUniqueValidatorEnabled (Field field){
+
+	public static boolean hasUniqueValidatorEnabled(Field field) {
 		boolean isEnabled = false;
 		Validators validators = field.getAnnotation(Validators.class);
 		if (validators != null) {
@@ -524,12 +552,12 @@ public class InterchangeUtils {
 				isEnabled = FMVisibility.isFmPathEnabled(uniqueValidator);
 			}
 		}
-		
+
 		return isEnabled;
-		
+
 	}
-	
-	public static boolean hasMaxSizeValidatorEnabled (Field field) {
+
+	public static boolean hasMaxSizeValidatorEnabled(Field field) {
 		boolean isEnabled = false;
 		Validators validators = field.getAnnotation(Validators.class);
 		if (validators != null) {
@@ -538,12 +566,14 @@ public class InterchangeUtils {
 				isEnabled = FMVisibility.isFmPathEnabled(maxSize);
 			}
 		}
-		return isEnabled;	
+		return isEnabled;
 	}
+
 	/**
 	 * Checks if a given field is required or not
 	 * 
-	 * @param field the field to validate
+	 * @param field
+	 *            the field to validate
 	 * @return true if the field is required, false if it is not.
 	 */
 	public static boolean isRequired(Field field) {
@@ -555,7 +585,8 @@ public class InterchangeUtils {
 			minSize = validators.minSize();
 		}
 		String required = interchangeable.required();
-		if (required.equals(ALWAYS_REQUIRED) || (!required.equals(NOT_REQUIRED) && FMVisibility.isFmPathEnabled(required))
+		if (required.equals(ALWAYS_REQUIRED)
+				|| (!required.equals(NOT_REQUIRED) && FMVisibility.isFmPathEnabled(required))
 				|| (!minSize.isEmpty() && FMVisibility.isFmPathEnabled(minSize))) {
 			isRequired = true;
 		}

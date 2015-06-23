@@ -12,6 +12,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.Validators;
@@ -83,7 +84,7 @@ LoggerIdentifiable, Cloneable {
 
 	//protected String govAgreementNumber;
 
-	@Interchangeable(fieldTitle = "Internal ID", importable=false)
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.AMP_ACTIVITY_ID, importable=false)
 	@PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_ID})
 	@VersionableFieldSimple(fieldTitle = "Internal ID", blockSingleChange = true)
 	protected Long ampActivityId ;

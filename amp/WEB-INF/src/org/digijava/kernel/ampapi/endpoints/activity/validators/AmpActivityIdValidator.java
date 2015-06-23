@@ -9,14 +9,18 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
- * Validates if required data is provided
+ * Validates amp_activity_id and amp_id to be valid
  * @author Nadejda Mandrescu
  */
-public class RequiredValidator extends InputValidator {
+public class AmpActivityIdValidator extends InputValidator {
+	
+	public AmpActivityIdValidator() {
+		this.continueOnSuccess = false;
+	}
 
 	@Override
 	public ApiErrorMessage getErrorMessage() {
-		return ActivityErrors.FIELD_REQUIRED;
+		return ActivityErrors.FIELD_INVALID_VALUE;
 	}
 
 	@Override

@@ -9,14 +9,14 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
- * Validates if required data is provided
+ * Validates that field value is allowed
  * @author Nadejda Mandrescu
  */
-public class RequiredValidator extends InputValidator {
+public class ValueValidator extends InputValidator {
 
 	@Override
 	public ApiErrorMessage getErrorMessage() {
-		return ActivityErrors.FIELD_REQUIRED;
+		return ActivityErrors.FIELD_INVALID_VALUE;
 	}
 
 	@Override
@@ -25,5 +25,5 @@ public class RequiredValidator extends InputValidator {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
+	
 }

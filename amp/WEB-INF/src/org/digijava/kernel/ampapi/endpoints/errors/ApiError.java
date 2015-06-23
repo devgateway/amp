@@ -22,6 +22,8 @@ public class ApiError {
 	public final static String JSON_ERROR_CODE = "error";
 	public final static String API_ERROR_PATTERN = "%02d%02d";
 	
+	public final static String UNKOWN_ERROR = "Unknown Error";
+	
 	/**  Will store the mapping between the component and it's Id (C). */
 	public static final Map<String, Integer> COMPONENT_ID_CLASS_MAP = new HashMap<String, Integer>() {{
 		put(InterchangeEndpoints.class.getName(), 1);
@@ -60,7 +62,7 @@ public class ApiError {
 					errors.get(generalErrorCode).add((String) errorMessage);
 				}
 			} else if (errorMessages.get(0) instanceof ApiErrorMessage) {
-				int componentId = getErrorComponentId((ApiErrorMessage) errorMessages.get(0));
+				int componentId = getErrorComponentId();
 				for(Object errorMessage : errorMessages) {
 					ApiErrorMessage apiError = (ApiErrorMessage) errorMessage;
 					String errorId = getErrorId(componentId, apiError.id);
@@ -84,7 +86,7 @@ public class ApiError {
 	 */
 	public static JsonBean toError(ApiErrorMessage apiErrorMessage) {
 		JsonBean errorBean = new JsonBean();
-		errorBean.set(getErrorId(getErrorComponentId(apiErrorMessage), apiErrorMessage.id), new String[] {getErrorText(apiErrorMessage)});
+		errorBean.set(getErrorId(getErrorComponentId(), apiErrorMessage.id), new String[] {getErrorText(apiErrorMessage)});
 		
 		return getResultErrorBean(errorBean);
 	};
@@ -94,6 +96,17 @@ public class ApiError {
 		resultErrorBean.set(JSON_ERROR_CODE, errorBean);
 		
 		return resultErrorBean;
+	}
+	
+	/**
+	 * Builds full error code, that can be used for logging.
+	 * Please refer to {@link #toError(ApiErrorMessage)} and its overloaded alternatives 
+	 * to generate a correct Amp API Error response.
+	 * @param error API Message error reference
+	 * @return full error code
+	 */
+	public static String getErrorCode(ApiErrorMessage error) {
+		return getErrorId(getErrorComponentId(), error.id);
 	}
 	
 	/**
@@ -109,7 +122,7 @@ public class ApiError {
 		}
 	}
 	
-	private static Integer getErrorComponentId(ApiErrorMessage apiErrorMessage) {
+	private static Integer getErrorComponentId() {
 		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 		
 		for (StackTraceElement st : stackTrace) {

@@ -9,14 +9,18 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
- * Validates if required data is provided
+ * Validates that project title field value is unique across AMP
  * @author Nadejda Mandrescu
  */
-public class RequiredValidator extends InputValidator {
+public class ActivityTitleValidator extends InputValidator {
+	
+	public ActivityTitleValidator() {
+		this.continueOnSuccess = false;
+	}
 
 	@Override
 	public ApiErrorMessage getErrorMessage() {
-		return ActivityErrors.FIELD_REQUIRED;
+		return ActivityErrors.FIELD_UNQUE_VALUES;
 	}
 
 	@Override

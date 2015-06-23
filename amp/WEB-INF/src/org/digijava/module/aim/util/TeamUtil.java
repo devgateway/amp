@@ -1884,4 +1884,13 @@ public class TeamUtil {
     public static TeamMember getCurrentMember(){
     	return (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
     }
+    
+    /**
+     * uses {@link TLSUtils} to get the current request's team member
+     * @return AmpTeamMember
+     */
+    public static AmpTeamMember getCurrentAmpTeamMember(){
+    	TeamMember tm = getCurrentMember(); 
+    	return tm == null ? null : getAmpTeamMember(tm.getMemberId());
+    }
 }

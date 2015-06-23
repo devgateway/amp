@@ -9,14 +9,14 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
- * Validates if required data is provided
+ * Validates that multiple values are provided only when it is allowed
  * @author Nadejda Mandrescu
  */
-public class RequiredValidator extends InputValidator {
+public class MultipleEntriesValidator extends InputValidator {
 
 	@Override
 	public ApiErrorMessage getErrorMessage() {
-		return ActivityErrors.FIELD_REQUIRED;
+		return ActivityErrors.FIELD_MULTIPLE_VALUES_NOT_ALLOWED;
 	}
 
 	@Override

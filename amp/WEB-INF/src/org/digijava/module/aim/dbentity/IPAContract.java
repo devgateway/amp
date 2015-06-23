@@ -36,9 +36,10 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 	 */
 	
     private static final long serialVersionUID = 2485772788422409800L;
+    @Interchangeable(fieldTitle = "ID", id=true)
     private Long id;
     @TranslatableField
-	@Interchangeable(fieldTitle = "Contract Name", fmPath="/Activity Form/Contracts/Contract Item/Contract Info/Contract Name")
+	@Interchangeable(fieldTitle = "Contract Name", fmPath="/Activity Form/Contracts/Contract Item/Contract Info/Contract Name", value=true)
     private String contractName;
     
     @TranslatableField

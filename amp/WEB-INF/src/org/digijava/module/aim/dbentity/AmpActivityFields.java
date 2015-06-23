@@ -164,6 +164,8 @@ LoggerIdentifiable, Cloneable {
 	
 	@Interchangeable(fieldTitle = "Sectors",fmPath="/Activity Form/Sectors")
 	@VersionableCollection(fieldTitle = "Sectors")
+
+	protected Set <AmpActivitySector> sectors ;
 	@InterchangeableDiscriminator(
 	        discriminatorField = "classificationConfig.name",
 	        settings = {
@@ -172,7 +174,6 @@ LoggerIdentifiable, Cloneable {
 	 @Interchangeable(fieldTitle ="Tertiary Sectors",discriminatorOption = "Tertiary", fmPath="/Activity Form/Sectors/Tertiary Sectors"),
 	 }
 	)
-	protected Set <AmpActivitySector> sectors ;
 	
 	@Interchangeable(fieldTitle = "Contracts",fmPath="/Activity Form/Contracts")
 	@VersionableCollection(fieldTitle = "Contracts")
@@ -181,7 +182,7 @@ LoggerIdentifiable, Cloneable {
 	@Interchangeable(fieldTitle = "Locations",fmPath="/Activity Form/Location",required="/Activity Form/Location/Locations/Location required validator")
 	@Validators (unique="/Activity Form/Location/Locations/uniqueLocationsValidator")
 	@VersionableCollection(fieldTitle = "Locations")
-	protected Set<AmpActivityLocation> locations ;
+	protected Set<AmpActivityLocation> locations ; 
 	
 	@Interchangeable(fieldTitle = "Org. Role",fmPath="/Activity Form/Funding/Org Role")
 	@VersionableCollection(fieldTitle = "Org. Role")

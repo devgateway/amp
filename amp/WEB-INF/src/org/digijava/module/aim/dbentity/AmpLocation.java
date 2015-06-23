@@ -11,27 +11,27 @@ import org.digijava.module.aim.util.Output;
 
 public class AmpLocation implements Serializable, Versionable, Cloneable
 {
-	@Interchangeable(fieldTitle="AMP Location ID")
+//	@Interchangeable(fieldTitle="AMP Location ID")
 	private Long ampLocationId ;
-	@Interchangeable(fieldTitle="ISO3 Code")
+//	@Interchangeable(fieldTitle="ISO3 Code")
 	private String iso3Code ;
-	@Interchangeable(fieldTitle="Name")
+//	@Interchangeable(fieldTitle="Name")
 	private String name ;
-	@Interchangeable(fieldTitle="Description")
+//	@Interchangeable(fieldTitle="Description")
 	private String description ;
-	@Interchangeable(fieldTitle="GIS Coordinates")
+//	@Interchangeable(fieldTitle="GIS Coordinates")
 	private String gisCoordinates ;
-	@Interchangeable(fieldTitle="Language")
+//	@Interchangeable(fieldTitle="Language")
 	private String language ;
-	@Interchangeable(fieldTitle="Version")
+//	@Interchangeable(fieldTitle="Version")
 	private String version ;
-	@Interchangeable(fieldTitle="Geocode")
+//	@Interchangeable(fieldTitle="Geocode")
 	private String geoCode;
 	
-	@Interchangeable(fieldTitle="Activities", recursive=true)
+//	@Interchangeable(fieldTitle="Activities", recursive=true)
 	private Set<AmpActivityVersion> activities;
 	
-	@Interchangeable(fieldTitle="Location")
+	@Interchangeable(fieldTitle="Location", descend = true)
 	private AmpCategoryValueLocations location;
 	
 	@Interchangeable(fieldTitle="Region Location")

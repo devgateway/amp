@@ -2,13 +2,21 @@ package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+
 public class AmpRole implements Serializable, Comparable<AmpRole>
 {
+	@Interchangeable(fieldTitle="AMP Role ID", id = true)
 	private Long ampRoleId ;
+	@Interchangeable(fieldTitle="Role Code")
 	private String roleCode ;
+	@Interchangeable(fieldTitle="Name", value = true)
 	private String name ;
+	@Interchangeable(fieldTitle="Type")
 	private String type ;
+	@Interchangeable(fieldTitle="Description")
 	private String description ;
+	@Interchangeable(fieldTitle="Language")
 	private String language ;
 	
 	

@@ -1,6 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.sql.Connection;
@@ -327,6 +329,23 @@ public class InterchangeUtils {
 		return bld.toString();
 	}
 
+	private static String deunderscorify(String input) {
+		StringBuilder bld = new StringBuilder();
+		boolean upcaseMarker = false;
+		for (int i = 0; i < input.length(); i++) {
+			if (upcaseMarker) {
+				bld.append(Character.toUpperCase(input.charAt(i)));
+				upcaseMarker = false;
+			}
+			if (input.charAt(i) == '_') {
+				upcaseMarker = true;
+			} else {
+				bld.append(input.charAt(i));
+			}
+			
+		}
+		return bld.toString();
+	}
 	/**
 	 * describes a field in a JSON structure of: field_type: one of the types
 	 * {string, boolean, float, list} field_name: the field name, obtained from
@@ -583,6 +602,226 @@ public class InterchangeUtils {
 		}
 		return isRequired;
 	}
+<<<<<<< .mine
+	
+	
+//
+//	private static void populateFieldNamesWithClass(String appendix, Class<?> clazz) {
+//		Field[] fields = clazz.getDeclaredFields();
+//		for (Field field : fields ) {
+//			Interchangeable ant = field.getAnnotation(Interchangeable.class);
+//			if (ant != null) {
+//				fieldNames.put(appendix + "~" + underscorify(ant.fieldTitle()), field);
+//				if (!ant.recursive() && !isSimpleType(getClassOfField(field)))
+//					populateFieldNamesWithClass(appendix + "~" + underscorify(ant.fieldTitle()), getClassOfField(field));
+//			}
+//			
+//		}
+//		
+//	}
+//	
+//	
+//	private static void populateFieldNamesMap() {
+//		fieldNames = new HashMap<String, Field>();
+//		populateFieldNamesWithClass("", AmpActivityFields.class);
+////		Field[] fields = AmpActivityFields.class.getDeclaredFields();
+////		for (Field field : fields) {
+////			Interchangeable ant = field.getAnnotation(Interchangeable.class);
+////			if (ant != null)
+////				fieldNames.put(underscorify(ant.fieldTitle()), field);
+////		}
+//	}
+//	
+	private static boolean isSimpleType(Class<?> clazz) {
+		return classToCustomType.containsKey(clazz);
+	}
+	
+	
+	
+	private static String getValue(Object obj) throws NoSuchMethodException, 
+	SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		if (isSimpleType(obj.getClass())) {
+			return null;
+		} else {
+			for (Field field : obj.getClass().getDeclaredFields()) {
+				Interchangeable ant = field.getAnnotation(Interchangeable.class);
+				if (ant != null) {
+					if (ant.value()) {
+						Method meth = obj.getClass().getMethod(getGetterMethodName(field.getName()));
+						if (String.class.isAssignableFrom(field.getType())) {
+							return (String) meth.invoke(obj);
+						} else {
+							/*we need to go deeper*/
+							return getValue(meth.invoke(obj));
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	private static JsonBean setProperties(Object obj) throws NoSuchMethodException, 
+	SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		if (isSimpleType(obj.getClass())) {
+			return null;
+		} else {
+			JsonBean result = new JsonBean();
+			for (Field field : obj.getClass().getDeclaredFields()) {
+				Interchangeable ant = field.getAnnotation(Interchangeable.class);
+				if (ant != null) {
+					Method meth = obj.getClass().getMethod(getGetterMethodName(field.getName()));
+					Object property = meth.invoke(obj);
+					if (ant.id()) {
+						if (Long.class.isAssignableFrom(field.getType())) {
+							result.set("id", property);
+						} else {
+							/*we need to go deeper*/
+							result.set("id", getId(property));
+						}
+					} 
+					if (ant.value()) {
+						if (String.class.isAssignableFrom(field.getType())) {
+							result.set("value", property);
+						} else {
+							/*we need to go deeper*/
+							result.set("value", getValue(property));
+						}
+					}
+					if (ant.recursive() && property != null) {
+						result.set(underscorify(ant.fieldTitle()), getId(property));
+					}
+					if (!(ant.value() || ant.id())) {
+						//additional property
+
+						if (isSimpleType(meth.getReturnType()) && property != null)
+							result.set(underscorify(ant.fieldTitle()), property);
+					}
+					
+				}
+			}
+			return result;
+		}
+	}
+	
+	
+	private static Long  getId(Object obj) throws NoSuchMethodException, 
+	SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		if (isSimpleType(obj.getClass())) {
+			return null;
+		} else {
+			for (Field field : obj.getClass().getDeclaredFields()) {
+				Interchangeable ant = field.getAnnotation(Interchangeable.class);
+				if (ant != null) {
+					if (ant.id()) {
+						Method meth = obj.getClass().getMethod(getGetterMethodName(field.getName()));
+						if (Long.class.isAssignableFrom(field.getType())) {
+							return (Long) meth.invoke(obj);
+						} else {
+							/*we need to go deeper*/
+							return getId(meth.invoke(obj));
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+
+	
+	private static String getGetterMethodName(String fieldName) {
+		
+		if (fieldName.length() == 1)
+			return "get" + Character.toUpperCase(fieldName.charAt(0));
+		return "get" + Character.toUpperCase(fieldName.charAt(0)) + 
+				((fieldName.length() > 1) ? fieldName.substring(1) : "");
+	}
+	
+	
+	private static Field getDescendField(Class clazz) {
+		for (Field field : clazz.getDeclaredFields()) {
+			Interchangeable ant = field.getAnnotation(Interchangeable.class);
+			if (ant != null && ant.descend())
+				return field;
+		}
+		return null;
+	}
+
+	@SuppressWarnings("rawtypes")
+	private static Class getClassOfField(Field field) {
+		if (!isCollection(field))
+			return field.getType();
+		else
+			return getGenericClass(field);
+		
+	}
+	
+	
+	private static List<JsonBean> getPossibleValuesForField(Field field) {
+		List<JsonBean> result = new ArrayList<JsonBean>();
+		Class<?> clazz = getClassOfField(field);
+		
+		Field potentialDescend = getDescendField(clazz);
+		if (potentialDescend != null) {
+			return getPossibleValuesForField(potentialDescend);
+		}
+		
+		String queryString = "select cls from " + clazz.getName() + " cls ";
+		List<Object> objectList= PersistenceManager.getSession().createQuery(queryString).list();
+		for (Object obj : objectList) {
+			JsonBean item = null;
+			try {
+				item = setProperties(obj);
+			} catch (Exception exc) {
+				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.SOME_OTHER_ERROR, field.getName())));
+			}
+			result.add(item);
+		}
+		return result;
+	}
+	
+	
+	
+	public static List<JsonBean> getPossibleValuesForField(String compositeFieldName, Class<?> clazz) {
+//		if (fieldNames == null) {
+//			populateFieldNamesMap();
+//		}
+//		if (!fieldNames.containsKey(fieldName)) {
+//			List<JsonBean> result = new ArrayList<JsonBean>();
+//			result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.NO_SUCH_FIELD, fieldName)));
+//			return result; 
+//		}
+		String fieldName = "";
+		if (compositeFieldName.contains("~")) {
+			fieldName = compositeFieldName.substring(0, compositeFieldName.indexOf('~') - 1);
+			try {
+				Field descendField = clazz.getDeclaredField(deunderscorify(fieldName));
+				return getPossibleValuesForField(compositeFieldName.substring(compositeFieldName.indexOf('~') + 1), getClassOfField(descendField));
+				
+			} catch (NoSuchFieldException | SecurityException e) {
+				List<JsonBean> result = new ArrayList<JsonBean>();
+				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, fieldName)));
+				return result;
+//				e.printStackTrace();
+			}
+		} else {
+			try {
+				Field finalField = clazz.getDeclaredField(deunderscorify(compositeFieldName));
+				return getPossibleValuesForField(finalField);
+
+			} catch (NoSuchFieldException | SecurityException e) {
+				List<JsonBean> result = new ArrayList<JsonBean>();
+				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, fieldName)));
+				return result;
+			}
+			
+		}
+		
+//		System.out.println();
+//		List<JsonBean>
+//		return getPossibleValuesForField(fieldNames.get(fieldName));
+	}
 	
 	/**
 	 * Imports or Updates an activity
@@ -617,4 +856,8 @@ public class InterchangeUtils {
 		return result;
 	}
 	
+
 }
+
+
+

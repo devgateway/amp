@@ -26,9 +26,9 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCategoryValueLocations>, 
 		HierarchyListable, ARDimensionable, Serializable, AmpAutoCompleteDisplayable,OrgProfileValue, NameableOrIdentifiable {
 
-	@Interchangeable(fieldTitle="ID")
+	@Interchangeable(fieldTitle="ID", id=true)
 	private Long id;
-	@Interchangeable(fieldTitle="Name")
+	@Interchangeable(fieldTitle="Name", value=true)
 	@TranslatableField
 	private String name;
 	@Interchangeable(fieldTitle="Parent Category Value")

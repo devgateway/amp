@@ -54,10 +54,12 @@ import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureImg;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
+import org.digijava.module.aim.dbentity.FundingInformationItem;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
@@ -76,6 +78,7 @@ import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -159,7 +162,30 @@ public class ActivityUtil {
 		a.setDeleted(false);
 		//we will check what is comming in funding
 		Set<AmpFunding> af = a.getFunding();
+		//check if we have funding items with null in ammount
+		//this is not a valid use case but a possible due to the flexibility of the configurations in FM mode
+		if (af != null && Hibernate.isInitialized(af)) {
+			Iterator<AmpFunding> fundingIterator = af.iterator();
+			while (fundingIterator.hasNext()) {
+				AmpFunding ampFunding = fundingIterator.next();
 
+				if (Hibernate.isInitialized(ampFunding.getFundingDetails())) {
+					Iterator ampFundingDetailsIterator = ampFunding.getFundingDetails().iterator();
+					removeFundingNullAmount(ampFundingDetailsIterator);
+				}
+				if (ampFunding.getMtefProjections() != null && Hibernate.isInitialized(ampFunding.getMtefProjections())) {
+					Iterator<AmpFundingMTEFProjection> ampFundingMTEFProjectionIterator = ampFunding
+							.getMtefProjections().iterator();
+					while(ampFundingMTEFProjectionIterator.hasNext()){
+						AmpFundingMTEFProjection ampFundingMTEFProjection=ampFundingMTEFProjectionIterator.next();
+						if(ampFundingMTEFProjection.getAmount()==null){
+							ampFundingMTEFProjectionIterator.remove();
+						}
+					}
+				}
+			}
+
+		}
 		
         if (ContentTranslationUtil.multilingualIsEnabled())
             ContentTranslationUtil.cloneTranslations(a, translations);
@@ -251,6 +277,20 @@ public class ActivityUtil {
             session.update(a);
         }
         return a;
+	}
+
+	/**
+	 * Remove funding items with null amount (that means that the form is missconfigured)
+	 * @param ampFundingDetailsIterator
+	 */
+	private static void removeFundingNullAmount(Iterator ampFundingDetailsIterator) {
+		while (ampFundingDetailsIterator.hasNext()) {
+			FundingInformationItem ampFundingDetail = (FundingInformationItem) ampFundingDetailsIterator.next();
+			if (ampFundingDetail.getTransactionAmount() == null) {
+				// this shouldnt be null, so we remove it
+				ampFundingDetailsIterator.remove();
+			}
+		}
 	}
 
 	

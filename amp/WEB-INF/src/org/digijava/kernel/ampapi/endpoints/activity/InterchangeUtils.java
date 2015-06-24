@@ -390,7 +390,7 @@ public class InterchangeUtils {
 				bean.set("recursive", true);
 			}
 			bean.set("unique", hasUniqueValidatorEnabled(field));
-			bean.set("allow_empty", !isRequired(field));
+			bean.set("allow_empty", getRequiredValue(field));
 		}
 		return bean;
 	}
@@ -586,13 +586,14 @@ public class InterchangeUtils {
 	}
 
 	/**
-	 * Checks if a given field is required or not
+	 * Gets the field required value. 
 	 * 
-	 * @param field the field to validate
-	 * @return true if the field is required, false if it is not.
+	 * @param Field the field to get its required value
+	 * @return String with Y|ND|N, where Y (yes) = always required, ND=for draft status=false, 
+	 * N (no) = not required. .
 	 */
-	public static boolean isRequired(Field field) {
-		boolean isRequired = false;
+	public static String getRequiredValue(Field field) {
+		String requiredValue = "N";
 		String minSize = "";
 		Validators validators = field.getAnnotation(Validators.class);
 		Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
@@ -600,12 +601,14 @@ public class InterchangeUtils {
 			minSize = validators.minSize();
 		}
 		String required = interchangeable.required();
-		if (required.equals(ALWAYS_REQUIRED)
-				|| (!required.equals(NOT_REQUIRED) && FMVisibility.isFmPathEnabled(required))
-				|| (!minSize.isEmpty() && FMVisibility.isFmPathEnabled(minSize))) {
-			isRequired = true;
+		if (required.equals(ALWAYS_REQUIRED)) {
+			requiredValue = "Y";
 		}
-		return isRequired;
+		else if ((!required.equals(NOT_REQUIRED) && FMVisibility.isFmPathEnabled(required))
+				|| (!minSize.isEmpty() && FMVisibility.isFmPathEnabled(minSize))) {
+			requiredValue = "ND";
+		}
+		return requiredValue;
 	}
 
 	

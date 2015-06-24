@@ -14,6 +14,10 @@ public class LoginForm extends ValidatorForm {
 	private String userId = null;
 	private String password = null;
 	private boolean login = false;
+	//Use to determine if should generate a token for the user
+	private boolean generateToken;
+	//url to redirect after token has been generated
+	private String callbackUrl;
 	private Collection members;
 	private Collection<AmpCategoryValue> workspaceGroups;
 
@@ -70,4 +74,21 @@ public class LoginForm extends ValidatorForm {
 	public Collection<AmpCategoryValue> getWorkspaceGroups() {
 		return workspaceGroups;
 	}
+
+	public boolean getGenerateToken() {
+		return generateToken;
+	}
+
+	public void setGenerateToken(boolean generateToken) {
+		this.generateToken = generateToken;
+	}
+
+	public String getCallbackUrl() {
+		return callbackUrl;
+	}
+
+	public void setCallbackUrl(String callbackUrl) {
+		this.callbackUrl = callbackUrl;
+	}
+
 }

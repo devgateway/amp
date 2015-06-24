@@ -13,8 +13,10 @@ import javax.ws.rs.core.MediaType;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.util.AmpApiToken;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
@@ -47,67 +49,54 @@ public class Security {
 	private HttpServletRequest httpRequest;
 
 	/**
-	 * if there'is a looged user it returns
-	 * 
-	 * <code>
-	 *  {
-       	"id": "45678",
-       	"email": "atl@amp.org",
-       	"firstName": "ATL",
-       	"lastName": "ATL",
-       	"workspace": "Ministry of Finance",
-       	"administratorMode": "false"
-   		}   
-   		</code> <code>
-		if not logged it it returns 
-		{
-   			username: null
-		}
-		</code>
 	 * 
 	 * @return
 	 */
-//	@GET
-//	@Path("/user")
-//	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-//	@ApiMethod(ui = false, id = "LoggedUser", name = "Logged user")
-//	public JsonBean getUser() {
-//		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
-//
-//		JsonBean user = new JsonBean();
-//		if (tm != null) {
-//			Site site = RequestUtils.getSite(TLSUtils.getRequest());
-//			User u;
-//			try {
-//				u = UserUtils.getUserByEmail(tm.getEmail());
-//			} catch (DgException e) {
-//				user.set("email", null);
-//				return user;
-//			}
-//			Subject subject = UserUtils.getUserSubject(u);
-//
-//			boolean siteAdmin = DgSecurityManager.permitted(subject, site, ResourcePermission.INT_ADMIN);
-//			user.set("email", u.getEmail());
-//			user.set("firstName", u.getFirstNames());
-//			user.set("lastName", u.getLastName());
-//			user.set("administratorMode", siteAdmin);
-//			if (!siteAdmin) {
-//				AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
-//
-//				if (ampTeamMember.getAmpTeam() != null) { 
-//					user.set("workspace", ampTeamMember.getAmpTeam().getName());
-//					user.set("workspaceId", ampTeamMember.getAmpTeam().getIdentifier());
-//				}
-//				
-//			} else {
-//				return user;
-//			}
-//		} else {
-//			user.set("email", null);
-//		}
-//		return user;
-//	}
+	@GET
+	@Path("/user/")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public JsonBean user() {
+		JsonBean authenticationResult = new JsonBean();
+		
 
+		AmpApiToken apiToken= SecurityUtil.getTokenFromSession();
+
+		boolean isAdmin ="yes".equals(httpRequest.getSession().getAttribute("ampAdmin"));
+		
+		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+		String username=null;
+		String team=null;
+		
+		//if the user is admin the he doesn't have a workspace assigned
+		if (tm != null && !isAdmin ) {
+			User u;
+			AmpTeamMember ampTeamMember;
+			try {
+				u = UserUtils.getUserByEmail(tm.getEmail());
+				username=u.getName();
+				ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
+				team=ampTeamMember.getAmpTeam().getName();
+
+			} catch (DgException e) {
+				// TODO return error 500 with description
+				e.printStackTrace();
+			}
+
+		}
+	    String port="";
+	    //if we are in secure mode and the port is not 443 or if we are not secure and the port is not 80 we have to add the port to the url
+	    if( (TLSUtils.getRequest().isSecure() && TLSUtils.getRequest().getServerPort()!=443 ) ||( !TLSUtils.getRequest().isSecure() && TLSUtils.getRequest().getServerPort()!=80 )){
+	    	port=":"+TLSUtils.getRequest().getServerPort();
+	    }
+		authenticationResult.set("token", apiToken!=null && apiToken.getToken()!=null?apiToken.getToken():null);
+		authenticationResult.set("url", "http"+ (TLSUtils.getRequest().isSecure()?"S":"") +"://"+ TLSUtils.getRequest().getServerName() + port +"/showLayout.do?layout=login");
+		authenticationResult.set("team", team);
+		authenticationResult.set("user-name", username);
+		authenticationResult.set("add-activity", false); //to check if the user can add activity in the selected ws
+		authenticationResult.set("view-activity", true); //to check if the user can edit activity in the selected ws
+
+		return authenticationResult;
+	}
 	/**
 	 * @return menu structure for the current view, user and state
 	 */

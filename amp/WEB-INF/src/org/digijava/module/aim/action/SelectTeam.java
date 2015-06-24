@@ -12,28 +12,29 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
-import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.security.DgSecurityManager;
 import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.UserUtils;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.form.LoginForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.caching.AmpCaching;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 
 public class SelectTeam extends Action {
 
@@ -44,6 +45,7 @@ public class SelectTeam extends Action {
             throws java.lang.Exception {
 
         HttpSession session = request.getSession();
+        SimpleUrlLogoutSuccessHandler  l;
         
         //Removing attributes from previous session (East Timor. Aug.2011)
         ReportContextData.clearSession();
@@ -124,6 +126,7 @@ public class SelectTeam extends Action {
             session.removeAttribute(Constants.MY_REPORTS_PER_PAGE);
             session.removeAttribute(Constants.LAST_VIEWED_REPORTS);
             session.removeAttribute(Constants.UNASSIGNED_ACTIVITY_LIST);
+            //TODO remove token if the user changed the workspace?
 
             //See if current workspace has a FM Template attached to it
             AmpTeam currentTeam = member.getAmpTeam();
@@ -139,6 +142,12 @@ public class SelectTeam extends Action {
             e.printStackTrace(System.out);
         }
 
+        //once we have selected the team we have to check if we need to generate the token
+        if("true".equals(request.getParameter("generateToken"))){
+        	String token =SecurityUtil.generateToken();
+        	response.sendRedirect(request.getParameter("callbackUrl") + "?amp_api_token="+token);
+        	return null;
+        }
         return mapping.findForward("forward");
     }
 }

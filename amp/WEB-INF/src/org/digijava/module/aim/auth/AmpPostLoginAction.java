@@ -5,7 +5,6 @@ package org.digijava.module.aim.auth;
 
 import java.io.PrintWriter;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.security.auth.Subject;
@@ -24,11 +23,8 @@ import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.UserUtils;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.AuditLoggerUtil;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.um.dbentity.SuspendLogin;
 import org.digijava.module.um.util.UmUtil;
@@ -54,8 +50,7 @@ public class AmpPostLoginAction extends Action {
     	String id = request.getParameter("j_autoWorkspaceId");
     	request.getSession().setAttribute("j_autoWorkspaceId", id);
     	
-    	
-        Authentication authResult = SecurityContextHolder.getContext().getAuthentication();
+    	Authentication authResult = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = null;
         try {
             currentUser = getUser(authResult);
@@ -78,10 +73,10 @@ public class AmpPostLoginAction extends Action {
          */
         Collection members = TeamMemberUtil.getTeamMembers(currentUser.getEmail());
         if(members == null || members.size() == 0) {
-            if(!siteAdmin) { // user is a site admin
-                // The user is a regsitered user but not a team member
+            if(!siteAdmin) { // user is a site Admin
+                // The user is a registered user but not a team member
             	SecurityContextHolder.getContext().setAuthentication(null);
-            	out.println("noTeamMember");
+            	out.println(getJsonResponse("noTeamMember"));
             	return null;
             }
         }
@@ -95,7 +90,8 @@ public class AmpPostLoginAction extends Action {
                     suReasons.append("{").append(suObject.getReasonText()).append("}");
                 }
                 SecurityContextHolder.getContext().setAuthentication(null);
-                out.println(suReasons.toString());
+            	out.println(getJsonResponse(suReasons.toString()));
+
                 return null;
             }
         }
@@ -117,10 +113,37 @@ public class AmpPostLoginAction extends Action {
 //            	
 //        }
         AuditLoggerUtil.logUserLogin(request,currentUser, Constants.LOGIN_ACTION);
-        out.println("noError");
+        String ampApiIntegration="\"generate_token\":";
+        
+		if ("true".equals(request.getParameter("generateToken"))) {
+			ampApiIntegration += "true";
+			ampApiIntegration += ",\"callback_url\":\"" + request.getParameter("callbackUrl") + "\" ";
+		} else {
+			ampApiIntegration += "false";
+		}
+
+        out.println(getJsonResponse("noError",ampApiIntegration));
 		return null;
 	}
 	
+	private String getJsonResponse(String originalMessage){
+		return getJsonResponse(originalMessage,null);
+	}
+	/**
+	 * we wrap the non json response, so we don't have to refactor all the JavaScript part
+	 * @param originalMessage
+	 * @param newMessage
+	 * @return
+	 */
+	private String getJsonResponse(String originalMessage,String newMessage){ 
+    	String json="{ "+  
+				"\"original_result\":\""+ originalMessage +"\" ";
+    	if(newMessage!=null){
+    		json+=","+newMessage;
+    	}
+    	json+="}"; 
+    	return json;
+	}
 	
 	 protected User getUser(Authentication currentAuth) throws DgException {
 	        if(currentAuth == null) {

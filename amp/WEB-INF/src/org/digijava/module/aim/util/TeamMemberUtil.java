@@ -1645,7 +1645,10 @@ public class TeamMemberUtil {
 		return (headRole==null || role==null) ? false: headRole.getAmpTeamMemRoleId().equals(role.getAmpTeamMemRoleId());
 	}
 	
+	
+	
 	public static boolean isManagementWorkspace (TeamMember tm) {
-		return tm != null && "Management".equalsIgnoreCase(tm.getTeamAccessType().toLowerCase());
+		return tm != null && tm.getTeamAccessType() != null
+				&& "Management".equalsIgnoreCase(tm.getTeamAccessType());
 	}
 }

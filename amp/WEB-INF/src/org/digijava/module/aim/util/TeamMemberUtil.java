@@ -1644,4 +1644,8 @@ public class TeamMemberUtil {
 	public static boolean isHeadRole(AmpTeamMemberRoles role){
 		return (headRole==null || role==null) ? false: headRole.getAmpTeamMemRoleId().equals(role.getAmpTeamMemRoleId());
 	}
+	
+	public static boolean isManagementWorkspace (TeamMember tm) {
+		return tm != null && "Management".equalsIgnoreCase(tm.getTeamAccessType().toLowerCase());
+	}
 }

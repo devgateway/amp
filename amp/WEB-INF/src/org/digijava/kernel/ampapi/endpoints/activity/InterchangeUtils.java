@@ -361,7 +361,7 @@ public class InterchangeUtils {
 	 * boolean, or float), its class may contain other @Interchangeable fields,
 	 * which are recursively added here recursive: defined by
 	 * @Interchangeable.recursive; true for the purpose of avoiding loops
-	 * allow_empty: specifies whether said field is allowed to be transmitted
+	 * required: specifies whether said field needs to be transmitted
 	 * empty
 	 * 
 	 * @param field
@@ -389,7 +389,7 @@ public class InterchangeUtils {
 				bean.set("recursive", true);
 			}
 			bean.set("unique", hasUniqueValidatorEnabled(field));
-			bean.set("allow_empty", getRequiredValue(field));
+			bean.set("required", getRequiredValue(field));
 		}
 		return bean;
 	}

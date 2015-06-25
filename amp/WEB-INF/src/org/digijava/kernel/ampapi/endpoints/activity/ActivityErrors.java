@@ -20,6 +20,7 @@ public class ActivityErrors {
 	public static final ApiErrorMessage FIELD_UNQUE_VALUES = new ApiErrorMessage(6, "Unique values required");
 	public static final ApiErrorMessage FIELD_INVALID = new ApiErrorMessage(7, "Invalid field");
 	public static final ApiErrorMessage SOME_OTHER_ERROR = new ApiErrorMessage(8, "Other non-specific error");
+	public static final ApiErrorMessage UNIQUE_ACTIVITY_TITLE = new ApiErrorMessage(9, "Activity title should be unique");
 	
 	
 }

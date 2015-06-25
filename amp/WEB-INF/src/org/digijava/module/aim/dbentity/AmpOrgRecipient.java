@@ -14,9 +14,9 @@ public class AmpOrgRecipient implements Serializable,OrgProfileValue {
     private static final long serialVersionUID = 1L;
     @Interchangeable(fieldTitle="AMP Organization Recipient ID")
     private Long ampOrgRecipientId;
-    @Interchangeable(fieldTitle="Organization", recursive=true)
+    @Interchangeable(fieldTitle="Organization", pickIdOnly=true)
     private AmpOrganisation organization;
-    @Interchangeable(fieldTitle="Parent Organization", recursive=true)
+    @Interchangeable(fieldTitle="Parent Organization", pickIdOnly=true)
     private AmpOrganisation parentOrganization;
     @Interchangeable(fieldTitle="Description")
     private String description;

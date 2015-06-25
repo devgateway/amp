@@ -41,12 +41,18 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.time.StopWatch;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.jdbc.Work;
 import org.springframework.util.ClassUtils;
 
@@ -59,8 +65,21 @@ import clover.org.apache.log4j.helpers.ISO8601DateFormat;
  */
 public class InterchangeUtils {
 
+
+	private static Map<String, String> underscoreToTitleMap = new HashMap<String, String>();
+	private static Map<String, String> titleToUnderscoreMap = new HashMap<String, String>();
+	
+	/**map from discriminator title (i.e. "Primary Sectors") to actual field name (i.e. "Sectors")
+	 */
+	private static Map<String, String> discriminatorMap = new HashMap<String, String> ();
+	static {
+		addUnderscoredTitlesToMap(AmpActivityFields.class);
+	}
+	
+	
 	private static final String VIEW = "view";
 	private static final String EDIT = "edit";
+
 	private static final String NOT_REQUIRED = "_NONE_";
 	private static final String ALWAYS_REQUIRED = "_ALWAYS_";
 	public static final Logger LOGGER = Logger.getLogger(InterchangeUtils.class);
@@ -96,7 +115,26 @@ public class InterchangeUtils {
 			add(Date.class);
 		}
 	};
-
+	private static void addUnderscoredTitlesToMap(Class clazz) {
+		for (Field field : clazz.getDeclaredFields()) {
+			Interchangeable ant = field.getAnnotation(Interchangeable.class);
+			if (ant != null) {
+				if (!isCompositeField(field))
+				{
+					underscoreToTitleMap.put(underscorify(ant.fieldTitle()), ant.fieldTitle());
+					titleToUnderscoreMap.put(ant.fieldTitle(), underscorify(ant.fieldTitle()));
+				} else {
+					InterchangeableDiscriminator antd = field.getAnnotation(InterchangeableDiscriminator.class);
+					Interchangeable[] settings = antd.settings();
+					for (Interchangeable ants : settings) {
+						underscoreToTitleMap.put(underscorify(ants.fieldTitle()), ants.fieldTitle());
+						titleToUnderscoreMap.put(ants.fieldTitle(), underscorify(ants.fieldTitle()));
+						discriminatorMap.put(ants.fieldTitle(), ant.fieldTitle());
+					}
+				}
+			}
+		}
+	}
 	/**
 	 * Picks available translations for a string (supposedly field name)
 	 * 
@@ -314,6 +352,7 @@ public class InterchangeUtils {
 			return getAllAvailableFields(getGenericClass(field));
 	}
 
+
 	/**
 	 * converts the uppercase letters of a string to underscore + lowercase
 	 * (except for first one)
@@ -323,6 +362,8 @@ public class InterchangeUtils {
 	 * @return converted string
 	 */
 	public static String underscorify(String input) {
+		if (titleToUnderscoreMap.containsKey(input))
+			return titleToUnderscoreMap.get(input);
 		StringBuilder bld = new StringBuilder();
 		for (int i = 0; i < input.length(); i++) {
 			if (input.charAt(i) == ' ')
@@ -334,18 +375,20 @@ public class InterchangeUtils {
 	}
 
 	private static String deunderscorify(String input) {
+		if (underscoreToTitleMap.containsKey(input)) 
+			return underscoreToTitleMap.get(input);
 		StringBuilder bld = new StringBuilder();
 		boolean upcaseMarker = false;
 		for (int i = 0; i < input.length(); i++) {
 			if (upcaseMarker) {
 				bld.append(Character.toUpperCase(input.charAt(i)));
 				upcaseMarker = false;
-			}
-			if (input.charAt(i) == '_') {
-				upcaseMarker = true;
-			} else {
-				bld.append(input.charAt(i));
-			}
+			} else
+				if (input.charAt(i) == '_') {
+					upcaseMarker = true;
+				} else {
+					bld.append(input.charAt(i));
+				}
 			
 		}
 		return bld.toString();
@@ -360,7 +403,7 @@ public class InterchangeUtils {
 	 * sake of matching children: if the field is not a basic type (string,
 	 * boolean, or float), its class may contain other @Interchangeable fields,
 	 * which are recursively added here recursive: defined by
-	 * @Interchangeable.recursive; true for the purpose of avoiding loops
+	 * @Interchangeable.pickIdOnly; true for the purpose of avoiding loops
 	 * required: specifies whether said field needs to be transmitted
 	 * empty
 	 * 
@@ -371,7 +414,7 @@ public class InterchangeUtils {
 		if (interchangeble == null)
 			return null;
 		JsonBean bean = new JsonBean();
-		bean.set("field_name", underscorify(interchangeble.fieldTitle()));
+		bean.set("field_name", interchangeble.fieldTitle() );
 		bean.set("field_type", classToCustomType.containsKey(field.getType()) ? classToCustomType.get(field.getType())
 				: "list");
 		bean.set("field_label", mapToBean(getLabelsForField(interchangeble.fieldTitle())));
@@ -381,12 +424,12 @@ public class InterchangeUtils {
 				bean.set("multiple_values", true);
 			else
 				bean.set("multiple_values", false);
-			if (!interchangeble.recursive()) {
+			if (!interchangeble.pickIdOnly()) {
 				List<JsonBean> children = getChildrenOfField(field);
 				if (children != null && children.size() > 0)
 					bean.set("children", children);
 			} else {
-				bean.set("recursive", true);
+				bean.set("id_only", true);
 			}
 			bean.set("unique", hasUniqueValidatorEnabled(field));
 			bean.set("required", getRequiredValue(field));
@@ -695,7 +738,7 @@ public class InterchangeUtils {
 							result.set("value", getValue(property));
 						}
 					}
-					if (ant.recursive() && property != null) {
+					if (ant.pickIdOnly() && property != null) {
 						result.set(underscorify(ant.fieldTitle()), getId(property));
 					}
 					if (!(ant.value() || ant.id())) {
@@ -765,9 +808,47 @@ public class InterchangeUtils {
 	}
 	
 	
+	private static List<JsonBean> getPossibleCategoryValues(Field field) {
+		List <JsonBean> result = new ArrayList<JsonBean>();
+		Interchangeable ant = field.getAnnotation(Interchangeable.class);
+		String whereClause =  "WHERE acv.ampCategoryClass.name=" + "'" + ant.fieldTitle() +"'";
+		
+		String queryString = "SELECT acv from " + AmpCategoryValue.class.getName() + " acv ";
+		/* This hack is done for the case when the field analyzed is
+		 * AmpActivityFields.categories. 
+		 * The alternative to this would have been to set one more attribute for the annotation
+		 * (something like "listAllValues") or making a shortcut from upper (like getPossibleValuesForField(String)) 
+		 * 
+		 * */ 
+		if (! (field.getName().equals("categories") && (field.getDeclaringClass().equals(AmpActivityFields.class)))) {
+			queryString += whereClause;
+		}
+		List<AmpCategoryValue> acvList = (List<AmpCategoryValue>) PersistenceManager.getSession().createQuery(queryString).list();
+
+		for (AmpCategoryValue acv : acvList) {
+			if (acv.isVisible()) {
+				JsonBean item = null;
+				try {
+					item = setProperties(acv);
+					result.add(item);
+				} catch (Exception exc) {
+					result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.SOME_OTHER_ERROR, field.getName())));
+				}
+			}
+		}
+		
+		
+		return result; 
+	}
+	
 	private static List<JsonBean> getPossibleValuesForField(Field field) {
 		List<JsonBean> result = new ArrayList<JsonBean>();
 		Class<?> clazz = getClassOfField(field);
+
+		
+		
+		if (clazz.isAssignableFrom(AmpCategoryValue.class))
+			return getPossibleCategoryValues(field);
 		
 		Field potentialDescend = getDescendField(clazz);
 		if (potentialDescend != null) {
@@ -788,41 +869,127 @@ public class InterchangeUtils {
 		return result;
 	}
 	
-	
-	
-	public static List<JsonBean> getPossibleValuesForField(String compositeFieldName, Class<?> clazz) {
-//		if (fieldNames == null) {
-//			populateFieldNamesMap();
-//		}
-//		if (!fieldNames.containsKey(fieldName)) {
-//			List<JsonBean> result = new ArrayList<JsonBean>();
-//			result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.NO_SUCH_FIELD, fieldName)));
-//			return result; 
-//		}
-		String fieldName = "";
-		if (compositeFieldName.contains("~")) {
-			fieldName = compositeFieldName.substring(0, compositeFieldName.indexOf('~') - 1);
-			try {
-				Field descendField = clazz.getDeclaredField(deunderscorify(fieldName));
-				return getPossibleValuesForField(compositeFieldName.substring(compositeFieldName.indexOf('~') + 1), getClassOfField(descendField));
-				
-			} catch (NoSuchFieldException | SecurityException e) {
-				List<JsonBean> result = new ArrayList<JsonBean>();
-				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, fieldName)));
-				return result;
-//				e.printStackTrace();
+	private static Field getField(Class<?> clazz, String fieldname) {
+		for (Field field: clazz.getDeclaredFields()) {
+			Interchangeable ant = field.getAnnotation(Interchangeable.class);
+			if (ant != null) {
+				if (fieldname.equals(ant.fieldTitle()))
+					return field;
 			}
-		} else {
-			try {
-				Field finalField = clazz.getDeclaredField(deunderscorify(compositeFieldName));
-				return getPossibleValuesForField(finalField);
-
-			} catch (NoSuchFieldException | SecurityException e) {
-				List<JsonBean> result = new ArrayList<JsonBean>();
-				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, fieldName)));
+		}
+		return null;
+	}
+	
+	private static Field getPotentiallyDiscriminatedField(Class<?> clazz, String fieldName){ 
+		Field field = getField(clazz, deunderscorify(fieldName));
+		if (field == null) {
+			//attempt to check if it's a composite field
+			return getField(clazz, discriminatorMap.get(deunderscorify(fieldName)));
+		}
+		return field;
+	}
+	
+	private static List<AmpSector> getSectorList(final String configType) {
+//		List<AmpSector> result = new ArrayList<AmpSector>();
+		final List<Long> sectorIds = new ArrayList<Long>();
+		PersistenceManager.getSession().doWork(new Work() {
+			public void execute(Connection conn) throws SQLException {
+				String allSectorsQuery = "SELECT amp_sector_id FROM all_sectors_with_levels WHERE sector_config_name=" + 
+										 "'" + configType +"'" ;
+				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allSectorsQuery, null)) {
+					ResultSet rs = rsi.rs;
+					while (rs.next()) 
+						sectorIds.add(rs.getLong("amp_sector_id"));
+					rs.close();
+				}
+			}
+		});		
+		
+		String ids = StringUtils.join(sectorIds, ",");
+		String queryString = "select ast from " + AmpSector.class.getName() + " ast where ast.ampSectorId in (" + ids + ")";
+		List<AmpSector> objectList = PersistenceManager.getSession().createQuery(queryString).list();
+		return objectList;
+	}
+	
+	
+	private static String getConfigValue(String longFieldName, Field field) {
+		InterchangeableDiscriminator ant = field.getAnnotation(InterchangeableDiscriminator.class);
+		for (Interchangeable inter : ant.settings()) {
+			if (inter.fieldTitle().equals(deunderscorify(longFieldName))) {
+				return inter.discriminatorOption();
+			}
+		}
+		return null;
+	}
+	
+	private static List<JsonBean> getPossibleValuesForComplexField(Field field, String originalName) {
+		List<JsonBean> result = new ArrayList<JsonBean>();
+		/*AmpActivitySector || AmpComponentFunding || AmpActivityProgram*/
+		if (getClassOfField(field).equals(AmpActivitySector.class)) {
+			String configValue = getConfigValue(originalName, field);
+			if (configValue == null) {
+				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.SOME_OTHER_ERROR, field.getName())));
 				return result;
+			}
+			List<AmpSector> sectors = getSectorList(configValue);
+			for (AmpSector sector : sectors) {
+				JsonBean item = null;
+				try {
+					item = setProperties(sector);
+				} catch (Exception exc) {
+					result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.SOME_OTHER_ERROR, field.getName())));
+				}
+				result.add(item);
+				
 			}
 			
+		} else if (getClassOfField(field).equals(AmpActivityProgram.class)) {
+			
+		} else if (getClassOfField(field).equals(AmpComponentFunding.class)) {
+			
+		} else {
+			result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, field.getName() + "/config:" + originalName)));
+			return result;
+		}
+		return result;
+		
+	}
+	
+	public static List<JsonBean> getPossibleValuesForField(String longFieldName, Class<?> clazz) {
+
+		String fieldName = "";
+		if (longFieldName.contains("~")) {
+			/*
+			 * we might have a field containing a discriminator description,
+			 * but what we actually need is underneath -> obtain name of the field underneath
+			 * */
+			fieldName = longFieldName.substring(0, longFieldName.indexOf('~') );
+			Field field = getPotentiallyDiscriminatedField(clazz, fieldName);
+			if (field == null) {
+				List<JsonBean> result = new ArrayList<JsonBean>();
+				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, fieldName)));
+				return result;
+			} else {
+				return getPossibleValuesForField(longFieldName.substring(longFieldName.indexOf('~') + 1), getClassOfField(field));
+			}
+		} else {
+			/*
+			 * the last field might contain discriminated values
+			 * if it is such a field, it's a special case for each class
+			 * 
+			 * */
+			Field finalField = getPotentiallyDiscriminatedField(clazz, longFieldName);
+			if (finalField == null) {
+				List<JsonBean> result = new ArrayList<JsonBean>();
+				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, fieldName)));
+				return result;
+			} else {
+				if (isCompositeField(finalField)) {
+					return getPossibleValuesForComplexField(finalField, longFieldName);
+				}
+
+				return getPossibleValuesForField(finalField);
+			}
 		}
 		
 //		System.out.println();

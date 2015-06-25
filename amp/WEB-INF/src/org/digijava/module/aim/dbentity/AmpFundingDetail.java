@@ -74,7 +74,7 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	private AmpCurrency ampCurrencyId;
 	@Interchangeable(fieldTitle="Reporting Organization")
 	private AmpOrganisation reportingOrgId;
-	@Interchangeable(fieldTitle="Funding", recursive=true)
+	@Interchangeable(fieldTitle="Funding", pickIdOnly=true)
 	private AmpFunding ampFundingId;
 	@Interchangeable(fieldTitle="Fixed Exchange Rate")
 	private Double fixedExchangeRate;

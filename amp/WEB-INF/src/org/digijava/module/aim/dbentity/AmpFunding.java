@@ -24,9 +24,9 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	private static final long serialVersionUID = 1L;
 	@Interchangeable(fieldTitle="AMP Funding ID")
 	private Long ampFundingId;
-	@Interchangeable(fieldTitle="Donor Organization ID", recursive=true)
+	@Interchangeable(fieldTitle="Donor Organization ID", pickIdOnly=true)
 	private AmpOrganisation ampDonorOrgId;
-	@Interchangeable(fieldTitle="Activity ID", recursive=true)
+	@Interchangeable(fieldTitle="Activity ID", pickIdOnly=true)
 	private AmpActivityVersion ampActivityId;
 	@Interchangeable(fieldTitle="CRS Transaction Number")
 	private Long crsTransactionNo;
@@ -85,7 +85,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	// private AmpModality modalityId;
 	@Interchangeable(fieldTitle="Type of Assistance",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence")
 	private AmpCategoryValue typeOfAssistance;
-	@Interchangeable(fieldTitle="Financing Instrument",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument")
+	@Interchangeable(fieldTitle="Financal Instrument",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument")
 	private AmpCategoryValue financingInstrument;
 	@Interchangeable(fieldTitle="Funding Status",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status")
 	private AmpCategoryValue fundingStatus;

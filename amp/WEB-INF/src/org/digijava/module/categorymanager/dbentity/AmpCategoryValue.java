@@ -21,11 +21,11 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
  *
  */
 public class AmpCategoryValue implements Serializable, Identifiable, Comparable<AmpCategoryValue>, HierarchyListable, Versionable{
-	@Interchangeable(fieldTitle="ID")
+	@Interchangeable(fieldTitle="ID", id=true)
 	private Long id;
-	@Interchangeable(fieldTitle="AMP Category Class")
+	@Interchangeable(fieldTitle="AMP Category Class", pickIdOnly = true)
 	private AmpCategoryClass ampCategoryClass;
-	@Interchangeable(fieldTitle="Value")
+	@Interchangeable(fieldTitle="Value", value = true)
 	private String value;
 	@Interchangeable(fieldTitle="Index")
 	private Integer index;
@@ -36,9 +36,9 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 	private Set<AmpActivityVersion> activities;
 	//private Long fieldType;
 	
-	@Interchangeable(fieldTitle="Used Values", recursive=true)
+//	@Interchangeable(fieldTitle="Used Values", pickIdOnly=true)
 	private Set<AmpCategoryValue> usedValues;
-	@Interchangeable(fieldTitle="Used By Values", recursive = true)
+//	@Interchangeable(fieldTitle="Used By Values", pickIdOnly = true)
 	private Set<AmpCategoryValue> usedByValues;	
 
 	private boolean translateable	= true;
@@ -193,6 +193,10 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 		return deleted;
 	}
 
+	/**
+	 * whether this AmpCategoryValue has been marked as deleted
+	 * @return
+	 */
 	public boolean isVisible() {
 		return (deleted == null) || (!deleted);
 	}

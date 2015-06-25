@@ -32,7 +32,7 @@ public class AmpIndicator implements Serializable
     @TranslatableField
     @Interchangeable(fieldTitle="Description",fmPath="/Activity Form/M&E/Description")
 	private String description;
-    @Interchangeable(fieldTitle="Sectors", recursive=true)
+    @Interchangeable(fieldTitle="Sectors", pickIdOnly=true)
     @Validators (unique="/Activity Form/M&E/uniqueSectorsValidator")
 	private Set<AmpSector> sectors;
     @Interchangeable(fieldTitle="Comments")

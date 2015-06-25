@@ -19,9 +19,9 @@ public class AmpGPISurveyQuestion implements Serializable {
 	@Interchangeable(fieldTitle="Question Text")
 	private String questionText;
 	
-	@Interchangeable(fieldTitle="Parent question", recursive=true)
+	@Interchangeable(fieldTitle="Parent question", pickIdOnly=true)
 	private AmpGPISurveyQuestion parentQuestion;
-	@Interchangeable(fieldTitle="Indicator", recursive=true)
+	@Interchangeable(fieldTitle="Indicator", pickIdOnly=true)
 	private AmpGPISurveyIndicator ampIndicatorId;
 	@Interchangeable(fieldTitle="Question Number")
 	private Integer questionNumber;
@@ -29,7 +29,7 @@ public class AmpGPISurveyQuestion implements Serializable {
 	private AmpGPISurveyQuestionType ampTypeId;
 	@Interchangeable(fieldTitle="Status")
 	private String status;
-	@Interchangeable(fieldTitle="Questions", recursive=true)
+	@Interchangeable(fieldTitle="Questions", pickIdOnly=true)
 	private Set<AmpGPISurveyQuestion> questions;
 
 	public AmpGPISurveyQuestion getParentQuestion() {

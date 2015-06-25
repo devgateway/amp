@@ -1909,4 +1909,25 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 			}
 			return aidEffectivenesForExport;
 		}
+	 
+	/**
+	 * Get the amp_activity id of the last version of a given AmpActivityVersion
+	 * 
+	 * @param ampId
+	 *             the amp_id of the AmpActivityVersion to get the last version
+	 * @return Long, with the amp_activity_id of the last version of an AmpActivityVersion
+	 **/
+	public static Long getLastActivityId(String ampId) {
+		Long maxActivityId = null;
+		try {
+			Session session = PersistenceManager.getSession();
+			Query qry = session.createQuery("select max(a.ampActivityId) from " + AmpActivityVersion.class.getName()
+					+ " a where a.ampId =:ampId ");
+			qry.setParameter("ampId", ampId, StringType.INSTANCE);
+			maxActivityId = (Long) qry.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return maxActivityId;
+	}
 } // End

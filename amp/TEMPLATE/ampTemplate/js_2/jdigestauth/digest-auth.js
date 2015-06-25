@@ -15,8 +15,7 @@ function ajaxLogin() {
 					onSuccess : function(data) {
 						var serverResponse=JSON.parse(data);
 						var error = jQuery.trim(serverResponse.original_result);
-						
-						debugger;
+
 						$('#result').hide();
 						
 						//Suspended login
@@ -61,7 +60,6 @@ function ajaxLogin() {
 							reportError("suspend");
 							break;
 						case 'noError':
-							debugger;
 							if(serverResponse.generate_token && serverResponse.generate_token === true){
 								$('#generateToken').val(serverResponse.generate_token || "");
 								$('#callbackUrl').val(serverResponse.callback_url || "");
@@ -90,7 +88,6 @@ function ajaxLogin() {
 
   			digestAuth.setCredentials($('#j_username').val(),$('#j_password').val());
   			digestAuth.setTokenInformation(getParameterByName('generate-token'),getParameterByName('callback-url'));
-  			debugger;
    			digestAuth.call('/aim/postLogin.do');
 	}
 

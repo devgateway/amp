@@ -9,6 +9,8 @@ public @interface InterchangeableDiscriminator {
     String discriminatorField();
     /** list of settings based on discriminator field options. The option value must be configured at discriminatorOption */
     Interchangeable[] settings() default {};
+    /** list of validators for each sub-category**/
+    Validators [] validators() default {};
     /** we can also have a method, like Discriminators.sector that will fill in the settings structure at runtime*/
     String method() default "";
 }

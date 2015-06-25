@@ -264,20 +264,22 @@ public static List<JsonBean> getOrgGroups() {
 				//go and fetch translated version of organisation name if multilingual is enabled
 				
 				Map<Long, String> organisationsNames = QueryUtil.getTranslatedName(conn,"amp_organisation","amp_org_id","name");
-				String query = " select distinct o.amp_org_id orgId, "+
-						" o.name ,  "+
-						" o.acronym ,  "+
-						" aor.role roleId , "+ 
-						" o.org_grp_id grpId  "+
-						" , EXISTS(SELECT af.amp_donor_org_id FROM amp_funding af WHERE o.amp_org_id = af.amp_donor_org_id AND ((af.source_role_id IS NULL) OR af.source_role_id = (select amp_role_id from amp_role WHERE role_code='DN'))) AS hasFundings " +
-						" from amp_org_role aor,amp_organisation o "+
-						" where aor.organisation=o.amp_org_id " +
-						" and (o.deleted is null or o.deleted = false) " +
-						/*" AND o.amp_org_id IN (select DISTINCT(amp_donor_org_id) FROM amp_funding) " +*/
-						" and aor.role IN " +
-							"(SELECT r.amp_role_id FROM amp_role r WHERE r.role_code IN (" + 
-							Util.toCSStringForIN(roleCodes) + "))" +
-						" order by o.amp_org_id";
+				String query = "SELECT DISTINCT o.amp_org_id orgId, o.name ,  o.acronym ,  o.org_grp_id grpId, aor.role roleId" +
+						", EXISTS(SELECT af.amp_donor_org_id FROM amp_funding af WHERE o.amp_org_id = af.amp_donor_org_id AND ((af.source_role_id IS NULL) OR af.source_role_id = (SELECT amp_role_id FROM amp_role WHERE role_code='DN'))) AS hasFundings  " +
+						" FROM amp_org_role aor JOIN amp_organisation o ON aor.organisation=o.amp_org_id" +
+						" WHERE " +
+						"     o.deleted IS NULL OR o.deleted = false" +
+						"     AND aor.role IN (SELECT r.amp_role_id FROM amp_role r WHERE r.role_code IN ("
+						+ Util.toCSStringForIN(roleCodes) + "))   " +
+						" UNION     " +
+						" SELECT DISTINCT o.amp_org_id orgId, o.name ,  o.acronym ,  o.org_grp_id grpId, af.source_role_id roleId," +
+						" (af.source_role_id IS NULL OR af.source_role_id = (SELECT amp_role_id FROM amp_role WHERE role_code='DN')) AS hasFundings  " +
+						" FROM amp_funding af JOIN amp_organisation o ON o.amp_org_id = af.amp_donor_org_id " +
+						" WHERE " +
+						"    o.deleted IS NULL OR o.deleted = false" +
+						" AND af.source_role_id IN (SELECT r.amp_role_id FROM amp_role r WHERE r.role_code IN ("
+						+ Util.toCSStringForIN(roleCodes) + ")) " +
+						" ORDER BY orgId"; 
 				try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
 					ResultSet rs = rsi.rs;
 					Long lastOrgId = 0L;

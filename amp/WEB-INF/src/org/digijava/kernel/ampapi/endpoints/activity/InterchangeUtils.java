@@ -51,7 +51,6 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.time.StopWatch;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.jdbc.Work;
 import org.springframework.util.ClassUtils;
@@ -109,8 +108,8 @@ public class InterchangeUtils {
 			add(Double.class);
 			add(String.class);
 			add(Date.class);
-		}
-	};
+	}};
+	
 	private static void addUnderscoredTitlesToMap(Class clazz) {
 		for (Field field : clazz.getDeclaredFields()) {
 			Interchangeable ant = field.getAnnotation(Interchangeable.class);
@@ -131,6 +130,7 @@ public class InterchangeUtils {
 			}
 		}
 	}
+	
 	/**
 	 * Picks available translations for a string (supposedly field name)
 	 * 
@@ -298,8 +298,7 @@ public class InterchangeUtils {
 	/**
 	 * checks whether a Field is assignable from a Collection
 	 * 
-	 * @param field
-	 *            a Field
+	 * @param field a Field
 	 * @return true/false
 	 */
 	private static boolean isCollection(Field field) {
@@ -351,11 +350,9 @@ public class InterchangeUtils {
 
 
 	/**
-	 * converts the uppercase letters of a string to underscore + lowercase
-	 * (except for first one)
+	 * converts the uppercase letters of a string to underscore + lowercase (except for first one)
 	 * 
-	 * @param input
-	 *            String to be converted
+	 * @param input String to be converted
 	 * @return converted string
 	 */
 	public static String underscorify(String input) {
@@ -390,6 +387,7 @@ public class InterchangeUtils {
 		}
 		return bld.toString();
 	}
+	
 	/**
 	 * describes a field in a JSON structure of: field_type: one of the types
 	 * {string, boolean, float, list} field_name: the field name, obtained from
@@ -441,11 +439,10 @@ public class InterchangeUtils {
 	/**
 	 * Describes each @Interchangeable field of a class
 	 * 
-	 * @param clazz
-	 *            the class to be described
+	 * @param clazz the class to be described
 	 * @return
 	 */
-	private static List<JsonBean> getAllAvailableFields(Class clazz) {
+	private static List<JsonBean> getAllAvailableFields(Class<?> clazz) {
 		List<JsonBean> result = new ArrayList<JsonBean>();
 		StopWatch.next("Descending into", false, clazz.getName());
 		Field[] fields = clazz.getDeclaredFields();
@@ -485,8 +482,7 @@ public class InterchangeUtils {
 	 * Gets a date formatted in ISO 8601 format. If the date is null, returns
 	 * null.
 	 * 
-	 * @param date
-	 *            the date to be formatted
+	 * @param date the date to be formatted
 	 * @return String, date in ISO 8601 format
 	 */
 	public static String formatISO8601Date(Date date) {

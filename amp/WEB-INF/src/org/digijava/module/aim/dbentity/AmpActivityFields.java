@@ -506,7 +506,11 @@ LoggerIdentifiable, Cloneable {
 	@Interchangeable(fieldTitle = "Sub Program",fmPath="/Activity Form/Identification/Budget Extras/Sub-Program")
 	@VersionableFieldSimple(fieldTitle = "Sub Program")
 	protected String subProgram;
-	@Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_CODE,fmPath="/Activity Form/Identification/Budget Extras/Project Code")
+	/* 
+	 * AMP-20423: For Import/Export we need it always visible 
+	 * */
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_CODE)
+			//AMP-20423: disabling fmPath="/Activity Form/Identification/Budget Extras/Project Code")
 	@VersionableFieldSimple(fieldTitle = "Project Code")
 	protected String projectCode;
 	@Interchangeable(fieldTitle = "Ministry Code",fmPath="/Activity Form/Identification/Budget Extras/Ministry Code")

@@ -49,7 +49,6 @@ public class EPConstants {
     }};
 	
 	public static final String ERROR = "error";
-	public static final String INVALID = "invalid";
 	public static final String NA = "N/A";
 	
 	public static final String FILTERS = "filters";

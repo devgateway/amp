@@ -20,8 +20,8 @@ public class MultipleEntriesValidator extends InputValidator {
 	}
 
 	@Override
-	public boolean isValid(AmpActivityVersion oldActivity, JsonBean newFieldValue, JsonBean oldFieldValue,
-			JsonBean fieldDescription, boolean update) {
+	public boolean isValid(AmpActivityVersion oldActivity, JsonBean newFieldParent, JsonBean oldFieldParent,
+			JsonBean fieldDescription, String fieldPath, boolean update) {
 		// TODO Auto-generated method stub
 		return false;
 	}

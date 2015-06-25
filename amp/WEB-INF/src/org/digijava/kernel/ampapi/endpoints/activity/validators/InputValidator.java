@@ -18,14 +18,15 @@ public abstract class InputValidator {
 	/**
 	 * Validates new field value configuration
 	 * @param oldActivity or null if none existed
-	 * @param newFieldValue input JSON definition of the field
-	 * @param oldFieldValue existing JSON definition of the field (can be null if not present)
+	 * @param newFieldParent parent input JSON definition of the field
+	 * @param oldFieldParent existing parent JSON definition of the field (can be null if not present)
 	 * @param fieldDescription description of the current field (type, required, edit rights, etc)
+	 * @param fieldPath full field path
 	 * @param update true if this is an update request
 	 * @return true if chain validation passed
 	 */
-	public abstract boolean isValid(AmpActivityVersion oldActivity, JsonBean newFieldValue, JsonBean oldFieldValue, 
-			JsonBean fieldDescription, boolean update);
+	public abstract boolean isValid(AmpActivityVersion oldActivity, JsonBean newFieldParent, JsonBean oldFieldParent, 
+			JsonBean fieldDescription, String fieldPath, boolean update);
 	
 	/**
 	 * @return this validator specific Error message

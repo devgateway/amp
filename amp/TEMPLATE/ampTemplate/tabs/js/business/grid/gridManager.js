@@ -190,6 +190,14 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 								row.className = className + ' status_1';
 								jQuery(row.cells[0]).html(link);
 								
+								// Shorten texts.
+								for (var j = 0; j < colModel.length; j++) {
+									var cell = row.cells[j];
+									if (jQuery(cell).css('display') !== 'none') {
+										cell.textContent = shortenTexts(cell.textContent);
+									}
+								}
+								
 								//check public view - no team present
 								if(!teamid) continue;
 								
@@ -526,6 +534,14 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 			}
 		});
 		return ret;
+	}
+	
+	function shortenTexts(text) {
+		var max = 100;
+		if (text !== undefined && text !== null && text.length > max) {
+			return text.substring(0, max) + "...";
+		}
+		return text;
 	}
 
 	return GridManager;

@@ -181,6 +181,7 @@ public class InterchangeUtils {
 			viewableActivities = getActivitiesByIds(viewableIds, true, true, false);
 		}
 		if (editableIds.size() > 0) {
+			
 			editableActivities = getActivitiesByIds(editableIds, true, true, !TeamMemberUtil.isManagementWorkspace(tm));
 		}
 		populateActivityMap(activityMap, editableActivities);
@@ -410,25 +411,25 @@ public class InterchangeUtils {
 		if (interchangeble == null)
 			return null;
 		JsonBean bean = new JsonBean();
-		bean.set("field_name", titleToUnderscoreMap.get(interchangeble.fieldTitle()) );
-		bean.set("field_type", classToCustomType.containsKey(field.getType()) ? classToCustomType.get(field.getType())
+		bean.set(ActivityEPConstants.FIELD_NAME,titleToUnderscoreMap.get(interchangeble.fieldTitle()));
+		bean.set(ActivityEPConstants.FIELD_TYPE, classToCustomType.containsKey(field.getType()) ? classToCustomType.get(field.getType())
 				: "list");
-		bean.set("field_label", mapToBean(getLabelsForField(interchangeble.fieldTitle())));
+		bean.set(ActivityEPConstants.FIELD_LABEL, mapToBean(getLabelsForField(interchangeble.fieldTitle())));
 		if (!classToCustomType.containsKey(field.getClass())) {/* list type */
-			bean.set("importable", interchangeble.importable() ? true : false);
+			bean.set(ActivityEPConstants.IMPORTABLE, interchangeble.importable() ? true : false);
 			if (isCollection(field) && !hasMaxSizeValidatorEnabled(field))
-				bean.set("multiple_values", true);
+				bean.set(ActivityEPConstants.MULTIPLE_VALUES, true);
 			else
-				bean.set("multiple_values", false);
+				bean.set(ActivityEPConstants.MULTIPLE_VALUES, false);
 			if (!interchangeble.pickIdOnly()) {
 				List<JsonBean> children = getChildrenOfField(field);
 				if (children != null && children.size() > 0)
-					bean.set("children", children);
+					bean.set(ActivityEPConstants.CHILDREN, children);
 			} else {
-				bean.set("id_only", true);
+				bean.set(ActivityEPConstants.ID_ONLY, true);
 			}
-			bean.set("unique", hasUniqueValidatorEnabled(field));
-			bean.set("required", getRequiredValue(field));
+			bean.set(ActivityEPConstants.UNIQUE, hasUniqueValidatorEnabled(field));
+			bean.set(ActivityEPConstants.REQUIRED, getRequiredValue(field));
 		}
 		return bean;
 	}
@@ -1023,5 +1024,6 @@ public class InterchangeUtils {
 	
 
 }
+
 
 

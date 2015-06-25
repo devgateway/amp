@@ -133,11 +133,11 @@ public class ActivityImporter {
 		boolean validSubElements = true;
 		
 		// first validate all sub-elements
-		List<JsonBean> childrenFields = (List<JsonBean>) fieldDef.get(ActivityEPConstants.FIELD_CHILDREN);
+		List<JsonBean> childrenFields = (List<JsonBean>) fieldDef.get(ActivityEPConstants.CHILDREN);
 		List<JsonBean> childrenNewValues = newJsonParent == null ? null : 
-			new ArrayList<JsonBean>((List<JsonBean>) newJsonParent.get(ActivityEPConstants.FIELD_CHILDREN));
+			new ArrayList<JsonBean>((List<JsonBean>) newJsonParent.get(ActivityEPConstants.CHILDREN));
 		List<JsonBean> childrenOldValues = oldJsonParent == null ? null : 
-			new ArrayList<JsonBean>((List<JsonBean>) oldJsonParent.get(ActivityEPConstants.FIELD_CHILDREN));
+			new ArrayList<JsonBean>((List<JsonBean>) oldJsonParent.get(ActivityEPConstants.CHILDREN));
 		
 		if ((ActivityEPConstants.FIELD_TYPE_LIST.equals(fieldType) || childrenFields != null && childrenFields.size() > 0)
 				&& childrenNewValues != null) {

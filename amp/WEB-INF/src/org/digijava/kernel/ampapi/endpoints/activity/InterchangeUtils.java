@@ -525,76 +525,71 @@ public class InterchangeUtils {
 			AmpActivityVersion activity = ActivityUtil.loadActivity(projectId);
 			activityJson.set("amp_activity_id", activity.getAmpActivityId());
 			activityJson.set("amp_id", activity.getAmpId());
+			
 			Field[] fields = activity.getClass().getSuperclass().getDeclaredFields();
 
 			for (Field field : fields) {
-				Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
-				if (interchangeable != null) {
-					field.setAccessible(true);
-					if (field.getType().isAssignableFrom(Set.class)) {
-						Set setObject = (Set) field.get(activity);
-						if (setObject != null) {
-							for (Object obj : setObject) {
-
-								Field[] setFields = obj.getClass().getDeclaredFields();
-								for (Field setField : setFields) {
-									Interchangeable interchangeableSetField = setField
-											.getAnnotation(Interchangeable.class);
-
-									if (interchangeableSetField != null) {
-										setField.setAccessible(true);
-										activityJson.set(interchangeableSetField.fieldTitle(), setField.get(obj));
-
-									}
-								}
-							}
-						}
-					} else {
-						Object object = field.get(activity);
-						if (object != null) {
-							ClassUtils.isPrimitiveOrWrapper(object.getClass());
-							// @VersionableFieldTextEditor
-							if (!JSON_SUPPORTED_CLASSES.contains(object.getClass())) {
-								System.out.println("not supported");
-							} else {
-								activityJson.set(interchangeable.fieldTitle(), object);
-
-							}
+				readFieldValue(field, activity, activityJson);
+			}
+			
+		} catch (Exception e) {
+			LOGGER.error("Coudn't load activity with id: " + projectId + ". " + e.getMessage());
+			activityJson = ApiError.toError("Coudn't load activity with id: " + projectId);
+		} 
+		
+		return activityJson;
+	}
+	
+	private static void readFieldValue(Field field, Object fieldInstance, JsonBean resultJson) throws IllegalArgumentException, 
+	IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException {
+		
+		Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
+		
+		if (interchangeable != null && FMVisibility.isVisible(field)) {
+			field.setAccessible(true);
+			String fieldTitle = underscorify(interchangeable.fieldTitle());
+			Object object = field.get(fieldInstance);
+			
+			if (!interchangeable.pickIdOnly()) {
+				// check if the member is a collection
+				if (isCollection(field) ) {
+					Collection<Object> collectionItems = (Collection<Object>) object;
+					// if the collection is not empty, it will be parsed and a JSON with member details will be generated
+					List<JsonBean> collectionJson = new ArrayList<JsonBean>();
+					if (collectionItems != null) {
+						// iterate over the objects of the collection
+						for (Object item : collectionItems) {
+							collectionJson.add(getObjectJson(item));
 						}
 					}
-
+					// put the array with object values in the result JSON
+					resultJson.set(fieldTitle, collectionJson);
+				} else {
+					if (JSON_SUPPORTED_CLASSES.contains(field.getType()) || object == null) {
+						resultJson.set(fieldTitle, object);
+					} else {
+						if (interchangeable.pickIdOnly()) {
+							resultJson.set(fieldTitle, getId(object));
+						} else {
+							resultJson.set(fieldTitle, getObjectJson(object));
+						}
+					}
 				}
 			}
-
-			/*
-			 * activityJson.set("title", activity.getName());
-			 * activityJson.set("created_date",
-			 * formatISO8601Date(activity.getCreatedDate()));
-			 * activityJson.set("updated_date",
-			 * formatISO8601Date(activity.getUpdatedDate())); if
-			 * (activity.getSectors().size() > 0) { List<JsonBean> sectors = new
-			 * ArrayList<JsonBean>(); Iterator<AmpActivitySector> it =
-			 * activity.getSectors().iterator(); while (it.hasNext()) {
-			 * AmpActivitySector sector = it.next(); JsonBean sectorBean = new
-			 * JsonBean(); sectorBean.set("id",
-			 * sector.getSectorId().getAmpSectorId()); sectorBean.set("name",
-			 * sector.getSectorId().getName()); sectorBean.set("percentage",
-			 * sector.getSectorPercentage()); sectors.add(sectorBean); }
-			 * activityJson.set("sectors", sectors); } //activityJson.set(name,
-			 * activity.)
-			 */
-
-		} catch (DgException e) {
-			LOGGER.warn("Coudn't load activity with id: " + projectId);
-			throw new RuntimeException(e);
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		}		
+	}
+	
+	private static JsonBean getObjectJson(Object item) throws IllegalArgumentException, IllegalAccessException, 
+	NoSuchMethodException, SecurityException, InvocationTargetException {
+		Field[] itemFields = item.getClass().getDeclaredFields();
+		JsonBean itemJson = new JsonBean();
+		
+		// iterate the fields of the object and generate the JSON
+		for (Field itemField : itemFields) {
+			readFieldValue(itemField, item, itemJson);	
 		}
-		return activityJson;
+		
+		return itemJson;
 	}
 
 	public static boolean hasUniqueValidatorEnabled(Field field) {

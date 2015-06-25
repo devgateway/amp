@@ -35,22 +35,22 @@ public class ActivityTitleValidator extends InputValidator {
 		return ActivityErrors.UNIQUE_ACTIVITY_TITLE;
 	}
 
-	@Override
-	public boolean isValid(AmpActivityVersion oldActivity, JsonBean newFieldParent, JsonBean oldFieldParent,
-			JsonBean fieldDescription, boolean update) {
+	@Override 
+	public  boolean isValid(AmpActivityVersion oldActivity, JsonBean newFieldParent, JsonBean oldFieldParent, 
+			JsonBean fieldDescription, String fieldPath, boolean update) {
 		boolean isValid = true;
 		String fieldName = (String) fieldDescription.get(ActivityEPConstants.FIELD_NAME);
 		//this validator only validates project title
 		if (InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_TITLE).equals(fieldName)) {
 			HttpServletRequest request = TLSUtils.getRequest();
-			String title = newFieldValue.getString(fieldName);
+			String title = newFieldParent.getString(fieldName);
 			String langCode = null;
 			if (ContentTranslationUtil.multilingualIsEnabled()) {
 				langCode = TLSUtils.getEffectiveLangCode ();
 			}
 			List<AmpActivity> list = LuceneUtil.findActivitiesMoreLikeThis(request.getServletContext().getRealPath("/")
 					+ LuceneUtil.ACTVITY_INDEX_DIRECTORY, title, langCode, 2);
-			isValid = !isTitleExistent(newFieldValue, list);
+			isValid = !isTitleExistent(newFieldParent, list);
 		}
 
 		return isValid;

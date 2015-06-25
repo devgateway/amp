@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -42,16 +41,17 @@ public class InputValidatorProcessor {
 	 * @param errors
 	 * @return true if the current field passes the full validation chain
 	 */
-	public boolean isValid(AmpActivityVersion oldActivity, JsonBean newField, JsonBean oldField, 
-			JsonBean fieldDescription, Map<Integer, ApiErrorMessage> errors, boolean update) {
+	public boolean isValid(AmpActivityVersion oldActivity, JsonBean newParent, JsonBean oldParent, 
+			JsonBean fieldDef, String fieldPath, Map<Integer, ApiErrorMessage> errors, boolean update) {
 		boolean valid = true;
+		String fieldName = fieldPath.substring(fieldPath.lastIndexOf("~"));
 		
 		for (InputValidator current : validators) {
-			boolean currentValid = current.isValid(oldActivity, newField, oldField, fieldDescription, update);
+			boolean currentValid = current.isValid(oldActivity, newParent, oldParent, fieldDef, fieldPath, update);
 			valid = currentValid && valid;
 			
 			if (!currentValid) {
-				addError(newField, current.getErrorMessage(), errors);
+				addError(newParent, fieldName, current.getErrorMessage(), errors);
 			}
 			
 			if (!(currentValid && current.isContinueOnSuccess() || !currentValid && current.isContinueOnError())) {
@@ -61,20 +61,29 @@ public class InputValidatorProcessor {
 		return valid;
 	}
 	
-	protected void addError(JsonBean newFieldValue, ApiErrorMessage error, Map<Integer, ApiErrorMessage> errors) {
+	protected void addError(JsonBean newParent, String fieldName, ApiErrorMessage error, 
+			Map<Integer, ApiErrorMessage> errors) {
 		String errorCode = ApiError.getErrorCode(error);
-		// configure field level invalid flag
-		Set<String> fieldErrors = (Set<String>) newFieldValue.get(EPConstants.INVALID); 
-		if (fieldErrors == null) {
-			fieldErrors = new HashSet<String>();
-			newFieldValue.set(EPConstants.INVALID, fieldErrors);
+		JsonBean newField = new JsonBean();
+		Object newFieldValue = newParent.get(fieldName);
+		// if some errors where already reported, use new field storage
+		if (newFieldValue instanceof JsonBean && ((JsonBean) newFieldValue).get(ActivityEPConstants.INVALID) != null) {
+			newField = (JsonBean) newFieldValue;
+		} else {
+			// store original input
+			newField.set(ActivityEPConstants.INPUT, newFieldValue);
+			// and initialize fields errors list
+			newField.set(ActivityEPConstants.INVALID, new HashSet<String>());
+			// record new wrapped field value
+			newParent.set(fieldName, newField);
 		}
-		fieldErrors.add(errorCode);
+		
+		// register field level invalid errors
+		((Set<String>) newField.get(ActivityEPConstants.INVALID)).add(errorCode);
 		
 		// record general errors for the request
-		String value = newFieldValue.getString(ActivityEPConstants.FIELD_NAME);
 		ApiErrorMessage generalError = errors.get(error.id);
-		generalError = new ApiErrorMessage(generalError == null ? error : generalError, value);
+		generalError = new ApiErrorMessage(generalError == null ? error : generalError, fieldName);
 		errors.put(error.id, generalError);
 	}
 	

@@ -87,8 +87,7 @@ public class InterchangeUtils {
 	private static ProjectListCacher cacher = new ProjectListCacher();
 
 	@SuppressWarnings("serial")
-	protected static final Map<Class<?>, String> classToCustomType = new HashMap<Class<?>, String>() {
-		{
+	protected static final Map<Class<?>, String> classToCustomType = new HashMap<Class<?>, String>() {{
 			put(java.lang.String.class, "string");
 			put(java.util.Date.class, "date");
 			put(java.lang.Double.class, "float");
@@ -97,12 +96,9 @@ public class InterchangeUtils {
 			// put(java.lang.Long.class, "int");
 			put(java.lang.Float.class, "float");
 			// put(AmpCategoryValue.class, "string");
+	}};
 
-		}
-	};
-
-	private static Set<Class<?>> JSON_SUPPORTED_CLASSES = new HashSet<Class<?>>() {
-		{
+	private static Set<Class<?>> JSON_SUPPORTED_CLASSES = new HashSet<Class<?>>() {{
 			add(Boolean.class);
 			add(Character.class);
 			add(Byte.class);
@@ -415,7 +411,7 @@ public class InterchangeUtils {
 		if (interchangeble == null)
 			return null;
 		JsonBean bean = new JsonBean();
-		bean.set("field_name", interchangeble.fieldTitle() );
+		bean.set("field_name", titleToUnderscoreMap.get(interchangeble.fieldTitle()) );
 		bean.set("field_type", classToCustomType.containsKey(field.getType()) ? classToCustomType.get(field.getType())
 				: "list");
 		bean.set("field_label", mapToBean(getLabelsForField(interchangeble.fieldTitle())));

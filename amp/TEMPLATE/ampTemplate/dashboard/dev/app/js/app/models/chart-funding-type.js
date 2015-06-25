@@ -1,6 +1,6 @@
 var _ = require('underscore');
 var ChartModel = require('./chart-model-base');
-
+var common = require('../charts/common');
 
 module.exports = ChartModel.extend({
 
@@ -104,8 +104,15 @@ module.exports = ChartModel.extend({
             return {
               x: othersYear[0].x,
               y: _(othersYear).reduce(function(t, s) { return t + s.y; }, 0),
-              z: _(othersYear).reduce(function(t, s) { return t + s.z; }, 0)
+              z: ''
             };
+          })
+          .map(function(item) {
+        	  return {
+        		  x: item.x,
+        		  y: item.y,
+        		  z: common.formatNumber(item.y * parseFloat(app.settings.numberMultiplier.name))
+        	  };
           })
           .value()
       };

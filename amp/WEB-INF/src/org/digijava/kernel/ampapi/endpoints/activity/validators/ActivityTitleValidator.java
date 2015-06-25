@@ -50,34 +50,25 @@ public class ActivityTitleValidator extends InputValidator {
 			}
 			List<AmpActivity> list = LuceneUtil.findActivitiesMoreLikeThis(request.getServletContext().getRealPath("/")
 					+ LuceneUtil.ACTVITY_INDEX_DIRECTORY, title, langCode, 2);
-			isValid = !isTitleExistent(newFieldParent, list);
+			isValid = !isTitleExistent(oldActivity, list,update);
 		}
 
 		return isValid;
 	}
 
 	/**
-	 * Validates if the Activity's amp Id  contained on the newFieldValue JsonBean already exists on 
-	 * the list of AmpActivity.
-	 * The List <AmpActivity> contains activities with similar titles to the one present on newFieldValue. So we 
-	 * check if the list with Activities with similar title contains more activities besides the
-	 * one sent by parameter (newFieldValue)
+	 * Checks if the Activity title already exists on the system.
 	 * 
-	 * @param newFieldValue the JsonBean containing the Activity amp Id to verify
-	 * @param list the List with AmpActivity with similar titles
-	 * @return true if the title is repeated, false otherwise.
+	 * @param oldActivity, null if it is an insert, the activity already on the system on updates.
+	 * @param list the List <AmpActivity> with matching titles
+	 * @param update, whether this is an update operation or an insert
+	 * @return if there is already an activity with a matching title.
 	 */
-	private boolean isTitleExistent(JsonBean newFieldValue, List<AmpActivity> list) {
+	private boolean isTitleExistent(AmpActivityVersion oldActivity, List<AmpActivity> list,boolean update) {
 		boolean isExistent = false;
 		if (!list.isEmpty()) {
-			String ampId = null;
-			if (newFieldValue != null) {
-				ampId = (String) newFieldValue.get(ActivityFieldsConstants.AMP_ID);
-			}
-
 			for (AmpActivity activity : list)
-				// we want to avoid comparing the Activity with itself
-				if (ampId == null || (activity.getAmpId() != null && !ampId.equalsIgnoreCase(activity.getAmpId()))) {
+				if (!update  || !oldActivity.getName().equals(activity.getName())) {
 					isExistent = true;
 				}
 

@@ -18,7 +18,7 @@ public class AmpAhsurveyQuestion implements Serializable{
 	private Long ampQuestionId;
 	@Interchangeable(fieldTitle="Question Text")
 	private String questionText;
-	@Interchangeable(fieldTitle="Parent Question", recursive=true)
+	@Interchangeable(fieldTitle="Parent Question", pickIdOnly=true)
 	private AmpAhsurveyQuestion parentQuestion;
 	@Interchangeable(fieldTitle="Indicator ID")
 	private AmpAhsurveyIndicator ampIndicatorId;
@@ -28,7 +28,7 @@ public class AmpAhsurveyQuestion implements Serializable{
 	private AmpAhsurveyQuestionType ampTypeId;
 	@Interchangeable(fieldTitle="Status")
 	private String status;
-	@Interchangeable(fieldTitle="Questions", recursive=true)
+	@Interchangeable(fieldTitle="Questions", pickIdOnly=true)
 	private Set<AmpAhsurveyQuestion> questions;
 	
 

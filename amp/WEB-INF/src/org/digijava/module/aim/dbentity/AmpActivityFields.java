@@ -171,7 +171,7 @@ LoggerIdentifiable, Cloneable {
 	 }
 	)
 	protected Set <AmpActivitySector> sectors ;
-	
+
 	@Interchangeable(fieldTitle = "Contracts",fmPath="/Activity Form/Contracts")
 	@VersionableCollection(fieldTitle = "Contracts")
 	protected Set<IPAContract> contracts;

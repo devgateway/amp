@@ -36,7 +36,7 @@ public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimen
     
     private boolean translateable	= true;
     
-    @Interchangeable(fieldTitle="Organization Groups", recursive=true)
+    @Interchangeable(fieldTitle="Organization Groups", pickIdOnly=true)
     private Set<AmpOrgGroup> orgGroups;
     
     public String getClassification() {

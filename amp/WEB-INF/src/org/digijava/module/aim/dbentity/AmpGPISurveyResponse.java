@@ -11,7 +11,7 @@ public class AmpGPISurveyResponse implements Versionable, Cloneable, Serializabl
 	private static final long serialVersionUID = 1L;
 	@Interchangeable(fieldTitle="Response ID")
 	private Long ampReponseId;
-	@Interchangeable(fieldTitle="GPI Survey", recursive=true)
+	@Interchangeable(fieldTitle="GPI Survey", pickIdOnly=true)
 	private AmpGPISurvey ampGPISurveyId;
 	@Interchangeable(fieldTitle="GPI Survey Question")
 	private AmpGPISurveyQuestion ampQuestionId;

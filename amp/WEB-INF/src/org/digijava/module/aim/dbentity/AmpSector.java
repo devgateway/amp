@@ -25,7 +25,7 @@ public class AmpSector implements Serializable, Comparable, Identifiable,
 		Cloneable, OrgProfileValue, NameableOrIdentifiable {
 	@Interchangeable(fieldTitle="Sector ID", id=true)
 	private Long ampSectorId;
-	@Interchangeable(fieldTitle="Parent Sector ID", recursive=true)
+	@Interchangeable(fieldTitle="Parent Sector ID", pickIdOnly=true)
 	private AmpSector parentSectorId;
 	@Interchangeable(fieldTitle="Sector Code")
 	private String sectorCode;
@@ -53,7 +53,7 @@ public class AmpSector implements Serializable, Comparable, Identifiable,
 	
 	@Interchangeable(fieldTitle="Indicators")
 	private Set<AmpIndicator> indicators;
-	@Interchangeable(fieldTitle="Sectors", recursive=true)
+	@Interchangeable(fieldTitle="Sectors", pickIdOnly=true)
 	private Set<AmpSector> sectors;
 	@Interchangeable(fieldTitle="Deleted")
 	private Boolean deleted;

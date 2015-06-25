@@ -28,12 +28,12 @@ public class AmpCategoryClass implements Serializable, Comparable<AmpCategoryCla
 	private boolean isMultiselect	= false;
 	private boolean isOrdered		= false;
 	
-	@Interchangeable(fieldTitle="Possible Values", recursive=true)
+	@Interchangeable(fieldTitle="Possible Values", pickIdOnly=true)
 	private List<AmpCategoryValue> possibleValues;
 	
-	@Interchangeable(fieldTitle="Used Categories", recursive = true)
+	@Interchangeable(fieldTitle="Used Categories", pickIdOnly = true)
 	private List<AmpCategoryClass> usedCategories;
-	@Interchangeable(fieldTitle="Used By Categories", recursive=true)
+	@Interchangeable(fieldTitle="Used By Categories", pickIdOnly=true)
 	private Set<AmpCategoryClass> usedByCategories;
 	
 	@Interchangeable(fieldTitle="Used By Category Single Select")

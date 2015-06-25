@@ -26,7 +26,7 @@ public class AmpAhsurveyIndicator implements Serializable {
     private String indicatorCode;
 	@Interchangeable(fieldTitle="Status")
     private String status;
-	@Interchangeable(fieldTitle="Questions", recursive=true)
+	@Interchangeable(fieldTitle="Questions", pickIdOnly=true)
     private Set<AmpAhsurveyQuestion> questions;
 	@Interchangeable(fieldTitle="Calc Formulas")
     private Set<AmpAhsurveyIndicatorCalcFormula> calcFormulas;

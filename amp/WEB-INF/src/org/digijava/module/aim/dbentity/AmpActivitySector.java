@@ -12,7 +12,7 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable {
 	
 	@Interchangeable(fieldTitle="Activity ID")
 	private AmpActivityVersion activityId;
-	@Interchangeable(fieldTitle="Sector ID", id = true, value = true)
+	@Interchangeable(fieldTitle="Sector ID", descend=true)
 	private AmpSector sectorId;
 	@Interchangeable(fieldTitle="Sector Percentage")
 	private Float sectorPercentage;

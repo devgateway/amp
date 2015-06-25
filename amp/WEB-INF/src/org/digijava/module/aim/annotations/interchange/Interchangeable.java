@@ -43,18 +43,25 @@ public @interface Interchangeable {
 	 * to be set 'true' for the fields whose type or generic subtype is 
 	 * the same as of one of the containing classes above 
 	 * 
-	 * basically implemented to avoid endless loops
+	 * basically implemented to avoid endless loops when describing classes or 
+	 * enumerating values
 	 * 
-	 * example: AmpActivityFields -> Set\<AmpSector\> sectors;
+	 * example: AmpActivityFields -> Set\<AmpActivitySector\> sectors;
+	 * 			AmpActivitySector -> AmpSector sector;
 	 * 			AmpSector -> AmpSector parentSector; //descending into AmpSector here would build up a recursion
 	 * 
 	 * another example: 
-	 * AmpActivityFields -> Set\<AmpSector\> sectors;
+	 * AmpActivityFields -> Set\<AmpActivitySector\> sectors;
+	 * AmpActivitySector -> AmpSector sector;
 	 * AmpSector -> Set\<AmpOrganization\> orgs;
 	 * AmpOrganization-> Set\<AmpActivityVersion\> acts; //AmpActivityVersion extends AmpActivityFields, therefore, loop again
 	 * 
+	 * a third example:
+	 * 
+	 * AmpActivityFields -> 
+	 * 
 	 */
-	boolean recursive() default false;
+	boolean pickIdOnly() default false;
 	
 	/*ATTENTION: A FIELD MIGHT BE BOTH AN ID AND A VALUE (UNDERLYING)*/
 	/**

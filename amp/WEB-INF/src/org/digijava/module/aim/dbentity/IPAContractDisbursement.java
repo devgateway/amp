@@ -30,7 +30,7 @@ public class IPAContractDisbursement implements Serializable, Cloneable {
 	private AmpCurrency currency;
 	@Interchangeable(fieldTitle="Date",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date")
 	private Date date;
-	@Interchangeable(fieldTitle="Contract", recursive=true)
+	@Interchangeable(fieldTitle="Contract", pickIdOnly=true)
         private IPAContract contract;
 
         public IPAContract getContract() {

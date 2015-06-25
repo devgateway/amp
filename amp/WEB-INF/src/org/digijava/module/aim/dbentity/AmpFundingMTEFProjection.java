@@ -49,7 +49,7 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 		private AmpCurrency ampCurrency;
 		@Interchangeable(fieldTitle="Projection Date")
 		private Date projectionDate;
-		@Interchangeable(fieldTitle="Funding", recursive = true)
+		@Interchangeable(fieldTitle="Funding", pickIdOnly = true)
 		private AmpFunding  ampFunding;
 		@Interchangeable(fieldTitle="Reporting Date")
 		private Date reportingDate;

@@ -78,6 +78,7 @@ public class InterchangeUtils {
 	
 	private static final String VIEW = "view";
 	private static final String EDIT = "edit";
+	private static final String FILTER_FIELD = "fields";
 
 	private static final String NOT_REQUIRED = "_NONE_";
 	private static final String ALWAYS_REQUIRED = "_ALWAYS_";
@@ -528,27 +529,50 @@ public class InterchangeUtils {
 	 * @return
 	 */
 	public static JsonBean getActivity(Long projectId) {
+		return getActivity(projectId, null);
+	}
+	
+	/**
+	 * Activity Export as JSON 
+	 * 
+	 * @param projectId is amp_activity_id
+	 * @param filter is the JSON with a list of fields
+	 * @return
+	 */
+	public static JsonBean getActivity(Long projectId, JsonBean filter) {
 		JsonBean activityJson = new JsonBean();
 		try {
 			AmpActivityVersion activity = ActivityUtil.loadActivity(projectId);
 			activityJson.set("amp_activity_id", activity.getAmpActivityId());
 			activityJson.set("amp_id", activity.getAmpId());
 			
+			List<String> filteredFields = (List<String>) filter.get(FILTER_FIELD);
+			
 			Field[] fields = activity.getClass().getSuperclass().getDeclaredFields();
 
 			for (Field field : fields) {
-				readFieldValue(field, activity, activityJson);
+				readFieldValue(field, activity, activityJson, filteredFields, null);
 			}
 			
 		} catch (Exception e) {
 			LOGGER.error("Coudn't load activity with id: " + projectId + ". " + e.getMessage());
-			activityJson = ApiError.toError("Coudn't load activity with id: " + projectId);
-		}
+			throw new RuntimeException(e);
+		} 
 		
 		return activityJson;
 	}
 	
-	private static void readFieldValue(Field field, Object fieldInstance, JsonBean resultJson) throws IllegalArgumentException, 
+	
+	/**
+	 * 
+	 * @param field
+	 * @param fieldInstance
+	 * @param resultJson
+	 * @param filteredFields
+	 * @param fieldPath
+	 * @return
+	 */
+	private static void readFieldValue(Field field, Object fieldInstance, JsonBean resultJson, List<String> filteredFields, String fieldPath) throws IllegalArgumentException, 
 	IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException {
 		
 		Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
@@ -556,30 +580,37 @@ public class InterchangeUtils {
 		if (interchangeable != null && FMVisibility.isVisible(field)) {
 			field.setAccessible(true);
 			String fieldTitle = underscorify(interchangeable.fieldTitle());
+			
+			String filteredFieldPath = fieldPath == null ? fieldTitle : fieldPath + "~" + fieldTitle;
 			Object object = field.get(fieldInstance);
 			
 			if (!interchangeable.pickIdOnly()) {
 				// check if the member is a collection
-				if (isCollection(field) ) {
-					Collection<Object> collectionItems = (Collection<Object>) object;
-					// if the collection is not empty, it will be parsed and a JSON with member details will be generated
-					List<JsonBean> collectionJson = new ArrayList<JsonBean>();
-					if (collectionItems != null) {
-						// iterate over the objects of the collection
-						for (Object item : collectionItems) {
-							collectionJson.add(getObjectJson(item));
+				
+				if (isCompositeField(field)) {
+					generateCompositeCollection(field, object, resultJson, filteredFields, fieldPath);
+				} if (isFiltered(filteredFieldPath, filteredFields)) {
+					if (isCollection(field)) {
+						Collection<Object> collectionItems = (Collection<Object>) object;
+						// if the collection is not empty, it will be parsed and a JSON with member details will be generated
+						List<JsonBean> collectionJson = new ArrayList<JsonBean>();
+						if (collectionItems != null) {
+							// iterate over the objects of the collection
+							for (Object item : collectionItems) {
+								collectionJson.add(getObjectJson(item, filteredFields, filteredFieldPath));
+							}
 						}
-					}
-					// put the array with object values in the result JSON
-					resultJson.set(fieldTitle, collectionJson);
-				} else {
-					if (JSON_SUPPORTED_CLASSES.contains(field.getType()) || object == null) {
-						resultJson.set(fieldTitle, object);
+						// put the array with object values in the result JSON
+						resultJson.set(fieldTitle, collectionJson);
 					} else {
-						if (interchangeable.pickIdOnly()) {
-							resultJson.set(fieldTitle, getId(object));
+						if (JSON_SUPPORTED_CLASSES.contains(field.getType()) || object == null) {
+							resultJson.set(fieldTitle, object);
 						} else {
-							resultJson.set(fieldTitle, getObjectJson(object));
+							if (interchangeable.pickIdOnly()) {
+								resultJson.set(fieldTitle, getId(object));
+							} else {
+								resultJson.set(fieldTitle, getObjectJson(object, filteredFields, filteredFieldPath));
+							}
 						}
 					}
 				}
@@ -587,17 +618,96 @@ public class InterchangeUtils {
 		}		
 	}
 	
-	private static JsonBean getObjectJson(Object item) throws IllegalArgumentException, IllegalAccessException, 
+	/**
+	 * 
+	 * @param item
+	 * @param filteredFields
+	 * @param fieldPath
+	 * @return itemJson
+	 */
+	private static JsonBean getObjectJson(Object item, List<String> filteredFields, String fieldPath) throws IllegalArgumentException, IllegalAccessException, 
 	NoSuchMethodException, SecurityException, InvocationTargetException {
+		
 		Field[] itemFields = item.getClass().getDeclaredFields();
 		JsonBean itemJson = new JsonBean();
 		
 		// iterate the fields of the object and generate the JSON
 		for (Field itemField : itemFields) {
-			readFieldValue(itemField, item, itemJson);	
+			readFieldValue(itemField, item, itemJson, filteredFields, fieldPath);	
 		}
 		
 		return itemJson;
+	}
+	
+	/**
+	 * Generate the composite collection. E.g: we have a list of sectors, in JSON the list should be written by classification (primary programs, secondary programs, etc.)
+	 * @param field
+	 * @param fieldInstance
+	 * @param resultJson
+	 * @param filteredFields
+	 * @param fieldPath
+	 * @return
+	 */
+	private static void generateCompositeCollection(Field field, Object object, JsonBean resultJson, List<String> filteredFields, String fieldPath) throws IllegalArgumentException, 
+	IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException {
+		
+		InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
+		Interchangeable[] settings = discriminator.settings();
+		
+		Map<String, List<JsonBean>> compositeMap = new HashMap<String, List<JsonBean>>();
+		Map<String, String> filteredFieldsMap = new HashMap<String, String>();
+		
+		// create the map containing the correlation between the discriminatorOption and the JSON generated objects
+		for (Interchangeable setting : settings) {
+			compositeMap.put(setting.discriminatorOption(), new ArrayList<JsonBean>());
+			String fieldTitle = underscorify(setting.fieldTitle());
+			String filteredFieldPath = fieldPath == null ? fieldTitle : fieldPath + "~" + fieldTitle;
+			
+			filteredFieldsMap.put(setting.discriminatorOption(), filteredFieldPath);
+		}
+		
+		if (isCollection(field) && object != null) {
+			Collection<Object> compositeCollection = (Collection <Object>) object;
+			if (compositeCollection.size() > 0) {
+				for (Object obj : compositeCollection) {
+					if (obj instanceof AmpActivitySector) {
+						AmpActivitySector sector = (AmpActivitySector) obj;
+						String filteredFieldPath = filteredFieldsMap.get(sector.getClassificationConfig().getName());
+						compositeMap.get(sector.getClassificationConfig().getName()).add(getObjectJson(sector, filteredFields, filteredFieldPath));
+					} else if (obj instanceof AmpActivityProgram) {
+						AmpActivityProgram program = (AmpActivityProgram) obj;
+						String filteredFieldPath = filteredFieldsMap.get(program.getProgramSetting().getName());
+						compositeMap.get(program.getProgramSetting().getName()).add(getObjectJson(program, filteredFields, filteredFieldPath));
+					}
+				}
+			}
+		}
+		
+		// put in the result JSON the generated structure
+		for (Interchangeable setting : settings) {
+			String fieldTitle = underscorify(setting.fieldTitle());
+			if (isFiltered(fieldTitle, filteredFields)) {
+				resultJson.set(underscorify(setting.fieldTitle()), compositeMap.get(setting.discriminatorOption()));
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @param filteredFieldPath
+	 * @param filteredFields
+	 * @return boolean, if the field should be exported in the result Json 
+	 */
+	private static boolean isFiltered(String filteredFieldPath, List<String> filteredFields) {
+		if (filteredFields.isEmpty()) 
+			return true;
+			
+		for (String s : filteredFields) {
+			if (s.startsWith(filteredFieldPath) || filteredFieldPath.startsWith(s)) 
+				return true;
+		}
+		
+		return false;
 	}
 
 	public static boolean hasUniqueValidatorEnabled(Field field) {

@@ -94,6 +94,19 @@ public class InterchangeEndpoints {
 	}
 	
 	/**
+	 * Provides full project information 
+	 * @param projectId project id
+	 * @param filter jsonBean with a list of fields that will be displayed
+	 * @return project with full set of configured fields and their values 
+	 */
+	@POST
+	@Path("/projects/{projectId}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public JsonBean getProject(@PathParam("projectId") Long projectId, JsonBean filter) {
+		return InterchangeUtils.getActivity(projectId, filter);
+	}
+	
+	/**
 	 * Imports an activity
 	 * @param newJson activity configuration
 	 * @return latest project overview or an error if invalid configuration is received

@@ -79,8 +79,6 @@ public class InterchangeEndpoints {
 		return new ArrayList(activityCollection).subList(start, end);
 	}
 	
-
-
 	/**
 	 * Provides full project information 
 	 * @param projectId project id
@@ -93,6 +91,18 @@ public class InterchangeEndpoints {
 		return InterchangeUtils.getActivity(projectId);
 	}
 	
+	/**
+	 * Provides full project information 
+	 * @param projectId project id
+	 * @param filter jsonBean with a list of fields that will be displayed
+	 * @return project with full set of configured fields and their values 
+	 */
+	@POST
+	@Path("/projects/{projectId}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public JsonBean getProject(@PathParam("projectId") Long projectId, JsonBean filter) {
+		return InterchangeUtils.getActivity(projectId, filter);
+	}
 	
 	/**
 	 * Imports an activity

@@ -12,13 +12,13 @@ import org.digijava.module.aim.util.Output;
 
 public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Versionable, Cloneable
 {
-	@Interchangeable(fieldTitle="AMP Organization Role ID", id=true)
+	@Interchangeable(fieldTitle="AMP Organization Role ID")
     private Long ampOrgRoleId;
-	@Interchangeable(fieldTitle="Activity")
+	@Interchangeable(fieldTitle="Activity", pickIdOnly = true)
     private AmpActivityVersion activity;
 	@Interchangeable(fieldTitle="Organization")
 	private AmpOrganisation organisation;
-	@Interchangeable(fieldTitle="Role", value = true)
+	@Interchangeable(fieldTitle="Role", descend=true)
 	private AmpRole role;
 	@Interchangeable(fieldTitle="Percentage")
 	private Float 	percentage;

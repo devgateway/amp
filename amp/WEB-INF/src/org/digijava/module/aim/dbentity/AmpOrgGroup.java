@@ -21,10 +21,10 @@ import org.digijava.module.aim.util.NameableOrIdentifiable;
 @TranslatableClass (displayName = "Organisation Group")
 public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDimensionable, HierarchyListable,OrgProfileValue, NameableOrIdentifiable
 {
-	@Interchangeable(fieldTitle="Organization Group ID")
+	@Interchangeable(fieldTitle="Organization Group ID", id = true)
 	private Long ampOrgGrpId;
 	
-	@Interchangeable(fieldTitle="Organization Group Name")
+	@Interchangeable(fieldTitle="Organization Group Name", value = true)
 	@TranslatableField
 	private String orgGrpName;
 	

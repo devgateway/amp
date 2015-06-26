@@ -14,9 +14,9 @@ import org.hibernate.Query;
 @TranslatableClass (displayName = "Currency")
 public class AmpCurrency implements Serializable,Comparable, Identifiable
 {
-	@Interchangeable(fieldTitle="ID")
+	@Interchangeable(fieldTitle="ID", id = true)
 	private Long ampCurrencyId;
-	@Interchangeable(fieldTitle="Currency Code")
+	@Interchangeable(fieldTitle="Currency Code", value = true)
 	private String currencyCode;
 	@Interchangeable(fieldTitle="Country Name")
     private String countryName;

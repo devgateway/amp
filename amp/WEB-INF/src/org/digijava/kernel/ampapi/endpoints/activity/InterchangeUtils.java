@@ -47,6 +47,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -72,6 +73,8 @@ public class InterchangeUtils {
 	 */
 	private static Map<String, String> discriminatorMap = new HashMap<String, String> ();
 	static {
+		
+		
 		addUnderscoredTitlesToMap(AmpActivityFields.class);
 	}
 	
@@ -81,31 +84,7 @@ public class InterchangeUtils {
 	private static final ISO8601DateFormat dateFormatter = new ISO8601DateFormat();
 	private static ProjectListCacher cacher = new ProjectListCacher();
 
-	@SuppressWarnings("serial")
-	protected static final Map<Class<?>, String> classToCustomType = new HashMap<Class<?>, String>() {{
-			put(java.lang.String.class, "string");
-			put(java.util.Date.class, "date");
-			put(java.lang.Double.class, "float");
-			put(java.lang.Boolean.class, "boolean");
-			put(java.lang.Long.class, "string");
-			// put(java.lang.Long.class, "int");
-			put(java.lang.Float.class, "float");
-			// put(AmpCategoryValue.class, "string");
-	}};
 
-	private static Set<Class<?>> JSON_SUPPORTED_CLASSES = new HashSet<Class<?>>() {{
-			add(Boolean.class);
-			add(Character.class);
-			add(Byte.class);
-			add(Short.class);
-			add(Integer.class);
-			add(Long.class);
-			add(Float.class);
-			add(Double.class);
-			add(String.class);
-			add(Date.class);
-	}};
-	
 	private static void addUnderscoredTitlesToMap(Class clazz) {
 		for (Field field : clazz.getDeclaredFields()) {
 			Interchangeable ant = field.getAnnotation(Interchangeable.class);
@@ -123,6 +102,8 @@ public class InterchangeUtils {
 						discriminatorMap.put(ants.fieldTitle(), ant.fieldTitle());
 					}
 				}
+				if (!isSimpleType(getClassOfField(field)) && !ant.pickIdOnly())
+					addUnderscoredTitlesToMap(getClassOfField(field));
 			}
 		}
 	}
@@ -407,11 +388,11 @@ public class InterchangeUtils {
 			return null;
 		JsonBean bean = new JsonBean();
 		bean.set(ActivityEPConstants.FIELD_NAME, titleToUnderscoreMap.get(interchangeble.fieldTitle()));
-		bean.set(ActivityEPConstants.FIELD_TYPE, classToCustomType.containsKey(field.getType()) ? 
-				classToCustomType.get(field.getType()) : "list");
+		bean.set(ActivityEPConstants.FIELD_TYPE, InterchangeableClassMapper.containsSimpleClass(field.getType()) ? 
+				InterchangeableClassMapper.getCustomMapping(field.getType()) : "list");
 		bean.set(ActivityEPConstants.FIELD_LABEL, mapToBean(getLabelsForField(interchangeble.fieldTitle())));
 		/* list type */
-		if (!classToCustomType.containsKey(field.getClass())) {
+		if (!InterchangeableClassMapper.containsSimpleClass(field.getClass())) {
 			bean.set(ActivityEPConstants.IMPORTABLE, interchangeble.importable() ? true : false);
 			if (isCollection(field) && !hasMaxSizeValidatorEnabled(field)) {
 				bean.set(ActivityEPConstants.MULTIPLE_VALUES, true);
@@ -618,7 +599,8 @@ public class InterchangeUtils {
 						// put the array with object values in the result JSON
 						resultJson.set(fieldTitle, collectionJson);
 					} else {
-						if (JSON_SUPPORTED_CLASSES.contains(field.getType()) || object == null) {
+
+						if (InterchangeableClassMapper.containsSupportedClass(field.getType()) || object == null) {
 							resultJson.set(fieldTitle, object);
 						} else {
 							if (interchangeable.pickIdOnly()) {
@@ -655,7 +637,9 @@ public class InterchangeUtils {
 	}
 	
 	/**
-	 * Generate the composite collection. E.g: we have a list of sectors, in JSON the list should be written by classification (primary programs, secondary programs, etc.)
+	 * Generate the composite collection. E.g: we have a list of sectors, 
+	 * in JSON the list should be written by classification 
+	 * (primary programs, secondary programs, etc.)
 	 * @param field
 	 * @param fieldInstance
 	 * @param resultJson
@@ -795,19 +779,9 @@ public class InterchangeUtils {
 //	}
 //	
 //	
-//	private static void populateFieldNamesMap() {
-//		fieldNames = new HashMap<String, Field>();
-//		populateFieldNamesWithClass("", AmpActivityFields.class);
-////		Field[] fields = AmpActivityFields.class.getDeclaredFields();
-////		for (Field field : fields) {
-////			Interchangeable ant = field.getAnnotation(Interchangeable.class);
-////			if (ant != null)
-////				fieldNames.put(underscorify(ant.fieldTitle()), field);
-////		}
-//	}
-//	
+
 	private static boolean isSimpleType(Class<?> clazz) {
-		return classToCustomType.containsKey(clazz);
+		return InterchangeableClassMapper.containsSimpleClass(clazz);
 	}
 	
 	
@@ -847,7 +821,7 @@ public class InterchangeUtils {
 					Method meth = obj.getClass().getMethod(getGetterMethodName(field.getName()));
 					Object property = meth.invoke(obj);
 					if (ant.id()) {
-						if (Long.class.isAssignableFrom(field.getType())) {
+						if (Long.class.isAssignableFrom(field.getType()) || String.class.isAssignableFrom(field.getType())) {
 							result.set("id", property);
 						} else {
 							/*we need to go deeper*/
@@ -855,7 +829,7 @@ public class InterchangeUtils {
 						}
 					} 
 					if (ant.value()) {
-						if (String.class.isAssignableFrom(field.getType())) {
+						if (String.class.isAssignableFrom(field.getType()) || Long.class.isAssignableFrom(field.getType())) {
 							result.set("value", property);
 						} else {
 							/*we need to go deeper*/
@@ -1010,7 +984,9 @@ public class InterchangeUtils {
 		Field field = getField(clazz, deunderscorify(fieldName));
 		if (field == null) {
 			//attempt to check if it's a composite field
-			return getField(clazz, discriminatorMap.get(deunderscorify(fieldName)));
+			String discriminatedFieldName = discriminatorMap.get(deunderscorify(fieldName));
+			if (discriminatedFieldName != null)
+				return getField(clazz, discriminatedFieldName);
 		}
 		return field;
 	}
@@ -1036,7 +1012,27 @@ public class InterchangeUtils {
 		List<AmpSector> objectList = PersistenceManager.getSession().createQuery(queryString).list();
 		return objectList;
 	}
-	
+	private static List<AmpTheme> getThemeList(final String configType) {
+//		List<AmpSector> result = new ArrayList<AmpSector>();
+		final List<Long> programIds = new ArrayList<Long>();
+		PersistenceManager.getSession().doWork(new Work() {
+			public void execute(Connection conn) throws SQLException {
+				String allSectorsQuery = "SELECT amp_theme_id FROM all_programs_with_levels WHERE program_setting_name=" + 
+										 "'" + configType +"'" ;
+				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allSectorsQuery, null)) {
+					ResultSet rs = rsi.rs;
+					while (rs.next()) 
+						programIds.add(rs.getLong("amp_theme_id"));
+					rs.close();
+				}
+			}
+		});		
+		
+		String ids = StringUtils.join(programIds, ",");
+		String queryString = "select ast from " + AmpTheme.class.getName() + " ast where ast.ampThemeId in (" + ids + ")";
+		List<AmpTheme> objectList = PersistenceManager.getSession().createQuery(queryString).list();
+		return objectList;
+	}
 	
 	private static String getConfigValue(String longFieldName, Field field) {
 		InterchangeableDiscriminator ant = field.getAnnotation(InterchangeableDiscriminator.class);
@@ -1073,6 +1069,22 @@ public class InterchangeUtils {
 			}
 			
 		} else if (getClassOfField(field).equals(AmpActivityProgram.class)) {
+			String configValue = getConfigValue(originalName, field);
+			if (configValue == null) {
+				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.WRONG_PROGRAM_TYPE, field.getName())));
+				return result;
+			}
+			List<AmpTheme> themes = getThemeList(configValue);
+			for (AmpTheme theme : themes) {
+				JsonBean item = null;
+				try {
+					item = setProperties(theme);
+				} catch (Exception exc) {
+					result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.CANNOT_GET_PROPERTIES, field.getName())));
+				}
+				result.add(item);
+				
+			}
 			
 		} else if (getClassOfField(field).equals(AmpComponentFunding.class)) {
 			
@@ -1083,7 +1095,6 @@ public class InterchangeUtils {
 		return result;
 		
 	}
-	
 	public static List<JsonBean> getPossibleValuesForField(String longFieldName, Class<?> clazz) {
 
 		String fieldName = "";

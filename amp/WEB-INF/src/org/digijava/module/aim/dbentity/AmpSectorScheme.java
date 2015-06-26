@@ -11,11 +11,11 @@ import org.digijava.module.aim.util.SectorUtil;
 @TranslatableClass (displayName = "Sector Scheme")
 public class AmpSectorScheme implements Serializable
 {
-	@Interchangeable(fieldTitle="AMP Sector Scheme ID")
+	@Interchangeable(fieldTitle="AMP Sector Scheme ID", id = true)
 	private Long ampSecSchemeId ;
 	@Interchangeable(fieldTitle="Sector Scheme Code")
 	private String secSchemeCode ;
-	@Interchangeable(fieldTitle="Sector Scheme Name")
+	@Interchangeable(fieldTitle="Sector Scheme Name", value = true)
 	@TranslatableField
 	private String secSchemeName ;
 

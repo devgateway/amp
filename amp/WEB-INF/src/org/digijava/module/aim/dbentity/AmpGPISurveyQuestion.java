@@ -14,9 +14,9 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 
 public class AmpGPISurveyQuestion implements Serializable {
 
-	@Interchangeable(fieldTitle="ID")
+	@Interchangeable(fieldTitle="ID", id = true)
 	private Long ampQuestionId;
-	@Interchangeable(fieldTitle="Question Text")
+	@Interchangeable(fieldTitle="Question Text", value = true)
 	private String questionText;
 	
 	@Interchangeable(fieldTitle="Parent question", pickIdOnly=true)

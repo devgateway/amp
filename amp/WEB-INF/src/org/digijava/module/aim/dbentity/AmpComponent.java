@@ -25,9 +25,9 @@ import org.digijava.module.aim.util.Output;
 public class AmpComponent implements Serializable,Comparable<AmpComponent>, Versionable, Cloneable {
 	
 	private static Logger logger = Logger.getLogger(AmpComponent.class);
-	@Interchangeable(fieldTitle="ID")
+	@Interchangeable(fieldTitle="ID", id = true)
 	private Long ampComponentId;
-	@Interchangeable(fieldTitle="Title",fmPath="/Activity Form/Components/Component/Component Information/Component Title")
+	@Interchangeable(fieldTitle="Title",fmPath="/Activity Form/Components/Component/Component Information/Component Title", value = true)
 	@TranslatableField
 	private String title;
 	@Interchangeable(fieldTitle="Description",fmPath="/Activity Form/Components/Component/Component Information/Description")

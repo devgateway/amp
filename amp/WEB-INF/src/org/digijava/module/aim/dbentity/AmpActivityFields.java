@@ -347,14 +347,16 @@ LoggerIdentifiable, Cloneable {
 	//TODO can be Component Commintment, Disbursement or Expenditures
 	@Interchangeable(fieldTitle = "Component Fundings",fmPath="/Activity Form/Components")
 	@VersionableCollection(fieldTitle = "Component Fundings")
-	@InterchangeableDiscriminator(
-	        discriminatorField = "transactionType",
-	        settings = {
-	 @Interchangeable(fieldTitle ="Components Commitments",discriminatorOption = "0", fmPath="/Activity Form/Components/Component/Components Commitments"),
-	 @Interchangeable(fieldTitle ="Components Disbursements",discriminatorOption = "1", fmPath="/Activity Form/Components/Component/Components Disbursements"),
-	 @Interchangeable(fieldTitle ="Components Expenditures",discriminatorOption = "2", fmPath="/Activity Form/Components/Component/Components Expenditures"),
-	 }
-	)
+//	DOES NOT NEED A DISCRIMINATOR! IT'S REACHABLE VIA AMPCATEGORYVALUES INSIDE AMPCOMPONENTFUNDING
+//ALSO, IS NOT A PREDEFINED LIST  
+//	@InterchangeableDiscriminator(
+//	        discriminatorField = "transactionType",
+//	        settings = {
+//	 @Interchangeable(fieldTitle ="Components Commitments",discriminatorOption = "0", fmPath="/Activity Form/Components/Component/Components Commitments"),
+//	 @Interchangeable(fieldTitle ="Components Disbursements",discriminatorOption = "1", fmPath="/Activity Form/Components/Component/Components Disbursements"),
+//	 @Interchangeable(fieldTitle ="Components Expenditures",discriminatorOption = "2", fmPath="/Activity Form/Components/Component/Components Expenditures"),
+//	 }
+//	)
 	protected Set<AmpComponentFunding> componentFundings;
 
 

@@ -15,7 +15,7 @@ import org.digijava.module.aim.util.Output;
 
 public class AmpAhsurvey implements Versionable, Serializable, Cloneable, Comparable<AmpAhsurvey> {
 
-	@Interchangeable(fieldTitle="ID")
+	@Interchangeable(fieldTitle="ID", id = true)
 	private Long ampAHSurveyId;
 
 	//private AmpFunding ampFundingId;

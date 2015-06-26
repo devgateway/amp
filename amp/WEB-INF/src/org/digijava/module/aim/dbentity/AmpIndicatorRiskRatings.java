@@ -6,9 +6,9 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Identifiable;
 
 public class AmpIndicatorRiskRatings implements Identifiable, Serializable {
-	@Interchangeable(fieldTitle="Indicator Risk Ratings ID")
+	@Interchangeable(fieldTitle="Indicator Risk Ratings ID", id = true)
 	private Long ampIndRiskRatingsId;
-	@Interchangeable(fieldTitle="Rating Name")
+	@Interchangeable(fieldTitle="Rating Name", value = true)
 	private String ratingName;
 	@Interchangeable(fieldTitle="Translated Rating Name")
 	private String translatedRatingName;

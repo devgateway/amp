@@ -21,11 +21,9 @@ public class ActivityErrors {
 	public static final ApiErrorMessage FIELD_MULTIPLE_VALUES_NOT_ALLOWED = new ApiErrorMessage(5, "Multiple values not allowed");
 	public static final ApiErrorMessage FIELD_UNQUE_VALUES = new ApiErrorMessage(6, "Unique values required");
 	public static final ApiErrorMessage FIELD_INVALID = new ApiErrorMessage(7, "Invalid field");
-	/* NO "other" errors are allowed, only concrete errors related to the current logic, so please define them explicitly
-	 * for any uncontrolled error, exception must be logged   
-	public static final ApiErrorMessage SOME_OTHER_ERROR = new ApiErrorMessage(8, "Other non-specific error");
-	 */
+	public static final ApiErrorMessage WRONG_PROGRAM_TYPE = new ApiErrorMessage(8, "Wrong config value for programs");
 	public static final ApiErrorMessage UNIQUE_ACTIVITY_TITLE = new ApiErrorMessage(9, "Activity title should be unique");
+	public static final ApiErrorMessage CANNOT_GET_PROPERTIES = new ApiErrorMessage(10, "Cannot get properties for type");
 	
 	
 }

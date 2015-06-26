@@ -7,9 +7,9 @@
 <stringAttribute key="M2_PROFILES" value=""/>
 <listAttribute key="M2_PROPERTIES">
 <listEntry value="serverName=local"/>
-<listEntry value="jdbc.db=amp-moldova-stg-210"/>
+<listEntry value="jdbc.db=amp_moldova_210_stg"/>
 <listEntry value="jdbc.user=postgres"/>
-<listEntry value="jdbc.password=m0n1t0r"/>
+<listEntry value="jdbc.password=abc"/>
 <listEntry value="jdbc.port=5432"/>
 </listAttribute>
 <stringAttribute key="M2_RUNTIME" value="EMBEDDED"/>
@@ -25,5 +25,5 @@
 </mapAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/CDC-1.0%Foundation-1.0"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx1024m"/>
-<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:/amp-2.10-release}"/>
+<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${project_loc}"/>
 </launchConfiguration>

@@ -19,7 +19,7 @@ import org.digijava.module.aim.util.Output;
 @TranslatableClass (displayName = "Structure")
 public class AmpStructure implements Serializable,Comparable, Versionable, Cloneable {
 	private static Logger logger = Logger.getLogger(AmpStructure.class);
-	@Interchangeable(fieldTitle="ID")
+	@Interchangeable(fieldTitle="ID", id = true)
 	private Long ampStructureId;
 	@TranslatableField
 	@Interchangeable(fieldTitle="Title",fmPath="/Activity Form/Structures/Structure Title")
@@ -34,6 +34,7 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
 	@Interchangeable(fieldTitle="Shape",fmPath="/Activity Form/Structures/Structure Shape")
 	private String shape;
 	private java.sql.Timestamp creationdate;
+	@Interchangeable(fieldTitle="Type", pickIdOnly = true)
 	private AmpStructureType type;
 
 	private Set<AmpActivityVersion> activities;

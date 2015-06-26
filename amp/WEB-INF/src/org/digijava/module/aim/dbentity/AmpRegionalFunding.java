@@ -9,24 +9,35 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class AmpRegionalFunding implements Versionable, Serializable, Cloneable {
 	
+	@Interchangeable(fieldTitle = "ID", id = true)
 	private Long ampRegionalFundingId;
+	@Interchangeable(fieldTitle="Activity", pickIdOnly = true)
 	private AmpActivityVersion activity;
+	@Interchangeable(fieldTitle="Transaction type")
 	private Integer transactionType;
+	@Interchangeable(fieldTitle="Adjustment Type")
 	private AmpCategoryValue adjustmentType;
+	@Interchangeable(fieldTitle="Transaction Date")
 	private Date transactionDate;
+	@Interchangeable(fieldTitle="Reporting Date")
 	private Date reportingDate;
+	@Interchangeable(fieldTitle="Transaction Amount")
 	private Double transactionAmount;
+	@Interchangeable(fieldTitle="Reporting Organization", pickIdOnly = true)
 	private AmpOrganisation reportingOrganization;
+	@Interchangeable(fieldTitle="Currency")
 	private AmpCurrency currency;
+	@Interchangeable(fieldTitle="Expenditure Category")
 	private String expenditureCategory;
 
-	
+	@Interchangeable(fieldTitle="Region Location")
 	private AmpCategoryValueLocations regionLocation;
 	/**
 	 * @return Returns the activity.

@@ -73,7 +73,8 @@ public @interface Interchangeable {
 	 */
 	boolean value() default false;
 	/**
-	 * marks the fact that the relevant information for the Possible Values (and potentially other endpoints)
+	 * marks the fact that the Possible Values of the class are contained in the type class of the field marked with descend(), 
+	 * instead of the class containing this very field
 	 *  
 	 */
 	boolean descend() default false;

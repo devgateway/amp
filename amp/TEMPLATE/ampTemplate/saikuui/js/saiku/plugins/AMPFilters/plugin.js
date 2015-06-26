@@ -202,7 +202,13 @@ FilterUtils.getDateIntervalType = function(element) {
 	return "both";
 };
 
+FilterUtils.parseValue = function(elem, v) {
+	var theName = elem.valueToName ? elem.valueToName[v] : v;
+	return {id: v, name: theName};
+};
+
 FilterUtils.extractFilters = function(content) {
+	var self = this;
 	var filters = new Array();
 	var filtersColumnsJson = content.columnFilterRules;
 	var keys = [];
@@ -214,13 +220,16 @@ FilterUtils.extractFilters = function(content) {
 			var content = [];
 			if (element.name === 'DATE') {
 				var dateIntervalType = FilterUtils.getDateIntervalType(element, item, i);
-			}				
+			}
+			if (element.values !== null) {
+				_.each(element.values, function(v) {
+					content.push(self.parseValue(element, v));
+				})
+			}
 			if (element.value !== null) {
-				var auxItem = {};
-				auxItem.id = element.value;
-				auxItem.name = element.valueToName[element.value];
-				content.push(auxItem);
-			} else if (element.valueToName !== null) {
+				content.push(self.parseValue(element, element.value));
+			}
+			else if (element.valueToName !== null) {
 				// This should be .models but the way the endpoint returns
 				// the data breaks backbone.
 				_.each(element.valueToName, function(item_, i) {
@@ -323,6 +332,7 @@ FilterUtils.convertJavaFiltersToJS = function(data) {
 		case 'Zone':
 		case 'Region':
 		case 'District':
+		case 'Humanitarian Aid':
 			blob.columnFilters[item.name] = _.map(item.values, function(item_) {
 				return parseInt(item_.id);
 			});
@@ -337,28 +347,24 @@ FilterUtils.convertJavaFiltersToJS = function(data) {
 				return parseInt(item_.id);
 			});
 			break;
+		
 		case 'National Planning Objectives':
-			blob.columnFilters['National Planning Objectives Level 1 Id'] = _.map(item.values, function(
+		case 'Primary Program':
+		case 'Secondary Program':
+		case 'Tertiary Program':
+			blob.columnFilters[item.name + ' Level 1 Id'] = _.map(item.values, function(
 					item_) {
 				return parseInt(item_.id);
 			});
-			blob.columnFilters['National Planning Objectives Level 2 Id'] = blob.columnFilters['National Planning Objectives Level 1 Id'];
+			blob.columnFilters[item.name + ' Level 2 Id'] = blob.columnFilters[item.name + ' Level 1 Id'];
 			break;
-		case 'Primary Program':
-			blob.columnFilters['Primary Program Level 1 Id'] = _.map(item.values, function(item_) {
-				return parseInt(item_.id);
-			});
-			break;
-		case 'Secondary Program':
-			blob.columnFilters['Secondary Program Level 3 Id'] = _.map(item.values, function(item_) {
-				return parseInt(item_.id);
-			});
-			break;
+			
 		case 'Donor Agency':
 			blob.columnFilters['Donor Id'] = _.map(item.values, function(item_) {
 				return parseInt(item_.id);
 			});
 			break;
+			
 		case 'Funding Organization':
 			blob.columnFilters['Donor Id'] = _.map(item.values, function(item_) {
 				return parseInt(item_.id);
@@ -369,22 +375,13 @@ FilterUtils.convertJavaFiltersToJS = function(data) {
 			});
 			break;*/
 		case 'Primary Sector':
-			// NOTE: Since the filter widget (arbitrarily) uses 3 different fields for Primary Sectors we
-			// triplicate the values coming from the endpoint.
-			blob.columnFilters['Primary Sector Id'] = _.map(item.values, function(item_) {
-				return parseInt(item_.id);
-			});
-			blob.columnFilters['Primary Sector Sub-Sector Id'] = blob.columnFilters['Primary Sector Id'];
-			blob.columnFilters['Primary Sector Sub-Sub-Sector Id'] = blob.columnFilters['Primary Sector Id'];
-			break;
 		case 'Secondary Sector':
-			// NOTE: Since the filter widget (arbitrarily) uses 3 different fields for Secondary Sectors we
-			// triplicate the values coming from the endpoint.
-			blob.columnFilters['Secondary Sector Id'] = _.map(item.values, function(item_) {
+		case 'Tertiary Sector':	
+			blob.columnFilters[item.name + ' Id'] = _.map(item.values, function(item_) {
 				return parseInt(item_.id);
 			});
-			blob.columnFilters['Secondary Sector Sub-Sector Id'] = blob.columnFilters['Secondary Sector Id'];
-			blob.columnFilters['Secondary Sector Sub-Sub-Sector Id'] = blob.columnFilters['Secondary Sector Id'];
+			blob.columnFilters[item.name + ' Sub-Sector Id'] = blob.columnFilters[item.name + ' Id'];
+			blob.columnFilters[item.name + ' Sub-Sub-Sector Id'] = blob.columnFilters[item.name + ' Id'];
 			break;
 			
 //		case 'Start Date':
@@ -408,11 +405,7 @@ FilterUtils.convertJavaFiltersToJS = function(data) {
 			});
 			blob.otherFilters['date'] = newDate;
 			break;
-		case 'Tertiary Sector':
-			blob.columnFilters['Tertiary Program Level 1 Id'] = _.map(item.values, function(item_) {
-				return parseInt(item_.id);
-			});
-			break;					
+
 		case 'Team':
 			blob.columnFilters['Workspaces'] = _.map(item.values, function(item_) {
 				return parseInt(item_.id);

@@ -122,10 +122,8 @@ public class ApiError {
 		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 		
 		for (StackTraceElement st : stackTrace) {
-			for (String componentName : COMPONENT_ID_CLASS_MAP.keySet()) {
-				if (st.getClassName().contains(componentName)) {
-					return COMPONENT_ID_CLASS_MAP.get(componentName);
-				}
+			if (COMPONENT_ID_CLASS_MAP.containsKey(st.getClassName())) {
+				return COMPONENT_ID_CLASS_MAP.get(st.getClassName());
 			}
 		}
 		

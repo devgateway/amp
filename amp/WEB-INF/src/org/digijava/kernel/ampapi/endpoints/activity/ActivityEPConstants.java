@@ -11,7 +11,7 @@ import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
  */
 public class ActivityEPConstants {
 	// JSON fields
-	public static final String ACTIVITY = "activity"; 
+	public static final String ACTIVITY = "activity";
 	public static final String FIELD_NAME = "field_name";
 	public static final String FIELD_TYPE = "field_type";
 	public static final String FIELD_LABEL = "field_label";
@@ -20,7 +20,8 @@ public class ActivityEPConstants {
 	public static final String CHILDREN = "children";
 	public static final String UNIQUE = "unique";
 	public static final String REQUIRED = "required";	
-	public static final String ID_ONLY = "id_only";	
+	public static final String ID_ONLY = "id_only";
+	public static final String TRANSLATABLE = "translatable";
 	public static final String INVALID = "invalid";
 	public static final String INPUT = "input";
 	

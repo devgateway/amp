@@ -96,20 +96,16 @@ public class QueryUtil {
 
 	@Deprecated
 	/**
-	 * RULES IN LIFE OF A CODER:
-	 * 1. do not copy-paste
-	 * 2. if you copy-paste, at least copy-paste code you understand
-	 * 3. if you don't understand some code, do not copy-paste it
-	 * 4. this code is buggy
-	 * ===============
-	 * ergo rule #5: DO NOT COPY-PASTE THIS FUNCTION, it is part of an old buggy module
+	 * 1. this code is buggy, it is part of an old buggy module <br />
+	 * 2. DO NOT COPY-PASTE OR USE THIS FUNCTION, it is part of an old buggy module which is scheduled for physical removal <br />
+	 * 3. You are probably interested in {@link org.digijava.kernel.ampapi.endpoints.util.CalendarUtil#getDate(AmpFiscalCalendar, boolean, int)} <br />
 	 * 
 	 * @param fiscalCalendar
 	 * @param startDate
 	 * @param year
 	 * @return
 	 */
-	    public static Date getCalendar(AmpFiscalCalendar fiscalCalendar, boolean startDate, int year) {
+	public static Date getCalendar(AmpFiscalCalendar fiscalCalendar, boolean startDate, int year) {
 	        DateTime dt = null;
 	        String calendarType = fiscalCalendar.getBaseCal();
 	        if (calendarType.equals("ETH-CAL")) {
@@ -130,6 +126,7 @@ public class QueryUtil {
 	        }
 	        return dt.toDate();
 	    }
+	
 	public static Date getEndDate(Long fiscalCalendarId, int year) {
 		Date endDate = null;
 		if (fiscalCalendarId != null && fiscalCalendarId != -1) {

@@ -8,11 +8,9 @@ import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -56,11 +54,10 @@ public class AddTeamMember extends Action {
 
 		/* check if the user have entered an invalid user id */
 		if (user == null) {
-			if(ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_MNGMT)){
+			if (ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_MNGMT)) {
 				roles=TeamMemberUtil.getAllTeamMemberRoles(false);
-			}
-			else{
-				roles=TeamMemberUtil.getAllTeamMemberRoles();
+			} else {
+				roles = TeamMemberUtil.getAllTeamMemberRoles();
 			}
 			upMemForm.setAmpRoles(roles);
 			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
@@ -75,10 +72,9 @@ public class AddTeamMember extends Action {
 
 		/* if user havent specified the role for the new member */
 		if (upMemForm.getRole() == null) {
-			if(ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_MNGMT)){
+			if (ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_MNGMT)) {
 				roles=TeamMemberUtil.getAllTeamMemberRoles(false);
-			}
-			else{
+			} else {
 				roles=TeamMemberUtil.getAllTeamMemberRoles();
 			}
 			upMemForm.setAmpRoles(roles);
@@ -96,10 +92,10 @@ public class AddTeamMember extends Action {
 		 * already exist for the team */
 		if (ampTeam.getTeamLead() != null &&
 				ampTeam.getTeamLead().getAmpMemberRole().getAmpTeamMemRoleId().equals(upMemForm.getRole())) {
-			if(ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_MNGMT)){
+			if (ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_MNGMT)){
 				roles=TeamMemberUtil.getAllTeamMemberRoles(false);
 			}
-			else{
+			else {
 				roles=TeamMemberUtil.getAllTeamMemberRoles();
 			}
 			upMemForm.setAmpRoles(roles);

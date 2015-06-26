@@ -42,36 +42,34 @@ public class ViewUserProfile
         List<TeamMember> memberInformationn = new ArrayList<TeamMember>();
         
         if (request.getParameter("id") != null) {
-            long id = Long.parseLong(request.getParameter("id"));
-            userid = new Long(id);
+            userid = Long.parseLong(request.getParameter("id"));
         }
-        if (request.getParameter("email") != null && request.getParameter("email") != "") {
+        if (request.getParameter("email") != null && ! "".equals(request.getParameter("email"))) {
             email = request.getParameter("email");
-            user= DbUtil.getUser(email);
-            if(user==null){
+            user = DbUtil.getUser(email);
+            if (user == null || user.getId() == null) {
             	 errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.invalidUserIdLogs"));
                  saveErrors(request, errors);
                  return mapping.findForward("forward");
-            }
-            else{
+            } else {
             	userid = user.getId();
             }
-            
         }
-        
-        if (httpSession.getAttribute("ampAdmin") == null || httpSession.getAttribute("ampAdmin").equals("no")) {
-            
-            if(user != null) member = TeamMemberUtil.getAmpTeamMember(user);
-            else if(userid != null) member = TeamMemberUtil.getAmpTeamMember(userid);
 
-            
+        if (httpSession.getAttribute("ampAdmin") == null || httpSession.getAttribute("ampAdmin").equals("no")) {
+            if (user != null) {
+                member = TeamMemberUtil.getAmpTeamMember(user);
+            } else {
+                member = TeamMemberUtil.getAmpTeamMember(userid);
+            }
+
             if (member == null && request.getParameter("id") != null) {
                 if (userid.equals(teamMember.getMemberId())) {
                     user = DbUtil.getUser(teamMember.getMemberId());
                     memberInformationn.add(new TeamMember(teamMember.getTeamName(),teamMember.getRoleName()));
                 } else {
                 	user = DbUtil.getUser(userid);
-                	if(user==null){
+                	if (user == null){
                 		errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.invalidUserId"));
                     	saveErrors(request, errors);
                     	mapping.findForward("forward");
@@ -87,23 +85,20 @@ public class ViewUserProfile
     //
 //                }
             	user = DbUtil.getUser(member.getUser().getId());    
-                if(user!=null) 
-                	memberInformationn = TeamMemberUtil.getMemberInformation(user.getId());
+                if (user != null) {
+                    memberInformationn = TeamMemberUtil.getMemberInformation(user.getId());
+                }
             }
-        }else {
-        		if (userid!=null) {
-        			user= DbUtil.getUser(userid);
-        			memberInformationn = TeamMemberUtil.getMemberInformation(user.getId());
-        		}
         }
 
-
-        formBean.setAddress(user.getAddress());
-        formBean.setFirstNames(user.getFirstNames());
-        formBean.setLastName(user.getLastName());
-        formBean.setMailingAddress(user.getEmail());
-        formBean.setOrganizationName(user.getOrganizationName());
-        formBean.setTeamMemberTeamHelpers(memberInformationn);
+        if (user != null) {
+            formBean.setAddress(user.getAddress());
+            formBean.setFirstNames(user.getFirstNames());
+            formBean.setLastName(user.getLastName());
+            formBean.setMailingAddress(user.getEmail());
+            formBean.setOrganizationName(user.getOrganizationName());
+            formBean.setTeamMemberTeamHelpers(memberInformationn);
+        }
 
         return mapping.findForward("forward");
     }

@@ -47,17 +47,17 @@ public class WorkspaceManager extends Action {
             wsForm.setNumPerPage(-1);
         }
 
-        if(session.getAttribute("fromPage") != null){
+        if (session.getAttribute("fromPage") != null) {
             wsForm.setCurrentPage((Integer)session.getAttribute("fromPage"));
             session.removeAttribute("fromPage");
         }
 
-        if(session.getAttribute("selectedRow") != null){
+        if (session.getAttribute("selectedRow") != null) {
             wsForm.setCurrentRow((Integer)session.getAttribute("selectedRow"));
             session.removeAttribute("selectedRow");
         }
 
-        if(session.getAttribute("selectedWs") != null){
+        if (session.getAttribute("selectedWs") != null) {
             wsForm.setSelectedWs((Long)session.getAttribute("selectedWs"));
             session.removeAttribute("selectedWs");
         }
@@ -156,13 +156,14 @@ public class WorkspaceManager extends Action {
                 pages.add(pageNum);
             }
         }
+
         Collection<AmpTeam> workspacesFiltered = new ArrayList<AmpTeam>();
         if (! workspaces.isEmpty()) {
             for (AmpTeam team : workspaces) {
                 boolean found = false;
                 for (String keyw : keywords) {
                     java.util.Locale currentLocale = new java.util.Locale(TLSUtils.getEffectiveLangCode());
-                    found |= SearchUtil.TeamContainsKeyword(team, keyword, currentLocale);
+                    found |= "".equals(keyw) || SearchUtil.TeamContainsKeyword(team, keyw, currentLocale);
                 }
                 if (found) {
                     workspacesFiltered.add(team);
@@ -175,6 +176,7 @@ public class WorkspaceManager extends Action {
         } else {
             wsForm.setWorkspaces(workspacesFiltered);
         }
+
         wsForm.setPages(pages);
 
         return mapping.findForward("forward");

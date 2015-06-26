@@ -264,7 +264,7 @@ public class AmpUserUtil {
 		}
 		return retVal;
 	}
-       public static List<String> searchUsesers(String searchStr,Long teamId) throws Exception {
+       public static List<String> searchUsesers(String searchStr, Long teamId) throws Exception {
         Session session = null;
         String queryString = null;
         Query query = null;
@@ -273,15 +273,14 @@ public class AmpUserUtil {
             session = PersistenceManager.getRequestDBSession();
             queryString = "select distinct concat(u.firstNames,' ',u.lastName) from " + User.class.getName() + 
                     " u where  lower(concat(u.firstNames,' ',u.lastName)) like lower(:searchStr) and u.id not in (select tm.user.id from "+AmpTeamMember.class.getName()+
-			" tm where tm.ampTeam.ampTeamId=:teamId) and  u.banned=:banned ";
-            query=session.createQuery(queryString);   
+			" tm where tm.ampTeam.ampTeamId=:teamId) and u.banned=:banned order by concat(u.firstNames,' ',u.lastName)";
+            query = session.createQuery(queryString);
             query.setString("searchStr", searchStr + "%");
             query.setLong("teamId", teamId);
             query.setBoolean("banned", false);  
             users = query.list();
         } catch (Exception ex) {
-            logger.error("couldn't load user " + ex.getMessage());
-            ex.printStackTrace();
+            logger.error("couldn't load user " + ex.getMessage(), ex);
         }
 
 

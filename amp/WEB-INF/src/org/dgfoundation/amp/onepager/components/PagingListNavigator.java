@@ -51,7 +51,8 @@ public class PagingListNavigator<T> extends Panel {
                 return ret;
             }
         };
-
+        super.setVisible(model.getObject().size() > 1);
+        
         ListView<Integer> list = new ListView<Integer>("naviList", model) {
             @Override
             protected void populateItem(final ListItem<Integer> item) {

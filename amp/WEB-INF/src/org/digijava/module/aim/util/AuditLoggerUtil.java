@@ -200,8 +200,18 @@ public class AuditLoggerUtil {
 			logger.error("Cannot save audit logger :", ex);
 		} 
 	}
-
+	
 	public static void logActivityUpdate(HttpServletRequest request, AmpActivityVersion activity, List<String> details){
+		logActivityUpdate(request, activity, details, null);
+	}
+	/**
+	 * This method was changed to simulate an update that happened in the past. Will be removed once donorscore card testing is done
+	 *  @deprecated Do not use this method use {@link AuditLoggerUtil.logActivityUpdate(HttpServletRequest request, AmpActivityVersion activity, List<String> details)}
+	 * @param request
+	 * @param activity
+	 * @param details
+	 */
+	public static void logActivityUpdate(HttpServletRequest request, AmpActivityVersion activity, List<String> details, Date dateUpdated){
 		Session session = null;
 		Transaction tx = null;
 		HttpSession hsession = request.getSession();
@@ -214,8 +224,15 @@ public class AuditLoggerUtil {
 			session = PersistenceManager.getSession();
 
 //beginTransaction();			
+			
 			long time = System.currentTimeMillis();
-			Timestamp ts = new Timestamp(time);			
+			Timestamp ts;
+			if(dateUpdated!=null){
+				ts= new Timestamp(dateUpdated.getTime());
+
+			}else{
+				ts= new Timestamp(time);
+			}
 			AmpAuditLogger existentLoggerObj = null;
 				
 			Collection<AmpAuditLogger> col = getAudits(session, objId, objType);

@@ -5,6 +5,7 @@
 
 package org.digijava.module.aim.action;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -78,7 +79,10 @@ import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.hibernate.Hibernate;
+import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.type.StringType;
 
 
 /**
@@ -204,6 +208,10 @@ public class EditActivity extends Action {
 							AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberCached(tm.getMemberId());
 							activity.setModifiedBy(teamMember);
 							hsession.update(activity);
+							List<String> details=new ArrayList<String>();
+							details.add("approved");
+							AuditLoggerUtil.logActivityUpdate(request, activity,details,dateUpdated);
+
 							ARUtil.writeResponse(response, "Activity *" + activity.getName() +"* successfully updated " );
 							return null;
 						}

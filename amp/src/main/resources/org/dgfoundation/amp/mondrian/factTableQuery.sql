@@ -98,6 +98,6 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
     LEFT JOIN etl_regional_groups rg ON rg.act_id = rawdonation.amp_activity_id
     LEFT JOIN etl_sector_groups sg ON sg.act_id = rawdonation.amp_activity_id
 
-    WHERE rawdonation.amp_activity_id @@activityIdCondition@@
+    WHERE (rawdonation.transaction_amount IS NOT NULL) AND (rawdonation.amp_activity_id @@activityIdCondition@@)
     
 order by rawdonation.amp_activity_id;

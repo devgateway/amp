@@ -25,6 +25,7 @@ import org.digijava.module.aim.util.TeamUtil;
 
 /**
  * Imports a new activity or updates an existing one
+ * 
  * @author Nadejda Mandrescu
  */
 public class ActivityImporter {
@@ -57,11 +58,13 @@ public class ActivityImporter {
 		if (ampActivityId != null) {
 			try {
 				oldActivity  = ActivityUtil.loadActivity(ampActivityId);
-				//oldJson = InterchangeUtils.exportActivity(oldActivity);
-				oldJson = InterchangeUtils.getActivity(ampActivityId);
+				oldJson = InterchangeUtils.getActivity(oldActivity, null);
 			} catch (DgException e) {
 				logger.error(e.getMessage());
+				/*
+				 * Disabling Exception in order to continue general validation of fields  
 				throw new RuntimeException(e);
+				*/
 			}
 		}
 		

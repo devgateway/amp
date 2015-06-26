@@ -75,11 +75,6 @@ public class InterchangeUtils {
 		addUnderscoredTitlesToMap(AmpActivityFields.class);
 	}
 	
-	
-	private static final String VIEW = "view";
-	private static final String EDIT = "edit";
-	private static final String FILTER_FIELD = "fields";
-
 	private static final String NOT_REQUIRED = "_NONE_";
 	private static final String ALWAYS_REQUIRED = "_ALWAYS_";
 	public static final Logger LOGGER = Logger.getLogger(InterchangeUtils.class);
@@ -285,8 +280,8 @@ public class InterchangeUtils {
 						bean.set(underscorify(ActivityFieldsConstants.PROJECT_CODE), rs.getString("project_code"));
 						bean.set(underscorify(ActivityFieldsConstants.UPDATE_DATE), formatISO8601Date(rs.getTimestamp("date_updated")));
 						bean.set(underscorify(ActivityFieldsConstants.AMP_ID), rs.getString("amp_id"));
-						bean.set(EDIT, editable);
-						bean.set(VIEW, viewable);
+						bean.set(ActivityEPConstants.EDIT, editable);
+						bean.set(ActivityEPConstants.VIEW, viewable);
 						activitiesList.add(bean);
 					}
 					rs.close();
@@ -540,24 +535,44 @@ public class InterchangeUtils {
 	 * @return
 	 */
 	public static JsonBean getActivity(Long projectId, JsonBean filter) {
-		JsonBean activityJson = new JsonBean();
 		try {
 			AmpActivityVersion activity = ActivityUtil.loadActivity(projectId);
-			activityJson.set("amp_activity_id", activity.getAmpActivityId());
-			activityJson.set("amp_id", activity.getAmpId());
-			
-			List<String> filteredFields = filter != null ? (List<String>) filter.get(FILTER_FIELD) : new ArrayList<String>();
-			
-			Field[] fields = activity.getClass().getSuperclass().getDeclaredFields();
-
-			for (Field field : fields) {
-				readFieldValue(field, activity, activityJson, filteredFields, null);
-			}
-			
+			return getActivity(activity, filter);
 		} catch (Exception e) {
 			LOGGER.error("Coudn't load activity with id: " + projectId + ". " + e.getMessage());
 			throw new RuntimeException(e);
-		} 
+		}
+	}
+	
+	/**
+	 * Activity Export as JSON 
+	 * 
+	 * @param activity actual activity to export
+	 * @param filter is the JSON with a list of fields
+	 * @return
+	 */
+	public static JsonBean getActivity(AmpActivityVersion activity, JsonBean filter) {
+		JsonBean activityJson = new JsonBean();
+			
+		activityJson.set("amp_activity_id", activity.getAmpActivityId());
+		activityJson.set("amp_id", activity.getAmpId());
+		
+		List<String> filteredFields = filter != null ? (List<String>) filter.get(ActivityEPConstants.FILTER_FIELDS) 
+				: new ArrayList<String>();
+		
+		Field[] fields = activity.getClass().getSuperclass().getDeclaredFields();
+
+		for (Field field : fields) {
+			try {
+				readFieldValue(field, activity, activityJson, filteredFields, null);
+			} catch (IllegalArgumentException | IllegalAccessException
+					| NoSuchMethodException | SecurityException
+					| InvocationTargetException e) {
+				LOGGER.error("Coudn't read activity fields with id: " + activity.getAmpActivityId() + ". " 
+					+ e.getMessage());
+				throw new RuntimeException(e);
+			}
+		}
 		
 		return activityJson;
 	}
@@ -941,7 +956,8 @@ public class InterchangeUtils {
 					item = setProperties(acv);
 					result.add(item);
 				} catch (Exception exc) {
-					result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.SOME_OTHER_ERROR, field.getName())));
+					LOGGER.error(exc.getMessage());
+					throw new RuntimeException(exc);
 				}
 			}
 		}
@@ -971,7 +987,8 @@ public class InterchangeUtils {
 			try {
 				item = setProperties(obj);
 			} catch (Exception exc) {
-				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.SOME_OTHER_ERROR, field.getName())));
+				LOGGER.error(exc.getMessage());
+				throw new RuntimeException(exc);
 			}
 			result.add(item);
 		}
@@ -1037,7 +1054,9 @@ public class InterchangeUtils {
 		if (getClassOfField(field).equals(AmpActivitySector.class)) {
 			String configValue = getConfigValue(originalName, field);
 			if (configValue == null) {
+				/* FIXME: 
 				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.SOME_OTHER_ERROR, field.getName())));
+				*/
 				return result;
 			}
 			List<AmpSector> sectors = getSectorList(configValue);
@@ -1046,7 +1065,8 @@ public class InterchangeUtils {
 				try {
 					item = setProperties(sector);
 				} catch (Exception exc) {
-					result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.SOME_OTHER_ERROR, field.getName())));
+					LOGGER.error(exc.getMessage());
+					throw new RuntimeException(exc);
 				}
 				result.add(item);
 				

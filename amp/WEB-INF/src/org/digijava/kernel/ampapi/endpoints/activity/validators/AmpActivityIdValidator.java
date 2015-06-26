@@ -38,10 +38,9 @@ public class AmpActivityIdValidator extends InputValidator {
 		if (InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID).equals(fieldName)) {
 			if (update) {
 				Long latestAmpActivityId = ActivityVersionUtil.getLastVersionForVersion(Long.valueOf(ampActivityId));
-				if (!latestAmpActivityId.equals(oldActivity.getAmpActivityId())) {
+				if (oldActivity == null || !latestAmpActivityId.equals(oldActivity.getAmpActivityId())) {
 					isValid = false;
 				}
-
 			} else {
 				if ((ampActivityId != null && Long.valueOf(ampActivityId).longValue() != 0l)) {
 					isValid = false;
@@ -49,10 +48,9 @@ public class AmpActivityIdValidator extends InputValidator {
 			}
 		} else if (InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID).equals(fieldName)) {
 			if (update) {
-				if (!oldActivity.getAmpId().equals(ampId)) {
+				if (oldActivity == null || !oldActivity.getAmpId().equals(ampId)) {
 					isValid = false;
 				}
-
 			} else {
 				if (ampId != null) {
 					isValid = false;

@@ -24,6 +24,9 @@ public class ActivityEPConstants {
 	public static final String TRANSLATABLE = "translatable";
 	public static final String INVALID = "invalid";
 	public static final String INPUT = "input";
+	public static final String FILTER_FIELDS = "fields";
+	public static final String VIEW = "view";
+	public static final String EDIT = "edit";
 
 	// fields constants
 	public static final String AMP_ACTIVITY_ID_FIELD_NAME = InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID);

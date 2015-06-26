@@ -546,7 +546,7 @@ public class InterchangeUtils {
 			activityJson.set("amp_activity_id", activity.getAmpActivityId());
 			activityJson.set("amp_id", activity.getAmpId());
 			
-			List<String> filteredFields = (List<String>) filter.get(FILTER_FIELD);
+			List<String> filteredFields = filter != null ? (List<String>) filter.get(FILTER_FIELD) : new ArrayList<String>();
 			
 			Field[] fields = activity.getClass().getSuperclass().getDeclaredFields();
 

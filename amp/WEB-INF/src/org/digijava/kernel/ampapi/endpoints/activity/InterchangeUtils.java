@@ -52,8 +52,8 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.time.StopWatch;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.jdbc.Work;
-import org.springframework.util.ClassUtils;
 
 import clover.org.apache.commons.lang.StringUtils;
 import clover.org.apache.log4j.helpers.ISO8601DateFormat;
@@ -337,15 +337,16 @@ public class InterchangeUtils {
 	 * gets fields from the type of the field
 	 * 
 	 * @param field
+	 * @param multilingual true if multilingual enabled
 	 * @return a list of JsonBeans, each a description of @Interchangeable
 	 *         fields in the definition of the field's class, or field's generic
 	 *         type, if it's a collection
 	 */
-	private static List<JsonBean> getChildrenOfField(Field field) {
+	private static List<JsonBean> getChildrenOfField(Field field, boolean multilingual) {
 		if (!isCollection(field))
-			return getAllAvailableFields(field.getType());
+			return getAllAvailableFields(field.getType(), multilingual);
 		else
-			return getAllAvailableFields(getGenericClass(field));
+			return getAllAvailableFields(getGenericClass(field), multilingual);
 	}
 
 
@@ -405,35 +406,44 @@ public class InterchangeUtils {
 	 * @param field
 	 * @return
 	 */
-	private static JsonBean describeField(Field field, Interchangeable interchangeble) {
+	private static JsonBean describeField(Field field, Interchangeable interchangeble, boolean multilingual) {
 		if (interchangeble == null)
 			return null;
 		JsonBean bean = new JsonBean();
-		bean.set(ActivityEPConstants.FIELD_NAME,titleToUnderscoreMap.get(interchangeble.fieldTitle()));
-		bean.set(ActivityEPConstants.FIELD_TYPE, classToCustomType.containsKey(field.getType()) ? classToCustomType.get(field.getType())
-				: "list");
+		bean.set(ActivityEPConstants.FIELD_NAME, titleToUnderscoreMap.get(interchangeble.fieldTitle()));
+		bean.set(ActivityEPConstants.FIELD_TYPE, classToCustomType.containsKey(field.getType()) ? 
+				classToCustomType.get(field.getType()) : "list");
 		bean.set(ActivityEPConstants.FIELD_LABEL, mapToBean(getLabelsForField(interchangeble.fieldTitle())));
-		if (!classToCustomType.containsKey(field.getClass())) {/* list type */
+		/* list type */
+		if (!classToCustomType.containsKey(field.getClass())) {
 			bean.set(ActivityEPConstants.IMPORTABLE, interchangeble.importable() ? true : false);
-			if (isCollection(field) && !hasMaxSizeValidatorEnabled(field))
+			if (isCollection(field) && !hasMaxSizeValidatorEnabled(field)) {
 				bean.set(ActivityEPConstants.MULTIPLE_VALUES, true);
-			else
+			} else {
 				bean.set(ActivityEPConstants.MULTIPLE_VALUES, false);
+			}
 			if (!interchangeble.pickIdOnly()) {
-				List<JsonBean> children = getChildrenOfField(field);
-				if (children != null && children.size() > 0)
+				List<JsonBean> children = getChildrenOfField(field, multilingual);
+				if (children != null && children.size() > 0) {
 					bean.set(ActivityEPConstants.CHILDREN, children);
+				}
 			} else {
 				bean.set(ActivityEPConstants.ID_ONLY, true);
 			}
 			bean.set(ActivityEPConstants.UNIQUE, hasUniqueValidatorEnabled(field));
 			bean.set(ActivityEPConstants.REQUIRED, getRequiredValue(field));
 		}
+		
+		// only String fields should clarify if they are translatable or not
+		if (java.lang.String.class.equals(field.getType())) {
+			bean.set(ActivityEPConstants.TRANSLATABLE, multilingual && FieldsDescriptor.isTranslatable(field));
+		}
+		
 		return bean;
 	}
 
 	public static List<JsonBean> getAllAvailableFields() {
-		return getAllAvailableFields(AmpActivityFields.class);
+		return getAllAvailableFields(AmpActivityFields.class, ContentTranslationUtil.multilingualIsEnabled());
 	}
 
 	/**
@@ -442,7 +452,7 @@ public class InterchangeUtils {
 	 * @param clazz the class to be described
 	 * @return
 	 */
-	private static List<JsonBean> getAllAvailableFields(Class<?> clazz) {
+	private static List<JsonBean> getAllAvailableFields(Class<?> clazz, boolean multilingual) {
 		List<JsonBean> result = new ArrayList<JsonBean>();
 		StopWatch.next("Descending into", false, clazz.getName());
 		Field[] fields = clazz.getDeclaredFields();
@@ -454,7 +464,7 @@ public class InterchangeUtils {
 			
 			if (!isCompositeField(field)) {
 				Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
-				JsonBean descr = describeField(field, interchangeable);
+				JsonBean descr = describeField(field, interchangeable, multilingual);
 				if (descr != null) {
 					result.add(descr);
 				}
@@ -462,7 +472,7 @@ public class InterchangeUtils {
 				InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
 				Interchangeable[] settings = discriminator.settings();
 				for (int i = 0; i < settings.length; i++) {
-					JsonBean descr = describeField(field, settings[i]);
+					JsonBean descr = describeField(field, settings[i], multilingual);
 					if (descr != null) {
 						result.add(descr);
 
@@ -512,8 +522,9 @@ public class InterchangeUtils {
 	}
 	
 	/**
+	 * Activity Export as JSON
 	 * 
-	 * @param projectId
+	 * @param projectId is amp_activity_id
 	 * @return
 	 */
 	public static JsonBean getActivity(Long projectId) {
@@ -532,12 +543,10 @@ public class InterchangeUtils {
 		} catch (Exception e) {
 			LOGGER.error("Coudn't load activity with id: " + projectId + ". " + e.getMessage());
 			activityJson = ApiError.toError("Coudn't load activity with id: " + projectId);
-		} 
+		}
 		
 		return activityJson;
 	}
-	
-	
 	
 	private static void readFieldValue(Field field, Object fieldInstance, JsonBean resultJson) throws IllegalArgumentException, 
 	IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException {

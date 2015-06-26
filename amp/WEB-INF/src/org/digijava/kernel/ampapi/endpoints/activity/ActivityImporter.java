@@ -53,11 +53,12 @@ public class ActivityImporter {
 		List<JsonBean> fieldsDef = InterchangeUtils.getAllAvailableFields();
 		// get existing activity if this is an update request
 		Long ampActivityId = update ? (Long) newJson.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME) : null;
-		oldJson = ampActivityId == null ? null : InterchangeUtils.getActivity(ampActivityId);
 		
 		if (ampActivityId != null) {
 			try {
 				oldActivity  = ActivityUtil.loadActivity(ampActivityId);
+				//oldJson = InterchangeUtils.exportActivity(oldActivity);
+				oldJson = InterchangeUtils.getActivity(ampActivityId);
 			} catch (DgException e) {
 				logger.error(e.getMessage());
 				throw new RuntimeException(e);

@@ -44,8 +44,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.ObjectNotFoundException;
 
 /**
- * Class that holds method related to filters for gis query (available options,
- * available filters)
+ * Class that holds method related to filters (available options, available filters)
  * 
  * @author jdeanquin@developmentgateway.org
  * 
@@ -296,7 +295,7 @@ public class Filters {
 	}
 
 	/**
-	 * Return org grous with its orgs ids
+	 * Return org groups with its orgs ids
 	 * 
 	 * @return
 	 *	[

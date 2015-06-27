@@ -20,6 +20,8 @@ public class EPConstants {
 	public static final String ADD_HIERARCHIES = "add_hierarchies";
 	public static final String ADD_MEASURES = "add_measures";
 	public static final String SORTING = "sorting";
+	public static final String SHOW_EMPTY_ROWS = "show_empty_rows";
+	public static final String SHOW_EMPTY_COLUMNS = "show_empty_cols"; // this is for column groups (quarter, year)
 	public static final String DO_ROW_TOTALS = "rowTotals";
     public static final String FORCE_HEADERS = "forceHeaders";
 	

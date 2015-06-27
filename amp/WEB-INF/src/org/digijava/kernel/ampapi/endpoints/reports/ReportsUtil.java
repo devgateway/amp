@@ -92,24 +92,27 @@ public class ReportsUtil {
 	 * <dl>
 	 * 	 <dt>name</dt>			<dd>mandatory to be provided for custom reports, otherwise is skipped</dd> 
 	 *   <dt>page</dt>        	<dd>optional, page number, starting from 1. Use 0 to retrieve only
-	 *                        pagination information, without any records. Default to 0</dd>
+	 *                        		pagination information, without any records. Default to 0</dd>
 	 *   <dt>recordsPerPage</dt> <dd>optional, the number of records per page to return. Default
-	 *   					  will be set to the number configured in AMP. Set it to -1
-	 *                        to get the unlimited records, that will provide all records.</dd>
+	 *   					  		will be set to the number configured in AMP. Set it to -1
+	 *                        		to get the unlimited records, that will provide all records.</dd>
 	 *   <dt>sorting</dt>     	<dd>optional, a list of sorting maps. Each map has 'columns' list 
-	 *                        and 'asc' flag, that is true for sorting ascending. Hierarchical 
-	 *                        sorting will define a column list as a tuple to sort by.</dd>
+	 *                        		and 'asc' flag, that is true for sorting ascending. Hierarchical 
+	 *                        		sorting will define a column list as a tuple to sort by.</dd>
 	 *   <dt>regenerate</dt>	<dd>optional, set to true for all first access and any changes and 
-	 *                        to false for consequent page navigation. Default to true</dd>
+	 *                        		to false for consequent page navigation. Default to true</dd>
 	 *   <dt>add_columns</dt> 	<dd>optional, a list of columns names to be added to the
-	 *                        report configuration</dd>
+	 *                        		report configuration</dd>
 	 *   <dt>add_hierarchies</dt>  <dd>optional, a list of hierarchies to be added to the
-	 *                             report configuration</dd>
+	 *                             	report configuration</dd>
 	 *   <dt>add_measures</dt> 	<dd>optional, a list of measures to be added to the
-	 *                         report configuration</dd>
+	 *                         		report configuration</dd>
+	 *   <dt>show_empty_rows</dt> <dd>optional, default false, to show rows with empty measures amounts</dd>
+	 *   <dt>show_empty_cols</dt> <dd>optional, default false, to show full column groups (by quarter, year) 
+	 *   							with empty measures amounts</dd>
 	 *   <dt>rowTotals</dt>    	<dd>optional, flag to request row totals to be build</dd>
-     *   <dt>forceHeaders</dt>   <dd>optional, flag, if the report query returns empty response
-     *                    the list of column headers is populated from the request. Default is false</dd>
+	 *   <dt>forceHeaders</dt>  <dd>optional, flag, if the report query returns empty response
+     *                    			the list of column headers is populated from the request. Default is false</dd>
 	 *   <dt>settings</dt>	   	<dd>Report settings</dd>
 	 *   <dt>reportType</dt>	<dd>can be on of "D" (Donor), "C" (Component), "P" (Pledge) report type.
 	 *   						Default is "D" if not provided.</dd>
@@ -164,7 +167,7 @@ public class ReportsUtil {
 		LinkedHashMap queryModel = (LinkedHashMap) original.get("queryModel");
 		if (queryModel != null) {
 			if (queryModel.get("page") != null) {
-				newParams.set("page", ((Integer) queryModel.get("page")));			
+				newParams.set("page", ((Integer) queryModel.get("page")));
 			}
 			if (queryModel.get("recordsPerPage") != null) {
 				newParams.set("recordsPerPage", ((Integer) queryModel.get("recordsPerPage")));
@@ -562,6 +565,16 @@ public class ReportsUtil {
 		Boolean doRowTotals = (Boolean) formParams.get(EPConstants.DO_ROW_TOTALS);
 		if (doRowTotals != null) {
 			spec.setCalculateRowTotals(doRowTotals);
+		}
+		
+		Boolean showEmptyRows = (Boolean) formParams.get(EPConstants.SHOW_EMPTY_ROWS);
+		if (showEmptyRows != null) {
+			spec.setDisplayEmptyFundingRows(showEmptyRows);
+		}
+		
+		Boolean showEmptyColumnGroups = (Boolean) formParams.get(EPConstants.SHOW_EMPTY_COLUMNS);
+		if (showEmptyColumnGroups != null) {
+			spec.setDisplayEmptyFundingColumns(showEmptyColumnGroups);
 		}
 		
         Boolean forceHeaders = (Boolean) formParams.get(EPConstants.FORCE_HEADERS);

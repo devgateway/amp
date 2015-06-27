@@ -46,7 +46,7 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 	private String description;
 	@Interchangeable(fieldTitle = "Contracting Organization Text")
 	private String contractingOrganizationText;
-	@Interchangeable(fieldTitle = "Activity Category")
+	@Interchangeable(fieldTitle = "IPA activity categ")
 	private transient AmpCategoryValue activityCategory;
 	@Interchangeable(fieldTitle = "Start of Tendering", fmPath = "/Activity Form/Contracts/Contract Item/Contract Details/Start of Tendering")
 	private Date startOfTendering;
@@ -96,12 +96,12 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 	// @Interchangeable(fieldTitle = "Activity")
 	private transient AmpActivityVersion activity;
 
-	@Interchangeable(fieldTitle = "Organization")
+	@Interchangeable(fieldTitle = "Organization", pickIdOnly = true)
 	private transient AmpOrganisation organization;
 	@Interchangeable(fieldTitle = "Organizations", fmPath = "/Activity Form/Contracts/Contract Item/Contract Organizations")
 	@Validators(unique = "/Activity Form/Organizations/Donor Organization/Unique Orgs Validator")
 	private transient Set<AmpOrganisation> organizations;
-	@Interchangeable(fieldTitle = "Status", fmPath = "/Activity Form/Contracts/Contract Item/Contract Details/Status")
+	@Interchangeable(fieldTitle = "IPA Status", fmPath = "/Activity Form/Contracts/Contract Item/Contract Details/Status")
 	private transient AmpCategoryValue status;
 	// this disbursements and executionRate are used in Montenegro
 	@Interchangeable(fieldTitle = "Total Disbursements")
@@ -115,8 +115,9 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 	private Double fundingTotalDisbursements;
 	@Interchangeable(fieldTitle = "Funding Execution Rate")
 	private Double fundingExecutionRate;
-	@Interchangeable(fieldTitle = "Type", fmPath = "/Activity Form/Contracts/Contract Item/Contract Info/Activity Type")
+	@Interchangeable(fieldTitle = "IPA Activity Type", fmPath = "/Activity Form/Contracts/Contract Item/Contract Info/Activity Type")
 	private transient AmpCategoryValue type;
+	//ATTENTION: no amp_category_classs with such a value!
 	@Interchangeable(fieldTitle = "Contract Type", fmPath = "/Activity Form/Contracts/Contract Item/Contract Info/Contract Type")
 	private transient AmpCategoryValue contractType;
 

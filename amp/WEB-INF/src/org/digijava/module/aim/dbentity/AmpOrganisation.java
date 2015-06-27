@@ -26,10 +26,10 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 @TranslatableClass (displayName = "Organisation")
 public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiable, Serializable, ARDimensionable, HierarchyListable, NameableOrIdentifiable
 {
-	@Interchangeable(fieldTitle="Organization ID")
+	@Interchangeable(fieldTitle="Organization ID", id=true)
 	private Long ampOrgId;
 	@TranslatableField
-	@Interchangeable(fieldTitle="Name")
+	@Interchangeable(fieldTitle="Name", value=true)
 	private String name ;
 	/**
 	 * @deprecated
@@ -81,7 +81,7 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
 	private AmpCategoryValueLocations region;
 	@Interchangeable(fieldTitle="Implementation Location Level")
     private AmpCategoryValue implemLocationLevel;
-//	@Interchangeable(fieldTitle="Locations")
+	@Interchangeable(fieldTitle="Locations")
     private Set<AmpOrgLocation> locations;
 //	@Interchangeable(fieldTitle="Staff Infos")
     private Set<AmpOrgStaffInformation> staffInfos;
@@ -113,7 +113,7 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
 
 	@Interchangeable(fieldTitle="Segment Code")
 	private String segmentCode;
-//	@Interchangeable(fieldTitle="Sectors", recursive=true)
+	@Interchangeable(fieldTitle="Sectors", pickIdOnly=true)
 	private Set<AmpSector> sectors;
 	
 //	@Interchangeable(fieldTitle="Documents")
@@ -149,13 +149,13 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
     private String orgKeyAreas;
     
     //Budget fields
-//	@Interchangeable(fieldTitle="Parent Sector")
+	@Interchangeable(fieldTitle="Parent Sector", pickIdOnly = true)
     private AmpBudgetSector parentsector;
-//	@Interchangeable(fieldTitle="Departments")
+	@Interchangeable(fieldTitle="Departments", pickIdOnly = true)
     private Set<AmpDepartments> departments;
-//	@Interchangeable(fieldTitle="Budget Sectors")
+	@Interchangeable(fieldTitle="Budget Sectors")
     private Set<AmpBudgetSector> budgetsectors;
-//	@Interchangeable(fieldTitle="Line Ministry Registration Number")
+	@Interchangeable(fieldTitle="Line Ministry Registration Number")
     private String  lineMinRegNumber;
     
     private boolean translateable	= true;

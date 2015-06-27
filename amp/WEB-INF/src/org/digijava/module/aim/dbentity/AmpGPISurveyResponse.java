@@ -9,13 +9,13 @@ import org.digijava.module.aim.util.Output;
 public class AmpGPISurveyResponse implements Versionable, Cloneable, Serializable {
 
 	private static final long serialVersionUID = 1L;
-	@Interchangeable(fieldTitle="Response ID")
+	@Interchangeable(fieldTitle="Response ID", id = true)
 	private Long ampReponseId;
 	@Interchangeable(fieldTitle="GPI Survey", pickIdOnly=true)
 	private AmpGPISurvey ampGPISurveyId;
 	@Interchangeable(fieldTitle="GPI Survey Question")
 	private AmpGPISurveyQuestion ampQuestionId;
-	@Interchangeable(fieldTitle="Response")
+	@Interchangeable(fieldTitle="Response", value = true)
 	private String response;
 	@Interchangeable(fieldTitle="References")
 	private String references;

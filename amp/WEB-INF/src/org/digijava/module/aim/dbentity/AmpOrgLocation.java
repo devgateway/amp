@@ -17,9 +17,9 @@ public class AmpOrgLocation implements Serializable,OrgProfileValue {
     private Long ampOrgLocId;
     @Interchangeable(fieldTitle="Percent")
     private Double percent;
-    @Interchangeable(fieldTitle="Organization")
+//    @Interchangeable(fieldTitle="Organization")
     private AmpOrganisation organization;
-    @Interchangeable(fieldTitle="Location")
+    @Interchangeable(fieldTitle="Location", descend = true)
     private AmpCategoryValueLocations location;
 
     public Long getAmpOrgLocId() {

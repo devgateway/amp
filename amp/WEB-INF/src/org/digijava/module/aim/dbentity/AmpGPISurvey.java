@@ -11,7 +11,7 @@ public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Compa
 	private Long ampGPISurveyId;
 
 	private AmpActivityVersion ampActivityId;
-	@Interchangeable(fieldTitle="Responses")
+	@Interchangeable(fieldTitle="Responses", descend = true)
 	private Set<AmpGPISurveyResponse> responses;
 	@Interchangeable(fieldTitle="Survey Date")
 	private Date surveyDate;

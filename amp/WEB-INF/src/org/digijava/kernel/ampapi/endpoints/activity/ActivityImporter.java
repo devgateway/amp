@@ -51,7 +51,7 @@ public class ActivityImporter {
 		this.newJson = newJson;
 		
 		// retrieve fields definition
-		List<JsonBean> fieldsDef = InterchangeUtils.getAllAvailableFields();
+		List<JsonBean> fieldsDef = FieldsEnumerator.getAllAvailableFields();
 		// get existing activity if this is an update request
 		Long ampActivityId = update ? (Long) newJson.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME) : null;
 		

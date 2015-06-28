@@ -34,21 +34,6 @@ public class InterchangeEndpoints {
 	@Context
 	private HttpServletRequest httpRequest;
 
-	
-	@GET
-	@Path("/fields/{fieldName}")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public List<JsonBean> getValues(@PathParam("fieldName") String fieldName) {
-		return InterchangeUtils.getPossibleValuesForField(fieldName, AmpActivityFields.class);
-	}
-	
-	@GET
-	@Path("/fields")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public List<JsonBean> getAvailableFields() {
-		return InterchangeUtils.getAllAvailableFields();
-	}
-	
 	/**
 	 * Returns a JSON object with the list of all projects on the system, including its view and edit status for the current logged user.
 	 * If the user can view the project, the 'view' property of the project is set to true. False otherwise.

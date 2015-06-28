@@ -129,7 +129,7 @@ LoggerIdentifiable, Cloneable {
 	protected String documentSpace;
 
 
-	@Interchangeable(fieldTitle = "Is Draft", required="_ALWAYS_",importable=false)
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.IS_DRAFT, required="_ALWAYS_",importable=false)
 	@VersionableFieldSimple(fieldTitle = "Is Draft?")
 	protected Boolean draft;
 

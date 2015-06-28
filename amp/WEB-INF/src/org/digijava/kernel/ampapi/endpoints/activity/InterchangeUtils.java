@@ -13,10 +13,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -743,7 +741,7 @@ public class InterchangeUtils {
 	 * N (no) = not required. .
 	 */
 	public static String getRequiredValue(Field field) {
-		String requiredValue = "N";
+		String requiredValue = ActivityEPConstants.FIELD_NOT_REQUIRED;
 		String minSize = "";
 		Validators validators = field.getAnnotation(Validators.class);
 		Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
@@ -752,11 +750,11 @@ public class InterchangeUtils {
 		}
 		String required = interchangeable.required();
 		if (required.equals(ALWAYS_REQUIRED)) {
-			requiredValue = "Y";
+			requiredValue = ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
 		}
 		else if ((!required.equals(NOT_REQUIRED) && FMVisibility.isFmPathEnabled(required))
 				|| (!minSize.isEmpty() && FMVisibility.isFmPathEnabled(minSize))) {
-			requiredValue = "ND";
+			requiredValue = ActivityEPConstants.NON_DRAFT_REQUIRED;
 		}
 		return requiredValue;
 	}

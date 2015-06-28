@@ -67,7 +67,7 @@ public class InterchangeEndpoints {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Collection<JsonBean> getProjects(@QueryParam ("pid") String pid,@QueryParam("offset") Integer offset, @QueryParam("count") Integer count) {
 		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
-		Collection<JsonBean> activityCollection = InterchangeUtils.getActivityList(pid, tm);
+		Collection<JsonBean> activityCollection = ProjectList.getActivityList(pid, tm);
 		int start = 0;
 		int end = activityCollection.size() - 1;
 		if (offset != null && count != null && offset < activityCollection.size()) {

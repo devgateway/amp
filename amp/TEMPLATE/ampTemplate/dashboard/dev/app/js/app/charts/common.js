@@ -79,7 +79,7 @@ function mkChartSVG(height, width) {
 
 function nvBoiler(nvData, chart, svg, specific, trimLabels, addLegend, width) {
   if (trimLabels) {
-    chart.x(function(d) { return util.formatShortText(19)(d.x); });
+	  chart.x(function(d) { return util.formatShortText(50)(d.x); });
   }
   if (addLegend && specific.addLegend) {
     specific.addLegend(svg, chart, nvData, trimLabels, width);

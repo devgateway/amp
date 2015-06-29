@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
+import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
@@ -39,8 +40,9 @@ public class ActivityImporter {
 	private boolean update  = false;
 	private InputValidatorProcessor validator = new InputValidatorProcessor();
 	private List<AmpContentTranslation> translations = new ArrayList<AmpContentTranslation>();
-	private boolean isDrafFMEnabled = false;
-	
+	private static String SAVE_AS_DRAFT_PATH = "/Activity Form/Save as Draft";
+	private static boolean allowSaveAsDraftShift = true;
+
 	/**
 	 * Imports or Updates
 	 * @param newJson new activity configuration
@@ -50,7 +52,6 @@ public class ActivityImporter {
 	public List<ApiErrorMessage> importOrUpdate(JsonBean newJson, boolean update) {
 		this.update = update;
 		this.newJson = newJson;
-		// this.isDrafFMEnabled = 
 		
 		// retrieve fields definition
 		List<JsonBean> fieldsDef = FieldsEnumerator.getAllAvailableFields();
@@ -255,10 +256,10 @@ public class ActivityImporter {
 	}
 
 	/**
-	 * @return the isDrafFMEnabled
+	 * @return the isDraftFMEnabled
 	 */
-	public boolean isDrafFMEnabled() {
-		return isDrafFMEnabled;
+	public boolean isDraftFMEnabled() {
+		return FMVisibility.isFmPathEnabled(SAVE_AS_DRAFT_PATH);
 	}
 
 	/**
@@ -273,5 +274,14 @@ public class ActivityImporter {
 	 */
 	public List<AmpContentTranslation> getTranslations() {
 		return translations;
+	}
+	
+	/**
+	 * Defines if changing the Saving process from "Save" to "Save as draft" is allowed or not.
+	 * 
+	 * @return true if it is allowed, false otherwise
+	 */
+	public boolean getAllowSaveAsDraftShift () {
+		return allowSaveAsDraftShift;
 	}
 }

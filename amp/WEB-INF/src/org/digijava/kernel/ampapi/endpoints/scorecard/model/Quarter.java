@@ -16,7 +16,7 @@ import clover.org.apache.log4j.Logger;
  */
 public class Quarter {
 
-	private Logger LOGGER = Logger.getLogger(Quarter.class);
+	private Logger logger = Logger.getLogger(Quarter.class);
 	private Integer year;
 	private String yearCode;
 	private Integer quarterNumber;
@@ -34,7 +34,7 @@ public class Quarter {
 				this.yearCode += "-" + (worker.getYear() + 1);
 			}
 		} catch (Exception e) {
-			LOGGER.warn("Couldn't get quarter for date: " + date);
+			throw new RuntimeException ("Couldn't get quarter for date: " + date);
 		}
 
 	}

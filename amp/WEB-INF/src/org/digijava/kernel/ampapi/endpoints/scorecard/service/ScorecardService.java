@@ -25,7 +25,6 @@ import org.digijava.kernel.ampapi.endpoints.util.CalendarUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpScorecardOrganisation;
@@ -55,7 +54,7 @@ import clover.org.apache.log4j.Logger;
 public class ScorecardService {
 
 	private static final int DEFAULT_START_YEAR = 2010;
-	private static final Logger LOGGER = Logger.getLogger(ScorecardService.class);
+	private static final Logger logger = Logger.getLogger(ScorecardService.class);
 	private AmpScorecardSettings settings;
 	private AmpFiscalCalendar fiscalCalendar;
 	private Double DEFAULT_THRESHOLD = 70d;
@@ -295,7 +294,7 @@ public class ScorecardService {
 				}
 			}
 		} catch (Exception e) {
-			LOGGER.error("Couldn't generate quarters ", e);
+			logger.error("Couldn't generate quarters ", e);
 		}
 
 		return quarters;
@@ -481,7 +480,7 @@ public class ScorecardService {
 			worker.setTime(activityUpdate.getModifyDate());
 			Quarter quarter = new Quarter(fiscalCalendar, activityUpdate.getModifyDate());
 			ColoredCell cell = data.get(donorId).get(quarter.toString());
-			LOGGER.info("Quarter" + quarter);
+			logger.info("Quarter" + quarter);
 			if (isUpdateOnGracePeriod(activityUpdate.getModifyDate())) {
 				Quarter previousQuarter = quarter.getPreviousQuarter();
 				ColoredCell previousQuarterCell = data.get(donorId).get(previousQuarter.toString());
@@ -515,7 +514,6 @@ public class ScorecardService {
 		boolean isOnGracePeriod = false;
 		if (settings != null && settings.getValidationPeriod() != null && settings.getValidationPeriod()) {
 			Integer weekNumber = settings.getValidationTime();
-			try {
 				Quarter quarter = new Quarter(fiscalCalendar, updateDate);
 				Date quarterStartDate = quarter.getQuarterStartDate();
 				Calendar calendarGracePeriod = Calendar.getInstance();
@@ -525,10 +523,6 @@ public class ScorecardService {
 						&& updateDate.compareTo(calendarGracePeriod.getTime()) <= 0) {
 					isOnGracePeriod = true;
 				}
-
-			} catch (Exception e) {
-				LOGGER.warn("Couldn't get quarter for date " + updateDate);
-			}
 		}
 		return isOnGracePeriod;
 	}
@@ -622,7 +616,7 @@ public class ScorecardService {
 					rsi.close();
 					
 				}  catch (Exception e) {
-					LOGGER.error("Exception while getting org types amount:" + e.getMessage());
+					logger.error("Exception while getting org types amount:" + e.getMessage());
 				}
 			}
 		});
@@ -677,7 +671,7 @@ public class ScorecardService {
 					rsi.close();
 					
 				}  catch (Exception e) {
-					LOGGER.error("Exception while getting past quarter objects:" + e.getMessage());
+					logger.error("Exception while getting past quarter objects:" + e.getMessage());
 				}
 			}
 		});

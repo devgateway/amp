@@ -5,9 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeEndpoints;
 import org.digijava.kernel.ampapi.endpoints.security.Security;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.translator.TranslatorWorker;
 
 /**
  * Defines API Error Utility class for manipulating ApiErrorMessage objects
@@ -137,14 +139,16 @@ public class ApiError {
 	 * @return the message of the error
 	 */
 	private static String getErrorText(ApiErrorMessage apiErrorMessage) {
-		String errorText = "(" + apiErrorMessage.description + ")";
-		if (apiErrorMessage.prefix != null)
-			errorText += " " + apiErrorMessage.prefix;
+		String errorText = "(" + TranslatorWorker.translateText(apiErrorMessage.description) + ")";
+		if (!StringUtils.isBlank(apiErrorMessage.prefix)) {
+			errorText += " " + TranslatorWorker.translateText(apiErrorMessage.prefix);
+		}
 		
-		if (apiErrorMessage.value != null) {
+		if (!StringUtils.isBlank(apiErrorMessage.value)) {
+			// no translation of the value, it must come translated if translation is needed for it
 			errorText += " " + apiErrorMessage.value;
 		}
-			
+		
 		return errorText;
 	}
 }

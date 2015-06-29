@@ -5,11 +5,11 @@ package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 
 /**
@@ -29,16 +29,17 @@ public class AmpActivityIdValidator extends InputValidator {
 	}
 
 	@Override
-	public boolean isValid(AmpActivityVersion oldActivity, JsonBean newFieldParent, JsonBean oldFieldParent,
-			JsonBean fieldDescription, String fieldPath, boolean update) {
+	public boolean isValid(ActivityImporter importer, JsonBean newFieldParent, JsonBean oldFieldParent,
+			JsonBean fieldDescription, String fieldPath) {
 		boolean isValid = true;
 		String ampId = (String) newFieldParent.get(ActivityFieldsConstants.AMP_ID);
 		String ampActivityId = (String) newFieldParent.get(ActivityFieldsConstants.AMP_ACTIVITY_ID);
 		String fieldName = (String) fieldDescription.get(ActivityEPConstants.FIELD_NAME);
 		if (InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID).equals(fieldName)) {
-			if (update) {
+			if (importer.isUpdate()) {
 				Long latestAmpActivityId = ActivityVersionUtil.getLastVersionForVersion(Long.valueOf(ampActivityId));
-				if (oldActivity == null || !latestAmpActivityId.equals(oldActivity.getAmpActivityId())) {
+				if (importer.getOldActivity() == null 
+						|| !latestAmpActivityId.equals(importer.getOldActivity().getAmpActivityId())) {
 					isValid = false;
 				}
 			} else {
@@ -47,8 +48,8 @@ public class AmpActivityIdValidator extends InputValidator {
 				}
 			}
 		} else if (InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID).equals(fieldName)) {
-			if (update) {
-				if (oldActivity == null || !oldActivity.getAmpId().equals(ampId)) {
+			if (importer.isUpdate()) {
+				if (importer.getOldActivity() == null || !importer.getOldActivity().getAmpId().equals(ampId)) {
 					isValid = false;
 				}
 			} else {

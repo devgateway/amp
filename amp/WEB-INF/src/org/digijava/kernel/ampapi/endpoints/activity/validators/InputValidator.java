@@ -3,9 +3,9 @@
  */
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
  * Defines common base class for input validation  
@@ -17,7 +17,7 @@ public abstract class InputValidator {
 	
 	/**
 	 * Validates new field value configuration
-	 * @param oldActivity or null if none existed
+	 * @param importer or null if none existed
 	 * @param newFieldParent parent input JSON definition of the field
 	 * @param oldFieldParent existing parent JSON definition of the field (can be null if not present)
 	 * @param fieldDescription description of the current field (type, required, edit rights, etc)
@@ -25,8 +25,8 @@ public abstract class InputValidator {
 	 * @param update true if this is an update request
 	 * @return true if chain validation passed
 	 */
-	public abstract boolean isValid(AmpActivityVersion oldActivity, JsonBean newFieldParent, JsonBean oldFieldParent, 
-			JsonBean fieldDescription, String fieldPath, boolean update);
+	public abstract boolean isValid(ActivityImporter importer, JsonBean newFieldParent, JsonBean oldFieldParent, 
+			JsonBean fieldDescription, String fieldPath);
 	
 	/**
 	 * @return this validator specific Error message

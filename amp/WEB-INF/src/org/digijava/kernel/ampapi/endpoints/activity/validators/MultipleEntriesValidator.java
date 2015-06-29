@@ -7,9 +7,9 @@ import java.util.Collection;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
  * Validates that multiple values are provided only when it is allowed
@@ -24,8 +24,8 @@ public class MultipleEntriesValidator extends InputValidator {
 	}
 
 	@Override
-	public boolean isValid(AmpActivityVersion oldActivity, JsonBean newFieldParent, JsonBean oldFieldParent,
-			JsonBean fieldDescription, String fieldPath, boolean update) {
+	public boolean isValid(ActivityImporter importer, JsonBean newFieldParent, JsonBean oldFieldParent,
+			JsonBean fieldDescription, String fieldPath) {
 		boolean isValid = true;
 		boolean multipleValuesAllowed = Boolean.valueOf(fieldDescription.getString(ActivityEPConstants.MULTIPLE_VALUES));
 		String fieldName = fieldDescription.getString(ActivityEPConstants.FIELD_NAME);

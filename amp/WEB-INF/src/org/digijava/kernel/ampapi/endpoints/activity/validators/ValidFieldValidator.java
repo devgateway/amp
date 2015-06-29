@@ -4,9 +4,9 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
  * Verifies if the field is found under the current level of fields enumeration
@@ -20,8 +20,8 @@ public class ValidFieldValidator extends InputValidator {
 	}
 
 	@Override
-	public boolean isValid(AmpActivityVersion oldActivity, JsonBean newFieldParent, JsonBean oldFieldParent,
-			JsonBean fieldDescription, String fieldPath, boolean update) {
+	public boolean isValid(ActivityImporter importer, JsonBean newFieldParent, JsonBean oldFieldParent,
+			JsonBean fieldDescription, String fieldPath) {
 		// TODO Auto-generated method stub
 		return false;
 	}

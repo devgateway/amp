@@ -69,6 +69,7 @@ public class FieldsEnumerator {
 		else
 			return getAllAvailableFields(InterchangeUtils.getGenericClass(field), multilingual);
 	}
+	
 	public static boolean hasMaxSizeValidatorEnabled(Field field) {
 		boolean isEnabled = false;
 		Validators validators = field.getAnnotation(Validators.class);
@@ -103,7 +104,7 @@ public class FieldsEnumerator {
 		if (interchangeble == null)
 			return null;
 		JsonBean bean = new JsonBean();
-		bean.set(ActivityEPConstants.FIELD_NAME, InterchangeUtils.deunderscorify(interchangeble.fieldTitle()));
+		bean.set(ActivityEPConstants.FIELD_NAME, InterchangeUtils.underscorify(interchangeble.fieldTitle()));
 		bean.set(ActivityEPConstants.FIELD_TYPE, InterchangeableClassMapper.containsSimpleClass(field.getType()) ? 
 				InterchangeableClassMapper.getCustomMapping(field.getType()) : "list");
 		bean.set(ActivityEPConstants.FIELD_LABEL, InterchangeUtils.mapToBean(getLabelsForField(interchangeble.fieldTitle())));
@@ -168,14 +169,13 @@ public class FieldsEnumerator {
 					JsonBean descr = describeField(field, settings[i], multilingual);
 					if (descr != null) {
 						result.add(descr);
-
 					}
 				}
 			}
-			
 		}
 		return result;
 	}
+	
 	/**
 	 * Picks available translations for a string (supposedly field name)
 	 * 
@@ -197,6 +197,7 @@ public class FieldsEnumerator {
 		}
 		return translations;
 	}
+	
 	public static boolean hasUniqueValidatorEnabled(Field field) {
 		boolean isEnabled = false;
 		Validators validators = field.getAnnotation(Validators.class);
@@ -208,4 +209,5 @@ public class FieldsEnumerator {
 		}
 		return isEnabled;
 	}
+	
 }

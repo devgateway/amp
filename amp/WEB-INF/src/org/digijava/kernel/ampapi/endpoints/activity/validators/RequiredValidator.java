@@ -6,6 +6,7 @@ package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -26,17 +27,17 @@ public class RequiredValidator extends InputValidator {
 	}
 
 	@Override
-	public boolean isValid(AmpActivityVersion oldActivity, JsonBean newFieldParent, JsonBean oldFieldParent,
-			JsonBean fieldDescription, String fieldPath, boolean update) {
+	public boolean isValid(ActivityImporter importer, JsonBean newFieldParent, JsonBean oldFieldParent,
+			JsonBean fieldDescription, String fieldPath) {
 		boolean isValid = true;
 		String fieldName = (String) fieldDescription.get(ActivityEPConstants.FIELD_NAME);
 		String fieldValue = newFieldParent.getString(fieldName);
 		String requiredStatus = fieldDescription.getString(ActivityEPConstants.REQUIRED);
 		// On insert or draft activities update...
-		if (!update || isDraftActivityUpdate(oldActivity)) {
+		if (!importer.isUpdate() || isDraftActivityUpdate(importer.getOldActivity())) {
 			// TODO: if Draft FM path is disabled during draft activity validation, do we
 			// return invalid?
-			if (isDraftActivityUpdate(oldActivity) && !isDraftFMEnabled()) {
+			if (isDraftActivityUpdate(importer.getOldActivity()) && !isDraftFMEnabled()) {
 				isValid = false;
 			}
 			if (ActivityEPConstants.FIELD_ALWAYS_REQUIRED.equals(requiredStatus) && fieldValue == null) {

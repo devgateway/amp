@@ -38,7 +38,8 @@ public class ActivityImporter {
 	private Map<Integer, ApiErrorMessage> errors = new HashMap<Integer, ApiErrorMessage>();
 	private boolean update  = false;
 	private InputValidatorProcessor validator = new InputValidatorProcessor();
-	private List<AmpContentTranslation> translations = new ArrayList<AmpContentTranslation>(); 
+	private List<AmpContentTranslation> translations = new ArrayList<AmpContentTranslation>();
+	private boolean isDrafFMEnabled = false;
 	
 	/**
 	 * Imports or Updates
@@ -49,6 +50,7 @@ public class ActivityImporter {
 	public List<ApiErrorMessage> importOrUpdate(JsonBean newJson, boolean update) {
 		this.update = update;
 		this.newJson = newJson;
+		// this.isDrafFMEnabled = 
 		
 		// retrieve fields definition
 		List<JsonBean> fieldsDef = FieldsEnumerator.getAllAvailableFields();
@@ -117,8 +119,8 @@ public class ActivityImporter {
 		// validate sub-elements first
 		boolean validSubElements = validateSubElements(fieldDef, newFieldJson, oldFieldJson, fieldPath);
 		// then validate current field itself
-		boolean valid = validator.isValid(oldActivity, newFieldJson, oldFieldJson, fieldDef, 
-				fieldPath + "~" + fieldName, errors, update);
+		boolean valid = validator.isValid(this, newFieldJson, oldFieldJson, fieldDef, 
+				fieldPath + "~" + fieldName, errors);
 		valid = valid && validSubElements;
 		// and set new field only if all sub-elements are valid
 		if (valid && newParent != null) {
@@ -225,7 +227,7 @@ public class ActivityImporter {
 	}
 
 	/**
-	 * @return the oldActivity
+	 * @return the oldActivity or null if none found
 	 */
 	public AmpActivityVersion getOldActivity() {
 		return oldActivity;
@@ -250,5 +252,26 @@ public class ActivityImporter {
 	 */
 	public Map<Integer, ApiErrorMessage> getErrors() {
 		return errors;
+	}
+
+	/**
+	 * @return the isDrafFMEnabled
+	 */
+	public boolean isDrafFMEnabled() {
+		return isDrafFMEnabled;
+	}
+
+	/**
+	 * @return the update
+	 */
+	public boolean isUpdate() {
+		return update;
+	}
+
+	/**
+	 * @return the translations
+	 */
+	public List<AmpContentTranslation> getTranslations() {
+		return translations;
 	}
 }

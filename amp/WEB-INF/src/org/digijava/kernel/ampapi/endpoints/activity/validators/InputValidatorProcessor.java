@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -35,19 +36,21 @@ public class InputValidatorProcessor {
 	
 	/**
 	 * Executes validation chain for the new field values 
-	 * @param newFieldValue new field json structure
-	 * @param oldFieldValue old field json structure
-	 * @param fieldDescription field description
-	 * @param errors
+	 * 
+	 * @param importer 			Activity Importer instance that holds other import information
+	 * @param newFieldValue 	new field JSON structure
+	 * @param oldFieldValue 	old field JSON structure
+	 * @param fieldDescription 	field description
+	 * @param errors 			map to store errors 
 	 * @return true if the current field passes the full validation chain
 	 */
-	public boolean isValid(AmpActivityVersion oldActivity, JsonBean newParent, JsonBean oldParent, 
-			JsonBean fieldDef, String fieldPath, Map<Integer, ApiErrorMessage> errors, boolean update) {
+	public boolean isValid(ActivityImporter importer, JsonBean newParent, JsonBean oldParent, 
+			JsonBean fieldDef, String fieldPath, Map<Integer, ApiErrorMessage> errors) {
 		boolean valid = true;
 		String fieldName = fieldPath.substring(fieldPath.lastIndexOf("~"));
 		
 		for (InputValidator current : validators) {
-			boolean currentValid = current.isValid(oldActivity, newParent, oldParent, fieldDef, fieldPath, update);
+			boolean currentValid = current.isValid(importer, newParent, oldParent, fieldDef, fieldPath);
 			valid = currentValid && valid;
 			
 			if (!currentValid) {

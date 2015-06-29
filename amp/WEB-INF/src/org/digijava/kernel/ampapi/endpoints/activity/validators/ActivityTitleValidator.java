@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -36,8 +37,8 @@ public class ActivityTitleValidator extends InputValidator {
 	}
 
 	@Override 
-	public  boolean isValid(AmpActivityVersion oldActivity, JsonBean newFieldParent, JsonBean oldFieldParent, 
-			JsonBean fieldDescription, String fieldPath, boolean update) {
+	public  boolean isValid(ActivityImporter importer, JsonBean newFieldParent, JsonBean oldFieldParent, 
+			JsonBean fieldDescription, String fieldPath) {
 		boolean isValid = true;
 		String fieldName = (String) fieldDescription.get(ActivityEPConstants.FIELD_NAME);
 		//this validator only validates project title
@@ -50,7 +51,7 @@ public class ActivityTitleValidator extends InputValidator {
 			}
 			List<AmpActivity> list = LuceneUtil.findActivitiesMoreLikeThis(request.getServletContext().getRealPath("/")
 					+ LuceneUtil.ACTVITY_INDEX_DIRECTORY, title, langCode, 2);
-			isValid = !isTitleExistent(oldActivity, list,update);
+			isValid = !isTitleExistent(importer.getOldActivity(), list, importer.isUpdate());
 		}
 
 		return isValid;
@@ -68,7 +69,7 @@ public class ActivityTitleValidator extends InputValidator {
 		boolean isExistent = false;
 		if (!list.isEmpty()) {
 			for (AmpActivity activity : list)
-				if (!update  || !oldActivity.getName().equals(activity.getName())) {
+				if (!update  || oldActivity == null || !oldActivity.getName().equals(activity.getName())) {
 					isExistent = true;
 				}
 

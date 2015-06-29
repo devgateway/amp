@@ -70,24 +70,26 @@ module.exports = Backbone.Collection
     }
   },
 
-  deserialize: function(jsonBlob) {
-    var self = this;
-    if (jsonBlob) {
-      _.each(jsonBlob, function(v, k) {
-        self.get(k).set('selected', v);
+  deserialize : function(jsonBlob) {
+	var self = this;
+	if (jsonBlob) {
+		_.each(jsonBlob, function(v, k) {
+			if (self.get(k) !== undefined) {
+				self.get(k).set('selected', v);
 
-        /* also stash translated item's name */
-        var setting = self.get(k);
-        self.setSettingSelectedName(setting);
-
-      });
-    } else {
-      this.each(function(setting) {
-        setting.set('selected', setting.get('defaultId'));
-        self.setSettingSelectedName(setting);
-      });
-
-    }
+				/* also stash translated item's name */
+				var setting = self.get(k);
+				self.setSettingSelectedName(setting);
+			} else {
+				console.log("cant find setting with key:" + k);
+			}
+		});
+	} else {
+		this.each(function(setting) {
+			setting.set('selected', setting.get('defaultId'));
+			self.setSettingSelectedName(setting);
+		});
+	}
   }
 
 });

@@ -5,9 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,16 +13,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.entity.Message;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.Validators;
@@ -33,16 +24,7 @@ import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpComponentFunding;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.time.StopWatch;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.hibernate.jdbc.Work;
-
-import clover.org.apache.commons.lang.StringUtils;
 
 /**
  * Activity Import/Export Utility methods 
@@ -50,7 +32,7 @@ import clover.org.apache.commons.lang.StringUtils;
  */
 public class InterchangeUtils {
 
-
+	public static final Logger LOGGER = Logger.getLogger(InterchangeUtils.class);
 	private static Map<String, String> underscoreToTitleMap = new HashMap<String, String>();
 	private static Map<String, String> titleToUnderscoreMap = new HashMap<String, String>();
 	
@@ -58,16 +40,19 @@ public class InterchangeUtils {
 	 */
 	private static Map<String, String> discriminatorMap = new HashMap<String, String> ();
 	static {
-		
-		
 		addUnderscoredTitlesToMap(AmpActivityFields.class);
 	}
 	
 	private static final String NOT_REQUIRED = "_NONE_";
 	private static final String ALWAYS_REQUIRED = "_ALWAYS_";
-	public static final Logger LOGGER = Logger.getLogger(InterchangeUtils.class);
+	
 	
 
+	
+	public static String getDiscriminatedFieldTitle(String fieldName) {
+		return discriminatorMap.get(deunderscorify(fieldName));
+	}
+	
 	private static void addUnderscoredTitlesToMap(Class clazz) {
 		for (Field field : clazz.getDeclaredFields()) {
 			Interchangeable ant = field.getAnnotation(Interchangeable.class);
@@ -91,27 +76,6 @@ public class InterchangeUtils {
 		}
 	}
 	
-	/**
-	 * Picks available translations for a string (supposedly field name)
-	 * 
-	 * @param fieldName the field name to be translated
-	 * @return a map from the ISO2 code -> translation in said text
-	 */
-	private static Map<String, String> getLabelsForField(String fieldName) {
-		Map<String, String> translations = new HashMap<String, String>();
-		try {
-			Collection<Message> messages = TranslatorWorker.getAllTranslationOfBody(fieldName, Long.valueOf(3));
-			for (Message m : messages) {
-				translations.put(m.getLocale(), m.getMessage());
-			}
-			if (translations.isEmpty()) {
-				translations.put("EN", fieldName);
-			}
-		} catch (WorkerException e) {
-			// MEANINGFUL ERROR HERE
-		}
-		return translations;
-	}
 
 	/**
 	 * transforms a Map<String,String> to a JsonBean with equal structure
@@ -135,7 +99,7 @@ public class InterchangeUtils {
 	 * @param field a Field
 	 * @return true/false
 	 */
-	private static boolean isCollection(Field field) {
+	public static boolean isCollection(Field field) {
 		return Collection.class.isAssignableFrom(field.getType());
 	}
 
@@ -146,7 +110,7 @@ public class InterchangeUtils {
 	 * @param field
 	 * @return the generic class
 	 */
-	private static Class<?> getGenericClass(Field field) {
+	public static Class<?> getGenericClass(Field field) {
 		if (!isCollection(field))
 			throw new RuntimeException("Not a collection: " + field.toString());
 		ParameterizedType collectionType = null;
@@ -167,21 +131,7 @@ public class InterchangeUtils {
 		return ((Class<?>) genericTypes[0]);
 	}
 
-	/**
-	 * gets fields from the type of the field
-	 * 
-	 * @param field
-	 * @param multilingual true if multilingual enabled
-	 * @return a list of JsonBeans, each a description of @Interchangeable
-	 *         fields in the definition of the field's class, or field's generic
-	 *         type, if it's a collection
-	 */
-	private static List<JsonBean> getChildrenOfField(Field field, boolean multilingual) {
-		if (!isCollection(field))
-			return getAllAvailableFields(field.getType(), multilingual);
-		else
-			return getAllAvailableFields(getGenericClass(field), multilingual);
-	}
+
 
 
 	/**
@@ -203,7 +153,7 @@ public class InterchangeUtils {
 		return bld.toString();
 	}
 
-	private static String deunderscorify(String input) {
+	public static String deunderscorify(String input) {
 		if (underscoreToTitleMap.containsKey(input)) 
 			return underscoreToTitleMap.get(input);
 		StringBuilder bld = new StringBuilder();
@@ -223,102 +173,9 @@ public class InterchangeUtils {
 		return bld.toString();
 	}
 	
-	/**
-	 * describes a field in a JSON structure of: field_type: one of the types
-	 * {string, boolean, float, list} field_name: the field name, obtained from
-	 * the fieldTitle attribute from the @Interchangeable annotation
-	 * field_label: translations of the field in the available languages
-	 * multiple_values: true if it's a collection, false otherwise importable:
-	 * whether the field is to be imported, or had been exported just for the
-	 * sake of matching children: if the field is not a basic type (string,
-	 * boolean, or float), its class may contain other @Interchangeable fields,
-	 * which are recursively added here recursive: defined by
-	 * @Interchangeable.pickIdOnly; true for the purpose of avoiding loops
-	 * required: specifies whether said field needs to be transmitted
-	 * empty
-	 * 
-	 * @param field
-	 * @return
-	 */
-	private static JsonBean describeField(Field field, Interchangeable interchangeble, boolean multilingual) {
-		if (interchangeble == null)
-			return null;
-		JsonBean bean = new JsonBean();
-		bean.set(ActivityEPConstants.FIELD_NAME, titleToUnderscoreMap.get(interchangeble.fieldTitle()));
-		bean.set(ActivityEPConstants.FIELD_TYPE, InterchangeableClassMapper.containsSimpleClass(field.getType()) ? 
-				InterchangeableClassMapper.getCustomMapping(field.getType()) : "list");
-		bean.set(ActivityEPConstants.FIELD_LABEL, mapToBean(getLabelsForField(interchangeble.fieldTitle())));
-		/* list type */
-		if (!InterchangeableClassMapper.containsSimpleClass(field.getClass())) {
-			bean.set(ActivityEPConstants.IMPORTABLE, interchangeble.importable() ? true : false);
-			if (isCollection(field) && !hasMaxSizeValidatorEnabled(field)) {
-				bean.set(ActivityEPConstants.MULTIPLE_VALUES, true);
-			} else {
-				bean.set(ActivityEPConstants.MULTIPLE_VALUES, false);
-			}
-			if (!interchangeble.pickIdOnly()) {
-				List<JsonBean> children = getChildrenOfField(field, multilingual);
-				if (children != null && children.size() > 0) {
-					bean.set(ActivityEPConstants.CHILDREN, children);
-				}
-			} else {
-				bean.set(ActivityEPConstants.ID_ONLY, true);
-			}
-			bean.set(ActivityEPConstants.UNIQUE, hasUniqueValidatorEnabled(field));
-			bean.set(ActivityEPConstants.REQUIRED, getRequiredValue(field));
-		}
-		
-		// only String fields should clarify if they are translatable or not
-		if (java.lang.String.class.equals(field.getType())) {
-			bean.set(ActivityEPConstants.TRANSLATABLE, multilingual && FieldsDescriptor.isTranslatable(field));
-		}
-		
-		return bean;
-	}
 
-	public static List<JsonBean> getAllAvailableFields() {
-		return getAllAvailableFields(AmpActivityFields.class, ContentTranslationUtil.multilingualIsEnabled());
-	}
 
-	/**
-	 * Describes each @Interchangeable field of a class
-	 * 
-	 * @param clazz the class to be described
-	 * @return
-	 */
-	private static List<JsonBean> getAllAvailableFields(Class<?> clazz, boolean multilingual) {
-		List<JsonBean> result = new ArrayList<JsonBean>();
-		StopWatch.next("Descending into", false, clazz.getName());
-		Field[] fields = clazz.getDeclaredFields();
-		for (Field field : fields) {
-			
-			if (!FMVisibility.isVisible(field)) {
-				continue;
-			}
-			
-			if (!isCompositeField(field)) {
-				Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
-				JsonBean descr = describeField(field, interchangeable, multilingual);
-				if (descr != null) {
-					result.add(descr);
-				}
-			} else {
-				InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
-				Interchangeable[] settings = discriminator.settings();
-				for (int i = 0; i < settings.length; i++) {
-					JsonBean descr = describeField(field, settings[i], multilingual);
-					if (descr != null) {
-						result.add(descr);
-
-					}
-				}
-			}
-			
-		}
-		return result;
-	}
-
-	private static boolean isCompositeField(Field field) {
+	public static boolean isCompositeField(Field field) {
 		return field.getAnnotation(InterchangeableDiscriminator.class) != null;
 	}
 
@@ -383,7 +240,35 @@ public class InterchangeUtils {
 		return activityJson;
 	}
 	
-	
+	public static String getGetterMethodName(String fieldName) {
+		
+		if (fieldName.length() == 1)
+			return "get" + Character.toUpperCase(fieldName.charAt(0));
+		return "get" + Character.toUpperCase(fieldName.charAt(0)) + 
+				((fieldName.length() > 1) ? fieldName.substring(1) : "");
+	}	
+	public static Long  getId(Object obj) throws NoSuchMethodException, 
+	SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		if (InterchangeUtils.isSimpleType(obj.getClass())) {
+			return null;
+		} else {
+			for (Field field : obj.getClass().getDeclaredFields()) {
+				Interchangeable ant = field.getAnnotation(Interchangeable.class);
+				if (ant != null) {
+					if (ant.id()) {
+						Method meth = obj.getClass().getMethod(getGetterMethodName(field.getName()));
+						if (Long.class.isAssignableFrom(field.getType())) {
+							return (Long) meth.invoke(obj);
+						} else {
+							/*we need to go deeper*/
+							return getId(meth.invoke(obj));
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}	
 	/**
 	 * 
 	 * @param field
@@ -534,31 +419,8 @@ public class InterchangeUtils {
 		return false;
 	}
 
-	public static boolean hasUniqueValidatorEnabled(Field field) {
-		boolean isEnabled = false;
-		Validators validators = field.getAnnotation(Validators.class);
-		if (validators != null) {
-			String uniqueValidator = validators.unique();
-			if (!uniqueValidator.isEmpty()) {
-				isEnabled = FMVisibility.isFmPathEnabled(uniqueValidator);
-			}
-		}
 
-		return isEnabled;
 
-	}
-
-	public static boolean hasMaxSizeValidatorEnabled(Field field) {
-		boolean isEnabled = false;
-		Validators validators = field.getAnnotation(Validators.class);
-		if (validators != null) {
-			String maxSize = validators.maxSize();
-			if (!maxSize.isEmpty()) {
-				isEnabled = FMVisibility.isFmPathEnabled(maxSize);
-			}
-		}
-		return isEnabled;
-	}
 
 	/**
 	 * Gets the field required value. 
@@ -588,380 +450,20 @@ public class InterchangeUtils {
 
 	
 	
-//
-//	private static void populateFieldNamesWithClass(String appendix, Class<?> clazz) {
-//		Field[] fields = clazz.getDeclaredFields();
-//		for (Field field : fields ) {
-//			Interchangeable ant = field.getAnnotation(Interchangeable.class);
-//			if (ant != null) {
-//				fieldNames.put(appendix + "~" + underscorify(ant.fieldTitle()), field);
-//				if (!ant.recursive() && !isSimpleType(getClassOfField(field)))
-//					populateFieldNamesWithClass(appendix + "~" + underscorify(ant.fieldTitle()), getClassOfField(field));
-//			}
-//			
-//		}
-//		
-//	}
-//	
-//	
 
-	private static boolean isSimpleType(Class<?> clazz) {
+	public static boolean isSimpleType(Class<?> clazz) {
 		return InterchangeableClassMapper.containsSimpleClass(clazz);
-	}
-	
-	
-	
-	private static String getValue(Object obj) throws NoSuchMethodException, 
-	SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		if (isSimpleType(obj.getClass())) {
-			return null;
-		} else {
-			for (Field field : obj.getClass().getDeclaredFields()) {
-				Interchangeable ant = field.getAnnotation(Interchangeable.class);
-				if (ant != null) {
-					if (ant.value()) {
-						Method meth = obj.getClass().getMethod(getGetterMethodName(field.getName()));
-						if (String.class.isAssignableFrom(field.getType())) {
-							return (String) meth.invoke(obj);
-						} else {
-							/*we need to go deeper*/
-							return getValue(meth.invoke(obj));
-						}
-					}
-				}
-			}
-		}
-		return null;
-	}
-	
-	private static JsonBean setProperties(Object obj) throws NoSuchMethodException, 
-	SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		if (isSimpleType(obj.getClass())) {
-			return null;
-		} else {
-			JsonBean result = new JsonBean();
-			for (Field field : obj.getClass().getDeclaredFields()) {
-				Interchangeable ant = field.getAnnotation(Interchangeable.class);
-				if (ant != null) {
-					Method meth = obj.getClass().getMethod(getGetterMethodName(field.getName()));
-					Object property = meth.invoke(obj);
-					if (ant.id()) {
-						if (Long.class.isAssignableFrom(field.getType()) || String.class.isAssignableFrom(field.getType())) {
-							result.set("id", property);
-						} else {
-							/*we need to go deeper*/
-							result.set("id", getId(property));
-						}
-					} 
-					if (ant.value()) {
-						if (String.class.isAssignableFrom(field.getType()) || Long.class.isAssignableFrom(field.getType())) {
-							result.set("value", property);
-						} else {
-							/*we need to go deeper*/
-							result.set("value", getValue(property));
-						}
-					}
-					if (ant.pickIdOnly() && property != null) {
-						result.set(underscorify(ant.fieldTitle()), getId(property));
-					}
-					if (!(ant.value() || ant.id())) {
-						//additional property
-
-						if (isSimpleType(meth.getReturnType()) && property != null)
-							result.set(underscorify(ant.fieldTitle()), property);
-					}
-					
-				}
-			}
-			return result;
-		}
-	}
-	
-	
-	private static Long  getId(Object obj) throws NoSuchMethodException, 
-	SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		if (isSimpleType(obj.getClass())) {
-			return null;
-		} else {
-			for (Field field : obj.getClass().getDeclaredFields()) {
-				Interchangeable ant = field.getAnnotation(Interchangeable.class);
-				if (ant != null) {
-					if (ant.id()) {
-						Method meth = obj.getClass().getMethod(getGetterMethodName(field.getName()));
-						if (Long.class.isAssignableFrom(field.getType())) {
-							return (Long) meth.invoke(obj);
-						} else {
-							/*we need to go deeper*/
-							return getId(meth.invoke(obj));
-						}
-					}
-				}
-			}
-		}
-		return null;
-	}
-	
-
-	
-	private static String getGetterMethodName(String fieldName) {
-		
-		if (fieldName.length() == 1)
-			return "get" + Character.toUpperCase(fieldName.charAt(0));
-		return "get" + Character.toUpperCase(fieldName.charAt(0)) + 
-				((fieldName.length() > 1) ? fieldName.substring(1) : "");
-	}
-	
-	
-	private static Field getDescendField(Class clazz) {
-		for (Field field : clazz.getDeclaredFields()) {
-			Interchangeable ant = field.getAnnotation(Interchangeable.class);
-			if (ant != null && ant.descend())
-				return field;
-		}
-		return null;
 	}
 
 	@SuppressWarnings("rawtypes")
-	private static Class getClassOfField(Field field) {
+	public static Class getClassOfField(Field field) {
 		if (!isCollection(field))
 			return field.getType();
 		else
 			return getGenericClass(field);
 		
 	}
-	
-	
-	private static List<JsonBean> getPossibleCategoryValues(Field field) {
-		List <JsonBean> result = new ArrayList<JsonBean>();
-		Interchangeable ant = field.getAnnotation(Interchangeable.class);
-		String whereClause =  "WHERE acv.ampCategoryClass.name=" + "'" + ant.fieldTitle() +"'";
 		
-		String queryString = "SELECT acv from " + AmpCategoryValue.class.getName() + " acv ";
-		/* This hack is done for the case when the field analyzed is
-		 * AmpActivityFields.categories. 
-		 * The alternative to this would have been to set one more attribute for the annotation
-		 * (something like "listAllValues") or making a shortcut from upper (like getPossibleValuesForField(String)) 
-		 * 
-		 * */ 
-		if (! (field.getName().equals("categories") && (field.getDeclaringClass().equals(AmpActivityFields.class)))) {
-			queryString += whereClause;
-		}
-		List<AmpCategoryValue> acvList = (List<AmpCategoryValue>) PersistenceManager.getSession().createQuery(queryString).list();
-
-		for (AmpCategoryValue acv : acvList) {
-			if (acv.isVisible()) {
-				JsonBean item = null;
-				try {
-					item = setProperties(acv);
-					result.add(item);
-				} catch (Exception exc) {
-					LOGGER.error(exc.getMessage());
-					throw new RuntimeException(exc);
-				}
-			}
-		}
-		
-		
-		return result; 
-	}
-	
-	private static List<JsonBean> getPossibleValuesForField(Field field) {
-		List<JsonBean> result = new ArrayList<JsonBean>();
-		Class<?> clazz = getClassOfField(field);
-
-		
-		
-		if (clazz.isAssignableFrom(AmpCategoryValue.class))
-			return getPossibleCategoryValues(field);
-		
-		Field potentialDescend = getDescendField(clazz);
-		if (potentialDescend != null) {
-			return getPossibleValuesForField(potentialDescend);
-		}
-		
-		String queryString = "select cls from " + clazz.getName() + " cls ";
-		List<Object> objectList= PersistenceManager.getSession().createQuery(queryString).list();
-		for (Object obj : objectList) {
-			JsonBean item = null;
-			try {
-				item = setProperties(obj);
-			} catch (Exception exc) {
-				LOGGER.error(exc.getMessage());
-				throw new RuntimeException(exc);
-			}
-			result.add(item);
-		}
-		return result;
-	}
-	
-	private static Field getField(Class<?> clazz, String fieldname) {
-		for (Field field: clazz.getDeclaredFields()) {
-			Interchangeable ant = field.getAnnotation(Interchangeable.class);
-			if (ant != null) {
-				if (fieldname.equals(ant.fieldTitle()))
-					return field;
-			}
-		}
-		return null;
-	}
-	
-	private static Field getPotentiallyDiscriminatedField(Class<?> clazz, String fieldName){ 
-		Field field = getField(clazz, deunderscorify(fieldName));
-		if (field == null) {
-			//attempt to check if it's a composite field
-			String discriminatedFieldName = discriminatorMap.get(deunderscorify(fieldName));
-			if (discriminatedFieldName != null)
-				return getField(clazz, discriminatedFieldName);
-		}
-		return field;
-	}
-	
-	private static List<AmpSector> getSectorList(final String configType) {
-//		List<AmpSector> result = new ArrayList<AmpSector>();
-		final List<Long> sectorIds = new ArrayList<Long>();
-		PersistenceManager.getSession().doWork(new Work() {
-			public void execute(Connection conn) throws SQLException {
-				String allSectorsQuery = "SELECT amp_sector_id FROM all_sectors_with_levels WHERE sector_config_name=" + 
-										 "'" + configType +"'" ;
-				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allSectorsQuery, null)) {
-					ResultSet rs = rsi.rs;
-					while (rs.next()) 
-						sectorIds.add(rs.getLong("amp_sector_id"));
-					rs.close();
-				}
-			}
-		});		
-		
-		String ids = StringUtils.join(sectorIds, ",");
-		String queryString = "select ast from " + AmpSector.class.getName() + " ast where ast.ampSectorId in (" + ids + ")";
-		List<AmpSector> objectList = PersistenceManager.getSession().createQuery(queryString).list();
-		return objectList;
-	}
-	private static List<AmpTheme> getThemeList(final String configType) {
-//		List<AmpSector> result = new ArrayList<AmpSector>();
-		final List<Long> programIds = new ArrayList<Long>();
-		PersistenceManager.getSession().doWork(new Work() {
-			public void execute(Connection conn) throws SQLException {
-				String allSectorsQuery = "SELECT amp_theme_id FROM all_programs_with_levels WHERE program_setting_name=" + 
-										 "'" + configType +"'" ;
-				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allSectorsQuery, null)) {
-					ResultSet rs = rsi.rs;
-					while (rs.next()) 
-						programIds.add(rs.getLong("amp_theme_id"));
-					rs.close();
-				}
-			}
-		});		
-		
-		String ids = StringUtils.join(programIds, ",");
-		String queryString = "select ast from " + AmpTheme.class.getName() + " ast where ast.ampThemeId in (" + ids + ")";
-		List<AmpTheme> objectList = PersistenceManager.getSession().createQuery(queryString).list();
-		return objectList;
-	}
-	
-	private static String getConfigValue(String longFieldName, Field field) {
-		InterchangeableDiscriminator ant = field.getAnnotation(InterchangeableDiscriminator.class);
-		for (Interchangeable inter : ant.settings()) {
-			if (inter.fieldTitle().equals(deunderscorify(longFieldName))) {
-				return inter.discriminatorOption();
-			}
-		}
-		return null;
-	}
-	
-	private static List<JsonBean> getPossibleValuesForComplexField(Field field, String originalName) {
-		List<JsonBean> result = new ArrayList<JsonBean>();
-		/*AmpActivitySector || AmpComponentFunding || AmpActivityProgram*/
-		if (getClassOfField(field).equals(AmpActivitySector.class)) {
-			String configValue = getConfigValue(originalName, field);
-			if (configValue == null) {
-				/* FIXME: 
-				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.SOME_OTHER_ERROR, field.getName())));
-				*/
-				return result;
-			}
-			List<AmpSector> sectors = getSectorList(configValue);
-			for (AmpSector sector : sectors) {
-				JsonBean item = null;
-				try {
-					item = setProperties(sector);
-				} catch (Exception exc) {
-					LOGGER.error(exc.getMessage());
-					throw new RuntimeException(exc);
-				}
-				result.add(item);
-				
-			}
-			
-		} else if (getClassOfField(field).equals(AmpActivityProgram.class)) {
-			String configValue = getConfigValue(originalName, field);
-			if (configValue == null) {
-				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.WRONG_PROGRAM_TYPE, field.getName())));
-				return result;
-			}
-			List<AmpTheme> themes = getThemeList(configValue);
-			for (AmpTheme theme : themes) {
-				JsonBean item = null;
-				try {
-					item = setProperties(theme);
-				} catch (Exception exc) {
-					result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.CANNOT_GET_PROPERTIES, field.getName())));
-				}
-				result.add(item);
-				
-			}
-			
-		} else if (getClassOfField(field).equals(AmpComponentFunding.class)) {
-			
-		} else {
-			result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, field.getName() + "/config:" + originalName)));
-			return result;
-		}
-		return result;
-		
-	}
-	public static List<JsonBean> getPossibleValuesForField(String longFieldName, Class<?> clazz) {
-
-		String fieldName = "";
-		if (longFieldName.contains("~")) {
-			/*
-			 * we might have a field containing a discriminator description,
-			 * but what we actually need is underneath -> obtain name of the field underneath
-			 * */
-			fieldName = longFieldName.substring(0, longFieldName.indexOf('~') );
-			Field field = getPotentiallyDiscriminatedField(clazz, fieldName);
-			if (field == null) {
-				List<JsonBean> result = new ArrayList<JsonBean>();
-				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, fieldName)));
-				return result;
-			} else {
-				return getPossibleValuesForField(longFieldName.substring(longFieldName.indexOf('~') + 1), getClassOfField(field));
-			}
-		} else {
-			/*
-			 * the last field might contain discriminated values
-			 * if it is such a field, it's a special case for each class
-			 * 
-			 * */
-			Field finalField = getPotentiallyDiscriminatedField(clazz, longFieldName);
-			if (finalField == null) {
-				List<JsonBean> result = new ArrayList<JsonBean>();
-				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, fieldName)));
-				return result;
-			} else {
-				if (isCompositeField(finalField)) {
-					return getPossibleValuesForComplexField(finalField, longFieldName);
-				}
-
-				return getPossibleValuesForField(finalField);
-			}
-		}
-		
-//		System.out.println();
-//		List<JsonBean>
-//		return getPossibleValuesForField(fieldNames.get(fieldName));
-	}
-	
 	/**
 	 * Imports or Updates an activity
 	 * @param json new activity configuration
@@ -997,6 +499,3 @@ public class InterchangeUtils {
 	
 
 }
-
-
-

@@ -1,6 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -14,11 +16,13 @@ import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.util.ActivityUtil;
 
 /**
  * Activity Import/Export Utility methods 
@@ -189,13 +193,65 @@ public class InterchangeUtils {
 	 */
 	public static JsonBean getActivity(Long projectId, JsonBean filter) {
 		try {
-			ActivityExporter exporter = new ActivityExporter();
-			return exporter.getActivity(projectId, filter);
-		} catch (Exception e) {
+			AmpActivityVersion activity = ActivityUtil.loadActivity(projectId);
+			
+			return getActivity(activity, filter);
+		} catch (DgException e) {
 			LOGGER.error("Coudn't load activity with id: " + projectId + ". " + e.getMessage());
 			throw new RuntimeException(e);
 		}
 	}
+	
+	/**
+	 * Activity Export as JSON 
+	 * 
+	 * @param AmpActivityVersion is the activity
+	 * @param filter is the JSON with a list of fields
+	 * @return
+	 */
+	public static JsonBean getActivity(AmpActivityVersion activity, JsonBean filter) {
+		try {
+			ActivityExporter exporter = new ActivityExporter();
+			
+			return exporter.getActivity(activity, filter);
+		} catch (Exception e) {
+			LOGGER.error("Error in loading activity. " + e.getMessage());
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public static String getGetterMethodName(String fieldName) {
+
+		if (fieldName.length() == 1)
+			return "get" + Character.toUpperCase(fieldName.charAt(0));
+		return "get" + Character.toUpperCase(fieldName.charAt(0)) + 
+				((fieldName.length() > 1) ? fieldName.substring(1) : "");
+	}	
+	
+	public static Long  getId(Object obj) throws NoSuchMethodException,	SecurityException, 
+		IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		
+		if (InterchangeUtils.isSimpleType(obj.getClass())) {
+			return null;
+		} else {
+			for (Field field : obj.getClass().getDeclaredFields()) {
+				Interchangeable ant = field.getAnnotation(Interchangeable.class);
+				if (ant != null) {
+					if (ant.id()) {
+						Method meth = obj.getClass().getMethod(getGetterMethodName(field.getName()));
+						if (Long.class.isAssignableFrom(field.getType())) {
+							return (Long) meth.invoke(obj);
+						} else {
+							/*we need to go deeper*/
+							return getId(meth.invoke(obj));
+						}
+					}
+				}
+			}
+		}
+		
+		return null;
+	}	
 	
 	/**
 	 * Gets the field required value. 

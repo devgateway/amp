@@ -39,9 +39,8 @@ public class ActivityExporter {
 	 * @return
 	 * @throws DgException 
 	 */
-	public JsonBean getActivity(Long projectId, JsonBean filter) throws DgException {
+	public JsonBean getActivity(AmpActivityVersion activity, JsonBean filter) throws DgException {
 		JsonBean activityJson = new JsonBean();
-		AmpActivityVersion activity = ActivityUtil.loadActivity(projectId);
 			
 		activityJson.set("amp_activity_id", activity.getAmpActivityId());
 		activityJson.set("amp_id", activity.getAmpId());

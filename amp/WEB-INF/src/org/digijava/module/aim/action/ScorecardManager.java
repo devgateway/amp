@@ -19,6 +19,7 @@ import org.digijava.module.aim.dbentity.AmpScorecardSettingsCategoryValue;
 import org.digijava.module.aim.form.ScorecardManagerForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class ScorecardManager extends Action {
 	
@@ -26,11 +27,13 @@ public class ScorecardManager extends Action {
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 		ScorecardManagerForm scorecardSettingsForm = (ScorecardManagerForm) form;
-		Collection<AmpCategoryValue> allCategoryValues = ScorecardService.getAllCategoryValues();
+		Collection<AmpCategoryValue> allCategoryValues = 
+		CategoryManagerUtil.
+		getAmpCategoryValueCollectionByKey("activity_status");
 		
-//		for (AmpCategoryValue acv : allCategoryValues) {
-//        	acv.setValue(TranslatorWorker.translateText(acv.getValue()));
-//        }
+		for (AmpCategoryValue acv : allCategoryValues) {
+			acv.setValue(CategoryManagerUtil.translateAmpCategoryValue(acv));
+        }
 		
 		scorecardSettingsForm.setCategoryValues(allCategoryValues);
 		

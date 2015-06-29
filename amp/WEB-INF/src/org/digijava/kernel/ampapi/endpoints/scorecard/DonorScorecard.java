@@ -36,6 +36,7 @@ import org.digijava.module.aim.dbentity.AmpScorecardSettings;
 import org.digijava.module.aim.dbentity.AmpScorecardSettingsCategoryValue;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
  * This class should have all endpoints related to the Donor Scorecard -
@@ -101,7 +102,8 @@ public class DonorScorecard {
 	public String saveScorecardSettings(final JSONObject settingsBean) {
 		String message = null;
 		List<AmpScorecardSettings> scorecardSettingsList = (List<AmpScorecardSettings>) DbUtil.getAll(AmpScorecardSettings.class);
-		List<AmpCategoryValue> allCategoryValues = (List<AmpCategoryValue>) ScorecardService.getAllCategoryValues();
+		List<AmpCategoryValue> allCategoryValues = (List<AmpCategoryValue>) CategoryManagerUtil.
+				getAmpCategoryValueCollectionByKey("activity_status");
 		
 		AmpScorecardSettings settings = scorecardSettingsList.isEmpty() ? new AmpScorecardSettings() : scorecardSettingsList.get(0);
 		String validationTime = settingsBean.getString("validationTime");

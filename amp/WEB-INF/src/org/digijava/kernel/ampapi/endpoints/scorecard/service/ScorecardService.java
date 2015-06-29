@@ -212,26 +212,6 @@ public class ScorecardService {
 			
 		return donorsList;
 	}
-	
-
-	/**
-	 * Returns the list of all Activity Statuses from category values table
-	 * (amp_category_value)
-	 * 
-	 * @return Collection<AmpCategoryValue>, the list with of all activity
-	 *         statuses
-	 */
-	public static Collection<AmpCategoryValue> getAllCategoryValues() {
-		Collection<AmpCategoryValue> responses = new ArrayList<AmpCategoryValue>();
-
-		Session session = PersistenceManager.getRequestDBSession();
-		String queryString = "FROM " + AmpCategoryValue.class.getName() + " acv "
-        		+ "WHERE acv.ampCategoryClass.keyName = 'activity_status'";
-        Query query = session.createQuery(queryString);
-        responses = query.list();
-        
-		return responses;
-	}
 
 	/**
 	 * Gets the default start year for the donor scorecard. It tries to get it

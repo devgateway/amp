@@ -73,13 +73,4 @@ public class AmpBooleanChoiceField extends AmpFieldPanel<Boolean>{
 		choiceContainer.setSuffix(" ");
 		addFormComponent(choiceContainer);
 	}
-
-	public RadioChoice<Boolean> getChoiceContainer() {
-		return choiceContainer;
-	}
-
-	public void setChoiceContainer(RadioChoice<Boolean> choiceContainer) {
-		this.choiceContainer = choiceContainer;
-	}
-	
 }

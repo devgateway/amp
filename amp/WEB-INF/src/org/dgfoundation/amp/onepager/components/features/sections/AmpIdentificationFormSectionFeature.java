@@ -402,23 +402,11 @@ implements AmpRequiredComponentContainer{
 
 			add(new AmpBooleanChoiceField("jointCriteria", 
 					new PropertyModel<Boolean>(am, "jointCriteria"), "Joint Criteria"));
-			
-			final AmpBooleanChoiceField humanitarianAid= new AmpBooleanChoiceField("humanitarianAid", 
-					new PropertyModel<Boolean>(am, "humanitarianAid"), "Humanitarian Aid");
-			
 
-            add(new AmpComponentPanel("humanitarianAidRequired", "Required Validator for Humanitarian Aid") {
-                @Override
-                protected void onConfigure() {
-                    super.onConfigure();
-                    if (this.isVisible()){
-                    	humanitarianAid.getChoiceContainer().setRequired(true);
-                    	requiredFormComponents.add(humanitarianAid.getChoiceContainer());
-            			
-                    }
-                }
-            });						
-            add(humanitarianAid);
+			add(new AmpBooleanChoiceField("humanitarianAid", 
+					new PropertyModel<Boolean>(am, "humanitarianAid"), "Humanitarian Aid"));
+			
+		
 			add(new AmpTextAreaFieldPanel("projectComments",
 					new PropertyModel<String>(am, "projectComments"),
 					"Project Comments", true, AmpFMTypes.MODULE));

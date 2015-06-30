@@ -263,12 +263,18 @@ public class OnePager extends AmpHeaderFooter {
 				AmpActivityModel.getHibernateSession().doWork(new Work() {
 					@Override
 					public void execute(Connection connection) throws SQLException {
-						java.sql.Statement stm = connection.createStatement();
-						java.sql.ResultSet rs = stm.executeQuery("select 1");
-						if (rs.next())
-							;
-						rs.close();
-						stm.close();
+						try {
+							java.sql.Statement stm = connection.createStatement();
+							java.sql.ResultSet rs = stm.executeQuery("select 1");
+							if (rs.next())
+								;
+							rs.close();
+							stm.close();
+						} catch (Exception e) {
+							//this is a ajax triger and the connectionas has already been closed. so its good to 
+							//ignore the exception
+							logger.error(e);
+						}
 					}
 				});
 			}

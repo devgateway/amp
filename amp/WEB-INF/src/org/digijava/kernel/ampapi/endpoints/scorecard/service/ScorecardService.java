@@ -406,6 +406,22 @@ public class ScorecardService {
 							Integer totalActivities = rs.getInt("total_activities");
 							Long donorId = rs.getLong("donor_id");
 							ColoredCell cell = data.get(donorId).get(quarter.toString());
+							cell.setTotalActivities(totalActivities);
+							
+							//Imagine "Organisation 1" is first added as donor for an activity on Quarter 2, 2015.
+							//Then Quarter 1, 2015 for that organisation, total activities will be 0. Because that organisation was not 
+							//yet a donor.
+							if (isDonorFirstQuarter(data, quarter, donorId)) {
+								Quarter previousQuarter = quarter.getPreviousQuarter();
+								ColoredCell previousCell = data.get(donorId).get(previousQuarter.toString());
+								
+								//if the previous cell has 0 total activities, but some activities were updated on his grace period
+								// then it is marked as YELLOW
+								if (previousCell.getUpdatedActivitiesOnGracePeriod().size() > 0) {
+									previousCell.setColor(Colors.YELLOW);
+								}
+							}
+							
 							Integer totalUpdatedActivities = cell.getUpdatedActivites().size();
 							Integer totalUpdatedActivitiesOnGracePeriod = cell.getUpdatedActivitiesOnGracePeriod()
 									.size();
@@ -424,9 +440,32 @@ public class ScorecardService {
 					}
 
 				}
+
+				
 			});
 		}
 		return data;
+	}
+	
+	/**
+	 * Verifies if it is the first quarter where the the donor has related activities.
+	 * It represents the first quarter in which the organisation acts as a donor.
+	 * 
+	 * @param data the Map <String,ColoredCell> with ColoredCells by donors
+	 * @param quarter the quarter to verify if it is the first time the donor has activities
+	 * @param donorId  donor organisation id
+	 * @return true  it is the first quarter where the the donor has related activities, false otherwise
+	 */
+	private boolean isDonorFirstQuarter (final Map<Long, Map<String, ColoredCell>> data,
+			final Quarter quarter, Long donorId) {
+		boolean isDonorFirstQuarter = false;
+		Quarter previousQuarter = quarter.getPreviousQuarter();
+		ColoredCell previousCell = data.get(donorId).get(previousQuarter.toString());
+		if (previousCell != null && previousCell.getTotalActivities() == 0) {
+			isDonorFirstQuarter = true;
+		}
+		return isDonorFirstQuarter;
+		
 	}
 	
 	/**

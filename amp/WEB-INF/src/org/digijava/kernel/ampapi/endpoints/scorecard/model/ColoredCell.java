@@ -36,7 +36,8 @@ public class ColoredCell {
 	private Set<String> updatedActivites = new HashSet<String>();
 
 	// updated activities on the grace period of the previous quarter
-	private Set<String> updatedActivitiesOnGracePeriod = new HashSet<String>();;
+	private Set<String> updatedActivitiesOnGracePeriod = new HashSet<String>();
+	private Integer totalActivities = 0;
 
 	public ColoredCell(Colors color) {
 		this.color = color;
@@ -89,6 +90,14 @@ public class ColoredCell {
 
 	public void setUpdatedActivitiesOnGracePeriod(Set<String> updatedActivitiesOnGracePeriod) {
 		this.updatedActivitiesOnGracePeriod = updatedActivitiesOnGracePeriod;
+	}
+
+	public Integer getTotalActivities() {
+		return totalActivities;
+	}
+
+	public void setTotalActivities(Integer totalActivities) {
+		this.totalActivities = totalActivities;
 	}
 
 }

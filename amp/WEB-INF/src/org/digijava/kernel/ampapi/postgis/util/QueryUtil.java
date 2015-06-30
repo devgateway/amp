@@ -516,8 +516,10 @@ public static List<JsonBean> getOrgGroups() {
 					    "FROM  amp_organisation o,amp_org_role r "+
 						 "WHERE o.amp_org_id = r.organisation " +
 						 "AND EXISTS(SELECT af.amp_donor_org_id "+ 
-						 "                   FROM   amp_funding af "+
+						 "                   FROM   amp_funding af,amp_activity_version v "+
 						 "                   WHERE  o.amp_org_id = af.amp_donor_org_id "+ 
+						 "  AND v.amp_activity_id = af.amp_activity_id "+
+						 "  AND v.deleted is false "+ 
 						 "AND ( ( af.source_role_id IS NULL ) "+
 						 "OR af.source_role_id = (SELECT amp_role_id "+
 						 "FROM   amp_role "+

@@ -12,6 +12,8 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 
+<c:choose>
+<c:when test="${pledgeUser}">
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <jsp:include page="teamPagesHeader.jsp"  />
@@ -256,3 +258,11 @@ function setHoveredRow(rowId) {
 </script> 
 
 </digi:form>
+
+</c:when>
+
+<c:otherwise>
+    <digi:errors/>
+</c:otherwise>
+
+</c:choose>

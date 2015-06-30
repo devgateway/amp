@@ -108,7 +108,7 @@ module.exports = BackboneDash.Collection.extend({
 	  if(numberFormat.numberFormat.indexOf(',') !== -1) {
 		  numberFormat.groupSeparator = _.find(settings, function(item) {
 			  return item['id'] === 'number-group-separator';
-		  }).name || ',';
+		  }).defaultId || ',';
 	  } else {
 		  numberFormat.groupSeparator = '';
 	  }	  	  

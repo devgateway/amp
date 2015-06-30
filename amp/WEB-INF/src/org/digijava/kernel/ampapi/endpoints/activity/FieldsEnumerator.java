@@ -105,11 +105,16 @@ public class FieldsEnumerator {
 			return null;
 		JsonBean bean = new JsonBean();
 		bean.set(ActivityEPConstants.FIELD_NAME, InterchangeUtils.underscorify(interchangeble.fieldTitle()));
+		if (interchangeble.id()) {
+			bean.set(ActivityEPConstants.ID, interchangeble.id());
+		}
 		bean.set(ActivityEPConstants.FIELD_TYPE, InterchangeableClassMapper.containsSimpleClass(field.getType()) ? 
 				InterchangeableClassMapper.getCustomMapping(field.getType()) : "list");
 		bean.set(ActivityEPConstants.FIELD_LABEL, InterchangeUtils.mapToBean(getLabelsForField(interchangeble.fieldTitle())));
+		bean.set(ActivityEPConstants.REQUIRED, InterchangeUtils.getRequiredValue(field));
+		
 		/* list type */
-		if (!InterchangeableClassMapper.containsSimpleClass(field.getClass())) {
+		if (!InterchangeableClassMapper.containsSimpleClass(field.getType())) {
 			bean.set(ActivityEPConstants.IMPORTABLE, interchangeble.importable() ? true : false);
 			if (InterchangeUtils.isCollection(field) && !hasMaxSizeValidatorEnabled(field)) {
 				bean.set(ActivityEPConstants.MULTIPLE_VALUES, true);
@@ -125,7 +130,6 @@ public class FieldsEnumerator {
 				bean.set(ActivityEPConstants.ID_ONLY, true);
 			}
 			bean.set(ActivityEPConstants.UNIQUE, hasUniqueValidatorEnabled(field));
-			bean.set(ActivityEPConstants.REQUIRED, InterchangeUtils.getRequiredValue(field));
 		}
 		
 		// only String fields should clarify if they are translatable or not

@@ -366,9 +366,11 @@ public class SettingsUtils {
 		settings.add(new SettingOptions("number-format", false, 
 				MondrianReportUtils.getCurrentUserDefaultSettings().getCurrencyFormat().toPattern(), null, null));
 		int amountOptionId = Integer.valueOf(
-				FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));		
-		settings.add(new SettingOptions("number-group-separator", false, 
-				FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GROUP_SEPARATOR), null, null));
+				FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
+		
+		settings.add(new SettingOptions("number-group-separator", false, null, FeaturesUtil
+				.getGlobalSettingValue(GlobalSettingsConstants.GROUP_SEPARATOR), null));
+		
 		settings.add(new SettingOptions("number-decimal-separator", false, 
 				FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR), null, null));
 		

@@ -31,6 +31,8 @@ import org.digijava.module.aim.util.TeamUtil;
  */
 public class ActivityImporter {
 	private static final Logger logger = Logger.getLogger(ActivityImporter.class);
+	private static final String SAVE_AS_DRAFT_PATH = "/Activity Form/Save as Draft";
+	private static final boolean ALLOW_SAVE_AS_DRAFT_SHIFT = true;
 	
 	private AmpActivityVersion newActivity = null;
 	private AmpActivityVersion oldActivity = null;
@@ -40,18 +42,19 @@ public class ActivityImporter {
 	private boolean update  = false;
 	private InputValidatorProcessor validator = new InputValidatorProcessor();
 	private List<AmpContentTranslation> translations = new ArrayList<AmpContentTranslation>();
-	private static String SAVE_AS_DRAFT_PATH = "/Activity Form/Save as Draft";
-	private static boolean allowSaveAsDraftShift = true;
+	private boolean isDraftFMEnabled;
 
 	/**
 	 * Imports or Updates
+	 * 
 	 * @param newJson new activity configuration
-	 * @param update flags whether this is an import or an update request
+	 * @param update  flags whether this is an import or an update request
 	 * @return a list of API errors, that is empty if no error detected
 	 */
 	public List<ApiErrorMessage> importOrUpdate(JsonBean newJson, boolean update) {
 		this.update = update;
 		this.newJson = newJson;
+		this.isDraftFMEnabled = FMVisibility.isFmPathEnabled(SAVE_AS_DRAFT_PATH);
 		
 		// retrieve fields definition
 		List<JsonBean> fieldsDef = FieldsEnumerator.getAllAvailableFields();
@@ -256,10 +259,13 @@ public class ActivityImporter {
 	}
 
 	/**
-	 * @return the isDraftFMEnabled
+	 * @return true if Save as Draft is enabled in FM
 	 */
 	public boolean isDraftFMEnabled() {
+		/* just look inside this method, why during an import we have to call it multiple times?
 		return FMVisibility.isFmPathEnabled(SAVE_AS_DRAFT_PATH);
+		*/
+		return isDraftFMEnabled;
 	}
 
 	/**
@@ -282,6 +288,6 @@ public class ActivityImporter {
 	 * @return true if it is allowed, false otherwise
 	 */
 	public boolean getAllowSaveAsDraftShift () {
-		return allowSaveAsDraftShift;
+		return ALLOW_SAVE_AS_DRAFT_SHIFT;
 	}
 }

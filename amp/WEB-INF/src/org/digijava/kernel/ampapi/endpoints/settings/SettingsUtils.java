@@ -413,12 +413,12 @@ public class SettingsUtils {
 		settings.add(new SettingOptions("dashboard-default-calendar", false, defaultCalendar, null, null));
 		if (!defaultDashboardMaxYearRange.equals("-1")) {
 			settings.add(new SettingOptions("dashboard-default-max-date", false, DateTimeUtil
-					.parseDateForPicker2(CalendarUtil.getStartDate(new Long(defaultCalendar), new Integer(
+					.parseDateForPicker2(CalendarUtil.getEndDate(new Long(defaultCalendar), new Integer(
 							defaultDashboardMaxYearRange).intValue()), Constants.CALENDAR_DATE_PICKER), null, null));
 		}
 		if (!defaultDashboardMinYearRange.equals("-1")) {
 			settings.add(new SettingOptions("dashboard-default-min-date", false, DateTimeUtil
-					.parseDateForPicker2(CalendarUtil.getEndDate(new Long(defaultCalendar), new Integer(
+					.parseDateForPicker2(CalendarUtil.getStartDate(new Long(defaultCalendar), new Integer(
 							defaultDashboardMinYearRange).intValue()), Constants.CALENDAR_DATE_PICKER), null, null));
 		}
 		return settings;

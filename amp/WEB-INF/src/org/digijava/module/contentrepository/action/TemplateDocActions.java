@@ -108,10 +108,14 @@ public class TemplateDocActions extends DispatchAction {
 		ActionErrors errors= new ActionErrors();
 		String tempName=myForm.getTemplateName(); //name should be unique
 		TemplateDoc tempDoc=TemplateDocsUtil.getTemplateDocByName(tempName);
-		if(tempDoc!=null){
-			if(! tempDoc.getId().equals(myForm.getTemplateId())){				
-				errors.add("name not unique", new ActionMessage("cr.templateName.exists",TranslatorWorker.translateText("Template With Given Name Already Exists")));
-			}			
+		if(tempDoc!=null || tempName==null){
+			if (myForm.getTemplateId()==null && myForm.getTemplateName()==null){
+				return viewTemplateDocuments(mapping, myForm, request, response);
+			}else{
+				if(!tempDoc.getId().equals(myForm.getTemplateId())){	
+					errors.add("name not unique", new ActionMessage("cr.templateName.exists",TranslatorWorker.translateText("Template With Given Name Already Exists")));
+				}			
+			}
 		}
 		
 		//for each field check whether it's allowed not to have pre-defined values
@@ -144,7 +148,8 @@ public class TemplateDocActions extends DispatchAction {
 		//remove fields from map
 		HttpSession session = request.getSession();
 		session.removeAttribute("fields");
-		
+		myForm.setTemplateId(null);
+		myForm.setTemplateName(null);
 		return viewTemplateDocuments(mapping, myForm, request, response);
 	}
 	

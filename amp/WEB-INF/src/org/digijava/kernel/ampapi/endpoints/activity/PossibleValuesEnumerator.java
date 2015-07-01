@@ -175,6 +175,9 @@ public class PossibleValuesEnumerator {
 		});		
 		
 		String ids = StringUtils.join(sectorIds, ",");
+		if (sectorIds.size() == 0) {
+			return new ArrayList<Object>();
+		}
 		String queryString = "select ast from " + AmpActivitySector.class.getName() + " ast where ast.sectorId.ampSectorId in (" + ids + ")";
 		List<Object> objectList = PersistenceManager.getSession().createQuery(queryString).list();
 		return objectList;		
@@ -198,6 +201,9 @@ public class PossibleValuesEnumerator {
 		});		
 		
 		String ids = StringUtils.join(sectorIds, ",");
+		if (sectorIds.size() == 0) {
+			return new ArrayList<Object>();
+		}
 		String queryString = "select ast from " + AmpSector.class.getName() + " ast where ast.ampSectorId in (" + ids + ")";
 		List<Object> objectList = PersistenceManager.getSession().createQuery(queryString).list();
 		return objectList;
@@ -219,8 +225,14 @@ public class PossibleValuesEnumerator {
 		});		
 		
 		String ids = StringUtils.join(programIds, ",");
+
+		if (programIds.size() == 0) {
+			return new ArrayList<Object>();
+		}
+//		{
 		String queryString = "select ast from " + AmpActivityProgram.class.getName() + " ast where ast.program.ampThemeId in (" + ids + ")";
 		List<Object> objectList = PersistenceManager.getSession().createQuery(queryString).list();
+//		}
 		return objectList;
 	}
 	private static List<Object> getThemeList(final String configType) {
@@ -240,6 +252,9 @@ public class PossibleValuesEnumerator {
 		});		
 		
 		String ids = StringUtils.join(programIds, ",");
+		if (programIds.size() == 0) {
+			return new ArrayList<Object>();
+		}
 		String queryString = "select ast from " + AmpTheme.class.getName() + " ast where ast.ampThemeId in (" + ids + ")";
 		List<Object> objectList = PersistenceManager.getSession().createQuery(queryString).list();
 		return objectList;

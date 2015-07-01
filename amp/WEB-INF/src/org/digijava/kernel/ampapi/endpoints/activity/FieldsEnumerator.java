@@ -227,6 +227,7 @@ public class FieldsEnumerator {
 				bean.set(ActivityEPConstants.ID_ONLY, true);
 			}
 			bean.set(ActivityEPConstants.UNIQUE, hasUniqueValidatorEnabled(field));
+			bean.set(ActivityEPConstants.REQUIRED, InterchangeUtils.getRequiredValue(field));
 		}
 		
 		// only String fields should clarify if they are translatable or not

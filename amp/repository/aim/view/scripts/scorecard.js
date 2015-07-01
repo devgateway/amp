@@ -208,6 +208,7 @@ function loadFinalReview() {
     	$('#validationTime').text($('select[name="validationTime"]').find(":selected").text());
     	$("#validationNone").hide();
     } else {
+    	$('#validationTime').text('');
     	$('#validationNone').show();
     }
     

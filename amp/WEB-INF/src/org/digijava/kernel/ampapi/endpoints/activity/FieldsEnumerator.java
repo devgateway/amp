@@ -57,7 +57,7 @@ import clover.org.apache.commons.lang.StringUtils;
  * @author acartaleanu
  */
 
-@Path("activity/fields")
+
 public class FieldsEnumerator {
 	
 	@Context
@@ -70,12 +70,7 @@ public class FieldsEnumerator {
 	}
 	
 	
-	@GET
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public List<JsonBean> getAvailableFields() {
-		
-		return getAllAvailableFields();
-	}
+	
 	/**
 	 * gets fields from the type of the field
 	 * 

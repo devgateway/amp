@@ -16,7 +16,7 @@ public class AmpActivityLocation implements Versionable,Serializable, Cloneable 
 //	@Interchangeable(fieldTitle="ID", id=true)
 	private Long id;
 	private AmpActivityVersion activity;
-	@Interchangeable(fieldTitle="Location", descend = true)
+	@Interchangeable(fieldTitle="Location"/*, descend = true*/)
 	private AmpLocation location;
 	@Interchangeable(fieldTitle="Location Percentage",fmPath="/Activity Form/Location/Locations/Location Item/location Percentage",required="/Activity Form/Location/Locations/Location percentage required")
 	@Validators (percentage="/Activity Form/Location/Locations/locationPercentageTotal" )

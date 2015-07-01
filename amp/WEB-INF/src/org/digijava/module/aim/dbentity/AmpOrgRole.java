@@ -18,7 +18,7 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
     private AmpActivityVersion activity;
 	@Interchangeable(fieldTitle="Organization")
 	private AmpOrganisation organisation;
-	@Interchangeable(fieldTitle="Role", descend=true)
+	@Interchangeable(fieldTitle="Role"/*, descend=true*/)
 	private AmpRole role;
 	@Interchangeable(fieldTitle="Percentage")
 	private Float 	percentage;

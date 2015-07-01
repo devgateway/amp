@@ -55,20 +55,11 @@ import clover.org.apache.commons.lang.StringUtils;
 
 
 
-@Path("activity/fields/{fieldName}")
+
 public class PossibleValuesEnumerator {
 	
-	@Context
-	private HttpServletRequest httpRequest;
-
 	public static final Logger LOGGER = Logger.getLogger(PossibleValuesEnumerator.class);
 	
-	@GET
-//	@Path("/fields/{fieldName}")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public List<JsonBean> getValues(@PathParam("fieldName") String fieldName) {
-		return getPossibleValuesForField(fieldName, AmpActivityFields.class);
-	}
 	
 	public static List<JsonBean> getPossibleValuesForField(String longFieldName, Class<?> clazz) {
 
@@ -110,7 +101,7 @@ public class PossibleValuesEnumerator {
 	private static List<JsonBean> getPossibleValuesForComplexField(Field field, String originalName) {
 		List<JsonBean> result = new ArrayList<JsonBean>();
 		/*AmpActivitySector || AmpComponentFunding || AmpActivityProgram*/
-		if (InterchangeUtils.getClassOfField(field).equals(AmpActivitySector.class)) {
+		if (InterchangeUtils.getClassOfField(field).equals(AmpSector.class) || InterchangeUtils.getClassOfField(field).equals(AmpActivitySector.class)) {
 			String configValue = getConfigValue(originalName, field);
 			if (configValue == null) {
 				/* FIXME: 
@@ -118,8 +109,8 @@ public class PossibleValuesEnumerator {
 				*/
 				return result;
 			}
-			List<AmpSector> sectors = getSectorList(configValue);
-			for (AmpSector sector : sectors) {
+			List<Object> sectors = InterchangeUtils.getClassOfField(field).equals(AmpSector.class) ? getSectorList(configValue) : getActivitySectorList(configValue);
+			for (Object sector : sectors) {
 				JsonBean item = null;
 				try {
 					item = setProperties(sector);
@@ -131,14 +122,14 @@ public class PossibleValuesEnumerator {
 				
 			}
 			
-		} else if (InterchangeUtils.getClassOfField(field).equals(AmpActivityProgram.class)) {
+		} else if (InterchangeUtils.getClassOfField(field).equals(AmpTheme.class) || InterchangeUtils.getClassOfField(field).equals(AmpActivityProgram.class)) {
 			String configValue = getConfigValue(originalName, field);
 			if (configValue == null) {
 				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.WRONG_PROGRAM_TYPE, field.getName())));
 				return result;
 			}
-			List<AmpTheme> themes = getThemeList(configValue);
-			for (AmpTheme theme : themes) {
+			List<Object> themes = InterchangeUtils.getClassOfField(field).equals(AmpTheme.class) ? getThemeList(configValue) : getActivityProgramList(configValue);
+			for (Object theme : themes) {
 				JsonBean item = null;
 				try {
 					item = setProperties(theme);
@@ -148,12 +139,11 @@ public class PossibleValuesEnumerator {
 				result.add(item);
 				
 			}
-			
-		} else if (InterchangeUtils.getClassOfField(field).equals(AmpComponentFunding.class)) {
-			
+
 		} else {
-			result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, field.getName() + "/config:" + originalName)));
-			return result;
+			
+//			result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, field.getName() + "/config:" + originalName)));
+//			return result;
 		}
 		return result;
 		
@@ -167,7 +157,31 @@ public class PossibleValuesEnumerator {
 		}
 		return null;
 	}
-	private static List<AmpSector> getSectorList(final String configType) {
+	
+	private static List<Object> getActivitySectorList(final String configType) {
+//		List<AmpSector> result = new ArrayList<AmpSector>();
+		final List<Long> sectorIds = new ArrayList<Long>();
+		PersistenceManager.getSession().doWork(new Work() {
+			public void execute(Connection conn) throws SQLException {
+				String allSectorsQuery = "SELECT amp_sector_id FROM all_sectors_with_levels WHERE sector_config_name=" + 
+										 "'" + configType +"'" ;
+				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allSectorsQuery, null)) {
+					ResultSet rs = rsi.rs;
+					while (rs.next()) 
+						sectorIds.add(rs.getLong("amp_sector_id"));
+					rs.close();
+				}
+			}
+		});		
+		
+		String ids = StringUtils.join(sectorIds, ",");
+		String queryString = "select ast from " + AmpActivitySector.class.getName() + " ast where ast.sectorId.ampSectorId in (" + ids + ")";
+		List<Object> objectList = PersistenceManager.getSession().createQuery(queryString).list();
+		return objectList;		
+	}
+	
+	
+	private static List<Object> getSectorList(final String configType) {
 //		List<AmpSector> result = new ArrayList<AmpSector>();
 		final List<Long> sectorIds = new ArrayList<Long>();
 		PersistenceManager.getSession().doWork(new Work() {
@@ -185,10 +199,31 @@ public class PossibleValuesEnumerator {
 		
 		String ids = StringUtils.join(sectorIds, ",");
 		String queryString = "select ast from " + AmpSector.class.getName() + " ast where ast.ampSectorId in (" + ids + ")";
-		List<AmpSector> objectList = PersistenceManager.getSession().createQuery(queryString).list();
+		List<Object> objectList = PersistenceManager.getSession().createQuery(queryString).list();
 		return objectList;
 	}
-	private static List<AmpTheme> getThemeList(final String configType) {
+	private static List<Object> getActivityProgramList(final String configType) {
+//		List<AmpSector> result = new ArrayList<AmpSector>();
+		final List<Long> programIds = new ArrayList<Long>();
+		PersistenceManager.getSession().doWork(new Work() {
+			public void execute(Connection conn) throws SQLException {
+				String allSectorsQuery = "SELECT amp_theme_id FROM all_programs_with_levels WHERE program_setting_name=" + 
+										 "'" + configType +"'" ;
+				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allSectorsQuery, null)) {
+					ResultSet rs = rsi.rs;
+					while (rs.next()) 
+						programIds.add(rs.getLong("amp_theme_id"));
+					rs.close();
+				}
+			}
+		});		
+		
+		String ids = StringUtils.join(programIds, ",");
+		String queryString = "select ast from " + AmpActivityProgram.class.getName() + " ast where ast.program.ampThemeId in (" + ids + ")";
+		List<Object> objectList = PersistenceManager.getSession().createQuery(queryString).list();
+		return objectList;
+	}
+	private static List<Object> getThemeList(final String configType) {
 //		List<AmpSector> result = new ArrayList<AmpSector>();
 		final List<Long> programIds = new ArrayList<Long>();
 		PersistenceManager.getSession().doWork(new Work() {
@@ -206,7 +241,7 @@ public class PossibleValuesEnumerator {
 		
 		String ids = StringUtils.join(programIds, ",");
 		String queryString = "select ast from " + AmpTheme.class.getName() + " ast where ast.ampThemeId in (" + ids + ")";
-		List<AmpTheme> objectList = PersistenceManager.getSession().createQuery(queryString).list();
+		List<Object> objectList = PersistenceManager.getSession().createQuery(queryString).list();
 		return objectList;
 	}
 	private static Field getPotentiallyDiscriminatedField(Class<?> clazz, String fieldName){ 
@@ -223,10 +258,14 @@ public class PossibleValuesEnumerator {
 		for (Field field: clazz.getDeclaredFields()) {
 			Interchangeable ant = field.getAnnotation(Interchangeable.class);
 			if (ant != null) {
+//				if (ant.descend()) {
+//					return getField(InterchangeUtils.getClassOfField(field), fieldname);
+//				}
 				if (fieldname.equals(ant.fieldTitle()))
 					return field;
 			}
 		}
+		
 		return null;
 	}
 	private static List<JsonBean> getPossibleValuesForField(Field field) {
@@ -238,10 +277,10 @@ public class PossibleValuesEnumerator {
 		if (clazz.isAssignableFrom(AmpCategoryValue.class))
 			return getPossibleCategoryValues(field);
 		
-		Field potentialDescend = getDescendField(clazz);
-		if (potentialDescend != null) {
-			return getPossibleValuesForField(potentialDescend);
-		}
+//		Field potentialDescend = getDescendField(clazz);
+//		if (potentialDescend != null) {
+//			return getPossibleValuesForField(potentialDescend);
+//		}
 		
 		String queryString = "select cls from " + clazz.getName() + " cls ";
 		List<Object> objectList= PersistenceManager.getSession().createQuery(queryString).list();
@@ -290,7 +329,7 @@ public class PossibleValuesEnumerator {
 		
 		return result; 
 	}
-	private static Field getDescendField(Class clazz) {
+	/*private static Field getDescendField(Class clazz) {
 		for (Field field : clazz.getDeclaredFields()) {
 			Interchangeable ant = field.getAnnotation(Interchangeable.class);
 			if (ant != null && ant.descend())
@@ -298,7 +337,7 @@ public class PossibleValuesEnumerator {
 		}
 		return null;
 	}
-	
+	*/
 	private static JsonBean setProperties(Object obj) throws NoSuchMethodException, 
 	SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		if (InterchangeUtils.isSimpleType(obj.getClass())) {

@@ -10,6 +10,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * Verifies if the field is found under the current level of fields enumeration
+ * 
  * @author Nadejda Mandrescu
  */
 public class ValidFieldValidator extends InputValidator {
@@ -22,8 +23,11 @@ public class ValidFieldValidator extends InputValidator {
 	@Override
 	public boolean isValid(ActivityImporter importer, JsonBean newFieldParent, JsonBean oldFieldParent,
 			JsonBean fieldDescription, String fieldPath) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean isValid = true;
+		if (fieldDescription == null) {
+			isValid = false;
+		}
+		return isValid;
 	}
 
 }

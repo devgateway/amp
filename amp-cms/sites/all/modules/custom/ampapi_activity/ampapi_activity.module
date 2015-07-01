@@ -13,6 +13,10 @@ interface activityMapperAutocompleteInterface {
   public function getAutocompleteValue($plugin, $data, $type);
 }
 
+interface activityMapperOptionsInterface {
+  public function getMatchedValue($plugin, $lookup_value);
+}
+
 /**
  * Implements hook_entity_info().
  */

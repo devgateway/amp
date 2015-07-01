@@ -167,7 +167,9 @@ public class FieldsEnumerator {
 		
 
 	}
-	
+	/**
+	 * fills the fieldTypes and fieldMaxLengths maps
+	 */
 	private static void fillAllFieldsLengthInformation(){
 		if (fieldTypes == null) {
 			fieldTypes = new HashMap<Field, String>();
@@ -241,7 +243,7 @@ public class FieldsEnumerator {
 		}
 		return bean;
 	}
-
+	
 	public static List<JsonBean> getAllAvailableFields() {
 		return getAllAvailableFields(AmpActivityFields.class, ContentTranslationUtil.multilingualIsEnabled());
 	}

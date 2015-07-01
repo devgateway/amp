@@ -5,7 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,7 +13,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
@@ -405,35 +403,6 @@ public class InterchangeUtils {
 				result = activities.get(0);
 			}
 		}
-		return result;
-	}
-	
-	protected static JsonBean validateExportFilter(JsonBean filterJson) {
-		JsonBean result = null;
-		InputValidatorProcessor validator = new InputValidatorProcessor();
-		List<String> filteredFields = new ArrayList<String>();
-		
-		if (filterJson != null) {
-			filteredFields = (List<String>) filterJson.get(ActivityEPConstants.FILTER_FIELDS);
-			
-		}
-		
-//		for (String filteredField : filteredFields) {
-//			
-//		}
-//		if (errors.size() == 0 && newActivity == null) {
-//			result = ApiError.toError(ApiError.UNKOWN_ERROR); 
-//		} else if (errors.size() > 0) {
-//			result = ApiError.toError(errors);
-//			result.set(ActivityEPConstants.ACTIVITY, oldJson);
-//		} else {
-//			List<JsonBean> activities = ProjectList.getActivitiesByIds(Arrays.asList(newActivity.getAmpActivityId()), true, true, true);
-//			if (activities == null || activities.size() == 0) {
-//				result = ApiError.toError(ApiError.UNKOWN_ERROR);
-//			} else {
-//				result = activities.get(0);
-//			}
-//		}
 		return result;
 	}
 }

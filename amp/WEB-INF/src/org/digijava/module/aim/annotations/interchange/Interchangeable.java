@@ -77,7 +77,7 @@ public @interface Interchangeable {
 	 * instead of the class containing this very field
 	 *  
 	 */
-	boolean descend() default false;
+//	boolean descend() default false;
 	
 	/** configured with option value, like "Primary Sector" */
     String discriminatorOption() default "";

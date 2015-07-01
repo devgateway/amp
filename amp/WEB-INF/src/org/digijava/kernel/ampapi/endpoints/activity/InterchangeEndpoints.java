@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -16,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 
@@ -32,6 +34,29 @@ public class InterchangeEndpoints {
 	@Context
 	private HttpServletRequest httpRequest;
 
+	/**
+	 * Returns a list of JSON objects, each describing a possible value that might be specified 
+	 * in an activity field 
+	 * 
+	 * 
+	 * 
+	 * @param fieldName, the Activity field title, underscorified (see <InterchangeUtils.underscorify for details>
+	 * @return list of JsonBean objects, each representing a possible value
+	 */
+	@GET
+	@Path("fields/{fieldName}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public List<JsonBean> getValues(@PathParam("fieldName") String fieldName) {
+		return PossibleValuesEnumerator.getPossibleValuesForField(fieldName, AmpActivityFields.class);
+	}
+
+	@GET
+	@Path("fields")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public List<JsonBean> getAvailableFields() {
+		return FieldsEnumerator.getAllAvailableFields();
+	}
+	
 	/**
 	 * Returns a JSON object with the list of all projects on the system, including its view and edit status for the current logged user.
 	 * If the user can view the project, the 'view' property of the project is set to true. False otherwise.

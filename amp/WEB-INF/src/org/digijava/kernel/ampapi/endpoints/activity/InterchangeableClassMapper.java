@@ -16,8 +16,6 @@ public class InterchangeableClassMapper {
 			put(java.lang.Long.class, "string");
 			// put(java.lang.Long.class, "int");
 			put(java.lang.Float.class, "float");
-			// put(AmpCategoryValue.class, "string");
-
 		}
 	};
 	

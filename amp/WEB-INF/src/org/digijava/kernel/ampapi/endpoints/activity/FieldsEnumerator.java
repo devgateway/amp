@@ -1,9 +1,13 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.lang.reflect.Field;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -18,9 +22,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -28,10 +35,20 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.time.StopWatch;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.hibernate.jdbc.Work;
+import org.hibernate.metadata.ClassMetadata;
+import org.hibernate.persister.entity.AbstractEntityPersister;
+import org.hibernate.persister.entity.SingleTableEntityPersister;
+
+import com.vividsolutions.jts.operation.IsSimpleOp;
+
+import clover.org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -48,10 +65,15 @@ public class FieldsEnumerator {
 
 	
 	
+	static {
+		fillAllFieldsLengthInformation();
+	}
+	
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public List<JsonBean> getAvailableFields() {
+		
 		return getAllAvailableFields();
 	}
 	/**
@@ -81,7 +103,85 @@ public class FieldsEnumerator {
 		}
 		return isEnabled;
 	}
+	
+	private static Map<String, Field> getInterchangeableFields(Class clazz) {
+		Map<String, Field> interFields = new HashMap<String, Field>();
+		Class wClass = clazz;
+		while (wClass != Object.class) {
+			Field[] declaredFields = wClass.getDeclaredFields();
+			for (Field field : declaredFields)
+				if (field.getAnnotation(Interchangeable.class) != null)
+					interFields.put(field.getName(), field);
+			wClass = (Class<?>) wClass.getGenericSuperclass();
+		}
+		return interFields;
+	}
+	
+	
+	
+	private static void fillFieldsLengthInformation(Class<?> clazz) {
+		final Map <String, String> dbTypes = new HashMap<String, String>();
+		final Map <String, Integer> maxLengths = new HashMap<String, Integer>();
+		ClassMetadata meta = PersistenceManager.getClassMetadata(clazz);
+		if (meta == null)
+			return;
+		AbstractEntityPersister entityPersister = (AbstractEntityPersister)meta;
+		String[] propertyNames = entityPersister.getPropertyNames();
+		final String tableName = entityPersister.getTableName();
+		Map<String, Field> interchangeableFields = getInterchangeableFields(clazz);
+		PersistenceManager.getSession().doWork(new Work() {
+			public void execute(Connection conn) throws SQLException {
+				String allSectorsQuery = "SELECT column_name, data_type, character_maximum_length "
+						+ "FROM INFORMATION_SCHEMA.COLUMNS WHERE character_maximum_length IS NOT NULL "
+						+ "AND table_name = '" + tableName + "'";
+				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allSectorsQuery, null)) {
+					ResultSet rs = rsi.rs;
+					while (rs.next()) {
+						dbTypes.put(rs.getString("column_name"), rs.getString("data_type"));
+						maxLengths.put(rs.getString("column_name"), rs.getInt("character_maximum_length"));
+					}
+					rs.close();
+				}
+			}
+		});
+		for (int i = 0; i < propertyNames.length; i++) {
+			String[] columnNames = entityPersister.getPropertyColumnNames(i);
+			if (columnNames.length > 0)
+			{
+				String colname = columnNames[0];
+				String fieldName = propertyNames[i];
+//				System.out.println(propertyNames[i] + "->" + colname + "(" + dbTypes.get(colname)+  "/" + maxLengths.get(colname) +")");
+				if (interchangeableFields.get(fieldName) != null) {
+					Field field = interchangeableFields.get(fieldName);
+					fieldTypes.put(field, dbTypes.get(colname)); //maxLengths.get(colname)
+					fieldMaxLengths.put(field, maxLengths.get(colname));
+				}
+			}
+		}
+		for (Field field : interchangeableFields.values()) {
+			Interchangeable ant = field.getAnnotation(Interchangeable.class);
+			if (ant != null && !ant.pickIdOnly() && !InterchangeUtils.isSimpleType(field.getType()))
+				fillFieldsLengthInformation(InterchangeUtils.getClassOfField(field));
 
+		}
+		
+
+	}
+	
+	private static void fillAllFieldsLengthInformation(){
+		if (fieldTypes == null) {
+			fieldTypes = new HashMap<Field, String>();
+			fieldMaxLengths = new HashMap<Field, Integer>();
+			fillFieldsLengthInformation(AmpActivityVersion.class);
+			
+		}
+	}
+	
+	public static Map<Field, String > fieldTypes;
+	public static Map<Field, Integer> fieldMaxLengths;
+	
+	
+	
 	
 	/**
 	 * describes a field in a JSON structure of: field_type: one of the types
@@ -132,7 +232,10 @@ public class FieldsEnumerator {
 		if (java.lang.String.class.equals(field.getType())) {
 			bean.set(ActivityEPConstants.TRANSLATABLE, multilingual && FieldsDescriptor.isTranslatable(field));
 		}
-		
+		String dbFieldType = fieldTypes.get(field); 
+		if (ActivityEPConstants.TYPE_VARCHAR.equals(fieldTypes.get(field)) && fieldMaxLengths.get(field) != null) {
+			bean.set(ActivityEPConstants.FIELD_LENGTH, fieldMaxLengths.get(field));
+		}
 		return bean;
 	}
 

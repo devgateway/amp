@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +17,6 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.reports.ReportCacher;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -24,6 +24,8 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
+import org.digijava.module.aim.dbentity.AmpActivityFields;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -177,7 +179,7 @@ public class ProjectList {
 						JsonBean bean = new JsonBean();
 						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID), rs.getLong("amp_activity_id"));
 						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.CREATED_DATE), formatISO8601Date(rs.getTimestamp("date_created")));
-						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_TITLE), rs.getString("name"));
+						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_TITLE), getTranslatableFieldValue("name", rs.getString("name"), rs.getLong("amp_activity_id")));
 						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_CODE), rs.getString("project_code"));
 						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.UPDATE_DATE), formatISO8601Date(rs.getTimestamp("date_updated")));
 						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID), rs.getString("amp_id"));
@@ -203,5 +205,24 @@ public class ProjectList {
 		return date == null ? null : dateFormatter.format(date);
 	}
 
-	
+	/**
+	 * Gets a object containing the values for requested languages. 
+	 * In fact the method returns a Map<String, String>, where the key is the code of the language and the value in that language
+	 * The keys (languages) is a reunion of language codes containing the default_locale, language parameter and translations parameter
+	 * 
+	 * @param fieldName name of the field
+	 * @param fieldValue value of the object
+	 * @param parentObjectId the object id of the activity
+	 * @return Object with translated values
+	 */
+	public static Object getTranslatableFieldValue(String fieldName, String fieldValue, Long parentObjectId) {
+		try {
+			Field field = AmpActivityFields.class.getDeclaredField(fieldName);
+			
+			return InterchangeUtils.getTranslationValues(field, AmpActivityVersion.class, fieldValue, parentObjectId);
+		} catch (Exception e) {
+			LOGGER.error("Couldn't translate the field value", e);
+			throw new RuntimeException(e);
+		} 
+	}
 }

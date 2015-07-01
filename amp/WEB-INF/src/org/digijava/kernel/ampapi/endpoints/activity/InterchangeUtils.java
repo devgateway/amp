@@ -11,18 +11,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.Validators;
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.editor.exception.EditorException;
+import org.digijava.module.editor.util.DbUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
  * Activity Import/Export Utility methods 
@@ -170,11 +182,21 @@ public class InterchangeUtils {
 		}
 		return bld.toString();
 	}
-	
-
 
 	public static boolean isCompositeField(Field field) {
 		return field.getAnnotation(InterchangeableDiscriminator.class) != null;
+	}
+	
+	public static boolean isTranslatbleClass(Class<?> classEntity) {
+		return classEntity.getAnnotation(TranslatableClass.class) != null;
+	}
+	
+	public static boolean isTranslatbleField(Field field) {
+		return field.getAnnotation(TranslatableField.class) != null;
+	}
+	
+	public static boolean isVersionableTextField(Field field) {
+		return field.getAnnotation(VersionableFieldTextEditor.class) != null;
 	}
 	
 	/**
@@ -210,17 +232,76 @@ public class InterchangeUtils {
 	 * 
 	 * @param AmpActivityVersion is the activity
 	 * @param filter is the JSON with a list of fields
-	 * @return
+	 * @return Json Activity
 	 */
 	public static JsonBean getActivity(AmpActivityVersion activity, JsonBean filter) {
 		try {
 			ActivityExporter exporter = new ActivityExporter();
-			
+		
 			return exporter.getActivity(activity, filter);
 		} catch (Exception e) {
-			LOGGER.error("Error in loading activity. " + e.getMessage());
-			throw new RuntimeException(e);
+		LOGGER.error("Error in loading activity. " + e.getMessage());
+		throw new RuntimeException(e);
 		}
+	}
+	
+	/**
+	 * Get the translation values of the field. 
+	 * @param field
+	 * @param object 
+	 * @param parentObject is the parent that contains the object in order to retrieve translations throu parent object id
+	 * @return object with the translated values
+	 */
+	public static Object getTranslationValues(Field field, Class<?> clazz, Object object, Long parentObjectId) throws NoSuchMethodException, 
+			SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, EditorException {
+		
+		TranslationSettings translationSettings = InterchangeUtils.getTranslationSettings();
+		String defaultLanguageCode = SiteUtils.getGlobalSite().getDefaultLanguage().getCode();
+		boolean isDefaultLanguage = translationSettings.getLanguage().equalsIgnoreCase(defaultLanguageCode);
+		Map<String, Object> fieldValue = null; 
+		if (InterchangeUtils.isTranslatbleClass(clazz) && InterchangeUtils.isTranslatbleField(field)) {
+			if (object != null) {
+				fieldValue = new HashMap<String, Object>();
+				
+				for (String translation : translationSettings.getTranslations()) {
+					String className = clazz.getName();
+					String fieldName = field.getName();
+					
+					String translatedText = ContentTranslationUtil.loadFieldTranslationInLocale(className, parentObjectId, fieldName, translation);
+					
+					if (translation.equals(defaultLanguageCode)) {
+						translatedText = (String) object;
+					}
+					
+					fieldValue.put(translation, getJsonStringValue(translatedText));
+				}
+			}
+			
+			return fieldValue;
+		} else if (InterchangeUtils.isVersionableTextField(field)) {
+			String editorText = DbUtil.getEditorBodyFiltered(SiteUtils.getGlobalSite(), (String) object, translationSettings.getLanguage());
+			return getJsonStringValue(editorText);
+		} else if (object instanceof String) {
+			String translatedText = isDefaultLanguage ? (String) object : TranslatorWorker.translateText((String) object);
+			return getJsonStringValue(translatedText);
+		}
+		
+		return object;
+	}
+	
+	/**
+	 * 
+	 * @param value 
+	 * @return value if is not blank or null (in order to have for empty strings null values in result JSON) 
+	 */
+	private static String getJsonStringValue(String value) {
+		return StringUtils.isBlank(value) ? null : value;
+	}
+	
+	public static TranslationSettings getTranslationSettings() {
+		ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+		
+		return (TranslationSettings) requestAttributes.getRequest().getAttribute(EPConstants.TRANSLATIONS);
 	}
 	
 	public static String getGetterMethodName(String fieldName) {
@@ -330,6 +411,4 @@ public class InterchangeUtils {
 		}
 		return result;
 	}
-	
-
 }

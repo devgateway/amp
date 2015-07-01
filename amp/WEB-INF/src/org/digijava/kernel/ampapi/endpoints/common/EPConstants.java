@@ -19,6 +19,7 @@ import org.dgfoundation.amp.reports.ActivityType;
  */
 public class EPConstants {
 	public static final String LANGUAGE = "language";
+	public static final String TRANSLATIONS = "translations";
 	
 	// config update
 	public static final String REPORT_NAME = "name";

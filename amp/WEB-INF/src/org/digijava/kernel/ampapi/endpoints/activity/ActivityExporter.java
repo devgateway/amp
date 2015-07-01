@@ -20,6 +20,7 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableDiscrimina
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.editor.exception.EditorException;
 
 /**
  * Class used for exporting an activity as a JSON
@@ -30,30 +31,33 @@ public class ActivityExporter {
 	
 	private static final Logger logger = Logger.getLogger(ActivityImporter.class);
 	
+	private List<String> filteredFields = new ArrayList<String>();
+	
 	/**
 	 * Activity Export as JSON 
 	 * 
 	 * @param activity actual activity to export
 	 * @param filter is the JSON with a list of fields
+	 * @param translations 
+	 * @param language 
 	 * @return
 	 * @throws DgException 
 	 */
 	public JsonBean getActivity(AmpActivityVersion activity, JsonBean filter) throws DgException {
 		JsonBean activityJson = new JsonBean();
-
+			
 		activityJson.set("amp_activity_id", activity.getAmpActivityId());
 		activityJson.set("amp_id", activity.getAmpId());
 		
-		List<String> filteredFields = new ArrayList<String>();
 		if (filter != null) {
-			filteredFields = (List<String>) filter.get(ActivityEPConstants.FILTER_FIELDS);
+			this.filteredFields = (List<String>) filter.get(ActivityEPConstants.FILTER_FIELDS);
 		}
 		
 		Field[] fields = activity.getClass().getSuperclass().getDeclaredFields();
 
 		for (Field field : fields) {
 			try {
-				readFieldValue(field, activity, activityJson, filteredFields, null);
+				readFieldValue(field, activity, activity, activityJson, null);
 			} catch (IllegalArgumentException | IllegalAccessException
 					| NoSuchMethodException | SecurityException
 					| InvocationTargetException e) {
@@ -74,8 +78,8 @@ public class ActivityExporter {
 	 * @param fieldPath
 	 * @return
 	 */
-	private void readFieldValue(Field field, Object fieldInstance, JsonBean resultJson, List<String> filteredFields, String fieldPath) throws IllegalArgumentException, 
-	IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException {
+	private void readFieldValue(Field field, Object fieldInstance, Object parentObject, JsonBean resultJson, String fieldPath) throws IllegalArgumentException, 
+	IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException, EditorException {
 		
 		Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
 		
@@ -90,8 +94,8 @@ public class ActivityExporter {
 				// check if the member is a collection
 				
 				if (InterchangeUtils.isCompositeField(field)) {
-					generateCompositeCollection(field, object, resultJson, filteredFields, fieldPath);
-				} if (isFiltered(filteredFieldPath, filteredFields)) {
+					generateCompositeCollection(field, object, resultJson, fieldPath);
+				} if (isFiltered(filteredFieldPath)) {
 					if (InterchangeUtils.isCollection(field)) {
 						Collection<Object> collectionItems = (Collection<Object>) object;
 						// if the collection is not empty, it will be parsed and a JSON with member details will be generated
@@ -99,7 +103,7 @@ public class ActivityExporter {
 						if (collectionItems != null) {
 							// iterate over the objects of the collection
 							for (Object item : collectionItems) {
-								collectionJson.add(getObjectJson(item, filteredFields, filteredFieldPath));
+								collectionJson.add(getObjectJson(item, filteredFieldPath));
 							}
 						}
 						// put the array with object values in the result JSON
@@ -107,12 +111,12 @@ public class ActivityExporter {
 					} else {
 
 						if (InterchangeableClassMapper.containsSupportedClass(field.getType()) || object == null) {
-							resultJson.set(fieldTitle, object);
+							resultJson.set(fieldTitle, InterchangeUtils.getTranslationValues(field, field.getDeclaringClass(), object, InterchangeUtils.getId(parentObject)));
 						} else {
 							if (interchangeable.pickIdOnly()) {
 								resultJson.set(fieldTitle, InterchangeUtils.getId(object));
 							} else {
-								resultJson.set(fieldTitle, getObjectJson(object, filteredFields, filteredFieldPath));
+								resultJson.set(fieldTitle, getObjectJson(object, filteredFieldPath));
 							}
 						}
 					}
@@ -128,15 +132,15 @@ public class ActivityExporter {
 	 * @param fieldPath
 	 * @return itemJson
 	 */
-	private JsonBean getObjectJson(Object item, List<String> filteredFields, String fieldPath) throws IllegalArgumentException, IllegalAccessException, 
-	NoSuchMethodException, SecurityException, InvocationTargetException {
+	private JsonBean getObjectJson(Object item, String fieldPath) throws IllegalArgumentException, IllegalAccessException, 
+	NoSuchMethodException, SecurityException, InvocationTargetException, EditorException {
 		
 		Field[] itemFields = item.getClass().getDeclaredFields();
 		JsonBean itemJson = new JsonBean();
 		
 		// iterate the fields of the object and generate the JSON
 		for (Field itemField : itemFields) {
-			readFieldValue(itemField, item, itemJson, filteredFields, fieldPath);	
+			readFieldValue(itemField, item, item, itemJson, fieldPath);	
 		}
 		
 		return itemJson;
@@ -151,10 +155,9 @@ public class ActivityExporter {
 	 * @param resultJson
 	 * @param filteredFields
 	 * @param fieldPath
-	 * @return
 	 */
-	private void generateCompositeCollection(Field field, Object object, JsonBean resultJson, List<String> filteredFields, String fieldPath) throws IllegalArgumentException, 
-	IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException {
+	private void generateCompositeCollection(Field field, Object object, JsonBean resultJson, String fieldPath) throws IllegalArgumentException, 
+	IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException, EditorException {
 		
 		InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
 		Interchangeable[] settings = discriminator.settings();
@@ -178,11 +181,11 @@ public class ActivityExporter {
 					if (obj instanceof AmpActivitySector) {
 						AmpActivitySector sector = (AmpActivitySector) obj;
 						String filteredFieldPath = filteredFieldsMap.get(sector.getClassificationConfig().getName());
-						compositeMap.get(sector.getClassificationConfig().getName()).add(getObjectJson(sector, filteredFields, filteredFieldPath));
+						compositeMap.get(sector.getClassificationConfig().getName()).add(getObjectJson(sector, filteredFieldPath));
 					} else if (obj instanceof AmpActivityProgram) {
 						AmpActivityProgram program = (AmpActivityProgram) obj;
 						String filteredFieldPath = filteredFieldsMap.get(program.getProgramSetting().getName());
-						compositeMap.get(program.getProgramSetting().getName()).add(getObjectJson(program, filteredFields, filteredFieldPath));
+						compositeMap.get(program.getProgramSetting().getName()).add(getObjectJson(program, filteredFieldPath));
 					}
 				}
 			}
@@ -191,7 +194,7 @@ public class ActivityExporter {
 		// put in the result JSON the generated structure
 		for (Interchangeable setting : settings) {
 			String fieldTitle = InterchangeUtils.underscorify(setting.fieldTitle());
-			if (isFiltered(fieldTitle, filteredFields)) {
+			if (isFiltered(fieldTitle)) {
 				resultJson.set(InterchangeUtils.underscorify(setting.fieldTitle()), compositeMap.get(setting.discriminatorOption()));
 			}
 		}
@@ -203,7 +206,7 @@ public class ActivityExporter {
 	 * @param filteredFields
 	 * @return boolean, if the field should be exported in the result Json 
 	 */
-	private boolean isFiltered(String filteredFieldPath, List<String> filteredFields) {
+	private boolean isFiltered(String filteredFieldPath) {
 		if (filteredFields.isEmpty()) 
 			return true;
 			

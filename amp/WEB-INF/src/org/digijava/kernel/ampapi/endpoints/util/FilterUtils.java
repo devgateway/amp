@@ -51,7 +51,7 @@ public class FilterUtils {
 			if (filterRules == null) {
 				filterRules = new MondrianReportFilters();
 			}
-			Map<String, Object> date = (LinkedHashMap<String, Object>) filter.get(dateColumn);
+			Map<String, Object> date = (Map<String, Object>) filter.get(dateColumn);
 			String start = String.valueOf(date.get("start"));
 			String end = String.valueOf(date.get("end"));
 			if (start != null || end != null) {
@@ -68,7 +68,6 @@ public class FilterUtils {
 			logger.error("cannot process date", e);
 		}
 		return filterRules;
-
 	}
 
 	/**
@@ -86,26 +85,29 @@ public class FilterUtils {
 		for (Entry<String, Object> entry : filter.entrySet()) {
 			if (validColumns.contains(entry.getKey())) {
 				if (entry.getValue() instanceof List) {
-					List<String> ids = getStringFromIntegerArray((List<Integer>) filter.get(entry.getKey()));
-					filterRules.addFilterRule(new ReportColumn(entry.getKey()),
-							new FilterRule(ids, true)); 
-				} 
+					List<String> ids = getStringsFromArray((List<?>) filter.get(entry.getKey()));
+					filterRules.addFilterRule(new ReportColumn(entry.getKey()), new FilterRule(ids, true)); 
+				} else 
+				if (entry.getValue() != null) {
+					String value = entry.getValue().toString();
+					filterRules.addFilterRule(new ReportColumn(entry.getKey()), new FilterRule(value, true));
+				}
 			}
 		}
 		
 		return filterRules;
 	}
 	
-	private static List<String>getStringFromIntegerArray(List<Integer>theArray){
-		List<String>s=new ArrayList<String>();
-		for (Integer intObject : theArray) {
-			s.add(intObject.toString());
+	private static List<String> getStringsFromArray(List<?> theArray) {
+		List<String> s = new ArrayList<String>();
+		for (Object obj : theArray) {
+			s.add(obj.toString());
 		}
 		return s;
 	}
 	
 	public static List<String> applyKeywordSearch(LinkedHashMap<String, Object> otherFilter) {
-		List<String> activitIds=new ArrayList<String>();
+		List<String> activitIds = new ArrayList<String>();
 
 		if (otherFilter!=null && otherFilter.get("keyword") != null) {
 			String keyword = ((Map<String,Object>)otherFilter).get("keyword").toString();

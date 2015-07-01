@@ -54,7 +54,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldTextEditor(fieldTitle = "Project Management")
 	protected String projectManagement;
 
-	@Interchangeable(fieldTitle = "Activity Budget",fmPath="/Activity Form/Identification/Activity Budget", required="_ALWAYS_")
+	@Interchangeable(fieldTitle = "Activity Budget",fmPath="/Activity Form/Identification/Activity Budget", required="/Activity Form/Identification/Required Validator for Activity Budget")
 	@VersionableFieldSimple(fieldTitle = "Activity Budget")
 	protected Integer budget;
 	

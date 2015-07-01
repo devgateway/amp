@@ -96,8 +96,9 @@ function generateHeaderHtml(headers) {
 	// Generate header HTML.
 	var header = "<thead>";
 	for (var i = 0; i < this.headerMatrix.length; i++) {
-		var row = "<tr>";
+		var row = "<tr>";		
 		for (var j = 0; j < this.headerMatrix[i].length; j++) {
+			var col = "";
 			if (this.headerMatrix[i][j] !== undefined) {
 				// Add sorting info: HEADER_HIERARCHY for first columns that
 				// define a hierarchy (if any), HEADER_COMMON for non
@@ -133,7 +134,7 @@ function generateHeaderHtml(headers) {
 					this.headerMatrix[i][j].columnName = "-";
 				}
 
-				var col = "<th" + style + id + " data-header-level='" + i + "'"
+				col = "<th" + style + id + " data-header-level='" + i + "'"
 						+ sortingType + " colspan='" + +groupCount + "'><div>"
 						+ this.headerMatrix[i][j].columnName + "</div></th>";
 
@@ -144,7 +145,7 @@ function generateHeaderHtml(headers) {
 					j -= 1;
 				}
 			} else {
-				var col = "<th class='all_null'>&nbsp;</th>";
+				col = "<th class='all_null'>&nbsp;</th>";
 			}
 			row += col;
 		}
@@ -263,6 +264,7 @@ function generateDataRows(page, options) {
 		var applyTotalRowStyle = false;
 		var row = "<tr>";
 		for (var j = 0; j < this.contentMatrix[i].length; j++) {
+			var cell = "";
 			if (j < this.metadataColumns.length) {
 				if (this.contentMatrix[i][j].isGrouped === true) {
 					continue;
@@ -314,13 +316,13 @@ function generateDataRows(page, options) {
 					}
 				}
 
-				var cell = "<th" + styleClass + rowSpan + ">";
+				cell = "<th" + styleClass + rowSpan + ">";
 				cell += cleanValue.text;
 				cell += "</th>";
 			} else {
 				// Change amount styles if is a subtotal.
 				if (this.contentMatrix[i][j].isTotal === true) {
-					var cell = "<td class='data total'>";
+					cell = "<td class='data total'>";
 					if (this.type === 'xlsx') {
 						cell += this.contentMatrix[i][j].value;
 					} else {
@@ -328,7 +330,7 @@ function generateDataRows(page, options) {
 					}
 					cell += "</td>";
 				} else {
-					var cell = "<td class='data'>";
+					cell = "<td class='data'>";
 					// Special case we receive the word "constant" from the
 					// endpoint (summarized reports).
 					if (this.summarizedReport === true && i === 0 && j === 0) {

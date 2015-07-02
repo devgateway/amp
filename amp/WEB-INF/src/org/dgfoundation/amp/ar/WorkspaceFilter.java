@@ -133,8 +133,6 @@ public class WorkspaceFilter
 			//+ Util.toCSString(ampTeams) + ") )" ;
 			
 		String DRAFT_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false ) ";
-		if (hideDraft)
-			TEAM_FILTER += "AND amp_activity_id IN (" + DRAFT_FILTER + ") ";		
 		
 		TEAM_FILTER += "AND approval_status IN ("+used_approval_status+") ";
 		// computed workspace filter -- append it to the team filter so normal

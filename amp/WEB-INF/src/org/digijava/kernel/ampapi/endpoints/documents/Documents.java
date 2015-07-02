@@ -49,7 +49,7 @@ public class Documents {
                         withGetterVisibility(JsonAutoDetect.Visibility.NONE));
 
         long end = System.currentTimeMillis();
-        logger.debug("getTopDocuments. execution time is: " + (end - start));
+        logger.info("getTopDocuments. execution time is: " + (end - start));
 
 		return mapper.writeValueAsString(documents);
 	}

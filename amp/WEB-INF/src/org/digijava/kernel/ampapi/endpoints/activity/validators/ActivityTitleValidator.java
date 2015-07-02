@@ -15,6 +15,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -50,20 +51,22 @@ public class ActivityTitleValidator extends InputValidator {
 		
 			// project_title = {en : "English Title",fr:"French title",...}
 			Map<String, Object> titleMap = translatedTitles.any();
+			String activityTitle = "";
+			String language = null;
 			for (String langCode : titleMap.keySet()) {
-				String title = (String) titleMap.get(langCode);
-			
-				// we validate titles in the current language or titles in ALL
-				// languages when multilingual is enabled
-				if (ContentTranslationUtil.multilingualIsEnabled() || TLSUtils.getEffectiveLangCode().equals(langCode)) {
-					List<AmpActivity> list = LuceneUtil.findActivitiesMoreLikeThis(request.getServletContext()
-							.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, title, langCode, 2);
-					isValid = !isTitleExistent(importer.getOldActivity(), list, importer.isUpdate());
-					if (!isValid) {
-						break;
+				if (SiteUtils.getGlobalSite().getDefaultLanguage().getCode().equals(langCode)) {
+					activityTitle = (String) titleMap.get(langCode);
+					if (ContentTranslationUtil.multilingualIsEnabled()) {
+						language = langCode;
 					}
+					break;
 				}
 
+			}
+			if (!activityTitle.isEmpty()) {
+				List<AmpActivity> list = LuceneUtil.findActivitiesMoreLikeThis(request.getServletContext()
+						.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, activityTitle, language, 2);
+				isValid = !isTitleExistent(importer.getOldActivity(), list, importer.isUpdate());
 			}
 		}
 

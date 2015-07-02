@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -69,31 +68,34 @@ public class SearchWorkspaces extends Action {
 		int stIndex = startIndexInt;
 		int edIndex = (startIndexInt + resultsInt)>ampWorkspaces.size()?ampWorkspaces.size():(startIndexInt + resultsInt);
 
-		Vector vect = new Vector();
+		List list = new ArrayList();
 
-		vect.addAll(ampWorkspaces);
+		list.addAll(ampWorkspaces);
 
 		Collection tempCol = new ArrayList();
 
 		for (int i = stIndex; i < edIndex; i++) {
-			tempCol.add(vect.get(i));
+			tempCol.add(list.get(i));
 		}
+
 		for (Iterator it = tempCol.iterator(); it.hasNext();) {
 			AmpTeam team = (AmpTeam) it.next();
 			JSONObject jteam = new JSONObject();
 			jteam.put("ID", team.getAmpTeamId());
 			jteam.put("name", team.getName());
             jteam.put("accessType", team.getAccessType());
-            if(team.getComputation()!=null&&team.getComputation()){
+
+            if (team.getComputation() != null && team.getComputation()) {
                  jteam.put("computation", "yes");
             }
-            else{
+            else {
                  jteam.put("computation", "no");
             }
-           JSONArray jsonOrganizationArray = new JSONArray();
-           Set<AmpOrganisation>   organizations=team.getOrganizations();
-             if(organizations!=null){
-               for(AmpOrganisation childOrg: organizations){
+
+            JSONArray jsonOrganizationArray = new JSONArray();
+            Set<AmpOrganisation> organizations = team.getOrganizations();
+            if (organizations != null) {
+               for (AmpOrganisation childOrg : organizations) {
                    JSONObject jChildOrg = new JSONObject();
                    jChildOrg.put("name", childOrg.getName());
                    jsonOrganizationArray.add( jChildOrg);
@@ -101,19 +103,21 @@ public class SearchWorkspaces extends Action {
             }
 
            JSONArray jsonChildrenTeamArray = new JSONArray();
-           Collection<AmpTeam> childrenTeams=TeamUtil.getAllChildrenWorkspaces(team.getAmpTeamId());
-            if(childrenTeams!=null){
-               for(AmpTeam childteam: childrenTeams){
+           Collection<AmpTeam> childrenTeams = TeamUtil.getAllChildrenWorkspaces(team.getAmpTeamId());
+            if (childrenTeams != null) {
+               for(AmpTeam childteam : childrenTeams) {
                    JSONObject jChildTeam = new JSONObject();
                    jChildTeam.put("name", childteam.getName());
                    jsonChildrenTeamArray.add(jChildTeam);
                }
             }
+
             jteam.put("childrenOrganizations", jsonOrganizationArray);
             jteam.put("childrenWorkspaces", jsonChildrenTeamArray);
 			jsonArray.add(jteam);
 
 		}
+
 		Integer totalRecords = ampWorkspaces.size();
 		json.put("recordsReturned", tempCol.size());
 		json.put("totalRecords", totalRecords);

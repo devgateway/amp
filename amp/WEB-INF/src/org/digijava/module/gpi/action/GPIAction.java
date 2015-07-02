@@ -34,7 +34,11 @@ public class GPIAction extends Action {
 	
 			// Setup filters.
 			ServletContext ampContext = getServlet().getServletContext();
-			useCase.setupFiltersData(gpiForm, request, ampContext);
+			useCase.setupFiltersData(gpiForm, request, ampContext);			
+			// AMP-20549: If some filters are not defined then we need to reset them.
+			if (gpiForm.getStartYears() == null) {
+				gpiForm.setReset(true);
+			}
 			if (gpiForm.isReset()) {
 				useCase.resetFilterSelections(gpiForm, ((TeamMember) request.getSession().getAttribute("currentMember")).getAppSettings());
 			}

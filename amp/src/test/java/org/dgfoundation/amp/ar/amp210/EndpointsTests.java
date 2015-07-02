@@ -51,7 +51,7 @@ public class EndpointsTests extends JerseyTest {
 		 	WebResource webResource = Client.create(clientConfig).resource("http://localhost:8080/rest/dashboard").path("/tops");
 		ClientResponse response = webResource.type(MediaType.APPLICATION_JSON_TYPE).accept(MediaType.APPLICATION_JSON_TYPE)
 				.get(ClientResponse.class);
-		List <Map<String,String>> json =response.getEntity(new GenericType (List.class));
+		List <Map<String,String>> json = null;//response.getEntity(new GenericType (List.class));
 		Map <String,String>agency = (Map<String,String>)json.get(0);
 		Map <String,String>region = (Map<String,String>)json.get(1);
 		Map <String,String>sector = (Map<String,String>)json.get(2);

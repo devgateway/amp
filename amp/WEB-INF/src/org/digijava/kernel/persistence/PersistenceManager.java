@@ -606,6 +606,20 @@ public class PersistenceManager {
 		}
 	}
 
+    public static void closeQuietly(Connection connection)
+    {
+        if (connection == null)
+            return;
+        try
+        {
+            connection.close();
+        }
+        catch(Exception e)
+        {
+            logger.error(e);
+        }
+    }
+
 	/**
 	 * extracts a Long from an object
 	 * @param obj

@@ -49,21 +49,25 @@ public class MonetConnection implements AutoCloseable {
 	}
 	
 	private static String url = null;
-	
-	public static String getJdbcUrl() {
-		try{Class.forName("nl.cwi.monetdb.jdbc.MonetDriver");}catch(Exception e){throw new RuntimeException(e);}
-		
-		if (MONET_CFG_OVERRIDE_URL != null)
-			return MONET_CFG_OVERRIDE_URL;
-		if (url == null) {
-			DataSource dataSource = getMonetDataSource();
-			org.apache.tomcat.jdbc.pool.DataSource src = (org.apache.tomcat.jdbc.pool.DataSource) dataSource;
-			String postgresUrl = src.getUrl().substring(0, src.getUrl().indexOf('?')); // jdbc:postgresql://localhost:5432/amp_moldova_210?useUnicode=true&characterEncoding=UTF-8&jdbcCompliantTruncation=false
-			String dbName = postgresUrl.substring(postgresUrl.lastIndexOf('/') + 1); 
-			url = String.format("jdbc:monetdb://localhost/%s", dbName);
-		}
-		return url;
-	}
+
+    public static String getJdbcUrl() {
+        try{Class.forName("nl.cwi.monetdb.jdbc.MonetDriver");}catch(Exception e){throw new RuntimeException(e);}
+
+        if (MONET_CFG_OVERRIDE_URL != null)
+            return MONET_CFG_OVERRIDE_URL;
+        if (url == null) {
+            DataSource dataSource = getMonetDataSource();
+            try {
+                url = (String)dataSource.getClass().getMethod("getUrl").invoke(dataSource);
+            } catch (Exception e) {
+                throw new IllegalStateException("The datasource does not implement 'getUrl()' method");
+            }
+            String postgresUrl = url.substring(0, url.indexOf('?')); // jdbc:postgresql://localhost:5432/amp_moldova_210?useUnicode=true&characterEncoding=UTF-8&jdbcCompliantTruncation=false
+            String dbName = postgresUrl.substring(postgresUrl.lastIndexOf('/') + 1);
+            url = String.format("jdbc:monetdb://localhost/%s", dbName);
+        }
+        return url;
+    }
 	
 	public static MonetConnection getConnection() {
 		try {

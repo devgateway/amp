@@ -99,7 +99,7 @@
  
  
    <category name="org.hibernate.SQL">
-       <priority value="INFO"/>   <!-- SET to TRACE in order to see queries and their value, INFO is default -->
+       <priority value="INFO"/>   <!-- ******** SET to TRACE in order to see queries and their value, INFO is default -->
    </category>
 
    <category name="org.hibernate.type">

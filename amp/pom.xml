@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.devgateway</groupId>
 	<artifactId>amp</artifactId>
-	<version>${buildVersion}</version>
+	<version>1</version>
 	<packaging>war</packaging>
 	<name>Aid Management Platform</name>
 	<properties>
@@ -1126,21 +1126,7 @@
 					    </configuration>
 					</execution>
 					<!-- Running npm -->
-					<execution>
-					    <id>npm install</id>
-					    <goals>
-					        <goal>npm</goal>
-					    </goals>
-					
-					    <!-- optional: default phase is "generate-resources" -->
-					    <phase>generate-sources</phase>
-					
-					    <configuration>
-					        <!-- optional: The default argument is actually  "install", so unless you need to run some other npm command, 
-					        you can remove this whole <configuration> section.-->
-					        <arguments>install</arguments>
-					    </configuration>
-					</execution>
+
 					<!-- Running gulp -->
 					<execution>
 					    <id>gulp build</id>
@@ -1211,7 +1197,7 @@
 										<ignore></ignore>
 									</action>
 								</pluginExecution>
-								<pluginExecution>
+								<!--pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>
 											com.github.eirslett
@@ -1244,8 +1230,8 @@
 									<action>
 										<ignore></ignore>
 									</action>
-								</pluginExecution>
-								<pluginExecution>
+								</pluginExecution-->
+								<!--pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>
 											com.github.eirslett
@@ -1261,7 +1247,7 @@
 									<action>
 										<ignore></ignore>
 									</action>
-								</pluginExecution>
+								</pluginExecution-->
 								<pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>

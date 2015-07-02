@@ -133,10 +133,10 @@ public class LuceneUtil implements Serializable {
      * @author Arty
      */
     public final static String ACTIVITY_INDEX_SUFFIX = "activity";
-    public final static String ACTVITY_INDEX_DIRECTORY = LUCENE_BASE_DIR + "/" + ACTIVITY_INDEX_SUFFIX;
+    public final static String ACTVITY_INDEX_DIRECTORY = LUCENE_BASE_DIR + "\\" + ACTIVITY_INDEX_SUFFIX;
 
     public final static String PLEDGE_INDEX_SUFFIX = "pledge";
-    public final static String PLEDGE_INDEX_DIRECTORY = LUCENE_BASE_DIR + "/" + PLEDGE_INDEX_SUFFIX;
+    public final static String PLEDGE_INDEX_DIRECTORY = LUCENE_BASE_DIR + "\\" + PLEDGE_INDEX_SUFFIX;
     
 	private static final int CHUNK_SIZE = 10000;
 	

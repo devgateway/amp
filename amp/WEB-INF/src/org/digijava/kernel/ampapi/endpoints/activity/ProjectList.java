@@ -125,21 +125,15 @@ public class ProjectList {
 	private static List<Long> getViewableActivityIds(TeamMember tm) {
 		List<Long> viewableActivityIds = new ArrayList<Long>();
 		try {
-			StringBuffer finalActivityQuery = new StringBuffer();
+
 			User user = UserUtils.getUserByEmail(tm.getEmail());
 			// Gets the list of all the workspaces that the current logged user
 			// is a member
 			Collection<AmpTeamMember> teamMemberList = TeamMemberUtil.getAllAmpTeamMembersByUser(user);
-
+			
 			// for every workspace generate the workspace query to get the
 			// activities.
-			for (AmpTeamMember teamMember : teamMemberList) {
-				TeamMember aux = new TeamMember(teamMember);
-				finalActivityQuery.append(WorkspaceFilter.generateWorkspaceFilterQuery(aux));
-				finalActivityQuery.append(" UNION ");
-			}
-			int index = finalActivityQuery.lastIndexOf("UNION");
-			final String query = finalActivityQuery.substring(0, index);
+			final String query = WorkspaceFilter.getViewableActivitiesIdByTeams( teamMemberList);
 			viewableActivityIds = PersistenceManager.getSession().createSQLQuery(query).list();
 		} catch (DgException e1) {
 			LOGGER.warn("Couldn't generate the List of viewable activity ids", e1);
@@ -147,6 +141,8 @@ public class ProjectList {
 		}
 		return viewableActivityIds;
 	}
+
+
 
 	/**
 	 * Returns all AmpActivityVersions from AMP that are included/excluded from

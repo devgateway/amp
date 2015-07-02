@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.ar;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -295,6 +296,17 @@ public class WorkspaceFilter
 			return generateWorkspaceFilterQuery(tm.getMemberId(), accessType, approved, hideDraft);
 		}
 	}
+
+	public static String getViewableActivitiesIdByTeams(Collection<AmpTeamMember> teamMemberList) {
+		StringBuffer finalActivityQuery = new StringBuffer();
+		for (AmpTeamMember teamMember : teamMemberList) {
+			TeamMember aux = new TeamMember(teamMember);
+			finalActivityQuery.append(WorkspaceFilter.generateWorkspaceFilterQuery(aux));
+			finalActivityQuery.append(" UNION ");
+		}
+		int index = finalActivityQuery.lastIndexOf("UNION");
+		return  finalActivityQuery.substring(0, index);
+	}	
 	
 	/**
 	 * if forcedTeamMemberId == null, use the logged-in user (or public view). Else use the forcedTeamMember <b>which might have the special value TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES</b>

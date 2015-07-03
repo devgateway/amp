@@ -79,7 +79,7 @@
 	               </td>
 	               <td align="center" class="inside" style="font-size: 11px; color: #484846;">
                        <c:if test="${element.column1 != null}">
-                       		<aim:formatNumber value="${element.column1}"/>
+                       		${element.column1DisplayValue}
                     	</c:if>
                     	<c:if test="${element.column1 == null}">
                     		<digi:trn><%=org.digijava.module.gpi.util.GPIConstants.NO_DATA %></digi:trn>
@@ -87,14 +87,14 @@
                    </td>
                    <td align="center" class="inside" style="font-size: 11px; color: #484846;">
                        <c:if test="${element.column2 != null}">
-                       		<aim:formatNumber value="${element.column2}"/>
+                       		${element.column2DisplayValue}
                     	</c:if>
                     	<c:if test="${element.column2 == null}">
                     		<digi:trn><%=org.digijava.module.gpi.util.GPIConstants.NO_DATA %></digi:trn>
                     	</c:if>
                    </td>
                    <td align="center" class="inside" style="font-size: 11px; color: #484846;">
-                       <fmt:formatNumber type="number" value="${element.column3}" pattern="###" maxFractionDigits="0" />%
+                       ${element.column3DisplayValue}
                    </td>
 	           </tr>
 	       </logic:iterate>

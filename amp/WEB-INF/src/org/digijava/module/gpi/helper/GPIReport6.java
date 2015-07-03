@@ -14,6 +14,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -31,7 +32,10 @@ import org.digijava.module.aim.dbentity.GPISetup;
 import org.digijava.module.aim.exception.NoCategoryClassException;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.GPISetupUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
@@ -40,6 +44,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.gpi.helper.row.GPIReport1Row;
+import org.digijava.module.gpi.helper.row.GPIReport5aRow;
 import org.digijava.module.gpi.helper.row.GPIReport6Row;
 import org.digijava.module.gpi.helper.row.GPIReportAbstractRow;
 import org.digijava.module.gpi.model.GPIFilter;
@@ -73,6 +78,8 @@ public class GPIReport6 extends GPIAbstractReport {
 		Date[] endDates = new Date[yearRange];
 		double fromExchangeRate;
 		double toExchangeRate;
+		BigDecimal multiplier = new BigDecimal(MondrianReportUtils.getAmountMultiplier(Integer.valueOf(FeaturesUtil
+				.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))));
 
 		if (setup != null) {
 			try {
@@ -110,6 +117,7 @@ public class GPIReport6 extends GPIAbstractReport {
 								new java.sql.Date(transactionDate.getTime()));
 					}
 					BigDecimal amount = new BigDecimal(CurrencyWorker.convert1((Double) data[7], fromExchangeRate, toExchangeRate));
+					amount = amount.multiply(multiplier);
 
 					// This is Actual or Planned for funding.
 					String auxCategoryValue = data[10].toString();
@@ -320,6 +328,30 @@ public class GPIReport6 extends GPIAbstractReport {
 		// Calculate final percentages and add 'All Donors' row.
 		if (!newList.isEmpty()) {
 			newList = this.calculatePercentages(newList, startYear, endYear);
+		}
+		
+		// Format numbers.
+		for (GPIReportAbstractRow row : newList) {
+			GPIReport6Row auxRow = (GPIReport6Row) row;
+			if (auxRow.getColumn1() != null) {
+				if (auxRow.getColumn1().doubleValue() != 0) {
+					auxRow.setColumn1DisplayValue(FormatHelper.formatNumber(auxRow.getColumn1().doubleValue()));
+				} else {
+					auxRow.setColumn1DisplayValue("0");
+				}
+			} else {
+				auxRow.setColumn1DisplayValue(GPIConstants.NO_DATA);
+			}
+			if (auxRow.getColumn2() != null) {
+				if (auxRow.getColumn2().doubleValue() != 0) {
+					auxRow.setColumn2DisplayValue(FormatHelper.formatNumber(auxRow.getColumn2().doubleValue()));
+				} else {
+					auxRow.setColumn2DisplayValue("0");
+				}
+			} else {
+				auxRow.setColumn2DisplayValue(GPIConstants.NO_DATA);
+			}
+			auxRow.setColumn3DisplayValue("" + Math.round(auxRow.getColumn3()) + "%");
 		}
 
 		return newList;

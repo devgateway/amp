@@ -78,23 +78,13 @@
 	                   <bean:write name="element" property="year"/>
 	               </td>
 	               <td align="center" class="inside" style="font-size: 11px; color: #484846;">
-	               		<c:if test="${element.column1 != null}">
-                       		<aim:formatNumber value="${element.column1}"/>
-                    	</c:if>
-                    	<c:if test="${element.column1 == null}">
-                    		<digi:trn><%=org.digijava.module.gpi.util.GPIConstants.NO_DATA %></digi:trn>
-                    	</c:if>
+						${element.column1DisplayValue}
                    </td>
                    <td align="center" class="inside" style="font-size: 11px; color: #484846;">
-                       	<c:if test="${element.column2 != null}">
-                       		<aim:formatNumber value="${element.column2}"/>
-                    	</c:if>
-                    	<c:if test="${element.column2 == null}">
-                    		<digi:trn><%=org.digijava.module.gpi.util.GPIConstants.NO_DATA %></digi:trn>
-                    	</c:if>
+						${element.column2DisplayValue}
                    </td>
                    <td align="center" class="inside" style="font-size: 11px; color: #484846;">
-                       <fmt:formatNumber type="number" value="${element.column3}" pattern="###" maxFractionDigits="0" />%
+                       ${element.column3DisplayValue}
                    </td>
 	           </tr>
 	       </logic:iterate>

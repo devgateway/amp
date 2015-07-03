@@ -29,12 +29,12 @@ public class GPIReport1Export extends GPIAbstractExport {
 			auxRow.setDonorGroup(row.getDonorGroup().getOrgGrpName());
 			auxRow.setYear(new Integer(row.getYear()).toString());
 			if(row.getColumn1() != null) {
-				auxRow.setColumn1(FormatHelper.getDecimalFormat().format(row.getColumn1()));
+				auxRow.setColumn1(row.getColumn1().toString());
 			} else {
 				auxRow.setColumn1(GPIConstants.NO_DATA);
 			}
 			if(row.getColumn2() != null) {
-				auxRow.setColumn2(FormatHelper.getDecimalFormat().format(row.getColumn2()));
+				auxRow.setColumn2(row.getColumn2().toString());
 			} else {
 				auxRow.setColumn2(GPIConstants.NO_DATA);
 			}

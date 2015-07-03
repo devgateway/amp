@@ -9,6 +9,8 @@ import java.util.Map;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gpi.helper.row.GPIReport6Row;
 import org.digijava.module.gpi.helper.row.GPIReportAbstractRow;
 import org.digijava.module.gpi.util.GPIConstants;
@@ -28,17 +30,9 @@ public class GPIReport6Export extends GPIAbstractExport {
 			AuxRow3 auxRow = new AuxRow3();
 			auxRow.setDonorGroup(row.getDonorGroup().getOrgGrpName());
 			auxRow.setYear(new Integer(row.getYear()).toString());
-			if(row.getColumn1() != null) {
-				auxRow.setColumn1(FormatHelper.getDecimalFormat().format(row.getColumn1()));
-			} else {
-				auxRow.setColumn1(GPIConstants.NO_DATA);
-			}
-			if(row.getColumn2() != null) {
-				auxRow.setColumn2(FormatHelper.getDecimalFormat().format(row.getColumn2()));
-			} else {
-				auxRow.setColumn2(GPIConstants.NO_DATA);
-			}
-			auxRow.setColumn3(new Integer(new Float(row.getColumn3()).intValue()).toString() + "%");
+			auxRow.setColumn1(row.getColumn1DisplayValue());
+			auxRow.setColumn2(row.getColumn2DisplayValue());			
+			auxRow.setColumn3(row.getColumn3DisplayValue());
 			list.add(auxRow);
 		}
 
@@ -65,9 +59,21 @@ public class GPIReport6Export extends GPIAbstractExport {
 				"Indicator 6", this.getLangCode(),
 				this.getSite().getId()));
 		parameters.put("GPI_LAST_YEAR", new Integer(year).toString());
-		parameters.put("GPI_CURRENCY_MSG", TranslatorWorker.translateText("All the amounts are in thousands (000) ",
-				this.getLangCode(), this.getSite().getId())
-				+ " " + this.getCurrency());
+		
+		String units = "";
+		switch (FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)) {
+		case "0":
+			units = "All the amounts are in units";
+			break;
+		case "1":
+			units = "All the amounts are in thousands (000)";
+			break;
+		case "2":
+			units = "All the amounts are in millions (000000)";
+			break;
+		}
+		parameters.put("GPI_CURRENCY_MSG", TranslatorWorker.translateText(units) + " " + this.getCurrency());
+		
 		return parameters;
 	}
 

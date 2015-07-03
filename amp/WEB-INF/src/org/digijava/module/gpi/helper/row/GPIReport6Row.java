@@ -15,10 +15,13 @@ public class GPIReport6Row extends GPIReportAbstractRow {
 	private int year;
 	// Number of projects using country results framework
 	private BigDecimal column1;
+	private String column1DisplayValue;
 	// Total Number of Projects
 	private BigDecimal column2;
+	private String column2DisplayValue;
 	// Indicator 1
 	private float column3;
+	private String column3DisplayValue;
 
 	public int getYear() {
 		return year;
@@ -99,5 +102,29 @@ public class GPIReport6Row extends GPIReportAbstractRow {
 		if (year != other.year)
 			return false;
 		return true;
+	}
+
+	public String getColumn1DisplayValue() {
+		return column1DisplayValue;
+	}
+
+	public void setColumn1DisplayValue(String column1DisplayValue) {
+		this.column1DisplayValue = column1DisplayValue;
+	}
+
+	public String getColumn2DisplayValue() {
+		return column2DisplayValue;
+	}
+
+	public void setColumn2DisplayValue(String column2DisplayValue) {
+		this.column2DisplayValue = column2DisplayValue;
+	}
+
+	public String getColumn3DisplayValue() {
+		return column3DisplayValue;
+	}
+
+	public void setColumn3DisplayValue(String column3DisplayValue) {
+		this.column3DisplayValue = column3DisplayValue;
 	}
 }

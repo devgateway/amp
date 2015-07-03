@@ -52,7 +52,7 @@ public class AmpSector implements Serializable, Comparable, Identifiable,
 	
 	@Interchangeable(fieldTitle="Indicators")
 	private Set<AmpIndicator> indicators;
-	@Interchangeable(fieldTitle="Sectors", pickIdOnly=true)
+//	@Interchangeable(fieldTitle="Sectors", pickIdOnly=true)
 	private Set<AmpSector> sectors;
 	@Interchangeable(fieldTitle="Deleted")
 	private Boolean deleted;

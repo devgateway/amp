@@ -15,11 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class AmpAgreement implements Serializable, Versionable {
 	private static final long serialVersionUID = 1L;
 
-	@Interchangeable(fieldTitle="ID")
+	@Interchangeable(fieldTitle="ID", id = true)
 	private Long id;
 	@Interchangeable(fieldTitle="Code",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Code")
 	private String code;
-	@Interchangeable(fieldTitle="Title",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Title")
+	@Interchangeable(fieldTitle="Title",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Title", value = true)
 	@TranslatableField
 	private String title;
 	@Interchangeable(fieldTitle="Effective Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Effective Date")

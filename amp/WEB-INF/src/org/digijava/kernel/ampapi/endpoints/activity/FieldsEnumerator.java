@@ -193,7 +193,8 @@ public class FieldsEnumerator {
 		bean.set(ActivityEPConstants.REQUIRED, InterchangeUtils.getRequiredValue(field));
 		
 		/* list type */
-		if (!InterchangeableClassMapper.containsSimpleClass(field.getType())) {
+
+		if (!InterchangeUtils.isSimpleType(field.getType())) {
 			bean.set(ActivityEPConstants.IMPORTABLE, interchangeble.importable() ? true : false);
 			if (InterchangeUtils.isCollection(field) && !hasMaxSizeValidatorEnabled(field)) {
 				bean.set(ActivityEPConstants.MULTIPLE_VALUES, true);

@@ -319,6 +319,18 @@ public class InterchangeUtils {
 				((fieldName.length() > 1) ? fieldName.substring(1) : "");
 	}	
 	
+	
+	/**
+	 * recursively gets the id for this object -- directly a field marked as such, or an underlying field
+	 * @param obj
+	 * @return
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
+	//TODO: optimize it. it doesn't have to be n*n for field descent
 	public static Long  getId(Object obj) throws NoSuchMethodException,	SecurityException, 
 		IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		
@@ -332,10 +344,14 @@ public class InterchangeUtils {
 						Method meth = obj.getClass().getMethod(getGetterMethodName(field.getName()));
 						if (Long.class.isAssignableFrom(field.getType())) {
 							return (Long) meth.invoke(obj);
-						} else {
-							/*we need to go deeper*/
-							return getId(meth.invoke(obj));
-						}
+						} 
+						
+//						else  						
+//							if (String.class.isAssignableFrom(field.getType())) {
+//								return (String) meth.invoke(obj);
+//							
+//
+//						}
 					}
 				}
 			}
@@ -441,7 +457,7 @@ public class InterchangeUtils {
 		}
 		
 		for (String filteredItem : filteredItems) {
-			List<JsonBean> possibleValues = PossibleValuesEnumerator.getPossibleValuesForField(filteredItem, AmpActivityFields.class);
+			List<JsonBean> possibleValues = PossibleValuesEnumerator.getPossibleValuesForField(filteredItem, AmpActivityFields.class, null);
 			if (possibleValues.size() == 1) {
 				Object error = possibleValues.get(0).get(ApiError.JSON_ERROR_CODE);
 				if( error != null) {

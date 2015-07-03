@@ -35,9 +35,9 @@ SaikuTableRenderer.prototype._render = function(data, options) {
 
                 var html =  self.internalRender(self._data, self._options);
                 $(self._options.htmlObject).html(html);
-                if(Settings.AMP_REPORT_API_BRIDGE){
+                /*if(Settings.AMP_REPORT_API_BRIDGE){
                 	checkTable(self._options.htmlObject);
-                }
+                }*/
                 $(".tooltipped").tipsy();
                 _.defer(function(that) {
                     if (self._options.hasOwnProperty('batch') && self._options.hasBatchResult) {                        

@@ -5,11 +5,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -19,6 +22,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
@@ -30,10 +34,10 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
@@ -240,53 +244,56 @@ public class InterchangeUtils {
 		
 			return exporter.getActivity(activity, filter);
 		} catch (Exception e) {
-		LOGGER.error("Error in loading activity. " + e.getMessage());
-		throw new RuntimeException(e);
+			LOGGER.error("Error in loading activity. " + e.getMessage());
+			throw new RuntimeException(e);
 		}
 	}
 	
 	/**
 	 * Get the translation values of the field. 
 	 * @param field
-	 * @param object 
+	 * @param class used for retrieving translation
+	 * @param fieldValue 
 	 * @param parentObject is the parent that contains the object in order to retrieve translations throu parent object id
 	 * @return object with the translated values
 	 */
-	public static Object getTranslationValues(Field field, Class<?> clazz, Object object, Long parentObjectId) throws NoSuchMethodException, 
+	public static Object getTranslationValues(Field field, Class<?> clazz, Object fieldValue, Long parentObjectId) throws NoSuchMethodException, 
 			SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, EditorException {
 		
 		TranslationSettings translationSettings = InterchangeUtils.getTranslationSettings();
-		String defaultLanguageCode = SiteUtils.getGlobalSite().getDefaultLanguage().getCode();
-		boolean isDefaultLanguage = translationSettings.getLanguage().equalsIgnoreCase(defaultLanguageCode);
-		Map<String, Object> fieldValue = null; 
-		if (InterchangeUtils.isTranslatbleClass(clazz) && InterchangeUtils.isTranslatbleField(field)) {
-			if (object != null) {
-				fieldValue = new HashMap<String, Object>();
+		
+		Map<String, Object> fieldTrnValues = null; 
+		if (InterchangeUtils.isTranslatbleClass(clazz) && (InterchangeUtils.isTranslatbleField(field) || InterchangeUtils.isVersionableTextField(field))) {
+			if (fieldValue != null) {
+				fieldTrnValues = new HashMap<String, Object>();
 				
-				for (String translation : translationSettings.getTranslations()) {
+				for (String translation : translationSettings.getTrnLocaleCodes()) {
 					String className = clazz.getName();
 					String fieldName = field.getName();
 					
-					String translatedText = ContentTranslationUtil.loadFieldTranslationInLocale(className, parentObjectId, fieldName, translation);
+					String translatedText = (String) fieldValue;
 					
-					if (translation.equals(defaultLanguageCode)) {
-						translatedText = (String) object;
+					if (InterchangeUtils.isVersionableTextField(field)) {
+						translatedText = DbUtil.getEditorBodyFiltered(SiteUtils.getGlobalSite(), (String) fieldValue, translation);
+					} else if (!translationSettings.isDefaultLanguage(translation)) {
+						translatedText = ContentTranslationUtil.loadFieldTranslationInLocale(className, parentObjectId, fieldName, translation);
 					}
 					
-					fieldValue.put(translation, getJsonStringValue(translatedText));
+					fieldTrnValues.put(translation, getJsonStringValue(translatedText));
 				}
 			}
 			
-			return fieldValue;
-		} else if (InterchangeUtils.isVersionableTextField(field)) {
-			String editorText = DbUtil.getEditorBodyFiltered(SiteUtils.getGlobalSite(), (String) object, translationSettings.getLanguage());
-			return getJsonStringValue(editorText);
-		} else if (object instanceof String) {
-			String translatedText = isDefaultLanguage ? (String) object : TranslatorWorker.translateText((String) object);
+			return fieldTrnValues;
+		} else if (fieldValue instanceof String) {
+			boolean isBaseLangDefault = translationSettings.isDefaultLanguage(translationSettings.getBaseLangCode());
+			boolean toTranslate = clazz.equals(AmpCategoryValue.class) && field.getName().equals("value");
+			
+			// now we check if is only a CategoryValue field and the field name is value
+			String translatedText = !isBaseLangDefault && toTranslate ? TranslatorWorker.translateText((String) fieldValue) : (String) fieldValue;
 			return getJsonStringValue(translatedText);
 		}
 		
-		return object;
+		return fieldValue;
 	}
 	
 	/**
@@ -299,9 +306,9 @@ public class InterchangeUtils {
 	}
 	
 	public static TranslationSettings getTranslationSettings() {
-		ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+		HttpServletRequest requestAttributes = TLSUtils.getRequest();
 		
-		return (TranslationSettings) requestAttributes.getRequest().getAttribute(EPConstants.TRANSLATIONS);
+		return (TranslationSettings) requestAttributes.getAttribute(EPConstants.TRANSLATIONS);
 	}
 	
 	public static String getGetterMethodName(String fieldName) {
@@ -410,5 +417,41 @@ public class InterchangeUtils {
 			}
 		}
 		return result;
+	}
+	
+	public static boolean validateFilterActivityFields(JsonBean filterJson, JsonBean result) {
+		List<String> filteredItems = new ArrayList<String>();
+		String message = "Invalid filter. The usage should be {\"" + ActivityEPConstants.FILTER_FIELDS + "\" : [\"field1\", \"field2\", ..., \"fieldn\"]}";
+		JsonBean errorBean = ApiError.toError(message);
+		
+		if (filterJson != null) {
+			try {
+				filteredItems = (List<String>) filterJson.get(ActivityEPConstants.FILTER_FIELDS);
+				if (filteredItems == null) {
+					result.set(ApiError.JSON_ERROR_CODE, errorBean.get(ApiError.JSON_ERROR_CODE));
+					
+					return false;
+				}
+			} catch (Exception e) {
+				LOGGER.warn("Error in validating fields filter JSON. " + e.getMessage());
+				result.set(ApiError.JSON_ERROR_CODE, errorBean.get(ApiError.JSON_ERROR_CODE));
+				
+				return false;
+			}
+		}
+		
+		for (String filteredItem : filteredItems) {
+			List<JsonBean> possibleValues = PossibleValuesEnumerator.getPossibleValuesForField(filteredItem, AmpActivityFields.class);
+			if (possibleValues.size() == 1) {
+				Object error = possibleValues.get(0).get(ApiError.JSON_ERROR_CODE);
+				if( error != null) {
+					result.set(ApiError.JSON_ERROR_CODE, error);
+					
+					return false;
+				}
+			}
+		}
+		
+		return true;
 	}
 }

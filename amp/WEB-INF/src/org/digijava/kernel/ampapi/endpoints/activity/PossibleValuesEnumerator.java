@@ -87,7 +87,7 @@ public class PossibleValuesEnumerator {
 			Field finalField = getPotentiallyDiscriminatedField(clazz, longFieldName);
 			if (finalField == null) {
 				List<JsonBean> result = new ArrayList<JsonBean>();
-				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, fieldName)));
+				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, longFieldName)));
 				return result;
 			} else {
 				if (InterchangeUtils.isCompositeField(finalField)) {

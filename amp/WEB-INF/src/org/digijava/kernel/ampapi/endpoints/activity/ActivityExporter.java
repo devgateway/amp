@@ -44,10 +44,11 @@ public class ActivityExporter {
 	 * @throws DgException 
 	 */
 	public JsonBean getActivity(AmpActivityVersion activity, JsonBean filter) throws DgException {
-		JsonBean activityJson = new JsonBean();
-			
-		activityJson.set("amp_activity_id", activity.getAmpActivityId());
-		activityJson.set("amp_id", activity.getAmpId());
+		JsonBean resultJson = new JsonBean();
+	    
+		if (!InterchangeUtils.validateFilterActivityFields(filter, resultJson)) {
+			return resultJson;
+		}
 		
 		if (filter != null) {
 			this.filteredFields = (List<String>) filter.get(ActivityEPConstants.FILTER_FIELDS);
@@ -57,7 +58,7 @@ public class ActivityExporter {
 
 		for (Field field : fields) {
 			try {
-				readFieldValue(field, activity, activity, activityJson, null);
+				readFieldValue(field, activity, activity, resultJson, null);
 			} catch (IllegalArgumentException | IllegalAccessException
 					| NoSuchMethodException | SecurityException
 					| InvocationTargetException e) {
@@ -66,7 +67,7 @@ public class ActivityExporter {
 			}
 		}
 		
-		return activityJson;
+		return resultJson;
 	}
 	
 	/**

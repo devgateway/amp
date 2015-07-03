@@ -89,16 +89,16 @@ public class ActivityExporter {
 			String fieldTitle = InterchangeUtils.underscorify(interchangeable.fieldTitle());
 			
 			String filteredFieldPath = fieldPath == null ? fieldTitle : fieldPath + "~" + fieldTitle;
-			Object object = field.get(fieldInstance);
+			Object fieldValue = field.get(fieldInstance);
 			
 			if (!interchangeable.pickIdOnly()) {
 				// check if the member is a collection
 				
 				if (InterchangeUtils.isCompositeField(field)) {
-					generateCompositeCollection(field, object, resultJson, fieldPath);
-				} if (isFiltered(filteredFieldPath)) {
+					generateCompositeCollection(field, fieldValue, fieldPath, resultJson);
+				} else if(isFiltered(filteredFieldPath)) {
 					if (InterchangeUtils.isCollection(field)) {
-						Collection<Object> collectionItems = (Collection<Object>) object;
+						Collection<Object> collectionItems = (Collection<Object>) fieldValue;
 						// if the collection is not empty, it will be parsed and a JSON with member details will be generated
 						List<JsonBean> collectionJson = new ArrayList<JsonBean>();
 						if (collectionItems != null) {
@@ -111,13 +111,13 @@ public class ActivityExporter {
 						resultJson.set(fieldTitle, collectionJson);
 					} else {
 
-						if (InterchangeableClassMapper.containsSupportedClass(field.getType()) || object == null) {
-							resultJson.set(fieldTitle, InterchangeUtils.getTranslationValues(field, field.getDeclaringClass(), object, InterchangeUtils.getId(parentObject)));
+						if (InterchangeableClassMapper.containsSupportedClass(field.getType()) || fieldValue == null) {
+							resultJson.set(fieldTitle, InterchangeUtils.getTranslationValues(field, field.getDeclaringClass(), fieldValue, InterchangeUtils.getId(parentObject)));
 						} else {
 							if (interchangeable.pickIdOnly()) {
-								resultJson.set(fieldTitle, InterchangeUtils.getId(object));
+								resultJson.set(fieldTitle, InterchangeUtils.getId(fieldValue));
 							} else {
-								resultJson.set(fieldTitle, getObjectJson(object, filteredFieldPath));
+								resultJson.set(fieldTitle, getObjectJson(fieldValue, filteredFieldPath));
 							}
 						}
 					}
@@ -157,7 +157,7 @@ public class ActivityExporter {
 	 * @param filteredFields
 	 * @param fieldPath
 	 */
-	private void generateCompositeCollection(Field field, Object object, JsonBean resultJson, String fieldPath) throws IllegalArgumentException, 
+	private void generateCompositeCollection(Field field, Object object, String fieldPath, JsonBean resultJson) throws IllegalArgumentException, 
 	IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException, EditorException {
 		
 		InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);

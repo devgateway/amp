@@ -10,6 +10,7 @@ public class InterchangeableClassMapper {
 	protected static final Map<Class<?>, String> classToCustomType = new HashMap<Class<?>, String>() {
 		{
 			put(java.lang.String.class, "string");
+			put(java.lang.Integer.class, "string");
 			put(java.util.Date.class, "date");
 			put(java.lang.Double.class, "float");
 			put(java.lang.Boolean.class, "boolean");

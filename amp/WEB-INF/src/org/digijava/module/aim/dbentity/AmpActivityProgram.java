@@ -12,9 +12,9 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable 
         private Long ampActivityProgramId;
         @Interchangeable(fieldTitle="Program Percentage")
         private Float programPercentage;
-        @Interchangeable(fieldTitle="Program", id=true)
+        @Interchangeable(fieldTitle="Program")
         private AmpTheme program;
-        @Interchangeable(fieldTitle="Activity", pickIdOnly = true)
+//        @Interchangeable(fieldTitle="Activity", pickIdOnly = true)
         private AmpActivityVersion activity;
         private AmpActivityProgramSettings programSetting;
         public Long getAmpActivityProgramId() {

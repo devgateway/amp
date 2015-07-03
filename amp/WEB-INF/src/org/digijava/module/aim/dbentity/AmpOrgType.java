@@ -17,9 +17,9 @@ import org.digijava.module.aim.util.NameableOrIdentifiable;
 
 @TranslatableClass (displayName = "Organisation Type")
 public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimensionable, HierarchyListable, NameableOrIdentifiable {
-	@Interchangeable(fieldTitle="Organization Type ID")
+	@Interchangeable(fieldTitle="Organization Type ID", id = true)
 	private Long ampOrgTypeId;
-	@Interchangeable(fieldTitle="Organization Type")
+	@Interchangeable(fieldTitle="Organization Type", value = true)
 	@TranslatableField
 	private String orgType;
 	

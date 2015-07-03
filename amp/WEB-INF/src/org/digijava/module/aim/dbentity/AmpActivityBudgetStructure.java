@@ -10,6 +10,7 @@ import org.digijava.module.aim.util.Output;
 public class AmpActivityBudgetStructure implements Versionable, Serializable, Cloneable{
 	
 	private Long ampActivityBudgetStructureId;
+	@Interchangeable (fieldTitle ="Budget Structure Name")
 	private String budgetStructureName;
 	
 	//@Interchangeable (fieldTitle ="Budget Structure Percentage" ,fmPath="/Activity Form/Budget Structure/Budget Structure/budgetStructurePercentage")

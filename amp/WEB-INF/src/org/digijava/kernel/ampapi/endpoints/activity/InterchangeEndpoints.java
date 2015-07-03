@@ -47,7 +47,7 @@ public class InterchangeEndpoints {
 	@Path("fields/{fieldName}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public List<JsonBean> getValues(@PathParam("fieldName") String fieldName) {
-		return PossibleValuesEnumerator.getPossibleValuesForField(fieldName, AmpActivityFields.class);
+		return PossibleValuesEnumerator.getPossibleValuesForField(fieldName, AmpActivityFields.class, null);
 	}
 
 	@GET

@@ -72,7 +72,7 @@ public class AuthRequestFilter implements ContainerRequestFilter {
 	}
 	
 	private void addTranslations(SiteDomain siteDomain) {
-		Locale defaultLocale = SiteUtils.getGlobalSite().getDefaultLanguage();
+		Locale defaultLocale = SiteUtils.getDefaultLanguages(SiteUtils.getDefaultSite());
 		Locale currentLocale = (Locale) httpRequest.getAttribute(org.digijava.kernel.Constants.NAVIGATION_LANGUAGE);
 		String currentLocaleCode = currentLocale != null ? currentLocale.getCode() : defaultLocale.getCode();
 		

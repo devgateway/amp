@@ -674,6 +674,7 @@ public class AmpMessageWorker {
         	String team=StringUtils.split(receivers[j],";")[1];
         	if(teamsToNotify.toString().contains(team)){
         		finalReceivers.append(receivers[j]);
+        		finalReceivers.append(",");
         	}
         }
         

@@ -1,7 +1,6 @@
 package org.digijava.module.message.triggers;
 
-import org.digijava.kernel.ampapi.endpoints.dto.Activity;
-import org.digijava.kernel.user.User;
+import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.message.helper.Event;
@@ -27,7 +26,8 @@ public class ActivityValidationWorkflowTrigger extends Trigger {
 		AmpActivityVersion activity=(AmpActivityVersion) source;
 		e.getParameters().put(PARAM_NAME,activity.getName());
 		e.getParameters().put(PARAM_TRIGGER_SENDER,MessageConstants.SENDER_TYPE_SYSTEM);
-		e.getParameters().put(PARAM_URL, "aim/selectActivityTabs.do~ampActivityId="+activity.getAmpActivityId());
+		
+		e.getParameters().put(PARAM_URL, ActivityGatekeeper.buildPreviewUrl(activity.getAmpActivityId().toString()));
 		e.getParameters().put(PARAM_ACTIVITY_ID, activity.getAmpActivityId());
 		
 //		e.getParameters().put(PARAM_CREATED_BY, activity.getActivityCreator());

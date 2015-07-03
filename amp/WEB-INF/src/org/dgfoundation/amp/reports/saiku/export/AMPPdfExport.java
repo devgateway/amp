@@ -8,6 +8,7 @@ import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.saiku.web.export.PdfReport;
@@ -35,9 +36,8 @@ import com.itextpdf.tool.xml.pipeline.html.HtmlPipelineContext;
 public class AMPPdfExport extends PdfReport {
 
 	public byte[] pdf(JsonBean jb, String type) throws Exception {
-		Rectangle size = PageSize.A4.rotate();
-		Document doc = new Document(size);
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		Document doc = createDocument(jb);
 		PdfWriter writer = PdfWriter.getInstance(doc, os);
 		doc.open();
 		populatePdf(doc, writer, jb, type);
@@ -49,7 +49,9 @@ public class AMPPdfExport extends PdfReport {
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		Date date = new Date();
 		String content = AMPJSConverter.convertToHtml(jb, type);
-		content = "<div>" + "AMP Export - " + dateFormat.format(date) + "</div><div>&nbsp;</div>" + content;
+		content = "<!DOCTYPE html><html><head><title></title></head><body><div>" + "AMP Export - "
+				+ dateFormat.format(date) + "</div><div>&nbsp;</div>" + content + "</body></html>";
+		// System.out.println(content);
 
 		InputStream contentIs = new ByteArrayInputStream(content.getBytes("UTF-8"));
 		// CSS
@@ -72,5 +74,35 @@ public class AMPPdfExport extends PdfReport {
 		int n = contentIs.available();
 		byte[] bytes = new byte[n];
 		contentIs.read(bytes, 0, n);
+	}
+
+	private Document createDocument(JsonBean jb) {
+		Document doc = new Document(calculateDocumentSize(calculateWidth(jb)));
+		return doc;
+	}
+
+	private int calculateWidth(JsonBean jb) {
+		int ret = 0;
+		if (jb.get("headers") != null) {
+			ret = ((List) jb.get("headers")).size();
+		}
+		return ret;
+	}
+
+	private Rectangle calculateDocumentSize(int resultWidth) {
+		Rectangle size = PageSize.A4.rotate();
+		if (resultWidth >= 5) {
+			size = PageSize.A3.rotate();
+		}
+		if (resultWidth >= 10) {
+			size = PageSize.A2.rotate();
+		}
+		if (resultWidth >= 15) {
+			size = PageSize.A1.rotate();
+		}
+		if (resultWidth >= 20) {
+			size = PageSize.A0.rotate();
+		}
+		return size;
 	}
 }

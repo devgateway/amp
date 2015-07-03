@@ -96,7 +96,7 @@ function generateHeaderHtml(headers) {
 	// Generate header HTML.
 	var header = "<thead>";
 	for (var i = 0; i < this.headerMatrix.length; i++) {
-		var row = "<tr>";		
+		var row = "<tr>";
 		for (var j = 0; j < this.headerMatrix[i].length; j++) {
 			var col = "";
 			if (this.headerMatrix[i][j] !== undefined) {
@@ -135,7 +135,7 @@ function generateHeaderHtml(headers) {
 				}
 
 				col = "<th" + style + id + " data-header-level='" + i + "'"
-						+ sortingType + " colspan='" + +groupCount + "'><div>"
+						+ sortingType + " colspan='" + groupCount + "'><div>"
 						+ this.headerMatrix[i][j].columnName + "</div></th>";
 
 				// We change 'j' in order to skip the next N columns.
@@ -230,6 +230,9 @@ function generateContentHtml(page, options) {
 			var cell = page.pageArea.contents[this.headerMatrix[this.lastHeaderRow][i].hierarchicalName];
 			if (this.type === 'xlsx') {
 				totalValue += cell.value;
+			} else if (this.type === 'pdf') {
+				totalValue += "<div class='total'>" + cell.displayedValue
+						+ "</div>";
 			} else {
 				totalValue += cell.displayedValue;
 			}
@@ -289,19 +292,16 @@ function generateDataRows(page, options) {
 				if (this.contentMatrix[i][j].isTotal === true) {
 					if (applyTotalRowStyle === false
 							&& cleanValue.text.length > 0) {
-						// This flag indicates in which column we start
-						// applying
+						// This flag indicates in which column we start applying
 						// the total style.
 						applyTotalRowStyle = true;
 					}
 
 					// Apply the special style for subtotal rows but
-					// starting in
-					// the right column index.
+					// starting in the right column index.
 					if (applyTotalRowStyle === true) {
 						// Trying something new here: show tooltip on the
-						// now
-						// empty "Hierarchy Value Totals" row.
+						// now empty "Hierarchy Value Totals" row.
 						if (cleanValue.text != undefined) {
 							styleClass = " class='row_total tooltipped' original-title='"
 									+ cleanValue.text + "' ";
@@ -325,6 +325,10 @@ function generateDataRows(page, options) {
 					cell = "<td class='data total'>";
 					if (this.type === 'xlsx') {
 						cell += this.contentMatrix[i][j].value;
+					} else if (this.type === 'pdf') {
+						cell += "<div class='total'>"
+								+ this.contentMatrix[i][j].displayedValue
+								+ "</div>";
 					} else {
 						cell += this.contentMatrix[i][j].displayedValue;
 					}

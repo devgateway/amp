@@ -59,6 +59,7 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
+import org.digijava.module.message.triggers.ActivityValidationWorkflowTrigger;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
@@ -94,10 +95,11 @@ public class ActivityUtil {
 		AmpActivityVersion oldA = am.getObject();
 
 		boolean newActivity = oldA.getAmpActivityId() == null;
+		AmpActivityVersion a=null;
 		try 
 		{
 			AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
-			AmpActivityVersion a = saveActivityNewVersion(am.getObject(), am.getTranslationHashMap().values(), 
+			a = saveActivityNewVersion(am.getObject(), am.getTranslationHashMap().values(), 
 					ampCurrentMember, draft, session, rejected, true);
 			am.setObject(a);
 		} catch (Exception exception) {
@@ -107,6 +109,11 @@ public class ActivityUtil {
 		} finally {
 			ActivityGatekeeper.unlockActivity(String.valueOf(am.getId()), am.getEditingKey());
 			AmpActivityModel.endConversation();
+	        
+			if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(a.getApprovalStatus())) {
+            	new ActivityValidationWorkflowTrigger(a);
+            }
+	        
 			try {
 				ServletContext sc = wicketSession.getHttpSession().getServletContext();
 				Site site = wicketSession.getSite();

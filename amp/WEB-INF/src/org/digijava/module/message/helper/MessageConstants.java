@@ -9,6 +9,7 @@ import org.digijava.module.message.triggers.ActivityProposedApprovalDateTrigger;
 import org.digijava.module.message.triggers.ActivityProposedCompletionDateTrigger;
 import org.digijava.module.message.triggers.ActivityProposedStartDateTrigger;
 import org.digijava.module.message.triggers.ActivitySaveTrigger;
+import org.digijava.module.message.triggers.ActivityValidationWorkflowTrigger;
 import org.digijava.module.message.triggers.ApprovedActivityTrigger;
 import org.digijava.module.message.triggers.ApprovedCalendarEventTrigger;
 import org.digijava.module.message.triggers.ApprovedResourceShareTrigger;
@@ -55,7 +56,9 @@ public class MessageConstants {
                                                                 PendingResourceShareTrigger.class,
                                                                 ApprovedResourceShareTrigger.class,
                                                                 RejectResourceSharetrigger.class,
-                                                                UserRegistrationTrigger.class};
+                                                                UserRegistrationTrigger.class,
+                                                                ActivityValidationWorkflowTrigger.class
+                                                                };
 
     public static final  String[] triggerName=new String[] {"User added to workspace", 
     														"Save Actvity",
@@ -78,7 +81,8 @@ public class MessageConstants {
                                                             "Resource Share is Pending Approval",
                                                             "Resource Share is Approved",
                                                             "Reject Resource Share",
-                                                            "New User Registration"};
+                                                            "New User Registration",
+                                                            "Activity validation workflow notification"};
 
 	public static final String PRIORITY_LEVEL_NAME= "Priorty level";
 	public static final String PRIORITY_LEVEL_KEY= "priorty_level";

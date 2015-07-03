@@ -43,7 +43,9 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
 import org.digijava.module.calendar.dbentity.Calendar;
-import org.hibernate.*;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
@@ -737,13 +739,31 @@ public class TeamMemberUtil {
 		}
 		return member;
 	}
+	
+	public static Collection<AmpTeamMember> getAllAmpTeamMembersByAmpTeamMemberId(Collection<Long> ampTeamMemberIds) {
+		Session session = null;
+		Query qry = null;
+		Collection<AmpTeamMember> result= null;
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select tm from "
+					+ AmpTeamMember.class.getName()
+					+ " tm where (tm.ampTeamMemId in(:ampTeamMemberIds))";
+			qry = session.createQuery(queryString);
+			
+			qry.setParameterList("ampTeamMemberIds", ampTeamMemberIds);
+			
+			result	=	qry.list();
+		} catch (Exception e) {
+			logger.error("Unable to get team Member", e);
+		}
+		return result;
+	}
 
 	public static Collection<AmpTeamMember> getAllAmpTeamMembersByUser(User user) {
 		Session session = null;
 		Query qry = null;
-		AmpTeamMember member = null;
 		Collection<AmpTeamMember> result= null;
-		//if(user == null) return null;
 		try {
 			session = PersistenceManager.getSession();
 			String queryString = "select tm from "

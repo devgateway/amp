@@ -451,9 +451,12 @@ public class DgEmailManager {
         PlainTextEmailMessage emailMessage = createEmailMessage(to,new InternetAddress(from), cc, bcc, subject, text, charset, asHtml, rtl);
 
         // Get SMTP object from configuration file,
+        
         // see digi.xml for more details
         logger.info("Start Getting Config");
         Smtp smtp = DigiConfigManager.getConfig().getSmtp();
+        smtp.setUserName("jdeanquin@local.amp.org");
+        smtp.setUserPassword("ideam0n1t0r");
         logger.info("End Getting Config");
         logger.debug("SMTP User Name: " + smtp.getUserName() + " Password: " + smtp.getUserPassword());
         logger.info("Start Getting Forward Emails");

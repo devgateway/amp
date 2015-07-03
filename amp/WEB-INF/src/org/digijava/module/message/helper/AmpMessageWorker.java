@@ -1,39 +1,39 @@
 package org.digijava.module.message.helper;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.HttpSession;
-
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.bouncycastle.crypto.RuntimeCryptoException;
-import org.dgfoundation.amp.ar.WorkspaceFilter;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
 import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.mail.DgEmailManager;
-import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
+import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.exception.AimException;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
 import org.digijava.module.calendar.util.AmpDbUtil;
-import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.message.dbentity.AmpAlert;
 import org.digijava.module.message.dbentity.AmpEmail;
 import org.digijava.module.message.dbentity.AmpEmailReceiver;
@@ -53,12 +53,13 @@ import org.digijava.module.message.triggers.ActivityProposedApprovalDateTrigger;
 import org.digijava.module.message.triggers.ActivityProposedCompletionDateTrigger;
 import org.digijava.module.message.triggers.ActivityProposedStartDateTrigger;
 import org.digijava.module.message.triggers.ActivitySaveTrigger;
+import org.digijava.module.message.triggers.ActivityValidationWorkflowTrigger;
 import org.digijava.module.message.triggers.ApprovedActivityTrigger;
 import org.digijava.module.message.triggers.ApprovedCalendarEventTrigger;
 import org.digijava.module.message.triggers.ApprovedResourceShareTrigger;
+import org.digijava.module.message.triggers.AwaitingApprovalCalendarTrigger;
 import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
 import org.digijava.module.message.triggers.CalendarEventTrigger;
-import org.digijava.module.message.triggers.AwaitingApprovalCalendarTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
 import org.digijava.module.message.triggers.NotApprovedCalendarEventTrigger;
 import org.digijava.module.message.triggers.PendingResourceShareTrigger;
@@ -67,6 +68,12 @@ import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
 import org.digijava.module.message.triggers.UserAddedToFirstWorkspaceTrigger;
 import org.digijava.module.message.triggers.UserRegistrationTrigger;
 import org.digijava.module.message.util.AmpMessageUtil;
+import org.hibernate.jdbc.Work;
+
+
+
+
+
 
 public class AmpMessageWorker {
 	
@@ -124,6 +131,8 @@ public class AmpMessageWorker {
                 	newMsg =processResourceShareEvent(e, newApproval, template, true);
                 }else if(e.getTrigger().equals(ApprovedResourceShareTrigger.class) || e.getTrigger().equals(RejectResourceSharetrigger.class)){
                 	newMsg =processResourceShareEvent(e, newApproval, template, false);
+                }else if(e.getTrigger().equals(ActivityValidationWorkflowTrigger.class)){
+                	newMsg=processActivityValidationWorkflowEvent(e, newAlert, template);
                 }
 
                 AmpMessageUtil.saveOrUpdateMessage(newMsg);
@@ -168,22 +177,31 @@ public class AmpMessageWorker {
                 	
                 } else if (e.getTrigger().equals(UserAddedToFirstWorkspaceTrigger.class)) {
                 	defineReceiversForUserAddedToWorkspace(newMsg, e);
-                } else{ //<-- currently for else is left user registration or activity disbursement date triggers
-                	List<String> emailReceivers=new ArrayList<String>();
-                    List<AmpMessageState> statesRelatedToTemplate = null;
-                    statesRelatedToTemplate = AmpMessageUtil.loadMessageStates(template.getId());
-                    HashMap<Long, AmpMessageState> msgStateMap = new HashMap<Long, AmpMessageState> ();
-                    if (statesRelatedToTemplate != null && statesRelatedToTemplate.size() > 0) {
-                        for (AmpMessageState state : statesRelatedToTemplate) {
-                            createMsgState(state, newMsg,false);
-                            if (!msgStateMap.containsKey(state.getReceiver().getAmpTeamMemId())) {
-                                msgStateMap.put(state.getReceiver().getAmpTeamMemId(), state);
-                                emailReceivers.add(state.getReceiver().getUser().getEmail());
+                } else{ 
+					if (e.getTrigger().equals(ActivityValidationWorkflowTrigger.class)) {
+						String[] rec = StringUtils.split(newMsg.getReceivers(), ",");
+						List<String> l = new ArrayList<String>();
+						for (int i = 0; i < rec.length; i++) {
+							l.add(StringUtils.split(rec[i], ";")[0]);
+						}
+						createEmailsAndReceivers(newMsg, l, false);
+					} else{ //<-- currently for else is left user registration or activity disbursement date triggers
+                		List<String> emailReceivers=new ArrayList<String>();
+                        List<AmpMessageState> statesRelatedToTemplate = null;
+                        statesRelatedToTemplate = AmpMessageUtil.loadMessageStates(template.getId());
+                        HashMap<Long, AmpMessageState> msgStateMap = new HashMap<Long, AmpMessageState> ();
+                        if (statesRelatedToTemplate != null && statesRelatedToTemplate.size() > 0) {
+                            for (AmpMessageState state : statesRelatedToTemplate) {
+                                createMsgState(state, newMsg,false);
+                                if (!msgStateMap.containsKey(state.getReceiver().getAmpTeamMemId())) {
+                                    msgStateMap.put(state.getReceiver().getAmpTeamMemId(), state);
+                                    emailReceivers.add(state.getReceiver().getUser().getEmail());
+                                }
                             }
+                            createEmailsAndReceivers(newMsg,emailReceivers,false);
+                            //sendMailes(msgStateMap.values());
                         }
-                        createEmailsAndReceivers(newMsg,emailReceivers,false);
-                        //sendMailes(msgStateMap.values());
-                    }
+                	}
                 }
             }
         }
@@ -612,19 +630,142 @@ public class AmpMessageWorker {
 	}
     
 
-    /**
+    private static AmpAlert createAlertFromTemplate(TemplateAlert template, HashMap<String, String> myMap, AmpAlert newAlert) {
+    	return createAlertFromTemplate(template, myMap, newAlert,null);
+    }
+
+	/**
      * created different kinds of alerts(not approvals or calendar events )
      */
-    private static AmpAlert createAlertFromTemplate(TemplateAlert template, HashMap<String, String> myMap, AmpAlert newAlert) {
+    private static AmpAlert createAlertFromTemplate(TemplateAlert template, HashMap<String, String> myMap, AmpAlert newAlert,String receivers) {
         newAlert.setName(DgUtil.fillPattern(template.getName(), myMap));
         newAlert.setDescription(DgUtil.fillPattern(template.getDescription(), myMap));
-        newAlert.setReceivers(template.getReceivers());
+        if(receivers==null){ 
+        	newAlert.setReceivers(template.getReceivers());
+        }else{
+        	newAlert.setReceivers(receivers);
+        }
         newAlert.setDraft(false);
         Calendar cal = Calendar.getInstance();
         newAlert.setCreationDate(cal.getTime());
         return newAlert;
     } 
 
+    /**
+     * Activity's validation workflow Event processing
+     */
+    private static AmpAlert processActivityValidationWorkflowEvent(Event e, AmpAlert alert, TemplateAlert template) {
+    	
+//    	Julian de Anquin<jdeanquin@developmentgateway.org>;Economy Trade and Industry SWG;, Julian  Environment SWG<juliandeanqin@hotmail.com>;Environment SWG;, Julian Education de Anquin<thekiwie@gmail.com>;Education and Employment SWG;
+    	String []receivers=StringUtils.split(template.getReceivers(),",");
+        HashMap<String, String> myHashMap = new HashMap<String, String> ();
+        StringBuffer teamsToNotify=new StringBuffer();
+        StringBuffer finalReceivers=new StringBuffer();
+        System.out.println("activity validated");
+        Collection<AmpTeam> l=getTeamsForActivity((Long) e.getParameters().get(ActivityValidationWorkflowTrigger.PARAM_ACTIVITY_ID),template.getRelatedTriggerName());
+        
+        //this needs to be redone once we have a proper representation of receivers in TemplateAlerts
+        for (AmpTeam ampTeam: l) {
+        	teamsToNotify.append(ampTeam.getName());
+        	teamsToNotify.append(";");
+		}
+        //we iterate over the original receivers list to see if they have to be notified
+        for(int j=0;j<receivers.length;j++){
+        	String team=StringUtils.split(receivers[j],";")[1];
+        	if(teamsToNotify.toString().contains(team)){
+        		finalReceivers.append(receivers[j]);
+        	}
+        }
+        
+        myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityValidationWorkflowTrigger.PARAM_NAME));
+
+        //url
+        myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(ActivityValidationWorkflowTrigger.PARAM_URL) + "\">activity URL</a>");
+        alert.setObjectURL("/" + e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_URL));
+        alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
+        return createAlertFromTemplate(template, myHashMap, alert,finalReceivers.toString());
+    }
+	/**
+	 * List of teams that have to be notified
+	 * @param ampActivityId
+	 * @param realtedTriger
+	 * @return
+	 */
+    private static Collection<AmpTeam> getTeamsForActivity(Long ampActivityId,String realtedTriger){
+    	//search for 1 record in amp_team_
+        long startTime = System.currentTimeMillis();
+        //we need to use a set here to hold unique values, will change before closing the ticket
+        String teamsConfigured=null;
+        StringBuffer teamsToSearch=new StringBuffer();
+        //ids of team to filter out the AmpTeamLeads query
+        final List<Long>teamIds=new ArrayList<Long>();
+        List<AmpTeam>teamsToReturn=new ArrayList<AmpTeam>();
+        //we get the set of unique teams configured to receive alter so we can limit
+        //the count of ws in which look for the activity
+		try {
+			StringBuffer bufferReceivers = new StringBuffer();
+			String[] aReceivers;
+			List<TemplateAlert> tempAlerts = AmpMessageUtil.getTemplateAlerts(realtedTriger);
+			for (TemplateAlert templateAlert : tempAlerts) {
+				bufferReceivers.append(templateAlert.getReceivers());
+			}
+			if (bufferReceivers.length() == 0) {
+				// we don't have any recipient configured
+				return null;
+			}
+			aReceivers = StringUtils.split(bufferReceivers.toString(), ",");
+			for (int i = 0; i < aReceivers.length; i++) {
+				String t = StringUtils.split(aReceivers[i], ";")[1];
+				if (!teamsToSearch.toString().contains(t)) {
+					teamsToSearch.append("'" + t + "'" + ",");
+				}
+			}
+			teamsConfigured = teamsToSearch.substring(0, teamsToSearch.lastIndexOf(","));
+
+		} catch (Exception e) {
+			logger.error("couldnt get teams configured", e);
+		}
+
+        final String query ="select min(tm.amp_team_mem_id),tm.amp_team_id from amp_team_member tm ,amp_team  t "+
+        			" where tm.amp_member_role_id in(1,3) "+
+        			" and tm.amp_team_id=t.amp_team_id "+
+        			" and t.name in ("+ teamsConfigured +") "+
+        			" group by tm.amp_team_id"; 
+        
+        PersistenceManager.getSession().doWork(new Work(){
+			public void execute(Connection conn) throws SQLException {
+				RsInfo teamIdQry= SQLUtils.rawRunQuery(conn, query,null);
+				while(teamIdQry.rs.next()){
+					teamIds.add(teamIdQry.rs.getLong(1));
+				}
+			}
+
+        });
+        
+        Collection<AmpTeamMember>l = TeamMemberUtil.getAllAmpTeamMembersByAmpTeamMemberId(teamIds);
+		for (AmpTeamMember ampTeamMember : l) {
+			TeamMember member=new TeamMember(ampTeamMember);
+			/** this can be taken of initializeTeamFiltersSession but with out saving into session**/
+			
+			
+			AmpTeam ampTeam = ampTeamMember.getAmpTeam();
+			AmpARFilter af = new AmpARFilter();
+			af.fillWithDefaultsSettings();
+			af.fillWithDefaultsFilter(null);
+			if (ampTeam.getFilterDataSet()!=null && ampTeam.getFilterDataSet().size()>0 ){
+				af = FilterUtil.buildFilter(ampTeam, null);
+			}
+			af.generateFilterQuery(TLSUtils.getRequest(), true);
+			CompleteWorkspaceFilter s= new CompleteWorkspaceFilter(member,af);
+
+			if (s.getIds().contains(ampActivityId)) {
+				teamsToReturn.add(ampTeamMember.getAmpTeam());
+			}
+		}
+        long endTime = System.currentTimeMillis();
+        logger.debug("time elapsed " + (endTime - startTime));
+        return teamsToReturn;
+    }
     private static CalendarEvent createEventFromTemplate(TemplateAlert template, HashMap<String, String> myMap, CalendarEvent newEvent) {
         newEvent.setName(DgUtil.fillPattern(template.getName(), myMap));
         newEvent.setDescription(DgUtil.fillPattern(template.getDescription(), myMap));

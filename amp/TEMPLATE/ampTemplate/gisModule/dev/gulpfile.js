@@ -42,6 +42,7 @@ var gulp = require('gulp');
 var g = require('gulp-load-plugins')();
 var gulpi18nScraper = require('gulp-i18n-scraper');
 var mold = require('mold-source-map');
+//var react = require('gulp-react');
 
 var paths = {
   app: {
@@ -198,6 +199,7 @@ gulp.task('build', ['clean', 'build-js', 'build-css'/*, 'revision'*/, 'copy-stuf
 
 gulp.task('build-js', ['clean', 'browserify'], function() {
   return gulp.src(paths.app.scripts.built)
+  	//.pipe(react())
     .pipe(g.streamify(g.uglify))
     .pipe(gulp.dest(paths.dist.scripts));
 });

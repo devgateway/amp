@@ -4,6 +4,7 @@ var watchify = require('watchify');
 var source = require('vinyl-source-stream');
 var gulp = require('gulp');
 var del = require('del');
+//var react = require('gulp-react');
 var $ = require('gulp-load-plugins')();
 
 
@@ -47,12 +48,13 @@ var paths = {
 
 
 function _browserifier(entry, destFolder, destName, options) {
-  /*
-  TODO: Constantin: understand the build process better before making a nonbreaking change
+  
+  //TODO: Constantin: understand the build process better before making a nonbreaking change
+  options = options || {};
   options.entries = entry;
   var bundler = browserify(options);
-  */
-  var bundler = browserify(entry, options);
+  
+  //var bundler = browserify(entry, options);
   bundler.external([
     'backbone',
     // don't need bootstrap here, as it just registers jQ plugins
@@ -117,7 +119,8 @@ gulp.task('clean', function() {
 
 gulp.task('build-js', ['browserify'], function() {
   return gulp.src(paths.scripts.compiled + 'app.js')
-    .pipe($.streamify($.uglify))
+    //.pipe(react())
+    .pipe($.streamify($.uglify)) // CONSTANTIN - comment this one for development
     .pipe(gulp.dest(paths.dist + 'compiled-js/'));
 });
 

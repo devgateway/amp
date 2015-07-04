@@ -4,7 +4,7 @@ var fs = require('fs');
 var browserify = require('browserify');
 var uglify = require('uglify-stream');
 
-var bundleStream = browserify()
+var bundleStream = browserify() // CONSTANTIN - {debug: true} for development
   .add('./index.js')
   .require([
     'backbone',
@@ -19,5 +19,5 @@ bundleStream
   .pipe(fs.createWriteStream('common.js'));
 
 bundleStream
-  .pipe(uglify())
+  .pipe(uglify())  // CONSTANTIN - comment this one for development
   .pipe(fs.createWriteStream('common.min.js'));

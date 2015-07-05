@@ -489,7 +489,8 @@ tr.wicketFundingRowItem:nth-child(even) {}
 tr.wicketFundingRowItem:nth-child(odd) {background: #FFFFFF}
 
 .tooltip-logo { height: 14px; width: 14px;}
-.tooltip-align{vertical-align:middle;}
+.tooltip-align{vertical-align: middle;}
+.field-align{vertical-align: middle;}
 /* -- ONE PAGER END -- */
 
 .fundingSummary {

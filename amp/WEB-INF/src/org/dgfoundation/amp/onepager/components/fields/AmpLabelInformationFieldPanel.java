@@ -17,10 +17,11 @@ public class AmpLabelInformationFieldPanel<T> extends AmpFieldPanel<T> {
 	public void setValueLabel(Label valueLabel) {
 		this.valueLabel = valueLabel;
 	}
+
 	public AmpLabelInformationFieldPanel(String id, IModel<T> model, String fmName) {
-		super(id, model, fmName,false,true);
-		if(model!=null){
-			valueLabel=new Label("valueLabel",model);
+		super (id, model, fmName, false, true);
+		if (model != null) {
+			valueLabel = new Label("valueLabel", model);
 		}
 		
 		add(valueLabel);

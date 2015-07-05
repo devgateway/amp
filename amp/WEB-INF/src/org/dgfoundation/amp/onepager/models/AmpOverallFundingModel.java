@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.onepager.models;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 import org.apache.wicket.model.IModel;
@@ -10,10 +11,8 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
-import org.digijava.module.categorymanager.util.CategoryConstants;
 
 public class AmpOverallFundingModel implements IModel {
 
@@ -60,7 +59,23 @@ public class AmpOverallFundingModel implements IModel {
 	}
 
 	private DecimalWraper doCalculations(String toCurrCode) {
-		DecimalWraper amount = new DecimalWraper();
+		DecimalWraper amount = new DecimalWraper() {
+
+            /**
+             * This is kind of ugly hack
+             * But changing the behavior of DecimalWraper is more dangerous
+             * @return
+             */
+            @Override
+            public String toString() {
+                if (getValue() == null || getValue().doubleValue() == 0) {
+                    return "0";
+                } else {
+                    return super.toString();
+                }
+            }
+        };
+
 		if (singleFundingModel != null) {
 			processFunding(toCurrCode, amount, singleFundingModel.getObject());
 		} else {
@@ -77,7 +92,7 @@ public class AmpOverallFundingModel implements IModel {
 		for (AmpFundingDetail fundingDetail : funding.getFundingDetails()) {
 			if (fundingDetail.getAdjustmentType() != null && fundingDetail.getAdjustmentType().getValue() != null
 					&& fundingDetail.getAdjustmentType().getValue().equals(adjustmentType)
-					&& fundingDetail.getTransactionType().intValue() == transactionType) {
+					&& fundingDetail.getTransactionType() == transactionType) {
 
 				if (fundingDetail.getAmpCurrencyId() != null && fundingDetail.getTransactionAmount() != null
 						&& fundingDetail.getTransactionDate() != null) {
@@ -91,7 +106,7 @@ public class AmpOverallFundingModel implements IModel {
 		java.sql.Date dt = new java.sql.Date(fundDet.getTransactionDate().getTime());
 
 		Double fixedExchangeRate = fundDet.getFixedExchangeRate();
-		if (fixedExchangeRate != null && (Math.abs(fixedExchangeRate.doubleValue()) < 1.0E-15))
+		if (fixedExchangeRate != null && (Math.abs(fixedExchangeRate) < 1.0E-15))
 			fixedExchangeRate = null;
 		double frmExRt;
 		if (fixedExchangeRate == null) {
@@ -106,7 +121,7 @@ public class AmpOverallFundingModel implements IModel {
 		} else {
 			toExRt = Util.getExchange(toCurrCode, dt);
 		}
-		return CurrencyWorker.convertWrapper(fundDet.getTransactionAmount().doubleValue(), frmExRt, toExRt, dt);
+		return CurrencyWorker.convertWrapper(fundDet.getTransactionAmount(), frmExRt, toExRt, dt);
 
 	}
 

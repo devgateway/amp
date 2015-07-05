@@ -11,8 +11,9 @@ public class DecimalWraper {
 	 */
 	
 	public DecimalWraper() {
-		this.value=new BigDecimal(0d);
+		this.value = new BigDecimal(0d);
 	}
+
 	private static final long serialVersionUID = 7549949655765988774L;
 
 	private String calculations;

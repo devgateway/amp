@@ -464,7 +464,7 @@ public class Reports {
 	public final Response exportSaikuReport(String query, Long reportId, String type) {
 		JsonBean result;
 		try {
-			String decodedQuery = java.net.URLDecoder.decode(query);
+			String decodedQuery = java.net.URLDecoder.decode(query, "UTF-8");
 			decodedQuery = decodedQuery.replace("query=", "");
 			JsonBean queryObject = JsonBean.getJsonBeanFromString(decodedQuery);
 			LinkedHashMap<String, Object> queryModel = (LinkedHashMap<String, Object>) queryObject.get("queryModel");
@@ -489,7 +489,7 @@ public class Reports {
 			switch (type) {
 			// TODO: Uncomment when csv is ready.
 			case AMPReportExportConstants.XLSX:
-				doc = AMPReportExcelExport.generateExcel(result, AMPReportExportConstants.XLSX, report.getRowsHierarchiesTotals(), report.getColumns().size());
+				doc = AMPReportExcelExport.generateExcel(result, AMPReportExportConstants.XLSX, report, queryModel);
 				break;
 			/*
 			 * case "csv": doc = SaikuUtils.getCsv(result, settings, ",", "\""); break;

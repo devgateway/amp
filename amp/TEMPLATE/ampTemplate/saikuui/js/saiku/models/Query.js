@@ -178,7 +178,8 @@ var Query = Backbone.Model.extend({
 	        	if(filters) {
 	        		this.set('filters', filters);
 	        		filtersApplied = true;
-	        	}
+	        		this.set('filtersWithModels', window.currentFilter.serializeToModels());
+	        	}	        	
         	}
 
         	var settingsApplied = false;
@@ -194,6 +195,7 @@ var Query = Backbone.Model.extend({
         	exModel = this.workspace.currentQueryModel;
         	if (this.firstLoad === false) {
         		exModel.queryModel.filters = this.get('filters');
+        		exModel.queryModel.filtersWithModels = this.get('filtersWithModels');
         		exModel.queryModel.filtersApplied = filtersApplied;
         	}
         	exModel.queryModel.settings = this.get('settings');        	

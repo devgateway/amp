@@ -783,7 +783,6 @@ var WorkspaceToolbar = Backbone.View.extend({
 
 $.postDownload = function (path, params, method) {
     method = method || "post";
-
     var form = document.getElementById("exportForm");
     if(!form) {
         form = document.createElement("form");
@@ -791,17 +790,20 @@ $.postDownload = function (path, params, method) {
     }
     form.setAttribute("method", method);
     form.setAttribute("action", path);
+    form.setAttribute("accept-charset","UTF-8");
 
     for(var key in params) {
         if(params.hasOwnProperty(key)) {
-        	var query = document.getElementById("export_query");
-        	if(!query) {
-        		query = document.createElement("input");
-                form.appendChild(query);
+        	if(params[key]) {
+	        	var query = document.getElementById("export_query");
+	        	if(!query) {
+	        		query = document.createElement("input");
+	                form.appendChild(query);
+	        	}
+	        	query.setAttribute("type", "hidden");
+	        	query.setAttribute("name", key);
+	        	query.setAttribute("value", params[key]);
         	}
-        	query.setAttribute("type", "hidden");
-        	query.setAttribute("name", key);
-        	query.setAttribute("value", params[key]);
          }
     }
     document.body.appendChild(form);

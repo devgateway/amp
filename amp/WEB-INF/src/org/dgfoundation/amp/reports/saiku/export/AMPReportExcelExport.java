@@ -2,17 +2,25 @@ package org.dgfoundation.amp.reports.saiku.export;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.dgfoundation.amp.newreports.FilterRule;
+import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.newreports.ReportFilters;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -28,13 +36,16 @@ public class AMPReportExcelExport {
 	private static CellStyle styleHeaderClean = null;
 	private static CellStyle styleTotalClean = null;
 	private static CellStyle styleNumber = null;
+	private static CellStyle styleSettingOption = null;
+	private static CellStyle styleSettingFilter = null;
 
 	private static final int TYPE_STYLED = 0;
 	private static final int TYPE_PLAIN = 1;
 
 	private static final short cellHeight = 300;
 
-	public static byte[] generateExcel(JsonBean jb, String type, int hierarchies, int columns) throws IOException {
+	public static byte[] generateExcel(JsonBean jb, String type, ReportSpecificationImpl report,
+			LinkedHashMap<String, Object> queryModel) throws IOException {
 		// Generate html table.
 		String content = AMPJSConverter.convertToHtml(jb, type);
 		// Parse the string.
@@ -44,15 +55,153 @@ public class AMPReportExcelExport {
 		Workbook wb = new XSSFWorkbook();
 		Sheet mainSheet = wb.createSheet(TranslatorWorker.translateText("Formatted"));
 		Sheet plainSheet = wb.createSheet(TranslatorWorker.translateText("Plain"));
+		Sheet summarySheet = wb.createSheet(TranslatorWorker.translateText("Summary Information"));
 		createStyles(wb);
 
+		int hierarchies = report.getRowsHierarchiesTotals();
+		int columns = report.getColumns().size();
 		generateSheet(wb, mainSheet, doc, hierarchies, columns, TYPE_STYLED);
 		generateSheet(wb, plainSheet, doc, hierarchies, columns, TYPE_PLAIN);
+		generateSummarySheet(wb, summarySheet, report, queryModel);
 
 		wb.write(os);
 		os.flush();
 		os.close();
 		return os.toByteArray();
+	}
+
+	/**
+	 * Add extra info about filters applied, currency and settings.
+	 * 
+	 * @param wb
+	 * @param sheet
+	 * @param report
+	 * @param queryObject
+	 */
+	private static void generateSummarySheet(Workbook wb, Sheet sheet, ReportSpecificationImpl report,
+			LinkedHashMap<String, Object> queryModel) {
+		int i = 0;
+		int j = 0;
+		Map<String, List<String>> extractedFilters = new<String, List<String>> HashMap();
+		if (queryModel.get("filtersWithModels") != null) {
+			LinkedHashMap<String, Object> filtersWithModels = (LinkedHashMap<String, Object>) queryModel
+					.get("filtersWithModels");
+			if (filtersWithModels.get("columnFilters") != null) {
+				LinkedHashMap<String, Object> columnFilters = (LinkedHashMap<String, Object>) filtersWithModels
+						.get("columnFilters");
+				for (Map.Entry<String, Object> columnFilter : columnFilters.entrySet()) {
+					String extractedFilter = TranslatorWorker.translateText(columnFilter.getKey().toString());
+					List<String> extractedValues = new ArrayList<String>();
+					for (LinkedHashMap<String, Object> columnFilterValues : (List<LinkedHashMap<String, Object>>) columnFilter
+							.getValue()) {
+						extractedValues.add(columnFilterValues.get("name").toString());
+					}
+					extractedFilters.put(extractedFilter, extractedValues);
+				}
+			}
+			if (filtersWithModels.get("otherFilters") != null) {
+				LinkedHashMap<String, Object> otherFilters = (LinkedHashMap<String, Object>) filtersWithModels
+						.get("otherFilters");
+				for (Map.Entry<String, Object> otherFilter : otherFilters.entrySet()) {
+					String extractedFilter = TranslatorWorker.translateText(otherFilter.getKey().toString());
+					List<String> extractedValues = new ArrayList<String>();
+					LinkedHashMap<String, Object> columnFilterValues = (LinkedHashMap<String, Object>) otherFilter
+							.getValue();
+					for (Map.Entry<String, Object> columnFilterValue : columnFilterValues.entrySet()) {
+						extractedValues.add(columnFilterValue.getValue().toString());
+					}
+					extractedFilters.put(extractedFilter, extractedValues);
+				}
+			}
+		} else if (report.getFilters() != null) {
+			ReportFilters filters = report.getFilters();
+			Map<ReportElement, List<FilterRule>> filterRules = filters.getFilterRules();
+			for (Map.Entry<ReportElement, List<FilterRule>> filter : filterRules.entrySet()) {
+				for (FilterRule filterRule : filter.getValue()) {
+					String entityName = filter.getKey().type.name();
+					if (filter.getKey().entity != null) {
+						entityName = filter.getKey().entity.getEntityName();
+					}
+					String extractedFilter = TranslatorWorker.translateText(entityName);
+					List<String> extractedValues = new ArrayList<String>();
+					for (Map.Entry<String, String> filterValue : filterRule.valueToName.entrySet()) {
+						extractedValues.add(filterValue.getValue());
+					}
+					extractedFilters.put(extractedFilter, extractedValues);
+				}
+			}
+		}
+
+		// Create header row for filters.
+		int group = 0;
+		Row filterRowTitle = sheet.createRow(i);
+		Cell filterTitleCell = filterRowTitle.createCell(0);
+		filterTitleCell.setCellValue(TranslatorWorker.translateText("Applied Filters"));
+		filterTitleCell.setCellStyle(styleSettingOption);
+		for (Map.Entry<String, List<String>> filter : extractedFilters.entrySet()) {
+			group = 0;
+			i++;
+			Row filterCategoryRow = sheet.createRow(i);
+			Cell filterCategoryCell = filterCategoryRow.createCell(j);
+			filterCategoryCell.setCellValue(filter.getKey());
+			filterCategoryCell.setCellStyle(styleSettingFilter);
+			for (String filterValue : filter.getValue()) {
+				// Check if the row 'i' exists so we dont add an extra row for the first filter result.
+				if (sheet.getRow(i) != null) {
+					sheet.getRow(i).createCell(j + 1).setCellValue(filterValue);
+				} else {
+					sheet.createRow(i).createCell(j + 1).setCellValue(filterValue);
+				}
+				i++;
+				group++;
+			}
+			if (group > 0) {
+				sheet.addMergedRegion(new CellRangeAddress(i - group, i - 1, 0, 0));
+				sheet.getRow(i - group).getCell(j).setCellStyle(styleHierarchy);
+			}
+			i--;
+		}
+
+		i += 2;
+		j = 0;
+		String currency = report.getSettings().getCurrencyCode();
+		String calendar = report.getSettings().getCalendar().getName();
+		if (queryModel.containsKey("settings")) {
+			LinkedHashMap<String, Object> settings = (LinkedHashMap<String, Object>) queryModel.get("settings");
+			currency = settings.get("1").toString();
+			calendar = FiscalCalendarUtil.getAmpFiscalCalendar(new Long(settings.get("2").toString())).getName();
+		}
+		Row currencyRow = sheet.createRow(i);
+		Cell currencyTitleCell = currencyRow.createCell(j);
+		currencyTitleCell.setCellValue(TranslatorWorker.translateText("Currency"));
+		currencyTitleCell.setCellStyle(styleSettingOption);
+		currencyRow.createCell(j + 1).setCellValue(currency);
+
+		i += 2;
+		j = 0;
+		Row calendarRow = sheet.createRow(i);
+		Cell calendarTitleCell = calendarRow.createCell(j);
+		calendarTitleCell.setCellValue(TranslatorWorker.translateText("Calendar"));
+		calendarTitleCell.setCellStyle(styleSettingOption);
+		calendarRow.createCell(j + 1).setCellValue(calendar);
+
+		i += 2;
+		j = 0;
+		Row unitsRow = sheet.createRow(i);
+		Cell unitsTitleCell = unitsRow.createCell(j);
+		unitsTitleCell.setCellValue(TranslatorWorker.translateText("Units"));
+		unitsTitleCell.setCellStyle(styleSettingOption);
+		String units = "Amounts in units";
+		if (report.getSettings().getUnitsMultiplier() == (1d / 1000000d)) {
+			units = "Amounts in millions";
+		} else if (report.getSettings().getUnitsMultiplier() == (1d / 1000d)) {
+			units = "Amounts in thousands";
+		}
+		unitsRow.createCell(j + 1).setCellValue(TranslatorWorker.translateText(units));
+
+		for (int l = 0; l < 3; l++) {
+			sheet.autoSizeColumn(l, true);
+		}
 	}
 
 	private static void generateSheet(Workbook wb, Sheet sheet, Document doc, int hierarchies, int columns, int type) {
@@ -379,6 +528,8 @@ public class AMPReportExcelExport {
 	private static void createStyles(Workbook wb) {
 		Font fontHeaderAndTotal = wb.createFont();
 		fontHeaderAndTotal.setColor(IndexedColors.BLACK.getIndex());
+		Font fontBold = wb.createFont();
+		fontBold.setBoldweight(Font.BOLDWEIGHT_BOLD);
 		// fontHeaderAndTotal.setBoldweight(Font.BOLDWEIGHT_BOLD);
 		styleHeader = wb.createCellStyle();
 		styleHeader.setFillPattern(CellStyle.SOLID_FOREGROUND);
@@ -434,5 +585,13 @@ public class AMPReportExcelExport {
 
 		styleNumber = wb.createCellStyle();
 		styleNumber.setAlignment(CellStyle.ALIGN_RIGHT);
+
+		styleSettingOption = wb.createCellStyle();
+		styleSettingOption.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		styleSettingOption.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
+		styleSettingOption.setFont(fontBold);
+		;
+
+		styleSettingFilter = wb.createCellStyle();
 	}
 }

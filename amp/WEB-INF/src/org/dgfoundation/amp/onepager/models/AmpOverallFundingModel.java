@@ -50,7 +50,13 @@ public class AmpOverallFundingModel implements IModel {
 		if (tm != null) {
 			toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 		}
-		return doCalculations(toCurrCode).toString() + " " + toCurrCode;
+
+        String displayAmount = doCalculations(toCurrCode).toString();
+        if ("".equals(displayAmount)) {
+            displayAmount = "0";
+        }
+
+		return displayAmount + " " + toCurrCode;
 	}
 
 	@Override
@@ -59,22 +65,7 @@ public class AmpOverallFundingModel implements IModel {
 	}
 
 	private DecimalWraper doCalculations(String toCurrCode) {
-		DecimalWraper amount = new DecimalWraper() {
-
-            /**
-             * This is kind of ugly hack
-             * But changing the behavior of DecimalWraper is more dangerous
-             * @return
-             */
-            @Override
-            public String toString() {
-                if (getValue() == null || getValue().doubleValue() == 0) {
-                    return "0";
-                } else {
-                    return super.toString();
-                }
-            }
-        };
+		DecimalWraper amount = new DecimalWraper();
 
 		if (singleFundingModel != null) {
 			processFunding(toCurrCode, amount, singleFundingModel.getObject());

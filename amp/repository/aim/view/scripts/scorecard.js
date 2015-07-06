@@ -34,7 +34,7 @@ function validatePercentage() {
 	var percentage = $('input[name="percentageThreshold"]').val();
 	var floatValue = parseFloat(percentage);
 	
-	if (isNaN(floatValue) || (floatValue < 0) || (floatValue > 100)) {
+	if (isNaN(floatValue) || (floatValue <= 0) || (floatValue > 100)) {
 		alert(alertValidationPercentage);
 		return false;
 	}

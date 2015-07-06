@@ -65,7 +65,7 @@
 
 <script type="text/javascript">
 	var alertValidationTime = '<digi:trn>Please select validation time</digi:trn>';
-	var alertValidationPercentage = '<digi:trn>Please enter a valid percentage (0.00 - 100.00)</digi:trn>';
+	var alertValidationPercentage = '<digi:trn>Please enter a valid percentage (0.01 - 100.00)</digi:trn>';
 </script>
 
 <digi:instance property="aimScorecardManagerForm" />

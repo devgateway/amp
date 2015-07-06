@@ -11,6 +11,8 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -54,6 +56,8 @@ public class AMPReportExcelExport {
 	}
 
 	private static void generateSheet(Workbook wb, Sheet sheet, Document doc, int hierarchies, int columns, int type) {
+		boolean emptyAsZero = FeaturesUtil
+				.getGlobalSettingValueBoolean(GlobalSettingsConstants.REPORTS_EMPTY_VALUES_AS_ZERO_XLS);
 		// Process header.
 		Element headerRows = doc.getElementsByTag("thead").first();
 		int i = 0;
@@ -130,9 +134,22 @@ public class AMPReportExcelExport {
 				if (j >= columns && !reportTotalsString.equals(cellContent)) {
 					isNumber = true;
 					try {
-						cell.setCellValue(new Double(cellContent));
+						Double doubleNumber = new Double(cellContent);
+						if (doubleNumber.equals(0d)) {
+							if (emptyAsZero) {
+								cell.setCellValue(doubleNumber);
+							} else {
+								cell.setCellValue("");
+							}
+						} else {
+							cell.setCellValue(doubleNumber);
+						}
 					} catch (NumberFormatException e) {
-						cell.setCellValue(new Double(0));
+						if (emptyAsZero) {
+							cell.setCellValue(new Double(0));
+						} else {
+							cell.setCellValue("");
+						}
 					}
 				} else {
 					isNumber = false;
@@ -236,7 +253,7 @@ public class AMPReportExcelExport {
 						}
 					}
 				}
-				// Now shift rows to fill the gaps created by removing columns with POI.
+				// Now shift rows to fill the gaps created by removing rows with POI.
 				int shift = 0;
 				for (int i = headers; i < totalRows; i++) {
 					Row row = sheet.getRow(i);

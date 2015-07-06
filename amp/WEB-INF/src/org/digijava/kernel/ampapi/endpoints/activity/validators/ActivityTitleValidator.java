@@ -14,6 +14,8 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
@@ -54,7 +56,9 @@ public class ActivityTitleValidator extends InputValidator {
 			String activityTitle = "";
 			String language = null;
 			for (String langCode : titleMap.keySet()) {
-				if (SiteUtils.getGlobalSite().getDefaultLanguage().getCode().equals(langCode)) {
+				Site defaultSite = SiteUtils.getDefaultSite();
+				Locale defaultLocale = SiteUtils.getDefaultLanguages(defaultSite);
+				if (defaultLocale.getCode().equals(langCode)) {
 					activityTitle = (String) titleMap.get(langCode);
 					if (ContentTranslationUtil.multilingualIsEnabled()) {
 						language = langCode;

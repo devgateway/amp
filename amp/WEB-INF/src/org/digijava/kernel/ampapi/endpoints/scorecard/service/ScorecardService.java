@@ -36,7 +36,6 @@ import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -378,7 +377,7 @@ public class ScorecardService {
 					}
 					String quarterEndDate = new SimpleDateFormat("yyyy-MM-dd").format(quarter.getQuarterEndDate());
 					//Get total (not completed nor deleted) activities  by donor at the end of a given quarter
-					Object [] activityIds = getLatestActivityIdsByDate(quarterEndDate);
+					Object [] activityIds = getLatestActivityIdsByDate(quarterEndDate,status);
 					String query = "select count (distinct (a.amp_id)) as total_activities,r.organisation as donor_id "
 							+ "from amp_activity_version a, amp_org_role r,amp_organisation o,amp_activities_categoryvalues c,amp_category_value v "+
 							" WHERE  r.activity=a.amp_activity_id  AND a.amp_activity_id = c.amp_activity_id "+
@@ -478,25 +477,35 @@ public class ScorecardService {
 	 * before the quarter end and we should also omit updates and versions that happened after the end of the quarter.
 	 *   
 	 * @param endPeriodDate, the end date of a quarter
+	 * @param status, the list of status to be filtered
 	 * @return Object [] with the ids of the latest versions of an activity for the quarter
 	 */
-	public Object [] getLatestActivityIdsByDate (final String endPeriodDate) {
-		final List <Long> activityIds = new ArrayList <Long> ();
+	public Object [] getLatestActivityIdsByDate (final String endPeriodDate,final String status) {
+		final List<Long> activityIds = new ArrayList<Long>();
 		PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {
-				String query = "select max(amp_activity_id) as amp_activity_id,amp_id from amp_activity_version "+
-								"where deleted is false and date_updated <= '"+endPeriodDate+"' "+
-								"group by amp_id";
+				String query = "select max(a.amp_activity_id) as amp_activity_id,amp_id  from amp_activity_version a," +
+						"amp_activities_categoryvalues c,amp_category_value v  "
+						+ "where deleted is false and date_updated <= '"+endPeriodDate+"' "
+						+ "and a.amp_activity_id = c.amp_activity_id "
+						+ "AND c.amp_categoryvalue_id = v.id "
+						+ "AND  v.amp_category_class_id = (select id from amp_category_class where "
+						+ " keyname='activity_status') ";
+				if (!status.equals("")) {
+					query += "AND c.amp_categoryvalue_id not in (" + status + " ) ";
+				}
+				query += "group by amp_id";
 				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
 					ResultSet rs = rsi.rs;
 					while (rs.next()) {
 						activityIds.add(rs.getLong("amp_activity_id"));
 					}
 					rsi.close();
-					
+
 				}
-				
-			}});
+
+			}
+		});
 		return activityIds.toArray();
 		
 	}

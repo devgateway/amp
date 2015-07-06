@@ -41,8 +41,9 @@ public class RequiredValidator extends InputValidator {
 		}
 		// on update of non-draft activities
 		else {
-			if (!importer.getAllowSaveAsDraftShift() && ActivityEPConstants.NON_DRAFT_REQUIRED.equals(requiredStatus)
-					&& fieldValue == null) {
+			if (!importer.getAllowSaveAsDraftShift()
+					&& (ActivityEPConstants.NON_DRAFT_REQUIRED.equals(requiredStatus) || ActivityEPConstants.FIELD_ALWAYS_REQUIRED
+							.equals(requiredStatus)) && fieldValue == null) {
 				isValid = false;
 			}
 		}

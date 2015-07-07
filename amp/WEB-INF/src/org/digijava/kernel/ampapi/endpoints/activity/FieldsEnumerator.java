@@ -219,6 +219,7 @@ public class FieldsEnumerator {
 		}
 		if (ActivityEPConstants.TYPE_VARCHAR.equals(fieldTypes.get(field)) && fieldMaxLengths.get(field) != null) {
 			bean.set(ActivityEPConstants.FIELD_LENGTH, fieldMaxLengths.get(field));
+			System.out.println(interchangeble.fieldTitle());
 		}
 		return bean;
 	}

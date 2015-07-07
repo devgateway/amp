@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
@@ -67,7 +68,7 @@ public class InterchangeUtils {
 		return discriminatorMap.get(deunderscorify(fieldName));
 	}
 	
-	private static void addUnderscoredTitlesToMap(Class clazz) {
+	private static void addUnderscoredTitlesToMap(Class<?> clazz) {
 		for (Field field : clazz.getDeclaredFields()) {
 			Interchangeable ant = field.getAnnotation(Interchangeable.class);
 			if (ant != null) {
@@ -186,7 +187,38 @@ public class InterchangeUtils {
 		}
 		return bld.toString();
 	}
+	
+	public static Method getCustomInterchangeableMethod (Field field) {
+		InterchangeableDiscriminator disc = field.getAnnotation(InterchangeableDiscriminator.class);
+		if (disc != null) {
+			String methodName = disc.method();
+			try {
+				InterchangeUtils.class.getDeclaredMethod(methodName);
+			} catch (Exception exc) {
+				
+				return null;
+			}
+		}
+		return null;
+	}
+	
+	public static boolean hasCustomInterchangeableMethod(Field field) {
+		InterchangeableDiscriminator disc = field.getAnnotation(InterchangeableDiscriminator.class);
+		return (disc != null) && disc.method().length() > 0;
+	}
 
+	public static Class<? extends FieldsDiscriminator> getDiscriminatorClass(Field field) throws ClassNotFoundException {
+		InterchangeableDiscriminator ant = field.getAnnotation(InterchangeableDiscriminator.class);
+		if (ant != null && !ant.discriminatorClass().equals("")) {
+			String className = ant.discriminatorClass();
+			@SuppressWarnings("unchecked")
+			Class<? extends FieldsDiscriminator> result = (Class<? extends FieldsDiscriminator>) Class.forName(className);
+			return result;
+		}
+		return null;
+		
+	}
+	
 	public static boolean isCompositeField(Field field) {
 		return field.getAnnotation(InterchangeableDiscriminator.class) != null;
 	}
@@ -415,6 +447,18 @@ public class InterchangeUtils {
 		return getImportResult(importer.getNewActivity(), importer.getOldJson(), errors);
 		
 	}
+	
+	
+	
+	
+	public static Map<Integer, String> getTransactionTypeValues() {
+		Map<Integer, String> transactionTypeToString = new HashMap<Integer, String>();
+		for (Map.Entry<String, Integer> entry : ArConstants.TRANSACTION_TYPE_NAME_TO_ID.entrySet()) {
+			transactionTypeToString.put(entry.getValue(), entry.getKey());
+		}
+		return transactionTypeToString;
+	}
+	
 	
 	protected static JsonBean getImportResult(AmpActivityVersion newActivity, JsonBean oldJson, 
 			List<ApiErrorMessage> errors) {

@@ -54,7 +54,8 @@ var AMPSettings = Backbone.View.extend({
 			applySettings: function() {
 				var settings = {
 					"1": $('#amp_currency').val(),
-					"2": $('#amp_calendar').val()
+					"2": $('#amp_calendar').val(),
+					"3": (window.currentSettings !== undefined ? window.currentSettings["3"] : '')
 				};
 				this.workspace.query.set('settings', settings);
 				window.currentSettings = settings;

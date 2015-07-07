@@ -328,6 +328,9 @@ public class AMPReportExcelExport {
 								break;
 							}
 						}
+					} else {
+						// This is a "clean" style we use to mark total rows in plain export.
+						styleForCurrentRow = styleTotalClean;
 					}
 				}
 				if (styleForCurrentRow != null) {
@@ -390,14 +393,18 @@ public class AMPReportExcelExport {
 			if (columns > hierarchies) {
 				// Iterate columns from right to left, then rows from bottom to top.
 				// Notice 'j = hierarchies' instead of 'j = hierarchies - 1' because we start on the first non
-				// hierarchical
-				// column to get the last hierarchy empty total cells.
+				// hierarchical column to get the last hierarchy empty total cells.
 				for (int j = hierarchies; j > 0; j--) {
 					for (int i = sheet.getPhysicalNumberOfRows() - 2; i >= headers - 1; i--) {
 						Row row = sheet.getRow(i);
 						if (row != null) {
 							if (row.getCell(j).getStringCellValue().isEmpty()) {
-								sheet.removeRow(row);
+								CellStyle style = row.getCell(j).getCellStyle();
+								// We need this extra check for reports where the first non hierarchical column has
+								// empty cells (it happens on Niger).
+								if (style.getIndex() == styleTotalClean.getIndex()) {
+									sheet.removeRow(row);
+								}
 							}
 						}
 					}
@@ -554,6 +561,7 @@ public class AMPReportExcelExport {
 		styleTotal.setFont(fontHeaderAndTotal);
 		styleTotal.setWrapText(true);
 
+		// Important: DO NOT change this style (is used as a marker for total rows in plain export).
 		styleTotalClean = wb.createCellStyle();
 		styleTotalClean.setAlignment(CellStyle.ALIGN_LEFT);
 		styleTotalClean.setFont(fontHeaderAndTotal);

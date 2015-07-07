@@ -139,10 +139,8 @@ public class PossibleValuesEnumerator {
 		
 		
 		List<JsonBean> result = new ArrayList<JsonBean>();
-//		String configValue = getConfigValue(originalName, field);
 		if (configValue == null) {
-			result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, field.getName())));
-			return result;
+			return getPossibleValuesForField(field);
 		}
 		/*AmpActivitySector || AmpComponentFunding || AmpActivityProgram*/
 		List<Object> items;
@@ -224,6 +222,7 @@ public class PossibleValuesEnumerator {
 		}
 		return field;
 	}
+	
 	private static Field getField(Class<?> clazz, String fieldname) {
 		for (Field field: clazz.getDeclaredFields()) {
 			Interchangeable ant = field.getAnnotation(Interchangeable.class);
@@ -257,7 +256,8 @@ public class PossibleValuesEnumerator {
 				LOGGER.error(exc.getMessage());
 				throw new RuntimeException(exc);
 			}
-			result.add(item);
+			if (item != null)
+				result.add(item);
 		}
 		return result;
 	}

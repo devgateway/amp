@@ -79,6 +79,10 @@ public class InterchangeUtils {
 				} else {
 					InterchangeableDiscriminator antd = field.getAnnotation(InterchangeableDiscriminator.class);
 					Interchangeable[] settings = antd.settings();
+					if (settings.length == 0) {
+						underscoreToTitleMap.put(underscorify(ant.fieldTitle()), ant.fieldTitle());
+						titleToUnderscoreMap.put(ant.fieldTitle(), underscorify(ant.fieldTitle()));
+					}
 					for (Interchangeable ants : settings) {
 						underscoreToTitleMap.put(underscorify(ants.fieldTitle()), ants.fieldTitle());
 						titleToUnderscoreMap.put(ants.fieldTitle(), underscorify(ants.fieldTitle()));

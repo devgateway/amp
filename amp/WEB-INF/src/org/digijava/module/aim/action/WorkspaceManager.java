@@ -101,18 +101,10 @@ public class WorkspaceManager extends Action {
         int stIndex = ((currPage - 1) * NUM_RECORDS);
         int edIndex = stIndex + NUM_RECORDS;
 
-        Collection<AmpTeam> colAt = new ArrayList<AmpTeam>();
-        for (AmpTeam at : ampWorkspaces) {
-            at.setChildrenWorkspaces(TeamUtil.getAllChildrenWorkspaces(at.getAmpTeamId()));
-            colAt.add(at);
-        }
-
-        ArrayList<AmpTeam> ampTeams = new ArrayList<AmpTeam>();
-        //vect.addAll(ampWorkspaces);
-        ampTeams.addAll(colAt);
         String workspaceType = wsForm.getWorkspaceType();
         Long workspaceGroup = wsForm.getWorkspaceGroup();
-        for (AmpTeam ampTeam : ampTeams) {
+        for (AmpTeam ampTeam : ampWorkspaces) {
+
             Boolean addTeam = false;
             if (workspaceType != null) {
                 if ("all".equals(workspaceType)) {
@@ -131,6 +123,7 @@ public class WorkspaceManager extends Action {
             }
 
             if (addTeam) {
+                ampTeam.setChildrenWorkspaces(TeamUtil.getAllChildrenWorkspaces(ampTeam.getAmpTeamId()));
                 workspaces.add(ampTeam);
             }
         }
@@ -143,7 +136,7 @@ public class WorkspaceManager extends Action {
         }
 
         //workspaces for current page
-        if(edIndex > workspaces.size()) {
+        if (edIndex > workspaces.size()) {
             edIndex = workspaces.size();
         }
 

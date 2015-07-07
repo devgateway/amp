@@ -174,7 +174,6 @@ public class TLSUtils {
     	    public Object answer(InvocationOnMock invocation) throws Throwable {
     	        String key = invocation.getArgumentAt(0, String.class);
     	        Object value = sessionAttributes.get(key);
-    	        System.out.println("get attribute value for key="+key+" : "+value);
     	        return value;
     	    }
     	});
@@ -189,7 +188,6 @@ public class TLSUtils {
     	        String key = invocation.getArgumentAt(0, String.class);
     	        Object value = invocation.getArgumentAt(1, Object.class);
     	        sessionAttributes.put(key, value);
-    	        System.out.println("put attribute key="+key+", value="+value);
     	        return null;
     	    }
     	});

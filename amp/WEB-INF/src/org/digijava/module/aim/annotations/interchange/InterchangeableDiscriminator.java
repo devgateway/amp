@@ -13,4 +13,8 @@ public @interface InterchangeableDiscriminator {
     Validators [] validators() default {};
     /** we can also have a method, like Discriminators.sector that will fill in the settings structure at runtime*/
     String method() default "";
+    /**
+     * class for obtaining 
+     */
+    String discriminatorClass() default "";
 }

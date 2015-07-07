@@ -54,6 +54,8 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldTextEditor(fieldTitle = "Project Management")
 	protected String projectManagement;
 
+	
+	//getter and setter never used
 	@Interchangeable(fieldTitle = "Activity Budget",fmPath="/Activity Form/Identification/Activity Budget", required="/Activity Form/Identification/Required Validator for Activity Budget")
 	@VersionableFieldSimple(fieldTitle = "Activity Budget")
 	protected Integer budget;
@@ -66,10 +68,12 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Budget Code Project ID")
 	protected String budgetCodeProjectID;
 	
+	//getter and setter never used
 	@Interchangeable(fieldTitle = "Budget Sector",fmPath="/Activity Form/Identification/Budget Classification")
 	@VersionableFieldSimple(fieldTitle = "Budget Sector")
 	protected Long budgetsector;
 	
+	//getter and setter never used
 	@Interchangeable(fieldTitle = "Budget Organization",fmPath="/Activity Form/Identification/Budget Classification")
 	@VersionableFieldSimple(fieldTitle = "Budget Organization")
 	protected Long budgetorganization;
@@ -78,6 +82,8 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Budget Department")
 	protected Long budgetdepartment;
 	
+	
+	//getter and setter never used
 	@Interchangeable(fieldTitle = "Budget Program",fmPath="/Activity Form/Identification/Budget Classification")
 	@VersionableFieldSimple(fieldTitle = "Budget Program")
 	protected Long budgetprogram;

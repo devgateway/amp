@@ -24,6 +24,10 @@ public class ActivityErrors {
 	public static final ApiErrorMessage WRONG_PROGRAM_TYPE = new ApiErrorMessage(8, "Wrong config value for programs");
 	public static final ApiErrorMessage UNIQUE_ACTIVITY_TITLE = new ApiErrorMessage(9, "Activity title should be unique");
 	public static final ApiErrorMessage CANNOT_GET_PROPERTIES = new ApiErrorMessage(10, "Cannot get properties for type");
+	public static final ApiErrorMessage DISCRIMINATOR_CLASS_NOT_FOUND = new ApiErrorMessage(11, "Cannot find discriminator class");
+	public static final ApiErrorMessage DISCRIMINATOR_METHOD_ERROR = new ApiErrorMessage(11, "Error when accessing discriminator method");
+	public static final ApiErrorMessage DISCRIMINATOR_CLASS_METHOD_ERROR = new ApiErrorMessage(12, "Error when accessing a method from the discriminator class");
+	
 	
 	
 }

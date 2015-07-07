@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -95,6 +96,21 @@ public class PossibleValuesEnumerator {
 				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, longFieldName)));
 				return result;
 			} else {
+				
+				try {
+					Class<? extends FieldsDiscriminator> discClass = InterchangeUtils.getDiscriminatorClass(finalField);
+					if (discClass != null)
+						return getPossibleValuesDirectly(discClass);
+				} catch(ClassNotFoundException exc) {
+					List<JsonBean> result = new ArrayList<JsonBean>();
+					result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.DISCRIMINATOR_CLASS_NOT_FOUND, exc.getMessage())));
+					return result;
+				} catch (InvocationTargetException | IllegalArgumentException | IllegalAccessException 
+						| SecurityException  | NoSuchMethodException | InstantiationException e) {
+					List<JsonBean> result = new ArrayList<JsonBean>();
+					result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.DISCRIMINATOR_CLASS_METHOD_ERROR, e.getMessage())));
+					return result;
+				}				
 				if (InterchangeUtils.isCompositeField(finalField) || discriminatorOption != null) {
 					return getPossibleValuesForComplexField(finalField, discriminatorOption);
 				}
@@ -103,7 +119,25 @@ public class PossibleValuesEnumerator {
 			}
 		}
 	}
+	private static List<JsonBean> getPossibleValuesDirectly(Class<? extends FieldsDiscriminator> discClass) 
+			throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, 
+			InvocationTargetException, InstantiationException {
+		Method m = discClass.getMethod("getPossibleValues");
+		FieldsDiscriminator discObj = discClass.newInstance();
+		Map<String, Object> vals = (Map<String, Object>) m.invoke(discObj);
+		List<JsonBean> result = new ArrayList<JsonBean>();
+		for (Map.Entry<String, Object> entry : vals.entrySet()) {
+			JsonBean bean = new JsonBean();
+			bean.set("id", entry.getKey());
+			bean.set("value", entry.getValue());
+			result.add(bean);
+		}
+		return result;
+		
+	}
 	private static List<JsonBean> getPossibleValuesForComplexField(Field field, String configValue) {
+		
+		
 		List<JsonBean> result = new ArrayList<JsonBean>();
 //		String configValue = getConfigValue(originalName, field);
 		if (configValue == null) {
@@ -154,7 +188,7 @@ public class PossibleValuesEnumerator {
 	
 	
 	private static List<Object> getSpecialCaseObjectList(final String configType, final String configTableName, 
-					 String entityIdColumnName, final String conditionColumnName, final String idColumnName, Class clazz) {
+					 String entityIdColumnName, final String conditionColumnName, final String idColumnName, Class<?> clazz) {
 //		List<AmpSector> result = new ArrayList<AmpSector>();
 		final List<Long> itemIds = new ArrayList<Long>();
 		PersistenceManager.getSession().doWork(new Work() {
@@ -174,6 +208,7 @@ public class PossibleValuesEnumerator {
 		}
 		String ids = StringUtils.join(itemIds, ",");
 		String queryString = "select cls from " + clazz.getName() + " cls where cls."+ entityIdColumnName + " in (" + ids + ")";
+		
 		List<Object> objectList = PersistenceManager.getSession().createQuery(queryString).list();
 		return objectList;
 	}

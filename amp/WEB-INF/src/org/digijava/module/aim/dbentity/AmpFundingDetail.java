@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.Date;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -49,7 +50,10 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	 * public static final int DISBURSEMENT_ORDER = 4 ;
 	 * public static final int MTEFPROJECTION = 3 ;
 	 */
+	
 	@Interchangeable(fieldTitle="Transaction Type")
+	@InterchangeableDiscriminator(discriminatorField="transactionType", 
+			discriminatorClass="org.digijava.kernel.ampapi.endpoints.activity.discriminators.TransactionTypeDiscriminator")
 	private Integer transactionType;
 	@Interchangeable(fieldTitle="Adjustment Type")
 	private AmpCategoryValue adjustmentType;

@@ -35,7 +35,7 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
 	private AmpCategoryValue parentCategoryValue;
 	@Interchangeable(fieldTitle="Parent Location", pickIdOnly=true)
 	private AmpCategoryValueLocations parentLocation;
-	@Interchangeable(fieldTitle="Child Locations", pickIdOnly = true)
+//	@Interchangeable(fieldTitle="Child Locations", pickIdOnly = true)
 	private Set<AmpCategoryValueLocations> childLocations;
 	@Interchangeable(fieldTitle="Description")
 	private String description;

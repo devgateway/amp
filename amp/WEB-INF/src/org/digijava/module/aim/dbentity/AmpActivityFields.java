@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-
+import org.digijava.kernel.ampapi.endpoints.activity.discriminators.ApprovalStatusDiscriminator;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
@@ -428,7 +428,9 @@ LoggerIdentifiable, Cloneable {
 	@VersionableCollection(fieldTitle = "Regional Fundings")
 	protected Set <AmpRegionalFunding> regionalFundings;
 
-	@Interchangeable(fieldTitle = "Approval Status")
+	@Interchangeable(fieldTitle = "Approval Status",importable=false)
+	@InterchangeableDiscriminator(discriminatorField="approvalStatus", 
+		discriminatorClass="org.digijava.kernel.ampapi.endpoints.activity.discriminators.ApprovalStatusDiscriminator")
 	@VersionableFieldSimple(fieldTitle = "Approval Status", blockSingleChange = true)
 	protected String approvalStatus;
 

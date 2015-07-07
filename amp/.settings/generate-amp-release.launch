@@ -7,9 +7,9 @@
 <stringAttribute key="M2_PROFILES" value=""/>
 <listAttribute key="M2_PROPERTIES">
 <listEntry value="serverName=local"/>
-<listEntry value="jdbc.db=amp-moldova-stg-210"/>
+<listEntry value="jdbc.db=amp_moldova_211_stg_nobin"/>
 <listEntry value="jdbc.user=postgres"/>
-<listEntry value="jdbc.password=m0n1t0r"/>
+<listEntry value="jdbc.password=abc"/>
 <listEntry value="jdbc.port=5432"/>
 </listAttribute>
 <stringAttribute key="M2_RUNTIME" value="EMBEDDED"/>

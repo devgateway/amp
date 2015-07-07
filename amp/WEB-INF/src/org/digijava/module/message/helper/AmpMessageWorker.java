@@ -28,6 +28,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.exception.AimException;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -745,28 +746,27 @@ public class AmpMessageWorker {
         
         Collection<AmpTeamMember>l = TeamMemberUtil.getAllAmpTeamMembersByAmpTeamMemberId(teamIds);
 		for (AmpTeamMember ampTeamMember : l) {
+			
 			TeamMember member=new TeamMember(ampTeamMember);
-			/** this can be taken of initializeTeamFiltersSession but with out saving into session**/
 			
-			
-			AmpTeam ampTeam = ampTeamMember.getAmpTeam();
-			AmpARFilter af = new AmpARFilter();
-			af.fillWithDefaultsSettings();
-			af.fillWithDefaultsFilter(null);
-			if (ampTeam.getFilterDataSet()!=null && ampTeam.getFilterDataSet().size()>0 ){
-				af = FilterUtil.buildFilter(ampTeam, null);
-			}
-			af.generateFilterQuery(TLSUtils.getRequest(), true);
-			CompleteWorkspaceFilter s= new CompleteWorkspaceFilter(member,af);
+			if(TLSUtils.getRequest()==null){
+				TLSUtils.populateMockTlsUtils();
+				TLSUtils.getRequest().getSession().setAttribute(Constants.CURRENT_MEMBER, member);
 
+			}
+			AmpARFilter af = FilterUtil.buildFilter(ampTeamMember.getAmpTeam(), null);
+			af.generateFilterQuery(TLSUtils.getRequest(), true);
+
+			CompleteWorkspaceFilter s= new CompleteWorkspaceFilter(member,af);
 			if (s.getIds().contains(ampActivityId)) {
-				teamsToReturn.add(ampTeamMember.getAmpTeam());
+				teamsToReturn.add(ampTeamMember.getAmpTeam());//ampTeamMember.getUser().getEmail()
 			}
 		}
         long endTime = System.currentTimeMillis();
         logger.debug("time elapsed " + (endTime - startTime));
         return teamsToReturn;
     }
+
     private static CalendarEvent createEventFromTemplate(TemplateAlert template, HashMap<String, String> myMap, CalendarEvent newEvent) {
         newEvent.setName(DgUtil.fillPattern(template.getName(), myMap));
         newEvent.setDescription(DgUtil.fillPattern(template.getDescription(), myMap));

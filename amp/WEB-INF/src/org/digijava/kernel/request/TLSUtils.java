@@ -1,13 +1,21 @@
 package org.digijava.kernel.request;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.RequestUtils;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.Stubber;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -137,5 +145,55 @@ public class TLSUtils {
 		TLSUtils.getThreadLocalInstance().request = null;
 		TLSUtils.getThreadLocalInstance().site = null;
 	}
-	 
+    /**
+     * populate TLSUtils using a mock objects to store 
+     * request and session objects so they can be used in environments 
+     * where no request is available (such as jobs)
+     */
+	public static void populateMockTlsUtils(){
+		HttpServletRequest mockRequest = Mockito.mock(HttpServletRequest.class); 
+	    HttpSession mockSession = Mockito.mock( HttpSession.class );
+	    Mockito.when( mockRequest.getSession() ).thenReturn( mockSession );	
+    	final Map<String, Object> requestAttributes = new ConcurrentHashMap<String, Object>();     
+
+    	getMockSetter(requestAttributes).when(mockRequest).setAttribute(Mockito.anyString(), Mockito.anyObject());
+    	getMockGetter(requestAttributes).when(mockRequest).getAttribute(Mockito.anyString());    	
+    	
+    	final Map<String, Object> sessionAttributes = new ConcurrentHashMap<String, Object>();     
+    	// Mock setAttribute
+    	getMockSetter(sessionAttributes).when(mockSession).setAttribute(Mockito.anyString(), Mockito.anyObject());
+    	getMockGetter(sessionAttributes).when(mockSession).getAttribute(Mockito.anyString());    	
+    	
+		TLSUtils.getThreadLocalInstance().request=mockRequest;
+    }
+
+	private static Stubber getMockGetter(final Map<String, Object> sessionAttributes) {
+		Stubber s=
+    	Mockito.doAnswer(new Answer<Object>() {
+    	    @Override
+    	    public Object answer(InvocationOnMock invocation) throws Throwable {
+    	        String key = invocation.getArgumentAt(0, String.class);
+    	        Object value = sessionAttributes.get(key);
+    	        System.out.println("get attribute value for key="+key+" : "+value);
+    	        return value;
+    	    }
+    	});
+		return s;
+	}
+
+	private static Stubber getMockSetter(final Map<String, Object> sessionAttributes) {
+		Stubber s=
+    	Mockito.doAnswer(new Answer<Void>() {
+    	    @Override
+    	    public Void answer(InvocationOnMock invocation) throws Throwable {
+    	        String key = invocation.getArgumentAt(0, String.class);
+    	        Object value = invocation.getArgumentAt(1, Object.class);
+    	        sessionAttributes.put(key, value);
+    	        System.out.println("put attribute key="+key+", value="+value);
+    	        return null;
+    	    }
+    	});
+		return s;
+	}
+    	 
 }

@@ -682,8 +682,8 @@ public class AmpMessageWorker {
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityValidationWorkflowTrigger.PARAM_NAME));
 
         //url
-        myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(ActivityValidationWorkflowTrigger.PARAM_URL) + "\">activity URL</a>");
-        alert.setObjectURL("/" + e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_URL));
+        myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\""  + e.getParameters().get(ActivityValidationWorkflowTrigger.PARAM_URL) + "\">activity URL</a>");
+        alert.setObjectURL( ""+e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_URL));
         alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
         return createAlertFromTemplate(template, myHashMap, alert,finalReceivers.toString());
     }

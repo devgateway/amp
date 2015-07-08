@@ -3361,21 +3361,18 @@ public class ExportActivityToWord extends Action {
             identificationSubTable1.addCell(cell);
         }
 
-        if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Humanitarian Aid")) {
-            cell = new RtfCell();
-            cell.setColspan(2);
-            cell.setBorder(0);
-            cell.add(new Paragraph(TranslatorWorker.translateText("Humanitarian Aid")+": ",PLAINFONT));
-
-            columnVal="";
-            if (identification.getHumanitarianAid()!=null && identification.getHumanitarianAid()){
-                columnVal = "Yes";
-            } else if (identification.getHumanitarianAid()!=null && ! identification.getHumanitarianAid()) {
-                columnVal = "No";
-            }
-            cell.add(new Paragraph(columnVal, BOLDFONT));
-            identificationSubTable1.addCell(cell);
-        }
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Humanitarian Aid")) {
+			cell = new RtfCell();
+			cell.setColspan(2);
+			cell.setBorder(0);
+			cell.add(new Paragraph(TranslatorWorker.translateText("Humanitarian Aid") + ": ",PLAINFONT));
+						
+			if (identification.getHumanitarianAid() != null ) {
+				columnVal = TranslatorWorker.translateText(identification.getHumanitarianAid() ? "Yes" : "No");
+				cell.add(new Paragraph(columnVal, BOLDFONT));
+				identificationSubTable1.addCell(cell);
+			}
+		}
     }
     //TODO: unify it with the one from ExportActivityToPDF (move to a common place)
     //please fix me asap or humanity will reach deep space before it's done

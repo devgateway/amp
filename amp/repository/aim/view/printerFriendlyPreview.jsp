@@ -636,25 +636,22 @@ body {background:none;}
 									</tr>
 									</field:display>
 		</feature:display>
-	<module:display name="/Activity Form/Identification/Humanitarian Aid" parentModule="/Activity Form/Identification">
-                                     
- 
-										<field:display name="Humanitarian Aid" feature="Identification">
-											<tr>
-												<td width="30%" align="right" valign="top" nowrap="nowrap" ><b>
-													<digi:trn key="aim:humanitarianaid">
-													 Humanitarian Aid</digi:trn></b></td>
-												<td bgcolor="#ffffff">
-													<c:if test="${!aimEditActivityForm.identification.humanitarianAid==true}">
-														<digi:trn key="aim:no">No</digi:trn>
-													</c:if>
-													<c:if test="${aimEditActivityForm.identification.humanitarianAid==true}">
-														<digi:trn key="aim:yes">Yes</digi:trn>
-													</c:if>
-	&nbsp;										</td>
-											</tr>
-										</field:display>
-	</module:display>
+		<module:display name="/Activity Form/Identification/Humanitarian Aid" parentModule="/Activity Form/Identification">
+								<tr>
+									<td width="30%" align="right" valign="top" nowrap="nowrap">
+										<b><digi:trn key="aim:humanitarianaid">Humanitarian Aid</digi:trn></b>
+									</td>
+									<td bgcolor="#ffffff">
+										<c:if test="${!aimEditActivityForm.identification.humanitarianAid==true}">
+											<digi:trn key="aim:no">No</digi:trn>
+										</c:if>
+										<c:if test="${aimEditActivityForm.identification.humanitarianAid==true}">
+											<digi:trn key="aim:yes">Yes</digi:trn>
+										</c:if>
+										&nbsp;
+									</td>
+								</tr>
+		</module:display>
 								
 									<field:display feature="Identification" name="Organizations and Project ID">
 											<tr>

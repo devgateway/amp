@@ -748,22 +748,16 @@ public class ExportActivityToPDF extends Action {
                 mainLayout.addCell(orgProjCell2);
             }
 
-            /**
-             * Humanitarian Aid
-             */
-            if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Humanitarian Aid")){
-                String value="";
-                if(activity.isHumanitarianAid()!=null && activity.isHumanitarianAid()){
-                    value="Yes";
-                }else if(activity.isHumanitarianAid()!=null && ! activity.isHumanitarianAid()){
-                    value="No";
-                }
-
-                if(value.length()>0){
-                    columnName=TranslatorWorker.translateText("Humanitarian Aid");
-                    createGeneralInfoRow(mainLayout,columnName,value);
-                }
-            }
+			/**
+			 * Humanitarian Aid
+			 */
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Humanitarian Aid")){
+				if (activity.isHumanitarianAid() != null) {
+					String value = TranslatorWorker.translateText(activity.isHumanitarianAid() ? "Yes": "No");
+					columnName = TranslatorWorker.translateText("Humanitarian Aid");
+					createGeneralInfoRow(mainLayout, columnName, value);
+				}
+			}			
 
 
             //Planning

@@ -88,7 +88,9 @@ public class Security {
 	 * @param containerReq
 	 */
 	public static void authorize(ContainerRequest containerReq) {
+		/* disabling for now, since cannot commit yet ApiAuthorization class due to some pom.xml changes needed and we are in 2.10 code freeze 
 		ApiAuthorization.authorize(containerReq);
+		*/
 	}
 	
 	/**

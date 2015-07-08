@@ -3317,15 +3317,12 @@ public class ExportActivityToWord extends Action {
 			cell.setColspan(2);
 			cell.setBorder(0);
 			cell.add(new Paragraph(TranslatorWorker.translateText("Humanitarian Aid")+": ",PLAINFONT));
-			
-			columnVal="";
-			if (identification.getHumanitarianAid()!=null && identification.getHumanitarianAid()){
-				columnVal = "Yes";
-			} else if (identification.getHumanitarianAid()!=null && ! identification.getHumanitarianAid()) {
-				columnVal = "No";
+						
+			if (identification.getHumanitarianAid() != null ) {
+				columnVal = TranslatorWorker.translateText(identification.getHumanitarianAid() ? "Yes" : "No");
+				cell.add(new Paragraph(columnVal, BOLDFONT));
+				identificationSubTable1.addCell(cell);
 			}
-			cell.add(new Paragraph(columnVal, BOLDFONT));
-			identificationSubTable1.addCell(cell);
 		}
 	}
 	//TODO: unify it with the one from ExportActivityToPDF (move to a common place)

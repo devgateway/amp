@@ -749,20 +749,13 @@ public class ExportActivityToPDF extends Action {
 			 * Humanitarian Aid
 			 */
 			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Humanitarian Aid")){
-				String value="";
-				if(activity.isHumanitarianAid()!=null && activity.isHumanitarianAid()){
-					value="Yes";
-				}else if(activity.isHumanitarianAid()!=null && ! activity.isHumanitarianAid()){
-					value="No";
-				}
-				
-				if(value.length()>0){
-					columnName=TranslatorWorker.translateText("Humanitarian Aid");
-					createGeneralInfoRow(mainLayout,columnName,value);
+				if (activity.isHumanitarianAid() != null) {
+					String value = TranslatorWorker.translateText(activity.isHumanitarianAid() ? "Yes": "No");
+					columnName = TranslatorWorker.translateText("Humanitarian Aid");
+					createGeneralInfoRow(mainLayout, columnName, value);
 				}
 			}			
-						 
-			
+						 		
             //Planning
 			if(FeaturesUtil.isVisibleModule("/Activity Form/Planning")){			
 				String outputValue="";

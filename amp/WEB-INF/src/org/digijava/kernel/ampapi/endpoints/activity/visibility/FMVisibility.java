@@ -96,6 +96,12 @@ public class FMVisibility {
 		AmpModulesVisibility modulesVisibility = ampTreeVisibility.getModuleByNameFromRoot(lastVerifiedPath);
 		if (modulesVisibility != null) {
 			isVisible = modulesVisibility.isVisibleTemplateObj((AmpTemplatesVisibility) ampTreeVisibility.getRoot());
+			
+			// AMP-20597 when root FM is disabled and children are enabled, all the children will be not shown
+			if ("/Activity Form".equals(lastVerifiedPath)) {
+				isVisible = true;
+			}
+			
 			visibilityMap.put(lastVerifiedPath, isVisible);
 		}
 		if (!fmPath.equals(lastVerifiedPath) && isVisible) {

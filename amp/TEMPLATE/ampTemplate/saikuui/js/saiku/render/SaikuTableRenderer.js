@@ -352,13 +352,19 @@ function sanitizeRows(rowData, data) {
 }
 
 SaikuTableRenderer.prototype.internalRender = function(allData, options) {
-	if (Settings.AMP_REPORT_API_BRIDGE) {
+	if (Settings.AMP_REPORT_API_BRIDGE) {		
 		var metadata = {
 			hierarchies : Saiku.tabs._tabs[0].content.query.attributes.hierarchies,
 			columns : Saiku.tabs._tabs[0].content.query.attributes.columns,
 			type : 'html'
 		};
 		var ampTableRenderer = new AMPTableRenderer(metadata);
+		
+		allData.workspace.bind('saikuTableRender:tableRenderedInDOM', function(
+				args) {
+			ampTableRenderer.postProcessTooltips();
+		});
+		
 		return ampTableRenderer.render(allData, options);
 	}
 	

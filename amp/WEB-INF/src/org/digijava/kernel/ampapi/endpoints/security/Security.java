@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -18,6 +19,8 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamUtil;
+
+import com.sun.jersey.spi.container.ContainerRequest;
 
 /**
  * This class should have all security / permissions related methods
@@ -79,4 +82,27 @@ public class Security {
 
 		return authenticationResult;
 	}
+	
+	/**
+	 * Authorizes Container Request
+	 * @param containerReq
+	 */
+	public static void authorize(ContainerRequest containerReq) {
+		ApiAuthorization.authorize(containerReq);
+	}
+	
+	/**
+	 * THIS IS FOR DEBUG ONLY. Must be disabled on production.
+	 * @param token
+	 * @return
+	 */
+	/*
+	@GET
+	@Path("/token")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public String echo(@QueryParam("amp_api_token") String token) {
+		token = SecurityUtil.generateToken();
+		return "Token: " + token;
+	}
+	*/
 }

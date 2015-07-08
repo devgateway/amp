@@ -1886,6 +1886,20 @@ public class TeamUtil {
     }
     
     /**
+     * @return true if logged in as Amp Admin
+     */
+    public static boolean isCurrentMemberAdmin(){
+    	return "yes".equals(TLSUtils.getRequest().getSession().getAttribute("ampAdmin"));
+    }
+    
+    /**
+     * @return true of the user is in actual workspace
+     */
+    public static boolean isUserInWorkspace() {
+    	return !isCurrentMemberAdmin() && getCurrentMember() != null;
+    }
+    
+    /**
      * uses {@link TLSUtils} to get the current request's team member
      * @return AmpTeamMember
      */

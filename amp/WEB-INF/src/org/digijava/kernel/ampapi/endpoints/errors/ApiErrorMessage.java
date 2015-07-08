@@ -61,5 +61,13 @@ public class ApiErrorMessage {
 	public int hashCode() {
 		return (19 + id) * 23 + description.hashCode();
 	}
+	
+	@Override
+	public String toString() {
+		return "[" + id + "] " + 
+				(prefix == null ? "" : "(" + prefix + ") ")
+				+ description +
+				(value == null ? "" :  " : " + value); 
+	}
 
 }

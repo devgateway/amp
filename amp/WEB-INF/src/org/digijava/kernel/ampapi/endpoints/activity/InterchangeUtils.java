@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.PathSegment;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -27,6 +28,7 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.Validators;
@@ -35,11 +37,13 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.springframework.web.context.request.ServletRequestAttributes;
+
+import com.sun.jersey.spi.container.ContainerRequest;
 
 /**
  * Activity Import/Export Utility methods 
@@ -512,4 +516,43 @@ public class InterchangeUtils {
 		
 		return true;
 	}
-}
+	
+	/**
+	 * @param containerReq current request
+	 * @return true if request is valid to edit an activity
+	 */
+	public static boolean isEditableActivity(ContainerRequest containerReq) {
+		if (!TeamUtil.isUserInWorkspace()) {
+			return false;
+		}
+		JsonBean input = (JsonBean) containerReq.getEntity(JsonBean.class);
+		Long id = input == null ? null : (Long) input.get(ActivityFieldsConstants.AMP_ACTIVITY_ID);
+		// we reuse the same approach as the one done by Project List EP
+		return id != null && ProjectList.getEditableActivityIds().contains(id);
+	}
+	
+	/**
+	 * @param containerReq
+	 * @return true if request is valid to view an activity
+	 */
+	public static boolean isViewableActivity(ContainerRequest containerReq) {
+		if (!TeamUtil.isUserInWorkspace()) {
+			return false;
+		}
+		List<PathSegment> paths = containerReq.getPathSegments();
+		Long id = null;
+		if (paths != null && paths.size() > 0) {
+			PathSegment segment = paths.get(paths.size() - 1);
+			if (StringUtils.isNumeric(segment.getPath())) {
+				id = Long.valueOf(segment.getPath());
+			}
+		}
+		// we reuse the same approach as the one done by Project List EP
+		/* disabling for now due to AMP-20496
+		return id != null && ProjectList.getViewableActivityIds(TeamUtil.getCurrentMember()).contains(id);
+		*/
+		// remove this and turn on previous when AMP-20496 is fixed
+		return id != null;
+	}
+	
+} 

@@ -109,7 +109,7 @@ public class ProjectList {
 	 * @param session HttpSession
 	 * @return List<Long> with the editable activity Ids
 	 */
-	private static List<Long> getEditableActivityIds() {
+	public static List<Long> getEditableActivityIds() {
 		HttpSession session = TLSUtils.getRequest().getSession();
 		String query = WorkspaceFilter.getWorkspaceFilterQuery(session);
 		return PersistenceManager.getSession().createSQLQuery(query).list();
@@ -122,7 +122,7 @@ public class ProjectList {
 	 * @param tm Logged teamMember
 	 * @return the List<Long> of ids of the activities that the logged user can view.
 	 */
-	private static List<Long> getViewableActivityIds(TeamMember tm) {
+	public static List<Long> getViewableActivityIds(TeamMember tm) {
 		List<Long> viewableActivityIds = new ArrayList<Long>();
 		try {
 

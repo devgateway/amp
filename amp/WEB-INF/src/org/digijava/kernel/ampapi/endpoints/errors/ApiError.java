@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.errors;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,14 +53,14 @@ public class ApiError {
 	 * @param ApiErrorMessage object 
 	 * @return the JSON object of the error. E.g.: {0: [“Generic error 1”, “Generic error 2”], 135: [“Forbidden fields have been configured: sector_id”], 123: [“Generic error 1”]}
 	 */
-	public static JsonBean toError(List<?> errorMessages) {
-		Map<String, List<String>> errors = new HashMap<String, List<String>>();
+	public static JsonBean toError(Collection<?> errorMessages) {
+		Map<String, Collection<String>> errors = new HashMap<String, Collection<String>>();
 		
 		if (errorMessages != null && errorMessages.size() > 0) {
-			if (errorMessages.get(0) instanceof String) {
+			if (errorMessages.iterator().next() instanceof String) {
 				String generalErrorCode = String.format(API_ERROR_PATTERN, GENERAL_ERROR_CODE, GENERIC_HANDLED_ERROR_CODE);
-				errors.put(generalErrorCode, (List<String>) errorMessages);
-			} else if (errorMessages.get(0) instanceof ApiErrorMessage) {
+				errors.put(generalErrorCode, (Collection<String>) errorMessages);
+			} else if (errorMessages.iterator().next() instanceof ApiErrorMessage) {
 				int componentId = getErrorComponentId();
 				for(Object errorMessage : errorMessages) {
 					ApiErrorMessage apiError = (ApiErrorMessage) errorMessage;

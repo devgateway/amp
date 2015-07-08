@@ -11,9 +11,9 @@ import javax.ws.rs.core.Context;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.ampapi.endpoints.security.Security;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.request.TLSUtils;
@@ -27,11 +27,13 @@ import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerRequestFilter;
 
 /***
+ * Configures common parameters and validates some requests
  * 
  * @author Diego Dimunzio
- * 
  */
 public class AuthRequestFilter implements ContainerRequestFilter {
+	// use it to disable temporarily the authorization
+	private static final boolean AUTHORIZE = false;
 	// Inject request into the filter
 	@Context
 	private HttpServletRequest httpRequest;
@@ -40,22 +42,26 @@ public class AuthRequestFilter implements ContainerRequestFilter {
 
 	@Override
 	public ContainerRequest filter(ContainerRequest arg0) {
-        SiteDomain siteDomain = null;
+		SiteDomain siteDomain = null;
         //yet to strip the mainPath dynamically, committed hardcoded for testing purposes
         String mainPath="/rest";
         siteDomain = SiteCache.getInstance().getSiteDomain(httpRequest.getServerName(), mainPath);
         httpRequest.setAttribute(org.digijava.kernel.Constants.CURRENT_SITE, siteDomain);
         
-        //configure requested language
+        // configure requested language
         addLanguage(siteDomain);
         
-        //configure translastions if exist
+        // configure translastions if exist
         addTranslations(siteDomain);
         
         TLSUtils.populate(httpRequest);
         
         addDefaultTreeVisibility();
-		
+        
+        if (AUTHORIZE) {
+        	Security.authorize(arg0);
+        }
+        
         return arg0;
 	}
 	
@@ -64,8 +70,8 @@ public class AuthRequestFilter implements ContainerRequestFilter {
         if (httpRequest.getParameter(EPConstants.LANGUAGE) != null) {
         	String lang = httpRequest.getParameter(EPConstants.LANGUAGE).toLowerCase();
         	if (SiteUtils.getUserLanguagesCodes(siteDomain.getSite()).contains(lang)) {
-        		Locale locale = new Locale();
-        		locale.setCode(lang);
+	        	Locale locale = new Locale();
+	        	locale.setCode(lang);
 	        	httpRequest.setAttribute(org.digijava.kernel.Constants.NAVIGATION_LANGUAGE, locale);
         	}
         }
@@ -96,7 +102,7 @@ public class AuthRequestFilter implements ContainerRequestFilter {
 		}
 		
 		TranslationSettings translationBean = new TranslationSettings(currentLocaleCode, translations);
-		
+        
 		httpRequest.setAttribute(EPConstants.TRANSLATIONS, translationBean);
 	}
 	
@@ -109,4 +115,5 @@ public class AuthRequestFilter implements ContainerRequestFilter {
             FeaturesUtil.setAmpTreeVisibility(httpRequest.getServletContext(), httpRequest.getSession(), ampTreeVisibility);
 		}
 	}
+	
 }

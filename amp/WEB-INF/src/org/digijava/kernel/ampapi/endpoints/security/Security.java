@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.xml.parsers.ParserConfigurationException;
@@ -33,8 +34,10 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamUtil;
 import org.xml.sax.SAXException;
 
+import com.sun.jersey.spi.container.ContainerRequest;
+
 /**
- * This class should have all security / permisions related methods
+ * This class should have all security / permissions related methods
  * 
  * @author jdeanquin@developmentgateway.org
  * 
@@ -186,4 +189,28 @@ public class Security {
 		return layout;
 	}
 
+	/**
+	 * Authorizes Container Request
+	 * @param containerReq
+	 */
+	public static void authorize(ContainerRequest containerReq) {
+		/* disabling for now, since cannot commit yet ApiAuthorization class due to some pom.xml changes needed and we are in 2.10 code freeze 
+		ApiAuthorization.authorize(containerReq);
+		*/
+	}
+	
+	/**
+	 * THIS IS FOR DEBUG ONLY. Must be disabled on production.
+	 * @param token
+	 * @return
+	 */
+	/*
+	@GET
+	@Path("/token")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public String echo(@QueryParam("amp_api_token") String token) {
+		token = SecurityUtil.generateToken();
+		return "Token: " + token;
+	}
+	*/
 }

@@ -42,6 +42,7 @@ import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecif
 import org.dgfoundation.amp.reports.mondrian.converters.MondrianReportFiltersConverter;
 import org.dgfoundation.amp.reports.saiku.export.AMPExcelExport;
 import org.dgfoundation.amp.reports.saiku.export.AMPPdfExport;
+import org.dgfoundation.amp.reports.saiku.export.AMPReportCsvExport;
 import org.dgfoundation.amp.reports.saiku.export.AMPReportExcelExport;
 import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
@@ -595,9 +596,10 @@ public class Reports {
 			case AMPReportExportConstants.XLSX:
 				doc = AMPReportExcelExport.generateExcel(result, AMPReportExportConstants.XLSX, report, queryModel);
 				break;
-			/*
-			 * case "csv": doc = SaikuUtils.getCsv(result, settings, ",", "\""); break;
-			 */
+			case AMPReportExportConstants.CSV: 
+				doc = AMPReportCsvExport.generateCSV(result, AMPReportExportConstants.CSV, report, queryModel, ";");
+				break;
+			
 			case AMPReportExportConstants.PDF:
 				AMPPdfExport pdf = new AMPPdfExport();
 				doc = pdf.pdf(result, AMPReportExportConstants.PDF);

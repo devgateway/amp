@@ -241,22 +241,27 @@ function generateContentHtml(page, options) {
 
 	// Add last row with totals.
 	var totalRow = "<tr>";
-	for (var i = 0; i < this.headerMatrix[this.lastHeaderRow].length; i++) {
+	for (var j = 0; j < this.headerMatrix[this.lastHeaderRow].length; j++) {
 		// This check is for those summarized reports that dont return any
 		// content.
 		if (page.pageArea.contents !== null) {
-			var totalValue = "<td class='data total'>";
-			var cell = page.pageArea.contents[this.headerMatrix[this.lastHeaderRow][i].hierarchicalName];
+			var td = "<td class='data total tooltiped'";
+			var auxTd = "";
+			var cell = page.pageArea.contents[this.headerMatrix[this.lastHeaderRow][j].hierarchicalName];
 			if (this.type === 'xlsx' || this.type === 'csv') {
-				totalValue += cell.value;
-			} else if (this.type === 'pdf' || type === 'html') {
-				totalValue += "<div class='total'>" + cell.displayedValue
-						+ "</div>";
-			} else {
-				totalValue += cell.displayedValue;
+				auxTd += cell.value;
+			} else if (this.type === 'pdf') {
+				auxTd += "<div class='total'>" + cell.displayedValue + "</div>";
+			} else if (type === 'html') {
+				if (j === 0) {
+					td += " original-title='" + cell.displayedValue
+							+ "' data-subtotal='true'";
+				}
+				auxTd += "<div class='total'>" + cell.displayedValue + "</div>";
 			}
-			totalValue += "</td>";
-			totalRow += totalValue;
+			td += ">";
+			td += auxTd + "</td>";
+			totalRow += td;
 		}
 	}
 	totalRow += "</tr>";
@@ -337,7 +342,7 @@ function generateDataRows(page, options) {
 						// Trying something new here: show tooltip on the
 						// now empty "Hierarchy Value Totals" row.
 						if (cleanValue.text !== undefined) {
-							styleClass = " class='row_total tooltipped' original-title='"
+							styleClass = " class='row_total tooltipped' data-subtotal='true' original-title='"
 									+ cleanValue.text + "' ";
 						} else {
 							styleClass = " class='row_total' ";
@@ -532,4 +537,23 @@ function checkIfSummarizedReportWithConstant(page) {
 		summarized = true;
 	}
 	return summarized;
+}
+
+/**
+ * This method will be used only for HTML output (never from Rhino). It adds
+ * tooltips for all subtotal row's cell, not only for the first one.
+ */
+AMPTableRenderer.prototype.postProcessTooltips = function() {
+	var totalCells = $('table').find("[data-subtotal='true']");
+	_.each(totalCells, function(cell) {
+		if ($(cell).attr('original-title') !== '') {
+			var tooltip = $(cell).attr('original-title');
+			var row = $(cell).parent();
+			_.each(row.children(), function(th) {
+				$(th).attr('original-title', tooltip);
+				$(th).addClass('tooltipped');
+			});
+		}
+	});
+	$(".tooltipped").tipsy();
 }

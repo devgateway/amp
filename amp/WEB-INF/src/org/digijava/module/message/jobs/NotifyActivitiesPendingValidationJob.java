@@ -33,7 +33,7 @@ public class NotifyActivitiesPendingValidationJob extends ConnectionCleaningJob 
 			@Override
 			public void execute(Connection connection) throws SQLException {
 				String condition=" where date_updated::date =(current_date -3) "+ 
-							" and approval_status in ("+  Constants.ACTIVITY_NEEDS_APPROVAL_STATUS +")";
+							" and approval_status in ("+  Constants.ACTIVITY_NEEDS_APPROVAL_STATUS +") and draft=false";
 
 				ViewFetcher v = DatabaseViewFetcher.getFetcherForView("amp_activity",condition,TLSUtils.getEffectiveLangCode(),
 						new HashMap<PropertyDescription, ColumnValuesCacher>(),connection, "*");

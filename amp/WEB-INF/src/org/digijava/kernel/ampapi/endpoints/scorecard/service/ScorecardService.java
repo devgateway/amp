@@ -487,7 +487,7 @@ public class ScorecardService {
 			public void execute(Connection conn) throws SQLException {
 				String query = "select max(a.amp_activity_id) as amp_activity_id,amp_id  from amp_activity_version a," +
 						"amp_activities_categoryvalues c,amp_category_value v  "
-						+ "where deleted is false and date_updated <= '"+endPeriodDate+"' "
+						+ "where a.deleted is false and date_updated <= '"+endPeriodDate+"' "
 						+ "and a.amp_activity_id = c.amp_activity_id "
 						+ "AND c.amp_categoryvalue_id = v.id "
 						+ "AND  v.amp_category_class_id = (select id from amp_category_class where "

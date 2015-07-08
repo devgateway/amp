@@ -31,7 +31,7 @@ AMPTableRenderer.prototype.render = function(data, options) {
 	// When using this class to export the report we receive these extra
 	// parameters from the endpoint because are unavailable in the constructor
 	// call when using Rhino.
-	if (type === 'pdf') {
+	if (type === 'pdf' || type === 'csv') {
 		metadataColumns = data.columns;
 		metadataHierarchies = data.hierarchies;
 	}
@@ -91,6 +91,14 @@ function generateHeaderHtml(headers) {
 	}
 	// Reorder matrix rows.
 	this.headerMatrix.reverse();
+
+	// Flatten header for CSV processing.
+	if (this.type === 'csv') {
+		var lastRow = this.headerMatrix.splice(maxHeaderLevel - 1, 1);
+		this.headerMatrix = lastRow;
+		maxHeaderLevel = 1;
+	}
+
 	// Check columns metadata
 	calculateColumnsDisposition();
 	// Generate header HTML.
@@ -115,7 +123,11 @@ function generateHeaderHtml(headers) {
 				// Since groupCount is 0 when no column grouping is applicable
 				// then we don't need an extra IF for creating the 'col'
 				// variable.
-				var groupCount = findSameHeaderHorizontally(i, j);
+				var groupCount = 0;
+				if (this.type === 'xlsx' || this.type === 'pdf'
+						|| type === 'html') {
+					groupCount = findSameHeaderHorizontally(i, j);
+				}
 				// Define styles for the header.
 				var style = " class='col";
 				if (sortingType.length > 0) {
@@ -134,9 +146,16 @@ function generateHeaderHtml(headers) {
 					this.headerMatrix[i][j].columnName = "-";
 				}
 
+				// Use the full hierarchicalName when processing CSV.
+				var colName = "";
+				if (this.type === 'csv') {
+					colName = this.headerMatrix[i][j].hierarchicalName
+				} else {
+					colName = this.headerMatrix[i][j].columnName
+				}
 				col = "<th" + style + id + " data-header-level='" + i + "'"
 						+ sortingType + " colspan='" + groupCount + "'><div>"
-						+ this.headerMatrix[i][j].columnName + "</div></th>";
+						+ colName + "</div></th>";
 
 				// We change 'j' in order to skip the next N columns.
 				j += groupCount;
@@ -228,9 +247,9 @@ function generateContentHtml(page, options) {
 		if (page.pageArea.contents !== null) {
 			var totalValue = "<td class='data total'>";
 			var cell = page.pageArea.contents[this.headerMatrix[this.lastHeaderRow][i].hierarchicalName];
-			if (this.type === 'xlsx') {
+			if (this.type === 'xlsx' || this.type === 'csv') {
 				totalValue += cell.value;
-			} else if (this.type === 'pdf') {
+			} else if (this.type === 'pdf' || type === 'html') {
 				totalValue += "<div class='total'>" + cell.displayedValue
 						+ "</div>";
 			} else {
@@ -264,6 +283,15 @@ function generateDataRows(page, options) {
 	}
 
 	for (var i = 0; i < this.contentMatrix.length; i++) {
+		// Skip total rows for CSV.
+		if (this.type === 'csv') {
+			var skip = _.find(this.contentMatrix[i], function(item) {
+				return (item.isTotal !== true);
+			});
+			if (skip === undefined) {
+				continue;
+			}
+		}
 		var applyTotalRowStyle = false;
 		var row = "<tr>";
 		for (var j = 0; j < this.contentMatrix[i].length; j++) {
@@ -275,12 +303,18 @@ function generateDataRows(page, options) {
 				var group = findGroupVertically(this.contentMatrix, i, j);
 				var rowSpan = " rowspan='" + group + "' ";
 				var styleClass = "";
-				if (this.type === 'xlsx') {
+				if (this.type === 'xlsx' || this.type === 'csv') {
 					var value = this.contentMatrix[i][j].value;
 				} else {
 					var value = this.contentMatrix[i][j].displayedValue;
 				}
-				var cleanValue = cleanText(value);
+				var cleanValue = {};
+				if (this.type === 'csv') {
+					value = "" + value + "";
+					cleanValue = cleanValue = cleanText(value);
+				} else {
+					cleanValue = cleanText(value, 60);
+				}
 				if (cleanValue.tooltip !== undefined) {
 					styleClass = " class='row tooltipped' original-title='"
 							+ cleanValue.tooltip + "' ";
@@ -302,7 +336,7 @@ function generateDataRows(page, options) {
 					if (applyTotalRowStyle === true) {
 						// Trying something new here: show tooltip on the
 						// now empty "Hierarchy Value Totals" row.
-						if (cleanValue.text != undefined) {
+						if (cleanValue.text !== undefined) {
 							styleClass = " class='row_total tooltipped' original-title='"
 									+ cleanValue.text + "' ";
 						} else {
@@ -311,7 +345,7 @@ function generateDataRows(page, options) {
 					} else {
 						styleClass = " class='row' ";
 					}
-					if (type === 'html') {
+					if (this.type === 'html') {
 						cleanValue.text = '';
 					}
 				}
@@ -323,9 +357,9 @@ function generateDataRows(page, options) {
 				// Change amount styles if is a subtotal.
 				if (this.contentMatrix[i][j].isTotal === true) {
 					cell = "<td class='data total'>";
-					if (this.type === 'xlsx') {
+					if (this.type === 'xlsx' || this.type === 'csv') {
 						cell += this.contentMatrix[i][j].value;
-					} else if (this.type === 'pdf') {
+					} else if (this.type === 'pdf' || type === 'html') {
 						cell += "<div class='total'>"
 								+ this.contentMatrix[i][j].displayedValue
 								+ "</div>";
@@ -340,7 +374,7 @@ function generateDataRows(page, options) {
 					if (this.summarizedReport === true && i === 0 && j === 0) {
 						cell += options.reportTotalsString;
 					} else {
-						if (this.type === 'xlsx') {
+						if (this.type === 'xlsx' || this.type === 'csv') {
 							cell += this.contentMatrix[i][j].value;
 						} else {
 							cell += this.contentMatrix[i][j].displayedValue;
@@ -461,13 +495,14 @@ function generateHeaderRows(column, iRow, iCol) {
  * Remove characters that would break the html, shorten if is larger than 60
  * chars and generate a tooltip text if needed.
  */
-function cleanText(text) {
+function cleanText(text, maxLength) {
 	text = text.replace(/<(?:.|\n)*?>/gm, '').replace(/["']/g, "");
-	var cellText = "";
 	var tooltip = undefined;
-	if (text.length > 60) {
-		tooltip = text;
-		text = text.substring(0, 60) + "...";
+	if (maxLength !== undefined) {
+		if (text.length > maxLength) {
+			tooltip = text;
+			text = text.substring(0, maxLength) + "...";
+		}
 	}
 	return {
 		text : text,

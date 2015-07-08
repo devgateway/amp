@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -44,11 +45,14 @@ public class AMPReportExcelExport {
 
 	private static final short cellHeight = 300;
 
+	private static final Logger logger = Logger.getLogger(AMPReportExcelExport.class);
+
 	public static byte[] generateExcel(JsonBean jb, String type, ReportSpecificationImpl report,
 			LinkedHashMap<String, Object> queryModel) throws IOException {
 		// Generate html table.
 		String content = AMPJSConverter.convertToHtml(jb, type);
 		// Parse the string.
+		logger.info("Parse document.");
 		Document doc = Jsoup.parse(content);
 
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -80,6 +84,7 @@ public class AMPReportExcelExport {
 	 */
 	private static void generateSummarySheet(Workbook wb, Sheet sheet, ReportSpecificationImpl report,
 			LinkedHashMap<String, Object> queryModel) {
+		logger.info("start generateSummarySheet.");
 		int i = 0;
 		int j = 0;
 		Map<String, List<String>> extractedFilters = new<String, List<String>> HashMap();
@@ -205,6 +210,7 @@ public class AMPReportExcelExport {
 	}
 
 	private static void generateSheet(Workbook wb, Sheet sheet, Document doc, int hierarchies, int columns, int type) {
+		logger.info("start generateSheet.");
 		boolean emptyAsZero = FeaturesUtil
 				.getGlobalSettingValueBoolean(GlobalSettingsConstants.REPORTS_EMPTY_VALUES_AS_ZERO_XLS);
 		// Process header.

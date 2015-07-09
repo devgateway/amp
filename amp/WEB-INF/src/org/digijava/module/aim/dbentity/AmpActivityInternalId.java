@@ -11,7 +11,7 @@ public class AmpActivityInternalId implements Serializable, Versionable, Cloneab
 	private static final long serialVersionUID = 469552292854192522L;
 //	@Interchangeable(fieldTitle="ID")
 	private Long id;
-//	@Interchangeable(fieldTitle="Organization")
+	@Interchangeable(fieldTitle="Organization", pickIdOnly = true)
 	private AmpOrganisation organisation;
 //	@Interchangeable(fieldTitle="AMP Activity",recursive=true)
 	private AmpActivityVersion ampActivity;

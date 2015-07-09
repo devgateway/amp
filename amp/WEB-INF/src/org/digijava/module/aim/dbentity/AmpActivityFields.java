@@ -503,16 +503,17 @@ LoggerIdentifiable, Cloneable {
 		@Interchangeable(fieldTitle = "Type of Cooperation", discriminatorOption = /*"SSC_" + */CategoryConstants.TYPE_OF_COOPERATION_KEY),
 		@Interchangeable(fieldTitle = "Type of Implementation", discriminatorOption = /*"SSC_" + */CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY),
 		@Interchangeable(fieldTitle = "Modalities", discriminatorOption = /*"SSC_" + */CategoryConstants.MODALITIES_KEY),
-		@Interchangeable(fieldTitle = "A.C. Chapter", discriminatorOption = CategoryConstants.ACCHAPTER_NAME), 
+		@Interchangeable(fieldTitle = "A.C. Chapter", discriminatorOption = CategoryConstants.ACCHAPTER_KEY), 
 		@Interchangeable(fieldTitle = "Activity Budget", discriminatorOption = CategoryConstants.ACTIVITY_BUDGET_KEY), 
 		@Interchangeable(fieldTitle = "Procurement System", discriminatorOption = CategoryConstants.PROCUREMENT_SYSTEM_KEY),
-		@Interchangeable(fieldTitle = "Reporting System", discriminatorOption = CategoryConstants.REPORTING_SYSTEM_NAME), 
-		@Interchangeable(fieldTitle = "Audit System", discriminatorOption = CategoryConstants.AUDIT_SYSTEM_NAME),
-		@Interchangeable(fieldTitle = "Institutions", discriminatorOption = CategoryConstants.INSTITUTIONS_NAME),
+		@Interchangeable(fieldTitle = "Reporting System", discriminatorOption = CategoryConstants.REPORTING_SYSTEM_KEY), 
+		@Interchangeable(fieldTitle = "Audit System", discriminatorOption = CategoryConstants.AUDIT_SYSTEM_KEY),
+		@Interchangeable(fieldTitle = "Institutions", discriminatorOption = CategoryConstants.INSTITUTIONS_KEY),
 		@Interchangeable(fieldTitle = "Project Implementing Unit", discriminatorOption = CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY),
-		@Interchangeable(fieldTitle = "Accession Instrument", discriminatorOption = CategoryConstants.ACCESSION_INSTRUMENT_NAME),
-		@Interchangeable(fieldTitle = "Project Category", discriminatorOption = CategoryConstants.PROJECT_CATEGORY_KEY)
-		
+		@Interchangeable(fieldTitle = "Accession Instrument", discriminatorOption = CategoryConstants.ACCESSION_INSTRUMENT_KEY),
+		@Interchangeable(fieldTitle = "Project Category", discriminatorOption = CategoryConstants.PROJECT_CATEGORY_KEY),
+		@Interchangeable(fieldTitle = "Implementation Level", discriminatorOption = CategoryConstants.IMPLEMENTATION_LEVEL_KEY),
+		@Interchangeable(fieldTitle = "Implementation Location", discriminatorOption = CategoryConstants.IMPLEMENTATION_LOCATION_KEY)
 		
 	})
 	@VersionableCollection(fieldTitle = "Categories")

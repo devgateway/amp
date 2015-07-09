@@ -7,9 +7,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.ApprovalStatusDiscriminator;
+
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
@@ -19,8 +18,6 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableDiscrimina
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
-import org.digijava.module.aim.helper.RegionalFunding;
-import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
@@ -435,12 +432,12 @@ LoggerIdentifiable, Cloneable {
 	protected String approvalStatus;
 
 	// Aid Harmonization Survey Set
-	@Interchangeable(fieldTitle = "Surveys",fmPath="/Activity Form/Paris Indicators")
-	@VersionableCollection(fieldTitle = "Surveys")
+	// @Interchangeable(fieldTitle = "Surveys",fmPath="/Activity Form/Paris Indicators")
+	// @VersionableCollection(fieldTitle = "Surveys")
 	protected Set<AmpAhsurvey> survey;
 	
-	@Interchangeable(fieldTitle = "GPI Surveys",fmPath="/Activity Form/GPI")
-	@VersionableCollection(fieldTitle = "GPI Surveys")
+	// @Interchangeable(fieldTitle = "GPI Surveys",fmPath="/Activity Form/GPI")
+	// @VersionableCollection(fieldTitle = "GPI Surveys")
 	protected Set <AmpGPISurvey> gpiSurvey;
 
 	@Interchangeable(fieldTitle = "Line Ministry Rank",fmPath="/Activity Form/Planning/Line Ministry Rank")
@@ -560,7 +557,7 @@ LoggerIdentifiable, Cloneable {
 	protected String ministryCode;
 
 	
-	@Interchangeable(fieldTitle = "CRIS Number",fmPath="/Activity Form/Identification/CRIS Number")
+	@Interchangeable(fieldTitle = "CRIS Number",fmPath="/Activity Form/Identification/Cris Number")
 	@VersionableFieldSimple(fieldTitle = "CRIS Number")
 	protected String crisNumber;
 

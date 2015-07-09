@@ -96,7 +96,11 @@ public class PossibleValuesEnumerator {
 				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, longFieldName)));
 				return result;
 			} else {
-				
+				String configString = discriminatorOption == null? null : discriminatorOption;
+				if (InterchangeUtils.isCompositeField(finalField)) {
+					configString = getConfigValue(longFieldName, finalField);	
+				}
+
 				try {
 					Class<? extends FieldsDiscriminator> discClass = InterchangeUtils.getDiscriminatorClass(finalField);
 					if (discClass != null)
@@ -111,8 +115,8 @@ public class PossibleValuesEnumerator {
 					result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.DISCRIMINATOR_CLASS_METHOD_ERROR, e.getMessage())));
 					return result;
 				}				
-				if (InterchangeUtils.isCompositeField(finalField) || discriminatorOption != null) {
-					return getPossibleValuesForComplexField(finalField, discriminatorOption);
+				if (InterchangeUtils.isCompositeField(finalField) || configString != null) {
+					return getPossibleValuesForComplexField(finalField, configString);
 				}
 
 				return getPossibleValuesForField(finalField);
@@ -150,6 +154,8 @@ public class PossibleValuesEnumerator {
 		} else if  (InterchangeUtils.getClassOfField(field).equals(AmpTheme.class)) {
 			items = getSpecialCaseObjectList(configValue, "all_programs_with_levels",
 					 "ampThemeId", "program_setting_name", "amp_theme_id", AmpTheme.class);
+		} else if (InterchangeUtils.getClassOfField(field).equals(AmpCategoryValue.class)){
+			return getPossibleCategoryValues(field, configValue);
 		} else {
 //			result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, field.getName())));
 			//not a complex field, after all
@@ -244,7 +250,7 @@ public class PossibleValuesEnumerator {
 		
 		
 		if (clazz.isAssignableFrom(AmpCategoryValue.class))
-			return getPossibleCategoryValues(field);
+			return getPossibleCategoryValues(field, null);
 				
 		String queryString = "select cls from " + clazz.getName() + " cls ";
 		List<Object> objectList= PersistenceManager.getSession().createQuery(queryString).list();
@@ -261,21 +267,26 @@ public class PossibleValuesEnumerator {
 		}
 		return result;
 	}
-	private static List<JsonBean> getPossibleCategoryValues(Field field) {
+	private static List<JsonBean> getPossibleCategoryValues(Field field, String discriminatorOption) {
 		List <JsonBean> result = new ArrayList<JsonBean>();
 		Interchangeable ant = field.getAnnotation(Interchangeable.class);
-		String whereClause =  "WHERE acv.ampCategoryClass.name=" + "'" + ant.fieldTitle() +"'";
-		
-		String queryString = "SELECT acv from " + AmpCategoryValue.class.getName() + " acv ";
-		/* This hack is done for the case when the field analyzed is
-		 * AmpActivityFields.categories. 
-		 * The alternative to this would have been to set one more attribute for the annotation
-		 * (something like "listAllValues") or making a shortcut from upper (like getPossibleValuesForField(String)) 
-		 * 
-		 * */ 
-		if (! (field.getName().equals("categories") && (field.getDeclaringClass().equals(AmpActivityFields.class)))) {
-			queryString += whereClause;
+		String whereClause;
+		if (discriminatorOption != null) {
+			String classSearchField = InterchangeUtils.categoryValueKeys.contains(discriminatorOption) ? 
+					"keyName" : "name";
+			whereClause = "WHERE acv.ampCategoryClass." +  classSearchField	+  "='" + discriminatorOption + "'";
+		} else {
+			whereClause =  "WHERE acv.ampCategoryClass.name=" + "'" + ant.fieldTitle() +"'";
 		}
+		
+		
+//		String whereClause =  "WHERE acv.ampCategoryClass.name=" + "'" + ant.fieldTitle() +"'";
+		
+		String queryString = "SELECT acv from " + AmpCategoryValue.class.getName() + " acv " + whereClause;
+
+//		if (! (field.getName().equals("categories") && (field.getDeclaringClass().equals(AmpActivityFields.class)))) {
+//			queryString += whereClause;
+//		}
 		List<AmpCategoryValue> acvList = (List<AmpCategoryValue>) PersistenceManager.getSession().createQuery(queryString).list();
 
 		for (AmpCategoryValue acv : acvList) {
@@ -290,8 +301,6 @@ public class PossibleValuesEnumerator {
 				}
 			}
 		}
-		
-		
 		return result; 
 	}
 	

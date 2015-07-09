@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.PathSegment;
@@ -39,6 +41,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
@@ -54,12 +57,18 @@ public class InterchangeUtils {
 	public static final Logger LOGGER = Logger.getLogger(InterchangeUtils.class);
 	private static Map<String, String> underscoreToTitleMap = new HashMap<String, String>();
 	private static Map<String, String> titleToUnderscoreMap = new HashMap<String, String>();
+	public static Set<String> categoryValueKeys;
+	public static Set<String> categoryValueNames;
+
+	
+
 	
 	/**map from discriminator title (i.e. "Primary Sectors") to actual field name (i.e. "Sectors")
 	 */
 	private static Map<String, String> discriminatorMap = new HashMap<String, String> ();
 	static {
 		addUnderscoredTitlesToMap(AmpActivityFields.class);
+		generateCategoryConstantsSets();
 	}
 	
 	private static final String NOT_REQUIRED = "_NONE_";
@@ -72,6 +81,25 @@ public class InterchangeUtils {
 		return discriminatorMap.get(deunderscorify(fieldName));
 	}
 	
+	
+	private static void generateCategoryConstantsSets() {
+		Field[] fields = CategoryConstants.class.getFields();
+		categoryValueKeys = new HashSet<String>();
+		categoryValueNames = new HashSet<String>();
+		for (Field field : fields) {
+			if (field.getType().equals(java.lang.String.class)) {
+				try {
+					if (field.getName().contains("KEY"))
+						categoryValueKeys.add((String)field.get(null));
+					if (field.getName().contains("NAME"))
+						categoryValueNames.add((String)field.get(null));
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}	
+
 	private static void addUnderscoredTitlesToMap(Class<?> clazz) {
 		for (Field field : clazz.getDeclaredFields()) {
 			Interchangeable ant = field.getAnnotation(Interchangeable.class);
@@ -481,6 +509,7 @@ public class InterchangeUtils {
 		return result;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static boolean validateFilterActivityFields(JsonBean filterJson, JsonBean result) {
 		List<String> filteredItems = new ArrayList<String>();
 		String message = "Invalid filter. The usage should be {\"" + ActivityEPConstants.FILTER_FIELDS + "\" : [\"field1\", \"field2\", ..., \"fieldn\"]}";

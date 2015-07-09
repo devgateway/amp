@@ -49,7 +49,7 @@ $.ajax({
 
 <div class="quickView">
 	<div class="column-left">
-		<br/><digi:trn>Active Organisations Past Quarter</digi:trn>
+		<br/><digi:trn>Active Organizations Past Quarter</digi:trn>
 		<span id="countOrgs"></span>
 	</div>
    	<div class="column-center">

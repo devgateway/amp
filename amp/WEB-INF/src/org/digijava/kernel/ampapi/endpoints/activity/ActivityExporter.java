@@ -20,6 +20,7 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableDiscrimina
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.exception.EditorException;
 
 /**
@@ -187,6 +188,11 @@ public class ActivityExporter {
 						AmpActivityProgram program = (AmpActivityProgram) obj;
 						String filteredFieldPath = filteredFieldsMap.get(program.getProgramSetting().getName());
 						compositeMap.get(program.getProgramSetting().getName()).add(getObjectJson(program, filteredFieldPath));
+					} else if (obj instanceof AmpCategoryValue) {
+						AmpCategoryValue catVal = (AmpCategoryValue) obj;
+						String filteredFieldPath = filteredFieldsMap.get(catVal.getAmpCategoryClass().getKeyName());
+						compositeMap.get(catVal.getAmpCategoryClass().getKeyName()).add(getObjectJson(catVal, filteredFieldPath));
+						//TODO we have to manage when the ActivityBudet is not present (Budget Unallocated)
 					}
 				}
 			}

@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import org.digijava.kernel.ampapi.endpoints.activity.discriminators.ApprovalStatusDiscriminator;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
@@ -338,8 +337,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableCollection(fieldTitle = "Activity Contacts")
 	protected Set<AmpActivityContact> activityContacts;
 
-	//UPDATE IT_AFTER
-	//@Interchangeable(fieldTitle = "Status Reason",fmPath="/Activity Form/Identification/Status Reason")
+	@Interchangeable(fieldTitle = "Status Reason",fmPath="/Activity Form/Identification/Status Reason")
 	@VersionableFieldTextEditor(fieldTitle = "Status Reason")
 	protected String statusReason;
 	
@@ -427,12 +425,12 @@ LoggerIdentifiable, Cloneable {
 	protected String approvalStatus;
 
 	// Aid Harmonization Survey Set
-	@Interchangeable(fieldTitle = "Surveys",fmPath="/Activity Form/Paris Indicators")
-	@VersionableCollection(fieldTitle = "Surveys")
+	// @Interchangeable(fieldTitle = "Surveys",fmPath="/Activity Form/Paris Indicators")
+	// @VersionableCollection(fieldTitle = "Surveys")
 	protected Set<AmpAhsurvey> survey;
 	
-	@Interchangeable(fieldTitle = "GPI Surveys",fmPath="/Activity Form/GPI")
-	@VersionableCollection(fieldTitle = "GPI Surveys")
+	// @Interchangeable(fieldTitle = "GPI Surveys",fmPath="/Activity Form/GPI")
+	// @VersionableCollection(fieldTitle = "GPI Surveys")
 	protected Set <AmpGPISurvey> gpiSurvey;
 
 	@Interchangeable(fieldTitle = "Line Ministry Rank",fmPath="/Activity Form/Planning/Line Ministry Rank")
@@ -550,7 +548,7 @@ LoggerIdentifiable, Cloneable {
 	protected String ministryCode;
 
 	
-	@Interchangeable(fieldTitle = "CRIS Number",fmPath="/Activity Form/Identification/CRIS Number")
+	@Interchangeable(fieldTitle = "CRIS Number",fmPath="/Activity Form/Identification/Cris Number")
 	@VersionableFieldSimple(fieldTitle = "CRIS Number")
 	protected String crisNumber;
 

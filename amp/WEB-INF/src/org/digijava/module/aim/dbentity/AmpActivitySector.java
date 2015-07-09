@@ -12,21 +12,22 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable {
 	
 //	@Interchangeable(fieldTitle="Activity ID", pickIdOnly = true)
 	private AmpActivityVersion activityId;
+	
 	@Interchangeable(fieldTitle="Sector ID"/*, id = true, descend=true*/)
 	private AmpSector sectorId;
+	
 	@Interchangeable(fieldTitle="Sector Percentage")
 	private Float sectorPercentage;
         
-        private AmpClassificationConfiguration classificationConfig;
+    private AmpClassificationConfiguration classificationConfig;
 
-        public AmpClassificationConfiguration getClassificationConfig() {
-            return classificationConfig;
-        }
+    public AmpClassificationConfiguration getClassificationConfig() {
+        return classificationConfig;
+    }
 
-        public void setClassificationConfig(AmpClassificationConfiguration classificationConfig) {
-            this.classificationConfig = classificationConfig;
-        }
-
+    public void setClassificationConfig(AmpClassificationConfiguration classificationConfig) {
+        this.classificationConfig = classificationConfig;
+    }
 
 	public Long getAmpActivitySectorId() {
 		return ampActivitySectorId;

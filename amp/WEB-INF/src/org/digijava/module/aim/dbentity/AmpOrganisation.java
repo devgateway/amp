@@ -106,7 +106,7 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
     private Date minPlanRegDate;
 	@Interchangeable(fieldTitle="Organization Budget Infos")
     private Set<AmpOrganizationBudgetInformation> organizationBudgetInfos;
-	@Interchangeable(fieldTitle="Survey")
+//	@Interchangeable(fieldTitle="Survey") there could be many items that are useless 
 	private Set<AmpAhsurvey> survey;	// Collection of AmpAhsurvey dbentity objects
 //	@Interchangeable(fieldTitle="Calendar") //really, this seems useless
 	private Set<AmpCalendar> calendar;
@@ -129,7 +129,7 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
     private String receiptLegPersonalityAct;
 	
 	//unused anywhere
-	@Interchangeable(fieldTitle="Survey By Point Of Delivery Donor")
+//	@Interchangeable(fieldTitle="Survey By Point Of Delivery Donor")  
 	private transient Set<AmpAhsurvey> surveyByPointOfDeliveryDonor;
 
 //	@Interchangeable(fieldTitle="Organization Contacts")

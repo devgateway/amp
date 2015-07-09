@@ -12,6 +12,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.UserBean;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DbUtil.UserManagerSorting;
@@ -173,79 +174,75 @@ import org.digijava.module.um.util.AmpUserUtil;
 	    private Collection<UserBean> getUsers(ViewAllUsersForm vwForm,HttpServletRequest request) {
 	    	
 	    	vwForm.setAlphaUsers(new ArrayList<UserBean>());
-	    	Collection<User> users=null;
+	    	Collection<User> users = null;
 	    	 String alpha = request.getParameter("currentAlpha"); //vwForm.getCurrentAlpha();
 	    	    if (alpha == null || alpha.trim().length() == 0 || alpha.equals("viewAll")) {
 	    	    	users = AmpUserUtil.getAllUsers(vwForm.getShowBanned());
 	    	    	vwForm.setSelectedNoLetter(true);
-	    	    }else if(alpha!=null && !alpha.equals("viewAll")){
-	    	    	users=new  ArrayList<User>();
-	    	    	Iterator iter=AmpUserUtil.getAllUsers(vwForm.getShowBanned()).iterator();
-	    	    	while (iter.hasNext()){
-	    	    		User us=(User)iter.next();
-	    	    		if(us.getFirstNames().toUpperCase().startsWith(alpha)){
+	    	    } else if (alpha != null && !alpha.equals("viewAll")) {
+	    	    	users = new ArrayList<User>();
+	    	    	for(User us:AmpUserUtil.getAllUsers(vwForm.getShowBanned())) {
+	    	    		if (us.getFirstNames().toUpperCase().startsWith(alpha)) {
 	    	    			users.add(us);
 	    	    		}
 	    	    	}
 	    	    	vwForm.setSelectedNoLetter(false);
 	    	    }
 	    	
-	            if(users != null) {
-	            List<User> sortedUser = new ArrayList<User>(users);
+	            if (users != null) {
+	            	List<User> sortedUser = new ArrayList<User>(users);
+	            	String sortBy = vwForm.getSortBy();
+	            	if (sortBy == null) {
+	            		sortBy = "nameAscending";
+	            		vwForm.setSortBy(sortBy);
+	            	}	            
 	            
-	           
-	            String sortBy=vwForm.getSortBy();
-	            if(sortBy==null){
-	            	sortBy="nameAscending";
-	            	vwForm.setSortBy(sortBy);
-	            }
-	            
-	            
-	        	Collections.sort(sortedUser, DbUtil.sortUsers(UserManagerSorting.valueOf(sortBy.toUpperCase())));
+	            	Collections.sort(sortedUser, DbUtil.sortUsers(UserManagerSorting.valueOf(sortBy.toUpperCase())));
 	          
 	           
 	
-	            Collection<UserBean> ubCol = new ArrayList();
-	
-	            for(Iterator userIter = sortedUser.iterator(); userIter.hasNext(); ) {
-	                User user = (User) userIter.next();
-	                if(user != null) {
-	                    UserBean ub = new UserBean();
-	                    ub.setId(user.getId());
-	                    ub.setEmail(user.getEmail());
-	                    ub.setFirstNames(user.getFirstNames());
-	                    ub.setLastName(user.getLastName());
-	                    ub.setBan(user.isBanned());
-	
-	                    Collection members = TeamMemberUtil.getTeamMembers(user.getEmail());
-                            ub.setTeamMembers(members);
-	                    /*if(members != null) {
-	                        List<AmpTeam> teams = new ArrayList<AmpTeam>();
-	                        for(Iterator teamMemberIter = members.iterator(); teamMemberIter.hasNext(); ) {
-	                            AmpTeamMember teamMember = (AmpTeamMember) teamMemberIter.next();
-	                            if(teamMember != null && teamMember.getAmpTeam() != null) {
-	                                teams.add(teamMember.getAmpTeam());
-	                            }
-	                        }
-	                        if(teams != null && teams.size() > 0) {
-	                            Collections.sort(teams, new TeamUtil.HelperAmpTeamNameComparator());
-	                            ub.setTeams(teams);
-	                        }
-	                    }*/
-	                    ubCol.add(ub);
-	                }
-	            }
+	            List<UserBean> userBeans = buildUserBeans(sortedUser);
 	            
-	            if(alpha!=null && !alpha.equals("viewAll")){
-	            	vwForm.setAlphaUsers(ubCol);
+	            if (alpha != null && !alpha.equals("viewAll")) {
+	            	vwForm.setAlphaUsers(userBeans);
 	            }
 	                        
-	            return ubCol;
+	            return userBeans;
 	        } else {
 	            return null;
 	        }
 	    }
 	
+	    /**
+	     * maps each User instance of the input to a UserBean instance
+	     * @param sortedUsers
+	     * @return
+	     */
+	    protected List<UserBean> buildUserBeans(Collection<User> sortedUsers) {
+	    	Set<Long> userIds = new HashSet<>();
+	    	for (User user:sortedUsers)
+	    		userIds.add(user.getId());
+	    	
+	    	Map<Long, List<AmpTeamMember>> membersByUserId = TeamMemberUtil.getTeamMembersByUserId(userIds);
+	    	List<UserBean> res = new ArrayList<>();
+	    	
+            for(User user:sortedUsers) {
+                if (user != null) {
+                    UserBean ub = new UserBean();
+                    ub.setId(user.getId());
+                    ub.setEmail(user.getEmail());
+                    ub.setFirstNames(user.getFirstNames());
+                    ub.setLastName(user.getLastName());
+                    ub.setBan(user.isBanned());
+
+                    List<AmpTeamMember> members = membersByUserId.get(user.getId());
+                    ub.setTeamMembers(members);
+                    res.add(ub);
+                }
+            }
+            return res;
+	    }
+	    
 	    public ViewAllUsers() {
 	    }
 

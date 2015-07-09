@@ -954,6 +954,25 @@ public class TeamMemberUtil {
 		return role;
 	}
 	
+	/**
+	 * Map<User.id, List<AmpTeamMember>>
+	 * @return
+	 */
+	public static Map<Long, List<AmpTeamMember>> getTeamMembersByUserId(Set<Long> userIds) {
+		Map<Long, List<AmpTeamMember>> res = new HashMap<>();
+		for(long userId:userIds)
+			res.put(userId, new ArrayList<AmpTeamMember>());
+		List<Object[]> z = PersistenceManager.getSession()
+				.createQuery("select tm, tm.user.id from " + AmpTeamMember.class.getName() + " tm where tm.user.id in :userIds")
+				.setParameterList("userIds", userIds)
+				.list();
+		for(Object[] elem:z) {
+			long userId = PersistenceManager.getLong(elem[1]);
+			res.get(userId).add((AmpTeamMember) elem[0]);
+		}
+		return res;
+	}
+	
 	public static Collection<AmpTeamMember> getTeamMembers(String email) {
 		 User user = org.digijava.module.aim.util.DbUtil.getUser(email);
 		 if (user == null) return null;

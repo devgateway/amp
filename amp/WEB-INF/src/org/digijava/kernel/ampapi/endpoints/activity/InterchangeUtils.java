@@ -8,6 +8,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -47,6 +48,7 @@ import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 
 import com.sun.jersey.spi.container.ContainerRequest;
+import clover.org.apache.log4j.helpers.ISO8601DateFormat;
 
 /**
  * Activity Import/Export Utility methods 
@@ -59,9 +61,6 @@ public class InterchangeUtils {
 	private static Map<String, String> titleToUnderscoreMap = new HashMap<String, String>();
 	public static Set<String> categoryValueKeys;
 	public static Set<String> categoryValueNames;
-
-	
-
 	
 	/**map from discriminator title (i.e. "Primary Sectors") to actual field name (i.e. "Sectors")
 	 */
@@ -74,7 +73,7 @@ public class InterchangeUtils {
 	private static final String NOT_REQUIRED = "_NONE_";
 	private static final String ALWAYS_REQUIRED = "_ALWAYS_";
 	
-	
+	private static final ISO8601DateFormat dateFormatter = new ISO8601DateFormat();
 
 	
 	public static String getDiscriminatedFieldTitle(String fieldName) {
@@ -356,6 +355,8 @@ public class InterchangeUtils {
 			// now we check if is only a CategoryValue field and the field name is value
 			String translatedText = !isBaseLangDefault && toTranslate ? TranslatorWorker.translateText((String) fieldValue) : (String) fieldValue;
 			return getJsonStringValue(translatedText);
+		} else if (fieldValue instanceof Date) {
+			return InterchangeUtils.formatISO8601Date((Date) fieldValue);
 		}
 		
 		return fieldValue;
@@ -374,6 +375,17 @@ public class InterchangeUtils {
 		HttpServletRequest requestAttributes = TLSUtils.getRequest();
 		
 		return (TranslationSettings) requestAttributes.getAttribute(EPConstants.TRANSLATIONS);
+	}
+	
+	/**
+	 * Gets a date formatted in ISO 8601 format. If the date is null, returns
+	 * null.
+	 * 
+	 * @param date the date to be formatted
+	 * @return String, date in ISO 8601 format
+	 */
+	public static String formatISO8601Date(Date date) {
+		return date == null ? null : dateFormatter.format(date);
 	}
 	
 	public static String getGetterMethodName(String fieldName) {

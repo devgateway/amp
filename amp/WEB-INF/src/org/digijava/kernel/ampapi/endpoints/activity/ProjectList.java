@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +31,6 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.jdbc.Work;
 
 import clover.org.apache.commons.lang.StringUtils;
-import clover.org.apache.log4j.helpers.ISO8601DateFormat;
 
 /**
  * Project List generation class
@@ -42,7 +40,6 @@ import clover.org.apache.log4j.helpers.ISO8601DateFormat;
 public class ProjectList {
 	
 	private static ProjectListCacher cacher = new ProjectListCacher();
-	private static final ISO8601DateFormat dateFormatter = new ISO8601DateFormat();
 	public static final Logger LOGGER = Logger.getLogger(ProjectList.class);
 
 	
@@ -174,10 +171,10 @@ public class ProjectList {
 					while (rs.next()) {
 						JsonBean bean = new JsonBean();
 						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID), rs.getLong("amp_activity_id"));
-						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.CREATED_DATE), formatISO8601Date(rs.getTimestamp("date_created")));
+						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.CREATED_DATE), InterchangeUtils.formatISO8601Date(rs.getTimestamp("date_created")));
 						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_TITLE), getTranslatableFieldValue("name", rs.getString("name"), rs.getLong("amp_activity_id")));
 						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_CODE), rs.getString("project_code"));
-						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.UPDATE_DATE), formatISO8601Date(rs.getTimestamp("date_updated")));
+						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.UPDATE_DATE), InterchangeUtils.formatISO8601Date(rs.getTimestamp("date_updated")));
 						bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID), rs.getString("amp_id"));
 						bean.set(ActivityEPConstants.EDIT, editable);
 						bean.set(ActivityEPConstants.VIEW, viewable);
@@ -188,17 +185,6 @@ public class ProjectList {
 			}
 		});
 		return activitiesList;
-	}
-
-	/**
-	 * Gets a date formatted in ISO 8601 format. If the date is null, returns
-	 * null.
-	 * 
-	 * @param date the date to be formatted
-	 * @return String, date in ISO 8601 format
-	 */
-	public static String formatISO8601Date(Date date) {
-		return date == null ? null : dateFormatter.format(date);
 	}
 
 	/**

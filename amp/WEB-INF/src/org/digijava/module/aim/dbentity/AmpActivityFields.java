@@ -453,34 +453,7 @@ LoggerIdentifiable, Cloneable {
 	@Interchangeable(fieldTitle = "Deleted", importable=false)
 	@VersionableFieldSimple(fieldTitle = "Deleted")
 	protected Boolean deleted;
-	//for AMP-14784
-	@Interchangeable(fieldTitle = "Project Implementation Unit",fmPath="/Activity Form/Aid Effectivenes/Project uses parallel project implementation unit")
-	@VersionableFieldSimple(fieldTitle = "Project Implementation Unit")
-	protected String projectImplementationUnit;
-	@Interchangeable(fieldTitle = "IMAC Approved",fmPath="/Activity Form/Aid Effectivenes/Project has been approved by IMAC")
-	@VersionableFieldSimple(fieldTitle = "IMAC Approved")
-	protected String imacApproved;
-	@Interchangeable(fieldTitle = "National Oversight",fmPath="/Activity Form/Aid Effectivenes/Government is meber of project steering committee")
-	@VersionableFieldSimple(fieldTitle = "National Oversight")	
-	protected String nationalOversight;
-	@Interchangeable(fieldTitle =  "On Budget",fmPath="/Activity Form/Aid Effectivenes/Project is on budget")
-	@VersionableFieldSimple(fieldTitle = "On Budget")	
-	protected String onBudget;
-	@Interchangeable(fieldTitle = "On Parliament",fmPath="/Activity Form/Aid Effectivenes/Project is on parliament")
-	@VersionableFieldSimple(fieldTitle = "On Parliament")	
-	protected String onParliament;
-	@Interchangeable(fieldTitle = "On Treasury",fmPath="/Activity Form/Aid Effectivenes/Project disburses directly into the Goverment single treasury account")
-	@VersionableFieldSimple(fieldTitle = "On Treasury")	
-	protected String onTreasury;
-	@Interchangeable(fieldTitle = "National Financial Management",fmPath="/Activity Form/Aid Effectivenes/Project uses national financial management systems")
-	@VersionableFieldSimple(fieldTitle = "National Financial Management")	
-	protected String nationalFinancialManagement;
-	@Interchangeable(fieldTitle = "National Procurement",fmPath="/Activity Form/Aid Effectivenes/Project uses national procurement systems")
-	@VersionableFieldSimple(fieldTitle = "National Procurement")	
-	protected String nationalProcurement;
-	@Interchangeable(fieldTitle = "National Audit",fmPath="/Activity Form/Aid Effectivenes/Project uses national audit systems")
-	@VersionableFieldSimple(fieldTitle = "National Audit")	
-	protected String nationalAudit;
+
 	 @VersionableCollection(fieldTitle = "Aid Effectiveness")
 	    protected Set<AmpAidEffectivenessIndicatorOption> selectedEffectivenessIndicatorOptions;
 		
@@ -2007,77 +1980,6 @@ LoggerIdentifiable, Cloneable {
 
 		public void setIatiLastUpdatedDate(Date iatiLastUpdatedDate) {
 			this.iatiLastUpdatedDate = iatiLastUpdatedDate;
-		}
-	    public String getProjectImplementationUnit() {
-			return projectImplementationUnit;
-		}
-
-		public void setProjectImplementationUnit(String projectImplementationUnit) {
-			this.projectImplementationUnit = projectImplementationUnit;
-		}
-
-		public String getImacApproved() {
-			return imacApproved;
-		}
-
-		public void setImacApproved(String imacApproved) {
-			this.imacApproved = imacApproved;
-		}
-
-		public String getNationalOversight() {
-			return nationalOversight;
-		}
-
-		public void setNationalOversight(String nationalOversight) {
-			this.nationalOversight = nationalOversight;
-		}
-
-		public String getOnBudget() {
-			return onBudget;
-		}
-
-		public void setOnBudget(String onBudget) {
-			this.onBudget = onBudget;
-		}
-
-		public String getOnParliament() {
-			return onParliament;
-		}
-
-		public void setOnParliament(String onParliament) {
-			this.onParliament = onParliament;
-		}
-
-		public String getOnTreasury() {
-			return onTreasury;
-		}
-
-		public void setOnTreasury(String onTreasury) {
-			this.onTreasury = onTreasury;
-		}
-
-		public String getNationalFinancialManagement() {
-			return nationalFinancialManagement;
-		}
-
-		public void setNationalFinancialManagement(String nationalFinancialManagement) {
-			this.nationalFinancialManagement = nationalFinancialManagement;
-		}
-
-		public String getNationalProcurement() {
-			return nationalProcurement;
-		}
-
-		public void setNationalProcurement(String nationalProcurement) {
-			this.nationalProcurement = nationalProcurement;
-		}
-
-		public String getNationalAudit() {
-			return nationalAudit;
-		}
-
-		public void setNationalAudit(String nationalAudit) {
-			this.nationalAudit = nationalAudit;
 		}
 
 		public Boolean getDeleted() {

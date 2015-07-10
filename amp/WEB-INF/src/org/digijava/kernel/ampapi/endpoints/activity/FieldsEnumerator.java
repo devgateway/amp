@@ -62,11 +62,11 @@ public class FieldsEnumerator {
 	 *         fields in the definition of the field's class, or field's generic
 	 *         type, if it's a collection
 	 */
-	private static List<JsonBean> getChildrenOfField(Field field, boolean multilingual) {
+	private static List<JsonBean> getChildrenOfField(Field field, boolean multilingual, boolean internalUse) {
 		if (!InterchangeUtils.isCollection(field))
-			return getAllAvailableFields(field.getType(), multilingual);
+			return getAllAvailableFields(field.getType(), multilingual, internalUse);
 		else
-			return getAllAvailableFields(InterchangeUtils.getGenericClass(field), multilingual);
+			return getAllAvailableFields(InterchangeUtils.getGenericClass(field), multilingual, internalUse);
 	}
 	
 	public static boolean hasMaxSizeValidatorEnabled(Field field) {
@@ -179,7 +179,8 @@ public class FieldsEnumerator {
 	 * @param field
 	 * @return
 	 */
-	private static JsonBean describeField(Field field, Interchangeable interchangeble, boolean multilingual) {
+	private static JsonBean describeField(Field field, Interchangeable interchangeble, boolean multilingual, 
+			boolean internalUse) {
 		if (interchangeble == null)
 			return null;
 		JsonBean bean = new JsonBean();
@@ -192,6 +193,10 @@ public class FieldsEnumerator {
 		bean.set(ActivityEPConstants.FIELD_LABEL, InterchangeUtils.mapToBean(getLabelsForField(interchangeble.fieldTitle())));
 		bean.set(ActivityEPConstants.REQUIRED, InterchangeUtils.getRequiredValue(field));
 		
+		if (internalUse) {
+			bean.set(ActivityEPConstants.FIELD_NAME_INTERNAL, field.getName());
+		}
+		
 		/* list type */
 		if (!InterchangeableClassMapper.containsSimpleClass(field.getType())) {
 			bean.set(ActivityEPConstants.IMPORTABLE, interchangeble.importable() ? true : false);
@@ -201,7 +206,7 @@ public class FieldsEnumerator {
 				bean.set(ActivityEPConstants.MULTIPLE_VALUES, false);
 			}
 			if (!interchangeble.pickIdOnly()) {
-				List<JsonBean> children = getChildrenOfField(field, multilingual);
+				List<JsonBean> children = getChildrenOfField(field, multilingual, internalUse);
 				if (children != null && children.size() > 0) {
 					bean.set(ActivityEPConstants.CHILDREN, children);
 				}
@@ -224,7 +229,17 @@ public class FieldsEnumerator {
 	}
 	
 	public static List<JsonBean> getAllAvailableFields() {
-		return getAllAvailableFields(AmpActivityFields.class, ContentTranslationUtil.multilingualIsEnabled());
+		return getAllAvailableFields(false);
+	}
+	
+	/**
+	 * Retrieves the list of available fields, their description within a hierarchical structure 
+	 * @param internalUse flags that additional info is needed for internal processing
+	 * @return the list of available fields
+	 */
+	public static List<JsonBean> getAllAvailableFields(boolean internalUse) {
+		return getAllAvailableFields(AmpActivityFields.class, ContentTranslationUtil.multilingualIsEnabled(), 
+				internalUse);
 	}
 
 	/**
@@ -233,7 +248,7 @@ public class FieldsEnumerator {
 	 * @param clazz the class to be described
 	 * @return
 	 */
-	private static List<JsonBean> getAllAvailableFields(Class<?> clazz, boolean multilingual) {
+	private static List<JsonBean> getAllAvailableFields(Class<?> clazz, boolean multilingual, boolean internalUse) {
 		List<JsonBean> result = new ArrayList<JsonBean>();
 		StopWatch.next("Descending into", false, clazz.getName());
 		Field[] fields = clazz.getDeclaredFields();
@@ -245,7 +260,7 @@ public class FieldsEnumerator {
 			
 			if (!InterchangeUtils.isCompositeField(field)) {
 				Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
-				JsonBean descr = describeField(field, interchangeable, multilingual);
+				JsonBean descr = describeField(field, interchangeable, multilingual, internalUse);
 				if (descr != null) {
 					result.add(descr);
 				}
@@ -253,7 +268,7 @@ public class FieldsEnumerator {
 				InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
 				Interchangeable[] settings = discriminator.settings();
 				for (int i = 0; i < settings.length; i++) {
-					JsonBean descr = describeField(field, settings[i], multilingual);
+					JsonBean descr = describeField(field, settings[i], multilingual, internalUse);
 					if (descr != null) {
 						result.add(descr);
 					}

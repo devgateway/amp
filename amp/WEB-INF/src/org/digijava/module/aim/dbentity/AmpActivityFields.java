@@ -193,7 +193,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableCollection(fieldTitle = "Org. Role")
 	protected Set<AmpOrgRole> orgrole;
 	
-	@Interchangeable(fieldTitle = "Internal IDs",fmPath="/Activity Form/Activity Internal IDs")
+	@Interchangeable(fieldTitle = "Organizations Project IDs",fmPath="/Activity Form/Activity Internal IDs")
 	@VersionableCollection(fieldTitle = "Internal IDs")
 	protected Set<AmpActivityInternalId> internalIds ;
 	

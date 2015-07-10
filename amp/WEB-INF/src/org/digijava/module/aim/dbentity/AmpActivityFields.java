@@ -343,8 +343,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableCollection(fieldTitle = "Activity Contacts")
 	protected Set<AmpActivityContact> activityContacts;
 
-	//UPDATE IT_AFTER
-	//@Interchangeable(fieldTitle = "Status Reason",fmPath="/Activity Form/Identification/Status Reason")
+	@Interchangeable(fieldTitle = "Status Reason",fmPath="/Activity Form/Identification/Status Reason")
 	@VersionableFieldTextEditor(fieldTitle = "Status Reason")
 	protected String statusReason;
 	

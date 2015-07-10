@@ -13,6 +13,7 @@ public class ActivityEPConstants {
 	// JSON fields
 	public static final String ACTIVITY = "activity";
 	public static final String FIELD_NAME = "field_name";
+	public static final String FIELD_NAME_INTERNAL = "actual_field_name";
 	public static final String FIELD_TYPE = "field_type";
 	public static final String FIELD_LENGTH = "field_length";
 	public static final String FIELD_LABEL = "field_label";

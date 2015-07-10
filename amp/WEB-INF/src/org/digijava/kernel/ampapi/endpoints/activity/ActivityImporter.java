@@ -3,6 +3,7 @@
  */
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -56,8 +57,8 @@ public class ActivityImporter {
 		this.newJson = newJson;
 		this.isDraftFMEnabled = FMVisibility.isFmPathEnabled(SAVE_AS_DRAFT_PATH);
 		
-		// retrieve fields definition
-		List<JsonBean> fieldsDef = FieldsEnumerator.getAllAvailableFields();
+		// retrieve fields definition for internal use
+		List<JsonBean> fieldsDef = FieldsEnumerator.getAllAvailableFields(true);
 		// get existing activity if this is an update request
 		Long ampActivityId = update ? (Long) newJson.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME) : null;
 		
@@ -117,13 +118,13 @@ public class ActivityImporter {
 	protected boolean validateAndImport(Object oldParent, Object newParent, JsonBean fieldDef, 
 			JsonBean newJsonParent, JsonBean oldJsonParent, String fieldPath) {
 		String fieldName = fieldDef.getString(ActivityEPConstants.FIELD_NAME);
-		JsonBean oldFieldJson = oldJsonParent == null ? null : (JsonBean) oldJsonParent.get(fieldName);
-		JsonBean newFieldJson = oldJsonParent == null ? null : (JsonBean) newJsonParent.get(fieldName);
+		Object oldField = oldJsonParent == null ? null : oldJsonParent.get(fieldName);
+		Object newField = newJsonParent == null ? null : newJsonParent.get(fieldName);
 		
 		// validate sub-elements first
-		boolean validSubElements = validateSubElements(fieldDef, newFieldJson, oldFieldJson, fieldPath);
+		boolean validSubElements = validateSubElements(fieldDef, newField, oldField, fieldPath);
 		// then validate current field itself
-		boolean valid = validator.isValid(this, newFieldJson, oldFieldJson, fieldDef, 
+		boolean valid = validator.isValid(this, newJsonParent, oldJsonParent, fieldDef, 
 				fieldPath + "~" + fieldName, errors);
 		valid = valid && validSubElements;
 		// and set new field only if all sub-elements are valid
@@ -133,8 +134,7 @@ public class ActivityImporter {
 		return valid;
 	}
 	
-	protected boolean validateSubElements(JsonBean fieldDef, JsonBean newJsonParent, JsonBean oldJsonParent, 
-			String fieldPath) {
+	protected boolean validateSubElements(JsonBean fieldDef, Object newField, Object oldField, String fieldPath) {
 		String fieldType = fieldDef.getString(ActivityEPConstants.FIELD_TYPE);
 		/* 
 		 * Sub-elements by default are valid when not provided. 
@@ -144,11 +144,18 @@ public class ActivityImporter {
 		
 		// first validate all sub-elements
 		List<JsonBean> childrenFields = (List<JsonBean>) fieldDef.get(ActivityEPConstants.CHILDREN);
-		List<JsonBean> childrenNewValues = newJsonParent == null ? null : 
-			new ArrayList<JsonBean>((List<JsonBean>) newJsonParent.get(ActivityEPConstants.CHILDREN));
-		List<JsonBean> childrenOldValues = oldJsonParent == null ? null : 
-			new ArrayList<JsonBean>((List<JsonBean>) oldJsonParent.get(ActivityEPConstants.CHILDREN));
+		List<JsonBean> childrenNewValues = null;
+		List<JsonBean> childrenOldValues = null;
 		
+		// identify children of the new field input
+		if (newField != null && newField instanceof JsonBean) { 
+			childrenNewValues = (List<JsonBean>) ((JsonBean) newField).get(ActivityEPConstants.CHILDREN);
+		}
+		// identify children of the old field input
+		if (oldField != null && oldField instanceof JsonBean) { 
+			childrenNewValues = (List<JsonBean>) ((JsonBean) oldField).get(ActivityEPConstants.CHILDREN);
+		}
+		// validate children
 		if ((ActivityEPConstants.FIELD_TYPE_LIST.equals(fieldType) || childrenFields != null && childrenFields.size() > 0)
 				&& childrenNewValues != null) {
 			Iterator<JsonBean> iterNew = childrenNewValues.iterator();
@@ -176,14 +183,25 @@ public class ActivityImporter {
 		// note again: only checks in scope of this method are done here
 		
 		String fieldName = (String) field.get(ActivityEPConstants.FIELD_NAME);
+		String actualFieldName = (String) field.get(ActivityEPConstants.FIELD_NAME_INTERNAL);
 		String fieldType = (String) field.get(ActivityEPConstants.FIELD_TYPE);
 		// TODO: locate field, initialize intermediate objects
 		Object fieldValue = newJsonParent.get(fieldName);
 		Object oldValue = null;
 		Object newValue = null;
+		Field objField = null;
 		
 		try {
-			oldValue = newParent.getClass().getField("get" + fieldName.toUpperCase()).get(newParent);
+			Class<?> clazz = newParent.getClass();
+			while (objField == null && !clazz.equals(Object.class)) {
+				try {
+					objField = clazz.getDeclaredField(actualFieldName);
+					objField.setAccessible(true);
+					oldValue = objField.get(newParent);
+				} catch (NoSuchFieldException ex) {
+					clazz = clazz.getSuperclass();
+				}
+			}
 		} catch (Exception e) {
 			logger.error(e);
 			throw new RuntimeException(e);
@@ -199,12 +217,13 @@ public class ActivityImporter {
 			// TODO: 
 		}
 		
-		try {
-			newParent.getClass().getField("set" + fieldName.toUpperCase()).set(newParent, newValue);
-		} catch (IllegalArgumentException | IllegalAccessException
-				| NoSuchFieldException | SecurityException e) {
-			logger.error(e.getMessage());
-			throw new RuntimeException(e);
+		if (objField != null) {
+			try {
+				objField.set(newParent, newValue);
+			} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
+				logger.error(e.getMessage());
+				throw new RuntimeException(e);
+			}
 		}
 	}
 	
@@ -284,7 +303,6 @@ public class ActivityImporter {
 	
 	/**
 	 * Defines if changing the Saving process from "Save" to "Save as draft" is allowed or not.
-	 * 
 	 * @return true if it is allowed, false otherwise
 	 */
 	public boolean getAllowSaveAsDraftShift () {

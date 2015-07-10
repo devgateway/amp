@@ -602,7 +602,7 @@ public class Reports {
 			
 			case AMPReportExportConstants.PDF:
 				AMPPdfExport pdf = new AMPPdfExport();
-				doc = pdf.pdf(result, AMPReportExportConstants.PDF);
+				doc = pdf.pdf(result, AMPReportExportConstants.PDF, report, queryModel);
 				break;
 			}
 

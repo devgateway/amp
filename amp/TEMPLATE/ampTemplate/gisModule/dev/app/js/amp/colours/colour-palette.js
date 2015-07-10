@@ -181,12 +181,20 @@ function FromRange(options) {
   if (!_.has(options, 'seed')) {
     throw new Error('seed is required.');
   }
+  
+  var min = options.min || 0;
+  var max = options.max || 100;
+  var stops = options.stops || 5;
+  if (stops >= max || stops <= min) {
+	  // AMP-20346: If this parameter is too high or too low we can kill the browser.
+	  stops = 5;
+  }
 
   var palette = new Palette({
     mode: 'range',
-    min: options.min || 0,
-    max: options.max || 100,
-    stops: options.stops || 5,
+    min: min,
+    max: max,
+    stops: stops,
     linLog: options.linLog || 'linear'
   });
 

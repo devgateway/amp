@@ -139,6 +139,9 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Is Draft?")
 	protected Boolean draft;
 
+    @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.CHANGE_TYPE)
+    protected String changeType;
+
 	@Interchangeable(fieldTitle = "Equal Oportunity",fmPath="/Activity Form/Cross Cutting Issues/Equal Opportunity")
 	@VersionableFieldTextEditor(fieldTitle = "Equal Oportunity")
 	protected String equalOpportunity;
@@ -1547,6 +1550,14 @@ LoggerIdentifiable, Cloneable {
 	public void setDraft(Boolean draft) {
 		this.draft = draft;
 	}
+
+    public String getChangeType() {
+        return changeType;
+    }
+
+    public void setChangeType(String changeType) {
+        this.changeType = changeType;
+    }
 
 	public void setActPrograms(Set <AmpActivityProgram> actPrograms) {
 		this.actPrograms = actPrograms;

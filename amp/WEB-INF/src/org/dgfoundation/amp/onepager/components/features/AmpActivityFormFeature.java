@@ -100,6 +100,7 @@ import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -1127,23 +1128,24 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                               boolean draft, Model<Integer> redirected,boolean rejected) {
 		
 		AmpActivityModel a = (AmpActivityModel) am;
-		AmpActivityVersion activity=am.getObject();
+		AmpActivityVersion activity = am.getObject();
 		Long oldId = activity.getAmpActivityId();
-		Boolean wasDraft=activity.getDraft();
+		Boolean wasDraft = activity.getDraft();
 		AmpTeamMember modifiedBy = activity.getModifiedBy();
-		AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get(); 
+		AmpAuthWebSession wicketSession = (AmpAuthWebSession)org.apache.wicket.Session.get();
 		long currentUserId = wicketSession.getCurrentMember().getMemberId();
+        activity.setChangeType(ActivityFieldsConstants.ChangeType.MANUAL.toString());
 		
 		AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
 
 
 		//Before starting to save check lock
-		if (oldId != null && !ActivityGatekeeper.verifyLock(String.valueOf(a.getId()), a.getEditingKey())){
+		if (oldId != null && !ActivityGatekeeper.verifyLock(String.valueOf(a.getId()), a.getEditingKey())) {
 	          //Someone else has grabbed the lock ... maybe connection slow and lock refresh timed out
 		    throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(String.valueOf(a.getId()), currentUserId));
 		}
 		
-		ActivityUtil.saveActivity((AmpActivityModel) am, draft,rejected);
+		ActivityUtil.saveActivity((AmpActivityModel)am, draft, rejected);
 
 		info(TranslatorUtil.getTranslatedText("Activity saved successfully"));
 

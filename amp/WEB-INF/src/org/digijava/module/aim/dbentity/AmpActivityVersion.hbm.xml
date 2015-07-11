@@ -36,6 +36,7 @@
 		<property name="minorities" column="minorities" type="java.lang.String" />
 
 		<property name="draft" column="draft" type="java.lang.Boolean" />
+		<property name="changeType" column="change_type" type="java.lang.String" />
 		<property name="deleted" column="deleted" type="java.lang.Boolean" />
 
 		<property name="projectImplementationUnit" column="prj_implementation_unit" type="java.lang.String" />

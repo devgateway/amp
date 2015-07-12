@@ -844,6 +844,16 @@ function openAdmin () {
 										</a>
 									</li>
 								</feature:display>
+
+                                <%-- TODO The link and action to be provided --%>
+								<feature:display name="IATI Tool" module="Tools">
+                                    <li class="yuiampmenuitem_drop">
+                                        <a class="yuiampmenuitemlabel" onclick="return false;" href="">
+                                            <digi:trn key="aim:workspaceinfo">IATI Tool</digi:trn>
+                                        </a>
+                                    </li>
+                                </feature:display>
+
 								<logic:notEmpty name="currentMember" scope="session">
 									<digi:secure actions="TRANSLATE">
 										<digi:insert flush="false" attribute="transmode" />

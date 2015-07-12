@@ -276,9 +276,9 @@ public class ProgramUtil {
 		 * @throws DgException
 		 */
         @SuppressWarnings("unchecked")
-		public static Map<Long, AmpThemeSkeleton> getAllThemesFaster(boolean includeSubThemes) throws DgException
+		public static Map<Long, AmpThemeSkeleton> getAllThemesFaster() throws DgException
 		{
-            Map<Long, AmpThemeSkeleton> themes = AmpThemeSkeleton.populateThemesTree(includeSubThemes);
+            Map<Long, AmpThemeSkeleton> themes = AmpThemeSkeleton.populateThemesTree(-1);
             return themes;
         }
 		
@@ -1458,71 +1458,31 @@ public class ProgramUtil {
     }
 
 
-      public static List getAmpActivityProgramSettingsList() throws DgException {
-            Session session = null;
-            List programSettings=null;
-
-            try {
-                    session = PersistenceManager.getRequestDBSession();
-                    String queryString = "select ap from "
-                                    + AmpActivityProgramSettings.class.getName()+ " ap";
-
-                    Query qry = session.createQuery(queryString);
-                    programSettings=qry.list();
-                    if( programSettings==null|| programSettings.size()==0){
-               programSettings=createDefaultAmpActivityProgramSettingsList();
-               }
-
-
-            } catch (Exception ex) {
-                    logger.debug("Unable to search " + ex);
-                    throw new DgException(ex);
-                    }
-            return programSettings;
+      public static List<AmpActivityProgramSettings> getAmpActivityProgramSettingsList() throws DgException {
+    	  String queryString = "select ap from " + AmpActivityProgramSettings.class.getName() + " ap";
+    	  Query qry = PersistenceManager.getSession().createQuery(queryString);
+          List<AmpActivityProgramSettings> programSettings = qry.list();
+          if (programSettings.isEmpty()) {
+        	  programSettings = createDefaultAmpActivityProgramSettingsList();
+          }
+          return programSettings;
     }
 
 
     public static List createDefaultAmpActivityProgramSettingsList() throws DgException {
-        Session session = null;
-        List programSettings=null;
-        Transaction tx = null;
+        Session session = PersistenceManager.getSession();
 
+        AmpActivityProgramSettings settingNPO=new AmpActivityProgramSettings("National Plan Objective");
+        AmpActivityProgramSettings settingPP=new AmpActivityProgramSettings("Primary Program");
+        AmpActivityProgramSettings settingSP=new AmpActivityProgramSettings("Secondary Program");
+        session.save(settingNPO);
+        session.save(settingPP);
+        session.save(settingSP);
 
-        try {
-                session = PersistenceManager.getRequestDBSession();
-//beginTransaction();
-                AmpActivityProgramSettings settingNPO=new AmpActivityProgramSettings("National Plan Objective");
-                AmpActivityProgramSettings settingPP=new AmpActivityProgramSettings("Primary Program");
-                AmpActivityProgramSettings settingSP=new AmpActivityProgramSettings("Secondary Program");
-                session.save(settingNPO);
-                session.save(settingPP);
-                session.save(settingSP);
-                //tx.commit();
-                programSettings=new ArrayList();
-                programSettings.add(settingNPO);
-                programSettings.add(settingPP);
-                programSettings.add(settingSP);
-
-
-             } catch (Exception ex) {
-              logger.error("Unable to create Default program Settings List  " + ex);
-                        if (tx != null)
-                          {
-                                  try
-                                  {
-                                          tx.rollback();
-                                  }
-                                  catch (Exception extx)
-                                  {
-                                          logger.error("Transaction roll back failed : "+extx.getMessage());
-
-                                  }
-                          }
-
-
-                    throw new DgException(ex);
-                    }
-
+        List<AmpActivityProgramSettings> programSettings = new ArrayList<>();
+        programSettings.add(settingNPO);
+        programSettings.add(settingPP);
+        programSettings.add(settingSP);
         return programSettings;
 }
 

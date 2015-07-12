@@ -43,6 +43,7 @@ import org.digijava.module.aim.dbentity.FeatureTemplates;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Flag;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.Logic;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -990,14 +991,9 @@ public class FeaturesUtil {
 	 * @return
 	 */
 	public static long getCurrentTemplateId() {
-		Long teamId = (Long) TLSUtils.getRequest().getSession().getAttribute(Constants.TEAM_ID);
-		if (teamId != null) {
-			AmpTeam ampTeam = TeamUtil.getAmpTeam(teamId);
-			if (ampTeam != null) {
-				AmpTemplatesVisibility vis = ampTeam.getFmTemplate();
-				if (vis != null)
-					return vis.getId();
-			}
+		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+		if (tm != null && tm.getVisibilityTemplateId() > 0) {
+			return tm.getVisibilityTemplateId();
 		}
 		//if outside the workspace, then provide the default one
 		return FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE);

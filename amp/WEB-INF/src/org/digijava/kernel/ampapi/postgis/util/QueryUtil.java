@@ -33,6 +33,7 @@ import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.LocationSkeleton;
 import org.digijava.module.aim.util.OrganisationUtil;
 import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -398,112 +399,33 @@ public static List<JsonBean> getOrgGroups() {
 	}
 
 	public static JsonBean getLocationsForFilter() {
-		// check country id
-		final ValueWrapper<String> qry = new ValueWrapper<String>(null);
-		final JsonBean location = new JsonBean();
-		qry.value = "WITH recursive rt_amp_category_value_location(id, parent_id, location_name, gs_lat, gs_long, acvl_parent_category_value, "
-				+ " level, root_location_id, path) AS "
-				+ " (  "
-				+ "    SELECT acvl.id, "
-				+ "          acvl.parent_location, "
-				+ "      acvl.location_name, "
-				+ "    acvl.gs_lat,  "
-				+ "     acvl.gs_long,  "
-				+ "     acvl.parent_category_value, "
-				+ "     1,  "
-				+ "    acvl.id, "
-				+ "    ARRAY[id] "
-				+ "  FROM   amp_category_value_location acvl "
-				+ "    where  "
-				+ "   ( parent_location is null and location_name =( select country_name "
-				+ " from DG_COUNTRIES where iso= '"+ FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY) +"' ) ) " 
-				+ "    UNION ALL  " 
-				+ "    SELECT acvl.id, "
-				+ "         acvl.parent_location, "
-				+ "    acvl.location_name, "
-				+ "    rt.gs_lat,  "
-				+ "      rt.gs_long,  "
-				+ "     acvl.parent_category_value, "
-				+ "      rt.level + 1,  "
-				+ "      rt.root_location_id, "
-				+ " path || ARRAY[acvl.id] "
-				+ " FROM   rt_amp_category_value_location rt, "
-				+ " amp_category_value_location acvl  "
-				+ "      WHERE  acvl.parent_location =rt.id )  "
-				+ " select * from rt_amp_category_value_location "
-				+ " order by path";
-		try {
-			PersistenceManager.getSession().doWork(new Work() {
-
-				@Override
-				public void execute(Connection connection) throws SQLException {
-					try (RsInfo rsi = SQLUtils.rawRunQuery(connection, qry.value, null)) {
-						ResultSet rs = rsi.rs;
-						if (rs.next()) {
-							location.set("id", rs.getLong("id"));
-							location.set("name", rs.getString("location_name"));
-							location.set("level",rs.getInt("level") );
-							setFilterIdToJsonBean (location,rs.getInt("level"));
-							location.set("children", new ArrayList<JsonBean>());
-							while (rs.next()) {
-								JsonBean l = new JsonBean();
-								l.set("id", rs.getLong("id"));
-								l.set("name", rs.getString("location_name"));
-								l.set("level", rs.getInt("level"));
-								setFilterIdToJsonBean (l,rs.getInt("level"));
-								addLocationToJsonBean(location, rs.getLong("parent_id"), l);
-							}
-						}
-
-					}
-				}
-
-				private void setFilterIdToJsonBean (JsonBean loc,Integer level) {
-					String columnName = null;
-					switch (level) {
-					case 1:
-						columnName = ColumnConstants.COUNTRY;
-						break;
-					case 2:
-						columnName = ColumnConstants.REGION;
-						break;
-					case 3:
-						columnName = ColumnConstants.ZONE;
-						break;
-					case 4:
-						columnName = ColumnConstants.DISTRICT;
-						break;
-				
-					}
-					loc.set("filterId", columnName);
-				}
-				private void addLocationToJsonBean(JsonBean loc, Long id,
-						JsonBean beanToAdd) {
-					if (loc.get("id").equals(id)) {
-						List<JsonBean> locList = (ArrayList<JsonBean>) loc
-								.get("children");
-						if (locList == null) {
-							locList = new ArrayList<JsonBean>();
-							loc.set("children", locList);
-						}
-						locList.add(beanToAdd);
-					} else {
-						List<JsonBean> children = (ArrayList<JsonBean>) loc
-								.get("children");
-						if (children != null) {
-							for (JsonBean child : children) {
-								addLocationToJsonBean(child, id, beanToAdd);
-							}
-						}
-					}
-				}
-			});
-		} catch (HibernateException e) {
-			throw new RuntimeException(e);
-		}
-
+	
+		Map<Long, LocationSkeleton> locations = LocationSkeleton.populateSkeletonLocationsList();
+		long parentLocationId = PersistenceManager.getLong(PersistenceManager.getSession()
+				.createSQLQuery("SELECT acvl.id FROM amp_category_value_location acvl WHERE acvl.parent_location IS NULL AND location_name=(" + 
+						"select country_name from DG_COUNTRIES WHERE iso='" + FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY) + "')")
+						.list().get(0));
+		
+		LocationSkeleton rootLocation = locations.get(parentLocationId);
+		final JsonBean location = buildLocationsJsonBean(rootLocation, 1);
 		return location;
 	}
+	
+	public final static String[] LEVEL_TO_NAME = {"na", ColumnConstants.COUNTRY, ColumnConstants.REGION, ColumnConstants.ZONE, ColumnConstants.DISTRICT, "na2", "na3", "na4"};
+	
+	public static JsonBean buildLocationsJsonBean(LocationSkeleton loc, int level) {
+		JsonBean res = new JsonBean();
+		res.set("id", loc.getId());
+		res.set("name", loc.getName());
+		res.set("level", level);
+		res.set("filterId", LEVEL_TO_NAME[level]);
+		ArrayList<JsonBean> children = new ArrayList<JsonBean>();
+		for(LocationSkeleton child:loc.getChildLocations())
+			children.add(buildLocationsJsonBean(child, level + 1));
+		res.set("children", children);
+		return res;
+	}
+	
 	
 	public static List<JsonBean> getDonors(final boolean toExcludeFilter) {
 		final List<JsonBean> donors = new ArrayList<JsonBean>();

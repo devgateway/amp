@@ -79,7 +79,67 @@
         maxElementsOnDisk="50000"
         statistics="true"
         />
-
+	
+	<cache
+        name="org.digijava.module.aim.dbentity.AmpMenuEntry"
+        maxElementsInMemory="700"
+        eternal="true"
+        overflowToDisk="false"
+        diskPersistent="false"
+        maxElementsOnDisk="5000"
+        statistics="true"
+        />
+        
+	<cache
+        name="org.digijava.module.aim.dbentity.AmpMenuEntryInView"
+        maxElementsInMemory="700"
+        eternal="true"
+        overflowToDisk="false"
+        diskPersistent="false"
+        maxElementsOnDisk="5000"
+        statistics="true"
+        />
+   
+   <cache
+        name="org.digijava.module.aim.dbentity.AmpMenuEntryInAdminView"
+        maxElementsInMemory="700"
+        eternal="true"
+        overflowToDisk="false"
+        diskPersistent="false"
+        maxElementsOnDisk="5000"
+        statistics="true"
+        />
+   
+   <cache
+        name="org.digijava.module.aim.dbentity.AmpMenuEntryInPublicView"
+        maxElementsInMemory="700"
+        eternal="true"
+        overflowToDisk="false"
+        diskPersistent="false"
+        maxElementsOnDisk="5000"
+        statistics="true"
+        />
+        
+	<cache
+        name="org.digijava.module.aim.dbentity.AmpMenuEntryInTeamView"
+        maxElementsInMemory="700"
+        eternal="true"
+        overflowToDisk="false"
+        diskPersistent="false"
+        maxElementsOnDisk="5000"
+        statistics="true"
+        />
+        
+	<cache
+        name="org.digijava.module.aim.dbentity.AmpVisibilityRule"
+        maxElementsInMemory="700"
+        eternal="true"
+        overflowToDisk="false"
+        diskPersistent="false"
+        maxElementsOnDisk="5000"
+        statistics="true"
+        />
+                
     <!--
         This cache is used by SiteCache (for version synchs) and by DigiPolicy (Permission Storage)
     -->

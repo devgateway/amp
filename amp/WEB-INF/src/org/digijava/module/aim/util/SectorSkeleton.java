@@ -3,6 +3,7 @@ package org.digijava.module.aim.util;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -47,11 +48,15 @@ public class SectorSkeleton extends HierEntitySkeleton<SectorSkeleton> {
     }
 	
 	private static EntityFetcher<SectorSkeleton> sectorsFetcher = new EntityFetcher<SectorSkeleton>() {
-		public SectorSkeleton fetch(ResultSet rs) throws SQLException {
+		@Override public SectorSkeleton fetch(ResultSet rs) throws SQLException {
 			return new SectorSkeleton(rs.getLong("amp_sector_id"), 
 				 	rs.getString("name"), 
 				 	nullInsteadOfZero(rs.getLong("parent_sector_id")),
 				    rs.getString("sector_code"));
+		}
+		
+		@Override public String[] getNeededColumnNames() {
+			return new String[] {"amp_sector_id", "name", "parent_sector_id", "sector_code"};
 		}
 	};
 }

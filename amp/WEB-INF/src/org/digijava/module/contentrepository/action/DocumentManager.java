@@ -483,7 +483,7 @@ public class DocumentManager extends Action {
 		Collection<String> PledgeDocumentsUuids = FundingPledges.getPledgeDocumentUuids();
 		
 		
-		
+		Boolean hasMakePublicRights		= DocumentManagerRights.hasMakePublicRights(request);
 		
 		try {
 			while ( nodeIterator.hasNext() ) {
@@ -545,7 +545,6 @@ public class DocumentManager extends Action {
 				Boolean hasShowVersionsRights	= false;
 				Boolean hasVersioningRights		= false;
 				Boolean hasDeleteRights			= false;
-				Boolean hasMakePublicRights		= false;
 				Boolean hasDeleteRightsOnPublicVersion	= false;
 				Boolean hasApproveVersionRights 		= false;
 				Boolean hasAddParticipatingOrgRights	= false;
@@ -602,11 +601,10 @@ public class DocumentManager extends Action {
 					if ( hasDeleteRights != null ) {
 						documentData.setHasDeleteRights( hasDeleteRights.booleanValue() && !isPending);
 					}
-					hasMakePublicRights		= DocumentManagerRights.hasMakePublicRights(baseNode, request);
 					if ( hasMakePublicRights != null ) {
 						documentData.setHasMakePublicRights( hasMakePublicRights.booleanValue() && !isPending);
 					}
-					
+
 					hasAddParticipatingOrgRights	= DocumentManagerRights.hasAddParticipatingOrgRights(documentNode, request);
 					if (hasAddParticipatingOrgRights != null) {
 						documentData.setHasAddParticipatingOrgRights(hasAddParticipatingOrgRights);

@@ -32,6 +32,11 @@ public class LocationSkeleton extends HierEntitySkeleton<LocationSkeleton> {
 					 	rs.getString("code"),
 					 	nullInsteadOfZero(rs.getLong("parent_location")), 
 					 	nullInsteadOfZero(rs.getLong("parent_category_value")));
-    		}});
+    		}
+    		
+    		@Override public String[] getNeededColumnNames() {
+    			return new String[] {"id", "location_name", "code", "parent_location", "parent_category_value"};
+    		}
+    	});
     	};
 }

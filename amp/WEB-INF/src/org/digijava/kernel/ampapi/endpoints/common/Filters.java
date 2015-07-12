@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ws.rs.GET;
@@ -15,6 +16,8 @@ import javax.ws.rs.core.MediaType;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
+import org.dgfoundation.amp.ar.viewfetcher.I18nViewDescription;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -24,6 +27,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
@@ -34,7 +38,9 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.AmpThemeSkeleton;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.LocationSkeleton;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -262,26 +268,26 @@ public class Filters {
 	@GET
 	@Path("/programs")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = "Programs", id = "Programs",columns={ColumnConstants.PRIMARY_PROGRAM,ColumnConstants.SECONDARY_PROGRAM,ColumnConstants.NATIONAL_PLANNING_OBJECTIVES,ColumnConstants.TERTIARY_PROGRAM})
+	@ApiMethod(ui = true, name = "Programs", id = "Programs", columns={ColumnConstants.PRIMARY_PROGRAM, ColumnConstants.SECONDARY_PROGRAM, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, ColumnConstants.TERTIARY_PROGRAM})
 	public List<SimpleJsonBean> getPrograms() {
 		List<SimpleJsonBean> programs = new ArrayList<SimpleJsonBean>();
 		try {
 			Set<String> visibleColumns = ColumnsVisibility.getVisibleColumns();
 
-			for (Object p : ProgramUtil.getAmpActivityProgramSettingsList()) {
-				AmpActivityProgramSettings program = (AmpActivityProgramSettings) p;
-				final String columnName = ProgramUtil.NAME_TO_COLUMN_MAP.get(program.getName());
+			List<Object[]> progs = PersistenceManager.getSession().createSQLQuery("SELECT amp_program_settings_id, name FROM amp_program_settings").list();
+			for (Object[] program : progs) {
+				String programName = String.valueOf(program[1]);
+				final String columnName = ProgramUtil.NAME_TO_COLUMN_MAP.get(String.valueOf(program[1]));
 				// only add if its enabled
 				if (visibleColumns.contains(columnName)) {
-					SimpleJsonBean bean = new SimpleJsonBean(program.getAmpProgramSettingsId(), TranslatorWorker.translateText(program.getName()));
-					bean.setFilterId(program.getName());
+					SimpleJsonBean bean = new SimpleJsonBean(PersistenceManager.getLong(program[0]), TranslatorWorker.translateText(programName));
+					bean.setFilterId(programName);
 					programs.add(bean);
 				}
 			}
 			return programs;
-		} catch (DgException e) {
-			logger.error("cannot get program list", e);
-			return programs;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 	
@@ -379,7 +385,7 @@ public class Filters {
 	
 
 	/**
-	 * Return the programs filtered by the given sectorName
+	 * Return the programs filtered by the given programSettingsId
 	 * 
 	 * @return
 	 */
@@ -389,11 +395,14 @@ public class Filters {
 	@ApiMethod(ui = false, id = "ProgramsByProgramName")
 	public SimpleJsonBean getPrograms(@PathParam("programId") Long programId) {
 		try {
-			AmpActivityProgramSettings npd = ProgramUtil.getAmpActivityProgramSettings(programId);
-
-			if (npd != null && npd.getDefaultHierarchy() != null) {
-				SimpleJsonBean bean = getPrograms(npd.getDefaultHierarchy(), npd.getName(), 0);
-				bean.setFilterId(npd.getName());
+			Object[] idname = (Object[]) PersistenceManager.getSession().createSQLQuery("select default_hierarchy, name from amp_program_settings where amp_program_settings_id = " + programId).uniqueResult();
+			Long rootAmpThemeId = idname == null ? null : PersistenceManager.getLong(idname[0]);
+			if (rootAmpThemeId != null) {
+				String schemeName = String.valueOf(idname[1]);
+				Map<Long, AmpThemeSkeleton> themes = AmpThemeSkeleton.populateThemesTree(rootAmpThemeId);
+				String programName = schemeName.equals(ProgramUtil.NATIONAL_PLAN_OBJECTIVE) ? ColumnConstants.NATIONAL_PLANNING_OBJECTIVES : schemeName;
+				SimpleJsonBean bean = buildProgramsJsonBean(themes.get(rootAmpThemeId), programName, 0);
+				bean.setFilterId(programName);
 				return bean;
 			} else {
 				return new SimpleJsonBean();
@@ -401,9 +410,8 @@ public class Filters {
 
 		} catch (ObjectNotFoundException e) {
 			return new SimpleJsonBean();
-		} catch (DgException e) {
-			logger.error("Cannot get program", e);
-			return null;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -532,6 +540,19 @@ public class Filters {
 		return js;
 		
 	}
+	
+	public static SimpleJsonBean buildProgramsJsonBean(AmpThemeSkeleton loc, String programName, int level) {
+		SimpleJsonBean res = new SimpleJsonBean();
+		res.setId(loc.getId());
+		res.setName(loc.getName());		
+		res.setFilterId(programName + " Level " + level + " Id");
+		ArrayList<SimpleJsonBean> children = new ArrayList<SimpleJsonBean>();
+		for(AmpThemeSkeleton child:loc.getChildLocations())
+			children.add(buildProgramsJsonBean(child, programName, level + 1));
+		res.setChildren(children);
+		return res;
+	}
+	
 	/**
 	 * Get JsonEnable object for programs
 	 * 
@@ -647,15 +668,14 @@ public class Filters {
 	@ApiMethod(ui = true, name = "Workspaces", id = "Workspaces", visibilityCheck = "hasToShowWorkspaceFilter"/*, column = ColumnConstants.WORKSPACES*/)
 	public JsonBean getWorkspaces() {
 		List<SimpleJsonBean> teamsListJson = new ArrayList<SimpleJsonBean>();
-		Collection<AmpTeam> ampTeamList = TeamUtil.getAllRelatedTeams();
 		if (hasToShowWorkspaceFilter()) {
-			for (AmpTeam ampTeam : ampTeamList) {
-				if(!ampTeam.getIsolated()){
-					SimpleJsonBean ampTeamJson = new SimpleJsonBean();
-					ampTeamJson.setId(ampTeam.getIdentifier());
-					ampTeamJson.setName(ampTeam.getName());
-					teamsListJson.add(ampTeamJson);
-				}
+			Map<Long, String> teamNames = DatabaseViewFetcher.fetchInternationalizedView("amp_team", "WHERE (isolated is false) OR (isolated is null)", "amp_team_id", "name");
+			
+			for (long ampTeamId:teamNames.keySet()) {
+				SimpleJsonBean ampTeamJson = new SimpleJsonBean();
+				ampTeamJson.setId(ampTeamId);
+				ampTeamJson.setName(teamNames.get(ampTeamId));
+				teamsListJson.add(ampTeamJson);
 			}
 		}
 		JsonBean js = new JsonBean();

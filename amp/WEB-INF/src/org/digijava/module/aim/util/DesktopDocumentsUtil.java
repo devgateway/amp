@@ -115,6 +115,8 @@ public class DesktopDocumentsUtil {
 		ArrayList<DocumentData> documents = new ArrayList<DocumentData>();
 		HashMap<String, CrDocumentNodeAttributes> uuidMapOrg = CrDocumentNodeAttributes.getPublicDocumentsMap(false);
 		HashMap<String, CrDocumentNodeAttributes> uuidMapVer = CrDocumentNodeAttributes.getPublicDocumentsMap(true);
+		Boolean hasMakePublicRights = DocumentManagerRights.hasMakePublicRights(request);
+
 		try {
 			while (nodeIterator.hasNext()) {
 				Node documentNode = (Node) nodeIterator.next();
@@ -123,7 +125,6 @@ public class DesktopDocumentsUtil {
 				Boolean hasShowVersionsRights = false;
 				Boolean hasVersioningRights = false;
 				Boolean hasDeleteRights = false;
-				Boolean hasMakePublicRights = false;
 				Boolean hasDeleteRightsOnPublicVersion = false;
 
 				String uuid = documentNode.getUUID();
@@ -160,7 +161,6 @@ public class DesktopDocumentsUtil {
 						documentData.setHasDeleteRights(hasDeleteRights);
 					}
 
-					hasMakePublicRights = DocumentManagerRights.hasMakePublicRights(documentNode, request);
 					if (hasMakePublicRights != null) {
 						documentData.setHasMakePublicRights(hasMakePublicRights);
 					}

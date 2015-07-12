@@ -12,7 +12,7 @@
 		<property column="allow_multiple" name="allowMultiple" type="boolean" />
 		<property column="name" name="name" type="java.lang.String" />
 		<many-to-one name="defaultHierarchy" column="default_hierarchy"
-			class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none" not-null="false" lazy="false"/>
+			class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none" not-null="false" />
 
 
 	</class>

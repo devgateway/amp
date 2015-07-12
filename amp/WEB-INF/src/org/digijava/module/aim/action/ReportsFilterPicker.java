@@ -596,7 +596,7 @@ public class ReportsFilterPicker extends Action {
         StopWatch.next("Filters", true, "before programs");
         if ( FeaturesUtil.isVisibleModule("National Planning Dashboard") )
         {
-	        Map<Long, AmpThemeSkeleton> allPrograms	= ProgramUtil.getAllThemesFaster(true);
+	        Map<Long, AmpThemeSkeleton> allPrograms	= ProgramUtil.getAllThemesFaster();
 	        //this is now done automatically in the getallthemesfaster
 	        //HashMap<Long, AmpTheme> progMap		= ProgramUtil.prepareStructure(allPrograms);
 	        

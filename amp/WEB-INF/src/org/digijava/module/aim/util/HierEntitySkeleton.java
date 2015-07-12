@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -90,7 +91,7 @@ public abstract class HierEntitySkeleton<K extends HierEntitySkeleton<?>> implem
 	 * compareTo based on id
 	 */
 	public int compareTo(K o) {
-		int d = this.name.toLowerCase().compareTo(o.name.toLowerCase());
+		int d = this.name.compareToIgnoreCase(o.name);
 		if (d != 0) return d;
 		return this.id.compareTo(o.id);
 	}
@@ -166,9 +167,10 @@ public abstract class HierEntitySkeleton<K extends HierEntitySkeleton<?>> implem
     
     protected static<K extends HierEntitySkeleton<K>> Map<Long, K> fetchTree(final String tableName, final String where, final EntityFetcher<K> fetcher) {
         final Map<Long, K> entities = new HashMap<>();
+        final String[] columnNames = fetcher.getNeededColumnNames();
         PersistenceManager.getSession().doWork(new Work(){
 				public void execute(Connection conn) throws SQLException {
-					ViewFetcher v = DatabaseViewFetcher.getFetcherForView(tableName, where, TLSUtils.getEffectiveLangCode(), new HashMap<PropertyDescription, ColumnValuesCacher>(), conn, "*");		
+					ViewFetcher v = DatabaseViewFetcher.getFetcherForView(tableName, where, TLSUtils.getEffectiveLangCode(), new HashMap<PropertyDescription, ColumnValuesCacher>(), conn, columnNames);		
 					try(RsInfo rs = v.fetch(null)) {
 						while (rs.rs.next()) {
 							K entity = fetcher.fetch(rs.rs);

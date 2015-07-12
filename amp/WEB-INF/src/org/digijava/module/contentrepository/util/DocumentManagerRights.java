@@ -96,7 +96,7 @@ public class DocumentManagerRights {
 		}
 	
 		
-	public static Boolean hasMakePublicRights (Node node, HttpServletRequest request) {
+	public static Boolean hasMakePublicRights (HttpServletRequest request) {
 		Boolean manuallySetNoMakePublicFlag	= isManuallySetNoMakePublicFlag(request);
 		if ( manuallySetNoMakePublicFlag == null ){
 			manuallySetNoMakePublicFlag=true;
@@ -366,10 +366,10 @@ public class DocumentManagerRights {
 			return false;
 		}
 		
-		AmpApplicationSettings sett	= DbUtil.getTeamAppSettings(tm.getTeamId());
+		Integer allowAddTeamRes = tm.getAllowAddTeamRes();
 
-		return sett.getAllowAddTeamRes() != null && 
-				sett.getAllowAddTeamRes() >= CrConstants.TEAM_RESOURCES_VERSIONING_ALLOWED_WORKSP_MEMBER ;		
+		return allowAddTeamRes != null && 
+				allowAddTeamRes >= CrConstants.TEAM_RESOURCES_VERSIONING_ALLOWED_WORKSP_MEMBER ;		
 	}
 	
 	private static Boolean isAllowedShareAndUnshareResAcrossWorkspacesForMembers (HttpServletRequest request) {

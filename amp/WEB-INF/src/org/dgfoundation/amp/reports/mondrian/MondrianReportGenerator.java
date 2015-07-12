@@ -162,6 +162,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	@Override
 	public GeneratedReport executeReport(ReportSpecification specOrig) throws AMPException {
 		try {
+			//try {Thread.sleep(25000);}catch(Exception e){};
 			//TODO: current limitation: now we only accept ReportSpecificationImpl as input because of the in-place modifications done to the structure
 			// this should be changed in the bright future
 			ReportSpecificationImpl spec = (ReportSpecificationImpl) specOrig;

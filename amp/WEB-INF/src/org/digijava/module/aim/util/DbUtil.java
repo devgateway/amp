@@ -680,25 +680,11 @@ public class DbUtil {
 	}
 
 	public static AmpApplicationSettings getTeamAppSettings(Long teamId) {
-		Session session = null;
-		Query qry = null;
-		AmpApplicationSettings ampAppSettings = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "from "
-					+ AmpApplicationSettings.class.getName()
-					+ " a where (a.team.ampTeamId=:teamId)";
-			qry = session.createQuery(queryString);
-			qry.setLong("teamId", teamId);
-			Iterator itr = qry.list().iterator();
-			if (itr.hasNext()) {
-				ampAppSettings = (AmpApplicationSettings) itr.next();
-			}
-
-		} catch (Exception e) {
-			logger.error("Unable to get TeamAppSettings", e);
-		}
+	
+		String queryString = "from "
+				+ AmpApplicationSettings.class.getName()
+				+ " a where (a.team.ampTeamId=:teamId)";
+		AmpApplicationSettings ampAppSettings = (AmpApplicationSettings) PersistenceManager.getSession().createQuery(queryString).setLong("teamId", teamId).uniqueResult();
 		return ampAppSettings;
 	}
 

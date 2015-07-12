@@ -118,6 +118,10 @@ public class InternationalizedViewsRepository {
 			Collections.<String, I18nViewDescription>unmodifiableMap(
 			new HashMap<String, I18nViewDescription>()
 			{{
+				
+				addViewDef(this, new I18nViewDescription("amp_team").
+								addColumnDef(new I18nViewColumnDescription("name", "amp_team_id", AmpTeam.class, "name")));
+				
 				addViewDef(this, new I18nViewDescription("amp_organisation").
 								addColumnDef(new I18nViewColumnDescription("description", "amp_org_id", AmpOrganisation.class, "description")).
 								addColumnDef(new I18nViewColumnDescription("name", "amp_org_id", AmpOrganisation.class, "name")));

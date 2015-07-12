@@ -54,14 +54,16 @@ public class MenuVisibility extends RuleBasedVisibility {
 			visibleDataPerView = new TreeMap<AmpView, Set<String>>();
 		}
 		// reset to null if there was any FM change in the meantime
-		visibleData = visibleDataPerView.get(MenuUtils.getCurrentView());
+		AmpView currentView = MenuUtils.getCurrentView();
+		visibleData = visibleDataPerView.get(currentView);
 		if (visibleData == null) {
+			logger.error("visibleData for MenuVisibility is null!");
 			// rebuild visibleData for the current view or use cached on from visibleDataPerView 
 			super.getEnabledSettings();
 			// keep only the 1st FM option for priority lists
 			selectFirstPriorityOnly();
 		}
-		
+		visibleDataPerView.put(currentView, visibleData);
 		return visibleData;
 	}
 	

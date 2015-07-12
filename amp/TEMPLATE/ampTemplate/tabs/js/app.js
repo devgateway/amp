@@ -23,9 +23,9 @@ define(
 			// Define 2 regions where the tab and the content will be drawn.
 			// Each region is mapped to a <section> element on the html.
 			app.TabsApp.addRegions({
+				'documentsWidgetRegion' : '#resources-widget-container',				
 				'tabsRegion' : '#tabs-section',
-				'tabsBodyRegion' : '#tabs-body-section',
-				'documentsWidgetRegion' : '#resources-widget-container'
+				'tabsBodyRegion' : '#tabs-body-section'
 			});
 
 			app.TabsApp.on('start', function() {

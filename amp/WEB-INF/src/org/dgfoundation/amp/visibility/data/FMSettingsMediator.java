@@ -52,8 +52,7 @@ public class FMSettingsMediator {
 	 * @return
 	 */
 	public static Set<String> getEnabledSettings(String fmGroupName) {
-		AmpTemplatesVisibility currentTemplate = FeaturesUtil.getCurrentTemplate();
-		Map<String, FMSettings> templateGroup = getTemplate(currentTemplate.getId());
+		Map<String, FMSettings> templateGroup = getTemplate(FeaturesUtil.getCurrentTemplateId());
 		FMSettings fmGroup = getFMSettings(templateGroup, fmGroupName);
 		
 		if (fmGroup != null) {

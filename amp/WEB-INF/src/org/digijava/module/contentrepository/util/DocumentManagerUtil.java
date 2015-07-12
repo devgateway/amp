@@ -806,15 +806,15 @@ public class DocumentManagerUtil {
 		return	DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "team/"+teamMember.getTeamId());
 	}
 
-	public static Node getUserPrivateNode(Session jcrWriteSession, TeamMember teamMember) {
+	public static Node getUserPrivateNode(Session jcrSession, TeamMember teamMember) {
 		String userName	= teamMember.getEmail();
 		String teamId = "" + teamMember.getTeamId();
-		return	DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "private/"+teamId+"/"+userName);
+		return	DocumentManagerUtil.getNodeByPath(jcrSession, teamMember, "private/"+teamId+"/"+userName);
 	}
 	
-	public static Node getTeamPendingNode(Session jcrWriteSession, TeamMember teamMember) {
+	public static Node getTeamPendingNode(Session jcrSession, TeamMember teamMember) {
 		String teamId = "" + teamMember.getTeamId();
-		return DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "pending/"+teamId);
+		return DocumentManagerUtil.getNodeByPath(jcrSession, teamMember, "pending/"+teamId);
 	}
 
 	public static String getWebLinkByUuid(String uuid, HttpServletRequest request) {

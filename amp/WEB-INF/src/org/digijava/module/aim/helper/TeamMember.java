@@ -7,6 +7,7 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.ar.util.FilterUtil;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
@@ -41,6 +42,8 @@ public class TeamMember implements Comparable, Serializable{
 	private Boolean publishDocuments; /*permissions to make docs public*/
 	private boolean approver;
     private AmpCategoryValue workspacePrefix;
+    private Integer allowAddTeamRes;
+    private long visibilityTemplateId;
 
     /**
      * use {@link #TeamMember(AmpTeamMember)} instead of this one
@@ -62,7 +65,6 @@ public class TeamMember implements Comparable, Serializable{
 			init(tm.getAmpTeam());
 			this.memberId = tm.getAmpTeamMemId();
 			this.publishDocuments = tm.getPublishDocPermission();
-			
 		}
 	}
 	/**
@@ -93,7 +95,7 @@ public class TeamMember implements Comparable, Serializable{
 	}
 	
 	private void init(AmpTeam t) {
-		if( t!=null ) {
+		if (t != null) {
 			this.teamId = (Long)t.getIdentifier();
 			this.teamName = t.getName();
 			this.teamAccessType = t.getAccessType();
@@ -101,7 +103,10 @@ public class TeamMember implements Comparable, Serializable{
 			this.useFilters = t.getUseFilter();
 			this.addActivity = t.getAddActivity();
 			this.workspacePrefix = t.getWorkspacePrefix();
-			this.setTeamIsolated(t.getIsolated());
+			this.teamIsolated = t.getIsolated();
+			AmpApplicationSettings sett	= DbUtil.getTeamAppSettings(this.teamId);
+			this.allowAddTeamRes = sett == null ? null : sett.getAllowAddTeamRes();
+			this.visibilityTemplateId = t.getFmTemplate() == null ? 0 : t.getFmTemplate().getId();
 		}
 	}
         
@@ -278,16 +283,18 @@ public class TeamMember implements Comparable, Serializable{
 		Long newId = (Long)arg0;
 		return this.getMemberId().compareTo(newId); 
 	}
+    
 	public Boolean getTeamIsolated() {
 		return teamIsolated;
 	}
-	public void setTeamIsolated(Boolean teamIsolated) {
-		this.teamIsolated = teamIsolated;
+    
+	public Integer getAllowAddTeamRes() {
+		return this.allowAddTeamRes;
 	}
     
-
-    
-    
+    public long getVisibilityTemplateId() {
+    	return this.visibilityTemplateId;
+    }
     
     
 }

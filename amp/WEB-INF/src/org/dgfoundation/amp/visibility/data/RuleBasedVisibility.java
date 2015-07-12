@@ -33,7 +33,7 @@ public abstract class RuleBasedVisibility extends DataVisibility implements FMSe
 	@Override
 	protected Set<String> detectVisibleData() {
 		List<? extends RuleBasedData> ruleBasedData = VisibilityUtil.getDataWithVisibilityRule(getClazz());
-		
+
 		// these are visible by default
 		Set<String> visibleData = new HashSet<String>(VisibilityUtil.getDataNamesWithoutVisibilityRule(getClazz()));
 		// add other in case some custom list is defined

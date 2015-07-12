@@ -25,6 +25,7 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -1126,10 +1127,9 @@ public class TeamUtil {
      * @return true if draft activities should be hidden
      */
 	public static boolean hideDraft(TeamMember tm) {
-		if (tm.getComputation() != null && tm.getComputation()) {
+		if (AmpARFilter.isTrue(tm.getComputation())) {
 			Workspace wrksp = TeamUtil.getWorkspace(tm.getTeamId());
-			if (wrksp != null && wrksp.getHideDraftActivities() != null
-					&& wrksp.getHideDraftActivities())
+			if (wrksp != null && AmpARFilter.isTrue(wrksp.getHideDraftActivities()))
 				return true;
 		}
 		return false;

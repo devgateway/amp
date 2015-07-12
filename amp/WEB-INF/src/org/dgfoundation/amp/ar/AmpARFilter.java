@@ -1746,8 +1746,7 @@ public class AmpARFilter extends PropertyListable {
 		}
 		
 		boolean thisIsComputedWorkspaceWithFilters = workspaceFilter && (member != null) && 
-				((member.getComputation() != null) && (member.getComputation()) ||
-				 (member.getUseFilters() != null) && (member.getUseFilters()));
+				isTrue(member.getComputation()) && isTrue(member.getUseFilters());
 
 		String TEAM_FILTER = WorkspaceFilter.generateWorkspaceFilterQuery(member);
 
@@ -1766,13 +1765,12 @@ public class AmpARFilter extends PropertyListable {
 				/* do a somewhat ugly hack: the TEAM_FILTER will only contain the activities from within the workspace
 				 * here we run the filter part of the workspace and OR with the own activities returned in TEAM_FILTER
 				 */
-				String hideDraftSQL = TeamUtil.hideDraft(member) ? "draft <> true" : "1=1";
-				String allActivitiesInTheDatabaseQuery = "SELECT amp_activity_id from amp_activity ";
-				String queryToAppend = allActivitiesInTheDatabaseQuery + " WHERE amp_activity_id IN (" + TEAM_FILTER + ")";
-				String otherActivities = this.generatedFilterQuery + " AND " + hideDraftSQL;
-				this.generatedFilterQuery = String.format("(%s) UNION (%s)", otherActivities, queryToAppend);
+				String activitiesInTheWorkspace = "SELECT amp_activity_id from amp_activity WHERE amp_activity_id IN (" + TEAM_FILTER + ")";
+				String otherActivities = this.generatedFilterQuery + (TeamUtil.hideDraft(member) ? " AND draft <> true" : "");
+				
+				this.generatedFilterQuery = String.format("(%s) UNION (%s)", otherActivities, activitiesInTheWorkspace);
 				//this.generatedFilterQuery = String.format("(%s) OR (%s)", this.generatedFilterQuery, queryToAppend);
-			}
+		}
 			else
 			{
 				// normal workspace filter, works hackless

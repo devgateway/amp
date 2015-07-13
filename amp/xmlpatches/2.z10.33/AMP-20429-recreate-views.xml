@@ -10,7 +10,6 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 				UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart';
-				INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('full_etl_request', 999);
 			</lang>
 		</script>
 	</apply>

@@ -464,16 +464,28 @@ public class GisEndPoints {
 	public List<JsonBean> getClusterLevels() {
 		List<AmpCategoryValue> values = QueryUtil.getClusterLevels();
 		List<JsonBean> levelsJson = new ArrayList<JsonBean>();
+		JSONArray bounderies = getBoundaries();
 		for (AmpCategoryValue value : values) {
-			JsonBean json = new JsonBean();
-			json.set("id", value.getId());
-			json.set("title", value.getLabel());
-			json.set("adminLevel", "adm-" + value.getIndex());
-			levelsJson.add(json);
+			if(hasMapBounderies(value, bounderies)) {
+				JsonBean json = new JsonBean();
+				json.set("id", value.getId());
+				json.set("title", value.getLabel());
+				json.set("adminLevel", "adm-" + value.getIndex());
+				levelsJson.add(json);
+			}
 		}
 		return levelsJson;
 	}
 	
+	private boolean hasMapBounderies(AmpCategoryValue value, JSONArray bounderies) {
+		for (Object object : bounderies) {
+			if (object instanceof JSONObject && ("adm-"+value.getIndex()).equals(((JSONObject) object).get("id"))) {
+				return true;
+			}			
+		}
+		return false;
+	}
+
 	/**
 	 * Return the last updated activities
 	 * 

@@ -142,7 +142,7 @@
     <action name="umViewAllUsersForm" path="/um/exportUserManager" scope="session" type="org.digijava.module.um.action.ExportUserManager2XSL" validate="false"/>
     <action name="umViewEditUserForm" path="/um/viewEditUser" scope="session" type="org.digijava.module.um.action.ViewEditUser" validate="false">
       <forward name="forward" path="/showLayout.do?layout=umViewEditUser" />
-      <forward name="saved" path="/um/viewAllUsers.do" redirect="false"/>
+      <forward name="saved" path="/um/viewAllUsers.do?currentAlpha=viewAll" redirect="false"/>
       <forward name="assignWorkspace" path="/showLayout.do?layout=assignWorkspaceToUser" />
     </action>
     <action input="/um/registerUser.do" name="umAddUserForm" path="/um/addWorkSpaceUser" scope="session" type="org.digijava.module.um.action.addWorkSpaceUser" validate="true">

@@ -89,10 +89,7 @@ import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
-import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
-import org.dgfoundation.amp.onepager.util.ActivityUtil;
-import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-import org.dgfoundation.amp.onepager.util.AttributePrepender;
+import org.dgfoundation.amp.onepager.util.*;
 import org.dgfoundation.amp.onepager.validators.AmpSemanticValidator;
 import org.dgfoundation.amp.onepager.validators.StringRequiredValidator;
 import org.dgfoundation.amp.onepager.validators.TranslatableValidators;
@@ -100,7 +97,6 @@ import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
-import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -1134,7 +1130,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		AmpTeamMember modifiedBy = activity.getModifiedBy();
 		AmpAuthWebSession wicketSession = (AmpAuthWebSession)org.apache.wicket.Session.get();
 		long currentUserId = wicketSession.getCurrentMember().getMemberId();
-        activity.setChangeType(ActivityFieldsConstants.ChangeType.MANUAL.toString());
+        activity.setChangeType(ChangeType.MANUAL.toString());
 		
 		AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
 

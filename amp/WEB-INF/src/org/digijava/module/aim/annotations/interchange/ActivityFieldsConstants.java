@@ -16,21 +16,4 @@ public class ActivityFieldsConstants {
 	public static final String PROJECT_TITLE = "Project Title";
 	public static final String IS_DRAFT = "Is Draft";
     public static final String CHANGE_TYPE = "Change Type";
-
-    public static enum ChangeType {
-
-        MANUAL ("Manual"), IMPORT ("Import");
-
-        private String value;
-
-        ChangeType(String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return value;
-        }
-
-    }
 }

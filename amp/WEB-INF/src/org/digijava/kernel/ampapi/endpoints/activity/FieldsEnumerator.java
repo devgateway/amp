@@ -10,9 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Context;
-
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
@@ -42,16 +39,9 @@ import org.hibernate.persister.entity.AbstractEntityPersister;
 
 public class FieldsEnumerator {
 	
-	@Context
-	private HttpServletRequest httpRequest;
-
-	
-	
 	static {
 		fillAllFieldsLengthInformation();
 	}
-	
-	
 	
 	/**
 	 * gets fields from the type of the field
@@ -81,9 +71,9 @@ public class FieldsEnumerator {
 		return isEnabled;
 	}
 	
-	private static Map<String, Field> getInterchangeableFields(Class clazz) {
+	private static Map<String, Field> getInterchangeableFields(Class<?> clazz) {
 		Map<String, Field> interFields = new HashMap<String, Field>();
-		Class wClass = clazz;
+		Class<?> wClass = clazz;
 		while (wClass != Object.class) {
 			Field[] declaredFields = wClass.getDeclaredFields();
 			for (Field field : declaredFields)
@@ -93,8 +83,6 @@ public class FieldsEnumerator {
 		}
 		return interFields;
 	}
-	
-	
 	
 	private static void fillFieldsLengthInformation(Class<?> clazz) {
 		final Map <String, String> dbTypes = new HashMap<String, String>();
@@ -141,9 +129,8 @@ public class FieldsEnumerator {
 				fillFieldsLengthInformation(InterchangeUtils.getClassOfField(field));
 
 		}
-		
-
 	}
+	
 	/**
 	 * fills the fieldTypes and fieldMaxLengths maps
 	 */
@@ -158,8 +145,6 @@ public class FieldsEnumerator {
 	
 	public static Map<Field, String > fieldTypes;
 	public static Map<Field, Integer> fieldMaxLengths;
-	
-	
 	
 	
 	/**

@@ -4,7 +4,10 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -87,7 +90,8 @@ public class ActivityImporter {
 			newActivity = new AmpActivityVersion(); 
 		}
 		
-		if(validateAndImport(oldActivity, newActivity, fieldsDef, newJson, oldJson, "")) {
+		newActivity = (AmpActivityVersion) validateAndImport(oldActivity, newActivity, fieldsDef, newJson, oldJson, ""); 
+		if(newActivity != null) {
 			// save new activity
 			try {
 				org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(
@@ -102,39 +106,34 @@ public class ActivityImporter {
 		return new ArrayList<ApiErrorMessage>(errors.values());
 	}
 	
-	protected boolean validateAndImport(Object oldParent, Object newParent, List<JsonBean> fieldsDef, 
+	protected Object validateAndImport(Object oldParent, Object newParent, List<JsonBean> fieldsDef, 
 			JsonBean newJsonParent, JsonBean oldJsonParent, String fieldPath) {
-		boolean valid = true;
 		for (JsonBean fieldDef : fieldsDef) {
-			if (!validateAndImport(oldParent, newParent, fieldDef, newJsonParent, oldJsonParent, fieldPath)) {
-				// disable further configurations
-				newParent = null;
-				valid = false;
-			}
+			newParent = validateAndImport(oldParent, newParent, fieldDef, newJsonParent, oldJsonParent, fieldPath); 
 		}
-		return valid;
+		return newParent;
 	}
 	
-	protected boolean validateAndImport(Object oldParent, Object newParent, JsonBean fieldDef, 
+	protected Object validateAndImport(Object oldParent, Object newParent, JsonBean fieldDef, 
 			JsonBean newJsonParent, JsonBean oldJsonParent, String fieldPath) {
 		String fieldName = fieldDef.getString(ActivityEPConstants.FIELD_NAME);
-		Object oldField = oldJsonParent == null ? null : oldJsonParent.get(fieldName);
-		Object newField = newJsonParent == null ? null : newJsonParent.get(fieldName);
+		Object oldJsonValue = oldJsonParent == null ? null : oldJsonParent.get(fieldName);
+		Object newJsonValue = newJsonParent == null ? null : newJsonParent.get(fieldName);
 		
 		// validate sub-elements first
-		boolean validSubElements = validateSubElements(fieldDef, newField, oldField, fieldPath);
+		newParent = validateSubElements(fieldDef, newParent, oldParent, newJsonValue, oldJsonValue, fieldPath);
 		// then validate current field itself
 		boolean valid = validator.isValid(this, newJsonParent, oldJsonParent, fieldDef, 
 				fieldPath + "~" + fieldName, errors);
-		valid = valid && validSubElements;
 		// and set new field only if all sub-elements are valid
 		if (valid && newParent != null) {
-			setNewField(newParent, fieldDef, newJsonParent);
+			newParent = setNewField(newParent, fieldDef, newJsonParent, fieldPath);
 		}
-		return valid;
+		return newParent;
 	}
 	
-	protected boolean validateSubElements(JsonBean fieldDef, Object newField, Object oldField, String fieldPath) {
+	protected Object validateSubElements(JsonBean fieldDef, Object newParent, Object oldParent, Object newJsonValue, 
+			Object oldJsonValue, String fieldPath) {
 		String fieldType = fieldDef.getString(ActivityEPConstants.FIELD_TYPE);
 		/* 
 		 * Sub-elements by default are valid when not provided. 
@@ -148,16 +147,33 @@ public class ActivityImporter {
 		List<JsonBean> childrenOldValues = null;
 		
 		// identify children of the new field input
-		if (newField != null && newField instanceof JsonBean) { 
-			childrenNewValues = (List<JsonBean>) ((JsonBean) newField).get(ActivityEPConstants.CHILDREN);
+		if (newJsonValue != null && newJsonValue instanceof List) { 
+			childrenNewValues = (List<JsonBean>) ((JsonBean) newJsonValue).get(ActivityEPConstants.CHILDREN);
 		}
 		// identify children of the old field input
-		if (oldField != null && oldField instanceof JsonBean) { 
-			childrenNewValues = (List<JsonBean>) ((JsonBean) oldField).get(ActivityEPConstants.CHILDREN);
+		if (oldJsonValue != null && oldJsonValue instanceof List) { 
+			childrenNewValues = (List<JsonBean>) ((JsonBean) oldJsonValue).get(ActivityEPConstants.CHILDREN);
 		}
 		// validate children
 		if ((ActivityEPConstants.FIELD_TYPE_LIST.equals(fieldType) || childrenFields != null && childrenFields.size() > 0)
 				&& childrenNewValues != null) {
+			String actualFieldName = fieldDef.getString(ActivityEPConstants.FIELD_NAME_INTERNAL);
+			Field newField = getField(newParent, actualFieldName);
+			Field oldField = getField(oldParent, actualFieldName);
+			Object newFiledValue = null;
+			Object oldFiledValue = null;
+			try {
+				newFiledValue = newField == null ? null : newField.get(newParent);
+				oldFiledValue = oldField == null ? null : oldField.get(oldParent);
+				if (newParent != null && newFiledValue == null) {
+					newFiledValue = newField.getType().newInstance();
+					newField.set(newParent, newFiledValue);
+				}
+			} catch (IllegalArgumentException | IllegalAccessException | InstantiationException e) {
+				logger.error(e.getMessage());
+				throw new RuntimeException(e);
+			}
+			
 			Iterator<JsonBean> iterNew = childrenNewValues.iterator();
 			while (iterNew.hasNext() && validSubElements) {
 				JsonBean newChild = iterNew.next();
@@ -166,10 +182,14 @@ public class ActivityImporter {
 				if (oldChild != null) {
 					childrenOldValues.remove(oldChild);
 				}
-				validSubElements = validateAndImport(null, null, childFieldDef, newChild, oldChild, fieldPath);
+				newFiledValue = validateAndImport(newFiledValue, oldFiledValue, childFieldDef, newChild, oldChild, fieldPath);
+				if (newFiledValue == null) {
+					// validation failed, reset parent to stop config
+					newParent = null;
+				}
 			}
 		}
-		return validSubElements;
+		return newParent;
 	}
 	
 	/**
@@ -177,27 +197,62 @@ public class ActivityImporter {
 	 * @param newParent
 	 * @param field
 	 * @param newJson
+	 * @return 
 	 */
-	protected void setNewField(Object newParent, JsonBean field, JsonBean newJsonParent) {
+	protected Object setNewField(Object newParent, JsonBean fieldDef, JsonBean newJsonParent, String fieldPath) {
 		
 		// note again: only checks in scope of this method are done here
 		
-		String fieldName = (String) field.get(ActivityEPConstants.FIELD_NAME);
-		String actualFieldName = (String) field.get(ActivityEPConstants.FIELD_NAME_INTERNAL);
-		String fieldType = (String) field.get(ActivityEPConstants.FIELD_TYPE);
-		// TODO: locate field, initialize intermediate objects
+		String fieldName = (String) fieldDef.get(ActivityEPConstants.FIELD_NAME);
+		String actualFieldName = (String) fieldDef.get(ActivityEPConstants.FIELD_NAME_INTERNAL);
+		String fieldType = (String) fieldDef.get(ActivityEPConstants.FIELD_TYPE);
 		Object fieldValue = newJsonParent.get(fieldName);
-		Object oldValue = null;
-		Object newValue = null;
-		Field objField = null;
-		
+		Field objField = getField(newParent, actualFieldName);
+		if (objField == null) {
+			// cannot set
+			logger.error("Actual Field not found: " + actualFieldName + ", fieldPaht: " + fieldPath);
+			return null;
+		}
+		Object oldValue;
 		try {
-			Class<?> clazz = newParent.getClass();
-			while (objField == null && !clazz.equals(Object.class)) {
+			oldValue = objField.get(newParent);
+		} catch (IllegalArgumentException | IllegalAccessException e1) {
+			logger.error(e1.getMessage());
+			throw new RuntimeException(e1);
+		}
+		Object newValue = getNewValue(objField, fieldValue, fieldDef, fieldPath);
+		
+		
+		if (newValue == null && oldValue == null || newValue != null && newValue.equals(oldValue)) {
+			// nothing to do
+		} else {
+			if (ActivityEPConstants.FIELD_TYPE_LIST.equals(fieldType)) {
+				// TODO: 
+			}
+			
+			if (objField != null) {
 				try {
-					objField = clazz.getDeclaredField(actualFieldName);
-					objField.setAccessible(true);
-					oldValue = objField.get(newParent);
+					objField.set(newParent, newValue);
+				} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
+					logger.error(e.getMessage());
+					throw new RuntimeException(e);
+				}
+			}
+		}
+		return newParent;
+	}
+	
+	protected Field getField(Object parent, String actualFieldName) {
+		if (parent == null) {
+			return null;
+		}
+		Field field = null;
+		try {
+			Class<?> clazz = parent.getClass();
+			while (field == null && !clazz.equals(Object.class)) {
+				try {
+					field = clazz.getDeclaredField(actualFieldName);
+					field.setAccessible(true);
 				} catch (NoSuchFieldException ex) {
 					clazz = clazz.getSuperclass();
 				}
@@ -206,25 +261,7 @@ public class ActivityImporter {
 			logger.error(e);
 			throw new RuntimeException(e);
 		}
-		
-		if (fieldValue == null && oldValue == null) {
-			// nothing to do
-		} else {
-			// TODO:
-		}
-		
-		if (ActivityEPConstants.FIELD_TYPE_LIST.equals(fieldType)) {
-			// TODO: 
-		}
-		
-		if (objField != null) {
-			try {
-				objField.set(newParent, newValue);
-			} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
-				logger.error(e.getMessage());
-				throw new RuntimeException(e);
-			}
-		}
+		return field;
 	}
 	
 	protected JsonBean getMatchedOldValue(JsonBean newValue, List<JsonBean> oldValues) {
@@ -240,6 +277,35 @@ public class ActivityImporter {
 	protected boolean valueChanged(JsonBean newValue, JsonBean oldValue) {
 		// TODO:
 		return true;
+	}
+	
+	public Object getNewValue(Field field, Object fieldValue, JsonBean fieldDef, String fieldPath) {
+		Object value = null;
+		if (InterchangeUtils.isCompositeField(field)) {
+			// TODO:
+		} else if (InterchangeableClassMapper.containsSimpleClass(field.getType())) {
+			
+			try {
+				if (Date.class.equals(field.getType())) {
+					// TODO: custom for date
+				} else if (String.class.equals(field.getType())) {
+					// check if this is a translatable that expects multiple 
+					value = fieldValue;
+				} else {
+					// a value of should work
+					Method valueOf = field.getType().getDeclaredMethod("valueOf", String.class);
+					value = valueOf.invoke(field.getType(), String.valueOf(fieldValue));
+				}
+			} catch (SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchMethodException 
+					| InvocationTargetException e) {
+				logger.error(e.getMessage());
+				throw new RuntimeException(e);
+			}
+		} else {
+			// this is a list
+			// TODO:
+		}
+		return value;
 	}
 
 	/**

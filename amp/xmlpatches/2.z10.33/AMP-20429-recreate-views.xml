@@ -9,8 +9,8 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-                UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart';
-            </lang>
+				UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart';
+			</lang>
 		</script>
 	</apply>
 </tns:patch>

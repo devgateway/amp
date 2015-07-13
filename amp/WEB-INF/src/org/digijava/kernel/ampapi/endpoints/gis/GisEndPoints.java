@@ -462,16 +462,33 @@ public class GisEndPoints {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "ClusterLevels")
 	public List<JsonBean> getClusterLevels() {
-		List<AmpCategoryValue> values = QueryUtil.getClusterLevels();
-		List<JsonBean> levelsJson = new ArrayList<JsonBean>();
-		for (AmpCategoryValue value : values) {
+ 		List<AmpCategoryValue> values = QueryUtil.getClusterLevels();
+ 		List<JsonBean> levelsJson = new ArrayList<JsonBean>();
+ 		JSONArray bounderies = getBoundaries();
+ 		for (AmpCategoryValue value : values) {
+			if(hasMapBounderies(value, bounderies)) {
+				JsonBean json = new JsonBean();
+				json.set("id", value.getId());
+				json.set("title", value.getLabel());
+				json.set("adminLevel", "adm-" + value.getIndex());
+				levelsJson.add(json);
+			}
 			JsonBean json = new JsonBean();
 			json.set("id", value.getId());
 			json.set("title", value.getLabel());
 			json.set("adminLevel", "adm-" + value.getIndex());
 			levelsJson.add(json);
+ 		}
+ 		return levelsJson;
+ 	}
+ 	
+	private boolean hasMapBounderies(AmpCategoryValue value, JSONArray bounderies) {
+		for (Object object : bounderies) {
+			if (object instanceof JSONObject && ("adm-"+value.getIndex()).equals(((JSONObject) object).get("id"))) {
+				return true;
+			}			
 		}
-		return levelsJson;
+		return false;
 	}
 	
 	/**

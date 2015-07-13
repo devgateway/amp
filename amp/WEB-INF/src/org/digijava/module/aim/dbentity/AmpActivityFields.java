@@ -160,8 +160,8 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Language")
 	protected String language ;
 
-	@Interchangeable(fieldTitle = "Original Date",fmPath="/Activity Form/Planning/Original Completion Date", required="/Activity Form/Planning/Required Validator for Original Completion Date")
-	@VersionableFieldSimple(fieldTitle = "Original Date")
+	@Interchangeable(fieldTitle = "Original Completion Date",fmPath="/Activity Form/Planning/Original Completion Date", required="/Activity Form/Planning/Required Validator for Original Completion Date")
+	@VersionableFieldSimple(fieldTitle = "Original Completion Date")
 	protected Date originalCompDate;
 	
 	@Interchangeable(fieldTitle = "Contracting Date",fmPath="/Activity Form/Planning/Final Date for Contracting")

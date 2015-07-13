@@ -5,6 +5,7 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,6 +14,8 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -96,7 +99,7 @@ public class ActivityExporter {
 				// check if the member is a collection
 				
 				if (InterchangeUtils.isCompositeField(field)) {
-					generateCompositeCollection(field, fieldValue, fieldPath, resultJson);
+					generateCompositeValues(field, fieldValue, fieldPath, resultJson);
 				} else if(isFiltered(filteredFieldPath)) {
 					if (InterchangeUtils.isCollection(field)) {
 						Collection<Object> collectionItems = (Collection<Object>) fieldValue;
@@ -115,13 +118,14 @@ public class ActivityExporter {
 						if (InterchangeableClassMapper.containsSupportedClass(field.getType()) || fieldValue == null) {
 							resultJson.set(fieldTitle, InterchangeUtils.getTranslationValues(field, field.getDeclaringClass(), fieldValue, InterchangeUtils.getId(parentObject)));
 						} else {
-							if (interchangeable.pickIdOnly()) {
-								resultJson.set(fieldTitle, InterchangeUtils.getId(fieldValue));
-							} else {
-								resultJson.set(fieldTitle, getObjectJson(fieldValue, filteredFieldPath));
-							}
+							resultJson.set(fieldTitle, getObjectJson(fieldValue, filteredFieldPath));
 						}
 					}
+				}
+			} else {
+				if (isFiltered(filteredFieldPath)) {
+					Long id = fieldValue != null ? InterchangeUtils.getId(fieldValue) : null;
+					resultJson.set(fieldTitle, id);
 				}
 			}
 		}		
@@ -149,7 +153,7 @@ public class ActivityExporter {
 	}
 	
 	/**
-	 * Generate the composite collection. E.g: we have a list of sectors, 
+	 * Generate the composite values. E.g: we have a list of sectors, 
 	 * in JSON the list should be written by classification 
 	 * (primary programs, secondary programs, etc.)
 	 * @param field
@@ -158,11 +162,28 @@ public class ActivityExporter {
 	 * @param filteredFields
 	 * @param fieldPath
 	 */
-	private void generateCompositeCollection(Field field, Object object, String fieldPath, JsonBean resultJson) throws IllegalArgumentException, 
+	private void generateCompositeValues(Field field, Object object, String fieldPath, JsonBean resultJson) throws IllegalArgumentException, 
 	IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException, EditorException {
 		
+		Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
 		InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
 		Interchangeable[] settings = discriminator.settings();
+		
+		try {
+			Class<? extends FieldsDiscriminator> discClass = InterchangeUtils.getDiscriminatorClass(field);
+			
+			if (discClass != null) {
+				resultJson.set(InterchangeUtils.underscorify(interchangeable.fieldTitle()), getDiscriminatorValue(discClass, object));
+				return;
+			}
+		} catch(ClassNotFoundException e) {
+			logger.error("Discriminator class not found. " 	+ e.getMessage());
+			throw new RuntimeException(e);
+		} catch (InstantiationException e) {
+			logger.error("Error in creating instance of class. " 	+ e.getMessage());
+			throw new RuntimeException(e);
+		}			
+		
 		
 		Map<String, List<JsonBean>> compositeMap = new HashMap<String, List<JsonBean>>();
 		Map<String, String> filteredFieldsMap = new HashMap<String, String>();
@@ -202,7 +223,7 @@ public class ActivityExporter {
 		for (Interchangeable setting : settings) {
 			String fieldTitle = InterchangeUtils.underscorify(setting.fieldTitle());
 			if (isFiltered(fieldTitle)) {
-				resultJson.set(InterchangeUtils.underscorify(setting.fieldTitle()), compositeMap.get(setting.discriminatorOption()));
+				resultJson.set(fieldTitle, compositeMap.get(setting.discriminatorOption()));
 			}
 		}
 	}
@@ -223,5 +244,21 @@ public class ActivityExporter {
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * 
+	 * @param discClass Discriminator Class that will be used to load the values of the object
+	 * @param fieldValue Object which will be used to retrieve the custom value
+	 * @return object Custom value of the object  
+	 */
+	private Object getDiscriminatorValue(Class<? extends FieldsDiscriminator> discClass, Object fieldValue) 
+			throws NoSuchMethodException, SecurityException, InstantiationException, 
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		
+		Method m = discClass.getMethod("toJsonOutput", new Class[] {Object.class});
+		FieldsDiscriminator discObj = discClass.newInstance();
+		
+		return m.invoke(discObj, fieldValue);
 	}
 }

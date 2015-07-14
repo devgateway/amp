@@ -11,11 +11,15 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 
 /**
  * Provides fields description
- * TODO: we should store here "Fields Enumeraiton EP" logic
  * 
  * @author Nadejda Mandrescu
  */
 public class FieldsDescriptor {
+	public enum TranslationType {
+		STRING,
+		TEXT,
+		NONE
+	};
 
 	/**
 	 * Detects if a field is translatable
@@ -28,5 +32,16 @@ public class FieldsDescriptor {
 		return field.isAnnotationPresent(TranslatableField.class) 
 				&& field.getDeclaringClass().isAnnotationPresent(TranslatableClass.class)
 				|| field.isAnnotationPresent(VersionableFieldTextEditor.class);
+	}
+	
+	public static TranslationType getTranslatableType(Field field) {
+		if (field.isAnnotationPresent(TranslatableField.class) 
+				&& field.getDeclaringClass().isAnnotationPresent(TranslatableClass.class)) {
+			return TranslationType.STRING;
+		}
+		if (field.isAnnotationPresent(VersionableFieldTextEditor.class)) {
+			return TranslationType.TEXT;
+		}
+		return TranslationType.NONE;
 	}
 }

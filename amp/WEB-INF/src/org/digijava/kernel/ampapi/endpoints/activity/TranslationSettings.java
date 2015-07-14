@@ -3,24 +3,34 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteUtils;
 
 /**
- * Class for storing translating settings for activity export
- * The bean is created in AuthRequestFilter and stored in request
+ * Class for storing translating settings for activity export. <br>
+ * The bean is created in AuthRequestFilter and stored in request.
+ * 
  * @author Viorel Chihai
  */
 public class TranslationSettings {
 
-	/** Base language code (retrieved from 'language' parameter)*/
+	/** Base language code (retrieved from 'language' parameter) */
 	private String baseLangCode;
+	/** Default language code for the current site */
+	private String defaultLangCode;
+	/** Allowed language codes */
+	private Set<String> allowedLangCodes = null;
 	/** List of translations. 
 	 *  Reunion of language codes from <default_language>, 'language' and 'translations' parameter
 	 *  */
 	private Set<String> trnLocaleCodes = new HashSet<String>();
+	
+	/**
+	 * @return default trn settings for the current request environment
+	 */
+	public static TranslationSettings getDefault() {
+		return new TranslationSettings();
+	}
 
 	public void setTrnLocaleCodes(Set<String> trnLocaleCodes) {
 		this.trnLocaleCodes = trnLocaleCodes;
@@ -37,13 +47,19 @@ public class TranslationSettings {
 		this.trnLocaleCodes = trnLocaleCodes;
 	}
 	
+	/**
+	 * @return default language code for the current site
+	 */
 	public String getDefaultLangCode() {
-		Site defaultSite = SiteUtils.getDefaultSite();
-		Locale defaultLocale = SiteUtils.getDefaultLanguages(defaultSite);
-		
-		return defaultLocale.getCode();
+		if (defaultLangCode == null) {
+			this.defaultLangCode = TLSUtils.getSite().getDefaultLanguage().getCode();
+		}
+		return defaultLangCode;
 	}
-
+	
+	/**
+	 * @return user selected language, that can be configured also via 'language' parameter
+	 */
 	public String getBaseLangCode() {
 		return baseLangCode;
 	}
@@ -62,6 +78,16 @@ public class TranslationSettings {
 	 * */
 	public boolean isDefaultLanguage(String langCode) {
 		return getDefaultLangCode().equalsIgnoreCase(langCode);
+	}
+
+	/**
+	 * @return the allowedLangCodes
+	 */
+	public Set<String> getAllowedLangCodes() {
+		if (allowedLangCodes == null) {
+			allowedLangCodes = (Set<String>) TLSUtils.getSite().getTranslationLanguages();
+		}
+		return allowedLangCodes;
 	}
 
 }

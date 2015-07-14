@@ -49,6 +49,7 @@ import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 
 import com.sun.jersey.spi.container.ContainerRequest;
+
 import clover.org.apache.log4j.helpers.ISO8601DateFormat;
 
 /**
@@ -389,6 +390,7 @@ public class InterchangeUtils {
 		return date == null ? null : dateFormatter.format(date);
 	}
 	
+	
 	public static String getGetterMethodName(String fieldName) {
 
 		if (fieldName.length() == 1)
@@ -590,6 +592,12 @@ public class InterchangeUtils {
 		*/
 		// remove this and turn on previous when AMP-20496 is fixed
 		return id != null;
+	}
+
+
+	public static String getISO8601DateFormatter() {
+		return ISO8601DateFormat.DATE_AND_TIME_DATE_FORMAT;
+//		return null;
 	}
 	
 } 

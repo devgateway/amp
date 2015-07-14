@@ -2,7 +2,6 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
 import org.digijava.kernel.request.TLSUtils;
@@ -17,7 +16,7 @@ import org.digijava.kernel.util.SiteUtils;
 public class TranslationSettings {
 
 	/** Base language code (retrieved from 'language' parameter) */
-	private String baseLangCode;
+	private String currentLangCode;
 	
 	/** Default language code for the current site */
 	private String defaultLangCode;
@@ -38,13 +37,13 @@ public class TranslationSettings {
 	}
 
 	public TranslationSettings() {
-		this.baseLangCode = TLSUtils.getEffectiveLangCode();
-		this.trnLocaleCodes.add(baseLangCode);
+		this.currentLangCode = TLSUtils.getEffectiveLangCode();
+		this.trnLocaleCodes.add(currentLangCode);
 		this.trnLocaleCodes.add(getDefaultLangCode());
 	}
 	
-	public TranslationSettings(String langCode, Set<String> trnLocaleCodes) {
-		this.baseLangCode = langCode;
+	public TranslationSettings(String currentLangCode, Set<String> trnLocaleCodes) {
+		this.currentLangCode = currentLangCode;
 		this.trnLocaleCodes = trnLocaleCodes;
 	}
 	
@@ -66,12 +65,12 @@ public class TranslationSettings {
 	/**
 	 * @return user selected language, that can be configured also via 'language' parameter
 	 */
-	public String getBaseLangCode() {
-		return baseLangCode;
+	public String getCurrentLangCode() {
+		return currentLangCode;
 	}
 
-	public void setBaseLangCode(String baseLangCode) {
-		this.baseLangCode = baseLangCode;
+	public void setBaseLangCode(String currentLangCode) {
+		this.currentLangCode = currentLangCode;
 	}
 
 	public Set<String> getTrnLocaleCodes() {
@@ -92,15 +91,8 @@ public class TranslationSettings {
 	public Collection <String> getAllowedLangCodes() {
 		if (allowedLangCodes == null) {
 			return SiteUtils.getUserLanguagesCodes(TLSUtils.getSite());
-//			Set<Locale> locales = 
-//			allowedLangCodes = new HashSet<String>();
-//			for (Locale locale : locales) {
-//				allowedLangCodes.add(locale.)
-//			}
-
-//			allowedLangCodes = (Set<String>) TLSUtils.getSite().getTranslationLanguages();
 		}
-		
 		return allowedLangCodes;
 	}
+	
 }

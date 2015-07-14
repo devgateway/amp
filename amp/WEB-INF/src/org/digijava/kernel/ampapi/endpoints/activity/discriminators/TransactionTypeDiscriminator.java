@@ -6,9 +6,6 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.FieldsDiscriminator;
 
 public class TransactionTypeDiscriminator extends FieldsDiscriminator {
-
-	
-	
 	
 	@Override
 	public Map<String, Object> getPossibleValues() {

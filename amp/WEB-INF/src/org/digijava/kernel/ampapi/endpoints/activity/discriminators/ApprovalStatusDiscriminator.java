@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.FieldsDiscriminator;
 
 public class ApprovalStatusDiscriminator extends FieldsDiscriminator {

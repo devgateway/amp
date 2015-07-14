@@ -12,21 +12,34 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.activity.FieldsDescriptor.TranslationType;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.editor.dbentity.Editor;
+import org.digijava.module.editor.exception.EditorException;
+import org.digijava.module.editor.util.DbUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 
 /**
  * Imports a new activity or updates an existing one
@@ -47,6 +60,25 @@ public class ActivityImporter {
 	private InputValidatorProcessor validator = new InputValidatorProcessor();
 	private List<AmpContentTranslation> translations = new ArrayList<AmpContentTranslation>();
 	private boolean isDraftFMEnabled;
+	private boolean isMultilingual;
+	private TranslationSettings trnSettings;
+	private TeamMember teamMember;
+	private User user;
+	private String sourceURL;
+	
+	protected void init(JsonBean newJson, boolean update) {
+		this.teamMember = (TeamMember) TLSUtils.getRequest().getAttribute(Constants.CURRENT_MEMBER);
+		this.user = RequestUtils.getUser(TLSUtils.getRequest());
+		this.sourceURL = RequestUtils.getSourceURL(TLSUtils.getRequest());
+		this.update = update;
+		this.newJson = newJson;
+		this.isDraftFMEnabled = FMVisibility.isFmPathEnabled(SAVE_AS_DRAFT_PATH);
+		this.isMultilingual = ContentTranslationUtil.multilingualIsEnabled();
+		this.trnSettings = (TranslationSettings) TLSUtils.getRequest().getAttribute(EPConstants.TRANSLATIONS);
+		if (trnSettings == null) {
+			trnSettings = TranslationSettings.getDefault();
+		}
+	}
 
 	/**
 	 * Imports or Updates
@@ -56,9 +88,7 @@ public class ActivityImporter {
 	 * @return a list of API errors, that is empty if no error detected
 	 */
 	public List<ApiErrorMessage> importOrUpdate(JsonBean newJson, boolean update) {
-		this.update = update;
-		this.newJson = newJson;
-		this.isDraftFMEnabled = FMVisibility.isFmPathEnabled(SAVE_AS_DRAFT_PATH);
+		init(newJson, update);
 		
 		// retrieve fields definition for internal use
 		List<JsonBean> fieldsDef = FieldsEnumerator.getAllAvailableFields(true);
@@ -147,11 +177,11 @@ public class ActivityImporter {
 		List<JsonBean> childrenOldValues = null;
 		
 		// identify children of the new field input
-		if (newJsonValue != null && newJsonValue instanceof List) { 
+		if (newJsonValue != null && newJsonValue instanceof JsonBean) { 
 			childrenNewValues = (List<JsonBean>) ((JsonBean) newJsonValue).get(ActivityEPConstants.CHILDREN);
 		}
 		// identify children of the old field input
-		if (oldJsonValue != null && oldJsonValue instanceof List) { 
+		if (oldJsonValue != null && oldJsonValue instanceof JsonBean) { 
 			childrenNewValues = (List<JsonBean>) ((JsonBean) oldJsonValue).get(ActivityEPConstants.CHILDREN);
 		}
 		// validate children
@@ -200,6 +230,12 @@ public class ActivityImporter {
 	 * @return 
 	 */
 	protected Object setNewField(Object newParent, JsonBean fieldDef, JsonBean newJsonParent, String fieldPath) {
+		// by default importable = true
+		boolean importable = !Boolean.FALSE.equals(fieldDef.get(ActivityEPConstants.IMPORTABLE));
+		if (!importable) {
+			// skip reconfiguration at this level if the field is not importable
+			return newParent;
+		}
 		
 		// note again: only checks in scope of this method are done here
 		
@@ -220,7 +256,7 @@ public class ActivityImporter {
 			logger.error(e1.getMessage());
 			throw new RuntimeException(e1);
 		}
-		Object newValue = getNewValue(objField, fieldValue, fieldDef, fieldPath);
+		Object newValue = getNewValue(objField, newParent, fieldValue, fieldDef, fieldPath);
 		
 		
 		if (newValue == null && oldValue == null || newValue != null && newValue.equals(oldValue)) {
@@ -279,22 +315,21 @@ public class ActivityImporter {
 		return true;
 	}
 	
-	public Object getNewValue(Field field, Object fieldValue, JsonBean fieldDef, String fieldPath) {
+	protected Object getNewValue(Field field, Object parentObj, Object jsonValue, JsonBean fieldDef, String fieldPath) {
 		Object value = null;
 		if (InterchangeUtils.isCompositeField(field)) {
 			// TODO:
 		} else if (InterchangeableClassMapper.containsSimpleClass(field.getType())) {
-			
 			try {
 				if (Date.class.equals(field.getType())) {
 					// TODO: custom for date
 				} else if (String.class.equals(field.getType())) {
-					// check if this is a translatable that expects multiple 
-					value = fieldValue;
+					// check if this is a translatable that expects multiple entries
+					value = extractTranslationsOrSimpleValue(field, parentObj, jsonValue, fieldDef);
 				} else {
-					// a value of should work
+					// a valueOf should work
 					Method valueOf = field.getType().getDeclaredMethod("valueOf", String.class);
-					value = valueOf.invoke(field.getType(), String.valueOf(fieldValue));
+					value = valueOf.invoke(field.getType(), String.valueOf(jsonValue));
 				}
 			} catch (SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchMethodException 
 					| InvocationTargetException e) {
@@ -306,6 +341,96 @@ public class ActivityImporter {
 			// TODO:
 		}
 		return value;
+	}
+	
+	protected String extractTranslationsOrSimpleValue(Field field, Object parentObj, Object jsonValue, JsonBean fieldDef) {
+		TranslationType trnType = FieldsDescriptor.getTranslatableType(field);
+		if (TranslationType.NONE == trnType) {
+			return (String) jsonValue;
+		}
+		
+		String value = null;
+		if (TranslationType.STRING == trnType) {
+			value = extractContentTranslation(field, parentObj, (Map<String, Object>) jsonValue);
+		} else {
+			value = extractTextTranslations(field, parentObj, (Map<String, Object>) jsonValue);
+		}
+		return value;
+	}
+		
+	protected String extractContentTranslation(Field field, Object parentObj, Map<String, Object> trnJson) {
+		List<AmpContentTranslation> trnList = null;
+		String value = null; 
+		
+		String objectClass = parentObj.getClass().getName();
+		Long objId = (Long) ((Identifiable) parentObj).getIdentifier();
+		trnList = ContentTranslationUtil.loadFieldTranslations(objectClass, objId, field.getName());
+		for (Entry<String, Object> trn : trnJson.entrySet()) {
+			String langCode = trn.getKey();
+			AmpContentTranslation act = null;
+			for (AmpContentTranslation existingAct : trnList) {
+				if (langCode.equalsIgnoreCase(existingAct.getLocale())) {
+					act = existingAct;
+					break;
+				}
+			}
+			String translation = DgUtil.cleanHtmlTags((String) trn.getValue());
+			// if translation to be removed
+			if (translation == null) {
+				trnList.remove(act);
+			} else if (act == null) {
+				act = new AmpContentTranslation(objectClass, objId, field.getName(), langCode, translation);
+				trnList.add(act);
+			} else {
+				act.setTranslation(translation);
+			}
+			if (trnSettings.isDefaultLanguage(langCode)) {
+				// TODO: do we need to set default language?
+				value = translation;
+			}
+		}
+		translations.addAll(trnList);
+		return value;
+	}
+	
+	protected String extractTextTranslations(Field field, Object parentObj, Map<String, Object> trnJson) {
+		String key = null;
+		if (update) { // all editor keys must exist before
+			try {
+				key = (String) field.get(parentObj);
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				logger.error(e.getMessage());
+				throw new RuntimeException(e);
+			}
+		}
+		if (key == null) { // init it in any case
+			key = "activity-import-" + System.currentTimeMillis();
+		}
+		for (Entry<String, Object> trn : trnJson.entrySet()) {
+			String langCode = trn.getKey();
+			String translation = DgUtil.cleanHtmlTags((String) trn.getValue());
+			Editor editor;
+			try {
+				editor = DbUtil.getEditor(key, langCode);
+				if (translation == null) {
+					// remove existing translations
+					if (editor != null) {
+						DbUtil.deleteEditor(editor);
+					}
+				} else if (editor == null) {
+					// create new
+					editor = DbUtil.createEditor(user, langCode, sourceURL, key, null, translation, "Activities API", TLSUtils.getRequest());
+				} else if (!editor.getBody().equals(translation)) {
+					// update existing if needed
+					editor.setBody(translation);
+					DbUtil.updateEditor(editor);
+				}
+			} catch (EditorException e) {
+				logger.error(e.getMessage());
+				throw new RuntimeException(e);
+			}
+		}
+		return key;
 	}
 
 	/**
@@ -373,5 +498,40 @@ public class ActivityImporter {
 	 */
 	public boolean getAllowSaveAsDraftShift () {
 		return ALLOW_SAVE_AS_DRAFT_SHIFT;
+	}
+	
+	/**
+	 * @return the isMultilingual
+	 */
+	public boolean isMultilingual() {
+		return isMultilingual;
+	}
+
+	/**
+	 * @return the trnSettings
+	 */
+	public TranslationSettings getTrnSettings() {
+		return trnSettings;
+	}
+
+	/**
+	 * @return the teamMember
+	 */
+	public TeamMember getTeamMember() {
+		return teamMember;
+	}
+
+	/**
+	 * @return the user
+	 */
+	public User getUser() {
+		return user;
+	}
+
+	/**
+	 * @return the sourceURL
+	 */
+	public String getSourceURL() {
+		return sourceURL;
 	}
 }

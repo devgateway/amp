@@ -509,7 +509,7 @@ public class InterchangeUtils {
 			result = ApiError.toError(errors);
 			result.set(ActivityEPConstants.ACTIVITY, oldJson);
 		} else {
-			List<JsonBean> activities = ProjectList.getActivitiesByIds(Arrays.asList(newActivity.getAmpActivityId()), true, true, true);
+			List<JsonBean> activities = null; // TODO: ProjectList.getActivitiesByIds(Arrays.asList(newActivity.getAmpActivityId()), true, true, true);
 			if (activities == null || activities.size() == 0) {
 				result = ApiError.toError(ApiError.UNKOWN_ERROR);
 			} else {

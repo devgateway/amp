@@ -43,7 +43,7 @@ public class AmpActivityIdValidator extends InputValidator {
 					isValid = false;
 				}
 			} else {
-				if ((ampActivityId != null && Long.valueOf(ampActivityId).longValue() != 0l)) {
+				if ((ampActivityId != null)) { //must not be configurable even to 0 (updated design) && Long.valueOf(ampActivityId).longValue() != 0l)) {
 					isValid = false;
 				}
 			}

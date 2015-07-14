@@ -149,7 +149,12 @@ function generateHeaderHtml(headers) {
 				// Use the full hierarchicalName when processing CSV.
 				var colName = "";
 				if (this.type === 'csv') {
-					colName = this.headerMatrix[i][j].hierarchicalName
+					colName = this.headerMatrix[i][j].hierarchicalName;
+					// AMP-20379
+					if (colName === null || colName === ""
+							|| colName.toLowerCase().indexOf('null') > -1) {
+						colName = this.headerMatrix[i][j].columnName
+					}
 				} else {
 					colName = this.headerMatrix[i][j].columnName
 				}

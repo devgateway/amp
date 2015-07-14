@@ -24,6 +24,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
@@ -499,6 +500,17 @@ public class ActivityImporter {
 	public boolean getAllowSaveAsDraftShift () {
 		return ALLOW_SAVE_AS_DRAFT_SHIFT;
 	}
+
+	
+	Map<String, List<JsonBean>> possibleValuesCached = new HashMap<String, List<JsonBean>>();
+
+	public List<JsonBean> getPossibleValuesForFieldCached(String fieldPath,
+			Class<AmpActivityFields> clazz, Object object) {
+		if (possibleValuesCached.containsKey(fieldPath))
+			return possibleValuesCached.get(fieldPath);
+		else possibleValuesCached.put(fieldPath, PossibleValuesEnumerator.getPossibleValuesForField(fieldPath, clazz, null));
+		return null;
+	}
 	
 	/**
 	 * @return the isMultilingual
@@ -534,4 +546,5 @@ public class ActivityImporter {
 	public String getSourceURL() {
 		return sourceURL;
 	}
+
 }

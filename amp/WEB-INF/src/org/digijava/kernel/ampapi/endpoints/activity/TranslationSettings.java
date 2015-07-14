@@ -1,9 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.util.SiteUtils;
 
 /**
  * Class for storing translating settings for activity export. <br>
@@ -20,7 +23,7 @@ public class TranslationSettings {
 	private String defaultLangCode;
 	
 	/** Allowed language codes */
-	private Set<String> allowedLangCodes = null;
+	private Collection<String> allowedLangCodes = null;
 	
 	/** List of translations. 
 	 *  Reunion of language codes from <default_language>, 'language' and 'translations' parameter
@@ -86,9 +89,16 @@ public class TranslationSettings {
 	/**
 	 * @return the allowedLangCodes
 	 */
-	public Set<String> getAllowedLangCodes() {
+	public Collection <String> getAllowedLangCodes() {
 		if (allowedLangCodes == null) {
-			allowedLangCodes = (Set<String>) TLSUtils.getSite().getTranslationLanguages();
+			return SiteUtils.getUserLanguagesCodes(TLSUtils.getSite());
+//			Set<Locale> locales = 
+//			allowedLangCodes = new HashSet<String>();
+//			for (Locale locale : locales) {
+//				allowedLangCodes.add(locale.)
+//			}
+
+//			allowedLangCodes = (Set<String>) TLSUtils.getSite().getTranslationLanguages();
 		}
 		
 		return allowedLangCodes;

@@ -9,17 +9,16 @@ import java.util.Set;
 public class InterchangeableClassMapper {
 	protected static final Map<Class<?>, String> classToCustomType = new HashMap<Class<?>, String>() {
 		{
-			put(java.lang.String.class, "string");
-			put(java.lang.Integer.class, "string");
-			put(java.util.Date.class, "date");
-			put(java.lang.Double.class, "float");
-			put(java.lang.Boolean.class, "boolean");
-			put(java.lang.Long.class, "string");
+			put(java.lang.String.class, ActivityEPConstants.FIELD_TYPE_STRING);
+			put(java.lang.Integer.class, ActivityEPConstants.FIELD_TYPE_LONG);
+			put(java.util.Date.class, ActivityEPConstants.FIELD_TYPE_DATE);
+			put(java.lang.Double.class, ActivityEPConstants.FIELD_TYPE_FLOAT);
+			put(java.lang.Boolean.class, ActivityEPConstants.FIELD_TYPE_BOOLEAN);
+			put(java.lang.Long.class, ActivityEPConstants.FIELD_TYPE_LONG);
 			// put(java.lang.Long.class, "int");
-			put(java.lang.Float.class, "float");
+			put(java.lang.Float.class, ActivityEPConstants.FIELD_TYPE_FLOAT);
 		}
 	};
-	
 	
 
 	private static Set<Class<?>> JSON_SUPPORTED_CLASSES = new HashSet<Class<?>>() {

@@ -49,10 +49,11 @@ public class ActivityTitleValidator extends InputValidator {
 		// this validator only validates project title
 		if (InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_TITLE).equals(fieldName)) {
 			HttpServletRequest request = TLSUtils.getRequest();
-			JsonBean translatedTitles = (JsonBean) newFieldParent.get(fieldName);
+//			JsonBean translatedTitles = (JsonBean) newFieldParent.get(fieldName);
 		
 			// project_title = {en : "English Title",fr:"French title",...}
-			Map<String, Object> titleMap = translatedTitles.any();
+//			Map<String, Object> titleMap = translatedTitles.any();
+			Map<String, Object> titleMap = (Map<String, Object>) newFieldParent.get(fieldName);
 			String activityTitle = "";
 			String language = null;
 			for (String langCode : titleMap.keySet()) {

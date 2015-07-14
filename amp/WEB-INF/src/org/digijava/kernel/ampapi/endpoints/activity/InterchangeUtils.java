@@ -77,6 +77,9 @@ public class InterchangeUtils {
 	
 	private static final ISO8601DateFormat dateFormatter = new ISO8601DateFormat();
 
+	public static String getISO8601DateFormatter() {
+		return ISO8601DateFormat.DATE_AND_TIME_DATE_FORMAT;
+	}
 	
 	public static String getDiscriminatedFieldTitle(String fieldName) {
 		return discriminatorMap.get(deunderscorify(fieldName));
@@ -412,30 +415,25 @@ public class InterchangeUtils {
 	//TODO: optimize it. it doesn't have to be n*n for field descent
 	public static Long  getId(Object obj) throws NoSuchMethodException,	SecurityException, 
 		IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		
 		if (InterchangeUtils.isSimpleType(obj.getClass())) {
 			return null;
 		} else {
-			for (Field field : obj.getClass().getDeclaredFields()) {
-				Interchangeable ant = field.getAnnotation(Interchangeable.class);
-				if (ant != null) {
-					if (ant.id()) {
-						Method meth = obj.getClass().getMethod(getGetterMethodName(field.getName()));
-						if (Long.class.isAssignableFrom(field.getType())) {
-							return (Long) meth.invoke(obj);
-						} 
-						
-//						else  						
-//							if (String.class.isAssignableFrom(field.getType())) {
-//								return (String) meth.invoke(obj);
-//							
-//
-//						}
+			Class clazz = obj.getClass();
+			while (clazz != Object.class) {
+				for (Field field : clazz.getDeclaredFields()) {
+					Interchangeable ant = field.getAnnotation(Interchangeable.class);
+					if (ant != null) {
+						if (ant.id()) {
+							Method meth = obj.getClass().getMethod(getGetterMethodName(field.getName()));
+							if (Long.class.isAssignableFrom(field.getType())) {
+								return (Long) meth.invoke(obj);
+							} 
+						}
 					}
 				}
+				clazz = clazz.getSuperclass();
 			}
 		}
-		
 		return null;
 	}	
 	

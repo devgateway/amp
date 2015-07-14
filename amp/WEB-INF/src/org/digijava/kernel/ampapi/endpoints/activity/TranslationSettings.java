@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.util.SiteUtils;
 
 /**
  * Class for storing translating settings for activity export. <br>
@@ -16,10 +15,13 @@ public class TranslationSettings {
 
 	/** Base language code (retrieved from 'language' parameter) */
 	private String baseLangCode;
+	
 	/** Default language code for the current site */
 	private String defaultLangCode;
+	
 	/** Allowed language codes */
 	private Set<String> allowedLangCodes = null;
+	
 	/** List of translations. 
 	 *  Reunion of language codes from <default_language>, 'language' and 'translations' parameter
 	 *  */
@@ -30,10 +32,6 @@ public class TranslationSettings {
 	 */
 	public static TranslationSettings getDefault() {
 		return new TranslationSettings();
-	}
-
-	public void setTrnLocaleCodes(Set<String> trnLocaleCodes) {
-		this.trnLocaleCodes = trnLocaleCodes;
 	}
 
 	public TranslationSettings() {
@@ -54,7 +52,12 @@ public class TranslationSettings {
 		if (defaultLangCode == null) {
 			this.defaultLangCode = TLSUtils.getSite().getDefaultLanguage().getCode();
 		}
+		
 		return defaultLangCode;
+	}
+	
+	public void setTrnLocaleCodes(Set<String> trnLocaleCodes) {
+		this.trnLocaleCodes = trnLocaleCodes;
 	}
 	
 	/**
@@ -87,7 +90,7 @@ public class TranslationSettings {
 		if (allowedLangCodes == null) {
 			allowedLangCodes = (Set<String>) TLSUtils.getSite().getTranslationLanguages();
 		}
+		
 		return allowedLangCodes;
 	}
-
 }

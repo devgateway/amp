@@ -29,6 +29,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
@@ -48,6 +49,7 @@ import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 
 import com.sun.jersey.spi.container.ContainerRequest;
+
 import clover.org.apache.log4j.helpers.ISO8601DateFormat;
 
 /**
@@ -336,10 +338,10 @@ public class InterchangeUtils {
 					String fieldName = field.getName();
 					
 					String translatedText = (String) fieldValue;
-					
+
 					if (InterchangeUtils.isVersionableTextField(field)) {
-						translatedText = DbUtil.getEditorBodyFiltered(SiteUtils.getGlobalSite(), (String) fieldValue, translation);
-					} else if (!translationSettings.isDefaultLanguage(translation)) {
+						translatedText =  DgUtil.cleanHtmlTags(DbUtil.getEditorBodyEmptyInclude(SiteUtils.getGlobalSite(), (String) fieldValue, translation));
+					} else if (ContentTranslationUtil.multilingualIsEnabled()) {
 						translatedText = ContentTranslationUtil.loadFieldTranslationInLocale(className, parentObjectId, fieldName, translation);
 					}
 					

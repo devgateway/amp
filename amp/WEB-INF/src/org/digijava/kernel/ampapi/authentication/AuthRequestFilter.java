@@ -21,7 +21,6 @@ import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.translation.util.ContentTranslationUtil;
 
 import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerRequestFilter;
@@ -79,16 +78,18 @@ public class AuthRequestFilter implements ContainerRequestFilter {
 	
 	private void addTranslations(SiteDomain siteDomain) {
 		Locale defaultLocale = SiteUtils.getDefaultLanguages(SiteUtils.getDefaultSite());
+		String defaultLocaleCode = defaultLocale != null ? defaultLocale.getCode() : null;
 		Locale currentLocale = (Locale) httpRequest.getAttribute(org.digijava.kernel.Constants.NAVIGATION_LANGUAGE);
-		String currentLocaleCode = currentLocale != null ? currentLocale.getCode() : defaultLocale.getCode();
+		String currentLocaleCode = currentLocale != null ? currentLocale.getCode() : defaultLocaleCode;
 		
 		Set<String> translations = new HashSet<String>();
+		translations.add(defaultLocaleCode);
 		translations.add(currentLocaleCode);
 		
 		if (httpRequest.getParameter(EPConstants.TRANSLATIONS) != null) {
 	    	String translationsParam = httpRequest.getParameter(EPConstants.TRANSLATIONS).toLowerCase();
 			
-			if (ContentTranslationUtil.multilingualIsEnabled() && StringUtils.isNotEmpty(translationsParam)) {
+			if (StringUtils.isNotEmpty(translationsParam)) {
 				List<String> requestedTranslations = Arrays.asList(translationsParam.split("\\|")); 
 			
 				for (String translation : requestedTranslations) {

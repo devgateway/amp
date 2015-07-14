@@ -36,6 +36,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.text.regex.RegexBatch;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
@@ -457,8 +458,10 @@ public class DbUtil {
 
         // get module instance
         ModuleInstance moduleInstance = RequestUtils.getRealModuleInstance(request);
+        // TODO: not sure if moduleInstance is now always false and we can simply replace with TLSUtils.getSite()  
+        Site site = moduleInstance == null ? TLSUtils.getSite() : moduleInstance.getSite();
 
-        editor.setSite(moduleInstance.getSite());
+        editor.setSite(site);
         editor.setEditorKey(editorKey);
         editor.setUrl(url);
         editor.setLanguage(languageCode);
@@ -542,7 +545,6 @@ public class DbUtil {
         return body;
     }
     
-
     /**
      * Returns editor body text but strips out all HTML tags.
      * Uses {@link #getEditorBody(String, String, String)} method to 

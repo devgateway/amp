@@ -24,13 +24,12 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
@@ -68,9 +67,9 @@ public class ActivityImporter {
 	private String sourceURL;
 	
 	protected void init(JsonBean newJson, boolean update) {
-		this.teamMember = (TeamMember) TLSUtils.getRequest().getAttribute(Constants.CURRENT_MEMBER);
-		this.user = RequestUtils.getUser(TLSUtils.getRequest());
-		this.sourceURL = RequestUtils.getSourceURL(TLSUtils.getRequest());
+		this.teamMember = TeamUtil.getCurrentMember();
+		this.user = TeamMemberUtil.getUserEntityByTMId(teamMember.getMemberId());
+		this.sourceURL = TLSUtils.getRequest().getRequestURL().toString();
 		this.update = update;
 		this.newJson = newJson;
 		this.isDraftFMEnabled = FMVisibility.isFmPathEnabled(SAVE_AS_DRAFT_PATH);
@@ -367,8 +366,13 @@ public class ActivityImporter {
 		
 		String objectClass = parentObj.getClass().getName();
 		Long objId = (Long) ((Identifiable) parentObj).getIdentifier();
-		List<AmpContentTranslation> trnList = isMultilingual ? 
-				ContentTranslationUtil.loadFieldTranslations(objectClass, objId, field.getName()) : null;
+		List<AmpContentTranslation> trnList = null;
+		if (isMultilingual) {
+			if (objId == null) {
+				objId = (long) System.identityHashCode(parentObj);
+			}
+			trnList = ContentTranslationUtil.loadFieldTranslations(objectClass, objId, field.getName());
+		}
 		for (Entry<String, Object> trn : trnJson.entrySet()) {
 			String langCode = trn.getKey();
 			String translation = DgUtil.cleanHtmlTags((String) trn.getValue());
@@ -437,6 +441,7 @@ public class ActivityImporter {
 				} else if (editor == null) {
 					// create new
 					editor = DbUtil.createEditor(user, langCode, sourceURL, key, null, translation, "Activities API", TLSUtils.getRequest());
+					DbUtil.saveEditor(editor);
 				} else if (!editor.getBody().equals(translation)) {
 					// update existing if needed
 					editor.setBody(translation);

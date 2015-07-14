@@ -259,7 +259,6 @@ public class ActivityImporter {
 		}
 		Object newValue = getNewValue(objField, newParent, fieldValue, fieldDef, fieldPath);
 		
-		
 		if (newValue == null && oldValue == null || newValue != null && newValue.equals(oldValue)) {
 			// nothing to do
 		} else {
@@ -321,6 +320,8 @@ public class ActivityImporter {
 		if (InterchangeUtils.isCompositeField(field)) {
 			// TODO:
 		} else if (InterchangeableClassMapper.containsSimpleClass(field.getType())) {
+			if (jsonValue == null)
+				return null;
 			try {
 				if (Date.class.equals(field.getType())) {
 					// TODO: custom for date
@@ -360,37 +361,52 @@ public class ActivityImporter {
 	}
 		
 	protected String extractContentTranslation(Field field, Object parentObj, Map<String, Object> trnJson) {
-		List<AmpContentTranslation> trnList = null;
-		String value = null; 
+		String value = null;
+		String currentLangValue = null;
+		String anyLangValue = null;
 		
 		String objectClass = parentObj.getClass().getName();
 		Long objId = (Long) ((Identifiable) parentObj).getIdentifier();
-		trnList = ContentTranslationUtil.loadFieldTranslations(objectClass, objId, field.getName());
+		List<AmpContentTranslation> trnList = isMultilingual ? 
+				ContentTranslationUtil.loadFieldTranslations(objectClass, objId, field.getName()) : null;
 		for (Entry<String, Object> trn : trnJson.entrySet()) {
 			String langCode = trn.getKey();
-			AmpContentTranslation act = null;
-			for (AmpContentTranslation existingAct : trnList) {
-				if (langCode.equalsIgnoreCase(existingAct.getLocale())) {
-					act = existingAct;
-					break;
+			String translation = DgUtil.cleanHtmlTags((String) trn.getValue());
+			if (isMultilingual) {
+				AmpContentTranslation act = null;
+				for (AmpContentTranslation existingAct : trnList) {
+					if (langCode.equalsIgnoreCase(existingAct.getLocale())) {
+						act = existingAct;
+						break;
+					}
+				}
+				// if translation to be removed
+				if (translation == null) {
+					trnList.remove(act);
+				} else if (act == null) {
+					act = new AmpContentTranslation(objectClass, objId, field.getName(), langCode, translation);
+					trnList.add(act);
+				} else {
+					act.setTranslation(translation);
 				}
 			}
-			String translation = DgUtil.cleanHtmlTags((String) trn.getValue());
-			// if translation to be removed
-			if (translation == null) {
-				trnList.remove(act);
-			} else if (act == null) {
-				act = new AmpContentTranslation(objectClass, objId, field.getName(), langCode, translation);
-				trnList.add(act);
-			} else {
-				act.setTranslation(translation);
-			}
 			if (trnSettings.isDefaultLanguage(langCode)) {
-				// TODO: do we need to set default language?
+				// set default language value as well
 				value = translation;
 			}
+			if (anyLangValue == null) {
+				anyLangValue = translation;
+			}
+			if (trnSettings.getCurrentLangCode().equals(langCode)) {
+				currentLangValue = translation;
+			}
 		}
-		translations.addAll(trnList);
+		// if default language still not set, let's determine it
+		if (value == null) {
+			value = currentLangValue != null ? currentLangValue : anyLangValue;
+		}
+		if (isMultilingual)
+			translations.addAll(trnList);
 		return value;
 	}
 	
@@ -473,9 +489,6 @@ public class ActivityImporter {
 	 * @return true if Save as Draft is enabled in FM
 	 */
 	public boolean isDraftFMEnabled() {
-		/* just look inside this method, why during an import we have to call it multiple times?
-		return FMVisibility.isFmPathEnabled(SAVE_AS_DRAFT_PATH);
-		*/
 		return isDraftFMEnabled;
 	}
 
@@ -500,7 +513,6 @@ public class ActivityImporter {
 	public boolean getAllowSaveAsDraftShift () {
 		return ALLOW_SAVE_AS_DRAFT_SHIFT;
 	}
-
 	
 	Map<String, List<JsonBean>> possibleValuesCached = new HashMap<String, List<JsonBean>>();
 

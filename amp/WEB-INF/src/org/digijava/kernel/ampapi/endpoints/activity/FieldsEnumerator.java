@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
@@ -38,6 +39,8 @@ import org.hibernate.persister.entity.AbstractEntityPersister;
 
 
 public class FieldsEnumerator {
+	
+	public static final Logger LOGGER = Logger.getLogger(PossibleValuesEnumerator.class);
 	
 	static {
 		fillAllFieldsLengthInformation();
@@ -243,7 +246,7 @@ public class FieldsEnumerator {
 				continue;
 			}
 			
-			if (!InterchangeUtils.isCompositeField(field)) {
+			if (!InterchangeUtils.isCompositeField(field) || hasFieldDiscriminatorClass(field)) {
 				Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
 				JsonBean descr = describeField(field, interchangeable, multilingual, internalUse);
 				if (descr != null) {
@@ -263,6 +266,15 @@ public class FieldsEnumerator {
 		return result;
 	}
 	
+	private static boolean hasFieldDiscriminatorClass(Field field) {
+		try {
+			return InterchangeUtils.getDiscriminatorClass(field) != null;
+		} catch (ClassNotFoundException e) {
+			LOGGER.error(e.getMessage());
+			throw new RuntimeException(e);
+		}
+	}
+
 	/**
 	 * Picks available translations for a string (supposedly field name)
 	 * 

@@ -14,7 +14,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
  * Defines input validation chain and executes it 
@@ -24,9 +23,9 @@ public class InputValidatorProcessor {
 	/** defines validators list and their execution order */
 	private List<InputValidator> validators = new ArrayList<InputValidator>() {{
 			add(new ValidFieldValidator());
-			add(new RequiredValidator());
 			add(new AllowedInputValidator());
 			add(new InputTypeValidator());
+			add(new RequiredValidator());
 			add(new ActivityTitleValidator());
 			add(new AmpActivityIdValidator());
 			add(new MultipleEntriesValidator());

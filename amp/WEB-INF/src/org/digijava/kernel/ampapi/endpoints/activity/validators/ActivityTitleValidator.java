@@ -6,6 +6,7 @@ package org.digijava.kernel.ampapi.endpoints.activity.validators;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
@@ -23,6 +24,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.tartarus.snowball.ext.SwedishStemmer;
 
 /**
  * Validates that project title field value is unique across AMP
@@ -48,25 +50,21 @@ public class ActivityTitleValidator extends InputValidator {
 		
 		// this validator only validates project title
 		if (InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_TITLE).equals(fieldName)) {
-			HttpServletRequest request = TLSUtils.getRequest();
-			Map<String, Object> titleMap = (Map<String, Object>) newFieldParent.get(fieldName);
-			String activityTitle = "";
-			String language = null;
-			for (String langCode : titleMap.keySet()) {
-				Site defaultSite = SiteUtils.getDefaultSite();
-				Locale defaultLocale = SiteUtils.getDefaultLanguages(defaultSite);
-				if (defaultLocale.getCode().equals(langCode)) {
-					activityTitle = (String) titleMap.get(langCode);
-					if (ContentTranslationUtil.multilingualIsEnabled()) {
-						language = langCode;
-					}
-					break;
-				}
-
+			// replicating current AF functionality to validate the default language title value
+			String lang = importer.getTrnSettings().getDefaultLangCode();
+			// it's always required & type is validated earlier
+			String activityTitle = null;
+			if (Boolean.TRUE.equals(fieldDescription.get(ActivityEPConstants.TRANSLATABLE))) {
+				activityTitle = (String) ((Map<String, Object>) newFieldParent.get(fieldName)).get(lang);
+			} else {
+				activityTitle = (String) newFieldParent.get(fieldName);
 			}
-			if (!activityTitle.isEmpty()) {
-				List<AmpActivity> list = LuceneUtil.findActivitiesMoreLikeThis(request.getServletContext()
-						.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, activityTitle, language, 2);
+			if (activityTitle == null) {
+				isValid = false;
+			} else {
+				ServletContext context = TLSUtils.getRequest().getServletContext();
+				List<AmpActivity> list = LuceneUtil.findActivitiesMoreLikeThis(
+						context.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, activityTitle, lang, 2);
 				isValid = !isTitleExistent(importer.getOldActivity(), list, importer.isUpdate());
 			}
 		}

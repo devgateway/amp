@@ -17,11 +17,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
@@ -127,6 +127,7 @@ public class ActivityImporter {
 		if(newActivity != null) {
 			// save new activity
 			try {
+				initEditors();
 				org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(
 						newActivity, translations, TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest()), 
 						newActivity.getDraft(), PersistenceManager.getRequestDBSession(), false, false);
@@ -142,14 +143,14 @@ public class ActivityImporter {
 	protected Object validateAndImport(Object oldParent, Object newParent, List<JsonBean> fieldsDef, 
 			Map<String, Object> newJsonParent, Map<String, Object> oldJsonParent, String fieldPath) {
 		for (JsonBean fieldDef : fieldsDef) {
-			newParent = validateAndImport(oldParent, newParent, fieldDef, newJsonParent, oldJsonParent, fieldPath); 
+			newParent = validateAndImport(newParent, oldParent, fieldDef, newJsonParent, oldJsonParent, fieldPath); 
 		}
 		return newParent;
 	}
 	
-	protected Object validateAndImport(Object oldParent, Object newParent, JsonBean fieldDef, 
+	protected Object validateAndImport(Object newParent, Object oldParent, JsonBean fieldDef,
 			Map<String, Object> newJsonParent, Map<String, Object> oldJsonParent, String fieldPath) {
-		String fieldName = fieldDef.getString(ActivityEPConstants.FIELD_NAME);
+		String fieldName = fieldDef == null ? null : fieldDef.getString(ActivityEPConstants.FIELD_NAME);
 		Object oldJsonValue = oldJsonParent == null ? null : oldJsonParent.get(fieldName);
 		Object newJsonValue = newJsonParent == null ? null : newJsonParent.get(fieldName);
 		
@@ -173,23 +174,27 @@ public class ActivityImporter {
 		 * Current field will be verified below and reported as invalid if sub-elements are mandatory and are not provided. 
 		 */
 		boolean validSubElements = true;
+		boolean isList = ActivityEPConstants.FIELD_TYPE_LIST.equals(fieldType); 
 		
 		// first validate all sub-elements
 		List<JsonBean> childrenFields = (List<JsonBean>) fieldDef.get(ActivityEPConstants.CHILDREN);
-		List<JsonBean> childrenNewValues = null;
-		List<JsonBean> childrenOldValues = null;
+		List<Map<String, Object>> childrenNewValues = null;
+		List<Map<String, Object>> childrenOldValues = null;
 		
 		// identify children of the new field input
-		if (newJsonValue != null && newJsonValue instanceof List) { 
-			childrenNewValues = (List) newJsonValue;
+		if (newJsonValue != null) {
+			if (newJsonValue instanceof List) { 
+				childrenNewValues = (List<Map<String, Object>>) newJsonValue;
+			} else if (isList && newJsonValue instanceof Map) {
+				childrenNewValues = new ArrayList<>(((Map) newJsonValue).entrySet());
+			}
 		}
 		// identify children of the old field input
 		if (oldJsonValue != null && oldJsonValue instanceof List) { 
-			childrenOldValues = (List) oldJsonValue;
+			childrenOldValues = (List<Map<String, Object>>) oldJsonValue;
 		}
-		// validate children
-		if ((ActivityEPConstants.FIELD_TYPE_LIST.equals(fieldType) || childrenFields != null && childrenFields.size() > 0)
-				&& childrenNewValues != null) {
+		// validate children, even if it is not a list -> to notify wrong entries
+		if ((isList || childrenFields != null && childrenFields.size() > 0) && childrenNewValues != null) {
 			String actualFieldName = fieldDef.getString(ActivityEPConstants.FIELD_NAME_INTERNAL);
 			Field newField = getField(newParent, actualFieldName);
 			Field oldField = getField(oldParent, actualFieldName);
@@ -206,19 +211,23 @@ public class ActivityImporter {
 				throw new RuntimeException(e);
 			}
 			//validateAndImport(oldFiledValue, newFiledValue, childrenFields, childrenNewValues, childrenOldValues, fieldPath);
-			Iterator<JsonBean> iterNew = childrenNewValues.iterator();
+			Iterator<Map<String, Object>> iterNew = childrenNewValues.iterator();
 			while (iterNew.hasNext() && validSubElements) {
-				Object newChild = iterNew.next();
-				Object oldChild = getMatchedOldValue(newChild, childrenOldValues);
+				Map<String, Object> newChild = iterNew.next();
 				JsonBean childFieldDef = getMatchedFieldDef(newChild, childrenFields);
+				Map<String, Object> oldChild = getMatchedOldValue(childFieldDef, childrenOldValues);
+				
 				if (oldChild != null) {
 					childrenOldValues.remove(oldChild);
 				}
-				// TODO: 
-				//newFiledValue = validateAndImport(newFiledValue, oldFiledValue, childFieldDef, newChild, oldChild, fieldPath);
+				newFiledValue = validateAndImport(newFiledValue, oldFiledValue, childFieldDef, newChild, oldChild, 
+						fieldPath);
 				if (newFiledValue == null) {
 					// validation failed, reset parent to stop config
 					newParent = null;
+				} else {
+					// record object subelement
+					// TODO:
 				}
 			}
 		}
@@ -288,7 +297,7 @@ public class ActivityImporter {
 			if (objField != null) {
 				try {
 					if (newParent instanceof Collection) {
-						((Collection) newParent).add(newValue);
+						((Collection<Object>) newParent).add(newValue);
 					} else {
 						objField.set(newParent, newValue);
 					}
@@ -323,13 +332,40 @@ public class ActivityImporter {
 		return field;
 	}
 	
-	protected Object getMatchedOldValue(Object newValue, List<JsonBean> oldValues) {
-		// TODO:
+	protected Map<String, Object> getMatchedOldValue(JsonBean childDef, List<Map<String, Object>> oldValues) {
+		if (childDef != null && oldValues != null && oldValues.size() > 0) {
+			String fieldName = (String) childDef.get(ActivityEPConstants.FIELD_NAME);
+			if (StringUtils.isNotBlank(fieldName)) {
+				for (Map<String, Object> oldValue : oldValues) {
+					if (oldValue.containsKey(fieldName)) {
+						return oldValue;
+					}
+				}
+			}
+		}
+		
 		return null;
 	}
 	
-	protected JsonBean getMatchedFieldDef(Object newValue, List<JsonBean> fieldDefs) {
-		// TODO:
+	protected JsonBean getMatchedFieldDef(Map<String, Object> newValue, List<JsonBean> fieldDefs) {
+		if (fieldDefs != null && fieldDefs.size() > 0) {
+			// if we have only 1 child element, then this is a list of elements and only this definition is expected
+			// or new value is empty, but we expect something 
+			if (fieldDefs.size() == 1 || newValue == null || newValue.isEmpty()) {
+				return fieldDefs.get(0);
+			} else {
+				// this is a complex type => simple maps like { field_name : new_value_obj } are expected
+				// TODO: if more than 1 value
+				String fieldName = newValue.keySet().iterator().next();
+				if (StringUtils.isNotBlank(fieldName)) {
+					for (JsonBean childDef : fieldDefs) {
+						if (fieldName.equals(childDef.get(ActivityEPConstants.FIELD_NAME))) {
+							return childDef;
+						}
+					}
+				}
+			}
+		}
 		return null;
 	}
 	
@@ -341,6 +377,7 @@ public class ActivityImporter {
 	protected Object getNewValue(Field field, Object parentObj, Object jsonValue, JsonBean fieldDef, String fieldPath) {
 		Object value = null;
 		if (InterchangeUtils.isCompositeField(field)) {
+			value = null;
 			// TODO:
 		} else if (InterchangeableClassMapper.containsSimpleClass(field.getType())) {
 			if (jsonValue == null)
@@ -362,6 +399,7 @@ public class ActivityImporter {
 				throw new RuntimeException(e);
 			}
 		} else {
+			value = null;
 			// this is a list
 			// TODO:
 		}
@@ -444,7 +482,7 @@ public class ActivityImporter {
 			}
 		}
 		if (key == null) { // init it in any case
-			key = "activity-import-" + System.currentTimeMillis();
+			key = getEditorKey();
 		}
 		for (Entry<String, Object> trn : trnJson.entrySet()) {
 			String langCode = trn.getKey();
@@ -472,6 +510,30 @@ public class ActivityImporter {
 			}
 		}
 		return key;
+	}
+	
+	private String getEditorKey() {
+		return "activity-import-" + System.currentTimeMillis();
+	}
+	
+	protected void initEditors() {
+		if (newActivity == null)
+			return;
+		for (Field field : AmpActivityFields.class.getFields()) {
+			if (InterchangeUtils.isVersionableTextField(field)) {
+				try {
+					String currentValue = (String) field.get(newActivity);
+					if (currentValue == null) {
+						currentValue = getEditorKey();
+						field.setAccessible(true);
+						field.set(newActivity, currentValue);
+					}
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					logger.error(e.getMessage());
+					throw new RuntimeException(e);
+				}
+			}
+		}
 	}
 
 	/**

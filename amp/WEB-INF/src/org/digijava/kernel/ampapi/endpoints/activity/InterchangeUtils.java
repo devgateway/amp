@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,6 +43,7 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -331,27 +333,20 @@ public class InterchangeUtils {
 		
 		Map<String, Object> fieldTrnValues = null; 
 		if (InterchangeUtils.isTranslatbleClass(clazz) && (InterchangeUtils.isTranslatbleField(field) || InterchangeUtils.isVersionableTextField(field))) {
-			if (fieldValue != null) {
+			String fieldText = (String) fieldValue;
+			if (InterchangeUtils.isVersionableTextField(field)) {
 				fieldTrnValues = new HashMap<String, Object>();
-				
 				for (String translation : translationSettings.getTrnLocaleCodes()) {
-					String className = clazz.getName();
-					String fieldName = field.getName();
-					
-					String translatedText = (String) fieldValue;
-
-					if (InterchangeUtils.isVersionableTextField(field)) {
-						translatedText = DgUtil.cleanHtmlTags(DbUtil.getEditorBodyEmptyInclude(SiteUtils.getGlobalSite(), (String) fieldValue, translation));
-					} else if (ContentTranslationUtil.multilingualIsEnabled()) {
-						translatedText = ContentTranslationUtil.loadFieldTranslationInLocale(className, parentObjectId, fieldName, translation);
-					}
-					
+					String translatedText = DgUtil.cleanHtmlTags(DbUtil.getEditorBodyEmptyInclude(SiteUtils.getGlobalSite(), fieldText, translation));
 					fieldTrnValues.put(translation, getJsonStringValue(translatedText));
 				}
+				return fieldTrnValues;
+			} else if (ContentTranslationUtil.multilingualIsEnabled()) {
+				return loadTranslationsForField(clazz, field.getName(), fieldText, parentObjectId, translationSettings.getTrnLocaleCodes());
 			}
-			
-			return fieldTrnValues;
-		} else if (fieldValue instanceof String) {
+		} 
+		
+		if (fieldValue instanceof String) {
 			boolean isBaseLangDefault = translationSettings.isDefaultLanguage(translationSettings.getCurrentLangCode());
 			boolean toTranslate = clazz.equals(AmpCategoryValue.class) && field.getName().equals("value");
 			
@@ -392,7 +387,10 @@ public class InterchangeUtils {
 		// return date == null ? null : dateFormatter.format(date);
 		// we need to use DatatypeConverter, since ISO8601DateFormat is unable to parse its own formatted date 
 		Calendar c = Calendar.getInstance();
-		c.setTimeInMillis(date.getTime());
+		
+		if (date != null)
+			c.setTimeInMillis(date.getTime());
+		
 		return date == null ? null : DatatypeConverter.printDateTime(c);
 	}
 	
@@ -617,4 +615,33 @@ public class InterchangeUtils {
 //		}
 	}
 	
+	public static Object loadTranslationsForField(Class<?> clazz, String propertyName, String fieldValue, Long id, Set<String> languages) {
+		
+		Map<String, String> translations = new LinkedHashMap<String, String>(); 
+		String defLangCode = TranslationSettings.getDefault().getDefaultLangCode();
+		
+		for (String l : languages) {
+			translations.put(l, null);
+		}
+		
+		if (id == null)
+			return translations; 
+		
+		if (ContentTranslationUtil.multilingualIsEnabled()) {
+			List<AmpContentTranslation> trns = ContentTranslationUtil.loadFieldTranslations(clazz.getName(), id, propertyName);
+			for(AmpContentTranslation trn:trns){
+				if (languages.contains(trn.getLocale())) {
+					translations.put(trn.getLocale(), trn.getTranslation());
+				}
+			}
+		} else {
+			return fieldValue;
+		}
+		
+		if (translations.get(defLangCode) == null){
+				translations.put(defLangCode, fieldValue);
+		}
+		
+		return translations;
+	}
 } 

@@ -3,8 +3,6 @@
  */
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +17,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * Verifies that data type matches the one defined in field description
+ * 
  * @author Nadejda Mandrescu
  */
 public class InputTypeValidator extends InputValidator {
@@ -30,8 +29,7 @@ public class InputTypeValidator extends InputValidator {
 	
 	private boolean isStringValid(Object item, Boolean translatable, Collection<String> supportedLocaleCodes) {
 		if (Boolean.TRUE.equals(translatable)) {
-			if (Map.class.isAssignableFrom(item.getClass()))
-			{
+			if (Map.class.isAssignableFrom(item.getClass())) {
 				return isTranslatableStringValid(item, supportedLocaleCodes);
 			}
 		}
@@ -41,9 +39,9 @@ public class InputTypeValidator extends InputValidator {
 	}
 	
 	private boolean isTranslatableStringValid(Object item, Collection<String> supportedLocaleCodes) {
-		Map map = (Map) item;
-		for (Object entry : map.entrySet()) {
-			Map.Entry<String, Object> castedEntry = (Map.Entry<String, Object>) entry; 
+		@SuppressWarnings("unchecked")
+		Map<String, Object> map = (Map<String, Object>) item;
+		for (Map.Entry<String, Object> castedEntry : map.entrySet()) {
 			if (!supportedLocaleCodes.contains(castedEntry.getKey()))
 				return false;			
 			if (castedEntry.getValue() != null && !String.class.isAssignableFrom(castedEntry.getValue().getClass()))
@@ -104,7 +102,8 @@ public class InputTypeValidator extends InputValidator {
 	}
 
 	private boolean checkListFieldValidity(Object item, JsonBean fieldDescription) {
-		if (List.class.isAssignableFrom(item.getClass()))
+		// for simple lists OR objects with sub-fields
+		if (List.class.isAssignableFrom(item.getClass()) || Map.class.isAssignableFrom(item.getClass())) 
 			return true;
 		return false;
 	}

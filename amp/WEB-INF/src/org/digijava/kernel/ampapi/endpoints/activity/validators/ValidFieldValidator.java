@@ -3,6 +3,8 @@
  */
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
+import java.util.Map;
+
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -21,8 +23,8 @@ public class ValidFieldValidator extends InputValidator {
 	}
 
 	@Override
-	public boolean isValid(ActivityImporter importer, JsonBean newFieldParent, JsonBean oldFieldParent,
-			JsonBean fieldDescription, String fieldPath) {
+	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
+			Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
 		boolean isValid = true;
 		if (fieldDescription == null) {
 			isValid = false;

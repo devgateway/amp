@@ -3,6 +3,8 @@
  */
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
+import java.util.Map;
+
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
@@ -29,8 +31,8 @@ public class AmpActivityIdValidator extends InputValidator {
 	}
 
 	@Override
-	public boolean isValid(ActivityImporter importer, JsonBean newFieldParent, JsonBean oldFieldParent,
-			JsonBean fieldDescription, String fieldPath) {
+	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
+			Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
 		boolean isValid = true;
 		String ampId = (String) newFieldParent.get(ActivityFieldsConstants.AMP_ID);
 		String ampActivityId = (String) newFieldParent.get(ActivityFieldsConstants.AMP_ACTIVITY_ID);

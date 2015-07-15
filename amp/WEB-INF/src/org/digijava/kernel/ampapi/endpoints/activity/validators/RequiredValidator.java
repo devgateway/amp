@@ -4,6 +4,8 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 
+import java.util.Map;
+
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
@@ -24,11 +26,11 @@ public class RequiredValidator extends InputValidator {
 	}
 
 	@Override
-	public boolean isValid(ActivityImporter importer, JsonBean newFieldParent, JsonBean oldFieldParent,
-			JsonBean fieldDescription, String fieldPath) {
+	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
+			Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
 		boolean isValid = true;
 		String fieldName = (String) fieldDescription.get(ActivityEPConstants.FIELD_NAME);
-		String fieldValue = newFieldParent.getString(fieldName);
+		Object fieldValue = newFieldParent.get(fieldName);
 		String requiredStatus = fieldDescription.getString(ActivityEPConstants.REQUIRED);
 		// On insert or draft activities update...
 		if (!importer.isUpdate() || isSaveAsDraft(importer.getOldActivity())) {

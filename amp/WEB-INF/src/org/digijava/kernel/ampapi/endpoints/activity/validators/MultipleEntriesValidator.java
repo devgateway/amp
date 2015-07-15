@@ -4,6 +4,7 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
@@ -24,8 +25,8 @@ public class MultipleEntriesValidator extends InputValidator {
 	}
 
 	@Override
-	public boolean isValid(ActivityImporter importer, JsonBean newFieldParent, JsonBean oldFieldParent,
-			JsonBean fieldDescription, String fieldPath) {
+	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
+			Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
 		boolean isValid = true;
 		boolean multipleValuesAllowed = Boolean.valueOf(fieldDescription.getString(ActivityEPConstants.MULTIPLE_VALUES));
 		String fieldName = fieldDescription.getString(ActivityEPConstants.FIELD_NAME);

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
@@ -29,8 +30,8 @@ public class UniqueValidator extends InputValidator {
 	}
 
 	@Override
-	public boolean isValid(ActivityImporter importer, JsonBean newFieldParent, JsonBean oldFieldParent,
-			JsonBean fieldDescription, String fieldPath) {
+	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
+			Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
 		boolean isValid = true;
 		String fieldName = (String) fieldDescription.get(ActivityEPConstants.FIELD_NAME);
 		Boolean unique = Boolean.valueOf(fieldDescription.getString(ActivityEPConstants.UNIQUE));
@@ -59,17 +60,13 @@ public class UniqueValidator extends InputValidator {
 		return isValid;
 	}
 
-	/***
+	/**
 	 * Populates a Set of unique id values from the Collection <JsonBean>
 	 * containing the fields and returns the number of unique id values.
 	 * 
-	 * @param fieldValue
-	 *            the Collection <JsonBean> with a list of fields from which the
-	 * @param idValuesSet
-	 *            the Set to be populated with unique id values
-	 * @param fieldPathToId
-	 *            List <String> with list of fields parents to access the id
-	 *            field.
+	 * @param fieldValue 	the Collection <JsonBean> with a list of fields from which the
+	 * @param idValuesSet	the Set to be populated with unique id values
+	 * @param fieldPathToId	List <String> with list of fields parents to access the id field.
 	 * @return number of unique id values
 	 */
 	private Integer populateUniqueValues(Collection<JsonBean> fieldValue, Set<String> idValuesSet,
@@ -86,7 +83,7 @@ public class UniqueValidator extends InputValidator {
 		return totalElements;
 	}
 	
-	/***
+	/**
 	 * Explores a List<JsonBean> recursively containing a field of AmpActivityField, until it finds one
 	 * with 'id'== true, indicating that field is an ID of the DB, and while doing that creates a List <String> with the
 	 * ordered names of the field parents in order to get to the ID field. 
@@ -96,29 +93,29 @@ public class UniqueValidator extends InputValidator {
 	 *        "field_name":"value"
 	 *	      },
 	 *	      {  
-	*		         "field_name":"aux",
-	*		         "children":[  
-	*		            {  
-	*		               "field_name":"valueXAux"
-	*		            },
-	*		            {  
-	*		               "field_name":"idOfChildAux"
-	*		            }
-	*		         ]
-	*		      },
-	*		      {  
-	*		         "field_name":"id",
-	*		         "field_type":"list",
-	*		         "children":[  
-	*		            {  
-	*		               "field_name":"valueX"
-	*		            },
-	*		            {  
-	*		               "field_name":"idOfChild",
-	*		               "id":"true"
-	*		            }
-	*		         ]
-	*		      }]
+	 *		         "field_name":"aux",
+	 *		         "children":[
+	 *		            {
+	 *		               "field_name":"valueXAux"
+	 *		            },
+	 *		            {
+	 *		               "field_name":"idOfChildAux"
+	 *		            }
+	 *		         ]
+	 *		      },
+	 *		      {
+	 *		         "field_name":"id",
+	 *		         "field_type":"list",
+	 *		         "children":[
+	 *		            {
+	 *		               "field_name":"valueX"
+	 *		            },
+	 *		            {
+	 *		               "field_name":"idOfChild",
+	 *		               "id":"true"
+	 *		            }
+	 *		         ]
+	 *		      }]
 	 * 
 	 * If that List<JsonBean> is received as children, it will process it recursively, creating a fieldPath result of ['id','idOfChild']
 	 * and it will return true

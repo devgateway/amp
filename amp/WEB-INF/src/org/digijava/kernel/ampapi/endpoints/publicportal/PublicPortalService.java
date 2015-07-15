@@ -82,7 +82,8 @@ public class PublicPortalService {
 		/*TODO: tbd if we need to filter out null dates from results
 		MondrianReportUtils.filterOutNullDates(spec);
 		*/
-			
+		SettingsUtils.getColumnFilters(spec, config);	
+		
 		getPublicReport(count, result, content, spec);
 		
 		return result;
@@ -151,6 +152,7 @@ public class PublicPortalService {
 
 		spec.setFilters(getPeriodFilter(months));
 		SettingsUtils.applySettings(spec, config);
+		SettingsUtils.getColumnFilters(spec, config);
 		getPublicReport(count, result, content, spec,true,measureName);
 		return result;
 

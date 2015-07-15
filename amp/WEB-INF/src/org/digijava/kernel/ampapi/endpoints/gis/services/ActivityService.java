@@ -215,6 +215,7 @@ public class ActivityService {
 	}
 	
 	GeneratedReport report = null;
+	SettingsUtils.getColumnFilters(spec, config);
 	MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
 			ReportEnvironment.buildFor(TLSUtils.getRequest()), true);
 	try {

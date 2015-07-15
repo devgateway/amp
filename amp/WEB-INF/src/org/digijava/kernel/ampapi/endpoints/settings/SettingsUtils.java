@@ -6,6 +6,7 @@ package org.digijava.kernel.ampapi.endpoints.settings;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -19,20 +20,24 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.newreports.FilterRule;
+import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.util.CalendarUtil;
+import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.Constants;
@@ -620,4 +625,41 @@ public class SettingsUtils {
 		}
 	}
 	
+	/**
+	 * Setting column filters
+	 * @param spec report specification
+	 * @param config json object that stores the settings
+	 */
+	public static void getColumnFilters(ReportSpecificationImpl spec, JsonBean config) {
+
+		MondrianReportFilters columnFilters = FilterUtils.getFilterRules(
+				(LinkedHashMap<String, Object>) config.get("columnFilters"), null, null);
+
+		if (columnFilters != null) {
+			MondrianReportFilters filters = (MondrianReportFilters) spec.getFilters();
+			if (filters == null) {
+				filters = new MondrianReportFilters();
+				spec.setFilters(columnFilters);
+			} else {
+				Map<String, List<String>> extractedFilters = new<String, List<String>> HashMap();
+				LinkedHashMap<String, Object> columnFiltersObjects = (LinkedHashMap<String, Object>) config
+						.get("columnFilters");
+				for (Map.Entry<String, Object> columnFilter : columnFiltersObjects.entrySet()) {
+					String extractedFilter = TranslatorWorker.translateText(columnFilter.getKey().toString());
+					List<String> extractedValues = new ArrayList<String>();
+					for (Object columnFilterValues : (List<ArrayList<Object>>) columnFilter.getValue()) {
+						extractedValues.add(columnFilterValues.toString());
+					}
+					extractedFilters.put(extractedFilter, extractedValues);
+
+				}
+
+				for (Map.Entry<String, List<String>> columnFilter : extractedFilters.entrySet()) {
+					filters.addFilterRule(new ReportColumn(columnFilter.getKey()), new FilterRule(columnFilter.getValue(),
+							true));
+				}
+			}
+		}
+
+	}
 }

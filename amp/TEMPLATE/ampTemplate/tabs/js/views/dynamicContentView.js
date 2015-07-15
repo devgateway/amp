@@ -68,6 +68,8 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 					jQuery(containerName).css('position', 'absolute');
 					jQuery(containerName).css('top', 10);
 					jQuery(containerName).css("min-width", jQuery(containerName + " .panel-heading").width() + 32);
+					// Make sure the filter widget is always translated.
+					app.TabsApp.filtersWidget.view.translate();
 				}
 			});
 			var filterDialog = new FilterDialogContainerView();

@@ -15,7 +15,7 @@ $plugin = array(
   'render callback' => 'contentwidget_lastupdated_widget_render',
   'settings form' => 'contentwidget_lastupdated_widget_settings',
   'settings storage' => 'contentwidget_lastupdated_widget_settings_storage',
-  'retrieve data' => 'contentwidget_lastupdated_widget_retrieve_data',
+  'resource api path' => 'gis/last-updated',
   'defaults' => array(
     'period' => '12',
     'count' => '10',
@@ -24,7 +24,7 @@ $plugin = array(
   ),
 );
 
-function contentwidget_lastupdated_widget_retrieve_data($widget_settings, $langcode = NULL) {
+function contentwidget_lastupdated_widget_retrieve_data($plugin, $widget_settings, $langcode = NULL) {
   $data = array();
 
   $langcode = (empty($langcode) ? LANGUAGE_NONE : $langcode);
@@ -56,14 +56,26 @@ function contentwidget_lastupdated_widget_retrieve_data($widget_settings, $langc
       'Accept' => 'application/json',
       'Content-Type' => 'application/json',
     );
-    // Required, even though we pass the parameters in the URL like for GET requests.
-    $variables['body'] = '{}';
 
-    // Set the API Resource Endpoint.
-    $resource_path = 'gis/last-updated';
+    $request_body = array();
+
+    $api_settings = helpergeneric_get_api_settings();
+    if (!empty($api_settings['humanitarian_aid_only'])) {
+      $humanitarian_aid_plugin = ampapi_get_mapper_by_property_name('humanitarian_aid');
+      $class_name = ctools_plugin_get_class($humanitarian_aid_plugin, 'handler');
+      /** @var activityMapperOptionsInterface $handler */
+      $handler = new $class_name();
+
+      // Only display data related to humanitarian aid.
+      $ha_key = $humanitarian_aid_plugin['report field key'];
+      $ha_value = $handler->getMatchedValue($humanitarian_aid_plugin, TRUE);
+      $request_body['columnFilters'][$ha_key] = array($ha_value);
+    }
+
+    $variables['body'] = empty($request_body) ? '{}' : json_encode($request_body);
 
     // Make a POST request.
-    $response = restclient_post($resource_path . '?' . drupal_http_build_query($parameters), $variables);
+    $response = restclient_post($plugin['resource api path'] . '?' . drupal_http_build_query($parameters), $variables);
   }
 
   // @TODO: Add support for more response codes.
@@ -92,7 +104,7 @@ function contentwidget_lastupdated_widget_render($plugin, $widget_settings, $ent
   // Provide some default values.
   $widget_settings += $plugin['defaults'];
 
-  $data = contentwidget_lastupdated_widget_retrieve_data($widget_settings, $langcode);
+  $data = contentwidget_lastupdated_widget_retrieve_data($plugin, $widget_settings, $langcode);
 
   $header = array();
   if (!empty($data)) {

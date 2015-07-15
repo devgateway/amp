@@ -16,12 +16,12 @@ $plugin = array(
   'render callback' => 'contentwidget_totalactivities_widget_render',
   'settings form' => 'contentwidget_totalactivities_widget_settings',
   'settings storage' => 'contentwidget_totalactivities_widget_settings_storage',
-  'retrieve data' => 'contentwidget_totalactivities_widget_retrieve_data',
+  'resource api path' => 'data/report/custom/paginate',
   'defaults' => array(
   ),
 );
 
-function contentwidget_totalactivities_widget_retrieve_data($widget_settings, $langcode = NULL) {
+function contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_settings, $langcode = NULL) {
   $api_status = helpergeneric_check_api_status();
   if (!$api_status['online']) {
     drupal_set_message($api_status['message'], 'warning');
@@ -55,8 +55,8 @@ function contentwidget_totalactivities_widget_retrieve_data($widget_settings, $l
       'add_measures' => array(),
     );
 
-    $plugin = ampapi_get_mapper_by_property_name('id');
-    $request_body['add_columns'][] = $plugin['report field key'];
+    $id_plugin = ampapi_get_mapper_by_property_name('id');
+    $request_body['add_columns'][] = $id_plugin['report field key'];
 
     $actual_commitments_plugin = ampapi_get_mapper_by_property_name('actual_commitments');
     $request_body['add_measures'][] = $actual_commitments_plugin['report field key'];
@@ -70,10 +70,24 @@ function contentwidget_totalactivities_widget_retrieve_data($widget_settings, $l
     $request_body['rowTotals'] = TRUE;
     $request_body['name'] = 'api:totalactivities';
 
+    $api_settings = helpergeneric_get_api_settings();
+    if (!empty($api_settings['humanitarian_aid_only'])) {
+      $humanitarian_aid_plugin = ampapi_get_mapper_by_property_name('humanitarian_aid');
+      $class_name = ctools_plugin_get_class($humanitarian_aid_plugin, 'handler');
+      /** @var activityMapperOptionsInterface $handler */
+      $handler = new $class_name();
+
+      // Only display data related to humanitarian aid.
+      // NOTE: Filters for the custom reports endpoint need to be inside a "filters" key.
+      $ha_key = $humanitarian_aid_plugin['report field key'];
+      $ha_value = $handler->getMatchedValue($humanitarian_aid_plugin, TRUE);
+      $request_body['filters']['columnFilters'][$ha_key] = array($ha_value);
+    }
+
     $variables['body'] = empty($request_body) ? '{}' : json_encode($request_body);
 
     // Set the API Resource Endpoint.
-    $resource_path = 'data/report/custom/paginate';
+    $resource_path = $plugin['resource api path'];
     if (!empty($parameters)) {
       $resource_path .= '?' . drupal_http_build_query($parameters);
     }
@@ -116,11 +130,13 @@ function contentwidget_totalactivities_widget_retrieve_data($widget_settings, $l
       $currency = $info->value->defaultId;
     }
   }
+  if (is_null($number_format)) {
+    $number_format = '###0.00';
+  }
 
   // @see https://php.net/manual/en/numberformatter.create.php
   // @see http://www.icu-project.org/apiref/icu4c/classDecimalFormat.html#details
   $formatter_locale = NULL;
-  $number_format = '###0.00';
   $formatter = new NumberFormatter($formatter_locale, NumberFormatter::PATTERN_DECIMAL, $number_format);
 
   foreach ($response_data->headers as $h_info) {
@@ -174,7 +190,7 @@ function contentwidget_totalactivities_widget_render($plugin, $widget_settings, 
   // Provide some default values.
   $widget_settings += $plugin['defaults'];
 
-  $data = contentwidget_totalactivities_widget_retrieve_data($widget_settings, $langcode);
+  $data = contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_settings, $langcode);
   if (empty($data)) {
     return;
   }

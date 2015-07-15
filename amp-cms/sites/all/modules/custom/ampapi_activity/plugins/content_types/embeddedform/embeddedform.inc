@@ -45,7 +45,14 @@ function ampapi_activity_embeddedform_content_type_render($subtype, $conf, $pane
   }
 
   $view->set_display($display_id);
-  $view->init_handlers();
+  $view->pre_execute();
+
+  // Let modules modify the view just prior to building it.
+  // @see Views::build();
+  foreach (module_implements('views_pre_build') as $module) {
+    $function = $module . '_views_pre_build';
+    $function($view);
+  }
 
   $output['form'] = array();
   if (isset($view->display_handler)) {

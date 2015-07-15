@@ -6,7 +6,7 @@
  */
 
 /**
- * Page callback for 'admin/settings/ui'.
+ * Page callback for 'admin/settings/search'.
  */
 function ampapi_activity_search_settings_form($form, &$form_state) {
   $search_settings = ampapi_activity_get_search_settings();

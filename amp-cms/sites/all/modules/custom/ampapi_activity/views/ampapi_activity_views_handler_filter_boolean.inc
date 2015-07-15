@@ -15,10 +15,6 @@ class ampapi_activity_views_handler_filter_boolean extends efq_views_handler_fil
   }
 
   function query() {
-    if (empty($this->options['exposed']) || !$this->view->display_handler->uses_exposed()) {
-      return TRUE;
-    }
-
     $plugin = ampapi_get_mapper_by_property_name($this->options['field']);
     if (empty($plugin['report filter endpoint'])) {
       return FALSE;

@@ -211,8 +211,8 @@ function ampapi_activity_views_pre_build(View &$view) {
 
   foreach ($view->field as $field_name => $field_handler) {
     $field_enabled = TRUE;
-    $plugin = ampapi_get_mapper_by_property_name($field_handler->real_field);
-    $field_key = $plugin['report field key'];
+    $mapper_plugin = ampapi_get_mapper_by_property_name($field_handler->real_field);
+    $field_key = $mapper_plugin['report field key'];
 
     // Hide fields disabled in the PP search settings.
     if (!in_array($field_name, $search_settings['enabled_columns'])) {
@@ -220,21 +220,21 @@ function ampapi_activity_views_pre_build(View &$view) {
     }
 
     // Hide fields disabled in AMP.
-    if ($plugin['report field group'] == 'columns') {
+    if ($mapper_plugin['report field group'] == 'columns') {
       if (empty($columns_data->{$field_key})) {
         $field_enabled = FALSE;
       }
     }
-    else if ($plugin['report field group'] == 'measures') {
+    else if ($mapper_plugin['report field group'] == 'measures') {
       if (empty($measures_data->{$field_key})) {
         $field_enabled = FALSE;
       }
 
       // Disable SSC specific columns if SSC functionality is disabled.
-      if (!$ssc_search_enabled && !empty($plugin['report field ssc'])) {
+      if (!$ssc_search_enabled && !empty($mapper_plugin['report field ssc'])) {
         $field_enabled = FALSE;
       }
-      else if ($ssc_search_enabled && empty($plugin['report field ssc'])) {
+      else if ($ssc_search_enabled && empty($mapper_plugin['report field ssc'])) {
         $field_enabled = FALSE;
       }
     }
@@ -252,27 +252,50 @@ function ampapi_activity_views_pre_build(View &$view) {
 
   foreach ($view->filter as $filter_name => $filter_handler) {
     $filter_enabled = TRUE;
-    $plugin = ampapi_get_mapper_by_property_name($filter_handler->real_field);
-    $filter_key = $plugin['report field key'];
 
-    // Hide Search type selector for SSC activities.
-    if ($filter_key == 'activities_search_type' && !$ssc_search_enabled) {
-      $filter_enabled = FALSE;
-    }
-
-    // Hide filters disabled in AMP.
-    if ($plugin['report field group'] == 'columns') {
-      if (empty($columns_data->{$filter_key})) {
+    if ($filter_name == 'activities_search_type') {
+      // Hide Search type selector for SSC activities.
+      if (!$ssc_search_enabled) {
         $filter_enabled = FALSE;
       }
     }
-    else if ($plugin['report field group'] == 'measures') {
-      if (empty($measures_data->{$filter_key})) {
-        $filter_enabled = FALSE;
+    else {
+      $mapper_plugin = ampapi_get_mapper_by_property_name($filter_handler->real_field);
+      $filter_key = $mapper_plugin['report field key'];
+
+      // Handle global "Humanitarian Aid" filter.
+      // @see helpergeneric_api_settings_form()
+      if ($filter_name == 'humanitarian_aid') {
+        $api_settings = helpergeneric_get_api_settings();
+
+        if (!empty($api_settings['humanitarian_aid_only'])) {
+          // Update the filter defaults. Defaults for the display_handler
+          // filter are also updated.
+          // Hide the filter.
+          $view->filter[$filter_name]->options['exposed'] = FALSE;
+
+          // Display only "Humanitarian Aid" data.
+          // NOTE: Changing the value here only works if the filter is not
+          // exposed. Otherwise the form values will override this change.
+          $view->filter[$filter_name]->value = TRUE;
+        }
+      }
+
+      // Hide filters disabled in AMP.
+      if ($mapper_plugin['report field group'] == 'columns') {
+        if (empty($columns_data->{$filter_key})) {
+          $filter_enabled = FALSE;
+        }
+      }
+      else if ($mapper_plugin['report field group'] == 'measures') {
+        if (empty($measures_data->{$filter_key})) {
+          $filter_enabled = FALSE;
+        }
       }
     }
 
     if (!$filter_enabled) {
+      // Remove filter from both the view and the display handler.
       unset($view->filter[$filter_name]);
       unset($view->display_handler->handlers['filter'][$filter_name]);
     }

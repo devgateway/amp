@@ -347,11 +347,10 @@ public class InterchangeUtils {
 		} 
 		
 		if (fieldValue instanceof String) {
-			boolean isBaseLangDefault = translationSettings.isDefaultLanguage(translationSettings.getCurrentLangCode());
 			boolean toTranslate = clazz.equals(AmpCategoryValue.class) && field.getName().equals("value");
 			
 			// now we check if is only a CategoryValue field and the field name is value
-			String translatedText = !isBaseLangDefault && toTranslate ? TranslatorWorker.translateText((String) fieldValue) : (String) fieldValue;
+			String translatedText = toTranslate ? TranslatorWorker.translateText((String) fieldValue) : (String) fieldValue;
 			return getJsonStringValue(translatedText);
 		} else if (fieldValue instanceof Date) {
 			return InterchangeUtils.formatISO8601Date((Date) fieldValue);

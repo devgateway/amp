@@ -159,6 +159,7 @@ public class WorkspaceManager extends Action {
 		Collection<AmpTeam> workspacesFiltered = new ArrayList<AmpTeam>();
 		if (! workspaces.isEmpty()) {
 			for (AmpTeam team : workspaces) {
+				team.getOrganizations().size(); // initialize lazy collection
 				boolean found = false;
 				for (String keyw : keywords) {
 					java.util.Locale currentLocale = new java.util.Locale(TLSUtils.getEffectiveLangCode());

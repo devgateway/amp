@@ -30,6 +30,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
@@ -326,7 +327,11 @@ public class PossibleValuesEnumerator {
 					} else
 					if (ant.value()) { 
 						if (String.class.isAssignableFrom(field.getType()) || Long.class.isAssignableFrom(field.getType())) {
-							result.set("value", property);
+							String transProp = (String) property;
+							if (AmpCategoryValue.class.isAssignableFrom(obj.getClass())) {
+								transProp = TranslatorWorker.translateText(transProp);
+							}
+							result.set("value", transProp);
 							isEnumerable = true;
 						}
 					} else {

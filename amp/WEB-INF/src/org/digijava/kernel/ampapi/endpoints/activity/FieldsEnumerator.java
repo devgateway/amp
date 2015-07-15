@@ -176,6 +176,7 @@ public class FieldsEnumerator {
 				InterchangeableClassMapper.getCustomMapping(field.getType()) : "list");
 		bean.set(ActivityEPConstants.FIELD_LABEL, InterchangeUtils.mapToBean(getLabelsForField(interchangeble.fieldTitle())));
 		bean.set(ActivityEPConstants.REQUIRED, InterchangeUtils.getRequiredValue(field));
+		bean.set(ActivityEPConstants.IMPORTABLE, interchangeble.importable());
 		
 		if (internalUse) {
 			bean.set(ActivityEPConstants.FIELD_NAME_INTERNAL, field.getName());
@@ -184,7 +185,6 @@ public class FieldsEnumerator {
 		/* list type */
 
 		if (!InterchangeUtils.isSimpleType(field.getType())) {
-			bean.set(ActivityEPConstants.IMPORTABLE, interchangeble.importable() ? true : false);
 			if (InterchangeUtils.isCollection(field) && !hasMaxSizeValidatorEnabled(field)) {
 				bean.set(ActivityEPConstants.MULTIPLE_VALUES, true);
 			} else {

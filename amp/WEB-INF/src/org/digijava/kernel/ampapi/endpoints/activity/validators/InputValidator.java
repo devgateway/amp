@@ -3,6 +3,8 @@
  */
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
+import java.util.Map;
+
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -25,8 +27,8 @@ public abstract class InputValidator {
 	 * @param update true if this is an update request
 	 * @return true if chain validation passed
 	 */
-	public abstract boolean isValid(ActivityImporter importer, JsonBean newFieldParent, JsonBean oldFieldParent, 
-			JsonBean fieldDescription, String fieldPath);
+	public abstract boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
+			Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath);
 	
 	/**
 	 * @return this validator specific Error message

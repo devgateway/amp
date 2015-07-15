@@ -8,18 +8,13 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import javax.swing.text.DateFormatter;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
-import org.digijava.kernel.ampapi.endpoints.activity.InterchangeableClassMapper;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.lucene.LangSupport;
 
 
 /**
@@ -32,7 +27,6 @@ public class InputTypeValidator extends InputValidator {
 	public ApiErrorMessage getErrorMessage() {
 		return ActivityErrors.FIELD_INVALID_TYPE;
 	}
-
 	
 	private boolean isStringValid(Object item, Boolean translatable, Collection<String> supportedLocaleCodes) {
 		if (Boolean.TRUE.equals(translatable)) {
@@ -58,15 +52,13 @@ public class InputTypeValidator extends InputValidator {
 		return true;
 	}
 
-
 	@Override
-	public boolean isValid(ActivityImporter importer, JsonBean newFieldParent, JsonBean oldFieldParent,
-			JsonBean fieldDescription, String fieldPath) {
+	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
+			Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
 		String fieldType = fieldDescription.getString(ActivityEPConstants.FIELD_TYPE);
 		String fieldName = fieldDescription.getString(ActivityEPConstants.FIELD_NAME);
 		Object item = newFieldParent.get(fieldName);
 		if (item == null) {
-//			System.out.println(fieldName  + " is null" );
 			return true;
 		}
 		
@@ -80,15 +72,7 @@ public class InputTypeValidator extends InputValidator {
 		case ActivityEPConstants.FIELD_TYPE_LONG: return isValidLong(item);
 		default: return false; 
 		}
-		
-		
-		//System.out.println(newFieldParent.get())
-//		return false;
-//		switch(fieldType) {
-//		case InterchangeableClassMapper.
-//		}
 	}
-
 
 	private boolean isValidLong(Object item) {
 		if (Long.class.isAssignableFrom(item.getClass()))
@@ -97,7 +81,6 @@ public class InputTypeValidator extends InputValidator {
 			return true;
 		return false;
 	}
-
 
 	private boolean isValidFloat(Object item) {
 		if (Float.class.isAssignableFrom(item.getClass()))
@@ -108,32 +91,19 @@ public class InputTypeValidator extends InputValidator {
 		return false;
 	}
 
-
 	private boolean isValidBoolean(Object value) {
 		if (Boolean.class.isAssignableFrom(value.getClass()))
 			return true;
 		return false;
 	}
 
-
 	private boolean isValidDate(Object value) {
-		String format = InterchangeUtils.getISO8601DateFormatter();
-//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SSS");
-		SimpleDateFormat sdf = new SimpleDateFormat(format);
-		try {
-			sdf.parse((String) value);
-			return true;
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-//			e.printStackTrace();
-			return false;
-		}
-//		return false;
+		return value == null || 
+				value instanceof String 
+				&& InterchangeUtils.parseISO8601Date((String) value) != null;
 	}
 
-
 	private boolean checkListFieldValidity(Object item, JsonBean fieldDescription) {
-
 		if (List.class.isAssignableFrom(item.getClass()))
 			return true;
 		return false;

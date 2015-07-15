@@ -44,10 +44,10 @@ public class InputValidatorProcessor {
 	 * @param errors 			map to store errors 
 	 * @return true if the current field passes the full validation chain
 	 */
-	public boolean isValid(ActivityImporter importer, JsonBean newParent, JsonBean oldParent, 
+	public boolean isValid(ActivityImporter importer, Map<String, Object> newParent, Map<String, Object> oldParent, 
 			JsonBean fieldDef, String fieldPath, Map<Integer, ApiErrorMessage> errors) {
 		boolean valid = true;
-		String fieldName = fieldPath.substring(fieldPath.lastIndexOf("~"));
+		String fieldName = fieldPath.substring(fieldPath.lastIndexOf("~") + 1);
 		
 		for (InputValidator current : validators) {
 			boolean currentValid = current.isValid(importer, newParent, oldParent, fieldDef, fieldPath);
@@ -64,7 +64,7 @@ public class InputValidatorProcessor {
 		return valid;
 	}
 	
-	protected void addError(JsonBean newParent, String fieldName, ApiErrorMessage error, 
+	protected void addError(Map<String, Object> newParent, String fieldName, ApiErrorMessage error, 
 			Map<Integer, ApiErrorMessage> errors) {
 		String errorCode = ApiError.getErrorCode(error);
 		JsonBean newField = new JsonBean();
@@ -78,7 +78,7 @@ public class InputValidatorProcessor {
 			// and initialize fields errors list
 			newField.set(ActivityEPConstants.INVALID, new HashSet<String>());
 			// record new wrapped field value
-			newParent.set(fieldName, newField);
+			newParent.put(fieldName, newField);
 		}
 		
 		// register field level invalid errors

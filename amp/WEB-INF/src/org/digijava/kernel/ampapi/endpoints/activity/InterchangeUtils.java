@@ -7,6 +7,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.PathSegment;
+import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -48,9 +50,9 @@ import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 
-import com.sun.jersey.spi.container.ContainerRequest;
-
 import clover.org.apache.log4j.helpers.ISO8601DateFormat;
+
+import com.sun.jersey.spi.container.ContainerRequest;
 
 /**
  * Activity Import/Export Utility methods 
@@ -76,10 +78,6 @@ public class InterchangeUtils {
 	private static final String ALWAYS_REQUIRED = "_ALWAYS_";
 	
 	private static final ISO8601DateFormat dateFormatter = new ISO8601DateFormat();
-
-	public static String getISO8601DateFormatter() {
-		return ISO8601DateFormat.DATE_AND_TIME_DATE_FORMAT;
-	}
 	
 	public static String getDiscriminatedFieldTitle(String fieldName) {
 		return discriminatorMap.get(deunderscorify(fieldName));
@@ -343,7 +341,7 @@ public class InterchangeUtils {
 					String translatedText = (String) fieldValue;
 
 					if (InterchangeUtils.isVersionableTextField(field)) {
-						translatedText =  DgUtil.cleanHtmlTags(DbUtil.getEditorBodyEmptyInclude(SiteUtils.getGlobalSite(), (String) fieldValue, translation));
+						translatedText = DgUtil.cleanHtmlTags(DbUtil.getEditorBodyEmptyInclude(SiteUtils.getGlobalSite(), (String) fieldValue, translation));
 					} else if (ContentTranslationUtil.multilingualIsEnabled()) {
 						translatedText = ContentTranslationUtil.loadFieldTranslationInLocale(className, parentObjectId, fieldName, translation);
 					}
@@ -390,8 +388,14 @@ public class InterchangeUtils {
 	 * @return String, date in ISO 8601 format
 	 */
 	public static String formatISO8601Date(Date date) {
-		return date == null ? null : dateFormatter.format(date);
+		
+		// return date == null ? null : dateFormatter.format(date);
+		// we need to use DatatypeConverter, since ISO8601DateFormat is unable to parse its own formatted date 
+		Calendar c = Calendar.getInstance();
+		c.setTimeInMillis(date.getTime());
+		return date == null ? null : DatatypeConverter.printDateTime(c);
 	}
+	
 	
 	public static String getGetterMethodName(String fieldName) {
 
@@ -486,7 +490,7 @@ public class InterchangeUtils {
 		ActivityImporter importer = new ActivityImporter();
 		List<ApiErrorMessage> errors = importer.importOrUpdate(newJson, update);
 		
-		return getImportResult(importer.getNewActivity(), importer.getOldJson(), errors);
+		return getImportResult(importer.getNewActivity(), importer.getNewJson(), errors);
 		
 	}
 	
@@ -502,18 +506,22 @@ public class InterchangeUtils {
 	}
 	
 	
-	protected static JsonBean getImportResult(AmpActivityVersion newActivity, JsonBean oldJson, 
+	protected static JsonBean getImportResult(AmpActivityVersion newActivity, JsonBean newJson, 
 			List<ApiErrorMessage> errors) {
 		JsonBean result = null;
 		if (errors.size() == 0 && newActivity == null) {
 			result = ApiError.toError(ApiError.UNKOWN_ERROR); 
 		} else if (errors.size() > 0) {
 			result = ApiError.toError(errors);
-			result.set(ActivityEPConstants.ACTIVITY, oldJson);
+			result.set(ActivityEPConstants.ACTIVITY, newJson);
 		} else {
-			List<JsonBean> activities = null; // TODO: ProjectList.getActivitiesByIds(Arrays.asList(newActivity.getAmpActivityId()), true, true, true);
+			List<JsonBean> activities = null;
+			if (newActivity != null && newActivity.getAmpActivityId() != null) {
+				activities = ProjectList.getActivitiesByIds(Arrays.asList(newActivity.getAmpActivityId()), true, true, true);
+			}
 			if (activities == null || activities.size() == 0) {
 				result = ApiError.toError(ApiError.UNKOWN_ERROR);
+				result.set(ActivityEPConstants.ACTIVITY, newJson);
 			} else {
 				result = activities.get(0);
 			}
@@ -594,6 +602,19 @@ public class InterchangeUtils {
 		*/
 		// remove this and turn on previous when AMP-20496 is fixed
 		return id != null;
+	}
+
+
+
+	public static Date parseISO8601Date(String date) {
+		return DatatypeConverter.parseDateTime(date).getTime();
+//		try {
+//			// dateFormatter.setLenient(true);
+//			return dateFormatter.parse(date);
+//		} catch (ParseException e) {
+//			LOGGER.warn(e.getMessage());
+//			return null;
+//		}
 	}
 	
 } 

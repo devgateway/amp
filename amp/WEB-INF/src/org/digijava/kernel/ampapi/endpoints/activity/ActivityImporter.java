@@ -7,12 +7,15 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.FieldsDescriptor.TranslationType;
@@ -26,7 +29,6 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
@@ -120,7 +122,11 @@ public class ActivityImporter {
 			newActivity = new AmpActivityVersion(); 
 		}
 		
-		newActivity = (AmpActivityVersion) validateAndImport(oldActivity, newActivity, fieldsDef, newJson, oldJson, ""); 
+		Map<String, Object> newJsonParent = newJson.any();
+		Map<String, Object> oldJsonParent = oldJson == null ? null : oldJson.any();
+		
+		newActivity = (AmpActivityVersion) validateAndImport(oldActivity, newActivity, fieldsDef, 
+				newJsonParent, oldJsonParent, "");
 		if(newActivity != null) {
 			// save new activity
 			try {
@@ -137,7 +143,7 @@ public class ActivityImporter {
 	}
 	
 	protected Object validateAndImport(Object oldParent, Object newParent, List<JsonBean> fieldsDef, 
-			JsonBean newJsonParent, JsonBean oldJsonParent, String fieldPath) {
+			Map<String, Object> newJsonParent, Map<String, Object> oldJsonParent, String fieldPath) {
 		for (JsonBean fieldDef : fieldsDef) {
 			newParent = validateAndImport(oldParent, newParent, fieldDef, newJsonParent, oldJsonParent, fieldPath); 
 		}
@@ -145,7 +151,7 @@ public class ActivityImporter {
 	}
 	
 	protected Object validateAndImport(Object oldParent, Object newParent, JsonBean fieldDef, 
-			JsonBean newJsonParent, JsonBean oldJsonParent, String fieldPath) {
+			Map<String, Object> newJsonParent, Map<String, Object> oldJsonParent, String fieldPath) {
 		String fieldName = fieldDef.getString(ActivityEPConstants.FIELD_NAME);
 		Object oldJsonValue = oldJsonParent == null ? null : oldJsonParent.get(fieldName);
 		Object newJsonValue = newJsonParent == null ? null : newJsonParent.get(fieldName);
@@ -177,12 +183,12 @@ public class ActivityImporter {
 		List<JsonBean> childrenOldValues = null;
 		
 		// identify children of the new field input
-		if (newJsonValue != null && newJsonValue instanceof JsonBean) { 
-			childrenNewValues = (List<JsonBean>) ((JsonBean) newJsonValue).get(ActivityEPConstants.CHILDREN);
+		if (newJsonValue != null && newJsonValue instanceof List) { 
+			childrenNewValues = (List) newJsonValue;
 		}
 		// identify children of the old field input
-		if (oldJsonValue != null && oldJsonValue instanceof JsonBean) { 
-			childrenNewValues = (List<JsonBean>) ((JsonBean) oldJsonValue).get(ActivityEPConstants.CHILDREN);
+		if (oldJsonValue != null && oldJsonValue instanceof List) { 
+			childrenOldValues = (List) oldJsonValue;
 		}
 		// validate children
 		if ((ActivityEPConstants.FIELD_TYPE_LIST.equals(fieldType) || childrenFields != null && childrenFields.size() > 0)
@@ -196,23 +202,23 @@ public class ActivityImporter {
 				newFiledValue = newField == null ? null : newField.get(newParent);
 				oldFiledValue = oldField == null ? null : oldField.get(oldParent);
 				if (newParent != null && newFiledValue == null) {
-					newFiledValue = newField.getType().newInstance();
-					newField.set(newParent, newFiledValue);
+					newFiledValue = getNewInstance(newParent, newField);
 				}
-			} catch (IllegalArgumentException | IllegalAccessException | InstantiationException e) {
+			} catch (IllegalArgumentException | IllegalAccessException e) {
 				logger.error(e.getMessage());
 				throw new RuntimeException(e);
 			}
-			
+			//validateAndImport(oldFiledValue, newFiledValue, childrenFields, childrenNewValues, childrenOldValues, fieldPath);
 			Iterator<JsonBean> iterNew = childrenNewValues.iterator();
 			while (iterNew.hasNext() && validSubElements) {
-				JsonBean newChild = iterNew.next();
-				JsonBean oldChild = getMatchedOldValue(newChild, childrenOldValues);
+				Object newChild = iterNew.next();
+				Object oldChild = getMatchedOldValue(newChild, childrenOldValues);
 				JsonBean childFieldDef = getMatchedFieldDef(newChild, childrenFields);
 				if (oldChild != null) {
 					childrenOldValues.remove(oldChild);
 				}
-				newFiledValue = validateAndImport(newFiledValue, oldFiledValue, childFieldDef, newChild, oldChild, fieldPath);
+				// TODO: 
+				//newFiledValue = validateAndImport(newFiledValue, oldFiledValue, childFieldDef, newChild, oldChild, fieldPath);
 				if (newFiledValue == null) {
 					// validation failed, reset parent to stop config
 					newParent = null;
@@ -222,6 +228,26 @@ public class ActivityImporter {
 		return newParent;
 	}
 	
+	protected Object getNewInstance(Object parent, Field field) {
+		Object fieldValue = null;
+		try {
+			if (Set.class.isAssignableFrom(field.getType())) {
+				fieldValue = new HashSet<Object>();
+			} else if (List.class.isAssignableFrom(field.getType())) {
+				fieldValue = new ArrayList<Object>();
+			} else if (Collection.class.isAssignableFrom(field.getType())) {
+				fieldValue = new ArrayList<Object>();
+			} else {
+				fieldValue = field.getType().newInstance();
+			}
+			field.set(parent, fieldValue);
+		} catch(InstantiationException | IllegalAccessException e) {
+			logger.error(e.getMessage());
+			throw new RuntimeException(e);
+		}
+		return fieldValue;
+	}
+	
 	/**
 	 * Configures new value, no validation outside of this method scope, it must be verified before
 	 * @param newParent
@@ -229,7 +255,8 @@ public class ActivityImporter {
 	 * @param newJson
 	 * @return 
 	 */
-	protected Object setNewField(Object newParent, JsonBean fieldDef, JsonBean newJsonParent, String fieldPath) {
+	protected Object setNewField(Object newParent, JsonBean fieldDef, Map<String, Object> newJsonParent, 
+			String fieldPath) {
 		// by default importable = true
 		boolean importable = !Boolean.FALSE.equals(fieldDef.get(ActivityEPConstants.IMPORTABLE));
 		if (!importable) {
@@ -261,13 +288,13 @@ public class ActivityImporter {
 		if (newValue == null && oldValue == null || newValue != null && newValue.equals(oldValue)) {
 			// nothing to do
 		} else {
-			if (ActivityEPConstants.FIELD_TYPE_LIST.equals(fieldType)) {
-				// TODO: 
-			}
-			
 			if (objField != null) {
 				try {
-					objField.set(newParent, newValue);
+					if (newParent instanceof Collection) {
+						((Collection) newParent).add(newValue);
+					} else {
+						objField.set(newParent, newValue);
+					}
 				} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
 					logger.error(e.getMessage());
 					throw new RuntimeException(e);
@@ -299,12 +326,12 @@ public class ActivityImporter {
 		return field;
 	}
 	
-	protected JsonBean getMatchedOldValue(JsonBean newValue, List<JsonBean> oldValues) {
+	protected Object getMatchedOldValue(Object newValue, List<JsonBean> oldValues) {
 		// TODO:
 		return null;
 	}
 	
-	protected JsonBean getMatchedFieldDef(JsonBean newValue, List<JsonBean> fieldDefs) {
+	protected JsonBean getMatchedFieldDef(Object newValue, List<JsonBean> fieldDefs) {
 		// TODO:
 		return null;
 	}

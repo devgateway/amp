@@ -47,9 +47,12 @@ public class ValueValidator extends InputValidator {
 		if (possibleValues.size() == 0) {
 			return true;
 		} else {
-			for (JsonBean value: possibleValues) {
-				if (value.equals(newFieldParent.get((String)fieldDescription.get(ActivityEPConstants.FIELD_NAME))))
-					return true;
+			Object map = newFieldParent.get(fieldDescription.getString(ActivityEPConstants.FIELD_NAME));
+			if (map != null && Map.class.isAssignableFrom(map.getClass())) {
+				for (JsonBean value: possibleValues) {
+					if (value.any().equals(map))
+						return true;
+				}
 			}
 			return false;
 		}

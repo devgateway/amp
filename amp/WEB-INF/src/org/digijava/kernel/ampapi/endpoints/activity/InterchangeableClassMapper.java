@@ -47,9 +47,5 @@ public class InterchangeableClassMapper {
 	public static boolean containsSupportedClass(Class<?> clazz) {
 		return JSON_SUPPORTED_CLASSES.contains(clazz);
 	}
-	
-//	private static final Map<Class<?>, String> classToCustomType = new HashMap<Class<?>, String>(){
-//		put(java.lang.String.class, "string");
-//		
-//	};
+
 }

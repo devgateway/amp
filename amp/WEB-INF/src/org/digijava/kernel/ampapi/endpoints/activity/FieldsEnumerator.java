@@ -41,6 +41,8 @@ import org.hibernate.persister.entity.AbstractEntityPersister;
 public class FieldsEnumerator {
 	
 	public static final Logger LOGGER = Logger.getLogger(PossibleValuesEnumerator.class);
+	public static Map<Field, String > fieldTypes;
+	public static Map<Field, Integer> fieldMaxLengths;
 	
 	static {
 		fillAllFieldsLengthInformation();
@@ -146,10 +148,6 @@ public class FieldsEnumerator {
 		}
 	}
 	
-	public static Map<Field, String > fieldTypes;
-	public static Map<Field, Integer> fieldMaxLengths;
-	
-	
 	/**
 	 * describes a field in a JSON structure of: field_type: one of the types
 	 * {string, boolean, float, list} field_name: the field name, obtained from
@@ -207,11 +205,11 @@ public class FieldsEnumerator {
 		
 		// only String fields should clarify if they are translatable or not
 		if (java.lang.String.class.equals(field.getType())) {
-			bean.set(ActivityEPConstants.TRANSLATABLE, multilingual && FieldsDescriptor.isTranslatable(field));
+			bean.set(ActivityEPConstants.TRANSLATABLE, FieldsDescriptor.isTranslatable(field, multilingual));
 		}
 		if (ActivityEPConstants.TYPE_VARCHAR.equals(fieldTypes.get(field)) && fieldMaxLengths.get(field) != null) {
 			bean.set(ActivityEPConstants.FIELD_LENGTH, fieldMaxLengths.get(field));
-			System.out.println(interchangeble.fieldTitle());
+			LOGGER.debug(interchangeble.fieldTitle());
 		}
 		return bean;
 	}
@@ -292,7 +290,8 @@ public class FieldsEnumerator {
 				translations.put("EN", fieldName);
 			}
 		} catch (WorkerException e) {
-			// MEANINGFUL ERROR HERE
+			LOGGER.error(e.getMessage());
+			throw new RuntimeException(e);
 		}
 		return translations;
 	}

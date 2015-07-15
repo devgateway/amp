@@ -28,8 +28,8 @@ public class FieldsDescriptor {
 	 * @return true if this field is translatable
 	 * Note: can be reused during Import / Export processing
 	 */
-	public static boolean isTranslatable(Field field) {
-		return field.isAnnotationPresent(TranslatableField.class) 
+	public static boolean isTranslatable(Field field, boolean multilingual) {
+		return multilingual && field.isAnnotationPresent(TranslatableField.class) 
 				&& field.getDeclaringClass().isAnnotationPresent(TranslatableClass.class)
 				|| field.isAnnotationPresent(VersionableFieldTextEditor.class);
 	}

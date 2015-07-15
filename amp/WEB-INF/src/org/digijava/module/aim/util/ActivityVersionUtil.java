@@ -55,7 +55,16 @@ public class ActivityVersionUtil {
 				}
 			}
 		}
-		return auxClass.getMethod(methodName, null);
+		try {
+			return auxClass.getMethod(methodName, null);
+		}
+		catch(Exception e) {
+			if (prefix.equals("get")) {
+				// boolean fields might have "is" as a prefix
+				return getMethodFromFieldName(fieldName, auxClass, "is");
+			}
+			throw e;
+		}
 	}
 
 	public static boolean implementsVersionable(Class[] array) {

@@ -23,7 +23,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 public class AmpCategoryValue implements Serializable, Identifiable, Comparable<AmpCategoryValue>, HierarchyListable, Versionable{
 	@Interchangeable(fieldTitle="ID", id=true)
 	private Long id;
-	@Interchangeable(fieldTitle="AMP Category Class", pickIdOnly = true)
+//	@Interchangeable(fieldTitle="AMP Category Class", pickIdOnly = true)
 	private AmpCategoryClass ampCategoryClass;
 	@Interchangeable(fieldTitle="Value", value = true)
 	private String value;

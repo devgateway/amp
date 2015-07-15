@@ -5,9 +5,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,7 +20,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.PathSegment;
-import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -52,8 +52,6 @@ import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 
-import clover.org.apache.log4j.helpers.ISO8601DateFormat;
-
 import com.sun.jersey.spi.container.ContainerRequest;
 
 /**
@@ -79,12 +77,12 @@ public class InterchangeUtils {
 	private static final String NOT_REQUIRED = "_NONE_";
 	private static final String ALWAYS_REQUIRED = "_ALWAYS_";
 	
-	private static final ISO8601DateFormat dateFormatter = new ISO8601DateFormat();
+	private static final String ISO8601_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+	private static final ThreadLocal<SimpleDateFormat> DATE_FORMATTER = new ThreadLocal<SimpleDateFormat>();
 	
 	public static String getDiscriminatedFieldTitle(String fieldName) {
 		return discriminatorMap.get(deunderscorify(fieldName));
 	}
-	
 	
 	private static void generateCategoryConstantsSets() {
 		Field[] fields = CategoryConstants.class.getFields();
@@ -375,24 +373,28 @@ public class InterchangeUtils {
 	}
 	
 	/**
-	 * Gets a date formatted in ISO 8601 format. If the date is null, returns
-	 * null.
+	 * Gets a date formatted in ISO 8601 format. If the date is null, returns null.
 	 * 
 	 * @param date the date to be formatted
 	 * @return String, date in ISO 8601 format
 	 */
 	public static String formatISO8601Date(Date date) {
-		
-		// return date == null ? null : dateFormatter.format(date);
-		// we need to use DatatypeConverter, since ISO8601DateFormat is unable to parse its own formatted date 
-		Calendar c = Calendar.getInstance();
-		
-		if (date != null)
-			c.setTimeInMillis(date.getTime());
-		
-		return date == null ? null : DatatypeConverter.printDateTime(c);
+		return date == null ? null : getDateFormatter().format(date);
 	}
 	
+	/**
+	 * Rebuilds the date from the source
+	 * @param date the source
+	 * @return Date object
+	 */
+	public static Date parseISO8601Date(String date) {
+		try {
+			return date == null ? null : getDateFormatter().parse(date);
+		} catch (ParseException e) {
+			LOGGER.warn(e.getMessage());
+			return null;
+		}
+	}	
 	
 	public static String getGetterMethodName(String fieldName) {
 
@@ -600,18 +602,6 @@ public class InterchangeUtils {
 		// remove this and turn on previous when AMP-20496 is fixed
 		return id != null;
 	}
-
-
-	public static Date parseISO8601Date(String date) {
-		return DatatypeConverter.parseDateTime(date).getTime();
-//		try {
-//			// dateFormatter.setLenient(true);
-//			return dateFormatter.parse(date);
-//		} catch (ParseException e) {
-//			LOGGER.warn(e.getMessage());
-//			return null;
-//		}
-	}
 	
 	public static Object loadTranslationsForField(Class<?> clazz, String propertyName, String fieldValue, Long id, Set<String> languages) {
 		
@@ -642,4 +632,12 @@ public class InterchangeUtils {
 		
 		return translations;
 	}
+	
+	protected static SimpleDateFormat getDateFormatter() {
+		if (DATE_FORMATTER.get() == null) {
+			DATE_FORMATTER.set(new SimpleDateFormat(ISO8601_DATE_FORMAT));
+		}
+		return DATE_FORMATTER.get();
+	}
+	
 } 

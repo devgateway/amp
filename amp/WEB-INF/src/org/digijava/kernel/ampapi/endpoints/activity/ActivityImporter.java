@@ -18,7 +18,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.activity.FieldsDescriptor.TranslationType;
+import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
@@ -76,10 +76,7 @@ public class ActivityImporter {
 		this.newJson = newJson;
 		this.isDraftFMEnabled = FMVisibility.isFmPathEnabled(SAVE_AS_DRAFT_PATH);
 		this.isMultilingual = ContentTranslationUtil.multilingualIsEnabled();
-		this.trnSettings = (TranslationSettings) TLSUtils.getRequest().getAttribute(EPConstants.TRANSLATIONS);
-		if (trnSettings == null) {
-			trnSettings = TranslationSettings.getDefault();
-		}
+		this.trnSettings = TranslationSettings.getCurrent();
 	}
 
 	/**
@@ -372,7 +369,7 @@ public class ActivityImporter {
 	}
 	
 	protected String extractTranslationsOrSimpleValue(Field field, Object parentObj, Object jsonValue, JsonBean fieldDef) {
-		TranslationType trnType = FieldsDescriptor.getTranslatableType(field);
+		TranslationType trnType = trnSettings.getTranslatableType(field);
 		if (TranslationType.NONE == trnType) {
 			return (String) jsonValue;
 		}
@@ -393,33 +390,28 @@ public class ActivityImporter {
 		
 		String objectClass = parentObj.getClass().getName();
 		Long objId = (Long) ((Identifiable) parentObj).getIdentifier();
-		List<AmpContentTranslation> trnList = null;
-		if (isMultilingual) {
-			if (objId == null) {
-				objId = (long) System.identityHashCode(parentObj);
-			}
-			trnList = ContentTranslationUtil.loadFieldTranslations(objectClass, objId, field.getName());
+		List<AmpContentTranslation> trnList = trnList = ContentTranslationUtil.loadFieldTranslations(objectClass, objId, field.getName());
+		if (objId == null) {
+			objId = (long) System.identityHashCode(parentObj);
 		}
 		for (Entry<String, Object> trn : trnJson.entrySet()) {
 			String langCode = trn.getKey();
 			String translation = DgUtil.cleanHtmlTags((String) trn.getValue());
-			if (isMultilingual) {
-				AmpContentTranslation act = null;
-				for (AmpContentTranslation existingAct : trnList) {
-					if (langCode.equalsIgnoreCase(existingAct.getLocale())) {
-						act = existingAct;
-						break;
-					}
+			AmpContentTranslation act = null;
+			for (AmpContentTranslation existingAct : trnList) {
+				if (langCode.equalsIgnoreCase(existingAct.getLocale())) {
+					act = existingAct;
+					break;
 				}
-				// if translation to be removed
-				if (translation == null) {
-					trnList.remove(act);
-				} else if (act == null) {
-					act = new AmpContentTranslation(objectClass, objId, field.getName(), langCode, translation);
-					trnList.add(act);
-				} else {
-					act.setTranslation(translation);
-				}
+			}
+			// if translation to be removed
+			if (translation == null) {
+				trnList.remove(act);
+			} else if (act == null) {
+				act = new AmpContentTranslation(objectClass, objId, field.getName(), langCode, translation);
+				trnList.add(act);
+			} else {
+				act.setTranslation(translation);
 			}
 			if (trnSettings.isDefaultLanguage(langCode)) {
 				// set default language value as well

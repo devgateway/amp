@@ -62,16 +62,16 @@ function helpergeneric_api_settings_form($form, &$form_state) {
     drupal_set_message($api_status['message'], 'warning');
   }
 
-  $form['location'] = array(
+  $form['hostname'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Location'),
-    '#description' => t('Enter the location of the server.'),
+    '#title' => t('API Server Hostname'),
+    '#description' => t('Enter the hostname of the server.'),
     '#collapsible' => FALSE,
     '#collapsed' => FALSE,
   );
 
   $example_url = helpergeneric_detect_amp_baseurl();
-  $form['location']['restclient_hostname'] = array(
+  $form['hostname']['restclient_hostname'] = array(
     '#type' => 'textfield',
     '#title' => t('Hostname'),
     '#description' => t('The hostname for the server with no trailing slash. Ex: ') . $example_url . '/rest',
@@ -81,14 +81,14 @@ function helpergeneric_api_settings_form($form, &$form_state) {
 
   // Provide an alternative link for links to AMP.
   $amp_hostname = variable_get('helpergeneric_amp_hostname', NULL);
-  $form['location']['alternative_hostname'] = array(
+  $form['hostname']['alternative_hostname'] = array(
     '#type' => 'checkbox',
     '#title' => t('Use alternative hostname for Activity view links'),
     '#default_value' => !empty($amp_hostname),
     '#description' => t('If you are using localhost to access the API check here to use an alternative hostname for the Activity view links.'),
   );
 
-  $form['location']['wrapper'] = array(
+  $form['hostname']['wrapper'] = array(
     '#type' => 'container',
     '#states' => array(
       'visible' => array(
@@ -97,12 +97,31 @@ function helpergeneric_api_settings_form($form, &$form_state) {
     ),
   );
 
-  $form['location']['wrapper']['helpergeneric_amp_hostname'] = array(
+  $form['hostname']['wrapper']['helpergeneric_amp_hostname'] = array(
     '#type' => 'textfield',
     '#title' => t('AMP Hostname'),
     '#description' => t('The hostname for the AMP environment, without a trailing slash. Ex: ') . $example_url,
     '#size' => 40,
     '#default_value' => $amp_hostname,
+  );
+
+  // Get the API settings.
+  $api_settings = helpergeneric_get_api_settings();
+
+  $form['helpergeneric_api_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('API Settings'),
+    '#collapsible' => FALSE,
+    '#collapsed' => FALSE,
+    '#tree' => TRUE,
+  );
+
+  // Allow administrator to limit all API queries to only show
+  // "Humanitarian Aid" related data.
+  $form['helpergeneric_api_settings']['humanitarian_aid_only'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Only show "Humanitarian Aid" related data'),
+    '#default_value' => $api_settings['humanitarian_aid_only'],
   );
 
   $form['#validate'][] = 'helpergeneric_api_settings_form_validate';

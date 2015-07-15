@@ -855,3 +855,17 @@ function _helpergeneric_get_social_links($current_url, $page_title = NULL) {
 
   return $links;
 }
+
+/**
+ * Returns settings for the API.
+ */
+function helpergeneric_get_api_settings() {
+  $settings = variable_get('helpergeneric_api_settings', array());
+
+  // Disable "Humanitarian Aid" filter by default.
+  if (!isset($settings['humanitarian_aid_only'])) {
+    $settings['humanitarian_aid_only'] = FALSE;
+  }
+
+  return $settings;
+}

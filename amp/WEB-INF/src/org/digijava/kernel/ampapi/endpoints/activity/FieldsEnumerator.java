@@ -25,7 +25,6 @@ import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.util.time.StopWatch;
-import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.jdbc.Work;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.entity.AbstractEntityPersister;
@@ -36,13 +35,12 @@ import org.hibernate.persister.entity.AbstractEntityPersister;
  * 
  * @author acartaleanu
  */
-
-
 public class FieldsEnumerator {
 	
 	public static final Logger LOGGER = Logger.getLogger(PossibleValuesEnumerator.class);
 	public static Map<Field, String > fieldTypes;
 	public static Map<Field, Integer> fieldMaxLengths;
+	
 	
 	static {
 		fillAllFieldsLengthInformation();
@@ -57,11 +55,11 @@ public class FieldsEnumerator {
 	 *         fields in the definition of the field's class, or field's generic
 	 *         type, if it's a collection
 	 */
-	private static List<JsonBean> getChildrenOfField(Field field, boolean multilingual, boolean internalUse) {
+	private static List<JsonBean> getChildrenOfField(Field field, TranslationSettings trnSettings, boolean internalUse) {
 		if (!InterchangeUtils.isCollection(field))
-			return getAllAvailableFields(field.getType(), multilingual, internalUse);
+			return getAllAvailableFields(field.getType(), trnSettings, internalUse);
 		else
-			return getAllAvailableFields(InterchangeUtils.getGenericClass(field), multilingual, internalUse);
+			return getAllAvailableFields(InterchangeUtils.getGenericClass(field), trnSettings, internalUse);
 	}
 	
 	public static boolean hasMaxSizeValidatorEnabled(Field field) {
@@ -165,7 +163,7 @@ public class FieldsEnumerator {
 	 * @param field
 	 * @return
 	 */
-	private static JsonBean describeField(Field field, Interchangeable interchangeble, boolean multilingual, 
+	private static JsonBean describeField(Field field, Interchangeable interchangeble, TranslationSettings trnSettings, 
 			boolean internalUse) {
 		if (interchangeble == null)
 			return null;
@@ -193,7 +191,7 @@ public class FieldsEnumerator {
 				bean.set(ActivityEPConstants.MULTIPLE_VALUES, false);
 			}
 			if (!interchangeble.pickIdOnly()) {
-				List<JsonBean> children = getChildrenOfField(field, multilingual, internalUse);
+				List<JsonBean> children = getChildrenOfField(field, trnSettings, internalUse);
 				if (children != null && children.size() > 0) {
 					bean.set(ActivityEPConstants.CHILDREN, children);
 				}
@@ -206,7 +204,7 @@ public class FieldsEnumerator {
 		
 		// only String fields should clarify if they are translatable or not
 		if (java.lang.String.class.equals(field.getType())) {
-			bean.set(ActivityEPConstants.TRANSLATABLE, FieldsDescriptor.isTranslatable(field, multilingual));
+			bean.set(ActivityEPConstants.TRANSLATABLE, trnSettings.isTranslatable(field));
 		}
 		if (ActivityEPConstants.TYPE_VARCHAR.equals(fieldTypes.get(field)) && fieldMaxLengths.get(field) != null) {
 			bean.set(ActivityEPConstants.FIELD_LENGTH, fieldMaxLengths.get(field));
@@ -225,8 +223,7 @@ public class FieldsEnumerator {
 	 * @return the list of available fields
 	 */
 	public static List<JsonBean> getAllAvailableFields(boolean internalUse) {
-		return getAllAvailableFields(AmpActivityFields.class, ContentTranslationUtil.multilingualIsEnabled(), 
-				internalUse);
+		return getAllAvailableFields(AmpActivityFields.class, TranslationSettings.getCurrent(), internalUse);
 	}
 
 	/**
@@ -235,7 +232,8 @@ public class FieldsEnumerator {
 	 * @param clazz the class to be described
 	 * @return
 	 */
-	private static List<JsonBean> getAllAvailableFields(Class<?> clazz, boolean multilingual, boolean internalUse) {
+	private static List<JsonBean> getAllAvailableFields(Class<?> clazz, TranslationSettings trnSettings, 
+			boolean internalUse) {
 		List<JsonBean> result = new ArrayList<JsonBean>();
 		StopWatch.next("Descending into", false, clazz.getName());
 		Field[] fields = clazz.getDeclaredFields();
@@ -247,7 +245,7 @@ public class FieldsEnumerator {
 			
 			if (!InterchangeUtils.isCompositeField(field) || hasFieldDiscriminatorClass(field)) {
 				Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
-				JsonBean descr = describeField(field, interchangeable, multilingual, internalUse);
+				JsonBean descr = describeField(field, interchangeable, trnSettings, internalUse);
 				if (descr != null) {
 					result.add(descr);
 				}
@@ -255,7 +253,7 @@ public class FieldsEnumerator {
 				InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
 				Interchangeable[] settings = discriminator.settings();
 				for (int i = 0; i < settings.length; i++) {
-					JsonBean descr = describeField(field, settings[i], multilingual, internalUse);
+					JsonBean descr = describeField(field, settings[i], trnSettings, internalUse);
 					if (descr != null) {
 						result.add(descr);
 					}

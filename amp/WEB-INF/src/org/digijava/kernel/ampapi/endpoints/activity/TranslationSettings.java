@@ -1,11 +1,17 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 
 /**
  * Class for storing translating settings for activity export. <br>
@@ -14,6 +20,12 @@ import org.digijava.kernel.util.SiteUtils;
  * @author Viorel Chihai
  */
 public class TranslationSettings {
+	/** Translation Types */
+	public enum TranslationType {
+		STRING,
+		TEXT,
+		NONE
+	};
 
 	/** Base language code (retrieved from 'language' parameter) */
 	private String currentLangCode;
@@ -29,15 +41,27 @@ public class TranslationSettings {
 	 *  */
 	private Set<String> trnLocaleCodes = new HashSet<String>();
 	
+	private boolean multilingual;
+	
 	/**
 	 * @return default trn settings for the current request environment
 	 */
 	public static TranslationSettings getDefault() {
 		return new TranslationSettings();
 	}
+	
+	/**
+	 * @return current translation settings or the default one if nothing configured
+	 */
+	public static TranslationSettings getCurrent() {
+		TranslationSettings trn = (TranslationSettings) TLSUtils.getRequest().getAttribute(EPConstants.TRANSLATIONS);
+		if (trn == null)
+			trn = getDefault();
+		return trn;
+	}
 
 	public TranslationSettings() {
-		this.currentLangCode = TLSUtils.getEffectiveLangCode();
+		init();
 		this.trnLocaleCodes.add(currentLangCode);
 		this.trnLocaleCodes.add(getDefaultLangCode());
 	}
@@ -45,6 +69,14 @@ public class TranslationSettings {
 	public TranslationSettings(String currentLangCode, Set<String> trnLocaleCodes) {
 		this.currentLangCode = currentLangCode;
 		this.trnLocaleCodes = trnLocaleCodes;
+		init();
+	}
+	
+	private void init() {
+		if (this.currentLangCode == null) {
+			this.currentLangCode = TLSUtils.getEffectiveLangCode();
+		}
+		multilingual = ContentTranslationUtil.multilingualIsEnabled();
 	}
 	
 	/**
@@ -54,7 +86,6 @@ public class TranslationSettings {
 		if (defaultLangCode == null) {
 			this.defaultLangCode = TLSUtils.getSite().getDefaultLanguage().getCode();
 		}
-		
 		return defaultLangCode;
 	}
 	
@@ -93,6 +124,42 @@ public class TranslationSettings {
 			return SiteUtils.getUserLanguagesCodes(TLSUtils.getSite());
 		}
 		return allowedLangCodes;
+	}
+	
+	/**
+	 * @return the multilingual
+	 */
+	public boolean isMultilingual() {
+		return multilingual;
+	}
+
+	/**
+	 * Detects if a field is translatable
+	 * 
+	 * @param field
+	 * @return true if this field is translatable
+	 */ 
+	public boolean isTranslatable(Field field) {
+		return multilingual && field.isAnnotationPresent(TranslatableField.class) 
+				&& field.getDeclaringClass().isAnnotationPresent(TranslatableClass.class)
+				|| field.isAnnotationPresent(VersionableFieldTextEditor.class);
+	}
+	
+	/**
+	 * Provides 
+	 * @param field
+	 * @param multilingual
+	 * @return
+	 */
+	public TranslationType getTranslatableType(Field field) {
+		if (multilingual && field.isAnnotationPresent(TranslatableField.class) 
+				&& field.getDeclaringClass().isAnnotationPresent(TranslatableClass.class)) {
+			return TranslationType.STRING;
+		}
+		if (field.isAnnotationPresent(VersionableFieldTextEditor.class)) {
+			return TranslationType.TEXT;
+		}
+		return TranslationType.NONE;
 	}
 	
 }

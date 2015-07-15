@@ -1,6 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.util.Collection;
 import java.util.Map;
 /**
  * 

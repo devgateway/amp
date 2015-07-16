@@ -75,6 +75,19 @@ function ampi18n_locale_default_languages() {
     'prefix' => 'ru',
     'weight' => 0,
   );
+  // Exported language: sh.
+  $languages['sh'] = array(
+    'language' => 'sh',
+    'name' => 'Serbo-Croatian',
+    'native' => 'Serbo-Croatian',
+    'direction' => 0,
+    'enabled' => 1,
+    'plurals' => 0,
+    'formula' => '',
+    'domain' => '',
+    'prefix' => 'sh',
+    'weight' => 0,
+  );
   // Exported language: sq.
   $languages['sq'] = array(
     'language' => 'sq',

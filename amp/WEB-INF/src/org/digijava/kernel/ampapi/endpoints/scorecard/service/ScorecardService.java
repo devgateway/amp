@@ -649,18 +649,30 @@ public class ScorecardService {
 		
 		PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {
-				String query = "SELECT count(DISTINCT(r.organisation)) "
-						+ "		FROM   amp_org_role r, amp_activity_version v, amp_organisation o "
-						+ "WHERE  r.activity= v.amp_activity_id	AND  r.organisation=o.amp_org_id "
-						+ "AND (EXISTS (SELECT af.amp_donor_org_id FROM amp_funding af,amp_activity_version v  "
-						+ "WHERE  organisation = af.amp_donor_org_id "
-						+ "AND v.amp_activity_id = af.amp_activity_id "
-						+ "AND v.deleted is false " 
-						+ "AND  (( af.source_role_id IS NULL) "
-						+ "OR af.source_role_id = (SELECT amp_role_id FROM amp_role WHERE  role_code='DN'))) OR r.role=1) "
-						+ "AND (o.deleted IS NULL OR o.deleted = FALSE) "
-						+ "AND  v.date_updated <= '"+ formattedEndDate + "'"
-						+ "AND  v.date_updated >= '"+ formattedStartDate + "'";
+				String query = "SELECT Count(DISTINCT( o.amp_org_id )) "
+						+ " FROM   amp_organisation o  "
+						+ " WHERE  ( ( EXISTS (SELECT af.amp_donor_org_id "
+						+ " FROM   amp_funding af,  amp_activity v  "
+						+ " WHERE  o.amp_org_id = af.amp_donor_org_id "
+						+ " AND v.amp_activity_id = af.amp_activity_id "
+						+ " AND v.date_updated <= '"+ formattedEndDate +"' "
+						+ " AND v.date_updated >= '2015-04-01 00:00:00.00'  "
+						+ " AND ( ( af.source_role_id IS NULL )  "
+						+ " OR EXISTS (SELECT 1  FROM   amp_role r "
+						+ " WHERE  role_code = 'DN' "
+						+ " AND r.amp_role_id = af.source_role_id "
+						+ " ) )) )  "
+						+ " OR ( EXISTS (SELECT org.organisation  "
+						+ " FROM   amp_org_role org,  " + " amp_activity av "
+						+ " WHERE  org.activity = av.amp_activity_id "
+						+ " and EXISTS  (SELECT 1   "
+						+ " FROM   amp_role r WHERE  role_code = 'DN' "
+						+ " AND r.amp_role_id=org.role  " + " ) "
+						+ " AND av.date_updated <= '2015-06-30 00:00:00.00' "
+						+ " AND av.date_updated >= '2015-04-01 00:00:00.00'  "
+						+ " AND org.organisation = o.amp_org_id) ) )  "
+						+ " AND ( o.deleted IS NULL  "
+						+ " OR o.deleted = false ) ";
 				
 				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
 					ResultSet rs = rsi.rs;

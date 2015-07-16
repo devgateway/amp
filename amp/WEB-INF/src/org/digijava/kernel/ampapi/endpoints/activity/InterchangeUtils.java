@@ -461,7 +461,7 @@ public class InterchangeUtils {
 		}
 		else if ((!required.equals(NOT_REQUIRED) && FMVisibility.isFmPathEnabled(required))
 				|| (!minSize.isEmpty() && FMVisibility.isFmPathEnabled(minSize))) {
-			requiredValue = ActivityEPConstants.NON_DRAFT_REQUIRED;
+			requiredValue = ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
 		}
 		return requiredValue;
 	}

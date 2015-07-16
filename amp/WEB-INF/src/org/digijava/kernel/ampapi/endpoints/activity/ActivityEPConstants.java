@@ -29,7 +29,7 @@ public class ActivityEPConstants {
 	public static final String FILTER_FIELDS = "fields";
 	public static final String VIEW = "view";
 	public static final String EDIT = "edit";
-	public static final String NON_DRAFT_REQUIRED = "ND";
+	public static final String FIELD_NON_DRAFT_REQUIRED = "ND";
 	public static final String FIELD_ALWAYS_REQUIRED = "Y";
 	public static final String FIELD_NOT_REQUIRED = "N";
 	public static final String ID = "id";

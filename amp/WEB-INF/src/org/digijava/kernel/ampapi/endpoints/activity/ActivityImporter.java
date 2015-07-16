@@ -59,6 +59,7 @@ public class ActivityImporter {
 	private JsonBean newJson = null;
 	private Map<Integer, ApiErrorMessage> errors = new HashMap<Integer, ApiErrorMessage>();
 	private boolean update  = false;
+	private boolean saveAsDraft = false;
 	private InputValidatorProcessor validator = new InputValidatorProcessor();
 	private List<AmpContentTranslation> translations = new ArrayList<AmpContentTranslation>();
 	private boolean isDraftFMEnabled;
@@ -643,6 +644,14 @@ public class ActivityImporter {
 	 */
 	public String getSourceURL() {
 		return sourceURL;
+	}
+
+	public boolean isSaveAsDraft() {
+		return saveAsDraft;
+	}
+
+	public void setSaveAsDraft(boolean saveAsDraft) {
+		this.saveAsDraft = saveAsDraft;
 	}
 
 }

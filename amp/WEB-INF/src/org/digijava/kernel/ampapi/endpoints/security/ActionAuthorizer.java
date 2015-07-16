@@ -4,6 +4,8 @@
 package org.digijava.kernel.ampapi.endpoints.security;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -85,8 +87,12 @@ public class ActionAuthorizer {
 			error = SecurityErrors.NO_SESSION_TOKEN;
 		} else {
 			String token = containerReq.getHeaderValue("X-Auth-Token");
-			if (StringUtils.isBlank(token)) {
-				error = SecurityErrors.NO_REQUEST_TOKEN;
+			List<ApiErrorMessage>errors=new ArrayList<ApiErrorMessage>();
+
+			SecurityUtil.getAmpApiTokenFromApplication(token,errors);
+			
+			if (errors.size()>0) {
+				error = errors.get(0);
 			} else if (!token.equals(sessionToken.getToken())) {
 				error = SecurityErrors.INVALID_TOKEN;
 			}

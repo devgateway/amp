@@ -12,6 +12,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.kernel.ampapi.endpoints.util.AmpApiToken;
 import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.security.DgSecurityManager;
@@ -144,8 +145,8 @@ public class SelectTeam extends Action {
 
         //once we have selected the team we have to check if we need to generate the token
         if("true".equals(request.getParameter("generateToken"))){
-        	String token =SecurityUtil.generateToken();
-        	response.sendRedirect(request.getParameter("callbackUrl") + "?amp_api_token="+token);
+        	AmpApiToken token =SecurityUtil.generateToken();
+        	response.sendRedirect(request.getParameter("callbackUrl") + "?amp_api_token="+token.getToken());
         	return null;
         }
         return mapping.findForward("forward");

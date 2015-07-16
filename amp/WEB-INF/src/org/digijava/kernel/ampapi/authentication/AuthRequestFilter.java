@@ -57,9 +57,9 @@ public class AuthRequestFilter implements ContainerRequestFilter {
         TLSUtils.populate(httpRequest);
         
         addDefaultTreeVisibility();
-        //we check for authentication exclude /rest/security/user
+        //we check for authentication exclude /rest/security/user and include only /activity/ for now
 		if (!httpRequest.getRequestURL().toString()
-				.endsWith(mainPath + SecurityUtil.USER_ENDPOINT_PATH)) {
+				.endsWith(mainPath + SecurityUtil.USER_ENDPOINT_PATH) && httpRequest.getRequestURL().toString().contains(mainPath + "/activity")) {
 			String token = containerReq.getHeaderValue("X-Auth-Token");
 			SecurityUtil.validateTokenAndRestoreSession(token);
       }

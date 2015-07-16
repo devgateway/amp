@@ -18,6 +18,7 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableDiscrimina
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
@@ -189,8 +190,35 @@ LoggerIdentifiable, Cloneable {
 	@VersionableCollection(fieldTitle = "Locations")
 	protected Set<AmpActivityLocation> locations ;
 	
-	@Interchangeable(fieldTitle = "Org. Role",fmPath="/Activity Form/Funding/Org Role")
+	@Interchangeable(fieldTitle = "Org. Role", fmPath = "/Activity Form/Related Organizations")
 	@VersionableCollection(fieldTitle = "Org. Role")
+	@InterchangeableDiscriminator(discriminatorField = "orgRoleConfig.name", settings = {
+			@Interchangeable(fieldTitle = "Donor Organization", discriminatorOption = Constants.FUNDING_AGENCY, fmPath = "/Activity Form/Related Organizations/Donor Organization"),
+			@Interchangeable(fieldTitle = "Responsible Organization", discriminatorOption = Constants.RESPONSIBLE_ORGANISATION, fmPath = "/Activity Form/Related Organizations/Responsible Organization"),
+			@Interchangeable(fieldTitle = "Executing Agency", discriminatorOption = Constants.EXECUTING_AGENCY, fmPath = "/Activity Form/Related Organizations/Executing Agency"),
+			@Interchangeable(fieldTitle = "Implementing Agency", discriminatorOption = Constants.IMPLEMENTING_AGENCY, fmPath = "/Activity Form/Related Organizations/Implementing Agency"),
+			@Interchangeable(fieldTitle = "Beneficiary Agency", discriminatorOption = Constants.BENEFICIARY_AGENCY, fmPath = "/Activity Form/Related Organizations/Beneficiary Agency"),
+			@Interchangeable(fieldTitle = "Contracting Agency", discriminatorOption = Constants.CONTRACTING_AGENCY, fmPath = "/Activity Form/Related Organizations/Contracting Agency"),
+			@Interchangeable(fieldTitle = "Regional Group", discriminatorOption = Constants.REGIONAL_GROUP, fmPath = "/Activity Form/Related Organizations/Sector Group"),
+			@Interchangeable(fieldTitle = "Sector Group", discriminatorOption = Constants.SECTOR_GROUP, fmPath = "/Activity Form/Related Organizations/Regional Group")
+		}, validators = {
+			@Validators(maxSize = "/Activity Form/Organizations/Donor Organization/Max Size Validator", minSize = "/Activity Form/Organizations/Donor Organization/Required Validator", 
+					unique = "/Activity Form/Organizations/Donor Organization/Unique Orgs Validator", percentage = "/Activity Form/Organizations/Donor Organization/relOrgPercentageTotal"),
+			@Validators(maxSize = "/Activity Form/Organizations/Responsible Organization/Max Size Validator", minSize = "/Activity Form/Organizations/Responsible Organization/Required Validator", 
+					unique = "/Activity Form/Organizations/Responsible Organization/Unique Orgs Validator", percentage = "/Activity Form/Organizations/Responsible Organization/relOrgPercentageTotal"),
+			@Validators(maxSize = "/Activity Form/Organizations/Executing Agency/Max Size Validator", minSize = "/Activity Form/Organizations/Executing Agency/Required Validator", 
+					unique = "/Activity Form/Organizations/Executing Agency/Unique Orgs Validator", percentage = "/Activity Form/Organizations/Executing Agency/relOrgPercentageTotal"),
+			@Validators(maxSize = "/Activity Form/Organizations/Implementing Agency/Max Size Validator", minSize = "/Activity Form/Organizations/Implementing Agency/Required Validator", 
+					unique = "/Activity Form/Organizations/Implementing Agency/Unique Orgs Validator", percentage = "/Activity Form/Organizations/Implementing Agency/relOrgPercentageTotal"),
+			@Validators(maxSize = "/Activity Form/Organizations/Beneficiary Agency/Max Size Validator", minSize = "/Activity Form/Organizations/Beneficiary Agency/Required Validator", 
+					unique = "/Activity Form/Organizations/Beneficiary Agency/Unique Orgs Validator", percentage = "/Activity Form/Organizations/Beneficiary Agency/relOrgPercentageTotal"),
+			@Validators(maxSize = "/Activity Form/Organizations/Contracting Agency/Max Size Validator", minSize = "/Activity Form/Organizations/Contracting Agency/Required Validator", 
+					unique = "/Activity Form/Organizations/Contracting Agency/Unique Orgs Validator", percentage = "/Activity Form/Organizations/Contracting Agency/relOrgPercentageTotal"),
+			@Validators(maxSize = "/Activity Form/Organizations/Regional Group/Unique Orgs Validator", minSize = "/Activity Form/Organizations/Regional Group/Required Validator", 
+					unique = "/Activity Form/Organizations/Regional Group/Max Size Validator", percentage = "/Activity Form/Organizations/Regional Group/relOrgPercentageTotal"),
+			@Validators(maxSize = "/Activity Form/Organizations/Sector Group/Unique Orgs Validator", minSize = "/Activity Form/Organizations/Sector Group/Required Validator", 
+					unique = "/Activity Form/Organizations/Sector Group/Max Size Validator", percentage = "/Activity Form/Organizations/Sector Group/relOrgPercentageTotal")
+	})
 	protected Set<AmpOrgRole> orgrole;
 	
 	@Interchangeable(fieldTitle = "Organizations Project IDs",fmPath="/Activity Form/Activity Internal IDs")

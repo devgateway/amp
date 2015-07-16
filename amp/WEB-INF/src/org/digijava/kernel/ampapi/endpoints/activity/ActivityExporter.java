@@ -23,6 +23,7 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableDiscrimina
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.exception.EditorException;
 
@@ -214,6 +215,10 @@ public class ActivityExporter {
 						String filteredFieldPath = filteredFieldsMap.get(catVal.getAmpCategoryClass().getKeyName());
 						compositeMap.get(catVal.getAmpCategoryClass().getKeyName()).add(getObjectJson(catVal, filteredFieldPath));
 						//TODO we have to manage when the ActivityBudet is not present (Budget Unallocated)
+					} else if (obj instanceof AmpOrgRole) {
+						AmpOrgRole aor = (AmpOrgRole) obj;
+						String filteredFieldPath = filteredFieldsMap.get(aor.getRole().getRoleCode());
+						compositeMap.get(aor.getRole().getRoleCode()).add(getObjectJson(aor, filteredFieldPath));
 					}
 				}
 			}

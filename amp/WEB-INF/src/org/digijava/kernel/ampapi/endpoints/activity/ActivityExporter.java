@@ -227,7 +227,7 @@ public class ActivityExporter {
 		// put in the result JSON the generated structure
 		for (Interchangeable setting : settings) {
 			String fieldTitle = InterchangeUtils.underscorify(setting.fieldTitle());
-			if (isFiltered(fieldTitle)) {
+			if (isFiltered(fieldTitle) && FMVisibility.isVisible(setting.fmPath())) {
 				resultJson.set(fieldTitle, compositeMap.get(setting.discriminatorOption()));
 			}
 		}

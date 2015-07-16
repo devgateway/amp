@@ -14,6 +14,7 @@ import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.security.Security;
+import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.request.TLSUtils;
@@ -40,13 +41,13 @@ public class AuthRequestFilter implements ContainerRequestFilter {
 	private static final Logger logger = Logger.getLogger(AuthRequestFilter.class);
 
 	@Override
-	public ContainerRequest filter(ContainerRequest arg0) {
+	public ContainerRequest filter(ContainerRequest containerReq) {
 		SiteDomain siteDomain = null;
         //yet to strip the mainPath dynamically, committed hardcoded for testing purposes
         String mainPath="/rest";
         siteDomain = SiteCache.getInstance().getSiteDomain(httpRequest.getServerName(), mainPath);
         httpRequest.setAttribute(org.digijava.kernel.Constants.CURRENT_SITE, siteDomain);
-        
+
         // configure requested language
         addLanguage(siteDomain);
         
@@ -56,12 +57,19 @@ public class AuthRequestFilter implements ContainerRequestFilter {
         TLSUtils.populate(httpRequest);
         
         addDefaultTreeVisibility();
-        
+        //we check for authentication exclude /rest/security/user
+		if (!httpRequest.getRequestURL().toString()
+				.endsWith(mainPath + SecurityUtil.USER_ENDPOINT_PATH)) {
+			String token = containerReq.getHeaderValue("X-Auth-Token");
+			SecurityUtil.validateTokenAndRestoreSession(token);
+      }
+
+
         if (AUTHORIZE) {
-        	Security.authorize(arg0);
+        	Security.authorize(containerReq);
         }
         
-        return arg0;
+        return containerReq;
 	}
 	
 	private void addLanguage(SiteDomain siteDomain) {

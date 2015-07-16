@@ -42,11 +42,11 @@ public class Security {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public JsonBean user() {
 		JsonBean authenticationResult = new JsonBean();
-		
+		boolean isAdmin;
 
-		AmpApiToken apiToken= SecurityUtil.getTokenFromSession();
+		AmpApiToken apiToken = SecurityUtil.getTokenFromSession();
 
-		boolean isAdmin ="yes".equals(httpRequest.getSession().getAttribute("ampAdmin"));
+		isAdmin ="yes".equals(httpRequest.getSession().getAttribute("ampAdmin"));
 		
 		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
 		String username=null;
@@ -61,6 +61,11 @@ public class Security {
 				username=u.getName();
 				ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
 				team=ampTeamMember.getAmpTeam().getName();
+				//if the user is logged in without a token, we generate one
+				if (apiToken == null) {
+					//if no token is present in session we generate one 
+					apiToken = SecurityUtil.generateToken();
+				}
 
 			} catch (DgException e) {
 				// TODO return error 500 with description

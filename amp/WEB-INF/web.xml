@@ -203,6 +203,11 @@
 			<param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
 			<param-value>org.digijava.kernel.ampapi.authentication.AuthRequestFilter</param-value>
 		</init-param>
+    	 <init-param>
+			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
+			<param-value>org.digijava.kernel.ampapi.authentication.AuthResponseFilter</param-value>
+		</init-param>
+		 
     	<init-param>
         	<param-name>jersey.config.server.tracing</param-name>
         	<param-value>ALL</param-value>

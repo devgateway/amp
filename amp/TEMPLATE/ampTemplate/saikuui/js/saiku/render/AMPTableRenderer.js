@@ -31,7 +31,7 @@ AMPTableRenderer.prototype.render = function(data, options) {
 	// When using this class to export the report we receive these extra
 	// parameters from the endpoint because are unavailable in the constructor
 	// call when using Rhino.
-	if (type === 'pdf' || type === 'csv') {
+	if (type === 'pdf' || type === 'csv' || type === 'xlsx') {
 		metadataColumns = data.columns;
 		metadataHierarchies = data.hierarchies;
 	}
@@ -310,18 +310,18 @@ function generateDataRows(page, options) {
 				if (this.contentMatrix[i][j].isGrouped === true) {
 					continue;
 				}
-				var group = findGroupVertically(this.contentMatrix, i, j);
+				var group = 1;
+				if (this.type === 'csv' || this.type === 'pdf'
+						|| this.type === 'html') {
+					group = findGroupVertically(this.contentMatrix, i, j);
+				}
 				var rowSpan = " rowspan='" + group + "' ";
 				var styleClass = "";
-				if (this.type === 'xlsx' || this.type === 'csv') {
-					var value = this.contentMatrix[i][j].value;
-				} else {
-					var value = this.contentMatrix[i][j].displayedValue;
-				}
+				var value = this.contentMatrix[i][j].displayedValue;
 				var cleanValue = {};
-				if (this.type === 'csv') {
+				if (this.type === 'csv' || this.type === 'xlsx') {
 					value = "" + value + "";
-					cleanValue = cleanValue = cleanText(value);
+					cleanValue = cleanText(value);
 				} else {
 					cleanValue = cleanText(value, 60);
 				}
@@ -436,7 +436,7 @@ function extractDataFromTree(node) {
 		// the header's last row.
 		for (var i = 0; i < this.headerMatrix[this.lastHeaderRow].length; i++) {
 			var dataValue = node.contents[this.headerMatrix[this.lastHeaderRow][i].hierarchicalName];
-			if (this.type === 'csv' || this.type === 'xlsx') {
+			if (this.type === 'csv') {
 				// If this is a hierarchy column.
 				if (i < this.metadataHierarchies.length) {
 					// If current cell is empty then take the above cell value.

@@ -25,6 +25,7 @@ import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class AMPReportExcelExport {
 
@@ -282,7 +283,9 @@ public class AMPReportExcelExport {
 			Row row = sheet.createRow(i);
 			CellStyle styleForCurrentRow = null;
 			int j = 0;
-			for (Element contentColElement : contentRowElement.getElementsByTag("td")) {
+			Elements elements = contentRowElement.getElementsByTag("th");
+			elements.addAll(contentRowElement.getElementsByTag("td"));
+			for (Element contentColElement : elements) {
 				boolean isNumber = false;
 				Cell cell = row.createCell(j);
 				String cellContent = ((Element) contentColElement).text();
@@ -318,7 +321,7 @@ public class AMPReportExcelExport {
 					} else {
 						styleForCurrentRow = styleTotalClean;
 					}
-				} else if (contentColElement.hasClass("total")) {
+				} else if (contentColElement.hasClass("total") || contentColElement.hasClass("row_total")) {
 					if (type == TYPE_STYLED) {
 						// Start applying the subtotal style in the right column (not the first).
 						if (styleForCurrentRow == null && !cellContent.equals("")) {
@@ -395,6 +398,7 @@ public class AMPReportExcelExport {
 	 */
 	private static void deleteHierarchyTotalRows(Sheet sheet, int hierarchies, int headers, int columns) {
 		if (sheet.getRow(0) != null) {
+			boolean deleted = false;
 			int totalRows = sheet.getPhysicalNumberOfRows();
 			if (columns > hierarchies) {
 				// Iterate columns from right to left, then rows from bottom to top.
@@ -410,24 +414,27 @@ public class AMPReportExcelExport {
 								// empty cells (it happens on Niger).
 								if (style.getIndex() == styleTotalClean.getIndex()) {
 									sheet.removeRow(row);
+									deleted = true;
 								}
 							}
 						}
 					}
 				}
 				// Now shift rows to fill the gaps created by removing rows with POI.
-				int shift = 0;
-				for (int i = headers; i < totalRows; i++) {
-					Row row = sheet.getRow(i);
-					// row is null when was deleted by POI, but still exists in the sheet.
-					if (row == null || row.getCell(0).getStringCellValue().isEmpty()) {
-						shift++;
-					} else {
-						if (shift > 0) {
-							// Move up this row 'shift' positions and restart the loop.
-							sheet.shiftRows(i, i, -1 * shift);
-							i = headers;
-							shift = 0;
+				if (deleted) {
+					int shift = 0;
+					for (int i = headers; i < totalRows; i++) {
+						Row row = sheet.getRow(i);
+						// row is null when was deleted by POI, but still exists in the sheet.
+						if (row == null || row.getCell(0) == null || row.getCell(0).getStringCellValue().isEmpty()) {
+							shift++;
+						} else {
+							if (shift > 0) {
+								// Move up this row 'shift' positions and restart the loop.
+								sheet.shiftRows(i, i, -1 * shift);
+								i = headers;
+								shift = 0;
+							}
 						}
 					}
 				}

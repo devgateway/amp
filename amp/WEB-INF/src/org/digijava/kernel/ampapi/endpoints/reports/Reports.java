@@ -465,6 +465,7 @@ public class Reports {
 	public final Response exportSaikuReport(String query, Long reportId, String type) {
 		JsonBean result;
 		try {
+			logger.info("Starting export to " + type);
 			String decodedQuery = java.net.URLDecoder.decode(query, "UTF-8");
 			decodedQuery = decodedQuery.replace("query=", "");
 			JsonBean queryObject = JsonBean.getJsonBeanFromString(decodedQuery);
@@ -473,12 +474,14 @@ public class Reports {
 			queryModel.put("page", 0);
 			queryModel.put("recordsPerPage", -1);
 			queryModel.put("regenerate", false);
+			logger.info("Obtain report result...");
 			result = getSaikuReport(queryObject, reportId);
 
 			byte[] doc = null;
 			String filename = "export";
 
 			// We will use report settings to get the DecimalFormat in order to parse the formatted values
+			logger.info("Obtain report implementation...");
 			ReportSpecificationImpl report = ReportsUtil.getReport(reportId);
 
 			if (report != null && !StringUtils.isEmpty(report.getReportName())) {
@@ -487,6 +490,7 @@ public class Reports {
 			filename += "." + type;
 			filename = filename.replaceAll(" ", "_");
 
+			logger.info("Generate specific export...");
 			switch (type) {
 			// TODO: Uncomment when csv is ready.
 			case AMPReportExportConstants.XLSX:
@@ -503,6 +507,7 @@ public class Reports {
 			}
 
 			if (doc != null) {
+				logger.info("Send export data to browser...");
 				return Response.ok(doc, MediaType.APPLICATION_OCTET_STREAM)
 						.header("content-disposition", "attachment; filename = " + filename)
 						.header("content-length", doc.length).build();

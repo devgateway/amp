@@ -50,19 +50,22 @@ public class FMVisibility {
 	 *            , the field to determine its visibility
 	 * @return boolean, returns true if the field is visible, false otherwise.
 	 */
-	public static boolean isVisible(Field field) {
+	public static boolean isVisible(String fmPath) {
+		if (fmPath == null)
+			return true;
 		HttpSession session = TLSUtils.getRequest().getSession();
 		checkTreeVisibilityUpdate(session);
 		boolean isVisible = false;
-		Interchangeable annotation = field.getAnnotation(Interchangeable.class);
-		if (annotation == null) {
-			return isVisible;
-		}
-		String path = annotation.fmPath();
-		if (path.equals("")) {
+		//shouldn't get here at all from a non-interchangeable field!
+//		Interchangeable annotation = field.getAnnotation(Interchangeable.class);
+//		if (annotation == null) {
+//			return isVisible;
+//		}
+//		String path = annotation.fmPath();
+		if (fmPath.equals("")) {
 			isVisible = true;
 		} else {
-			isVisible = isFmPathEnabled (path);
+			isVisible = isFmPathEnabled (fmPath);
 		}
 		return isVisible;
 	}

@@ -234,16 +234,18 @@ public class FieldsEnumerator {
 	private static List<JsonBean> getAllAvailableFields(Class<?> clazz, TranslationSettings trnSettings, 
 			boolean internalUse) {
 		List<JsonBean> result = new ArrayList<JsonBean>();
-		StopWatch.next("Descending into", false, clazz.getName());
+//		StopWatch.next("Descending into", false, clazz.getName());
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
 			
-			if (!FMVisibility.isVisible(field)) {
-				continue;
-			}
-			
+
 			if (!InterchangeUtils.isCompositeField(field) || hasFieldDiscriminatorClass(field)) {
 				Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
+				if (interchangeable == null)
+					continue;
+				if (!FMVisibility.isVisible(interchangeable.fmPath())) {
+					continue;
+				}
 				JsonBean descr = describeField(field, interchangeable, trnSettings, internalUse);
 				if (descr != null) {
 					result.add(descr);
@@ -252,6 +254,11 @@ public class FieldsEnumerator {
 				InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
 				Interchangeable[] settings = discriminator.settings();
 				for (int i = 0; i < settings.length; i++) {
+					String fmPath = settings[i].fmPath();
+					if (!FMVisibility.isVisible(fmPath)) {
+						continue;
+					}
+			
 					JsonBean descr = describeField(field, settings[i], trnSettings, internalUse);
 					if (descr != null) {
 						result.add(descr);

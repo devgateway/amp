@@ -89,7 +89,7 @@ public class ActivityExporter {
 		
 		Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
 		
-		if (interchangeable != null && FMVisibility.isVisible(field)) {
+		if (interchangeable != null && FMVisibility.isVisible(interchangeable.fmPath())) {
 			field.setAccessible(true);
 			String fieldTitle = InterchangeUtils.underscorify(interchangeable.fieldTitle());
 			

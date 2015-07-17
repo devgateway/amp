@@ -476,7 +476,6 @@ public class InterchangeUtils {
 			return field.getType();
 		else
 			return getGenericClass(field);
-		
 	}
 		
 	/**

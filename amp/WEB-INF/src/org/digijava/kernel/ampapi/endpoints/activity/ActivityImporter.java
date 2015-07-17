@@ -13,13 +13,18 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.onepager.util.ChangeType;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
+import org.digijava.kernel.ampapi.endpoints.activity.utils.ActivityImporterHelper;
+import org.digijava.kernel.ampapi.endpoints.activity.utils.ActivityRefPath;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -29,13 +34,21 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.editor.dbentity.Editor;
@@ -58,6 +71,8 @@ public class ActivityImporter {
 	private JsonBean oldJson = null;
 	private JsonBean newJson = null;
 	private Map<Integer, ApiErrorMessage> errors = new HashMap<Integer, ApiErrorMessage>();
+	Map<String, List<JsonBean>> possibleValuesCached = new HashMap<String, List<JsonBean>>();
+	Map<String, String> possibleValuesQuery = new HashMap<String, String>();
 	private boolean update  = false;
 	private boolean saveAsDraft = false;
 	private InputValidatorProcessor validator = new InputValidatorProcessor();
@@ -123,15 +138,16 @@ public class ActivityImporter {
 		Map<String, Object> newJsonParent = newJson.any();
 		Map<String, Object> oldJsonParent = oldJson == null ? null : oldJson.any();
 		
-		newActivity = (AmpActivityVersion) validateAndImport(oldActivity, newActivity, fieldsDef, 
+		newActivity = (AmpActivityVersion) validateAndImport(newActivity, oldActivity, fieldsDef, 
 				newJsonParent, oldJsonParent, "");
 		if(newActivity != null) {
 			// save new activity
 			try {
-				initEditors();
+				prepareToSave();
 				org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(
 						newActivity, translations, TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest()), 
 						newActivity.getDraft(), PersistenceManager.getRequestDBSession(), false, false);
+				postProcess();
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 				throw new RuntimeException(e);
@@ -141,7 +157,7 @@ public class ActivityImporter {
 		return new ArrayList<ApiErrorMessage>(errors.values());
 	}
 	
-	protected Object validateAndImport(Object oldParent, Object newParent, List<JsonBean> fieldsDef, 
+	protected Object validateAndImport(Object newParent, Object oldParent, List<JsonBean> fieldsDef, 
 			Map<String, Object> newJsonParent, Map<String, Object> oldJsonParent, String fieldPath) {
 		for (JsonBean fieldDef : fieldsDef) {
 			newParent = validateAndImport(newParent, oldParent, fieldDef, newJsonParent, oldJsonParent, fieldPath); 
@@ -152,17 +168,18 @@ public class ActivityImporter {
 	protected Object validateAndImport(Object newParent, Object oldParent, JsonBean fieldDef,
 			Map<String, Object> newJsonParent, Map<String, Object> oldJsonParent, String fieldPath) {
 		String fieldName = fieldDef == null ? null : fieldDef.getString(ActivityEPConstants.FIELD_NAME);
+		String currentFieldPath = fieldPath + "~" + fieldName;
 		Object oldJsonValue = oldJsonParent == null ? null : oldJsonParent.get(fieldName);
 		Object newJsonValue = newJsonParent == null ? null : newJsonParent.get(fieldName);
 		
 		// validate sub-elements first
-		newParent = validateSubElements(fieldDef, newParent, oldParent, newJsonValue, oldJsonValue, fieldPath);
+		newParent = validateSubElements(fieldDef, newParent, oldParent, newJsonValue, oldJsonValue, currentFieldPath);
 		// then validate current field itself
 		boolean valid = validator.isValid(this, newJsonParent, oldJsonParent, fieldDef, 
-				fieldPath + "~" + fieldName, errors);
+				currentFieldPath, errors);
 		// and set new field only if all sub-elements are valid
 		if (valid && newParent != null) {
-			newParent = setNewField(newParent, fieldDef, newJsonParent, fieldPath);
+			newParent = setNewField(newParent, fieldDef, newJsonParent, currentFieldPath);
 		}
 		return newParent;
 	}
@@ -179,39 +196,33 @@ public class ActivityImporter {
 		
 		// first validate all sub-elements
 		List<JsonBean> childrenFields = (List<JsonBean>) fieldDef.get(ActivityEPConstants.CHILDREN);
-		List<Map<String, Object>> childrenNewValues = null;
-		List<Map<String, Object>> childrenOldValues = null;
+		List<Map<String, Object>> childrenNewValues = getChildrenValues(newJsonValue, isList);
+		List<Map<String, Object>> childrenOldValues = getChildrenValues(oldJsonValue, isList);
 		
-		// identify children of the new field input
-		if (newJsonValue != null) {
-			if (newJsonValue instanceof List) { 
-				childrenNewValues = (List<Map<String, Object>>) newJsonValue;
-			} else if (isList && newJsonValue instanceof Map) {
-				childrenNewValues = new ArrayList<>(((Map) newJsonValue).entrySet());
-			}
-		}
-		// identify children of the old field input
-		if (oldJsonValue != null && oldJsonValue instanceof List) { 
-			childrenOldValues = (List<Map<String, Object>>) oldJsonValue;
-		}
 		// validate children, even if it is not a list -> to notify wrong entries
 		if ((isList || childrenFields != null && childrenFields.size() > 0) && childrenNewValues != null) {
 			String actualFieldName = fieldDef.getString(ActivityEPConstants.FIELD_NAME_INTERNAL);
 			Field newField = getField(newParent, actualFieldName);
 			Field oldField = getField(oldParent, actualFieldName);
-			Object newFiledValue = null;
-			Object oldFiledValue = null;
+			Object newFieldValue = null;
+			Object oldFieldValue = null;
+			Class<?> subElementClass = null;
+			boolean isCollection = false;
 			try {
-				newFiledValue = newField == null ? null : newField.get(newParent);
-				oldFiledValue = oldField == null ? null : oldField.get(oldParent);
-				if (newParent != null && newFiledValue == null) {
-					newFiledValue = getNewInstance(newParent, newField);
+				newFieldValue = newField == null ? null : newField.get(newParent);
+				oldFieldValue = oldField == null ? null : oldField.get(oldParent);
+				if (newParent != null && newFieldValue == null) {
+					newFieldValue = getNewInstance(newParent, newField, fieldPath);
+				}
+				if (Collection.class.isAssignableFrom(newFieldValue.getClass())) {
+					isCollection = true;
+					subElementClass = ActivityImporterHelper.getGenericsParameterClass(newField);
 				}
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 				logger.error(e.getMessage());
 				throw new RuntimeException(e);
 			}
-			//validateAndImport(oldFiledValue, newFiledValue, childrenFields, childrenNewValues, childrenOldValues, fieldPath);
+			//newSubElement = validateAndImport(newSubElement, oldSubElement, childrenFields, newChild, oldChild, fieldPath);
 			Iterator<Map<String, Object>> iterNew = childrenNewValues.iterator();
 			while (iterNew.hasNext() && validSubElements) {
 				Map<String, Object> newChild = iterNew.next();
@@ -221,21 +232,49 @@ public class ActivityImporter {
 				if (oldChild != null) {
 					childrenOldValues.remove(oldChild);
 				}
-				newFiledValue = validateAndImport(newFiledValue, oldFiledValue, childFieldDef, newChild, oldChild, 
-						fieldPath);
-				if (newFiledValue == null) {
+				Object res = null;
+				if (isCollection) {
+					try {
+						Object newSubElement = subElementClass.newInstance();
+						// TODO: detect matching
+						Object oldSubElement = null;
+						res = validateAndImport(newSubElement, oldSubElement, childFieldDef, newChild, oldChild, fieldPath);
+					} catch (InstantiationException | IllegalAccessException e) {
+						logger.error(e.getMessage());
+						throw new RuntimeException(e);
+					}
+				} else {
+					res = validateAndImport(newFieldValue, oldFieldValue, childFieldDef, newChild, oldChild, fieldPath);
+				}
+				
+				if (res == null) {
 					// validation failed, reset parent to stop config
 					newParent = null;
-				} else {
-					// record object subelement
-					// TODO:
+				} else if (isCollection) {
+					// actual links will be updated
+					((Collection) newFieldValue).add(res);
 				}
 			}
 		}
 		return newParent;
 	}
 	
-	protected Object getNewInstance(Object parent, Field field) {
+	private List<Map<String, Object>> getChildrenValues(Object jsonValue, boolean isList) {
+		if (jsonValue != null) {
+			if (jsonValue instanceof List) { 
+				return (List<Map<String, Object>>) jsonValue;
+			} else if (isList && jsonValue instanceof Map) {
+				List<Map<String, Object>> jsonValues = new ArrayList<Map<String, Object>>();
+				for (final Map.Entry<String, Object> entry : ((Map<String, Object>) jsonValue).entrySet()) {
+					jsonValues.add(new HashMap<String, Object> () {{put(entry.getKey(), entry.getValue());}});
+				}
+				return jsonValues;
+			}
+		}
+		return null;
+	}
+	
+	protected Object getNewInstance(Object parent, Field field, String fieldPath) {
 		Object fieldValue = null;
 		try {
 			if (Set.class.isAssignableFrom(field.getType())) {
@@ -377,15 +416,18 @@ public class ActivityImporter {
 	
 	protected Object getNewValue(Field field, Object parentObj, Object jsonValue, JsonBean fieldDef, String fieldPath) {
 		Object value = null;
-		if (InterchangeUtils.isCompositeField(field)) {
+		String fieldType = (String) fieldDef.get(ActivityEPConstants.FIELD_TYPE);
+		fieldPath = fieldPath.substring(1);
+		List<JsonBean> allowedValues = getPossibleValuesForFieldCached(fieldPath, AmpActivityFields.class, null);
+		if (Collection.class.isAssignableFrom(field.getType())) {
 			value = null;
 			// TODO:
-		} else if (InterchangeableClassMapper.containsSimpleClass(field.getType())) {
+		} else if (InterchangeableClassMapper.SIMPLE_TYPES.contains(fieldType)) {
 			if (jsonValue == null)
 				return null;
 			try {
 				if (Date.class.equals(field.getType())) {
-					// TODO: custom for date
+					value = InterchangeUtils.parseISO8601Date((String) jsonValue);
 				} else if (String.class.equals(field.getType())) {
 					// check if this is a translatable that expects multiple entries
 					value = extractTranslationsOrSimpleValue(field, parentObj, jsonValue, fieldDef);
@@ -399,10 +441,16 @@ public class ActivityImporter {
 				logger.error(e.getMessage());
 				throw new RuntimeException(e);
 			}
-		} else {
-			value = null;
-			// this is a list
-			// TODO:
+		} else if (allowedValues != null && allowedValues.size() > 0){
+			// => this is an object => it has children elements
+			for (JsonBean childDef : (List<JsonBean>) fieldDef.get(ActivityEPConstants.CHILDREN)) {
+				if (Boolean.TRUE.equals(childDef.get(ActivityEPConstants.ID))) {
+					Long id = ((Integer) ((Map<String, Object>) jsonValue).get(childDef.getString(ActivityEPConstants.FIELD_NAME))).longValue();
+					value = PersistenceManager.getSession().get(field.getType().getName(), id);
+					// possibleValuesQuery.get(fieldPath);
+					break;
+				}
+			}
 		}
 		return value;
 	}
@@ -429,7 +477,7 @@ public class ActivityImporter {
 		
 		String objectClass = parentObj.getClass().getName();
 		Long objId = (Long) ((Identifiable) parentObj).getIdentifier();
-		List<AmpContentTranslation> trnList = trnList = ContentTranslationUtil.loadFieldTranslations(objectClass, objId, field.getName());
+		List<AmpContentTranslation> trnList = ContentTranslationUtil.loadFieldTranslations(objectClass, objId, field.getName());
 		if (objId == null) {
 			objId = (long) System.identityHashCode(parentObj);
 		}
@@ -517,24 +565,131 @@ public class ActivityImporter {
 		return "activity-import-" + System.currentTimeMillis();
 	}
 	
-	protected void initEditors() {
-		if (newActivity == null)
-			return;
+	protected void initEditor(Field field) {
+		try {
+			String currentValue = (String) field.get(newActivity);
+			if (currentValue == null) {
+				currentValue = getEditorKey();
+				field.setAccessible(true);
+				field.set(newActivity, currentValue);
+			}
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			logger.error(e.getMessage());
+			throw new RuntimeException(e);
+		}
+	}
+	
+	protected void prepareToSave() {
+		newActivity.setChangeType(ChangeType.IMPORT.name());
+		// configure draft status on import only, since on update we'll change to draft based on RequiredValidator
+		if (!update) {
+			newActivity.setDraft(isDraftFMEnabled);
+		}
+		initDefaults();
+	}
+	
+	protected void initDefaults() {
 		for (Field field : AmpActivityFields.class.getFields()) {
 			if (InterchangeUtils.isVersionableTextField(field)) {
-				try {
-					String currentValue = (String) field.get(newActivity);
-					if (currentValue == null) {
-						currentValue = getEditorKey();
-						field.setAccessible(true);
-						field.set(newActivity, currentValue);
+				initEditor(field);
+			}
+		}
+		initSetors();
+		initFundings();
+        initLocations();
+        initContacts();
+		//initActivityReferences(newActivity, ActivityImporterHelper.getActivityRefPathsSet()); //ActivityImporterHelper.ACTIVITY_REFERENCES);
+	}
+	
+	protected void initSetors() {
+		if (newActivity.getSectors() == null) {
+			newActivity.setSectors(new HashSet<AmpActivitySector>());
+		} else if (newActivity.getSectors().size() > 0) {
+			Map<Long, AmpClassificationConfiguration> foundClassifications = new TreeMap<Long, AmpClassificationConfiguration>();
+			for(AmpActivitySector acs : newActivity.getSectors()) {
+				acs.setActivityId(newActivity);
+				if (acs.getClassificationConfig() == null) {
+					Long ampSecSchemeId = acs.getSectorId().getAmpSecSchemeId().getAmpSecSchemeId();
+					if (!foundClassifications.containsKey(ampSecSchemeId)) {
+						foundClassifications.put(ampSecSchemeId, SectorUtil.getClassificationConfigBySectorSchemeId(ampSecSchemeId));
 					}
-				} catch (IllegalArgumentException | IllegalAccessException e) {
-					logger.error(e.getMessage());
-					throw new RuntimeException(e);
+					acs.setClassificationConfig(foundClassifications.get(ampSecSchemeId));
 				}
 			}
 		}
+	}
+	
+	protected void initFundings() {
+		if (newActivity.getFunding() == null) {
+			newActivity.setFunding(new HashSet<AmpFunding>());
+        } else {
+        	// TODO:
+        }
+	}
+	
+	protected void initOrgRoles() {
+		if (newActivity.getOrgrole() == null) {
+        	newActivity.setOrgrole(new HashSet<AmpOrgRole>());
+        } else {
+        	// TODO:
+        }
+	}
+	
+	protected void initLocations() {
+		if (newActivity.getLocations() == null) {
+        	newActivity.setLocations(new HashSet<AmpActivityLocation>());
+        } else {
+        	// TODO:
+        }
+	}
+	
+	protected void initContacts() {
+		if (newActivity.getActivityContacts() == null) {
+        	newActivity.setActivityContacts(new HashSet<AmpActivityContact>());
+        } else {
+        	// TODO:
+        }
+	}
+	
+//	protected void initActivityReferences(Object currentObj, ActivityRefPath activityRef) {
+//		if (currentObj == null) {
+//			return;
+//		}
+//		if (activityRef.hasActivityRef()) {
+//			Field field = getField(currentObj, activityRef.getActivityField());
+//			if (field != null) {
+//				try {
+//					field.set(currentObj, newActivity);
+//				} catch (IllegalArgumentException | IllegalAccessException e) {
+//					logger.error(e.getMessage());
+//					throw new RuntimeException(e);
+//				}
+//			}
+//		}
+//		for (Map.Entry<String, ActivityRefPath> pathThrough : activityRef.getRefPaths().entrySet()) {
+//			Field field = getField(currentObj, activityRef.getActivityField());
+//			try {
+//				if (Collection.class.isAssignableFrom(field.getType())) {
+//					Collection<?> collValues = (Collection<?>) field.get(currentObj);
+//					if (collValues != null && collValues.size() > 0) {
+//						for (Object child : collValues) {
+//							initActivityReferences(child, pathThrough.getValue());
+//						}
+//					}
+//				} else {
+//					// direct field
+//					initActivityReferences(field.get(currentObj), pathThrough.getValue());
+//				}
+//			} catch (IllegalArgumentException | IllegalAccessException e) {
+//				logger.error(e.getMessage());
+//				throw new RuntimeException(e);
+//			} 
+//		}
+//	}
+	
+	protected void postProcess() {
+		LuceneUtil.addUpdateActivity(TLSUtils.getRequest().getServletContext().getRealPath("/"), update,
+        		TLSUtils.getSite(), Locale.forLanguageTag(trnSettings.getDefaultLangCode()), newActivity, oldActivity);
 	}
 
 	/**
@@ -601,14 +756,13 @@ public class ActivityImporter {
 		return ALLOW_SAVE_AS_DRAFT_SHIFT;
 	}
 	
-	Map<String, List<JsonBean>> possibleValuesCached = new HashMap<String, List<JsonBean>>();
-
-	public List<JsonBean> getPossibleValuesForFieldCached(String fieldPath,
+	// what is object for?
+	public List<JsonBean> getPossibleValuesForFieldCached(String fieldPath, 
 			Class<AmpActivityFields> clazz, Object object) {
-		if (possibleValuesCached.containsKey(fieldPath))
-			return possibleValuesCached.get(fieldPath);
-		else possibleValuesCached.put(fieldPath, PossibleValuesEnumerator.getPossibleValuesForField(fieldPath, clazz, null));
-		return null;
+		if (!possibleValuesCached.containsKey(fieldPath)) {
+			possibleValuesCached.put(fieldPath, PossibleValuesEnumerator.getPossibleValuesForField(fieldPath, clazz, null));
+		}
+		return possibleValuesCached.get(fieldPath);
 	}
 	
 	/**

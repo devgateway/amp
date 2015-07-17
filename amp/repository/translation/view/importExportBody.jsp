@@ -150,8 +150,10 @@ div.fakefile2 input{
 <script type="text/javascript">
 	var W3CDOM = (document.createElement && document.getElementsByTagName);
 
+	
 	function initFileUploads() {
-		if (!W3CDOM) return;
+		if (!W3CDOM)
+			return;
 		var fakeFileUpload = document.createElement('div');
 		fakeFileUpload.className = 'fakefile';
 		fakeFileUpload.appendChild(document.createElement('input'));
@@ -159,8 +161,8 @@ div.fakefile2 input{
 		var fakeFileUpload2 = document.createElement('div');
 		fakeFileUpload2.className = 'fakefile2';
 
-
 		var button = document.createElement('input');
+		button.id = "fakeInputFile";
 		button.type = 'button';
 
 		button.value = '<digi:trn key="aim:browse">Browse...</digi:trn>';
@@ -168,78 +170,86 @@ div.fakefile2 input{
 
 		fakeFileUpload.appendChild(fakeFileUpload2);
 		var x = document.getElementsByTagName('input');
-		for (var i=0;i<x.length;i++) {
-			if (x[i].type != 'file') continue;
-			if (x[i].parentNode.className != 'fileinputs') continue;
+		for (var i = 0; i < x.length; i++) {
+			if (x[i].type != 'file')
+				continue;
+			if (x[i].parentNode.className != 'fileinputs')
+				continue;
 			x[i].className = 'file hidden';
 			var clone = fakeFileUpload.cloneNode(true);
 			x[i].parentNode.appendChild(clone);
 			x[i].relatedElement = clone.getElementsByTagName('input')[0];
 
- 			x[i].onchange = x[i].onmouseout = function () {
+			x[i].onclick = function() {
 				this.relatedElement.value = this.value;
 			}
+			
+			// Quick fix for AMP-20683, TODO: Remove all above code and replace by something that works like https://markusslima.github.io/bootstrap-filestyle/
+			$('#fakeInputFile').on('click', function() {
+				$("#fileUploaded").click();
+			});
 		}
 	}
 
 	function initFileUploads3() {
-		if (!W3CDOM) return;
+		if (!W3CDOM)
+			return;
 		var fakeFileUpload = document.createElement('div');
 		fakeFileUpload.className = 'fakefile';
 		fakeFileUpload.appendChild(document.createElement('input'));
 		var image = document.createElement('img');
-		image.src='pix/button_select.gif';
+		image.src = 'pix/button_select.gif';
 		fakeFileUpload.appendChild(image);
 		var x = document.getElementsByTagName('input');
-		for (var i=0;i<x.length;i++) {
-			if (x[i].type != 'file') continue;
-			if (x[i].parentNode.className != 'fileinputs') continue;
+		for (var i = 0; i < x.length; i++) {
+			if (x[i].type != 'file')
+				continue;
+			if (x[i].parentNode.className != 'fileinputs')
+				continue;
 			x[i].className = 'file hidden';
 			var clone = fakeFileUpload.cloneNode(true);
 			x[i].parentNode.appendChild(clone);
 			x[i].relatedElement = clone.getElementsByTagName('input')[0];
-			x[i].onchange = x[i].onmouseout = function () {
+			x[i].onchange = x[i].onmouseout = function() {
 				this.relatedElement.value = this.value;
 			}
 		}
 	}
-	
-	function showOrHideKeywordsDiv(show){
-		if(show){
-			document.getElementById('textDiv').style.display='block';
-			document.getElementById('keywordsDiv').style.display='block';
-		}else{
-			document.getElementById('textDiv').style.display='none';
-			document.getElementById('keywordsDiv').style.display='none';
+
+	function showOrHideKeywordsDiv(show) {
+		if (show) {
+			document.getElementById('textDiv').style.display = 'block';
+			document.getElementById('keywordsDiv').style.display = 'block';
+		} else {
+			document.getElementById('textDiv').style.display = 'none';
+			document.getElementById('keywordsDiv').style.display = 'none';
 		}
 	}
-function checkSelectedLanguages(){
-	var submit=true;
-	if($("select[name='exportFormat'] option:selected").val()==2){
-		var selected =$("input[name='selectedLanguages']:checked") ;
-		var num=selected.length;
-		var englishSelected=false;
-		selected.each(function() {
-			if($(this).val()=='en'){
-			englishSelected=true; 
+	function checkSelectedLanguages() {
+		var submit = true;
+		if ($("select[name='exportFormat'] option:selected").val() == 2) {
+			var selected = $("input[name='selectedLanguages']:checked");
+			var num = selected.length;
+			var englishSelected = false;
+			selected.each(function() {
+				if ($(this).val() == 'en') {
+					englishSelected = true;
+				}
+
+			});
+			if (englishSelected) {
+				if (num > 2 || num == 1) {
+					submit = false;
+				}
+			} else {
+				submit = false;
+			}
 		}
-			 
-		});
-		if(englishSelected){
-			if(num>2||num==1){
-				submit=false;
-			}	
+		if (!submit) {
+			alert("<digi:trn>Please select only one language in addition to english language</digi:trn>")
 		}
-		else{
-			submit=false;
-		}
-	}
-	if(!submit){
-		alert("<digi:trn>Please select only one language in addition to english language</digi:trn>")
-	}
 		return submit;
 	}
-
 </script>
 
 <digi:instance property="importExportForm" />

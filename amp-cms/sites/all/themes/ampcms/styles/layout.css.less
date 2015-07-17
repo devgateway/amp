@@ -273,6 +273,30 @@
   }
 }
 
+.xSmallOnly() {
+  .layout-grid-items {
+    text-align: center;
+  }
+}
+.xMediumAndUp() {
+  .layout-grid-items {
+    .l-hack-column();
+
+    .layout-grid-item {
+      .column(4);
+
+      .title {
+        .l-column-force-height(1.5em, 3);
+        text-align: center;
+      }
+    }
+
+    .group-title {
+      .single-fluid-column();
+    }
+  }
+}
+
 @import './lib/custom-grid.less';
 @import './lib/custom-responsive.less';
 @import './lib/helpers.less';

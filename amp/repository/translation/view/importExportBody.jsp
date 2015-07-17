@@ -156,7 +156,9 @@ div.fakefile2 input{
 			return;
 		var fakeFileUpload = document.createElement('div');
 		fakeFileUpload.className = 'fakefile';
-		fakeFileUpload.appendChild(document.createElement('input'));
+		var fileNameInput = document.createElement('input');
+		fileNameInput.id = "fileNameInput";
+		fakeFileUpload.appendChild(fileNameInput);
 
 		var fakeFileUpload2 = document.createElement('div');
 		fakeFileUpload2.className = 'fakefile2';
@@ -180,13 +182,16 @@ div.fakefile2 input{
 			x[i].parentNode.appendChild(clone);
 			x[i].relatedElement = clone.getElementsByTagName('input')[0];
 
-			x[i].onclick = function() {
+			/*x[i].onclick = function() {
 				this.relatedElement.value = this.value;
-			}
+			}*/
 			
 			// Quick fix for AMP-20683, TODO: Remove all above code and replace by something that works like https://markusslima.github.io/bootstrap-filestyle/
 			$('#fakeInputFile').on('click', function() {
 				$("#fileUploaded").click();
+			});
+			$('#fileUploaded').on('change', function() {
+				$("#fileNameInput").val($("#fileUploaded").val());
 			});
 		}
 	}

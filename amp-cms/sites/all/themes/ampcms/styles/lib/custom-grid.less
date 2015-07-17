@@ -21,6 +21,12 @@
   width: (@gen_column_width + @gen_gutter_width) * @count - @gen_gutter_width;
 }
 
+.column-max(@count) {
+  margin-left: @gen_gutter_width / 2;
+  margin-right: @gen_gutter_width / 2;
+  max-width: (@gen_column_width + @gen_gutter_width) * @count - @gen_gutter_width;
+}
+
 .column-full(@count) {
   display: inline;
   float: left;
@@ -72,6 +78,18 @@
 .single-fluid-column(@type:margin) when (@type = padding) {
   padding-left: @gen_gutter_width / 2;
   padding-right: @gen_gutter_width / 2;
+}
+
+.l-hack-column() {
+  margin-left: -1 * @gen_gutter_width / 2;
+  margin-right: -1 * @gen_gutter_width / 2;
+}
+
+// Set fixed height to columns.
+.l-column-force-height(@line_height, @rows) {
+  line-height: @line_height;
+  height: @line_height * @rows;
+  overflow: hidden;
 }
 
 .push(@offset:1) {

@@ -28,6 +28,7 @@ cbreference-view-mode-normal|CB Reference: view_mode normal';
   $strongarm->value = 'clearfix|Clearfix
 layout-block|Layout: Block
 layout-inline|Layout: Inline
+layout-grid-item|Layout: Grit Item
 layout-separator|Layout: Separator
 layout-right-sidebar|Layout: Right Sidebar';
   $export['ds_classes_regions'] = $strongarm;

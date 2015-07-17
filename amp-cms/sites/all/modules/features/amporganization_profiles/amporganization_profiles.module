@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the AMP Organization Profiles feature.
+ */
+
+include_once 'amporganization_profiles.features.inc';

@@ -200,7 +200,7 @@ function amporganization_profiles_field_default_field_instances() {
       'filefield_paths_enabled' => 1,
       'max_filesize' => '',
       'max_resolution' => '2048x2048',
-      'min_resolution' => '256x256',
+      'min_resolution' => '128x128',
       'title_field' => 0,
       'user_register_form' => FALSE,
     ),

@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.visibility.data.DataVisibility;
 import org.digijava.kernel.user.Group;
 import org.digijava.module.aim.dbentity.AmpMenuEntryInView;
 
@@ -52,7 +53,8 @@ public class MenuStructure {
 			for (AmpView view : AmpView.values()) {
 				structurePerView.put(view, new MenuStructure(MenuUtils.getMenuEntries(view, true), view));
 			}
-		} 
+		}
+		DataVisibility.notifyVisibilityChanged();
 	}
 	
 	private List<MenuItem> menuItems;

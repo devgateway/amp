@@ -447,11 +447,11 @@ public class InterchangeUtils {
 	 * @return String with Y|ND|N, where Y (yes) = always required, ND=for draft status=false, 
 	 * N (no) = not required. .
 	 */
-	public static String getRequiredValue(Field field) {
+	public static String getRequiredValue(Field field, Interchangeable interchangeable) {
 		String requiredValue = ActivityEPConstants.FIELD_NOT_REQUIRED;
 		String minSize = "";
 		Validators validators = field.getAnnotation(Validators.class);
-		Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
+//		Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
 		if (validators != null) {
 			minSize = validators.minSize();
 		}

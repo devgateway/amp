@@ -1411,6 +1411,18 @@ function flash() {
   }
 }
 
+function localstorage(){
+  var mod = 'whatever';
+  try {
+    localStorage.setItem(mod, mod);
+    localStorage.removeItem(mod);
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+}
+
 
 module.exports = function() {
   var missingFeatures = [];  // an empty array will cast to bool false. handy!
@@ -1447,6 +1459,13 @@ module.exports = function() {
     missingFeatures.push({
       feature: 'flash',
       severity: isIE() ? 'major' : 'minor'
+    });
+  }
+
+  if (!localstorage()) {
+    missingFeatures.push({
+      feature: 'localStorage',
+      severity: 'minor'
     });
   }
 
@@ -2012,6 +2031,25 @@ module.exports = BackboneDash.Collection.extend({
     this.app = options.app;
     this._loaded = new Deferred();
     _.bindAll(this, 'toAPI', 'fromState');
+    if(!this.app.hasIssue('localStorage')){
+      //this should be "once", but this collection gets synced 2 times for some reason
+      //TODO: find the reason for above and replace this with "once"
+      this.on("sync", _(function(){
+        try{
+          var settings = JSON.parse(localStorage.settings);
+          if("object" == typeof settings && null !== settings){
+            if(settings.currency){
+              this.findWhere({name: "currency"}).select(settings.currency);
+            }
+            if(settings["Calendar Type"]){
+              this.findWhere({name: "Calendar Type"}).select(settings["Calendar Type"]);
+            }
+          }
+        }
+        //we're catching because it will throw if localStorage.settings is empty or corrupted
+        catch(e){}
+      }).bind(this));
+    }
   },
 
   parse: function(settings) {
@@ -3289,6 +3327,26 @@ module.exports = BackboneDash.View.extend({
 
   changeSetting: function(e) {
     var optionId = e.currentTarget.value;
+    //if the browser supports local storage AND (the current setting is <currency> OR it is <calendar>)
+    if(!this.app.hasIssue('localStorage') && _(['currency', 'Calendar Type']).contains(this.current.attributes.name)){
+      var settings;
+      //try reading the settings JSON from localStorage and deserialize it...
+      try{
+        settings = JSON.parse(localStorage.settings);
+      }
+      catch(e){}
+      //...regardless of whether that failed or not...
+      finally{
+        //...ensure settings is a normal object...
+        if(!("object" == typeof settings && null !== settings)){
+          //...if it's not, let it be just an empty object
+          settings = {};
+        }
+      }
+      //and after all that paranoia we can now relatively safely persist the settings:
+      settings[this.current.attributes.name] = optionId;
+      localStorage.settings = JSON.stringify(settings);
+    }
     this.current.select(optionId);
   }
 
@@ -25059,8 +25117,12 @@ module.exports = Backbone.View.extend({
 	    	self.render();
 	    	self.layoutFetched.resolve();
 	    });
-	    _.bindAll(this, 'render','refreshUserSection');
-	 
+	    
+	    //AMP-20646: we need to wait until the endpoint has responded.
+	    this.layoutFetched.done(function(){
+	    	self.render();
+	    });
+	    _.bindAll(this, 'render','refreshUserSection');	 
 	  },
 	  render: function() {
 		  if (this.model) {
@@ -32925,7 +32987,7 @@ module.exports = Backbone.View.extend({
     	  self.renderFilters();
     	  //self.translate();
       });
-    debugger; // wth does thing not work in saiku?
+    //debugger; // AMP-20617  wth does thing not work in saiku?
     // handle click on a Tab's title: http://getbootstrap.com/javascript/#tabs-events
     $(document).on('shown.bs.tab click', "ul.nav.filter-titles>li>a[data-toggle='tab']", function (e) {  // <- this line makes little sense but works in Saiku/Tabs also
     //this.$el.find("ul.nav.filter-titles>li>a[data-toggle='tab']").on('shown.bs.tab', function (e) {   // <- this line works in anything except Saiku/Tabs

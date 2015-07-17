@@ -65,6 +65,18 @@ function flash() {
   }
 }
 
+function localstorage(){
+  var mod = 'whatever';
+  try {
+    localStorage.setItem(mod, mod);
+    localStorage.removeItem(mod);
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+}
+
 
 module.exports = function() {
   var missingFeatures = [];  // an empty array will cast to bool false. handy!
@@ -101,6 +113,13 @@ module.exports = function() {
     missingFeatures.push({
       feature: 'flash',
       severity: isIE() ? 'major' : 'minor'
+    });
+  }
+
+  if (!localstorage()) {
+    missingFeatures.push({
+      feature: 'localStorage',
+      severity: 'minor'
     });
   }
 

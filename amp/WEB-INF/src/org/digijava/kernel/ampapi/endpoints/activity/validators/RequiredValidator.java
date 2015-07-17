@@ -38,8 +38,9 @@ public class RequiredValidator extends InputValidator {
 		String fieldName = (String) fieldDescription.get(ActivityEPConstants.FIELD_NAME);
 		Object fieldValue = newFieldParent.get(fieldName);
 		String requiredStatus = fieldDescription.getString(ActivityEPConstants.REQUIRED);
-		//don't care if value has something 
-		if (fieldValue == null) {
+		boolean importable = Boolean.TRUE.equals(fieldDescription.getString(ActivityEPConstants.IMPORTABLE));
+		// don't care if value has something
+		if (importable && fieldValue == null) {
 			if (ActivityEPConstants.FIELD_ALWAYS_REQUIRED.equals(requiredStatus)) {
 				//field is always required -> can't save it even as a draft
 				return false;

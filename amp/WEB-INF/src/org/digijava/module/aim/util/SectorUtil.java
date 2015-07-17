@@ -731,6 +731,11 @@ public class SectorUtil {
 		String queryString = "select cls from " + AmpClassificationConfiguration.class.getName() + " cls ";
 		return PersistenceManager.getSession().createQuery(queryString).list();
 	}
+	
+	public static AmpClassificationConfiguration getClassificationConfigBySectorSchemeId(Long sectorSchemeId) {
+		String queryString = "select cls from " + AmpClassificationConfiguration.class.getName() + " cls  where cls.classification.ampSecSchemeId = " + sectorSchemeId;
+		return (AmpClassificationConfiguration) PersistenceManager.getSession().createQuery(queryString).uniqueResult();
+	}
 
 	/**
 	 * Returns Classification Configuration by Configuration Id

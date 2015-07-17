@@ -20,6 +20,9 @@ public class InterchangeableClassMapper {
 		}
 	};
 	
+	public static final Set<String> SIMPLE_TYPES = new HashSet<String>() {{
+		addAll(classToCustomType.values());
+	}};
 
 	private static Set<Class<?>> JSON_SUPPORTED_CLASSES = new HashSet<Class<?>>() {
 		{

@@ -24,7 +24,6 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableDiscrimina
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.util.time.StopWatch;
 import org.hibernate.jdbc.Work;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.entity.AbstractEntityPersister;
@@ -41,9 +40,20 @@ public class FieldsEnumerator {
 	public static Map<Field, String > fieldTypes;
 	public static Map<Field, Integer> fieldMaxLengths;
 	
+	private boolean internalUse = false;
+	private TranslationSettings trnSettings = TranslationSettings.getCurrent();
 	
 	static {
 		fillAllFieldsLengthInformation();
+	}
+	
+	/**
+	 * Fields Enumerator
+	 * 
+	 * @param internalUse flags if additional information for internal use is needed 
+	 */
+	public FieldsEnumerator(boolean internalUse) {
+		this.internalUse = internalUse;
 	}
 	
 	/**
@@ -55,11 +65,11 @@ public class FieldsEnumerator {
 	 *         fields in the definition of the field's class, or field's generic
 	 *         type, if it's a collection
 	 */
-	private static List<JsonBean> getChildrenOfField(Field field, TranslationSettings trnSettings, boolean internalUse) {
+	private List<JsonBean> getChildrenOfField(Field field) {
 		if (!InterchangeUtils.isCollection(field))
-			return getAllAvailableFields(field.getType(), trnSettings, internalUse);
+			return getAllAvailableFields(field.getType());
 		else
-			return getAllAvailableFields(InterchangeUtils.getGenericClass(field), trnSettings, internalUse);
+			return getAllAvailableFields(InterchangeUtils.getGenericClass(field));
 	}
 	
 	public static boolean hasMaxSizeValidatorEnabled(Field field) {
@@ -142,7 +152,6 @@ public class FieldsEnumerator {
 			fieldTypes = new HashMap<Field, String>();
 			fieldMaxLengths = new HashMap<Field, Integer>();
 			fillFieldsLengthInformation(AmpActivityVersion.class);
-			
 		}
 	}
 	
@@ -163,8 +172,7 @@ public class FieldsEnumerator {
 	 * @param field
 	 * @return
 	 */
-	private static JsonBean describeField(Field field, Interchangeable interchangeble, TranslationSettings trnSettings, 
-			boolean internalUse) {
+	private JsonBean describeField(Field field, Interchangeable interchangeble) {
 		if (interchangeble == null)
 			return null;
 		JsonBean bean = new JsonBean();
@@ -190,7 +198,7 @@ public class FieldsEnumerator {
 				bean.set(ActivityEPConstants.MULTIPLE_VALUES, false);
 			}
 			if (!interchangeble.pickIdOnly()) {
-				List<JsonBean> children = getChildrenOfField(field, trnSettings, internalUse);
+				List<JsonBean> children = getChildrenOfField(field);
 				if (children != null && children.size() > 0) {
 					bean.set(ActivityEPConstants.CHILDREN, children);
 				}
@@ -222,7 +230,7 @@ public class FieldsEnumerator {
 	 * @return the list of available fields
 	 */
 	public static List<JsonBean> getAllAvailableFields(boolean internalUse) {
-		return getAllAvailableFields(AmpActivityFields.class, TranslationSettings.getCurrent(), internalUse);
+		return (new FieldsEnumerator(internalUse)).getAllAvailableFields(AmpActivityFields.class);
 	}
 
 	/**
@@ -231,8 +239,7 @@ public class FieldsEnumerator {
 	 * @param clazz the class to be described
 	 * @return
 	 */
-	private static List<JsonBean> getAllAvailableFields(Class<?> clazz, TranslationSettings trnSettings, 
-			boolean internalUse) {
+	private List<JsonBean> getAllAvailableFields(Class<?> clazz) {
 		List<JsonBean> result = new ArrayList<JsonBean>();
 //		StopWatch.next("Descending into", false, clazz.getName());
 		Field[] fields = clazz.getDeclaredFields();
@@ -246,7 +253,7 @@ public class FieldsEnumerator {
 				if (!FMVisibility.isVisible(interchangeable.fmPath())) {
 					continue;
 				}
-				JsonBean descr = describeField(field, interchangeable, trnSettings, internalUse);
+				JsonBean descr = describeField(field, interchangeable);
 				if (descr != null) {
 					result.add(descr);
 				}
@@ -259,7 +266,7 @@ public class FieldsEnumerator {
 						continue;
 					}
 			
-					JsonBean descr = describeField(field, settings[i], trnSettings, internalUse);
+					JsonBean descr = describeField(field, settings[i]);
 					if (descr != null) {
 						result.add(descr);
 					}

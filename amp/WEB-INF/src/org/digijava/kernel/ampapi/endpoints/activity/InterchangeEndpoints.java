@@ -29,7 +29,6 @@ import org.digijava.module.aim.helper.TeamMember;
  * 
  * @author acartaleanu
  */
-
 @Path("activity")
 public class InterchangeEndpoints {
 	
@@ -38,9 +37,7 @@ public class InterchangeEndpoints {
 
 	/**
 	 * Returns a list of JSON objects, each describing a possible value that might be specified 
-	 * in an activity field 
-	 * 
-	 * 
+	 * in an activity field
 	 * 
 	 * @param fieldName, the Activity field title, underscorified (see <InterchangeUtils.underscorify for details>
 	 * @return list of JsonBean objects, each representing a possible value
@@ -52,13 +49,16 @@ public class InterchangeEndpoints {
 	public List<JsonBean> getValues(@PathParam("fieldName") String fieldName) {
 		return PossibleValuesEnumerator.getPossibleValuesForField(fieldName, AmpActivityFields.class, null);
 	}
-
+	
+	/**
+	 * 
+	 * @return
+	 */
 	@GET
 	@Path("fields")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.IN_WORKSPACE}, id = "getFields", ui = false)
 	public List<JsonBean> getAvailableFields() {
-		
 		return FieldsEnumerator.getAllAvailableFields();
 	}
 	
@@ -93,7 +93,6 @@ public class InterchangeEndpoints {
 		}
 		return new ArrayList(activityCollection).subList(start, end);
 	}
-	
 
 	/**
 	 * Provides full project information 
@@ -147,4 +146,5 @@ public class InterchangeEndpoints {
 	public JsonBean updateProject(JsonBean newJson) {
 		return InterchangeUtils.importActivity(newJson, true);
 	}
+	
 }

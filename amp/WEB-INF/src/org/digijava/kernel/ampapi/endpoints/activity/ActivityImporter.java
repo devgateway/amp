@@ -50,6 +50,7 @@ import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
@@ -131,7 +132,7 @@ public class ActivityImporter {
 				throw new RuntimeException(e);
 			}
 		} else if (!update) {
-			newActivity = new AmpActivityVersion(); 
+			newActivity = new AmpActivityVersion();
 		}
 		
 		Map<String, Object> newJsonParent = newJson.any();
@@ -179,6 +180,8 @@ public class ActivityImporter {
 		// and set new field only if all sub-elements are valid
 		if (valid && newParent != null) {
 			newParent = setNewField(newParent, fieldDef, newJsonParent, currentFieldPath);
+		} else if (!valid) {
+			newParent = null;
 		}
 		return newParent;
 	}
@@ -600,14 +603,14 @@ public class ActivityImporter {
 	}
 	
 	protected void initDefaults() {
-		for (Field field : AmpActivityFields.class.getFields()) {
-			if (InterchangeUtils.isVersionableTextField(field)) {
-				initEditor(field);
-			}
-		}
+//		for (Field field : AmpActivityFields.class.getFields()) {
+//			if (InterchangeUtils.isVersionableTextField(field)) {
+//				initEditor(field);
+//			}
+//		}
 		initSetors();
+		initLocations();
 		initFundings();
-        initLocations();
         initContacts();
 		//initActivityReferences(newActivity, ActivityImporterHelper.getActivityRefPathsSet()); //ActivityImporterHelper.ACTIVITY_REFERENCES);
 	}
@@ -652,6 +655,14 @@ public class ActivityImporter {
         } else {
         	// TODO:
         }
+	}
+	
+	protected void initCategories() {
+		if (newActivity.getCategories() == null) {
+			newActivity.setCategories(new HashSet<AmpCategoryValue>());
+		} else {
+			// TODO:
+		}
 	}
 	
 	protected void initContacts() {

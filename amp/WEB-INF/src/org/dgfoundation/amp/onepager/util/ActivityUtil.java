@@ -62,6 +62,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.dbentity.FundingInformationItem;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
+import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.ActivityVersionUtil;
@@ -69,6 +70,7 @@ import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.contentrepository.exception.JCRSessionException;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
@@ -144,8 +146,9 @@ public class ActivityUtil {
 			AmpTeamMember ampCurrentMember, boolean draft, Session session, boolean rejected, boolean isActivityForm) throws Exception
 	{
 		//saveFundingOrganizationRole(a);
-        AmpActivityVersion oldA = a;
+		AmpActivityVersion oldA = a;
 		boolean newActivity = false;
+		boolean isImporter = ChangeType.IMPORT.name().equals(a.getChangeType());
 		
 		if (a.getAmpActivityId() == null){
 			a.setActivityCreator(ampCurrentMember);
@@ -247,8 +250,11 @@ public class ActivityUtil {
 		a.setModifiedDate(updatedDate);
 		a.setModifiedBy(ampCurrentMember);
 		
-		if (isActivityForm) {
+		if (isActivityForm || isImporter) {
 			setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity,rejected);
+		}
+		
+		if (isActivityForm) {
 			
 			saveIndicators(a, session);
 
@@ -309,7 +315,9 @@ public class ActivityUtil {
 
 	private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean draft, AmpActivityFields a, AmpActivityVersion oldA, boolean newActivity,boolean rejected) {
 		Long teamMemberTeamId=ampCurrentMember.getAmpTeam().getAmpTeamId();
-		String validation=org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(teamMemberTeamId);
+		ApplicationSettings appSettings = TeamUtil.getCurrentMember().getAppSettings();
+		String validation = appSettings != null ? appSettings.getValidation() : 
+			org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(teamMemberTeamId);
 		
 		//setting activity status....
 		AmpTeamMemberRoles role = ampCurrentMember.getAmpMemberRole();

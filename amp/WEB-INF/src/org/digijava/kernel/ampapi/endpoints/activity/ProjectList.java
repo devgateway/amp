@@ -41,7 +41,6 @@ public class ProjectList {
 	
 	private static ProjectListCacher cacher = new ProjectListCacher();
 	public static final Logger LOGGER = Logger.getLogger(ProjectList.class);
-
 	
 	/**
 	 * Gets the List <JsonBean> of activities the user can and can't view, edit
@@ -185,6 +184,19 @@ public class ProjectList {
 			}
 		});
 		return activitiesList;
+	}
+	
+	public static JsonBean getActivityInProjectListFormat(AmpActivityVersion a) {
+		JsonBean bean = new JsonBean();
+		bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID), a.getIdentifier());
+		bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.CREATED_DATE), InterchangeUtils.formatISO8601Date(a.getCreatedDate()));
+		bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_TITLE), getTranslatableFieldValue("name", a.getName(), (Long) a.getIdentifier()));
+		bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.PROJECT_CODE), a.getProjectCode());
+		bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.UPDATE_DATE), InterchangeUtils.formatISO8601Date(a.getUpdatedDate()));
+		bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID), a.getAmpId());
+		bean.set(ActivityEPConstants.EDIT, true);
+		bean.set(ActivityEPConstants.VIEW, true);
+		return bean;
 	}
 
 	/**

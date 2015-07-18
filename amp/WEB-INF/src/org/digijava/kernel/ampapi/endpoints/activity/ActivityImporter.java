@@ -24,7 +24,6 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.onepager.util.ChangeType;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.ActivityImporterHelper;
-import org.digijava.kernel.ampapi.endpoints.activity.utils.ActivityRefPath;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -186,6 +185,8 @@ public class ActivityImporter {
 	
 	protected Object validateSubElements(JsonBean fieldDef, Object newParent, Object oldParent, Object newJsonValue, 
 			Object oldJsonValue, String fieldPath) {
+		// simulate temproarily fieldDef
+		fieldDef = fieldDef == null ? new JsonBean() : fieldDef;
 		String fieldType = fieldDef.getString(ActivityEPConstants.FIELD_TYPE);
 		/* 
 		 * Sub-elements by default are valid when not provided. 
@@ -214,7 +215,7 @@ public class ActivityImporter {
 				if (newParent != null && newFieldValue == null) {
 					newFieldValue = getNewInstance(newParent, newField, fieldPath);
 				}
-				if (Collection.class.isAssignableFrom(newFieldValue.getClass())) {
+				if (newFieldValue != null && Collection.class.isAssignableFrom(newFieldValue.getClass())) {
 					isCollection = true;
 					subElementClass = ActivityImporterHelper.getGenericsParameterClass(newField);
 				}
@@ -303,8 +304,7 @@ public class ActivityImporter {
 	 */
 	protected Object setNewField(Object newParent, JsonBean fieldDef, Map<String, Object> newJsonParent, 
 			String fieldPath) {
-		// by default importable = true
-		boolean importable = !Boolean.FALSE.equals(fieldDef.get(ActivityEPConstants.IMPORTABLE));
+		boolean importable = Boolean.TRUE.equals(fieldDef.get(ActivityEPConstants.IMPORTABLE));
 		if (!importable) {
 			// skip reconfiguration at this level if the field is not importable
 			return newParent;
@@ -650,42 +650,6 @@ public class ActivityImporter {
         	// TODO:
         }
 	}
-	
-//	protected void initActivityReferences(Object currentObj, ActivityRefPath activityRef) {
-//		if (currentObj == null) {
-//			return;
-//		}
-//		if (activityRef.hasActivityRef()) {
-//			Field field = getField(currentObj, activityRef.getActivityField());
-//			if (field != null) {
-//				try {
-//					field.set(currentObj, newActivity);
-//				} catch (IllegalArgumentException | IllegalAccessException e) {
-//					logger.error(e.getMessage());
-//					throw new RuntimeException(e);
-//				}
-//			}
-//		}
-//		for (Map.Entry<String, ActivityRefPath> pathThrough : activityRef.getRefPaths().entrySet()) {
-//			Field field = getField(currentObj, activityRef.getActivityField());
-//			try {
-//				if (Collection.class.isAssignableFrom(field.getType())) {
-//					Collection<?> collValues = (Collection<?>) field.get(currentObj);
-//					if (collValues != null && collValues.size() > 0) {
-//						for (Object child : collValues) {
-//							initActivityReferences(child, pathThrough.getValue());
-//						}
-//					}
-//				} else {
-//					// direct field
-//					initActivityReferences(field.get(currentObj), pathThrough.getValue());
-//				}
-//			} catch (IllegalArgumentException | IllegalAccessException e) {
-//				logger.error(e.getMessage());
-//				throw new RuntimeException(e);
-//			} 
-//		}
-//	}
 	
 	protected void postProcess() {
 		LuceneUtil.addUpdateActivity(TLSUtils.getRequest().getServletContext().getRealPath("/"), update,

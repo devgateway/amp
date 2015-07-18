@@ -186,7 +186,14 @@ public class ProjectList {
 		return activitiesList;
 	}
 	
-	public static JsonBean getActivityInProjectListFormat(AmpActivityVersion a) {
+	/**
+	 * Transforms and activity into Project List format
+	 * @param a			the activity
+	 * @param editable	true if it can be edited in the current workspaces
+	 * @param viewable	true if it can be viewed from any user workspace
+	 * @return JsonBean representation of the activity in Project List format
+	 */
+	public static JsonBean getActivityInProjectListFormat(AmpActivityVersion a, boolean editable, boolean viewable) {
 		JsonBean bean = new JsonBean();
 		bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID), a.getIdentifier());
 		bean.set(InterchangeUtils.underscorify(ActivityFieldsConstants.CREATED_DATE), InterchangeUtils.formatISO8601Date(a.getCreatedDate()));

@@ -846,9 +846,9 @@ function openAdmin () {
 								</feature:display>
 
                                 <%-- TODO The link and action to be provided --%>
-								<feature:display name="IATI Tool" module="Tools">
+								<feature:display name="IATI Importer" module="Tools">
                                     <li class="yuiampmenuitem_drop">
-                                        <a class="yuiampmenuitemlabel" onclick="return true;" href="/importer/index.html?target=_blank">
+                                        <a class="yuiampmenuitemlabel" onclick="return true;" target=_blank href="/importer/index.html">
                                             <digi:trn key="aim:workspaceinfo">IATI Tool</digi:trn>
                                         </a>
                                     </li>

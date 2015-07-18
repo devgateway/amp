@@ -6,26 +6,17 @@ package org.digijava.kernel.ampapi.endpoints.activity.validators;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.LuceneUtil;
-import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.tartarus.snowball.ext.SwedishStemmer;
 
 /**
  * Validates that project title field value is unique across AMP
@@ -64,9 +55,10 @@ public class ActivityTitleValidator extends InputValidator {
 				isValid = false;
 			} else {
 //				ServletContext context = TLSUtils.getRequest().getServletContext();
-				AmpActivity activityByName = ActivityUtil.getActivityByNameExcludingGroup(activityTitle, null);
+				AmpActivityGroup group = importer.getOldActivity() == null ? null : 
+					importer.getOldActivity().getAmpActivityGroup();
+				AmpActivity activityByName = ActivityUtil.getActivityByNameExcludingGroup(activityTitle, group);
 				isValid = activityByName == null;
-				
 //				List<AmpActivity> list = LuceneUtil.findActivitiesMoreLikeThis(
 //						context.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, activityTitle, lang, 2);
 //				isValid = !isTitleExistent(importer.getOldActivity(), list, importer.isUpdate());

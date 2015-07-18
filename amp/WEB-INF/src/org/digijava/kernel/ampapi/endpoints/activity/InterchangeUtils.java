@@ -515,7 +515,7 @@ public class InterchangeUtils {
 		} else {
 			List<JsonBean> activities = null;
 			if (newActivity != null && newActivity.getAmpActivityId() != null) {
-				activities = ProjectList.getActivitiesByIds(Arrays.asList(newActivity.getAmpActivityId()), true, true, true);
+				activities = Arrays.asList(ProjectList.getActivityInProjectListFormat(newActivity));
 			}
 			if (activities == null || activities.size() == 0) {
 				result = ApiError.toError(ApiError.UNKOWN_ERROR);

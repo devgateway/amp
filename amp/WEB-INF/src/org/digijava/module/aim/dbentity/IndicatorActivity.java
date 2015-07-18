@@ -20,6 +20,7 @@ import org.digijava.module.aim.util.Output;
  */
 public class IndicatorActivity extends IndicatorConnection implements Versionable, Cloneable{
 
+	//IATI-check: to be ignored
 	private static final long serialVersionUID = 2L;
 	
 	/**
@@ -32,7 +33,7 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
 	 * Indicator risk.
 	 * Actually risk is in each connection of indicator and activity.
 	 */
-	@Interchangeable(fieldTitle="Risk")
+//	@Interchangeable(fieldTitle="Risk", importable = true)
 	private AmpIndicatorRiskRatings risk;
         
 

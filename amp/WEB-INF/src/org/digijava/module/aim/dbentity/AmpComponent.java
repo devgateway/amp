@@ -24,18 +24,20 @@ import org.digijava.module.aim.util.Output;
 @TranslatableClass (displayName = "Component")
 public class AmpComponent implements Serializable,Comparable<AmpComponent>, Versionable, Cloneable {
 	
+	//IATI-check: to be ignored
+	
 	private static Logger logger = Logger.getLogger(AmpComponent.class);
-	@Interchangeable(fieldTitle="ID", id = true)
+//	@Interchangeable(fieldTitle="ID", id = true)
 	private Long ampComponentId;
-	@Interchangeable(fieldTitle="Title",fmPath="/Activity Form/Components/Component/Component Information/Component Title", value = true)
+//	@Interchangeable(fieldTitle="Title",fmPath="/Activity Form/Components/Component/Component Information/Component Title", value = true)
 	@TranslatableField
 	private String title;
-	@Interchangeable(fieldTitle="Description",fmPath="/Activity Form/Components/Component/Component Information/Description")
+//	@Interchangeable(fieldTitle="Description",fmPath="/Activity Form/Components/Component/Component Information/Description")
 	@TranslatableField
 	private String description;
 //	@Interchangeable(fieldTitle="") //I gladly would export this, if I could
 	private java.sql.Timestamp creationdate;
-	@Interchangeable(fieldTitle="Code")
+//	@Interchangeable(fieldTitle="Code")
 	private String code;
 	
 	public static class AmpComponentComparator implements Comparator<AmpComponent>{

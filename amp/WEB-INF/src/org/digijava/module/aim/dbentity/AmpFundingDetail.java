@@ -14,6 +14,7 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
 public class AmpFundingDetail implements Serializable, Cloneable, FundingInformationItem {
 	
+	//IATI-check: not to be ignored!
 	public static class FundingDetailComparator implements Comparator<AmpFundingDetail>, Serializable {
 		
 		
@@ -37,9 +38,9 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	}
 	@Interchangeable(fieldTitle="ID")
 	private Long ampFundDetailId;
-	@Interchangeable(fieldTitle="Fiscal Year")
+	@Interchangeable(fieldTitle="Fiscal Year", importable=true)
 	private Integer fiscalYear;
-	@Interchangeable(fieldTitle="Fiscal Quarter")
+	@Interchangeable(fieldTitle="Fiscal Quarter", importable=true)
 	private Integer fiscalQuarter;
 	
 	/**
@@ -51,54 +52,54 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	 * public static final int MTEFPROJECTION = 3 ;
 	 */
 	
-	@Interchangeable(fieldTitle="Transaction Type")
+	@Interchangeable(fieldTitle="Transaction Type", importable=true)
 	@InterchangeableDiscriminator(discriminatorField="transactionType", 
 			discriminatorClass="org.digijava.kernel.ampapi.endpoints.activity.discriminators.TransactionTypeDiscriminator")
 	private Integer transactionType;
-	@Interchangeable(fieldTitle="Adjustment Type")
+	@Interchangeable(fieldTitle="Adjustment Type", importable=true, pickIdOnly = true)
 	private AmpCategoryValue adjustmentType;
-	@Interchangeable(fieldTitle="Transaction Date")
+	@Interchangeable(fieldTitle="Transaction Date", importable=true)
 	private Date transactionDate;
-	@Interchangeable(fieldTitle="Transaction Date 2")
+	@Interchangeable(fieldTitle="Transaction Date 2", importable=true)
 	private Date transactionDate2;
-	@Interchangeable(fieldTitle="Reporting Date")
+	@Interchangeable(fieldTitle="Reporting Date", importable=true)
 	private Date reportingDate;
-	@Interchangeable(fieldTitle="Transaction Amount")
+	@Interchangeable(fieldTitle="Transaction Amount", importable=true)
 	private Double transactionAmount;
-	@Interchangeable(fieldTitle="Thousands Transaction Amount")
+	@Interchangeable(fieldTitle="Thousands Transaction Amount", importable=true)
 	private Double thousandsTransactionAmount;
-	@Interchangeable(fieldTitle="Language")
+	@Interchangeable(fieldTitle="Language", importable=true)
 	private String language;
-	@Interchangeable(fieldTitle="Version")
+	@Interchangeable(fieldTitle="Version", importable=true)
 	private String version;
-	@Interchangeable(fieldTitle="Calendar Type") //why isn't this an ACV?
+	@Interchangeable(fieldTitle="Calendar Type", importable=true) //why isn't this an ACV?
 	private String calType;
 	private String orgRoleCode; // defunct
-	@Interchangeable(fieldTitle="Currency")
+	@Interchangeable(fieldTitle="Currency", importable=true, pickIdOnly = true)
 	private AmpCurrency ampCurrencyId;
-	@Interchangeable(fieldTitle="Reporting Organization")
+	@Interchangeable(fieldTitle="Reporting Organization", importable=true, pickIdOnly = true)
 	private AmpOrganisation reportingOrgId;
-	@Interchangeable(fieldTitle="Funding", pickIdOnly=true)
+//	@Interchangeable(fieldTitle="Funding", pickIdOnly=true, importable=true)
 	private AmpFunding ampFundingId;
-	@Interchangeable(fieldTitle="Fixed Exchange Rate")
+	@Interchangeable(fieldTitle="Fixed Exchange Rate", importable=true)
 	private Double fixedExchangeRate;
-	@Interchangeable(fieldTitle="Fixed Base Currency")
+	@Interchangeable(fieldTitle="Fixed Base Currency", importable=true, pickIdOnly = true)
 	private AmpCurrency fixedRateBaseCurrency;
-	@Interchangeable(fieldTitle="Disbursement Order Rejected")
+	@Interchangeable(fieldTitle="Disbursement Order Rejected", importable=true)
 	private Boolean disbursementOrderRejected;
-	@Interchangeable(fieldTitle="Pledge")
+	@Interchangeable(fieldTitle="Pledge", importable=true)
 	private FundingPledges pledgeid;
-	@Interchangeable(fieldTitle="Capital Spending Percentage")
+	@Interchangeable(fieldTitle="Capital Spending Percentage", importable=true)
 	private Float capitalSpendingPercentage;
-	@Interchangeable(fieldTitle="Recipient Organization")
+	@Interchangeable(fieldTitle="Recipient Organization", importable=true, pickIdOnly=true)
 	private AmpOrganisation recipientOrg;
-	@Interchangeable(fieldTitle="Recipient Role")
+	@Interchangeable(fieldTitle="Recipient Role", importable=true, pickIdOnly = true)
 	private AmpRole recipientRole;
-	@Interchangeable(fieldTitle="Expenditure Category")
+	@Interchangeable(fieldTitle="Expenditure Category", importable=true)
 	private String expCategory;
-	@Interchangeable(fieldTitle="Disbursement Order ID")
+	@Interchangeable(fieldTitle="Disbursement Order ID", importable=true)
 	private String disbOrderId;
-	@Interchangeable(fieldTitle="Contract")
+//	@Interchangeable(fieldTitle="Contract", importable=true)
 	private IPAContract contract;
 	private boolean iatiAdded = false; //nonpersistant
 

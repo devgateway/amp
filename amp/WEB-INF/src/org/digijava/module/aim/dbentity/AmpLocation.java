@@ -31,7 +31,7 @@ public class AmpLocation implements Serializable, Versionable, Cloneable
 //	@Interchangeable(fieldTitle="Activities", recursive=true)
 	private Set<AmpActivityVersion> activities;
 	
-	@Interchangeable(fieldTitle="Location"/*, descend = true*/)
+	@Interchangeable(fieldTitle="Location", importable=true/*, descend = true*/)
 	private AmpCategoryValueLocations location;
 	
 	@Interchangeable(fieldTitle="Region Location")

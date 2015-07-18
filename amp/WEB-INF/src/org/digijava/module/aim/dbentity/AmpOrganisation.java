@@ -26,6 +26,8 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 @TranslatableClass (displayName = "Organisation")
 public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiable, Serializable, ARDimensionable, HierarchyListable, NameableOrIdentifiable
 {
+	
+	//IATI-check: not to be ignored. 
 	@Interchangeable(fieldTitle="Organization ID", id=true)
 	private Long ampOrgId;
 	@TranslatableField

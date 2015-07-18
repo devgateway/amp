@@ -13,31 +13,33 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 @TranslatableClass (displayName = "Indicator")
 public class AmpIndicator implements Serializable
 {
+	
+	//IATI-check: to be ignored
 	private static final long serialVersionUID = 1L;
-	@Interchangeable(fieldTitle="Indicator ID")
+//	@Interchangeable(fieldTitle="Indicator ID")
 	private Long indicatorId;
-	@Interchangeable(fieldTitle="Default Indicator")
+//	@Interchangeable(fieldTitle="Default Indicator")
 	private boolean defaultInd;
-	@Interchangeable(fieldTitle="Name",fmPath="/Activity Form/M&E/Name")
+//	@Interchangeable(fieldTitle="Name",fmPath="/Activity Form/M&E/Name")
     @TranslatableField
 	private String name;
-	@Interchangeable(fieldTitle="Code",fmPath="/Activity Form/M&E/Code")
+//	@Interchangeable(fieldTitle="Code",fmPath="/Activity Form/M&E/Code")
 	private String code;
-	@Interchangeable(fieldTitle="Type")
+//	@Interchangeable(fieldTitle="Type")
 	private String type;
-	@Interchangeable(fieldTitle="Creation Date",fmPath="/Activity Form/M&E/Creation Date")
+//	@Interchangeable(fieldTitle="Creation Date",fmPath="/Activity Form/M&E/Creation Date")
 	private Date creationDate;
-	@Interchangeable(fieldTitle="Category")
+//	@Interchangeable(fieldTitle="Category")
 	private int category;
     @TranslatableField
-    @Interchangeable(fieldTitle="Description",fmPath="/Activity Form/M&E/Description")
+//    @Interchangeable(fieldTitle="Description",fmPath="/Activity Form/M&E/Description")
 	private String description;
-    @Interchangeable(fieldTitle="Sectors", pickIdOnly=true)
+//    @Interchangeable(fieldTitle="Sectors", pickIdOnly=true)
     @Validators (unique="/Activity Form/M&E/uniqueSectorsValidator")
 	private Set<AmpSector> sectors;
-    @Interchangeable(fieldTitle="Comments")
+//    @Interchangeable(fieldTitle="Comments")
 	private String comments;
-    @Interchangeable(fieldTitle="Unit")
+//    @Interchangeable(fieldTitle="Unit")
         private String unit;
 	/**
 	 * Indicator connections with activities.

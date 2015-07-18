@@ -11,15 +11,17 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 @TranslatableClass (displayName = "Measure")
 public class AmpMeasure  implements Serializable, Cloneable
 {
-	@Interchangeable(fieldTitle="ID")
+	//IATI-check: seems used only in issues -- commenting out (to be ignored).
+	
+//	@Interchangeable(fieldTitle="ID")
 	private Long ampMeasureId ;
 	@TranslatableField
-	@Interchangeable(fieldTitle="Name")
+//	@Interchangeable(fieldTitle="Name")
 	private String name ;
 	private AmpIssues issue;
-	@Interchangeable(fieldTitle="Actors",fmPath="/Activity Form/Issues Section/Issue/Measure/Actor")
+//	@Interchangeable(fieldTitle="Actors",fmPath="/Activity Form/Issues Section/Issue/Measure/Actor")
 	private Set<AmpActor> actors;
-	@Interchangeable(fieldTitle="Measure Date",fmPath="/Activity Form/Issues Section/Issue/Date")
+//	@Interchangeable(fieldTitle="Measure Date",fmPath="/Activity Form/Issues Section/Issue/Date")
 	private Date measureDate;
 	
 	

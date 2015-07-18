@@ -13,14 +13,15 @@ import org.digijava.module.aim.util.Output;
 public class AmpIssues  implements Serializable, Versionable, Cloneable
 {
 
-	@Interchangeable(fieldTitle="ID")
+	//IATI-check: to be ignored
+//	@Interchangeable(fieldTitle="ID")
 	private Long ampIssueId ;
-	@Interchangeable(fieldTitle="Name")
+//	@Interchangeable(fieldTitle="Name")
 	private String name ;
 	private AmpActivityVersion activity;
-	@Interchangeable(fieldTitle="Measures",fmPath="/Activity Form/Issues Section/Issue/Measure")
+//	@Interchangeable(fieldTitle="Measures",fmPath="/Activity Form/Issues Section/Issue/Measure")
 	private Set<AmpMeasure> measures;
-	@Interchangeable(fieldTitle="Issue Date",fmPath="/Activity Form/Issues Section/Issue/Date")
+//	@Interchangeable(fieldTitle="Issue Date",fmPath="/Activity Form/Issues Section/Issue/Date")
 	private Date issueDate;
  
 	public String getName() {

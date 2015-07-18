@@ -6,6 +6,7 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 
 public class AmpRole implements Serializable, Comparable<AmpRole>
 {
+	//IATI-check: not to be ignored, but obtained via possible values 
 	@Interchangeable(fieldTitle="AMP Role ID", id = true)
 	private Long ampRoleId ;
 	@Interchangeable(fieldTitle="Role Code")

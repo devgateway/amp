@@ -13,13 +13,14 @@ import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 
 public class AmpOrgLocation implements Serializable,OrgProfileValue {
     private static final long serialVersionUID = 1L;
-    @Interchangeable(fieldTitle="AMP Organization Location ID")
+    //IATI-check: to be ignored
+//    @Interchangeable(fieldTitle="AMP Organization Location ID")
     private Long ampOrgLocId;
-    @Interchangeable(fieldTitle="Percent")
+//    @Interchangeable(fieldTitle="Percent")
     private Double percent;
 //    @Interchangeable(fieldTitle="Organization")
     private AmpOrganisation organization;
-    @Interchangeable(fieldTitle="Location"/*, descend = true*/)
+//    @Interchangeable(fieldTitle="Location"/*, descend = true*/)
     private AmpCategoryValueLocations location;
 
     public Long getAmpOrgLocId() {

@@ -14,18 +14,19 @@ import org.digijava.module.aim.util.Output;
 
 public class AmpAhsurveyResponse implements Versionable, Cloneable, Serializable {
 
+	//IATI-check: to be ignored
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@Interchangeable(fieldTitle="ID")
+//	@Interchangeable(fieldTitle="ID")
 	private Long ampReponseId;
 	private AmpAhsurvey ampAHSurveyId;
-	@Interchangeable(fieldTitle="Survey Question ID")
+//	@Interchangeable(fieldTitle="Survey Question ID", importable = true)
 	private AmpAhsurveyQuestion ampQuestionId;
-	@Interchangeable(fieldTitle="Response")
+//	@Interchangeable(fieldTitle="Response", importable = true)
 	private String response;
-	@Interchangeable(fieldTitle="References")
+//	@Interchangeable(fieldTitle="References", importable = true)
     private String references;
 
 

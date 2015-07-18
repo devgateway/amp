@@ -10,13 +10,14 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 @TranslatableClass (displayName = "Regional Observation Measure")
 public class AmpRegionalObservationMeasure implements Serializable, Cloneable {
-	@Interchangeable(fieldTitle="ID")
+	//IATI-check: to be ignored
+//	@Interchangeable(fieldTitle="ID")
 	private Long ampRegionalObservationMeasureId;
-	@Interchangeable(fieldTitle="Name")
+//	@Interchangeable(fieldTitle="Name")
 	@TranslatableField
 	private String name;
 	private AmpRegionalObservation regionalObservation;
-	@Interchangeable(fieldTitle="Actors",fmPath="/Activity Form/Regional Observations/Observation/Measure/Actor")
+//	@Interchangeable(fieldTitle="Actors",fmPath="/Activity Form/Regional Observations/Observation/Measure/Actor")
 	private Set<AmpRegionalObservationActor> actors;
 
 

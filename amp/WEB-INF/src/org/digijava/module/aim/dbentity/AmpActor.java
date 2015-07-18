@@ -9,13 +9,13 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 @TranslatableClass (displayName = "Actor")
 public class AmpActor  implements Serializable, Cloneable
 {
-
-	@Interchangeable(fieldTitle="ID")
+	//IATI-check: not used in IATI
+//	@Interchangeable(fieldTitle="ID", importable = true)
 	private Long ampActorId ;
-	@Interchangeable(fieldTitle="Name")
+//	@Interchangeable(fieldTitle="Name", importable = true)
 	@TranslatableField
 	private String name;
-	@Interchangeable(fieldTitle="Name Trimmed")
+//	@Interchangeable(fieldTitle="Name Trimmed", importable = true)
 	private String nameTrimmed;
 //	@Interchangeable(fieldTitle="Measure")
 	private AmpMeasure measure;

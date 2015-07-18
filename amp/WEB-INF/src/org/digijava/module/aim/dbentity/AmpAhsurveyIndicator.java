@@ -14,21 +14,23 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 
 public class AmpAhsurveyIndicator implements Serializable {
 
-	@Interchangeable(fieldTitle="ID")
+	//IATI-check: to be ignored
+	
+//	@Interchangeable(fieldTitle="ID")
     private Long ampIndicatorId;
-	@Interchangeable(fieldTitle="Name")
+//	@Interchangeable(fieldTitle="Name", importable = true)
     private String name;
-	@Interchangeable(fieldTitle="Total Questions")
+//	@Interchangeable(fieldTitle="Total Questions", importable = true)
     private Integer totalQuestions;
-	@Interchangeable(fieldTitle="Indicator Number")
+//	@Interchangeable(fieldTitle="Indicator Number", importable = true)
     private Integer indicatorNumber;
-	@Interchangeable(fieldTitle="Indicator Code")
+//	@Interchangeable(fieldTitle="Indicator Code", importable = true)
     private String indicatorCode;
-	@Interchangeable(fieldTitle="Status")
+//	@Interchangeable(fieldTitle="Status", importable = true)
     private String status;
-	@Interchangeable(fieldTitle="Questions", pickIdOnly=true)
+//	@Interchangeable(fieldTitle="Questions", pickIdOnly=true, importable = true)
     private Set<AmpAhsurveyQuestion> questions;
-	@Interchangeable(fieldTitle="Calc Formulas")
+//	@Interchangeable(fieldTitle="Calc Formulas", importable = true)
     private Set<AmpAhsurveyIndicatorCalcFormula> calcFormulas;
 
     

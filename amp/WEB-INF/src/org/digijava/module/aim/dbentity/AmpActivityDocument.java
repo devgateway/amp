@@ -19,11 +19,11 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
  *
  */
 public class AmpActivityDocument extends ObjectReferringDocument implements Serializable, Versionable, Cloneable {
-	@Interchangeable(fieldTitle="ID", id = true, value = true)
+//	@Interchangeable(fieldTitle="ID", id = true, value = true, importable = true)
 	private Long id;
 	
 	private AmpActivityVersion ampActivity;
-	@Interchangeable(fieldTitle="Document Type")
+//	@Interchangeable(fieldTitle="Document Type")
 	private String documentType;
 	
 	

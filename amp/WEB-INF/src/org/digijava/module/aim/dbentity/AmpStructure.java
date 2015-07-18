@@ -18,6 +18,7 @@ import org.digijava.module.aim.util.Output;
  */
 @TranslatableClass (displayName = "Structure")
 public class AmpStructure implements Serializable,Comparable, Versionable, Cloneable {
+	//IATI-check: not to be ignored
 	private static Logger logger = Logger.getLogger(AmpStructure.class);
 	@Interchangeable(fieldTitle="ID", id = true)
 	private Long ampStructureId;

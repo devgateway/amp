@@ -11,12 +11,12 @@ import java.io.Serializable;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 
 public class AmpAhsurveyQuestionType implements Serializable{
-
-	@Interchangeable(fieldTitle="ID")
+//IATI-check: to be ignored
+//	@Interchangeable(fieldTitle="ID", id = true)
 	private Long ampTypeId;
-	@Interchangeable(fieldTitle="Name")
+//	@Interchangeable(fieldTitle="Name", importable = true, value = true)
 	private String name;	// 'yes-no', 'calculated'
-	@Interchangeable(fieldTitle="Description")
+//	@Interchangeable(fieldTitle="Description", importable = true)
 	private String desc;
 	
 	/**

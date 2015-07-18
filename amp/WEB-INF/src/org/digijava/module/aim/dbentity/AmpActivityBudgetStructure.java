@@ -8,11 +8,12 @@ import org.digijava.module.aim.util.Output;
 
 public class AmpActivityBudgetStructure implements Versionable, Serializable, Cloneable{
 	
+	//TODO: not expected to be used in IATI. commenting for now
 	private Long ampActivityBudgetStructureId;
-	@Interchangeable(fieldTitle ="Budget Structure Name")
+//	@Interchangeable (fieldTitle ="Budget Structure Name", importable = true)
 	private String budgetStructureName;
 	
-	//@Interchangeable (fieldTitle ="Budget Structure Percentage" ,fmPath="/Activity Form/Budget Structure/Budget Structure/budgetStructurePercentage")
+//	@Interchangeable (fieldTitle ="Budget Structure Percentage" ,fmPath="/Activity Form/Budget Structure/Budget Structure/budgetStructurePercentage", importable = true)
 	//@Validators (percentage = "/Activity Form/Budget Structure/Budget Structure/programPercentageTotal")
 	private Float budgetStructurePercentage;
     private AmpActivityVersion activity;

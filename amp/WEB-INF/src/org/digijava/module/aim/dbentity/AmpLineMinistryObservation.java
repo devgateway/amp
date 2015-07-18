@@ -16,15 +16,17 @@ import org.digijava.module.aim.util.Output;
 @TranslatableClass (displayName = "Line Ministry Observation")
 public class AmpLineMinistryObservation implements Serializable, Versionable, Cloneable {
 	private static final long serialVersionUID = 1L;
-	@Interchangeable(fieldTitle="ID")
+	//IATI-check: to be ignored
+	
+//	@Interchangeable(fieldTitle="ID")
 	private Long ampLineMinistryObservationId;
 	@TranslatableField
-	@Interchangeable(fieldTitle="Name")
+//	@Interchangeable(fieldTitle="Name")
 	private String name;
 	private AmpActivityVersion activity;
-	@Interchangeable(fieldTitle="Line Ministry Observation Measures",fmPath="/Activity Form/Line Ministry Observations/Observation/Measure")
+//	@Interchangeable(fieldTitle="Line Ministry Observation Measures",fmPath="/Activity Form/Line Ministry Observations/Observation/Measure")
 	private Set<AmpLineMinistryObservationMeasure> lineMinistryObservationMeasures;
-	@Interchangeable(fieldTitle="Observation Date",fmPath="/Activity Form/Line Ministry Observations/Observation/Date")
+//	@Interchangeable(fieldTitle="Observation Date",fmPath="/Activity Form/Line Ministry Observations/Observation/Date")
 	private Date observationDate;
 
 	public String getName() {

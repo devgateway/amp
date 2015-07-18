@@ -19,21 +19,23 @@ import org.digijava.module.aim.util.Identifiable;
 import java.util.Arrays;
 
 public class AmpFiscalCalendar implements Serializable, Identifiable,OrgProfileValue {
-	@Interchangeable(fieldTitle="Fiscal Calendar ID")
+	
+	//IATI-check: to be ignored
+//	@Interchangeable(fieldTitle="Fiscal Calendar ID")
 	private Long ampFiscalCalId;
-	@Interchangeable(fieldTitle="Start Month Number")
+//	@Interchangeable(fieldTitle="Start Month Number")
 	private Integer startMonthNum;
-	@Interchangeable(fieldTitle="Year Offset")
+//	@Interchangeable(fieldTitle="Year Offset")
 	private Integer yearOffset;
-	@Interchangeable(fieldTitle="Start Day Number")
+//	@Interchangeable(fieldTitle="Start Day Number")
 	private Integer startDayNum;
-	@Interchangeable(fieldTitle="Name")
+//	@Interchangeable(fieldTitle="Name")
 	private String name;
-	@Interchangeable(fieldTitle="Description")
+//	@Interchangeable(fieldTitle="Description")
 	private String description;
-	@Interchangeable(fieldTitle="Base Calendar")
+//	@Interchangeable(fieldTitle="Base Calendar")
 	private String baseCal;
-	@Interchangeable(fieldTitle="Is Fiscal")
+//	@Interchangeable(fieldTitle="Is Fiscal")
 	private Boolean isFiscal; // This indicates whether calendar is fiscal or
 
 	// not.

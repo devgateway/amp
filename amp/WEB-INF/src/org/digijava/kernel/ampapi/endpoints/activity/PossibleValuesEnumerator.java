@@ -73,18 +73,18 @@ public class PossibleValuesEnumerator {
 			 * */
 			fieldName = longFieldName.substring(0, longFieldName.indexOf('~') );
 			Field field = getPotentiallyDiscriminatedField(clazz, fieldName);
-			String configString = discriminatorOption == null? null : discriminatorOption;
-			if (InterchangeUtils.isCompositeField(field)) {
-				configString = getConfigValue(fieldName, field);	
-			}
-				
 			if (field == null) {
 				List<JsonBean> result = new ArrayList<JsonBean>();
 				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, fieldName)));
 				return result;
-			} else {
-				return getPossibleValuesForField(longFieldName.substring(longFieldName.indexOf('~') + 1), InterchangeUtils.getClassOfField(field), configString);
 			}
+			String configString = discriminatorOption == null? null : discriminatorOption;
+			if (InterchangeUtils.isCompositeField(field)) {
+				configString = getConfigValue(fieldName, field);	
+			}
+
+			return getPossibleValuesForField(longFieldName.substring(longFieldName.indexOf('~') + 1), InterchangeUtils.getClassOfField(field), configString);
+			
 		} else {
 			/*
 			 * the last field might contain discriminated values

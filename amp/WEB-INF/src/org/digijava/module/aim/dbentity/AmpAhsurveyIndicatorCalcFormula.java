@@ -6,19 +6,20 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 
 public class AmpAhsurveyIndicatorCalcFormula implements Serializable {
 
-	@Interchangeable(fieldTitle="ID")
+	//IATI-check: to be ignored
+//	@Interchangeable(fieldTitle="ID", id = true, importable = true)
     private Long id;
-	@Interchangeable(fieldTitle="Formula")
+//	@Interchangeable(fieldTitle="Formula", value = true)
     private String calcFormula;
-	@Interchangeable(fieldTitle="Column Index")
+//	@Interchangeable(fieldTitle="Column Index")
     private Long columnIndex;
-	@Interchangeable(fieldTitle="Constant Name")
+//	@Interchangeable(fieldTitle="Constant Name")
     private String constantName;
-	@Interchangeable(fieldTitle="Base Line Value")
+//	@Interchangeable(fieldTitle="Base Line Value")
     private String baseLineValue;
-	@Interchangeable(fieldTitle="Target Value")
+//	@Interchangeable(fieldTitle="Target Value")
     private String targetValue;
-	@Interchangeable(fieldTitle="Enabled")
+//	@Interchangeable(fieldTitle="Enabled")
     private Boolean enabled;
     private AmpAhsurveyIndicator parentIndicator;
 

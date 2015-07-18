@@ -7,13 +7,13 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
 public class AmpActivityInternalId implements Serializable, Versionable, Cloneable {
-
+	//IATI-check: used. 
 	private static final long serialVersionUID = 469552292854192522L;
 	
 //	@Interchangeable(fieldTitle="ID")
 	private Long id;
 
-	@Interchangeable(fieldTitle="Organization", pickIdOnly = true)
+	@Interchangeable(fieldTitle="Organization", importable = true, pickIdOnly = true)
 	private AmpOrganisation organisation;
 
 //	@Interchangeable(fieldTitle="AMP Activity",recursive=true)

@@ -25,7 +25,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 @TranslatableClass (displayName = "Location")
 public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCategoryValueLocations>, 
 		HierarchyListable, ARDimensionable, Serializable, AmpAutoCompleteDisplayable,OrgProfileValue, NameableOrIdentifiable {
-
+	//IATI-check: this is not to be ignored, but not importable, since it's obtained from possible values
 	@Interchangeable(fieldTitle="ID", id=true)
 	private Long id;
 	@Interchangeable(fieldTitle="Name", value=true)

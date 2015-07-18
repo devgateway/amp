@@ -239,7 +239,7 @@ public class ActivityImporter {
 			}
 			//newSubElement = validateAndImport(newSubElement, oldSubElement, childrenFields, newChild, oldChild, fieldPath);
 			Iterator<Map<String, Object>> iterNew = childrenNewValues.iterator();
-			while (iterNew.hasNext() && validSubElements) {
+			while (iterNew.hasNext() && newParent != null) {
 				Map<String, Object> newChild = iterNew.next();
 				JsonBean childFieldDef = getMatchedFieldDef(newChild, childrenFields);
 				Map<String, Object> oldChild = getMatchedOldValue(childFieldDef, childrenOldValues);
@@ -253,7 +253,7 @@ public class ActivityImporter {
 						Object newSubElement = subElementClass.newInstance();
 						// TODO: detect matching
 						Object oldSubElement = null;
-						res = validateAndImport(newSubElement, oldSubElement, childFieldDef, newChild, oldChild, fieldPath);
+						res = validateAndImport(newSubElement, oldSubElement, childrenFields, newChild, oldChild, fieldPath);
 					} catch (InstantiationException | IllegalAccessException e) {
 						logger.error(e.getMessage());
 						throw new RuntimeException(e);
@@ -270,6 +270,7 @@ public class ActivityImporter {
 					((Collection) newFieldValue).add(res);
 				}
 			}
+			// TODO: we also need to validate other children, some can be mandatory
 		}
 		return newParent;
 	}
@@ -280,9 +281,10 @@ public class ActivityImporter {
 				return (List<Map<String, Object>>) jsonValue;
 			} else if (isList && jsonValue instanceof Map) {
 				List<Map<String, Object>> jsonValues = new ArrayList<Map<String, Object>>();
-				for (final Map.Entry<String, Object> entry : ((Map<String, Object>) jsonValue).entrySet()) {
-					jsonValues.add(new HashMap<String, Object> () {{put(entry.getKey(), entry.getValue());}});
-				}
+				jsonValues.add((Map<String, Object>) jsonValue);
+//				for (final Map.Entry<String, Object> entry : ((Map<String, Object>) jsonValue).entrySet()) {
+//					jsonValues.add(new HashMap<String, Object> () {{put(entry.getKey(), entry.getValue());}});
+//				}
 				return jsonValues;
 			}
 		}
@@ -404,7 +406,7 @@ public class ActivityImporter {
 	protected JsonBean getMatchedFieldDef(Map<String, Object> newValue, List<JsonBean> fieldDefs) {
 		if (fieldDefs != null && fieldDefs.size() > 0) {
 			// if we have only 1 child element, then this is a list of elements and only this definition is expected
-			// or new value is empty, but we expect something 
+			// or new value is empty, but we expect something
 			if (fieldDefs.size() == 1 || newValue == null || newValue.isEmpty()) {
 				return fieldDefs.get(0);
 			} else {
@@ -434,8 +436,12 @@ public class ActivityImporter {
 		fieldPath = fieldPath.substring(1);
 		List<JsonBean> allowedValues = getPossibleValuesForFieldCached(fieldPath, AmpActivityFields.class, null);
 		if (Collection.class.isAssignableFrom(field.getType())) {
-			value = null;
-			// TODO:
+			try {
+				value = field.get(parentObj);
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				logger.error(e.getMessage());
+				throw new RuntimeException(e);
+			}
 		} else if (InterchangeableClassMapper.SIMPLE_TYPES.contains(fieldType)) {
 			if (jsonValue == null)
 				return null;
@@ -455,15 +461,19 @@ public class ActivityImporter {
 				logger.error(e.getMessage());
 				throw new RuntimeException(e);
 			}
-		} else if (allowedValues != null && allowedValues.size() > 0){
+		} else if (allowedValues != null && allowedValues.size() > 0 && fieldDef != null){
 			// => this is an object => it has children elements
-			for (JsonBean childDef : (List<JsonBean>) fieldDef.get(ActivityEPConstants.CHILDREN)) {
-				if (Boolean.TRUE.equals(childDef.get(ActivityEPConstants.ID))) {
-					Long id = ((Integer) ((Map<String, Object>) jsonValue).get(childDef.getString(ActivityEPConstants.FIELD_NAME))).longValue();
-					value = PersistenceManager.getSession().get(field.getType().getName(), id);
-					// possibleValuesQuery.get(fieldPath);
-					break;
+			if (fieldDef.get(ActivityEPConstants.CHILDREN) != null) {
+				for (JsonBean childDef : (List<JsonBean>) fieldDef.get(ActivityEPConstants.CHILDREN)) {
+					if (Boolean.TRUE.equals(childDef.get(ActivityEPConstants.ID))) {
+						Long id = ((Integer) ((Map<String, Object>) jsonValue).get(childDef.getString(ActivityEPConstants.FIELD_NAME))).longValue();
+						value = PersistenceManager.getSession().get(field.getType().getName(), id);
+						// possibleValuesQuery.get(fieldPath);
+						break;
+					}
 				}
+			} else {
+				// TODO:
 			}
 		}
 		return value;

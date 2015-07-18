@@ -1116,13 +1116,13 @@ table.component-funding-table tr
 }
 
 .nav.navbar-nav.menus {
-  top: 10px;
-  position: relative;	
+  padding-top:10px;
+  padding-bottom: 10px;
+  position: relative;
 }
 .nav.navbar-nav.ampUserLoggedIn {
   top: 10px;
-  position: relative;	
-  width: 20%;	
+  position: relative;
 }
 .nav.navbar-nav.ampPublic {
   top: 10px;

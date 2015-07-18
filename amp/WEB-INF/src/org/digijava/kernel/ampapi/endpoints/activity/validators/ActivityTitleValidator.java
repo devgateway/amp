@@ -22,6 +22,7 @@ import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.tartarus.snowball.ext.SwedishStemmer;
@@ -62,10 +63,13 @@ public class ActivityTitleValidator extends InputValidator {
 			if (activityTitle == null) {
 				isValid = false;
 			} else {
-				ServletContext context = TLSUtils.getRequest().getServletContext();
-				List<AmpActivity> list = LuceneUtil.findActivitiesMoreLikeThis(
-						context.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, activityTitle, lang, 2);
-				isValid = !isTitleExistent(importer.getOldActivity(), list, importer.isUpdate());
+//				ServletContext context = TLSUtils.getRequest().getServletContext();
+				AmpActivity activityByName = ActivityUtil.getActivityByNameExcludingGroup(activityTitle, null);
+				isValid = activityByName == null;
+				
+//				List<AmpActivity> list = LuceneUtil.findActivitiesMoreLikeThis(
+//						context.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, activityTitle, lang, 2);
+//				isValid = !isTitleExistent(importer.getOldActivity(), list, importer.isUpdate());
 			}
 		}
 

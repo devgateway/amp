@@ -166,7 +166,7 @@ public class ActivityImporter {
 	
 	protected Object validateAndImport(Object newParent, Object oldParent, JsonBean fieldDef,
 			Map<String, Object> newJsonParent, Map<String, Object> oldJsonParent, String fieldPath) {
-		String fieldName = fieldDef == null ? null : fieldDef.getString(ActivityEPConstants.FIELD_NAME);
+		String fieldName = getFieldName(fieldDef, newJsonParent);
 		String currentFieldPath = fieldPath + "~" + fieldName;
 		Object oldJsonValue = oldJsonParent == null ? null : oldJsonParent.get(fieldName);
 		Object newJsonValue = newJsonParent == null ? null : newJsonParent.get(fieldName);
@@ -183,9 +183,20 @@ public class ActivityImporter {
 		return newParent;
 	}
 	
+	protected String getFieldName(JsonBean fieldDef, Map<String, Object> newJsonParent) {
+		if (fieldDef == null) {
+			if (newJsonParent != null && newJsonParent.keySet().size() == 1) {
+				return newJsonParent.keySet().iterator().next();
+			}
+		} else {
+			return fieldDef.getString(ActivityEPConstants.FIELD_NAME);
+		}
+		return null;
+	}
+	
 	protected Object validateSubElements(JsonBean fieldDef, Object newParent, Object oldParent, Object newJsonValue, 
 			Object oldJsonValue, String fieldPath) {
-		// simulate temproarily fieldDef
+		// simulate temporarily fieldDef
 		fieldDef = fieldDef == null ? new JsonBean() : fieldDef;
 		String fieldType = fieldDef.getString(ActivityEPConstants.FIELD_TYPE);
 		/* 
@@ -193,7 +204,7 @@ public class ActivityImporter {
 		 * Current field will be verified below and reported as invalid if sub-elements are mandatory and are not provided. 
 		 */
 		boolean validSubElements = true;
-		boolean isList = ActivityEPConstants.FIELD_TYPE_LIST.equals(fieldType); 
+		boolean isList = ActivityEPConstants.FIELD_TYPE_LIST.equals(fieldType);
 		
 		// first validate all sub-elements
 		List<JsonBean> childrenFields = (List<JsonBean>) fieldDef.get(ActivityEPConstants.CHILDREN);

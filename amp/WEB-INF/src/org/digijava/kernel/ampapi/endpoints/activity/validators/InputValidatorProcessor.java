@@ -53,7 +53,7 @@ public class InputValidatorProcessor {
 			valid = currentValid && valid;
 			
 			if (!currentValid) {
-				addError(newParent, fieldName, current.getErrorMessage(), errors);
+				addError(newParent, fieldName, fieldPath, current.getErrorMessage(), errors);
 			}
 			
 			if (!(currentValid && current.isContinueOnSuccess() || !currentValid && current.isContinueOnError())) {
@@ -63,7 +63,7 @@ public class InputValidatorProcessor {
 		return valid;
 	}
 	
-	protected void addError(Map<String, Object> newParent, String fieldName, ApiErrorMessage error, 
+	protected void addError(Map<String, Object> newParent, String fieldName, String fieldPath, ApiErrorMessage error, 
 			Map<Integer, ApiErrorMessage> errors) {
 		String errorCode = ApiError.getErrorCode(error);
 		JsonBean newField = new JsonBean();
@@ -85,7 +85,7 @@ public class InputValidatorProcessor {
 		
 		// record general errors for the request
 		ApiErrorMessage generalError = errors.get(error.id);
-		generalError = new ApiErrorMessage(generalError == null ? error : generalError, fieldName);
+		generalError = new ApiErrorMessage(generalError == null ? error : generalError, fieldPath);
 		errors.put(error.id, generalError);
 	}
 	

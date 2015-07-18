@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
@@ -449,7 +450,7 @@ LoggerIdentifiable, Cloneable {
 	protected Set <AmpRegionalFunding> regionalFundings;
 
 	@Interchangeable(fieldTitle = "Approval Status", importable = false)
-	@InterchangeableDiscriminator(discriminatorField="approvalStatus", 
+	@InterchangeableDiscriminator( 
 		discriminatorClass="org.digijava.kernel.ampapi.endpoints.activity.discriminators.ApprovalStatusDiscriminator")
 	@VersionableFieldSimple(fieldTitle = "Approval Status", blockSingleChange = true)
 	protected String approvalStatus;
@@ -546,6 +547,10 @@ LoggerIdentifiable, Cloneable {
 	 * AMP-20423: For Import/Export we need it always visible 
 	 * */
 	@Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_CODE, importable = true)
+	@InterchangeableDiscriminator(settings= {
+			@Interchangeable(fieldTitle ="Project Code", fmPath = "/Activity Form/Identification/Donor Project Code"),
+			@Interchangeable(fieldTitle ="Project Code", fmPath = "/Activity Form/Identification/Budget Extras/Project Code", required="/Activity Form/Identification/Budget Extras/Project Code")
+	})
 			//AMP-20423: disabling fmPath="/Activity Form/Identification/Budget Extras/Project Code")
 	@VersionableFieldSimple(fieldTitle = "Project Code")
 	protected String projectCode;

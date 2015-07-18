@@ -172,19 +172,19 @@ public class FieldsEnumerator {
 	 * @param field
 	 * @return
 	 */
-	private JsonBean describeField(Field field, Interchangeable interchangeble) {
-		if (interchangeble == null)
+	private  JsonBean describeField(Field field, Interchangeable interchangeable) {
+		if (interchangeable == null)
 			return null;
 		JsonBean bean = new JsonBean();
-		bean.set(ActivityEPConstants.FIELD_NAME, InterchangeUtils.underscorify(interchangeble.fieldTitle()));
-		if (interchangeble.id()) {
-			bean.set(ActivityEPConstants.ID, interchangeble.id());
+		bean.set(ActivityEPConstants.FIELD_NAME, InterchangeUtils.underscorify(interchangeable.fieldTitle()));
+		if (interchangeable.id()) {
+			bean.set(ActivityEPConstants.ID, interchangeable.id());
 		}
 		bean.set(ActivityEPConstants.FIELD_TYPE, InterchangeableClassMapper.containsSimpleClass(field.getType()) ? 
 				InterchangeableClassMapper.getCustomMapping(field.getType()) : "list");
-		bean.set(ActivityEPConstants.FIELD_LABEL, InterchangeUtils.mapToBean(getLabelsForField(interchangeble.fieldTitle())));
-		bean.set(ActivityEPConstants.REQUIRED, InterchangeUtils.getRequiredValue(field));
-		bean.set(ActivityEPConstants.IMPORTABLE, interchangeble.importable());
+		bean.set(ActivityEPConstants.FIELD_LABEL, InterchangeUtils.mapToBean(getLabelsForField(interchangeable.fieldTitle())));
+		bean.set(ActivityEPConstants.REQUIRED, InterchangeUtils.getRequiredValue(field, interchangeable));
+		bean.set(ActivityEPConstants.IMPORTABLE, interchangeable.importable());
 		
 		if (internalUse) {
 			bean.set(ActivityEPConstants.FIELD_NAME_INTERNAL, field.getName());
@@ -198,7 +198,7 @@ public class FieldsEnumerator {
 			} else {
 				bean.set(ActivityEPConstants.MULTIPLE_VALUES, false);
 			}
-			if (!interchangeble.pickIdOnly()) {
+			if (!interchangeable.pickIdOnly()) {
 				List<JsonBean> children = getChildrenOfField(field);
 				if (children != null && children.size() > 0) {
 					bean.set(ActivityEPConstants.CHILDREN, children);
@@ -216,7 +216,7 @@ public class FieldsEnumerator {
 		}
 		if (ActivityEPConstants.TYPE_VARCHAR.equals(fieldTypes.get(field)) && fieldMaxLengths.get(field) != null) {
 			bean.set(ActivityEPConstants.FIELD_LENGTH, fieldMaxLengths.get(field));
-			LOGGER.debug(interchangeble.fieldTitle());
+			LOGGER.debug(interchangeable.fieldTitle());
 		}
 		return bean;
 	}
@@ -245,8 +245,6 @@ public class FieldsEnumerator {
 		//StopWatch.next("Descending into", false, clazz.getName());
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
-			
-			
 			if (!InterchangeUtils.isCompositeField(field) || hasFieldDiscriminatorClass(field)) {
 				Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
 				if (interchangeable == null)

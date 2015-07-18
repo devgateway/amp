@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.validator.routines.FloatValidator;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
@@ -81,12 +82,7 @@ public class InputTypeValidator extends InputValidator {
 	}
 
 	private boolean isValidFloat(Object item) {
-		if (Float.class.isAssignableFrom(item.getClass()))
-			return true;
-		if (Double.class.isAssignableFrom(item.getClass()))
-			return true;
-		
-		return false;
+		return FloatValidator.getInstance().isValid(item.toString());
 	}
 
 	private boolean isValidBoolean(Object value) {

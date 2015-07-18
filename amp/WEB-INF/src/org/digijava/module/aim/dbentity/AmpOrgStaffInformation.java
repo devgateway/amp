@@ -15,15 +15,17 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class AmpOrgStaffInformation implements Serializable,OrgProfileValue{
     private static final long serialVersionUID = 1L;
-    @Interchangeable(fieldTitle="ID")
+    //IATI-check: to be ignored
+    
+//    @Interchangeable(fieldTitle="ID")
     private Long id;
-    @Interchangeable(fieldTitle="Year")
+//    @Interchangeable(fieldTitle="Year")
     private Long year;
-    @Interchangeable(fieldTitle="Staff Number")
+//    @Interchangeable(fieldTitle="Staff Number")
     private Long staffNumber;
-    @Interchangeable(fieldTitle="Type")
+//    @Interchangeable(fieldTitle="Type")
     private AmpCategoryValue type;
-    @Interchangeable(fieldTitle="Organization")
+//    @Interchangeable(fieldTitle="Organization")
     private AmpOrganisation organization;
     // helper field, not for saving in db..
     private boolean newlyCreated;

@@ -20,17 +20,19 @@ import org.digijava.module.common.util.DateTimeUtil;
  */
 public class IPAContractDisbursement implements Serializable, Cloneable {
 	private static final long serialVersionUID = -4688757182074104911L;
-	@Interchangeable(fieldTitle="ID")
+	
+	//IATI-check: to be ignored
+//	@Interchangeable(fieldTitle="ID")
 	private Long id;
-	@Interchangeable(fieldTitle="Adjustment Type",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Adjustment Type")
+//	@Interchangeable(fieldTitle="Adjustment Type",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Adjustment Type", importable = true)
 	private AmpCategoryValue adjustmentType;
-	@Interchangeable(fieldTitle="Amount",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Amount")
+//	@Interchangeable(fieldTitle="Amount",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Amount", importable = true)
 	private Double amount;
-	@Interchangeable(fieldTitle="Currency",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency")
+//	@Interchangeable(fieldTitle="Currency",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency", importable = true)
 	private AmpCurrency currency;
-	@Interchangeable(fieldTitle="Date",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date")
+//	@Interchangeable(fieldTitle="Date",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date", importable = true)
 	private Date date;
-	@Interchangeable(fieldTitle="Contract", pickIdOnly=true)
+//	@Interchangeable(fieldTitle="Contract", pickIdOnly=true, importable = true)
         private IPAContract contract;
 
         public IPAContract getContract() {

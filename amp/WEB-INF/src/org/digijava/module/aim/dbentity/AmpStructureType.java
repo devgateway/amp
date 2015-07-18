@@ -11,7 +11,7 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 
 @TranslatableClass (displayName = "Structure Type")
 public class AmpStructureType implements ARDimensionable, Serializable{
-
+//IATI-check: not to be ignored
 	private static final long serialVersionUID = 1L;
 	@Interchangeable(fieldTitle="ID", id = true)
 	private Long typeId;

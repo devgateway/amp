@@ -12,7 +12,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
 public class AmpFundingMTEFProjection implements Cloneable, Serializable, Comparable<AmpFundingMTEFProjection>, FundingInformationItem {
-	
+//IATI-check: to be ignored	
 	
 
 	private static final long serialVersionUID = -1583797313318079006L;
@@ -39,19 +39,19 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 		
 	}
 	
-		@Interchangeable(fieldTitle="ID")
+//		@Interchangeable(fieldTitle="ID")
 		private Long ampFundingMTEFProjectionId ;
-		@Interchangeable(fieldTitle="Projected")
+//		@Interchangeable(fieldTitle="Projected")
 		private AmpCategoryValue projected;
-		@Interchangeable(fieldTitle="Amount")
+//		@Interchangeable(fieldTitle="Amount")
 		private Double amount;
-		@Interchangeable(fieldTitle="Currency")
+//		@Interchangeable(fieldTitle="Currency")
 		private AmpCurrency ampCurrency;
-		@Interchangeable(fieldTitle="Projection Date")
+//		@Interchangeable(fieldTitle="Projection Date")
 		private Date projectionDate;
-		@Interchangeable(fieldTitle="Funding", pickIdOnly = true)
+//		@Interchangeable(fieldTitle="Funding", pickIdOnly = true)
 		private AmpFunding  ampFunding;
-		@Interchangeable(fieldTitle="Reporting Date")
+//		@Interchangeable(fieldTitle="Reporting Date")
 		private Date reportingDate;
 		
 		private AmpOrganisation recipientOrg;

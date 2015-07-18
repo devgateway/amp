@@ -17,31 +17,31 @@ import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class AmpRegionalFunding implements Versionable, Serializable, Cloneable {
-	
-	@Interchangeable(fieldTitle = "ID", id = true)
+	//IATI-check: to be ignored
+//	@Interchangeable(fieldTitle = "ID", id = true)
 	private Long ampRegionalFundingId;
-	@Interchangeable(fieldTitle="Activity", pickIdOnly = true)
+//	@Interchangeable(fieldTitle="Activity", pickIdOnly = true)
 	private AmpActivityVersion activity;
-	@InterchangeableDiscriminator(discriminatorField="transactionType", 
-			discriminatorClass="org.digijava.kernel.ampapi.endpoints.activity.discriminators.TransactionTypeDiscriminator")
-	@Interchangeable(fieldTitle="Transaction type")
+//		@InterchangeableDiscriminator(discriminatorField="transactionType", 
+//			discriminatorClass="org.digijava.kernel.ampapi.endpoints.activity.discriminators.TransactionTypeDiscriminator")
+//	@Interchangeable(fieldTitle="Transaction type")
 	private Integer transactionType;
-	@Interchangeable(fieldTitle="Adjustment Type")
+//	@Interchangeable(fieldTitle="Adjustment Type")
 	private AmpCategoryValue adjustmentType;
-	@Interchangeable(fieldTitle="Transaction Date")
+//	@Interchangeable(fieldTitle="Transaction Date")
 	private Date transactionDate;
-	@Interchangeable(fieldTitle="Reporting Date")
+//	@Interchangeable(fieldTitle="Reporting Date")
 	private Date reportingDate;
-	@Interchangeable(fieldTitle="Transaction Amount")
+//	@Interchangeable(fieldTitle="Transaction Amount")
 	private Double transactionAmount;
-	@Interchangeable(fieldTitle="Reporting Organization", pickIdOnly = true)
+//	@Interchangeable(fieldTitle="Reporting Organization", pickIdOnly = true)
 	private AmpOrganisation reportingOrganization;
-	@Interchangeable(fieldTitle="Currency")
+//	@Interchangeable(fieldTitle="Currency")
 	private AmpCurrency currency;
-	@Interchangeable(fieldTitle="Expenditure Category")
+//	@Interchangeable(fieldTitle="Expenditure Category")
 	private String expenditureCategory;
 
-	@Interchangeable(fieldTitle="Region Location")
+//	@Interchangeable(fieldTitle="Region Location")
 	private AmpCategoryValueLocations regionLocation;
 	/**
 	 * @return Returns the activity.

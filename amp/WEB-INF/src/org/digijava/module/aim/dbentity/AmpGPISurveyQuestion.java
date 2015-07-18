@@ -14,22 +14,23 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 
 public class AmpGPISurveyQuestion implements Serializable {
 
-	@Interchangeable(fieldTitle="ID", id = true)
+	//IATI-check: to be ignored
+//	@Interchangeable(fieldTitle="ID", id = true)
 	private Long ampQuestionId;
-	@Interchangeable(fieldTitle="Question Text", value = true)
+//	@Interchangeable(fieldTitle="Question Text", value = true)
 	private String questionText;
 	
-	@Interchangeable(fieldTitle="Parent question", pickIdOnly=true)
+//	@Interchangeable(fieldTitle="Parent question", pickIdOnly=true)
 	private AmpGPISurveyQuestion parentQuestion;
-	@Interchangeable(fieldTitle="Indicator", pickIdOnly=true)
+//	@Interchangeable(fieldTitle="Indicator", pickIdOnly=true)
 	private AmpGPISurveyIndicator ampIndicatorId;
-	@Interchangeable(fieldTitle="Question Number")
+//	@Interchangeable(fieldTitle="Question Number")
 	private Integer questionNumber;
-	@Interchangeable(fieldTitle="Question Type")
+//	@Interchangeable(fieldTitle="Question Type")
 	private AmpGPISurveyQuestionType ampTypeId;
-	@Interchangeable(fieldTitle="Status")
+//	@Interchangeable(fieldTitle="Status")
 	private String status;
-	@Interchangeable(fieldTitle="Questions", pickIdOnly=true)
+//	@Interchangeable(fieldTitle="Questions", pickIdOnly=true)
 	private Set<AmpGPISurveyQuestion> questions;
 
 	public AmpGPISurveyQuestion getParentQuestion() {

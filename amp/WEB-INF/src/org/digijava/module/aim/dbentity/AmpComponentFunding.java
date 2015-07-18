@@ -15,30 +15,32 @@ import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class AmpComponentFunding implements Versionable, Cloneable, Serializable {
-	@Interchangeable(fieldTitle="ID")
+	//IATI-check: to be ignored
+	
+//	@Interchangeable(fieldTitle="ID")
 	private Long ampComponentFundingId;
 //	@Interchangeable(fieldTitle="Activity")
 	private AmpActivityVersion activity;
-	@Interchangeable(fieldTitle="Transaction Type")
+//	@Interchangeable(fieldTitle="Transaction Type")
 	private Integer transactionType;
-	@Interchangeable(fieldTitle="Adjustment Type")
+//	@Interchangeable(fieldTitle="Adjustment Type")
 	private AmpCategoryValue adjustmentType ;
-	@Interchangeable(fieldTitle="Transaction Date")
+//	@Interchangeable(fieldTitle="Transaction Date")
 	private Date transactionDate;
-	@Interchangeable(fieldTitle="Reporting Date")
+//	@Interchangeable(fieldTitle="Reporting Date")
 	private Date reportingDate;
-	@Interchangeable(fieldTitle="Transaction Amount")
+//	@Interchangeable(fieldTitle="Transaction Amount")
 	private Double transactionAmount;
     //reusing field to store the organisation related to the current component
-	@Interchangeable(fieldTitle="Reporting Organization")
+//	@Interchangeable(fieldTitle="Reporting Organization")
 	private AmpOrganisation reportingOrganization;
-	@Interchangeable(fieldTitle="Currency")
+//	@Interchangeable(fieldTitle="Currency")
 	private AmpCurrency currency;
-	@Interchangeable(fieldTitle="Description")
+//	@Interchangeable(fieldTitle="Description")
 	private String description;
-	@Interchangeable(fieldTitle="Component")
+//	@Interchangeable(fieldTitle="Component")
 	private AmpComponent component;
-	@Interchangeable(fieldTitle="Exchange Rate")
+//	@Interchangeable(fieldTitle="Exchange Rate")
 	private Float exchangeRate;
 	
 	/**

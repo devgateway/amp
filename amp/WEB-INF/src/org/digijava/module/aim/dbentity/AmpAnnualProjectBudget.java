@@ -10,16 +10,17 @@ import org.digijava.module.aim.util.Output;
 
 public class AmpAnnualProjectBudget implements Serializable, Versionable, Cloneable, Comparable {
 
+	//IATI-check: to be ignored
 	private static final Logger logger = Logger.getLogger(AmpAnnualProjectBudget.class);
-	@Interchangeable(fieldTitle="Annual Project Budget ID")
+//	@Interchangeable(fieldTitle="Annual Project Budget ID")
 	private Long ampAnnualProjectBudgetId;
-	@Interchangeable(fieldTitle="Amount")
+//	@Interchangeable(fieldTitle="Amount", importable = true)
 	private Double amount;
-	@Interchangeable(fieldTitle="Year")
+//	@Interchangeable(fieldTitle="Year", importable = true)
 	private Date year;
 	
 	private AmpActivityVersion activity;
-	@Interchangeable(fieldTitle="Currency")
+//	@Interchangeable(fieldTitle="Currency", importable = true, pickIdOnly = true)
 	protected AmpCurrency ampCurrencyId;
 
 	public Long getAmpAnnualProjectBudgetId() {

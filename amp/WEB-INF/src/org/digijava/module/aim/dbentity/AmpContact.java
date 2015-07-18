@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
@@ -20,18 +21,27 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 @TranslatableClass (displayName = "Contact")
 public class AmpContact implements Comparable, Serializable, Cloneable, Versionable {
 	private Long id;
+	@Interchangeable(fieldTitle="Name")
 	private String name;
+	@Interchangeable(fieldTitle="Last Name")
 	private String lastname;
+	@Interchangeable(fieldTitle="Title")
 	private AmpCategoryValue title;
 
 	@TranslatableField
+	@Interchangeable(fieldTitle="Organization Name")
 	private String organisationName;
 	@TranslatableField
+	@Interchangeable(fieldTitle="Function")
 	private String function;
+	@Interchangeable(fieldTitle="Office Address")
 	private String officeaddress;
+	@Interchangeable(fieldTitle="Temporary ID")
 	private String temporaryId;
 	
+	@Interchangeable(fieldTitle="Name and Last Name")
 	private String nameAndLastName;
+	@Interchangeable(fieldTitle="Full Name")
 	private String fullname;
 	
 

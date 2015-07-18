@@ -11,6 +11,7 @@ import org.digijava.module.aim.util.SectorUtil;
 @TranslatableClass (displayName = "Sector Scheme")
 public class AmpSectorScheme implements Serializable
 {
+	//IATI-check: might be relevant, but obtained from possible values
 	@Interchangeable(fieldTitle="AMP Sector Scheme ID", id = true)
 	private Long ampSecSchemeId ;
 	@Interchangeable(fieldTitle="Sector Scheme Code")

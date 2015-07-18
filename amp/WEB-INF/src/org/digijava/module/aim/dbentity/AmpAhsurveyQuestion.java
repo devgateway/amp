@@ -13,22 +13,22 @@ import java.util.Set;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 
 public class AmpAhsurveyQuestion implements Serializable{
-
-	@Interchangeable(fieldTitle="Question ID", id = true)
+//IATI-check: to be ignored
+//	@Interchangeable(fieldTitle="Question ID", id = true, importable = true)
 	private Long ampQuestionId;
-	@Interchangeable(fieldTitle="Question Text", value = true)
+//	@Interchangeable(fieldTitle="Question Text", value = true)
 	private String questionText;
-	@Interchangeable(fieldTitle="Parent Question", pickIdOnly=true)
+//	@Interchangeable(fieldTitle="Parent Question", pickIdOnly=true)
 	private AmpAhsurveyQuestion parentQuestion;
-	@Interchangeable(fieldTitle="Indicator ID")
+//	@Interchangeable(fieldTitle="Indicator ID")
 	private AmpAhsurveyIndicator ampIndicatorId;
-	@Interchangeable(fieldTitle="Question Number")
+//	@Interchangeable(fieldTitle="Question Number")
 	private Integer questionNumber;
-	@Interchangeable(fieldTitle="Type ID")
+//	@Interchangeable(fieldTitle="Type ID")
 	private AmpAhsurveyQuestionType ampTypeId;
-	@Interchangeable(fieldTitle="Status")
+//	@Interchangeable(fieldTitle="Status")
 	private String status;
-	@Interchangeable(fieldTitle="Questions", pickIdOnly=true)
+//	@Interchangeable(fieldTitle="Questions", pickIdOnly=true)
 	private Set<AmpAhsurveyQuestion> questions;
 	
 

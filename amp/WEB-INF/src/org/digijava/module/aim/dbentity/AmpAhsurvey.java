@@ -18,15 +18,17 @@ public class AmpAhsurvey implements Versionable, Serializable, Cloneable, Compar
 	@Interchangeable(fieldTitle="ID", id = true)
 	private Long ampAHSurveyId;
 
+	//IATI-check: to be ignored
+	
 	//private AmpFunding ampFundingId;
 	//private Integer surveyYear;
 	//point of delivery donor
 	private AmpActivityVersion ampActivityId;
 	private AmpOrganisation ampDonorOrgId;
     private AmpOrganisation pointOfDeliveryDonor;
-    @Interchangeable(fieldTitle="Responses")
+//    @Interchangeable(fieldTitle="Responses", importable = true)
 	private Set<AmpAhsurveyResponse> responses;
-	@Interchangeable(fieldTitle="Survey Date")
+//	@Interchangeable(fieldTitle="Survey Date", importable = true)
     private Date surveyDate;
 
     public Date getSurveyDate() {

@@ -34,7 +34,7 @@ public class AmpSector implements Serializable, Comparable, Identifiable,
 	private String name;
 	@Interchangeable(fieldTitle="Type")
 	private String type;
-	@Interchangeable(fieldTitle="AMP Organization ID")
+//	@Interchangeable(fieldTitle="AMP Organization ID")	
 	private AmpOrganisation ampOrgId;
 	@Interchangeable(fieldTitle="AMP Sector Scheme ID")
 	private AmpSectorScheme ampSecSchemeId;

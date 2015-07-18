@@ -8,12 +8,13 @@ import org.digijava.module.aim.util.Output;
 
 public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Comparable<AmpGPISurvey> {
 
+	//IATI-check: to be ignored
 	private Long ampGPISurveyId;
 
 	private AmpActivityVersion ampActivityId;
-	@Interchangeable(fieldTitle="Responses"/*, descend = true*/)
+//	@Interchangeable(fieldTitle="Responses"/*, descend = true*/)
 	private Set<AmpGPISurveyResponse> responses;
-	@Interchangeable(fieldTitle="Survey Date")
+//	@Interchangeable(fieldTitle="Survey Date")
 	private Date surveyDate;
 
 	public Date getSurveyDate() {

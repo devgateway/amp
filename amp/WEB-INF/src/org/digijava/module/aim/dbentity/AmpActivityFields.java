@@ -182,7 +182,7 @@ LoggerIdentifiable, Cloneable {
 			@Validators(minSize = "/Activity Form/Sectors/Tertiary Sectors/minSizeSectorsValidator", percentage = "/Activity Form/Sectors/Tertiary Sectors/sectorPercentageTotal", unique = "/Activity Form/Sectors/Tertiary Sectors/uniqueSectorsValidator")})
 	protected Set <AmpActivitySector> sectors ;
 
-	@Interchangeable(fieldTitle = "Contracts", importable = true, fmPath="/Activity Form/Contracts")
+//	@Interchangeable(fieldTitle = "Contracts", importable = true, fmPath="/Activity Form/Contracts")
 	@VersionableCollection(fieldTitle = "Contracts")
 	protected Set<IPAContract> contracts;
 	
@@ -231,6 +231,7 @@ LoggerIdentifiable, Cloneable {
 	protected Set<AmpFunding> funding ;
 	
 	//TODO show this field?
+	//TODO-reply: we should first figure out what it is
 	/*seems obsolete*/
 	@VersionableCollection(fieldTitle = "Progress")
 	protected Set progress;
@@ -242,15 +243,16 @@ LoggerIdentifiable, Cloneable {
 	@Deprecated
 	protected Set documents ;
 	
-	@Interchangeable(fieldTitle = "Issues", importable = true, fmPath = "/Activity Form/Issues Section")
+
+//	@Interchangeable(fieldTitle = "Issues", importable = true, fmPath = "/Activity Form/Issues Section")
 	@VersionableCollection(fieldTitle = "Issues")
 	protected Set<AmpIssues> issues;
 
-	@Interchangeable(fieldTitle = "Regional Observations", importable = true, fmPath = "/Activity Form/Regional Observations")
+//	@Interchangeable(fieldTitle = "Regional Observations", importable = true, fmPath = "/Activity Form/Regional Observations")
 	@VersionableCollection(fieldTitle = "Regional Observations")
 	protected Set<AmpRegionalObservation> regionalObservations;
 
-	@Interchangeable(fieldTitle = "Line Ministry Observations", importable = true, fmPath = "/Activity Form/Line Ministry Observations")
+//	@Interchangeable(fieldTitle = "Line Ministry Observations", importable = true, fmPath = "/Activity Form/Line Ministry Observations")
 	@VersionableCollection(fieldTitle = "Line Ministry Observations")
 	protected Set<AmpLineMinistryObservation> lineMinistryObservations;
 
@@ -373,7 +375,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldTextEditor(fieldTitle = "Status Reason")
 	protected String statusReason;
 	
-	@Interchangeable(fieldTitle = "Components", importable = true, fmPath = "/Activity Form/Components")
+//	@Interchangeable(fieldTitle = "Components", importable = true, fmPath = "/Activity Form/Components")
 	@VersionableCollection(fieldTitle = "Components")
 	protected Set<AmpComponent> components;
 
@@ -381,19 +383,9 @@ LoggerIdentifiable, Cloneable {
 	@VersionableCollection(fieldTitle = "Structures")
 	protected Set<AmpStructure> structures;
 
-	//TODO can be Component Commintment, Disbursement or Expenditures
-	@Interchangeable(fieldTitle = "Component Fundings", importable = true, fmPath = "/Activity Form/Components")
+
+//	@Interchangeable(fieldTitle = "Component Fundings", importable = true, fmPath = "/Activity Form/Components")
 	@VersionableCollection(fieldTitle = "Component Fundings")
-//	DOES NOT NEED A DISCRIMINATOR! IT'S REACHABLE VIA AMPCATEGORYVALUES INSIDE AMPCOMPONENTFUNDING
-//ALSO, IS NOT A PREDEFINED LIST  
-//	@InterchangeableDiscriminator(
-//	        discriminatorField = "transactionType",
-//	        settings = {
-//	 @Interchangeable(fieldTitle ="Components Commitments",discriminatorOption = "0", fmPath="/Activity Form/Components/Component/Components Commitments"),
-//	 @Interchangeable(fieldTitle ="Components Disbursements",discriminatorOption = "1", fmPath="/Activity Form/Components/Component/Components Disbursements"),
-//	 @Interchangeable(fieldTitle ="Components Expenditures",discriminatorOption = "2", fmPath="/Activity Form/Components/Component/Components Expenditures"),
-//	 }
-//	)
 	protected Set<AmpComponentFunding> componentFundings;
 
 
@@ -422,7 +414,7 @@ LoggerIdentifiable, Cloneable {
 	protected Date proposedCompletionDate;
 
 
-//	@Interchangeable(fieldTitle = "Created By")
+
 	@VersionableFieldSimple(fieldTitle = "Created By", blockSingleChange = true)
 	protected AmpTeamMember activityCreator;
 	
@@ -445,7 +437,7 @@ LoggerIdentifiable, Cloneable {
 	@Interchangeable(fieldTitle = "Approval Date", importable = false)
 	protected Date approvalDate;
 
-	@Interchangeable(fieldTitle = "Regional Fundings", importable = true, fmPath = "/Activity Form/Regional Funding")
+//	@Interchangeable(fieldTitle = "Regional Fundings", importable = true, fmPath = "/Activity Form/Regional Funding")
 	@VersionableCollection(fieldTitle = "Regional Fundings")
 	protected Set <AmpRegionalFunding> regionalFundings;
 
@@ -474,7 +466,10 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Archived")
 	protected Boolean archived;
 
-	@Interchangeable(fieldTitle = "Deleted", importable=false)
+	//do we want to export deleted activities? 
+	//do we expect to import deleted activities?
+	//commenting for now
+//	@Interchangeable(fieldTitle = "Deleted", importable=false)
 	@VersionableFieldSimple(fieldTitle = "Deleted")
 	protected Boolean deleted;
 	//for AMP-14784
@@ -514,12 +509,12 @@ LoggerIdentifiable, Cloneable {
 	 * and contain set of values for this connection.
 	 * Please refer to AmpActivity.hbm.xml and IndicatorConnection.hbm.xml for details.
 	 */
-	@Interchangeable(fieldTitle = "Indicators",fmPath="/Activity Form/M&E")
+//	@Interchangeable(fieldTitle = "Indicators",fmPath="/Activity Form/M&E")
 	@VersionableCollection(fieldTitle = "Indicators")
-	@Validators (unique="/Activity Form/M&E/Unique MEs Validator")
+//	@Validators (unique="/Activity Form/M&E/Unique MEs Validator")
 	protected Set<IndicatorActivity> indicators;
 
-	@Interchangeable(fieldTitle = "Activity Documents",fmPath="/Activity Form/Related Documents")
+//	@Interchangeable(fieldTitle = "Activity Documents",fmPath="/Activity Form/Related Documents")
 	@VersionableCollection(fieldTitle = "Activity Documents")
 	protected Set<AmpActivityDocument> activityDocuments	= null;
 	
@@ -614,7 +609,7 @@ LoggerIdentifiable, Cloneable {
 			@Validators(maxSize = "/Activity Form/Program/Tertiary Programs/max Size Program Validator", minSize = "/Activity Form/Program/Tertiary Programs/minSizeProgramValidator", unique = "/Activity Form/Program/Tertiary Programs/uniqueProgramsValidator", percentage = "/Activity Form/Program/Tertiary Programs/programPercentageTotal"), })
 	protected Set <AmpActivityProgram> actPrograms;
 	
-	//UPDATE_IT_AFTER
+	
 //	@Interchangeable(fieldTitle = "Act. Budget Structure",fmPath="/Activity Form/Budget Structure")
 	//@Validators (unique ="/Activity Form/Budget Structure/Budget Structure/uniqueProgramsValidator", minSize="/Activity Form/Budget Structure/Budget Structure/minSizeProgramValidator")
 	@VersionableCollection(fieldTitle = "Act. Budget Structure")
@@ -653,7 +648,7 @@ LoggerIdentifiable, Cloneable {
 	 */
     protected Long activityType = org.dgfoundation.amp.onepager.util.ActivityUtil.ACTIVITY_TYPE_PROJECT; //default type
 
-    @Interchangeable(fieldTitle = "Annual Project Budgets", importable = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")
+//    @Interchangeable(fieldTitle = "Annual Project Budgets", importable = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")
     @VersionableCollection(fieldTitle = "Annual Project Budgets")
 	protected Set<AmpAnnualProjectBudget> annualProjectBudgets;
 	//protected Set <AmpActivityContact> activityContacts;

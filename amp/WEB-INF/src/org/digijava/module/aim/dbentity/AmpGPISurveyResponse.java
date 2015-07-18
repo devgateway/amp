@@ -8,16 +8,17 @@ import org.digijava.module.aim.util.Output;
 
 public class AmpGPISurveyResponse implements Versionable, Cloneable, Serializable {
 
+	//IATI-check: to be ignored
 	private static final long serialVersionUID = 1L;
-	@Interchangeable(fieldTitle="Response ID", id = true)
+//	@Interchangeable(fieldTitle="Response ID", id = true)
 	private Long ampReponseId;
-	@Interchangeable(fieldTitle="GPI Survey", pickIdOnly=true)
+//	@Interchangeable(fieldTitle="GPI Survey", pickIdOnly=true)
 	private AmpGPISurvey ampGPISurveyId;
-	@Interchangeable(fieldTitle="GPI Survey Question")
+//	@Interchangeable(fieldTitle="GPI Survey Question")
 	private AmpGPISurveyQuestion ampQuestionId;
-	@Interchangeable(fieldTitle="Response", value = true)
+//	@Interchangeable(fieldTitle="Response", value = true)
 	private String response;
-	@Interchangeable(fieldTitle="References")
+//	@Interchangeable(fieldTitle="References")
 	private String references;
 
 	public String getReferences() {

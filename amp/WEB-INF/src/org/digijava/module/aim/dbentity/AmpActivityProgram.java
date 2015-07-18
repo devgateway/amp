@@ -10,9 +10,9 @@ import org.digijava.module.aim.util.ProgramUtil;
 public class AmpActivityProgram implements Versionable, Serializable, Cloneable {
 
         private Long ampActivityProgramId;
-        @Interchangeable(fieldTitle="Program Percentage")
+        @Interchangeable(fieldTitle="Program Percentage", importable = true)
         private Float programPercentage;
-        @Interchangeable(fieldTitle="Program")
+        @Interchangeable(fieldTitle="Program", importable = true)
         private AmpTheme program;
 //        @Interchangeable(fieldTitle="Activity", pickIdOnly = true)
         private AmpActivityVersion activity;

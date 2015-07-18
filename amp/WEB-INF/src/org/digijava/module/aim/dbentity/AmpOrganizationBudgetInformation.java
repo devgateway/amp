@@ -15,15 +15,17 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 
 public class AmpOrganizationBudgetInformation implements Serializable,OrgProfileValue{
-	@Interchangeable(fieldTitle="ID")
+
+	//IATI-check: to be ignored
+	//	@Interchangeable(fieldTitle="ID")
     private Long id;
-	@Interchangeable(fieldTitle="Type")
+//	@Interchangeable(fieldTitle="Type")
     private AmpCategoryValue type;
-	@Interchangeable(fieldTitle="Year")
+//	@Interchangeable(fieldTitle="Year")
     private Long year;
-	@Interchangeable(fieldTitle="Amount")
+//	@Interchangeable(fieldTitle="Amount")
     private Double amount;
-	@Interchangeable(fieldTitle="Currency")
+//	@Interchangeable(fieldTitle="Currency")
     private AmpCurrency currency;
 //	@Interchangeable(fieldTitle="Organization", recursive=true)
     private AmpOrganisation organization;

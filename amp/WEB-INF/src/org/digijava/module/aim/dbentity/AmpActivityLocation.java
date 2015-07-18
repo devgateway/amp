@@ -13,17 +13,18 @@ import org.digijava.module.aim.util.Output;
  *
  */
 public class AmpActivityLocation implements Versionable,Serializable, Cloneable {
+	//IATI-check: should be exported.
 //	@Interchangeable(fieldTitle="ID", id=true)
 	private Long id;
 	private AmpActivityVersion activity;
-	@Interchangeable(fieldTitle="Location"/*, descend = true*/)
+	@Interchangeable(fieldTitle="Location", importable = true/*, descend = true*/)
 	private AmpLocation location;
-	@Interchangeable(fieldTitle="Location Percentage",fmPath="/Activity Form/Location/Locations/Location Item/location Percentage",required="/Activity Form/Location/Locations/Location percentage required")
+	@Interchangeable(fieldTitle="Location Percentage",fmPath="/Activity Form/Location/Locations/Location Item/location Percentage",required="/Activity Form/Location/Locations/Location percentage required" , importable = true)
 	@Validators (percentage="/Activity Form/Location/Locations/locationPercentageTotal" )
 	private Float locationPercentage;
-	@Interchangeable(fieldTitle="Latitude",fmPath="/Activity Form/Location/Locations/Location Item/Latitude")
+	@Interchangeable(fieldTitle="Latitude",fmPath="/Activity Form/Location/Locations/Location Item/Latitude", importable = true)
 	private String latitude;
-	@Interchangeable(fieldTitle="Longitude",fmPath="/Activity Form/Location/Locations/Location Item/Logitude")
+	@Interchangeable(fieldTitle="Longitude",fmPath="/Activity Form/Location/Locations/Location Item/Logitude", importable = true)
 	private String longitude;
 	
 	public Long getId() {

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.Output;
 
@@ -12,6 +13,7 @@ public class AmpActivityContact implements Versionable, Comparable, Serializable
 	
 	private Long id;
 	private AmpActivityVersion activity;
+	@Interchangeable(fieldTitle="Contact")
 	private AmpContact contact;
 	private Boolean primaryContact;
 	private String contactType; // Donor/MOFED funding,Project Coordinator,Sector Ministry or Implementing/Executing Agency Contact Information

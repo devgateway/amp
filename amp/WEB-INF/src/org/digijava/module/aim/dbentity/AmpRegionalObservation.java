@@ -15,15 +15,16 @@ import org.digijava.module.aim.util.Output;
 @TranslatableClass (displayName = "Regional Observation")
 public class AmpRegionalObservation implements Serializable, Versionable, Cloneable {
 
-	@Interchangeable(fieldTitle="ID")
+	//IATI-check: to be ignored
+//	@Interchangeable(fieldTitle="ID")
 	private Long ampRegionalObservationId;
-	@Interchangeable(fieldTitle="Name")
+//	@Interchangeable(fieldTitle="Name")
 	@TranslatableField
 	private String name;
 	private AmpActivityVersion activity;
-	@Interchangeable(fieldTitle="Regional Observation Measures",fmPath="/Activity Form/Regional Observations/Observation/Measure")
+//	@Interchangeable(fieldTitle="Regional Observation Measures",fmPath="/Activity Form/Regional Observations/Observation/Measure")
 	private Set<AmpRegionalObservationMeasure> regionalObservationMeasures;
-	@Interchangeable(fieldTitle="Observation Date",fmPath="/Activity Form/Regional Observations/Observation/Date")
+//	@Interchangeable(fieldTitle="Observation Date",fmPath="/Activity Form/Regional Observations/Observation/Date")
 	private Date observationDate;
 
 	public String getName() {

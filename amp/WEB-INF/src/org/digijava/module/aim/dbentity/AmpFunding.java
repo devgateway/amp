@@ -20,88 +20,92 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 @TranslatableClass(displayName = "Funding")
 public class AmpFunding implements Serializable, Versionable, Cloneable {
-	
+	//IATI-check: not ignored!
 	private static final long serialVersionUID = 1L;
 	@Interchangeable(fieldTitle="AMP Funding ID")
 	private Long ampFundingId;
-	@Interchangeable(fieldTitle="Donor Organization ID", pickIdOnly=true)
+	@Interchangeable(fieldTitle="Donor Organization ID", pickIdOnly=true, importable=true)
 	private AmpOrganisation ampDonorOrgId;
-	@Interchangeable(fieldTitle="Activity ID", pickIdOnly=true)
+	@Interchangeable(fieldTitle="Activity ID", pickIdOnly=true, importable=true)
 	private AmpActivityVersion ampActivityId;
-	@Interchangeable(fieldTitle="CRS Transaction Number")
+	@Interchangeable(fieldTitle="CRS Transaction Number", importable=true)
 	private Long crsTransactionNo;
-	@Interchangeable(fieldTitle="Financing ID",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Organization Id")
+	@Interchangeable(fieldTitle="Financing ID",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Organization Id", importable=true)
 	private String financingId;
-	@Interchangeable(fieldTitle="Funding Terms Code")
+	@Interchangeable(fieldTitle="Funding Terms Code", importable=true)
 	private String fundingTermsCode;
-	@Interchangeable(fieldTitle="Planned Start Date")
+	@Interchangeable(fieldTitle="Planned Start Date", importable=true)
 	private Date plannedStartDate;
-	@Interchangeable(fieldTitle="Planned Completion Date",fmPath="/Activity Form/Planning/Date of Planned Completion")
+	@Interchangeable(fieldTitle="Planned Completion Date",fmPath="/Activity Form/Planning/Date of Planned Completion", importable=true)
 	private Date plannedCompletionDate;
-	@Interchangeable(fieldTitle="Actual Start Date",fmPath="/Activity Form/Planning/Actual Start Date")
+	@Interchangeable(fieldTitle="Actual Start Date",fmPath="/Activity Form/Planning/Actual Start Date", importable=true)
 	private Date actualStartDate;
-	@Interchangeable(fieldTitle="Actual Completion Date",fmPath="/Activity Form/Planning/Actual Completion Date")
+	@Interchangeable(fieldTitle="Actual Completion Date",fmPath="/Activity Form/Planning/Actual Completion Date", importable=true)
 	private Date actualCompletionDate;
-	@Interchangeable(fieldTitle="Original Completion Date",fmPath="/Activity Form/Planning/Original Completion Date",required="/Activity Form/Planning/Required Validator for Original Completion Date")
+	@Interchangeable(fieldTitle="Original Completion Date",fmPath="/Activity Form/Planning/Original Completion Date",required="/Activity Form/Planning/Required Validator for Original Completion Date", importable=true)
 	private Date originalCompDate;
-	@Interchangeable(fieldTitle="Last Audit Date")
+	@Interchangeable(fieldTitle="Last Audit Date", importable=true)
 	private Date lastAuditDate;
-	@Interchangeable(fieldTitle="Reporting Date")
+	@Interchangeable(fieldTitle="Reporting Date", importable=true)
 	private Date reportingDate;
 	
-	@Interchangeable(fieldTitle="Conditions",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Conditions")
+	@Interchangeable(fieldTitle="Conditions",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Conditions", importable=true)
 	@TranslatableField
 	private String conditions;
 	
-	@Interchangeable(fieldTitle="Donor Objective",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Donor Objective")
+	@Interchangeable(fieldTitle="Donor Objective",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Donor Objective", importable=true)
 	@TranslatableField
 	private String donorObjective;
-	@Interchangeable(fieldTitle="Language")
+	@Interchangeable(fieldTitle="Language", importable=true)
 	private String language;
-	@Interchangeable(fieldTitle="Version")
+	@Interchangeable(fieldTitle="Version", importable=true)
 	private String version;
-	@Interchangeable(fieldTitle="Cal Type") //????????????
+	@Interchangeable(fieldTitle="Cal Type", importable=true) //???????????? probably calendar type, probably needs a discriminator
 	private String calType;
-	@Interchangeable(fieldTitle="Comments")
+	@Interchangeable(fieldTitle="Comments", importable=true)
 	private String comments;
-	@Interchangeable(fieldTitle="Signature Date")
+	@Interchangeable(fieldTitle="Signature Date", importable=true)
 	private Date signatureDate;
-	@Interchangeable(fieldTitle="Funding Details")
+	@Interchangeable(fieldTitle="Funding Details", importable=true)
 	private Set<AmpFundingDetail> fundingDetails;
-	@Interchangeable(fieldTitle="MTEF Projections",fmPath="/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections")
+
+	
+	//now, MTEF projections are to be ignored	
+	
+//	@Interchangeable(fieldTitle="MTEF Projections",fmPath="/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections")
 	private Set<AmpFundingMTEFProjection> mtefProjections;
 	// private AmpTermsAssist ampTermsAssistId ;
 	/*
 	 * tanzania adds funding amp-1707
 	 */
-	@Interchangeable(fieldTitle="Active",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Active")
+	@Interchangeable(fieldTitle="Active",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Active", importable = true)
 	private Boolean active;
-	@Interchangeable(fieldTitle="Delegated Cooperation",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Delegated Cooperation")
+	@Interchangeable(fieldTitle="Delegated Cooperation",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Delegated Cooperation", importable = true)
 	private Boolean delegatedCooperation;
-	@Interchangeable(fieldTitle="Delegated Partner",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Delegated Partner")
+	@Interchangeable(fieldTitle="Delegated Partner",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Delegated Partner", importable=true)
 	private Boolean delegatedPartner;
-	@Interchangeable(fieldTitle="Active List")
+	@Interchangeable(fieldTitle="Active List", importable=true)
 	private ArrayList<Boolean> activeList;
 	// private AmpModality modalityId;
-	@Interchangeable(fieldTitle="Type of Assistance",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence")
+	@Interchangeable(fieldTitle="Type of Assistance",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence", importable=true, pickIdOnly=true)
 	private AmpCategoryValue typeOfAssistance;
-	@Interchangeable(fieldTitle="Financal Instrument",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument")
+	@Interchangeable(fieldTitle="Financal Instrument",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument", importable=true, pickIdOnly=true)
 	private AmpCategoryValue financingInstrument;
-	@Interchangeable(fieldTitle="Funding Status",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status")
+	@Interchangeable(fieldTitle="Funding Status",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status", importable=true, pickIdOnly=true)
 	private AmpCategoryValue fundingStatus;
-	@Interchangeable(fieldTitle="Mode of Payment",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Mode of Payment")
+	@Interchangeable(fieldTitle="Mode of Payment",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Mode of Payment", importable=true, pickIdOnly=true)
 	private AmpCategoryValue modeOfPayment;
-	@Interchangeable(fieldTitle="Loan Terms",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Loan Terms")
+	@Interchangeable(fieldTitle="Loan Terms",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Loan Terms", importable=true)
 	private String loanTerms;
-	@Interchangeable(fieldTitle="Group Versioned Funding")
+	@Interchangeable(fieldTitle="Group Versioned Funding", importable=true)
 	private Long groupVersionedFunding;
-	@Interchangeable(fieldTitle="Capital Spending Percentage",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Capital Spending Percentage")
+	@Interchangeable(fieldTitle="Capital Spending Percentage",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Capital Spending Percentage", importable=true)
 	private Float capitalSpendingPercentage;
-	@Interchangeable(fieldTitle="Agreement",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement")
+//	@Interchangeable(fieldTitle="Agreement",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement", importable=true)
 	private AmpAgreement agreement;
-	@Interchangeable(fieldTitle="Source Role",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Source Role")
+	@Interchangeable(fieldTitle="Source Role",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Source Role", importable=true, pickIdOnly=true)
 	private AmpRole sourceRole;
-	@Interchangeable(fieldTitle="Funding Classification Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Classification Date")
+	@Interchangeable(fieldTitle="Funding Classification Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Classification Date", importable=true)
 	private Date fundingClassificationDate;
 	
 	@Override

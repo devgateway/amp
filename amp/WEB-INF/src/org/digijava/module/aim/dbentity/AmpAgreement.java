@@ -15,20 +15,21 @@ import org.springframework.transaction.annotation.Transactional;
 public class AmpAgreement implements Serializable, Versionable {
 	private static final long serialVersionUID = 1L;
 
-	@Interchangeable(fieldTitle="ID", id = true)
+	//IATI-check: Not used in IATI
+//	@Interchangeable(fieldTitle="ID", id = true)
 	private Long id;
-	@Interchangeable(fieldTitle="Code",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Code")
+//	@Interchangeable(fieldTitle="Code",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Code", importable = true)
 	private String code;
-	@Interchangeable(fieldTitle="Title",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Title", value = true)
+//	@Interchangeable(fieldTitle="Title",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Title", value = true, importable = true)
 	@TranslatableField
 	private String title;
-	@Interchangeable(fieldTitle="Effective Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Effective Date")
+//	@Interchangeable(fieldTitle="Effective Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Effective Date", importable = true)
 	private Date effectiveDate;
-	@Interchangeable(fieldTitle="Signature Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Signature Date")
+//	@Interchangeable(fieldTitle="Signature Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Signature Date", importable = true)
 	private Date signatureDate;
-	@Interchangeable(fieldTitle="Close Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Close Date")
+//	@Interchangeable(fieldTitle="Close Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Close Date", importable = true)
 	private Date closeDate;
-	@Interchangeable(fieldTitle="Parlimentary Approval Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Parlimentary Approval Date")
+//	@Interchangeable(fieldTitle="Parlimentary Approval Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Parlimentary Approval Date", importable = true)
 	private Date parlimentaryApprovalDate;
 	
 	public AmpAgreement() {

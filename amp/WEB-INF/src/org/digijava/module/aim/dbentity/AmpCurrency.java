@@ -14,6 +14,7 @@ import org.hibernate.Query;
 @TranslatableClass (displayName = "Currency")
 public class AmpCurrency implements Serializable,Comparable, Identifiable
 {
+	//IATI-check: to not be ignored. obtained from possible values 
 	@Interchangeable(fieldTitle="ID", id = true)
 	private Long ampCurrencyId;
 	@Interchangeable(fieldTitle="Currency Code", value = true)

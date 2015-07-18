@@ -489,11 +489,7 @@ public class InterchangeUtils {
 		List<ApiErrorMessage> errors = importer.importOrUpdate(newJson, update);
 		
 		return getImportResult(importer.getNewActivity(), importer.getNewJson(), errors);
-		
 	}
-	
-	
-	
 	
 	public static Map<Integer, String> getTransactionTypeValues() {
 		Map<Integer, String> transactionTypeToString = new HashMap<Integer, String>();
@@ -502,7 +498,6 @@ public class InterchangeUtils {
 		}
 		return transactionTypeToString;
 	}
-	
 	
 	protected static JsonBean getImportResult(AmpActivityVersion newActivity, JsonBean newJson, 
 			List<ApiErrorMessage> errors) {
@@ -515,7 +510,8 @@ public class InterchangeUtils {
 		} else {
 			List<JsonBean> activities = null;
 			if (newActivity != null && newActivity.getAmpActivityId() != null) {
-				activities = Arrays.asList(ProjectList.getActivityInProjectListFormat(newActivity));
+				// editable, viewable, since was just created/updated
+				activities = Arrays.asList(ProjectList.getActivityInProjectListFormat(newActivity, true, true));
 			}
 			if (activities == null || activities.size() == 0) {
 				result = ApiError.toError(ApiError.UNKOWN_ERROR);

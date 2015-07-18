@@ -545,7 +545,7 @@ public class ActivityImporter {
 			}
 		}
 		if (key == null) { // init it in any case
-			key = getEditorKey();
+			key = getEditorKey(field.getName());
 		}
 		for (Entry<String, Object> trn : trnJson.entrySet()) {
 			String langCode = trn.getKey();
@@ -575,15 +575,16 @@ public class ActivityImporter {
 		return key;
 	}
 	
-	private String getEditorKey() {
-		return "activity-import-" + System.currentTimeMillis();
+	private String getEditorKey(String fieldName) {
+		// must start with "aim-" since it is expected by AF like this...
+		return "aim-import-" + fieldName + "-" + System.currentTimeMillis();
 	}
 	
 	protected void initEditor(Field field) {
 		try {
 			String currentValue = (String) field.get(newActivity);
 			if (currentValue == null) {
-				currentValue = getEditorKey();
+				currentValue = getEditorKey(field.getName());
 				field.setAccessible(true);
 				field.set(newActivity, currentValue);
 			}
@@ -603,11 +604,11 @@ public class ActivityImporter {
 	}
 	
 	protected void initDefaults() {
-//		for (Field field : AmpActivityFields.class.getFields()) {
-//			if (InterchangeUtils.isVersionableTextField(field)) {
-//				initEditor(field);
-//			}
-//		}
+		for (Field field : AmpActivityFields.class.getFields()) {
+			if (InterchangeUtils.isVersionableTextField(field)) {
+				initEditor(field);
+			}
+		}
 		initSetors();
 		initLocations();
 		initFundings();

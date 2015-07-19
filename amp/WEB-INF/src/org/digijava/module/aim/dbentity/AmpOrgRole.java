@@ -15,7 +15,7 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 	//IATI-check: not to be ignored
 	@Interchangeable(fieldTitle="AMP Organization Role ID")
     private Long ampOrgRoleId;
-	@Interchangeable(fieldTitle="Activity", pickIdOnly = true, importable=true)
+	@Interchangeable(fieldTitle="Activity", pickIdOnly = true, importable = false)
     private AmpActivityVersion activity;
 	@Interchangeable(fieldTitle="Organization", importable=true, pickIdOnly=true)
 	private AmpOrganisation organisation;

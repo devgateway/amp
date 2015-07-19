@@ -26,7 +26,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	private Long ampFundingId;
 	@Interchangeable(fieldTitle="Donor Organization ID", pickIdOnly=true, importable=true)
 	private AmpOrganisation ampDonorOrgId;
-	@Interchangeable(fieldTitle="Activity ID", pickIdOnly=true, importable=true)
+	@Interchangeable(fieldTitle="Activity ID", pickIdOnly = true, importable = false)
 	private AmpActivityVersion ampActivityId;
 	@Interchangeable(fieldTitle="CRS Transaction Number", importable=true)
 	private Long crsTransactionNo;

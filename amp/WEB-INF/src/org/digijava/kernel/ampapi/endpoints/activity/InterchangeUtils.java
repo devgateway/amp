@@ -371,24 +371,10 @@ public class InterchangeUtils {
 
 	}
 	
-	
-	
-	public static Object getObjectById(Class entityClass, Long id) {
-		List<JsonBean> result = new ArrayList<JsonBean>();
-		Field field = getIdFieldOfEntity(entityClass);
-		if (field == null)
-			 throw new RuntimeException("Requested ID field of a class with no such thing!"); 
-		String queryString = "select cls from " + entityClass.getName() + " cls WHERE cls." + field.getName() + "=" + id;
-		List<Object> objectList= PersistenceManager.getSession().createQuery(queryString).list();
-		if (objectList.size() == 0)
-			return null;
-		//it's really improbable that the entity's corresponding table has >1 entry with the same ID,
-		//and if it does, well, the DB has heavy structural problems
-		if (objectList.size() > 1)
-			throw new RuntimeException("ID doesn't uniquely identify an object!");
-		return objectList.get(0);
+	public static Object getObjectById(Class<?> entityClass, Long id) {
+		// TODO: cache it
+		return PersistenceManager.getSession().get(entityClass.getName(), id);
 	}
-	
 	
 	/**
 	 * 

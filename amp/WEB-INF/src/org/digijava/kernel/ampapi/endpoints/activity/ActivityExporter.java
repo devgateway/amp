@@ -186,12 +186,15 @@ public class ActivityExporter {
 		}			
 		
 		
-		Map<String, List<JsonBean>> compositeMap = new HashMap<String, List<JsonBean>>();
+		Map<String, Object> compositeMap = new HashMap<String, Object>();
+		Map<String, Interchangeable> compositeMapSettings = new HashMap<String, Interchangeable>();
 		Map<String, String> filteredFieldsMap = new HashMap<String, String>();
 		
 		// create the map containing the correlation between the discriminatorOption and the JSON generated objects
 		for (Interchangeable setting : settings) {
+			// TODO: init settings with defaults from interchangeable
 			compositeMap.put(setting.discriminatorOption(), new ArrayList<JsonBean>());
+			compositeMapSettings.put(setting.discriminatorOption(), setting);
 			String fieldTitle = InterchangeUtils.underscorify(setting.fieldTitle());
 			String filteredFieldPath = fieldPath == null ? fieldTitle : fieldPath + "~" + fieldTitle;
 			
@@ -205,20 +208,26 @@ public class ActivityExporter {
 					if (obj instanceof AmpActivitySector) {
 						AmpActivitySector sector = (AmpActivitySector) obj;
 						String filteredFieldPath = filteredFieldsMap.get(sector.getClassificationConfig().getName());
-						compositeMap.get(sector.getClassificationConfig().getName()).add(getObjectJson(sector, filteredFieldPath));
+						((List<JsonBean>) compositeMap.get(sector.getClassificationConfig().getName())).add(getObjectJson(sector, filteredFieldPath));
 					} else if (obj instanceof AmpActivityProgram) {
 						AmpActivityProgram program = (AmpActivityProgram) obj;
 						String filteredFieldPath = filteredFieldsMap.get(program.getProgramSetting().getName());
-						compositeMap.get(program.getProgramSetting().getName()).add(getObjectJson(program, filteredFieldPath));
+						((List<JsonBean>) compositeMap.get(program.getProgramSetting().getName())).add(getObjectJson(program, filteredFieldPath));
 					} else if (obj instanceof AmpCategoryValue) {
 						AmpCategoryValue catVal = (AmpCategoryValue) obj;
 						String filteredFieldPath = filteredFieldsMap.get(catVal.getAmpCategoryClass().getKeyName());
-						compositeMap.get(catVal.getAmpCategoryClass().getKeyName()).add(getObjectJson(catVal, filteredFieldPath));
+						// we may need to move up for all composites, but so far applies to ACV, 
+						// so keeping here to avoid side effects in rush changes
+						if (compositeMapSettings.get(catVal.getAmpCategoryClass().getKeyName()).pickIdOnly()) {
+							compositeMap.put(catVal.getAmpCategoryClass().getKeyName(), catVal.getId());
+						} else {
+							((List<JsonBean>) compositeMap.get(catVal.getAmpCategoryClass().getKeyName())).add(getObjectJson(catVal, filteredFieldPath));
+						}
 						//TODO we have to manage when the ActivityBudet is not present (Budget Unallocated)
 					} else if (obj instanceof AmpOrgRole) {
 						AmpOrgRole aor = (AmpOrgRole) obj;
 						String filteredFieldPath = filteredFieldsMap.get(aor.getRole().getRoleCode());
-						compositeMap.get(aor.getRole().getRoleCode()).add(getObjectJson(aor, filteredFieldPath));
+						((List<JsonBean>) compositeMap.get(aor.getRole().getRoleCode())).add(getObjectJson(aor, filteredFieldPath));
 					}
 				}
 			}

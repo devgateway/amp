@@ -10,6 +10,9 @@ import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
  * @author Nadejda Mandrescu
  */
 public class ActivityEPConstants {
+	// Field configs
+	public static final String REQUIRED_NONE = "_NONE_";
+	public static final String REQUIRED_ALWAYS = "_ALWAYS_";
 	// JSON fields
 	public static final String ACTIVITY = "activity";
 	public static final String FIELD_NAME = "field_name";

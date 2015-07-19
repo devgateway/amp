@@ -75,9 +75,6 @@ public class InterchangeUtils {
 		generateCategoryConstantsSets();
 	}
 	
-	private static final String NOT_REQUIRED = "_NONE_";
-	private static final String ALWAYS_REQUIRED = "_ALWAYS_";
-	
 	private static final String ISO8601_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 	private static final ThreadLocal<SimpleDateFormat> DATE_FORMATTER = new ThreadLocal<SimpleDateFormat>();
 	
@@ -495,10 +492,10 @@ public class InterchangeUtils {
 			minSize = validators.minSize();
 		}
 		String required = interchangeable.required();
-		if (required.equals(ALWAYS_REQUIRED)) {
+		if (required.equals(ActivityEPConstants.REQUIRED_ALWAYS)) {
 			requiredValue = ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
 		}
-		else if ((!required.equals(NOT_REQUIRED) && FMVisibility.isFmPathEnabled(required))
+		else if ((!required.equals(ActivityEPConstants.REQUIRED_NONE) && FMVisibility.isFmPathEnabled(required))
 				|| (!minSize.isEmpty() && FMVisibility.isFmPathEnabled(minSize))) {
 			requiredValue = ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
 		}

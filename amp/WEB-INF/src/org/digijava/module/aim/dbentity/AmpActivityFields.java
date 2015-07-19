@@ -568,11 +568,16 @@ LoggerIdentifiable, Cloneable {
 	/* 
 	 * AMP-20423: For Import/Export we need it always visible 
 	 * */
-	@Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_CODE, importable = true)
+	// AMP-20671: temp workaround: though it is actually required only for activities On Budget, we'll always require and if it cannot be set -> will be saved as draft and manually updated
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_CODE, importable = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
+	/*
+	 * 			NOTE: DO NOT CONFIGURE fmPath, since it must be always visible (see AMP-20423) 
+	 * 
 	@InterchangeableDiscriminator(settings= {
 			@Interchangeable(fieldTitle ="Project Code", fmPath = "/Activity Form/Identification/Donor Project Code"),
-			@Interchangeable(fieldTitle ="Project Code", fmPath = "/Activity Form/Identification/Budget Extras/Project Code", required="/Activity Form/Identification/Budget Extras/Project Code")
+			@Interchangeable(fieldTitle ="Project Code", fmPath = "/Activity Form/Identification/Budget Extras/Project Code", required = "/Activity Form/Identification/Budget Extras/Project Code")
 	})
+	*/
 			//AMP-20423: disabling fmPath="/Activity Form/Identification/Budget Extras/Project Code")
 	@VersionableFieldSimple(fieldTitle = "Project Code")
 	protected String projectCode;

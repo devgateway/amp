@@ -28,19 +28,10 @@ public class ActivityImporterHelper {
 	}
 	
 	public static Class<?> getGenericsParameterClass(Field field) {
-//		if (!ParameterizedType.class.isAssignableFrom(field.getGenericType().getClass())
-//				|| java.util.Map.class.isAssignableFrom(field.getType())) {
-//			return null;
-//		}
 		ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
-//		if (toSkip.contains(parameterizedType))
-//			return null;
-		// so far we process only 1 parameter only collections
 		if (parameterizedType.getActualTypeArguments().length > 1)
 			throw new RuntimeException("Unsupported field: " + field);
 		String subElementTypeName = parameterizedType.getActualTypeArguments()[0].toString(); //parameterizedType.getActualTypeArguments()[0];
-//		if (subElementTypeName.equals("K") || subElementTypeName.contains("<"))
-//			return null;
 		String className = subElementTypeName.substring("class ".length());
 		try {
 			return Class.forName(className);
@@ -49,129 +40,5 @@ public class ActivityImporterHelper {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	/*******************************************************************************************************
-	 * 							OLD
-	 *******************************************************************************************************/
-	
-//	protected void initActivityReferences(Object currentObj, ActivityRefPath activityRef) {
-//	if (currentObj == null) {
-//		return;
-//	}
-//	if (activityRef.hasActivityRef()) {
-//		Field field = getField(currentObj, activityRef.getActivityField());
-//		if (field != null) {
-//			try {
-//				field.set(currentObj, newActivity);
-//			} catch (IllegalArgumentException | IllegalAccessException e) {
-//				logger.error(e.getMessage());
-//				throw new RuntimeException(e);
-//			}
-//		}
-//	}
-//	for (Map.Entry<String, ActivityRefPath> pathThrough : activityRef.getRefPaths().entrySet()) {
-//		Field field = getField(currentObj, activityRef.getActivityField());
-//		try {
-//			if (Collection.class.isAssignableFrom(field.getType())) {
-//				Collection<?> collValues = (Collection<?>) field.get(currentObj);
-//				if (collValues != null && collValues.size() > 0) {
-//					for (Object child : collValues) {
-//						initActivityReferences(child, pathThrough.getValue());
-//					}
-//				}
-//			} else {
-//				// direct field
-//				initActivityReferences(field.get(currentObj), pathThrough.getValue());
-//			}
-//		} catch (IllegalArgumentException | IllegalAccessException e) {
-//			logger.error(e.getMessage());
-//			throw new RuntimeException(e);
-//		} 
-//	}
-//}
-	
-//	protected static Set<Class<?>> toSkip = new HashSet<Class<?>>() {{
-//	add(null);
-//	add(Object.class);
-//	add(Comparator.class);
-//	add(java.util.Map.class);
-//	add(org.dgfoundation.amp.ar.MetaInfo.class);
-//}};
-//
-//public static ActivityRefPath getActivityRefPathsSet() {
-//	toSkip.add(java.util.Map.class);
-//	toSkip.add(org.dgfoundation.amp.ar.MetaInfo.class);
-//	toSkip.add(java.security.Principal.class);
-//	
-//	Map<Class<?>, ActivityRefPath> scanned = new HashMap<Class<?>, ActivityRefPath>();
-//	buildPaths(AmpActivityVersion.class, scanned);
-//	cleanupInvalid(scanned.get(AmpActivityVersion.class).getRefPaths());
-//	return scanned.get(AmpActivityVersion.class);
-//}
-//
-//protected static void buildPaths(Class<?> origClazz, Map<Class<?>, ActivityRefPath> scanned) {
-//	if (scanned.containsKey(origClazz)) {
-//		return;
-//	}
-//	if (!(origClazz.getName().contains("org.digijava") || origClazz.getName().contains("org.dgfoundation"))) {
-//		scanned.put(origClazz, null);
-//		return;
-//	}
-//	
-//	ActivityRefPath currentRefPath = new ActivityRefPath();
-//	
-//	Map<Field, String> toScan = new HashMap<Field, String>();
-//	String activityFieldName = null;
-//	Class<?> clazz = origClazz;
-//	while (!toSkip.contains(clazz)) {
-//		for (Field field : clazz.getDeclaredFields()) {
-//			if (!field.getType().isPrimitive() && !field.getType().getName().startsWith("java.lang")) {
-//				if (field.getType().isAssignableFrom(AmpActivityVersion.class)) {
-//					activityFieldName = field.getName();
-//					currentRefPath.setActivityField(activityFieldName);
-//				} else { 
-//					if (scanned.containsKey(field.getType())) {
-//						ActivityRefPath refPath = scanned.get(field.getType());
-//						if (refPath != null) {
-//							currentRefPath.addActivityRefPath(field.getName(), refPath); 
-//						}
-//					} else {
-//						toScan.put(field, field.getName());
-//					}
-//				}
-//			}
-//		}
-//		clazz = clazz.getSuperclass(); 
-//	}
-//	
-//	scanned.put(origClazz, currentRefPath);
-//	
-//	for (Map.Entry<Field, String> classField : toScan.entrySet()) {
-//		Field field = classField.getKey();
-//		Class<?> childClass = null;
-//		if (InterchangeUtils.isCollection(field)) {
-//			childClass =  getGenericsParameterClass(field);
-//		} else {
-//			childClass = field.getType();
-//		}
-//		buildPaths(childClass, scanned);
-//		ActivityRefPath refPath = scanned.get(childClass);
-//		if (refPath != null) {
-//			currentRefPath.addActivityRefPath(classField.getValue(), refPath); 
-//		}
-//	}
-//}
-//
-//protected static void cleanupInvalid(Map<String, ActivityRefPath> scanned) {
-//	for (Iterator<Map.Entry<String, ActivityRefPath>> iter = scanned.entrySet().iterator(); iter.hasNext(); ) {
-//		Map.Entry<String, ActivityRefPath> entry = iter.next();
-//		ActivityRefPath ref = entry.getValue();
-//		cleanupInvalid(ref.getRefPaths());
-//		if (ref.getRefPaths().isEmpty() && !ref.hasActivityRef()) {
-//			// no actual ref paths
-//			iter.remove();
-//		}
-//	}
-//}
 	
 }

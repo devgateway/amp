@@ -1,6 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity.visibility;
 
-import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;

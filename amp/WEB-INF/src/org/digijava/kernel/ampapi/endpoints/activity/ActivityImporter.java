@@ -207,7 +207,6 @@ public class ActivityImporter {
 		 * Sub-elements by default are valid when not provided. 
 		 * Current field will be verified below and reported as invalid if sub-elements are mandatory and are not provided. 
 		 */
-		boolean validSubElements = true;
 		boolean isList = ActivityEPConstants.FIELD_TYPE_LIST.equals(fieldType);
 		
 		// first validate all sub-elements
@@ -329,10 +328,6 @@ public class ActivityImporter {
 	protected Object setNewField(Object newParent, JsonBean fieldDef, Map<String, Object> newJsonParent, 
 			String fieldPath) {
 		boolean importable = Boolean.TRUE.equals(fieldDef.get(ActivityEPConstants.IMPORTABLE));
-		if (!importable) {
-			// skip reconfiguration at this level if the field is not importable
-			return newParent;
-		}
 		
 		// note again: only checks in scope of this method are done here
 		
@@ -346,6 +341,16 @@ public class ActivityImporter {
 			logger.error("Actual Field not found: " + actualFieldName + ", fieldPaht: " + fieldPath);
 			return null;
 		}
+		
+		if (!importable) {
+			if (!newParent.getClass().isAssignableFrom(AmpActivityVersion.class) &&
+					objField.getType().isAssignableFrom(AmpActivityVersion.class)) {
+				addActivityFieldForPostprocessing(objField, newParent);
+			}
+			// skip reconfiguration at this level if the field is not importable
+			return newParent;
+		}
+		
 		Object oldValue;
 		try {
 			oldValue = objField.get(newParent);
@@ -363,13 +368,7 @@ public class ActivityImporter {
 					if (newParent instanceof Collection) {
 						((Collection<Object>) newParent).add(newValue);
 					} else {
-						if (!newParent.getClass().isAssignableFrom(AmpActivityVersion.class) &&
-								objField.getType().isAssignableFrom(AmpActivityVersion.class)) {
-							addActivityFieldForPostprocessing(objField, newParent);
-							objField.set(newParent, null);
-						} else {
-							objField.set(newParent, newValue);
-						}
+						objField.set(newParent, newValue);
 					}
 				} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
 					logger.error(e.getMessage());

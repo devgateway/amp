@@ -7,20 +7,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
@@ -29,18 +17,11 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
-import org.digijava.module.aim.dbentity.AmpActivityFields;
-import org.digijava.module.aim.dbentity.AmpActivityProgram;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.jdbc.Work;
 
@@ -53,11 +34,6 @@ import clover.org.apache.commons.lang.StringUtils;
  * 
  * @author acartaleanu
  */
-
-
-
-
-
 public class PossibleValuesEnumerator {
 	
 	public static final Logger LOGGER = Logger.getLogger(PossibleValuesEnumerator.class);

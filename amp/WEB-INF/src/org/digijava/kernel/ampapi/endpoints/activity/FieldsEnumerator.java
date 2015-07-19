@@ -180,8 +180,15 @@ public class FieldsEnumerator {
 		if (interchangeable.id()) {
 			bean.set(ActivityEPConstants.ID, interchangeable.id());
 		}
-		bean.set(ActivityEPConstants.FIELD_TYPE, InterchangeableClassMapper.containsSimpleClass(field.getType()) ? 
-				InterchangeableClassMapper.getCustomMapping(field.getType()) : "list");
+		
+		if (interchangeable.pickIdOnly()) {
+			bean.set(ActivityEPConstants.FIELD_TYPE, InterchangeableClassMapper.getCustomMapping(java.lang.Long.class));
+		} else {
+			bean.set(ActivityEPConstants.FIELD_TYPE, InterchangeableClassMapper.containsSimpleClass(field.getType())? 
+					InterchangeableClassMapper.getCustomMapping(field.getType()) : ActivityEPConstants.FIELD_TYPE_LIST);			
+		}
+		
+
 		bean.set(ActivityEPConstants.FIELD_LABEL, InterchangeUtils.mapToBean(getLabelsForField(interchangeable.fieldTitle())));
 		bean.set(ActivityEPConstants.REQUIRED, InterchangeUtils.getRequiredValue(field, interchangeable));
 		bean.set(ActivityEPConstants.IMPORTABLE, interchangeable.importable());

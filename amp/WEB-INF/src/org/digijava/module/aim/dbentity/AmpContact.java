@@ -20,6 +20,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  */
 @TranslatableClass (displayName = "Contact")
 public class AmpContact implements Comparable, Serializable, Cloneable, Versionable {
+	@Interchangeable(fieldTitle="ID", id=true)
 	private Long id;
 	@Interchangeable(fieldTitle="Name")
 	private String name;

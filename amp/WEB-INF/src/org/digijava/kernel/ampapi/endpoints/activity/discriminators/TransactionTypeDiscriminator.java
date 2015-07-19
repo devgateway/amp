@@ -15,6 +15,9 @@ public class TransactionTypeDiscriminator extends FieldsDiscriminator {
 		return valuesMap;
 	}
 	
+	
+	
+	
 	@Override
 	public Object toJsonOutput(Object obj) {
 		Integer value = (Integer) obj;
@@ -22,6 +25,14 @@ public class TransactionTypeDiscriminator extends FieldsDiscriminator {
 			if (entry.getValue().equals(value))
 				return entry.getKey();
 		return null;
+	}
+
+
+
+
+	@Override
+	public Object toAmpFormat(Object obj) {
+		return ArConstants.TRANSACTION_TYPE_NAME_TO_ID.get(obj);
 	}
 
 }

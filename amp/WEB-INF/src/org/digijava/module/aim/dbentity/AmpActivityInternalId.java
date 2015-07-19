@@ -16,7 +16,7 @@ public class AmpActivityInternalId implements Serializable, Versionable, Cloneab
 	@Interchangeable(fieldTitle="Organization", importable = true, pickIdOnly = true)
 	private AmpOrganisation organisation;
 
-//	@Interchangeable(fieldTitle="AMP Activity",recursive=true)
+	@Interchangeable(fieldTitle="AMP Activity",importable=true, pickIdOnly=true)
 	private AmpActivityVersion ampActivity;
 	
 	@Interchangeable(fieldTitle="Internal ID")

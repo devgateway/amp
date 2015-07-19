@@ -68,7 +68,7 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
 	 */
 	private String orgTypeCode; // defunct
 	
-	@Interchangeable(fieldTitle="Organization Group")
+//	@Interchangeable(fieldTitle="Organization Group")
 	private AmpOrgGroup orgGrpId;
 	@Interchangeable(fieldTitle="Address")
 	private String address;

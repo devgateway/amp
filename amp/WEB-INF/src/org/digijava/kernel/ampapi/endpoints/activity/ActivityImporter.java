@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.jackrabbit.core.xml.Importer;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.onepager.util.ChangeType;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
@@ -311,6 +312,13 @@ public class ActivityImporter {
 		return fieldValue;
 	}
 	
+	protected Map<Field, Object> activityFieldsForPostprocess = new HashMap<Field, Object>();
+	
+	protected void addActivityFieldForPostprocessing(Field field, Object obj) {
+		activityFieldsForPostprocess.put(field,obj);
+	}
+	
+	
 	/**
 	 * Configures new value, no validation outside of this method scope, it must be verified before
 	 * @param newParent
@@ -355,7 +363,13 @@ public class ActivityImporter {
 					if (newParent instanceof Collection) {
 						((Collection<Object>) newParent).add(newValue);
 					} else {
-						objField.set(newParent, newValue);
+						if (!newParent.getClass().isAssignableFrom(AmpActivityVersion.class) &&
+								objField.getType().isAssignableFrom(AmpActivityVersion.class)) {
+							addActivityFieldForPostprocessing(objField, newParent);
+							objField.set(newParent, null);
+						} else {
+							objField.set(newParent, newValue);
+						}
 					}
 				} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
 					logger.error(e.getMessage());
@@ -430,11 +444,31 @@ public class ActivityImporter {
 		return true;
 	}
 	
+	
+	
+	
+	
+	protected Object getObjectReferencedById(Field field, Long objectId) {
+		Class objectType = field.getType();
+		if (Collection.class.isAssignableFrom(objectType))
+			throw new RuntimeException("Can't handle a collection of ID-linked objects yet!");
+		return InterchangeUtils.getObjectById(objectType, objectId);
+	}
+	
+	
 	protected Object getNewValue(Field field, Object parentObj, Object jsonValue, JsonBean fieldDef, String fieldPath) {
+		if (jsonValue == null)
+			return null;
 		Object value = null;
 		String fieldType = (String) fieldDef.get(ActivityEPConstants.FIELD_TYPE);
 		fieldPath = fieldPath.substring(1);
 		List<JsonBean> allowedValues = getPossibleValuesForFieldCached(fieldPath, AmpActivityFields.class, null);
+		if (Boolean.TRUE.equals(fieldDef.get(ActivityEPConstants.ID_ONLY))) {
+			//Number->String->Long. 
+			//if anyone has a better idea how to make this conversion painless, please ping me. @acartaleanu
+			return getObjectReferencedById(field, Long.valueOf(jsonValue.toString()));
+		}
+		
 		if (Collection.class.isAssignableFrom(field.getType())) {
 			try {
 				value = field.get(parentObj);
@@ -454,6 +488,7 @@ public class ActivityImporter {
 				} else {
 					// a valueOf should work
 					Method valueOf = field.getType().getDeclaredMethod("valueOf", String.class);
+					
 					value = valueOf.invoke(field.getType(), String.valueOf(jsonValue));
 				}
 			} catch (SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchMethodException 
@@ -619,14 +654,30 @@ public class ActivityImporter {
 				initEditor(field);
 			}
 		}
-		initSetors();
+		initOrgRoles();
+		initSectors();
 		initLocations();
 		initFundings();
         initContacts();
+        postprocessActivityReferences();
 		//initActivityReferences(newActivity, ActivityImporterHelper.getActivityRefPathsSet()); //ActivityImporterHelper.ACTIVITY_REFERENCES);
 	}
 	
-	protected void initSetors() {
+
+	protected void postprocessActivityReferences() {
+		for (Map.Entry<Field, Object> entry : activityFieldsForPostprocess.entrySet()) {
+			Field field = entry.getKey();
+			Object obj = entry.getValue();
+			try {
+				field.set(obj, this.newActivity);
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				logger.error(e.getMessage());
+				throw new RuntimeException(e);
+			}
+		}
+	}
+	
+	protected void initSectors() {
 		if (newActivity.getSectors() == null) {
 			newActivity.setSectors(new HashSet<AmpActivitySector>());
 		} else if (newActivity.getSectors().size() > 0) {

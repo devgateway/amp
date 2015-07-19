@@ -143,8 +143,7 @@ public class SecurityUtil {
 					// the user is logged in but without token
 					error=SecurityErrors.NO_SESSION_TOKEN;
 				} else {
-					if (new DateTime().isAfter(sessionAapiToken
-							.getExpirationTime())) {
+					if (new DateTime().isAfter(sessionAapiToken.getExpirationTime())) {
 						// the token in session has expired trhow exception
 						error = SecurityErrors.TOKEN_EXPIRED;
 					} else {

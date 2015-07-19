@@ -11,8 +11,7 @@ import com.sun.jersey.spi.container.ContainerResponseFilter;
 public class AuthResponseFilter implements ContainerResponseFilter {
 
 	@Override
-	public ContainerResponse filter(ContainerRequest request,
-			ContainerResponse response) {
+	public ContainerResponse filter(ContainerRequest request, ContainerResponse response) {
 			if("true".equals(TLSUtils.getRequest().getAttribute(SecurityUtil.REMOVE_SESSION))){
 				TLSUtils.getRequest().getSession().removeAttribute(Constants.CURRENT_MEMBER);
 				TLSUtils.getRequest().removeAttribute(SecurityUtil.REMOVE_SESSION);

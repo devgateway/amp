@@ -23,4 +23,7 @@ public abstract class FieldsDiscriminator {
 	 */
 
 	public abstract Object toJsonOutput(Object obj);
+	
+	
+	public abstract Object toAmpFormat(Object obj);
 }

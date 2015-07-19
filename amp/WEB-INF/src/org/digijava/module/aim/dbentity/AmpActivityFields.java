@@ -174,9 +174,9 @@ LoggerIdentifiable, Cloneable {
 	@Interchangeable(fieldTitle = "Sectors", importable = true, fmPath = "/Activity Form/Sectors")
 	@VersionableCollection(fieldTitle = "Sectors")
 	@InterchangeableDiscriminator(discriminatorField = "classificationConfig.name", settings = {
-			@Interchangeable(fieldTitle = "Primary Sectors", discriminatorOption = "Primary", fmPath = "/Activity Form/Sectors/Primary Sectors"),
-			@Interchangeable(fieldTitle = "Secondary Sectors", discriminatorOption = "Secondary", fmPath = "/Activity Form/Sectors/Secondary Sectors"),
-			@Interchangeable(fieldTitle = "Tertiary Sectors", discriminatorOption = "Tertiary", fmPath = "/Activity Form/Sectors/Tertiary Sectors")}, validators = {
+			@Interchangeable(fieldTitle = "Primary Sectors", discriminatorOption = "Primary", importable=true, fmPath = "/Activity Form/Sectors/Primary Sectors"),
+			@Interchangeable(fieldTitle = "Secondary Sectors", discriminatorOption = "Secondary", importable=true, fmPath = "/Activity Form/Sectors/Secondary Sectors"),
+			@Interchangeable(fieldTitle = "Tertiary Sectors", discriminatorOption = "Tertiary", importable=true, fmPath = "/Activity Form/Sectors/Tertiary Sectors")}, validators = {
 			@Validators(minSize = "/Activity Form/Sectors/Primary Sectors/minSizeSectorsValidator", percentage = "/Activity Form/Sectors/Primary Sectors/sectorPercentageTotal", unique = "/Activity Form/Sectors/Primary Sectors/uniqueSectorsValidator"),
 			@Validators(minSize = "/Activity Form/Sectors/Secondary Sectors/minSizeSectorsValidator", percentage = "/Activity Form/Sectors/Secondary Sectors/sectorPercentageTotal", unique = "/Activity Form/Sectors/Secondary Sectors/uniqueSectorsValidator"),
 			@Validators(minSize = "/Activity Form/Sectors/Tertiary Sectors/minSizeSectorsValidator", percentage = "/Activity Form/Sectors/Tertiary Sectors/sectorPercentageTotal", unique = "/Activity Form/Sectors/Tertiary Sectors/uniqueSectorsValidator")})
@@ -186,7 +186,8 @@ LoggerIdentifiable, Cloneable {
 	@VersionableCollection(fieldTitle = "Contracts")
 	protected Set<IPAContract> contracts;
 	
-	@Interchangeable(fieldTitle = "Locations", importable = true, fmPath = "/Activity Form/Location", required = "/Activity Form/Location/Locations/Location required validator")
+	//TTIL
+//	@Interchangeable(fieldTitle = "Locations", importable = true, fmPath = "/Activity Form/Location", required = "/Activity Form/Location/Locations/Location required validator")
 	@Validators (unique = "/Activity Form/Location/Locations/uniqueLocationsValidator")
 	@VersionableCollection(fieldTitle = "Locations")
 	protected Set<AmpActivityLocation> locations ;
@@ -194,14 +195,14 @@ LoggerIdentifiable, Cloneable {
 	@Interchangeable(fieldTitle = "Org. Role", importable = true, fmPath = "/Activity Form/Related Organizations")
 	@VersionableCollection(fieldTitle = "Org. Role")
 	@InterchangeableDiscriminator(discriminatorField = "orgRoleConfig.name", settings = {
-			@Interchangeable(fieldTitle = "Donor Organization", discriminatorOption = Constants.FUNDING_AGENCY, fmPath = "/Activity Form/Related Organizations/Donor Organization"),
-			@Interchangeable(fieldTitle = "Responsible Organization", discriminatorOption = Constants.RESPONSIBLE_ORGANISATION, fmPath = "/Activity Form/Related Organizations/Responsible Organization"),
-			@Interchangeable(fieldTitle = "Executing Agency", discriminatorOption = Constants.EXECUTING_AGENCY, fmPath = "/Activity Form/Related Organizations/Executing Agency"),
-			@Interchangeable(fieldTitle = "Implementing Agency", discriminatorOption = Constants.IMPLEMENTING_AGENCY, fmPath = "/Activity Form/Related Organizations/Implementing Agency"),
-			@Interchangeable(fieldTitle = "Beneficiary Agency", discriminatorOption = Constants.BENEFICIARY_AGENCY, fmPath = "/Activity Form/Related Organizations/Beneficiary Agency"),
-			@Interchangeable(fieldTitle = "Contracting Agency", discriminatorOption = Constants.CONTRACTING_AGENCY, fmPath = "/Activity Form/Related Organizations/Contracting Agency"),
-			@Interchangeable(fieldTitle = "Regional Group", discriminatorOption = Constants.REGIONAL_GROUP, fmPath = "/Activity Form/Related Organizations/Sector Group"),
-			@Interchangeable(fieldTitle = "Sector Group", discriminatorOption = Constants.SECTOR_GROUP, fmPath = "/Activity Form/Related Organizations/Regional Group")
+			@Interchangeable(fieldTitle = "Donor Organization", importable=true, discriminatorOption = Constants.FUNDING_AGENCY, fmPath = "/Activity Form/Related Organizations/Donor Organization"),
+			@Interchangeable(fieldTitle = "Responsible Organization", importable=true, discriminatorOption = Constants.RESPONSIBLE_ORGANISATION, fmPath = "/Activity Form/Related Organizations/Responsible Organization"),
+			@Interchangeable(fieldTitle = "Executing Agency", importable=true, discriminatorOption = Constants.EXECUTING_AGENCY, fmPath = "/Activity Form/Related Organizations/Executing Agency"),
+			@Interchangeable(fieldTitle = "Implementing Agency", importable=true, discriminatorOption = Constants.IMPLEMENTING_AGENCY, fmPath = "/Activity Form/Related Organizations/Implementing Agency"),
+			@Interchangeable(fieldTitle = "Beneficiary Agency", importable=true, discriminatorOption = Constants.BENEFICIARY_AGENCY, fmPath = "/Activity Form/Related Organizations/Beneficiary Agency"),
+			@Interchangeable(fieldTitle = "Contracting Agency", importable=true, discriminatorOption = Constants.CONTRACTING_AGENCY, fmPath = "/Activity Form/Related Organizations/Contracting Agency"),
+			@Interchangeable(fieldTitle = "Regional Group", importable=true, discriminatorOption = Constants.REGIONAL_GROUP, fmPath = "/Activity Form/Related Organizations/Sector Group"),
+			@Interchangeable(fieldTitle = "Sector Group", importable=true, discriminatorOption = Constants.SECTOR_GROUP, fmPath = "/Activity Form/Related Organizations/Regional Group")
 		}, validators = {
 			@Validators(maxSize = "/Activity Form/Organizations/Donor Organization/Max Size Validator", minSize = "/Activity Form/Organizations/Donor Organization/Required Validator", 
 					unique = "/Activity Form/Organizations/Donor Organization/Unique Orgs Validator", percentage = "/Activity Form/Organizations/Donor Organization/relOrgPercentageTotal"),
@@ -228,7 +229,7 @@ LoggerIdentifiable, Cloneable {
 	
 	@Interchangeable(fieldTitle = "Fundings", importable = true, fmPath = "/Activity Form/Funding")
 	@VersionableCollection(fieldTitle = "Fundings")
-	protected Set<AmpFunding> funding ;
+	protected Set<AmpFunding> funding;
 	
 	//TODO show this field?
 	//TODO-reply: we should first figure out what it is
@@ -379,7 +380,8 @@ LoggerIdentifiable, Cloneable {
 	@VersionableCollection(fieldTitle = "Components")
 	protected Set<AmpComponent> components;
 
-	@Interchangeable(fieldTitle = "Structures", importable = true, fmPath = "/Activity Form/Structures")
+	//TTIL
+//	@Interchangeable(fieldTitle = "Structures", importable = true, fmPath = "/Activity Form/Structures")
 	@VersionableCollection(fieldTitle = "Structures")
 	protected Set<AmpStructure> structures;
 
@@ -449,11 +451,11 @@ LoggerIdentifiable, Cloneable {
 
 	// Aid Harmonization Survey Set
 	// @Interchangeable(fieldTitle = "Surveys",fmPath="/Activity Form/Paris Indicators")
-	// @VersionableCollection(fieldTitle = "Surveys")
+	 @VersionableCollection(fieldTitle = "Surveys")
 	protected Set<AmpAhsurvey> survey;
 	
 	// @Interchangeable(fieldTitle = "GPI Surveys",fmPath="/Activity Form/GPI")
-	// @VersionableCollection(fieldTitle = "GPI Surveys")
+	 @VersionableCollection(fieldTitle = "GPI Surveys")
 	protected Set <AmpGPISurvey> gpiSurvey;
 
 	@Interchangeable(fieldTitle = "Line Ministry Rank", importable = true, fmPath = "/Activity Form/Planning/Line Ministry Rank")
@@ -522,24 +524,24 @@ LoggerIdentifiable, Cloneable {
 	
 	
 	/* Categories */
-	@Interchangeable(fieldTitle = "Categories", importable = true)
+	@Interchangeable(fieldTitle = "Categories", importable = true, pickIdOnly=true)
 	@InterchangeableDiscriminator(discriminatorField="categories", 
 	settings = {
-		@Interchangeable(fieldTitle = "Status", discriminatorOption = CategoryConstants.ACTIVITY_STATUS_KEY, fmPath="/Activity Form/Identification/Activity Status"),
-		@Interchangeable(fieldTitle = "Type of Cooperation", discriminatorOption = /*"SSC_" + */CategoryConstants.TYPE_OF_COOPERATION_KEY, fmPath="/Activity Form/Identification/Type of Cooperation"),
-		@Interchangeable(fieldTitle = "Type of Implementation", discriminatorOption = /*"SSC_" + */CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY, fmPath="/Activity Form/Identification/Type of Implementation"),
-		@Interchangeable(fieldTitle = "Modalities", discriminatorOption = /*"SSC_" + */CategoryConstants.MODALITIES_KEY, fmPath="/Activity Form/Funding/Modalities"),
-		@Interchangeable(fieldTitle = "A.C. Chapter", discriminatorOption = CategoryConstants.ACCHAPTER_KEY, fmPath="/Activity Form/Identification/A.C. Chapter"), 
-		@Interchangeable(fieldTitle = "Activity Budget", discriminatorOption = CategoryConstants.ACTIVITY_BUDGET_KEY, fmPath="/Activity Form/Identification/Activity Budget"), 
-		@Interchangeable(fieldTitle = "Procurement System", discriminatorOption = CategoryConstants.PROCUREMENT_SYSTEM_KEY, fmPath="/Activity Form/Identification/Procurement System"),
-		@Interchangeable(fieldTitle = "Reporting System", discriminatorOption = CategoryConstants.REPORTING_SYSTEM_KEY, fmPath="/Activity Form/Identification/Reporting System"), 
-		@Interchangeable(fieldTitle = "Audit System", discriminatorOption = CategoryConstants.AUDIT_SYSTEM_KEY, fmPath="/Activity Form/Identification/Audit System"),
-		@Interchangeable(fieldTitle = "Institutions", discriminatorOption = CategoryConstants.INSTITUTIONS_KEY, fmPath="/Activity Form/Identification/Institutions"),
-		@Interchangeable(fieldTitle = "Project Implementing Unit", discriminatorOption = CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY, fmPath="/Activity Form/Identification/Project Implementing Unit"),
-		@Interchangeable(fieldTitle = "Accession Instrument", discriminatorOption = CategoryConstants.ACCESSION_INSTRUMENT_KEY, fmPath="/Activity Form/Identification/Accession Instrument"),
-		@Interchangeable(fieldTitle = "Project Category", discriminatorOption = CategoryConstants.PROJECT_CATEGORY_KEY, fmPath="/Activity Form/Identification/Project Category"),
-		@Interchangeable(fieldTitle = "Implementation Level", discriminatorOption = CategoryConstants.IMPLEMENTATION_LEVEL_KEY, fmPath="/Activity Form/Location/Implementation Level"),
-		@Interchangeable(fieldTitle = "Implementation Location", discriminatorOption = CategoryConstants.IMPLEMENTATION_LOCATION_KEY, fmPath="/Activity Form/Location/Implementation Location")
+		@Interchangeable(fieldTitle = "Status", importable=true, discriminatorOption = CategoryConstants.ACTIVITY_STATUS_KEY, fmPath="/Activity Form/Identification/Activity Status", pickIdOnly=true),
+		@Interchangeable(fieldTitle = "Type of Cooperation", importable=true, discriminatorOption = /*"SSC_" + */CategoryConstants.TYPE_OF_COOPERATION_KEY, fmPath="/Activity Form/Identification/Type of Cooperation", pickIdOnly=true),
+		@Interchangeable(fieldTitle = "Type of Implementation", importable=true, discriminatorOption = /*"SSC_" + */CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY, fmPath="/Activity Form/Identification/Type of Implementation", pickIdOnly=true),
+		@Interchangeable(fieldTitle = "Modalities", importable=true, discriminatorOption = /*"SSC_" + */CategoryConstants.MODALITIES_KEY, fmPath="/Activity Form/Funding/Modalities", pickIdOnly=true),
+		@Interchangeable(fieldTitle = "A.C. Chapter", importable=true, discriminatorOption = CategoryConstants.ACCHAPTER_KEY, fmPath="/Activity Form/Identification/A.C. Chapter", pickIdOnly=true), 
+		@Interchangeable(fieldTitle = "Activity Budget", importable=true, discriminatorOption = CategoryConstants.ACTIVITY_BUDGET_KEY, fmPath="/Activity Form/Identification/Activity Budget", pickIdOnly=true), 
+		@Interchangeable(fieldTitle = "Procurement System", importable=true, discriminatorOption = CategoryConstants.PROCUREMENT_SYSTEM_KEY, fmPath="/Activity Form/Identification/Procurement System", pickIdOnly=true),
+		@Interchangeable(fieldTitle = "Reporting System", importable=true, discriminatorOption = CategoryConstants.REPORTING_SYSTEM_KEY, fmPath="/Activity Form/Identification/Reporting System", pickIdOnly=true), 
+		@Interchangeable(fieldTitle = "Audit System", importable=true, discriminatorOption = CategoryConstants.AUDIT_SYSTEM_KEY, fmPath="/Activity Form/Identification/Audit System", pickIdOnly=true),
+		@Interchangeable(fieldTitle = "Institutions", importable=true, discriminatorOption = CategoryConstants.INSTITUTIONS_KEY, fmPath="/Activity Form/Identification/Institutions", pickIdOnly=true),
+		@Interchangeable(fieldTitle = "Project Implementing Unit", importable=true, discriminatorOption = CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY, fmPath="/Activity Form/Identification/Project Implementing Unit", pickIdOnly=true),
+		@Interchangeable(fieldTitle = "Accession Instrument", importable=true, discriminatorOption = CategoryConstants.ACCESSION_INSTRUMENT_KEY, fmPath="/Activity Form/Identification/Accession Instrument", pickIdOnly=true),
+		@Interchangeable(fieldTitle = "Project Category", importable=true, discriminatorOption = CategoryConstants.PROJECT_CATEGORY_KEY, fmPath="/Activity Form/Identification/Project Category", pickIdOnly=true),
+		@Interchangeable(fieldTitle = "Implementation Level", importable=true, discriminatorOption = CategoryConstants.IMPLEMENTATION_LEVEL_KEY, fmPath="/Activity Form/Location/Implementation Level", pickIdOnly=true),
+		@Interchangeable(fieldTitle = "Implementation Location", importable=true, discriminatorOption = CategoryConstants.IMPLEMENTATION_LOCATION_KEY, fmPath="/Activity Form/Location/Implementation Location", pickIdOnly=true)
 		
 	})
 	@VersionableCollection(fieldTitle = "Categories")
@@ -596,13 +598,13 @@ LoggerIdentifiable, Cloneable {
 	protected Boolean humanitarianAid;
 
 	//Can be Primary, Secondary,Tertiary or National Plan Objective
-	@Interchangeable(fieldTitle = "Act. Programs", importable = true, fmPath = "/Activity Form/Program")
+	@Interchangeable(fieldTitle = "Act. Programs", importable = true, fmPath = "/Activity Form/Program", pickIdOnly=true)
 	@VersionableCollection(fieldTitle = "Act. Programs")
 	@InterchangeableDiscriminator(discriminatorField = "programSetting.name", settings = {
-			@Interchangeable(fieldTitle = "National Plan Objective", discriminatorOption = "National Plan Objective", fmPath = "/Activity Form/Program/National Plan Objective"),
-			@Interchangeable(fieldTitle = "Primary Programs", discriminatorOption = "Primary Program", fmPath = "/Activity Form/Program/Primary Programs"),
-			@Interchangeable(fieldTitle = "Secondary Programs", discriminatorOption = "Secondary Program", fmPath = "/Activity Form/Program/Secondary Programs"),
-			@Interchangeable(fieldTitle = "Tertiary Programs", discriminatorOption = "Tertiary Program", fmPath = "/Activity Form/Program/Tertiary Programs") }, validators = {
+			@Interchangeable(fieldTitle = "National Plan Objective", discriminatorOption = "National Plan Objective", fmPath = "/Activity Form/Program/National Plan Objective", pickIdOnly=true),
+			@Interchangeable(fieldTitle = "Primary Programs", discriminatorOption = "Primary Program", fmPath = "/Activity Form/Program/Primary Programs", pickIdOnly=true),
+			@Interchangeable(fieldTitle = "Secondary Programs", discriminatorOption = "Secondary Program", fmPath = "/Activity Form/Program/Secondary Programs", pickIdOnly=true),
+			@Interchangeable(fieldTitle = "Tertiary Programs", discriminatorOption = "Tertiary Program", fmPath = "/Activity Form/Program/Tertiary Programs", pickIdOnly=true) }, validators = {
 			@Validators(maxSize = "/Activity Form/Program/National Plan Objective/max Size Program Validator", minSize = "/Activity Form/Program/National Plan Objective/minSizeProgramValidator", unique = "/Activity Form/Program/National Plan Objective/uniqueProgramsValidator", percentage = "/Activity Form/Program/National Plan Objective/programPercentageTotal"),
 			@Validators(maxSize = "/Activity Form/Program/Primary Programs/max Size Program Validator", minSize = "/Activity Form/Program/Primary Programs/minSizeProgramValidator", unique = "/Activity Form/Program/Primary Programs/uniqueProgramsValidator", percentage = "/Activity Form/Program/Primary Programs/programPercentageTotal"),
 			@Validators(maxSize = "/Activity Form/Program/Secondary Programs/max Size Program Validator", minSize = "/Activity Form/Program/Secondary Programs/minSizeProgramValidator", unique = "/Activity Form/Program/Secondary Programs/uniqueProgramsValidator", percentage = "/Activity Form/Program/Secondary Programs/programPercentageTotal"),

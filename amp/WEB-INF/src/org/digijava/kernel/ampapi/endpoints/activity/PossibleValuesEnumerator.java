@@ -82,14 +82,7 @@ public class PossibleValuesEnumerator {
 			if (InterchangeUtils.isCompositeField(field)) {
 				configString = getConfigValue(fieldName, field);	
 			}
-				
-			if (field == null) {
-				List<JsonBean> result = new ArrayList<JsonBean>();
-				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, fieldName)));
-				return result;
-			} else {
-				return getPossibleValuesForField(longFieldName.substring(longFieldName.indexOf('~') + 1), InterchangeUtils.getClassOfField(field), configString);
-			}
+			return getPossibleValuesForField(longFieldName.substring(longFieldName.indexOf('~') + 1), InterchangeUtils.getClassOfField(field), configString);
 		} else {
 			/*
 			 * the last field might contain discriminated values
@@ -252,12 +245,8 @@ public class PossibleValuesEnumerator {
 	private static List<JsonBean> getPossibleValuesForField(Field field) {
 		List<JsonBean> result = new ArrayList<JsonBean>();
 		Class<?> clazz = InterchangeUtils.getClassOfField(field);
-
-		
-		
 		if (clazz.isAssignableFrom(AmpCategoryValue.class))
 			return getPossibleCategoryValues(field, null);
-				
 		String queryString = "select cls from " + clazz.getName() + " cls ";
 		List<Object> objectList= PersistenceManager.getSession().createQuery(queryString).list();
 		for (Object obj : objectList) {

@@ -227,7 +227,7 @@ public class ActivityImporter {
 				newFieldValue = newField == null ? null : newField.get(newParent);
 				oldFieldValue = oldField == null ? null : oldField.get(oldParent);
 				if (newParent != null && newFieldValue == null) {
-					newFieldValue = getNewInstance(newParent, newField, fieldPath);
+					newFieldValue = getNewInstance(newParent, newField);
 				}
 				if (newFieldValue != null && Collection.class.isAssignableFrom(newFieldValue.getClass())) {
 					isCollection = true;
@@ -291,7 +291,7 @@ public class ActivityImporter {
 		return null;
 	}
 	
-	protected Object getNewInstance(Object parent, Field field, String fieldPath) {
+	protected Object getNewInstance(Object parent, Field field) {
 		Object fieldValue = null;
 		try {
 			if (Set.class.isAssignableFrom(field.getType())) {
@@ -443,34 +443,45 @@ public class ActivityImporter {
 		return true;
 	}
 	
-	
-	
-	
-	
-	protected Object getObjectReferencedById(Field field, Long objectId) {
-		Class objectType = field.getType();
+	protected Object getObjectReferencedById(Class<?> objectType, Long objectId) {
 		if (Collection.class.isAssignableFrom(objectType))
 			throw new RuntimeException("Can't handle a collection of ID-linked objects yet!");
 		return InterchangeUtils.getObjectById(objectType, objectId);
 	}
 	
-	
 	protected Object getNewValue(Field field, Object parentObj, Object jsonValue, JsonBean fieldDef, String fieldPath) {
-		if (jsonValue == null)
+		boolean isCollection = Collection.class.isAssignableFrom(field.getType());
+		if (jsonValue == null && !isCollection)
 			return null;
 		Object value = null;
 		String fieldType = (String) fieldDef.get(ActivityEPConstants.FIELD_TYPE);
 		fieldPath = fieldPath.substring(1);
 		List<JsonBean> allowedValues = getPossibleValuesForFieldCached(fieldPath, AmpActivityFields.class, null);
-		if (Boolean.TRUE.equals(fieldDef.get(ActivityEPConstants.ID_ONLY))) {
+		boolean idOnly = Boolean.TRUE.equals(fieldDef.get(ActivityEPConstants.ID_ONLY)); 
+		if (!isCollection && idOnly) {
 			//Number->String->Long. 
 			//if anyone has a better idea how to make this conversion painless, please ping me. @acartaleanu
-			return getObjectReferencedById(field, Long.valueOf(jsonValue.toString()));
+			return getObjectReferencedById(field.getType(), Long.valueOf(jsonValue.toString()));
 		}
 		
 		if (Collection.class.isAssignableFrom(field.getType())) {
 			try {
 				value = field.get(parentObj);
+				Collection col = (Collection) value;
+				if (col == null) {
+					col = (Collection) getNewInstance(parentObj, field);
+				}
+				if (idOnly && jsonValue != null) {
+					Class<?> objectType = ActivityImporterHelper.getGenericsParameterClass(field);
+					try {
+						Object res = getObjectReferencedById(objectType, Long.valueOf(jsonValue.toString()));
+						col.add(res);
+					} catch (IllegalArgumentException e) {
+						logger.error(e.getMessage());
+						throw new RuntimeException(e);
+					}
+					
+				}
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 				logger.error(e.getMessage());
 				throw new RuntimeException(e);
@@ -501,8 +512,7 @@ public class ActivityImporter {
 				for (JsonBean childDef : (List<JsonBean>) fieldDef.get(ActivityEPConstants.CHILDREN)) {
 					if (Boolean.TRUE.equals(childDef.get(ActivityEPConstants.ID))) {
 						Long id = ((Integer) ((Map<String, Object>) jsonValue).get(childDef.getString(ActivityEPConstants.FIELD_NAME))).longValue();
-						value = PersistenceManager.getSession().get(field.getType().getName(), id);
-						// possibleValuesQuery.get(fieldPath);
+						value = InterchangeUtils.getObjectById(field.getType(), id);
 						break;
 					}
 				}

@@ -10,7 +10,7 @@ define([ 'underscore', 'backbone', 'models/document' ], function(_, Backbone, Do
 					console.error('error loading documents url');
 				},
 				success : function(collection, response) {
-					console.log(response);
+					// console.log("list of documents is: " + JSON.toString(response));
 				}
 			});
 		}

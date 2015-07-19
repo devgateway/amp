@@ -20,9 +20,9 @@ define([ 'util/tabUtils' ], function(TabUtils) {
 			}
 		});
 		if (ret != undefined) {
-			console.log('Found column: ' + name);
+			console.log('Found column with special settings: ' + name);
 		} else {
-			console.warn('Not Found column: ' + name);
+			//console.warn('Not Found column: ' + name);
 		}
 		return ret;
 	}

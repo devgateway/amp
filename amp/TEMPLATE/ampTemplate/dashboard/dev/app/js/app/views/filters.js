@@ -16,7 +16,7 @@ module.exports = BackboneDash.View.extend({
     'click .show-filter-details': 'showFilterDetails',
     'click .hide-filter-details': 'hideFilterDetails'
   },
-
+  
   initialize: function(options) {
     this.finishedFirstLoad = false;
 	this.app = options.app;
@@ -25,28 +25,13 @@ module.exports = BackboneDash.View.extend({
 
     this.app.settings.load().done(_(function() {
     	// Extract default dates from Global Settings.
-    	var blob = {
-    		otherFilters : {
-    			date : {
-	    			start: '',
-	    			end: ''
-    			}
-    		}
-    	};
-    	var defaultMinDate = _.find(this.app.settings.models, function(item) {
-    		return item.get('id') === 'dashboard-default-min-date';
-    	});
-    	if (defaultMinDate !== undefined && defaultMinDate.get('name') !== '') {
-    		blob.otherFilters.date.start = defaultMinDate.get('name');
-    	}
-    	var defaultMaxDate = _.find(this.app.settings.models, function(item) {
-    		return item.get('id') === 'dashboard-default-max-date';
-    	});
-    	if (defaultMaxDate !== undefined && defaultMaxDate.get('name') !== '') {
-    		blob.otherFilters.date.end = defaultMaxDate.get('name');
-    	}
+    	var blob = {};
+    	
+    	// AMP-19254, AMP-20537: override the "date" range with the Dashboards-specific one from the settings blob (a hack...) 
+    	this.app.filter.extractDates(this.app.settings.models, blob, 'dashboard-default-min-date', 'dashboard-default-max-date');
     	
 	    this.app.filter.loaded.done(_(function() {
+	    	console.error('filters loaded');
 	      this.app.state.register(this, 'filters', {
 	        // namespace serialized filters so we can hook in extra state to store
 	        // later if desired (anything dashboards-ui related, for example)

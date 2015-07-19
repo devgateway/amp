@@ -382,8 +382,12 @@ public class SettingsUtils {
 		settings.add(new SettingOptions("number-multiplier", false, 
 				String.valueOf(MondrianReportUtils.getAmountMultiplier(amountOptionId))
 				, null, null));
+		
+		settings.add(new SettingOptions("language", false, TLSUtils.getEffectiveLangCode(),
+				null, null)); 
+
 		// Workspace Settings
-		if (tm != null){ 
+		if (tm != null) { 
 			settings.add(new SettingOptions("team-id", false, 
 					EndpointUtils.getAppSettings().getTeam().getAmpTeamId().toString(), null, null));
 			settings.add(new SettingOptions("team-lead", false, String.valueOf(tm.getTeamHead()), null, null));
@@ -393,37 +397,34 @@ public class SettingsUtils {
 					String.valueOf(EndpointUtils.getAppSettings().getTeam().getCrossteamvalidation())
 					, null, null));
 			settings.add(new SettingOptions("workspace_type", false, String.valueOf(EndpointUtils.getAppSettings().getTeam().getAccessType())
-					, null, null));
-			settings.add(new SettingOptions("language", false, 
-					tm.getAppSettings().getLanguage(), null, null)); 
-			
+					, null, null));			
 		}
 		
-		// Dashboard specific settings (some come directly from GS values and others require some processing).
-		String defaultDashboardMaxYearRange = FeaturesUtil
-				.getGlobalSettingValue(GlobalSettingsConstants.DASHBOARD_DEFAULT_MAX_YEAR_RANGE);
-		String defaultDashboardMinYearRange = FeaturesUtil
-				.getGlobalSettingValue(GlobalSettingsConstants.DASHBOARD_DEFAULT_MIN_YEAR_RANGE);
+		// Dashboard / GIS specific date range settings
+
 		String defaultCalendar = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
-		settings.add(new SettingOptions("dashboard-default-max-year-range", false, defaultDashboardMaxYearRange, null,
-				null));
-		settings.add(new SettingOptions("dashboard-default-min-year-range", false, defaultDashboardMinYearRange, null,
-				null));
-		settings.add(new SettingOptions("dashboard-default-calendar", false, defaultCalendar, null, null));
-		if (!defaultDashboardMaxYearRange.equals("-1")) {
-			settings.add(new SettingOptions("dashboard-default-max-date", false, DateTimeUtil
-					.parseDateForPicker2(CalendarUtil.getEndDate(new Long(defaultCalendar), new Integer(
-							defaultDashboardMaxYearRange).intValue()), Constants.CALENDAR_DATE_PICKER), null, null));
-		}
-		if (!defaultDashboardMinYearRange.equals("-1")) {
-			settings.add(new SettingOptions("dashboard-default-min-date", false, DateTimeUtil
-					.parseDateForPicker2(CalendarUtil.getStartDate(new Long(defaultCalendar), new Integer(
-							defaultDashboardMinYearRange).intValue()), Constants.CALENDAR_DATE_PICKER), null, null));
-		}
+		long defaultCalendarId = Long.parseLong(defaultCalendar);
+		
+		addDateSetting(settings, GlobalSettingsConstants.DASHBOARD_DEFAULT_MAX_YEAR_RANGE, "dashboard-default-max-date", "dashboard-default-max-year-range", defaultCalendarId);
+		addDateSetting(settings, GlobalSettingsConstants.DASHBOARD_DEFAULT_MIN_YEAR_RANGE, "dashboard-default-min-date", "dashboard-default-min-year-range", defaultCalendarId);
+		addDateSetting(settings, GlobalSettingsConstants.GIS_DEFAUL_MAX_YEAR_RANGE, "gis-default-max-date", "gis-default-max-year-range", defaultCalendarId);
+		addDateSetting(settings, GlobalSettingsConstants.GIS_DEFAUL_MIN_YEAR_RANGE, "gis-default-min-date", "gis-default-min-year-range", defaultCalendarId);
+
 		return settings;
 	}
 	
-	
+	protected static void addDateSetting(List<SettingOptions> settings, String globalSettingsName,
+			String dateSettingsName, String yearSettingsName,
+			long calendarId) throws Exception {
+		
+		String yearNumber = FeaturesUtil.getGlobalSettingValue(globalSettingsName);
+		settings.add(new SettingOptions(yearSettingsName, false, yearNumber, null, null));
+
+		if (!yearNumber.equals("-1")) {
+			settings.add(new SettingOptions(dateSettingsName, false, DateTimeUtil
+					.parseDateForPicker2(CalendarUtil.getEndDate(calendarId, Integer.parseInt(yearNumber)), Constants.CALENDAR_DATE_PICKER), null, null));
+		}
+	}
 	
 	/**
 	 * @return retrieves the default settings for currency and calendar 

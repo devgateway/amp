@@ -524,7 +524,7 @@ LoggerIdentifiable, Cloneable {
 	
 	
 	/* Categories */
-	@Interchangeable(fieldTitle = "Categories", importable = true, pickIdOnly=true)
+	@Interchangeable(fieldTitle = "Categories", importable = true)
 	@InterchangeableDiscriminator(discriminatorField="categories", 
 	settings = {
 		@Interchangeable(fieldTitle = "Status", importable=true, discriminatorOption = CategoryConstants.ACTIVITY_STATUS_KEY, fmPath="/Activity Form/Identification/Activity Status", pickIdOnly=true),

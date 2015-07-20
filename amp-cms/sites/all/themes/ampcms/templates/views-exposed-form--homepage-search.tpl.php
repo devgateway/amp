@@ -17,6 +17,7 @@
 
 <?php print $extra_widgets_toggle; ?>
 <div class="views-widgets-wrapper">
+  <?php if (!empty($basewidget)): ?>
   <div id="<?php print $basewidget->id; ?>-wrapper" class="views-exposed-widget views-base-widget">
     <?php if (!empty($basewidget->label)): ?>
       <label for="<?php print $basewidget->id; ?>">
@@ -37,6 +38,7 @@
       <?php print $basewidget->widget; ?>
     </div>
   </div>
+  <?php endif; ?>
 
   <div class="views-extra-widgets clearfix">
     <?php foreach ($widgets as $id => $widget): ?>

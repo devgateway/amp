@@ -65,6 +65,7 @@
 
 <script type="text/javascript">
 	var alertValidationTime = '<digi:trn>Please select validation time</digi:trn>';
+	var alertValidationPeriod = '<digi:trn>Please check Validation Period if you have selected Validation Time</digi:trn>';
 	var alertValidationPercentage = '<digi:trn>Please enter a valid percentage (0.01 - 100.00)</digi:trn>';
 </script>
 
@@ -88,7 +89,7 @@
   					<div class="settings-blocks">
   						<div class="settings-left"><digi:trn>Validation Time</digi:trn></div>
   						<div class="settings-right">
-  							<html:select property="validationTime">
+  							<html:select property="validationTime" onchange="handleValidationTimeChange(this);">
 								<html:option value=""><digi:trn>Select value...</digi:trn>
 								</html:option>
 								<html:option value="1">1 <digi:trn>Week</digi:trn>

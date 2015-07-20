@@ -16,6 +16,10 @@ function validate(){
 		alert(alertValidationTime);
 		return false;
 	}
+	if( $("input[name=validationPeriod]").is(":checked") === false && isEmpty($('select[name="validationTime"]').val()) === false){
+		alert(alertValidationPeriod);
+		return false;
+	}
 	
 	if (!validatePercentage()) {
 		return false;
@@ -27,6 +31,14 @@ function validate(){
 function handleValidationPeriodClick(chkbox){
 	if(!chkbox.checked){
 		$('select[name="validationTime"]').val("");
+	}
+}
+
+function handleValidationTimeChange(select) {
+	if (isEmpty($(select).val())) {
+		$("input[name=validationPeriod]").prop('checked', false);
+	} else {
+		$("input[name=validationPeriod]").prop('checked', true);
 	}
 }
 

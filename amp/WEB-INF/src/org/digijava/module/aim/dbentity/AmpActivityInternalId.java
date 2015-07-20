@@ -10,13 +10,13 @@ public class AmpActivityInternalId implements Serializable, Versionable, Cloneab
 	//IATI-check: used. 
 	private static final long serialVersionUID = 469552292854192522L;
 
-//	@Interchangeable(fieldTitle="ID")
+	@Interchangeable(fieldTitle="ID")
 	private Long id;
 
 	@Interchangeable(fieldTitle="Organization", importable=true, pickIdOnly=true)
 	private AmpOrganisation organisation;
 
-	@Interchangeable(fieldTitle="AMP Activity", importable=true, pickIdOnly=true)
+	@Interchangeable(fieldTitle="AMP Activity", pickIdOnly=true)
 	private AmpActivityVersion ampActivity;
 	
 	@Interchangeable(fieldTitle="Internal ID", importable=true)

@@ -117,7 +117,8 @@ public class ActivityExporter {
 					} else {
 
 						if (InterchangeableClassMapper.containsSupportedClass(field.getType()) || fieldValue == null) {
-							resultJson.set(fieldTitle, InterchangeUtils.getTranslationValues(field, field.getDeclaringClass(), fieldValue, InterchangeUtils.getId(parentObject)));
+							Class<? extends Object> parentClassName = parentObject == null ? field.getDeclaringClass() : parentObject.getClass();
+							resultJson.set(fieldTitle, InterchangeUtils.getTranslationValues(field, parentClassName, fieldValue, InterchangeUtils.getId(parentObject)));
 						} else {
 							resultJson.set(fieldTitle, getObjectJson(fieldValue, filteredFieldPath));
 						}

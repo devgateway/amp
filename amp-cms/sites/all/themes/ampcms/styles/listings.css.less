@@ -214,5 +214,28 @@ table {
   }
 }
 
+
+.layout-grid-items {
+  .layout-grid-item {
+    .logo {
+      margin: 1em 0;
+    }
+  }
+}
+.xSmallOnly() {
+  .layout-grid-items {
+    text-align: center;
+  }
+}
+.xMediumAndUp() {
+  .layout-grid-items {
+    .layout-grid-item {
+      .title {
+        text-align: center;
+      }
+    }
+  }
+}
+
 @import './lib/custom-responsive.less';
 @import './lib/helpers.less';

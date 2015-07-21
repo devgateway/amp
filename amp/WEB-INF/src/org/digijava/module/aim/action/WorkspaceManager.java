@@ -19,6 +19,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.WorkspaceForm;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.search.util.SearchUtil;
+import org.hibernate.Hibernate;
 
 public class WorkspaceManager extends Action {
 
@@ -159,7 +160,7 @@ public class WorkspaceManager extends Action {
 		Collection<AmpTeam> workspacesFiltered = new ArrayList<AmpTeam>();
 		if (! workspaces.isEmpty()) {
 			for (AmpTeam team : workspaces) {
-				team.getOrganizations().size(); // initialize lazy collection
+				Hibernate.initialize(team.getOrganizations()); // initialize lazy collection
 				boolean found = false;
 				for (String keyw : keywords) {
 					java.util.Locale currentLocale = new java.util.Locale(TLSUtils.getEffectiveLangCode());

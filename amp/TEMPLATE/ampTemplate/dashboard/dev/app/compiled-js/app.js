@@ -431,6 +431,7 @@ var nv = window.nv;  // nvd3 is a pain
 
 var _ = require('underscore');
 var common = require('./common');
+var util = require('../../ugly/util');
 
 
 function dataToNv(data) {
@@ -455,7 +456,8 @@ function chart(options) {
     .valueFormat(options.shortFormatter)
     .labelType('percent')
     .donut(true)
-    .donutRatio(0.35);
+    .donutRatio(0.35)
+    .showLegend(false);
   return _chart;
 }
 
@@ -470,17 +472,34 @@ function normalizeNvTTArgs(fmtX, fmtY, raw) {
   return [void 0, fmtX, fmtY, raw];
 }
 
+function addLegend(svg, chart, nvData, trimLabels, width) {
+  var legend = nv.models.legend()
+    .width(width || svg.clientWidth)
+    .margin({left: 20, right: 20})
+    .rightAlign(false)
+    .color(util.categoryColours(nvData.length))
+    .key(function(d) { return trimLabels ? util.formatShortText(12)(d.x) : d.x; });
+
+  d3.select(svg)
+    .datum(nvData)
+    .call(legend);
+
+  var legendHeight = svg.querySelector('.nv-legend').getBBox().height;
+  chart.margin({top: legendHeight + 15});
+}
+
 
 module.exports = {
   dispatchName: 'pie',
   normalizeNvTTArgs: normalizeNvTTArgs,
   countCategories: countCategories,
+  addLegend: addLegend,
   removeLegend: removeLegend,
   dataToNv: dataToNv,
   chart: chart
 };
 
-},{"./common":9,"underscore":"underscore"}],7:[function(require,module,exports){
+},{"../../ugly/util":42,"./common":9,"underscore":"underscore"}],7:[function(require,module,exports){
 
 var _ = require('underscore');
 var util = require('../../ugly/util');

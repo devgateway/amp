@@ -16,16 +16,16 @@ public class AmpActivityLocation implements Versionable,Serializable, Cloneable 
 	//IATI-check: should be exported.
 //	@Interchangeable(fieldTitle="ID", id=true)
 	private Long id;
-	@Interchangeable(fieldTitle="ID", pickIdOnly=true)
+	@Interchangeable(fieldTitle = "ID", pickIdOnly=true)
 	private AmpActivityVersion activity;
-	@Interchangeable(fieldTitle="Location", pickIdOnly = true, importable = true/*, descend = true*/)
+	@Interchangeable(fieldTitle = "Location", pickIdOnly = true, importable = true/*, descend = true*/)
 	private AmpLocation location;
-	@Interchangeable(fieldTitle="Location Percentage",fmPath="/Activity Form/Location/Locations/Location Item/location Percentage",required="/Activity Form/Location/Locations/Location percentage required" , importable = true, pickIdOnly = true)
-	@Validators (percentage="/Activity Form/Location/Locations/locationPercentageTotal" )
+	@Interchangeable(fieldTitle="Location Percentage", fmPath = "/Activity Form/Location/Locations/Location Item/locationPercentage", required = "/Activity Form/Location/Locations/Location required validator", importable = true)
+	@Validators (percentage = "/Activity Form/Location/Locations/locationPercentageTotal" )
 	private Float locationPercentage;
-	@Interchangeable(fieldTitle="Latitude",fmPath="/Activity Form/Location/Locations/Location Item/Latitude", importable = true)
+	@Interchangeable(fieldTitle = "Latitude", fmPath = "/Activity Form/Location/Locations/Location Item/Latitude", importable = true)
 	private String latitude;
-	@Interchangeable(fieldTitle="Longitude",fmPath="/Activity Form/Location/Locations/Location Item/Logitude", importable = true)
+	@Interchangeable(fieldTitle = "Longitude", fmPath = "/Activity Form/Location/Locations/Location Item/Logitude", importable = true)
 	private String longitude;
 	
 	public Long getId() {

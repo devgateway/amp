@@ -12,11 +12,13 @@ import org.digijava.module.aim.util.Output;
 public class AmpActivityContact implements Versionable, Comparable, Serializable, Cloneable {
 	
 	private Long id;
-	@Interchangeable(fieldTitle="Activity", pickIdOnly=true)
+	@Interchangeable(fieldTitle="Activity", pickIdOnly=true, importable=false)
 	private AmpActivityVersion activity;
-	@Interchangeable(fieldTitle="Contact", pickIdOnly=true)
+	@Interchangeable(fieldTitle="Contact", importable=true, pickIdOnly=true)
 	private AmpContact contact;
+	@Interchangeable(fieldTitle="Primary Contact", importable=true)
 	private Boolean primaryContact;
+	@Interchangeable(fieldTitle="Contact Type", importable=true)
 	private String contactType; // Donor/MOFED funding,Project Coordinator,Sector Ministry or Implementing/Executing Agency Contact Information
 	
 	public AmpActivityVersion getActivity() {

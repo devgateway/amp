@@ -304,68 +304,68 @@ LoggerIdentifiable, Cloneable {
 	// The field is defunct
 
 	// Donor contact information
-	@Interchangeable(fieldTitle = "Contact First Name",fmPath="/Activity Form/Contacts/Donor Contact Information/contact first name")
+//	@Interchangeable(fieldTitle = "Contact First Name",fmPath="/Activity Form/Contacts/Donor Contact Information/contact first name")
 	protected String contFirstName;
-	@Interchangeable(fieldTitle = "Contact Last Name",fmPath="/Activity Form/Contacts/Donor Contact Information/contact lastname")
+//	@Interchangeable(fieldTitle = "Contact Last Name",fmPath="/Activity Form/Contacts/Donor Contact Information/contact lastname")
 	protected String contLastName;
-	@Interchangeable(fieldTitle = "Email",fmPath="/Activity Form/Contacts/Donor Contact Information/Add Contact Email/Add Contact Email")
+//	@Interchangeable(fieldTitle = "Email",fmPath="/Activity Form/Contacts/Donor Contact Information/Add Contact Email/Add Contact Email")
 	protected String email;
-	@Interchangeable(fieldTitle = "Donor Contact Title",fmPath="/Activity Form/Contacts/Donor Contact Information/Contact Title")
+//	@Interchangeable(fieldTitle = "Donor Contact Title",fmPath="/Activity Form/Contacts/Donor Contact Information/Contact Title")
 	protected String dnrCntTitle;
-	@Interchangeable(fieldTitle = "Donor Contact Organization",fmPath="/Activity Form/Contacts/Donor Contact Information/Contact Organizations")
+//	@Interchangeable(fieldTitle = "Donor Contact Organization",fmPath="/Activity Form/Contacts/Donor Contact Information/Contact Organizations")
 	protected String dnrCntOrganization;
-	@Interchangeable(fieldTitle = "Donor Contact Phone Number",fmPath="/Activity Form/Contacts/Donor Contact Information/Add Contact Phone")
+//	@Interchangeable(fieldTitle = "Donor Contact Phone Number",fmPath="/Activity Form/Contacts/Donor Contact Information/Add Contact Phone")
 	protected String dnrCntPhoneNumber;
-	@Interchangeable(fieldTitle = "Donor Contact Fax Number",fmPath="/Activity Form/Contacts/Donor Contact Information/Add Contact Fax/Add Contact Fax")
+//	@Interchangeable(fieldTitle = "Donor Contact Fax Number",fmPath="/Activity Form/Contacts/Donor Contact Information/Add Contact Fax/Add Contact Fax")
 	protected String dnrCntFaxNumber;
 
 	// MOFED contact information
-	@Interchangeable(fieldTitle = "MOFED Contact First Name",fmPath="/Activity Form/Contacts/Mofed Contact Information/contact first name")
+//	@Interchangeable(fieldTitle = "MOFED Contact First Name",fmPath="/Activity Form/Contacts/Mofed Contact Information/contact first name")
 	protected String mofedCntFirstName;
-	@Interchangeable(fieldTitle = "MOFED Contact Last Name",fmPath="/Activity Form/Contacts/Mofed Contact Information/contact lastname")
+//	@Interchangeable(fieldTitle = "MOFED Contact Last Name",fmPath="/Activity Form/Contacts/Mofed Contact Information/contact lastname")
 	protected String mofedCntLastName;
-	@Interchangeable(fieldTitle = "MOFED Contact Email",fmPath="/Activity Form/Contacts/Mofed Contact Information/Add Contact Email/Add Contact Email")
+//	@Interchangeable(fieldTitle = "MOFED Contact Email",fmPath="/Activity Form/Contacts/Mofed Contact Information/Add Contact Email/Add Contact Email")
 	protected String mofedCntEmail;
-	@Interchangeable(fieldTitle = "MOFED Contact Title",fmPath="/Activity Form/Contacts/Mofed Contact Information/Contact Title")
+//	@Interchangeable(fieldTitle = "MOFED Contact Title",fmPath="/Activity Form/Contacts/Mofed Contact Information/Contact Title")
 	protected String mfdCntTitle;
-	@Interchangeable(fieldTitle = "MOFED Contact Organization",fmPath="/Activity Form/Contacts/Mofed Contact Information/Contact Organizations")
+//	@Interchangeable(fieldTitle = "MOFED Contact Organization",fmPath="/Activity Form/Contacts/Mofed Contact Information/Contact Organizations")
 	protected String mfdCntOrganization;
-	@Interchangeable(fieldTitle = "MOFED Contact Phone Number",fmPath="/Activity Form/Contacts/Mofed Contact Information/Add Contact Phone")
+//	@Interchangeable(fieldTitle = "MOFED Contact Phone Number",fmPath="/Activity Form/Contacts/Mofed Contact Information/Add Contact Phone")
 	protected String mfdCntPhoneNumber;
-	@Interchangeable(fieldTitle = "MOFED Contact Fax Number",fmPath="/Activity Form/Contacts/Mofed Contact Information/Add Contact Fax")
+//	@Interchangeable(fieldTitle = "MOFED Contact Fax Number",fmPath="/Activity Form/Contacts/Mofed Contact Information/Add Contact Fax")
 	protected String mfdCntFaxNumber;
 
 	// Project Coordinator contact information
-	@Interchangeable(fieldTitle = "Project Coordinator First Name",fmPath="/Activity Form/Contacts/Project Coordinator Contact Information/contact first name")
+//	@Interchangeable(fieldTitle = "Project Coordinator First Name",fmPath="/Activity Form/Contacts/Project Coordinator Contact Information/contact first name")
 	protected String prjCoFirstName;
-	@Interchangeable(fieldTitle = "Project Coordinator Last Name",fmPath="/Activity Form/Contacts/Project Coordinator Contact Information/contact lastname")
+//	@Interchangeable(fieldTitle = "Project Coordinator Last Name",fmPath="/Activity Form/Contacts/Project Coordinator Contact Information/contact lastname")
 	protected String prjCoLastName;
-	@Interchangeable(fieldTitle = "Project Coordinator Email",fmPath="/Activity Form/Contacts/Project Coordinator Contact Information/Add Contact Email/Add Contact Email")
+//	@Interchangeable(fieldTitle = "Project Coordinator Email",fmPath="/Activity Form/Contacts/Project Coordinator Contact Information/Add Contact Email/Add Contact Email")
 	protected String prjCoEmail;
-	@Interchangeable(fieldTitle = "Project Coordinator Title",fmPath="/Activity Form/Contacts/Project Coordinator Contact Information/Contact Title")
+//	@Interchangeable(fieldTitle = "Project Coordinator Title",fmPath="/Activity Form/Contacts/Project Coordinator Contact Information/Contact Title")
 	protected String prjCoTitle;
-	@Interchangeable(fieldTitle = "Project Coordinator Organization",fmPath="/Activity Form/Contacts/Project Coordinator Contact Information/Contact Organizations")
+//	@Interchangeable(fieldTitle = "Project Coordinator Organization",fmPath="/Activity Form/Contacts/Project Coordinator Contact Information/Contact Organizations")
 	protected String prjCoOrganization;
-	@Interchangeable(fieldTitle = "Project Coordinator Phone Number",fmPath="/Activity Form/Contacts/Project Coordinator Contact Information/Add Contact Phone")
+//	@Interchangeable(fieldTitle = "Project Coordinator Phone Number",fmPath="/Activity Form/Contacts/Project Coordinator Contact Information/Add Contact Phone")
 	protected String prjCoPhoneNumber;
-	@Interchangeable(fieldTitle = "Project Coordinator Fax Number",fmPath="/Activity Form/Contacts/Project Coordinator Contact Information/Add Contact Fax")
+//	@Interchangeable(fieldTitle = "Project Coordinator Fax Number",fmPath="/Activity Form/Contacts/Project Coordinator Contact Information/Add Contact Fax")
 	protected String prjCoFaxNumber;
 
 	// Sector Ministry contact information
 	
-	@Interchangeable(fieldTitle = "Sector Ministry Contact First Name",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/contact first name")
+//	@Interchangeable(fieldTitle = "Sector Ministry Contact First Name",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/contact first name")
 	protected String secMiCntFirstName;
-	@Interchangeable(fieldTitle = "Sector Ministry Contact Last Name",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/contact lastname")
+//	@Interchangeable(fieldTitle = "Sector Ministry Contact Last Name",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/contact lastname")
 	protected String secMiCntLastName;
-	@Interchangeable(fieldTitle = "Sector Ministry Contact Email",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Add Contact Email/Add Contact Email")
+//	@Interchangeable(fieldTitle = "Sector Ministry Contact Email",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Add Contact Email/Add Contact Email")
 	protected String secMiCntEmail;
-	@Interchangeable(fieldTitle = "Sector Ministry Contact Title",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Contact Title")
+//	@Interchangeable(fieldTitle = "Sector Ministry Contact Title",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Contact Title")
 	protected String secMiCntTitle;
-	@Interchangeable(fieldTitle = "Sector Ministry Contact Organization",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Contact Organizations")
+//	@Interchangeable(fieldTitle = "Sector Ministry Contact Organization",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Contact Organizations")
 	protected String secMiCntOrganization;
-	@Interchangeable(fieldTitle = "Sector Ministry Contact Phone Number",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Add Contact Phone")
+//	@Interchangeable(fieldTitle = "Sector Ministry Contact Phone Number",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Add Contact Phone")
 	protected String secMiCntPhoneNumber;
-	@Interchangeable(fieldTitle = "Sector Ministry Contact Fax Number",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Add Contact Fax")
+//	@Interchangeable(fieldTitle = "Sector Ministry Contact Fax Number",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Add Contact Fax")
 	protected String secMiCntFaxNumber;
 
 	@Interchangeable(fieldTitle = "Activity Contacts", importable = true, fmPath = "/Activity Form/Contacts")

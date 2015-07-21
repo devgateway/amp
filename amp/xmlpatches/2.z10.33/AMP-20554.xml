@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-    <jira>AMP-20045</jira>
+    <jira>AMP-20554</jira>
     <keyword>IATI Tool link</keyword>
     <author>vlimansky</author>
     <description>Clean up IATI Tool</description>

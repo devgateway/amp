@@ -13,6 +13,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
 <digi:instance property="aimEditActivityForm" />
+<c:set var="transaction" value="MTEF Projections/MTEF Projections Table" scope="page"/>
 <c:if test="${!empty funding.mtefDetails}">
     <tr bgcolor="#FFFFCC">
         <td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC" style="text-transform: uppercase;">

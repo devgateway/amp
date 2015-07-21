@@ -28,6 +28,6 @@ public class ActivityErrors {
 	public static final ApiErrorMessage DISCRIMINATOR_METHOD_ERROR = new ApiErrorMessage(11, "Error when accessing discriminator method");
 	public static final ApiErrorMessage DISCRIMINATOR_CLASS_METHOD_ERROR = new ApiErrorMessage(12, "Error when accessing a method from the discriminator class");
 	public static final ApiErrorMessage SAVE_AS_DRAFT_FM_DISABLED = new ApiErrorMessage(13, "Activity can only be saved as draft, but \"save as draft\" is disabled in FM!");	
-	
+	public static final ApiErrorMessage TITLE_IN_DEFAULT_LANUGAGE_REQUIRED = new ApiErrorMessage(14, "Title in default language is required");
 	
 }

@@ -3,9 +3,9 @@
  */
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
-import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
@@ -15,7 +15,6 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.util.ActivityUtil;
 
 /**
@@ -24,6 +23,8 @@ import org.digijava.module.aim.util.ActivityUtil;
  * @author Nadejda Mandrescu
  */
 public class ActivityTitleValidator extends InputValidator {
+	
+	private boolean missingTitle = false;
 
 	public ActivityTitleValidator() {
 		this.continueOnSuccess = false;
@@ -31,6 +32,8 @@ public class ActivityTitleValidator extends InputValidator {
 
 	@Override
 	public ApiErrorMessage getErrorMessage() {
+		if (missingTitle)
+			return ActivityErrors.TITLE_IN_DEFAULT_LANUGAGE_REQUIRED;
 		return ActivityErrors.UNIQUE_ACTIVITY_TITLE;
 	}
 
@@ -51,41 +54,18 @@ public class ActivityTitleValidator extends InputValidator {
 			} else {
 				activityTitle = (String) newFieldParent.get(fieldName);
 			}
-			if (activityTitle == null) {
+			if (StringUtils.isBlank(activityTitle)) {
 				isValid = false;
+				missingTitle = true;
 			} else {
-//				ServletContext context = TLSUtils.getRequest().getServletContext();
 				AmpActivityGroup group = importer.getOldActivity() == null ? null : 
 					importer.getOldActivity().getAmpActivityGroup();
 				AmpActivity activityByName = ActivityUtil.getActivityByNameExcludingGroup(activityTitle, group);
 				isValid = activityByName == null;
-//				List<AmpActivity> list = LuceneUtil.findActivitiesMoreLikeThis(
-//						context.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, activityTitle, lang, 2);
-//				isValid = !isTitleExistent(importer.getOldActivity(), list, importer.isUpdate());
 			}
 		}
 
 		return isValid;
-	}
-
-	/**
-	 * Checks if the Activity title already exists on the system.
-	 * 
-	 * @param oldActivity 	null if it is an insert, the activity already on the system on updates.
-	 * @param list 			the List <AmpActivity> with matching titles
-	 * @param update		whether this is an update operation or an insert
-	 * @return if there is already an activity with a matching title.
-	 */
-	private boolean isTitleExistent(AmpActivityVersion oldActivity, List<AmpActivity> list, boolean update) {
-		boolean isExistent = false;
-		if (!list.isEmpty()) {
-			for (AmpActivity activity : list)
-				if (!update || oldActivity == null || !oldActivity.getName().equals(activity.getName())) {
-					isExistent = true;
-				}
-
-		}
-		return isExistent;
 	}
 
 }

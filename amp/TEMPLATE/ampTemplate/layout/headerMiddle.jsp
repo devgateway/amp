@@ -849,7 +849,7 @@ function openAdmin () {
 								<feature:display name="IATI Importer" module="Tools">
                                     <li class="yuiampmenuitem_drop">
                                         <a class="yuiampmenuitemlabel" onclick="return true;" target="_blank" href="/importer/index.html">
-                                            <digi:trn key="aim:workspaceinfo">IATI Tool</digi:trn>
+                                            <digi:trn key="aim:workspaceinfo">IATI Importer</digi:trn>
                                         </a>
                                     </li>
                                 </feature:display>

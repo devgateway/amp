@@ -311,10 +311,10 @@ public class ActivityImporter {
 		return fieldValue;
 	}
 	
-	protected Map<Field, Object> activityFieldsForPostprocess = new HashMap<Field, Object>();
+	protected Map<Object, Field> activityFieldsForPostprocess = new HashMap<Object, Field>();
 	
 	protected void addActivityFieldForPostprocessing(Field field, Object obj) {
-		activityFieldsForPostprocess.put(field,obj);
+		activityFieldsForPostprocess.put(obj, field);
 	}
 	
 	
@@ -674,9 +674,9 @@ public class ActivityImporter {
 	
 
 	protected void postprocessActivityReferences() {
-		for (Map.Entry<Field, Object> entry : activityFieldsForPostprocess.entrySet()) {
-			Field field = entry.getKey();
-			Object obj = entry.getValue();
+		for (Map.Entry<Object, Field> entry : activityFieldsForPostprocess.entrySet()) {
+			Field field = entry.getValue();
+			Object obj = entry.getKey();
 			try {
 				field.set(obj, this.newActivity);
 			} catch (IllegalArgumentException | IllegalAccessException e) {

@@ -11,7 +11,7 @@ import org.digijava.module.aim.util.Output;
 
 public class AmpLocation implements Serializable, Versionable, Cloneable
 {
-//	@Interchangeable(fieldTitle="AMP Location ID")
+	@Interchangeable(fieldTitle="AMP Location ID", id=true)
 	private Long ampLocationId ;
 //	@Interchangeable(fieldTitle="ISO3 Code")
 	private String iso3Code ;
@@ -31,10 +31,10 @@ public class AmpLocation implements Serializable, Versionable, Cloneable
 //	@Interchangeable(fieldTitle="Activities", recursive=true)
 	private Set<AmpActivityVersion> activities;
 	
-	@Interchangeable(fieldTitle="Location", importable=true/*, descend = true*/)
+	@Interchangeable(fieldTitle="Location", extraInfo = true/*, descend = true*/)
 	private AmpCategoryValueLocations location;
 	
-	@Interchangeable(fieldTitle="Region Location")
+	@Interchangeable(fieldTitle="Region Location", extraInfo = true)
 	private AmpCategoryValueLocations regionLocation;
 	
 	public AmpCategoryValueLocations getLocation() {

@@ -70,11 +70,15 @@ public @interface Interchangeable {
 	boolean value() default false;
 	
 	/**
-	 * marks the fact that the Possible Values of the class are contained in the type class of the field marked with descend(), 
-	 * instead of the class containing this very field
+	 * Used in PossibleValues EP. (Designed for the AmpActivityLocation->AmpLocation->AmpCategoryValueLocations)
+	 * 
+	 * Marks a field that contains information useful for describing a possible value, 
+	 * yet not contained within the class itself. 
+	 * Said info is to be specified under the tag "Extra info" and grouped in a JSON. 
+	 * Said JSON will have the structure expected from a 'Possible Value' item.  
 	 *  
 	 */
-//	boolean descend() default false;
+	boolean extraInfo() default false;
 	
 	/** configured with option value, like "Primary Sector" */
     String discriminatorOption() default "";

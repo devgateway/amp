@@ -187,7 +187,7 @@ LoggerIdentifiable, Cloneable {
 	protected Set<IPAContract> contracts;
 	
 	//TTIL
-//	@Interchangeable(fieldTitle = "Locations", importable = true, fmPath = "/Activity Form/Location", required = "/Activity Form/Location/Locations/Location required validator")
+	@Interchangeable(fieldTitle = "Locations", importable = true, fmPath = "/Activity Form/Location", required = "/Activity Form/Location/Locations/Location required validator")
 	@Validators (unique = "/Activity Form/Location/Locations/uniqueLocationsValidator")
 	@VersionableCollection(fieldTitle = "Locations")
 	protected Set<AmpActivityLocation> locations ;

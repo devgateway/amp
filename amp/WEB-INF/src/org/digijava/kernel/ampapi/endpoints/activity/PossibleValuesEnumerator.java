@@ -277,6 +277,8 @@ public class PossibleValuesEnumerator {
 	
 	private static JsonBean setProperties(Object obj) throws NoSuchMethodException, 
 	SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		if (obj == null)
+			return null;
 		if (InterchangeUtils.isSimpleType(obj.getClass())) {
 			return null;
 		} else {
@@ -297,13 +299,16 @@ public class PossibleValuesEnumerator {
 					} else
 					if (ant.value()) { 
 						if (String.class.isAssignableFrom(field.getType()) || Long.class.isAssignableFrom(field.getType())) {
-							String transProp = (String) property;
+							String transProp =  property.toString();
 							if (AmpCategoryValue.class.isAssignableFrom(obj.getClass())) {
 								transProp = TranslatorWorker.translateText(transProp);
 							}
 							result.set("value", transProp);
 							isEnumerable = true;
 						}
+					} else 
+					if (ant.extraInfo()) {
+						result.set("extra info", setProperties(property));
 					} else {
 						if (ant.pickIdOnly() && property != null) {
 							result.set(InterchangeUtils.underscorify(ant.fieldTitle()), InterchangeUtils.getId(property));

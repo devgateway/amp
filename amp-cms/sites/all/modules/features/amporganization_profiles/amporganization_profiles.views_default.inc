@@ -27,6 +27,7 @@ function amporganization_profiles_views_default_views() {
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['query']['options']['distinct'] = TRUE;
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['pager']['type'] = 'none';
   $handler->display->display_options['pager']['options']['offset'] = '0';
@@ -41,47 +42,19 @@ function amporganization_profiles_views_default_views() {
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
   $handler->display->display_options['empty']['area']['content'] = 'There are no organizations to display!';
   $handler->display->display_options['empty']['area']['format'] = 'filtered_html';
-  /* Field: Content: Organization Logo */
-  $handler->display->display_options['fields']['field_organization_logo']['id'] = 'field_organization_logo';
-  $handler->display->display_options['fields']['field_organization_logo']['table'] = 'field_data_field_organization_logo';
-  $handler->display->display_options['fields']['field_organization_logo']['field'] = 'field_organization_logo';
-  $handler->display->display_options['fields']['field_organization_logo']['label'] = '';
-  $handler->display->display_options['fields']['field_organization_logo']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_organization_logo']['element_default_classes'] = FALSE;
-  $handler->display->display_options['fields']['field_organization_logo']['click_sort_column'] = 'fid';
-  $handler->display->display_options['fields']['field_organization_logo']['settings'] = array(
-    'image_style' => 'img-llogo',
-    'image_link' => 'content',
-  );
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['label'] = '';
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  $handler->display->display_options['fields']['title']['element_type'] = 'h3';
-  $handler->display->display_options['fields']['title']['element_class'] = 'title';
-  $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['title']['element_default_classes'] = FALSE;
   /* Field: Content: Organization Group */
   $handler->display->display_options['fields']['field_organization_group']['id'] = 'field_organization_group';
   $handler->display->display_options['fields']['field_organization_group']['table'] = 'field_data_field_organization_group';
   $handler->display->display_options['fields']['field_organization_group']['field'] = 'field_organization_group';
   $handler->display->display_options['fields']['field_organization_group']['label'] = '';
-  $handler->display->display_options['fields']['field_organization_group']['exclude'] = TRUE;
   $handler->display->display_options['fields']['field_organization_group']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_organization_group']['element_default_classes'] = FALSE;
   $handler->display->display_options['fields']['field_organization_group']['type'] = 'taxonomy_term_reference_plain';
-  /* Sort criterion: Field: Title (title_field) */
-  $handler->display->display_options['sorts']['title_field_value']['id'] = 'title_field_value';
-  $handler->display->display_options['sorts']['title_field_value']['table'] = 'field_data_title_field';
-  $handler->display->display_options['sorts']['title_field_value']['field'] = 'title_field_value';
   /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
-  $handler->display->display_options['filters']['status']['value'] = 1;
+  $handler->display->display_options['filters']['status']['value'] = '1';
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
   /* Filter criterion: Content: Type */
@@ -90,6 +63,13 @@ function amporganization_profiles_views_default_views() {
   $handler->display->display_options['filters']['type']['field'] = 'type';
   $handler->display->display_options['filters']['type']['value'] = array(
     'organization' => 'organization',
+  );
+  /* Filter criterion: Field: Title (title_field:language) */
+  $handler->display->display_options['filters']['language_1']['id'] = 'language_1';
+  $handler->display->display_options['filters']['language_1']['table'] = 'field_data_title_field';
+  $handler->display->display_options['filters']['language_1']['field'] = 'language';
+  $handler->display->display_options['filters']['language_1']['value'] = array(
+    '***CURRENT_LANGUAGE***' => '***CURRENT_LANGUAGE***',
   );
 
   /* Display: Page */
@@ -101,16 +81,23 @@ function amporganization_profiles_views_default_views() {
   $handler->display->display_options['style_options']['grouping'] = array(
     0 => array(
       'field' => 'field_organization_group',
-      'rendered' => 0,
-      'rendered_strip' => 1,
+      'rendered' => 1,
+      'rendered_strip' => 0,
     ),
   );
   $handler->display->display_options['style_options']['row_class'] = 'layout-block layout-grid-item layout-separator';
+  $handler->display->display_options['style_options']['uses_fields'] = TRUE;
   $handler->display->display_options['defaults']['style_options'] = FALSE;
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
-  $handler->display->display_options['row_plugin'] = 'fields';
-  $handler->display->display_options['row_options']['default_field_elements'] = FALSE;
+  $handler->display->display_options['row_plugin'] = 'node';
+  $handler->display->display_options['row_options']['view_mode'] = 'teaser_featured';
+  $handler->display->display_options['row_options']['links'] = FALSE;
   $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['sorts'] = FALSE;
+  /* Sort criterion: Content: Title */
+  $handler->display->display_options['sorts']['title']['id'] = 'title';
+  $handler->display->display_options['sorts']['title']['table'] = 'node';
+  $handler->display->display_options['sorts']['title']['field'] = 'title';
   $handler->display->display_options['path'] = 'organizations';
   $translatables['organizations'] = array(
     t('Master'),

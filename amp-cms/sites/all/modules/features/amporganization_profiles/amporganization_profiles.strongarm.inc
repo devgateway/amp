@@ -14,7 +14,7 @@ function amporganization_profiles_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'entity_translation_hide_translation_links_organization';
-  $strongarm->value = 0;
+  $strongarm->value = 1;
   $export['entity_translation_hide_translation_links_organization'] = $strongarm;
 
   $strongarm = new stdClass();

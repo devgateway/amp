@@ -9,7 +9,12 @@
 ?>
 <div class="group-wrapper clearfix">
   <?php if (!empty($title)): ?>
-    <h2 class="group-title"><?php print $title; ?></h2>
+    <?php /*
+    @HACK: The organization group taxonomy does not have translation enabled.
+    And because this feature HAS to be done in 8h (which is why we use the
+    taxonomy.module in the first place) we have to manually call t().
+    */ ?>
+    <h2 class="group-title"><?php print t($title); ?></h2>
   <?php endif; ?>
   <?php foreach ($rows as $id => $row): ?>
     <div<?php if ($classes_array[$id]) { print ' class="' . $classes_array[$id] .'"';  } ?>>

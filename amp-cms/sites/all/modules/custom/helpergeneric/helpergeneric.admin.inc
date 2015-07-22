@@ -153,9 +153,24 @@ function helpergeneric_api_settings_form_submit($form, &$form_state) {
  * Page callback for 'admin/settings/generic'.
  */
 function helpergeneric_settings_form($form, &$form_state) {
+  $form['clear_cache'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Clear cache'),
+  );
+
+  $form['clear_cache']['clear'] = array(
+    '#type' => 'submit',
+    '#value' => t('Clear all caches'),
+    '#submit' => array('helpergeneric_settings_form_clear_cache_submit'),
+    '#prefix' => '<p>',
+    '#suffix' => '</p>',
+  );
+
   $form['site_information'] = array(
     '#type' => 'fieldset',
     '#title' => t('Site details'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
   );
   $form['site_information']['site_name'] = array(
     '#type' => 'textfield',
@@ -186,6 +201,8 @@ function helpergeneric_settings_form($form, &$form_state) {
     '#type' => 'fieldset',
     '#title' => t('Logo image settings'),
     '#description' => t("Your logo is displayed in the top left of the website header."),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
   );
   $form['theme_settings']['logo']['default_logo'] = array(
     '#type' => 'checkbox',
@@ -214,6 +231,8 @@ function helpergeneric_settings_form($form, &$form_state) {
     '#type' => 'fieldset',
     '#title' => t('Shortcut icon settings'),
     '#description' => t("Your shortcut icon, or 'favicon', is displayed in the address bar and bookmarks of most browsers.") . ' <strong>Not implemented yet!</strong>',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
   );
   $form['theme_settings']['favicon']['default_favicon'] = array(
     '#type' => 'checkbox',
@@ -289,6 +308,16 @@ function helpergeneric_settings_form_validate($form, &$form_state) {
       form_set_error('favicon_upload', t('The favicon could not be uploaded.'));
     }
   }
+}
+
+/**
+ * Clear Cache Submit callback for helpergeneric_settings_form().
+ */
+function helpergeneric_settings_form_clear_cache_submit($form, &$form_state) {
+  drupal_flush_all_caches();
+  drupal_flush_all_caches();  // Just to make sure.
+
+  drupal_set_message(t('Caches cleared.'));
 }
 
 /**

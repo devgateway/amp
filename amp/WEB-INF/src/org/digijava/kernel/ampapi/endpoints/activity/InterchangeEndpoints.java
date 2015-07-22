@@ -139,11 +139,11 @@ public class InterchangeEndpoints {
 	 * @param newJson activity configuration
 	 * @return latest project overview or an error if invalid configuration is received
 	 */
-	@PUT
-	@Path("/")
+	@POST
+	@Path("/{projectId}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.EDIT_ACTIVITY}, id = "updateProject", ui = false)
-	public JsonBean updateProject(JsonBean newJson) {
+	public JsonBean updateProject(@PathParam("projectId") Long projectId, JsonBean newJson) {
 		return InterchangeUtils.importActivity(newJson, true);
 	}
 	

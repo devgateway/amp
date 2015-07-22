@@ -39,6 +39,7 @@ import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -46,6 +47,7 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.SectorUtil;
@@ -669,6 +671,7 @@ public class ActivityImporter {
 		initFundings();
         initContacts();
         postprocessActivityReferences();
+        updatePPCAmount();
 		//initActivityReferences(newActivity, ActivityImporterHelper.getActivityRefPathsSet()); //ActivityImporterHelper.ACTIVITY_REFERENCES);
 	}
 	
@@ -742,6 +745,18 @@ public class ActivityImporter {
         } else {
         	// TODO:
         }
+	}
+	
+	protected void updatePPCAmount() {
+		double funAmount = 0d;
+		//TODO funAmmount shoud be calculated with currencies  AMP-20570
+		if (newActivity.getAnnualProjectBudgets() != null) {
+        	for(AmpAnnualProjectBudget apb : newActivity.getAnnualProjectBudgets()) {
+        		funAmount += apb.getAmount();
+        	}
+        }
+		
+		newActivity.setFunAmount(funAmount / FeaturesUtil.getAmountMultiplier());
 	}
 	
 	protected void postProcess() {

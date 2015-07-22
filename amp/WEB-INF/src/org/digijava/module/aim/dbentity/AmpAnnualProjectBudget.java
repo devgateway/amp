@@ -12,15 +12,20 @@ public class AmpAnnualProjectBudget implements Serializable, Versionable, Clonea
 
 	//IATI-check: to be ignored
 	private static final Logger logger = Logger.getLogger(AmpAnnualProjectBudget.class);
-//	@Interchangeable(fieldTitle="Annual Project Budget ID")
+	
+	@Interchangeable(fieldTitle="Annual Project Budget ID")
 	private Long ampAnnualProjectBudgetId;
-//	@Interchangeable(fieldTitle="Amount", importable = true)
+	
+	@Interchangeable(fieldTitle="Amount", importable = true)
 	private Double amount;
-//	@Interchangeable(fieldTitle="Year", importable = true)
+	
+	@Interchangeable(fieldTitle="Year", importable = true)
 	private Date year;
 	
+	@Interchangeable(fieldTitle="AMP Activity", pickIdOnly = true)
 	private AmpActivityVersion activity;
-//	@Interchangeable(fieldTitle="Currency", importable = true, pickIdOnly = true)
+	
+	@Interchangeable(fieldTitle="Currency", importable = true, pickIdOnly = true)
 	protected AmpCurrency ampCurrencyId;
 
 	public Long getAmpAnnualProjectBudgetId() {

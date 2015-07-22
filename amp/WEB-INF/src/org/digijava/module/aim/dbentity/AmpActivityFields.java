@@ -275,15 +275,15 @@ LoggerIdentifiable, Cloneable {
 	protected String contactName;
 	//protected AmpTeamMember updatedBy; !!! Use modifiedBy
 
-	@Interchangeable(fieldTitle = "Fun Amount", importable = true, fmPath = "/Activity Form/Funding/Proposed Project Cost/Amount")
+	@Interchangeable(fieldTitle = "PPC Amount", fmPath = "/Activity Form/Funding/Proposed Project Cost/Amount")
 	@VersionableFieldSimple(fieldTitle = "Fun Amount")
 	protected Double funAmount;
 	
-	@Interchangeable(fieldTitle = "Currency Code", importable = true, fmPath = "/Activity Form/Funding/Proposed Project Cost/Amount")
+	@Interchangeable(fieldTitle = "PPC Currency Code", importable = true, fmPath = "/Activity Form/Funding/Proposed Project Cost/Currency")
 	@VersionableFieldSimple(fieldTitle = "Currency Code")
 	protected String currencyCode;
 	
-	@Interchangeable(fieldTitle = "Fun Date", importable = true, fmPath = "/Activity Form/Funding/Proposed Project Cost/Date")
+	@Interchangeable(fieldTitle = "PPC Funding Date", importable = true, fmPath = "/Activity Form/Funding/Proposed Project Cost/Date")
 	@VersionableFieldSimple(fieldTitle = "Fun Date")
 	protected Date funDate;
 
@@ -630,8 +630,8 @@ LoggerIdentifiable, Cloneable {
 	 */
     protected Long activityType = org.dgfoundation.amp.onepager.util.ActivityUtil.ACTIVITY_TYPE_PROJECT; //default type
 
-//    @Interchangeable(fieldTitle = "Annual Project Budgets", importable = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")
-    @VersionableCollection(fieldTitle = "Annual Project Budgets")
+    @Interchangeable(fieldTitle = "PPC Annual Budgets", importable = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")
+    @VersionableCollection(fieldTitle = "PPC Annual Budgets")
 	protected Set<AmpAnnualProjectBudget> annualProjectBudgets;
 	//protected Set <AmpActivityContact> activityContacts;
 

@@ -195,14 +195,14 @@ LoggerIdentifiable, Cloneable {
 	@Interchangeable(fieldTitle = "Org. Role", importable = true, fmPath = "/Activity Form/Related Organizations")
 	@VersionableCollection(fieldTitle = "Org. Role")
 	@InterchangeableDiscriminator(discriminatorField = "orgRoleConfig.name", settings = {
-			@Interchangeable(fieldTitle = "Donor Organization", importable=true, discriminatorOption = Constants.FUNDING_AGENCY, fmPath = "/Activity Form/Related Organizations/Donor Organization"),
-			@Interchangeable(fieldTitle = "Responsible Organization", importable=true, discriminatorOption = Constants.RESPONSIBLE_ORGANISATION, fmPath = "/Activity Form/Related Organizations/Responsible Organization"),
-			@Interchangeable(fieldTitle = "Executing Agency", importable=true, discriminatorOption = Constants.EXECUTING_AGENCY, fmPath = "/Activity Form/Related Organizations/Executing Agency"),
-			@Interchangeable(fieldTitle = "Implementing Agency", importable=true, discriminatorOption = Constants.IMPLEMENTING_AGENCY, fmPath = "/Activity Form/Related Organizations/Implementing Agency"),
-			@Interchangeable(fieldTitle = "Beneficiary Agency", importable=true, discriminatorOption = Constants.BENEFICIARY_AGENCY, fmPath = "/Activity Form/Related Organizations/Beneficiary Agency"),
-			@Interchangeable(fieldTitle = "Contracting Agency", importable=true, discriminatorOption = Constants.CONTRACTING_AGENCY, fmPath = "/Activity Form/Related Organizations/Contracting Agency"),
-			@Interchangeable(fieldTitle = "Regional Group", importable=true, discriminatorOption = Constants.REGIONAL_GROUP, fmPath = "/Activity Form/Related Organizations/Sector Group"),
-			@Interchangeable(fieldTitle = "Sector Group", importable=true, discriminatorOption = Constants.SECTOR_GROUP, fmPath = "/Activity Form/Related Organizations/Regional Group")
+			@Interchangeable(fieldTitle = "Donor Organization", importable=true, discriminatorOption = Constants.FUNDING_AGENCY, fmPath = "/Activity Form/Organizations/Donor Organization"),
+			@Interchangeable(fieldTitle = "Responsible Organization", importable=true, discriminatorOption = Constants.RESPONSIBLE_ORGANISATION, fmPath = "/Activity Form/Organizations/Responsible Organization"),
+			@Interchangeable(fieldTitle = "Executing Agency", importable=true, discriminatorOption = Constants.EXECUTING_AGENCY, fmPath = "/Activity Form/Organizations/Executing Agency"),
+			@Interchangeable(fieldTitle = "Implementing Agency", importable=true, discriminatorOption = Constants.IMPLEMENTING_AGENCY, fmPath = "/Activity Form/Organizations/Implementing Agency"),
+			@Interchangeable(fieldTitle = "Beneficiary Agency", importable=true, discriminatorOption = Constants.BENEFICIARY_AGENCY, fmPath = "/Activity Form/Organizations/Beneficiary Agency"),
+			@Interchangeable(fieldTitle = "Contracting Agency", importable=true, discriminatorOption = Constants.CONTRACTING_AGENCY, fmPath = "/Activity Form/Organizations/Contracting Agency"),
+			@Interchangeable(fieldTitle = "Regional Group", importable=true, discriminatorOption = Constants.REGIONAL_GROUP, fmPath = "/Activity Form/Organizations/Sector Group"),
+			@Interchangeable(fieldTitle = "Sector Group", importable=true, discriminatorOption = Constants.SECTOR_GROUP, fmPath = "/Activity Form/Organizations/Regional Group")
 		}, validators = {
 			@Validators(maxSize = "/Activity Form/Organizations/Donor Organization/Max Size Validator", minSize = "/Activity Form/Organizations/Donor Organization/Required Validator", 
 					unique = "/Activity Form/Organizations/Donor Organization/Unique Orgs Validator", percentage = "/Activity Form/Organizations/Donor Organization/relOrgPercentageTotal"),
@@ -516,8 +516,7 @@ LoggerIdentifiable, Cloneable {
 		@Interchangeable(fieldTitle = "Accession Instrument", importable=true, discriminatorOption = CategoryConstants.ACCESSION_INSTRUMENT_KEY, fmPath="/Activity Form/Identification/Accession Instrument", pickIdOnly=true),
 		@Interchangeable(fieldTitle = "Project Category", importable=true, discriminatorOption = CategoryConstants.PROJECT_CATEGORY_KEY, fmPath="/Activity Form/Identification/Project Category", pickIdOnly=true),
 		@Interchangeable(fieldTitle = "Implementation Level", importable=true, discriminatorOption = CategoryConstants.IMPLEMENTATION_LEVEL_KEY, fmPath="/Activity Form/Location/Implementation Level", pickIdOnly=true),
-		@Interchangeable(fieldTitle = "Implementation Location", importable=true, discriminatorOption = CategoryConstants.IMPLEMENTATION_LOCATION_KEY, fmPath="/Activity Form/Location/Implementation Location", pickIdOnly=true)
-		
+		@Interchangeable(fieldTitle = "Implementation Location", importable=true, discriminatorOption = CategoryConstants.IMPLEMENTATION_LOCATION_KEY, fmPath="/Activity Form/Location/Implementation Location", pickIdOnly=true)		
 	})
 	@VersionableCollection(fieldTitle = "Categories")
 	protected Set<AmpCategoryValue> categories;

@@ -116,11 +116,13 @@ function contentwidget_totalactivities_widget_retrieve_data($widget_settings, $l
       $currency = $info->value->defaultId;
     }
   }
+  if (is_null($number_format)) {
+    $number_format = '###0.00';
+  }
 
   // @see https://php.net/manual/en/numberformatter.create.php
   // @see http://www.icu-project.org/apiref/icu4c/classDecimalFormat.html#details
   $formatter_locale = NULL;
-  $number_format = '###0.00';
   $formatter = new NumberFormatter($formatter_locale, NumberFormatter::PATTERN_DECIMAL, $number_format);
 
   foreach ($response_data->headers as $h_info) {

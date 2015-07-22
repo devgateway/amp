@@ -89,7 +89,11 @@ import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
-import org.dgfoundation.amp.onepager.util.*;
+import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.dgfoundation.amp.onepager.util.AttributePrepender;
+import org.dgfoundation.amp.onepager.util.ChangeType;
+import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.validators.AmpSemanticValidator;
 import org.dgfoundation.amp.onepager.validators.StringRequiredValidator;
 import org.dgfoundation.amp.onepager.validators.TranslatableValidators;
@@ -1141,7 +1145,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		    throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(String.valueOf(a.getId()), currentUserId));
 		}
 		
-		ActivityUtil.saveActivity((AmpActivityModel)am, draft, rejected);
+		ActivityUtil.saveActivity((AmpActivityModel) am, draft, rejected);
 
 		info(TranslatorUtil.getTranslatedText("Activity saved successfully"));
 

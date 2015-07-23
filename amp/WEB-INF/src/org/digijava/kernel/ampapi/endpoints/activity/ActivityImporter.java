@@ -44,6 +44,8 @@ import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpOrgRoleBudget;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
@@ -130,6 +132,7 @@ public class ActivityImporter {
 		if (oldActivity != null) {
 			try {
 				newActivity = ActivityVersionUtil.cloneActivity(oldActivity, TeamUtil.getCurrentAmpTeamMember());
+				newActivity.setAmpActivityGroup(oldActivity.getAmpActivityGroup());
 			} catch (CloneNotSupportedException e) {
 				logger.error(e.getMessage());
 				throw new RuntimeException(e);
@@ -720,7 +723,17 @@ public class ActivityImporter {
 		if (newActivity.getOrgrole() == null) {
         	newActivity.setOrgrole(new HashSet<AmpOrgRole>());
         } else {
-        	// TODO:
+        	for (AmpOrgRole aor : newActivity.getOrgrole()) {
+        		
+        		
+        		
+        		//set budgets, or we'll have errors on several entities pointing to the same set
+        		if (aor.getBudgets() != null) {
+        			Set<AmpOrgRoleBudget> aorbSet = new HashSet<AmpOrgRoleBudget>();
+        			aorbSet.addAll(aor.getBudgets());
+	        		aor.setBudgets(aorbSet);
+        		}
+        	}
         }
 	}
 	

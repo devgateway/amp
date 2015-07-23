@@ -2,11 +2,15 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+
 
 public class AmpOrgRoleBudget implements Serializable,Comparable<AmpOrgRoleBudget>, Cloneable{
 	
 	private Long ampOrgRoleBudgetId ;
+	@Interchangeable(fieldTitle="Budget code")
 	private String budgetCode ;
+	@Interchangeable(fieldTitle="AMP Organization Role", pickIdOnly=true)
 	private AmpOrgRole ampOrgRole;
 	
 	public Long getAmpOrgRoleBudgetId() {

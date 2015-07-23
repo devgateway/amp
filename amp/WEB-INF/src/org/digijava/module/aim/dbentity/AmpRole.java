@@ -3,8 +3,9 @@ package org.digijava.module.aim.dbentity ;
 import java.io.Serializable;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.util.Identifiable;
 
-public class AmpRole implements Serializable, Comparable<AmpRole>
+public class AmpRole implements Serializable, Identifiable, Comparable<AmpRole>
 {
 	//IATI-check: not to be ignored, but obtained via possible values 
 	@Interchangeable(fieldTitle="AMP Role ID", id = true)
@@ -114,6 +115,12 @@ public class AmpRole implements Serializable, Comparable<AmpRole>
 	public int compareTo(AmpRole o) {
 		if(this.getAmpRoleId()!=null && o.getAmpRoleId()!=null) return this.getAmpRoleId().compareTo(o.getAmpRoleId());
 		return -1;
+	}
+
+	@Override
+	public Object getIdentifier() {
+
+		return ampRoleId;
 	}
 	
 }	

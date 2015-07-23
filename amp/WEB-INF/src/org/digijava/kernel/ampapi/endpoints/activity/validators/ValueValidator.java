@@ -20,8 +20,11 @@ import org.digijava.module.aim.dbentity.AmpActivityFields;
  */
 public class ValueValidator extends InputValidator {
 
+	protected boolean isValidLength = true;
 	@Override
 	public ApiErrorMessage getErrorMessage() {
+		if (!isValidLength)
+			return ActivityErrors.FIELD_INVALID_LENGTH;
 		return ActivityErrors.FIELD_INVALID_VALUE;
 	}
 
@@ -36,14 +39,8 @@ public class ValueValidator extends InputValidator {
 			return true;
 		
 		
-		Integer maxLength = (Integer) fieldDescription.get(ActivityEPConstants.FIELD_LENGTH); 
-		if (maxLength != null) {
-			Object obj = newFieldParent.get(fieldDescription.getString(ActivityEPConstants.FIELD_NAME));
-			if (obj != null && String.class.isAssignableFrom(obj.getClass())){
-				if (maxLength < ((String) obj).length())
-					return false;
-			}
-		}
+		if (!isValidLength(newFieldParent, fieldDescription))
+			return false;
 		
 		List<JsonBean> possibleValues = importer.getPossibleValuesForFieldCached(fieldPath, AmpActivityFields.class, null);
 		
@@ -75,4 +72,33 @@ public class ValueValidator extends InputValidator {
 		return true;
 	}
 	
+	protected boolean isValidLength(Map<String, Object> newFieldParent, JsonBean fieldDescription) {
+		isValidLength = true;
+		Integer maxLength = (Integer) fieldDescription.get(ActivityEPConstants.FIELD_LENGTH); 
+		if (maxLength != null) {
+			Object obj = newFieldParent.get(fieldDescription.getString(ActivityEPConstants.FIELD_NAME));
+			if (obj != null) {
+				if (!Boolean.TRUE.equals(fieldDescription.get(ActivityEPConstants.TRANSLATABLE))) {
+					isValidLength = !isValidLength(obj, maxLength);
+				} else if (Map.class.isAssignableFrom(obj.getClass())) {
+					for (Object trn : ((Map) obj).values()) {
+						if (!isValidLength(trn, maxLength)) {
+							isValidLength = false;
+							break;
+						}
+					}
+					// translatable means it's input must be a map, otherwise invalid input was provided, so we cannot say it's invalid
+				}
+			}
+		}
+		return isValidLength;
+	}
+	
+	protected boolean isValidLength(Object obj, Integer maxLength) {
+		if (String.class.isAssignableFrom(obj.getClass())){
+			if (maxLength < ((String) obj).length())
+				return false;
+		}
+		return true;
+	}
 }

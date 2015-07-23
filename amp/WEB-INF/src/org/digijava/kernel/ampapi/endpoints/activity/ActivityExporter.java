@@ -271,9 +271,7 @@ public class ActivityExporter {
 			throws NoSuchMethodException, SecurityException, InstantiationException, 
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		
-		Method m = discClass.getMethod("toJsonOutput", new Class[] {Object.class});
 		FieldsDiscriminator discObj = discClass.newInstance();
-		
-		return m.invoke(discObj, fieldValue);
+		return discObj.toJsonOutput(fieldValue);
 	}
 }

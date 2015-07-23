@@ -22,7 +22,6 @@ import org.digijava.module.aim.util.ActivityVersionUtil;
 public class AmpActivityIdValidator extends InputValidator {
 
 	public AmpActivityIdValidator() {
-		this.continueOnSuccess = false;
 	}
 
 	@Override

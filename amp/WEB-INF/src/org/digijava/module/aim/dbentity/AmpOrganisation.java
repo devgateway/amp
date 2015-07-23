@@ -32,18 +32,18 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
 	private Long ampOrgId;
 	@TranslatableField
 	@Interchangeable(fieldTitle="Name", value=true)
-	private String name ;
+	private String name;
 	/**
 	 * @deprecated
 	 */
 	private String orgType;  // defunct
 	@Interchangeable(fieldTitle="DAC Organization Code")
-	private String dacOrgCode ;
+	private String dacOrgCode;
 	@Interchangeable(fieldTitle="Organization ISO Code")
 	private String orgIsoCode;
 	@Interchangeable(fieldTitle="Description")
 	@TranslatableField
-	private String description ;
+	private String description;
 	@Interchangeable(fieldTitle="Organization Code")
 	private String orgCode;
 	

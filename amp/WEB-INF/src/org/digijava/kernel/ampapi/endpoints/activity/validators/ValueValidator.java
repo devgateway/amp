@@ -31,31 +31,48 @@ public class ValueValidator extends InputValidator {
 		//TODO: validate ranges for integers, dates, percentages etc. 
 		
 		boolean importable = (boolean) fieldDescription.get(ActivityEPConstants.IMPORTABLE);
-		if (importable) {
-			Long maxLength = (Long) fieldDescription.get(ActivityEPConstants.FIELD_LENGTH); 
-			if (maxLength != null) {
-				Object obj = newFieldParent.get(fieldDescription.getString(ActivityEPConstants.FIELD_NAME));
-				if (String.class.isAssignableFrom(obj.getClass())){
-					if (maxLength < ((String)obj).length())
-						return false;
-				}
+		// input type, allowed input will be verified before, so nothing check here 
+		if (!importable)
+			return true;
+		
+		
+		Integer maxLength = (Integer) fieldDescription.get(ActivityEPConstants.FIELD_LENGTH); 
+		if (maxLength != null) {
+			Object obj = newFieldParent.get(fieldDescription.getString(ActivityEPConstants.FIELD_NAME));
+			if (obj != null && String.class.isAssignableFrom(obj.getClass())){
+				if (maxLength < ((String) obj).length())
+					return false;
 			}
 		}
 		
 		List<JsonBean> possibleValues = importer.getPossibleValuesForFieldCached(fieldPath, AmpActivityFields.class, null);
 		
-		if (possibleValues.size() == 0) {
-			return true;
-		} else {
-			Object map = newFieldParent.get(fieldDescription.getString(ActivityEPConstants.FIELD_NAME));
-			if (map != null && Map.class.isAssignableFrom(map.getClass())) {
-				for (JsonBean value: possibleValues) {
-					if (value.any().equals(map))
-						return true;
+		if (possibleValues.size() != 0) {
+			Object value = newFieldParent.get(fieldDescription.getString(ActivityEPConstants.FIELD_NAME));
+			
+			if (value != null) {
+				boolean idOnly = Boolean.TRUE.equals(fieldDescription.get(ActivityEPConstants.ID_ONLY));
+				//String idFieldName = idOnly ? ActivityImporterHelper.getIdFieldName(fieldDescription) : null;
+				boolean isMap = value != null && Map.class.isAssignableFrom(value.getClass());
+				
+				// convert to string the ids to avoid long-integer comparison
+				value = idOnly ? value.toString() : value;
+				
+				for (JsonBean option: possibleValues) {
+					if (isMap) {
+						if (option.any().equals(value))
+							return true;
+					} else if (idOnly) {
+						if ( value.equals(option.getString(ActivityEPConstants.ID)))
+							return true;
+					}
 				}
+				// wrong value configured if it is not found in allowed options 
+				return false;
 			}
-			return false;
 		}
+		// nothing failed so far? then we are good to go
+		return true;
 	}
 	
 }

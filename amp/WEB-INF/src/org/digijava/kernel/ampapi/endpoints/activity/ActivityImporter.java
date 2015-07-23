@@ -20,7 +20,6 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.jackrabbit.core.xml.Importer;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.onepager.util.ChangeType;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
@@ -45,7 +44,6 @@ import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgRoleBudget;
-import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
@@ -76,8 +74,9 @@ public class ActivityImporter {
 	private JsonBean oldJson = null;
 	private JsonBean newJson = null;
 	private Map<Integer, ApiErrorMessage> errors = new HashMap<Integer, ApiErrorMessage>();
-	Map<String, List<JsonBean>> possibleValuesCached = new HashMap<String, List<JsonBean>>();
-	Map<String, String> possibleValuesQuery = new HashMap<String, String>();
+	protected Map<String, List<JsonBean>> possibleValuesCached = new HashMap<String, List<JsonBean>>();
+	protected Map<String, String> possibleValuesQuery = new HashMap<String, String>();
+	protected Map<Object, Field> activityFieldsForPostprocess = new HashMap<Object, Field>();
 	private boolean update  = false;
 	private boolean saveAsDraft = false;
 	private InputValidatorProcessor validator = new InputValidatorProcessor();
@@ -152,7 +151,7 @@ public class ActivityImporter {
 		oldJsonParent = null;
 		
 		newActivity = (AmpActivityVersion) validateAndImport(newActivity, oldActivity, fieldsDef, 
-				newJsonParent, oldJsonParent, "");
+				newJsonParent, oldJsonParent, null);
 		if(newActivity != null && errors.isEmpty()) {
 			// save new activity
 			try {
@@ -181,7 +180,7 @@ public class ActivityImporter {
 	protected Object validateAndImport(Object newParent, Object oldParent, JsonBean fieldDef,
 			Map<String, Object> newJsonParent, Map<String, Object> oldJsonParent, String fieldPath) {
 		String fieldName = getFieldName(fieldDef, newJsonParent);
-		String currentFieldPath = fieldPath + "~" + fieldName;
+		String currentFieldPath = (fieldPath == null ? "" : fieldPath + "~") + fieldName;
 		Object oldJsonValue = oldJsonParent == null ? null : oldJsonParent.get(fieldName);
 		Object newJsonValue = newJsonParent == null ? null : newJsonParent.get(fieldName);
 		
@@ -219,6 +218,12 @@ public class ActivityImporter {
 		 * Sub-elements by default are valid when not provided. 
 		 * Current field will be verified below and reported as invalid if sub-elements are mandatory and are not provided. 
 		 */
+		
+		// skip children validation immediately if only ID is expected
+		boolean idOnly = Boolean.TRUE.equals(fieldDef.get(ActivityEPConstants.ID_ONLY));
+		if (idOnly)
+			return newParent;
+		
 		boolean isList = ActivityEPConstants.FIELD_TYPE_LIST.equals(fieldType);
 		
 		// first validate all sub-elements
@@ -323,8 +328,6 @@ public class ActivityImporter {
 		return fieldValue;
 	}
 	
-	protected Map<Object, Field> activityFieldsForPostprocess = new HashMap<Object, Field>();
-	
 	protected void addActivityFieldForPostprocessing(Field field, Object obj) {
 		activityFieldsForPostprocess.put(obj, field);
 	}
@@ -355,8 +358,7 @@ public class ActivityImporter {
 		}
 		
 		if (!importable) {
-			if (!newParent.getClass().isAssignableFrom(AmpActivityVersion.class) &&
-					objField.getType().isAssignableFrom(AmpActivityVersion.class)) {
+			if (InterchangeUtils.isAmpActivityVersion(objField.getType())) {
 				addActivityFieldForPostprocessing(objField, newParent);
 			}
 			// skip reconfiguration at this level if the field is not importable
@@ -730,9 +732,6 @@ public class ActivityImporter {
         	newActivity.setOrgrole(new HashSet<AmpOrgRole>());
         } else {
         	for (AmpOrgRole aor : newActivity.getOrgrole()) {
-        		
-        		
-        		
         		//set budgets, or we'll have errors on several entities pointing to the same set
         		if (aor.getBudgets() != null) {
         			Set<AmpOrgRoleBudget> aorbSet = new HashSet<AmpOrgRoleBudget>();

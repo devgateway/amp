@@ -27,7 +27,6 @@ public class ActivityTitleValidator extends InputValidator {
 	private boolean missingTitle = false;
 
 	public ActivityTitleValidator() {
-		this.continueOnSuccess = false;
 	}
 
 	@Override

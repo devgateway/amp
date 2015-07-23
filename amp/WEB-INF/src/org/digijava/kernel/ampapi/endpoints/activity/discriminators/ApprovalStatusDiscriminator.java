@@ -23,8 +23,7 @@ public class ApprovalStatusDiscriminator extends FieldsDiscriminator {
 
 	@Override
 	public Object toAmpFormat(Object obj) {
-		return obj;		
-//		return null;
+		return obj;
 	}
 
 }

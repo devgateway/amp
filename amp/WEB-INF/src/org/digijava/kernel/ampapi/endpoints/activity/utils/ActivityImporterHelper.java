@@ -68,4 +68,16 @@ public class ActivityImporterHelper {
 		generalErrors.put(error.id, error);
 	}
 	
+//	public static String getIdFieldName(JsonBean fieldDescription) {
+//		if (fieldDescription != null) {
+//			Object children = fieldDescription.get(ActivityEPConstants.CHILDREN);
+//			if (children != null && children instanceof List)
+//				for (JsonBean child : (List<JsonBean>) children) {
+//					if (Boolean.TRUE.equals(child.get(ActivityEPConstants.ID)))
+//						return child.getString(ActivityEPConstants.FIELD_NAME);
+//				}
+//		}
+//		return null;
+//	}
+	
 }

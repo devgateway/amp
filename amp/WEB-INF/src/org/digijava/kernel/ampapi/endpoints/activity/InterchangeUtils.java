@@ -692,4 +692,14 @@ public class InterchangeUtils {
 		return calculatedAmount.doubleValue();
 	}
 	
+	
+	/**
+	 * Determine if this is an AmpActivityVersion field reference
+	 * @param field
+	 * @return
+	 */
+	public static boolean isAmpActivityVersion(Class<?> clazz) {
+		return clazz.isAssignableFrom(AmpActivityVersion.class);
+	}
+	
 } 

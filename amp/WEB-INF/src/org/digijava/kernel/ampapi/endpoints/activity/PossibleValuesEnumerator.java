@@ -218,7 +218,11 @@ public class PossibleValuesEnumerator {
 		
 		return null;
 	}
+	
+	
 	private static List<JsonBean> getPossibleValuesForField(Field field) {
+		if (!InterchangeUtils.isFieldEnumerable(field))
+			return new ArrayList<JsonBean>();
 		List<JsonBean> result = new ArrayList<JsonBean>();
 		Class<?> clazz = InterchangeUtils.getClassOfField(field);
 		if (clazz.isAssignableFrom(AmpCategoryValue.class))

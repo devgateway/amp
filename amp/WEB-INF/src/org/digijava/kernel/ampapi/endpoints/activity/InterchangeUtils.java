@@ -46,6 +46,7 @@ import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -80,6 +81,21 @@ public class InterchangeUtils {
 	
 	public static String getDiscriminatedFieldTitle(String fieldName) {
 		return discriminatorMap.get(deunderscorify(fieldName));
+	}
+	
+	
+
+	public static boolean isFieldEnumerable(Field inputField) {
+		Class clazz = getClassOfField(inputField);
+		if (isSimpleType(clazz))
+			return false;
+		Field[] fields = clazz.getDeclaredFields();
+		for (Field field : fields) {
+			Interchangeable ant = field.getAnnotation(Interchangeable.class); 
+			if ( ant != null && ant.id())
+				return true;
+		}
+		return false;
 	}
 	
 	private static void generateCategoryConstantsSets() {
@@ -425,9 +441,9 @@ public class InterchangeUtils {
 	
 	
 	/**
-	 * recursively gets the id for this object -- directly a field marked as such, or an underlying field
+	 * Gets the ID of an enumerable object (used in Possible Values EP)
 	 * @param obj
-	 * @return
+	 * @return ID if it's identifiable, null otherwise
 	 * @throws NoSuchMethodException
 	 * @throws SecurityException
 	 * @throws IllegalAccessException
@@ -435,28 +451,18 @@ public class InterchangeUtils {
 	 * @throws InvocationTargetException
 	 */
 	//TODO: optimize it. it doesn't have to be n*n for field descent
-	public static Long  getId(Object obj) throws NoSuchMethodException,	SecurityException, 
+	public static Long getId(Object obj) throws NoSuchMethodException,	SecurityException, 
 		IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		if (InterchangeUtils.isSimpleType(obj.getClass())) {
+		if (!Identifiable.class.isAssignableFrom(obj.getClass())) {
+//			System.out.println("URURU: " + obj.getClass() + "isn't identifiable!");
+//			return Long.valueOf(1);
 			return null;
-		} else {
-			Class clazz = obj.getClass();
-			while (clazz != Object.class) {
-				for (Field field : clazz.getDeclaredFields()) {
-					Interchangeable ant = field.getAnnotation(Interchangeable.class);
-					if (ant != null) {
-						if (ant.id()) {
-							Method meth = obj.getClass().getMethod(getGetterMethodName(field.getName()));
-							if (Long.class.isAssignableFrom(field.getType())) {
-								return (Long) meth.invoke(obj);
-							} 
-						}
-					}
-				}
-				clazz = clazz.getSuperclass();
-			}
+
 		}
-		return null;
+		Identifiable identifiableObject = (Identifiable) obj;
+		Long id = (Long) identifiableObject.getIdentifier(); 
+		return id;
+		
 	}
 	
 

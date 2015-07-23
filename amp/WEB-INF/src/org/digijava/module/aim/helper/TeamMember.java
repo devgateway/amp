@@ -30,7 +30,7 @@ public class TeamMember implements Comparable, Serializable{
 	private Boolean addActivity;
 	private boolean teamHead;
 	private Boolean pledger;
-	private Boolean teamIsolated;
+	private boolean teamIsolated;
 
 	private ApplicationSettings appSettings; /*
 											  * Application settings of the
@@ -103,7 +103,7 @@ public class TeamMember implements Comparable, Serializable{
 			this.useFilters = t.getUseFilter();
 			this.addActivity = t.getAddActivity();
 			this.workspacePrefix = t.getWorkspacePrefix();
-			this.teamIsolated = t.getIsolated();
+			this.teamIsolated = t.getIsolated() == null ? false : t.getIsolated();
 			AmpApplicationSettings sett	= DbUtil.getTeamAppSettings(this.teamId);
 			this.allowAddTeamRes = sett == null ? null : sett.getAllowAddTeamRes();
 			this.visibilityTemplateId = t.getFmTemplate() == null ? 0 : t.getFmTemplate().getId();
@@ -284,7 +284,7 @@ public class TeamMember implements Comparable, Serializable{
 		return this.getMemberId().compareTo(newId); 
 	}
     
-	public Boolean getTeamIsolated() {
+	public boolean getTeamIsolated() {
 		return teamIsolated;
 	}
     

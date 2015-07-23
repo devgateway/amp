@@ -1688,16 +1688,15 @@ public class AmpARFilter extends PropertyListable {
 		if (params.getActivityIdFilter() != null) {
 			queryAppend(ACTIVITY_ID_FILTER);
 		}
+		
+		
 		String ISOLATED_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id IN (select amp_activity_id FROM amp_activity_version aav WHERE " 
 				+ "aav.amp_team_id IN (select amp_team_id from amp_team WHERE isolated = true)) ";
-		
-
-		
 		
 		/* TEAM FILTER HACK ZONE
 		 * because in certain situations this zone can add an OR, any queryAppend calls MUST be done BEFORE THIS AREA
 		 */
-		if (!loggedInTeamMember.getTeamIsolated()) {
+		if ((loggedInTeamMember == null) || !loggedInTeamMember.getTeamIsolated()) {
 			queryNotAppend(ISOLATED_FILTER);
 		}
 		

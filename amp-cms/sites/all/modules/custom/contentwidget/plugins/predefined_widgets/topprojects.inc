@@ -17,7 +17,7 @@ $plugin = array(
   'settings storage' => 'contentwidget_topprojects_widget_settings_storage',
   'resource api path' => 'public/topprojects',
   'defaults' => array(
-    'period' => '12',
+    'period' => '12',  // NOTE: This is passed to the API as "months".
     'count' => '10',
     'sort' => 'default',
     'ssc' => FALSE,
@@ -48,7 +48,6 @@ function contentwidget_topprojects_widget_retrieve_data($plugin, $widget_setting
 
     if (!empty($widget_settings['period'])) {
       $parameters['months'] = $widget_settings['period'];
-      $parameters['months'] = 36;
     }
     if (!empty($widget_settings['count'])) {
       $parameters['count'] = $widget_settings['count'];
@@ -225,7 +224,7 @@ function contentwidget_topprojects_widget_settings(&$element, &$form_state, $plu
     '#title' => t('Period'),
     '#description' => t('Displays the top projects during the selected time period.'),
     '#default_value' => $widget_settings['period'],
-    '#options' => $period_options,
+    '#options' => array('' => t('No specific period')) + $period_options,
   );
 
   $settings_form['count'] = array(

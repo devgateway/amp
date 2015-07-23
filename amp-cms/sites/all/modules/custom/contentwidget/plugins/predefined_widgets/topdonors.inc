@@ -17,7 +17,7 @@ $plugin = array(
   'settings storage' => 'contentwidget_topdonors_widget_settings_storage',
   'resource api path' => 'public/donorFunding',
   'defaults' => array(
-    'period' => '12',
+    'period' => '12',  // NOTE: This is passed to the API as "months".
     'count' => '10',
     'type' => 'commitments',
   ),
@@ -179,7 +179,7 @@ function contentwidget_topdonors_widget_settings(&$element, &$form_state, $plugi
   // Provide some default values.
   $widget_settings += $plugin['defaults'];
 
-  $period_options = drupal_map_assoc(array(1, 2, 3, 4, 5, 6, 9, 12, 15, 18, 24));
+  $period_options = drupal_map_assoc(array(1, 2, 3, 4, 5, 6, 9, 12, 15, 18, 24, 30, 36));
   foreach ($period_options as $key => &$value) {
     $value = format_plural($value, 'Last month', 'Last @count months');
   }
@@ -188,7 +188,7 @@ function contentwidget_topdonors_widget_settings(&$element, &$form_state, $plugi
     '#title' => t('Period'),
     '#description' => t('Displays the top donors during the selected time period.'),
     '#default_value' => $widget_settings['period'],
-    '#options' => $period_options,
+    '#options' => array('' => t('No specific period')) + $period_options,
   );
 
   $settings_form['count'] = array(

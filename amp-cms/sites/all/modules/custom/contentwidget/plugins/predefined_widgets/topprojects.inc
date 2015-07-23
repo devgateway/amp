@@ -39,7 +39,7 @@ function contentwidget_topprojects_widget_retrieve_data($plugin, $widget_setting
   $cache_id = "contentblock:widget:{$langcode}:topprojects:" . md5(serialize($widget_settings));
 
   // Try to get the response from cache.
-  if (FALSE && $cached = cache_get($cache_id, 'cache')) {
+  if ($cached = cache_get($cache_id, 'cache')) {
     $response = $cached->data;
   }
   else {

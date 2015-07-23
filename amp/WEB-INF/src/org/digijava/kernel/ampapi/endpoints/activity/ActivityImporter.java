@@ -762,15 +762,16 @@ public class ActivityImporter {
 	}
 	
 	protected void updatePPCAmount() {
-		double funAmount = 0d;
-		//TODO funAmmount shoud be calculated with currencies  AMP-20570
-		if (newActivity.getAnnualProjectBudgets() != null) {
+		boolean isAnnualBudget = FMVisibility.isFmPathEnabled("/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost");
+
+		if (isAnnualBudget && newActivity.getAnnualProjectBudgets() != null) {
+			double funAmount = 0d;
         	for(AmpAnnualProjectBudget apb : newActivity.getAnnualProjectBudgets()) {
-        		funAmount += apb.getAmount();
+        		funAmount += InterchangeUtils.doPPCCalculations(apb, newActivity.getCurrencyCode());
         	}
+        	
+        	newActivity.setFunAmount(funAmount / FeaturesUtil.getAmountMultiplier());
         }
-		
-		newActivity.setFunAmount(funAmount / FeaturesUtil.getAmountMultiplier());
 	}
 	
 	protected void postProcess() {

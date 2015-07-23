@@ -35,7 +35,7 @@ public abstract class AmpActivityFields extends Permissible implements Comparabl
 LoggerIdentifiable, Cloneable {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	protected static String [] IMPLEMENTED_ACTIONS=new String[]{GatePermConst.Actions.EDIT};
 
 	protected AmpTeamMember createdBy;
@@ -275,11 +275,13 @@ LoggerIdentifiable, Cloneable {
 	protected String contactName;
 	//protected AmpTeamMember updatedBy; !!! Use modifiedBy
 
-	@Interchangeable(fieldTitle = "PPC Amount", fmPath = "/Activity Form/Funding/Proposed Project Cost/Amount")
+	@Interchangeable(fieldTitle = "PPC Amount", importable = true, fmPath = "/Activity Form/Funding/Proposed Project Cost/Amount")
 	@VersionableFieldSimple(fieldTitle = "Fun Amount")
 	protected Double funAmount;
 	
 	@Interchangeable(fieldTitle = "PPC Currency Code", importable = true, fmPath = "/Activity Form/Funding/Proposed Project Cost/Currency")
+	@InterchangeableDiscriminator(discriminatorField="currencyCode", 
+	discriminatorClass="org.digijava.kernel.ampapi.endpoints.activity.discriminators.CurrencyDiscriminator")
 	@VersionableFieldSimple(fieldTitle = "Currency Code")
 	protected String currencyCode;
 	
@@ -516,7 +518,7 @@ LoggerIdentifiable, Cloneable {
 		@Interchangeable(fieldTitle = "Accession Instrument", importable=true, discriminatorOption = CategoryConstants.ACCESSION_INSTRUMENT_KEY, fmPath="/Activity Form/Identification/Accession Instrument", pickIdOnly=true),
 		@Interchangeable(fieldTitle = "Project Category", importable=true, discriminatorOption = CategoryConstants.PROJECT_CATEGORY_KEY, fmPath="/Activity Form/Identification/Project Category", pickIdOnly=true),
 		@Interchangeable(fieldTitle = "Implementation Level", importable=true, discriminatorOption = CategoryConstants.IMPLEMENTATION_LEVEL_KEY, fmPath="/Activity Form/Location/Implementation Level", pickIdOnly=true),
-		@Interchangeable(fieldTitle = "Implementation Location", importable=true, discriminatorOption = CategoryConstants.IMPLEMENTATION_LOCATION_KEY, fmPath="/Activity Form/Location/Implementation Location", pickIdOnly=true)		
+		@Interchangeable(fieldTitle = "Implementation Location", importable=true, discriminatorOption = CategoryConstants.IMPLEMENTATION_LOCATION_KEY, fmPath="/Activity Form/Location/Implementation Location", pickIdOnly=true)
 	})
 	@VersionableCollection(fieldTitle = "Categories")
 	protected Set<AmpCategoryValue> categories;

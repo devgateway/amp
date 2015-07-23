@@ -23,6 +23,7 @@ import javax.ws.rs.core.PathSegment;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
@@ -44,8 +45,11 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -662,6 +666,30 @@ public class InterchangeUtils {
 			DATE_FORMATTER.set(new SimpleDateFormat(ISO8601_DATE_FORMAT));
 		}
 		return DATE_FORMATTER.get();
+	}
+	
+	/**
+	 * @param apb AmpAnnualProject budget having amount, currency and date
+	 * @parm toCurrCode target currency code to which apb amount would be calculated
+	 * @return double the amount in toCurrCode
+	 */
+	public static Double doPPCCalculations(AmpAnnualProjectBudget apb, String toCurrCode) {
+		DecimalWraper calculatedAmount = new DecimalWraper();
+		
+		if (apb.getAmpCurrencyId() != null && apb.getYear() != null && apb.getAmount() != null && toCurrCode != null) {
+			String frmCurrCode = apb.getAmpCurrencyId().getCurrencyCode();
+			java.sql.Date dt = new java.sql.Date(apb.getYear().getTime());
+			Double amount = apb.getAmount();
+		
+			double frmExRt = Util.getExchange(frmCurrCode, dt);
+			double toExRt = frmCurrCode.equalsIgnoreCase(toCurrCode) ? frmExRt : Util.getExchange(toCurrCode, dt);
+	
+			calculatedAmount = CurrencyWorker.convertWrapper(amount, frmExRt, toExRt, dt);
+		} else {
+			LOGGER.error("Some info is missed in PPC Calculations");
+		} 
+		
+		return calculatedAmount.doubleValue();
 	}
 	
 } 

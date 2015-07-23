@@ -17,7 +17,7 @@ $plugin = array(
   'settings storage' => 'contentwidget_topprojects_widget_settings_storage',
   'retrieve data' => 'contentwidget_topprojects_widget_retrieve_data',
   'defaults' => array(
-    'period' => '12',
+    'period' => '12',  // NOTE: This is passed to the API as "months".
     'count' => '10',
     'sort' => 'default',
     'visible_columns' => array(),
@@ -107,17 +107,17 @@ function contentwidget_topprojects_widget_render($plugin, $widget_settings, $ent
     if (empty($widget_settings['visible_columns'])) {
       $widget_settings['visible_columns'] = array_keys((array) $data->headers);
     }
-    
+
     // Create the table headers.
     foreach ($widget_settings['visible_columns'] as $key) {
       if (!isset($data->headers->$key)) {
         continue;
       }
-			
+
       $label = $data->headers->$key;
-    	if (!empty($data->Currency) && in_array($key, array('actual-commitments', 'actual-disbursements'))) {
-    		$label = $label . ' (' . $data->Currency . ')';
-    	}
+      if (!empty($data->Currency) && in_array($key, array('actual-commitments', 'actual-disbursements'))) {
+        $label = $label . ' (' . $data->Currency . ')';
+      }
       $header[$key] = array(
         'data' => check_plain($label),
         'class' => array(
@@ -169,7 +169,7 @@ function contentwidget_topprojects_widget_settings(&$element, &$form_state, $plu
   );
   $form_state['topprojects']['wrapper_id'] = drupal_html_class($form_state['topprojects']['input_name_prefix'] . '-options');
 
-  $period_options = drupal_map_assoc(array(1, 2, 3, 4, 5, 6, 9, 12, 15, 18, 24));
+  $period_options = drupal_map_assoc(array(1, 2, 3, 4, 5, 6, 9, 12, 15, 18, 24, 30, 36));
   foreach ($period_options as $key => &$value) {
     $value = format_plural($value, 'Previous month', 'Previous @count months');
   }
@@ -178,7 +178,7 @@ function contentwidget_topprojects_widget_settings(&$element, &$form_state, $plu
     '#title' => t('Period'),
     '#description' => t('Displays the top projects during the selected time period.'),
     '#default_value' => $widget_settings['period'],
-    '#options' => $period_options,
+    '#options' => array('' => t('No specific period')) + $period_options,
   );
 
   $settings_form['count'] = array(

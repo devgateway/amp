@@ -111,7 +111,7 @@ public class ActivityImporter {
 		// retrieve fields definition for internal use
 		List<JsonBean> fieldsDef = FieldsEnumerator.getAllAvailableFields(true);
 		// get existing activity if this is an update request
-		Long ampActivityId = update ? (Long) newJson.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME) : null;
+		Long ampActivityId = update ? Long.decode(newJson.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME).toString()) : null;
 		
 		if (ampActivityId != null) {
 			try {
@@ -140,6 +140,7 @@ public class ActivityImporter {
 		
 		Map<String, Object> newJsonParent = newJson.any();
 		Map<String, Object> oldJsonParent = oldJson == null ? null : oldJson.any();
+		oldJsonParent = null;
 		
 		newActivity = (AmpActivityVersion) validateAndImport(newActivity, oldActivity, fieldsDef, 
 				newJsonParent, oldJsonParent, "");

@@ -49,11 +49,11 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
 	
 	@Deprecated
 	private String orgGroup;  // defunct
-	@Interchangeable(fieldTitle="AMP Fiscal Calendar")
+//	@Interchangeable(fieldTitle="AMP Fiscal Calendar")
 	private AmpFiscalCalendar ampFiscalCalId;
-	@Interchangeable(fieldTitle="AMP Sector Scheme")
+//	@Interchangeable(fieldTitle="AMP Sector Scheme")
 	private AmpSectorScheme ampSecSchemeId;
-	@Interchangeable(fieldTitle="Funding Organization ID")
+//	@Interchangeable(fieldTitle="Funding Organization ID")
 	private String fundingorgid;
 	@Interchangeable(fieldTitle="Deleted")
 	private Boolean deleted;
@@ -72,24 +72,24 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
 	private AmpOrgGroup orgGrpId;
 	@Interchangeable(fieldTitle="Address")
 	private String address;
-	@Interchangeable(fieldTitle="Country ID")
+//	@Interchangeable(fieldTitle="Country ID")
 	private Country countryId;
 	@Interchangeable(fieldTitle="Organization URL")
 	private String orgUrl;
 	@Interchangeable(fieldTitle="Acronym")
 	private String acronym;
 	
-	@Interchangeable(fieldTitle="Region")
+//	@Interchangeable(fieldTitle="Region")
 	private AmpCategoryValueLocations region;
-	@Interchangeable(fieldTitle="Implementation Location Level")
+//	@Interchangeable(fieldTitle="Implementation Location Level")
     private AmpCategoryValue implemLocationLevel;
-	@Interchangeable(fieldTitle="Locations")
+//	@Interchangeable(fieldTitle="Locations")
     private Set<AmpOrgLocation> locations;
 //	@Interchangeable(fieldTitle="Staff Infos")
     private Set<AmpOrgStaffInformation> staffInfos;
-	@Interchangeable(fieldTitle="Contry")
+//	@Interchangeable(fieldTitle="Contry")
     private AmpCategoryValueLocations country;
-	@Interchangeable(fieldTitle="AMP Organization Recipients")
+//	@Interchangeable(fieldTitle="AMP Organization Recipients")
     private Set<AmpOrgRecipient> recipients;
     
 	@Interchangeable(fieldTitle="Address Abroad")
@@ -115,7 +115,7 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
 
 	@Interchangeable(fieldTitle="Segment Code")
 	private String segmentCode;
-	@Interchangeable(fieldTitle="Sectors", pickIdOnly=true)
+//	@Interchangeable(fieldTitle="Sectors", pickIdOnly=true)
 	private Set<AmpSector> sectors;
 	
 //	@Interchangeable(fieldTitle="Documents")
@@ -151,13 +151,13 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
     private String orgKeyAreas;
     
     //Budget fields
-	@Interchangeable(fieldTitle="Parent Sector", pickIdOnly = true)
+//	@Interchangeable(fieldTitle="Parent Sector", pickIdOnly = true)
     private AmpBudgetSector parentsector;
-	@Interchangeable(fieldTitle="Departments", pickIdOnly = true)
+//	@Interchangeable(fieldTitle="Departments", pickIdOnly = true)
     private Set<AmpDepartments> departments;
-	@Interchangeable(fieldTitle="Budget Sectors")
+//	@Interchangeable(fieldTitle="Budget Sectors")
     private Set<AmpBudgetSector> budgetsectors;
-	@Interchangeable(fieldTitle="Line Ministry Registration Number")
+//	@Interchangeable(fieldTitle="Line Ministry Registration Number")
     private String  lineMinRegNumber;
     
     private boolean translateable	= true;

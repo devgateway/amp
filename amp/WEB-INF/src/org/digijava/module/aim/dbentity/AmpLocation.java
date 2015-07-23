@@ -7,9 +7,10 @@ import java.util.Set;
 
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
 
-public class AmpLocation implements Serializable, Versionable, Cloneable
+public class AmpLocation implements Serializable, Versionable, Cloneable, Identifiable
 {
 	@Interchangeable(fieldTitle="AMP Location ID", id=true)
 	private Long ampLocationId ;
@@ -246,5 +247,10 @@ public class AmpLocation implements Serializable, Versionable, Cloneable
 
 	public void setGeoCode(String geoCode) {
 		this.geoCode = geoCode;
+	}
+
+	@Override
+	public Object getIdentifier() {
+		return ampLocationId;
 	}
 }	

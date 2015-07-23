@@ -455,8 +455,8 @@ public class InterchangeUtils {
 		IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		if (!Identifiable.class.isAssignableFrom(obj.getClass())) {
 //			System.out.println("URURU: " + obj.getClass() + "isn't identifiable!");
-//			return Long.valueOf(1);
 			return null;
+//			return null;
 
 		}
 		Identifiable identifiableObject = (Identifiable) obj;

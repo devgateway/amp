@@ -7,7 +7,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -15,6 +14,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.digijava.kernel.ampapi.endpoints.activity.utils.ActivityImporterHelper;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -144,6 +145,18 @@ public class InterchangeEndpoints {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.EDIT_ACTIVITY}, id = "updateProject", ui = false)
 	public JsonBean updateProject(@PathParam("projectId") Long projectId, JsonBean newJson) {
+		/*
+		 * Originally it was defined as PUT to avoid these type of issues checked here.
+		 * But it is more common to use it as POST, so let's then validate
+		 */ 
+		Object internalId = newJson.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME);
+		if (!projectId.equals(internalId)) {
+			// invalidating
+			String details = "url project_id = " + projectId + ", json " + ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME +
+					" = " + internalId;
+			ActivityImporterHelper.addGeneralError(newJson, 
+					new ApiErrorMessage(ActivityErrors.UPDATE_ID_MISMATCH, details));
+		}
 		return InterchangeUtils.importActivity(newJson, true);
 	}
 	

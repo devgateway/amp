@@ -5,9 +5,14 @@ package org.digijava.kernel.ampapi.endpoints.activity.utils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 
 /**
@@ -23,10 +28,19 @@ public class ActivityImporterHelper {
 	 */
 	private ActivityImporter activityImporter;
 	
+	/**
+	 * 
+	 * @param activityImporter
+	 */
 	public ActivityImporterHelper(ActivityImporter activityImporter) {
 		this.activityImporter = activityImporter;
 	}
 	
+	/**
+	 * 
+	 * @param field
+	 * @return
+	 */
 	public static Class<?> getGenericsParameterClass(Field field) {
 		ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
 		if (parameterizedType.getActualTypeArguments().length > 1)
@@ -39,6 +53,19 @@ public class ActivityImporterHelper {
 			logger.error(e.getMessage());
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public static void addGeneralError(JsonBean root, ApiErrorMessage error) { 
+		Map<Integer, ApiErrorMessage> generalErrors = (TreeMap<Integer, ApiErrorMessage>) root.get(ActivityEPConstants.INVALID);
+		if (generalErrors == null) {
+			generalErrors = new TreeMap<Integer, ApiErrorMessage>();
+			root.set(ActivityEPConstants.INVALID, generalErrors);
+		}
+		ApiErrorMessage existing = generalErrors.get(error.id);
+		if (existing != null) {
+			error = new ApiErrorMessage(existing, error.value);
+		}
+		generalErrors.put(error.id, error);
 	}
 	
 }

@@ -114,6 +114,12 @@ public class ActivityImporter {
 		List<JsonBean> fieldsDef = FieldsEnumerator.getAllAvailableFields(true);
 		// get existing activity if this is an update request
 		Long ampActivityId = update ? Long.decode(newJson.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME).toString()) : null;
+		// check if any error were already detected in upper layers 
+		Map<Integer, ApiErrorMessage> existingErrors = (TreeMap<Integer, ApiErrorMessage>) newJson.get(ActivityEPConstants.INVALID);
+		
+		if (existingErrors != null && existingErrors.size() > 0) {
+			errors.putAll(existingErrors);
+		}
 		
 		if (ampActivityId != null) {
 			try {
@@ -147,7 +153,7 @@ public class ActivityImporter {
 		
 		newActivity = (AmpActivityVersion) validateAndImport(newActivity, oldActivity, fieldsDef, 
 				newJsonParent, oldJsonParent, "");
-		if(newActivity != null) {
+		if(newActivity != null && errors.isEmpty()) {
 			// save new activity
 			try {
 				prepareToSave();

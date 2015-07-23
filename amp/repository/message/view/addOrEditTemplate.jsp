@@ -232,7 +232,7 @@ var submmited = false;
 																                                    <table border="0" width="100%">																                                        
 																                                        <tr>
 																                                            <td>
-																                                              <select  multiple="multiple" size="5" id="whoIsReceiver"  class="inp-text" style="width:200px">
+																                                              <select  multiple="multiple" size="5" id="whoIsReceiver"  class="inp-text" style="width:350px">
 																												<logic:empty name="messageForm" property="teamMapValues">
 																													<option value="-1">No receivers</option>
 																												</logic:empty>
@@ -264,7 +264,7 @@ var submmited = false;
 																                                                <table border="0" width="100%">																                                                   
 																                                                    <tr>
 																                                                        <td valign="top">																
-																                                                            <html:select multiple="multiple" styleId="selreceivers" name="messageForm" property="receiversIds"  size="5" styleClass="inp-text" style="width:200px">
+																                                                            <html:select multiple="multiple" styleId="selreceivers" name="messageForm" property="receiversIds"  size="5" styleClass="inp-text" style="width:350px">
 																                                              					<c:if test="${!empty messageForm.receivers}">
 																	                                                              	<html:optionsCollection name="messageForm" property="receivers" value="value" label="label" />
 																	                                                              </c:if>                

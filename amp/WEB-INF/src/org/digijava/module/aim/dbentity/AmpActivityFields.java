@@ -504,7 +504,7 @@ LoggerIdentifiable, Cloneable {
 	@Interchangeable(fieldTitle = "Categories", importable = true)
 	@InterchangeableDiscriminator(discriminatorField="categories", 
 	settings = {
-		@Interchangeable(fieldTitle = "Activity Status", importable=true, discriminatorOption = CategoryConstants.ACTIVITY_STATUS_KEY, fmPath="/Activity Form/Identification/Activity Status", pickIdOnly=true),
+		@Interchangeable(fieldTitle = "Activity Status", importable=true, required = ActivityEPConstants.REQUIRED_ALWAYS, discriminatorOption = CategoryConstants.ACTIVITY_STATUS_KEY, fmPath="/Activity Form/Identification/Activity Status", pickIdOnly=true),
 		@Interchangeable(fieldTitle = "Type of Cooperation", importable=true, discriminatorOption = /*"SSC_" + */CategoryConstants.TYPE_OF_COOPERATION_KEY, fmPath="/Activity Form/Identification/Type of Cooperation", pickIdOnly=true),
 		@Interchangeable(fieldTitle = "Type of Implementation", importable=true, discriminatorOption = /*"SSC_" + */CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY, fmPath="/Activity Form/Identification/Type of Implementation", pickIdOnly=true),
 		@Interchangeable(fieldTitle = "Modalities", importable=true, discriminatorOption = /*"SSC_" + */CategoryConstants.MODALITIES_KEY, fmPath="/Activity Form/Funding/Modalities", pickIdOnly=true),

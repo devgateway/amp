@@ -256,7 +256,7 @@ public class ActivityImporter {
 			}
 			//newSubElement = validateAndImport(newSubElement, oldSubElement, childrenFields, newChild, oldChild, fieldPath);
 			Iterator<Map<String, Object>> iterNew = childrenNewValues.iterator();
-			while (iterNew.hasNext() && newParent != null) {
+			while (iterNew.hasNext()) {
 				Map<String, Object> newChild = iterNew.next();
 				JsonBean childFieldDef = getMatchedFieldDef(newChild, childrenFields);
 				Map<String, Object> oldChild = getMatchedOldValue(childFieldDef, childrenOldValues);
@@ -282,7 +282,7 @@ public class ActivityImporter {
 				if (res == null) {
 					// validation failed, reset parent to stop config
 					newParent = null;
-				} else if (isCollection) {
+				} else if (newParent != null && isCollection) {
 					// actual links will be updated
 					((Collection) newFieldValue).add(res);
 				}

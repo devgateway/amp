@@ -20,6 +20,9 @@ import org.dgfoundation.amp.reports.ActivityType;
 public class EPConstants {
 	public static final String LANGUAGE = "language";
 	public static final String TRANSLATIONS = "translations";
+
+    // the request attribute name to set response status
+    public static final String RESPONSE_STATUS = "response_status";
 	
 	// config update
 	public static final String REPORT_NAME = "name";

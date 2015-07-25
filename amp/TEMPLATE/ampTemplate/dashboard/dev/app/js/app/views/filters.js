@@ -7,6 +7,7 @@ var summaryTemplate = _.template(fs.readFileSync(
   __dirname + '/../templates/filter-summary.html', 'UTF-8'));
 var detailsTemplate = _.template(fs.readFileSync(
   __dirname + '/../templates/filter-details.html', 'UTF-8'));
+var filtersViewLog = require('../../../../../../../ampTemplate/module/amp-log')('dashboard:filters:view');
 
 
 module.exports = BackboneDash.View.extend({
@@ -55,9 +56,9 @@ module.exports = BackboneDash.View.extend({
 	        }).bind(this),
 	        set: _(function(state) {
 	        	if (state.filter.otherFilters !== undefined && state.filter.otherFilters.date !== undefined) {
-	        		console.log('Using saved filters.');	        		
+	        		filtersViewLog.log('Using saved filters.');
 	        	} else {
-	        		console.log('Using default filter dates.');
+              filtersViewLog.log('Using default filter dates.');
 	        		state.filter = blob;
 	        	}
 	        	this.app.filter.deserialize(state.filter);

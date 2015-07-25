@@ -1,6 +1,7 @@
 var fs = require('fs');
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
+var AmpLogger = require('../../../../../../../ampTemplate/module/amp-log')('settings:modal');
 var template = _.template(fs.readFileSync(
   __dirname + '/../templates/settings-modal.html', 'UTF-8'));
 
@@ -56,5 +57,4 @@ module.exports = BackboneDash.View.extend({
     }
     this.current.select(optionId);
   }
-
 });

@@ -1,0 +1,31 @@
+{
+  "name": "amp-log",
+  "version": "0.0.1",
+  "description": "A logger wrapper for AMP",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "jest": {
+    "scriptPreprocessor": "./node_modules/babel-jest",
+    "testFileExtensions": [
+      "es6"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "es6"
+    ]
+  },
+  "author": "Alexei Savca",
+  "license": "inherit",
+  "devDependencies": {
+    "babel-jest": "^5.3.0",
+    "babel-loader": "^5.3.2",
+    "jest-cli": "^0.4.17",
+    "webpack": "^1.10.5"
+  },
+  "dependencies": {
+    "debug": "^2.2.0"
+  }
+}

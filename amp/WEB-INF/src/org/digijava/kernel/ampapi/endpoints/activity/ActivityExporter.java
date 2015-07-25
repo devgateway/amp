@@ -88,6 +88,7 @@ public class ActivityExporter {
 	IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException, EditorException {
 		
 		Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
+		InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
 		
 		if (interchangeable != null && FMVisibility.isVisible(interchangeable.fmPath())) {
 			field.setAccessible(true);
@@ -126,8 +127,21 @@ public class ActivityExporter {
 				}
 			} else {
 				if (isFiltered(filteredFieldPath)) {
-					Long id = fieldValue != null ? InterchangeUtils.getId(fieldValue) : null;
-					resultJson.set(fieldTitle, id);
+					
+					Long id;
+					
+					if (discriminator != null && discriminator.discriminatorClass().length() > 0) {
+						try {
+							Class<FieldsDiscriminator> discClass = (Class<FieldsDiscriminator>) Class.forName(discriminator.discriminatorClass());
+							id = (Long) discClass.newInstance().getIdOf(fieldValue);
+							resultJson.set(fieldTitle, id);	
+						} catch (ClassNotFoundException | InstantiationException e) {
+							throw new RuntimeException("Couldn't instantiate discriminator class "+ discriminator.discriminatorClass());
+						}
+					} else {
+						id = fieldValue != null ? InterchangeUtils.getId(fieldValue) : null;
+						resultJson.set(fieldTitle, id);
+					}
 				}
 			}
 		}		

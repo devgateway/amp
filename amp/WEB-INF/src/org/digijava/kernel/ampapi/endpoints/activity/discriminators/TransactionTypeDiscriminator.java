@@ -7,6 +7,13 @@ import org.digijava.kernel.ampapi.endpoints.activity.FieldsDiscriminator;
 
 public class TransactionTypeDiscriminator extends FieldsDiscriminator {
 	
+//	public TransactionTypeDiscriminator(Object value) {
+//		super(value);
+//	}
+
+
+
+
 	@Override
 	public Map<String, Object> getPossibleValues() {
 		Map<String, Object> valuesMap = new HashMap<String, Object>();
@@ -20,9 +27,9 @@ public class TransactionTypeDiscriminator extends FieldsDiscriminator {
 	
 	@Override
 	public Object toJsonOutput(Object obj) {
-		Integer value = (Integer) obj;
+		Integer intValue = (Integer) obj;
 		for (Map.Entry<String, Integer> entry : ArConstants.TRANSACTION_TYPE_NAME_TO_ID.entrySet())
-			if (entry.getValue().equals(value))
+			if (entry.getValue().equals(intValue))
 				return entry.getKey();
 		return null;
 	}
@@ -31,8 +38,18 @@ public class TransactionTypeDiscriminator extends FieldsDiscriminator {
 
 
 	@Override
-	public Object toAmpFormat(Object obj) {
-		return ArConstants.TRANSACTION_TYPE_NAME_TO_ID.get(obj);
+	public Long getIdOf(Object value) {
+		return Long.decode(value.toString());
 	}
+
+
+
+
+	@Override
+	public Object toAmpFormat(Object obj) {
+		return obj;
+//		return ArConstants.TRANSACTION_TYPE_NAME_TO_ID.get(obj);
+	}
+
 
 }

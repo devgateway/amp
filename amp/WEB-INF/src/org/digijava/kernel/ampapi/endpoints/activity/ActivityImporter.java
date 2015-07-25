@@ -33,6 +33,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -475,6 +476,18 @@ public class ActivityImporter {
 		if (!isCollection && idOnly) {
 			//Number->String->Long. 
 			//if anyone has a better idea how to make this conversion painless, please ping me. @acartaleanu
+			
+			InterchangeableDiscriminator discr = field.getAnnotation(InterchangeableDiscriminator.class);
+			if (discr != null && discr.discriminatorClass().length() > 0) {
+				try {
+					@SuppressWarnings("unchecked")
+					Class<FieldsDiscriminator> discrClass = (Class<FieldsDiscriminator>) Class.forName(discr.discriminatorClass());
+					FieldsDiscriminator disc = discrClass.newInstance();
+					return disc.toAmpFormat(jsonValue);
+				} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+					throw new RuntimeException("Cannot instantiate discriminator class " + discr.discriminatorClass());
+				}				
+			}
 			return getObjectReferencedById(field.getType(), Long.valueOf(jsonValue.toString()));
 		}
 		

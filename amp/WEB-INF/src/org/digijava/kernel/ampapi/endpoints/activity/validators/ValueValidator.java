@@ -87,7 +87,7 @@ public class ValueValidator extends InputValidator {
 							break;
 						}
 					}
-					// translatable means it's input must be a map, otherwise invalid input was provided, so we cannot say it's invalid
+					// translatable means its input must be a map, otherwise invalid input was provided, so we cannot say it's invalid
 				}
 			}
 		}

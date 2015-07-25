@@ -172,7 +172,7 @@ public class FieldsEnumerator {
 	 * @param field
 	 * @return
 	 */
-	private  JsonBean describeField(Field field, Interchangeable interchangeable) {
+	private  JsonBean describeField(Field field, Interchangeable interchangeable, InterchangeableDiscriminator discriminator) {
 		if (interchangeable == null)
 			return null;
 		JsonBean bean = new JsonBean();
@@ -184,8 +184,23 @@ public class FieldsEnumerator {
 		if (interchangeable.pickIdOnly()) {
 			bean.set(ActivityEPConstants.FIELD_TYPE, InterchangeableClassMapper.getCustomMapping(java.lang.Long.class));
 		} else {
-			bean.set(ActivityEPConstants.FIELD_TYPE, InterchangeableClassMapper.containsSimpleClass(field.getType())? 
-					InterchangeableClassMapper.getCustomMapping(field.getType()) : ActivityEPConstants.FIELD_TYPE_LIST);			
+			Class<?> fieldType;
+			
+//			if (discriminator != null && discriminator.discriminatorClass().length() > 0) {
+//				try {
+////					@SuppressWarnings("unchecked")
+////					Class<FieldsDiscriminator> discrClass = (Class<FieldsDiscriminator>) Class.forName(discriminator.discriminatorClass());
+////					fieldType = discrClass.newInstance().getJsonOutputType();
+//				} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+//					throw new RuntimeException("Cannot instantiate discriminator class: " + discriminator.discriminatorClass());
+////					e.printStackTrace();
+//				}
+//			} else {
+				fieldType = field.getType();
+//			}
+			bean.set(ActivityEPConstants.FIELD_TYPE, InterchangeableClassMapper.containsSimpleClass(fieldType)? 
+					InterchangeableClassMapper.getCustomMapping(fieldType) : ActivityEPConstants.FIELD_TYPE_LIST);		
+			
 		}
 		
 
@@ -199,6 +214,11 @@ public class FieldsEnumerator {
 		
 		/* list type */
 
+		
+		if (interchangeable.pickIdOnly())
+			bean.set(ActivityEPConstants.ID_ONLY, true);
+		
+		
 		if (!InterchangeUtils.isSimpleType(field.getType())) {
 			if (InterchangeUtils.isCollection(field) && !hasMaxSizeValidatorEnabled(field)) {
 				bean.set(ActivityEPConstants.MULTIPLE_VALUES, true);
@@ -210,9 +230,7 @@ public class FieldsEnumerator {
 				if (children != null && children.size() > 0) {
 					bean.set(ActivityEPConstants.CHILDREN, children);
 				}
-			} else {
-				bean.set(ActivityEPConstants.ID_ONLY, true);
-			}
+			} 
 			bean.set(ActivityEPConstants.UNIQUE, hasUniqueValidatorEnabled(field));
 			
 		}
@@ -253,13 +271,14 @@ public class FieldsEnumerator {
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
 			if (!InterchangeUtils.isCompositeField(field) || hasFieldDiscriminatorClass(field)) {
+				InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
 				Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
 				if (interchangeable == null)
 					continue;
 				if (!FMVisibility.isVisible(interchangeable.fmPath())) {
 					continue;
 				}
-				JsonBean descr = describeField(field, interchangeable);
+				JsonBean descr = describeField(field, interchangeable, discriminator);
 				if (descr != null) {
 					result.add(descr);
 				}
@@ -271,7 +290,7 @@ public class FieldsEnumerator {
 					if (!FMVisibility.isVisible(fmPath)) {
 						continue;
 					}
-					JsonBean descr = describeField(field, settings[i]);
+					JsonBean descr = describeField(field, settings[i], discriminator);
 					if (descr != null) {
 						result.add(descr);
 					}

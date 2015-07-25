@@ -19,12 +19,22 @@ public class CurrencyDiscriminator extends FieldsDiscriminator {
 	}
 	
 	@Override
-	public Object toJsonOutput(Object obj) {
-		return obj;
+	public Object toJsonOutput(Object object) {
+		return object;
+	}
+
+	@Override
+	public Long getIdOf(Object value) {
+		return null;
 	}
 
 	public Object toAmpFormat(Object obj) {
 		return obj;
 	}
+//
+//	@Override
+//	public Class getJsonOutputType() {
+//		return String.class;
+//	}
 
 }

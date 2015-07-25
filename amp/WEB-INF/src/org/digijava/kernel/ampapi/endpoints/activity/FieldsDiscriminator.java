@@ -22,8 +22,18 @@ public abstract class FieldsDiscriminator {
 	 * @param obj the object to be converted
 	 */
 
-	public abstract Object toJsonOutput(Object obj);
+	protected Object value;
 	
+//	public FieldsDiscriminator(Object value) {
+//		this.value = value;
+//	}
+//	
+	public abstract Object toJsonOutput(Object value);
 	
-	public abstract Object toAmpFormat(Object obj);
+	public abstract Long getIdOf(Object value);
+
+	public abstract Object toAmpFormat(Object obj);	
+//	public abstract Object toAmpFormat();
+	
+//	public abstract Class getJsonOutputType();
 }

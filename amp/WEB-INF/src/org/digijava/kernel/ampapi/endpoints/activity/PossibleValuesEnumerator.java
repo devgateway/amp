@@ -39,8 +39,9 @@ public class PossibleValuesEnumerator {
 	public static final Logger LOGGER = Logger.getLogger(PossibleValuesEnumerator.class);
 	
 	
-	public static List<JsonBean> getPossibleValuesForField(String longFieldName, Class<?> clazz, String discriminatorOption) {
+	public static List<JsonBean> getPossibleValuesForField(String longFieldName, Class<?> clazz, Interchangeable interchangeable) {
 
+		Interchangeable configInter = interchangeable;
 		String fieldName = "";
 		if (longFieldName.contains("~")) {
 			/*
@@ -54,11 +55,14 @@ public class PossibleValuesEnumerator {
 				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, fieldName)));
 				return result;
 			}
-			String configString = discriminatorOption == null? null : discriminatorOption;
+			
+			configInter = field.getAnnotation(Interchangeable.class);
+			
 			if (InterchangeUtils.isCompositeField(field)) {
-				configString = getConfigValue(fieldName, field);	
-			}
-			return getPossibleValuesForField(longFieldName.substring(longFieldName.indexOf('~') + 1), InterchangeUtils.getClassOfField(field), configString);
+				configInter = getCompositeInterchangeableForField(fieldName, field);	
+			} 
+			
+			return getPossibleValuesForField(longFieldName.substring(longFieldName.indexOf('~') + 1), InterchangeUtils.getClassOfField(field), interchangeable);
 		} else {
 			/*
 			 * the last field might contain discriminated values
@@ -71,9 +75,10 @@ public class PossibleValuesEnumerator {
 				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, longFieldName)));
 				return result;
 			} else {
-				String configString = discriminatorOption == null? null : discriminatorOption;
+				configInter = finalField.getAnnotation(Interchangeable.class);
+				
 				if (InterchangeUtils.isCompositeField(finalField)) {
-					configString = getConfigValue(longFieldName, finalField);	
+					configInter = getCompositeInterchangeableForField(longFieldName, finalField);	
 				}
 
 				try {
@@ -90,11 +95,11 @@ public class PossibleValuesEnumerator {
 					result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.DISCRIMINATOR_CLASS_METHOD_ERROR, e.getMessage())));
 					return result;
 				}				
-				if (InterchangeUtils.isCompositeField(finalField) || configString != null) {
-					return getPossibleValuesForComplexField(finalField, configString);
+				if (InterchangeUtils.isCompositeField(finalField) || configInter != null) {
+					return getPossibleValuesForComplexField(finalField, configInter);
 				}
 
-				return getPossibleValuesForField(finalField);
+				return getPossibleValuesForField(finalField, configInter);
 			}
 		}
 	}
@@ -114,27 +119,26 @@ public class PossibleValuesEnumerator {
 		return result;
 		
 	}
-	private static List<JsonBean> getPossibleValuesForComplexField(Field field, String configValue) {
-		
+	private static List<JsonBean> getPossibleValuesForComplexField(Field field, Interchangeable configInter) {
 		
 		List<JsonBean> result = new ArrayList<JsonBean>();
-		if (configValue == null) {
-			return getPossibleValuesForField(field);
+		if (configInter == null) {
+			return getPossibleValuesForField(field, configInter);
 		}
 		/*AmpActivitySector || AmpComponentFunding || AmpActivityProgram*/
 		List<Object> items;
 		if (InterchangeUtils.getClassOfField(field).equals(AmpSector.class)) {
-			items = getSpecialCaseObjectList(configValue, "all_sectors_with_levels",
+			items = getSpecialCaseObjectList(configInter.discriminatorOption(), "all_sectors_with_levels",
 					 "ampSectorId", "sector_config_name", "amp_sector_id", AmpSector.class);
 		} else if  (InterchangeUtils.getClassOfField(field).equals(AmpTheme.class)) {
-			items = getSpecialCaseObjectList(configValue, "all_programs_with_levels",
+			items = getSpecialCaseObjectList(configInter.discriminatorOption(), "all_programs_with_levels",
 					 "ampThemeId", "program_setting_name", "amp_theme_id", AmpTheme.class);
 		} else if (InterchangeUtils.getClassOfField(field).equals(AmpCategoryValue.class)){
-			return getPossibleCategoryValues(field, configValue);
+			return getPossibleCategoryValues(field, configInter);
 		} else {
 //			result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, field.getName())));
 			//not a complex field, after all
-			return getPossibleValuesForField(field);
+			return getPossibleValuesForField(field,configInter);
 		}
 		
 		
@@ -154,11 +158,11 @@ public class PossibleValuesEnumerator {
 //			return result;
 		return result;
 	}
-	private static String getConfigValue(String longFieldName, Field field) {
+	private static Interchangeable getCompositeInterchangeableForField(String longFieldName, Field field) {
 		InterchangeableDiscriminator ant = field.getAnnotation(InterchangeableDiscriminator.class);
 		for (Interchangeable inter : ant.settings()) {
 			if (inter.fieldTitle().equals(InterchangeUtils.deunderscorify(longFieldName))) {
-				return inter.discriminatorOption();
+				return inter;
 			}
 		}
 		return null;
@@ -220,13 +224,15 @@ public class PossibleValuesEnumerator {
 	}
 	
 	
-	private static List<JsonBean> getPossibleValuesForField(Field field) {
+	private static List<JsonBean> getPossibleValuesForField(Field field, Interchangeable interchangeable) {
 		if (!InterchangeUtils.isFieldEnumerable(field))
 			return new ArrayList<JsonBean>();
 		List<JsonBean> result = new ArrayList<JsonBean>();
 		Class<?> clazz = InterchangeUtils.getClassOfField(field);
+		
 		if (clazz.isAssignableFrom(AmpCategoryValue.class))
-			return getPossibleCategoryValues(field, null);
+			return getPossibleCategoryValues(field, interchangeable);
+		
 		String queryString = "select cls from " + clazz.getName() + " cls ";
 		List<Object> objectList= PersistenceManager.getSession().createQuery(queryString).list();
 		for (Object obj : objectList) {
@@ -242,26 +248,22 @@ public class PossibleValuesEnumerator {
 		}
 		return result;
 	}
-	private static List<JsonBean> getPossibleCategoryValues(Field field, String discriminatorOption) {
+	
+	private static List<JsonBean> getPossibleCategoryValues(Field field, Interchangeable interchangeable) {
 		List <JsonBean> result = new ArrayList<JsonBean>();
-		Interchangeable ant = field.getAnnotation(Interchangeable.class);
+	    String discriminatorOption = interchangeable !=null ? interchangeable.discriminatorOption() : null;
 		String whereClause;
-		if (discriminatorOption != null) {
+		
+		if (StringUtils.isNotBlank(discriminatorOption)) {
 			String classSearchField = InterchangeUtils.categoryValueKeys.contains(discriminatorOption) ? 
 					"keyName" : "name";
 			whereClause = "WHERE acv.ampCategoryClass." +  classSearchField	+  "='" + discriminatorOption + "'";
 		} else {
-			whereClause =  "WHERE acv.ampCategoryClass.name=" + "'" + ant.fieldTitle() +"'";
+			whereClause =  "WHERE acv.ampCategoryClass.name=" + "'" + interchangeable.fieldTitle() +"'";
 		}
-		
-		
-//		String whereClause =  "WHERE acv.ampCategoryClass.name=" + "'" + ant.fieldTitle() +"'";
 		
 		String queryString = "SELECT acv from " + AmpCategoryValue.class.getName() + " acv " + whereClause;
 
-//		if (! (field.getName().equals("categories") && (field.getDeclaringClass().equals(AmpActivityFields.class)))) {
-//			queryString += whereClause;
-//		}
 		List<AmpCategoryValue> acvList = (List<AmpCategoryValue>) PersistenceManager.getSession().createQuery(queryString).list();
 
 		for (AmpCategoryValue acv : acvList) {

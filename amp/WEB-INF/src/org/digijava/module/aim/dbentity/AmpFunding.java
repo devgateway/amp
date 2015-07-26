@@ -17,6 +17,7 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 @TranslatableClass(displayName = "Funding")
 public class AmpFunding implements Serializable, Versionable, Cloneable {
@@ -87,14 +88,23 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	@Interchangeable(fieldTitle="Active List", importable=true)
 	private ArrayList<Boolean> activeList;
 	// private AmpModality modalityId;
-	@Interchangeable(fieldTitle="Type of Assistance",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence", importable=true, pickIdOnly=true)
+	
+	@Interchangeable(fieldTitle="Type of Assistance", fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence", 
+					 discriminatorOption = CategoryConstants.TYPE_OF_ASSISTENCE_KEY, importable=true, pickIdOnly=true)
 	private AmpCategoryValue typeOfAssistance;
-	@Interchangeable(fieldTitle="Financal Instrument",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument", importable=true, pickIdOnly=true)
+	
+	@Interchangeable(fieldTitle="Financial Instrument",  
+					 discriminatorOption = CategoryConstants.FINANCIAL_INSTRUMENT_KEY, importable=true, pickIdOnly=true)
 	private AmpCategoryValue financingInstrument;
-	@Interchangeable(fieldTitle="Funding Status",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status", importable=true, pickIdOnly=true)
+	
+	@Interchangeable(fieldTitle="Funding Status", fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status", 
+			 		 discriminatorOption = CategoryConstants.FUNDING_STATUS_KEY, importable=true, pickIdOnly=true)
 	private AmpCategoryValue fundingStatus;
-	@Interchangeable(fieldTitle="Mode of Payment",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Mode of Payment", importable=true, pickIdOnly=true)
+	
+	@Interchangeable(fieldTitle="Mode of Payment", fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Mode of Payment", 
+			 		 discriminatorOption = CategoryConstants.MODE_OF_PAYMENT_KEY, importable=true, pickIdOnly=true)
 	private AmpCategoryValue modeOfPayment;
+	
 	@Interchangeable(fieldTitle="Loan Terms",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Loan Terms", importable=true)
 	private String loanTerms;
 	@Interchangeable(fieldTitle="Group Versioned Funding", importable=true)

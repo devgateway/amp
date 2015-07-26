@@ -56,8 +56,11 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	@InterchangeableDiscriminator(discriminatorField="transactionType",
 			discriminatorClass="org.digijava.kernel.ampapi.endpoints.activity.discriminators.TransactionTypeDiscriminator")
 	private Integer transactionType;
-	@Interchangeable(fieldTitle="Adjustment Type", importable=true, pickIdOnly = true)
+	
+	@Interchangeable(fieldTitle="Adjustment Type", importable = true, pickIdOnly = true, 
+					 discriminatorOption = CategoryConstants.ADJUSTMENT_TYPE_KEY)
 	private AmpCategoryValue adjustmentType;
+	
 	@Interchangeable(fieldTitle="Transaction Date", importable=true)
 	private Date transactionDate;
 	@Interchangeable(fieldTitle="Transaction Date 2", importable=true)

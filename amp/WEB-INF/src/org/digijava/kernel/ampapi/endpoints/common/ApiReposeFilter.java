@@ -28,7 +28,9 @@ public class ApiReposeFilter implements ContainerResponseFilter {
         if (responseStatusValue != null) {
             try {
                 response.setStatus(Integer.parseInt(responseStatusValue.toString()));
-            } catch (NumberFormatException ex) {}
+            } catch (NumberFormatException ex) {
+                logger.warn("Setting response status: invalid, " + responseStatusValue, ex);
+            }
         }
 
         return response;

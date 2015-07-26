@@ -353,4 +353,14 @@ public class EndpointUtils {
 		decimalFormat.applyPattern(pattern);
 		return decimalFormat;
 	}
+
+    /**
+     * Sets the request attribute marker to be used by ApiResponseFilter
+     * to set the response status before sending to client
+     *
+     * @param status HTTP response status
+     */
+    public static void markResponseStatus(int status) {
+        TLSUtils.getRequest().setAttribute(EPConstants.RESPONSE_STATUS, status);
+    }
 }

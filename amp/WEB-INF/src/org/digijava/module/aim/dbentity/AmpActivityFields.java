@@ -108,7 +108,7 @@ LoggerIdentifiable, Cloneable {
 	@TranslatableField
 	protected String name ;
 	
-	@Interchangeable(fieldTitle = "Activity Description", importable = true, fmPath = "/Activity Form/Identification/Description")
+	@Interchangeable(fieldTitle = "Activity Description", importable = true, fmPath = "/Activity Form/Identification/Description", required = "/Activity Form/Identification/Required Validator for Description")
 	@VersionableFieldTextEditor(fieldTitle = "Activity Description")
 	protected String description ;
 
@@ -120,7 +120,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldTextEditor(fieldTitle = "Lessons Learned")
 	protected String lessonsLearned;
 	
-	@Interchangeable(fieldTitle = "Objective", importable = true, fmPath = "/Activity Form/Identification/Objective")
+	@Interchangeable(fieldTitle = "Objective", importable = true, fmPath = "/Activity Form/Identification/Objective", required = "/Activity Form/Identification/Required Validator for Objective")
 	@VersionableFieldTextEditor(fieldTitle = "Objective")
 	protected String objective ;
 	
@@ -278,7 +278,7 @@ LoggerIdentifiable, Cloneable {
 	protected String contactName;
 	//protected AmpTeamMember updatedBy; !!! Use modifiedBy
 
-	@Interchangeable(fieldTitle = "PPC Amount", importable = true, fmPath = "/Activity Form/Funding/Proposed Project Cost/Amount")
+	@Interchangeable(fieldTitle = "PPC Amount", importable = true, fmPath = "/Activity Form/Funding/Proposed Project Cost/Amount", required = "/Activity Form/Funding/Proposed Project Cost/Required Validator for Proposed Amount")
 	@VersionableFieldSimple(fieldTitle = "Fun Amount")
 	protected Double funAmount;
 	
@@ -396,7 +396,7 @@ LoggerIdentifiable, Cloneable {
 	protected Set<AmpComponentFunding> componentFundings;
 
 
-	@Interchangeable(fieldTitle = "Proposed Start Date", importable = true, fmPath = "/Activity Form/Planning/Proposed Start Date")
+	@Interchangeable(fieldTitle = "Proposed Start Date", importable = true, fmPath = "/Activity Form/Planning/Proposed Start Date", required = "/Activity Form/Planning/Required Validator for Proposed Start Date")
 	@VersionableFieldSimple(fieldTitle = "Proposed Start Date")
 	protected Date proposedStartDate;
 
@@ -512,7 +512,7 @@ LoggerIdentifiable, Cloneable {
 		@Interchangeable(fieldTitle = "Type of Implementation", importable=true, discriminatorOption = /*"SSC_" + */CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY, fmPath="/Activity Form/Identification/Type of Implementation", pickIdOnly=true),
 		@Interchangeable(fieldTitle = "Modalities", importable=true, discriminatorOption = /*"SSC_" + */CategoryConstants.MODALITIES_KEY, fmPath="/Activity Form/Funding/Modalities", pickIdOnly=true),
 		@Interchangeable(fieldTitle = "A.C. Chapter", importable=true, discriminatorOption = CategoryConstants.ACCHAPTER_KEY, fmPath="/Activity Form/Identification/A.C. Chapter", pickIdOnly=true), 
-		@Interchangeable(fieldTitle = "Activity Budget", importable=true, discriminatorOption = CategoryConstants.ACTIVITY_BUDGET_KEY, fmPath="/Activity Form/Identification/Activity Budget", pickIdOnly=true), 
+		@Interchangeable(fieldTitle = "Activity Budget", importable=true, required = "/Activity Form/Identification/Required Validator for Activity Budget", discriminatorOption = CategoryConstants.ACTIVITY_BUDGET_KEY, fmPath="/Activity Form/Identification/Activity Budget", pickIdOnly=true), 
 		@Interchangeable(fieldTitle = "Procurement System", importable=true, discriminatorOption = CategoryConstants.PROCUREMENT_SYSTEM_KEY, fmPath="/Activity Form/Identification/Procurement System", pickIdOnly=true),
 		@Interchangeable(fieldTitle = "Reporting System", importable=true, discriminatorOption = CategoryConstants.REPORTING_SYSTEM_KEY, fmPath="/Activity Form/Identification/Reporting System", pickIdOnly=true), 
 		@Interchangeable(fieldTitle = "Audit System", importable=true, discriminatorOption = CategoryConstants.AUDIT_SYSTEM_KEY, fmPath="/Activity Form/Identification/Audit System", pickIdOnly=true),
@@ -532,7 +532,7 @@ LoggerIdentifiable, Cloneable {
 	@Interchangeable(fieldTitle = "Indirect On Budget", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Indirect On Budget")
     @VersionableFieldSimple(fieldTitle = "Indirect On Budget")
     protected Boolean indirectOnBudget;
-	@Interchangeable(fieldTitle = "FY", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/FY")
+	@Interchangeable(fieldTitle = "FY", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/FY", required = "/Activity Form/Identification/Budget Extras/Required Validator for fy")
 	@VersionableFieldSimple(fieldTitle = "FY")
 	protected String FY;
 	@Interchangeable(fieldTitle = "Vote", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Vote")
@@ -577,7 +577,8 @@ LoggerIdentifiable, Cloneable {
 	@Interchangeable(fieldTitle = "Joint Criteria", importable = true, fmPath = "/Activity Form/Identification/Joint Criteria")
 	@VersionableFieldSimple(fieldTitle = "Joint Criteria")
 	protected Boolean jointCriteria;
-	@Interchangeable(fieldTitle = "Humanitarian Aid", importable = true, fmPath = "/Activity Form/Identification/Humanitarian Aid")
+	
+	@Interchangeable(fieldTitle = "Humanitarian Aid", importable = true, fmPath = "/Activity Form/Identification/Humanitarian Aid", required = "/Activity Form/Identification/Required Validator for Humanitarian Aid")
 	@VersionableFieldSimple(fieldTitle = "Humanitarian Aid")
 	protected Boolean humanitarianAid;
 

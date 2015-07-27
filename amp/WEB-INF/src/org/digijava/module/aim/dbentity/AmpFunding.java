@@ -93,8 +93,8 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 					 discriminatorOption = CategoryConstants.TYPE_OF_ASSISTENCE_KEY, importable=true, pickIdOnly=true)
 	private AmpCategoryValue typeOfAssistance;
 	
-	@Interchangeable(fieldTitle="Financial Instrument",  
-					 discriminatorOption = CategoryConstants.FINANCIAL_INSTRUMENT_KEY, importable=true, pickIdOnly=true)
+	@Interchangeable(fieldTitle="Financing Instrument",  
+					 discriminatorOption = CategoryConstants.FINANCING_INSTRUMENT_KEY, importable=true, pickIdOnly=true)
 	private AmpCategoryValue financingInstrument;
 	
 	@Interchangeable(fieldTitle="Funding Status", fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status", 

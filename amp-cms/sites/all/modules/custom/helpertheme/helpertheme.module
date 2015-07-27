@@ -347,7 +347,11 @@ function helpertheme_preprocess_page(&$variables) {
     }
 
     $options['query']['subset'] = implode(',', $options['query']['subset']);
-    $font_url = url('http://fonts.googleapis.com/css', $options);
+
+    global $is_https;
+    $url_scheme = ($is_https) ? 'https://' : 'http://';
+
+    $font_url = url($url_scheme . 'fonts.googleapis.com/css', $options);
     drupal_add_css($font_url, $css_options);
   }
 }

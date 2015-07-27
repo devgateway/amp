@@ -12,6 +12,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Collections;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
@@ -385,4 +388,40 @@ public class EndpointUtils {
     public static Integer getResponseStatusMarker() {
         return (Integer) TLSUtils.getRequest().getAttribute(EPConstants.RESPONSE_STATUS);
     }
+
+    /**
+     * Returns Map of markers from request to be set as response headers in ApiResponseFilter
+     * before sending to client
+     *
+     * Please not that this is readonly method and map's modification is not possible through it
+     * All modifications should be done via <code>addResponseHeaderMarker<code/> method
+     */
+    public static Map<String, String> getResponseHeaderMarkers() {
+        return Collections.unmodifiableMap((Map<String, String>)TLSUtils.getRequest()
+                .getAttribute(EPConstants.RESPONSE_HEADERS_MAP));
+    }
+
+    /**
+     * Adds the request attribute marker to be used by ApiResponseFilter
+     * to add the response header before sending to client
+     * @param headerName
+     * @param headerValue
+     */
+    public static void addResponseHeaderMarker(String headerName, String headerValue) {
+        Map<String, String> responseHeadersMap =
+                (Map<String, String>)TLSUtils.getRequest().getAttribute(EPConstants.RESPONSE_HEADERS_MAP);
+        if (responseHeadersMap == null) {
+            responseHeadersMap = new HashMap<String, String>();
+        }
+        responseHeadersMap.put(headerName, headerValue);
+    }
+
+    /**
+     * Cleans up all markers in case the request will be further processed
+     */
+    public static void cleanUpResponseMarkers() {
+        TLSUtils.getRequest().removeAttribute(EPConstants.RESPONSE_STATUS);
+        TLSUtils.getRequest().removeAttribute(EPConstants.RESPONSE_HEADERS_MAP);
+    }
+
 }

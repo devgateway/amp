@@ -5,6 +5,8 @@ import com.sun.jersey.spi.container.ContainerResponse;
 import com.sun.jersey.spi.container.ContainerResponseFilter;
 import org.apache.log4j.Logger;
 
+import java.util.Map;
+
 
 /**
  * Endpoint response post processor filer
@@ -26,6 +28,15 @@ public class ApiReposeFilter implements ContainerResponseFilter {
         if (responseStatusMarker != null) {
             response.setStatus(responseStatusMarker);
         }
+
+        Map<String, String> responseHeaderMarkers = EndpointUtils.getResponseHeaderMarkers();
+        if (responseHeaderMarkers != null) {
+            for (Map.Entry<String, String> headerMarker : responseHeaderMarkers.entrySet()) {
+                response.getHttpHeaders().add(headerMarker.getKey(), headerMarker.getValue());
+            }
+        }
+
+        EndpointUtils.cleanUpResponseMarkers();
 
         return response;
     }

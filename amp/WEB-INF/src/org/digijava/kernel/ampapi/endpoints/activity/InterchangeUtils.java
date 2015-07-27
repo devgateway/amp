@@ -40,7 +40,6 @@ import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTe
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
-import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
@@ -481,19 +480,14 @@ public class InterchangeUtils {
 	 */
 	public static String getRequiredValue(Field field, Interchangeable interchangeable) {
 		String requiredValue = ActivityEPConstants.FIELD_NOT_REQUIRED;
-		String minSize = "";
-		Validators validators = field.getAnnotation(Validators.class);
-//		Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
-		if (validators != null) {
-			minSize = validators.minSize();
-		}
 		String required = interchangeable.required();
+		
 		if (required.equals(ActivityEPConstants.REQUIRED_ALWAYS)) {
 			requiredValue = ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
 		}
 		else if (required.equals(ActivityEPConstants.REQUIRED_ND) 
 				|| (!required.equals(ActivityEPConstants.REQUIRED_NONE) && FMVisibility.isFmPathEnabled(required))
-				|| (!minSize.isEmpty() && FMVisibility.isFmPathEnabled(minSize))) {
+				|| (hasRequiredValidatorEnabled(field, interchangeable))) {
 			requiredValue = ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
 		}
 		return requiredValue;
@@ -700,6 +694,47 @@ public class InterchangeUtils {
 	 */
 	public static boolean isAmpActivityVersion(Class<?> clazz) {
 		return clazz.isAssignableFrom(AmpActivityVersion.class);
+	}
+	
+	public static boolean hasUniqueValidatorEnabled(Field field, Interchangeable interchangeable) {
+		return hasValidatorEnabled(field, interchangeable, ActivityEPConstants.UNIQUE_VALIDATOR_NAME);
+	}
+	
+	public static boolean hasMaxSizeValidatorEnabled(Field field, Interchangeable interchangeable) {
+		return hasValidatorEnabled(field, interchangeable, ActivityEPConstants.MAX_SIZE_VALIDATOR_NAME);
+	}
+	
+	public static boolean hasRequiredValidatorEnabled(Field field, Interchangeable interchangeable) {
+		return hasValidatorEnabled(field, interchangeable, ActivityEPConstants.MIN_SIZE_VALIDATOR_NAME);
+	}
+	
+	public static boolean hasPercentageValidatorEnabled(Field field, Interchangeable interchangeable) {
+		return hasValidatorEnabled(field, interchangeable, ActivityEPConstants.PERCENTAGE_VALIDATOR_NAME);
+	}
+	
+	private static boolean hasValidatorEnabled(Field field, Interchangeable interchangeable, String validatorName) {
+		boolean isEnabled = false;
+		Validators validators = interchangeable.validators();
+		
+		if (validators != null) {
+			String validatorFmPath = "";
+			
+			if (ActivityEPConstants.UNIQUE_VALIDATOR_NAME.equals(validatorName)) {
+				validatorFmPath = validators.unique();
+			} else if (ActivityEPConstants.MAX_SIZE_VALIDATOR_NAME.equals(validatorName)) {
+				validatorFmPath = validators.maxSize();
+			} else if (ActivityEPConstants.MIN_SIZE_VALIDATOR_NAME.equals(validatorName)) {
+				validatorFmPath = validators.minSize();
+			} else if (ActivityEPConstants.PERCENTAGE_VALIDATOR_NAME.equals(validatorName)) {
+				validatorFmPath = validators.percentage();
+			}
+			
+			if (StringUtils.isNotBlank(validatorFmPath)) {
+				isEnabled = FMVisibility.isFmPathEnabled(validatorFmPath);
+			}
+		}
+		
+		return isEnabled;
 	}
 	
 } 

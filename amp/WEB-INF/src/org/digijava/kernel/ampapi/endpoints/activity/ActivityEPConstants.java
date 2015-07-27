@@ -54,4 +54,10 @@ public class ActivityEPConstants {
 	//max length constants
 	public static final String TYPE_VARCHAR = "character varying";
 	
+	//validator names constants
+	public static final String UNIQUE_VALIDATOR_NAME = "uniqe";
+	public static final String MAX_SIZE_VALIDATOR_NAME = "maxSize";
+	public static final String MIN_SIZE_VALIDATOR_NAME = "minSize";
+	public static final String PERCENTAGE_VALIDATOR_NAME = "percentage";
+	
 }

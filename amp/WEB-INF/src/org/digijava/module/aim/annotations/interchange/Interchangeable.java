@@ -82,5 +82,7 @@ public @interface Interchangeable {
 	
 	/** configured with option value, like "Primary Sector" */
     String discriminatorOption() default "";
+    
+    Validators validators() default @Validators;
 
 }

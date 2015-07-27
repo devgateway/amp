@@ -21,13 +21,11 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
-import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.hibernate.jdbc.Work;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.entity.AbstractEntityPersister;
-
 
 /**
  * AMP Activity Endpoints for Activity Import / Export
@@ -70,18 +68,6 @@ public class FieldsEnumerator {
 			return getAllAvailableFields(field.getType());
 		else
 			return getAllAvailableFields(InterchangeUtils.getGenericClass(field));
-	}
-	
-	public static boolean hasMaxSizeValidatorEnabled(Field field) {
-		boolean isEnabled = false;
-		Validators validators = field.getAnnotation(Validators.class);
-		if (validators != null) {
-			String maxSize = validators.maxSize();
-			if (!maxSize.isEmpty()) {
-				isEnabled = FMVisibility.isFmPathEnabled(maxSize);
-			}
-		}
-		return isEnabled;
 	}
 	
 	private static Map<String, Field> getInterchangeableFields(Class<?> clazz) {
@@ -175,6 +161,7 @@ public class FieldsEnumerator {
 	private  JsonBean describeField(Field field, Interchangeable interchangeable, InterchangeableDiscriminator discriminator) {
 		if (interchangeable == null)
 			return null;
+		
 		JsonBean bean = new JsonBean();
 		bean.set(ActivityEPConstants.FIELD_NAME, InterchangeUtils.underscorify(interchangeable.fieldTitle()));
 		if (interchangeable.id()) {
@@ -220,19 +207,20 @@ public class FieldsEnumerator {
 		
 		
 		if (!InterchangeUtils.isSimpleType(field.getType())) {
-			if (InterchangeUtils.isCollection(field) && !hasMaxSizeValidatorEnabled(field)) {
+			if (InterchangeUtils.isCollection(field) && !InterchangeUtils.hasMaxSizeValidatorEnabled(field, interchangeable)) {
 				bean.set(ActivityEPConstants.MULTIPLE_VALUES, true);
 			} else {
 				bean.set(ActivityEPConstants.MULTIPLE_VALUES, false);
 			}
+			
 			if (!interchangeable.pickIdOnly()) {
 				List<JsonBean> children = getChildrenOfField(field);
 				if (children != null && children.size() > 0) {
 					bean.set(ActivityEPConstants.CHILDREN, children);
 				}
 			} 
-			bean.set(ActivityEPConstants.UNIQUE, hasUniqueValidatorEnabled(field));
 			
+			bean.set(ActivityEPConstants.UNIQUE, InterchangeUtils.hasUniqueValidatorEnabled(field, interchangeable));
 		}
 		
 		// only String fields should clarify if they are translatable or not
@@ -330,18 +318,6 @@ public class FieldsEnumerator {
 			throw new RuntimeException(e);
 		}
 		return translations;
-	}
-	
-	public static boolean hasUniqueValidatorEnabled(Field field) {
-		boolean isEnabled = false;
-		Validators validators = field.getAnnotation(Validators.class);
-		if (validators != null) {
-			String uniqueValidator = validators.unique();
-			if (!uniqueValidator.isEmpty()) {
-				isEnabled = FMVisibility.isFmPathEnabled(uniqueValidator);
-			}
-		}
-		return isEnabled;
 	}
 	
 }

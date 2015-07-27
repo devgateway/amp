@@ -8,9 +8,12 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeEndpoints;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.security.Security;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.translator.TranslatorWorker;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Defines API Error Utility class for manipulating ApiErrorMessage objects
@@ -89,8 +92,22 @@ public class ApiError {
 		
 		return getResultErrorBean(errorBean);
 	};
+
+    /**
+     * Sets "Internal Server Error" marker if the marker was absent or 200 OK
+     * Does not override custom Response marker status if one has been set
+     * See AMP-20522 for details
+     */
+    private static void processErrorResponseStatus() {
+        Integer responseMarker = EndpointUtils.getResponseStatusMarker();
+        if (responseMarker != null && responseMarker == HttpServletResponse.SC_OK) {
+            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
 	
 	private static JsonBean getResultErrorBean(Object errorBean) {
+        processErrorResponseStatus();
+
 		JsonBean resultErrorBean = new JsonBean();
 		resultErrorBean.set(JSON_ERROR_CODE, errorBean);
 		

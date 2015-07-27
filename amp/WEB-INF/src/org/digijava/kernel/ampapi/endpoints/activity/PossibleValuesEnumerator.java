@@ -252,32 +252,29 @@ public class PossibleValuesEnumerator {
 	private static List<JsonBean> getPossibleCategoryValues(Field field, Interchangeable interchangeable) {
 		List <JsonBean> result = new ArrayList<JsonBean>();
 	    String discriminatorOption = interchangeable !=null ? interchangeable.discriminatorOption() : null;
-		String whereClause;
 		
 		if (StringUtils.isNotBlank(discriminatorOption)) {
-			String classSearchField = InterchangeUtils.categoryValueKeys.contains(discriminatorOption) ? 
-					"keyName" : "name";
-			whereClause = "WHERE acv.ampCategoryClass." +  classSearchField	+  "='" + discriminatorOption + "'";
-		} else {
-			whereClause =  "WHERE acv.ampCategoryClass.name=" + "'" + interchangeable.fieldTitle() +"'";
-		}
-		
-		String queryString = "SELECT acv from " + AmpCategoryValue.class.getName() + " acv " + whereClause;
-
-		List<AmpCategoryValue> acvList = (List<AmpCategoryValue>) PersistenceManager.getSession().createQuery(queryString).list();
-
-		for (AmpCategoryValue acv : acvList) {
-			if (acv.isVisible()) {
-				JsonBean item = null;
-				try {
-					item = setProperties(acv);
-					result.add(item);
-				} catch (Exception exc) {
-					LOGGER.error(exc.getMessage());
-					throw new RuntimeException(exc);
+			String queryString = "SELECT acv from " + AmpCategoryValue.class.getName() + " acv "
+					+ "WHERE acv.ampCategoryClass.keyName ='" + discriminatorOption + "'";
+	
+			List<AmpCategoryValue> acvList = (List<AmpCategoryValue>) PersistenceManager.getSession().createQuery(queryString).list();
+	
+			for (AmpCategoryValue acv : acvList) {
+				if (acv.isVisible()) {
+					JsonBean item = null;
+					try {
+						item = setProperties(acv);
+						result.add(item);
+					} catch (Exception exc) {
+						LOGGER.error(exc.getMessage());
+						throw new RuntimeException(exc);
+					}
 				}
 			}
+		} else {
+			LOGGER.error("discriminatorOption is not configured for CategoryValue [" + field.getName() + "]");
 		}
+		
 		return result; 
 	}
 	

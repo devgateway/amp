@@ -14,7 +14,8 @@ public class EPConstants {
 	public static final String TRANSLATIONS = "translations";
 
     // the request attribute name to set response status
-    public static final String RESPONSE_STATUS = "response_status";
+    public static final String RESPONSE_STATUS = "response_status_marker";
+    public static final String RESPONSE_HEADERS_MAP = "response_headers_map";
 	
 	// config update
 	public static final String REPORT_NAME = "name";

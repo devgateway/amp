@@ -375,7 +375,14 @@ public class EndpointUtils {
      *
      * @param status HTTP response status
      */
-    public static void markResponseStatus(int status) {
+    public static void setResponseStatusMarker(Integer status) {
         TLSUtils.getRequest().setAttribute(EPConstants.RESPONSE_STATUS, status);
+    }
+
+    /**
+     * Returns HTTP Response status attribute from the request or null if none has been set
+     */
+    public static Integer getResponseStatusMarker() {
+        return (Integer) TLSUtils.getRequest().getAttribute(EPConstants.RESPONSE_STATUS);
     }
 }

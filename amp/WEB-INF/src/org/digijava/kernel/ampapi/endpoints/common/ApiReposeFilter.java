@@ -4,9 +4,7 @@ import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerResponse;
 import com.sun.jersey.spi.container.ContainerResponseFilter;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.request.TLSUtils;
 
-import javax.ws.rs.core.Response;
 
 /**
  * Endpoint response post processor filer
@@ -24,13 +22,9 @@ public class ApiReposeFilter implements ContainerResponseFilter {
     @Override
     public ContainerResponse filter(ContainerRequest request, ContainerResponse response) {
 
-        Object responseStatusValue = TLSUtils.getRequest().getAttribute(EPConstants.RESPONSE_STATUS);
-        if (responseStatusValue != null) {
-            try {
-                response.setStatus(Integer.parseInt(responseStatusValue.toString()));
-            } catch (NumberFormatException ex) {
-                logger.warn("Setting response status: invalid, " + responseStatusValue, ex);
-            }
+        Integer responseStatusMarker = EndpointUtils.getResponseStatusMarker();
+        if (responseStatusMarker != null) {
+            response.setStatus(responseStatusMarker);
         }
 
         return response;

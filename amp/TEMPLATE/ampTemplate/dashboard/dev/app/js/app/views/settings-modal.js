@@ -1,7 +1,7 @@
 var fs = require('fs');
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
-var AmpLogger = require('../../../../../../../ampTemplate/module/amp-log')('settings:modal');
+var logger = require('../../../../../../../ampTemplate/module/amp-log')('amp:dashboard:settings:modal');
 var template = _.template(fs.readFileSync(
   __dirname + '/../templates/settings-modal.html', 'UTF-8'));
 
@@ -15,14 +15,22 @@ module.exports = BackboneDash.View.extend({
 
   initialize: function(options) {
     this.app = options.app;
+    logger.log("Initialized with", options);
   },
 
   render: function() {
-    if (!this.current) { this.current = this.app.settings.getVisible()[0]; }
+    if (!this.current) {
+      this.current = this.app.settings.getVisible()[0];
+      logger.log("Render requested, but there's no  current setting. Trying to guess it");
+    }
     this.$el.html(template({
       settings: this.app.settings,
       current: this.current
     }));
+    var that = this;
+    logger.onDebug(function(){
+      logger.log("Rendered width current=", that.current.toJSON());
+    });
     return this;
   },
 
@@ -30,13 +38,18 @@ module.exports = BackboneDash.View.extend({
     e.preventDefault();  // don't change URL
     var settingId = e.currentTarget.hash.slice(1);  // removes '#'
     this.current = this.app.settings.get(settingId);
+    var that = this;
+    logger.onDebug(function(){
+      logger.log("Current setting changed to", that.current.toJSON());
+    });
     this.render();
   },
 
   changeSetting: function(e) {
     var optionId = e.currentTarget.value;
-    //if the browser supports local storage AND (the current setting is <currency> OR it is <calendar>)
-    if(!this.app.hasIssue('localStorage') && _(['currency', 'Calendar Type']).contains(this.current.attributes.name)){
+    logger.log("Changing", optionId, "setting");
+    //if the browser supports local storage
+    if(!this.app.hasIssue('localStorage')){
       var settings;
       //try reading the settings JSON from localStorage and deserialize it...
       try{

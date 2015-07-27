@@ -3296,7 +3296,7 @@ module.exports = BackboneDash.View.extend({
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
-var AmpLogger = require('../../../../../../../ampTemplate/module/amp-log')('settings:modal');
+var logger = require('../../../../../../../ampTemplate/module/amp-log')('amp:dashboard:settings:modal');
 var template = _.template("<div class=\"tab-content filter-options\">\n  <div class=\"tab-pane active\">\n    <ul class=\"sub-filters-titles nav nav-pills nav-stacked\">\n      <% _(settings.getVisible()).each(function(setting) { %>\n        <li <%= setting.id === current.id ? 'class=\"active\"' : '' %>>\n          <a class=\"setting-select\" href=\"#<%= setting.id %>\"><span><%= setting.get('name') %></span></a>\n        </li>\n      <% }) %>\n    </ul>\n    <div class=\"sub-filters-content\">\n      <select class=\"form-control setting-value\">\n        <% _(current.get('options')).each(function(option) { %>\n          <option value=\"<%= option.value %>\" <%= option.selected ? 'selected=\"selected\"' : '' %>><%= option.name %></option>\n        <% }) %>\n      </select>\n    </div>\n  </div>\n</div>\n");
 
 
@@ -3309,14 +3309,22 @@ module.exports = BackboneDash.View.extend({
 
   initialize: function(options) {
     this.app = options.app;
+    logger.log("Initialized with", options);
   },
 
   render: function() {
-    if (!this.current) { this.current = this.app.settings.getVisible()[0]; }
+    if (!this.current) {
+      this.current = this.app.settings.getVisible()[0];
+      logger.log("Render requested, but there's no  current setting. Trying to guess it");
+    }
     this.$el.html(template({
       settings: this.app.settings,
       current: this.current
     }));
+    var that = this;
+    logger.onDebug(function(){
+      logger.log("Rendered width current=", that.current.toJSON());
+    });
     return this;
   },
 
@@ -3324,13 +3332,18 @@ module.exports = BackboneDash.View.extend({
     e.preventDefault();  // don't change URL
     var settingId = e.currentTarget.hash.slice(1);  // removes '#'
     this.current = this.app.settings.get(settingId);
+    var that = this;
+    logger.onDebug(function(){
+      logger.log("Current setting changed to", that.current.toJSON());
+    });
     this.render();
   },
 
   changeSetting: function(e) {
     var optionId = e.currentTarget.value;
-    //if the browser supports local storage AND (the current setting is <currency> OR it is <calendar>)
-    if(!this.app.hasIssue('localStorage') && _(['currency', 'Calendar Type']).contains(this.current.attributes.name)){
+    logger.log("Changing", optionId, "setting");
+    //if the browser supports local storage
+    if(!this.app.hasIssue('localStorage')){
       var settings;
       //try reading the settings JSON from localStorage and deserialize it...
       try{

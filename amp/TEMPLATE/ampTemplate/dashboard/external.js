@@ -33,7 +33,6 @@
 var distFolder = "build";
 
 if (QueryString.language) {
-  debugger;
  var request = new XMLHttpRequest();
 
  request.open('GET', ['/rest/translations/languages/',QueryString.language].join(""), true);

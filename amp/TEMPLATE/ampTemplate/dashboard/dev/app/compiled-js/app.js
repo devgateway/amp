@@ -2038,11 +2038,11 @@ module.exports = BackboneDash.Collection.extend({
         try{
           var settings = JSON.parse(localStorage.settings);
           if("object" == typeof settings && null !== settings){
-            if(settings.currency){
-              this.findWhere({name: "currency"}).select(settings.currency);
+            if(settings[1]){
+              this.findWhere({id: "1"}).select(settings[1]);
             }
-            if(settings["Calendar Type"]){
-              this.findWhere({name: "Calendar Type"}).select(settings["Calendar Type"]);
+            if(settings[2]){
+              this.findWhere({id: "2"}).select(settings[2]);
             }
           }
         }
@@ -3343,7 +3343,7 @@ module.exports = BackboneDash.View.extend({
     var optionId = e.currentTarget.value;
     logger.log("Changing", optionId, "setting");
     //if the browser supports local storage
-    if(!this.app.hasIssue('localStorage')){
+    if(!this.app.hasIssue('localStorage') && (1 == this.current.get('id') || 2 == this.current.get('id'))){
       var settings;
       //try reading the settings JSON from localStorage and deserialize it...
       try{
@@ -3359,7 +3359,8 @@ module.exports = BackboneDash.View.extend({
         }
       }
       //and after all that paranoia we can now relatively safely persist the settings:
-      settings[this.current.attributes.name] = optionId;
+      var id = this.current.get('id');
+      settings[id] = optionId;
       localStorage.settings = JSON.stringify(settings);
     }
     this.current.select(optionId);

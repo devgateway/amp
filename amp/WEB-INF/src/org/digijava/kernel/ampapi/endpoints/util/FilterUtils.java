@@ -15,6 +15,8 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.utils.ConstantsUtil;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
@@ -219,5 +221,29 @@ public class FilterUtils {
 		String retval = settings == null ? null : (String) settings.get(value);
 		return retval;
 	}
-	
+
+	/**
+	 * Apply filterulse. In case the spec already have filterRules, append them
+	 * 
+	 * @param config
+	 * @param spec
+	 */
+	public static void applyFilterRules(JsonBean config, ReportSpecificationImpl spec) {
+		MondrianReportFilters filterRules = FilterUtils.getFilters(config);
+		if (filterRules != null) {
+			if (spec.getFilters() != null) {
+				Map<ReportElement, List<FilterRule>> filters = filterRules
+						.getFilterRules();
+				for (ReportElement reportElement : filters.keySet()) {
+					if (spec.getFilters().getFilterRules().get(reportElement) != null) {
+						spec.getFilters().getFilterRules().get(reportElement).addAll(filters.get(reportElement));
+					} else {
+						spec.getFilters().getFilterRules()
+								.put(reportElement, filters.get(reportElement));
+					}
+				}
+			}
+		}
+	}
+		 	
 }

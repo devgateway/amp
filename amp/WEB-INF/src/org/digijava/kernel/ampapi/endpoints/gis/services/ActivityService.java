@@ -47,9 +47,11 @@ public class ActivityService {
 	private static final Set<String> columnsToProvide;
 	 static
 	    {
+		 
 		 columnHeaders = new HashMap<String, String>();
 		 columnHeaders.put(ColumnConstants.PROJECT_TITLE,"Title" );
-		 columnHeaders.put(ColumnConstants.DONOR_AGENCY, "Donor Agency");
+		 columnHeaders.
+		 put(ColumnConstants.DONOR_AGENCY, "Donor Agency");
 		 columnHeaders.put(ColumnConstants.ACTIVITY_UPDATED_ON, "Date");
 		 
 		 columnsToProvide = new HashSet<String>();
@@ -215,7 +217,7 @@ public class ActivityService {
 	}
 	
 	GeneratedReport report = null;
-	SettingsUtils.getColumnFilters(spec, config);
+	FilterUtils.applyFilterRules(config, spec);
 	MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
 			ReportEnvironment.buildFor(TLSUtils.getRequest()), true);
 	try {

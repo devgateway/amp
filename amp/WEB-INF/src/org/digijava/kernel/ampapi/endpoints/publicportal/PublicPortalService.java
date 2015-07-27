@@ -26,6 +26,7 @@ import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
+import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -82,8 +83,7 @@ public class PublicPortalService {
 		/*TODO: tbd if we need to filter out null dates from results
 		MondrianReportUtils.filterOutNullDates(spec);
 		*/
-		SettingsUtils.getColumnFilters(spec, config);	
-		
+		FilterUtils.applyFilterRules(config, spec);		
 		getPublicReport(count, result, content, spec);
 		
 		return result;
@@ -152,7 +152,7 @@ public class PublicPortalService {
 
 		spec.setFilters(getPeriodFilter(months));
 		SettingsUtils.applySettings(spec, config);
-		SettingsUtils.getColumnFilters(spec, config);
+		FilterUtils.applyFilterRules(config, spec);
 		getPublicReport(count, result, content, spec,true,measureName);
 		return result;
 

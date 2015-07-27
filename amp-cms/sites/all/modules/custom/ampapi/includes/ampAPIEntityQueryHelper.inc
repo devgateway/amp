@@ -161,12 +161,6 @@ class ampAPIEntityQueryHelper {
       }
     }
 
-    // Add a "report" name, required for API cache.
-    $md5_data = $request_body;
-    unset($md5_data['page']);
-    unset($md5_data['regenerate']);
-    $request_body['name'] = 'api:search:' . md5(json_encode($md5_data));
-
     $api_parameters['query'] = array(
       'language' => $language_content->language,
     );
@@ -193,6 +187,9 @@ class ampAPIEntityQueryHelper {
       $request_body['recordsPerPage'] = -1;
     }
 
+    // Always show Activities with empty funding.
+    $request_body['show_empty_rows'] = TRUE;
+
     // @TODO: Deal with multiple sorts and maping of special properties.
     // @TODO: Request API support for count queries, for now we don't include order options.
     if ($query->order && !$query->count) {
@@ -204,6 +201,12 @@ class ampAPIEntityQueryHelper {
         $handler->sort($plugin, $api_parameters, $request_body, $order);
       }
     }
+
+    // Add a "report" name, required for API cache.
+    $md5_data = $request_body;
+    unset($md5_data['page']);
+    unset($md5_data['regenerate']);
+    $request_body['name'] = 'api:search:' . md5(json_encode($md5_data));
 
     // The api requires that we provide at least an empty object.
     $api_parameters['body'] = empty($request_body) ? '{}' : json_encode($request_body);

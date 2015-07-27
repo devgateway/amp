@@ -392,19 +392,13 @@ public class EndpointUtils {
     /**
      * Returns Map of markers from request to be set as response headers in ApiResponseFilter
      * before sending to client
-     * Returns null if headers marker has not been set into request
      *
      * Please not that this is readonly method and map's modification is not possible through it
      * All modifications should be done via <code>addResponseHeaderMarker<code/> method
      */
     public static Map<String, String> getResponseHeaderMarkers() {
-        Map<String, String> headerMarkers = (Map<String, String>)TLSUtils.getRequest()
-                .getAttribute(EPConstants.RESPONSE_HEADERS_MAP);
-        if (headerMarkers != null) {
-            return Collections.unmodifiableMap(headerMarkers);
-        } else {
-            return null;
-        }
+        return Collections.unmodifiableMap((Map<String, String>)TLSUtils.getRequest()
+                .getAttribute(EPConstants.RESPONSE_HEADERS_MAP));
     }
 
     /**
@@ -418,7 +412,6 @@ public class EndpointUtils {
                 (Map<String, String>)TLSUtils.getRequest().getAttribute(EPConstants.RESPONSE_HEADERS_MAP);
         if (responseHeadersMap == null) {
             responseHeadersMap = new HashMap<String, String>();
-            TLSUtils.getRequest().setAttribute(EPConstants.RESPONSE_HEADERS_MAP, responseHeadersMap);
         }
         responseHeadersMap.put(headerName, headerValue);
     }

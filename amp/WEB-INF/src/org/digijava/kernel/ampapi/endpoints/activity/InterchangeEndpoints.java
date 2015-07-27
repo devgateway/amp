@@ -150,7 +150,7 @@ public class InterchangeEndpoints {
 		 * But it is more common to use it as POST, so let's then validate
 		 */ 
 		Object internalId = newJson.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME);
-		if (!projectId.equals(internalId)) {
+		if (!projectId.toString().equals(String.valueOf(internalId))) {
 			// invalidating
 			String details = "url project_id = " + projectId + ", json " + ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME +
 					" = " + internalId;

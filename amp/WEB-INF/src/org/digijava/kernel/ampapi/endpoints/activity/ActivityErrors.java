@@ -31,5 +31,6 @@ public class ActivityErrors {
 	public static final ApiErrorMessage TITLE_IN_DEFAULT_LANUGAGE_REQUIRED = new ApiErrorMessage(14, "Title in default language is required");
 	public static final ApiErrorMessage UPDATE_ID_MISMATCH = new ApiErrorMessage(15, "Request project ids mismatch");
 	public static final ApiErrorMessage FIELD_INVALID_LENGTH = new ApiErrorMessage(16, "Invalid field length");
+	public static final ApiErrorMessage UPDATE_ID_IS_OLD = new ApiErrorMessage(17, "Update request for older activty id. Please provide the latest");
 	
 }

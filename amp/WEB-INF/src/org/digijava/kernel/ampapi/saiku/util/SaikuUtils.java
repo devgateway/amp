@@ -27,6 +27,7 @@ import java.util.SortedSet;
 import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportSettings;
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -49,6 +50,7 @@ import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.olap.dto.resultset.DataCell;
 import org.saiku.olap.dto.resultset.MemberCell;
 import org.saiku.olap.query2.ThinQuery;
+import org.saiku.olap.util.OlapResultSetUtil;
 import org.saiku.olap.util.SaikuProperties;
 import org.saiku.repository.IRepositoryObject;
 import org.saiku.repository.RepositoryFileObject;
@@ -385,25 +387,58 @@ public class SaikuUtils {
 			}
 	}
 
+	public static MemberCell createHeaderCell(String columnName) {
+		MemberCell cell = new MemberCell();
+		cell.setExpanded(false);
+		cell.setFormattedValue(columnName);
+		cell.setHierarchy("[Measures]");
+		cell.setLastRow(true);
+		cell.setLevel("[Measures].[MeasuresLevel]");
+		cell.setParentDimension("[Measures]");
+		cell.setRight(false);
+		cell.setSameAsPrev(false);
+		cell.setUniquename(String.format("[%s][%s]", "Measures", columnName));
+		return cell;
+	}
+	
 	/**
-	 * Cleans up header traces when no data is available.
-	 * AMP-18748
+	 * postprocesses header cells when no data is available
+	 * AMP-18748, AMP-20702
 	 * 
-	 * Note: another approach to avoid traces is to use "NON EMPTY" in MDX ON ROWS
-	 * but at the moment it breaks the solution for AMP-18504.
-	 * Even if later we'll decide to use another solution for AMP-18504,
-	 * this part shall not do anything bad.
+	 * on non-totals-only reports, NonEmptyCrossJoin generates an output without totals or measures
+	 * Saiku's OlapResultSetUtil.cellSet2Matrix() chokes on this input e.g. generates an output
+	 * without any headers. <br /> 
+	 * This function distinguishes between two possible cases when an output has no headers:<br />
+	 *  1) the output is truly empty <br />
+	 *  2) this is a Saiku bug <br />
+	 *  
+	 *  In case (1) is suspected, the whole output is cleared. In case (2) is detected, fresh header cells are generated based on the report's columns
 	 *  
 	 * @param cellDataSet
 	 */
-	public static void cleanupTraceHeadersIfNoData(CellDataSet cellDataSet) {
+	public static void postprocessHeaders(CellDataSet cellDataSet, ReportSpecification spec) {
 		// When no data is available, then for some reason Saiku CellDataSet has no headers,
 		// and trace headers are stored in the cellSetBody, that breaks things up.
 		// => removing this header traces from cellSetBody
-		if (cellDataSet.getCellSetHeaders().length == 0) {
-			cellDataSet.setCellSetBody(new AbstractBaseCell[0][0]);
-			cellDataSet.setHeight(0);
-			cellDataSet.setWidth(0);
+		if (cellDataSet.getCellSetHeaders().length == 0 && cellDataSet.getWidth() > 0 && cellDataSet.getHeight() > 0) {
+			// we suspect it's the Saiku bug
+			if (cellDataSet.getWidth() == spec.getColumnNames().size()) {
+				// AMP-20702: one of Saiku's many bugs is that it does not generate headers in case of totals-only-reports with all-zeroes outputs
+				// restore headers, because the report has useful info
+				AbstractBaseCell[][] headers = new AbstractBaseCell[1][cellDataSet.getWidth()];
+				int i = 0;
+				for(String columnName:spec.getColumnNames()) {
+					// it is safe to iterate getColumnNames() because columns have already been reordered hierarchies-first
+					headers[0][i] = createHeaderCell(columnName);
+					i ++;
+				}
+				cellDataSet.setCellSetHeaders(headers);
+			} else {
+				// not sure -> just wipe everything
+				cellDataSet.setCellSetBody(new AbstractBaseCell[0][0]);
+				cellDataSet.setHeight(0);
+				cellDataSet.setWidth(0);
+			}
 		}
 	}
 	

@@ -619,7 +619,7 @@ public class Reports {
 				throw new Exception("Empty response while exporting.");
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("error while generating report", e);
 			return Response.serverError().build();
 		}
 	}

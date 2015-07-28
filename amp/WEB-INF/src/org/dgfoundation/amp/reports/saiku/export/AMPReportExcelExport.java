@@ -313,8 +313,9 @@ public class AMPReportExcelExport {
 					isNumber = false;
 					cell.setCellValue(cellContent);
 				}
-
-				if (i == totalRows) {
+				
+				boolean thisIsTotalsRow = i == totalRows && contentColElement.hasClass("total"); 
+				if (thisIsTotalsRow) {
 					// Style last total row.
 					if (type == TYPE_STYLED) {
 						styleForCurrentRow = styleTotal;

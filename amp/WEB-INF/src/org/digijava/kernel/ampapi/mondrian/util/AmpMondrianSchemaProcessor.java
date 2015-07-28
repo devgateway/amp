@@ -111,11 +111,16 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		
 		// process general filters & custom filters 
 		String entityFilteringSubquery = buildFilteringSubquery();
-		String noDatesEntityFilteringSubquery = getNoDatesFilter(entityFilteringSubquery); 
 		entityFilteringSubquery = entityFilteringSubquery.replaceAll(FactTableFiltering.DATE_FILTERS_TAG_START + "|" + FactTableFiltering.DATE_FILTERS_TAG_END, "");
+		String noDatesEntityFilteringSubquery = getNoDatesFilter(entityFilteringSubquery);
+		String computedTotalsFilter = getComputedTotalsFilter();
+		
+		logger.info("the entity filtering subquery is: " + entityFilteringSubquery);
+		logger.info("the noDatesEntityFiltering subquery is: " + noDatesEntityFilteringSubquery);
+		logger.info("the computedTotalsFilter subquery is: " + computedTotalsFilter);
 		contents = contents.replaceAll("@@filteredActivities@@", entityFilteringSubquery);
 		contents = contents.replaceAll("@@filteredActivitiesWithoutDateFilters@@", noDatesEntityFilteringSubquery);
-		contents = contents.replaceAll("@@report_totals_filter@@", getComputedTotalsFilter());
+		contents = contents.replaceAll("@@report_totals_filter@@", computedTotalsFilter);
 		
 		//contents = contents.replaceAll("@@filteredActivities@@", "mondrian_fact_table.entity_id > 0");
 		int pos = contents.indexOf("@@");
@@ -348,9 +353,9 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	protected String getComputedTotalsFilter() {
 		String filter = "(" + getFilterByReportType(currentReport.get().getReportType()) + ")";
 		switch(currentReport.get().getReportType()) {
-		case ArConstants.DONOR_TYPE:
-		case ArConstants.COMPONENT_TYPE:
-			filter += " AND (src_role='DN')";
+			case ArConstants.DONOR_TYPE:
+			case ArConstants.COMPONENT_TYPE:
+				filter += " AND (src_role='DN')";
 			break;
 		}
 		return filter;

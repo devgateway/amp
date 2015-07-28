@@ -27,6 +27,7 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.menu.MenuStructure;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.dgfoundation.amp.visibility.data.DataVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -86,7 +87,7 @@ public class GlobalSettings extends Action {
 			this.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
 			//ActionMessages errors = new ActionMessages();
 			auditTrialCleanerChanges(gsForm);
-			refreshGlobalSettingsCache	= true;
+			refreshGlobalSettingsCache	= true;			
 		}
 		
 		

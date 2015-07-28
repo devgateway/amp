@@ -211,6 +211,8 @@ public class CellDataSetToGeneratedReport {
 		if (measureTotals != null) {
 			int headerColId = rowLength;
 			for (int colId = 0; colId < measureTotals.length; colId ++) {
+				if (headerColId >= leafHeaders.size())
+					break; // AMP-20702: ugly workaround for a Saiku bug which has been previously workarounded "too toughly" via AMP-18748
 				//Unfortunately cannot use getValue() because during concatenation we override the value, but the only way to override is via formatted value
 				double value = parseValue(measureTotals[colId][rowId].getFormattedValue(), false, headerColId); 
 				contents.put(leafHeaders.get(headerColId++), new AmountCell(value, this.numberFormat));

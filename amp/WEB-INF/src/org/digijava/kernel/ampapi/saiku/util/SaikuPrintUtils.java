@@ -15,6 +15,7 @@ import java.util.List;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
+import org.saiku.olap.dto.resultset.MemberCell;
 import org.saiku.service.olap.totals.aggregators.TotalAggregator;
 import org.saiku.web.rest.objects.resultset.Cell;
 import org.saiku.web.rest.objects.resultset.Total;
@@ -242,6 +243,8 @@ public class SaikuPrintUtils {
 	 */
 	public static void print(CellDataSet cellDataSet, String reportName) {
 		PrintWriter writer = MondrianUtils.getOutput(reportName);
+		writer.write("printing report " + reportName + " of size (" + cellDataSet.getWidth() + "x" + cellDataSet.getHeight() + ")");
+		writer.println("\n");
 		try {
 			(new SaikuPrintUtils(cellDataSet, writer)).print();
 		} finally {

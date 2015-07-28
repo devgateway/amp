@@ -454,7 +454,7 @@
 
 			<Hierarchy hasAll="true" allMemberName="All Cris Number" primaryKey="amp_activity_id" name="Cris Number">
 				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Cris Number" column="amp_activity_id" type="String" nameColumn="Cris Number" />
+				<Level name="Cris Number" column="amp_activity_id" type="String" nameColumn="cris_number" />
 			</Hierarchy>
 
 			<Hierarchy hasAll="true" allMemberName="All Project Implementing Unit" primaryKey="amp_activity_id" name="Project Implementing Unit">

@@ -39,12 +39,19 @@ public class ValueValidator extends InputValidator {
 			return true;
 		
 		
+		
+		//temporary debug
 		if (!isValidLength(newFieldParent, fieldDescription))
-			return false;
+			return isValidLength(newFieldParent, fieldDescription);
 		
 		List<JsonBean> possibleValues = importer.getPossibleValuesForFieldCached(fieldPath, AmpActivityFields.class, null);
 		
 		if (possibleValues.size() != 0) {
+			
+			//TEMPORARY DEBUG
+			possibleValues = importer.getPossibleValuesForFieldCached(fieldPath, AmpActivityFields.class, null);
+			//END OF TEMPORARY DEBUG
+			
 			Object value = newFieldParent.get(fieldDescription.getString(ActivityEPConstants.FIELD_NAME));
 			
 			if (value != null) {
@@ -79,7 +86,7 @@ public class ValueValidator extends InputValidator {
 			Object obj = newFieldParent.get(fieldDescription.getString(ActivityEPConstants.FIELD_NAME));
 			if (obj != null) {
 				if (!Boolean.TRUE.equals(fieldDescription.get(ActivityEPConstants.TRANSLATABLE))) {
-					isValidLength = !isValidLength(obj, maxLength);
+					isValidLength = isValidLength(obj, maxLength);
 				} else if (Map.class.isAssignableFrom(obj.getClass())) {
 					for (Object trn : ((Map) obj).values()) {
 						if (!isValidLength(trn, maxLength)) {

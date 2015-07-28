@@ -203,7 +203,7 @@ var submmited = false;
 																		<td valign="top" align="center" class="inside">
 																			<table width="100%" cellspacing="3" cellpadding="5" style="font-size:12px;">																				
 																				<tr>
-																					<td align="right" width="25%"><digi:trn>Template Name</digi:trn><font color="red">*</font> </td>
+																					<td align="right" width="10%"><digi:trn>Template Name</digi:trn><font color="red">*</font> </td>
 																					<td align="left" width="90%"><html:text property="messageName" styleClass="inp-text" style="width:600px;"/></td>
 																				</tr>																																				
 																				<tr>
@@ -232,7 +232,7 @@ var submmited = false;
 																                                    <table border="0" width="100%">																                                        
 																                                        <tr>
 																                                            <td>
-																                                              <select  multiple="multiple" size="5" id="whoIsReceiver"  class="inp-text" style="width:350px">
+																                                              <select  multiple="multiple" size="5" id="whoIsReceiver"  class="inp-text" style="width:350px; height:150px">
 																												<logic:empty name="messageForm" property="teamMapValues">
 																													<option value="-1">No receivers</option>
 																												</logic:empty>
@@ -264,7 +264,7 @@ var submmited = false;
 																                                                <table border="0" width="100%">																                                                   
 																                                                    <tr>
 																                                                        <td valign="top">																
-																                                                            <html:select multiple="multiple" styleId="selreceivers" name="messageForm" property="receiversIds"  size="5" styleClass="inp-text" style="width:350px">
+																                                                            <html:select multiple="multiple" styleId="selreceivers" name="messageForm" property="receiversIds"  size="5" styleClass="inp-text" style="width:350px; height:150px">
 																                                              					<c:if test="${!empty messageForm.receivers}">
 																	                                                              	<html:optionsCollection name="messageForm" property="receivers" value="value" label="label" />
 																	                                                              </c:if>                

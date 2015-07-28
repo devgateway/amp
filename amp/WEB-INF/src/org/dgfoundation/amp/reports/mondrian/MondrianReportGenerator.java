@@ -549,8 +549,14 @@ public class MondrianReportGenerator implements ReportExecutor {
 		CellDataSet cellDataSet = OlapResultSetUtil.cellSet2Matrix(cellSet);  // we can also pass a formatter to cellSet2Matrix(cellSet, formatter)
 		logger.info("[" + spec.getReportName() + "]" +  "Conversion from Olap4J CellSet to Saiku CellDataSet ended.");
 
+//		logger.error("after cellSet2Matrix:");
+//		SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_cellSet2Matrix");
+		
 		// AMP-18748
-		SaikuUtils.cleanupTraceHeadersIfNoData(cellDataSet);
+		SaikuUtils.postprocessHeaders(cellDataSet, spec);
+		
+//		logger.error("after cleanupTraceHeadersIfNoData:");
+//		SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_cleanupTraceHeadersIfNoData");
 		
 		leafHeaders = getOrderedLeafColumnsList(spec, rowAxis, columnAxis);		
 
@@ -576,10 +582,13 @@ public class MondrianReportGenerator implements ReportExecutor {
 		formatSaikuDates(cellDataSet);
 		applyFilterSetting(spec, cellDataSet);
 		
+//		logger.error("after applyFilterSetting:");
+//		SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST_FILTERING");
+		
 		postprocessUndefinedEntries(spec, cellDataSet);
 		CellDataSetToAmpHierarchies.concatenateNonHierarchicalColumns(spec, cellDataSet, leafHeaders, this.translatedUndefined, cellDataSetActivities);
 		postProcessor.removeDummyColumns();
-		
+				
 		//clear totals if were enabled for non-hierarchical merges
 		if (!spec.isCalculateColumnTotals())
 			cellDataSet.setColTotalsLists(null);

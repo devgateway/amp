@@ -210,7 +210,7 @@ public class MDXGenerator {
 					with, "COLSET", axisMdx, config.isDoColumnsTotals(), 
 					Math.min(config.getColsHierarchiesTotals(), config.getColumnAttributes().size()-1) , dataFilterSets);
 			if (config.isAllowColumnsEmptyData()) {
-				axisMdx = customEmptyQuorterAndMonth(config, with, axisMdx, measuresStr);
+				axisMdx = customEmptyQuarterAndMonth(config, with, axisMdx, measuresStr);
 			}
 			
 			//if there are data filters applied directly on columns, then we need to update total measures member definition
@@ -235,7 +235,7 @@ public class MDXGenerator {
 		}
 		
 		if (config.isDoColumnsTotals()) {
-			//replace last occurrence of measures set tot total measures
+			//replace last occurrence of measures set for total measures
 			int lastMeasuresPos = axisMdx.lastIndexOf(measuresStr); 
 			axisMdx = axisMdx.substring(0, lastMeasuresPos) + totalMeasures + axisMdx.substring(lastMeasuresPos + measuresStr.length());
 			
@@ -255,7 +255,7 @@ public class MDXGenerator {
 	 * @param measures
 	 * @return
 	 */
-	private String customEmptyQuorterAndMonth(MDXConfig config, StringBuilder with, String axisMdx, String measures) {
+	private String customEmptyQuarterAndMonth(MDXConfig config, StringBuilder with, String axisMdx, String measures) {
 		/*
 		 * This is a custom approach.
 		 * Assumption: we request empty columns only for quarters and months.
@@ -322,7 +322,7 @@ public class MDXGenerator {
 				Math.min(config.getRowsHierarchiesTotals(), config.getRowAttributes().size() - 1), null);
 	}
 	
-	/** supporting common method used by getRows and getColumns, because the algorithm is the same similar */
+	/** supporting common method used by getRows and getColumns, because the algorithm is the same */
 	private String getAxis(MDXConfig config, ListIterator<MDXAttribute> reverseIterator, StringBuilder with, String withPrefix,
 							String initMember, boolean doTotals, int numSubTotals, List<String> dataFilterSets) throws AmpApiException {
 		int setId = 0; //identifier suffix for 'with' member name

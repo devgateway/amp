@@ -53,7 +53,11 @@ public class OrganisationsMondrianReportTests extends MondrianReportsTestCase {
 	@Test
 	public void testPureMtefProjectsDonorInfo() {
 		// annual non-hierarchical reports without data per years provide empty results (same behavior was in old reports engine)
-		ReportAreaForTests correctReport = new ReportAreaForTests().withChildren(  );
+		ReportAreaForTests correctReport = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Donor Agency", "", "Donor Group", "", "Donor Type", "")
+	    .withChildren(
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "Pure MTEF Project", "Donor Agency", "Ministry of Finance", "Donor Group", "National", "Donor Type", "Default"));
 		
 		runMondrianTestCase(
 				"all-donor-info",						
@@ -81,8 +85,11 @@ public class OrganisationsMondrianReportTests extends MondrianReportsTestCase {
 	
 	@Test
 	public void testFundlessDonorInfo() {
-		// annual non-hierarchical reports without data per years provide empty results (same behavior was in old reports engine)
-		ReportAreaForTests correctReport = new ReportAreaForTests().withChildren(  );
+		ReportAreaForTests correctReport = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Donor Agency", "", "Donor Group", "", "Donor Type", "")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "Proposed Project Cost 1 - USD", "Donor Agency", "", "Donor Group", "", "Donor Type", ""),
+	      new ReportAreaForTests().withContents("Project Title", "Project with documents", "Donor Agency", "", "Donor Group", "", "Donor Type", ""));
 		
 		runMondrianTestCase(
 				"all-donor-info",						

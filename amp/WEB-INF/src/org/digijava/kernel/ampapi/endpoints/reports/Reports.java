@@ -516,7 +516,7 @@ public class Reports {
 			}
 
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("error while generating report", e);
 			return Response.serverError().build();
 		}
 

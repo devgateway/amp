@@ -70,6 +70,21 @@ function preprocessHierarchies() {
 	}
 }
 
+/**
+ * returns one of HEADER_HIERARCHY, HEADER_COMMON (column), HEADER_MEASURE or undefined
+ */
+function getEntityTypeByColumnNumber(headerRowNumber, headerColumnNumber) {
+	if (this.headerMatrix[headerRowNumber][headerColumnNumber] !== undefined) {
+		if (headerColumnNumber < this.metadataHierarchies.length) 
+			return 'HEADER_HIERARCHY';
+		else if (headerColumnNumber < this.metadataColumns.length)
+			return 'HEADER_COMMON';
+		else 
+			return 'HEADER_MEASURE';
+	}
+	return undefined;
+}
+
 function generateHeaderHtml(headers) {
 	// Discover tree depth.
 	var maxHeaderLevel = 0;
@@ -107,19 +122,13 @@ function generateHeaderHtml(headers) {
 		var row = "<tr>";
 		for (var j = 0; j < this.headerMatrix[i].length; j++) {
 			var col = "";
-			if (this.headerMatrix[i][j] !== undefined) {
+			var entityType = getEntityTypeByColumnNumber(i, j);
+			if (entityType !== undefined) {
 				// Add sorting info: HEADER_HIERARCHY for first columns that
 				// define a hierarchy (if any), HEADER_COMMON for non
 				// hierarchical columns and HEADER_MEASURE for measures (only in
 				// the last header row).
-				var sortingType = "";
-				if (j < this.metadataHierarchies.length) {
-					sortingType = " data-sorting-type='HEADER_HIERARCHY'";
-				} else if (j < this.metadataColumns.length) {
-					sortingType = " data-sorting-type='HEADER_COMMON'";
-				} else if (i === this.headerMatrix.length - 1) {
-					sortingType = " data-sorting-type='HEADER_MEASURE'";
-				}
+				var sortingType = " data-sorting-type='" + entityType + "'";
 				// Since groupCount is 0 when no column grouping is applicable
 				// then we don't need an extra IF for creating the 'col'
 				// variable.
@@ -236,15 +245,10 @@ function findSameHeaderHorizontally(i, j) {
 	return count;
 }
 
-function generateContentHtml(page, options) {
-	var self = this;
-	var content = "<tbody>";
-	this.lastHeaderRow = this.headerMatrix.length - 1;
-	// Add data rows.
-	var dataHtml = generateDataRows(page, options);
-	content += dataHtml;
-
-	// Add last row with totals.
+/**
+ * returns an imperatively-built totals row html markup
+ */
+function buildTotalsRow(page) {
 	var totalRow = "<tr>";
 	for (var j = 0; j < this.headerMatrix[this.lastHeaderRow].length; j++) {
 		// This check is for those summarized reports that dont return any
@@ -270,6 +274,24 @@ function generateContentHtml(page, options) {
 		}
 	}
 	totalRow += "</tr>";
+	return totalRow;
+}
+
+function generateContentHtml(page, options) {
+	var self = this;
+	var content = "<tbody>";
+	this.lastHeaderRow = this.headerMatrix.length - 1;
+	// Add data rows.
+	var dataHtml = generateDataRows(page, options);
+	content += dataHtml;
+
+	// Add last row with totals.
+	var totalsRowNeeded =
+		(this.lastHeaderRow  >= 0) && // there exists a header 
+		(this.metadataHierarchies.length + this.metadataColumns.length < this.headerMatrix[this.lastHeaderRow].length);
+
+	var totalRow = totalsRowNeeded ? buildTotalsRow(page) : "";
+	
 	content += totalRow;
 	content += "</tbody>";
 	return content;

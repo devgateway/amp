@@ -173,7 +173,7 @@ public class WorkspaceFilter
 		//return /*"33"; */"36";
 		//return "41, 43, 44, 45";
 		//return "20, 21"; // masha
-		//return "select amp_activity_id from amp_activity where amp_activity_id in (5819)";
+		//return "select amp_activity_id from amp_activity where amp_activity_id in (8286, 7782, 7781, 7741)";
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('TAC_activity_2', 'date-filters-activity', 'crazy funding 1')";
 		return TEAM_FILTER;
 		//return "select amp_activity_id from amp_activity where amp_id in ('8723851537', '8723851641', '8723851222')";

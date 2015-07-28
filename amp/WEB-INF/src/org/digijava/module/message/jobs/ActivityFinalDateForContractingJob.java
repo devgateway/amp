@@ -35,18 +35,9 @@ public class ActivityFinalDateForContractingJob extends ConnectionCleaningJob im
             dateAfterDays=AmpDateUtils.getDateAfterDays(curDate,3);
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        String exDt=sdf.format(dateAfterDays);
-        List<AmpActivityVersion> actList=ActivityUtil.getAllAssignedActivitiesList();
-        if(actList!=null){
-            for (AmpActivityVersion act : actList) {
-                if (act.getContractingDate() != null) {
-                    String dt = sdf.format(act.getContractingDate());
-                    if (dt.equals(exDt)) {
-                        new ActivityFinalDateForContractingTrigger(act);
-                    }
-                }
-            }
+        List<AmpActivityVersion> actList = ActivityUtil.getActivitiesWhichMatchDate("contractingDate", dateAfterDays);
+        for (AmpActivityVersion act : actList) {
+        	new ActivityFinalDateForContractingTrigger(act);
         }
     }
 }

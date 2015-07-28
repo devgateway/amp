@@ -36,17 +36,9 @@ public class ActivityActualStartDateJob extends ConnectionCleaningJob implements
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        String exDt=sdf.format(dateAfterDays);
-        List<AmpActivityVersion> actList=ActivityUtil.getAllAssignedActivitiesList();
-        if(actList!=null){
-            for (AmpActivityVersion act : actList) {
-                if (act.getActualStartDate() != null) {
-                    String dt = sdf.format(act.getActualStartDate());
-                    if (dt.equals(exDt)) {
-                        new ActivityActualStartDateTrigger(act);
-                    }
-                }
-            }
+        List<AmpActivityVersion> actList = ActivityUtil.getActivitiesWhichMatchDate("actualStartDate", dateAfterDays);
+        for (AmpActivityVersion act : actList) {
+        	new ActivityActualStartDateTrigger(act);
         }
     }
 }

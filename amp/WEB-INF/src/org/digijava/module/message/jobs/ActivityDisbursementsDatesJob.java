@@ -36,18 +36,9 @@ public class ActivityDisbursementsDatesJob extends ConnectionCleaningJob  implem
             dateAfterDays=AmpDateUtils.getDateAfterDays(curDate,3);
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        String exDt=sdf.format(dateAfterDays);
-        List<AmpActivityVersion> actList=ActivityUtil.getAllAssignedActivitiesList();
-        if(actList!=null){
-            for (AmpActivityVersion act : actList) {
-                if (act.getActualStartDate() != null) {
-                    String dt = sdf.format(act.getActualStartDate());
-                    if (dt.equals(exDt)) {
-                        new ActivityDisbursementDateTrigger(act);
-                    }
-                }
-            }
+        List<AmpActivityVersion> actList = ActivityUtil.getActivitiesWhichMatchDate("actualStartDate", dateAfterDays);
+        for (AmpActivityVersion act : actList) {
+        	new ActivityDisbursementDateTrigger(act);
         }
     }
 }

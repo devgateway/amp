@@ -9,6 +9,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AmpDateUtils;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
+import org.digijava.module.message.triggers.ActivityDisbursementDateTrigger;
 import org.digijava.module.message.triggers.ActivityProposedApprovalDateTrigger;
 import org.digijava.module.message.util.AmpMessageUtil;
 import org.quartz.JobExecutionContext;
@@ -35,18 +36,9 @@ public class ActivityProposedApprovalDateJob extends ConnectionCleaningJob imple
             dateAfterDays=AmpDateUtils.getDateAfterDays(curDate,3);
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        String exDt=sdf.format(dateAfterDays);
-        List<AmpActivityVersion> actList=ActivityUtil.getAllAssignedActivitiesList();
-        if(actList!=null){
-            for (AmpActivityVersion act : actList) {
-                if (act.getProposedApprovalDate() != null) {
-                    String dt = sdf.format(act.getProposedApprovalDate());
-                    if (dt.equals(exDt)) {
-                        new ActivityProposedApprovalDateTrigger(act);
-                    }
-                }
-            }
+        List<AmpActivityVersion> actList = ActivityUtil.getActivitiesWhichMatchDate("proposedApprovalDate", dateAfterDays);
+        for (AmpActivityVersion act : actList) {
+        	new ActivityProposedApprovalDateTrigger(act);
         }
     }
 }

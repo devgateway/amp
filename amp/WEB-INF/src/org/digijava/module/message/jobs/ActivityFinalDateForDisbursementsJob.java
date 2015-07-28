@@ -10,6 +10,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AmpDateUtils;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
+import org.digijava.module.message.triggers.ActivityFinalDateForContractingTrigger;
 import org.digijava.module.message.triggers.ActivityFinalDateForDisbursementsTrigger;
 import org.digijava.module.message.util.AmpMessageUtil;
 import org.quartz.JobExecutionContext;
@@ -34,19 +35,10 @@ public class ActivityFinalDateForDisbursementsJob extends ConnectionCleaningJob 
         }catch(Exception ex){
             dateAfterDays=AmpDateUtils.getDateAfterDays(curDate,3);
         }
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        String exDt=sdf.format(dateAfterDays);
-        List<AmpActivityVersion> actList=ActivityUtil.getAllAssignedActivitiesList();
-        if(actList!=null){
-            for (AmpActivityVersion act : actList) {
-                if (act.getDisbursmentsDate() != null) {
-                    String dt = sdf.format(act.getDisbursmentsDate());
-                    if (dt.equals(exDt)) {
-                        new ActivityFinalDateForDisbursementsTrigger(act);
-                    }
-                }
-            }
+        
+        List<AmpActivityVersion> actList = ActivityUtil.getActivitiesWhichMatchDate("disbursmentsDate", dateAfterDays);
+        for (AmpActivityVersion act : actList) {
+        	new ActivityFinalDateForDisbursementsTrigger(act);
         }
     }
 }

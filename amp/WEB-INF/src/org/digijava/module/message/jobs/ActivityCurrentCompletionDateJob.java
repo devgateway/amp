@@ -36,18 +36,9 @@ public class ActivityCurrentCompletionDateJob extends ConnectionCleaningJob impl
             dateAfterDays=AmpDateUtils.getDateAfterDays(curDate,3);
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        String exDt=sdf.format(dateAfterDays);
-        List<AmpActivityVersion> actList=ActivityUtil.getAllAssignedActivitiesList();
-        if(actList!=null){
-            for (AmpActivityVersion act : actList) {
-                if (act.getActualCompletionDate() != null) {
-                    String dt = sdf.format(act.getActualCompletionDate());
-                    if (dt.equals(exDt)) {
-                        new ActivityCurrentCompletionDateTrigger(act);
-                    }
-                }
-            }
+        List<AmpActivityVersion> actList = ActivityUtil.getActivitiesWhichMatchDate("actualCompletionDate", dateAfterDays);
+        for (AmpActivityVersion act : actList) {
+        	new ActivityCurrentCompletionDateTrigger(act);
         }
     }
 }

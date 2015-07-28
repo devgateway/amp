@@ -19,6 +19,10 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.form.NewIndicatorForm;
 import org.digijava.module.aim.util.ActivityUtil;
 
+/**
+ * class apparently not used anymore
+ *
+ */
 public class SelectActivityForIndicator
         extends Action{
         public ActionForward execute(ActionMapping mapping, ActionForm form,

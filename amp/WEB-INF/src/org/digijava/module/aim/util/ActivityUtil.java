@@ -5,6 +5,7 @@
 
 package org.digijava.module.aim.util;
 
+import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -881,17 +882,38 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 	}
   
   /*
-   * get the list of all the activities
-   * to display in the activity manager of Admin
+   * this function is so incredibly slow that you should NEVER use it. Left it here because it is used by one very old (most probably unused) page
    */
   	public static List<AmpActivityVersion> getAllActivitiesList() {
 	  String queryString = "select ampAct from " + AmpActivityVersion.class.getName() + " ampAct";
 	  return PersistenceManager.getSession().createQuery(queryString).list();
   }
   
-  public static List<AmpActivityVersion> getAllAssignedActivitiesList() {
-	  String queryString = "select ampAct from " + AmpActivityVersion.class.getName() + " ampAct where ampAct.team is not null";
-	  return PersistenceManager.getSession().createQuery(queryString).list();
+  public static List<AmpActivityVersion> getActivitiesWhichMatchDate(String dateField, Date value) {
+	  Date minDate = new Date(value.getTime() - 24 * 3600l * 1000l);
+	  Date maxDate = new Date(value.getTime() + 24 * 3600l * 1000l);
+	  String queryString = String.format(
+			  "select ampAct from %s ampAct WHERE (ampAct.team IS NOT NULL) AND " + 
+			"(ampAct.%s >= :minDate) AND (ampAct.%s <= :maxDate)",
+			  AmpActivityVersion.class.getName(), dateField, dateField);
+	  List<AmpActivityVersion> aavs = PersistenceManager.getSession()
+			  .createQuery(queryString)
+			  .setDate("minDate", minDate)
+			  .setDate("maxDate", maxDate)
+			  .list();
+	  try {
+		  List<AmpActivityVersion> res = new ArrayList<>();
+		  Method m = AmpActivityVersion.class.getMethod("get" + Character.toUpperCase(dateField.charAt(0)) + dateField.substring(1));
+		  for(AmpActivityVersion aav:aavs) {
+			  Date date = (Date) m.invoke(aav);
+			  if (date.getDay() == value.getDay())
+				  res.add(aav);
+		  }
+		  return res;
+	  }
+	  catch(Exception e) {
+		  throw new RuntimeException(e);
+	  }
   }
   
 

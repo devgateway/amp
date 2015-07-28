@@ -7,11 +7,8 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
-import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.junit.Test;
 
 public class BasicMondrianReportTests extends MondrianReportsTestCase {
@@ -425,6 +422,25 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 		
 		List<String> activities = Arrays.asList("pledged 2", "activity with capital spending", "ptc activity 1");
 		runMondrianTestCase("AMP-19799-Unsupported-Mondrian-Column3",
+				activities,
+				correctResult,
+				"en");
+	}
+	
+	@Test
+	public void test_AMP_20811_Cris_Number() {
+		ReportAreaForTests correctResult = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Cris Number", "", "2013-Actual Commitments", "3 336 777", "2013-Actual Disbursements", "0", "2014-Actual Commitments", "4 479 670,69", "2014-Actual Disbursements", "530 000", "Total Measures-Actual Commitments", "7 816 447,69", "Total Measures-Actual Disbursements", "530 000")
+	    .withChildren(
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "ptc activity 1", "Cris Number", "", "2013-Actual Commitments", "666 777", "2013-Actual Disbursements", "", "2014-Actual Commitments", "", "2014-Actual Disbursements", "", "Total Measures-Actual Commitments", "666 777", "Total Measures-Actual Disbursements", "0"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "pledged 2", "Cris Number", "", "2013-Actual Commitments", "2 670 000", "2013-Actual Disbursements", "", "2014-Actual Commitments", "4 400 000", "2014-Actual Disbursements", "450 000", "Total Measures-Actual Commitments", "7 070 000", "Total Measures-Actual Disbursements", "450 000"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "activity with capital spending", "Cris Number", "", "2013-Actual Commitments", "", "2013-Actual Disbursements", "", "2014-Actual Commitments", "79 670,69", "2014-Actual Disbursements", "80 000", "Total Measures-Actual Commitments", "79 670,69", "Total Measures-Actual Disbursements", "80 000")  );
+		
+		List<String> activities = Arrays.asList("pledged 2", "activity with capital spending", "ptc activity 1");
+		runMondrianTestCase("AMP-20811-Cris-Number",
 				activities,
 				correctResult,
 				"en");

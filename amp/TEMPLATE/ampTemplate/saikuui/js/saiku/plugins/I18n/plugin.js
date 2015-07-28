@@ -257,7 +257,8 @@ var TranslationTab = Backbone.View.extend({
  */
 if(Settings.USE_AMP_LANGUAGE) {
 	$.getJSON("/rest/amp/settings", function(data) {
-		var language = _.findWhere(data, {id : "language"}).name || Settings.DEFAULT_LANGUAGE;
+		//debugger;
+		var language = _.findWhere(data, {id : "language"}).name;
 		window.currentLanguage = language;
 		Saiku.i18n.locale = language;
 		Saiku.i18n.automatic_i18n();

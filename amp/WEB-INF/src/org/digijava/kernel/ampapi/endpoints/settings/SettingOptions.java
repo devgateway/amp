@@ -79,4 +79,8 @@ public class SettingOptions {
 		this.defaultId = defaultId;
 		this.options = options;
 	}
+	
+	@Override public String toString() {
+		return String.format("(id: %s, name: %s, multi: %s, defaultId: %s, options: %s)", id, name, multi, defaultId, options);
+	}
 }

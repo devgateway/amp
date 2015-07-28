@@ -722,7 +722,7 @@ public class FeaturesUtil {
 			coll = qry.list();
 		}
 		catch (Exception ex) {
-			logger.error(ex);
+			logger.error(ex, ex);
 		}
 		return coll;
 	}

@@ -10,7 +10,7 @@ define([ 'underscore', 'backbone', 'models/tab' ], function (_, Backbone, Tab) {
                     console.log('error loading tabs url');
                 },
                 success: function (collection, response) {
-                    console.log(response);
+                    // console.log("list of tabs is: " + JSON.toString(response));
                 }
             });
         }

@@ -3032,7 +3032,7 @@ module.exports = BackboneDash.View.extend({
     'click .show-filter-details': 'showFilterDetails',
     'click .hide-filter-details': 'hideFilterDetails'
   },
-
+  
   initialize: function(options) {
     this.finishedFirstLoad = false;
 	this.app = options.app;
@@ -3041,28 +3041,13 @@ module.exports = BackboneDash.View.extend({
 
     this.app.settings.load().done(_(function() {
     	// Extract default dates from Global Settings.
-    	var blob = {
-    		otherFilters : {
-    			date : {
-	    			start: '',
-	    			end: ''
-    			}
-    		}
-    	};
-    	var defaultMinDate = _.find(this.app.settings.models, function(item) {
-    		return item.get('id') === 'dashboard-default-min-date';
-    	});
-    	if (defaultMinDate !== undefined && defaultMinDate.get('name') !== '') {
-    		blob.otherFilters.date.start = defaultMinDate.get('name');
-    	}
-    	var defaultMaxDate = _.find(this.app.settings.models, function(item) {
-    		return item.get('id') === 'dashboard-default-max-date';
-    	});
-    	if (defaultMaxDate !== undefined && defaultMaxDate.get('name') !== '') {
-    		blob.otherFilters.date.end = defaultMaxDate.get('name');
-    	}
+    	var blob = {};
+    	
+    	// AMP-19254, AMP-20537: override the "date" range with the Dashboards-specific one from the settings blob (a hack...) 
+    	this.app.filter.extractDates(this.app.settings.models, blob, 'dashboard-default-min-date', 'dashboard-default-max-date');
     	
 	    this.app.filter.loaded.done(_(function() {
+	    	console.error('filters loaded');
 	      this.app.state.register(this, 'filters', {
 	        // namespace serialized filters so we can hook in extra state to store
 	        // later if desired (anything dashboards-ui related, for example)
@@ -32261,9 +32246,11 @@ module.exports = Backbone.Collection.extend({
     //the model should be visible and the caller is not of the same tpe
     
     if (model.get('filterType')) {
+    	// CONSTANTIN: here filtering irrelevant columns for the set filter type are filtered out
     	var isOfRequiredType = _.some( model.get('filterType'), function( type ) {
     	    return type === componentCaller || type === "ALL";
     	});
+    	//console.log("decided whether to show column " + model.get("name") + ": " + isOfRequiredType)
     	if (!isOfRequiredType) {
     		self.remove (model);
     	}
@@ -32691,7 +32678,36 @@ _.extend(Widget.prototype, Backbone.Events, {
     if (!options || !options.silent) {
       this.view.applyFilters();
     }
-  }
+  },
+  
+  /**
+   * searches the settings array of models for the ones which hold the min/max values instructed to and, if found,
+   * writes them in filtersOut.otherFilters.date.{start}{end}
+   * 
+   * use it as an utility function (it does not reference 'this', so 
+   * it is safe to use it at any point in the lifecycle of the widget
+   */
+  extractDates: function(settings, filtersOut, minName, maxName) {
+	  filtersOut.otherFilters = filtersOut.otherFilters || {};
+	  filtersOut.otherFilters.date = filtersOut.otherFilters.date || 
+	  	{
+    		start: '',
+    		end: ''
+		}
+
+  	var defaultMinDate = _.find(settings, function(item) {
+		return item.get('id') === minName;
+	});
+	if (defaultMinDate !== undefined && defaultMinDate.get('name') !== '') {
+		filtersOut.otherFilters.date.start = defaultMinDate.get('name');
+	}
+	var defaultMaxDate = _.find(settings, function(item) {
+		return item.get('id') === maxName;
+	});
+	if (defaultMaxDate !== undefined && defaultMaxDate.get('name') !== '') {
+		filtersOut.otherFilters.date.end = defaultMaxDate.get('name');
+	}
+  },
 
 });
 
@@ -32939,14 +32955,27 @@ var BaseFilterModel = require('../models/base-filter-model');
 
 module.exports = BaseFilterModel.extend({
 
-  //TODO: serialize-deserialize functions
 
   defaults: {
     selectedStart: null,
     selectedEnd: null,
-    // range is provided by api, but will fallback to this if ot provided, or set to -1
-    startYear: '01/01/1961',
-    endYear: '31/12/2015'
+    // range is provided by api, but will fallback to this if not provided, or set to -1
+    startYear: '',
+    endYear: ''
+  },
+  
+  sync: function () {
+	  /**
+	   * hackish: the data coming off the /dates endpoint should be ignored at all moments, because
+	   * 1. for tabs/saiku, it should always be empty
+	   * 2. for gis/dashboards, it is coming off the /setting endpoint
+	   * 
+	   * All the other years-filter-model should by spec be always empty at this point. In case this would cease to be true in the future,
+	   * just filter by "name"
+	   */ 
+	  	
+	  //console.error('SYNCING YEARS MODEL: ' + this.get('name'));
+	  return $.when(true);
   },
 
   initialize: function(options) {
@@ -32967,6 +32996,11 @@ module.exports = BaseFilterModel.extend({
       data.endYear = '31/12/' + data.endYear;
     }
 
+    if (!data.selectedStart) {
+    	// good ole' partial copy-paste off postprocess()
+    	data.selectedStart = data.startYear;
+    	data.selectedEnd = data.endYear;
+    }
     this.get('_loaded').resolve();
     return data;
   },
@@ -32985,6 +33019,17 @@ module.exports = BaseFilterModel.extend({
     }
   },
 
+  /**
+   * postprocess model after having fetched data from the server
+   */
+  postprocess: function() {
+	  // only set if not set by deserialize
+	  if (!this.get('selectedStart')) {
+	  	  this.set('selectedStart', this.get('startYear'));
+	   	  this.set('selectedEnd', this.get('endYear'));
+	  }
+  },
+  
   deserialize: function(obj) {
 	if(obj && (obj[this.get('column')] || obj.date)){
 	  var key = 'date'; 
@@ -32993,7 +33038,9 @@ module.exports = BaseFilterModel.extend({
 	  }
 	  this.set('selectedStart', this._dateConvert(obj[key].start));
       this.set('selectedEnd', this._dateConvert(obj[key].end));
-    }
+      
+      this.postprocess();
+     }
   },
 
   reset: function() {
@@ -33980,7 +34027,7 @@ module.exports = Backbone.View.extend({
       filtersViewLog.onDebug(function(){
         // Constantin: harmless debug message to be removed once the filters sanitisation is done
         // @Constantin, we can do bettr than this, senpai!
-        filtersViewLog.log('rendering filter', filter.get('name'));
+        //filtersViewLog.log('rendering filter', filter.get('name'));
       });
     	if (filter instanceof YearsFilterModel) {
     		view = new YearsFilterView({
@@ -34052,7 +34099,7 @@ var BaseFilterView = require('../views/base-filter-view');
 require('../lib/jquery.nouislider.min.js');
 require('jquery-ui/datepicker');
 
-var Template = "\n  <h3 class=\"title text-center\"><span class=\"start-year\">1990</span> <strong>-</strong> <span class=\"end-year\">2015</span></h3>\n   <div class=\"year-slider\"></div>\n\n   <span data-i18n=\"amp.gis:pane-subfilters-startdate\">Start Date:</span>&nbsp<p><input type=\"text\" id=\"start-date\" class=\"date-picker\"></p>\n   <span data-i18n=\"amp.gis:pane-subfilters-enddate\">End Date:</span>&nbsp<p><input type=\"text\" id=\"end-date\" class=\"date-picker\"></p>\n";
+var Template = "\n  <h3 class=\"title text-center\"><span class=\"start-year\">dummy</span> <strong>-</strong> <span class=\"end-year\">dummy</span></h3>\n   <div class=\"year-slider\"></div>\n\n   <span data-i18n=\"amp.gis:pane-subfilters-startdate\">Start Date:</span>&nbsp<p><input type=\"text\" id=\"start-date\" class=\"date-picker\"></p>\n   <span data-i18n=\"amp.gis:pane-subfilters-enddate\">End Date:</span>&nbsp<p><input type=\"text\" id=\"end-date\" class=\"date-picker\"></p>\n";
 
 module.exports = BaseFilterView.extend({
 
@@ -34067,12 +34114,9 @@ module.exports = BaseFilterView.extend({
     this.model = options.model;
     this.translator = options.translator;
     this.translate = options.translate;
+//    console.log("just built a years-filter-view for " + self.model.get('name'));
     this._loaded = this.model.fetch().then(function() {
-      // only set if not set by deserialize
-      if (!self.model.get('selectedStart')) {
-        self.model.set('selectedStart', self.model.get('startYear'));
-        self.model.set('selectedEnd', self.model.get('endYear'));
-      }
+    	//console.log("just loaded a years-filter-view for: " + JSON.stringify({name: self.model.get('name'), start: self.model.get('selectedStart'), end: self.model.get('selectedEnd')}));
     });
 
     this.listenTo(this.model, 'change', this._updateTitle);
@@ -34100,14 +34144,14 @@ module.exports = BaseFilterView.extend({
   _renderDatePickers: function() {
     var self = this;
 
-    // TODO: format absed on admin setting....maybe get from year api..
+    // TODO: format based on admin setting....maybe get from year api..
     // TODO: abstract common properties from object inits below...
     // var commonObj = {};
 
     this.$('#start-date').datepicker({
       defaultDate: this.model.get('selectedStart'),
-      minDate: this.model.get('startYear'),
-      maxDate: this.model.get('endYear'),
+      //minDate: this.model.get('startYear'),
+      //maxDate: this.model.get('endYear'),
       dateFormat: 'dd/mm/yy',
       changeMonth: true,
       changeYear: true,
@@ -34122,8 +34166,8 @@ module.exports = BaseFilterView.extend({
 
     this.$('#end-date').datepicker({
       defaultDate: this.model.get('selectedEnd'),
-      minDate: this.model.get('startYear'),
-      maxDate: this.model.get('endYear'),
+      //minDate: this.model.get('startYear'),
+      //maxDate: this.model.get('endYear'),
       dateFormat: 'dd/mm/yy',
       changeMonth: true,
       changeYear: true,
@@ -34135,14 +34179,6 @@ module.exports = BaseFilterView.extend({
         // self._updateTitle();
       }
     });
-    
-    if(this.model.collection.componentCaller === "DASHBOARD") {
-    	this.$('#start-date').datepicker("option", "maxDate", null);
-    	this.$('#start-date').datepicker("option", "minDate", null);
-    	
-    	this.$('#end-date').datepicker("option", "maxDate", null);
-    	this.$('#end-date').datepicker("option", "minDate", null);
-    }
 
     this.$('#start-date').val(this.model.get('selectedStart'));
     this.$('#end-date').val(this.model.get('selectedEnd'));
@@ -34156,11 +34192,11 @@ module.exports = BaseFilterView.extend({
   },
 
   //TODO: do more in template.
-  _updateTitle:function() {
+  _updateTitle:function() {	
     this.$titleEl.find('.filter-count').text(this.model.get('selectedStart') +
         ' - ' +
       this.model.get('selectedEnd'));
-
+    //console.log('updating years title for ' + this.model.get('name') + ', start-year: ' + this.model.get('selectedStart') + ', end-year: ' + this.model.get('selectedEnd'));
     this.$('.start-year').text(this.model.get('selectedStart'));
     this.$('.end-year').text(this.model.get('selectedEnd'));
   },

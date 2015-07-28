@@ -33,8 +33,10 @@ import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -358,7 +360,8 @@ public class SettingsUtils {
 		settings.add(getFundingTypeSettings(measures));
 		
 		settings.add(new SettingOptions("use-icons-for-sectors-in-project-list", false, new Boolean(FeaturesUtil
-				.isVisibleFeature(GisConstants.USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST)).toString(), null, null));
+				.isVisibleFeature(GisConstants.USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST)).toString(), null,
+				null));
 		settings.add(new SettingOptions("max-locations-icons", false, FeaturesUtil
 				.getGlobalSettingValue(GlobalSettingsConstants.MAX_LOCATIONS_ICONS), null, null));
 		
@@ -376,57 +379,58 @@ public class SettingsUtils {
 		settings.add(new SettingOptions("number-multiplier", false, 
 				String.valueOf(MondrianReportUtils.getAmountMultiplier(amountOptionId))
 				, null, null));
+		
+		settings.add(new SettingOptions("language", false, TLSUtils.getEffectiveLangCode(),
+				null, null)); 
+
 		// Workspace Settings
-		if (tm != null){ 
-			settings.add(new SettingOptions("team-id", false, 
-					EndpointUtils.getAppSettings().getTeam().getAmpTeamId().toString(), null, null));
+		if (tm != null) {
+			AmpApplicationSettings setts = EndpointUtils.getAppSettings();
 			settings.add(new SettingOptions("team-lead", false, String.valueOf(tm.getTeamHead()), null, null));
 			settings.add(new SettingOptions("team-validator", false, String.valueOf(tm.isApprover()), null, null));
-			// Cross Team validation
-			settings.add(new SettingOptions("cross_team_validation", false, 
-					String.valueOf(EndpointUtils.getAppSettings().getTeam().getCrossteamvalidation())
-					, null, null));
-			settings.add(new SettingOptions("workspace_type", false, String.valueOf(EndpointUtils.getAppSettings().getTeam().getAccessType())
-					, null, null));
-			settings.add(new SettingOptions("language", false, 
-					tm.getAppSettings().getLanguage(), null, null));
-			//AMP-19389 Only add the workspace prefix when its configured for the team
-			String wsPrefix=null;
-			if (EndpointUtils.getAppSettings() != null
-					&& EndpointUtils.getAppSettings().getTeam() != null
-					&& EndpointUtils.getAppSettings().getTeam().getWorkspacePrefix() != null) {
-				wsPrefix = EndpointUtils.getAppSettings().getTeam()
-						.getWorkspacePrefix().getValue();
-				wsPrefix = wsPrefix.substring(0, wsPrefix.length() - 1);
+			String wsPrefix = null;
+			if (setts != null) {
+				AmpTeam team = setts.getTeam();
+				if (team != null) {
+					settings.add(new SettingOptions("team-id", false, team.getAmpTeamId().toString(), null, null));
+					// Cross Team validation
+					settings.add(new SettingOptions("cross_team_validation", false, String.valueOf(team.getCrossteamvalidation()), null, null));
+					settings.add(new SettingOptions("workspace_type", false, String.valueOf(team.getAccessType()), null, null));
+					
+					if (team.getWorkspacePrefix() != null) {
+						 wsPrefix = team.getWorkspacePrefix().getValue();
+						 wsPrefix = wsPrefix.substring(0, wsPrefix.length() - 1);
+					}
+				}
 			}
 			settings.add(new SettingOptions("workspace_prefix", false, null, wsPrefix, null));
-			
 		}
 		
-		// Dashboard specific settings (some come directly from GS values and others require some processing).
-		String defaultDashboardMaxYearRange = FeaturesUtil
-				.getGlobalSettingValue(GlobalSettingsConstants.DASHBOARD_DEFAULT_MAX_YEAR_RANGE);
-		String defaultDashboardMinYearRange = FeaturesUtil
-				.getGlobalSettingValue(GlobalSettingsConstants.DASHBOARD_DEFAULT_MIN_YEAR_RANGE);
+		// Dashboard / GIS specific date range settings
+
 		String defaultCalendar = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
-		settings.add(new SettingOptions("dashboard-default-max-year-range", false, defaultDashboardMaxYearRange, null,
-				null));
-		settings.add(new SettingOptions("dashboard-default-min-year-range", false, defaultDashboardMinYearRange, null,
-				null));
-		settings.add(new SettingOptions("dashboard-default-calendar", false, defaultCalendar, null, null));
-		if (!defaultDashboardMaxYearRange.equals("-1")) {
-			settings.add(new SettingOptions("dashboard-default-max-date", false, DateTimeUtil
-					.parseDateForPicker2(CalendarUtil.getEndDate(new Long(defaultCalendar), new Integer(
-							defaultDashboardMaxYearRange).intValue()), Constants.CALENDAR_DATE_PICKER), null, null));
-		}
-		if (!defaultDashboardMinYearRange.equals("-1")) {
-			settings.add(new SettingOptions("dashboard-default-min-date", false, DateTimeUtil
-					.parseDateForPicker2(CalendarUtil.getStartDate(new Long(defaultCalendar), new Integer(
-							defaultDashboardMinYearRange).intValue()), Constants.CALENDAR_DATE_PICKER), null, null));
-		}
+		long defaultCalendarId = Long.parseLong(defaultCalendar);
+		
+		addDateSetting(settings, GlobalSettingsConstants.DASHBOARD_DEFAULT_MAX_YEAR_RANGE, "dashboard-default-max-date", "dashboard-default-max-year-range", defaultCalendarId);
+		addDateSetting(settings, GlobalSettingsConstants.DASHBOARD_DEFAULT_MIN_YEAR_RANGE, "dashboard-default-min-date", "dashboard-default-min-year-range", defaultCalendarId);
+		addDateSetting(settings, GlobalSettingsConstants.GIS_DEFAUL_MAX_YEAR_RANGE, "gis-default-max-date", "gis-default-max-year-range", defaultCalendarId);
+		addDateSetting(settings, GlobalSettingsConstants.GIS_DEFAUL_MIN_YEAR_RANGE, "gis-default-min-date", "gis-default-min-year-range", defaultCalendarId);
+
 		return settings;
 	}
 	
+	protected static void addDateSetting(List<SettingOptions> settings, String globalSettingsName,
+			String dateSettingsName, String yearSettingsName,
+			long calendarId) throws Exception {
+		
+		String yearNumber = FeaturesUtil.getGlobalSettingValue(globalSettingsName);
+		settings.add(new SettingOptions(yearSettingsName, false, yearNumber, null, null));
+
+		if (!yearNumber.equals("-1")) {
+			settings.add(new SettingOptions(dateSettingsName, false, DateTimeUtil
+					.parseDateForPicker2(CalendarUtil.getEndDate(calendarId, Integer.parseInt(yearNumber)), Constants.CALENDAR_DATE_PICKER), null, null));
+		}
+	}
 	
 	
 	/**

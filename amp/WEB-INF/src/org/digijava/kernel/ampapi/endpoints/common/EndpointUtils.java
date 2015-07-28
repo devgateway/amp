@@ -249,30 +249,49 @@ public class EndpointUtils {
 		return mapId;
 	}
 	
-	public static List<AvailableMethod> getAvailableMethods(String className){
-	return getAvailableMethods(className,false);
+	public static List<AvailableMethod> getAvailableMethods(String className) {
+		return getAvailableMethods(className, false);
 	}
+	
+	public static String getEndpointMethod(Method method) {
+		if (method.getAnnotation(javax.ws.rs.POST.class) != null) {
+			return "POST";
+		};
+
+		if (method.getAnnotation(javax.ws.rs.GET.class) != null) {
+			return "GET";
+		}
+		
+		if (method.getAnnotation(javax.ws.rs.PUT.class) != null) {
+			return "PUT";
+		}
+		
+		if (method.getAnnotation(javax.ws.rs.DELETE.class) != null) {
+			return "DELETE";
+		}
+		
+		throw new RuntimeException("method " + method.getName() + " of class " + method.getDeclaringClass().getName() + " does not have a POST/GET/PUT/DELETE annotation!");
+	}
+	
 	/**
 	 * 
 	 * @param className
 	 * @return
 	 */
-	public static List<AvailableMethod> getAvailableMethods(String className,boolean includeColumn){
-		List<AvailableMethod> availableFilters=new ArrayList<AvailableMethod>(); 
+	public static List<AvailableMethod> getAvailableMethods(String className, boolean includeColumn){
+		List<AvailableMethod> availableFilters = new ArrayList<AvailableMethod>(); 
 		try {
 			Set<String> visibleColumns = ColumnsVisibility.getVisibleColumns();
 			Class<?> c = Class.forName(className);
 			
-			javax.ws.rs.Path p=c.getAnnotation(javax.ws.rs.Path.class);
-			String path="/rest/"+p.value();
-			Member[] mbrs=c.getMethods();
-			for (Member mbr : mbrs) {
-				ApiMethod apiAnnotation=
-		    			((Method) mbr).getAnnotation(ApiMethod.class);
+			javax.ws.rs.Path p = c.getAnnotation(javax.ws.rs.Path.class);
+			Method[] methods = c.getMethods();
+			for (Method method : methods) {
+				ApiMethod apiAnnotation = method.getAnnotation(ApiMethod.class);
 				if (apiAnnotation != null) {
-					final String []columns = apiAnnotation.columns();
+					final String[] columns = apiAnnotation.columns();
 					
-					boolean isVisibleColumn=false; 
+					boolean isVisibleColumn = false; 
 					for(String column:columns){ 
 						if (EPConstants.NA.equals(column) || visibleColumns.contains(column)) {
 							isVisibleColumn=true;
@@ -281,10 +300,10 @@ public class EndpointUtils {
 					}
 					if (isVisibleColumn) {
 						//then we have to add it to the filters list
-						javax.ws.rs.Path methodPath = ((Method) mbr).getAnnotation(javax.ws.rs.Path.class);
+						javax.ws.rs.Path methodPath = method.getAnnotation(javax.ws.rs.Path.class);
 						AvailableMethod filter = new AvailableMethod();
 						//the name should be translatable
-						if(apiAnnotation.name()!=null && !apiAnnotation.name().equals("")){
+						if (apiAnnotation.name() != null && !apiAnnotation.name().equals("")){
 							filter.setName(TranslatorWorker.translateText(apiAnnotation.name()));
 						}
 						
@@ -298,7 +317,7 @@ public class EndpointUtils {
 						filter.setId(apiAnnotation.id());
 						filter.setFilterType(apiAnnotation.filterType());
 						if (includeColumn) {
-							if(apiAnnotation.columns().length>1){ //this should not be empty since it has a default value
+							if (apiAnnotation.columns().length > 1) { //this should not be empty since it has a default value
 								//If we have more than one column we column to NA (as it was before)
 								filter.setColumn(EPConstants.NA);
 							}else{
@@ -309,26 +328,12 @@ public class EndpointUtils {
 							filter.setColumns(apiAnnotation.columns());
 						}
 						//we check the method exposed
-						if (((Method) mbr).getAnnotation(javax.ws.rs.POST.class) != null){
-							filter.setMethod("POST");
-						} else {
-							if (((Method) mbr).getAnnotation(javax.ws.rs.GET.class) != null){
-								filter.setMethod("GET");
-							} else {
-								if (((Method) mbr).getAnnotation(javax.ws.rs.PUT.class) != null){
-									filter.setMethod("PUT");
-								} else {
-									if (((Method) mbr).getAnnotation(javax.ws.rs.DELETE.class) != null){
-										filter.setMethod("DELETE");
-									}
-								}
-							}
-						}
-						//special check if the method shoud be added
-						Boolean shouldCheck=false;
-						Boolean result=false;
+						filter.setMethod(getEndpointMethod(method));
+						//special check if the method should be added
+						boolean shouldCheck = false;
+						boolean result = false;
 						if (apiAnnotation.visibilityCheck().length() > 0) {
-							shouldCheck=true;
+							shouldCheck = true;
 							try {
 								Method shouldAddApiMethod = c.getMethod(apiAnnotation.visibilityCheck(), null);
 								shouldAddApiMethod.setAccessible(true);
@@ -351,16 +356,15 @@ public class EndpointUtils {
 				}
 			}
 		}
-		 catch (ClassNotFoundException e) {
-			GisUtil.logger.error("cannot retrieve filters list",e);
-			return null;
+		catch (ClassNotFoundException e) {
+			throw new RuntimeException("cannot retrieve methods list", e);
 		}
 		return availableFilters;
 	}
 	
 	
 	/**
-	 * Set locale to US in order to avoid number formating issues
+	 * Set locale to US in order to avoid number formatting issues
 	 * @return
 	 */
 	public static DecimalFormat getCurrencySymbols(){

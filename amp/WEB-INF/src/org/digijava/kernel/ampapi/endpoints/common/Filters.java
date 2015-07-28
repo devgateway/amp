@@ -199,7 +199,14 @@ public class Filters {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = true, name = "Dates", id = "Dates")
 	public JsonBean getDates(){
-		return getDefaultDate();
+		JsonBean date = new JsonBean();
+		date.set("startYear", 1985);
+		date.set("endYear", 2025);
+		return date;
+		//return getDefaultDate(); // tabs/saiku should have this empty by default; gis/dashboards fill it client side
+		// the API does not offer server-side the possibility of knowing the kind of filter widget being filtered, so instead
+		// the settings API ships them all client side and they are sorted out there
+		//return new JsonBean();
 	}
 	
 	@GET
@@ -208,8 +215,7 @@ public class Filters {
 	@ApiMethod(ui = true, name = "Proposed Start Date", columns = ColumnConstants.PROPOSED_START_DATE, id = "ProposedStartDate", filterType = {
 			FilterType.REPORTS, FilterType.TAB })
 	public JsonBean getProposedStartDate(){
-		JsonBean date = getDefaultDate();
-		return date;
+		return new JsonBean();
 	}
 	
 	@GET
@@ -218,8 +224,7 @@ public class Filters {
 	@ApiMethod(ui = true, name = "Actual Start Date", columns = ColumnConstants.ACTUAL_START_DATE, id = "ActualStartDate", filterType = {
 			FilterType.REPORTS, FilterType.TAB })
 	public JsonBean getActualStartDate(){
-		JsonBean date = getDefaultDate();
-		return date;
+		return new JsonBean();
 	}
 	
 	@GET
@@ -228,8 +233,7 @@ public class Filters {
 	@ApiMethod(ui = true, name = "Planned Completion Date", columns = ColumnConstants.PROPOSED_COMPLETION_DATE, id = "PlannedCompletionDate", filterType = {
 			FilterType.REPORTS, FilterType.TAB })
 	public JsonBean getPlannedCompletionDate(){
-		JsonBean date = getDefaultDate();
-		return date;
+		return new JsonBean();
 	}
 	
 	@GET
@@ -238,8 +242,7 @@ public class Filters {
 	@ApiMethod(ui = true, name = "Actual Completion Date", columns = ColumnConstants.ACTUAL_COMPLETION_DATE, id = "ActualCompletionDate", filterType = {
 			FilterType.REPORTS, FilterType.TAB })
 	public JsonBean getActualCompletionDate(){
-		JsonBean date = getDefaultDate();
-		return date;
+		return new JsonBean();
 	}
 
 	@GET
@@ -248,17 +251,15 @@ public class Filters {
 	@ApiMethod(ui = true, name = "Date of Agreement", columns = ColumnConstants.FINAL_DATE_FOR_CONTRACTING, id = "DateOfAgreement", filterType = {
 			FilterType.REPORTS, FilterType.TAB })
 	public JsonBean getDateOfAgreement(){
-		JsonBean date = getDefaultDate();
-		return date;
+		return new JsonBean();
 	}
 	
-	private JsonBean getDefaultDate () {
-		JsonBean date=new JsonBean();
-		date.set("startYear", FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.GIS_DEFAUL_MIN_YEAR_RANGE));
-		date.set("endYear", FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.GIS_DEFAUL_MAX_YEAR_RANGE));
-		return date;
-		
-	}
+//	private JsonBean getDefaultDate () {
+//		JsonBean date = new JsonBean();
+//		date.set("startYear", FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.GIS_DEFAUL_MIN_YEAR_RANGE));
+//		date.set("endYear", FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.GIS_DEFAUL_MAX_YEAR_RANGE));
+//		return date;		
+//	}
 	
 	/**
 	 * Return the programs filtered by the given sectorName

@@ -586,16 +586,16 @@ LoggerIdentifiable, Cloneable {
 	@Interchangeable(fieldTitle = "Act. Programs", importable = true, fmPath = "/Activity Form/Program", pickIdOnly=true)
 	@VersionableCollection(fieldTitle = "Act. Programs")
 	@InterchangeableDiscriminator(discriminatorField = "programSetting.name", settings = {
-			@Interchangeable(fieldTitle = "National Plan Objective", discriminatorOption = "National Plan Objective", fmPath = "/Activity Form/Program/National Plan Objective", pickIdOnly=true,
+			@Interchangeable(fieldTitle = "National Plan Objective", discriminatorOption = "National Plan Objective", importable = true, fmPath = "/Activity Form/Program/National Plan Objective", 
 					validators = @Validators(maxSize = "/Activity Form/Program/National Plan Objective/max Size Program Validator", minSize = "/Activity Form/Program/National Plan Objective/minSizeProgramValidator", 
 					unique = "/Activity Form/Program/National Plan Objective/uniqueProgramsValidator", percentage = "/Activity Form/Program/National Plan Objective/programPercentageTotal")),
-			@Interchangeable(fieldTitle = "Primary Programs", discriminatorOption = "Primary Program", fmPath = "/Activity Form/Program/Primary Programs", pickIdOnly=true,
+			@Interchangeable(fieldTitle = "Primary Programs", discriminatorOption = "Primary Program", importable = true, fmPath = "/Activity Form/Program/Primary Programs", 
 					validators = @Validators(maxSize = "/Activity Form/Program/Primary Programs/max Size Program Validator", minSize = "/Activity Form/Program/Primary Programs/minSizeProgramValidator", 
 					unique = "/Activity Form/Program/Primary Programs/uniqueProgramsValidator", percentage = "/Activity Form/Program/Primary Programs/programPercentageTotal")),
-			@Interchangeable(fieldTitle = "Secondary Programs", discriminatorOption = "Secondary Program", fmPath = "/Activity Form/Program/Secondary Programs", pickIdOnly=true,
+			@Interchangeable(fieldTitle = "Secondary Programs", discriminatorOption = "Secondary Program", importable = true, fmPath = "/Activity Form/Program/Secondary Programs", 
 					validators = @Validators(maxSize = "/Activity Form/Program/Secondary Programs/max Size Program Validator", minSize = "/Activity Form/Program/Secondary Programs/minSizeProgramValidator", 
 					unique = "/Activity Form/Program/Secondary Programs/uniqueProgramsValidator", percentage = "/Activity Form/Program/Secondary Programs/programPercentageTotal")),
-			@Interchangeable(fieldTitle = "Tertiary Programs", discriminatorOption = "Tertiary Program", fmPath = "/Activity Form/Program/Tertiary Programs", pickIdOnly=true,
+			@Interchangeable(fieldTitle = "Tertiary Programs", discriminatorOption = "Tertiary Program", importable = true, fmPath = "/Activity Form/Program/Tertiary Programs", 
 					validators = @Validators(maxSize = "/Activity Form/Program/Tertiary Programs/max Size Program Validator", minSize = "/Activity Form/Program/Tertiary Programs/minSizeProgramValidator", 
 					unique = "/Activity Form/Program/Tertiary Programs/uniqueProgramsValidator", percentage = "/Activity Form/Program/Tertiary Programs/programPercentageTotal"))})
 	protected Set<AmpActivityProgram> actPrograms;

@@ -314,13 +314,13 @@ FilterUtils.convertJavaFiltersToJS = function(data) {
 	// Define some basic defaults needed in the widget filter.
 	var blob = {
 		otherFilters : {
-			date : {
+			/*date : {
 				end : '',
 				start : ''
-			}
+			}*/
 		},
 		columnFilters : {
-			"Donor Id" : []
+			/*"Donor Id" : []*/
 		}
 	};
 	_.each(data, function(item, i) {

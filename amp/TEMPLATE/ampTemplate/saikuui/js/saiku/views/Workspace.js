@@ -426,8 +426,16 @@ var Workspace = Backbone.View.extend({
         }
 
         // is this a new query?
-        if (typeof isNew != "undefined") {
-            this.query.run(true);
+        if(!Settings.AMP_REPORT_API_BRIDGE) {
+	        if (typeof isNew != "undefined") {
+	            this.query.run(true);
+	        }
+        } else {
+        	// Run query once the filters widget is ready.
+        	this.query.initFiltersDeferred.done(function() {
+        		console.log(window.currentFilter.serialize());
+        		self.query.run(true);
+        	});
         }
         Saiku.i18n.translate();
 

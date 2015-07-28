@@ -9,6 +9,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AmpDateUtils;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
+import org.digijava.module.message.triggers.ActivityCurrentCompletionDateTrigger;
 import org.digijava.module.message.triggers.ActivityProposedStartDateTrigger;
 import org.digijava.module.message.util.AmpMessageUtil;
 import org.quartz.JobExecutionContext;
@@ -37,18 +38,9 @@ public class ActivityProposedStartDateJob extends ConnectionCleaningJob implemen
             dateAfterDays=AmpDateUtils.getDateAfterDays(curDate,3);
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        String exDt=sdf.format(dateAfterDays);
-        List<AmpActivityVersion> actList=ActivityUtil.getAllAssignedActivitiesList();
-        if(actList!=null){
-            for (AmpActivityVersion act : actList) {
-                if (act.getProposedStartDate() != null) {
-                    String dt = sdf.format(act.getProposedStartDate());
-                    if (dt.equals(exDt)) {
-                        new ActivityProposedStartDateTrigger(act);
-                    }
-                }
-            }
+        List<AmpActivityVersion> actList = ActivityUtil.getActivitiesWhichMatchDate("proposedStartDate", dateAfterDays);
+        for (AmpActivityVersion act : actList) {
+        	new ActivityProposedStartDateTrigger(act);
         }
     }
 }

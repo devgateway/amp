@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -13,8 +14,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 import org.digijava.kernel.ampapi.endpoints.activity.utils.ActivityImporterHelper;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -23,6 +26,7 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityVersionUtil;
 
 
 /**
@@ -35,6 +39,9 @@ public class InterchangeEndpoints {
 	
 	@Context
 	private HttpServletRequest httpRequest;
+
+    @Context
+    private UriInfo uri;
 
 	/**
 	 * Returns a list of JSON objects, each describing a possible value that might be specified 
@@ -132,7 +139,17 @@ public class InterchangeEndpoints {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.ADD_ACTIVITY}, id = "addProject", ui = false)
 	public JsonBean addProject(JsonBean newJson) {
-		return InterchangeUtils.importActivity(newJson, false);
+        JsonBean importedActivity = InterchangeUtils.importActivity(newJson, false);
+
+        JsonBean activityJson = (JsonBean)importedActivity.get("activity");
+        Object internalId = activityJson.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME);
+
+
+        EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_CREATED);
+        String locationUrl = uri.getBaseUri() + "activity/projects/" + internalId;
+        EndpointUtils.addResponseHeaderMarker("Location", locationUrl);
+
+		return importedActivity;
 	}
 	
 	/**
@@ -157,6 +174,20 @@ public class InterchangeEndpoints {
 			ActivityImporterHelper.addGeneralError(newJson, 
 					new ApiErrorMessage(ActivityErrors.UPDATE_ID_MISMATCH, details));
 		}
+
+        /**
+         * Check if projectId is the last version of activity
+         * See AMP-20723 for details
+         */
+        Long lastVersionId = ActivityVersionUtil.getLastVersionForVersion(projectId);
+        if (lastVersionId != null && !lastVersionId.equals(projectId)) {
+            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_CONFLICT);
+        } else {
+            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_OK);
+            String locationUrl = uri.getBaseUri() + "activity/projects/" + projectId;
+            EndpointUtils.addResponseHeaderMarker("Location", locationUrl);
+        }
+
 		return InterchangeUtils.importActivity(newJson, true);
 	}
 	

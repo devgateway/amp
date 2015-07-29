@@ -663,6 +663,17 @@ public class InterchangeUtils {
 		
 		return calculatedAmount.doubleValue();
 	}
+
+    public static Long extractActivityId(JsonBean activityBean) {
+        if (activityBean != null
+                && (activityBean.get("error") == null || ((Map)activityBean.get("error")).isEmpty())) {
+            Object idValue = activityBean.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME);
+            return idValue == null ? null : Long.decode(idValue.toString());
+        }
+        return null;
+    }
+
+
 	
 	
 	/**

@@ -141,15 +141,13 @@ public class InterchangeEndpoints {
 	public JsonBean addProject(JsonBean newJson) {
         JsonBean importedActivity = InterchangeUtils.importActivity(newJson, false);
 
-        /*
-        JsonBean activityJson = (JsonBean)importedActivity.get("activity");
-        Object internalId = activityJson.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME);
+        Long internalId = InterchangeUtils.extractActivityId(importedActivity);
+        if (internalId != null) {
+            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_CREATED);
+            String locationUrl = uri.getBaseUri() + "activity/projects/" + internalId;
+            EndpointUtils.addResponseHeaderMarker("Location", locationUrl);
+        }
 
-
-        EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_CREATED);
-        String locationUrl = uri.getBaseUri() + "activity/projects/" + internalId;
-        EndpointUtils.addResponseHeaderMarker("Location", locationUrl);
-        */
 		return importedActivity;
 	}
 	

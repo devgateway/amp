@@ -68,8 +68,8 @@ public class ValueValidator extends InputValidator {
 						if (value.equals(option.getString(ActivityEPConstants.ID)))
 							return true;
 					} else {
-						if (value.equals(option.getString(ActivityEPConstants.VALUE)))
-								return true;						
+						if (value.equals(option.get(ActivityEPConstants.VALUE)))
+							return true;						
 					}
 				}
 				// wrong value configured if it is not found in allowed options 

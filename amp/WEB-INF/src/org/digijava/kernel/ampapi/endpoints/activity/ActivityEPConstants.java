@@ -37,6 +37,7 @@ public class ActivityEPConstants {
 	public static final String FIELD_ALWAYS_REQUIRED = "Y";
 	public static final String FIELD_NOT_REQUIRED = "N";
 	public static final String ID = "id";
+	public static final String VALUE = "value";
 	
 
 	// fields constants

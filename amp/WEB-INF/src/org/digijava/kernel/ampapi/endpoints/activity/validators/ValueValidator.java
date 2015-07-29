@@ -42,14 +42,15 @@ public class ValueValidator extends InputValidator {
 		
 		//temporary debug
 		if (!isValidLength(newFieldParent, fieldDescription))
-			return isValidLength(newFieldParent, fieldDescription);
+//			return isValidLength(newFieldParent, fieldDescription);
+			return false;
 		
 		List<JsonBean> possibleValues = importer.getPossibleValuesForFieldCached(fieldPath, AmpActivityFields.class, null);
 		
 		if (possibleValues.size() != 0) {
 			
 			//TEMPORARY DEBUG
-			possibleValues = importer.getPossibleValuesForFieldCached(fieldPath, AmpActivityFields.class, null);
+//			possibleValues = importer.getPossibleValuesForFieldCached(fieldPath, AmpActivityFields.class, null);
 			//END OF TEMPORARY DEBUG
 			
 			Object value = newFieldParent.get(fieldDescription.getString(ActivityEPConstants.FIELD_NAME));
@@ -57,18 +58,18 @@ public class ValueValidator extends InputValidator {
 			if (value != null) {
 				boolean idOnly = Boolean.TRUE.equals(fieldDescription.get(ActivityEPConstants.ID_ONLY));
 				//String idFieldName = idOnly ? ActivityImporterHelper.getIdFieldName(fieldDescription) : null;
-				boolean isMap = value != null && Map.class.isAssignableFrom(value.getClass());
+//				boolean isMap = value != null && Map.class.isAssignableFrom(value.getClass());
 				
 				// convert to string the ids to avoid long-integer comparison
 				value = idOnly ? value.toString() : value;
 				
 				for (JsonBean option: possibleValues) {
-					if (isMap) {
-						if (option.any().equals(value))
+					if (idOnly) {
+						if (value.equals(option.getString(ActivityEPConstants.ID)))
 							return true;
-					} else if (idOnly) {
-						if ( value.equals(option.getString(ActivityEPConstants.ID)))
-							return true;
+					} else {
+						if (value.equals(option.getString(ActivityEPConstants.VALUE)))
+								return true;						
 					}
 				}
 				// wrong value configured if it is not found in allowed options 
@@ -102,6 +103,8 @@ public class ValueValidator extends InputValidator {
 	}
 	
 	protected boolean isValidLength(Object obj, Integer maxLength) {
+		if (obj == null)
+			return true;
 		if (String.class.isAssignableFrom(obj.getClass())){
 			if (maxLength < ((String) obj).length())
 				return false;

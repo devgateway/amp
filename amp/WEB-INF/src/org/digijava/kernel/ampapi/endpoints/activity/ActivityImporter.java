@@ -136,13 +136,14 @@ public class ActivityImporter {
 		
 		// initialize new activity
 		if (oldActivity != null) {
-			try {
-				newActivity = ActivityVersionUtil.cloneActivity(oldActivity, TeamUtil.getCurrentAmpTeamMember());
-				newActivity.setAmpActivityGroup(oldActivity.getAmpActivityGroup());
-			} catch (CloneNotSupportedException e) {
-				logger.error(e.getMessage());
-				throw new RuntimeException(e);
-			}
+//			try {
+//				newActivity = ActivityVersionUtil.cloneActivity(oldActivity, TeamUtil.getCurrentAmpTeamMember());
+				newActivity = oldActivity;
+//				newActivity.setAmpActivityGroup(oldActivity.getAmpActivityGroup());
+//			} catch (CloneNotSupportedException e) {
+//				logger.error(e.getMessage());
+//				throw new RuntimeException(e);
+//			}
 		} else if (!update) {
 			newActivity = new AmpActivityVersion();
 		}

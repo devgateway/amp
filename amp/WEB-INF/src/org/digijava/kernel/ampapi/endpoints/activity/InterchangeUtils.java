@@ -202,7 +202,7 @@ public class InterchangeUtils {
 		if (underscoreToTitleMap.containsKey(input)) 
 			return underscoreToTitleMap.get(input);
 		StringBuilder bld = new StringBuilder();
-		boolean upcaseMarker = false;
+		boolean upcaseMarker = true;
 		for (int i = 0; i < input.length(); i++) {
 			if (upcaseMarker) {
 				bld.append(Character.toUpperCase(input.charAt(i)));

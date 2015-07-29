@@ -27,33 +27,33 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiabl
 	//IATI-check: to be ignored
 	private static final long serialVersionUID = 1L;
 	//private AmpActivityVersion activityId;
-//	@Interchangeable(fieldTitle="ID", id=true)
+	@Interchangeable(fieldTitle="ID", id=true)
     private Long ampThemeId ;
-//	@Interchangeable(fieldTitle="Parent Theme ID", pickIdOnly=true)
+	@Interchangeable(fieldTitle="Parent Theme ID", pickIdOnly=true)
     private AmpTheme parentThemeId ;
-//	@Interchangeable(fieldTitle="Theme Code")
+	@Interchangeable(fieldTitle="Theme Code")
     private String themeCode ;
-//	@Interchangeable(fieldTitle="Budget Program Code")
+	@Interchangeable(fieldTitle="Budget Program Code")
     
 	private String budgetProgramCode ;
-//	@Interchangeable(fieldTitle="Is Budget Program")
+	@Interchangeable(fieldTitle="Is Budget Program")
 	private Integer isbudgetprogram;
-//	@Interchangeable(fieldTitle="Name", value = true)
+	@Interchangeable(fieldTitle="Name", value = true)
 	@TranslatableField
 	private String name ;
-//	@Interchangeable(fieldTitle="Encoded Name")
+	@Interchangeable(fieldTitle="Encoded Name")
 	private String encodeName;
 	//private String type ;
-//	@Interchangeable(fieldTitle="Type Category Value")
+	@Interchangeable(fieldTitle="Type Category Value", pickIdOnly=true)
 	private AmpCategoryValue typeCategoryValue;
-//	@Interchangeable(fieldTitle="Level")
+	@Interchangeable(fieldTitle="Level")
 	private Integer indlevel;
-//	@Interchangeable(fieldTitle="Description")
+	@Interchangeable(fieldTitle="Description")
 	@TranslatableField
 	private String description ;
-//	@Interchangeable(fieldTitle="Language")
+	@Interchangeable(fieldTitle="Language")
 	private String language ;
-//	@Interchangeable(fieldTitle="Version")
+	@Interchangeable(fieldTitle="Version")
 	private String version ;
 	
 	/**

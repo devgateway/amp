@@ -14,7 +14,7 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 	};
 
 	FilterManager.initializeFilterWidget = function() {
-		var containerName = "#filters-container";
+		var containerName = "#filter-popup";
 		var container = jQuery(containerName);
 
 		// Create the FilterWidget instance.

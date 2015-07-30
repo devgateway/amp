@@ -39,7 +39,7 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 				silent : true
 			});
 
-			var containerName = '#filters-container';
+			var containerName = '#filter-popup';
 			var FilterDialogContainerView = Marionette.ItemView.extend({
 				template : "<p></p>",
 				render : function(model) {

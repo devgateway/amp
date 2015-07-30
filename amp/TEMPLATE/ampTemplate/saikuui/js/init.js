@@ -16,7 +16,7 @@ app.SaikuApp = {};
 
 define([ 'filtersWidget' ], function(FiltersWidget) {
 	debugger;
-	var containerName = "#filters-container";
+	var containerName = "#filter-popup";
 	var container = jQuery(containerName);
 	// Create the FilterWidget instance.
 	app.SaikuApp.filtersWidget = new FiltersWidget({

@@ -25,6 +25,8 @@ define([ 'marionette', 'models/document', 'collections/documents',
 				content : '#documents-container-region'
 			}
 		});
+		var dynamicContentView = new DynamicContentView();
+		app.TabsApp.documentsWidgetRegion.show(dynamicContentView);
 
 		var DocumentItemView = Marionette.ItemView.extend({
 			tagName : 'li',
@@ -38,10 +40,7 @@ define([ 'marionette', 'models/document', 'collections/documents',
 		});
 		var documentsItemsView = new DocumentsItemsView({
 			collection : documents
-		});
-
-		var dynamicContentView = new DynamicContentView();
-		app.TabsApp.documentsWidgetRegion.show(dynamicContentView);
+		});		
 		dynamicContentView.content.show(documentsItemsView);
 	};
 

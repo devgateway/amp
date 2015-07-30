@@ -446,3 +446,25 @@
   src: local('Open Sans Extrabold Italic'), local('OpenSans-ExtraboldItalic'), url(http://fonts.gstatic.com/s/opensans/v10/PRmiXeptR36kaC0GEAetxnibbpXgLHK_uTT48UMyjSM.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
 }
+
+@font-face {
+  font-family: 'Open Sans';
+  src: url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_light/OpenSans-Light-webfont.eot');
+  src: url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_light/OpenSans-Light-webfont.eot?#iefix') format('embedded-opentype'), url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_light/OpenSans-Light-webfont.woff') format('woff'), url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_light/OpenSans-Light-webfont.ttf') format('truetype'), url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_light/OpenSans-Light-webfont.svg#open_sanslight') format('svg');
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Open Sans';
+  src: url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot');
+  src: url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot?#iefix') format('embedded-opentype'), url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.woff') format('woff'), url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.ttf') format('truetype'), url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.svg#open_sansextrabold') format('svg');
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Open Sans';
+  src: url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot');
+  src: url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot?#iefix') format('embedded-opentype'), url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.woff') format('woff'), url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.ttf') format('truetype'), url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.svg#open_sansextrabold') format('svg');
+  font-weight: 800;
+  font-style: normal;
+}

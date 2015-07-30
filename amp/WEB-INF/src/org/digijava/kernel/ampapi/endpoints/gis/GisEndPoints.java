@@ -473,11 +473,6 @@ public class GisEndPoints {
 				json.set("adminLevel", "adm-" + value.getIndex());
 				levelsJson.add(json);
 			}
-			JsonBean json = new JsonBean();
-			json.set("id", value.getId());
-			json.set("title", value.getLabel());
-			json.set("adminLevel", "adm-" + value.getIndex());
-			levelsJson.add(json);
  		}
  		return levelsJson;
  	}

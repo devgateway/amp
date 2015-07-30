@@ -23,7 +23,7 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 	private AmpRole role;
 	@Interchangeable(fieldTitle="Percentage", importable=true)
 	private Float 	percentage;
-	@Interchangeable(fieldTitle="Budgets", importable=true)
+	@Interchangeable(fieldTitle="Budgets", importable=true, multipleValues=true)
 	private Set <AmpOrgRoleBudget> budgets;
 	@Interchangeable(fieldTitle="Additional Info", importable=true)
 	private String additionalInfo;

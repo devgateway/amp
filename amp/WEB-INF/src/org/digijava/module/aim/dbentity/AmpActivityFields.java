@@ -174,13 +174,13 @@ LoggerIdentifiable, Cloneable {
 	@Interchangeable(fieldTitle = "Sectors", importable = true, fmPath = "/Activity Form/Sectors")
 	@VersionableCollection(fieldTitle = "Sectors")
 	@InterchangeableDiscriminator(discriminatorField = "classificationConfig.name", settings = {
-			@Interchangeable(fieldTitle = "Primary Sectors", discriminatorOption = "Primary", importable=true, fmPath = "/Activity Form/Sectors/Primary Sectors",
+			@Interchangeable(fieldTitle = "Primary Sectors", discriminatorOption = "Primary", importable=true, multipleValues = true, fmPath = "/Activity Form/Sectors/Primary Sectors",
 					validators = @Validators(minSize = "/Activity Form/Sectors/Primary Sectors/minSizeSectorsValidator", percentage = "/Activity Form/Sectors/Primary Sectors/sectorPercentageTotal", 
 					unique = "/Activity Form/Sectors/Primary Sectors/uniqueSectorsValidator")),
-			@Interchangeable(fieldTitle = "Secondary Sectors", discriminatorOption = "Secondary", importable=true, fmPath = "/Activity Form/Sectors/Secondary Sectors", 
+			@Interchangeable(fieldTitle = "Secondary Sectors", discriminatorOption = "Secondary", importable=true, multipleValues = true, fmPath = "/Activity Form/Sectors/Secondary Sectors", 
 					validators = @Validators(minSize = "/Activity Form/Sectors/Secondary Sectors/minSizeSectorsValidator", percentage = "/Activity Form/Sectors/Secondary Sectors/sectorPercentageTotal", 
 					unique = "/Activity Form/Sectors/Secondary Sectors/uniqueSectorsValidator")),
-			@Interchangeable(fieldTitle = "Tertiary Sectors", discriminatorOption = "Tertiary", importable=true, fmPath = "/Activity Form/Sectors/Tertiary Sectors",
+			@Interchangeable(fieldTitle = "Tertiary Sectors", discriminatorOption = "Tertiary", importable=true, multipleValues = true, fmPath = "/Activity Form/Sectors/Tertiary Sectors",
 					validators = @Validators(minSize = "/Activity Form/Sectors/Tertiary Sectors/minSizeSectorsValidator", percentage = "/Activity Form/Sectors/Tertiary Sectors/sectorPercentageTotal", 
 					unique = "/Activity Form/Sectors/Tertiary Sectors/uniqueSectorsValidator"))
 	})
@@ -191,7 +191,7 @@ LoggerIdentifiable, Cloneable {
 	protected Set<IPAContract> contracts;
 	
 	//TTIL
-	@Interchangeable(fieldTitle = "Locations", importable = true, fmPath = "/Activity Form/Location", required = "/Activity Form/Location/Locations/Location required validator")
+	@Interchangeable(fieldTitle = "Locations", importable = true, multipleValues = true, fmPath = "/Activity Form/Location", required = "/Activity Form/Location/Locations/Location required validator")
 	@Validators (unique = "/Activity Form/Location/Locations/uniqueLocationsValidator")
 	@VersionableCollection(fieldTitle = "Locations")
 	protected Set<AmpActivityLocation> locations ;
@@ -218,19 +218,19 @@ LoggerIdentifiable, Cloneable {
 					validators = @Validators(maxSize = "/Activity Form/Organizations/Contracting Agency/Max Size Validator", minSize = "/Activity Form/Organizations/Contracting Agency/Required Validator", 
 					unique = "/Activity Form/Organizations/Contracting Agency/Unique Orgs Validator", percentage = "/Activity Form/Organizations/Contracting Agency/relOrgPercentageTotal")),
 			@Interchangeable(fieldTitle = "Regional Group", importable=true, discriminatorOption = Constants.REGIONAL_GROUP, fmPath = "/Activity Form/Organizations/Sector Group",
-					validators = @Validators(maxSize = "/Activity Form/Organizations/Regional Group/Unique Orgs Validator", minSize = "/Activity Form/Organizations/Regional Group/Required Validator", 
-					unique = "/Activity Form/Organizations/Regional Group/Max Size Validator", percentage = "/Activity Form/Organizations/Regional Group/relOrgPercentageTotal")),
+					validators = @Validators(maxSize = "/Activity Form/Organizations/Regional Group/Max Size Validator", minSize = "/Activity Form/Organizations/Regional Group/Required Validator", 
+					unique = "/Activity Form/Organizations/Regional Group/Unique Orgs Validator", percentage = "/Activity Form/Organizations/Regional Group/relOrgPercentageTotal")),
 			@Interchangeable(fieldTitle = "Sector Group", importable=true, discriminatorOption = Constants.SECTOR_GROUP, fmPath = "/Activity Form/Organizations/Regional Group",
-					validators = @Validators(maxSize = "/Activity Form/Organizations/Sector Group/Unique Orgs Validator", minSize = "/Activity Form/Organizations/Sector Group/Required Validator", 
-					unique = "/Activity Form/Organizations/Sector Group/Max Size Validator", percentage = "/Activity Form/Organizations/Sector Group/relOrgPercentageTotal"))
+					validators = @Validators(maxSize = "/Activity Form/Organizations/Sector Group/Max Size Validator", minSize = "/Activity Form/Organizations/Sector Group/Required Validator", 
+					unique = "/Activity Form/Organizations/Sector Group/Unique Orgs Validator", percentage = "/Activity Form/Organizations/Sector Group/relOrgPercentageTotal"))
 	})
 	protected Set<AmpOrgRole> orgrole;
 	
-	@Interchangeable(fieldTitle = "Organizations Project IDs", importable = true, fmPath = "/Activity Form/Activity Internal IDs")
+	@Interchangeable(fieldTitle = "Organizations Project IDs", importable = true, multipleValues = true, fmPath = "/Activity Form/Activity Internal IDs")
 	@VersionableCollection(fieldTitle = "Internal IDs")
 	protected Set<AmpActivityInternalId> internalIds ;
 	
-	@Interchangeable(fieldTitle = "Fundings", importable = true, fmPath = "/Activity Form/Funding")
+	@Interchangeable(fieldTitle = "Fundings", importable = true, multipleValues = true, fmPath = "/Activity Form/Funding")
 	@VersionableCollection(fieldTitle = "Fundings")
 	protected Set<AmpFunding> funding;
 	
@@ -373,7 +373,7 @@ LoggerIdentifiable, Cloneable {
 //	@Interchangeable(fieldTitle = "Sector Ministry Contact Fax Number",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Add Contact Fax")
 	protected String secMiCntFaxNumber;
 
-	@Interchangeable(fieldTitle = "Activity Contacts", importable = true, fmPath = "/Activity Form/Contacts")
+	@Interchangeable(fieldTitle = "Activity Contacts", importable = true, multipleValues = true, fmPath = "/Activity Form/Contacts")
 	@VersionableCollection(fieldTitle = "Activity Contacts")
 	protected Set<AmpActivityContact> activityContacts;
 
@@ -639,7 +639,7 @@ LoggerIdentifiable, Cloneable {
 	 */
     protected Long activityType = org.dgfoundation.amp.onepager.util.ActivityUtil.ACTIVITY_TYPE_PROJECT; //default type
 
-    @Interchangeable(fieldTitle = "PPC Annual Budgets", importable = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")
+    @Interchangeable(fieldTitle = "PPC Annual Budgets", importable = true, multipleValues = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")
     @VersionableCollection(fieldTitle = "PPC Annual Budgets")
 	protected Set<AmpAnnualProjectBudget> annualProjectBudgets;
 	//protected Set <AmpActivityContact> activityContacts;

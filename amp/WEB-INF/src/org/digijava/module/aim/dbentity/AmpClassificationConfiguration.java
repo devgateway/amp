@@ -6,10 +6,12 @@ import java.util.Map;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.SectorUtil;
 
 
-public class AmpClassificationConfiguration implements Serializable {
+public class AmpClassificationConfiguration implements Serializable, Identifiable {
 	
 	public static final String PRIMARY_CLASSIFICATION_CONFIGURATION_NAME	= "Primary";
 	public static final String SECONDARY_CLASSIFICATION_CONFIGURATION_NAME	= "Secondary";
@@ -23,11 +25,14 @@ public class AmpClassificationConfiguration implements Serializable {
     	put(TERTIARY_CLASSIFICATION_CONFIGURATION_NAME, ColumnConstants.TERTIARY_SECTOR);
     }};
 	
-	
+	@Interchangeable(fieldTitle="ID", id = true)
 	private Long id;
-    private String name;
-    private String description;
-    private AmpSectorScheme classification;
+	@Interchangeable(fieldTitle="ID", value = true)
+	private String name;
+	@Interchangeable(fieldTitle="Description")
+	private String description;
+	@Interchangeable(fieldTitle="Classification", pickIdOnly=true)
+	private AmpSectorScheme classification;
     private boolean multisector ;
     private boolean primary;
 
@@ -94,5 +99,11 @@ public class AmpClassificationConfiguration implements Serializable {
         }
         return used;
     }
+
+	@Override
+	public Object getIdentifier() {
+		return this.id;
+//		return null;
+	}
 
 }

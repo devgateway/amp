@@ -361,7 +361,13 @@ public class ActivityImporter {
 		
 		if (!importable) {
 			if (InterchangeUtils.isAmpActivityVersion(objField.getType())) {
-				addActivityFieldForPostprocessing(objField, newParent);
+//				addActivityFieldForPostprocessing(objField, newParent);
+				try {
+					objField.set(newParent, this.getNewActivity());
+				} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
+					logger.error(e.getMessage());
+					throw new RuntimeException(e);
+				}
 			}
 			// skip reconfiguration at this level if the field is not importable
 			return newParent;
@@ -719,6 +725,7 @@ public class ActivityImporter {
 		if (newActivity.getSectors() == null) {
 			newActivity.setSectors(new HashSet<AmpActivitySector>());
 		} else if (newActivity.getSectors().size() > 0) {
+			
 			Map<Long, AmpClassificationConfiguration> foundClassifications = new TreeMap<Long, AmpClassificationConfiguration>();
 			for(AmpActivitySector acs : newActivity.getSectors()) {
 				acs.setActivityId(newActivity);

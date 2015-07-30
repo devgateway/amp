@@ -24,6 +24,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.jdbc.Work;
+import org.hibernate.proxy.HibernateProxyHelper;
 
 import clover.org.apache.commons.lang.StringUtils;
 
@@ -284,10 +285,11 @@ public class PossibleValuesEnumerator {
 		} else {
 			JsonBean result = new JsonBean();
 			boolean isEnumerable = false;
-			for (Field field : obj.getClass().getDeclaredFields()) {
+			Class<?> objClass = HibernateProxyHelper.getClassWithoutInitializingProxy(obj);
+			for (Field field : objClass.getDeclaredFields()) {
 				Interchangeable ant = field.getAnnotation(Interchangeable.class);
 				if (ant != null) {
-					Method meth = obj.getClass().getMethod(InterchangeUtils.getGetterMethodName(field.getName()));
+					Method meth = objClass.getMethod(InterchangeUtils.getGetterMethodName(field.getName()));
 					Object property = meth.invoke(obj);
 					
 					if (ant.id())

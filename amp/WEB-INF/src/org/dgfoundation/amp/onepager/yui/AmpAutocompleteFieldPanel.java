@@ -4,10 +4,22 @@
  */
 package org.dgfoundation.amp.onepager.yui;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.jcr.RepositoryException;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
+import org.apache.wicket.ajax.json.JsonUtils;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -32,16 +44,10 @@ import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpAutoCompleteModelParam;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.hibernate.Session;
-
-import javax.jcr.RepositoryException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import org.hibernate.proxy.HibernateProxyHelper;
 
 /**
  * Autocomplete Combobox Component based on YUI 2.8.x (or upper). This component
@@ -371,7 +377,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
      */
     protected String getChoiceId(final CHOICE choice){
         if (objClass == null){
-            objClass = (Class<CHOICE>) choice.getClass();
+        	objClass=(Class<CHOICE>)HibernateProxyHelper.getClassWithoutInitializingProxy(choice);
         }
         if (choice instanceof NodeWrapper){
             //we can't use the ContentTranslationUtil for Jackrabbit items, since it works only with hibernate
@@ -523,7 +529,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
      * @return
      */
     protected CHOICE getSelectedChoice(Long objId) {
-        return (CHOICE) PersistenceManager.getSession().get(objClass, objId);
+    	return (CHOICE) PersistenceManager.getSession().get(objClass, objId);
     }
 
 	/**

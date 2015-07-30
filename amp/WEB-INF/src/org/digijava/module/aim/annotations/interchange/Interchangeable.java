@@ -17,10 +17,10 @@ public @interface Interchangeable {
 	String fmPath() default "";
 	
 	/**
-	 * Whether the field in AF supports several values 
+	 * Whether the collection field in AF supports several values. It will be used just for collection fields
 	 * (like: one activity might have several sectors assigned, or only one)
 	 */
-	boolean multipleValues() default false;
+	boolean multipleValues() default true;
 	
 	/**
 	 * whether this field is to be imported on the target system

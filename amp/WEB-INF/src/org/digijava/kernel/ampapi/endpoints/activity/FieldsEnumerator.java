@@ -208,10 +208,10 @@ public class FieldsEnumerator {
 		
 		if (!InterchangeUtils.isSimpleType(field.getType())) {
 			if (InterchangeUtils.isCollection(field)) {
-				if(InterchangeUtils.hasMaxSizeValidatorEnabled(field, interchangeable) || !interchangeable.multipleValues()) {
-					bean.set(ActivityEPConstants.MULTIPLE_VALUES, false);
-				} else {
+				if(!InterchangeUtils.hasMaxSizeValidatorEnabled(field, interchangeable) && interchangeable.multipleValues()) {
 					bean.set(ActivityEPConstants.MULTIPLE_VALUES, true);
+				} else {
+					bean.set(ActivityEPConstants.MULTIPLE_VALUES, false);
 				}
 			}
 			

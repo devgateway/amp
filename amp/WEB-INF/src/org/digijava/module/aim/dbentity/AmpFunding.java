@@ -67,7 +67,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	private String comments;
 	@Interchangeable(fieldTitle="Signature Date", importable=true)
 	private Date signatureDate;
-	@Interchangeable(fieldTitle="Funding Details", importable=true, multipleValues=true)
+	@Interchangeable(fieldTitle="Funding Details", importable=true)
 	private Set<AmpFundingDetail> fundingDetails;
 
 	

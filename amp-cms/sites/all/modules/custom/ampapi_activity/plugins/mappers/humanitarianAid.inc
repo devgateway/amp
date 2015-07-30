@@ -15,6 +15,7 @@ $plugin = array(
 
   'report field group' => 'columns',
   'report field key' => 'Humanitarian Aid',
+  'report filter key' => 'Humanitarian Aid',
 
   'report filter endpoint' => 'filters/humanitarianAid',
 

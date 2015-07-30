@@ -321,6 +321,17 @@ function ampapi_activity_get_search_settings() {
     ));
   }
 
+  // Enable default filters.
+  if (empty($settings['enabled_filters'])) {
+    $settings['enabled_filters'] = drupal_map_assoc(array(
+      'beneficiary_agency',
+      'donor_agency',
+      'location',
+      'primary_sector',
+      'secondary_sector',
+    ));
+  }
+
   // Always enable the activity ID, title an external URL.
   $settings['enabled_columns'] += drupal_map_assoc(array(
     'id',

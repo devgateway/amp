@@ -15,6 +15,7 @@ $plugin = array(
 
   'report field group' => 'columns',
   'report field key' => 'Location',
+  'report filter key' => 'Location',
 
   'report filter endpoint' => 'filters/locations',
 

@@ -15,6 +15,7 @@ $plugin = array(
 
   'report field group' => 'columns',
   'report field key' => 'Project Title',
+  'report filter key' => 'Project Title',
 
   'handler' => 'activityTitleMapper',
 );

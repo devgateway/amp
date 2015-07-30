@@ -435,6 +435,7 @@ function ampactivities_views_default_views() {
   $handler->display->display_options['filters']['primary_sector']['table'] = 'efq_activity';
   $handler->display->display_options['filters']['primary_sector']['field'] = 'primary_sector';
   $handler->display->display_options['filters']['primary_sector']['value'] = '';
+  $handler->display->display_options['filters']['primary_sector']['group'] = 1;
   $handler->display->display_options['filters']['primary_sector']['exposed'] = TRUE;
   $handler->display->display_options['filters']['primary_sector']['expose']['operator_id'] = 'primary_sector_op';
   $handler->display->display_options['filters']['primary_sector']['expose']['label'] = 'Primary Sector';
@@ -442,11 +443,28 @@ function ampactivities_views_default_views() {
   $handler->display->display_options['filters']['primary_sector']['expose']['operator'] = 'primary_sector_op';
   $handler->display->display_options['filters']['primary_sector']['expose']['identifier'] = 'psec';
   $handler->display->display_options['filters']['primary_sector']['type'] = 'tokeninput';
+  /* Filter criterion: Activity: Secondary Sector */
+  $handler->display->display_options['filters']['secondary_sector']['id'] = 'secondary_sector';
+  $handler->display->display_options['filters']['secondary_sector']['table'] = 'efq_activity';
+  $handler->display->display_options['filters']['secondary_sector']['field'] = 'secondary_sector';
+  $handler->display->display_options['filters']['secondary_sector']['value'] = '';
+  $handler->display->display_options['filters']['secondary_sector']['group'] = 1;
+  $handler->display->display_options['filters']['secondary_sector']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['secondary_sector']['expose']['operator_id'] = 'secondary_sector_op';
+  $handler->display->display_options['filters']['secondary_sector']['expose']['label'] = 'Secondary Sector';
+  $handler->display->display_options['filters']['secondary_sector']['expose']['description'] = 'filter activities by secondary sector';
+  $handler->display->display_options['filters']['secondary_sector']['expose']['operator'] = 'secondary_sector_op';
+  $handler->display->display_options['filters']['secondary_sector']['expose']['identifier'] = 'secondary_sector';
+  $handler->display->display_options['filters']['secondary_sector']['expose']['remember_roles'] = array(
+    2 => '2',
+  );
+  $handler->display->display_options['filters']['secondary_sector']['type'] = 'tokeninput';
   /* Filter criterion: Activity: Location */
   $handler->display->display_options['filters']['location']['id'] = 'location';
   $handler->display->display_options['filters']['location']['table'] = 'efq_activity';
   $handler->display->display_options['filters']['location']['field'] = 'location';
   $handler->display->display_options['filters']['location']['value'] = '';
+  $handler->display->display_options['filters']['location']['group'] = 1;
   $handler->display->display_options['filters']['location']['exposed'] = TRUE;
   $handler->display->display_options['filters']['location']['expose']['operator_id'] = 'location_op';
   $handler->display->display_options['filters']['location']['expose']['label'] = 'Location';
@@ -461,6 +479,7 @@ function ampactivities_views_default_views() {
   $handler->display->display_options['filters']['activities_search_type']['value'] = array(
     'standard' => 'standard',
   );
+  $handler->display->display_options['filters']['activities_search_type']['group'] = 1;
   $handler->display->display_options['filters']['activities_search_type']['exposed'] = TRUE;
   $handler->display->display_options['filters']['activities_search_type']['expose']['operator_id'] = 'activities_search_type_op';
   $handler->display->display_options['filters']['activities_search_type']['expose']['label'] = 'Activities Search Type';
@@ -472,6 +491,7 @@ function ampactivities_views_default_views() {
   $handler->display->display_options['filters']['humanitarian_aid']['table'] = 'efq_activity';
   $handler->display->display_options['filters']['humanitarian_aid']['field'] = 'humanitarian_aid';
   $handler->display->display_options['filters']['humanitarian_aid']['value'] = '0';
+  $handler->display->display_options['filters']['humanitarian_aid']['group'] = 1;
   $handler->display->display_options['filters']['humanitarian_aid']['exposed'] = TRUE;
   $handler->display->display_options['filters']['humanitarian_aid']['expose']['operator_id'] = '';
   $handler->display->display_options['filters']['humanitarian_aid']['expose']['label'] = 'Humanitarian Aid';
@@ -551,6 +571,7 @@ function ampactivities_views_default_views() {
     t('filter activities by donor agency'),
     t('filter activities by beneficiary agency'),
     t('filter activities by primary sector'),
+    t('filter activities by secondary sector'),
     t('filter activities by location'),
     t('Activities Search Type'),
     t('Humanitarian Aid'),

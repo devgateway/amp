@@ -48,12 +48,13 @@ class activityMapperBase implements activityMapperInterface {
       $condition['operator'] = is_array($condition['value']) ? 'IN' : '=';
     }
 
-    if (isset($plugin['report filter key'])) {
-      $key = $plugin['report filter key'];
+    if (empty($plugin['report filter key'])) {
+      $plugin_title = check_plain($plugin['title']);
+      throw new ampAPIEntityQueryHelperException("The {$plugin_title} plugin can not be used to filter activities.");
     }
-    else {
-      $key = $plugin['report field key'];
-    }
+
+    $key = $plugin['report filter key'];
+
     switch ($condition['operator']) {
       case 'IN':
       case '=':

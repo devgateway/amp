@@ -38,7 +38,7 @@ public class RequiredValidator extends InputValidator {
 		String fieldName = (String) fieldDescription.get(ActivityEPConstants.FIELD_NAME);
 		Object fieldValue = newFieldParent.get(fieldName);
 		String requiredStatus = fieldDescription.getString(ActivityEPConstants.REQUIRED);
-		boolean importable = Boolean.TRUE.equals(fieldDescription.getString(ActivityEPConstants.IMPORTABLE));
+		boolean importable = Boolean.valueOf(fieldDescription.getString(ActivityEPConstants.IMPORTABLE));
 		// don't care if value has something
 		if (importable && fieldValue == null) {
 			if (ActivityEPConstants.FIELD_ALWAYS_REQUIRED.equals(requiredStatus)) {

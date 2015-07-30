@@ -199,28 +199,28 @@ LoggerIdentifiable, Cloneable {
 	@Interchangeable(fieldTitle = "Org. Role", importable = true, fmPath = "/Activity Form/Related Organizations")
 	@VersionableCollection(fieldTitle = "Org. Role")
 	@InterchangeableDiscriminator(discriminatorField = "orgRoleConfig.name", settings = {
-			@Interchangeable(fieldTitle = "Donor Organization", importable=true, discriminatorOption = Constants.FUNDING_AGENCY, fmPath = "/Activity Form/Organizations/Donor Organization",
+			@Interchangeable(fieldTitle = "Donor Organization", importable=true, multipleValues=true, discriminatorOption = Constants.FUNDING_AGENCY, fmPath = "/Activity Form/Organizations/Donor Organization",
 					validators = @Validators(maxSize = "/Activity Form/Organizations/Donor Organization/Max Size Validator", minSize = "/Activity Form/Organizations/Donor Organization/Required Validator", 
 					unique = "/Activity Form/Organizations/Donor Organization/Unique Orgs Validator", percentage = "/Activity Form/Organizations/Donor Organization/relOrgPercentageTotal")),
-			@Interchangeable(fieldTitle = "Responsible Organization", importable=true, discriminatorOption = Constants.RESPONSIBLE_ORGANISATION, fmPath = "/Activity Form/Organizations/Responsible Organization",
+			@Interchangeable(fieldTitle = "Responsible Organization", importable=true, multipleValues=true, discriminatorOption = Constants.RESPONSIBLE_ORGANISATION, fmPath = "/Activity Form/Organizations/Responsible Organization",
 					validators = @Validators(maxSize = "/Activity Form/Organizations/Responsible Organization/Max Size Validator", minSize = "/Activity Form/Organizations/Responsible Organization/Required Validator", 
 					unique = "/Activity Form/Organizations/Responsible Organization/Unique Orgs Validator", percentage = "/Activity Form/Organizations/Responsible Organization/relOrgPercentageTotal")),
-			@Interchangeable(fieldTitle = "Executing Agency", importable=true, discriminatorOption = Constants.EXECUTING_AGENCY, fmPath = "/Activity Form/Organizations/Executing Agency",
+			@Interchangeable(fieldTitle = "Executing Agency", importable=true, multipleValues=true, discriminatorOption = Constants.EXECUTING_AGENCY, fmPath = "/Activity Form/Organizations/Executing Agency",
 					validators = @Validators(maxSize = "/Activity Form/Organizations/Executing Agency/Max Size Validator", minSize = "/Activity Form/Organizations/Executing Agency/Required Validator", 
 					unique = "/Activity Form/Organizations/Executing Agency/Unique Orgs Validator", percentage = "/Activity Form/Organizations/Executing Agency/relOrgPercentageTotal")),
-			@Interchangeable(fieldTitle = "Implementing Agency", importable=true, discriminatorOption = Constants.IMPLEMENTING_AGENCY, fmPath = "/Activity Form/Organizations/Implementing Agency",
+			@Interchangeable(fieldTitle = "Implementing Agency", importable=true, multipleValues=true, discriminatorOption = Constants.IMPLEMENTING_AGENCY, fmPath = "/Activity Form/Organizations/Implementing Agency",
 					validators = @Validators(maxSize = "/Activity Form/Organizations/Implementing Agency/Max Size Validator", minSize = "/Activity Form/Organizations/Implementing Agency/Required Validator", 
 					unique = "/Activity Form/Organizations/Implementing Agency/Unique Orgs Validator", percentage = "/Activity Form/Organizations/Implementing Agency/relOrgPercentageTotal")),
-			@Interchangeable(fieldTitle = "Beneficiary Agency", importable=true, discriminatorOption = Constants.BENEFICIARY_AGENCY, fmPath = "/Activity Form/Organizations/Beneficiary Agency", 
+			@Interchangeable(fieldTitle = "Beneficiary Agency", importable=true, multipleValues=true, discriminatorOption = Constants.BENEFICIARY_AGENCY, fmPath = "/Activity Form/Organizations/Beneficiary Agency", 
 					validators = @Validators(maxSize = "/Activity Form/Organizations/Beneficiary Agency/Max Size Validator", minSize = "/Activity Form/Organizations/Beneficiary Agency/Required Validator", 
 					unique = "/Activity Form/Organizations/Beneficiary Agency/Unique Orgs Validator", percentage = "/Activity Form/Organizations/Beneficiary Agency/relOrgPercentageTotal")),
-			@Interchangeable(fieldTitle = "Contracting Agency", importable=true, discriminatorOption = Constants.CONTRACTING_AGENCY, fmPath = "/Activity Form/Organizations/Contracting Agency",
+			@Interchangeable(fieldTitle = "Contracting Agency", importable=true, multipleValues=true, discriminatorOption = Constants.CONTRACTING_AGENCY, fmPath = "/Activity Form/Organizations/Contracting Agency",
 					validators = @Validators(maxSize = "/Activity Form/Organizations/Contracting Agency/Max Size Validator", minSize = "/Activity Form/Organizations/Contracting Agency/Required Validator", 
 					unique = "/Activity Form/Organizations/Contracting Agency/Unique Orgs Validator", percentage = "/Activity Form/Organizations/Contracting Agency/relOrgPercentageTotal")),
-			@Interchangeable(fieldTitle = "Regional Group", importable=true, discriminatorOption = Constants.REGIONAL_GROUP, fmPath = "/Activity Form/Organizations/Sector Group",
+			@Interchangeable(fieldTitle = "Regional Group", importable=true, multipleValues=true, discriminatorOption = Constants.REGIONAL_GROUP, fmPath = "/Activity Form/Organizations/Sector Group",
 					validators = @Validators(maxSize = "/Activity Form/Organizations/Regional Group/Max Size Validator", minSize = "/Activity Form/Organizations/Regional Group/Required Validator", 
 					unique = "/Activity Form/Organizations/Regional Group/Unique Orgs Validator", percentage = "/Activity Form/Organizations/Regional Group/relOrgPercentageTotal")),
-			@Interchangeable(fieldTitle = "Sector Group", importable=true, discriminatorOption = Constants.SECTOR_GROUP, fmPath = "/Activity Form/Organizations/Regional Group",
+			@Interchangeable(fieldTitle = "Sector Group", importable=true, multipleValues=true, discriminatorOption = Constants.SECTOR_GROUP, fmPath = "/Activity Form/Organizations/Regional Group",
 					validators = @Validators(maxSize = "/Activity Form/Organizations/Sector Group/Max Size Validator", minSize = "/Activity Form/Organizations/Sector Group/Required Validator", 
 					unique = "/Activity Form/Organizations/Sector Group/Unique Orgs Validator", percentage = "/Activity Form/Organizations/Sector Group/relOrgPercentageTotal"))
 	})
@@ -586,16 +586,16 @@ LoggerIdentifiable, Cloneable {
 	@Interchangeable(fieldTitle = "Act. Programs", importable = true, fmPath = "/Activity Form/Program", pickIdOnly=true)
 	@VersionableCollection(fieldTitle = "Act. Programs")
 	@InterchangeableDiscriminator(discriminatorField = "programSetting.name", settings = {
-			@Interchangeable(fieldTitle = "National Plan Objective", discriminatorOption = "National Plan Objective", importable = true, fmPath = "/Activity Form/Program/National Plan Objective", 
+			@Interchangeable(fieldTitle = "National Plan Objective", discriminatorOption = "National Plan Objective", importable = true, multipleValues = true, fmPath = "/Activity Form/Program/National Plan Objective", 
 					validators = @Validators(maxSize = "/Activity Form/Program/National Plan Objective/max Size Program Validator", minSize = "/Activity Form/Program/National Plan Objective/minSizeProgramValidator", 
 					unique = "/Activity Form/Program/National Plan Objective/uniqueProgramsValidator", percentage = "/Activity Form/Program/National Plan Objective/programPercentageTotal")),
-			@Interchangeable(fieldTitle = "Primary Programs", discriminatorOption = "Primary Program", importable = true, fmPath = "/Activity Form/Program/Primary Programs", 
+			@Interchangeable(fieldTitle = "Primary Programs", discriminatorOption = "Primary Program", importable = true, multipleValues = true, fmPath = "/Activity Form/Program/Primary Programs", 
 					validators = @Validators(maxSize = "/Activity Form/Program/Primary Programs/max Size Program Validator", minSize = "/Activity Form/Program/Primary Programs/minSizeProgramValidator", 
 					unique = "/Activity Form/Program/Primary Programs/uniqueProgramsValidator", percentage = "/Activity Form/Program/Primary Programs/programPercentageTotal")),
-			@Interchangeable(fieldTitle = "Secondary Programs", discriminatorOption = "Secondary Program", importable = true, fmPath = "/Activity Form/Program/Secondary Programs", 
+			@Interchangeable(fieldTitle = "Secondary Programs", discriminatorOption = "Secondary Program", importable = true, multipleValues = true, fmPath = "/Activity Form/Program/Secondary Programs", 
 					validators = @Validators(maxSize = "/Activity Form/Program/Secondary Programs/max Size Program Validator", minSize = "/Activity Form/Program/Secondary Programs/minSizeProgramValidator", 
 					unique = "/Activity Form/Program/Secondary Programs/uniqueProgramsValidator", percentage = "/Activity Form/Program/Secondary Programs/programPercentageTotal")),
-			@Interchangeable(fieldTitle = "Tertiary Programs", discriminatorOption = "Tertiary Program", importable = true, fmPath = "/Activity Form/Program/Tertiary Programs", 
+			@Interchangeable(fieldTitle = "Tertiary Programs", discriminatorOption = "Tertiary Program", importable = true, multipleValues = true, fmPath = "/Activity Form/Program/Tertiary Programs", 
 					validators = @Validators(maxSize = "/Activity Form/Program/Tertiary Programs/max Size Program Validator", minSize = "/Activity Form/Program/Tertiary Programs/minSizeProgramValidator", 
 					unique = "/Activity Form/Program/Tertiary Programs/uniqueProgramsValidator", percentage = "/Activity Form/Program/Tertiary Programs/programPercentageTotal"))})
 	protected Set<AmpActivityProgram> actPrograms;

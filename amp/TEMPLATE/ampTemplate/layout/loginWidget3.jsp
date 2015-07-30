@@ -119,35 +119,12 @@
                    </feature:display>
 					</div>
 					</div>
-					<!--
-	<c:if test="${param['loginError'] != null}">
-		<div class="error_login">
-			<c:if test="${param['loginError'] == 'invalidLogin'}">
-				<c:set var="errorDisplayed">true</c:set>
-				<bean:message key="error.aim.invalidLogin" />
-			</c:if>
-			<c:if test="${param['loginError'] == 'userBanned'}">
-				<c:set var="errorDisplayed">true</c:set>
-				<bean:message key="error.aim.userBanned" />
-			</c:if>
-			<c:if test="${param['loginError'] == 'noTeamMember'}">
-				<c:set var="errorDisplayed">true</c:set>
-								<font color="red">
-									<digi:trn key="error.aim.userinvalidteammembernoworkplace">You can not login. Not assigned to any workspace</digi:trn>
-								</font>	
-			</c:if>
-			<c:if test="${param['loginError'] == 'invalidUser'}">
-				<c:set var="errorDisplayed">true</c:set>
-				<bean:message key="error.aim.userInvalid" />
-			</c:if>
-			<c:if test="${errorDisplayed == null}">
-				<bean:message key="error.aim.loginFailed" />
-			</c:if>
-		</div>
-	</c:if>
-	-->
-					
-</logic:notPresent>
+		<form action="/aim/index.do" id="selectWorkspaceForm" method="post">
+			<input type="hidden" id="generateToken" name="generateToken" /> <input
+				type="hidden" id="callbackUrl" name="callbackUrl" />
+		</form>
+
+	</logic:notPresent>
 </digi:secure>
 <digi:secure authenticated="true">
 <script type="text/javascript">

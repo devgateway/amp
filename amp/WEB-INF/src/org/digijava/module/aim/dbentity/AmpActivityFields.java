@@ -583,7 +583,7 @@ LoggerIdentifiable, Cloneable {
 	protected Boolean humanitarianAid;
 
 	//Can be Primary, Secondary,Tertiary or National Plan Objective
-	@Interchangeable(fieldTitle = "Act. Programs", importable = true, fmPath = "/Activity Form/Program", pickIdOnly=true)
+	@Interchangeable(fieldTitle = "Act. Programs", importable = true, fmPath = "/Activity Form/Program")
 	@VersionableCollection(fieldTitle = "Act. Programs")
 	@InterchangeableDiscriminator(discriminatorField = "programSetting.name", settings = {
 			@Interchangeable(fieldTitle = "National Plan Objective", discriminatorOption = "National Plan Objective", importable = true, multipleValues = true, fmPath = "/Activity Form/Program/National Plan Objective", 

@@ -50,6 +50,7 @@ function ampsettings_wysiwyg_default_profiles() {
           'Styles' => 1,
           'Table' => 1,
           'CreateDiv' => 1,
+          'FontSize' => 1,
         ),
         'drupal' => array(
           'media' => 1,

@@ -145,8 +145,8 @@ layout-right-sidebar|Layout: Right Sidebar';
   $strongarm->name = 'title_taxonomy_term';
   $strongarm->value = array(
     'auto_attach' => array(
-      'name' => 'name',
-      'description' => 'description',
+      'name' => 0,
+      'description' => 0,
     ),
     'hide_label' => array(
       'entity' => 'entity',

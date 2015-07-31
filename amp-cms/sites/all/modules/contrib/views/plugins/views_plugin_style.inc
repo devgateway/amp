@@ -324,6 +324,9 @@ class views_plugin_style extends views_plugin {
       TRUE
     );
 
+    // Allow altering of grouping sets.
+    drupal_alter('views_plugin_style_pre_render_grouping_sets', $this, $sets);
+
     return $this->render_grouping_sets($sets);
   }
 

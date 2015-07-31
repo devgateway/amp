@@ -202,9 +202,9 @@ public class FieldsEnumerator {
 		/* list type */
 
 		
-		if (interchangeable.pickIdOnly())
+		if (interchangeable.pickIdOnly()) {
 			bean.set(ActivityEPConstants.ID_ONLY, true);
-		
+		}
 		
 		if (!InterchangeUtils.isSimpleType(field.getType())) {
 			if (InterchangeUtils.isCollection(field)) {
@@ -212,6 +212,10 @@ public class FieldsEnumerator {
 					bean.set(ActivityEPConstants.MULTIPLE_VALUES, true);
 				} else {
 					bean.set(ActivityEPConstants.MULTIPLE_VALUES, false);
+				}
+				
+				if (InterchangeUtils.hasUniqueValidatorEnabled(field, interchangeable)) {
+					bean.set(ActivityEPConstants.UNIQUE_CONSTRAINT, getUniqueConstraint(field, interchangeable));
 				}
 			}
 			
@@ -221,8 +225,6 @@ public class FieldsEnumerator {
 					bean.set(ActivityEPConstants.CHILDREN, children);
 				}
 			} 
-			
-			bean.set(ActivityEPConstants.UNIQUE, InterchangeUtils.hasUniqueValidatorEnabled(field, interchangeable));
 		}
 		
 		// only String fields should clarify if they are translatable or not
@@ -320,6 +322,26 @@ public class FieldsEnumerator {
 			throw new RuntimeException(e);
 		}
 		return translations;
+	}
+	
+	/**
+	 * Describes each @Interchangeable field of a class
+	 * @param parentInterchangeable 
+	 * 
+	 * @param clazz the class to be described
+	 * @return
+	 */
+	private String getUniqueConstraint(Field field, Interchangeable parentInterchangeable) {
+		Class<?> genericClass = InterchangeUtils.getGenericClass(field);
+		Field[] fields = genericClass.getDeclaredFields();
+		for (Field f : fields) {
+			Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
+			if (interchangeable != null && FMVisibility.isVisible(interchangeable.fmPath()) && interchangeable.uniqueConstraint()) {
+				return InterchangeUtils.underscorify(interchangeable.fieldTitle());
+			}
+		}
+		
+		return null;
 	}
 	
 }

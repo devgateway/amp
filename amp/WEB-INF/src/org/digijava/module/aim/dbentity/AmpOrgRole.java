@@ -17,7 +17,7 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
     private Long ampOrgRoleId;
 	@Interchangeable(fieldTitle="Activity", pickIdOnly = true, importable = false)
     private AmpActivityVersion activity;
-	@Interchangeable(fieldTitle="Organization", importable=true, pickIdOnly=true)
+	@Interchangeable(fieldTitle="Organization", importable=true, pickIdOnly=true, uniqueConstraint=true)
 	private AmpOrganisation organisation;
 	@Interchangeable(fieldTitle="Role"/*, descend=true*/, importable=true, pickIdOnly=true)
 	private AmpRole role;

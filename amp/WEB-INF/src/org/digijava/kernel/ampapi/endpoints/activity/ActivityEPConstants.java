@@ -38,6 +38,7 @@ public class ActivityEPConstants {
 	public static final String FIELD_NOT_REQUIRED = "N";
 	public static final String ID = "id";
 	public static final String VALUE = "value";
+	public static final String UNIQUE_CONSTRAINT = "unique_constraint";
 	
 
 	// fields constants
@@ -56,7 +57,7 @@ public class ActivityEPConstants {
 	public static final String TYPE_VARCHAR = "character varying";
 	
 	//validator names constants
-	public static final String UNIQUE_VALIDATOR_NAME = "uniqe";
+	public static final String UNIQUE_VALIDATOR_NAME = "unique";
 	public static final String MAX_SIZE_VALIDATOR_NAME = "maxSize";
 	public static final String MIN_SIZE_VALIDATOR_NAME = "minSize";
 	public static final String PERCENTAGE_VALIDATOR_NAME = "percentage";

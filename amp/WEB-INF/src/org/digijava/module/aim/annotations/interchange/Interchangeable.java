@@ -84,5 +84,7 @@ public @interface Interchangeable {
     String discriminatorOption() default "";
     
     Validators validators() default @Validators;
+    
+    boolean uniqueConstraint() default false;
 
 }

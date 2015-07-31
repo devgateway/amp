@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
@@ -34,16 +35,15 @@ public class UniqueValidator extends InputValidator {
 			Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
 		boolean isValid = true;
 		String fieldName = (String) fieldDescription.get(ActivityEPConstants.FIELD_NAME);
-		Boolean unique = Boolean.valueOf(fieldDescription.getString(ActivityEPConstants.UNIQUE));
-		if (unique) {
+		String uniqueField = fieldDescription.getString(ActivityEPConstants.UNIQUE_CONSTRAINT);
+		if (StringUtils.isNotBlank(uniqueField)) {
 			// get Collection with values to be unique
 			Collection<Map<String, Object>> fieldValue = (Collection<Map<String, Object>>) newFieldParent.get(fieldName);
 			
 			//Set that will hold the values that need to be different between each other
 			Set<Object> idValuesSet = new HashSet<Object>();
 			if (fieldValue != null && fieldValue.size() > 1) {
-				String fieldPathToId = determineUniqueFieldName((List<JsonBean>) fieldDescription.get(ActivityEPConstants.CHILDREN));
-				Integer totalElements = populateUniqueValues(fieldValue, idValuesSet, fieldPathToId);
+				Integer totalElements = populateUniqueValues(fieldValue, idValuesSet, uniqueField);
 				
 				//if the set contains less elements, then we have some repeated values
 				if (idValuesSet.size() < totalElements) {
@@ -76,27 +76,4 @@ public class UniqueValidator extends InputValidator {
 		
 		return totalElements;
 	}
-	
-	/**
-	 * Explores a List<JsonBean> recursively containing field values, until it finds one
-	 * with 'unique'== true, indicating that field is an ID of the DB
-	 * 
-	 * @param fieldValues List <JsonBean> with list of JsonBean representing attributes of an object
-	 * @return name of the field that is an Id of the DB
-	 */
-	private String determineUniqueFieldName(List<JsonBean> fieldValues) {
-		for (JsonBean val : fieldValues) {
-			String id = val.getString(ActivityEPConstants.ID);
-
-			// If the 'id' attribute is present and true, then it is the
-			// field that acts as DB identifier
-			// We found the desired field
-			if (id != null && Boolean.valueOf(id)) {
-				return val.getString("field_name");
-			}
-		}
-		
-		return "";
-	}
-
 }

@@ -32,7 +32,7 @@ public class AmpLocation implements Serializable, Versionable, Cloneable, Identi
 //	@Interchangeable(fieldTitle="Activities", recursive=true)
 	private Set<AmpActivityVersion> activities;
 	
-	@Interchangeable(fieldTitle="Location", extraInfo = true/*, descend = true*/)
+	@Interchangeable(fieldTitle="Location", extraInfo = true, uniqueConstraint=true/*, descend = true*/)
 	private AmpCategoryValueLocations location;
 	
 	@Interchangeable(fieldTitle="Region Location", extraInfo = true)

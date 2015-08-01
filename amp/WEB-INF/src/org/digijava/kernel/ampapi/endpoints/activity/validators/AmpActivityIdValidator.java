@@ -38,7 +38,7 @@ public class AmpActivityIdValidator extends InputValidator {
 			Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
 		boolean isValid = true;
 		String fieldName = (String) fieldDescription.get(ActivityEPConstants.FIELD_NAME);
-		if (ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME.equals(fieldName)) {
+		if (ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME.equals(fieldPath)) {
 			String internalId = String.valueOf(newFieldParent.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME));
 			Long ampActivityId = NumberUtils.isNumber(internalId) ? Long.valueOf(internalId) : null; 
 			if (importer.isUpdate()) {

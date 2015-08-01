@@ -23,6 +23,8 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableDiscrimina
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.hibernate.FlushMode;
+import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 import org.hibernate.proxy.HibernateProxyHelper;
 
@@ -230,7 +232,9 @@ public class PossibleValuesEnumerator {
 		if (clazz.isAssignableFrom(AmpCategoryValue.class))
 			return getPossibleCategoryValues(field, null);
 		String queryString = "select cls from " + clazz.getName() + " cls ";
-		List<Object> objectList= PersistenceManager.getSession().createQuery(queryString).list();
+		Session session = PersistenceManager.getSession();
+		session.setFlushMode(FlushMode.COMMIT);
+		List<Object> objectList= session.createQuery(queryString).list();
 		for (Object obj : objectList) {
 			JsonBean item = null;
 			try {

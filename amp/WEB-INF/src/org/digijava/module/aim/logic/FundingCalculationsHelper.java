@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+
 import org.apache.commons.lang.ObjectUtils.Null;
 import org.dgfoundation.amp.Util;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
@@ -18,12 +20,14 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.RegionalFundingsHelper;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
 import com.sun.istack.logging.Logger;
 
 public class FundingCalculationsHelper {
@@ -137,9 +141,12 @@ public class FundingCalculationsHelper {
 			if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
 				fundingDetail.setClassification(fundDet.getExpCategory());
 			}
-		    fundingDetail.setCurrencyCode(fundDet.getAmpCurrencyId().getCurrencyCode());
-		    fundingDetail.setCurrencyName(fundDet.getAmpCurrencyId().getCurrencyName());
-			fundingDetail.setTransactionAmount(CurrencyWorker.convert(FeaturesUtil.applyThousandsForVisibility(fundDet.getTransactionAmount()).doubleValue(), 1, 1));
+			fundingDetail.setCurrencyCode(toCurrCode);
+		    AmpCurrency curr = CurrencyUtil.getAmpcurrency(toCurrCode);
+		    if(curr != null) {
+		    	fundingDetail.setCurrencyName(curr.getCountryName());
+		    }
+			fundingDetail.setTransactionAmount(CurrencyWorker.convert(FeaturesUtil.applyThousandsForVisibility(amt.doubleValue()).doubleValue(), 1, 1));
 			fundingDetail.setTransactionDate(DateConversion.ConvertDateToString(fundDet.getTransactionDate()));
 			fundingDetail.setFiscalYear(DateConversion.convertDateToFiscalYearString(fundDet.getTransactionDate()));
 			fundingDetail.setCapitalPercent(fundDet.getCapitalSpendingPercentage());

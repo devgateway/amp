@@ -5,6 +5,7 @@ package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.validator.routines.FloatValidator;
@@ -84,8 +85,13 @@ public class InputTypeValidator extends InputValidator {
 		return false;
 	}
 
+    /**
+     * Adding Locale.US to explicitly say that 100.28 values are processed, not 100,28
+     * @param item
+     * @return
+     */
 	private boolean isValidFloat(Object item) {
-		return FloatValidator.getInstance().isValid(item.toString());
+		return FloatValidator.getInstance().isValid(item.toString(), Locale.US);
 	}
 
 	private boolean isValidBoolean(Object value) {

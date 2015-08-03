@@ -12,7 +12,7 @@ public @interface Interchangeable {
 	String fieldTitle();
 	
 	/**
-	 * Path in the Function Manager, corresponding to enabling / disabling said field in AF
+	 * Path in the Feature Manager, corresponding to enabling / disabling said field in AF
 	 */
 	String fmPath() default "";
 	
@@ -30,37 +30,27 @@ public @interface Interchangeable {
 	boolean importable() default false;
 	
 	/**
-	 *Whether the field is required.
+	 *Whether the field is always required, required for non-draft saves, or not required. 
 	 */
 	String required () default "_NONE_";
 	
 	/**
-	 * to be set 'true' for the fields whose type or generic subtype is 
-	 * the same as of one of the containing classes above 
-	 * 
-	 * basically implemented to avoid endless loops when describing classes or 
-	 * enumerating values
-	 * 
-	 * example: AmpActivityFields -> Set\<AmpActivitySector\> sectors;
-	 * 			AmpActivitySector -> AmpSector sector;
-	 * 			AmpSector -> AmpSector parentSector; //descending into AmpSector here would build up a recursion
-	 * 
-	 * another example: 
-	 * AmpActivityFields -> Set\<AmpActivitySector\> sectors;
-	 * AmpActivitySector -> AmpSector sector;
-	 * AmpSector -> Set\<AmpOrganization\> orgs;
-	 * AmpOrganization-> Set\<AmpActivityVersion\> acts; //AmpActivityVersion extends AmpActivityFields, therefore, loop again
-	 * 
-	 * a third example:
-	 * 
-	 * AmpActivityFields -> 
-	 * 
+	 * Set to true if underlying field value can be obtained from the 
+	 * Possible Values endpoint -- meaning it can be identified by an ID
+	 * and picked from a list instead of being computed by AMP
+	 * or input by the user
+	 * Example: any AmpCategoryValue is picked by ID, not by its string value,
+	 * since it's picked from a list and never customly edited
+	 * Another example: Sector ID from AmpActivitySector. A sector is picked from
+	 * a predefined list, not added in the AF. 
 	 */
 	boolean pickIdOnly() default false;
 	
 	/*ATTENTION: A FIELD MIGHT BE BOTH AN ID AND A VALUE (UNDERLYING)*/
 	/**
 	 * Whether this field is an ID for the db entity where it takes residence.
+	 * The ID itself is picked from the getIdentifier() method of the entity, 
+	 * which has to be marked as "implements <Identifiable>".
 	 */
 	boolean id() default false;
 	
@@ -79,6 +69,8 @@ public @interface Interchangeable {
 	 *  
 	 */
 	boolean extraInfo() default false;
+	
+		
 	
 	/** configured with option value, like "Primary Sector" */
     String discriminatorOption() default "";

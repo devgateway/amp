@@ -486,12 +486,14 @@ public class InterchangeUtils {
 	/**
 	 * Imports or Updates an activity
 	 * @param json new activity configuration
-	 * @param update flags whether this is an import or an update request 
+	 * @param update flags whether this is an import or an update request
+     * @param endpointContextPath full API method path where this method has been called
+     *
 	 * @return latest project overview or an error if invalid configuration is received 
 	 */
-	public static JsonBean importActivity(JsonBean newJson, boolean update) {
+	public static JsonBean importActivity(JsonBean newJson, boolean update, String endpointContextPath) {
 		ActivityImporter importer = new ActivityImporter();
-		List<ApiErrorMessage> errors = importer.importOrUpdate(newJson, update);
+		List<ApiErrorMessage> errors = importer.importOrUpdate(newJson, update, endpointContextPath);
 		
 		return getImportResult(importer.getNewActivity(), importer.getNewJson(), errors);
 	}

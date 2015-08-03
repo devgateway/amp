@@ -26,6 +26,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.Transla
 import org.digijava.kernel.ampapi.endpoints.activity.utils.ActivityImporterHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
@@ -47,7 +48,6 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgRoleBudget;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.LuceneUtil;
@@ -59,6 +59,8 @@ import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Imports a new activity or updates an existing one
@@ -88,16 +90,20 @@ public class ActivityImporter {
 	private TeamMember teamMember;
 	private User user;
 	private String sourceURL;
-	
-	protected void init(JsonBean newJson, boolean update) {
+    private String endpointContextPath;
+    private Long latestActivityId;
+
+    protected void init(JsonBean newJson, boolean update, String endpointContextPath) {
 		this.teamMember = TeamUtil.getCurrentMember();
 		this.user = TeamMemberUtil.getUserEntityByTMId(teamMember.getMemberId());
 		this.sourceURL = TLSUtils.getRequest().getRequestURL().toString();
 		this.update = update;
+
 		this.newJson = newJson;
 		this.isDraftFMEnabled = FMVisibility.isFmPathEnabled(SAVE_AS_DRAFT_PATH);
 		this.isMultilingual = ContentTranslationUtil.multilingualIsEnabled();
 		this.trnSettings = TranslationSettings.getCurrent();
+        this.endpointContextPath = endpointContextPath;
 	}
 
 	/**
@@ -107,8 +113,8 @@ public class ActivityImporter {
 	 * @param update  flags whether this is an import or an update request
 	 * @return a list of API errors, that is empty if no error detected
 	 */
-	public List<ApiErrorMessage> importOrUpdate(JsonBean newJson, boolean update) {
-		init(newJson, update);
+	public List<ApiErrorMessage> importOrUpdate(JsonBean newJson, boolean update, String endpointContextPath) {
+		init(newJson, update, endpointContextPath);
 		
 		// retrieve fields definition for internal use
 		List<JsonBean> fieldsDef = FieldsEnumerator.getAllAvailableFields(true);
@@ -167,6 +173,8 @@ public class ActivityImporter {
 				throw new RuntimeException(e);
 			}
 		}
+
+        updateResponse(update, ampActivityId);
 		
 		return new ArrayList<ApiErrorMessage>(errors.values());
 	}
@@ -786,7 +794,49 @@ public class ActivityImporter {
         	// TODO:
         }
 	}
-	
+
+    /**
+     * Updates response header and status based on activity validation results
+     *
+     * @param update - flag indicating activity create/update operation
+     * @param latestActivityId - latest activity id in case there was attempt to update older version of activity
+     */
+    private void updateResponse(boolean update, Long latestActivityId) {
+        String locationUrl = endpointContextPath + "/";
+
+        if (update) {
+            if (errors == null || errors.isEmpty() && newActivity != null) {
+                /** update http status to SC_OK (activity has been successfully updated)
+                 * EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_OK);
+                 * The 200 status is sent by default
+                 */
+                locationUrl += newActivity.getAmpActivityId();
+            } else if (errors.containsKey(ActivityErrors.UPDATE_ID_IS_OLD.id)) {
+                // update http status to SC_CONFLICT (old version was sent for update)
+                EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_CONFLICT);
+                locationUrl += latestActivityId;
+            } else {
+                // any other error occurred during the update
+                locationUrl = null;
+            }
+        } else {
+            if (newActivity != null) {
+                // update http status to SC_CREATED (activity has been created)
+                EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_CREATED);
+                locationUrl += newActivity.getAmpActivityId();
+            } else {
+                // if activity is not created, then we cannot provide an URL
+                locationUrl = null;
+            }
+        }
+
+        // configure Header in the response
+        if (locationUrl != null) {
+            EndpointUtils.addResponseHeaderMarker("Location", locationUrl);
+        }
+    }
+
+
 	protected void updatePPCAmount() {
 		boolean isAnnualBudget = FMVisibility.isFmPathEnabled("/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost");
 
@@ -920,5 +970,10 @@ public class ActivityImporter {
 	public void setSaveAsDraft(boolean saveAsDraft) {
 		this.saveAsDraft = saveAsDraft;
 	}
+
+    public void setLatestActivityId(Long latestActivityId) {
+        this.latestActivityId = latestActivityId;
+    }
+
 
 }

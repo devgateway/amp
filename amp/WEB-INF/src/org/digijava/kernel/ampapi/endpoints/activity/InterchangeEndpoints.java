@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -17,7 +16,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.digijava.kernel.ampapi.endpoints.activity.utils.ActivityImporterHelper;
-import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -26,7 +24,6 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.ActivityVersionUtil;
 
 
 /**
@@ -139,16 +136,7 @@ public class InterchangeEndpoints {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(authTypes = {AuthRule.TOKEN, AuthRule.ADD_ACTIVITY}, id = "addProject", ui = false)
 	public JsonBean addProject(JsonBean newJson) {
-        JsonBean importedActivity = InterchangeUtils.importActivity(newJson, false);
-
-        Long internalId = InterchangeUtils.extractActivityId(importedActivity);
-        if (internalId != null) {
-            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_CREATED);
-            String locationUrl = uri.getBaseUri() + "activity/projects/" + internalId;
-            EndpointUtils.addResponseHeaderMarker("Location", locationUrl);
-        }
-
-		return importedActivity;
+        return InterchangeUtils.importActivity(newJson, false, uri.getBaseUri() + "activity");
 	}
 	
 	/**
@@ -174,20 +162,7 @@ public class InterchangeEndpoints {
 					new ApiErrorMessage(ActivityErrors.UPDATE_ID_MISMATCH, details));
 		}
 
-        /**
-         * Check if projectId is the last version of activity
-         * See AMP-20723 for details
-         */
-        Long lastVersionId = ActivityVersionUtil.getLastVersionForVersion(projectId);
-        if (lastVersionId != null && !lastVersionId.equals(projectId)) {
-            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_CONFLICT);
-        } else {
-            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_OK);
-            String locationUrl = uri.getBaseUri() + "activity/projects/" + projectId;
-            EndpointUtils.addResponseHeaderMarker("Location", locationUrl);
-        }
-
-		return InterchangeUtils.importActivity(newJson, true);
+		return InterchangeUtils.importActivity(newJson, true, uri.getBaseUri() + "activity");
 	}
 	
 }

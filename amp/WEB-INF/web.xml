@@ -205,7 +205,9 @@
 		</init-param>
     	 <init-param>
 			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
-			<param-value>org.digijava.kernel.ampapi.authentication.AuthResponseFilter</param-value>
+			<param-value>org.digijava.kernel.ampapi.authentication.AuthResponseFilter,
+                org.digijava.kernel.ampapi.endpoints.common.ApiReposeFilter
+            </param-value>
 		</init-param>
 		 
     	<init-param>

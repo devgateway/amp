@@ -22,14 +22,15 @@ import org.digijava.module.aim.util.ActivityVersionUtil;
  */
 public class AmpActivityIdValidator extends InputValidator {
 	private boolean isOldActivityId = false;
-	
-	public AmpActivityIdValidator() {
+
+    public AmpActivityIdValidator() {
 	}
 
 	@Override
 	public ApiErrorMessage getErrorMessage() {
-		if (isOldActivityId)
-			return ActivityErrors.UPDATE_ID_IS_OLD;
+		if (isOldActivityId) {
+            return ActivityErrors.UPDATE_ID_IS_OLD;
+        }
 		return ActivityErrors.FIELD_INVALID_VALUE;
 	}
 
@@ -48,6 +49,9 @@ public class AmpActivityIdValidator extends InputValidator {
 						|| !latestAmpActivityId.equals(importer.getOldActivity().getAmpActivityId())) {
 					isValid = false;
 					isOldActivityId = importer.getOldActivity() != null;
+                    if (isOldActivityId) {
+                        importer.setLatestActivityId(latestAmpActivityId);
+                    }
 				}
 			} else {
 				if ((ampActivityId != null)) { //must not be configurable even to 0 (updated design) && Long.valueOf(ampActivityId).longValue() != 0l)) {

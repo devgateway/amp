@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.ServletContext;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -183,6 +185,20 @@ public class SecurityUtil {
 		if(error!=null){
 			logger.debug(error.description);
 			ApiErrorResponse.reportUnauthorisedAccess(error);
+		}
+	}
+	/** Remove token from application level
+	 * @param sc ServletContext
+	 * @param token token to remove
+	 */
+	public static void removeTokenFromContext(ServletContext sc,String token) {
+		HashMap<String, AmpApiToken> tokens;
+
+		tokens = (HashMap<String, AmpApiToken>) sc.getAttribute(SecurityUtil.TOKENS);
+
+		if (tokens != null) {
+			tokens.remove(token);
+			sc.setAttribute(SecurityUtil.TOKENS,tokens);
 		}
 	}
 }

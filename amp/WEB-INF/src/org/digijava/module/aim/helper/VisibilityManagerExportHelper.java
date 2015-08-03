@@ -243,6 +243,9 @@ public class VisibilityManagerExportHelper {
 				FeaturesUtil.updateAmpModulesTreeVisibility(modules, currenttemplate.getId(), hbsession);
 				FeaturesUtil.updateAmpFeaturesTreeVisibility(features, currenttemplate.getId(), hbsession);
 				FeaturesUtil.updateAmpFieldsTreeVisibility(fields, currenttemplate.getId(), hbsession);
+				modules.clear();
+				features.clear();
+				fields.clear();
 			}
 		} catch (HibernateException e) {
 			e.printStackTrace();

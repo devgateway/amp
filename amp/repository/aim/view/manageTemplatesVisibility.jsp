@@ -57,7 +57,6 @@ div.fakefile2 {
 div.fakefile2 input{
 	width: 83px;
 }
--->
 </style>
 
 <script type="text/javascript">
@@ -73,11 +72,13 @@ div.fakefile2 input{
 		fakeFileUpload2.className = 'fakefile2';
 
 
-		var button = document.createElement('input');
-		button.type = 'button';
-
-		button.value = '<digi:trn jsFriendly="true" key="aim:browse">Browse...</digi:trn>';
+ 		var button = document.createElement('input');
+ 		button.type = 'button';
+ 		button.value = '<digi:trn jsFriendly="true" key="aim:browse">Browse...</digi:trn>';
+	
+ 		button.setAttribute('onclick', '$(\'#uploadFile\').click()');
 		fakeFileUpload2.appendChild(button);
+		
 
 		fakeFileUpload.appendChild(fakeFileUpload2);
 		var x = document.getElementsByTagName('input');
@@ -195,6 +196,7 @@ div.fakefile2 input{
 	</logic:iterate>
 	<tr>
 		<td colspan=2 class="inside">	
+			
 			<div style="width: 600px;">
 				<div class="fileinputs" style="float: left;">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
 					<!-- CSS content must be put in a separated file and a class must be generated -->

@@ -166,12 +166,15 @@ public class ActivityImporter {
 				prepareToSave();
 				org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(
 						newActivity, translations, TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest()), 
-						newActivity.getDraft(), PersistenceManager.getRequestDBSession(), false, false);
+						Boolean.TRUE.equals(newActivity.getDraft()), PersistenceManager.getRequestDBSession(), false, false);
 				postProcess();
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 				throw new RuntimeException(e);
 			}
+		} else {
+			// undo any pending changes
+			PersistenceManager.getSession().clear();
 		}
 
         updateResponse(update, ampActivityId);

@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.PathSegment;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -55,6 +56,8 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.hibernate.FlushMode;
+import org.hibernate.Session;
 
 import com.sun.jersey.spi.container.ContainerRequest;
 
@@ -576,7 +579,8 @@ public class InterchangeUtils {
 			return false;
 		}
 		JsonBean input = (JsonBean) containerReq.getEntity(JsonBean.class);
-		Long id = input == null ? null : (Long) input.get(ActivityFieldsConstants.AMP_ACTIVITY_ID);
+		String idStr = input == null ? null : String.valueOf(input.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME));
+		Long id = NumberUtils.isNumber(idStr) ? Long.valueOf(idStr) : null;
 		// we reuse the same approach as the one done by Project List EP
 		return id != null && ProjectList.getEditableActivityIds().contains(id);
 	}
@@ -728,4 +732,17 @@ public class InterchangeUtils {
 		return isEnabled;
 	}
 	
+	/**
+	 * This is a special adjusted Session with FlusMode = Commit so that Hiberante doesn't try to commit intermediate 
+	 * changes while we still query some information
+	 * TODO: AMP-20869: we'll need to give it a more thought during refactoring if either rewrite related queries as JDBC queries
+	 * or investigate more for 
+	 * 
+	 * @return Session with no AutoFlush mode
+	 */
+	public static Session getSessionWithPendingChanges() {
+		Session session = PersistenceManager.getSession();
+		session.setFlushMode(FlushMode.COMMIT);
+		return session;
+	}
 } 

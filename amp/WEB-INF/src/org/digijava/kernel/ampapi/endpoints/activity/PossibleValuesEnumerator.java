@@ -191,7 +191,7 @@ public class PossibleValuesEnumerator {
 		String ids = StringUtils.join(itemIds, ",");
 		String queryString = "select cls from " + clazz.getName() + " cls where cls."+ entityIdColumnName + " in (" + ids + ")";
 		
-		List<Object> objectList = PersistenceManager.getSession().createQuery(queryString).list();
+		List<Object> objectList = InterchangeUtils.getSessionWithPendingChanges().createQuery(queryString).list();
 		return objectList;
 	}
 	
@@ -232,9 +232,7 @@ public class PossibleValuesEnumerator {
 		if (clazz.isAssignableFrom(AmpCategoryValue.class))
 			return getPossibleCategoryValues(field, null);
 		String queryString = "select cls from " + clazz.getName() + " cls ";
-		Session session = PersistenceManager.getSession();
-		session.setFlushMode(FlushMode.COMMIT);
-		List<Object> objectList= session.createQuery(queryString).list();
+		List<Object> objectList = InterchangeUtils.getSessionWithPendingChanges().createQuery(queryString).list();
 		for (Object obj : objectList) {
 			JsonBean item = null;
 			try {
@@ -259,7 +257,7 @@ public class PossibleValuesEnumerator {
 			String queryString = "SELECT acv from " + AmpCategoryValue.class.getName() + " acv "
 					+ "WHERE acv.ampCategoryClass.keyName ='" + discriminatorOption + "'";
 	
-			List<AmpCategoryValue> acvList = (List<AmpCategoryValue>) PersistenceManager.getSession().createQuery(queryString).list();
+			List<AmpCategoryValue> acvList = (List<AmpCategoryValue>) InterchangeUtils.getSessionWithPendingChanges().createQuery(queryString).list();
 	
 			for (AmpCategoryValue acv : acvList) {
 				if (acv.isVisible()) {

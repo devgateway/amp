@@ -106,23 +106,22 @@ public class SecurityUtil {
 	public static AmpApiToken getAmpApiTokenFromApplication(String token,
 			List<ApiErrorMessage> errors) {
 		HashMap<String, AmpApiToken> tokens;
-		AmpApiToken requestApiToken;
+		AmpApiToken requestApiToken = null;
 		if (StringUtils.isBlank(token)) {
 			errors.add(SecurityErrors.NO_REQUEST_TOKEN);
 			requestApiToken = null;
 		} else {
 			tokens = (HashMap<String, AmpApiToken>) TLSUtils.getRequest()
 					.getServletContext().getAttribute(SecurityUtil.TOKENS);
-			requestApiToken = (AmpApiToken) tokens.get(token);
-			if(requestApiToken==null){
-				errors.add(SecurityErrors.NO_REQUEST_TOKEN);
-				requestApiToken=null;
-			}else {
-			if (new DateTime().isAfter(requestApiToken.getExpirationTime())) {
-				logger.debug(SecurityErrors.TOKEN_EXPIRED.description);
-				errors.add(SecurityErrors.TOKEN_EXPIRED);
-				requestApiToken = null;
-			} }
+            requestApiToken = (tokens == null) ? null : tokens.get(token);
+            if (requestApiToken == null) {
+				errors.add(SecurityErrors.NO_SESSION_TOKEN);
+			} else {
+                if (new DateTime().isAfter(requestApiToken.getExpirationTime())) {
+                    logger.debug(SecurityErrors.TOKEN_EXPIRED.description);
+                    errors.add(SecurityErrors.TOKEN_EXPIRED);
+                }
+            }
 		}
 		return requestApiToken;
 	}

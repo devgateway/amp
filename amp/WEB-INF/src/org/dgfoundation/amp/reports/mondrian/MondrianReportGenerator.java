@@ -200,9 +200,6 @@ public class MondrianReportGenerator implements ReportExecutor {
 			
 			CellDataSet cellDataSet = generateReportAsSaikuCellDataSet(spec);
 			long postprocStart = System.currentTimeMillis();
-
-			try{Thread.sleep(3000);}
-			catch(Exception e){};
 			
 			logger.info("[" + spec.getReportName() + "]" +  "Converting CellDataSet to GeneratedReport...");
 			GeneratedReport report = toGeneratedReport(spec, cellDataSet, cellDataSet.runtime);

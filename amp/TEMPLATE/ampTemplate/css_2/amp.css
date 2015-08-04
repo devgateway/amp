@@ -93,7 +93,7 @@ td.inside_inner_title { border-width: 1px 1px 1px 1px;border-color: #CCC; border
 .welcome_title {font-size:10pt; font-weight:bold; margin-bottom:10px;color:#737373;}
 #logincontainer {z-index:9999;}
 .welcome_note {font-size:11px; font-weight:bold; color:#666666;}
-.login_here {  background-color: #65B457;   width: 125px;  height: 30px;  margin-right: 10px;  text-align: center;  margin-top: 10px;float:left;margin-left:70px;}
+.login_here {  background-color: #65B457;   width: 125px;  height: 30px;  margin-right: 10px;  text-align: center;  margin-top: 10px;}
 .login_here:hover {  background-color: #B4EEAA;color:#519847}
 .login_here_cont { font-size:14px;}
 .login_here .login_here_cont a {font-size:12px;color:#FFFFFF; font-weight:bold;text-decoration: none;cursor: pointer;}
@@ -251,7 +251,7 @@ a.settingsbut{float:left;display:block;width:250px;}
 #add_filt_btn_box {display:none; margin-top:3px;}
 #add_label_btn_box {display:none; margin-top:3px;}
 #show_action_box {display:none; margin-top:3px; font-size:11px;}
-#show_login_pop_box {display:none; margin:37px 0px 0px 55px;width:270px; padding:10px;border:1px solid #CCCCCC; background-color:#FFFFFF;z-index:9999;position:absolute;}
+#show_login_pop_box {display:none; margin:37px 0 0 0;width:270px; padding:10px;border:1px solid #CCCCCC; background-color:#FFFFFF;z-index:9999;position:absolute;}
 html.chrome #show_login_pop_box{margin-top:52px;}
 #show_login_pop_box label{color:#000; padding:5px;display:inline-block;}
 .resource_label_gr a {color:#FFFFFF;}
@@ -385,7 +385,6 @@ ul.first-of-type li.yui-gen14 {}
 
 
 /*-----rafy-----*/
-.login_here{position:absolute;}
 div.reg_form_container{width:1000px; margin:0 auto;text-align:center;}
 div.reg_form_container table {margin:0 auto; }
 div.reg_form_container input,div.reg_form_container form input, div.reg_form_container form select{border:1px solid #d0d0d0;height:18px;}
@@ -512,7 +511,6 @@ div.adminicon{float:right;}
 
 
 /*-----rafy-----*/
-.login_here{position:absolute;}
 div.reg_form_container{width:1000px; margin:0 auto;text-align:center;}
 div.reg_form_container table {margin:0 auto; }
 div.reg_form_container input,div.reg_form_container form input, div.reg_form_container form select{border:1px solid #d0d0d0;height:18px; width:145px;}
@@ -702,8 +700,6 @@ html.chrome .login_here {
 	width: 125px; 
 	height: 33px;
 	text-align: center;
-	float: left;
-	margin-left: 70px;
 	margin-top:10px;
 }
 html.chrome .login_here:hover { 

@@ -14,13 +14,6 @@
 
 		<script type="text/javascript">
 			$(document).ready(function() {
-				$("#show_login_pop").click(function(e) {
-					e.preventDefault();
-					$("div#show_login_pop_box").toggle();
-					$("#show_login_pop").toggleClass("menu-open");
-					$("#j_username").focus();
-				});
-
 				$("div#show_login_pop_box").mouseup(function() {
 					return false
 				});
@@ -82,14 +75,6 @@
 			</div>
 		</div>
 		<div id="logincontainer">
-			<div class="login_here" id="show_login_pop">
-				<div class="login_here_cont">
-					<a  >
-						<digi:trn>Login Here</digi:trn>
-					</a>
-				</div>
-
-			</div>
 			<div id="login_menu" class="header_links">
 				<feature:display name="Enable New User Registration" module="Login - User Management">
 					<c:set var="trn3">

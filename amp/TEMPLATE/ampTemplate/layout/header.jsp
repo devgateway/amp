@@ -4,18 +4,18 @@
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 
 <logic:notEmpty name="currentMember" scope="session">
- 	<bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.module.aim.helper.TeamMember" />
- </logic:notEmpty>
- <logic:empty name="currentMember" scope="session">
+	<bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.module.aim.helper.TeamMember" />
+</logic:notEmpty>
+<logic:empty name="currentMember" scope="session">
 	<logic:notEmpty name="currentUser" scope="session">
- 		<bean:define id="userLogged" name="currentUser" scope="session" type="org.digijava.kernel.user.User" />
-	 </logic:notEmpty>
- </logic:empty>
+		<bean:define id="userLogged" name="currentUser" scope="session" type="org.digijava.kernel.user.User" />
+	</logic:notEmpty>
+</logic:empty>
 
 <!-- HEADER START -->
-	<c:if test='${empty sessionScope.currentMember}'>
-		<div class="login_nav" style="position: absolute;top: 0px;left:59%;">
-				<digi:insert attribute="loginWidget"/>
-		</div>
-	</c:if>
+<c:if test='${empty sessionScope.currentMember}'>
+	<div class="login_nav" style="position: absolute;top: 0px;left:59%;">
+		<digi:insert attribute="loginWidget"/>
+	</div>
+</c:if>
 <!-- HEADER END -->

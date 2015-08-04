@@ -17,6 +17,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.ValueWrapper;
@@ -96,6 +98,18 @@ public class MondrianReportGenerator implements ReportExecutor {
 	//TODO: set to false
 	//e.g. skips to throw exceptions until schema def is complete and all mappings are configured based on it
 	private static final boolean IS_DEV = true;
+	
+	/**
+	 * number of reports allowed to run parallelly: equals number of logical cores in the system, but no more than 7 and no less than 2
+	 */
+	public static final int MAX_ALLOWED_CONCURRENT_REPORTS = Math.min(Math.max(2, Runtime.getRuntime().availableProcessors()), 7);
+	
+	/**
+	 * for limiting the number of concurrently-running reports
+	 */
+	private static final Semaphore REPORTS_SEMAPHORE = new Semaphore(MAX_ALLOWED_CONCURRENT_REPORTS);
+	
+	
 	private final Class<? extends ReportAreaImpl> reportAreaType;
 	private final boolean printMode;
 	
@@ -159,16 +173,29 @@ public class MondrianReportGenerator implements ReportExecutor {
 		}
 	}
 	
+	/**
+	 * poor man's semaphore (theoretically a race condition could lead to the depth being exceeded, practically the waiting time is random, thus clashes would happen extremely rarely and in those cases we'd have an extra depth <br />
+	 * <b>do not forget to decrementAndGet()</b>
+	 * @return the current max depth
+	 */
+	protected int ensureMaxDepth() {
+		int waiting = REPORTS_SEMAPHORE.getQueueLength();
+		REPORTS_SEMAPHORE.acquireUninterruptibly();
+		return waiting;
+	}
+	
 	@Override
 	public GeneratedReport executeReport(ReportSpecification specOrig) throws AMPException {
 		try {
 			//try {Thread.sleep(25000);}catch(Exception e){};
 			//TODO: current limitation: now we only accept ReportSpecificationImpl as input because of the in-place modifications done to the structure
 			// this should be changed in the bright future
+			int reportDepth = ensureMaxDepth();
 			ReportSpecificationImpl spec = (ReportSpecificationImpl) specOrig;
 			spec.reorderColumnsByHierarchies();
 			CellDataSetToGeneratedReport.counts.clear();
 			stats = new ReportGenerationStats();
+			stats.reportDepth = reportDepth;
 			CellDataSet cellDataSet = generateReportAsSaikuCellDataSet(spec);
 			long postprocStart = System.currentTimeMillis();
 			
@@ -197,6 +224,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			throw e;
 		}
 		finally {
+			REPORTS_SEMAPHORE.release();
 			writeStats();
 			tearDown();
 		}
@@ -205,12 +233,13 @@ public class MondrianReportGenerator implements ReportExecutor {
 	void writeStats() {
 		if (stats != null) {
 			PersistenceManager.getSession().createSQLQuery(
-					String.format("INSERT INTO amp_reports_runtime_log (lock_wait_time, mdx_time, total_time, mdx_query, width, height, postproc_time, crashed) VALUES (%d, %d, %d, %s, %d, %d, %d, %s)",
+					String.format("INSERT INTO amp_reports_runtime_log (lock_wait_time, mdx_time, total_time, mdx_query, width, height, postproc_time, crashed, concurrent_reports) VALUES (%d, %d, %d, %s, %d, %d, %d, %s, %d)",
 							stats.lock_wait_time, stats.mdx_time, stats.total_time, SQLUtils.stringifyObject(stats.mdx_query),
 							stats.width, 
 							stats.height,
 							stats.postproc_time,
-							stats.crashed
+							stats.crashed,
+							stats.reportDepth
 							)).executeUpdate();
 		}
 	}

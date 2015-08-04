@@ -9,6 +9,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
+				DROP TABLE IF EXISTS locations_replacements;
 				CREATE TABLE locations_replacements AS (SELECT amp_location_id, amp_location_id AS replacement_loc_id, location_id AS acvl_id FROM amp_location WHERE location_id IS NOT NULL);
 				UPDATE locations_replacements AS lr SET replacement_loc_id = (SELECT min(amp_location_id) FROM locations_replacements lr2 WHERE lr2.acvl_id = lr.acvl_id) WHERE acvl_id IS NOT NULL;
 				UPDATE amp_activity_location AS aal SET amp_location_id = (SELECT replacement_loc_id FROM locations_replacements lr WHERE lr.amp_location_id = aal.amp_location_id);

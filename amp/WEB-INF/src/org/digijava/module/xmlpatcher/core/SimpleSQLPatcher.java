@@ -22,7 +22,7 @@ import org.digijava.module.aim.helper.Constants;
  */
 public class SimpleSQLPatcher {
 	
-	private static Logger logger = Logger.getLogger(SimpleSQLPatch.class) ;
+	private static Logger logger = Logger.getLogger(SimpleSQLPatcher.class) ;
 	
 	public SortedSet<SimpleSQLPatch> patches = new TreeSet<SimpleSQLPatch>(){
 			void addPatch(SimpleSQLPatch p){
@@ -428,8 +428,10 @@ public class SimpleSQLPatcher {
    				if (hashes.size() > 1)
    					throw new RuntimeException("amp_simple_sql_patches is corrupted, please review code / database (patch with id " + patch.id + " is mentioned > 1 times)");   				
    				boolean shouldRunPatch = hashes.isEmpty() || (!hashes.get(0).equals(patch.hash));
-   				if (shouldRunPatch)
+   				if (shouldRunPatch) {
+   	   				logger.info("running patch " + patch.id);
    					executePatch(patch, conn, hashes.isEmpty());
+   				}
    			}
    			
    			runDrcCleanup(conn);

@@ -371,7 +371,7 @@ private EtlResult execute() throws Exception {
 			nrAffectedDates = etlConfig.dateCodes == null ? -1 : etlConfig.dateCodes.size();
 			StopWatch.reset(MONDRIAN_ETL);
 							
-			logger.error("done executing ETL");
+			logger.info("done executing ETL");
 		}
 		
 		processAutonomousTable(MondrianTablesRepository.MONDRIAN_COMPONENTS, etlConfig.componentIdsIn("amp_component_id"));
@@ -1060,7 +1060,7 @@ private EtlResult execute() throws Exception {
 				try(MonetConnection monetConn = MonetConnection.getConnection()) {
 					MondrianETL etl = new MondrianETL(conn, monetConn, forceFull);
 					EtlResult etlResult = etl.execute();
-					logger.error("Mondrian ETL result: " + etlResult);
+					logger.info("Mondrian ETL result: " + etlResult);
 					SQLUtils.flush(monetConn.conn);
 					SQLUtils.flush(conn);
 					return etlResult;

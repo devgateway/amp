@@ -2,7 +2,7 @@ package org.dgfoundation.amp.reports.mondrian;
 
 /**
  * statistics regarding time it took to generate a report - for production diagnostic reasons
- * @author simple
+ * @author Dolghier Constantin
  *
  */
 public class ReportGenerationStats {
@@ -14,5 +14,8 @@ public class ReportGenerationStats {
 	public int height;
 	public long postproc_time;
 	boolean crashed;
-	
+	/**
+	 * number of reports which have been run parallelly
+	 */
+	public int reportDepth;
 }

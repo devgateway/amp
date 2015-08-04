@@ -129,10 +129,10 @@ public abstract class DatabaseViewFetcher implements ViewFetcher
 		I18nViewDescription viewDesc = InternationalizedViewsRepository.i18Models.get(viewName);
 		if (viewDesc == null)
 		{
-			logger.info("for view " + viewName + ", selected RawFetcher");
+			logger.debug("for view " + viewName + ", selected RawFetcher");
 			return new RawDatabaseViewFetcher(viewName, condition, connection, columnNames);
 		}
-		logger.info("for view " + viewDesc.viewName + ", selected i18nFetcher");
+		logger.debug("for view " + viewDesc.viewName + ", selected i18nFetcher");
 		return new I18nDatabaseViewFetcher(viewName, condition, locale, cachers, connection, columnNames);
 	}
 	

@@ -1114,6 +1114,18 @@
         		<executions>
     				<!-- Installing node and npm -->
     				<execution>
+					    <id>install node and npm for filters</id>
+					    <goals>
+					        <goal>install-node-and-npm</goal>
+					    </goals>
+					    <phase>generate-sources</phase>
+					    <configuration>
+					        <nodeVersion>v0.10.29</nodeVersion>
+					        <npmVersion>1.3.8</npmVersion>
+				 	        <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
+    				    </configuration>
+					</execution>
+					<execution>
 					    <id>install node and npm for dashboards</id>
 					    <goals>
 					        <goal>install-node-and-npm</goal>
@@ -1139,25 +1151,14 @@
 				 	        <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
     				    </configuration>
 					</execution>
-					<execution>
-					    <id>install node and npm for filters</id>
-					    <goals>
-					        <goal>install-node-and-npm</goal>
-					    </goals>
-					    <phase>generate-sources</phase>
-					    <configuration>
-					        <nodeVersion>v0.10.29</nodeVersion>
-					        <npmVersion>1.3.8</npmVersion>
-				 	        <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
-    				    </configuration>
-					</execution>
 					 <!-- Running npm -->
                     <execution>
                         <id>npm install on GIS</id>
                         <goals>
                             <goal>npm</goal>
                         </goals>
-                        <configuration>
+                	    <phase>generate-sources</phase>
+				        <configuration>
 				 	        <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
@@ -1166,7 +1167,8 @@
                         <goals>
                             <goal>npm</goal>
                         </goals>
-                        <configuration>
+                	    <phase>generate-sources</phase>
+				        <configuration>
 				 	        <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory>
                         </configuration>
                     </execution>

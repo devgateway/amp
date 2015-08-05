@@ -193,9 +193,23 @@
 		<intercept-url pattern="/**" access="ROLE_AUTHENTICATED" />
 		
 		<!-- standard logout url to terminate the session and delete Tomcat cookies -->
-		<logout delete-cookies="JSESSIONID" logout-url="/j_spring_logout" />
-				
+		<!-- <logout delete-cookies="JSESSIONID" logout-url="/j_spring_logout" />
+		 -->
+
+		<custom-filter position="LOGOUT_FILTER" ref="logoutFilter" />
 	</http>
+
+<beans:bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
+    <beans:constructor-arg index="0" value="/showLayout.do\?layout=login" />
+    <beans:constructor-arg index="1">
+        <beans:list>
+        	<beans:bean id="ampCustomLogoutHandler" class="org.digijava.kernel.security.auth.AmpCustomLogoutHandler" />
+            <beans:bean id="securityContextLogoutHandler" class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
+        </beans:list>
+    </beans:constructor-arg>
+    <beans:property name="filterProcessesUrl" value="/j_spring_logout" />
+</beans:bean>
+
 
 	<!-- the authentication manager references the auth service -->
 	<authentication-manager alias="authenticationManager">

@@ -2,8 +2,38 @@
 	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
 }
 
-#filters-container {
+#filter-popup {
 	z-index: 10000;
+	font-size: 14px !important;
+}
+
+#filter-popup a {
+	color: #428BCA;
+	text-decoration: none;
+}
+
+#filter-popup li.active a {
+	color: #FFF;
+	background-color: #428BCA;
+}
+
+#filter-popup .btn-sm, .btn-group-sm>.btn {
+	padding: 5px 10px;
+	font-size: 12px !important;
+	line-height: 1.5;
+	border-radius: 3px;
+	font-family: "Open Sans";
+  	font-style: normal;
+  	font-weight: 300;
+}
+
+#filter-popup .filter-options .nav > li > a {
+    padding: 10px 15px;
+}
+
+/* The icons used by jquery on Tabs. */
+.ui-state-default .ui-icon {
+    background-image: url("images/ui-icons_FF6000_256x240.png");
 }
 
 .noTabsMessage {

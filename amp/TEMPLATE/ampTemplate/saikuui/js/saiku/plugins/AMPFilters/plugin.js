@@ -22,25 +22,25 @@ var AMPFilters = Backbone.View.extend({
 
 				$(this.workspace.el).find('.workspace_results').prepend($(this.el).hide());
 
-				window.currentFilter = new ampFilter({el:$('#filters-container'), draggable:true, caller: 'REPORTS'});
+				window.currentFilter = new ampFilter({el:$('#filter-popup'), draggable:true, caller: 'REPORTS'});
 				window.currentFilter.showFilters();
 				window.currentFilter.converted = false;
-				$('#filters-container').hide();
+				$('#filter-popup').hide();
 
 				Saiku.events.listenTo(window.currentFilter, 'cancel', function() {
 					self.filters_button.toggleClass('on');
-					$('#filters-container').hide();
+					$('#filter-popup').hide();
 				});
 				Saiku.events.listenTo(window.currentFilter, 'close', function() {
 					self.filters_button.toggleClass('on');
-					$('#filters-container').hide();
+					$('#filter-popup').hide();
 				});
 				Saiku.events.listenTo(window.currentFilter, 'apply', function(data) {
 					//if(data.columnFilters || data.otherFilters) {
 						self.workspace.query.run_query(window.currentFilter.serialize(), null);
 						self.filters_button.removeClass('on');
 					//}
-					$('#filters-container').hide();
+					$('#filter-popup').hide();
 				});
 				this.workspace.query.initFilters();
 			},
@@ -68,9 +68,9 @@ var AMPFilters = Backbone.View.extend({
 					// AMP-18921: workaround to the filters until they will be properly initialized, 
 					// that should be done as part of filters widget improvement as a whole
 					//this.workspace.query.initFilters();
-					$('#filters-container').show();
+					$('#filter-popup').show();
 				} else {
-					$('#filters-container').hide();
+					$('#filter-popup').hide();
 				}
 
 			},

@@ -40,14 +40,14 @@
 		<link href='tabs/fonts/open-sans.css' rel='stylesheet' type='text/css'>
 		<!-- Icon Font - Font Awesome -->
 		<link href="tabs/fonts/font-awesome.min.css" rel="stylesheet">
-
-        <link rel="stylesheet" href="node_modules/amp-filter/dist/amp-filter.css">
+        
 		<link rel="stylesheet" href="tabs/css/bootstrap.css">
 		<link rel="stylesheet" href="tabs/css/bootstrap-theme.css">
 		<link rel="stylesheet" href="tabs/css/jquery-ui.css">
-		<link rel="stylesheet" href="tabs/js/lib/jqgrid-4.6.0/css/ui.jqgrid.css">
-		<link rel="stylesheet" href="tabs/css/tabs.css">
+		<link rel="stylesheet" href="tabs/js/lib/jqgrid-4.6.0/css/ui.jqgrid.css">		
 		<link rel="stylesheet" href="tabs/css/settings.css">
+		<link rel="stylesheet" href="node_modules/amp-filter/dist/amp-filter.css">
+		<link rel="stylesheet" href="tabs/css/tabs.css">
 		<script>
 		    // define waitSeconds above require script tag
 		    // to override the default, until main.js loads

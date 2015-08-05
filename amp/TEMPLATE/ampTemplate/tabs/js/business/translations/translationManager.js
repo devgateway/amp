@@ -81,7 +81,7 @@ define([ 'underscore', 'jquery', 'i18next' ], function(_, jQuery) {
 			var key = prefix + text;
 			textObject[key] = text;
 			var response = (TranslationManager.postJSON('/rest/translations/label-translations', textObject, function(data) {
-				console.log(data);
+				//console.log(data);
 			}));
 			putTranslationValueInCache(key, response.responseJSON[key]);
 			return response.responseJSON[key];

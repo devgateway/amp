@@ -1352,103 +1352,7 @@ public class AmpARFilter extends PropertyListable {
 			ACTIVITY_ID_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id = " + params.getActivityIdFilter();
 		}
 		
-		
-		boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
-		
-//		String[] dates = this.calculateDateFilters(fromDate, toDate, dynDateFilterCurrentPeriod, dynDateFilterAmount, dynDateFilterOperator, dynDateFilterXPeriod);
-//		String fromDate = dates[0];
-//		String toDate = dates[1];
-		setToFromDate(fromDate, toDate, dynDateFilterCurrentPeriod, dynDateFilterAmount, dynDateFilterOperator, dynDateFilterXPeriod);
-		
-		if(dateFilterHidesProjects && fromDate !=null && fromDate.length()>0) {
-			String FROM_DATE_FILTER=null;
-			try {
-				FROM_DATE_FILTER = " SELECT distinct(f.amp_activity_id) FROM amp_funding_detail fd, amp_funding f WHERE f.amp_funding_id=fd.amp_funding_id AND fd.transaction_date>='"
-					+ sdfOut.format(sdfIn.parse(fromDate)) + "'";
-
-			} catch (ParseException e) {
-				logger.error(e);
-				e.printStackTrace();
-			}
-			dateFilterUsed = true;
-			queryAppend(FROM_DATE_FILTER);
-		}
-		if(dateFilterHidesProjects && toDate!=null && toDate.length()>0) {
-			String TO_DATE_FILTER=null;
-			try {
-				TO_DATE_FILTER = " SELECT distinct(f.amp_activity_id) FROM amp_funding_detail fd, amp_funding f WHERE f.amp_funding_id=fd.amp_funding_id AND fd.transaction_date<='"
-					+  sdfOut.format(sdfIn.parse(toDate)) + "'";
-			} catch (ParseException e) {
-				logger.error(e);
-				e.printStackTrace();
-			}
-			dateFilterUsed = true;
-			queryAppend(TO_DATE_FILTER);
-		}
-		
-		setToFromDate(fromActivityStartDate, toActivityStartDate, dynActivityStartFilterCurrentPeriod, dynActivityStartFilterAmount, dynActivityStartFilterOperator, dynActivityStartFilterXPeriod);
-//		dates = this.calculateDateFilters(fromActivityStartDate, toActivityStartDate, dynActivityStartFilterCurrentPeriod, dynActivityStartFilterAmount, dynActivityStartFilterOperator, dynActivityStartFilterXPeriod);
-//		fromDate = dates[0];
-//		toDate = dates[1];
-
-		String ACTIVITY_START_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "asd.actual_start_date");
-		if ( ACTIVITY_START_DATE_FILTER.length() > 0 ) {
-			ACTIVITY_START_DATE_FILTER = "SELECT asd.amp_activity_id from v_actual_start_date asd WHERE " + ACTIVITY_START_DATE_FILTER;
-			queryAppend(ACTIVITY_START_DATE_FILTER);
-		}
-		setToFromDate(fromActivityActualCompletionDate, toActivityActualCompletionDate, dynActivityActualCompletionFilterCurrentPeriod, dynActivityActualCompletionFilterAmount, dynActivityActualCompletionFilterOperator, dynActivityActualCompletionFilterXPeriod);
-//		dates = this.calculateDateFilters(fromActivityActualCompletionDate, toActivityActualCompletionDate, dynActivityActualCompletionFilterCurrentPeriod, dynActivityActualCompletionFilterAmount, dynActivityActualCompletionFilterOperator, dynActivityActualCompletionFilterXPeriod);
-//		fromDate = dates[0];
-//		toDate = dates[1];
-
-		String ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "acd.actual_completion_date");
-		if ( ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER.length() > 0 ) {
-			ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER = "SELECT acd.amp_activity_id from v_actual_completion_date acd WHERE " + ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER;
-			queryAppend(ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER);
-		}
-		setToFromDate(fromActivityFinalContractingDate, toActivityFinalContractingDate, dynActivityFinalContractingFilterCurrentPeriod, dynActivityFinalContractingFilterAmount, dynActivityFinalContractingFilterOperator, dynActivityFinalContractingFilterXPeriod);
-//		dates = this.calculateDateFilters(fromActivityFinalContractingDate, toActivityFinalContractingDate, dynActivityFinalContractingFilterCurrentPeriod, dynActivityFinalContractingFilterAmount, dynActivityFinalContractingFilterOperator, dynActivityFinalContractingFilterXPeriod);
-//		fromDate = dates[0];
-//		toDate = dates[1];
-
-		String ACTIVITY_FINAL_CONTRACTING_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "ctrd.contracting_date");
-		if ( ACTIVITY_FINAL_CONTRACTING_DATE_FILTER.length() > 0 ) {
-			ACTIVITY_FINAL_CONTRACTING_DATE_FILTER = "SELECT ctrd.amp_activity_id from v_contracting_date ctrd WHERE " + ACTIVITY_FINAL_CONTRACTING_DATE_FILTER;
-			queryAppend(ACTIVITY_FINAL_CONTRACTING_DATE_FILTER);
-		}
-		setToFromDate(fromProposedApprovalDate, toProposedApprovalDate, dynProposedApprovalFilterCurrentPeriod, dynProposedApprovalFilterAmount, dynProposedApprovalFilterOperator, dynProposedApprovalFilterXPeriod);
-//		dates = this.calculateDateFilters(fromProposedApprovalDate, toProposedApprovalDate, dynProposedApprovalFilterCurrentPeriod, dynProposedApprovalFilterAmount, dynProposedApprovalFilterOperator, dynProposedApprovalFilterXPeriod);
-//		fromDate = dates[0];
-//		toDate = dates[1];
-		
-		String ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "apsd.proposed_approval_date");
-		if ( ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER.length() > 0 ) {
-			ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER = "SELECT apsd.amp_activity_id from v_actual_proposed_date apsd WHERE " + ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER;
-			queryAppend(ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER);
-		}
-		
-		/*
-		 * if(fromYear!=null) { AmpARFilterHelper filterHelper =
-		 * Logic.getInstance().getAmpARFilterHelper(); String
-		 * FROM_FUNDING_YEAR_FILTER =
-		 * filterHelper.createFromYearQuery(fromYear);
-		 * queryAppend(FROM_FUNDING_YEAR_FILTER); }
-		 * 
-		 * if(toYear!=null) { AmpARFilterHelper filterHelper =
-		 * Logic.getInstance().getAmpARFilterHelper(); String
-		 * TO_FUNDING_YEAR_FILTER = filterHelper.createToYearQuery(toYear);
-		 * queryAppend(TO_FUNDING_YEAR_FILTER); }
-		 * 
-		 * if (fromMonth!=null) { AmpARFilterHelper filterHelper =
-		 * Logic.getInstance().getAmpARFilterHelper(); String FROM_MONTH_FILTER =
-		 * filterHelper.createFromMonthQuery(fromMonth);
-		 * queryAppend(FROM_MONTH_FILTER); }
-		 * 
-		 * if (toMonth!=null) { AmpARFilterHelper filterHelper =
-		 * Logic.getInstance().getAmpARFilterHelper(); String TO_MONTH_FILTER =
-		 * filterHelper.createToMonthQuery(toMonth);
-		 * queryAppend(TO_MONTH_FILTER); }
-		 */
+		buildDatesFilterStatements();
 
 		if (fromMonth == null) {
 			if (yearFrom != null) {
@@ -1481,42 +1385,7 @@ public class AmpARFilter extends PropertyListable {
 					.createToMonthQuery(toMonth, yearTo);
 			queryAppend(TO_FUNDING_YEARMONTH_FILTER);
 		}
-
 		
-		/*
-		if (fromDate != null) 
-			if (fromDate.trim().length() > 0){
-				String FROM_FUNDING_DATE_FILTER = "SELECT DISTINCT(f.amp_activity_id) FROM amp_funding f, amp_funding_detail fd "
-					+ "WHERE f.amp_funding_id=fd.amp_funding_id AND DATEDIFF(fd.transaction_date,?) >= 0";
-				queryAppend(FROM_FUNDING_DATE_FILTER);
-				//add to the params list that will be used on the prepared statment
-				indexedParams.add(new FilterParam(new java.sql.Date(FormatHelper.parseDate2(this.getFromDate()).getTime()),java.sql.Types.DATE));
-			}
-		if (toDate != null)
-			if (toDate.trim().length() > 0){
-				String TO_FUNDING_DATE_FILTER = "SELECT DISTINCT(f.amp_activity_id) FROM amp_funding f, amp_funding_detail fd "
-					+ "WHERE f.amp_funding_id=fd.amp_funding_id AND DATEDIFF(?, fd.transaction_date) >= 0";
-				queryAppend(TO_FUNDING_DATE_FILTER);
-				//add to the params list that will be used on the prepared statment
-				indexedParams.add(new FilterParam(new java.sql.Date(FormatHelper.parseDate2(this.getToDate()).getTime()),java.sql.Types.DATE));
-				
-			}
-			*/
-
-		/*
-		 * if (fromYear==null) fromYear = 0;
-		 * 
-		 * if (fromMonth==null) fromMonth = 1;
-		 * 
-		 * if (toYear==null) toYear = 9999;
-		 * 
-		 * if (toMonth==null) toMonth = 12;
-		 * 
-		 * AmpARFilterHelper filterHelper =
-		 * Logic.getInstance().getAmpARFilterHelper(); String MONTH_YEAR_FILTER =
-		 * filterHelper.createMonthYearQuery(fromMonth, fromYear, toMonth,
-		 * toYear); queryAppend(MONTH_YEAR_FILTER);
-		 */
 		if (text != null) {
 			if (! "".equals(text.trim())) {
 				String TEXT_FILTER = "SELECT a.amp_activity_id from amp_activity a WHERE a.amp_id="
@@ -1732,7 +1601,82 @@ public class AmpARFilter extends PropertyListable {
 		return overridingTeamFilter;
 	}
 	
+	/**
+	 * appends to the query statements filtering by various date fields, most importantly - transaction date
+	 */
+	protected void buildDatesFilterStatements() {
+		// build transaction date filtering statements
+		boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
+		
+		String[] dates = this.calculateDateFilters(fromDate, toDate, dynDateFilterCurrentPeriod, dynDateFilterAmount, dynDateFilterOperator, dynDateFilterXPeriod);
+		String fromDate = dates[0];
+		String toDate = dates[1];
+		
+		if (dateFilterHidesProjects && fromDate != null && fromDate.length() > 0) {
+			String FROM_DATE_FILTER = null;
+			try {
+				FROM_DATE_FILTER = " SELECT distinct(f.amp_activity_id) FROM amp_funding_detail fd, amp_funding f WHERE f.amp_funding_id=fd.amp_funding_id AND fd.transaction_date>='"
+					+ sdfOut.format(sdfIn.parse(fromDate)) + "'";
 
+			} catch (ParseException e) {
+				logger.error(e, e);
+			}
+			dateFilterUsed = true;
+			queryAppend(FROM_DATE_FILTER);
+		}
+		if (dateFilterHidesProjects && toDate != null && toDate.length()>0) {
+			String TO_DATE_FILTER=null;
+			try {
+				TO_DATE_FILTER = " SELECT distinct(f.amp_activity_id) FROM amp_funding_detail fd, amp_funding f WHERE f.amp_funding_id=fd.amp_funding_id AND fd.transaction_date<='"
+					+  sdfOut.format(sdfIn.parse(toDate)) + "'";
+			} catch (ParseException e) {
+				logger.error(e, e);
+			}
+			dateFilterUsed = true;
+			queryAppend(TO_DATE_FILTER);
+		}
+		
+		// build activity start date filtering statements
+		dates = this.calculateDateFilters(fromActivityStartDate, toActivityStartDate, dynActivityStartFilterCurrentPeriod, dynActivityStartFilterAmount, dynActivityStartFilterOperator, dynActivityStartFilterXPeriod);
+		fromDate = dates[0];
+		toDate = dates[1];
+
+		String ACTIVITY_START_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "asd.actual_start_date");
+		if ( ACTIVITY_START_DATE_FILTER.length() > 0 ) {
+			ACTIVITY_START_DATE_FILTER = "SELECT asd.amp_activity_id from v_actual_start_date asd WHERE " + ACTIVITY_START_DATE_FILTER;
+			queryAppend(ACTIVITY_START_DATE_FILTER);
+		}
+		
+		dates = this.calculateDateFilters(fromActivityActualCompletionDate, toActivityActualCompletionDate, dynActivityActualCompletionFilterCurrentPeriod, dynActivityActualCompletionFilterAmount, dynActivityActualCompletionFilterOperator, dynActivityActualCompletionFilterXPeriod);
+		fromDate = dates[0];
+		toDate = dates[1];
+
+		String ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "acd.actual_completion_date");
+		if ( ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER.length() > 0 ) {
+			ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER = "SELECT acd.amp_activity_id from v_actual_completion_date acd WHERE " + ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER;
+			queryAppend(ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER);
+		}
+
+		dates = this.calculateDateFilters(fromActivityFinalContractingDate, toActivityFinalContractingDate, dynActivityFinalContractingFilterCurrentPeriod, dynActivityFinalContractingFilterAmount, dynActivityFinalContractingFilterOperator, dynActivityFinalContractingFilterXPeriod);
+		fromDate = dates[0];
+		toDate = dates[1];
+
+		String ACTIVITY_FINAL_CONTRACTING_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "ctrd.contracting_date");
+		if ( ACTIVITY_FINAL_CONTRACTING_DATE_FILTER.length() > 0 ) {
+			ACTIVITY_FINAL_CONTRACTING_DATE_FILTER = "SELECT ctrd.amp_activity_id from v_contracting_date ctrd WHERE " + ACTIVITY_FINAL_CONTRACTING_DATE_FILTER;
+			queryAppend(ACTIVITY_FINAL_CONTRACTING_DATE_FILTER);
+		}
+		
+		dates = this.calculateDateFilters(fromProposedApprovalDate, toProposedApprovalDate, dynProposedApprovalFilterCurrentPeriod, dynProposedApprovalFilterAmount, dynProposedApprovalFilterOperator, dynProposedApprovalFilterXPeriod);
+		fromDate = dates[0];
+		toDate = dates[1];
+		
+		String ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "apsd.proposed_approval_date");
+		if ( ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER.length() > 0 ) {
+			ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER = "SELECT apsd.amp_activity_id from v_actual_proposed_date apsd WHERE " + ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER;
+			queryAppend(ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER);
+		}
+	}
 	
 
 	protected void processTeamFilter(TeamMember member, boolean workspaceFilter)
@@ -1776,13 +1720,6 @@ public class AmpARFilter extends PropertyListable {
 				queryAppend(TEAM_FILTER);
 			}
 		}
-	}
-	
-	
-	private void setToFromDate(String startDate, String lastDate, String currentPeriod, Integer amount, String op, String xPeriod) {
-		String[] dates = this.calculateDateFilters(startDate, lastDate, currentPeriod, amount, op, xPeriod);
-		this.fromDate = dates[0];
-		this.toDate = dates[1];
 	}
 	
 	private String[] calculateDateFilters(String startDate, String lastDate, String currentPeriod, Integer amount, String op, String xPeriod){

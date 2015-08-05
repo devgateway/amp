@@ -1,0 +1,1 @@
+{"version":3,"file":"library.js","mappings":"AAAA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA","sources":["library.js"],"sourcesContent":["/* non-sensical library */\\ndefine([], function() {\\n  var number = 1;\\n\\n  function addNumber(n) {\\n    return n + number;\\n  }\\n\\n  return addNumber;\\n});\\n"],"names":[]}

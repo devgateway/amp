@@ -1211,19 +1211,17 @@
     				        <arguments>build</arguments>
 					    </configuration>
 					</execution>
-					
-					<execution>
-					    <id>gulp test</id>
-					    <goals>
-					        <goal>gulp</goal>
-					    </goals>
-					
-					    <!-- optional: the default phase is "generate-resources" -->
-					    <phase>test</phase>
-					     <configuration>
-					        <arguments>test</arguments>
-					    </configuration>
-					</execution>
+					  
+<!-- 					<execution> -->
+<!-- 					    <id>gulp test</id> -->
+<!-- 					    <goals> --> 
+<!-- 					        <goal>gulp</goal> -->
+<!-- 					    </goals> -->
+<!-- 					    <phase>test</phase> -->
+<!-- 					     <configuration> -->
+<!-- 					        <arguments>test</arguments> -->
+<!-- 					    </configuration> -->
+<!-- 					</execution> -->
 				</executions>
     		</plugin>
 		

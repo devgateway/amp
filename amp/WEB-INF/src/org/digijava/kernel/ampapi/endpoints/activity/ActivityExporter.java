@@ -205,10 +205,14 @@ public class ActivityExporter {
 		Map<String, Interchangeable> compositeMapSettings = new HashMap<String, Interchangeable>();
 		Map<String, String> filteredFieldsMap = new HashMap<String, String>();
 		
+		// check that we need to initialize as a collection only real collections
+		boolean initAsCollection = InterchangeUtils.isCollection(field) &&
+				!InterchangeUtils.getGenericClass(field).equals(AmpCategoryValue.class);
+		
 		// create the map containing the correlation between the discriminatorOption and the JSON generated objects
 		for (Interchangeable setting : settings) {
 			// TODO: init settings with defaults from interchangeable
-			compositeMap.put(setting.discriminatorOption(), new ArrayList<JsonBean>());
+			compositeMap.put(setting.discriminatorOption(), initAsCollection ? new ArrayList<JsonBean>() : null);
 			compositeMapSettings.put(setting.discriminatorOption(), setting);
 			String fieldTitle = InterchangeUtils.underscorify(setting.fieldTitle());
 			String filteredFieldPath = fieldPath == null ? fieldTitle : fieldPath + "~" + fieldTitle;

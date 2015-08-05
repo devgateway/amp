@@ -70,23 +70,23 @@ var Query = Backbone.Model.extend({
         if (window.currentFilter !== undefined && window.currentFilter.converted !== true) {
         	window.currentFilter.converted = true;
             window.currentFilter.loaded.done(function() {
-            //console.log(this.get('filters'));
-            var auxFilters = self.get('filters');
-            self.set('filters', undefined);
-            var extractedFiltersFromSpecs = FilterUtils.extractFilters(auxFilters);
-            //console.log(extractedFiltersFromSpecs);
-            var blob = FilterUtils.convertJavaFiltersToJS(extractedFiltersFromSpecs);
-            //console.log(blob);
-                                
-            window.currentFilter.deserialize(blob, {
-            	silent : true
-            });
-            var serealized = window.currentFilter.serialize();
-            //console.log(JSON.stringify(serealized));
-            self.set('filters', serealized);
-            //console.log(JSON.stringify(self.get('filters')));
-            // TODO: Check if the filter widget is really ready (in older versions the parse of dates where processed too late).
-            self.initFiltersDeferred.resolve();
+	            //console.log(this.get('filters'));
+	            var auxFilters = self.get('filters');
+	            self.set('filters', undefined);
+	            var extractedFiltersFromSpecs = FilterUtils.extractFilters(auxFilters);
+	            //console.log(extractedFiltersFromSpecs);
+	            var blob = FilterUtils.convertJavaFiltersToJS(extractedFiltersFromSpecs);
+	            //console.log(blob);
+	                                
+	            window.currentFilter.deserialize(blob, {
+	            	silent : true
+	            });
+	            var serealized = window.currentFilter.serialize();
+	            //console.log(JSON.stringify(serealized));
+	            self.set('filters', serealized);
+	            //console.log(JSON.stringify(self.get('filters')));
+	            // TODO: Check if the filter widget is really ready (in older versions the parse of dates where processed too late).
+	            self.initFiltersDeferred.resolve();
             });                                                                     
         } else {
         	console.error('ERROR: Race condition with filters!!!');

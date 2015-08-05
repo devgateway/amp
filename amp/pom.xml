@@ -1152,26 +1152,26 @@
     				    </configuration>
 					</execution>
 					 <!-- Running npm -->
-                    <execution>
-                        <id>npm install on GIS</id>
-                        <goals>
-                            <goal>npm</goal>
-                        </goals>
-                	    <phase>generate-sources</phase>
-				        <configuration>
-				 	        <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>npm install on dashboards</id>
-                        <goals>
-                            <goal>npm</goal>
-                        </goals>
-                	    <phase>generate-sources</phase>
-				        <configuration>
-				 	        <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory>
-                        </configuration>
-                    </execution>
+<!--                     <execution> -->
+<!--                         <id>npm install on GIS</id> -->
+<!--                         <goals> -->
+<!--                             <goal>npm</goal> -->
+<!--                         </goals> -->
+<!--                 	    <phase>generate-sources</phase> -->
+<!-- 				        <configuration> -->
+<!-- 				 	        <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory> -->
+<!--                         </configuration> -->
+<!--                     </execution> -->
+<!--                     <execution> -->
+<!--                         <id>npm install on dashboards</id> -->
+<!--                         <goals> -->
+<!--                             <goal>npm</goal> -->
+<!--                         </goals> -->
+<!--                 	    <phase>generate-sources</phase> -->
+<!-- 				        <configuration> -->
+<!-- 				 	        <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory> -->
+<!--                         </configuration> -->
+<!--                     </execution> -->
 					<!-- Running gulp -->
 <!-- 					<execution> -->
 <!-- 					    <id>GIS gulp build</id> -->

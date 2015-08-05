@@ -1185,18 +1185,18 @@
 <!--     				        <arguments>build</arguments> -->
 <!-- 					    </configuration> -->
 <!-- 					</execution> -->
-					<execution>
-					    <id>Dashboard gulp build</id>
-					    <goals>
-					        <goal>gulp</goal>
-					    </goals>
-					    <phase>generate-sources</phase>
+<!-- 					<execution> -->
+<!-- 					    <id>Dashboard gulp build</id> -->
+<!-- 					    <goals> -->
+<!-- 					        <goal>gulp</goal> -->
+<!-- 					    </goals> -->
+<!-- 					    <phase>generate-sources</phase> -->
 					
-					    <configuration>
-							<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory>
-    				        <arguments>build</arguments>
-					    </configuration>
-					</execution>
+<!-- 					    <configuration> -->
+<!-- 							<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory> -->
+<!--     				        <arguments>build</arguments> -->
+<!-- 					    </configuration> -->
+<!-- 					</execution> -->
 					<execution>
 					    <id>Filters gulp build</id>
 					    <goals>

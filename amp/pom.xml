@@ -1171,22 +1171,20 @@
                         </configuration>
                     </execution>
 					<!-- Running gulp -->
-					<execution>
-					    <id>GIS gulp build</id>
-					    <goals>
-					        <goal>gulp</goal>
-					    </goals>
+<!-- 					<execution> -->
+<!-- 					    <id>GIS gulp build</id> -->
+<!-- 					    <goals> -->
+<!-- 					        <goal>gulp</goal> -->
+<!-- 					    </goals> -->
 					
-					    <!-- optional: the default phase is "generate-resources" -->
-					    <phase>generate-sources</phase>
+<!-- 					    optional: the default phase is "generate-resources" -->
+<!-- 					    <phase>generate-sources</phase> -->
 					
-					    <configuration>
-					        <!-- optional: if not specified, it will run gulp's default
-					        task (and you can remove this whole <configuration> section.) -->
-							<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
-    				        <arguments>build</arguments>
-					    </configuration>
-					</execution>
+<!-- 					    <configuration> -->
+<!-- 							<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory> -->
+<!--     				        <arguments>build</arguments> -->
+<!-- 					    </configuration> -->
+<!-- 					</execution> -->
 					<execution>
 					    <id>Dashboard gulp build</id>
 					    <goals>

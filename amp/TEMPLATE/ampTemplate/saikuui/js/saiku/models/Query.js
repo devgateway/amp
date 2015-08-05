@@ -23,6 +23,10 @@ var Query = Backbone.Model.extend({
     properties: null,
 
     initialize: function(args, options) {
+    	if (Settings.AMP_REPORT_API_BRIDGE) {
+    		this.initFiltersDeferred = $.Deferred();    		
+    	}
+    	
         // Save cube
         _.extend(this, options);
         
@@ -62,17 +66,31 @@ var Query = Backbone.Model.extend({
     // AMP-18921: workaround to the filters until they will be properly initialized, 
 	// that should be done as part of filters widget improvement as a whole
     initFilters: function() {
-    	if (window.currentFilter !== undefined && window.currentFilter.converted !== true) {
-    		window.currentFilter.converted = true;
-    		var extractedFiltersFromSpecs = FilterUtils.extractFilters(this.get('filters'));
-			var blob = FilterUtils.convertJavaFiltersToJS(extractedFiltersFromSpecs);
-			window.currentFilter.loaded.done(function() {
-				window.currentFilter.deserialize(blob, {
-					silent : true
-				});
-			});			
-			this.set('filters', blob);			
-		}
+    	var self = this;
+        if (window.currentFilter !== undefined && window.currentFilter.converted !== true) {
+        	window.currentFilter.converted = true;
+            window.currentFilter.loaded.done(function() {
+            //console.log(this.get('filters'));
+            var auxFilters = self.get('filters');
+            self.set('filters', undefined);
+            var extractedFiltersFromSpecs = FilterUtils.extractFilters(auxFilters);
+            //console.log(extractedFiltersFromSpecs);
+            var blob = FilterUtils.convertJavaFiltersToJS(extractedFiltersFromSpecs);
+            //console.log(blob);
+                                
+            window.currentFilter.deserialize(blob, {
+            	silent : true
+            });
+            var serealized = window.currentFilter.serialize();
+            //console.log(JSON.stringify(serealized));
+            self.set('filters', serealized);
+            //console.log(JSON.stringify(self.get('filters')));
+            // TODO: Check if the filter widget is really ready (in older versions the parse of dates where processed too late).
+            self.initFiltersDeferred.resolve();
+            });                                                                     
+        } else {
+        	console.error('ERROR: Race condition with filters!!!');
+        }
     },
     
     parse: function(response) {
@@ -166,11 +184,11 @@ var Query = Backbone.Model.extend({
         	 * We need filters & settings to be always applied
         	 * See AMP-19159, AMP-19135 and AMP-18826
         	 */
-        	if (this.firstLoad === false) {
-	        	if (filters == undefined) {
+        	//if (this.firstLoad === false) {
+	        	if (filters === undefined) {
 	        		filters = this.get('filters');
 	        	}
-	        	if (settings == undefined) {
+	        	if (settings === undefined) {
 	        		settings = this.get('settings');
 	        	}
 	        	
@@ -180,7 +198,7 @@ var Query = Backbone.Model.extend({
 	        		filtersApplied = true;
 	        		this.set('filtersWithModels', window.currentFilter.serializeToModels());
 	        	}	        	
-        	}
+        	//}
 
         	var settingsApplied = false;
         	if(settings) {
@@ -193,11 +211,11 @@ var Query = Backbone.Model.extend({
         	}
 
         	exModel = this.workspace.currentQueryModel;
-        	if (this.firstLoad === false) {
+        	//if (this.firstLoad === false) {
         		exModel.queryModel.filters = this.get('filters');
         		exModel.queryModel.filtersWithModels = this.get('filtersWithModels');
         		exModel.queryModel.filtersApplied = filtersApplied;
-        	}
+        	//}
         	exModel.queryModel.settings = this.get('settings');        	
         	exModel.queryModel.settingsApplied = settingsApplied;
         	if(Settings.PAGINATION) {

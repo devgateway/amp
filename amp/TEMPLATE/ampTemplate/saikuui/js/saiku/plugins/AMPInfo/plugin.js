@@ -18,7 +18,7 @@ var AMPInfo = Backbone.View.extend({
     render: function() {
 		var filters = this.workspace.query.get('filters');
 		var settings = window.currentSettings;
-		var content = this.render_info(filters, settings);
+		var content = this.render_info(settings);
 		$(this.el).html(content);
 		$("#amp_info_filters").accordion({	
 			collapsible : true,
@@ -34,7 +34,7 @@ var AMPInfo = Backbone.View.extend({
         $(this.el).show();
     },
     
-    render_info: function(filters, settings) {
+    render_info: function(settings) {
     	//TODO: Move all these html into a template + view.
     	var content = "<div id='amp_notification' class='amp_notification'><span class='i18n'>{0}</span></div>" 
     		+ "<div id='amp_info_filters'>";

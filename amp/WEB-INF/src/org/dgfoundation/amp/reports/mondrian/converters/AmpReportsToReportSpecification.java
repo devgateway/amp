@@ -82,7 +82,7 @@ public class AmpReportsToReportSpecification {
 		AmpARFilterConverter arFilterTranslator = new AmpARFilterConverter(arFilter);
 		spec.setSettings(arFilterTranslator.buildSettings());
 		spec.setFilters(arFilterTranslator.buildFilters());
-		
+		MtefConverter.instance.convertMtefs(this.report, this.spec);
 		return spec;
 	}
 	
@@ -93,7 +93,9 @@ public class AmpReportsToReportSpecification {
 				spec.addColumn(new ReportColumn(hierarchy.getColumn().getColumnName()));
 		} else {
 			for (AmpColumns column : getOrderedColumns()) 
-				spec.addColumn(new ReportColumn(column.getColumnName()));
+				if (!column.isMtefColumn()) { // MTEF columns are processed separately by MtefConverter, which reads the AmpReports instance directly
+					spec.addColumn(new ReportColumn(column.getColumnName()));
+				}
 		}
 		
 		boolean measuresMovedAsColumns = false;

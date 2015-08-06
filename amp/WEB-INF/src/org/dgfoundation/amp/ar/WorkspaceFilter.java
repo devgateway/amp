@@ -146,7 +146,16 @@ public class WorkspaceFilter
 						+ Util.toCSStringForIN(teamAssignedOrgs) + ") AND af.amp_activity_id=b.amp_activity_id AND b.amp_team_id IS NOT NULL AND b.approval_status IN (" +
 						used_approval_status	+") )" + (hideDraft ? "AND draft<>true ":"");
 			}
-				
+
+		String isolated_filter = " amp_activity_id IN (select amp_activity_id FROM amp_activity_version aav WHERE "
+					+ "aav.amp_team_id IN (select amp_team_id from amp_team WHERE isolated = true)) ";
+		if (this.teamMember !=null && this.teamMember.getTeamIsolated()) {
+			TEAM_FILTER = String.format("(%s) OR (%s)", TEAM_FILTER, isolated_filter );
+		}
+		else {
+			TEAM_FILTER = String.format("(%s) AND (NOT %s)", TEAM_FILTER, isolated_filter );
+		}
+
 
 //		int c;
 //		if (hideDraft){
@@ -163,16 +172,9 @@ public class WorkspaceFilter
 		//return "41, 43, 44, 45";
 		//return "20, 21"; // masha
 		//return "17041";
-		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('activity with components', 'activity-with-unfunded-components', 'activity with funded components', 'crazy funding 1', 'Eth Water')";
-		String isolated_filter = " amp_activity_id IN (select amp_activity_id FROM amp_activity_version aav WHERE "
-					+ "aav.amp_team_id IN (select amp_team_id from amp_team WHERE isolated = true)) ";
-		if (this.teamMember !=null && this.teamMember.getTeamIsolated()) {
-			TEAM_FILTER = String.format("%s OR  %s", TEAM_FILTER, isolated_filter );
-		}
-		else {
-			TEAM_FILTER = String.format("%s AND  (NOT %s)", TEAM_FILTER, isolated_filter );
-		}
-		return TEAM_FILTER;
+		return "SELECT amp_activity_id from amp_activity WHERE name IN ('TAC_activity_1', 'Test MTEF directed', 'Pure MTEF Project', 'mtef activity 1', 'Activity with both MTEFs and Act.Comms')";
+		
+		//return TEAM_FILTER;
 	}
 	
 	/**

@@ -633,9 +633,19 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	 */
 	public boolean isImplementedInMondrian() {
 		return (this.getType().intValue() == ArConstants.DONOR_TYPE || this.getType().intValue() == ArConstants.COMPONENT_TYPE || this.getType().intValue() == ArConstants.PLEDGES_TYPE)
-				&& hasAvailableMeasures();
+				&& (hasAvailableMeasures() || hasMtefColumn());
 	}
 	
+	/**
+	 * returns true iff any of the report's columns are MTEFs
+	 * @return
+	 */
+	protected boolean hasMtefColumn() {
+		for(AmpReportColumn arc:this.columns)
+			if (arc.getColumn().isMtefColumn())
+				return true;
+		return false;
+	}
 	
 	public String[] getOrderedMeasureNames() {
 		String[] res = new String[getMeasures().size()];

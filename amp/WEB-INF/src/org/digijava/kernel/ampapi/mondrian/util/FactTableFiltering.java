@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -19,6 +20,7 @@ import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.reports.mondrian.ActivityFilter;
 import org.dgfoundation.amp.reports.mondrian.FiltersGroup;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
+import org.digijava.module.aim.helper.Constants;
 
 /**
  * class used to add fact-table-filtering subquery(ies) to be used by Mondrian
@@ -27,6 +29,9 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
  *
  */
 public class FactTableFiltering {
+	
+	protected static final Logger logger = Logger.getLogger(FactTableFiltering.class);
+	
 	public static final String DATE_FILTERS_TAG_START = "@@date-filters-start@@";
 	public static final String DATE_FILTERS_TAG_END = "@@date-filters-end@@";
 	public static final String DATE_FILTERS_PATTERN = DATE_FILTERS_TAG_START + ".*" + DATE_FILTERS_TAG_END;
@@ -53,27 +58,38 @@ public class FactTableFiltering {
 				subquery.append(fragment);
 			}
 
-			ActivityFilter flt = new ActivityFilter("date_code");
-			// tag date filters section to reuse "all filters without date filters" criteria in other queries 
-			subquery.append(DATE_FILTERS_TAG_START);
-			// process the funding-date filter(s)
-			for(Entry<ReportElement, List<FilterRule>> filterElement:mrf.getFilterRules().entrySet())
-				if (filterElement.getKey().type.equals(ReportElement.ElementType.DATE)) {
-					String dateQuery = flt.buildQuery(filterElement.getValue());
-					if (dateQuery != null && !dateQuery.isEmpty())
-						subquery.append(dateQuery);
-				}
-			subquery.append(DATE_FILTERS_TAG_END);
+			String dateFilteringFragment = buildDateFilteringFragment(ReportElement.ElementType.DATE, "transaction_type <> " + Constants.MTEFPROJECTION);
+			String mtefFilteringFragment = buildDateFilteringFragment(ReportElement.ElementType.MTEF_DATE, "transaction_type = " + Constants.MTEFPROJECTION);
+			String datesQuery = String.format("%sAND ((%s) OR (%s))%s", DATE_FILTERS_TAG_START, dateFilteringFragment, mtefFilteringFragment, DATE_FILTERS_TAG_END);
+			subquery.append(datesQuery);
 		}
 		String ret = subquery.toString().trim();
 		long delta = System.currentTimeMillis() - start;
-		if (delta > 20) {
-			System.out.println("generating sql filter query took: " + delta + " millies");
+		if (delta > 30) {
+			logger.warn("generating sql filter query took: " + delta + " millies");
 			if (ret != null && !ret.isEmpty())
-				System.out.println("\tthe filter query fragment is: " + ret);
+				logger.info("\tthe filter query fragment is: " + ret);
 		}
 		return ret;
 	}
+	
+	/**
+	 * process the funding-date filter(s), excluding MTEFs
+	 * @return
+	 */
+	protected String buildDateFilteringFragment(ReportElement.ElementType elementType, String transactionTypeFilteringQuery) {
+		StringBuilder fragment = new StringBuilder();
+		ActivityFilter flt = new ActivityFilter("date_code");
+		// tag date filters section to reuse "all filters without date filters" criteria in other queries 
+		for(Entry<ReportElement, List<FilterRule>> filterElement:mrf.getFilterRules().entrySet())
+			if (filterElement.getKey().type.equals(elementType)) {
+				String dateQuery = flt.buildQuery(filterElement.getValue());
+				if (dateQuery != null && !dateQuery.isEmpty())
+					fragment.append(dateQuery);
+			}
+		String res = String.format("%s %s", transactionTypeFilteringQuery, fragment.toString());
+		return res;
+	}	
 	
 	/**
 	 * builds a subquery of the form AND (primary_sector_id IN (...))

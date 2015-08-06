@@ -19,15 +19,17 @@ public class ActivityFilter {
 	 * the expression to use on the left side of the queries 
 	 */
 	public final String COLUMN_EXPR;
-	
+		
 	public ActivityFilter(String columnExpr) {
 		this.COLUMN_EXPR = columnExpr;
-	}	
+	}
 	
 	public String buildQuery(List<FilterRule> filterElements) {
 		List<String> statements = new ArrayList<>();
+				
 		if (filterElements == null)
 			return null;
+		
 		for(FilterRule rule:filterElements) {
 			String statement = "";
 			switch(rule.filterType) {
@@ -55,7 +57,7 @@ public class ActivityFilter {
 				default:
 					throw new RuntimeException("unimplemented type of sql filter type: " + rule.filterType);
 			}
-			if (statement != null && !statement.isEmpty()){
+			if (statement != null && !statement.isEmpty()) {
 				if (!rule.valuesInclusive)
 					statement = "NOT (" + statement + ")";
 				statements.add(statement);

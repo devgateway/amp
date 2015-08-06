@@ -3,10 +3,14 @@ package org.digijava.module.aim.dbentity ;
 import java.io.Serializable;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.digijava.module.aim.annotations.reports.Identificator;
 
-public class AmpColumns  implements Serializable, Comparable
+public class AmpColumns implements Serializable, Comparable
 {
+	protected static final Logger logger = Logger.getLogger(AmpColumns.class);
+	
 	@Identificator
 	private Long columnId ;
 	private String columnName ;
@@ -166,5 +170,19 @@ public class AmpColumns  implements Serializable, Comparable
 		clonedCol.setTokenExpression( this.getTokenExpression() );
 		clonedCol.setTotalExpression( this.getTotalExpression() );
 		return clonedCol;
-	}	
+	}
+	
+	public boolean isMtefColumn() {
+		try {return getMtefYear() != null;}
+		catch(Exception e) {
+			logger.error("potentially inconsistent MTEF column definition", e);
+			return false;
+		}
+	}
+	
+	public Integer getMtefYear() {
+		if (this.getAliasName() == null || !this.getAliasName().toLowerCase().startsWith("mtef"))
+			return null;
+		return Integer.parseInt(this.getAliasName().substring(4)); // intentionally crash if input isn't good
+	}
 }

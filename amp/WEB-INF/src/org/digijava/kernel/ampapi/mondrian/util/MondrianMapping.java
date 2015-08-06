@@ -352,6 +352,7 @@ public class MondrianMapping {
 			dependency.put(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS, ColumnConstants.TOTAL_GRAND_ACTUAL_DISBURSEMENTS);
 			addMeasureDefinition(MeasureConstants.UNDISBURSED_BALANCE);
 			addMeasureDefinition(MeasureConstants.PLEDGES_COMMITMENT_GAP);
+			addMeasureDefinition(MeasureConstants.MTEF_PROJECTIONS);
 			
 			addMeasureDefinition(MeasureConstants.ALWAYS_PRESENT);
 			//put(new ReportMeasure(MeasureConstants.REAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL), new MDXMeasure(MoConstants.REAL_DISBURSEMENTS));

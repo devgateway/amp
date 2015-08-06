@@ -30,7 +30,10 @@ import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.dgfoundation.amp.testutils.PledgeIdsFetcher;
 import org.dgfoundation.amp.testutils.ReportTestingUtils;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -294,6 +297,17 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		String res = "";
 		for(int i = 0; i < depth; i++)
 			res = res + "  ";
+		return res;
+	}
+	
+	public static AmpReportColumn ampReportColumnForColName(String colName, long order) {
+		AmpColumns col = (AmpColumns) PersistenceManager.getSession().createQuery("FROM " + AmpColumns.class.getName() + " c WHERE c.columnName=:colName").setString("colName", colName).uniqueResult();
+		if (col == null)
+			throw new RuntimeException("column with name <" + colName + "> not found!");
+		
+		AmpReportColumn res = new AmpReportColumn();
+		res.setColumn(col);
+		res.setOrderId(order);
 		return res;
 	}
 }

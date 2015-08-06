@@ -83,6 +83,7 @@ import org.olap4j.metadata.Member;
 import org.olap4j.query.SortOrder;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
+import org.saiku.olap.dto.resultset.MemberCell;
 import org.saiku.olap.util.OlapResultSetUtil;
 import org.saiku.service.olap.totals.TotalNode;
 import org.saiku.service.olap.totals.aggregators.TotalAggregator;
@@ -476,7 +477,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		// at the moment only dates are filtered out, but years, quarters and months are not :(
 		// ignore DATE filters, as those are now processed through the SQL  filter
 
-		if (element.type == ElementType.DATE)
+		if (element.type == ElementType.DATE || element.type == ElementType.MTEF_DATE)
 			return true;
 
 		if (element.type == ElementType.ENTITY) {
@@ -592,6 +593,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 
 		// now cleanup dummy measures, identified during #getOrderedLeafColumnsList
 		//SaikuUtils.removeColumns(cellDataSet, dummyColumnsToRemove);
+		processMtefHeaders(cellDataSet, spec);
 		
 		boolean calculateTotalsOnRows = spec.isCalculateRowTotals()
 				//enable totals for non-hierarchical columns
@@ -629,6 +631,69 @@ public class MondrianReportGenerator implements ReportExecutor {
 		SaikuUtils.updateCoordinates(cellDataSet);
 		
 		return cellDataSet;
+	}
+	
+	/**
+	 * change 'mtef projection' headers to translate('MTEF xxxx/yyyy')
+	 * @param cellDataSet
+	 * @param spec
+	 */
+	protected void processMtefHeaders(CellDataSet cellDataSet, ReportSpecification spec) {
+		AbstractBaseCell[][] headers = cellDataSet.getCellSetHeaders();
+		if (headers == null || headers.length <= 1) return;
+		// skim through last line
+		int lastLineNr = headers.length - 1;
+		String expectedMtefRawValue = "[Measures].[MTEF Projections]";
+		for(int i = 0; i < headers[lastLineNr].length; i++) {
+			AbstractBaseCell cell = headers[lastLineNr][i];
+			AbstractBaseCell parentCell = headers[lastLineNr - 1][i];
+			if (cell.getRawValue() != null && cell.getRawValue().equals(expectedMtefRawValue) && parentCell != null) {
+				// this is a MTEF cell and it needs translation
+				int year = parseYear(parentCell.getRawValue());
+				if (year > 0) {
+					String englishFormattedValue = String.format("MTEF %d/%d", year, year + 1);
+					String formattedValue = TranslatorWorker.translateText(englishFormattedValue, environment.locale, 3l);
+					//cell = new MemberCell();
+					cell.setFormattedValue(formattedValue);
+					cell.setRawValue(formattedValue);
+					//headers[lastLineNr][i] = cell;
+					ReportOutputColumn roc = leafHeaders.get(i);
+					roc = new ReportOutputColumn(formattedValue, roc.parentColumn, roc.originalColumnName);
+					leafHeaders.set(i, roc);
+				}
+			}
+//			logger.error(
+//					String.format("last line cell: parentDimension: %s, rawValue: %s, formattedValue: %s", 
+//							cell.getParentDimension(), cell.getRawValue(), cell.getFormattedValue()));
+//			logger.error(
+//					String.format("parent cell: parentDimension: %s, rawValue: %s, formattedValue: %s", 
+//							parentCell.getParentDimension(), parentCell.getRawValue(), parentCell.getFormattedValue()));
+		}
+	}
+	
+	/**
+	 * parses a string of the form "[Dates.Year].[2014]" into "2014". Returns <=0 if failed to parse 
+	 * @param dateCellValue
+	 * @return
+	 */
+	protected int parseYear(String dateCellValue) {
+		if (dateCellValue == null) return -1;
+		String expectedPrefix = "[Dates.Year].[";
+
+		if (!dateCellValue.startsWith(expectedPrefix)) return -2;
+		dateCellValue = dateCellValue.substring(expectedPrefix.length());
+		if (dateCellValue.isEmpty()) return -3;
+		
+		dateCellValue = dateCellValue + "#"; // guard
+		int pos = 0;
+		while (Character.isDigit(dateCellValue.charAt(pos))) pos ++; // will never overrun the string because of the guard
+		String v = dateCellValue.substring(0, pos);
+		try{
+			return Integer.parseInt(v);
+		}
+		catch(Exception e) {
+			return -4;
+		}
 	}
 	
 	/**

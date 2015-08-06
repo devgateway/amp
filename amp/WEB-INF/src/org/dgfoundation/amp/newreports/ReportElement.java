@@ -15,7 +15,8 @@ public class ReportElement {
 		YEAR,
 		QUARTER,
 		MONTH,
-		DATE;
+		DATE,
+		MTEF_DATE
 	};
 	
 	/** Report element type. If it is ENTITY type, then {@link #entity} is specified */

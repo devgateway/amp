@@ -177,7 +177,7 @@ module.exports = Backbone.Collection
                 aryOfIDs.splice(index, 1);  // remove id from array
               }
             });
-
+            console.warn('Failed to recieve activities:', aryOfIDs);
             deferred.resolve(matches);
           })
           .fail(function(err) {

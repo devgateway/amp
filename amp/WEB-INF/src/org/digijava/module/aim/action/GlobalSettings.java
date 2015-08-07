@@ -114,8 +114,6 @@ public class GlobalSettings extends Action {
 			dailyCurrencyRatesChanges(null);
 			auditTrialCleanerChanges();
 			DigiCacheManager.getInstance().getCache(ArConstants.EXCHANGE_RATES_CACHE).clear();
-			// update menu if support email changed
-			MenuStructure.recreate();
 		}
 		
 		List<AmpGlobalSettings> col = FeaturesUtil.getGlobalSettings();
@@ -133,6 +131,8 @@ public class GlobalSettings extends Action {
 	    	ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 	    	FeaturesUtil.setAmpTreeVisibility(ampContext, session,ampTreeVisibility);
 	    	
+			// update menu if support email changed
+			MenuStructure.recreate();
 		}
 		gsForm.setGsfCol(col);
 		for (AmpGlobalSettings ampGS:col)

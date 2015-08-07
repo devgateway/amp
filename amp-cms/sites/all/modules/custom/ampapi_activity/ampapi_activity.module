@@ -251,6 +251,7 @@ function ampapi_activity_views_pre_build(View &$view) {
   }
 
   foreach ($view->filter as $filter_name => $filter_handler) {
+    // @TODO: Have filters enabled by default? This will hide new filters when they are deployed.
     $filter_enabled = TRUE;
 
     if ($filter_name == 'activities_search_type') {
@@ -278,6 +279,9 @@ function ampapi_activity_views_pre_build(View &$view) {
           // NOTE: Changing the value here only works if the filter is not
           // exposed. Otherwise the form values will override this change.
           $view->filter[$filter_name]->value = TRUE;
+        }
+        else {
+          $filter_enabled = FALSE;
         }
       }
 

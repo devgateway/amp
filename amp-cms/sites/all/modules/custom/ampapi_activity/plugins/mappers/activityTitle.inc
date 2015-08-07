@@ -15,7 +15,7 @@ $plugin = array(
 
   'report field group' => 'columns',
   'report field key' => 'Project Title',
-  'report filter key' => 'Project Title',
+  'report filter key' => 'keyword',
 
   'handler' => 'activityTitleMapper',
 );
@@ -25,9 +25,8 @@ class activityTitleMapper extends activityMapperBase {
    * Filter handler.
    */
   public static function filter($plugin, &$api_parameters, &$request_body, $condition) {
-    // We use SOLR search for the title.
+    // The filter for this field is not a normal filter.
     $plugin['report field group'] = 'others';
-    $plugin['report field key'] = 'keyword';
     parent::filter($plugin, $api_parameters, $request_body, $condition);
   }
 }

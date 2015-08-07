@@ -54,7 +54,9 @@ function ampapi_activity_views_data_alter(&$data) {
             break;
           case 'text':
           default:
-          $data[$efq_data_key][$property_name]['filter']['handler'] = 'ampapi_activity_views_handler_filter_in_operator';
+            if (isset($plugin['report filter endpoint'])) {
+              $data[$efq_data_key][$property_name]['filter']['handler'] = 'ampapi_activity_views_handler_filter_in_operator';
+            }
         }
       }
       else {

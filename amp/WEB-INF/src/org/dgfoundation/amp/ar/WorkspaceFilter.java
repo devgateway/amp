@@ -150,10 +150,10 @@ public class WorkspaceFilter
 		String isolated_filter = " amp_activity_id IN (select amp_activity_id FROM amp_activity_version aav WHERE "
 					+ "aav.amp_team_id IN (select amp_team_id from amp_team WHERE isolated = true)) ";
 		if (this.teamMember !=null && this.teamMember.getTeamIsolated()) {
-			TEAM_FILTER = String.format("(%s) OR (%s)", TEAM_FILTER, isolated_filter );
+			TEAM_FILTER = String.format("%s OR %s", TEAM_FILTER, isolated_filter );
 		}
 		else {
-			TEAM_FILTER = String.format("(%s) AND (NOT %s)", TEAM_FILTER, isolated_filter );
+			TEAM_FILTER = String.format("%s AND (NOT %s)", TEAM_FILTER, isolated_filter );
 		}
 
 

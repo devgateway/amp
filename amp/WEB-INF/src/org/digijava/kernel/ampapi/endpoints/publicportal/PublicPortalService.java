@@ -71,7 +71,9 @@ public class PublicPortalService {
 		ReportSpecificationImpl spec = EndpointUtils.getReportSpecification(config, "PublicPortal_GetTopProjects");
 		
 		SettingsUtils.applySettings(spec, config);
-		spec.setFilters(getPeriodFilter(months));
+		if (months != null) {
+			spec.setFilters(getPeriodFilter(months));
+		}
 		/*TODO: tbd if we need to filter out null dates from results
 		MondrianReportUtils.filterOutNullDates(spec);
 		*/
@@ -153,8 +155,7 @@ public class PublicPortalService {
 	}
 	
 	public static final ReportFilters getPeriodFilter(Integer months) {
-		if (months == null)
-			months = getPublicPortalPeriodInMonths();
+
 		Calendar cal = Calendar.getInstance();
 		Calendar currentCal = Calendar.getInstance();
 		cal.add(Calendar.MONTH, -months);
@@ -205,7 +206,9 @@ public class PublicPortalService {
 			}
 		}
 
-		spec.setFilters(getPeriodFilter(months));
+		if (months != null) {
+			spec.setFilters(getPeriodFilter(months));
+		}
 		SettingsUtils.applySettings(spec, config);
 		getPublicReport(count, result, content, spec, true, measureName, null);
 		return result;

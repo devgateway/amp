@@ -99,7 +99,7 @@ public class MonetConnection implements AutoCloseable {
      */
     public LinkedHashMap<String, String> getTableColumnsWithTypes(final String tableName, boolean crashOnDuplicates){
         String query = String.format("SELECT c.name, c.type FROM sys.columns c WHERE c.table_id = (SELECT t.id FROM sys.tables t WHERE t.name='%s') ORDER BY c.number", tableName.toLowerCase());
-        return SQLUtils.getTableColumnsWithTypes(this.conn, tableName, query, crashOnDuplicates);
+        return SQLUtils.getStringToStringMap(this.conn, tableName, query, crashOnDuplicates);
     }
 
     public Set<String> getTablesWithNameMatching(String begin) {

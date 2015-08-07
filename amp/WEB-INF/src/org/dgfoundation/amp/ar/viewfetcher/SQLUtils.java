@@ -52,11 +52,22 @@ public class SQLUtils {
 	public static LinkedHashMap<String, String> getTableColumnsWithTypes(final String tableName, boolean crashOnDuplicates){
 		String query = String.format("SELECT c.column_name, c.data_type FROM information_schema.columns As c WHERE table_schema='public' AND table_name = '%s' ORDER BY c.ordinal_position", tableName.toLowerCase());
 		try(Connection jdbcConnection = PersistenceManager.getJdbcConnection()) {
-			return getTableColumnsWithTypes(jdbcConnection, tableName, query, crashOnDuplicates);
+			return getStringToStringMap(jdbcConnection, tableName, query, crashOnDuplicates);
 		}
 		catch(SQLException ex) {
 			throw new RuntimeException(ex);
 		}
+	}
+	
+	/**
+	 * returns the list of all the columns of a table / view, in the same order as they appear in the table/view definition
+	 * @param tableName - the table / view whose columns to fetch
+	 * @param crashOnDuplicates - whether to throw exception in case the table/view has duplicate names
+	 * @return Map<ColumnName, data_type>
+	 */
+	public static LinkedHashMap<String, String> getTableColumnsWithTypes(Connection jdbcConnection, final String tableName, boolean crashOnDuplicates){
+		String query = String.format("SELECT c.column_name, c.data_type FROM information_schema.columns As c WHERE table_schema='public' AND table_name = '%s' ORDER BY c.ordinal_position", tableName.toLowerCase());
+		return getStringToStringMap(jdbcConnection, tableName, query, crashOnDuplicates);
 	}
 	
 	/**
@@ -66,7 +77,7 @@ public class SQLUtils {
 	 * @param crashOnDuplicates
 	 * @return
 	 */
-	public static LinkedHashMap<String, String> getTableColumnsWithTypes(Connection jdbcConnection, String tableName, String query, boolean crashOnDuplicates) {
+	public static LinkedHashMap<String, String> getStringToStringMap(Connection jdbcConnection, String tableName, String query, boolean crashOnDuplicates) {
 		LinkedHashMap<String, String> res = new LinkedHashMap<>();
 		try(RsInfo rsi = rawRunQuery(jdbcConnection, query, null)) {
 			while (rsi.rs.next()) {
@@ -102,6 +113,10 @@ public class SQLUtils {
 		return getLong(conn, "select count(*) from information_schema.tables WHERE table_schema='public' AND lower(table_type)='view' and table_name='" + viewName + "'") >= 0;
 	}
 	
+	public static boolean isTable(Connection conn, String viewName) {
+		return getLong(conn, "select count(*) from information_schema.tables WHERE table_schema='public' AND lower(table_type)='base table' and table_name='" + viewName + "'") >= 0;
+	}	
+	
 	/**
 	 * returns the rowcount in a table
 	 * @param conn
@@ -125,11 +140,7 @@ public class SQLUtils {
 	public static boolean tableExists(String tableName)
 	{
 		return !getTableColumns(tableName).isEmpty();
-	}
-	
-	public static boolean tableExists(Connection conn, String tableName) {
-		return getLong(conn, "select count(*) from information_schema.tables WHERE table_schema='public' AND lower(table_type)='table' and table_name='" + tableName + "'") > 0;
-	}
+	}	
 	
 	public static void executeQuery(Connection conn, String query)
 	{

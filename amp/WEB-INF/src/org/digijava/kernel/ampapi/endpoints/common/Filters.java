@@ -51,6 +51,7 @@ import org.hibernate.ObjectNotFoundException;
  */
 @Path("filters")
 public class Filters {
+	private static final String SECTORS_SUFFIX = " Sectors";
 	private static final Logger logger = Logger.getLogger(Filters.class);
 
 	//AmpARFilter filters;
@@ -131,7 +132,7 @@ public class Filters {
 			if (visibleColumns.contains(columnName)) {
 				JsonBean schema=new JsonBean();
 				schema.set("id", ampClassificationConfiguration.getId());
-				schema.set("name", ampClassificationConfiguration.getName());
+				schema.set("name", TranslatorWorker.translateText(ampClassificationConfiguration.getName() + SECTORS_SUFFIX));
 				schemaList.add(schema);
 			}
 		}
@@ -158,7 +159,7 @@ public class Filters {
 			String sectorConfigName = c.getName();
 			List<SimpleJsonBean> ampSectorsList = new ArrayList<SimpleJsonBean>();
 			sector.setId(sectorId);
-			sector.setName(sectorConfigName);
+			sector.setName(TranslatorWorker.translateText(sectorConfigName + SECTORS_SUFFIX));
 			List<AmpSector> s = SectorUtil
 					.getAmpSectorsAndSubSectorsHierarchy(sectorConfigName);
 			for (AmpSector ampSector : s) {

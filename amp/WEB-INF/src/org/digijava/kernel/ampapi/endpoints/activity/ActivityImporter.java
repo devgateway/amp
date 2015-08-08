@@ -32,7 +32,6 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
@@ -46,14 +45,13 @@ import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgRoleBudget;
-import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
@@ -87,18 +85,15 @@ public class ActivityImporter {
 	private boolean isDraftFMEnabled;
 	private boolean isMultilingual;
 	private TranslationSettings trnSettings;
-	private TeamMember teamMember;
-	private User user;
+	private AmpTeamMember currentMember;
 	private String sourceURL;
     private String endpointContextPath;
     private Long latestActivityId;
 
     protected void init(JsonBean newJson, boolean update, String endpointContextPath) {
-		this.teamMember = TeamUtil.getCurrentMember();
-		this.user = TeamMemberUtil.getUserEntityByTMId(teamMember.getMemberId());
 		this.sourceURL = TLSUtils.getRequest().getRequestURL().toString();
 		this.update = update;
-
+        currentMember = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
 		this.newJson = newJson;
 		this.isDraftFMEnabled = FMVisibility.isFmPathEnabled(SAVE_AS_DRAFT_PATH);
 		this.isMultilingual = ContentTranslationUtil.multilingualIsEnabled();
@@ -160,12 +155,13 @@ public class ActivityImporter {
 		
 		newActivity = (AmpActivityVersion) validateAndImport(newActivity, oldActivity, fieldsDef, 
 				newJsonParent, oldJsonParent, null);
-		if(newActivity != null && errors.isEmpty()) {
+		if (newActivity != null && errors.isEmpty()) {
+
 			// save new activity
 			try {
 				prepareToSave();
 				org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(
-						newActivity, translations, TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest()), 
+						newActivity, translations, currentMember,
 						Boolean.TRUE.equals(newActivity.getDraft()), PersistenceManager.getRequestDBSession(), false, false);
 				postProcess();
 			} catch (Exception e) {
@@ -659,7 +655,8 @@ public class ActivityImporter {
 					}
 				} else if (editor == null) {
 					// create new
-					editor = DbUtil.createEditor(user, langCode, sourceURL, key, null, translation, "Activities API", TLSUtils.getRequest());
+					editor = DbUtil.createEditor(currentMember.getUser(), langCode, sourceURL, key, null, translation,
+                            "Activities API", TLSUtils.getRequest());
 					DbUtil.saveEditor(editor);
 				} else if (!editor.getBody().equals(translation)) {
 					// update existing if needed
@@ -694,6 +691,9 @@ public class ActivityImporter {
 	}
 	
 	protected void prepareToSave() {
+        newActivity.setLastImportedAt(new Date());
+        newActivity.setLastImportedBy(currentMember);
+
 		newActivity.setChangeType(ChangeType.IMPORT.name());
 		// configure draft status on import only, since on update we'll change to draft based on RequiredValidator
 		if (!update) {
@@ -943,20 +943,6 @@ public class ActivityImporter {
 	 */
 	public TranslationSettings getTrnSettings() {
 		return trnSettings;
-	}
-
-	/**
-	 * @return the teamMember
-	 */
-	public TeamMember getTeamMember() {
-		return teamMember;
-	}
-
-	/**
-	 * @return the user
-	 */
-	public User getUser() {
-		return user;
 	}
 
 	/**

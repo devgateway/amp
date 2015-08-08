@@ -16,4 +16,6 @@ public class ActivityFieldsConstants {
 	public static final String PROJECT_TITLE = "Project Title";
 	public static final String IS_DRAFT = "Is Draft";
     public static final String CHANGE_TYPE = "Change Type";
+    public static final String LAST_IMPORTED_AT = "Last Imported At";
+    public static final String LAST_IMPORTED_BY = "Last Imported By";
 }

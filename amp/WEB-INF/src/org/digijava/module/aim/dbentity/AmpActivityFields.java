@@ -144,6 +144,14 @@ LoggerIdentifiable, Cloneable {
     @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.CHANGE_TYPE)
     protected String changeType;
 
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_AT)
+    @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_AT)
+    protected Date lastImportedAt;
+
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_BY)
+    @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_BY)
+    protected AmpTeamMember lastImportedBy;
+
 	@Interchangeable(fieldTitle = "Equal Oportunity", importable = true, fmPath = "/Activity Form/Cross Cutting Issues/Equal Opportunity")
 	@VersionableFieldTextEditor(fieldTitle = "Equal Oportunity")
 	protected String equalOpportunity;
@@ -1590,6 +1598,22 @@ LoggerIdentifiable, Cloneable {
 
         public void setChangeType(String changeType) {
             this.changeType = changeType;
+        }
+
+        public Date getLastImportedAt() {
+            return lastImportedAt;
+        }
+
+        public void setLastImportedAt(Date lastImportedAt) {
+            this.lastImportedAt = lastImportedAt;
+        }
+
+        public AmpTeamMember getLastImportedBy() {
+            return lastImportedBy;
+        }
+
+        public void setLastImportedBy(AmpTeamMember lastImportedBy) {
+            this.lastImportedBy = lastImportedBy;
         }
 
 		public void setActPrograms(Set actPrograms) {

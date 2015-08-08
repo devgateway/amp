@@ -17,7 +17,6 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
-import org.dgfoundation.amp.ar.viewfetcher.I18nViewDescription;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -30,7 +29,6 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -40,7 +38,6 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AmpThemeSkeleton;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.LocationSkeleton;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -57,6 +54,7 @@ import org.hibernate.ObjectNotFoundException;
  */
 @Path("filters")
 public class Filters {
+	private static final String SECTORS_SUFFIX = " Sectors";
 	private static final Logger logger = Logger.getLogger(Filters.class);
 
 	//AmpARFilter filters;
@@ -151,7 +149,7 @@ public class Filters {
 			if (visibleColumns.contains(columnName)) {
 				JsonBean schema=new JsonBean();
 				schema.set("id", ampClassificationConfiguration.getId());
-				schema.set("name", ampClassificationConfiguration.getName());
+				schema.set("name", TranslatorWorker.translateText(ampClassificationConfiguration.getName() + SECTORS_SUFFIX));
 				schemaList.add(schema);
 			}
 		}
@@ -178,7 +176,7 @@ public class Filters {
 			String sectorConfigName = c.getName();
 			List<SimpleJsonBean> ampSectorsList = new ArrayList<SimpleJsonBean>();
 			sector.setId(sectorId);
-			sector.setName(sectorConfigName);
+			sector.setName(TranslatorWorker.translateText(sectorConfigName + SECTORS_SUFFIX));
 			List<AmpSector> s = SectorUtil
 					.getAmpSectorsAndSubSectorsHierarchy(sectorConfigName);
 			for (AmpSector ampSector : s) {

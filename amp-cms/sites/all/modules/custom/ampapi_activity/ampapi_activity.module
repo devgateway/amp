@@ -262,7 +262,15 @@ function ampapi_activity_views_pre_build(View &$view) {
     }
     else {
       $mapper_plugin = ampapi_get_mapper_by_property_name($filter_handler->real_field);
-      $filter_key = $mapper_plugin['report field key'];
+
+      // Some filers have a key that is different from the field key. like:
+      // 'National Plan Objective' vs 'National Planning Objectives Level 1 Id'
+      if (isset($mapper_plugin['report filter key'])) {
+        $filter_key = $mapper_plugin['report filter key'];
+      }
+      else {
+        $filter_key = $mapper_plugin['report field key'];
+      }
 
       // Handle global "Humanitarian Aid" filter.
       // @see helpergeneric_api_settings_form()

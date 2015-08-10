@@ -115,6 +115,7 @@ function contentblock_entity_info() {
         'default settings' => array(
           'default_language' => LANGUAGE_NONE,
           'hide_language_selector' => FALSE,
+          'lock_language' => FALSE,
         ),
       ),
     ),

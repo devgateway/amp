@@ -1534,8 +1534,8 @@ public class ExportActivityToPDF extends Action {
 				
 				int endTagLength = endTagStr.length();
 				//fixed the problem related with editor from form
-				if(text.contains("/style>") && !text.contains("</style>"))
-					text = text.replace("/style>", "</style>");
+				if(text.contains("/"+tag+">") && !text.contains("</"+tag+">"))
+					text = text.replace("/"+tag+">", "</"+tag+">");
 				
 				while(text.contains(startTagStrOpened) || text.contains(startTagStrClosed)){
 					int firstIndexOfStartTag=0;

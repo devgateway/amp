@@ -23,5 +23,5 @@ $plugin = array(
   'handler' => 'beneficiaryAgencyMapper',
 );
 
-class beneficiaryAgencyMapper extends activityMapperRoleAutocomplete {
+class beneficiaryAgencyMapper extends activityMapperSubFilterAutocomplete {
 }

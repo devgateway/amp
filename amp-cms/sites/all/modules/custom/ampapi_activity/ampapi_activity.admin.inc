@@ -125,6 +125,7 @@ function ampapi_activity_search_settings_form($form, &$form_state) {
   }
 
   $notes = theme('item_list', array('items' => array(
+    t('Only filters that are also enabled in AMP will be displayed.'),
     t('It is recommended to also enable the column for each of the enabled filters.'),
     t('The "Search Terms" filter is always displayed.'),
   )));

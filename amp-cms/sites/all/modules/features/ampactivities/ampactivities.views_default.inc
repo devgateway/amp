@@ -455,10 +455,20 @@ function ampactivities_views_default_views() {
   $handler->display->display_options['filters']['secondary_sector']['expose']['description'] = 'filter activities by secondary sector';
   $handler->display->display_options['filters']['secondary_sector']['expose']['operator'] = 'secondary_sector_op';
   $handler->display->display_options['filters']['secondary_sector']['expose']['identifier'] = 'secondary_sector';
-  $handler->display->display_options['filters']['secondary_sector']['expose']['remember_roles'] = array(
-    2 => '2',
-  );
   $handler->display->display_options['filters']['secondary_sector']['type'] = 'tokeninput';
+  /* Filter criterion: Activity: National Plan Objective */
+  $handler->display->display_options['filters']['national_plan_objective']['id'] = 'national_plan_objective';
+  $handler->display->display_options['filters']['national_plan_objective']['table'] = 'efq_activity';
+  $handler->display->display_options['filters']['national_plan_objective']['field'] = 'national_plan_objective';
+  $handler->display->display_options['filters']['national_plan_objective']['value'] = '';
+  $handler->display->display_options['filters']['national_plan_objective']['group'] = 1;
+  $handler->display->display_options['filters']['national_plan_objective']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['national_plan_objective']['expose']['operator_id'] = 'national_plan_objective_op';
+  $handler->display->display_options['filters']['national_plan_objective']['expose']['label'] = 'National Plan Objective';
+  $handler->display->display_options['filters']['national_plan_objective']['expose']['description'] = 'filter activities by national plan objective';
+  $handler->display->display_options['filters']['national_plan_objective']['expose']['operator'] = 'national_plan_objective_op';
+  $handler->display->display_options['filters']['national_plan_objective']['expose']['identifier'] = 'npo';
+  $handler->display->display_options['filters']['national_plan_objective']['type'] = 'tokeninput';
   /* Filter criterion: Activity: Location */
   $handler->display->display_options['filters']['location']['id'] = 'location';
   $handler->display->display_options['filters']['location']['table'] = 'efq_activity';
@@ -498,9 +508,6 @@ function ampactivities_views_default_views() {
   $handler->display->display_options['filters']['humanitarian_aid']['expose']['operator'] = 'humanitarian_aid_op';
   $handler->display->display_options['filters']['humanitarian_aid']['expose']['identifier'] = 'aid';
   $handler->display->display_options['filters']['humanitarian_aid']['expose']['required'] = TRUE;
-  $handler->display->display_options['filters']['humanitarian_aid']['expose']['remember_roles'] = array(
-    2 => '2',
-  );
 
   /* Display: Search Page */
   $handler = $view->new_display('page', 'Search Page', 'search_page');
@@ -572,6 +579,8 @@ function ampactivities_views_default_views() {
     t('filter activities by beneficiary agency'),
     t('filter activities by primary sector'),
     t('filter activities by secondary sector'),
+    t('National Plan Objective'),
+    t('filter activities by national plan objective'),
     t('filter activities by location'),
     t('Activities Search Type'),
     t('Humanitarian Aid'),

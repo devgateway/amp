@@ -18,10 +18,10 @@ $plugin = array(
   'report filter key' => 'Primary Sector Id',
 
   'report filter endpoint' => 'filters/sectors',
-  'filter sector type' => 'Primary',
+  'report sub-filter type' => 'Primary',
 
   'handler' => 'primarySectorMapper',
 );
 
-class primarySectorMapper extends activityMapperSectorAutocomplete {
+class primarySectorMapper extends activityMapperSubFilterAutocomplete {
 }

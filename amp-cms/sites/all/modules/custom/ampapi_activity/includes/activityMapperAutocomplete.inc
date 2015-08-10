@@ -3,28 +3,28 @@
 /**
  * @file
  * Shared classes and interfaces for the API mapper system.
- *
- * @TODO: Reduce complexity!!
  */
 
 class activityMapperAutocompleteBase extends activityMapperBase implements activityMapperAutocompleteInterface {
   public function autocomplete($plugin, $data, $type = 'autocomplete') {
     $info = $this->getAutocompleteInfo($plugin, $data, $type);
-
     if (empty($info)) {
       return array();
     }
 
     $returned_data = ampapi_request('get', $info['endpoint'], TRUE);
+    if (empty($returned_data)) {
+      return array();
+    }
 
-    // Because we like to be consistent.
     switch ($plugin['report filter endpoint']) {
       case 'filters/locations':
         // Include top level (the country name) in the autocomplete suggestions.
         $returned_data = array($returned_data);
         break;
+      case 'filters/programs':
       case 'filters/sectors':
-        // Do not include top level (Primary/Secondary) in the autocomplete suggestions.
+        // Do not include top level option in the autocomplete suggestions.
         $returned_data = $returned_data->children;
         break;
     }
@@ -72,54 +72,8 @@ class activityMapperAutocompleteBase extends activityMapperBase implements activ
         }
       }
 
-
-      switch ($info['type']) {
-        case 'tokeninput':
-        case 'autocomplete':
-          $skip = TRUE;
-
-          $entry_name = transliteration_get($entry->name, '', $language->language);
-          if (stripos($entry_name, $search_string) !== FALSE) {
-            $skip = FALSE;
-          }
-
-          if ($info['plugin']['report filter endpoint'] == 'filters/orgs') {
-            if (isset($entry->acronym) && stripos($entry->acronym, $search_string) !== FALSE) {
-              $skip = FALSE;
-            }
-          }
-
-          // Filter out donors without funding.
-          // @TODO: Refactor.
-          if ($info['plugin']['property name'] == 'donor_agency') {
-            if (!$skip && !empty($entry->hasFundings)) {
-              $skip = FALSE;
-            }
-            else {
-              $skip = TRUE;
-            }
-          }
-
-          if ($skip) {
-            continue 2;
-          }
-          break;
-        case 'autocompleteids':
-          // Special case for autocomplete powered view filters.
-          // Not using the jQuery TokenInput library.
-          if ($entry->name != $search_string) {
-            continue 2;
-          }
-          break;
-        case 'tokeninputids':
-          if (!in_array($entry->id, $info['values'])) {
-            continue 2;
-          }
-          break;
-
-        default:
-          continue 2;
-          break;
+      if (!$this->_valueMatches($info, $entry, $search_string)) {
+        continue;
       }
 
       // Include parent Location Administrative Levels in name, if any.
@@ -143,11 +97,11 @@ class activityMapperAutocompleteBase extends activityMapperBase implements activ
         'name' => $name,
       );
 
-      if (!$prepend_entry) {
-        $matches[] = $new_value;
+      if ($prepend_entry) {
+        array_unshift($matches, $new_value);
       }
       else {
-        $matches = array_shift($new_value, $matches);
+        $matches[] = $new_value;
       }
     }
 
@@ -172,6 +126,56 @@ class activityMapperAutocompleteBase extends activityMapperBase implements activ
     return $matches;
   }
 
+  /**
+   * Test if the entry object show be included in the returned values or not.
+   */
+  private function _valueMatches(array $info, $entry, $search_string) {
+    global $language;
+
+    switch ($info['type']) {
+      case 'tokeninput':
+      case 'autocomplete':
+        $matches = FALSE;
+
+        $entry_name = transliteration_get($entry->name, '', $language->language);
+        if (stripos($entry_name, $search_string) !== FALSE) {
+          $matches = TRUE;
+        }
+
+        if ($info['plugin']['report filter endpoint'] == 'filters/orgs') {
+          if (isset($entry->acronym) && stripos($entry->acronym, $search_string) !== FALSE) {
+            $matches = TRUE;
+          }
+        }
+
+        // Filter out donors without funding.
+        if ($info['plugin']['property name'] == 'donor_agency') {
+          if (empty($entry->hasFundings)) {
+            $matches = FALSE;
+          }
+        }
+
+        if ($matches) {
+          return TRUE;
+        }
+        break;
+      case 'autocompleteids':
+        // Special case for autocomplete powered view filters.
+        // Not using the jQuery TokenInput library.
+        if ($entry->name == $search_string) {
+          return TRUE;
+        }
+        break;
+      case 'tokeninputids':
+        if (in_array($entry->id, $info['values'])) {
+          return TRUE;
+        }
+        break;
+    }
+
+    return FALSE;
+  }
+
   public function getAutocompleteValue($plugin, $data, $type) {
     $matches = $this->autocomplete($plugin, $data, $type);
     if (empty($matches)) {
@@ -191,75 +195,75 @@ class activityMapperAutocompleteBase extends activityMapperBase implements activ
   }
 }
 
-class activityMapperRoleAutocomplete extends activityMapperAutocompleteBase {
+/**
+ * Class activityMapperSubFilterAutocomplete
+ *
+ * Use this mapper for generic filters that are actually children of other
+ * filters, like:
+ *  - "National Plan Objective" a sub-filter of "Programs"
+ *  - "Secondary Sectors" a sub-filter of "Sectors".
+ *  - "Beneficiary Agency" a sub-filter of "Sectors".
+ */
+class activityMapperSubFilterAutocomplete extends activityMapperAutocompleteBase {
   public function getAutocompleteInfo($plugin, $data, $type) {
     $info = parent::getAutocompleteInfo($plugin, $data, $type);
 
-    $role_id = $this->getRoleId($plugin);
-    if (empty($role_id)) {
+    $sub_filter_type_id = $this->_getSubFilterTypeId($plugin);
+    if (is_null($sub_filter_type_id)) {
       return NULL;
     }
 
-    $info['role_id'] = $role_id;
+    // Use sub-filter URL.
+    // @TODO: Fix organization role filters. AMP-19342
+    if (isset($plugin['report filter endpoint']) && $plugin['report filter endpoint'] != 'filters/orgs') {
+      $info['sub_filter_id'] = $sub_filter_type_id;
+      $info['endpoint'] = $plugin['report filter endpoint'] . '/' . $sub_filter_type_id;
+    }
 
     return $info;
   }
 
-  // @TODO: Request ID from the API.
-  public function getRoleId($plugin) {
-    static $roles_data;
-
-    if (!isset($roles_data)) {
-      $roles_data = ampapi_request('get', $plugin['report filter endpoint extra'], TRUE);
+  private function _getSubFilterTypeId($plugin) {
+    // The organization roles sub-filters have a different structure.
+    // #ConsistentAPI.
+    if (isset($plugin['report filter endpoint extra'])) {
+      $endpoint = $plugin['report filter endpoint extra'];
+    }
+    else {
+      $endpoint = $plugin['report filter endpoint'];
     }
 
-    if (empty($roles_data)) {
+    $sub_filter_data = ampapi_request('get', $endpoint, TRUE);
+
+    if (empty($sub_filter_data)) {
       return FALSE;
     }
 
-    // @HACK: Temporary!
-    if ($plugin['report field key'] == 'Donor Agency') {
-      $plugin['report field key'] = 'Donor'; // Yes, we have a consistent API.
+    if (isset($plugin['report sub-filter type'])) {
+      $lookup_type = $plugin['report sub-filter type'];
+    }
+    else {
+      $lookup_type = $plugin['report field key'];
+
+      // #ConsistentAPI.
+      if ($lookup_type == 'Donor Agency') {
+        $lookup_type = 'Donor';
+      }
     }
 
-    foreach ($roles_data as $info) {
-      if ($info->name == $plugin['report field key']) {
+    foreach ($sub_filter_data as $info) {
+      if (isset($info->filterId) && $info->filterId == $lookup_type) {
+        return $info->id;
+      }
+
+      // The API is consistently un-consistent. "Organization Type" sub-filters
+      //don't have a filterId property.
+      // #ConsistentAPI.
+      if (isset($info->name) && $info->name == $lookup_type) {
         return $info->id;
       }
     }
-  }
-}
 
-class activityMapperSectorAutocomplete extends activityMapperAutocompleteBase {
-  public function getAutocompleteInfo($plugin, $data, $type) {
-    $info = parent::getAutocompleteInfo($plugin, $data, $type);
-
-    $sector_type_id = $this->getSectorTypeId($plugin);
-    if (empty($sector_type_id)) {
-      return NULL;
-    }
-
-    $info['sector_id'] = $sector_type_id;
-    $info['endpoint'] = $plugin['report filter endpoint'] . '/' . $sector_type_id;
-
-    return $info;
-  }
-
-  public function getSectorTypeId($plugin) {
-    static $sectors_data;
-
-    if (!isset($sectors_data)) {
-      $sectors_data = ampapi_request('get', $plugin['report filter endpoint'], TRUE);
-    }
-
-    if (empty($sectors_data)) {
-      return FALSE;
-    }
-
-    foreach ($sectors_data as $info) {
-      if ($info->name == $plugin['filter sector type']) {
-        return $info->id;
-      }
-    }
+    return NULL;
   }
 }

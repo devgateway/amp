@@ -197,7 +197,7 @@ _.extend(App.prototype, BackboneDash.Events, {
 
 module.exports = App;
 
-},{"./backbone-dash":3,"./check-support":11,"./models/saved-dashes-collection.js":19,"./models/settings-collection":21,"./views/fail":30,"./views/main":34,"amp-filter/src/main":54,"amp-state/index":66,"amp-translate":67,"amp-url/index":68,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
+},{"./backbone-dash":3,"./check-support":11,"./models/saved-dashes-collection.js":19,"./models/settings-collection":21,"./views/fail":30,"./views/main":34,"amp-filter/src/main":55,"amp-state/index":67,"amp-translate":68,"amp-url/index":69,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -2083,25 +2083,24 @@ module.exports = BackboneDash.Collection.extend({
   },
   
   extractNumberFormatSettings: function(settings) {
-	  var numberFormat = {};
-	  numberFormat.numberFormat = _.find(settings, function(item) {
-			return item['id'] === 'number-format';
-	  }).name || '#,#.#';
+	  var numberFormat = {}; 
+	  var foundNF =_.find(settings, function(item) {return item.id === 'number-format'});
+	  numberFormat.numberFormat = _.find(foundNF.options, function(item) { return item.id === foundNF.defaultId}).name || '#,#.#';
+
 	  // If the format pattern doesnt have thousands grouping then ignore 'number-group-separator' param or it will 
 	  // be used by JS to group by thousands (ie: in the 'Others' columns).
 	  if(numberFormat.numberFormat.indexOf(',') !== -1) {
-		  numberFormat.groupSeparator = _.find(settings, function(item) {
-			  return item['id'] === 'number-group-separator';
-		  }).defaultId || ',';
+		  var foundNGS =_.find(settings, function(item) {return item.id === 'number-group-separator'});
+		  numberFormat.groupSeparator = _.find(foundNGS.options, function(item) { return item.id === foundNGS.defaultId}).name || ',';
 	  } else {
 		  numberFormat.groupSeparator = '';
-	  }	  	  
-	  numberFormat.decimalSeparator = _.find(settings, function(item) {
-			return item['id'] === 'number-decimal-separator';
-	  }).name || ('.');	  
+	  }
+	  var foundDS =_.find(settings, function(item) {return item.id === 'number-decimal-separator'});
+	  numberFormat.decimalSeparator = _.find(foundDS.options, function(item) { return item.id === foundDS.defaultId}).name || '.';
 	  this.app.settings.numberFormatSettings = numberFormat;
 	  
-	  this.app.settings.numberMultiplier = _.find(settings, function(item) {return item.id === 'number-multiplier'});
+	  var foundNM =_.find(settings, function(item) {return item.id === 'number-multiplier'});
+	  this.app.settings.numberMultiplier = _.find(foundNM.options, function(item) { return item.id === foundNM.defaultId});
 	  if (this.app.settings.numberMultiplier.name === '1.0') {
 		  this.app.settings.numberMultiplierDescription = 'amp.dashboard:chart-tops-inunits';
 	  } else if(this.app.settings.numberMultiplier.name === '0.001') {
@@ -3295,7 +3294,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"../models/chart-aid-predictability":12,"../models/chart-funding-type":13,"../models/chart-tops":15,"../models/charts-collection":16,"../models/enabled-charts-collection":17,"./charts":27,"./controls":28,"./footer":32,"./header":33,"amp-state/index":66,"underscore":"underscore"}],35:[function(require,module,exports){
+},{"../backbone-dash":3,"../models/chart-aid-predictability":12,"../models/chart-funding-type":13,"../models/chart-tops":15,"../models/charts-collection":16,"../models/enabled-charts-collection":17,"./charts":27,"./controls":28,"./footer":32,"./header":33,"amp-state/index":67,"underscore":"underscore"}],35:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -8250,6 +8249,12 @@ module.exports = {
 }).call(this);
 
 },{}],45:[function(require,module,exports){
+(function (global){
+global.d3 = require('d3-browserify');
+require('./nv.d3.js');
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./nv.d3.js":46,"d3-browserify":"d3-browserify"}],46:[function(require,module,exports){
 (function(){
 
 var nv = window.nv || {};
@@ -22615,7 +22620,7 @@ nv.models.stackedAreaChart = function() {
   return chart;
 }
 })();
-},{}],46:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 /*!
  * Bootstrap v3.3.0 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.
@@ -24893,7 +24898,7 @@ if (typeof jQuery === 'undefined') {
 
 }(jQuery);
 
-},{}],47:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -25217,7 +25222,7 @@ $.extend( $.ui, {
 
 })( jQuery );
 
-},{"jquery":"jquery"}],48:[function(require,module,exports){
+},{"jquery":"jquery"}],49:[function(require,module,exports){
 var jQuery = require('jquery');
 require('./core');
 
@@ -27260,7 +27265,7 @@ $.datepicker.version = "1.10.4";
 
 })(jQuery);
 
-},{"./core":47,"jquery":"jquery"}],49:[function(require,module,exports){
+},{"./core":48,"jquery":"jquery"}],50:[function(require,module,exports){
 var jQuery = require('jquery');
 require('./core');
 require('./mouse');
@@ -28225,7 +28230,7 @@ $.ui.plugin.add("draggable", "zIndex", {
 
 })(jQuery);
 
-},{"./core":47,"./mouse":50,"./widget":51,"jquery":"jquery"}],50:[function(require,module,exports){
+},{"./core":48,"./mouse":51,"./widget":52,"jquery":"jquery"}],51:[function(require,module,exports){
 var jQuery = require('jquery');
 require('./widget');
 
@@ -28399,7 +28404,7 @@ $.widget("ui.mouse", {
 
 })(jQuery);
 
-},{"./widget":51,"jquery":"jquery"}],51:[function(require,module,exports){
+},{"./widget":52,"jquery":"jquery"}],52:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -28924,7 +28929,7 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 
 })( jQuery );
 
-},{"jquery":"jquery"}],52:[function(require,module,exports){
+},{"jquery":"jquery"}],53:[function(require,module,exports){
 var Backbone = require('backbone');
 var _ = require('underscore');
 var $ = require('jquery');
@@ -29290,7 +29295,7 @@ module.exports = Backbone.Collection.extend({
 	}
 });
 
-},{"../models/generic-filter-model":56,"../models/org-role-filter-model":57,"../models/years-filter-model":58,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],53:[function(require,module,exports){
+},{"../models/generic-filter-model":57,"../models/org-role-filter-model":58,"../models/years-filter-model":59,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],54:[function(require,module,exports){
 /*
 
 $.Link (part of noUiSlider) - WTFPL */
@@ -29323,7 +29328,7 @@ b,a)})}function X(a){return this.each(function(){var b=c(this).val(),d=this.dest
 end:"mouseup touchend"},f="noUi-target noUi-base noUi-origin noUi-handle noUi-horizontal noUi-vertical noUi-background noUi-connect noUi-ltr noUi-rtl noUi-dragable  noUi-state-drag  noUi-state-tap noUi-active noUi-extended noUi-stacking".split(" ");c.fn.val=function(){var a=arguments,b=c(this[0]);return arguments.length?this.each(function(){(c(this).hasClass(f[0])?B:C).apply(c(this),a)}):(b.hasClass(f[0])?B:C).call(b)};c.noUiSlider={Link:c.Link};c.fn.noUiSlider=function(a,b){return(b?X:W).call(this,
 a)}})(window.jQuery||window.Zepto);
 
-},{}],54:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -29446,7 +29451,7 @@ _.extend(Widget.prototype, Backbone.Events, {
 
 module.exports = Widget;
 
-},{"./views/filters-view":62,"backbone":"backbone","bootstrap/dist/js/bootstrap":46,"jquery":"jquery","jquery-ui/draggable":49,"underscore":"underscore"}],55:[function(require,module,exports){
+},{"./views/filters-view":63,"backbone":"backbone","bootstrap/dist/js/bootstrap":47,"jquery":"jquery","jquery-ui/draggable":50,"underscore":"underscore"}],56:[function(require,module,exports){
 var Backbone = require('backbone');
 
   // Parent model for filters.
@@ -29471,7 +29476,7 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],56:[function(require,module,exports){
+},{"backbone":"backbone"}],57:[function(require,module,exports){
 var _ = require('underscore');
 
 var BaseFilterModel = require('../models/base-filter-model');
@@ -29624,7 +29629,7 @@ module.exports = BaseFilterModel.extend({
 });
 
 
-},{"../models/base-filter-model":55,"../tree/tree-node-model":59,"underscore":"underscore"}],57:[function(require,module,exports){
+},{"../models/base-filter-model":56,"../tree/tree-node-model":60,"underscore":"underscore"}],58:[function(require,module,exports){
 var $ = require('jquery');
 
 var GenericFilterModel = require('../models/generic-filter-model');
@@ -29679,7 +29684,7 @@ module.exports = GenericFilterModel.extend({
 });
 
 
-},{"../models/generic-filter-model":56,"../tree/tree-node-model":59,"jquery":"jquery"}],58:[function(require,module,exports){
+},{"../models/generic-filter-model":57,"../tree/tree-node-model":60,"jquery":"jquery"}],59:[function(require,module,exports){
 var $ = require('jquery');
 var BaseFilterModel = require('../models/base-filter-model');
 
@@ -29797,7 +29802,7 @@ module.exports = BaseFilterModel.extend({
 
 });
 
-},{"../models/base-filter-model":55,"jquery":"jquery"}],59:[function(require,module,exports){
+},{"../models/base-filter-model":56,"jquery":"jquery"}],60:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 var TreeNodeModel; // declare here to help with ref loop of collection and model
@@ -30046,7 +30051,7 @@ TreeNodeModel = Backbone.Model.extend({
 
 module.exports = TreeNodeModel;
 
-},{"backbone":"backbone","underscore":"underscore"}],60:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],61:[function(require,module,exports){
 
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -30233,7 +30238,7 @@ var TreeNodeView = Backbone.View.extend({
 
 module.exports = TreeNodeView;
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],61:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],62:[function(require,module,exports){
 
 var _ = require('underscore');
 var $ = require('jquery');
@@ -30277,7 +30282,7 @@ module.exports = Backbone.View.extend({
 
 });
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],62:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],63:[function(require,module,exports){
 /**
  * this is the view which renders the big Filter contents (the tabs)
  */
@@ -30571,7 +30576,7 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"../collections/all-filters-collection":52,"../views/top-level-filter-view":64,"amp-translate":67,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],63:[function(require,module,exports){
+},{"../collections/all-filters-collection":53,"../views/top-level-filter-view":65,"amp-translate":68,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],64:[function(require,module,exports){
 
 var _ = require('underscore');
 
@@ -30703,7 +30708,7 @@ module.exports = BaseFilterView.extend({
 });
 
 
-},{"../tree/tree-node-view":60,"../views/base-filter-view":61,"underscore":"underscore"}],64:[function(require,module,exports){
+},{"../tree/tree-node-view":61,"../views/base-filter-view":62,"underscore":"underscore"}],65:[function(require,module,exports){
 
 var _ = require('underscore');
 var $ = require('jquery');
@@ -30814,7 +30819,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../models/years-filter-model":58,"../views/generic-filter-view":63,"../views/years-filter-view":65,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],65:[function(require,module,exports){
+},{"../models/years-filter-model":59,"../views/generic-filter-view":64,"../views/years-filter-view":66,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],66:[function(require,module,exports){
 
 var _ = require('underscore');
 var BaseFilterView = require('../views/base-filter-view');
@@ -30966,7 +30971,7 @@ module.exports = BaseFilterView.extend({
 
 });
 
-},{"../lib/jquery.nouislider.min.js":53,"../views/base-filter-view":61,"jquery-ui/datepicker":48,"underscore":"underscore"}],66:[function(require,module,exports){
+},{"../lib/jquery.nouislider.min.js":54,"../views/base-filter-view":62,"jquery-ui/datepicker":49,"underscore":"underscore"}],67:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -31162,7 +31167,7 @@ _.extend(State.prototype, Backbone.Events, {
 State.StateLoadError = StateLoadError;
 module.exports = State;
 
-},{"backbone":"backbone","underscore":"underscore"}],67:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],68:[function(require,module,exports){
 // TODO: move this up a dir, and instantiate and attach to the app
 
 
@@ -31380,7 +31385,7 @@ function Translator(options) {
 
 module.exports = Translator;
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],68:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],69:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 

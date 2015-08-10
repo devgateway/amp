@@ -2,7 +2,7 @@ var $ = require('jquery');
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 var util = require('../../../libs/local/chart-util');
-
+var _ = require('underscore');
 
 module.exports = Backbone.View.extend({
 
@@ -125,7 +125,8 @@ module.exports = Backbone.View.extend({
             ': ',
             '</strong>'].join('');
         }
-        var ampFormatter = new util.DecimalFormat(self.app.data.settings.get('number-format').get('name'));
+        var foundNF = _.find(self.app.data.settings.models, function(item) {return item.get('id') === 'number-format'});
+        var ampFormatter = new util.DecimalFormat(_.find(foundNF.get('options'), function(item) { return item.id === foundNF.get('defaultId')}).name);
         var fundingPopupTemplate = ['<strong>', feature.properties.name, '</strong>',
                         '<br/>', fundingTypeString, '',
                         ampFormatter.format(feature.properties.value), ' ', unit].join('');

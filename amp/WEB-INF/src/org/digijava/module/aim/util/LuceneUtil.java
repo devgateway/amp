@@ -962,7 +962,7 @@ public class LuceneUtil implements Serializable {
     }
 
     public static void addUpdatePledge(String rootRealPath, boolean update, AmpPledgeFake newfakePledge){
-        logger.info("Updating activity!");
+        logger.info("Updating activity pledge!");
         try {
 
             if (update/* && false*/) {
@@ -1015,14 +1015,11 @@ public class LuceneUtil implements Serializable {
             Document doc = null;
 
             ArrayList<String> componentsCode = new ArrayList<String>();
-            if(Hibernate.isInitialized(newActivity.getComponents())){
-                Collection<AmpComponent> componentsList = newActivity.getComponents();
-                if (componentsList != null) {
-                    for (AmpComponent c : componentsList) {
-                        componentsCode.add(c.getCode());
-                    }
-                }
-            }
+			if(newActivity.getComponents() != null && Hibernate.isInitialized(newActivity.getComponents())){
+				for (AmpComponent c : newActivity.getComponents()) {
+					componentsCode.add(c.getCode());
+				}
+			}
 
             String language = navigationLanguage.getLanguage();
             doc = activity2Document(String.valueOf(newActivity.getAmpActivityId()), projectid, String.valueOf(newActivity.getName()),
@@ -1050,7 +1047,7 @@ public class LuceneUtil implements Serializable {
 
     private static String getBudgetCodesForActivity(AmpActivityVersion newActivity) {
         StringBuffer sBuffer = new StringBuffer();
-        if (newActivity.getOrgrole() != null) {
+        if (newActivity.getOrgrole() != null && Hibernate.isInitialized(newActivity.getOrgrole()) ) {
             for (AmpOrgRole role : newActivity.getOrgrole()) {
                 if(role.getBudgets()!=null){
                     for (AmpOrgRoleBudget budget : role.getBudgets()){

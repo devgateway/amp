@@ -14,6 +14,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.dgfoundation.amp.newreports.FilterRule;
+import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -65,8 +66,8 @@ public class AMPReportExcelExport {
 
 		int hierarchies = report.getRowsHierarchiesTotals();
 		int columns = report.getColumns().size();
-		generateSheet(wb, mainSheet, doc, hierarchies, columns, TYPE_STYLED);
-		generateSheet(wb, plainSheet, doc, hierarchies, columns, TYPE_PLAIN);
+		generateSheet(wb, mainSheet, doc, hierarchies, columns, TYPE_STYLED, report);
+		generateSheet(wb, plainSheet, doc, hierarchies, columns, TYPE_PLAIN, report);
 		generateSummarySheet(wb, summarySheet, report, queryModel);
 
 		wb.write(os);
@@ -210,7 +211,7 @@ public class AMPReportExcelExport {
 		}
 	}
 
-	private static void generateSheet(Workbook wb, Sheet sheet, Document doc, int hierarchies, int columns, int type) {
+	private static void generateSheet(Workbook wb, Sheet sheet, Document doc, int hierarchies, int columns, int type, ReportSpecificationImpl report) {
 		logger.info("start generateSheet.");
 		boolean emptyAsZero = FeaturesUtil
 				.getGlobalSettingValueBoolean(GlobalSettingsConstants.REPORTS_EMPTY_VALUES_AS_ZERO_XLS);
@@ -377,11 +378,15 @@ public class AMPReportExcelExport {
 		// Postprocess according to sheet type.
 		switch (type) {
 		case TYPE_STYLED:
-			mergeHierarchyRows(sheet, hierarchies, headers);
+			if (!report.getGroupingCriteria().equals(GroupingCriteria.GROUPING_TOTALS_ONLY)) {
+				mergeHierarchyRows(sheet, hierarchies, headers);
+			}
 			break;
 		case TYPE_PLAIN:
-			refillHierarchyRows(sheet, hierarchies, headers);
-			deleteHierarchyTotalRows(sheet, hierarchies, headers, columns);
+			if (!report.getGroupingCriteria().equals(GroupingCriteria.GROUPING_TOTALS_ONLY)) {
+				refillHierarchyRows(sheet, hierarchies, headers);
+				deleteHierarchyTotalRows(sheet, hierarchies, headers, columns);
+			}
 			break;
 		}
 

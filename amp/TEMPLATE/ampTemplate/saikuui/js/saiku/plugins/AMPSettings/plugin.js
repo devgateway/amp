@@ -43,6 +43,10 @@ var AMPSettings = Backbone.View.extend({
 					async : false
 				}).done(function(data) {
 					self.populate_dropdowns(data);
+					if (window.currentSettings["1"] === null) {
+						var foundCurrency = _.find(data, function(item) {return item.id === '1'});
+						window.currentSettings["1"] = _.find(foundCurrency.options, function(item) { return item.id === foundCurrency.defaultId}).value;
+					}
 				});
 			},
 			

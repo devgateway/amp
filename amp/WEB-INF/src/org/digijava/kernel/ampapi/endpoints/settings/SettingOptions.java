@@ -3,8 +3,11 @@
  */
 package org.digijava.kernel.ampapi.endpoints.settings;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.digijava.kernel.translator.TranslatorWorker;
 
@@ -14,6 +17,9 @@ import org.digijava.kernel.translator.TranslatorWorker;
  * @author Nadejda Mandrescu
  */
 public class SettingOptions {
+	
+	protected static final Logger logger = Logger.getLogger(SettingOptions.class);
+	
 	/**
 	 * A setting option
 	 */
@@ -48,17 +54,20 @@ public class SettingOptions {
 			this.name = translate ? TranslatorWorker.translateText(name) : name;
 			this.value = value;
 		}
+		
+		public Option(String id) {
+			// The setting does not have a "name", only id.
+			this(id, id);
+		}
 	}
 	
 	
 	
 	/** Setting id */
-	@Deprecated
 	public final String id;
 	/** Specifies if multiple options can be selected */
 	public final Boolean multi;
 	/** Setting name */
-	@Deprecated
 	public final String name;
 	/** Default setting option id */
 	public final String defaultId;
@@ -78,6 +87,16 @@ public class SettingOptions {
 		this.name = name == null ? null : TranslatorWorker.translateText(name);
 		this.defaultId = defaultId;
 		this.options = options;
+	}
+	
+	/**
+	 * Use this constructor to create a SettingOptions with only one Option.
+	 * @param id
+	 * @param name
+	 * @param option
+	 */
+	public SettingOptions(String id, String name, Option option) {
+		this(id, false, name, option.id, Arrays.asList(option));
 	}
 	
 	@Override public String toString() {

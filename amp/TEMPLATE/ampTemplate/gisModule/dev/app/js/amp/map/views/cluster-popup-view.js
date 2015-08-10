@@ -196,7 +196,8 @@ module.exports = Backbone.View.extend({
         self.tempDOM.find('#projects-pane .loading').remove();
 
       /* Format the numerical columns */
-        var ampFormatter = new util.DecimalFormat(self.app.data.settings.get('number-format').get('name'));
+        var foundNF = _.find(self.app.data.settings.models, function(item) {return item.get('id') === 'number-format'});
+        var ampFormatter = new util.DecimalFormat(_.find(foundNF.get('options'), function(item) { return item.id === foundNF.get('defaultId')}).name);
         var currencyCode = self.app.data.settings.get('1').get('selected');
         var fundingType = 'Actual';
         var selected = self.app.data.settings.get('0').get('selected');

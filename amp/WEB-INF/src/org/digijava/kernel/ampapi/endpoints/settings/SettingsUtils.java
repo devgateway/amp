@@ -358,63 +358,64 @@ public class SettingsUtils {
 		Set<String> measures = new LinkedHashSet<String>(GisConstants.FUNDING_TYPES);
 		measures.retainAll(MondrianReportUtils.getConfigurableMeasures());
 		settings.add(getFundingTypeSettings(measures));
-		
-		settings.add(new SettingOptions("use-icons-for-sectors-in-project-list", false, new Boolean(FeaturesUtil
-				.isVisibleFeature(GisConstants.USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST)).toString(), null,
-				null));
-		settings.add(new SettingOptions("max-locations-icons", false, FeaturesUtil
-				.getGlobalSettingValue(GlobalSettingsConstants.MAX_LOCATIONS_ICONS), null, null));
-		
-		settings.add(new SettingOptions("number-format", false, 
-				MondrianReportUtils.getCurrentUserDefaultSettings().getCurrencyFormat().toPattern(), null, null));
-		int amountOptionId = Integer.valueOf(
-				FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
-		
-		settings.add(new SettingOptions("number-group-separator", false, null, FeaturesUtil
-				.getGlobalSettingValue(GlobalSettingsConstants.GROUP_SEPARATOR), null));
-		
-		settings.add(new SettingOptions("number-decimal-separator", false, 
-				FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR), null, null));
-		
-		settings.add(new SettingOptions("number-multiplier", false, 
-				String.valueOf(MondrianReportUtils.getAmountMultiplier(amountOptionId))
-				, null, null));
-		
-		settings.add(new SettingOptions("language", false, TLSUtils.getEffectiveLangCode(),
-				null, null)); 
+
+		settings.add(new SettingOptions("use-icons-for-sectors-in-project-list",
+				GisConstants.USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST, new SettingOptions.Option(new Boolean(FeaturesUtil
+						.isVisibleFeature(GisConstants.USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST)).toString())));
+
+		settings.add(new SettingOptions("max-locations-icons", GlobalSettingsConstants.MAX_LOCATIONS_ICONS,
+				new SettingOptions.Option(FeaturesUtil
+						.getGlobalSettingValue(GlobalSettingsConstants.MAX_LOCATIONS_ICONS))));
+
+		settings.add(new SettingOptions("number-format", GlobalSettingsConstants.NUMBER_FORMAT,
+				new SettingOptions.Option("number-format", MondrianReportUtils.getCurrentUserDefaultSettings()
+						.getCurrencyFormat().toPattern(), false)));
+
+		settings.add(new SettingOptions("number-group-separator", GlobalSettingsConstants.GROUP_SEPARATOR,
+				new SettingOptions.Option(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GROUP_SEPARATOR))));
+
+		settings.add(new SettingOptions(
+				"number-decimal-separator",
+				GlobalSettingsConstants.DECIMAL_SEPARATOR,
+				new SettingOptions.Option(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR))));
+
+		int amountOptionId = Integer.valueOf(FeaturesUtil
+				.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
+		settings.add(new SettingOptions("number-multiplier", GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS,
+				new SettingOptions.Option(String.valueOf(MondrianReportUtils.getAmountMultiplier(amountOptionId)))));
+
+		settings.add(new SettingOptions("language", "language", new SettingOptions.Option(TLSUtils
+				.getEffectiveLangCode())));
 
 		// Workspace Settings
 		if (tm != null) {
-			AmpApplicationSettings setts = EndpointUtils.getAppSettings();
-			settings.add(new SettingOptions("team-lead", false, String.valueOf(tm.getTeamHead()), null, null));
-			settings.add(new SettingOptions("team-validator", false, String.valueOf(tm.isApprover()), null, null));
-			String wsPrefix = null;
-			if (setts != null) {
-				AmpTeam team = setts.getTeam();
-				if (team != null) {
-					settings.add(new SettingOptions("team-id", false, team.getAmpTeamId().toString(), null, null));
-					// Cross Team validation
-					settings.add(new SettingOptions("cross_team_validation", false, String.valueOf(team.getCrossteamvalidation()), null, null));
-					settings.add(new SettingOptions("workspace_type", false, String.valueOf(team.getAccessType()), null, null));
-					
-					if (team.getWorkspacePrefix() != null) {
-						 wsPrefix = team.getWorkspacePrefix().getValue();
-						 wsPrefix = wsPrefix.substring(0, wsPrefix.length() - 1);
-					}
-				}
-			}
-			settings.add(new SettingOptions("workspace_prefix", false, null, wsPrefix, null));
+			settings.add(new SettingOptions("team-id", "team-id", new SettingOptions.Option(EndpointUtils
+					.getAppSettings().getTeam().getAmpTeamId().toString())));
+			settings.add(new SettingOptions("team-lead", "team-lead", new SettingOptions.Option(String.valueOf(tm
+					.getTeamHead()))));
+			settings.add(new SettingOptions("team-validator", "team-validator", new SettingOptions.Option(String
+					.valueOf(tm.isApprover()))));
+			// Cross Team validation
+			settings.add(new SettingOptions("cross_team_validation", "cross_team_validation",
+					new SettingOptions.Option(String.valueOf(EndpointUtils.getAppSettings().getTeam()
+							.getCrossteamvalidation()))));
+			settings.add(new SettingOptions("workspace_type", "workspace_type", new SettingOptions.Option(String
+					.valueOf(EndpointUtils.getAppSettings().getTeam().getAccessType()))));
 		}
-		
+
 		// Dashboard / GIS specific date range settings
 
 		String defaultCalendar = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
 		long defaultCalendarId = Long.parseLong(defaultCalendar);
-		
-		addDateSetting(settings, GlobalSettingsConstants.DASHBOARD_DEFAULT_MAX_YEAR_RANGE, "dashboard-default-max-date", "dashboard-default-max-year-range", defaultCalendarId);
-		addDateSetting(settings, GlobalSettingsConstants.DASHBOARD_DEFAULT_MIN_YEAR_RANGE, "dashboard-default-min-date", "dashboard-default-min-year-range", defaultCalendarId);
-		addDateSetting(settings, GlobalSettingsConstants.GIS_DEFAUL_MAX_YEAR_RANGE, "gis-default-max-date", "gis-default-max-year-range", defaultCalendarId);
-		addDateSetting(settings, GlobalSettingsConstants.GIS_DEFAUL_MIN_YEAR_RANGE, "gis-default-min-date", "gis-default-min-year-range", defaultCalendarId);
+
+		addDateSetting(settings, GlobalSettingsConstants.DASHBOARD_DEFAULT_MAX_YEAR_RANGE,
+				"dashboard-default-max-date", "dashboard-default-max-year-range", defaultCalendarId);
+		addDateSetting(settings, GlobalSettingsConstants.DASHBOARD_DEFAULT_MIN_YEAR_RANGE,
+				"dashboard-default-min-date", "dashboard-default-min-year-range", defaultCalendarId);
+		addDateSetting(settings, GlobalSettingsConstants.GIS_DEFAUL_MAX_YEAR_RANGE, "gis-default-max-date",
+				"gis-default-max-year-range", defaultCalendarId);
+		addDateSetting(settings, GlobalSettingsConstants.GIS_DEFAUL_MIN_YEAR_RANGE, "gis-default-min-date",
+				"gis-default-min-year-range", defaultCalendarId);
 
 		return settings;
 	}

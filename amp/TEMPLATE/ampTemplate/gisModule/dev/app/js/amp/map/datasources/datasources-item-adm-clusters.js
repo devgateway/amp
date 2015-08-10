@@ -26,7 +26,8 @@ module.exports = Backbone.View.extend({
         self.collection.each(function(project) {
           // it joins on activity init, but for some reason it was being overridden...
           // temp dirty force rejoin for now, otherwise use: getJoinedVersion
-          var ampFormatter = new chartUtils.DecimalFormat(self.app.data.settings.get('number-format').get('name'));
+          var foundNF = _.find(self.app.data.settings.models, function(item) {return item.get('id') === 'number-format'});
+          var ampFormatter = new chartUtils.DecimalFormat(_.find(foundNF.get('options'), function(item) { return item.id === foundNF.get('defaultId')}).name);
 
           // dec 31st, 2014 tried getjoinedversion INSTEAD OF tempDirtyForceJoin, but still doesn't work
           project.tempDirtyForceJoin().then(function() {

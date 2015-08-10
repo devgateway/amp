@@ -118,25 +118,24 @@ module.exports = BackboneDash.Collection.extend({
   },
   
   extractNumberFormatSettings: function(settings) {
-	  var numberFormat = {};
-	  numberFormat.numberFormat = _.find(settings, function(item) {
-			return item['id'] === 'number-format';
-	  }).name || '#,#.#';
+	  var numberFormat = {}; 
+	  var foundNF =_.find(settings, function(item) {return item.id === 'number-format'});
+	  numberFormat.numberFormat = _.find(foundNF.options, function(item) { return item.id === foundNF.defaultId}).name || '#,#.#';
+
 	  // If the format pattern doesnt have thousands grouping then ignore 'number-group-separator' param or it will 
 	  // be used by JS to group by thousands (ie: in the 'Others' columns).
 	  if(numberFormat.numberFormat.indexOf(',') !== -1) {
-		  numberFormat.groupSeparator = _.find(settings, function(item) {
-			  return item['id'] === 'number-group-separator';
-		  }).defaultId || ',';
+		  var foundNGS =_.find(settings, function(item) {return item.id === 'number-group-separator'});
+		  numberFormat.groupSeparator = _.find(foundNGS.options, function(item) { return item.id === foundNGS.defaultId}).name || ',';
 	  } else {
 		  numberFormat.groupSeparator = '';
-	  }	  	  
-	  numberFormat.decimalSeparator = _.find(settings, function(item) {
-			return item['id'] === 'number-decimal-separator';
-	  }).name || ('.');	  
+	  }
+	  var foundDS =_.find(settings, function(item) {return item.id === 'number-decimal-separator'});
+	  numberFormat.decimalSeparator = _.find(foundDS.options, function(item) { return item.id === foundDS.defaultId}).name || '.';
 	  this.app.settings.numberFormatSettings = numberFormat;
 	  
-	  this.app.settings.numberMultiplier = _.find(settings, function(item) {return item.id === 'number-multiplier'});
+	  var foundNM =_.find(settings, function(item) {return item.id === 'number-multiplier'});
+	  this.app.settings.numberMultiplier = _.find(foundNM.options, function(item) { return item.id === foundNM.defaultId});
 	  if (this.app.settings.numberMultiplier.name === '1.0') {
 		  this.app.settings.numberMultiplierDescription = 'amp.dashboard:chart-tops-inunits';
 	  } else if(this.app.settings.numberMultiplier.name === '0.001') {

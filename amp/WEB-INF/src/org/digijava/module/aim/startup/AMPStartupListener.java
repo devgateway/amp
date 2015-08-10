@@ -211,13 +211,13 @@ public class AMPStartupListener extends HttpServlet implements
 	}
 
 	protected void doMonetETL() throws SQLException {
-		logger.error("running MonetETL");
+		logger.info("running MonetETL");
 		double elapsedSecs = MondrianETL.runETL(false).duration;
-		logger.error(String.format("ETL took %.2f seconds", elapsedSecs));
+		logger.info(String.format("ETL took %.2f seconds", elapsedSecs));
 	}
 	
 	public void contextInitialized(ServletContextEvent sce) {
-        logger.error("I am running with a new code!!!!");
+        logger.debug("I am running with a new code!!!!");
 		ServletContext ampContext = null;
 
 		try {

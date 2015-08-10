@@ -315,7 +315,7 @@ public class InterchangeUtils {
 	}
 	
 	/**
-	 * Get the translation values of the field. 
+	 * Get the translation values of the field.
 	 * @param field
 	 * @param class used for retrieving translation
 	 * @param fieldValue 
@@ -327,21 +327,36 @@ public class InterchangeUtils {
 		
 		TranslationSettings translationSettings = InterchangeUtils.getTranslationSettings();
 		
-		Map<String, Object> fieldTrnValues = null; 
-		if (InterchangeUtils.isTranslatbleClass(clazz) && (InterchangeUtils.isTranslatbleField(field) || InterchangeUtils.isVersionableTextField(field))) {
+		// check if this is translatable field
+		boolean isTranslatable = translationSettings.isTranslatable(field);
+		boolean isEditor = InterchangeUtils.isVersionableTextField(field);
+		
+		// provide map for translatable fields
+		if (isTranslatable) {
 			String fieldText = (String) fieldValue;
-			if (InterchangeUtils.isVersionableTextField(field)) {
-				fieldTrnValues = new HashMap<String, Object>();
+			if (isEditor) {
+				Map<String, Object> fieldTrnValues = new HashMap<String, Object>();
 				for (String translation : translationSettings.getTrnLocaleCodes()) {
-					String translatedText = DgUtil.cleanHtmlTags(DbUtil.getEditorBodyEmptyInclude(SiteUtils.getGlobalSite(), fieldText, translation));
+					// AMP-20884: no html tags cleanup so far
+					//String translatedText = DgUtil.cleanHtmlTags(DbUtil.getEditorBodyEmptyInclude(SiteUtils.getGlobalSite(), fieldText, translation));
+					String translatedText = DbUtil.getEditorBodyEmptyInclude(SiteUtils.getGlobalSite(), fieldText, 
+							translation);
 					fieldTrnValues.put(translation, getJsonStringValue(translatedText));
 				}
 				return fieldTrnValues;
-			} else if (ContentTranslationUtil.multilingualIsEnabled()) {
+			} else {
 				return loadTranslationsForField(clazz, field.getName(), fieldText, parentObjectId, translationSettings.getTrnLocaleCodes());
 			}
-		} 
+		}
 		
+		// for reach text editors
+		if (isEditor) {
+			// AMP-20884: no html tags cleanup so far
+			return DbUtil.getEditorBodyEmptyInclude(SiteUtils.getGlobalSite(), (String) fieldValue,
+					translationSettings.getDefaultLangCode());
+		}
+		
+		// other translatable options
 		if (fieldValue instanceof String) {
 			boolean toTranslate = clazz.equals(AmpCategoryValue.class) && field.getName().equals("value");
 			

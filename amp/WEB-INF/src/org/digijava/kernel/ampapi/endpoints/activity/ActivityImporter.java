@@ -93,7 +93,7 @@ public class ActivityImporter {
     protected void init(JsonBean newJson, boolean update, String endpointContextPath) {
 		this.sourceURL = TLSUtils.getRequest().getRequestURL().toString();
 		this.update = update;
-        currentMember = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
+        this.currentMember = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
 		this.newJson = newJson;
 		this.isDraftFMEnabled = FMVisibility.isFmPathEnabled(SAVE_AS_DRAFT_PATH);
 		this.isMultilingual = ContentTranslationUtil.multilingualIsEnabled();
@@ -574,7 +574,15 @@ public class ActivityImporter {
 		if (TranslationType.STRING == trnType) {
 			value = extractContentTranslation(field, parentObj, (Map<String, Object>) jsonValue);
 		} else {
-			value = extractTextTranslations(field, parentObj, (Map<String, Object>) jsonValue);
+			Map<String, Object> editorText = null;
+			if (trnSettings.isMultilingual()) {
+				editorText = (Map<String, Object>) jsonValue;
+			} else {
+				// simulate the lang-value map, since dg_editor is still stored per language
+				editorText = new HashMap<String, Object>();
+				editorText.put(trnSettings.getDefaultLangCode(), jsonValue);
+			}
+			value = extractTextTranslations(field, parentObj, editorText);
 		}
 		return value;
 	}
@@ -644,7 +652,8 @@ public class ActivityImporter {
 		}
 		for (Entry<String, Object> trn : trnJson.entrySet()) {
 			String langCode = trn.getKey();
-			String translation = DgUtil.cleanHtmlTags((String) trn.getValue());
+			// AMP-20884: no cleanup so far DgUtil.cleanHtmlTags((String) trn.getValue());
+			String translation = (String) trn.getValue();
 			Editor editor;
 			try {
 				editor = DbUtil.getEditor(key, langCode);

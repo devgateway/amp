@@ -140,9 +140,9 @@ public class TranslationSettings {
 	 * @return true if this field is translatable
 	 */ 
 	public boolean isTranslatable(Field field) {
-		return multilingual && field.isAnnotationPresent(TranslatableField.class) 
+		return multilingual && (field.isAnnotationPresent(TranslatableField.class) 
 				&& field.getDeclaringClass().isAnnotationPresent(TranslatableClass.class)
-				|| field.isAnnotationPresent(VersionableFieldTextEditor.class);
+				|| field.isAnnotationPresent(VersionableFieldTextEditor.class));
 	}
 	
 	/**

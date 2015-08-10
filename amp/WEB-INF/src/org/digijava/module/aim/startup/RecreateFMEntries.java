@@ -30,7 +30,7 @@ public class RecreateFMEntries {
 	protected static final Logger logger = Logger.getLogger(RecreateFMEntries.class);
 	
 	public void doIt(ServletContext ampContext) {
-		logger.error("adding newly-created-measures entries to the FM and enabling them according to the AF configuration...");
+		logger.info("adding newly-created-measures entries to the FM and enabling them according to the AF configuration...");
 
 		List<String>  measuresToRestore = new ArrayList<>();
 		measuresToRestore.addAll(MeasuresVisibility.allMeasures);		 
@@ -53,7 +53,7 @@ public class RecreateFMEntries {
 			createAndInsertValues(templateId, measuresModuleId, new HashSet<>(measuresToRestore), visibleMeasuresByAf);
 		}
 		PersistenceManager.getSession().flush();
-		logger.error("\t...done!");
+		logger.info("\t...done!");
 	}
 	
 	protected void createAndInsertValues(Long templateId, Long moduleId, Set<String> rawFeatureNames, Set<String> featuresToSet) {

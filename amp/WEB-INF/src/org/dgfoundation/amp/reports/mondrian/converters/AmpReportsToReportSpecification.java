@@ -157,8 +157,11 @@ public class AmpReportsToReportSpecification {
 	}
 	
 	private void configureNonEmpty() {
-		//default expectations
-		spec.setDisplayEmptyFundingColumns(report.getAllowEmptyFundingColumns());
+		// default expectations
+		Boolean allowEmptyFundingColumns = report.getAllowEmptyFundingColumns();
+		// We make this check because some old tabs return allowEmptyFundingColumns = null which causes an exception in
+		// the next line.
+		spec.setDisplayEmptyFundingColumns(allowEmptyFundingColumns != null ? allowEmptyFundingColumns : false);
 		
 		//detect if we should display empty rows or not
 		//the existing logic rules are applied here from old reports generation mechanism

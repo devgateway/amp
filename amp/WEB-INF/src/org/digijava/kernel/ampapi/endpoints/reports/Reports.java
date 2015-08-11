@@ -345,7 +345,7 @@ public class Reports {
 		ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
 		report.set("columns", spec.getColumns());
 		report.set("hierarchies", spec.getHierarchies());
-		
+		ReportsUtil.addLastViewedReport(httpRequest.getSession(), reportId);
 		// In caseIf this is a summarized report without hierarchies then we need to change the word 'constant' for 'Report
 		// Totals' (translated).
 		report.set("reportTotalsString", TranslatorWorker.translateText("Report Totals"));

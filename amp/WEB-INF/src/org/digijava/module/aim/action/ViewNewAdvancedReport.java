@@ -6,8 +6,6 @@
  */
 package org.digijava.module.aim.action;
 
-import java.sql.Connection;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -33,10 +31,9 @@ import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MonetLeak;
-import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.dgfoundation.amp.reports.DateColumns;
 import org.dgfoundation.amp.reports.mondrian.FiltersGroup;
-import org.dgfoundation.amp.utils.BoundedList;
+import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -48,9 +45,7 @@ import org.digijava.module.aim.dbentity.AmpReportLog;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.AdvancedReportForm;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.AmpMath;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -156,23 +151,8 @@ public class ViewNewAdvancedReport extends Action {
 			if (!ReportContextData.cleanCurrentReportCaches())
 				return CANNOT_RENDER_REPORT(mapping);
 			
-			if ( ampReportId != null ){
-				if (request.getSession().getAttribute(Constants.LAST_VIEWED_REPORTS) == null){
-					Comparator<AmpReports> ampReportsComparator = new Comparator<AmpReports>(){
-						public int compare(AmpReports a, AmpReports b){
-							return a.getAmpReportId().compareTo(b.getAmpReportId());
-						}
-					};
-					request.getSession().setAttribute(Constants.LAST_VIEWED_REPORTS, new BoundedList<AmpReports>(5, ampReportsComparator));
-				}
-				
-				BoundedList<AmpReports> bList = (BoundedList<AmpReports>) request.getSession().getAttribute(Constants.LAST_VIEWED_REPORTS);
-				if (AmpMath.isLong(ampReportId))
-				{
-					AmpReports report = (AmpReports) PersistenceManager.getSession().get(AmpReports.class, Long.parseLong(ampReportId));
-					if ((report != null) && (!report.getDrilldownTab()))
-						bList.add(report);
-				}
+			if ( ampReportId != null && AmpMath.isLong(ampReportId)){
+				ReportsUtil.addLastViewedReport (request.getSession(),Long.valueOf(ampReportId));
 			}
 		}
 

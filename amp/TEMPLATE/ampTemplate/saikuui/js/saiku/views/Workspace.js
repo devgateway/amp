@@ -433,7 +433,7 @@ var Workspace = Backbone.View.extend({
         } else {
         	// Run query once the filters widget is ready.
         	this.query.initFiltersDeferred.done(function() {
-                console.log(window.currentFilter.serialize());
+                //console.log(window.currentFilter.serialize());
                 self.query.run(true);
         	});
         }

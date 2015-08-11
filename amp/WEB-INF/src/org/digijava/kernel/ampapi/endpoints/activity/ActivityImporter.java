@@ -33,6 +33,8 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
@@ -47,11 +49,13 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgRoleBudget;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
@@ -102,6 +106,39 @@ public class ActivityImporter {
         this.endpointContextPath = endpointContextPath;
 	}
 
+    private void cleanupNewActivity() {
+
+		Map<String, Method> aafMethods = new HashMap<String, Method>();
+		for (Method method : AmpActivityFields.class.getMethods()) {
+			aafMethods.put(method.getName(), method);
+		}
+		
+		for (Field field : AmpActivityFields.class.getDeclaredFields()) {
+			Interchangeable ant = field.getAnnotation(Interchangeable.class);
+			if (ant != null) {
+				try {
+					if (ant.fieldTitle().equals(ActivityFieldsConstants.AMP_ACTIVITY_ID) ||
+							ant.fieldTitle().equals(ActivityFieldsConstants.AMP_ID))
+						continue;
+					//clean up everything importable in the new activity
+//					String methodName = InterchangeUtils.getSetterMethodName(field.getName());
+					Method setterMeth = aafMethods.get(InterchangeUtils.getSetterMethodName(field.getName()));
+					Method getterMeth = aafMethods.get(InterchangeUtils.getGetterMethodName(field.getName()));
+					if (Collection.class.isAssignableFrom(field.getType())) {
+						Collection<Object> col = (Collection<Object>)getterMeth.invoke(newActivity);
+						if (col != null)
+							col.clear();
+					} else {
+						setterMeth.invoke(newActivity, new Object[]{null});
+					}
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			}
+		}
+    }
+    
+    
 	/**
 	 * Imports or Updates
 	 * 
@@ -138,14 +175,16 @@ public class ActivityImporter {
 		
 		// initialize new activity
 		if (oldActivity != null) {
-//			try {
+			try {
 //				newActivity = ActivityVersionUtil.cloneActivity(oldActivity, TeamUtil.getCurrentAmpTeamMember());
 				newActivity = oldActivity;
+				oldActivity = ActivityVersionUtil.cloneActivity(oldActivity, TeamUtil.getCurrentAmpTeamMember());
+				oldActivity.setAmpId(newActivity.getAmpId());
 //				newActivity.setAmpActivityGroup(oldActivity.getAmpActivityGroup());
-//			} catch (CloneNotSupportedException e) {
-//				logger.error(e.getMessage());
-//				throw new RuntimeException(e);
-//			}
+			} catch (CloneNotSupportedException e) {
+				logger.error(e.getMessage());
+				throw new RuntimeException(e);
+			}
 		} else if (!update) {
 			newActivity = new AmpActivityVersion();
 		}
@@ -153,6 +192,8 @@ public class ActivityImporter {
 		Map<String, Object> newJsonParent = newJson.any();
 		Map<String, Object> oldJsonParent = oldJson == null ? null : oldJson.any();
 		oldJsonParent = null;
+		cleanupNewActivity();
+		
 		
 		newActivity = (AmpActivityVersion) validateAndImport(newActivity, oldActivity, fieldsDef, 
 				newJsonParent, oldJsonParent, null);
@@ -186,6 +227,23 @@ public class ActivityImporter {
 		}
 		return newParent;
 	}
+
+	/**
+	 * Of all the fields from AmpActivityFields, these two (AMP ID and Internal ID) should be null 
+	 * on a fresh project import and, therefore, shouldn't be deleted if they are null 
+	 * in the new activity JSON.
+	 * 
+	 * @param currentFieldPath path to the field 
+	 * @return true if it's not AMP ID or Internal ID, false otherwise
+	 */
+	protected boolean fieldDeletableOnNull(String currentFieldPath) {
+		if (currentFieldPath.equals(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME))
+			return false;
+		if (currentFieldPath.equals(ActivityEPConstants.AMP_ID_FIELD_NAME))
+			return false;
+		return true;
+	}
+	
 	
 	protected Object validateAndImport(Object newParent, Object oldParent, JsonBean fieldDef,
 			Map<String, Object> newJsonParent, Map<String, Object> oldJsonParent, String fieldPath) {
@@ -194,7 +252,7 @@ public class ActivityImporter {
 		Object oldJsonValue = oldJsonParent == null ? null : oldJsonParent.get(fieldName);
 		Object newJsonValue = newJsonParent == null ? null : newJsonParent.get(fieldName);
 		
-		// validate sub-elements first
+		// validate and import sub-elements first
 		newParent = validateSubElements(fieldDef, newParent, oldParent, newJsonValue, oldJsonValue, currentFieldPath);
 		// then validate current field itself
 		boolean valid = validator.isValid(this, newJsonParent, oldJsonParent, fieldDef, 
@@ -363,7 +421,7 @@ public class ActivityImporter {
 		Field objField = getField(newParent, actualFieldName);
 		if (objField == null) {
 			// cannot set
-			logger.error("Actual Field not found: " + actualFieldName + ", fieldPaht: " + fieldPath);
+			logger.error("Actual Field not found: " + actualFieldName + ", fieldPath: " + fieldPath);
 			return null;
 		}
 		
@@ -390,7 +448,7 @@ public class ActivityImporter {
 		}
 		Object newValue = getNewValue(objField, newParent, fieldValue, fieldDef, fieldPath);
 		
-		if (newValue == null && oldValue == null || newValue != null && newValue.equals(oldValue)) {
+		if (newValue == null && oldValue == null/* || newValue != null && newValue.equals(oldValue) */) {
 			// nothing to do
 		} else {
 			if (objField != null) {

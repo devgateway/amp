@@ -432,13 +432,19 @@ public class InterchangeUtils {
 	}	
 	
 	public static String getGetterMethodName(String fieldName) {
-
 		if (fieldName.length() == 1)
 			return "get" + Character.toUpperCase(fieldName.charAt(0));
 		return "get" + Character.toUpperCase(fieldName.charAt(0)) + 
 				((fieldName.length() > 1) ? fieldName.substring(1) : "");
 	}	
 	
+	
+	public static String getSetterMethodName(String fieldName) {
+		if (fieldName.length() == 1)
+			return "set" + Character.toUpperCase(fieldName.charAt(0));
+		return "set" + Character.toUpperCase(fieldName.charAt(0)) + 
+				((fieldName.length() > 1) ? fieldName.substring(1) : "");
+	}
 	
 	/**
 	 * Gets the ID of an enumerable object (used in Possible Values EP)

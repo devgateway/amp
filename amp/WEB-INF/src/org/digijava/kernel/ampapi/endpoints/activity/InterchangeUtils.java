@@ -715,7 +715,7 @@ public class InterchangeUtils {
 		if (AmpActivityProgram.class.equals(getGenericClass(field))) {
 			try {
 				AmpActivityProgramSettings setting = ProgramUtil.getAmpActivityProgramSettings(interchangeable.discriminatorOption());
-				return setting == null || !setting.isAllowMultiple();
+				return setting != null && !setting.isAllowMultiple();
 			} catch (DgException e) {
 				throw new RuntimeException(e);
 			}

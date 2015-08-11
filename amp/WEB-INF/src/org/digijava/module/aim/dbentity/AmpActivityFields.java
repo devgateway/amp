@@ -381,7 +381,7 @@ LoggerIdentifiable, Cloneable {
 //	@Interchangeable(fieldTitle = "Sector Ministry Contact Fax Number",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Add Contact Fax")
 	protected String secMiCntFaxNumber;
 
-	@Interchangeable(fieldTitle = "Activity Contacts", importable = true, fmPath = "/Activity Form/Contacts")
+//	@Interchangeable(fieldTitle = "Activity Contacts", importable = true, fmPath = "/Activity Form/Contacts")
 	@VersionableCollection(fieldTitle = "Activity Contacts")
 	protected Set<AmpActivityContact> activityContacts;
 
@@ -609,7 +609,7 @@ LoggerIdentifiable, Cloneable {
 	@Interchangeable(fieldTitle = "Act. Programs", importable = true, fmPath = "/Activity Form/Program")
 	@VersionableCollection(fieldTitle = "Act. Programs")
 	@InterchangeableDiscriminator(discriminatorField = "programSetting.name", settings = {
-			@Interchangeable(fieldTitle = "National Plan Objective", discriminatorOption = "National Plan Objective", importable = true, fmPath = "/Activity Form/Program/National Plan Objective", 
+			@Interchangeable(fieldTitle = "National Plan Objective", discriminatorOption = "National Plan Objective", importable = true, fmPath = "/Activity Form/Program/National Plan Objective",
 					validators = @Validators(maxSize = "/Activity Form/Program/National Plan Objective/max Size Program Validator", minSize = "/Activity Form/Program/National Plan Objective/minSizeProgramValidator", 
 					unique = "/Activity Form/Program/National Plan Objective/uniqueProgramsValidator", percentage = "/Activity Form/Program/National Plan Objective/programPercentageTotal")),
 			@Interchangeable(fieldTitle = "Primary Programs", discriminatorOption = "Primary Program", importable = true, fmPath = "/Activity Form/Program/Primary Programs", 

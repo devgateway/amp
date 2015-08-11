@@ -156,12 +156,13 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 							var validator;
 							var teamtype;
 							var onePagerParameter = DEFAULT_ONE_PAGER_PARAMETER;
+
 							if(app.TabsApp.settings.teamId){
-								teamid = app.TabsApp.settings.teamId.name;
-								crossTeamValidation = (app.TabsApp.settings.crossTeamEnable.name === 'true');
-								teamlead = (app.TabsApp.settings.teamLead.name === 'true');
-								validator = (app.TabsApp.settings.validator.name === 'true');
-								teamtype = app.TabsApp.settings.accessType.name;
+								teamid = app.TabsApp.settings.teamId;
+								crossTeamValidation = (app.TabsApp.settings.crossTeamEnable === 'true');
+								teamlead = (app.TabsApp.settings.teamLead === 'true');
+								validator = (app.TabsApp.settings.validator === 'true');
+								teamtype = app.TabsApp.settings.accessType;
 							}
 							if(app.TabsApp.settings.workspacePrefix && app.TabsApp.settings.workspacePrefix.defaultId ){
 								onePagerParameter = app.TabsApp.settings.workspacePrefix.defaultId.toLowerCase();
@@ -179,7 +180,6 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 								row = this.rows[iRow];
 								className = row.className;
 								var id = row.cells[1].textContent;
-								
 								var iconedit = "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id
 									+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/ico_edit.gif'/></a>";
 								var iconvalidated = "<a href='/wicket/onepager/"+ onePagerParameter +"/" + id
@@ -201,11 +201,11 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 								//check public view - no team present
 								if(!teamid) continue;
 								
-								teamid = app.TabsApp.settings.teamId.name;
-								crossTeamValidation = (app.TabsApp.settings.crossTeamEnable.name === 'true');
-								teamlead = (app.TabsApp.settings.teamLead.name === 'true');
-								validator = (app.TabsApp.settings.validator.name === 'true');
-								teamtype = app.TabsApp.settings.accessType.name;
+								teamid = app.TabsApp.settings.teamId;
+								crossTeamValidation = (app.TabsApp.settings.crossTeamEnable === 'true');
+								teamlead = (app.TabsApp.settings.teamLead === 'true');
+								validator = (app.TabsApp.settings.validator === 'true');
+								teamtype = app.TabsApp.settings.accessType;
 								
 								// Set font color according to status.
 								var draft = row.cells[3].textContent;

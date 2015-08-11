@@ -34,16 +34,16 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
-import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
@@ -51,6 +51,7 @@ import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.exception.EditorException;
@@ -711,7 +712,16 @@ public class InterchangeUtils {
 	}
 	
 	public static boolean hasMaxSizeValidatorEnabled(Field field, Interchangeable interchangeable) {
-		return hasValidatorEnabled(field, interchangeable, ActivityEPConstants.MAX_SIZE_VALIDATOR_NAME);
+		if (AmpActivityProgram.class.equals(getGenericClass(field))) {
+			try {
+				AmpActivityProgramSettings setting = ProgramUtil.getAmpActivityProgramSettings(interchangeable.discriminatorOption());
+				return setting == null || !setting.isAllowMultiple();
+			} catch (DgException e) {
+				throw new RuntimeException(e);
+			}
+		} else {
+			return hasValidatorEnabled(field, interchangeable, ActivityEPConstants.MAX_SIZE_VALIDATOR_NAME);
+		}
 	}
 	
 	public static boolean hasRequiredValidatorEnabled(Field field, Interchangeable interchangeable) {

@@ -32,7 +32,6 @@ import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
-import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
@@ -40,7 +39,6 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.dgfoundation.amp.reports.mondrian.converters.MondrianReportFiltersConverter;
-import org.dgfoundation.amp.reports.saiku.export.AMPExcelExport;
 import org.dgfoundation.amp.reports.saiku.export.AMPPdfExport;
 import org.dgfoundation.amp.reports.saiku.export.AMPReportCsvExport;
 import org.dgfoundation.amp.reports.saiku.export.AMPReportExcelExport;
@@ -71,16 +69,11 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.Session;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
-import org.saiku.olap.query2.ThinHierarchy;
 import org.saiku.olap.query2.ThinQuery;
-import org.saiku.service.util.export.excel.ExcelBuilderOptions;
-import org.saiku.service.util.export.excel.ExcelWorksheetBuilder;
-import org.saiku.web.export.PdfReport;
 import org.saiku.web.rest.objects.resultset.QueryResult;
 import org.saiku.web.rest.util.RestUtil;
 
@@ -367,6 +360,7 @@ public class Reports {
 		// In caseIf this is a summarized report without hierarchies then we need to change the word 'constant' for 'Report
         // Totals' (translated).
         report.set("reportTotalsString", TranslatorWorker.translateText("Report Totals"));
+        ReportsUtil.addLastViewedReport(httpRequest.getSession(), reportId);
 		
 		return report;
 	}

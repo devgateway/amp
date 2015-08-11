@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.reports;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -10,6 +11,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONObject;
 
@@ -39,6 +42,7 @@ import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
+import org.dgfoundation.amp.utils.BoundedList;
 import org.dgfoundation.amp.utils.ConstantsUtil;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
@@ -48,10 +52,12 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
@@ -696,5 +702,30 @@ public class ReportsUtil {
 		return (JsonBean) TLSUtils.getRequest().getSession()
 				.getAttribute(EPConstants.API_STATE_REPORT_EXPORT + reportConfigId);
 	}
+	
+	/**
+	 * Last viewed reports are kept track for the user. This method allows to add a report id into
+	 * the 'last viewed' report list.
+	 * 
+	 * @param session, the session where the last viewed reports are kept
+	 * @param ampReportId, the id of the report to add as 'last viewed'
+	 */
+	public static void addLastViewedReport(HttpSession session, Long ampReportId) {
+		if (session.getAttribute(Constants.LAST_VIEWED_REPORTS) == null) {
+			Comparator<AmpReports> ampReportsComparator = new Comparator<AmpReports>() {
+				public int compare(AmpReports a, AmpReports b) {
+					return a.getAmpReportId().compareTo(b.getAmpReportId());
+				}
+			};
+			session.setAttribute(Constants.LAST_VIEWED_REPORTS, new BoundedList<AmpReports>(5, ampReportsComparator));
+		}
+
+		BoundedList<AmpReports> bList = (BoundedList<AmpReports>) session.getAttribute(Constants.LAST_VIEWED_REPORTS);
+		AmpReports report = (AmpReports) PersistenceManager.getSession().get(AmpReports.class, ampReportId);
+		if ((report != null) && (!report.getDrilldownTab()))
+			bList.add(report);
+
+	}
+
 	
 }

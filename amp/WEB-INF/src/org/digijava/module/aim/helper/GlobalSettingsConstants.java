@@ -20,8 +20,6 @@ public class GlobalSettingsConstants {
     
     public static final String PUBLIC_VIEW_BIDGET_FILTER = "Public View Budget Filter";
     
-    public static final String PUBLIC_VIEW_LAST_PERIOD = "Public View Last Period (months)";
-    
     public static final String DEFAULT_SECTOR_SCHEME = "Default Sector Scheme";
 
     public static final String CURRENT_SYSTEM_YEAR = "Current Fiscal Year";

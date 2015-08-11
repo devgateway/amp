@@ -148,7 +148,8 @@ LoggerIdentifiable, Cloneable {
     @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_AT)
     protected Date lastImportedAt;
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_BY)
+    // Commented temporarily AMP-20791
+    // @Interchangeable(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_BY)
     @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_BY)
     protected AmpTeamMember lastImportedBy;
 

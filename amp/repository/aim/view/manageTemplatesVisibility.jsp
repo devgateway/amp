@@ -57,6 +57,7 @@ div.fakefile2 {
 div.fakefile2 input{
 	width: 83px;
 }
+-->
 </style>
 
 <script type="text/javascript">

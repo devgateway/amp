@@ -41,8 +41,6 @@ import org.digijava.module.aim.util.FeaturesUtil;
 public class PublicPortalService {
 	protected static final Logger logger = Logger.getLogger(PublicPortalService.class);
 
-	private static final int DEFAULT_PERIOD = 12; // months
-
 	/**
 	 * Retrieves top 'count' projects based on fixed requirements. <br>
 	 * NOTE: the requirement is fixed at the moment, however we may need to
@@ -89,16 +87,6 @@ public class PublicPortalService {
 		return result;
 	}
 
-	/**
-	 * @return period = number of months, the public portal data must be
-	 *         filtered by
-	 */
-	public static final int getPublicPortalPeriodInMonths() {
-		String months = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PUBLIC_VIEW_LAST_PERIOD);
-		int period = StringUtils.isNumeric(months) ? Integer.valueOf(months) : DEFAULT_PERIOD;
-		return period;
-	}
-
 	public static final ReportFilters getPeriodFilter(Integer months) {
 
 		Calendar cal = Calendar.getInstance();
@@ -111,10 +99,6 @@ public class PublicPortalService {
 			logger.error(e);
 		}
 		return filters;
-	}
-
-	public static final ReportFilters getDefaultPublicFilter() {
-		return getPeriodFilter(getPublicPortalPeriodInMonths());
 	}
 
 	/**

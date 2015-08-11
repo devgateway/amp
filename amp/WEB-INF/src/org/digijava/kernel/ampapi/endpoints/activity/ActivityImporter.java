@@ -88,6 +88,7 @@ public class ActivityImporter {
 	private AmpTeamMember currentMember;
 	private String sourceURL;
     private String endpointContextPath;
+    // latest activity id in case there was attempt to update older version of an activity
     private Long latestActivityId;
 
     protected void init(JsonBean newJson, boolean update, String endpointContextPath) {
@@ -173,7 +174,7 @@ public class ActivityImporter {
 			PersistenceManager.getSession().clear();
 		}
 
-        updateResponse(update, ampActivityId);
+        updateResponse(update);
 		
 		return new ArrayList<ApiErrorMessage>(errors.values());
 	}
@@ -811,9 +812,8 @@ public class ActivityImporter {
      * Updates response header and status based on activity validation results
      *
      * @param update - flag indicating activity create/update operation
-     * @param latestActivityId - latest activity id in case there was attempt to update older version of activity
      */
-    private void updateResponse(boolean update, Long latestActivityId) {
+    private void updateResponse(boolean update) {
         String locationUrl = endpointContextPath + "/";
 
         if (update) {
@@ -826,7 +826,7 @@ public class ActivityImporter {
             } else if (errors.containsKey(ActivityErrors.UPDATE_ID_IS_OLD.id)) {
                 // update http status to SC_CONFLICT (old version was sent for update)
                 EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_CONFLICT);
-                locationUrl += latestActivityId;
+                locationUrl += this.latestActivityId;
             } else {
                 // any other error occurred during the update
                 locationUrl = null;

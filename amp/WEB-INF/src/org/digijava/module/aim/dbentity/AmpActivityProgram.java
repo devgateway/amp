@@ -13,7 +13,7 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable 
         private Long ampActivityProgramId;
         @Interchangeable(fieldTitle="Program Percentage", importable = true)
         private Float programPercentage;
-        @Interchangeable(fieldTitle="Program", importable = true, pickIdOnly = true)
+        @Interchangeable(fieldTitle="Program", importable = true, pickIdOnly = true, uniqueConstraint = true)
         private AmpTheme program;
         @Interchangeable(fieldTitle="Activity ID", pickIdOnly = true)
         private AmpActivityVersion activity;

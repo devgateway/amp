@@ -60,8 +60,8 @@ public class FilterUtils {
 			if (start != null || end != null) {
 				SimpleDateFormat sdf = new SimpleDateFormat(MoConstants.DATE_FORMAT);
 				if (COLUMN_DATES_FILTER.contains(dateColumn)) {
-					//filterRules.addDateRangeFilterRule(new ReportColumn(dateColumn),
-						//	start == null ? null : sdf.parse(start), end == null ? null : sdf.parse(end));
+					filterRules.addDateRangeFilterRule(new ReportColumn(dateColumn),
+							start == null ? null : sdf.parse(start), end == null ? null : sdf.parse(end));
 				} else {
 					filterRules.addDateRangeFilterRule(start == null ? null : sdf.parse(start), end == null ? null
 							: sdf.parse(end));

@@ -278,7 +278,7 @@ FilterUtils.extractFilters = function(content) {
 	$(keys).each(function(i, item) {
 		var subElement = filtersDateColumnsJson[item];
 		if (subElement instanceof Array) {
-			var element = subElement.models[0];
+			var element = subElement.models ? subElement.models[0] : subElement[0];
 			var content = [];	
 			if (element.value !== null) {
 				var auxItem = {};
@@ -418,8 +418,13 @@ FilterUtils.convertJavaFiltersToJS = function(data) {
 				return parseInt(item_.id);
 			});
 			break;
+			
 		case 'Actual Start Date':
+		case 'Proposed Start Date':
 		case 'Actual Completion Date':
+		case 'Planned Completion Date':
+		case 'Date of Agreement':
+			
 			var newDate = {};
 			_.map(item.values, function(item_, i) {						
 				if(i === 0) {

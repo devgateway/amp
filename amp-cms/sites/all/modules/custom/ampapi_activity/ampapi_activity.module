@@ -131,7 +131,6 @@ function ampapi_activity_views_api() {
 function ampapi_activity_menu() {
   $items = array();
 
-
   $mappers = ampapi_get_mappers();
   foreach ($mappers as $key => $plugin) {
     if (empty($plugin['property name'])) {
@@ -179,7 +178,7 @@ function _ampapi_human_filesize($path, $decimals = 2) {
   $factor = floor((strlen($bytes) - 1) / 3);
 
   $sz = 'BKMGTP';
-  $suffix = ' ' . (($factor == 0) ? @$sz[$factor] : @$sz[$factor] . 'B');
+  $suffix = ' ' . (($factor == 0) ? @$sz[(int) $factor] : @$sz[(int) $factor] . 'B');
   return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . $suffix;
 }
 
@@ -205,43 +204,14 @@ function ampapi_activity_views_pre_build(View &$view) {
   }
   $search_settings = ampapi_activity_get_search_settings();
 
-  // Get a list of enabled columns and measures.
-  $columns_data = ampapi_request('get', 'data/report/columns', TRUE);
-  $measures_data = ampapi_request('get', 'data/report/measures', TRUE);
-
   foreach ($view->field as $field_name => $field_handler) {
-    $field_enabled = TRUE;
-    $mapper_plugin = ampapi_get_mapper_by_property_name($field_handler->real_field);
-    $field_key = $mapper_plugin['report field key'];
+    // By default all fields/columns are disabled.
+    $field_enabled = FALSE;
 
-    // Hide fields disabled in the PP search settings.
-    if (!in_array($field_name, $search_settings['enabled_columns'])) {
-      $field_enabled = FALSE;
-    }
-
-    // Hide fields disabled in AMP.
-    if ($mapper_plugin['report field group'] == 'columns') {
-      if (empty($columns_data->{$field_key})) {
-        $field_enabled = FALSE;
-      }
-    }
-    else if ($mapper_plugin['report field group'] == 'measures') {
-      if (empty($measures_data->{$field_key})) {
-        $field_enabled = FALSE;
-      }
-
-      // Disable SSC specific columns if SSC functionality is disabled.
-      if (!$ssc_search_enabled && !empty($mapper_plugin['report field ssc'])) {
-        $field_enabled = FALSE;
-      }
-      else if ($ssc_search_enabled && empty($mapper_plugin['report field ssc'])) {
-        $field_enabled = FALSE;
-      }
-    }
-
-    // Hide external_url field in exports.
-    if ($field_name == 'external_url' && $view->current_display == 'export_page') {
-      $field_enabled = FALSE;
+    // Only display fields that are enabled in the Activities Search settings
+    // and in the API. (AMP calls these "columns")
+    if (in_array($field_name, $search_settings['enabled_columns'])) {
+      $field_enabled = _ampapi_activity_get_field_status($field_name, $field_handler, $ssc_search_enabled);
     }
 
     if (!$field_enabled) {
@@ -251,59 +221,13 @@ function ampapi_activity_views_pre_build(View &$view) {
   }
 
   foreach ($view->filter as $filter_name => $filter_handler) {
-    // @TODO: Have filters enabled by default? This will hide new filters when they are deployed.
-    $filter_enabled = TRUE;
+    // By default all filters are disabled.
+    $filter_enabled = FALSE;
 
-    if ($filter_name == 'activities_search_type') {
-      // Hide Search type selector for SSC activities.
-      if (!$ssc_search_enabled) {
-        $filter_enabled = FALSE;
-      }
-    }
-    else {
-      $mapper_plugin = ampapi_get_mapper_by_property_name($filter_handler->real_field);
-
-      // Some filers have a key that is different from the field key. like:
-      // 'National Plan Objective' vs 'National Planning Objectives Level 1 Id'
-      if (isset($mapper_plugin['report filter key'])) {
-        $filter_key = $mapper_plugin['report filter key'];
-      }
-      else {
-        $filter_key = $mapper_plugin['report field key'];
-      }
-
-      // Handle global "Humanitarian Aid" filter.
-      // @see helpergeneric_api_settings_form()
-      if ($filter_name == 'humanitarian_aid') {
-        $api_settings = helpergeneric_get_api_settings();
-
-        if (!empty($api_settings['humanitarian_aid_only'])) {
-          // Update the filter defaults. Defaults for the display_handler
-          // filter are also updated.
-          // Hide the filter.
-          $view->filter[$filter_name]->options['exposed'] = FALSE;
-
-          // Display only "Humanitarian Aid" data.
-          // NOTE: Changing the value here only works if the filter is not
-          // exposed. Otherwise the form values will override this change.
-          $view->filter[$filter_name]->value = TRUE;
-        }
-        else {
-          $filter_enabled = FALSE;
-        }
-      }
-
-      // Hide filters disabled in AMP.
-      if ($mapper_plugin['report field group'] == 'columns') {
-        if (empty($columns_data->{$filter_key})) {
-          $filter_enabled = FALSE;
-        }
-      }
-      else if ($mapper_plugin['report field group'] == 'measures') {
-        if (empty($measures_data->{$filter_key})) {
-          $filter_enabled = FALSE;
-        }
-      }
+    // Only display filters that are enabled in the Activities Search settings
+    // and in the API.
+    if (in_array($filter_name, $search_settings['enabled_filters'])) {
+      $filter_enabled = _ampapi_activity_get_filter_status($filter_name, $filter_handler, $ssc_search_enabled);
     }
 
     if (!$filter_enabled) {
@@ -312,6 +236,127 @@ function ampapi_activity_views_pre_build(View &$view) {
       unset($view->display_handler->handlers['filter'][$filter_name]);
     }
   }
+}
+
+/**
+ * Returns the status of an activity search field/column.
+ */
+function _ampapi_activity_get_field_status($name, $handler, $ssc_status) {
+  // Always enable these fields/columns.
+  $always_enabled_fields = array(
+    'id',
+    'title',
+  );
+  if (in_array($name, $always_enabled_fields)) {
+    return TRUE;
+  }
+
+  // Hide external_url field in exports, and display in other listings.
+  if ($name == 'external_url') {
+    if ($handler->view->current_display == 'export_page') {
+      return FALSE;
+    }
+    else {
+      return TRUE;
+    }
+  }
+
+  // Get a list of enabled columns and measures, these also affect the filter
+  // visibility.
+  $columns_data = ampapi_request('get', 'data/report/columns', TRUE);
+  $measures_data = ampapi_request('get', 'data/report/measures', TRUE);
+
+  // Hide fields disabled in AMP.
+  $mapper_plugin = ampapi_get_mapper_by_property_name($handler->real_field);
+  $field_key = $mapper_plugin['report field key'];
+  if ($mapper_plugin['report field group'] == 'columns') {
+    if (empty($columns_data->{$field_key})) {
+      return FALSE;
+    }
+  }
+  else if ($mapper_plugin['report field group'] == 'measures') {
+    if (empty($measures_data->{$field_key})) {
+      return FALSE;
+    }
+
+    // Disable SSC specific columns if SSC functionality is disabled.
+    if (!$ssc_status && !empty($mapper_plugin['report field ssc'])) {
+      return FALSE;
+    }
+    else if ($ssc_status && empty($mapper_plugin['report field ssc'])) {
+      return FALSE;
+    }
+  }
+
+  return TRUE;
+}
+
+/**
+ * Returns the status of an activity search filter.
+ */
+function _ampapi_activity_get_filter_status($name, $handler, $ssc_status) {
+  // Always enable these filters.
+  $always_enabled_filters = array(
+    'title',
+  );
+  if (in_array($name, $always_enabled_filters)) {
+    return TRUE;
+  }
+
+  // Get a list of enabled columns and measures, these also affect the filter
+  // visibility.
+  $columns_data = ampapi_request('get', 'data/report/columns', TRUE);
+  $measures_data = ampapi_request('get', 'data/report/measures', TRUE);
+
+  // Hide Search type selector for SSC activities.
+  if ($name == 'activities_search_type' && !$ssc_status) {
+    return FALSE;
+  }
+
+  // Handle global "Humanitarian Aid" filter.
+  // @see helpergeneric_api_settings_form()
+  if ($name == 'humanitarian_aid') {
+    $api_settings = helpergeneric_get_api_settings();
+
+    if (!empty($api_settings['humanitarian_aid_only'])) {
+      // Update the filter defaults. Defaults for the display_handler
+      // filter are also updated.
+      // Hide the filter.
+      $handler->view->filter[$name]->options['exposed'] = FALSE;
+
+      // Display only "Humanitarian Aid" data.
+      // NOTE: Changing the value here only works if the filter is not
+      // exposed. Otherwise the form values will override this change.
+      $handler->view->filter[$name]->value = TRUE;
+    }
+    else {
+      return FALSE;
+    }
+  }
+
+  // Some filers have a key that is different from the field key. like:
+  // 'National Plan Objective' vs 'National Planning Objectives Level 1 Id'
+  $mapper_plugin = ampapi_get_mapper_by_property_name($handler->real_field);
+  if (isset($mapper_plugin['report filter key'])) {
+    $filter_key = $mapper_plugin['report filter key'];
+  }
+  else {
+    $filter_key = $mapper_plugin['report field key'];
+  }
+
+  // Hide filters disabled in AMP.
+  if ($mapper_plugin['report field group'] == 'columns') {
+    if (empty($columns_data->{$filter_key})) {
+      return FALSE;
+    }
+  }
+  else if ($mapper_plugin['report field group'] == 'measures') {
+    if (empty($measures_data->{$filter_key})) {
+      return FALSE;
+    }
+  }
+
+  return TRUE;
 }
 
 /**
@@ -344,11 +389,16 @@ function ampapi_activity_get_search_settings() {
     ));
   }
 
-  // Always enable the activity ID, title an external URL.
+  // Always enable the activity ID, title an external URL fields/columns.
   $settings['enabled_columns'] += drupal_map_assoc(array(
     'id',
     'title',
     'external_url',
+  ));
+
+  // Always enable the title/keyword filter.
+  $settings['enabled_filters'] += drupal_map_assoc(array(
+    'title',
   ));
 
   if (empty($settings['default_sort'])) {

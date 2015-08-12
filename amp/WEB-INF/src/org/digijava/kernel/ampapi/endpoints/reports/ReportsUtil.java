@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
@@ -28,6 +29,7 @@ import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -331,15 +333,40 @@ public class ReportsUtil {
 	
 	public static void configureFilters(ReportSpecificationImpl spec, JsonBean formParams) {
 		JsonBean filters = new JsonBean();
-		LinkedHashMap<String, Object> requestFilters = (LinkedHashMap<String, Object>) 
-				formParams.get(EPConstants.FILTERS);
-		MondrianReportFilters mondrianReportFilters = null;
+		LinkedHashMap<String, Object> requestFilters = (LinkedHashMap<String, Object>) formParams.get(EPConstants.FILTERS);
 		if (requestFilters != null) {
 			filters.any().putAll(requestFilters);
-			mondrianReportFilters = FilterUtils.getFilters(filters);
-			// set filters even if they are empty, that means filters are cleared up
-			spec.setFilters(mondrianReportFilters);
+			MondrianReportFilters formFilters = FilterUtils.getFilters(filters);
+			MondrianReportFilters stickyFilters = copyStickyMtefEntries(spec.getFilters(), formFilters);
+			spec.setFilters(stickyFilters);
 		}
+	}
+	
+	/**
+	 * copies entries which are not enclosed in the Filter widget but should be kept post-filter-application from oldFilters to newFilters<br />
+	 * Now this only means MTEF filter entries
+	 * @param oldFilters
+	 * @param newFilters
+	 * @return
+	 */
+	protected static MondrianReportFilters copyStickyMtefEntries(ReportFilters oldFilters, MondrianReportFilters newFilters) {
+		if (oldFilters == null || oldFilters.getFilterRules() == null)
+			return newFilters; // no chance of stickies
+		
+		MondrianReportFilters result = newFilters == null ? new MondrianReportFilters() : newFilters;
+		boolean somethingAdded = false;
+		// set filters even if they are empty, that means filters are cleared up
+		// copy MTEF-hacky entries from old widget to new widget, since these are supposed to be sticky (not present in the filter form)
+		for(Entry<ReportElement, List<FilterRule>> elem: oldFilters.getFilterRules().entrySet()) {
+			if (elem.getKey().type == ReportElement.ElementType.MTEF_DATE) {
+				result.getFilterRules().put(elem.getKey(), elem.getValue());
+				somethingAdded = true;
+			}
+		}
+		if (newFilters == null && !somethingAdded)
+			return newFilters; // do not alter filters if we did nothing
+		
+		return result;
 	}
 	
 	/**

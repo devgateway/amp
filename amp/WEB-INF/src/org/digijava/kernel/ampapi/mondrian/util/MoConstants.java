@@ -105,6 +105,7 @@ public final class MoConstants {
 	public static final String H_PROPOSED_APPROVAL_DATE = "Proposed Approval Date";
 	public static final String H_ACTUAL_APPROVAL_DATE = "Actual Approval Date";
 	public static final String H_ACTUAL_COMPLETION_DATE = "Actual Completion Date";	
+	public static final String H_CURRENT_COMPLETION_DATE = "Current Completion Date";
 	public static final String H_PROPOSED_COMPLETION_DATE = "Proposed Completion Date";
 	public static final String H_ACTIVITY_CREATED_ON = "Activity Created On";
 	public static final String H_ACTIVITY_UPDATED_ON = "Activity Updated On";
@@ -209,6 +210,7 @@ public final class MoConstants {
 	public static final String ATTR_PROPOSED_APPROVAL_DATE = "Proposed Approval Date";
 	public static final String ATTR_ACTUAL_APPROVAL_DATE = "Actual Approval Date";
 	public static final String ATTR_ACTUAL_COMPLETION_DATE ="Actual Completion Date";
+	public static final String ATTR_CURRENT_COMPLETION_DATE ="Current Completion Date";
 	public static final String ATTR_PROPOSED_COMPLETION_DATE = "Proposed Completion Date";
 	public static final String ATTR_ACTIVITY_CREATED_ON = "Activity Created On";
 	public static final String ATTR_ACTIVITY_UPDATED_ON = "Activity Updated On";

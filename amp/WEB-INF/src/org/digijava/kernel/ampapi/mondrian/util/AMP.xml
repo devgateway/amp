@@ -369,6 +369,11 @@
 				<Level name="Actual Completion Date" column="actual_completion_date_code" type="Integer" nameColumn="actual_completion_date" />
 			</Hierarchy>
 
+			<Hierarchy hasAll="true" allMemberName="All Current Completion Date" primaryKey="amp_activity_id" name="Current Completion Date"> <!-- synonym for Actual Completion Date -->
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Current Completion Date" column="actual_completion_date_code" type="Integer" nameColumn="actual_completion_date" />
+			</Hierarchy>
+
 			<Hierarchy hasAll="true" allMemberName="All Proposed Completion Date" primaryKey="amp_activity_id" name="Proposed Completion Date">
 				<Table name="mondrian_activity_fixed_texts" />
 				<Level name="Proposed Completion Date" column="proposed_completion_date_code" type="Integer" nameColumn="proposed_completion_date" />

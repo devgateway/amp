@@ -52,8 +52,9 @@ public class FilterUtils {
 				filterRules = new MondrianReportFilters();
 			}
 			Map<String, Object> date = (Map<String, Object>) filter.get(dateColumn);
-			String start = String.valueOf(date.get("start"));
-			String end = String.valueOf(date.get("end"));
+			String start = denull(String.valueOf(date.get("start")));
+			String end = denull(String.valueOf(date.get("end")));
+			
 			if (start != null || end != null) {
 				SimpleDateFormat sdf = new SimpleDateFormat(MoConstants.DATE_FORMAT);
 				if (COLUMN_DATES_FILTER.contains(dateColumn)) {
@@ -68,6 +69,16 @@ public class FilterUtils {
 			logger.error("cannot process date", e);
 		}
 		return filterRules;
+	}
+
+	/**
+	 * returns the original String instance, unless it equals "null", case in which null will be returned
+	 * @param s
+	 * @return
+	 */
+	public static String denull(String s) {
+		if (s == null || !s.equalsIgnoreCase("null")) return s;
+		return null;
 	}
 
 	/**

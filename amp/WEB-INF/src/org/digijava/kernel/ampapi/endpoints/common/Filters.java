@@ -1,8 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -54,6 +57,8 @@ import org.hibernate.ObjectNotFoundException;
  */
 @Path("filters")
 public class Filters {
+	private static final String DISPLAY_NAME_PROPERTY = "DisplayName";
+	private static final String NAME_PROPERTY = "Name";
 	private static final String SECTORS_SUFFIX = " Sectors";
 	private static final Logger logger = Logger.getLogger(Filters.class);
 
@@ -96,10 +101,12 @@ public class Filters {
 				sjb.setName(TranslatorWorker.translateText(key));
 				activityStatus.add(sjb);
 			}
+			activityStatus = orderByProperty (activityStatus,NAME_PROPERTY);
 			as.set("filterId", ColumnConstants.APPROVAL_STATUS);
 			as.set("name", TranslatorWorker.translateText(ColumnConstants.APPROVAL_STATUS));
 			as.set("values",activityStatus);
 		}
+		
 		return as;
 	}
 
@@ -182,6 +189,7 @@ public class Filters {
 			for (AmpSector ampSector : s) {
 				ampSectorsList.add(getSectors(ampSector,sectorConfigName,1));
 			}
+			ampSectorsList = orderByProperty(ampSectorsList,NAME_PROPERTY);
 			sector.setChildren(ampSectorsList);
 		} catch (DgException e) {
 			logger.error("Cannot get sector by id",e);
@@ -309,8 +317,8 @@ public class Filters {
 	@ApiMethod(ui = true, name = "Types of Organizations", id = "organizationTypesList")
 	
 	public List<JsonBean> getOrgTypes() {
-
-		return QueryUtil.getOrgTypes();
+		List <JsonBean> orgTypes = QueryUtil.getOrgTypes();
+		return orderByName(orgTypes);
 	}
 
 	/**
@@ -333,7 +341,8 @@ public class Filters {
 	@ApiMethod(ui = true, name = "Organization Groups", id = "orgGroupsList")
 	
 	public List<JsonBean> getOrgGroups() {
-		return QueryUtil.getOrgGroups();
+		List <JsonBean> orgGroups = orderByName(QueryUtil.getOrgGroups());
+		return orgGroups;
 		
 	}	
 
@@ -357,7 +366,8 @@ public class Filters {
 	@ApiMethod(ui = true, id = "Organizations", name = "orgsList")
 	
 	public List<JsonBean> getOrgs() { 
-		return QueryUtil.getOrgs();
+		List <JsonBean> orgs = QueryUtil.getOrgs();
+		return orderByName(orgs);
 	}	
 
 	/**
@@ -379,7 +389,8 @@ public class Filters {
 	@ApiMethod(ui = true, name = "Organization Roles", id = "orgRolesList")
 	
 	public List<SimpleJsonBean> getorgRoles() {
-		return QueryUtil.getOrgRoles();
+		List <SimpleJsonBean> orgRoles = QueryUtil.getOrgRoles();
+		return orderByProperty(orgRoles,DISPLAY_NAME_PROPERTY);
 	}	
 	
 
@@ -485,15 +496,18 @@ public class Filters {
 		List<SimpleJsonBean> fi = new ArrayList<SimpleJsonBean>();
 
 		Collection<AmpCategoryValue> col = CategoryManagerUtil
-				.getAmpCategoryValueCollectionByKey(categoryKey);
+				.getAmpCategoryValueCollectionByKey(categoryKey,true);
 		for (AmpCategoryValue ampCategoryValue : col) {
 			String translatedValue = CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue);
 			fi.add(new SimpleJsonBean(ampCategoryValue.getIdentifier(),
 					translatedValue));
 		}
+		//reorder because after we get the translated name we lose ordering
+		fi = orderByProperty (fi,NAME_PROPERTY);
 		return fi;
 		
 	}
+	
 	
 	/**
 	 * Return locations
@@ -519,8 +533,8 @@ public class Filters {
 		res.set("translatedName", ColumnConstants.HUMANITARIAN_AID);
 		res.set("values", 
 				Arrays.asList(
-					new SimpleJsonBean(1, "Yes", null, TranslatorWorker.translateText("Yes")),
-					new SimpleJsonBean(2, "No", null, TranslatorWorker.translateText("No"))
+						new SimpleJsonBean(2, "No", null, TranslatorWorker.translateText("No")),
+						new SimpleJsonBean(1, "Yes", null, TranslatorWorker.translateText("Yes"))
 				));
 		return res;
 	}
@@ -587,6 +601,7 @@ public class Filters {
 		for (AmpTheme tt : t.getSiblings()) {
 			p.getChildren().add(getPrograms(tt,programName,level));
 		}
+		orderByProperty(p.getChildren(),NAME_PROPERTY);
 		return p;
 	}
 
@@ -652,6 +667,7 @@ public class Filters {
 		for (AmpSector ampSectorChild : as.getSectors()) {
 			s.getChildren().add(getSectors(ampSectorChild,sectorConfigName,level));
 		}
+		orderByProperty(s.getChildren(),NAME_PROPERTY);
 		return s;
 	}
 	
@@ -681,6 +697,7 @@ public class Filters {
 		js.set("filterId", "Workspaces");
 		js.set("name", TranslatorWorker.translateText("Workspaces"));
 		js.set("values", teamsListJson);
+		
 		return js;
 	}
 	
@@ -703,6 +720,52 @@ public class Filters {
 		}
 		return showWorkspaceFilter;
 
+	}
+
+	/**
+	 * Orders a List <JsonBean> by name
+	 * 
+	 * @param fi, List <JsonBean> to be ordered
+	 * @return ordered List 
+	 */
+	private List <JsonBean> orderByName(List <JsonBean> fi) {
+		Collections.sort(fi, new Comparator<JsonBean>() {
+			@Override
+			public int compare(JsonBean a, JsonBean b) {
+					return ((String) a.get("name")).compareTo((String) b.get("name"));
+				}
+		});
+		return fi;
+
+	}
+
+	/**
+	 * Orders a List <SimpleJsonBean> based on the property desired.
+	 * It can order using any attributes of SimpleJsonBean like: id, code, name, displayName
+	 * 
+	 * @param list the list to be ordered
+	 * @param property, String with the attribute to be ordered
+	 * @return ordered List <SimpleJsonBean>
+	 */
+	private List<SimpleJsonBean> orderByProperty(List<SimpleJsonBean> list, final String property) {
+		Collections.sort(list, new Comparator<SimpleJsonBean>() {
+			@Override
+			public int compare(SimpleJsonBean a, SimpleJsonBean b) {
+				try {
+					String property1 = (String) SimpleJsonBean.class.getMethod("get" + property).invoke(a);
+					String property2 = (String) SimpleJsonBean.class.getMethod("get" + property).invoke(b);
+					return property1.compareTo(property2);
+
+				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+						| NoSuchMethodException | SecurityException e) {
+					logger.warn("Couldn't order the JSON objects based on property " + property);
+					return 0;
+				}
+
+			}
+		});
+		return list;
+		
 	}
 	
 

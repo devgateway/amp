@@ -226,7 +226,7 @@ public static List<JsonBean> getOrgGroups() {
 							 " o.amp_org_id orgId  "+
 							 " from amp_org_group aog "+ 
 							 " left outer join amp_organisation o on aog.amp_org_grp_id=o.org_grp_id "+
-							 " order by orgGrpId";
+							 " order by orgGrpId,o.name";
 				try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
 					ResultSet rs = rsi.rs;
 					Long lastOrgGrpId=0L;

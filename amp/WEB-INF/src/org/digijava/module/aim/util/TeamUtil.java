@@ -198,7 +198,7 @@ public class TeamUtil {
         try {
             session = PersistenceManager.getSession();
             String query = "select team from " + AmpTeam.class.getName()
-                + " team where (team.accessType=:accessType)";
+                + " team where (team.accessType=:accessType) order by name";
             Query qry = session.createQuery(query);
             qry.setParameter("accessType", "Team");
             col = qry.list();

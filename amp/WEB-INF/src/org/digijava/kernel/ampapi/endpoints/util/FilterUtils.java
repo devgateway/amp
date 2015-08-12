@@ -37,8 +37,7 @@ public class FilterUtils {
 	public static MondrianReportFilters getApiOtherFilters(Map<String, Object> filter, MondrianReportFilters filterRules) {
 		for (String columnName : COLUMN_DATES_FILTER) {
 			if (filter.get(columnName) != null) {
-				//TODO right now it is not filtering correctly, check this problem
-				//filterRules = addDateFilterRule(columnName, filter, filterRules);
+				filterRules = addDateFilterRule(columnName, filter, filterRules);
 			}
 		}
 		if (filter.get("date") != null) {
@@ -54,9 +53,10 @@ public class FilterUtils {
 			if (filterRules == null) {
 				filterRules = new MondrianReportFilters();
 			}
-			Map<String, Object> date = (LinkedHashMap<String, Object>) filter.get(dateColumn);
-			String start = String.valueOf(date.get("start"));
-			String end = String.valueOf(date.get("end"));
+			Map<String, Object> date = (Map<String, Object>) filter.get(dateColumn);
+			String start = denull(String.valueOf(date.get("start")));
+			String end = denull(String.valueOf(date.get("end")));
+			
 			if (start != null || end != null) {
 				SimpleDateFormat sdf = new SimpleDateFormat(MoConstants.DATE_FORMAT);
 				if (COLUMN_DATES_FILTER.contains(dateColumn)) {
@@ -71,9 +71,18 @@ public class FilterUtils {
 			logger.error("cannot process date", e);
 		}
 		return filterRules;
-
 	}
 
+	/**
+	 * returns the original String instance, unless it equals "null", case in which null will be returned
+	 * @param s
+	 * @return
+	 */
+	public static String denull(String s) {
+		if (s == null || !s.equalsIgnoreCase("null")) return s;
+		return null;
+	}
+	
 	/**
 	 * returns a MondrianReportFilters based on the End point parameter
 	 * 

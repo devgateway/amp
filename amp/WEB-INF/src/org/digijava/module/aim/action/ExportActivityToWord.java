@@ -3361,6 +3361,30 @@ public class ExportActivityToWord extends Action {
             identificationSubTable1.addCell(cell);
         }
 
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Government Approval Procedures")) {
+			cell = new RtfCell();
+			cell.setColspan(2);
+			cell.setBorder(0);
+			cell.add(new Paragraph(TranslatorWorker.translateText("Government Approval Procedures") + ": ",PLAINFONT));
+						
+			if (identification.getGovernmentApprovalProcedures() != null ) {
+				columnVal = TranslatorWorker.translateText(identification.getGovernmentApprovalProcedures() ? "Yes" : "No");
+				cell.add(new Paragraph(columnVal, BOLDFONT));
+				identificationSubTable1.addCell(cell);
+			}
+		}
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Joint Criteria")) {
+			cell = new RtfCell();
+			cell.setColspan(2);
+			cell.setBorder(0);
+			cell.add(new Paragraph(TranslatorWorker.translateText("Joint Criteria") + ": ",PLAINFONT));
+						
+			if (identification.getJointCriteria() != null ) {
+				columnVal = TranslatorWorker.translateText(identification.getJointCriteria() ? "Yes" : "No");
+				cell.add(new Paragraph(columnVal, BOLDFONT));
+				identificationSubTable1.addCell(cell);
+			}
+		}
 		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Humanitarian Aid")) {
 			cell = new RtfCell();
 			cell.setColspan(2);

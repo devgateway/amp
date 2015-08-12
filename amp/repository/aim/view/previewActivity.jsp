@@ -1116,6 +1116,30 @@ function collapseAll() {
 		</c:if> 
 	</field:display>
 	
+	<module:display name="/Activity Form/Identification/Government Approval Procedures" parentModule="/Activity Form/Identification">
+		<c:if test="${aimEditActivityForm.identification.governmentApprovalProcedures!=null}">
+			<digi:trn>Government Approval Procedures</digi:trn>:&nbsp;<br />
+			<c:if test="${aimEditActivityForm.identification.governmentApprovalProcedures==false}">
+				<b><digi:trn key="aim:no">No</digi:trn></b>
+			</c:if> 
+			<c:if test="${aimEditActivityForm.identification.governmentApprovalProcedures==true}">
+				<b><digi:trn key="aim:yes">Yes</digi:trn></b>
+			</c:if>
+			<hr/>
+		</c:if>
+	</module:display>
+	<module:display name="/Activity Form/Identification/Joint Criteria" parentModule="/Activity Form/Identification">
+		<c:if test="${aimEditActivityForm.identification.jointCriteria!=null}">
+			<digi:trn>Joint Criteria</digi:trn>:&nbsp;<br />
+			<c:if test="${aimEditActivityForm.identification.jointCriteria==false}">
+				<b><digi:trn key="aim:no">No</digi:trn></b>
+			</c:if>
+			<c:if test="${aimEditActivityForm.identification.jointCriteria==true}">
+				<b><digi:trn key="aim:yes">Yes</digi:trn></b>
+			</c:if>
+			<hr/>
+		</c:if>
+	</module:display>
 	<module:display name="/Activity Form/Identification/Humanitarian Aid" parentModule="/Activity Form/Identification">
 		<c:if test="${aimEditActivityForm.identification.humanitarianAid!=null}">
 			<digi:trn>Humanitarian Aid</digi:trn>:&nbsp;<br />

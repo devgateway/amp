@@ -748,6 +748,26 @@ public class ExportActivityToPDF extends Action {
                 mainLayout.addCell(orgProjCell2);
             }
 
+            /**
+			 * Government Approval Procedures
+			 */
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Government Approval Procedures")){
+				if (activity.isGovernmentApprovalProcedures() != null) {
+					String value = TranslatorWorker.translateText(activity.isGovernmentApprovalProcedures() ? "Yes": "No");
+					columnName = TranslatorWorker.translateText("Government Approval Procedures");
+					createGeneralInfoRow(mainLayout, columnName, value);
+				}
+			}
+			/**
+			 * Joint Criteria
+			 */
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Joint Criteria")){
+				if (activity.isJointCriteria() != null) {
+					String value = TranslatorWorker.translateText(activity.isJointCriteria() ? "Yes": "No");
+					columnName = TranslatorWorker.translateText("Joint Criteria");
+					createGeneralInfoRow(mainLayout, columnName, value);
+				}
+			}
 			/**
 			 * Humanitarian Aid
 			 */
@@ -758,6 +778,7 @@ public class ExportActivityToPDF extends Action {
 					createGeneralInfoRow(mainLayout, columnName, value);
 				}
 			}			
+			
 
 
             //Planning

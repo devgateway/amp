@@ -419,11 +419,20 @@ FilterUtils.convertJavaFiltersToJS = function(data) {
 			});
 			break;
 			
-		case 'Actual Start Date':
-		case 'Proposed Start Date':
+		case 'Actual Approval Date':
 		case 'Actual Completion Date':
-		case 'Planned Completion Date':
-		case 'Date of Agreement':
+		case 'Actual Start Date':
+		case 'Current Completion Date':
+		case 'Donor Commitment Date':
+		case 'Final Date for Contracting':
+		case 'Final Date for Disbursements':
+		case 'Funding Classification Date':
+		case 'Funding end date':
+		case 'Funding start date':
+		case 'Original Completion Date':
+		case 'Proposed Approval Date':
+		case 'Proposed Completion Date':
+		case 'Proposed Start Date':
 			
 			var newDate = {};
 			_.map(item.values, function(item_, i) {						

@@ -558,20 +558,18 @@ public class InterchangeUtils {
 	@SuppressWarnings("unchecked")
 	public static boolean validateFilterActivityFields(JsonBean filterJson, JsonBean result) {
 		List<String> filteredItems = new ArrayList<String>();
-		String message = "Invalid filter. The usage should be {\"" + ActivityEPConstants.FILTER_FIELDS + "\" : [\"field1\", \"field2\", ..., \"fieldn\"]}";
-		JsonBean errorBean = ApiError.toError(message);
 		
 		if (filterJson != null) {
 			try {
 				filteredItems = (List<String>) filterJson.get(ActivityEPConstants.FILTER_FIELDS);
 				if (filteredItems == null) {
-					result.set(ApiError.JSON_ERROR_CODE, errorBean.get(ApiError.JSON_ERROR_CODE));
+					addFilterValidationErrorToResult(result);
 					
 					return false;
 				}
 			} catch (Exception e) {
-				LOGGER.warn("Error in validating fields filter JSON. " + e.getMessage());
-				result.set(ApiError.JSON_ERROR_CODE, errorBean.get(ApiError.JSON_ERROR_CODE));
+				LOGGER.warn("Error in validating fields of the filter attribute. " + e.getMessage());
+				addFilterValidationErrorToResult(result);;
 				
 				return false;
 			}
@@ -592,6 +590,15 @@ public class InterchangeUtils {
 		return true;
 	}
 	
+	private static void addFilterValidationErrorToResult(JsonBean result) {
+		String message = "Invalid filter. The usage should be {\"" + ActivityEPConstants.FILTER_FIELDS + "\" : [\"field1\", \"field2\", ..., \"fieldn\"]}";
+		
+		JsonBean errorBean = ApiError.toError(message);
+		result.set(ApiError.JSON_ERROR_CODE, errorBean.get(ApiError.JSON_ERROR_CODE));
+	}
+
+
+
 	/**
 	 * @param containerReq current request
 	 * @return true if request is valid to edit an activity

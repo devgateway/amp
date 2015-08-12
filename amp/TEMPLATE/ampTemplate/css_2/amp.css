@@ -91,7 +91,7 @@ td.inside_inner_title { border-width: 1px 1px 1px 1px;border-color: #CCC; border
 .wlcm_txt_menu_spc {margin-left:10px; margin-right:10px;}
 .welcome_info {font-size:12px; line-height:17px;}
 .welcome_title {font-size:10pt; font-weight:bold; margin-bottom:10px;color:#737373;}
-#logincontainer {z-index:9999;}
+#logincontainer a{white-space: nowrap}
 .welcome_note {font-size:11px; font-weight:bold; color:#666666;}
 .login_here {  background-color: #65B457;   width: 125px;  height: 30px;  margin-right: 10px;  text-align: center;  margin-top: 10px;}
 .login_here:hover {  background-color: #B4EEAA;color:#519847}
@@ -126,7 +126,6 @@ top_nav a {color:#FFFFFF;}
 html.ie .workspace_info {width:100px; margin:0 auto; height:30px; color:#000000; font-size:11px; padding:5px 10px;text-align:right;margin:-0px 0px 0px 50px;z-index:9990;position:absolute; top:5px;right:10px;}
 .workspace_info select{width:150px;font-size:10px;}
 .workspace_choose {line-height:25px; font-size:13px; margin-top:25px;}
-#login_menu{width:330px; float:right; margin:10px 30px 0px 0px;color:#fff;}
 
 /* MENU */
 .main_menu {height:25px;   margin:0 auto;text-align:center;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;z-index:9000;}
@@ -1124,11 +1123,6 @@ table.component-funding-table tr
   top: 10px;
   position: relative;		
 }
-.header_links {
-	position: relative;
-	top: 10px;
-}
-
 
 
 #actions-table {

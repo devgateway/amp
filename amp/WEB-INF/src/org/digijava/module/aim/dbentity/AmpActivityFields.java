@@ -519,11 +519,23 @@ LoggerIdentifiable, Cloneable {
 		@Interchangeable(fieldTitle = "Activity Status", importable=true, multipleValues=false, required = ActivityEPConstants.REQUIRED_ALWAYS,
 				discriminatorOption = CategoryConstants.ACTIVITY_STATUS_KEY, fmPath="/Activity Form/Identification/Activity Status", pickIdOnly=true),
 		@Interchangeable(fieldTitle = "Type of Cooperation", importable=true,  multipleValues = false,
-				discriminatorOption = CategoryConstants.TYPE_OF_COOPERATION_KEY, fmPath="/Activity Form/Identification/Type of Cooperation", pickIdOnly=true),
-		@Interchangeable(fieldTitle = "Type of Implementation", importable=true,  multipleValues = false, 
-				discriminatorOption = CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY,  fmPath="/Activity Form/Identification/Type of Implementation", pickIdOnly=true),
-		@Interchangeable(fieldTitle = "Modalities", importable=true, multipleValues=false, 
-				discriminatorOption = CategoryConstants.MODALITIES_KEY, fmPath="/Activity Form/Funding/Modalities", pickIdOnly=true),
+				/* "/Activity Form/Identification/Type of Cooperation" is used for SSC Type of Cooperation in preview display,
+				 * but in AF only the one from "/Activity Form/Funding/Overview Section/Type of Cooperation"
+				 * also confirmed via AMP-20899
+				 */
+				discriminatorOption = CategoryConstants.TYPE_OF_COOPERATION_KEY, fmPath="/Activity Form/Funding/Overview Section/Type of Cooperation", pickIdOnly=true),
+		@Interchangeable(fieldTitle = "Type of Implementation", importable=true,  multipleValues = false,
+				/* "/Activity Form/Funding/Type of Implementation" is used for SSC Type of Implementation in preview display,
+				 * but in AF only the one from "/Activity Form/Funding/Overview Section/Type of Implementation"
+				 * also confirmed via AMP-20899
+				 */
+				discriminatorOption = CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY,  fmPath="/Activity Form/Funding/Overview Section/Type of Implementation", pickIdOnly=true),
+		@Interchangeable(fieldTitle = "Modalities", importable=true, multipleValues=false,
+				/* "/Activity Form/Funding/Modalities" is used for SSC Modalities in preview display,
+				 * but in AF only the one from "/Activity Form/Funding/Overview Section/Type of Cooperation"
+				 * also confirmed via AMP-20899
+				 */
+				discriminatorOption = CategoryConstants.MODALITIES_KEY, fmPath="/Activity Form/Funding/Overview Section/Modalities", pickIdOnly=true),
 		@Interchangeable(fieldTitle = "A.C. Chapter", importable=true, multipleValues=false, 
 				discriminatorOption = CategoryConstants.ACCHAPTER_KEY, fmPath="/Activity Form/Identification/A.C. Chapter", pickIdOnly=true), 
 		@Interchangeable(fieldTitle = "Activity Budget", importable=true, multipleValues=false, required = "/Activity Form/Identification/Required Validator for Activity Budget", 

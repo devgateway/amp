@@ -28,6 +28,7 @@ public class MondrianSQLFilters {
 		addDateColumn(ColumnConstants.PROPOSED_APPROVAL_DATE, "proposed_approval_date");
 		addDateColumn(ColumnConstants.ACTUAL_APPROVAL_DATE, "actual_approval_date");
 		addDateColumn(ColumnConstants.ACTUAL_COMPLETION_DATE, "actual_completion_date");
+		addDateColumn(ColumnConstants.CURRENT_COMPLETION_DATE, "actual_completion_date");
 		addDateColumn(ColumnConstants.PROPOSED_COMPLETION_DATE, "proposed_completion_date");
 		addDateColumn(ColumnConstants.ACTIVITY_CREATED_ON, "date_created");
 		addDateColumn(ColumnConstants.ACTIVITY_UPDATED_ON, "date_updated");		

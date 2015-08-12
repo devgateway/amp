@@ -170,6 +170,7 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.PROPOSED_APPROVAL_DATE, new MDXLevel(MoConstants.ACTIVITY_DATES, MoConstants.H_PROPOSED_APPROVAL_DATE, MoConstants.ATTR_PROPOSED_APPROVAL_DATE));
 			addColumnDefinition(ColumnConstants.ACTUAL_APPROVAL_DATE, new MDXLevel(MoConstants.ACTIVITY_DATES, MoConstants.H_ACTUAL_APPROVAL_DATE, MoConstants.ATTR_ACTUAL_APPROVAL_DATE));
 			addColumnDefinition(ColumnConstants.ACTUAL_COMPLETION_DATE, new MDXLevel(MoConstants.ACTIVITY_DATES, MoConstants.H_ACTUAL_COMPLETION_DATE, MoConstants.ATTR_ACTUAL_COMPLETION_DATE));
+			addColumnDefinition(ColumnConstants.CURRENT_COMPLETION_DATE, new MDXLevel(MoConstants.ACTIVITY_DATES, MoConstants.H_CURRENT_COMPLETION_DATE, MoConstants.ATTR_CURRENT_COMPLETION_DATE));
 			addColumnDefinition(ColumnConstants.PROPOSED_COMPLETION_DATE, new MDXLevel(MoConstants.ACTIVITY_DATES, MoConstants.H_PROPOSED_COMPLETION_DATE, MoConstants.ATTR_PROPOSED_COMPLETION_DATE));
 			addColumnDefinition(ColumnConstants.ACTIVITY_CREATED_ON, new MDXLevel(MoConstants.ACTIVITY_DATES, MoConstants.H_ACTIVITY_CREATED_ON, MoConstants.ATTR_ACTIVITY_CREATED_ON));
 			addColumnDefinition(ColumnConstants.ACTIVITY_UPDATED_ON, new MDXLevel(MoConstants.ACTIVITY_DATES, MoConstants.H_ACTIVITY_UPDATED_ON, MoConstants.ATTR_ACTIVITY_UPDATED_ON));

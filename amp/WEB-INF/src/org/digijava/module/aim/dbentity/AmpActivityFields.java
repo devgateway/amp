@@ -108,8 +108,8 @@ LoggerIdentifiable, Cloneable {
 	@TranslatableField
 	protected String name ;
 	
-	@Interchangeable(fieldTitle = "Activity Description", importable = true, fmPath = "/Activity Form/Identification/Description", required = "/Activity Form/Identification/Required Validator for Description")
-	@VersionableFieldTextEditor(fieldTitle = "Activity Description")
+	@Interchangeable(fieldTitle = "Description", importable = true, fmPath = "/Activity Form/Identification/Description", required = "/Activity Form/Identification/Required Validator for Description")
+	@VersionableFieldTextEditor(fieldTitle = "Description")
 	protected String description ;
 
 	@Interchangeable(fieldTitle = "Project Comments", importable = true, fmPath = "/Activity Form/Identification/Project Comments")
@@ -235,8 +235,8 @@ LoggerIdentifiable, Cloneable {
 	})
 	protected Set<AmpOrgRole> orgrole;
 	
-	@Interchangeable(fieldTitle = "Organizations Project IDs", importable = true, fmPath = "/Activity Form/Activity Internal IDs")
-	@VersionableCollection(fieldTitle = "Internal IDs")
+	@Interchangeable(fieldTitle = "Activity Internal IDs", importable = true, fmPath = "/Activity Form/Activity Internal IDs")
+	@VersionableCollection(fieldTitle = "Activity Internal IDs")
 	protected Set<AmpActivityInternalId> internalIds ;
 	
 	@Interchangeable(fieldTitle = "Fundings", importable = true, fmPath = "/Activity Form/Funding")

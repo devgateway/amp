@@ -29028,22 +29028,14 @@ module.exports = Backbone.Collection.extend({
         //tmp hack because we need to return something.
         tmpModel = new Backbone.Model({ui:false});
         break;
-      case 'ActualCompletionDate': 
-      case 'DateOfAgreement':
-      case 'PlannedCompletionDate':
-      case 'ActualStartDate':
-      case 'ProposedStartDate':
-      case 'Dates':  
-        tmpModel = new YearsFilterModel(attrs);
-        break;
-      // case 'ActivityBudgetList':
-      // case 'TypeOfAssistanceList':
-      // case 'FinancingInstrumentsList':
-      // case 'ActivityStatusList':
-      // case 'ActivityApprovalStatus':
+        
       default:
-        tmpModel = new GenericFilterModel(attrs);
-        self._allDeferreds.push(tmpModel.getTree());
+    	  if (attrs.id == 'Dates' || (attrs.id.length > 4 && attrs.id.substring(attrs.id.length - 4) == 'Date')) {
+    		  tmpModel = new YearsFilterModel(attrs);  // hacky but less hacky than enumerating them. Long term solution -> the endpoint should return a field telling the type of a field
+    	  } else {
+    		  tmpModel = new GenericFilterModel(attrs);
+    		  self._allDeferreds.push(tmpModel.getTree());
+    	  }
     }
 
     return tmpModel;
@@ -29379,7 +29371,7 @@ _.extend(Widget.prototype, Backbone.Events, {
   getAllFilters: function() {
     var self = this;
     return this.loaded.then(function(){
-      // cache, because won't change. avoids callling serialize eveytime.
+      // cache, because won't change. avoids calling serialize everytime.
       if(!this._cachedAllFilters){
         this._cachedAllFilters = self.view.serialize({includeUnselected: true, wholeModel: true});
       }

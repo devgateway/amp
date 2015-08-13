@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
+import org.dgfoundation.amp.reports.mondrian.MondrianSQLFilters;
 import org.dgfoundation.amp.utils.ConstantsUtil;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
@@ -30,9 +32,8 @@ import org.digijava.module.search.util.SearchUtil;
 
 public class FilterUtils {
 	protected static Logger logger = Logger.getLogger(FilterUtils.class);
-	private static List<String> COLUMN_DATES_FILTER = Arrays.asList(ColumnConstants.PROPOSED_START_DATE,
-			ColumnConstants.ACTUAL_START_DATE, ColumnConstants.ACTUAL_COMPLETION_DATE,
-			ColumnConstants.FINAL_DATE_FOR_CONTRACTING, ColumnConstants.PROPOSED_COMPLETION_DATE);
+	
+	private static List<String> COLUMN_DATES_FILTER = Collections.unmodifiableList(new ArrayList<>(MondrianSQLFilters.DATE_COLUMNS));
 	
 	public static MondrianReportFilters getApiOtherFilters(Map<String, Object> filter, MondrianReportFilters filterRules) {
 		for (String columnName : COLUMN_DATES_FILTER) {

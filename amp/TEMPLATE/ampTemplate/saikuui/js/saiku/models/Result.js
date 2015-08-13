@@ -63,6 +63,7 @@ var Result = Backbone.Model.extend({
     },
     
     url: function() {
+    	debugger;
     	if(this.query.get('report_id')){
 	    	return encodeURI("../../../rest/data/saikureport/" + this.query.get('report_id'));
     	}

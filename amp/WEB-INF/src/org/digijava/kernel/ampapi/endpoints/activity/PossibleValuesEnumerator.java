@@ -203,6 +203,7 @@ public class PossibleValuesEnumerator {
 			String discriminatedFieldName = InterchangeUtils.getDiscriminatedFieldTitle(fieldName);
 			if (discriminatedFieldName != null)
 				return getField(clazz, discriminatedFieldName);
+
 		}
 		return field;
 	}

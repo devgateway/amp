@@ -40,7 +40,7 @@ LoggerIdentifiable, Cloneable {
 
 	protected AmpTeamMember createdBy;
 	
-	@Interchangeable(fieldTitle = "Project Impact",fmPath="/Activity Form/Identification/Project Impact")
+	@Interchangeable(fieldTitle = "Project Impact", importable = true, fmPath="/Activity Form/Identification/Project Impact")
 	@VersionableFieldTextEditor(fieldTitle = "Project Impact")
 	protected String projectImpact;
 	

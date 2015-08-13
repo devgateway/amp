@@ -115,7 +115,7 @@ public class ActivityImporter {
 		
 		for (Field field : AmpActivityFields.class.getDeclaredFields()) {
 			Interchangeable ant = field.getAnnotation(Interchangeable.class);
-			if (ant != null) {
+			if (ant != null && ant.importable()) {
 				try {
 					if (ant.fieldTitle().equals(ActivityFieldsConstants.AMP_ACTIVITY_ID) ||
 							ant.fieldTitle().equals(ActivityFieldsConstants.AMP_ID))

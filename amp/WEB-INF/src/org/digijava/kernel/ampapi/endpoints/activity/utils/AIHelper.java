@@ -14,15 +14,17 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
+import clover.org.apache.commons.lang.math.NumberUtils;
+
 
 /**
  * Helper methods for Activity Import
  * 
  * @author Nadejda Mandrescu
  */
-public class ActivityImporterHelper {
+public class AIHelper {
 	
-	private static final Logger logger = Logger.getLogger(ActivityImporterHelper.class);
+	private static final Logger logger = Logger.getLogger(AIHelper.class);
 	/** 
 	 * Stores all field paths within AmpActivityVersion tree that back reference the Activity.
 	 */
@@ -32,7 +34,7 @@ public class ActivityImporterHelper {
 	 * 
 	 * @param activityImporter
 	 */
-	public ActivityImporterHelper(ActivityImporter activityImporter) {
+	public AIHelper(ActivityImporter activityImporter) {
 		this.activityImporter = activityImporter;
 	}
 	
@@ -68,16 +70,17 @@ public class ActivityImporterHelper {
 		generalErrors.put(error.id, error);
 	}
 	
-//	public static String getIdFieldName(JsonBean fieldDescription) {
-//		if (fieldDescription != null) {
-//			Object children = fieldDescription.get(ActivityEPConstants.CHILDREN);
-//			if (children != null && children instanceof List)
-//				for (JsonBean child : (List<JsonBean>) children) {
-//					if (Boolean.TRUE.equals(child.get(ActivityEPConstants.ID)))
-//						return child.getString(ActivityEPConstants.FIELD_NAME);
-//				}
-//		}
-//		return null;
-//	}
+	/**
+	 * Retrieves amp_activity_id (internal_id) from main JSON request
+	 * @param root
+	 * @return Long representation or null if invalid or missing
+	 */
+	public static Long getActivityIdOrNull(JsonBean root) {
+		String idStr = String.valueOf(root.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME));
+		if (NumberUtils.isDigits(idStr)) 
+			return Long.valueOf(idStr);
+		return null;
+	}
+	
 	
 }

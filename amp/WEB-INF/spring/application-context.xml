@@ -111,10 +111,10 @@
 		request-matcher="regex" security="none" />
 
 	<!-- alllow bypass for login page -->
-	<http pattern="/showLayout.do\?layout=login" request-matcher="regex"
+	<http pattern="/showLayout.do/?layout=login" request-matcher="regex"
 		security="none" />
 	
-	<http pattern="/showLayout.do\?layout=viewActivityHistory" request-matcher="regex"
+	<http pattern="/showLayout.do/?layout=viewActivityHistory" request-matcher="regex"
 		security="none" />
 		
 	<!-- import digi module spring configuration files -->
@@ -200,7 +200,7 @@
 	</http>
 
 <beans:bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
-    <beans:constructor-arg index="0" value="/showLayout.do\?layout=login" />
+    <beans:constructor-arg index="0" value="/showLayout.do/?layout=login" />
     <beans:constructor-arg index="1">
         <beans:list>
         	<beans:bean id="ampCustomLogoutHandler" class="org.digijava.kernel.security.auth.AmpCustomLogoutHandler" />

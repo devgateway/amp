@@ -15,7 +15,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.digijava.kernel.ampapi.endpoints.activity.utils.ActivityImporterHelper;
+import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -158,8 +158,7 @@ public class InterchangeEndpoints {
 			// invalidating
 			String details = "url project_id = " + projectId + ", json " + ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME +
 					" = " + internalId;
-			ActivityImporterHelper.addGeneralError(newJson, 
-					new ApiErrorMessage(ActivityErrors.UPDATE_ID_MISMATCH, details));
+			AIHelper.addGeneralError(newJson, new ApiErrorMessage(ActivityErrors.UPDATE_ID_MISMATCH, details));
 		}
 
 		return InterchangeUtils.importActivity(newJson, true, uri.getBaseUri() + "activity");

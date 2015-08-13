@@ -19,11 +19,13 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.onepager.util.ChangeType;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
-import org.digijava.kernel.ampapi.endpoints.activity.utils.ActivityImporterHelper;
+import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
@@ -61,8 +63,6 @@ import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
-
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * Imports a new activity or updates an existing one
@@ -107,6 +107,8 @@ public class ActivityImporter {
 	}
 
     private void cleanupNewActivity() {
+    	if (newActivity == null)
+    		return;
 
 		Map<String, Method> aafMethods = new HashMap<String, Method>();
 		for (Method method : AmpActivityFields.class.getMethods()) {
@@ -125,7 +127,7 @@ public class ActivityImporter {
 					Method setterMeth = aafMethods.get(InterchangeUtils.getSetterMethodName(field.getName()));
 					Method getterMeth = aafMethods.get(InterchangeUtils.getGetterMethodName(field.getName()));
 					if (Collection.class.isAssignableFrom(field.getType())) {
-						Collection<Object> col = (Collection<Object>)getterMeth.invoke(newActivity);
+						Collection<Object> col = (Collection<Object>) getterMeth.invoke(newActivity);
 						if (col != null)
 							col.clear();
 					} else {
@@ -137,7 +139,6 @@ public class ActivityImporter {
 			}
 		}
     }
-    
     
 	/**
 	 * Imports or Updates
@@ -152,7 +153,7 @@ public class ActivityImporter {
 		// retrieve fields definition for internal use
 		List<JsonBean> fieldsDef = FieldsEnumerator.getAllAvailableFields(true);
 		// get existing activity if this is an update request
-		Long ampActivityId = update ? Long.decode(newJson.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME).toString()) : null;
+		Long ampActivityId = update ? AIHelper.getActivityIdOrNull(newJson) : null;
 		// check if any error were already detected in upper layers 
 		Map<Integer, ApiErrorMessage> existingErrors = (TreeMap<Integer, ApiErrorMessage>) newJson.get(ActivityEPConstants.INVALID);
 		
@@ -195,13 +196,15 @@ public class ActivityImporter {
 		cleanupNewActivity();
 		
 		
-		newActivity = (AmpActivityVersion) validateAndImport(newActivity, oldActivity, fieldsDef, newJsonParent, oldJsonParent, null);
+		newActivity = (AmpActivityVersion) validateAndImport(newActivity, oldActivity, fieldsDef, newJsonParent, 
+				oldJsonParent, null);
 		if (newActivity != null && errors.isEmpty()) {
 			// save new activity
 			try {
 				prepareToSave();
-				newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity, translations, currentMember,
-						Boolean.TRUE.equals(newActivity.getDraft()), PersistenceManager.getRequestDBSession(), false, false);
+				newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity, 
+						translations, currentMember, Boolean.TRUE.equals(newActivity.getDraft()), 
+						PersistenceManager.getRequestDBSession(), false, false);
 				postProcess();
 			} catch (Exception e) {
 				logger.error(e.getMessage());
@@ -313,7 +316,7 @@ public class ActivityImporter {
 				}
 				if (newFieldValue != null && Collection.class.isAssignableFrom(newFieldValue.getClass())) {
 					isCollection = true;
-					subElementClass = ActivityImporterHelper.getGenericsParameterClass(newField);
+					subElementClass = AIHelper.getGenericsParameterClass(newField);
 				}
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 				logger.error(e.getMessage());
@@ -396,7 +399,6 @@ public class ActivityImporter {
 	protected void addActivityFieldForPostprocessing(Field field, Object obj) {
 		activityFieldsForPostprocess.put(obj, field);
 	}
-	
 	
 	/**
 	 * Configures new value, no validation outside of this method scope, it must be verified before
@@ -569,7 +571,7 @@ public class ActivityImporter {
 					col = (Collection) getNewInstance(parentObj, field);
 				}
 				if (idOnly && jsonValue != null) {
-					Class<?> objectType = ActivityImporterHelper.getGenericsParameterClass(field);
+					Class<?> objectType = AIHelper.getGenericsParameterClass(field);
 					try {
 						Object res = getObjectReferencedById(objectType, Long.valueOf(jsonValue.toString()));
 						col.add(res);
@@ -780,7 +782,6 @@ public class ActivityImporter {
         initContacts();
         postprocessActivityReferences();
         updatePPCAmount();
-		//initActivityReferences(newActivity, ActivityImporterHelper.getActivityRefPathsSet()); //ActivityImporterHelper.ACTIVITY_REFERENCES);
 	}
 	
 
@@ -1027,6 +1028,5 @@ public class ActivityImporter {
     public void setLatestActivityId(Long latestActivityId) {
         this.latestActivityId = latestActivityId;
     }
-
-
+    
 }

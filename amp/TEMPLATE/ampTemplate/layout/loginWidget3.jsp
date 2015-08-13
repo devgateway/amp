@@ -82,7 +82,7 @@
         <digi:link href="/showRegisterUser.do?init=true" module="aim" title="${trn3}">
           <digi:trn key="aim:newUserRegistration"> New user registration</digi:trn>
         </digi:link>
-        &nbsp;|&nbsp;
+        <br/>
       </feature:display>
       <feature:display name="Change Password" module="Login - User Management">
         <c:set var="title">
@@ -91,7 +91,7 @@
         <digi:link href="/showChangePassword.do" title="${title}" module="aim">
           <digi:trn> Change Password</digi:trn>
         </digi:link>
-        &nbsp;|&nbsp;
+        <br/>
       </feature:display>
       <feature:display name="Trouble signing in" module="Login - User Management">
         <c:set var="trn1">

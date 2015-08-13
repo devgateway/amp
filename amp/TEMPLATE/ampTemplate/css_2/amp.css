@@ -93,7 +93,7 @@ td.inside_inner_title { border-width: 1px 1px 1px 1px;border-color: #CCC; border
 .welcome_title {font-size:10pt; font-weight:bold; margin-bottom:10px;color:#737373;}
 #logincontainer a{white-space: nowrap}
 .welcome_note {font-size:11px; font-weight:bold; color:#666666;}
-.login_here {  background-color: #65B457;   width: 125px;  height: 30px;  margin-right: 10px;  text-align: center;  margin-top: 10px;}
+.login_here { background-color: #65B457;   width: 125px;  height: 30px;  margin-right: 10px;  text-align: center;  margin-top: 10px; float: left;}
 .login_here:hover {  background-color: #B4EEAA;color:#519847}
 .login_here_cont { font-size:14px;}
 .login_here .login_here_cont a {font-size:12px;color:#FFFFFF; font-weight:bold;text-decoration: none;cursor: pointer;}

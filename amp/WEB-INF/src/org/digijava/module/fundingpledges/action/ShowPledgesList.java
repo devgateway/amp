@@ -24,7 +24,7 @@ public class ShowPledgesList extends Action {
 
         HttpSession session = request.getSession();
         TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-        if (tm == null || !tm.getPledger()) {
+        if (tm == null || tm.getPledger() == null || !tm.getPledger()) {
             handleNonPledgeUser(request);
             return mapping.findForward("forward");
         }

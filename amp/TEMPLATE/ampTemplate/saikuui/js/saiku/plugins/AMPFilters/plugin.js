@@ -186,6 +186,12 @@ FilterUtils.convertJavaFiltersToJS = function(data) {
 	return blob;
 };*/
 
+
+/**
+ * THIS FILE IS A SHAMELESS ALMOST-COPY-PASTE OFF tabs/js/business/filter/filterUtils.js.
+ * MIRROR ALL CHANGES DONE HERE THERE AND VICEVERSA 
+ */
+
 FilterUtils.getDateIntervalType = function(element) {
 	var min = element.min;
 	var max = element.max;
@@ -300,6 +306,7 @@ FilterUtils.extractFilters = function(content) {
 			filters.push(auxFilter);
 		}
 	});
+	debugger;
 	return filters;
 };
 

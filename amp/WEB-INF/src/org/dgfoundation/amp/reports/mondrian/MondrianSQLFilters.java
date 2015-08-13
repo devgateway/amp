@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.reports.mondrian;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,6 +16,11 @@ import org.digijava.module.aim.util.ActivityUtil;
  */
 public class MondrianSQLFilters {
 
+	/**
+	 * this one is being filled by addDateColumn() below
+	 */
+	public static final Set<String> DATE_COLUMNS = new HashSet<String>();
+	
 	/**
 	 * complete list of columns which are filtered though amp_activity_id filters
 	 */
@@ -38,6 +44,7 @@ public class MondrianSQLFilters {
 	}
 		private void addDateColumn(String ampColumn, String aavColumn) {
 			put(ampColumn, new MondrianDateFilters(ampColumn, aavColumn));
+			DATE_COLUMNS.add(ampColumn);
 		}
 	};
 

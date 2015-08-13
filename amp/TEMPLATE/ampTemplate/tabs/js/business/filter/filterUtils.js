@@ -8,6 +8,11 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 		}
 	}
 
+	/**
+	 * THIS FILE IS A SHAMELESS ALMOST-COPY-PASTE OFF saiku/plugins/AMPFilters/plugin.js.
+	 * MIRROR ALL CHANGES DONE HERE THERE AND VICEVERSA 
+	 */
+	
 	FilterUtils.getDateIntervalType = function(element) {
 		var min = element.attributes.min;
 		var max = element.attributes.max;
@@ -357,8 +362,22 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 						return parseInt(item_.id);
 					});
 					break;
-				case 'Actual Start Date':
+					
+				case 'Actual Approval Date':
 				case 'Actual Completion Date':
+				case 'Actual Start Date':
+				case 'Current Completion Date':
+				case 'Donor Commitment Date':
+				case 'Final Date for Contracting':
+				case 'Final Date for Disbursements':
+				case 'Funding Classification Date':
+				case 'Funding end date':
+				case 'Funding start date':
+				case 'Original Completion Date':
+				case 'Proposed Approval Date':
+				case 'Proposed Completion Date':
+				case 'Proposed Start Date':
+					
 					var newDate = {};
 					_.map(item.get('values'), function(item_, i) {						
 						if(i === 0) {

@@ -543,7 +543,7 @@ public class ActivityImporter {
 			return null;
 		Object value = null;
 		String fieldType = (String) fieldDef.get(ActivityEPConstants.FIELD_TYPE);
-		fieldPath = fieldPath.substring(1);
+		//looks like a left over, probably can remove on the next commit: fieldPath = fieldPath.substring(1);
 		List<JsonBean> allowedValues = getPossibleValuesForFieldCached(fieldPath, AmpActivityFields.class, null);
 		boolean idOnly = Boolean.TRUE.equals(fieldDef.get(ActivityEPConstants.ID_ONLY)); 
 		if (!isCollection && idOnly) {

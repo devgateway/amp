@@ -195,15 +195,12 @@ public class ActivityImporter {
 		cleanupNewActivity();
 		
 		
-		newActivity = (AmpActivityVersion) validateAndImport(newActivity, oldActivity, fieldsDef, 
-				newJsonParent, oldJsonParent, null);
+		newActivity = (AmpActivityVersion) validateAndImport(newActivity, oldActivity, fieldsDef, newJsonParent, oldJsonParent, null);
 		if (newActivity != null && errors.isEmpty()) {
-
 			// save new activity
 			try {
 				prepareToSave();
-				org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(
-						newActivity, translations, currentMember,
+				newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity, translations, currentMember,
 						Boolean.TRUE.equals(newActivity.getDraft()), PersistenceManager.getRequestDBSession(), false, false);
 				postProcess();
 			} catch (Exception e) {

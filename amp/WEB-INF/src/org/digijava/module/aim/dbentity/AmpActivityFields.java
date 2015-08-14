@@ -191,7 +191,10 @@ LoggerIdentifiable, Cloneable {
 					unique = "/Activity Form/Sectors/Secondary Sectors/uniqueSectorsValidator")),
 			@Interchangeable(fieldTitle = "Tertiary Sectors", discriminatorOption = "Tertiary", importable=true, fmPath = "/Activity Form/Sectors/Tertiary Sectors",
 					validators = @Validators(minSize = "/Activity Form/Sectors/Tertiary Sectors/minSizeSectorsValidator", percentage = "/Activity Form/Sectors/Tertiary Sectors/sectorPercentageTotal", 
-					unique = "/Activity Form/Sectors/Tertiary Sectors/uniqueSectorsValidator"))
+					unique = "/Activity Form/Sectors/Tertiary Sectors/uniqueSectorsValidator")),
+            @Interchangeable(fieldTitle = "Tag Sectors", discriminatorOption = "Tag", importable=true, fmPath = "/Activity Form/Sectors/Tag Sectors",
+                    validators = @Validators(minSize = "/Activity Form/Sectors/Tag Sectors/minSizeSectorsValidator", percentage = "/Activity Form/Sectors/Tag Sectors/sectorPercentageTotal",
+                    unique = "/Activity Form/Sectors/Tag Sectors/uniqueSectorsValidator"))
 	})
 	protected Set<AmpActivitySector> sectors;
 	

@@ -101,7 +101,7 @@ public class ApiError {
     private static void processErrorResponseStatus() {
         Integer responseMarker = EndpointUtils.getResponseStatusMarker();
         if (responseMarker == null || responseMarker == HttpServletResponse.SC_OK) {
-            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 	

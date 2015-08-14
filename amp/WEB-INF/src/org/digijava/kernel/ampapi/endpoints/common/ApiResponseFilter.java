@@ -11,6 +11,8 @@ import org.digijava.module.aim.helper.Constants;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 
 /**
  * Endpoint response post processor filer
@@ -34,7 +36,8 @@ public class ApiResponseFilter implements ContainerResponseFilter {
 			TLSUtils.getRequest().removeAttribute(SecurityUtil.REMOVE_SESSION);
 		}
         Integer responseStatusMarker = EndpointUtils.getResponseStatusMarker();
-        if (responseStatusMarker != null) {
+        // override only the default 200 status with custom one
+        if (responseStatusMarker != null && response.getStatus() == HttpServletResponse.SC_OK) {
             response.setStatus(responseStatusMarker);
         }
 

@@ -34,28 +34,10 @@ var distFolder = "build";
 
 if (QueryString.language) {
   var request = new XMLHttpRequest();
-
-  request.open('GET', ['/rest/translations/languages/',QueryString.language].join(""), true);
-
-  request.onload = function() {
-    if (request.status >= 200 && request.status < 400) {
-      // Success!
-      var resp = request.responseText;
-      window.location.replace([distFolder,"/","index.html"].join(""));
-    } else {
-      // We reached our target server, but it returned an error
-
-    }
-  };
-
-  request.onerror = function() {
-    // There was a connection error of some sort
-  };
-
+  request.withCredentials = true;
+  request.open('GET', ['/rest/translations/languages/', QueryString.language].join(""), false);
   request.send();
-
-
+  document.cookie = "digi_language=" + QueryString.language + ";path=/";
 }
-else {
-  window.location.replace([distFolder,"/","index.html"].join(""));
-}
+
+window.location.replace([distFolder,"/","index.html"].join(""));

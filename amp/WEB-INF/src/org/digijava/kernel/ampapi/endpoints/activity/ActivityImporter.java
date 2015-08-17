@@ -176,13 +176,16 @@ public class ActivityImporter {
 		}
 		
 		// initialize new activity
+		InterchangeUtils.getSessionWithPendingChanges();
+		
 		if (oldActivity != null) {
 			try {
-//				newActivity = ActivityVersionUtil.cloneActivity(oldActivity, TeamUtil.getCurrentAmpTeamMember());
 				newActivity = oldActivity;
 				oldActivity = ActivityVersionUtil.cloneActivity(oldActivity, TeamUtil.getCurrentAmpTeamMember());
 				oldActivity.setAmpId(newActivity.getAmpId());
-//				newActivity.setAmpActivityGroup(oldActivity.getAmpActivityGroup());
+				oldActivity.setAmpActivityGroup(newActivity.getAmpActivityGroup());
+				
+				cleanupNewActivity();
 			} catch (CloneNotSupportedException e) {
 				logger.error(e.getMessage());
 				throw new RuntimeException(e);
@@ -191,11 +194,9 @@ public class ActivityImporter {
 			newActivity = new AmpActivityVersion();
 		}
 		
+		Map<String, Object> oldJsonParent = null;
 		Map<String, Object> newJsonParent = newJson.any();
-		Map<String, Object> oldJsonParent = oldJson == null ? null : oldJson.any();
-		oldJsonParent = null;
-		cleanupNewActivity();
-		
+//		oldJsonParent = oldJson == null ? null : oldJson.any();
 		
 		newActivity = (AmpActivityVersion) validateAndImport(newActivity, oldActivity, fieldsDef, newJsonParent, 
 				oldJsonParent, null);

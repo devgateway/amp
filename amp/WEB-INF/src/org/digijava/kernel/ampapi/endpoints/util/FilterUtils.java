@@ -69,7 +69,8 @@ public class FilterUtils {
 				}
 			}
 		} catch (AmpApiException | ParseException e) {
-			logger.error("cannot process date", e);
+			//logger.error("cannot process date", e);
+			throw new RuntimeException(e);
 		}
 		return filterRules;
 	}

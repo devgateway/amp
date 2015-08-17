@@ -35,6 +35,7 @@ module.exports = Backbone.Collection
        * Currently all on the same data level.
        **/
 
+      //debugger;
       /* get filters if set (not applicable for getActivities) */
       if (this.appData.filter) {
         _.extend(payload, this.appData.filter.serialize());

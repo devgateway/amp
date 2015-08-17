@@ -12,7 +12,7 @@ import junit.framework.TestCase;
 
 /**
  * intermediary class for holding various utility methods for testcases
- * @author simple
+ * @author Dolghier Constantin
  *
  */
 public abstract class AmpTestCase extends TestCase

@@ -20,6 +20,7 @@ import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.reports.mondrian.MondrianHumanitarianAidFilter;
@@ -381,7 +382,7 @@ public class AmpARFilterConverter {
 	
 	public MondrianReportSettings buildSettings() {
 		settings = new MondrianReportSettings();
-		
+		settings.setUnitsOption(arFilter.getUnitsOptions()); // might be null and we are ok with that - the getter will never return a null
 		addCurrencySettings();
 		addDateSettings();
 		
@@ -393,9 +394,6 @@ public class AmpARFilterConverter {
 			settings.setCurrencyCode(arFilter.getCurrency().getCurrencyCode());
 		if (arFilter.getCurrentFormat() != null)
 			settings.setCurrencyFormat(arFilter.getCurrentFormat());
-		// cannot use DecimalFormat multiplier, which is int and cannot be fractional
-		settings.setUnitsMultiplier(MondrianReportUtils.getAmountMultiplier(
-				arFilter.computeEffectiveAmountInThousand()));
 	}
 	
 	/**

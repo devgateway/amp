@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.onepager.util.ChangeType;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
@@ -914,7 +915,7 @@ public class ActivityImporter {
         		funAmount += InterchangeUtils.doPPCCalculations(apb, newActivity.getCurrencyCode());
         	}
         	
-        	newActivity.setFunAmount(funAmount / FeaturesUtil.getAmountMultiplier());
+        	newActivity.setFunAmount(funAmount * AmountsUnits.getDefaultValue().multiplier);
         }
 	}
 	

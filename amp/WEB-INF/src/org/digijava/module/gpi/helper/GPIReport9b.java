@@ -14,6 +14,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
@@ -79,8 +80,8 @@ public class GPIReport9b extends GPIAbstractReport {
 		Date[] endDates = new Date[yearRange];
 		double fromExchangeRate;
 		double toExchangeRate;
-		BigDecimal multiplier = new BigDecimal(MondrianReportUtils.getAmountMultiplier(Integer.valueOf(FeaturesUtil
-				.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))));
+		
+		BigDecimal multiplier = BigDecimal.valueOf(AmountsUnits.getDefaultValue().multiplier);
 
 		if (setup != null) {
 			try {

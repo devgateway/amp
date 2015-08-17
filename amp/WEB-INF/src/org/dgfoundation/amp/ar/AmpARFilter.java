@@ -35,6 +35,7 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.reports.IgnorePersistence;
@@ -458,7 +459,7 @@ public class AmpARFilter extends PropertyListable {
 
 	private DecimalFormat currentFormat = null;
 	
-	public final static int AMOUNT_OPTION_IN_UNITS = 0; // not sure
+	public final static int AMOUNT_OPTION_IN_UNITS = 0;
 	public final static int AMOUNT_OPTION_IN_THOUSANDS = 1;
 	public final static int AMOUNT_OPTION_IN_MILLIONS = 2;
 	
@@ -700,6 +701,23 @@ public class AmpARFilter extends PropertyListable {
 			// AmpCaching does not work out of the Struts request cycle
 		}
 		return settings;
+	}
+	
+	public int getAmountDivider() {
+		return AmountsUnits.getAmountDivider(computeEffectiveAmountInThousand());
+	}
+	
+	public double getAmountMultiplier() {
+		return AmountsUnits.getAmountMultiplier(computeEffectiveAmountInThousand());
+	}
+	
+	/**
+	 * returns an AmountsUnits instance corresponding to the instance's {@link #amountinthousand} value OR null
+	 * @return
+	 */
+	public AmountsUnits getUnitsOptions() {
+		if (amountinthousand == null) return null;
+		return AmountsUnits.getForValue(amountinthousand);
 	}
 	
 	public void initFilterQueryPledge() {

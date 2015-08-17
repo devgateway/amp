@@ -253,20 +253,8 @@ public class GroupReportDataXLS extends XLSExporter{
 		row = sheet.createRow(rowId.shortValue());
 		HSSFCell cell=row.createCell(colId.shortValue());
 		
-			String translatedNotes = "";
-			String translatedReportDescription = "Description:";			
-
-			int amountUnitsCode = arf.computeEffectiveAmountInThousand();
-			if (amountUnitsCode != AmpARFilter.AMOUNT_OPTION_IN_UNITS)
-			{
-				if (amountUnitsCode == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS)
-			   		translatedNotes = TranslatorWorker.translateText("Amounts are in thousands (000)");
-				else
-					translatedNotes = TranslatorWorker.translateText("Amounts are in millions (000 000)");
-			    if("".equalsIgnoreCase(translatedNotes)){
-			    	translatedNotes = AmpReports.getNote(session);    
-			    }
-			}
+			String translatedNotes = TranslatorWorker.translateText(arf.getUnitsOptions().userMessage);
+			String translatedReportDescription = "Description:";
 							
 			String translatedCurrency = TranslatorWorker.translateText(ReportContextData.getFromRequest().getSelectedCurrencyName());
             translatedNotes = translatedNotes.replaceAll("\n", " ");

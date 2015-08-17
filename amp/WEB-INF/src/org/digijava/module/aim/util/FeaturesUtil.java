@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibilityAlphaOrderComparator;
@@ -111,48 +112,21 @@ public class FeaturesUtil {
         for (AmpTemplatesVisibility tv : templates) {
             tv.setUsedByTeamsNames(getAssignedToTeams(tv.getId()));
         }
-    }
-
-	/**
-	 * returns 1, 1000 or 1000000 depending on the code values: AmpARFilter.AMOUNT_OPTION_IN_XXXX
-	 * throws exception in case the input value is wrong
-	 * @param code
-	 * @return
-	 */
-	public static int getAmountMultiplier(int code)
-	{
-		switch(code)
-		{
-		case AmpARFilter.AMOUNT_OPTION_IN_UNITS:
-			return 1;
-		case AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS:
-			return 1000;
-		case AmpARFilter.AMOUNT_OPTION_IN_MILLIONS:
-			return 1000 * 1000;
-		default:
-			throw new RuntimeException("Huge bug 432321"); // random number, all that counts is for it to be unique
-		}
-	}
-	
-	public static int getAmountMultiplier()
-	{
-		int amountsUnitCode = Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
-		return getAmountMultiplier(amountsUnitCode);
-	}
+    }	
 	
 	public static Double applyThousandsForVisibility(Double amount) 
 	{
 		if (amount == null)
 			return null;
-		return amount * 1.0 / getAmountMultiplier();
+		return amount * AmountsUnits.getDefaultValue().multiplier;
 	}
 
 	public static Double applyThousandsForEntry(Double amount) 
 	{
 		if (amount == null)
 			return null;
-		return amount * getAmountMultiplier();
-	}	
+		return amount * AmountsUnits.getDefaultValue().divider;
+	}
 	
 	public static Collection getAMPFeatures() {
 		Session session = null;

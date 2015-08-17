@@ -1,0 +1,102 @@
+package org.dgfoundation.amp.newreports;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
+
+/**
+ * class holding a "Option" unit
+ * @author Dolghier Constantin
+ *
+ */
+public enum AmountsUnits {
+	
+	AMOUNTS_OPTION_UNITS(AmpARFilter.AMOUNT_OPTION_IN_UNITS, 1, "Amounts are in units"),
+	AMOUNTS_OPTION_THOUSANDS(AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS, 1000, "Amounts are in thousands (000)"),
+	AMOUNTS_OPTION_MILLIONS(AmpARFilter.AMOUNT_OPTION_IN_MILLIONS, 1000 * 1000, "Amounts are in millions (000 000)");
+	
+	private final static Map<Integer, AmountsUnits> CODE_TO_VALUE = new HashMap<>();
+	private final static SortedMap<Integer, AmountsUnits> DIVIDER_TO_VALUE = new TreeMap<>();
+	
+	static {
+		for(AmountsUnits v:AmountsUnits.values()) {
+			CODE_TO_VALUE.put(v.code, v);
+			DIVIDER_TO_VALUE.put(v.divider, v);
+		}
+	}
+	
+	/**
+	 * one of AmpARFilter.AMOUNT_OPTION_IN_XXXX values
+	 */
+	public final int code;
+	/**
+	 * 10^0, 10^-3, 10^-6 etc
+	 */
+	public final int divider;
+	public final double multiplier;
+	
+	/**
+	 * a <strong>non-translated</strong> string user message to be used in the UI
+	 */
+	public final String userMessage;
+	
+	private AmountsUnits(int code, int divider, String userMessage) {
+		if (divider <= 0) 
+			throw new RuntimeException("incorrect divider value: " + divider);
+		this.code = code;
+		this.divider = divider;
+		this.multiplier = 1.0 / this.divider;
+		this.userMessage = userMessage;
+	}
+	
+	/**
+	 * builds an instance based foo AmpARFilter.AMOUNTS_UNITS_XX
+	 * @param code
+	 * @return
+	 */
+	public static AmountsUnits getForValue(int code) {
+		if (CODE_TO_VALUE.containsKey(code))
+			return CODE_TO_VALUE.get(code);
+		
+		throw new RuntimeException("unknown AmpARFilter amount code: " + code);
+	}
+	
+	/**
+	 * returns the value stored in GlobalSettings
+	 * @return
+	 */
+	public static AmountsUnits getDefaultValue() {
+		int amountsUnitCode = Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
+		return getForValue(amountsUnitCode);
+	}
+	
+	/**
+	 * epsilon-safe find the value which has a given multiplier.<br />
+	 * implementation note: search is actually done by divider, since that one is integer 
+	 * @param multiplier
+	 * @return
+	 */
+	public static AmountsUnits findByMultiplier(double multiplier) {
+		if (multiplier <= 0.98 / DIVIDER_TO_VALUE.lastKey())
+			throw new RuntimeException("you supplied a multiplier lower than the biggest one AMP currently has: " + multiplier);
+		
+		int divider = (int) Math.round(1.0 / multiplier);
+		if (DIVIDER_TO_VALUE.containsKey(divider))
+			return DIVIDER_TO_VALUE.get(divider);
+		
+		throw new RuntimeException("could not find an AmountsUnits instance with a multiplier of " + multiplier);
+	}
+	
+    public static int getAmountDivider(int code) {
+		return AmountsUnits.getForValue(code).divider;
+	}
+    
+	public static double getAmountMultiplier(int optionId) {
+		return AmountsUnits.getForValue(optionId).multiplier;
+	}
+}

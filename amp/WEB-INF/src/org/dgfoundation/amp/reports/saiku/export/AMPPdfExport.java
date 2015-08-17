@@ -65,12 +65,7 @@ public class AMPPdfExport extends PdfReport {
 		}
 		htmlString.append("<div><b>").append(TranslatorWorker.translateText("Currency")).append(": </b>")
 				.append(currency).append("</div>");
-		String units = "Amounts in units";
-		if (report.getSettings().getUnitsMultiplier() == (1d / 1000000d)) {
-			units = "Amounts in millions";
-		} else if (report.getSettings().getUnitsMultiplier() == (1d / 1000d)) {
-			units = "Amounts in thousands";
-		}
+		String units = report.getSettings().getUnitsOption().userMessage;
 		htmlString.append("<div><b>").append(TranslatorWorker.translateText(units)).append("</b></div>")
 				.append(content).append("</body></html>");
 

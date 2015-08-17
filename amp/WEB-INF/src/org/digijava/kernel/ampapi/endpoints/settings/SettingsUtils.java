@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportMeasure;
@@ -281,7 +282,7 @@ public class SettingsUtils {
 				SettingsConstants.ID_NAME_MAP.get(SettingsConstants.GROUP_SIZE), format.getGroupingSize()));
 		
 		// amount units
-		final String selectedAmountUnits = String.valueOf(spec.getSettings().getUnitsMultiplier());
+		final String selectedAmountUnits = String.valueOf(spec.getSettings().getUnitsOption().multiplier);
 		formatFields.add(getOptionValueSetting(SettingsConstants.AMOUNT_UNITS, 
 				SettingsConstants.USE_GROUPING, selectedAmountUnits,
 				SettingsConstants.AMOUNT_UNITS_MAP));
@@ -379,10 +380,8 @@ public class SettingsUtils {
 				GlobalSettingsConstants.DECIMAL_SEPARATOR,
 				new SettingOptions.Option(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR))));
 
-		int amountOptionId = Integer.valueOf(FeaturesUtil
-				.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
 		settings.add(new SettingOptions("number-multiplier", GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS,
-				new SettingOptions.Option(String.valueOf(MondrianReportUtils.getAmountMultiplier(amountOptionId)))));
+				new SettingOptions.Option(String.valueOf(AmountsUnits.getDefaultValue().multiplier))));
 
 		settings.add(new SettingOptions("language", "language", new SettingOptions.Option(TLSUtils
 				.getEffectiveLangCode())));
@@ -575,9 +574,9 @@ public class SettingsUtils {
 					maxFractDigitsNum, useGrouping, groupingSize);
 			reportSettings.setCurrencyFormat((DecimalFormat) format.getInstance(new Locale("en", "US")));
 			
-			Double multiplier  = (Double) amountFormat.get(SettingsConstants.AMOUNT_UNITS);
+			Double multiplier = (Double) amountFormat.get(SettingsConstants.AMOUNT_UNITS);
 			if (multiplier != null)
-				reportSettings.setUnitsMultiplier(multiplier);
+				reportSettings.setUnitsOption(AmountsUnits.findByMultiplier(multiplier));
 		}
 		
 		if (setDefaults && reportSettings.getCurrencyFormat() == null) {

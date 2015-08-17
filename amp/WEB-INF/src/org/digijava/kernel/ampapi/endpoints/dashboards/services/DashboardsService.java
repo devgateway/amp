@@ -14,6 +14,7 @@ import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
@@ -228,6 +229,8 @@ public class DashboardsService {
 			retlist.set("error", err);
 		}
 
+		AmountsUnits unitsOption = spec.getSettings().getUnitsOption();
+		
 		// Format the report output return a simple list. 
 		// this is the report totals, which is not for the top N, but for ALL
 		// results
@@ -236,7 +239,7 @@ public class DashboardsService {
 		if (report.reportContents != null && report.reportContents.getContents() != null
 				&& report.reportContents.getContents().size() > 0) {
 			totals = (ReportCell) report.reportContents.getContents().values().toArray()[2];
-			rawTotal = (Double) totals.value / spec.getSettings().getUnitsMultiplier(); // Save total in units.
+			rawTotal = (Double) totals.value * unitsOption.divider; // Save total in units.
 		} else {
 			rawTotal = new Double("0");
 		}
@@ -259,9 +262,8 @@ public class DashboardsService {
 				JsonBean row = new JsonBean();
 				row.set("name", ((ReportCell) contents.values().toArray()[0]).displayedValue);
 				row.set("id", ((ReportCell) contents.values().toArray()[1]).value);
-				row.set("amount", ((Double) ((ReportCell) contents.values().toArray()[2]).value)
-						/ spec.getSettings().getUnitsMultiplier());
-				row.set("formattedAmount", ((ReportCell) contents.values().toArray()[2]).displayedValue);				
+				row.set("amount", ((Double) ((ReportCell) contents.values().toArray()[2]).value) * unitsOption.divider);
+				row.set("formattedAmount", ((ReportCell) contents.values().toArray()[2]).displayedValue);
 
 				// Commented this code for recheck when working on AMP-18632. 
 				/*
@@ -282,7 +284,7 @@ public class DashboardsService {
 
 		retlist.set("total", rawTotal);
 		retlist.set("sumarizedTotal",
-				calculateSumarizedTotals(rawTotal * spec.getSettings().getUnitsMultiplier(), spec));
+				calculateSumarizedTotals(rawTotal * unitsOption.multiplier, spec));
 		// report the total number of tops available
 		retlist.set("maxLimit", maxLimit);
 		retlist.set("name", name);
@@ -412,16 +414,14 @@ public class DashboardsService {
 		spec.addSorter(new SortingInfo(spec.getMeasures().get(0), false));
 		
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
-		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
 		GeneratedReport report = null;
 		
 		MondrianReportFilters filterRules = null;
- 		if(filter!=null){
- 			LinkedHashMap<String, Object> columnFilters=(LinkedHashMap<String, Object>)filter.get("columnFilters");
- 			LinkedHashMap<String, Object> otherFilter=(LinkedHashMap<String, Object>)filter.get("otherFilters");
-			filterRules = FilterUtils.getFilterRules(columnFilters,
- 					otherFilter, null);
- 			if(filterRules!=null){
+ 		if (filter != null) {
+ 			LinkedHashMap<String, Object> columnFilters = (LinkedHashMap<String, Object>) filter.get("columnFilters");
+ 			LinkedHashMap<String, Object> otherFilter = (LinkedHashMap<String, Object>) filter.get("otherFilters");
+			filterRules = FilterUtils.getFilterRules(columnFilters, otherFilter, null);
+ 			if (filterRules != null) {
  				spec.setFilters(filterRules);
  			}
  		
@@ -588,8 +588,7 @@ public class DashboardsService {
 	private static void setCustomSettings(JsonBean config, ReportSpecificationImpl spec) {
 		LinkedHashMap<String, Object> userSettings = (LinkedHashMap<String, Object>) config.get("settings");
 		MondrianReportSettings defaultSettings = MondrianReportUtils.getCurrentUserDefaultSettings();
-		defaultSettings.setUnitsMultiplier(MondrianReportUtils.getAmountMultiplier(Integer.valueOf(FeaturesUtil
-				.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))));
+		defaultSettings.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
 		if (userSettings.get("1") != null) {
 			defaultSettings.setCurrencyCode(userSettings.get("1").toString());
 		}
@@ -609,8 +608,8 @@ public class DashboardsService {
 	 */
 	private static String calculateSumarizedTotals(double total, ReportSpecificationImpl spec) {
 		// Convert the number back to units (depending of GS total could be in millions or thousands).
-		total = total / spec.getSettings().getUnitsMultiplier();
-		String formatted = "";
+		total = total * spec.getSettings().getUnitsOption().divider;
+		String formatted;
 		boolean addSufix = false;
 		int exp = (int) (Math.log(total) / Math.log(1000));
 		if (total < 1000) {

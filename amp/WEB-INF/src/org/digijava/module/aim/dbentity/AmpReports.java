@@ -23,6 +23,7 @@ import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
@@ -162,26 +163,6 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 
 	public void setOwnerId(AmpTeamMember owner) {
 		this.ownerId = owner;
-	}
-
-	public static String getNote(HttpSession session) {
-		int amountsUnitCode = Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
-
-		switch(amountsUnitCode)
-		{
-			case AmpARFilter.AMOUNT_OPTION_IN_UNITS:
-				return "";
-
-			case AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS:
-				return "Amounts are in thousands (000)";
-
-			case AmpARFilter.AMOUNT_OPTION_IN_MILLIONS:
-				return "Amounts are in millions (000 000)";
-				
-			default:
-				new RuntimeException("(Uberbug)").printStackTrace();				
-				return "(BUG 3221321)";				
-		}
 	}
 
 	public Set<AmpReportMeasures> getMeasures() {

@@ -198,12 +198,7 @@ public class AMPReportExcelExport {
 		Cell unitsTitleCell = unitsRow.createCell(j);
 		unitsTitleCell.setCellValue(TranslatorWorker.translateText("Units"));
 		unitsTitleCell.setCellStyle(styleSettingOption);
-		String units = "Amounts in units";
-		if (report.getSettings().getUnitsMultiplier() == (1d / 1000000d)) {
-			units = "Amounts in millions";
-		} else if (report.getSettings().getUnitsMultiplier() == (1d / 1000d)) {
-			units = "Amounts in thousands";
-		}
+		String units = report.getSettings().getUnitsOption().userMessage;
 		unitsRow.createCell(j + 1).setCellValue(TranslatorWorker.translateText(units));
 
 		for (int l = 0; l < 3; l++) {

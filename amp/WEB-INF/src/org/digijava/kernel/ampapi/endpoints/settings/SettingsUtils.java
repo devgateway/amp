@@ -72,7 +72,7 @@ public class SettingsUtils {
 		
 		return new SettingOptions(SettingsConstants.CURRENCY_ID, false,
 				SettingsConstants.ID_NAME_MAP.get(SettingsConstants.CURRENCY_ID), 
-				defaultId, options);
+				defaultId, options, true);
 	}
 	
 	/**
@@ -92,7 +92,7 @@ public class SettingsUtils {
 		
 		return new SettingOptions(SettingsConstants.CALENDAR_TYPE_ID, false,
 				SettingsConstants.ID_NAME_MAP.get(SettingsConstants.CALENDAR_TYPE_ID),
-				defaultId, options);
+				defaultId, options, true);
 	}
 	
 	/**
@@ -124,7 +124,7 @@ public class SettingsUtils {
 		
 		return new SettingOptions(SettingsConstants.FUNDING_TYPE_ID, true,
 				SettingsConstants.ID_NAME_MAP.get(SettingsConstants.FUNDING_TYPE_ID),
-				defaultId, options);
+				defaultId, options, true);
 	}
 	
 	/**
@@ -232,7 +232,7 @@ public class SettingsUtils {
 			options.add(yearOption);
 		}
 		
-		return new SettingOptions(null, false, null, null, options);
+		return new SettingOptions(null, options);
 	}
 	
 	private static SettingField getSelectedOptions(String selectedId, 
@@ -244,7 +244,7 @@ public class SettingsUtils {
 		SettingOptions actualOptions = new SettingOptions(null, 
 				defaults.multi, null,
 				(selectedId == null ? defaults.defaultId : selectedId), 
-				defaults.options);
+				defaults.options, false);
 		return new SettingField(id, null, SettingsConstants.ID_NAME_MAP.get(id) , actualOptions);
 	}
 	
@@ -337,7 +337,7 @@ public class SettingsUtils {
 			selectedId = idValue.entrySet().iterator().next().getKey();
 		
 		return new SettingField(settingId, groupId, SettingsConstants.ID_NAME_MAP.get(settingId), 
-				new SettingOptions(null, false, null, selectedId, options));
+				new SettingOptions(selectedId, options));
 	}
 	
 	/**
@@ -361,12 +361,11 @@ public class SettingsUtils {
 		settings.add(getFundingTypeSettings(measures));
 
 		settings.add(new SettingOptions("use-icons-for-sectors-in-project-list",
-				GisConstants.USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST, new SettingOptions.Option(new Boolean(FeaturesUtil
-						.isVisibleFeature(GisConstants.USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST)).toString())));
+				GisConstants.USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST, new SettingOptions.Option(Boolean.toString(FeaturesUtil
+						.isVisibleFeature(GisConstants.USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST)))));
 
 		settings.add(new SettingOptions("max-locations-icons", GlobalSettingsConstants.MAX_LOCATIONS_ICONS,
-				new SettingOptions.Option(FeaturesUtil
-						.getGlobalSettingValue(GlobalSettingsConstants.MAX_LOCATIONS_ICONS))));
+				new SettingOptions.Option(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MAX_LOCATIONS_ICONS))));
 
 		settings.add(new SettingOptions("number-format", GlobalSettingsConstants.NUMBER_FORMAT,
 				new SettingOptions.Option("number-format", MondrianReportUtils.getCurrentUserDefaultSettings()
@@ -424,11 +423,11 @@ public class SettingsUtils {
 			long calendarId) throws Exception {
 		
 		String yearNumber = FeaturesUtil.getGlobalSettingValue(globalSettingsName);
-		settings.add(new SettingOptions(yearSettingsName, false, yearNumber, null, null));
+		settings.add(new SettingOptions(yearSettingsName, false, yearNumber, null, null, false));
 
 		if (!yearNumber.equals("-1")) {
 			settings.add(new SettingOptions(dateSettingsName, false, DateTimeUtil
-					.parseDateForPicker2(CalendarUtil.getEndDate(calendarId, Integer.parseInt(yearNumber)), Constants.CALENDAR_DATE_PICKER), null, null));
+					.parseDateForPicker2(CalendarUtil.getEndDate(calendarId, Integer.parseInt(yearNumber)), Constants.CALENDAR_DATE_PICKER), null, null, true));
 		}
 	}
 	

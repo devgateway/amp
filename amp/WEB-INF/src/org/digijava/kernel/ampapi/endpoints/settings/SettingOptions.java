@@ -59,6 +59,10 @@ public class SettingOptions {
 			// The setting does not have a "name", only id.
 			this(id, id);
 		}
+		
+		@Override public String toString() {
+			return String.format("option(id=<%s>, name=<%s>, value=<%s>");
+		}
 	}
 	
 	
@@ -81,14 +85,18 @@ public class SettingOptions {
 	 * @param defaultId - default setting option id
 	 * @param options - list of available setting options
 	 */
-	public SettingOptions(String id, boolean multi, String name, String defaultId, List<Option> options) {
+	public SettingOptions(String id, boolean multi, String name, String defaultId, List<Option> options, boolean translate) {
 		this.id = id;
 		this.multi = multi;
-		this.name = name == null ? null : TranslatorWorker.translateText(name);
+		this.name = (name != null && translate) ? TranslatorWorker.translateText(name) : name;
 		this.defaultId = defaultId;
 		this.options = options;
 	}
 	
+	public SettingOptions(String defaultId, List<Option> options) {
+		this(null, false, null, defaultId, options, false);
+	}
+		
 	/**
 	 * Use this constructor to create a SettingOptions with only one Option.
 	 * @param id
@@ -96,7 +104,7 @@ public class SettingOptions {
 	 * @param option
 	 */
 	public SettingOptions(String id, String name, Option option) {
-		this(id, false, name, option.id, Arrays.asList(option));
+		this(id, false, name, option.id, Arrays.asList(option), true);
 	}
 	
 	@Override public String toString() {

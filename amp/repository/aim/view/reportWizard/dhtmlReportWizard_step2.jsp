@@ -24,7 +24,7 @@
 	<table align="center" cellpadding="0" cellspacing="0" style="width: 735px;" border=0>
 		<tr>
 			<td width="55%" align="left">
-				<div id="searchBox" style="  font-size:12px;">
+				<div id="searchBox" style="margin-top:10px; font-size:12px;">
 					<!-- 										<form name="searchBoxForm" onsubmit="searchFunction();return false;"> -->
 
 					<b><digi:trn key="fm:search:searchTitle">Search</digi:trn></b>

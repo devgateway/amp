@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
@@ -831,7 +833,7 @@ public class ExportBuilder {
 		retValue.setType(type);
 		retValue.setDate(ExportHelper.getGregorianCalendar(date));
 		
-		amount = amount * FeaturesUtil.getAmountMultiplier();
+		amount = amount * AmountsUnits.getDefaultValue().divider;
 		NumberFormat formatter = new DecimalFormat("#0.00");
 		BigDecimal d = new BigDecimal(formatter.format(amount));
 		retValue.setAmount(d);

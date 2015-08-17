@@ -37,6 +37,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -71,6 +72,7 @@ import org.digijava.module.visualization.helper.DashboardFilter;
 import org.digijava.module.visualization.util.DashboardUtil;
 import org.digijava.module.visualization.util.DbUtil;
 import org.jfree.data.category.DefaultCategoryDataset;
+
 import sun.misc.BASE64Decoder;
 
 public class DataDispatcher extends DispatchAction {
@@ -4648,7 +4650,7 @@ public class DataDispatcher extends DispatchAction {
 		String format = request.getParameter("format");
 		
 		BigDecimal divideByMillionDenominator = new BigDecimal(1000000 / 
-				Math.max(1000000, FeaturesUtil.getAmountMultiplier())); // Math.max added for the future, in case "billions" appears, as we don't want to divide by zero lower down the road
+				Math.max(1000000, AmountsUnits.getDefaultValue().divider)); // Math.max added for the future, in case "billions" appears, as we don't want to divide by zero lower down the road
 		String othersTitle = TranslatorWorker.translateText("Other");
         
 		boolean ignore = request.getParameter("ignore") != null ? Boolean.parseBoolean(request.getParameter("ignore")) : (format != null && format.equals("xml"))? true : false;

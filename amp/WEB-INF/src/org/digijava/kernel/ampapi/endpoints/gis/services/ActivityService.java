@@ -17,6 +17,7 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
@@ -32,6 +33,7 @@ import org.dgfoundation.amp.reports.ReportAreaMultiLinked;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
@@ -102,6 +104,8 @@ public class ActivityService {
  		spec.setDisplayEmptyFundingRows(true);
 		
  		spec.setCalculateRowTotals(doTotals);
+ 		MondrianReportSettings mrs = (MondrianReportSettings) spec.getSettings();
+ 		mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
 
 		MondrianReportFilters filterRules = FilterUtils.getFilterRules(
 				(LinkedHashMap<String, Object>) config.get("columnFilters"),

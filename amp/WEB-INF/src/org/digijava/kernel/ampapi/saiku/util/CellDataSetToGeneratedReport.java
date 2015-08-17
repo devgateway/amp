@@ -22,6 +22,7 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.AmountCell;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.DateCell;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
@@ -51,9 +52,9 @@ public class CellDataSetToGeneratedReport {
 	protected static final Logger logger = Logger.getLogger(CellDataSetToGeneratedReport.class);
 	
 	private ReportSpecification spec;
-	private CellDataSet cellDataSet;
-	private List<ReportOutputColumn> leafHeaders;
-	private List<Integer> cellDataSetActivities;
+	private final CellDataSet cellDataSet;
+	private final List<ReportOutputColumn> leafHeaders;
+	private final List<Integer> cellDataSetActivities;
 	private DecimalFormat numberFormat;
 	private NumberFormat readingNumberFormat;
 	private TotalAggregator[][] measureTotals = null;
@@ -63,7 +64,7 @@ public class CellDataSetToGeneratedReport {
 	private Set<Integer> emptyColTotalsMeasuresIndexes = new TreeSet<Integer>();
 	private Set<Integer> emptyRowTotalsMeasuresIndexes = new TreeSet<Integer>();
 	private Set<Integer> amountMultiplierColumns = new TreeSet<Integer>();
-	private double amountMultiplier = 1.0d;
+	private final AmountsUnits unitsOption;
 	
 	public CellDataSetToGeneratedReport(ReportSpecification spec, CellDataSet cellDataSet, 
 			List<ReportOutputColumn> leafHeaders, List<Integer> cellDataSetActivities) {
@@ -71,6 +72,7 @@ public class CellDataSetToGeneratedReport {
 		this.cellDataSet = cellDataSet;
 		this.leafHeaders = leafHeaders;
 		this.cellDataSetActivities = cellDataSetActivities;
+		this.unitsOption = this.spec.getSettings().getUnitsOption();
 		init();
 	}
 	
@@ -82,7 +84,6 @@ public class CellDataSetToGeneratedReport {
 		} else { 
 			this.numberFormat = MondrianReportUtils.getCurrentUserDefaultSettings().getCurrencyFormat();
 		}
-		amountMultiplier = settings.getUnitsMultiplier();
 		initColumnIdsToApplyAmountsMultiplier();
 		// This is a bit ugly it will fix end points and tabs with number formating issues 
 		// Ensure Locale is always US
@@ -242,6 +243,15 @@ public class CellDataSetToGeneratedReport {
 //	}
 	
 	public static Map<String, Integer> counts = new TreeMap<String, Integer>();
+	
+	/**
+	 * parses the value and multiplies the value by amountMultiplier (if value is part of a column/measure eligible for it)
+	 * @param value
+	 * @param emptyAsNull
+	 * @param colId
+	 * @return
+	 * @throws AMPException
+	 */
 	private Double parseValue(String value, boolean emptyAsNull, int colId) throws AMPException {
 		if (value == null)
 			throw new AMPException("Textual column value sent for parsing - invalid request. Please fix");
@@ -259,7 +269,7 @@ public class CellDataSetToGeneratedReport {
 			try {
 				dValue = readingNumberFormat.parse(value).doubleValue();
 				if (amountMultiplierColumns.contains(colId)) {
-					dValue *= amountMultiplier;
+					dValue *= unitsOption.multiplier;
 				}
 			} catch (ParseException e) {
 				//empty string
@@ -346,7 +356,7 @@ public class CellDataSetToGeneratedReport {
 					totals[a][b] = totals[a][b].newInstance("");
 					value = null;
 				} else if (amountMultiplierColumns.contains(headerPos)) {
-					value *= amountMultiplier; 
+					value *= unitsOption.multiplier;
 				}
 				contents.put(leafHeaders.get(headerPos++), new AmountCell(value, this.numberFormat));
 				totals[a][b].setFormattedValue(value == null ? "" : this.numberFormat.format(value));
@@ -422,9 +432,6 @@ public class CellDataSetToGeneratedReport {
 	 * @return column ids to apply the amounts multiplier
 	 */
 	private void initColumnIdsToApplyAmountsMultiplier() {
-		// if this is a standard amount unit, then nothing to multiply and leave it as it is
-		if (Math.abs(1.0d - amountMultiplier) < 0.000000001)
-			return;
 		int headerPos = 0;
 		for (ReportOutputColumn roc : leafHeaders) {
 			if (!CustomAmounts.UNIT_MULTIPLIER_NOT_APPLICABLE.contains(roc.originalColumnName)) {

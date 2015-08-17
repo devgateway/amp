@@ -27,6 +27,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -998,7 +999,7 @@ public class DashboardUtil {
 	        long divideThousandsMultiplier = divideThousands ? 1000 : 1;
 	        long showInThousandsMultiplier = showInThousands ? 1000 : 1000000; //if show in thousands is set then divide by 1000, else, it divides by 1000000 and show in millions
 	        //long unitsMultiplier = 1000000 / Math.max(1000000, FeaturesUtil.getAmountMultiplier());
-	        double unitsMultiplier = 1d/FeaturesUtil.getAmountMultiplier();// this is to get the value in units because in AmpFundingDetail.java is being applied the multiplier
+	        double unitsMultiplier = 1d / AmountsUnits.getDefaultValue().divider; // this is to get the value in units because in AmpFundingDetail.java is being applied the multiplier
 			divideByDenominator = new BigDecimal(unitsMultiplier * showInThousandsMultiplier * divideThousandsMultiplier);
 		}
 		return divideByDenominator;

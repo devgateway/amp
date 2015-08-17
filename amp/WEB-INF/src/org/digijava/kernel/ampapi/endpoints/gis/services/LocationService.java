@@ -31,6 +31,7 @@ import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
@@ -43,6 +44,7 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
@@ -113,6 +115,8 @@ public class LocationService {
 		spec.getHierarchies().addAll(spec.getColumns());
 		// also configures the measure(s) from funding type settings request
 		SettingsUtils.applyExtendedSettings(spec, config);
+		MondrianReportSettings mrs = (MondrianReportSettings) spec.getSettings();
+		mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
 		
 		 MondrianReportFilters filterRules = new MondrianReportFilters(); 
 		
@@ -767,6 +771,8 @@ public class LocationService {
 		MondrianReportFilters filterRules = FilterUtils.getFilters(config);
 		
 		SettingsUtils.applyExtendedSettings(spec, config);
+		MondrianReportSettings mrs = (MondrianReportSettings) spec.getSettings();
+		mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
 		if (filterRules != null) {
 			spec.setFilters(filterRules);
 		}

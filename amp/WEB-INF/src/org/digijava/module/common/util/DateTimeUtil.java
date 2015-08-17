@@ -113,7 +113,7 @@ public class DateTimeUtil {
     	return result;
 	}
 
-		public static String parseDateForPicker2(Date date, String format) throws Exception{
+	public static String parseDateForPicker2(Date date, String format) throws Exception{
 		// TODO This should be in some other Utility class, FormatUtil may be, or just Util
 		String pattern = null;
 		if (format == null) {

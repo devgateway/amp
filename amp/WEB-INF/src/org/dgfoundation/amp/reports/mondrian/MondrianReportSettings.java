@@ -5,6 +5,7 @@ package org.dgfoundation.amp.reports.mondrian;
 
 import java.text.DecimalFormat;
 
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 
@@ -16,7 +17,7 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 public class MondrianReportSettings extends MondrianReportFilters implements ReportSettings {
 	private String currencyCode = null;
 	private DecimalFormat currencyFormat = null;
-	private double unitsMultiplier = 1;
+	private AmountsUnits unitsOption;
 	
 	@Override
 	public String getCurrencyCode() {
@@ -45,18 +46,6 @@ public class MondrianReportSettings extends MondrianReportFilters implements Rep
 	}
 
 	@Override
-	public double getUnitsMultiplier() {
-		return unitsMultiplier;
-	}
-
-	/**
-	 * @param unitsMultiplier the unitsMultiplier to set
-	 */
-	public void setUnitsMultiplier(double unitsMultiplier) {
-		this.unitsMultiplier = unitsMultiplier;
-	}
-
-	@Override
 	public AmpFiscalCalendar getCalendar() {
 		return calendar;
 	}
@@ -67,5 +56,15 @@ public class MondrianReportSettings extends MondrianReportFilters implements Rep
 	 */
 	public void setCalendar(AmpFiscalCalendar calendar) {
 		this.calendar = calendar;
+	}
+
+	@Override
+	/** if the stored value is null, returns the default one (GlobalSettings.AMOUNTS_IN_THOUSANDS) */
+	public AmountsUnits getUnitsOption() {
+		return unitsOption == null ? AmountsUnits.getDefaultValue() : unitsOption;
+	}
+	
+	public void setUnitsOption(AmountsUnits unitsOption) {
+		this.unitsOption = unitsOption;
 	}
 }

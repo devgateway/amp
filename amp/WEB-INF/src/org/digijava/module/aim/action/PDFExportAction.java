@@ -249,7 +249,7 @@ public class PDFExportAction extends Action implements PdfPageEvent
 
 		String translatedCurrency="";
 		String translatedCurrentFilter="";
-		String translatedAmount="";
+		String translatedAmount = TranslatorWorker.translateText(arf.getUnitsOptions().userMessage);
 		String translatedReportDescription="Description:";
 
 		// HEADER/FOOTER logo/statement				
@@ -307,14 +307,7 @@ public class PDFExportAction extends Action implements PdfPageEvent
 		translatedCurrentFilter=("".equalsIgnoreCase(translatedCurrentFilter))?"Currently Selected Filters":translatedCurrentFilter;
 
 		translatedCurrency=TranslatorWorker.translateText(ReportContextData.getFromRequest().getSelectedCurrencyText());
-
-		if (arf.computeEffectiveAmountInThousand() == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS){					
-			translatedAmount=TranslatorWorker.translateText("Amounts are in thousands (000)");
-		}
-		if (arf.computeEffectiveAmountInThousand() == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS){					
-			translatedAmount=TranslatorWorker.translateText("Amounts are in millions (000 000)");
-		}
-		translatedAmount=("".equalsIgnoreCase(translatedAmount))?AmpReports.getNote(session):translatedAmount;
+		
 		translatedReportDescription=TranslatorWorker.translateText("Description:");
 	
 		PdfPCell pdfc;

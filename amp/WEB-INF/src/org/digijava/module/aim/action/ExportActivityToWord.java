@@ -1749,10 +1749,10 @@ public class ExportActivityToWord extends Action {
         HttpSession session=request.getSession();
         List<Table> retVal = new ArrayList<Table>();
 
-        ExportSectionHelper eshTitle = new ExportSectionHelper("Related Organizations", true).setWidth(100f).setAlign("left");
+        ExportSectionHelper eshTitle = new ExportSectionHelper("Organizations", true).setWidth(100f).setAlign("left");
         ExportSectionHelper eshRelatedOrgsTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
 
-        if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations")){
+        if(FeaturesUtil.isVisibleModule("/Activity Form/Organizations")){
             retVal.add(createSectionTable(eshTitle, request, ampContext));
 
             if (act.getOrgrole() != null && !act.getOrgrole().isEmpty()) {
@@ -1774,42 +1774,42 @@ public class ExportActivityToWord extends Action {
                     Set<AmpOrgRole> groupedRoleSet = roleGrouper.get(roleCode);
 
                     if (roleCode.equals(Constants.FUNDING_AGENCY) &&
-                            FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Donor Organization")){
+                            FeaturesUtil.isVisibleModule("/Activity Form/Organizations/Donor Organization")){
                         buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Donor Agency",false);
                     }
 
                     if (roleCode.equals(Constants.RESPONSIBLE_ORGANISATION) &&
-                            FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Responsible Organization")){
+                            FeaturesUtil.isVisibleModule("/Activity Form/Organizations/Responsible Organization")){
                         buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Responsible Organization");
                     }
 
                     if (roleCode.equals(Constants.EXECUTING_AGENCY) &&
-                            FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Executing Agency")){
+                            FeaturesUtil.isVisibleModule("/Activity Form/Organizations/Executing Agency")){
                         buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Executing Agency");
                     }
 
                     if (roleCode.equals(Constants.IMPLEMENTING_AGENCY) &&
-                            FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Implementing Agency")){
+                            FeaturesUtil.isVisibleModule("/Activity Form/Organizations/Implementing Agency")){
                         buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Implementing Agency");
                     }
 
                     if (roleCode.equals(Constants.BENEFICIARY_AGENCY) &&
-                            FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Beneficiary Agency")){
+                            FeaturesUtil.isVisibleModule("/Activity Form/Organizations/Beneficiary Agency")){
                         buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Beneficiary Agency");
                     }
 
                     if (roleCode.equals(Constants.CONTRACTING_AGENCY) &&
-                            FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Contracting Agency")){
+                            FeaturesUtil.isVisibleModule("/Activity Form/Organizations/Contracting Agency")){
                         buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Contracting Agency");
                     }
 
                     if (roleCode.equals(Constants.SECTOR_GROUP) &&
-                            FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Sector Group")){
+                            FeaturesUtil.isVisibleModule("/Activity Form/Organizations/Sector Group")){
                         buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Sector Group");
                     }
 
                     if (roleCode.equals(Constants.REGIONAL_GROUP) &&
-                            FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Regional Group")){
+                            FeaturesUtil.isVisibleModule("/Activity Form/Organizations/Regional Group")){
                         buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Regional Group");
                     }
 

@@ -1169,7 +1169,7 @@ public class ExportActivityToPDF extends Action {
             /**
              * Related organizations
              */
-            if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations")){
+            if(FeaturesUtil.isVisibleModule("/Activity Form/Organizations")){
                 PdfPCell relOrgCell1=new PdfPCell();
                 p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Related Organizations", locale, siteId))+":",titleFont);
                 p1.setAlignment(Element.ALIGN_RIGHT);
@@ -1182,36 +1182,36 @@ public class ExportActivityToPDF extends Action {
                 relOrgCell2.setBorder(0);
                 PdfPTable relatedOrgnested=new PdfPTable(1); //table that holds all related organisations
                 //Donor Organizations
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Donor Organization")){
+                if(FeaturesUtil.isVisibleModule("/Activity Form/Organizations/Donor Organization")){
                     buildRelatedOrganisationsOutput(relatedOrgnested,"Donor Agency",null,myForm.getFunding().getFundingOrganizations(), myForm.getAgencies().getRespOrgPercentage(),ampContext);
                 }
                 //Responsible Organizations
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Responsible Organization")){
+                if(FeaturesUtil.isVisibleModule("/Activity Form/Organizations/Responsible Organization")){
                     buildRelatedOrganisationsOutput(relatedOrgnested,"Responsible Organization",myForm.getAgencies().getRespOrganisations(),null, myForm.getAgencies().getRespOrgPercentage(),ampContext);
                 }
                 //Executing Agency
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Executing Agency")){
+                if(FeaturesUtil.isVisibleModule("/Activity Form/Organizations/Executing Agency")){
                     buildRelatedOrganisationsOutput(relatedOrgnested,"Executing Agency",myForm.getAgencies().getExecutingAgencies(),null, myForm.getAgencies().getExecutingOrgPercentage(), ampContext);
                 }
                 //Implementing Agency
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Implementing Agency")){
+                if(FeaturesUtil.isVisibleModule("/Activity Form/Organizations/Implementing Agency")){
                     buildRelatedOrganisationsOutput(relatedOrgnested,"Implementing Agency",myForm.getAgencies().getImpAgencies(),null,myForm.getAgencies().getImpOrgPercentage(), ampContext);
                 }
                 //Beneficiary Agency
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Beneficiary Agency")){
+                if(FeaturesUtil.isVisibleModule("/Activity Form/Organizations/Beneficiary Agency")){
                     buildRelatedOrganisationsOutput(relatedOrgnested,"Beneficiary Agency",myForm.getAgencies().getBenAgencies(),null, myForm.getAgencies().getBenOrgPercentage(),ampContext);
                 }
                 //Contracting Agency
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Contracting Agency")){
+                if(FeaturesUtil.isVisibleModule("/Activity Form/Organizations/Contracting Agency")){
                     buildRelatedOrganisationsOutput(relatedOrgnested,"Contracting Agency",myForm.getAgencies().getConAgencies(),null,myForm.getAgencies().getConOrgPercentage(),ampContext);
                 }
 
                 //Sector Group
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Sector Group")){
+                if(FeaturesUtil.isVisibleModule("/Activity Form/Organizations/Sector Group")){
                     buildRelatedOrganisationsOutput(relatedOrgnested,"Sector Group",myForm.getAgencies().getSectGroups(),null,myForm.getAgencies().getSectOrgPercentage(), ampContext);
                 }
                 //Regional Group
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Regional Group")){
+                if(FeaturesUtil.isVisibleModule("/Activity Form/Organizations/Regional Group")){
                     buildRelatedOrganisationsOutput(relatedOrgnested,"Regional Group",myForm.getAgencies().getRegGroups(),null,myForm.getAgencies().getRegOrgPercentage(), ampContext);
                 }
 

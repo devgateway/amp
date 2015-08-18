@@ -2285,7 +2285,7 @@ function collapseAll() {
 <jsp:include page="previewActivityLineMinistryObservations.jsp"></jsp:include>
 
 <!-- RELATED ORGANIZATIONS SECTION -->
-<module:display name="/Activity Form/Related Organizations" parentModule="/Activity Form">
+<module:display name="/Activity Form/Organizations" parentModule="/Activity Form">
 <fieldset>
 	<legend>
 		<span class=legend_label id="relatedorglink" style="cursor: pointer;">
@@ -2294,7 +2294,7 @@ function collapseAll() {
 	</legend>
 
 	<div id="relateorgdiv" class="toggleDiv">
-		<module:display name="/Activity Form/Related Organizations/Donor Organization" parentModule="/Activity Form/Related Organizations">
+		<module:display name="/Activity Form/Organizations/Donor Organization" parentModule="/Activity Form/Organizations">
 			<logic:notEmpty name="aimEditActivityForm" property="funding.fundingOrganizations">
                 <digi:trn key="aim:donororganisation">Donor Organization</digi:trn>
                 <br/>
@@ -2317,7 +2317,7 @@ function collapseAll() {
 			</logic:notEmpty>
 		</module:display>
 
-     <module:display name="/Activity Form/Related Organizations/Responsible Organization" parentModule="/Activity Form/Related Organizations">
+     <module:display name="/Activity Form/Organizations/Responsible Organization" parentModule="/Activity Form/Organizations">
 		<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrganisations" >
 			<div id="act_responsible_organisation" style="display: block;">
 				<digi:trn key="aim:responsibleorganisation">Responsible Organization</digi:trn>
@@ -2353,7 +2353,7 @@ function collapseAll() {
 			</logic:notEmpty>
 		</module:display>
 
-        <module:display name="/Activity Form/Related Organizations/Executing Agency" parentModule="/Activity Form/Related Organizations">
+        <module:display name="/Activity Form/Organizations/Executing Agency" parentModule="/Activity Form/Organizations">
  		<logic:notEmpty name="aimEditActivityForm" property="agencies.executingAgencies">
 			<digi:trn key="aim:executingAgency">Executing Agency</digi:trn>
 			<div id="act_executing_agency" style="display: block;">
@@ -2386,7 +2386,7 @@ function collapseAll() {
 		</logic:notEmpty>
 		</module:display>
 
-		<module:display name="/Activity Form/Related Organizations/Implementing Agency" parentModule="/Activity Form/Related Organizations">
+		<module:display name="/Activity Form/Organizations/Implementing Agency" parentModule="/Activity Form/Organizations">
 		<logic:notEmpty name="aimEditActivityForm" property="agencies.impAgencies" >
 			<digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn>
 			<br/>
@@ -2420,7 +2420,7 @@ function collapseAll() {
 		</logic:notEmpty>
 		</module:display>
 
-		<module:display name="/Activity Form/Related Organizations/Beneficiary Agency" parentModule="/Activity Form/Related Organizations">
+		<module:display name="/Activity Form/Organizations/Beneficiary Agency" parentModule="/Activity Form/Organizations">
  		<logic:notEmpty name="aimEditActivityForm" property="agencies.benAgencies">
 			<digi:trn key="aim:beneficiary2Agency">Beneficiary Agency</digi:trn>
 			<br />
@@ -2454,7 +2454,7 @@ function collapseAll() {
 		</logic:notEmpty>
 		</module:display>
 
-		<module:display name="/Activity Form/Related Organizations/Contracting Agency" parentModule="/Activity Form/Related Organizations">
+		<module:display name="/Activity Form/Organizations/Contracting Agency" parentModule="/Activity Form/Organizations">
 		<logic:notEmpty name="aimEditActivityForm" property="agencies.conAgencies">
 			<digi:trn key="aim:contracting2Agency">Contracting Agency</digi:trn>
 			<br />
@@ -2490,7 +2490,7 @@ function collapseAll() {
 
 
 		<!--SECTOR GROUP SECTION -->
-		<module:display name="/Activity Form/Related Organizations/Sector Group" parentModule="/Activity Form/Related Organizations">
+		<module:display name="/Activity Form/Organizations/Sector Group" parentModule="/Activity Form/Organizations">
 			<logic:notEmpty name="aimEditActivityForm" property="agencies.sectGroups">
 			<digi:trn key="aim:sectorGroup">Sector Group</digi:trn>
 			<br/>
@@ -2524,7 +2524,7 @@ function collapseAll() {
 			</logic:notEmpty>
 		</module:display>
 		
-		<module:display name="/Activity Form/Related Organizations/Regional Group" parentModule="/Activity Form/Related Organizations">
+		<module:display name="/Activity Form/Organizations/Regional Group" parentModule="/Activity Form/Organizations">
 			<logic:notEmpty name="aimEditActivityForm" property="agencies.regGroups">
 			<digi:trn key="aim:regionalGroup">Regional Group</digi:trn>
 			<br/>

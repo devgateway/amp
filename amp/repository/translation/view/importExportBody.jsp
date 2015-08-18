@@ -349,8 +349,15 @@ div.fakefile2 input{
 					<logic:empty name="importExportForm" property="importedLanguages">
 					<logic:notEmpty name="importExportForm" property="languages">
 					<digi:form action="/importexport.do" method="post" >
-					</td>
-					</tr>
+							<logic:notEmpty name="importExportForm" property="errors">
+								<tr><td><span style="color: red;"><digi:trn>Errors:</digi:trn></span></td></tr>
+								<c:forEach items="${importExportForm.errors}" var="error">
+									<tr>
+										<td><span style="color: red;">${error}</span></td>
+									</tr>
+								</c:forEach>
+								<tr><td>&nbsp;</td></tr>
+							</logic:notEmpty>
 							<tr>
 								<td align="center">
 									<b>

@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -63,6 +64,7 @@ public class ImportExportTranslations extends Action {
 	public static final String SESSION_ROOT = "dgfoundation.amp.translation.import.xmlRoot";
 	public static final int XML_FORMAT=1;
 	public static final int EXCEL_FORMAT=2;
+	private static Logger logger = Logger.getLogger(ImportExportTranslations.class);
 
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -164,6 +166,15 @@ public class ImportExportTranslations extends Action {
                         targetText=(targetText==null)?"":targetText;
 
 
+						if (englishText.length() >= 32760) {
+							//TODO: Action and JSPs need some refactoring and improvements (ie: to show these errors).
+							logger.error("Can not export key because text is too long: " + messageGrp.getKey());
+							continue;
+						}
+						if (targetText.length() >= 32760) {
+							logger.error("Can not export key because text is too long: " + messageGrp.getKey());
+							continue;
+						}
                         row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(englishText);
                         row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(targetText);
                         HSSFCell englishDateCell=row.createCell(column++,HSSFCell.CELL_TYPE_BLANK);
@@ -213,9 +224,10 @@ public class ImportExportTranslations extends Action {
         Translations translations = (Translations) session
                 .getAttribute(SESSION_ROOT);
 
+        List<String> errors = null;
         if (translations == null) {
-            ImportExportUtil.importExcelFile((POIFSFileSystem)session.getAttribute(SESSION_FILE), option, site);
-
+            errors = ImportExportUtil.importExcelFile((POIFSFileSystem)session.getAttribute(SESSION_FILE), option, site);
+			ioForm.setErrors(errors.toArray(new String[0]));
         } else {
             /*if (translations == null) {
                 ActionErrors errors = new ActionErrors();

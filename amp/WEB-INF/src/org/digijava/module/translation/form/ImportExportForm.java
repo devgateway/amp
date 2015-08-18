@@ -30,6 +30,7 @@ public class ImportExportForm extends ActionForm {
 	private String[] keywords;
 	private String skipOrUpdateTrnsWithKeywords;
 	private int exportFormat;
+	private String[] errors;
 
 	
 	public int getExportFormat() {
@@ -98,6 +99,12 @@ public class ImportExportForm extends ActionForm {
 		overwriteTrn=null;
 		keywords=null;
 		skipOrUpdateTrnsWithKeywords=null;
+	}
+	public String[] getErrors() {
+		return errors;
+	}
+	public void setErrors(String[] errors) {
+		this.errors = errors;
 	}
 
 

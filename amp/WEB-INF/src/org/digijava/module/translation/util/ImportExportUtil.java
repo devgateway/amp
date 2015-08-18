@@ -27,6 +27,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Row;
+import org.dgfoundation.amp.newreports.NumberedTypedEntity;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -489,12 +490,13 @@ public class ImportExportUtil {
 	 * Used to import translations from xsl file.
 	 * @param inputStreame 
 	 * @param msgSiteId 
-	 * @return list target language 
+	 * @return list of errors 
 	 * @throws AimException
 	 */
-	public static void importExcelFile(POIFSFileSystem fsFileSystem,ImportExportOption option, Site site)  throws AimException{
+	public static List<String> importExcelFile(POIFSFileSystem fsFileSystem,ImportExportOption option, Site site)  throws AimException{
 		String targetLanguage=null;
 		Session session = null;
+		List<String> errors = new ArrayList<String>();
 		try {
 			HSSFWorkbook workBook = new HSSFWorkbook(fsFileSystem);
 			HSSFSheet hssfSheet = workBook.getSheetAt(0);
@@ -517,6 +519,16 @@ public class ImportExportUtil {
 				String key = (hssfRow.getCell(0).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) ? hssfRow
 						.getCell(0).getNumericCellValue() + ""
 						: hssfRow.getCell(0).getStringCellValue();
+				// We need to discard those keys that are not numbers or the whole process will fail when trying to make insert
+				// in table amp_etl_changelog(entity_name, entity_id).
+				try {
+					Integer.parseInt(key);
+				} catch (NumberFormatException nfe) {
+					logger.error("Cant import key: " + key);
+					errors.add(TranslatorWorker.translateText("Can not import key: " + key));
+					continue;
+				}
+				
 				String englishText = (hssfRow.getCell(1) == null) ? ""
 						: hssfRow.getCell(1).getStringCellValue();
 				//for AMP-16681 when the cell content is #N/A on third column you are getting an erro if getStringCellValue is called
@@ -564,7 +576,7 @@ public class ImportExportUtil {
 			logger.error(e);
 			throw new AimException("Cannot import messages",e);
 		}
-
+		return errors;
 	}
 
 	public static void refreshWorker(ImportExportOption option)

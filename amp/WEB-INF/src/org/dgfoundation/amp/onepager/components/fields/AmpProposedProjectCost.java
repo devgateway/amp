@@ -54,7 +54,7 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> implements A
 
 		if (!FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")) {
 			amount = new AmpTextFieldPanel<Double>("proposedAmount", new PropertyModel<Double>(am,
-					CategoryConstants.PROPOSE_PRJC_AMOUNT_KEY), CategoryConstants.PROPOSE_PRJC_AMOUNT_NAME, false,false,true) {
+					CategoryConstants.PROPOSE_PRJC_AMOUNT_KEY), CategoryConstants.PROPOSE_PRJC_AMOUNT_NAME, false,false,false) {
 				public IConverter getInternalConverter(java.lang.Class<?> type) {
 					DoubleConverter converter = (DoubleConverter) DoubleConverter.INSTANCE;
 					NumberFormat formatter = FormatHelper.getDecimalFormat(true);
@@ -81,7 +81,6 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> implements A
 
 			};
 			amount.getTextContainer().add(new AttributeModifier("size", new Model<String>("12")));
-			add(amount);
 		} else {
 			amount = new AmpTextFieldPanel<Double>("proposedAmount", new ProposedProjectCostModel(new PropertyModel<String>(am, "currencyCode"),
 					new PropertyModel<Double>(am, "funAmount"), new PropertyModel<Set<AmpAnnualProjectBudget>>(am,
@@ -115,7 +114,6 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> implements A
 			amount.getTextContainer().add(new AttributeModifier("size", new Model<String>("12")));
 			amount.add(UpdateEventBehavior.of(ProposedProjectCostUpdateEvent.class));
 			amount.getTextContainer().add(new AttributeModifier("readonly", new Model<String>("readonly")));
-			add(amount);
 		}
 
 		AmpCurrencyCodeStringListReadOnlyModel currencyList = new AmpCurrencyCodeStringListReadOnlyModel();
@@ -163,7 +161,7 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> implements A
 		});
 		// the amount should be added to the form AFTER the validator so it gets
 		// the star
-		// add(amount);
+		 add(amount);
 		add(date);
 		
 	

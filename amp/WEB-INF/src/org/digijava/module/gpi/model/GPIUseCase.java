@@ -335,8 +335,16 @@ public class GPIUseCase {
 				where += " AND aa.amp_activity_id IN (SELECT aas.amp_activity_id FROM amp_activity_sector aas WHERE aas.amp_sector_id IN ("
 						+ sectors + ")) ";
 			}
-			if (filter.getStatuses() != null) {
-				// TODO: implement this.
+			if (filter.getStatuses() != null && filter.getStatuses().size() > 0) {
+				where += " AND aa.amp_activity_id IN (SELECT amp_activity_id FROM amp_activities_categoryvalues aacv WHERE amp_categoryvalue_id IN (@@status@@)) ";
+				String ids = "";
+				Iterator<AmpCategoryValue> iStatus = filter.getStatuses().iterator();
+				while (iStatus.hasNext()) {
+					AmpCategoryValue cv = iStatus.next();
+					ids += cv.getUniqueId() + ",";
+				}
+				ids = ids.substring(0, ids.length() - 1);
+				where = where.replace("@@status@@", ids);
 			}
 			if (filter.getDonors() != null) {
 				String donors = "";

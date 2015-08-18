@@ -27,7 +27,10 @@ public abstract class AmpTestCase extends TestCase
 			throw new RuntimeException("did not throw exception");
 		}
 		catch(Throwable thr){
+			if (thr.getMessage().equals("did not throw exception"))
+				throw new RuntimeException("code which should have failed did not throw an exception!");
 			// it is ok, we want an exception
+			System.out.println("caught an ok exception: " + thr.getMessage());
 		}
 	}
 	

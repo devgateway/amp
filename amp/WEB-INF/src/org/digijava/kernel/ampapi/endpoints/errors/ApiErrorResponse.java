@@ -19,7 +19,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 public class ApiErrorResponse {
 	protected static final Logger logger = Logger.getLogger(ApiErrorResponse.class);
 	
-	private static final String UNKOWN_ERROR = "Unkown Error";
+	public static final String UNKOWN_ERROR = "Unkown Error";
 	
 	
 	/**
@@ -29,6 +29,16 @@ public class ApiErrorResponse {
 	public static void reportGenericError(ApiErrorMessage msg) {
 		reportError(Response.Status.INTERNAL_SERVER_ERROR, msg);
 	}
+
+    /**
+     * Builds response with HTTP 500 (Internal Server Error) with the given message
+     * @param msg the API Error
+     */
+    public static Response buildGenericError(ApiErrorMessage msg) {
+        JsonBean formattedMessage = ApiError.toError(msg);
+        ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(formattedMessage);
+        return builder.build();
+    }
 	
 	/**
 	 * Reports that user authentication is required (HTTP 401)

@@ -51,7 +51,9 @@ public class ActionAuthorizer {
 				addError(methodInfo, errors, SecurityErrors.INVALID_API_METHOD, "Mixed authorization with NO authorization");
 				break;
 			case TOKEN:
+				/* AMP-20664: we'll need to refactor so that token authentication done in same place as other authorization actions 
 				verifyTokenMatch(containerReq);
+				*/
 				break;
 			case IN_WORKSPACE:
 				if (!TeamUtil.isUserInWorkspace()) {
@@ -62,14 +64,17 @@ public class ActionAuthorizer {
 				if (!addActivityAllowed()) {
 					addError(methodInfo, errors, SecurityErrors.NOT_ALLOWED, "Adding activity is not allowed");
 				}
+				break;
 			case EDIT_ACTIVITY:
 				if (!InterchangeUtils.isEditableActivity(containerReq)) {
 					addError(methodInfo, errors, SecurityErrors.NOT_ALLOWED, "No right to edit this activity");
 				}
+				break;
 			case VIEW_ACTIVITY:
 				if (!InterchangeUtils.isViewableActivity(containerReq)) {
-					addError(methodInfo, errors, SecurityErrors.NOT_ALLOWED, "No right to view this activity");
+					addError(methodInfo, errors, SecurityErrors.INVALID_REQUEST, "Activity doesn't exist or is not the latest version");
 				}
+				break;
 			}
 		}
 		if (!errors.isEmpty()) {
@@ -87,9 +92,9 @@ public class ActionAuthorizer {
 			error = SecurityErrors.NO_SESSION_TOKEN;
 		} else {
 			String token = containerReq.getHeaderValue("X-Auth-Token");
-			List<ApiErrorMessage>errors=new ArrayList<ApiErrorMessage>();
+			List<ApiErrorMessage>errors = new ArrayList<ApiErrorMessage>();
 
-			SecurityUtil.getAmpApiTokenFromApplication(token,errors);
+			SecurityUtil.getAmpApiTokenFromApplication(token, errors);
 			
 			if (errors.size()>0) {
 				error = errors.get(0);

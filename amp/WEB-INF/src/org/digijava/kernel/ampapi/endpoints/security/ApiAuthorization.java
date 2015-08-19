@@ -107,7 +107,9 @@ public class ApiAuthorization {
 	private static String getMethodReference(String... args) {
 		StringBuilder sb = new StringBuilder();
 		for (String arg : args) {
-			sb.append("/").append(StringUtils.strip(arg, "/"));
+			arg = StringUtils.strip(arg, "/");
+			if (StringUtils.isNotBlank(arg))
+				sb.append("/").append(arg);
 		}
 		return sb.toString();
 	}

@@ -24,5 +24,6 @@ public class SecurityErrors {
 	public static final ApiErrorMessage INVALID_API_METHOD = new ApiErrorMessage(5, "Invalid API Method");
 	/** Token expired */
 	public static final ApiErrorMessage TOKEN_EXPIRED = new ApiErrorMessage(6, "Token expired");
-
+	/** Invalid Request */
+	public static final ApiErrorMessage INVALID_REQUEST = new ApiErrorMessage(7, "Invalid request");
 }

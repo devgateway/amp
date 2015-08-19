@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.jdbc.Work;
+import org.hibernate.type.LongType;
 
 import clover.org.apache.commons.lang.StringUtils;
 
@@ -69,7 +71,7 @@ public class ProjectList {
 		List<JsonBean> viewableActivities = new ArrayList<JsonBean>();
 		List<JsonBean> editableActivities = new ArrayList<JsonBean>();
 		final List<Long> viewableIds = getViewableActivityIds(tm);
-		List<Long> editableIds = getEditableActivityIds();
+		List<Long> editableIds = getEditableActivityIds(tm);
 		List<JsonBean> notViewableActivities = getActivitiesByIds(viewableIds, false, false, false);
 		if (viewableIds.size() > 0) {
 			viewableIds.removeAll(editableIds);
@@ -105,10 +107,15 @@ public class ProjectList {
 	 * @param session HttpSession
 	 * @return List<Long> with the editable activity Ids
 	 */
-	public static List<Long> getEditableActivityIds() {
+	public static List<Long> getEditableActivityIds(TeamMember tm) {
+		// based on AMP-20520 research the only rule found when activities are not editable is when in Mng WS
+		if (TeamMemberUtil.isManagementWorkspace(tm))
+			return Collections.emptyList();
 		HttpSession session = TLSUtils.getRequest().getSession();
 		String query = WorkspaceFilter.getWorkspaceFilterQuery(session);
-		return PersistenceManager.getSession().createSQLQuery(query).list();
+		List<Long> result = PersistenceManager.getSession().createSQLQuery(query)
+				.addScalar("amp_activity_id", LongType.INSTANCE).list();
+		return result;
 
 	}
 
@@ -121,16 +128,14 @@ public class ProjectList {
 	public static List<Long> getViewableActivityIds(TeamMember tm) {
 		List<Long> viewableActivityIds = new ArrayList<Long>();
 		try {
-
 			User user = UserUtils.getUserByEmail(tm.getEmail());
-			// Gets the list of all the workspaces that the current logged user
-			// is a member
+			// Gets the list of all the workspaces that the current logged user is a member
 			Collection<AmpTeamMember> teamMemberList = TeamMemberUtil.getAllAmpTeamMembersByUser(user);
 			
-			// for every workspace generate the workspace query to get the
-			// activities.
+			// for every workspace generate the workspace query to get the activities.
 			final String query = WorkspaceFilter.getViewableActivitiesIdByTeams( teamMemberList);
-			viewableActivityIds = PersistenceManager.getSession().createSQLQuery(query).list();
+			viewableActivityIds = PersistenceManager.getSession().createSQLQuery(query)
+					.addScalar("amp_activity_id", LongType.INSTANCE).list();
 		} catch (DgException e1) {
 			LOGGER.warn("Couldn't generate the List of viewable activity ids", e1);
 			throw new RuntimeException(e1);

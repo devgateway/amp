@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.PathSegment;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -607,11 +606,9 @@ public class InterchangeUtils {
 		if (!TeamUtil.isUserInWorkspace()) {
 			return false;
 		}
-		JsonBean input = (JsonBean) containerReq.getEntity(JsonBean.class);
-		String idStr = input == null ? null : String.valueOf(input.get(ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME));
-		Long id = NumberUtils.isNumber(idStr) ? Long.valueOf(idStr) : null;
+		Long id = getRequestId(containerReq);
 		// we reuse the same approach as the one done by Project List EP
-		return id != null && ProjectList.getEditableActivityIds().contains(id);
+		return id != null && ProjectList.getEditableActivityIds(TeamUtil.getCurrentMember()).contains(id);
 	}
 	
 	/**
@@ -619,9 +616,13 @@ public class InterchangeUtils {
 	 * @return true if request is valid to view an activity
 	 */
 	public static boolean isViewableActivity(ContainerRequest containerReq) {
-		if (!TeamUtil.isUserInWorkspace()) {
-			return false;
-		}
+		Long id = getRequestId(containerReq);
+		// we reuse the same approach as the one done by Project List EP
+		// however there are some known issues: AMP-20496
+		return id != null && ProjectList.getViewableActivityIds(TeamUtil.getCurrentMember()).contains(id);
+	}
+	
+	private static Long getRequestId(ContainerRequest containerReq) {
 		List<PathSegment> paths = containerReq.getPathSegments();
 		Long id = null;
 		if (paths != null && paths.size() > 0) {
@@ -630,12 +631,7 @@ public class InterchangeUtils {
 				id = Long.valueOf(segment.getPath());
 			}
 		}
-		// we reuse the same approach as the one done by Project List EP
-		/* disabling for now due to AMP-20496
-		return id != null && ProjectList.getViewableActivityIds(TeamUtil.getCurrentMember()).contains(id);
-		*/
-		// remove this and turn on previous when AMP-20496 is fixed
-		return id != null;
+		return id;
 	}
 	
 	public static Object loadTranslationsForField(Class<?> clazz, String propertyName, String fieldValue, Long id, Set<String> languages) {

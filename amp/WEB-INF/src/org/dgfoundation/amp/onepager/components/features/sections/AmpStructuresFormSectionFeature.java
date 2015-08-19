@@ -11,18 +11,17 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.*;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -61,8 +60,8 @@ public class AmpStructuresFormSectionFeature extends
 					return null;
 			}
 		};
-		
-		
+		final TransparentWebMarkupContainer containter = new TransparentWebMarkupContainer("listWithPaginator"); 
+		containter.setOutputMarkupId(true);
 		list = new PagingListEditor<AmpStructure>("list", setModel) {
 			
 			
@@ -135,7 +134,24 @@ public class AmpStructuresFormSectionFeature extends
 				//item.add(imgList);
 				
 				
-				ListEditorRemoveButton delbutton = new ListEditorRemoveButton("deleteStructure", "Delete Structure");
+				ListEditorRemoveButton delbutton = new ListEditorRemoveButton("deleteStructure", "Delete Structure"){
+
+					@Override
+					protected void onClick(AjaxRequestTarget target) {
+						target.add(containter);
+						super.onClick(target);
+						Component component = containter.get("paging");
+				        if(component instanceof PagingListNavigator) {
+				        	PagingListNavigator paging = (PagingListNavigator)component;
+				        	boolean v = paging.isVisible();
+				        	if(!v) {
+				        		((PagingListEditor)containter.get("list")).goToLastPage();
+				        	}
+				        	paging.setVisible(v);
+				        }
+					}
+					
+				};
 				item.add(delbutton);
 				
 				final AmpAjaxLinkField openMapPopup = new AmpAjaxLinkField("openMapPopup", "Map", "Map") {
@@ -147,10 +163,12 @@ public class AmpStructuresFormSectionFeature extends
 				item.add(openMapPopup);	
 			}
 		};
-		add(list);
+		containter.add(list);
+		
 
-        PagingListNavigator<AmpStructure> pln = new PagingListNavigator<AmpStructure>("paging", list);
-        add(pln);
+        final PagingListNavigator<AmpStructure> pln = new PagingListNavigator<AmpStructure>("paging", list);
+        containter.add(pln);
+        add(containter);
 
 
 		AmpAjaxLinkField addbutton = new AmpAjaxLinkField("addbutton", "Add Structure", "Add Structure") {
@@ -165,8 +183,11 @@ public class AmpStructuresFormSectionFeature extends
 				
 				list.addItem(stru);
 				target.add(this.getParent());
+				target.add(containter);
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
                 list.goToLastPage();
+                boolean visible = pln.isVisible();
+                pln.setVisible(visible);
 			}
 		};
 		add(addbutton);

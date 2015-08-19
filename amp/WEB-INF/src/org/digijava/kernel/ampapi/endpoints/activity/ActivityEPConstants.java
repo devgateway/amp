@@ -39,6 +39,8 @@ public class ActivityEPConstants {
 	public static final String ID = "id";
 	public static final String VALUE = "value";
 	public static final String UNIQUE_CONSTRAINT = "unique_constraint";
+	public static final String PERCENTAGE_CONSTRAINT = "percentage_constraint";
+	
 	
 
 	// fields constants

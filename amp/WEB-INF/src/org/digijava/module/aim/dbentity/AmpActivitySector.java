@@ -16,7 +16,7 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable {
 	@Interchangeable(fieldTitle="Sector ID", importable = true , pickIdOnly = true, uniqueConstraint = true)
 	private AmpSector sectorId;
 	
-	@Interchangeable(fieldTitle="Sector Percentage", importable = true)
+	@Interchangeable(fieldTitle="Sector Percentage", importable = true, percentageConstraint = true)
 	private Float sectorPercentage;
         
     private AmpClassificationConfiguration classificationConfig;

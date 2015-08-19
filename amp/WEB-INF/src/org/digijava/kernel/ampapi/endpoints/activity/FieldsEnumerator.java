@@ -213,7 +213,9 @@ public class FieldsEnumerator {
 				} else {
 					bean.set(ActivityEPConstants.MULTIPLE_VALUES, false);
 				}
-				
+				if (InterchangeUtils.hasPercentageValidatorEnabled(field, interchangeable)) {
+					bean.set(ActivityEPConstants.PERCENTAGE_CONSTRAINT, getPercentageConstraint(field, interchangeable));
+				}
 				if (InterchangeUtils.hasUniqueValidatorEnabled(field, interchangeable)) {
 					bean.set(ActivityEPConstants.UNIQUE_CONSTRAINT, getUniqueConstraint(field, interchangeable));
 				}
@@ -323,7 +325,25 @@ public class FieldsEnumerator {
 		}
 		return translations;
 	}
-	
+	/**
+	 * 
+	 * @param parentInterchangeable 
+	 * 
+	 * @param clazz the class to be described
+	 * @return
+	 */
+	private String getPercentageConstraint(Field field, Interchangeable parentInterchangeable) {
+		Class<?> genericClass = InterchangeUtils.getGenericClass(field);
+		Field[] fields = genericClass.getDeclaredFields();
+		for (Field f : fields) {
+			Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
+			if (interchangeable != null && FMVisibility.isVisible(interchangeable.fmPath()) && interchangeable.percentageConstraint()) {
+				return InterchangeUtils.underscorify(interchangeable.fieldTitle());
+			}
+		}
+		
+		return null;
+	}
 	/**
 	 * Describes each @Interchangeable field of a class
 	 * @param parentInterchangeable 

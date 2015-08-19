@@ -77,6 +77,8 @@ public @interface Interchangeable {
     
     Validators validators() default @Validators;
     
+    /* constraints for multi-level validators */
     boolean uniqueConstraint() default false;
+    boolean percentageConstraint() default false;
 
 }

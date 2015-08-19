@@ -78,52 +78,89 @@ public class GPIAction extends Action {
 
 	private GPIForm formatFilters(GPIForm piForm) {
 		// TODO: Create an object that will have all filters.
-		if (piForm.getSelectedDonorTypes() != null && piForm.getSelectedDonorTypes().length > 0 && !piForm.getSelectedDonorTypes()[0].isEmpty() && !piForm.getSelectedDonorTypes()[0].equals("0") && !piForm.getSelectedDonorTypes()[0].contains("String")) {
-			if(piForm.getSelectedDonorTypes().length == 1) {
+		if (piForm.getSelectedDonorTypes() != null && piForm.getSelectedDonorTypes().length > 0
+				&& !piForm.getSelectedDonorTypes()[0].isEmpty() && !piForm.getSelectedDonorTypes()[0].equals("0")
+				&& !piForm.getSelectedDonorTypes()[0].contains("String")) {
+			if (piForm.getSelectedDonorTypes().length == 1) {
 				// Filters from popup.
-				piForm.setSelectedDonorTypes(piForm.getSelectedDonorTypes()[0].split(","));
+				if (piForm.getSelectedDonorTypes().length == 1) {
+					piForm.setSelectedDonorTypes(piForm.getSelectedDonorTypes()[0].split(","));
+				} else {
+					piForm.setSelectedDonorTypes(piForm.getSelectedDonorTypes());
+				}
 			} else {
 				// Saved filters.
-				//TODO: Find out why sometimes the list has an extra element with wrong value.
+				// TODO: Find out why sometimes the list has an extra element with wrong value.
 				List<String> auxTypes = new ArrayList<String>();
-				for(int i = 0; i<piForm.getSelectedDonorTypes().length; i++) {
-					if(piForm.getSelectedDonorTypes()[i] != null && piForm.getSelectedDonorTypes()[i] != "" && piForm.getSelectedDonorTypes()[i].indexOf("String") == -1) {
+				for (int i = 0; i < piForm.getSelectedDonorTypes().length; i++) {
+					if (piForm.getSelectedDonorTypes()[i] != null && piForm.getSelectedDonorTypes()[i] != ""
+							&& piForm.getSelectedDonorTypes()[i].indexOf("String") == -1) {
 						auxTypes.add(piForm.getSelectedDonorTypes()[i]);
 					}
-				}				
+				}
 				piForm.setSelectedDonorTypes(auxTypes.toArray(new String[auxTypes.size()]));
 			}
 		} else {
 			piForm.setSelectedDonorTypes(null);
 		}
-		
-		if (piForm.getSelectedDonors() != null && piForm.getSelectedDonors().length > 0 && !piForm.getSelectedDonors()[0].isEmpty() && !piForm.getSelectedDonors()[0].equals("0") && !piForm.getSelectedDonors()[0].contains("String")) {
-			piForm.setSelectedDonors(piForm.getSelectedDonors()[0].split(","));
+
+		if (piForm.getSelectedDonors() != null && piForm.getSelectedDonors().length > 0
+				&& !piForm.getSelectedDonors()[0].isEmpty() && !piForm.getSelectedDonors()[0].equals("0")
+				&& !piForm.getSelectedDonors()[0].contains("String")) {
+			if (piForm.getSelectedDonors().length == 1) {
+				piForm.setSelectedDonors(piForm.getSelectedDonors()[0].split(","));
+			} else {
+				piForm.setSelectedDonors(piForm.getSelectedDonors());
+			}
 		} else {
 			piForm.setSelectedDonors(null);
 		}
-		
-		if (piForm.getSelectedDonorGroups() != null && piForm.getSelectedDonorGroups().length > 0 && !piForm.getSelectedDonorGroups()[0].isEmpty() && !piForm.getSelectedDonorGroups()[0].equals("0") && !piForm.getSelectedDonorGroups()[0].contains("String")) {
-			piForm.setSelectedDonorGroups(piForm.getSelectedDonorGroups()[0].split(","));
+
+		if (piForm.getSelectedDonorGroups() != null && piForm.getSelectedDonorGroups().length > 0
+				&& !piForm.getSelectedDonorGroups()[0].isEmpty() && !piForm.getSelectedDonorGroups()[0].equals("0")
+				&& !piForm.getSelectedDonorGroups()[0].contains("String")) {
+			if (piForm.getSelectedDonorGroups().length == 1) {
+				piForm.setSelectedDonorGroups(piForm.getSelectedDonorGroups()[0].split(","));
+			} else {
+				piForm.setSelectedDonorGroups(piForm.getSelectedDonorGroups());
+			}
 		} else {
 			piForm.setSelectedDonorGroups(null);
 		}
-		
-		if (piForm.getSelectedStatuses() != null && piForm.getSelectedStatuses().length > 0 && !piForm.getSelectedStatuses()[0].isEmpty() && !piForm.getSelectedStatuses()[0].equals("0") && !piForm.getSelectedStatuses()[0].contains("String")) {
-			piForm.setSelectedStatuses(piForm.getSelectedStatuses()[0].split(","));
+
+		if (piForm.getSelectedStatuses() != null && piForm.getSelectedStatuses().length > 0
+				&& !piForm.getSelectedStatuses()[0].isEmpty() && !piForm.getSelectedStatuses()[0].equals("0")
+				&& !piForm.getSelectedStatuses()[0].contains("String")) {
+			if (piForm.getSelectedStatuses().length == 1) {
+				piForm.setSelectedStatuses(piForm.getSelectedStatuses()[0].split(","));
+			} else {
+				piForm.setSelectedStatuses(piForm.getSelectedStatuses());
+			}
 		} else {
 			piForm.setSelectedStatuses(null);
 		}
-		
-		if (piForm.getSelectedSectors() != null && piForm.getSelectedSectors().length > 0 && !piForm.getSelectedSectors()[0].isEmpty() && !piForm.getSelectedSectors()[0].equals("0") && !piForm.getSelectedSectors()[0].contains("String")) {
-			piForm.setSelectedSectors(piForm.getSelectedSectors()[0].split(","));
+
+		if (piForm.getSelectedSectors() != null && piForm.getSelectedSectors().length > 0
+				&& !piForm.getSelectedSectors()[0].isEmpty() && !piForm.getSelectedSectors()[0].equals("0")
+				&& !piForm.getSelectedSectors()[0].contains("String")) {
+			if (piForm.getSelectedSectors().length == 1) {
+				piForm.setSelectedSectors(piForm.getSelectedSectors()[0].split(","));
+			} else {
+				piForm.setSelectedSectors(piForm.getSelectedSectors());
+			}
 		} else {
 			piForm.setSelectedSectors(null);
 		}
-		
-		if (piForm.getSelectedFinancingIstruments() != null && piForm.getSelectedFinancingIstruments().length > 0 && !piForm.getSelectedFinancingIstruments()[0].isEmpty()
-				&& !piForm.getSelectedFinancingIstruments()[0].equals("0") && !piForm.getSelectedFinancingIstruments()[0].contains("String")) {
-			piForm.setSelectedFinancingIstruments(piForm.getSelectedFinancingIstruments()[0].split(","));
+
+		if (piForm.getSelectedFinancingIstruments() != null && piForm.getSelectedFinancingIstruments().length > 0
+				&& !piForm.getSelectedFinancingIstruments()[0].isEmpty()
+				&& !piForm.getSelectedFinancingIstruments()[0].equals("0")
+				&& !piForm.getSelectedFinancingIstruments()[0].contains("String")) {
+			if (piForm.getSelectedFinancingIstruments().length == 1) {
+				piForm.setSelectedFinancingIstruments(piForm.getSelectedFinancingIstruments()[0].split(","));
+			} else {
+				piForm.setSelectedFinancingIstruments(piForm.getSelectedFinancingIstruments());
+			}
 		} else {
 			piForm.setSelectedFinancingIstruments(null);
 		}

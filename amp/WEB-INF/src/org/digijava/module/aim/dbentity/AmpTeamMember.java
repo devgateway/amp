@@ -32,7 +32,11 @@ import org.hibernate.jdbc.Work;
 public class AmpTeamMember implements Serializable/*, Versionable*/ {
 
 	private Long ampTeamMemId;
+
+    @Interchangeable(fieldTitle = "User")
 	private User user;
+
+    @Interchangeable(fieldTitle = "Workspace")
 	private AmpTeam ampTeam;
 	private AmpTeamMemberRoles ampMemberRole;
 	private Set<AmpActivityVersion> activities;

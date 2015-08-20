@@ -18,4 +18,6 @@ public class ActivityFieldsConstants {
     public static final String CHANGE_TYPE = "Change Type";
     public static final String LAST_IMPORTED_AT = "Last Imported At";
     public static final String LAST_IMPORTED_BY = "Last Imported By";
+    public static final String CREATED_BY = "Created By";
+    public static final String MODIFIED_BY = "Modified By";
 }

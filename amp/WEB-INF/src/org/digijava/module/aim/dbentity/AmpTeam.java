@@ -18,6 +18,7 @@ import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.ar.util.FilterUtil;
@@ -31,6 +32,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 	private static final Logger logger = Logger.getLogger(AmpTeam.class);
 	private Long ampTeamId;
 	@TranslatableField
+    @Interchangeable(fieldTitle = "name")
 	private String name;
 	
 	private Boolean addActivity;

@@ -290,17 +290,19 @@ LoggerIdentifiable, Cloneable {
 	protected String contactName;
 	//protected AmpTeamMember updatedBy; !!! Use modifiedBy
 
-	@Interchangeable(fieldTitle = "PPC Amount", importable = true, fmPath = "/Activity Form/Funding/Proposed Project Cost/Amount", required = "/Activity Form/Funding/Proposed Project Cost/Required Validator for Proposed Amount")
+	@Interchangeable(fieldTitle = "PPC Amount", importable = true,
+			fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/" + CategoryConstants.PROPOSE_PRJC_AMOUNT_NAME,
+			required = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Required Validator for Proposed Amount")
 	@VersionableFieldSimple(fieldTitle = "Fun Amount")
 	protected Double funAmount;
 	
-	@Interchangeable(fieldTitle = "PPC Currency Code", importable = true, fmPath = "/Activity Form/Funding/Proposed Project Cost/Currency")
+	@Interchangeable(fieldTitle = "PPC Currency Code", importable = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Currency")
 	@InterchangeableDiscriminator(discriminatorField="currencyCode", 
 	discriminatorClass="org.digijava.kernel.ampapi.endpoints.activity.discriminators.CurrencyDiscriminator")
 	@VersionableFieldSimple(fieldTitle = "Currency Code")
 	protected String currencyCode;
 	
-	@Interchangeable(fieldTitle = "PPC Funding Date", importable = true, fmPath = "/Activity Form/Funding/Proposed Project Cost/Date")
+	@Interchangeable(fieldTitle = "PPC Funding Date", importable = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/" + CategoryConstants.PROPOSE_PRJC_DATE_NAME)
 	@VersionableFieldSimple(fieldTitle = "Fun Date")
 	protected Date funDate;
 

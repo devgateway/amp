@@ -86,7 +86,11 @@ public class InterchangeDependencyResolver {
 	}
 
 	
-	
+	/**
+	 * Checks whether the "activity budget" category value is equal to "on budget" 
+	 * @param incomingActivity The full JsonBean describing the activity to be imported
+	 * @return true if it's valid, false if it isn't
+	 */
 	private static boolean checkOnBudget(JsonBean incomingActivity) {
 		Object externalValue = InterchangeUtils.getFieldValuesFromJsonActivity(incomingActivity, BUDGET_PATH);
 		if (externalValue == null)
@@ -100,11 +104,24 @@ public class InterchangeDependencyResolver {
 		return externalValue.equals(value);
 	}
 	
+	/**
+	 * checks whether the field described is present in the full activity
+	 * @param incomingActivity
+	 * @param path
+	 * @return
+	 */
 	private static boolean checkFieldPresent(JsonBean incomingActivity, String path) {
 		Object externalValue = InterchangeUtils.getFieldValuesFromJsonActivity(incomingActivity, path);
 		return externalValue != null;
 	}
 	
+	/**
+	 * Performs a check on ids corresponding to AmpLocation objects -- 
+	 * whether those are included in the Implementation Level provided by the activity
+	 * @param e
+	 * @param incomingActivity
+	 * @return
+	 */
 	private static boolean checkImplementationLevel(Object e, JsonBean incomingActivity) {
 		//this object should be a Number (Long or Integer)
 		Object externalValue = InterchangeUtils.getFieldValuesFromJsonActivity(incomingActivity, IMPLEMENTATION_LEVEL_PATH);
@@ -130,6 +147,13 @@ public class InterchangeDependencyResolver {
 		return false;
 	}
 	
+	/**
+	 * checks whether the specified dependency code is fulfilled in regards to the activity
+	 * @param value
+	 * @param incomingActivity
+	 * @param code
+	 * @return
+	 */
 	public static boolean checkDependency(Object value, JsonBean incomingActivity, String code) {
 		switch (code) {
 		case ON_BUDGET_KEY: return checkOnBudget(incomingActivity);
@@ -142,6 +166,13 @@ public class InterchangeDependencyResolver {
 		}
 	}
 
+	/**
+	 * checks whether the implementation location (provided as Object e) 
+	 * is corresponding to the value from implementation level category value  
+	 * @param e the implementation location category value
+	 * @param incomingActivity 
+	 * @return
+	 */
 	private static boolean checkImplementationLocation(Object e,
 			JsonBean incomingActivity) {
 		//this object should be a Number (Long or Integer)

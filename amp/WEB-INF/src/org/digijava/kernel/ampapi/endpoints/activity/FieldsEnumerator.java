@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
@@ -23,6 +24,7 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.jdbc.Work;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.entity.AbstractEntityPersister;
@@ -141,6 +143,28 @@ public class FieldsEnumerator {
 		}
 	}
 	
+	
+	private List<JsonBean> generateDependencies(Field field, String[] dependencies) {
+		
+		
+		List<JsonBean> result = new ArrayList<JsonBean>();
+		for (String depCode : dependencies) {
+			JsonBean entry = new JsonBean();
+			entry.set(depCode, depCode);
+//			String path = InterchangeDependencyResolver.getPath(depCode);
+//			Set<Object> valueSet = InterchangeDependencyResolver.getValues(depCode);
+//			List<JsonBean> values = new ArrayList<JsonBean>();
+//			for (Object item : valueSet) {
+//				JsonBean newItem = new JsonBean();
+//				newItem.set("value", item);
+//				values.add(newItem);
+//			}
+			result.add(entry);
+		}
+		return result;
+	}
+	
+	
 	/**
 	 * describes a field in a JSON structure of: field_type: one of the types
 	 * {string, boolean, float, list} field_name: the field name, obtained from
@@ -194,6 +218,8 @@ public class FieldsEnumerator {
 		bean.set(ActivityEPConstants.FIELD_LABEL, InterchangeUtils.mapToBean(getLabelsForField(interchangeable.fieldTitle())));
 		bean.set(ActivityEPConstants.REQUIRED, InterchangeUtils.getRequiredValue(field, interchangeable));
 		bean.set(ActivityEPConstants.IMPORTABLE, interchangeable.importable());
+		if (interchangeable.dependencies().length > 0)
+			bean.set(ActivityEPConstants.DEPENDENCIES, interchangeable.dependencies());
 		
 		if (internalUse) {
 			bean.set(ActivityEPConstants.FIELD_NAME_INTERNAL, field.getName());

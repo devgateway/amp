@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
@@ -562,7 +563,8 @@ LoggerIdentifiable, Cloneable {
 		@Interchangeable(fieldTitle = "Implementation Level", importable=true, multipleValues=false, 
 				discriminatorOption = CategoryConstants.IMPLEMENTATION_LEVEL_KEY, fmPath="/Activity Form/Location/Implementation Level", pickIdOnly=true),
 		@Interchangeable(fieldTitle = "Implementation Location", importable=true, multipleValues=false, 
-				discriminatorOption = CategoryConstants.IMPLEMENTATION_LOCATION_KEY, fmPath="/Activity Form/Location/Implementation Location", pickIdOnly=true)
+				discriminatorOption = CategoryConstants.IMPLEMENTATION_LOCATION_KEY, fmPath="/Activity Form/Location/Implementation Location", 
+				dependencies = {InterchangeDependencyResolver.IMPLEMENTATION_LOCATION_VALID_KEY}, pickIdOnly=true)
 	})
 	@VersionableCollection(fieldTitle = "Categories")
 	protected Set<AmpCategoryValue> categories;
@@ -576,13 +578,16 @@ LoggerIdentifiable, Cloneable {
 	@Interchangeable(fieldTitle = "FY", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/FY", required = "/Activity Form/Identification/Budget Extras/Required Validator for fy")
 	@VersionableFieldSimple(fieldTitle = "FY")
 	protected String FY;
-	@Interchangeable(fieldTitle = "Vote", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Vote")
+	@Interchangeable(fieldTitle = "Vote", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Vote", 
+			dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
 	@VersionableFieldSimple(fieldTitle = "Vote")
 	protected String vote;
-	@Interchangeable(fieldTitle = "Sub Vote", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Sub-Vote")
+	@Interchangeable(fieldTitle = "Sub Vote", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Sub-Vote", 
+			dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
 	@VersionableFieldSimple(fieldTitle = "Sub Vote")
 	protected String subVote;
-	@Interchangeable(fieldTitle = "Sub Program", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Sub-Program")
+	@Interchangeable(fieldTitle = "Sub Program", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Sub-Program", 
+			dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
 	@VersionableFieldSimple(fieldTitle = "Sub Program")
 	protected String subProgram;
 	/* 
@@ -601,7 +606,8 @@ LoggerIdentifiable, Cloneable {
 			//AMP-20423: disabling fmPath="/Activity Form/Identification/Budget Extras/Project Code")
 	@VersionableFieldSimple(fieldTitle = "Project Code")
 	protected String projectCode;
-	@Interchangeable(fieldTitle = "Ministry Code", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Ministry Code")
+	@Interchangeable(fieldTitle = "Ministry Code", importable = true, fmPath = "/Activity Form/Identification/Budget Extras/Ministry Code",
+			dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
 	@VersionableFieldSimple(fieldTitle = "Ministry Code")
 	protected String ministryCode;
 

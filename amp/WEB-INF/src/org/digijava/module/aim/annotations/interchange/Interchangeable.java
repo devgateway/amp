@@ -70,7 +70,13 @@ public @interface Interchangeable {
 	 */
 	boolean extraInfo() default false;
 	
-		
+	/**
+	 * Specifies the dependencies used for later checking in DependencyValidator. 
+	 * Dependencies (path and value) are encoded via {@link InterchangeDependencyMapper} public static strings,
+	 * like {@link InterchangeDependencyMapper#ON_BUDGET_CODE}. 
+	 * @return
+	 */
+	String[] dependencies() default {};
 	
 	/** configured with option value, like "Primary Sector" */
     String discriminatorOption() default "";

@@ -34,5 +34,6 @@ public class ActivityErrors {
 	public static final ApiErrorMessage UPDATE_ID_IS_OLD = new ApiErrorMessage(18, "Update request for older activity id. Please provide the latest");
 	public static final ApiErrorMessage FIELD_PERCENTAGE_SUM_BAD = new ApiErrorMessage(19, "Sum of percentage fields has to be 100");
 	public static final ApiErrorMessage FIELD_PARENT_CHILDREN_NOT_ALLOWED = new ApiErrorMessage(20, "Parent and child cannot be in the same collection");
+	public static final ApiErrorMessage DEPENDENCY_NOT_MET = new ApiErrorMessage(21, "Dependency not met: ");
 
 }

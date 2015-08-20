@@ -40,6 +40,7 @@ public class ActivityEPConstants {
 	public static final String VALUE = "value";
 	public static final String UNIQUE_CONSTRAINT = "unique_constraint";
 	public static final String PERCENTAGE_CONSTRAINT = "percentage_constraint";
+	public static final String DEPENDENCIES ="dependencies";
 	public static final String TREE_COLLECTION_CONSTRAINT = "tree_collection";
 	
 

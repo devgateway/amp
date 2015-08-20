@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.PathSegment;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.WordUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -56,6 +57,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.hibernate.proxy.HibernateProxyHelper;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
 
@@ -128,6 +130,111 @@ public class InterchangeUtils {
 	}
 	
 
+	private static Object getChildObject(Class<?> clazz, String fieldTitle, Object obj, boolean finalField) throws Exception {
+		while (clazz != Object.class) {
+			boolean found = false;
+			for (Field field : clazz.getDeclaredFields()) {
+				Interchangeable ant = field.getAnnotation(Interchangeable.class);
+				InterchangeableDiscriminator disc = field.getAnnotation(InterchangeableDiscriminator.class);
+				if (disc != null) {
+					for (Interchangeable setting : disc.settings()) {
+						if (ant.fieldTitle().equals(fieldTitle)) {
+							Method meth = clazz.getMethod(getGetterMethodName(fieldTitle));
+							Object finalObj = meth.invoke(obj);
+							if (finalField && setting.pickIdOnly())
+								return ((Identifiable) finalObj).getIdentifier();
+							else 
+								return finalObj;
+						}
+					}
+				}
+				if (ant != null){
+					if (ant.fieldTitle().equals(fieldTitle)) {
+						Method meth = clazz.getMethod(getGetterMethodName(fieldTitle));
+						Object finalObj = meth.invoke(obj);
+						if (finalField && ant.pickIdOnly())
+							return ((Identifiable) finalObj).getIdentifier();
+						else 
+							return finalObj;
+					}
+				}
+			}
+			clazz = clazz.getSuperclass();
+		}
+		return null;
+	}
+	/**
+	 * Gets the value of a field from the specified path from the AmpActivityVersion 
+	 * transient object.
+	 * 
+	 * @param aav the AmpActivityVersion from which the value is extracted
+	 * @param path underscorified path (like "sectors~sector_id") to the field
+	 * @return the value at the specified path. null if following the path
+	 * cuts off before the end path is reached, or if the value itself is null.
+	 */
+	public static Object getValueFromPath(AmpActivityVersion aav, String path) {
+		
+		String fieldPath = path;
+		
+		Class<?> clazz = HibernateProxyHelper.getClassWithoutInitializingProxy(aav);;
+		Object obj = aav;
+		while (fieldPath.contains("~")) {
+			String pathSegment = fieldPath.substring(0, fieldPath.indexOf('~'));
+			String fieldTitle = deunderscorify(pathSegment);
+			Class<?> workClass = clazz;
+			try {
+				obj = getChildObject(workClass, fieldTitle, obj, false);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			
+			if (obj == null)
+				return null;
+			fieldPath = fieldPath.substring(fieldPath.indexOf('~') + 1);
+			workClass = HibernateProxyHelper.getClassWithoutInitializingProxy(obj);
+		}
+		
+		//path is complete, object is set to proper value
+		try {
+			obj = getChildObject(clazz, fieldPath, obj, true);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return obj;
+	}
+	
+	
+	/**
+	 * Gets the value at the specified path from the JSON description of the activity. 
+	 * 
+	 * @param activity a JsonBean description of the activity
+	 * @param fieldPath path to the field 
+	 * @return null if the path abruptly stops before reaching the end, or the value itself,
+	 * if the end of the path is reached
+	 */
+	public static Object getFieldValuesFromJsonActivity(JsonBean activity, String path) {
+		String fieldPath = path;
+		
+		JsonBean currentBranch = activity;
+		while (fieldPath.contains("~")) {
+			String pathSegment = fieldPath.substring(0, fieldPath.indexOf('~'));
+			Object obj = currentBranch.get(pathSegment);
+			if (obj != null && JsonBean.class.isAssignableFrom(obj.getClass())) {
+				currentBranch = (JsonBean) obj;
+			} else {
+				return null;
+			}
+			fieldPath = path.substring(fieldPath.indexOf('~') + 1);
+			}
+		
+		//path is complete, object is set to proper value
+		return currentBranch.get(fieldPath);
+		
+		
+//		return null;
+	}
+	
+	
 	/**
 	 * transforms a Map<String,String> to a JsonBean with equal structure
 	 * 
@@ -431,10 +538,11 @@ public class InterchangeUtils {
 	}	
 	
 	public static String getGetterMethodName(String fieldName) {
-		if (fieldName.length() == 1)
-			return "get" + Character.toUpperCase(fieldName.charAt(0));
-		return "get" + Character.toUpperCase(fieldName.charAt(0)) + 
-				((fieldName.length() > 1) ? fieldName.substring(1) : "");
+		return "get" + WordUtils.capitalize(fieldName);
+//		if (fieldName.length() == 1)
+//			return "get" + Character.toUpperCase(fieldName.charAt(0));
+//		return "get" + Character.toUpperCase(fieldName.charAt(0)) + 
+//				((fieldName.length() > 1) ? fieldName.substring(1) : "");
 	}	
 	
 	

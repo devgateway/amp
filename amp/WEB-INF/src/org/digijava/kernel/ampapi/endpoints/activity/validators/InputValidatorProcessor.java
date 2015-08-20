@@ -33,6 +33,7 @@ public class InputValidatorProcessor {
 			add(new TreeCollectionValidator());
 			add(new PercentageValidator());
 			add(new ValueValidator());
+			add(new DependencyValidator());
 			}};
 	
 	/**

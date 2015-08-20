@@ -19,12 +19,9 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.hibernate.FlushMode;
-import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 import org.hibernate.proxy.HibernateProxyHelper;
 
@@ -51,7 +48,7 @@ public class PossibleValuesEnumerator {
 			 * but what we actually need is underneath -> obtain name of the field underneath
 			 * */
 			fieldName = longFieldName.substring(0, longFieldName.indexOf('~') );
-			Field field = getPotentiallyDiscriminatedField(clazz, fieldName);
+			Field field = InterchangeUtils.getPotentiallyDiscriminatedField(clazz, fieldName);
 			if (field == null) {
 				List<JsonBean> result = new ArrayList<JsonBean>();
 				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, fieldName)));
@@ -59,7 +56,7 @@ public class PossibleValuesEnumerator {
 			}
 			String configString = discriminatorOption == null? null : discriminatorOption;
 			if (InterchangeUtils.isCompositeField(field)) {
-				configString = getConfigValue(fieldName, field);	
+				configString =  InterchangeUtils.getConfigValue(fieldName, field);	
 			}
 			return getPossibleValuesForField(longFieldName.substring(longFieldName.indexOf('~') + 1), InterchangeUtils.getClassOfField(field), configString);
 		} else {
@@ -68,7 +65,7 @@ public class PossibleValuesEnumerator {
 			 * if it is such a field, it's a special case for each class
 			 * 
 			 * */
-			Field finalField = getPotentiallyDiscriminatedField(clazz, longFieldName);
+			Field finalField =  InterchangeUtils.getPotentiallyDiscriminatedField(clazz, longFieldName);
 			if (finalField == null) {
 				List<JsonBean> result = new ArrayList<JsonBean>();
 				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, longFieldName)));
@@ -76,7 +73,7 @@ public class PossibleValuesEnumerator {
 			} else {
 				String configString = discriminatorOption == null? null : discriminatorOption;
 				if (InterchangeUtils.isCompositeField(finalField)) {
-					configString = getConfigValue(longFieldName, finalField);	
+					configString =  InterchangeUtils.getConfigValue(longFieldName, finalField);	
 				}
 
 				try {
@@ -157,17 +154,6 @@ public class PossibleValuesEnumerator {
 //			return result;
 		return result;
 	}
-	private static String getConfigValue(String longFieldName, Field field) {
-		InterchangeableDiscriminator ant = field.getAnnotation(InterchangeableDiscriminator.class);
-		for (Interchangeable inter : ant.settings()) {
-			if (inter.fieldTitle().equals(InterchangeUtils.deunderscorify(longFieldName))) {
-				return inter.discriminatorOption();
-			}
-		}
-		return null;
-	}
-	
-	
 	
 	private static List<Object> getSpecialCaseObjectList(final String configType, final String configTableName, 
 					 String entityIdColumnName, final String conditionColumnName, final String idColumnName, Class<?> clazz) {
@@ -194,35 +180,6 @@ public class PossibleValuesEnumerator {
 		List<Object> objectList = InterchangeUtils.getSessionWithPendingChanges().createQuery(queryString).list();
 		return objectList;
 	}
-	
-	
-	private static Field getPotentiallyDiscriminatedField(Class<?> clazz, String fieldName){ 
-		Field field = getField(clazz, InterchangeUtils.deunderscorify(fieldName));
-		if (field == null) {
-			//attempt to check if it's a composite field
-			String discriminatedFieldName = InterchangeUtils.getDiscriminatedFieldTitle(fieldName);
-			if (discriminatedFieldName != null)
-				return getField(clazz, discriminatedFieldName);
-
-		}
-		return field;
-	}
-	
-	private static Field getField(Class<?> clazz, String fieldname) {
-		for (Field field: clazz.getDeclaredFields()) {
-			Interchangeable ant = field.getAnnotation(Interchangeable.class);
-			if (ant != null) {
-//				if (ant.descend()) {
-//					return getField(InterchangeUtils.getClassOfField(field), fieldname);
-//				}
-				if (fieldname.equals(ant.fieldTitle()))
-					return field;
-			}
-		}
-		
-		return null;
-	}
-	
 	
 	private static List<JsonBean> getPossibleValuesForField(Field field) {
 		if (!InterchangeUtils.isFieldEnumerable(field))

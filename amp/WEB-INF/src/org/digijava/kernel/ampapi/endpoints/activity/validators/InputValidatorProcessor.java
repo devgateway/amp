@@ -30,6 +30,7 @@ public class InputValidatorProcessor {
 			add(new AmpActivityIdValidator());
 			add(new MultipleEntriesValidator());
 			add(new UniqueValidator());
+			add(new TreeCollectionValidator());
 			add(new PercentageValidator());
 			add(new ValueValidator());
 			}};

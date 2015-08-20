@@ -25,14 +25,14 @@ public class ActivityErrors {
 	public static final ApiErrorMessage UNIQUE_ACTIVITY_TITLE = new ApiErrorMessage(9, "Activity title should be unique");
 	public static final ApiErrorMessage CANNOT_GET_PROPERTIES = new ApiErrorMessage(10, "Cannot get properties for type");
 	public static final ApiErrorMessage DISCRIMINATOR_CLASS_NOT_FOUND = new ApiErrorMessage(11, "Cannot find discriminator class");
-	public static final ApiErrorMessage DISCRIMINATOR_METHOD_ERROR = new ApiErrorMessage(11, "Error when accessing discriminator method");
-	public static final ApiErrorMessage DISCRIMINATOR_CLASS_METHOD_ERROR = new ApiErrorMessage(12, "Error when accessing a method from the discriminator class");
-	public static final ApiErrorMessage SAVE_AS_DRAFT_FM_DISABLED = new ApiErrorMessage(13, "Activity can only be saved as draft, but \"save as draft\" is disabled in FM!");	
-	public static final ApiErrorMessage TITLE_IN_DEFAULT_LANUGAGE_REQUIRED = new ApiErrorMessage(14, "Title in default language is required");
-	public static final ApiErrorMessage UPDATE_ID_MISMATCH = new ApiErrorMessage(15, "Request project ids mismatch");
-	public static final ApiErrorMessage FIELD_INVALID_LENGTH = new ApiErrorMessage(16, "Invalid field length");
-	public static final ApiErrorMessage UPDATE_ID_IS_OLD = new ApiErrorMessage(17, "Update request for older activity id. Please provide the latest");
-	public static final ApiErrorMessage FIELD_PERCENTAGE_SUM_BAD = new ApiErrorMessage(18, "Sum of percentage fields has to be 100");
-	
-	
+	public static final ApiErrorMessage DISCRIMINATOR_METHOD_ERROR = new ApiErrorMessage(12, "Error when accessing discriminator method");
+	public static final ApiErrorMessage DISCRIMINATOR_CLASS_METHOD_ERROR = new ApiErrorMessage(13, "Error when accessing a method from the discriminator class");
+	public static final ApiErrorMessage SAVE_AS_DRAFT_FM_DISABLED = new ApiErrorMessage(14, "Activity can only be saved as draft, but \"save as draft\" is disabled in FM!");	
+	public static final ApiErrorMessage TITLE_IN_DEFAULT_LANUGAGE_REQUIRED = new ApiErrorMessage(15, "Title in default language is required");
+	public static final ApiErrorMessage UPDATE_ID_MISMATCH = new ApiErrorMessage(16, "Request project ids mismatch");
+	public static final ApiErrorMessage FIELD_INVALID_LENGTH = new ApiErrorMessage(17, "Invalid field length");
+	public static final ApiErrorMessage UPDATE_ID_IS_OLD = new ApiErrorMessage(18, "Update request for older activity id. Please provide the latest");
+	public static final ApiErrorMessage FIELD_PERCENTAGE_SUM_BAD = new ApiErrorMessage(19, "Sum of percentage fields has to be 100");
+	public static final ApiErrorMessage FIELD_PARENT_CHILDREN_NOT_ALLOWED = new ApiErrorMessage(20, "Parent and child cannot be in the same collection");
+
 }

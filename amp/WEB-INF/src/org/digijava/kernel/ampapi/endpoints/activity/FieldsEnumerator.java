@@ -213,11 +213,17 @@ public class FieldsEnumerator {
 				} else {
 					bean.set(ActivityEPConstants.MULTIPLE_VALUES, false);
 				}
+				
 				if (InterchangeUtils.hasPercentageValidatorEnabled(field, interchangeable)) {
 					bean.set(ActivityEPConstants.PERCENTAGE_CONSTRAINT, getPercentageConstraint(field, interchangeable));
 				}
+				
 				if (InterchangeUtils.hasUniqueValidatorEnabled(field, interchangeable)) {
 					bean.set(ActivityEPConstants.UNIQUE_CONSTRAINT, getUniqueConstraint(field, interchangeable));
+				}
+				
+				if (InterchangeUtils.hasTreeCollectionValidatorEnabled(field, interchangeable)) {
+					bean.set(ActivityEPConstants.TREE_COLLECTION_CONSTRAINT, true);
 				}
 			}
 			

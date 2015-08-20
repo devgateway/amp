@@ -658,7 +658,7 @@ public class InterchangeUtils {
 		}
 		
 		if (translations.get(defLangCode) == null){
-				translations.put(defLangCode, fieldValue);
+			translations.put(defLangCode, fieldValue);
 		}
 		
 		return translations;
@@ -720,6 +720,10 @@ public class InterchangeUtils {
 		return hasValidatorEnabled(field, interchangeable, ActivityEPConstants.UNIQUE_VALIDATOR_NAME);
 	}
 	
+	public static boolean hasTreeCollectionValidatorEnabled(Field field, Interchangeable interchangeable) {
+		return hasValidatorEnabled(field, interchangeable, ActivityEPConstants.TREE_COLLECTION_VALIDATOR_NAME);
+	}
+	
 	public static boolean hasMaxSizeValidatorEnabled(Field field, Interchangeable interchangeable) {
 		if (AmpActivityProgram.class.equals(getGenericClass(field))) {
 			try {
@@ -756,6 +760,8 @@ public class InterchangeUtils {
 				validatorFmPath = validators.minSize();
 			} else if (ActivityEPConstants.PERCENTAGE_VALIDATOR_NAME.equals(validatorName)) {
 				validatorFmPath = validators.percentage();
+			} else if (ActivityEPConstants.TREE_COLLECTION_VALIDATOR_NAME.equals(validatorName)) {
+				validatorFmPath = validators.treeCollection();
 			}
 			
 			if (StringUtils.isNotBlank(validatorFmPath)) {
@@ -778,5 +784,103 @@ public class InterchangeUtils {
 		Session session = PersistenceManager.getSession();
 		session.setFlushMode(FlushMode.COMMIT);
 		return session;
+	}
+	
+	/**
+	 * Gets the instance of the field by long field name (e.g.: primary_sectors, secondary_programs, locations~id}
+	 * 
+	 * @param longFieldName
+	 * @param isGeneric boolean used to determine if the class returned should be the generic one or not
+	 * @return
+	 */
+	public static Field getFieldByLongName(String longFieldName, boolean isGeneric) {
+		return getFieldByLongName(longFieldName, AmpActivityFields.class, null, isGeneric);
+	}
+	
+	/**
+	 * Gets the instance of the field by long field name (e.g.: primary_sectors, secondary_programs, locations~id}
+	 * 
+	 * @param longFieldName 
+	 * @param clazz Class where the field should be searched
+	 * @param discriminatorOption
+	 * @param isGeneric boolean used to determine if the class returned should be the generic one or not
+	 * @return Field instance of the field
+	 */
+	public static Field getFieldByLongName(String longFieldName, Class<?> clazz, String discriminatorOption, boolean isGeneric) {
+
+		String fieldName = "";
+		if (longFieldName.contains("~")) {
+			fieldName = longFieldName.substring(0, longFieldName.indexOf('~') );
+			Field field = getPotentiallyDiscriminatedField(clazz, fieldName);
+			
+			if (field != null) {
+				String configString = discriminatorOption == null? null : discriminatorOption;
+				if (isCompositeField(field)) {
+					configString = getConfigValue(fieldName, field);	
+				}
+				
+				return getFieldByLongName(longFieldName.substring(longFieldName.indexOf('~') + 1), getClassOfField(field), configString, isGeneric);
+			}
+		} else {
+			return getPotentiallyDiscriminatedField(clazz, longFieldName);
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Gets the discriminator option of the field by fieldName
+	 * 
+	 * @param longFieldName
+	 * @param field
+	 * @return String discriminator option
+	 */
+	public static String getConfigValue(String longFieldName, Field field) {
+		InterchangeableDiscriminator ant = field.getAnnotation(InterchangeableDiscriminator.class);
+		for (Interchangeable inter : ant.settings()) {
+			if (inter.fieldTitle().equals(InterchangeUtils.deunderscorify(longFieldName))) {
+				return inter.discriminatorOption();
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * * Gets the field instance by field name   
+	 * 
+	 * @param clazz
+	 * @param fieldName
+	 * @return Field the instance of the discriminated field from the Class clazz
+	 */
+	public static Field getPotentiallyDiscriminatedField(Class<?> clazz, String fieldName){ 
+		Field field = getField(clazz, InterchangeUtils.deunderscorify(fieldName));
+		if (field == null) {
+			//attempt to check if it's a composite field
+			String discriminatedFieldName = getDiscriminatedFieldTitle(fieldName);
+			
+			if (discriminatedFieldName != null)
+				return getField(clazz, discriminatedFieldName);
+
+		}
+		return field;
+	}
+	
+	/**
+	 * Gets the field instance by field name 
+	 * 
+	 * @param clazz
+	 * @param fieldname
+	 * @return Field the instance of the field from the Class clazz
+	 */
+	private static Field getField(Class<?> clazz, String fieldname) {
+		for (Field field: clazz.getDeclaredFields()) {
+			Interchangeable ant = field.getAnnotation(Interchangeable.class);
+			if (ant != null && fieldname.equals(ant.fieldTitle())) {
+				return field;
+			}
+		}
+		
+		return null;
 	}
 } 

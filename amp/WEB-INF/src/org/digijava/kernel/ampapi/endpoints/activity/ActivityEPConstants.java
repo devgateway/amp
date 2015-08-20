@@ -40,7 +40,7 @@ public class ActivityEPConstants {
 	public static final String VALUE = "value";
 	public static final String UNIQUE_CONSTRAINT = "unique_constraint";
 	public static final String PERCENTAGE_CONSTRAINT = "percentage_constraint";
-	
+	public static final String TREE_COLLECTION_CONSTRAINT = "tree_collection";
 	
 
 	// fields constants
@@ -66,5 +66,6 @@ public class ActivityEPConstants {
 	public static final String MAX_SIZE_VALIDATOR_NAME = "maxSize";
 	public static final String MIN_SIZE_VALIDATOR_NAME = "minSize";
 	public static final String PERCENTAGE_VALIDATOR_NAME = "percentage";
+	public static final String TREE_COLLECTION_VALIDATOR_NAME = "treeCollection";
 	
 }

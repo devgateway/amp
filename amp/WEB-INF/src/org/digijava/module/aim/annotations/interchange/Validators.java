@@ -9,5 +9,7 @@ public @interface Validators {
 	String percentage() default "";
 	
 	String minSize() default "";
+	
+	String treeCollection() default "";
 
 }

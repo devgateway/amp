@@ -185,16 +185,16 @@ LoggerIdentifiable, Cloneable {
 	@InterchangeableDiscriminator(discriminatorField = "classificationConfig.name", settings = {
 			@Interchangeable(fieldTitle = "Primary Sectors", discriminatorOption = "Primary", importable=true, fmPath = "/Activity Form/Sectors/Primary Sectors",
 					validators = @Validators(minSize = "/Activity Form/Sectors/Primary Sectors/minSizeSectorsValidator", percentage = "/Activity Form/Sectors/Primary Sectors/sectorPercentageTotal", 
-					unique = "/Activity Form/Sectors/Primary Sectors/uniqueSectorsValidator")),
+					unique = "/Activity Form/Sectors/Primary Sectors/uniqueSectorsValidator", treeCollection = "/Activity Form/Sectors/Primary Sectors/treeSectorsValidator")),
 			@Interchangeable(fieldTitle = "Secondary Sectors", discriminatorOption = "Secondary", importable=true, fmPath = "/Activity Form/Sectors/Secondary Sectors", 
 					validators = @Validators(minSize = "/Activity Form/Sectors/Secondary Sectors/minSizeSectorsValidator", percentage = "/Activity Form/Sectors/Secondary Sectors/sectorPercentageTotal", 
-					unique = "/Activity Form/Sectors/Secondary Sectors/uniqueSectorsValidator")),
+					unique = "/Activity Form/Sectors/Secondary Sectors/uniqueSectorsValidator", treeCollection = "/Activity Form/Sectors/Secondary Sectors/treeSectorsValidator")),
 			@Interchangeable(fieldTitle = "Tertiary Sectors", discriminatorOption = "Tertiary", importable=true, fmPath = "/Activity Form/Sectors/Tertiary Sectors",
 					validators = @Validators(minSize = "/Activity Form/Sectors/Tertiary Sectors/minSizeSectorsValidator", percentage = "/Activity Form/Sectors/Tertiary Sectors/sectorPercentageTotal", 
-					unique = "/Activity Form/Sectors/Tertiary Sectors/uniqueSectorsValidator")),
+					unique = "/Activity Form/Sectors/Tertiary Sectors/uniqueSectorsValidator", treeCollection = "/Activity Form/Sectors/Secondary Sectors/treeSectorsValidator")),
             @Interchangeable(fieldTitle = "Tag Sectors", discriminatorOption = "Tag", importable=true, fmPath = "/Activity Form/Sectors/Tag Sectors",
                     validators = @Validators(minSize = "/Activity Form/Sectors/Tag Sectors/minSizeSectorsValidator", percentage = "/Activity Form/Sectors/Tag Sectors/sectorPercentageTotal",
-                    unique = "/Activity Form/Sectors/Tag Sectors/uniqueSectorsValidator"))
+                    unique = "/Activity Form/Sectors/Tag Sectors/uniqueSectorsValidator", treeCollection = "/Activity Form/Sectors/Tag Sectors/treeSectorsValidator"))
 	})
 	protected Set<AmpActivitySector> sectors;
 	
@@ -204,7 +204,7 @@ LoggerIdentifiable, Cloneable {
 	
 	//TTIL
 	@Interchangeable(fieldTitle = "Locations", importable = true, fmPath = "/Activity Form/Location", required = "/Activity Form/Location/Locations/Location required validator",
-					validators = @Validators (unique = "/Activity Form/Location/Locations/uniqueLocationsValidator"))
+					validators = @Validators (unique = "/Activity Form/Location/Locations/uniqueLocationsValidator", treeCollection = "/Activity Form/Location/Locations/Tree Validator"))
 	@VersionableCollection(fieldTitle = "Locations")
 	protected Set<AmpActivityLocation> locations ;
 	
@@ -627,16 +627,20 @@ LoggerIdentifiable, Cloneable {
 	@InterchangeableDiscriminator(discriminatorField = "programSetting.name", settings = {
 			@Interchangeable(fieldTitle = "National Plan Objective", discriminatorOption = "National Plan Objective", importable = true, fmPath = "/Activity Form/Program/National Plan Objective",
 					validators = @Validators(maxSize = "/Activity Form/Program/National Plan Objective/max Size Program Validator", minSize = "/Activity Form/Program/National Plan Objective/minSizeProgramValidator", 
-					unique = "/Activity Form/Program/National Plan Objective/uniqueProgramsValidator", percentage = "/Activity Form/Program/National Plan Objective/programPercentageTotal")),
+					unique = "/Activity Form/Program/National Plan Objective/uniqueProgramsValidator", percentage = "/Activity Form/Program/National Plan Objective/programPercentageTotal",
+					treeCollection = "/Activity Form/Program/National Plan Objective/Tree Validator")),
 			@Interchangeable(fieldTitle = "Primary Programs", discriminatorOption = "Primary Program", importable = true, fmPath = "/Activity Form/Program/Primary Programs", 
 					validators = @Validators(maxSize = "/Activity Form/Program/Primary Programs/max Size Program Validator", minSize = "/Activity Form/Program/Primary Programs/minSizeProgramValidator", 
-					unique = "/Activity Form/Program/Primary Programs/uniqueProgramsValidator", percentage = "/Activity Form/Program/Primary Programs/programPercentageTotal")),
+					unique = "/Activity Form/Program/Primary Programs/uniqueProgramsValidator", percentage = "/Activity Form/Program/Primary Programs/programPercentageTotal",
+					treeCollection = "/Activity Form/Program/Primary Programs/Tree Validator")),
 			@Interchangeable(fieldTitle = "Secondary Programs", discriminatorOption = "Secondary Program", importable = true, fmPath = "/Activity Form/Program/Secondary Programs", 
 					validators = @Validators(maxSize = "/Activity Form/Program/Secondary Programs/max Size Program Validator", minSize = "/Activity Form/Program/Secondary Programs/minSizeProgramValidator", 
-					unique = "/Activity Form/Program/Secondary Programs/uniqueProgramsValidator", percentage = "/Activity Form/Program/Secondary Programs/programPercentageTotal")),
+					unique = "/Activity Form/Program/Secondary Programs/uniqueProgramsValidator", percentage = "/Activity Form/Program/Secondary Programs/programPercentageTotal",
+					treeCollection = "/Activity Form/Program/Secondary Programs/Tree Validator")),
 			@Interchangeable(fieldTitle = "Tertiary Programs", discriminatorOption = "Tertiary Program", importable = true, fmPath = "/Activity Form/Program/Tertiary Programs", 
 					validators = @Validators(maxSize = "/Activity Form/Program/Tertiary Programs/max Size Program Validator", minSize = "/Activity Form/Program/Tertiary Programs/minSizeProgramValidator", 
-					unique = "/Activity Form/Program/Tertiary Programs/uniqueProgramsValidator", percentage = "/Activity Form/Program/Tertiary Programs/programPercentageTotal"))})
+					unique = "/Activity Form/Program/Tertiary Programs/uniqueProgramsValidator", percentage = "/Activity Form/Program/Tertiary Programs/programPercentageTotal",
+					treeCollection = "/Activity Form/Program/Tertiary Programs/Tree Validator"))})
 	protected Set<AmpActivityProgram> actPrograms;
 	
 	

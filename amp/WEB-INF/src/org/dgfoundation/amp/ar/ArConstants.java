@@ -143,6 +143,10 @@ public final class ArConstants {
 		put(ESTIMATED_DISBURSEMENTS, Constants.ESTIMATED_DONOR_DISBURSEMENT);
 		put(PLEDGE, Constants.PLEDGE);
         put(DISBURSEMENT_ORDERS, Constants.DISBURSEMENT_ORDER);
+        put(MTEF_PROJECTION, Constants.MTEFPROJECTION);
+        put(PLEDGES_COMMITMENT, Constants.PLEDGES_COMMITMENT);
+        put(ANNUAL_PROPOSED_PROJECT_COST, Constants.ANNUAL_PROPOSED_PROJECT_COST);
+        put(PLEDGES_DISBURSEMENT, Constants.PLEDGES_DISBURSEMENT);
 	}};
 	
 	public final static Map<String, Integer> SSC_TRANSACTION_TYPE_NAME_TO_ID = new LinkedHashMap<String, Integer>() {{

@@ -31,7 +31,7 @@ $BODY$ LANGUAGE plpgsql@@@
 CREATE FUNCTION activity_deleted_proc() RETURNS trigger AS $BODY$
     BEGIN
         INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('activity', OLD.amp_activity_id);
-        RETURN NEW;
+        RETURN OLD;
     END;
 $BODY$ LANGUAGE plpgsql@@@
 
@@ -53,7 +53,7 @@ $BODY$ LANGUAGE plpgsql@@@
 CREATE FUNCTION exchange_rate_deleted_proc() RETURNS trigger AS $BODY$
     BEGIN
         INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('exchange_rate', to_char(OLD.exchange_rate_date, 'J')::integer);
-        RETURN NEW;
+        RETURN OLD;
     END;
 $BODY$ LANGUAGE plpgsql@@@
 

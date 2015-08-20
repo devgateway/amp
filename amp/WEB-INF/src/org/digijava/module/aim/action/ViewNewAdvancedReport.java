@@ -28,6 +28,7 @@ import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.ReportContextData;
+import org.dgfoundation.amp.ar.VirtualCurrenciesMaintainer;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MonetLeak;
@@ -87,6 +88,11 @@ public class ViewNewAdvancedReport extends Action {
 		return res.toString();
 	}
 	
+	protected String redo_virtual_currencies() {
+		new VirtualCurrenciesMaintainer().work();
+		return "ok";
+	}
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
@@ -107,6 +113,12 @@ public class ViewNewAdvancedReport extends Action {
 			ARUtil.writeResponse(response, checkSqlFilters());
 			return null;
 		}
+		
+		if (request.getParameter("redo_virtual_currencies") != null) {
+			ARUtil.writeResponse(response, redo_virtual_currencies());
+			return null;
+		}
+		
 		
 //		if (request.getParameter("monet_etl") != null) {
 //			try(MonetConnection monetConn = MonetConnection.getConnection()) {

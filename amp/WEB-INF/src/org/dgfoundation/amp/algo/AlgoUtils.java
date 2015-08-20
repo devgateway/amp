@@ -132,4 +132,26 @@ public class AlgoUtils {
 		String md5 = sb.toString();
 		return md5;
 	}
+	
+	private static double[] POWER_OF_TEN = computePowerOfTen();
+	private static double[] computePowerOfTen() {
+		double[] res = new double[15];
+		res[0] = 1;
+		for(int i = 1; i< res.length; i++) {
+			res[i] = res[i - 1] / 10;
+		}
+		return res;
+	}
+	
+	/**
+	 * discards the nonrelevant decimals of a double. NonRelevant: is >nrDecimals
+	 * @param in
+	 * @param nrDecimals
+	 * @return
+	 */
+	public static double keepNDecimals(double in, int nrDecimals) {
+		if (Math.abs(in) < POWER_OF_TEN[nrDecimals] && (Math.abs(in) > Double.MIN_VALUE))
+			return POWER_OF_TEN[nrDecimals];
+		return Double.parseDouble(String.format("%." + nrDecimals + "f", in));
+	}
 }

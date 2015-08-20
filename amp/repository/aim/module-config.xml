@@ -67,6 +67,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFundingMTEFProjection</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpCurrency</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpCurrencyRate</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpInflationRate</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFilteredCurrencyRate</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeam</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpMEIndicatorValue</hibernate-class>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpInflationRate" table="AMP_INFLATION_RATES" lazy="false">
+		<cache usage="read-write" />
+		<id name="id" column="amp_inflation_rate_id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_INFLATION_RATE_seq</param>
+			</generator>
+		</id>
+
+		<property name="year" column="data_year" type="java.lang.Integer" unique-key='yearCurrencyInflation' />
+		<property name="inflationRate" column="inflation_rate" type="java.lang.Double" />
+		<property name="constantCurrency" column="constantCurrency" type="java.lang.Boolean" />
+		<many-to-one name="baseCurrency" column="base_currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" unique-key='yearCurrencyInflation' />
+
+	</class>
+</hibernate-mapping>

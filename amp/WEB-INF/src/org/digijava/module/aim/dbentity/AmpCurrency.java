@@ -12,7 +12,7 @@ import org.digijava.module.aim.util.Identifiable;
 import org.hibernate.Query;
 
 @TranslatableClass (displayName = "Currency")
-public class AmpCurrency implements Serializable,Comparable, Identifiable
+public class AmpCurrency implements Serializable, Comparable<AmpCurrency>, Identifiable
 {
 	//IATI-check: to not be ignored. obtained from possible values 
 	@Interchangeable(fieldTitle="ID", id = true)
@@ -27,7 +27,9 @@ public class AmpCurrency implements Serializable,Comparable, Identifiable
 	@Interchangeable(fieldTitle="Country Location")
     private AmpCategoryValueLocations countryLocation;
 	private Integer activeFlag;
-
+	
+	private boolean virtual;
+	
 	/**
 	 * @return Returns the activeFlag.
 	 */
@@ -95,6 +97,7 @@ public class AmpCurrency implements Serializable,Comparable, Identifiable
 	public String getCurrencyName() {
 		return currencyName;
 	}
+	
 	/**
 	 * @param currencyName The currencyName to set.
 	 */
@@ -102,33 +105,29 @@ public class AmpCurrency implements Serializable,Comparable, Identifiable
 		this.currencyName = currencyName;
 	}
 	
-	public boolean equals(Object obj) {
-		if (obj == null) return false;
-		
-		if (obj instanceof AmpCurrency) {
-			AmpCurrency curr = (AmpCurrency) obj;
-			return curr.getCurrencyCode().equals(this.currencyCode);
-		}
-		
-		return false;
-		
+	public boolean isVirtual() {
+		return this.virtual;
 	}
 	
-	public int compareTo(Object obj) {
-		if (obj == null) throw new NullPointerException();
-		
-		if (obj instanceof AmpCurrency) {
-			AmpCurrency curr = (AmpCurrency) obj;
-			return (this.currencyCode.compareTo(curr.getCurrencyCode()));
-		} else {
-			throw new ClassCastException();
-		}
+	public void setVirtual(Boolean virtual) {
+		this.virtual = (virtual != null && virtual);
 	}
-	public Object getIdentifier() {
+	
+	@Override public boolean equals(Object obj) {
+		return this.compareTo((AmpCurrency) obj) == 0;
+	}
+	
+	@Override public int compareTo(AmpCurrency obj) {
+		int delta = this.currencyCode.compareTo(obj.getCurrencyCode());
+		if (delta != 0) return delta;
+		return Long.compare(this.ampCurrencyId, obj.ampCurrencyId);
+	}
+
+	@Override public Object getIdentifier() {
 		return this.getAmpCurrencyId();
 	}
 	
-	public String toString() {
+	@Override public String toString() {
 		return currencyCode;
 	}
 	

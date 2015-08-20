@@ -13,6 +13,7 @@
 		<property name="currencyName" column="currency_name" type="java.lang.String" />
 		<property name="countryName" column="country_name" type="java.lang.String" /><!-- defunct -->
 		<property name="activeFlag" column="active_flag" type="java.lang.Integer" />
+		<property name="virtual" column="virtual_flag" type="java.lang.Boolean" />
 		<many-to-one name="countryLocation" column="country_location_id"
 			class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
 

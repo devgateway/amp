@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.FieldsDiscriminator;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -31,12 +32,17 @@ public class TransactionTypeDiscriminator extends FieldsDiscriminator {
     private Map<String, Integer> getTransactionTypeMap() {
         Map<String, Integer> valuesMap = new HashMap<String, Integer>();
 
-        AmpCategoryClass categoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.TRANSACTION_TYPE_KEY);
+        AmpCategoryClass categoryClass
+                = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.TRANSACTION_TYPE_KEY);
         List<AmpCategoryValue> possibleValues = categoryClass.getPossibleValues();
         if (possibleValues != null) {
             for (AmpCategoryValue transactionType : possibleValues) {
-                if (transactionType.isVisible()) {
-                    valuesMap.put(transactionType.getValue(), transactionType.getIndex());
+                // put only those values that are not disabled/deleted in the category manager and are presented in the
+                // TRANSACTION_TYPE_NAME_TO_ID map
+                if (transactionType.isVisible()
+                        && ArConstants.TRANSACTION_TYPE_NAME_TO_ID.get(transactionType.getValue()) != null) {
+                    valuesMap.put(transactionType.getValue(),
+                            ArConstants.TRANSACTION_TYPE_NAME_TO_ID.get(transactionType.getValue()));
                 }
             }
         }

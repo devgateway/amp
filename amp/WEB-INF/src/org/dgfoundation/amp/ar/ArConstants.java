@@ -123,25 +123,26 @@ public final class ArConstants {
 			)));
 	
 	//metainfo values:
-	public final static String COMMITMENT="Commitments";
-	public final static String DISBURSEMENT="Disbursements";
-	public final static String EXPENDITURE="Expenditures";
+	public final static String COMMITMENT = "Commitments";
+	public final static String DISBURSEMENT = "Disbursements";
+	public final static String EXPENDITURE = "Expenditures";
 	public final static String RELEASE_OF_FUNDS = "Release of Funds";
 	public final static String ESTIMATED_DISBURSEMENTS = "Estimated Disbursements";
 	public final static String ANNUAL_PROPOSED_PROJECT_COST = "Annual Proposed Project Cost";
-	public final static String PLEDGES_COMMITMENT="Pledges Commitments";
-	public final static String PLEDGES_DISBURSEMENT="Pledges Disbursements";
-	public final static String PLEDGE="Pledge";
+	public final static String PLEDGES_COMMITMENT = "Pledges Commitments";
+	public final static String PLEDGES_DISBURSEMENT = "Pledges Disbursements";
+	public final static String PLEDGE = "Pledge";
 	public final static String FUNDING_TYPE_COMMITMENT_GAP = "Commitment Gap";
-	public final static String PLEDGES_METADATA_NAME="Pledges ";
-	
-	public final static Map<String, Integer> TRANSACTION_TYPE_NAME_TO_ID = new LinkedHashMap<String, Integer>() {{
+	public final static String PLEDGES_METADATA_NAME = "Pledges ";
+
+    public final static Map<String, Integer> TRANSACTION_TYPE_NAME_TO_ID = new LinkedHashMap<String, Integer>() {{
 		put(COMMITMENT, Constants.COMMITMENT);
 		put(DISBURSEMENT, Constants.DISBURSEMENT);
 		put(EXPENDITURE, Constants.EXPENDITURE);
 		put(RELEASE_OF_FUNDS, Constants.RELEASE_OF_FUNDS);
 		put(ESTIMATED_DISBURSEMENTS, Constants.ESTIMATED_DONOR_DISBURSEMENT);
 		put(PLEDGE, Constants.PLEDGE);
+        put(DISBURSEMENT_ORDERS, Constants.DISBURSEMENT_ORDER);
 	}};
 	
 	public final static Map<String, Integer> SSC_TRANSACTION_TYPE_NAME_TO_ID = new LinkedHashMap<String, Integer>() {{

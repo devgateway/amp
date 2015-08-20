@@ -674,6 +674,18 @@ public class PersistenceManager {
         throw new RuntimeException("cannot convert object of class " + obj.getClass().getName() + " to double");
     }
 
+    public final static Boolean getBoolean(Object obj) {
+    	if (obj == null)
+    		return null;
+    	if (obj instanceof Boolean)
+    		return (Boolean) obj;
+    	if (obj.toString().equals("true") || obj.toString().equals("yes"))
+    		return true;
+       	if (obj.toString().equals("false") || obj.toString().equals("no"))
+    		return false;
+       	throw new RuntimeException("cannot convert object " + obj + " to boolean");
+    }
+    
     public static StatelessSession openNewStatelessSession() {
         return sf.openStatelessSession();
     }

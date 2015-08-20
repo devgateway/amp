@@ -502,25 +502,16 @@ public class CurrencyUtil {
 	}
 
 	public static AmpCurrency getAmpcurrency(String currCode) {
-		AmpCurrency ampCurrency = null;
-		Session session = null;
-
 		try {
-			session = PersistenceManager.getSession();
 			String queryString = "select c from " + AmpCurrency.class.getName()
 					+ " c " + "where (c.currencyCode=:id)";
-			Query qry = session.createQuery(queryString);
+			Query qry = PersistenceManager.getSession().createQuery(queryString);
 			qry.setCacheable(true);
 			qry.setParameter("id", currCode, StringType.INSTANCE);
-			Iterator itr = qry.list().iterator();
-			if (itr.hasNext()) {
-				ampCurrency = (AmpCurrency) itr.next();
-			}
-			// end
+			return (AmpCurrency) qry.uniqueResult();
 		} catch (Exception ex) {
-			logger.error("Unable to get currency " + ex);
+			throw new RuntimeException(ex);
 		}
-		return ampCurrency;
 	}
 
 	

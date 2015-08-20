@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 /**
  * https://jira.dgfoundation.org/browse/AMP-20534, https://jira.dgfoundation.org/browse/AMP-20923
  * @author Dolghier Constantin
@@ -70,7 +72,7 @@ public class AmpInflationRate implements Serializable, Comparable<AmpInflationRa
 	public Long getId() {
 		return id;
 	}
-
+	
 	public void setId(Long id) {
 		this.id = id;
 	}

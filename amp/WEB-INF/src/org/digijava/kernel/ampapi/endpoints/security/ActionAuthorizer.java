@@ -60,6 +60,11 @@ public class ActionAuthorizer {
 					addError(methodInfo, errors, SecurityErrors.NOT_ALLOWED, "No workspace selected");
 				}
 				break;
+			case IN_ADMIN:
+				if (!TeamUtil.isCurrentMemberAdmin()) {
+					addError(methodInfo, errors, SecurityErrors.NOT_ALLOWED, "You must be logged-in as admin");
+				}
+				break;
 			case ADD_ACTIVITY:
 				if (!addActivityAllowed()) {
 					addError(methodInfo, errors, SecurityErrors.NOT_ALLOWED, "Adding activity is not allowed");

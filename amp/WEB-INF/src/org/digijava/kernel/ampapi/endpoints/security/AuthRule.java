@@ -13,6 +13,8 @@ public enum AuthRule {
 	TOKEN, 
 	/** request must be issued within a selected workspace */
 	IN_WORKSPACE,
+	/** request must be issued by a logged-in admin */
+	IN_ADMIN,
 	/** add activity right must be enabled */
 	ADD_ACTIVITY,
 	/** edit activity right must be enabled */

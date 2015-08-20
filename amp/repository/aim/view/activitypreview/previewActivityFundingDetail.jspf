@@ -11,7 +11,7 @@ second row (if any):
 	col 1: spacing
 	col 2,3,4: recipient
 
-other rows (if any): capital spending percent / classification / attached pledge
+other rows (if any): capital spending percent / classification / attached pledge	
 	col 1: spacing
 	col 2,3,4:  	
  --%>
@@ -19,19 +19,29 @@ other rows (if any): capital spending percent / classification / attached pledge
 	<td width="40%" align="right"  bgcolor="#FFFFFF">
 		<digi:trn><b><bean:write name="fundingDetail" property="adjustmentTypeName.value" /></b></digi:trn>
 	</td>
-	<td height="18" align="right">
-		<c:choose>
-			<c:when test="${showFiscalYear}">
-				<b><digi:trn><bean:write name="fundingDetail" property="fiscalYear" /></digi:trn></b>
-			</c:when>
-			<c:otherwise>
-				<b><bean:write name="fundingDetail" property="transactionDate" /></b>
-			</c:otherwise>
-		</c:choose>
-									
-	
-		
-	</td>
+	<td height="18" align="right"><module:display
+			name="/Activity Form/Funding/Funding Group/Funding Item/${transaction}/Disaster Response"
+			parentModule="/Activity Form/Funding/Funding Group/Funding Item/${transaction}/Disaster Response">
+
+			<logic:present name="fundingDetail" property="disasterResponse">
+				<c:if test="${fundingDetail.disasterResponse }">
+					<div style="float: left; padding-left: 10px; font-size: 75%;">Dissaster
+						Response</div>
+				</c:if>
+			</logic:present>
+		</module:display>
+		<div>
+			<c:choose>
+				<c:when test="${showFiscalYear}">
+					<b><digi:trn>
+							<bean:write name="fundingDetail" property="fiscalYear" />
+						</digi:trn></b>
+				</c:when>
+				<c:otherwise>
+					<b><bean:write name="fundingDetail" property="transactionDate" /></b>
+				</c:otherwise>
+			</c:choose>
+		</div></td>
 	<c:choose>
 		<c:when test="${aimEditActivityForm.funding.fixerate}">
 			<td height="18" align="right">

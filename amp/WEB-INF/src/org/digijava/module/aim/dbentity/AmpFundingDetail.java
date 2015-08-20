@@ -103,6 +103,7 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	private IPAContract contract;
 	private boolean iatiAdded = false; //nonpersistant
 
+	private Boolean disasterResponse;
     public boolean isIatiAdded() {
         return iatiAdded;
     }
@@ -518,4 +519,14 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	public void setContract(final IPAContract contract) {
 		this.contract = contract;
 	}
+
+	public Boolean getDisasterResponse() {
+		return disasterResponse;
+	}
+
+	public void setDisasterResponse(Boolean disasterResponse) {
+		this.disasterResponse = disasterResponse;
+	}
+
+
 }

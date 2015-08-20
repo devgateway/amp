@@ -18,6 +18,7 @@
 <!--start commitments-->
 <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments" 
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+<c:set var="transaction" value="Commitments/Commitments Table" scope="page"/>
 														
 <c:if test="${aimEditActivityForm.funding.showPlanned}">
 	

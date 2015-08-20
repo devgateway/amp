@@ -65,6 +65,8 @@ public class FundingDetail implements Serializable, Comparable
 	private Long regionId;
 	private String regionName;
 	*/
+    
+    public Boolean disasterResponse;
 
 	public FundingDetail() {}
 
@@ -410,6 +412,14 @@ public class FundingDetail implements Serializable, Comparable
 
 	public void setFiscalYear(String fiscalYear) {
 		this.fiscalYear = fiscalYear;
+	}
+
+	public Boolean getDisasterResponse() {
+		return disasterResponse;
+	}
+
+	public void setDisasterResponse(Boolean disasterResponse) {
+		this.disasterResponse = disasterResponse;
 	}
  
 }

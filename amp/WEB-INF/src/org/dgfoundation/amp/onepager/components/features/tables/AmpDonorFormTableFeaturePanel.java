@@ -10,19 +10,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.exception.NoCategoryClassException;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -133,23 +133,18 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 				"ampCurrencyId", "Transaction Date", "transactionDate", false);
 	}
 
-	
-	/**
-	 * Deprecated
-	 * 
-	protected AmpDeleteLinkField getDeleteLinkField(String id, String fmName,
-			final ListItem<AmpFundingDetail> item) {
-		return new AmpDeleteLinkField(id, fmName) {
+	public AmpComponentPanel getDisasterValidator(final AmpBooleanChoiceField disasterResponse) {
+		return new AmpComponentPanel("disasterResponseRequired",
+				"Required Validator for Disaster Response") {
 			@Override
-			public void onClick(AjaxRequestTarget target) {
-				parentModel.getObject().remove(item.getModelObject());
-				target.add(AmpDonorFormTableFeaturePanel.this);
-				list.removeAll();
-				target.add(getParentFundingItem().getFundingInfo());
-				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(getParentFundingItem().getFundingInfo()));
+			protected void onConfigure() {
+				super.onConfigure();
+				if (this.isVisible()) {
+					disasterResponse.getChoiceContainer().setRequired(true);
+					// requiredFormComponents.add(disasterResponse.getChoiceContainer());
+				}
 			}
 		};
 	}
-	 *	
-	 */
+
 }

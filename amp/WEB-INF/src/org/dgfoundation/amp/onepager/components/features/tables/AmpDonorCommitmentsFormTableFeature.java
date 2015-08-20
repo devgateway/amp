@@ -4,9 +4,10 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
+import java.util.List;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -18,6 +19,7 @@ import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
@@ -26,8 +28,6 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
-
-import java.util.List;
 
 /**
  * @author mpostelnicu@dgateway.org since Nov 8, 2010
@@ -127,6 +127,13 @@ public class AmpDonorCommitmentsFormTableFeature extends
 						target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
 					};
 				});
+				
+				//disaster response marker
+				final AmpBooleanChoiceField disasterResponse = new AmpBooleanChoiceField("disasterResponse", new PropertyModel<Boolean>(
+						item.getModel(), "disasterResponse"),"Disaster Response");
+				item.add(getDisasterValidator(disasterResponse));
+
+				item.add(disasterResponse);	
 			}
 		};
 		add(list);

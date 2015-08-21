@@ -39,7 +39,7 @@ public class MondrianSQLFilters {
 		addDateColumn(ColumnConstants.ACTIVITY_UPDATED_ON, "date_updated");		
 		put(ColumnConstants.APPROVAL_STATUS, new MondrianApprovalStatusFilter());
 		put(ColumnConstants.AMP_ID, new MondrianAmpIdFilter());
-		put(ColumnConstants.HUMANITARIAN_AID, new MondrianHumanitarianAidFilter());
+		put(ColumnConstants.HUMANITARIAN_AID, new MondrianBooleanAAVFieldFilter("humanitarianaid", ColumnConstants.HUMANITARIAN_AID));
 		put(ColumnConstants.DRAFT, new MondrianDraftFilter());		
 	}
 		private void addDateColumn(String ampColumn, String aavColumn) {

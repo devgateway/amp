@@ -19,6 +19,7 @@ public class ActivityFilter {
 	 * the expression to use on the left side of the queries 
 	 */
 	public final String COLUMN_EXPR;
+	
 		
 	public ActivityFilter(String columnExpr) {
 		this.COLUMN_EXPR = columnExpr;
@@ -46,7 +47,10 @@ public class ActivityFilter {
 					break;
 				
 				case SINGLE_VALUE:
-					statement = COLUMN_EXPR + " = " + rule.value;
+					if (rule.value.equals(FilterRule.NULL_VALUE))
+						statement = "COLUMN_EXPR IS NULL";
+					else
+						statement = COLUMN_EXPR + " = " + rule.value;
 					break;
 				
 				case VALUES:

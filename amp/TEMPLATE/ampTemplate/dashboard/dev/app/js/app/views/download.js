@@ -88,8 +88,9 @@ module.exports = BackboneDash.View.extend({
         adjType = this.model.get('adjtype');
 
     if (adjType) {
-      // TODO: localize adjtype? is that necessary?
-      moneyContext = adjType + moneyContext;
+    	var key = this.adjTypeTranslation [adjType];
+        var trnAdjType = this.app.translator.translateSync(key, adjType);
+        moneyContext = trnAdjType + moneyContext;
     }
 
     // size the canvas
@@ -105,7 +106,7 @@ module.exports = BackboneDash.View.extend({
     // Add the chart title
     ctx.fillStyle = '#163f66';
     ctx.font = 'bold 22px "Open Sans"';
-    ctx.fillText(this.model.get('name').toUpperCase(), 10, 10 + 22);
+    ctx.fillText(this.model.get('title').toUpperCase(), 10, 10 + 22);
     // what money are we talking about?
     ctx.fillStyle = '#333';
     ctx.textAlign = 'right';

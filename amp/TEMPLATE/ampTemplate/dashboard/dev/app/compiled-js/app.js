@@ -2838,8 +2838,9 @@ module.exports = BackboneDash.View.extend({
         adjType = this.model.get('adjtype');
 
     if (adjType) {
-      // TODO: localize adjtype? is that necessary?
-      moneyContext = adjType + moneyContext;
+    	var key = this.adjTypeTranslation [adjType];
+        var trnAdjType = this.app.translator.translateSync(key, adjType);
+        moneyContext = trnAdjType + moneyContext;
     }
 
     // size the canvas
@@ -2855,7 +2856,7 @@ module.exports = BackboneDash.View.extend({
     // Add the chart title
     ctx.fillStyle = '#163f66';
     ctx.font = 'bold 22px "Open Sans"';
-    ctx.fillText(this.model.get('name').toUpperCase(), 10, 10 + 22);
+    ctx.fillText(this.model.get('title').toUpperCase(), 10, 10 + 22);
     // what money are we talking about?
     ctx.fillStyle = '#333';
     ctx.textAlign = 'right';
@@ -33656,7 +33657,7 @@ module.exports = Backbone.View.extend({
 
       this._getFilterList().done(function() {
         self.renderFilters();
-        //self.translate();
+        self.translate(this.$el);
       });
       //debugger; // AMP-20617  wth does thing not work in saiku?
       // handle click on a Tab's title: http://getbootstrap.com/javascript/#tabs-events
@@ -33692,7 +33693,7 @@ module.exports = Backbone.View.extend({
 
   createTranslator: function(force) {
     var self = this;
-    var filterTranslateKeys = JSON.parse("{\n  \"amp.gis:title-Country\": \"Country\",\n  \"amp.gis:title-Region\": \"Region\",\n  \"amp.gis:title-Zone\": \"Zone\",\n  \"amp.gis:title-District\": \"District\",\n  \"amp.gis:title-filters\": \"Filter\",\n  \"amp.gis:title-filters\": \"Filter\",\n  \"amp.gis:pane-filters-search\": \"Go\",\n  \"amp.gis:pane-filters-select\": \"select all\",\n  \"amp.gis:pane-filters-deselect\": \"deselect all\",\n  \"[placeholder]amp.gis:pane-filters-search-placeholder\": \"Search...\",\n  \"amp.gis:pane-filters-FundingOrganizations\": \"Funding Organizations\",\n  \"amp.gis:pane-filters-Sector\": \"Sector\",\n  \"amp.gis:pane-filters-Programs\": \"Programs\",\n  \"amp.gis:pane-filters-Activity\": \"Activity\",\n  \"amp.gis:pane-filters-AllAgencies\": \"All Agencies\",\n  \"amp.gis:pane-filters-Financial\": \"Financial\",\n  \"amp.gis:pane-filters-Location\": \"Location\",\n  \"amp.gis:pane-filters-Other\": \"Other\",\n  \"amp.gis:pane-subfilters-Donor\": \"Donor\",\n  \"amp.gis:pane-subfilters-Primary\": \"Primary\",\n  \"amp.gis:pane-subfilters-Secondary\": \"Secondary\",\n  \"amp.gis:pane-subfilters-NationalPlanObjective\": \"National Plan Objective\",\n  \"amp.gis:pane-subfilters-ActivityStatus\": \"Activity Status\",\n  \"amp.gis:pane-subfilters-ApprovalStatus\": \"Approval Status\",\n  \"amp.gis:pane-subfilters-ImplementingAgency\": \"Implementing Agency\",\n  \"amp.gis:pane-subfilters-ExecutingAgency\": \"Executing Agency\",\n  \"amp.gis:pane-subfilters-BeneficiaryAgency\": \"Beneficiary Agency\",\n  \"amp.gis:pane-subfilters-ContractingAgency\": \"Contracting Agency\",\n  \"amp.gis:pane-subfilters-AidModality\": \"Aid Modality\",\n  \"amp.gis:pane-subfilters-TypeOfAssistance\": \"Type Of Assistance\",\n  \"amp.gis:pane-subfilters-ResponsibleOrganization\": \"Responsible Organization\",\n  \"amp.gis:pane-subfilters-Dates\": \"Dates\",\n  \"amp.gis:pane-filters-all\": \"all\",\n  \"amp.gis:button-reset\": \"Reset\",\n  \"amp.gis:button-cancel\": \"Cancel\",\n  \"amp.gis:button-apply\": \"Apply\",\n  \"amp.gis:pane-subfilters-startdate\": \"Start Date:\",\n  \"amp.gis:pane-subfilters-enddate\": \"End Date:\",\n  \"amp.gis:pane-subfilters-empty\": \"No data for this filter\"\n}\n");
+    var filterTranslateKeys = JSON.parse("{\n  \"amp.gis:title-Country\": \"Country\",\n  \"amp.gis:title-Region\": \"Region\",\n  \"amp.gis:title-Zone\": \"Zone\",\n  \"amp.gis:title-District\": \"District\",\n  \"amp.gis:title-filters\": \"Filter\",\n  \"amp.gis:title-filters\": \"Filter\",\n  \"amp.gis:pane-filters-search\": \"Go\",\n  \"amp.gis:pane-filters-select\": \"select all\",\n  \"amp.gis:pane-filters-deselect\": \"deselect all\",\n  \"[placeholder]amp.gis:pane-filters-search-placeholder\": \"Search...\",\n  \"amp.gis:pane-filters-FundingOrganizations\": \"Funding Organizations\",\n  \"amp.gis:pane-filters-Sector\": \"Sector\",\n  \"amp.gis:pane-filters-Programs\": \"Programs\",\n  \"amp.gis:pane-filters-Activity\": \"Activity\",\n  \"amp.gis:pane-filters-AllAgencies\": \"All Agencies\",\n  \"amp.gis:pane-filters-Financial\": \"Financial\",\n  \"amp.gis:pane-filters-Location\": \"Location\",\n  \"amp.gis:pane-filters-Other\": \"Other\",\n  \"amp.gis:pane-subfilters-Donor\": \"Donor\",\n  \"amp.gis:pane-subfilters-Primary\": \"Primary\",\n  \"amp.gis:pane-subfilters-Secondary\": \"Secondary\",\n  \"amp.gis:pane-subfilters-NationalPlanObjective\": \"National Plan Objective\",\n  \"amp.gis:pane-subfilters-ActivityStatus\": \"Activity Status\",\n  \"amp.gis:pane-subfilters-ApprovalStatus\": \"Approval Status\",\n  \"amp.gis:pane-subfilters-ImplementingAgency\": \"Implementing Agency\",\n  \"amp.gis:pane-subfilters-ExecutingAgency\": \"Executing Agency\",\n  \"amp.gis:pane-subfilters-BeneficiaryAgency\": \"Beneficiary Agency\",\n  \"amp.gis:pane-subfilters-ContractingAgency\": \"Contracting Agency\",\n  \"amp.gis:pane-subfilters-AidModality\": \"Aid Modality\",\n  \"amp.gis:pane-subfilters-TypeOfAssistance\": \"Type Of Assistance\",\n  \"amp.gis:pane-subfilters-ResponsibleOrganization\": \"Responsible Organization\",\n  \"amp.gis:pane-subfilters-Dates\": \"Dates\",\n  \"amp.gis:pane-subfilters-RegionalGroup\": \"Regional Group\",\n  \"amp.gis:pane-subfilters-SectorGroup\": \"Sector Group\",\n  \"amp.gis:pane-filters-all\": \"all\",\n  \"amp.gis:button-reset\": \"Reset\",\n  \"amp.gis:button-cancel\": \"Cancel\",\n  \"amp.gis:button-apply\": \"Apply\",\n  \"amp.gis:pane-subfilters-startdate\": \"Start Date:\",\n  \"amp.gis:pane-subfilters-enddate\": \"End Date:\",\n  \"amp.gis:pane-subfilters-empty\": \"No data for this filter\"\n}\n");
     // setup any popovers as needed...
     self.popovers = self.$('[data-toggle="popover"]');
     self.popovers.popover();

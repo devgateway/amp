@@ -66,7 +66,7 @@ public class InputValidatorProcessor {
 		return valid;
 	}
 	
-	protected void addError(Map<String, Object> newParent, String fieldName, String fieldPath, ApiErrorMessage error, 
+	public void addError(Map<String, Object> newParent, String fieldName, String fieldPath, ApiErrorMessage error, 
 			Map<Integer, ApiErrorMessage> errors) {
 		String errorCode = ApiError.getErrorCode(error);
 		JsonBean newField = new JsonBean();

@@ -53,7 +53,6 @@ import org.digijava.module.aim.dbentity.AmpOrgRoleBudget;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.SectorUtil;
@@ -224,9 +223,24 @@ public class ActivityImporter {
 	
 	protected Object validateAndImport(Object newParent, Object oldParent, List<JsonBean> fieldsDef, 
 			Map<String, Object> newJsonParent, Map<String, Object> oldJsonParent, String fieldPath) {
+		Set<String> fields = new HashSet<String>(newJsonParent.keySet());
+		// process all valid definitions
 		for (JsonBean fieldDef : fieldsDef) {
-			newParent = validateAndImport(newParent, oldParent, fieldDef, newJsonParent, oldJsonParent, fieldPath); 
+			newParent = validateAndImport(newParent, oldParent, fieldDef, newJsonParent, oldJsonParent, fieldPath);
+			fields.remove(fieldDef.get(ActivityEPConstants.FIELD_NAME));
 		}
+		
+		// and error anything remained
+		// note: due to AMP-20766, we won't be able to fully detect invalid children
+		String fieldPathPrefix = fieldPath == null ? "" : fieldPath + "~";
+		if (fields.size() > 0) {
+			newParent = null;
+			for (String invalidField : fields) {
+				// no need to go through deep-first validation flow
+				validator.addError(newJsonParent, invalidField, fieldPathPrefix + invalidField, ActivityErrors.FIELD_INVALID, errors);
+			}
+		}
+		
 		return newParent;
 	}
 

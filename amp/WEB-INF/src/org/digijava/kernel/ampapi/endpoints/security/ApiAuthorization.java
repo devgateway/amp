@@ -41,7 +41,6 @@ public class ApiAuthorization {
 	private static ApiAuthorization apiAuthorization = new ApiAuthorization();
 	private ApiAuthorization() {
 		addApiMethods("org.digijava.kernel.ampapi.endpoints");
-		apiAuthorization = this;
 	}
 	
 	private void addApiMethods(String packageName) {

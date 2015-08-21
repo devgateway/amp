@@ -38,11 +38,8 @@ public class ValueValidator extends InputValidator {
 		if (!importable)
 			return true;
 		
-		
-		
 		//temporary debug
 		if (!isValidLength(newFieldParent, fieldDescription))
-//			return isValidLength(newFieldParent, fieldDescription);
 			return false;
 		
 		List<JsonBean> possibleValues = importer.getPossibleValuesForFieldCached(fieldPath, AmpActivityFields.class, null);
@@ -57,9 +54,6 @@ public class ValueValidator extends InputValidator {
 			
 			if (value != null) {
 				boolean idOnly = Boolean.TRUE.equals(fieldDescription.get(ActivityEPConstants.ID_ONLY));
-				//String idFieldName = idOnly ? ActivityImporterHelper.getIdFieldName(fieldDescription) : null;
-//				boolean isMap = value != null && Map.class.isAssignableFrom(value.getClass());
-				
 				// convert to string the ids to avoid long-integer comparison
 				value = idOnly ? value.toString() : value;
 				

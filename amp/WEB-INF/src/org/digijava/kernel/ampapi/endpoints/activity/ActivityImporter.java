@@ -316,6 +316,7 @@ public class ActivityImporter {
 				if (newParent != null && newFieldValue == null) {
 					newFieldValue = getNewInstance(newParent, newField);
 				}
+				// AMP-20766: we cannot correctly detect isCollection when current validation already failed (no parent obj ref)
 				if (newFieldValue != null && Collection.class.isAssignableFrom(newFieldValue.getClass())) {
 					isCollection = true;
 					subElementClass = AIHelper.getGenericsParameterClass(newField);

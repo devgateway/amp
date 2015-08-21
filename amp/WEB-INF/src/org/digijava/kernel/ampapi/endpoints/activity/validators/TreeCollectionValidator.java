@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
@@ -29,7 +30,10 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
+
+import clover.org.apache.commons.lang.math.NumberUtils;
 
 /**
  * Validates that both parent and child items are not present in the collection
@@ -37,6 +41,8 @@ import org.hibernate.Session;
  * @author Viorel Chihai
  */
 public class TreeCollectionValidator extends InputValidator {
+	
+	private static final Logger logger = Logger.getLogger(TreeCollectionValidator.class);
 
 	@Override
 	public ApiErrorMessage getErrorMessage() {
@@ -82,7 +88,10 @@ public class TreeCollectionValidator extends InputValidator {
 		Set<Long> idValuesSet = new HashSet<Long>();
 		for (Map<String, Object> child : fieldValues) {
 			if (child.get(fieldPathToId) != null) {
-				idValuesSet.add(new Long((Integer)child.get(fieldPathToId)));
+				String childInput = String.valueOf(child.get(fieldPathToId));
+				if (NumberUtils.isNumber(childInput)) {
+					idValuesSet.add(new Long(childInput));
+				}
 			}
 		}
 		
@@ -160,8 +169,15 @@ public class TreeCollectionValidator extends InputValidator {
 	 * @return boolean if isPresent parents of the location in collection
 	 */
 	private boolean isPresentParentLocationInCollection(Long locationId, Set<Long> idValues) {
-		Session session=PersistenceManager.getRequestDBSession();
-		AmpLocation oldLocation=(AmpLocation) session.load(AmpLocation.class, locationId);
+		Session session = InterchangeUtils.getSessionWithPendingChanges();
+		AmpLocation oldLocation = null;
+		try {
+			oldLocation = (AmpLocation) session.load(AmpLocation.class, locationId);
+		} catch (ObjectNotFoundException ex) {
+			// invalid location cannot be checked
+			logger.error(ex.getMessage());
+			return false;
+		}
 		
 		Collection<AmpCategoryValueLocations> parentLocations = getParentLocations(oldLocation.getLocation());
 		

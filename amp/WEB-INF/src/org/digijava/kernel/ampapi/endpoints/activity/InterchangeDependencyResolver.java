@@ -178,7 +178,7 @@ public class InterchangeDependencyResolver {
 		//this object should be a Number (Long or Integer)
 		Object externalValue = InterchangeUtils.getFieldValuesFromJsonActivity(incomingActivity, IMPLEMENTATION_LEVEL_PATH);
 		
-		if (externalValue == null)
+		if (externalValue == null || !Number.class.isAssignableFrom(externalValue.getClass()))
 			return false;
 		if (!Number.class.isAssignableFrom(e.getClass()))
 			return false; //something's wrong with this item -- it's not an id

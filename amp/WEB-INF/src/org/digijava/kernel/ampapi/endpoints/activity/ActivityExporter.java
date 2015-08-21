@@ -20,6 +20,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -247,6 +248,10 @@ public class ActivityExporter {
 						AmpOrgRole aor = (AmpOrgRole) obj;
 						String filteredFieldPath = filteredFieldsMap.get(aor.getRole().getRoleCode());
 						((List<JsonBean>) compositeMap.get(aor.getRole().getRoleCode())).add(getObjectJson(aor, filteredFieldPath));
+					} else if (obj instanceof AmpActivityContact) {
+						AmpActivityContact ac = (AmpActivityContact) obj;
+						String filteredFieldPath = filteredFieldsMap.get(ac.getContactType());
+						((List<JsonBean>) compositeMap.get(ac.getContactType())).add(getObjectJson(ac, filteredFieldPath));
 					}
 				}
 			}

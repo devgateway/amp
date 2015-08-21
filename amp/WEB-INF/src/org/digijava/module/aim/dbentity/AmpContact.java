@@ -10,8 +10,10 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 /**
  * holds contact user's information
@@ -19,33 +21,40 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  *
  */
 @TranslatableClass (displayName = "Contact")
-public class AmpContact implements Comparable, Serializable, Cloneable, Versionable {
-	@Interchangeable(fieldTitle="ID", id=true)
+public class AmpContact implements Comparable, Serializable, Cloneable, Versionable, Identifiable {
+	
+	@Interchangeable(fieldTitle = "ID", id = true)
 	private Long id;
-	@Interchangeable(fieldTitle="Name", value=true)
+	
+	@Interchangeable(fieldTitle="Name", importable = true)
 	private String name;
-	@Interchangeable(fieldTitle="Last Name")
+	
+	@Interchangeable(fieldTitle = "Last Name", importable = true)
 	private String lastname;
-	@Interchangeable(fieldTitle="Title")
+	
+	@Interchangeable(fieldTitle = "Title", discriminatorOption = CategoryConstants.CONTACT_TITLE_KEY)
 	private AmpCategoryValue title;
 
 	@TranslatableField
-	@Interchangeable(fieldTitle="Organization Name")
+	@Interchangeable(fieldTitle = "Organization Name", importable = true)
 	private String organisationName;
+	
 	@TranslatableField
-	@Interchangeable(fieldTitle="Function")
+	@Interchangeable(fieldTitle = "Function", importable = true)
 	private String function;
-	@Interchangeable(fieldTitle="Office Address")
+	
+	@Interchangeable(fieldTitle = "Office Address", importable = true)
 	private String officeaddress;
-	@Interchangeable(fieldTitle="Temporary ID")
+	
+	@Interchangeable(fieldTitle = "Temporary ID")
 	private String temporaryId;
 	
-	@Interchangeable(fieldTitle="Name and Last Name")
+	@Interchangeable(fieldTitle = "Name and Last Name")
 	private String nameAndLastName;
-	@Interchangeable(fieldTitle="Full Name")
+	
+	@Interchangeable(fieldTitle = "Full Name")
 	private String fullname;
 	
-
 	/**
 	 * currently these fields are not usable, but will become when we decide 
 	 * to link contact list to calendar and messaging 
@@ -54,10 +63,12 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
 	private AmpTeamMember creator; //who created the contact
 	
 	private Set<AmpActivityContact> activityContacts;
+	
+	@Interchangeable(fieldTitle = "Organisation Contacts", importable = true)
 	private Set<AmpOrganisationContact> organizationContacts;
+	
+	@Interchangeable(fieldTitle = "Properties", importable = true)
 	private Set<AmpContactProperty> properties;
-    
-	//private Set<AmpOrganisation> organizations;
     
     public AmpContact(){
     	
@@ -239,6 +250,10 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
         }
 		return aux;
 	}
-
+	
+	@Override
+	public Object getIdentifier() {
+		return id;
+	}
 
 }

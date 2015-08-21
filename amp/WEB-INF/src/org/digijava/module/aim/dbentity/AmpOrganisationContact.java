@@ -1,5 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
 import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 
@@ -8,11 +10,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@TranslatableClass (displayName = "Organisation Contact")
 public class AmpOrganisationContact implements Serializable,OrgProfileValue {
 	
 	private Long id;
 	private AmpContact contact;
+	
+	@Interchangeable(fieldTitle = "Organisation", pickIdOnly=true)
 	private AmpOrganisation organisation;
+	
+	@Interchangeable(fieldTitle = "Primary Contact")
 	private Boolean primaryContact;
 	
 	public AmpOrganisationContact(){

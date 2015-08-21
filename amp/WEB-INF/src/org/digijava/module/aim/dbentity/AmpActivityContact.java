@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.TreeSet;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.Output;
 
@@ -12,13 +13,16 @@ import org.digijava.module.aim.util.Output;
 public class AmpActivityContact implements Versionable, Comparable, Serializable, Cloneable {
 	
 	private Long id;
-	@Interchangeable(fieldTitle="Activity", pickIdOnly=true, importable=false)
+	
+	@Interchangeable(fieldTitle="Activity", pickIdOnly=true)
 	private AmpActivityVersion activity;
-	@Interchangeable(fieldTitle="Contact", importable=true, pickIdOnly=true)
+	
+	@Interchangeable(fieldTitle="Contact", pickIdOnly=true, importable=true)
 	private AmpContact contact;
+	
 	@Interchangeable(fieldTitle="Primary Contact", importable=true)
 	private Boolean primaryContact;
-	@Interchangeable(fieldTitle="Contact Type", importable=true)
+	
 	private String contactType; // Donor/MOFED funding,Project Coordinator,Sector Ministry or Implementing/Executing Agency Contact Information
 	
 	public AmpActivityVersion getActivity() {

@@ -46,7 +46,8 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
 	@Interchangeable(fieldTitle = "Office Address", importable = true)
 	private String officeaddress;
 	
-	@Interchangeable(fieldTitle = "Temporary ID")
+	// do we need it?
+	//@Interchangeable(fieldTitle = "Temporary ID")
 	private String temporaryId;
 	
 	@Interchangeable(fieldTitle = "Name and Last Name")

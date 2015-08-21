@@ -6,6 +6,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
+import org.digijava.module.aim.helper.Constants;
+
 public class InterchangeableClassMapper {
 	protected static final Map<Class<?>, String> classToCustomType = new HashMap<Class<?>, String>() {
 		{
@@ -15,7 +18,6 @@ public class InterchangeableClassMapper {
 			put(java.lang.Double.class, ActivityEPConstants.FIELD_TYPE_FLOAT);
 			put(java.lang.Boolean.class, ActivityEPConstants.FIELD_TYPE_BOOLEAN);
 			put(java.lang.Long.class, ActivityEPConstants.FIELD_TYPE_LONG);
-			// put(java.lang.Long.class, "int");
 			put(java.lang.Float.class, ActivityEPConstants.FIELD_TYPE_FLOAT);
 		}
 	};
@@ -38,6 +40,14 @@ public class InterchangeableClassMapper {
 			add(Date.class);
 		}
 	};
+	
+	public static Map<String, String> CONTACT_SET_NAME_TO_CONTACT_TYPE = new HashMap<String, String>() {{
+		put(ActivityFieldsConstants.DONOR_CONTACT, Constants.DONOR_CONTACT);
+		put(ActivityFieldsConstants.PROJECT_COORDINATOR_CONTACT, Constants.PROJECT_COORDINATOR_CONTACT);
+		put(ActivityFieldsConstants.SECTOR_MINISTRY_CONTACT, Constants.SECTOR_MINISTRY_CONTACT);
+		put(ActivityFieldsConstants.MOFED_CONTACT, Constants.MOFED_CONTACT);
+		put(ActivityFieldsConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT, Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT);
+	}};
 	
 	public static String getCustomMapping(Class<?> clazz) {
 		return classToCustomType.get(clazz);

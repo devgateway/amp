@@ -383,19 +383,18 @@ LoggerIdentifiable, Cloneable {
 //	@Interchangeable(fieldTitle = "Sector Ministry Contact Fax Number",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Add Contact Fax")
 	protected String secMiCntFaxNumber;
 
-	// temporarily disable until solution finalised
-//	@Interchangeable(fieldTitle = "Activity Contacts", importable = true, fmPath = "/Activity Form/Contacts")
+	@Interchangeable(fieldTitle = "Activity Contacts", importable = true, fmPath = "/Activity Form/Contacts")
 	@VersionableCollection(fieldTitle = "Activity Contacts")
-	@InterchangeableDiscriminator(discriminatorField = "activityContacts", settings = {
-			@Interchangeable(fieldTitle = "Donor Contact", importable=true, discriminatorOption = Constants.DONOR_CONTACT, 
+	@InterchangeableDiscriminator(discriminatorField = "contactType", discriminatorClass = "", settings = {
+			@Interchangeable(fieldTitle = ActivityFieldsConstants.DONOR_CONTACT, importable = true, discriminatorOption = Constants.DONOR_CONTACT, 
 							fmPath = "/Activity Form/Contacts/Donor Contact Information"),
-			@Interchangeable(fieldTitle = "Project Coordinator Contact", importable=true, discriminatorOption = Constants.PROJECT_COORDINATOR_CONTACT, 
+			@Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_COORDINATOR_CONTACT, importable = true, discriminatorOption = Constants.PROJECT_COORDINATOR_CONTACT, 
 							fmPath = "/Activity Form/Contacts/Project Coordinator Contact Information"),
-			@Interchangeable(fieldTitle = "Sector Ministry Contact", importable=true, discriminatorOption = Constants.SECTOR_MINISTRY_CONTACT, 
+			@Interchangeable(fieldTitle = ActivityFieldsConstants.SECTOR_MINISTRY_CONTACT, importable = true, discriminatorOption = Constants.SECTOR_MINISTRY_CONTACT, 
 							fmPath = "/Activity Form/Contacts/Sector Ministry Contact Information"),
-			@Interchangeable(fieldTitle = "MOFED Contact", importable=true, discriminatorOption = Constants.MOFED_CONTACT, 
+			@Interchangeable(fieldTitle = ActivityFieldsConstants.MOFED_CONTACT, importable = true, discriminatorOption = Constants.MOFED_CONTACT, 
 							fmPath = "/Activity Form/Contacts/Mofed Contact Information"),
-			@Interchangeable(fieldTitle = "Implementing Executing Agency Contact", importable=true, discriminatorOption = Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT, 
+			@Interchangeable(fieldTitle = ActivityFieldsConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT, importable = true, discriminatorOption = Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT, 
 							fmPath = "/Activity Form/Contacts/Implementing Executing Agency Contact Information")
 	})
 	protected Set<AmpActivityContact> activityContacts;

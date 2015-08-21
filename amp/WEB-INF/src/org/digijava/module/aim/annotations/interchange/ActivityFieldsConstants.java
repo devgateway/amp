@@ -20,4 +20,9 @@ public class ActivityFieldsConstants {
     public static final String LAST_IMPORTED_BY = "Last Imported By";
     public static final String CREATED_BY = "Created By";
     public static final String MODIFIED_BY = "Modified By";
+    public static final String DONOR_CONTACT = "Donor Contact";
+    public static final String PROJECT_COORDINATOR_CONTACT = "Project Coordinator Contact";
+    public static final String SECTOR_MINISTRY_CONTACT = "Sector Ministry Contact";
+    public static final String MOFED_CONTACT = "MOFED Contact";
+    public static final String IMPLEMENTING_EXECUTING_AGENCY_CONTACT = "Implementing Executing Agency Contact";
 }

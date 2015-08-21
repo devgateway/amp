@@ -123,7 +123,6 @@ public class ActivityImporter {
 							ant.fieldTitle().equals(ActivityFieldsConstants.AMP_ID))
 						continue;
 					//clean up everything importable in the new activity
-//					String methodName = InterchangeUtils.getSetterMethodName(field.getName());
 					Method setterMeth = aafMethods.get(InterchangeUtils.getSetterMethodName(field.getName()));
 					Method getterMeth = aafMethods.get(InterchangeUtils.getGetterMethodName(field.getName()));
 					if (Collection.class.isAssignableFrom(field.getType())) {
@@ -370,6 +369,7 @@ public class ActivityImporter {
 				} else if (newParent != null && isCollection) {
 					// actual links will be updated
 					((Collection) newFieldValue).add(res);
+					configureCustom(newParent, res, fieldPath);
 				}
 			}
 			// TODO: we also need to validate other children, some can be mandatory
@@ -933,6 +933,22 @@ public class ActivityImporter {
         	
         	newActivity.setFunAmount(funAmount * AmountsUnits.getDefaultValue().multiplier);
         }
+	}
+	
+	protected void configureCustom(Object parent, Object child, String fieldPath) {
+		if (child instanceof AmpActivityContact) {
+			configureContactType((AmpActivityContact) child, fieldPath);
+		}
+	}
+	
+	protected void configureContactType(AmpActivityContact contact, String contactGroup) {
+		// custom, but very special case no need to make generic
+		String contactType = InterchangeableClassMapper.CONTACT_SET_NAME_TO_CONTACT_TYPE.get(
+				InterchangeUtils.deunderscorify(contactGroup));
+		if (contactType == null) {
+			throw new RuntimeException("No contact type match found for contactGroup = " + contactGroup);
+		}
+		contact.setContactType(contactType);
 	}
 	
 	protected void postProcess() {

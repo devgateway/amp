@@ -283,8 +283,6 @@ LoggerIdentifiable, Cloneable {
 	//@VersionableCollection(fieldTitle = "Members")
 	protected Set member;
 
-	//TODO never used. What we do on IATI?
-	@Interchangeable(fieldTitle = "Contact Name") //slightly fishy here
 	protected String contactName;
 	//protected AmpTeamMember updatedBy; !!! Use modifiedBy
 
@@ -385,7 +383,8 @@ LoggerIdentifiable, Cloneable {
 //	@Interchangeable(fieldTitle = "Sector Ministry Contact Fax Number",fmPath="/Activity Form/Contacts/Sector Ministry Contact Information/Add Contact Fax")
 	protected String secMiCntFaxNumber;
 
-	@Interchangeable(fieldTitle = "Activity Contacts", importable = true, fmPath = "/Activity Form/Contacts")
+	// temporarily disable until solution finalised
+//	@Interchangeable(fieldTitle = "Activity Contacts", importable = true, fmPath = "/Activity Form/Contacts")
 	@VersionableCollection(fieldTitle = "Activity Contacts")
 	@InterchangeableDiscriminator(discriminatorField = "activityContacts", settings = {
 			@Interchangeable(fieldTitle = "Donor Contact", importable=true, discriminatorOption = Constants.DONOR_CONTACT, 

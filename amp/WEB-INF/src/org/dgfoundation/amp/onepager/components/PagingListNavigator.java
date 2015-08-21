@@ -26,6 +26,7 @@ import java.util.List;
 public class PagingListNavigator<T> extends Panel {
     //number of pages to show before the current page and after it
     private static final int VIEW_SIZE = 5;
+    private AbstractReadOnlyModel<List<Integer>> model;
 
     public PagingListNavigator(String id, final PagingListEditor<T> ple) {
         super(id);
@@ -33,7 +34,7 @@ public class PagingListNavigator<T> extends Panel {
 
 
 
-        AbstractReadOnlyModel<List<Integer>> model = new AbstractReadOnlyModel<List<Integer>>() {
+        model = new AbstractReadOnlyModel<List<Integer>>() {
             @Override
             public List<Integer> getObject() {
                 int currentPage = ple.getCurrentPage();
@@ -51,8 +52,7 @@ public class PagingListNavigator<T> extends Panel {
                 return ret;
             }
         };
-        super.setVisible(model.getObject().size() > 1);
-        
+
         ListView<Integer> list = new ListView<Integer>("naviList", model) {
             @Override
             protected void populateItem(final ListItem<Integer> item) {
@@ -82,6 +82,10 @@ public class PagingListNavigator<T> extends Panel {
             }
         };
         add(list);
+    }
+    
+    public boolean isVisible() {
+    	return model.getObject().size() > 1;
     }
 
 

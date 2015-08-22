@@ -112,14 +112,15 @@ public class ExportActivityToPDF extends Action {
     public final static BaseFont basefont = getBaseFont();
 
     private static final com.lowagie.text.Font plainFont = new com.lowagie.text.Font(basefont, 11,Font.NORMAL);
+    private static final com.lowagie.text.Font smallerFont = new com.lowagie.text.Font(basefont, 9,Font.NORMAL);
     private static final com.lowagie.text.Font titleFont = new com.lowagie.text.Font(basefont, 11,Font.BOLD);
 
-    private static final String [] fundingCommitmentsFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Currency","/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Exchange Rate"};
-    private static final String [] fundingDisbursementsFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Currency"};
-    private static final String [] fundingExpendituresFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Currency"};
-    private static final String [] fundingRoFFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Release of Funds/Release of Funds Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Release of Funds/Release of Funds Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Release of Funds/Release of Funds Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Release of Funds/Release of Funds Table/Currency"};
-    private static final String [] fundingEDDFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Currency"};
-    private static final String [] fundingDisbOrdersFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Currency"};
+    private static final String [] fundingCommitmentsFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Disaster Response","/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Currency","/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Exchange Rate"};
+    private static final String [] fundingDisbursementsFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Disaster Response","/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Currency"};
+    private static final String [] fundingExpendituresFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Disaster Response","/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Currency"};
+    private static final String [] fundingRoFFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Release of Funds/Release of Funds Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Release of Funds/Release of Funds Table/Disaster Response","/Activity Form/Funding/Funding Group/Funding Item/Release of Funds/Release of Funds Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Release of Funds/Release of Funds Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Release of Funds/Release of Funds Table/Currency"};
+    private static final String [] fundingEDDFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Disaster Response","/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Currency"};
+    private static final String [] fundingDisbOrdersFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Disaster Response","/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Currency"};
 
     private static final String [] componentCommitmentsFMfields={"/Activity Form/Components/Component/Components Commitments","/Activity Form/Components/Component/Components Commitments/Commitment Table/Amount","/Activity Form/Components/Component/Components Commitments/Commitment Table/Currency","/Activity Form/Components/Component/Components Commitments/Commitment Table/Transaction Date"};
     private static final String [] componentDisbursementsFMfields={"/Activity Form/Components/Component/Components Disbursements","/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Amount","/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Currency","/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Transaction Date"};
@@ -3127,17 +3128,30 @@ public class ExportActivityToPDF extends Action {
             String[] fmFields, PdfPTable fundingTable, ServletContext ampContext,HttpSession session) throws WorkerException {
 
         PdfPCell innerCell = new PdfPCell();
+		String disasterResponse=null;
+		if (Boolean.TRUE.equals(fd.getDisasterResponse())) {
+			if (FeaturesUtil.isVisibleModule(fmFields[1])) {
+				disasterResponse=TranslatorWorker.translateText("Disaster Response");
+			}
+		}
+		if (FeaturesUtil.isVisibleModule(fmFields[0])) {
+			innerCell.setBorder(0);
+			innerCell = new PdfPCell();
+			
+			Paragraph p=new Paragraph();
 
-        if (FeaturesUtil.isVisibleModule(fmFields[0])) {
-            innerCell.setBorder(0);
-            innerCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText(fd.getAdjustmentTypeName().getValue()), plainFont));
-            innerCell.setBorder(0);
-            infoTable.addCell(innerCell);
-        } else {
-            addEmptyCell(infoTable);
-        }
+			p.add(new Phrase( TranslatorWorker.translateText(fd.getAdjustmentTypeName().getValue()), plainFont));
+			if (disasterResponse != null) {
+				p.add(new Phrase(" | " + disasterResponse, smallerFont));
+			}
+			innerCell.addElement(p);
+			innerCell.setBorder(0);
+			infoTable.addCell(innerCell);
+		} else {
+			addEmptyCell(infoTable);
+		}
 
-        if (FeaturesUtil.isVisibleModule(fmFields[1])){
+        if (FeaturesUtil.isVisibleModule(fmFields[2])){
             innerCell = new PdfPCell(new Paragraph(fd.getTransactionDate(), plainFont));
             innerCell.setBorder(0);
             infoTable.addCell(innerCell);
@@ -3145,7 +3159,7 @@ public class ExportActivityToPDF extends Action {
             addEmptyCell(infoTable);
         }
 
-        if (FeaturesUtil.isVisibleModule(fmFields[2])) {
+        if (FeaturesUtil.isVisibleModule(fmFields[3])) {
             String output="";
             if (fd.getTransactionAmount() != null && fd.getTransactionAmount().length() > 0) {
                 output = fd.getTransactionAmount() + " " + fd.getCurrencyCode();

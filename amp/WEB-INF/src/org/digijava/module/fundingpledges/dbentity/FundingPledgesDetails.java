@@ -301,5 +301,9 @@ public class FundingPledgesDetails implements FundingInformationItem, Identifiab
 	public void setTransactionAmount(Double transactionAmount) {
 		this.setAmount(transactionAmount);
 	}
-	
+
+	@Override
+	public Boolean getDisasterResponse() {
+		return null;
+	}
 }

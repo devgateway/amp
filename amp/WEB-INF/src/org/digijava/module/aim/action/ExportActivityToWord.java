@@ -2528,9 +2528,13 @@ public class ExportActivityToWord extends Action {
                                         || (fndDet.getTransactionType() == Constants.DISBURSEMENT_ORDER && visibleModuleDisbOrders)) {
 
                                     ExportSectionHelperRowData sectionHelperRowData = new ExportSectionHelperRowData(getTransactionTypeLable(fndDet.getTransactionType()), null, null, true);
-
+									String disasterResponse = "";
+									if (Boolean.TRUE.equals(fndDet.getDisasterResponse())) {
+											disasterResponse = TranslatorWorker.translateText("Disaster Response");
+									}
+									
                                     ExportSectionHelperRowData currentRowData = sectionHelperRowData.
-                                            addRowData(fndDet.getAdjustmentType().getLabel(), true).
+                                            addRowData(fndDet.getAdjustmentType().getLabel(), true).addRowData(disasterResponse).
                                             addRowData(DateConversion.ConvertDateToString(fndDet.getTransactionDate())).
                                             addRowData(formatNumber(fndDet.getTransactionAmount())).
                                             addRowData(fndDet.getAmpCurrencyId().getCurrencyCode());

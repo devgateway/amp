@@ -162,9 +162,11 @@ public class FundingCalculationsHelper {
 			// TOTALS
 			if (updateTotals) addToTotals(adjType, fundDet, amt);
 			fundDetailList.add(fundingDetail);
+			fundingDetail.setDisasterResponse(fundDet.getDisasterResponse());
 		}
 		totalCommitments = Logic.getInstance().getTotalDonorFundingCalculator().getTotalCommtiments(totPlannedComm, totActualComm, totPipelineComm);
 		unDisbursementsBalance = Logic.getInstance().getTotalDonorFundingCalculator().getunDisbursementsBalance(totalCommitments, totActualDisb);
+		
 	}
 	
 	protected void addToTotals(AmpCategoryValue adjType, FundingInformationItem fundDet, DecimalWraper amt) {

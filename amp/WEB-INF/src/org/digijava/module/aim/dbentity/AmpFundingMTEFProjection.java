@@ -249,4 +249,8 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 			this.setAmount(transactionAmount);
 			
 		}
+		@Override
+		public Boolean getDisasterResponse() {
+			return null;
+		}
 }

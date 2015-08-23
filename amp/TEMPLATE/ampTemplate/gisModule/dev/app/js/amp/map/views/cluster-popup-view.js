@@ -84,7 +84,7 @@ module.exports = Backbone.View.extend({
       return {label: org.name, value: org.amount};
     });
     if ((model.total - tmpTotal) > 1) {
-      data.push({ label: 'Other', value: (model.total - tmpTotal)});
+      data.push({ label: app.translator.translateSync("amp.gis:legend-others", "Others"), value: (model.total - tmpTotal)});
     }
 
     nvd3.addGraph(function() {

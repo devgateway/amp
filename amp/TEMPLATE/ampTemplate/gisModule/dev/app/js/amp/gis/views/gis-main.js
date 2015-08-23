@@ -48,6 +48,13 @@ module.exports = Backbone.View.extend({
     // update translations
     this.translator.translateDOM(this.el);
     this.translationToggle();
+    
+    // Translate parts of leaflet UI.
+    var leafletZoomIn = $('.leaflet-control-zoom-in');
+    $(leafletZoomIn).attr('data-i18n', 'amp.gis:leaflet-button-zoom-in[title]');  
+    var leafletZoomOut = $('.leaflet-control-zoom-out');
+    $(leafletZoomOut).attr('data-i18n', 'amp.gis:leaflet-button-zoom-out[title]');
+    app.translator.translateDOM('.leaflet-control-zoom');
   },
 
   translationToggle: function() {

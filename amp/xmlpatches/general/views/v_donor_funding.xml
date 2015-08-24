@@ -25,8 +25,9 @@
 		    			fd.transaction_date, fd.transaction_amount, fd.pledge_id, c.currency_code, cval.id AS terms_assist_id, cval.category_value AS terms_assist_name, fd.fixed_exchange_rate, 
 		    			b.org_grp_name, ot.org_type AS donor_type_name, cval2.category_value AS financing_instrument_name, cval2.id AS financing_instrument_id, d.amp_org_id AS org_id, d.org_grp_id, 
 		    			ot.amp_org_type_id AS org_type_id, cval3.category_value AS mode_of_payment_name, cval3.id AS mode_of_payment_id, cval4.category_value AS funding_status_name, cval4.id AS funding_status_id, 
-		    			fd.capital_spend_percent, agr.code AS agreement_code, (agr.title::text || ' - '::text) || agr.code::text AS agreement_title_code, fd.recipient_org_id AS recipient_id, 
-		    			recipient_org.name AS recipient_name, recipient_role.role_code AS recipient_role_code, recipient_role.name AS recipient_role_name, 
+		    			fd.capital_spend_percent, agr.code AS agreement_code, (agr.title::text || ' - '::text) || agr.code::text AS agreement_title_code, 
+		    			fd.disaster_response AS disaster_response,
+		    			fd.recipient_org_id AS recipient_id, recipient_org.name AS recipient_name, recipient_role.role_code AS recipient_role_code, recipient_role.name AS recipient_role_name, 
 		    			source_role.role_code AS source_role_code, source_role.name AS source_role_name, pld_t.category_value AS activity_pledges_title_name,pld_t.id as activity_pledges_title_id
 					FROM amp_funding f LEFT JOIN amp_role source_role ON f.source_role_id = source_role.amp_role_id
 						LEFT JOIN amp_category_value cval2 ON f.financing_instr_category_value = cval2.id
@@ -47,8 +48,9 @@
 					apb.year AS transaction_date, apb.amount AS transaction_amount, NULL as pledge_id, c.currency_code AS currency_code, NULL as terms_assist_id, NULL as terms_assist_name, NULL as fixed_exchange_rate,
 					NULL as org_grp_name, NULL as donor_type_name, NULL as financing_instrument_name, NULL as financing_instrument_id, NULL as org_id, NULL as org_grp_id,
 					NULL as org_type_id, NULL AS mode_of_payment_name, NULL AS mode_of_payment_id, NULL as funding_status_name, NULL as funding_status_id,
-					NULL as capital_spend_percent, NULL as agreement_code, NULL as agreement_title_code, NULL as recipient_id,
-					NULL as recipient_name, NULL as recipient_role_code, NULL AS recipient_role_name,
+					NULL as capital_spend_percent, NULL as agreement_code, NULL as agreement_title_code, 
+					NULL AS disaster_response,
+					NULL as recipient_id, NULL as recipient_name, NULL as recipient_role_code, NULL AS recipient_role_name,
 					'DN' AS source_role_code, 'Donor' AS source_role_name, NULL as activity_pledges_title_name, NULL as activity_pledges_title_id
 				FROM amp_annual_project_budget apb JOIN amp_currency c ON c.amp_currency_id = apb.amp_currency_id
 				
@@ -69,6 +71,7 @@
 			    	fs.category_value AS funding_status_name, fs.id AS funding_status_id,
 			    	NULL as capital_spend_percent,
 			    	agr.code AS agreement_code, (agr.title::text || ' - '::text) || agr.code::text AS agreement_title_code,
+			    	NULL AS disaster_response,
 			    	recipient.amp_org_id AS recipient_id, recipient.name AS recipient_name,
 			    	dest_role.role_code AS recipient_role_code, dest_role.name AS recipient_role_name,
 			    	src_role.role_code AS source_role_code, src_role.name AS source_role_name,

@@ -65,6 +65,7 @@ public final class MoConstants {
 	public static final String TYPE_OF_ASSISTANCE = "Type Of Assistance";
 	public static final String ACTIVITY_LONG_TEXTS = "Activity Long Texts";
 	public static final String ACTIVITY_TEXTS = "Activity Texts";
+	public static final String DISASTER_RESPONSE_MARKER = "Disaster Response Marker";
 	public static final String PLEDGE_TEXTS = "Pledge Texts";
 	public static final String ACTIVITY_FIXED_TEXTS = "Activity Fixed Texts";
 	public static final String ACTIVITY_CURRENCY_AMOUNTS = "Activity Currency Amounts";
@@ -135,6 +136,7 @@ public final class MoConstants {
 	public static final String H_IMPLEMENTATION_LEVEL = "Implementation Level";
 	public static final String H_ON_OFF_TREASURY_BUDGET = "On/Off/Treasury Budget";
 	public static final String H_HUMANITARIAN_AID = "Humanitarian Aid";
+	public static final String H_HARDCODED_TEXT = "Hardcoded Text";
 	public static final String H_IMPLEMENTATION_LOCATION = "Implementation Location";
 	public static final String H_GEO_CODE = "GeoCode";
 	public static final String H_DISTRICTS = "District";

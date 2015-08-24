@@ -583,8 +583,8 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 	
 	@Test
 	public void testHumanitarianAidFilter() {
-		String TRUE = "1";
-		String FALSE = "2";
+		String TRUE = FilterRule.TRUE_VALUE;
+		String FALSE = FilterRule.FALSE_VALUE;
 		
 		List<String> humanitarianAid = Arrays.asList(TRUE);
 		List<String> activities = Arrays.asList("TAC_activity_1", "date-filters-activity", "crazy funding 1", "Activity with planned disbursements", // these have HA defined
@@ -612,13 +612,39 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 	      new ReportAreaForTests().withContents("Project Title", "date-filters-activity", "Actual Commitments", "125 000", "Actual Disbursements", "72 000"),
 	      new ReportAreaForTests().withContents("Project Title", "Activity with planned disbursements", "Actual Commitments", "0", "Actual Disbursements", "770"));
 		
+		ReportAreaForTests cr3 = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Actual Commitments", "7 245 000", "Actual Disbursements", "522 770")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "date-filters-activity", "Actual Commitments", "125 000", "Actual Disbursements", "72 000"),
+	      new ReportAreaForTests().withContents("Project Title", "Activity Linked With Pledge", "Actual Commitments", "50 000", "Actual Disbursements", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "pledged 2", "Actual Commitments", "7 070 000", "Actual Disbursements", "450 000"),
+	      new ReportAreaForTests().withContents("Project Title", "Activity with planned disbursements", "Actual Commitments", "0", "Actual Disbursements", "770"));
+		
 		spec.setFilters(buildSimpleFilter(ColumnConstants.HUMANITARIAN_AID, humanitarianAid, false));
-		runMondrianTestCase(spec, "en", activities, cr2);
+		runMondrianTestCase(spec, "en", activities, cr3);
 		
 		spec.setFilters(buildSimpleFilter(ColumnConstants.HUMANITARIAN_AID, TRUE, false));
-		runMondrianTestCase(spec, "en", activities, cr2);
+		runMondrianTestCase(spec, "en", activities, cr3);
 		
 		spec.setFilters(buildSimpleFilter(ColumnConstants.HUMANITARIAN_AID, FALSE, true));
 		runMondrianTestCase(spec, "en", activities, cr2);
+	}
+	
+	@Test
+	public void testDisasterResponseFilterColumn() {
+		ReportAreaForTests correctReportFlat = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Disaster Response Marker", "", "2011-Actual Commitments", "213 231", "2014-Actual Commitments", "33 000", "2015-Actual Commitments", "117 000", "Total Measures-Actual Commitments", "363 231")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "TAC_activity_1", "Disaster Response Marker", "", "2011-Actual Commitments", "213 231", "2014-Actual Commitments", "", "2015-Actual Commitments", "", "Total Measures-Actual Commitments", "213 231"),
+	      new ReportAreaForTests().withContents("Project Title", "activity_with_disaster_response", "Disaster Response Marker", "No, Yes", "2011-Actual Commitments", "", "2014-Actual Commitments", "33 000", "2015-Actual Commitments", "117 000", "Total Measures-Actual Commitments", "150 000"));
+		ReportAreaForTests correctReportHier = null;
+		
+		runMondrianTestCase("AMP-20980-disaster-response-marker",
+			Arrays.asList("TAC_activity_1", "activity_with_disaster_response"), 
+			correctReportFlat, "en");
+		
+		runMondrianTestCase("AMP-20980-disaster-response-marker-hier",
+				Arrays.asList("TAC_activity_1", "activity_with_disaster_response"), 
+				correctReportHier, "en");
 	}
 }

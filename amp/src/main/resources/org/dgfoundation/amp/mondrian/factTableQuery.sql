@@ -7,7 +7,8 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
   primary_program_id, secondary_program_id, tertiary_program_id, national_objectives_program_id,
   ea_org_id, ba_org_id, ia_org_id, ro_org_id, ca_org_id, rg_org_id, sg_org_id,
   component_id, agreement_id,
-  capital_spend_percent, src_role, dest_role, dest_org_id,
+  capital_spend_percent, disaster_response,
+  src_role, dest_role, dest_org_id,
   related_entity_id)
   SELECT 
 	rawdonation.amp_activity_id AS entity_id,
@@ -71,6 +72,11 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
      COALESCE(rawdonation.agreement_id, 999999999) AS agreement_id,
      
      capital_spend_percent AS capital_spend_percent,
+     CASE
+     	WHEN rawdonation.disaster_response THEN 1
+     	WHEN NOT rawdonation.disaster_response THEN 2
+     	ELSE 999999999 
+     END AS disaster_response_id,
      
      rawdonation.src_role AS src_role,
      rawdonation.dest_role AS dest_role,

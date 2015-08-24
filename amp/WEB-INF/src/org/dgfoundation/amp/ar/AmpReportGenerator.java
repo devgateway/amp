@@ -1542,20 +1542,17 @@ public class AmpReportGenerator extends ReportGenerator {
 	
 	/**
 	 * generates a TextCell with the title "column.getName() Unallocated" (translated)
-	 * @param rd
 	 * @param activityId
 	 * @param column
 	 * @return
 	 */
-	public static TextCell generateFakeCell (ColumnReportData rd, Long activityId, Column column)
-	{
-		TextCell fakeC = new TextCell();
-		fakeC.setValue(ArConstants.UNALLOCATED);
-		fakeC.setOwnerId( activityId );
+	public static TextCell generateFakeCell (Long activityId, String columnName)
+	{		
+		String translatedText = TranslatorWorker.translateText(ArConstants.UNALLOCATED);
+		String translatedText2 = TranslatorWorker.translateText(columnName);
 		
-		String text = fakeC.getValue().toString();
-		String translatedText = TranslatorWorker.translateText(text);
-		String translatedText2 = TranslatorWorker.translateText(column.getName());
+		TextCell fakeC = new TextCell();
+		fakeC.setOwnerId(activityId);
 		fakeC.setValue(translatedText2 + " " + translatedText);
 		return fakeC;
 	}

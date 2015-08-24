@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmountCellColumn;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.AmpReportGenerator;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.FundingTypeSortedString;
@@ -28,6 +29,7 @@ import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.onepager.models.MTEFYearsModel;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DateConversion;
@@ -196,6 +198,15 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 			capitalPercent	= rs.getDouble("capital_spend_percent");
 		}
 		
+		if (columnsMetaData.containsKey("disaster_response")) {
+			boolean val = rs.getBoolean("disaster_response");
+			String disasterResponse = rs.wasNull() ?
+					AmpReportGenerator.generateFakeCell(1l, this.getColumnName()).getValue().toString() :
+					TranslatorWorker.translateText(val ? "Yes" : "No");
+
+			MetaInfo disasterResponseMeta = this.getCachedMetaInfo(ArConstants.DISASTER_RESPONSE_MARKER, disasterResponse);
+			acc.getMetaData().add(disasterResponseMeta);
+		}
 		//the most important meta name, the source name (donor name, region name, component name)
 		String headMetaName=rsmd.getColumnName(4).toLowerCase();
 		if (this.getViewName().equals("v_proposed_cost") || tr_type == Constants.ANNUAL_PROPOSED_PROJECT_COST)
@@ -223,6 +234,7 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 		addMetaIfExists(rs, acc, "agreement_title_code", ArConstants.AGREEMENT_TITLE_CODE, null, false);
 		addMetaIfExists(rs, acc, "component_type", ArConstants.COMPONENT_TYPE_S, null, true);
 		addMetaIfExists(rs, acc, "component_name", ArConstants.COMPONENT_NAME, null, true);
+
 		
 		fetchDirectedDisbursementMeta(rs, acc, tr_type);
 		

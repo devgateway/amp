@@ -187,6 +187,16 @@ public class MondrianTablesRepository {
 				}
 			});
 	
+	public final static MondrianTableDescription MONDRIAN_HARDCODED_TEXTS = 
+			new MondrianTableDescription("mondrian_generic_texts", "id", Arrays.asList("id"))
+			.withFingerprintedJob(Arrays.asList(Fingerprint.buildTableHashingQuery("v_mondrian_generic_texts", "id")))
+			.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
+				@Override public I18nViewDescription getObject() {
+					return new I18nViewDescription("mondrian_generic_texts")
+						.addTrnColDef("val", "id");
+				}
+			});
+	
 	public final static MondrianTableDescription MONDRIAN_LONG_TEXTS = 
 			new MondrianTableDescription("mondrian_activity_long_texts", "amp_activity_id", Arrays.asList("amp_activity_id", "language")) {
 				{
@@ -217,12 +227,14 @@ public class MondrianTablesRepository {
 			MONDRIAN_SECTORS_DIMENSION_TABLE,
 			MONDRIAN_PROGRAMS_DIMENSION_TABLE,
 			MONDRIAN_ORGANIZATIONS_DIMENSION_TABLE,
-			MONDRIAN_CATEGORY_VALUES);
+			MONDRIAN_CATEGORY_VALUES,
+			MONDRIAN_HARDCODED_TEXTS);
 	
 	public final static List<MondrianTableDescription> TRN_BACKED_DIMENSIONS = Arrays.asList(
 			MONDRIAN_CATEGORY_VALUES, 
 			MONDRIAN_ACTIVITY_TRN_TEXTS, 
-			MONDRIAN_LOCATIONS_DIMENSION_TABLE);
+			MONDRIAN_LOCATIONS_DIMENSION_TABLE,
+			MONDRIAN_HARDCODED_TEXTS);
 	
 	public final static List<MondrianTableDescription> MONDRIAN_ACTIVITY_DIMENSIONS = Arrays.asList(
 			MONDRIAN_ACTIVITY_TEXTS,
@@ -296,6 +308,7 @@ public class MondrianTablesRepository {
 				new DatabaseTableColumn("agreement_id", "integer NOT NULL", true), // amp_agreement_id
 						
 				new DatabaseTableColumn("capital_spend_percent", "double", true),
+				new DatabaseTableColumn("disaster_response", "integer NOT NULL", true), // 1 - yes, 2 - no, UNDEFINED - undefined
 				
 				new DatabaseTableColumn("src_role", "text", true),  // amp_role.role_name
 				new DatabaseTableColumn("dest_role", "text", true), // amp_role.role_name

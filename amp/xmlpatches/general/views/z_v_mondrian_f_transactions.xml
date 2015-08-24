@@ -52,6 +52,7 @@ SELECT
 	COALESCE(f.agreement, 999999999) AS agreement_id,
 	
     fd.capital_spend_percent AS capital_spend_percent,
+    fd.disaster_response AS disaster_response,
     fd.pledge_id AS pledge_id,
      
 	src_role.role_code AS src_role,

@@ -176,6 +176,13 @@
 		</Hierarchy>
 	</Dimension>
 		
+	<Dimension name="Hardcoded Texts">
+		<Hierarchy hasAll="true" allMemeberName="All Values" primaryKey="id" name="Hardcoded Text">
+			<Table name="mondrian_generic_texts@@locale@@" />
+			<Level name="Hardcoded Text" column="id" type="Integer" nameColumn="val" />
+		</Hierarchy>
+	</Dimension>
+		
 	<Dimension name="AMP Date" type="TimeDimension">
 		<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day_code" name="Dates">
 			<Table name="mondrian_dates" />
@@ -313,6 +320,7 @@
 		<DimensionUsage name="Type Of Assistance" source="Category Value" foreignKey="terms_of_assistance_id" />
 		<DimensionUsage name="Pledges Type Of Assistance" source="Category Value" foreignKey="terms_of_assistance_id" />
 		<DimensionUsage name="Pledges Aid Modality" source="Category Value" foreignKey="modality_id" />
+		<DimensionUsage name="Disaster Response Marker" source="Hardcoded Texts" foreignKey="disaster_response" />
 
 		<Dimension name="Related Projects" foreignKey="related_entity_id">
 			<Hierarchy hasAll="true" allMemberName="All Related Projects" primaryKey="amp_activity_id" name="Related Projects">

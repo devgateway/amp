@@ -45,6 +45,7 @@ SELECT <!-- pledge funding -->
 	pf.agreement_id AS agreement_id,
 	
 	NULL AS capital_spend_percent,
+	NULL AS disaster_response,
 	
 	cast ('DN' as text) as src_role,
 	cast (NULL as text) as dest_role,

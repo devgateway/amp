@@ -80,6 +80,7 @@ public final class ArConstants {
 	
 	public final static String AGREEMENT_CODE = "Agreement Code";
 	public final static String AGREEMENT_TITLE_CODE = "Agreement Title + Code";
+	public final static String DISASTER_RESPONSE_MARKER = "Disaster Response Marker";
 	
 	public final static String DISABLE_PERCENT = "Disable_Percent";
 	//public final static String IS_REAL_DISBURSEMENTS_COLUMN = "Is Real Disbursements";

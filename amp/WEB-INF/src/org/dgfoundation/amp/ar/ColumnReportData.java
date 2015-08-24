@@ -241,7 +241,7 @@ public class ColumnReportData extends ReportData<Column> {
 		// create set with unique values for the filtered col:
 		Column rawKeyCol = getColumn(columnName);
 		
-		TextCell fakeCell = AmpReportGenerator.generateFakeCell(this, null, rawKeyCol);
+		TextCell fakeCell = AmpReportGenerator.generateFakeCell(null, rawKeyCol.getName());
 
 		removeColumnsByName(columnName);
 
@@ -352,7 +352,7 @@ public class ColumnReportData extends ReportData<Column> {
 				Double parentPercentage		= 100.0;
 				if (createUnallocatedSubreport && e.getValue() < 100.0 ) {
 					fakeCell = AmpReportGenerator.generateMetaTextCell(
-									AmpReportGenerator.generateFakeCell(this, e.getKey(), keyCol), 
+									AmpReportGenerator.generateFakeCell(e.getKey(), keyCol.getName()), 
 									parentPercentage - e.getValue());
 					metaFakeCell	= (MetaTextCell)fakeCell;
 					keyCol.addCell(fakeCell);
@@ -364,7 +364,7 @@ public class ColumnReportData extends ReportData<Column> {
 		/* We create fake cells for all activities that would otherwise just disappear in the newly create GroupReportData */
 		for ( Long id: activitiesInColReport ){
 			//logger.info("The following activity needs to be added to the Unallocated category: " + id );
-			fakeCell	= AmpReportGenerator.generateFakeCell(this, id, keyCol);
+			fakeCell	= AmpReportGenerator.generateFakeCell(id, keyCol.getName());
 			keyCol.addCell(fakeCell);
 		}
 		/* If the unallocated category doesn't already exist we need to create it */

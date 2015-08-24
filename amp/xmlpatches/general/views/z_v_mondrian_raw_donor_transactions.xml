@@ -45,7 +45,8 @@ SELECT  <!-- regular transactions -->
 	CAST(NULL as bigint) AS component_id,
 	vmpt.agreement_id AS agreement_id,
 	
-    vmpt.capital_spend_percent, 
+    vmpt.capital_spend_percent,
+    vmpt.disaster_response,
      
 	vmpt.src_role,
 	vmpt.dest_role,
@@ -84,6 +85,7 @@ SELECT <!-- MTEFs -->
 	COALESCE(f.agreement, 999999999) AS agreement_id,
 	
 	NULL AS capital_spend_percent,
+	NULL as disaster_response,
     
 	src_role.role_code AS src_role,
 	cast (NULL as text) as dest_role,
@@ -123,6 +125,7 @@ SELECT <!-- undefined donor -->
 	(999999999) AS agreement_id,
 	
 	NULL AS capital_spend_percent,
+	NULL AS disaster_response,
      
 	'DN' AS src_role,
 	cast (NULL as text) as dest_role,
@@ -168,6 +171,7 @@ SELECT <!-- component funding -->
 	999999999 AS agreement_id,
 	
 	NULL AS capital_spend_percent,
+	NULL AS disaster_response,
     
 	cast ('DN' as text) as src_role,
 	cast (NULL as text) as dest_role,

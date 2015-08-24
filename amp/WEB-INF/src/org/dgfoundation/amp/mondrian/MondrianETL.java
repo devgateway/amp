@@ -94,19 +94,14 @@ public class MondrianETL {
 	protected final static Fingerprint ETL_TIME_FINGERPRINT = new Fingerprint("etl_event_id", new ArrayList<String>(), "-1");
 	
 	/**
-	 * fingerprint for triggering FULL ETL once a currency has been (re)(un)defined
+	 * fingerprints which, if changed, trigger a full etl
 	 */
-	protected final static Fingerprint CURRENCIES_FINGERPRINT = new Fingerprint("amp_currency", Arrays.asList(Fingerprint.buildTableHashingQuery("amp_currency", "amp_currency_id")));
-	
-	/**
-	 * fingerprint for triggering FULL ETL once a locale has been added/removed
-	 */
-	protected final static Fingerprint LOCALES_FINGERPRINT = new Fingerprint("locales", Arrays.asList("select code from DG_SITE_TRANS_LANG_MAP where site_id = 3 order by code"));
-	
-	/**
-	 * fingerprint for triggering FULL ETL once a calendar has been added/removed
-	 */
-	protected final static Fingerprint CALENDARS_FINGERPRINT = new Fingerprint("calendars", Arrays.asList(Fingerprint.buildTableHashingQuery("amp_fiscal_calendar", "amp_fiscal_cal_id")));
+	protected final static List<Fingerprint> FULL_ETL_TRIGGERING_FINGERPRINTS = Arrays.asList(
+			new Fingerprint("amp_currency", Arrays.asList(Fingerprint.buildTableHashingQuery("amp_currency", "amp_currency_id"))), // if a currency has been (re)(un)defined
+			new Fingerprint("locales", Arrays.asList("select code from DG_SITE_TRANS_LANG_MAP where site_id = 3 order by code")), // if a locale has been added/removed
+			new Fingerprint("calendars", Arrays.asList(Fingerprint.buildTableHashingQuery("amp_fiscal_calendar", "amp_fiscal_cal_id"))) // if a calendar has been added/removed			
+		);
+
 	
 	protected static Logger logger = Logger.getLogger(MondrianETL.class);
 	
@@ -453,15 +448,18 @@ private EtlResult execute() throws Exception {
 	 */
 	protected boolean shouldMakeFullEtl(final List<ExceptionRunnable<? extends Exception>> fullEtlJobs) throws SQLException {
 		final BooleanWrapper res = new BooleanWrapper(forceFullEtl);
-		LOCALES_FINGERPRINT.runIfFingerprintChangedOr(conn, monetConn, false, stepSkipped, new ExceptionRunnable<SQLException>() {
-			@Override public void run() throws SQLException {
-				res.or(true);
-				if (LOCALES_FINGERPRINT.hasChangeBeenDetected()) {
-					reasonsForFull.add("locales_change");
-					logger.error("locales changed, forcing a full ETL");
+		for(final Fingerprint fingerprint:FULL_ETL_TRIGGERING_FINGERPRINTS) {
+			fingerprint.runIfFingerprintChangedOr(conn, monetConn, false, stepSkipped, new ExceptionRunnable<SQLException>() {
+				@Override public void run() throws SQLException {
+					res.or(true);
+					if (fingerprint.hasChangeBeenDetected()) {
+						reasonsForFull.add(fingerprint.keyName);
+						logger.error(fingerprint.keyName + " changed, forcing a full ETL");
+					}
 				}
-			}
-		});
+			});
+			
+		}
 		if (previousEtlEventId <= 0) {
 			res.or(true);
 			reasonsForFull.add("previousETL_never");
@@ -470,12 +468,6 @@ private EtlResult execute() throws Exception {
 		pumpTableIfChanged(res, fullEtlJobs, "amp_currency", "amp_currency_id");
 		pumpTableIfChanged(res, fullEtlJobs, "amp_category_class", "id");
 		pumpTableIfChanged(res, fullEtlJobs, "amp_category_value", "id");
-
-		CALENDARS_FINGERPRINT.runIfFingerprintChangedOr(conn, monetConn, false, stepSkipped, new ExceptionRunnable<SQLException>() {
-			@Override public void run() throws SQLException {
-				res.or(true);
-			}
-		});
 		
 		// if any of the dimension tables changed -> redo the whole thing
 		for (final MondrianTableDescription mondrianTable:MondrianTablesRepository.MONDRIAN_DIMENSION_TABLES)

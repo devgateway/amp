@@ -57,7 +57,7 @@ define(
 				}
 			}, this);
 			
-			if (tabsCollection.models.length !== 0) {
+			if (_.filter(tabsCollection.models, function(item) {return (item.get('visible') === true);}).length !== 0) {
 				var hasMoreTabs = false;
 				if (_.find(tabsCollection.models, function(val) {
 					return val.get('visible') === false;

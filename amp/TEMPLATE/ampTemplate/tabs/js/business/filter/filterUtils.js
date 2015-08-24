@@ -9,7 +9,7 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 	}
 
 	/**
-	 * THIS FILE IS A SHAMELESS ALMOST-COPY-PASTE OFF saiku/plugins/AMPFilters/plugin.js.
+	 * N-O-T-I-C-E: THIS FILE IS A BIG ALMOST-COPY-PASTE OFF saiku/plugins/AMPFilters/plugin.js.
 	 * MIRROR ALL CHANGES DONE HERE THERE AND VICEVERSA 
 	 */
 	

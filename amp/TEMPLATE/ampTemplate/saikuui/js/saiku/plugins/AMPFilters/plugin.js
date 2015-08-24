@@ -188,7 +188,7 @@ FilterUtils.convertJavaFiltersToJS = function(data) {
 
 
 /**
- * THIS FILE IS A SHAMELESS ALMOST-COPY-PASTE OFF tabs/js/business/filter/filterUtils.js.
+ * N-O-T-I-C-E: THIS FILE IS A BIG ALMOST-COPY-PASTE OFF tabs/js/business/filter/filterUtils.js.
  * MIRROR ALL CHANGES DONE HERE THERE AND VICEVERSA 
  */
 

@@ -10,7 +10,7 @@ define([ 'underscore', 'backbone' ], function(_, Backbone) {
 			/* it means is one of the tabs always shown. */
 			visible : false,
 			/* it means is originally from the 'more tabs' and is visible now. */
-			isOtherTabNowVisible : false
+			isOtherTabNowVisible : null
 		}
 	});
 	return Tab;

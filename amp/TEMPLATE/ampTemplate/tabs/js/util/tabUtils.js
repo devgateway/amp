@@ -9,27 +9,38 @@ define([ 'numeral', 'jquery', 'jqueryui', 'jqgrid' ], function(Numeral, jQuery) 
 	}
 
 	TabUtils.hideInvisibleTabs = function(tabsCollection, animate) {
-		var duration = animate != undefined ? animate : 0;
+		var duration = animate !== undefined ? animate : 0;
 		var allTabs = jQuery("#tabs-section ul li");
 		_.each(tabsCollection, function(val, i) {
-			if (val.get('visible') == false) {
-				jQuery(allTabs[i]).hide(duration);
-				app.TabsApp.tabsCollection.models[i].set('isOtherTabNowVisible', false);
+			if (val.get('visible') === false) {
+				if (app.TabsApp.tabsCollection.models[i].get('isOtherTabNowVisible') === false) {
+					// This step is necessary when we first load the page because we are not triggering the change event 
+					// since 'isOtherTabNowVisible' is already false.
+					jQuery(allTabs[i]).hide(duration);
+				} else {
+					app.TabsApp.tabsCollection.models[i].set('isOtherTabNowVisible', false);
+				}
 			}
 		});
 	};
 
 	TabUtils.showInvisibleTab = function(id, animate) {
-		var duration = animate != undefined ? animate : 0;
+		var duration = animate !== undefined ? animate : 0;
 		this.hideInvisibleTabs(app.TabsApp.tabsCollection.models, 250);
 		_.each(app.TabsApp.tabsCollection.models, function(item, i) {
-			if (item.get('id') == id) {
-				jQuery(jQuery("#tabs-section ul li")[i]).show(duration);
+			if (item.get('id') === id) {
+				//jQuery(jQuery("#tabs-section ul li")[i]).show(duration);
 				jQuery(app.TabsApp.tabContainer).tabs("option", "active", i);
 				app.TabsApp.tabsCollection.models[i].set('isOtherTabNowVisible', true);
 			}
 		});
-	};
+		// AMP-20998: Hide 'More tabs' tab for good if there are no more hidden tabs.
+		var invisibleTabsCount = _.filter(app.TabsApp.tabsCollection.models, function(item) {return (item.get('isOtherTabNowVisible') === false);}).length;
+		if (invisibleTabsCount === 0) {
+			var moreTabsTab = _.find(app.TabsApp.tabsCollection.models, function(item) {return item.get('id') === -1});
+			jQuery("#tab-link--1").parent().hide(duration);
+		}
+	}
 
 	/**
 	 * This ugly method will solve the known problem of latest jqueryui tabs +
@@ -57,7 +68,7 @@ define([ 'numeral', 'jquery', 'jqueryui', 'jqgrid' ], function(Numeral, jQuery) 
 		_.each(tabs, function(item, i) {
 			var name = item.get('name');
 			// Ignore "more tabs" tab.
-			if (name.length > maxChars && item.get('id') != -1) {
+			if (name.length > maxChars && item.get('id') !== -1) {
 				item.set('shortName', name.substring(0, maxChars) + '...');
 			} else {
 				item.set('shortName', name);
@@ -145,7 +156,7 @@ define([ 'numeral', 'jquery', 'jqueryui', 'jqgrid' ], function(Numeral, jQuery) 
 	TabUtils.activateTabById = function(id) {
 		_.each(app.TabsApp.tabsCollection.models, function(item, i) {
 			if (item.get('id') === id) {
-				if (item.get('visible') == false) {
+				if (item.get('visible') === false) {
 					// TODO: Bind an event to changes on "visible" field so this
 					// process is triggered automatically.
 					item.set('visible', true);

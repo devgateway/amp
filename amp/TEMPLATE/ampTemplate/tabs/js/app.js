@@ -48,10 +48,19 @@ define(
 			 */
 			var tabsCollection = new Tabs();
 			tabsCollection.fetchData();
-			if (tabsCollection.models.length != 0) {
+			
+			tabsCollection.on("change:isOtherTabNowVisible", function(model, value, options) {
+				if (value === true) {
+					jQuery("#tab-link-" + model.get('id')).parent().show(250);
+				} else {
+					jQuery("#tab-link-" + model.get('id')).parent().hide(250);
+				}
+			}, this);
+			
+			if (tabsCollection.models.length !== 0) {
 				var hasMoreTabs = false;
 				if (_.find(tabsCollection.models, function(val) {
-					return val.get('visible') == false;
+					return val.get('visible') === false;
 				})) {
 					hasMoreTabs = true;
 				}

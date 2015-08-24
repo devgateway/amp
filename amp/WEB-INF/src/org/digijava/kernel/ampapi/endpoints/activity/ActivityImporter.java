@@ -267,11 +267,10 @@ public class ActivityImporter {
 		Object oldJsonValue = oldJsonParent == null ? null : oldJsonParent.get(fieldName);
 		Object newJsonValue = newJsonParent == null ? null : newJsonParent.get(fieldName);
 		
-		// validate and import sub-elements first
+		// validate and import sub-elements first (if any)
 		newParent = validateSubElements(fieldDef, newParent, oldParent, newJsonValue, oldJsonValue, currentFieldPath);
 		// then validate current field itself
-		boolean valid = validator.isValid(this, newJsonParent, oldJsonParent, fieldDef, 
-				currentFieldPath, errors);
+		boolean valid = validator.isValid(this, newJsonParent, oldJsonParent, fieldDef, currentFieldPath, errors);
 		// and set new field only if all sub-elements are valid
 		if (valid && newParent != null) {
 			newParent = setNewField(newParent, fieldDef, newJsonParent, currentFieldPath);
@@ -338,7 +337,6 @@ public class ActivityImporter {
 				logger.error(e.getMessage());
 				throw new RuntimeException(e);
 			}
-			//newSubElement = validateAndImport(newSubElement, oldSubElement, childrenFields, newChild, oldChild, fieldPath);
 			Iterator<Map<String, Object>> iterNew = childrenNewValues.iterator();
 			while (iterNew.hasNext()) {
 				Map<String, Object> newChild = iterNew.next();
@@ -352,7 +350,6 @@ public class ActivityImporter {
 				if (isCollection) {
 					try {
 						Object newSubElement = subElementClass.newInstance();
-						// TODO: detect matching
 						Object oldSubElement = null;
 						res = validateAndImport(newSubElement, oldSubElement, childrenFields, newChild, oldChild, fieldPath);
 					} catch (InstantiationException | IllegalAccessException e) {
@@ -443,7 +440,6 @@ public class ActivityImporter {
 		
 		if (!importable) {
 			if (InterchangeUtils.isAmpActivityVersion(objField.getType())) {
-//				addActivityFieldForPostprocessing(objField, newParent);
 				try {
 					objField.set(newParent, this.getNewActivity());
 				} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {

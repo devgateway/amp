@@ -195,23 +195,9 @@ public class FieldsEnumerator {
 		if (interchangeable.pickIdOnly()) {
 			bean.set(ActivityEPConstants.FIELD_TYPE, InterchangeableClassMapper.getCustomMapping(java.lang.Long.class));
 		} else {
-			Class<?> fieldType;
-			
-//			if (discriminator != null && discriminator.discriminatorClass().length() > 0) {
-//				try {
-////					@SuppressWarnings("unchecked")
-////					Class<FieldsDiscriminator> discrClass = (Class<FieldsDiscriminator>) Class.forName(discriminator.discriminatorClass());
-////					fieldType = discrClass.newInstance().getJsonOutputType();
-//				} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-//					throw new RuntimeException("Cannot instantiate discriminator class: " + discriminator.discriminatorClass());
-////					e.printStackTrace();
-//				}
-//			} else {
-				fieldType = field.getType();
-//			}
+			Class<?> fieldType = field.getType();
 			bean.set(ActivityEPConstants.FIELD_TYPE, InterchangeableClassMapper.containsSimpleClass(fieldType)? 
-					InterchangeableClassMapper.getCustomMapping(fieldType) : ActivityEPConstants.FIELD_TYPE_LIST);		
-			
+					InterchangeableClassMapper.getCustomMapping(fieldType) : ActivityEPConstants.FIELD_TYPE_LIST);
 		}
 		
 
@@ -223,6 +209,9 @@ public class FieldsEnumerator {
 		
 		if (internalUse) {
 			bean.set(ActivityEPConstants.FIELD_NAME_INTERNAL, field.getName());
+			if (InterchangeUtils.isAmpActivityVersion(field.getType())) {
+				bean.set(ActivityEPConstants.ACTIVITY, true);
+			}
 		}
 		
 		/* list type */
@@ -253,12 +242,12 @@ public class FieldsEnumerator {
 				}
 			}
 			
-			if (!interchangeable.pickIdOnly()) {
+			if (!interchangeable.pickIdOnly() && !InterchangeUtils.isAmpActivityVersion(field.getClass())) {
 				List<JsonBean> children = getChildrenOfField(field);
 				if (children != null && children.size() > 0) {
 					bean.set(ActivityEPConstants.CHILDREN, children);
 				}
-			} 
+			}
 		}
 		
 		// only String fields should clarify if they are translatable or not
@@ -296,11 +285,13 @@ public class FieldsEnumerator {
 		//StopWatch.next("Descending into", false, clazz.getName());
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
+			Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
+			if (interchangeable == null || !internalUse && InterchangeUtils.isAmpActivityVersion(field.getType())) {
+				continue;
+			}
 			if (!InterchangeUtils.isCompositeField(field) || hasFieldDiscriminatorClass(field)) {
 				InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
-				Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
-				if (interchangeable == null)
-					continue;
+				
 				if (!FMVisibility.isVisible(interchangeable.fmPath())) {
 					continue;
 				}

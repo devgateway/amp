@@ -91,7 +91,8 @@ public class ActivityExporter {
 		Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
 		InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
 		
-		if (interchangeable != null && FMVisibility.isVisible(interchangeable.fmPath())) {
+		if (interchangeable != null && !InterchangeUtils.isAmpActivityVersion(field.getType()) 
+				&& FMVisibility.isVisible(interchangeable.fmPath())) {
 			field.setAccessible(true);
 			String fieldTitle = InterchangeUtils.underscorify(interchangeable.fieldTitle());
 			

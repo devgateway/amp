@@ -56,7 +56,7 @@ public class PossibleValuesEnumerator {
 			}
 			String configString = discriminatorOption == null? null : discriminatorOption;
 			if (InterchangeUtils.isCompositeField(field)) {
-				configString =  InterchangeUtils.getConfigValue(fieldName, field);	
+				configString =  InterchangeUtils.getConfigValue(fieldName, field);
 			}
 			return getPossibleValuesForField(longFieldName.substring(longFieldName.indexOf('~') + 1), InterchangeUtils.getClassOfField(field), configString);
 		} else {

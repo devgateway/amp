@@ -19,6 +19,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
+				DROP VIEW IF EXISTS v_disaster_response_marker;
 			    CREATE OR REPLACE VIEW v_disaster_response_marker AS 
 					SELECT DISTINCT aav.amp_activity_id,
 			    		CASE 
@@ -30,7 +31,7 @@
 			    			WHEN fd.disaster_response IS TRUE THEN 1
 			    			WHEN fd.disaster_response IS FALSE THEN 2
 			    			ELSE 999999999
-			    		END AS val_code
+			    		END AS val_id
 
 					FROM amp_activity_version aav
 						JOIN amp_funding af ON af.amp_activity_id = aav.amp_activity_id

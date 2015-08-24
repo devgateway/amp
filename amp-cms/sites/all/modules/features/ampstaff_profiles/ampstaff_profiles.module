@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the AMP Staff Profiles feature.
+ */
+
+include_once 'ampstaff_profiles.features.inc';

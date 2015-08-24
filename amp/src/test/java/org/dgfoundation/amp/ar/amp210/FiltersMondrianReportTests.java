@@ -621,4 +621,13 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 		spec.setFilters(buildSimpleFilter(ColumnConstants.HUMANITARIAN_AID, FALSE, true));
 		runMondrianTestCase(spec, "en", activities, cr2);
 	}
+	
+//	@Test
+//	public void testDisasterResponseFilterFlat() {
+//		ReportAreaForTests correctReport = null;
+//		
+//		runMondrianTestCase("AMP-20980-disaster-response-marker-flat",
+//			Arrays.asList("TAC_activity_1", "activity_with_disaster_response"), 
+//			correctReport, "en");
+//	}
 }

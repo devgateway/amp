@@ -562,7 +562,8 @@
 <field:display name="Grand Total Commitments" feature="Activity - Component Step"></field:display> 
 <field:display name="Grand Total Cost" feature="Costing"></field:display> 
 <field:display name="Grand Total Disbursements" feature="Activity - Component Step"></field:display> 
-<field:display name="Humanitarian Aid" feature="Identification"></field:display> 
+<field:display name="Humanitarian Aid" feature="Identification"></field:display>
+<field:display name="Disaster Response Marker" feature="Identification"></field:display> 
 <field:display name="Implementation Level" feature="Location"></field:display> 
 <field:display name="Implementation Location" feature="Location"></field:display> 
 <field:display name="Implementing Agency Add Button" feature="Implementing Agency"></field:display> 

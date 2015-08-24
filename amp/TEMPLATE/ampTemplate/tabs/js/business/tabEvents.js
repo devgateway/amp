@@ -102,8 +102,21 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 					});
 				}
 			});
+			var units = "";
+			switch (firstContent.get('reportMetadata').get('reportSpec').get('settings').get('unitsOption')) {
+			case 'AMOUNTS_OPTION_UNITS':
+				units = TranslationManager.getTranslated("Amounts in units");
+				break;
+			case 'AMOUNTS_OPTION_THOUSANDS':
+				units = TranslationManager.getTranslated("Amounts in thousands");
+				break;
+			case 'AMOUNTS_OPTION_MILLIONS':
+				units = TranslationManager.getTranslated("Amounts in millions");
+				break;
+			}
 			var legend = new Legend({
 				currencyCode : firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode'),
+				units : units,
 				id : app.TabsApp.currentTab.get('id')
 			});
 			var legendView = new LegendView({

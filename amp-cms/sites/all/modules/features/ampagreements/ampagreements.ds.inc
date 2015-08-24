@@ -22,6 +22,13 @@ function ampagreements_ds_field_settings_info() {
         'ft' => array(),
       ),
     ),
+    'title_field' => array(
+      'formatter_settings' => array(
+        'ft' => array(
+          'func' => 'theme_ds_field_reset',
+        ),
+      ),
+    ),
   );
   $export['node|agreement|default'] = $ds_fieldsetting;
 
@@ -32,9 +39,11 @@ function ampagreements_ds_field_settings_info() {
   $ds_fieldsetting->bundle = 'agreement';
   $ds_fieldsetting->view_mode = 'full';
   $ds_fieldsetting->settings = array(
-    'body' => array(
+    'title_field' => array(
       'formatter_settings' => array(
-        'ft' => array(),
+        'ft' => array(
+          'func' => 'theme_ds_field_reset',
+        ),
       ),
     ),
   );
@@ -59,13 +68,13 @@ function ampagreements_ds_layout_settings_info() {
   $ds_layout->settings = array(
     'regions' => array(
       'main' => array(
-        0 => 'body',
-        1 => 'field_agreement_picture',
+        0 => 'title_field',
+        1 => 'body',
       ),
     ),
     'fields' => array(
+      'title_field' => 'main',
       'body' => 'main',
-      'field_agreement_picture' => 'main',
     ),
     'classes' => array(
       'layout_class' => array(
@@ -94,17 +103,22 @@ function ampagreements_ds_layout_settings_info() {
   $ds_layout->settings = array(
     'regions' => array(
       'main' => array(
-        0 => 'body',
-        1 => 'field_agreement_picture',
+        0 => 'group_title_wrapper',
+        1 => 'title_field',
+        2 => 'body',
       ),
     ),
     'fields' => array(
+      'group_title_wrapper' => 'main',
+      'title_field' => 'main',
       'body' => 'main',
-      'field_agreement_picture' => 'main',
     ),
     'classes' => array(
       'layout_class' => array(
-        '' => '',
+        'clearfix' => 'clearfix',
+      ),
+      'main' => array(
+        'layout-block' => 'layout-block',
       ),
     ),
     'wrappers' => array(
@@ -116,7 +130,7 @@ function ampagreements_ds_layout_settings_info() {
     'layout_attributes_merge' => 1,
     'layout_link_attribute' => '',
     'layout_link_custom' => '',
-    'hide_page_title' => '0',
+    'hide_page_title' => '1',
     'page_option_title' => '',
   );
   $export['node|agreement|full'] = $ds_layout;

@@ -45,9 +45,8 @@ public class PrimaryContactValidator extends InputValidator {
 		
 		boolean isValid = true;
 		String fieldName = (String) fieldDescription.get(ActivityEPConstants.FIELD_NAME);
-		String fieldType = (String) fieldDescription.get(ActivityEPConstants.FIELD_TYPE);
 		
-		if (fieldType != null && CONTACT_TYPE_FIELDS.contains(fieldName)) {
+		if (CONTACT_TYPE_FIELDS.contains(fieldName)) {
 			Collection<Map<String, Object>> fieldValues = (Collection<Map<String, Object>>) newFieldParent.get(fieldName);
 
 			if (fieldValues != null && fieldValues.size() > 1) {

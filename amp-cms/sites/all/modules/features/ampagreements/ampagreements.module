@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the AMP Agreements feature.
+ */
+
+include_once 'ampagreements.features.inc';

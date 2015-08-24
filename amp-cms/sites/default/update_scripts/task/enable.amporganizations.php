@@ -33,6 +33,10 @@ _us_features__install($feature_names);
 drupal_flush_all_caches();
 
 
+// HACK: Load the view, otherwise the menu link will not be created.
+views_invalidate_cache();
+$view = views_get_view('organizations');
+
 // Create a menu link.
 $link = array(
   'link_path' => 'organizations',

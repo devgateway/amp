@@ -15,6 +15,9 @@ _us_features__install($feature_names);
 // Clear system caches.
 drupal_flush_all_caches();
 
+// HACK: Load the view, otherwise the menu link will not be created.
+views_invalidate_cache();
+$view = views_get_view('staff');
 
 // Create a menu link.
 $link = array(

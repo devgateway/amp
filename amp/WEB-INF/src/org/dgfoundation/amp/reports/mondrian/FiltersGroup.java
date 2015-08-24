@@ -166,6 +166,8 @@ public class FiltersGroup {
 		addIdentityMapping(filterGroupMap, ColumnConstants.ACTIVITY_ID);
 		filterGroupMap.put(ColumnConstants.INTERNAL_USE_ID, ColumnConstants.ACTIVITY_ID);
 		
+		addIdentityMapping(filterGroupMap, ColumnConstants.DISASTER_RESPONSE_MARKER);
+		
 		addIdentityMapping(filterGroupMap, ColumnConstants.TEAM);
 		filterGroupMap.put(ColumnConstants.TEAM_ID, ColumnConstants.TEAM);
 		

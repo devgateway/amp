@@ -26,7 +26,11 @@
 		    			b.org_grp_name, ot.org_type AS donor_type_name, cval2.category_value AS financing_instrument_name, cval2.id AS financing_instrument_id, d.amp_org_id AS org_id, d.org_grp_id, 
 		    			ot.amp_org_type_id AS org_type_id, cval3.category_value AS mode_of_payment_name, cval3.id AS mode_of_payment_id, cval4.category_value AS funding_status_name, cval4.id AS funding_status_id, 
 		    			fd.capital_spend_percent, agr.code AS agreement_code, (agr.title::text || ' - '::text) || agr.code::text AS agreement_title_code, 
-		    			fd.disaster_response AS disaster_response,
+			   			CASE 
+			    			WHEN fd.disaster_response IS TRUE THEN 1
+			    			WHEN fd.disaster_response IS FALSE THEN 2
+			    			ELSE 999999999
+			    		END AS disaster_response_code,
 		    			fd.recipient_org_id AS recipient_id, recipient_org.name AS recipient_name, recipient_role.role_code AS recipient_role_code, recipient_role.name AS recipient_role_name, 
 		    			source_role.role_code AS source_role_code, source_role.name AS source_role_name, pld_t.category_value AS activity_pledges_title_name,pld_t.id as activity_pledges_title_id
 					FROM amp_funding f LEFT JOIN amp_role source_role ON f.source_role_id = source_role.amp_role_id

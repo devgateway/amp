@@ -132,7 +132,8 @@ public class AmpARFilterConverter {
 		addCategoryValueNamesFilter(arFilter.getStatuses(), ColumnConstants.STATUS);
 		addFilter(arFilter.getWorkspaces(), ColumnConstants.TEAM);
 		addApprovalStatus();
-		addHumanitarianAidFilter();
+		addBooleansFilter(arFilter.getHumanitarianAid(), ColumnConstants.HUMANITARIAN_AID);
+		addBooleansFilter(arFilter.getDisasterResponse(), ColumnConstants.DISASTER_RESPONSE_MARKER);
 		addBooleanFilter(arFilter.getGovernmentApprovalProcedures(), ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES);
 		addBooleanFilter(arFilter.getJointCriteria(), ColumnConstants.JOINT_CRITERIA);
 		addBooleanFilter(arFilter.getShowArchived(), ColumnConstants.ARCHIVED);
@@ -140,14 +141,19 @@ public class AmpARFilterConverter {
 		addCategoryValueNamesFilter(arFilter.getActivityPledgesTitle(), ColumnConstants.PLEDGES_TITLES);
 	}
 	
-	private void addHumanitarianAidFilter() {
+	/**
+	 * builds a multiple-choices boolean filter
+	 * @param vals
+	 * @param columnName
+	 */
+	private void addBooleansFilter(Set<Integer> vals, String columnName) {
 		if (arFilter.isPledgeFilter()) return;
-		if (arFilter.getHumanitarianAid() == null) return;
+		if (vals == null) return;
 		List<String> values = new ArrayList<>();
-		for(int v:arFilter.getHumanitarianAid()) {
+		for(int v:vals) {
 			values.add(Integer.toString(v));
 		}
-		filterRules.addFilterRule(new ReportColumn(ColumnConstants.HUMANITARIAN_AID), new FilterRule(values, true));
+		filterRules.addFilterRule(new ReportColumn(columnName), new FilterRule(values, true));
 	}
 	
 	private void addApprovalStatus() {
@@ -337,6 +343,11 @@ public class AmpARFilterConverter {
 		addFilterRule(columnName, new FilterRule(names, values, true));
 	}
 	
+	/**
+	 * adds a single-choice boolean filter
+	 * @param flag
+	 * @param columnName
+	 */
 	private void addBooleanFilter(Boolean flag, String columnName) {
 		if(flag == null) return;
 		addFilterRule(columnName, 

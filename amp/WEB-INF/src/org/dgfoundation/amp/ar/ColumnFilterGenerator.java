@@ -181,6 +181,7 @@ public class ColumnFilterGenerator {
 			c.getFilters().add(acf5);
 			AmpColumnsFilters acf6= new AmpColumnsFilters(c,"activityPledgesTitle","activity_pledges_title_id");
 			c.getFilters().add(acf6);
+			c.getFilters().add(new AmpColumnsFilters(c, "disasterResponseCodes", "disaster_response_code"));
 		}
 	 		
 		if (ArConstants.VIEW_CONTRIBUTION_FUNDING.equals(c.getExtractorView())) {

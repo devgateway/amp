@@ -198,13 +198,10 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 			capitalPercent	= rs.getDouble("capital_spend_percent");
 		}
 		
-		if (columnsMetaData.containsKey("disaster_response")) {
-			boolean val = rs.getBoolean("disaster_response");
-			String disasterResponse = rs.wasNull() ?
-					AmpReportGenerator.generateFakeCell(1l, this.getColumnName()).getValue().toString() :
-					TranslatorWorker.translateText(val ? "Yes" : "No");
-
-			MetaInfo disasterResponseMeta = this.getCachedMetaInfo(ArConstants.DISASTER_RESPONSE_MARKER, disasterResponse);
+		if (columnsMetaData.containsKey("disaster_response_code")) {
+			Integer val = rs.getInt("disaster_response_code");
+			String displayedVal = decodeBoolean(val);
+			MetaInfo disasterResponseMeta = this.getCachedMetaInfo(ArConstants.DISASTER_RESPONSE_MARKER, displayedVal);
 			acc.getMetaData().add(disasterResponseMeta);
 		}
 		//the most important meta name, the source name (donor name, region name, component name)
@@ -475,6 +472,17 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 		return acc;
 	}
 		
+	String translatedYes = TranslatorWorker.translateText("Yes");
+	String translatedNo = TranslatorWorker.translateText("No");
+	String translatedUndefined = TranslatorWorker.translateText(AmpReportGenerator.generateFakeCell(1l, this.getColumnName()).getValue().toString());
+	
+	protected String decodeBoolean(Integer code) {
+		if (code == null) return translatedUndefined;
+		if (code.intValue() == 1) return translatedYes;
+		if (code.intValue() == 2) return translatedNo;
+		return translatedUndefined;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

@@ -519,14 +519,26 @@ public class Filters {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = true, id = "HumanitarianAidValues", columns = ColumnConstants.HUMANITARIAN_AID, name="Humanitarian Aid")
 	public JsonBean getHumanitarianAid() {
+		return buildYesNoJsonBean(ColumnConstants.HUMANITARIAN_AID);
+	}
+	
+	@GET
+	@Path("/disasterResponse/")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = true, id = "DisasterResponseValues", columns = ColumnConstants.HUMANITARIAN_AID, name="Disaster Response Marker")
+	public JsonBean getDisasterResponse() {
+		return buildYesNoJsonBean(ColumnConstants.DISASTER_RESPONSE_MARKER);
+	}
+	
+	protected JsonBean buildYesNoJsonBean(String columnName) {
 		JsonBean res = new JsonBean();
-		res.set("filterId", ColumnConstants.HUMANITARIAN_AID);
-		res.set("name", ColumnConstants.HUMANITARIAN_AID);
-		res.set("translatedName", ColumnConstants.HUMANITARIAN_AID);
+		res.set("filterId", columnName);
+		res.set("name", columnName);
+		res.set("translatedName", columnName);
 		res.set("values", 
 				Arrays.asList(
-						new SimpleJsonBean(2, "No", null, TranslatorWorker.translateText("No")),
-						new SimpleJsonBean(1, "Yes", null, TranslatorWorker.translateText("Yes"))
+					new SimpleJsonBean(1, "Yes", null, TranslatorWorker.translateText("Yes")),
+					new SimpleJsonBean(2, "No", null, TranslatorWorker.translateText("No"))
 				));
 		return res;
 	}

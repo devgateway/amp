@@ -385,6 +385,12 @@ public class AmpARFilter extends PropertyListable {
 	private Set<Integer> humanitarianAid;
 	
 	/**
+	 * if set is null - "all", else the elements in the set mean
+	 * 1 - yes, 2 - no
+	 */
+	private Set<Integer> disasterResponse;
+	
+	/**
 	 * the date is stored in the {@link #sdfIn} hardcoded format
 	 */
 	private String fromDate;
@@ -1597,6 +1603,9 @@ public class AmpARFilter extends PropertyListable {
 		
 		if (humanitarianAid != null)
 			queryAppend(String.format("SELECT v.amp_activity_id FROM v_humanitarian_aid v WHERE val_id IN (%s)", Util.toCSStringForIN(humanitarianAid)));
+			
+		if (disasterResponse != null)
+			queryAppend(String.format("SELECT v.amp_activity_id FROM v_disaster_response_marker v WHERE val_id IN (%s)", Util.toCSStringForIN(disasterResponse)));
 			
 		if (workspaces != null && workspaces.size() > 0)
 			queryAppend(WORKSPACE_FILTER);
@@ -3453,6 +3462,25 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setHumanitarianAid(Set<Integer> humanitarianAid) {
 		this.humanitarianAid = humanitarianAid;
+	}
+	
+	public Set<Integer> getDisasterResponse() {
+		return disasterResponse;
+	}
+
+	public Set<Integer> getDisasterResponseCodes() {
+		Set<Integer> res = new HashSet<>();
+		if (disasterResponse != null) {
+			for(int v:disasterResponse) {
+				if (v == 1 || v == 2) res.add(v);
+				else res.add(999999999);
+			}
+		}
+		return res;
+	}
+	
+	public void setDisasterResponse(Set<Integer> disasterResponse) {
+		this.disasterResponse = disasterResponse;
 	}
 	
 	public static boolean isTrue(Boolean b) {

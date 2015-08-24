@@ -16,6 +16,16 @@ import java.util.Set;
  * @author Nadejda Mandrescu
  */
 public class FilterRule {
+	
+	/** the value to use as a filter value when filtering for NULLs */
+	public static final String NULL_VALUE = "#null#";
+	
+	/** the value to use as a filter value when filtering booleans for TRUEs */
+	public static final String TRUE_VALUE = "1";
+	
+	/** the value to use as a filter value when filtering booleans for FALSEs */
+	public static final String FALSE_VALUE = "2";
+	
 	/** 
 	 * Possible types of rules: a range filter (of values/ids), a single value filter (value/id), a list filter (of values/ids) <br>
 	 * Options: <br>

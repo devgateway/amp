@@ -278,6 +278,7 @@ public class FilterUtil {
 			form.setCustomGroupSize(filter.getGroupingsize());
 		}
 		form.setSelectedHumanitarianAid(collectValues(filter.getHumanitarianAid()));
+		form.setSelectedDisasterResponse(collectValues(filter.getDisasterResponse()));
 		
 		return filter;
 	}

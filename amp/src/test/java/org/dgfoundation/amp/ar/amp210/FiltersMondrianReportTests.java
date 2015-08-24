@@ -622,12 +622,54 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 		runMondrianTestCase(spec, "en", activities, cr2);
 	}
 	
-//	@Test
-//	public void testDisasterResponseFilterFlat() {
-//		ReportAreaForTests correctReport = null;
-//		
-//		runMondrianTestCase("AMP-20980-disaster-response-marker-flat",
-//			Arrays.asList("TAC_activity_1", "activity_with_disaster_response"), 
-//			correctReport, "en");
-//	}
+	@Test
+	public void testDisasterResponseFilterColumn() {
+		ReportAreaForTests correctReportFlat = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Disaster Response Marker", "", "2011-Actual Commitments", "213 231", "2014-Actual Commitments", "33 000", "2015-Actual Commitments", "117 000", "Total Measures-Actual Commitments", "363 231")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "TAC_activity_1", "Disaster Response Marker", "", "2011-Actual Commitments", "213 231", "2014-Actual Commitments", "", "2015-Actual Commitments", "", "Total Measures-Actual Commitments", "213 231"),
+	      new ReportAreaForTests().withContents("Project Title", "activity_with_disaster_response", "Disaster Response Marker", "No, Yes", "2011-Actual Commitments", "", "2014-Actual Commitments", "33 000", "2015-Actual Commitments", "117 000", "Total Measures-Actual Commitments", "150 000"));
+		
+		ReportAreaForTests correctReportHier = new ReportAreaForTests()
+	    .withContents("Disaster Response Marker", "Report Totals", "Project Title", "", "2011-Actual Commitments", "213 231", "2014-Actual Commitments", "33 000", "2015-Actual Commitments", "117 000", "Total Measures-Actual Commitments", "363 231")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Disaster Response Marker", "Yes Totals", "Project Title", "", "2011-Actual Commitments", "0", "2014-Actual Commitments", "0", "2015-Actual Commitments", "67 000", "Total Measures-Actual Commitments", "67 000")
+	      .withChildren(
+	        new ReportAreaForTests().withContents("Disaster Response Marker", "Yes", "Project Title", "activity_with_disaster_response", "2011-Actual Commitments", "", "2014-Actual Commitments", "", "2015-Actual Commitments", "67 000", "Total Measures-Actual Commitments", "67 000")    ),
+	      new ReportAreaForTests().withContents("Disaster Response Marker", "No Totals", "Project Title", "", "2011-Actual Commitments", "0", "2014-Actual Commitments", "33 000", "2015-Actual Commitments", "0", "Total Measures-Actual Commitments", "33 000")
+	      .withChildren(
+	        new ReportAreaForTests().withContents("Disaster Response Marker", "No", "Project Title", "activity_with_disaster_response", "2011-Actual Commitments", "", "2014-Actual Commitments", "33 000", "2015-Actual Commitments", "", "Total Measures-Actual Commitments", "33 000")    ),
+	      new ReportAreaForTests().withContents("Disaster Response Marker", "Disaster Response Marker: Undefined Totals", "Project Title", "", "2011-Actual Commitments", "213 231", "2014-Actual Commitments", "0", "2015-Actual Commitments", "50 000", "Total Measures-Actual Commitments", "263 231")
+	      .withChildren(
+	        new ReportAreaForTests().withContents("Disaster Response Marker", "Disaster Response Marker: Undefined", "Project Title", "TAC_activity_1", "2011-Actual Commitments", "213 231", "2014-Actual Commitments", "", "2015-Actual Commitments", "", "Total Measures-Actual Commitments", "213 231"),
+	        new ReportAreaForTests().withContents("Disaster Response Marker", "", "Project Title", "activity_with_disaster_response", "2011-Actual Commitments", "", "2014-Actual Commitments", "", "2015-Actual Commitments", "50 000", "Total Measures-Actual Commitments", "50 000")));
+		
+		runMondrianTestCase("AMP-20980-disaster-response-marker",
+			Arrays.asList("TAC_activity_1", "activity_with_disaster_response"), 
+			correctReportFlat, "en");
+		
+		
+		runMondrianTestCase("AMP-20980-disaster-response-marker-hier",
+				Arrays.asList("TAC_activity_1", "activity_with_disaster_response"), 
+				correctReportHier, "en");
+	}
+	
+	@Test
+	public void testDisasterResponseFiltering() { // test both API and AmpARFilterConverter
+		ReportAreaForTests cor = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Disaster Response Marker", "", "2015-Actual Commitments", "67 000", "Total Measures-Actual Commitments", "67 000")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "activity_with_disaster_response", "Disaster Response Marker", "Yes", "2015-Actual Commitments", "67 000", "Total Measures-Actual Commitments", "67 000"));
+
+		List<String> acts = Arrays.asList("TAC_activity_1", "activity_with_disaster_response");
+		
+		runMondrianTestCase("AMP-20980-disaster-response-marker-yes", acts, cor, "en");
+		
+		ReportSpecificationImpl spec = buildSpecification("drm", 
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DISASTER_RESPONSE_MARKER), 
+				Arrays.asList("Actual Commitments"), null, GroupingCriteria.GROUPING_YEARLY);
+		spec.setFilters(buildSimpleFilter(ColumnConstants.DISASTER_RESPONSE_MARKER, FilterRule.TRUE_VALUE, true));
+		
+		runMondrianTestCase(spec, "en", acts, cor);
+	}
 }

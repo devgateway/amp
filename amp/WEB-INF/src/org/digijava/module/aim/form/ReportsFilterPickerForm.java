@@ -82,6 +82,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Object[] selectedresponsibleorg;
 	private Object[] selectedArchivedStatus = new Object[]{"1"};
 	private Object[] selectedHumanitarianAid;
+	private Object[] selectedDisasterResponse;
 	private Object[] selectedActivitySettings;
 	private Object[] selectedActivityPledgesTitle;
 	//private Collection regionSelectedCollection;
@@ -1329,5 +1330,13 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setSelectedHumanitarianAid(Object[] selectedHumanitarianAid) {
 		this.selectedHumanitarianAid = selectedHumanitarianAid;
+	}
+	
+	public Object[] getSelectedDisasterResponse() {
+		return selectedDisasterResponse;
+	}
+
+	public void setSelectedDisasterResponse(Object[] selectedDisasterResponse) {
+		this.selectedDisasterResponse = selectedDisasterResponse;
 	}
 }

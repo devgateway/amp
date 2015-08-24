@@ -347,6 +347,7 @@ FilterUtils.convertJavaFiltersToJS = function(data) {
 		case 'Region':
 		case 'District':
 		case 'Humanitarian Aid':
+		case 'Disaster Response Marker':
 			blob.columnFilters[item.name] = _.map(item.values, function(item_) {
 				return parseInt(item_.id);
 			});

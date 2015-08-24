@@ -186,6 +186,7 @@ public class FactTableFiltering {
 			add(ColumnConstants.STATUS, new IdentityExpander("status_id"));			
 			
 			add(ColumnConstants.ACTIVITY_ID, new IdentityExpander("entity_id"));
+			add(ColumnConstants.DISASTER_RESPONSE_MARKER, new BooleanExpander("disaster_response"));
 			
 			// non-direct-fact-table-filtering entries
 			add(ColumnConstants.TEAM, new CustomQueryIdExpander("entity_id", "SELECT amp_activity_id FROM amp_activity_version WHERE amp_team_id IN (QQQ)"));

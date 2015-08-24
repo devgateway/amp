@@ -904,32 +904,15 @@ public class ReportsFilterPicker extends Action {
 			filterForm.getOtherCriteriaElements().add(lineMinRankElement);
 		}
 		
-		if (FeaturesUtil.isVisibleFeature("Archived")) {
-			if (teamMember != null) {
-				Collection<HierarchyListableImplementation> children	= 
-					new ArrayList<HierarchyListableImplementation>();
-				HierarchyListableImplementation rootArchivedStatus	= new HierarchyListableImplementation("All", "0", children);
-				children.add(new HierarchyListableImplementation(TranslatorWorker.translateText("Non-archived Activities"), "1"));
-				children.add(new HierarchyListableImplementation(TranslatorWorker.translateText("Archived Activities"), "2"));
-
-				GroupingElement<HierarchyListableImplementation> archivedElement =
-						new GroupingElement<HierarchyListableImplementation>("Archived", "filter_archived_div", rootArchivedStatus, "selectedArchivedStatus");
-				filterForm.getOtherCriteriaElements().add(archivedElement);
-			}
-		}
+		if (FeaturesUtil.isVisibleFeature("Archived") && teamMember != null)
+			addBooleanElementToFilter(filterForm, "Archived", "filter_archived_div", "selectedArchivedStatus", "Non-archived Activities", "Archived Activities");
 		
-		if (FeaturesUtil.isVisibleField("Humanitarian Aid") && !filterForm.isPledgeReport()) {
-			if (teamMember != null) {
-				Collection<HierarchyListableImplementation> children = new ArrayList<HierarchyListableImplementation>();
-				HierarchyListableImplementation rootArchivedStatus	= new HierarchyListableImplementation("All", "0", children);
-				children.add(new HierarchyListableImplementation(TranslatorWorker.translateText("Yes"), "1"));
-				children.add(new HierarchyListableImplementation(TranslatorWorker.translateText("No"), "2"));
-
-				GroupingElement<HierarchyListableImplementation> archivedElement =
-						new GroupingElement<HierarchyListableImplementation>("Humanitarian Aid", "filter_humanitarian_aid_div", rootArchivedStatus, "selectedHumanitarianAid");
-				filterForm.getOtherCriteriaElements().add(archivedElement);
-			}
-		}
+		if (FeaturesUtil.isVisibleField("Humanitarian Aid") && !filterForm.isPledgeReport())
+			addBooleanElementToFilter(filterForm, "Humanitarian Aid", "filter_humanitarian_aid_div", "selectedHumanitarianAid", "Yes", "No");
+		
+		if (FeaturesUtil.isVisibleField("Disaster Response Marker") && !filterForm.isPledgeReport())
+			addBooleanElementToFilter(filterForm, "Disaster Response Marker", "filter_disaster_response_div", "selectedDisasterResponse", "Yes", "No");
+		
 		if ( FeaturesUtil.isVisibleFeature("Multi Donor")) {
 			Collection<HierarchyListableImplementation> children	= 
 				new ArrayList<HierarchyListableImplementation>();
@@ -1032,6 +1015,16 @@ public class ReportsFilterPicker extends Action {
 		StopWatch.next("Filters", true, "end refreshDropDowns");
 	}
 
+	protected static void addBooleanElementToFilter(ReportsFilterPickerForm filterForm, String name, String divId, String propertyName, String positiveLabel, String negativeLabel) {
+		Collection<HierarchyListableImplementation> children = new ArrayList<HierarchyListableImplementation>();
+		HierarchyListableImplementation rootArchivedStatus	= new HierarchyListableImplementation("All", "0", children);
+		children.add(new HierarchyListableImplementation(TranslatorWorker.translateText(positiveLabel), "1"));
+		children.add(new HierarchyListableImplementation(TranslatorWorker.translateText(negativeLabel), "2"));
+
+		GroupingElement<HierarchyListableImplementation> archivedElement = new GroupingElement<HierarchyListableImplementation>(name, divId, rootArchivedStatus, propertyName);
+		filterForm.getOtherCriteriaElements().add(archivedElement);
+	}
+	
 	/**
 	 * generate a session based AmpARFilter object based on the form selections and forward to different actions (depending on the request source)
 	 * 
@@ -1503,19 +1496,20 @@ public class ReportsFilterPicker extends Action {
 				arf.setShowArchived(true);
 		}
 		
-		arf.setHumanitarianAid(buildHumanitarianAid(filterForm));
+		arf.setHumanitarianAid(buildBooleanField(filterForm.getSelectedHumanitarianAid()));
+		arf.setDisasterResponse(buildBooleanField(filterForm.getSelectedDisasterResponse()));
 		arf.postprocess();
 	}
 
-	protected static Set<Integer> buildHumanitarianAid(ReportsFilterPickerForm filterForm) {
-		if (filterForm.getSelectedHumanitarianAid() == null)
+	protected static Set<Integer> buildBooleanField(Object[] values) {
+		if (values == null)
 			return null;
 		
-		Set<Integer> humanitarianAid = new HashSet<>();
-		for(Object obj:filterForm.getSelectedHumanitarianAid()) {
+		Set<Integer> res = new HashSet<>();
+		for(Object obj:values) {
 			if (obj != null && Integer.parseInt(obj.toString()) > 0)
-				humanitarianAid.add(Integer.parseInt(obj.toString()));
+				res.add(Integer.parseInt(obj.toString()));
 			}
-		return humanitarianAid;
+		return res;
 	}
 }

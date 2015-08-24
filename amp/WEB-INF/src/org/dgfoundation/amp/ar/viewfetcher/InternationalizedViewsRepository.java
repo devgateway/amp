@@ -262,6 +262,9 @@ public class InternationalizedViewsRepository {
 				addViewDef(this, new I18nViewDescription("v_humanitarian_aid").
 						addTrnColDef("val", "val_id"));
 				
+				addViewDef(this, new I18nViewDescription("v_disaster_response_marker").
+						addTrnColDef("val", "val_id"));				
+				
 				addViewDef(this, new I18nViewDescription("v_funding_status").
 						addTrnColDef("funding_status_name", "funding_status_code"));
 				

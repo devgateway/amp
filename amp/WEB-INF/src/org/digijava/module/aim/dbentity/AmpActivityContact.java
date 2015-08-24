@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.TreeSet;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.Output;
 
@@ -17,7 +16,7 @@ public class AmpActivityContact implements Versionable, Comparable, Serializable
 	@Interchangeable(fieldTitle="Activity", pickIdOnly=true)
 	private AmpActivityVersion activity;
 	
-	@Interchangeable(fieldTitle="Contact", pickIdOnly=true, importable=true)
+	@Interchangeable(fieldTitle="Contact", pickIdOnly=true, importable=true, uniqueConstraint=true)
 	private AmpContact contact;
 	
 	@Interchangeable(fieldTitle="Primary Contact", importable=true)

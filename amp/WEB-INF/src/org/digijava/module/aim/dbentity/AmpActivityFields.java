@@ -387,15 +387,20 @@ LoggerIdentifiable, Cloneable {
 	@VersionableCollection(fieldTitle = "Activity Contacts")
 	@InterchangeableDiscriminator(discriminatorField = "contactType", discriminatorClass = "", settings = {
 			@Interchangeable(fieldTitle = ActivityFieldsConstants.DONOR_CONTACT, importable = true, discriminatorOption = Constants.DONOR_CONTACT, 
-							fmPath = "/Activity Form/Contacts/Donor Contact Information"),
+							fmPath = "/Activity Form/Contacts/Donor Contact Information", 
+							validators = @Validators(unique = "/Activity Form/Contacts/Donor Contact Information")),
 			@Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_COORDINATOR_CONTACT, importable = true, discriminatorOption = Constants.PROJECT_COORDINATOR_CONTACT, 
-							fmPath = "/Activity Form/Contacts/Project Coordinator Contact Information"),
+							fmPath = "/Activity Form/Contacts/Project Coordinator Contact Information", 
+							validators = @Validators(unique = "/Activity Form/Contacts/Project Coordinator Contact Information")),
 			@Interchangeable(fieldTitle = ActivityFieldsConstants.SECTOR_MINISTRY_CONTACT, importable = true, discriminatorOption = Constants.SECTOR_MINISTRY_CONTACT, 
-							fmPath = "/Activity Form/Contacts/Sector Ministry Contact Information"),
+							fmPath = "/Activity Form/Contacts/Sector Ministry Contact Information", 
+							validators = @Validators(unique = "/Activity Form/Contacts/Sector Ministry Contact Information")),
 			@Interchangeable(fieldTitle = ActivityFieldsConstants.MOFED_CONTACT, importable = true, discriminatorOption = Constants.MOFED_CONTACT, 
-							fmPath = "/Activity Form/Contacts/Mofed Contact Information"),
-			@Interchangeable(fieldTitle = ActivityFieldsConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT, importable = true, discriminatorOption = Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT, 
-							fmPath = "/Activity Form/Contacts/Implementing Executing Agency Contact Information")
+							fmPath = "/Activity Form/Contacts/Mofed Contact Information", 
+							validators = @Validators(unique = "/Activity Form/Contacts/Mofed Contact Information")),
+			@Interchangeable(fieldTitle = ActivityFieldsConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT, importable = true,	discriminatorOption = Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT, 
+							fmPath = "/Activity Form/Contacts/Implementing Executing Agency Contact Information", 
+							validators = @Validators(unique = "/Activity Form/Contacts/Implementing Executing Agency Contact Information"))
 	})
 	protected Set<AmpActivityContact> activityContacts;
 

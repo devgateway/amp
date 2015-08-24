@@ -249,38 +249,45 @@ addLoadEvent(addpanel);
 		<td noWrap align=left valign="middle">	
 			<logic:notEqual name="viewable" property="totalUniqueRows" value="0">	
 				<a href="#" target="_blank" onclick="toggleActionForm('pdf'); return false;" title="<digi:trn>Download as PDF</digi:trn>">
-					<digi:img hspace="2" vspace="2" src="module/aim/images/pdf_icon.gif" border="0" alt="Export to PDF" />
+				    <c:set var="title"><digi:trn>Export to PDF</digi:trn></c:set>
+					<digi:img hspace="2" vspace="2" src="module/aim/images/pdf_icon.gif" border="0" alt="${title}" />
 				</a>
 			</logic:notEqual>
-			<logic:equal name="viewable" property="totalUniqueRows" value="0">	
-					<digi:img hspace="2" vspace="2" src="module/aim/images/pdf_icon_gray.gif" border="0" title="Report is empty. Nothing to export" />
+			<logic:equal name="viewable" property="totalUniqueRows" value="0">
+			    <c:set var="title"><digi:trn>Report is empty. Nothing to export</digi:trn></c:set>
+				<digi:img hspace="2" vspace="2" src="module/aim/images/pdf_icon_gray.gif" border="0" title="${title}" />
 			</logic:equal>
 		</td>
 
 		<td noWrap align=left valign="middle">
 			<logic:notEqual name="viewable" property="totalUniqueRows" value="0">			
 				<a href="#" target="_blank" onclick="toggleActionForm('xls'); return false;" title="<digi:trn>Download as XLS</digi:trn>">
-					<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon.jpg" border="0" title="Export to Excel" />
+				    <c:set var="title"><digi:trn>Export to Excel</digi:trn></c:set>
+					<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon.jpg" border="0" title="${title}" />
 				</a>
 			</logic:notEqual>
-			<logic:equal name="viewable" property="totalUniqueRows" value="0">			
-				<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon_gray.gif" border="0" title="Report is empty. Nothing to export" />
+			<logic:equal name="viewable" property="totalUniqueRows" value="0">
+				<c:set var="title"><digi:trn>Report is empty. Nothing to export</digi:trn></c:set>
+				<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon_gray.gif" border="0" title="${title}" />
 			</logic:equal>
 		</td>
 
 		<td noWrap align=left valign="middle">		
 			<logic:notEqual name="viewable" property="totalUniqueRows" value="0">	
 				<a href="#" target="_blank" onclick="toggleActionForm('plainXls'); return false;" title="<digi:trn>Download as Plain XLS</digi:trn>">
-					<digi:img hspace="2" vspace="2" src="module/aim/images/xls_plain_icon.jpg" border="0" alt="Export to Excel as Plain Report" />
+				    <c:set var="title"><digi:trn>Export to Excel as Plain Report</digi:trn></c:set>
+					<digi:img hspace="2" vspace="2" src="module/aim/images/xls_plain_icon.jpg" border="0" alt="${title}" />
 				</a>
 			</logic:notEqual>
-			<logic:equal name="viewable" property="totalUniqueRows" value="0">		
-				<digi:img hspace="2" vspace="2" src="module/aim/images/xls_plain_icon_gray.gif" border="0" title="Report is empty. Nothing to export" />
+			<logic:equal name="viewable" property="totalUniqueRows" value="0">
+				<c:set var="title"><digi:trn>Report is empty. Nothing to export</digi:trn></c:set>
+				<digi:img hspace="2" vspace="2" src="module/aim/images/xls_plain_icon_gray.gif" border="0" title="${title}" />
 			</logic:equal>
 		</td>
 
 		<%--<td noWrap align=left valign="middle" style="background-color: #CFCFCF">		
 			<a href="#" target="_blank" onclick="toggleActionForm('richXls'); return false;" title="<digi:trn>Download as Rich XLS</digi:trn>">
+			    <c:set var="title"><digi:trn>Export to Excel</digi:trn></c:set>
 				<img src="/TEMPLATE/ampTemplate/module/aim/images/xls_icon.jpg" border="0" hspace="2" vspace="2" alt="Export as Rich Excel" />
 			</a>
 		</td> --%>
@@ -308,7 +315,8 @@ addLoadEvent(addpanel);
 				</digi:link>
 			</logic:notEqual>
 			<logic:equal name="viewable" property="totalUniqueRows" value="0">
-					<digi:img styleClass="imagecsv" hspace="2" vspace="2" src="module/aim/images/csv_icon_gray.png" border="0" title="Report is empty. Nothing to export"/>
+			    <c:set var="title"><digi:trn>Report is empty. Nothing to export</digi:trn></c:set>
+				<digi:img styleClass="imagecsv" hspace="2" vspace="2" src="module/aim/images/csv_icon_gray.png" border="0" title="${title}"/>
 			</logic:equal>
 		</td>
 		

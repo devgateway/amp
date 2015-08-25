@@ -202,12 +202,11 @@ public class GetTeamActivities
                 } else if(totActivities / numRecords > 50) {
                 	numRecords = totActivities / 50;
                 }
+                 	
+                int numPages = numRecords == 0 ? 1 : 
+                	(totActivities / numRecords) + ((totActivities % numRecords != 0) ? 1 : 0);
                 
-                
-                	
-                int numPages = totActivities / numRecords;
-                numPages += (totActivities % numRecords != 0) ? 1 : 0;
-                if(numPages < page){
+                if (page > numPages){
                     page = numPages;
                 }
                 

@@ -40,7 +40,7 @@ function ampstaff_profiles_views_default_views() {
   $handler->display->display_options['empty']['area']['table'] = 'views';
   $handler->display->display_options['empty']['area']['field'] = 'area';
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
-  $handler->display->display_options['empty']['area']['content'] = 'There are no organizations to display!';
+  $handler->display->display_options['empty']['area']['content'] = 'There are no staff to display!';
   $handler->display->display_options['empty']['area']['format'] = 'filtered_html';
   /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
@@ -92,7 +92,7 @@ function ampstaff_profiles_views_default_views() {
     t('Sort by'),
     t('Asc'),
     t('Desc'),
-    t('There are no organizations to display!'),
+    t('There are no staff to display!'),
     t('Page'),
   );
   $export['staff'] = $view;

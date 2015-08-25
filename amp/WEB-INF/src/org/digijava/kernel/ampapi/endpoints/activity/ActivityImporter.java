@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.AmountsUnits;
+import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.onepager.util.ChangeType;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings.TranslationType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
@@ -31,6 +32,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorPr
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.exception.ApiExceptionMapper;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -166,57 +168,67 @@ public class ActivityImporter {
 				oldJson = InterchangeUtils.getActivity(oldActivity, null);
 			} catch (DgException e) {
 				logger.error(e.getMessage());
-				/*
-				 * Disabling Exception in order to continue general validation of fields  
-				throw new RuntimeException(e);
-				*/
+				errors.put(ActivityErrors.ACTIVITY_NOT_LOADED.id, ActivityErrors.ACTIVITY_NOT_LOADED);
 			}
 		}
 		
-		// initialize new activity
-		InterchangeUtils.getSessionWithPendingChanges();
-		
-		if (oldActivity != null) {
-			try {
+		String activityId = Long.toString(ampActivityId);
+		String key = null;
+
+		try {
+			// initialize new activity
+			InterchangeUtils.getSessionWithPendingChanges();
+			
+			if (oldActivity != null) {
+				key = ActivityGatekeeper.lockActivity(activityId, TeamUtil.getCurrentAmpTeamMember().getAmpTeamMemId());
+				
+				if (key == null){ //lock not acquired
+					logger.error("Cannot aquire lock during IATI import/update for activity " + activityId);
+					errors.put(ActivityErrors.ACTIVITY_IS_LOCKED.id, ActivityErrors.ACTIVITY_IS_LOCKED);
+				}
+				
 				newActivity = oldActivity;
 				oldActivity = ActivityVersionUtil.cloneActivity(oldActivity, TeamUtil.getCurrentAmpTeamMember());
 				oldActivity.setAmpId(newActivity.getAmpId());
 				oldActivity.setAmpActivityGroup(newActivity.getAmpActivityGroup());
 				
 				cleanupNewActivity();
-			} catch (CloneNotSupportedException e) {
-				logger.error(e.getMessage());
-				throw new RuntimeException(e);
+			} else if (!update) {
+				newActivity = new AmpActivityVersion();
 			}
-		} else if (!update) {
-			newActivity = new AmpActivityVersion();
-		}
-		
-		Map<String, Object> oldJsonParent = null;
-		Map<String, Object> newJsonParent = newJson.any();
-//		oldJsonParent = oldJson == null ? null : oldJson.any();
-		
-		newActivity = (AmpActivityVersion) validateAndImport(newActivity, oldActivity, fieldsDef, newJsonParent, 
-				oldJsonParent, null);
-		if (newActivity != null && errors.isEmpty()) {
-			// save new activity
-			try {
-				prepareToSave();
-				newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity, 
-						translations, currentMember, Boolean.TRUE.equals(newActivity.getDraft()), 
-						PersistenceManager.getRequestDBSession(), false, false);
-				postProcess();
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-				throw new RuntimeException(e);
+			
+			Map<String, Object> oldJsonParent = null;
+			Map<String, Object> newJsonParent = newJson.any();
+			
+			newActivity = (AmpActivityVersion) validateAndImport(newActivity, oldActivity, fieldsDef, newJsonParent, 
+					oldJsonParent, null);
+			if (newActivity != null && errors.isEmpty()) {
+				// save new activity
+					prepareToSave();
+					newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity, 
+							translations, currentMember, Boolean.TRUE.equals(newActivity.getDraft()), 
+							PersistenceManager.getRequestDBSession(), false, false);
+					postProcess();
+			} else {
+				// undo any pending changes
+				PersistenceManager.getSession().clear();
 			}
-		} else {
-			// undo any pending changes
+			
+			updateResponse(update);
+		} catch (Throwable e) {
 			PersistenceManager.getSession().clear();
+			
+			if (errors.isEmpty()) {
+				throw new RuntimeException(e);
+			} else {
+				ApiExceptionMapper aem = new ApiExceptionMapper();
+				ApiErrorMessage apiErrorMessageFromException = aem.getApiErrorMessageFromException(e);
+				errors.put(apiErrorMessageFromException.id, apiErrorMessageFromException);
+			}
+		} finally {
+			ActivityGatekeeper.unlockActivity(activityId, key);
 		}
 
-        updateResponse(update);
-		
 		return new ArrayList<ApiErrorMessage>(errors.values());
 	}
 	

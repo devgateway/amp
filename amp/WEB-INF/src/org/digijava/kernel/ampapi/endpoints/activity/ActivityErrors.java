@@ -36,5 +36,7 @@ public class ActivityErrors {
 	public static final ApiErrorMessage FIELD_PARENT_CHILDREN_NOT_ALLOWED = new ApiErrorMessage(20, "Parent and child cannot be in the same collection");
 	public static final ApiErrorMessage DEPENDENCY_NOT_MET = new ApiErrorMessage(21, "Dependency not met: ");
 	public static final ApiErrorMessage UNIQUE_PRIMARY_CONTACT = new ApiErrorMessage(22, "Multiple primary contacts not allowed");
+	public static final ApiErrorMessage ACTIVITY_IS_LOCKED = new ApiErrorMessage(23, "Cannot aquire lock for the activity");
+	public static final ApiErrorMessage ACTIVITY_NOT_LOADED = new ApiErrorMessage(24, "Cannot load the activity");
 
 }

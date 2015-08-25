@@ -22,11 +22,15 @@ public class ApiExceptionMapper implements ExceptionMapper<Exception> {
     public Response toResponse(Exception e) {
         logger.error("ApiExceptionMapper: ", e);
 
-        String message = extractMessageFromException(e);
-
-        ApiErrorMessage apiErrorMessage = new ApiErrorMessage(ApiError.GENERIC_UNHANDLED_ERROR_CODE, message);
+        ApiErrorMessage apiErrorMessage = getApiErrorMessageFromException(e);
 
         return ApiErrorResponse.buildGenericError(apiErrorMessage);
+    }
+    
+    public ApiErrorMessage getApiErrorMessageFromException(Throwable e) {
+    	String message = extractMessageFromException(e);
+
+        return new ApiErrorMessage(ApiError.GENERIC_UNHANDLED_ERROR_CODE, message);
     }
 
 

@@ -250,9 +250,10 @@ a.settingsbut{float:left;display:block;width:250px;}
 #add_filt_btn_box {display:none; margin-top:3px;}
 #add_label_btn_box {display:none; margin-top:3px;}
 #show_action_box {display:none; margin-top:3px; font-size:11px;}
-#show_login_pop_box {display:none; margin:37px 0 0 0;width:270px; padding:10px;border:1px solid #CCCCCC; background-color:#FFFFFF;z-index:9999;position:absolute;}
-html.chrome #show_login_pop_box{margin-top:52px;}
-#show_login_pop_box label{color:#000; padding:5px;display:inline-block;}
+#show_login_pop_box {display:none; margin:40px 0 0 0;width:250px; padding:10px;border:1px solid #CCCCCC; background-color:#FFFFFF;z-index:9999;position:absolute;}
+html.chrome #show_login_pop_box{margin-top:44px;}
+#show_login_pop_box label{color:#000; padding:5px;display:inline-block; width:110px; text-align:right;}
+#show_login_pop_box input{color:#000; padding:5px;display:inline-block; width:110px;}
 .resource_label_gr a {color:#FFFFFF;}
 .resource_label_or a {color:#FFFFFF;}
 .resource_label_red a {color:#FFFFFF;}

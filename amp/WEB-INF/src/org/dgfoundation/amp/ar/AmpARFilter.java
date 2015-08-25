@@ -3470,11 +3470,13 @@ public class AmpARFilter extends PropertyListable {
 
 	public Set<Integer> getDisasterResponseCodes() {
 		Set<Integer> res = new HashSet<>();
-		if (disasterResponse != null) {
-			for(int v:disasterResponse) {
-				if (v == 1 || v == 2) res.add(v);
-				else res.add(999999999);
-			}
+		
+		if (disasterResponse == null)
+			return null;
+		
+		for(int v:disasterResponse) {
+			if (v == 1 || v == 2) res.add(v);
+			else res.add(999999999);
 		}
 		return res;
 	}

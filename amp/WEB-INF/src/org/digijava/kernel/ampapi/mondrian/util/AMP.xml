@@ -310,6 +310,7 @@
 		
 		<DimensionUsage name="Activity Status" source="Category Value" foreignKey="status_id" />
 		<DimensionUsage name="Pledge Status" source="Category Value" foreignKey="status_id" />
+		<DimensionUsage name="PledgeModalities" source="Category Value" foreignKey="modality_id" />
 		<DimensionUsage name="Modalities" source="Category Value" foreignKey="modality_id" />
 		<DimensionUsage name="Type of Cooperation" source="Category Value" foreignKey="type_of_cooperation_id" />
 		<DimensionUsage name="Type of Implementation" source="Category Value" foreignKey="type_of_implementation_id" />

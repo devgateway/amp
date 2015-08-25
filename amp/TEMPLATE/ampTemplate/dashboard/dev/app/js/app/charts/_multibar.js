@@ -24,6 +24,9 @@ function chart(options) {
     .forceY([0, maxValue])  // ensures yAxis is showing at least 0 and 10, but won't restrict the domain
                             // (meaning if the are values falling outside the range it will show then).
     .reduceXTicks(false)
+    //this check is needed because I need strictly either 300 or 400 px, and sometimes, when the chart overflows, it
+    //will give me >400 px height
+    .height(options.height < 400 ? 300 : 400)
     .margin({ top: 5, right: 10, bottom: 20, left: 50 });
 
   if (!options.nvControls) {

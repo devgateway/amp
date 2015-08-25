@@ -77,47 +77,70 @@ module.exports = ChartModel.extend({
 
     // group smallest contributors as "other"s
     if (this.get('limit') < data.processed.length) {
-      var othersNames = _(data.processed)
-        .chain()
-        .map(function(series) {
-          return {
-            key: series.key,
-            total: _(series.values).reduce(function(t, v) { return t + v.y; }, 0)
-          };
-        })
-        .sortBy('total')
-        .reverse()
-        .rest(this.get('limit') - 2)  // 1 for .length offset, 1 for .rest offset
-        .pluck('key')
-        .value();
+    	// Summarize each funding type and sort by total descending, create a new array only with funding types names.
+    	var othersNames = _(data.processed)
+	        .chain()
+	        .map(function(series) {
+	        	return {
+	        		key: series.key,
+		        	total: _(series.values).reduce(function(t, v) { return t + v.y; }, 0)
+		        };
+	        })
+	        .sortBy('total')
+	        .reverse()
+	        .rest(this.get('limit'))
+	        .pluck('key')
+	        .value();
 
-      var othersSeries = {
-        key: localizedOthers,
-        color: '#777',
-        special: 'others',
-        values: _(data.processed)
-          .chain()
-          .filter(function(series) { return _(othersNames).contains(series.key); })
-          .map(function(series) { return series.values; })
-          .transpose()
-          .map(function(othersYear) {
-            return {
-              x: othersYear[0].x,
-              y: _(othersYear).reduce(function(t, s) { return t + s.y; }, 0),
-              z: ''
-            };
-          })
-          .map(function(item) {
-        	  return {
-        		  x: item.x,
-        		  y: item.y,
-        		  z: common.formatNumber(item.y /** parseFloat(app.settings.numberMultiplier.name)*/)
-        	  };
-          })
-          .value()
-      };
-      data.processed = data.processed.slice(0, this.get('limit'));
-      data.processed.push(othersSeries);
+    	// Create a new array from the original data but only with the funding types from 'Others' category.
+    	var othersSeriesValues = _(data.processed).filter(function(series) { return _(othersNames).contains(series.key); })
+    	var sortedOthersSeriesValues = [];
+    	
+    	// Sort 'othersSeriesValues' by the values from 'othersNames' 
+    	// (if we dont do this step then we will 'extract' the wrong funding type when clicking 'Others').
+    	othersNames.forEach(function(key) {
+    		var found = false;
+    		othersSeriesValues = othersSeriesValues.filter(function(item) {
+    	        if(!found && item.key === key) {
+    	        	sortedOthersSeriesValues.push(item);
+    	            found = true;
+    	            return false;
+    	        } else 
+    	            return true;
+    	    })
+    	});
+    	
+    	// Summarize all funding types (from 'Others') by year.
+    	othersSeriesValues = _(sortedOthersSeriesValues)
+	    	.chain()
+	    	.map(function(series) { return series.values; })
+	        .transpose()
+	        .map(function(othersYear) {
+	            return {
+	            	x: othersYear[0].x,
+	            	y: _(othersYear).reduce(function(t, s) { return t + s.y; }, 0),
+	            	z: ''
+	            };
+	        })
+	        .map(function(item) {
+	        	return {
+	        		x: item.x,
+	        		y: item.y,
+	        		z: common.formatNumber(item.y /** parseFloat(app.settings.numberMultiplier.name)*/)
+	        	};
+	        })
+	        .value()
+	    
+	    var othersSeries = { 
+	        key: localizedOthers,
+	        color: '#777',
+	        special: 'others',
+	        values: othersSeriesValues
+	    };
+    	
+    	// Remove from the original data the funding types we grouped in 'Others' (cant use slice because the sorting in 'data.processed' is different).
+    	data.processed = _(data.processed).filter(function(item) {return !_(othersNames).contains(item.key)});
+    	data.processed.push(othersSeries);
     }
 
     return data;

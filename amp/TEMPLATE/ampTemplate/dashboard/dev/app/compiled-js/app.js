@@ -1647,47 +1647,70 @@ module.exports = ChartModel.extend({
 
     // group smallest contributors as "other"s
     if (this.get('limit') < data.processed.length) {
-      var othersNames = _(data.processed)
-        .chain()
-        .map(function(series) {
-          return {
-            key: series.key,
-            total: _(series.values).reduce(function(t, v) { return t + v.y; }, 0)
-          };
-        })
-        .sortBy('total')
-        .reverse()
-        .rest(this.get('limit') - 2)  // 1 for .length offset, 1 for .rest offset
-        .pluck('key')
-        .value();
+    	// Summarize each funding type and sort by total descending, create a new array only with funding types names.
+    	var othersNames = _(data.processed)
+	        .chain()
+	        .map(function(series) {
+	        	return {
+	        		key: series.key,
+		        	total: _(series.values).reduce(function(t, v) { return t + v.y; }, 0)
+		        };
+	        })
+	        .sortBy('total')
+	        .reverse()
+	        .rest(this.get('limit'))
+	        .pluck('key')
+	        .value();
 
-      var othersSeries = {
-        key: localizedOthers,
-        color: '#777',
-        special: 'others',
-        values: _(data.processed)
-          .chain()
-          .filter(function(series) { return _(othersNames).contains(series.key); })
-          .map(function(series) { return series.values; })
-          .transpose()
-          .map(function(othersYear) {
-            return {
-              x: othersYear[0].x,
-              y: _(othersYear).reduce(function(t, s) { return t + s.y; }, 0),
-              z: ''
-            };
-          })
-          .map(function(item) {
-        	  return {
-        		  x: item.x,
-        		  y: item.y,
-        		  z: common.formatNumber(item.y /** parseFloat(app.settings.numberMultiplier.name)*/)
-        	  };
-          })
-          .value()
-      };
-      data.processed = data.processed.slice(0, this.get('limit'));
-      data.processed.push(othersSeries);
+    	// Create a new array from the original data but only with the funding types from 'Others' category.
+    	var othersSeriesValues = _(data.processed).filter(function(series) { return _(othersNames).contains(series.key); })
+    	var sortedOthersSeriesValues = [];
+    	
+    	// Sort 'othersSeriesValues' by the values from 'othersNames' 
+    	// (if we dont do this step then we will 'extract' the wrong funding type when clicking 'Others').
+    	othersNames.forEach(function(key) {
+    		var found = false;
+    		othersSeriesValues = othersSeriesValues.filter(function(item) {
+    	        if(!found && item.key === key) {
+    	        	sortedOthersSeriesValues.push(item);
+    	            found = true;
+    	            return false;
+    	        } else 
+    	            return true;
+    	    })
+    	});
+    	
+    	// Summarize all funding types (from 'Others') by year.
+    	othersSeriesValues = _(sortedOthersSeriesValues)
+	    	.chain()
+	    	.map(function(series) { return series.values; })
+	        .transpose()
+	        .map(function(othersYear) {
+	            return {
+	            	x: othersYear[0].x,
+	            	y: _(othersYear).reduce(function(t, s) { return t + s.y; }, 0),
+	            	z: ''
+	            };
+	        })
+	        .map(function(item) {
+	        	return {
+	        		x: item.x,
+	        		y: item.y,
+	        		z: common.formatNumber(item.y /** parseFloat(app.settings.numberMultiplier.name)*/)
+	        	};
+	        })
+	        .value()
+	    
+	    var othersSeries = { 
+	        key: localizedOthers,
+	        color: '#777',
+	        special: 'others',
+	        values: othersSeriesValues
+	    };
+    	
+    	// Remove from the original data the funding types we grouped in 'Others' (cant use slice because the sorting in 'data.processed' is different).
+    	data.processed = _(data.processed).filter(function(item) {return !_(othersNames).contains(item.key)});
+    	data.processed.push(othersSeries);
     }
 
     return data;
@@ -33693,7 +33716,7 @@ module.exports = Backbone.View.extend({
 
   createTranslator: function(force) {
     var self = this;
-    var filterTranslateKeys = JSON.parse("{\n  \"amp.gis:title-Country\": \"Country\",\n  \"amp.gis:title-Region\": \"Region\",\n  \"amp.gis:title-Zone\": \"Zone\",\n  \"amp.gis:title-District\": \"District\",\n  \"amp.gis:title-filters\": \"Filter\",\n  \"amp.gis:title-filters\": \"Filter\",\n  \"amp.gis:pane-filters-search\": \"Go\",\n  \"amp.gis:pane-filters-select\": \"select all\",\n  \"amp.gis:pane-filters-deselect\": \"deselect all\",\n  \"[placeholder]amp.gis:pane-filters-search-placeholder\": \"Search...\",\n  \"amp.gis:pane-filters-FundingOrganizations\": \"Funding Organizations\",\n  \"amp.gis:pane-filters-Sector\": \"Sector\",\n  \"amp.gis:pane-filters-Programs\": \"Programs\",\n  \"amp.gis:pane-filters-Activity\": \"Activity\",\n  \"amp.gis:pane-filters-AllAgencies\": \"All Agencies\",\n  \"amp.gis:pane-filters-Financial\": \"Financial\",\n  \"amp.gis:pane-filters-Location\": \"Location\",\n  \"amp.gis:pane-filters-Other\": \"Other\",\n  \"amp.gis:pane-subfilters-Donor\": \"Donor\",\n  \"amp.gis:pane-subfilters-Primary\": \"Primary\",\n  \"amp.gis:pane-subfilters-Secondary\": \"Secondary\",\n  \"amp.gis:pane-subfilters-NationalPlanObjective\": \"National Plan Objective\",\n  \"amp.gis:pane-subfilters-ActivityStatus\": \"Activity Status\",\n  \"amp.gis:pane-subfilters-ApprovalStatus\": \"Approval Status\",\n  \"amp.gis:pane-subfilters-ImplementingAgency\": \"Implementing Agency\",\n  \"amp.gis:pane-subfilters-ExecutingAgency\": \"Executing Agency\",\n  \"amp.gis:pane-subfilters-BeneficiaryAgency\": \"Beneficiary Agency\",\n  \"amp.gis:pane-subfilters-ContractingAgency\": \"Contracting Agency\",\n  \"amp.gis:pane-subfilters-AidModality\": \"Aid Modality\",\n  \"amp.gis:pane-subfilters-TypeOfAssistance\": \"Type Of Assistance\",\n  \"amp.gis:pane-subfilters-ResponsibleOrganization\": \"Responsible Organization\",\n  \"amp.gis:pane-subfilters-Dates\": \"Dates\",\n  \"amp.gis:pane-subfilters-RegionalGroup\": \"Regional Group\",\n  \"amp.gis:pane-subfilters-SectorGroup\": \"Sector Group\",\n  \"amp.gis:pane-filters-all\": \"all\",\n  \"amp.gis:button-reset\": \"Reset\",\n  \"amp.gis:button-cancel\": \"Cancel\",\n  \"amp.gis:button-apply\": \"Apply\",\n  \"amp.gis:pane-subfilters-startdate\": \"Start Date:\",\n  \"amp.gis:pane-subfilters-enddate\": \"End Date:\",\n  \"amp.gis:pane-subfilters-empty\": \"No data for this filter\"\n}\n");
+    var filterTranslateKeys = JSON.parse("{\n  \"amp.gis:title-Country\": \"Country\",\n  \"amp.gis:title-Region\": \"Region\",\n  \"amp.gis:title-Zone\": \"Zone\",\n  \"amp.gis:title-District\": \"District\",\n  \"amp.gis:title-filters\": \"Filter\",\n  \"amp.gis:title-filters\": \"Filter\",\n  \"amp.gis:pane-filters-search\": \"Go\",\n  \"amp.gis:pane-filters-select\": \"select all\",\n  \"amp.gis:pane-filters-deselect\": \"deselect all\",\n  \"[placeholder]amp.gis:pane-filters-search-placeholder\": \"Search...\",\n  \"amp.gis:pane-filters-FundingOrganizations\": \"Funding Organizations\",\n  \"amp.gis:pane-filters-Sector\": \"Sector\",\n  \"amp.gis:pane-filters-Programs\": \"Programs\",\n  \"amp.gis:pane-filters-Activity\": \"Activity\",\n  \"amp.gis:pane-filters-AllAgencies\": \"All Agencies\",\n  \"amp.gis:pane-filters-Financial\": \"Financial\",\n  \"amp.gis:pane-filters-Location\": \"Location\",\n  \"amp.gis:pane-filters-Other\": \"Other\",\n  \"amp.gis:pane-subfilters-Donor\": \"Donor\",\n  \"amp.gis:pane-subfilters-Primary\": \"Primary\",\n  \"amp.gis:pane-subfilters-Secondary\": \"Secondary\",\n  \"amp.gis:pane-subfilters-NationalPlanObjective\": \"National Plan Objective\",\n  \"amp.gis:pane-subfilters-ActivityStatus\": \"Activity Status\",\n  \"amp.gis:pane-subfilters-ApprovalStatus\": \"Approval Status\",\n  \"amp.gis:pane-subfilters-ImplementingAgency\": \"Implementing Agency\",\n  \"amp.gis:pane-subfilters-ExecutingAgency\": \"Executing Agency\",\n  \"amp.gis:pane-subfilters-BeneficiaryAgency\": \"Beneficiary Agency\",\n  \"amp.gis:pane-subfilters-ContractingAgency\": \"Contracting Agency\",\n  \"amp.gis:pane-subfilters-AidModality\": \"Aid Modality\",\n  \"amp.gis:pane-subfilters-TypeOfAssistance\": \"Type Of Assistance\",\n  \"amp.gis:pane-subfilters-ResponsibleOrganization\": \"Responsible Organization\",\n  \"amp.gis:pane-subfilters-Dates\": \"Dates\",\n  \"amp.gis:pane-subfilters-RegionalGroup\": \"Regional Group\",\n  \"amp.gis:pane-subfilters-SectorGroup\": \"Sector Group\",\n  \"amp.gis:pane-subfilters-TertiarySectors\": \"Tertiary Sectors\",\n  \"amp.gis:pane-subfilters-FinancingInstruments\": \"Financing Instruments\",\n  \"amp.gis:pane-filters-all\": \"all\",\n  \"amp.gis:button-reset\": \"Reset\",\n  \"amp.gis:button-cancel\": \"Cancel\",\n  \"amp.gis:button-apply\": \"Apply\",\n  \"amp.gis:pane-subfilters-startdate\": \"Start Date:\",\n  \"amp.gis:pane-subfilters-enddate\": \"End Date:\",\n  \"amp.gis:pane-subfilters-empty\": \"No data for this filter\"\n}\n");
     // setup any popovers as needed...
     self.popovers = self.$('[data-toggle="popover"]');
     self.popovers.popover();

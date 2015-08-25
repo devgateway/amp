@@ -47,17 +47,22 @@
 		<div id="show_login_pop_box">
 			<form action="/aim/postLogin.do" id="loginForm" method="post" onsubmit="ajaxLogin();return false;">
 				<label for="j_username">
-					<digi:trn>Username</digi:trn>:
+					<c:set var="usernameText"><digi:trn>Username</digi:trn></c:set>
+					<c:out escapeXml="true" value="${usernameText}"/>:
 				</label>
 
 				<input name="j_username" type="text" class="inputx" id="j_username">
 
 				<label for="j_password">
-					<digi:trn>Password</digi:trn>:</label>
+				    <c:set var="passwordText"><digi:trn>Password</digi:trn></c:set>
+					<c:out escapeXml="true" value="${passwordText}"/>:
+				</label>
 
 				<input name="j_password" type="password" class="inputx" id="j_password">
 				<div class="clear">
-					<input type="submit"  class="buttonx_sm_lgn"  onclick="ajaxLogin();return false" value='<digi:trn>Login</digi:trn>'>
+				    <c:set var="loginText"><digi:trn>Login</digi:trn></c:set>
+				    <c:set var="loginLabel"><c:out escapeXml="true" value="${loginText}"/></c:set>
+					<input type="submit"  class="buttonx_sm_lgn"  onclick="ajaxLogin();return false" value='${loginLabel}'>
 				</div>
 
 			</form>

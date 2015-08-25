@@ -139,12 +139,12 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.HUMANITARIAN_AID, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_HUMANITARIAN_AID, MoConstants.ATTR_HUMANITARIAN_AID));
 			addColumnDefinition(ColumnConstants.DISASTER_RESPONSE_MARKER, new MDXLevel(MoConstants.DISASTER_RESPONSE_MARKER, MoConstants.H_HARDCODED_TEXT, MoConstants.H_HARDCODED_TEXT));
 
-			
 			addColumnDefinition(ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_GOVERNMENT_APPROVAL_PROCEDURES, MoConstants.ATTR_GOVERNMENT_APPROVAL_PROCEDURES));
 			addColumnDefinition(ColumnConstants.JOINT_CRITERIA, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_JOINT_CRITERIA, MoConstants.ATTR_JOINT_CRITERIA));
 			addColumnDefinition(ColumnConstants.INDIRECT_ON_BUDGET, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.ATTR_INDIRECT_ON_BUDGET, MoConstants.ATTR_INDIRECT_ON_BUDGET));
 			addColumnDefinition(ColumnConstants.STATUS, new MDXLevel(MoConstants.ACTIVITY_STATUS, MoConstants.H_ACTIVITY_STATUS, MoConstants.ATTR_ACTIVITY_STATUS));
-			addColumnDefinition(ColumnConstants.PLEDGES_AID_MODALITY, new MDXLevel(MoConstants.MODALITIES, MoConstants.H_MODALITIES, MoConstants.ATTR_ACTIVITY_STATUS));
+			addColumnDefinition(ColumnConstants.PLEDGES_AID_MODALITY, new MDXLevel(MoConstants.PLEDGE_MODALITIES, MoConstants.H_CATEGORY_NAME, MoConstants.ATTR_ACTIVITY_STATUS));
+			addColumnDefinition(ColumnConstants.MODALITIES, new MDXLevel(MoConstants.MODALITIES, MoConstants.H_CATEGORY_NAME, MoConstants.ATTR_ACTIVITY_STATUS));
 			addColumnDefinition(ColumnConstants.TYPE_OF_COOPERATION, new MDXLevel(MoConstants.TYPE_OF_COOPERATION, MoConstants.H_TYPE_OF_COOPERATION, MoConstants.ATTR_TYPE_OF_COOPERATION));
 			addColumnDefinition(ColumnConstants.TYPE_OF_IMPLEMENTATION, new MDXLevel(MoConstants.TYPE_OF_IMPLEMENTATION, MoConstants.H_TYPE_OF_IMPLEMENTATION, MoConstants.ATTR_TYPE_OF_IMPLEMENTATION));
 			addColumnDefinition(ColumnConstants.PROCUREMENT_SYSTEM, new MDXLevel(MoConstants.PROCUREMENT_SYSTEM, MoConstants.H_PROCUREMENT_SYSTEM, MoConstants.ATTR_PROCUREMENT_SYSTEM));

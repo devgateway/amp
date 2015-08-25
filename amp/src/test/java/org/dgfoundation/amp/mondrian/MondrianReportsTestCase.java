@@ -243,8 +243,9 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		boolean isPartialReportArea = PartialReportArea.class.isAssignableFrom(area.getClass());
 		String testAreaType = isPartialReportArea ? "PaginatedReportAreaForTests" : "ReportAreaForTests"; 
 		
-		return String.format("%snew %s()\n%s%s%s", prefixString(depth), testAreaType,
-				prefixString(depth), describeContents(area, depth, isPartialReportArea),
+		return String.format("%snew %s()%s%s%s", prefixString(depth), testAreaType,
+				(area.getChildren() != null && area.getChildren().size() > 1) ? "\n" + prefixString(depth) : "",
+				describeContents(area, depth, isPartialReportArea),
 				describeChildren(area, depth));
 	}
 	

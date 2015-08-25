@@ -55,6 +55,7 @@ public final class MoConstants {
 
 	//Dimensions
 	public static final String ACTIVITY_STATUS = "Activity Status";
+	public static final String PLEDGE_MODALITIES = "PledgeModalities";
 	public static final String MODALITIES = "Modalities";
 	public static final String TYPE_OF_COOPERATION = "Type of Cooperation";
 	public static final String TYPE_OF_IMPLEMENTATION = "Type of Implementation";

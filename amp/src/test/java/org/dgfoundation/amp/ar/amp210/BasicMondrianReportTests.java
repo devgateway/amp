@@ -445,4 +445,24 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 				correctResult,
 				"en");
 	}
+	
+	@Test
+	public void testModalities() {
+		ReportAreaForTests correctResult = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Modalities", "", "2013-Actual Commitments", "3 348 754", "2013-Actual Disbursements", "1 231 956", "2014-Actual Commitments", "4 529 670,69", "2014-Actual Disbursements", "530 000", "Total Measures-Actual Commitments", "7 878 424,69", "Total Measures-Actual Disbursements", "1 761 956")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "Eth Water", "Modalities", "Diplomats and courses", "2013-Actual Commitments", "", "2013-Actual Disbursements", "545 000", "2014-Actual Commitments", "", "2014-Actual Disbursements", "", "Total Measures-Actual Commitments", "0", "Total Measures-Actual Disbursements", "545 000"),
+	      new ReportAreaForTests().withContents("Project Title", "SSC Project 1", "Modalities", "Diplomats and courses", "2013-Actual Commitments", "111 333", "2013-Actual Disbursements", "555 111", "2014-Actual Commitments", "", "2014-Actual Disbursements", "", "Total Measures-Actual Commitments", "111 333", "Total Measures-Actual Disbursements", "555 111"),
+	      new ReportAreaForTests().withContents("Project Title", "SSC Project 2", "Modalities", "Virtual Platforms and blogs to consult, learn, and exchange ideas", "2013-Actual Commitments", "567 421", "2013-Actual Disbursements", "131 845", "2014-Actual Commitments", "", "2014-Actual Disbursements", "", "Total Measures-Actual Commitments", "567 421", "Total Measures-Actual Disbursements", "131 845"),
+	      new ReportAreaForTests().withContents("Project Title", "Activity Linked With Pledge", "Modalities", "Videoconference and studying abroad", "2013-Actual Commitments", "", "2013-Actual Disbursements", "", "2014-Actual Commitments", "50 000", "2014-Actual Disbursements", "", "Total Measures-Actual Commitments", "50 000", "Total Measures-Actual Disbursements", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "pledged 2", "Modalities", "", "2013-Actual Commitments", "2 670 000", "2013-Actual Disbursements", "", "2014-Actual Commitments", "4 400 000", "2014-Actual Disbursements", "450 000", "Total Measures-Actual Commitments", "7 070 000", "Total Measures-Actual Disbursements", "450 000"),
+	      new ReportAreaForTests().withContents("Project Title", "activity with capital spending", "Modalities", "", "2013-Actual Commitments", "", "2013-Actual Disbursements", "", "2014-Actual Commitments", "79 670,69", "2014-Actual Disbursements", "80 000", "Total Measures-Actual Commitments", "79 670,69", "Total Measures-Actual Disbursements", "80 000"));
+		
+		List<String> activities = Arrays.asList("Eth Water", "SSC Project 1", "SSC Project 2", "Activity Linked With Pledge", "pledged 2", "activity with capital spending");
+		ReportSpecificationImpl spec = buildSpecification("modalities_flat", 
+			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.MODALITIES), 
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+			null, GroupingCriteria.GROUPING_YEARLY);
+		runMondrianTestCase(spec, "en", activities, correctResult);
+	}
 }

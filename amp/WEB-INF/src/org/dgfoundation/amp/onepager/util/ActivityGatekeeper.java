@@ -85,7 +85,7 @@ public class ActivityGatekeeper {
 	}
 	
 	public static boolean verifyLock(String id, String hash){
-		if (keycode.get(id) != null && keycode.get(id).compareTo(hash) == 0)
+		if (keycode.get(id) != null && keycode.get(id).equals(hash))
 			return true;
 		else
 			return false;

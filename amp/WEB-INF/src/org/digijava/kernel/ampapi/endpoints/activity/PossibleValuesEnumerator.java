@@ -38,7 +38,13 @@ public class PossibleValuesEnumerator {
 	
 	public static final Logger LOGGER = Logger.getLogger(PossibleValuesEnumerator.class);
 	
-	
+	/**
+	 * recursive method that gets possible values that can be held by a field
+	 * @param longFieldName underscorified field name 
+	 * @param clazz the class on which the method operates
+	 * @param discriminatorOption recursive option to be passed down if there was a discriminator option higher up
+	 * @return
+	 */
 	public static List<JsonBean> getPossibleValuesForField(String longFieldName, Class<?> clazz, String discriminatorOption) {
 
 		String fieldName = "";
@@ -98,6 +104,18 @@ public class PossibleValuesEnumerator {
 			}
 		}
 	}
+	/**
+	 * method employed for the scenario that possible values are to be obtained from
+	 * a FieldsDiscriminator-derived class, instead of the usual database queries
+	 * @param discClass
+	 * @return
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws InstantiationException
+	 */
 	private static List<JsonBean> getPossibleValuesDirectly(Class<? extends FieldsDiscriminator> discClass) 
 			throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, 
 			InvocationTargetException, InstantiationException {
@@ -114,9 +132,14 @@ public class PossibleValuesEnumerator {
 		return result;
 		
 	}
+	/**
+	 * Complex fields are discriminated fields -- when several underscorified paths 
+	 * lead to the same Java field. This method gets possible values for such fields
+	 * @param field
+	 * @param configValue
+	 * @return
+	 */
 	private static List<JsonBean> getPossibleValuesForComplexField(Field field, String configValue) {
-		
-		
 		List<JsonBean> result = new ArrayList<JsonBean>();
 		if (configValue == null) {
 			return getPossibleValuesForField(field);
@@ -137,7 +160,6 @@ public class PossibleValuesEnumerator {
 			return getPossibleValuesForField(field);
 		}
 		
-		
 		for (Object item : items) {
 			JsonBean jsonItem = null;
 			try {
@@ -147,14 +169,20 @@ public class PossibleValuesEnumerator {
 				throw new RuntimeException(exc);
 			}
 			result.add(jsonItem);
-			
 		}
-	
-//			result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, field.getName() + "/config:" + originalName)));
-//			return result;
 		return result;
 	}
 	
+	/**
+	 * Method that wraps generic approaches for the programs, sector and org. role entities
+	 * @param configType
+	 * @param configTableName
+	 * @param entityIdColumnName
+	 * @param conditionColumnName
+	 * @param idColumnName
+	 * @param clazz
+	 * @return
+	 */
 	private static List<Object> getSpecialCaseObjectList(final String configType, final String configTableName, 
 					 String entityIdColumnName, final String conditionColumnName, final String idColumnName, Class<?> clazz) {
 //		List<AmpSector> result = new ArrayList<AmpSector>();
@@ -181,6 +209,13 @@ public class PossibleValuesEnumerator {
 		return objectList;
 	}
 	
+	/**
+	 * Generic method for obtaining possible values for most cases (without any fancy special cases)
+	 * @param field
+	 * @return
+	 */
+	
+	@SuppressWarnings("unchecked")
 	private static List<JsonBean> getPossibleValuesForField(Field field) {
 		if (!InterchangeUtils.isFieldEnumerable(field))
 			return new ArrayList<JsonBean>();
@@ -204,10 +239,17 @@ public class PossibleValuesEnumerator {
 		}
 		return result;
 	}
+	
+	/**
+	 * Gets possible values for the AmpCategoryValue class
+	 * @param field
+	 * @param discriminatorOption
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
 	private static List<JsonBean> getPossibleCategoryValues(Field field, String discriminatorOption) {
 		List <JsonBean> result = new ArrayList<JsonBean>();
 		Interchangeable ant = field.getAnnotation(Interchangeable.class);
-		String whereClause;
 		if (StringUtils.isBlank(discriminatorOption)) {
 			discriminatorOption = ant.discriminatorOption();
 		}
@@ -215,7 +257,8 @@ public class PossibleValuesEnumerator {
 			String queryString = "SELECT acv from " + AmpCategoryValue.class.getName() + " acv "
 					+ "WHERE acv.ampCategoryClass.keyName ='" + discriminatorOption + "'";
 	
-			List<AmpCategoryValue> acvList = (List<AmpCategoryValue>) InterchangeUtils.getSessionWithPendingChanges().createQuery(queryString).list();
+			List<AmpCategoryValue> acvList = (List<AmpCategoryValue>) InterchangeUtils
+					.getSessionWithPendingChanges().createQuery(queryString).list();
 	
 			for (AmpCategoryValue acv : acvList) {
 				if (acv.isVisible()) {
@@ -236,6 +279,16 @@ public class PossibleValuesEnumerator {
 		return result; 
 	}
 	
+	/**
+	 * Sets properties for a single possible value (the obj)
+	 * @param obj
+	 * @return
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
 	private static JsonBean setProperties(Object obj) throws NoSuchMethodException, 
 	SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		if (obj == null)

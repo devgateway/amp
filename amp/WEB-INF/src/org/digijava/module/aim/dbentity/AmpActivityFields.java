@@ -39,8 +39,7 @@ LoggerIdentifiable, Cloneable {
 	
 	protected static String [] IMPLEMENTED_ACTIONS=new String[]{GatePermConst.Actions.EDIT};
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.CREATED_BY)
-	protected AmpTeamMember createdBy;
+    protected AmpTeamMember createdBy;
 	
 	@Interchangeable(fieldTitle = "Project Impact", importable = true, fmPath="/Activity Form/Identification/Project Impact")
 	@VersionableFieldTextEditor(fieldTitle = "Project Impact")
@@ -447,7 +446,8 @@ LoggerIdentifiable, Cloneable {
 
 
 
-	@VersionableFieldSimple(fieldTitle = "Created By", blockSingleChange = true)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.CREATED_BY)
+	@VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.CREATED_BY, blockSingleChange = true)
 	protected AmpTeamMember activityCreator;
 	
 	@Interchangeable(fieldTitle = ActivityFieldsConstants.CREATED_DATE, importable = false)
@@ -461,7 +461,8 @@ LoggerIdentifiable, Cloneable {
 	@Interchangeable(fieldTitle = "Iati Last Update Date", importable = true)
 	@VersionableFieldSimple(fieldTitle = "Iati Last Update Date", blockSingleChange = true)
 	protected Date iatiLastUpdatedDate;
-	
+
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVED_BY)
 	protected AmpTeamMember approvedBy;
 	
 	@Interchangeable(fieldTitle = "Approval Date", importable = false)

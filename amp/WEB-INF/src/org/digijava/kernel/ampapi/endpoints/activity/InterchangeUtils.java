@@ -89,6 +89,12 @@ public class InterchangeUtils {
 	
 	
 
+	/**
+	 * Decides whether a field is enumerable (may be called in the Possible Values EP)
+	 *  
+	 * @param inputField
+	 * @return true if possible values are limited to a set for this field, false if otherwise
+	 */
 	public static boolean isFieldEnumerable(Field inputField) {
 		Class clazz = getClassOfField(inputField);
 		if (isSimpleType(clazz))
@@ -102,6 +108,12 @@ public class InterchangeUtils {
 		return false;
 	}
 	
+	/**
+	 * Maps every title in the AF fields model to an underscorified version
+	 * TODO: this section needs heavy rewrite -- we hope to remove the need to underscorify at all
+	 * and use the Field Label separately from the Field Title
+	 * @param clazz
+	 */
 	private static void addUnderscoredTitlesToMap(Class<?> clazz) {
 		for (Field field : clazz.getDeclaredFields()) {
 			Interchangeable ant = field.getAnnotation(Interchangeable.class);
@@ -130,6 +142,17 @@ public class InterchangeUtils {
 	}
 	
 
+	/**
+	 * gets specific child object by field title (not underscorified!)
+	 * looks like it's never been used and it's also potentially wrong and broken
+	 * @param clazz
+	 * @param fieldTitle
+	 * @param obj
+	 * @param finalField
+	 * @return
+	 * @throws Exception
+	 */
+	@Deprecated
 	private static Object getChildObject(Class<?> clazz, String fieldTitle, Object obj, boolean finalField) throws Exception {
 		while (clazz != Object.class) {
 			boolean found = false;
@@ -139,6 +162,10 @@ public class InterchangeUtils {
 				if (disc != null) {
 					for (Interchangeable setting : disc.settings()) {
 						if (ant.fieldTitle().equals(fieldTitle)) {
+							//!!!!!!
+							//the actual field name should be used here, not field title!!!!!
+							//not fixing this because no point debugging it -- nobody uses this
+							//but in case you need it, fix it first
 							Method meth = clazz.getMethod(getGetterMethodName(fieldTitle));
 							Object finalObj = meth.invoke(obj);
 							if (finalField && setting.pickIdOnly())
@@ -172,6 +199,7 @@ public class InterchangeUtils {
 	 * @return the value at the specified path. null if following the path
 	 * cuts off before the end path is reached, or if the value itself is null.
 	 */
+	@Deprecated
 	public static Object getValueFromPath(AmpActivityVersion aav, String path) {
 		
 		String fieldPath = path;
@@ -226,12 +254,8 @@ public class InterchangeUtils {
 			}
 			fieldPath = path.substring(fieldPath.indexOf('~') + 1);
 			}
-		
 		//path is complete, object is set to proper value
 		return currentBranch.get(fieldPath);
-		
-		
-//		return null;
 	}
 	
 	
@@ -327,7 +351,12 @@ public class InterchangeUtils {
 		}
 		return bld.toString();
 	}
-	
+	/**
+	 * seems unused anywhere
+	 * @param field
+	 * @return
+	 */
+	@Deprecated
 	public static Method getCustomInterchangeableMethod (Field field) {
 		InterchangeableDiscriminator disc = field.getAnnotation(InterchangeableDiscriminator.class);
 		if (disc != null) {
@@ -342,11 +371,23 @@ public class InterchangeUtils {
 		return null;
 	}
 	
+	/**
+	 * Seems unused anywhere
+	 * @param field
+	 * @return
+	 */
+	@Deprecated
 	public static boolean hasCustomInterchangeableMethod(Field field) {
 		InterchangeableDiscriminator disc = field.getAnnotation(InterchangeableDiscriminator.class);
 		return (disc != null) && disc.method().length() > 0;
 	}
 
+	/**
+	 * Obtains the discriminator class of the field, if it has one
+	 * @param field
+	 * @return null if the field doesn't have a discriminator class attached, otherwise -- the class
+	 * @throws ClassNotFoundException
+	 */
 	public static Class<? extends FieldsDiscriminator> getDiscriminatorClass(Field field) throws ClassNotFoundException {
 		InterchangeableDiscriminator ant = field.getAnnotation(InterchangeableDiscriminator.class);
 		if (ant != null && !ant.discriminatorClass().equals("")) {
@@ -363,11 +404,11 @@ public class InterchangeUtils {
 		return field.getAnnotation(InterchangeableDiscriminator.class) != null;
 	}
 	
-	public static boolean isTranslatbleClass(Class<?> classEntity) {
+	public static boolean isTranslatableClass(Class<?> classEntity) {
 		return classEntity.getAnnotation(TranslatableClass.class) != null;
 	}
 	
-	public static boolean isTranslatbleField(Field field) {
+	public static boolean isTranslatableField(Field field) {
 		return field.getAnnotation(TranslatableField.class) != null;
 	}
 	
@@ -478,7 +519,8 @@ public class InterchangeUtils {
 	}
 
 	
-	public static Field getIdFieldOfEntity(Class entityClass) {
+	public static Field getIdFieldOfEntity(@SuppressWarnings("rawtypes") Class entityClass) {
+		@SuppressWarnings("rawtypes")
 		Class workingClass = entityClass;
 		while (workingClass != Object.class) {
 			Field[] fields = workingClass.getDeclaredFields();
@@ -537,15 +579,21 @@ public class InterchangeUtils {
 		}
 	}	
 	
+	/**
+	 * generates a string that should hit with the getter method name 
+	 *TODO: add the case the getter is called isSomething (needs careful refactoring from above)
+	 * @param fieldName
+	 * @return
+	 */
 	public static String getGetterMethodName(String fieldName) {
 		return "get" + WordUtils.capitalize(fieldName);
-//		if (fieldName.length() == 1)
-//			return "get" + Character.toUpperCase(fieldName.charAt(0));
-//		return "get" + Character.toUpperCase(fieldName.charAt(0)) + 
-//				((fieldName.length() > 1) ? fieldName.substring(1) : "");
 	}	
 	
-	
+	/**
+	 * generates a string that should hit with the setter method name
+	 * @param fieldName
+	 * @return
+	 */
 	public static String getSetterMethodName(String fieldName) {
 		if (fieldName.length() == 1)
 			return "set" + Character.toUpperCase(fieldName.charAt(0));
@@ -563,19 +611,15 @@ public class InterchangeUtils {
 	 * @throws IllegalArgumentException
 	 * @throws InvocationTargetException
 	 */
-	//TODO: optimize it. it doesn't have to be n*n for field descent
 	public static Long getId(Object obj) throws NoSuchMethodException,	SecurityException, 
 		IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		//TODO: throw an exception here? it's currently swallowed
 		if (!Identifiable.class.isAssignableFrom(obj.getClass())) {
-//			System.out.println("URURU: " + obj.getClass() + "isn't identifiable!");
 			return null;
-//			return null;
-
 		}
 		Identifiable identifiableObject = (Identifiable) obj;
 		Long id = (Long) identifiableObject.getIdentifier(); 
 		return id;
-		
 	}
 	
 

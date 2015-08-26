@@ -39,8 +39,6 @@ LoggerIdentifiable, Cloneable {
 	
 	protected static String [] IMPLEMENTED_ACTIONS=new String[]{GatePermConst.Actions.EDIT};
 
-    protected AmpTeamMember createdBy;
-	
 	@Interchangeable(fieldTitle = "Project Impact", importable = true, fmPath="/Activity Form/Identification/Project Impact")
 	@VersionableFieldTextEditor(fieldTitle = "Project Impact")
 	protected String projectImpact;
@@ -1545,14 +1543,6 @@ LoggerIdentifiable, Cloneable {
 
 		public void setMinistryCode(String ministryCode) {
 			this.ministryCode = ministryCode;
-		}
-
-		public AmpTeamMember getCreatedBy() {
-			return createdBy;
-		}
-
-		public void setCreatedBy(AmpTeamMember createdBy) {
-			this.createdBy = createdBy;
 		}
 
 		public String getLessonsLearned() {

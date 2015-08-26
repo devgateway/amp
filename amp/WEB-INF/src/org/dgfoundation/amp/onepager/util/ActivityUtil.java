@@ -141,7 +141,7 @@ public class ActivityUtil {
 		
 		if (a.getAmpActivityId() == null){
 			a.setActivityCreator(ampCurrentMember);
-			a.setCreatedBy(ampCurrentMember);
+			a.setActivityCreator(ampCurrentMember);
 			a.setTeam(ampCurrentMember.getAmpTeam());
 			newActivity = true;
 		}

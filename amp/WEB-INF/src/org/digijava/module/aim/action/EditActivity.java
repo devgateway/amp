@@ -226,11 +226,11 @@ public class EditActivity extends Action {
         eaForm.getIdentification().setWasDraft(activity.isCreatedAsDraft());
         if(activity!=null)
         {
-        	if (activity.getCreatedBy() != null && activity.getCreatedBy().getUser() != null)
+        	if (activity.getActivityCreator() != null && activity.getActivityCreator().getUser() != null)
         	{
-        		eaForm.getIdentification().setActAthFirstName(activity.getCreatedBy().getUser().getFirstNames());
-        		eaForm.getIdentification().setActAthLastName(activity.getCreatedBy().getUser().getLastName());
-        		eaForm.getIdentification().setActAthEmail(activity.getCreatedBy().getUser().getEmail());
+        		eaForm.getIdentification().setActAthFirstName(activity.getActivityCreator().getUser().getFirstNames());
+        		eaForm.getIdentification().setActAthLastName(activity.getActivityCreator().getUser().getLastName());
+        		eaForm.getIdentification().setActAthEmail(activity.getActivityCreator().getUser().getEmail());
         	}
             boolean hasTeamLeadOrValidator = false;
             if (currentTeam != null) {

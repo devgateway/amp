@@ -2279,7 +2279,7 @@ public class DEImportBuilder {
                     if (grpId > -0l) {
                         AmpActivityGroup currentGroup = DataExchangeUtils.getAmpActivityGroupById(grpId);
                         prevVersion = currentGroup.getAmpActivityLastVersion();
-                        AmpTeamMember modBy = prevVersion.getModifiedBy() == null ? prevVersion.getCreatedBy() : prevVersion.getModifiedBy();
+                        AmpTeamMember modBy = prevVersion.getModifiedBy() == null ? prevVersion.getActivityCreator() : prevVersion.getModifiedBy();
                         try {
                             ampActivity = ActivityVersionUtil.cloneActivity(prevVersion, modBy);
                             ampActivity.setAmpActivityGroup(currentGroup);

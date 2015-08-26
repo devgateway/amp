@@ -73,6 +73,9 @@ import org.digijava.module.translation.util.ContentTranslationUtil;
  */
 public class ActivityImporter {
 	private static final Logger logger = Logger.getLogger(ActivityImporter.class);
+	/**
+	 * FM path for the "Save as Draft" feature being enabled 
+	 */
 	private static final String SAVE_AS_DRAFT_PATH = "/Activity Form/Save as Draft";
 	private static final boolean ALLOW_SAVE_AS_DRAFT_SHIFT = true;
 	
@@ -108,10 +111,16 @@ public class ActivityImporter {
         this.endpointContextPath = endpointContextPath;
 	}
 
+    /**
+     * Cleans all the fields of the new activity (except for AMP ID and internal ID),
+     * in the case it's an update process.
+     * It has to be this way because otherwise it would contain leftover data from the old activity 
+     * (in m2ms, like sectors)
+     */
     private void cleanupNewActivity() {
     	if (newActivity == null)
     		return;
-
+    	
 		Map<String, Method> aafMethods = new HashMap<String, Method>();
 		for (Method method : AmpActivityFields.class.getMethods()) {
 			aafMethods.put(method.getName(), method);
@@ -128,6 +137,7 @@ public class ActivityImporter {
 					Method setterMeth = aafMethods.get(InterchangeUtils.getSetterMethodName(field.getName()));
 					Method getterMeth = aafMethods.get(InterchangeUtils.getGetterMethodName(field.getName()));
 					if (Collection.class.isAssignableFrom(field.getType())) {
+						@SuppressWarnings("unchecked")
 						Collection<Object> col = (Collection<Object>) getterMeth.invoke(newActivity);
 						if (col != null)
 							col.clear();
@@ -232,6 +242,19 @@ public class ActivityImporter {
 		return new ArrayList<ApiErrorMessage>(errors.values());
 	}
 	
+	/**
+	 * Recursive method (through ->validateAndImport->validateSubElements->[this method]
+	 * that attempts to validate the incoming JSON and import its data. 
+	 * If there are any errors -> append them to the validator to propagate upwards
+	 * @param newParent Matched parent object in which resides the field of the activity we're importing or updating
+	 * (for example, AmpActivityVersion newActivity is newParent for 'sectors'
+	 * @param oldParent Matched parent object in which the old activity field resides
+	 * @param fieldsDef definitions of the fields in this parent (from Fields Enumeration EP)
+	 * @param newJsonParent parent JSON object in which reside the analyzed fields 
+	 * @param oldJsonParent old parent JSON
+	 * @param fieldPath the underscorified path to the field currently validated & imported
+	 * @return
+	 */
 	protected Object validateAndImport(Object newParent, Object oldParent, List<JsonBean> fieldsDef, 
 			Map<String, Object> newJsonParent, Map<String, Object> oldJsonParent, String fieldPath) {
 		Set<String> fields = new HashSet<String>(newJsonParent.keySet());
@@ -271,14 +294,22 @@ public class ActivityImporter {
 		return true;
 	}
 	
-	
+	/**
+	 * Validates and imports a single element (and its subelements)  
+	 * @param newParent parent object containing the field
+	 * @param oldParent old parent (for activity)
+	 * @param fieldDef JsonBean holding the description of the field (obtained from the Fields Enumerator EP)
+	 * @param newJsonParent JSON as imported
+	 * @param oldJsonParent JSON of the old activity (if it's update) from the Export Activity EP
+	 * @param fieldPath underscorified path to the field
+	 * @return
+	 */
 	protected Object validateAndImport(Object newParent, Object oldParent, JsonBean fieldDef,
 			Map<String, Object> newJsonParent, Map<String, Object> oldJsonParent, String fieldPath) {
 		String fieldName = getFieldName(fieldDef, newJsonParent);
 		String currentFieldPath = (fieldPath == null ? "" : fieldPath + "~") + fieldName;
 		Object oldJsonValue = oldJsonParent == null ? null : oldJsonParent.get(fieldName);
 		Object newJsonValue = newJsonParent == null ? null : newJsonParent.get(fieldName);
-		
 		// validate and import sub-elements first (if any)
 		newParent = validateSubElements(fieldDef, newParent, oldParent, newJsonValue, oldJsonValue, currentFieldPath);
 		// then validate current field itself
@@ -292,6 +323,12 @@ public class ActivityImporter {
 		return newParent;
 	}
 	
+	/**
+	 * Obtains the field name
+	 * @param fieldDef
+	 * @param newJsonParent
+	 * @return
+	 */
 	protected String getFieldName(JsonBean fieldDef, Map<String, Object> newJsonParent) {
 		if (fieldDef == null) {
 			if (newJsonParent != null && newJsonParent.keySet().size() == 1) {
@@ -303,6 +340,16 @@ public class ActivityImporter {
 		return null;
 	}
 	
+	/**
+	 * Validates sub-elements (recursively)
+	 * @param fieldDef
+	 * @param newParent
+	 * @param oldParent
+	 * @param newJsonValue
+	 * @param oldJsonValue
+	 * @param fieldPath
+	 * @return
+	 */
 	protected Object validateSubElements(JsonBean fieldDef, Object newParent, Object oldParent, Object newJsonValue, 
 			Object oldJsonValue, String fieldPath) {
 		// simulate temporarily fieldDef
@@ -321,6 +368,7 @@ public class ActivityImporter {
 		boolean isList = ActivityEPConstants.FIELD_TYPE_LIST.equals(fieldType);
 		
 		// first validate all sub-elements
+		@SuppressWarnings("unchecked")
 		List<JsonBean> childrenFields = (List<JsonBean>) fieldDef.get(ActivityEPConstants.CHILDREN);
 		List<Map<String, Object>> childrenNewValues = getChildrenValues(newJsonValue, isList);
 		List<Map<String, Object>> childrenOldValues = getChildrenValues(oldJsonValue, isList);
@@ -385,7 +433,12 @@ public class ActivityImporter {
 		}
 		return newParent;
 	}
-	
+	/**
+	 * Gets items marked under the "children" key in the hierarchical branch of the imported JSON
+	 * @param jsonValue
+	 * @param isList
+	 * @return
+	 */
 	private List<Map<String, Object>> getChildrenValues(Object jsonValue, boolean isList) {
 		if (jsonValue != null) {
 			if (jsonValue instanceof List) { 
@@ -393,15 +446,17 @@ public class ActivityImporter {
 			} else if (isList && jsonValue instanceof Map) {
 				List<Map<String, Object>> jsonValues = new ArrayList<Map<String, Object>>();
 				jsonValues.add((Map<String, Object>) jsonValue);
-//				for (final Map.Entry<String, Object> entry : ((Map<String, Object>) jsonValue).entrySet()) {
-//					jsonValues.add(new HashMap<String, Object> () {{put(entry.getKey(), entry.getValue());}});
-//				}
 				return jsonValues;
 			}
 		}
 		return null;
 	}
-	
+	/**
+	 * Generates an instance of the type of the field 
+	 * @param parent
+	 * @param field
+	 * @return
+	 */
 	protected Object getNewInstance(Object parent, Field field) {
 		Object fieldValue = null;
 		try {
@@ -490,7 +545,7 @@ public class ActivityImporter {
 		}
 		return newParent;
 	}
-	
+
 	protected Field getField(Object parent, String actualFieldName) {
 		if (parent == null) {
 			return null;
@@ -549,18 +604,26 @@ public class ActivityImporter {
 		}
 		return null;
 	}
-	
-	protected boolean valueChanged(JsonBean newValue, JsonBean oldValue) {
-		// TODO:
-		return true;
-	}
-	
+
+	//unused anywhere -- commenting out for now
+	//please delete it if it's September 2015 or later and you're reading this
+//	protected boolean valueChanged(JsonBean newValue, JsonBean oldValue) {
+//		// TODO:
+//		return true;
+//	}
+	/**
+	 * Gets the object identified by an ID, from the Possible Values EP
+	 * @param objectType
+	 * @param objectId
+	 * @return
+	 */
 	protected Object getObjectReferencedById(Class<?> objectType, Long objectId) {
 		if (Collection.class.isAssignableFrom(objectType))
 			throw new RuntimeException("Can't handle a collection of ID-linked objects yet!");
 		return InterchangeUtils.getObjectById(objectType, objectId);
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected Object getNewValue(Field field, Object parentObj, Object jsonValue, JsonBean fieldDef, String fieldPath) {
 		boolean isCollection = Collection.class.isAssignableFrom(field.getType());
 		if (jsonValue == null && !isCollection)
@@ -571,8 +634,6 @@ public class ActivityImporter {
 		List<JsonBean> allowedValues = getPossibleValuesForFieldCached(fieldPath, AmpActivityFields.class, null);
 		boolean idOnly = Boolean.TRUE.equals(fieldDef.get(ActivityEPConstants.ID_ONLY)); 
 		if (!isCollection && idOnly) {
-			//Number->String->Long. 
-			//if anyone has a better idea how to make this conversion painless, please ping me. @acartaleanu
 			
 			InterchangeableDiscriminator discr = field.getAnnotation(InterchangeableDiscriminator.class);
 			if (discr != null && discr.discriminatorClass().length() > 0) {
@@ -585,7 +646,7 @@ public class ActivityImporter {
 					throw new RuntimeException("Cannot instantiate discriminator class " + discr.discriminatorClass());
 				}				
 			}
-			return getObjectReferencedById(field.getType(), Long.valueOf(jsonValue.toString()));
+			return getObjectReferencedById(field.getType(), ((Number)jsonValue).longValue());
 		}
 		
 		if (Collection.class.isAssignableFrom(field.getType())) {
@@ -652,7 +713,6 @@ public class ActivityImporter {
 		if (TranslationType.NONE == trnType) {
 			return (String) jsonValue;
 		}
-		
 		String value = null;
 		if (TranslationType.STRING == trnType) {
 			value = extractContentTranslation(field, parentObj, (Map<String, Object>) jsonValue);
@@ -781,7 +841,9 @@ public class ActivityImporter {
 			throw new RuntimeException(e);
 		}
 	}
-	
+	/**
+	 * Performs operations that need to be done before the activity is saved
+	 */
 	protected void prepareToSave() {
         newActivity.setLastImportedAt(new Date());
         newActivity.setLastImportedBy(currentMember);
@@ -794,6 +856,9 @@ public class ActivityImporter {
 		initDefaults();
 	}
 	
+	/**
+	 * init m2m-fields before them being saved
+	 */
 	protected void initDefaults() {
 		for (Field field : AmpActivityFields.class.getFields()) {
 			if (InterchangeUtils.isVersionableTextField(field)) {
@@ -810,6 +875,10 @@ public class ActivityImporter {
 	}
 	
 
+	/*
+	 * First, every reference to AmpActivityVersion in all the m2ms has been added to a map; 
+	 * now, we're setting them all to point to the AmpActivityVersion we're importing
+	 */
 	protected void postprocessActivityReferences() {
 		for (Map.Entry<Object, Field> entry : activityFieldsForPostprocess.entrySet()) {
 			Field field = entry.getValue();
@@ -823,6 +892,10 @@ public class ActivityImporter {
 		}
 	}
 	
+	/*
+	 * this was the original way to circumvent Hibernate exceptions on save. 
+	 * Since a lot of generic workarounds have been applied, don't know if it's still relevant 
+	 */
 	protected void initSectors() {
 		if (newActivity.getSectors() == null) {
 			newActivity.setSectors(new HashSet<AmpActivitySector>());
@@ -846,7 +919,6 @@ public class ActivityImporter {
 		if (newActivity.getFunding() == null) {
 			newActivity.setFunding(new HashSet<AmpFunding>());
         } else {
-        	// TODO:
         }
 	}
 	
@@ -869,7 +941,6 @@ public class ActivityImporter {
 		if (newActivity.getLocations() == null) {
         	newActivity.setLocations(new HashSet<AmpActivityLocation>());
         } else {
-        	// TODO:
         }
 	}
 	
@@ -877,7 +948,6 @@ public class ActivityImporter {
 		if (newActivity.getCategories() == null) {
 			newActivity.setCategories(new HashSet<AmpCategoryValue>());
 		} else {
-			// TODO:
 		}
 	}
 	
@@ -885,7 +955,6 @@ public class ActivityImporter {
 		if (newActivity.getActivityContacts() == null) {
         	newActivity.setActivityContacts(new HashSet<AmpActivityContact>());
         } else {
-        	// TODO:
         }
 	}
 

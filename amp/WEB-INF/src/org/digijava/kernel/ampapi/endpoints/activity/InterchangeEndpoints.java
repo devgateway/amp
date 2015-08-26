@@ -15,7 +15,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.digijava.kernel.ampapi.endpoints.activity.utils.AIHelper;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -56,8 +56,9 @@ public class InterchangeEndpoints {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Provides full set of available fields and their settings/rules in a hierarchical structure.
+	 * @return JSON with fields information
+	 * @see <a href="https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration">Fields Enumeration Wiki<a/>
 	 */
 	@GET
 	@Path("fields")
@@ -128,6 +129,7 @@ public class InterchangeEndpoints {
 	
 	/**
 	 * Imports an activity
+	 * 
 	 * @param newJson activity configuration
 	 * @return latest project overview or an error if invalid configuration is received
 	 */
@@ -141,6 +143,7 @@ public class InterchangeEndpoints {
 	
 	/**
 	 * Updates an activity
+	 * 
 	 * @param newJson activity configuration
 	 * @return latest project overview or an error if invalid configuration is received
 	 */
@@ -158,7 +161,7 @@ public class InterchangeEndpoints {
 			// invalidating
 			String details = "url project_id = " + projectId + ", json " + ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME +
 					" = " + internalId;
-			AIHelper.addGeneralError(newJson, new ApiErrorMessage(ActivityErrors.UPDATE_ID_MISMATCH, details));
+			EndpointUtils.addGeneralError(newJson, new ApiErrorMessage(ActivityErrors.UPDATE_ID_MISMATCH, details));
 		}
 
 		return InterchangeUtils.importActivity(newJson, true, uri.getBaseUri() + "activity");

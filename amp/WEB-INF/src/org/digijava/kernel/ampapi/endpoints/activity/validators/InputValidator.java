@@ -10,11 +10,13 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
- * Defines common base class for input validation  
+ * Defines common base class for input validation
+ * 
  * @author Nadejda Mandrescu
  */
 public abstract class InputValidator {
 	protected boolean continueOnError = false;
+	// REFACTOR: seems to not be actually needed
 	protected boolean continueOnSuccess = true;
 	
 	/**

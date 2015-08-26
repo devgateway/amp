@@ -86,8 +86,6 @@ public class InterchangeUtils {
 	public static String getDiscriminatedFieldTitle(String fieldName) {
 		return discriminatorMap.get(deunderscorify(fieldName));
 	}
-	
-	
 
 	/**
 	 * Decides whether a field is enumerable (may be called in the Possible Values EP)
@@ -114,6 +112,7 @@ public class InterchangeUtils {
 		Number n = (Number) obj;
 		return n.doubleValue();
 	}
+	
 	/**
 	 * Maps every title in the AF fields model to an underscorified version
 	 * TODO: this section needs heavy rewrite -- we hope to remove the need to underscorify at all
@@ -196,6 +195,7 @@ public class InterchangeUtils {
 		}
 		return null;
 	}
+	
 	/**
 	 * Gets the value of a field from the specified path from the AmpActivityVersion 
 	 * transient object.
@@ -237,7 +237,6 @@ public class InterchangeUtils {
 		return obj;
 	}
 	
-	
 	/**
 	 * Gets the value at the specified path from the JSON description of the activity. 
 	 * 
@@ -263,7 +262,6 @@ public class InterchangeUtils {
 		//path is complete, object is set to proper value
 		return currentBranch.get(fieldPath);
 	}
-	
 	
 	/**
 	 * transforms a Map<String,String> to a JsonBean with equal structure
@@ -357,6 +355,7 @@ public class InterchangeUtils {
 		}
 		return bld.toString();
 	}
+	
 	/**
 	 * seems unused anywhere
 	 * @param field
@@ -628,9 +627,6 @@ public class InterchangeUtils {
 		return id;
 	}
 	
-
-	
-	
 	/**
 	 * Gets the field required value. 
 	 * 
@@ -664,6 +660,14 @@ public class InterchangeUtils {
 		else
 			return getGenericClass(field);
 	}
+	
+	public static Map<Integer, String> getTransactionTypeValues() {
+		Map<Integer, String> transactionTypeToString = new HashMap<Integer, String>();
+		for (Map.Entry<String, Integer> entry : ArConstants.TRANSACTION_TYPE_NAME_TO_ID.entrySet()) {
+			transactionTypeToString.put(entry.getValue(), entry.getKey());
+		}
+		return transactionTypeToString;
+	}
 		
 	/**
 	 * Imports or Updates an activity
@@ -680,18 +684,11 @@ public class InterchangeUtils {
 		return getImportResult(importer.getNewActivity(), importer.getNewJson(), errors);
 	}
 	
-	public static Map<Integer, String> getTransactionTypeValues() {
-		Map<Integer, String> transactionTypeToString = new HashMap<Integer, String>();
-		for (Map.Entry<String, Integer> entry : ArConstants.TRANSACTION_TYPE_NAME_TO_ID.entrySet()) {
-			transactionTypeToString.put(entry.getValue(), entry.getKey());
-		}
-		return transactionTypeToString;
-	}
-	
 	protected static JsonBean getImportResult(AmpActivityVersion newActivity, JsonBean newJson, 
 			List<ApiErrorMessage> errors) {
 		JsonBean result = null;
 		if (errors.size() == 0 && newActivity == null) {
+			// no new activity, but also errors are missing -> unknown error
 			result = ApiError.toError(ApiError.UNKOWN_ERROR); 
 		} else if (errors.size() > 0) {
 			result = ApiError.toError(errors);
@@ -753,8 +750,6 @@ public class InterchangeUtils {
 		JsonBean errorBean = ApiError.toError(message);
 		result.set(ApiError.JSON_ERROR_CODE, errorBean.get(ApiError.JSON_ERROR_CODE));
 	}
-
-
 
 	/**
 	 * @param containerReq current request
@@ -861,9 +856,6 @@ public class InterchangeUtils {
         }
         return null;
     }
-
-
-	
 	
 	/**
 	 * Determine if this is an AmpActivityVersion field reference

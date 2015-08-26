@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Collections;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
@@ -28,6 +29,8 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
 import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
@@ -434,5 +437,24 @@ public class EndpointUtils {
         TLSUtils.getRequest().removeAttribute(EPConstants.RESPONSE_STATUS);
         TLSUtils.getRequest().removeAttribute(EPConstants.RESPONSE_HEADERS_MAP);
     }
+    
+    /**
+	 * Adds a general error to any JSON result
+	 * @param output 	the output to be provided
+	 * @param error 	error to be attached to the output
+	 */
+	public static void addGeneralError(JsonBean output, ApiErrorMessage error) { 
+		Map<Integer, ApiErrorMessage> generalErrors = (Map<Integer, ApiErrorMessage>) 
+				output.get(ActivityEPConstants.INVALID);
+		if (generalErrors == null) {
+			generalErrors = new TreeMap<Integer, ApiErrorMessage>();
+			output.set(ActivityEPConstants.INVALID, generalErrors);
+		}
+		ApiErrorMessage existing = generalErrors.get(error.id);
+		if (existing != null) {
+			error = new ApiErrorMessage(existing, error.value);
+		}
+		generalErrors.put(error.id, error);
+	}
 
 }

@@ -188,7 +188,6 @@ public class FieldsEnumerator {
 		}
 		
 		/* list type */
-
 		
 		if (interchangeable.pickIdOnly()) {
 			bean.set(ActivityEPConstants.ID_ONLY, true);
@@ -234,6 +233,9 @@ public class FieldsEnumerator {
 		return bean;
 	}
 	
+	/**
+	 * @see #getAllAvailableFields(boolean)
+	 */
 	public static List<JsonBean> getAllAvailableFields() {
 		return getAllAvailableFields(false);
 	}

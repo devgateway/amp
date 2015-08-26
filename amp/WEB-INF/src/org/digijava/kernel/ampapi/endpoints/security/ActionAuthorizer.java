@@ -32,7 +32,13 @@ import com.sun.jersey.spi.container.ContainerRequest;
  */
 public class ActionAuthorizer {
 	protected static final Logger logger = Logger.getLogger(ActionAuthorizer.class);
-
+	
+	/**
+	 * Main process to give authorization to call current method based on its authorization rules 
+	 * @param method the method to authorize
+	 * @param apiMethod method settings that store the authorization rules as well
+	 * @param containerReq general container request to be used for additional information 
+	 */
 	public static void authorize(Method method, ApiMethod apiMethod, ContainerRequest containerReq) {
 		if (apiMethod.authTypes().length == 0 
 				|| apiMethod.authTypes().length == 1 && AuthRule.NONE.equals(apiMethod.authTypes()[0])) {

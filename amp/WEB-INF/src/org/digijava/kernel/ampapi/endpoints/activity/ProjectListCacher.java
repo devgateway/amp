@@ -1,6 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -10,14 +9,14 @@ import org.dgfoundation.amp.reports.ReportCacher;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
- * Project List pagination cacher that reuses the very same approach as in {@link ReportCacher} 
+ * Project List pagination cacher that reuses the very same approach as in {@link ReportCacher}
+ * 
  * @author Emanuel Perez
  */
 public class ProjectListCacher {
 	public final static int MAX_CACHED_PROJECT_LISTS = 10;
 	
-	private Map<String, Collection<JsonBean>> lru = Collections.synchronizedMap(
-			new LRUMap(MAX_CACHED_PROJECT_LISTS));
+	private Map<String, Collection<JsonBean>> lru = Collections.synchronizedMap(new LRUMap(MAX_CACHED_PROJECT_LISTS));
 	
 	public ProjectListCacher() {
 	}
@@ -35,6 +34,5 @@ public class ProjectListCacher {
 	public Collection<JsonBean> deleteCachedProjectList(String pid) {
 		return lru.remove(pid);
 	}
-	
 	
 }

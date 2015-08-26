@@ -16,7 +16,8 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
- * Defines input validation chain and executes it 
+ * Defines input validation chain and executes it
+ * 
  * @author Nadejda Mandrescu
  */
 public class InputValidatorProcessor {
@@ -67,8 +68,18 @@ public class InputValidatorProcessor {
 		return valid;
 	}
 	
+	/**
+	 * Adds a specific error message to the set of errors for the given JSON section (newParent) 
+	 * and fieldName that is part of it 
+	 * @param newParent parent JSON structure to update
+	 * @param fieldName fieldName
+	 * @param fieldPath full field path
+	 * @param error the error to add
+	 * @param errors the errors stored so far
+	 */
 	public void addError(Map<String, Object> newParent, String fieldName, String fieldPath, ApiErrorMessage error, 
 			Map<Integer, ApiErrorMessage> errors) {
+		// REFACTOR: to split to reuse some functionality in order to be able to add a generic error not necessarily related to a field
 		String errorCode = ApiError.getErrorCode(error);
 		JsonBean newField = new JsonBean();
 		Object newFieldValue = newParent.get(fieldName);

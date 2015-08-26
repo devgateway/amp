@@ -36,13 +36,13 @@ import clover.org.apache.commons.lang.StringUtils;
 
 /**
  * Project List generation class
- * @author Emanuel Perez
  * 
+ * @author Emanuel Perez
  */
 public class ProjectList {
 	
 	private static ProjectListCacher cacher = new ProjectListCacher();
-	public static final Logger LOGGER = Logger.getLogger(ProjectList.class);
+	private static final Logger LOGGER = Logger.getLogger(ProjectList.class);
 	
 	/**
 	 * Gets the List <JsonBean> of activities the user can and can't view, edit
@@ -66,6 +66,11 @@ public class ProjectList {
 		return projectList;
 	}
 	
+	/**
+	 * Builds full project list of activities with clarification on rights to edit for the given team member
+	 * @param tm the team member
+	 * @return the list with a short JSON description for each activity 
+	 */
 	public static Collection<JsonBean> getActivityList(TeamMember tm) {
 		Map<String, JsonBean> activityMap = new HashMap<String, JsonBean>();
 		List<JsonBean> viewableActivities = new ArrayList<JsonBean>();
@@ -142,8 +147,6 @@ public class ProjectList {
 		}
 		return viewableActivityIds;
 	}
-
-
 
 	/**
 	 * Returns all AmpActivityVersions from AMP that are included/excluded from

@@ -133,7 +133,7 @@ public class ActivityImporter {
 					if (ant.fieldTitle().equals(ActivityFieldsConstants.AMP_ACTIVITY_ID) ||
 							ant.fieldTitle().equals(ActivityFieldsConstants.AMP_ID))
 						continue;
-					//clean up everything importable in the new activity
+					// clean up everything importable in the new activity
 					Method setterMeth = aafMethods.get(InterchangeUtils.getSetterMethodName(field.getName()));
 					Method getterMeth = aafMethods.get(InterchangeUtils.getGetterMethodName(field.getName()));
 					if (Collection.class.isAssignableFrom(field.getType())) {
@@ -198,6 +198,7 @@ public class ActivityImporter {
 				}
 				
 				newActivity = oldActivity;
+				// REFACTOR: we may no longer need to use old activity
 				oldActivity = ActivityVersionUtil.cloneActivity(oldActivity, TeamUtil.getCurrentAmpTeamMember());
 				oldActivity.setAmpId(newActivity.getAmpId());
 				oldActivity.setAmpActivityGroup(newActivity.getAmpActivityGroup());
@@ -207,6 +208,7 @@ public class ActivityImporter {
 				newActivity = new AmpActivityVersion();
 			}
 			
+			// REFACTOR: we may no longer need to use oldJson
 			Map<String, Object> oldJsonParent = null;
 			Map<String, Object> newJsonParent = newJson.any();
 			
@@ -214,11 +216,11 @@ public class ActivityImporter {
 					oldJsonParent, null);
 			if (newActivity != null && errors.isEmpty()) {
 				// save new activity
-					prepareToSave();
-					newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity, 
-							translations, currentMember, Boolean.TRUE.equals(newActivity.getDraft()), 
-							PersistenceManager.getRequestDBSession(), false, false);
-					postProcess();
+				prepareToSave();
+				newActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(newActivity, 
+						translations, currentMember, Boolean.TRUE.equals(newActivity.getDraft()), 
+						PersistenceManager.getRequestDBSession(), false, false);
+				postProcess();
 			} else {
 				// undo any pending changes
 				PersistenceManager.getSession().clear();
@@ -226,6 +228,7 @@ public class ActivityImporter {
 			
 			updateResponse(update);
 		} catch (Throwable e) {
+			// if any unhandled issue, then cleanup pending changes 
 			PersistenceManager.getSession().clear();
 			
 			if (errors.isEmpty()) {
@@ -238,7 +241,7 @@ public class ActivityImporter {
 		} finally {
 			ActivityGatekeeper.unlockActivity(activityId, key);
 		}
-
+		
 		return new ArrayList<ApiErrorMessage>(errors.values());
 	}
 	
@@ -247,13 +250,13 @@ public class ActivityImporter {
 	 * that attempts to validate the incoming JSON and import its data. 
 	 * If there are any errors -> append them to the validator to propagate upwards
 	 * @param newParent Matched parent object in which resides the field of the activity we're importing or updating
-	 * (for example, AmpActivityVersion newActivity is newParent for 'sectors'
+	 * 					(for example, AmpActivityVersion newActivity is newParent for 'sectors'
 	 * @param oldParent Matched parent object in which the old activity field resides
 	 * @param fieldsDef definitions of the fields in this parent (from Fields Enumeration EP)
 	 * @param newJsonParent parent JSON object in which reside the analyzed fields 
 	 * @param oldJsonParent old parent JSON
 	 * @param fieldPath the underscorified path to the field currently validated & imported
-	 * @return
+	 * @return currently updated object or null if any validation error occurred
 	 */
 	protected Object validateAndImport(Object newParent, Object oldParent, List<JsonBean> fieldsDef, 
 			Map<String, Object> newJsonParent, Map<String, Object> oldJsonParent, String fieldPath) {
@@ -302,7 +305,7 @@ public class ActivityImporter {
 	 * @param newJsonParent JSON as imported
 	 * @param oldJsonParent JSON of the old activity (if it's update) from the Export Activity EP
 	 * @param fieldPath underscorified path to the field
-	 * @return
+	 * @return currently updated object or null if any validation error occurred
 	 */
 	protected Object validateAndImport(Object newParent, Object oldParent, JsonBean fieldDef,
 			Map<String, Object> newJsonParent, Map<String, Object> oldJsonParent, String fieldPath) {
@@ -348,7 +351,7 @@ public class ActivityImporter {
 	 * @param newJsonValue
 	 * @param oldJsonValue
 	 * @param fieldPath
-	 * @return
+	 * @return currently updated object or null if any validation error occurred
 	 */
 	protected Object validateSubElements(JsonBean fieldDef, Object newParent, Object oldParent, Object newJsonValue, 
 			Object oldJsonValue, String fieldPath) {
@@ -377,6 +380,7 @@ public class ActivityImporter {
 		if ((isList || childrenFields != null && childrenFields.size() > 0) && childrenNewValues != null) {
 			String actualFieldName = fieldDef.getString(ActivityEPConstants.FIELD_NAME_INTERNAL);
 			Field newField = getField(newParent, actualFieldName);
+			// REFACTOR: remove old parent and field usage, not relevant anymore
 			Field oldField = getField(oldParent, actualFieldName);
 			Object newFieldValue = null;
 			Object oldFieldValue = null;
@@ -397,6 +401,8 @@ public class ActivityImporter {
 				logger.error(e.getMessage());
 				throw new RuntimeException(e);
 			}
+			
+			// process children 
 			Iterator<Map<String, Object>> iterNew = childrenNewValues.iterator();
 			while (iterNew.hasNext()) {
 				Map<String, Object> newChild = iterNew.next();
@@ -433,6 +439,7 @@ public class ActivityImporter {
 		}
 		return newParent;
 	}
+	
 	/**
 	 * Gets items marked under the "children" key in the hierarchical branch of the imported JSON
 	 * @param jsonValue
@@ -451,6 +458,7 @@ public class ActivityImporter {
 		}
 		return null;
 	}
+	
 	/**
 	 * Generates an instance of the type of the field 
 	 * @param parent
@@ -506,6 +514,7 @@ public class ActivityImporter {
 		}
 		
 		if (!importable) {
+			// custom process amp_activity_id links to other structures
 			if (InterchangeUtils.isAmpActivityVersion(objField.getType())) {
 				try {
 					objField.set(newParent, this.getNewActivity());
@@ -518,6 +527,7 @@ public class ActivityImporter {
 			return newParent;
 		}
 		
+		// REFACTOR: remove old field usage
 		Object oldValue;
 		try {
 			oldValue = objField.get(newParent);
@@ -545,7 +555,7 @@ public class ActivityImporter {
 		}
 		return newParent;
 	}
-
+	
 	protected Field getField(Object parent, String actualFieldName) {
 		if (parent == null) {
 			return null;
@@ -628,13 +638,14 @@ public class ActivityImporter {
 		boolean isCollection = Collection.class.isAssignableFrom(field.getType());
 		if (jsonValue == null && !isCollection)
 			return null;
+		
 		Object value = null;
 		String fieldType = (String) fieldDef.get(ActivityEPConstants.FIELD_TYPE);
-		//looks like a left over, probably can remove on the next commit: fieldPath = fieldPath.substring(1);
 		List<JsonBean> allowedValues = getPossibleValuesForFieldCached(fieldPath, AmpActivityFields.class, null);
-		boolean idOnly = Boolean.TRUE.equals(fieldDef.get(ActivityEPConstants.ID_ONLY)); 
+		boolean idOnly = Boolean.TRUE.equals(fieldDef.get(ActivityEPConstants.ID_ONLY));
+		
+		// this is an object reference
 		if (!isCollection && idOnly) {
-			
 			InterchangeableDiscriminator discr = field.getAnnotation(InterchangeableDiscriminator.class);
 			if (discr != null && discr.discriminatorClass().length() > 0) {
 				try {
@@ -649,6 +660,7 @@ public class ActivityImporter {
 			return getObjectReferencedById(field.getType(), ((Number)jsonValue).longValue());
 		}
 		
+		// this is a collection
 		if (Collection.class.isAssignableFrom(field.getType())) {
 			try {
 				value = field.get(parentObj);
@@ -671,6 +683,7 @@ public class ActivityImporter {
 				logger.error(e.getMessage());
 				throw new RuntimeException(e);
 			}
+		// this is a simple type
 		} else if (InterchangeableClassMapper.SIMPLE_TYPES.contains(fieldType)) {
 			if (jsonValue == null)
 				return null;
@@ -702,7 +715,7 @@ public class ActivityImporter {
 					}
 				}
 			} else {
-				// TODO:
+				// REFACTOR: seems nothing todo here
 			}
 		}
 		return value;
@@ -710,9 +723,11 @@ public class ActivityImporter {
 	
 	protected String extractTranslationsOrSimpleValue(Field field, Object parentObj, Object jsonValue, JsonBean fieldDef) {
 		TranslationType trnType = trnSettings.getTranslatableType(field);
+		// no translation expected
 		if (TranslationType.NONE == trnType) {
 			return (String) jsonValue;
 		}
+		// base table value
 		String value = null;
 		if (TranslationType.STRING == trnType) {
 			value = extractContentTranslation(field, parentObj, (Map<String, Object>) jsonValue);
@@ -729,7 +744,14 @@ public class ActivityImporter {
 		}
 		return value;
 	}
-		
+	
+	/**
+	 * Stores all provided translations
+	 * @param field the field to translate
+	 * @param parentObj the object the field is part of 
+	 * @param trnJson <lang, value> map of translations for each language
+	 * @return value to be stored in the base table
+	 */
 	protected String extractContentTranslation(Field field, Object parentObj, Map<String, Object> trnJson) {
 		String value = null;
 		String currentLangValue = null;
@@ -741,6 +763,7 @@ public class ActivityImporter {
 		if (objId == null) {
 			objId = (long) System.identityHashCode(parentObj);
 		}
+		// process translations
 		for (Entry<String, Object> trn : trnJson.entrySet()) {
 			String langCode = trn.getKey();
 			String translation = DgUtil.cleanHtmlTags((String) trn.getValue());
@@ -780,6 +803,13 @@ public class ActivityImporter {
 		return value;
 	}
 	
+	/**
+	 * Stores Rich Text Editor entries
+	 * @param field reference field for the key
+	 * @param parentObj the object the field is part of 
+	 * @param trnJson <lang, value> map of translations for each language
+	 * @return dg_editor key reference to be stored in the base table
+	 */
 	protected String extractTextTranslations(Field field, Object parentObj, Map<String, Object> trnJson) {
 		String key = null;
 		if (update) { // all editor keys must exist before
@@ -841,6 +871,7 @@ public class ActivityImporter {
 			throw new RuntimeException(e);
 		}
 	}
+	
 	/**
 	 * Performs operations that need to be done before the activity is saved
 	 */
@@ -857,7 +888,7 @@ public class ActivityImporter {
 	}
 	
 	/**
-	 * init m2m-fields before them being saved
+	 * Initialize m2m-fields before saving them
 	 */
 	protected void initDefaults() {
 		for (Field field : AmpActivityFields.class.getFields()) {
@@ -865,6 +896,7 @@ public class ActivityImporter {
 				initEditor(field);
 			}
 		}
+		// REFACTOR: may no longer need some of these initializations
 		initOrgRoles();
 		initSectors();
 		initLocations();
@@ -879,6 +911,7 @@ public class ActivityImporter {
 	 * First, every reference to AmpActivityVersion in all the m2ms has been added to a map; 
 	 * now, we're setting them all to point to the AmpActivityVersion we're importing
 	 */
+	// REFACTOR: not used anymore, candidate for removal
 	protected void postprocessActivityReferences() {
 		for (Map.Entry<Object, Field> entry : activityFieldsForPostprocess.entrySet()) {
 			Field field = entry.getValue();
@@ -895,6 +928,9 @@ public class ActivityImporter {
 	/*
 	 * this was the original way to circumvent Hibernate exceptions on save. 
 	 * Since a lot of generic workarounds have been applied, don't know if it's still relevant 
+	 */
+	/**
+	 * Do not remove, is relevant for AmpClassificationConfiguration configuration
 	 */
 	protected void initSectors() {
 		if (newActivity.getSectors() == null) {
@@ -918,7 +954,6 @@ public class ActivityImporter {
 	protected void initFundings() {
 		if (newActivity.getFunding() == null) {
 			newActivity.setFunding(new HashSet<AmpFunding>());
-        } else {
         }
 	}
 	
@@ -940,21 +975,18 @@ public class ActivityImporter {
 	protected void initLocations() {
 		if (newActivity.getLocations() == null) {
         	newActivity.setLocations(new HashSet<AmpActivityLocation>());
-        } else {
         }
 	}
 	
 	protected void initCategories() {
 		if (newActivity.getCategories() == null) {
 			newActivity.setCategories(new HashSet<AmpCategoryValue>());
-		} else {
 		}
 	}
 	
 	protected void initContacts() {
 		if (newActivity.getActivityContacts() == null) {
         	newActivity.setActivityContacts(new HashSet<AmpActivityContact>());
-        } else {
         }
 	}
 
@@ -997,8 +1029,7 @@ public class ActivityImporter {
             EndpointUtils.addResponseHeaderMarker("Location", locationUrl);
         }
     }
-
-
+    
 	protected void updatePPCAmount() {
 		boolean isAnnualBudget = FMVisibility.isFmPathEnabled("/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost");
 
@@ -1012,12 +1043,23 @@ public class ActivityImporter {
         }
 	}
 	
+	/**
+	 * Execute custom configurations that is not worth to define generic for single use cases
+	 * @param parent
+	 * @param child
+	 * @param fieldPath
+	 */
 	protected void configureCustom(Object parent, Object child, String fieldPath) {
 		if (child instanceof AmpActivityContact) {
 			configureContactType((AmpActivityContact) child, fieldPath);
 		}
 	}
 	
+	/**
+	 * Custom configuration for the contact type 
+	 * @param contact activity contact to configure
+	 * @param contactGroup the contact group to configure
+	 */
 	protected void configureContactType(AmpActivityContact contact, String contactGroup) {
 		// custom, but very special case no need to make generic
 		String contactType = InterchangeableClassMapper.CONTACT_SET_NAME_TO_CONTACT_TYPE.get(
@@ -1126,15 +1168,27 @@ public class ActivityImporter {
 	public String getSourceURL() {
 		return sourceURL;
 	}
-
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isSaveAsDraft() {
 		return saveAsDraft;
 	}
-
+	
+	/**
+	 * 
+	 * @param saveAsDraft
+	 */
 	public void setSaveAsDraft(boolean saveAsDraft) {
 		this.saveAsDraft = saveAsDraft;
 	}
 
+	/**
+	 * 
+	 * @param latestActivityId
+	 */
     public void setLatestActivityId(Long latestActivityId) {
         this.latestActivityId = latestActivityId;
     }

@@ -18,16 +18,13 @@ import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.util.ActivityUtil;
 
 /**
- * Validates that project title field value is unique across AMP
+ * Validates that project title field value is provided in default language and is unique across AMP
  * 
  * @author Nadejda Mandrescu
  */
 public class ActivityTitleValidator extends InputValidator {
 	
 	private boolean missingTitle = false;
-
-	public ActivityTitleValidator() {
-	}
 
 	@Override
 	public ApiErrorMessage getErrorMessage() {

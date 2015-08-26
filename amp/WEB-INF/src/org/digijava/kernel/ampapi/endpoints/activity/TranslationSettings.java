@@ -22,8 +22,11 @@ import org.digijava.module.translation.util.ContentTranslationUtil;
 public class TranslationSettings {
 	/** Translation Types */
 	public enum TranslationType {
+		/** Associated to @TranslatableField fields if multilingual is enabled*/
 		STRING,
+		/** Associated to @VersionableFieldTextEditor fields if multilingual is enabled */
 		TEXT,
+		/** No Translation associated to the given String field or multilingual is disabled */
 		NONE
 	};
 
@@ -36,9 +39,10 @@ public class TranslationSettings {
 	/** Allowed language codes */
 	private Collection<String> allowedLangCodes = null;
 	
-	/** List of translations. 
-	 *  Reunion of language codes from <default_language>, 'language' and 'translations' parameter
-	 *  */
+	/** 
+	 * List of translations.
+	 * Reunion of language codes from <default_language>, 'language' and 'translations' parameter
+	 */
 	private Set<String> trnLocaleCodes = new HashSet<String>();
 	
 	private boolean multilingual;
@@ -59,7 +63,7 @@ public class TranslationSettings {
 			trn = getDefault();
 		return trn;
 	}
-
+	
 	public TranslationSettings() {
 		init();
 		this.trnLocaleCodes.add(currentLangCode);

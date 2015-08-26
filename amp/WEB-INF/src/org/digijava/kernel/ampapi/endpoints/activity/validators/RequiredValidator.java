@@ -21,7 +21,6 @@ public class RequiredValidator extends InputValidator {
 
 	private boolean draftDisabled = false;
 	
-	
 	@Override
 	public ApiErrorMessage getErrorMessage() {
 		if (this.draftDisabled)
@@ -29,8 +28,6 @@ public class RequiredValidator extends InputValidator {
 		else
 			return ActivityErrors.FIELD_REQUIRED;
 	}
-
-
 	
 	@Override
 	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
@@ -42,21 +39,21 @@ public class RequiredValidator extends InputValidator {
 		// don't care if value has something
 		if (importable && fieldValue == null) {
 			if (ActivityEPConstants.FIELD_ALWAYS_REQUIRED.equals(requiredStatus)) {
-				//field is always required -> can't save it even as a draft
+				// field is always required -> can't save it even as a draft
 				return false;
 			} else if (ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED.equals(requiredStatus)) {
-				//field required for submitted activities, but we can save it as a draft
-				//unless it's disabled in FM
+				// field required for submitted activities, but we can save it as a draft
+				// unless it's disabled in FM
 				if (!importer.isDraftFMEnabled()) {
 					this.draftDisabled = true;
 					return false;
 				}
-				//ok, it's enabled, save as draft
+				// ok, it's enabled, save as draft
 				importer.setSaveAsDraft(true);
 				return true;
 			}
 		} 
-		//field value != null, it's fine from this validator's POV
+		// field value != null, it's fine from this validator's POV
 		return true;	
 	}
 

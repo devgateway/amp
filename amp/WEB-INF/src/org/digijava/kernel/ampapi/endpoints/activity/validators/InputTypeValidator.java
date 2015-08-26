@@ -59,8 +59,6 @@ public class InputTypeValidator extends InputValidator {
 		String fieldName = fieldDescription.getString(ActivityEPConstants.FIELD_NAME);
 		Object item = newFieldParent.get(fieldName);
 		
-		
-		
 		if (item == null) {
 			return true;
 		}

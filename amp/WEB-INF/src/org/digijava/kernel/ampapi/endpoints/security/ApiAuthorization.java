@@ -38,8 +38,10 @@ public class ApiAuthorization {
 	private final Map<String, ApiMethod> paths = new HashMap<String, ApiMethod>();
 	private final Map<ApiMethod, Method> apiMethodToClassMethod = new HashMap<ApiMethod, Method>();
 	
+	// read once all API method settings
 	private static ApiAuthorization apiAuthorization = new ApiAuthorization();
 	private ApiAuthorization() {
+		// convention where we store our Endpoints => we'll process only this package
 		addApiMethods("org.digijava.kernel.ampapi.endpoints");
 	}
 	
@@ -51,6 +53,7 @@ public class ApiAuthorization {
 		Set<Method> apiMethods = reflections.getMethodsAnnotatedWith(ApiMethod.class);
 		for (Method m : apiMethods) {
 			ApiMethod apiMethod = m.getAnnotation(ApiMethod.class);
+			// no need to remember methods we don't need to authorize
 			if (apiMethod.authTypes().length == 0 || 
 					apiMethod.authTypes().length == 1 && AuthRule.NONE.equals(apiMethod.authTypes()[0])) {
 				continue;
@@ -58,6 +61,7 @@ public class ApiAuthorization {
 			Class<?> clazz = m.getDeclaringClass();
 			String classPath = clazz.isAnnotationPresent(Path.class) ? clazz.getAnnotation(Path.class).value() : "";
 			String currentPath = m.getAnnotation(Path.class).value();
+			// detect URL reference of the method in a special format, like GET/activity/fields
 			String methodRef = getMethodReference(getMethodType(m), classPath, currentPath);
 			// store the regex for parameterized queries
 			methodRef = methodRef.replaceAll("\\{.*\\}", ".*");
@@ -66,6 +70,10 @@ public class ApiAuthorization {
 		}
 	}
 	
+	/**
+	 * Process current request to detect if any authorization is needed and initiates it
+	 * @param containerReq current request
+	 */
 	public static void authorize(ContainerRequest containerReq) {
 		//apiAuthorization = new ApiAuthorization();
 		String pathRef = getMethodReference(containerReq.getMethod(), containerReq.getPath());
@@ -104,6 +112,7 @@ public class ApiAuthorization {
 	}
 	
 	private static String getMethodReference(String... args) {
+		// simply merge everything separating by "/"
 		StringBuilder sb = new StringBuilder();
 		for (String arg : args) {
 			arg = StringUtils.strip(arg, "/");

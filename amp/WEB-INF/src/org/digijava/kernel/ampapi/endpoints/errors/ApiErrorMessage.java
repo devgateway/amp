@@ -5,16 +5,24 @@ package org.digijava.kernel.ampapi.endpoints.errors;
 
 /**
  * Defines API Error Message template and stores custom value if needed
+ * 
  * @author Nadejda Mandrescu
  */
 public class ApiErrorMessage {
-	/** Message custom Error Code [0..99] within its component/method*/
+	/** Message custom Error Code [0..99] within its component/method */
 	public final Integer id;
-	/** General error description (laconic) */
+	/** 
+	 * General error description (laconic), automatically translated.<br>
+	 * For custom details per error, you must use: <br>
+	 * <dl>
+	 * <dt>value </dt> <dd> for non-translatable details like exception messages </dd>
+	 * <dt>prefix </dt> <dd> for custom translatable detail prefix </dd>
+	 * </dl>
+	 */
 	public final String description;
-	/** (Optional) Error message prefix, e.g. "Missing fields: "*/
+	/** (Optional) Error message prefix, custom value, e.g. "Missing fields: " */
 	public final String prefix;
-	/** Error details (e.g. "project_title"), without prefix */
+	/** (Optional) Error details (e.g. "project_title"), without prefix */
 	public final String value;
 	
 	/**
@@ -29,7 +37,7 @@ public class ApiErrorMessage {
 	
 	/**
 	 * Defines an ApiErrorMessahe 
-	 * @param id see {@link #id}
+	 * @param id see {@link #id id}
 	 * @param description see {@link #description}
 	 */
 	public ApiErrorMessage(Integer id, String description) {
@@ -58,6 +66,7 @@ public class ApiErrorMessage {
 		this.value = value;
 	}
 	
+	@Override
 	public int hashCode() {
 		return (19 + id) * 23 + description.hashCode();
 	}

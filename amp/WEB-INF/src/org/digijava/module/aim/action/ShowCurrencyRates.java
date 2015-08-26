@@ -25,6 +25,7 @@ import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.util.DigiCacheManager;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.form.CurrencyRateForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyRateLoader;
@@ -182,8 +183,8 @@ public class ShowCurrencyRates extends Action {
             crForm.setCurrencyRates(null);
         }
 
-		crForm.setCurrentPage(new Integer(page));
-		crForm.setCurrencyCodes(CurrencyUtil.getActiveAmpCurrencyByName());
+		crForm.setCurrentPage(new Integer(page));		
+		crForm.setCurrencyCodes(CurrencyUtil.removeVirtualCurrencies(CurrencyUtil.getActiveAmpCurrencyByName()));
 		crForm.setTimePeriods(getTimePeriods());
 		crForm.setUpdateCRateAmount(null);
 		crForm.setUpdateCRateCode(null);
@@ -198,6 +199,7 @@ public class ShowCurrencyRates extends Action {
 		crForm.setLastRateUpdate(lastUpdate);
 		return mapping.findForward("forward");
 	}
+	
 	private List<LabelValueBean>  getTimePeriods(){
 		List<LabelValueBean> timePeriods=new ArrayList<LabelValueBean>();
 		timePeriods.add(new LabelValueBean("7 Days","1"));

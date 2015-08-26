@@ -6,6 +6,7 @@ package org.digijava.kernel.ampapi.endpoints.settings;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -411,27 +412,34 @@ public class SettingsUtils {
 		long defaultCalendarId = Long.parseLong(defaultCalendar);
 
 		addDateSetting(settings, GlobalSettingsConstants.DASHBOARD_DEFAULT_MAX_YEAR_RANGE,
-				"dashboard-default-max-date", "dashboard-default-max-year-range", defaultCalendarId);
+				"dashboard-default-max-date", "dashboard-default-max-year-range", 
+				defaultCalendarId, true);
 		addDateSetting(settings, GlobalSettingsConstants.DASHBOARD_DEFAULT_MIN_YEAR_RANGE,
-				"dashboard-default-min-date", "dashboard-default-min-year-range", defaultCalendarId);
+				"dashboard-default-min-date", "dashboard-default-min-year-range", 
+				defaultCalendarId, false);
 		addDateSetting(settings, GlobalSettingsConstants.GIS_DEFAUL_MAX_YEAR_RANGE, "gis-default-max-date",
-				"gis-default-max-year-range", defaultCalendarId);
+				"gis-default-max-year-range", defaultCalendarId, true);
 		addDateSetting(settings, GlobalSettingsConstants.GIS_DEFAUL_MIN_YEAR_RANGE, "gis-default-min-date",
-				"gis-default-min-year-range", defaultCalendarId);
+				"gis-default-min-year-range", defaultCalendarId, false);
 
 		return settings;
 	}
 	
 	protected static void addDateSetting(List<SettingOptions> settings, String globalSettingsName,
 			String dateSettingsName, String yearSettingsName,
-			long calendarId) throws Exception {
+			long calendarId,
+			boolean yearEnd) throws Exception {
 		
 		String yearNumber = FeaturesUtil.getGlobalSettingValue(globalSettingsName);
 		settings.add(new SettingOptions(yearSettingsName, false, yearNumber, null, null, false));
 
 		if (!yearNumber.equals("-1")) {
-			settings.add(new SettingOptions(dateSettingsName, false, DateTimeUtil
-					.parseDateForPicker2(CalendarUtil.getEndDate(calendarId, Integer.parseInt(yearNumber)), Constants.CALENDAR_DATE_PICKER), null, null, true));
+			Date date = yearEnd ? 
+				CalendarUtil.getEndDate(calendarId, Integer.parseInt(yearNumber))
+						:
+				CalendarUtil.getStartDate(calendarId, Integer.parseInt(yearNumber));
+				
+			settings.add(new SettingOptions(dateSettingsName, false, DateTimeUtil.parseDateForPicker2(date, Constants.CALENDAR_DATE_PICKER), null, null, true));
 		}
 	}
 	

@@ -61,7 +61,7 @@ public class SettingOptions {
 		}
 		
 		@Override public String toString() {
-			return String.format("option(id=<%s>, name=<%s>, value=<%s>");
+			return String.format("option(id=<%s>, name=<%s>, value=<%s>", this.id, this.name, this.value);
 		}
 	}
 	

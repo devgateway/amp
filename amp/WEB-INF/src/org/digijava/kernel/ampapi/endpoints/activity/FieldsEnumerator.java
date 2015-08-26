@@ -143,41 +143,9 @@ public class FieldsEnumerator {
 		}
 	}
 	
-	
-	private List<JsonBean> generateDependencies(Field field, String[] dependencies) {
-		
-		
-		List<JsonBean> result = new ArrayList<JsonBean>();
-		for (String depCode : dependencies) {
-			JsonBean entry = new JsonBean();
-			entry.set(depCode, depCode);
-//			String path = InterchangeDependencyResolver.getPath(depCode);
-//			Set<Object> valueSet = InterchangeDependencyResolver.getValues(depCode);
-//			List<JsonBean> values = new ArrayList<JsonBean>();
-//			for (Object item : valueSet) {
-//				JsonBean newItem = new JsonBean();
-//				newItem.set("value", item);
-//				values.add(newItem);
-//			}
-			result.add(entry);
-		}
-		return result;
-	}
-	
-	
 	/**
-	 * describes a field in a JSON structure of: field_type: one of the types
-	 * {string, boolean, float, list} field_name: the field name, obtained from
-	 * the fieldTitle attribute from the @Interchangeable annotation
-	 * field_label: translations of the field in the available languages
-	 * multiple_values: true if it's a collection, false otherwise importable:
-	 * whether the field is to be imported, or had been exported just for the
-	 * sake of matching children: if the field is not a basic type (string,
-	 * boolean, or float), its class may contain other @Interchangeable fields,
-	 * which are recursively added here recursive: defined by
-	 * @Interchangeable.pickIdOnly; true for the purpose of avoiding loops
-	 * required: specifies whether said field needs to be transmitted
-	 * empty
+	 * describes a field in a complex JSON structure
+	 * see the wiki for details, too many options to be listed here
 	 * 
 	 * @param field
 	 * @return

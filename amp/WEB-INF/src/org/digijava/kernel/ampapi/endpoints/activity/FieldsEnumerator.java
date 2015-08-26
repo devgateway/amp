@@ -163,15 +163,20 @@ public class FieldsEnumerator {
 		if (interchangeable.pickIdOnly()) {
 			bean.set(ActivityEPConstants.FIELD_TYPE, InterchangeableClassMapper.getCustomMapping(java.lang.Long.class));
 		} else {
+
 			Class<?> fieldType = field.getType();
 			bean.set(ActivityEPConstants.FIELD_TYPE, InterchangeableClassMapper.containsSimpleClass(fieldType)? 
 					InterchangeableClassMapper.getCustomMapping(fieldType) : ActivityEPConstants.FIELD_TYPE_LIST);
+
 		}
 		
 
 		bean.set(ActivityEPConstants.FIELD_LABEL, InterchangeUtils.mapToBean(getLabelsForField(interchangeable.fieldTitle())));
 		bean.set(ActivityEPConstants.REQUIRED, InterchangeUtils.getRequiredValue(field, interchangeable));
 		bean.set(ActivityEPConstants.IMPORTABLE, interchangeable.importable());
+		if (interchangeable.percentageConstraint()){
+			bean.set(ActivityEPConstants.PERCENTAGE, true);
+		}
 		if (interchangeable.dependencies().length > 0)
 			bean.set(ActivityEPConstants.DEPENDENCIES, interchangeable.dependencies());
 		

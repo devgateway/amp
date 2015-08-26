@@ -14,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
@@ -29,6 +30,7 @@ public class PercentageValidator extends InputValidator {
 		return ActivityErrors.FIELD_PERCENTAGE_SUM_BAD;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean isValid(ActivityImporter importer, Map<String, Object> newFieldParent, 
 			Map<String, Object> oldFieldParent, JsonBean fieldDescription, String fieldPath) {
@@ -38,24 +40,30 @@ public class PercentageValidator extends InputValidator {
 		if (StringUtils.isNotBlank(percentageField)) {
 			// get Collection with values to be summed into percentages
 			Collection<Map<String, Object>> fieldValue = (Collection<Map<String, Object>>) newFieldParent.get(fieldName);
-			
-			//Set that will hold the values that have to be summed up
-			Set<Object> idValuesSet = new HashSet<Object>();
-			if (fieldValue != null && fieldValue.size() > 1) {
-				double result = calculatePercentagesSum(fieldValue, percentageField);
-				//if the result isn't equal to 100, it's invalid
-				if (Math.abs(result - 100.0) > 0.0001 )
+			if (fieldValue != null) {
+				Double result = calculatePercentagesSum(fieldValue, percentageField);
+				if (result == null)
 					isValid = false;
+				else {
+					//if the result isn't equal to 100, it's invalid
+					if (Math.abs(result - 100.0) > ActivityEPConstants.EPSILON )
+						isValid = false;
+				}
 			}
 		}
 		return isValid;
 	}
 
 	
-	private double calculatePercentagesSum(Collection<Map<String, Object>> fieldValues, String fieldPathToPercentage) {
+	private Double calculatePercentagesSum(Collection<Map<String, Object>> fieldValues, String fieldPathToPercentage) {
 		double result = 0.0;
 		for (Map<String, Object> child : fieldValues) {
-			if (child.get(fieldPathToPercentage) != null) {
+			Number value = InterchangeUtils.getDoubleFromJsonNumber(child.get(fieldPathToPercentage));
+			//if the convertor gets a null, the field must have been null, or invalid (not a number)
+			//so we bail out and mark this as an error
+			if (value == null)
+				return null;
+			if (value != null) {
 				Number val = (Number) child.get(fieldPathToPercentage);
 				result += val.doubleValue();
 			}

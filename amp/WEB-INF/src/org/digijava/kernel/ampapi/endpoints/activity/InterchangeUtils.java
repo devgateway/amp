@@ -107,7 +107,13 @@ public class InterchangeUtils {
 		}
 		return false;
 	}
-	
+
+	public static Double getDoubleFromJsonNumber(Object obj) {
+		if (!Number.class.isInstance(obj))
+			return null;
+		Number n = (Number) obj;
+		return n.doubleValue();
+	}
 	/**
 	 * Maps every title in the AF fields model to an underscorified version
 	 * TODO: this section needs heavy rewrite -- we hope to remove the need to underscorify at all

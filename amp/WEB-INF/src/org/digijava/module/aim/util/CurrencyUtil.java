@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -69,8 +70,9 @@ public class CurrencyUtil {
 		try {
 			session = PersistenceManager.getSession();
 			qryStr = "select currency from " + AmpCurrency.class.getName() + "" +
-					" currency where currency.activeFlag='1'";
+					" currency where (currency.activeFlag='1') and (currency.virtual is false) ";
 			qry = session.createQuery(qryStr);
+			Set<String> allCurrencies = new HashSet<>();
 			Collection res = qry.list();
 			if (res.size() > 0) {
 				logger.debug("Active currencies found");
@@ -97,9 +99,12 @@ public class CurrencyUtil {
 
 				CurrencyRates currencyRates = null;
 				while (itr2.hasNext()) {
+					cRate = itr2.next();
+					boolean bothCurrenciesAcceptable = cRate.getfromCurrencyCode() != null && currencyCodes.contains(cRate.getfromCurrencyCode()) &&
+						cRate.getToCurrencyCode() != null && currencyCodes.contains(cRate.getToCurrencyCode());
+					if (!bothCurrenciesAcceptable)
+						continue;
 					currencyRates = new CurrencyRates();
-					cRate = (AmpCurrencyRate) itr2.next();
-
 					currencyRates.setCurrencyCode(cRate.getToCurrencyCode());
 					currencyRates.setFromCurrencyCode(cRate.getFromCurrencyCode());
 					currencyRates.setCurrencyName( currencies.get(cRate.getToCurrencyCode()) );
@@ -255,11 +260,27 @@ public class CurrencyUtil {
 				qry = session.createQuery(qryStr);
 				qry.setParameter("flag",new Integer(active),IntegerType.INSTANCE);
 			}
-			col = qry.list();
+			col = removeVirtualCurrencies(qry.list());
 		} catch (Exception e) {
 			logger.error("Exception from getAllCurrencies()", e);
 		}
 		return col;
+	}
+	
+	/**
+	 * 
+	 * @param in usually is the result of CurrencyUtil.getActiveAmpCurrencyByName()
+	 * @return
+	 */
+	public static List<AmpCurrency> removeVirtualCurrencies(Collection<AmpCurrency> in) {
+		List<AmpCurrency> res = new ArrayList<>(CurrencyUtil.getActiveAmpCurrencyByName());
+		// O(n^2) algorithm ok because there are at most 150 currencies worldwode
+		Iterator<AmpCurrency> it = res.iterator();
+		while (it.hasNext()) {
+			if (it.next().isVirtual())
+				it.remove();
+		}
+		return res;
 	}
 	
 	public static boolean isCurrencyRateInDatabase (AmpCurrencyRate cRate) {
@@ -595,6 +616,18 @@ public class CurrencyUtil {
 		return usableCurrencies;
 	}
 
+	public static List<AmpCurrency> getUsableNonVirtualCurrencies()
+	{
+		//Only currencies having exchanges rates AMP-2620
+		List<AmpCurrency> usableCurrencies = new ArrayList<AmpCurrency>();		
+	
+		for (AmpCurrency currency:getActiveAmpCurrencyByName())
+			if (currency.isRate() && !currency.isVirtual()){
+				usableCurrencies.add(currency);
+			}
+		return usableCurrencies;
+	}
+	
 	/**
 	 * Returns Latest Exchange rate for currency specified in parameter by code.
 	 * Used in NPD, may be temporarry

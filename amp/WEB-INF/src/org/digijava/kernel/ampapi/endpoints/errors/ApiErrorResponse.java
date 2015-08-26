@@ -20,7 +20,7 @@ public class ApiErrorResponse {
 	protected static final Logger logger = Logger.getLogger(ApiErrorResponse.class);
 	
 	public static final String UNKOWN_ERROR = "Unkown Error";
-	
+	public static final String INTERNAL_ERROR = "Internal Error";
 	
 	/**
 	 * Reports HTTP 500 (Internal Server Error) with the given message

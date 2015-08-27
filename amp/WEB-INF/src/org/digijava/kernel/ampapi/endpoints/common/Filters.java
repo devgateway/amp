@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -58,6 +59,9 @@ public class Filters {
 	private static final String NAME_PROPERTY = "Name";
 	private static final String SECTORS_SUFFIX = " Sectors";
 	private static final Logger logger = Logger.getLogger(Filters.class);
+	
+	/** the value to use as a filter value when filtering booleans for ANY DEFINED */
+	public static final String ANY_BOOLEAN = "999888777";
 
 	//AmpARFilter filters;
 	
@@ -535,6 +539,7 @@ public class Filters {
 		res.set("filterId", columnName);
 		res.set("name", columnName);
 		res.set("translatedName", columnName);
+		res.set("id", ANY_BOOLEAN);
 		res.set("values", 
 				Arrays.asList(
 					new SimpleJsonBean(1, "Yes", null, TranslatorWorker.translateText("Yes")),

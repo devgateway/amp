@@ -14,6 +14,8 @@ public class ActivityEPConstants {
 	public static final String REQUIRED_NONE = "_NONE_";
 	public static final String REQUIRED_ALWAYS = "_ALWAYS_";
 	public static final String REQUIRED_ND = "_NOT_DRAFT_"; // temp. special case for project_code when Activity On Budget, do not use for other, use FM that defines
+	
+	
 	// JSON fields
 	public static final String ACTIVITY = "activity";
 	public static final String FIELD_NAME = "field_name";
@@ -43,12 +45,11 @@ public class ActivityEPConstants {
 	public static final String PERCENTAGE_CONSTRAINT = "percentage_constraint";
 	public static final String DEPENDENCIES ="dependencies";
 	public static final String TREE_COLLECTION_CONSTRAINT = "tree_collection";
-	
 
+	
 	// fields constants
 	public static final String AMP_ACTIVITY_ID_FIELD_NAME = InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID);
 	public static final String AMP_ID_FIELD_NAME = InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID);
-	
 	
 	
 	// field types
@@ -59,9 +60,10 @@ public class ActivityEPConstants {
 	public static final String FIELD_TYPE_FLOAT = "float";
 	public static final String FIELD_TYPE_DATE = "date";
 	
-
+	
 	//max length constants
 	public static final String TYPE_VARCHAR = "character varying";
+	
 	
 	//validator names constants
 	public static final String UNIQUE_VALIDATOR_NAME = "unique";

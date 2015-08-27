@@ -51,9 +51,6 @@ public class InterchangeDependencyResolver {
 	private final static String IMPLEMENTATION_LEVEL_PATH = "implementation_level";
 	private final static String IMPLEMENTATION_LOCATION_PATH = "implementation_location";
 	
-	
-	
-	
 	/*
 	 * End of dependency codes section
 	 */

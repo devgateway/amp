@@ -78,14 +78,16 @@ public class ProjectList {
 		final List<Long> viewableIds = getViewableActivityIds(tm);
 		List<Long> editableIds = getEditableActivityIds(tm);
 		List<JsonBean> notViewableActivities = getActivitiesByIds(viewableIds, false, false, false);
+		
 		if (viewableIds.size() > 0) {
 			viewableIds.removeAll(editableIds);
 			viewableActivities = getActivitiesByIds(viewableIds, true, true, false);
 		}
+		
 		if (editableIds.size() > 0) {
-			
 			editableActivities = getActivitiesByIds(editableIds, true, true, !TeamMemberUtil.isManagementWorkspace(tm));
 		}
+		
 		populateActivityMap(activityMap, editableActivities);
 		populateActivityMap(activityMap, notViewableActivities);
 		populateActivityMap(activityMap, viewableActivities);
@@ -96,8 +98,7 @@ public class ProjectList {
 		for (JsonBean activity : activities) {
 			JsonBean activityOnMap = activityMap.get((String) activity.get(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ID)));
 			// if it is not on the map, or activity is a newer
-			// version than the one already on the Map
-			// then we put it on the Map
+			// version than the one already on the Map then we put it on the Map
 			if (activityOnMap == null
 					|| (Long) activity.get(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID)) > (Long) activityOnMap
 							.get(InterchangeUtils.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID))) {
@@ -121,7 +122,6 @@ public class ProjectList {
 		List<Long> result = PersistenceManager.getSession().createSQLQuery(query)
 				.addScalar("amp_activity_id", LongType.INSTANCE).list();
 		return result;
-
 	}
 
 	/**

@@ -43,7 +43,7 @@ public class PossibleValuesEnumerator {
 	 * @param longFieldName underscorified field name 
 	 * @param clazz the class on which the method operates
 	 * @param discriminatorOption recursive option to be passed down if there was a discriminator option higher up
-	 * @return
+	 * @return JSON object containing the possible values that can be held by the field
 	 */
 	public static List<JsonBean> getPossibleValuesForField(String longFieldName, Class<?> clazz, String discriminatorOption) {
 
@@ -60,11 +60,14 @@ public class PossibleValuesEnumerator {
 				result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, fieldName)));
 				return result;
 			}
+			
 			String configString = discriminatorOption == null? null : discriminatorOption;
 			if (InterchangeUtils.isCompositeField(field)) {
 				configString =  InterchangeUtils.getConfigValue(fieldName, field);
 			}
-			return getPossibleValuesForField(longFieldName.substring(longFieldName.indexOf('~') + 1), InterchangeUtils.getClassOfField(field), configString);
+			
+			return getPossibleValuesForField(longFieldName.substring(longFieldName.indexOf('~') + 1), 
+					InterchangeUtils.getClassOfField(field), configString);
 		} else {
 			/*
 			 * the last field might contain discriminated values
@@ -104,6 +107,7 @@ public class PossibleValuesEnumerator {
 			}
 		}
 	}
+	
 	/**
 	 * method employed for the scenario that possible values are to be obtained from
 	 * a FieldsDiscriminator-derived class, instead of the usual database queries
@@ -132,6 +136,7 @@ public class PossibleValuesEnumerator {
 		return result;
 		
 	}
+	
 	/**
 	 * Complex fields are discriminated fields -- when several underscorified paths 
 	 * lead to the same Java field. This method gets possible values for such fields
@@ -155,7 +160,6 @@ public class PossibleValuesEnumerator {
 		} else if (InterchangeUtils.getClassOfField(field).equals(AmpCategoryValue.class)){
 			return getPossibleCategoryValues(field, configValue);
 		} else {
-//			result.add(ApiError.toError(new ApiErrorMessage(ActivityErrors.FIELD_INVALID, field.getName())));
 			//not a complex field, after all
 			return getPossibleValuesForField(field);
 		}
@@ -185,7 +189,6 @@ public class PossibleValuesEnumerator {
 	 */
 	private static List<Object> getSpecialCaseObjectList(final String configType, final String configTableName, 
 					 String entityIdColumnName, final String conditionColumnName, final String idColumnName, Class<?> clazz) {
-//		List<AmpSector> result = new ArrayList<AmpSector>();
 		final List<Long> itemIds = new ArrayList<Long>();
 		PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {
@@ -199,9 +202,11 @@ public class PossibleValuesEnumerator {
 				}
 			}
 		});		
+		
 		if (itemIds.size() == 0) {
 			return new ArrayList<Object>();
 		}
+		
 		String ids = StringUtils.join(itemIds, ",");
 		String queryString = "select cls from " + clazz.getName() + " cls where cls."+ entityIdColumnName + " in (" + ids + ")";
 		
@@ -243,7 +248,7 @@ public class PossibleValuesEnumerator {
 	/**
 	 * Gets possible values for the AmpCategoryValue class
 	 * @param field
-	 * @param discriminatorOption
+	 * @param discriminatorOption 
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -338,6 +343,4 @@ public class PossibleValuesEnumerator {
 			return result;
 		}
 	}
-	
-	
 }

@@ -31,10 +31,5 @@ public class CurrencyDiscriminator extends FieldsDiscriminator {
 	public Object toAmpFormat(Object obj) {
 		return obj;
 	}
-//
-//	@Override
-//	public Class getJsonOutputType() {
-//		return String.class;
-//	}
 
 }

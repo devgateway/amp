@@ -884,6 +884,7 @@ public class ActivityImporter {
 		if (!update) {
 			newActivity.setDraft(isDraftFMEnabled);
 		}
+		
 		initDefaults();
 	}
 	
@@ -1030,6 +1031,9 @@ public class ActivityImporter {
         }
     }
     
+    /**
+	 * Updates Proposed Project Cost amount depending on configuration (annual budget)
+	 */
 	protected void updatePPCAmount() {
 		boolean isAnnualBudget = FMVisibility.isFmPathEnabled("/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost");
 

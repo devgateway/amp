@@ -78,11 +78,11 @@ public class ActivityExporter {
 	
 	/**
 	 * 
-	 * @param field
-	 * @param fieldInstance
-	 * @param resultJson
-	 * @param filteredFields
-	 * @param fieldPath
+	 * @param field the instance of the field
+	 * @param fieldInstance the object of the field
+	 * @param parentObject the object that contain the field
+	 * @param resultJson result JSON object which will be filled with the values of the fields 
+	 * @param fieldPath the underscorified path to the field currently exported
 	 * @return
 	 */
 	private void readFieldValue(Field field, Object fieldInstance, Object parentObject, JsonBean resultJson, String fieldPath) throws IllegalArgumentException, 
@@ -131,7 +131,6 @@ public class ActivityExporter {
 				if (isFiltered(filteredFieldPath)) {
 					
 					Long id;
-					
 					if (discriminator != null && discriminator.discriminatorClass().length() > 0) {
 						try {
 							Class<FieldsDiscriminator> discClass = (Class<FieldsDiscriminator>) Class.forName(discriminator.discriminatorClass());
@@ -141,8 +140,7 @@ public class ActivityExporter {
 							throw new RuntimeException("Couldn't instantiate discriminator class "+ discriminator.discriminatorClass());
 						}
 					} else {
-						id = fieldValue != null ? InterchangeUtils.getId(fieldValue) : null;
-						resultJson.set(fieldTitle, id);
+						resultJson.set(fieldTitle, InterchangeUtils.getId(fieldValue));
 					}
 				}
 			}
@@ -151,10 +149,9 @@ public class ActivityExporter {
 	
 	/**
 	 * 
-	 * @param item
-	 * @param filteredFields
-	 * @param fieldPath
-	 * @return itemJson
+	 * @param item 
+	 * @param fieldPath the underscorified path to the field currently exported 
+	 * @return itemJson object JSON containing the value of the item
 	 */
 	private JsonBean getObjectJson(Object item, String fieldPath) throws IllegalArgumentException, IllegalAccessException, 
 	NoSuchMethodException, SecurityException, InvocationTargetException, EditorException {
@@ -174,11 +171,10 @@ public class ActivityExporter {
 	 * Generate the composite values. E.g: we have a list of sectors, 
 	 * in JSON the list should be written by classification 
 	 * (primary programs, secondary programs, etc.)
-	 * @param field
-	 * @param fieldInstance
-	 * @param resultJson
-	 * @param filteredFields
-	 * @param fieldPath
+	 * @param field the instance of the field
+	 * @param fieldInstance the object of the field
+	 * @param resultJson object JSON containing the value of the item
+	 * @param fieldPath the underscorified path to the field currently exported 
 	 */
 	private void generateCompositeValues(Field field, Object object, String fieldPath, JsonBean resultJson) throws IllegalArgumentException, 
 	IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException, EditorException {
@@ -201,7 +197,6 @@ public class ActivityExporter {
 			logger.error("Error in creating instance of class. " 	+ e.getMessage());
 			throw new RuntimeException(e);
 		}			
-		
 		
 		Map<String, Object> compositeMap = new HashMap<String, Object>();
 		Map<String, Interchangeable> compositeMapSettings = new HashMap<String, Interchangeable>();
@@ -239,6 +234,7 @@ public class ActivityExporter {
 						String filteredFieldPath = filteredFieldsMap.get(catVal.getAmpCategoryClass().getKeyName());
 						// we may need to move up for all composites, but so far applies to ACV, 
 						// so keeping here to avoid side effects in rush changes
+						
 						if (compositeMapSettings.get(catVal.getAmpCategoryClass().getKeyName()).pickIdOnly()) {
 							compositeMap.put(catVal.getAmpCategoryClass().getKeyName(), catVal.getId());
 						} else {
@@ -269,8 +265,7 @@ public class ActivityExporter {
 	
 	/**
 	 * 
-	 * @param filteredFieldPath
-	 * @param filteredFields
+	 * @param filteredFieldPath the underscorified path to the field
 	 * @return boolean, if the field should be exported in the result Json 
 	 */
 	private boolean isFiltered(String filteredFieldPath) {
@@ -296,6 +291,7 @@ public class ActivityExporter {
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		
 		FieldsDiscriminator discObj = discClass.newInstance();
+		
 		return discObj.toJsonOutput(fieldValue);
 	}
 }

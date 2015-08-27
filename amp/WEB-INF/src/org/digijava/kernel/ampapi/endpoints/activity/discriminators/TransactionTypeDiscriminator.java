@@ -15,25 +15,29 @@ public class TransactionTypeDiscriminator extends FieldsDiscriminator {
 	@Override
 	public Map<String, Object> getPossibleValues() {
 		Map<String, Object> valuesMap = new HashMap<String, Object>();
-		for (Map.Entry<String, Integer> entry : getTransactionTypeMap().entrySet())
+		for (Map.Entry<String, Integer> entry : getTransactionTypeMap().entrySet()) {
 			valuesMap.put(entry.getValue().toString(), entry.getKey());
+		}
+		
 		return valuesMap;
 	}
 	
 	@Override
 	public Object toJsonOutput(Object obj) {
 		Integer intValue = (Integer) obj;
-		for (Map.Entry<String, Integer> entry : getTransactionTypeMap().entrySet())
-			if (entry.getValue().equals(intValue))
+		for (Map.Entry<String, Integer> entry : getTransactionTypeMap().entrySet()) {
+			if (entry.getValue().equals(intValue)) {
 				return entry.getKey();
+			}
+		}
+		
 		return null;
 	}
 
     private Map<String, Integer> getTransactionTypeMap() {
         Map<String, Integer> valuesMap = new HashMap<String, Integer>();
 
-        AmpCategoryClass categoryClass
-                = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.TRANSACTION_TYPE_KEY);
+        AmpCategoryClass categoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.TRANSACTION_TYPE_KEY);
         List<AmpCategoryValue> possibleValues = categoryClass.getPossibleValues();
         if (possibleValues != null) {
             for (AmpCategoryValue transactionType : possibleValues) {
@@ -41,8 +45,7 @@ public class TransactionTypeDiscriminator extends FieldsDiscriminator {
                 // TRANSACTION_TYPE_NAME_TO_ID map
                 if (transactionType.isVisible()
                         && ArConstants.TRANSACTION_TYPE_NAME_TO_ID.get(transactionType.getValue()) != null) {
-                    valuesMap.put(transactionType.getValue(),
-                            ArConstants.TRANSACTION_TYPE_NAME_TO_ID.get(transactionType.getValue()));
+                    valuesMap.put(transactionType.getValue(), ArConstants.TRANSACTION_TYPE_NAME_TO_ID.get(transactionType.getValue()));
                 }
             }
         }

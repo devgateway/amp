@@ -619,9 +619,10 @@ public class InterchangeUtils {
 	public static Long getId(Object obj) throws NoSuchMethodException,	SecurityException, 
 		IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		//TODO: throw an exception here? it's currently swallowed
-		if (!Identifiable.class.isAssignableFrom(obj.getClass())) {
+		if (obj == null || !Identifiable.class.isAssignableFrom(obj.getClass())) {
 			return null;
 		}
+		
 		Identifiable identifiableObject = (Identifiable) obj;
 		Long id = (Long) identifiableObject.getIdentifier(); 
 		return id;
@@ -866,14 +867,32 @@ public class InterchangeUtils {
 		return clazz.isAssignableFrom(AmpActivityVersion.class);
 	}
 	
+	/**
+	 * Determine if the field contains unique validator
+	 * @param field
+	 * @param interchangeable
+	 * @return boolean if the field contains unique validator 
+	 */
 	public static boolean hasUniqueValidatorEnabled(Field field, Interchangeable interchangeable) {
 		return hasValidatorEnabled(field, interchangeable, ActivityEPConstants.UNIQUE_VALIDATOR_NAME);
 	}
 	
+	/**
+	 * Determine if the field contains tree collection validator
+	 * @param field
+	 * @param interchangeable
+	 * @return boolean if the field contains tree collection validator 
+	 */
 	public static boolean hasTreeCollectionValidatorEnabled(Field field, Interchangeable interchangeable) {
 		return hasValidatorEnabled(field, interchangeable, ActivityEPConstants.TREE_COLLECTION_VALIDATOR_NAME);
 	}
 	
+	/**
+	 * Determine if the field contains maxsize validator
+	 * @param field
+	 * @param interchangeable
+	 * @return boolean if the field contains maxsize validator 
+	 */
 	public static boolean hasMaxSizeValidatorEnabled(Field field, Interchangeable interchangeable) {
 		if (AmpActivityProgram.class.equals(getGenericClass(field))) {
 			try {
@@ -887,14 +906,33 @@ public class InterchangeUtils {
 		}
 	}
 	
+	/**
+	 * Determine if the field contains required validator
+	 * @param field
+	 * @param interchangeable
+	 * @return boolean if the field contains required validator 
+	 */
 	public static boolean hasRequiredValidatorEnabled(Field field, Interchangeable interchangeable) {
 		return hasValidatorEnabled(field, interchangeable, ActivityEPConstants.MIN_SIZE_VALIDATOR_NAME);
 	}
 	
+	/**
+	 * Determine if the field contains percentage validator
+	 * @param field
+	 * @param interchangeable
+	 * @return boolean if the field contains percentage validator 
+	 */
 	public static boolean hasPercentageValidatorEnabled(Field field, Interchangeable interchangeable) {
 		return hasValidatorEnabled(field, interchangeable, ActivityEPConstants.PERCENTAGE_VALIDATOR_NAME);
 	}
 	
+	/**
+	 * Determine if the field contains a certain validator 
+	 * @param field
+	 * @param interchangeable
+	 * @param validatorName the name of the validator (unique, maxSize, minSize, percentage, treeCollection)
+	 * @return boolean if the field contains unique validator 
+	 */
 	private static boolean hasValidatorEnabled(Field field, Interchangeable interchangeable, String validatorName) {
 		boolean isEnabled = false;
 		Validators validators = interchangeable.validators();

@@ -144,6 +144,7 @@ public class InterchangeEndpoints {
 	/**
 	 * Updates an activity
 	 * 
+	 * @param projectId the id of the activity which should be updated
 	 * @param newJson activity configuration
 	 * @return latest project overview or an error if invalid configuration is received
 	 */

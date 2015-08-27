@@ -17,6 +17,41 @@
 /**
  * The workspace toolbar, and associated actions
  */
+
+var EnabledGisModel = Backbone.Model.extend({
+	
+});
+
+var EnabledGisCollection = Backbone.Collection.extend({
+	model : EnabledGisModel,
+	url : '/rest/common/fm',
+	fetchData : function() {
+		var params = {
+			"detail-modules" : [ "GIS" ]
+		};
+		this.fetch({
+			type : 'POST',
+			async : false,
+			processData : false,
+			mimeType : 'application/json',
+			traditional : true,
+			headers : {
+				'Content-Type' : 'application/json',
+				'Cache-Control' : 'no-cache'
+			},
+			data : JSON.stringify(params),
+			error : function(collection, response) {
+				//console.error('error loading enabled modules.');
+			},
+			success : function(collection, response) {
+			}
+		});
+	}
+});
+
+var enabledGisFM = new EnabledGisCollection();
+enabledGisFM.fetchData();
+
 var WorkspaceToolbar = Backbone.View.extend({
     enabled: false,
     events: {
@@ -94,6 +129,12 @@ var WorkspaceToolbar = Backbone.View.extend({
             });
     		}
 
+    	if (enabledGisFM && enabledGisFM.models[0].get('error') == undefined && enabledGisFM.models[0].get('GIS') !== undefined) {
+        	$(this.el).find('a.export_to_map').removeClass('disabled_toolbar');
+        } else {
+        	$(this.el).find('a.export_to_map').addClass('disabled_toolbar');
+        }
+    	
         this.reflect_properties();
 
     },

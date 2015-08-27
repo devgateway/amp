@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -42,10 +43,23 @@ public class AMPReportExcelExport {
 	private static CellStyle styleSettingOption = null;
 	private static CellStyle styleSettingFilter = null;
 
+	// We moved here all calls to translateText (to static texts) to avoid a leak connection exception if the report is
+	// too big.
+	private static String translatedFormatted = TranslatorWorker.translateText("Formatted");
+	private static String translatedPlain = TranslatorWorker.translateText("Plain");
+	private static String translatedSummaryInformation = TranslatorWorker.translateText("Summary Information");
+	private static String translatedAppliedFilters = TranslatorWorker.translateText("Applied Filters");
+	private static String translatedCurrency = TranslatorWorker.translateText("Currency");
+	private static String translatedCalendar = TranslatorWorker.translateText("Calendar");
+	private static String translatedUnits = TranslatorWorker.translateText("Units");
+	private static String translatedReportTotals = TranslatorWorker.translateText("Report Totals");
+
 	private static final int TYPE_STYLED = 0;
 	private static final int TYPE_PLAIN = 1;
 
 	private static final short cellHeight = 300;
+	private static final float charWidth = 260;
+	private static final int defaultColWidth = 25;
 
 	private static final Logger logger = Logger.getLogger(AMPReportExcelExport.class);
 
@@ -54,25 +68,28 @@ public class AMPReportExcelExport {
 		// Generate html table.
 		String content = AMPJSConverter.convertToHtml(jb, type);
 		// Parse the string.
-		logger.info("Parse document.");
+		logger.info("Start Parse document.");
 		Document doc = Jsoup.parse(content);
+		logger.info("End Parse document.");
 
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		Workbook wb = new XSSFWorkbook();
-		Sheet mainSheet = wb.createSheet(TranslatorWorker.translateText("Formatted"));
-		Sheet plainSheet = wb.createSheet(TranslatorWorker.translateText("Plain"));
-		Sheet summarySheet = wb.createSheet(TranslatorWorker.translateText("Summary Information"));
+		Sheet mainSheet = wb.createSheet(translatedFormatted);
+		Sheet plainSheet = wb.createSheet(translatedPlain);
+		Sheet summarySheet = wb.createSheet(translatedSummaryInformation);
 		createStyles(wb);
 
 		int hierarchies = report.getRowsHierarchiesTotals();
 		int columns = report.getColumns().size();
+		generateSummarySheet(wb, summarySheet, report, queryModel);
 		generateSheet(wb, mainSheet, doc, hierarchies, columns, TYPE_STYLED, report);
 		generateSheet(wb, plainSheet, doc, hierarchies, columns, TYPE_PLAIN, report);
-		generateSummarySheet(wb, summarySheet, report, queryModel);
 
+		logger.info("Write excel");
 		wb.write(os);
 		os.flush();
 		os.close();
+		logger.info("Return excel");
 		return os.toByteArray();
 	}
 
@@ -86,7 +103,7 @@ public class AMPReportExcelExport {
 	 */
 	private static void generateSummarySheet(Workbook wb, Sheet sheet, ReportSpecificationImpl report,
 			LinkedHashMap<String, Object> queryModel) {
-		logger.info("start generateSummarySheet.");
+		logger.info("Start generateSummarySheet.");
 		int i = 0;
 		int j = 0;
 		Map<String, List<String>> extractedFilters = new<String, List<String>> HashMap();
@@ -143,7 +160,7 @@ public class AMPReportExcelExport {
 		int group = 0;
 		Row filterRowTitle = sheet.createRow(i);
 		Cell filterTitleCell = filterRowTitle.createCell(0);
-		filterTitleCell.setCellValue(TranslatorWorker.translateText("Applied Filters"));
+		filterTitleCell.setCellValue(translatedAppliedFilters);
 		filterTitleCell.setCellStyle(styleSettingOption);
 		for (Map.Entry<String, List<String>> filter : extractedFilters.entrySet()) {
 			group = 0;
@@ -180,7 +197,7 @@ public class AMPReportExcelExport {
 		}
 		Row currencyRow = sheet.createRow(i);
 		Cell currencyTitleCell = currencyRow.createCell(j);
-		currencyTitleCell.setCellValue(TranslatorWorker.translateText("Currency"));
+		currencyTitleCell.setCellValue(translatedCurrency);
 		currencyTitleCell.setCellStyle(styleSettingOption);
 		currencyRow.createCell(j + 1).setCellValue(currency);
 
@@ -188,7 +205,7 @@ public class AMPReportExcelExport {
 		j = 0;
 		Row calendarRow = sheet.createRow(i);
 		Cell calendarTitleCell = calendarRow.createCell(j);
-		calendarTitleCell.setCellValue(TranslatorWorker.translateText("Calendar"));
+		calendarTitleCell.setCellValue(translatedCalendar);
 		calendarTitleCell.setCellStyle(styleSettingOption);
 		calendarRow.createCell(j + 1).setCellValue(calendar);
 
@@ -196,7 +213,7 @@ public class AMPReportExcelExport {
 		j = 0;
 		Row unitsRow = sheet.createRow(i);
 		Cell unitsTitleCell = unitsRow.createCell(j);
-		unitsTitleCell.setCellValue(TranslatorWorker.translateText("Units"));
+		unitsTitleCell.setCellValue(translatedUnits);
 		unitsTitleCell.setCellStyle(styleSettingOption);
 		String units = report.getSettings().getUnitsOption().userMessage;
 		unitsRow.createCell(j + 1).setCellValue(TranslatorWorker.translateText(units));
@@ -204,10 +221,13 @@ public class AMPReportExcelExport {
 		for (int l = 0; l < 3; l++) {
 			sheet.autoSizeColumn(l, true);
 		}
+		logger.info("End generateSummarySheet.");
 	}
 
-	private static void generateSheet(Workbook wb, Sheet sheet, Document doc, int hierarchies, int columns, int type, ReportSpecificationImpl report) {
-		logger.info("start generateSheet.");
+	private static void generateSheet(Workbook wb, Sheet sheet, Document doc, int hierarchies, int columns, int type,
+			ReportSpecificationImpl report) {
+		logger.info("Start generateSheet " + sheet.getSheetName());
+		Map<Integer, Integer> widths = new TreeMap<Integer, Integer>();
 		boolean emptyAsZero = FeaturesUtil
 				.getGlobalSettingValueBoolean(GlobalSettingsConstants.REPORTS_EMPTY_VALUES_AS_ZERO_XLS);
 		// Process header.
@@ -259,6 +279,7 @@ public class AMPReportExcelExport {
 						cell.setCellStyle(styleHeader);
 					}
 				}
+				setMaxColWidth(widths, cell, j);
 				j++;
 				totalColNumber++;
 			}
@@ -267,7 +288,7 @@ public class AMPReportExcelExport {
 		headers = i;
 
 		// Check special case when summarized report has only 1 column and 1 row for "report totals".
-		String reportTotalsString = TranslatorWorker.translateText("Report Totals");
+		String reportTotalsString = translatedReportTotals;
 		// Create a map with the styles we will be cloning so we can add or change them (without breaking the WorkBook
 		// with too many styles).
 		Map<String, CellStyle> clonedStyles = new HashMap<String, CellStyle>();
@@ -309,8 +330,8 @@ public class AMPReportExcelExport {
 					isNumber = false;
 					cell.setCellValue(cellContent);
 				}
-				
-				boolean thisIsTotalsRow = i == totalRows && contentColElement.hasClass("total"); 
+
+				boolean thisIsTotalsRow = i == totalRows && contentColElement.hasClass("total");
 				if (thisIsTotalsRow) {
 					// Style last total row.
 					if (type == TYPE_STYLED) {
@@ -364,6 +385,7 @@ public class AMPReportExcelExport {
 						cell.setCellStyle(styleNumber);
 					}
 				}
+				setMaxColWidth(widths, cell, j);
 				j++;
 			}
 			row.setHeight(cellHeight);
@@ -385,8 +407,31 @@ public class AMPReportExcelExport {
 			break;
 		}
 
-		for (int l = 0; l < totalColNumber; l++) {
-			sheet.autoSizeColumn(l, true);
+		calculateColumnsWidth(sheet, sheet.getRow(0).getPhysicalNumberOfCells(), widths);
+		logger.info("End generateSheet " + sheet.getSheetName());
+	}
+
+	/**
+	 * We need an alternative way to calculate the column's width because sheet.autoSizeColumn can add several minutes
+	 * to the process.
+	 * 
+	 * @param sheet
+	 * @param totalColNumber
+	 * @param hierarchies
+	 * @param headers
+	 */
+	private static void calculateColumnsWidth(Sheet sheet, int totalColNumber, Map<Integer, Integer> widths) {
+		for (int i = 0; i < totalColNumber; i++) {
+			try {
+				if (widths.containsKey(i)) {
+					sheet.setColumnWidth(i, (int) (widths.get(i) * charWidth));
+				} else {
+					sheet.setColumnWidth(i, (int) (defaultColWidth * charWidth));
+				}
+			} catch (Exception e) {
+				// Alternative slow method.
+				sheet.autoSizeColumn(i);
+			}
 		}
 	}
 
@@ -398,6 +443,7 @@ public class AMPReportExcelExport {
 	 * @param headers
 	 */
 	private static void deleteHierarchyTotalRows(Sheet sheet, int hierarchies, int headers, int columns) {
+		logger.info("Start deleteHierarchyTotalRows");
 		if (sheet.getRow(0) != null) {
 			boolean deleted = false;
 			int totalRows = sheet.getPhysicalNumberOfRows();
@@ -441,6 +487,7 @@ public class AMPReportExcelExport {
 				}
 			}
 		}
+		logger.info("End deleteHierarchyTotalRows");
 	}
 
 	/**
@@ -451,6 +498,7 @@ public class AMPReportExcelExport {
 	 * @param headers
 	 */
 	private static void refillHierarchyRows(Sheet sheet, int hierarchies, int headers) {
+		logger.info("Start refillHierarchyRows");
 		if (sheet.getRow(0) != null) {
 			String prevCellValue = null;
 			// Iterate columns then rows.
@@ -486,6 +534,7 @@ public class AMPReportExcelExport {
 				}
 			}
 		}
+		logger.info("End refillHierarchyRows");
 	}
 
 	/**
@@ -496,6 +545,7 @@ public class AMPReportExcelExport {
 	 * @param headers
 	 */
 	private static void mergeHierarchyRows(Sheet sheet, int hierarchies, int headers) {
+		logger.info("Start mergeHierarchyRows");
 		if (sheet.getRow(0) != null) {
 			String prevCellValue = null;
 			int group = 0;
@@ -539,6 +589,7 @@ public class AMPReportExcelExport {
 				}
 			}
 		}
+		logger.info("End mergeHierarchyRows");
 	}
 
 	/**
@@ -547,6 +598,7 @@ public class AMPReportExcelExport {
 	 * @param wb
 	 */
 	private static void createStyles(Workbook wb) {
+		logger.info("Create Excel styles");
 		Font fontHeaderAndTotal = wb.createFont();
 		fontHeaderAndTotal.setColor(IndexedColors.BLACK.getIndex());
 		Font fontBold = wb.createFont();
@@ -612,8 +664,26 @@ public class AMPReportExcelExport {
 		styleSettingOption.setFillPattern(CellStyle.SOLID_FOREGROUND);
 		styleSettingOption.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
 		styleSettingOption.setFont(fontBold);
-		;
 
 		styleSettingFilter = wb.createCellStyle();
+	}
+
+	private static void setMaxColWidth(Map<Integer, Integer> widths, Cell cell, int i) {
+		int currentWidth = 10;
+		switch (cell.getCellType()) {
+		case Cell.CELL_TYPE_STRING:
+			currentWidth = cell.getStringCellValue().length();
+			break;
+		case Cell.CELL_TYPE_NUMERIC:
+			currentWidth = Double.toString(cell.getNumericCellValue()).length();
+			break;
+		}
+		if (widths.containsKey(i)) {
+			if (currentWidth > widths.get(i)) {
+				widths.put(i, currentWidth);
+			}
+		} else {
+			widths.put(i, currentWidth);
+		}
 	}
 }

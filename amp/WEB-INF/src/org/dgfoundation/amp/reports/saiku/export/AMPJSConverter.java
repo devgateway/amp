@@ -20,7 +20,7 @@ public class AMPJSConverter extends JSConverter {
 	private static final Logger logger = Logger.getLogger(AMPJSConverter.class);
 
 	public static String convertToHtml(JsonBean jb, String type) throws IOException {
-		logger.info("start convertToHtml");
+		logger.info("Start convertToHtml");
 		ObjectMapper om = new ObjectMapper();
 		StringWriter sw = new StringWriter();
 		Context context = Context.enter();
@@ -43,6 +43,7 @@ public class AMPJSConverter extends JSConverter {
 		context.evaluateString(globalScope, code, "<mem>", 1, null);
 		Context.exit();
 		String content = sw.toString();
+		logger.info("End convertToHtml");
 		return content;
 	}
 }

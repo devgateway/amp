@@ -53,6 +53,7 @@ public class AMPReportExcelExport {
 	private static String translatedCalendar = TranslatorWorker.translateText("Calendar");
 	private static String translatedUnits = TranslatorWorker.translateText("Units");
 	private static String translatedReportTotals = TranslatorWorker.translateText("Report Totals");
+	private static String translatedUnknownValue = TranslatorWorker.translateText("Unknown value");
 
 	private static final int TYPE_STYLED = 0;
 	private static final int TYPE_PLAIN = 1;
@@ -118,7 +119,12 @@ public class AMPReportExcelExport {
 					List<String> extractedValues = new ArrayList<String>();
 					for (LinkedHashMap<String, Object> columnFilterValues : (List<LinkedHashMap<String, Object>>) columnFilter
 							.getValue()) {
-						extractedValues.add(columnFilterValues.get("name").toString());
+						// AMP-21066
+						if (columnFilterValues != null && columnFilterValues.get("name") != null) {
+							extractedValues.add(columnFilterValues.get("name").toString());
+						} else {
+							extractedValues.add("");
+						}
 					}
 					extractedFilters.put(extractedFilter, extractedValues);
 				}
@@ -132,7 +138,12 @@ public class AMPReportExcelExport {
 					LinkedHashMap<String, Object> columnFilterValues = (LinkedHashMap<String, Object>) otherFilter
 							.getValue();
 					for (Map.Entry<String, Object> columnFilterValue : columnFilterValues.entrySet()) {
-						extractedValues.add(columnFilterValue.getValue().toString());
+						// AMP-21066
+						if (columnFilterValue != null && columnFilterValue.getValue() != null) {
+							extractedValues.add(columnFilterValue.getValue().toString());
+						} else {
+							extractedValues.add("");
+						}
 					}
 					extractedFilters.put(extractedFilter, extractedValues);
 				}
@@ -149,7 +160,12 @@ public class AMPReportExcelExport {
 					String extractedFilter = TranslatorWorker.translateText(entityName);
 					List<String> extractedValues = new ArrayList<String>();
 					for (Map.Entry<String, String> filterValue : filterRule.valueToName.entrySet()) {
-						extractedValues.add(filterValue.getValue());
+						// AMP-21066
+						if (filterValue != null) {
+							extractedValues.add(filterValue.getValue());
+						} else {
+							extractedValues.add("");
+						}
 					}
 					extractedFilters.put(extractedFilter, extractedValues);
 				}

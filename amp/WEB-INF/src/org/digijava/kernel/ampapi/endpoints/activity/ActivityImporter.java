@@ -182,7 +182,7 @@ public class ActivityImporter {
 			}
 		}
 		
-		String activityId = Long.toString(ampActivityId);
+		String activityId = ampActivityId == null ? null : ampActivityId.toString();
 		String key = null;
 
 		try {
@@ -193,7 +193,7 @@ public class ActivityImporter {
 				key = ActivityGatekeeper.lockActivity(activityId, TeamUtil.getCurrentAmpTeamMember().getAmpTeamMemId());
 				
 				if (key == null){ //lock not acquired
-					logger.error("Cannot aquire lock during IATI import/update for activity " + activityId);
+					logger.error("Cannot aquire lock during IATI update for activity " + activityId);
 					errors.put(ActivityErrors.ACTIVITY_IS_LOCKED.id, ActivityErrors.ACTIVITY_IS_LOCKED);
 				}
 				

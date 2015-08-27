@@ -3,7 +3,6 @@ package org.digijava.kernel.ampapi.endpoints.util;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -20,6 +19,7 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianSQLFilters;
 import org.dgfoundation.amp.utils.ConstantsUtil;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.ampapi.endpoints.common.Filters;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.request.TLSUtils;
@@ -114,7 +114,12 @@ public class FilterUtils {
 	private static List<String> getStringsFromArray(List<?> theArray) {
 		List<String> s = new ArrayList<String>();
 		for (Object obj : theArray) {
-			s.add(obj.toString());
+			if (obj != null && Filters.ANY_BOOLEAN.equals(obj.toString())) {
+				s.add(FilterRule.FALSE_VALUE);
+				s.add(FilterRule.TRUE_VALUE);
+			} else {
+				s.add(obj.toString());
+			}
 		}
 		return s;
 	}

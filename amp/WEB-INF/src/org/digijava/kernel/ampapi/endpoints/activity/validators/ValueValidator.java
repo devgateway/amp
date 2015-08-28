@@ -85,7 +85,11 @@ public class ValueValidator extends InputValidator {
 
 		//attempt to get the number out of this one
 		Double val = InterchangeUtils.getDoubleFromJsonNumber(newFieldParent.get(fieldDescription.get(ActivityEPConstants.FIELD_NAME)));
-		if (val == null || val < ActivityEPConstants.EPSILON || val - 100.0 > ActivityEPConstants.EPSILON) {
+		/*VERY TEMPORARY, HERE ONLY FOR THE RELEASE ON 28.08.2015*/
+		if (val == null)
+			return true;
+		/*END OF VERY TEMPORARY PART*/
+		if (val < ActivityEPConstants.EPSILON || val - 100.0 > ActivityEPConstants.EPSILON) {
 			this.isValidPercentage = false;
 			return false;
 		}

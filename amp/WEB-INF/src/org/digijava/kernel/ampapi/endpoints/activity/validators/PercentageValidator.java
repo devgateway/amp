@@ -36,7 +36,7 @@ public class PercentageValidator extends InputValidator {
 		if (StringUtils.isNotBlank(percentageField)) {
 			// get Collection with values to be summed into percentages
 			Collection<Map<String, Object>> fieldValue = (Collection<Map<String, Object>>) newFieldParent.get(fieldName);
-			if (fieldValue != null) {
+			if (fieldValue != null && fieldValue.size() > 0) {
 				Double result = calculatePercentagesSum(fieldValue, percentageField);
 				if (result == null)
 					isValid = false;

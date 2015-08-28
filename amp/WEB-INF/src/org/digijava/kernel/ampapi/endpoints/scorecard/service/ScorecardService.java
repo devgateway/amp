@@ -123,7 +123,7 @@ public class ScorecardService {
 						+ "AND a.amp_activity_id = l.objectid:: integer " + "AND r.activity=a.amp_activity_id "
 						+ "AND    (EXISTS " + "        ( " + "        SELECT af.amp_donor_org_id "
 						+ "       FROM   amp_funding af,amp_activity_version v " + "      WHERE  r.organisation = af.amp_donor_org_id "
-						+ "  AND v.amp_activity_id = af.amp_activity_id  AND v.deleted is false AND (a.activity.draft = false OR a.activity.draft is null) " +
+						+ "  AND v.amp_activity_id = af.amp_activity_id  AND v.deleted is false AND (a.draft = false OR a.draft is null) " +
                         " AND    (( af.source_role_id IS NULL) "
 						+ "     OR     af.source_role_id =( SELECT amp_role_id         FROM   amp_role "
 						+ "  WHERE  role_code='DN')) "
@@ -179,9 +179,9 @@ public class ScorecardService {
 						+ "WHERE o.amp_org_id = r.organisation  AND (EXISTS (SELECT af.amp_donor_org_id "
 						+ "FROM  amp_funding af, amp_activity_version v WHERE  o.amp_org_id = af.amp_donor_org_id "
 						+ "AND v.amp_activity_id = af.amp_activity_id AND v.deleted is false "
+                        + "AND (v.draft = false OR v.draft is null) "
 						+ "AND ((af.source_role_id IS NULL) OR af.source_role_id = (SELECT amp_role_id FROM amp_role WHERE role_code = 'DN')))) "
 						+ "AND ( o.deleted IS NULL OR o.deleted = false ) "
-                        + "AND (v.activity.draft = false OR v.activity.draft is null)"
 						+ "AND o.amp_org_id ";
 					if (toExlcude) {
 						query += "NOT ";
@@ -393,7 +393,7 @@ public class ScorecardService {
 							+ "AND    (EXISTS  (SELECT af.amp_donor_org_id " + " FROM   amp_funding af,amp_activity_version v "
 							+ " WHERE  r.organisation = af.amp_donor_org_id "
 							+ "  AND v.amp_activity_id = af.amp_activity_id "
-                            + " AND (v.activity.draft = false OR v.activity.draft is null) "
+                            + " AND (v.draft = false OR v.draft is null) "
 							+ "  AND v.deleted is false " 
 							+ " AND    (( af.source_role_id IS NULL) "
 							+ " OR     af.source_role_id =( SELECT amp_role_id         FROM   amp_role "
@@ -492,7 +492,7 @@ public class ScorecardService {
 						"amp_activities_categoryvalues c,amp_category_value v  "
 						+ "where a.deleted is false and date_updated <= '"+endPeriodDate+"' "
 						+ "AND a.amp_activity_id = c.amp_activity_id "
-                        + "AND (a.activity.draft = false OR a.activity.draft is null) "
+                        + "AND (a.draft = false OR a.draft is null) "
 						+ "AND c.amp_categoryvalue_id = v.id "
 						+ "AND  v.amp_category_class_id = (select id from amp_category_class where "
 						+ " keyname='activity_status') ";

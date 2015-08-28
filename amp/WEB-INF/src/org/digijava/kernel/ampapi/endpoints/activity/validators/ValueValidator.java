@@ -85,7 +85,16 @@ public class ValueValidator extends InputValidator {
 
 		//attempt to get the number out of this one
 		Double val = InterchangeUtils.getDoubleFromJsonNumber(newFieldParent.get(fieldDescription.get(ActivityEPConstants.FIELD_NAME)));
-		if (val == null || val < ActivityEPConstants.EPSILON || val - 100.0 > ActivityEPConstants.EPSILON) {
+		/*this place checks for a valid percentage. 
+		 * getDoubleFromJsonNumber might have returned a null if it wasn't a number, or it was a null.
+		 * if it's a null where there's supposed to be data, requiredValidator should have marked it broken. 
+		 * if it's not a proper number, InputTypeValidator should have marked it as broken. 
+		 * So, isValidPercentage has no quarrel with this value, unless it's a number 
+		 * and not 0<number<=100. 
+		*/
+		if (val == null)
+			return true;
+		if (val < ActivityEPConstants.EPSILON || val - 100.0 > ActivityEPConstants.EPSILON) {
 			this.isValidPercentage = false;
 			return false;
 		}

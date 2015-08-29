@@ -175,14 +175,16 @@ public class ScorecardService {
 			public void execute(Connection conn) throws SQLException {
 				Map<Long, String> organisationsNames = QueryUtil.getTranslatedName(conn,"amp_organisation","amp_org_id","name");
 				
-				String query = "SELECT distinct(o.amp_org_id ),o.name  FROM   amp_organisation o,amp_org_role r   "
-						+ "WHERE o.amp_org_id = r.organisation  AND (EXISTS (SELECT af.amp_donor_org_id "
-						+ "FROM  amp_funding af, amp_activity_version v WHERE  o.amp_org_id = af.amp_donor_org_id "
-						+ "AND v.amp_activity_id = af.amp_activity_id AND v.deleted is false "
-                        + "AND (v.draft = false OR v.draft is null) "
-						+ "AND ((af.source_role_id IS NULL) OR af.source_role_id = (SELECT amp_role_id FROM amp_role WHERE role_code = 'DN')))) "
-						+ "AND ( o.deleted IS NULL OR o.deleted = false ) "
+				String query = "SELECT (o.amp_org_id) amp_org_id, o.name, o.acronym FROM  amp_organisation o WHERE o.amp_org_id IN ("
+						+ "SELECT distinct o.amp_org_id FROM  amp_organisation o, amp_org_role aor, amp_role r "
+						+ "WHERE (o.amp_org_id = aor.organisation AND aor.role = r.amp_role_id AND r.role_code = 'DN') "
+						+ "UNION "
+						+ "SELECT distinct o.amp_org_id FROM  amp_organisation o, amp_funding af, amp_activity_version v, amp_role r   "          
+						+ "WHERE  o.amp_org_id = af.amp_donor_org_id  AND v.amp_activity_id = af.amp_activity_id  AND (v.deleted is false) "
+						+ "AND ((af.source_role_id IS NULL) OR af.source_role_id = r.amp_role_id and r.role_code = 'DN') "
+						+ ") AND (o.deleted IS NULL OR o.deleted = false ) " 
 						+ "AND o.amp_org_id ";
+				
 					if (toExlcude) {
 						query += "NOT ";
 					}

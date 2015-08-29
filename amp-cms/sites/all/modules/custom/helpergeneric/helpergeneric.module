@@ -867,5 +867,10 @@ function helpergeneric_get_api_settings() {
     $settings['humanitarian_aid_only'] = FALSE;
   }
 
+  // Disable "Disaster Response Marker" filter by default.
+  if (!isset($settings['disaster_response_marker_only'])) {
+    $settings['disaster_response_marker_only'] = FALSE;
+  }
+
   return $settings;
 }

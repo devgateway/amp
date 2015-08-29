@@ -508,6 +508,17 @@ function ampactivities_views_default_views() {
   $handler->display->display_options['filters']['humanitarian_aid']['expose']['operator'] = 'humanitarian_aid_op';
   $handler->display->display_options['filters']['humanitarian_aid']['expose']['identifier'] = 'aid';
   $handler->display->display_options['filters']['humanitarian_aid']['expose']['required'] = TRUE;
+  /* Filter criterion: Activity: Disaster Response Marker */
+  $handler->display->display_options['filters']['disaster_response_marker']['id'] = 'disaster_response_marker';
+  $handler->display->display_options['filters']['disaster_response_marker']['table'] = 'efq_activity';
+  $handler->display->display_options['filters']['disaster_response_marker']['field'] = 'disaster_response_marker';
+  $handler->display->display_options['filters']['disaster_response_marker']['value'] = '0';
+  $handler->display->display_options['filters']['disaster_response_marker']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['disaster_response_marker']['expose']['operator_id'] = '';
+  $handler->display->display_options['filters']['disaster_response_marker']['expose']['label'] = 'Disaster Response Marker';
+  $handler->display->display_options['filters']['disaster_response_marker']['expose']['operator'] = 'disaster_response_marker_op';
+  $handler->display->display_options['filters']['disaster_response_marker']['expose']['identifier'] = 'drm';
+  $handler->display->display_options['filters']['disaster_response_marker']['expose']['required'] = TRUE;
 
   /* Display: Search Page */
   $handler = $view->new_display('page', 'Search Page', 'search_page');
@@ -584,6 +595,7 @@ function ampactivities_views_default_views() {
     t('filter activities by location'),
     t('Activities Search Type'),
     t('Humanitarian Aid'),
+    t('Disaster Response Marker'),
     t('Search Page'),
     t('Export Page'),
   );

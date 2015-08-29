@@ -71,6 +71,9 @@ function contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_set
     $request_body['name'] = 'api:totalactivities';
 
     $api_settings = helpergeneric_get_api_settings();
+
+    // Handle the global "Humanitarian Aid" filter.
+    // @see helpergeneric_api_settings_form()
     if (!empty($api_settings['humanitarian_aid_only'])) {
       $humanitarian_aid_plugin = ampapi_get_mapper_by_property_name('humanitarian_aid');
       $class_name = ctools_plugin_get_class($humanitarian_aid_plugin, 'handler');
@@ -82,6 +85,20 @@ function contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_set
       $ha_key = $humanitarian_aid_plugin['report field key'];
       $ha_value = $handler->getMatchedValue($humanitarian_aid_plugin, TRUE);
       $request_body['filters']['columnFilters'][$ha_key] = array($ha_value);
+    }
+
+    // Handle the global "Disaster Response Marker" filter.
+    // @see helpergeneric_api_settings_form()
+    if (!empty($api_settings['disaster_response_marker_only'])) {
+      $disaster_response_marker_plugin = ampapi_get_mapper_by_property_name('disaster_response_marker');
+      $class_name = ctools_plugin_get_class($disaster_response_marker_plugin, 'handler');
+      /** @var activityMapperOptionsInterface $handler */
+      $handler = new $class_name();
+
+      // Only display data related to humanitarian aid.
+      $drm_key = $disaster_response_marker_plugin['report field key'];
+      $drm_value = $handler->getMatchedValue($disaster_response_marker_plugin, TRUE);
+      $request_body['columnFilters'][$drm_key] = array($drm_value);
     }
 
     $variables['body'] = empty($request_body) ? '{}' : json_encode($request_body);

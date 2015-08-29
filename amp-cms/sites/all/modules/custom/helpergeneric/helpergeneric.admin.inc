@@ -124,6 +124,14 @@ function helpergeneric_api_settings_form($form, &$form_state) {
     '#default_value' => $api_settings['humanitarian_aid_only'],
   );
 
+  // Allow administrator to limit all API queries to only show
+  // "Disaster Response Marker" related data.
+  $form['helpergeneric_api_settings']['disaster_response_marker_only'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Only show "Disaster Response Marker" related data'),
+    '#default_value' => $api_settings['disaster_response_marker_only'],
+  );
+
   $form['#validate'][] = 'helpergeneric_api_settings_form_validate';
   $form['#submit'][] = 'helpergeneric_api_settings_form_submit';
 

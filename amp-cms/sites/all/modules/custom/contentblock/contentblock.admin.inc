@@ -180,7 +180,7 @@ function _contentblock_entity_form_submit($form, &$form_state) {
     $entity->uid = $GLOBALS['user']->uid;
   }
   else {
-    // @TODO: Add posibility to change user?!?
+    // @TODO: Add possibility to change user?!?
   }
 
   // Save the entity.
@@ -243,7 +243,7 @@ function contentblock_entity_form_delete_submit($form, &$form_state) {
 }
 
 /**
- * Menu callback: Creates overview page for custom contentblock entites at admin/structure/%.
+ * Menu callback: Creates overview page for custom contentblock entities at admin/structure/%.
  */
 function contentblock_entity_overview_types($entity_type) {
   $entity_info = entity_get_info($entity_type);

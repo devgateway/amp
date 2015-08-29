@@ -48,7 +48,7 @@ function theme_svg_sprite($elements) {
     );
   }
 
-  // A dummy query-string is added to filenames, to gain control over
+  // A dummy query-string is added to file names, to gain control over
   // browser-caching. The string changes on every update or full cache
   // flush, forcing browsers to load a new copy of the files, as the
   // URL changed. Files that should not be cached (see drupal_add_js())

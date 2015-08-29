@@ -313,7 +313,7 @@ function _ampapi_activity_get_filter_status($name, $handler, $ssc_status) {
     return FALSE;
   }
 
-  // Handle global "Humanitarian Aid" filter.
+  // Handle the global "Humanitarian Aid" filter.
   // @see helpergeneric_api_settings_form()
   if ($name == 'humanitarian_aid') {
     $api_settings = helpergeneric_get_api_settings();
@@ -325,6 +325,27 @@ function _ampapi_activity_get_filter_status($name, $handler, $ssc_status) {
       $handler->view->filter[$name]->options['exposed'] = FALSE;
 
       // Display only "Humanitarian Aid" data.
+      // NOTE: Changing the value here only works if the filter is not
+      // exposed. Otherwise the form values will override this change.
+      $handler->view->filter[$name]->value = TRUE;
+    }
+    else {
+      return FALSE;
+    }
+  }
+
+  // Handle the global "Disaster Response Marker" filter.
+  // @see helpergeneric_api_settings_form()
+  if ($name == 'disaster_response_marker') {
+    $api_settings = helpergeneric_get_api_settings();
+
+    if (!empty($api_settings['disaster_response_marker_only'])) {
+      // Update the filter defaults. Defaults for the display_handler
+      // filter are also updated.
+      // Hide the filter.
+      $handler->view->filter[$name]->options['exposed'] = FALSE;
+
+      // Display only "Disaster Response Marker" data.
       // NOTE: Changing the value here only works if the filter is not
       // exposed. Otherwise the form values will override this change.
       $handler->view->filter[$name]->value = TRUE;

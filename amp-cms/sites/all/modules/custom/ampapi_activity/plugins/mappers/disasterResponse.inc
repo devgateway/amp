@@ -1,29 +1,29 @@
 <?php
 /**
  * @file
- * humanitarianAid plugin.
+ * disasterResponse plugin.
  */
 
 $plugin = array(
-  'title' => t('Humanitarian Aid'),
+  'title' => t('Disaster Response Marker'),
   'description' => t(''),
 
-  'property name' => 'humanitarian_aid',
+  'property name' => 'disaster_response_marker',
   'property info' => array(
     'type' => 'boolean',
   ),
 
   'report field group' => 'columns',
-  'report field key' => 'Humanitarian Aid',
-  'report filter key' => 'Humanitarian Aid',
+  'report field key' => 'Disaster Response Marker',
+  'report filter key' => 'Disaster Response Marker',
 
-  'report filter endpoint' => 'filters/humanitarianAid',
+  'report filter endpoint' => 'filters/disasterResponse',
 
-  'handler' => 'humanitarianAidMapper',
+  'handler' => 'disasterResponseMarkerMapper',
 );
 
-class humanitarianAidMapper extends activityMapperBase implements activityMapperOptionsInterface {
-  // This hacked mapper is similar to the disasterResponseMarkerMapper mapper.
+class disasterResponseMarkerMapper extends activityMapperBase implements activityMapperOptionsInterface {
+  // This hacked mapper is similar to the humanitarianAidMapper mapper.
   public function getMatchedValue($plugin, $lookup_value) {
     if (!isset($lookup_value)) {
       return NULL;

@@ -27,6 +27,11 @@ $plugin = array(
 function contentwidget_lastupdated_widget_retrieve_data($plugin, $widget_settings, $langcode = NULL) {
   $data = array();
 
+  $api_status = helpergeneric_check_api_status();
+  if (!$api_status['online']) {
+    return $data;
+  }
+
   $langcode = (empty($langcode) ? LANGUAGE_NONE : $langcode);
   $cache_id = "contentblock:widget:{$langcode}:lastupdated:" . md5(serialize($widget_settings));
 
@@ -35,12 +40,6 @@ function contentwidget_lastupdated_widget_retrieve_data($plugin, $widget_setting
    $response = $cached->data;
   }
   else {
-    $api_status = helpergeneric_check_api_status();
-    if (!$api_status['online']) {
-      drupal_set_message($api_status['message'], 'warning');
-      return $data;
-    }
-
     // Prepare a list of parameters for the request.
     $parameters = array();
 

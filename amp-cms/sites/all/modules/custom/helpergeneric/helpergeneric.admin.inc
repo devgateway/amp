@@ -57,7 +57,7 @@ function helpergeneric_toggle_cleanup_ui_force_submit($form, &$form_state) {
  * Page callback for 'admin/settings/api'.
  */
 function helpergeneric_api_settings_form($form, &$form_state) {
-  $api_status = helpergeneric_check_api_status(FALSE);
+  $api_status = helpergeneric_check_api_status(FALSE, FALSE);
   if (!$api_status['online']) {
     drupal_set_message($api_status['message'], 'warning');
   }

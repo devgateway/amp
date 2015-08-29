@@ -28,10 +28,15 @@ function ampapi_activity_embeddedform_content_type_render($subtype, $conf, $pane
   $block = new stdClass();
   $block->module = 'ampapi_activity';
 
-
   $svgicon = helpertheme_get_svg_icons('search', array('width' => '2em', 'height' => '2em'));
   $block->title = '<div class="title">' . $svgicon . t('Search Activities') . '</div>';
   $block->title_is_xss_free = TRUE;
+
+  // Make sure the API is online before displaying the search form.
+  $api_status = helpergeneric_check_api_status();
+  if (!$api_status['online']) {
+    return;
+  }
 
   $name = 'activities';
   $display_id = 'search_page';

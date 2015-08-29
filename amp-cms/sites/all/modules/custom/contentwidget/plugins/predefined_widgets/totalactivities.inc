@@ -24,7 +24,6 @@ $plugin = array(
 function contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_settings, $langcode = NULL) {
   $api_status = helpergeneric_check_api_status();
   if (!$api_status['online']) {
-    drupal_set_message($api_status['message'], 'warning');
     return;
   }
 

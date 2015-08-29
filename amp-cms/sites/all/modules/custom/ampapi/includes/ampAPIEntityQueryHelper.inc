@@ -63,15 +63,8 @@ class ampAPIEntityQueryHelper {
   function executeQuery(EntityFieldQuery $query) {
     global $language_content;
 
-    static $api_status;
-    if (!isset($api_status)) {
-      $api_status = helpergeneric_check_api_status(FALSE);
-
-      if (!$api_status['online']) {
-        drupal_set_message($api_status['message'], 'warning');
-      }
-    }
-    if (empty($api_status['online'])) {
+    $api_status = helpergeneric_check_api_status();
+    if (!$api_status['online']) {
       return ($query->count) ? 0 : array();
     }
 

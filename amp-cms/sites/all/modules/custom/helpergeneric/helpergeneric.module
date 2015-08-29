@@ -749,7 +749,7 @@ function helpergeneric_unparse_url($parsed_url) {
 /**
  * Tries to determine if the API is online or not.
  */
-function helpergeneric_check_api_status($link = TRUE) {
+function helpergeneric_check_api_status($display_error = TRUE, $link = TRUE) {
   static $status;
 
   if (isset($status)) {
@@ -762,27 +762,43 @@ function helpergeneric_check_api_status($link = TRUE) {
   );
 
   $response = restclient_get('test', array('reset' => TRUE, 'error_handling' => TRUE));
-  if (empty($response)) {
+  if (empty($response) || $response->code == '404') {
     $status['online'] = FALSE;
     $status['message'] = t('The API server seems to be offline.');
-    if ($link) {
-      $t_args = array('!settings' => l(t('API Settings'), 'admin/settings/api'));
-      $status['message'] .= ' ' . t('Please check the !settings page.', $t_args);
-    }
-    return $status;
-  }
 
-  // @TODO: Add support for more response codes.
-  if (restclient_response_code($response) == RESTCLIENT_RESPONSE_SUCCESS) {
-    $status['online'] = TRUE;
+    if (user_access('helpergeneric administer settings') && $link) {
+      $t_args = array('!settings' => l(t('API Settings'), 'admin/settings/api'));
+      $status['message'] .= ' ' . t('Please check the !settings page or the AMP status.', $t_args);
+    }
+    else {
+      $status['message'] .= ' ' . t('Please try again later.');
+    }
   }
   else {
-    if (!empty($response->error)) {
-      $status['message'] = t('The API returned the following status message: %message', array('%message' => $response->error));
+    $response_code = restclient_response_code($response);
+    if ($response_code == RESTCLIENT_RESPONSE_SUCCESS) {
+      $status['online'] = TRUE;
     }
-    else if (!empty($response->status_message)) {
-      $status['message'] = t('The API returned the following status message: %message', array('%message' => $response->status_message));
+    else if ($response_code == RESTCLIENT_RESPONSE_CLIENT_ERROR && $response->code == '404') {
+      $status['message'] = t('The API server seems to be offline.');
+      if ($link) {
+        $t_args = array('!settings' => l(t('API Settings'), 'admin/settings/api'));
+        $status['message'] .= ' ' . t('Please check the !settings page.', $t_args);
+      }
     }
+    else {
+      if (!empty($response->error)) {
+        $status['message'] = t('The API returned the following status message: %message', array('%message' => $response->error));
+      }
+      else if (!empty($response->status_message)) {
+        $status['message'] = t('The API returned the following status message: %message', array('%message' => $response->status_message));
+      }
+    }
+  }
+
+  // The error is displayed only the first time this function is called.
+  if ($display_error && !empty($status['message'])) {
+    drupal_set_message($status['message'], 'error');
   }
 
   return $status;

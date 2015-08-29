@@ -174,6 +174,12 @@ function ampapi_request($type, $endpoint, $use_cache = FALSE, $options = array()
   global $language_content;
   $langcode = $language_content->language;
 
+  // Make sure the API is online before attempting to make another request.
+  $api_status = helpergeneric_check_api_status();
+  if (!$api_status['online']) {
+    return array();
+  }
+
   $cache_id = "ampapi_request:{$langcode}:{$type}:{$endpoint}:" . md5(serialize($options));
   // Try to get the response from cache.
   if ($use_cache && $cached = cache_get($cache_id, 'cache')) {

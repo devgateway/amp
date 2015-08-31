@@ -1,10 +1,13 @@
-const MIN_YEAR = 1970;
-const MAX_YEAR = 2050;
+export const MIN_YEAR = 1970;
+export const MAX_YEAR = 2050;
+const KEY_DELETE = 0;
+const KEY_BACKSPACE = 8;
 const KEY_ENTER = 13;
 
 var keyCode = e => "undefined" != typeof e.which ? e.which : e.keyCode;
 
-var isSpecialKey = e => e.altKey || e.shiftKey || e.ctrlKey || keyCode(e) == KEY_ENTER;
+var isSpecialKey = e => e.altKey || e.shiftKey || e.ctrlKey || keyCode(e) == KEY_ENTER || keyCode(e) == KEY_BACKSPACE
+  || keyCode(e) == KEY_DELETE;
 
 var char = e => String.fromCharCode(keyCode(e));
 

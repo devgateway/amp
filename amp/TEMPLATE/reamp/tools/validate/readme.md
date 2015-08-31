@@ -32,6 +32,9 @@ that prevents default on events based on the result of validator's execution
 
     type ListenerCreator = (validator: Validator) => Listener
 
+## Constants
+* MIN_YEAR
+* MAX_YEAR
 
 ## API
 ### keyPressEventToString:(e: KeyPressEvent) => string

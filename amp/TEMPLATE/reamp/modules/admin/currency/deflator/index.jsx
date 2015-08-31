@@ -1,11 +1,11 @@
 /** @jsx h */
-
 import * as AMP from "amp/architecture";
 var {h} = AMP;
 import __ from "amp/modules/translate";
 import * as Rate from "./rate";
 import * as NewRate from "./new-rate";
 import cn from "classnames";
+import {MIN_YEAR, MAX_YEAR} from "amp/tools/validate";
 
 export class Action extends AMP.Action{}
 class Save extends Action{}
@@ -171,7 +171,9 @@ export function update(action: AMP.Action, model:Model){
   if(action instanceof NewRate.Action){
     if(action instanceof NewRate.YearSubmitted){
       let path = ['current', 'currencies', model.current().currentCurrencyCode(), 'inflationRates', action.year()];
-      return model.hasIn(path) ? model : model.setIn(path, Rate.model.year(action.year()))
+      return !model.hasIn(path) && MIN_YEAR <= action.year() && action.year() <= MAX_YEAR ?
+        model.setIn(path, Rate.model.year(action.year())) :
+        model;
     }
     return AMP.updateSubmodel(['current', 'newRate'], NewRate.update, action, model);
   }

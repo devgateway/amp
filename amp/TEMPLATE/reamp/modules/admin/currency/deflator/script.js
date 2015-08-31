@@ -72,7 +72,6 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(fetch) {/** @jsx h */
-	
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
@@ -117,6 +116,8 @@
 	var _classnames = __webpack_require__(47);
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	var _ampToolsValidate = __webpack_require__(48);
 	
 	var h = AMP.h;
 	
@@ -449,7 +450,7 @@
 	  if (action instanceof NewRate.Action) {
 	    if (action instanceof NewRate.YearSubmitted) {
 	      var path = ['current', 'currencies', model.current().currentCurrencyCode(), 'inflationRates', action.year()];
-	      return model.hasIn(path) ? model : model.setIn(path, Rate.model.year(action.year()));
+	      return !model.hasIn(path) && _ampToolsValidate.MIN_YEAR <= action.year() && action.year() <= _ampToolsValidate.MAX_YEAR ? model.setIn(path, Rate.model.year(action.year())) : model;
 	    }
 	    return AMP.updateSubmodel(['current', 'newRate'], NewRate.update, action, model);
 	  }
@@ -3577,7 +3578,11 @@
 	  value: true
 	});
 	var MIN_YEAR = 1970;
+	exports.MIN_YEAR = MIN_YEAR;
 	var MAX_YEAR = 2050;
+	exports.MAX_YEAR = MAX_YEAR;
+	var KEY_DELETE = 0;
+	var KEY_BACKSPACE = 8;
 	var KEY_ENTER = 13;
 	
 	var keyCode = function keyCode(e) {
@@ -3585,7 +3590,7 @@
 	};
 	
 	var isSpecialKey = function isSpecialKey(e) {
-	  return e.altKey || e.shiftKey || e.ctrlKey || keyCode(e) == KEY_ENTER;
+	  return e.altKey || e.shiftKey || e.ctrlKey || keyCode(e) == KEY_ENTER || keyCode(e) == KEY_BACKSPACE || keyCode(e) == KEY_DELETE;
 	};
 	
 	var char = function char(e) {

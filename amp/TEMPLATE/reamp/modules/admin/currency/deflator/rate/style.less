@@ -1,0 +1,34 @@
+.glyphicon-trash{
+  cursor: pointer;
+}
+
+td, th{
+  width: 25%;
+}
+
+.form-control.view{
+  background: transparent;
+  border-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.edit-on-hover{
+  .edit{
+    display:none;
+    &:focus{
+      display: block;
+      &+.view{
+        display: none;
+      }
+    }
+  }
+  &:hover{
+    .edit{
+      display: block;
+    }
+    .view{
+      display: none
+    }
+  }
+}

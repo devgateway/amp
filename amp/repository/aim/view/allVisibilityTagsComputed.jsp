@@ -21,9 +21,10 @@
 <module:display name="Activity Import Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Budget Codes Exporter" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Code Chapitre Importer" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Currency deflator" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Activity Levels" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Add & Edit Activity" parentModule="PARIS INDICATORS"></module:display> 
-<module:display name="Admin Home" parentModule="PARIS INDICATORS"></module:display> 
+<module:display name="Admin Home" parentModule="PARIS INDICATORS"></module:display>
 <module:display name="Calendar" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Channel Overview" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Components Resume" parentModule="PROJECT MANAGEMENT"></module:display> 

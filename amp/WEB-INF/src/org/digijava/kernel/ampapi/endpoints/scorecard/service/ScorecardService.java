@@ -118,18 +118,21 @@ public class ScorecardService {
 			public void execute(Connection conn) throws SQLException {
 				String query = "SELECT distinct (l.id),r.organisation ,l.teamname, "
 						+ " l.authorname,l.loggeddate,a.amp_id,l.modifydate "
-						+ "FROM amp_audit_logger l, amp_activity_version a,amp_org_role r "
+						+ "FROM amp_audit_logger l, amp_activity_version a, amp_org_role r "
 						+ "WHERE objecttype = 'org.digijava.module.aim.dbentity.AmpActivityVersion' "
 						+ "AND a.amp_activity_id = l.objectid:: integer " + "AND r.activity=a.amp_activity_id "
 						+ "AND    (EXISTS " + "        ( " + "        SELECT af.amp_donor_org_id "
-						+ "       FROM   amp_funding af,amp_activity_version v " + "      WHERE  r.organisation = af.amp_donor_org_id "
-						+ "  AND v.amp_activity_id = af.amp_activity_id  AND v.deleted is false AND (a.draft = false OR a.draft is null) " +
-                        " AND    (( af.source_role_id IS NULL) "
+						+ "       FROM   amp_funding af, amp_activity_version v, amp_team t " + "      WHERE  r.organisation = af.amp_donor_org_id "
+						+ "  AND v.amp_activity_id = af.amp_activity_id  AND v.deleted is false AND (a.draft = false OR a.draft is null) "
+                        // exclude private workspaces from calculation
+                        + " AND v.amp_team_id = t.amp_team_id AND t.isolated = false "
+                        + " AND    (( af.source_role_id IS NULL) "
 						+ "     OR     af.source_role_id =( SELECT amp_role_id         FROM   amp_role "
 						+ "  WHERE  role_code='DN')) "
 						+ "AND af.amp_donor_org_id NOT IN (SELECT amp_donor_id FROM amp_scorecard_organisation WHERE to_exclude = true))) "
 						+ " AND modifydate>='" + formattedStartDate
-						+ "' AND modifydate <= '" + formattedEndDate + "' ";
+						+ "' AND modifydate <= '" + formattedEndDate + "' "
+                        + " AND (a.draft = false OR a.draft is null) AND a.deleted is false ";
 
 				if (allowedStatuses != null && !allowedStatuses.isEmpty()) {
 					String status = StringUtils.join(allowedStatuses, ",");
@@ -400,7 +403,7 @@ public class ScorecardService {
 							+ " AND    (( af.source_role_id IS NULL) "
 							+ " OR     af.source_role_id =( SELECT amp_role_id         FROM   amp_role "
 							+ " WHERE  role_code='DN')))) " + " and date_created <= '" + quarterEndDate + "' "
-							+ " AND a.deleted is false ";
+							+ " AND a.deleted is false AND (a.draft = false OR a.draft is null)";
 					if (activityIds.length > 0) {
 						query += "AND a.amp_activity_id in (" + StringUtils.join(activityIds, ",") + ") ";
 					}

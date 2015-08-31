@@ -1111,21 +1111,6 @@ table.component-funding-table tr
 	list-style-position: inside;
 }
 
-.nav.navbar-nav.menus {
-  padding-top:10px;
-  padding-bottom: 10px;
-  position: relative;
-}
-.nav.navbar-nav.ampUserLoggedIn {
-  top: 10px;
-  position: relative;
-}
-.nav.navbar-nav.ampPublic {
-  top: 10px;
-  position: relative;		
-}
-
-
 #actions-table {
   background-color: rgb(242, 242, 242);
   display: table;

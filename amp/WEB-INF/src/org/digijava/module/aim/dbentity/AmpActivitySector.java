@@ -3,6 +3,7 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
@@ -16,7 +17,8 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable {
 	@Interchangeable(fieldTitle="Sector ID", importable = true , pickIdOnly = true, uniqueConstraint = true)
 	private AmpSector sectorId;
 	
-	@Interchangeable(fieldTitle="Sector Percentage", importable = true, percentageConstraint = true)
+	@Interchangeable(fieldTitle="Sector Percentage", importable = true, percentageConstraint = true, 
+			fmPath = FMVisibility.PARENT_FM + "/sectorPercentage")
 	private Float sectorPercentage;
         
     private AmpClassificationConfiguration classificationConfig;

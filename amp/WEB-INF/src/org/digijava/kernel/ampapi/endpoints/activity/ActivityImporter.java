@@ -105,7 +105,7 @@ public class ActivityImporter {
 		this.update = update;
         this.currentMember = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
 		this.newJson = newJson;
-		this.isDraftFMEnabled = FMVisibility.isFmPathEnabled(SAVE_AS_DRAFT_PATH);
+		this.isDraftFMEnabled = FMVisibility.isVisible(SAVE_AS_DRAFT_PATH, null);
 		this.isMultilingual = ContentTranslationUtil.multilingualIsEnabled();
 		this.trnSettings = TranslationSettings.getCurrent();
         this.endpointContextPath = endpointContextPath;
@@ -1035,7 +1035,7 @@ public class ActivityImporter {
 	 * Updates Proposed Project Cost amount depending on configuration (annual budget)
 	 */
 	protected void updatePPCAmount() {
-		boolean isAnnualBudget = FMVisibility.isFmPathEnabled("/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost");
+		boolean isAnnualBudget = FMVisibility.isVisible("/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost", null);
 
 		if (isAnnualBudget && newActivity.getAnnualProjectBudgets() != null) {
 			double funAmount = 0d;

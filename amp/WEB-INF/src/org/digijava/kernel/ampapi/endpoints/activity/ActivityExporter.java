@@ -64,7 +64,7 @@ public class ActivityExporter {
 
 		for (Field field : fields) {
 			try {
-				readFieldValue(field, activity, activity, resultJson, null);
+				readFieldValue(field, activity, activity, resultJson, null, null);
 			} catch (IllegalArgumentException | IllegalAccessException
 					| NoSuchMethodException | SecurityException
 					| InvocationTargetException e) {
@@ -85,14 +85,15 @@ public class ActivityExporter {
 	 * @param fieldPath the underscorified path to the field currently exported
 	 * @return
 	 */
-	private void readFieldValue(Field field, Object fieldInstance, Object parentObject, JsonBean resultJson, String fieldPath) throws IllegalArgumentException, 
+	private void readFieldValue(Field field, Object fieldInstance, Object parentObject, JsonBean resultJson, 
+			String fieldPath, Interchangeable parentInterchangeable) throws IllegalArgumentException, 
 	IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException, EditorException {
 		
 		Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
 		InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
 		
 		if (interchangeable != null && !InterchangeUtils.isAmpActivityVersion(field.getType()) 
-				&& FMVisibility.isVisible(interchangeable.fmPath())) {
+				&& FMVisibility.isVisible(interchangeable.fmPath(), parentInterchangeable)) {
 			field.setAccessible(true);
 			String fieldTitle = InterchangeUtils.underscorify(interchangeable.fieldTitle());
 			
@@ -112,7 +113,7 @@ public class ActivityExporter {
 						if (collectionItems != null) {
 							// iterate over the objects of the collection
 							for (Object item : collectionItems) {
-								collectionJson.add(getObjectJson(item, filteredFieldPath));
+								collectionJson.add(getObjectJson(item, filteredFieldPath, parentInterchangeable));
 							}
 						}
 						// put the array with object values in the result JSON
@@ -123,7 +124,7 @@ public class ActivityExporter {
 							Class<? extends Object> parentClassName = parentObject == null ? field.getDeclaringClass() : parentObject.getClass();
 							resultJson.set(fieldTitle, InterchangeUtils.getTranslationValues(field, parentClassName, fieldValue, InterchangeUtils.getId(parentObject)));
 						} else {
-							resultJson.set(fieldTitle, getObjectJson(fieldValue, filteredFieldPath));
+							resultJson.set(fieldTitle, getObjectJson(fieldValue, filteredFieldPath, parentInterchangeable));
 						}
 					}
 				}
@@ -153,7 +154,7 @@ public class ActivityExporter {
 	 * @param fieldPath the underscorified path to the field currently exported 
 	 * @return itemJson object JSON containing the value of the item
 	 */
-	private JsonBean getObjectJson(Object item, String fieldPath) throws IllegalArgumentException, IllegalAccessException, 
+	private JsonBean getObjectJson(Object item, String fieldPath, Interchangeable parentInterchangeable) throws IllegalArgumentException, IllegalAccessException, 
 	NoSuchMethodException, SecurityException, InvocationTargetException, EditorException {
 		
 		Field[] itemFields = item.getClass().getDeclaredFields();
@@ -161,7 +162,7 @@ public class ActivityExporter {
 		
 		// iterate the fields of the object and generate the JSON
 		for (Field itemField : itemFields) {
-			readFieldValue(itemField, item, item, itemJson, fieldPath);	
+			readFieldValue(itemField, item, item, itemJson, fieldPath, parentInterchangeable);	
 		}
 		
 		return itemJson;
@@ -220,35 +221,36 @@ public class ActivityExporter {
 		if (InterchangeUtils.isCollection(field) && object != null) {
 			Collection<Object> compositeCollection = (Collection <Object>) object;
 			if (compositeCollection.size() > 0) {
+				boolean isRealCollection = true;
+				Object ref = compositeCollection.iterator().next();
+				if (ref instanceof AmpCategoryValue && compositeMapSettings.get(((AmpCategoryValue) ref).getAmpCategoryClass().getKeyName()).pickIdOnly()) {
+					isRealCollection = false;
+				}
 				for (Object obj : compositeCollection) {
+					String discOption = null;
 					if (obj instanceof AmpActivitySector) {
-						AmpActivitySector sector = (AmpActivitySector) obj;
-						String filteredFieldPath = filteredFieldsMap.get(sector.getClassificationConfig().getName());
-						((List<JsonBean>) compositeMap.get(sector.getClassificationConfig().getName())).add(getObjectJson(sector, filteredFieldPath));
+						discOption = ((AmpActivitySector) obj).getClassificationConfig().getName();
 					} else if (obj instanceof AmpActivityProgram) {
-						AmpActivityProgram program = (AmpActivityProgram) obj;
-						String filteredFieldPath = filteredFieldsMap.get(program.getProgramSetting().getName());
-						((List<JsonBean>) compositeMap.get(program.getProgramSetting().getName())).add(getObjectJson(program, filteredFieldPath));
+						discOption = ((AmpActivityProgram) obj).getProgramSetting().getName();
 					} else if (obj instanceof AmpCategoryValue) {
 						AmpCategoryValue catVal = (AmpCategoryValue) obj;
-						String filteredFieldPath = filteredFieldsMap.get(catVal.getAmpCategoryClass().getKeyName());
+						discOption = catVal.getAmpCategoryClass().getKeyName();
 						// we may need to move up for all composites, but so far applies to ACV, 
 						// so keeping here to avoid side effects in rush changes
-						
-						if (compositeMapSettings.get(catVal.getAmpCategoryClass().getKeyName()).pickIdOnly()) {
+						if (!isRealCollection) {
 							compositeMap.put(catVal.getAmpCategoryClass().getKeyName(), catVal.getId());
-						} else {
-							((List<JsonBean>) compositeMap.get(catVal.getAmpCategoryClass().getKeyName())).add(getObjectJson(catVal, filteredFieldPath));
 						}
 						//TODO we have to manage when the ActivityBudet is not present (Budget Unallocated)
 					} else if (obj instanceof AmpOrgRole) {
-						AmpOrgRole aor = (AmpOrgRole) obj;
-						String filteredFieldPath = filteredFieldsMap.get(aor.getRole().getRoleCode());
-						((List<JsonBean>) compositeMap.get(aor.getRole().getRoleCode())).add(getObjectJson(aor, filteredFieldPath));
+						discOption = ((AmpOrgRole) obj).getRole().getRoleCode();
 					} else if (obj instanceof AmpActivityContact) {
-						AmpActivityContact ac = (AmpActivityContact) obj;
-						String filteredFieldPath = filteredFieldsMap.get(ac.getContactType());
-						((List<JsonBean>) compositeMap.get(ac.getContactType())).add(getObjectJson(ac, filteredFieldPath));
+						discOption = ((AmpActivityContact) obj).getContactType();
+					}
+					
+					String filteredFieldPath = filteredFieldsMap.get(discOption);
+					if (isRealCollection) {
+						((List<JsonBean>) compositeMap.get(discOption)).add(
+								getObjectJson(obj, filteredFieldPath, compositeMapSettings.get(discOption)));
 					}
 				}
 			}
@@ -257,7 +259,7 @@ public class ActivityExporter {
 		// put in the result JSON the generated structure
 		for (Interchangeable setting : settings) {
 			String fieldTitle = InterchangeUtils.underscorify(setting.fieldTitle());
-			if (isFiltered(fieldTitle) && FMVisibility.isVisible(setting.fmPath())) {
+			if (isFiltered(fieldTitle) && FMVisibility.isVisible(setting.fmPath(), setting)) {
 				resultJson.set(fieldTitle, compositeMap.get(setting.discriminatorOption()));
 			}
 		}

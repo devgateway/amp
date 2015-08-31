@@ -10,11 +10,19 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
 
+/**
+ * Verifies if the associated FM path is enabled
+ * 
+ */
 public class FMVisibility {
+	
+	public static final String PARENT_FM = "_PARENT_FM_";
+	public static final String ANY_FM = "_ANY_FM_";
 
 	private final static Map<String, Boolean> visibilityMap = new HashMap<String, Boolean>();
 	private static Date lastTreeVisibilityUpdate;
@@ -24,7 +32,24 @@ public class FMVisibility {
 	 * @param fmPath, the String with the FM path
 	 * @return true if is enabled, false otherwise
 	 */
-	public static boolean isFmPathEnabled (String fmPath) {
+	public static boolean isFmPathEnabled(String fmPath, Interchangeable interchangeable) {
+		// pre-process
+		if (fmPath.contains(PARENT_FM)) {
+			fmPath = fmPath.replace(PARENT_FM, interchangeable.fmPath());
+		}
+		if (fmPath.startsWith(ANY_FM)) {
+			for(String anyFMOption : fmPath.substring(ANY_FM.length()).split("\\|")) {
+				if (StringUtils.isNotBlank(anyFMOption) && isFinalFmPathEnabled(anyFMOption)) {
+					return true;
+				}
+			}
+			return false;
+		} else {
+			return isFinalFmPathEnabled(fmPath);
+		}
+	}
+	
+	protected static boolean isFinalFmPathEnabled(String fmPath) {
 		boolean isEnabled = false;
 		HttpSession session = TLSUtils.getRequest().getSession();
 		ServletContext ampContext = session.getServletContext();
@@ -37,6 +62,7 @@ public class FMVisibility {
 
 		return isEnabled;
 	}
+	
 	/**
 	 * Checks whether a Field is visible or not according to the Feature
 	 * Manager. It checks the @Interchangeable annotation for its fmPath. If the
@@ -44,26 +70,19 @@ public class FMVisibility {
 	 * Feature Manager path for the Field the it returns true Otherwise it
 	 * returns false
 	 * 
-	 * @param field
-	 *            , the field to determine its visibility
-	 * @return boolean, returns true if the field is visible, false otherwise.
+	 * @param field the field to determine its visibility
+	 * @return true if the field is visible, false otherwise
 	 */
-	public static boolean isVisible(String fmPath) {
+	public static boolean isVisible(String fmPath, Interchangeable interchangeable) {
 		if (fmPath == null)
 			return true;
 		HttpSession session = TLSUtils.getRequest().getSession();
 		checkTreeVisibilityUpdate(session);
 		boolean isVisible = false;
-		//shouldn't get here at all from a non-interchangeable field!
-//		Interchangeable annotation = field.getAnnotation(Interchangeable.class);
-//		if (annotation == null) {
-//			return isVisible;
-//		}
-//		String path = annotation.fmPath();
 		if (fmPath.equals("")) {
 			isVisible = true;
 		} else {
-			isVisible = isFmPathEnabled (fmPath);
+			isVisible = isFmPathEnabled(fmPath, interchangeable);
 		}
 		return isVisible;
 	}

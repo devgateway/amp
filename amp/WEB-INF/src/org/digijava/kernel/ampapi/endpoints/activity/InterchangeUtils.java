@@ -643,7 +643,7 @@ public class InterchangeUtils {
 			requiredValue = ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
 		}
 		else if (required.equals(ActivityEPConstants.REQUIRED_ND) 
-				|| (!required.equals(ActivityEPConstants.REQUIRED_NONE) && FMVisibility.isFmPathEnabled(required))
+				|| (!required.equals(ActivityEPConstants.REQUIRED_NONE) && FMVisibility.isVisible(required, interchangeable))
 				|| (hasRequiredValidatorEnabled(field, interchangeable))) {
 			requiredValue = ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
 		}
@@ -953,7 +953,7 @@ public class InterchangeUtils {
 			}
 			
 			if (StringUtils.isNotBlank(validatorFmPath)) {
-				isEnabled = FMVisibility.isFmPathEnabled(validatorFmPath);
+				isEnabled = FMVisibility.isVisible(validatorFmPath, interchangeable);
 			}
 		}
 		

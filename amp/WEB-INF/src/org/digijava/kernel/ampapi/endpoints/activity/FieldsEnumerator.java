@@ -65,11 +65,11 @@ public class FieldsEnumerator {
 	 *         fields in the definition of the field's class, or field's generic
 	 *         type, if it's a collection
 	 */
-	private List<JsonBean> getChildrenOfField(Field field) {
+	private List<JsonBean> getChildrenOfField(Field field, Interchangeable parentInterchangeable) {
 		if (!InterchangeUtils.isCollection(field))
-			return getAllAvailableFields(field.getType());
+			return getAllAvailableFields(field.getType(), parentInterchangeable);
 		else
-			return getAllAvailableFields(InterchangeUtils.getGenericClass(field));
+			return getAllAvailableFields(InterchangeUtils.getGenericClass(field), parentInterchangeable);
 	}
 	
 	private static Map<String, Field> getInterchangeableFields(Class<?> clazz) {
@@ -215,7 +215,7 @@ public class FieldsEnumerator {
 			}
 			
 			if (!interchangeable.pickIdOnly() && !InterchangeUtils.isAmpActivityVersion(field.getClass())) {
-				List<JsonBean> children = getChildrenOfField(field);
+				List<JsonBean> children = getChildrenOfField(field, interchangeable);
 				if (children != null && children.size() > 0) {
 					bean.set(ActivityEPConstants.CHILDREN, children);
 				}
@@ -246,7 +246,7 @@ public class FieldsEnumerator {
 	 * @return the list of available fields
 	 */
 	public static List<JsonBean> getAllAvailableFields(boolean internalUse) {
-		return (new FieldsEnumerator(internalUse)).getAllAvailableFields(AmpActivityFields.class);
+		return (new FieldsEnumerator(internalUse)).getAllAvailableFields(AmpActivityFields.class, null);
 	}
 
 	/**
@@ -255,7 +255,7 @@ public class FieldsEnumerator {
 	 * @param clazz the class to be described
 	 * @return
 	 */
-	private List<JsonBean> getAllAvailableFields(Class<?> clazz) {
+	private List<JsonBean> getAllAvailableFields(Class<?> clazz, Interchangeable parentInterchangeable) {
 		List<JsonBean> result = new ArrayList<JsonBean>();
 		//StopWatch.next("Descending into", false, clazz.getName());
 		Field[] fields = clazz.getDeclaredFields();
@@ -267,7 +267,7 @@ public class FieldsEnumerator {
 			if (!InterchangeUtils.isCompositeField(field) || hasFieldDiscriminatorClass(field)) {
 				InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
 				
-				if (!FMVisibility.isVisible(interchangeable.fmPath())) {
+				if (!FMVisibility.isVisible(interchangeable.fmPath(), parentInterchangeable)) {
 					continue;
 				}
 				JsonBean descr = describeField(field, interchangeable, discriminator);
@@ -279,7 +279,7 @@ public class FieldsEnumerator {
 				Interchangeable[] settings = discriminator.settings();
 				for (int i = 0; i < settings.length; i++) {
 					String fmPath = settings[i].fmPath();
-					if (!FMVisibility.isVisible(fmPath)) {
+					if (!FMVisibility.isVisible(fmPath, parentInterchangeable)) {
 						continue;
 					}
 					JsonBean descr = describeField(field, settings[i], discriminator);
@@ -323,6 +323,7 @@ public class FieldsEnumerator {
 		}
 		return translations;
 	}
+	
 	/**
 	 * 
 	 * @param parentInterchangeable 
@@ -335,13 +336,15 @@ public class FieldsEnumerator {
 		Field[] fields = genericClass.getDeclaredFields();
 		for (Field f : fields) {
 			Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
-			if (interchangeable != null && FMVisibility.isVisible(interchangeable.fmPath()) && interchangeable.percentageConstraint()) {
+			if (interchangeable != null && FMVisibility.isVisible(interchangeable.fmPath(), parentInterchangeable) 
+					&& interchangeable.percentageConstraint()) {
 				return InterchangeUtils.underscorify(interchangeable.fieldTitle());
 			}
 		}
 		
 		return null;
 	}
+	
 	/**
 	 * Describes each @Interchangeable field of a class
 	 * @param parentInterchangeable 
@@ -354,7 +357,8 @@ public class FieldsEnumerator {
 		Field[] fields = genericClass.getDeclaredFields();
 		for (Field f : fields) {
 			Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
-			if (interchangeable != null && FMVisibility.isVisible(interchangeable.fmPath()) && interchangeable.uniqueConstraint()) {
+			if (interchangeable != null && FMVisibility.isVisible(interchangeable.fmPath(), parentInterchangeable) 
+					&& interchangeable.uniqueConstraint()) {
 				return InterchangeUtils.underscorify(interchangeable.fieldTitle());
 			}
 		}

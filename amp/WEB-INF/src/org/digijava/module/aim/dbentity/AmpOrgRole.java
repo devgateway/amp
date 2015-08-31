@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Set;
 
+import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
@@ -21,7 +22,7 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 	private AmpOrganisation organisation;
 	@Interchangeable(fieldTitle="Role"/*, descend=true*/, importable=true, pickIdOnly=true)
 	private AmpRole role;
-	@Interchangeable(fieldTitle="Percentage", importable=true, percentageConstraint = true)
+	@Interchangeable(fieldTitle="Percentage", importable=true, percentageConstraint = true, fmPath = FMVisibility.PARENT_FM + "/percentage")
 	private Float 	percentage;
 	@Interchangeable(fieldTitle="Budgets", importable=true)
 	private Set <AmpOrgRoleBudget> budgets;

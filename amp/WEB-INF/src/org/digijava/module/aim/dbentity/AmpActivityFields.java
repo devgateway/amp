@@ -600,7 +600,8 @@ LoggerIdentifiable, Cloneable {
 	 * AMP-20423: For Import/Export we need it always visible 
 	 * */
 	// AMP-20671: temp workaround: though it is actually required only for activities On Budget, we'll always require and if it cannot be set -> will be saved as draft and manually updated
-	@Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_CODE, importable = true, required = ActivityEPConstants.REQUIRED_ND)
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_CODE, importable = true, required = ActivityEPConstants.REQUIRED_ND,
+			dependencies={InterchangeDependencyResolver.ON_BUDGET_KEY})
 	/*
 	 * 			NOTE: DO NOT CONFIGURE fmPath, since it must be always visible (see AMP-20423) 
 	 * 

@@ -72,7 +72,11 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
      COALESCE(rawdonation.agreement_id, 999999999) AS agreement_id,
      
      capital_spend_percent AS capital_spend_percent,
-	 1 AS disaster_response_id,
+     CASE
+     	WHEN rawdonation.disaster_response THEN 1
+     	WHEN NOT rawdonation.disaster_response THEN 2
+     	ELSE 999999999 
+     END AS disaster_response_id,
      
      rawdonation.src_role AS src_role,
      rawdonation.dest_role AS dest_role,

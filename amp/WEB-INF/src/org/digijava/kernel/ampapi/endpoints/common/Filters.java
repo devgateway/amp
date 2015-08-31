@@ -539,7 +539,7 @@ public class Filters {
 	@GET
 	@Path("/humanitarianAid/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "HumanitarianAidValues", columns = ColumnConstants.HUMANITARIAN_AID, name="Humanitarian Aid")
+	@ApiMethod(ui = true, id = "HumanitarianAidValues", columns = ColumnConstants.HUMANITARIAN_AID, name=ColumnConstants.HUMANITARIAN_AID)
 	public JsonBean getHumanitarianAid() {
 		return buildYesNoJsonBean(ColumnConstants.HUMANITARIAN_AID);
 	}
@@ -547,7 +547,7 @@ public class Filters {
 	@GET
 	@Path("/disasterResponse/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "DisasterResponseValues", columns = ColumnConstants.DISASTER_RESPONSE_MARKER, name="Disaster Response Marker")
+	@ApiMethod(ui = true, id = "DisasterResponseValues", columns = ColumnConstants.DISASTER_RESPONSE_MARKER, name=ColumnConstants.DISASTER_RESPONSE_MARKER)
 	public JsonBean getDisasterResponse() {
 		return buildYesNoJsonBean(ColumnConstants.DISASTER_RESPONSE_MARKER);
 	}

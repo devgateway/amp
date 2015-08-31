@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
@@ -74,12 +75,12 @@ public class FilterUtils {
 	}
 
 	/**
-	 * returns the original String instance, unless it equals "null", case in which null will be returned
-	 * @param s
-	 * @return
-	 */
+     * returns the original String instance, unless it equals "null", case in which null will be returned
+     * @param s
+     * @return
+     */
 	public static String denull(String s) {
-		if (s == null || !s.equalsIgnoreCase("null")) return s;
+		if (StringUtils.isNotBlank(s) && !s.equalsIgnoreCase("null")) return s;
 		return null;
 	}
 

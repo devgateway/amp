@@ -2,9 +2,12 @@
 	<script type='text/template'>
         <b><%= trnName %></b>:
 		<br> 
-		<% _.each(values, function(item, i) { %>
-			<div class='round-filter'>
-			<%= item.trnName %></div>
+		<% _.each(values, function(item, i) { %>			
+			<% if (item.trnName) { %>
+				<div class='round-filter'><%= item.trnName %></div>
+			<% } else { %>
+				<div class='round-filter'> - </div>
+			<% } %>
 		<% }); %>
     </script>
 </div>

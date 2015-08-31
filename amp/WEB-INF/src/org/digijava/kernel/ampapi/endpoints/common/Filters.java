@@ -547,7 +547,7 @@ public class Filters {
 	@GET
 	@Path("/disasterResponse/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "DisasterResponseValues", columns = ColumnConstants.HUMANITARIAN_AID, name="Disaster Response Marker")
+	@ApiMethod(ui = true, id = "DisasterResponseValues", columns = ColumnConstants.DISASTER_RESPONSE_MARKER, name="Disaster Response Marker")
 	public JsonBean getDisasterResponse() {
 		return buildYesNoJsonBean(ColumnConstants.DISASTER_RESPONSE_MARKER);
 	}

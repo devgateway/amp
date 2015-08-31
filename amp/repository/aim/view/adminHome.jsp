@@ -357,8 +357,21 @@
                             </td>
                           </tr>
                         </module:display>
+                        <module:display name="Currency deflator" parentModule="ADMINISTRATIVE SECTION">
+                          <tr>
+                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td class="admin_box_label">
+                              <c:set var="translation">
+                                <digi:trn invisibleLinks="true">Click here to view Currency Deflator</digi:trn>
+                              </c:set>
+                              <a href="/TEMPLATE/reamp/modules/admin/currency/deflator/index.html"
+                                 title="${translation}">
+                                <digi:trn>Currency Deflator</digi:trn>
+                              </a>
+                            </td>
+                          </tr>
+                        </module:display>
                       </table>
-
                     </div></td>
                   <td width=10>&nbsp;</td>
                   <td width=33% class="admin_landing_page_box" valign=top>

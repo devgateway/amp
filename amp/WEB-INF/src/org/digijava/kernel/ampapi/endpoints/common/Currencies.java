@@ -104,6 +104,7 @@ public class Currencies {
 			.list();
 		for(AmpInflationRate rate:rates)
 			PersistenceManager.getSession().delete(rate);
+		PersistenceManager.getSession().flush();
 		
 		List<Map<String, ?>> arr = (List) param.get("rates");
 		for(Map<String, ?> entry:arr) {

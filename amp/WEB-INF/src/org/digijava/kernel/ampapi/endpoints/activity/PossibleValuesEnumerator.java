@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -150,30 +152,20 @@ public class PossibleValuesEnumerator {
 			return getPossibleValuesForField(field);
 		}
 		/*AmpActivitySector || AmpComponentFunding || AmpActivityProgram*/
-		List<Object> items;
+		List<Object[]> items;
 		if (InterchangeUtils.getClassOfField(field).equals(AmpSector.class)) {
 			items = getSpecialCaseObjectList(configValue, "all_sectors_with_levels",
-					 "ampSectorId", "sector_config_name", "amp_sector_id", AmpSector.class);
+					 "ampSectorId", "name", "sector_config_name", "amp_sector_id", AmpSector.class);
 		} else if  (InterchangeUtils.getClassOfField(field).equals(AmpTheme.class)) {
 			items = getSpecialCaseObjectList(configValue, "all_programs_with_levels",
-					 "ampThemeId", "program_setting_name", "amp_theme_id", AmpTheme.class);
+					 "ampThemeId", "name", "program_setting_name", "amp_theme_id", AmpTheme.class);
 		} else if (InterchangeUtils.getClassOfField(field).equals(AmpCategoryValue.class)){
 			return getPossibleCategoryValues(field, configValue);
 		} else {
 			//not a complex field, after all
 			return getPossibleValuesForField(field);
 		}
-		
-		for (Object item : items) {
-			JsonBean jsonItem = null;
-			try {
-				jsonItem = setProperties(item);
-			} catch (Exception exc) {
-				LOGGER.error(exc.getMessage());
-				throw new RuntimeException(exc);
-			}
-			result.add(jsonItem);
-		}
+		result = setProperties(items, result, false);
 		return result;
 	}
 	
@@ -187,8 +179,9 @@ public class PossibleValuesEnumerator {
 	 * @param clazz
 	 * @return
 	 */
-	private static List<Object> getSpecialCaseObjectList(final String configType, final String configTableName, 
-					 String entityIdColumnName, final String conditionColumnName, final String idColumnName, Class<?> clazz) {
+	private static List<Object[]> getSpecialCaseObjectList(final String configType, final String configTableName, 
+					 String entityIdColumnName, String entityValueColumnName, final String conditionColumnName, 
+					 final String idColumnName,  Class<?> clazz) {
 		final List<Long> itemIds = new ArrayList<Long>();
 		PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {
@@ -204,13 +197,15 @@ public class PossibleValuesEnumerator {
 		});		
 		
 		if (itemIds.size() == 0) {
-			return new ArrayList<Object>();
+			return new ArrayList<Object[]>();
 		}
 		
 		String ids = StringUtils.join(itemIds, ",");
-		String queryString = "select cls from " + clazz.getName() + " cls where cls."+ entityIdColumnName + " in (" + ids + ")";
+		String queryString = "select cls." + entityIdColumnName + ", " +
+				"cls." + entityValueColumnName + " " +
+				" from " + clazz.getName() + " cls where cls."+ entityIdColumnName + " in (" + ids + ")";
 		
-		List<Object> objectList = InterchangeUtils.getSessionWithPendingChanges().createQuery(queryString).list();
+		List<Object[]> objectList = InterchangeUtils.getSessionWithPendingChanges().createQuery(queryString).list();
 		return objectList;
 	}
 	
@@ -229,22 +224,73 @@ public class PossibleValuesEnumerator {
 		
 		if (clazz.isAssignableFrom(AmpCategoryValue.class))
 			return getPossibleCategoryValues(field, null);
-		String queryString = "select cls from " + clazz.getName() + " cls ";
-		List<Object> objectList = InterchangeUtils.getSessionWithPendingChanges().createQuery(queryString).list();
-		for (Object obj : objectList) {
-			JsonBean item = null;
-			try {
-				item = setProperties(obj);
-			} catch (Exception exc) {
-				LOGGER.error(exc.getMessage());
-				throw new RuntimeException(exc);
+		if (clazz.isAssignableFrom(AmpLocation.class))
+			return getPossibleLocations(field);
+		Field[] fields = InterchangeUtils.getClassOfField(field).getDeclaredFields();
+		String idFieldName = null;
+		String valueFieldName = null;
+		for (Field passField : fields) {
+			Interchangeable ant = passField.getAnnotation(Interchangeable.class);
+			if (ant != null) {
+				if (ant.id())
+					idFieldName = passField.getName();
+				if (ant.value())
+					valueFieldName = passField.getName();
 			}
-			if (item != null)
-				result.add(item);
 		}
+		if (idFieldName == null || valueFieldName == null)
+			return result;
+		String queryString = "select cls."+idFieldName +
+							", cls." + valueFieldName +
+							" from " + clazz.getName() + " cls ";
+		List<Object[]> objectList = InterchangeUtils.getSessionWithPendingChanges().createQuery(queryString).list();
+		result = setProperties(objectList, result, false);
+//		for (Object obj : objectList) {
+//			JsonBean item = null;
+//			try {
+//				item = setProperties(obj);
+//			} catch (Exception exc) {
+//				LOGGER.error(exc.getMessage());
+//				throw new RuntimeException(exc);
+//			}
+//			if (item != null)
+//				result.add(item);
+//		}
 		return result;
 	}
 	
+	private static List<JsonBean> getPossibleLocations(Field field) {
+		List <JsonBean> result = new ArrayList<JsonBean>();
+		Interchangeable ant = field.getAnnotation(Interchangeable.class);
+		String queryString = "SELECT loc.id, loc.location.name, loc.location.parentLocation.id, loc.location.parentLocation.name" +
+					" ,loc.location.parentCategoryValue.id, loc.location.parentCategoryValue.value" + 
+					" from "+ AmpLocation.class.getName() + " loc ";
+		@SuppressWarnings("unchecked")
+		List<Object[]> objColList = (List<Object[]>) InterchangeUtils
+				.getSessionWithPendingChanges().createQuery(queryString).list();
+
+		for (Object[] item : objColList){
+			Long id = ((Number)(item[0])).longValue();
+			String value = ((String)(item[1]));
+			Long parentLocationId = ((Number)(item[2])).longValue();
+			String parentLocationName = ((String)(item[3]));
+			Long categoryValueId = ((Number)(item[4])).longValue();
+			String categoryValueName = ((String)(item[5]));
+			
+			JsonBean bean = new JsonBean();
+			bean.set("id", id);
+			bean.set("value", value);
+			JsonBean extraInfo = new JsonBean();
+			extraInfo.set("parent_location_id", parentLocationId);
+			extraInfo.set("parent_location_name", parentLocationName);
+			extraInfo.set("implementation_level_id", categoryValueId);
+			extraInfo.set("implementation_location_name", categoryValueName);
+			bean.set("extra_info", extraInfo);
+			result.add(bean);
+		}
+		return result;		
+	}
+
 	/**
 	 * Gets possible values for the AmpCategoryValue class
 	 * @param field
@@ -259,24 +305,14 @@ public class PossibleValuesEnumerator {
 			discriminatorOption = ant.discriminatorOption();
 		}
 		if (StringUtils.isNotBlank(discriminatorOption)) {
-			String queryString = "SELECT acv from " + AmpCategoryValue.class.getName() + " acv "
+			String queryString = "SELECT acv.id, acv.value, acv.deleted from " + AmpCategoryValue.class.getName() + " acv "
 					+ "WHERE acv.ampCategoryClass.keyName ='" + discriminatorOption + "'";
-	
-			List<AmpCategoryValue> acvList = (List<AmpCategoryValue>) InterchangeUtils
+			@SuppressWarnings("unchecked")
+			List<Object[]> objColList = (List<Object[]>) InterchangeUtils
 					.getSessionWithPendingChanges().createQuery(queryString).list();
-	
-			for (AmpCategoryValue acv : acvList) {
-				if (acv.isVisible()) {
-					JsonBean item = null;
-					try {
-						item = setProperties(acv);
-						result.add(item);
-					} catch (Exception exc) {
-						LOGGER.error(exc.getMessage());
-						throw new RuntimeException(exc);
-					}
-				}
-			}
+
+			result = setProperties(objColList, result, true);
+			return result;
 		} else {
 			LOGGER.error("discriminatorOption is not configured for CategoryValue [" + field.getName() + "]");
 		}
@@ -284,63 +320,82 @@ public class PossibleValuesEnumerator {
 		return result; 
 	}
 	
-	/**
-	 * Sets properties for a single possible value (the obj)
-	 * @param obj
-	 * @return
-	 * @throws NoSuchMethodException
-	 * @throws SecurityException
-	 * @throws IllegalAccessException
-	 * @throws IllegalArgumentException
-	 * @throws InvocationTargetException
-	 */
-	private static JsonBean setProperties(Object obj) throws NoSuchMethodException, 
-	SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		if (obj == null)
-			return null;
-		if (InterchangeUtils.isSimpleType(obj.getClass())) {
-			return null;
-		} else {
-			JsonBean result = new JsonBean();
-			boolean isEnumerable = false;
-			Class<?> objClass = HibernateProxyHelper.getClassWithoutInitializingProxy(obj);
-			for (Field field : objClass.getDeclaredFields()) {
-				Interchangeable ant = field.getAnnotation(Interchangeable.class);
-				if (ant != null) {
-					Method meth = objClass.getMethod(InterchangeUtils.getGetterMethodName(field.getName()));
-					Object property = meth.invoke(obj);
-					
-					if (ant.id())
-					{
-						if (Long.class.isAssignableFrom(field.getType()) || String.class.isAssignableFrom(field.getType())) { 
-							result.set("id", property);
-							isEnumerable = true;
-						}
-					} else
-					if (ant.value()) { 
-						if (String.class.isAssignableFrom(field.getType()) || Long.class.isAssignableFrom(field.getType())) {
-							String transProp =  property.toString();
-							if (AmpCategoryValue.class.isAssignableFrom(obj.getClass())) {
-								transProp = TranslatorWorker.translateText(transProp);
-							}
-							result.set("value", transProp);
-							isEnumerable = true;
-						}
-					} else 
-					if (ant.extraInfo()) {
-						result.set("extra info", setProperties(property));
-					} else {
-						if (ant.pickIdOnly() && property != null) {
-							result.set(InterchangeUtils.underscorify(ant.fieldTitle()), InterchangeUtils.getId(property));
-						} else 
-							if (InterchangeUtils.isSimpleType(meth.getReturnType()) && property != null)
-								result.set(InterchangeUtils.underscorify(ant.fieldTitle()), property);
-					}
-				}
+	private static List<JsonBean> setProperties(List<Object[]> objColList, List<JsonBean> result, boolean checkDeleted) {
+		
+		for (Object[] item : objColList){
+			Long id = ((Number)(item[0])).longValue();
+			String value = ((String)(item[1]));
+			boolean itemGood = !checkDeleted || Boolean.FALSE.equals((Boolean)(item[2])); 
+//			Boolean deleted = ((Boolean)(item[2]));
+			if (itemGood) {
+				JsonBean bean = new JsonBean();
+				bean.set("id", id);
+				bean.set("value", value);
+				result.add(bean);
 			}
-			if (!isEnumerable)
-				return null;
-			return result;
+			
 		}
+		return result;
 	}
+
+//	/**
+//	 * Sets properties for a single possible value (the obj)
+//	 * @param obj
+//	 * @return
+//	 * @throws NoSuchMethodException
+//	 * @throws SecurityException
+//	 * @throws IllegalAccessException
+//	 * @throws IllegalArgumentException
+//	 * @throws InvocationTargetException
+//	 */
+//	@Deprecated
+//	private static JsonBean setProperties(Object obj) throws NoSuchMethodException, 
+//	SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+//		if (obj == null)
+//			return null;
+//		if (InterchangeUtils.isSimpleType(obj.getClass())) {
+//			return null;
+//		} else {
+//			JsonBean result = new JsonBean();
+//			boolean isEnumerable = false;
+//			Class<?> objClass = HibernateProxyHelper.getClassWithoutInitializingProxy(obj);
+//			for (Field field : objClass.getDeclaredFields()) {
+//				Interchangeable ant = field.getAnnotation(Interchangeable.class);
+//				if (ant != null) {
+//					Method meth = objClass.getMethod(InterchangeUtils.getGetterMethodName(field.getName()));
+//					Object property = meth.invoke(obj);
+//					
+//					if (ant.id())
+//					{
+//						if (Long.class.isAssignableFrom(field.getType()) || String.class.isAssignableFrom(field.getType())) { 
+//							result.set("id", property);
+//							isEnumerable = true;
+//						}
+//					} else
+//					if (ant.value()) { 
+//						if (String.class.isAssignableFrom(field.getType()) || Long.class.isAssignableFrom(field.getType())) {
+//							String transProp =  property.toString();
+//							if (AmpCategoryValue.class.isAssignableFrom(obj.getClass())) {
+//								transProp = TranslatorWorker.translateText(transProp);
+//							}
+//							result.set("value", transProp);
+//							isEnumerable = true;
+//						}
+//					} else 
+//					if (ant.extraInfo()) {
+//						result.set("extra info", setProperties(property));
+//					} else {
+//						if (ant.pickIdOnly() && property != null) {
+//							result.set(InterchangeUtils.underscorify(ant.fieldTitle()), InterchangeUtils.getId(property));
+//						} else 
+//							if (InterchangeUtils.isSimpleType(meth.getReturnType()) && property != null)
+//								result.set(InterchangeUtils.underscorify(ant.fieldTitle()), property);
+//					}
+//				}
+//			}
+//			if (!isEnumerable)
+//				return null;
+//			return result;
+//		}
+//	}
 }

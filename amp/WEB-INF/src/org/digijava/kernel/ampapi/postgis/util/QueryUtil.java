@@ -120,7 +120,7 @@ public class QueryUtil {
 					params.add(new FilterParam(keyword,  java.sql.Types.VARCHAR));
 					params.add(new FilterParam(keyword,  java.sql.Types.VARCHAR));
 					
-					try(RsInfo rsi = SQLUtils.rawRunQuery(connection, queryString, null)) {
+					try(RsInfo rsi = SQLUtils.rawRunQuery(connection, queryString, params)) {
 						ResultSet rs = rsi.rs;
 						while (rs.next()) {
 							AmpLocator locator = new AmpLocator();

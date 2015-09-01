@@ -21,6 +21,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -38,6 +39,7 @@ import org.digijava.kernel.translator.util.TrnAccesTimeSaver;
 import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.module.admin.util.DbUtil;
 import org.digijava.module.aim.exception.AimException;
+import org.digijava.module.aim.util.AmpMath;
 import org.digijava.module.translation.action.ImportExportTranslations;
 import org.digijava.module.translation.entity.MessageGroup;
 import org.digijava.module.translation.importexport.ImportExportOption;
@@ -514,42 +516,50 @@ public class ImportExportUtil {
 			
 			for (int i = 1; i < physicalNumberOfRows; i++) {
 				Row hssfRow = hssfSheet.getRow(i);
-				String key = (hssfRow.getCell(0).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) ? hssfRow
-						.getCell(0).getNumericCellValue() + ""
-						: hssfRow.getCell(0).getStringCellValue();
-				String englishText = (hssfRow.getCell(1) == null) ? ""
-						: hssfRow.getCell(1).getStringCellValue();
-				//for AMP-16681 when the cell content is #N/A on third column you are getting an erro if getStringCellValue is called
-				//so if its an error cell the target text is "" as if the cell would be empty
-				String targetText = (hssfRow.getCell(2) == null || hssfRow.getCell(2).getCellType()==HSSFCell.CELL_TYPE_ERROR) ? ""
-						: hssfRow.getCell(2).getStringCellValue();
-				Date englishDate=(hssfRow.getCell(3) == null) ? null: hssfRow.getCell(3).getDateCellValue();
-				Date targetDate=(hssfRow.getCell(4) == null) ? null: hssfRow.getCell(4).getDateCellValue();
-				if(englishDate!=null){
-					Message message = new Message();
-					message.setKey(key);
-					message.setMessage(englishText);
-					message.setLocale("en");
-					message.setSite(site);
-					message.setCreated(new Timestamp(englishDate.getTime()));
-					queue.put(message);
-				}
-				
-				if(targetText != null && !targetText.trim().isEmpty() /*targetDate!=null*/){
-                    if (targetDate==null) {
-                        targetDate = new Date();
-                    }
+				String key = (hssfRow.getCell(0).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) ? hssfRow.getCell(0)
+						.getNumericCellValue() + "" : hssfRow.getCell(0).getStringCellValue();
+				if (AmpMath.isNumeric(key)) {
+					String englishText = (hssfRow.getCell(1) == null) ? "" : hssfRow.getCell(1).getStringCellValue();
+					// for AMP-16681 when the cell content is #N/A on third
+					// column you are getting an erro if getStringCellValue is
+					// called
+					// so if its an error cell the target text is "" as if the
+					// cell would be empty
+					String targetText = (hssfRow.getCell(2) == null || hssfRow.getCell(2).getCellType() == HSSFCell.CELL_TYPE_ERROR) ? ""
+							: hssfRow.getCell(2).getStringCellValue();
+					Date englishDate = (hssfRow.getCell(3) == null) ? null : hssfRow.getCell(3).getDateCellValue();
+					Date targetDate = (hssfRow.getCell(4) == null) ? null : hssfRow.getCell(4).getDateCellValue();
+					if (englishDate != null) {
+						Message message = new Message();
+						message.setKey(key);
+						message.setMessage(englishText);
+						message.setLocale("en");
+						message.setSite(site);
+						message.setCreated(new Timestamp(englishDate.getTime()));
+						queue.put(message);
+					}
 
-					Message targetMessage = new Message();
-					targetMessage.setKey(key);
-					targetMessage.setMessage(targetText);
-					targetMessage.setLocale(targetLanguage);
-					targetMessage.setSite(site);
-					targetMessage.setCreated(new Timestamp(targetDate.getTime()));
-					queue.put(targetMessage);	
+					if (targetText != null && !targetText.trim().isEmpty() /*
+																			 * targetDate
+																			 * !=
+																			 * null
+																			 */) {
+						if (targetDate == null) {
+							targetDate = new Date();
+						}
+
+						Message targetMessage = new Message();
+						targetMessage.setKey(key);
+						targetMessage.setMessage(targetText);
+						targetMessage.setLocale(targetLanguage);
+						targetMessage.setSite(site);
+						targetMessage.setCreated(new Timestamp(targetDate.getTime()));
+						queue.put(targetMessage);
+					}
+
+				} else {
+					logger.error("The key: " + key + " IS NOT NUMERIC and was not imported.");
 				}
-				
-				
 			}
 			queue.put(POISON_MSG);
 			consumerStatus.get();

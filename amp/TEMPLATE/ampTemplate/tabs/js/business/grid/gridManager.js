@@ -157,11 +157,11 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 							var teamtype;
 							
 							if(app.TabsApp.settings.teamId){
-								teamid = app.TabsApp.settings.teamId.name;
-								crossTeamValidation = (app.TabsApp.settings.crossTeamEnable.name === 'true');
-								teamlead = (app.TabsApp.settings.teamLead.name === 'true');
-								validator = (app.TabsApp.settings.validator.name === 'true');
-								teamtype = app.TabsApp.settings.accessType.name;
+								teamid = app.TabsApp.settings.teamId;
+								crossTeamValidation = (app.TabsApp.settings.crossTeamEnable === 'true');
+								teamlead = (app.TabsApp.settings.teamLead === 'true');
+								validator = (app.TabsApp.settings.validator === 'true');
+								teamtype = app.TabsApp.settings.accessType;
 							}
 
 							for (iRow = 0; iRow < cRows; iRow++) {
@@ -198,11 +198,11 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 								//check public view - no team present
 								if(!teamid) continue;
 								
-								teamid = app.TabsApp.settings.teamId.name;
-								crossTeamValidation = (app.TabsApp.settings.crossTeamEnable.name === 'true');
-								teamlead = (app.TabsApp.settings.teamLead.name === 'true');
-								validator = (app.TabsApp.settings.validator.name === 'true');
-								teamtype = app.TabsApp.settings.accessType.name;
+								teamid = app.TabsApp.settings.teamId;
+								crossTeamValidation = (app.TabsApp.settings.crossTeamEnable === 'true');
+								teamlead = (app.TabsApp.settings.teamLead === 'true');
+								validator = (app.TabsApp.settings.validator === 'true');
+								teamtype = app.TabsApp.settings.accessType;
 								
 								// Set font color according to status.
 								var draft = row.cells[3].textContent;

@@ -112,6 +112,7 @@ public class Currencies {
 			PersistenceManager.getSession().save(air);
 		}
 		PersistenceManager.getSession().flush();
+		CurrencyUtil.maintainVirtualCurrencies();
 	}
 	
 	protected AmpInflationRate buildInflationRate(AmpCurrency baseCurrency, Map<String, ?> raw) {

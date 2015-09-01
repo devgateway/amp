@@ -134,11 +134,11 @@ public class TreeCollectionValidator extends InputValidator {
 		
 		for (AmpSector t : parentSectors) {
 			if(idValues.contains(t.getAmpSectorId())) {
-				return false;
+				return true;
 			} 
 		}
 		
-		return true;
+		return false;
 	}
 	
 	/**

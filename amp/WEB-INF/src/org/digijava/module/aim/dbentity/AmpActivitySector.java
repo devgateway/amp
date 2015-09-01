@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
@@ -14,7 +15,7 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable {
 	@Interchangeable(fieldTitle="Activity ID", pickIdOnly = true)
 	private AmpActivityVersion activityId;
 	
-	@Interchangeable(fieldTitle="Sector ID", importable = true , pickIdOnly = true, uniqueConstraint = true)
+	@Interchangeable(fieldTitle="Sector ID", importable = true , pickIdOnly = true, uniqueConstraint = true, required = ActivityEPConstants.REQUIRED_ALWAYS)
 	private AmpSector sectorId;
 	
 	@Interchangeable(fieldTitle="Sector Percentage", importable = true, percentageConstraint = true, 

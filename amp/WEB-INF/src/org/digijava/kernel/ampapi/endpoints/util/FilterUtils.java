@@ -240,7 +240,7 @@ public class FilterUtils {
 	}
 
 	/**
-	 * Apply filterulse. In case the spec already have filterRules, append them
+	 * Apply filterRules. In case the spec already have filterRules, append them
 	 * 
 	 * @param config
 	 * @param spec
@@ -248,19 +248,18 @@ public class FilterUtils {
 	public static void applyFilterRules(JsonBean config, ReportSpecificationImpl spec) {
 		MondrianReportFilters filterRules = FilterUtils.getFilters(config);
 		if (filterRules != null) {
-			if (spec.getFilters() != null) {
-				Map<ReportElement, List<FilterRule>> filters = filterRules
-						.getFilterRules();
-				for (ReportElement reportElement : filters.keySet()) {
-					if (spec.getFilters().getFilterRules().get(reportElement) != null) {
-						spec.getFilters().getFilterRules().get(reportElement).addAll(filters.get(reportElement));
-					} else {
-						spec.getFilters().getFilterRules()
-								.put(reportElement, filters.get(reportElement));
-					}
+			if (spec.getFilters() == null) {
+				spec.setFilters(new MondrianReportFilters());
+			}
+			Map<ReportElement, List<FilterRule>> filters = filterRules.getFilterRules();
+			for (ReportElement reportElement : filters.keySet()) {
+				if (spec.getFilters().getFilterRules().get(reportElement) != null) {
+					spec.getFilters().getFilterRules().get(reportElement).addAll(filters.get(reportElement));
+				} else {
+					spec.getFilters().getFilterRules().put(reportElement, filters.get(reportElement));
 				}
 			}
 		}
 	}
-		 	
+
 }

@@ -143,6 +143,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		put("/Activity Form/Identification/Project Title", ColumnConstants.PROJECT_TITLE);
 		put("/Activity Form/Identification/Purpose", ColumnConstants.PURPOSE);
 		put("/Activity Form/Identification/Humanitarian Aid", ColumnConstants.HUMANITARIAN_AID);
+		put("/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Disaster Response", ColumnConstants.DISASTER_RESPONSE_MARKER);
 		put("/Activity Form/Identification/Objective", ColumnConstants.OBJECTIVE);
 		put("/Activity Form/Identification/Reporting System", ColumnConstants.REPORTING_SYSTEM);
 		put("/Activity Form/Identification/Results", ColumnConstants.RESULTS);
@@ -372,6 +373,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		put("Variance Of Disbursements", ColumnConstants.VARIANCE_OF_DISBURSEMENTS);
 		put(ColumnConstants.UNCOMMITTED_CUMULATIVE_BALANCE, ColumnConstants.UNCOMMITTED_CUMULATIVE_BALANCE);
 		put(ColumnConstants.UNDISBURSED_CUMULATIVE_BALANCE, ColumnConstants.UNDISBURSED_CUMULATIVE_BALANCE);
+		put("Disaster Response Marker", ColumnConstants.DISASTER_RESPONSE_MARKER);
 	}};
 	
 	protected static final List<String> visibleByDefault = Arrays.asList(

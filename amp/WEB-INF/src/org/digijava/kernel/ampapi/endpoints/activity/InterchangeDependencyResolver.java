@@ -48,7 +48,8 @@ public class InterchangeDependencyResolver {
 	public final static String IMPLEMENTATION_LOCATION_PRESENT_KEY = "implementation_location_present";
 	public final static String IMPLEMENTATION_LEVEL_VALID_KEY = "implementation_level_valid";
 	public final static String IMPLEMENTATION_LOCATION_VALID_KEY = "implementation_location_valid";
-	public final static String COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY = "funding_type_commitment_or_disbursements_present";
+	public final static String COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY = "funding_type_commitment_or_disbursement_present";
+	public final static String COMMITMENTS_PRESENT_KEY = "funding_type_commitment_present";
 	public final static String DISBURSEMENTS_PRESENT_KEY = "funding_type_disbursements_present";
 	public final static String COMMITMENTS_DISASTER_RESPONSE_REQUIRED = "commitments_disaster_response_required";
 	public final static String DSIBURSEMENTS_DISASTER_RESPONSE_REQUIRED = "disbursements_disaster_response_required";
@@ -165,7 +166,11 @@ public class InterchangeDependencyResolver {
 		case IMPLEMENTATION_LOCATION_PRESENT_KEY: return checkFieldPresent(incomingActivity, IMPLEMENTATION_LOCATION_PATH);
 		case IMPLEMENTATION_LEVEL_VALID_KEY: return checkImplementationLevel(value, incomingActivity);
 		case IMPLEMENTATION_LOCATION_VALID_KEY: return checkImplementationLocation(value, incomingActivity);
-		case COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY: return checkCommitmentDisbursement(value, incomingActivity, fieldParent);
+		case COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY: return
+				checkTransactionType(value, incomingActivity, fieldParent, Constants.COMMITMENT) ||
+				checkTransactionType(value, incomingActivity, fieldParent, Constants.DISBURSEMENT);
+		case COMMITMENTS_PRESENT_KEY: return checkTransactionType(value, incomingActivity, fieldParent, Constants.COMMITMENT);
+		case DISBURSEMENTS_PRESENT_KEY: return checkTransactionType(value, incomingActivity, fieldParent, Constants.DISBURSEMENT);
 		case COMMITMENTS_DISASTER_RESPONSE_REQUIRED:
 			boolean isCommitment = checkTransactionType(value, incomingActivity, fieldParent, Constants.COMMITMENT);
 			return !isCommitment || isCommitment && value != null;
@@ -235,14 +240,31 @@ public class InterchangeDependencyResolver {
 	public static String getActualDependency(String dependencyKey) {
 		// verify any custom keys processing
 		switch (dependencyKey) {
+		case COMMITMENTS_PRESENT_KEY:
+			if (!FMVisibility.isVisible(ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
+				return null;
+			} else if (FMVisibility.isVisible(ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
+				return COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY;
+			}
+			break;
+		case DISBURSEMENTS_PRESENT_KEY:
+			if (!FMVisibility.isVisible(ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
+				return null;
+			} else if (FMVisibility.isVisible(ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH, null)) {
+				// since it will be or was provided as part of COMMITMENTS_PRESENT_KEY
+				return null;
+			}
+			break;
 		case COMMITMENTS_DISASTER_RESPONSE_REQUIRED:
 			// do not mention commitments dependency key required setting if not enabled
-			if (!FMVisibility.isVisible("/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Required Validator for Disaster Response", null))
+			if (!FMVisibility.isVisible(ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH, null) ||
+					!FMVisibility.isVisible("/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Required Validator for Disaster Response", null))
 				return null;
 			break;
 		case DSIBURSEMENTS_DISASTER_RESPONSE_REQUIRED:
 			// do not mention disbursements dependency key required setting if not enabled
-			if (!FMVisibility.isVisible("/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Required Validator for Disaster Response", null))
+			if (!FMVisibility.isVisible(ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH, null) ||
+					!FMVisibility.isVisible("/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Required Validator for Disaster Response", null))
 				return null;
 			break;
 		}

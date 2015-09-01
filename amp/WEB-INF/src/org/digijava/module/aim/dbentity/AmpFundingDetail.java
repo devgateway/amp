@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 
+import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
@@ -109,9 +110,10 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	private boolean iatiAdded = false; //nonpersistant
 	
 	@Interchangeable(fieldTitle = "Disaster Response", importable = true, 
-			fmPath = FMVisibility.ANY_FM + "/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Disaster Response|/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Disaster Response",
+			fmPath = FMVisibility.ANY_FM + ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH + "|" + ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH,
 			dependencies = {
-			InterchangeDependencyResolver.COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY,
+			InterchangeDependencyResolver.COMMITMENTS_PRESENT_KEY,
+			InterchangeDependencyResolver.DISBURSEMENTS_PRESENT_KEY,
 			InterchangeDependencyResolver.COMMITMENTS_DISASTER_RESPONSE_REQUIRED,
 			InterchangeDependencyResolver.DSIBURSEMENTS_DISASTER_RESPONSE_REQUIRED}
 			)

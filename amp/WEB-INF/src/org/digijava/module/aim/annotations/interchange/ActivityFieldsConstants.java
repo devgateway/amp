@@ -27,4 +27,5 @@ public class ActivityFieldsConstants {
     public static final String MOFED_CONTACT = "MOFED Contact";
     public static final String IMPLEMENTING_EXECUTING_AGENCY_CONTACT = "Implementing Executing Agency Contact";
     public static final String PRIMARY_CONTACT = "Primary Contact";
+    public static final String TRANSACTION_TYPE = "Transaction Type";
 }

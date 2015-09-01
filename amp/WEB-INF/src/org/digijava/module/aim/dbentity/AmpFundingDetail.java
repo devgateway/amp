@@ -5,7 +5,9 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 
+import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -53,7 +55,7 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	 * public static final int MTEFPROJECTION = 3 ;
 	 */
 	
-	@Interchangeable(fieldTitle="Transaction Type", importable=true, pickIdOnly=true)
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.TRANSACTION_TYPE, importable = true, pickIdOnly = true)
 	@InterchangeableDiscriminator(discriminatorField="transactionType",
 			discriminatorClass="org.digijava.kernel.ampapi.endpoints.activity.discriminators.TransactionTypeDiscriminator")
 	private Integer transactionType;
@@ -107,8 +109,11 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	private boolean iatiAdded = false; //nonpersistant
 	
 	@Interchangeable(fieldTitle = "Disaster Response", importable = true, 
-			fmPath = FMVisibility.ANY_FM + "/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Disaster Response|/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Disaster Response"
-			//dependencies = {InterchangeDependencyResolver.}
+			fmPath = FMVisibility.ANY_FM + "/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Disaster Response|/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Disaster Response",
+			dependencies = {
+			InterchangeDependencyResolver.COMMITMENTS_OR_DISBURSEMENTS_PRESENT_KEY,
+			InterchangeDependencyResolver.COMMITMENTS_DISASTER_RESPONSE_REQUIRED,
+			InterchangeDependencyResolver.DSIBURSEMENTS_DISASTER_RESPONSE_REQUIRED}
 			)
 	private Boolean disasterResponse;
 	

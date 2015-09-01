@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
@@ -25,12 +26,12 @@ public class DependencyValidator extends InputValidator {
 		Object value = newFieldParent.get(fieldDescription.get(ActivityEPConstants.FIELD_NAME));
 		if (value == null)
 			return true;
-		String[] deps =  (String[]) fieldDescription.get(ActivityEPConstants.DEPENDENCIES);
+		List<String> deps =  (List<String>) fieldDescription.get(ActivityEPConstants.DEPENDENCIES);
 		if (deps != null)
 		{
 			boolean result = true;
 			for (String dep : deps) {
-				if (!InterchangeDependencyResolver.checkDependency(value, importer.getNewJson(), dep)) {
+				if (!InterchangeDependencyResolver.checkDependency(value, importer.getNewJson(), dep, newFieldParent)) {
 					result = false;
 					errors.add(dep);
 				}

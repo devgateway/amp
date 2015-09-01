@@ -94,7 +94,7 @@ public class InterchangeUtils {
 	 * @return true if possible values are limited to a set for this field, false if otherwise
 	 */
 	public static boolean isFieldEnumerable(Field inputField) {
-		Class clazz = getClassOfField(inputField);
+		Class<?> clazz = getClassOfField(inputField);
 		if (isSimpleType(clazz))
 			return false;
 		Field[] fields = clazz.getDeclaredFields();

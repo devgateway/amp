@@ -177,8 +177,10 @@ public class FieldsEnumerator {
 		if (interchangeable.percentageConstraint()){
 			bean.set(ActivityEPConstants.PERCENTAGE, true);
 		}
-		if (interchangeable.dependencies().length > 0)
-			bean.set(ActivityEPConstants.DEPENDENCIES, interchangeable.dependencies());
+		List<String> actualDependencies = InterchangeDependencyResolver.getActualDependencies(interchangeable.dependencies());
+		if (actualDependencies != null) {
+			bean.set(ActivityEPConstants.DEPENDENCIES, actualDependencies);
+		}
 		
 		if (internalUse) {
 			bean.set(ActivityEPConstants.FIELD_NAME_INTERNAL, field.getName());

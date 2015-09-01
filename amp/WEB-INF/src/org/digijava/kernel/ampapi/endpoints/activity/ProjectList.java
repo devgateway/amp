@@ -133,14 +133,16 @@ public class ProjectList {
 	public static List<Long> getViewableActivityIds(TeamMember tm) {
 		List<Long> viewableActivityIds = new ArrayList<Long>();
 		try {
-			User user = UserUtils.getUserByEmail(tm.getEmail());
-			// Gets the list of all the workspaces that the current logged user is a member
-			Collection<AmpTeamMember> teamMemberList = TeamMemberUtil.getAllAmpTeamMembersByUser(user);
-			
-			// for every workspace generate the workspace query to get the activities.
-			final String query = WorkspaceFilter.getViewableActivitiesIdByTeams( teamMemberList);
-			viewableActivityIds = PersistenceManager.getSession().createSQLQuery(query)
-					.addScalar("amp_activity_id", LongType.INSTANCE).list();
+			if (tm != null) {
+				User user = UserUtils.getUserByEmail(tm.getEmail());
+				// Gets the list of all the workspaces that the current logged user is a member
+				Collection<AmpTeamMember> teamMemberList = TeamMemberUtil.getAllAmpTeamMembersByUser(user);
+				
+				// for every workspace generate the workspace query to get the activities.
+				final String query = WorkspaceFilter.getViewableActivitiesIdByTeams( teamMemberList);
+				viewableActivityIds = PersistenceManager.getSession().createSQLQuery(query)
+						.addScalar("amp_activity_id", LongType.INSTANCE).list();
+			}
 		} catch (DgException e1) {
 			LOGGER.warn("Couldn't generate the List of viewable activity ids", e1);
 			throw new RuntimeException(e1);

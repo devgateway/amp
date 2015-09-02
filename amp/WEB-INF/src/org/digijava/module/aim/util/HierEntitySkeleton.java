@@ -180,7 +180,6 @@ public abstract class HierEntitySkeleton<K extends HierEntitySkeleton<?>> implem
 					setParentChildRelationships(entities);				
 				}
 			});
-        entities.get(275l);
         return entities;
     }
 }

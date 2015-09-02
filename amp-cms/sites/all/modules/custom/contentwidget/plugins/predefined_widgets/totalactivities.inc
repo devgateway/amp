@@ -69,6 +69,9 @@ function contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_set
     $request_body['rowTotals'] = TRUE;
     $request_body['name'] = 'api:totalactivities';
 
+    // Include Activities with empty funding in the total activities count.
+    $request_body['show_empty_rows'] = TRUE;
+
     $api_settings = helpergeneric_get_api_settings();
 
     // Handle the global "Humanitarian Aid" filter.

@@ -109,6 +109,17 @@ public class AmpInflationRate implements Serializable, Comparable<AmpInflationRa
 		this.constantCurrency = constantCurrency != null && constantCurrency;
 	}
 
+	/**
+	 * copies all the fields except id from an another instance
+	 * @param air
+	 */
+	public void importDataFrom(AmpInflationRate air) {
+		this.baseCurrency = air.baseCurrency;
+		this.constantCurrency = air.constantCurrency;
+		this.inflationRate = air.inflationRate;
+		this.year = air.year;
+	}
+
 	@AssertTrue()
 	private boolean isValid() {
 		return (this.inflationRate > -100) && (this.baseCurrency != null) && (!this.baseCurrency.isVirtual()) && (this.year >= MIN_DEFLATION_YEAR) && (this.year <= MAX_DEFLATION_YEAR);

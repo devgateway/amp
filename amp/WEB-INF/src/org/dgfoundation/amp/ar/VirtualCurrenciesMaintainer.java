@@ -1,22 +1,27 @@
 package org.dgfoundation.amp.ar;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.dbentity.AmpInflationRate;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.caching.AmpCaching;
 
 /**
  * This class is used for doing maintenance of virtual currencies <br />
@@ -40,6 +45,7 @@ public class VirtualCurrenciesMaintainer {
 					.list();
 			logger.warn("redoing virtual currencies based on " + baseCurrency + ", the inflation data entries are: " + rates);
 			createVirtualCurrenciesBasedOn(rates, baseCurrency);
+			AmpCaching.getInstance().currencyCache.reset();
 		}
 	}
 	
@@ -51,6 +57,7 @@ public class VirtualCurrenciesMaintainer {
 		int baseYear = clamp(rates.isEmpty() ? 2010 : rates.get(0).getYear() - 1, 2000, 2010);
 		SortedMap<Integer, Double> priceIndices = computePriceIndices(rates, baseYear);
 		
+		Set<String> relevantVCurrencyCodes = new HashSet<>();
 		for(AmpInflationRate rate:rates) {
 			if (!rate.isConstantCurrency())
 				continue;
@@ -60,7 +67,38 @@ public class VirtualCurrenciesMaintainer {
 			List<AmpCurrencyRate> ratesToWrite = computeRatesToWrite(virtualCurrency, baseCurrency, rebasedIndices);			
 			
 			saveExchangeRates(virtualCurrency, ratesToWrite);
+			relevantVCurrencyCodes.add(virtualCurrency.getCurrencyCode().toLowerCase());
 		}
+		markDisappearedCurrenciesAsUnavailable(rates, baseCurrency, relevantVCurrencyCodes);
+	}
+	
+	public void markDisappearedCurrenciesAsUnavailable(List<AmpInflationRate> rates, AmpCurrency baseCurrency, Set<String> relevantVCurrencyCodes) {
+		List<AmpCurrency> virtCurrencies = PersistenceManager.getSession().createQuery("FROM " + AmpCurrency.class.getName() + " ac WHERE ac.virtual IS TRUE").list();
+		for(AmpCurrency curr:virtCurrencies) {
+			if (curr.isVirtual() && curr.getCurrencyCode().toLowerCase().startsWith(baseCurrency.getCurrencyCode().toLowerCase()) && !relevantVCurrencyCodes.contains(curr.getCurrencyCode().toLowerCase())) {
+				deleteCurrencyIfPossible(curr);
+			}
+		}
+		AmpCaching.getInstance().currencyCache.reset();
+	}
+	
+	/**
+	 * delete a currency IFF it is not referenced anywhere in the DB (for example, through saved reports)
+	 * @param curr
+	 * @throws SQLException 
+	 */
+	protected void deleteCurrencyIfPossible(AmpCurrency curr) {
+		logger.info("marking virtual currency " + curr + " as deleted, because it has not been requested as a deflated currency anymore");
+		curr.setActiveFlag(0);
+		PersistenceManager.getSession().flush();
+// 		code below commented out because: 1. it's not very smart  2. it sometimes leads to PostgreSQL hanging the thread on DELETE		
+//		try(java.sql.Connection conn = PersistenceManager.getJdbcConnection()) {
+//			SQLUtils.executeQuery(conn, "DELETE FROM amp_currency WHERE amp_currency_id = " + curr.getAmpCurrencyId());
+//		}
+//		catch(Exception e) {
+//			// do nothing - we tried to delete currency and failed
+//			logger.error("could not delete currency " + curr + ", probably used in some saved report(s)");
+//		}
 	}
 	
 	protected void saveExchangeRates(AmpCurrency virtualCurrency, List<AmpCurrencyRate> ratesToWrite) {
@@ -73,7 +111,6 @@ public class VirtualCurrenciesMaintainer {
 			PersistenceManager.getSession().save(exchange);
 		}
 		PersistenceManager.getSession().flush();
-
 	}
 	
 	/**

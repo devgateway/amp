@@ -2,9 +2,14 @@ package org.digijava.kernel.ampapi.endpoints.common;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -99,20 +104,47 @@ public class Currencies {
 			throw new RuntimeException("not allowed to set inflation rates for currency: " + currCode);
 		
 		AmpCurrency baseCurrency = CurrencyUtil.getCurrencyByCode(currCode);
-		List<AmpInflationRate> rates = PersistenceManager.getSession().createQuery("FROM " + AmpInflationRate.class.getName() + " ir WHERE ir.baseCurrency.currencyCode=:currCode")
+		List<AmpInflationRate> oldRates = PersistenceManager.getSession().createQuery("FROM " + AmpInflationRate.class.getName() + " ir WHERE ir.baseCurrency.currencyCode=:currCode")
 			.setString("currCode", currCode)
 			.list();
-		for(AmpInflationRate rate:rates)
-			PersistenceManager.getSession().delete(rate);
-		PersistenceManager.getSession().flush();
+		
+		SortedMap<Integer, AmpInflationRate> existingEntries = distributeByYear(oldRates);				
+		SortedMap<Integer, AmpInflationRate> newEntries = new TreeMap<>();
 		
 		List<Map<String, ?>> arr = (List) param.get("rates");
 		for(Map<String, ?> entry:arr) {
 			AmpInflationRate air = buildInflationRate(baseCurrency, entry);
-			PersistenceManager.getSession().save(air);
+			newEntries.put(air.getYear(), air);
+//			PersistenceManager.getSession().save(air);
+		}
+		for(int year:existingEntries.keySet()) {
+			if (!newEntries.containsKey(year)) {
+				// year has disappeared -> delete entry altogether
+				PersistenceManager.getSession().delete(existingEntries.get(year));
+				PersistenceManager.getSession().flush();
+			}
+		}
+		for(int year:newEntries.keySet()) {
+			AmpInflationRate newRate = newEntries.get(year);
+			AmpInflationRate rateToSave;
+			if (existingEntries.containsKey(year)) {
+				// must UPDATE instead of INSERT
+				rateToSave = existingEntries.get(year);
+				rateToSave.importDataFrom(newRate);
+			} else {
+				rateToSave = newRate;
+			}
+			PersistenceManager.getSession().save(rateToSave);
 		}
 		PersistenceManager.getSession().flush();
 		CurrencyUtil.maintainVirtualCurrencies();
+	}
+	
+	protected SortedMap<Integer, AmpInflationRate> distributeByYear(Collection<AmpInflationRate> rates) {
+		SortedMap<Integer, AmpInflationRate> res = new TreeMap<>();
+		for(AmpInflationRate air:rates)
+			res.put(air.getYear(), air);
+		return res;
 	}
 	
 	protected AmpInflationRate buildInflationRate(AmpCurrency baseCurrency, Map<String, ?> raw) {

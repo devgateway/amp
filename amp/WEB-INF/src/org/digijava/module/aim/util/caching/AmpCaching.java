@@ -53,7 +53,7 @@ public class AmpCaching {
 	
 	public static AmpCaching getInstance()
 	{
-		HttpSession session = TLSUtils.getRequest().getSession();
+//		HttpSession session = TLSUtils.getRequest().getSession();
 		String locale = TLSUtils.getEffectiveLangCode();
 		
 		Map<String, AmpCaching> caches = getAmpCaches();
@@ -69,6 +69,5 @@ public class AmpCaching {
 		}
 		catch(Exception e){}
 	}
-	 
 }
 

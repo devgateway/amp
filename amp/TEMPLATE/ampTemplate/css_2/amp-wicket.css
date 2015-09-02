@@ -23,7 +23,7 @@ h1 {text-transform:uppercase;}
 .inputx {border:1px solid #D0D0D0; background-color:#FFFFFF}
 .inputx_date {border:1px solid #D0D0D0; background-color:#FFFFFF; width: 80px;}
 .dropdwn_sm {border:1px solid #D0D0D0; font-size:11px; background-color:#FFFFFF; min-width:50px; max-width:328px;margin:0px 5px 0px 0px;}
-.dropdwn_currency {border:1px solid #D0D0D0; font-size:11px; background-color:#FFFFFF; width: 50px;}
+.dropdwn_currency {border:1px solid #D0D0D0; font-size:11px; background-color:#FFFFFF; min-width:50px;max-width:328px;}
 fieldset {background-color:#FFFFFF; border-top:1px solid #DADAD6; border-left:1px solid #DADAD6; border-right:2px solid #C2C1BA; border-bottom:2px solid #C2C1BA; padding:10px; margin-top:15px;}
 legend {background-color:#4A687A; color:#FFFFFF; font-size:12px; font-weight:bold; padding-left:5px; padding-right:5px;}
 .legend_label {line-height:22px;}

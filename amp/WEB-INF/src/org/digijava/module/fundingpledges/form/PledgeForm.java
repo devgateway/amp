@@ -550,7 +550,7 @@ public class PledgeForm extends ActionForm implements Serializable {
 	}
 	
 	public List<IdWithValueShim> getValidCurrencies() {
-		return Lists.transform(CurrencyUtil.getUsableCurrencies(), AMP_CURRENCY_TO_ID_WITH_SHIM);
+		return Lists.transform(CurrencyUtil.getUsableNonVirtualCurrencies(), AMP_CURRENCY_TO_ID_WITH_SHIM);
 	}
 	
 	public boolean getFundingShowTypeOfAssistance() {

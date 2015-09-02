@@ -73,33 +73,19 @@ public class PublicPortalService {
 
 		spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS), false, true));
 
-		if (months != null) {
-			spec.setFilters(getPeriodFilter(months));
-		}
+
 		SettingsUtils.applySettings(spec, config);
 		/*
 		 * TODO: tbd if we need to filter out null dates from results
 		 * MondrianReportUtils.filterOutNullDates(spec);
 		 */
-		FilterUtils.applyFilterRules(config, spec);
+		FilterUtils.applyFilterRules(config, spec,months);
 		getPublicReport(count, result, content, spec);
 
 		return result;
 	}
 
-	public static final ReportFilters getPeriodFilter(Integer months) {
 
-		Calendar cal = Calendar.getInstance();
-		Calendar currentCal = Calendar.getInstance();
-		cal.add(Calendar.MONTH, -months);
-		MondrianReportFilters filters = new MondrianReportFilters();
-		try {
-			filters.addDateRangeFilterRule(cal.getTime(), currentCal.getTime());
-		} catch (AmpApiException e) {
-			logger.error(e);
-		}
-		return filters;
-	}
 
 	/**
 	 * 
@@ -134,11 +120,8 @@ public class PublicPortalService {
 			}
 		}
 
-		if (months != null) {
-			spec.setFilters(getPeriodFilter(months));
-		}
 		SettingsUtils.applySettings(spec, config);
-		FilterUtils.applyFilterRules(config, spec);
+		FilterUtils.applyFilterRules(config, spec,months);
 		getPublicReport(count, result, content, spec, true, measureName);
 		return result;
 
@@ -197,12 +180,15 @@ public class PublicPortalService {
 				Iterator<ReportArea> iter = report.reportContents.getChildren().iterator();
 				while (count > 0) {
 					ReportArea data = iter.next();
+					
 					JsonBean jsonData = new JsonBean();
-					for (Entry<ReportOutputColumn, ReportCell> cell : data.getContents().entrySet()) {
-						jsonData.set(headersToId.get(cell.getKey().columnName), cell.getValue().displayedValue);
-						if (calculateSubTotal) {
-							if (cell.getKey().columnName.equals(measureName)) {
-								total += (Double) cell.getValue().value;
+					if (data.getContents().size() > 1) {
+						for (Entry<ReportOutputColumn, ReportCell> cell : data.getContents().entrySet()) {
+							jsonData.set(headersToId.get(cell.getKey().columnName), cell.getValue().displayedValue);
+							if (calculateSubTotal) {
+								if (cell.getKey().columnName.equals(measureName)) {
+									total += (Double) cell.getValue().value;
+								}
 							}
 						}
 					}

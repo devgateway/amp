@@ -221,7 +221,7 @@ public class ActivityService {
 	}
 	
 	GeneratedReport report = null;
-	FilterUtils.applyFilterRules(config, spec);
+	FilterUtils.applyFilterRules(config, spec,null);
 	MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
 			ReportEnvironment.buildFor(TLSUtils.getRequest()), true);
 	try {
@@ -231,37 +231,41 @@ public class ActivityService {
 	}
 	ReportAreaMultiLinked[] areasDFArray = ReportPaginationUtils.convert(report.reportContents);
 	ReportArea pagedReport = ReportPaginationUtils.getReportArea(areasDFArray, 0, pageSize);
-	List<ReportArea> area = pagedReport.getChildren();
 	JSONArray activities = new JSONArray();
 	JSONArray headers = new JSONArray();
-	boolean headerAdded = false;
-	for (Iterator<ReportArea> iterator = area.iterator(); iterator.hasNext();) {
-	    JSONObject activityObj = new JSONObject();
-	    JSONObject header = new JSONObject();
-	    ReportArea reportArea = iterator.next();
+	
+		if (pagedReport != null) {
+			List<ReportArea> area = pagedReport.getChildren();
+			boolean headerAdded = false;
+			for (Iterator<ReportArea> iterator = area.iterator(); iterator.hasNext();) {
+				JSONObject activityObj = new JSONObject();
+				JSONObject header = new JSONObject();
+				ReportArea reportArea = iterator.next();
 
-	    Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
-	    Set<ReportOutputColumn> col = row.keySet();
-	    for (ReportOutputColumn reportOutputColumn : col) {
+				Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
+				Set<ReportOutputColumn> col = row.keySet();
+				for (ReportOutputColumn reportOutputColumn : col) {
 
-		if (!reportOutputColumn.originalColumnName.equals(MeasureConstants.ALWAYS_PRESENT)) {
-		    activityObj.put(reportOutputColumn.originalColumnName, row.get(reportOutputColumn).displayedValue);
-		    String displayName = columnHeaders.get(reportOutputColumn.originalColumnName);
-		    if (displayName == null) {
-			displayName = reportOutputColumn.originalColumnName;
-		    }
-		    displayName = TranslatorWorker.translateText(displayName);
-		    header.put(reportOutputColumn.originalColumnName, displayName);
+					if (!reportOutputColumn.originalColumnName.equals(MeasureConstants.ALWAYS_PRESENT)) {
+						activityObj.put(reportOutputColumn.originalColumnName,
+								row.get(reportOutputColumn).displayedValue);
+						String displayName = columnHeaders.get(reportOutputColumn.originalColumnName);
+						if (displayName == null) {
+							displayName = reportOutputColumn.originalColumnName;
+						}
+						displayName = TranslatorWorker.translateText(displayName);
+						header.put(reportOutputColumn.originalColumnName, displayName);
+					}
+
+				}
+
+				if (!headerAdded) {
+					headers.add(header);
+				}
+				activities.add(activityObj);
+				headerAdded = true;
+			}
 		}
-
-	    }
-
-	    if (!headerAdded) {
-		headers.add(header);
-	    }
-	    activities.add(activityObj);
-	    headerAdded = true;
-	}
 	responseJson.put("activities", activities);
 	responseJson.put("headers", headers);
 	return responseJson;

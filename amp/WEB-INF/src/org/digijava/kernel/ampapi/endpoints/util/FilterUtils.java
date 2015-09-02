@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.util;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -245,20 +246,24 @@ public class FilterUtils {
 	 * @param config
 	 * @param spec
 	 */
-	public static void applyFilterRules(JsonBean config, ReportSpecificationImpl spec) {
+	public static void applyFilterRules(JsonBean config, ReportSpecificationImpl spec,Integer months) {
 		MondrianReportFilters filterRules = FilterUtils.getFilters(config);
-		if (filterRules != null) {
-			if (spec.getFilters() == null) {
-				spec.setFilters(new MondrianReportFilters());
-			}
-			Map<ReportElement, List<FilterRule>> filters = filterRules.getFilterRules();
-			for (ReportElement reportElement : filters.keySet()) {
-				if (spec.getFilters().getFilterRules().get(reportElement) != null) {
-					spec.getFilters().getFilterRules().get(reportElement).addAll(filters.get(reportElement));
-				} else {
-					spec.getFilters().getFilterRules().put(reportElement, filters.get(reportElement));
+		if (months != null) {
+			Calendar cal = Calendar.getInstance();
+			Calendar currentCal = Calendar.getInstance();
+			cal.add(Calendar.MONTH, -months);
+
+			try {
+				if (filterRules == null) {
+					filterRules = new MondrianReportFilters();
 				}
+				filterRules.addDateRangeFilterRule(cal.getTime(), currentCal.getTime());
+			} catch (AmpApiException e) {
+				logger.error(e);
 			}
+		}
+		if (filterRules != null) {
+			spec.setFilters(filterRules);
 		}
 	}
 

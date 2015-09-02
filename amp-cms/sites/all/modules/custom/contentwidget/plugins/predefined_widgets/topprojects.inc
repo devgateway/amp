@@ -385,7 +385,7 @@ function contentwidget_topprojects_widget_settings_storage($widget_name, $form_v
   $settings = array();
 
   if (isset($form_values[$widget_name]) && is_array($form_values[$widget_name])) {
-    $settings = array_filter($form_values[$widget_name]);
+    $settings = $form_values[$widget_name];
   }
 
   if (empty($form_values[$widget_name]['display_all_columns']) && !empty($settings['visible_columns'])) {

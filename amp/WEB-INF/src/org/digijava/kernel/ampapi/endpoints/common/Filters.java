@@ -719,6 +719,7 @@ public class Filters {
 				ampTeamJson.setName(teamNames.get(ampTeamId));
 				teamsListJson.add(ampTeamJson);
 			}
+			teamsListJson = orderByProperty(teamsListJson, NAME_PROPERTY);
 		}
 		JsonBean js = new JsonBean();
 		js.set("filterId", "Workspaces");
@@ -755,11 +756,15 @@ public class Filters {
 	 * @param fi, List <JsonBean> to be ordered
 	 * @return ordered List 
 	 */
-	private List <JsonBean> orderByName(List <JsonBean> fi) {
+	private static List <JsonBean> orderByName(List <JsonBean> fi) {
 		Collections.sort(fi, new Comparator<JsonBean>() {
 			@Override
 			public int compare(JsonBean a, JsonBean b) {
-					return ((String) a.get("name")).compareTo((String) b.get("name"));
+					String prop1 = (String) a.get("name");
+					String prop2 = (String) b.get("name");
+					prop1 = prop1.trim();
+					prop2 = prop2.trim();
+					return prop1.compareToIgnoreCase(prop2);
 				}
 		});
 		return fi;
@@ -774,14 +779,16 @@ public class Filters {
 	 * @param property, String with the attribute to be ordered
 	 * @return ordered List <SimpleJsonBean>
 	 */
-	private List<SimpleJsonBean> orderByProperty(List<SimpleJsonBean> list, final String property) {
+	private static List<SimpleJsonBean> orderByProperty(List<SimpleJsonBean> list, final String property) {
 		Collections.sort(list, new Comparator<SimpleJsonBean>() {
 			@Override
 			public int compare(SimpleJsonBean a, SimpleJsonBean b) {
 				try {
 					String property1 = (String) SimpleJsonBean.class.getMethod("get" + property).invoke(a);
 					String property2 = (String) SimpleJsonBean.class.getMethod("get" + property).invoke(b);
-					return property1.compareTo(property2);
+					property1 = property1.trim();
+					property2 = property2.trim();
+					return property1.compareToIgnoreCase(property2);
 
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
 						| NoSuchMethodException | SecurityException e) {

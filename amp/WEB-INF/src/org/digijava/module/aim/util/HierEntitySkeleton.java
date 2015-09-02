@@ -91,7 +91,7 @@ public abstract class HierEntitySkeleton<K extends HierEntitySkeleton<?>> implem
 	 * compareTo based on id
 	 */
 	public int compareTo(K o) {
-		int d = this.name.compareToIgnoreCase(o.name);
+		int d = this.name.trim().compareToIgnoreCase(o.name.trim());
 		if (d != 0) return d;
 		return this.id.compareTo(o.id);
 	}
@@ -180,6 +180,7 @@ public abstract class HierEntitySkeleton<K extends HierEntitySkeleton<?>> implem
 					setParentChildRelationships(entities);				
 				}
 			});
+        entities.get(275l);
         return entities;
     }
 }

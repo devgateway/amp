@@ -687,6 +687,7 @@ public class Filters {
 				ampTeamJson.setName(ampTeam.getName());
 				teamsListJson.add(ampTeamJson);
 			}
+			teamsListJson = orderByProperty(teamsListJson, NAME_PROPERTY);
 		}
 		JsonBean js = new JsonBean();
 		js.set("filterId", "Workspaces");
@@ -727,7 +728,9 @@ public class Filters {
 		Collections.sort(fi, new Comparator<JsonBean>() {
 			@Override
 			public int compare(JsonBean a, JsonBean b) {
-					return ((String) a.get("name")).compareTo((String) b.get("name"));
+				String prop1 = (String) a.get("name");
+				String prop2 = (String) b.get("name");
+				return prop1.trim().compareToIgnoreCase(prop2.trim());
 				}
 		});
 		return fi;
@@ -749,7 +752,7 @@ public class Filters {
 				try {
 					String property1 = (String) SimpleJsonBean.class.getMethod("get" + property).invoke(a);
 					String property2 = (String) SimpleJsonBean.class.getMethod("get" + property).invoke(b);
-					return property1.compareTo(property2);
+					return property1.trim().compareToIgnoreCase(property2.trim());
 
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
 						| NoSuchMethodException | SecurityException e) {

@@ -57,6 +57,11 @@
 	vertical-align: top;
 }
 
+#scorecardErrors {
+    color: red;
+    font-weight: bold;
+}
+
 .nodonors-left {float: left; width: 200px; vertical-align: middle}
 .nodonors-right { display: inline-block; width: 200px; vertical-align: middle}
 .nodonors-center { display: inline-block; width: 100px; padding-left:20px;}
@@ -76,6 +81,10 @@
 <digi:form action="/scorecardManager.do" method="post">
 
 <html:hidden property="action" value="CANCEL"/>
+
+<div id="scorecardErrors">
+</div>
+
 <div class="scorecard-container">
 	<div>
 		<div id="Step1" class="step-container">

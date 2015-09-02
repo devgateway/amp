@@ -136,10 +136,28 @@ function loadFilteredDonors() {
 		  contentType: "application/json",
 		  data : JSON.stringify(jsonDonors),
 		  dataType: "json"
-	}).done(function(data) {
-		reloadDonorsNoUpdates(data)
-	});
+	}).success(function(data) {
+	    cleanUpErrors();
+		reloadDonorsNoUpdates(data);
+	}).error(function(data) {
+	    cleanUpErrors();
+	    showErrors(data);
+    });
 	
+}
+
+function cleanUpErrors() {
+    $("#scorecardErrors").empty();
+}
+
+function showErrors(data) {
+    if (data && data.responseText) {
+        try {
+            $("#scorecardErrors").html(jQuery.parseJSON(data.responseText).error["0001"]);
+        } catch (e) {
+        }
+        $("#btnNext").hide();
+    }
 }
 
 function reloadDonorsNoUpdates(data) {
@@ -273,6 +291,9 @@ function handleWizardNext() {
 	var btnNext = $('#btnNext');
 	var btnPrev = $('#btnPrev');
 	var btnSubmit = $('#btnSubmit');
+
+	// init button next
+	$("#btnNext").show();
 	
     if (btnNext.attr('name')=='Step2' && isValidScorecardSetting()) {
     	saveScorecardSetting();
@@ -312,6 +333,9 @@ function handleWizardPrevious() {
 	var btnNext = $('#btnNext');
 	var btnPrev = $('#btnPrev');
 	var btnSubmit = $('#btnSubmit');
+
+    // init button next
+    $("#btnNext").show();
 	
     if (btnPrev.attr('name')=='Step1') {
         // Change the button name - we use this to keep track of which step to display on a click

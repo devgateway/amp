@@ -209,7 +209,8 @@ public class DonorScorecard {
 			try {
 				DbUtil.saveOrUpdateObject(org);
 			} catch (Exception e) {
-				message = e.getLocalizedMessage();
+                // todo think of the exception type we're throwing here
+				throw new RuntimeException("Failed to load donor list");
 			}
 			
 			donorIds.add(donorId);

@@ -70,6 +70,9 @@ function contentwidget_totalactivities_widget_retrieve_data($widget_settings, $l
     $request_body['rowTotals'] = TRUE;
     $request_body['name'] = 'api:totalactivities';
 
+    // Include Activities with empty funding in the total activities count.
+    $request_body['show_empty_rows'] = TRUE;
+
     $variables['body'] = empty($request_body) ? '{}' : json_encode($request_body);
 
     // Set the API Resource Endpoint.

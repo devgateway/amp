@@ -571,19 +571,17 @@ public class CurrencyUtil {
 	}
 	
 	public static List<AmpCurrency> getActiveAmpCurrencyByCode() {
-		AmpCurrency ampCurrency = null;
-		Session session = null;
-		Query q = null;
-		Iterator<AmpCurrency> iter = null;
 		String queryString = null;
 		ArrayList<AmpCurrency> currency = new ArrayList<AmpCurrency>();
 		try {
-			session = PersistenceManager.getRequestDBSession();
 			queryString = " select c from " + AmpCurrency.class.getName()
 					+ " c where c.activeFlag='1' order by c.currencyCode";
-			q = session.createQuery(queryString);
-			q.setCacheable(true);
-			return (List<AmpCurrency>) q.list();
+			List<AmpCurrency> temp = PersistenceManager.getSession().createQuery(queryString).setCacheable(true).list();
+			List<AmpCurrency> res = new ArrayList<>();
+			for(AmpCurrency c:temp)
+				if (!c.isVirtual())
+					res.add(c);
+			return res;
 		} catch (Exception ex) {
 			logger.error("Unable to get currency " + ex);
 		}

@@ -142,7 +142,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
 		AbstractReadOnlyModel<List<AmpCurrency>> currencyList = new AbstractReadOnlyModel<List<AmpCurrency>>() {
 			@Override
 			public List<AmpCurrency> getObject() {
-				return (List<AmpCurrency>) CurrencyUtil.getActiveAmpCurrencyByCode() ;
+				return (List<AmpCurrency>) CurrencyUtil.getUsableNonVirtualCurrencies() ;
 			}
 		};
 		

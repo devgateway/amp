@@ -31,6 +31,7 @@ import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
+import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -69,13 +70,11 @@ public class PublicPortalService {
 		ReportSpecificationImpl spec = EndpointUtils.getReportSpecification(config, "PublicPortal_GetTopProjects");
 		
 		SettingsUtils.applySettings(spec, config);
-		if (months != null) {
-			spec.setFilters(getPeriodFilter(months));
-		}
+
 		/*TODO: tbd if we need to filter out null dates from results
 		MondrianReportUtils.filterOutNullDates(spec);
 		*/
-		
+		FilterUtils.applyFilterRules(config, spec,months);
 		// configure project types
 		ReportsUtil.configureProjectTypes(spec, config);
 		// do we need to include empty fundings in case no fundings are detected at all? 
@@ -143,19 +142,6 @@ public class PublicPortalService {
 		spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.CUMULATED_SSC_COMMITMENTS), false, true));
 	}
 	
-	public static final ReportFilters getPeriodFilter(Integer months) {
-
-		Calendar cal = Calendar.getInstance();
-		Calendar currentCal = Calendar.getInstance();
-		cal.add(Calendar.MONTH, -months);
-		MondrianReportFilters filters = new MondrianReportFilters();
-		try {
-			filters.addDateRangeFilterRule(cal.getTime(), currentCal.getTime());
-		} catch (AmpApiException e) {
-			logger.error(e);
-		}
-		return filters;
-	}
 	
 /**
  * 
@@ -191,9 +177,8 @@ public class PublicPortalService {
 			}
 		}
 
-		if (months != null) {
-			spec.setFilters(getPeriodFilter(months));
-		}
+		FilterUtils.applyFilterRules(config, spec,months);
+
 		SettingsUtils.applySettings(spec, config);
 		getPublicReport(count, result, content, spec, true, measureName, null);
 		return result;
@@ -247,12 +232,14 @@ public class PublicPortalService {
 			while (count > 0) {
 				ReportArea data = iter.next();
 				JsonBean jsonData = new JsonBean();
-				for (Entry<ReportOutputColumn, ReportCell> cell : data.getContents().entrySet()) {
-					if (columnsToIgnore == null || !columnsToIgnore.contains(cell.getKey().columnName)) {
-						jsonData.set(headersToId.get(cell.getKey().columnName), cell.getValue().displayedValue);
-						if (calculateSubTotal) {
-							if (cell.getKey().columnName.equals(measureName)) {
-								total += (Double) cell.getValue().value;
+				if (data.getContents().size() > 1) {
+					for (Entry<ReportOutputColumn, ReportCell> cell : data.getContents().entrySet()) {
+						if (columnsToIgnore == null || !columnsToIgnore.contains(cell.getKey().columnName)) {
+							jsonData.set(headersToId.get(cell.getKey().columnName), cell.getValue().displayedValue);
+							if (calculateSubTotal) {
+								if (cell.getKey().columnName.equals(measureName)) {
+									total += (Double) cell.getValue().value;
+								}
 							}
 						}
 					}

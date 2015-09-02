@@ -94,10 +94,10 @@ function contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_set
       /** @var activityMapperOptionsInterface $handler */
       $handler = new $class_name();
 
-      // Only display data related to humanitarian aid.
+      // Only display data related to disaster response.
       $drm_key = $disaster_response_marker_plugin['report field key'];
       $drm_value = $handler->getMatchedValue($disaster_response_marker_plugin, TRUE);
-      $request_body['columnFilters'][$drm_key] = array($drm_value);
+      $request_body['filters']['columnFilters'][$drm_key] = array($drm_value);
     }
 
     $variables['body'] = empty($request_body) ? '{}' : json_encode($request_body);

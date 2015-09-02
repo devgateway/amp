@@ -248,7 +248,6 @@ function contentwidget_topdonors_widget_settings_storage($widget_name, $form_val
   $settings = array();
 
   if (isset($form_values[$widget_name]) && is_array($form_values[$widget_name])) {
-    $settings = array_filter($form_values[$widget_name]);
     $settings = $form_values[$widget_name];
   }
 

@@ -50,7 +50,7 @@ div.fakefile input {
 	margin-left: 0;
 	width: 217px;
 }
-div.fakefile2 {
+div.browseContainer {
 	position: absolute;
 	top: 0px;
 	left: 217px;
@@ -60,8 +60,9 @@ div.fakefile2 {
 	z-index: 1;
 	line-height: 90%;
 	text-align:left;
+	margin-left: 10px;
 }
-div.fakefile2 input{
+div.browseContainer input{
 	width: 83px;
 }
 -->
@@ -143,38 +144,29 @@ function fnSubmit() {
 </script>
 
 <script type="text/javascript">
-	var W3CDOM = (document.createElement && document.getElementsByTagName);
-
+	
 	function initFileUploads() {
-		if (!W3CDOM) return;
-		var fakeFileUpload = document.createElement('div');
-		fakeFileUpload.className = 'fakefile';
-		fakeFileUpload.appendChild(document.createElement('input'));
+		var fakeFileUpload = $('<div class="fakefile"></div>');
+		var fileNameInput = $('<input type="text" id="fileNameInput"/>');
+		fakeFileUpload.append (fileNameInput);
+		var browseContainer =  $('<div class="browseContainer"/>');
+		var button = $('<input type ="button" id="fakeInputFile" value="<digi:trn key="aim:browse">Browse...</digi:trn>"> </input>');
+		browseContainer.append(button);
 
-		var fakeFileUpload2 = document.createElement('div');
-		fakeFileUpload2.className = 'fakefile2';
-
-
-		var button = document.createElement('input');
-		button.type = 'button';
-
-		button.value = '<digi:trn key="aim:browse">Browse...</digi:trn>';
-		fakeFileUpload2.appendChild(button);
-
-		fakeFileUpload.appendChild(fakeFileUpload2);
-		var x = document.getElementsByTagName('input');
-		for (var i=0;i<x.length;i++) {
-			if (x[i].type != 'file') continue;
-			if (x[i].parentNode.className != 'fileinputs') continue;
-			x[i].className = 'file hidden';
-			var clone = fakeFileUpload.cloneNode(true);
-			x[i].parentNode.appendChild(clone);
-			x[i].relatedElement = clone.getElementsByTagName('input')[0];
-
- 			x[i].onchange = x[i].onmouseout = function () {
-				this.relatedElement.value = this.value;
+		fakeFileUpload.append(browseContainer);
+		
+		var fileHidden = $('.fileinputs input:file');
+		fileHidden.addClass ('file hidden');
+		var clone = fakeFileUpload.clone(true);
+		fileHidden.parent().append($(clone));
+		$('#fakeInputFile').on('click',function (){ 
+			fileHidden.click(); 
 			}
-		}
+		);
+		fileHidden.on('change', function() {
+			$("#fileNameInput").val(fileHidden.val());
+		});
+	
 	}
 
 </script>

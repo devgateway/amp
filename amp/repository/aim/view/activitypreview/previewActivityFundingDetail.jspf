@@ -33,7 +33,7 @@ other rows (if any): capital spending percent / classification / attached pledge
 
 			<logic:present name="fundingDetail" property="disasterResponse">
 				<c:if test="${fundingDetail.disasterResponse }">
-					<div style="float: left; padding-left: 10px; font-size: 75%;">Dissaster
+					<div style="float: left; padding-left: 10px;">Dissaster
 						Response</div>
 				</c:if>
 			</logic:present>

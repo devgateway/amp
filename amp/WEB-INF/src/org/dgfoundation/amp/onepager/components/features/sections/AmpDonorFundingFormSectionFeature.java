@@ -380,36 +380,34 @@ public class AmpDonorFundingFormSectionFeature extends
 //		};
 //		wmc.add(list);
 		
-		//if (isTabsView) {
-			orgRolelist = new ListEditor<AmpOrgRole>("listFunding", roleModel) {
-				@Override
-				protected void onPopulateItem(ListItem<AmpOrgRole> item) {
-					AmpOrgRole orgRole = item.getModelObject();
-					AmpFundingGroupFeaturePanel fg = new AmpFundingGroupFeaturePanel(
-							"fundingItem", "Funding Group", new Model<AmpRole>(orgRole.getRole()), fundingModel,
-							new Model<AmpOrganisation>(orgRole.getOrganisation()), am,
-							AmpDonorFundingFormSectionFeature.this);
-					fg.setTabIndex(item.getIndex());
-					item.add(new AttributePrepender("data-is_tab", new Model<String>("true"), ""));
-					List<AmpFundingGroupFeaturePanel> fgList = listItems.get(item.getModelObject().getOrganisation());
-					if (fgList == null) {
-						fgList = new ArrayList<AmpFundingGroupFeaturePanel>();
-						listItems.put(orgRole.getOrganisation(), fgList);
-					}
-					fgList.add(fg);
-					item.add(fg);
+		orgRolelist = new ListEditor<AmpOrgRole>("listFunding", roleModel) {
+			@Override
+			protected void onPopulateItem(ListItem<AmpOrgRole> item) {
+				AmpOrgRole orgRole = item.getModelObject();
+				AmpFundingGroupFeaturePanel fg = new AmpFundingGroupFeaturePanel(
+						"fundingItem", "Funding Group", new Model<AmpRole>(orgRole.getRole()), fundingModel,
+						new Model<AmpOrganisation>(orgRole.getOrganisation()), am,
+						AmpDonorFundingFormSectionFeature.this);
+				fg.setTabIndex(item.getIndex());
+				item.add(new AttributePrepender("data-is_tab", new Model<String>("true"), ""));
+				List<AmpFundingGroupFeaturePanel> fgList = listItems.get(item.getModelObject().getOrganisation());
+				if (fgList == null) {
+					fgList = new ArrayList<AmpFundingGroupFeaturePanel>();
+					listItems.put(orgRole.getOrganisation(), fgList);
 				}
-	
-				@Override
-				public void addItem(AmpOrgRole orgRole) {
-					addToOrganisationSection(orgRole.getOrganisation());
-					addItemToList(orgRole.getOrganisation(), orgRole);
-					
-					orgRolelist.updateModel();
-				}
-			};
-			wmc.add(orgRolelist);
-		//}
+				fgList.add(fg);
+				item.add(fg);
+			}
+
+			@Override
+			public void addItem(AmpOrgRole orgRole) {
+				addToOrganisationSection(orgRole.getOrganisation());
+				addItemToList(orgRole.getOrganisation(), orgRole);
+				
+				orgRolelist.updateModel();
+			}
+		};
+		wmc.add(orgRolelist);
 
 		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs = new AmpAutocompleteFieldPanel<AmpOrganisation>(
 				"searchAutocomplete", "Search Organizations", true,true,
@@ -434,10 +432,8 @@ public class AmpDonorFundingFormSectionFeature extends
 				addToOrganisationSection(choice);
 				orgRolelist.addItem(findAmpOrgRole(choice, getSelectedAmpRole()));
 				
-				target.appendJavaScript(OnePagerUtil
-						.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
-				send(getPage(), Broadcast.BREADTH,
-						new OrganisationUpdateEvent(target));
+				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
+				send(getPage(), Broadcast.BREADTH, new OrganisationUpdateEvent(target));
 				if (isTabsView){
 					//if in tabs view we should refresh the whole section so 
 					//tabs are inplace and recreated
@@ -683,11 +679,7 @@ public class AmpDonorFundingFormSectionFeature extends
 	
 	public void addFundingItem(AmpFunding funding) {
 		if (funding == null) return;
-		//if (isTabsView) {
-			orgRolelist.addItem(findAmpOrgRole(funding.getAmpDonorOrgId(), funding.getSourceRole()));
-//		} else {
-//			list.addItem(funding.getAmpDonorOrgId());
-//		}
+		orgRolelist.addItem(findAmpOrgRole(funding.getAmpDonorOrgId(), funding.getSourceRole()));
 	}
 	
 	protected AmpRole getSelectedAmpRole() {

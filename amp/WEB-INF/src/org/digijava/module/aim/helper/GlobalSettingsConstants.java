@@ -191,6 +191,8 @@ public class GlobalSettingsConstants {
     
     public static final String REPORT_WIZARD_VISIBILITY_SOURCE = "Report wizard visibility source";
     
+    public static final String DAYS_NOTIFY_ACTIVITY_SUBMITED_VALIDATION = "Days to notify activity submited for validation";
+    
     
     
     /**

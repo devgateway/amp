@@ -4,11 +4,12 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
-<%@ taglib uri="http://java.fckeditor.net" prefix="FCK"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 
+<script type="text/javascript" src="/ckeditor_4.4.6/ckeditor.js"></script>
+<script type="text/javascript" src="/ckeditor_4.4.6/adapters/jquery.js"></script>
 
 <script>
 <%String contextPath = request.getContextPath();
@@ -80,15 +81,7 @@ function cancelText(){
 		</table>
 	</c:if>
 	<br>
-	<FCK:editor instanceName="content" basePath="/FCKeditor/" width="80%"
-		height="500" toolbarSet="AMP">
-		<jsp:attribute name="value">${editorForm.content}</jsp:attribute>
-		<jsp:body>
-			<FCK:config AutoDetectLanguage="false"
-				DefaultLanguage="${editorForm.lang}" />
-		</jsp:body>
-	</FCK:editor>
-
+	<html:textarea property="content" name="editorForm" cols="100" rows="5"></html:textarea>
 	<b>
 		<span style="color: #cc4000"> <bean:write name="editorForm" property="key" /></span>
 	</b>
@@ -208,3 +201,13 @@ function cancelText(){
 		</logic:iterate>
 	</table>
 </logic:present>
+
+<script type="text/javascript">
+	var config = {
+        baseHref: '/ckeditor_4.4.6/',
+        customConfig: '/ckeditor_4.4.6/config_admin_editor.js',
+        width: 800,
+        height: 400
+    }
+    var editor = $("[name='content']").ckeditor(config);
+</script>

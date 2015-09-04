@@ -205,13 +205,12 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 //		add(searchOrganization);
 	
 		
-		final AmpOrgRoleSelectorComponent orgRoleSelector = new AmpOrgRoleSelectorComponent("orgRoleSelector", am, parent.getRoleFilter());
+		final AmpOrgRoleSelectorComponent orgRoleSelector = new AmpOrgRoleSelectorComponent("orgRoleSelector", am, 
+				parent.getRoleFilter());
 		wmc.add(orgRoleSelector);
 		
-		// button used to add funding based on the selected organization and
-		// role
-		final AmpAjaxLinkField changeOrg = new AmpAjaxLinkField("changeOrg",
-				"Change Org", "Change Org") {
+		// button used to add funding based on the selected organization and role
+		final AmpAjaxLinkField changeOrg = new AmpAjaxLinkField("changeOrg", "Change Org", "Change Org") {
 			private static final long serialVersionUID = 1L;
 
 			@Override

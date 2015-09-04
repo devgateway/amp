@@ -79,7 +79,7 @@ public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation
             @Override
             public boolean condition(AmpFunding item) {
                 return item.getAmpDonorOrgId().getAmpOrgId().equals(model.getObject().getAmpOrgId())
-                		&& (role.getObject() == null || item.getSourceRole().getAmpRoleId().equals(role.getObject().getAmpRoleId()));
+                		&& item.getSourceRole().getAmpRoleId().equals(role.getObject().getAmpRoleId());
             }
         };
 		

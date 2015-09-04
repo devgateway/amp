@@ -42,8 +42,6 @@ import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpOverviewSection;
 import org.dgfoundation.amp.onepager.events.DonorFundingRolesEvent;
 import org.dgfoundation.amp.onepager.events.OrganisationUpdateEvent;
-import org.dgfoundation.amp.onepager.helper.IOrgRole;
-import org.dgfoundation.amp.onepager.helper.OrgRole;
 import org.dgfoundation.amp.onepager.models.AmpFundingGroupModel;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -147,12 +145,12 @@ public class AmpDonorFundingFormSectionFeature extends
 //		list.items.indexOf(newOrg));
 		target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(orgRolelist.getParent()));
 
-//		if (isTabsView) {
+		if (isTabsView) {
 			target.add(AmpDonorFundingFormSectionFeature.this);
 			target.appendJavaScript("switchTabs();");
-//		} else {
-//			target.add(list.getParent());
-//		}
+		} else {
+			target.add(orgRolelist.getParent());
+		}
 	}
 	
 	/**
@@ -217,9 +215,7 @@ public class AmpDonorFundingFormSectionFeature extends
 			// when only last founding group associated to general listing by "Org" (not "Org + Role"), then remove also the Org
 			if (fgList != null && fgList.size() == 0) {
 				// now we can remove the org, since no other associated role is present
-				//if (deteleItem(list, ampOrgRole.getOrganisation(), target)) {
-					listItems.remove(ampOrgRole.getOrganisation());
-				//}
+				listItems.remove(ampOrgRole.getOrganisation());
 			}
 			
 			Set<AmpOrgRole> roles = roleModel.getObject();
@@ -639,16 +635,12 @@ public class AmpDonorFundingFormSectionFeature extends
 		AmpFundingGroupFeaturePanel existingFundingGroup = null;
 		List<AmpFundingGroupFeaturePanel> fgList = listItems == null ? null : listItems.get(org);
 		if (fgList != null && fgList.size() > 0) {
-			//if (isTabsView) {
-				for (AmpFundingGroupFeaturePanel fg : fgList) {
-					if (fg.getRole().getObject() != null && fg.getRole().getObject().equals(role)) {
-						existingFundingGroup = fg;
-						break;
-					}
+			for (AmpFundingGroupFeaturePanel fg : fgList) {
+				if (fg.getRole().getObject() != null && fg.getRole().getObject().equals(role)) {
+					existingFundingGroup = fg;
+					break;
 				}
-//			} else {
-//				existingFundingGroup = fgList.iterator().next();
-//			}
+			}
 		}
 		return existingFundingGroup;
 	}

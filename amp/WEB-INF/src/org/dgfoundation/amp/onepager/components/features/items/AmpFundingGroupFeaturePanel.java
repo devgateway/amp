@@ -8,14 +8,18 @@ import java.util.Set;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
+import org.dgfoundation.amp.onepager.helper.IOrgRole;
+import org.dgfoundation.amp.onepager.helper.OrgRole;
 import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.gateperm.core.GatePermConst;
@@ -29,6 +33,7 @@ public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation
 	private static final long serialVersionUID = 1L;
 	private ListEditor<AmpFunding> list;
 	private IModel<AmpOrganisation> fundingOrgModel;
+	private IModel<AmpRole> fundingRoleModel;
 	private Integer tabIndex;
 
 	
@@ -52,11 +57,13 @@ public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation
 		}
 	}
 
-	public AmpFundingGroupFeaturePanel(String id, String fmName,
+	public AmpFundingGroupFeaturePanel(String id, String fmName, final IModel<AmpRole> role, 
 			IModel<Set<AmpFunding>> fundsModel, final IModel<AmpOrganisation> model,final IModel<AmpActivityVersion> am, final AmpDonorFundingFormSectionFeature parent) {
 		super(id, model, fmName, true);
 		fundingOrgModel = model;
-		add(new Label("donorOrg", model.getObject().getName()));
+		fundingRoleModel = role;
+		String suffix = role.getObject() == null ? "" : " (" + role.getObject().getName() + ")";
+		add(new Label("donorOrg", model.getObject().getName() + suffix));
 		
 //		AmpLabelFieldPanel<AmpOrganisation> sourceOrg = new AmpLabelFieldPanel<AmpOrganisation>(
 //		"sourceOrg", new PropertyModel<AmpOrganisation>(fundsModel, "ampDonorOrgId"), "Source Organisation", true);
@@ -74,7 +81,8 @@ public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation
         AbstractMixedSetModel<AmpFunding> setModel = new AbstractMixedSetModel<AmpFunding>(fundsModel) {
             @Override
             public boolean condition(AmpFunding item) {
-                return item.getAmpDonorOrgId().getAmpOrgId().compareTo(model.getObject().getAmpOrgId()) == 0;
+                return item.getAmpDonorOrgId().getAmpOrgId().equals(model.getObject().getAmpOrgId())
+                		&& (role.getObject() == null || item.getSourceRole().getAmpRoleId().equals(role.getObject().getAmpRoleId()));
             }
         };
 		
@@ -95,21 +103,17 @@ public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation
 			}
 		};
 		add(list);
-		
-
-		
-		
-		
-
+	}
+	
+	public IModel<AmpRole> getRole() {
+		return fundingRoleModel;
 	}
 
 	public void setTabIndex(Integer index) {
-
-		this.tabIndex=index;
+		this.tabIndex = index;
 	}
 
 	public Integer getTabIndex() {
-		
 		return tabIndex;
 	}
 	

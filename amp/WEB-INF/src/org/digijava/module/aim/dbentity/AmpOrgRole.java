@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Set;
 
+import org.dgfoundation.amp.onepager.helper.IOrgRole;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
 
-public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Versionable, Cloneable
+public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Versionable, Cloneable, IOrgRole
 {
 	//IATI-check: not to be ignored
 	@Interchangeable(fieldTitle="AMP Organization Role ID")

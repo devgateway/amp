@@ -33,9 +33,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpFundingSummaryPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpProposedProjectCost;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
-import org.dgfoundation.amp.onepager.events.DonorFundingRolesEvent;
 import org.dgfoundation.amp.onepager.events.FundingSectionSummaryEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -49,7 +47,6 @@ import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
  * Represents visually one funding item {@link AmpFunding} The model here is
@@ -88,9 +85,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		add(wmc);
 		
 		if (isTabView) {
-			wmc.add(new AttributePrepender("style", new Model<String>(
-					"display: none;"), ""));
-
+			wmc.add(new AttributePrepender("style", new Model<String>("display: none;"), ""));
 		} 
 
 		add(fundingSummary);
@@ -102,9 +97,6 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		Label orgLabel = new Label("donorOrg", new PropertyModel<AmpOrganisation>(fundingModel, "groupVersionedFunding"));
 		orgLabel.add(new AttributePrepender("style", new Model<String>("font-weight: bold;"), ""));
         orgLabel.setVisible("true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_FUNDING_GROUP_ID)));
-        	
-        
-            
 		orgLabel.setOutputMarkupId(true);
 		wmcLabelContainer.add(orgLabel);
 		
@@ -129,8 +121,9 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
 				AmpOrganisation org = fundingModel.getObject().getAmpDonorOrgId();
+				AmpRole role = fundingModel.getObject().getSourceRole();
 				super.onClick(target);
-				parent.updateFundingGroups(org, target);
+				parent.updateFundingGroups(parent.findAmpOrgRole(org, role), target);
 				target.add(parent);
 				if(isTabView){
 					target.appendJavaScript("switchTabs();");
@@ -144,16 +137,15 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
-				parent.getList().addItem(fundingModel.getObject().getAmpDonorOrgId());
-				
-				parent.getList().updateModel();
-					target.add(parent);
+				parent.addFundingItem(fundingModel.getObject());
+				target.add(parent);
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
-				if(isTabView){
+				if (isTabView) {
 					//when adding a new funding search for the correct index
 					//parent.getTabsList()
-					int index=
-					parent.calculateTabIndex(fundingModel.getObject().getAmpDonorOrgId());
+					int index = parent.calculateTabIndex(fundingModel.getObject().getAmpDonorOrgId(),
+							fundingModel.getObject().getSourceRole());
+					
 					target.appendJavaScript("switchTabs("+ index +");");
 				}
 			}
@@ -229,9 +221,11 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 				AmpDonorFundingFormSectionFeature fundingSection = findParent(AmpDonorFundingFormSectionFeature.class);
 				AmpFunding funding = fundingModel.getObject();
 				AmpOrganisation oldOrg = funding.getAmpDonorOrgId();
-				fundingSection.switchOrg(listItem, funding, (AmpOrganisation) orgRoleSelector.getOrgSelect().getChoiceContainer()
-						.getModelObject(),  (AmpRole) orgRoleSelector.getRoleSelect().getChoiceContainer().getModelObject(), target);
-				fundingSection.updateFundingGroups(oldOrg, target);
+				AmpRole oldRole = funding.getSourceRole();
+				fundingSection.switchOrg(listItem, funding,
+						(AmpOrganisation) orgRoleSelector.getOrgSelect().getChoiceContainer().getModelObject(),
+						(AmpRole) orgRoleSelector.getRoleSelect().getChoiceContainer().getModelObject(), target);
+				fundingSection.updateFundingGroups(fundingSection.findAmpOrgRole(oldOrg, oldRole), target);
 						
 			}
 		};

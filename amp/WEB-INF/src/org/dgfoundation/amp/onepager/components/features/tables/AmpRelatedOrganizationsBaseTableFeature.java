@@ -38,8 +38,12 @@ import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
-import org.digijava.module.aim.action.GlobalSettings;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
@@ -102,7 +106,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
         if (addFundingItemAutomatically.isVisible()){
             donorFundingSection.getOrgRoleSelector().getOrgSelect().getModel().setObject(ampOrgRole.getOrganisation());
             donorFundingSection.getOrgRoleSelector().getRoleSelect().getModel().setObject(ampOrgRole.getRole());
-            donorFundingSection.addItemToList(ampOrgRole.getOrganisation());
+            donorFundingSection.addItemToList(ampOrgRole.getOrganisation(), ampOrgRole);
             if(ampOrgRole.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY)) {
             	donorFundingSection.setOriginalSearchOrganizationSelector(searchOrganization);
             }
@@ -126,7 +130,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
                     it.remove();
                 }
             }
-            donorFundingSection.updateFundingGroups(ampOrgRole.getOrganisation(), target);
+            donorFundingSection.updateFundingGroups(ampOrgRole, target);
             target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(donorFundingSection));
             target.add(donorFundingSection);
         }
@@ -161,7 +165,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 			final IModel<AmpActivityVersion> am, final String roleName, AmpDonorFundingFormSectionFeature donorFundingSection,
 			final List<AmpOrgGroup> availableOrgGroupChoices) throws Exception {
 		super(id, am, fmName);
-		setModel=new PropertyModel<Set<AmpOrgRole>>(am,"orgrole");
+		setModel = new PropertyModel<Set<AmpOrgRole>>(am,"orgrole");
 		this.donorFundingSection=donorFundingSection;
 		if (setModel.getObject() == null)
 			setModel.setObject(new HashSet<AmpOrgRole>());

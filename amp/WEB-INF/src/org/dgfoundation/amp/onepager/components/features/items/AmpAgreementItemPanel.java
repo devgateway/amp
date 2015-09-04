@@ -16,7 +16,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
@@ -56,6 +55,7 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
         AmpEditLinkField editAgreement = new AmpEditLinkField("editAgreement", "Edit Agreement") {
             @Override
             protected void onConfigure() {
+            	super.onConfigure();
                 if (agreement.getObject() == null)
                     this.setVisibilityAllowed(false);
                 else
@@ -174,7 +174,6 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 						target.add(newAgreementForm.getParent());
 						return;
 					}
-
 				}
 				
 				Session wSession = Session.get();
@@ -208,8 +207,8 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
         newAgreementForm.add(cancel);
 		newAgreementForm.setOutputMarkupId(true);
 		add(newAgreementForm);
-
 	}
+	
 	public void validateIsNewAgreementFormClosed(AjaxRequestTarget target){
 		if(this.isFormOpen){
 			//if the form is still open we reject validation
@@ -219,5 +218,4 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 		}
 	}
 	
-
 }

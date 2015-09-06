@@ -1156,12 +1156,12 @@ public class EditActivity extends Action {
 
 
 
-          eaForm.getFunding().setShowActual(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.existsInDatabase());
-          eaForm.getFunding().setShowPlanned(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.existsInDatabase());
-          eaForm.getFunding().setShowPipeline(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.existsInDatabase());
-          eaForm.getFunding().setShowOfficialDevelopmentAid(CategoryConstants.ADJUSTMENT_TYPE_ODA_SSC.existsInDatabase());
-          eaForm.getFunding().setShowBilateralSsc(CategoryConstants.ADJUSTMENT_TYPE_BILATERAL_SSC.existsInDatabase());
-          eaForm.getFunding().setShowTriangularSsc(CategoryConstants.ADJUSTMENT_TYPE_TRIANGULAR_SSC.existsInDatabase());
+          eaForm.getFunding().setShowActual(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.isActiveInDatabase());
+          eaForm.getFunding().setShowPlanned(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.isActiveInDatabase());
+          eaForm.getFunding().setShowPipeline(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.isActiveInDatabase());
+          eaForm.getFunding().setShowOfficialDevelopmentAid(CategoryConstants.ADJUSTMENT_TYPE_ODA_SSC.isActiveInDatabase());
+          eaForm.getFunding().setShowBilateralSsc(CategoryConstants.ADJUSTMENT_TYPE_BILATERAL_SSC.isActiveInDatabase());
+          eaForm.getFunding().setShowTriangularSsc(CategoryConstants.ADJUSTMENT_TYPE_TRIANGULAR_SSC.isActiveInDatabase());
 
           String toCurrCode=null;
           if (tm != null)

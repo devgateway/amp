@@ -2664,177 +2664,69 @@ public class ExportActivityToWord extends Action {
 
         // TOTALS
         String currencyCode = myForm.getCurrCode() == null ? Constants.DEFAULT_CURRENCY : myForm.getCurrCode();
-
-        String totalsOutput = "";
-        String totalAmountType = null;
         ExportSectionHelper fundingTotalsDetails = new ExportSectionHelper(
                 null, false).setWidth(100f).setAlign("left");
 
-        if (visibleModuleCommitments) {
-            // TOTAL PLANNED COMMITMENTS
-            totalAmountType = TranslatorWorker.translateText(
-                    "TOTAL PLANNED COMMITMENTS") + ":";
-            if (myForm.getFunding().getTotalPlannedCommitments() != null
-                    && myForm.getFunding().getTotalPlannedCommitments()
-                    .length() > 0) {
-                totalsOutput = myForm.getFunding()
-                        .getTotalPlannedCommitments() + " " + currencyCode;
-            }
-            fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
-                    totalAmountType).addRowData(totalsOutput));
+    	if (visibleModuleCommitments) {
+			// TOTAL PLANNED COMMITMENTS
+			addTotalsOutput(fundingTotalsDetails,"TOTAL PLANNED COMMITMENTS", myForm.getFunding().getTotalPlannedCommitments(), currencyCode);
+			
+			// TOTAL ACTUAL COMMITMENTS
+			addTotalsOutput(fundingTotalsDetails,"TOTAL ACTUAL COMMITMENTS", myForm.getFunding().getTotalCommitments(), currencyCode);
+		}
 
-            // TOTAL ACTUAL COMMITMENTS
-            totalAmountType = TranslatorWorker.translateText(
-                    "TOTAL ACTUAL COMMITMENTS") + ":";
-            totalsOutput = "";
-            if (myForm.getFunding().getTotalCommitments() != null
-                    && myForm.getFunding().getTotalCommitments().length() > 0) {
-                totalsOutput = myForm.getFunding().getTotalCommitments() + " "
-                        + currencyCode;
-            }
-            fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
-                    totalAmountType).addRowData(totalsOutput));
-        }
+		if (mtefExisting) {
+			// TOTAL MTEF PROJECTIONS
+			addTotalsOutput(fundingTotalsDetails,"TOTAL MTEF PROJECTIONS", myForm.getFunding().getTotalMtefProjections(), currencyCode);
+		}
+		
+		if (visibleModuleDisbursement) {
+			// TOTAL PLANNED DISBURSEMENT
+			addTotalsOutput(fundingTotalsDetails,"TOTAL PLANNED DISBURSEMENT", myForm.getFunding().getTotalPlannedDisbursements(), currencyCode);
+		
+			// TOTAL ACTUAL DISBURSEMENT
+			addTotalsOutput(fundingTotalsDetails,"TOTAL ACTUAL DISBURSEMENT", myForm.getFunding().getTotalDisbursements(), currencyCode);
+		}
 
-        if (mtefExisting) {
-            // TOTAL MTEF PROJECTIONS
-            totalAmountType = TranslatorWorker.translateText("TOTAL MTEF PROJECTIONS").toUpperCase() + ":";
-            totalsOutput = myForm.getFunding().getTotalMtefProjections() + " " + currencyCode;
-            fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(totalAmountType).addRowData(totalsOutput));
-        }
+		if (visibleModuleExpenditures) {
+			// TOTAL PLANNED EXPENDITURES
+			addTotalsOutput(fundingTotalsDetails,"TOTAL PLANNED EXPENDITURES", myForm.getFunding().getTotalPlannedExpenditures(), currencyCode);
+	
+			// TOTAL ACTUAL EXPENDITURES
+			addTotalsOutput(fundingTotalsDetails,"TOTAL ACTUAL EXPENDITURES", myForm.getFunding().getTotalExpenditures(), currencyCode);
+		}
 
-        if (visibleModuleDisbursement) {
-            // TOTAL PLANNED DISBURSEMENT
-            totalAmountType = TranslatorWorker.translateText(
-                    "TOTAL PLANNED DISBURSEMENT").toUpperCase() + ":";
-            totalsOutput = "";
-            if (myForm.getFunding().getTotalPlannedDisbursements() != null
-                    && myForm.getFunding().getTotalPlannedDisbursements()
-                    .length() > 0) {
-                totalsOutput = myForm.getFunding()
-                        .getTotalPlannedDisbursements() + " " + currencyCode;
-            }
-            fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
-                    totalAmountType).addRowData(totalsOutput));
+		if (visibleModuleRoF) {
+        // Total Planned Release of Funds
+		addTotalsOutput(fundingTotalsDetails,"Total Planned Release of Funds".toUpperCase(), myForm.getFunding().getTotalPlannedRoF(), currencyCode);
 
-            // TOTAL ACTUAL DISBURSEMENT
-            totalAmountType = TranslatorWorker.translateText(
-                    "TOTAL ACTUAL DISBURSEMENT").toUpperCase() + ":";
-            totalsOutput = "";
-            if (myForm.getFunding().getTotalDisbursements() != null
-                    && myForm.getFunding().getTotalDisbursements().length() > 0) {
-                totalsOutput = myForm.getFunding().getTotalDisbursements() + " "
-                        + currencyCode;
-            }
-            fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
-                    totalAmountType).addRowData(totalsOutput));
-        }
+        // Total Actual Release of Funds
+		addTotalsOutput(fundingTotalsDetails,"Total Actual Release of Funds".toUpperCase(), myForm.getFunding().getTotalActualRoF(), currencyCode);
+		
+       }
 
-        if (visibleModuleExpenditures) {
-            // TOTAL PLANNED EXPENDITURES
-            totalAmountType = TranslatorWorker.translateText(
-                    "TOTAL PLANNED EXPENDITURES").toUpperCase() + ":";
-            totalsOutput = "";
-            if (myForm.getFunding().getTotalPlannedExpenditures() != null
-                    && myForm.getFunding().getTotalPlannedExpenditures()
-                    .length() > 0) {
-                totalsOutput = myForm.getFunding()
-                        .getTotalPlannedExpenditures() + " " + currencyCode;
-            }
-            fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
-                    totalAmountType).addRowData(totalsOutput));
-
-            // TOTAL ACTUAL EXPENDITURES
-            totalAmountType = TranslatorWorker.translateText(
-                    "TOTAL ACTUAL EXPENDITURES").toUpperCase() + ":";
-            totalsOutput = "";
-            if (myForm.getFunding().getTotalExpenditures() != null
-                    && myForm.getFunding().getTotalExpenditures().length() > 0) {
-                totalsOutput = myForm.getFunding().getTotalExpenditures() + " "
-                        + currencyCode;
-            }
-            fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
-                    totalAmountType).addRowData(totalsOutput));
-        }
-
-        if (visibleModuleRoF) {
-            // Total Planned Release of Funds
-            totalAmountType = TranslatorWorker.translateText(
-                    "Total Planned Release of Funds").toUpperCase() + ":";
-            totalsOutput = "";
-            if (myForm.getFunding().getTotalPlannedRoF() != null
-                    && myForm.getFunding().getTotalPlannedRoF()
-                    .length() > 0) {
-                totalsOutput = myForm.getFunding()
-                        .getTotalPlannedRoF() + " " + currencyCode;
-            }
-            fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
-                    totalAmountType).addRowData(totalsOutput));
-
-            // Total Actual Release of Funds
-            totalAmountType = TranslatorWorker.translateText(
-                    "Total Actual Release of Funds").toUpperCase() + ":";
-            totalsOutput = "";
-            if (myForm.getFunding().getTotalActualRoF() != null
-                    && myForm.getFunding().getTotalActualRoF().length() > 0) {
-                totalsOutput = myForm.getFunding().getTotalActualRoF() + " "
-                        + currencyCode;
-            }
-            fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
-                    totalAmountType).addRowData(totalsOutput));
-        }
-
-
-        if (visibleModuleDisbOrders) {
-            // TOTAL ACTUAL DISBURSeMENT ORDERS:
-            totalAmountType = TranslatorWorker.translateText(
-                    "TOTAL ACTUAL DISBURSEMENT ORDERS") + ":";
-            totalsOutput = "";
-            if (myForm.getFunding().getTotalActualDisbursementsOrders() != null
-                    && myForm.getFunding()
-                    .getTotalActualDisbursementsOrders().length() > 0) {
-                totalsOutput = myForm.getFunding()
-                        .getTotalActualDisbursementsOrders() + " " + currencyCode;
-            }
-            fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
-                    totalAmountType).addRowData(totalsOutput));
-        }
-        // UNDISBURSED BALANCE
-        if (FeaturesUtil
-                .isVisibleFeature("Undisbursed Balance")) {
-            totalAmountType = TranslatorWorker.translateText(
-                    "UNDISBURSED BALANCE") + ":";
-            totalsOutput = "";
-            if (myForm.getFunding().getUnDisbursementsBalance() != null
-                    && myForm.getFunding().getUnDisbursementsBalance()
-                    .length() > 0) {
-                totalsOutput = myForm.getFunding()
-                        .getUnDisbursementsBalance() + " " + currencyCode;
-            }
-            fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
-                    totalAmountType).addRowData(totalsOutput));
-        }
-
-        // Consumption Rate
+		if (visibleModuleDisbOrders) {
+			// TOTAL ACTUAL DISBURSeMENT ORDERS:
+			addTotalsOutput(fundingTotalsDetails,"TOTAL ACTUAL DISBURSEMENT ORDERS", myForm.getFunding().getTotalActualDisbursementsOrders(), currencyCode);
+		}
+		// UNDISBURSED BALANCE
+		if (FeaturesUtil
+				.isVisibleFeature("Undisbursed Balance")) {
+			addTotalsOutput(fundingTotalsDetails,"UNDISBURSED BALANCE", myForm.getFunding().getUnDisbursementsBalance(), currencyCode);
+		}
+		
+		// Consumption Rate
         if (myForm.getFunding().getConsumptionRate()!=null && myForm.getFunding().getConsumptionRate().length()>0) {
-            totalsOutput = "";
-            totalAmountType = TranslatorWorker.translateText("Consumption Rate") + ":";
-            totalsOutput=myForm.getFunding().getConsumptionRate();
-
-            fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(totalAmountType).addRowData(totalsOutput));
+    		addTotalsOutput(fundingTotalsDetails,"Consumption Rate", myForm.getFunding().getConsumptionRate(), null);
         }
 
-        // Delivery Rate
+		// Delivery Rate
         if (myForm.getFunding().getDeliveryRate() != null && myForm.getFunding().getDeliveryRate().length() > 0) {
-            totalsOutput = "";
-            totalAmountType = TranslatorWorker.translateText("Delivery Rate") + ":";
-            totalsOutput = myForm.getFunding().getDeliveryRate();
-
-            fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(totalAmountType).addRowData(totalsOutput));
+        	addTotalsOutput(fundingTotalsDetails,"Delivery Rate", myForm.getFunding().getDeliveryRate(), null);
         }
 
-        retVal.add(createSectionTable(fundingTotalsDetails, request,
-                ampContext));
+       retVal.add(createSectionTable(fundingTotalsDetails, request,
+	   ampContext));
 
         return retVal;
     }
@@ -4038,6 +3930,20 @@ public class ExportActivityToWord extends Action {
         }
         return retVal;
     }
+    
+    private void addTotalsOutput(ExportSectionHelper fundingTotalsDetails,String title, String value, String currencyCode)
+	{
+		if (value == null || value.isEmpty())
+			return;
+		String totalAmountType = TranslatorWorker.translateText(title) + ":";
+		String output = value;
+		if (currencyCode != null && !currencyCode.isEmpty()) {
+			output += " " + currencyCode;
+		}
+		//addTotalAmountsCellsToFundingTable(fundingTable, totalAmountType, output);
+		fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
+				totalAmountType).addRowData(output));
+	}
 
 
 }

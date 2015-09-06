@@ -280,6 +280,13 @@ public class CategoryConstants {
 			return getAmpCategoryValueFromDB() != null;
 		}
 		
+		
+		public boolean isActiveInDatabase () 
+		{
+			AmpCategoryValue value = getAmpCategoryValueFromDB ();
+			return (value != null && value.isVisible());
+		}
+		
 		/**
 		 * returns null if does not exist in database
 		 * @return

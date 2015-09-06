@@ -8,7 +8,10 @@ import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpLabelInformationFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpOverallFundingModel;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 
 public class AmpOverallFundingTotalsTable extends AmpComponentPanel<Void> {
 
@@ -19,13 +22,12 @@ public class AmpOverallFundingTotalsTable extends AmpComponentPanel<Void> {
 		//int DISBURSEMENT = 1 ;
 		//int EXPENDITURE = 2 ;
 	 //   AmpLabelFieldPanel<T>
-		
-        @SuppressWarnings({ "rawtypes", "unchecked" })
+		@SuppressWarnings({ "rawtypes", "unchecked" })
         AmpLabelInformationFieldPanel totalActualCommitments
                 = new AmpLabelInformationFieldPanel("totalActualCommitments",
                 new AmpOverallFundingModel(funding, null, Constants.COMMITMENT,CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()),
                 "Total Actual Commitments");
-		add(totalActualCommitments);
+       add(totalActualCommitments);
 		
 		AmpLabelInformationFieldPanel totalActualDisbursements =
                 new AmpLabelInformationFieldPanel("totalActualDisbursements",
@@ -39,7 +41,7 @@ public class AmpOverallFundingTotalsTable extends AmpComponentPanel<Void> {
                         new AmpOverallFundingModel(funding, null, Constants.EXPENDITURE, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()),
                         "Total Actual Expenditure");
 		add(totalActualExpenditures);		
-
+		
         AmpLabelInformationFieldPanel totalPlannedCommitments =
                 new AmpLabelInformationFieldPanel("totalPlannedCommitments",
                         new AmpOverallFundingModel(funding, null, Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()),
@@ -58,7 +60,19 @@ public class AmpOverallFundingTotalsTable extends AmpComponentPanel<Void> {
                 new AmpOverallFundingModel(funding, null, Constants.EXPENDITURE, CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()),
                 "Total Planned Expenditure");
 		add(totalPlannedExpenditures);		
-		
+		AmpCategoryValue planned = CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getAmpCategoryValueFromDB();
+		AmpCategoryValue actual = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getAmpCategoryValueFromDB();
+		if (planned == null || !actual.isVisible()) {
+			totalActualCommitments.setVisibilityAllowed(false);
+			totalActualDisbursements.setVisibilityAllowed(false);
+			totalActualExpenditures.setVisibilityAllowed(false);
+		}
+		if (planned == null || !planned.isVisible()) {
+			totalPlannedCommitments.setVisibilityAllowed(false);
+			totalPlannedDisbursements.setVisibilityAllowed(false);
+			totalPlannedExpenditures.setVisibilityAllowed(false);
+		}
+
 	}
 
 }

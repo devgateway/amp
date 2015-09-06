@@ -78,7 +78,7 @@ public class EndpointUtils {
 	 */
 	public static String getDefaultCurrencyCode() {
 		AmpApplicationSettings appSettings = getAppSettings();
-		if(appSettings != null)
+		if(appSettings != null && appSettings.getCurrency() != null)
 			return appSettings.getCurrency().getCurrencyCode();
 		return CurrencyUtil.getDefaultCurrency().getCurrencyCode();
 	}

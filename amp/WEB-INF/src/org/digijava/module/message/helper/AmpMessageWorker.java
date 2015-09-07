@@ -788,10 +788,10 @@ public class AmpMessageWorker {
 	 * List of teams that have to be notified
 	 * 
 	 * @param ampActivityId
-	 * @param realtedTriger
+	 * @param relatedTrigger
 	 * @return
 	 */
-	private static Collection<AmpTeam> getTeamsForActivity(Long ampActivityId, String realtedTriger) {
+	private static Collection<AmpTeam> getTeamsForActivity(Long ampActivityId, String relatedTrigger) {
 		// search for 1 record in amp_team_
 		long startTime = System.currentTimeMillis();
 		// we need to use a set here to hold unique values, will change before
@@ -807,7 +807,7 @@ public class AmpMessageWorker {
 		try {
 			StringBuffer bufferReceivers = new StringBuffer();
 			String[] aReceivers;
-			List<TemplateAlert> tempAlerts = AmpMessageUtil.getTemplateAlerts(realtedTriger);
+			List<TemplateAlert> tempAlerts = AmpMessageUtil.getTemplateAlerts(relatedTrigger);
 			for (TemplateAlert templateAlert : tempAlerts) {
 				bufferReceivers.append(templateAlert.getReceivers());
 			}

@@ -142,10 +142,26 @@ public class AmpMessageWorker {
 						|| e.getTrigger().equals(RejectResourceSharetrigger.class)) {
 					newMsg = processResourceShareEvent(e, newApproval, template, false);
 				} else if (e.getTrigger().equals(ActivityValidationWorkflowTrigger.class)) {
-					newMsg = processActivityValidationWorkflowEvent(e, newAlert, template);
-				}
+					// This should be generalize but not to modify already
+					// running (for long time) code we process this particular 
+					// case in a separate piece of
+					// code
 
-				AmpMessageUtil.saveOrUpdateMessage(newMsg);
+					List<AmpAlert> listNewMsg = processActivityValidationWorkflowEvent(e, newAlert, template);
+					
+					for (AmpAlert ampMessage : listNewMsg) {
+						List<String> receivers = new ArrayList<>();
+						AmpMessageUtil.saveOrUpdateMessage(ampMessage);
+						receivers.add(StringUtils.split(ampMessage.getReceivers(), ";")[0]);
+						createEmailsAndReceivers(ampMessage, receivers, false);
+					}
+
+				}
+				if (newMsg != null) {
+					AmpMessageUtil.saveOrUpdateMessage(newMsg);
+				} else {
+					return;
+				}
 				/**
 				 * getting states according to tempalteId New Requirement for
 				 * ApprovedActiviti and Activity waiting approval.only
@@ -202,31 +218,22 @@ public class AmpMessageWorker {
 
 				} else if (e.getTrigger().equals(UserAddedToFirstWorkspaceTrigger.class)) {
 					defineReceiversForUserAddedToWorkspace(newMsg, e);
-				} else {
-					if (e.getTrigger().equals(ActivityValidationWorkflowTrigger.class)) {
-						String[] rec = StringUtils.split(newMsg.getReceivers(), ",");
-						List<String> l = new ArrayList<String>();
-						for (int i = 0; i < rec.length; i++) {
-							l.add(StringUtils.split(rec[i], ";")[0]);
-						}
-						createEmailsAndReceivers(newMsg, l, false);
-					} else { // <-- currently for else is left user registration
-								// or activity disbursement date triggers
-						List<String> emailReceivers = new ArrayList<String>();
-						List<AmpMessageState> statesRelatedToTemplate = null;
-						statesRelatedToTemplate = AmpMessageUtil.loadMessageStates(template.getId());
-						HashMap<Long, AmpMessageState> msgStateMap = new HashMap<Long, AmpMessageState>();
-						if (statesRelatedToTemplate != null && statesRelatedToTemplate.size() > 0) {
-							for (AmpMessageState state : statesRelatedToTemplate) {
-								createMsgState(state, newMsg, false);
-								if (!msgStateMap.containsKey(state.getReceiver().getAmpTeamMemId())) {
-									msgStateMap.put(state.getReceiver().getAmpTeamMemId(), state);
-									emailReceivers.add(state.getReceiver().getUser().getEmail());
-								}
+				} else { // <-- currently for else is left user registration
+							// or activity disbursement date triggers
+					List<String> emailReceivers = new ArrayList<String>();
+					List<AmpMessageState> statesRelatedToTemplate = null;
+					statesRelatedToTemplate = AmpMessageUtil.loadMessageStates(template.getId());
+					HashMap<Long, AmpMessageState> msgStateMap = new HashMap<Long, AmpMessageState>();
+					if (statesRelatedToTemplate != null && statesRelatedToTemplate.size() > 0) {
+						for (AmpMessageState state : statesRelatedToTemplate) {
+							createMsgState(state, newMsg, false);
+							if (!msgStateMap.containsKey(state.getReceiver().getAmpTeamMemId())) {
+								msgStateMap.put(state.getReceiver().getAmpTeamMemId(), state);
+								emailReceivers.add(state.getReceiver().getUser().getEmail());
 							}
-							createEmailsAndReceivers(newMsg, emailReceivers, false);
-							// sendMailes(msgStateMap.values());
 						}
+						createEmailsAndReceivers(newMsg, emailReceivers, false);
+						// sendMailes(msgStateMap.values());
 					}
 				}
 			}
@@ -734,33 +741,18 @@ public class AmpMessageWorker {
 	/**
 	 * Activity's validation workflow Event processing
 	 */
-	private static AmpAlert processActivityValidationWorkflowEvent(Event e, AmpAlert alert, TemplateAlert template) {
+	private static List<AmpAlert> processActivityValidationWorkflowEvent(Event e, AmpAlert alert,
+			TemplateAlert template) {
 
-		String[] receivers = StringUtils.split(template.getReceivers(), ",");
-		HashMap<String, String> myHashMap = new HashMap<String, String>();
 		StringBuffer teamsToNotify = new StringBuffer();
-		StringBuffer finalReceivers = new StringBuffer();
-		System.out.println("activity validated");
-		Collection<AmpTeam> l = getTeamsForActivity(
-				(Long) e.getParameters().get(ActivityValidationWorkflowTrigger.PARAM_ACTIVITY_ID),
-				template.getRelatedTriggerName());
+		String[] receivers ;
+		HashMap<String, String> myHashMap = new HashMap<String, String>();
+		List<AmpAlert> alerts = new ArrayList<AmpAlert>();
+		
+		Collection<AmpTeam> listTeamsToNotify ;
 
 		// this needs to be redone once we have a proper representation of
 		// receivers in TemplateAlerts
-		for (AmpTeam ampTeam : l) {
-			teamsToNotify.append(ampTeam.getName());
-			teamsToNotify.append(";");
-		}
-		// we iterate over the original receivers list to see if they have to be
-		// notified
-		for (int j = 0; j < receivers.length; j++) {
-			String team = StringUtils.split(receivers[j], ";")[1];
-			if (teamsToNotify.toString().contains(team)) {
-				finalReceivers.append(receivers[j]);
-				finalReceivers.append(",");
-			}
-		}
-
 		myHashMap.put(MessageConstants.OBJECT_NAME,
 				(String) e.getParameters().get(ActivityValidationWorkflowTrigger.PARAM_NAME));
 
@@ -769,7 +761,27 @@ public class AmpMessageWorker {
 				+ e.getParameters().get(ActivityValidationWorkflowTrigger.PARAM_URL) + "\">activity URL</a>");
 		alert.setObjectURL("" + e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_URL));
 		alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
-		return createAlertFromTemplate(template, myHashMap, alert, finalReceivers.toString());
+
+		listTeamsToNotify = getTeamsForActivity(
+				(Long) e.getParameters().get(ActivityValidationWorkflowTrigger.PARAM_ACTIVITY_ID),
+				template.getRelatedTriggerName());
+		
+		for (AmpTeam ampTeam : listTeamsToNotify) {
+			teamsToNotify.append(ampTeam.getName());
+			teamsToNotify.append(";");
+		}
+		receivers = StringUtils.split(template.getReceivers(), ",");
+		for (int j = 0; j < receivers.length; j++) {
+			if (teamsToNotify.toString().contains(StringUtils.split(receivers[j], ";")[1])) {
+				if (receivers[j].indexOf("<") > 0) {
+					myHashMap.put(MessageConstants.OBJECT_LOGIN,StringUtils.left(receivers[j], receivers[j].indexOf("<")));
+				}
+				alerts.add(createAlertFromTemplate(template, myHashMap, alert, receivers[j]));
+
+			}
+		}
+
+		return alerts;
 	}
 
 	/**

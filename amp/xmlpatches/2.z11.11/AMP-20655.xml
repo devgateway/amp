@@ -10,7 +10,7 @@
                 <script>
                         <lang delimiter=";" type="postgres">
                                 INSERT INTO amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section)
-                                VALUES (nextval('amp_global_settings_seq'), 'Days to notify activity submited for validation', '3', 't_Integer', 'Number of days to notify after an activity has been submited for validation but has not yet been validated', 'general');
+                                VALUES (nextval('amp_global_settings_seq'), 'Days to notify activity submitted for validation', '3', 't_Integer', 'Number of days to notify after an activity has been submited for validation but has not yet been validated', 'general');
                         </lang>
                 </script>
         </apply>

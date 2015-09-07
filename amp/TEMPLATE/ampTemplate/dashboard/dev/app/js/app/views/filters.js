@@ -29,7 +29,7 @@ module.exports = BackboneDash.View.extend({
     	this.app.filter.extractDates(this.app.settings.models, blob, 'dashboard-default-min-date', 'dashboard-default-max-date');
     	
 	    this.app.filter.loaded.done(_(function() {
-	    	console.error('filters loaded');
+	      console.info('filters loaded');
 	      this.app.state.register(this, 'filters', {
 	        // namespace serialized filters so we can hook in extra state to store
 	        // later if desired (anything dashboards-ui related, for example)
@@ -38,10 +38,11 @@ module.exports = BackboneDash.View.extend({
 	        }).bind(this),
 	        set: _(function(state) {
 	        	if (state.filter.otherFilters !== undefined && state.filter.otherFilters.date !== undefined) {
-	        		console.log('Using saved filters.');	        		
+	        		console.log('Using saved date filters.');	        		
 	        	} else {
 	        		console.log('Using default filter dates.');
-	        		state.filter = blob;
+	        		// AMP-21118: Dont override all filters, just dates section.
+	        		state.filter.otherFilters = blob.otherFilters;
 	        	}
 	        	this.app.filter.deserialize(state.filter);
 	        	this.app.filter.finishedFirstLoad = true;

@@ -442,29 +442,29 @@ myTable.enhanceMarkup = function(markupName) {
 	if(checkBoxToHide != null && checkBoxToHide.value == "true"){
 		//alert (1);
 	    this.columnHeaders = [
-			{key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true/*,width:150*/},
+			{key:"resource_title",label:"${trans_headerResourceTitle}", sortable:true},
 		    {key:"type",label:"${trans_headerType}",sortable:true},
-	        {key:"file_name",label:"${trans_headerFileName}",sortable:true/*,width:150*/},
-	        {key:"date",type:"date",label:"${trans_headerDate}",sortable:true},
+	        {key:"file_name",label:"${trans_headerFileName}", sortable:true},
+	        {key:"date",type:"date",label:"${trans_headerDate}", sortable:true},
 	        {key:"yearOfPublication",type:"text",label:"${trans_headerYearofPubl}",sortable:true},
-	        {key:"size",type:"number",label:"${trans_fileSize}",sortable:true},
-	        {key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true},
-	        {key:"labels",label:"${trans_headerLabels}",sortable:false/*,width:200*/},
-	        {key:"actions",label:"${trans_headerActions}",sortable:false/*,width:400*/}
+	        {key:"size",type:"number",label:"${trans_fileSize}", sortable:true},
+	        {key:"cm_doc_type",label:"${trans_cmDocType}", sortable:true},
+	        {key:"labels",label:"${trans_headerLabels}", sortable:false},
+	        {key:"actions",label:"${trans_headerActions}", sortable:false}
 	    ];
 	}
 	else if ((checkBoxToHide == null) && (dt == "Related Documents")) {
 		//alert (2);
 		this.columnHeaders = [
-    			{key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true,width:150},
+    			{key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true, width:150},
     		    {key:"type",label:"${trans_headerType}",sortable:true},
-    	        {key:"file_name",label:"${trans_headerFileName}",sortable:true,width:150},
+    	        {key:"file_name",label:"${trans_headerFileName}",sortable:true, width:150},
     	        {key:"date",type:"date",label:"${trans_headerDate}",sortable:true},
-    	        {key:"yearOfPublication",type:"text",label:"${trans_headerYearofPubl}",sortable:true},
+    	        {key:"yearOfPublication",type:"text",label:"${trans_headerYearofPubl}", sortable:true},
     	     	{key:"size",type:"number",label:"${trans_fileSize}",sortable:true},
     	        {key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true},
-    	        {key:"labels",label:"${trans_headerLabels}",sortable:false,width:100},
-    	        {key:"actions",label:"${trans_headerActions}",sortable:false,width:150}
+    	        {key:"labels",label:"${trans_headerLabels}",sortable:false, width:100},
+    	        {key:"actions",label:"${trans_headerActions}",sortable:false, width:150}
     	    ];
 	}else {
 		//alert(3);
@@ -489,30 +489,22 @@ myTable.enhanceMarkup = function(markupName) {
 		var extraSpacePerFreeLoader = freeloaders = 0 ? 0 : freeWidth / freeloaders;
 		
 	    this.columnHeaders = [];
-	    this.columnHeaders.push({key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true, width:60});
-	    this.columnHeaders.push({key:"type",label:"${trans_headerType}",sortable:true, width: 30});
-	    this.columnHeaders.push({key:"file_name",label:"${trans_headerFileName}",sortable:true, width:77});
-	    this.columnHeaders.push({key:"date",type:"Date",label:"${trans_headerDate}",sortable:true, formatter: YAHOO.widget.DataTable.formatDate, width:50});
-	    this.columnHeaders.push({key:"yearOfPublication", type:"number",label:"${trans_headerYearofPubl}",sortable:true, width:50});
-	    this.columnHeaders.push({key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true/*, width:50 + 3 * extraSpacePerFreeLoader / 2*/});
+	    this.columnHeaders.push({key:"resource_title",label:"${trans_headerResourceTitle}", sortable:true});
+	    this.columnHeaders.push({key:"type",label:"${trans_headerType}", sortable:true, width: 40});
+	    this.columnHeaders.push({key:"file_name",label:"${trans_headerFileName}", sortable:true});
+	    this.columnHeaders.push({key:"date",type:"Date",label:"${trans_headerDate}",sortable:true, formatter: YAHOO.widget.DataTable.formatDate, width:75});
+	    this.columnHeaders.push({key:"yearOfPublication", type:"number",label:"${trans_headerYearofPubl}",sortable:true, width:70});
+	    this.columnHeaders.push({key:"cm_doc_type",label:"${trans_cmDocType}", sortable:true});
 	    if (show_index)
-	    	this.columnHeaders.push({key:"resource_index",label:"${trans_headerResourceIndex}", sortable:true, width: 30/*, width:40 + extraSpacePerFreeLoader*/});
+	    	this.columnHeaders.push({key:"resource_index",label:"${trans_headerResourceIndex}", sortable:true, width: 30});
 	    if (show_category)
-	    	this.columnHeaders.push({key:"resource_category",label:"${trans_headerResourceCategory}", sortable:true, width:70/* + extraSpacePerFreeLoader*/});
+	    	this.columnHeaders.push({key:"resource_category",label:"${trans_headerResourceCategory}", sortable:true, width:70});
 	    if (show_organisations)
-	    	this.columnHeaders.push({key:"resource_organisations",label:"${trans_headerResourceOrganisations}", sortable:true/*, width:50 + extraSpacePerFreeLoader*/});
-	    this.columnHeaders.push({key:"labels",label:"${trans_headerLabels}",sortable:true, width:50});
-	    this.columnHeaders.push({key:"size",type:"number",label:"${trans_fileSize}",sortable:true, width:50});	    
-	    this.columnHeaders.push({key:"actions",label:"${trans_headerActions}",sortable:false, width:50});
+	    	this.columnHeaders.push({key:"resource_organisations",label:"${trans_headerResourceOrganisations}", sortable:true});
+	    this.columnHeaders.push({key:"labels",label:"${trans_headerLabels}",sortable:true});
+	    this.columnHeaders.push({key:"size",type:"number",label:"${trans_fileSize}",sortable:true, width:65});
+	    this.columnHeaders.push({key:"actions",label:"${trans_headerActions}",sortable:false, width:60});
 	}
-//    this.columnSet 	= new YAHOO.widget.ColumnSet(this.columnHeaders);
-//    var markup	 				= YAHOO.util.Dom.get(markupName);
-    //var datasource				= YAHOO.util.DataSource(markup);
-//    var options					= {
-//    	    						pageCurrent:1,
-//									rowsPerPage:10,
-//							        pageLinksLength:2
-//   };
 
     var markup	 				= YAHOO.util.Dom.get(markupName);
  
@@ -528,10 +520,10 @@ myTable.enhanceMarkup = function(markupName) {
         // use custom page link labels
         pageLabelBuilder: function (page,paginator) {
                 var curr = paginator.getCurrentPage();
-                if(curr==page){
+                if (curr == page) {
                 	return "<span class='current-page'>"+page+"</span>|";
                 }
-                else{
+                else {
                 	return page;
                 }
                 

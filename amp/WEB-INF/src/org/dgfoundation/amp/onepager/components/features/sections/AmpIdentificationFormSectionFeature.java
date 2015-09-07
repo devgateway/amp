@@ -163,7 +163,7 @@ implements AmpRequiredComponentContainer{
                         .getServletContext();	
                 logger.info("Searching similar activity name for activity: "+ sTitle);
                 List<AmpActivity> list = LuceneUtil.findActivitiesMoreLikeThis(
-                        context.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, sTitle, langCode, 2);
+                        context.getRealPath("/") + LuceneUtil.ACTIVITY_INDEX_DIRECTORY, sTitle, langCode, 2);
                 if (! list.isEmpty()) {
                     String ret = TranslatorUtil
                             .getTranslation("Warning! Potential duplicates! The database already contains project(s) with similar title(s):")+"\n";

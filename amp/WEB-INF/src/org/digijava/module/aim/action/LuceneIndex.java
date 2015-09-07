@@ -63,7 +63,7 @@ public class LuceneIndex extends Action {
 		  logger.info("lucene:" + action);
 		  if (action != null)
 		  if ("create".compareTo(action)== 0){
-			  LuceneUtil.checkIndex(request.getSession().getServletContext());
+			  LuceneUtil.checkActivityIndex(request.getSession().getServletContext());
 		  }
 		  else{
 			  if ("view".compareTo(action) == 0){
@@ -71,7 +71,7 @@ public class LuceneIndex extends Action {
 				  String field = request.getParameter("field");
 				  String search = request.getParameter("search");
 
-                  Document[] docs = LuceneUtil.search(LuceneUtil.ACTVITY_INDEX_DIRECTORY, field, search);
+                  Document[] docs = LuceneUtil.search(LuceneUtil.ACTIVITY_INDEX_DIRECTORY, field, search);
                   for (Document doc : docs) {
                       AmpActivityVersion act = ActivityUtil.loadActivity(Long.parseLong(doc.get("id")));
                       logger.info(doc.get("id") + "[" + act.getAmpId() + "] " + act.getName());
@@ -82,7 +82,7 @@ public class LuceneIndex extends Action {
 					  String field = request.getParameter("field");
 					  String search = request.getParameter("search");
 
-					  LuceneUtil.deleteEntry(request.getSession().getServletContext().getRealPath("/") + "/" + LuceneUtil.ACTVITY_INDEX_DIRECTORY, field, search);
+					  LuceneUtil.deleteEntry(request.getSession().getServletContext().getRealPath("/") + "/" + LuceneUtil.ACTIVITY_INDEX_DIRECTORY, field, search);
 				  } else {
 					  if ("checked".compareTo(action) == 0){
 						  //first occurence of the error ... get's wrapped

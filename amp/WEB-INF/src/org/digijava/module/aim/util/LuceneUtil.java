@@ -133,10 +133,11 @@ public class LuceneUtil implements Serializable {
      * @author Arty
      */
     public final static String ACTIVITY_INDEX_SUFFIX = "activity";
-    public final static String ACTVITY_INDEX_DIRECTORY = LUCENE_BASE_DIR + "/" + ACTIVITY_INDEX_SUFFIX;
+    public final static String ACTIVITY_INDEX_DIRECTORY = LUCENE_BASE_DIR + "/" + ACTIVITY_INDEX_SUFFIX;
 
     public final static String PLEDGE_INDEX_SUFFIX = "pledge";
     public final static String PLEDGE_INDEX_DIRECTORY = LUCENE_BASE_DIR + "/" + PLEDGE_INDEX_SUFFIX;
+    
     
 	private static final int CHUNK_SIZE = 10000;
 	
@@ -237,12 +238,23 @@ public class LuceneUtil implements Serializable {
     	return(path.delete());
     }
 
+    
 
-    public static void checkIndex(ServletContext sc){
+
+    
+    public static void checkActivityIndex(ServletContext sc) {
+    	checkLuceneIndex(sc, false, ACTIVITY_INDEX_SUFFIX, ACTIVITY_INDEX_DIRECTORY);
+    }
+    
+    public static void checkPledgeIndex(ServletContext sc) {
+    	checkLuceneIndex(sc, true, PLEDGE_INDEX_SUFFIX, PLEDGE_INDEX_DIRECTORY);
+    }
+    
+    public static void checkLuceneIndex(ServletContext sc, boolean pledge, String indexSuffix, String indexDirectory){
     	logger.info("Lucene startup!");
-
-    	File idxStamp = new File(sc.getRealPath("/") + LUCENE_BASE_DIR + "/" + ACTIVITY_INDEX_SUFFIX + LUCENE_STAMP_EXT);
-    	File idxDir = new File(sc.getRealPath("/") + ACTVITY_INDEX_DIRECTORY);
+    	
+    	File idxStamp = new File(sc.getRealPath("/") + LUCENE_BASE_DIR + "/" + indexSuffix + LUCENE_STAMP_EXT);
+    	File idxDir = new File(sc.getRealPath("/") + indexDirectory);
     	boolean deleteIndex = false;
     	
     	checkStamp:{
@@ -288,7 +300,7 @@ public class LuceneUtil implements Serializable {
     			//getting DB timestamp
     			long dbStamp = -1;
     			try {
-					dbStamp = getIdxStamp(ACTIVITY_INDEX_SUFFIX).getStamp();
+					dbStamp = getIdxStamp(indexSuffix).getStamp();
 				} catch (Exception e) {
 					logger.error("", e);
 				}
@@ -337,7 +349,7 @@ public class LuceneUtil implements Serializable {
     			return;
     		}
     		
-    		int mId = getMaxActivityId();
+    		int mId = getMaxId(pledge);
     		long startTime = System.currentTimeMillis();
     		try {
 				IndexWriter fsWriter = new IndexWriter(idxDir, analyzer, true);
@@ -352,19 +364,19 @@ public class LuceneUtil implements Serializable {
 				long stopTime = System.currentTimeMillis();
 				
 				try {
-					AmpLuceneIndexStamp currentStamp = getIdxStamp(ACTIVITY_INDEX_SUFFIX);
+					AmpLuceneIndexStamp currentStamp = getIdxStamp(indexSuffix);
 					if (currentStamp != null)
-						DbUtil.deleteAllStamps(ACTIVITY_INDEX_SUFFIX);
+						DbUtil.deleteAllStamps(indexSuffix);
 				} catch (Exception e1) {
 				}
 				
 				AmpLuceneIndexStamp stamp = new AmpLuceneIndexStamp();
-				stamp.setIdxName(ACTIVITY_INDEX_SUFFIX);
+				stamp.setIdxName(indexSuffix);
 				stamp.setStamp(stopTime);
 				
 				try {
 					Session session = PersistenceManager.getRequestDBSession();
-//beginTransaction();
+					//beginTransaction();
 					session.save(stamp);
 					//tx.commit();
 					//PersistenceManager.releaseSession(session);
@@ -401,13 +413,15 @@ public class LuceneUtil implements Serializable {
     		logger.info("Lucene Index found, using saved one:" + idxDir.getAbsolutePath());
     }
 
-    private static int getMaxActivityId(){
+    private static int getMaxId(boolean pledge) {
     	int ret = -1;
 		try{
 			Session session = PersistenceManager.getSession();
 			Connection	conn	= ((SessionImplementor)session).connection();
 			Statement st		= conn.createStatement();
-			String qryStr		= "select max(amp_activity_id) mid from v_titles";
+			String columnName = pledge? "pledge_id" : "amp_activity_id";
+			String tableName = pledge ? "v_pledges_titles" : "v_titles";
+			String qryStr		= String.format("select max(%s) mid from %s",columnName,tableName );
 
 			ResultSet rs		= st.executeQuery(qryStr);
 			
@@ -416,10 +430,50 @@ public class LuceneUtil implements Serializable {
 			ret = Integer.parseInt(rs.getString("mid"));
 		}
 		catch(Exception ex){
-			logger.error("Error while getting the max activity id:", ex);
+			logger.error("Error while getting the max " + (pledge? "pledge" : "activity" )+ " id:", ex);
 		}
 		return ret;
     }
+    
+//    private static int getMaxPledgeId() {
+//    	int ret = -1;
+//		try{
+//			Session session = PersistenceManager.getSession();
+//			Connection	conn	= ((SessionImplementor)session).connection();
+//			Statement st		= conn.createStatement();
+//			String qryStr		= "select max(pledge_id) mid from v_pledges_titles";
+//
+//			ResultSet rs		= st.executeQuery(qryStr);
+//			
+//			rs.next();
+//			if(rs.getString("mid")==null) return 0;
+//			ret = Integer.parseInt(rs.getString("mid"));
+//		}
+//		catch(Exception ex){
+//			logger.error("Error while getting the max activity id:", ex);
+//		}
+//		return ret;	
+//		}
+//
+//	private static int getMaxActivityId(){
+//    	int ret = -1;
+//		try{
+//			Session session = PersistenceManager.getSession();
+//			Connection	conn	= ((SessionImplementor)session).connection();
+//			Statement st		= conn.createStatement();
+//			String qryStr		= "select max(amp_activity_id) mid from v_titles";
+//
+//			ResultSet rs		= st.executeQuery(qryStr);
+//			
+//			rs.next();
+//			if(rs.getString("mid")==null) return 0;
+//			ret = Integer.parseInt(rs.getString("mid"));
+//		}
+//		catch(Exception ex){
+//			logger.error("Error while getting the max activity id:", ex);
+//		}
+//		return ret;
+//    }
     
 	/**
 	 * Metod is used for first time index creation
@@ -717,7 +771,7 @@ public class LuceneUtil implements Serializable {
 		IndexReader indexReader;
 		try {
 			indexReader = IndexReader.open(idx);
-			//listDocuments(indexReader);
+//			listDocuments(indexReader);
 			int ret = indexReader.deleteDocuments(term);
 			indexReader.close();
 			return ret;
@@ -732,7 +786,7 @@ public class LuceneUtil implements Serializable {
     }		
 	
     public static int deleteActivity(String rootRealPath, Long activityId){
-    	return deleteEntry(rootRealPath + ACTVITY_INDEX_DIRECTORY, ID_FIELD, String.valueOf(activityId));
+    	return deleteEntry(rootRealPath + ACTIVITY_INDEX_DIRECTORY, ID_FIELD, String.valueOf(activityId));
     }
 	 
     static String activityClassName = AmpActivityVersion.class.getName();
@@ -772,17 +826,16 @@ public class LuceneUtil implements Serializable {
         return result.toString();
     }
     
-    /**
-		 * Add a PLEDGE to the index
-		 * why, oh whyyyyyyyyyyyyyyyyyyyyyy
-		 * 
-		 * @param request is used to retrieve curent site and navigation language
-		 * @param act the activity that will be added
-		 */
+
 	    public static Document pledge2Document(Long pledgeId, String title, String additionalInfo) {
 			Document doc = new Document();
 			String all = new String("");
 	
+			if (pledgeId != null){
+                doc.add(new Field(ID_FIELD, pledgeId.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                //all = all.concat(" " + actId);
+            }
+			
 	        HashMap<String, String> regularFieldNames = new HashMap<String, String>();
 	        regularFieldNames.put("pledgeId", String.valueOf(pledgeId));
 	        regularFieldNames.put("title", title);
@@ -797,7 +850,7 @@ public class LuceneUtil implements Serializable {
 	
 	         // Added try/catch because Field can throw an exception if any of the parameters is wrong and that would break the process. 
 	            try {
-		            if ("name".equals(field)){
+		            if ("title".equals(field)){
 		                doc.add(new Field(field, luceneValue, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));
 		            } else {
 		                doc.add(new Field(field, luceneValue, Field.Store.NO, Field.Index.ANALYZED));
@@ -968,7 +1021,7 @@ public class LuceneUtil implements Serializable {
 				if (update/* && false*/) {
 					int nrDeleted = deletePledge(rootRealPath, newfakePledge.getAmpId());
 					if (nrDeleted != 1)
-						logger.warn("Lucene.addUpdateActivity(): deleted " + nrDeleted + " activities from index, normal value would be: 1");
+						logger.warn("Lucene.addUpdatePledge(): deleted " + nrDeleted + " activities from index, normal value would be: 1");
 				}
 				
 				IndexWriter indexWriter = null;
@@ -1010,7 +1063,7 @@ public class LuceneUtil implements Serializable {
 					logger.warn("Lucene.addUpdateActivity(): deleted " + nrDeleted + " activities from index, normal value would be: 1");
 			}
 			IndexWriter indexWriter = null;
-			indexWriter = new IndexWriter(rootRealPath + ACTVITY_INDEX_DIRECTORY, LuceneUtil.analyzer, false);
+			indexWriter = new IndexWriter(rootRealPath + ACTIVITY_INDEX_DIRECTORY, LuceneUtil.analyzer, false);
 			// Util.getEditorBody(site,act.getDescription(),navigationLanguage);
 			Document doc = null;
 			
@@ -1098,7 +1151,7 @@ public class LuceneUtil implements Serializable {
      * {@link MoreLikeThis#setMinTermFreq(int)}
      *
      * @param index
-     *            the {@link LuceneUtil}{@link #ACTVITY_INDEX_DIRECTORY}
+     *            the {@link LuceneUtil}{@link #ACTIVITY_INDEX_DIRECTORY}
      * @param origSearchString
      *            the text searched as {@link AmpActivityFields#getName()} which in
      *            {@link LuceneUtil#activity2Document(String, String, String, String, String, String, String, String, String, ArrayList, String, String)}

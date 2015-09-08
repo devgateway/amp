@@ -60,6 +60,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
  */
 
 public class DashboardsService {
+	protected final static double EPSILON = 0.0001;
 
 	private static Logger logger = Logger.getLogger(DashboardsService.class);
 
@@ -347,7 +348,7 @@ public class DashboardsService {
 			}
 		}
 		// transform original Undefined into International, i.e. subtract National and actual Region: Undefined
-		double intlAmount = (Double) undefinedTotals.getContents().get(report.rootHeaders.get(2)).value;
+		double intlAmount = (Double) undefinedTotals.getContents().get(amountCol).value;
 		if (national != null) {
 			intlAmount -= (Double) national.getContents().get(amountCol).value;
 			mainDataIter.add(national);
@@ -356,7 +357,7 @@ public class DashboardsService {
 			intlAmount -= (Double) uRegion.getContents().get(amountCol).value;
 			mainDataIter.add(uRegion);
 		}
-		if (intlAmount > 0) {
+		if (Math.abs(intlAmount) < EPSILON) {
 			mainDataIter.add(createAreaTotals(report, TranslatorWorker.translateText(MoConstants.INTERNATIONAL), "-2", 
 					intlAmount, numberFormat));
 		}

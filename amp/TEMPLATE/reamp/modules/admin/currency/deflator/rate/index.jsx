@@ -43,7 +43,7 @@ class Rate extends AMP.View{
       if(0 == value.length || negative(point(number))(value)){
         address.send(new Change(value));
       }
-    }
+    };
     var onToggleConstant = e => address.send(new ToggleConstant(e.target.checked));
     var inflationRate = model.inflationRate();
     return (
@@ -53,16 +53,16 @@ class Rate extends AMP.View{
         </td>
         <td className="edit-on-hover inflation-rate">
           <input className="form-control input-sm edit" required
-                 value={inflationRate} onChange={onChange}
-            />
+            value={inflationRate} onChange={onChange}
+          />
           <span className="form-control input-sm view">{inflationRate}</span>
         </td>
         <td>
-          <input type="checkbox" value={model.constantCurrency()} onchange={onToggleConstant}/>
+          <input type="checkbox" checked={model.constantCurrency()} onChange={onToggleConstant}/>
         </td>
         <td>
           {model.deletable() ?
-            <i onclick={onDelete} className="glyphicon glyphicon-trash"></i>
+            <i onClick={onDelete} className="glyphicon glyphicon-trash"></i>
             : null}
         </td>
       </tr>

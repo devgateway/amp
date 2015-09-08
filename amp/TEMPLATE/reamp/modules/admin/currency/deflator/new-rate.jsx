@@ -56,7 +56,7 @@ class NewRate extends AMP.View{
     };
     return (
       <td className="edit-on-hover add-new-rate">
-        <form onsubmit={submitYear} action="#">
+        <form onSubmit={submitYear} action="#">
           <input
             className="form-control edit"
             placeholder={__('Enter the year and press Enter')}
@@ -76,5 +76,8 @@ export {NewRate as view};
 export function update(action: Action, model: Model){
   if(action instanceof YearChanged){
     return model.year(action.year());
+  }
+  if(action instanceof YearSubmitted){
+    return model.year("");
   }
 }

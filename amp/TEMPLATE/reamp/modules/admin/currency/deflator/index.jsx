@@ -8,6 +8,13 @@ import React from "react";
 
 export class Action extends AMP.Action{}
 class Save extends Action{}
+class SaveSuccess extends Save{}
+class SaveFailed extends Save{
+  constructor(reason){
+    super();
+    this.reason = () => reason;
+  }
+}
 
 class RateAction extends AMP.Package{}
 
@@ -26,7 +33,13 @@ class SaveSideEffect extends AMP.SideEffect{
         body: JSON.stringify({
           rates: currentCurrency.inflationRates().map(entry => entry.year(parseInt).inflationRate(parseFloat).toJS())
         })
-      })
+      }).then(response => {
+        if (response.status >= 200 && response.status < 300) {
+          address.send(new SaveSuccess());
+        } else {
+          address.send(new SaveFailed(response.statusText))
+        }
+      });
     });
   }
 }
@@ -92,6 +105,7 @@ export var init = () =>
         .reduce((currencies, currency) => currencies.set(currency.code(), currency), new Currencies())
     });
     return new Model({
+      lastSaveStatus: "",
       saved: state,
       current: state
     })
@@ -138,13 +152,18 @@ class Deflator extends AMP.View {
               <tr>
                 <NewRate.view address={address} model={state.newRate()}/>
                 <td colSpan="3" className="text-right">
+
+                  &nbsp;
                   <button
                     className={cn("btn btn-success", {disabled: !haveChanges})}
                     disabled={!haveChanges}
                     onClick={e => address.send(new Save())}
                   >
-                  {__('Save')}
+                    {__('Save')}
                   </button>
+                  <div className="help-block">
+                    {model.lastSaveStatus() || (!haveChanges && __("No changes"))}
+                  </div>
                 </td>
               </tr>
               </tfoot>
@@ -161,6 +180,14 @@ export {Deflator as view};
 
 export function update(action: AMP.Action, model:Model){
   if(action instanceof Save){
+    if(action instanceof SaveSuccess){
+      return model
+        .saved(model.current())
+        .set('lastSaveStatus', __('Save successful'));
+    }
+    if(action instanceof SaveFailed){
+      return model.set('lastSaveStatus', __('Save failed: #$', action.reason()));
+    }
     return new SaveSideEffect(model);
   }
   if(action instanceof RateAction){
@@ -172,12 +199,13 @@ export function update(action: AMP.Action, model:Model){
     return AMP.updateSubmodel(path, Rate.update, originalAction, model);
   }
   if(action instanceof NewRate.Action){
+    var submodel = AMP.updateSubmodel(['current', 'newRate'], NewRate.update, action, model);
     if(action instanceof NewRate.YearSubmitted){
       let path = ['current', 'currencies', model.current().currentCurrencyCode(), 'inflationRates', action.year()];
       return !model.hasIn(path) && MIN_YEAR <= action.year() && action.year() <= MAX_YEAR ?
-        model.setIn(path, Rate.model.year(action.year())) :
+        submodel.setIn(path, Rate.model.year(action.year())) :
         model;
     }
-    return AMP.updateSubmodel(['current', 'newRate'], NewRate.update, action, model);
+    return submodel;
   }
 }

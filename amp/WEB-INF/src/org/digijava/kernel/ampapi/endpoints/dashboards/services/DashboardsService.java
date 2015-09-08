@@ -1,9 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -14,7 +17,10 @@ import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.AmountsUnits;
+import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
@@ -26,9 +32,11 @@ import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportSorter;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.DashboardConstants;
@@ -52,6 +60,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
  */
 
 public class DashboardsService {
+	protected final static double EPSILON = 0.0001;
 
 	private static Logger logger = Logger.getLogger(DashboardsService.class);
 
@@ -155,7 +164,7 @@ public class DashboardsService {
 			name = DashboardConstants.TOP_EXECUTING_ORGS;
 			break;
 		case "RE":
-			spec.addColumn(new ReportColumn(MoConstants.H_REGIONS));
+			spec.addColumn(new ReportColumn(ColumnConstants.REGION));
 			spec.addColumn(new ReportColumn(ColumnConstants.REGIONAL_GROUP_ID));
 			title = TranslatorWorker.translateText(DashboardConstants.TOP_REGIONS);
 			name = DashboardConstants.TOP_REGIONS;
@@ -240,6 +249,7 @@ public class DashboardsService {
 				&& report.reportContents.getContents().size() > 0) {
 			totals = (ReportCell) report.reportContents.getContents().values().toArray()[2];
 			rawTotal = (Double) totals.value * unitsOption.divider; // Save total in units.
+			postProcess(report, spec, generator, type);
 		} else {
 			rawTotal = new Double("0");
 		}
@@ -249,34 +259,16 @@ public class DashboardsService {
 
 		Integer maxLimit = report.reportContents.getChildren().size();
 
-		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
-			ReportAreaImpl reportArea = (ReportAreaImpl) iterator.next();
-			Iterator<ReportArea> iChildren = reportArea.getChildren().iterator();
-			while (iChildren.hasNext()) {
-				if (values.size() >= n) {
-					break;
-				}
-				ReportArea ra = iChildren.next();
-				LinkedHashMap<ReportOutputColumn, ReportCell> contents = (LinkedHashMap<ReportOutputColumn, ReportCell>) ra
-						.getContents();
+		for (Iterator<ReportArea> iterator = report.reportContents.getChildren().iterator(); 
+				values.size() < n && iterator.hasNext();) {
+			Iterator<ReportArea> iChildren = iterator.next().getChildren().iterator();
+			while (iChildren.hasNext() && values.size() < n) {
+				ReportCell[] content = iChildren.next().getContents().values().toArray(new ReportCell[0]);
 				JsonBean row = new JsonBean();
-				row.set("name", ((ReportCell) contents.values().toArray()[0]).displayedValue);
-				row.set("id", ((ReportCell) contents.values().toArray()[1]).value);
-				row.set("amount", ((Double) ((ReportCell) contents.values().toArray()[2]).value) * unitsOption.divider);
-				row.set("formattedAmount", ((ReportCell) contents.values().toArray()[2]).displayedValue);
-
-				// Commented this code for recheck when working on AMP-18632. 
-				/*
-				// Remove undefined from region's chart AMP-18632 (TODO: find a cross-country way to filter by id)
-				if (type.toUpperCase().equals("RE")
-						&& row.get("name").toString().toLowerCase().indexOf("undefined") > -1) {
-					// Subtract National from the total
-					rawTotal = rawTotal - (Double) row.get("amount");
-					// Remove National's bar from the chart
-					maxLimit--;
-				} else {
-					values.add(row);
-				}*/
+				row.set("name", content[0].displayedValue);
+				row.set("id", content[1].value);
+				row.set("amount", ((Double) content[2].value) * unitsOption.divider);
+				row.set("formattedAmount", content[2].displayedValue);
 				values.add(row);
 			}
 		}
@@ -290,6 +282,151 @@ public class DashboardsService {
 		retlist.set("name", name);
 		retlist.set("title", title);
 		return retlist;
+	}
+	
+	protected static void postProcess(GeneratedReport report, ReportSpecificationImpl spec, 
+			MondrianReportGenerator generator, String type) {
+		switch (type.toUpperCase()) {
+		case "RE": postProcessRE(report, spec, generator); break;
+		}
+	}
+	
+	/**
+	 * Replace "Undefined" region with "International", "National" and actual "Undefined" region
+	 * (this is one of the workaround solutions)   
+	 * @param root
+	 * @param spec
+	 * @param generator
+	 */
+	protected static void postProcessRE(GeneratedReport report, ReportSpecificationImpl spec, 
+			MondrianReportGenerator generator) {
+		String undefinedStr = TranslatorWorker.translateText("Undefined");
+		// lookup the Undefined region
+		ListIterator<ReportArea> mainDataIter = report.reportContents.getChildren().listIterator();
+		ReportArea undefinedTotals = getUndefinedRegionArea(mainDataIter, undefinedStr);
+		// if undefined region is not found, then nothing to drill down
+		if (undefinedTotals == null) {
+			return;
+		}
+		
+		GeneratedReport undefinedRegion = drillDownUndefinedRegionByLocation(spec, generator);
+		if (undefinedRegion == null || undefinedRegion.reportContents == null 
+				|| undefinedRegion.reportContents.getChildren().size() == 0) {
+			return;
+		}
+		
+		DecimalFormat numberFormat = null;
+		if (spec.getSettings() != null && spec.getSettings().getCurrencyFormat() != null ) {
+			numberFormat = spec.getSettings().getCurrencyFormat();
+		} else { 
+			numberFormat = MondrianReportUtils.getCurrentUserDefaultSettings().getCurrencyFormat();
+		}
+		
+		ReportOutputColumn locationCol = undefinedRegion.rootHeaders.get(2);
+		ReportOutputColumn amountCol = undefinedRegion.rootHeaders.get(3);
+		
+		String currentCountry = TranslatorWorker.translateText(FeaturesUtil.getCurrentCountryName());
+		 
+		
+		ReportArea actualUndefiend = getUndefinedRegionArea(undefinedRegion.reportContents.getChildren().iterator(), 
+				undefinedStr);
+		
+		Iterator<ReportArea> undefinedDataIter = actualUndefiend.getChildren().iterator().next().getChildren()
+				.iterator();
+		ReportArea national = null;
+		ReportArea uRegion = null;
+		while (undefinedDataIter.hasNext() && (national == null || uRegion == null)) {
+			ReportArea ra = undefinedDataIter.next();
+			ReportCell location = ra.getContents().get(locationCol);
+			if (currentCountry.equals(location.value)) {
+				national = createAreaTotals(report, TranslatorWorker.translateText(MoConstants.NATIONAL), "-1", 
+						(Double) ra.getContents().get(amountCol).value, numberFormat);
+			} else if (location.value != null && ((String) location.value).contains(undefinedStr)) {
+				uRegion = createAreaTotals(report, TranslatorWorker.translateText("Region") + ": " + undefinedStr, 
+						MoConstants.UNDEFINED_KEY.toString(), (Double) ra.getContents().get(amountCol).value, 
+						numberFormat);
+			}
+		}
+		// transform original Undefined into International, i.e. subtract National and actual Region: Undefined
+		double intlAmount = (Double) undefinedTotals.getContents().get(amountCol).value;
+		if (national != null) {
+			intlAmount -= (Double) national.getContents().get(amountCol).value;
+			mainDataIter.add(national);
+		}
+		if (uRegion != null) {
+			intlAmount -= (Double) uRegion.getContents().get(amountCol).value;
+			mainDataIter.add(uRegion);
+		}
+		if (Math.abs(intlAmount) < EPSILON) {
+			mainDataIter.add(createAreaTotals(report, TranslatorWorker.translateText(MoConstants.INTERNATIONAL), "-2", 
+					intlAmount, numberFormat));
+		}
+		report.reportContents.getChildren().remove(undefinedTotals);
+		
+		
+		try {
+			// resort
+			MondrianReportSorter.sort(report, ReportEnvironment.buildFor(TLSUtils.getRequest()));
+		} catch (AMPException e) {
+			logger.error(e.getMessage());
+			throw new RuntimeException(e);
+		}
+	}
+	
+	protected static ReportArea createAreaTotals(GeneratedReport report, String name, String id, Double value, 
+			DecimalFormat numberFormat) {
+		ReportAreaImpl area = new ReportAreaImpl();
+		Map<ReportOutputColumn, ReportCell> contents = new LinkedHashMap<ReportOutputColumn, ReportCell>();
+		contents.put(report.rootHeaders.get(0), new TextCell(name));
+		contents.put(report.rootHeaders.get(1), new TextCell(id));
+		contents.put(report.rootHeaders.get(2), new AmountCell(value, numberFormat));
+		area.setContents(contents);
+		
+		ReportAreaImpl totals = new ReportAreaImpl();
+		List<ReportArea> children = new ArrayList<ReportArea>();
+		children.add(area);
+		totals.setContents(contents);
+		totals.setChildren(children);
+		return totals;
+	}
+	
+	protected static ReportArea getUndefinedRegionArea(Iterator<ReportArea> iter, String undefinedStr) {
+		ReportArea undefined = null;
+		while (iter.hasNext() && undefined == null) {
+			undefined = iter.next();
+			ReportCell cell = undefined.getContents().values().iterator().next();
+			if (cell.value == null || !((String) cell.value).contains(undefinedStr)) {
+				undefined = null;
+			}
+		}
+		return undefined;
+	}
+	
+	protected static GeneratedReport drillDownUndefinedRegionByLocation(ReportSpecificationImpl spec, 
+			MondrianReportGenerator generator) {
+		/*
+		 * Drill down report data by location for undefined region:
+		 * 		National - allocated for the current country
+		 * 		International - allocated for other countries
+		 * 		Region: Undefined - what indeed is not allocated for a given region 
+		 */
+		spec.addColumn(new ReportColumn(ColumnConstants.LOCATION));
+		spec.setHierarchies(spec.getColumns());
+		MondrianReportFilters filters = (MondrianReportFilters) spec.getFilters();
+		if (filters == null) {
+			filters = new MondrianReportFilters();
+			spec.setFilters(filters);
+		}
+		/* not possible, is not working, we'll have to manually find the undefined region in the results
+		filters.addFilterRule(new ReportColumn(ColumnConstants.REGION),
+				new FilterRule(MoConstants.UNDEFINED_KEY.toString(), true));
+				*/
+		try {
+			return generator.executeReport(spec);
+		} catch (AMPException e) {
+			logger.error(e.getMessage());
+			throw new RuntimeException(e);
+		}
 	}
 	
 	protected static JSONObject buildEmptyJSon(String...keys) {

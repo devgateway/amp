@@ -307,6 +307,9 @@ public final class MoConstants {
 	public static final String BOOLEAN_TRUE_KEY = "2";
 	public static final String BOOLEAN_FALSE_KEY = "1";
 	public static final String REGION_UNDEFINED = "Region: Undefined";
+	public static final String LOCATION_UNDEFINED = "Location: Undefined";
+	public static final String NATIONAL = "National";
+	public static final String INTERNATIONAL = "International";
 	public static final Integer UNDEFINED_KEY = 999999999;
 	public static final Integer UNDEFINED_YEAR_KEY = 9999;
 	public static final Integer UNDEFINED_QUARTER_KEY = 99;

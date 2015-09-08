@@ -2,13 +2,7 @@ package org.dgfoundation.amp.algo;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.digijava.module.aim.util.Identifiable;
 
@@ -152,6 +146,6 @@ public class AlgoUtils {
 	public static double keepNDecimals(double in, int nrDecimals) {
 		if (Math.abs(in) < POWER_OF_TEN[nrDecimals] && (Math.abs(in) > Double.MIN_VALUE))
 			return POWER_OF_TEN[nrDecimals];
-		return Double.parseDouble(String.format("%." + nrDecimals + "f", in));
+		return Double.parseDouble(String.format(Locale.US, "%." + nrDecimals + "f", in));
 	}
 }

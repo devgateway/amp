@@ -294,7 +294,7 @@ public class LuceneUtil implements Serializable {
     				break checkStamp;
     			}
     			else{
-    				logger.info("Lucene Index algforithm serial ID is OK");
+    				logger.info("Lucene Index algorithm serial ID is OK");
     			}
     			
     			//getting DB timestamp

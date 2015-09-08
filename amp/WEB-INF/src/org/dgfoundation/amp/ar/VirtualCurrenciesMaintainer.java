@@ -38,6 +38,9 @@ public class VirtualCurrenciesMaintainer {
 	public void work() {
 		List<AmpCurrency> baseCurrencies = PersistenceManager.getSession().createQuery("SELECT DISTINCT ir.baseCurrency FROM " + AmpInflationRate.class.getName() + " ir WHERE ir.constantCurrency IS TRUE").list();
 		for(AmpCurrency baseCurrency:baseCurrencies) {
+			if (!baseCurrency.equals(AmpARFilter.getDefaultCurrency())) {
+				continue; // not implemented for now
+			}
 			List<AmpInflationRate> rates = PersistenceManager.getSession()
 					.createQuery("SELECT ir FROM " + AmpInflationRate.class.getName() + " ir WHERE (ir.year between :start and :end) AND ir.baseCurrency.ampCurrencyId = " + baseCurrency.getAmpCurrencyId() + " ORDER BY ir.year")
 					.setInteger("start", AmpInflationRate.MIN_DEFLATION_YEAR)
@@ -205,8 +208,12 @@ public class VirtualCurrenciesMaintainer {
 	protected AmpCurrency ensureVirtualCurrencyExists(AmpInflationRate rate) {
 		String newCurrencyCode = buildConstantCurrencyCode(rate.getBaseCurrency(), rate.getYear());
 		AmpCurrency newCurr = CurrencyUtil.getCurrencyByCode(newCurrencyCode);
-		if (newCurr != null)
+		if (newCurr != null) {
+			newCurr.setActiveFlag(1);
+			PersistenceManager.getSession().save(newCurr);
+			PersistenceManager.getSession().flush();
 			return newCurr;
+		}
 
 		newCurr = createVirtualCurrency(rate);
 		PersistenceManager.getSession().save(newCurr);

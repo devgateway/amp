@@ -31,6 +31,7 @@ import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.time.StopWatch;
@@ -99,7 +100,8 @@ public class MondrianETL {
 	protected final static List<Fingerprint> FULL_ETL_TRIGGERING_FINGERPRINTS = Arrays.asList(
 			new Fingerprint("amp_currency", Arrays.asList(Fingerprint.buildTableHashingQuery("amp_currency", "amp_currency_id"))), // if a currency has been (re)(un)defined
 			new Fingerprint("locales", Arrays.asList("select code from DG_SITE_TRANS_LANG_MAP where site_id = 3 order by code")), // if a locale has been added/removed
-			new Fingerprint("calendars", Arrays.asList(Fingerprint.buildTableHashingQuery("amp_fiscal_calendar", "amp_fiscal_cal_id"))) // if a calendar has been added/removed			
+			new Fingerprint("calendars", Arrays.asList(Fingerprint.buildTableHashingQuery("amp_fiscal_calendar", "amp_fiscal_cal_id"))), // if a calendar has been added/removed
+			new Fingerprint("base_currency", Arrays.asList("SELECT settingsvalue from amp_global_settings WHERE settingsname='" + GlobalSettingsConstants.BASE_CURRENCY + "'"))
 		);
 
 	

@@ -1,6 +1,5 @@
-/** @jsx h */
+import React from "react";
 import * as AMP from "amp/architecture";
-var {h} = AMP;
 import style from "./style.less";
 import __ from "amp/modules/translate";
 import cn from "classnames";
@@ -35,33 +34,45 @@ export class ToggleConstant extends Action{
   }
 }
 
-export function view(address, model: Model){
-  var onDelete = e => address.send(new Delete());
-  var onChange = e => address.send(new Change(e.target.value));
-  var onToggleConstant = e => address.send(new ToggleConstant(e.target.checked));
-  var inflationRate = model.inflationRate();
-  return (
-    <tr className={cn('inflation-rate-entry', {"danger has-error": !model.valid()})}>
-      <td>
-        <span className="form-control input-sm view">{model.get('year')}</span>
-      </td>
-      <td className="edit-on-hover inflation-rate">
-        <input className="form-control input-sm edit" required
-           onkeypress={allow(negative(point(number)))} value={inflationRate} onkeyup={onChange}
-        />
-        <span className="form-control input-sm view">{inflationRate}</span>
-      </td>
-      <td>
-        <input type="checkbox" checked={model.constantCurrency()} onchange={onToggleConstant}/>
-      </td>
-      <td>
-        {model.deletable() ?
-          <i onclick={onDelete} className="glyphicon glyphicon-trash"></i>
-        : null}
-      </td>
-    </tr>
-  )
+class Rate extends AMP.View{
+  render(){
+    var {address, model} = this.props;
+    var onDelete = e => address.send(new Delete());
+    var onChange = e => {
+      var value = e.target.value;
+      if(0 == value.length || negative(point(number))(value)){
+        address.send(new Change(value));
+      }
+    }
+    var onToggleConstant = e => address.send(new ToggleConstant(e.target.checked));
+    var inflationRate = model.inflationRate();
+    return (
+      <tr className={cn('inflation-rate-entry', {"danger has-error": !model.valid()})}>
+        <td>
+          <span className="form-control input-sm view">{model.get('year')}</span>
+        </td>
+        <td className="edit-on-hover inflation-rate">
+          <input className="form-control input-sm edit" required
+                 value={inflationRate} onChange={onChange}
+            />
+          <span className="form-control input-sm view">{inflationRate}</span>
+        </td>
+        <td>
+          <input type="checkbox" value={model.constantCurrency()} onchange={onToggleConstant}/>
+        </td>
+        <td>
+          {model.deletable() ?
+            <i onclick={onDelete} className="glyphicon glyphicon-trash"></i>
+            : null}
+        </td>
+      </tr>
+    )
+  }
 }
+
+Rate.propTypes.model = React.PropTypes.instanceOf(Model);
+
+export {Rate as view}
 
 export function update(action: Action, model: Model){
   if(action instanceof Change){

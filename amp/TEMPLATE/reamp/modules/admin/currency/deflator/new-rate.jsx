@@ -1,16 +1,14 @@
-/** @flow */
-/** @jsx h */
 import * as AMP from "amp/architecture";
-var {h} = AMP;
+import React from "react";
 import __ from "amp/modules/translate";
-import {allow, year} from "amp/tools/validate";
+import * as validate from "amp/tools/validate";
 
 export class Action extends AMP.Action{}
 
 export class YearChanged extends Action {
-  constructor(year: integer){
+  constructor(year: string){
     super();
-    this.year = year;
+    this.year = () => year;
   }
 }
 
@@ -41,30 +39,42 @@ function getValidationError(model){
   }
 
   return null;
+};
+
+class NewRate extends AMP.View{
+  render(){
+    var {address, model} = this.props;
+    var changeYear = e => {
+      var value = e.target.value;
+      if(0 == value.length || validate.year(value)){
+        address.send(new YearChanged(value))
+      }
+    }
+    var submitYear = e => {
+      e.preventDefault();
+      address.send(new YearSubmitted(parseInt(e.target.querySelector('input').value)));
+    };
+    return (
+      <td className="edit-on-hover add-new-rate">
+        <form onsubmit={submitYear} action="#">
+          <input
+            className="form-control edit"
+            placeholder={__('Enter the year and press Enter')}
+            onChange ={changeYear}
+            value={model.year()}
+          />
+          <button className="btn btn-primary view">{__('Add inflation rate')}</button>
+        </form>
+      </td>
+    )
+  }
 }
 
-export function view(address, model: Model){
-  var submitYear = e => {
-    e.preventDefault();
-    address.send(new YearSubmitted(parseInt(e.target.querySelector('input').value)));
-  };
-  return (
-    <td className="edit-on-hover add-new-rate">
-      <form onsubmit={submitYear} action="#">
-        <input
-          className="form-control edit"
-          placeholder={__('Enter the year and press Enter')}
-          onkeypress={allow(year)}
-          value={model.year()}
-        />
-        <button className="btn btn-primary view">{__('Add inflation rate')}</button>
-      </form>
-    </td>
-  )
-}
+NewRate.propTypes.model = React.PropTypes.instanceOf(Model);
+export {NewRate as view};
 
 export function update(action: Action, model: Model){
   if(action instanceof YearChanged){
-    return model.year(action.year);
+    return model.year(action.year());
   }
 }

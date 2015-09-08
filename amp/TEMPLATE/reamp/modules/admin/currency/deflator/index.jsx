@@ -1,11 +1,10 @@
-/** @jsx h */
 import * as AMP from "amp/architecture";
-var {h} = AMP;
 import __ from "amp/modules/translate";
 import * as Rate from "./rate";
 import * as NewRate from "./new-rate";
 import cn from "classnames";
 import {MIN_YEAR, MAX_YEAR} from "amp/tools/validate";
+import React from "react";
 
 export class Action extends AMP.Action{}
 class Save extends Action{}
@@ -98,33 +97,33 @@ export var init = () =>
     })
   });
 
-export function view(address, model: Model){
-  var state = model.current();
-  var haveChanges = !model.saved().equals(state);
-  var currentCurrency = state.currentCurrency();
-  var currentInflationRates = currentCurrency.inflationRates();
-  return (
-    <div className="container">
-      <div className="row">
-        <div className="col-md-12">
-          <table className="table table-striped">
-            <caption>
-              <h2>
-                {__('Inflation rates for')} {currentCurrency.name()}
-                (
-                  {currentCurrency.code()}
-                )
-              </h2>
-            </caption>
-            <thead>
+class Deflator extends AMP.View {
+  render() {
+    var {address, model} = this.props;
+    var state = model.current();
+    var haveChanges = !model.saved().equals(state);
+    var currentCurrency = state.currentCurrency();
+    var currentInflationRates = currentCurrency.inflationRates();
+    return (
+      <div className="container">
+        <div className="row">
+          <div className="col-md-12">
+            <table className="table table-striped">
+              <caption>
+                <h2>
+                  {__('Inflation rates for')} {currentCurrency.name()}
+                  ({currentCurrency.code()})
+                </h2>
+              </caption>
+              <thead>
               <tr>
                 <th>{__('Year')}</th>
                 <th>{__('Inflation(%)')}</th>
                 <th>{__('Constant currency')}</th>
                 <th>{__('Delete')}</th>
               </tr>
-            </thead>
-            <tbody>
+              </thead>
+              <tbody>
               {currentInflationRates.map(rate => {
                 var isFirstOrLast = rate.year() == currentInflationRates.startYear()
                   || rate.year() == currentInflationRates.endYear();
@@ -132,29 +131,33 @@ export function view(address, model: Model){
                 var isValid = parseFloat(inflationRate) == inflationRate;
                 var model = rate.set('deletable', false).deletable(isFirstOrLast)
                   .set('valid', isValid);
-                return Rate.view(address.usePackage(RateAction, rate.get('year')), model)
+                return <Rate.view address={address.usePackage(RateAction, rate.get('year'))} model={model}/>
               })}
-            </tbody>
-            <tfoot>
+              </tbody>
+              <tfoot>
               <tr>
-                {NewRate.view(address, state.newRate())}
+                <NewRate.view address={address} model={state.newRate()}/>
                 <td colSpan="3" className="text-right">
                   <button
                     className={cn("btn btn-success", {disabled: !haveChanges})}
                     disabled={!haveChanges}
-                    onclick={e => address.send(new Save())}
+                    onClick={e => address.send(new Save())}
                   >
-                    {__('Save')}
+                  {__('Save')}
                   </button>
                 </td>
               </tr>
-            </tfoot>
-          </table>
+              </tfoot>
+            </table>
+          </div>
         </div>
       </div>
-    </div>
-  )
+    )
+  }
 }
+
+Deflator.propTypes.model = React.PropTypes.instanceOf(Model);
+export {Deflator as view};
 
 export function update(action: AMP.Action, model:Model){
   if(action instanceof Save){

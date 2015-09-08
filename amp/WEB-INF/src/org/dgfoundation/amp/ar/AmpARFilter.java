@@ -1429,7 +1429,7 @@ public class AmpARFilter extends PropertyListable {
 
             searchMode = params.getLuceneSearchModeParam();
 
-            Document[] docs = LuceneUtil.search(params.getLuceneRealPath() + LuceneUtil.ACTVITY_INDEX_DIRECTORY, "all", indexText, searchMode);
+            Document[] docs = LuceneUtil.search(params.getLuceneRealPath() + LuceneUtil.ACTIVITY_INDEX_DIRECTORY, "all", indexText, searchMode);
             logger.info("New lucene search !");
 
             for (Document doc : docs) {

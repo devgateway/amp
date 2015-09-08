@@ -264,7 +264,9 @@ public class AMPStartupListener extends HttpServlet implements
 			maintainMondrianCaches();
 
 			// Lucene indexation
-			LuceneUtil.checkIndex(sce.getServletContext());
+			LuceneUtil.checkActivityIndex(sce.getServletContext());
+			LuceneUtil.checkPledgeIndex(sce.getServletContext());
+			
 			//LuceneUtil.createHelp(sce.getServletContext());
 			//ampContext.setAttribute(Constants.LUCENE_INDEX, idx); //deprecated
 			LuceneWorker.init(sce.getServletContext(),new LuceneModules());

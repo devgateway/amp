@@ -13,6 +13,30 @@
 				import org.hibernate.Criteria;
 				import org.digijava.kernel.entity.Message;
 				import org.hibernate.criterion.Restrictions;
+				
+				deleteDuplicateKeyIfExists( String newKey, String locale, String siteId) {
+					critDuplicateKey = session.createCriteria(Message.class);
+					critDuplicateKey.add(Restrictions.like("key", newKey));
+					critDuplicateKey.add(Restrictions.like("locale", locale));
+					critDuplicateKey.add(Restrictions.like("siteId", siteId));
+				    listDuplicateKey = critDuplicateKey.list();
+				    if (listDuplicateKey.size() > 0) {
+				        
+					    qry = "delete from dg_message where message_key='" + newKey;
+					    qry += "' and lang_iso='" + locale + "' and site_id='" + siteId + "'";
+						    	        
+					    session.createSQLQuery(qry).executeUpdate();
+				    } 
+				}
+					
+				updateKey( String oldKey, String newKey, String prefix, String locale, String siteId) {
+					    qry = "update dg_message set message_key='" + newKey + "',prefix='" + prefix + "_";
+					    qry += "' where message_key='" + oldKey;
+					    qry += "' and lang_iso='" + locale + "' and site_id='" + siteId + "'";
+					        
+					    session.createSQLQuery(qry).executeUpdate();
+				}
+				
 				Criteria crit = session.createCriteria(Message.class);
 				crit.add(Restrictions.like("key", "SSC_%"));
 				countMessagesUpdated = 0;
@@ -23,23 +47,9 @@
 				    if (msg.getOriginalMessage() != null &amp;&amp; msg.getOriginalMessage().trim().length() > 0) {
 				        newKey = Integer.toString((m[0] + "_" + msg.getOriginalMessage()).trim().toLowerCase().hashCode());
 				        
-						critDuplicateKey = session.createCriteria(Message.class);
-						critDuplicateKey.add(Restrictions.like("key", newKey));
-						critDuplicateKey.add(Restrictions.like("locale", msg.getLocale()));
-						critDuplicateKey.add(Restrictions.like("siteId", msg.getSiteId()));
-				        listDuplicateKey = critDuplicateKey.list();
-				        if (listDuplicateKey.size() > 0) {
-				        
-					        qry = "delete from dg_message where message_key='" + newKey;
-					        qry += "' and lang_iso='" + msg.getLocale() + "' and site_id='" + msg.getSiteId() + "'";
-						    	        
-					        session.createSQLQuery(qry).executeUpdate();
-				        } 
-					    qry = "update dg_message set message_key='" + newKey + "',prefix='" + m[0] + "_";
-					    qry += "' where message_key='" + msg.getKey();
-					    qry += "' and lang_iso='" + msg.getLocale() + "' and site_id='" + msg.getSiteId() + "'";
-					        
-					    session.createSQLQuery(qry).executeUpdate();
+				        deleteDuplicateKeyIfExists(newKey,msg.getLocale(),msg.getSiteId());
+						
+						updateKey(msg.getKey(), newKey, m[0], msg.getLocale(),msg.getSiteId());
 					        
 				        countMessagesUpdated++;
 				    } else {
@@ -53,25 +63,9 @@
 				            if (orig.getOriginalMessage() != null &amp;&amp; orig.getOriginalMessage().trim().length() > 0) {
 				                newKey = Integer.toString((m[0] + "_" + orig.getOriginalMessage()).trim().toLowerCase().hashCode());
 				                
-						        critDuplicateKey = session.createCriteria(Message.class);
-						        critDuplicateKey.add(Restrictions.like("key", newKey));
-						        critDuplicateKey.add(Restrictions.like("locale", msg.getLocale()));
-						        critDuplicateKey.add(Restrictions.like("siteId", msg.getSiteId()));
-				                listDuplicateKey = critDuplicateKey.list();
-				        		if (listDuplicateKey.size() > 0) {
-				        		
-				                	qry = "delete from dg_message ";
-				                	qry += " where message_key='" + newKey + "' ";
-				                	qry += " and lang_iso='" + msg.getLocale() + "' and site_id='" + msg.getSiteId() + "'";
-					    	              
-					                session.createSQLQuery(qry).executeUpdate();
-				    	        } 
+						        deleteDuplicateKeyIfExists(newKey,msg.getLocale(),msg.getSiteId());
 				    	        
-				                qry = "update dg_message set message_key='" + newKey + "',prefix='" + m[0] + "_";
-				                qry += "' where message_key='" + msg.getKey();
-				                qry += "' and lang_iso='" + msg.getLocale() + "' and site_id='" + msg.getSiteId() + "'";
-					    	        
-					            session.createSQLQuery(qry).executeUpdate();
+				    	        updateKey(msg.getKey(), newKey, m[0], msg.getLocale(),msg.getSiteId());
 					              					    	        				                
 				                countMessagesUpdated++;
 				            }
@@ -79,23 +73,9 @@
 				            if (msg.getMessage() != null &amp;&amp; msg.getMessage().trim().length() > 0) {
 				                newKey = Integer.toString((m[0] + "_" + msg.getMessage()).trim().toLowerCase().hashCode());
 				                
-								critDuplicateKey = session.createCriteria(Message.class);
-								critDuplicateKey.add(Restrictions.like("key", newKey));
-								critDuplicateKey.add(Restrictions.like("locale", msg.getLocale()));
-								critDuplicateKey.add(Restrictions.like("siteId", msg.getSiteId()));
-						        listDuplicateKey = critDuplicateKey.list();
-						        if (listDuplicateKey.size() > 0) {
-						        
-							        qry = "delete from dg_message where message_key='" + newKey;
-							        qry += "' and lang_iso='" + msg.getLocale() + "' and site_id='" + msg.getSiteId() + "'";
-							        
-							        session.createSQLQuery(qry).executeUpdate();
-						        } 
-					            qry = "update dg_message set message_key='" + newKey + "',prefix='" + m[0] + "_";
-					            qry += "' where message_key='" + msg.getKey();
-					            qry += "' and lang_iso='" + msg.getLocale() + "' and site_id='" + msg.getSiteId() + "'";
-						    	        
-					            session.createSQLQuery(qry).executeUpdate();				                
+								deleteDuplicateKeyIfExists(newKey,msg.getLocale(),msg.getSiteId());
+								
+								updateKey(msg.getKey(), newKey, m[0], msg.getLocale(),msg.getSiteId());			                
 
 				                countMessagesUpdated++;
 				            }

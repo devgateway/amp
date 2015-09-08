@@ -41,19 +41,7 @@ public class AMPReportExcelExport {
 	private static CellStyle styleTotalClean = null;
 	private static CellStyle styleNumber = null;
 	private static CellStyle styleSettingOption = null;
-	private static CellStyle styleSettingFilter = null;
-
-	// We moved here all calls to translateText (to static texts) to avoid a leak connection exception if the report is
-	// too big.
-	private static String translatedFormatted = TranslatorWorker.translateText("Formatted");
-	private static String translatedPlain = TranslatorWorker.translateText("Plain");
-	private static String translatedSummaryInformation = TranslatorWorker.translateText("Summary Information");
-	private static String translatedAppliedFilters = TranslatorWorker.translateText("Applied Filters");
-	private static String translatedCurrency = TranslatorWorker.translateText("Currency");
-	private static String translatedCalendar = TranslatorWorker.translateText("Calendar");
-	private static String translatedUnits = TranslatorWorker.translateText("Units");
-	private static String translatedReportTotals = TranslatorWorker.translateText("Report Totals");
-	private static String translatedUnknownValue = TranslatorWorker.translateText("Unknown value");
+	private static CellStyle styleSettingFilter = null;	
 
 	private static final int TYPE_STYLED = 0;
 	private static final int TYPE_PLAIN = 1;
@@ -75,9 +63,9 @@ public class AMPReportExcelExport {
 
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		Workbook wb = new XSSFWorkbook();
-		Sheet mainSheet = wb.createSheet(translatedFormatted);
-		Sheet plainSheet = wb.createSheet(translatedPlain);
-		Sheet summarySheet = wb.createSheet(translatedSummaryInformation);
+		Sheet mainSheet = wb.createSheet(TranslatorWorker.translateText("Formatted"));
+		Sheet plainSheet = wb.createSheet(TranslatorWorker.translateText("Plain"));
+		Sheet summarySheet = wb.createSheet(TranslatorWorker.translateText("Summary Information"));
 		createStyles(wb);
 
 		int hierarchies = report.getRowsHierarchiesTotals();
@@ -93,7 +81,7 @@ public class AMPReportExcelExport {
 		logger.info("Return excel");
 		return os.toByteArray();
 	}
-
+	
 	/**
 	 * Add extra info about filters applied, currency and settings.
 	 * 
@@ -176,7 +164,7 @@ public class AMPReportExcelExport {
 		int group = 0;
 		Row filterRowTitle = sheet.createRow(i);
 		Cell filterTitleCell = filterRowTitle.createCell(0);
-		filterTitleCell.setCellValue(translatedAppliedFilters);
+		filterTitleCell.setCellValue(TranslatorWorker.translateText("Applied Filters"));
 		filterTitleCell.setCellStyle(styleSettingOption);
 		for (Map.Entry<String, List<String>> filter : extractedFilters.entrySet()) {
 			group = 0;
@@ -213,7 +201,7 @@ public class AMPReportExcelExport {
 		}
 		Row currencyRow = sheet.createRow(i);
 		Cell currencyTitleCell = currencyRow.createCell(j);
-		currencyTitleCell.setCellValue(translatedCurrency);
+		currencyTitleCell.setCellValue(TranslatorWorker.translateText("Currency"));
 		currencyTitleCell.setCellStyle(styleSettingOption);
 		currencyRow.createCell(j + 1).setCellValue(currency);
 
@@ -221,7 +209,7 @@ public class AMPReportExcelExport {
 		j = 0;
 		Row calendarRow = sheet.createRow(i);
 		Cell calendarTitleCell = calendarRow.createCell(j);
-		calendarTitleCell.setCellValue(translatedCalendar);
+		calendarTitleCell.setCellValue(TranslatorWorker.translateText("Calendar"));
 		calendarTitleCell.setCellStyle(styleSettingOption);
 		calendarRow.createCell(j + 1).setCellValue(calendar);
 
@@ -229,7 +217,7 @@ public class AMPReportExcelExport {
 		j = 0;
 		Row unitsRow = sheet.createRow(i);
 		Cell unitsTitleCell = unitsRow.createCell(j);
-		unitsTitleCell.setCellValue(translatedUnits);
+		unitsTitleCell.setCellValue(TranslatorWorker.translateText("Units"));
 		unitsTitleCell.setCellStyle(styleSettingOption);
 		String units = report.getSettings().getUnitsOption().userMessage;
 		unitsRow.createCell(j + 1).setCellValue(TranslatorWorker.translateText(units));
@@ -304,7 +292,7 @@ public class AMPReportExcelExport {
 		headers = i;
 
 		// Check special case when summarized report has only 1 column and 1 row for "report totals".
-		String reportTotalsString = translatedReportTotals;
+		String reportTotalsString = TranslatorWorker.translateText("Report Totals");
 		// Create a map with the styles we will be cloning so we can add or change them (without breaking the WorkBook
 		// with too many styles).
 		Map<String, CellStyle> clonedStyles = new HashMap<String, CellStyle>();

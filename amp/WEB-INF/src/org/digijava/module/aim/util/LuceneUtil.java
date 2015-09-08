@@ -435,45 +435,6 @@ public class LuceneUtil implements Serializable {
 		return ret;
     }
     
-//    private static int getMaxPledgeId() {
-//    	int ret = -1;
-//		try{
-//			Session session = PersistenceManager.getSession();
-//			Connection	conn	= ((SessionImplementor)session).connection();
-//			Statement st		= conn.createStatement();
-//			String qryStr		= "select max(pledge_id) mid from v_pledges_titles";
-//
-//			ResultSet rs		= st.executeQuery(qryStr);
-//			
-//			rs.next();
-//			if(rs.getString("mid")==null) return 0;
-//			ret = Integer.parseInt(rs.getString("mid"));
-//		}
-//		catch(Exception ex){
-//			logger.error("Error while getting the max activity id:", ex);
-//		}
-//		return ret;	
-//		}
-//
-//	private static int getMaxActivityId(){
-//    	int ret = -1;
-//		try{
-//			Session session = PersistenceManager.getSession();
-//			Connection	conn	= ((SessionImplementor)session).connection();
-//			Statement st		= conn.createStatement();
-//			String qryStr		= "select max(amp_activity_id) mid from v_titles";
-//
-//			ResultSet rs		= st.executeQuery(qryStr);
-//			
-//			rs.next();
-//			if(rs.getString("mid")==null) return 0;
-//			ret = Integer.parseInt(rs.getString("mid"));
-//		}
-//		catch(Exception ex){
-//			logger.error("Error while getting the max activity id:", ex);
-//		}
-//		return ret;
-//    }
     
 	/**
 	 * Metod is used for first time index creation

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-21090</jira>
+    <keyword>utility</keyword>
+    <author>cdolghier</author>
+    <description>creates utility read-only views only used by developers to aid in debugging AMP</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+            	DROP VIEW IF EXISTS v_reports;
+            	CREATE VIEW v_reports AS
+            		SELECT ar.amp_report_id, ar.name AS report_name, ar.options AS report_options, ar.type AS report_type, arc.order_id AS order_id, ac.columnid, ac.columnname AS column_name 
+            		FROM amp_reports ar 
+            			JOIN amp_report_column arc ON arc.amp_report_id = ar.amp_report_id
+            			JOIN amp_columns ac on arc.columnid = ac.columnid 
+            		ORDER BY ar.amp_report_id, arc.order_id
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

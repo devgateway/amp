@@ -347,13 +347,13 @@ public class DashboardsService {
 			}
 		}
 		// transform original Undefined into International, i.e. subtract National and actual Region: Undefined
-		double intlAmount = (double) undefinedTotals.getContents().get(report.rootHeaders.get(2)).value;
+		double intlAmount = (Double) undefinedTotals.getContents().get(report.rootHeaders.get(2)).value;
 		if (national != null) {
-			intlAmount -= (double) national.getContents().get(amountCol).value;
+			intlAmount -= (Double) national.getContents().get(amountCol).value;
 			mainDataIter.add(national);
 		}
 		if (uRegion != null) {
-			intlAmount -= (double) uRegion.getContents().get(amountCol).value;
+			intlAmount -= (Double) uRegion.getContents().get(amountCol).value;
 			mainDataIter.add(uRegion);
 		}
 		if (intlAmount > 0) {

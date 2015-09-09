@@ -122,7 +122,8 @@ public class AmpInflationRate implements Serializable, Comparable<AmpInflationRa
 
 	@AssertTrue()
 	private boolean isValid() {
-		return (this.inflationRate > -100) && (this.baseCurrency != null) && (!this.baseCurrency.isVirtual()) && (this.year >= MIN_DEFLATION_YEAR) && (this.year <= MAX_DEFLATION_YEAR);
+		boolean res = (this.inflationRate > -100) && (this.baseCurrency != null) && (!this.baseCurrency.isVirtual()) && (this.year >= MIN_DEFLATION_YEAR) && (this.year <= MAX_DEFLATION_YEAR);
+		return res;
 	}
 	
 	@Override public String toString() {

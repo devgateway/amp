@@ -85,15 +85,15 @@ public class CalculateExchangeRatesEtlJob {
 				monetConn.executeQuery(String.format("ALTER TABLE %s ADD %s DOUBLE", cag.destinationTable, cag.prefix + "amount_base_currency"));
 			}
 			monetConn.executeQuery(String.format("UPDATE %s SET %samount_base_currency = "
-					+ "%stransaction_amount * (select mer.exchange_rate from mondrian_exchange_rates mer WHERE mer.day_code = %s.%sdate_code AND mer.currency_id = %s.%scurrency_id) %s",
-					cag.destinationTable, cag.prefix, cag.prefix, cag.destinationTable, cag.prefix, cag.destinationTable, cag.prefix,
+					+ "%stransaction_amount * (select mer.exchange_rate from mondrian_exchange_rates mer WHERE mer.day_code = %s AND mer.currency_id = %s.%scurrency_id) %s",
+					cag.destinationTable, cag.prefix, cag.prefix, nullAvoidingCase(cag.destinationTable, cag.prefix), cag.destinationTable, cag.prefix,
 					condition));
 			for (long currId:currencyIds) {
 				String query = String.format(
 						"UPDATE %s SET %s = COALESCE("  
-						+ "%samount_base_currency / (select mer.exchange_rate from mondrian_exchange_rates mer WHERE mer.day_code = %s.%sdate_code AND mer.currency_id = %d), %s) %s ",
-						cag.destinationTable, cag.getColumnName(currId),
-						cag.prefix, cag.destinationTable, cag.prefix,
+						+ "%samount_base_currency / (select mer.exchange_rate from mondrian_exchange_rates mer WHERE mer.day_code = %s AND mer.currency_id = %d), %s) %s ",
+						cag.destinationTable, cag.getColumnName(currId), cag.prefix,
+						nullAvoidingCase(cag.destinationTable, cag.prefix),
 						currId, MoConstants.UNDEFINED_AMOUNT_STR, condition); 
 				monetConn.executeQuery(query);
 				monetConn.flush();
@@ -102,19 +102,35 @@ public class CalculateExchangeRatesEtlJob {
 			// stupid
 			for (long currId:currencyIds) {
 				String query = String.format(
-					"UPDATE %s SET %s = COALESCE(%stransaction_amount * (select mer.exchange_rate from %s mer WHERE mer.day_code = %s.%sdate_code AND mer.currency_id = %s.%scurrency_id) / (select mer2.exchange_rate from %s mer2 WHERE mer2.day_code = %s.%sdate_code AND mer2.currency_id = %s) , %s) %s",
+					"UPDATE %s SET %s = COALESCE(%stransaction_amount * (select mer.exchange_rate from %s mer WHERE mer.day_code = %s AND mer.currency_id = %s.%scurrency_id) / (select mer2.exchange_rate from %s mer2 WHERE mer2.day_code = %s AND mer2.currency_id = %s) , %s) %s",
 					cag.destinationTable, cag.getColumnName(currId),
 					cag.prefix, MONDRIAN_EXCHANGE_RATES_TABLE, 
-					cag.destinationTable, cag.prefix, 
+					nullAvoidingCase(cag.destinationTable, cag.prefix),
 					cag.destinationTable, cag.prefix,
 					MONDRIAN_EXCHANGE_RATES_TABLE, 
-					cag.destinationTable, cag.prefix,
+					nullAvoidingCase(cag.destinationTable, cag.prefix),
 					currId, MoConstants.UNDEFINED_AMOUNT_STR, condition);
 				monetConn.executeQuery(query);
 			}
 			return;
 		}
-	}	
+	}
+	
+	private String nullAvoidingCase(String table, String prefix) {
+		return nullAvoidingCase(String.format("%s.%sdate_code", table, prefix));
+	}
+	
+	/**
+	 * AMP-21138 MonetDB has weird bugs when JOINing between a column which contains NULLs 
+	 * (it is enough for one of them to contain a single NULL for MonetDB to give a totally wrong result). 
+	 * Thus this function is used for CASE'ing away NULLs into a constant which won't find anything during a JOIN
+	 * @param fullColumnName
+	 * @return
+	 */
+	private String nullAvoidingCase(String fullColumnName) {
+		return String.format("CASE WHEN %s IS NULL THEN -999999999 ELSE %s END", fullColumnName, fullColumnName);
+		//return fullColumnName; // in case that, for testing reasons, you want to generate standard non-work-arounded SQL which should work the same or faster than the line above
+	}
 	
 	/**
 	 * generates exchange rate entries for the cartesian product (transaction date, currency)

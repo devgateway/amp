@@ -63,6 +63,7 @@ public class InflationRatesTests extends MondrianReportsTestCase {
 				PersistenceManager.getSession().flush();
 			}
 		});
+		PersistenceManager.endSessionLifecycle(); // else the entity remains sticky in the session and unrelated flush()-es will fail
 	}
 	
 	@Test

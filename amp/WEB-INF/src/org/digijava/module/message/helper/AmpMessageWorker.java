@@ -8,11 +8,13 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
@@ -143,12 +145,12 @@ public class AmpMessageWorker {
 					newMsg = processResourceShareEvent(e, newApproval, template, false);
 				} else if (e.getTrigger().equals(ActivityValidationWorkflowTrigger.class)) {
 					// This should be generalize but not to modify already
-					// running (for long time) code we process this particular 
+					// running (for long time) code we process this particular
 					// case in a separate piece of
 					// code
 
 					List<AmpAlert> listNewMsg = processActivityValidationWorkflowEvent(e, newAlert, template);
-					
+
 					for (AmpAlert ampMessage : listNewMsg) {
 						List<String> receivers = new ArrayList<>();
 						AmpMessageUtil.saveOrUpdateMessage(ampMessage);
@@ -745,11 +747,11 @@ public class AmpMessageWorker {
 			TemplateAlert template) {
 
 		StringBuffer teamsToNotify = new StringBuffer();
-		String[] receivers ;
+		String[] receivers;
 		HashMap<String, String> myHashMap = new HashMap<String, String>();
 		List<AmpAlert> alerts = new ArrayList<AmpAlert>();
-		
-		Collection<AmpTeam> listTeamsToNotify ;
+
+		Collection<Team> listTeamsToNotify;
 
 		// this needs to be redone once we have a proper representation of
 		// receivers in TemplateAlerts
@@ -765,16 +767,17 @@ public class AmpMessageWorker {
 		listTeamsToNotify = getTeamsForActivity(
 				(Long) e.getParameters().get(ActivityValidationWorkflowTrigger.PARAM_ACTIVITY_ID),
 				template.getRelatedTriggerName());
-		
-		for (AmpTeam ampTeam : listTeamsToNotify) {
-			teamsToNotify.append(ampTeam.getName());
+
+		for (Team ampTeam : listTeamsToNotify) {
+			teamsToNotify.append(ampTeam.getTeamName());
 			teamsToNotify.append(";");
 		}
 		receivers = StringUtils.split(template.getReceivers(), ",");
 		for (int j = 0; j < receivers.length; j++) {
 			if (teamsToNotify.toString().contains(StringUtils.split(receivers[j], ";")[1])) {
 				if (receivers[j].indexOf("<") > 0) {
-					myHashMap.put(MessageConstants.OBJECT_LOGIN,StringUtils.left(receivers[j], receivers[j].indexOf("<")));
+					myHashMap.put(MessageConstants.OBJECT_LOGIN,
+							StringUtils.left(receivers[j], receivers[j].indexOf("<")));
 				}
 				alerts.add(createAlertFromTemplate(template, myHashMap, alert, receivers[j]));
 
@@ -791,77 +794,126 @@ public class AmpMessageWorker {
 	 * @param relatedTrigger
 	 * @return
 	 */
-	private static Collection<AmpTeam> getTeamsForActivity(Long ampActivityId, String relatedTrigger) {
-		// search for 1 record in amp_team_
-		long startTime = System.currentTimeMillis();
-		// we need to use a set here to hold unique values, will change before
-		// closing the ticket
-		String teamsConfigured = null;
-		StringBuffer teamsToSearch = new StringBuffer();
-		// ids of team to filter out the AmpTeamLeads query
-		final List<Long> teamIds = new ArrayList<Long>();
-		List<AmpTeam> teamsToReturn = new ArrayList<AmpTeam>();
-		// we get the set of unique teams configured to receive alter so we can
-		// limit
-		// the count of ws in which look for the activity
-		try {
-			StringBuffer bufferReceivers = new StringBuffer();
-			String[] aReceivers;
-			List<TemplateAlert> tempAlerts = AmpMessageUtil.getTemplateAlerts(relatedTrigger);
-			for (TemplateAlert templateAlert : tempAlerts) {
-				bufferReceivers.append(templateAlert.getReceivers());
-			}
-			if (bufferReceivers.length() == 0) {
-				// we don't have any recipient configured
-				return null;
-			}
-			aReceivers = StringUtils.split(bufferReceivers.toString(), ",");
-			for (int i = 0; i < aReceivers.length; i++) {
-				String t = StringUtils.split(aReceivers[i], ";")[1];
-				if (!teamsToSearch.toString().contains(t)) {
-					teamsToSearch.append("'" + t + "'" + ",");
+	private static Collection<Team> getTeamsForActivity(Long ampActivityId, String relatedTrigger) {
+
+		List<Team> teamsToReturn = new ArrayList<Team>();
+
+		if (TLSUtils.getRequest() == null) {
+			TLSUtils.populateMockTlsUtils();
+		}				
+		TeamMember requestMember = (TeamMember) TLSUtils.getRequest().getSession()
+				.getAttribute(Constants.CURRENT_MEMBER);
+
+
+		if (TLSUtils.getRequest().getAttribute("activityTeams") != null) {
+			Map<Long, List<Team>> activityTeams;
+			activityTeams = (Map<Long, List<Team>>) TLSUtils.getRequest().getAttribute("activityTeams");
+			teamsToReturn = activityTeams.get(ampActivityId);
+		} else {
+			final Map<Long, List<Team>> activityTeams = new HashMap<Long, List<Team>>();
+			// we need to use a set here to hold unique values, will change
+			// before
+			// closing the ticket
+			String teamsConfigured = null;
+			StringBuffer teamsToSearch = new StringBuffer();
+			// ids of team to filter out the AmpTeamLeads query
+			final List<Long> teamIds = new ArrayList<Long>();
+
+			// we get the set of unique teams configured to receive alter so we
+			// can
+			// limit
+			// the count of ws in which look for the activity
+			try {
+				StringBuffer bufferReceivers = new StringBuffer();
+				String[] aReceivers;
+				List<TemplateAlert> tempAlerts = AmpMessageUtil.getTemplateAlerts(relatedTrigger);
+				for (TemplateAlert templateAlert : tempAlerts) {
+					bufferReceivers.append(templateAlert.getReceivers());
 				}
-			}
-			teamsConfigured = teamsToSearch.substring(0, teamsToSearch.lastIndexOf(","));
-
-		} catch (Exception e) {
-			logger.error("couldnt get teams configured", e);
-		}
-
-		final String query = "select min(tm.amp_team_mem_id),tm.amp_team_id from amp_team_member tm ,amp_team  t "
-				+ " where tm.amp_member_role_id in(1,3) " + " and tm.amp_team_id=t.amp_team_id " + " and t.name in ("
-				+ teamsConfigured + ") " + " group by tm.amp_team_id";
-
-		PersistenceManager.getSession().doWork(new Work() {
-			public void execute(Connection conn) throws SQLException {
-				RsInfo teamIdQry = SQLUtils.rawRunQuery(conn, query, null);
-				while (teamIdQry.rs.next()) {
-					teamIds.add(teamIdQry.rs.getLong(1));
+				if (bufferReceivers.length() == 0) {
+					// we don't have any recipient configured
+					return null;
 				}
+				aReceivers = StringUtils.split(bufferReceivers.toString(), ",");
+				for (int i = 0; i < aReceivers.length; i++) {
+					String t = StringUtils.split(aReceivers[i], ";")[1];
+					if (!teamsToSearch.toString().contains(t)) {
+						teamsToSearch.append("'" + t + "'" + ",");
+					}
+				}
+				teamsConfigured = teamsToSearch.substring(0, teamsToSearch.lastIndexOf(","));
+
+			} catch (Exception e) {
+				logger.error("couldnt get teams configured", e);
 			}
 
-		});
+			final String query = "select min(tm.amp_team_mem_id),tm.amp_team_id from amp_team_member tm ,amp_team  t "
+					+ " where tm.amp_member_role_id in(1,3) " + " and tm.amp_team_id=t.amp_team_id "
+					+ " and t.name in (" + teamsConfigured + ") " + " group by tm.amp_team_id";
 
-		Collection<AmpTeamMember> l = TeamMemberUtil.getAllAmpTeamMembersByAmpTeamMemberId(teamIds);
-		for (AmpTeamMember ampTeamMember : l) {
+			PersistenceManager.getSession().doWork(new Work() {
+				public void execute(Connection conn) throws SQLException {
+					RsInfo teamIdQry = SQLUtils.rawRunQuery(conn, query, null);
+					while (teamIdQry.rs.next()) {
+						teamIds.add(teamIdQry.rs.getLong(1));
+					}
+					teamIdQry.close();
+				}
 
-			TeamMember member = new TeamMember(ampTeamMember);
+			});
+			final StringBuffer wsQueries = new StringBuffer();
+			Collection<AmpTeamMember> l = TeamMemberUtil.getAllAmpTeamMembersByAmpTeamMemberId(teamIds);
+			for (AmpTeamMember ampTeamMember : l) {
 
-			if (TLSUtils.getRequest() == null) {
-				TLSUtils.populateMockTlsUtils();
+				TeamMember member = new TeamMember(ampTeamMember);
+
 				TLSUtils.getRequest().getSession().setAttribute(Constants.CURRENT_MEMBER, member);
+				AmpARFilter af = FilterUtil.buildFilter(ampTeamMember.getAmpTeam(), null);
+				af.generateFilterQuery(TLSUtils.getRequest(), true);
+
+				CompleteWorkspaceFilter completeWorkspaceFilter = new CompleteWorkspaceFilter(member, af);
+				String wsQuery1 = WorkspaceFilter.generateWorkspaceFilterQuery(completeWorkspaceFilter.tm);
+				String wsQuery2 = completeWorkspaceFilter.workspaceFilter.getGeneratedFilterQuery();
+
+				if (wsQueries.length() > 0) {
+					wsQueries.append(" UNION ");
+				}
+				wsQueries.append(addTeamIdToQuery(wsQuery1, ampTeamMember.getAmpTeam().getAmpTeamId(),
+						ampTeamMember.getAmpTeam().getName())).append(" UNION ");
+				wsQueries.append("select amp_activity_id ," + ampTeamMember.getAmpTeam().getAmpTeamId()
+						+ " as  ampTeamId, '" + ampTeamMember.getAmpTeam().getName() + "' as teamName from ( ");
+				wsQueries.append(wsQuery2);
+				wsQueries.append(") as activityTemp ");
 
 			}
-			AmpARFilter af = FilterUtil.buildFilter(ampTeamMember.getAmpTeam(), null);
-			af.generateFilterQuery(TLSUtils.getRequest(), true);
+			// we now turn queries into map, and store it at request level in
+			// case its needed again
+			PersistenceManager.getSession().doWork(new Work() {
+				public void execute(Connection conn) throws SQLException {
+					RsInfo teamsInActivityQuery = SQLUtils.rawRunQuery(conn, wsQueries.toString(), null);
+					while (teamsInActivityQuery.rs.next()) {
+						// activityTeams
+						Long ampActivityId = teamsInActivityQuery.rs.getLong(1);
+						if (activityTeams.get(ampActivityId) == null) {
+							activityTeams.put(ampActivityId, new ArrayList<Team>());
+						}
+						activityTeams.get(ampActivityId).add(
+								new Team(teamsInActivityQuery.rs.getLong(2), teamsInActivityQuery.rs.getString(3)));
+					}
+					teamsInActivityQuery.close();
+				}
 
-			CompleteWorkspaceFilter s = new CompleteWorkspaceFilter(member, af);
-			if (s.getIds().contains(ampActivityId)) {
-				teamsToReturn.add(ampTeamMember.getAmpTeam());// ampTeamMember.getUser().getEmail()
+			});
+			TLSUtils.getRequest().setAttribute("activityTeams", activityTeams);
+			if (requestMember != null) {
+				TLSUtils.getRequest().getSession().setAttribute(Constants.CURRENT_MEMBER, requestMember);
+			} else {
+				TLSUtils.getRequest().getSession().removeAttribute(Constants.CURRENT_MEMBER);
 			}
+			teamsToReturn = activityTeams.get(ampActivityId);
 		}
-		long endTime = System.currentTimeMillis();
-		logger.debug("time elapsed " + (endTime - startTime));
+
+
 		return teamsToReturn;
 	}
 
@@ -1272,5 +1324,12 @@ public class AmpMessageWorker {
 				}
 			}
 		}
+	}
+
+	private static String addTeamIdToQuery(String wsQuery, Long teamId, String teamName) {
+		Integer indexToReplace = StringUtils.indexOf(wsQuery, "FROM amp_activity");
+		wsQuery = StringUtils.left(wsQuery, indexToReplace) + " , " + teamId + " as ampTeamId , '" + teamName
+				+ "' as teamName " + StringUtils.mid(wsQuery, indexToReplace, wsQuery.length() - 1);
+		return wsQuery;
 	}
 }

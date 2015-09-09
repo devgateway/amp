@@ -145,27 +145,28 @@ public class TLSUtils {
 		TLSUtils.getThreadLocalInstance().request = null;
 		TLSUtils.getThreadLocalInstance().site = null;
 	}
-    /**
-     * populate TLSUtils using a mock objects to store 
-     * request and session objects so they can be used in environments 
-     * where no request is available (such as jobs)
-     */
-	public static void populateMockTlsUtils(){
-		HttpServletRequest mockRequest = Mockito.mock(HttpServletRequest.class); 
-	    HttpSession mockSession = Mockito.mock( HttpSession.class );
-	    Mockito.when( mockRequest.getSession() ).thenReturn( mockSession );	
-    	final Map<String, Object> requestAttributes = new ConcurrentHashMap<String, Object>();     
 
-    	getMockSetter(requestAttributes).when(mockRequest).setAttribute(Mockito.anyString(), Mockito.anyObject());
-    	getMockGetter(requestAttributes).when(mockRequest).getAttribute(Mockito.anyString());    	
-    	
-    	final Map<String, Object> sessionAttributes = new ConcurrentHashMap<String, Object>();     
-    	// Mock setAttribute
-    	getMockSetter(sessionAttributes).when(mockSession).setAttribute(Mockito.anyString(), Mockito.anyObject());
-    	getMockGetter(sessionAttributes).when(mockSession).getAttribute(Mockito.anyString());    	
-    	
-		TLSUtils.getThreadLocalInstance().request=mockRequest;
-    }
+	/**
+	 * populate TLSUtils using a mock objects to store request and session
+	 * objects so they can be used in environments where no request is available
+	 * (such as jobs)
+	 */
+	public static void populateMockTlsUtils() {
+		HttpServletRequest mockRequest = Mockito.mock(HttpServletRequest.class);
+		HttpSession mockSession = Mockito.mock(HttpSession.class);
+		Mockito.when(mockRequest.getSession()).thenReturn(mockSession);
+		final Map<String, Object> requestAttributes = new ConcurrentHashMap<String, Object>();
+
+		getMockSetter(requestAttributes).when(mockRequest).setAttribute(Mockito.anyString(), Mockito.anyObject());
+		getMockGetter(requestAttributes).when(mockRequest).getAttribute(Mockito.anyString());
+
+		final Map<String, Object> sessionAttributes = new ConcurrentHashMap<String, Object>();
+		
+		getMockSetter(sessionAttributes).when(mockSession).setAttribute(Mockito.anyString(), Mockito.anyObject());
+		getMockGetter(sessionAttributes).when(mockSession).getAttribute(Mockito.anyString());
+
+		TLSUtils.getThreadLocalInstance().request = mockRequest;
+	}
 
 	private static Stubber getMockGetter(final Map<String, Object> sessionAttributes) {
 		Stubber s=

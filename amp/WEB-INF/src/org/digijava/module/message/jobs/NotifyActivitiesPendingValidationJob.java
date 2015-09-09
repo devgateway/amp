@@ -36,7 +36,7 @@ public class NotifyActivitiesPendingValidationJob extends ConnectionCleaningJob 
 
 	@Override
 	public void executeInternal(JobExecutionContext context) throws JobExecutionException {
-		final List<AmpActivityVersion> activitiesToNotifiy = new ArrayList<>();
+		final List<AmpActivityVersion> activitiesToNotify = new ArrayList<>();
 		PersistenceManager.getSession().doWork(new Work() {
 
 			@Override
@@ -55,14 +55,19 @@ public class NotifyActivitiesPendingValidationJob extends ConnectionCleaningJob 
 
 					activity.setAmpActivityId(activities.rs.getLong("amp_activity_id"));
 					activity.setName(activities.rs.getString("name"));
-					activitiesToNotifiy.add(activity);
+					activitiesToNotify.add(activity);
 				}
 				activities.close();
 			}
 		});
-		for (AmpActivityVersion ampActivityVersion : activitiesToNotifiy) {
-			new ActivityValidationWorkflowTrigger(ampActivityVersion);
 
+		try {
+			for (AmpActivityVersion ampActivityVersion : activitiesToNotify) {
+				new ActivityValidationWorkflowTrigger(ampActivityVersion);
+			}
+		} finally {
+			//clean request Thread created with mockito
+			TLSUtils.getThreadLocalInstance().request = null;
 		}
 
 	}

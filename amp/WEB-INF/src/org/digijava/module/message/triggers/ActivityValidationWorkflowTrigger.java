@@ -5,14 +5,16 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.message.helper.Event;
 import org.digijava.module.message.helper.MessageConstants;
-
+/**
+ * Trigger to notify when an activity is submitted for validation
+ * @author jdeanquin
+ *
+ */
 public class ActivityValidationWorkflowTrigger extends Trigger {
     public static final String PARAM_NAME="name";
-//    public static final String PARAM_TEAM_ID="teamId";
     public static final String PARAM_TRIGGER_SENDER="sender";
     public static final String PARAM_URL="activity url";
     public static final String PARAM_ACTIVITY_ID="activity_id";
-//    public static final String PARAM_CREATED_BY="createdBy";
     public static final String [] parameterNames=new String[]{PARAM_NAME,PARAM_TRIGGER_SENDER,PARAM_URL,PARAM_ACTIVITY_ID};
 
 	public ActivityValidationWorkflowTrigger(Object source) {
@@ -30,8 +32,6 @@ public class ActivityValidationWorkflowTrigger extends Trigger {
 		e.getParameters().put(PARAM_URL, ActivityGatekeeper.buildPreviewUrl(activity.getAmpActivityId().toString()));
 		e.getParameters().put(PARAM_ACTIVITY_ID, activity.getAmpActivityId());
 		
-//		e.getParameters().put(PARAM_CREATED_BY, activity.getActivityCreator());
-//		e.getParameters().put(PARAM_TEAM_ID, activity.getTeam().getAmpTeamId());
 		return e;
 
 	}

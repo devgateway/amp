@@ -107,12 +107,12 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
             donorFundingSection.getOrgRoleSelector().getOrgSelect().getModel().setObject(ampOrgRole.getOrganisation());
             donorFundingSection.getOrgRoleSelector().getRoleSelect().getModel().setObject(ampOrgRole.getRole());
             donorFundingSection.addItemToList(ampOrgRole.getOrganisation(), ampOrgRole);
-            if(ampOrgRole.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY)) {
+            if (ampOrgRole.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY)) {
             	donorFundingSection.setOriginalSearchOrganizationSelector(searchOrganization);
             }
             target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(donorFundingSection));
             //If we are in tabView
-    		if( FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ACTIVITY_FORM_FUNDING_SECTION_DESIGN)){
+    		if (donorFundingSection.isTabsView()) {
     			target.appendJavaScript("switchTabs();");
     		}
 
@@ -120,7 +120,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
         }
     }
     private void removeFundingAutomatically(AjaxRequestTarget target, AmpOrgRole ampOrgRole) {
-        if (addFundingItemAutomatically.isVisible()){
+        if (addFundingItemAutomatically.isVisible()) {
             Set<AmpFunding> set = donorFundingSection.getFundingModel().getObject();
             Iterator<AmpFunding> it = set.iterator();
             while (it.hasNext()){
@@ -132,6 +132,9 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
             }
             donorFundingSection.updateFundingGroups(ampOrgRole, target);
             target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(donorFundingSection));
+            if (donorFundingSection.isTabsView()) {
+    			target.appendJavaScript("switchTabs();");
+    		}
             target.add(donorFundingSection);
         }
     }
@@ -228,7 +231,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
         maxSizeCollectionValidationField.setOutputMarkupPlaceholderTag(true);
         add(maxSizeCollectionValidationField);
         
-        addFundingItemAutomatically = new AmpComponentPanel("addFundingItemAutomatically", "Add Funding Item Automatically"){};
+        addFundingItemAutomatically = new AmpComponentPanel("addFundingItemAutomatically", "Add Funding Item Automatically") {};
         add(addFundingItemAutomatically);
 
 

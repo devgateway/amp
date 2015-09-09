@@ -158,9 +158,15 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 	
 	@Override
 	public int compareTo(AmpOrgRole arg0) {
-		if(this.getAmpOrgRoleId()!=null)
-		return this.getAmpOrgRoleId().compareTo(arg0.getAmpOrgRoleId());
-		else return -1;
+		if (this.getAmpOrgRoleId() !=null && arg0 != null && arg0.getAmpOrgRoleId() != null) {
+			return this.getAmpOrgRoleId().compareTo(arg0.getAmpOrgRoleId());
+		} else if (arg0.getAmpOrgRoleId() == null && arg0 != null && arg0.getAmpOrgRoleId() == null) {
+			Integer tempId1 = System.identityHashCode(this);
+			Integer tempId2 = System.identityHashCode(arg0);
+			return tempId1.compareTo(tempId2);
+		} else {
+			return -1;
+		}
 	}
 	
 	public final static Comparator<AmpOrgRole> BY_ACRONYM_AND_NAME_COMPARATOR = new Comparator<AmpOrgRole>() {
@@ -171,6 +177,23 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 			if (o2 == null || o2.getOrganisation() == null ||o2.getOrganisation().getAcronymAndName() == null)
 				return -1;
 			return o1.getOrganisation().getAcronymAndName().compareTo(o2.getOrganisation().getAcronymAndName());
+		}
+	};
+	
+	public final static Comparator<AmpOrgRole> BY_ORG_AND_ROLE = new Comparator<AmpOrgRole>() {
+		@Override
+		public int compare(AmpOrgRole o1, AmpOrgRole o2) {
+			if (o1 == null && o2 == null)
+				return 0;
+			if (o1 == null || o1.getOrganisation() == null || o1.getRole() == null)
+				return 1;
+			if (o2 == null || o2.getOrganisation() == null || o2.getRole() == null)
+				return -1;
+			if (o1.getOrganisation().equals(o2.getOrganisation()) && o1.getRole().equals(o2.getRole()))
+				return 0;
+			if (o1.hashCode() < o2.hashCode())
+				return -1;
+			return 1;
 		}
 	};
 

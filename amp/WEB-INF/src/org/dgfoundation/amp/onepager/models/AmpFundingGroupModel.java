@@ -9,15 +9,18 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.model.IModel;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
 
-public class AmpFundingGroupModel implements IModel<Set<AmpOrganisation>> {
+public class AmpFundingGroupModel implements IModel<Set<AmpOrgRole>> {
 	private static final long serialVersionUID = 1L;
 	private IModel<Set<AmpFunding>> model;
+	private AmpDonorFundingFormSectionFeature parent;
 
-	public AmpFundingGroupModel(IModel<Set<AmpFunding>> model) {
+	public AmpFundingGroupModel(IModel<Set<AmpFunding>> model, final AmpDonorFundingFormSectionFeature parent) {
 		this.model = model;
+		this.parent = parent;
 	}
 
 	@Override
@@ -26,11 +29,11 @@ public class AmpFundingGroupModel implements IModel<Set<AmpOrganisation>> {
 	}
 
 	@Override
-	public Set<AmpOrganisation> getObject() {
-		Set<AmpOrganisation> orgsSet = new LinkedHashSet<AmpOrganisation>();
+	public Set<AmpOrgRole> getObject() {
+		Set<AmpOrgRole> orgRoles = new LinkedHashSet<AmpOrgRole>();
 		Set<AmpFunding> fundingSet = model.getObject();
 		if (fundingSet == null)
-			return orgsSet;
+			return orgRoles;
 
 		List<AmpFunding> auxAmpFunding = new ArrayList<AmpFunding>(fundingSet);
 		Collections.sort(auxAmpFunding, new Comparator<AmpFunding>() {
@@ -54,13 +57,13 @@ public class AmpFundingGroupModel implements IModel<Set<AmpOrganisation>> {
 		Iterator<AmpFunding> fundingSetIterator = auxAmpFunding.iterator();
 		while (fundingSetIterator.hasNext()) {
 			AmpFunding funding = (AmpFunding) fundingSetIterator.next();
-			orgsSet.add(funding.getAmpDonorOrgId());
+			orgRoles.add(parent.findAmpOrgRole(funding.getAmpDonorOrgId(), funding.getSourceRole()));
 		}
-		return orgsSet;
+		return orgRoles;
 	}
 
 	@Override
-	public void setObject(Set<AmpOrganisation> object) {
+	public void setObject(Set<AmpOrgRole> object) {
 		// do nothing
 	}
 

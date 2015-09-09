@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -74,13 +73,13 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 public class AmpDonorFundingFormSectionFeature extends
 		AmpFormSectionFeaturePanel implements AmpRequiredComponentContainer {
 	private static final long serialVersionUID = 1L;
-	private TreeMap<AmpOrgRole, AmpFundingGroupFeaturePanel> listItems = new TreeMap<AmpOrgRole, AmpFundingGroupFeaturePanel>();
+	private Map<AmpOrgRole, AmpFundingGroupFeaturePanel> listItems = new TreeMap<AmpOrgRole, AmpFundingGroupFeaturePanel>();
 	
 	protected ListEditor<AmpOrgRole> orgRolelist;
 	protected ListEditor<AmpOrgRole> tabsList;
 	
-	private IModel<Set<AmpOrganisation>> setModel;
-	private IModel<Set<AmpOrgRole>> roleModel;
+	private IModel<Set<AmpOrgRole>> orgRoleModel;
+	private IModel<Set<AmpOrgRole>> fundingOrgRoleModel;
 	private AbstractReadOnlyModel<List<AmpFunding>> listModel;
 	private PropertyModel<Set<AmpFunding>> fundingModel;
 	private AmpAjaxLinkField addNewFunding;
@@ -101,10 +100,6 @@ public class AmpDonorFundingFormSectionFeature extends
 		return tabsList;
 	}
 
-	public IModel<Set<AmpOrganisation>> getSetModel() {
-		return setModel;
-	}
-
 	public String[] getRoleFilter() {
 		String[] roleFilter = ACTIVITY_ROLE_FILTER;
 		if (ActivityUtil.ACTIVITY_TYPE_SSC
@@ -117,9 +112,11 @@ public class AmpDonorFundingFormSectionFeature extends
 			AmpRole role, AjaxRequestTarget target) {
 
 		AmpFundingGroupFeaturePanel existingFundGrp = getExistingFundingGroup(funding);
-
-		existingFundGrp.getList().remove(item);
-		existingFundGrp.getList().updateModel();
+		
+		if (existingFundGrp != null) {
+			existingFundGrp.getList().remove(item);
+			existingFundGrp.getList().updateModel();
+		}
 
 		funding.setAmpDonorOrgId(newOrg);
 		funding.setSourceRole(role);
@@ -133,9 +130,11 @@ public class AmpDonorFundingFormSectionFeature extends
 				fundingModel.setObject(new LinkedHashSet<AmpFunding>());
 			}
 			fundingModel.getObject().add(funding);
-			orgRolelist.addItem(ampOrgRole);
 			tabsList.addItem(ampOrgRole);
+			orgRolelist.origAddItem(ampOrgRole);
 		}
+		tabsList.updateModel();
+		orgRolelist.updateModel();
 		//find the idex
 //		System.out.println("Switch orgs El indice es : "+
 //		list.items.indexOf(newOrg));
@@ -198,15 +197,13 @@ public class AmpDonorFundingFormSectionFeature extends
 			// cleanup tab related data
 			deleteTab(ampOrgRole, target);
 			
-			Set<AmpOrgRole> roles = roleModel.getObject();
+			Set<AmpOrgRole> roles = fundingOrgRoleModel.getObject();
 			for (Iterator<AmpOrgRole> it2 = roles.iterator(); it2.hasNext();) {
 				AmpOrgRole role = it2.next();
-				if (role.getRole().getRoleCode()
-						.equals(Constants.FUNDING_AGENCY)
-						&& role.getAmpOrgRoleId().equals(ampOrgRole.getAmpOrgRoleId())) {														
+				if (role.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY)
+						&& role.compareTo(ampOrgRole) == 0) {														
 					it2.remove();
-					send(getPage(), Broadcast.BREADTH,
-							new DonorFundingRolesEvent(target));
+					send(getPage(), Broadcast.BREADTH, new DonorFundingRolesEvent(target));
 					
 					if(this.originalSearchOrganizationSelector != null) {
 						this.originalSearchOrganizationSelector.setVisibilityAllowed(true);
@@ -269,8 +266,8 @@ public class AmpDonorFundingFormSectionFeature extends
 		if (fundingModel.getObject() == null)
 			fundingModel.setObject(new LinkedHashSet<AmpFunding>());
 
-		setModel = new AmpFundingGroupModel(fundingModel);
-		roleModel = new PropertyModel<Set<AmpOrgRole>>(am, "orgrole");
+		orgRoleModel = new PropertyModel<Set<AmpOrgRole>>(am, "orgrole");
+		fundingOrgRoleModel = new AmpFundingGroupModel(fundingModel, this);
 		
 		final WebMarkupContainer wmc = new WebMarkupContainer("container");
 		wmc.setOutputMarkupId(true);
@@ -287,7 +284,7 @@ public class AmpDonorFundingFormSectionFeature extends
 
 		add(wmc);
 		
-		tabsList = new ListEditor<AmpOrgRole>("donorItemsForTabs", roleModel) {
+		tabsList = new ListEditor<AmpOrgRole>("donorItemsForTabs", fundingOrgRoleModel) {
 			private static final long serialVersionUID = -206108834217117807L;
 			
 			@Override
@@ -309,9 +306,6 @@ public class AmpDonorFundingFormSectionFeature extends
 				
 				item.add(l);
 			}
-			public void addItem(AmpOrgRole orgRole) {
-				tabsList.origAddItem(orgRole);
-			}
 
 		};
 		tabsList.setVisibilityAllowed(isTabsView);
@@ -331,7 +325,7 @@ public class AmpDonorFundingFormSectionFeature extends
 		
 		getRequiredFormComponents().addAll(overviewSection.getRequiredFormComponents());
 		
-		orgRolelist = new ListEditor<AmpOrgRole>("listFunding", roleModel) {
+		orgRolelist = new ListEditor<AmpOrgRole>("listFunding", fundingOrgRoleModel) {
 			@Override
 			protected void onPopulateItem(ListItem<AmpOrgRole> item) {
 				AmpOrgRole orgRole = item.getModelObject();
@@ -467,10 +461,10 @@ public class AmpDonorFundingFormSectionFeature extends
 	
 	public void addItemToList(AmpOrganisation org, AmpOrgRole ampOrgRole) {
 		AmpFunding funding = new AmpFunding();
-		if (orgRoleSelector.getRoleSelect().getChoiceContainer().getModelObject() != null) {
-			funding.setSourceRole((AmpRole) orgRoleSelector.getRoleSelect().getChoiceContainer().getModelObject());
-		} else if (ampOrgRole != null) {
+		if (ampOrgRole != null) {
 			funding.setSourceRole(ampOrgRole.getRole());
+		} else if (orgRoleSelector.getRoleSelect().getChoiceContainer().getModelObject() != null) {
+			funding.setSourceRole((AmpRole) orgRoleSelector.getRoleSelect().getChoiceContainer().getModelObject());
 		} else {
 			funding.setSourceRole(DbUtil.getAmpRole(Constants.FUNDING_AGENCY));
 		}
@@ -513,7 +507,7 @@ public class AmpDonorFundingFormSectionFeature extends
 			// Constants.FUNDING_AGENCY;
 			if (!ActivityUtil.ACTIVITY_TYPE_SSC.equals(((AmpAuthWebSession) getSession()).getFormType())) {
 				boolean found = false;
-				Set<AmpOrgRole> orgRoles = roleModel.getObject();
+				Set<AmpOrgRole> orgRoles = orgRoleModel.getObject();
 				for (AmpOrgRole role : orgRoles) {
 					if (role.getRole().getRoleCode().equals(roleCode)
 							&& role.getOrganisation().getAmpOrgId().equals(org.getAmpOrgId())) {
@@ -582,7 +576,7 @@ public class AmpDonorFundingFormSectionFeature extends
 	}
 	
 	public AmpOrgRole findAmpOrgRole(AmpOrganisation org, AmpRole role) {
-		for (AmpOrgRole ampOrgRole : roleModel.getObject()) {
+		for (AmpOrgRole ampOrgRole : orgRoleModel.getObject()) {
 			if (ampOrgRole.getOrganisation().getIdentifier().equals(org.getIdentifier()) 
 					&& ampOrgRole.getRole().getIdentifier().equals(role.getIdentifier())) {
 				return (AmpOrgRole) ampOrgRole;
@@ -602,6 +596,13 @@ public class AmpDonorFundingFormSectionFeature extends
 			role = DbUtil.getAmpRole(Constants.FUNDING_AGENCY);
 		}
 		return role;
+	}
+
+	/**
+	 * @return the isTabsView
+	 */
+	public boolean isTabsView() {
+		return isTabsView;
 	}
 	
 }

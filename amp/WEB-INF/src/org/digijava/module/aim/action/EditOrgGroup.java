@@ -127,7 +127,9 @@ public class EditOrgGroup extends Action {
 				if (ampGrp != null) {
 					ARUtil.clearOrgGroupTypeDimensions();
 					DbUtil.deleteUserExt(ampGrp, null, null);
-					DbUtil.delete(ampGrp);
+					/*AMP-21078 : replacing hard delete with soft delete*/
+//					DbUtil.delete(ampGrp);
+					ampGrp.setDeleted(true);
 					logger.debug("Organization Group deleted");
 				}
 				return mapping.findForward("added");

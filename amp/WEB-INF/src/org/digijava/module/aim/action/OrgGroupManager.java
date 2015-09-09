@@ -100,7 +100,7 @@ public class OrgGroupManager extends Action {
 					            // get all organisations since keyword field is blank and org type field has 'ALL'.
 					        	  ampOrg = DbUtil.getAllOrganisationGroup();
 					          }
-					 	
+					 	ampOrg = filterDeletedOrgGroups(ampOrg);
 						session.setAttribute("ampOrgGrp",ampOrg);
 					 }
 					 // sorting!!!
@@ -184,6 +184,10 @@ public class OrgGroupManager extends Action {
 									edIndex = ampOrg.size();
 			            	 }
 			            	vect.addAll(ampOrg);
+//			            	for (AmpOrgGroup item : ampOrg) {
+//			            		if (!Boolean.TRUE.equals(item.getDeleted()))
+//			            			vect.add(item);
+//			            	}
 			            	 numPages = ampOrg.size() / NUM_RECORDS;
 							 numPages += (ampOrg.size() % NUM_RECORDS != 0) ? 1 : 0;
 			            }else {
@@ -191,7 +195,11 @@ public class OrgGroupManager extends Action {
 								edIndex = orgsForCurrentAlpha.size();
 			            	}
 			            	vect.addAll(orgsForCurrentAlpha);
-			            	 numPages = orgsForCurrentAlpha.size() / NUM_RECORDS;
+//			            	for (AmpOrgGroup item : orgsForCurrentAlpha) {
+//			            		if (!Boolean.TRUE.equals(item.getDeleted()))
+//			            			vect.add(item);
+//			            	}
+			            	numPages = orgsForCurrentAlpha.size() / NUM_RECORDS;
 							 numPages += (orgsForCurrentAlpha.size() % NUM_RECORDS != 0) ? 1 : 0;
 			            }					
 
@@ -200,6 +208,7 @@ public class OrgGroupManager extends Action {
 					  */
 					 for (int i = (stIndex-1); i < edIndex; i++) {
 						 if(vect.get(i)!=null){
+//							 if (!Boolean.TRUE.equals(vect.get(i).getDeleted()))
 							 org.add(vect.get(i));
 						 }						
 					 }
@@ -221,4 +230,18 @@ public class OrgGroupManager extends Action {
 					 logger.debug("Organisation Group manager returning");
 					 return mapping.findForward("forward");
 		  }
+		  /**
+		   * generates new list of amp org groups based on passed parameter, including only those that are not deleted
+		   * @param ampOrg
+		   * @return
+		   */
+		private Collection<AmpOrgGroup> filterDeletedOrgGroups(
+				Collection<AmpOrgGroup> ampOrg) {
+			Collection<AmpOrgGroup> filtered = new ArrayList<AmpOrgGroup>();
+			for (AmpOrgGroup item : ampOrg) {
+				if (!Boolean.TRUE.equals(item.getDeleted()))
+					filtered.add(item);
+			}
+			return filtered;
+		}
 }

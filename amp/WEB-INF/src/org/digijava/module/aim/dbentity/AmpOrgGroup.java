@@ -52,6 +52,9 @@ public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDi
 //	@Interchangeable(fieldTitle="Organization Group Key Areas (Dashboard)")
     private String orgGrpKeyAreas;
 	
+    
+    private Boolean deleted;
+    
 	/**
 	 * @return Returns the ampOrgGrpId.
 	 */
@@ -187,4 +190,10 @@ public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDi
     {
     	return InternationalizedModelDescription.getForProperty(AmpOrgGroup.class, "orgGrpName").getSQLFunctionCall(idSource + ".ampOrgGrpId");
     }
+	public Boolean getDeleted() {
+		return deleted;
+	}
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
 }

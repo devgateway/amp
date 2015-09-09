@@ -26,6 +26,7 @@ public class OrgGroupManagerForm extends ActionForm {
 	private Collection<AmpOrgGroup> orgsForCurrentAlpha;
 	private boolean reset;
 	private boolean orgSelReset;
+	private boolean showDeleted;
 	
 	public OrgGroupManagerForm(){
 		reset = false;
@@ -173,6 +174,14 @@ public class OrgGroupManagerForm extends ActionForm {
 
 	public void setOrgTypes(Collection orgTypes) {
 		this.orgTypes = orgTypes;
+	}
+
+	public boolean isShowDeleted() {
+		return showDeleted;
+	}
+
+	public void setShowDeleted(boolean showDeleted) {
+		this.showDeleted = showDeleted;
 	}
 	
 }

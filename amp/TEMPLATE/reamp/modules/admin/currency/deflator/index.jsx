@@ -15,6 +15,12 @@ class SaveFailed extends Save{
     this.reason = () => reason;
   }
 }
+var SaveStatus = {
+  INITIAL: 0,
+  SAVING: 1,
+  SUCCESS: 2,
+  FAIL: 3
+};
 
 class RateAction extends AMP.Package{}
 
@@ -77,6 +83,8 @@ class State extends AMP.Model{
 class Model extends AMP.Model{
   saved: State;
   current: State;
+  status: number;
+  textStatus: string;
 }
 var model = new Model();
 
@@ -105,19 +113,42 @@ export var init = () =>
         .reduce((currencies, currency) => currencies.set(currency.code(), currency), new Currencies())
     });
     return new Model({
-      lastSaveStatus: "",
+      status: SaveStatus.INITIAL,
+      textStatus: "",
       saved: state,
       current: state
     })
   });
 
+var getValidationMessage = model => {
+  var state = model.current();
+  var currentInflationRates = state.currentCurrency().inflationRates();
+  if(model.status() == SaveStatus.SAVING){
+    return model.textStatus();
+  }
+  if(model.saved().equals(state)){
+    if(!!model.status()){
+      return model.textStatus();
+    }
+    return __('No changes');
+  }
+  if(currentInflationRates.some(inflationRate => {
+      var inflationRate = inflationRate.inflationRate();
+      return parseFloat(inflationRate) != inflationRate;
+    })){
+    return __('One or more rates are invalid. Please verify the rates highlighted in red')
+  }
+  return null;
+};
+
 class Deflator extends AMP.View {
   render() {
     var {address, model} = this.props;
     var state = model.current();
-    var haveChanges = !model.saved().equals(state);
     var currentCurrency = state.currentCurrency();
     var currentInflationRates = currentCurrency.inflationRates();
+    var validationMessage = getValidationMessage(model);
+    var savingDisabled = validationMessage !== null;
     return (
       <div className="container">
         <div className="row">
@@ -155,14 +186,14 @@ class Deflator extends AMP.View {
 
                   &nbsp;
                   <button
-                    className={cn("btn btn-success", {disabled: !haveChanges})}
-                    disabled={!haveChanges}
+                    className={cn("btn btn-success", {disabled: savingDisabled})}
+                    disabled={savingDisabled}
                     onClick={e => address.send(new Save())}
                   >
                     {__('Save')}
                   </button>
                   <div className="help-block">
-                    {model.lastSaveStatus() || (!haveChanges && __("No changes"))}
+                    {getValidationMessage(model)}
                   </div>
                 </td>
               </tr>
@@ -183,12 +214,17 @@ export function update(action: AMP.Action, model:Model){
     if(action instanceof SaveSuccess){
       return model
         .saved(model.current())
-        .set('lastSaveStatus', __('Save successful'));
+        .status(SaveStatus.SUCCESS)
+        .textStatus(__('Save successful'));
     }
     if(action instanceof SaveFailed){
-      return model.set('lastSaveStatus', __('Save failed: #$', action.reason()));
+      return model
+        .status(SaveStatus.FAIL)
+        .textStatus(__('Save failed: #$', action.reason()));
     }
-    return new SaveSideEffect(model);
+    return new SaveSideEffect(model
+      .status(SaveStatus.SAVING)
+      .textStatus(__('Saving')));
   }
   if(action instanceof RateAction){
     let path = ['current', 'currencies', model.current().currentCurrencyCode(), 'inflationRates', action.getTag()];

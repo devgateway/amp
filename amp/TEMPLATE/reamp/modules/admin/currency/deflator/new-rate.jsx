@@ -21,7 +21,9 @@ export class YearSubmitted extends Action{
 
 export class Model extends AMP.Model{}
 
-export var model = new Model().set('year', '');
+export var model = new Model({
+  year: ''
+})
 
 function getValidationError(model){
   var year = parseInt(model.year());

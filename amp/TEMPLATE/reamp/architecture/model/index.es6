@@ -75,6 +75,10 @@ export default class Model{
     return this.entries().map(...args);
   }
 
+  some(...args){
+    return this.entries().some(...args);
+  }
+
   equals(b: Model):boolean{
     return this.keys().length == b.keys().length &&
       this.keys().every( key => b.has(key) && (this.get(key) instanceof Model ?

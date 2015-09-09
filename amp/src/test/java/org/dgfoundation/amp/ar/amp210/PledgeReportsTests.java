@@ -282,19 +282,22 @@ public class PledgeReportsTests extends MondrianReportsTestCase {
 			correctReportEn, "en");
 	}
 	
-	@Test
-	public void testPledgesAidModalityFiltered() {
-		// AMP-17423-aid-modality-filtered
-		
-		ReportAreaForTests correctReportEn = new ReportAreaForTests()
-	    .withContents("Pledges Titles", "Report Totals", "Pledges Aid Modality", "", "2012-Actual Pledge", "1,25", "Total Measures-Actual Pledge", "1,25")
-	    .withChildren(
-	      new ReportAreaForTests().withContents("Pledges Titles", "Test pledge 1", "Pledges Aid Modality", "Development of shared analytical studies", "2012-Actual Pledge", "1,25", "Total Measures-Actual Pledge", "1,25"));
-		
-		runMondrianTestCase("AMP-17423-aid-modality-filtered-development",
-			Arrays.asList("Test pledge 1", "ACVL Pledge Name 2", "free text name 2", "Heavily used pledge"), // pledge report -> pledge names
-			correctReportEn, "en");
-	}
+//	/**
+//	 * no filtering by pledges aid modality implemented in new reports
+//	 */
+//	@Test
+//	public void testPledgesAidModalityFiltered() {
+//		// AMP-17423-aid-modality-filtered
+//		
+//		ReportAreaForTests correctReportEn = new ReportAreaForTests()
+//	    .withContents("Pledges Titles", "Report Totals", "Pledges Aid Modality", "", "2012-Actual Pledge", "1,25", "Total Measures-Actual Pledge", "1,25")
+//	    .withChildren(
+//	      new ReportAreaForTests().withContents("Pledges Titles", "Test pledge 1", "Pledges Aid Modality", "Development of shared analytical studies", "2012-Actual Pledge", "1,25", "Total Measures-Actual Pledge", "1,25"));
+//		
+//		runMondrianTestCase("AMP-17423-aid-modality-filtered-development",
+//			Arrays.asList("Test pledge 1", "ACVL Pledge Name 2", "free text name 2", "Heavily used pledge"), // pledge report -> pledge names
+//			correctReportEn, "en");
+//	}
 	
 	@Test
 	public void testPledgeSectorColumnsFlat() {

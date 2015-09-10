@@ -13,6 +13,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.RangeValidator;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpOverallFundingTotalsTable;
@@ -24,6 +25,7 @@ import org.dgfoundation.amp.onepager.util.AttributePrepender;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -37,8 +39,9 @@ public class AmpOverviewSection extends AmpComponentPanel<Void> implements AmpRe
 		super(id, fmName);
 		
 		//create a propose project cost section
-		
-		
+
+        AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
+        TeamMember tm = wicketSession.getCurrentMember();
 		
 		final WebMarkupContainer wmc = new WebMarkupContainer("fundingOverviewContainter");
 		wmc.setOutputMarkupId(true);
@@ -47,10 +50,10 @@ public class AmpOverviewSection extends AmpComponentPanel<Void> implements AmpRe
 		if (FeaturesUtil
 				.getGlobalSettingValueBoolean(GlobalSettingsConstants.ACTIVITY_FORM_FUNDING_SECTION_DESIGN)) {
 					wmc.add(new AttributeAppender("class", new Model<String>("fundingOverviewDiv"), ""));
-		}else{
+		} else {
 			wmc.add(new AttributeAppender("class", new Model<String>("fundingOverviewDiv fundingOverviewDivNoTabs"), ""));
-			
 		}
+
         AmpProposedProjectCost propProjCost = new AmpProposedProjectCost(
 				"propProjCost", "Proposed Project Cost", am);
         propProjCost.add(new AttributePrepender("data-is_tab", new Model<String>("true"), ""));
@@ -70,6 +73,12 @@ public class AmpOverviewSection extends AmpComponentPanel<Void> implements AmpRe
 		fundingSourcesNumberPanel.getTextContainer().add(rangeValidator);
 		fundingSourcesNumberPanel.getTextContainer().add(attributeModifier);
 		wmc.add(fundingSourcesNumberPanel);
+
+        String typeOfCooperationKeyPrefix = "";
+        String typeOfImplementationKeyPrefix = "";
+        if (tm.getWorkspacePrefix() != null) {
+            typeOfCooperationKeyPrefix += "SSC_";
+        }
 
 		AmpCategorySelectFieldPanel typeOfCooperation = new AmpCategorySelectFieldPanel(
 				"typeOfCooperation", CategoryConstants.TYPE_OF_COOPERATION_KEY,

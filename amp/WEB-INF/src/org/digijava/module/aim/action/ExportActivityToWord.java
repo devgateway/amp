@@ -2739,9 +2739,8 @@ public class ExportActivityToWord extends Action {
 		}
 		
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Type of Cooperation")){
-			
-			columnName=TranslatorWorker.translateText("Type of Cooperation");
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Type of Cooperation")) {
+			columnName = TranslatorWorker.translateText("Type of Cooperation");
 			columnVal = identification.getSsc_typeOfCooperation();
 							
 			if (columnVal != null) {
@@ -2750,9 +2749,8 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Type of Implementation")){
-			
-			columnName=TranslatorWorker.translateText("Type of Implementation");
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Type of Implementation")) {
+			columnName = TranslatorWorker.translateText("Type of Implementation");
 			columnVal = identification.getSsc_typeOfImplementation();
 							
 			if (columnVal != null) {

@@ -133,19 +133,19 @@ body {background:none;}
                                         </tr>
                                     </module:display>
 
-								<module:display name="/Activity Form/Identification/Type of Cooperation" parentModule="/Activity Form/Identification">
-								<tr>
-									<td width="27%" align="right" valign="top" nowrap="nowrap">
-										<b>
-											<digi:trn>Type of Cooperation</digi:trn>
-										</b></td>
-									<td bgcolor="#ffffff">
-										<c:out value="${aimEditActivityForm.identification.ssc_typeOfCooperation}"/>
-									</td>
-								</tr>
+								<module:display name="/Activity Form/Funding/Overview Section/Type of Cooperation" parentModule="/Activity Form/Funding/Overview Section">
+                                    <tr>
+                                        <td width="27%" align="right" valign="top" nowrap="nowrap">
+                                            <b>
+                                                <digi:trn>Type of Cooperation</digi:trn>
+                                            </b></td>
+                                        <td bgcolor="#ffffff">
+                                            <c:out value="${aimEditActivityForm.identification.ssc_typeOfCooperation}"/>
+                                        </td>
+                                    </tr>
 								</module:display>
 
-								<module:display name="/Activity Form/Identification/Type of Implementation" parentModule="/Activity Form/Identification">
+								<module:display name="/Activity Form/Funding/Overview Section/Type of Implementation" parentModule="/Activity Form/Funding/Overview Section">
 									<tr>
 									<td width="27%" align="right" valign="top" nowrap="nowrap">
 										<b><digi:trn>Type of Implementation</digi:trn></b>

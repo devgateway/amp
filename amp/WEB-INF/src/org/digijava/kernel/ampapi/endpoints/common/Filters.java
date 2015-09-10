@@ -149,21 +149,25 @@ public class Filters {
 	@Path("/sectors")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = true, name = "Sectors", id = "Sectors")
-	public List<JsonBean> getSectorsSchemas() throws AmpApiException{
-		List<JsonBean> schemaList = new ArrayList<JsonBean>();
+	public List<SimpleJsonBean> getSectorsSchemas() throws AmpApiException{
+		List<SimpleJsonBean> sectorList = new ArrayList<SimpleJsonBean>();
 		List<AmpClassificationConfiguration> schems = SectorUtil.getAllClassificationConfigs();
 		Set<String> visibleColumns = ColumnsVisibility.getVisibleColumns();
 		for (AmpClassificationConfiguration ampClassificationConfiguration : schems) {
 			final String columnName = AmpClassificationConfiguration.NAME_TO_COLUMN_MAP
 					.get(ampClassificationConfiguration.getName()); 
 			if (visibleColumns.contains(columnName)) {
-				JsonBean schema=new JsonBean();
-				schema.set("id", ampClassificationConfiguration.getId());
-				schema.set("name", TranslatorWorker.translateText(ampClassificationConfiguration.getName() + SECTORS_SUFFIX));
-				schemaList.add(schema);
+				Long sectorConfigId = ampClassificationConfiguration.getId();
+				String sectorDisplayName = TranslatorWorker.translateText(ampClassificationConfiguration.getName() + SECTORS_SUFFIX);
+				
+				SimpleJsonBean sectorBean = new SimpleJsonBean(sectorConfigId, sectorDisplayName);
+				sectorBean.setFilterId(columnName);
+				
+				sectorList.add(sectorBean);
 			}
 		}
-		return schemaList;
+		
+		return sectorList;
 	}
 
 	/**

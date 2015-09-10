@@ -50,7 +50,7 @@ div.fakefile input {
 	margin-left: 0;
 	width: 217px;
 }
-div.browseContainer {
+div.fakefile2 {
 	position: absolute;
 	top: 0px;
 	left: 217px;
@@ -62,7 +62,7 @@ div.browseContainer {
 	text-align:left;
 	margin-left: 10px;
 }
-div.browseContainer input{
+div.fakefile2 input{
 	width: 83px;
 }
 -->
@@ -143,33 +143,6 @@ function fnSubmit() {
 
 </script>
 
-<script type="text/javascript">
-	
-	function initFileUploads() {
-		var fakeFileUpload = $('<div class="fakefile"></div>');
-		var fileNameInput = $('<input type="text" id="fileNameInput"/>');
-		fakeFileUpload.append (fileNameInput);
-		var browseContainer =  $('<div class="browseContainer"/>');
-		var button = $('<input type ="button" id="fakeInputFile" value="<digi:trn key="aim:browse">Browse...</digi:trn>"> </input>');
-		browseContainer.append(button);
-
-		fakeFileUpload.append(browseContainer);
-		
-		var fileHidden = $('.fileinputs input:file');
-		fileHidden.addClass ('file hidden');
-		var clone = fakeFileUpload.clone(true);
-		fileHidden.parent().append($(clone));
-		$('#fakeInputFile').on('click',function (){ 
-			fileHidden.click(); 
-			}
-		);
-		fileHidden.on('change', function() {
-			$("#fileNameInput").val(fileHidden.val());
-		});
-	
-	}
-
-</script>
 <h1 class="admintitle"><digi:trn>Exchange Rates</digi:trn></h1>
 <digi:errors/>
 <digi:instance property="aimCurrencyRateForm" />
@@ -567,6 +540,8 @@ function fnSubmit() {
 </table>
 </digi:form>
 
+<script  type="text/javascript" src="<digi:file src="module/aim/scripts/fileUpload.js"/>"></script>
+   	
 <script type="text/javascript">
-	initFileUploads();
+	initFileUploads('<digi:trn jsFriendly="true" key="aim:browse">Browse...</digi:trn>');
 </script>

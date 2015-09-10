@@ -148,40 +148,6 @@ div.fakefile2 input {
             }
         });
     }
-	var W3CDOM = (document.createElement && document.getElementsByTagName);
-
-	function initFileUploads() {
-		if (!W3CDOM) return;
-		var fakeFileUpload = document.createElement('div');
-		fakeFileUpload.className = 'fakefile';
-		fakeFileUpload.appendChild(document.createElement('input'));
-
-		var fakeFileUpload2 = document.createElement('div');
-		fakeFileUpload2.className = 'fakefile2';
-
-
-		var button = document.createElement('input');
-		button.type = 'button';
-
-		button.value = '<digi:trn>Browse...</digi:trn>';
-		fakeFileUpload2.appendChild(button);
-
-		fakeFileUpload.appendChild(fakeFileUpload2);
-		var x = document.getElementsByTagName('input');
-		for (var i=0;i<x.length;i++) {
-			if (x[i].type != 'file') continue;
-			if (x[i].parentNode.className != 'fileinputs') continue;
-			x[i].className = 'file hidden';
-			var clone = fakeFileUpload.cloneNode(true);
-			x[i].parentNode.appendChild(clone);
-			x[i].relatedElement = clone.getElementsByTagName('input')[0];
-
- 			x[i].onchange = x[i].onmouseout = function () {
-				this.relatedElement.value = this.value;
-			}
-		}
-	}
-
 
 </script>
 <digi:instance property="contentForm" />
@@ -496,7 +462,7 @@ $(document).ready( function() {
 	catch(e) {}
 });
 </script>
-
+<script  type="text/javascript" src="<digi:file src="module/aim/scripts/fileUpload.js"/>"></script>
 <script language="javascript">
 
 function edit(key) {
@@ -584,7 +550,7 @@ function validateUpload(){
 	}
 	return true;
 }
-initFileUploads();
+initFileUploads('<digi:trn jsFriendly="true" key="aim:browse">Browse...</digi:trn>');
 var enterBinder	= new EnterHitBinder('saveContent');
 </script>
 </digi:form>

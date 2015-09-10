@@ -35,6 +35,7 @@
 <%@include file="documentManagerJsHelper.jsp" %>
 <digi:ref href="css_2/desktop_yui_tabs.css" type="text/css" rel="stylesheet" /> 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+
 <style type="text/css">
 <!--
 div.fileinputs {
@@ -151,7 +152,7 @@ border-right: 1px solid rgb(208, 208, 208);
 }
 
 </style>
-
+<script  type="text/javascript" src="<digi:file src="module/aim/scripts/fileUpload.js"/>"></script>
 <script language="javascript">
  var uploadDoc="<digi:trn jsFriendly='true'>Upload Doc</digi:trn>";
  var addWebLink="<digi:trn jsFriendly='true'>Add Web Link</digi:trn>";
@@ -331,7 +332,7 @@ border-right: 1px solid rgb(208, 208, 208);
 		for (var i=0; i<visibleTabs; i++)
 			repositoryTabView.activatedLists.push(false);
 		
-		initFileUploads();
+		initFileUploads('<digi:trn jsFriendly="true" key="aim:browse">Browse...</digi:trn>');
 		
 		loadTab();
 		
@@ -355,41 +356,6 @@ border-right: 1px solid rgb(208, 208, 208);
 	YAHOO.util.Event.on(window, "load", afterPageLoad); 
 </script>
 <script type="text/javascript">
-	var W3CDOM = (document.createElement && document.getElementsByTagName);
-
-	function initFileUploads() {
-		if (!W3CDOM) return;
-		var fakeFileUpload = document.createElement('div');
-		fakeFileUpload.className = 'fakefile';
-		fakeFileUpload.appendChild(document.createElement('input'));
-
-		var fakeFileUpload2 = document.createElement('div');
-		fakeFileUpload2.className = 'fakefile2';
-
-
-		var button = document.createElement('input');
-		button.type = 'button';
-		button.className='buton';
-
-		button.value = '<digi:trn key="aim:browse">Browse...</digi:trn>';
-		fakeFileUpload2.appendChild(button);
-
-		fakeFileUpload.appendChild(fakeFileUpload2);
-		var x = document.getElementsByTagName('input');
-		for (var i=0;i<x.length;i++) {
-			if (x[i].type != 'file') continue;
-			if (x[i].parentNode.className != 'fileinputs') continue;
-			x[i].className = 'file hidden';
-			var clone = fakeFileUpload.cloneNode(true);
-			x[i].parentNode.appendChild(clone);
-			x[i].relatedElement = clone.getElementsByTagName('input')[0];
-
- 			x[i].onchange = x[i].onmouseout = function () {
-				this.relatedElement.value = this.value;
-			}
-		}
-	}
-
 	function validateAddDocumentLocal(){
 		var ret = false;
 		if(validateAddDocument() == true){

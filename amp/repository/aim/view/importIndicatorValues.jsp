@@ -11,6 +11,7 @@
 	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
+	
 
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer"
@@ -73,35 +74,6 @@ div.fakefile2 input {
 -->
 </style>
 
-<script type="text/javascript">
-	var W3CDOM = (document.createElement && document.getElementsByTagName);
-
-	function initFileUploads() {
-		if (!W3CDOM)
-			return;
-		var fakeFileUpload = document.createElement('div');
-		fakeFileUpload.className = 'fakefile';
-		fakeFileUpload.appendChild(document.createElement('input'));
-		var fakeFileUpload2 = document.createElement('div');
-		fakeFileUpload2.className = 'fakefile2';
-
-		var button = document.createElement('input');
-		button.type = 'button';
-
-		button.value = '<digi:trn key="aim:browse">Browse...</digi:trn>';
-		fakeFileUpload2.appendChild(button);
-
-		fakeFileUpload.appendChild(fakeFileUpload2);
-		var inputFile = $('input:file');
-		inputFile.addClass ('file hidden');
-		var clone = fakeFileUpload.cloneNode(true);
-		inputFile.parent().append(clone);
-		inputFile[0].relatedElement = clone.getElementsByTagName('input')[0];
-		inputFile[0].onchange = inputFile[0].onmouseout = function() {
-			this.relatedElement.value = this.value;
-		}
-	}
-</script>
 
 <digi:instance property="aimDynLocationManagerForm" />
 <digi:context name="digiContext" property="context" />
@@ -215,8 +187,10 @@ div.fakefile2 input {
 		</td>
 	</tr>
 </table>
+<script  type="text/javascript" src="<digi:file src="module/aim/scripts/fileUpload.js"/>"></script>
+   	
 <script type="text/javascript">
-	initFileUploads();
+	initFileUploads('<digi:trn jsFriendly="true" key="aim:browse">Browse...</digi:trn>');
 </script>
 
 

@@ -631,7 +631,8 @@ function collapseAll() {
 				<hr />
 			</module:display>
 
-			<module:display name="/Activity Form/Identification/Type of Cooperation" parentModule="/Activity Form/Identification">
+			<module:display name="/Activity Form/Funding/Overview Section/Type of Cooperation"
+			    parentModule="/Activity Form/Funding/Overview Section">
 				<c:if test="${not empty aimEditActivityForm.identification.ssc_typeOfCooperation}">
 				<digi:trn>Type of Cooperation</digi:trn>:&nbsp;<br />
 				<b><c:out value="${aimEditActivityForm.identification.ssc_typeOfCooperation}"/></b>
@@ -639,7 +640,8 @@ function collapseAll() {
 				</c:if>
 			</module:display>
 
-			<module:display name="/Activity Form/Identification/Type of Implementation" parentModule="/Activity Form/Identification">
+			<module:display name="/Activity Form/Funding/Overview Section/Type of Implementation"
+			    parentModule="/Activity Form/Funding/Overview Section">
 				<digi:trn>Type of Implementation</digi:trn>:&nbsp;<br />
 				<b><c:out value="${aimEditActivityForm.identification.ssc_typeOfImplementation}"/></b>
 				<hr />

@@ -742,15 +742,21 @@ public class EditActivity extends Action {
          }
         eaForm.getIdentification().setSsc_modalities(actModalities );
 
-        AmpCategoryValue typeOfCooperation = CategoryManagerUtil.getAmpCategoryValueFromListByKey("SSC_" +CategoryConstants.TYPE_OF_COOPERATION_KEY, activity.getCategories());
-        eaForm.getIdentification().setSsc_typeOfCooperation(typeOfCooperation == null ? null :typeOfCooperation.getLabel());
+        String typeOfCooperationKeyPrefix = "";
+        String typeOfImplementationKeyPrefix = "";
+        if (currentTeam.getWorkspacePrefix() != null) {
+            typeOfCooperationKeyPrefix += "SSC_";
+            typeOfImplementationKeyPrefix = "SSC_";
+        }
+        AmpCategoryValue typeOfCooperation = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+                typeOfCooperationKeyPrefix + CategoryConstants.TYPE_OF_COOPERATION_KEY, activity.getCategories());
+        eaForm.getIdentification().setSsc_typeOfCooperation(typeOfCooperation == null ? null : typeOfCooperation.getLabel());
 
-        AmpCategoryValue typeOfImplementation = CategoryManagerUtil.getAmpCategoryValueFromListByKey("SSC_" +CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY, activity.getCategories());
-        eaForm.getIdentification().setSsc_typeOfImplementation(typeOfImplementation == null ? null :typeOfImplementation.getLabel());
+        AmpCategoryValue typeOfImplementation = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+                typeOfImplementationKeyPrefix + CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY, activity.getCategories());
+        eaForm.getIdentification().setSsc_typeOfImplementation(typeOfImplementation == null ? null : typeOfImplementation.getLabel());
 
        // eaForm.getIdentification().setFundingSourcesNumber(activity.getFundingSourcesNumber());
-
-        //eaForm.getIdentification().setSsc_typeOfCooperation(activity.)
 
         if (activity != null) {
         	// set title,description and objective
@@ -758,31 +764,29 @@ public class EditActivity extends Action {
         	Set<AmpAnnualProjectBudget> annualBudgets = activity.getAnnualProjectBudgets();
 			List<ProposedProjCost> proposedAnnualBudgets = new ArrayList<ProposedProjCost>();
 			if (annualBudgets != null) {
-				Iterator<AmpAnnualProjectBudget> it = annualBudgets.iterator();
-				while (it.hasNext()) {
-					ProposedProjCost ppc = new ProposedProjCost();
-					AmpAnnualProjectBudget anProjBudget = it.next();
-					java.sql.Date dt = new java.sql.Date(anProjBudget.getYear().getTime());
-					if (anProjBudget.getAmpCurrencyId()!=null) {
-						ppc.setCurrencyCode(anProjBudget.getAmpCurrencyId().getCurrencyCode());
-						ppc.setCurrencyName(anProjBudget.getAmpCurrencyId().getCurrencyName());
-						
-					}
-					else {
-						AmpCurrency currency = CurrencyUtil.getCurrencyByCode(activity.getCurrencyCode());
-						ppc.setCurrencyCode(currency.getCurrencyCode());
-						ppc.setCurrencyName(currency.getCurrencyName());
-						
-					}
-					double frmExRt = Util.getExchange(ppc.getCurrencyCode(), dt);
-					double toExRt = frmExRt;
-					DecimalWraper amt = CurrencyWorker.convertWrapper(anProjBudget.getAmount(), frmExRt,
-							toExRt, dt);
-					ppc.setFunAmount(amt.getCalculations());
-					ppc.setFunAmountAsDouble(amt.doubleValue());
-					ppc.setFunDate(Integer.toString(dt.getYear() + 1900));
-					proposedAnnualBudgets.add(ppc);
-				}
+                for (AmpAnnualProjectBudget annualBudget : annualBudgets) {
+                    ProposedProjCost ppc = new ProposedProjCost();
+                    AmpAnnualProjectBudget anProjBudget = annualBudget;
+                    java.sql.Date dt = new java.sql.Date(anProjBudget.getYear().getTime());
+                    if (anProjBudget.getAmpCurrencyId() != null) {
+                        ppc.setCurrencyCode(anProjBudget.getAmpCurrencyId().getCurrencyCode());
+                        ppc.setCurrencyName(anProjBudget.getAmpCurrencyId().getCurrencyName());
+
+                    } else {
+                        AmpCurrency currency = CurrencyUtil.getCurrencyByCode(activity.getCurrencyCode());
+                        ppc.setCurrencyCode(currency.getCurrencyCode());
+                        ppc.setCurrencyName(currency.getCurrencyName());
+
+                    }
+                    double frmExRt = Util.getExchange(ppc.getCurrencyCode(), dt);
+                    double toExRt = frmExRt;
+                    DecimalWraper amt = CurrencyWorker.convertWrapper(anProjBudget.getAmount(), frmExRt,
+                            toExRt, dt);
+                    ppc.setFunAmount(amt.getCalculations());
+                    ppc.setFunAmountAsDouble(amt.doubleValue());
+                    ppc.setFunDate(Integer.toString(dt.getYear() + 1900));
+                    proposedAnnualBudgets.add(ppc);
+                }
 			}
 			Collections.sort(proposedAnnualBudgets);
 			eaForm.getFunding().setProposedAnnualBudgets(proposedAnnualBudgets);

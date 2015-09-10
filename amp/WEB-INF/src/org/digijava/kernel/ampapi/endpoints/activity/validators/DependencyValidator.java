@@ -7,6 +7,7 @@ import java.util.Map;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.DependencyCheckResult;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeDependencyResolver;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -31,9 +32,19 @@ public class DependencyValidator extends InputValidator {
 		{
 			boolean result = true;
 			for (String dep : deps) {
-				if (!InterchangeDependencyResolver.checkDependency(value, importer.getNewJson(), dep, newFieldParent)) {
+				switch(InterchangeDependencyResolver.checkDependency(value, importer.getNewJson(), dep, newFieldParent)) {
+				case INVALID_REQUIRED:
+					importer.setSaveAsDraft(true);
+					break;
+				case INVALID_NOT_CONFIGURABLE:
 					result = false;
 					errors.add(dep);
+					break;
+				case VALID: 
+					break;
+					
+//					result = false;
+//					errors.add(dep);
 				}
 			}
 			return result;

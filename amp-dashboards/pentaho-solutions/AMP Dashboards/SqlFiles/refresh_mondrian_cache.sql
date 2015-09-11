@@ -14,6 +14,25 @@ DROP TABLE IF EXISTS cached_v_actual_completion_date;
 CREATE TABLE cached_v_actual_completion_date AS SELECT * FROM v_actual_completion_date;
 DROP TABLE IF EXISTS cached_v_sectors CASCADE;
 CREATE TABLE cached_v_sectors AS SELECT * FROM v_sectors;
+--recreate v_m_sectors
+				CREATE OR REPLACE VIEW v_m_sectors AS
+				SELECT sa.amp_activity_id, 
+				getsectorname(getparentsectorid(s.amp_sector_id)) AS sectorname, 
+				getsectorname(getparentsubsectorid(s.amp_sector_id)) AS subsectorname,
+				getsectorname(getparentsubsubsectorid(s.amp_sector_id)) AS subsubsectorname,
+				getparentsectorid(s.amp_sector_id) AS amp_sector_id, 
+				sum(sa.sector_percentage) AS sector_percentage, 
+				s.amp_sec_scheme_id AS amp_sector_scheme_id, 
+				ss.sec_scheme_name
+				   FROM amp_sector_scheme ss
+				   JOIN amp_classification_config cc ON cc.name::text = 'Primary'::text AND cc.classification_id = ss.amp_sec_scheme_id
+				   JOIN amp_sector s ON s.amp_sec_scheme_id = ss.amp_sec_scheme_id
+				   JOIN amp_activity_sector sa ON sa.amp_sector_id = s.amp_sector_id AND sa.classification_config_id = cc.id
+				  GROUP BY sa.amp_activity_id, getparentsectorid(s.amp_sector_id), s.amp_sec_scheme_id, ss.sec_scheme_name,getparentsubsectorid(s.amp_sector_id),getparentsubsubsectorid
+				
+				(s.amp_sector_id)
+				  ORDER BY sa.amp_activity_id, getsectorname(getparentsectorid(s.amp_sector_id));
+
 
 DROP TABLE IF EXISTS cached_v_m_sectors CASCADE;
 CREATE TABLE cached_v_m_sectors AS SELECT * FROM v_m_sectors;
@@ -148,14 +167,37 @@ CREATE TABLE cached_v_creation_date AS SELECT * FROM v_creation_date;
 DROP TABLE IF EXISTS cached_v_secondary_sectors;
 CREATE TABLE cached_v_secondary_sectors AS SELECT * FROM v_secondary_sectors;
 
+--recreate v_m_secondary_sectors
+				CREATE OR REPLACE VIEW v_m_secondary_sectors AS
+				SELECT sa.amp_activity_id, 
+				getsectorname(getparentsectorid(s.amp_sector_id)) AS sectorname, 
+				getparentsectorid(s.amp_sector_id) AS amp_sector_id, 
+				getsectorname(getparentsubsectorid(s.amp_sector_id)) AS subsectorname,
+				getsectorname(getparentsubsubsectorid(s.amp_sector_id)) AS subsubsectorname,
+				sum(sa.sector_percentage) AS sector_percentage, 
+				s.amp_sec_scheme_id AS amp_sector_scheme_id,
+				ss.sec_scheme_name
+				FROM amp_activity_sector sa, amp_sector s, amp_sector_scheme ss
+				WHERE s.amp_sector_id = sa.amp_sector_id AND (s.amp_sec_scheme_id IN ( SELECT amp_classification_config.classification_id
+				           FROM amp_classification_config
+				          WHERE amp_classification_config.name::text = 'Secondary'::text)) AND s.amp_sec_scheme_id = ss.amp_sec_scheme_id
+				  GROUP BY sa.amp_activity_id, 
+				  getsectorname(getparentsectorid(s.amp_sector_id)), 
+				  getparentsectorid(s.amp_sector_id), 
+				  s.amp_sec_scheme_id,
+				  getparentsubsectorid(s.amp_sector_id),
+				  getparentsubsubsectorid(s.amp_sector_id),
+				  ss.sec_scheme_name
+				  ORDER BY sa.amp_activity_id, getsectorname(getparentsectorid(s.amp_sector_id));
+
 DROP TABLE IF EXISTS cached_v_m_secondary_sectors;
 CREATE TABLE cached_v_m_secondary_sectors AS SELECT * FROM v_m_secondary_sectors;
 
 DROP TABLE IF EXISTS cached_v_secondary_sub_sectors;
 CREATE TABLE cached_v_secondary_sub_sectors AS SELECT * FROM v_secondary_sub_sectors;
 
-DROP TABLE IF EXISTS cached_v_convenio_numcont;
-CREATE TABLE cached_v_convenio_numcont AS SELECT * FROM v_convenio_numcont;
+--DROP TABLE IF EXISTS cached_v_convenio_numcont;
+--CREATE TABLE cached_v_convenio_numcont AS SELECT * FROM v_convenio_numcont;
 DROP TABLE IF EXISTS cached_v_responsible_organisation;
 CREATE TABLE cached_v_responsible_organisation AS SELECT * FROM v_responsible_organisation;
 DROP TABLE IF EXISTS cached_v_responsible_org_info;
@@ -197,8 +239,8 @@ DROP TABLE IF EXISTS cached_v_computed_dates;
 CREATE TABLE cached_v_computed_dates AS SELECT * FROM v_computed_dates;
 DROP TABLE IF EXISTS cached_v_cris_number;
 CREATE TABLE cached_v_cris_number AS SELECT * FROM v_cris_number;
-DROP TABLE IF EXISTS cached_v_code_chapitre;
-CREATE TABLE cached_v_code_chapitre AS SELECT * FROM v_code_chapitre;
+--DROP TABLE IF EXISTS cached_v_code_chapitre;
+--CREATE TABLE cached_v_code_chapitre AS SELECT * FROM v_code_chapitre;
 DROP TABLE IF EXISTS cached_v_executing_agency_info;
 CREATE TABLE cached_v_executing_agency_info AS SELECT * FROM v_executing_agency_info;
 DROP TABLE IF EXISTS cached_v_beneficiary_agency_info;
@@ -308,6 +350,9 @@ CREATE TABLE cached_v_donor_date_hierarchy AS SELECT * FROM v_donor_date_hierarc
 ALTER TABLE cached_v_donor_date_hierarchy ALTER COLUMN quarter_name TYPE varchar(2);
 insert into cached_v_donor_date_hierarchy SELECT * FROM v_donor_date_hierarchy;
 
+--crate v_regions_cached
+
+CREATE OR REPLACE VIEW v_regions_cached AS SELECT aa.amp_activity_id, al.region_location_id AS region_id, sum(lp.location_percentage) AS location_percentage, acvl.location_name AS region FROM (((amp_activity aa LEFT JOIN amp_activity_location lp ON ((aa.amp_activity_id = lp.amp_activity_id))) LEFT JOIN amp_location al ON ((lp.amp_location_id = al.amp_location_id))) LEFT JOIN amp_category_value_location acvl ON ((al.region_location_id = acvl.id))) GROUP BY aa.amp_activity_id, al.region_location_id, acvl.location_name ORDER BY aa.amp_activity_id, al.region_location_id;;;
 
 DROP TABLE IF EXISTS cached_v_m_regions;
 CREATE TABLE cached_v_m_regions AS SELECT * FROM v_regions_cached;
@@ -457,9 +502,10 @@ select
 		CAST (coalesce(cro.percentage, 100) as NUMERIC) / CAST (100 as NUMERIC) *
 		CAST (coalesce(cia.percentage, 100) as NUMERIC) / CAST (100 as NUMERIC) *
 		CAST (coalesce(rc.location_percentage, 100) as NUMERIC) / CAST (100 as NUMERIC) *
-		CAST (coalesce(npl1.program_percentage, 100) as NUMERIC) / CAST (100 as NUMERIC) *
+		CAST (coalesce(npl1.percentage, 100) as NUMERIC) / CAST (100 as NUMERIC) *
 		CAST (coalesce(s.sector_percentage,100) as NUMERIC) / CAST (100 as NUMERIC)
 		) AS transaction_amount,     
+	transaction_amount * (1::double precision / getexchangewithfixed(currency_code, transaction_date, fixed_exchange_rate)) AS transaction_amount_in_base,
 	d.name AS donor_name,
 	c.currency_code AS currency_code,
 	cval.id AS terms_assist_id,

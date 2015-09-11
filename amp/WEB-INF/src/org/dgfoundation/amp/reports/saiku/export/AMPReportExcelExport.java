@@ -41,7 +41,7 @@ public class AMPReportExcelExport {
 	private static CellStyle styleTotalClean = null;
 	private static CellStyle styleNumber = null;
 	private static CellStyle styleSettingOption = null;
-	private static CellStyle styleSettingFilter = null;	
+	private static CellStyle styleSettingFilter = null;
 
 	private static final int TYPE_STYLED = 0;
 	private static final int TYPE_PLAIN = 1;
@@ -49,6 +49,9 @@ public class AMPReportExcelExport {
 	private static final short cellHeight = 300;
 	private static final float charWidth = 260;
 	private static final int defaultColWidth = 25;
+
+	private static final String xls_type_styled = "styled";
+	private static final String xls_type_plain = "plain";
 
 	private static final Logger logger = Logger.getLogger(AMPReportExcelExport.class);
 
@@ -63,16 +66,27 @@ public class AMPReportExcelExport {
 
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		Workbook wb = new XSSFWorkbook();
-		Sheet mainSheet = wb.createSheet(TranslatorWorker.translateText("Formatted"));
-		Sheet plainSheet = wb.createSheet(TranslatorWorker.translateText("Plain"));
+		Sheet styledSheet = null;
+		Sheet plainSheet = null;
+
+		String styleType = (String) queryModel.get(AMPReportExportConstants.EXCEL_TYPE_PARAM);
+		if (styleType != null && styleType.equals(xls_type_plain)) {
+			plainSheet = wb.createSheet(TranslatorWorker.translateText("Plain"));
+		} else if (styleType != null && styleType.equals(xls_type_styled)) {
+			styledSheet = wb.createSheet(TranslatorWorker.translateText("Formatted"));
+		}
 		Sheet summarySheet = wb.createSheet(TranslatorWorker.translateText("Summary Information"));
 		createStyles(wb);
 
 		int hierarchies = report.getRowsHierarchiesTotals();
 		int columns = report.getColumns().size();
 		generateSummarySheet(wb, summarySheet, report, queryModel);
-		generateSheet(wb, mainSheet, doc, hierarchies, columns, TYPE_STYLED, report);
-		generateSheet(wb, plainSheet, doc, hierarchies, columns, TYPE_PLAIN, report);
+		if (styledSheet != null) {
+			generateSheet(wb, styledSheet, doc, hierarchies, columns, TYPE_STYLED, report);
+		}
+		if (plainSheet != null) {
+			generateSheet(wb, plainSheet, doc, hierarchies, columns, TYPE_PLAIN, report);
+		}
 
 		logger.info("Write excel");
 		wb.write(os);
@@ -81,7 +95,7 @@ public class AMPReportExcelExport {
 		logger.info("Return excel");
 		return os.toByteArray();
 	}
-	
+
 	/**
 	 * Add extra info about filters applied, currency and settings.
 	 * 

@@ -66,7 +66,7 @@ var WorkspaceToolbar = Backbone.View.extend({
         _.bindAll(this, "call", "reflect_properties", "run_query",
             "swap_axes_on_dropzones", "display_drillthrough","clicked_cell_drillthrough_export",
             "clicked_cell_drillthrough","activate_buttons", "switch_to_mdx","post_mdx_transform", "toggle_fields_action",
-            "export_amp_xls", "export_amp_csv","export_amp_pdf","calculate_url");
+            "export_amp_xls", "export_amp_xls_plain", "export_amp_csv","export_amp_pdf","calculate_url");
         
         // Redraw the toolbar to reflect properties
         this.workspace.bind('properties:loaded', this.reflect_properties);
@@ -534,8 +534,22 @@ var WorkspaceToolbar = Backbone.View.extend({
     },
     export_amp_xls: function(event) {
     	if(Settings.AMP_REPORT_API_BRIDGE) {
+    		var auxQuery = this.workspace.currentQueryModel;
+    		auxQuery.xls_type = 'styled';
 	    	$.postDownload("/rest/data/saikureport/export/xls/" + this.calculate_url(),
-	    			{query: JSON.stringify(this.workspace.currentQueryModel)}, "post");
+	    			{query: JSON.stringify(auxQuery)}, "post");
+    	}
+    	else
+		{
+    		this.export_xls();
+		}
+    },
+    export_amp_xls_plain: function(event) {
+    	if(Settings.AMP_REPORT_API_BRIDGE) {
+    		var auxQuery = this.workspace.currentQueryModel;
+    		auxQuery.xls_type = 'plain';
+	    	$.postDownload("/rest/data/saikureport/export/xls/" + this.calculate_url(),
+	    			{query: JSON.stringify(auxQuery)}, "post");
     	}
     	else
 		{

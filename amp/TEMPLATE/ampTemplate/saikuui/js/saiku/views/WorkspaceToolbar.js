@@ -120,15 +120,15 @@ var WorkspaceToolbar = Backbone.View.extend({
             	$(this.el).find('a.fullscreen').addClass('disabled_toolbar');
             }
     	}
-    	else
-    		{
+    	else {
             var arrButtons = $(args.workspace.toolbar.el)
             .find('.zoom_mode, .query_scenario, .swap_axis, .toggle_fields, .switch_to_mdx, .mdx, .group_parents, .drillthrough, .drillthrough_export, .first_page, .prev_page, .pagination_info, .next_page, .last_page ');
             _.each(arrButtons, function(button) {
             	//Hide Parent
             	$(button.parentElement).hide();
             });
-    		}
+           	$(".export_xls_plain").hide();
+    	}
 
     	if (enabledGisFM && enabledGisFM.models[0].get('error') == undefined && enabledGisFM.models[0].get('GIS') !== undefined) {
         	$(this.el).find('a.export_to_map').removeClass('disabled_toolbar');
@@ -253,7 +253,7 @@ var WorkspaceToolbar = Backbone.View.extend({
 
     
     run_query: function(event) {
-        this.workspace.query.run(true);
+        this.workspace.query.run(true);        
     },
 
     //Start Custom Code for Pagination

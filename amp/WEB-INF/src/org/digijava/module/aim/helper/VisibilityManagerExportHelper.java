@@ -160,7 +160,7 @@ public class VisibilityManagerExportHelper {
 			for (Iterator vtemplateiter = vtemplate.getTemplate().iterator(); vtemplateiter.hasNext();) {
 				TemplateType xmltemplate = (TemplateType) vtemplateiter.next();
 				String templatename = getImportedTemplateName(xmltemplate);
-				AmpTemplatesVisibility currenttemplate = new AmpTemplatesVisibility();//; FeaturesUtil.getTemplateById(FeaturesUtil.insertreturnTemplate(templatename));
+				AmpTemplatesVisibility currenttemplate = new AmpTemplatesVisibility();
 				currenttemplate.setName(templatename);
 				
 				AmpTreeVisibility modeltree = new AmpTreeVisibility();

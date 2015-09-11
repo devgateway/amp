@@ -15,8 +15,8 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.(jsx)$/, loaders:['react-hot', 'babel?plugins=typecheck'], exclude: /node_modules/ },
-      { test: /\.(es6)$/, loaders:['babel?plugins=typecheck'], exclude: /node_modules/ },
+      { test: /\.jsx$/, loaders:['react-hot', 'babel?plugins=typecheck'], exclude: /node_modules/ },
+      { test: /\.es6$/, loaders:['babel?plugins=typecheck'], exclude: /node_modules/ },
       { test: /\.json$/, loader: 'json' },
       { test: /\.css$/, exclude: /\.useable\.css$/, loader: "style!css" },
       { test: /\.less$/, loader: "style!css!less" }

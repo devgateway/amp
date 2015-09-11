@@ -79,6 +79,10 @@ export default class Model{
     return this.entries().some(...args);
   }
 
+  every(...args){
+    return this.entries().every(...args);
+  }
+
   equals(b: Model):boolean{
     return this.keys().length == b.keys().length &&
       this.keys().every( key => b.has(key) && (this.get(key) instanceof Model ?

@@ -1,5 +1,6 @@
 "use strict";
 import Model from "./model";
+import * as effects from "./effects";
 import React from "react";
 
 function shallowDiff (a,b){
@@ -34,24 +35,6 @@ export class Package extends Action{
   }
 }
 
-export class SideEffect{
-  constructor(model: Model, cb){
-    var ran = false;
-    this.model = model;
-    this.unleash = address => {
-      if(ran){
-        throw {
-          name: "SideEffectException",
-          message: "Side effect already unleashed!"
-        }
-      } else {
-        ran = true;
-        cb(address);
-      }
-    }
-  }
-}
-
 export function run({model, view, update, element}){
   var View = view;
   function makeAddress(packages: Array<Package>){
@@ -62,12 +45,12 @@ export function run({model, view, update, element}){
           return new PackageClass(tag, prev);
         }, _action);
         var response = update(action, state);
-        var newState = response instanceof SideEffect ? response.model : response;
+        var newState = response instanceof effects.SideEffect ? response.model : response;
         if(state != newState){
           React.render(<View address={address} model={newState}/>, element);
           state = newState;
         }
-        if(response instanceof SideEffect){
+        if(response instanceof effects.SideEffect){
           response.unleash(address);
         }
       },
@@ -88,7 +71,7 @@ export function run({model, view, update, element}){
 
 export function updateSubmodel(path:Array<string>, update, action, model){
   var response = update(action, model.getIn(path));
-  if(response instanceof SideEffect){
+  if(response instanceof effects.SideEffect){
     response.model = model.setIn(path, response.model);
     return response;
   } else if(response instanceof Model){
@@ -97,3 +80,4 @@ export function updateSubmodel(path:Array<string>, update, action, model){
 }
 
 export {Model as Model}
+export {effects as effects}

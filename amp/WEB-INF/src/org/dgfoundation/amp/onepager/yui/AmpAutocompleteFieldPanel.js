@@ -97,12 +97,13 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
 			return resultObj;
 
         q = decodeURIComponent(q);
-		
+        q = XRegExp.escape(q);
+        
 		resultObj = YAHOO.widget.AutoComplete._cloneObject(resultObj);
 		
 	    var matches = [];
-	    var re = new XRegExp('(\\p{Letter}*)'+accent_fold(q), 'i');
-	    var arr =resultObj.results;
+	    var re = new XRegExp('(\\p{Letter}*)' + accent_fold(q), 'i');
+	    var arr = resultObj.results;
 	    
 	    for (var i=0; i<arr.length; i++) {
 	        if (re.test(accent_fold(arr[i][0])  )) {

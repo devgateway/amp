@@ -22,6 +22,7 @@
    "Export CSV":"Exportar CSV",
    "Export Drill-Through on cell to CSV":"Exportar detalles de la celda a CSV",
    "Export XLS":"Exportar XLS",
+   "Export XLS (without styles)": "Exportar XLS (sin estilos)",
    "Export":"Exportar",
    "Filter":"Filtro",
    "Heat Grid":"Cuadrícula activa",

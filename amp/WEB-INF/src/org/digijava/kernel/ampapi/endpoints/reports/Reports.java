@@ -452,7 +452,7 @@ public class Reports {
 	@Path("/saikureport/export/csv/{report_id}")
 	@Produces({"text/csv"})
 	public final Response exportCsvSaikuReport(String query, @PathParam("report_id") Long reportId) {
-		return exportSaikuReport(query, reportId, "csv");
+		return exportSaikuReport(query, reportId, AMPReportExportConstants.CSV);
 	}
 
 	@POST
@@ -474,6 +474,7 @@ public class Reports {
 			queryModel.put("page", 0);
 			queryModel.put("recordsPerPage", -1);
 			queryModel.put("regenerate", false);
+			queryModel.put(AMPReportExportConstants.EXCEL_TYPE_PARAM, queryObject.get(AMPReportExportConstants.EXCEL_TYPE_PARAM));
 			logger.info("Obtain report result...");
 			result = getSaikuReport(queryObject, reportId);
 

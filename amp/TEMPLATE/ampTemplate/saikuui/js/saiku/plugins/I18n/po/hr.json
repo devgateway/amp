@@ -29,6 +29,7 @@
     "Switch to MDX Mode": "Pređi u MDX način rada",
     "Run query": "Pokreni upit",
     "Export XLS": "Izvezi u XLS",
+    "Export XLS (without styles)": "",
     "Select a cube": "Odaberi kocku",
     "Basic Statistics": "Osnovna statistika",
     "bar": "stupčasti",

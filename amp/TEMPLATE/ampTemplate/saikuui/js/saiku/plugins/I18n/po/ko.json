@@ -23,6 +23,7 @@
 	"Drill through on cell" : "셀 드릴스루",
 	"Export Drill-Through on cell to CSV" : "셀 드릴스루 데이터를 CSV로 저장",
 	"Export XLS" : "XLS 내보내기",
+	"Export XLS (without styles)": "",
 	"Export CSV" : "CSV 내보내기",
 	"Switch to MDX Mode" : "MDX 모드 전환",
 	"Toggle Chart" : "차트 보임/숨김",

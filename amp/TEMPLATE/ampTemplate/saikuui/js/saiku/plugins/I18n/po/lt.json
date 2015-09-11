@@ -64,6 +64,7 @@
    "Export" : "Eksportuoti",
    "Export CSV" : "Eksportuoti į CSV",
    "Export Drill-Through on cell to CSV" : "Eksportuoti langelio detalizaciją į CSV",
+   "Export XLS (without styles)": "",
    "Export XLS" : "Eksportuoti į XLS",
    "File:" : "Failas:",
    "Filter" : "Filtras",

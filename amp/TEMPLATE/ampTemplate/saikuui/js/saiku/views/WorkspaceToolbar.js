@@ -534,8 +534,22 @@ var WorkspaceToolbar = Backbone.View.extend({
     
     export_amp_xls: function(event) {
     	if(Settings.AMP_REPORT_API_BRIDGE) {
-        	$.postDownload("/rest/data/saikureport/export/xls/" + this.workspace.query.get('report_id'),
-        			{query: JSON.stringify(this.workspace.currentQueryModel)}, "post");
+    		var auxQuery = this.workspace.currentQueryModel;
+    		auxQuery.xls_type = 'styled';
+	    	$.postDownload("/rest/data/saikureport/export/xls/" + this.workspace.query.get('report_id'),
+	    			{query: JSON.stringify(auxQuery)}, "post");
+    	}
+    	else
+		{
+    		this.export_xls();
+		}
+    },
+    export_amp_xls_plain: function(event) {
+    	if(Settings.AMP_REPORT_API_BRIDGE) {
+    		var auxQuery = this.workspace.currentQueryModel;
+    		auxQuery.xls_type = 'plain';
+	    	$.postDownload("/rest/data/saikureport/export/xls/" + this.workspace.query.get('report_id'),
+	    			{query: JSON.stringify(auxQuery)}, "post");
     	}
     	else
 		{

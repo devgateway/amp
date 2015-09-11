@@ -12,6 +12,7 @@
    "Swap axis":"Permuter les axes",
    "Show MDX":"Afficher la requête MDX",
    "Export XLS":"Exporter sous Excel",
+   "Export XLS (without styles)": "Exporter sous Excel (sans styles)",
    "Export CSV":"Exporter en CSV",
    "Drill Through":"Détails",
    "Cubes":"Cubes",

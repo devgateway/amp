@@ -1078,11 +1078,7 @@ public class FeaturesUtil {
 		return;
 	}
 	
-	public static Long insertreturnTemplate(String templateName) {
-		AmpTemplatesVisibility ampTemplate = new AmpTemplatesVisibility();
-		ampTemplate.setName(templateName);
-		return (Long) PersistenceManager.getSession().save(ampTemplate);
-	}
+	
 
 	/**
 	 * @author dan

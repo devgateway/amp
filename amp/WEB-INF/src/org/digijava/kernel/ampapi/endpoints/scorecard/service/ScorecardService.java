@@ -124,7 +124,7 @@ public class ScorecardService {
 						+ " AND a.amp_activity_id = l.objectid:: integer  " + " AND r.activity=a.amp_activity_id  "
 						+ " AND    (EXISTS (  SELECT af.amp_donor_org_id "
 						+ " FROM   amp_funding af, amp_activity_version v, amp_team t WHERE  r.organisation = af.amp_donor_org_id "
-						+ " AND v.amp_activity_id = af.amp_activity_id  AND v.deleted is false AND (a.draft = false OR a.draft is null) "
+						+ " AND v.amp_activity_id = af.amp_activity_id AND v.amp_activity_id=a.amp_activity_id AND v.deleted is false AND (a.draft = false OR a.draft is null) "
 						+ " AND v.amp_team_id = t.amp_team_id AND t.isolated = false  "
 						+ " AND    (( af.source_role_id IS NULL)  "
 						+ " OR     af.source_role_id =( SELECT amp_role_id         FROM   amp_role "

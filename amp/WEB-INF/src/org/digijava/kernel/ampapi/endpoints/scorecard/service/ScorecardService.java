@@ -139,7 +139,7 @@ public class ScorecardService {
 					String status = StringUtils.join(allowedStatuses, ",");
 					query += " AND approval_status IN (" + status + ") ";
 				}
-				query += "ORDER BY r.organisation,l.modifydate ";
+				query += "ORDER BY organisation , modifydate ";
 
 				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
 					ResultSet rs = rsi.rs;

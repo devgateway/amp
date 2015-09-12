@@ -1,6 +1,5 @@
 package org.digijava.module.aim.helper;
 
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
@@ -15,7 +14,6 @@ import org.dgfoundation.amp.visibility.feed.fm.schema.ModuleType;
 import org.dgfoundation.amp.visibility.feed.fm.schema.ObjectFactory;
 import org.dgfoundation.amp.visibility.feed.fm.schema.TemplateType;
 import org.dgfoundation.amp.visibility.feed.fm.schema.VisibilityTemplates;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
@@ -53,6 +51,9 @@ import org.hibernate.Session;
  */
 
 public class VisibilityManagerExportHelper {
+	
+	private static SimpleDateFormat myFormatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+	
 	/**
 	 * 
 	 * @return VisibilityTemplates
@@ -154,17 +155,11 @@ public class VisibilityManagerExportHelper {
 		Session hbsession;
 		try {
 			hbsession = PersistenceManager.getRequestDBSession();
-			AmpTemplatesVisibility currenttemplate=null;
-			TreeSet<AmpModulesVisibility> modules=new TreeSet<AmpModulesVisibility>();
-			TreeSet<AmpFeaturesVisibility> features=new TreeSet<AmpFeaturesVisibility>();
-			TreeSet<AmpFieldsVisibility> fields= new TreeSet<AmpFieldsVisibility>();
-			SimpleDateFormat myFormatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-			
 			for (Iterator vtemplateiter = vtemplate.getTemplate().iterator(); vtemplateiter.hasNext();) {
 				TemplateType xmltemplate = (TemplateType) vtemplateiter.next();
-				String templatename = xmltemplate.getName()+"-"+ myFormatter.format(new Date());
-				currenttemplate = FeaturesUtil.getTemplateById(FeaturesUtil.insertreturnTemplate(templatename));
-				
+				String templatename = getImportedTemplateName(xmltemplate);
+				AmpTemplatesVisibility currenttemplate = new AmpTemplatesVisibility();
+				currenttemplate.setName(templatename);
 				
 				AmpTreeVisibility modeltree = new AmpTreeVisibility();
 				modeltree.buildAmpTreeVisibilityMultiLevel(FeaturesUtil.getDefaultAmpTemplateVisibility());
@@ -177,60 +172,23 @@ public class VisibilityManagerExportHelper {
 					AmpModulesVisibility ampmodule = (AmpModulesVisibility) amptree.getRoot();
 					for (Iterator xmlmoditer = xmltemplate.getModule().iterator(); xmlmoditer.hasNext();) {
 						ModuleType xmlmodule = (ModuleType) xmlmoditer.next();
-						if (xmlmodule.getName().equalsIgnoreCase(ampmodule.getName()) && xmlmodule.isVisible()){
-							modules.add(ampmodule);
-							
-							Iterator modfeaturesiter = ampmodule.getItems().iterator();
-							while (modfeaturesiter.hasNext()) {
-								AmpFeaturesVisibility feature = (AmpFeaturesVisibility) modfeaturesiter.next();
-								for (Iterator xmlfeatureiter = xmlmodule.getFeature().iterator(); xmlfeatureiter.hasNext();) {
-									FeatureType xmlfeature = (FeatureType) xmlfeatureiter.next();
-									if(xmlfeature.getName().equalsIgnoreCase(feature.getName()) && xmlfeature.isVisible()){
-										features.add(feature);
-										
-										Iterator fielditer = feature.getItems().iterator();
-										while(fielditer.hasNext()){
-											AmpFieldsVisibility field = (AmpFieldsVisibility) fielditer.next();
-											for (Iterator xmlfieliter = xmlfeature.getField().iterator(); xmlfieliter.hasNext();) {
-												FieldType xmlfield = (FieldType) xmlfieliter.next();
-												if(xmlfield.getValue().equalsIgnoreCase(field.getName()) && xmlfield.isVisible()){
-													fields.add(field);
-												}
-											}
-										}
-									}
-								}
+						if (xmlmodule.getName().equalsIgnoreCase(ampmodule.getName())){
+							if (xmlmodule.isVisible()) {
+								currenttemplate.getItems().add(ampmodule);
 							}
 							
-							Iterator submoduleiter = ampmodule.getSubmodules().iterator();
-							while (submoduleiter.hasNext()) {
+							buildFeaturesAndFields(currenttemplate, ampmodule, xmlmodule);
+							
+							for (Iterator submoduleiter = ampmodule.getSubmodules().iterator();submoduleiter.hasNext();) {
 								AmpModulesVisibility submodule = (AmpModulesVisibility) submoduleiter.next();
 								for (Iterator xmlsubmoditer = xmlmodule.getModule().iterator(); xmlsubmoditer.hasNext();) {
 									ModuleType xmlsubmodule = (ModuleType) xmlsubmoditer.next();
-									if(xmlsubmodule.getName().equalsIgnoreCase(submodule.getName()) && xmlsubmodule.isVisible()){
-										modules.add(submodule);
-										
-										Iterator featuresiter = submodule.getItems().iterator();
-										while (featuresiter.hasNext()) {
-											AmpFeaturesVisibility subfeature = (AmpFeaturesVisibility) featuresiter.next();
-											for (Iterator xmlsubfeatureiter = xmlsubmodule.getFeature().iterator(); xmlsubfeatureiter.hasNext();) {
-												FeatureType xmlfeature = (FeatureType) xmlsubfeatureiter.next();
-												if(xmlfeature.getName().equalsIgnoreCase(subfeature.getName()) && xmlfeature.isVisible()){
-													features.add(subfeature);
-													
-													Iterator fielditer = subfeature.getItems().iterator();
-													while(fielditer.hasNext()){
-														AmpFieldsVisibility field = (AmpFieldsVisibility) fielditer.next();
-														for (Iterator xmlfieliter = xmlfeature.getField().iterator(); xmlfieliter.hasNext();) {
-															FieldType xmlfield = (FieldType) xmlfieliter.next();
-															if(xmlfield.getValue().equalsIgnoreCase(field.getName()) && xmlfield.isVisible()){
-																fields.add(field);
-															}
-														}
-													}
-												}
-											}
+									if(xmlsubmodule.getName().equalsIgnoreCase(submodule.getName())){
+										if (xmlsubmodule.isVisible()) {
+											currenttemplate.getItems().add(submodule);
 										}
+										
+										buildFeaturesAndFields(currenttemplate, submodule, xmlsubmodule);
 									}
 								}	
 							}
@@ -238,17 +196,42 @@ public class VisibilityManagerExportHelper {
 					}
 				}
 
+				hbsession.save(currenttemplate);
 				
-				FeaturesUtil.updateAmpTemplateNameTreeVisibility(currenttemplate.getName(), currenttemplate.getId(), hbsession);
-				FeaturesUtil.updateAmpModulesTreeVisibility(modules, currenttemplate.getId(), hbsession);
-				FeaturesUtil.updateAmpFeaturesTreeVisibility(features, currenttemplate.getId(), hbsession);
-				FeaturesUtil.updateAmpFieldsTreeVisibility(fields, currenttemplate.getId(), hbsession);
-				modules.clear();
-				features.clear();
-				fields.clear();
 			}
 		} catch (HibernateException e) {
 			e.printStackTrace();
+		}
+	}
+
+	private String getImportedTemplateName(TemplateType xmltemplate) {
+		return xmltemplate.getName()+"-"+ myFormatter.format(new Date());
+	}
+
+	private void buildFeaturesAndFields(AmpTemplatesVisibility currentTemplate,
+			AmpModulesVisibility ampmodule, ModuleType xmlmodule) {
+		Iterator modfeaturesiter = ampmodule.getItems().iterator();
+		while (modfeaturesiter.hasNext()) {
+			AmpFeaturesVisibility feature = (AmpFeaturesVisibility) modfeaturesiter.next();
+			for (Iterator xmlfeatureiter = xmlmodule.getFeature().iterator(); xmlfeatureiter.hasNext();) {
+				FeatureType xmlfeature = (FeatureType) xmlfeatureiter.next();
+				if(xmlfeature.getName().equalsIgnoreCase(feature.getName())){
+					if (xmlfeature.isVisible()) {
+						currentTemplate.getFeatures().add(feature);
+					}
+					
+					Iterator fielditer = feature.getItems().iterator();
+					while(fielditer.hasNext()){
+						AmpFieldsVisibility field = (AmpFieldsVisibility) fielditer.next();
+						for (Iterator xmlfieliter = xmlfeature.getField().iterator(); xmlfieliter.hasNext();) {
+							FieldType xmlfield = (FieldType) xmlfieliter.next();
+							if(xmlfield.getValue().equalsIgnoreCase(field.getName()) ){
+								currentTemplate.getFields().add(field);
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 	

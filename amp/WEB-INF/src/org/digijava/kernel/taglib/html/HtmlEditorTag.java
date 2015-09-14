@@ -28,6 +28,7 @@ import org.apache.struts.taglib.TagUtils;
 import org.apache.struts.taglib.html.BaseInputTag;
 import org.apache.struts.taglib.html.Constants;
 
+@Deprecated
 public class HtmlEditorTag
     extends BaseInputTag {
 	private static final long serialVersionUID = 1L;

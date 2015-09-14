@@ -28,7 +28,7 @@ function validate(){
 	if (size==-1){
 		size=100000;
 	}
-	if (FCKeditorAPI.GetInstance('content').GetData().length > size){
+	if ($("[name='content']").ckeditor().html().length > size){
 		var msg='<digi:trn key="editor:longtextError">The text is too long.</digi:trn>'+' Max is '+size+' chrs';
 		alert(msg);
 		return false;

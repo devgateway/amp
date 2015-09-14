@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -26,7 +27,6 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.module.aim.ar.util.FilterUtil;
-import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.exception.AimException;
@@ -779,7 +779,14 @@ public class AmpMessageWorker {
 					myHashMap.put(MessageConstants.OBJECT_LOGIN,
 							StringUtils.left(receivers[j], receivers[j].indexOf("<")));
 				}
-				alerts.add(createAlertFromTemplate(template, myHashMap, alert, receivers[j]));
+				AmpAlert newAlert = null;
+				try {
+					newAlert = (AmpAlert)BeanUtils.cloneBean(alert);
+					alerts.add(createAlertFromTemplate(template, myHashMap, newAlert, receivers[j]));
+				} catch (Exception ex) {
+					logger.error("Cannot clone AmpAlert",ex);
+				} 
+				
 
 			}
 		}

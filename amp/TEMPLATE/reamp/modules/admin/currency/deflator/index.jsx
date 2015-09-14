@@ -1,5 +1,5 @@
 import * as AMP from "amp/architecture";
-import __ from "amp/modules/translate";
+import {t} from "amp/modules/translate";
 import * as Rate from "./rate";
 import * as NewRate from "./new-rate";
 import cn from "classnames";
@@ -148,7 +148,7 @@ var getValidationMessage = model => {
   if(!ratesAreValid(model)){
     return (
       <div className="help-block">
-        {__('One or more rates are invalid. Please verify the rates highlighted in red')}
+        {t('amp.deflator:invalidRates')}
       </div>
     )
   }
@@ -156,7 +156,7 @@ var getValidationMessage = model => {
   if(!haveChanges(model)){
     return (
       <div className="help-block">
-        {__('No changes')}
+        {t('amp.deflator:noChanges')}
       </div>
     )
   }
@@ -178,7 +178,7 @@ var getSaveStatus = model => {
           <span className="label label-success">
             <i className="glyphicon glyphicon-ok"/>
             &nbsp;
-            {__('Saved')}
+            {t('amp.deflator:saved')}
           </span>
         </div>
       )
@@ -188,7 +188,7 @@ var getSaveStatus = model => {
           <span className="label label-danger">
             <i className="glyphicon glyphicon-remove"/>
             &nbsp;
-            {__('Saving failed: #$!', model.saveFailReason())}
+            {t('amp.deflator:savingFailed') + " " + model.saveFailReason()}
           </span>
         </div>
       )
@@ -212,16 +212,16 @@ class Deflator extends AMP.View {
             <table className="table table-striped">
               <caption>
                 <h2>
-                  {__('Inflation rates for')} {currentCurrency.name()}
+                  {t('amp.deflator:title')} {currentCurrency.name()}
                   ({currentCurrency.code()})
                 </h2>
               </caption>
               <thead>
               <tr>
-                <th>{__('Year')}</th>
-                <th>{__('Inflation(%)')}</th>
-                <th>{__('Constant currency')}</th>
-                <th>{__('Delete')}</th>
+                <th>{t('amp.deflator:year')}</th>
+                <th>{t('amp.deflator:inflation')}</th>
+                <th>{t('amp.deflator:constantCurrency')}</th>
+                <th>{t('amp.deflator:delete')}</th>
               </tr>
               </thead>
               <tbody>
@@ -246,7 +246,7 @@ class Deflator extends AMP.View {
                     disabled={disableSaving(model)}
                     onClick={e => address.send(new Save())}
                   >
-                    {__('Save')}
+                    {t('amp.deflator:save')}
                   </button>
                   {getValidationMessage(model)}
                   {getSaveStatus(model)}

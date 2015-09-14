@@ -1,0 +1,14 @@
+{
+  "amp.deflator:newRateHint": "Enter the year and press Enter",
+  "amp.deflator:add": "Add inflation rate",
+  "amp.deflator:invalidRates": "One or more rates are invalid. Please verify the rates highlighted in red",
+  "amp.deflator:noChanges": "No changes",
+  "amp.deflator:saved": "Saved",
+  "amp.deflator:save": "Save",
+  "amp.deflator:savingFailed": "Saving failed",
+  "amp.deflator:title": "Inflation rates for",
+  "amp.deflator:year": "Year",
+  "amp.deflator:inflation": "Inflation(%)",
+  "amp.deflator:constantCurrency": "Constant currency",
+  "amp.deflator:delete": "Delete"
+}

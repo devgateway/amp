@@ -1,7 +1,6 @@
 import React from "react";
 import * as AMP from "amp/architecture";
 import style from "./style.less";
-import __ from "amp/modules/translate";
 import cn from "classnames";
 import {allow, negative, point, number} from "amp/tools/validate";
 

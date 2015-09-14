@@ -5,6 +5,9 @@ import * as NewRate from "./new-rate";
 import cn from "classnames";
 import {MIN_YEAR, MAX_YEAR} from "amp/tools/validate";
 import React from "react";
+require('babel-core/polyfill');
+
+var ALLOW_GAPS = false;
 
 export class Action extends AMP.Action{}
 class Save extends Action{}
@@ -58,19 +61,24 @@ class ResetSaveStatusSideEffect extends AMP.effects.TimeoutSideEffect{
 }
 
 class InflationRates extends AMP.Model{
-    constructor(mutationOrData){
+  constructor(mutationOrData){
     super(mutationOrData);
-    var startYear = Math.min(...super.keys());
-    var endYear = Math.max(...super.keys());
-    this.startYear = () => startYear;
-    this.endYear = () => endYear;
+    if(ALLOW_GAPS){
+      var startYear = Math.min(...super.keys());
+      var endYear = Math.max(...super.keys());
+      this.startYear = () => startYear;
+      this.endYear = () => endYear;
+    }
   }
 
   get(key){
-    return !super.get(key) && this.startYear()< key && key < this.endYear() ? Rate.model.set('year', key) : super.get(key);
+    return ALLOW_GAPS ?
+      super.get(key) && this.startYear()< key && key < this.endYear() ? Rate.model.set('year', key) : super.get(key) :
+      super.get(key);
   }
 
   keys(){
+    if(!ALLOW_GAPS) return super.keys();
     var arr = [];
     for(var year = this.startYear(); year <= this.endYear(); year++){
       arr.push(year);
@@ -218,11 +226,13 @@ class Deflator extends AMP.View {
               </thead>
               <tbody>
               {currentInflationRates.map(rate => {
-                var isFirstOrLast = rate.year() == currentInflationRates.startYear()
-                  || rate.year() == currentInflationRates.endYear();
+                var deletable = ALLOW_GAPS ?
+                  rate.year() == currentInflationRates.startYear() || rate.year() == currentInflationRates.endYear() :
+                  true;
+
                 var inflationRate = rate.inflationRate();
                 var isValid = parseFloat(inflationRate) == inflationRate;
-                var model = rate.set('deletable', false).deletable(isFirstOrLast)
+                var model = rate.set('deletable', false).deletable(deletable)
                   .set('valid', isValid);
                 return <Rate.view address={address.usePackage(RateAction, rate.get('year'))} model={model}/>
               })}
@@ -251,6 +261,7 @@ class Deflator extends AMP.View {
   }
 }
 
+Deflator.propTypes = Deflator.propTypes || {};
 Deflator.propTypes.model = React.PropTypes.instanceOf(Model);
 export {Deflator as view};
 

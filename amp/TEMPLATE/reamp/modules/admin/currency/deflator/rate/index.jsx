@@ -70,6 +70,7 @@ class Rate extends AMP.View{
   }
 }
 
+Rate.propTypes = Rate.propTypes || {};
 Rate.propTypes.model = React.PropTypes.instanceOf(Model);
 
 export {Rate as view}

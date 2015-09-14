@@ -72,6 +72,7 @@ class NewRate extends AMP.View{
   }
 }
 
+NewRate.propTypes = NewRate.propTypes || {};
 NewRate.propTypes.model = React.PropTypes.instanceOf(Model);
 export {NewRate as view};
 

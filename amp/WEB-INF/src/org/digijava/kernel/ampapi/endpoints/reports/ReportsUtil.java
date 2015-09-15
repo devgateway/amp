@@ -194,6 +194,11 @@ public class ReportsUtil {
 				newParams.set("regenerate", queryModel.get("regenerate"));
 			}
 		}
+		
+		if (original.get(EPConstants.ADD_COLUMNS) != null) {
+			newParams.set(EPConstants.ADD_COLUMNS, original.get(EPConstants.ADD_COLUMNS));
+		}
+		
 		return newParams;
 	}
 	

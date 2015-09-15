@@ -364,3 +364,10 @@ function handleWizardPrevious() {
         $('#Step3').show();
     }
 }
+
+function cleanupValidationTime() {
+	// This is needed in case of an old issue when the table had validation_period = false and validation_time > 0
+	if($("input[name=validationPeriod]").is(":checked") !== true) {
+		$('select[name="validationTime"]').val("");
+	}
+}

@@ -67,8 +67,9 @@ public class EndpointUtils {
 		HttpServletRequest request = TLSUtils.getRequest();
 		if (request != null) {
 			TeamMember tm = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
-			if (tm != null)
+			if (tm != null && tm.getTeamId() != null) {
 				return DbUtil.getTeamAppSettings(tm.getTeamId());
+			}
 		}
 		return null;
 	}

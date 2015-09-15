@@ -193,7 +193,7 @@ public class PlainMTEFMondrianReportTests extends MondrianReportsTestCase {
 	
 	@Test
 	public void testMtefConverterDayCodes() {
-		for(int i = 1970; i < 2050; i++) {
+		for(int i = ArConstants.MIN_SUPPORTED_YEAR; i < ArConstants.MAX_SUPPORTED_YEAR; i++) {
 			if (MtefConverter.instance.mtefInfos.get(i).endDayJulianCode + 1 != MtefConverter.instance.mtefInfos.get(i + 1).startDayJulianCode)
 				throw new RuntimeException(String.format("Julian day code for year %d end does not equal 1 + code for year %d", i, i + 1));
 		}

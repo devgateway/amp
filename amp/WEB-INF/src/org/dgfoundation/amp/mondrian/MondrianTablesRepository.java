@@ -310,9 +310,10 @@ public class MondrianTablesRepository {
 				new DatabaseTableColumn("capital_spend_percent", "double", true),
 				new DatabaseTableColumn("disaster_response", "integer NOT NULL", true), // 1 - yes, 2 - no, UNDEFINED - undefined
 				
-				new DatabaseTableColumn("src_role", "text", true),  // amp_role.role_name
-				new DatabaseTableColumn("dest_role", "text", true), // amp_role.role_name
+				new DatabaseTableColumn("src_role", "varchar(10)", true),  // amp_role.role_name
+				new DatabaseTableColumn("dest_role", "varchar(10)", true), // amp_role.role_name
 				new DatabaseTableColumn("dest_org_id", "integer", true),   // amp_org_id
+				new DatabaseTableColumn("flow_name", "varchar(25)", true),
 				
 				new DatabaseTableColumn("related_entity_id", "integer", true) // mondrian_activity_texts id
 		));

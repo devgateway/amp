@@ -57,6 +57,10 @@ public class CellDataSetToGeneratedReport {
 	private final List<Integer> cellDataSetActivities;
 	private DecimalFormat numberFormat;
 	private NumberFormat readingNumberFormat;
+	
+	/**
+	 * measureTotals[MEASURE][ROW]
+	 */
 	private TotalAggregator[][] measureTotals = null;
 	private List<TotalNode>[] rowTotals = null;
 	private int[] currentSubGroupIndex;
@@ -117,8 +121,10 @@ public class CellDataSetToGeneratedReport {
 			hSize--;
 		
 		int maxDepth = spec.getColumns().isEmpty() ? 1 :  
-				(spec.isCalculateRowTotals() ? Math.max(1, hSize) - (hSize / spec.getColumns().size()) : 1); 
+				(spec.isCalculateRowTotals() ? Math.max(1, hSize) - (hSize / spec.getColumns().size()) : 1);
+
 		int maxStackSize = 1 + maxDepth * 2; //* 2 for totals, where maxDepth != 0 
+		
 		refillStack(stack, maxStackSize); //prepare the stack
 		currentSubGroupIndex = new int[maxDepth + 1];
 		
@@ -302,6 +308,7 @@ public class CellDataSetToGeneratedReport {
 	 */
 	private void updateGroupData(Deque<List<ReportArea>> stack, ReportAreaImpl current, int rowId, int totColId, 
 			int depth, int maxStackSize) throws AMPException {
+		//logger.error(String.format("updateGroupData: rowId = %d, totColId = %d, depth = %d, maxStackSize = %d", rowId, totColId, depth, maxStackSize));
 		while(depth > 0) {
 			stack.peek().add(current);
 			depth --;
@@ -367,7 +374,7 @@ public class CellDataSetToGeneratedReport {
 			double[] currentTotalMeasuresColumnTotals = new double[leafHeaders.size() - headerPos];
 			for (ReportArea childArea : current.getChildren()) {
 				ReportCell[] childContent = childArea.getContents().values().toArray(new ReportCell[0]);
-				for (int a = headerPos; a < leafHeaders.size(); a ++) {
+				for (int a = headerPos; a < leafHeaders.size() && a < childContent.length; a ++) { // BOZO - THIS IS A HACK FOR IT NOT TO CRASH. YOU SHOULD UPDATE SaikuUtils.doTotals() instead
 					Double value = (Double)((AmountCell)childContent[a]).value;
 					currentTotalMeasuresColumnTotals[a - headerPos] += value == null ? 0 : value;
 				}

@@ -8,7 +8,7 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
   ea_org_id, ba_org_id, ia_org_id, ro_org_id, ca_org_id, rg_org_id, sg_org_id,
   component_id, agreement_id,
   capital_spend_percent, disaster_response,
-  src_role, dest_role, dest_org_id,
+  src_role, dest_role, dest_org_id, flow_name,
   related_entity_id)
   SELECT 
 	rawdonation.amp_activity_id AS entity_id,
@@ -81,7 +81,7 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
      rawdonation.src_role AS src_role,
      rawdonation.dest_role AS dest_role,
      rawdonation.dest_org_id AS dest_org_id,
-     
+     'Undefined' AS flow_name, 
      rawdonation.related_entity_id AS related_entity_id
           
 	FROM mondrian_raw_donor_transactions rawdonation
@@ -107,3 +107,5 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
     WHERE (rawdonation.transaction_amount IS NOT NULL) AND (rawdonation.amp_activity_id @@activityIdCondition@@)
     
 order by rawdonation.amp_activity_id;
+
+UPDATE mondrian_fact_table SET flow_name = ((@@src_role@@) || ' - ' || (@@dest_role@@)) WHERE (src_role IS NOT NULL) AND (dest_role IS NOT NULL) AND (entity_id @@activityIdCondition@@);

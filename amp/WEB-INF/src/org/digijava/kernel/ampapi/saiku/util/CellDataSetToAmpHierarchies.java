@@ -66,7 +66,7 @@ public class CellDataSetToAmpHierarchies {
 	
 	private void init() {
 		rowTotals = cellDataSet.getRowTotalsLists();
-		//the starting index of the column to concatenate all totals 
+		//the starting index of the column to concatenate all totals
 		startColumnIndex = spec.getHierarchies().size();
 		noOfColumnsToMerge = spec.getColumns().size() - startColumnIndex;
 		if (noOfColumnsToMerge <= 0) return;

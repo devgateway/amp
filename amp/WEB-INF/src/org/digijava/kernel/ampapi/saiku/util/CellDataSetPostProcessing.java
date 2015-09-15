@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportColumn;
@@ -51,11 +52,73 @@ public class CellDataSetPostProcessing {
 		this.environment = o.environment;
 	}
 	
+	public void removeEmptyFlowsColumns(boolean internalIdUsed) {
+//		if (System.currentTimeMillis() > 1)
+//			return;
+		SortedSet<Integer> colsToDelete = new TreeSet<>();
+		List<TotalNode>[] rowTotals = cellDataSet.getRowTotalsLists();
+		boolean canLook = rowTotals != null && rowTotals.length > 0 && rowTotals[0].size() > 0 && rowTotals[0].get(0).getTotalGroups() != null;
+		if (!canLook) return; // nothing to do
+		TotalAggregator[][] matrixTotals = rowTotals[0].get(0).getTotalGroups();
+		if (matrixTotals == null || matrixTotals.length == 0 || matrixTotals[0] == null) return;
+		
+		TotalAggregator[] byColTotals = matrixTotals[0];
+		
+		int measureStartId = (internalIdUsed ? 1 : 0);
+		int measuresEndId = byColTotals.length;
+		
+		for(int i = measureStartId; i < measuresEndId; i++) {
+			if (byColTotals[i] != null && byColTotals[i].getFormattedValue().equals("0"))
+				colsToDelete.add(i + spec.getColumns().size());
+		}
+		//colsToDelete.clear();
+		//colsToDelete.add(1 + spec.getColumns().size());
+		
+		SortedSet<Integer> measToDelete = new TreeSet<>();
+		for(int colNr:colsToDelete)
+			measToDelete.add(colNr - spec.getColumns().size());
+
+		//cellDataSet.setCellSetHeaders(SaikuUtils.removeColumns(cellDataSet.getCellSetHeaders(), colsToDelete));
+		//cellDataSet.setCellSetBody(SaikuUtils.removeColumns(cellDataSet.getCellSetBody(), colsToDelete));
+		cleanupColumnsFromCellDataSet(colsToDelete, measToDelete, new ArrayList<String>());
+		removeColumnsFromLeafHeaders(colsToDelete, 0);
+	}
+	
+	protected void removeColumnsFromLeafHeaders(SortedSet<Integer> colsToDelete, int delta) {
+		// remove associated headers for dummy columns
+		int origHeaderPos = - delta;
+		for (Iterator<ReportOutputColumn> iter = this.leafHeaders.iterator(); iter.hasNext(); origHeaderPos++ ) {
+			ReportOutputColumn roc = iter.next();
+			if (colsToDelete.contains(origHeaderPos)) {
+				iter.remove();
+			}
+		}
+	}
+	
+	public void nullifyFundingFlowsMeasuresTotals() {
+		if (cellDataSet.getColTotalsLists() == null || cellDataSet.getColTotalsLists().length == 0) return;
+		List<TotalNode> level0 = cellDataSet.getColTotalsLists()[0];
+		if (level0.isEmpty()) return;
+		TotalNode byMeasureTotals = level0.get(0);
+		String[] columnNames = byMeasureTotals.getMemberCaptions();
+		if (columnNames == null) return;
+		TotalAggregator[][] matrix = byMeasureTotals.getTotalGroups();
+		if (matrix == null) return;
+		for(int i = 0; i < Math.min(columnNames.length, matrix.length); i++) {
+			String columnName = columnNames[i];
+			if (ArConstants.DIRECTED_MEASURE_TO_DIRECTED_TRANSACTION_VALUE.containsKey(columnName)) {
+				for(int j = 0; j < matrix[i].length; j++)
+					matrix[i][j].setFormattedValue("");
+			}
+		}
+	}
+	
 	/**
 	 * Removes dummy columns & hierarchies that were needed to retrieve appropriate reports result,
-	 * while those columns & hierarchies where not requested  
+	 * while those columns & hierarchies where not requested
+	 * returns internalIdUsed  
 	 */
-	public void removeDummyColumns() {
+	public boolean removeDummyColumns() {
 		// build the list of measures that must be distributed
 		List<String> distributionMeasures = new ArrayList<String>();
 		boolean isTotalsOnly = GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria()); 
@@ -71,7 +134,7 @@ public class CellDataSetPostProcessing {
 		int dummyNo = spec.getDummyColumns().size();
 		if (dummyNo == 0 && !hasDistributionColumnsToRemove) {
 			// no dummy columns to remove
-			return;
+			return false;
 		}
 		
 		cellDataSet.setLeftOffset(cellDataSet.getLeftOffset() - dummyNo);
@@ -94,8 +157,6 @@ public class CellDataSetPostProcessing {
 			}
 			currentId++;
 		}
-		// remove associated headers for dummy columns
-		int origHeaderPos = 0;
 		SortedSet<Integer> measureColIdsToHide = new TreeSet<Integer>();
 		
 		if (hasDistributionColumnsToRemove) {
@@ -105,13 +166,7 @@ public class CellDataSetPostProcessing {
 				dummyColumnsIdsIfInternalIdUsed.add(colId + spec.getColumns().size() - 1);
 			}
 		}
-		
-		for (Iterator<ReportOutputColumn> iter = this.leafHeaders.iterator(); iter.hasNext(); origHeaderPos++ ) {
-			ReportOutputColumn roc = iter.next();
-			if (dummyColumnsIds.contains(origHeaderPos)) {
-				iter.remove();
-			}
-		}
+		removeColumnsFromLeafHeaders(dummyColumnsIds, 0);
 		if (dummyHierarchy != null) {
 			spec.getHierarchies().remove(dummyHierarchy);
 			dummyColumnsIds = dummyColumnsIdsIfInternalIdUsed;
@@ -120,6 +175,7 @@ public class CellDataSetPostProcessing {
 		cleanupColumnsFromCellDataSet(dummyColumnsIds, measureColIdsToHide, distributionMeasures);
 		
 		spec.removeDummyColumns();
+		return dummyHierarchy != null;
 	}
 	
 	private SortedSet<Integer> detectFullyEmptyGroups(boolean internalIdUsed) {

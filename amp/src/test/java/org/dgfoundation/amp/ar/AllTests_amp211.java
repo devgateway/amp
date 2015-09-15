@@ -8,6 +8,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.dgfoundation.amp.ar.amp211.BooleanFilterTests;
+import org.dgfoundation.amp.ar.amp211.FundingFlowsMondrianReportTests;
 import org.dgfoundation.amp.ar.amp211.InflationRatesTests;
 import org.dgfoundation.amp.ar.amp211.PlainMTEFMondrianReportTests;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
@@ -36,7 +37,7 @@ public class AllTests_amp211
 		suite.addTest(new JUnit4TestAdapter(PlainMTEFMondrianReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(InflationRatesTests.class));
 		suite.addTest(new JUnit4TestAdapter(BooleanFilterTests.class));
-		
+		suite.addTest(new JUnit4TestAdapter(FundingFlowsMondrianReportTests.class));
 		return suite;
 	}
 	

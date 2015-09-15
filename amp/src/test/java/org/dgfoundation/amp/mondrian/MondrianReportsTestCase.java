@@ -17,6 +17,7 @@ import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
+import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -97,7 +98,7 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 			else
 				activitiesSrc = new ActivityIdsFetcher(entities);
 			ReportEnvironment env = new ReportEnvironment(locale, activitiesSrc, pledgesSrc, FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY));
-			MondrianReportGenerator generator = new MondrianReportGenerator(areaType, env);
+			ReportExecutor generator = new MondrianReportGenerator(areaType, env);
 			GeneratedReport res = generator.executeReport(spec);
 			return res;
 		}

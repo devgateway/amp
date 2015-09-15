@@ -28,6 +28,7 @@ import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
+import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -217,8 +218,7 @@ public class DashboardsService {
 		SettingsUtils.applyExtendedSettings(spec, config);
 		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false, true));
 		spec.setCalculateRowTotals(true);
-		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
-				ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
+		ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		GeneratedReport report = null;
 
 		filterRules = FilterUtils.getFilterRules(columnFilters, otherFilter, null);
@@ -284,8 +284,7 @@ public class DashboardsService {
 		return retlist;
 	}
 	
-	protected static void postProcess(GeneratedReport report, ReportSpecificationImpl spec, 
-			MondrianReportGenerator generator, String type) {
+	protected static void postProcess(GeneratedReport report, ReportSpecificationImpl spec, ReportExecutor generator, String type) {
 		switch (type.toUpperCase()) {
 		case "RE": postProcessRE(report, spec, generator); break;
 		}
@@ -298,8 +297,7 @@ public class DashboardsService {
 	 * @param spec
 	 * @param generator
 	 */
-	protected static void postProcessRE(GeneratedReport report, ReportSpecificationImpl spec, 
-			MondrianReportGenerator generator) {
+	protected static void postProcessRE(GeneratedReport report, ReportSpecificationImpl spec, ReportExecutor generator) {
 		String undefinedStr = TranslatorWorker.translateText("Undefined");
 		// lookup the Undefined region
 		ListIterator<ReportArea> mainDataIter = report.reportContents.getChildren().listIterator();
@@ -326,13 +324,11 @@ public class DashboardsService {
 		ReportOutputColumn amountCol = undefinedRegion.rootHeaders.get(3);
 		
 		String currentCountry = TranslatorWorker.translateText(FeaturesUtil.getCurrentCountryName());
-		 
 		
 		ReportArea actualUndefiend = getUndefinedRegionArea(undefinedRegion.reportContents.getChildren().iterator(), 
 				undefinedStr);
 		
-		Iterator<ReportArea> undefinedDataIter = actualUndefiend.getChildren().iterator().next().getChildren()
-				.iterator();
+		Iterator<ReportArea> undefinedDataIter = actualUndefiend.getChildren().iterator().next().getChildren().iterator();
 		ReportArea national = null;
 		ReportArea uRegion = null;
 		while (undefinedDataIter.hasNext() && (national == null || uRegion == null)) {
@@ -402,8 +398,7 @@ public class DashboardsService {
 		return undefined;
 	}
 	
-	protected static GeneratedReport drillDownUndefinedRegionByLocation(ReportSpecificationImpl spec, 
-			MondrianReportGenerator generator) {
+	protected static GeneratedReport drillDownUndefinedRegionByLocation(ReportSpecificationImpl spec, ReportExecutor generator) {
 		/*
 		 * Drill down report data by location for undefined region:
 		 * 		National - allocated for the current country
@@ -464,9 +459,7 @@ public class DashboardsService {
  				spec.setFilters(filterRules);
  			} 		
  		}
- 	
-		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
-				ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
+ 		ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		
 		SettingsUtils.applySettings(spec, filter);
 		
@@ -550,7 +543,7 @@ public class DashboardsService {
 		
 		spec.addSorter(new SortingInfo(spec.getMeasures().get(0), false));
 		
-		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
+		ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		GeneratedReport report = null;
 		
 		MondrianReportFilters filterRules = null;
@@ -644,8 +637,7 @@ public class DashboardsService {
 		SettingsUtils.applyExtendedSettings(spec, config);
 		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false, true));
 		spec.setCalculateRowTotals(true);
-		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
-				ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
+		ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		GeneratedReport report = null;
 
 		MondrianReportFilters filterRules = null;

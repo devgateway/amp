@@ -45,6 +45,18 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	public static ReportOutputColumn buildTranslated(String originalColumnName, String locale, ReportOutputColumn parentColumn){
 		return new ReportOutputColumn(TranslatorWorker.translateText(originalColumnName, locale, 3l), parentColumn, originalColumnName);
 	}
+	
+	/**
+	 * moves up a number of levels OR until null is reached
+	 * @param levels
+	 * @return
+	 */
+	public ReportOutputColumn moveUp(int levels) {
+		if (levels == 0) return this;
+		if (this.parentColumn == null) return parentColumn;
+		return this.parentColumn.moveUp(levels - 1);
+	}
+	
 	/**
 	 * computes the full name of the column like, for example, [Funding][2007][Actual Commitments]
 	 * <strong>unlocalized</strong>

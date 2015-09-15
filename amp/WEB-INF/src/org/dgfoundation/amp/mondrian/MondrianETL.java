@@ -21,6 +21,7 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.algo.BooleanWrapper;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
@@ -519,11 +520,11 @@ private EtlResult execute() throws Exception {
 	 */
 	protected void generateMondrianDateTable() throws SQLException {
 		generateStarTableWithQueryInPostgres(MONDRIAN_DATE_TABLE, "date_code", 
-			"SELECT to_char(transaction_date, 'J')::integer AS day_code, (CAST (transaction_date as date)) AS full_date, date_part('year'::text, (CAST (transaction_date as date)))::integer AS year_code, date_part('year'::text, (CAST (transaction_date as date)))::text AS year_name, date_part('month'::text, (CAST (transaction_date as date)))::integer AS month_code, to_char((CAST (transaction_date as date)), 'Month'::text) AS month_name, date_part('quarter'::text, (CAST (transaction_date as date)))::integer AS quarter_code, ('Q'::text || date_part('quarter'::text, (CAST (transaction_date as date)))) AS quarter_name " + 
-			" FROM generate_series('1970-1-1', '2050-1-1', interval '1 day') transaction_date " + 
+			String.format("SELECT to_char(transaction_date, 'J')::integer AS day_code, (CAST (transaction_date as date)) AS full_date, date_part('year'::text, (CAST (transaction_date as date)))::integer AS year_code, date_part('year'::text, (CAST (transaction_date as date)))::text AS year_name, date_part('month'::text, (CAST (transaction_date as date)))::integer AS month_code, to_char((CAST (transaction_date as date)), 'Month'::text) AS month_name, date_part('quarter'::text, (CAST (transaction_date as date)))::integer AS quarter_code, ('Q'::text || date_part('quarter'::text, (CAST (transaction_date as date)))) AS quarter_name " + 
+			" FROM generate_series('%d-1-1', '%d-1-1', interval '1 day') transaction_date " + 
 			" UNION ALL " + 
 			" SELECT 999999999, '9999-1-1', 9999, 'Undefined', 99, 'Undefined', 99, 'Undefined' " + 
-			" ORDER BY day_code",
+			" ORDER BY day_code", ArConstants.MIN_SUPPORTED_YEAR, ArConstants.MAX_SUPPORTED_YEAR), 
 			new ArrayList<String>());
 		for (AmpFiscalCalendar calendar:DbUtil.getAllFisCalenders()) {
 			generateFiscalCalendarColumns(calendar);
@@ -1010,6 +1011,15 @@ private EtlResult execute() throws Exception {
 //		monetConn.executeQuery(deletePledgesQuery);
 //	}
 	
+	protected String buildRoleCase(String colName) {
+		StringBuilder res = new StringBuilder("CASE");
+		for(String s:ArConstants.USER_FRIENDLY_ROLE_CODES.keySet()) {
+			res.append(String.format(" WHEN %s='%s' THEN '%s'", colName, s, ArConstants.USER_FRIENDLY_ROLE_CODES.get(s)));
+		}
+		res.append(" ELSE " + colName + " END");
+		return res.toString();
+	}
+	
 	/**
 	 * reads from factTableQuery the list of queries, inserts entity IDs in it and then filtering out those queries which would do nothing anyway
 	 * @return
@@ -1038,7 +1048,7 @@ private EtlResult execute() throws Exception {
 				if (q.indexOf("@@activityIdCondition@@") != 0 && allEntities.isEmpty())
 					continue; // query references activities, but these are empty -> it is useless
 				String activityCondition = etlConfig.fullEtl ? " >0 " : (" IN (" +Util.toCSStringForIN(allEntities) + ")");
-				res.add(q.replace("@@activityIdCondition@@", activityCondition));
+				res.add(q.replace("@@activityIdCondition@@", activityCondition).replace("@@src_role@@", buildRoleCase("src_role")).replace("@@dest_role@@", buildRoleCase("dest_role")));
 			}
 			return res;
 		}

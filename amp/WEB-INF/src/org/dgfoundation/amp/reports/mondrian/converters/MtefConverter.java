@@ -11,6 +11,7 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
@@ -56,9 +57,9 @@ public class MtefConverter {
 		final SortedMap<Integer, YearMtefInfo> mtefInfos = new TreeMap<>();
 		PersistenceManager.getSession().doWork(new Work() {
 			@Override public void execute(Connection connection) throws SQLException {
-				String query = "SELECT yr, to_char((yr || '-01-01')::date, 'J')::integer AS year_start_day_code, " + 
+				String query = String.format("SELECT yr, to_char((yr || '-01-01')::date, 'J')::integer AS year_start_day_code, " + 
 						"to_char((yr+1 || '-01-01')::date, 'J')::integer - 1 AS year_end_day_code " + 
-						"FROM generate_series(1970, 2050) yr";
+						"FROM generate_series(%d, %d) yr", ArConstants.MIN_SUPPORTED_YEAR, ArConstants.MAX_SUPPORTED_YEAR);
 
 				try(RsInfo rsi = SQLUtils.rawRunQuery(connection, query, null)) {
 					while (rsi.rs.next()) {

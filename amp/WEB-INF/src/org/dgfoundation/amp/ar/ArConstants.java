@@ -135,6 +135,12 @@ public final class ArConstants {
 	public final static String FUNDING_TYPE_COMMITMENT_GAP = "Commitment Gap";
 	public final static String PLEDGES_METADATA_NAME = "Pledges ";
 
+	public final static Map<String, String> USER_FRIENDLY_ROLE_CODES = Collections.unmodifiableMap(new HashMap<String, String>() {{
+		put("IA", "IMPL");
+		put("EA", "EXEC");
+		put("BA", "BENF");
+	}});
+
     public final static Map<String, Integer> TRANSACTION_TYPE_NAME_TO_ID = new LinkedHashMap<String, Integer>() {{
 		put(COMMITMENT, Constants.COMMITMENT);
 		put(DISBURSEMENT, Constants.DISBURSEMENT);
@@ -154,6 +160,9 @@ public final class ArConstants {
 		put(DISBURSEMENT, Constants.DISBURSEMENT);
 	}};
 	
+	public final static int MIN_SUPPORTED_YEAR = 1970;
+	public final static int MAX_SUPPORTED_YEAR = 2050;
+
 	//public final static String PLEDGES_TOTAL_PLEDGED="Total Pledged";
 	public final static java.sql.Date PLEDGE_FAKE_YEAR = new java.sql.Date(0);
     
@@ -495,18 +504,10 @@ public final class ArConstants {
 		}
 		
 	}
-
-	public final static String userFriendlyNameOfRole(String src)
-	{
-		if (src.equals("DN"))
-			return src;
-		if (src.equals("IA"))
-			return "IMPL";
-		if (src.equals("EA"))
-			return "EXEC";
-		if (src.equals("BA"))
-			return "BENF";
+	
+	public final static String userFriendlyNameOfRole(String src) {
+		String res = USER_FRIENDLY_ROLE_CODES.get(src);
+		if (res != null) return res;
 		return src;
 	}
-
 }

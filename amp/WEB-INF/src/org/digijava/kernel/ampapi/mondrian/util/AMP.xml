@@ -906,6 +906,13 @@
 		<DimensionUsage name="Pledge Tertiary Sector"	source="AMP Sector" foreignKey="tertiary_sector_id" />
 		
 		<DimensionUsage name="Dates" source="AMP Date" foreignKey="date_code" />
+		
+		<Dimension name="Flow Name">
+		<!-- degenerate dimension; not used in filtering or other complicated ways but for displaying only, so no key column -->
+			<Hierarchy hasAll="true">
+				<Level name="Flow Name" column="flow_name" />
+			</Hierarchy>
+		</Dimension>
 
 
 		<Measure name="@@trivial_measure@@" aggregator="sum">
@@ -949,6 +956,42 @@
 				</SQL>
 			</MeasureExpression>
 		</Measure>
+
+		<Measure name="Real Commitments" aggregator="sum">
+			<MeasureExpression>
+				<SQL dialect="generic" aggregator="sum">
+					CASE
+						WHEN (mondrian_fact_table.transaction_type = 0) AND (mondrian_fact_table.adjustment_type=@@actual@@) AND (flow_name &lt;&gt; 'Undefined')
+							THEN "mondrian_fact_table".transaction_exch_@@currency@@
+						ELSE null
+					END
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+		
+		<Measure name="Real Disbursements" aggregator="sum">
+			<MeasureExpression>
+				<SQL dialect="generic" aggregator="sum">
+					CASE
+						WHEN (mondrian_fact_table.transaction_type = 1) AND (mondrian_fact_table.adjustment_type=@@actual@@) AND (flow_name &lt;&gt; 'Undefined')
+							THEN "mondrian_fact_table".transaction_exch_@@currency@@
+						ELSE null
+					END
+				</SQL>
+			</MeasureExpression>
+		</Measure>		
+		
+		<Measure name="Real MTEFs" aggregator="sum">
+			<MeasureExpression>
+				<SQL dialect="generic" aggregator="sum">
+					CASE
+						WHEN (mondrian_fact_table.transaction_type = 3) AND (mondrian_fact_table.adjustment_type=@@actual@@) AND (flow_name &lt;&gt; 'Undefined')
+							THEN "mondrian_fact_table".transaction_exch_@@currency@@
+						ELSE null
+					END
+				</SQL>
+			</MeasureExpression>
+		</Measure>		
 		
 		<Measure name="Planned Disbursements - Capital" aggregator="sum">
 			<MeasureExpression>

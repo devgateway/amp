@@ -306,7 +306,6 @@ FilterUtils.extractFilters = function(content) {
 			filters.push(auxFilter);
 		}
 	});
-	debugger;
 	return filters;
 };
 

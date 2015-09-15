@@ -33,6 +33,7 @@ import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
+import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
@@ -453,7 +454,7 @@ public class Reports {
 			filterRules = FilterUtils.getFilterRules((LinkedHashMap<String, Object>)filters.get("columnFilters"), (LinkedHashMap<String, Object>)filters.get("otherFilters"), null);
 		}	
 
-		MondrianReportGenerator generator = new MondrianReportGenerator(SaikuReportArea.class, ReportEnvironment.buildFor(httpRequest));
+		ReportExecutor generator = new MondrianReportGenerator(SaikuReportArea.class, ReportEnvironment.buildFor(httpRequest));
 		SaikuGeneratedReport report = null;
 		try {
 			ReportSpecificationImpl spec = AmpReportsToReportSpecification.convert(ampReport);

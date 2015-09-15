@@ -121,34 +121,35 @@ public class MDXGenerator {
 		String notEmptyRows = config.isAllowRowsEmptyData() ? "" : "NON EMPTY ";
 		
 		adjustDateFilters(config);
-
-		String axisMdx = null;
 		
 		/* COLUMNS */
 		//if column attributes are not configured, display only measures
-		axisMdx = getColumns(config, with);
-		columns  =  notEmptyColumns + axisMdx + columns;
+		String columnMdx = getColumns(config, with);
+		if (config.getCrossJoinWithColumns() != null)
+			columnMdx = String.format("NonEmptyCrossJoin(%s, %s)", columnMdx, config.getCrossJoinWithColumns());
+		
+		columns  =  notEmptyColumns + columnMdx + columns;
 		
 		/* ROWS */
-		axisMdx = getRows(config, with);
+		String rowMdx = getRows(config, with);
 		
-		if (axisMdx == null) {//no attributes are defined on rows
+		if (rowMdx == null) {//no attributes are defined on rows
 			rows = "";
 		} else {
 			//filter axis by measures
 			if (config.getAxisFilters().size()>0) {
 				for (Map.Entry<MDXElement, List<MDXFilter>> pair : config.getAxisFilters().entrySet()) {
 					if (pair.getKey() instanceof MDXMeasure) {
-						axisMdx = toFilter(axisMdx, pair.getKey(), pair.getValue(), false);
+						rowMdx = toFilter(rowMdx, pair.getKey(), pair.getValue(), false);
 					}
 				}
 	 		}
 			//sorting
 			if (config.getSortingOrder().size() > 0) {
-				axisMdx = sorting(config.getSortingOrder(), axisMdx);
+				rowMdx = sorting(config.getSortingOrder(), rowMdx);
 			}
 			
-			rows  = notEmptyRows + axisMdx + rows;
+			rows  = notEmptyRows + rowMdx + rows;
 			columns += ", ";
 		}
 		
@@ -160,6 +161,18 @@ public class MDXGenerator {
 		logger.info("[" + config.getMdxName() + "] MDX query: " + mdx);
 		validate(mdx, config.getMdxName());
 			
+//		mdx = "WITH " + 
+//		"SET [~COLUMNS_Dates.Year] AS " + 
+//		"    {[Dates.Year].[Year].Members} " + 
+//		"SET [~COLUMNS_Flow Name] AS " + 
+//		"    {[Flow Name].[Flow Name].Members} " + 
+//		"SET [~ROWS] AS " + 
+//		"    {[Activity Texts.Project Title].[Project Title].Members}" + 
+//		"SELECT " + 
+//		"NON EMPTY NonEmptyCrossJoin(NonEmptyCrossJoin([~COLUMNS_Dates.Year], {[Measures].[Real Disbursements], [Measures].[Actual Commitments]}), [~COLUMNS_Flow Name]) ON COLUMNS, " + 
+//		"NON EMPTY NonEmptyCrossJoin([Activity Fixed Texts.Internal Use Id].[Internal Use Id].Members, [~ROWS]) ON ROWS " + 
+//		"FROM [Donor Funding]"; 
+		
 		return mdx;
 	}
 	

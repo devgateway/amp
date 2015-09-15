@@ -26,6 +26,7 @@ import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
+import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -115,7 +116,7 @@ public class ActivityService {
 		if(filterRules!=null){
 			spec.setFilters(filterRules);
 		}
-		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
+		ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class,ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		GeneratedReport report = null;		
 		try {
 			report = generator.executeReport(spec);
@@ -223,8 +224,7 @@ public class ActivityService {
 	}
 	FilterUtils.applyFilterRules(config, spec,null);	
 	GeneratedReport report = null;
-	MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
-			ReportEnvironment.buildFor(TLSUtils.getRequest()), true);
+	ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), true);
 	try {
 	    report = generator.executeReport(spec);
 	} catch (Exception e) {

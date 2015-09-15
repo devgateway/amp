@@ -20,14 +20,20 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.SortedSet;
 
+import mondrian.util.Format;
+
 import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -69,27 +75,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  */
 public class SaikuUtils {
 	
-	/**
-	 * Saiku mechanism to calculate the totals
-	 * @param cellDataSet
-	 * @param onColumns - true for totals on columns
-	 * @param onRows - true for totals on rows
-	 * @throws Exception 
-	 */
-	public static void doTotals(CellDataSet result, CellSet cellSet, boolean onColumns, boolean onRows) throws Exception {
-		/* start of AMP custom part to detect the selectedMeasures list */ 
-		
-		if (cellSet.getAxes().size() < 2 || result.getCellSetBody().length == 0 )
-			return; 
+	protected static List<Measure> scanUniqueMeasures(CellSet cellSet) {
 		CellSetAxis columnAxis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
 		List<Measure> uniqueMeasures = new ArrayList<Measure>();
-		/*
-		// adjustments for AMP-18330 start
-		Member alwaysPresent = null;
-		SortedSet<Integer> totalRowsColumnsToRemove = new TreeSet<Integer>();
-		int colPos = 0;
-		// AMP-18330 end
-		 */
 		
 		for(Position colPosition : columnAxis.getPositions())
 			for (Member member :  colPosition.getMembers()) {
@@ -110,7 +98,79 @@ public class SaikuUtils {
 					//colPos ++;
 				}
 			}
+		return uniqueMeasures;
+	}
+	
+	/**
+	 * debug-only method used for printing
+	 * @param totals
+	 * @return
+	 */
+	protected static String totalGroupsToString(TotalAggregator[][] totals) {
+		if (totals == null)
+			return "(null)";
 		
+		StringBuilder res = new StringBuilder(String.format("(%d, %d) = (", totals.length, totals.length == 0 ? 0 : totals[0].length));
+		for(int i = 0; i < totals.length; i++) {
+			if (i > 0) res.append("; ");
+			res.append("(");
+			for(int j = 0; j < totals[i].length; j++) {
+				if (j > 0) res.append(", ");
+				res.append(String.format("%.2f", totals[i][j].getValue()));
+			}
+			res.append(")");
+		}
+		res.append(")");
+		return res.toString();
+	}
+	
+	/**
+	 * debug-only method used for printing
+	 * @param t
+	 */
+	protected static void printTotals(List<TotalNode>[] t) {
+		System.err.format("there are a total of %d totals levels\n", t.length);
+		for(int i = 0; i < t.length; i++) {
+			System.err.format("\tlevel %d has %d TotalNodes:\n", i, t[i].size());
+			for(int j = 0; j < t[i].size(); j++) {
+				TotalNode tn = t[i].get(j);
+				System.err.format("\t\telement %d of level %d: %s %s\n", j, i, tn.getMemberCaptions() == null ? "(no captions)" : Arrays.asList(tn.getMemberCaptions()).toString(), totalGroupsToString(tn.getTotalGroups()));
+			}
+		}
+	}
+	
+	/**
+	 * as of 15-sep-2015, crashes
+	 * @param captions
+	 * @return
+	 */
+	protected static TotalNode createTotalNodeFor(String[] captions) {
+		TotalNode res = new MyTotalNode(captions);
+		return res;
+	}
+	
+	/**
+	 * Saiku mechanism to calculate the totals
+	 * @param cellDataSet
+	 * @param onColumns - true for totals on columns
+	 * @param onRows - true for totals on rows
+	 * @throws Exception 
+	 */
+	public static void doTotals(CellDataSet result, CellSet cellSet, boolean onColumns, boolean onRows, List<ReportOutputColumn> leafHeaders, List<ReportOutputColumn> totalsHeaders) throws Exception {
+		/* start of AMP custom part to detect the selectedMeasures list */ 
+		
+		if (cellSet.getAxes().size() < 2 || result.getCellSetBody().length == 0 )
+			return; 
+								
+		/*
+		// adjustments for AMP-18330 start
+		Member alwaysPresent = null;
+		SortedSet<Integer> totalRowsColumnsToRemove = new TreeSet<Integer>();
+		int colPos = 0;
+		// AMP-18330 end
+		 */
+
+		List<Measure> uniqueMeasures = scanUniqueMeasures(cellSet);		
 		Measure[] uniqueSelectedMeasures = uniqueMeasures.toArray(new Measure[0]);
 		
 		/* end of AMP custom part to detect the selectedMeasures list */
@@ -142,11 +202,26 @@ public class SaikuUtils {
 			aggregators[0] = totalFunctionName != null ? TotalAggregator.newInstanceByFunctionName(totalFunctionName) : null;
 			builder = new TotalsListsBuilder(uniqueSelectedMeasures, aggregators, cellSet, axisInfos[index], axisInfos[second]);
 			totals[index] = builder.buildTotalsLists();
+			
+			List<TotalNode>[] a = null;
 		}
 		result.setLeftOffset(axisInfos[0].maxDepth);
 		result.setRowTotalsLists(totals[1]);
-		result.setColTotalsLists(totals[0]);
+		
+		if (MondrianReportGenerator.SAIKU_TOTALS) {
+			//printTotals(totals[0]);
+			//System.err.format("row totals: \n");
+			//printTotals(totals[1]);
+			result.setColTotalsLists(totals[0]);
+		} else {
+			List<TotalNode>[] colTotalsLists = new List[1];
+			String[] captions = {"vasya", "masha"};
+			
+			colTotalsLists[0] = Arrays.asList(createTotalNodeFor(captions));
+			result.setColTotalsLists(colTotalsLists);
+		}
 		/* end of Saiku approach to calculate the totals */
+		
 		/*
 		if (alwaysPresent != null) {
 			removeTotalsColumns(result.getRowTotalsLists(), totalRowsColumnsToRemove);
@@ -213,7 +288,7 @@ public class SaikuUtils {
 
 	private static boolean alreadyAdded(List<Measure> measures, String name) {
 		for(Measure measure : measures) {
-			if(name.equals(measure.getName())) { 
+			if(name.equals(measure.getName())) {
 					return true;
 			}
 		}
@@ -269,21 +344,21 @@ public class SaikuUtils {
 		return newCellArray;
 	}
 	
-	public static void clearRowTotals(CellDataSet cellDataSet, SortedSet<Integer> rowTotalsColIdsToClear) {
-		for (List<TotalNode> tnl : cellDataSet.getRowTotalsLists()) {
-			for (TotalNode tn : tnl) {
-				for (int rowId = 0; rowId < tn.getTotalGroups().length; rowId++) {
-					for (int colId : rowTotalsColIdsToClear) {
-						if (colId < tn.getTotalGroups()[rowId].length) {
-							tn.getTotalGroups()[rowId][colId] = 
-									tn.getTotalGroups()[rowId][colId].newInstance("empty");
-							tn.getTotalGroups()[rowId][colId].setFormattedValue("");
-						}
-					}
-				}
-			}
-		}
-	}
+//	public static void clearRowTotals(CellDataSet cellDataSet, SortedSet<Integer> rowTotalsColIdsToClear) {
+//		for (List<TotalNode> tnl : cellDataSet.getRowTotalsLists()) {
+//			for (TotalNode tn : tnl) {
+//				for (int rowId = 0; rowId < tn.getTotalGroups().length; rowId++) {
+//					for (int colId : rowTotalsColIdsToClear) {
+//						if (colId < tn.getTotalGroups()[rowId].length) {
+//							tn.getTotalGroups()[rowId][colId] = 
+//									tn.getTotalGroups()[rowId][colId].newInstance("empty");
+//							tn.getTotalGroups()[rowId][colId].setFormattedValue("");
+//						}
+//					}
+//				}
+//			}
+//		}
+//	}
 
 	public static void removeTotalsColumns(List<TotalNode>[] totalListsArray, SortedSet<Integer> leafColumnsNumberToRemove) {
 		if (totalListsArray == null || totalListsArray.length == 0 

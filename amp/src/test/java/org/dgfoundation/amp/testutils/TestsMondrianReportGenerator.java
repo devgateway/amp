@@ -15,13 +15,13 @@ public class TestsMondrianReportGenerator extends MondrianReportGenerator {
 		super(ReportAreaImpl.class, new ReportEnvironment(locale, new CompleteWorkspaceFilter(null, null), "EUR"));
 	}
 	
-	@Override protected MDXConfig toMDXConfig(ReportSpecification spec) throws AMPException {
-		MDXConfig res = super.toMDXConfig(spec);
-		mdxConfigCallback(res, spec);
+	@Override protected MDXConfig toMDXConfig() throws AMPException {
+		MDXConfig res = super.toMDXConfig();
+		mdxConfigCallback(res);
 		return res;
 	}
 	
-	protected void mdxConfigCallback(MDXConfig config, ReportSpecification spec) {};
+	protected void mdxConfigCallback(MDXConfig config) {};
 	
 	@Override public GeneratedReport executeReport(ReportSpecification spec) {
 		try {return super.executeReport(spec);}

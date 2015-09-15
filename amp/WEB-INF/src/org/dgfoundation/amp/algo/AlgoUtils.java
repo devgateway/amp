@@ -148,4 +148,18 @@ public class AlgoUtils {
 			return POWER_OF_TEN[nrDecimals];
 		return Double.parseDouble(String.format(Locale.US, "%." + nrDecimals + "f", in));
 	}
+	
+	/**
+	 * skips at most N positions in an iterator
+	 * @param iter
+	 * @param n
+	 * @return
+	 */
+	public static<K> Iterator<K> skipNPositions(Iterator<K> iter, int n) {
+		while (n > 0 && iter.hasNext()) {
+			iter.next();
+			n --;
+		}
+		return iter;
+	}
 }

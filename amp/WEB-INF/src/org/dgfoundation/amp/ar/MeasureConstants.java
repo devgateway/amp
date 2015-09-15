@@ -41,7 +41,7 @@ public class MeasureConstants {
 	public static final String UNDISBURSED_BALANCE = "Undisbursed Balance";
 	public static final String REAL_DISBURSEMENTS = "Real Disbursements";
 	public static final String REAL_COMMITMENTS = "Real Commitments";
-	public static final String REAL_MTFS = "Real MTEFs";
+	public static final String REAL_MTEFS = "Real MTEFs";
 	public static final String PERCENTAGE_OF_TOTAL_COMMITMENTS = "Percentage of Total Commitments";
 	public static final String PERCENTAGE_OF_TOTAL_DISBURSEMENTS = "Percentage Of Total Disbursements";
 	public static final String LAST_YEAR_OF_PLANNED_DISBURSEMENTS = "Last Year of Planned Disbursements";

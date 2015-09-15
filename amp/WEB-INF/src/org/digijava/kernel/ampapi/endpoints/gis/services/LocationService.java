@@ -39,6 +39,7 @@ import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
+import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -336,9 +337,7 @@ public class LocationService {
 
 		getCommonSpecForExport(spec);
 
-		MondrianReportGenerator generator = new MondrianReportGenerator(
-				ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils
-						.getRequest()), false);
+		ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		GeneratedReport report = null;
 		
 		
@@ -451,7 +450,7 @@ public class LocationService {
 		spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
 		getCommonSpecForExport(spec);
 
-		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()),false);
+		ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()),false);
 		GeneratedReport report = null;
 		applyFilters((LinkedHashMap<String, Object>)filters.get("otherFilters"),(LinkedHashMap<String, Object>)filters.get("columnFilters"), spec);
 		try {
@@ -730,9 +729,7 @@ public class LocationService {
 			throws AmpApiException {
 		Set<Long> activitiesId = new HashSet<Long>();
 		 
-		MondrianReportGenerator generator = new MondrianReportGenerator(
-				ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils
-						.getRequest()), false);
+		ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		GeneratedReport report = null;
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("ActivityIdsForCluster", ArConstants.DONOR_TYPE);
 

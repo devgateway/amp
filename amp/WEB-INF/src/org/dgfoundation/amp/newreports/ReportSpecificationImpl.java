@@ -38,6 +38,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	private boolean displayEmptyFundingRows = false;
 	private boolean emptyOutputForUnspecifiedData = true;
 	private boolean alsoShowPledges = false;
+	private boolean usesFundingFlows = false;
 
     /**
      * If the report query results in empty data
@@ -356,5 +357,24 @@ public class ReportSpecificationImpl implements ReportSpecification {
 			setCalculateColumnTotals(true);
 			*/
 		}
+	}
+
+	public boolean getUsesFundingFlows() {
+		return usesFundingFlows;
+	}
+
+	public void setUsesFundingFlows(boolean usesFundingFlows) {
+		this.usesFundingFlows = usesFundingFlows;
+	}
+	
+	/**
+	 * sets {@link #usesFundingFlows} to true iff one of the funding-flows-using measure is used by the report
+	 */
+	public void computeUsesFundingFlows() {
+		boolean res = false;
+		for(ReportMeasure rm:this.measures) {
+			res |= (ArConstants.DIRECTED_MEASURE_TO_DIRECTED_TRANSACTION_VALUE.keySet().contains(rm.getMeasureName()));
+		}
+		this.setUsesFundingFlows(res);
 	}
 }

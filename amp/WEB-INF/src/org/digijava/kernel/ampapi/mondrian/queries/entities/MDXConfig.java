@@ -38,6 +38,11 @@ public class MDXConfig {
 	private String amountsFormat;
 	
 	/**
+	 * element to crossjoin the columns with - most probably this should be a MdxLevel of some sort
+	 */
+	private String crossJoinWithColumns;
+	
+	/**
 	 * @return the cubeName
 	 */
 	public String getCubeName() {
@@ -349,6 +354,14 @@ public class MDXConfig {
 	@Deprecated
 	public void setAmountsFormat(String amountsFormat) {
 		this.amountsFormat = amountsFormat;
+	}
+	
+	public String getCrossJoinWithColumns() {
+		return crossJoinWithColumns;
+	}
+	
+	public void setCrossJoinWithColumns(String crossJoinWithColumns) {
+		this.crossJoinWithColumns = crossJoinWithColumns;
 	}
 	
 }

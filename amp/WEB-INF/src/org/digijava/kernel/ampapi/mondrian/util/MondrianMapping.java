@@ -356,6 +356,10 @@ public class MondrianMapping {
 			addMeasureDefinition(MeasureConstants.PLEDGES_COMMITMENT_GAP);
 			addMeasureDefinition(MeasureConstants.MTEF_PROJECTIONS);
 			
+			addMeasureDefinition(MeasureConstants.REAL_COMMITMENTS);
+			addMeasureDefinition(MeasureConstants.REAL_DISBURSEMENTS);
+			addMeasureDefinition(MeasureConstants.REAL_MTEFS);
+			
 			addMeasureDefinition(MeasureConstants.ALWAYS_PRESENT);
 			//put(new ReportMeasure(MeasureConstants.REAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL), new MDXMeasure(MoConstants.REAL_DISBURSEMENTS));
 			//put(new ReportMeasure(MeasureConstants.EXECUTION_RATE, ReportEntityType.ENTITY_TYPE_ALL), new MDXMeasure(MoConstants.EXECUTION_RATE));

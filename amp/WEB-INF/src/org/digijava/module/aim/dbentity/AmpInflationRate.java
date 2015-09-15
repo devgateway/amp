@@ -6,6 +6,7 @@ import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.dgfoundation.amp.ar.ArConstants;
 
 /**
  * https://jira.dgfoundation.org/browse/AMP-20534, https://jira.dgfoundation.org/browse/AMP-20923
@@ -16,8 +17,8 @@ public class AmpInflationRate implements Serializable, Comparable<AmpInflationRa
 {
 	private static final long serialVersionUID = 1L;
 	
-	public final static int MIN_DEFLATION_YEAR = 1970;
-	public final static int MAX_DEFLATION_YEAR = 2050;
+	public final static int MIN_DEFLATION_YEAR = ArConstants.MIN_SUPPORTED_YEAR;
+	public final static int MAX_DEFLATION_YEAR = ArConstants.MAX_SUPPORTED_YEAR;
 
 	private Long id;
 	

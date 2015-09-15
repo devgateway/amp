@@ -25,6 +25,7 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
+import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
@@ -150,8 +151,7 @@ public class EndpointUtils {
 	 * @return GeneratedReport that stores all report info and report output
 	 */
 	public static GeneratedReport runReport(ReportSpecification spec, Class<? extends ReportAreaImpl> clazz) {
-		MondrianReportGenerator generator = new MondrianReportGenerator(clazz, 
-				ReportEnvironment.buildFor(TLSUtils.getRequest()));
+		ReportExecutor generator = new MondrianReportGenerator(clazz, ReportEnvironment.buildFor(TLSUtils.getRequest()));
 		GeneratedReport report = null;
 		try {
 			report = generator.executeReport(spec);

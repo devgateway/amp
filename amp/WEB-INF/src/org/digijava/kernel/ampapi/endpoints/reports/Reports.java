@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.reports;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -31,7 +32,6 @@ import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
-import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
@@ -39,7 +39,6 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.dgfoundation.amp.reports.mondrian.converters.MondrianReportFiltersConverter;
-import org.dgfoundation.amp.reports.saiku.export.AMPExcelExport;
 import org.dgfoundation.amp.reports.saiku.export.AMPPdfExport;
 import org.dgfoundation.amp.reports.saiku.export.AMPReportCsvExport;
 import org.dgfoundation.amp.reports.saiku.export.AMPReportExcelExport;
@@ -53,7 +52,6 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
 import org.digijava.kernel.ampapi.saiku.SaikuGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
-import org.digijava.kernel.ampapi.saiku.util.SaikuUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -73,12 +71,6 @@ import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.Session;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
-import org.saiku.olap.query2.ThinHierarchy;
-import org.saiku.olap.query2.ThinQuery;
-import org.saiku.service.util.export.excel.ExcelBuilderOptions;
-import org.saiku.web.export.PdfReport;
-import org.saiku.web.rest.objects.resultset.QueryResult;
-import org.saiku.web.rest.util.RestUtil;
 
 /***
  * 
@@ -330,6 +322,14 @@ public class Reports {
 	@Path("/saikureport/{report_id}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final JsonBean getSaikuReport(JsonBean queryObject, @PathParam("report_id") Long reportId) {
+		
+		// AMP-19189 - add columns used for coloring the project title and amp id
+		List<String> extraColumns = new ArrayList<String>();
+		extraColumns.add(ColumnConstants.ACTIVITY_ID);
+		extraColumns.add(ColumnConstants.APPROVAL_STATUS);
+		extraColumns.add(ColumnConstants.DRAFT);
+		queryObject.set(EPConstants.ADD_COLUMNS, extraColumns);
+		
 		JsonBean report = getReportResultByPage(ReportsUtil.convertSaikuParamsToReports(queryObject), reportId);
 		
 		// Add data needed on Saiku UI.
@@ -345,6 +345,9 @@ public class Reports {
 		ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
 		report.set("columns", spec.getColumns());
 		report.set("hierarchies", spec.getHierarchies());
+		
+		report.set("colorSettings", getColorSettings());
+		
 		ReportsUtil.addLastViewedReport(httpRequest.getSession(), reportId);
 		// In caseIf this is a summarized report without hierarchies then we need to change the word 'constant' for 'Report
 		// Totals' (translated).
@@ -664,5 +667,35 @@ public class Reports {
 	 */
 	public String exportToMap(JsonBean config, @PathParam("report_id") Long reportId) {
 		return ReportsUtil.exportToMap(config, reportId);
+	}
+	
+	public Map<String, Object> getColorSettings() {
+		
+		Set<String> hiddenColumnNames = new HashSet<String>();
+		hiddenColumnNames.add(ColumnConstants.APPROVAL_STATUS);
+		hiddenColumnNames.add(ColumnConstants.DRAFT);
+		hiddenColumnNames.add(ColumnConstants.ACTIVITY_ID);
+		// columns that will be used for coloring and should be hidden in saiku 
+
+		Map<String, Object> colorSettings = new HashMap<String, Object>();
+		
+		Set<Integer> validatedStatuses = new HashSet<Integer>();
+		for (String s : AmpARFilter.validatedActivityStatus) {
+			validatedStatuses.add(AmpARFilter.activityStatusToNr.get(s));
+		}
+		
+		Set<Integer> unvalidatedStatuses = new HashSet<Integer>();
+		for (String s : AmpARFilter.unvalidatedActivityStatus) {
+			unvalidatedStatuses.add(AmpARFilter.activityStatusToNr.get(s));
+		}
+		
+		Map<String, Set<Integer>> activityStatusCodes = new HashMap<String, Set<Integer>>();
+		activityStatusCodes.put("validated", validatedStatuses);
+		activityStatusCodes.put("unvalidated", unvalidatedStatuses);
+		
+		colorSettings.put("hiddenColumnNames", hiddenColumnNames);
+		colorSettings.put("activityStatusCodes", activityStatusCodes);
+		
+		return colorSettings;
 	}
 }

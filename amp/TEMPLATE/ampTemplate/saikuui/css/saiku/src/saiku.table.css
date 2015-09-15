@@ -176,3 +176,19 @@ separated by commas, and have just one of these...*/
     background: #B4C0C6;
     font-weight: bold;
 }
+
+.activity_status_validated {
+	 color: #00496B !important;
+}
+
+.activity_status_unvalidated {
+	 color: green !important;
+}
+
+.activity_status_draft {
+	 color: red !important;
+}
+
+.activity_status_pledge {
+	 color: #6A6A00 !important;
+}

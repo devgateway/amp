@@ -26,6 +26,12 @@ this.currentContentIndexRow = undefined;
 this.numberOfRows = undefined;
 this.type = undefined;
 this.summarizedReport = undefined;
+this.draftColumn = undefined;
+this.approvalStatusColumn = undefined;
+this.activityIdColumn = undefined;
+this.hiddenColumns = undefined;
+this.ACTIVITY_STATUS_CODES = undefined;
+this.PLEDGE_ID_ADDER = 800000000; // java-side constant, taken MondrianETL 
 
 AMPTableRenderer.prototype.render = function(data, options) {
 	// When using this class to export the report we receive these extra
@@ -37,10 +43,14 @@ AMPTableRenderer.prototype.render = function(data, options) {
 	}
 
 	if (data !== undefined && data.page !== null && data.page.pageArea !== null) {
+		ACTIVITY_STATUS_CODES = data.colorSettings.activityStatusCodes;
+		
 		summarizedReport = checkIfSummarizedReportWithConstant(data.page);
 		// Make an adjustment in the hierarchies list when showing a summarized
 		// report.
 		preprocessHierarchies();
+		
+		hiddenColumns = data.colorSettings.hiddenColumnNames;
 
 		// Create HTML table, with header + content.
 		var table = "<table>";
@@ -113,6 +123,14 @@ function generateHeaderHtml(headers) {
 		this.headerMatrix = lastRow;
 		maxHeaderLevel = 1;
 	}
+	
+	this.draftColumn = getIndexOfColumn('Draft');
+	this.approvalStatusColumn = getIndexOfColumn('Approval Status');
+	this.activityIdColumn = getIndexOfColumn('Activity Id');
+	
+	for (var i=0; i < hiddenColumns.length; i++) {
+		hiddenColumns[i] = getIndexOfColumn(hiddenColumns[i]);
+	}
 
 	// Check columns metadata
 	calculateColumnsDisposition();
@@ -121,66 +139,68 @@ function generateHeaderHtml(headers) {
 	for (var i = 0; i < this.headerMatrix.length; i++) {
 		var row = "<tr>";
 		for (var j = 0; j < this.headerMatrix[i].length; j++) {
-			var col = "";
-			var entityType = getEntityTypeByColumnNumber(i, j);
-			if (entityType !== undefined) {
-				// Add sorting info: HEADER_HIERARCHY for first columns that
-				// define a hierarchy (if any), HEADER_COMMON for non
-				// hierarchical columns and HEADER_MEASURE for measures (only in
-				// the last header row).
-				var sortingType = " data-sorting-type='" + entityType + "'";
-				// Since groupCount is 0 when no column grouping is applicable
-				// then we don't need an extra IF for creating the 'col'
-				// variable.
-				var groupCount = 0;
-				if (this.type === 'xlsx' || this.type === 'pdf'
-						|| type === 'html') {
-					groupCount = findSameHeaderHorizontally(i, j);
-				}
-				// Define styles for the header.
-				var style = " class='col";
-				if (sortingType.length > 0) {
-					style += " hand-pointer";
-				}
-				style += "'";
-				// Define id based on its hierarchy.
-				var id = " id='"
-						+ convertHierarchicalNameToId(this.headerMatrix[i][j].hierarchicalName)
-						+ "'";
-
-				// Change columnName when the endpoint sends "Constant" in a
-				// summarized report.
-				if (this.summarizedReport === true
-						&& this.headerMatrix[i][j].hierarchicalName === "[Constant]") {
-					this.headerMatrix[i][j].columnName = "-";
-				}
-
-				// Use the full hierarchicalName when processing CSV.
-				var colName = "";
-				if (this.type === 'csv') {
-					colName = this.headerMatrix[i][j].hierarchicalName;
-					// AMP-20379
-					if (colName === null || colName === ""
-							|| colName.toLowerCase().indexOf('null') > -1) {
+			if (!isHiddenColumn(j)) {
+				var col = "";
+				var entityType = getEntityTypeByColumnNumber(i, j);
+				if (entityType !== undefined) {
+					// Add sorting info: HEADER_HIERARCHY for first columns that
+					// define a hierarchy (if any), HEADER_COMMON for non
+					// hierarchical columns and HEADER_MEASURE for measures (only in
+					// the last header row).
+					var sortingType = " data-sorting-type='" + entityType + "'";
+					// Since groupCount is 0 when no column grouping is applicable
+					// then we don't need an extra IF for creating the 'col'
+					// variable.
+					var groupCount = 0;
+					if (this.type === 'xlsx' || this.type === 'pdf'
+							|| type === 'html') {
+						groupCount = findSameHeaderHorizontally(i, j);
+					}
+					// Define styles for the header.
+					var style = " class='col";
+					if (sortingType.length > 0) {
+						style += " hand-pointer";
+					}
+					style += "'";
+					// Define id based on its hierarchy.
+					var id = " id='"
+							+ convertHierarchicalNameToId(this.headerMatrix[i][j].hierarchicalName)
+							+ "'";
+	
+					// Change columnName when the endpoint sends "Constant" in a
+					// summarized report.
+					if (this.summarizedReport === true
+							&& this.headerMatrix[i][j].hierarchicalName === "[Constant]") {
+						this.headerMatrix[i][j].columnName = "-";
+					}
+	
+					// Use the full hierarchicalName when processing CSV.
+					var colName = "";
+					if (this.type === 'csv') {
+						colName = this.headerMatrix[i][j].hierarchicalName;
+						// AMP-20379
+						if (colName === null || colName === ""
+								|| colName.toLowerCase().indexOf('null') > -1) {
+							colName = this.headerMatrix[i][j].columnName
+						}
+					} else {
 						colName = this.headerMatrix[i][j].columnName
 					}
+					col = "<th" + style + id + " data-header-level='" + i + "'"
+							+ sortingType + " colspan='" + groupCount + "'><div>"
+							+ colName + "</div></th>";
+	
+					// We change 'j' in order to skip the next N columns.
+					j += groupCount;
+					if (groupCount > 0) {
+						// Decrement by 1 to adjust the column index correctly.
+						j -= 1;
+					}
 				} else {
-					colName = this.headerMatrix[i][j].columnName
+					col = "<th class='all_null'>&nbsp;</th>";
 				}
-				col = "<th" + style + id + " data-header-level='" + i + "'"
-						+ sortingType + " colspan='" + groupCount + "'><div>"
-						+ colName + "</div></th>";
-
-				// We change 'j' in order to skip the next N columns.
-				j += groupCount;
-				if (groupCount > 0) {
-					// Decrement by 1 to adjust the column index correctly.
-					j -= 1;
-				}
-			} else {
-				col = "<th class='all_null'>&nbsp;</th>";
+				row += col;
 			}
-			row += col;
 		}
 		row += "</tr>";
 		header += row;
@@ -253,7 +273,7 @@ function buildTotalsRow(page) {
 	for (var j = 0; j < this.headerMatrix[this.lastHeaderRow].length; j++) {
 		// This check is for those summarized reports that dont return any
 		// content.
-		if (page.pageArea.contents !== null) {
+		if (page.pageArea.contents !== null && !isHiddenColumn(j)) {
 			var td = "<td class='data total tooltiped'";
 			var auxTd = "";
 			var cell = page.pageArea.contents[this.headerMatrix[this.lastHeaderRow][j].hierarchicalName];
@@ -313,6 +333,9 @@ function generateDataRows(page, options) {
 		extractDataFromTree(page.pageArea.children[i],
 				this.currentContentIndexRow);
 	}
+	
+	// AMP-19189 fill the cell containing data with colors
+	fillContentsWithColors();
 
 	for (var i = 0; i < this.contentMatrix.length; i++) {
 		// Skip total rows for CSV.
@@ -327,33 +350,30 @@ function generateDataRows(page, options) {
 		var applyTotalRowStyle = false;
 		var row = "<tr>";
 		for (var j = 0; j < this.contentMatrix[i].length; j++) {
-			var cell = "";
-			if (j < this.metadataColumns.length) {
-				if (this.contentMatrix[i][j].isGrouped === true) {
-					continue;
-				}
-				var group = 1;
-				if (this.type === 'csv' || this.type === 'pdf'
-						|| this.type === 'html') {
-					group = findGroupVertically(this.contentMatrix, i, j);
-				}
-				var rowSpan = " rowspan='" + group + "' ";
-				var styleClass = "";
-				var value = this.contentMatrix[i][j].displayedValue;
-				var cleanValue = {};
-				if (this.type === 'csv' || this.type === 'xlsx') {
-					value = "" + value + "";
-					cleanValue = cleanText(value);
-				} else {
-					cleanValue = cleanText(value, 60);
-				}
-				if (cleanValue.tooltip !== undefined) {
-					styleClass = " class='row tooltipped' original-title='"
-							+ cleanValue.tooltip + "' ";
-				} else {
-					styleClass = " class='row'";
-				}
-
+			if (!isHiddenColumn(j)) {
+				var cell = "";
+				if (j < this.metadataColumns.length) {
+					if (this.contentMatrix[i][j].isGrouped === true) {
+						continue;
+					}
+					var group = 1;
+					if (this.type === 'csv' || this.type === 'pdf'
+							|| this.type === 'html') {
+						group = findGroupVertically(this.contentMatrix, i, j);
+					}
+					var rowSpan = " rowspan='" + group + "' ";
+					var value = this.contentMatrix[i][j].displayedValue;
+					var cleanValue = {};
+					if (this.type === 'csv' || this.type === 'xlsx') {
+						value = "" + value + "";
+						cleanValue = cleanText(value);
+					} else {
+						cleanValue = cleanText(value, 60);
+					}
+				
+				
+				var styleClass = getCellDataStyleClass(contentMatrix, cleanValue, i, j);
+				
 				// Ignore subtotal rows text and change style.
 				if (this.contentMatrix[i][j].isTotal === true) {
 					if (applyTotalRowStyle === false
@@ -362,7 +382,6 @@ function generateDataRows(page, options) {
 						// the total style.
 						applyTotalRowStyle = true;
 					}
-
 					// Apply the special style for subtotal rows but
 					// starting in the right column index.
 					if (applyTotalRowStyle === true) {
@@ -417,10 +436,27 @@ function generateDataRows(page, options) {
 			}
 			row += cell;
 		}
+		}
 		row += "</tr>";
 		content += row;
 	}
 	return content;
+}
+
+function getCellDataStyleClass(contentMatrix, cleanValue, i, j) {
+	var styleClass = " class='row "
+		
+	if (contentMatrix[i][j].color) {
+		styleClass += this.contentMatrix[i][j].color + " ";
+	}
+	
+	if (cleanValue.tooltip) {
+		styleClass += "tooltipped' original-title='" + cleanValue.tooltip + "' ";
+	} else {
+		styleClass += "'";
+	}
+	
+	return styleClass;
 }
 
 /**
@@ -583,4 +619,65 @@ AMPTableRenderer.prototype.postProcessTooltips = function() {
 		}
 	});
 	$(".tooltipped").tipsy();
+}
+
+/**
+ * Populate cell with colors based on values of 'Draft' and 'Approval Status' hidden columns 
+ * validated, unvalidated, draft, pledge
+ * 
+ */
+function fillContentsWithColors() {
+	for (var i = 0; i < this.contentMatrix.length; i++) {
+		for (var j = 0; j < this.contentMatrix[i].length; j++) {
+			if (!this.contentMatrix[i][j].isTotal && isColoredColumn(j)) {
+				var draftValue = this.contentMatrix[i][draftColumn].value;
+				var statusValue = parseInt(this.contentMatrix[i][approvalStatusColumn].value);
+				var activityIdValue = parseInt(this.contentMatrix[i][activityIdColumn].value);
+				
+				var color = undefined;
+				
+				if (isActivityPledge(activityIdValue)) {
+					color = 'pledge';
+				} else if (draftValue === 'true') {
+					color = 'draft';
+				} else if (this.ACTIVITY_STATUS_CODES.validated.indexOf(statusValue) > -1) {
+					color = 'validated'
+				} else if (this.ACTIVITY_STATUS_CODES.unvalidated.indexOf(statusValue) > -1) {
+					color = 'unvalidated';
+				}
+				
+				if (color) {
+					this.contentMatrix[i][j].color = "activity_status_" + color;
+				}
+			}
+		}
+	}
+}
+
+function getIndexOfColumn(columnName) {
+	var i = this.headerMatrix.length-1;
+	for (var j=0; j<this.headerMatrix[i].length; j++) {
+		if (this.headerMatrix[i][j] && columnName == this.headerMatrix[i][j].originalColumnName) {
+			return j;
+		}
+	}
+}
+
+function isColoredColumn(i) {
+	var columnName = this.headerMatrix[this.lastHeaderRow][i].originalColumnName;
+	
+	if (columnName === "Project Title" || columnName === "AMP ID" || columnName === "Pledges Titles")
+		return true;
+		
+	return false;
+}
+
+function isHiddenColumn(i) {
+	return hiddenColumns && hiddenColumns.indexOf(i) > -1;
+}
+
+function isActivityPledge(activityIdValue) {
+	var idNumber = parseInt(activityIdValue, 10);
+	
+	return idNumber && idNumber > this.PLEDGE_ID_ADDER;
 }

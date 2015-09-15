@@ -26,6 +26,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 
 /**
  * @author mpostelnicu@dgateway.org since Sep 28, 2010
@@ -55,12 +56,22 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
 		@SuppressWarnings("deprecation")
 		@Override
 		public void execute(Connection connection) throws SQLException {
-		    String sqlQuery = "SELECT org.amp_org_id, org.name, org.acronym, org.org_type, orgname.translation  from amp_organisation org"
-				    + " LEFT OUTER JOIN amp_content_translation orgname ON org.amp_org_id = orgname.object_id"
+		    String sqlQuery = null;
+		    ArrayList<FilterParam> params = new ArrayList<FilterParam>();
+		    boolean multilingualEnabled = ContentTranslationUtil.multilingualIsEnabled();
+			if (multilingualEnabled) {
+				params.add(new FilterParam("name", java.sql.Types.VARCHAR));
+			    params.add(new FilterParam("org.digijava.module.aim.dbentity.AmpOrganisation", java.sql.Types.VARCHAR));
+			    params.add(new FilterParam(TLSUtils.getEffectiveLangCode(), java.sql.Types.VARCHAR));
+			   sqlQuery = "SELECT org.amp_org_id, org.name, org.acronym, org.org_type, orgname.translation  from amp_organisation org LEFT OUTER JOIN amp_content_translation orgname ON org.amp_org_id = orgname.object_id"
 				    + " AND orgname.field_name = ? "
 				    + " AND orgname.object_class =? "
-				    + " AND orgname.locale = ?" 
-				    + " WHERE (org.deleted IS NULL OR org.deleted = ?)";
+				    + " AND orgname.locale = ?" ;
+			}
+			else {
+				sqlQuery = "SELECT org.amp_org_id, org.name, org.acronym, org.org_type from amp_organisation org";
+			}
+			sqlQuery+= " WHERE (org.deleted IS NULL OR org.deleted = ?)";
 		    AmpOrgGroup orgroup =null;
 
 			if (getParams()!=null && getParams().get(PARAM.GROUP_FILTER) != null) {
@@ -69,10 +80,14 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
 			}
 
 		    if (input.length() > 0) {
-			sqlQuery = sqlQuery + " AND (((orgname.translation ILIKE ? OR acronym ILIKE ?"
-					+ ") AND orgname.translation is null)"
-					+ " OR ((orgname.translation ILIKE ? OR acronym ILIKE ?) AND orgname.translation is not null))";
-		    }
+		    	if (multilingualEnabled)  {
+		    		sqlQuery = sqlQuery +  " AND (orgname.translation ILIKE ? OR acronym ILIKE ?)";
+				    		
+		    	}
+		    	else {
+		    		sqlQuery +=" AND (name ILIKE ? OR acronym ILIKE ?)";
+		    	}
+			}
 		    AmpOrgType orgtype =null;
 		    if (getParams()!=null && getParams().get(PARAM.TYPE_FILTER) != null) {
 		    orgtype = (AmpOrgType) getParams().get(PARAM.TYPE_FILTER);
@@ -85,19 +100,12 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
 			sqlQuery = sqlQuery + " LIMIT " + maxResults;
 		    }
 		    
-		    ArrayList<FilterParam> params = new ArrayList<FilterParam>();
 		    
-		    params.add(new FilterParam("name", java.sql.Types.VARCHAR));
-		    params.add(new FilterParam("org.digijava.module.aim.dbentity.AmpOrganisation", java.sql.Types.VARCHAR));
-		    params.add(new FilterParam(TLSUtils.getEffectiveLangCode(), java.sql.Types.VARCHAR));
 		    params.add(new FilterParam(false, java.sql.Types.BOOLEAN));
-		    
-			if (getParams() != null && getParams().get(PARAM.GROUP_FILTER) != null) {
+		   if (getParams() != null && getParams().get(PARAM.GROUP_FILTER) != null) {
 				params.add(new FilterParam(orgroup.getIdentifier(), java.sql.Types.BIGINT));
 			}
 		    if (input!=null && input.length() > 0) {
-			    params.add(new FilterParam("%"+input + "%", java.sql.Types.VARCHAR));
-			    params.add(new FilterParam("%"+input + "%", java.sql.Types.VARCHAR));
 			    params.add(new FilterParam("%"+input + "%", java.sql.Types.VARCHAR));
 			    params.add(new FilterParam("%"+input + "%", java.sql.Types.VARCHAR));
 		    }
@@ -110,7 +118,7 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
 		    while (rs.next()) {
 			AmpOrganisation orgtoadd = new AmpOrganisation();
 			orgtoadd.setAmpOrgId(rs.getLong("amp_org_id"));
-			if (rs.getString("translation") != null) {
+			if (multilingualEnabled && rs.getString("translation") != null) {
 			    orgtoadd.setName(rs.getString("translation"));
 			} else {
 			    orgtoadd.setName(rs.getString("name"));

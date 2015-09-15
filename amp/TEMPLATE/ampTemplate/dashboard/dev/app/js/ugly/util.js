@@ -6,9 +6,13 @@ var d3 = require('d3-browserify');
 var formatKMB = function(precision, decimalSeparator) {
   var formatSI = d3.format('.' + (precision || 3) + 's');
   decimalSeparator = decimalSeparator || '.';
+  console.log(formatSI);
   return function(value) {
     return formatSI(value)
-      .replace('G', 'B')  // now just need to convert G Gigia -> B Billion
+      .replace('K', app.translator.translateSync('amp.dashboard:chart-thousand'))
+      .replace('M', app.translator.translateSync('amp.dashboard:chart-million'))
+      .replace('G', app.translator.translateSync('amp.dashboard:chart-billion'))  // now just need to convert G Gigia -> B Billion
+      .replace('T', app.translator.translateSync('amp.dashboard:chart-trillion'))
       .replace('.', decimalSeparator);
   };
 };

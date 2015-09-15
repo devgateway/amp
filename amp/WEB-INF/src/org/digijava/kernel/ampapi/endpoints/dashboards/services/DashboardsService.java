@@ -764,7 +764,7 @@ public class DashboardsService {
 			formatted = formatted.substring(0, formatted.length() - 2);
 		}
 		if (addSufix) {
-			formatted = formatted + "kMBTPE".charAt(exp - 1);
+			formatted = formatted + TranslatorWorker.translateText(String.valueOf("kMBTPE".charAt(exp - 1)));
 		}
 		return formatted;
 	}

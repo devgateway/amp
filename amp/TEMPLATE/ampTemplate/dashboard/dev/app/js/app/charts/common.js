@@ -195,10 +195,10 @@ function formatNumber(number) {
 			decimal : app.settings.numberFormatSettings.decimalSeparator
 		},
 		abbreviations : {
-			thousand : 'K',
-			million : 'M',
-			billion : 'B',
-			trillion : 'T'
+			thousand : app.translator.translateSync('amp.dashboard:chart-thousand'),
+			million : app.translator.translateSync('amp.dashboard:chart-million'),
+			billion : app.translator.translateSync('amp.dashboard:chart-billion'),
+			trillion : app.translator.translateSync('amp.dashboard:chart-trillion')
 		},
 		ordinal : function(number) {
 			return number === 1 ? 'st' : 'rds';
@@ -207,11 +207,13 @@ function formatNumber(number) {
 			symbol : '$'
 		}
 	};
+	console.log(ampLang);
 	Numeral.language('amp', ampLang);
 	// Apply new language.
 	Numeral.language('amp');
 	// Apply the format.
 	var stringNumber = new Numeral(number).format(format);
+	console.log("stringNumber: " + stringNumber);
 	return stringNumber;
 }
 

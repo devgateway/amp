@@ -6,6 +6,11 @@ module.exports = {
       'webpack-dev-server/client?http://localhost:3000',
       'webpack/hot/only-dev-server',
       "./modules/admin/currency/deflator/script.es6"
+    ],
+    "admin/currency/deflated-currency-dialog/script": [
+      'webpack-dev-server/client?http://localhost:3000',
+      'webpack/hot/only-dev-server',
+      "./modules/admin/currency/deflated-currency-dialog/script.es6"
     ]
   },
   output: {

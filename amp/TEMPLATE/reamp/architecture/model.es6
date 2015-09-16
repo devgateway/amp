@@ -91,6 +91,10 @@ export default class Model{
                                               );
   }
 
+  empty(){
+    return !this.keys().length;
+  }
+
   toJS(){
     var obj = {};
     this.keys().forEach(key => {

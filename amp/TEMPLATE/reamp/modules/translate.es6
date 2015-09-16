@@ -1,4 +1,4 @@
-import obj2arr from "amp/tools/obj2arr";
+import {obj2arr} from "amp/tools";
 
 var translations = null;
 

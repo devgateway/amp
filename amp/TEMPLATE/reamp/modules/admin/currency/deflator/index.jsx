@@ -1,3 +1,4 @@
+require('babel-core/polyfill');
 import * as AMP from "amp/architecture";
 import {t} from "amp/modules/translate";
 import * as Rate from "./rate";
@@ -5,9 +6,9 @@ import * as NewRate from "./new-rate";
 import cn from "classnames";
 import {MIN_YEAR, MAX_YEAR} from "amp/tools/validate";
 import React from "react";
-require('babel-core/polyfill');
-
-var ALLOW_GAPS = false;
+import {fetchJson, range} from "amp/tools";
+import {INFLATABLE_CURRENCIES} from "amp/config/endpoints";
+import Currency from "../model";
 
 export class Action extends AMP.Action{}
 class Save extends Action{}
@@ -63,31 +64,25 @@ class ResetSaveStatusSideEffect extends AMP.effects.TimeoutSideEffect{
 class InflationRates extends AMP.Model{
   constructor(mutationOrData){
     super(mutationOrData);
-    if(ALLOW_GAPS){
-      var startYear = Math.min(...super.keys());
-      var endYear = Math.max(...super.keys());
-      this.startYear = () => startYear;
-      this.endYear = () => endYear;
-    }
+    var startYear = Math.min(...this.keys());
+    var endYear = Math.max(...this.keys());
+    this.startYear = () => startYear;
+    this.endYear = () => endYear;
   }
 
-  get(key){
-    return ALLOW_GAPS ?
-      super.get(key) && this.startYear()< key && key < this.endYear() ? Rate.model.set('year', key) : super.get(key) :
-      super.get(key);
-  }
-
-  keys(){
-    if(!ALLOW_GAPS) return super.keys();
-    var arr = [];
-    for(var year = this.startYear(); year <= this.endYear(); year++){
-      arr.push(year);
+  set(year, val){
+    if(!this.empty()){
+      if(year > this.endYear() + 1){
+        return this.set(year - 1, Rate.model.year(year - 1)).set(year, val);
+      }
+      if(year < this.startYear() - 1){
+        return this.set(year + 1, Rate.model.year(year + 1)).set(year, val);
+      }
     }
-    return arr;
+    return super.set(year, val);
   }
 }
 
-class Currency extends AMP.Model{}
 class Currencies extends AMP.Model{}
 class State extends AMP.Model{
   currentCurrency(){
@@ -103,17 +98,13 @@ class Model extends AMP.Model{
 }
 var model = new Model();
 
-var callFunc = func => obj => obj[func]();
-
-var fetchJson = url => fetch(url, {credentials: 'same-origin'}).then(callFunc('json'));
-
 var ensureArray = maybeArray => Array.isArray(maybeArray) ? maybeArray : [];
 
 //We need to talk to endpoints in order to figure out our model, so this function will return a promise that will resolve
 //with the model once we have all the data we need
 export var init = () =>
   Promise.all([
-    fetchJson('/rest/currencies/inflatableCurrencies'),
+    fetchJson(INFLATABLE_CURRENCIES),
     fetchJson('/rest/currencies/getInflationRates')
   ]).then(([currencies, inflationRates]) => {
     var getInflationRatesFor = code =>
@@ -226,9 +217,7 @@ class Deflator extends AMP.View {
               </thead>
               <tbody>
               {currentInflationRates.map(rate => {
-                var deletable = ALLOW_GAPS ?
-                  rate.year() == currentInflationRates.startYear() || rate.year() == currentInflationRates.endYear() :
-                  true;
+                var deletable = rate.year() == currentInflationRates.startYear() || rate.year() == currentInflationRates.endYear();
 
                 var inflationRate = rate.inflationRate();
                 var isValid = parseFloat(inflationRate) == inflationRate;

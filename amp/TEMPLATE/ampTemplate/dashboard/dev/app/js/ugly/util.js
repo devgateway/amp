@@ -8,7 +8,10 @@ var formatKMB = function(precision, decimalSeparator) {
   decimalSeparator = decimalSeparator || '.';
   return function(value) {
     return formatSI(value)
-      .replace('G', 'B')  // now just need to convert G Gigia -> B Billion
+      .replace('K', app.translator.translateSync('amp.dashboard:chart-thousand'))
+      .replace('M', app.translator.translateSync('amp.dashboard:chart-million'))
+      .replace('G', app.translator.translateSync('amp.dashboard:chart-billion'))  // now just need to convert G Gigia -> B Billion
+      .replace('T', app.translator.translateSync('amp.dashboard:chart-trillion'))
       .replace('.', decimalSeparator);
   };
 };

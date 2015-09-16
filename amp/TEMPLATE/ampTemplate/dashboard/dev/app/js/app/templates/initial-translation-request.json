@@ -112,6 +112,11 @@
 "amp.dashboard:chart-tops-table-projecttitle": "Project Title",
 "amp.dashboard:chart-tops-inunits": "In units",
 "amp.dashboard:chart-tops-inthousands": "In thousands",
-"amp.dashboard:chart-tops-inmillions": "In millions"
+"amp.dashboard:chart-tops-inmillions": "In millions",
+"amp.dashboard:chart-thousand": "K",
+"amp.dashboard:chart-million": "M",
+"amp.dashboard:chart-billion": "B",
+"amp.dashboard:chart-trillion": "T" 
+
 }
 

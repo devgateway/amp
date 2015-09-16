@@ -191,10 +191,10 @@ function formatNumber(number) {
 			decimal : app.settings.numberFormatSettings.decimalSeparator
 		},
 		abbreviations : {
-			thousand : 'K',
-			million : 'M',
-			billion : 'B',
-			trillion : 'T'
+			thousand : app.translator.translateSync('amp.dashboard:chart-thousand'),
+			million : app.translator.translateSync('amp.dashboard:chart-million'),
+			billion : app.translator.translateSync('amp.dashboard:chart-billion'),
+			trillion : app.translator.translateSync('amp.dashboard:chart-trillion')
 		},
 		ordinal : function(number) {
 			return number === 1 ? 'st' : 'rds';

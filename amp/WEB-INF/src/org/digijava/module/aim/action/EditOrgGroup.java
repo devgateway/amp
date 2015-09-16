@@ -71,21 +71,39 @@ public class EditOrgGroup extends Action {
 			if (session.getAttribute("ampOrgGrp") != null) {
 				session.removeAttribute("ampOrgGrp");
 			}
-			AmpOrgGroup ampGrp = new AmpOrgGroup();
+			AmpOrgGroup deleted = DbUtil.getDeletedAmpOrgGroups(editForm.getOrgGrpName(), editForm.getAmpOrgGrpId());
+			AmpOrgGroup ampGrp = null;
+			Long groupId = editForm.getAmpOrgGrpId();
+			if (deleted != null) {
+				ampGrp = deleted;
+				ampGrp.setDeleted(false);
+				groupId = ampGrp.getAmpOrgGrpId();
+			} else {
+				ampGrp = new AmpOrgGroup();
+			}
+//			AmpOrgGroup ampGrp = deleted == null ? new AmpOrgGroup() : deleted;
 			ampGrp.setOrgGrpName(editForm.getOrgGrpName());
 			ampGrp.setOrgGrpCode(editForm.getOrgGrpCode());
 			AmpOrgType ot = DbUtil.getAmpOrgType(editForm.getOrgTypeId());
 			ampGrp.setOrgType(ot);
 			ARUtil.clearOrgGroupTypeDimensions();
 			
-			if (DbUtil.checkAmpOrgGroupDuplication(ampGrp.getOrgGrpName(), editForm.getAmpOrgGrpId())) {
-				ActionMessages errors = new ActionMessages();
-				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationGroupManager.duplicateGroupName"));
-				saveErrors(request, errors);
-				//if(editForm.getAmpOrgGrpId()!=null && editForm.getAmpOrgGrpId().longValue()!=0) editForm.setAction("edit"); 
-				//else editForm.setAction("create");
-				if (editForm.getAmpOrgId() != null) return mapping.findForward("popup");
-				else return mapping.findForward("forward");
+			
+			
+			if (DbUtil.checkAmpOrgGroupDuplication(ampGrp.getOrgGrpName(), groupId)) {
+//				if (deleted != null) {
+//					the org. group has existed before and has been softdeleted -> let's restore it
+//					ampGrp = deleted;
+//					ampGrp.setDeleted(false);
+//				} else {
+					ActionMessages errors = new ActionMessages();
+					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationGroupManager.duplicateGroupName"));
+					saveErrors(request, errors);
+					//if(editForm.getAmpOrgGrpId()!=null && editForm.getAmpOrgGrpId().longValue()!=0) editForm.setAction("edit"); 
+					//else editForm.setAction("create");
+					if (editForm.getAmpOrgId() != null) return mapping.findForward("popup");
+					else return mapping.findForward("forward");
+//				}
 			}
 			
 
@@ -112,9 +130,10 @@ public class EditOrgGroup extends Action {
 		}
 
 		if ("delete".equals(action)) {
-
+			
 			Iterator itr1 = DbUtil.getOrgByGroup(editForm.getAmpOrgGrpId()).iterator();
 			if (itr1.hasNext()) {
+				//means there are organizations referencing this org group
 				editForm.setFlag("orgReferences");
 				editForm.setAction("edit");
 				return mapping.findForward("forward");

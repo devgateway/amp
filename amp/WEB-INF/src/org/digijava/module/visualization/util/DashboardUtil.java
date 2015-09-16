@@ -1045,7 +1045,7 @@ public class DashboardUtil {
 			
 		}
 
-		List<AmpOrgGroup> orgGroups = new ArrayList<AmpOrgGroup>(org.digijava.module.aim.util.DbUtil.getAllOrgGroups());
+		List<AmpOrgGroup> orgGroups = new ArrayList<AmpOrgGroup>(org.digijava.module.aim.util.DbUtil.getAllVisibleOrgGroups());
 		filter.setOrgGroups(orgGroups);
 		List<EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>> orgGroupsWithOrgsList = new ArrayList<EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>>();
 		for(AmpOrgGroup orgGroup:orgGroups){

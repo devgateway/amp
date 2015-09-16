@@ -143,7 +143,7 @@ public class ShowDashboard extends Action {
 			filter.setFiscalCalendarId(fisCalId);
 			filter.setDefaultFiscalCalendarId(fisCalId);
 		}
-		List<AmpOrgGroup> orgGroups = new ArrayList<AmpOrgGroup>(DbUtil.getAllOrgGroups());
+		List<AmpOrgGroup> orgGroups = new ArrayList<AmpOrgGroup>(DbUtil.getAllVisibleOrgGroups());
 		filter.setOrgGroups(orgGroups);
 		List<EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>> orgGroupsWithOrgsList = new ArrayList<EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>>();
 		for(AmpOrgGroup orgGroup:orgGroups){

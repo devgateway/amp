@@ -101,7 +101,7 @@ public class GPIUseCase {
 		}		 	 	
 		
 		if (form.getDonorElements() == null || form.getDonorElements().isEmpty()) {
-			Collection<AmpOrgGroup> donorGroups = DbUtil.getAllOrgGroups();
+			Collection<AmpOrgGroup> donorGroups = DbUtil.getAllVisibleOrgGroups();
 			form.setDonorElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
 			HierarchyListableImplementation rootOrgGroup = new HierarchyListableImplementation("All Donor Groups", "0", donorGroups);
 			GroupingElement<HierarchyListableImplementation> donorGroupElement = new GroupingElement<HierarchyListableImplementation>("Donor Groups", "filter_donor_groups_div", rootOrgGroup,

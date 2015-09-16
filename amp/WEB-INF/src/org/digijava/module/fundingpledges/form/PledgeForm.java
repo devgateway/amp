@@ -422,7 +422,7 @@ public class PledgeForm extends ActionForm implements Serializable {
 	public List<IdWithValueShim> getOrgGroups() {
 		List<IdWithValueShim> res = new ArrayList<>();
 		if (this.getSelectedOrgGrpId() == null) res.add(new IdWithValueShim(-1L, TranslatorWorker.translateText("Please select")));
-		for (AmpOrgGroup acv : org.digijava.module.aim.util.DbUtil.getAllOrgGroups()) res.add(new IdWithValueShim(acv));
+		for (AmpOrgGroup acv : org.digijava.module.aim.util.DbUtil.getAllVisibleOrgGroups()) res.add(new IdWithValueShim(acv));
 		return res;
 	}
 	

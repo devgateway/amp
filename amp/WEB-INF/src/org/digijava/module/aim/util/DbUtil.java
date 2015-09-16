@@ -1716,7 +1716,25 @@ public class DbUtil {
 		Collections.sort(col);
 		return col;
 	}
-	
+	/**
+	 * generates a list of all AmpOrgGroup elements which have deleted =null or deleted = false
+	 * @return
+	 */
+	public static List<AmpOrgGroup> getAllVisibleOrgGroups() {
+		try {
+			Session session = PersistenceManager.getRequestDBSession();
+			String orgGrpNameHql = AmpOrgGroup.hqlStringForName("c");
+			String queryString = "select c from " + AmpOrgGroup.class.getName() + " c"
+					+ " WHERE c.deleted IS NULL OR c.deleted = false"
+					+ " order by lower(" + orgGrpNameHql + ") asc";
+			Query qry = session.createQuery(queryString);
+			return qry.list();
+		} catch (Exception e) {
+			logger.debug("Exception from getAllOrgGroups()");
+			logger.debug(e.toString());
+			return null;
+		}
+	}
 	public static List<AmpOrgGroup> getAllOrgGroups() {
 		try {
 			Session session = PersistenceManager.getRequestDBSession();
@@ -1884,6 +1902,42 @@ public class DbUtil {
 		return grp;
 	}
 
+	
+	/**
+	 * Gets the deleted amp org group with specified name, if it exists
+	 * @param name name of the amp org group
+	 * @param id not sure we need this
+	 * @return the amp org group if it exists, null otherwise
+	 */
+	public static AmpOrgGroup getDeletedAmpOrgGroups(String name, Long id) {
+//		boolean deletedOrgGroupExists = false;
+		AmpOrgGroup result = null;
+		Session session = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String orgGrpName = AmpOrgGroup.hqlStringForName("l");
+			String queryString = "select l from "
+					+ AmpOrgGroup.class.getName() + " l "
+					+ "where upper(" + orgGrpName + ") like upper(:name) "
+					+ "AND (l.deleted = true)";
+//			if (id != null) {
+//				queryString += " and l.ampOrgGrpId!=" + id;
+//			}
+			Query qry = session.createQuery(queryString);
+			qry.setParameter("name", name, StringType.INSTANCE);
+			result = (AmpOrgGroup) qry.uniqueResult();
+//			Integer amount = (Integer) qry.uniqueResult();
+//			if (amount != null && amount.intValue() > 0) {
+//				deletedOrgGroupExists = true;
+//			}
+		} catch (Exception e) {
+			logger.error("Unable to get Org Group" + e);
+		}
+		return result;
+//		return deletedOrgGroupExists;
+		
+	}
+	
 	public static boolean checkAmpOrgGroupDuplication(String name, Long id) {
 		boolean duplicateName = false;
 		Session session = null;
@@ -1918,7 +1972,8 @@ public class DbUtil {
 			String orgGrpName = AmpOrgGroup.hqlStringForName("org");
 			String queryString = "select org from "
 					+ AmpOrgGroup.class.getName() + " org "
-					+ " where org.orgType=:orgType";
+					+ " where org.orgType=:orgType"
+					+ " AND org.deleted IS NULL OR org.deleted = false";
 			queryString += "  order by " + orgGrpName;
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("orgType", orgType, LongType.INSTANCE);

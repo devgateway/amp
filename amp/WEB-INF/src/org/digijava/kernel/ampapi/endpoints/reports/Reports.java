@@ -56,9 +56,12 @@ import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
 import org.digijava.kernel.ampapi.saiku.SaikuGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
 import org.digijava.kernel.ampapi.saiku.util.SaikuUtils;
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.action.ReportsFilterPicker;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -725,8 +728,9 @@ public class Reports {
 			Session session = PersistenceManager.getSession();			
 			List<Map<String, String>> reportData = (List<Map<String, String>>) formParams.get("reportData");
 			boolean emptyDefaultName = true;
+            Locale defaultLang = SiteUtils.getDefaultLanguages(RequestUtils.getSite(httpRequest));
 			for (Map<String, String> name : reportData) {
-				if (TLSUtils.getEffectiveLangCode().equals(name.get("lang")) && !"".equals(name.get("name").toString())) {
+				if (defaultLang != null && defaultLang.getCode().equals(name.get("lang")) && !"".equals(name.get("name"))) {
 					emptyDefaultName = false;
 				}
 			}

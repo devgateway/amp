@@ -29,7 +29,7 @@ other rows (if any): capital spending percent / classification / attached pledge
 	</td>
 	<td height="18" align="right"><module:display
 			name="/Activity Form/Funding/Funding Group/Funding Item/${transaction}/Disaster Response"
-			parentModule="/Activity Form/Funding/Funding Group/Funding Item/${transaction}/Disaster Response">
+			parentModule="/Activity Form/Funding/Funding Group/Funding Item/${transaction}">
 
 			<logic:present name="fundingDetail" property="disasterResponse">
 				<c:if test="${fundingDetail.disasterResponse }">

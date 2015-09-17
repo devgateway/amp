@@ -31,6 +31,7 @@ import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.xml.sax.SAXException;
 
@@ -67,27 +68,23 @@ public class Security {
 		isAdmin ="yes".equals(httpRequest.getSession().getAttribute("ampAdmin"));
 		
 		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
-		String username=null;
-		String team=null;
-		
-		//if the user is admin the he doesn't have a workspace assigned
-		if (tm != null && !isAdmin ) {
-			User u;
-			AmpTeamMember ampTeamMember;
-			try {
-				u = UserUtils.getUserByEmail(tm.getEmail());
-				username=u.getName();
+		String username = null;
+		String team = null;
+		boolean addActivity = false;
+		//if the user is adminn the he doesn't have a workspace assigned
+ 
+		if (tm != null) {
+			username = tm.getMemberName();
+			if (!isAdmin) {
+				AmpTeamMember ampTeamMember;
 				ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
-				team=ampTeamMember.getAmpTeam().getName();
-				//if the user is logged in without a token, we generate one
+				team = ampTeamMember.getAmpTeam().getName();
+				// if the user is logged in without a token, we generate one
 				if (apiToken == null) {
-					//if no token is present in session we generate one 
+					// if no token is present in session we generate one
 					apiToken = SecurityUtil.generateToken();
 				}
-
-			} catch (DgException e) {
-				// TODO return error 500 with description
-				e.printStackTrace();
+				addActivity = FeaturesUtil.isVisibleField("Add Activity Button") && ampTeamMember.getAmpTeam().getAddActivity();
 			}
 
 		}
@@ -97,12 +94,13 @@ public class Security {
 	    	port=":"+TLSUtils.getRequest().getServerPort();
 	    }
 		authenticationResult.set("token", apiToken!=null && apiToken.getToken()!=null?apiToken.getToken():null);
-		authenticationResult.set("url", "http"+ (TLSUtils.getRequest().isSecure()?"S":"") +"://"+ TLSUtils.getRequest().getServerName() + port +"/showLayout.do?layout=login");
+		authenticationResult.set("url", "http"+ (TLSUtils.getRequest().isSecure()?"s":"") +"://"+ TLSUtils.getRequest().getServerName() + port +"/showLayout.do?layout=login");
 		authenticationResult.set("team", team);
 		authenticationResult.set("user-name", username);
-		authenticationResult.set("add-activity", false); //to check if the user can add activity in the selected ws
-		authenticationResult.set("view-activity", true); //to check if the user can edit activity in the selected ws
-
+		authenticationResult.set("is-admin", isAdmin);
+		authenticationResult.set("add-activity", addActivity); //to check if the user can add activity in the selected ws
+		authenticationResult.set("view-activity", !isAdmin); ///at this stage the user can view activities only if you are not admin
+		
 		return authenticationResult;
 	}
 	/**

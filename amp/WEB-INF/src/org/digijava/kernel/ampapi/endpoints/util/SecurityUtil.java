@@ -47,15 +47,10 @@ public class SecurityUtil {
 		if (tokens == null) {
 			tokens = new HashMap<String, AmpApiToken>();
 		}
-		if (TLSUtils.getRequest().getSession().getAttribute(USER_TOKEN) != null) {
-			// if token exist in session we remove it
-			if (tokens.get(TLSUtils.getRequest().getSession().getAttribute(USER_TOKEN)) != null) {
-				// we remove appliaction level context
-				tokens.remove(TLSUtils.getRequest().getSession().getAttribute(USER_TOKEN));
-			}
-			// we remove session object
-			TLSUtils.getRequest().getSession().setAttribute(USER_TOKEN, null);
-		}
+		//we remove application token
+		tokens.remove(TLSUtils.getRequest().getSession().getAttribute(USER_TOKEN));
+		// we remove session object
+		TLSUtils.getRequest().getSession().setAttribute(USER_TOKEN, null);
 		String token = UUID.randomUUID().toString();
 		// We create the ampampi object
 		
@@ -83,6 +78,9 @@ public class SecurityUtil {
 			DateTime now = new DateTime();
 			if (now.isAfter(apiToken.getExpirationTime())) {
 				//token expired remove from session and from application
+
+				TLSUtils.getRequest().getSession().setAttribute(USER_TOKEN,null);
+
 				HashMap<String, AmpApiToken> tokens;
 
 				tokens = (HashMap<String, AmpApiToken>) TLSUtils.getRequest().getServletContext()

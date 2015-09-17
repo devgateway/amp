@@ -593,7 +593,18 @@ var WorkspaceToolbar = Backbone.View.extend({
     export_amp_dual_currency: function(){
         var that = this;
         if(!this.deflatedCurrenciesPromise){
-            this.deflatedCurrenciesPromise = $.get("/rest/currencies/inflatableCurrencies");
+            this.deflatedCurrenciesPromise = $.get("/rest/amp/settings")
+                .then(function(settings){
+                    return settings.filter(function(setting){
+                        return setting.name == "currency";
+                    })[0]
+                })
+                .then(function(setting){
+                    return setting.options.filter(function(currency){
+                        return currency.id != setting.defaultId
+                    })
+                })
+            ;
         }
         this.deflatedCurrenciesPromise.then(function(currencies){
             var $container = $('#deflated-currencies-container');
@@ -603,7 +614,7 @@ var WorkspaceToolbar = Backbone.View.extend({
             if($select.is(":empty")){
                 $select.append(currencies.map(function(currency){
                     return $("<option></option>")
-                        .text(currency.name + "( " + currency.code + ")")
+                        .text(currency.name + "( " + currency.id + ")")
                         .attr("value", currency.id);
                 }));
                 $cancel.click(function(){

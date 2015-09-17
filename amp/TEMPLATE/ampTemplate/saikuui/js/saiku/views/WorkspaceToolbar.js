@@ -596,7 +596,7 @@ var WorkspaceToolbar = Backbone.View.extend({
             this.deflatedCurrenciesPromise = $.get("/rest/amp/settings")
                 .then(function(settings){
                     return settings.filter(function(setting){
-                        return setting.name == "currency";
+                        return setting.id == "1";
                     })[0]
                 })
                 .then(function(setting){

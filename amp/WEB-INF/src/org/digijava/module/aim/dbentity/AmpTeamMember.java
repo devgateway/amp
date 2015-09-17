@@ -261,7 +261,6 @@ public class AmpTeamMember implements Serializable, Identifiable/*, Versionable*
 	@Override
 	public Object getIdentifier() {
 		return this.ampTeamMemId;
-//		return null;
 	}
     
 }

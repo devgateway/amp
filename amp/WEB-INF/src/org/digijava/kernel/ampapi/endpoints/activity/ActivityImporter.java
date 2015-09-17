@@ -884,7 +884,6 @@ public class ActivityImporter {
 		if (!update) {
 			newActivity.setDraft(isDraftFMEnabled);
 		}
-//		currentMember = null;
 		initDefaults();
 	}
 	
@@ -1075,7 +1074,6 @@ public class ActivityImporter {
 	}
 	
 	protected void postProcess() {
-//		currentMember = null;
 		LuceneUtil.addUpdateActivity(TLSUtils.getRequest().getServletContext().getRealPath("/"), update,
         		TLSUtils.getSite(), Locale.forLanguageTag(trnSettings.getDefaultLangCode()), newActivity, oldActivity);
 	}

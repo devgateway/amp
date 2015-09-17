@@ -592,6 +592,14 @@
             <li><a href="#switch_to_mdx"
                 class="i18n switch_to_mdx button disabled_toolbar"
                 title="Switch to MDX Mode"></a></li>
+
+            <li class="seperator">
+                <a
+                  href="#export_amp_dual_currency"
+                  class="i18n export_dual_currency button disabled_toolbar sprite"
+                  title="Dual currency report export"
+                /></a>
+            </li>
         </ul>
 
         </script>
@@ -995,5 +1003,29 @@
 		</div>
 	</div>
 	<!-- End of changes for AMP Filters -->
+    <div id="deflated-currencies-container" class="panel panel-primary">
+        <div class="panel-heading">
+            <button type="button" class="close cancel" aria-hidden="true">×</button>
+            <h3 class="panel-title">Settings</h3>
+        </div>
+        <div class="panel-body">
+            <table align="center">
+                <tbody>
+                    <tr>
+                        <td data-i18n="tabs.common:currency">Currency</td>
+                        <td>
+                            <select name="amp_currency" id="amp_deflated_currency"></select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="panel-footer">
+            <div class="pull-right">
+                <button type="button" class="btn btn-sm btn-warning cancel" title="Revert filters to state when opened.">Cancel</button>
+                <button type="button" class="btn btn-sm btn-success export">Export</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

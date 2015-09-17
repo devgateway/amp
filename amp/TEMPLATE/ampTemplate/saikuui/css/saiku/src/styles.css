@@ -1173,6 +1173,12 @@ a.disabled_toolbar:hover {
   background-image: url('../../../images/src/switch_to_mdx.png');
   background-position: 7px 7px;
 }
+
+.workspace_toolbar .export_dual_currency {
+    background-image: url('../../../images/src/swap.png');
+    background-position: 7px 7px;
+}
+
 .workspace_toolbar .chart {
     background-image:   url('../../../js/saiku/plugins/CCC_Chart/chart.png');
     background-position: 7px 7px;
@@ -2094,4 +2100,23 @@ width:70px !important;
 	font-family: "Open Sans";
   	font-style: normal;
   	font-weight: 300;
+}
+
+#deflated-currencies-container{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 400px;
+    height: 150px;
+    margin-top: -75px;
+    margin-left: -200px;
+    display: none;
+}
+
+#deflated-currencies-container .panel-footer{
+    height: 50px;
+}
+
+#deflated-currencies-container table{
+    width: 100%;
 }

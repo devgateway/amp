@@ -532,6 +532,7 @@ var WorkspaceToolbar = Backbone.View.extend({
         window.location = Settings.REST_URL +
             this.workspace.query.url() + "/export/xls/" + this.workspace.query.getProperty('saiku.olap.result.formatter');
     },
+
     export_amp_xls: function(event) {
     	if(Settings.AMP_REPORT_API_BRIDGE) {
     		var auxQuery = this.workspace.currentQueryModel;
@@ -544,6 +545,7 @@ var WorkspaceToolbar = Backbone.View.extend({
     		this.export_xls();
 		}
     },
+
     export_amp_xls_plain: function(event) {
     	if(Settings.AMP_REPORT_API_BRIDGE) {
     		var auxQuery = this.workspace.currentQueryModel;
@@ -586,6 +588,36 @@ var WorkspaceToolbar = Backbone.View.extend({
 		{
     		this.export_pdf();
 		}
+    },
+
+    export_amp_dual_currency: function(){
+        var that = this;
+        if(!this.deflatedCurrenciesPromise){
+            this.deflatedCurrenciesPromise = $.get("/rest/currencies/inflatableCurrencies");
+        }
+        this.deflatedCurrenciesPromise.then(function(currencies){
+            var $container = $('#deflated-currencies-container');
+            var $select = $container.find('#amp_deflated_currency');
+            var $export = $container.find(".btn.export");
+            var $cancel = $container.find(".btn.cancel, .close.cancel");
+            if($select.is(":empty")){
+                $select.append(currencies.map(function(currency){
+                    return $("<option></option>")
+                        .text(currency.name + "( " + currency.code + ")")
+                        .attr("value", currency.id);
+                }));
+                $cancel.click(function(){
+                    $container.hide();
+                });
+                $export.click(function(){
+                    var auxQuery = that.workspace.currentQueryModel;
+                    auxQuery.queryModel.secondCurrency = $select.val();
+                    $.postDownload("/rest/data/saikureport/export/xls/" + that.calculate_url(),
+                      {query: JSON.stringify(auxQuery)}, "post");
+                });
+            }
+            $container.show();
+        });
     },
 
     switch_to_mdx: function(event) {

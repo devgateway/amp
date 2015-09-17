@@ -28,6 +28,7 @@ public class FundingDetail implements Serializable, Comparable
 	
 	private Date reportingDate;
 	private AmpCategoryValue adjustmentTypeName;
+	private AmpCategoryValue projectionTypeName;
 	private String transactionDate;
 	private String transactionAmount;
 	private Long reportingOrganizationId;
@@ -74,16 +75,6 @@ public class FundingDetail implements Serializable, Comparable
 		this.indexId = id;
 	}
 
-
-//	public int getAdjustmentType() {
-//		return adjustmentType;
-//	}
-//
-//	public void setAdjustmentType(int adjustmentType) {
-//		this.adjustmentType = adjustmentType;	
-//		this.adjustmentTypeName = CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.ADJUSTMENT_TYPE_KEY, new Long(this.adjustmentType));
-//	}
-
 	public boolean isChecked() {
 		return checked;
 	}
@@ -108,14 +99,6 @@ public class FundingDetail implements Serializable, Comparable
 		this.currencyName = currencyName;
 	}
 
-/*	public Logger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-*/
 
 	public String getReportingOrganizationName() {
 		return reportingOrganizationName;
@@ -159,11 +142,6 @@ public class FundingDetail implements Serializable, Comparable
 
 	public void setAdjustmentTypeName(AmpCategoryValue adjustmentTypeName) {
 		this.adjustmentTypeName = adjustmentTypeName;
-//		if (adjustmentTypeName==null) {
-//			this.adjustmentType = -1;
-//		} else {
-//			this.adjustmentType = adjustmentTypeName.getId().intValue();
-//		}
 		
 	}
 
@@ -422,4 +400,11 @@ public class FundingDetail implements Serializable, Comparable
 		this.disasterResponse = disasterResponse;
 	}
  
+	public AmpCategoryValue getProjectionTypeName() {
+        return projectionTypeName;
+    }
+
+    public void setProjectionTypeName(AmpCategoryValue projectionTypeName) {
+            this.projectionTypeName = projectionTypeName;
+    }
 }

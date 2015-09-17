@@ -677,13 +677,10 @@ public class DbHelper {
 				String.format("SELECT acvl.id, getlocationidbyimpllocMap(acvl.id, '%s'::character varying) AS region_id FROM amp_category_value_location acvl WHERE acvl.id IN (" + Util.toCSStringForIN(allUsedAcvlIDs) + ")",
 						impLevel);		
 		final Map<Long, Long> locationToRegion = new HashMap<Long, Long>();
-		PersistenceManager.getSession().doWork(new Work()
-		{
-			public void execute(java.sql.Connection conn) throws java.sql.SQLException
-			{
+		PersistenceManager.getSession().doWork(new Work() {
+			public void execute(java.sql.Connection conn) throws java.sql.SQLException {
 				try(RsInfo rsi = SQLUtils.rawRunQuery(conn, findLocationRegionsQuery, null)) {
-					while (rsi.rs.next())
-					{
+					while (rsi.rs.next()) {
 						Long locId = rsi.rs.getLong(1);
 						Long regionLocId = rsi.rs.getLong(2);
 						locationToRegion.put(locId, regionLocId);
@@ -725,8 +722,12 @@ public class DbHelper {
         for(Object[] item:fundingDets)
         {
         	FundingInformationItem fd = (FundingInformationItem) item[0];
-        	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
-        	
+        	FundingInformationItem currentFd;
+			if(fd.getTransactionType().equals(Constants.MTEFPROJECTION)){
+				currentFd=new AmpFundingMTEFProjection(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+			}else{
+				currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+			}
         	Double finalAmount = currentFd.getAbsoluteTransactionAmount();
         	for(int i = 3; i < item.length; i++)
         		if (item[i] != null)

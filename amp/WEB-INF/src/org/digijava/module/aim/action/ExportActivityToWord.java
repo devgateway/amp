@@ -2593,14 +2593,7 @@ public class ExportActivityToWord extends Action {
                         for (AmpFundingMTEFProjection projection : fnd.getMtefProjections()) {
 
                         	mtefExisting = true;
-                            String projectedType = "";
-                            if (MTEFProjection.PROJECTION_ID == projection.getProjected().getId()) {
-                                projectedType = "Projection";
-                            }
-
-                            if (MTEFProjection.PIPELINE_ID == projection.getProjected().getId()) {
-                                projectedType = "Pipeline";
-                            }
+                            String projectedType = projection.getProjected().getValue();
 
                             sectionHelperRowData = new ExportSectionHelperRowData(TranslatorWorker.translateText(projectedType), null, null, true);
                             sectionHelperRowData.addRowData(DateConversion.convertDateToFiscalYearString(projection.getProjectionDate()));

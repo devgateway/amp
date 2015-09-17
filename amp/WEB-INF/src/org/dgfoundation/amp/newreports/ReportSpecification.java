@@ -13,7 +13,7 @@ import org.digijava.module.aim.helper.TeamMember;
  * @author Dolghier Constantin
  *
  */
-public interface ReportSpecification {
+public interface ReportSpecification extends Cloneable {
 	
 	/**
 	 * one of the ArConstants.LEGAL_REPORT_TYPES constants 

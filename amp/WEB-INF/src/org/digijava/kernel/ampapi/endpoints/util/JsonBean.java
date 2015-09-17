@@ -19,9 +19,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 public class JsonBean {
 	private static final Logger logger = Logger.getLogger(JsonBean.class);
 
-	public JsonBean() {
-
-	}
+	public JsonBean() {}
 
 	protected LinkedHashMap<String, Object> param = new LinkedHashMap<String, Object>();
 
@@ -43,6 +41,16 @@ public class JsonBean {
 	@JsonIgnore
 	public Integer getSize() {
 		return param.size();
+	}
+	
+	/**
+	 * makes a shallow copy
+	 * @return
+	 */
+	public JsonBean copy() {
+		JsonBean res = new JsonBean();
+		res.param = new LinkedHashMap<String, Object>(this.param);
+		return res;
 	}
 	
 	public String getString(String name) {

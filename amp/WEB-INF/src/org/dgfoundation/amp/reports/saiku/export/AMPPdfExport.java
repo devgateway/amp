@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -39,7 +40,7 @@ import com.itextpdf.tool.xml.pipeline.html.HtmlPipelineContext;
 
 public class AMPPdfExport extends PdfReport {
 
-	public byte[] pdf(JsonBean jb, String type, ReportSpecificationImpl report, LinkedHashMap<String, Object> queryModel)
+	public byte[] pdf(JsonBean jb, String type, ReportSpecification report, LinkedHashMap<String, Object> queryModel)
 			throws Exception {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		Document doc = createDocument(jb);
@@ -50,7 +51,7 @@ public class AMPPdfExport extends PdfReport {
 		return os.toByteArray();
 	}
 
-	public void populatePdf(Document doc, PdfWriter writer, JsonBean jb, String type, ReportSpecificationImpl report,
+	public void populatePdf(Document doc, PdfWriter writer, JsonBean jb, String type, ReportSpecification report,
 			LinkedHashMap<String, Object> queryModel) throws Exception {
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		Date date = new Date();

@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -15,7 +16,7 @@ import org.jsoup.select.Elements;
 
 public class AMPReportCsvExport {
 
-	public static byte[] generateCSV(JsonBean jb, String type, ReportSpecificationImpl report,
+	public static byte[] generateCSV(JsonBean jb, String type, ReportSpecification report,
 			LinkedHashMap<String, Object> queryModel, String separator) throws IOException {
 
 		// Generate html table.

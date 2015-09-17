@@ -34,6 +34,7 @@ import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportExecutor;
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
@@ -45,8 +46,10 @@ import org.dgfoundation.amp.reports.saiku.export.AMPPdfExport;
 import org.dgfoundation.amp.reports.saiku.export.AMPReportCsvExport;
 import org.dgfoundation.amp.reports.saiku.export.AMPReportExcelExport;
 import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
+import org.dgfoundation.amp.reports.saiku.export.ReportGenerationInfo;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
@@ -72,6 +75,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
@@ -575,28 +579,54 @@ public class Reports {
         
 	}
 
+	/**
+	 * a very very very ugly and hacky function which only exists because the filters / settings API is f...ed up
+	 * @param queryObject
+	 * @param origReport
+	 * @param ampReportId
+	 * @param ampCurrencyCode
+	 * @return
+	 */
+	protected ReportGenerationInfo changeReportCurrencyTo(JsonBean queryObject, ReportGenerationInfo origReport, long ampReportId, String ampCurrencyCode) {
+		System.out.println();
+		JsonBean newQueryObject = queryObject.copy();
+		LinkedHashMap<String, Object> newQueryModel = new LinkedHashMap<String, Object>((LinkedHashMap<String, Object>) queryObject.get("queryModel"));
+		newQueryModel.put("regenerate", true);
+		if (!newQueryModel.containsKey(EPConstants.SETTINGS))
+			newQueryModel.put(EPConstants.SETTINGS, new LinkedHashMap<String, Object>());
+		Map<String, Object> settings = (Map<String, Object>) newQueryModel.get(EPConstants.SETTINGS);
+		settings.put(SettingsConstants.CURRENCY_ID, ampCurrencyCode);
+
+		newQueryObject.set("queryModel", newQueryModel);
+
+		JsonBean newResult = getSaikuReport(newQueryObject, ampReportId);
+		ReportSpecification newReport = origReport.report; // sick and tired of shitcode 
+		return new ReportGenerationInfo(newResult, origReport.type, newReport, newQueryModel, String.format(" - %s", ampCurrencyCode));
+	}
+	
 	private Response exportSaikuReport(String query, String type, AmpReports ampReport) {
-		JsonBean result;
 		try {
 			logger.info("Starting export to " + type);
 			String decodedQuery = java.net.URLDecoder.decode(query, "UTF-8");
 			decodedQuery = decodedQuery.replace("query=", "");
 			JsonBean queryObject = JsonBean.getJsonBeanFromString(decodedQuery);
 			LinkedHashMap<String, Object> queryModel = (LinkedHashMap<String, Object>) queryObject.get("queryModel");
+			
 			queryModel.remove("page");
 			queryModel.put("page", 0);
 			queryModel.put("recordsPerPage", -1);
-			queryModel.put("regenerate", false);
+			queryModel.put("regenerate", true);
 			queryModel.put(AMPReportExportConstants.EXCEL_TYPE_PARAM, queryObject.get(AMPReportExportConstants.EXCEL_TYPE_PARAM));
+						
 			logger.info("Obtain report result...");
-			result = getSaikuReport(queryObject, ampReport.getAmpReportId());
+			JsonBean result = getSaikuReport(queryObject, ampReport.getAmpReportId());
 
 			byte[] doc = null;
 			String filename = "export";
 
 			// We will use report settings to get the DecimalFormat in order to parse the formatted values
 			logger.info("Obtain report implementation...");
-			ReportSpecificationImpl report = ReportsUtil.getReport(ampReport.getAmpReportId());
+			ReportSpecification report = ReportsUtil.getReport(ampReport.getAmpReportId());
 
 			if (report != null && !StringUtils.isEmpty(report.getReportName())) {
 				filename = report.getReportName();
@@ -606,10 +636,17 @@ public class Reports {
 
 			logger.info("Generate specific export...");
 			switch (type) {
-			// TODO: Uncomment when xls and csv is ready.
-			case AMPReportExportConstants.XLSX:
-				doc = AMPReportExcelExport.generateExcel(result, AMPReportExportConstants.XLSX, report, queryModel);
+			case AMPReportExportConstants.XLSX: {
+				ReportGenerationInfo report1 = new ReportGenerationInfo(result, AMPReportExportConstants.XLSX, report, queryModel, "");
+				ReportGenerationInfo report2 = null;
+				String secondCurrencyCode = queryModel.containsKey("secondCurrency") ? queryModel.get("secondCurrency").toString() : null;
+				logger.error(String.format("setts 1 = %s, 2 = %s, secondCurrency=%s", queryModel.get("1"), queryModel.get("2"), secondCurrencyCode));
+				if (secondCurrencyCode != null) {
+					report2 = changeReportCurrencyTo(queryObject, report1, ampReport.getAmpReportId(), secondCurrencyCode);
+				}
+				doc = AMPReportExcelExport.generateExcel(report1, report2);
 				break;
+			}
 			case AMPReportExportConstants.CSV: 
 				doc = AMPReportCsvExport.generateCSV(result, AMPReportExportConstants.CSV, report, queryModel, ";");
 				break;

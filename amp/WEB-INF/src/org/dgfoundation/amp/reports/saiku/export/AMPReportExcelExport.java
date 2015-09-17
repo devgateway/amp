@@ -18,7 +18,9 @@ import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportFilters;
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -55,45 +57,54 @@ public class AMPReportExcelExport {
 
 	private static final Logger logger = Logger.getLogger(AMPReportExcelExport.class);
 
-	public static byte[] generateExcel(JsonBean jb, String type, ReportSpecificationImpl report,
-			LinkedHashMap<String, Object> queryModel) throws IOException {
-		// Generate html table.
-		String content = AMPJSConverter.convertToHtml(jb, type);
-		// Parse the string.
-		logger.info("Start Parse document.");
-		Document doc = Jsoup.parse(content);
-		logger.info("End Parse document.");
-
+	/**
+	 * generates a workbook containing data about 1 or 2 reports. Normally you'd want both reports to actually be the same one generated in different currencies,
+	 * but the code does not care and you can put as different reports as you want
+	 * @param report1 - the first report
+	 * @param report2 - the second report, might be null
+	 */
+	public static byte[] generateExcel(ReportGenerationInfo report1, ReportGenerationInfo report2) throws IOException {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		Workbook wb = new XSSFWorkbook();
-		Sheet styledSheet = null;
-		Sheet plainSheet = null;
-
-		String styleType = (String) queryModel.get(AMPReportExportConstants.EXCEL_TYPE_PARAM);
-		if (styleType != null && styleType.equals(xls_type_plain)) {
-			plainSheet = wb.createSheet(TranslatorWorker.translateText("Plain"));
-		} else if (styleType != null && styleType.equals(xls_type_styled)) {
-			styledSheet = wb.createSheet(TranslatorWorker.translateText("Formatted"));
-		}
-		Sheet summarySheet = wb.createSheet(TranslatorWorker.translateText("Summary Information"));
 		createStyles(wb);
-
-		int hierarchies = report.getRowsHierarchiesTotals();
-		int columns = report.getColumns().size();
-		generateSummarySheet(wb, summarySheet, report, queryModel);
-		if (styledSheet != null) {
-			generateSheet(wb, styledSheet, doc, hierarchies, columns, TYPE_STYLED, report);
-		}
-		if (plainSheet != null) {
-			generateSheet(wb, plainSheet, doc, hierarchies, columns, TYPE_PLAIN, report);
-		}
-
-		logger.info("Write excel");
+		addSheetsToWorkbook(wb, report1);
+		if (report2 != null)
+			addSheetsToWorkbook(wb, report2);
 		wb.write(os);
 		os.flush();
 		os.close();
 		logger.info("Return excel");
 		return os.toByteArray();
+	}
+	
+	protected static void addSheetsToWorkbook(Workbook wb, ReportGenerationInfo reportInfo) throws IOException {
+		// Generate html table.
+		String content = AMPJSConverter.convertToHtml(reportInfo.jb, reportInfo.type);
+		// Parse the string.
+		logger.info("Start Parse document.");
+		Document doc = Jsoup.parse(content);
+		logger.info("End Parse document.");
+
+		Sheet styledSheet = null;
+		Sheet plainSheet = null;
+
+		String styleType = (String) reportInfo.queryModel.get(AMPReportExportConstants.EXCEL_TYPE_PARAM);
+		if (styleType != null && styleType.equals(xls_type_plain)) {
+			plainSheet = wb.createSheet(TranslatorWorker.translateText("Plain") + reportInfo.suffix);
+		} else if (styleType != null && styleType.equals(xls_type_styled)) {
+			styledSheet = wb.createSheet(TranslatorWorker.translateText("Formatted") + reportInfo.suffix);
+		}
+		Sheet summarySheet = wb.createSheet(TranslatorWorker.translateText("Summary Information") + reportInfo.suffix);
+
+		generateSummarySheet(summarySheet, reportInfo.report, reportInfo.queryModel);
+		if (styledSheet != null) {
+			generateSheet(wb, styledSheet, doc, TYPE_STYLED, reportInfo.report);
+		}
+		if (plainSheet != null) {
+			generateSheet(wb, plainSheet, doc, TYPE_PLAIN, reportInfo.report);
+		}
+
+		logger.info("Write excel");
 	}
 
 	/**
@@ -104,8 +115,7 @@ public class AMPReportExcelExport {
 	 * @param report
 	 * @param queryObject
 	 */
-	private static void generateSummarySheet(Workbook wb, Sheet sheet, ReportSpecificationImpl report,
-			LinkedHashMap<String, Object> queryModel) {
+	private static void generateSummarySheet(Sheet sheet, ReportSpecification report, Map<String, Object> queryModel) {
 		logger.info("Start generateSummarySheet.");
 		int i = 0;
 		int j = 0;
@@ -210,8 +220,10 @@ public class AMPReportExcelExport {
 		String calendar = report.getSettings().getCalendar().getName();
 		if (queryModel.containsKey("settings")) {
 			LinkedHashMap<String, Object> settings = (LinkedHashMap<String, Object>) queryModel.get("settings");
-			currency = settings.get("1").toString();
-			calendar = FiscalCalendarUtil.getAmpFiscalCalendar(new Long(settings.get("2").toString())).getName();
+			currency = settings.get(SettingsConstants.CURRENCY_ID).toString();
+			if (settings.containsKey(SettingsConstants.CALENDAR_TYPE_ID)) {
+				calendar = FiscalCalendarUtil.getAmpFiscalCalendar(new Long(settings.get(SettingsConstants.CALENDAR_TYPE_ID).toString())).getName();
+			}
 		}
 		Row currencyRow = sheet.createRow(i);
 		Cell currencyTitleCell = currencyRow.createCell(j);
@@ -242,8 +254,10 @@ public class AMPReportExcelExport {
 		logger.info("End generateSummarySheet.");
 	}
 
-	private static void generateSheet(Workbook wb, Sheet sheet, Document doc, int hierarchies, int columns, int type,
-			ReportSpecificationImpl report) {
+	private static void generateSheet(Workbook wb, Sheet sheet, Document doc, int type, ReportSpecification report) {
+		int columns = report.getColumns().size();
+		int hierarchies = report.getHierarchies().size();
+		
 		logger.info("Start generateSheet " + sheet.getSheetName());
 		Map<Integer, Integer> widths = new TreeMap<Integer, Integer>();
 		boolean emptyAsZero = FeaturesUtil

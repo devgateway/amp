@@ -52,7 +52,6 @@ public class InputValidatorProcessor {
 			JsonBean fieldDef, String fieldPath, Map<Integer, ApiErrorMessage> errors) {
 		boolean valid = true;
 		String fieldName = fieldPath.substring(fieldPath.lastIndexOf("~") + 1);
-		
 		for (InputValidator current : validators) {
 			boolean currentValid = current.isValid(importer, newParent, oldParent, fieldDef, fieldPath);
 			valid = currentValid && valid;

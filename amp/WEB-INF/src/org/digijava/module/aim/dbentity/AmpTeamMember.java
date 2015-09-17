@@ -23,14 +23,16 @@ import org.digijava.module.aim.action.GlobalSettings;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.message.dbentity.AmpMessageState;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 
-public class AmpTeamMember implements Serializable/*, Versionable*/ {
+public class AmpTeamMember implements Serializable, Identifiable/*, Versionable*/ {
 
+	@Interchangeable(fieldTitle="AmpTeamMember ID", id=true)
 	private Long ampTeamMemId;
 
     @Interchangeable(fieldTitle = "User")
@@ -255,5 +257,11 @@ public class AmpTeamMember implements Serializable/*, Versionable*/ {
 			throw new RuntimeException("could not run workspace filter");
 		}
     }
+
+	@Override
+	public Object getIdentifier() {
+		return this.ampTeamMemId;
+//		return null;
+	}
     
 }

@@ -144,7 +144,7 @@ LoggerIdentifiable, Cloneable {
     @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_AT)
     protected Date lastImportedAt;
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_BY)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_BY, pickIdOnly=true)
     @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_BY)
     protected AmpTeamMember lastImportedBy;
 
@@ -444,7 +444,7 @@ LoggerIdentifiable, Cloneable {
 
 
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.CREATED_BY)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.CREATED_BY, pickIdOnly=true)
 	@VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.CREATED_BY, blockSingleChange = true)
 	protected AmpTeamMember activityCreator;
 	
@@ -460,7 +460,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Iati Last Update Date", blockSingleChange = true)
 	protected Date iatiLastUpdatedDate;
 
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVED_BY)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVED_BY, pickIdOnly=true)
 	protected AmpTeamMember approvedBy;
 	
 	@Interchangeable(fieldTitle = "Approval Date", importable = false)
@@ -673,7 +673,7 @@ LoggerIdentifiable, Cloneable {
 	
 	protected Date modifiedDate;
 
-	@Interchangeable(fieldTitle = ActivityFieldsConstants.MODIFIED_BY)
+	@Interchangeable(fieldTitle = ActivityFieldsConstants.MODIFIED_BY, pickIdOnly=true)
 	@VersionableFieldSimple(fieldTitle = "Modified By")
 	protected AmpTeamMember modifiedBy;
 	

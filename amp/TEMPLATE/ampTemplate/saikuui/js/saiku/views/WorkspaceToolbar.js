@@ -610,21 +610,22 @@ var WorkspaceToolbar = Backbone.View.extend({
             var $container = $('#deflated-currencies-container');
             var $select = $container.find('#amp_deflated_currency');
             var $export = $container.find(".btn.export");
-            var $cancel = $container.find(".btn.cancel, .close.cancel");
+            var $cancel = $container.find(".btn.cancel");
+            var $close = $container.find(".close.cancel");
             if($select.is(":empty")){
                 $select.append(currencies.map(function(currency){
                     return $("<option></option>")
-                        .text(currency.name + "( " + currency.id + ")")
+                        .text(currency.name + " (" + currency.id + ")")
                         .attr("value", currency.id);
                 }));
-                $cancel.click(function(){
+                $cancel.add($export).add($close).click(function(){
                     $container.hide();
                 });
                 $export.click(function(){
-                    var auxQuery = that.workspace.currentQueryModel;
-                    auxQuery.queryModel.secondCurrency = $select.val();
+                    var payload = $.extend(true, {}, that.workspace.currentQueryModel);
+                    payload.queryModel.secondCurrency = $select.val();
                     $.postDownload("/rest/data/saikureport/export/xls/" + that.calculate_url(),
-                      {query: JSON.stringify(auxQuery)}, "post");
+                      {query: JSON.stringify(payload)}, "post");
                 });
             }
             $container.show();

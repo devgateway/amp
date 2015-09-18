@@ -113,10 +113,12 @@
 "amp.dashboard:chart-tops-inunits": "In units",
 "amp.dashboard:chart-tops-inthousands": "In thousands",
 "amp.dashboard:chart-tops-inmillions": "In millions",
-"amp.dashboard:chart-thousand": "K",
+"amp.dashboard:chart-thousand": "k",
 "amp.dashboard:chart-million": "M",
 "amp.dashboard:chart-billion": "B",
-"amp.dashboard:chart-trillion": "T" 
+"amp.dashboard:chart-trillion": "T",
+"amp.dashboard:chart-peta": "P",
+"amp.dashboard:chart-exa": "E"
 
 }
 

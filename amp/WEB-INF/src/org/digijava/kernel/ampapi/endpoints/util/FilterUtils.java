@@ -117,11 +117,13 @@ public class FilterUtils {
 	private static List<String> getStringsFromArray(List<?> theArray) {
 		List<String> s = new ArrayList<String>();
 		for (Object obj : theArray) {
-			if (obj != null && Filters.ANY_BOOLEAN.equals(obj.toString())) {
-				s.add(FilterRule.FALSE_VALUE);
-				s.add(FilterRule.TRUE_VALUE);
-			} else {
-				s.add(obj.toString());
+			if (obj != null) {
+				if(Filters.ANY_BOOLEAN.equals(obj.toString())) {
+					s.add(FilterRule.FALSE_VALUE);
+					s.add(FilterRule.TRUE_VALUE);
+				} else {
+					s.add(obj.toString());
+				}
 			}
 		}
 		return s;

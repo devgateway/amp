@@ -6,17 +6,27 @@ var d3 = require('d3-browserify');
 var formatKMB = function(precision, decimalSeparator) {
   var formatSI = d3.format('.' + (precision || 3) + 's');
   decimalSeparator = decimalSeparator || '.';
-  console.log(formatSI);
   return function(value) {
     return formatSI(value)
-      .replace('K', app.translator.translateSync('amp.dashboard:chart-thousand'))
+      .replace('k', app.translator.translateSync('amp.dashboard:chart-thousand'))
       .replace('M', app.translator.translateSync('amp.dashboard:chart-million'))
       .replace('G', app.translator.translateSync('amp.dashboard:chart-billion'))  // now just need to convert G Gigia -> B Billion
       .replace('T', app.translator.translateSync('amp.dashboard:chart-trillion'))
+      .replace('P', app.translator.translateSync('amp.dashboard:chart-peta'))
+	  .replace('E', app.translator.translateSync('amp.dashboard:chart-exa'))
       .replace('.', decimalSeparator);
   };
 };
 
+var translateLanguage = function(value) {
+    return value
+      .replace('k', app.translator.translateSync('amp.dashboard:chart-thousand'))
+      .replace('M', app.translator.translateSync('amp.dashboard:chart-million'))
+      .replace('B', app.translator.translateSync('amp.dashboard:chart-billion'))
+      .replace('T', app.translator.translateSync('amp.dashboard:chart-trillion'))
+      .replace('P', app.translator.translateSync('amp.dashboard:chart-peta'))
+      .replace('E', app.translator.translateSync('amp.dashboard:chart-exa'));
+};
 
 var formatShortText = function(maxWidth) {
   var ellipseWidth = 1;
@@ -87,6 +97,7 @@ function data(el, name, newValue) {
 
 module.exports = {
   formatKMB: formatKMB,
+  translateLanguage: translateLanguage,
   formatShortText: formatShortText,
   categoryColours: categoryColours,
   u16le64: u16le64,

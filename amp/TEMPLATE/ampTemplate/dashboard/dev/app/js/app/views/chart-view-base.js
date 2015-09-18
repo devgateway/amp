@@ -185,8 +185,7 @@ module.exports = BackboneDash.View.extend({
 
   renderNumbers: function() {
     if (this.model.get('total')) {
-      //this.$('.chart-total').html(util.formatKMB(3, app.settings.numberFormatSettings.decimalSeparator)(this.model.get('total')));
-    	this.$('.chart-total').html(this.model.get('sumarizedTotal'));
+    	this.$('.chart-total').html(util.translateLanguage(this.model.get('sumarizedTotal'))); // this shall use the format from the server and translate it in the front end
     }
     this.$('.chart-currency').html(this.model.get('currency'));
   },

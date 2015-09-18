@@ -9,6 +9,7 @@ import React from "react";
 import {fetchJson, range} from "amp/tools";
 import {INFLATABLE_CURRENCIES} from "amp/config/endpoints";
 import Currency from "../model";
+import style from "./style.less";
 
 export class Action extends AMP.Action{}
 class Save extends Action{}
@@ -211,14 +212,23 @@ class Deflator extends AMP.View {
               <tr>
                 <th>{t('amp.deflator:year')}</th>
                 <th>{t('amp.deflator:inflation')}</th>
-                <th>{t('amp.deflator:constantCurrency')}</th>
+                <th className="constant-currency">
+                  <span>
+                    {t('amp.deflator:constantCurrency')}
+                    <div className="tooltip bottom" role="tooltip">
+                      <div className="tooltip-arrow"></div>
+                      <div className="tooltip-inner">
+                        {t('amp.deflator:constantCurrencyHelp')}
+                      </div>
+                    </div>
+                  </span>
+                </th>
                 <th>{t('amp.deflator:delete')}</th>
               </tr>
               </thead>
               <tbody>
               {currentInflationRates.map(rate => {
                 var deletable = rate.year() == currentInflationRates.startYear() || rate.year() == currentInflationRates.endYear();
-
                 var inflationRate = rate.inflationRate();
                 var isValid = parseFloat(inflationRate) == inflationRate;
                 var model = rate.set('deletable', false).deletable(deletable)

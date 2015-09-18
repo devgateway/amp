@@ -1,0 +1,52 @@
+td, th{
+  width: 25%;
+}
+
+th.constant-currency>span{
+  cursor: help;
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted #333;
+  .tooltip{
+    display: none;
+    opacity: 1;
+    filter: alpha(opacity=100);
+    top: 100%;
+    left: 50%;
+    width: 200px;
+    margin-left: -100px;
+    &, .tooltip-inner{
+      max-width: none;
+    }
+  }
+  &:hover .tooltip{
+    display: block;
+  }
+}
+
+.form-control.view{
+  background: transparent;
+  border-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.edit-on-hover{
+  .edit{
+    display:none;
+    &:focus{
+      display: block;
+      &+.view{
+        display: none;
+      }
+    }
+  }
+  &:hover{
+    .edit{
+      display: block;
+    }
+    .view{
+      display: none
+    }
+  }
+}

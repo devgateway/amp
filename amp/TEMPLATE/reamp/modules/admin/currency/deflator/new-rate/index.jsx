@@ -2,6 +2,7 @@ import * as AMP from "amp/architecture";
 import React from "react";
 import {t} from "amp/modules/translate";
 import * as validate from "amp/tools/validate";
+import style from "./style.less";
 
 export class Action extends AMP.Action{}
 
@@ -48,6 +49,9 @@ class NewRate extends AMP.View{
             value={model.year()}
           />
           <button className="btn btn-primary view">{t('amp.deflator:add')}</button>
+          <div className="help-block">
+            {t('amp.deflator:yearConstraints')}
+          </div>
         </form>
       </td>
     )

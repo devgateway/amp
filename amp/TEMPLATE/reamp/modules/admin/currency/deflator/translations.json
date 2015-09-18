@@ -10,5 +10,7 @@
   "amp.deflator:year": "Year",
   "amp.deflator:inflation": "Inflation(%)",
   "amp.deflator:constantCurrency": "Constant currency",
-  "amp.deflator:delete": "Delete"
+  "amp.deflator:constantCurrencyHelp": "Select which deflated currencies you want to convert to real currencies",
+  "amp.deflator:delete": "Delete",
+  "amp.deflator:yearConstraints": "Year must be between 1970 and 2050"
 }

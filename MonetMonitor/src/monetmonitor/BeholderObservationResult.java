@@ -1,0 +1,10 @@
+package monetmonitor;
+
+public enum BeholderObservationResult {
+	ERROR_CANNOT_CONNECT,
+	ERROR_NO_DATABASE,
+	ERROR_INTERNAL_MONETDB,
+	ERROR_DATABASE_MAINTENANCE,
+	ERROR_UNKNOWN,
+	SUCCESS
+}

@@ -21,6 +21,7 @@ public class StatusShowerLog implements StatusShower {
 		FileWriter writer = new FileWriter(Constants.getLogfilePath(), true);
 		Date now = new Date();
 		writer.append(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(now));
+		writer.append(" ");
 		writer.append(status);
 		writer.append("\r\n");
 		writer.close();		

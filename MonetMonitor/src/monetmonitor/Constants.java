@@ -21,6 +21,10 @@ public class  Constants {
 		return parametersMap.get("MONET_FARM_PATH");
 	}
 	
+//	public static String getDatabaseName() {
+//		return parametersMap.get("DB_NAME");
+//	}
+	
 	public static boolean getNoGui() {
 		return parametersMap.get("NO_GUI").contains("true");
 	}
@@ -39,5 +43,26 @@ public class  Constants {
 	}
 	public static String getDbName() {
 		return parametersMap.get("DB_NAME").replace(" ", "");
+	}
+	/*#create db command
+CREATE_DB_COMMAND monetdb create 
+#release db command
+RELEASE_DB_COMMAND monetdb release 
+#stop db command
+STOP_DB_COMMMAND monetdb stop 
+#destroy db command
+DESTROY_COMMAND monetdb destroy 
+	 * */
+	public static String getCommandStop() {
+		return parametersMap.get("STOP_DB_COMMAND");
+	}
+	public static String getCommandCreate() {
+		return parametersMap.get("CREATE_DB_COMMAND");
+	}
+	public static String getCommandRelease() {
+		return parametersMap.get("RELEASE_DB_COMMAND");
+	}
+	public static String getCommandDestroy() {
+		return parametersMap.get("DESTROY_DB_COMMAND");
 	}
 }

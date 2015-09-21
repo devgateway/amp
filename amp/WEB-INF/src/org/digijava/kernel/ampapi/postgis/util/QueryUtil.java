@@ -202,6 +202,7 @@ public class QueryUtil {
 									orgType.set("name", rs.getString("orgTypeName"));
 								}
 								orgType.set("groupIds", orgsGrpId);
+								orgType.set("filterId", rs.getString("orgTypeName"));
 								orgTypes.add(orgType);
 							}
 							orgsGrpId.add(rs.getLong("orgGrpId"));
@@ -328,21 +329,28 @@ public static List<JsonBean> getOrgGroups() {
 
 	public static List<SimpleJsonBean> getOrgRoles() {
 		// //yet not translatable but its ready when it is
-		final List<SimpleJsonBean> rogRoles = new ArrayList<SimpleJsonBean>();
+		final List<SimpleJsonBean> orgRoles = new ArrayList<SimpleJsonBean>();
 		PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {
 
-				try(RsInfo rsi = SQLUtils.rawRunQuery(conn,	"select amp_role_id,name from amp_role", null)) {
+				try(RsInfo rsi = SQLUtils.rawRunQuery(conn,	"select amp_role_id, name from amp_role", null)) {
 					ResultSet rs = rsi.rs;
 					while (rs.next()) {
-						rogRoles.add(new SimpleJsonBean(rs.getLong("amp_role_id"), rs.getString("name"),
-								null, TranslatorWorker.translateText(rs.getString("name"))));
+						Long orgRoleId = rs.getLong("amp_role_id");
+						String orgRoleName = rs.getString("name");
+						String displayName = TranslatorWorker.translateText(rs.getString("name"));
+						
+						SimpleJsonBean orgRole = new SimpleJsonBean(orgRoleId, orgRoleName,	null, displayName);
+						orgRole.setFilterId(orgRoleName);
+						
+						orgRoles.add(orgRole);
 					}
 				}
 
 			}
 		});
-		return rogRoles;
+		
+		return orgRoles;
 	}
 	
 	public static List <AmpIndicatorLayer> getIndicatorLayers () {

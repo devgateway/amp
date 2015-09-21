@@ -32,21 +32,16 @@ th.constant-currency>span{
 }
 
 .edit-on-hover{
-  .edit{
-    display:none;
-    &:focus{
-      display: block;
-      &+.view{
-        display: none;
-      }
-    }
+  &:not(:hover) .edit:not(:focus){
+    width: 1px;
+    height: 1px;
+    float: right;
+    opacity: 0;
   }
-  &:hover{
-    .edit{
-      display: block;
-    }
-    .view{
-      display: none
+
+  &:hover .edit, .edit:focus{
+    &+.view{
+      display: none;
     }
   }
 }

@@ -737,6 +737,9 @@ public class LocationService {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("ActivityIdsForCluster", ArConstants.DONOR_TYPE);
 
 		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
+		// AMP-20903 - In order to not have inconsistency with data used in gis map, DONOR_ID was added 
+		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_ID));
+		
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
 		ReportColumn implementationLevelColumn = null;

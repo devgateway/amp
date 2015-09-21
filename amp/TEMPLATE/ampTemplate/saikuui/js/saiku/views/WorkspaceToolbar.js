@@ -623,6 +623,7 @@ var WorkspaceToolbar = Backbone.View.extend({
                 });
                 $export.click(function(){
                     var payload = $.extend(true, {}, that.workspace.currentQueryModel);
+                    payload.xls_type = 'styled';
                     payload.queryModel.secondCurrency = $select.val();
                     $.postDownload("/rest/data/saikureport/export/xls/" + that.calculate_url(),
                       {query: JSON.stringify(payload)}, "post");

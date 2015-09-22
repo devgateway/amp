@@ -64,10 +64,14 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'business/
 			};
 			GridManager.filter(app.TabsApp.currentTab.get('id'), app.TabsApp.serializedFilters, app.TabsApp.appliedSettings);
 
+            var currentLegendModel = app.TabsApp.dynamicContentRegion.currentView.legends.currentView.model;
+            var unitsValue = currentLegendModel.attributes.units;
+
 			// Update the legend section.
 			var legend = new Legend({
 				currencyCode : app.TabsApp.appliedSettings["1"],
-				id : null
+				id : null,
+				units : unitsValue
 			});
 			app.TabsApp.dynamicContentRegion.currentView.legends.currentView.model = legend;
 			app.TabsApp.dynamicContentRegion.currentView.legends.currentView.render();

@@ -1,4 +1,3 @@
-require('babel-core/polyfill');
 import * as AMP from "amp/architecture";
 import {t} from "amp/modules/translate";
 import * as Rate from "./rate";

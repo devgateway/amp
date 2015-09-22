@@ -17,3 +17,7 @@ export function range(from, to){
   }
   return arr;
 }
+
+export function keyCode(e){
+  return "undefined" != typeof e.which ? e.which : e.keyCode;
+}

@@ -1,4 +1,5 @@
 "use strict";
+require('babel-core/polyfill');
 import Model from "./model";
 import * as effects from "./effects";
 import React from "react";

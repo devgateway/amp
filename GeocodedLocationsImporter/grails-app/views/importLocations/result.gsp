@@ -26,7 +26,7 @@
 </head>
 
 <body>
-<h2>Result:</h2><br>
+<h3>Result:</h3><br>
 <g:each in="${generatedSQL}" var="sql">
     <span class="sql ${(sql.toString().startsWith("--") || sql.toString().startsWith("/")) ? 'comment' : ''}">${sql}</span>
     <br>
@@ -34,7 +34,7 @@
 <hr>
 
 <g:if test="${errors}">
-    <h2>Errors:</h2><br>
+    <h3>Errors:</h3><br>
     <g:each in="${errors}" var="error">
         <span class="sql error">${error}</span>
         <br>

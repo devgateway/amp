@@ -3,14 +3,7 @@ require('babel-core/polyfill');
 import Model from "./model";
 import * as effects from "./effects";
 import React from "react";
-
-function shallowDiff (a,b){
-  if(a && b && "object" == typeof a && "object" == typeof b){
-    return Object.keys(a).some(key => a[key] != b[key]);
-  } else {
-    return a != b;
-  }
-}
+import {shallowDiff} from "amp/tools";
 
 export class View extends React.Component {
   shouldComponentUpdate (nextProps){

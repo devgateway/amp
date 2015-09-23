@@ -21,3 +21,11 @@ export function range(from, to){
 export function keyCode(e){
   return "undefined" != typeof e.which ? e.which : e.keyCode;
 }
+
+export function shallowDiff (a,b){
+  if(a && b && "object" == typeof a && "object" == typeof b){
+    return Object.keys(a).some(key => a[key] != b[key]);
+  } else {
+    return a != b;
+  }
+}

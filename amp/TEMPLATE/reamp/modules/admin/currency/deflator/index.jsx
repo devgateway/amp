@@ -242,7 +242,7 @@ class Deflator extends AMP.View {
               </tr>
               </thead>
               <tbody>
-              {currentInflationRates.map(rate => {
+              {currentInflationRates.sortKeys().map(rate => {
                 var deletable = rate.year() == currentInflationRates.startYear() || rate.year() == currentInflationRates.endYear();
                 var inflationRate = rate.inflationRate();
                 var isValid = parseFloat(inflationRate) == inflationRate;

@@ -25,8 +25,17 @@ export default class Model{
   set(key, val){
     if(this.get(key) === val) return this;
     var clone = shallowCopy(this.__data);
-    clone[key] = val;
-    return new this.constructor(clone);
+    return new this.constructor({
+      ...clone,
+      [key]: val
+    });
+  }
+
+  sortKeys(){
+    return new this.constructor(this.keys().sort().reduce((accum, key) => {
+      accum[key] = this.get(key);
+      return accum;
+    }, {}));
   }
 
   unset(key){

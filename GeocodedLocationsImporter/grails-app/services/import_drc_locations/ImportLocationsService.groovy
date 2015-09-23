@@ -157,7 +157,7 @@ class ImportLocationsService {
                             def fundings = findRegionalFundings(((BigInteger) activity).toLong(), parentRegionLocation)
                             if (!fundings) {
                                 activityGeneratedSQL << "INSERT INTO amp_activity_location(amp_activity_location_id, amp_activity_id, amp_location_id, location_percentage, location_latitude, location_longitude) VALUES(nextval('amp_activity_location_seq'), ${activity}, ${ampLocationId}, 0, ${newLoc[3].replace(",", ".")}, ${newLoc[4].replace(",", ".")});"
-                                activityGeneratedSQL << "DELETE FROM amp_activity_location WHERE amp_activity_location_id = ${activity} AND amp_location_id = ${oldLocationToDelete[2].toString()};"
+                                activityGeneratedSQL << "DELETE FROM amp_activity_location WHERE amp_activity_id = ${activity} AND amp_location_id = ${oldLocationToDelete[2].toString()};"
                             } else {
                                 errors << "WARNING: Can not insert location because it has a parent ADM1 (region) with Regional Fundings: ${newLoc}"
                                 error = true

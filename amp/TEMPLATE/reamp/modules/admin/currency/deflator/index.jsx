@@ -61,6 +61,18 @@ class ResetSaveStatusSideEffect extends AMP.effects.TimeoutSideEffect{
   }
 }
 
+class FocusPrevSideEffect extends AMP.effects.SideEffect{
+  constructor(model, domNode){
+    super(model, () => domNode.parentNode.parentNode.previousSibling.querySelector(".edit").focus())
+  }
+}
+
+class FocusNextSideEffect extends AMP.effects.SideEffect{
+  constructor(model, domNode){
+    super(model, () => domNode.parentNode.parentNode.nextSibling.querySelector(".edit").focus())
+  }
+}
+
 class InflationRates extends AMP.Model{
   constructor(mutationOrData){
     super(mutationOrData);
@@ -95,6 +107,9 @@ class Model extends AMP.Model{
   current: State;
   status: number;
   saveFailReason: string;
+  currentInflationRates(){
+    return this.current().currentCurrency().inflationRates();
+  }
 }
 var model = new Model();
 
@@ -232,7 +247,7 @@ class Deflator extends AMP.View {
                 var isValid = parseFloat(inflationRate) == inflationRate;
                 var model = rate.set('deletable', false).deletable(deletable)
                   .set('valid', isValid);
-                return <Rate.view address={address.usePackage(RateAction, rate.get('year'))} model={model}/>
+                return <Rate.view address={address.usePackage(RateAction, rate.get('year'))} model={model} key={rate.get('year')}/>
               })}
               </tbody>
               <tfoot>
@@ -264,6 +279,7 @@ Deflator.propTypes.model = React.PropTypes.instanceOf(Model);
 export {Deflator as view};
 
 export function update(action: AMP.Action, model:Model){
+  var getPathForYear = year => ['current', 'currencies', model.current().currentCurrencyCode(), 'inflationRates', year];
   if(action instanceof Save){
     if(action instanceof SaveSuccess){
       return new ResetSaveStatusSideEffect(
@@ -281,17 +297,31 @@ export function update(action: AMP.Action, model:Model){
     return new SaveSideEffect(model.status(SaveStatus.SAVING))
   }
   if(action instanceof RateAction){
-    let path = ['current', 'currencies', model.current().currentCurrencyCode(), 'inflationRates', action.getTag()];
+    let path = getPathForYear(action.getTag());
     var originalAction = action.unpack();
     if(originalAction instanceof Rate.Delete){
       return model.unsetIn(path);
+    }
+    if(originalAction instanceof Rate.KeyUp){
+      var prevYear = originalAction.year() - 1;
+      let newModel = originalAction.year() == model.currentInflationRates().startYear() ?
+          model.setIn(getPathForYear(prevYear), Rate.model.year(prevYear)) :
+          model;
+      return new FocusPrevSideEffect(newModel, originalAction.domNode());
+    }
+    if(originalAction instanceof Rate.KeyDown){
+      var nextYear = originalAction.year() + 1;
+      let newModel = originalAction.year() == model.currentInflationRates().endYear() ?
+          model.setIn(getPathForYear(nextYear), Rate.model.year(nextYear)) :
+          model;
+      return new FocusNextSideEffect(newModel, originalAction.domNode());
     }
     return AMP.updateSubmodel(path, Rate.update, originalAction, model);
   }
   if(action instanceof NewRate.Action){
     var submodel = AMP.updateSubmodel(['current', 'newRate'], NewRate.update, action, model);
     if(action instanceof NewRate.YearSubmitted){
-      let path = ['current', 'currencies', model.current().currentCurrencyCode(), 'inflationRates', action.year()];
+      let path = getPathForYear(action.year());
       return !model.hasIn(path) && MIN_YEAR <= action.year() && action.year() <= MAX_YEAR ?
         submodel.setIn(path, Rate.model.year(action.year())) :
         model;

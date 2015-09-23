@@ -3,6 +3,9 @@ import * as AMP from "amp/architecture";
 import style from "./style.less";
 import cn from "classnames";
 import {allow, negative, point, number} from "amp/tools/validate";
+const KEY_UP = 38;
+const KEY_DOWN = 40;
+import {keyCode} from "amp/tools";
 
 export class Model extends AMP.Model{
   inflationRate: string;
@@ -33,6 +36,18 @@ export class ToggleConstant extends Action{
   }
 }
 
+class ArrowAction extends Action{
+  constructor(year, domNode){
+    super();
+    this.year = () => year;
+    this.domNode = () => domNode;
+  }
+}
+
+export class KeyUp extends ArrowAction{}
+export class KeyDown extends ArrowAction{}
+
+
 class Rate extends AMP.View{
   render(){
     var {address, model} = this.props;
@@ -45,8 +60,15 @@ class Rate extends AMP.View{
     };
     var onToggleConstant = e => address.send(new ToggleConstant(e.target.checked));
     var inflationRate = model.inflationRate();
+    var handleArrowNavigation = e => {
+      if(KEY_UP == keyCode(e)) address.send(new KeyUp(model.year(), e.target));
+      if(KEY_DOWN == keyCode(e)) address.send(new KeyDown(model.year(), e.target));
+    };
     return (
-      <tr className={cn('inflation-rate-entry', {"danger has-error": !model.valid()})}>
+      <tr
+        className={cn('inflation-rate-entry', {"danger has-error": !model.valid()})}
+        onKeyUp={handleArrowNavigation}
+      >
         <td>
           <span className="form-control input-sm view">{model.get('year')}</span>
         </td>

@@ -3,11 +3,10 @@ require('babel-core/polyfill');
 import Model from "./model";
 import * as effects from "./effects";
 import React from "react";
-import {shallowDiff} from "amp/tools";
 
 export class View extends React.Component {
   shouldComponentUpdate (nextProps){
-    return shallowDiff(this.props, nextProps);
+    return this.props.model != nextProps.model;
   }
 }
 
@@ -30,7 +29,7 @@ export class Package extends Action{
 }
 
 export function run({model, view, update, element}){
-  var View = view;
+  var View = view, address, reactElement;
   function makeAddress(packages: Array<Package>){
     return {
       send(_action){
@@ -40,12 +39,20 @@ export function run({model, view, update, element}){
         }, _action);
         var response = update(action, state);
         var newState = response instanceof effects.SideEffect ? response.model : response;
-        if(state != newState){
-          React.render(<View address={address} model={newState}/>, element);
+        function doPostUpdate(){
           state = newState;
+          if(response instanceof effects.SideEffect){
+            response.unleash(address);
+          }
         }
-        if(response instanceof effects.SideEffect){
-          response.unleash(address);
+        var props = {
+          address: address,
+          model: newState
+        };
+        if(reactElement.shouldComponentUpdate(props)){
+          reactElement = React.render(<View address={address} model={newState}/>, element, doPostUpdate);
+        } else {
+          doPostUpdate();
         }
       },
       /**
@@ -58,8 +65,8 @@ export function run({model, view, update, element}){
     }
   }
   var state = model;
-  var address = makeAddress([]);
-  React.render(<View address={address} model={model}/>, element);
+  address = makeAddress([]);
+  reactElement = React.render(<View address={address} model={model}/>, element);
   return address;
 }
 

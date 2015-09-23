@@ -3,6 +3,7 @@ import React from "react";
 import {t} from "amp/modules/translate";
 import * as validate from "amp/tools/validate";
 import style from "./style.less";
+import cn from "classnames";
 
 export class Action extends AMP.Action{}
 
@@ -23,7 +24,8 @@ export class YearSubmitted extends Action{
 export class Model extends AMP.Model{}
 
 export var model = new Model({
-  year: ''
+  year: '',
+  repeatedYearWarning: false
 })
 
 class NewRate extends AMP.View{
@@ -40,7 +42,7 @@ class NewRate extends AMP.View{
       address.send(new YearSubmitted(parseInt(e.target.querySelector('input').value)));
     };
     return (
-      <td className="edit-on-hover add-new-rate">
+      <td className={cn("edit-on-hover add-new-rate", {"has-error": model.repeatedYearWarning()})}>
         <form onSubmit={submitYear} action="#">
           <input
             className="form-control edit"
@@ -50,7 +52,10 @@ class NewRate extends AMP.View{
           />
           <button className="btn btn-primary view">{t('amp.deflator:add')}</button>
           <div className="help-block">
-            {t('amp.deflator:yearConstraints')}
+            {model.repeatedYearWarning() ?
+              t('amp.deflator:repeatedYear') + " " + model.year() :
+              t('amp.deflator:yearConstraints')
+            }
           </div>
         </form>
       </td>

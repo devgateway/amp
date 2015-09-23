@@ -12,5 +12,6 @@
   "amp.deflator:constantCurrency": "Constant currency",
   "amp.deflator:constantCurrencyHelp": "Select which deflated currencies you want to convert to real currencies",
   "amp.deflator:delete": "Delete",
-  "amp.deflator:yearConstraints": "Year must be between 1970 and 2050"
+  "amp.deflator:yearConstraints": "Year must be between 1970 and 2050",
+  "amp.deflator:repeatedYear": "There is already an entry for"
 }

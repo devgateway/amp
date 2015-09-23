@@ -211,6 +211,7 @@ class Deflator extends AMP.View {
     var state = model.current();
     var currentCurrency = state.currentCurrency();
     var currentInflationRates = currentCurrency.inflationRates();
+    var repeatedYear = currentInflationRates.has(state.newRate().year());
     return (
       <div className="container">
         <div className="row">
@@ -252,7 +253,7 @@ class Deflator extends AMP.View {
               </tbody>
               <tfoot>
               <tr>
-                <NewRate.view address={address} model={state.newRate()}/>
+                <NewRate.view address={address} model={state.newRate().set('repeatedYearWarning', repeatedYear)}/>
                 <td colSpan="3" className="text-right">
                   <button
                     className={cn("btn btn-success", {disabled: disableSaving(model)})}

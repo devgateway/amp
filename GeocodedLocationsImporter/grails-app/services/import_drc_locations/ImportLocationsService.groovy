@@ -69,8 +69,9 @@ class ImportLocationsService {
     def importLocations(String id, List<String[]> locations, Integer implementationLevel, Integer implementationLocation, Integer implementationLevelProvinceId,
                         Integer implementationLocationAMD1Id, Integer implementationLocationAMD2Id, Integer implementationLocationAMD3Id, Integer implementationLocationAMD4Id, List<String> generatedSQL, List<String> errors) {
         def activity = null
+        Boolean error
+        List<String> activityGeneratedSQL
         try {
-            //TODO: Revisar que no esté cargando una location ya exixtente (para eso tengo q buscar en la tabla amp_location.location_id? los ids de estas locations).
             Session session = sessionFactory.currentSession
             // 1) Look for the project in amp_activity.
             String strQuery = "SELECT amp_activity_id FROM amp_activity WHERE amp_id LIKE '{1}'"
@@ -78,6 +79,8 @@ class ImportLocationsService {
             SQLQuery sqlQuery = session.createSQLQuery(strQuery)
             activity = sqlQuery.uniqueResult()
             if (activity) {
+                activityGeneratedSQL = new ArrayList<String>()
+                error = false
                 log.info(activity + " - locations in file: " + locations.size())
                 // 2) Get current implementation/location levels.
                 strQuery = "SELECT amp_categoryvalue_id FROM amp_activities_categoryvalues WHERE amp_activity_id = ${activity} AND amp_categoryvalue_id IN (SELECT id FROM amp_category_value WHERE amp_category_class_id = ${implementationLevel});"
@@ -98,7 +101,7 @@ class ImportLocationsService {
                     errors << "WARNING: No locations to add after cleanup. ID: ${activity} - AMP ID: ${id}"
                     return
                 }
-                generatedSQL << "/* Activity ID: ${activity} - AMP ID: ${id} */"
+                activityGeneratedSQL << "/* Activity ID: ${activity} - AMP ID: ${id} */"
 
                 // 5) Decide if we are going to add locations up to ADM1 or ADM2.
                 int ADMLevelToAdd = 0
@@ -137,15 +140,18 @@ class ImportLocationsService {
                         // in that case we cant continue since regional fundings are linked to ADM1 only.
                         Long parentLocation = findParentLocation(ampLocationId)
                         if (!parentLocation) {
-                            generatedSQL << "INSERT INTO amp_activity_location(amp_activity_location_id, amp_activity_id, amp_location_id, location_percentage, location_latitude, location_longitude) VALUES(nextval('amp_activity_location_seq'), ${activity}, ${ampLocationId}, 0, ${newLoc[3].replace(",", ".")}, ${newLoc[4].replace(",", ".")});"
+                            activityGeneratedSQL << "INSERT INTO amp_activity_location(amp_activity_location_id, amp_activity_id, amp_location_id, location_percentage, location_latitude, location_longitude) VALUES(nextval('amp_activity_location_seq'), ${activity}, ${ampLocationId}, 0, ${newLoc[3].replace(",", ".")}, ${newLoc[4].replace(",", ".")});"
                             totalLocations++
                         } else {
                             // Ok, the parent is in the activity too, lets check if the parent location has regional fundings.
                             def fundings = findRegionalFundings(parentLocation)
                             if (!fundings) {
-                                //TODO: agregar nueva location y borrar el padre.
+                                activityGeneratedSQL << "INSERT INTO amp_activity_location(amp_activity_location_id, amp_activity_id, amp_location_id, location_percentage, location_latitude, location_longitude) VALUES(nextval('amp_activity_location_seq'), ${activity}, ${ampLocationId}, 0, ${newLoc[3].replace(",", ".")}, ${newLoc[4].replace(",", ".")});"
+                                activityGeneratedSQL << "DELETE FROM amp_activity_location WHERE amp_activity_location_id = ${activity} AND amp_location_id = ${newLoc[7].toString()};"
+                                totalLocations++
                             } else {
-                                //TODO: chequear si entre las otras "locations" nuevas hay más hijos de este padre --> fallar | else --> agregar hijo, relinkear fundings y borrar padre.
+                                errors << "WARNING: Can not insert location because it has a parent ADM1 (region) with Regional Fundings: ${newLoc}"
+                                error = true
                             }
                         }
                     }
@@ -153,17 +159,17 @@ class ImportLocationsService {
                 if (totalLocations > currentLocations.size()) {
                     int newPercentage = 100 / totalLocations
                     float round = (newPercentage * totalLocations != 100) ? (100 - (newPercentage * totalLocations)) : 0
-                    generatedSQL << "UPDATE amp_activity_location SET location_percentage = ${newPercentage} WHERE amp_activity_id = ${activity};"
+                    activityGeneratedSQL << "UPDATE amp_activity_location SET location_percentage = ${newPercentage} WHERE amp_activity_id = ${activity};"
                     if (round > 0) {
-                        generatedSQL << "UPDATE amp_activity_location SET location_percentage = ${newPercentage + round} WHERE amp_activity_id = ${activity} AND amp_location_id = ${ampLocationId};"
+                        activityGeneratedSQL << "UPDATE amp_activity_location SET location_percentage = ${newPercentage + round} WHERE amp_activity_id = ${activity} AND amp_location_id = ${ampLocationId};"
                     }
                 }
 
                 // 8) Update Implementation Level if needed.
                 if (ADMLevelToAdd != currentADMLevel) {
                     if (!currentImplementationLevelId.equals(implementationLevelProvinceId)) {
-                        generatedSQL << "DELETE FROM amp_activities_categoryvalues WHERE amp_activity_id = ${activity} AND amp_categoryvalue_id = ${currentImplementationLevelId};"
-                        generatedSQL << "INSERT INTO amp_activities_categoryvalues(amp_activity_id, amp_categoryvalue_id) VALUES(${activity}, ${implementationLevelProvinceId});"
+                        activityGeneratedSQL << "DELETE FROM amp_activities_categoryvalues WHERE amp_activity_id = ${activity} AND amp_categoryvalue_id = ${currentImplementationLevelId};"
+                        activityGeneratedSQL << "INSERT INTO amp_activities_categoryvalues(amp_activity_id, amp_categoryvalue_id) VALUES(${activity}, ${implementationLevelProvinceId});"
                     }
                     int auxVal = 0
                     switch (ADMLevelToAdd) {
@@ -177,19 +183,24 @@ class ImportLocationsService {
                             throw new Exception("Wrong ADMLevelToAdd with value: " + ADMLevelToAdd)
                     }
                     if (currentImplementationLocationId != auxVal) {
-                        generatedSQL << "DELETE FROM amp_activities_categoryvalues WHERE amp_activity_id = ${activity} AND amp_categoryvalue_id = ${currentImplementationLocationId};"
-                        generatedSQL << "INSERT INTO amp_activities_categoryvalues(amp_activity_id, amp_categoryvalue_id) VALUES(${activity}, ${auxVal});"
+                        activityGeneratedSQL << "DELETE FROM amp_activities_categoryvalues WHERE amp_activity_id = ${activity} AND amp_categoryvalue_id = ${currentImplementationLocationId};"
+                        activityGeneratedSQL << "INSERT INTO amp_activities_categoryvalues(amp_activity_id, amp_categoryvalue_id) VALUES(${activity}, ${auxVal});"
                     }
                 }
             } else {
                 String warning = "ERROR: Cant find id: " + id + " nothing will be added."
                 log.warn(warning)
                 errors << warning
+                error = true
             }
         } catch (Exception e) {
             String message = "ERROR: id: ${activity} - ampId: '${id}' - " + e
             log.error(message)
             errors << message
+            error = true
+        }
+        if (!error) {
+            generatedSQL.addAll(activityGeneratedSQL)
         }
     }
 
@@ -241,19 +252,17 @@ class ImportLocationsService {
         // 1) Find parent/child locations, notice table amp_location can not be used to get the parent/child structure for ADM3 or above, only for ADM2 (by checking against region_location_id)
         // If location is ADM3 or above you need to link to amp_categoryvalue_location by amp_location.location_id.
         locations?.sort { it[5].trim().toUpperCase() }?.reverse()?.each {
-            if (it[5].trim().toUpperCase().equals("ADM1")) {
-                // Nothing to do.
-            } else if (it[5].trim().toUpperCase().equals("ADM2")) {
-                String parentId = sessionFactory.currentSession.createSQLQuery("SELECT region_location_id FROM amp_location WHERE location_id = ${it[7]}").uniqueResult()
-                def parent = locations.find { it2 -> it2[7].toString().equals(parentId) }
-                if (parent) {
-                    // We found the parent in the list of new locations, so we have to remove it.
-                    auxLocations.remove(parent)
-                    deletedLocations << parent
-                    errors << "WARNING: Location ${parent.toArrayString()} will be IGNORED because a child ADM2 was also coded."
+            boolean found = false
+            auxLocations?.each { it2 ->
+                // Now we need to check if these 2 locations are related.
+                if (findParentLocationRecursively(it[7], it2[7])) {
+                    found = true
                 }
-            } else if (it[5].trim().toUpperCase().equals("ADM3")) {
-                //TODO: Implement for ADM3.
+            }
+            if (found) {
+                // We can not safely add the new location because it is a parent of other existing location.
+                errors << "WARNING: Location will be IGNORED because a child ADM2 was also coded in the source file: ${it.toArrayString()}"
+                deletedLocations << it
             }
         }
         deletedLocations.each {
@@ -262,11 +271,6 @@ class ImportLocationsService {
 
         // 2) If a new location have less precision than an existing location (ie: new location is ADM2 from existing ADM3 location) then we have to ignore it.
         locations.each {
-            if (existingLocations?.find { it2 -> it2[1].toString().equals(it[7]) }) {
-                // If the new location is the region parent for this existent location, then we dont add it (this works for ADM1/ADM2 or ADM1/ADM3 only.
-                errors << "WARNING: Location ${it.toArrayString()} will be IGNORED because is a parent of an existent location."
-                deletedLocations << it
-            }
             // Same check but recursively through all the structure (ie: to detect if ADM2: Tanganika is parent of ADM4: Nyemba... spoiler alert, it is).
             boolean found = false
             Integer newLocationLevel = sessionFactory.currentSession.createSQLQuery("SELECT acv.index_column FROM amp_category_value acv, amp_category_value_location acvl WHERE acvl.parent_category_value = acv.id AND acvl.id = ${it[7]};").uniqueResult()
@@ -279,10 +283,9 @@ class ImportLocationsService {
                     }
                 }
             }
-            // TODO: implement the same check again but comparing the new locations against themselves (yes, the source file can have new locations coded with father/child structures).
             if (found) {
                 // We can not safely add the new location because it is a parent of other existing location.
-                errors << "WARNING: Location ${it.toArrayString()} will be IGNORED because is a parent of an existent location (2)."
+                errors << "WARNING: Location will be IGNORED because is a parent of an existent location (2): ${it.toArrayString()}"
                 deletedLocations << it
             }
         }
@@ -300,7 +303,8 @@ class ImportLocationsService {
 
     // IMPORTANT: Only ADM1 locations can have regional fundings, so we cant relink to higher levels of precision like ADM2/3.
     def findRegionalFundings(Long id) {
-        return null
+        def fundings = sessionFactory.currentSession.createSQLQuery("SELECT * FROM amp_regional_funding WHERE activity_id = ${id};").uniqueResult()
+        return fundings
     }
 
     Boolean findParentLocationRecursively(String newLocId, String oldLocId) {

@@ -19,6 +19,7 @@ public abstract class MonetBeholder {
 		try {
 			Class.forName("nl.cwi.monetdb.jdbc.MonetDriver");
 		} catch(Exception exc) {
+			throw new RuntimeException(exc);
 		}
 
 	}

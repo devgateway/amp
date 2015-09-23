@@ -48,7 +48,6 @@ public class MonitorTimer {
 				@Override
 				public void run() {
 			    	BeholderObservationResult serverStatus = beholder.check();
-//			    	new PostgresWriter().addErrorToLogs("chlen");
 			    	String statusMessage = null;
 			    	switch(serverStatus) {
 			    	case SUCCESS: 						statusMessage = "Server running"; break;

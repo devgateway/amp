@@ -89,7 +89,7 @@ class ImportLocationsService {
                 Integer currentImplementationLocationId = session.createSQLQuery(strQuery).uniqueResult()
 
                 // 3) Look for existing locations.
-                strQuery = "SELECT al.location_id, al.region_location_id, al.name FROM amp_activity_location aal, amp_location al WHERE aal.amp_location_id = al.amp_location_id AND amp_activity_id = {1}"
+                strQuery = "SELECT al.location_id, al.name, al.amp_location_id FROM amp_activity_location aal, amp_location al WHERE aal.amp_location_id = al.amp_location_id AND amp_activity_id = {1}"
                 strQuery = strQuery.replace("{1}", activity.toString())
                 sqlQuery = session.createSQLQuery(strQuery)
                 List ampActivityLocations = sqlQuery.list()
@@ -124,6 +124,7 @@ class ImportLocationsService {
                 // 7) Iterate the list of locations to add, ignoring existent ones and keep a total count to calculate the percentage.
                 // Get list of existing locations with location_id (it comes in the source file so we dont have to match by location name).
                 strQuery = "SELECT al.location_id, aal.* FROM amp_activity_location aal, amp_location al WHERE aal.amp_location_id = al.amp_location_id AND amp_activity_id = ${activity}"
+                //TODO: Check why we get the list of current locations twice.
                 List currentLocations = session.createSQLQuery(strQuery).list()
                 int totalLocations = currentLocations.size()
                 Long ampLocationId = null
@@ -138,22 +139,32 @@ class ImportLocationsService {
 
                         // 8) If the current new location has its own parent in the project then we need to delete the parent or the ActivityForm will complain. The potential problem is the existing parent location might already have regional fundings,
                         // in that case we cant continue since regional fundings are linked to ADM1 only.
-                        Long parentLocation = findParentLocation(ampLocationId)
-                        if (!parentLocation) {
+                        Boolean isParentLocationPresent = false
+                        def oldLocationToDelete = null
+                        ampActivityLocations?.each { oldLocation ->
+                            if (findParentLocationRecursively(oldLocation[0].toString(), newLoc[7])) {
+                                isParentLocationPresent = true
+                                oldLocationToDelete = oldLocation
+                                //No need to insert here the DELETE clause over the parent because by definition we cant find more than one parent by any location in the database (with different ADMx levels).
+                            }
+                        }
+                        if (!isParentLocationPresent) {
                             activityGeneratedSQL << "INSERT INTO amp_activity_location(amp_activity_location_id, amp_activity_id, amp_location_id, location_percentage, location_latitude, location_longitude) VALUES(nextval('amp_activity_location_seq'), ${activity}, ${ampLocationId}, 0, ${newLoc[3].replace(",", ".")}, ${newLoc[4].replace(",", ".")});"
                             totalLocations++
                         } else {
-                            // Ok, the parent is in the activity too, lets check if the parent location has regional fundings.
-                            def fundings = findRegionalFundings(parentLocation)
+                            // Ok, the parent is in the activity too, lets check if the parent REGION (ADM1) location has regional fundings.
+                            Long parentRegionLocation = findParentLocationAtRegionLevel(ampLocationId)
+                            def fundings = findRegionalFundings(((BigInteger) activity).toLong(), parentRegionLocation)
                             if (!fundings) {
                                 activityGeneratedSQL << "INSERT INTO amp_activity_location(amp_activity_location_id, amp_activity_id, amp_location_id, location_percentage, location_latitude, location_longitude) VALUES(nextval('amp_activity_location_seq'), ${activity}, ${ampLocationId}, 0, ${newLoc[3].replace(",", ".")}, ${newLoc[4].replace(",", ".")});"
-                                activityGeneratedSQL << "DELETE FROM amp_activity_location WHERE amp_activity_location_id = ${activity} AND amp_location_id = ${newLoc[7].toString()};"
-                                totalLocations++
+                                activityGeneratedSQL << "DELETE FROM amp_activity_location WHERE amp_activity_location_id = ${activity} AND amp_location_id = ${oldLocationToDelete[2].toString()};"
                             } else {
                                 errors << "WARNING: Can not insert location because it has a parent ADM1 (region) with Regional Fundings: ${newLoc}"
                                 error = true
                             }
                         }
+                    } else {
+                        errors << "WARNING: This location exists in the database: ${newLoc}"
                     }
                 }
                 if (totalLocations > currentLocations.size()) {
@@ -246,6 +257,14 @@ class ImportLocationsService {
         return provinceId
     }
 
+    /**
+     * This method will cleanup the list of new locations by deleting from that list those new locations that are A) parent of other new locations or B) parent of existing locations.
+     * NOTE: This method WILL NOT generate any sql sentence.
+     * @param locations
+     * @param existingLocations
+     * @param errors
+     * @return
+     */
     List<String> cleanupLocations(List<String[]> locations, List existingLocations, List<String> errors) {
         List<String[]> auxLocations = locations
         List<String[]> deletedLocations = new ArrayList<String[]>()
@@ -270,23 +289,24 @@ class ImportLocationsService {
         }
 
         // 2) If a new location have less precision than an existing location (ie: new location is ADM2 from existing ADM3 location) then we have to ignore it.
-        locations.each {
+        locations.each { newLocation ->
             // Same check but recursively through all the structure (ie: to detect if ADM2: Tanganika is parent of ADM4: Nyemba... spoiler alert, it is).
             boolean found = false
-            Integer newLocationLevel = sessionFactory.currentSession.createSQLQuery("SELECT acv.index_column FROM amp_category_value acv, amp_category_value_location acvl WHERE acvl.parent_category_value = acv.id AND acvl.id = ${it[7]};").uniqueResult()
-            existingLocations?.each { it2 ->
-                Integer existingLocationLevel = sessionFactory.currentSession.createSQLQuery("SELECT acv.index_column FROM amp_category_value acv, amp_category_value_location acvl WHERE acvl.parent_category_value = acv.id AND acvl.id = ${it2[0]};").uniqueResult()
+            Integer newLocationLevel = sessionFactory.currentSession.createSQLQuery("SELECT acv.index_column FROM amp_category_value acv, amp_category_value_location acvl WHERE acvl.parent_category_value = acv.id AND acvl.id = ${newLocation[7]};").uniqueResult()
+            existingLocations?.each { existingLocation ->
+                Integer existingLocationLevel = sessionFactory.currentSession.createSQLQuery("SELECT acv.index_column FROM amp_category_value acv, amp_category_value_location acvl WHERE acvl.parent_category_value = acv.id AND acvl.id = ${existingLocation[0]};").uniqueResult()
+                // These check is for decreasing the calls to the recursive function.
                 if (newLocationLevel < existingLocationLevel) {
-                    // Now we need to check if these 2 locations are related.
-                    if (findParentLocationRecursively(it[7], it2[1].toString())) {
+                    // Now we need to check if the new location is parent of the existent location, in that case remove it.
+                    if (findParentLocationRecursively(newLocation[7], existingLocation[0].toString())) {
                         found = true
                     }
                 }
             }
             if (found) {
                 // We can not safely add the new location because it is a parent of other existing location.
-                errors << "WARNING: Location will be IGNORED because is a parent of an existent location (2): ${it.toArrayString()}"
-                deletedLocations << it
+                errors << "WARNING: Location will be IGNORED because is a parent of an existent location (2): ${newLocation.toArrayString()}"
+                deletedLocations << newLocation
             }
         }
         deletedLocations.each {
@@ -301,21 +321,33 @@ class ImportLocationsService {
         return parent
     }
 
+    Long findParentLocationAtRegionLevel(Long id) {
+        Long parent = null
+        parent = sessionFactory.currentSession.createSQLQuery("SELECT region_location_id FROM amp_location WHERE amp_location_id = ${id};").uniqueResult()
+        return parent
+    }
+
     // IMPORTANT: Only ADM1 locations can have regional fundings, so we cant relink to higher levels of precision like ADM2/3.
-    def findRegionalFundings(Long id) {
-        def fundings = sessionFactory.currentSession.createSQLQuery("SELECT * FROM amp_regional_funding WHERE activity_id = ${id};").uniqueResult()
+    def findRegionalFundings(Long id, Long region) {
+        def fundings = sessionFactory.currentSession.createSQLQuery("SELECT * FROM amp_regional_funding WHERE activity_id = ${id} AND region_location_id = ${region};").uniqueResult()
         return fundings
     }
 
-    Boolean findParentLocationRecursively(String newLocId, String oldLocId) {
-        Long parentLocationId = findParentLocation(new Long(oldLocId))
+    /**
+     * This method returns true if locA is parent of locB (not only the immediate parent but on any level).
+     * @param locA is the location that could be parent.
+     * @param locB is the location that could be child.
+     * @return
+     */
+    Boolean findParentLocationRecursively(String locA, String locB) {
+        Long parentLocationId = findParentLocation(new Long(locB))
         if (parentLocationId == null || parentLocationId == 0l) {
             return false
         }
-        if (parentLocationId.toString().equals(newLocId)) {
+        if (parentLocationId.toString().equals(locA)) {
             return true
         } else {
-            return findParentLocationRecursively(newLocId, parentLocationId.toString())
+            return findParentLocationRecursively(locA, parentLocationId.toString())
         }
     }
 }

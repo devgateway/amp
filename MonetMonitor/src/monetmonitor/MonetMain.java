@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 
+import monetmonitor.runners.MonetBeholderSanity;
 import monetmonitor.runners.MonetServerStarter;
 import monetmonitor.runners.Semaphore;
 
@@ -64,6 +65,6 @@ public class MonetMain {
     	int timer_delay = Constants.getTimerDelay();
     	Utils.broadcastStatus("Starting beholder with timer delay = "+ timer_delay);
     	MonitorTimer timer = new MonitorTimer(1, timer_delay);
-    	timer.startTimer(new MonetBeholderConnectivity(), new MonetServerStarter());
+    	timer.startTimer(new MonetBeholderSanity(), new MonetServerStarter());
     }
 }

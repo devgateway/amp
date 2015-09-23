@@ -27,7 +27,7 @@ public class MonitorTimer {
 		  scheduler = Executors.newScheduledThreadPool(NUM_THREADS);    
 	  }
 
-	  MonetBeholderConnectivity beholder;
+	  MonetBeholder beholder;
 	  
 	  MonetServerStarter starter;
 	  
@@ -41,13 +41,14 @@ public class MonitorTimer {
 	   * @param beh reference to the MonetBeholder class (it checks if MonetMonitor is responding)
 	   * @param st reference to the MonetStarter class (starts if MonetBeholder doesn't get an answer from the server)
 	   */
-	  void startTimer(MonetBeholderConnectivity beh,  MonetServerStarter st){
+	  void startTimer(MonetBeholder beh,  MonetServerStarter st){
 		  this.beholder = beh;
 		  this.starter = st;
 		    Runnable checkServerTask = new Runnable () {
 				@Override
 				public void run() {
 			    	BeholderObservationResult serverStatus = beholder.check();
+//			    	new PostgresWriter().addErrorToLogs("chlen");
 			    	String statusMessage = null;
 			    	switch(serverStatus) {
 			    	case SUCCESS: 						statusMessage = "Server running"; break;
@@ -55,6 +56,7 @@ public class MonitorTimer {
 			    	case ERROR_INTERNAL_MONETDB:		statusMessage = "Database corrupt"; break;
 			    	case ERROR_UNKNOWN: 				statusMessage = "Unknown error"; break;
 			    	case ERROR_DATABASE_MAINTENANCE: 	statusMessage = "Database under maintenance"; break;
+			    	case ERROR_NO_DATABASE: 			statusMessage = "Database missing"; break;
 			    	}
 
 			    	/*
@@ -88,12 +90,14 @@ public class MonitorTimer {
 			    		starter.run();
 			    		break; 
 			    	case ERROR_NO_DATABASE:
+			    		new SequentialRunner(CommandGenerator.generateCreateDatabaseCommands()).run();
 //			    		Semaphore sem = new Semaphore();
 //			    		
 //			    		new MonetDatabaseCreator(sem).run();
 //			    		new MonetDatabaseReleaser(sem).run();
 			    		break;
 			    	case ERROR_INTERNAL_MONETDB:
+			    		
 			    		new SequentialRunner(CommandGenerator.generateRecreateDatabaseCommands()).run();
 			    		//attempt to recreate the db 
 //			    		try {

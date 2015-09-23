@@ -33,11 +33,11 @@ public class MonetBeholderSanity extends MonetBeholder {
 		String url = "jdbc:monetdb://localhost/"+ Constants.getDbName();
 		List<Object> tableNames = runSelect(DriverManager.getConnection(url, "monetdb", "monetdb"), tableListQuery);
 		List<String> filteredTableNames = filterOutSystemTables(tableNames);
-		System.out.println();
+//		System.out.println();
 		for (String name : filteredTableNames) {
 			String tableIntegrityQuery = String.format("select count(*) from  %s", name);
 			List<Object> tablesCount = runSelect(DriverManager.getConnection(url, "monetdb", "monetdb"), tableIntegrityQuery);
-			System.out.print(name + ":" + tablesCount);
+//			System.out.print(name + ":" + tablesCount);
 		}
 	}	
 	static Set<String> internalMonetTables = null;	

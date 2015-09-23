@@ -13,7 +13,11 @@ public class CommandGenerator {
 				Constants.getCommandCreate() + Constants.getDbName(),
 				Constants.getCommandRelease() + Constants.getDbName()};
 	}
-	
+	public static String[] generateCreateDatabaseCommands() {
+		return new String[] {
+				Constants.getCommandCreate() + Constants.getDbName(),
+				Constants.getCommandRelease() + Constants.getDbName()};
+	}	
 	public static String[] generateReleaseDatabaseCommands() {
 		return new String[] { Constants.getCommandRelease() + Constants.getDbName()};
 	}

@@ -31,7 +31,9 @@ public abstract class MonetBeholder {
 	 */
 	protected List<Object> runSelect(Connection conn, String query) throws SQLException {
 		List<Object> res = new ArrayList<>();
+		lastRunQuery = query;
 		PreparedStatement ps = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+		
 		try(ResultSet rs = ps.executeQuery()) {
 			int nrColumns = rs.getMetaData().getColumnCount();
 			while (rs.next()) {
@@ -45,7 +47,7 @@ public abstract class MonetBeholder {
 		return res;
 	}
 
-	
+	private String lastRunQuery = null;
 	/**
 	 * 
 	 * @return true if server is responding, false if it isn't
@@ -57,10 +59,14 @@ public abstract class MonetBeholder {
 			return BeholderObservationResult.SUCCESS;
 		} catch (java.sql.SQLException exc) {
 			exc.printStackTrace();
+			if (exc.getMessage().contains("internal error while starting"))
+				return BeholderObservationResult.ERROR_INTERNAL_MONETDB;
 			if (exc.getMessage().contains("no such database"))
 				return BeholderObservationResult.ERROR_NO_DATABASE;
-			if (exc.getMessage().contains("End of stream reached"))
+			if (exc.getMessage().contains("End of stream reached")) {
+				new PostgresWriter().addErrorToLogs(lastRunQuery);
 				return BeholderObservationResult.ERROR_INTERNAL_MONETDB;
+			}
 			if (exc.getMessage().contains("Connection refused"))
 				return BeholderObservationResult.ERROR_CANNOT_CONNECT;
 //			End of stream reached

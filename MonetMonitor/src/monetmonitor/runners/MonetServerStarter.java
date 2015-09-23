@@ -33,7 +33,7 @@ public class MonetServerStarter extends Runner {
 	 * If he could, no point in starting the server, it's already started. 
 	 */
 	public boolean allowedToRun() {
-		return !(new MonetBeholderConnectivity()).check().equals(BeholderObservationResult.SUCCESS);
+		return !(new MonetBeholderSanity()).check().equals(BeholderObservationResult.SUCCESS);
 
 	}
 

@@ -65,4 +65,21 @@ DESTROY_COMMAND monetdb destroy
 	public static String getCommandDestroy() {
 		return parametersMap.get("DESTROY_DB_COMMAND");
 	}
+	
+	public static String getPostgresUser() {
+		return parametersMap.get("PG_USERNAME");
+	}
+	
+	/* it's called "swearword" for obfuscation
+	 * obviously a bad idea to keep the pg pass in plaintext in a config file
+	 * and keeping it hashed or somehow otherwise of a lock is too much fuss 
+	*/
+	public static String getPostgresPassword() {
+		return parametersMap.get("PG_SWEARWORD");
+	}
+	
+	public static String getPostgresPort() {
+		return parametersMap.get("PG_PORT").replaceAll(" ", "");
+	}
+	
 }

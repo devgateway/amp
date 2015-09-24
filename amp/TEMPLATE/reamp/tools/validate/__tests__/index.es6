@@ -1,4 +1,5 @@
 jest.dontMock('../index.es6');
+jest.dontMock('../../index.es6');
 var validate = require('../index.es6');
 
 describe("keypress event to string conversion", () => {

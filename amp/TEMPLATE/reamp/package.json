@@ -8,13 +8,14 @@
     "start": "node server.js"
   },
   "jest": {
-    "scriptPreprocessor": "./node_modules/babel-jest",
+    "scriptPreprocessor": "./jest-preprocessor",
     "testFileExtensions": [
       "es6"
     ],
     "moduleFileExtensions": [
       "js",
       "json",
+      "jsx",
       "es6"
     ]
   },

@@ -374,7 +374,7 @@ public class CellDataSetToGeneratedReport {
 			double[] currentTotalMeasuresColumnTotals = new double[leafHeaders.size() - headerPos];
 			for (ReportArea childArea : current.getChildren()) {
 				ReportCell[] childContent = childArea.getContents().values().toArray(new ReportCell[0]);
-				for (int a = headerPos; a < leafHeaders.size() && a < childContent.length; a ++) { // BOZO - THIS IS A HACK FOR IT NOT TO CRASH. YOU SHOULD UPDATE SaikuUtils.doTotals() instead
+				for (int a = headerPos; a < leafHeaders.size() && a < childContent.length; a ++) { //  THIS IS A HACK FOR IT NOT TO CRASH. YOU SHOULD UPDATE SaikuUtils.doTotals() instead
 					Double value = (Double)((AmountCell)childContent[a]).value;
 					currentTotalMeasuresColumnTotals[a - headerPos] += value == null ? 0 : value;
 				}

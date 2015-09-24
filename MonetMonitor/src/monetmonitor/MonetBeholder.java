@@ -1,6 +1,7 @@
 package monetmonitor;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,17 +34,13 @@ public abstract class MonetBeholder {
 	protected List<Object> runSelect(Connection conn, String query) throws SQLException {
 		List<Object> res = new ArrayList<>();
 		lastRunQuery = query;
-		PreparedStatement ps = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-		
-		try(ResultSet rs = ps.executeQuery()) {
+		try(PreparedStatement ps = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				ResultSet rs = ps.executeQuery()) {
 			int nrColumns = rs.getMetaData().getColumnCount();
 			while (rs.next()) {
 				for(int i = 0; i < nrColumns; i++)
 					res.add(rs.getObject(i + 1));
 			}
-			rs.close();
-			ps.close();
-			conn.close();
 		}
 		return res;
 	}
@@ -55,8 +52,12 @@ public abstract class MonetBeholder {
 	 * @throws ClassNotFoundException 
 	 */	
 	public BeholderObservationResult check() {
+		Connection conn = null;
 		try {
-			runQuery();
+			String url = "jdbc:monetdb://localhost/"+ Constants.getDbName();
+			conn = DriverManager.getConnection(url, "monetdb", "monetdb");
+			runQuery(conn);
+			
 			return BeholderObservationResult.SUCCESS;
 		} catch (java.sql.SQLException exc) {
 			exc.printStackTrace();
@@ -77,9 +78,16 @@ public abstract class MonetBeholder {
 		} catch (nl.cwi.monetdb.mcl.MCLException exc) {
 			exc.printStackTrace();
 			return BeholderObservationResult.ERROR_INTERNAL_MONETDB;
+		} finally {
+			if (conn != null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 		}
 		return BeholderObservationResult.ERROR_UNKNOWN;
 	}
 
-	protected abstract void runQuery() throws nl.cwi.monetdb.mcl.MCLException, java.sql.SQLException;
+	protected abstract void runQuery(Connection conn) throws nl.cwi.monetdb.mcl.MCLException, java.sql.SQLException;
 }

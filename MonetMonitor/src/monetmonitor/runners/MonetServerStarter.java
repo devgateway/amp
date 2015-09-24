@@ -1,11 +1,9 @@
 package monetmonitor.runners;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+
 
 import monetmonitor.BeholderObservationResult;
 import monetmonitor.Constants;
-import monetmonitor.MonetBeholderConnectivity;
 
 /**
  * @author acartaleanu

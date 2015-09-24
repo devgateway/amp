@@ -1,6 +1,7 @@
 package monetmonitor.runners;
 
-import java.sql.DriverManager;
+import java.sql.Connection;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,7 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import monetmonitor.Constants;
 import monetmonitor.MonetBeholder;
 
 public class MonetBeholderSanity extends MonetBeholder {
@@ -28,17 +28,16 @@ public class MonetBeholderSanity extends MonetBeholder {
 		return filtered;
 	}
 	
-	protected void runQuery() throws SQLException {
+	protected void runQuery(Connection conn) throws SQLException {
 		String tableListQuery = "select tables.name from tables";
-		String url = "jdbc:monetdb://localhost/"+ Constants.getDbName();
-		List<Object> tableNames = runSelect(DriverManager.getConnection(url, "monetdb", "monetdb"), tableListQuery);
+		
+		List<Object> tableNames = runSelect(conn, tableListQuery);
 		List<String> filteredTableNames = filterOutSystemTables(tableNames);
-//		System.out.println();
 		for (String name : filteredTableNames) {
 			String tableIntegrityQuery = String.format("select count(*) from  %s", name);
-			List<Object> tablesCount = runSelect(DriverManager.getConnection(url, "monetdb", "monetdb"), tableIntegrityQuery);
-//			System.out.print(name + ":" + tablesCount);
+			runSelect(conn, tableIntegrityQuery);
 		}
+
 	}	
 	static Set<String> internalMonetTables = null;	
 	private static void initInternalMonetTables() {

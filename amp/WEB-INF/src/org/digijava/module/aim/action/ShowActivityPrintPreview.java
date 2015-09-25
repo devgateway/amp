@@ -450,7 +450,7 @@ public class ShowActivityPrintPreview
                 if (tm != null)
                     toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 
-                eaForm.getFunding().populateFromFundings(activity.getFunding(), toCurrCode, tm, false); // alternative to activity.getFunding(): DbUtil.getAmpFunding(activity.getAmpActivityId());
+                eaForm.getFunding().populateFromFundings(activity, toCurrCode, tm, false); // alternative to activity.getFunding(): DbUtil.getAmpFunding(activity.getAmpActivityId());
         
                 ArrayList regFunds = new ArrayList();
                 Iterator rItr=null;

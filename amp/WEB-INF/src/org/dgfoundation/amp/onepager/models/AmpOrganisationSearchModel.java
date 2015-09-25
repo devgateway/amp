@@ -60,13 +60,14 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
 		    ArrayList<FilterParam> params = new ArrayList<FilterParam>();
 		    boolean multilingualEnabled = ContentTranslationUtil.multilingualIsEnabled();
 			if (multilingualEnabled) {
+			   sqlQuery = "SELECT org.amp_org_id, org.name, org.acronym, org.org_type, orgname.translation  from amp_organisation org LEFT OUTER JOIN amp_content_translation orgname ON org.amp_org_id = orgname.object_id"
+					    + " AND orgname.field_name = ? "
+					    + " AND orgname.object_class =? "
+					    + " AND orgname.locale = ?" ;
 				params.add(new FilterParam("name", java.sql.Types.VARCHAR));
 			    params.add(new FilterParam("org.digijava.module.aim.dbentity.AmpOrganisation", java.sql.Types.VARCHAR));
 			    params.add(new FilterParam(TLSUtils.getEffectiveLangCode(), java.sql.Types.VARCHAR));
-			   sqlQuery = "SELECT org.amp_org_id, org.name, org.acronym, org.org_type, orgname.translation  from amp_organisation org LEFT OUTER JOIN amp_content_translation orgname ON org.amp_org_id = orgname.object_id"
-				    + " AND orgname.field_name = ? "
-				    + " AND orgname.object_class =? "
-				    + " AND orgname.locale = ?" ;
+			
 			}
 			else {
 				sqlQuery = "SELECT org.amp_org_id, org.name, org.acronym, org.org_type from amp_organisation org";

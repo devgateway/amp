@@ -128,11 +128,7 @@ public class ActivityFundingDigest {
 		
 	/**
 	 * calculates various totals, populates {@link #fundingOrganizations} with funding sorted and digested by organization
-	 * @param debug 
-	 * @param tm 
-	 * @param toCurrCode2 
 	 * @param activity 
-	 * @param fundings
 	 * @param toCurrCode
 	 * @param tm - ignored, left in case in the future the "buggy switch fundings to a common currency" would be enabled (AND FIXED FOR MTEF FUNDINGS!)
 	 * @param debug - whether to output debugging information to the results strings

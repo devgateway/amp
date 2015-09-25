@@ -1174,7 +1174,7 @@ public class EditActivity extends Action {
         	  toCurrCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
           }
 
-          eaForm.getFunding().populateFromFundings(activity.getFunding(), toCurrCode, tm, debug);
+          eaForm.getFunding().populateFromFundings(activity, toCurrCode, tm, debug);
 
 
 		  ArrayList regFunds = RegionalFundingsHelper.getRegionalFundings(activity.getRegionalFundings(), toCurrCode, 0);

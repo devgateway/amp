@@ -38,7 +38,7 @@ public class ActivityPreviewTests extends ReportsTestCase
 	{
 		AmpActivityVersion act = ReportTestingUtils.loadActivityByName("mtef activity 1");
 		ActivityFundingDigest afd = new ActivityFundingDigest();
-		afd.populateFromFundings(act.getFunding(), "USD", null, false);
+		afd.populateFromFundings(act, "USD", null, false);
 		
 		List<FundingOrganization> fundOrgs = afd.getFundingOrganizations();
 		assertEquals(1, fundOrgs.size());
@@ -56,7 +56,7 @@ public class ActivityPreviewTests extends ReportsTestCase
 	{
 		AmpActivityVersion act = ReportTestingUtils.loadActivityByName("Eth Water");
 		ActivityFundingDigest afd = new ActivityFundingDigest();
-		afd.populateFromFundings(act.getFunding(), "USD", null, false);
+		afd.populateFromFundings(act, "USD", null, false);
 		
 		List<FundingOrganization> fundOrgs = afd.getFundingOrganizations();
 		assertEquals(7, fundOrgs.size());
@@ -78,7 +78,7 @@ public class ActivityPreviewTests extends ReportsTestCase
 	{
 		AmpActivityVersion act = ReportTestingUtils.loadActivityByName("Test MTEF directed");
 		ActivityFundingDigest afd = new ActivityFundingDigest();
-		afd.populateFromFundings(act.getFunding(), "USD", null, false);
+		afd.populateFromFundings(act, "USD", null, false);
 		
 		List<FundingOrganization> fundOrgs = afd.getFundingOrganizations();
 		assertEquals(2, fundOrgs.size());

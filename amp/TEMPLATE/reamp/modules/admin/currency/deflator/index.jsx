@@ -304,6 +304,7 @@ export function update(action: AMP.Action, model:Model){
       return model.unsetIn(path);
     }
     if(originalAction instanceof Rate.KeyUp){
+      if(originalAction.year() == MIN_YEAR) return model;
       var prevYear = originalAction.year() - 1;
       let newModel = originalAction.year() == model.currentInflationRates().startYear() ?
           model.setIn(getPathForYear(prevYear), Rate.model.year(prevYear)) :
@@ -311,6 +312,7 @@ export function update(action: AMP.Action, model:Model){
       return new FocusPrevSideEffect(newModel, originalAction.domNode());
     }
     if(originalAction instanceof Rate.KeyDown){
+      if(originalAction.year() == MAX_YEAR) return model;
       var nextYear = originalAction.year() + 1;
       let newModel = originalAction.year() == model.currentInflationRates().endYear() ?
           model.setIn(getPathForYear(nextYear), Rate.model.year(nextYear)) :

@@ -1,7 +1,19 @@
+/** @module tools */
+
+/**
+ * Returns a function that will invoke `func` property on its argument
+ * @param {Function} func
+ * @returns {Function}
+ */
 export function callFunc(func){
   return obj => obj[func]();
 }
 
+/**
+ * Converts an object to an array
+ * @param {Object} obj
+ * @returns {Array}
+ */
 export function obj2arr(obj){
   return Object.keys(obj).map(key => obj[key]);
 }

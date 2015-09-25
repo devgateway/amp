@@ -11,7 +11,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.FilterParam;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
@@ -41,7 +40,6 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -331,21 +329,25 @@ public static List<JsonBean> getOrgGroups() {
 
 	public static List<SimpleJsonBean> getOrgRoles() {
 		// //yet not translatable but its ready when it is
+		final List<String> visibleRoles = OrganisationUtil.getVisibleRoles();
 		final List<SimpleJsonBean> orgRoles = new ArrayList<SimpleJsonBean>();
 		PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {
 
-				try(RsInfo rsi = SQLUtils.rawRunQuery(conn,	"select amp_role_id, name from amp_role", null)) {
+				try(RsInfo rsi = SQLUtils.rawRunQuery(conn,	"select amp_role_id, name, role_code from amp_role", null)) {
 					ResultSet rs = rsi.rs;
 					while (rs.next()) {
-						Long orgRoleId = rs.getLong("amp_role_id");
-						String orgRoleName = rs.getString("name");
-						String displayName = TranslatorWorker.translateText(rs.getString("name"));
-						
-						SimpleJsonBean orgRole = new SimpleJsonBean(orgRoleId, orgRoleName,	null, displayName);
-						orgRole.setFilterId(orgRoleName);
-						
-						orgRoles.add(orgRole);
+						String orgRoleCode = rs.getString("role_code");
+						if (visibleRoles != null && visibleRoles.contains(orgRoleCode)) {
+							Long orgRoleId = rs.getLong("amp_role_id");
+							String orgRoleName = rs.getString("name");
+							String displayName = TranslatorWorker.translateText(rs.getString("name"));
+							
+							SimpleJsonBean orgRole = new SimpleJsonBean(orgRoleId, orgRoleName,	null, displayName);
+							orgRole.setFilterId(orgRoleName);
+							
+							orgRoles.add(orgRole);
+						}
 					}
 				}
 

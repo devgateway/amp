@@ -603,3 +603,13 @@ tr.wicketFundingRowItem:nth-child(odd) {background: #FFFFFF}
 	position: relative;
 	top: -11px;
 }
+.date-position {
+	float:left;
+	margin-top:-2px;
+}
+
+@-moz-document url-prefix() {
+    .date-position {
+        margin-top: 0px;
+    }
+}

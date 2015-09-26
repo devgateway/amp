@@ -621,3 +621,14 @@ tr.wicketFundingRowItem:nth-child(odd) {background: #FFFFFF}
 .inputx{
     min-height: 26px;
 }
+
+.date-position {
+	float:left;
+	margin-top:-2px;
+}
+
+@-moz-document url-prefix() {
+    .date-position {
+        margin-top: 0px;
+    }
+}

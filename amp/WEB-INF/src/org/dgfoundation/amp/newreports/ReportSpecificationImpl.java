@@ -39,6 +39,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	private boolean emptyOutputForUnspecifiedData = true;
 	private boolean alsoShowPledges = false;
 	private boolean usesFundingFlows = false;
+	private String projectTitleColumn = ColumnConstants.PROJECT_TITLE;
 
     /**
      * If the report query results in empty data
@@ -376,5 +377,13 @@ public class ReportSpecificationImpl implements ReportSpecification {
 			res |= (ArConstants.DIRECTED_MEASURE_TO_DIRECTED_TRANSACTION_VALUE.keySet().contains(rm.getMeasureName()));
 		}
 		this.setUsesFundingFlows(res);
+	}
+
+	public String getProjectTitleColumn() {
+		return projectTitleColumn;
+	}
+
+	public void setProjectTitleColumn(String projectTitleColumn) {
+		this.projectTitleColumn = projectTitleColumn;
 	}
 }

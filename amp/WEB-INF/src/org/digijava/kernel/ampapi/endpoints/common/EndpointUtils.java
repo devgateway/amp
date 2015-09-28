@@ -368,16 +368,18 @@ public class EndpointUtils {
 	
 	
 	/**
-	 * Set locale to US in order to avoid number formatting issues
+	 * Used to set locale to US in order to avoid number formatting issues
+	 * Now issues don't seem to appear, whichever the locale is, so picks the format that's in the settings
 	 * @return
 	 */
-	public static DecimalFormat getCurrencySymbols(){
-		Locale locale  = new Locale("en", "US");
-		String pattern = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
-		FormatHelper.getDecimalFormat();
-		DecimalFormat decimalFormat = (DecimalFormat) DecimalFormat.getInstance(locale);
-		decimalFormat.applyPattern(pattern);
-		return decimalFormat;
+//	public static DecimalFormat getDecimalFormat(){
+//		DecimalFormat defaultFormat = FormatHelper.getDecimalFormat();
+//		return defaultFormat;
+//	}
+
+	public static DecimalFormat getDecimalSymbols(){
+		DecimalFormat defaultFormat = FormatHelper.getDecimalFormat();
+		return defaultFormat;
 	}
 
     /**

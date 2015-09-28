@@ -13,20 +13,20 @@ var template = _.template(fs.readFileSync(
 
 
 module.exports = BackboneDash.View.extend({
- 
-  //TODO: This is wrong because different countries have other measures (ie: ssc).	
+
+  //TODO: This is wrong because different countries have other measures (ie: ssc).
   adjTypeTranslation : {"Actual Commitments":"amp.dashboard:ftype-actual-commitment",
-			"Actual Disbursements":"amp.dashboard:ftype-actual-disbursement",
-				"Actual Expenditures":"amp.dashboard:ftype-actual-expenditure",
-				"Planned Commitments": "amp.dashboard:ftype-planned-commitment",
-				"Planned Disbursements": "amp.dashboard:ftype-planned-disbursement",
-				"Planned Expenditures": "amp.dashboard:ftype-planned-expenditures"
-			    },
+      "Actual Disbursements":"amp.dashboard:ftype-actual-disbursement",
+        "Actual Expenditures":"amp.dashboard:ftype-actual-expenditure",
+        "Planned Commitments": "amp.dashboard:ftype-planned-commitment",
+        "Planned Disbursements": "amp.dashboard:ftype-planned-disbursement",
+        "Planned Expenditures": "amp.dashboard:ftype-planned-expenditures"
+          },
   initialize: function(options) {
     this.app = options.app;
     this.dashChartOptions = _({}).extend(options.chartOptions, {
       height: 450,  // sync with css!!!
-      width: 970,	// sync with css!!!
+      width: 970, // sync with css!!!
       trimLabels: false
     });
   },
@@ -37,21 +37,21 @@ module.exports = BackboneDash.View.extend({
     if (this.model.get('view') === 'table') {
       this.renderCSV(this.$('.preview-area .table-wrap').removeClass('hidden'));
     } else {
-    	// Here we will define an interval that will check periodically if the bootstrap modal is fully rendered.
-    	// In that moment the interval is finished and the chart is rendered.
-    	var self = this;
-    	var rendered = false; // This flag is used to avoid triggering the render process twice in case the browser mess up the interval.
-    	var interval = window.setInterval(function() {
-    		if ($('.dash-download-modal').closest('.in').length > 0) {
-    			window.clearInterval(interval);    			   			
-    			nv.tooltip.cleanup();
-    			if (rendered === false) {
-    				rendered = true;
-    				self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'), 
-    						self.$('.preview-area .canvas-wrap'));
-    			}
-    		}
-    	}, 100);      
+      // Here we will define an interval that will check periodically if the bootstrap modal is fully rendered.
+      // In that moment the interval is finished and the chart is rendered.
+      var self = this;
+      var rendered = false; // This flag is used to avoid triggering the render process twice in case the browser mess up the interval.
+      var interval = window.setInterval(function() {
+        if ($('.dash-download-modal').closest('.in').length > 0) {
+          window.clearInterval(interval);
+          nv.tooltip.cleanup();
+          if (rendered === false) {
+            rendered = true;
+            self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'), 
+                self.$('.preview-area .canvas-wrap'));
+          }
+        }
+      }, 100);
     }
     return this;
   },
@@ -77,7 +77,7 @@ module.exports = BackboneDash.View.extend({
       canvasContainer.html(img);
       $(canvasContainer).removeClass('hidden');
       $('.modal-preview-area').remove();
-      this.makeDownloadable(img.src, 'chart', '.png');      
+      this.makeDownloadable(img.src, 'chart', '.png');
     });
 
   },
@@ -165,45 +165,47 @@ module.exports = BackboneDash.View.extend({
       .map(function(row) {
         row.push(currency || '');
         if (adjtype) {
-        	var key = self.adjTypeTranslation [adjtype];
+          var key = self.adjTypeTranslation [adjtype];
             var trnAdjType = this.app.translator.translateSync(key, adjtype);
             row.push(trnAdjType);
         }
         return row;
       })
-      .value();  
-    
+      .value();
+
     // prepend a header row
     headerRow = [];
     var amountTrn = this.app.translator.translateSync('amp.dashboard:download-amount', 'Amount');
     var currencyTrn = this.app.translator.translateSync('amp.dashboard:currency', 'Currency');
     var typeTrn = this.app.translator.translateSync('amp.dashboard:type', 'Type');
     var yearTrn = this.app.translator.translateSync('amp.dashboard:year', 'Year');
-    
-	if (this.model.url.indexOf('/tops') > -1) {
-	    headerRow.push(this.model.get('title'));
-	    headerRow.push(amountTrn);
-	    headerRow.push(currencyTrn);
-	    headerRow.push(typeTrn);
-	} else if (this.model.url.indexOf('/aid-predictability') > -1) {
-	    headerRow.push(yearTrn);
-	    _.each(keys, function(item) {
-	    	headerRow.push(item);
-	    });
-	    headerRow.push(currencyTrn);
-	} else if (this.model.url.indexOf('/ftype') > -1) {
-		headerRow.push(yearTrn);
-	    _.each(keys, function(item) {
-	    	headerRow.push(item);
-	    });
-	    headerRow.push(currencyTrn);
-	    headerRow.push(typeTrn);
-	}    
+
+  if (this.model.url.indexOf('/tops') > -1) {
+      headerRow.push(this.model.get('title'));
+      headerRow.push(amountTrn);
+      headerRow.push(currencyTrn);
+      headerRow.push(typeTrn);
+  } else if (this.model.url.indexOf('/aid-predictability') > -1) {
+      headerRow.push(yearTrn);
+      _.each(keys, function(item) {
+        headerRow.push(item);
+      });
+      headerRow.push(currencyTrn);
+  } else if (this.model.url.indexOf('/ftype') > -1) {
+    headerRow.push(yearTrn);
+      _.each(keys, function(item) {
+        headerRow.push(item);
+      });
+      headerRow.push(currencyTrn);
+      headerRow.push(typeTrn);
+  }
 
     csvTransformed.unshift(headerRow);
 
     textContent = baby.unparse(csvTransformed, {
-    	quotes: true
+      delimiter: '\t',
+      encoding: 'utf-16',
+      quotes: true
     });
 
     preview = document.createElement('textarea');
@@ -258,10 +260,10 @@ module.exports = BackboneDash.View.extend({
         .attr('href', stuff)
         .attr('download', fileName);
     }
-    
+
     // AMP-19813
     if (ext.indexOf('csv') !== -1) {
-    	$('.modal-preview-area').remove();
+      $('.modal-preview-area').remove();
     }
   }
 

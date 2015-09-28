@@ -59,7 +59,7 @@ function getSecretRenderArea(height, width) {
     secretArea.id = 'super-secret-render-area-shh';
     secretArea.style.position = 'absolute';
     secretArea.style.left = '-9999em';
-    secretArea.style.top = '-9999em';
+    secretArea.style.top = '-9999em';  // for IE :(
     document.body.appendChild(secretArea);
   }
   if (height) { secretArea.style.height = height + 'px'; }
@@ -178,11 +178,11 @@ function formatNumber(number) {
 		format = "0";
 	}
 	if (app.settings.numberFormatSettings.numberFormat.indexOf('.') > 0) {
-		var decimalDigits = app.settings.numberFormatSettings.numberFormat.length 
+		var decimalDigits = app.settings.numberFormatSettings.numberFormat.length
 			- app.settings.numberFormatSettings.numberFormat.indexOf('.');
 		format = format + "." + new Array(decimalDigits).join("0");
 	}
-	
+
 	// Define a new "language" for Numeral where we can change the default
 	// delimiters.
 	var ampLang = {
@@ -211,7 +211,7 @@ function formatNumber(number) {
 	return stringNumber;
 }
 
-var ampLang = 
+var ampLang =
 
 
 module.exports = {

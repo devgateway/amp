@@ -228,7 +228,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 										if (approvalStatus == '2' || approvalStatus == '1') {
 											return statusMapping.Existing_Draft;
 										} else {
-											row.cells[4].textContent = '* ' + row.cells[4].textContent;
+											$(row).find('.wrap-title')[0].textContent = '* ' + $(row).find('.wrap-title')[0].textContent;
 											return statusMapping.New_Draft;
 										}
 									} else {
@@ -242,11 +242,11 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 											return statusMapping.Existing_Unvalidated;
 											break;
 										case '3':
-											row.cells[4].textContent = '* ' + row.cells[4].textContent;
+											$(row).find('.wrap-title')[0].textContent = '* ' + $(row).find('.wrap-title')[0].textContent;
 											return statusMapping.Approved;
 											break;
 										case '4':
-											row.cells[4].textContent = '* ' + row.cells[4].textContent;
+											$(row).find('.wrap-title')[0].textContent = '* ' + $(row).find('.wrap-title')[0].textContent;
 											return statusMapping.New_Unvalidated;
 											break;
 										default:
@@ -389,6 +389,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 		metadata.columns = metadataJson.get('columns');
 		metadata.hierarchies = metadataJson.get('hierarchies');
 		metadata.measures = metadataJson.get('measures');
+		metadata.projectTitleColumn = metadataJson.get('projectTitleColumn');
 		return metadata;
 	}
 

@@ -100,7 +100,7 @@ define([ 'util/tabUtils' ], function(TabUtils) {
 		$(metadata.columns.models).each(function(i, item) {
 			var column = {
 				name : item.get('columnName'),
-				classes : 'wrap-cell',
+				classes : 'wrap-cell' + (item.get('columnName') === metadata.projectTitleColumn? ' wrap-title': ''),
 				sortable : true
 			};
 			// No need to show a "summary row" if we want to match old tabs

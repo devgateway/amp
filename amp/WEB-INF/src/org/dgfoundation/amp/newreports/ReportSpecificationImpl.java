@@ -38,6 +38,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	private boolean displayEmptyFundingRows = false;
 	private boolean emptyOutputForUnspecifiedData = true;
 	private boolean alsoShowPledges = false;
+	private String projectTitleColumn = ColumnConstants.PROJECT_TITLE;
 
     /**
      * If the report query results in empty data
@@ -356,5 +357,13 @@ public class ReportSpecificationImpl implements ReportSpecification {
 			setCalculateColumnTotals(true);
 			*/
 		}
+	}
+	
+	public String getProjectTitleColumn() {
+		return projectTitleColumn;
+	}
+
+	public void setProjectTitleColumn(String projectTitleColumn) {
+		this.projectTitleColumn = projectTitleColumn;
 	}
 }

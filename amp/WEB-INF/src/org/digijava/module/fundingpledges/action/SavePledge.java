@@ -25,6 +25,7 @@ import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.admin.helper.AmpPledgeFake;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -49,11 +50,12 @@ import org.digijava.module.fundingpledges.form.PledgeForm;
 import org.digijava.module.fundingpledges.form.PledgeFormContact;
 import org.digijava.module.fundingpledges.form.TransientDocumentShim;
 import org.hibernate.Session;
-
 import org.digijava.module.admin.helper.AmpPledgeFake;
 
 public class SavePledge extends Action {
 	private static Logger logger = Logger.getLogger(SavePledge.class);
+	
+//	AmpPledgeFake pledge = null;
 	
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
     {			
@@ -72,28 +74,6 @@ public class SavePledge extends Action {
     		catch(Exception e){
     			errors.add(new ValidationError("Error while trying to save: " + e.getLocalizedMessage()));
     			logger.error("exception while trying to save pledge", e);
-    		}
-    		finally {
-    			try {
-    				ServletContext sc = request.getServletContext();
-    				boolean newPledge = plForm.isNewPledge();
-    				
-    				
-    				Long id = plForm.getPledgeId();
-    				
-//    				IdWithValueShim idv = null;
-    				if (plForm.getPledgeNames().size() > 0)
-    					plForm.getPledgeNames().get(0);
-//    				idv = plForm.getEffectiveName();
-//    				String name = idv.value;
-    				String additionalInfo = plForm.getAdditionalInformation();
-    				String name = plForm.getEffectiveName();
-    						
-    				LuceneUtil.addUpdatePledge(sc.getRealPath("/"), !newPledge, new AmpPledgeFake(name, id, additionalInfo));
-    				
-    			} catch (Exception e) {
-    				logger.error("error while trying to update lucene logs:", e);
-    			}		
     		}
     		// gone till here -> errors is not empty
 			JSONArray arr = new JSONArray();
@@ -125,6 +105,7 @@ public class SavePledge extends Action {
     
     protected List<ValidationError> do_save(PledgeForm plForm) throws Exception // it might die, ALWAYS check for exceptions and forward cleanly by AJAX
     {    	
+//    	this.pledge = null;
     	Session session = PersistenceManager.getSession();
     	
     	List<ValidationError> res = new ArrayList<>();
@@ -162,7 +143,22 @@ public class SavePledge extends Action {
     	res.addAll(do_save_funding(session, pledge, plForm.getSelectedFunding()));
     	res.addAll(do_save_documents(session, pledge, plForm.getSelectedDocsList(), plForm.getInitialDocuments()));
     	session.saveOrUpdate(pledge);
-    		
+    	if (res.isEmpty()) { //save succeeded
+    		boolean newPledge = plForm.isNewPledge();
+    		try {
+				LuceneUtil.addUpdatePledge(TLSUtils.getRequest().getServletContext().getRealPath("/"), !newPledge, 
+						new AmpPledgeFake(pledge.getEffectiveName(), pledge.getId(), pledge.getAdditionalInformation()));
+			} catch (Exception e) {
+				logger.error("error while trying to update lucene logs:", e);
+			}		
+
+    	} else {
+    		PersistenceManager.getSession().getTransaction().rollback();
+    	}
+    	
+//    	System.out.println("Pledge id is: " + pledge.getId());
+    	
+//    	this.pledge = new AmpPledgeFake(pledge.getEffectiveName(), pledge.getId(), pledge.getAdditionalInformation());
     	return res;
 	}
     

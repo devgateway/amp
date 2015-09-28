@@ -70,6 +70,9 @@ public class MondrianUtils {
 		Set<String> pledgeViewColumns = SQLUtils.getTableColumns(table.pledgeView);
 		viewColumns.remove("amp_activity_id");
 		
+		if (pledgeViewColumns.isEmpty())
+			throw new RuntimeException(String.format("the view %s corresponding to the Mondrian ETL table %s's pledge satellite does not exist!", table.pledgeView, table.tableName));
+		
 		if (!pledgeViewColumns.iterator().next().equals("pledge_id"))
 			throw new RuntimeException(String.format("the view corresponding to the Mondrian ETL table %s's pledge satellite does not have pledge_id as a first column!", table.tableName));
 		

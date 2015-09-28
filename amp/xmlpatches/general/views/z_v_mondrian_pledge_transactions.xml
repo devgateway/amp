@@ -40,7 +40,7 @@ SELECT	<!-- pledged money -->
 		WHEN afpd.datestart IS NOT NULL AND afpd.dateend IS NOT NULL THEN (date(afpd.datestart) || ' - '::text) || date(afpd.dateend)
 		ELSE 'Undefined'
 	END AS funding_range,
-	800000000 + afp.amp_org_grp_id AS donor_id,
+	800000000 + afp.amp_org_grp_id AS originating_org_id,
 	afp.status AS status_id
 	
 FROM amp_funding_pledges_details afpd JOIN amp_funding_pledges afp ON afp.id = afpd.pledge_id
@@ -60,10 +60,14 @@ SELECT <!-- pledge-financed donor transactions -->
 	999999999 AS aid_modality,
 	vmpt.agreement_id AS agreement_id,
 	'Undefined' as funding_range,
-	vmpt.donor_id,
+	vmpt.originating_org_id,
 	afp.status AS status_id
 	
-FROM v_mondrian_pure_transactions vmpt JOIN amp_funding_pledges afp ON vmpt.pledge_id = afp.id WHERE vmpt.pledge_id IS NOT NULL AND vmpt.draft &lt;&gt; true AND vmpt.deleted &lt;&gt; true AND vmpt.is_last_version &gt; 0;
+FROM 
+	v_mondrian_pure_transactions vmpt 
+		JOIN amp_funding_pledges afp ON vmpt.pledge_id = afp.id
+		WHERE (vmpt.pledge_id IS NOT NULL) AND (vmpt.draft &lt;&gt; true) AND (vmpt.deleted &lt;&gt; true) AND (vmpt.is_last_version &gt; 0) 
+			AND (vmpt.src_role = 'DN');  <!-- only donor transactions -->
 
 			</lang>
 		</script>

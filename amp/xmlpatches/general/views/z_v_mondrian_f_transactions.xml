@@ -41,9 +41,8 @@ SELECT
 		WHEN (fd.amp_currency_id != (SELECT amp_currency_id FROM amp_currency WHERE currency_code = (SELECT settingsvalue FROM amp_global_settings WHERE settingsname = 'Base Currency'))) AND (fd.fixed_exchange_rate IS NOT NULL) AND (fd.fixed_exchange_rate > 0) THEN 
 			(SELECT amp_currency_id FROM amp_currency WHERE currency_code = (SELECT settingsvalue FROM amp_global_Settings WHERE settingsname = 'Base Currency')) 
 		ELSE fd.amp_currency_id
-	END as currency_id,	
-	
-	CASE WHEN src_role.role_code='DN' THEN f.amp_donor_org_id ELSE 999888777 END AS donor_id,
+	END as currency_id,
+	f.amp_donor_org_id AS originating_org_id,
 	f.financing_instr_category_value AS financing_instrument_id,
 	f.type_of_assistance_category_va AS terms_of_assistance_id,
 	f.funding_status_category_va AS funding_status_id,

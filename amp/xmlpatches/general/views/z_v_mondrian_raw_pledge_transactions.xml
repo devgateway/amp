@@ -30,7 +30,7 @@ SELECT <!-- pledge funding -->
 	to_char(pf.transaction_date, 'J')::integer AS date_code,
 	pf.transaction_amount,
 	pf.currency_id,
-	pf.donor_id,
+	pf.originating_org_id,
 	999999999 AS financing_instrument_id,
 	pf.type_of_assistance AS terms_of_assistance_id,
 	999999999 AS funding_status_id,

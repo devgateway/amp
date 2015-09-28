@@ -52,6 +52,29 @@ public class CellDataSetPostProcessing {
 		this.environment = o.environment;
 	}
 	
+	/**
+	 * returns true IFF a column has a zero total
+	 * @param byColTotals
+	 * @param columnNumber
+	 * @return
+	 */
+	protected boolean isZero(TotalAggregator[] byColTotals, int columnNumber) {
+		return byColTotals[columnNumber] != null && byColTotals[columnNumber].getFormattedValue().equals("0");
+	}
+	
+	/**
+	 * returns true IFF this is a Flow Column which has a parent which is a funding flow-enabled measure 
+	 * @param columnNumber
+	 * @return
+	 */
+	protected boolean isFundingFlowColumn(int columnNumber) {
+		ReportOutputColumn roc = leafHeaders.get(columnNumber + spec.getColumns().size());
+		if (roc.parentColumn == null) return false; // no parent -> definitely not a funding flow column
+		if (ArConstants.DIRECTED_MEASURE_TO_NONDIRECTED_MEASURE.keySet().contains(roc.parentColumn.originalColumnName))
+			return true;
+		return false;
+	}
+	
 	public void removeEmptyFlowsColumns(boolean internalIdUsed) {
 //		if (System.currentTimeMillis() > 1)
 //			return;
@@ -64,11 +87,11 @@ public class CellDataSetPostProcessing {
 		
 		TotalAggregator[] byColTotals = matrixTotals[0];
 		
-		int measureStartId = (internalIdUsed ? 1 : 0);
+		int measureStartId = 0; //(internalIdUsed ? 1 : 0);
 		int measuresEndId = byColTotals.length;
 		
 		for(int i = measureStartId; i < measuresEndId; i++) {
-			if (byColTotals[i] != null && byColTotals[i].getFormattedValue().equals("0"))
+			if (isZero(byColTotals, i) && (isFundingFlowColumn(i) || !spec.isDisplayEmptyFundingColumns())) // no empty funding flows; also no empty column if desired so
 				colsToDelete.add(i + spec.getColumns().size());
 		}
 		//colsToDelete.clear();
@@ -80,6 +103,8 @@ public class CellDataSetPostProcessing {
 
 		//cellDataSet.setCellSetHeaders(SaikuUtils.removeColumns(cellDataSet.getCellSetHeaders(), colsToDelete));
 		//cellDataSet.setCellSetBody(SaikuUtils.removeColumns(cellDataSet.getCellSetBody(), colsToDelete));
+		//colsToDelete.clear();
+		//measToDelete.clear();
 		cleanupColumnsFromCellDataSet(colsToDelete, measToDelete, new ArrayList<String>());
 		removeColumnsFromLeafHeaders(colsToDelete, 0);
 	}

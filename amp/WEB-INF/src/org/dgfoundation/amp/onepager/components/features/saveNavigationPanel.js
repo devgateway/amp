@@ -18,14 +18,16 @@ function showDraftPanel(){
         	enableButtons2();
         	});
         saveAsDraftPanel.render();
-
+        $("#saveAsDraftPanel_mask").css("z-index", 2);
     }
     else{
         $("span[name=saveAsDraftPanelButton]").find('input').removeAttr('disabled');
         saveAsDraftPanel.show();
     }
+    
     return false;
 }
+
 function hideDraftPanel(){
     if(saveAsDraftPanel!=null){
         saveAsDraftPanel.hide();

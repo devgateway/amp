@@ -25,6 +25,7 @@ import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.admin.helper.AmpPledgeFake;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -49,7 +50,6 @@ import org.digijava.module.fundingpledges.form.PledgeForm;
 import org.digijava.module.fundingpledges.form.PledgeFormContact;
 import org.digijava.module.fundingpledges.form.TransientDocumentShim;
 import org.hibernate.Session;
-
 import org.digijava.module.admin.helper.AmpPledgeFake;
 
 public class SavePledge extends Action {
@@ -73,28 +73,7 @@ public class SavePledge extends Action {
     			errors.add(new ValidationError("Error while trying to save: " + e.getLocalizedMessage()));
     			logger.error("exception while trying to save pledge", e);
     		}
-    		finally {
-    			try {
-    				ServletContext sc = request.getServletContext();
-    				boolean newPledge = plForm.isNewPledge();
-    				
-    				
-    				Long id = plForm.getPledgeId();
-    				
-//    				IdWithValueShim idv = null;
-    				if (plForm.getPledgeNames().size() > 0)
-    					plForm.getPledgeNames().get(0);
-//    				idv = plForm.getEffectiveName();
-//    				String name = idv.value;
-    				String additionalInfo = plForm.getAdditionalInformation();
-    				String name = plForm.getEffectiveName();
-    						
-    				LuceneUtil.addUpdatePledge(sc.getRealPath("/"), !newPledge, new AmpPledgeFake(name, id, additionalInfo));
-    				
-    			} catch (Exception e) {
-    				logger.error("error while trying to update lucene logs:", e);
-    			}		
-    		}
+
     		// gone till here -> errors is not empty
 			JSONArray arr = new JSONArray();
 			String[] fields = new String[] {"errMsg"};
@@ -122,7 +101,7 @@ public class SavePledge extends Action {
     	
     	return plForm.getPledgeId() == preexistingPledgeWithSameName.getId();
     }
-    
+    /*
     protected List<ValidationError> do_save(PledgeForm plForm) throws Exception // it might die, ALWAYS check for exceptions and forward cleanly by AJAX
     {    	
     	Session session = PersistenceManager.getSession();
@@ -164,7 +143,67 @@ public class SavePledge extends Action {
     	session.saveOrUpdate(pledge);
     		
     	return res;
+	}*/
+
+protected List<ValidationError> do_save(PledgeForm plForm) throws Exception // it might die, ALWAYS check for exceptions and forward cleanly by AJAX
+    {    	
+//    	this.pledge = null;
+    	Session session = PersistenceManager.getSession();
+    	
+    	List<ValidationError> res = new ArrayList<>();
+    	
+		if (plForm.getUseFreeText() && (!checkNameUniqueness(plForm)))
+		{
+			res.add(new org.dgfoundation.amp.forms.ValidationError(TranslatorWorker.translateText("A different pledge with the same name exists")));
+			return res;
+		}
+		
+    	FundingPledges pledge;
+    	if (plForm.isNewPledge()){
+    		pledge = new FundingPledges();
+    	} else{
+    		pledge = PledgesEntityHelper.getPledgesById(plForm.getPledgeId());
+    	}
+
+    	session.saveOrUpdate(pledge);
+    	//if (FeaturesUtil.isVisibleField("Use Free Text")){
+  		pledge.setTitleFreeText(plForm.getTitleFreeText());  // copy both - one of them will be null and that's it
+//   		}else{
+  		pledge.setTitle(CategoryManagerUtil.getAmpCategoryValueFromDb(plForm.getPledgeTitleId()));
+  		pledge.setStatus(CategoryManagerUtil.getAmpCategoryValueFromDb(plForm.getPledgeStatusId()));
+ 
+  		pledge.setOrganizationGroup(PledgesEntityHelper.getOrgGroupById(plForm.getSelectedOrgGrpId()));
+    	pledge.setAdditionalInformation(plForm.getAdditionalInformation());
+    	pledge.setWhoAuthorizedPledge(plForm.getWhoAuthorizedPledge());
+    	pledge.setFurtherApprovalNedded(plForm.getFurtherApprovalNedded());
+    	    	
+    	res.addAll(do_save_contact1(pledge, plForm.getContact1()));
+    	res.addAll(do_save_contact2(pledge, plForm.getContact2()));
+    	res.addAll(do_save_sectors(session, pledge, plForm.getSelectedSectors()));
+    	res.addAll(do_save_programs(session, pledge, plForm.getSelectedProgs()));
+    	res.addAll(do_save_locations(session, pledge, plForm.getSelectedLocs()));
+    	res.addAll(do_save_funding(session, pledge, plForm.getSelectedFunding()));
+    	res.addAll(do_save_documents(session, pledge, plForm.getSelectedDocsList(), plForm.getInitialDocuments()));
+    	session.saveOrUpdate(pledge);
+    	if (res.isEmpty()) { //save succeeded
+    		boolean newPledge = plForm.isNewPledge();
+    		try {
+				LuceneUtil.addUpdatePledge(TLSUtils.getRequest().getServletContext().getRealPath("/"), !newPledge, 
+						new AmpPledgeFake(pledge.getEffectiveName(), pledge.getId(), pledge.getAdditionalInformation()));
+			} catch (Exception e) {
+				logger.error("error while trying to update lucene logs:", e);
+			}		
+
+    	} else {
+    		PersistenceManager.getSession().getTransaction().rollback();
+    	}
+    	
+//    	System.out.println("Pledge id is: " + pledge.getId());
+    	
+//    	this.pledge = new AmpPledgeFake(pledge.getEffectiveName(), pledge.getId(), pledge.getAdditionalInformation());
+    	return res;
 	}
+    
     
     protected List<ValidationError> do_save_contact1(FundingPledges pledge, PledgeFormContact contact1) throws Exception
     {

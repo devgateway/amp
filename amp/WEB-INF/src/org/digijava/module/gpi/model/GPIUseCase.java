@@ -346,6 +346,17 @@ public class GPIUseCase {
 				ids = ids.substring(0, ids.length() - 1);
 				where = where.replace("@@status@@", ids);
 			}
+			if (filter.getFinancingInstruments() != null && filter.getFinancingInstruments().size() > 0) {
+				where += " AND aa.amp_activity_id IN (SELECT amp_activity_id FROM amp_funding af WHERE af.financing_instr_category_value IN (@@finInstruments@@)) ";
+				String ids = "";
+				Iterator<AmpCategoryValue> iFinancingInstruments = filter.getFinancingInstruments().iterator();
+				while (iFinancingInstruments.hasNext()) {
+					AmpCategoryValue cv = iFinancingInstruments.next();
+					ids += cv.getUniqueId() + ",";
+				}
+				ids = ids.substring(0, ids.length() - 1);
+				where = where.replace("@@finInstruments@@", ids);
+			}
 			if (filter.getDonors() != null) {
 				String donors = "";
 				Iterator<AmpOrganisation> iDonors = filter.getDonors().iterator();

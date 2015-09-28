@@ -590,7 +590,7 @@ public class SettingsUtils {
 		}
 		
 		if (setDefaults && reportSettings.getCurrencyFormat() == null) {
-			reportSettings.setCurrencyFormat(EndpointUtils.getCurrencySymbols());
+			reportSettings.setCurrencyFormat(EndpointUtils.getDecimalFormat());
 		}
 	}
 	

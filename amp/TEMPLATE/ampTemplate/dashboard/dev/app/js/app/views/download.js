@@ -13,8 +13,8 @@ var template = _.template(fs.readFileSync(
 
 
 module.exports = BackboneDash.View.extend({
- 
-  //TODO: This is wrong because different countries have other measures (ie: ssc).	
+
+  //TODO: This is wrong because different countries have other measures (ie: ssc).
   adjTypeTranslation : {"Actual Commitments":"amp.dashboard:ftype-actual-commitment",
 			"Actual Disbursements":"amp.dashboard:ftype-actual-disbursement",
 				"Actual Expenditures":"amp.dashboard:ftype-actual-expenditure",
@@ -43,15 +43,15 @@ module.exports = BackboneDash.View.extend({
     	var rendered = false; // This flag is used to avoid triggering the render process twice in case the browser mess up the interval.
     	var interval = window.setInterval(function() {
     		if ($('.dash-download-modal').closest('.in').length > 0) {
-    			window.clearInterval(interval);    			   			
+    			window.clearInterval(interval);
     			nv.tooltip.cleanup();
     			if (rendered === false) {
     				rendered = true;
-    				self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'), 
+    				self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'),
     						self.$('.preview-area .canvas-wrap'));
     			}
     		}
-    	}, 100);      
+    	}, 100);
     }
     return this;
   },
@@ -77,7 +77,7 @@ module.exports = BackboneDash.View.extend({
       canvasContainer.html(img);
       $(canvasContainer).removeClass('hidden');
       $('.modal-preview-area').remove();
-      this.makeDownloadable(img.src, 'chart', '.png');      
+      this.makeDownloadable(img.src, 'chart', '.png');
     });
 
   },
@@ -165,15 +165,15 @@ module.exports = BackboneDash.View.extend({
         }
         return row;
       })
-      .value();  
-    
+      .value();
+
     // prepend a header row
     headerRow = [];
     var amountTrn = this.app.translator.translateSync('amp.dashboard:download-amount', 'Amount');
     var currencyTrn = this.app.translator.translateSync('amp.dashboard:currency', 'Currency');
     var typeTrn = this.app.translator.translateSync('amp.dashboard:type', 'Type');
     var yearTrn = this.app.translator.translateSync('amp.dashboard:year', 'Year');
-    
+
 	if (this.model.url.indexOf('/tops') > -1) {
 	    headerRow.push(this.model.get('title'));
 	    headerRow.push(amountTrn);
@@ -192,11 +192,18 @@ module.exports = BackboneDash.View.extend({
 	    });
 	    headerRow.push(currencyTrn);
 	    headerRow.push(typeTrn);
-	}    
+	}
 
     csvTransformed.unshift(headerRow);
+    /* Add sep=, for automatic Excel support at the very top of the file works but breaks BOM unicode.
+     * Let us use tab-delimited instead.
+     *  This website shows a csv with Tab-delimited, utf16le with a BOM has best Excel support (via StackOverflow):
+     *  http://wiki.scn.sap.com/wiki/display/ABAP/CSV+tests+of+encoding+and+column+separator
+     */
 
     textContent = baby.unparse(csvTransformed, {
+      delimiter: '\t',
+      encoding: 'utf-16',
     	quotes: true
     });
 
@@ -252,7 +259,7 @@ module.exports = BackboneDash.View.extend({
         .attr('href', stuff)
         .attr('download', fileName);
     }
-    
+
     // AMP-19813
     if (ext.indexOf('csv') !== -1) {
     	$('.modal-preview-area').remove();

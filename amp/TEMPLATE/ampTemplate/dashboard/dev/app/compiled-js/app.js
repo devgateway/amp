@@ -2068,6 +2068,8 @@ module.exports = BackboneDash.Collection.extend({
   model: Setting,
 
   comparator: 'id',
+  
+  firstTime: true,
 
   initialize: function(models, options) {
     this.app = options.app;
@@ -2115,18 +2117,21 @@ module.exports = BackboneDash.Collection.extend({
   },
 
   load: function() {
-    if (this._loaded.state() !== 'pending') { return this._loaded.promise(); }
+	if(this.firstTime) {
+		this.firstTime = false;
+		
+		if (this._loaded.state() !== 'pending') { return this._loaded.promise(); }
 
-    this.fetch({app: this.app })
-      .then(_(function() {
-        this._loaded.resolve();
-      }).bind(this))
-      .fail(_(function() {
-        this.app.report('Failed to load dashboard settings',
-          ['Could not connect to the server.']);
-        this._loaded.reject();
-      }).bind(this));
-
+	    this.fetch({app: this.app })
+	      .then(_(function() {
+	        this._loaded.resolve();
+	      }).bind(this))
+	      .fail(_(function() {
+	        this.app.report('Failed to load dashboard settings',
+	          ['Could not connect to the server.']);
+	        this._loaded.reject();
+	      }).bind(this));
+	}    
     return this._loaded.promise();
   },
 
@@ -32582,38 +32587,27 @@ module.exports = Backbone.Collection.extend({
     });
   },
 
-	  makeTreeHelper : function(parentCollection, childCollection, keyForForeignID, keyForCollectionDestination) {
-		var self = this;
-		var donorRole = _.filter(self.orgRolesCollection.models, function(item) {
-			return item.get('name') === 'Donor'
+  makeTreeHelper : function(parentCollection, childCollection, keyForForeignID, keyForCollectionDestination) {
+	  var self = this;
+	  var donorRole = _.filter(self.orgRolesCollection.models, function(item) {
+			return item.get('name') === 'Donor';
 		})[0];
 		parentCollection.each(function(parent) {
 			var idsToJoin = parent.get(keyForForeignID);
-			var tempCollection = [];
-			_.each(idsToJoin, function(id) {
-				// id == 0 check should be redundent when Julian commits update.
-				if (id !== 0) {
-					var leaf = childCollection.get({
-						id : id
-					});
-					if (leaf) {
-						if (leaf.get('hasFundings') === true) {
-							// Because of the business logic of old filters, if an organization has been used as a funding org
-							// (present in amp_funding) then we need to
-							// add it to the list of 'Donors' no matter which is the 'role' of that organization, so in order to
-							// make it appear in the tree we also need to
-							// add the 'DN' rol to it, otherwise it will be ignored even if its in tempCollection.
-							var roles = leaf.get('rolesIds');
-							if (roles != undefined) {
-								roles.push(donorRole.get('id'));
-								leaf.set('rolesIds', roles);
-							}
-						}
-						tempCollection.push(leaf.toJSON());
-					} else {
-						// console.warn('missing id', childCollection, ' does not have an id of ', id);
-					}
+			var tempCollection = childCollection.toJSON();
+			
+			// Because of the business logic of old filters, if an organization has been used as a funding org
+			// (present in amp_funding) then we need to
+			// add it to the list of 'Donors' no matter which is the 'role' of that organization, so in order to
+			// make it appear in the tree we also need to
+			// add the 'DN' rol to it, otherwise it will be ignored even if its in tempCollection.
+			tempCollection = _.each(tempCollection,function(aux) {
+				if (aux.hasFundings === true && aux.rolesIds != undefined) {
+					aux.rolesIds.push(donorRole);
 				}
+			});
+			tempCollection = _.filter(tempCollection,function(val) {
+				return _.contains(idsToJoin, val.id);
 			});
 			parent.set(keyForCollectionDestination, tempCollection);
 		});

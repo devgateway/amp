@@ -27,6 +27,8 @@ module.exports = BackboneDash.Collection.extend({
   model: Setting,
 
   comparator: 'id',
+  
+  firstTime: true,
 
   initialize: function(models, options) {
     this.app = options.app;
@@ -74,18 +76,21 @@ module.exports = BackboneDash.Collection.extend({
   },
 
   load: function() {
-    if (this._loaded.state() !== 'pending') { return this._loaded.promise(); }
+	if(this.firstTime) {
+		this.firstTime = false;
+		
+		if (this._loaded.state() !== 'pending') { return this._loaded.promise(); }
 
-    this.fetch({app: this.app })
-      .then(_(function() {
-        this._loaded.resolve();
-      }).bind(this))
-      .fail(_(function() {
-        this.app.report('Failed to load dashboard settings',
-          ['Could not connect to the server.']);
-        this._loaded.reject();
-      }).bind(this));
-
+	    this.fetch({app: this.app })
+	      .then(_(function() {
+	        this._loaded.resolve();
+	      }).bind(this))
+	      .fail(_(function() {
+	        this.app.report('Failed to load dashboard settings',
+	          ['Could not connect to the server.']);
+	        this._loaded.reject();
+	      }).bind(this));
+	}    
     return this._loaded.promise();
   },
 

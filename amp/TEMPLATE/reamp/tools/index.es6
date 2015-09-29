@@ -41,3 +41,17 @@ export function shallowDiff (a,b){
     return a != b;
   }
 }
+
+/**
+ * If the argument is an array, returns it, otherwise return an array whose sole member is the argument
+ * @param maybeArray
+ * @returns {Array}
+ */
+export function ensureArray(maybeArray){
+  return Array.isArray(maybeArray) ? maybeArray : [maybeArray]
+}
+
+export var spy = cb => (...args) => {
+  console.log(...args);
+  return cb(...args);
+};

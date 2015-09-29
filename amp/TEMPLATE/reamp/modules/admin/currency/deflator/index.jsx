@@ -10,16 +10,15 @@ import {INFLATABLE_CURRENCIES} from "amp/config/endpoints";
 import Currency from "../model";
 import style from "./style.less";
 
-export class Action extends AMP.Action{}
-class Save extends Action{}
-class SaveSuccess extends Save{}
-class SaveFailed extends Save{
-  constructor(reason){
-    super();
-    this.reason = () => reason;
-  }
-}
-class ResetSaveStatus extends Save{}
+export var actions = AMP.actions({
+  saveStarted: null,
+  saveSucceeded: null,
+  saveFailed: 'string',
+  resetSaveStatus: null,
+  rate: ['number', Rate.actions],
+  newRate: NewRate.actions
+});
+
 var SaveStatus = {
   INITIAL: 0,
   SAVING: 1,
@@ -27,51 +26,33 @@ var SaveStatus = {
   FAIL: 3
 };
 
-class RateAction extends AMP.Package{}
+var save = model => actions => {
+  var currentCurrency = model.current().currentCurrency();
+  var currencyCode = currentCurrency.code();
+  fetch(`/rest/currencies/setInflationRate/${currencyCode}`, {
+    method: 'post',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      rates: currentCurrency.inflationRates().map(entry => entry.year(parseInt).inflationRate(parseFloat).toJS())
+    })
+  }).then(response => {
+    if (response.status >= 200 && response.status < 300) {
+      actions.saveSucceeded();
+    } else {
+      actions.saveFailed(response.statusText);
+    }
+  });
+};
 
-class SaveSideEffect extends AMP.effects.SideEffect{
-  constructor(model){
-    super(model, address => {
-      var currentCurrency = model.current().currentCurrency();
-      var currencyCode = currentCurrency.code();
-      fetch(`/rest/currencies/setInflationRate/${currencyCode}`, {
-        method: 'post',
-        credentials: 'same-origin',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          rates: currentCurrency.inflationRates().map(entry => entry.year(parseInt).inflationRate(parseFloat).toJS())
-        })
-      }).then(response => {
-        if (response.status >= 200 && response.status < 300) {
-          address.send(new SaveSuccess());
-        } else {
-          address.send(new SaveFailed(response.statusText))
-        }
-      });
-    });
-  }
-}
+var resetSaveStatus = actions => setTimeout(actions.resetSaveStatus, 3000);
 
-class ResetSaveStatusSideEffect extends AMP.effects.TimeoutSideEffect{
-  constructor(model){
-    super(model, 3000, address => address.send(new ResetSaveStatus));
-  }
-}
+var focusPrev = domNode => domNode.parentNode.parentNode.previousSibling.querySelector(".edit").focus();
 
-class FocusPrevSideEffect extends AMP.effects.SideEffect{
-  constructor(model, domNode){
-    super(model, () => domNode.parentNode.parentNode.previousSibling.querySelector(".edit").focus())
-  }
-}
-
-class FocusNextSideEffect extends AMP.effects.SideEffect{
-  constructor(model, domNode){
-    super(model, () => domNode.parentNode.parentNode.nextSibling.querySelector(".edit").focus())
-  }
-}
+var focusNext = domNode => domNode.parentNode.parentNode.nextSibling.querySelector(".edit").focus();
 
 class InflationRates extends AMP.Model{
   constructor(mutationOrData){
@@ -123,8 +104,10 @@ export var init = () =>
     fetchJson('/rest/currencies/getInflationRates')
   ]).then(([currencies, inflationRates]) => {
     var getInflationRatesFor = code =>
-      ensureArray(inflationRates[code]).map(inflationRate => new Rate.Model(inflationRate))
-      .reduce((inflationRates, inflationRate) => inflationRates.set(inflationRate.year(), inflationRate), new InflationRates());
+      ensureArray(inflationRates[code]).map(inflationRate =>
+          new Rate.Model(inflationRate).set('deletable', false).set('valid', true))
+      .reduce((inflationRates, inflationRate) =>
+          inflationRates.set(inflationRate.year(), inflationRate), new InflationRates());
     var state = new State({
       newRate: NewRate.model,
       currentCurrencyCode: currencies[0]['code'],
@@ -199,136 +182,114 @@ var getSaveStatus = model => {
         </div>
       )
   }
-}
+};
 
 var savingInProgress = model => model.status() == SaveStatus.SAVING;
 
 var disableSaving = model => !haveChanges(model) || !ratesAreValid(model) || savingInProgress(model);
 
-class Deflator extends AMP.View {
-  render() {
-    var {address, model} = this.props;
-    var state = model.current();
-    var currentCurrency = state.currentCurrency();
-    var currentInflationRates = currentCurrency.inflationRates();
-    var repeatedYear = currentInflationRates.has(state.newRate().year());
-    return (
-      <div className="container">
-        <div className="row">
-          <div className="col-md-12">
-            <table className="table table-striped">
-              <caption>
-                <h2>
-                  {t('amp.deflator:title')} {currentCurrency.name()}
-                  ({currentCurrency.code()})
-                </h2>
-              </caption>
-              <thead>
-              <tr>
-                <th>{t('amp.deflator:year')}</th>
-                <th>{t('amp.deflator:inflation')}</th>
-                <th className="constant-currency">
-                  <span>
-                    {t('amp.deflator:constantCurrency')}
-                    <div className="tooltip bottom" role="tooltip">
-                      <div className="tooltip-arrow"></div>
-                      <div className="tooltip-inner">
-                        {t('amp.deflator:constantCurrencyHelp')}
-                      </div>
+export var view = AMP.view((model: Model, actions) => {
+  var state = model.current();
+  var currentCurrency = state.currentCurrency();
+  var currentInflationRates = currentCurrency.inflationRates();
+  var repeatedYear = currentInflationRates.has(state.newRate().year());
+  return (
+    <div className="container">
+      <div className="row">
+        <div className="col-md-12">
+          <table className="table table-striped">
+            <caption>
+              <h2>
+                {t('amp.deflator:title')} {currentCurrency.name()}
+                ({currentCurrency.code()})
+              </h2>
+            </caption>
+            <thead>
+            <tr>
+              <th>{t('amp.deflator:year')}</th>
+              <th>{t('amp.deflator:inflation')}</th>
+              <th className="constant-currency">
+                <span>
+                  {t('amp.deflator:constantCurrency')}
+                  <div className="tooltip bottom" role="tooltip">
+                    <div className="tooltip-arrow"></div>
+                    <div className="tooltip-inner">
+                      {t('amp.deflator:constantCurrencyHelp')}
                     </div>
-                  </span>
-                </th>
-                <th>{t('amp.deflator:delete')}</th>
-              </tr>
-              </thead>
-              <tbody>
-              {currentInflationRates.sortKeys().map(rate => {
-                var deletable = rate.year() == currentInflationRates.startYear() || rate.year() == currentInflationRates.endYear();
-                var inflationRate = rate.inflationRate();
-                var isValid = parseFloat(inflationRate) == inflationRate;
-                var model = rate.set('deletable', false).deletable(deletable)
-                  .set('valid', isValid);
-                return <Rate.view address={address.usePackage(RateAction, rate.get('year'))} model={model} key={rate.get('year')}/>
-              })}
-              </tbody>
-              <tfoot>
-              <tr>
-                <NewRate.view address={address} model={state.newRate().set('repeatedYearWarning', repeatedYear)}/>
-                <td colSpan="3" className="text-right">
-                  <button
-                    className={cn("btn btn-success", {disabled: disableSaving(model)})}
-                    disabled={disableSaving(model)}
-                    onClick={e => address.send(new Save())}
-                  >
-                    {t('amp.deflator:save')}
-                  </button>
-                  {getValidationMessage(model)}
-                  {getSaveStatus(model)}
-                </td>
-              </tr>
-              </tfoot>
-            </table>
-          </div>
+                  </div>
+                </span>
+              </th>
+              <th>{t('amp.deflator:delete')}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {currentInflationRates.sortKeys().map(rate => {
+              var year = rate.year();
+              var deletable = year == currentInflationRates.startYear() || year == currentInflationRates.endYear();
+              var inflationRate = rate.inflationRate();
+              var model = rate.deletable(deletable).valid(parseFloat(inflationRate) == inflationRate);
+              return <Rate.view actions={actions.rate(year)} model={model} key={year}/>
+            })}
+            </tbody>
+            <tfoot>
+            <tr>
+              <NewRate.view actions={actions.newRate()} model={state.newRate().set('repeatedYearWarning', repeatedYear)}/>
+              <td colSpan="3" className="text-right">
+                <button
+                  className={cn("btn btn-success", {disabled: disableSaving(model)})}
+                  disabled={disableSaving(model)}
+                  onClick={actions.saveStarted}
+                >
+                  {t('amp.deflator:save')}
+                </button>
+                {getValidationMessage(model)}
+                {getSaveStatus(model)}
+              </td>
+            </tr>
+            </tfoot>
+          </table>
         </div>
       </div>
-    )
-  }
-}
+    </div>
+  )
+});
 
-Deflator.propTypes = Deflator.propTypes || {};
-Deflator.propTypes.model = React.PropTypes.instanceOf(Model);
-export {Deflator as view};
+var getPathForYear = model => year =>
+  ['current', 'currencies', model.current().currentCurrencyCode(), 'inflationRates', year];
 
-export function update(action: AMP.Action, model:Model){
-  var getPathForYear = year => ['current', 'currencies', model.current().currentCurrencyCode(), 'inflationRates', year];
-  if(action instanceof Save){
-    if(action instanceof SaveSuccess){
-      return new ResetSaveStatusSideEffect(
-        model.saved(model.current()).status(SaveStatus.SUCCESS)
-      )
-    }
-    if(action instanceof SaveFailed){
-      return new ResetSaveStatusSideEffect(
-        model.status(SaveStatus.FAIL).saveFailReason(action.reason())
-      )
-    }
-    if(action instanceof ResetSaveStatus){
-      return model.status(SaveStatus.INITIAL);
-    }
-    return new SaveSideEffect(model.status(SaveStatus.SAVING))
-  }
-  if(action instanceof RateAction){
-    let path = getPathForYear(action.getTag());
-    var originalAction = action.unpack();
-    if(originalAction instanceof Rate.Delete){
-      return model.unsetIn(path);
-    }
-    if(originalAction instanceof Rate.KeyUp){
-      if(originalAction.year() == MIN_YEAR) return model;
-      var prevYear = originalAction.year() - 1;
-      let newModel = originalAction.year() == model.currentInflationRates().startYear() ?
-          model.setIn(getPathForYear(prevYear), Rate.model.year(prevYear)) :
-          model;
-      return new FocusPrevSideEffect(newModel, originalAction.domNode());
-    }
-    if(originalAction instanceof Rate.KeyDown){
-      if(originalAction.year() == MAX_YEAR) return model;
-      var nextYear = originalAction.year() + 1;
-      let newModel = originalAction.year() == model.currentInflationRates().endYear() ?
-          model.setIn(getPathForYear(nextYear), Rate.model.year(nextYear)) :
-          model;
-      return new FocusNextSideEffect(newModel, originalAction.domNode());
-    }
-    return AMP.updateSubmodel(path, Rate.update, originalAction, model);
-  }
-  if(action instanceof NewRate.Action){
-    var submodel = AMP.updateSubmodel(['current', 'newRate'], NewRate.update, action, model);
-    if(action instanceof NewRate.YearSubmitted){
-      let path = getPathForYear(action.year());
-      return !model.hasIn(path) && MIN_YEAR <= action.year() && action.year() <= MAX_YEAR ?
-        submodel.setIn(path, Rate.model.year(action.year())) :
-        model;
-    }
-    return submodel;
-  }
-}
+var addEmptyRate = model => year => model.setIn(getPathForYear(model)(year), Rate.model.year(year));
+
+var inc = number => number + 1;
+var dec = number => number - 1;
+
+var navigate = (model, except, target, year, nextYear, sideEffect) => domNode => {
+  if(year == except) return model;
+  return [year == target ? addEmptyRate(model)(nextYear) : model, sideEffect.bind(null, domNode)]
+};
+
+export var update = (action, model) => actions.match(action, {
+  saveStarted: () => [model.status(SaveStatus.SAVING), save(model)],
+
+  saveSucceeded: () => [model.saved(model.current()).status(SaveStatus.SUCCESS), resetSaveStatus],
+
+  saveFailed: reason => [model.status(SaveStatus.FAIL).saveFailReason(reason), resetSaveStatus],
+
+  resetSaveStatus: () => model.status(SaveStatus.INITIAL),
+
+  rate: (year, rateAction) => Rate.actions.match(rateAction, {
+    remove: () => model.unsetIn(getPathForYear(model)(year)),
+
+    up: navigate(model, MIN_YEAR, model.currentInflationRates().startYear(), year, year - 1, focusPrev),
+
+    down: navigate(model, MAX_YEAR, model.currentInflationRates().endYear(), year, year + 1, focusNext),
+
+    _: () => AMP.updateSubmodel(getPathForYear(model)(year), Rate.update, rateAction, model)
+  }),
+
+  newRate: newRateAction => NewRate.actions.match(newRateAction, {
+    yearSubmitted: year => AMP.updateSubmodel(['current', 'newRate'], NewRate.update, newRateAction,
+            !model.hasIn(getPathForYear(model)(year)) ? addEmptyRate(model)(year) : model),
+
+    _: () => AMP.updateSubmodel(['current', 'newRate'], NewRate.update, newRateAction, model)
+  })
+});

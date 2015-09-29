@@ -7,6 +7,15 @@ const KEY_UP = 38;
 const KEY_DOWN = 40;
 import {keyCode} from "amp/tools";
 
+export var actions = AMP.actions({
+  remove: null,
+  change: 'string',
+  toggleConstant: 'boolean',
+  up: HTMLElement,
+  down: HTMLElement
+});
+
+
 export class Model extends AMP.Model{
   inflationRate: string;
   deletable: boolean;
@@ -21,86 +30,49 @@ export var model = new Model({
   valid: false
 });
 
-export class Action extends AMP.Action{}
-export class Delete extends Action{}
-export class Change extends Action{
-  constructor(newInflationRate: string){
-    super();
-    this.inflationRate = newInflationRate;
-  }
-}
-export class ToggleConstant extends Action{
-  constructor(constant: boolean){
-    super();
-    this.constant = constant;
-  }
-}
+export var view = AMP.view(({inflationRate, valid, year, constantCurrency, deletable}
+    , {remove, change, toggleConstant, up, down}) => {
+  var onChange = e => {
+    var value = e.target.value;
+    if(0 == value.length || negative(point(number))(value)){
+      change(value);
+    }
+  };
+  var onToggleConstant = e => toggleConstant(e.target.checked);
+  var handleArrowNavigation = e => {
+    if(KEY_UP == keyCode(e)) up(e.target);
+    if(KEY_DOWN == keyCode(e)) down(e.target);
+  };
+  return (
+    <tr
+      className={cn('inflation-rate-entry', {"danger has-error": !valid()})}
+      onKeyUp={handleArrowNavigation}
+    >
+      <td>
+        <span className="form-control input-sm view">{year()}</span>
+      </td>
+      <td className="edit-on-hover inflation-rate">
+        <input className="form-control input-sm edit" required
+          value={inflationRate()} onChange={onChange}
+        />
+        <span className="form-control input-sm view">{inflationRate()}</span>
+      </td>
+      <td>
+        <input type="checkbox" checked={constantCurrency()} onChange={onToggleConstant}/>
+      </td>
+      <td>
+        {deletable() ?
+          <i onClick={remove} className="glyphicon glyphicon-trash"></i>
+          : null}
+      </td>
+    </tr>
+  )
+});
 
-class ArrowAction extends Action{
-  constructor(year, domNode){
-    super();
-    this.year = () => year;
-    this.domNode = () => domNode;
-  }
-}
+function pass(){}
 
-export class KeyUp extends ArrowAction{}
-export class KeyDown extends ArrowAction{}
-
-
-class Rate extends AMP.View{
-  render(){
-    var {address, model} = this.props;
-    var onDelete = e => address.send(new Delete());
-    var onChange = e => {
-      var value = e.target.value;
-      if(0 == value.length || negative(point(number))(value)){
-        address.send(new Change(value));
-      }
-    };
-    var onToggleConstant = e => address.send(new ToggleConstant(e.target.checked));
-    var inflationRate = model.inflationRate();
-    var handleArrowNavigation = e => {
-      if(KEY_UP == keyCode(e)) address.send(new KeyUp(model.year(), e.target));
-      if(KEY_DOWN == keyCode(e)) address.send(new KeyDown(model.year(), e.target));
-    };
-    return (
-      <tr
-        className={cn('inflation-rate-entry', {"danger has-error": !model.valid()})}
-        onKeyUp={handleArrowNavigation}
-      >
-        <td>
-          <span className="form-control input-sm view">{model.get('year')}</span>
-        </td>
-        <td className="edit-on-hover inflation-rate">
-          <input className="form-control input-sm edit" required
-            value={inflationRate} onChange={onChange}
-          />
-          <span className="form-control input-sm view">{inflationRate}</span>
-        </td>
-        <td>
-          <input type="checkbox" checked={model.constantCurrency()} onChange={onToggleConstant}/>
-        </td>
-        <td>
-          {model.deletable() ?
-            <i onClick={onDelete} className="glyphicon glyphicon-trash"></i>
-            : null}
-        </td>
-      </tr>
-    )
-  }
-}
-
-Rate.propTypes = Rate.propTypes || {};
-Rate.propTypes.model = React.PropTypes.instanceOf(Model);
-
-export {Rate as view}
-
-export function update(action: Action, model: Model){
-  if(action instanceof Change){
-    return model.inflationRate(action.inflationRate);
-  }
-  if(action instanceof ToggleConstant){
-    return model.constantCurrency(action.constant);
-  }
-}
+export var update = (action, model) => actions.match(action, {
+  change: model.inflationRate,
+  toggleConstant: model.constantCurrency,
+  _: pass
+});

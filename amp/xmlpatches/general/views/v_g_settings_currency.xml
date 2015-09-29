@@ -19,7 +19,8 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_g_settings_currency AS SELECT amp_currency.currency_code AS id, amp_currency.currency_name AS value FROM amp_currency WHERE (amp_currency.active_flag = 1) ORDER BY amp_currency.currency_name;;;
+			    	CREATE OR REPLACE VIEW v_g_settings_currency AS 
+			    		SELECT amp_currency.currency_code AS id, amp_currency.currency_name AS value FROM amp_currency WHERE (amp_currency.active_flag = 1) AND (NOT amp_currency.virtual_flag) ORDER BY amp_currency.currency_name;
         		</lang>
 		</script>
 	</apply>

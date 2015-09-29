@@ -90,7 +90,7 @@ public class VirtualCurrenciesMaintainer {
 	 * @param curr
 	 * @throws SQLException 
 	 */
-	protected void deleteCurrencyIfPossible(AmpCurrency curr) {
+	public static void deleteCurrencyIfPossible(AmpCurrency curr) {
 		logger.info("marking virtual currency " + curr + " as deleted, because it has not been requested as a deflated currency anymore");
 		curr.setActiveFlag(0);
 		PersistenceManager.getSession().flush();

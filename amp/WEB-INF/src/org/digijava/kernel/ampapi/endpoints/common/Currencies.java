@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
@@ -23,6 +25,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.VirtualCurrenciesMaintainer;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -34,6 +37,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpInflationRate;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.caching.AmpCaching;
 
 import com.google.common.base.Function;
 
@@ -89,6 +93,38 @@ public class Currencies {
 		});
 	}
 	
+	/**
+	 * deletes all virtual currencies and their rates, as long as they are NOT based on a real currency which is on the white list
+	 * @param okCurrencyCodes
+	 */
+	protected static void deleteAllVirtualCurrenciesExceptGiven(Set<String> okCurrencyCodes) {
+		PersistenceManager.getSession().flush();
+		SortedSet<AmpCurrency> currenciesToDelete = new TreeSet<>();
+		List<AmpInflationRate> allInflationRates = PersistenceManager.getSession().createQuery("FROM " + AmpInflationRate.class.getName()).list();
+		for(AmpInflationRate ir:allInflationRates) {
+			if (!okCurrencyCodes.contains(ir.getBaseCurrency().getCurrencyCode())) {
+				//ratesToDelete.add(ir);
+				currenciesToDelete.add(ir.getBaseCurrency());
+				PersistenceManager.getSession().delete(ir);
+			}
+		}
+		PersistenceManager.getSession().flush();
+		List<AmpCurrency> allCurrencies = PersistenceManager.getSession().createQuery("FROM " + AmpCurrency.class.getName()).list();
+		for(AmpCurrency curr:allCurrencies) {
+			if (!okCurrencyCodes.contains(curr.getCurrencyCode()))
+				currenciesToDelete.add(curr);
+		}
+		for(AmpCurrency curr:currenciesToDelete) {
+			if (curr.isVirtual()) {
+				VirtualCurrenciesMaintainer.deleteCurrencyIfPossible(curr);
+			} else {
+				new VirtualCurrenciesMaintainer().markDisappearedCurrenciesAsUnavailable(new ArrayList<AmpInflationRate>(), curr, new HashSet<String>());
+			}
+		}
+		PersistenceManager.getSession().flush();
+		AmpCaching.getInstance().currencyCache.reset();
+	}
+	
 	@POST
 	@Path("/setInflationRate/{currCode}")
 	@ApiMethod(authTypes = {AuthRule.IN_ADMIN}, id = "setInflationRates", ui = false)
@@ -103,6 +139,7 @@ public class Currencies {
 		if (!currCode.equals(AmpARFilter.getDefaultCurrency().getCurrencyCode()))
 			throw new RuntimeException("not allowed to set inflation rates for currency: " + currCode);
 		
+		deleteAllVirtualCurrenciesExceptGiven(new HashSet<String>(Arrays.asList(currCode)));
 		AmpCurrency baseCurrency = CurrencyUtil.getCurrencyByCode(currCode);
 		List<AmpInflationRate> oldRates = PersistenceManager.getSession().createQuery("FROM " + AmpInflationRate.class.getName() + " ir WHERE ir.baseCurrency.currencyCode=:currCode")
 			.setString("currCode", currCode)

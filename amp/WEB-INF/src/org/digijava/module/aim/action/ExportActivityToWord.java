@@ -3256,40 +3256,34 @@ public class ExportActivityToWord extends Action {
         }
 
         if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Government Approval Procedures")) {
-			cell = new RtfCell();
-			cell.setColspan(2);
-			cell.setBorder(0);
-			cell.add(new Paragraph(TranslatorWorker.translateText("Government Approval Procedures") + ": ",PLAINFONT));
-						
-			if (identification.getGovernmentApprovalProcedures() != null ) {
-				columnVal = TranslatorWorker.translateText(identification.getGovernmentApprovalProcedures() ? "Yes" : "No");
-				cell.add(new Paragraph(columnVal, BOLDFONT));
-				identificationSubTable1.addCell(cell);
-			}
+
+            String label = TranslatorWorker.translateText("Government Approval Procedures");
+
+            String value = identification.getHumanitarianAid() == null ? "" :
+                    TranslatorWorker.translateText(identification.getGovernmentApprovalProcedures() ? "Yes" : "No");
+
+            generateOverAllTableRows(identificationSubTable1, label, value , null);
 		}
+
         if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Joint Criteria")) {
-			cell = new RtfCell();
-			cell.setColspan(2);
-			cell.setBorder(0);
-			cell.add(new Paragraph(TranslatorWorker.translateText("Joint Criteria") + ": ",PLAINFONT));
-						
-			if (identification.getJointCriteria() != null ) {
-				columnVal = TranslatorWorker.translateText(identification.getJointCriteria() ? "Yes" : "No");
-				cell.add(new Paragraph(columnVal, BOLDFONT));
-				identificationSubTable1.addCell(cell);
-			}
+
+            String label = TranslatorWorker.translateText("Joint Criteria");
+
+            String value = identification.getHumanitarianAid() == null ? "" :
+                    TranslatorWorker.translateText(identification.getJointCriteria() ? "Yes" : "No");
+
+            generateOverAllTableRows(identificationSubTable1, label, value , null);
 		}
+
 		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Humanitarian Aid")) {
-			cell = new RtfCell();
-			cell.setColspan(2);
-			cell.setBorder(0);
-			cell.add(new Paragraph(TranslatorWorker.translateText("Humanitarian Aid") + ": ",PLAINFONT));
-						
-			if (identification.getHumanitarianAid() != null ) {
-				columnVal = TranslatorWorker.translateText(identification.getHumanitarianAid() ? "Yes" : "No");
-				cell.add(new Paragraph(columnVal, BOLDFONT));
-				identificationSubTable1.addCell(cell);
-			}
+
+            String label = TranslatorWorker.translateText("Humanitarian Aid");
+
+            String value = identification.getHumanitarianAid() == null ? "" :
+                    TranslatorWorker.translateText(identification.getHumanitarianAid() ? "Yes" : "No");
+
+            generateOverAllTableRows(identificationSubTable1, label, value , null);
+
 		}
     }
     //TODO: unify it with the one from ExportActivityToPDF (move to a common place)

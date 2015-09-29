@@ -488,7 +488,7 @@ public class Filters {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = true, id = "FundingStatus", columns = ColumnConstants.FUNDING_STATUS,name="Funding Status")
 	public JsonBean getFundingStatus() {
-		return getCategoryValue(CategoryConstants.TYPE_OF_ASSISTENCE_KEY,ColumnConstants.TYPE_OF_ASSISTANCE);
+		return getCategoryValue(CategoryConstants.FUNDING_STATUS_KEY,ColumnConstants.FUNDING_STATUS);
 	}
 	
 	/**

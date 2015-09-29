@@ -351,12 +351,15 @@ public class Reports {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final JsonBean getSaikuReport(JsonBean queryObject, @PathParam("report_id") Long reportId) {			
 
-		// AMP-19189 - add columns used for coloring the project title and amp id
+		ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
+		// AMP-19189 - add columns used for coloring the project title and amp id (but not for summary reports).
 		List<String> extraColumns = new ArrayList<String>();
-		extraColumns.add(ColumnConstants.ACTIVITY_ID);
-		extraColumns.add(ColumnConstants.APPROVAL_STATUS);
-		extraColumns.add(ColumnConstants.DRAFT);
-		queryObject.set(EPConstants.ADD_COLUMNS, extraColumns);
+		if (spec.getColumns().size() != spec.getHierarchies().size()) {
+			extraColumns.add(ColumnConstants.ACTIVITY_ID);
+			extraColumns.add(ColumnConstants.APPROVAL_STATUS);
+			extraColumns.add(ColumnConstants.DRAFT);
+			queryObject.set(EPConstants.ADD_COLUMNS, extraColumns);
+		}
 		
 		JsonBean report = getReportResultByPage(ReportsUtil.convertSaikuParamsToReports(queryObject), reportId);
 		
@@ -370,7 +373,6 @@ public class Reports {
 		report.set("cellset", cellset);
 		
 		// Add some missing metadata when running through Rhino.
-		ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
 		report.set("columns", spec.getColumns());
 		report.set("hierarchies", spec.getHierarchies());
 		

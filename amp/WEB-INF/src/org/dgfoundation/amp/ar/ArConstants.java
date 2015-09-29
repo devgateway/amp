@@ -252,14 +252,26 @@ public final class ArConstants {
 	public final static List<String> COLUMN_ANY_RELATED_ORGS=Arrays.asList("Beneficiary Agency","Contracting Agency",
 							"Executing Agency","Implementing Agency","Regional Group","Responsible Organization","Sector Group");
 
-	public final static Map<String, String> COLUMN_ROLE_CODES = new HashMap<String, String>()
+	public final static Map<String, String> COLUMN_ROLE_CODES = Collections.unmodifiableMap(new HashMap<String, String>()
 			{{
 				put(ROLE_NAME_DONOR_AGENCY, Constants.ROLE_CODE_DONOR);
 				put(ROLE_NAME_EXECUTING_AGENCY, Constants.ROLE_CODE_EXECUTING_AGENCY);
 				put(ROLE_NAME_IMPLEMENTING_AGENCY, Constants.ROLE_CODE_IMPLEMENTING_AGENCY);
 				put(ROLE_NAME_BENEFICIARY_AGENCY, Constants.ROLE_CODE_BENEFICIARY_AGENCY);
-			}};
+			}});
 
+	public final static Set<String> COLUMNS_LINKED_WITH_FLOW_ROLES = Collections.unmodifiableSet(new HashSet<String>()
+			{{
+				addAll(COLUMN_ROLE_CODES.keySet());
+				add(ColumnConstants.DONOR_GROUP); add(ColumnConstants.DONOR_TYPE);
+				add(ColumnConstants.EXECUTING_AGENCY_GROUPS); add(ColumnConstants.EXECUTING_AGENCY_TYPE);
+				add(ColumnConstants.IMPLEMENTING_AGENCY_GROUPS); add(ColumnConstants.IMPLEMENTING_AGENCY_TYPE);
+				add(ColumnConstants.BENEFICIARY_AGENCY_GROUPS); // no BENF type column, looks like
+				add(ColumnConstants.CONTRACTING_AGENCY); add(ColumnConstants.CONTRACTING_AGENCY_GROUPS);
+				add(ColumnConstants.RESPONSIBLE_ORGANIZATION); add(ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS);
+				add(ColumnConstants.REGIONAL_GROUP); add(ColumnConstants.REGIONAL_GROUP_GROUP);
+				add(ColumnConstants.SECTOR_GROUP); add(ColumnConstants.SECTOR_GROUP_GROUP);
+			}});
 	public final static Map<String, String> TRANSACTION_TYPE_TO_DIRECTED_TRANSACTION_VALUE = new HashMap<String, String>() {{
 		put(ArConstants.COMMITMENT, ArConstants.TRANSACTION_REAL_COMMITMENT_TYPE);
 		put(ArConstants.DISBURSEMENT, ArConstants.TRANSACTION_REAL_DISBURSEMENT_TYPE);

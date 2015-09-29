@@ -78,6 +78,14 @@ public class MondrianETL {
 	 * FULL ETL lock, shared with reports - used to prevent a report from running while a FULL ETL is performed and the database is in unusable shape
 	 */
 	public final static ReaderWriterLock FULL_ETL_LOCK = new ReaderWriterLock();
+	
+	/**
+	 * Mondrian works by GROUP BY, so one has to choose between the following 2 bugs
+	 *  1. (true) adding an "Executing Agency" column will delete transactions not linked to an EA in reports containing EA as a column, thus leading to data loss
+	 *  2. (false) hierarchies by "Executing Agency" will insert a dummy "Executing Agency: Undefined" entry in the report (directly contradicting the spec) for transactions without a relevant EA
+	 *  @see factTableQuery.sql, placeholder @@BUGCHOOSER@@  
+	 */
+	public final static boolean BUG_CHOOSER = true;
 		
 	/**
 	 * the postgres connection
@@ -1045,6 +1053,7 @@ private EtlResult execute() throws Exception {
 			Set<Long> allEntities = etlConfig.getAllEntityIds();
 			while (stok.hasMoreTokens()) {
 				String q = stok.nextToken();
+				q = q.replace("@@BUGCHOOSER@@", BUG_CHOOSER ? "999888777" : "999999999");
 				if (q.indexOf("@@activityIdCondition@@") != 0 && allEntities.isEmpty())
 					continue; // query references activities, but these are empty -> it is useless
 				String activityCondition = etlConfig.fullEtl ? " >0 " : (" IN (" +Util.toCSStringForIN(allEntities) + ")");

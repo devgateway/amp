@@ -985,7 +985,7 @@
 			<MeasureExpression>
 				<SQL dialect="generic" aggregator="sum">
 					CASE
-						WHEN (mondrian_fact_table.transaction_type = 203) AND (mondrian_fact_table.adjustment_type=@@actual@@) AND (flow_name &lt;&gt; 'Undefined')
+						WHEN (mondrian_fact_table.transaction_type = 203) AND (flow_name &lt;&gt; 'Undefined')
 							THEN "mondrian_fact_table".transaction_exch_@@currency@@
 						ELSE null
 					END

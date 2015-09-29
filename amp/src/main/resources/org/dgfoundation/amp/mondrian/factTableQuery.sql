@@ -37,7 +37,7 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
          ) AS transaction_amount,
 
      rawdonation.currency_id AS currency_id,
-	 CASE WHEN rawdonation.src_role='DN' THEN rawdonation.originating_org_id ELSE 999888777 END AS donor_id,
+	 CASE WHEN rawdonation.src_role='DN' THEN rawdonation.originating_org_id ELSE @@BUGCHOOSER@@ END AS donor_id,
      COALESCE(rawdonation.financing_instrument_id, 999999999) AS financing_instrument_id,
      COALESCE(rawdonation.terms_of_assistance_id, 999999999) AS terms_of_assistance_id,
      COALESCE(rawdonation.funding_status_id, 999999999) AS funding_status_id,
@@ -138,7 +138,7 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
          ) AS transaction_amount,
 
      rawdonation.currency_id AS currency_id,
-	 CASE WHEN src_role='DN' THEN rawdonation.originating_org_id ELSE 999888777 END AS donor_id,
+	 CASE WHEN src_role='DN' THEN rawdonation.originating_org_id ELSE @@BUGCHOOSER@@ END AS donor_id,
      COALESCE(rawdonation.financing_instrument_id, 999999999) AS financing_instrument_id,
      COALESCE(rawdonation.terms_of_assistance_id, 999999999) AS terms_of_assistance_id,
      COALESCE(rawdonation.funding_status_id, 999999999) AS funding_status_id,
@@ -161,13 +161,13 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
      COALESCE(tert_prog.ent_id, 999999999) AS tertiary_program_id,
      COALESCE(npo_prog.ent_id, 999999999) AS national_objectives_program_id,
 
-     CASE WHEN src_role='EA' THEN rawdonation.originating_org_id ELSE 999888777 END AS ea_org_id,
-     CASE WHEN src_role='BA' THEN rawdonation.originating_org_id ELSE 999888777 END AS ba_org_id,
-     CASE WHEN src_role='IA' THEN rawdonation.originating_org_id ELSE 999888777 END AS ia_org_id,
-     CASE WHEN src_role='RO' THEN rawdonation.originating_org_id ELSE 999888777 END AS ro_org_id,
-     CASE WHEN src_role='CA' THEN rawdonation.originating_org_id ELSE 999888777 END AS ca_org_id,
-     CASE WHEN src_role='RG' THEN rawdonation.originating_org_id ELSE 999888777 END AS rg_org_id,
-     CASE WHEN src_role='SG' THEN rawdonation.originating_org_id ELSE 999888777 END AS sg_org_id,
+     CASE WHEN src_role='EA' THEN rawdonation.originating_org_id ELSE @@BUGCHOOSER@@ END AS ea_org_id,
+     CASE WHEN src_role='BA' THEN rawdonation.originating_org_id ELSE @@BUGCHOOSER@@ END AS ba_org_id,
+     CASE WHEN src_role='IA' THEN rawdonation.originating_org_id ELSE @@BUGCHOOSER@@ END AS ia_org_id,
+     CASE WHEN src_role='RO' THEN rawdonation.originating_org_id ELSE @@BUGCHOOSER@@ END AS ro_org_id,
+     CASE WHEN src_role='CA' THEN rawdonation.originating_org_id ELSE @@BUGCHOOSER@@ END AS ca_org_id,
+     CASE WHEN src_role='RG' THEN rawdonation.originating_org_id ELSE @@BUGCHOOSER@@ END AS rg_org_id,
+     CASE WHEN src_role='SG' THEN rawdonation.originating_org_id ELSE @@BUGCHOOSER@@ END AS sg_org_id,
      
      COALESCE(rawdonation.component_id, 999999999) AS component_id,
      COALESCE(rawdonation.agreement_id, 999999999) AS agreement_id,

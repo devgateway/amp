@@ -5,6 +5,8 @@ package org.dgfoundation.amp.reports.mondrian.converters;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -18,6 +20,7 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportColumn;
@@ -73,6 +76,7 @@ public class AmpReportsToReportSpecification {
 		configureReportData();
 		configureNonEmpty();
 		configureHierarchies();
+		makeFundingFlowsHacks();
 		configureSorting();
 		
 		spec.setEmptyOutputForUnspecifiedData(report.getDrilldownTab() == null || !report.getDrilldownTab());
@@ -82,8 +86,46 @@ public class AmpReportsToReportSpecification {
 		AmpARFilterConverter arFilterTranslator = new AmpARFilterConverter(arFilter);
 		spec.setSettings(arFilterTranslator.buildSettings());
 		spec.setFilters(arFilterTranslator.buildFilters());
+		
 		MtefConverter.instance.convertMtefs(this.report, this.spec);
 		return spec;
+	}
+
+	/**
+	 * AMP-21236: delete all roles- and roles-superior columns (like GROUP / TYPE)
+	 * minimum-cost minimally-breaking
+	 */
+	protected void makeFundingFlowsHacks() {
+		if (!MondrianETL.BUG_CHOOSER)
+			return; // if it is true, then no workaround is needed - the bug does not exist (but an another one, unworkaroundable starts manifesting)
+		
+		spec.computeUsesFundingFlows();
+		
+		Set<String> hierNames = new HashSet<>();
+		if (spec != null) {
+			for(ReportColumn hier:spec.getHierarchies())
+				hierNames.add(hier.getColumnName());
+		}
+		
+		Set<String> columnsToRemove = new HashSet<>();
+		if (spec.getUsesFundingFlows()) {
+			for(ReportColumn col:spec.getColumns()) {
+				if (ArConstants.COLUMNS_LINKED_WITH_FLOW_ROLES.contains(col.getColumnName()) && (!hierNames.contains(col.getColumnName())))
+					columnsToRemove.add(col.getColumnName());
+			}
+		}
+		
+		// delete columns
+		Iterator<ReportColumn> colsIt = spec.getColumns().iterator();
+		while (colsIt.hasNext())
+			if (columnsToRemove.contains(colsIt.next().getColumnName()))
+				colsIt.remove();
+
+		// this code should not normally change anything, because columnsToRemove only contains cols which are NOT in hiers. Left here for refactoring easiness
+		Iterator<ReportColumn> hiersIt = spec.getHierarchies().iterator();
+		while (hiersIt.hasNext())
+			if (columnsToRemove.contains(hiersIt.next().getColumnName()))
+				hiersIt.remove();
 	}
 	
 	private void configureReportData() {

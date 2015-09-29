@@ -172,12 +172,12 @@ public class WorkspaceFilter
 		//return "41, 43, 44, 45";
 		//return "20, 21"; // masha
 		//return "17041";
-		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('Proposed Project Cost 1 - USD', 'Test MTEF directed', 'Eth Water')";
+		return "SELECT amp_activity_id from amp_activity WHERE name IN ('Proposed Project Cost 1 - USD', 'Test MTEF directed', 'Eth Water', 'activity with directed MTEFs')";
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('Proposed Project Cost 1 - USD', 'Proposed Project Cost 2 - EUR', 'SubNational no percentages', 'Project with documents')";
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('Test pledge 1', 'ACVL Pledge Name 2', 'free text name 2', 'Heavily used pledge')";
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('TAC_activity_1', 'TAC_activity_2', 'Proposed Project Cost 2 - EUR', 'Test MTEF directed', 'Eth Water')";
 		
-		return TEAM_FILTER;
+		//return TEAM_FILTER;
 	}
 	
 	/**

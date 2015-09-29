@@ -201,6 +201,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	protected static ReportSpecificationImpl buildInternallyUsedReportSpec(ReportSpecification specOrig) {
 		ReportSpecificationImpl spec = (ReportSpecificationImpl) specOrig;
 		spec.reorderColumnsByHierarchies();
+		spec.computeUsesFundingFlows();
 		MondrianReportUtils.configureDefaults(spec);
 		addDummyColumns(spec);
 		spec.reorderColumnsByHierarchies();
@@ -215,7 +216,6 @@ public class MondrianReportGenerator implements ReportExecutor {
 			// this should be changed in the bright future
 			int reportDepth = ensureMaxDepth();
 			this.spec = buildInternallyUsedReportSpec(specOrig);
-			this.spec.computeUsesFundingFlows();
 
 			CellDataSetToGeneratedReport.counts.clear();
 			stats = new ReportGenerationStats();

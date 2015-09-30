@@ -128,7 +128,12 @@ class ImportLocationsService {
                 List currentLocations = session.createSQLQuery(strQuery).list()
                 int totalLocations = currentLocations.size()
                 Long ampLocationId = null
+                Boolean added
+                // We need to keep a list of parent locations that have been marked for deletion (through sql DELETE) in case we are adding more than 1 child for any parent,
+                // if we dont do this then "totalLocations" will count less elements than reality.
+                List deletedParentLocations = new ArrayList()
                 locations.each { newLoc ->
+                    added = false
                     if (!currentLocations.find { oldLoc -> newLoc[7].toString().equals(oldLoc[0].toString()) }) {
                         // Find amp_location_id.
                         strQuery = "SELECT amp_location_id FROM amp_location WHERE location_id = ${newLoc[7].toString()};"
@@ -151,13 +156,21 @@ class ImportLocationsService {
                         if (!isParentLocationPresent) {
                             activityGeneratedSQL << "INSERT INTO amp_activity_location(amp_activity_location_id, amp_activity_id, amp_location_id, location_percentage, location_latitude, location_longitude) VALUES(nextval('amp_activity_location_seq'), ${activity}, ${ampLocationId}, 0, ${newLoc[3].replace(",", ".")}, ${newLoc[4].replace(",", ".")});"
                             totalLocations++
+                            added = true
                         } else {
                             // Ok, the parent is in the activity too, lets check if the parent REGION (ADM1) location has regional fundings.
                             Long parentRegionLocation = findParentLocationAtRegionLevel(ampLocationId)
                             def fundings = findRegionalFundings(((BigInteger) activity).toLong(), parentRegionLocation)
                             if (!fundings) {
                                 activityGeneratedSQL << "INSERT INTO amp_activity_location(amp_activity_location_id, amp_activity_id, amp_location_id, location_percentage, location_latitude, location_longitude) VALUES(nextval('amp_activity_location_seq'), ${activity}, ${ampLocationId}, 0, ${newLoc[3].replace(",", ".")}, ${newLoc[4].replace(",", ".")});"
-                                activityGeneratedSQL << "DELETE FROM amp_activity_location WHERE amp_activity_id = ${activity} AND amp_location_id = ${oldLocationToDelete[2].toString()};"
+                                totalLocations++
+                                added = true
+                                // Check if the parent was "deleted" before.
+                                if (!deletedParentLocations.contains(oldLocationToDelete)) {
+                                    activityGeneratedSQL << "DELETE FROM amp_activity_location WHERE amp_activity_id = ${activity} AND amp_location_id = ${oldLocationToDelete[2].toString()};"
+                                    totalLocations--
+                                    deletedParentLocations << oldLocationToDelete
+                                }
                             } else {
                                 errors << "WARNING: Can not insert location because it has a parent ADM1 (region) with Regional Fundings: ${newLoc}"
                                 error = true
@@ -167,7 +180,7 @@ class ImportLocationsService {
                         errors << "WARNING: This location exists in the database: ${newLoc}"
                     }
                 }
-                if (totalLocations > currentLocations.size()) {
+                if (added) {
                     int newPercentage = 100 / totalLocations
                     float round = (newPercentage * totalLocations != 100) ? (100 - (newPercentage * totalLocations)) : 0
                     activityGeneratedSQL << "UPDATE amp_activity_location SET location_percentage = ${newPercentage} WHERE amp_activity_id = ${activity};"
@@ -177,7 +190,7 @@ class ImportLocationsService {
                 }
 
                 // 8) Update Implementation Level if needed.
-                if (ADMLevelToAdd != currentADMLevel) {
+                if (ADMLevelToAdd > currentADMLevel) {
                     if (!currentImplementationLevelId.equals(implementationLevelProvinceId)) {
                         activityGeneratedSQL << "DELETE FROM amp_activities_categoryvalues WHERE amp_activity_id = ${activity} AND amp_categoryvalue_id = ${currentImplementationLevelId};"
                         activityGeneratedSQL << "INSERT INTO amp_activities_categoryvalues(amp_activity_id, amp_categoryvalue_id) VALUES(${activity}, ${implementationLevelProvinceId});"
@@ -258,7 +271,8 @@ class ImportLocationsService {
     }
 
     /**
-     * This method will cleanup the list of new locations by deleting from that list those new locations that are A) parent of other new locations or B) parent of existing locations.
+     * This method will cleanup the list of new locations by deleting from that list those new locations that are A) parent of other new locations or B) parent of existing locations or
+     * C) More than 1 location was coded with the same location_id (it happens when they code the same amp_location with different lat/long and ADMs).
      * NOTE: This method WILL NOT generate any sql sentence.
      * @param locations
      * @param existingLocations
@@ -312,6 +326,28 @@ class ImportLocationsService {
         deletedLocations.each {
             auxLocations.remove(it)
         }
+
+        // 3) Delete duplicated locations (same id) but always deleting the less precise one (lower ADM).
+        locations?.sort { it[5].trim().toUpperCase() }?.each {
+            boolean found = false
+            def auxLocation = null
+            auxLocations?.each { it2 ->
+                // Check if is a duplicated location.
+                if (it[7].equals(it2[7]) && !it[1].equals(it2[1]) && !deletedLocations.contains(it)) {
+                    // We can not safely add the new location because it is a parent of other existing location.
+                    errors << "WARNING: Location will be IGNORED because a duplicated location also coded in the source file: ${it.toArrayString()}"
+                    found = true
+                    auxLocation = it2
+                }
+            }
+            if (found) {
+                deletedLocations << auxLocation
+            }
+        }
+        deletedLocations.each {
+            locations.remove(it)
+        }
+
         return auxLocations
     }
 

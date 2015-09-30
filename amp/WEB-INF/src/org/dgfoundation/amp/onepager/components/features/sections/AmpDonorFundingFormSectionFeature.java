@@ -542,6 +542,8 @@ public class AmpDonorFundingFormSectionFeature extends
 				fundingModel.setObject(new LinkedHashSet<AmpFunding>());
 				// we only add the new tab if the org didnt exists
 			}
+			int order = fundingModel.getObject().size();
+			funding.setOrderNumber(order);
 			fundingModel.getObject().add(funding);
 			tabsList.addItem(org);
 

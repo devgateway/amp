@@ -42,6 +42,9 @@
         <property name="capitalSpendingPercentage" column="capital_spend_percent" type="float" />
 
         <property name="loanTerms" column="loan_terms" type="text" />
+        
+        <property name="orderNumber" column="order_number" type="java.lang.Integer" />
+		
 
 		<many-to-one name="ampDonorOrgId" column="amp_donor_org_id"
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />

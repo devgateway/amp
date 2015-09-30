@@ -68,6 +68,10 @@
         <?php print $offset; ?>
       </div>
     <?php endif; ?>
+
+    <?php // @HACK: D7 does not have session cookies for anonymous users. ?>
+    <input type="hidden" name="language" value="<?php print $GLOBALS['language']->language; ?>" />
+
     <div class="views-exposed-widget views-submit-button">
       <?php print $button; ?>
     </div>

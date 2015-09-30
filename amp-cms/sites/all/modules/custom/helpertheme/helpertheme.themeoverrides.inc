@@ -243,11 +243,16 @@ function helpertheme_media_wysiwyg_token_to_markup_alter(&$element, $tag_info, $
 }
 
 /**
- * Default theme function activitis search forms.
+ * Default theme function activities search forms.
  *
  * @see template_preprocess_views_exposed_form()
  */
 function helpertheme_preprocess_views_exposed_form(&$variables) {
+  // @TODO: Find a proper way to only alter the activities search form.
+  if ($variables['form']['#id'] != ' views-exposed-form-activities-search-page') {
+    return;
+  }
+
   if (drupal_is_front_page()) {
     $variables['theme_hook_suggestions'][] = 'views_exposed_form__homepage_search';
 

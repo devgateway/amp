@@ -69,7 +69,7 @@ public class PublicPortalService {
 		
 		ReportSpecificationImpl spec = EndpointUtils.getReportSpecification(config, "PublicPortal_GetTopProjects");
 		
-		SettingsUtils.applySettings(spec, config);
+		SettingsUtils.applySettings(spec, config, true);
 
 		/*TODO: tbd if we need to filter out null dates from results
 		MondrianReportUtils.filterOutNullDates(spec);
@@ -179,7 +179,7 @@ public class PublicPortalService {
 
 		FilterUtils.applyFilterRules(config, spec,months);
 
-		SettingsUtils.applySettings(spec, config);
+		SettingsUtils.applySettings(spec, config, true);
 		getPublicReport(count, result, content, spec, true, measureName, null);
 		return result;
 

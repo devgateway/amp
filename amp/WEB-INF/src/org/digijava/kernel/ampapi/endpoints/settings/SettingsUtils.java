@@ -458,7 +458,7 @@ public class SettingsUtils {
 	 */
 	public static void applyExtendedSettings(ReportSpecificationImpl spec, JsonBean config) {
 		// apply first common settings, i.e. calendar and currency
-		applySettings(spec, config);
+		applySettings(spec, config, true);
 		
 		// now apply custom settings, i.e. selected measures
 		List<String> measureOptions = new ArrayList<String>();
@@ -481,8 +481,10 @@ public class SettingsUtils {
 			spec.addMeasure(new ReportMeasure(SettingsConstants.DEFAULT_FUNDING_TYPE_ID));
 		}
 	}
-	
+		
 	/**
+	 * Configures report specification with settings provided via Json
+	 * 
 	 * Applies request settings, that are expected in the following format:
 	 * config = {
 	 * ...,
@@ -506,14 +508,6 @@ public class SettingsUtils {
      * }
 	 * @param spec - report specification over which to apply the settings
 	 * @param config - JSON request that includes the settings 
-	 */
-	public static void applySettings(ReportSpecificationImpl spec, JsonBean config) {
-		// by default configure defaults
-		applySettings(spec, config, true);
-	}
-	
-	/**
-	 * Configures report specification with settings provided via Json
 	 * 
 	 * @param spec report specification
 	 * @param config json object that stores the settings
@@ -539,7 +533,7 @@ public class SettingsUtils {
 		configureCurrencyCode(reportSettings, settings, setDefaults);
 		configureNumberFormat(reportSettings, settings, setDefaults);
 		configureCalendar(reportSettings, settings, setDefaults);
-		configureYearRange(reportSettings, settings);
+		configureYearRange(reportSettings, settings, setDefaults);
 	}
 	
 	/**
@@ -611,8 +605,12 @@ public class SettingsUtils {
 	 * Configures year range setting
 	 * @param reportSettings
 	 * @param settings
+	 * @param setDefaults: if true AND there is no range setting in @reportSettings, then reportSettings will be populated with the workspace/system's default 
 	 */
-	public static void configureYearRange(MondrianReportSettings reportSettings, Map<String, Object> settings) {
+	public static void configureYearRange(MondrianReportSettings reportSettings, Map<String, Object> settings, boolean setDefaults) {
+		ReportElement yearRangeElement = new ReportElement(ElementType.YEAR); 
+		boolean preExistingYearRangeSetting = (reportSettings.getFilterRules().get(yearRangeElement) != null) && 
+				(!reportSettings.getFilterRules().get(yearRangeElement).isEmpty());
 		// apply year range settings
 		Integer start = 0;
 		Integer end = 0;
@@ -625,8 +623,11 @@ public class SettingsUtils {
 			end = new Integer(EndpointUtils.getDefaultReportEndYear());
 		}
 		
+		if (preExistingYearRangeSetting && !setDefaults)
+			return;
+		
 		// clear previous year settings
-		reportSettings.getFilterRules().remove(new ReportElement(ElementType.YEAR));
+		reportSettings.getFilterRules().remove(yearRangeElement);
 		// TODO: update settings to store [ALL, ALL] range just to reflect
 		// the previous selection
 		if (!(start == -1 && end == -1)) {

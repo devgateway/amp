@@ -277,7 +277,7 @@ public class ReportsUtil {
 		addMeasures(specImpl, formParams);
 		
 		// update report data presentation
-		SettingsUtils.applySettings(specImpl, formParams);
+		SettingsUtils.applySettings(specImpl, formParams, false);
 		configureFilters(specImpl, formParams);
 		configureSorting(specImpl, formParams);
 		

@@ -469,7 +469,7 @@ public class Reports {
 			ReportSpecificationImpl spec = AmpReportsToReportSpecification.convert(ampReport);
 			if(filterRules != null) spec.setFilters(filterRules);
 			if(queryModel.containsKey("settingsApplied") && (Boolean)queryModel.get("settingsApplied")) {
-				SettingsUtils.applySettings(spec, extractSettings(queryModel));
+				SettingsUtils.applySettings(spec, extractSettings(queryModel), true);
 			}						
 						
 			boolean resort = ReportsUtil.configureSorting((ReportSpecificationImpl) spec, queryObject);			

@@ -461,7 +461,7 @@ public class DashboardsService {
  		}
  		ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		
-		SettingsUtils.applySettings(spec, filter);
+		SettingsUtils.applySettings(spec, filter, true);
 		
 		// AMP-18740: For dashboards we need to use the default number formatting and leave the rest of the settings
 		// configurable (calendar, currency, etc).

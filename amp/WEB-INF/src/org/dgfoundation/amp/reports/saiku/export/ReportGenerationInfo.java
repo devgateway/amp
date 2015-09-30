@@ -8,6 +8,12 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
+/**
+ * class containing info regarding how a report has been generated Saiku-side<br />
+ * Notice the class is a mess which duplicates data, breaks encapsulation (Saiku JSON in {@link #queryModel}...) and holds the generated report in JSON, because the Saiku side is a mess
+ * @author Dolghier Constantin
+ *
+ */
 public class ReportGenerationInfo {
 	
 	/**
@@ -16,12 +22,12 @@ public class ReportGenerationInfo {
 	public final JsonBean jb;
 	
 	/**
-	 * the report type
+	 * the report type, one of AMPReportExportConstants.XXX fields
 	 */
 	public final String type;
 	
 	/**
-	 * the report specification which lead to this report have been generated
+	 * the report specification which lead to this report having been generated. Does not consistently include data from {@link #queryModel}! (I warned you it's a mess)
 	 */
 	public final ReportSpecification report;
 	

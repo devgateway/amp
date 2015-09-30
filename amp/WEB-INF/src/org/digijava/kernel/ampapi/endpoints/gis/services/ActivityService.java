@@ -94,7 +94,7 @@ public class ActivityService {
 		//then we have to fetch all other matchesfilters outisde mondrian
 
 		// apply default settings
-		SettingsUtils.applySettings(spec, config);
+		SettingsUtils.applySettings(spec, config, true);
 		// apply custom settings
 		configureMeasures(spec, config);
 		
@@ -217,7 +217,7 @@ public class ActivityService {
 	spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON), false));
 	
 	if (config != null) {
-	    SettingsUtils.applySettings(spec, config);
+	    SettingsUtils.applySettings(spec, config, true);
 	}
 	
 	GeneratedReport report = null;

@@ -413,16 +413,14 @@ public class AmpARFilterConverter {
 	private void addDateSettings() {
 		settings.setCalendar(arFilter.getCalendarType());
 		try {
-			if ((arFilter.getRenderStartYear()!=null || arFilter.getRenderEndYear() != null)
-					//also check if this is not a both ends unlimited range (-1 in old filters means no limit...)
-					&& !(arFilter.getRenderStartYear() == -1 && arFilter.getRenderEndYear() == -1)) {
+			if (arFilter.getRenderStartYear() != null || arFilter.getRenderEndYear() != null) {
 				settings.addYearsRangeFilterRule(
-						(arFilter.getRenderStartYear() == -1 ? null : arFilter.getRenderStartYear()), 
-						(arFilter.getRenderEndYear() == -1 ? null : arFilter.getRenderEndYear())
+						(arFilter.getRenderStartYear() == -1 ? 1950 : arFilter.getRenderStartYear()), // 1950 / 2150 are ugly hacks because the API does not support both NULLs (e.g. unlimited) 
+						(arFilter.getRenderEndYear() == -1 ? 2150 : arFilter.getRenderEndYear())
 						);
 			}
 		} catch(Exception ex) {
-			logger.error(ex.getMessage());
+			logger.error(ex.getMessage(), ex);
 		}
 	}
 

@@ -12,6 +12,9 @@ package org.dgfoundation.amp.newreports;
 public class ReportElement {
 	public enum ElementType {
 		ENTITY,
+		/**
+		 * year-range-setting
+		 */
 		YEAR,
 		QUARTER,
 		MONTH,

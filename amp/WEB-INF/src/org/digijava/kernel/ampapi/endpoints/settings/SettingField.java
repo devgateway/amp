@@ -83,4 +83,8 @@ public class SettingField {
 		this.name = TranslatorWorker.translateText(name);
 		this.value = value;
 	}
+	
+	@Override public String toString() {
+		return String.format("name: %s, type: %s, id: %s, groupId: %s", name, type == null ? "(none)" : type.toString(), id, groupId);
+	}
 }

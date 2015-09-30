@@ -246,8 +246,7 @@ public class ReportsUtil {
 	 * @param formParams
 	 * @return the updated spec
 	 */
-	public static ReportSpecification update(ReportSpecification spec, 
-			JsonBean formParams) {
+	public static ReportSpecification update(ReportSpecification spec,  JsonBean formParams) {
 		if (spec == null || formParams == null) return spec;
 		if (!(spec instanceof ReportSpecificationImpl)) {
 			logger.error("Unsupported request for "  + spec.getClass());
@@ -263,7 +262,7 @@ public class ReportsUtil {
 		//update report data presentation
 		configureFilters(specImpl, formParams);
 		configureSorting(specImpl, formParams);
-		SettingsUtils.applySettings(specImpl, formParams);
+		SettingsUtils.applySettings(specImpl, formParams, false);
 		
 		//update other settings
 		setOtherOptions(specImpl, formParams);

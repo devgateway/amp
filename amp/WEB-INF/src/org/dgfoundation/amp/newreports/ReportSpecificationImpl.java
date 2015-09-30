@@ -364,7 +364,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
 		return usesFundingFlows;
 	}
 
-	public void setUsesFundingFlows(boolean usesFundingFlows) {
+	void setUsesFundingFlows(boolean usesFundingFlows) {
 		this.usesFundingFlows = usesFundingFlows;
 	}
 	

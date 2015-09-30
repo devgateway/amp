@@ -41,14 +41,21 @@ public class AmpFundingGroupModel implements IModel<Set<AmpOrgRole>> {
 			@Override
 			public int compare(AmpFunding o1, AmpFunding o2) {
 
-				if (o1.getAmpFundingId() == null ^ o2.getAmpFundingId() == null) {
-					return (o1.getAmpFundingId() == null) ? -1 : 1;
+				if (o1.getOrderNumber() == null ^ o2.getOrderNumber() == null) {
+					return (o1.getOrderNumber() == null) ? -1 : 1;
 				}
 
-				if (o1.getAmpFundingId() == null && o2.getAmpFundingId() == null) {
-					return 0;
+				if (o1.getOrderNumber() == null && o2.getOrderNumber() == null) {
+					
+					//only old fundings won't have and order. Old Fundings will have an id
+					if (o1.getAmpFundingId()!=null && o2.getAmpFundingId()!=null) {
+						return o1.getAmpFundingId().compareTo(o2.getAmpFundingId());
+					}
+					else {
+						return 0;
+					}
 				}
-				return o1.getAmpFundingId().compareTo(o2.getAmpFundingId());
+				return o1.getOrderNumber().compareTo(o2.getOrderNumber());
 
 			}
 

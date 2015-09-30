@@ -118,6 +118,8 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	@Interchangeable(fieldTitle="Funding Classification Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Classification Date", importable=true)
 	private Date fundingClassificationDate;
 	
+	private Integer orderNumber;
+	
 	@Override
 	public boolean equalsForVersioning(Object obj) {
 		AmpFunding auxFunding = (AmpFunding)obj;
@@ -746,5 +748,13 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	@java.lang.SuppressWarnings("all")
 	public void setFundingDetailsComparator(final Comparator fundingDetailsComparator) {
 		this.fundingDetailsComparator = fundingDetailsComparator;
+	}
+
+	public Integer getOrderNumber() {
+		return orderNumber;
+	}
+
+	public void setOrderNumber(Integer orderNumber) {
+		this.orderNumber = orderNumber;
 	}
 }

@@ -102,7 +102,7 @@ public class AmpReportsToReportSpecification {
 		spec.computeUsesFundingFlows();
 		
 		Set<String> hierNames = new HashSet<>();
-		if (spec != null) {
+		if (spec.getHierarchies() != null) {
 			for(ReportColumn hier:spec.getHierarchies())
 				hierNames.add(hier.getColumnName());
 		}

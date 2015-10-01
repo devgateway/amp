@@ -1106,19 +1106,16 @@
                 </executions>
             </plugin>
 
-            <!-- Inegrate Gulp with Maven -->
+            <!-- Integrate Gulp with Maven -->
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
                 <version>0.0.15</version>
-                <configuration>
-                    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
-                </configuration>
                 <executions>
-                    <!-- Installing node and npm -->
+                    <!-- Installing node and npm  for GIS-->
                     <execution>
                         <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
-                        <id>install node and npm</id>
+                        <id>install node and npm for GIS</id>
                         <goals>
                             <goal>install-node-and-npm</goal>
                         </goals>
@@ -1129,53 +1126,135 @@
                             <npmVersion>1.3.8</npmVersion>
                             <!-- optional: where to download node and npm from. Defaults to http://nodejs.org/dist/ -->
                             <downloadRoot>http://nodejs.org/dist/</downloadRoot>
+                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
-                    <!-- Running npm -->
+                    <!-- Running npm for GIS-->
                     <execution>
-                        <id>npm install</id>
+                        <id>npm install for GIS</id>
                         <goals>
                             <goal>npm</goal>
                         </goals>
-
                         <!-- optional: default phase is "generate-resources" -->
                         <phase>generate-sources</phase>
-
                         <configuration>
                             <!-- optional: The default argument is actually  "install", so unless you need to run some other npm command,
                             you can remove this whole <configuration> section.-->
                             <arguments>install</arguments>
+               			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
-                    <!-- Running gulp -->
+                    <!-- Running gulp for GIS-->
                     <execution>
-                        <id>gulp build</id>
+                        <id>gulp build for GIS</id>
                         <goals>
                             <goal>gulp</goal>
                         </goals>
-
-                        <!-- optional: the default phase is "generate-resources" -->
+<!--                         optional: the default phase is "generate-resources" -->
                         <phase>generate-sources</phase>
-
                         <configuration>
-                            <!-- optional: if not specified, it will run gulp's default
-                            task (and you can remove this whole <configuration> section.) -->
+<!--                             optional: if not specified, it will run gulp's default   -->
+<!--                             task (and you can remove this whole <configuration> section.)  -->
                             <arguments>build</arguments>
+               				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>gulp test</id>
+                        <id>gulp test for GIS</id>
                         <goals>
                             <goal>gulp</goal>
                         </goals>
-
-                        <!-- optional: the default phase is "generate-resources" -->
                         <phase>test</phase>
                         <configuration>
                             <arguments>test</arguments>
+               				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
+
+<!--                    !!!! Next part is for building filters and dashboard. It was commented out until  -->
+<!--                     there is a decision on how to approach dependecies caching (node_modules) AMP-20022 !!! -->
+                    
+                    
+<!--                           Installing node and npm for filters -->
+<!--                     <execution> -->
+<!--                         <id>install node and npm for filters</id> -->
+<!--                         <goals> -->
+<!--                             <goal>install-node-and-npm</goal> -->
+<!--                         </goals> -->
+<!--                         <configuration> -->
+<!--                             <nodeVersion>v0.10.29</nodeVersion> -->
+<!--                             <npmVersion>1.3.8</npmVersion> -->
+<!--                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory> -->
+<!--                         </configuration> -->
+<!--                     </execution> -->
+<!--                     Running npm for filters -->
+<!--                     <execution> -->
+<!--                         <id>npm install for filters</id> -->
+<!--                         <goals> -->
+<!--                             <goal>npm</goal> -->
+<!--                         </goals> -->
+<!--                         <phase>generate-sources</phase> -->
+<!--                         <configuration> -->
+<!--                  		    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory> -->
+<!--                         </configuration> -->
+<!--                     </execution> -->
+<!--                         Running gulp for filters -->
+<!--                     <execution> -->
+<!--                         <id>gulp build for filters</id> -->
+<!--                         <goals> -->
+<!--                             <goal>gulp</goal> -->
+<!--                         </goals> -->
+<!--                         <phase>generate-sources</phase> -->
+<!--                         <configuration> -->
+<!--                             <arguments>build</arguments> -->
+<!--                				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory> -->
+<!--                         </configuration> -->
+<!--                     </execution> -->
+                    
+                    
+                    
+<!--                     Installing node and npm for dashboard -->
+<!--                     <execution> -->
+<!--                         <id>install node and npm for dashboard</id> -->
+<!--                         <goals> -->
+<!--                             <goal>install-node-and-npm</goal> -->
+<!--                         </goals> -->
+<!--                         <configuration> -->
+<!--                             <nodeVersion>v0.10.29</nodeVersion> -->
+<!--                             <npmVersion>1.3.8</npmVersion> -->
+<!--                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory> -->
+<!--                         </configuration> -->
+<!--                     </execution> -->
+<!--                       Running npm for dashboard -->
+<!--                     <execution> -->
+<!--                         <id>npm install for dashboard</id> -->
+<!--                         <goals> -->
+<!--                             <goal>npm</goal> -->
+<!--                         </goals> -->
+<!--                         <phase>generate-sources</phase> -->
+<!--                         <configuration> -->
+<!--                  		    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory> -->
+<!--                         </configuration> -->
+<!--                     </execution> -->
+                    
+<!--                     Running gulp for dashboard -->
+<!--                     <execution> -->
+<!--                         <id>gulp build for dashboard</id> -->
+<!--                         <goals> -->
+<!--                             <goal>gulp</goal> -->
+<!--                         </goals> -->
+<!--                         <phase>generate-sources</phase> -->
+<!--                         <configuration> -->
+<!--                             <arguments>build</arguments> -->
+<!--                				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory> -->
+<!--                         </configuration> -->
+<!--                     </execution> -->
+                
+                
+                      
+                    
                 </executions>
+                
             </plugin>
         </plugins>
 

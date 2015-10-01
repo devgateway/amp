@@ -123,10 +123,7 @@ class ImportLocationsService {
 
                 // 7) Iterate the list of locations to add, ignoring existent ones and keep a total count to calculate the percentage.
                 // Get list of existing locations with location_id (it comes in the source file so we dont have to match by location name).
-                strQuery = "SELECT al.location_id, aal.* FROM amp_activity_location aal, amp_location al WHERE aal.amp_location_id = al.amp_location_id AND amp_activity_id = ${activity}"
-                //TODO: Check why we get the list of current locations twice.
-                List currentLocations = session.createSQLQuery(strQuery).list()
-                int totalLocations = currentLocations.size()
+                int totalLocations = ampActivityLocations.size()
                 Long ampLocationId = null
                 Boolean added
                 // We need to keep a list of parent locations that have been marked for deletion (through sql DELETE) in case we are adding more than 1 child for any parent,
@@ -134,7 +131,7 @@ class ImportLocationsService {
                 List deletedParentLocations = new ArrayList()
                 locations.each { newLoc ->
                     added = false
-                    if (!currentLocations.find { oldLoc -> newLoc[7].toString().equals(oldLoc[0].toString()) }) {
+                    if (!ampActivityLocations.find { oldLoc -> newLoc[7].toString().equals(oldLoc[0].toString()) }) {
                         // Find amp_location_id.
                         strQuery = "SELECT amp_location_id FROM amp_location WHERE location_id = ${newLoc[7].toString()};"
                         ampLocationId = session.createSQLQuery(strQuery).uniqueResult()

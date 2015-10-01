@@ -12,7 +12,7 @@
 </head>
 
 <body>
-<h2>Import ADM1/ADM2</h2>
+<h2>Import ADM1/ADM2/ADM3</h2>
 <g:uploadForm name="myUpload" action="importFileADM1_ADM2">
     <input type="file" name="myFile"/>
     <g:submitButton name="submit"/>

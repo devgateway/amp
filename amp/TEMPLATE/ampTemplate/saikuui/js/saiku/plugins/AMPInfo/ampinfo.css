@@ -5,15 +5,9 @@
 	top: -17px;
 }
 
-/*#amp_info_settings  {
-	width: 100px;
-	position: relative;
-	float:left;
-	padding-left: 10px;
-	padding-top: 3px;
-	top: 2px;
-	height: 24px;
-}*/
+#amp_info_settings>h4{
+	font-weight: bold;
+}
 
 #amp_notification {
 	color: red;

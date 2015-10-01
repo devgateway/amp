@@ -15,6 +15,7 @@
 <%	
 	ReportContextData.createWithId(request.getSession(), ReportContextData.REPORT_ID_WORKSPACE_EDITOR, false);
 	request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, ReportContextData.REPORT_ID_WORKSPACE_EDITOR);
+	
 %>
 
 <html:javascript formName="aimUpdateWorkspaceForm"/>
@@ -376,6 +377,7 @@ function update(action) {
 		var event	= document.aimUpdateWorkspaceForm.actionEvent.value;
 		var relFlag = document.aimUpdateWorkspaceForm.relatedTeamFlag.value;
 		if (event == "edit" && relFlag == "noedit") {
+
 			var name = trim(document.aimUpdateWorkspaceForm.teamName.value);
 			if (name == "" || name.length == 0) {
 				alert("<digi:trn key="aim:teamnamerequired">Team name required</digi:trn>");
@@ -398,6 +400,16 @@ function update(action) {
 			if (!validateAimUpdateWorkspaceForm(document.aimUpdateWorkspaceForm)){
 				return false;
 			}
+			if (document.aimUpdateWorkspaceForm.computation.checked == true) {
+				var selectedOrganizations = $('[name="selectedOrgId"]');
+				var hasFilters = $.parseJSON(document.aimUpdateWorkspaceForm.hasFilters.value);
+				if (!hasFilters && selectedOrganizations.length<=0){
+					alert("<digi:trn key="aim:computation">Please add a filter or a children organization</digi:trn>");
+					document.aimUpdateWorkspaceForm.computation.focus();
+					return false;
+				}
+			}
+			
 		    if (action != "reset"){
 			if (event == "add" || event == "edit") {
 				if (relFlag == "set") {
@@ -428,6 +440,7 @@ function update(action) {
 					}
 				}
 			}
+		   
 			document.aimUpdateWorkspaceForm.relatedTeamFlag.value = "no";
 			document.aimUpdateWorkspaceForm.addFlag.value = false;
 			<digi:context name="update" property="context/module/moduleinstance/updateWorkspace.do" />
@@ -960,6 +973,7 @@ function cancel()
 																	<legend>
 																		<html:radio property="useFilter" value="${true}" onclick="toggleFilterVsOrgs(this);"/>
 																		<span class="legend_label"><digi:trn key="rep:wizard:subtitle:selectedFilters">Selected Filters</digi:trn></span></legend>
+																		<input id="hasFilters" type="hidden" value="<%=ReportContextData.hasFilters()%>" name="hasFilters">
 																	<div id="listFiltersDiv" style="height:85px; width: 713px; overflow-y:auto; overflow-x:auto; margin-bottom: 5px; white-space: normal;" class="inputx">
 																		<jsp:include page="reportWizard/showSelectedFilters.jsp" />				
 																	</div>

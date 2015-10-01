@@ -457,6 +457,17 @@ public class ReportContextData
         return res;
 	}
 	
+	public static boolean hasFilters()
+	{
+		HttpServletRequest request = TLSUtils.getRequest();
+        if (request == null) {
+            throw new RuntimeException("TLS Request not found!");
+        }
+        request.getSession().setAttribute("reportMeta", null); //VERY important for pledge reports recognisation. For porting to AMP 2.4: put null in RCD.reportMeta
+        ReportContextData res = getFromRequest(request, true);
+        return (res==null?false:res.filter!=null);
+	}
+	
 	/**
 	 * equivalent to {@link #getFromRequest(false)}
 	 * @return

@@ -46,8 +46,8 @@ function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessa
 	this.settingsPanel.setBody("");
 	this.settingsPanel.render(document.body);
 	
-	this.listFiltersDiv				= document.getElementById("listFiltersDiv");
-	
+	this.listFiltersDiv			= document.getElementById("listFiltersDiv");
+	this.hasFilters				= document.getElementById("hasFilters");
 }
 
 Filters.prototype.success	= function (o) {
@@ -205,8 +205,8 @@ SaveFilters.prototype.success	= function (o) {
 	//alert ("saveFilters: " + o.responseText);
 	if ( o.responseText.length > 0 ) {
 		this.panel.hide();
+		this.filterObj.hasFilters.value = true;	
 		this.filterObj.listFiltersDiv.innerHTML	= o.responseText;
-		
 		if (!(typeof repManager === 'undefined')) {
 			repManager.showUseFilters(true);
 		}

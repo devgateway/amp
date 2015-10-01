@@ -619,7 +619,7 @@ public class ReportWizardAction extends MultiAction {
     	}
     	reportsList.put(reportToken, ampReport);
     	request.getSession().setAttribute("reportStack", reportsList);
-        callSaikuReport(reportToken, response, "runReportToken");
+        callSaikuReport(reportToken, response, "runReportToken", ampReport.hasAvailableMeasures());
 		return null;
 		
 	}
@@ -686,17 +686,18 @@ public class ReportWizardAction extends MultiAction {
         MultilingualInputFieldValues.serialize(ampReport, "name", null, null, request);
 
         if ((request.getParameter("openReport") != null) && request.getParameter("openReport").equals("true")) {
-            callSaikuReport(ampReport.getAmpReportId().toString(), response,"openReportId");
+            callSaikuReport (ampReport.getAmpReportId().toString(), response,"openReportId", ampReport.hasAvailableMeasures());
         }
         return null;
     }
 
-	private void callSaikuReport(String reportId, HttpServletResponse response, String varName) throws IOException {
+	private void callSaikuReport(String reportId, HttpServletResponse response, String varName, boolean hasAvailableMeasures ) throws IOException {
 		PrintWriter out = response.getWriter();
 		StringBuilder responseString = new StringBuilder();
 		responseString.append(varName + "=" + reportId);
 		responseString.append(",");
-		responseString.append("saiku=" + FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS));
+		responseString.append("saiku=" + hasAvailableMeasures );
+		
 		out.write(responseString.toString());
 		out.flush();
 		out.close();

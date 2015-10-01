@@ -187,7 +187,7 @@ function generateHeaderHtml(headers) {
 						colName = this.headerMatrix[i][j].columnName
 					}
 					col = "<th" + style + id + " data-header-level='" + i + "'"
-							+ sortingType + " colspan='" + groupCount + "'><div>"
+							+ sortingType + " colspan='" + groupCount + "'><div class = 'i18n'>"
 							+ colName + "</div></th>";
 	
 					// We change 'j' in order to skip the next N columns.
@@ -274,7 +274,7 @@ function buildTotalsRow(page) {
 		// This check is for those summarized reports that dont return any
 		// content.
 		if (page.pageArea.contents !== null && !isHiddenColumn(j)) {
-			var td = "<td class='data total tooltiped'";
+			var td = "<td class='data total'";
 			var auxTd = "";
 			var cell = page.pageArea.contents[this.headerMatrix[this.lastHeaderRow][j].hierarchicalName];
 			if (this.type === 'xlsx' || this.type === 'csv') {
@@ -286,7 +286,7 @@ function buildTotalsRow(page) {
 					td += " original-title='" + cell.displayedValue
 							+ "' data-subtotal='true'";
 				}
-				auxTd += "<div class='total'>" + cell.displayedValue + "</div>";
+				auxTd += "<div class='total i18n'>" + cell.displayedValue + "</div>";
 			}
 			td += ">";
 			td += auxTd + "</td>";
@@ -619,6 +619,7 @@ AMPTableRenderer.prototype.postProcessTooltips = function() {
 		}
 	});
 	$(".tooltipped").tipsy();
+	Saiku.i18n.translate();
 }
 
 /**

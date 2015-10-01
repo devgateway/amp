@@ -4,10 +4,15 @@ import {t} from "amp/modules/translate";
 import * as validate from "amp/tools/validate";
 import style from "./style.less";
 import cn from "classnames";
+import {keyCode} from "amp/tools";
+const KEY_UP = 38;
+const KEY_DOWN = 40;
 
 export var actions = AMP.actions({
   yearChanged: 'string',
-  yearSubmitted: 'number'
+  yearSubmitted: 'number',
+  increment: null,
+  decrement: null
 });
 
 export class Model extends AMP.Model{}
@@ -29,13 +34,20 @@ var submitYear = yearSubmitted => e => {
   yearSubmitted(parseInt(e.target.querySelector('input').value));
 };
 
-export var view = AMP.view(({repeatedYearWarning, year}, {yearChanged, yearSubmitted}) => (
+var maybeNavigate = inc => dec => e => {
+  if(KEY_UP == keyCode(e)) inc();
+  if(KEY_DOWN == keyCode(e)) dec();
+}
+
+export var view = AMP.view(({repeatedYearWarning, year},
+  {yearChanged, yearSubmitted, increment, decrement}) => (
     <td className={cn("edit-on-hover add-new-rate", {"has-error": repeatedYearWarning()})}>
       <form onSubmit={submitYear(yearSubmitted)} action="#">
         <input
           className="form-control edit"
           placeholder={t('amp.deflator:newRateHint')}
-          onChange ={changeYear(yearChanged)}
+          onChange={changeYear(yearChanged)}
+          onKeyDown={maybeNavigate(increment)(decrement)}
           value={year()}
         />
         <button className="btn btn-primary view">{t('amp.deflator:add')}</button>
@@ -49,7 +61,16 @@ export var view = AMP.view(({repeatedYearWarning, year}, {yearChanged, yearSubmi
     </td>
 ));
 
+var withInt = cb => n => cb(parseInt(n));
+var yearStep = step =>
+  withInt(year => validate.year(String(year + step)) ? year + step : year);
+
 export var update = (action, model: Model) => actions.match(action, {
   yearChanged: model.year,
-  yearSubmitted: () => model.year("")
+
+  yearSubmitted: () => model.year(""),
+
+  increment: () => model.year(yearStep(1)),
+
+  decrement: () => model.year(yearStep(-1))
 });

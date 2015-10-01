@@ -1218,9 +1218,12 @@ public class LuceneUtil implements Serializable {
             indexSearcher = new IndexSearcher(index);
 
             String searchString = origSearchString.trim();
-            if (searchString.charAt(0) == '*') {
-                searchString = searchString.substring(1);
-            }
+            //AMP-21172
+            //if (searchString.charAt(0) == '*') {
+            //    searchString = searchString.substring(1);
+            //}
+            searchString = searchString.replace("!","\\!");
+            searchString = searchString.replace("*","\\*");
             //AMP-3806
             searchString = searchString.replace("+","\\+");
             searchString = searchString.replace("-","\\-");

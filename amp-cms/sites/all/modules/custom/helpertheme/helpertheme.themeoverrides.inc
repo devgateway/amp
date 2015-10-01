@@ -249,7 +249,7 @@ function helpertheme_media_wysiwyg_token_to_markup_alter(&$element, $tag_info, $
  */
 function helpertheme_preprocess_views_exposed_form(&$variables) {
   // @TODO: Find a proper way to only alter the activities search form.
-  if ($variables['form']['#id'] != ' views-exposed-form-activities-search-page') {
+  if ($variables['form']['#id'] != 'views-exposed-form-activities-search-page') {
     return;
   }
 

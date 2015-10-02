@@ -11,12 +11,11 @@ define(
 		function(Marionette, Tabs, Tab, TabItemView, TabItemsView, TabBodyView, TabBodysView, TabEvents, TabUtils,
 				FilterManager, TranslationManager, DocumentsWidgetManager, jQuery) {
 
-			// AMP-21281 for IE there is a problem when the cache is enable, the tabs are not reloaded.
+			// AMP-21281 for IE there is a problem when the cache is enable, the tabs are n
 			if(/MSIE \d\d*/i.test(navigator.userAgent) || /rv:11.0/i.test(navigator.userAgent)) {
 				jQuery.ajaxSetup({
 					cache : false
 				});
-				app.ie-browser = true;
 			}
 			var tabContainer = jQuery('#tabs-container');
 			

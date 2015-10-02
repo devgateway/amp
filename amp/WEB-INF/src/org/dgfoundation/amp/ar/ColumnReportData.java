@@ -462,7 +462,7 @@ public class ColumnReportData extends ReportData<Column> {
 		{
 		    for (String name:ctbr) {
 		    	items.remove(this.getColumn(name));		
-		    	logger.info("Removed previously added column "+name+" for filtering purposes");
+		    	//logger.info("Removed previously added column "+name+" for filtering purposes");
 		    }
 		}
 		

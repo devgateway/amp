@@ -206,7 +206,7 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 		}
 		//the most important meta name, the source name (donor name, region name, component name)
 		String headMetaName=rsmd.getColumnName(4).toLowerCase();
-		if (this.getViewName().equals("v_proposed_cost") || tr_type == Constants.ANNUAL_PROPOSED_PROJECT_COST)
+		if (this.getViewName().equals("v_proposed_cost") || this.getViewName().equals("cached_v_proposed_cost") || tr_type == Constants.ANNUAL_PROPOSED_PROJECT_COST)
 			headMetaName = null; // no source name for v_proposed_cost
 
 //		String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE);
@@ -410,7 +410,7 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 		acc.getMetaData().add(mMs);	
 		acc.getMetaData().add(faMs);
 		acc.getMetaData().add(fmMs);
-		boolean headMetaCanBeNull = headMetaName == null || "v_pledges_funding_st".equals(this.getViewName());
+		boolean headMetaCanBeNull = headMetaName == null || "v_pledges_funding_st".equals(this.getViewName()) || "cached_v_pledges_funding_st".equals(this.getViewName());
 		if (headMeta != null)
 		{
 			acc.getMetaData().add(headMeta);
@@ -421,7 +421,7 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 				throw new RuntimeException("headMeta is null!");
 		}
 		
-		if(this.getViewName().equals("v_proposed_cost")) {
+		if (this.getViewName().equals("v_proposed_cost") || this.getViewName().equals("cached_v_proposed_cost")) {
 		    //used as a flag, no value needed
 		    MetaInfo costMs = this.getCachedMetaInfo(ArConstants.PROPOSED_COST, null);
 		    acc.getMetaData().add(costMs);

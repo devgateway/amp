@@ -74,8 +74,9 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 		// standar require way will generate side effects like grouping buttons
 		// stop working, the drawback is the client can not cache the jqgrid
 		// library.
+		var cacheEnabled = app.ie-browser? false: true;
 		jQuery.ajaxSetup({
-			cache : true
+			cache : cacheEnabled
 		});
 		jQuery.getScript("/TEMPLATE/ampTemplate/tabs/js/lib/one_place/jqgrid-all.js", function(data, textStatus, jqxhr) {
 			var rowNum = 0;

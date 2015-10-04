@@ -49,6 +49,8 @@ import org.dgfoundation.amp.utils.ConstantsUtil;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
@@ -528,14 +530,14 @@ public class ReportsUtil {
 	 */
 	public static final JsonBean validateReportConfig(JsonBean formParams,
 			boolean isCustom) {
-		List<String> errors = new ArrayList<String>();
+        List<ApiErrorMessage> errors = new ArrayList<ApiErrorMessage>();
 		// validate the name
 		if (isCustom && StringUtils.isBlank(formParams.getString(EPConstants.REPORT_NAME))) {
-			errors.add("report name not specified");
+            errors.add(ReportErrors.REPORT_NAME_REQUIRED);
 		}
 		
 		// validate the columns
-		String err = validateList("columns", (List<String>) formParams.get(EPConstants.ADD_COLUMNS),
+        ApiErrorMessage err = validateList("columns", (List<String>) formParams.get(EPConstants.ADD_COLUMNS),
 				MondrianReportUtils.getConfigurableColumns(), isCustom);
 		if (err != null) errors.add(err);
 		
@@ -558,42 +560,39 @@ public class ReportsUtil {
 		err = validateReportType(formParams);
 		if (err != null) errors.add(err);
 		
-		JsonBean result = null;
-		if (errors.size() > 0) {
-			result = new JsonBean();
-			result.set(EPConstants.ERROR, errors);
-		}
-		return result;
+		return ApiError.toError(errors);
 	}
 	
-	private static String validateList(String listName, List<String> values, 
+	private static ApiErrorMessage validateList(String listName, List<String> values,
 			Collection<String> allowedValues, boolean isMandatory) {
 		if (values == null || values.size() == 0) {
-			if (isMandatory)
-				return "no " + listName + " are specified";
+			if (isMandatory) {
+                return new ApiErrorMessage(ReportErrors.LIST_NAME_REQUIRED, listName);
+            }
 		} else {
 			List<String> copy = new ArrayList<String>(values);
 			copy.removeAll(allowedValues);
-			if (copy.size() > 0)
-				return "not allowed / invalid " + listName + " provided = " + copy.toString();
+			if (copy.size() > 0) {
+                return new ApiErrorMessage(ReportErrors.LIST_INVALID, listName + " provided = " + copy.toString());
+            }
 		}
 		return null;
 	}
 	
-	private static String validateReportType(JsonBean config) {
+	private static ApiErrorMessage validateReportType(JsonBean config) {
 		String reportType = EndpointUtils.getSingleValue(config, 
 				EPConstants.REPORT_TYPE, EPConstants.DEFAULT_REPORT_TYPE);
 		Integer reportTypeId = EPConstants.REPORT_TYPE_ID_MAP.get(reportType);
 		if (reportTypeId == null) {
-			return "Invalid report type = " + config.getString(EPConstants.REPORT_TYPE);
+			return new ApiErrorMessage(ReportErrors.REPORT_TYPE_INVALID, config.getString(EPConstants.REPORT_TYPE));
 		}
 		List<String> activityTypes = (List<String>) config.get(EPConstants.PROJECT_TYPE);
 		if (activityTypes != null) {
 			if (activityTypes.size() == 0) {
-				return "Invalid empty '" + EPConstants.PROJECT_TYPE + "'";
+				return ReportErrors.REPORT_TYPE_REQUIRED;
 			}
 			if (!EPConstants.REPORT_TYPE_ACTIVITY_MAP.get(reportType).containsAll(activityTypes)) {
-				return "Invalid list of activity types = " + activityTypes;
+				return new ApiErrorMessage(ReportErrors.ACTIVITY_TYPE_LIST_INVALID, activityTypes.toString());
 			}
 		}
 		return null;

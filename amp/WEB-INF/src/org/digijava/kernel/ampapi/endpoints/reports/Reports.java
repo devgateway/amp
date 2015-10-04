@@ -31,7 +31,6 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
@@ -170,12 +169,10 @@ public class Reports {
 	 * @see ReportsUtil#getReportResultByPage
 	 */
 	public final JsonBean getCustomReport(JsonBean formParams) {
-		List<String> errors = ReportsUtil.validateReportConfig(formParams, true);
-		if (errors.size() > 0) {
-			JsonBean result = new JsonBean();
-			result.set(EPConstants.ERROR, errors);
-			return result;
-		}
+        JsonBean result = ReportsUtil.validateReportConfig(formParams, true);
+        if (result != null) {
+            return result;
+        }
 		// we need reportId only to store the report result in cache
 		Long reportId = (long) formParams.getString(EPConstants.REPORT_NAME).hashCode();
 		formParams.set(EPConstants.IS_CUSTOM, true);

@@ -46,6 +46,8 @@ import org.dgfoundation.amp.utils.ConstantsUtil;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
@@ -422,15 +424,16 @@ public class ReportsUtil {
 	 * @param formParams input parameters used 
 	 * @return a list of errors
 	 */
-	public static final List<String> validateReportConfig(JsonBean formParams,
+	public static final JsonBean validateReportConfig(JsonBean formParams,
 			boolean isCustom) {
-		List<String> errors = new ArrayList<String>();
+		List<ApiErrorMessage> errors = new ArrayList<ApiErrorMessage>();
 		// validate the name
-		if (isCustom && StringUtils.isBlank(formParams.getString(EPConstants.REPORT_NAME)))
-			errors.add("report name not specified");
+		if (isCustom && StringUtils.isBlank(formParams.getString(EPConstants.REPORT_NAME))) {
+            errors.add(ReportErrors.REPORT_NAME_REQUIRED);
+        }
 		
 		// validate the columns
-		String err = validateList("columns", (List<String>) formParams.get(EPConstants.ADD_COLUMNS),
+        ApiErrorMessage err = validateList("columns", (List<String>) formParams.get(EPConstants.ADD_COLUMNS),
 				MondrianReportUtils.getConfigurableColumns(), isCustom);
 		if (err != null) errors.add(err);
 		
@@ -443,23 +446,25 @@ public class ReportsUtil {
 		err = validateList("hierarchies", (List<String>) formParams.get(EPConstants.ADD_HIERARCHIES),
 				(List<String>) formParams.get(EPConstants.ADD_COLUMNS), false);
 		if (err != null) errors.add(err);
-		
-		return errors;
+
+        return ApiError.toError(errors);
 	}
-	
-	private static String validateList(String listName, List<String> values, 
-			Collection<String> allowedValues, boolean isCustom) {
-		if (values == null || values.size() == 0) {
-			if (isCustom)
-				return "no " + listName + " are specified";
-		} else {
-			List<String> copy = new ArrayList<String>(values);
-			copy.removeAll(allowedValues);
-			if (copy.size() > 0)
-				return "not allowed / invalid " + listName + " provided = " + copy.toString();
-		}
-		return null;
-	}
+
+    private static ApiErrorMessage validateList(String listName, List<String> values,
+                                                Collection<String> allowedValues, boolean isMandatory) {
+        if (values == null || values.size() == 0) {
+            if (isMandatory) {
+                return new ApiErrorMessage(ReportErrors.LIST_NAME_REQUIRED, listName);
+            }
+        } else {
+            List<String> copy = new ArrayList<String>(values);
+            copy.removeAll(allowedValues);
+            if (copy.size() > 0) {
+                return new ApiErrorMessage(ReportErrors.LIST_INVALID, listName + " provided = " + copy.toString());
+            }
+        }
+        return null;
+    }
 	
 	private static void setOtherOptions(ReportSpecificationImpl spec, JsonBean formParams) {
 		Boolean doRowTotals = (Boolean) formParams.get(EPConstants.DO_ROW_TOTALS);

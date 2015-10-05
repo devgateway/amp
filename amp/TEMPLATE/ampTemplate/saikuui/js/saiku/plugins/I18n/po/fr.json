@@ -108,5 +108,6 @@
    "Edit query":"Modifier la requête",
    "Donor Funding":"Financement Donateur",
    "Table Mode":"Mode Tableau",
-   "Chart Mode":"Mode Graphique"
+   "Chart Mode":"Mode Graphique",
+   "Revert filters to state when opened.":"Rétablir les filtres à l'état initial."
 }

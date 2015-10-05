@@ -125,5 +125,6 @@
    "Edit query":"Editar consulta",
    "Donor Funding":"La financiación de los donantes",
    "Table Mode":"Modo Tabla",
-   "Chart Mode":"Modo Gráfico"
+   "Chart Mode":"Modo Gráfico",
+   "Revert filters to state when opened.":"Revertir filtros para el estado inicial."
 }

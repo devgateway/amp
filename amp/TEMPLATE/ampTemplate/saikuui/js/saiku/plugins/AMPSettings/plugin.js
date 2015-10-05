@@ -88,10 +88,10 @@ var AMPSettings = Backbone.View.extend({
 			add_button : function() {
 
 				this.settings_button = $(
-						'<a href="#amp_settings" class="amp_settings button i18n" title="AMP Settings">Settings</a>')
+						'<a href="#amp_settings" class="amp_settings button i18n" title="Settings">Settings</a>')
 						.css(
 								{
-									'width' : "44px"
+									'width' : "auto"
 								});
 
 				var $settings_li = $('<li></li>').append(

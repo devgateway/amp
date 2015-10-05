@@ -48,7 +48,7 @@ var AMPFilters = Backbone.View.extend({
 			add_button : function() {
 
 				this.filters_button = $(
-						'<a href="#amp_filters" class="amp_filters button i18n" title="AMP Filters">Filters</a>')
+						'<a href="#amp_filters" class="amp_filters button i18n" title="Filters">Filters</a>')
 						.css(
 								{
 									'width' : "30px"

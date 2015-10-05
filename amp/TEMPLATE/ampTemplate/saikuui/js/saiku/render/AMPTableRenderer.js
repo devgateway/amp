@@ -274,7 +274,7 @@ function buildTotalsRow(page) {
 		// This check is for those summarized reports that dont return any
 		// content.
 		if (page.pageArea.contents !== null && !isHiddenColumn(j)) {
-			var td = "<td class='data total'";
+			var td = "<td class='data total i18n'";
 			var auxTd = "";
 			var cell = page.pageArea.contents[this.headerMatrix[this.lastHeaderRow][j].hierarchicalName];
 			if (this.type === 'xlsx' || this.type === 'csv') {
@@ -388,7 +388,7 @@ function generateDataRows(page, options) {
 						// Trying something new here: show tooltip on the
 						// now empty "Hierarchy Value Totals" row.
 						if (cleanValue.text !== undefined) {
-							styleClass = " class='row_total tooltipped' data-subtotal='true' original-title='"
+							styleClass = " class='row_total tooltipped i18n' data-subtotal='true' original-title='"
 									+ cleanValue.text + "' ";
 						} else {
 							styleClass = " class='row_total' ";

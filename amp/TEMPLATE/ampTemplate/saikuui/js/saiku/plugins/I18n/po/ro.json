@@ -128,7 +128,8 @@
    "Refresh cube":"Reîncarcă cubul",
    "Reset query":"Reinițializare interogare",
    "Edit query":"Editare interogare",
-   "Donor Funding":"Finanțarea donator ",
+   "Donor Funding":"Finanțarea donator",
    "Table Mode":"Modul Tabel",
-   "Chart Mode":"Modul Grafic"
+   "Chart Mode":"Modul Grafic",
+   "Revert filters to state when opened.":"Revenire la filtrele din starea inițială."
 }

@@ -103,9 +103,11 @@ class ImportLocationsService {
                 }
                 activityGeneratedSQL << "/* Activity ID: ${activity} - AMP ID: ${id} */"
 
-                // 5) Decide if we are going to add locations up to ADM1 or ADM2.
+                // 5) Decide if we are going to add locations up to ADM1/ADM2/ADM3.
                 int ADMLevelToAdd = 0
-                if (locations?.find { it[5].equals("ADM2") }?.size() > 0) {
+                if (locations?.find { it[5].equals("ADM3") }?.size() > 0) {
+                    ADMLevelToAdd = 3
+                } else if (locations?.find { it[5].equals("ADM2") }?.size() > 0) {
                     ADMLevelToAdd = 2
                 } else if (locations?.find { it[5].equals("ADM1") }?.size() > 0) {
                     ADMLevelToAdd = 1
@@ -199,6 +201,9 @@ class ImportLocationsService {
                             break
                         case 2:
                             auxVal = implementationLocationAMD2Id
+                            break
+                        case 3:
+                            auxVal = implementationLocationAMD3Id
                             break
                         default:
                             throw new Exception("Wrong ADMLevelToAdd with value: " + ADMLevelToAdd)

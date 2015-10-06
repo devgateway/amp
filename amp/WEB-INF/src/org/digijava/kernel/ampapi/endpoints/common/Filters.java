@@ -496,6 +496,18 @@ public class Filters {
 		return getCategoryValue(CategoryConstants.ACTIVITY_BUDGET_KEY, ColumnConstants.ON_OFF_TREASURY_BUDGET);
 	}	
 	
+	/**
+	 * Funding status filter information 
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/fundingStatus/")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = true, id = "FundingStatus", columns = ColumnConstants.FUNDING_STATUS,name="Funding Status")
+	public JsonBean getFundingStatus() {
+		return getCategoryValue(CategoryConstants.FUNDING_STATUS_KEY,ColumnConstants.FUNDING_STATUS);
+	}
 	
 	/**
 	 * Return financing instruments 

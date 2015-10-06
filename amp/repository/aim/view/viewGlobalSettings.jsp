@@ -4,7 +4,7 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ page import="java.util.Map,java.util.List,java.util.ArrayList"%>
 
@@ -208,21 +208,33 @@ function createDateString(monthId, dayId) {
 	}
 }
 
+//oh $DEITY$.... what a code
 function saveAllSettings(){
     var allvalues='';
-    for (i=0;i < document.aimGlobalSettingsForm.length -1;i++) {
-		if (document.aimGlobalSettingsForm[i].globalId) {
-        	if (!validateCustomFields(document.aimGlobalSettingsForm[i])) {
+    for (i = 0;i < document.aimGlobalSettingsForm.length - 1 ; i++) {
+    	var gsElement = document.aimGlobalSettingsForm[i];
+   		if (window.warnOnBaseCurrencyChange && (gsElement.globalSettingsName) && (gsElement.globalSettingsName.value == 'Base Currency')) {
+   			var newValue = gsElement.gsfValue.value;
+   			var oldValue = window.oldGsValues[gsElement.globalSettingsName.value];
+   			if (newValue != oldValue) {
+   				if (!confirm('you are changing the Base Currency. You are going to lose all the inflation rate data if you enter the Currency Deflator window.\nAre you sure you want to change the base currency?')) 
+   					return false;
+   				}
+   			}
+    	//console.log('settings name = ' + document.aimGlobalSettingsForm[i].globalSettingsName.value + ', settings value = ' + document.aimGlobalSettingsForm[i].gsfValue.value);
+		if (gsElement.globalId) {
+        	if (!validateCustomFields(gsElement)) {
             	return false;
 			}
-            var id=document.aimGlobalSettingsForm[i].globalId.value;
-            if (typeof document.aimGlobalSettingsForm[i].gsfValue != "undefined") {
-            	var opt = document.aimGlobalSettingsForm[i].gsfValue;
-                var val=document.aimGlobalSettingsForm[i].gsfValue.value;
-                allvalues=allvalues+id+"="+val+"&";
+            var id = gsElement.globalId.value;
+            if (typeof gsElement.gsfValue != "undefined") {
+            	var opt = gsElement.gsfValue;
+                var val = gsElement.gsfValue.value;
+                allvalues = allvalues + id + "=" + val + "&";
+                console.log('allvalues = ' + allvalues);
 			} else {
             	// Code for multiselect.
-                var opt = document.aimGlobalSettingsForm[i].listOfValues;
+                var opt = gsElement.listOfValues;
                 var selected = new Array();
                 var index = 0;
                 var val = id + '=';
@@ -263,6 +275,24 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 <!-- End of Logo -->
 <html:hidden property="event" value="view"/>
 <h1 style="text-align:left;" class="admintitle">General Settings</h1>
+
+<logic:notEmpty name="aimGlobalSettingsForm" property="gsfCol">
+	<logic:iterate name="aimGlobalSettingsForm" property="gsfCol" id="globalSett" type="org.digijava.module.aim.dbentity.AmpGlobalSettings ">
+		<script type="text/javascript">
+			// haha Alexei, here is some nice global vars. I know you like them
+			if (typeof(window.oldGsValues) == 'undefined') {
+				window.oldGsValues = {};
+			}
+			window.oldGsValues['<c:out value="${globalSett.globalSettingsName}" />'] = '<c:out value="${globalSett.globalSettingsValue}" />';
+		</script>
+	</logic:iterate>
+</logic:notEmpty>
+<logic:greaterThan name="aimGlobalSettingsForm" property="relevantInflationRateEntries" value="0">
+	<script type="text/javascript">
+		window.warnOnBaseCurrencyChange = true;
+	</script>
+</logic:greaterThan>
+
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
 	<tr>
 		<td align=left valign="top" width=750px>
@@ -304,8 +334,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 									<jsp:useBean id="aimGlobalSettingsForm" class="org.digijava.module.aim.form.GlobalSettingsForm" scope="page"/>
 									<jsp:useBean id="sortedglobalSett" class="java.util.TreeMap" scope="page" />
 									<logic:notEmpty name="aimGlobalSettingsForm" property="gsfCol">
-		                            <logic:iterate name="aimGlobalSettingsForm" property="gsfCol" id="globalSett"
-		                            			   type="org.digijava.module.aim.dbentity.AmpGlobalSettings ">
+		                            <logic:iterate name="aimGlobalSettingsForm" property="gsfCol" id="globalSett" type="org.digijava.module.aim.dbentity.AmpGlobalSettings ">
 										<c:set var="key" scope="page"><digi:trn key="aim:Global:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn></c:set>
 										<jsp:useBean id="key" class="java.lang.String" scope="page"/>
 										<%

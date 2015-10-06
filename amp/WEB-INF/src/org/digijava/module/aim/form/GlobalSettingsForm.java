@@ -1,11 +1,16 @@
 package org.digijava.module.aim.form;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.struts.action.ActionForm;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
+import org.digijava.module.aim.dbentity.AmpInflationRate;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.KeyValue;
 public class GlobalSettingsForm extends ActionForm {
 	Collection<AmpGlobalSettings> gsfCol = null;
@@ -27,6 +32,7 @@ public class GlobalSettingsForm extends ActionForm {
 	
 	String newSettingName;
 	String newTableName;
+	
 	
 	private String allValues;
 	
@@ -72,12 +78,15 @@ public class GlobalSettingsForm extends ActionForm {
 	public void setGsfValue(String gsfValue) {
 		this.gsfValue = gsfValue;
 	}
+	
 	public Collection<AmpGlobalSettings> getGsfCol() {
-		return gsfCol;
+		return Collections.unmodifiableCollection(gsfCol);
 	}
+	
 	public void setGsfCol(Collection<AmpGlobalSettings> gsfCol) {
 		this.gsfCol = gsfCol;
 	}
+	
 	public String getCountryName() {
 		return countryName;
 	}
@@ -101,7 +110,8 @@ public class GlobalSettingsForm extends ActionForm {
 	
 	public void setPossibleValuesDictionary(String key, Map<String, String> dictionary) {
 		possibleValuesDictionary.put(key, dictionary);
-	}
+	} 
+	
 	public Map<String, String> getPossibleValuesDictionary(String key) {
 		return possibleValuesDictionary.get(key);
 	}
@@ -109,14 +119,39 @@ public class GlobalSettingsForm extends ActionForm {
 	public String getGlobalSettingType(String gsName) {
 		return globalSettingsType.get(gsName);
 	}
+	
 	public void setGlobalSettingType(String gsName, String gsType) {
-		
 		globalSettingsType.put(gsName, gsType);
 	}
+	
 	public String getIndexTab() {
 		return indexTab;
 	}
+	
 	public void setIndexTab(String indexTab) {
 		this.indexTab = indexTab;
+	}
+	
+	/**
+	 * returns the value of a GS by its given name
+	 * @param name
+	 * @return
+	 */
+	public String getGsValue(String name) {
+		for(AmpGlobalSettings ags:this.gsfCol) {
+			if (name.equals(ags.getGlobalSettingsName()))
+				return ags.getGlobalSettingsValue();
+		}
+		throw new RuntimeException(String.format("global settings with name '%s' not found", name));
+	}
+	
+	/**
+	 * called JSP-side
+	 * @return
+	 */
+	public long getRelevantInflationRateEntries() {
+		long res = PersistenceManager.getLong(PersistenceManager.getSession().createQuery("SELECT count(*) from " + AmpInflationRate.class.getName()).uniqueResult());
+		//boolean z = res > 0;
+		return res;
 	}
 }

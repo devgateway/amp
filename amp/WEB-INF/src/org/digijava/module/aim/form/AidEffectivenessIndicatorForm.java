@@ -1,12 +1,16 @@
 package org.digijava.module.aim.form;
 
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
-
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator;
+import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
+import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.digijava.module.translation.util.MultilingualInputFieldValues;
 
 /**
  * Form class is used to edit/add new indicators
@@ -30,8 +34,6 @@ public class AidEffectivenessIndicatorForm extends ActionForm {
     private String oldAmpIndicatorName;
 
     private List<AmpAidEffectivenessIndicatorOption> options = new ArrayList<AmpAidEffectivenessIndicatorOption>();
-
-
 
     public Long getAmpIndicatorId() {
         return ampIndicatorId;
@@ -101,5 +103,9 @@ public class AidEffectivenessIndicatorForm extends ActionForm {
         setMandatory(false);
         setActive(false);
     }
+    
+    public MultilingualInputFieldValues buildMultilingualInputInstance(String attributeName) {
+		return new MultilingualInputFieldValues(AmpAidEffectivenessIndicator.class, this.getAmpIndicatorId(), attributeName, null, null);
+	}
 
 }

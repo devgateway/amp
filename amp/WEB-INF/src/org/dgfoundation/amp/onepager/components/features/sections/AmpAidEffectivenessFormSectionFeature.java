@@ -1,11 +1,14 @@
 package org.dgfoundation.amp.onepager.components.features.sections;
 
 import java.io.Serializable;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.AbstractSingleSelectChoice;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -15,7 +18,9 @@ import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.fields.AmpFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpGroupFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator;
+import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
 import org.digijava.module.aim.util.AidEffectivenessIndicatorUtil;
 
 
@@ -99,15 +104,40 @@ public class AmpAidEffectivenessFormSectionFeature extends
                     }
                 };
 
+                final String indicatorName = indicator.getAmpIndicatorName();
                 if (AmpAidEffectivenessIndicator.IndicatorType.SELECT_LIST.ordinal() == indicator.getIndicatorType()) {
                     indicatorChoices = new AmpGroupFieldPanel<Long>(
                             "ampIndicatorOptionId", decoratorModel, options,
-                            indicator.getAmpIndicatorName(), false, false, renderer, indicator.getTooltipText());
+                            indicator.getFmName(), false, false, renderer, indicator.getTooltipText()) {
+                    	
+                    		@Override
+							protected void configureTranslatorLinks() {
+                    			this.setTitleTranslatorEnabled(false);
+                    			this.setTooltipTranslatorEnabled(false);
+                    		};
+                    		
+                    		@Override
+							protected void configureLabelText() {
+                    			this.setLabelText(indicatorName);
+                    		};
+                    	};
                     choiceContainer = (AbstractSingleSelectChoice)((AmpGroupFieldPanel)indicatorChoices).getChoiceContainer();
                 } else {
                     indicatorChoices = new AmpSelectFieldPanel <Long>(
                             "ampIndicatorOptionId", decoratorModel, options,
-                            indicator.getAmpIndicatorName(), false, false, renderer, false);
+                            indicator.getFmName(), false, false, renderer, false) {
+	                    	
+                    		@Override
+                    		protected void configureTranslatorLinks() {
+                    			this.setTitleTranslatorEnabled(false);
+                    			this.setTooltipTranslatorEnabled(false);
+	                		};
+	                		
+	                		@Override
+							protected void configureLabelText() {
+                    			this.setLabelText(indicatorName);
+                    		};
+                    };
 
                     choiceContainer = (AbstractSingleSelectChoice)((AmpSelectFieldPanel)indicatorChoices).getChoiceContainer();
                 }
@@ -118,10 +148,9 @@ public class AmpAidEffectivenessFormSectionFeature extends
                 } else {
                     choiceContainer.setNullValid(true);
                 }
-
-
-
+                
                 indicatorChoices.setTitleTooltip(new Label("tooltip", indicator.getTooltipText()));
+
                 componentOuter.add(indicatorChoices);
             }
 

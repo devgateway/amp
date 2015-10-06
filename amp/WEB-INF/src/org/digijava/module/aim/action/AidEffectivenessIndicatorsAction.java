@@ -2,13 +2,17 @@ package org.digijava.module.aim.action;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.*;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
 import org.digijava.module.aim.form.AidEffectivenessIndicatorForm;
 import org.digijava.module.aim.util.AidEffectivenessIndicatorUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.digijava.module.translation.util.MultilingualInputFieldValues;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -21,6 +25,7 @@ import java.util.Set;
 public class AidEffectivenessIndicatorsAction extends Action {
 
     private static Logger logger = Logger.getLogger(AidEffectivenessIndicatorsAction.class);
+    public final static String MULTILINGUAL_AID_PREFIX = "multilingual_aid";
 
     @Override
     public ActionForward execute(ActionMapping mapping,
@@ -41,7 +46,8 @@ public class AidEffectivenessIndicatorsAction extends Action {
             executeSearch(request, indicatorForm);
             return mapping.findForward("list");
         }
-
+        request.setAttribute(MULTILINGUAL_AID_PREFIX + "_tooltip", indicatorForm.buildMultilingualInputInstance("tooltipText"));
+        request.setAttribute(MULTILINGUAL_AID_PREFIX + "_name", indicatorForm.buildMultilingualInputInstance("ampIndicatorName"));
         // String switches already work in java7
         switch(actionParam) {
             case "search" :
@@ -122,6 +128,7 @@ public class AidEffectivenessIndicatorsAction extends Action {
                 return mapping.findForward("edit");
             case "save":
                 if (validateData(indicatorForm, request).size() > 0) {
+                	
                     return mapping.findForward("error");
                 }
                 // update
@@ -132,16 +139,35 @@ public class AidEffectivenessIndicatorsAction extends Action {
                         return mapping.findForward("error");
                     }
                     indicator = formToEntity(indicatorForm, indicator);
-                    if (indicatorForm.getOldAmpIndicatorName() != null && ! "".equals(indicatorForm.getOldAmpIndicatorName())) {
-                        AidEffectivenessIndicatorUtil.updateModulesVisibility(indicator, indicatorForm.getOldAmpIndicatorName());
-                    }
                 } else { // create
                     indicator = formToEntity(indicatorForm, null);
                 }
+                
+                if(ContentTranslationUtil.multilingualIsEnabled()) {
+                	indicator.setTooltipText(indicatorForm.getTooltipText());  
+                	indicator.setAmpIndicatorName(indicatorForm.getAmpIndicatorName());  
+	          	} else {
+	          		String tooltipText = MultilingualInputFieldValues.readParameter("AmpAidEffectivenessIndicator_tooltipText_" + TLSUtils.getSite().getDefaultLanguage().getCode(), "AmpAidEffectivenessIndicator_tooltipText", request).right;
+	          		indicator.setTooltipText(tooltipText);
+	          		
+	          		String indicatorName = MultilingualInputFieldValues.readParameter("AmpAidEffectivenessIndicator_ampIndicatorName_" + TLSUtils.getSite().getDefaultLanguage().getCode(), "AmpAidEffectivenessIndicator_ampIndicatorName", request).right;
+	          		indicator.setAmpIndicatorName(indicatorName);
+	          	}
+                
                 AidEffectivenessIndicatorUtil.saveIndicator(indicator);
+                
+                if (ContentTranslationUtil.multilingualIsEnabled()) {
+                	MultilingualInputFieldValues.serialize(indicator, "tooltipText", null, null, request);
+                	MultilingualInputFieldValues.serialize(indicator, "ampIndicatorName", null, null, request);
+          	    }
+                
+                if (indicatorForm.getOldAmpIndicatorName() != null && ! "".equals(indicatorForm.getOldAmpIndicatorName())) {
+                    AidEffectivenessIndicatorUtil.updateModulesVisibility(indicator, indicatorForm.getOldAmpIndicatorName());
+                }
+                
                 // AMP-19893. Synch FM tree with the active/inactive flag
                 if (indicator.getActive()) {
-                    AidEffectivenessIndicatorUtil.createModulesVisibility(indicator.getAmpIndicatorName());
+                    AidEffectivenessIndicatorUtil.createModulesVisibility(indicator.getFmName());
                 } else {
                     AidEffectivenessIndicatorUtil.cleanUpModulesVisibility(indicator);
                 }
@@ -163,7 +189,7 @@ public class AidEffectivenessIndicatorsAction extends Action {
                     return mapping.findForward("search");
                 }
 
-                if (! AidEffectivenessIndicatorUtil.hasIndicatorActivities(indicatorId)) {
+                if (!AidEffectivenessIndicatorUtil.hasIndicatorActivities(indicatorId)) {
                     AidEffectivenessIndicatorUtil.deleteIndicator(indicatorId);
                 }  else {
                     handleLocalException(request, null, "error.admin.aidEffectivenessIndicator.hasRelatedActivities",
@@ -245,7 +271,7 @@ public class AidEffectivenessIndicatorsAction extends Action {
             AidEffectivenessIndicatorForm form) {
 
         form.setAmpIndicatorName(entity.getAmpIndicatorName());
-        form.setOldAmpIndicatorName(entity.getAmpIndicatorName());
+        form.setOldAmpIndicatorName(entity.getFmName());
         form.setTooltipText(entity.getTooltipText());
         form.setMandatory(entity.getMandatory());
         form.setActive(entity.getActive());
@@ -272,9 +298,9 @@ public class AidEffectivenessIndicatorsAction extends Action {
 
     public ActionMessages validateData(AidEffectivenessIndicatorForm indicatorForm, HttpServletRequest request) {
         ActionMessages errors = new ActionMessages();
-        if (indicatorForm.getAmpIndicatorName() == null || "".equals(indicatorForm.getAmpIndicatorName())) {
-            errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.admin.aidEffectivenessIndicator.indicatorName.required"));
-        }
+//        if (indicatorForm.getAmpIndicatorName() == null || "".equals(indicatorForm.getAmpIndicatorName())) {
+//            errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.admin.aidEffectivenessIndicator.indicatorName.required"));
+//        }
 
         if (indicatorForm.getIndicatorType() == -1) {
             errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.admin.aidEffectivenessIndicator.indicatorType.required"));

@@ -32,14 +32,15 @@ public class TrnLabel extends Label {
 	 */
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(TrnLabel.class);
+
 	private static final Behavior LABEL_TRANSLATOR_BEHAVIOR = new LabelTranslatorBehaviour();
 	private static final Behavior LABEL_TRANSLATOR_STYLE = new AttributeAppender("style", new Model<String>("text-decoration: underline; color: #0CAD0C;"), "");
 
 	private String key;
 	private String label;
 	private boolean isTolltip;
-
 	
+	protected boolean translatable = true;
 
 	public TrnLabel(String id, String label) {
 		this(id, label,TranslatorWorker.generateTrnKey(label),false);
@@ -72,7 +73,7 @@ public class TrnLabel extends Label {
 	protected void onConfigure() {
 		super.onConfigure();
 		trnLabel();
-		if (TranslatorUtil.isTranslatorMode(getSession())){
+		if (TranslatorUtil.isTranslatorMode(getSession()) && translatable){
 			if (key == null)
 				throw new IllegalArgumentException("Parameter \"key\" can't be null!");
 			this.add(new AttributeModifier("key", key));
@@ -87,12 +88,12 @@ public class TrnLabel extends Label {
 	}
 	
 	private void trnLabel(){
-		if (TranslatorUtil.isTranslatorMode(getSession())){
+		if (TranslatorUtil.isTranslatorMode(getSession()) && isTranslatable()){
 			super.setOutputMarkupId(true);
 			this.add(LABEL_TRANSLATOR_BEHAVIOR);
 			this.add(LABEL_TRANSLATOR_STYLE);
 		}
-		else{
+		else {
 			List<? extends Behavior> list = this.getBehaviors();
 			Iterator<? extends Behavior> it = list.iterator();
 			while (it.hasNext()) {
@@ -146,4 +147,11 @@ public class TrnLabel extends Label {
 		return new TrnLabel(id, label);
 	}
 	
+	public boolean isTranslatable() {
+		return translatable;
+	}
+	
+	public void setTranslatable(boolean translatable) {
+		this.translatable = translatable;
+	}
 }

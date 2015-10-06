@@ -263,7 +263,7 @@ public class MultilingualInputFieldValues
 		
 		if (!translations.containsKey(baseLanguage)){ // user did not enter a value in base language
 			if (baseLanguageTranslation == null){
-				logger.error(String.format("while trying to translate an entity of class %s, id = %d, property= % s, no baseLanguage found, putting 'dummy'", clazz.getName(), entityId, propertyName), new RuntimeException());
+				logger.warn(String.format("while trying to translate an entity of class %s, id = %d, property= %s, no baseLanguage found, putting 'dummy'", clazz.getName(), entityId, propertyName), new RuntimeException());
 			}
 			translations.put(baseLanguage, new AmpContentTranslation(clazz.getName(), entityId, propertyName, baseLanguage, baseLanguageTranslation));
 		}
@@ -314,16 +314,18 @@ public class MultilingualInputFieldValues
 		
 		// overwrite property and update entity
 		String translationToSet = translations.get("currentLanguage").getTranslation();
-		ContentTranslationUtil.setProperty(obj, propertyName, translationToSet);
-		session.saveOrUpdate(obj);
-		session.flush();
+		if (translationToSet != null) {
+			ContentTranslationUtil.setProperty(obj, propertyName, translationToSet);
+			session.saveOrUpdate(obj);
+			session.flush();
 		
-		// prepare for writing trn in the DB
-		ContentTranslationUtil.evictEntityFromCache(obj);
-		FieldTranslationPack ftp = new FieldTranslationPack(obj.getClass().getName(), propertyName);
-		for(AmpContentTranslation trn:translations.values())
-			ftp.add(trn);
-		ContentTranslationUtil.saveFieldTranslations(entityId, ftp);
+			// prepare for writing trn in the DB
+			ContentTranslationUtil.evictEntityFromCache(obj);
+			FieldTranslationPack ftp = new FieldTranslationPack(obj.getClass().getName(), propertyName);
+			for(AmpContentTranslation trn:translations.values())
+				ftp.add(trn);
+			ContentTranslationUtil.saveFieldTranslations(entityId, ftp);
+		}
 		//ContentTranslationUtil.saveOrUpdateContentTrns(translations.values());
 	}
 	

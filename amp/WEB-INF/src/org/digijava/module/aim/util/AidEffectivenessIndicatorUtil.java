@@ -1,15 +1,25 @@
 package org.digijava.module.aim.util;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-
-import java.util.*;
 
 /**
  * List of utility methods to operate with effectiveness indicators
@@ -148,6 +158,7 @@ public class AidEffectivenessIndicatorUtil {
      */
     public static List<AmpAidEffectivenessIndicator> getAllActiveIndicators() {
         Session session = PersistenceManager.getSession();
+        //String tooltip = InternationalizedModelDescription.getForProperty(AmpAidEffectivenessIndicator.class, "tooltipText").getSQLFunctionCall("ind.tooltip_text");
         String queryStr = "select ind from " + AmpAidEffectivenessIndicator.class.getName()
                 + " ind where active = true order by ampIndicatorId";
         Query query = session.createQuery(queryStr);
@@ -167,13 +178,13 @@ public class AidEffectivenessIndicatorUtil {
         String queryStr = "delete from amp_modules_templates where module in " +
                 "(select id from amp_modules_visibility where name = :name)";
         Query query = session.createSQLQuery(queryStr);
-        query.setString("name", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + indicator.getAmpIndicatorName());
+        query.setString("name", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + indicator.getFmName());
         query.executeUpdate();
 
 
         queryStr = "delete from amp_modules_visibility where name = :name";
         query = session.createSQLQuery(queryStr);
-        query.setString("name", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + indicator.getAmpIndicatorName());
+        query.setString("name", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + indicator.getFmName());
         query.executeUpdate();
     }
 
@@ -216,7 +227,7 @@ public class AidEffectivenessIndicatorUtil {
 
         String queryStr = "update amp_modules_visibility set name = :name where name = :oldName";
         Query query = session.createSQLQuery(queryStr);
-        query.setString("name", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + indicator.getAmpIndicatorName());
+        query.setString("name", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX +  indicator.getFmName());
         query.setString("oldName", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + oldIndicatorName);
         query.executeUpdate();
     }

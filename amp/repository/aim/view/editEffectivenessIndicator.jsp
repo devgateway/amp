@@ -12,7 +12,10 @@
 
 <%@ page import="org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator" %>
 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css"> 
 <script type="text/javascript" src='<digi:file src="module/aim/scripts/table_utils.js"/>'>.</script>
+<script type="text/javascript" src="/repository/aim/view/multilingual/multilingual_scripts.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 <script type="text/javascript">
     var optionsTableCounter = 0;
 </script>
@@ -58,7 +61,9 @@
                 <digi:trn>Indicator Name</digi:trn><font color="red">*</font>:
             </td>
             <td>
-                <html:text property="ampIndicatorName" styleId="editAmpIndicatorName" size="50" maxlength="250"/>
+                <jsp:include page="/repository/aim/view/multilingual/multilingualFieldEntry.jsp">
+					<jsp:param name="attr_name" value="multilingual_aid_name" />
+				</jsp:include>         
             </td>
 
 
@@ -76,7 +81,9 @@
                 <digi:trn>Indicator Tooltip</digi:trn>:
             </td>
             <td>
-                <html:textarea property="tooltipText" styleId="editAmpIndicatorTitle" rows="5" cols="50" />
+            	<jsp:include page="/repository/aim/view/multilingual/multilingualFieldEntry.jsp">
+							<jsp:param name="attr_name" value="multilingual_aid_tooltip" />
+				</jsp:include>         
             </td>
 
             <td>
@@ -171,7 +178,7 @@
 
             <logic:iterate name="aidEffectivenessIndicatorsForm" property="options" id="option" indexId="idx" type="org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption">
                 <script type="text/javascript">
-                    var optionsTableCounter = ++;
+                    optionsTableCounter++;
                 </script>
 
                 <html:hidden property="options[${idx}].ampIndicatorOptionId" />
@@ -196,7 +203,7 @@
     </div>
 
     <div>
-        <html:submit styleClass="dr-menu"><digi:trn key="btn:save">Save</digi:trn></html:submit>
+        <html:submit styleClass="dr-menu" onclick="return validateSaveAidIndicator()"><digi:trn key="btn:save">Save</digi:trn></html:submit>
         &nbsp; &nbsp;
         <html:submit styleClass="dr-menu" onclick="cancelSave(); return false;">
             <digi:trn key="btn:cancel">Cancel</digi:trn>
@@ -206,6 +213,23 @@
 </digi:form>
 
 <script type="text/javascript">
+	function validateSaveAidIndicator() {
+	    var nameEntered = check_multilingual_value_entered('AmpAidEffectivenessIndicator_ampIndicatorName');
+	    if (!nameEntered) {
+	        alert('<digi:trn jsFriendly="true">Please enter name for Indicator.</digi:trn>');
+	        return false;
+	    }
+	    
+	    var indicatorType = document.aimAddOrgForm.indicatorType.value;
+        if (ampOrgTypeId == '-1' || ampOrgTypeId == null) {
+            alert('<digi:trn  jsFriendly="true">Please Select Indicator Type.</digi:trn>');
+            document.aimAddOrgForm.ampOrgTypeId.focus();
+            return false;
+        }
+	    
+	    return true;
+    }
+
     function cancelSave() {
         var editForm = document.getElementById("editForm");
         editForm.elements["actionParam"].value = "list";

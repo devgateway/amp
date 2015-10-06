@@ -3,13 +3,22 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.List;
 
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.translation.util.ContentTranslationUtil;
+
 /**
  * The Amp Aid Effectiveness Indicator domain class
  */
+@TranslatableClass (displayName = "Aid Effectiveness Indicator")
 public class AmpAidEffectivenessIndicator implements Serializable {
 
     private Long ampIndicatorId;
+    
+    @TranslatableField
     private String ampIndicatorName;
+    
+    @TranslatableField
     private String tooltipText;
 
     // default is true
@@ -26,8 +35,6 @@ public class AmpAidEffectivenessIndicator implements Serializable {
     public static enum IndicatorType {
         DROPDOWN_LIST, SELECT_LIST  // 0 - dropdown list, 1 - selectbox list
     }
-
-
 
     public Long getAmpIndicatorId() {
         return ampIndicatorId;
@@ -101,5 +108,16 @@ public class AmpAidEffectivenessIndicator implements Serializable {
     @Override
     public int hashCode() {
         return ampIndicatorId != null ? ampIndicatorId.hashCode() : 0;
+    }
+    
+    public String getFmName() {
+    	String fmName = ampIndicatorName;
+    	
+    	 if(ContentTranslationUtil.multilingualIsEnabled() && ampIndicatorId != null) {
+         	String baseLanguage = ContentTranslationUtil.getBaseLanguage();
+         	fmName = ContentTranslationUtil.loadFieldTranslationInLocale(AmpAidEffectivenessIndicator.class.getName(), ampIndicatorId, "ampIndicatorName", baseLanguage);
+         }
+    	
+    	return fmName;
     }
 }

@@ -37,6 +37,8 @@ import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.kernel.translator.TranslatorWorker;
 
+import clover.org.apache.commons.lang.StringUtils;
+
 /**
  * Component to be extended directly by AMP Field Types. An AMP field contains a
  * label with the field name, in bold, an immediately below the real form
@@ -61,6 +63,9 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	protected boolean hideLabel;
 	protected boolean showTooltipIfLabelHidden;
 	protected boolean showTranslatorIconIfLabelHidden;
+	protected boolean tooltipTranslatorEnabled = true;
+	protected boolean titleTranslatorEnabled = true;
+	protected String labelText;
 
 	/**
 	 * @see #addFormComponent(FormComponent)
@@ -68,7 +73,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	 */
 	protected void initFormComponent(FormComponent<?> fc) {
 		formComponent = fc;
-		fc.setLabel(new Model<String>(TranslatorUtil.getTranslatedText(fmName)));
+		fc.setLabel(new Model<String>(TranslatorUtil.getTranslatedText(labelText)));
 		fc.add(visualErrorBehavior());
 
 		if (!ajaxFormChoiceComponentUpdatingBehaviorAppliesTo(fc)) {
@@ -264,13 +269,21 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		boolean showTooltipEditor = false;
         boolean showTitleEditor = false;
 		this.showTooltipIfLabelHidden=showTooltipIfLabelHidden;
+		
+		configureLabelText();
+		configureTranslatorLinks();
+		
+		if (StringUtils.isEmpty(labelText)) {
+			labelText = fmName;
+		}
+		
 		//we show the edittooltip icon only if we are in translator mode and
 		//the label is not hidden or we choose to show it even if hidden 
-		if (TranslatorUtil.isTranslatorMode(getSession()) && (!hideLabel || showTooltipIfLabelHidden )) {
+		if (TranslatorUtil.isTranslatorMode(getSession()) && (!hideLabel || showTooltipIfLabelHidden ) && tooltipTranslatorEnabled) {
 			showTooltipEditor = true;
 		}
 
-		if ((TranslatorUtil.isTranslatorMode(getSession()) && (!hideLabel || showTranslatorIconIfLabelHidden))) {
+		if ((TranslatorUtil.isTranslatorMode(getSession()) && (!hideLabel || showTranslatorIconIfLabelHidden)) && titleTranslatorEnabled) {
             showTitleEditor = true;
         }
 
@@ -307,7 +320,6 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
         editTitleLink.add(new AttributeModifier("data-ot", TranslatorWorker.translateText("Please click to edit field label")));
         add(editTitleLink);
 
-
 		//for the edit of the tooltip
 
 		if(!"".equals(aditionalTooltipKey) && aditionalTooltipKey.trim().length()>0){
@@ -320,7 +332,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 			 */
 			private static final long serialVersionUID = 7873518570342980535L;
 			private Behavior titleBehavior = new AttributeModifier("title","Original field name: " + fmName);
-
+			
 			@Override
 			protected void onConfigure() {
 				super.onConfigure();
@@ -365,12 +377,13 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
         
 		
 
-		titleLabel = new TrnLabel("fieldLabel", fmName) {
+		titleLabel = new TrnLabel("fieldLabel", labelText) {
 			private Behavior titleBehavior = new AttributeModifier("title",
-					"Original field name: " + fmName);
+					"Original field name: " + labelText);
 
 			@Override
 			protected void onConfigure() {
+				setTranslatable(titleTranslatorEnabled); // if a field should be translatable or not in TranslationMode()
 				super.onConfigure();
 				if (((AmpAuthWebSession) getSession()).isFmMode()) {
 					titleLabel.add(titleBehavior);
@@ -396,6 +409,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		newLine.setVisible(!hideNewLine);
 		add(newLine);
 	}
+	
 	/**
 	 * on standard fields we add the tooltip to the label if you need it added on the component itself please override these method
 	 * please see {@link AmpButtonField} or {@link AmpAjaxLinkField}
@@ -408,7 +422,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 			tooltipIcon.setVisible(true);
 		}
 	}
-
+	
 	public AmpFieldPanel(String id, IModel<T> model, String fmName,
 			boolean hideLabel, boolean hideNewLine) {
 		this(id,  model,false,"", fmName,hideLabel, hideNewLine,"",false);
@@ -449,5 +463,30 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		return "spawnEditBox('"+ titleLabel.getMarkupId() +"');";
 	}
 	
+	public boolean isTooltipTranslatorEnabled() {
+		return tooltipTranslatorEnabled;
+	}
+
+	public void setTooltipTranslatorEnabled(boolean tooltipTranslatorEnabled) {
+		this.tooltipTranslatorEnabled = tooltipTranslatorEnabled;
+	}
+
+	public boolean isTitleTranslatorEnabled() {
+		return titleTranslatorEnabled;
+	}
+
+	public void setTitleTranslatorEnabled(boolean titleTranslatorEnabled) {
+		this.titleTranslatorEnabled = titleTranslatorEnabled;
+	}
+	
+	public void setLabelText(String labelText) {
+		this.labelText = labelText;
+	}
+	
+	protected void configureTranslatorLinks(){ 
+	}
+	
+	protected void configureLabelText(){
+	}
 	
 }

@@ -7,21 +7,29 @@ package org.digijava.module.aim.helper;
 
 import java.awt.Color;
 import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
@@ -52,6 +60,8 @@ import org.jfree.chart.servlet.ServletUtilities;
 import org.jfree.chart.urls.StandardCategoryURLGenerator;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
+
+
 
 public class ChartGenerator {
 
@@ -285,42 +295,6 @@ public class ChartGenerator {
 				}
 
 
-
-
-//				while (itr.hasNext()) {
-//					AmpIndicatorRiskRatings risk=itr.next();
-//					//MEIndicatorRisk risk = (MEIndicatorRisk) itr.next();
-//
-//					switch (risk.getRatingValue()) {
-//					case Constants.HIGHLY_SATISFACTORY:
-//						seriesColors[index++] = Constants.HIGHLY_SATISFACTORY_CLR;
-//						break;
-//					case Constants.VERY_SATISFACTORY:
-//						seriesColors[index++] = Constants.VERY_SATISFACTORY_CLR;
-//						break;
-//					case Constants.SATISFACTORY:
-//						seriesColors[index++] = Constants.SATISFACTORY_CLR;
-//						break;
-//					case Constants.UNSATISFACTORY:
-//						seriesColors[index++] = Constants.UNSATISFACTORY_CLR;
-//						break;
-//					case Constants.VERY_UNSATISFACTORY:
-//						seriesColors[index++] = Constants.VERY_UNSATISFACTORY_CLR;
-//						break;
-//					case Constants.HIGHLY_UNSATISFACTORY:
-//						seriesColors[index++] = Constants.HIGHLY_UNSATISFACTORY_CLR;
-//					}
-//
-//					ds.setValue("High",-1);
-//					ds.setValue("hehee",0);
-//					ds.setValue("Low",1);
-//					if (risk.getRatingValue()<0){
-//						ds.setValue(risk.getTranslatedRatingName(),risk.getRatingValue());
-//					}else{
-//						ds.setValue(risk.getTranslatedRatingName(),risk.getRatingValue());
-//					}
-//				}
-
 				JFreeChart chart = ChartFactory.createPieChart(
 						cp.getTitle(), // title
 						ds,		// dataset
@@ -353,87 +327,33 @@ public class ChartGenerator {
 		return fileName;
 	}
 
+	private static String generateMapTag(String mapTag, Collection data) throws Exception {
+		@SuppressWarnings("unchecked")
+		Map<String, Long> indicatorNamesToIds = IndicatorUtil.getIndicatorNamesToIds((Set<IndicatorActivity>)data);
+		Pattern pat = Pattern.compile("ind=.*?\"");
+		
+		StringBuilder bld = new StringBuilder();
+		String[] splits = pat.split(mapTag);
+		Matcher m = pat.matcher(mapTag);
+		for (String split : splits) {
+			bld.append(split);
+			if (m.find()) {
+				//skip the characters "ind=
+				String matched = mapTag.substring(m.start() + "ind=".length(), m.end() - "\"".length());
+				bld.append("ind=").append(indicatorNamesToIds.get(URLDecoder.decode(matched, "UTF-8"))).append("\"");
+			}
+		}
+		return bld.toString();
+	}
+	
 	public static String generatePerformanceChart(ChartParams cp,HttpServletRequest request) {
 		String fileName = null;
-		Double baseValue=null,actualValue=null,targetValue=null;
-		String baseValueType=null,targetValueType=null,actualValueType=null;
-		DefaultCategoryDataset ds = new DefaultCategoryDataset();
 		try {
-			Collection data=cp.getData();
-			if(data!=null)
-			for (Iterator iterator = data.iterator(); iterator.hasNext();) {
-				IndicatorActivity connection = (IndicatorActivity) iterator.next();
-
-				Collection<AmpIndicatorValue> col = connection.getValues();
-				if (col != null && col.size() > 0) {
-					String indicatorName=connection.getIndicator().getName();
-
-					Iterator<AmpIndicatorValue> itr = col.iterator();
-					boolean revisedAlreadyParsed=false;
-					while (itr.hasNext()) {
-						AmpIndicatorValue ampIndValue = itr.next();
-						if (ampIndValue.getValueType() == AmpIndicatorValue.BASE) {
-							baseValue = ampIndValue.getValue();
-							baseValueType =  "base".toLowerCase();
-							baseValueType = baseValueType.replaceAll(" ", "");
-							String msg = TranslatorWorker.translateText(baseValueType);
-							baseValueType=msg;
-						} else if (ampIndValue.getValueType() == AmpIndicatorValue.ACTUAL) {
-							actualValue = ampIndValue.getValue();
-							actualValueType = "actual".toLowerCase();
-							actualValueType = actualValueType.replaceAll(" ", "");
-							  String msg = TranslatorWorker.translateText(actualValueType);
-							actualValueType=msg;
-						} else if (ampIndValue.getValueType() == AmpIndicatorValue.TARGET && !revisedAlreadyParsed) {
-							targetValue = ampIndValue.getValue();
-							targetValueType = "target".toLowerCase();
-							targetValueType = targetValueType.replaceAll(" ", "");
-							  String msg = TranslatorWorker.translateText(targetValueType);
-							targetValueType=msg;
-
-						} else if (ampIndValue.getValueType() == AmpIndicatorValue.REVISED&&ampIndValue.getValue()!=null) {
-							targetValue = ampIndValue.getValue();
-							targetValueType =  "target".toLowerCase();
-							targetValueType = targetValueType.replaceAll(" ", "");
-							 String msg = TranslatorWorker.translateText(targetValueType);
-							targetValueType=msg;
-							revisedAlreadyParsed=true;//this is used to not overwrite revised with target.
-						}
-					}
-					if (baseValue<=actualValue&& actualValue<=targetValue){
-						actualValue=actualValue-baseValue;
-						targetValue=targetValue-baseValue;
-						actualValue=(100f*actualValue)/targetValue;
-						targetValue=100-actualValue;
-					} else {
-						double result = 0;
-						baseValue -= targetValue;
-			            actualValue -= targetValue;
-			            targetValue = baseValue;
-			            if (baseValue != 0 && actualValue != 0) {
-			                result = actualValue / (baseValue / 100);
-			                actualValue=100-result;
-			                targetValue=100 - actualValue;
-			            }
-						//ds.addValue(baseValue,baseValueType,indicatorName);
-					}
-					ds.addValue(actualValue,actualValueType,indicatorName);
-					ds.addValue(targetValue,targetValueType,indicatorName);
-
-				}
-			}
-
-
-			JFreeChart chart = ChartFactory.createStackedBarChart(
-					cp.getTitle(), // title
-					null,	// X-axis label
-					null,	// Y-axis label
-					ds,		// dataset
-					PlotOrientation.VERTICAL,	// Orientation
-					true,	// show legend
-					false,	// show tooltips
-					false);	// show urls
-			chart.setBackgroundPaint(Color.WHITE);
+			Site site = RequestUtils.getSite(request);
+			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+			Long siteId = site.getId();
+			String locale = navigationLanguage.getCode();
+			JFreeChart chart = generatePerformanceChart(cp, siteId, locale);
 
 			CategoryPlot plot = (CategoryPlot) chart.getPlot();
 
@@ -441,23 +361,10 @@ public class ChartGenerator {
 			//r1.setSeriesPaint(0,Constants.BASE_VAL_CLR);
 			r1.setSeriesPaint(0,Constants.ACTUAL_VAL_CLR);
 			r1.setSeriesPaint(1,Constants.TARGET_VAL_CLR);
-
-			/*
-			if (includeBaseLine) {
-				r1.setSeriesPaint(0,Constants.BASE_VAL_CLR);
-				r1.setSeriesPaint(1,Constants.ACTUAL_VAL_CLR);
-				r1.setSeriesPaint(2,Constants.TARGET_VAL_CLR);
-			} else {
-				r1.setSeriesPaint(0,Constants.ACTUAL_VAL_CLR);
-				r1.setSeriesPaint(1,Constants.TARGET_VAL_CLR);
-			}*/
-
-
 			String url = cp.getUrl();
 			if (url != null && url.trim().length() > 0) {
 				StandardCategoryURLGenerator cUrl1 = new StandardCategoryURLGenerator(url,"series","ind");
-//				CategoryURLGenerator cUrl1 = new CategoryUrlGen(url);
-				r1.setItemURLGenerator(cUrl1);
+				r1.setBaseItemURLGenerator(cUrl1);
 			}
 
 			plot.setRenderer(r1);
@@ -470,91 +377,104 @@ public class ChartGenerator {
 			ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
 			fileName = ServletUtilities.saveChartAsPNG(chart,cp.getChartWidth(),
 					cp.getChartHeight(),info,cp.getSession());
-			ChartUtilities.writeImageMap(cp.getWriter(),fileName,info,false);
+			
+			StringWriter strW = new StringWriter();
+			PrintWriter prW = new PrintWriter(strW);
+			ChartUtilities.writeImageMap(prW,fileName,info,false);
+			String mapTag = strW.toString();
+			cp.getWriter().write(generateMapTag(mapTag, cp.getData()));
 			cp.getWriter().flush();
-
-
-
-
 		} catch (Exception e) {
 			logger.error("Exception from generatePerformanceChart() :" + e.getMessage());
 			e.printStackTrace();
 		}
  		return fileName;
 	}
+	
+	static  class PairValue {
+		public Double value;
+		public String type; 
+		public PairValue(Double value, String type) {
+			this.value = value;
+			this.type = type;
+		}
+	}
+	
+	static class PerformanceChartValues {
+		public PairValue baseValue;
+		public PairValue actualValue;
+		public PairValue targetValue;
+		public PerformanceChartValues(PairValue baseValue, PairValue actualValue, PairValue targetValue) {
+			this.baseValue = baseValue;
+			this.actualValue = actualValue;
+			this.targetValue = targetValue;
+		}
+	}
+	
+	private static PairValue getSmallStuff(AmpIndicatorValue ampIndValue, String type, 
+			Long siteId, String langCode) {
+		String msg = TranslatorWorker.translateText(type, langCode, siteId);
+		return new PairValue(ampIndValue.getValue(), msg);
+		
+	}
+	
+	private static PerformanceChartValues getValuesFromIndicatorCollection(Collection<AmpIndicatorValue> col, String indicatorName, 
+			Long siteId, String langCode) {
+		PairValue baseValue = null, actualValue = null, targetValue = null;
+		boolean revisedAlreadyParsed=false;
+		for (AmpIndicatorValue ampIndValue: col)
+			switch (ampIndValue.getValueType()) {
+			case AmpIndicatorValue.BASE:
+				baseValue = getSmallStuff(ampIndValue, "base", siteId, langCode); 
+				break;
+			case AmpIndicatorValue.ACTUAL:
+				actualValue = getSmallStuff(ampIndValue, "actual", siteId, langCode); 
+				break;
+			case AmpIndicatorValue.TARGET:
+				if (!revisedAlreadyParsed)
+					targetValue = getSmallStuff(ampIndValue, "target", siteId, langCode); 
+				break;
+			case AmpIndicatorValue.REVISED:
+				targetValue = getSmallStuff(ampIndValue, "target", siteId, langCode); 
+				break;
+		}
+		return new PerformanceChartValues(baseValue, actualValue, targetValue);
+	}
 
-    public static JFreeChart generatePerformanceChart(ChartParams cp,Long siteId,String langCode) {
+    public static JFreeChart generatePerformanceChart(ChartParams cp, Long siteId, String langCode) {
 			JFreeChart chart =null;
-			Double baseValue=null,actualValue=null,targetValue=null;
-			String baseValueType=null,targetValueType=null,actualValueType=null;
+			PerformanceChartValues vals = null;
 			DefaultCategoryDataset ds = new DefaultCategoryDataset();
 			try {
-				Collection data=cp.getData();
+				Collection<IndicatorActivity> data=cp.getData();
 				if(data!=null)
-				for (Iterator iterator = data.iterator(); iterator.hasNext();) {
-					IndicatorActivity connection = (IndicatorActivity) iterator.next();
-
+				for (IndicatorActivity connection : data) {
 					Collection<AmpIndicatorValue> col = connection.getValues();
+					String indicatorName = connection.getIndicator().getName();
 					if (col != null && col.size() > 0) {
-						String indicatorName=connection.getIndicator().getName();
-
-						Iterator<AmpIndicatorValue> itr = col.iterator();
-						boolean revisedAlreadyParsed=false;
-						while (itr.hasNext()) {
-							AmpIndicatorValue ampIndValue = itr.next();
-							if (ampIndValue.getValueType() == AmpIndicatorValue.BASE) {
-								baseValue = ampIndValue.getValue();
-								baseValueType =  "base".toLowerCase();
-								baseValueType = baseValueType.replaceAll(" ", "");
-								String msg = TranslatorWorker.translateText(baseValueType, langCode, siteId);
-								baseValueType=msg;
-							} else if (ampIndValue.getValueType() == AmpIndicatorValue.ACTUAL) {
-								actualValue = ampIndValue.getValue();
-								actualValueType = "actual".toLowerCase();
-								actualValueType = actualValueType.replaceAll(" ", "");
-								  String msg = TranslatorWorker.translateText(actualValueType, langCode, siteId);
-								actualValueType=msg;
-							} else if (ampIndValue.getValueType() == AmpIndicatorValue.TARGET && !revisedAlreadyParsed) {
-								targetValue = ampIndValue.getValue();
-								targetValueType = "target".toLowerCase();
-								targetValueType = targetValueType.replaceAll(" ", "");
-								  String msg = TranslatorWorker.translateText(targetValueType, langCode, siteId);
-								targetValueType=msg;
-
-							} else if (ampIndValue.getValueType() == AmpIndicatorValue.REVISED) {
-								targetValue = ampIndValue.getValue();
-								targetValueType =  "target".toLowerCase();
-								targetValueType = targetValueType.replaceAll(" ", "");
-								 String msg = TranslatorWorker.translateText(targetValueType, langCode, siteId);
-								targetValueType=msg;
-								revisedAlreadyParsed=true;//this is used to not overwrite revised with target.
-							}
-						}
-						if (baseValue<=actualValue&& actualValue<=targetValue){
-							actualValue=actualValue-baseValue;
-							targetValue=targetValue-baseValue;
-							actualValue=(100f*actualValue)/targetValue;
-							targetValue=100-actualValue;
+						 vals = getValuesFromIndicatorCollection(col, indicatorName, siteId, langCode);
+						 if (vals.baseValue.value <= vals.actualValue.value 
+								&& vals.actualValue.value <= vals.targetValue.value){
+							vals.actualValue.value = vals.actualValue.value - vals.baseValue.value;
+							vals.targetValue.value = vals.targetValue.value - vals.baseValue.value;
+							vals.actualValue.value = (100f * vals.actualValue.value) / vals.targetValue.value;
+							vals.targetValue.value = 100 - vals.actualValue.value;
 						} else {
 							double result = 0;
-							baseValue -= targetValue;
-				            actualValue -= targetValue;
-				            targetValue = baseValue;
-				            if (baseValue != 0 && actualValue != 0) {
-				                result = actualValue / (baseValue / 100);
-				                actualValue=100-result;
-				                targetValue=100 - actualValue;
+							vals.baseValue.value -= vals.targetValue.value;
+				            vals.actualValue.value -= vals.targetValue.value;
+				            vals.targetValue.value = vals.baseValue.value;
+				            if (vals.baseValue.value != 0 && vals.actualValue.value != 0) {
+				                result = vals.actualValue.value / (vals.baseValue.value / 100);
+				                vals.actualValue.value = 100 - result;
+				                vals.targetValue.value = 100 - vals.actualValue.value;
 				            }
-							//ds.addValue(baseValue,baseValueType,indicatorName);
 						}
-						ds.addValue(actualValue,actualValueType,indicatorName);
-						ds.addValue(targetValue,targetValueType,indicatorName);
-
+						ds.addValue(vals.actualValue.value, vals.actualValue.type, indicatorName);
+						ds.addValue(vals.targetValue.value, vals.targetValue.type,indicatorName);
 					}
 				}
-
-
-				 chart = ChartFactory.createStackedBarChart(
+				chart = ChartFactory.createStackedBarChart(
 						cp.getTitle(), // title
 						null,	// X-axis label
 						null,	// Y-axis label
@@ -564,7 +484,6 @@ public class ChartGenerator {
 						false,	// show tooltips
 						false);	// show urls
 				chart.setBackgroundPaint(Color.WHITE);
-
 			} catch (Exception e) {
 				logger.error("Exception from generatePerformanceChart() :" + e.getMessage());
 				e.printStackTrace();

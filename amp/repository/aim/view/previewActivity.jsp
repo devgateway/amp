@@ -45,6 +45,7 @@
 
 <digi:instance property="aimEditActivityForm" />
 
+
 <%
 	//Quick fix AMP-6573 please check it
 	if (request.getParameter("currentlyEditing") != null) {
@@ -229,8 +230,7 @@ function collapseAll() {
 	try {
 		actPerfChartFileName = ChartGenerator
 				.getActivityPerformanceChartFileName(actId, session,
-						new PrintWriter(out), 370, 450, url, true,
-						request);
+						new PrintWriter(out), 370, 450, url, true, request);
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
@@ -1487,6 +1487,45 @@ function collapseAll() {
 </fieldset>
 </module:display>
 <!-- END SECTORS SECTION -->
+
+
+
+
+<!-- M & E  SECTION -->
+<fieldset>
+	<legend>
+		<span class=legend_label id="melink" style="cursor: pointer;">
+			<digi:trn>M &amp; E</digi:trn>
+		</span>	
+	</legend>
+	<div id="mediv" class="toggleDiv">
+
+		<table>
+			<field:display name="Activity Performance"  feature="Activity Dashboard">
+				<tr>
+					<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+						<digi:trn key="aim:level">Activity Performance</digi:trn>:					
+					</td>
+					<td bgcolor="#ffffff">
+						<% if (actPerfChartUrl != null) { %>
+								<img src="<%= actPerfChartUrl %>" width="370" height="450" border="0" usemap="#<%= actPerfChartFileName %>"><br><br>
+						<% } else { %>
+								<br><span class="red-log"><digi:trn key="aim:noDataPresentFor">No data present for</digi:trn>
+							    <digi:trn key="aim:activityPerformanceChart">Activity-Performance chart</digi:trn>
+							    </span><br><br>
+						<% } %>
+					</td>
+				</tr>
+			</field:display>
+	
+		</table>
+	</div>
+
+</fieldset>
+
+
+<!-- END OF M & E  SECTION -->
+
 
 <!-- FUNDING SECTION -->
 
@@ -3231,6 +3270,7 @@ function collapseAll() {
 		$.each(chartAreas, function (idx, val) {
 				//console.log (val.href);
 				val.href = "javascript:showIndicatorValsPopin(\"" + encodeURIComponent(val.href) + "\")";
+				//val.href = "javascript:showIndicatorValsPopin(\"" + val.href + "\")";
 			});
 	}
 	

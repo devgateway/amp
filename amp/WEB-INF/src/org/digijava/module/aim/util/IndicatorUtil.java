@@ -1,10 +1,12 @@
 package org.digijava.module.aim.util;
 		
+import java.sql.SQLException;
 import java.text.Collator;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.exception.DgException;
@@ -349,6 +351,15 @@ public class IndicatorUtil {
 			}
 		}
 	}
+	
+	public static Map<String, Long> getIndicatorNamesToIds(Set<IndicatorActivity> vals) {
+		Map<String, Long> result = new HashMap<String, Long>();
+		for (IndicatorActivity item : vals) {
+			result.put(item.getIndicator().getName(), item.getIndicator().getIndicatorId());
+		}
+		return result;
+	}
+	
 	
 	/**
 	 * Loads all indicators from DB.

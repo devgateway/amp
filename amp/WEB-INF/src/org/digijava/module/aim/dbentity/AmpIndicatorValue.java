@@ -28,6 +28,8 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
 	public static final int ACTUAL=1;
 	public static final int BASE=2;
 	public static final int REVISED=3;
+	
+
 
 	private static final long serialVersionUID = 1L;
 	private Long indValId;

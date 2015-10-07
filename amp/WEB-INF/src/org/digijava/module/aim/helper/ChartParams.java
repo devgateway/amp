@@ -5,8 +5,12 @@ import java.util.Collection;
 
 import javax.servlet.http.HttpSession;
 
+
+
+
 public class ChartParams {
 	
+	@SuppressWarnings("rawtypes")
 	private Collection data;
 	private String title;
 	private int chartWidth;
@@ -46,6 +50,7 @@ public class ChartParams {
 	/**
 	 * @return Returns the data.
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection getData() {
 		return data;
 	}
@@ -53,7 +58,7 @@ public class ChartParams {
 	/**
 	 * @param data The data to set.
 	 */
-	public void setData(Collection data) {
+	public void setData(@SuppressWarnings("rawtypes") Collection data) {
 		this.data = data;
 	}
 

@@ -13,8 +13,6 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
  */
 public class ReportErrors {
 
-    static final String LIST_NAME_PREFIX = "listName";
-
     // Validation errors
     public static final ApiErrorMessage REPORT_NAME_REQUIRED = new ApiErrorMessage(1, "Report name not specified");
     public static final ApiErrorMessage LIST_NAME_REQUIRED = new ApiErrorMessage(2, "Not specified: ");

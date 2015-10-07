@@ -245,6 +245,11 @@ function contentblock_type_get_name($bundle) {
 
 /**
  * Access callback for custom contentblock entities.
+ *
+ * @param string $op
+ * @param ContentBlockEntity $entity
+ * @param stdClass $account
+ * @return bool
  */
 function contentblock_access($op, $entity = NULL, $account = NULL) {
   $rights = &drupal_static(__FUNCTION__, array());

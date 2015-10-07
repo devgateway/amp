@@ -161,7 +161,7 @@ function helpertheme_color_pallete() {
   );
 
   $colors['notification']['clwarning'] = array(
-    '#value' => '#d4920e',
+    '#value' => '#d8a80e',
     '#desc' => 'warning message base color',
     '#variants' => array(
       'clwarning__dark' => array(

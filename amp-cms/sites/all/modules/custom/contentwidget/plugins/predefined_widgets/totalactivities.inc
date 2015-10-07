@@ -220,7 +220,16 @@ function contentwidget_totalactivities_widget_render($plugin, $widget_settings, 
     'activities_count' => 'Total Activities',
   );
 
-  $build = array();
+  $build = array(
+    '#prefix' => '<div class="contentblock-published clearfix">',
+    '#suffix' => '</div>',
+  );
+  if (empty($entity->status)) {
+    $build = array(
+      '#prefix' => '<div class="contentblock-unpublished clearfix">',
+      '#suffix' => '</div>',
+    );
+  }
 
   // Create the table headers.
   foreach ($info_blocks as $key => $label) {

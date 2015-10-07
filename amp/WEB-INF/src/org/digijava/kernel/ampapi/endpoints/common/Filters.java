@@ -84,7 +84,7 @@ public class Filters {
 	@GET
 	@Path("/activityapprovalStatus")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "ActivityApprovalStatus", columns = ColumnConstants.APPROVAL_STATUS , name="Approval Status")
+	@ApiMethod(ui = true, id = "ActivityApprovalStatus", columns = ColumnConstants.APPROVAL_STATUS , name="Approval Status", tab=EPConstants.TAB_ACTIVITY)
 	public JsonBean getActivityApprovalStatus() {
 		JsonBean as=new JsonBean();
 		TeamMember teamMember = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(
@@ -119,7 +119,7 @@ public class Filters {
 	@GET
 	@Path("/boundaries")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = false,  id = "Boundaries")
+	@ApiMethod(ui = false,  id = "Boundaries", tab=EPConstants.TAB_LOCATIONS)
 	public List<String> getBoundaries() {
 		return QueryUtil.getImplementationLocationsInUse();
 	}
@@ -132,7 +132,7 @@ public class Filters {
 	@GET
 	@Path("/sectors")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = "Sectors", id = "Sectors")
+	@ApiMethod(ui = true, name = "Sectors", id = "Sectors", tab = EPConstants.TAB_SECTORS)
 	public List<SimpleJsonBean> getSectorsSchemas() throws AmpApiException{
 		List<SimpleJsonBean> sectorList = new ArrayList<SimpleJsonBean>();
 		List<AmpClassificationConfiguration> schems = SectorUtil.getAllClassificationConfigs();
@@ -162,7 +162,7 @@ public class Filters {
 	@GET
 	@Path("/sectors/{sectorId}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = false, id = "SectorsById")
+	@ApiMethod(ui = false, id = "SectorsById", tab = EPConstants.TAB_SECTORS)
 	public SimpleJsonBean getSectors(@PathParam("sectorId") Long sectorId) {
 
 		SimpleJsonBean sector = new SimpleJsonBean();
@@ -194,7 +194,7 @@ public class Filters {
 	@GET
 	@Path("/dates/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = "Dates", id = "Dates")
+	@ApiMethod(ui = true, name = "Dates", id = "Dates", tab = EPConstants.TAB_OTHER)
 	public JsonBean getDates(){
 		JsonBean date = new JsonBean();
 		date.set("startYear", 1985);
@@ -210,7 +210,7 @@ public class Filters {
 	@Path("/proposedStartDate/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = true, name = ColumnConstants.PROPOSED_START_DATE, columns = ColumnConstants.PROPOSED_START_DATE, id = "ProposedStartDate", filterType = {
-			FilterType.REPORTS, FilterType.TAB })
+			FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
 	public JsonBean getProposedStartDate(){
 		return new JsonBean();
 	}
@@ -219,7 +219,7 @@ public class Filters {
 	@Path("/actualStartDate/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = true, name = ColumnConstants.ACTUAL_START_DATE, columns = ColumnConstants.ACTUAL_START_DATE, id = "ActualStartDate", filterType = {
-			FilterType.REPORTS, FilterType.TAB })
+			FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
 	public JsonBean getActualStartDate(){
 		return new JsonBean();
 	}
@@ -228,7 +228,7 @@ public class Filters {
 	@Path("/proposedCompletionDate/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = true, name = ColumnConstants.PROPOSED_COMPLETION_DATE, columns = ColumnConstants.PROPOSED_COMPLETION_DATE, id = "ProposedCompletionDate", filterType = {
-			FilterType.REPORTS, FilterType.TAB })
+			FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
 	public JsonBean getProposedCompletionDate(){
 		return new JsonBean();
 	}
@@ -237,7 +237,7 @@ public class Filters {
 	@Path("/actualCompletionDate/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = true, name = ColumnConstants.ACTUAL_COMPLETION_DATE, columns = ColumnConstants.ACTUAL_COMPLETION_DATE, id = "ActualCompletionDate", filterType = {
-			FilterType.REPORTS, FilterType.TAB })
+			FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
 	public JsonBean getActualCompletionDate(){
 		return new JsonBean();
 	}
@@ -246,7 +246,7 @@ public class Filters {
 	@Path("/finalDateContracting/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = true, name = ColumnConstants.FINAL_DATE_FOR_CONTRACTING, columns = ColumnConstants.FINAL_DATE_FOR_CONTRACTING, id = "ForContractingDate", filterType = {
-			FilterType.REPORTS, FilterType.TAB })
+			FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
 	public JsonBean getDateForContracting() {
 		return new JsonBean();
 	}
@@ -255,7 +255,7 @@ public class Filters {
 	@Path("/proposedApprovalDate/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = true, name = ColumnConstants.PROPOSED_APPROVAL_DATE, columns = ColumnConstants.PROPOSED_APPROVAL_DATE, id = "ProposedApprovalDate", filterType = {
-			FilterType.REPORTS, FilterType.TAB })
+			FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
 	public JsonBean getProposedApprovalDate() {
 		return new JsonBean();
 	}	
@@ -264,7 +264,7 @@ public class Filters {
 	@Path("/actualApprovalDate/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = true, name = ColumnConstants.ACTUAL_APPROVAL_DATE, columns = ColumnConstants.ACTUAL_APPROVAL_DATE, id = "ActualApprovalDate", filterType = {
-			FilterType.REPORTS, FilterType.TAB })
+			FilterType.REPORTS, FilterType.TAB }, tab = EPConstants.TAB_OTHER)
 	public JsonBean getActualApprovalDate() {
 		return new JsonBean();
 	}	
@@ -277,7 +277,8 @@ public class Filters {
 	@GET
 	@Path("/programs")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = "Programs", id = "Programs",columns={ColumnConstants.PRIMARY_PROGRAM,ColumnConstants.SECONDARY_PROGRAM,ColumnConstants.NATIONAL_PLANNING_OBJECTIVES,ColumnConstants.TERTIARY_PROGRAM})
+	@ApiMethod(ui = true, name = "Programs", id = "Programs",columns={ColumnConstants.PRIMARY_PROGRAM,ColumnConstants.SECONDARY_PROGRAM,ColumnConstants.NATIONAL_PLANNING_OBJECTIVES,ColumnConstants.TERTIARY_PROGRAM},
+	tab = EPConstants.TAB_PROGRAMS)
 	public List<SimpleJsonBean> getPrograms() {
 		List<SimpleJsonBean> programs = new ArrayList<SimpleJsonBean>();
 		try {
@@ -365,7 +366,7 @@ public class Filters {
 	@GET
 	@Path("/orgs")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "Organizations", name = "orgsList")
+	@ApiMethod(ui = true, id = "Organizations", name = "orgsList", tab=EPConstants.TAB_ORGANIZATIONS)
 	
 	public List<JsonBean> getOrgs() { 
 		List <JsonBean> orgs = QueryUtil.getOrgs();
@@ -388,7 +389,7 @@ public class Filters {
 	@GET
 	@Path("/org-roles")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = "Organization Roles", id = "orgRolesList")
+	@ApiMethod(ui = true, name = "Organization Roles", id = "orgRolesList", tab=EPConstants.TAB_ALL_AGENCIES)
 	
 	public List<SimpleJsonBean> getorgRoles() {
 		List <SimpleJsonBean> orgRoles = QueryUtil.getOrgRoles();
@@ -404,7 +405,8 @@ public class Filters {
 	@GET
 	@Path("/programs/{programId}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = false, id = "ProgramsByProgramName")
+	@ApiMethod(ui = false, id = "ProgramsByProgramName", columns={ColumnConstants.PRIMARY_PROGRAM, ColumnConstants.SECONDARY_PROGRAM, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, ColumnConstants.TERTIARY_PROGRAM}, 
+			tab=EPConstants.TAB_PROGRAMS)
 	public SimpleJsonBean getPrograms(@PathParam("programId") Long programId) {
 		try {
 			AmpActivityProgramSettings npd = ProgramUtil.getAmpActivityProgramSettings(programId);
@@ -434,7 +436,8 @@ public class Filters {
 	@GET
 	@Path("/typeOfAssistance/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "TypeOfAssistanceList", columns = ColumnConstants.TYPE_OF_ASSISTANCE,name="Type of Assistance")
+	@ApiMethod(ui = true, id = "TypeOfAssistanceList", columns = ColumnConstants.TYPE_OF_ASSISTANCE,name="Type of Assistance", 
+				tab=EPConstants.TAB_FINANCIALS)
 	public JsonBean getTypeOfAssistance() {
 		return getCategoryValue(CategoryConstants.TYPE_OF_ASSISTENCE_KEY,ColumnConstants.TYPE_OF_ASSISTANCE);
 	}
@@ -447,7 +450,7 @@ public class Filters {
 	@GET
 	@Path("/modeOfPayment/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "ModeOfPaymentList", columns = ColumnConstants.MODE_OF_PAYMENT,name="Mode of Payment")
+	@ApiMethod(ui = true, id = "ModeOfPaymentList", columns = ColumnConstants.MODE_OF_PAYMENT,name="Mode of Payment", tab=EPConstants.TAB_FINANCIALS)
 	public JsonBean getModeOfPayment() {
 		return getCategoryValue(CategoryConstants.MODE_OF_PAYMENT_KEY,ColumnConstants.MODE_OF_PAYMENT);
 	}
@@ -459,7 +462,7 @@ public class Filters {
 	@GET
 	@Path("/activityStatus/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "ActivityStatusList", columns = ColumnConstants.STATUS,name="Activity Status")
+	@ApiMethod(ui = true, id = "ActivityStatusList", columns = ColumnConstants.STATUS,name="Activity Status", tab=EPConstants.TAB_ACTIVITY)
 	public JsonBean getActivityStatus() {
 		return getCategoryValue(CategoryConstants.ACTIVITY_STATUS_KEY,
 				ColumnConstants.STATUS);
@@ -473,7 +476,8 @@ public class Filters {
 	@GET
 	@Path("/activityBudget/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "ActivityBudgetList", columns = ColumnConstants.ON_OFF_TREASURY_BUDGET, name="Activity Budget")
+	@ApiMethod(ui = true, id = "ActivityBudgetList", columns = ColumnConstants.ON_OFF_TREASURY_BUDGET, name="Activity Budget", 
+			tab=EPConstants.TAB_FINANCIALS)
 	public JsonBean getActivityBudget() {
 		return getCategoryValue(CategoryConstants.ACTIVITY_BUDGET_KEY, ColumnConstants.ON_OFF_TREASURY_BUDGET);
 	}	
@@ -499,7 +503,8 @@ public class Filters {
 	@GET
 	@Path("/financingInstruments/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "FinancingInstrumentsList", columns = ColumnConstants.FINANCING_INSTRUMENT,name="Financing Instruments")
+	@ApiMethod(ui = true, id = "FinancingInstrumentsList", columns = ColumnConstants.FINANCING_INSTRUMENT,name="Financing Instruments", 
+	tab=EPConstants.TAB_FINANCIALS)
 	public JsonBean getFinancingInstruments() {
 		return getCategoryValue(CategoryConstants.FINANCING_INSTRUMENT_KEY, ColumnConstants.FINANCING_INSTRUMENT);
 	}
@@ -529,7 +534,7 @@ public class Filters {
 	@GET
 	@Path("/locations/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "LocationList", columns = ColumnConstants.LOCATION,name="Locations")
+	@ApiMethod(ui = true, id = "LocationList", columns = ColumnConstants.LOCATION,name="Locations", tab=EPConstants.TAB_LOCATIONS)
 	public JsonBean getLocations() {
 		return QueryUtil.getLocationsForFilter();
 	}
@@ -537,7 +542,7 @@ public class Filters {
 	@GET
 	@Path("/humanitarianAid/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "HumanitarianAidValues", columns = ColumnConstants.HUMANITARIAN_AID, name=ColumnConstants.HUMANITARIAN_AID)
+	@ApiMethod(ui = true, id = "HumanitarianAidValues", columns = ColumnConstants.HUMANITARIAN_AID, name=ColumnConstants.HUMANITARIAN_AID, tab=EPConstants.TAB_FINANCIALS)
 	public JsonBean getHumanitarianAid() {
 		return buildYesNoJsonBean(ColumnConstants.HUMANITARIAN_AID);
 	}
@@ -545,7 +550,8 @@ public class Filters {
 	@GET
 	@Path("/disasterResponse/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "DisasterResponseValues", columns = ColumnConstants.DISASTER_RESPONSE_MARKER, name=ColumnConstants.DISASTER_RESPONSE_MARKER)
+	@ApiMethod(ui = true, id = "DisasterResponseValues", columns = ColumnConstants.DISASTER_RESPONSE_MARKER, 
+	name=ColumnConstants.DISASTER_RESPONSE_MARKER, tab=EPConstants.TAB_FINANCIALS)
 	public JsonBean getDisasterResponse() {
 		return buildYesNoJsonBean(ColumnConstants.DISASTER_RESPONSE_MARKER);
 	}
@@ -692,7 +698,8 @@ public class Filters {
 	@GET
 	@Path("/workspaces")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = "Workspaces", id = "Workspaces", visibilityCheck = "hasToShowWorkspaceFilter"/*, column = ColumnConstants.WORKSPACES*/)
+	@ApiMethod(ui = true, name = "Workspaces", id = "Workspaces", visibilityCheck = "hasToShowWorkspaceFilter"/*, column = ColumnConstants.WORKSPACES*/, 
+				tab=EPConstants.TAB_OTHER)
 	public JsonBean getWorkspaces() {
 		List<SimpleJsonBean> teamsListJson = new ArrayList<SimpleJsonBean>();
 		Collection<AmpTeam> ampTeamList = TeamUtil.getAllRelatedTeams();

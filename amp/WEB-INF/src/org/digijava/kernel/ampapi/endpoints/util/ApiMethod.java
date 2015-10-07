@@ -13,6 +13,7 @@ public @interface ApiMethod {
 	String id() ;
 	String[] columns() default EPConstants.NA;
 	FilterType[] filterType() default FilterType.ALL;
+	String tab() default EPConstants.TAB_UNASSIGNED;
 	String visibilityCheck() default "";
 	String columnGroup() default EPConstants.NA;
 	AuthRule[] authTypes() default AuthRule.NONE;

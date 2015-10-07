@@ -11,6 +11,7 @@ public class AvailableMethod {
 	private String method;
 	private String id;
 	private String column;
+	private String tab;
 	private String []columns;
 	private FilterType [] filterType;
 
@@ -82,6 +83,14 @@ public class AvailableMethod {
 
 	public void setColumns(String[] columns) {
 		this.columns = columns;
+	}
+
+	public String getTab() {
+		return tab;
+	}
+
+	public void setTab(String tab) {
+		this.tab = tab;
 	}
 	
 

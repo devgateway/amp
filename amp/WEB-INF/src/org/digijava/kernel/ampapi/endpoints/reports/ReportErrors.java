@@ -13,13 +13,13 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
  */
 public class ReportErrors {
 
-    private static final String PREFIX = "listName";
+    static final String LIST_NAME_PREFIX = "listName";
 
 	// Validation errors
-	public static final ApiErrorMessage REPORT_NAME_REQUIRED = new ApiErrorMessage(1, "Report name not specified", PREFIX);
-    public static final ApiErrorMessage LIST_NAME_REQUIRED = new ApiErrorMessage(2, "Not specified: ", PREFIX);
-    public static final ApiErrorMessage LIST_INVALID = new ApiErrorMessage(3, "Not allowed / invalid: ", PREFIX);
-    public static final ApiErrorMessage REPORT_TYPE_INVALID = new ApiErrorMessage(4, "Invalid report type: ", PREFIX);
-    public static final ApiErrorMessage REPORT_TYPE_REQUIRED = new ApiErrorMessage(5, "Project type is required", PREFIX);
-    public static final ApiErrorMessage ACTIVITY_TYPE_LIST_INVALID = new ApiErrorMessage(6, "Invalid list of activity types: ", PREFIX);
+	public static final ApiErrorMessage REPORT_NAME_REQUIRED = new ApiErrorMessage(1, "Report name not specified");
+    public static final ApiErrorMessage LIST_NAME_REQUIRED = new ApiErrorMessage(2, "Not specified: ");
+    public static final ApiErrorMessage LIST_INVALID = new ApiErrorMessage(3, "Not allowed / invalid: ");
+    public static final ApiErrorMessage REPORT_TYPE_INVALID = new ApiErrorMessage(4, "Invalid report type: ");
+    public static final ApiErrorMessage REPORT_TYPE_REQUIRED = new ApiErrorMessage(5, "Project type is required");
+    public static final ApiErrorMessage ACTIVITY_TYPE_LIST_INVALID = new ApiErrorMessage(6, "Invalid list of activity types: ");
 }

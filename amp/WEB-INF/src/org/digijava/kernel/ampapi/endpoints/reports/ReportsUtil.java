@@ -567,13 +567,16 @@ public class ReportsUtil {
 			Collection<String> allowedValues, boolean isMandatory) {
 		if (values == null || values.size() == 0) {
 			if (isMandatory) {
-                return new ApiErrorMessage(ReportErrors.LIST_NAME_REQUIRED, listName);
+                return new ApiErrorMessage(ReportErrors.LIST_NAME_REQUIRED.id,
+                        ReportErrors.LIST_NAME_REQUIRED.description + listName, ReportErrors.LIST_NAME_PREFIX);
             }
 		} else {
 			List<String> copy = new ArrayList<String>(values);
 			copy.removeAll(allowedValues);
 			if (copy.size() > 0) {
-                return new ApiErrorMessage(ReportErrors.LIST_INVALID, listName + " provided = " + copy.toString());
+                return new ApiErrorMessage(ReportErrors.LIST_INVALID.id,
+                        ReportErrors.LIST_INVALID.description + listName + " provided = " + copy.toString(),
+                        ReportErrors.LIST_NAME_PREFIX);
             }
 		}
 		return null;

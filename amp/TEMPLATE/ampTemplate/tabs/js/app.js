@@ -66,17 +66,15 @@ define(
 			if (_.filter(tabsCollection.models, function(item) {return (item.get('visible') === true);}).length !== 0) {
 				var hasMoreTabs = false;
 				if (_.find(tabsCollection.models, function(val) {
-					return val.get('visible') === false;
-				})) {
-					hasMoreTabs = true;
-				}
-				if (hasMoreTabs) {
+						return val.get('visible') === false;
+					})) {
 					var moreTabsTab = new Tab({
 						id : -1,
 						name : "<span data-i18n='tabs.common:moreTabs'>More Tabs...</span>",
 						visible : true
 					});
 					tabsCollection.push(moreTabsTab);
+					hasMoreTabs = true;
 				}
 				TabUtils.shortenTabNames(tabsCollection.models);
 

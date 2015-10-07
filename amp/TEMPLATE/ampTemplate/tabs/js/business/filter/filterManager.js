@@ -92,7 +92,9 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 				jQuery('#tab-link-'+tabId).prop('title', newTabName);
 				jQuery('#tab-link-'+tabId).html(newTabName);
 				jQuery(dialogView.el).dialog('close');
-				app.TabsApp.tabsCollection.fetchData();
+				// AMP-19587: TODO: remove the next line. If we fetch the tabs collection we 
+				// loose the 'more tabs' tab and initial context of the tabs @see app.js LOC 117-140
+				//app.TabsApp.tabsCollection.fetchData();
 			} else {
 				alert(data);
 			}

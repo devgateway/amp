@@ -100,6 +100,23 @@ public class EPConstants {
 	public static final String LINK_NAME = "name";
 	public static final String LINK_URL = "url";
 	
-
+	//tab dependency of each filter
+	/*
+	 * var filterInstancesNames = {donors: 'Funding Organizations', sectors : 'Sector', programs: 'Programs', 
+	  activity: 'Activity', allAgencies: 'All Agencies', financials: 'Financial',
+		  locations: 'Location', others: 'Other'};
+	 */
+	public static final String TAB_ORGANIZATIONS = "Funding Organizations";
+	public static final String TAB_SECTORS = "Sector";
+	public static final String TAB_PROGRAMS = "Programs";
+	public static final String TAB_ACTIVITY = "Activity";
+	public static final String TAB_ALL_AGENCIES = "All Agencies";
+	public static final String TAB_FINANCIALS = "Financial";
+	public static final String TAB_LOCATIONS = "Location";
+	public static final String TAB_OTHER= "Other";
+	public static final String TAB_UNASSIGNED= "Unassigned";
+	
+	
+	
 	
 }

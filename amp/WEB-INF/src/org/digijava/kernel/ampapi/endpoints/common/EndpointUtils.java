@@ -319,6 +319,7 @@ public class EndpointUtils {
 						filter.setEndpoint(endpoint);
 						filter.setUi(apiAnnotation.ui());
 						filter.setId(apiAnnotation.id());
+						filter.setTab(apiAnnotation.tab());
 						filter.setFilterType(apiAnnotation.filterType());
 						if (includeColumn) {
 							if (apiAnnotation.columns().length > 1) { //this should not be empty since it has a default value

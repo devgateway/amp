@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.newreports.AmountsUnits;
@@ -2309,6 +2310,10 @@ public class FeaturesUtil {
 	}
 
 	public static boolean isVisibleModule(String moduleName){
+		if (StringUtils.lowerCase(moduleName).equals("national planning dashboard")){
+			System.out.println("ururu");
+		}
+
 		AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(TLSUtils.getRequest().getServletContext(), TLSUtils.getRequest().getSession());
 		AmpModulesVisibility moduleToTest=ampTreeVisibility.getModuleByNameFromRoot(moduleName);
 		if (moduleToTest != null)

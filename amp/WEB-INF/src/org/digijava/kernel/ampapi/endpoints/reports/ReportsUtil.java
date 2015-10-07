@@ -568,15 +568,14 @@ public class ReportsUtil {
 		if (values == null || values.size() == 0) {
 			if (isMandatory) {
                 return new ApiErrorMessage(ReportErrors.LIST_NAME_REQUIRED.id,
-                        ReportErrors.LIST_NAME_REQUIRED.description + listName, ReportErrors.LIST_NAME_PREFIX);
+                        ReportErrors.LIST_NAME_REQUIRED.description, listName);
             }
 		} else {
 			List<String> copy = new ArrayList<String>(values);
 			copy.removeAll(allowedValues);
 			if (copy.size() > 0) {
-                return new ApiErrorMessage(ReportErrors.LIST_INVALID.id,
-                        ReportErrors.LIST_INVALID.description + listName + " provided = " + copy.toString(),
-                        ReportErrors.LIST_NAME_PREFIX);
+                return new ApiErrorMessage(ReportErrors.LIST_INVALID.id, ReportErrors.LIST_INVALID.description,
+                        listName);
             }
 		}
 		return null;

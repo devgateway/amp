@@ -65,7 +65,6 @@ define([ 'util/tabUtils' ], function(TabUtils) {
 		$(metadata.measures.models).each(function(i, item) {
 			ret.push("<span data-i18n='tabs.common:column" + item.get('measureName') + "'>" + item.get('measureName') + "</span>");
 		});
-		console.log(ret);
 		return ret;
 	};
 

@@ -67,17 +67,46 @@ public class CellDataSetPostProcessing {
 	 * @param columnNumber
 	 * @return
 	 */
-	protected boolean isFundingFlowColumn(int columnNumber) {
-		ReportOutputColumn roc = leafHeaders.get(columnNumber + spec.getColumns().size());
+	protected boolean hasFundingFlowParent(ReportOutputColumn roc) {
 		if (roc.parentColumn == null) return false; // no parent -> definitely not a funding flow column
 		if (ArConstants.DIRECTED_MEASURE_TO_NONDIRECTED_MEASURE.keySet().contains(roc.parentColumn.originalColumnName))
 			return true;
 		return false;
 	}
 	
+	protected boolean isFundingFlowBottom(ReportOutputColumn roc) {
+		return !(roc.originalColumnName.trim().isEmpty() || roc.originalColumnName.equals("Undefined"));
+	}
+	
+	protected boolean shouldRemoveColumnFromYear(ReportOutputColumn roc) {
+		boolean res = hasFundingFlowParent(roc) ^ isFundingFlowBottom(roc);
+		return res;
+	}
+	
+	/**
+	 * returns true IFF 1) the predecessor has a different parent AND 2) nobody with the same parent to the right is nonzero
+	 * @param columnNumber
+	 * @return
+	 */
+	protected boolean isFirstAndOnlyNonZero(ReportOutputColumn selfHeader, ReportOutputColumn previousHeader, TotalAggregator[] byColTotals, int colNr) {
+		if (previousHeader == null || selfHeader == null || previousHeader.parentColumn == null || selfHeader.parentColumn == null) return false;
+		if (selfHeader.parentColumn.equals(previousHeader.parentColumn)) return false; // we are not the first one
+		colNr ++; // invariant: colNr is the first unchecked one
+		while (colNr + spec.getColumnNames().size() < leafHeaders.size()) {
+			ReportOutputColumn colH = leafHeaders.get(colNr + spec.getColumnNames().size());
+			if (colH.parentColumn == null) break;
+			if (!selfHeader.parentColumn.equals(colH.parentColumn)) break;
+			// parents equal -> check if it is zero
+			if (!isZero(byColTotals, colNr)) return false;
+			colNr ++;
+		}
+		// gone till here and did not exit -> we reached the end of the year, thus return true
+		return true;
+	}
+	
 	public void removeEmptyFlowsColumns(boolean internalIdUsed) {
-//		if (System.currentTimeMillis() > 1)
-//			return;
+		if (System.currentTimeMillis() < 1)
+			return;
 		SortedSet<Integer> colsToDelete = new TreeSet<>();
 		List<TotalNode>[] rowTotals = cellDataSet.getRowTotalsLists();
 		boolean canLook = rowTotals != null && rowTotals.length > 0 && rowTotals[0].size() > 0 && rowTotals[0].get(0).getTotalGroups() != null;
@@ -90,9 +119,24 @@ public class CellDataSetPostProcessing {
 		int measureStartId = 0; //(internalIdUsed ? 1 : 0);
 		int measuresEndId = byColTotals.length;
 		
-		for(int i = measureStartId; i < measuresEndId; i++) {
-			if (isZero(byColTotals, i) && (isFundingFlowColumn(i) || !spec.isDisplayEmptyFundingColumns())) // no empty funding flows; also no empty column if desired so
-				colsToDelete.add(i + spec.getColumns().size());
+		ReportOutputColumn previousHeader = null; // needed for Mondrian post-processing hack "keep a zero-value Funding Flow entry IFF (it is the first entry for the year AND there are no non-zero-value entries with the same parent)
+		
+		// pass1: identify output raster columns to delete
+		for(int columnNumber = measureStartId; columnNumber < measuresEndId; columnNumber++) {
+			ReportOutputColumn selfHeader = leafHeaders.get(columnNumber + spec.getColumnNames().size());
+			boolean shouldDeleteThisColumn = false;
+			shouldDeleteThisColumn |= isFundingFlowBottom(selfHeader) && (!hasFundingFlowParent(selfHeader)); // [AC / DN-IMPL] is not ok
+			shouldDeleteThisColumn |= /*isFundingFlowBottom(selfHeader) && */hasFundingFlowParent(selfHeader) && isZero(byColTotals, columnNumber) && !isFirstAndOnlyNonZero(selfHeader, previousHeader, byColTotals, columnNumber); // because Mondrian does a Carthesian Product inside a year
+			if (shouldDeleteThisColumn) // no empty funding flows; also no empty column if desired so
+				colsToDelete.add(columnNumber + spec.getColumns().size());
+			previousHeader = selfHeader;
+		}
+		// pass2: change zeroed [RealDisb-DN-EXEC] into zeroes [RealDisb-()]
+		for(int columnNumber = measureStartId ; columnNumber < measuresEndId; columnNumber++) {
+			ReportOutputColumn selfHeader = leafHeaders.get(columnNumber + spec.getColumnNames().size());
+			if (hasFundingFlowParent(selfHeader) && isZero(byColTotals, columnNumber)) {
+				leafHeaders.set(columnNumber + spec.getColumnNames().size(), new ReportOutputColumn(" ", selfHeader.parentColumn, " "));
+			}
 		}
 		//colsToDelete.clear();
 		//colsToDelete.add(1 + spec.getColumns().size());

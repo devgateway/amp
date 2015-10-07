@@ -66,8 +66,12 @@ module.exports =
 	  };
 	  res.err.log = console.error.bind(console);
 	  res.warn.log = console.warn.bind(console);
-	  res.onDebug.log = function (_, __, ___, cb) {
-	    cb();
+	  res.onDebug.log = function () {
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    args.pop()();
 	  };
 	  return res;
 	};

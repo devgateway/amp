@@ -1,4 +1,4 @@
-import {default as debug} from "debug";
+import debug from "debug";
 
 export default function(slug){
   var res = {
@@ -9,8 +9,8 @@ export default function(slug){
   };
   res.err.log = console.error.bind(console);
   res.warn.log = console.warn.bind(console);
-  res.onDebug.log = function(_, __, ___, cb){
-    cb();
+  res.onDebug.log = function(...args){
+    args.pop()();
   };
   return res;
 }

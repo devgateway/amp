@@ -7,7 +7,7 @@ var summaryTemplate = _.template(fs.readFileSync(
   __dirname + '/../templates/filter-summary.html', 'UTF-8'));
 var detailsTemplate = _.template(fs.readFileSync(
   __dirname + '/../templates/filter-details.html', 'UTF-8'));
-var filtersViewLog = require('../../../../../../../ampTemplate/module/amp-log')('dashboard:filters:view');
+var filtersViewLog = require('../../../../../../../reamp/tools/log')('amp:dashboards:filters:view');
 
 
 module.exports = BackboneDash.View.extend({

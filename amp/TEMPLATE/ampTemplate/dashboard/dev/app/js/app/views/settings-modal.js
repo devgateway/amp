@@ -1,7 +1,7 @@
 var fs = require('fs');
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
-var logger = require('../../../../../../../ampTemplate/module/amp-log')('amp:dashboard:settings:modal');
+var logger = require('../../../../../../../reamp/tools/log')('amp:dashboards:settings:modal');
 var template = _.template(fs.readFileSync(
   __dirname + '/../templates/settings-modal.html', 'UTF-8'));
 

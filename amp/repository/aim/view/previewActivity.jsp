@@ -1,6 +1,7 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ page import="org.digijava.module.aim.helper.*"%>
 <%@ page import="org.digijava.module.aim.helper.ChartGenerator"%>
+<%@ page import="org.digijava.module.aim.util.IndicatorUtil"%>
 <%@ page import="java.io.PrintWriter,java.util.*"%>
 <%@ page import="org.digijava.module.aim.util.TeamMemberUtil"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
@@ -254,7 +255,12 @@ function collapseAll() {
 				+ actRiskChartFileName;
 	}
 	}
-	
+    int risk = IndicatorUtil.getOverallRisk(actId);
+    String riskName = IndicatorUtil.getRiskRatingName(risk);
+    String rskColor = IndicatorUtil.getRiskColor(risk);
+    //request.setAttribute("overallRisk", riskName);
+    //request.setAttribute("riskColor", rskColor);
+
 %>
 
 <digi:context name="digiContext" property="context" />
@@ -1518,7 +1524,29 @@ function collapseAll() {
 				</tr>
 			</field:display>
 	
-		</table>
+			<field:display name="Activity Risk"  feature="Activity Dashboard">
+				<tr>
+					<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+						<digi:trn key="aim:level">Activity Risk</digi:trn>:					
+					</td>
+					<td bgcolor="#ffffff">
+						<% if (actRiskChartUrl != null) { %>
+							<digi:trn key="aim:overallActivityRisk">Overall Risk</digi:trn>:
+							<font color="${riskColor}">
+	
+							<b><digi:trn key="<%=riskName%>"><%=riskName%></digi:trn></b>
+							</font>	
+							<img src="<%= actRiskChartUrl %>" width="370" height="350" border="0" usemap="#<%= actRiskChartFileName %>">
+							<br><br>
+						<% } else { %>
+							<br><span class="red-log"><digi:trn key="aim:noDataPresentFor">No data present for</digi:trn>
+					  	    <digi:trn key="aim:activityRiskChart">Activity-Risk chart</digi:trn>
+						    </span><br><br>
+						<% } %>										
+					</td>
+				</tr>
+			</field:display>
+			</table>
 	</div>
 
 </fieldset>

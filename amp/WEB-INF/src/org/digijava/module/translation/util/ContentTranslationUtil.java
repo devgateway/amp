@@ -22,7 +22,6 @@ import org.apache.wicket.util.string.Strings;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedPropertyDescription;
 import org.digijava.kernel.cache.AbstractCache;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.DigiCacheManager;
@@ -668,23 +667,21 @@ public class ContentTranslationUtil {
         				// load the translations from db, not cache
         				List<AmpContentTranslation> oldTrns = loadTranslations(newSession, objClass, newId, fieldName);
 
-        				HashMap<String, String> trns = ftp.getTranslations();
-        				Set<String> locales = trns.keySet();
-        				for (String locale : locales) {
-        					String trn = trns.get(locale);
-        					// see if we need to update existing translation
-        					Iterator<AmpContentTranslation> it = oldTrns.iterator();
-        					while (it.hasNext()) {
-        						AmpContentTranslation oldTrn = it.next();
-        						if (oldTrn.getLocale().equals(locale)) {
-        							newSession.delete(oldTrn);
-        							it.remove();
-        							break;
-        						}
-        					}
-        					AmpContentTranslation act = new AmpContentTranslation(objClass, newId, fieldName, locale, trn);
-        					newSession.save(act);
-        				}
+                        // first, delete all translations
+                        for (AmpContentTranslation oldTrn : oldTrns) {
+                            newSession.delete(oldTrn);
+                        }
+
+                        HashMap<String, String> trns = ftp.getTranslations();
+                        Set<String> locales = trns.keySet();
+
+                        // then add new ones
+                        for (String locale : locales) {
+                            String trn = trns.get(locale);
+                            AmpContentTranslation act = new AmpContentTranslation(objClass, newId, fieldName, locale, trn);
+                            newSession.save(act);
+                        }
+
         				newSession.flush();
         			} 
         			catch (Exception e) {

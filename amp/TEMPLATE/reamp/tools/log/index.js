@@ -71,7 +71,12 @@ module.exports =
 	      args[_key] = arguments[_key];
 	    }
 
-	    args.pop()();
+	    for (var index in args) {
+	      if ("function" == typeof args[index]) {
+	        args[index]();
+	        break;
+	      }
+	    }
 	  };
 	  return res;
 	};

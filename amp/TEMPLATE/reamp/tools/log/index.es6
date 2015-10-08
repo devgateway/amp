@@ -10,7 +10,12 @@ export default function(slug){
   res.err.log = console.error.bind(console);
   res.warn.log = console.warn.bind(console);
   res.onDebug.log = function(...args){
-    args.pop()();
+    for(var index in args){
+      if("function" == typeof args[index]){
+        args[index]();
+        break;
+      }
+    }
   };
   return res;
 }

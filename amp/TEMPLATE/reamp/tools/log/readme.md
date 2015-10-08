@@ -17,7 +17,7 @@ Currenlty amp-debug uses [this](https://www.npmjs.com/package/debug) library, so
 So that we are not limited to this library only, we could add more tools or replace the debug completely in the future, but we wanna keep Amp-debug's API stable, so that swaping or adding debugging libraries would be easy and won't crash the app.
 
 ## Ok, how do I use it?
-Include it in your libary, it is currenlty located in _TEMPLATE\ampTemplate\module\amp-log_:
+Include it in your libary, it is currenlty located in _reamp/tools/log_:
 
     var ampDebug = require('path/to/amp/debug');
 Create a debugger:
@@ -43,13 +43,13 @@ Takes a function that will be called if the current module is being debugged, an
         //antipatterns antipatterns bad practice antipatterns
     } catch(e){
         chartDebugger.onDebug(function(){
-            chartDebugger.err("OH NOES!!! Something really terrible just happenned, gonna dump EVERYTHING so that you can hopefully figure something out!")
+            chartDebugger.err("OH NOES!!! Something really terrible just happened, gonna dump EVERYTHING so that you can hopefully figure something out!")
             chartDebugger.log(everything.toJSON())
         });
     }
     
 ## Working on amp log
-Go to `TEMPLATE\ampTemplate\module\amp-log`. Install dependecies:
+Go to `TEMPLATE\ampTemplate\module\amp-log`. Install dependencies:
 
     npm install
 Run webpack:
@@ -58,6 +58,6 @@ Run webpack:
     
 Edit `index.es6`.
 ### Tests
-Tests are in `TEMPLATE\ampTemplate\module\amp-log\__tests__`. To run tests execute
+Tests are in `__tests__`. To run tests execute
 
     npm test

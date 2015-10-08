@@ -112,7 +112,7 @@ function continueInitialization( e, rmParams ){
 			else
 				repManager		= new NormalReportManager();
 		
-		debugger;
+//		debugger;
 		repManager.hierarchiesVisibility	= new ShowHideElement("hierarchies_step_div");
 		repManager.hFieldsetVisibility		= new ShowHideElement("hierarchiesInfoFieldset");
 		

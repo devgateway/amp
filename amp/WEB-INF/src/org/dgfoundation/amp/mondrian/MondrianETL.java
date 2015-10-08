@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -28,11 +29,15 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.mondrian.currencies.CalculateExchangeRatesEtlJob;
 import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
+import org.dgfoundation.amp.onepager.models.MTEFYearsModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter;
+import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter.YearMtefInfo;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.time.StopWatch;
@@ -66,6 +71,11 @@ public class MondrianETL {
 	 * the number to add to pledge ids in tables joined with activity tables
 	 */
 	public final static Long PLEDGE_ID_ADDER = 800000000l;
+	
+	/**
+	 * for MTEFs there are only year codes, mapped in (10k + yr). These don't clash with normal dates, because those start at ~2.4M
+	 */
+	public final static int MTEF_RANGES_START_DAY_CODE = 10000;
 	
 	//public final static ReadWriteLockHolder MONDRIAN_LOCK = new ReadWriteLockHolder("Mondrian reports/etl lock");
 	
@@ -522,6 +532,53 @@ private EtlResult execute() throws Exception {
 			}});
 	}
 	
+	protected void addSuffixedColumns(List<String> colNames, String suffix) {
+		colNames.add("year_code" + suffix);
+		colNames.add("year_name" + suffix);
+		colNames.add("month_code" + suffix);
+		colNames.add("month_name" + suffix);
+		colNames.add("quarter_code" + suffix);
+		colNames.add("quarter_name" + suffix);
+	}
+	
+	/**
+	 * generates MTEF entries in the day_code interval 10k...15k (e.g. 10k + YEAR_NUMBER) for all calendars
+	 * @param allCalendars
+	 * @throws SQLException
+	 */
+	protected void generateMtefCalendarEntries(List<AmpFiscalCalendar> allCalendars) throws SQLException {
+		List<String> columnNames = new ArrayList<>();
+		columnNames.add("day_code");
+		columnNames.add("full_date");
+		addSuffixedColumns(columnNames, "");
+		for(AmpFiscalCalendar cal:allCalendars)
+			addSuffixedColumns(columnNames, "_" + cal.getAmpFiscalCalId());
+		
+		List<List<Object>> mtefDatesRowsToInsert = new ArrayList<>();
+		for (int year:MtefConverter.instance.mtefInfos.keySet()) {
+			YearMtefInfo mtefInfo = MtefConverter.instance.mtefInfos.get(year);
+			List<Object> row = new ArrayList<>();
+			long day_code = mtefInfo.periodStartDayCode; // in the current implementation periodStart = periodEnd, thus can take any of them
+			String full_date = String.format("%d-01-01", year);
+			row.add(day_code);
+			row.add(full_date);
+//			calendar.set(Calendar.YEAR, year);
+			long yearCode = year;
+			String yearName = Long.toString(yearCode);//String.format("MTEF %s", kv.getValue());
+			long monthCode = 1;
+			String monthName = "January";
+			long quarterCode = 1;
+			String quarterName = "Q1";
+			List<Object> datesColumns = (List) Arrays.asList(yearCode, yearName, monthCode, monthName, quarterCode, quarterName);
+			row.addAll(datesColumns);
+			for(AmpFiscalCalendar dummyCal:allCalendars) {
+				row.addAll(datesColumns);
+			}
+			mtefDatesRowsToInsert.add(row);
+		}
+		SQLUtils.insert(conn, MONDRIAN_DATE_TABLE, null, null, columnNames, mtefDatesRowsToInsert);
+	}
+	
 	/**
 	 * generates the Mondrian Date Table into MonetDB. Since Monet lacks the needed features, the table construction is done in postgres and then pumped into monet
 	 * @throws SQLException
@@ -534,9 +591,13 @@ private EtlResult execute() throws Exception {
 			" SELECT 999999999, '9999-1-1', 9999, 'Undefined', 99, 'Undefined', 99, 'Undefined' " + 
 			" ORDER BY day_code", ArConstants.MIN_SUPPORTED_YEAR, ArConstants.MAX_SUPPORTED_YEAR), 
 			new ArrayList<String>());
-		for (AmpFiscalCalendar calendar:DbUtil.getAllFisCalenders()) {
+		
+		List<AmpFiscalCalendar> allCalendars = DbUtil.getAllFisCalenders();
+		
+		for (AmpFiscalCalendar calendar:allCalendars) {
 			generateFiscalCalendarColumns(calendar);
 		}
+		generateMtefCalendarEntries(allCalendars);
 		monetConn.copyTableFromPostgres(conn, MONDRIAN_DATE_TABLE);
 	}
 	
@@ -1054,6 +1115,7 @@ private EtlResult execute() throws Exception {
 			while (stok.hasMoreTokens()) {
 				String q = stok.nextToken();
 				q = q.replace("@@BUGCHOOSER@@", BUG_CHOOSER ? "999888777" : "999999999");
+				q = q.replace("@@MTEF_START@@", Integer.toString(MTEF_RANGES_START_DAY_CODE));
 				if (q.indexOf("@@activityIdCondition@@") != 0 && allEntities.isEmpty())
 					continue; // query references activities, but these are empty -> it is useless
 				String activityCondition = etlConfig.fullEtl ? " >0 " : (" IN (" +Util.toCSStringForIN(allEntities) + ")");

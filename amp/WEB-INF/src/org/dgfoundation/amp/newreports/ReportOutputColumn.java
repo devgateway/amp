@@ -13,9 +13,11 @@ import org.digijava.kernel.translator.TranslatorWorker;
 public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	
 	/**
-	 * the <strong>localized</strong> name of the column
+	 * the <strong>localized</strong> name of the column<br />
+	 * This one is not <strong>final</strong> because of a hack I had to do for AMP-21282<br />
+	 * No, I am not a shitcoder - the decision to use Mondrian in AMP is shit thing and it wasn't me who wanted it :P
 	 */
-	public final String columnName;
+	public String columnName;
 	
 	/**
 	 * the parent column, if any. Might be null for top-level columns, like "Funding" or "Project Title"

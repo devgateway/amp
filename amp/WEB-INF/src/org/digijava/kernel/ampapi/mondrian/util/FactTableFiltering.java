@@ -79,7 +79,7 @@ public class FactTableFiltering {
 	 */
 	protected String buildDateFilteringFragment(ReportElement.ElementType elementType, String transactionTypeFilteringQuery) {
 		StringBuilder fragment = new StringBuilder();
-		ActivityFilter flt = new ActivityFilter("date_code");
+		ActivityFilter flt = new ActivityFilter("display_date_code");
 		// tag date filters section to reuse "all filters without date filters" criteria in other queries 
 		for(Entry<ReportElement, List<FilterRule>> filterElement:mrf.getFilterRules().entrySet())
 			if (filterElement.getKey().type.equals(elementType)) {

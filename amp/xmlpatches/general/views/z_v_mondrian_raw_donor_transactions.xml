@@ -65,7 +65,10 @@ SELECT <!-- MTEFs -->
 	3 AS transaction_type,
 	999 AS adjustment_type,
 	mf.projection_date AS transaction_date,
+	
+	<!-- 10000 + extract(year from mf.projection_date) AS date_code, -->
 	to_char(mf.projection_date, 'J')::integer AS date_code,
+	
 	mf.amount AS transaction_amount,
 	mf.amp_currency_id AS currency_id,	
 	

@@ -266,7 +266,8 @@ public class MondrianTablesRepository {
 				new DatabaseTableColumn("transaction_type", "integer NOT NULL", true), // ACV
 				new DatabaseTableColumn("adjustment_type", "integer NOT NULL", true),  // ACV
 				new DatabaseTableColumn("transaction_date", "date NOT NULL", true),
-				new DatabaseTableColumn("date_code", "integer NOT NULL", true),
+				new DatabaseTableColumn("date_code", "integer NOT NULL", true), // for currency reasons
+				new DatabaseTableColumn("display_date_code", "integer NOT NULL", true), // for display reasons
 		
 				/**
 				 * regarding currencies: if a transaction has a fixed_exchange_rate, BASE_CURRENCY would have been written in currency_id and transaction_amount would be translated

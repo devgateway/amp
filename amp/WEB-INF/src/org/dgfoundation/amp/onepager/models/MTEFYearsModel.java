@@ -25,32 +25,35 @@ public class MTEFYearsModel implements IModel<KeyValue> {
     public static boolean getFiscal(){
         boolean fiscal = true;
 
-        TeamMember tm = ((AmpAuthWebSession) Session.get()).getCurrentMember();
-        if (tm != null){
-            AmpApplicationSettings tempSettings = AmpARFilter.getEffectiveSettings(tm);
-            Long defaultCalendarId=null;
-            if (tempSettings!=null && tempSettings.getFiscalCalendar()!=null){
-                defaultCalendarId=tempSettings.getFiscalCalendar().getAmpFiscalCalId();
-            }else{
-                defaultCalendarId=Long.parseLong(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR));
-            }
+        //TeamMember tm = ((AmpAuthWebSession) Session.get()).getCurrentMember();
+        //if (tm != null){
+            //AmpApplicationSettings tempSettings = AmpARFilter.getEffectiveSettings(tm);
+            Long defaultCalendarId = null;
+//            if (tempSettings!=null && tempSettings.getFiscalCalendar()!=null){
+//                defaultCalendarId=tempSettings.getFiscalCalendar().getAmpFiscalCalId();
+//            }else{
+                defaultCalendarId = Long.parseLong(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR));
+//            }
             AmpFiscalCalendar ampFiscalCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(defaultCalendarId);
             if (!ampFiscalCalendar.getIsFiscal())
                 fiscal = false;
-        }
+//        }
         return fiscal;
     }
-
-    public static KeyValue convert(Date date, boolean fiscal){
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        int year = c.get(Calendar.YEAR);
-
+    
+    public static KeyValue convert(int year, boolean fiscal) {
         String key = Integer.toString(year);
         String value = Integer.toString(year);
         if (fiscal)
-            value += "/"+Integer.toString(year+1);
+            value += "/" + Integer.toString(year+1);
         return new KeyValue(key, value);
+    }
+
+    public static KeyValue convert(Date date, boolean fiscal) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        int year = c.get(Calendar.YEAR);
+        return convert(year, fiscal);
     }
 
 	public MTEFYearsModel(IModel<Date> sourceModel) {

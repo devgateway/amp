@@ -3,6 +3,7 @@ package org.dgfoundation.amp.reports.mondrian.converters;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -15,15 +16,19 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.onepager.models.MTEFYearsModel;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.helper.KeyValue;
 import org.hibernate.jdbc.Work;
 
 /**
@@ -35,43 +40,56 @@ public class MtefConverter {
 	public final static MtefConverter instance = new MtefConverter();
 	
 	/**
-	 * Map<mtef-first-year-in-range, Pair<julian-code-of-first-day-in-year, julian-code-of-last-day-in-year>>
+	 * Map<mtef-first-year-in-range, Pair<day-code-of-first-day-in-year, day-code-of-last-day-in-year>>. Year is in the system's Calendar (this is historical behaviour, should normally be the AMP installation's default calendar)
 	 */
 	public final Map<Integer, YearMtefInfo> mtefInfos;
 	
 	public class YearMtefInfo {
-		public final int startDayJulianCode;
-		public final int endDayJulianCode;
+		public final int periodStartDayCode;
+		public final int periodEndDayCode;
 		
-		public YearMtefInfo(int startDayJulianCode, int endDayJulianCode) {
-			this.startDayJulianCode = startDayJulianCode;
-			this.endDayJulianCode = endDayJulianCode;
+		public YearMtefInfo(int periodStartDayCode, int periodEndDayCode) {
+			this.periodStartDayCode = periodStartDayCode;
+			this.periodEndDayCode = periodEndDayCode;
 		}
 		
 		@Override public String toString() {
-			return String.format("(%d - %d)", startDayJulianCode, endDayJulianCode);
+			return String.format("(%d - %d)", periodStartDayCode, periodEndDayCode);
 		}
 	}
 	
 	private MtefConverter() {
 		final SortedMap<Integer, YearMtefInfo> mtefInfos = new TreeMap<>();
-		PersistenceManager.getSession().doWork(new Work() {
-			@Override public void execute(Connection connection) throws SQLException {
-				String query = String.format("SELECT yr, to_char((yr || '-01-01')::date, 'J')::integer AS year_start_day_code, " + 
-						"to_char((yr+1 || '-01-01')::date, 'J')::integer - 1 AS year_end_day_code " + 
-						"FROM generate_series(%d, %d) yr", ArConstants.MIN_SUPPORTED_YEAR, ArConstants.MAX_SUPPORTED_YEAR);
-
-				try(RsInfo rsi = SQLUtils.rawRunQuery(connection, query, null)) {
-					while (rsi.rs.next()) {
-						int yearNr = rsi.rs.getInt(1);
-						int firstDay = rsi.rs.getInt(2);
-						int lastDay = rsi.rs.getInt(3);
-						mtefInfos.put(yearNr, new YearMtefInfo(firstDay, lastDay));
-					}
-				}
-			}});
+		
+		boolean isFiscal = MTEFYearsModel.getFiscal();
+//		Calendar calendar = Calendar.getInstance();
+//		calendar.set(Calendar.DAY_OF_YEAR, 1);
+		for(int year = ArConstants.MIN_SUPPORTED_YEAR - 100; year <= ArConstants.MAX_SUPPORTED_YEAR + 100; year++) {
+			int day_code = MondrianETL.MTEF_RANGES_START_DAY_CODE + year;
+//			calendar.set(Calendar.YEAR, year);
+			KeyValue kv = MTEFYearsModel.convert(year, isFiscal);
+			int yearCode = kv.getKeyAsLong().intValue() - 0;
+			mtefInfos.put(yearCode, new YearMtefInfo(day_code, day_code));
+		}
+//		PersistenceManager.getSession().doWork(new Work() {
+//			@Override public void execute(Connection connection) throws SQLException {
+//				String query = String.format("SELECT yr, to_char((yr || '-01-01')::date, 'J')::integer AS year_start_day_code, " + 
+//						"to_char((yr+1 || '-01-01')::date, 'J')::integer - 1 AS year_end_day_code " + 
+//						"FROM generate_series(%d, %d) yr", ArConstants.MIN_SUPPORTED_YEAR, ArConstants.MAX_SUPPORTED_YEAR);
+//
+//				try(RsInfo rsi = SQLUtils.rawRunQuery(connection, query, null)) {
+//					while (rsi.rs.next()) {
+//						int yearNr = rsi.rs.getInt(1);
+//						int firstDay = rsi.rs.getInt(2);
+//						int lastDay = rsi.rs.getInt(3);
+//						mtefInfos.put(yearNr, new YearMtefInfo(firstDay, lastDay));
+//					}
+//				}
+//			}});
+		
 		this.mtefInfos = Collections.unmodifiableMap(mtefInfos);
 	}
+	
 	
 	/**
 	 * scans the report for MTEF columns and converts them to "mtef" measure reference + filter entries <br />
@@ -94,8 +112,8 @@ public class MtefConverter {
 		for(int mtefYear:mtefYears) {
 			YearMtefInfo yearInfo = this.mtefInfos.get(mtefYear);
 			filterRules.add(new FilterRule(
-					Integer.toString(yearInfo.startDayJulianCode),
-					Integer.toString(yearInfo.endDayJulianCode),
+					Integer.toString(yearInfo.periodStartDayCode),
+					Integer.toString(yearInfo.periodStartDayCode),
 				true, true));
 		}
 		

@@ -185,20 +185,39 @@ public class PlainMTEFMondrianReportTests extends MondrianReportsTestCase {
 	      new ReportAreaForTests().withContents("Project Title", "Activity with both MTEFs and Act.Comms", "2011-MTEF Projections", "", "2011-Actual Commitments", "", "2012-MTEF Projections", "150 000", "2012-Actual Commitments", "", "2015-MTEF Projections", "", "2015-Actual Commitments", "888 000", "Total Measures-MTEF Projections", "150 000", "Total Measures-Actual Commitments", "888 000"));
 		
 		runMondrianTestCase(
-				"AMP-20872-one-single-MTEF-year",						
-				activities,
-				correctReportEn,
-				"en");
+			"AMP-20872-one-single-MTEF-year",						
+			activities,
+			correctReportEn,
+			"en");
+	}
+	
+	@Test
+	public void testMtefsMixedEthiopianCalendar() {
+		ReportAreaForTests correctReport = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "2002-MTEF Projections", "0", "2002-Actual Commitments", "0", "2002-Actual Disbursements", "267 098", "2003-MTEF Projections", "0", "2003-Actual Commitments", "213 231", "2003-Actual Disbursements", "0", "2007-MTEF Projections", "0", "2007-Actual Commitments", "888 000", "2007-Actual Disbursements", "0", "2011-MTEF Projections", "1 673 011", "2011-Actual Commitments", "0", "2011-Actual Disbursements", "0", "2012-MTEF Projections", "215 000", "2012-Actual Commitments", "0", "2012-Actual Disbursements", "0", "Total Measures-MTEF Projections", "1 888 011", "Total Measures-Actual Commitments", "1 101 231", "Total Measures-Actual Disbursements", "267 098")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "TAC_activity_1", "2002-MTEF Projections", "", "2002-Actual Commitments", "", "2002-Actual Disbursements", "123 321", "2003-MTEF Projections", "", "2003-Actual Commitments", "213 231", "2003-Actual Disbursements", "", "2007-MTEF Projections", "", "2007-Actual Commitments", "", "2007-Actual Disbursements", "", "2011-MTEF Projections", "", "2011-Actual Commitments", "", "2011-Actual Disbursements", "", "2012-MTEF Projections", "", "2012-Actual Commitments", "", "2012-Actual Disbursements", "", "Total Measures-MTEF Projections", "0", "Total Measures-Actual Commitments", "213 231", "Total Measures-Actual Disbursements", "123 321"),
+	      new ReportAreaForTests().withContents("Project Title", "Test MTEF directed", "2002-MTEF Projections", "", "2002-Actual Commitments", "", "2002-Actual Disbursements", "143 777", "2003-MTEF Projections", "", "2003-Actual Commitments", "", "2003-Actual Disbursements", "", "2007-MTEF Projections", "", "2007-Actual Commitments", "", "2007-Actual Disbursements", "", "2011-MTEF Projections", "150 000", "2011-Actual Commitments", "", "2011-Actual Disbursements", "", "2012-MTEF Projections", "65 000", "2012-Actual Commitments", "", "2012-Actual Disbursements", "", "Total Measures-MTEF Projections", "215 000", "Total Measures-Actual Commitments", "0", "Total Measures-Actual Disbursements", "143 777"),
+	      new ReportAreaForTests().withContents("Project Title", "Pure MTEF Project", "2002-MTEF Projections", "", "2002-Actual Commitments", "", "2002-Actual Disbursements", "", "2003-MTEF Projections", "", "2003-Actual Commitments", "", "2003-Actual Disbursements", "", "2007-MTEF Projections", "", "2007-Actual Commitments", "", "2007-Actual Disbursements", "", "2011-MTEF Projections", "33 888", "2011-Actual Commitments", "", "2011-Actual Disbursements", "", "2012-MTEF Projections", "", "2012-Actual Commitments", "", "2012-Actual Disbursements", "", "Total Measures-MTEF Projections", "33 888", "Total Measures-Actual Commitments", "0", "Total Measures-Actual Disbursements", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "mtef activity 1", "2002-MTEF Projections", "", "2002-Actual Commitments", "", "2002-Actual Disbursements", "", "2003-MTEF Projections", "", "2003-Actual Commitments", "", "2003-Actual Disbursements", "", "2007-MTEF Projections", "", "2007-Actual Commitments", "", "2007-Actual Disbursements", "", "2011-MTEF Projections", "789 123", "2011-Actual Commitments", "", "2011-Actual Disbursements", "", "2012-MTEF Projections", "", "2012-Actual Commitments", "", "2012-Actual Disbursements", "", "Total Measures-MTEF Projections", "789 123", "Total Measures-Actual Commitments", "0", "Total Measures-Actual Disbursements", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "Activity with both MTEFs and Act.Comms", "2002-MTEF Projections", "", "2002-Actual Commitments", "", "2002-Actual Disbursements", "", "2003-MTEF Projections", "", "2003-Actual Commitments", "", "2003-Actual Disbursements", "", "2007-MTEF Projections", "", "2007-Actual Commitments", "888 000", "2007-Actual Disbursements", "", "2011-MTEF Projections", "700 000", "2011-Actual Commitments", "", "2011-Actual Disbursements", "", "2012-MTEF Projections", "150 000", "2012-Actual Commitments", "", "2012-Actual Disbursements", "", "Total Measures-MTEF Projections", "850 000", "Total Measures-Actual Commitments", "888 000", "Total Measures-Actual Disbursements", "0"));
+		
+		runMondrianTestCase(
+			"AMP-16100-flat-mtefs-ethiopian",
+			activities,
+			correctReport,
+			"en"
+		);
 	}
 	
 	@Test
 	public void testMtefConverterDayCodes() {
 		for(int i = ArConstants.MIN_SUPPORTED_YEAR; i < ArConstants.MAX_SUPPORTED_YEAR; i++) {
-			if (MtefConverter.instance.mtefInfos.get(i).endDayJulianCode + 1 != MtefConverter.instance.mtefInfos.get(i + 1).startDayJulianCode)
+			if (MtefConverter.instance.mtefInfos.get(i).periodEndDayCode + 1 != MtefConverter.instance.mtefInfos.get(i + 1).periodStartDayCode)
 				throw new RuntimeException(String.format("Julian day code for year %d end does not equal 1 + code for year %d", i, i + 1));
 		}
-		assertEquals("(2445336 - 2445700)", MtefConverter.instance.mtefInfos.get(1983).toString());
-		assertEquals("(2454467 - 2454832)", MtefConverter.instance.mtefInfos.get(2008).toString());
+		assertEquals("(11983 - 11983)", MtefConverter.instance.mtefInfos.get(1983).toString());
+		assertEquals("(12008 - 12008)", MtefConverter.instance.mtefInfos.get(2008).toString());
 	}
 	
 	@Test
@@ -209,7 +228,7 @@ public class PlainMTEFMondrianReportTests extends MondrianReportsTestCase {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("aaaa", ArConstants.DONOR_TYPE);
 		MtefConverter.instance.convertMtefs(report, spec);
 		assertEquals("[entity: MTEF Projections]", spec.getMeasures().toString());
-		assertEquals("{ElementType = MTEF_DATE, NamedTypedEntity =[null]=[FilterRule=RANGE, [2455563 : 2455927]]}", spec.getFilters().getFilterRules().toString());
+		assertEquals("{ElementType = MTEF_DATE, NamedTypedEntity =[null]=[FilterRule=RANGE, [12011 : 12011]]}", spec.getFilters().getFilterRules().toString());
 	}
 	
 	@Test
@@ -220,6 +239,6 @@ public class PlainMTEFMondrianReportTests extends MondrianReportsTestCase {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("aaaa", ArConstants.DONOR_TYPE);
 		MtefConverter.instance.convertMtefs(report, spec);
 		assertEquals("[entity: MTEF Projections]", spec.getMeasures().toString());
-		assertEquals("{ElementType = MTEF_DATE, NamedTypedEntity =[null]=[FilterRule=RANGE, [2455563 : 2455927], FilterRule=RANGE, [2455928 : 2456293]]}", spec.getFilters().getFilterRules().toString());
+		assertEquals("{ElementType = MTEF_DATE, NamedTypedEntity =[null]=[FilterRule=RANGE, [12011 : 12011], FilterRule=RANGE, [12012 : 12012]]}", spec.getFilters().getFilterRules().toString());
 	}
 }

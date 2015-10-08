@@ -905,7 +905,7 @@
 		<DimensionUsage name="Pledge Secondary Sector"	source="AMP Sector" foreignKey="secondary_sector_id" />
 		<DimensionUsage name="Pledge Tertiary Sector"	source="AMP Sector" foreignKey="tertiary_sector_id" />
 		
-		<DimensionUsage name="Dates" source="AMP Date" foreignKey="date_code" />
+		<DimensionUsage name="Dates" source="AMP Date" foreignKey="display_date_code" />
 		
 		<Dimension name="Flow Name">
 		<!-- degenerate dimension; not used in filtering or other complicated ways but for displaying only, so no key column -->

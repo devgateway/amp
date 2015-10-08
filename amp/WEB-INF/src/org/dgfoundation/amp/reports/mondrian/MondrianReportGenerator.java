@@ -8,6 +8,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -20,6 +21,7 @@ import java.util.TreeSet;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.ecs.rtf.Header;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.ValueWrapper;
@@ -50,6 +52,7 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.newreports.TextCell;
+import org.dgfoundation.amp.onepager.models.MTEFYearsModel;
 import org.dgfoundation.amp.reports.PartialReportArea;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.queries.MDXGenerator;
@@ -607,8 +610,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 //		logger.error("after cleanupTraceHeadersIfNoData:");
 //		SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_cleanupTraceHeadersIfNoData");
 		
-		buildLeafAndTotalsHeaders(rowAxis, columnAxis);		
-
+		buildLeafAndTotalsHeaders(rowAxis, columnAxis);
+//		logger.error("the headers of report " + spec.getReportName() + " are: " + leafHeaders.toString());
+		
 		// now cleanup dummy measures, identified during #getOrderedLeafColumnsList
 		//SaikuUtils.removeColumns(cellDataSet, dummyColumnsToRemove);
 		processMtefHeaders(cellDataSet);
@@ -663,27 +667,39 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 * @param spec
 	 */
 	protected void processMtefHeaders(CellDataSet cellDataSet) {
+		if (spec.getGroupingCriteria() == GroupingCriteria.GROUPING_TOTALS_ONLY)
+			return;
+		//if (System.currentTimeMillis() > 1) return;
 		AbstractBaseCell[][] headers = cellDataSet.getCellSetHeaders();
 		if (headers == null || headers.length <= 1) return;
 		// skim through last line
-		int lastLineNr = headers.length - 1;
-		String expectedMtefRawValue = "[Measures].[MTEF Projections]";
-		for(int i = 0; i < headers[lastLineNr].length; i++) {
-			AbstractBaseCell cell = headers[lastLineNr][i];
-			AbstractBaseCell parentCell = headers[lastLineNr - 1][i];
-			if (cell.getRawValue() != null && cell.getRawValue().equals(expectedMtefRawValue) && parentCell != null) {
+		int yearLevelInHeader = headers.length - getYearLevelInHeader() - 1;
+		int measureLevelInHeader = headers.length - 1 - (spec.getUsesFundingFlows() ? 1 : 0);
+		Map<String, String> mtefMeasures = new HashMap<String, String>() {{
+			put("[Measures].[MTEF Projections]", "MTEF");
+			put("[Measures].[Real MTEFs]", "Real MTEFs");
+		}};
+		for(int i = 0; i < headers[measureLevelInHeader].length; i++) {
+			AbstractBaseCell measureCell = headers[measureLevelInHeader][i];
+			AbstractBaseCell yearCell = headers[yearLevelInHeader][i];
+			if (measureCell.getRawValue() != null && mtefMeasures.containsKey(measureCell.getRawValue()) && yearCell != null) {
 				// this is a MTEF cell and it needs translation
-				int year = parseYear(parentCell.getRawValue());
+				int year = parseYear(yearCell.getRawValue());
 				if (year > 0) {
-					String englishFormattedValue = String.format("MTEF %d/%d", year, year + 1);
+					String englishFormattedValue = /*MTEFYearsModel.getFiscal() ? */String.format("%s %d/%d", mtefMeasures.get(measureCell.getRawValue()), year, year + 1); /* : String.format("MTEF %d", year); -- commented out for old-reports compatibility reasons*/
 					String formattedValue = TranslatorWorker.translateText(englishFormattedValue, environment.locale, 3l);
 					//cell = new MemberCell();
-					cell.setFormattedValue(formattedValue);
-					cell.setRawValue(formattedValue);
+					measureCell.setFormattedValue(formattedValue);
+					measureCell.setRawValue(formattedValue);
 					//headers[lastLineNr][i] = cell;
 					ReportOutputColumn roc = leafHeaders.get(i);
-					roc = new ReportOutputColumn(formattedValue, roc.parentColumn, roc.originalColumnName);
-					leafHeaders.set(i, roc);
+					if (spec.getUsesFundingFlows()) {
+						roc.parentColumn.columnName = formattedValue;
+					} else {
+						// MTEF columns are leaves
+						roc = new ReportOutputColumn(formattedValue, roc.parentColumn, roc.originalColumnName);
+						leafHeaders.set(i, roc);
+					}
 				}
 			}
 //			logger.error(
@@ -755,8 +771,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 		for (Entry<ReportElement, List<FilterRule>> pair : spec.getSettings().getFilterRules().entrySet()) {
 			switch(pair.getKey().type) {
 			case YEAR: 
-				if (!GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria()))
+				if (!GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria())) {
 					applyYearRangeSetting(spec, pair.getValue(), cellDataSet);
+				}
 				break;
 			default: throw new AMPException("Not supported: settings behavior over " + pair.getKey().type);
 			}

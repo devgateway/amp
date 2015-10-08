@@ -1,6 +1,6 @@
 DELETE FROM mondrian_fact_table WHERE entity_id @@activityIdCondition@@;
 
-INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type, adjustment_type, transaction_date, date_code, transaction_amount, 
+INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type, adjustment_type, transaction_date, date_code, display_date_code, transaction_amount, 
   currency_id, donor_id, 
   financing_instrument_id, terms_of_assistance_id, funding_status_id, mode_of_payment_id, status_id, modality_id, type_of_cooperation_id, type_of_implementation_id, procurement_system_id,
   primary_sector_id, secondary_sector_id, tertiary_sector_id, location_id,
@@ -17,6 +17,7 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
     rawdonation.adjustment_type AS adjustment_type,
     rawdonation.transaction_date AS transaction_date,
     rawdonation.date_code AS date_code,
+    CASE WHEN transaction_type = 3 THEN @@MTEF_START@@ + (extract (year from transaction_date)) ELSE rawdonation.date_code END AS display_date_code, 
 
 	rawdonation.transaction_amount * (
          COALESCE(location.percentage, 1) *
@@ -108,7 +109,7 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
 order by rawdonation.amp_activity_id;
 
 
-INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type, adjustment_type, transaction_date, date_code, transaction_amount, 
+INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type, adjustment_type, transaction_date, date_code, display_date_code, transaction_amount, 
   currency_id, donor_id, 
   financing_instrument_id, terms_of_assistance_id, funding_status_id, mode_of_payment_id, status_id, modality_id, type_of_cooperation_id, type_of_implementation_id, procurement_system_id,
   primary_sector_id, secondary_sector_id, tertiary_sector_id, location_id,
@@ -125,6 +126,7 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
     rawdonation.adjustment_type AS adjustment_type,
     rawdonation.transaction_date AS transaction_date,
     rawdonation.date_code AS date_code,
+    CASE WHEN transaction_type = 3 THEN @@MTEF_START@@ + (extract (year from transaction_date)) ELSE rawdonation.date_code END AS display_date_code,
 
 	rawdonation.transaction_amount * (
          COALESCE(location.percentage, 1) *

@@ -50,17 +50,12 @@ var AMPInfo = Backbone.View.extend({
     	return content;
     },
     
-    build_notification: function(settings) {
-    	var notification = "";
-    	if(settings){
-    		switch(settings["3"]) {
-        	case 0.001: notification = "Amounts in Thousands";
-        	break;
-        	case 0.000001 : notification = "Amounts in Millions";
-        	break;
-        	}
-    	}
-    	return notification;
+    build_notification: function() {
+			switch(this.workspace.query.get('raw_settings').unitsOption) {
+				case "AMOUNTS_OPTION_THOUSANDS": return "Amounts in Thousands";
+				case "AMOUNTS_OPTION_MILLIONS": return "Amounts in Millions";
+			}
+    	return "";
     },
     
     receive_info: function(args) {

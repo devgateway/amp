@@ -16,6 +16,7 @@ import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.AllPrgIndicators;
 import org.digijava.module.aim.helper.AmpPrgIndicator;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.IndicatorThemeBean;
 import org.digijava.module.translation.util.ContentTranslationUtil;
@@ -26,6 +27,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.*;
+import org.hibernate.type.IntegerType;
 		
 		
 		/**
@@ -1824,6 +1826,83 @@ public class IndicatorUtil {
 		             logger.debug("Exception : "+ex);
 			}
 			
+		}
+		public static String getRiskColor(int overallRisk) {
+			String fntColor = "";
+			int r = 0,g = 0,b = 0;
+			switch (overallRisk) {
+			case Constants.HIGHLY_SATISFACTORY:
+				r = Constants.HIGHLY_SATISFACTORY_CLR.getRed();
+				g = Constants.HIGHLY_SATISFACTORY_CLR.getGreen();
+				b = Constants.HIGHLY_SATISFACTORY_CLR.getBlue();
+				break;
+			case Constants.VERY_SATISFACTORY:
+				r = Constants.VERY_SATISFACTORY_CLR.getRed();
+				g = Constants.VERY_SATISFACTORY_CLR.getGreen();
+				b = Constants.VERY_SATISFACTORY_CLR.getBlue();
+				break;
+			case Constants.SATISFACTORY:
+				r = Constants.SATISFACTORY_CLR.getRed();
+				g = Constants.SATISFACTORY_CLR.getGreen();
+				b = Constants.SATISFACTORY_CLR.getBlue();
+				break;
+			case Constants.UNSATISFACTORY:
+				r = Constants.UNSATISFACTORY_CLR.getRed();
+				g = Constants.UNSATISFACTORY_CLR.getGreen();
+				b = Constants.UNSATISFACTORY_CLR.getBlue();
+				break;
+			case Constants.VERY_UNSATISFACTORY:
+				r = Constants.VERY_UNSATISFACTORY_CLR.getRed();
+				g = Constants.VERY_UNSATISFACTORY_CLR.getGreen();
+				b = Constants.VERY_UNSATISFACTORY_CLR.getBlue();
+				break;
+			case Constants.HIGHLY_UNSATISFACTORY:
+				r = Constants.HIGHLY_UNSATISFACTORY_CLR.getRed();
+				g = Constants.HIGHLY_UNSATISFACTORY_CLR.getGreen();
+				b = Constants.HIGHLY_UNSATISFACTORY_CLR.getBlue();
+			}
+
+			String hexR = Integer.toHexString(r);
+			String hexG = Integer.toHexString(g);
+			String hexB = Integer.toHexString(b);
+			if (hexR.equals("0"))
+				fntColor += "00";
+			else
+				fntColor += hexR;
+
+			if (hexG.equals("0"))
+				fntColor += "00";
+			else
+				fntColor += hexG;
+
+			if (hexB.equals("0"))
+				fntColor += "00";
+			else
+				fntColor += hexB;
+
+			return fntColor;
+		}
+		
+		public static String getRiskRatingName(int risk) {
+			Session session = null;
+			String riskName = "";
+
+			try {
+				session = PersistenceManager.getSession();
+				String qryStr = "select r.ratingName from " + AmpIndicatorRiskRatings.class.getName() + "" +
+						" r where (r.ratingValue=:risk)";
+				Query qry = session.createQuery(qryStr);
+				qry.setParameter("risk",new Integer(risk),IntegerType.INSTANCE);
+				Iterator itr = qry.list().iterator();
+				if (itr.hasNext()) {
+					riskName = (String) itr.next();
+				}
+			}
+			catch(Exception e) {
+				logger.error("Unable to get risk ratibg value");
+				e.printStackTrace(System.out);
+			}
+			return riskName;
 		}
 	 
 	 public static Collection<AmpIndicatorRiskRatings> getRisks(Long actId) throws Exception{

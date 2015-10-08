@@ -35,18 +35,9 @@ public class ViewIndicatorValues extends TilesAction {
 
 		ViewIndicatorForm viForm = (ViewIndicatorForm) form;
 		viForm.setIndicators(new ArrayList<ActivityIndicator>());
-		Long ind = Long.parseLong(request.getParameter("ind"));
+		String indParam = request.getParameter("ind");
+		Long ind = indParam != null ? Long.parseLong(indParam) : null;
 		String risk = request.getParameter("risk");
-//		logger.error("Encoding: " + request.getCharacterEncoding());
-//		request.setCharacterEncoding("UTF-8");
-//
-//		Map<String, String[]> asd = request.getParameterMap();
-//		for (Map.Entry<String, String[]> entry : asd.entrySet()) {
-//			logger.error("[" + entry.getKey() + "] = " + StringUtils.join(entry.getValue(), " ; "));
-//		}
-		
-//		String encoded = URLDecoder.decode(ind, "UTF-8");
-		
 		AmpActivityVersion  activity = ActivityUtil.loadActivity(viForm.getAmpActivityId());
 		Collection<IndicatorActivity> indicators=activity.getIndicators();
 		if (indicators!=null){

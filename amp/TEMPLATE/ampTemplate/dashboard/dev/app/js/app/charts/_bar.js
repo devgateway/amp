@@ -2,6 +2,8 @@
  * Drawing a bar chart in AMP? Please use ./chart.js instead.
  */
 
+var barDebug = require('../../../../../../../reamp/tools/log')("amp:dashboards:charts:bar");
+
 var nv = window.nv;  // nvd3 is a pain
 var d3 = require('d3-browserify');
 var util = require('../../ugly/util');
@@ -19,11 +21,16 @@ function countCategories(data) {
 
 
 function chart(options) {
+  //this check is needed because I need strictly either 300 or 400 px, and sometimes, when the chart overflows, it
+  //will give me >400 px height
+  var height = options.height < 400 ? 300 : 400;
+  barDebug.log("Setting height to", height);
   var _chart = nv.models.discreteBarChart()
     .valueFormat(options.shortFormatter)
     .showValues(true)
     .showYAxis(false)
     .showXAxis(false)
+    .height(height)
     .margin({ top: 5, right: 10, bottom: 10, left: 10 });
   return _chart;
 }

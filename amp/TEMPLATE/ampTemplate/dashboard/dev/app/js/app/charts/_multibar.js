@@ -2,6 +2,8 @@
  * Drawing a multibar chart in AMP? Please use ./chart.js instead.
  */
 
+var multibarDebug = require('../../../../../../../reamp/tools/log')("amp:dashboards:charts:multibar");
+
 var nv = window.nv;  // nvd3 is a pain
 var customizedMultiBarChart = require('./customized/multiBarChart.js');
 // var d3 = require('d3-browserify');
@@ -20,13 +22,15 @@ function countCategories(data) {
 
 function chart(options) {
   var maxValue = 10;
+  //this check is needed because I need strictly either 300 or 400 px, and sometimes, when the chart overflows, it
+  //will give me >400 px height
+  var height = options.height < 400 ? 300 : 400;
+  multibarDebug.log("Setting multibar height", height);
   var _chart = nv.models.customizedMultiBarChart()  
     .forceY([0, maxValue])  // ensures yAxis is showing at least 0 and 10, but won't restrict the domain
                             // (meaning if the are values falling outside the range it will show then).
     .reduceXTicks(false)
-    //this check is needed because I need strictly either 300 or 400 px, and sometimes, when the chart overflows, it
-    //will give me >400 px height
-    .height(options.height < 400 ? 300 : 400)
+    .height(height)
     .margin({ top: 5, right: 10, bottom: 20, left: 50 });
 
   if (!options.nvControls) {

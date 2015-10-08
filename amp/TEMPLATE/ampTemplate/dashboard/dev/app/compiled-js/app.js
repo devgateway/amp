@@ -198,7 +198,7 @@ _.extend(App.prototype, BackboneDash.Events, {
 
 module.exports = App;
 
-},{"./backbone-dash":3,"./check-support":11,"./models/saved-dashes-collection.js":20,"./models/settings-collection":22,"./views/fail":31,"./views/main":33,"amp-filter/src/main":63,"amp-state/index":75,"amp-translate":76,"amp-url/index":77,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
+},{"./backbone-dash":3,"./check-support":11,"./models/saved-dashes-collection.js":20,"./models/settings-collection":22,"./views/fail":31,"./views/main":33,"amp-filter/src/main":62,"amp-state/index":74,"amp-translate":75,"amp-url/index":76,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -307,6 +307,8 @@ module.exports = _({}).extend(Backbone, {
  * Drawing a bar chart in AMP? Please use ./chart.js instead.
  */
 
+var barDebug = require('../../../../../../../reamp/tools/log')("amp:dashboards:charts:bar");
+
 var nv = window.nv;  // nvd3 is a pain
 var d3 = require('d3-browserify');
 var util = require('../../ugly/util');
@@ -324,11 +326,16 @@ function countCategories(data) {
 
 
 function chart(options) {
+  //this check is needed because I need strictly either 300 or 400 px, and sometimes, when the chart overflows, it
+  //will give me >400 px height
+  var height = options.height < 400 ? 300 : 400;
+  barDebug.log("Setting height to", height);
   var _chart = nv.models.discreteBarChart()
     .valueFormat(options.shortFormatter)
     .showValues(true)
     .showYAxis(false)
     .showXAxis(false)
+    .height(height)
     .margin({ top: 5, right: 10, bottom: 10, left: 10 });
   return _chart;
 }
@@ -364,10 +371,12 @@ module.exports = {
   chart: chart
 };
 
-},{"../../ugly/util":41,"d3-browserify":"d3-browserify"}],5:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":77,"../../ugly/util":41,"d3-browserify":"d3-browserify"}],5:[function(require,module,exports){
 /*
  * Drawing a multibar chart in AMP? Please use ./chart.js instead.
  */
+
+var multibarDebug = require('../../../../../../../reamp/tools/log')("amp:dashboards:charts:multibar");
 
 var nv = window.nv;  // nvd3 is a pain
 var customizedMultiBarChart = require('./customized/multiBarChart.js');
@@ -387,13 +396,15 @@ function countCategories(data) {
 
 function chart(options) {
   var maxValue = 10;
+  //this check is needed because I need strictly either 300 or 400 px, and sometimes, when the chart overflows, it
+  //will give me >400 px height
+  var height = options.height < 400 ? 300 : 400;
+  multibarDebug.log("Setting multibar height", height);
   var _chart = nv.models.customizedMultiBarChart()  
     .forceY([0, maxValue])  // ensures yAxis is showing at least 0 and 10, but won't restrict the domain
                             // (meaning if the are values falling outside the range it will show then).
     .reduceXTicks(false)
-    //this check is needed because I need strictly either 300 or 400 px, and sometimes, when the chart overflows, it
-    //will give me >400 px height
-    .height(options.height < 400 ? 300 : 400)
+    .height(height)
     .margin({ top: 5, right: 10, bottom: 20, left: 50 });
 
   if (!options.nvControls) {
@@ -415,7 +426,7 @@ module.exports = {
   chart: chart
 };
 
-},{"./customized/multiBarChart.js":10}],6:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":77,"./customized/multiBarChart.js":10}],6:[function(require,module,exports){
 /*
  * Drawing a pie chart in AMP? Please use ./chart.js instead.
  */
@@ -651,7 +662,7 @@ function getSecretRenderArea(height, width) {
     secretArea.id = 'super-secret-render-area-shh';
     secretArea.style.position = 'absolute';
     secretArea.style.left = '-9999em';
-    secretArea.style.top = '-9999em';
+    secretArea.style.top = '-9999em';  // for IE :(
     document.body.appendChild(secretArea);
   }
   if (height) { secretArea.style.height = height + 'px'; }
@@ -770,11 +781,11 @@ function formatNumber(number) {
 		format = "0";
 	}
 	if (app.settings.numberFormatSettings.numberFormat.indexOf('.') > 0) {
-		var decimalDigits = app.settings.numberFormatSettings.numberFormat.length 
+		var decimalDigits = app.settings.numberFormatSettings.numberFormat.length
 			- app.settings.numberFormatSettings.numberFormat.indexOf('.');
 		format = format + "." + new Array(decimalDigits).join("0");
 	}
-	
+
 	// Define a new "language" for Numeral where we can change the default
 	// delimiters.
 	var ampLang = {
@@ -803,7 +814,7 @@ function formatNumber(number) {
 	return stringNumber;
 }
 
-var ampLang = 
+var ampLang =
 
 
 module.exports = {
@@ -2793,8 +2804,8 @@ var template = _.template("<h4 data-i18n=\"amp.dashboard:download-preview\">Prev
 
 
 module.exports = BackboneDash.View.extend({
- 
-  //TODO: This is wrong because different countries have other measures (ie: ssc).	
+
+  //TODO: This is wrong because different countries have other measures (ie: ssc).
   adjTypeTranslation : {"Actual Commitments":"amp.dashboard:ftype-actual-commitment",
 			"Actual Disbursements":"amp.dashboard:ftype-actual-disbursement",
 				"Actual Expenditures":"amp.dashboard:ftype-actual-expenditure",
@@ -2823,15 +2834,15 @@ module.exports = BackboneDash.View.extend({
     	var rendered = false; // This flag is used to avoid triggering the render process twice in case the browser mess up the interval.
     	var interval = window.setInterval(function() {
     		if ($('.dash-download-modal').closest('.in').length > 0) {
-    			window.clearInterval(interval);    			   			
+    			window.clearInterval(interval);
     			nv.tooltip.cleanup();
     			if (rendered === false) {
     				rendered = true;
-    				self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'), 
+    				self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'),
     						self.$('.preview-area .canvas-wrap'));
     			}
     		}
-    	}, 100);      
+    	}, 100);
     }
     return this;
   },
@@ -2857,7 +2868,7 @@ module.exports = BackboneDash.View.extend({
       canvasContainer.html(img);
       $(canvasContainer).removeClass('hidden');
       $('.modal-preview-area').remove();
-      this.makeDownloadable(img.src, 'chart', '.png');      
+      this.makeDownloadable(img.src, 'chart', '.png');
     });
 
   },
@@ -2945,15 +2956,15 @@ module.exports = BackboneDash.View.extend({
         }
         return row;
       })
-      .value();  
-    
+      .value();
+
     // prepend a header row
     headerRow = [];
     var amountTrn = this.app.translator.translateSync('amp.dashboard:download-amount', 'Amount');
     var currencyTrn = this.app.translator.translateSync('amp.dashboard:currency', 'Currency');
     var typeTrn = this.app.translator.translateSync('amp.dashboard:type', 'Type');
     var yearTrn = this.app.translator.translateSync('amp.dashboard:year', 'Year');
-    
+
 	if (this.model.url.indexOf('/tops') > -1) {
 	    headerRow.push(this.model.get('title'));
 	    headerRow.push(amountTrn);
@@ -2972,11 +2983,18 @@ module.exports = BackboneDash.View.extend({
 	    });
 	    headerRow.push(currencyTrn);
 	    headerRow.push(typeTrn);
-	}    
+	}
 
     csvTransformed.unshift(headerRow);
+    /* Add sep=, for automatic Excel support at the very top of the file works but breaks BOM unicode.
+     * Let us use tab-delimited instead.
+     *  This website shows a csv with Tab-delimited, utf16le with a BOM has best Excel support (via StackOverflow):
+     *  http://wiki.scn.sap.com/wiki/display/ABAP/CSV+tests+of+encoding+and+column+separator
+     */
 
     textContent = baby.unparse(csvTransformed, {
+      delimiter: '\t',
+      encoding: 'utf-16',
     	quotes: true
     });
 
@@ -3032,7 +3050,7 @@ module.exports = BackboneDash.View.extend({
         .attr('href', stuff)
         .attr('download', fileName);
     }
-    
+
     // AMP-19813
     if (ext.indexOf('csv') !== -1) {
     	$('.modal-preview-area').remove();
@@ -3067,10 +3085,10 @@ module.exports = BackboneDash.View.extend({
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
-var template = _.template("<div class=\"col-xs-12 col-md-6\">\n  <div class=\"panel\">\n    <div class=\"panel-body\">\n      <button type=\"button\" class=\"btn btn-sm btn-default pull-right show-filters\">\n        <span class=\"glyphicon glyphicon-edit\"></span>\n        <span data-i18n=\"amp.dashboard:filters-edit\">Edit filters</span>\n      </button>\n      <h3 class=\"inline-heading\" data-i18n=\"amp.common:title-filters\">Filters</h3>\n      <div class=\"applied-filters\">\n        <em data-i18n=\"amp.common:filters-loading\">Loading...</em>\n      </div>\n    </div>\n  </div>\n</div>\n<div id=\"filter-popup\"></div>\n");
+var template = _.template("<div class=\"col-xs-12 col-md-5\">\n  <div class=\"panel\">\n    <div class=\"panel-body\">\n      <button type=\"button\" class=\"btn btn-sm btn-default pull-right show-filters\">\n        <span class=\"glyphicon glyphicon-edit\"></span>\n        <span data-i18n=\"amp.dashboard:filters-edit\">Edit filters</span>\n      </button>\n      <h3 class=\"inline-heading\" data-i18n=\"amp.common:title-filters\">Filters</h3>\n      <div class=\"applied-filters\">\n        <em data-i18n=\"amp.common:filters-loading\">Loading...</em>\n      </div>\n    </div>\n  </div>\n</div>\n<div id=\"filter-popup\"></div>\n");
 var summaryTemplate = _.template("<% if (!countApplied) { %>\n  <em data-i18n=\"amp.dashboard:filters-none-applied\">No filters applied</em>\n<% } else { %>\n  <span>\n    <button class=\"btn btn-default btn-sm show-filter-details\">\n      <span class=\"glyphicon glyphicon-eye-open\"></span>\n      <span data-i18n=\"amp.dashboard:filters-show-settings\">Show filter settings</span>\n      (<b><%= countApplied %></b>)\n    </button>\n  </span>\n<% } %>\n");
 var detailsTemplate = _.template("<div>\n  <h4 class=\"inline-heading\" data-i18n=\"amp.dashboard:filters-active\">Active Filters</h4>\n  <button type=\"button\" class=\"btn btn-sm btn-default hide-filter-details\">\n    <span class=\"glyphicon glyphicon-eye-close\"></span>\n    <span data-i18n=\"amp.dashboard:filters-hide-details\">Hide filter details</span>\n  </button>\n</div>\n<% _(applied).each(function(filter) { %>\n  <h5><%= filter.name %></h5>\n  <ul>\n    <% _(filter.detail).each(function(detail) { %>\n      <li><%= detail %></li>\n    <% }) %>\n  </ul>\n<% }) %>");
-var filtersViewLog = require('../../../../../../../ampTemplate/module/amp-log')('dashboard:filters:view');
+var filtersViewLog = require('../../../../../../../reamp/tools/log')('amp:dashboards:filters:view');
 
 
 module.exports = BackboneDash.View.extend({
@@ -3193,7 +3211,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../../../../../../../ampTemplate/module/amp-log":45,"../backbone-dash":3,"underscore":"underscore"}],33:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":77,"../backbone-dash":3,"underscore":"underscore"}],33:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -3324,11 +3342,11 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"../models/chart-aid-predictability":13,"../models/chart-funding-type":14,"../models/chart-tops":16,"../models/charts-collection":17,"../models/enabled-charts-collection":18,"./charts":28,"./controls":29,"amp-boilerplate":46,"amp-state/index":75,"underscore":"underscore"}],34:[function(require,module,exports){
+},{"../backbone-dash":3,"../models/chart-aid-predictability":13,"../models/chart-funding-type":14,"../models/chart-tops":16,"../models/charts-collection":17,"../models/enabled-charts-collection":18,"./charts":28,"./controls":29,"amp-boilerplate":45,"amp-state/index":74,"underscore":"underscore"}],34:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
-var logger = require('../../../../../../../ampTemplate/module/amp-log')('amp:dashboard:settings:modal');
+var logger = require('../../../../../../../reamp/tools/log')('amp:dashboards:settings:modal');
 var template = _.template("<div class=\"tab-content filter-options\">\n  <div class=\"tab-pane active\">\n    <ul class=\"sub-filters-titles nav nav-pills nav-stacked\">\n      <% _(settings.getVisible()).each(function(setting) { %>\n        <li <%= setting.id === current.id ? 'class=\"active\"' : '' %>>\n          <a class=\"setting-select\" href=\"#<%= setting.id %>\"><span><%= setting.get('name') %></span></a>\n        </li>\n      <% }) %>\n    </ul>\n    <div class=\"sub-filters-content\">\n      <select class=\"form-control setting-value\">\n        <% _(current.get('options')).each(function(option) { %>\n          <option value=\"<%= option.value %>\" <%= option.selected ? 'selected=\"selected\"' : '' %>><%= option.name %></option>\n        <% }) %>\n      </select>\n    </div>\n  </div>\n</div>\n");
 
 
@@ -3399,7 +3417,7 @@ module.exports = BackboneDash.View.extend({
   }
 });
 
-},{"../../../../../../../ampTemplate/module/amp-log":45,"../backbone-dash":3,"underscore":"underscore"}],35:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":77,"../backbone-dash":3,"underscore":"underscore"}],35:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -3448,7 +3466,7 @@ module.exports = BackboneDash.View.extend({
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
-var template = _.template("<div class=\"col-xs-12 col-sm-6 col-md-3\">\n  <div class=\"panel\">\n    <div class=\"panel-body\">\n      <h3 data-i18n=\"amp.dashboard:share-dashboard-top\" class=\"inline-heading\">Share</h3>\n      <button type=\"button\" class=\"btn btn-sm btn-default pull-right dash-share-button\">\n        <span class=\"glyphicon glyphicon-link\"></span>\n        <span data-i18n=\"amp.dashboard:share-link\">link</span>\n      </button>\n    </div>\n  </div>\n</div>\n\n<div class=\"dash-share-modal modal fade\" id=\"<%= details.id %>\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n  <div class=\"modal-dialog\">\n    <div class=\"panel panel-primary\">\n      <div class=\"panel-heading fix-title-height\">\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span data-i18n=\"amp.dashboard:close\" class=\"sr-only\">Close</span></button>\n        <span data-i18n=\"amp.dashboard:share-dashboard\">Share this dashboard view</span>\n      </div>\n      <div class=\"panel-body\">\n        <form role=\"form\">\n          <label data-i18n=\"amp.dashboard:share-link\" for=\"dash-share-url\">Link</label>\n          <input type=\"url\" class=\"form-control\" id=\"dash-share-url\" />\n        </form>\n      </div>\n      <div class=\"panel-footer\">\n        <button type=\"button\" class=\"btn btn-primary\" data-i18n=\"amp.dashboard:close\" data-dismiss=\"modal\">Close</button>\n      </div>\n    </div>\n  </div>\n</div>\n");
+var template = _.template("<div class=\"col-xs-12 col-sm-6 col-md-4\">\n  <div class=\"panel\">\n    <div class=\"panel-body\">\n      <h3 data-i18n=\"amp.dashboard:share-dashboard-top\" class=\"inline-heading\">Share</h3>\n      <button type=\"button\" class=\"btn btn-sm btn-default pull-right dash-share-button\">\n        <span class=\"glyphicon glyphicon-link\"></span>\n        <span data-i18n=\"amp.dashboard:share-link\">link</span>\n      </button>\n    </div>\n  </div>\n</div>\n\n<div class=\"dash-share-modal modal fade\" id=\"<%= details.id %>\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n  <div class=\"modal-dialog\">\n    <div class=\"panel panel-primary\">\n      <div class=\"panel-heading fix-title-height\">\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span data-i18n=\"amp.dashboard:close\" class=\"sr-only\">Close</span></button>\n        <span data-i18n=\"amp.dashboard:share-dashboard\">Share this dashboard view</span>\n      </div>\n      <div class=\"panel-body\">\n        <form role=\"form\">\n          <label data-i18n=\"amp.dashboard:share-link\" for=\"dash-share-url\">Link</label>\n          <input type=\"url\" class=\"form-control\" id=\"dash-share-url\" />\n        </form>\n      </div>\n      <div class=\"panel-footer\">\n        <button type=\"button\" class=\"btn btn-primary\" data-i18n=\"amp.dashboard:close\" data-dismiss=\"modal\">Close</button>\n      </div>\n    </div>\n  </div>\n</div>\n");
 
 
 module.exports = BackboneDash.View.extend({
@@ -22691,593 +22709,6 @@ nv.models.stackedAreaChart = function() {
 }
 })();
 },{}],45:[function(require,module,exports){
-module.exports =
-/******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
-/******/ 			return installedModules[moduleId].exports;
-
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			exports: {},
-/******/ 			id: moduleId,
-/******/ 			loaded: false
-/******/ 		};
-
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
-/******/ 		// Flag the module as loaded
-/******/ 		module.loaded = true;
-
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-
-
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(0);
-/******/ })
-/************************************************************************/
-/******/ ([
-/* 0 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	var _debug = __webpack_require__(1);
-
-	var _debug2 = _interopRequireDefault(_debug);
-
-	exports["default"] = function (slug) {
-	  var res = {
-	    log: (0, _debug2["default"])(slug),
-	    err: (0, _debug2["default"])(slug),
-	    warn: (0, _debug2["default"])(slug),
-	    onDebug: (0, _debug2["default"])(slug)
-	  };
-	  res.err.log = console.error.bind(console);
-	  res.warn.log = console.warn.bind(console);
-	  res.onDebug.log = function (_, __, ___, cb) {
-	    cb();
-	  };
-	  return res;
-	};
-
-	module.exports = exports["default"];
-
-/***/ },
-/* 1 */
-/***/ function(module, exports, __webpack_require__) {
-
-	
-	/**
-	 * This is the web browser implementation of `debug()`.
-	 *
-	 * Expose `debug()` as the module.
-	 */
-
-	exports = module.exports = __webpack_require__(2);
-	exports.log = log;
-	exports.formatArgs = formatArgs;
-	exports.save = save;
-	exports.load = load;
-	exports.useColors = useColors;
-	exports.storage = 'undefined' != typeof chrome
-	               && 'undefined' != typeof chrome.storage
-	                  ? chrome.storage.local
-	                  : localstorage();
-
-	/**
-	 * Colors.
-	 */
-
-	exports.colors = [
-	  'lightseagreen',
-	  'forestgreen',
-	  'goldenrod',
-	  'dodgerblue',
-	  'darkorchid',
-	  'crimson'
-	];
-
-	/**
-	 * Currently only WebKit-based Web Inspectors, Firefox >= v31,
-	 * and the Firebug extension (any Firefox version) are known
-	 * to support "%c" CSS customizations.
-	 *
-	 * TODO: add a `localStorage` variable to explicitly enable/disable colors
-	 */
-
-	function useColors() {
-	  // is webkit? http://stackoverflow.com/a/16459606/376773
-	  return ('WebkitAppearance' in document.documentElement.style) ||
-	    // is firebug? http://stackoverflow.com/a/398120/376773
-	    (window.console && (console.firebug || (console.exception && console.table))) ||
-	    // is firefox >= v31?
-	    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
-	    (navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31);
-	}
-
-	/**
-	 * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
-	 */
-
-	exports.formatters.j = function(v) {
-	  return JSON.stringify(v);
-	};
-
-
-	/**
-	 * Colorize log arguments if enabled.
-	 *
-	 * @api public
-	 */
-
-	function formatArgs() {
-	  var args = arguments;
-	  var useColors = this.useColors;
-
-	  args[0] = (useColors ? '%c' : '')
-	    + this.namespace
-	    + (useColors ? ' %c' : ' ')
-	    + args[0]
-	    + (useColors ? '%c ' : ' ')
-	    + '+' + exports.humanize(this.diff);
-
-	  if (!useColors) return args;
-
-	  var c = 'color: ' + this.color;
-	  args = [args[0], c, 'color: inherit'].concat(Array.prototype.slice.call(args, 1));
-
-	  // the final "%c" is somewhat tricky, because there could be other
-	  // arguments passed either before or after the %c, so we need to
-	  // figure out the correct index to insert the CSS into
-	  var index = 0;
-	  var lastC = 0;
-	  args[0].replace(/%[a-z%]/g, function(match) {
-	    if ('%%' === match) return;
-	    index++;
-	    if ('%c' === match) {
-	      // we only are interested in the *last* %c
-	      // (the user may have provided their own)
-	      lastC = index;
-	    }
-	  });
-
-	  args.splice(lastC, 0, c);
-	  return args;
-	}
-
-	/**
-	 * Invokes `console.log()` when available.
-	 * No-op when `console.log` is not a "function".
-	 *
-	 * @api public
-	 */
-
-	function log() {
-	  // this hackery is required for IE8/9, where
-	  // the `console.log` function doesn't have 'apply'
-	  return 'object' === typeof console
-	    && console.log
-	    && Function.prototype.apply.call(console.log, console, arguments);
-	}
-
-	/**
-	 * Save `namespaces`.
-	 *
-	 * @param {String} namespaces
-	 * @api private
-	 */
-
-	function save(namespaces) {
-	  try {
-	    if (null == namespaces) {
-	      exports.storage.removeItem('debug');
-	    } else {
-	      exports.storage.debug = namespaces;
-	    }
-	  } catch(e) {}
-	}
-
-	/**
-	 * Load `namespaces`.
-	 *
-	 * @return {String} returns the previously persisted debug modes
-	 * @api private
-	 */
-
-	function load() {
-	  var r;
-	  try {
-	    r = exports.storage.debug;
-	  } catch(e) {}
-	  return r;
-	}
-
-	/**
-	 * Enable namespaces listed in `localStorage.debug` initially.
-	 */
-
-	exports.enable(load());
-
-	/**
-	 * Localstorage attempts to return the localstorage.
-	 *
-	 * This is necessary because safari throws
-	 * when a user disables cookies/localstorage
-	 * and you attempt to access it.
-	 *
-	 * @return {LocalStorage}
-	 * @api private
-	 */
-
-	function localstorage(){
-	  try {
-	    return window.localStorage;
-	  } catch (e) {}
-	}
-
-
-/***/ },
-/* 2 */
-/***/ function(module, exports, __webpack_require__) {
-
-	
-	/**
-	 * This is the common logic for both the Node.js and web browser
-	 * implementations of `debug()`.
-	 *
-	 * Expose `debug()` as the module.
-	 */
-
-	exports = module.exports = debug;
-	exports.coerce = coerce;
-	exports.disable = disable;
-	exports.enable = enable;
-	exports.enabled = enabled;
-	exports.humanize = __webpack_require__(3);
-
-	/**
-	 * The currently active debug mode names, and names to skip.
-	 */
-
-	exports.names = [];
-	exports.skips = [];
-
-	/**
-	 * Map of special "%n" handling functions, for the debug "format" argument.
-	 *
-	 * Valid key names are a single, lowercased letter, i.e. "n".
-	 */
-
-	exports.formatters = {};
-
-	/**
-	 * Previously assigned color.
-	 */
-
-	var prevColor = 0;
-
-	/**
-	 * Previous log timestamp.
-	 */
-
-	var prevTime;
-
-	/**
-	 * Select a color.
-	 *
-	 * @return {Number}
-	 * @api private
-	 */
-
-	function selectColor() {
-	  return exports.colors[prevColor++ % exports.colors.length];
-	}
-
-	/**
-	 * Create a debugger with the given `namespace`.
-	 *
-	 * @param {String} namespace
-	 * @return {Function}
-	 * @api public
-	 */
-
-	function debug(namespace) {
-
-	  // define the `disabled` version
-	  function disabled() {
-	  }
-	  disabled.enabled = false;
-
-	  // define the `enabled` version
-	  function enabled() {
-
-	    var self = enabled;
-
-	    // set `diff` timestamp
-	    var curr = +new Date();
-	    var ms = curr - (prevTime || curr);
-	    self.diff = ms;
-	    self.prev = prevTime;
-	    self.curr = curr;
-	    prevTime = curr;
-
-	    // add the `color` if not set
-	    if (null == self.useColors) self.useColors = exports.useColors();
-	    if (null == self.color && self.useColors) self.color = selectColor();
-
-	    var args = Array.prototype.slice.call(arguments);
-
-	    args[0] = exports.coerce(args[0]);
-
-	    if ('string' !== typeof args[0]) {
-	      // anything else let's inspect with %o
-	      args = ['%o'].concat(args);
-	    }
-
-	    // apply any `formatters` transformations
-	    var index = 0;
-	    args[0] = args[0].replace(/%([a-z%])/g, function(match, format) {
-	      // if we encounter an escaped % then don't increase the array index
-	      if (match === '%%') return match;
-	      index++;
-	      var formatter = exports.formatters[format];
-	      if ('function' === typeof formatter) {
-	        var val = args[index];
-	        match = formatter.call(self, val);
-
-	        // now we need to remove `args[index]` since it's inlined in the `format`
-	        args.splice(index, 1);
-	        index--;
-	      }
-	      return match;
-	    });
-
-	    if ('function' === typeof exports.formatArgs) {
-	      args = exports.formatArgs.apply(self, args);
-	    }
-	    var logFn = enabled.log || exports.log || console.log.bind(console);
-	    logFn.apply(self, args);
-	  }
-	  enabled.enabled = true;
-
-	  var fn = exports.enabled(namespace) ? enabled : disabled;
-
-	  fn.namespace = namespace;
-
-	  return fn;
-	}
-
-	/**
-	 * Enables a debug mode by namespaces. This can include modes
-	 * separated by a colon and wildcards.
-	 *
-	 * @param {String} namespaces
-	 * @api public
-	 */
-
-	function enable(namespaces) {
-	  exports.save(namespaces);
-
-	  var split = (namespaces || '').split(/[\s,]+/);
-	  var len = split.length;
-
-	  for (var i = 0; i < len; i++) {
-	    if (!split[i]) continue; // ignore empty strings
-	    namespaces = split[i].replace(/\*/g, '.*?');
-	    if (namespaces[0] === '-') {
-	      exports.skips.push(new RegExp('^' + namespaces.substr(1) + '$'));
-	    } else {
-	      exports.names.push(new RegExp('^' + namespaces + '$'));
-	    }
-	  }
-	}
-
-	/**
-	 * Disable debug output.
-	 *
-	 * @api public
-	 */
-
-	function disable() {
-	  exports.enable('');
-	}
-
-	/**
-	 * Returns true if the given mode name is enabled, false otherwise.
-	 *
-	 * @param {String} name
-	 * @return {Boolean}
-	 * @api public
-	 */
-
-	function enabled(name) {
-	  var i, len;
-	  for (i = 0, len = exports.skips.length; i < len; i++) {
-	    if (exports.skips[i].test(name)) {
-	      return false;
-	    }
-	  }
-	  for (i = 0, len = exports.names.length; i < len; i++) {
-	    if (exports.names[i].test(name)) {
-	      return true;
-	    }
-	  }
-	  return false;
-	}
-
-	/**
-	 * Coerce `val`.
-	 *
-	 * @param {Mixed} val
-	 * @return {Mixed}
-	 * @api private
-	 */
-
-	function coerce(val) {
-	  if (val instanceof Error) return val.stack || val.message;
-	  return val;
-	}
-
-
-/***/ },
-/* 3 */
-/***/ function(module, exports) {
-
-	/**
-	 * Helpers.
-	 */
-
-	var s = 1000;
-	var m = s * 60;
-	var h = m * 60;
-	var d = h * 24;
-	var y = d * 365.25;
-
-	/**
-	 * Parse or format the given `val`.
-	 *
-	 * Options:
-	 *
-	 *  - `long` verbose formatting [false]
-	 *
-	 * @param {String|Number} val
-	 * @param {Object} options
-	 * @return {String|Number}
-	 * @api public
-	 */
-
-	module.exports = function(val, options){
-	  options = options || {};
-	  if ('string' == typeof val) return parse(val);
-	  return options.long
-	    ? long(val)
-	    : short(val);
-	};
-
-	/**
-	 * Parse the given `str` and return milliseconds.
-	 *
-	 * @param {String} str
-	 * @return {Number}
-	 * @api private
-	 */
-
-	function parse(str) {
-	  str = '' + str;
-	  if (str.length > 10000) return;
-	  var match = /^((?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$/i.exec(str);
-	  if (!match) return;
-	  var n = parseFloat(match[1]);
-	  var type = (match[2] || 'ms').toLowerCase();
-	  switch (type) {
-	    case 'years':
-	    case 'year':
-	    case 'yrs':
-	    case 'yr':
-	    case 'y':
-	      return n * y;
-	    case 'days':
-	    case 'day':
-	    case 'd':
-	      return n * d;
-	    case 'hours':
-	    case 'hour':
-	    case 'hrs':
-	    case 'hr':
-	    case 'h':
-	      return n * h;
-	    case 'minutes':
-	    case 'minute':
-	    case 'mins':
-	    case 'min':
-	    case 'm':
-	      return n * m;
-	    case 'seconds':
-	    case 'second':
-	    case 'secs':
-	    case 'sec':
-	    case 's':
-	      return n * s;
-	    case 'milliseconds':
-	    case 'millisecond':
-	    case 'msecs':
-	    case 'msec':
-	    case 'ms':
-	      return n;
-	  }
-	}
-
-	/**
-	 * Short format for `ms`.
-	 *
-	 * @param {Number} ms
-	 * @return {String}
-	 * @api private
-	 */
-
-	function short(ms) {
-	  if (ms >= d) return Math.round(ms / d) + 'd';
-	  if (ms >= h) return Math.round(ms / h) + 'h';
-	  if (ms >= m) return Math.round(ms / m) + 'm';
-	  if (ms >= s) return Math.round(ms / s) + 's';
-	  return ms + 'ms';
-	}
-
-	/**
-	 * Long format for `ms`.
-	 *
-	 * @param {Number} ms
-	 * @return {String}
-	 * @api private
-	 */
-
-	function long(ms) {
-	  return plural(ms, d, 'day')
-	    || plural(ms, h, 'hour')
-	    || plural(ms, m, 'minute')
-	    || plural(ms, s, 'second')
-	    || ms + ' ms';
-	}
-
-	/**
-	 * Pluralization helper.
-	 */
-
-	function plural(ms, n, name) {
-	  if (ms < n) return;
-	  if (ms < n * 1.5) return Math.floor(ms / n) + ' ' + name;
-	  return Math.ceil(ms / n) + ' ' + name + 's';
-	}
-
-
-/***/ }
-/******/ ]);
-},{}],46:[function(require,module,exports){
 
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -23348,7 +22779,7 @@ module.exports = {
 };
 window.boilerplate = Widget;
 
-},{"./src/views/header-footer-view.js":52,"./src/views/menu-view.js":53,"amp-translate":76,"backbone":"backbone","bootstrap/dist/js/bootstrap":47,"jquery":"jquery","underscore":"underscore"}],47:[function(require,module,exports){
+},{"./src/views/header-footer-view.js":51,"./src/views/menu-view.js":52,"amp-translate":75,"backbone":"backbone","bootstrap/dist/js/bootstrap":46,"jquery":"jquery","underscore":"underscore"}],46:[function(require,module,exports){
 /*!
  * Bootstrap v3.3.2 (http://getbootstrap.com)
  * Copyright 2011-2015 Twitter, Inc.
@@ -25656,7 +25087,7 @@ if (typeof jQuery === 'undefined') {
 
 }(jQuery);
 
-},{}],48:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 var Backbone = require('backbone');
 var MenuModel = require('../models/amp-menus-model.js');
 
@@ -25672,7 +25103,7 @@ module.exports = Backbone.Collection.extend({
 
 });
 
-},{"../models/amp-menus-model.js":50,"backbone":"backbone"}],49:[function(require,module,exports){
+},{"../models/amp-menus-model.js":49,"backbone":"backbone"}],48:[function(require,module,exports){
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
@@ -25689,7 +25120,7 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],50:[function(require,module,exports){
+},{"backbone":"backbone"}],49:[function(require,module,exports){
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
@@ -25707,7 +25138,7 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],51:[function(require,module,exports){
+},{"backbone":"backbone"}],50:[function(require,module,exports){
 
 var $ = require('jquery');
 var Backbone = require('backbone');
@@ -25737,7 +25168,7 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],52:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],51:[function(require,module,exports){
 
 var $ = require('jquery');
 var Backbone = require('backbone');
@@ -25802,7 +25233,7 @@ module.exports = Backbone.View.extend({
 	});
 
 
-},{"../models/amp-layout-model.js":49,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],53:[function(require,module,exports){
+},{"../models/amp-layout-model.js":48,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],52:[function(require,module,exports){
 
 var Backbone = require('backbone');
 require('bootstrap/dist/js/bootstrap');
@@ -25892,7 +25323,7 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"../collections/amp-menus-collection.js":48,"../models/amp-menus-model.js":50,"./about-view.js":51,"./submenu-compositeview.js":54,"backbone":"backbone","bootstrap/dist/js/bootstrap":47,"underscore":"underscore"}],54:[function(require,module,exports){
+},{"../collections/amp-menus-collection.js":47,"../models/amp-menus-model.js":49,"./about-view.js":50,"./submenu-compositeview.js":53,"backbone":"backbone","bootstrap/dist/js/bootstrap":46,"underscore":"underscore"}],53:[function(require,module,exports){
 
 var Backbone = require('backbone');
 var _ = require('underscore');
@@ -25958,7 +25389,7 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"backbone":"backbone","underscore":"underscore"}],55:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],54:[function(require,module,exports){
 /*!
  * Bootstrap v3.3.0 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.
@@ -28236,7 +27667,7 @@ if (typeof jQuery === 'undefined') {
 
 }(jQuery);
 
-},{}],56:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -28560,7 +27991,7 @@ $.extend( $.ui, {
 
 })( jQuery );
 
-},{"jquery":"jquery"}],57:[function(require,module,exports){
+},{"jquery":"jquery"}],56:[function(require,module,exports){
 var jQuery = require('jquery');
 require('./core');
 
@@ -30603,7 +30034,7 @@ $.datepicker.version = "1.10.4";
 
 })(jQuery);
 
-},{"./core":56,"jquery":"jquery"}],58:[function(require,module,exports){
+},{"./core":55,"jquery":"jquery"}],57:[function(require,module,exports){
 var jQuery = require('jquery');
 require('./core');
 require('./mouse');
@@ -31568,7 +30999,7 @@ $.ui.plugin.add("draggable", "zIndex", {
 
 })(jQuery);
 
-},{"./core":56,"./mouse":59,"./widget":60,"jquery":"jquery"}],59:[function(require,module,exports){
+},{"./core":55,"./mouse":58,"./widget":59,"jquery":"jquery"}],58:[function(require,module,exports){
 var jQuery = require('jquery');
 require('./widget');
 
@@ -31742,7 +31173,7 @@ $.widget("ui.mouse", {
 
 })(jQuery);
 
-},{"./widget":60,"jquery":"jquery"}],60:[function(require,module,exports){
+},{"./widget":59,"jquery":"jquery"}],59:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -32267,7 +31698,7 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 
 })( jQuery );
 
-},{"jquery":"jquery"}],61:[function(require,module,exports){
+},{"jquery":"jquery"}],60:[function(require,module,exports){
 var Backbone = require('backbone');
 var _ = require('underscore');
 var $ = require('jquery');
@@ -32337,6 +31768,10 @@ module.exports = Backbone.Collection.extend({
   },
 
 
+//  contains: function(key) {
+//	  if ()
+//  },
+  
   parse: function(data) {
     //only keep filters with ui == true;
     data = _.filter(data, function(obj) {
@@ -32398,6 +31833,7 @@ module.exports = Backbone.Collection.extend({
         var tmpModel = new GenericFilterModel({
           url: url + '/' + APIFilter.id,
           name: APIFilter.name,
+          tab: APIFilter.tab,
           ui: true,
           group: attrs.id,
           empty: false
@@ -32456,6 +31892,7 @@ module.exports = Backbone.Collection.extend({
             {
               ui: true,
               group: 'Donor',
+              tab: 'Funding Organizations',
               data: self.orgTypeCollection.toJSON()
             });
 
@@ -32467,6 +31904,7 @@ module.exports = Backbone.Collection.extend({
             {
               ui: true,
               group: 'Role', //TODO: ?should this be 'Role' or role.id or role.get('name')?
+              tab: 'All Agencies',
               data: self.orgGroupCollection.toJSON()
             });
 
@@ -32614,7 +32052,7 @@ module.exports = Backbone.Collection.extend({
 	}
 });
 
-},{"../models/generic-filter-model":65,"../models/org-role-filter-model":66,"../models/years-filter-model":67,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],62:[function(require,module,exports){
+},{"../models/generic-filter-model":64,"../models/org-role-filter-model":65,"../models/years-filter-model":66,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],61:[function(require,module,exports){
 /*
 
 $.Link (part of noUiSlider) - WTFPL */
@@ -32647,7 +32085,7 @@ b,a)})}function X(a){return this.each(function(){var b=c(this).val(),d=this.dest
 end:"mouseup touchend"},f="noUi-target noUi-base noUi-origin noUi-handle noUi-horizontal noUi-vertical noUi-background noUi-connect noUi-ltr noUi-rtl noUi-dragable  noUi-state-drag  noUi-state-tap noUi-active noUi-extended noUi-stacking".split(" ");c.fn.val=function(){var a=arguments,b=c(this[0]);return arguments.length?this.each(function(){(c(this).hasClass(f[0])?B:C).apply(c(this),a)}):(b.hasClass(f[0])?B:C).call(b)};c.noUiSlider={Link:c.Link};c.fn.noUiSlider=function(a,b){return(b?X:W).call(this,
 a)}})(window.jQuery||window.Zepto);
 
-},{}],63:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -32773,7 +32211,7 @@ _.extend(Widget.prototype, Backbone.Events, {
 
 module.exports = Widget;
 
-},{"./views/filters-view":71,"backbone":"backbone","bootstrap/dist/js/bootstrap":55,"jquery":"jquery","jquery-ui/draggable":58,"underscore":"underscore"}],64:[function(require,module,exports){
+},{"./views/filters-view":70,"backbone":"backbone","bootstrap/dist/js/bootstrap":54,"jquery":"jquery","jquery-ui/draggable":57,"underscore":"underscore"}],63:[function(require,module,exports){
 var Backbone = require('backbone');
 
   // Parent model for filters.
@@ -32798,7 +32236,7 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],65:[function(require,module,exports){
+},{"backbone":"backbone"}],64:[function(require,module,exports){
 var _ = require('underscore');
 
 var BaseFilterModel = require('../models/base-filter-model');
@@ -32951,7 +32389,7 @@ module.exports = BaseFilterModel.extend({
 });
 
 
-},{"../models/base-filter-model":64,"../tree/tree-node-model":68,"underscore":"underscore"}],66:[function(require,module,exports){
+},{"../models/base-filter-model":63,"../tree/tree-node-model":67,"underscore":"underscore"}],65:[function(require,module,exports){
 var $ = require('jquery');
 
 var GenericFilterModel = require('../models/generic-filter-model');
@@ -33006,7 +32444,7 @@ module.exports = GenericFilterModel.extend({
 });
 
 
-},{"../models/generic-filter-model":65,"../tree/tree-node-model":68,"jquery":"jquery"}],67:[function(require,module,exports){
+},{"../models/generic-filter-model":64,"../tree/tree-node-model":67,"jquery":"jquery"}],66:[function(require,module,exports){
 var $ = require('jquery');
 var BaseFilterModel = require('../models/base-filter-model');
 
@@ -33135,7 +32573,7 @@ module.exports = BaseFilterModel.extend({
 
 });
 
-},{"../models/base-filter-model":64,"jquery":"jquery"}],68:[function(require,module,exports){
+},{"../models/base-filter-model":63,"jquery":"jquery"}],67:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 var TreeNodeModel; // declare here to help with ref loop of collection and model
@@ -33406,7 +32844,7 @@ TreeNodeModel = Backbone.Model.extend({
 
 module.exports = TreeNodeModel;
 
-},{"backbone":"backbone","underscore":"underscore"}],69:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],68:[function(require,module,exports){
 
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -33593,7 +33031,7 @@ var TreeNodeView = Backbone.View.extend({
 
 module.exports = TreeNodeView;
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],70:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],69:[function(require,module,exports){
 
 var _ = require('underscore');
 var $ = require('jquery');
@@ -33637,7 +33075,7 @@ module.exports = Backbone.View.extend({
 
 });
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],71:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],70:[function(require,module,exports){
 /**
  * this is the view which renders the big Filter contents (the tabs)
  */
@@ -33654,7 +33092,12 @@ var AllFilterCollection = require('../collections/all-filters-collection');
 
 var Template = "<%\n  // this renders the \"big\" filter list (the tabs)\n%>\n<div class=\"panel-heading\">\n  <a type=\"button\" class=\"close cancel\"  aria-hidden=\"true\">&times;</a>\n  <h3 data-i18n=\"amp.gis:title-filters\" class=\"panel-title\">Filters</h3>\n</div>\n<div class=\"panel-body filter-body\">\n\n  <ul class=\"nav nav-tabs filter-titles\" role=\"tablist\">\n  </ul>\n\n  <div class=\"tab-content filter-options\">\n    <img src=\"img_2/loading-icon.gif\" />\n  </div>\n</div>\n<div class=\"panel-footer\">\n  &nbsp;\n  <div class=\"pull-right\" style=\"display: inline-block; margin-bottom: 5px;\">\n    <button type=\"button\" class=\"btn btn-sm btn-danger reset\"  data-i18n=\"amp.gis:button-reset\"  title=\"Turn off all filters.\">Reset</button>\n    <button type=\"button\" class=\"btn btn-sm btn-warning cancel\"  data-i18n=\"amp.gis:button-cancel\"  title=\"Revert filters to state when opened.\">Cancel</button>\n    <button type=\"button\" class=\"btn btn-sm btn-success apply\"  data-i18n=\"amp.gis:button-apply\" >Apply</button>\n  </div>\n</div>\n";
 var TitleTemplate = "<%\n// renders the title of a tab \n%>\n<li class=\"\"><a data-i18n=\"amp.gis:pane-filters-<%= name.replace(/ /g,'') %>\" href=\"#filter-pane-<%= name.replace(/ /g,'') %>\" role=\"tab\" data-toggle=\"tab\"><%= name %></a></li>\n";
-var filtersViewLog = require("../../../../module/amp-log")('filters:top-level:view');
+var filtersViewLog = require("../../../../../reamp/tools/log")('amp:filters:top-level:view');
+
+var filterInstancesNames = {donors: 'Funding Organizations', sectors : 'Sectors', programs: 'Programs', 
+	  activity: 'Activity', allAgencies: 'All Agencies', financials: 'Financial',
+		  locations: 'Location', others: 'Other'};
+
 
 module.exports = Backbone.View.extend({
   id: 'tool-filters',
@@ -33699,8 +33142,22 @@ module.exports = Backbone.View.extend({
 
   },
 
+  
+//  
+//  _generateFilterViewInstance : function(keyname) {
+//	  return new TopLevelFilterView({name:filterInstancesNames[keyname], translator: this.translator, translate: this.translate});
+//  },	  					  
+	  					
+  
   _createTopLevelFilterViews: function() {
-    this.filterViewsInstances = {
+    //this.filterViewsInstances = {
+    		for (key in filterInstancesNames) {
+    			if (filterInstancesNames.hasOwnProperty(key)) {
+    				
+    				this.filterViewsInstances[key] = new TopLevelFilterView({name:filterInstancesNames[key], translator: this.translator, translate: this.translate});
+    			}
+    		}
+    		/*
       donors: new TopLevelFilterView({name:'Funding Organizations', translator: this.translator, translate: this.translate}),
       sectors: new TopLevelFilterView({name:'Sector', translator: this.translator, translate: this.translate}),
       programs: new TopLevelFilterView({name:'Programs', translator: this.translator, translate: this.translate}),
@@ -33709,7 +33166,7 @@ module.exports = Backbone.View.extend({
       financials: new TopLevelFilterView({name:'Financial', translator: this.translator, translate: this.translate}),
       locations: new TopLevelFilterView({name:'Location', translator: this.translator, translate: this.translate}),
       others: new TopLevelFilterView({name:'Other', translator: this.translator, translate: this.translate})
-    };
+    };*/
   },
 
 
@@ -33725,6 +33182,7 @@ module.exports = Backbone.View.extend({
       this.$el.show();
 
       this._getFilterList().done(function() {
+//    	self.cleanupUnusedTabs(); 
         self.renderFilters();
         self.translate(this.$el);
       });
@@ -33796,7 +33254,22 @@ module.exports = Backbone.View.extend({
     var activeTitleNumber = this.$('.filter-titles').attr('active-tab-number') || 0;
 
     for (var filterView in this.filterViewsInstances) {
+//    	console.log(filterView);
       if (this.filterViewsInstances.hasOwnProperty(filterView)) {
+    	  contained = false;
+    	  var index;
+    	  for (index = 0; index < this.allFilters.length; index++) {
+    		  if ((this.allFilters.models[index].attributes.tab === this.filterViewsInstances[filterView].name) || 
+    		  (this.allFilters.models[index].attributes.group === this.filterViewsInstances[filterView].name)){
+    			  contained = true;
+    			  break;
+    		  } 
+    	  }
+    	  if (!contained) {
+    		  delete this.filterViewsInstances[filterView];
+    		  continue;
+    	  }
+    		  
         var tmpFilterView = this.filterViewsInstances[filterView];
         renderingTitleNumber = renderingTitleNumber + 1;
         // console.log('rendering top-level-filter-view ' + tmpFilterView.name); CONSTANTIN - comment to be removed once filters sanitisation is done
@@ -33934,7 +33407,7 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"../../../../module/amp-log":45,"../collections/all-filters-collection":61,"../views/top-level-filter-view":73,"amp-translate":76,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],72:[function(require,module,exports){
+},{"../../../../../reamp/tools/log":77,"../collections/all-filters-collection":60,"../views/top-level-filter-view":72,"amp-translate":75,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],71:[function(require,module,exports){
 
 var _ = require('underscore');
 
@@ -34066,7 +33539,7 @@ module.exports = BaseFilterView.extend({
 });
 
 
-},{"../tree/tree-node-view":69,"../views/base-filter-view":70,"underscore":"underscore"}],73:[function(require,module,exports){
+},{"../tree/tree-node-view":68,"../views/base-filter-view":69,"underscore":"underscore"}],72:[function(require,module,exports){
 
 var _ = require('underscore');
 var $ = require('jquery');
@@ -34080,7 +33553,7 @@ var YearsFilterView = require('../views/years-filter-view');
 
 var YearsFilterModel = require('../models/years-filter-model');
 
-var filtersViewLog = require("../../../../module/amp-log")('filters:top-level:view');
+var filtersViewLog = require("../../../../../reamp/tools/log")('amp:filters:top-level:view');
 
 
 //TODO: rename to 'group' to be consistent
@@ -34104,6 +33577,12 @@ module.exports = Backbone.View.extend({
     });
   },
 
+  cleanupUnusedTabs: function() {
+	  console.log(this);
+//	debugger(self);
+  },
+  
+  
   /**
    * renders the items in a tab
    * the first element of the tab's contents will be rendered IFF options.renderFirstElement has been specified
@@ -34183,7 +33662,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../../../../module/amp-log":45,"../models/years-filter-model":67,"../views/generic-filter-view":72,"../views/years-filter-view":74,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],74:[function(require,module,exports){
+},{"../../../../../reamp/tools/log":77,"../models/years-filter-model":66,"../views/generic-filter-view":71,"../views/years-filter-view":73,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],73:[function(require,module,exports){
 
 var _ = require('underscore');
 var BaseFilterView = require('../views/base-filter-view');
@@ -34336,7 +33815,7 @@ module.exports = BaseFilterView.extend({
 
 });
 
-},{"../lib/jquery.nouislider.min.js":62,"../views/base-filter-view":70,"jquery-ui/datepicker":57,"underscore":"underscore"}],75:[function(require,module,exports){
+},{"../lib/jquery.nouislider.min.js":61,"../views/base-filter-view":69,"jquery-ui/datepicker":56,"underscore":"underscore"}],74:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -34532,7 +34011,7 @@ _.extend(State.prototype, Backbone.Events, {
 State.StateLoadError = StateLoadError;
 module.exports = State;
 
-},{"backbone":"backbone","underscore":"underscore"}],76:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],75:[function(require,module,exports){
 // TODO: move this up a dir, and instantiate and attach to the app
 
 
@@ -34748,7 +34227,7 @@ function Translator(options) {
 
 module.exports = Translator;
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],77:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],76:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -34799,4 +34278,600 @@ _.extend(URL.prototype, Backbone.Events, {
 
 module.exports = URL;
 
-},{"backbone":"backbone","underscore":"underscore"}]},{},[1]);
+},{"backbone":"backbone","underscore":"underscore"}],77:[function(require,module,exports){
+module.exports =
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+
+
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	var _debug = __webpack_require__(1);
+
+	var _debug2 = _interopRequireDefault(_debug);
+
+	exports["default"] = function (slug) {
+	  var res = {
+	    log: (0, _debug2["default"])(slug),
+	    err: (0, _debug2["default"])(slug),
+	    warn: (0, _debug2["default"])(slug),
+	    onDebug: (0, _debug2["default"])(slug)
+	  };
+	  res.err.log = console.error.bind(console);
+	  res.warn.log = console.warn.bind(console);
+	  res.onDebug.log = function () {
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    for (var index in args) {
+	      if ("function" == typeof args[index]) {
+	        args[index]();
+	        break;
+	      }
+	    }
+	  };
+	  return res;
+	};
+
+	module.exports = exports["default"];
+
+/***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	/**
+	 * This is the web browser implementation of `debug()`.
+	 *
+	 * Expose `debug()` as the module.
+	 */
+
+	exports = module.exports = __webpack_require__(2);
+	exports.log = log;
+	exports.formatArgs = formatArgs;
+	exports.save = save;
+	exports.load = load;
+	exports.useColors = useColors;
+	exports.storage = 'undefined' != typeof chrome
+	               && 'undefined' != typeof chrome.storage
+	                  ? chrome.storage.local
+	                  : localstorage();
+
+	/**
+	 * Colors.
+	 */
+
+	exports.colors = [
+	  'lightseagreen',
+	  'forestgreen',
+	  'goldenrod',
+	  'dodgerblue',
+	  'darkorchid',
+	  'crimson'
+	];
+
+	/**
+	 * Currently only WebKit-based Web Inspectors, Firefox >= v31,
+	 * and the Firebug extension (any Firefox version) are known
+	 * to support "%c" CSS customizations.
+	 *
+	 * TODO: add a `localStorage` variable to explicitly enable/disable colors
+	 */
+
+	function useColors() {
+	  // is webkit? http://stackoverflow.com/a/16459606/376773
+	  return ('WebkitAppearance' in document.documentElement.style) ||
+	    // is firebug? http://stackoverflow.com/a/398120/376773
+	    (window.console && (console.firebug || (console.exception && console.table))) ||
+	    // is firefox >= v31?
+	    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
+	    (navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31);
+	}
+
+	/**
+	 * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
+	 */
+
+	exports.formatters.j = function(v) {
+	  return JSON.stringify(v);
+	};
+
+
+	/**
+	 * Colorize log arguments if enabled.
+	 *
+	 * @api public
+	 */
+
+	function formatArgs() {
+	  var args = arguments;
+	  var useColors = this.useColors;
+
+	  args[0] = (useColors ? '%c' : '')
+	    + this.namespace
+	    + (useColors ? ' %c' : ' ')
+	    + args[0]
+	    + (useColors ? '%c ' : ' ')
+	    + '+' + exports.humanize(this.diff);
+
+	  if (!useColors) return args;
+
+	  var c = 'color: ' + this.color;
+	  args = [args[0], c, 'color: inherit'].concat(Array.prototype.slice.call(args, 1));
+
+	  // the final "%c" is somewhat tricky, because there could be other
+	  // arguments passed either before or after the %c, so we need to
+	  // figure out the correct index to insert the CSS into
+	  var index = 0;
+	  var lastC = 0;
+	  args[0].replace(/%[a-z%]/g, function(match) {
+	    if ('%%' === match) return;
+	    index++;
+	    if ('%c' === match) {
+	      // we only are interested in the *last* %c
+	      // (the user may have provided their own)
+	      lastC = index;
+	    }
+	  });
+
+	  args.splice(lastC, 0, c);
+	  return args;
+	}
+
+	/**
+	 * Invokes `console.log()` when available.
+	 * No-op when `console.log` is not a "function".
+	 *
+	 * @api public
+	 */
+
+	function log() {
+	  // this hackery is required for IE8/9, where
+	  // the `console.log` function doesn't have 'apply'
+	  return 'object' === typeof console
+	    && console.log
+	    && Function.prototype.apply.call(console.log, console, arguments);
+	}
+
+	/**
+	 * Save `namespaces`.
+	 *
+	 * @param {String} namespaces
+	 * @api private
+	 */
+
+	function save(namespaces) {
+	  try {
+	    if (null == namespaces) {
+	      exports.storage.removeItem('debug');
+	    } else {
+	      exports.storage.debug = namespaces;
+	    }
+	  } catch(e) {}
+	}
+
+	/**
+	 * Load `namespaces`.
+	 *
+	 * @return {String} returns the previously persisted debug modes
+	 * @api private
+	 */
+
+	function load() {
+	  var r;
+	  try {
+	    r = exports.storage.debug;
+	  } catch(e) {}
+	  return r;
+	}
+
+	/**
+	 * Enable namespaces listed in `localStorage.debug` initially.
+	 */
+
+	exports.enable(load());
+
+	/**
+	 * Localstorage attempts to return the localstorage.
+	 *
+	 * This is necessary because safari throws
+	 * when a user disables cookies/localstorage
+	 * and you attempt to access it.
+	 *
+	 * @return {LocalStorage}
+	 * @api private
+	 */
+
+	function localstorage(){
+	  try {
+	    return window.localStorage;
+	  } catch (e) {}
+	}
+
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	/**
+	 * This is the common logic for both the Node.js and web browser
+	 * implementations of `debug()`.
+	 *
+	 * Expose `debug()` as the module.
+	 */
+
+	exports = module.exports = debug;
+	exports.coerce = coerce;
+	exports.disable = disable;
+	exports.enable = enable;
+	exports.enabled = enabled;
+	exports.humanize = __webpack_require__(3);
+
+	/**
+	 * The currently active debug mode names, and names to skip.
+	 */
+
+	exports.names = [];
+	exports.skips = [];
+
+	/**
+	 * Map of special "%n" handling functions, for the debug "format" argument.
+	 *
+	 * Valid key names are a single, lowercased letter, i.e. "n".
+	 */
+
+	exports.formatters = {};
+
+	/**
+	 * Previously assigned color.
+	 */
+
+	var prevColor = 0;
+
+	/**
+	 * Previous log timestamp.
+	 */
+
+	var prevTime;
+
+	/**
+	 * Select a color.
+	 *
+	 * @return {Number}
+	 * @api private
+	 */
+
+	function selectColor() {
+	  return exports.colors[prevColor++ % exports.colors.length];
+	}
+
+	/**
+	 * Create a debugger with the given `namespace`.
+	 *
+	 * @param {String} namespace
+	 * @return {Function}
+	 * @api public
+	 */
+
+	function debug(namespace) {
+
+	  // define the `disabled` version
+	  function disabled() {
+	  }
+	  disabled.enabled = false;
+
+	  // define the `enabled` version
+	  function enabled() {
+
+	    var self = enabled;
+
+	    // set `diff` timestamp
+	    var curr = +new Date();
+	    var ms = curr - (prevTime || curr);
+	    self.diff = ms;
+	    self.prev = prevTime;
+	    self.curr = curr;
+	    prevTime = curr;
+
+	    // add the `color` if not set
+	    if (null == self.useColors) self.useColors = exports.useColors();
+	    if (null == self.color && self.useColors) self.color = selectColor();
+
+	    var args = Array.prototype.slice.call(arguments);
+
+	    args[0] = exports.coerce(args[0]);
+
+	    if ('string' !== typeof args[0]) {
+	      // anything else let's inspect with %o
+	      args = ['%o'].concat(args);
+	    }
+
+	    // apply any `formatters` transformations
+	    var index = 0;
+	    args[0] = args[0].replace(/%([a-z%])/g, function(match, format) {
+	      // if we encounter an escaped % then don't increase the array index
+	      if (match === '%%') return match;
+	      index++;
+	      var formatter = exports.formatters[format];
+	      if ('function' === typeof formatter) {
+	        var val = args[index];
+	        match = formatter.call(self, val);
+
+	        // now we need to remove `args[index]` since it's inlined in the `format`
+	        args.splice(index, 1);
+	        index--;
+	      }
+	      return match;
+	    });
+
+	    if ('function' === typeof exports.formatArgs) {
+	      args = exports.formatArgs.apply(self, args);
+	    }
+	    var logFn = enabled.log || exports.log || console.log.bind(console);
+	    logFn.apply(self, args);
+	  }
+	  enabled.enabled = true;
+
+	  var fn = exports.enabled(namespace) ? enabled : disabled;
+
+	  fn.namespace = namespace;
+
+	  return fn;
+	}
+
+	/**
+	 * Enables a debug mode by namespaces. This can include modes
+	 * separated by a colon and wildcards.
+	 *
+	 * @param {String} namespaces
+	 * @api public
+	 */
+
+	function enable(namespaces) {
+	  exports.save(namespaces);
+
+	  var split = (namespaces || '').split(/[\s,]+/);
+	  var len = split.length;
+
+	  for (var i = 0; i < len; i++) {
+	    if (!split[i]) continue; // ignore empty strings
+	    namespaces = split[i].replace(/\*/g, '.*?');
+	    if (namespaces[0] === '-') {
+	      exports.skips.push(new RegExp('^' + namespaces.substr(1) + '$'));
+	    } else {
+	      exports.names.push(new RegExp('^' + namespaces + '$'));
+	    }
+	  }
+	}
+
+	/**
+	 * Disable debug output.
+	 *
+	 * @api public
+	 */
+
+	function disable() {
+	  exports.enable('');
+	}
+
+	/**
+	 * Returns true if the given mode name is enabled, false otherwise.
+	 *
+	 * @param {String} name
+	 * @return {Boolean}
+	 * @api public
+	 */
+
+	function enabled(name) {
+	  var i, len;
+	  for (i = 0, len = exports.skips.length; i < len; i++) {
+	    if (exports.skips[i].test(name)) {
+	      return false;
+	    }
+	  }
+	  for (i = 0, len = exports.names.length; i < len; i++) {
+	    if (exports.names[i].test(name)) {
+	      return true;
+	    }
+	  }
+	  return false;
+	}
+
+	/**
+	 * Coerce `val`.
+	 *
+	 * @param {Mixed} val
+	 * @return {Mixed}
+	 * @api private
+	 */
+
+	function coerce(val) {
+	  if (val instanceof Error) return val.stack || val.message;
+	  return val;
+	}
+
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	/**
+	 * Helpers.
+	 */
+
+	var s = 1000;
+	var m = s * 60;
+	var h = m * 60;
+	var d = h * 24;
+	var y = d * 365.25;
+
+	/**
+	 * Parse or format the given `val`.
+	 *
+	 * Options:
+	 *
+	 *  - `long` verbose formatting [false]
+	 *
+	 * @param {String|Number} val
+	 * @param {Object} options
+	 * @return {String|Number}
+	 * @api public
+	 */
+
+	module.exports = function(val, options){
+	  options = options || {};
+	  if ('string' == typeof val) return parse(val);
+	  return options.long
+	    ? long(val)
+	    : short(val);
+	};
+
+	/**
+	 * Parse the given `str` and return milliseconds.
+	 *
+	 * @param {String} str
+	 * @return {Number}
+	 * @api private
+	 */
+
+	function parse(str) {
+	  str = '' + str;
+	  if (str.length > 10000) return;
+	  var match = /^((?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$/i.exec(str);
+	  if (!match) return;
+	  var n = parseFloat(match[1]);
+	  var type = (match[2] || 'ms').toLowerCase();
+	  switch (type) {
+	    case 'years':
+	    case 'year':
+	    case 'yrs':
+	    case 'yr':
+	    case 'y':
+	      return n * y;
+	    case 'days':
+	    case 'day':
+	    case 'd':
+	      return n * d;
+	    case 'hours':
+	    case 'hour':
+	    case 'hrs':
+	    case 'hr':
+	    case 'h':
+	      return n * h;
+	    case 'minutes':
+	    case 'minute':
+	    case 'mins':
+	    case 'min':
+	    case 'm':
+	      return n * m;
+	    case 'seconds':
+	    case 'second':
+	    case 'secs':
+	    case 'sec':
+	    case 's':
+	      return n * s;
+	    case 'milliseconds':
+	    case 'millisecond':
+	    case 'msecs':
+	    case 'msec':
+	    case 'ms':
+	      return n;
+	  }
+	}
+
+	/**
+	 * Short format for `ms`.
+	 *
+	 * @param {Number} ms
+	 * @return {String}
+	 * @api private
+	 */
+
+	function short(ms) {
+	  if (ms >= d) return Math.round(ms / d) + 'd';
+	  if (ms >= h) return Math.round(ms / h) + 'h';
+	  if (ms >= m) return Math.round(ms / m) + 'm';
+	  if (ms >= s) return Math.round(ms / s) + 's';
+	  return ms + 'ms';
+	}
+
+	/**
+	 * Long format for `ms`.
+	 *
+	 * @param {Number} ms
+	 * @return {String}
+	 * @api private
+	 */
+
+	function long(ms) {
+	  return plural(ms, d, 'day')
+	    || plural(ms, h, 'hour')
+	    || plural(ms, m, 'minute')
+	    || plural(ms, s, 'second')
+	    || ms + ' ms';
+	}
+
+	/**
+	 * Pluralization helper.
+	 */
+
+	function plural(ms, n, name) {
+	  if (ms < n) return;
+	  if (ms < n * 1.5) return Math.floor(ms / n) + ' ' + name;
+	  return Math.ceil(ms / n) + ' ' + name + 's';
+	}
+
+
+/***/ }
+/******/ ]);
+},{}]},{},[1]);

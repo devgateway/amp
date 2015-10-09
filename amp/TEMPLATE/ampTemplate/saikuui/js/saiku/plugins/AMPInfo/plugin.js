@@ -52,8 +52,8 @@ var AMPInfo = Backbone.View.extend({
     
     build_notification: function() {
 			switch(this.workspace.query.get('raw_settings').unitsOption) {
-				case "AMOUNTS_OPTION_THOUSANDS": return "Amounts in Thousands";
-				case "AMOUNTS_OPTION_MILLIONS": return "Amounts in Millions";
+				case "AMOUNTS_OPTION_THOUSANDS": return "Amounts are in thousands (000)";
+				case "AMOUNTS_OPTION_MILLIONS": return "Amounts are in millions (000 000)";
 			}
     	return "";
     },

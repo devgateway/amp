@@ -515,9 +515,10 @@ public class Filters {
 		Collection<AmpCategoryValue> col = CategoryManagerUtil
 				.getAmpCategoryValueCollectionByKey(categoryKey,true);
 		for (AmpCategoryValue ampCategoryValue : col) {
-			String translatedValue = CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue);
-			fi.add(new SimpleJsonBean(ampCategoryValue.getIdentifier(),
-					translatedValue));
+			if (!Boolean.TRUE.equals(ampCategoryValue.getDeleted())) {
+				String translatedValue = CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue);
+				fi.add(new SimpleJsonBean(ampCategoryValue.getIdentifier(), translatedValue));
+			}
 		}
 		//reorder because after we get the translated name we lose ordering
 		fi = orderByProperty (fi,NAME_PROPERTY);

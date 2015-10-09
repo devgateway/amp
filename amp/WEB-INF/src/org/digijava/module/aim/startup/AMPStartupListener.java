@@ -285,7 +285,7 @@ public class AMPStartupListener extends HttpServlet implements
 			initializeQuartz(sce);
 
 			logger.info("Checking if any MTEF columns need to be created...");
-			DynamicColumnsUtil.createInexistentMtefColumns(ampContext,null);
+			DynamicColumnsUtil.createInexistentMtefColumns(ampContext);
 			
 			logger.info("loading the i18ned views description and checking for consistency with the database...");
 			for(String viewName:InternationalizedViewsRepository.i18Models.keySet())

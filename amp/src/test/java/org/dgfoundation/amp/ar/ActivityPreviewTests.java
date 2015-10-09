@@ -28,8 +28,8 @@ public class ActivityPreviewTests extends ReportsTestCase
 	{
 		TestSuite suite = new TestSuite(ActivityPreviewTests.class.getName());
 		suite.addTest(new ActivityPreviewTests("testPureMtef"));
-		suite.addTest(new ActivityPreviewTests("testPureFunding"));
-		suite.addTest(new ActivityPreviewTests("testMixedActivity"));
+		suite.addTest(new ActivityPreviewTests("testPureFunding_fails_as_of_AMP_21160"));
+		suite.addTest(new ActivityPreviewTests("testMixedActivity_fails_as_of_AMP_21160"));
 
 		return suite;
 	}
@@ -52,7 +52,7 @@ public class ActivityPreviewTests extends ReportsTestCase
 		////System.out.println(fo.getOrgName());
 	}
 	
-	public void testPureFunding()
+	public void testPureFunding_fails_as_of_AMP_21160()
 	{
 		AmpActivityVersion act = ReportTestingUtils.loadActivityByName("Eth Water");
 		ActivityFundingDigest afd = new ActivityFundingDigest();
@@ -74,7 +74,7 @@ public class ActivityPreviewTests extends ReportsTestCase
 		
 	}
 
-	public void testMixedActivity()
+	public void testMixedActivity_fails_as_of_AMP_21160()
 	{
 		AmpActivityVersion act = ReportTestingUtils.loadActivityByName("Test MTEF directed");
 		ActivityFundingDigest afd = new ActivityFundingDigest();

@@ -24,13 +24,11 @@ public class Values extends HashMap<String, BigDecimal> {
 	private List<AmpColumns> mtefCols	;
 	//private List<AmpMeasures> mtefMeas	;
 
-	public
-	Values(Long ownerID) {
+	public Values(Long ownerID) {
 		this.ownerId = ownerID;
 		this.mtefCols	= DynamicColumnsUtil.getMtefColumns();
 		//this.mtefMeas	= DynamicColumnsUtil.getMtefMeasures();
 	}
-
 	
 	public Values() {
 		this.mtefCols	= DynamicColumnsUtil.getMtefColumns();

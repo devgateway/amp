@@ -68,7 +68,7 @@ public class ColumnSavingEngine {
 	public boolean saveField(HttpSession session) {
 		boolean ret = false;
 		try{
-			AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility)FeaturesUtil.getAmpTreeVisibility(this.sCtx,session); 
+			AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility)FeaturesUtil.getAmpTreeVisibility(this.sCtx, session); 
 
 
 			if(ampTreeVisibility!=null)
@@ -137,8 +137,8 @@ public class ColumnSavingEngine {
 		}
 	}
 	
-	public void startSavingProcess(HttpSession session) {
-		boolean fieldSaved	= this.saveField(session);
+	public void startSavingProcess() {
+		boolean fieldSaved	= this.saveField(null);
 		
 		if ( fieldSaved ) 
 			this.saveColumn();

@@ -229,7 +229,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * @param columnAlias - the alias, of the form "mtefYYYY"
 	 * @return
 	 */
-	protected String generate_mtef_filter_statement(String columnFilterSQLClause, String columnAlias)
+	protected String generate_mtef_filter_statement(String columnFilterSQLClause, String columnName, String columnAlias)
 	{
 		if (columnFilterSQLClause == null)
 			columnFilterSQLClause = "";
@@ -237,10 +237,17 @@ public class AmpReportGenerator extends ReportGenerator {
 //		if (columnFilterSQLClause.isEmpty())
 //			columnFilterSQLClause = "AND (1 = 1)";
 		
-		if ((columnAlias == null) || (!columnAlias.startsWith("mtef")) || (columnAlias.length() != 8))
-			throw new RuntimeException("invalid column alias for an MTEF column: " + columnAlias);
+		if (columnAlias == null)
+			throw new RuntimeException("null column alias for an MTEF column: " + columnName);
 		
-		String fundingYearStr = columnAlias.substring(4);
+		int prefixLength = -999;
+		if (columnAlias.startsWith("mtef")) prefixLength = 4;
+		if (columnAlias.startsWith("realmtef")) prefixLength = 8;
+
+		if (columnAlias.length() != prefixLength + 4)
+			throw new RuntimeException(String.format("invalid column alias for an MTEF column %s: %s", columnName, columnAlias));
+		
+		String fundingYearStr = columnAlias.substring(prefixLength);
 		int fundingYear = Integer.parseInt(fundingYearStr);
 		
 		columnFilterSQLClause += " AND (extract(year from currency_date) = " + fundingYear + ")";
@@ -292,7 +299,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			logger.info("Column " + col.getColumnName()	+ " appendable SQL filter: ..."	+ columnFilterSQLClause);
 
 		if ((extractorView != null) && extractorView.endsWith("v_mtef_funding")) // v_mtef_funding OR cached_v_mtef_funding
-			columnFilterSQLClause = generate_mtef_filter_statement(columnFilterSQLClause, col.getAliasName());
+			columnFilterSQLClause = generate_mtef_filter_statement(columnFilterSQLClause, col.getColumnName(), col.getAliasName());
 		
 		return columnFilterSQLClause;	
 	}

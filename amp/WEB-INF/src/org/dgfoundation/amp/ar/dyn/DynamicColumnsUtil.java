@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -32,34 +34,43 @@ public class DynamicColumnsUtil {
 	private static ArrayList<AmpColumns> cachedMtefColumnList	= 	null;
 	private static ArrayList<AmpMeasures> cachedMtefMeasureList	= 	null;
 	
-	public static void createInexistentMtefColumns (ServletContext sCtx,HttpSession session) {
-		List<Integer> mtefYears		= showInexistentMtefYears();
-		if ( mtefYears != null && mtefYears.size() > 0 ) {
-			for ( Integer year: mtefYears ) {
-				AmpColumns	col		= new AmpColumns();
-				col.setColumnName("MTEF " + year + "/" + (year+1));
-				col.setAliasName("mtef" + year);
-				col.setExtractorView("v_mtef_funding");
-				col.setTokenExpression("MTEF " + year + "/" + (year+1) );
-				col.setCellType("org.dgfoundation.amp.ar.cell.ComputedAmountCell");
-				
-				logger.info("Adding MTEF column for year " + year + "/" + (year+1) );
-				dynamicallyCreateNewColumn(col,"Funding Information", sCtx,session);
-			}
+	public static void createInexistentMtefColumns (ServletContext sCtx) {
+		List<Integer> mtefFundingYears = getMtefYears();
+		Set<Integer> newMtefCols = buildInexistentMtefColumnYears(mtefFundingYears, "mtef");
+		buildMtefColumns(sCtx, "MTEF", "mtef", newMtefCols);
+		 
+		Set<Integer> newRealMtefCols = buildInexistentMtefColumnYears(mtefFundingYears, "realmtef");
+		buildMtefColumns(sCtx, "Real MTEF", "realmtef", newRealMtefCols);
+		
+		if (!newMtefCols.isEmpty() || !newRealMtefCols.isEmpty()) {
 			DynamicColumnsUtil.cachedMtefColumnList	= null;
 			MathExpressionRepository.buildMtefColumn();
 		}
 	}
-	
+
+	private static void buildMtefColumns(ServletContext sCtx, String namePrefix, String aliasPrefix, Set<Integer> mtefYears) {
+		for (Integer year: mtefYears) {
+			AmpColumns	col		= new AmpColumns();
+			col.setColumnName(namePrefix + " " + year + "/" + (year+1));
+			col.setAliasName(aliasPrefix + year);
+			col.setExtractorView("v_mtef_funding");
+			col.setTokenExpression("MTEF " + year + "/" + (year+1) );
+			col.setCellType("org.dgfoundation.amp.ar.cell.ComputedAmountCell");
+			
+			logger.info("Adding " + namePrefix + " column for year " + year + "/" + (year+1) );
+			dynamicallyCreateNewColumn(col, "Funding Information", sCtx);
+		}
+
+	}
 	
 	/**
 	 * 
 	 * @param newCol create a new AmpColumn object and give it to this function as parameter
 	 * @param featureName name of the parent feature of this field   
 	 */
-	public static void dynamicallyCreateNewColumn(AmpColumns newCol, String featureName, ServletContext sCtx,HttpSession session) {
+	public static void dynamicallyCreateNewColumn(AmpColumns newCol, String featureName, ServletContext sCtx) {
 		ColumnSavingEngine cse	= new ColumnSavingEngine(newCol, featureName, sCtx);
-		cse.startSavingProcess(session);
+		cse.startSavingProcess();
 	}
 	
 	
@@ -71,7 +82,7 @@ public class DynamicColumnsUtil {
 			Collection<AmpColumns> allCols	= AdvancedReportUtil.getColumnList();
 			for ( AmpColumns col: allCols ) 
 			{
-				if ( col.getColumnName().contains("MTEF") )
+				if (col.getAliasName() != null && col.getAliasName().startsWith("mtef"))
 					z.add(col);
 			}
 			DynamicColumnsUtil.cachedMtefColumnList	= new ArrayList<AmpColumns>(z);
@@ -96,63 +107,45 @@ public class DynamicColumnsUtil {
 		return Collections.unmodifiableList(DynamicColumnsUtil.cachedMtefMeasureList);
 	}
 	
-	public static List<Integer> showInexistentMtefYears() {
-		Session session;
-		Query q;
+	public static Set<Integer> buildInexistentMtefColumnYears(List<Integer> mtefFundingYears, String prefix) {
 		try {
-    		session = PersistenceManager.getRequestDBSession();
-    		String queryString = new String();
-    		queryString = "select c.columnName from "
-    			+ AmpColumns.class.getName()
-    			+ " c where c.extractorView='v_mtef_funding' ";
-    		q = session.createQuery(queryString);
-    		List<String> mtefColNames	 	= q.list();
-    		List<Integer> mtefFundingYears	= getMtefYears();
+			Set<Integer> res = new TreeSet<>(mtefFundingYears);
+    		String queryString = "select c.aliasName from " + AmpColumns.class.getName() + " c where c.extractorView = 'v_mtef_funding' AND c.aliasName like '" + prefix + "%' ";
     		
-    		if ( mtefFundingYears != null && mtefFundingYears.size() > 0 ) {
-    			if ( mtefColNames != null ) {
-    				for (String colName: mtefColNames) {
-    					String yearStr		= colName.substring(colName.length()-4, colName.length() );
-    					Integer year		= Integer.parseInt(yearStr)-1;
-    					mtefFundingYears.remove(year);
-    				}
-    			}
+    		List<String> mtefColNames = PersistenceManager.getSession().createQuery(queryString).list();
+    		for (String colName: mtefColNames) {
+    			String yearStr = colName.substring(prefix.length());
+    			Integer year = Integer.parseInt(yearStr);
+    			res.remove(year);
     		}
-    		
-    		return mtefFundingYears;
-    		
-    		
+    		return res;
     	} catch (Exception ex) {
-    		ex.printStackTrace();	
+    		throw new RuntimeException(ex);	
     	}
-    	return null;
 	}
 	
 	public static List<Integer> getMtefYears() {
-		Session session;
-		Query q;
 		try {
-    		session = PersistenceManager.getRequestDBSession();
-    		String queryString = new String();
-    		queryString = "select distinct(year(p.projectionDate)) from "
-    			+ AmpFundingMTEFProjection.class.getName()
-    			+ " p ";
-    		q = session.createQuery(queryString);
-    		List<Integer> retList = q.list();
-    		if ( retList!=null && retList.size()>0 ) {
-    			Iterator<Integer> iter	= retList.iterator();
-    			while (iter.hasNext() ) {
-    				Integer item	= iter.next();
-    				if ( item == null ) {
-    					logger.warn("There seem to be some null projection_date-s in the amp_funding_mtef_projection");
-    					iter.remove();
-    				}
-    			}
-    		}
+    		Session session = PersistenceManager.getSession();
+    		String queryString = "select distinct(year(p.projectionDate)) FROM "
+    			+ AmpFundingMTEFProjection.class.getName() + " p WHERE p.projectionDate IS NOT NULL "
+    			+ " ORDER BY year(p.projectionDate)";
+    		
+    		List<Integer> rawList = session.createQuery(queryString).list();
+    		List<Integer> retList = new ArrayList<>();
+    		
+    		if (rawList.isEmpty())
+    			return retList;
+    		
+    		int minYear = rawList.get(0) - 3;
+    		int maxYear = rawList.get(rawList.size() - 1) + 3;
+    		
+    		for(int i = minYear; i <= maxYear; i++)
+    			retList.add(i);
+    			
     		return retList;
     	} catch (Exception ex) {
-    		ex.printStackTrace();	
+    		throw new RuntimeException(ex);
     	}
-    	return null;
 	}
 }

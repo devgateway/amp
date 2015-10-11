@@ -738,14 +738,16 @@ public class Filters {
 	public JsonBean getWorkspaces() {
 		List<SimpleJsonBean> teamsListJson = new ArrayList<SimpleJsonBean>();
 		if (hasToShowWorkspaceFilter()) {
-			Map<Long, String> teamNames = DatabaseViewFetcher.fetchInternationalizedView("amp_team", "WHERE (isolated is false) OR (isolated is null)", "amp_team_id", "name");
+			Map<Long, String> teamNames = DatabaseViewFetcher
+                    .fetchInternationalizedView("amp_team", "WHERE (isolated is false) OR (isolated is null)", "amp_team_id", "name");
 			
-			for (long ampTeamId:teamNames.keySet()) {
+			for (long ampTeamId : teamNames.keySet()) {
 				SimpleJsonBean ampTeamJson = new SimpleJsonBean();
 				ampTeamJson.setId(ampTeamId);
 				ampTeamJson.setName(teamNames.get(ampTeamId));
 				teamsListJson.add(ampTeamJson);
 			}
+
 			teamsListJson = orderByProperty(teamsListJson, NAME_PROPERTY);
 		}
 		JsonBean js = new JsonBean();
@@ -758,7 +760,8 @@ public class Filters {
 	
 	public boolean hasToShowWorkspaceFilter () {
 		boolean showWorkspaceFilter = true;
-		boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));
+		boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(
+                FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));
 		TeamMember teamMember = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(
 				org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
 		AmpTeam ampTeam = null;
@@ -767,10 +770,10 @@ public class Filters {
 		}
 
 		if (ampTeam != null && ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM)
-				&& ampTeam.getComputation() == false && !showWorkspaceFilterInTeamWorkspace) {
+				&& !ampTeam.getComputation() && !showWorkspaceFilterInTeamWorkspace) {
 			showWorkspaceFilter = false;
 		//Hide Workspace in public view
-		}else if(ampTeam == null){
+		} else if (ampTeam == null) {
 			showWorkspaceFilter = false;
 		}
 		return showWorkspaceFilter;

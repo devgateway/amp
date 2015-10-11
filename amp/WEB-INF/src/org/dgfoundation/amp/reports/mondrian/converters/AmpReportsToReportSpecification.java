@@ -135,7 +135,7 @@ public class AmpReportsToReportSpecification {
 				spec.addColumn(new ReportColumn(hierarchy.getColumn().getColumnName()));
 		} else {
 			for (AmpColumns column : getOrderedColumns()) 
-				if (!column.isMtefColumn()) { // MTEF columns are processed separately by MtefConverter, which reads the AmpReports instance directly
+				if (!column.isMtefColumn() && !column.isRealMtefColumn()) { // MTEF columns are processed separately by MtefConverter, which reads the AmpReports instance directly
 					spec.addColumn(new ReportColumn(column.getColumnName()));
 				}
 		}

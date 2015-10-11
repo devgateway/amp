@@ -90,6 +90,28 @@ public class MtefConverter {
 		this.mtefInfos = Collections.unmodifiableMap(mtefInfos);
 	}
 	
+	protected void addIfMtef(AmpReportColumn arc, SortedSet<Integer> years, String prefix) {
+		Integer yearNr = arc.getColumn().getMtefYear(prefix);
+		if (yearNr != null) {
+			yearNr = Math.min(Math.max(yearNr, 1970), 2050); // clamp between 1970 and 2050 - this is what our Mondrian reports implementation supports (for now)
+			years.add(yearNr); 
+		}
+	}
+	
+	protected List<FilterRule> buildRulesFor(SortedSet<Integer> years) {
+		if (years.isEmpty()) return null; // nothing to do
+
+		// build list of items to add
+		List<FilterRule> filterRules = new ArrayList<>();
+		for(int mtefYear:years) {
+			YearMtefInfo yearInfo = this.mtefInfos.get(mtefYear);
+			filterRules.add(new FilterRule(
+					Integer.toString(yearInfo.periodStartDayCode),
+					Integer.toString(yearInfo.periodStartDayCode),
+				true, true));
+		}
+		return filterRules;
+	}
 	
 	/**
 	 * scans the report for MTEF columns and converts them to "mtef" measure reference + filter entries <br />
@@ -98,29 +120,31 @@ public class MtefConverter {
 	 */
 	public void convertMtefs(AmpReports report, ReportSpecificationImpl spec) {
 		SortedSet<Integer> mtefYears = new TreeSet<>();
+		SortedSet<Integer> realMtefYears = new TreeSet<>();
 		for(AmpReportColumn arc:report.getColumns()) {
-			Integer yearNr = arc.getColumn().getMtefYear();
-			if (yearNr != null) {
-				yearNr = Math.min(Math.max(yearNr, 1970), 2050); // clamp between 1970 and 2050 - this is what our Mondrian reports implementation supports (for now)
-				mtefYears.add(yearNr); 
-			}
-		}
-		if (mtefYears.isEmpty()) return; // nothing to do
-
-		// build list of items to add
-		List<FilterRule> filterRules = new ArrayList<>();
-		for(int mtefYear:mtefYears) {
-			YearMtefInfo yearInfo = this.mtefInfos.get(mtefYear);
-			filterRules.add(new FilterRule(
-					Integer.toString(yearInfo.periodStartDayCode),
-					Integer.toString(yearInfo.periodStartDayCode),
-				true, true));
+			addIfMtef(arc, mtefYears, "mtef");
+			addIfMtef(arc, realMtefYears, "realmtef");
 		}
 		
+		List<FilterRule> mtefFilterRules = buildRulesFor(mtefYears);
+		List<FilterRule> realMtefFilterRules = buildRulesFor(realMtefYears);
+		
+		if (mtefFilterRules == null && realMtefFilterRules == null) return; // nothing to do
+
 		// we have to add MTEF info to filters -> ensure that a filters instance exists
 		if (spec.getFilters() == null)
 			spec.setFilters(new MondrianReportFilters());
-		spec.getFilters().getFilterRules().put(new ReportElement(ElementType.MTEF_DATE), filterRules);
-		spec.getMeasures().add(0, new ReportMeasure(MeasureConstants.MTEF_PROJECTIONS)); // add MTEF proj as the first measure
+
+		if (mtefFilterRules != null) {
+			spec.getFilters().getFilterRules().put(new ReportElement(ElementType.MTEF_DATE), mtefFilterRules);
+			spec.getMeasures().add(0, new ReportMeasure(MeasureConstants.MTEF_PROJECTIONS)); // add MTEF proj as the first measure
+		}
+		
+		if (realMtefFilterRules != null) {
+			spec.getFilters().getFilterRules().put(new ReportElement(ElementType.REAL_MTEF_DATE), realMtefFilterRules);
+			ReportMeasure realMtefMeasure = new ReportMeasure(MeasureConstants.REAL_MTEFS);
+			if (!spec.getMeasures().contains(realMtefMeasure))
+				spec.getMeasures().add(realMtefMeasure);
+		}
 	}
 }

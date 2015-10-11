@@ -20,11 +20,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ArConstants.SyntheticColumnsMeta;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
@@ -63,6 +65,7 @@ import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 
@@ -85,7 +88,13 @@ public class AmpReportGenerator extends ReportGenerator {
 	
 	private HttpSession session	= null;
 	private BigDecimal totalac;
-
+	
+	/**
+	 * this should be taken in account IF it is not empty only
+	 * it will never be null
+	 * 
+	 */
+	private final SortedSet<Integer> realMtefYears;
 
 	/**
 	 * returns categories for a given column. If the column has no categories,
@@ -301,6 +310,10 @@ public class AmpReportGenerator extends ReportGenerator {
 		if ((extractorView != null) && extractorView.endsWith("v_mtef_funding")) // v_mtef_funding OR cached_v_mtef_funding
 			columnFilterSQLClause = generate_mtef_filter_statement(columnFilterSQLClause, col.getColumnName(), col.getAliasName());
 		
+		if ((extractorView != null) && extractorView.equals("v_donor_funding")  && (!this.realMtefYears.isEmpty())) {
+			// AMP-21355 - quite ugly, but speeds up fetching and it works
+			columnFilterSQLClause = String.format("%s AND ((transaction_type != 3) OR ((transaction_type = 3) AND (extract(year from transaction_date) IN (%s))))", columnFilterSQLClause, Util.toCSStringForIN(this.realMtefYears));
+		}
 		return columnFilterSQLClause;	
 	}
 	
@@ -1478,19 +1491,45 @@ public class AmpReportGenerator extends ReportGenerator {
 		}
 	}
 
+	public SortedSet<Integer> getRealMtefYears() {
+		return Collections.unmodifiableSortedSet(this.realMtefYears);
+	}
+	
 	/**
 	 * @param reportMetadata
 	 * @param condition
 	 */
-	public AmpReportGenerator(AmpReports reportMetadata, AmpARFilter filter, boolean regenerateFilterQuery) {
-	
+	public AmpReportGenerator(AmpReports inputReportMetadata, AmpARFilter filter, boolean regenerateFilterQuery) {
+		super(inputReportMetadata.buildClone());
+		
 		if (TLSUtils.getRequest() != null)
 			this.session		= TLSUtils.getRequest().getSession();
 		else
 			this.session = null;
 		
-		this.reportMetadata = reportMetadata;
+		// AMP-21355 hacks start - we are not going to overhaul a soon-to-be-retired code. What we're doing here is remove references to realMtef columns and instead add a constrained RealMTEfs measure
+		this.realMtefYears = new TreeSet<>();
+		boolean removedRealMtefsColumns = false;
+		Iterator<AmpReportColumn> arci = this.reportMetadata.getColumns().iterator();
+		while(arci.hasNext()) {
+			AmpReportColumn arc = arci.next();
+			if (arc.getColumn().isRealMtefColumn()) {
+				arci.remove();
+				this.realMtefYears.add(arc.getColumn().getMtefYear("realmtef"));
+				removedRealMtefsColumns = true;
+			}
+		}
+		
+		if (removedRealMtefsColumns) {
+			if (!this.reportMetadata.getMeasureNames().contains(ArConstants.REAL_MTEFS)) {
+				AmpReportMeasures dummyMeasure = new AmpReportMeasures(AdvancedReportUtil.getMeasureByName(ArConstants.REAL_MTEFS), reportMetadata.getMeasures().size() + 1);
+				this.reportMetadata.getMeasures().add(dummyMeasure);
+			}
+		}
+		// AMP-21355 hacks end
+		
 		this.reportMetadata.setReportGenerator(this);
+//		logger.error("real mtef years is: " + this.getRealMtefYears().toString());
 		
 		rawColumns = new GroupColumn(ArConstants.COLUMN_RAW_DATA);
 		this.filter = filter;
@@ -1527,8 +1566,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			}
 		}
 
-		reportMetadata.setOrderedColumns(ARUtil.createOrderedColumns(
-				reportMetadata.getShowAblesColumns(), reportMetadata.getHierarchies()));
+		reportMetadata.setOrderedColumns(ARUtil.createOrderedColumns(reportMetadata.getShowAblesColumns()));
 
 		// attach funding coming from extra sources ... inject funding from
 		if (ARUtil.containsColumn(ArConstants.COSTING_GRAND_TOTAL,reportMetadata.getShowAblesColumns())) {

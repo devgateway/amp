@@ -347,7 +347,7 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 		Integer year = null;
 		String fiscalYear = null;
 		ComparableMonth fiscalMonth = null;
-		
+				
 		if (filter.getCalendarType() != null) {
 			try {
 				ICalendarWorker worker = filter.getCalendarType().getworker();

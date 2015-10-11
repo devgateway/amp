@@ -18,8 +18,20 @@ public class ReportElement {
 		YEAR,
 		QUARTER,
 		MONTH,
+		/**
+		 * filter for transaction date
+		 */
 		DATE,
-		MTEF_DATE
+		
+		/**
+		 * filter for MTEF years
+		 */
+		MTEF_DATE,
+		
+		/**
+		 * filter for Real MTEF years
+		 */
+		REAL_MTEF_DATE
 	};
 	
 	/** Report element type. If it is ENTITY type, then {@link #entity} is specified */

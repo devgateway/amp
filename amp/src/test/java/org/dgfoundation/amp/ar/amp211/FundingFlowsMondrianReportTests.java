@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.ar.amp211;
 
+import static org.dgfoundation.amp.testutils.ReportTestingUtils.MUST_BE_EMPTY;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -13,6 +15,10 @@ import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter;
+import org.dgfoundation.amp.testmodels.ColumnReportDataModel;
+import org.dgfoundation.amp.testmodels.GroupColumnModel;
+import org.dgfoundation.amp.testmodels.GroupReportModel;
+import org.dgfoundation.amp.testmodels.SimpleColumnModel;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.junit.Test;
@@ -39,6 +45,8 @@ public class FundingFlowsMondrianReportTests extends MondrianReportsTestCase {
 			"Activity 2 with multiple agreements", "third activity with agreements", "activity with incomplete agreement",
 			"Activity with planned disbursements", "Activity with both MTEFs and Act.Comms", "activity_with_disaster_response",
 			"activity with directed MTEFs");
+	
+	public final static List<String> activities_with_some_mtefs = Arrays.asList("Eth Water", "pledged 2", "activity with directed MTEFs", "Activity with both MTEFs and Act.Comms");
 	
 	public FundingFlowsMondrianReportTests() {
 		super("funding flows mondrian tests");
@@ -259,5 +267,56 @@ public class FundingFlowsMondrianReportTests extends MondrianReportsTestCase {
 			A_LOT_OF_ACTIVITIES,
 			correctReportEn,
 			"en");
+	}
+	
+	@Test
+	public void testRealCommsDisbsByRegion() {
+		ReportAreaForTests cor = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "2011-Real MTEFs-EXEC - BENF", "50 000", "2011-Real MTEFs-IMPL - EXEC", "110 500", "2013-Actual Commitments- ", "2 670 000", "2013-Actual Disbursements- ", "545 000", "2013-Real MTEFs- ", "0", "2014-Actual Commitments- ", "4 400 000", "2014-Actual Disbursements- ", "450 000", "2014-Real MTEFs- ", "0", "2015-Actual Commitments- ", "1 011 456", "2015-Actual Disbursements- ", "0", "2015-Real MTEFs- ", "0", "Total Measures-Actual Commitments", "8 081 456", "Total Measures-Actual Disbursements", "995 000", "Total Measures-Real MTEFs", "0")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "Eth Water", "2011-Real MTEFs-EXEC - BENF", "", "2011-Real MTEFs-IMPL - EXEC", "", "2013-Actual Commitments- ", "", "2013-Actual Disbursements- ", "545 000", "2013-Real MTEFs- ", "", "2014-Actual Commitments- ", "", "2014-Actual Disbursements- ", "", "2014-Real MTEFs- ", "", "2015-Actual Commitments- ", "", "2015-Actual Disbursements- ", "", "2015-Real MTEFs- ", "", "Total Measures-Actual Commitments", "0", "Total Measures-Actual Disbursements", "545 000", "Total Measures-Real MTEFs", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "pledged 2", "2011-Real MTEFs-EXEC - BENF", "", "2011-Real MTEFs-IMPL - EXEC", "", "2013-Actual Commitments- ", "2 670 000", "2013-Actual Disbursements- ", "", "2013-Real MTEFs- ", "", "2014-Actual Commitments- ", "4 400 000", "2014-Actual Disbursements- ", "450 000", "2014-Real MTEFs- ", "", "2015-Actual Commitments- ", "", "2015-Actual Disbursements- ", "", "2015-Real MTEFs- ", "", "Total Measures-Actual Commitments", "7 070 000", "Total Measures-Actual Disbursements", "450 000", "Total Measures-Real MTEFs", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "Activity with both MTEFs and Act.Comms", "2011-Real MTEFs-EXEC - BENF", "", "2011-Real MTEFs-IMPL - EXEC", "", "2013-Actual Commitments- ", "", "2013-Actual Disbursements- ", "", "2013-Real MTEFs- ", "", "2014-Actual Commitments- ", "", "2014-Actual Disbursements- ", "", "2014-Real MTEFs- ", "", "2015-Actual Commitments- ", "888 000", "2015-Actual Disbursements- ", "", "2015-Real MTEFs- ", "", "Total Measures-Actual Commitments", "888 000", "Total Measures-Actual Disbursements", "0", "Total Measures-Real MTEFs", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "activity with directed MTEFs", "2011-Real MTEFs-EXEC - BENF", "50 000", "2011-Real MTEFs-IMPL - EXEC", "110 500", "2013-Actual Commitments- ", "", "2013-Actual Disbursements- ", "", "2013-Real MTEFs- ", "", "2014-Actual Commitments- ", "", "2014-Actual Disbursements- ", "", "2014-Real MTEFs- ", "", "2015-Actual Commitments- ", "123 456", "2015-Actual Disbursements- ", "", "2015-Real MTEFs- ", "", "Total Measures-Actual Commitments", "123 456", "Total Measures-Actual Disbursements", "0", "Total Measures-Real MTEFs", "0"));
+		runMondrianTestCase("AMP-21355-try-real-mtef-column-1", activities_with_some_mtefs, cor, "en");
+	}
+
+	@Test
+	public void testRealMtefAndMtefColumns() {
+		ReportAreaForTests cor = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "2011-Real MTEFs-EXEC - BENF", "50 000", "2011-Real MTEFs-IMPL - EXEC", "110 500", "2012-MTEF Projections- ", "150 000", "2012-Actual Commitments- ", "0", "2012-Real MTEFs- ", "0", "2013-MTEF Projections- ", "0", "2013-Actual Commitments- ", "2 670 000", "2013-Real MTEFs- ", "0", "2014-MTEF Projections- ", "0", "2014-Actual Commitments- ", "4 400 000", "2014-Real MTEFs- ", "0", "2015-MTEF Projections- ", "0", "2015-Actual Commitments- ", "1 011 456", "2015-Real MTEFs- ", "0", "Total Measures-MTEF Projections", "150 000", "Total Measures-Actual Commitments", "8 081 456", "Total Measures-Real MTEFs", "0")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "Eth Water", "2011-Real MTEFs-EXEC - BENF", "", "2011-Real MTEFs-IMPL - EXEC", "", "2012-MTEF Projections- ", "", "2012-Actual Commitments- ", "", "2012-Real MTEFs- ", "", "2013-MTEF Projections- ", "", "2013-Actual Commitments- ", "", "2013-Real MTEFs- ", "", "2014-MTEF Projections- ", "", "2014-Actual Commitments- ", "", "2014-Real MTEFs- ", "", "2015-MTEF Projections- ", "", "2015-Actual Commitments- ", "", "2015-Real MTEFs- ", "", "Total Measures-MTEF Projections", "0", "Total Measures-Actual Commitments", "0", "Total Measures-Real MTEFs", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "pledged 2", "2011-Real MTEFs-EXEC - BENF", "", "2011-Real MTEFs-IMPL - EXEC", "", "2012-MTEF Projections- ", "", "2012-Actual Commitments- ", "", "2012-Real MTEFs- ", "", "2013-MTEF Projections- ", "", "2013-Actual Commitments- ", "2 670 000", "2013-Real MTEFs- ", "", "2014-MTEF Projections- ", "", "2014-Actual Commitments- ", "4 400 000", "2014-Real MTEFs- ", "", "2015-MTEF Projections- ", "", "2015-Actual Commitments- ", "", "2015-Real MTEFs- ", "", "Total Measures-MTEF Projections", "0", "Total Measures-Actual Commitments", "7 070 000", "Total Measures-Real MTEFs", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "Activity with both MTEFs and Act.Comms", "2011-Real MTEFs-EXEC - BENF", "", "2011-Real MTEFs-IMPL - EXEC", "", "2012-MTEF Projections- ", "150 000", "2012-Actual Commitments- ", "", "2012-Real MTEFs- ", "", "2013-MTEF Projections- ", "", "2013-Actual Commitments- ", "", "2013-Real MTEFs- ", "", "2014-MTEF Projections- ", "", "2014-Actual Commitments- ", "", "2014-Real MTEFs- ", "", "2015-MTEF Projections- ", "", "2015-Actual Commitments- ", "888 000", "2015-Real MTEFs- ", "", "Total Measures-MTEF Projections", "150 000", "Total Measures-Actual Commitments", "888 000", "Total Measures-Real MTEFs", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "activity with directed MTEFs", "2011-Real MTEFs-EXEC - BENF", "50 000", "2011-Real MTEFs-IMPL - EXEC", "110 500", "2012-MTEF Projections- ", "", "2012-Actual Commitments- ", "", "2012-Real MTEFs- ", "", "2013-MTEF Projections- ", "", "2013-Actual Commitments- ", "", "2013-Real MTEFs- ", "", "2014-MTEF Projections- ", "", "2014-Actual Commitments- ", "", "2014-Real MTEFs- ", "", "2015-MTEF Projections- ", "", "2015-Actual Commitments- ", "123 456", "2015-Real MTEFs- ", "", "Total Measures-MTEF Projections", "0", "Total Measures-Actual Commitments", "123 456", "Total Measures-Real MTEFs", "0"));
+		
+		runMondrianTestCase("AMP-21355-real-mtef-and-mtef-columns", activities_with_some_mtefs, cor, "en");
+	}
+	
+	@Test
+	public void testRealMtefAndMtefColumnsAndRealMtefColumns() {
+		ReportAreaForTests cor = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "2011-Real MTEFs-EXEC - BENF", "50 000", "2011-Real MTEFs-IMPL - EXEC", "110 500", "2012-MTEF Projections- ", "150 000", "2012-Actual Commitments- ", "0", "2012-Real MTEFs- ", "0", "2013-MTEF Projections- ", "0", "2013-Actual Commitments- ", "2 670 000", "2013-Real MTEFs- ", "0", "2014-MTEF Projections- ", "0", "2014-Actual Commitments- ", "4 400 000", "2014-Real MTEFs- ", "0", "2015-MTEF Projections- ", "0", "2015-Actual Commitments- ", "1 011 456", "2015-Real MTEFs- ", "0", "Total Measures-MTEF Projections", "150 000", "Total Measures-Actual Commitments", "8 081 456", "Total Measures-Real MTEFs", "0")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "Eth Water", "2011-Real MTEFs-EXEC - BENF", "", "2011-Real MTEFs-IMPL - EXEC", "", "2012-MTEF Projections- ", "", "2012-Actual Commitments- ", "", "2012-Real MTEFs- ", "", "2013-MTEF Projections- ", "", "2013-Actual Commitments- ", "", "2013-Real MTEFs- ", "", "2014-MTEF Projections- ", "", "2014-Actual Commitments- ", "", "2014-Real MTEFs- ", "", "2015-MTEF Projections- ", "", "2015-Actual Commitments- ", "", "2015-Real MTEFs- ", "", "Total Measures-MTEF Projections", "0", "Total Measures-Actual Commitments", "0", "Total Measures-Real MTEFs", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "pledged 2", "2011-Real MTEFs-EXEC - BENF", "", "2011-Real MTEFs-IMPL - EXEC", "", "2012-MTEF Projections- ", "", "2012-Actual Commitments- ", "", "2012-Real MTEFs- ", "", "2013-MTEF Projections- ", "", "2013-Actual Commitments- ", "2 670 000", "2013-Real MTEFs- ", "", "2014-MTEF Projections- ", "", "2014-Actual Commitments- ", "4 400 000", "2014-Real MTEFs- ", "", "2015-MTEF Projections- ", "", "2015-Actual Commitments- ", "", "2015-Real MTEFs- ", "", "Total Measures-MTEF Projections", "0", "Total Measures-Actual Commitments", "7 070 000", "Total Measures-Real MTEFs", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "Activity with both MTEFs and Act.Comms", "2011-Real MTEFs-EXEC - BENF", "", "2011-Real MTEFs-IMPL - EXEC", "", "2012-MTEF Projections- ", "150 000", "2012-Actual Commitments- ", "", "2012-Real MTEFs- ", "", "2013-MTEF Projections- ", "", "2013-Actual Commitments- ", "", "2013-Real MTEFs- ", "", "2014-MTEF Projections- ", "", "2014-Actual Commitments- ", "", "2014-Real MTEFs- ", "", "2015-MTEF Projections- ", "", "2015-Actual Commitments- ", "888 000", "2015-Real MTEFs- ", "", "Total Measures-MTEF Projections", "150 000", "Total Measures-Actual Commitments", "888 000", "Total Measures-Real MTEFs", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "activity with directed MTEFs", "2011-Real MTEFs-EXEC - BENF", "50 000", "2011-Real MTEFs-IMPL - EXEC", "110 500", "2012-MTEF Projections- ", "", "2012-Actual Commitments- ", "", "2012-Real MTEFs- ", "", "2013-MTEF Projections- ", "", "2013-Actual Commitments- ", "", "2013-Real MTEFs- ", "", "2014-MTEF Projections- ", "", "2014-Actual Commitments- ", "", "2014-Real MTEFs- ", "", "2015-MTEF Projections- ", "", "2015-Actual Commitments- ", "123 456", "2015-Real MTEFs- ", "", "Total Measures-MTEF Projections", "0", "Total Measures-Actual Commitments", "123 456", "Total Measures-Real MTEFs", "0"));
+
+		runMondrianTestCase("AMP-21355-real-mtef-and-mtef-columns-and-real-mtef-measure", activities_with_some_mtefs, cor, "en");
+	}
+	
+	@Test
+	public void testRealMtefColumnsAndMeasure() {
+		ReportAreaForTests cor = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "2011-Real MTEFs-EXEC - BENF", "50 000", "2011-Real MTEFs-IMPL - EXEC", "110 500", "Total Measures-Real MTEFs", "0")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "Eth Water", "2011-Real MTEFs-EXEC - BENF", "", "2011-Real MTEFs-IMPL - EXEC", "", "Total Measures-Real MTEFs", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "pledged 2", "2011-Real MTEFs-EXEC - BENF", "", "2011-Real MTEFs-IMPL - EXEC", "", "Total Measures-Real MTEFs", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "Activity with both MTEFs and Act.Comms", "2011-Real MTEFs-EXEC - BENF", "", "2011-Real MTEFs-IMPL - EXEC", "", "Total Measures-Real MTEFs", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "activity with directed MTEFs", "2011-Real MTEFs-EXEC - BENF", "50 000", "2011-Real MTEFs-IMPL - EXEC", "110 500", "Total Measures-Real MTEFs", "0"));
+
+		runMondrianTestCase("AMP-21355-real-mtef-columns-and-measure", activities_with_some_mtefs, cor, "en");
 	}
 }

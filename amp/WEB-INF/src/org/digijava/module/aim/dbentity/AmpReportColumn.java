@@ -16,7 +16,7 @@ import org.hibernate.Session;
 import org.hibernate.annotations.Index;
 
 
-public class AmpReportColumn  implements Serializable, Comparable
+public class AmpReportColumn implements Serializable, Comparable<AmpReportColumn>
 {
 //	@Identificator
 //	private Long id;
@@ -72,21 +72,19 @@ public class AmpReportColumn  implements Serializable, Comparable
 	public void setLevel(AmpCategoryValue level) {
 		this.level = level;
 	}
-	public int compareTo(Object o) {
-		try {
-			 int myOrder         =orderId.intValue();
-			 int oOrder          = ((AmpReportColumn)o).getOrderId().intValue();
-			 return myOrder-oOrder;
-		}
-		catch (NumberFormatException e) {
-			e.printStackTrace();
-			return -1;
-		}
+	
+	@Override
+	public int compareTo(AmpReportColumn o) {
+		int delta = this.getOrderId().compareTo(o.getOrderId());
+		if (delta != 0) return delta;
+		return this.getColumn().compareTo(o.getColumn());
 	}
 
 	@Override
 	public boolean equals(Object arg0) {
-		return compareTo(arg0) == 0;
+		AmpReportColumn other = (AmpReportColumn) arg0;
+		int delta = this.compareTo(other);
+		return delta == 0;
 	}
 	
 	@Override

@@ -422,23 +422,12 @@ public final class ARUtil {
 	 * order.
 	 * 
 	 * @param columns
-	 * @param hierarchies
-	 *            this set is needed because also hierarchies were ordered by
-	 *            the same values and we need the max
 	 * @return
 	 */
-	public static List createOrderedColumns(Collection columns, Set hierarchies) {
-		List orderedColumns = new ArrayList(columns.size());
-		for (int x = 0; x < columns.size() + hierarchies.size(); x++) {
-			Iterator i = columns.iterator();
-			while (i.hasNext()) {
-				AmpReportColumn element = (AmpReportColumn) i.next();
-				 int order = element.getOrderId().intValue();
-				if (order - 1 == x)
-					orderedColumns.add(element);
-			}
-		}
-		return orderedColumns;
+	public static List<AmpReportColumn> createOrderedColumns(Collection<AmpReportColumn> columns) {
+		ArrayList<AmpReportColumn> res = new ArrayList<>(columns);
+		Collections.sort(res);
+		return res;
 	}
 	
 	public static void insertEmptyColumns (String type, CellColumn src, SortedSet<MetaInfo> destMetaSet, AmpARFilter filter) {

@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.digijava.module.aim.annotations.reports.Identificator;
 
-public class AmpColumns implements Serializable, Comparable
+public class AmpColumns implements Serializable, Comparable<AmpColumns>
 {
 	protected static final Logger logger = Logger.getLogger(AmpColumns.class);
 	
@@ -117,12 +117,9 @@ public class AmpColumns implements Serializable, Comparable
 		this.columnNameTrimmed = columnNameTrimmed;
 	}*/
 	
-	public int compareTo(Object o) {
-		// TODO Auto-generated method stub
-		if (!(o instanceof AmpColumns))
-			return -1;
-		AmpColumns auxColumn=(AmpColumns) o;
-		return this.getColumnName().compareTo(auxColumn.getColumnName());
+	@Override
+	public int compareTo(AmpColumns oth) {
+		return this.getColumnName().compareTo(oth.getColumnName());
 	}
 	
 	public String toString(){
@@ -173,16 +170,24 @@ public class AmpColumns implements Serializable, Comparable
 	}
 	
 	public boolean isMtefColumn() {
-		try {return getMtefYear() != null;}
+		try {return getMtefYear("mtef") != null;}
+		catch(Exception e) {
+			logger.error("potentially inconsistent MTEF column definition", e);
+			return false;
+		}
+	}
+
+	public boolean isRealMtefColumn() {
+		try {return getMtefYear("realmtef") != null;}
 		catch(Exception e) {
 			logger.error("potentially inconsistent MTEF column definition", e);
 			return false;
 		}
 	}
 	
-	public Integer getMtefYear() {
-		if (this.getAliasName() == null || !this.getAliasName().toLowerCase().startsWith("mtef"))
+	public Integer getMtefYear(String prefix) {
+		if (this.getAliasName() == null || !this.getAliasName().toLowerCase().startsWith(prefix))
 			return null;
-		return Integer.parseInt(this.getAliasName().substring(4)); // intentionally crash if input isn't good
+		return Integer.parseInt(this.getAliasName().substring(prefix.length())); // intentionally crash if input isn't good
 	}
 }

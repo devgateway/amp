@@ -43,7 +43,7 @@ public abstract class ReportGenerator {
 	protected AmpARFilter filter;
 	protected boolean pledgereport = false;
 	
-	protected AmpReports reportMetadata;
+	protected final AmpReports reportMetadata;
 	protected FilterCacher filterCacher;
 	protected java.util.Map<PropertyDescription, ColumnValuesCacher> columnCachers;
 	
@@ -58,6 +58,10 @@ public abstract class ReportGenerator {
 	 * prepares the extracted data for display
 	 */
 	protected abstract void prepareData();
+	
+	protected ReportGenerator(AmpReports reportMetadata) {
+		this.reportMetadata = reportMetadata;
+	}
 	
 	/**
 	 * true = use FastFilterCachier, false = use NopFilterCacher
@@ -107,12 +111,13 @@ public abstract class ReportGenerator {
 //		String popa = this.report.prettyPrint();
 		//logger.error("the report is " + report.prettyPrint());
 		//if (report.getName().startsWith("AMP-17746"))
-//			System.err.println("report is, in code, " + describeReportInCode(report, 0, true));
+		//System.err.println("report is, in code, " + describeReportInCode(report, 0, true));
 		long endTS = System.currentTimeMillis();
 		columnCachers.clear(); // cleanup memory used for holding columns
 		logger.info("Report "+getReport().getName()+" generated in "+(endTS-startTS)/1000.0+" seconds. Data retrieval completed in "+(retrTS-startTS)/1000.0+" seconds");
 		//logger.info("\tTotal merged cells while generating report: " + GroupReportData.totalMergedCells);
 	}
+	
 	
 
 	/**
@@ -148,13 +153,6 @@ public abstract class ReportGenerator {
 	 */
 	public AmpReports getReportMetadata() {
 		return reportMetadata;
-	}
-
-	/**
-	 * @param reportMetadata The reportMetadata to set.
-	 */
-	public void setReportMetadata(AmpReports reportMetadata) {
-		this.reportMetadata = reportMetadata;
 	}
 
 	public FilterCacher getFilterCacher()

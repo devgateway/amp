@@ -25,6 +25,7 @@ import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -40,7 +41,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 
 @TranslatableClass (displayName = "Report")
-public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, Serializable, FilterDataSetInterface<AmpFilterData> {
+public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, Serializable, Cloneable, FilterDataSetInterface<AmpFilterData> {
 
 	private Long ampReportId;
 
@@ -709,6 +710,19 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 					}
 				}
 			}
+		}
+	}
+	
+	public AmpReports buildClone() {
+		try {
+			PersistenceManager.getSession().evict(this);
+			AmpReports res = (AmpReports) super.clone();
+			res.setAmpReportId(null); // detach
+			PersistenceManager.getSession().evict(res);
+			return res;
+		}
+		catch(Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 	

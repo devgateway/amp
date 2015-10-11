@@ -50,7 +50,6 @@ public class FactTableFiltering {
 		long start = System.currentTimeMillis();
 		StringBuilder subquery = new StringBuilder();
 		if (mrf != null) {
-			
 			// process regular columns
 			for(Entry<String, List<FilterRule>> sqlFilterRule:mrf.getSqlFilterRules().entrySet()) {
 				String mainColumnName = sqlFilterRule.getKey();
@@ -58,9 +57,10 @@ public class FactTableFiltering {
 				subquery.append(fragment);
 			}
 
-			String dateFilteringFragment = buildDateFilteringFragment(ReportElement.ElementType.DATE, "transaction_type <> " + Constants.MTEFPROJECTION);
+			String dateFilteringFragment = buildDateFilteringFragment(ReportElement.ElementType.DATE, String.format("(transaction_type <> %d) AND (transaction_type <> %d)", Constants.MTEFPROJECTION, 200 + Constants.MTEFPROJECTION));
 			String mtefFilteringFragment = buildDateFilteringFragment(ReportElement.ElementType.MTEF_DATE, "transaction_type = " + Constants.MTEFPROJECTION);
-			String datesQuery = String.format("%sAND ((%s) OR (%s))%s", DATE_FILTERS_TAG_START, dateFilteringFragment, mtefFilteringFragment, DATE_FILTERS_TAG_END);
+			String realMtefFilteringFragment = buildDateFilteringFragment(ReportElement.ElementType.REAL_MTEF_DATE, "transaction_type = " + (200 + Constants.MTEFPROJECTION));
+			String datesQuery = String.format("%sAND ((%s) OR (%s) OR (%s))%s", DATE_FILTERS_TAG_START, dateFilteringFragment, mtefFilteringFragment, realMtefFilteringFragment, DATE_FILTERS_TAG_END);
 			subquery.append(datesQuery);
 		}
 		String ret = subquery.toString().trim();

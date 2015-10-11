@@ -365,7 +365,7 @@ public class ReportsUtil {
 		// set filters even if they are empty, that means filters are cleared up
 		// copy MTEF-hacky entries from old widget to new widget, since these are supposed to be sticky (not present in the filter form)
 		for(Entry<ReportElement, List<FilterRule>> elem: oldFilters.getFilterRules().entrySet()) {
-			if (elem.getKey().type == ReportElement.ElementType.MTEF_DATE) {
+			if (elem.getKey().type == ReportElement.ElementType.MTEF_DATE || elem.getKey().type == ReportElement.ElementType.REAL_MTEF_DATE) {
 				result.getFilterRules().put(elem.getKey(), elem.getValue());
 				somethingAdded = true;
 			}

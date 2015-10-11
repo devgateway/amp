@@ -1,29 +1,18 @@
 package org.dgfoundation.amp.ar.amp211;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.dgfoundation.amp.algo.AlgoUtils;
-import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.VirtualCurrenciesMaintainer;
 import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
-import org.dgfoundation.amp.mondrian.ReportAreaForTests;
-import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter;
 import org.dgfoundation.amp.testutils.AmpRunnable;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.dbentity.AmpInflationRate;
-import org.digijava.module.aim.dbentity.AmpReportColumn;
-import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.junit.Test;
 

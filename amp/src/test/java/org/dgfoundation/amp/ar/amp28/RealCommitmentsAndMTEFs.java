@@ -200,7 +200,7 @@ public class RealCommitmentsAndMTEFs extends ReportsTestCase {
 		runReportTest("Report With Real MTEFs By Region", "AMP-19212-real-mtefs-by-region", new String[] {"Eth Water", "pledged 2", "Activity with Directed MTEFs", "Activity With Directed Comms and Disbs", "Second activity with directed MTEFs"}, 
 				cor, null, "en");
 	}
-
+	
 	public void testRealMTEFsByImpl() {
 		GroupReportModel cor = GroupReportModel.withGroupReports("AMP-19212-real-mtefs-by-impl",
 				GroupReportModel.withColumnReports("AMP-19212-real-mtefs-by-impl",

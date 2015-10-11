@@ -723,7 +723,8 @@ public class Filters {
 	
 	public boolean hasToShowWorkspaceFilter () {
 		boolean showWorkspaceFilter = true;
-		boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));
+		boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(
+                FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));
 		TeamMember teamMember = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(
 				org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
 		AmpTeam ampTeam = null;
@@ -732,10 +733,10 @@ public class Filters {
 		}
 
 		if (ampTeam != null && ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM)
-				&& ampTeam.getComputation() == false && !showWorkspaceFilterInTeamWorkspace) {
+				&& !ampTeam.getComputation() && !showWorkspaceFilterInTeamWorkspace) {
 			showWorkspaceFilter = false;
-		//Hide Workspace in public view
-		}else if(ampTeam == null){
+		// Hide Workspace in public view
+		} else if (ampTeam == null) {
 			showWorkspaceFilter = false;
 		}
 		return showWorkspaceFilter;

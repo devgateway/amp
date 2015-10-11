@@ -134,7 +134,7 @@ public class GlobalSettingsConstants {
     
     public static final String SHOW_MOST_RECENT_ACTIVITIES_ON_TOP = "Show Most Recent Activities on Top";
 
-    public static final String SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES = "Show Workspace Filter In Team Workspace";
+    public static final String SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES = "Show workspace filter";
     
     public static final String ACTIVITY_AUTO_SAVE_SECONDS = "Seconds to Auto-Save Activity";
     

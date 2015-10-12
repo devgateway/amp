@@ -89,8 +89,12 @@ public class CellDataSetPostProcessing {
 	 * @return
 	 */
 	protected boolean isFirstAndOnlyNonZero(ReportOutputColumn selfHeader, ReportOutputColumn previousHeader, TotalAggregator[] byColTotals, int colNr) {
-		if (previousHeader == null || selfHeader == null || previousHeader.parentColumn == null || selfHeader.parentColumn == null) return false;
-		if (selfHeader.parentColumn.equals(previousHeader.parentColumn)) return false; // we are not the first one
+		if (selfHeader == null || selfHeader.parentColumn == null)
+			return false;
+			
+		if (previousHeader != null && previousHeader.parentColumn != null && selfHeader.parentColumn.equals(previousHeader.parentColumn))
+			return false; // we are not the first one
+		
 		colNr ++; // invariant: colNr is the first unchecked one
 		while (colNr + spec.getColumnNames().size() < leafHeaders.size()) {
 			ReportOutputColumn colH = leafHeaders.get(colNr + spec.getColumnNames().size());
@@ -105,8 +109,8 @@ public class CellDataSetPostProcessing {
 	}
 	
 	public void removeEmptyFlowsColumns(boolean internalIdUsed) {
-		if (System.currentTimeMillis() < 1)
-			return;
+//		if (System.currentTimeMillis() < 1)
+//			return;
 		SortedSet<Integer> colsToDelete = new TreeSet<>();
 		List<TotalNode>[] rowTotals = cellDataSet.getRowTotalsLists();
 		boolean canLook = rowTotals != null && rowTotals.length > 0 && rowTotals[0].size() > 0 && rowTotals[0].get(0).getTotalGroups() != null;

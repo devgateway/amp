@@ -128,14 +128,14 @@ public class FundingFlowsMondrianReportTests extends MondrianReportsTestCase {
 	@Test
 	public void testDirectedByExecuting() {
 		ReportAreaForTests correctReportEn = new ReportAreaForTests()
-	    .withContents("Executing Agency", "Report Totals", "Project Title", "", "2013-Real Disbursements-EXEC - IMPL", "100 000", "Total Measures-Real Disbursements", "0")
+	    .withContents("Executing Agency", "Report Totals", "Project Title", "", "2010-Real Disbursements- ", "0", "2013-Real Disbursements-EXEC - IMPL", "100 000", "Total Measures-Real Disbursements", "0")
 	    .withChildren(
-	      new ReportAreaForTests().withContents("Executing Agency", "UNDP Totals", "Project Title", "", "2013-Real Disbursements-EXEC - IMPL", "80 000", "Total Measures-Real Disbursements", "0")
+	      new ReportAreaForTests().withContents("Executing Agency", "UNDP Totals", "Project Title", "", "2010-Real Disbursements- ", "0", "2013-Real Disbursements-EXEC - IMPL", "80 000", "Total Measures-Real Disbursements", "0")
 	      .withChildren(
-	        new ReportAreaForTests().withContents("Executing Agency", "UNDP", "Project Title", "Eth Water", "2013-Real Disbursements-EXEC - IMPL", "80 000", "Total Measures-Real Disbursements", "0")    ),
-	      new ReportAreaForTests().withContents("Executing Agency", "World Bank Totals", "Project Title", "", "2013-Real Disbursements-EXEC - IMPL", "20 000", "Total Measures-Real Disbursements", "0")
+	        new ReportAreaForTests().withContents("Executing Agency", "UNDP", "Project Title", "Eth Water", "2010-Real Disbursements- ", "", "2013-Real Disbursements-EXEC - IMPL", "80 000", "Total Measures-Real Disbursements", "0")),
+	      new ReportAreaForTests().withContents("Executing Agency", "World Bank Totals", "Project Title", "", "2010-Real Disbursements- ", "0", "2013-Real Disbursements-EXEC - IMPL", "20 000", "Total Measures-Real Disbursements", "0")
 	      .withChildren(
-	        new ReportAreaForTests().withContents("Executing Agency", "World Bank", "Project Title", "Eth Water", "2013-Real Disbursements-EXEC - IMPL", "20 000", "Total Measures-Real Disbursements", "0")));
+	        new ReportAreaForTests().withContents("Executing Agency", "World Bank", "Project Title", "Eth Water", "2010-Real Disbursements- ", "", "2013-Real Disbursements-EXEC - IMPL", "20 000", "Total Measures-Real Disbursements", "0")));
 
 		runMondrianTestCase(
 			"AMP-15337-real-disbursements-by-executing",						
@@ -147,17 +147,18 @@ public class FundingFlowsMondrianReportTests extends MondrianReportsTestCase {
 	@Test
 	public void testDirectedByImplementing() {
 		ReportAreaForTests correctReportEn = new ReportAreaForTests()
-	    .withContents("Implementing Agency", "Report Totals", "Project Title", "", "2013-Real Disbursements-IMPL - BENF", "15 000", "2013-Real Disbursements-IMPL - EXEC", "44 333", "Total Measures-Real Disbursements", "0")
+	    .withContents("Implementing Agency", "Report Totals", "Project Title", "", "2010-Real Disbursements- ", "0", "2013-Real Disbursements-IMPL - BENF", "15 000", "2013-Real Disbursements-IMPL - EXEC", "44 333", "Total Measures-Real Disbursements", "0")
 	    .withChildren(
-	      new ReportAreaForTests().withContents("Implementing Agency", "USAID Totals", "Project Title", "", "2013-Real Disbursements-IMPL - BENF", "0", "2013-Real Disbursements-IMPL - EXEC", "44 333", "Total Measures-Real Disbursements", "0")
+	      new ReportAreaForTests().withContents("Implementing Agency", "USAID Totals", "Project Title", "", "2010-Real Disbursements- ", "0", "2013-Real Disbursements-IMPL - BENF", "0", "2013-Real Disbursements-IMPL - EXEC", "44 333", "Total Measures-Real Disbursements", "0")
 	      .withChildren(
-	        new ReportAreaForTests().withContents("Implementing Agency", "USAID", "Project Title", "Test MTEF directed", "2013-Real Disbursements-IMPL - BENF", "", "2013-Real Disbursements-IMPL - EXEC", "44 333", "Total Measures-Real Disbursements", "0")    ),
-	      new ReportAreaForTests().withContents("Implementing Agency", "Ministry of Finance Totals", "Project Title", "", "2013-Real Disbursements-IMPL - BENF", "10 000", "2013-Real Disbursements-IMPL - EXEC", "0", "Total Measures-Real Disbursements", "0")
+	        new ReportAreaForTests().withContents("Implementing Agency", "USAID", "Project Title", "Test MTEF directed", "2010-Real Disbursements- ", "", "2013-Real Disbursements-IMPL - BENF", "", "2013-Real Disbursements-IMPL - EXEC", "44 333", "Total Measures-Real Disbursements", "0")),
+	      new ReportAreaForTests().withContents("Implementing Agency", "Ministry of Finance Totals", "Project Title", "", "2010-Real Disbursements- ", "0", "2013-Real Disbursements-IMPL - BENF", "10 000", "2013-Real Disbursements-IMPL - EXEC", "0", "Total Measures-Real Disbursements", "0")
 	      .withChildren(
-	        new ReportAreaForTests().withContents("Implementing Agency", "Ministry of Finance", "Project Title", "Eth Water", "2013-Real Disbursements-IMPL - BENF", "10 000", "2013-Real Disbursements-IMPL - EXEC", "", "Total Measures-Real Disbursements", "0")    ),
-	      new ReportAreaForTests().withContents("Implementing Agency", "Ministry of Economy Totals", "Project Title", "", "2013-Real Disbursements-IMPL - BENF", "5 000", "2013-Real Disbursements-IMPL - EXEC", "0", "Total Measures-Real Disbursements", "0")
+	        new ReportAreaForTests().withContents("Implementing Agency", "Ministry of Finance", "Project Title", "Eth Water", "2010-Real Disbursements- ", "", "2013-Real Disbursements-IMPL - BENF", "10 000", "2013-Real Disbursements-IMPL - EXEC", "", "Total Measures-Real Disbursements", "0")),
+	      new ReportAreaForTests().withContents("Implementing Agency", "Ministry of Economy Totals", "Project Title", "", "2010-Real Disbursements- ", "0", "2013-Real Disbursements-IMPL - BENF", "5 000", "2013-Real Disbursements-IMPL - EXEC", "0", "Total Measures-Real Disbursements", "0")
 	      .withChildren(
-	        new ReportAreaForTests().withContents("Implementing Agency", "Ministry of Economy", "Project Title", "Eth Water", "2013-Real Disbursements-IMPL - BENF", "5 000", "2013-Real Disbursements-IMPL - EXEC", "", "Total Measures-Real Disbursements", "0")));
+	        new ReportAreaForTests().withContents("Implementing Agency", "Ministry of Economy", "Project Title", "Eth Water", "2010-Real Disbursements- ", "", "2013-Real Disbursements-IMPL - BENF", "5 000", "2013-Real Disbursements-IMPL - EXEC", "", "Total Measures-Real Disbursements", "0")));
+		
 		runMondrianTestCase(
 			"AMP-15337-real-disbursements-by-implementing",						
 			activities,

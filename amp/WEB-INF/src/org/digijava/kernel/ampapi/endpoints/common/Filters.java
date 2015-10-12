@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ws.rs.GET;
@@ -18,7 +19,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.newreports.FilterRule;
+import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -64,7 +65,13 @@ public class Filters {
 	public static final String ANY_BOOLEAN = "999888777";
 
 	//AmpARFilter filters;
-	
+
+    // todo
+    // probably not the best place to keep, but definitely better than in the method
+    private static final String PRIVATE_WS_CONDITION = "WHERE (isolated is false) OR (isolated is null)";
+    private static final String PARENT_WS_CONDITION = "WHERE parent_team_id = ";
+
+
 	public Filters() {
 		//filters = new AmpARFilter();
 	}
@@ -87,12 +94,7 @@ public class Filters {
 	@ApiMethod(ui = true, id = "ActivityApprovalStatus", columns = ColumnConstants.APPROVAL_STATUS , name="Approval Status", tab=EPConstants.TAB_ACTIVITY)
 	public JsonBean getActivityApprovalStatus() {
 		JsonBean as=new JsonBean();
-		TeamMember teamMember = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(
-				org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
-		AmpTeam ampTeam = null;
-		if (teamMember != null) {
-			ampTeam = TeamUtil.getAmpTeam(teamMember.getTeamId());
-		}
+        AmpTeam ampTeam = getAmpTeam();
 		//Hide in public view
 		if (ampTeam!=null){
 			List<SimpleJsonBean> activityStatus = new ArrayList<SimpleJsonBean>();
@@ -111,7 +113,17 @@ public class Filters {
 		return as;
 	}
 
-	/**
+    private AmpTeam getAmpTeam() {
+        TeamMember teamMember = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(
+                Constants.CURRENT_MEMBER);
+        AmpTeam ampTeam = null;
+        if (teamMember != null) {
+            ampTeam = TeamUtil.getAmpTeam(teamMember.getTeamId());
+        }
+        return ampTeam;
+    }
+
+    /**
 	 * Return the adminlevels for filtering
 	 * 
 	 * @return
@@ -393,7 +405,7 @@ public class Filters {
 	
 	public List<SimpleJsonBean> getorgRoles() {
 		List <SimpleJsonBean> orgRoles = QueryUtil.getOrgRoles();
-		return orderByProperty(orgRoles,DISPLAY_NAME_PROPERTY);
+		return orderByProperty(orgRoles, DISPLAY_NAME_PROPERTY);
 	}	
 	
 
@@ -686,51 +698,61 @@ public class Filters {
 		for (AmpSector ampSectorChild : as.getSectors()) {
 			s.getChildren().add(getSectors(ampSectorChild,sectorConfigName,level));
 		}
-		orderByProperty(s.getChildren(),NAME_PROPERTY);
+		orderByProperty(s.getChildren(), NAME_PROPERTY);
 		return s;
 	}
-	
-	
-	/**
-	 * Return all workspaces to be used for filtering
-	 * 
-	 * @return
-	 */
-	@GET
-	@Path("/workspaces")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = "Workspaces", id = "Workspaces", visibilityCheck = "hasToShowWorkspaceFilter"/*, column = ColumnConstants.WORKSPACES*/, 
-				tab=EPConstants.TAB_OTHER)
-	public JsonBean getWorkspaces() {
-		List<SimpleJsonBean> teamsListJson = new ArrayList<SimpleJsonBean>();
-		Collection<AmpTeam> ampTeamList = TeamUtil.getAllRelatedTeams();
-		if (hasToShowWorkspaceFilter()) {
-			for (AmpTeam ampTeam : ampTeamList) {
-				SimpleJsonBean ampTeamJson = new SimpleJsonBean();
-				ampTeamJson.setId(ampTeam.getIdentifier());
-				ampTeamJson.setName(ampTeam.getName());
-				teamsListJson.add(ampTeamJson);
-			}
-			teamsListJson = orderByProperty(teamsListJson, NAME_PROPERTY);
-		}
-		JsonBean js = new JsonBean();
-		js.set("filterId", "Workspaces");
-		js.set("name", TranslatorWorker.translateText("Workspaces"));
-		js.set("values", teamsListJson);
-		
-		return js;
-	}
+
+
+    /**
+     * Return all workspaces to be used for filtering
+     *
+     * @return
+     */
+    @GET
+    @Path("/workspaces")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = true, name = "Workspaces", id = "Workspaces", visibilityCheck = "hasToShowWorkspaceFilter",
+            tab=EPConstants.TAB_OTHER)
+    public JsonBean getWorkspaces() {
+        List<SimpleJsonBean> teamsListJson = new ArrayList<SimpleJsonBean>();
+        if (hasToShowWorkspaceFilter()) {
+            AmpTeam ws = getAmpTeam();
+
+            Map<Long, String> teamNames = null;
+            // display only child workspaces in case of computed workspaces
+            if (ws != null && "Management".equals(ws.getAccessType())) {
+                teamNames = DatabaseViewFetcher
+                        .fetchInternationalizedView("amp_team", PARENT_WS_CONDITION + ws.getAmpTeamId(), "amp_team_id", "name");
+            } else {
+                teamNames = DatabaseViewFetcher
+                        .fetchInternationalizedView("amp_team", PRIVATE_WS_CONDITION, "amp_team_id", "name");
+            }
+
+            if (teamNames != null) {
+                for (long ampTeamId : teamNames.keySet()) {
+                    SimpleJsonBean ampTeamJson = new SimpleJsonBean();
+                    ampTeamJson.setId(ampTeamId);
+                    ampTeamJson.setName(teamNames.get(ampTeamId));
+                    teamsListJson.add(ampTeamJson);
+                }
+            }
+
+            teamsListJson = orderByProperty(teamsListJson, NAME_PROPERTY);
+        }
+        JsonBean js = new JsonBean();
+        js.set("filterId", "Workspaces");
+        js.set("name", TranslatorWorker.translateText("Workspaces"));
+        js.set("values", teamsListJson);
+
+        return js;
+    }
+
 	
 	public boolean hasToShowWorkspaceFilter () {
 		boolean showWorkspaceFilter = true;
 		boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(
                 FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));
-		TeamMember teamMember = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(
-				org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
-		AmpTeam ampTeam = null;
-		if (teamMember != null) {
-			ampTeam = TeamUtil.getAmpTeam(teamMember.getTeamId());
-		}
+        AmpTeam ampTeam = getAmpTeam();
 
 		if (ampTeam != null && ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM)
 				&& !ampTeam.getComputation() && !showWorkspaceFilterInTeamWorkspace) {

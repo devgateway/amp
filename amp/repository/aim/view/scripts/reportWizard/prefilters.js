@@ -205,7 +205,9 @@ SaveFilters.prototype.success	= function (o) {
 	//alert ("saveFilters: " + o.responseText);
 	if ( o.responseText.length > 0 ) {
 		this.panel.hide();
-		this.filterObj.hasFilters.value = true;	
+		if (this.filterObj.hasFilters !== null && this.filterObj.hasFilters !== undefined) {
+			this.filterObj.hasFilters.value = true;
+		}
 		this.filterObj.listFiltersDiv.innerHTML	= o.responseText;
 		if (!(typeof repManager === 'undefined')) {
 			repManager.showUseFilters(true);

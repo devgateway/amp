@@ -25,7 +25,7 @@ import org.dgfoundation.amp.testmodels.GroupReportModel;
 import org.dgfoundation.amp.testmodels.SimpleColumnModel;
 
 /**
- * testcases for Currency Deflator (https://jira.dgfoundation.org/browse/AMP-20534)
+ * testcases for new features added into the old reports engine in AMP 2.11
  * @author Constantin Dolghier
  *
  */

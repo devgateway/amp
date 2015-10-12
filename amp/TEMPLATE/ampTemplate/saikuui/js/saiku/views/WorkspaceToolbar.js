@@ -66,7 +66,7 @@ var WorkspaceToolbar = Backbone.View.extend({
         _.bindAll(this, "call", "reflect_properties", "run_query",
             "swap_axes_on_dropzones", "display_drillthrough","clicked_cell_drillthrough_export",
             "clicked_cell_drillthrough","activate_buttons", "switch_to_mdx","post_mdx_transform", "toggle_fields_action",
-            "export_amp_xls", "export_amp_xls_plain", "export_amp_csv","export_amp_pdf","calculate_url");
+            "export_amp_xls", "export_amp_xls_plain", "export_amp_csv", "export_amp_pdf", "calculate_url");
         
         // Redraw the toolbar to reflect properties
         this.workspace.bind('properties:loaded', this.reflect_properties);
@@ -118,6 +118,7 @@ var WorkspaceToolbar = Backbone.View.extend({
             	$(this.el).find('a.export_pdf').addClass('disabled_toolbar');
             	$(this.el).find('a.export_to_map').addClass('disabled_toolbar');
             	$(this.el).find('a.fullscreen').addClass('disabled_toolbar');
+            	$(this.el).find('a.export_dual_currency').addClass('disabled_toolbar');
             }
     	}
     	else {

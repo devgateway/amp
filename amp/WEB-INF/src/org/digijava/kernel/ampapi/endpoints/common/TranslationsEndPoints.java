@@ -55,9 +55,25 @@ public class TranslationsEndPoints {
 			param.set(key, newValue);
 		}
 		return param;
-		
 	}
 
+	@POST
+	@Path("/translate-labels/{langCode}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = false, id = "CustomLanguageTranslations")
+	public JsonBean getLangPack(@PathParam("langCode") String langCode, final JsonBean param){
+		String language = langCode == null ? TLSUtils.getEffectiveLangCode() : langCode;
+		for (String key:param.any().keySet()) {
+			String translating = param.get(key).toString();
+			String newValue= TranslatorWorker.translateText(translating, language, 3l);
+			//LOGGER.error("translating <" + translating + "> to <" + newValue + ">");
+			param.set(key, newValue);
+		}
+		return param;
+		
+	}
+	
 	@GET
 	@Path("/languages/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")

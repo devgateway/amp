@@ -373,6 +373,11 @@ function generateDataRows(page, options) {
 				
 				
 				var styleClass = getCellDataStyleClass(contentMatrix, cleanValue, i, j);
+				var coloredPrefix = "";
+				
+				if (isCellNotValidated(contentMatrix, i, j)) {
+					coloredPrefix = "*";
+				}
 				
 				// Ignore subtotal rows text and change style.
 				if (this.contentMatrix[i][j].isTotal === true) {
@@ -402,7 +407,7 @@ function generateDataRows(page, options) {
 				}
 
 				cell = "<th" + styleClass + rowSpan + ">";
-				cell += cleanValue.text;
+				cell += coloredPrefix + cleanValue.text;
 				cell += "</th>";
 			} else {
 				// Change amount styles if is a subtotal.
@@ -457,6 +462,17 @@ function getCellDataStyleClass(contentMatrix, cleanValue, i, j) {
 	}
 	
 	return styleClass;
+}
+
+function isCellNotValidated(contentMatrix, i, j) {
+	if (contentMatrix[i][j].color && 
+		contentMatrix[i][j].color != "activity_status_validated" && 
+		contentMatrix[i][j].color != "activity_status_pledge") {
+		
+		return true;
+	}
+	
+	return false;
 }
 
 /**

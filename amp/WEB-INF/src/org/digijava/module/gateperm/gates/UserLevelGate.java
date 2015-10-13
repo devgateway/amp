@@ -21,17 +21,18 @@ import org.hibernate.Session;
  */
 public class UserLevelGate extends Gate {
 
-	public static final String PARAM_EVERYONE="everyone";
-	public static final String PARAM_GUEST="guest";
-	public static final String PARAM_OWNER="owner";
-	public static final String PARAM_WORKSPACE_MANAGER="worskpacemanager";
-	
-	public static final MetaInfo[] SCOPE_KEYS  = new MetaInfo[] { GatePermConst.ScopeKeys.CURRENT_MEMBER  };
-	
-	public static final MetaInfo[] PARAM_INFO  = new MetaInfo[] { new MetaInfo("Level",
-    "The name of the user level. Eg: everyone(public user), guest(user logged in but no rights)") };
+	public static final String PARAM_EVERYONE = "everyone";
+	public static final String PARAM_GUEST = "guest";
+	public static final String PARAM_OWNER = "owner";
+	public static final String PARAM_WORKSPACE_MANAGER = "worskpacemanager";
 
-	 private static final String  DESCRIPTION = "Returns access based on the rights level of the current user";
+	public static final MetaInfo[] SCOPE_KEYS = new MetaInfo[] { GatePermConst.ScopeKeys.CURRENT_MEMBER };
+
+	public static final MetaInfo[] PARAM_INFO = new MetaInfo[] { new MetaInfo("Level",
+			"The name of the user level. Eg: everyone(public user), guest(user logged in but no rights)") };
+
+	private static final String DESCRIPTION = "Returns access based on the rights level of the current user";
+
 	/**
 	 * @param scope
 	 * @param parameters
@@ -48,7 +49,9 @@ public class UserLevelGate extends Gate {
 		// TODO Auto-generated constructor stub
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.digijava.module.gateperm.core.Gate#description()
 	 */
 	@Override
@@ -57,57 +60,73 @@ public class UserLevelGate extends Gate {
 		return DESCRIPTION;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.digijava.module.gateperm.core.Gate#logic()
 	 */
 	@Override
 	public boolean logic() throws Exception {
 		Session session = PersistenceManager.getSession();
 		String param = parameters.poll().trim();
-		
+
 		TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
-		
+
 		AmpActivityVersion act = (AmpActivityVersion) scope.get(GatePermConst.ScopeKeys.ACTIVITY);
-		
-		//AMP-9768 - apply permissions to teamHead for other workspaces than his own 
-		if(tm!=null && tm.getTeamHead() && act!=null && act.getTeam()!=null && act.getTeam().getAmpTeamId().equals(tm.getTeamId())) return true;
-		
-		Permissible permissible=(Permissible) scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
-		if(act==null && permissible instanceof AmpActivityVersion) act=(AmpActivityVersion) scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
-		boolean owner=false;
-		logger.debug("Object is:"+permissible.toString());
-		if (act!=null && act.getActivityCreator()==null){
-			logger.warn("Activity without owner ... ID: "+act.getAmpActivityId());
-			owner=false;
-		}else{
-		
-		if( tm!=null && act!=null && act.getActivityCreator().getAmpTeamMemId().equals(tm.getMemberId()) ){ 
-			owner=true;
-		  }
+
+		// AMP-9768 - apply permissions to teamHead for other workspaces than
+		// his own
+		if (tm != null && tm.getTeamHead() && act != null && act.getTeam() != null
+				&& act.getTeam().getAmpTeamId().equals(tm.getTeamId())) {
+			return true;
 		}
-		//if im the owner and this gate checks for ownership....
-		if(owner && PARAM_OWNER.equals(param)) return true;
-		
-		//if im not even a team member 
-		if(tm==null) 
-			if(PARAM_EVERYONE.equals(param)) return true; 
-				else return false;
-		
-		//if i am a guest and not the owner of the current object i will have guest access
-		//if(!owner && PARAM_GUEST.equals(param)) return true;
-		
+
+		Permissible permissible = (Permissible) scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
+		if (act == null && permissible instanceof AmpActivityVersion)
+			act = (AmpActivityVersion) scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
+		boolean owner = false;
+		logger.debug("Object is:" + permissible.toString());
+		if (act != null && act.getActivityCreator() == null) {
+			logger.warn("Activity without owner ... ID: " + act.getAmpActivityId());
+			owner = false;
+		} else {
+
+			if (tm != null && act != null && act.getActivityCreator().getAmpTeamMemId().equals(tm.getMemberId())) {
+				owner = true;
+			}
+		}
+		// if im the owner and this gate checks for ownership....
+		if (owner && PARAM_OWNER.equals(param))
+			return true;
+
+		// if im not even a team member
+		if (tm == null) {
+			if (PARAM_EVERYONE.equals(param)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		// if i am a guest and not the owner of the current object i will have
+		// guest access
+		// if(!owner && PARAM_GUEST.equals(param)) return true;
+
 		Gate relatedOrgGate = Gate.instantiateGate(scope, null, RelatedOrgGate.class.getName());
-		Gate computedActivityGate= Gate.instantiateGate(scope, null, ComputedTeamActivityGate.class.getName());
-		//if i am a guest and not the owner AND not related to the current object i will have guest access
-		if(!owner && !relatedOrgGate.logic() &&  PARAM_GUEST.equals(param) ) return true;
-		
-		
-		
+		Gate computedActivityGate = Gate.instantiateGate(scope, null, ComputedTeamActivityGate.class.getName());
+		// if i am a guest and not the owner AND not related to the current
+		// object i will have guest access
+		if (!owner && !relatedOrgGate.logic() && PARAM_GUEST.equals(param)) {
+			return true;
+		}	
+
 		return false;
-		
+
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.digijava.module.gateperm.core.Gate#mandatoryScopeKeys()
 	 */
 	@Override
@@ -116,7 +135,9 @@ public class UserLevelGate extends Gate {
 		return SCOPE_KEYS;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.digijava.module.gateperm.core.Gate#parameterInfo()
 	 */
 	@Override
@@ -124,6 +145,5 @@ public class UserLevelGate extends Gate {
 		// TODO Auto-generated method stub
 		return PARAM_INFO;
 	}
-	
-	
+
 }

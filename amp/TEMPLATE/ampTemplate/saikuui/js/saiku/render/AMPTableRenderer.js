@@ -147,7 +147,12 @@ function generateHeaderHtml(headers) {
 					// define a hierarchy (if any), HEADER_COMMON for non
 					// hierarchical columns and HEADER_MEASURE for measures (only in
 					// the last header row).
-					var sortingType = " data-sorting-type='" + entityType + "'";
+					var sortingType = "";
+					
+					if (isHeaderCellSortable(i, entityType)) {
+						sortingType = "data-sorting-type='" + entityType + "'";
+					}
+					
 					// Since groupCount is 0 when no column grouping is applicable
 					// then we don't need an extra IF for creating the 'col'
 					// variable.
@@ -157,11 +162,8 @@ function generateHeaderHtml(headers) {
 						groupCount = findSameHeaderHorizontally(i, j);
 					}
 					// Define styles for the header.
-					var style = " class='col";
-					if (sortingType.length > 0) {
-						style += " hand-pointer";
-					}
-					style += "'";
+					var style = " class='col hand-pointer'";
+
 					// Define id based on its hierarchy.
 					var id = " id='"
 							+ convertHierarchicalNameToId(this.headerMatrix[i][j].hierarchicalName)
@@ -263,6 +265,20 @@ function findSameHeaderHorizontally(i, j) {
 		}
 	}
 	return count;
+}
+
+/**
+ * Return if the header cell can be sorted or not.
+ * A header cell can be marked as not 'sortable' if entity == 'HEADER_MEASURE' 
+ * and is not in the last row (that means it is a measure grouping other measures)
+ */
+function isHeaderCellSortable(i, entityName) {
+	if (entityName == "HEADER_MEASURE" &&
+			i < this.headerMatrix.length - 1) {
+		return false;
+	}
+	
+	return true;
 }
 
 /**

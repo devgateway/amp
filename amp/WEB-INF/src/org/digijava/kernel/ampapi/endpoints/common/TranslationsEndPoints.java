@@ -60,7 +60,9 @@ public class TranslationsEndPoints {
 
 	@GET
 	@Path("/languages/")
-	@ApiMethod(ui = false, id = "languajes")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = false, id = "languages")
 	public List<SimpleJsonBean> getLanguages(){
 		List<SimpleJsonBean> languages=new  ArrayList<SimpleJsonBean>();
 		List<String[]> locales = TranslationManager.getLocale(PersistenceManager.getSession());
@@ -91,6 +93,8 @@ public class TranslationsEndPoints {
 	@SuppressWarnings("rawtypes")
 	@GET
 	@Path("/multilingual-languages/")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "multilingualLanguages")
 	public List<SimpleJsonBean> getMultilingualLanguages() {
 		List<SimpleJsonBean> languages = new ArrayList<SimpleJsonBean>();

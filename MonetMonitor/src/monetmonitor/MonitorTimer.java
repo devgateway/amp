@@ -110,14 +110,16 @@ public class MonitorTimer {
 //			    		new MonetDatabaseCreator(sem2).run();
 //			    		new MonetDatabaseReleaser(sem2).run();
 //			    		
-//			    		starter.run();
+			    		starter.run();
 			    		break;
 			    	case ERROR_DATABASE_MAINTENANCE:
 //			    		new MonetDatabaseReleaser().run();
 			    		new SequentialRunner(CommandGenerator.generateReleaseDatabaseCommands()).run();;
+			    		starter.run();
 			    		break;
 			    	case ERROR_UNKNOWN: //this shouldn't be happening
 			    						//broadcast unknown error and break the cycle
+			    		starter.run();
 			    		break;
 			    	}
 //			    	if (!serverStatus.equals(BeholderObservationResult.SUCCESS)) {

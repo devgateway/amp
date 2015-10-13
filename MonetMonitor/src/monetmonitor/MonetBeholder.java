@@ -60,7 +60,12 @@ public abstract class MonetBeholder {
 			
 			return BeholderObservationResult.SUCCESS;
 		} catch (java.sql.SQLException exc) {
-			exc.printStackTrace();
+			try {
+				Utils.broadcastStatus(exc.getMessage());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if (exc.getMessage().contains("internal error while starting"))
 				return BeholderObservationResult.ERROR_INTERNAL_MONETDB;
 			if (exc.getMessage().contains("no such database"))

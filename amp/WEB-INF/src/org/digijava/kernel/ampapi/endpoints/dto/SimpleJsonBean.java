@@ -18,9 +18,11 @@ public class SimpleJsonBean {
     String filterId;
     String type;
     List<SimpleJsonBean> children;
-	public SimpleJsonBean(){
+	
+    public SimpleJsonBean(){
 		
 	}
+    
     public SimpleJsonBean(Object id,String name,String code,Long type) {
     	this(id,name, code);
     	this.type=type.toString();
@@ -38,7 +40,11 @@ public class SimpleJsonBean {
     	this.id=id;
     	this.name=name;
     }
-    
+
+    @Override
+    public String toString() {
+    	return String.format("%sid: %s, code: %s, name: %s", this.children == null ? "with children " : "", id, code, name);
+    }
 
     public Object getId() {
         return id;

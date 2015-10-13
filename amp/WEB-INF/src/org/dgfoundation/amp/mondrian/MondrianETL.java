@@ -564,15 +564,22 @@ private EtlResult execute() throws Exception {
 			row.add(full_date);
 //			calendar.set(Calendar.YEAR, year);
 			long yearCode = year;
-			String yearName = Long.toString(yearCode);//String.format("MTEF %s", kv.getValue());
+			// he who loves Mondrian should shoot himself. I have to write crap code like this because of YOU. Yes, I am looking at ==> YOU <==
+			
+			String yearNamePlain = Long.toString(yearCode);//String.format("MTEF %s", kv.getValue());
+			String yearNameFiscalJanuary = String.format("Fiscal Year %d", yearCode);//String.format("MTEF %s", kv.getValue());
+			String yearNameFiscalRange = String.format("Fiscal Year %d - %d", yearCode, yearCode + 1);//String.format("MTEF %s", kv.getValue());
+			
 			long monthCode = 1;
 			String monthName = "January";
 			long quarterCode = 1;
 			String quarterName = "Q1";
-			List<Object> datesColumns = (List) Arrays.asList(yearCode, yearName, monthCode, monthName, quarterCode, quarterName);
-			row.addAll(datesColumns);
+			List<Object> plainDatesColumns = (List) Arrays.asList(yearCode, yearNamePlain, monthCode, monthName, quarterCode, quarterName);
+			List<Object> fiscalJanuaryDatesColumns = (List) Arrays.asList(yearCode, yearNameFiscalJanuary, monthCode, monthName, quarterCode, quarterName);
+			List<Object> fiscalRangeDatesColumns = (List) Arrays.asList(yearCode, yearNameFiscalRange, monthCode, monthName, quarterCode, quarterName);
+			row.addAll(plainDatesColumns);
 			for(AmpFiscalCalendar dummyCal:allCalendars) {
-				row.addAll(datesColumns);
+				row.addAll(dummyCal.getIsFiscal() ? (dummyCal.getStartMonthNum() == 1 ? fiscalJanuaryDatesColumns : fiscalRangeDatesColumns) : plainDatesColumns);
 			}
 			mtefDatesRowsToInsert.add(row);
 		}

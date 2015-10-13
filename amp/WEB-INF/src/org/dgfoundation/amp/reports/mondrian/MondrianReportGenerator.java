@@ -721,9 +721,14 @@ public class MondrianReportGenerator implements ReportExecutor {
 		String expectedPrefix = "[Dates.Year].[";
 
 		if (!dateCellValue.startsWith(expectedPrefix)) return -2;
+				
 		dateCellValue = dateCellValue.substring(expectedPrefix.length());
 		if (dateCellValue.isEmpty()) return -3;
 		
+		String prefix2 = "Fiscal Year ";
+		if (dateCellValue.startsWith(prefix2))
+			dateCellValue = dateCellValue.substring(prefix2.length());
+
 		dateCellValue = dateCellValue + "#"; // guard
 		int pos = 0;
 		while (Character.isDigit(dateCellValue.charAt(pos))) pos ++; // will never overrun the string because of the guard

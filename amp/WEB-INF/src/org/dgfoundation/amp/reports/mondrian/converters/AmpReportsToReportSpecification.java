@@ -88,6 +88,8 @@ public class AmpReportsToReportSpecification {
 		spec.setFilters(arFilterTranslator.buildFilters());
 		
 		MtefConverter.instance.convertMtefs(this.report, this.spec);
+		makeFundingFlowsHacks(); // yes, twice
+		
 		return spec;
 	}
 

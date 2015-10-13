@@ -230,3 +230,11 @@ div.amp-subgroup:hover {
 .nav > li > a {
   padding: 4px 6px;
 }
+
+.select_quickfix {
+	color: #fff;
+	background-color : #428bca;
+	border-color: #357ebd;
+	border-radius: 3px;
+	width: 300px;
+}

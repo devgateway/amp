@@ -56,10 +56,11 @@ $(document).ready(function()
 
 function looksLikeEmail(email) {
 	var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-	if (!filter.test(email)) {
+	if (filter.test(email)) {
+		return true;
+	} else {
 		return false;
 	}
-	return true;
 }
 
 function looksLikePhoneNumber(input)
@@ -106,6 +107,14 @@ function isYearValidator(input){
  */
 function init_custom_looks(divId)
 {
+
+
+	$(divId + ' select').addClass('select_quickfix');
+
+	//	.each(function(){
+    //
+	//});
+/* code below commented out in memory of Emanuel having broken pledges with his bugridden amp-boilerplate
 	//alert('called');
 	$(divId + ' select').addClass('text-left');
 	$(divId + ' select').selectpicker({
@@ -114,7 +123,7 @@ function init_custom_looks(divId)
 		//size: 5
 	});
 	$(divId + ' select.live-search').attr('data-live-search', 'true'); // Struts is stupid and does not allow to inject custom attributes
-	
+*/
     $(divId + ' .date-range-start').each(function(){
     	$(this).datetimepicker({pickTime: false});
     	$(this).on("dp.change", function(e) {

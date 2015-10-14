@@ -802,13 +802,15 @@ public class Filters {
                 FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));
         AmpTeam ampTeam = getAmpTeam();
 
-		if (ampTeam != null && ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM)
-				&& !ampTeam.getComputation() && !showWorkspaceFilterInTeamWorkspace) {
-			showWorkspaceFilter = false;
-		//Hide Workspace in public view
-		} else if (ampTeam == null) {
-			showWorkspaceFilter = false;
-		}
+        //Hide Workspace in public view
+        if (ampTeam == null) {
+            showWorkspaceFilter = false;
+        } else {
+            if (ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM)
+                    || (!ampTeam.getComputation() && !showWorkspaceFilterInTeamWorkspace)) {
+                showWorkspaceFilter = false;
+            }
+        }
 		return showWorkspaceFilter;
 
 	}

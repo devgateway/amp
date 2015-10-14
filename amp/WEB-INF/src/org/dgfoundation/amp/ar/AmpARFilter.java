@@ -359,6 +359,7 @@ public class AmpARFilter extends PropertyListable {
 	private Set<AmpCategoryValue> aidModalities = null;
 	private Set<AmpCategoryValue> projectCategory = null;
 
+	private Set<AmpCategoryValue> fundingStatus = null;
 	
 	private Set<AmpCategoryValue> typeOfAssistance = null;
 	private Set<AmpCategoryValue> modeOfPayment = null;
@@ -1266,6 +1267,11 @@ public class AmpARFilter extends PropertyListable {
 		String AID_MODALITIES_FILTER = "SELECT amp_activity_id FROM v_modalities WHERE level_code IN (" + Util.toCSStringForIN(aidModalities) + ")";
 		String LINE_MIN_RANK_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE line_min_rank IN ("
 	 	 		+ Util.toCSStringForIN(lineMinRank) + ")";
+
+		String FUNDING_STATUS_FILTER = "SELECT amp_activity_id FROM v_funding_status WHERE funding_status_code IN ("
+				+ Util.toCSStringForIN(fundingStatus) + ")";
+		
+		
 	 	
 	 	String MULTI_DONOR		= "SELECT amp_activity_id FROM v_multi_donor WHERE value = '" + multiDonor + "'";
 	 	
@@ -1634,6 +1640,8 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend(REGION_FILTER);
 		if (financingInstruments != null && financingInstruments.size() > 0)
 			queryAppend(FINANCING_INSTR_FILTER);
+		if (fundingStatus != null && fundingStatus.size() > 0)
+			queryAppend(FUNDING_STATUS_FILTER);
 		if (aidModalities != null && !aidModalities.isEmpty())
 			queryAppend(AID_MODALITIES_FILTER);
 		if (risks != null && risks.size() > 0)
@@ -1936,6 +1944,14 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setFinancingInstruments(Set<AmpCategoryValue> financingInstruments) {
 		this.financingInstruments = financingInstruments;
+	}
+
+	public Set<AmpCategoryValue> getFundingStatus() {
+		return fundingStatus;
+	}
+
+	public void setFundingStatus(Set<AmpCategoryValue> fundingStatus) {
+		this.fundingStatus = fundingStatus;
 	}
 
 	public Set<AmpCategoryValue> getAidModalities(){

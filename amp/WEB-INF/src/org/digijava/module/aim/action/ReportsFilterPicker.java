@@ -721,6 +721,8 @@ public class ReportsFilterPicker extends Action {
 		//private void addFinancingLocationElement(ReportsFilterPickerForm filterForm, String fieldName, String rootLabel, String financingModeKey, String elementName, String filterId, String selectId, HttpServletRequest request, ServletContext ampContext) throws Exception
 		addFinancingLocationElement(filterForm, null, "All Financing Instrument Values", CategoryConstants.FINANCING_INSTRUMENT_KEY, "Financing Instrument", "filter_financing_instr_div", "selectedFinancingInstruments");
 		
+		addFinancingLocationElement(filterForm, null, "All "+ TranslatorWorker.translateText(CategoryConstants.FUNDING_STATUS_NAME) +" Values", CategoryConstants.FUNDING_STATUS_KEY, "Funding Status", "filter_funding_status_div", "selectedFundingStatus");
+		
 		if (filterForm.getPledged() != null && filterForm.getPledged() && FeaturesUtil.isVisibleField("Pledge Funding - Aid Modality"))
 			addFinancingLocationElement(filterForm, null, "All Aid Modality Values", CategoryConstants.AID_MODALITY_KEY, "Aid Modality", "filter_aid_modality_div", "selectedAidModalities");
 		
@@ -1388,6 +1390,7 @@ public class ReportsFilterPicker extends Action {
 
 		arf.setProjectCategory(pumpCategoryValueSetFromForm(filterForm.getSelectedProjectCategory()));
 		arf.setFinancingInstruments(pumpCategoryValueSetFromForm(filterForm.getSelectedFinancingInstruments()));
+		arf.setFundingStatus(pumpCategoryValueSetFromForm(filterForm.getSelectedFundingStatus()));
 		arf.setAidModalities(pumpCategoryValueSetFromForm(filterForm.getSelectedAidModalities()));
 		arf.setTypeOfAssistance(pumpCategoryValueSetFromForm(filterForm.getSelectedTypeOfAssistance()));
 		arf.setModeOfPayment(pumpCategoryValueSetFromForm(filterForm.getSelectedModeOfPayment()));

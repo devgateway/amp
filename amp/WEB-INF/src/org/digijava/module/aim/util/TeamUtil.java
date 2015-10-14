@@ -128,17 +128,24 @@ public class TeamUtil {
         return col;
     }
 
-    public static Set<AmpTeam> getRelatedTeamsForTeams(Collection<AmpTeam> teams)
-    {
+    public static Set<AmpTeam> getRelatedTeamsForTeams(Collection<AmpTeam> teams) {
     	Set<AmpTeam> result = new HashSet<AmpTeam>();
-    	for(AmpTeam ampTeam:teams)
-    	{
+    	for (AmpTeam ampTeam : teams) {
     		result.add(ampTeam);
     		result.addAll(TeamUtil.getAmpLevel0Teams(ampTeam.getAmpTeamId()));
     	}
     	return result;
     }
-    
+
+    public static Set<AmpTeam> getRelatedTeamsForTeamsById(List<Number> ampTeamIds) {
+        Set<AmpTeam> result = new HashSet<AmpTeam>();
+        for (Number ampTeamId : ampTeamIds) {
+            result.add(getAmpTeam(ampTeamId.longValue()));
+            result.addAll(TeamUtil.getAmpLevel0Teams(ampTeamId.longValue()));
+        }
+        return result;
+    }
+
     public static Set getRelatedTeamsForMember(TeamMember tm) 
     {
     	AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());	    

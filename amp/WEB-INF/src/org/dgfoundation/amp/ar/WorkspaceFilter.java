@@ -2,10 +2,12 @@ package org.dgfoundation.amp.ar;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
+import clover.com.google.common.base.Joiner;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -326,6 +328,23 @@ public class WorkspaceFilter
 
 		return generateWorkspaceFilterQuery(tm);
 	}
+
+    /**
+     * For current workspace (if it's computed WS) first gets list of related activities,
+     * Then returns list of related workspaces where all there activities belong to
+     * @return
+     */
+    public static Set<AmpTeam> getComputedRelatedWorkspaces() {
+        String wsQuery = getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
+        List<Number> res = PersistenceManager.getSession().createSQLQuery(wsQuery).list();
+        if (res != null) {
+            String activitiesQuery = "select amp_team_id from amp_activity_Version where amp_activity_id IN (" +
+                    Joiner.on(',').join(res) + ")";
+            List<Number> teamIds = PersistenceManager.getSession().createSQLQuery(activitiesQuery).list();
+            return TeamUtil.getRelatedTeamsForTeamsById(teamIds);
+        }
+        return null;
+    }
 
 	public void setTeamAssignedOrgs(Set teamAssignedOrgs) {
 		this.teamAssignedOrgs = teamAssignedOrgs;

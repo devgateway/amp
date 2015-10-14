@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
@@ -751,16 +753,28 @@ public class Filters {
 	public JsonBean getWorkspaces() {
 		List<SimpleJsonBean> teamsListJson = new ArrayList<SimpleJsonBean>();
 		if (hasToShowWorkspaceFilter()) {
+
             AmpTeam ws = getAmpTeam();
 
             Map<Long, String> teamNames = null;
-            // display only child workspaces in case of computed workspaces
-            if (ws != null && "Management".equals(ws.getAccessType())) {
-                teamNames = DatabaseViewFetcher
-                    .fetchInternationalizedView("amp_team", PARENT_WS_CONDITION + ws.getAmpTeamId(), "amp_team_id", "name");
+
+            if (ws != null && ws.getComputation() != null && ws.getComputation()) {
+                Set<AmpTeam> workspaces = WorkspaceFilter.getComputedRelatedWorkspaces();
+                if (workspaces != null) {
+                    teamNames = new HashMap<Long, String>();
+                    for (AmpTeam team : workspaces) {
+                        teamNames.put(team.getAmpTeamId(), team.getName());
+                    }
+                }
             } else {
-                teamNames = DatabaseViewFetcher
-                    .fetchInternationalizedView("amp_team", PRIVATE_WS_CONDITION, "amp_team_id", "name");
+                // display only child workspaces in case of computed workspaces
+                if (ws != null && "Management".equals(ws.getAccessType())) {
+                    teamNames = DatabaseViewFetcher
+                            .fetchInternationalizedView("amp_team", PARENT_WS_CONDITION + ws.getAmpTeamId(), "amp_team_id", "name");
+                } else {
+                    teamNames = DatabaseViewFetcher
+                            .fetchInternationalizedView("amp_team", PRIVATE_WS_CONDITION, "amp_team_id", "name");
+                }
             }
 
             if (teamNames != null) {
@@ -781,7 +795,7 @@ public class Filters {
 		
 		return js;
 	}
-	
+
 	public boolean hasToShowWorkspaceFilter () {
 		boolean showWorkspaceFilter = true;
 		boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(

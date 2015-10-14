@@ -4,18 +4,20 @@
  */
 package org.dgfoundation.amp.onepager.components.features.subsections;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
+import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.features.items.AmpAgreementItemPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
@@ -25,7 +27,6 @@ import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.events.FundingSectionSummaryEvent;
 import org.dgfoundation.amp.onepager.models.ValueToSetModel;
 import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -35,9 +36,10 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
  * @author mpostelnicu@dgateway.org since Nov 4, 2010
  */
 public class AmpDonorFundingInfoSubsectionFeature extends
-		AmpSubsectionFeaturePanel<AmpFunding> {
+		AmpSubsectionFeaturePanel<AmpFunding> 
+implements AmpRequiredComponentContainer{
 
-	
+	private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>>();
 	private AmpCategorySelectFieldPanel financingInstrument;
 	private AmpCategorySelectFieldPanel typeOfAssistance;
 	private AmpTextAreaFieldPanel loanTerms;
@@ -113,11 +115,24 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 		final AmpCategorySelectFieldPanel modeOfPayment;
 
         PropertyModel<AmpCategoryValue> fundingStatusModel = new PropertyModel<AmpCategoryValue>(model, "fundingStatus");
-        AmpCategorySelectFieldPanel fundingStatus = new AmpCategorySelectFieldPanel(
+       final AmpCategorySelectFieldPanel fundingStatus = new AmpCategorySelectFieldPanel(
                 "fundingStatus", CategoryConstants.FUNDING_STATUS_KEY,
                 fundingStatusModel,
                 CategoryConstants.FUNDING_STATUS_NAME, true, false);
         fundingStatus.getChoiceContainer().setRequired(false);
+        
+        
+        add(new AmpComponentPanel("fundingStatusRequired", "Required Validator for " + CategoryConstants.FUNDING_STATUS_NAME) {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (this.isVisible()){
+                	fundingStatus.getChoiceContainer().setRequired(true);
+                    requiredFormComponents.add(fundingStatus.getChoiceContainer());
+                }
+                
+            }
+        });
         add(fundingStatus);
 
         if ("true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.LINK_MODE_OF_PAYMENT_TO_FUNDING_STATUS))){
@@ -269,4 +284,13 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 		
 
 	}
+
+	public List<FormComponent<?>> getRequiredFormComponents() {
+		return requiredFormComponents;
+	}
+
+	public void setRequiredFormComponents(List<FormComponent<?>> requiredFormComponents) {
+		this.requiredFormComponents = requiredFormComponents;
+	}
+	
 }

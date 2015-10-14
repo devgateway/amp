@@ -68,7 +68,7 @@ public class Filters {
 
     // todo
     // probably not the best place to keep, but definitely better than in the method
-    private static final String PRIVATE_WS_CONDITION = "WHERE (isolated is false) OR (isolated is null)";
+    private static final String PRIVATE_WS_CONDITION = "WHERE (1=1)"; // different to the AMP 2.11 query, because there are no private workspaces in AMP 2.10
     private static final String PARENT_WS_CONDITION = "WHERE parent_team_id = ";
 
 

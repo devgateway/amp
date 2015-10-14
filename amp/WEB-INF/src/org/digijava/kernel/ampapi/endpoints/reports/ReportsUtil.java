@@ -560,7 +560,6 @@ public class ReportsUtil {
 		err = validateReportType(formParams);
 		if (err != null) errors.add(err);
 		if(errors.size()>0){
-
 			return ApiError.toError(errors);
 		}else{
 			return null;

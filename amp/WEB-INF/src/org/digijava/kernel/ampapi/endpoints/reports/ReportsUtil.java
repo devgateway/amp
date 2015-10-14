@@ -559,8 +559,12 @@ public class ReportsUtil {
 		// validate the report type
 		err = validateReportType(formParams);
 		if (err != null) errors.add(err);
-		
-		return ApiError.toError(errors);
+		if(errors.size()>0){
+
+			return ApiError.toError(errors);
+		}else{
+			return null;
+		}
 	}
 	
 	private static ApiErrorMessage validateList(String listName, List<String> values,

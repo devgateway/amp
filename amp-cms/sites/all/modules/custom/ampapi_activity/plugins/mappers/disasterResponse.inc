@@ -14,10 +14,10 @@ $plugin = array(
   ),
 
   'report field group' => 'columns',
-  'report field key' => 'Disaster Response Marker',
-  'report filter key' => 'Disaster Response Marker',
+  'report field key' => 'Funding Status',
+  'report filter key' => 'Funding Status',
 
-  'report filter endpoint' => 'filters/disasterResponse',
+  'report filter endpoint' => 'filters/fundingStatus',
 
   'handler' => 'disasterResponseMarkerMapper',
 );

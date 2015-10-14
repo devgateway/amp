@@ -446,8 +446,11 @@ public class ReportsUtil {
 		err = validateList("hierarchies", (List<String>) formParams.get(EPConstants.ADD_HIERARCHIES),
 				(List<String>) formParams.get(EPConstants.ADD_COLUMNS), false);
 		if (err != null) errors.add(err);
-
-        return ApiError.toError(errors);
+		if(errors.size()>0){
+			return ApiError.toError(errors);
+		}else{
+			return null;
+		}
 	}
 
     private static ApiErrorMessage validateList(String listName, List<String> values,

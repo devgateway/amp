@@ -34349,8 +34349,8 @@ module.exports =
 	    warn: (0, _debug2["default"])(slug),
 	    onDebug: (0, _debug2["default"])(slug)
 	  };
-	  res.err.log = console.error.bind(console);
-	  res.warn.log = console.warn.bind(console);
+	  res.err.log = Function.prototype.bind.call(console.error, console);
+	  res.warn.log = Function.prototype.bind.call(console.warn, console);
 	  res.onDebug.log = function () {
 	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 	      args[_key] = arguments[_key];

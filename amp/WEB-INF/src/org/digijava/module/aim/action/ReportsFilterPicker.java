@@ -370,7 +370,7 @@ public class ReportsFilterPicker extends Action {
 				((fieldName != null) && (FeaturesUtil.isVisibleField(fieldName)));
 		
 		if (enabled) { 
-			Collection<AmpCategoryValue> modeOfPaymentValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(financingModeKey, true);	
+			Collection<AmpCategoryValue> modeOfPaymentValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(financingModeKey, true);	
 			HierarchyListableImplementation rootModeOfPayment = new HierarchyListableImplementation(rootLabel, "0", modeOfPaymentValues);
 			GroupingElement<HierarchyListableImplementation> modeOfPaymentElement	=
 					new GroupingElement<HierarchyListableImplementation>(elementName, filterId,	rootModeOfPayment, selectId);

@@ -484,16 +484,24 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 	public static Collection<AmpCategoryValue> getAmpCategoryValueCollectionByKey(String categoryKey){
 		return getAmpCategoryValueCollectionByKey(categoryKey, false);		
 	}
-
 	/**
 	 * gets all ACV that are not also deleted 
-	 * The function is called with ordered = false
+	 * The function is called with ordered = false 
+	 * @param categoryKey
+	 * @return
+	 */
+	public static Collection<AmpCategoryValue> getAmpCategoryValueCollectionByKeyExcludeDeleted(String categoryKey){
+		return getAmpCategoryValueCollectionByKeyExcludeDeleted(categoryKey,false);
+	}
+	/**
+	 * gets all ACV that are not also deleted 
+	 * The function is called with ordered as parameter
 	 * @param categoryKey
 	 * @return 
 	 */
-	public static Collection<AmpCategoryValue> getAmpCategoryValueCollectionByKeyExcludeDeleted(String categoryKey){
+	public static Collection<AmpCategoryValue> getAmpCategoryValueCollectionByKeyExcludeDeleted(String categoryKey,Boolean ordered){
 		Collection<AmpCategoryValue> visibleValues = new ArrayList<AmpCategoryValue>(); 
-		for (AmpCategoryValue acvalue: CategoryManagerUtil.getAmpCategoryValueCollectionByKey(categoryKey)) {
+		for (AmpCategoryValue acvalue: CategoryManagerUtil.getAmpCategoryValueCollectionByKey(categoryKey,ordered)) {
 			if (acvalue.isVisible()) {
 				visibleValues.add(acvalue);
 			}

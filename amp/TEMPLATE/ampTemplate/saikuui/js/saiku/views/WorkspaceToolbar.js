@@ -129,6 +129,7 @@ var WorkspaceToolbar = Backbone.View.extend({
             	$(button.parentElement).hide();
             });
            	$(".export_xls_plain").hide();
+           	$(".export_dual_currency").hide();
     	}
 
     	if (enabledGisFM && enabledGisFM.models[0].get('error') == undefined && enabledGisFM.models[0].get('GIS') !== undefined) {

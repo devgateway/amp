@@ -111,7 +111,7 @@ clean:
 		true
 	@rm -f \
 		.htaccess \
-		sites/default/drushrc.php \
+		sites/default/drushrc.custom.php \
 		sites/default/settings.custom.php \
 		sites/default/update_scripts/environment/setup.local.php
 

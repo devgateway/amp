@@ -55,6 +55,9 @@ public class MeasureConstants {
 	public static final String PIPELINE_RELEASE_OF_FUNDS = "pipeline Release of Funds";
 	public static final String PLANNED_ESTIMATED_DISBURSEMENTS = "Planned Estimated Disbursements";
 	public static final String PLANNED_RELEASE_OF_FUNDS = "Planned Release of Funds";
+	public static final String PIPELINE_MTEF_PROJECTIONS = "Pipeline " + ArConstants.MTEF_PROJECTION;
+	public static final String PROJECTION_MTEF_PROJECTIONS = "Projection " + ArConstants.MTEF_PROJECTION;
+	
 	//type = P (pledge)
 	public static final String PLEDGES_ACTUAL_COMMITMENTS = "Actual Commitments";
 	public static final String PLEDGES_ACTUAL_DISBURSEMENTS = "Actual Disbursements";

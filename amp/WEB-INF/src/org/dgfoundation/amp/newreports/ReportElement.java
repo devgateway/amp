@@ -31,7 +31,17 @@ public class ReportElement {
 		/**
 		 * filter for Real MTEF years
 		 */
-		REAL_MTEF_DATE
+		REAL_MTEF_DATE,
+		
+		/**
+		 * filter for PIPELINE MTEF years
+		 */
+		PIPELINE_MTEF_DATE,
+		
+		/**
+		 * filter for PROJECTION MTEF years
+		 */
+		PROJECTION_MTEF_DATE
 	};
 	
 	/** Report element type. If it is ENTITY type, then {@link #entity} is specified */

@@ -4,8 +4,10 @@
 package org.dgfoundation.amp.ar.dyn;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -31,19 +33,33 @@ import org.hibernate.Session;
 public class DynamicColumnsUtil {
 	private static Logger logger = Logger.getLogger(DynamicColumnsUtil.class);
 	
-	private static ArrayList<AmpColumns> cachedMtefColumnList	= 	null;
-	private static ArrayList<AmpMeasures> cachedMtefMeasureList	= 	null;
+	public final static Set<String> mtefAliases = Collections.unmodifiableSet(new HashSet<String>() 
+			{{add("mtef"); add("realmtef"); add("pipelinemtef"); add("projectionmtef");}}
+	);
+	
+	private static List<AmpColumns> cachedMtefColumnList = null;
+	private static List<AmpColumns> cachedAllMtefColumnList = null;
+	private static List<AmpMeasures> cachedMtefMeasureList = null;
 	
 	public static void createInexistentMtefColumns (ServletContext sCtx) {
 		List<Integer> mtefFundingYears = getMtefYears();
+		
 		Set<Integer> newMtefCols = buildInexistentMtefColumnYears(mtefFundingYears, "mtef");
 		buildMtefColumns(sCtx, "MTEF", "mtef", newMtefCols);
 		 
 		Set<Integer> newRealMtefCols = buildInexistentMtefColumnYears(mtefFundingYears, "realmtef");
 		buildMtefColumns(sCtx, "Real MTEF", "realmtef", newRealMtefCols);
 		
-		if (!newMtefCols.isEmpty() || !newRealMtefCols.isEmpty()) {
+		Set<Integer> newPipelineMtefCols = buildInexistentMtefColumnYears(mtefFundingYears, "pipelinemtef");
+		buildMtefColumns(sCtx, "Pipeline MTEF Projections", "pipelinemtef", newPipelineMtefCols);
+		
+		Set<Integer> newProjectionMtefCols = buildInexistentMtefColumnYears(mtefFundingYears, "projectionmtef");
+		buildMtefColumns(sCtx, "Projection MTEF Projections", "projectionmtef", newProjectionMtefCols);
+		
+		
+		if (!newMtefCols.isEmpty() || !newRealMtefCols.isEmpty() || !newPipelineMtefCols.isEmpty() || !newProjectionMtefCols.isEmpty()) {
 			DynamicColumnsUtil.cachedMtefColumnList	= null;
+			DynamicColumnsUtil.cachedAllMtefColumnList = null;
 			MathExpressionRepository.buildMtefColumn();
 		}
 	}
@@ -54,7 +70,7 @@ public class DynamicColumnsUtil {
 			col.setColumnName(namePrefix + " " + year + "/" + (year+1));
 			col.setAliasName(aliasPrefix + year);
 			col.setExtractorView("v_mtef_funding");
-			col.setTokenExpression("MTEF " + year + "/" + (year+1) );
+			col.setTokenExpression(col.getColumnName());
 			col.setCellType("org.dgfoundation.amp.ar.cell.ComputedAmountCell");
 			
 			logger.info("Adding " + namePrefix + " column for year " + year + "/" + (year+1) );
@@ -72,24 +88,33 @@ public class DynamicColumnsUtil {
 		ColumnSavingEngine cse	= new ColumnSavingEngine(newCol, featureName, sCtx);
 		cse.startSavingProcess();
 	}
-	
-	
-	public static List<AmpColumns> getMtefColumns()
-	{
-		if (DynamicColumnsUtil.cachedMtefColumnList == null)
-		{
-			List<AmpColumns> z = new ArrayList<AmpColumns>();
-			Collection<AmpColumns> allCols	= AdvancedReportUtil.getColumnList();
-			for ( AmpColumns col: allCols ) 
-			{
-				if (col.getAliasName() != null && col.getAliasName().startsWith("mtef"))
+
+	public static List<AmpColumns> getAllMtefColumns(Set<String> prefixes) {
+		List<AmpColumns> z = new ArrayList<AmpColumns>();
+		Collection<AmpColumns> allCols = AdvancedReportUtil.getColumnList();
+		for (AmpColumns col: allCols) {
+			for(String prefix:prefixes) {
+				if (col.getAliasName() != null && col.getAliasName().startsWith(prefix))
 					z.add(col);
 			}
-			DynamicColumnsUtil.cachedMtefColumnList	= new ArrayList<AmpColumns>(z);
+		}
+		return z;
+	}
+	
+	public static List<AmpColumns> getAllMtefColumns() {
+		if (DynamicColumnsUtil.cachedAllMtefColumnList == null) {
+			DynamicColumnsUtil.cachedAllMtefColumnList	= getAllMtefColumns(mtefAliases);
+		}
+		return Collections.unmodifiableList(DynamicColumnsUtil.cachedAllMtefColumnList);
+	}
+
+	
+	public static List<AmpColumns> getMtefColumns() {
+		if (DynamicColumnsUtil.cachedMtefColumnList == null) {			
+			DynamicColumnsUtil.cachedMtefColumnList	= getAllMtefColumns(new HashSet<String>(Arrays.asList("mtef")));
 		}
 		return Collections.unmodifiableList(DynamicColumnsUtil.cachedMtefColumnList);
 	}
-	
 	
 	public static List<AmpMeasures> getMtefMeasures()
 	{

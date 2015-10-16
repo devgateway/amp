@@ -36,6 +36,7 @@ import org.dgfoundation.amp.ar.cell.ListCell;
 import org.dgfoundation.amp.ar.cell.MetaTextCell;
 import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
+import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.dgfoundation.amp.ar.filtercacher.FastFilterCacher;
@@ -231,6 +232,15 @@ public class AmpReportGenerator extends ReportGenerator {
 			rawColumns.getItems().remove(rawColumns.getColumn(ArConstants.COSTING_GRAND_TOTAL));
 		}
 	}
+
+	/**
+	 * Map<prefix, lower(adjustment_type_name value in v_mtef_funding)>
+	 * YES this should not be here. NO, this is not long-term code
+	 */
+	protected static Map<String, String> mtefColumnAliasToAdjTypeName = new HashMap<String, String>() {{
+		put("pipelinemtef", "pipeline");
+		put("projectionmtef", "projection");
+	}};
 	
 	/**
 	 * ONLY call for extractorView.equals("v_mtef_funding")
@@ -250,8 +260,11 @@ public class AmpReportGenerator extends ReportGenerator {
 			throw new RuntimeException("null column alias for an MTEF column: " + columnName);
 		
 		int prefixLength = -999;
-		if (columnAlias.startsWith("mtef")) prefixLength = 4;
-		if (columnAlias.startsWith("realmtef")) prefixLength = 8;
+		for(String ma:DynamicColumnsUtil.mtefAliases)
+			if (columnAlias.startsWith(ma)) {
+				prefixLength = ma.length();
+				break;
+			}
 
 		if (columnAlias.length() != prefixLength + 4)
 			throw new RuntimeException(String.format("invalid column alias for an MTEF column %s: %s", columnName, columnAlias));
@@ -260,6 +273,12 @@ public class AmpReportGenerator extends ReportGenerator {
 		int fundingYear = Integer.parseInt(fundingYearStr);
 		
 		columnFilterSQLClause += " AND (extract(year from currency_date) = " + fundingYear + ")";
+		
+		String prefix = columnAlias.substring(0, prefixLength);
+		String adjName = mtefColumnAliasToAdjTypeName.get(prefix);
+		if (adjName != null)
+			columnFilterSQLClause += String.format("AND (lower(adjustment_type_name) = '%s')", adjName);
+		
 		return columnFilterSQLClause;
 	}
 	

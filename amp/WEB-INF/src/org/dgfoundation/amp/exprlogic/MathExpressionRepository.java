@@ -522,13 +522,13 @@ public class MathExpressionRepository {
 			logger.error(e);
 		}
 	}
-	
+		
 	/**
 	 * Costing MTEF column
 	 */
 	public static void buildMtefColumn() {
 		try {
-			List<AmpColumns> mtefCols	= DynamicColumnsUtil.getMtefColumns();
+			List<AmpColumns> mtefCols = DynamicColumnsUtil.getAllMtefColumns();
 			if ( mtefCols != null  ) {
 				for (AmpColumns col: mtefCols ) {
 					String colName		= col.getColumnName();

@@ -60,7 +60,7 @@
 				
 				UNION ALL
 				
-				SELECT 
+				SELECT  <!-- MTEFs (for Directed MTEFs) -->
 			    	f.amp_activity_id, f.amp_funding_id, m.amp_fund_mtef_projection_id AS amp_fund_detail_id,
 			    	donor.name AS donor_name, 3 AS transaction_type, (select acv.id from amp_category_value acv JOIN amp_category_class acc ON acv.amp_category_class_id = acc.id WHERE acc.keyname='adjustment_type' and acv.category_value='Actual') AS adjustment_type, 'Actual' as adjustment_type_name,
 			    	m.projection_date AS transaction_date, m.amount AS transaction_amount,
@@ -88,8 +88,7 @@
 			    	JOIN amp_organisation donor ON f.amp_donor_org_id = donor.amp_org_id
 			    		JOIN amp_org_group grp ON grp.amp_org_grp_id = donor.org_grp_id
 			    			JOIN amp_org_type otype ON otype.amp_org_type_id = grp.org_type
-			    	JOIN amp_category_value acv ON m.amp_projected_categoryvalue_id = acv.id AND acv.category_value = 'projection'
-			    		JOIN amp_category_class acc ON acv.amp_category_class_id = acc.id AND acc.keyname = 'mtef_projection'
+			    	JOIN amp_category_value adj ON m.amp_projected_categoryvalue_id = adj.id
 			    	JOIN amp_category_value tos ON tos.id = f.type_of_assistance_category_va
 			    	JOIN amp_category_value fin ON fin.id = f.financing_instr_category_value
 			    	LEFT JOIN amp_role src_role ON f.source_role_id = src_role.amp_role_id

@@ -26,13 +26,11 @@ public class Values extends HashMap<String, BigDecimal> {
 
 	public Values(Long ownerID) {
 		this.ownerId = ownerID;
-		this.mtefCols	= DynamicColumnsUtil.getMtefColumns();
-		//this.mtefMeas	= DynamicColumnsUtil.getMtefMeasures();
+		this.mtefCols = DynamicColumnsUtil.getAllMtefColumns();
 	}
 	
 	public Values() {
-		this.mtefCols	= DynamicColumnsUtil.getMtefColumns();
-		//this.mtefMeas	= DynamicColumnsUtil.getMtefMeasures();
+		this(null);
 	}
 
 	
@@ -206,15 +204,16 @@ public class Values extends HashMap<String, BigDecimal> {
 		}
 		
 		//this.addValue(ArConstants.MTEF_COLUMN, TokenRepository.buildMtefColumnToken().evaluate(cell));
-		if ( this.mtefCols != null )
+		if (this.mtefCols != null ) {
 			for (AmpColumns col: this.mtefCols ) {
-				String mtefColName	= col.getColumnName();
-				String yearStr		= mtefColName.substring(mtefColName.length()-4, mtefColName.length() );
-				Integer year		= Integer.parseInt(yearStr)-1;
-				double evalResult 	= TokenRepository.buildMtefColumnToken(mtefColName, year).evaluate(cell);
+				String mtefColName = col.getAliasName();
+				String yearStr = mtefColName.substring(mtefColName.length() - 4, mtefColName.length());
+				Integer year = Integer.parseInt(yearStr);
+				double evalResult = TokenRepository.buildMtefColumnToken(col.getColumnName(), year).evaluate(cell);
 				
 				this.addValue(col.getColumnName(), evalResult );
 			}
+		}
 //		if ( this.mtefMeas != null )
 //			for (AmpMeasures meas: this.mtefMeas ) {
 //				String mtefExprName	= meas.getExpression();

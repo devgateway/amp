@@ -1044,12 +1044,34 @@
 				
 		<Measure name="MTEF Projections" aggregator="sum">
 			<MeasureExpression>
-				<SQL dialect="generic">
-					CASE WHEN mondrian_fact_table.transaction_type=3 AND src_role='DN'
+				<SQL dialect="generic"><![CDATA[
+					CASE WHEN (mondrian_fact_table.transaction_type=3) AND (src_role='DN') AND (@@mteffilter@@)
 					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE null END
+				]]>	
 				</SQL>
 			</MeasureExpression>
-		</Measure>		
+		</Measure>
+		
+		<Measure name="Pipeline MTEF Projections" aggregator="sum">
+			<MeasureExpression>
+				<SQL dialect="generic"><![CDATA[
+					CASE WHEN (mondrian_fact_table.transaction_type=3) AND (src_role='DN') AND (@@pipelinemteffilter@@)
+					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE null END
+				]]>
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+
+		<Measure name="Projection MTEF Projections" aggregator="sum">
+			<MeasureExpression>
+				<SQL dialect="generic"><![CDATA[
+					CASE WHEN (mondrian_fact_table.transaction_type=3) AND (src_role='DN') AND (@@projectionmteffilter@@)
+					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE null END
+				]]>
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+				
 		<Measure name="Always Present" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic" aggregator="sum">

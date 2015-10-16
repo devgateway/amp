@@ -164,6 +164,7 @@ public class ComputedAmountCell extends CategAmountCell {
 			while (i.hasNext()) {
 				values.collectCellVariables((CategAmountCell) i.next());
 			}
+			//logger.error("just collected values: " + values.toString());
 		}
 				
 		return values;

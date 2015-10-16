@@ -149,7 +149,7 @@ public class ComputedAmountColWorker extends MetaCellColumnWorker {
 			
 			fetchDirectedDisbursementMeta(rs, ret, Constants.MTEFPROJECTION);
 			fillDirectedDisbursementTypes(ret);
-		}		
+		}
 		return ret;
 	}
 

@@ -192,8 +192,9 @@ public abstract class ColumnWorker {
 			while (rs.rs.next())
 			{
 				Cell c = getCellFromRow(rs.rs);
-				if (c != null)
+				if (c != null) {
 					cc.addCell(c);
+				}
 			}
 
 			rs.close();

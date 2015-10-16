@@ -20,6 +20,7 @@ import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
+import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -30,10 +31,12 @@ import org.dgfoundation.amp.reports.mondrian.MondrianSQLFilters;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.Session;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -108,6 +111,12 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		
 		String localeTag = getReportLocale();
 		contents = contents.replaceAll("@@locale@@", localeTag);
+		HardCodedCategoryValue pipelineMtefAcv = CategoryConstants.MTEF_PROJECTION_PIPELINE;
+		HardCodedCategoryValue projectionMtefAcv = CategoryConstants.MTEF_PROJECTION_PROJECTION;
+		
+		contents = contents.replaceAll("@@mteffilter@@", buildDateFilteringSubquery(ReportElement.ElementType.MTEF_DATE, "1 = 1"));
+		contents = contents.replaceAll("@@pipelinemteffilter@@", buildDateFilteringSubquery(ReportElement.ElementType.PIPELINE_MTEF_DATE, String.format("adjustment_type = %d", pipelineMtefAcv.existsInDatabase() ? pipelineMtefAcv.getIdInDatabase() : 12324))); // crap code but who cares, we're dumping this stuff soon
+		contents = contents.replaceAll("@@projectionmteffilter@@", buildDateFilteringSubquery(ReportElement.ElementType.PROJECTION_MTEF_DATE, String.format("adjustment_type = %d", projectionMtefAcv.existsInDatabase() ? projectionMtefAcv.getIdInDatabase() : 12324)));
 		
 		// process general filters & custom filters 
 		String entityFilteringSubquery = buildFilteringSubquery();
@@ -134,6 +143,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		long delta = System.currentTimeMillis() - schemaProcessingStart;
 		logger.info("schema processing took " + delta + " ms");
 		//System.err.println("schema hashcode is: " + contents.hashCode());
+		//logger.error("the schema is: " + contents);
 		return contents;
 	}
 	
@@ -260,6 +270,15 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		return expandedSchema;
 	}
 	
+	/**
+	 * blablablaZZZ -> Blablablablazzz
+	 * @param in
+	 * @return
+	 */
+	public static String firstLetterUp(String in) {
+		return String.format("%s%s", in.substring(0, 1), in.substring(1).toLowerCase());
+	}
+	
 	protected void insertCommonMeasuresDefinitions(Document xmlSchema) {
 		Node trivialMeasureDefinitionNode = XMLGlobals.selectNode(xmlSchema, "//Measure[@name='@@trivial_measure@@']");
 		Node computedTotDefNode = XMLGlobals.selectNode(xmlSchema, "//Hierarchy[@name='Total Amounts']");
@@ -270,6 +289,8 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		// add the default trivial measures
 		for (String transactionType:ArConstants.TRANSACTION_TYPE_NAME_TO_ID.keySet()) {
 			Integer trTypeId = ArConstants.TRANSACTION_TYPE_NAME_TO_ID.get(transactionType);
+			if (trTypeId == Constants.MTEFPROJECTION)
+				continue; // MTEFs are handled elsewhere
 			for (AmpCategoryValue adj: CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.ADJUSTMENT_TYPE_KEY)) {
 				String measureName = adj.getValue() + " " + transactionType;
 				
@@ -277,24 +298,18 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 				insertComputedTotals(grandTotFilteredDefNode, adj, trTypeId, transactionType, measureName, true);
 				
 				if (measureName.equals(MoConstants.ACTUAL_COMMITMENTS))
-					continue; // this one is hardcoded in AMP.xml for the sake of "pledges + activities" reports
-				
-//				String newMeasureString = trivialMeasureString
-//						.replace("@@trivial_measure@@", measureName)
-//						.replace("@@trivial_measure_adjustment_type@@", adj.getId().toString());
-				
-//				Node newMeasureNode = xmlSchema.createElement("Measure");
-//				xmlSchema.createElement("someElement").
-//				newMeasureNode.setTextContent(newMeasureString);
-				
+					continue; // this one is hardcoded in AMP.xml for the sake of "pledges + activities" reports				
 				
 				addTrivialMeasure(trivialMeasureDefinitionNode, measureName, adj, trTypeId);
-				
-//				String elementSql = newMeasureDefinition.getTextContent();
-//				@@trivial_measure_transaction_type@@
 			}
 		}
 		
+//		String mtefProjectionName = ArConstants.MTEF_PROJECTION;
+//		for(AmpCategoryValue adj:CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.MTEF_PROJECTION_KEY)) {
+//			String measureName = firstLetterUp(adj.getValue()) + " " + mtefProjectionName; 
+//			addTrivialMeasure(trivialMeasureDefinitionNode, measureName, adj, Constants.MTEFPROJECTION);
+//		}
+//		
 		// add custom SSC trivial measures
 		Collection<AmpCategoryValue> sscAdjTypes = 
 				CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.SSC_ADJUSTMENT_TYPE_KEY);
@@ -439,6 +454,12 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			currencyCode = currentEnvironment.get().defaultCurrencyCode;
 		AmpCurrency res = CurrencyUtil.getCurrencyByCode(currencyCode);
 		return res;
+	}
+	
+	protected String buildDateFilteringSubquery(ReportElement.ElementType elementType, String transactionTypeFilteringQuery) {
+		MondrianReportFilters mrf = (currentReport.get().getFilters() != null) ? (MondrianReportFilters) currentReport.get().getFilters() : null;
+		String ret = new FactTableFiltering(mrf).buildDateFilteringFragment(elementType, transactionTypeFilteringQuery);
+		return ret;
 	}
 	
 	/**

@@ -32,9 +32,10 @@ import org.dgfoundation.amp.testmodels.SimpleColumnModel;
 public class OldReportsNewFeaturesTests extends ReportsTestCase {
 	
 	public static String[] activities = new String[] {"Eth Water", "pledged 2", "activity with directed MTEFs", "Activity with both MTEFs and Act.Comms"};
+	public static String[] mtefActivities = new String[] {"TAC_activity_1", "Test MTEF directed", "Pure MTEF Project", "mtef activity 1", "Activity with both MTEFs and Act.Comms"};
 	
 	public OldReportsNewFeaturesTests() {
-		super("currency deflator tests");
+		super("mtef tests in old reports");
 	}
 	
 	@Test
@@ -179,4 +180,140 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
 		runReportTest("Real MTEF columns, Real Mtefs measure", "AMP-21355-real-mtef-columns-and-measure", activities, 
 			cor, null, "en");
 	}
+	
+	@Test
+	public void testMtefProjectionsAsColumns() {
+		GroupReportModel cor = GroupReportModel.withColumnReports("AMP-21275-split-mtef-projections-as-columns",
+				ColumnReportDataModel.withColumns("AMP-21275-split-mtef-projections-as-columns",
+						SimpleColumnModel.withContents("Project Title", "Activity with both MTEFs and Act.Comms", "Activity with both MTEFs and Act.Comms", "Pure MTEF Project", "Pure MTEF Project", "Test MTEF directed", "Test MTEF directed", "mtef activity 1", "mtef activity 1", "TAC_activity_1", "TAC_activity_1").setIsPledge(false), 
+						SimpleColumnModel.withContents("MTEF 2011/2012", "Pure MTEF Project", "33 888", "Activity with both MTEFs and Act.Comms", "700 000", "Test MTEF directed", "150 000", "mtef activity 1", "789 123").setIsPledge(false), 
+						SimpleColumnModel.withContents("Pipeline MTEF Projections 2011/2012", "Activity with both MTEFs and Act.Comms", "700 000", "Pure MTEF Project", "33 888", "Test MTEF directed", "150 000").setIsPledge(false), 
+						SimpleColumnModel.withContents("Pipeline MTEF Projections 2012/2013", "Test MTEF directed", "65 000").setIsPledge(false), 
+						SimpleColumnModel.withContents("Pipeline MTEF Projections 2013/2014", MUST_BE_EMPTY).setIsPledge(false), 
+						SimpleColumnModel.withContents("Projection MTEF Projections 2011/2012", "mtef activity 1", "789 123").setIsPledge(false), 
+						SimpleColumnModel.withContents("Projection MTEF Projections 2012/2013", "Activity with both MTEFs and Act.Comms", "150 000").setIsPledge(false), 
+						SimpleColumnModel.withContents("Projection MTEF Projections 2013/2014", MUST_BE_EMPTY).setIsPledge(false), 
+						GroupColumnModel.withSubColumns("Funding",
+							GroupColumnModel.withSubColumns("2011",
+								SimpleColumnModel.withContents("Actual Commitments", "TAC_activity_1", "213 231").setIsPledge(false)), 
+							GroupColumnModel.withSubColumns("2015",
+								SimpleColumnModel.withContents("Actual Commitments", "Activity with both MTEFs and Act.Comms", "888 000").setIsPledge(false))), 
+						GroupColumnModel.withSubColumns("Total Costs",
+							SimpleColumnModel.withContents("Actual Commitments", "Activity with both MTEFs and Act.Comms", "888 000", "TAC_activity_1", "213 231").setIsPledge(false)))
+					.withTrailCells(null, "1 673 011", "883 888", "65 000", "0", "789 123", "150 000", "0", "213 231", "888 000", "1 101 231"))
+				.withTrailCells(null, "1 673 011", "883 888", "65 000", "0", "789 123", "150 000", "0", "213 231", "888 000", "1 101 231")
+				.withPositionDigest(true,
+					"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC MTEF 2011/2012: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC Pipeline MTEF Projections 2011/2012: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1), RHLC Pipeline MTEF Projections 2012/2013: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 3, colSpan: 1), RHLC Pipeline MTEF Projections 2013/2014: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 4, colSpan: 1), RHLC Projection MTEF Projections 2011/2012: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 5, colSpan: 1), RHLC Projection MTEF Projections 2012/2013: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 6, colSpan: 1), RHLC Projection MTEF Projections 2013/2014: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 7, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 8, colSpan: 2), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 10, colSpan: 1))",
+					"(line 1:RHLC 2011: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 8, colSpan: 1), RHLC 2015: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 9, colSpan: 1))",
+					"(line 2:RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1))");
+		
+		runReportTest("AMP-21275-split-mtef-projections-as-columns", "AMP-21275-split-mtef-projections-as-columns", mtefActivities, cor, null, "en");
+	}
+	
+	@Test
+	public void testMtefProjectionsAsColumnsNoMtefs() {
+		GroupReportModel cor = GroupReportModel.withColumnReports("AMP-21275-split-mtef-projections-as-columns-small",
+				ColumnReportDataModel.withColumns("AMP-21275-split-mtef-projections-as-columns-small",
+						SimpleColumnModel.withContents("Project Title", "Activity with both MTEFs and Act.Comms", "Activity with both MTEFs and Act.Comms", "Pure MTEF Project", "Pure MTEF Project", "Test MTEF directed", "Test MTEF directed", "mtef activity 1", "mtef activity 1", "TAC_activity_1", "TAC_activity_1").setIsPledge(false), 
+						SimpleColumnModel.withContents("Pipeline MTEF Projections 2012/2013", "Test MTEF directed", "65 000").setIsPledge(false), 
+						SimpleColumnModel.withContents("Projection MTEF Projections 2012/2013", "Activity with both MTEFs and Act.Comms", "150 000").setIsPledge(false), 
+						GroupColumnModel.withSubColumns("Funding",
+							GroupColumnModel.withSubColumns("2011",
+								SimpleColumnModel.withContents("Actual Commitments", "TAC_activity_1", "213 231").setIsPledge(false)), 
+							GroupColumnModel.withSubColumns("2015",
+								SimpleColumnModel.withContents("Actual Commitments", "Activity with both MTEFs and Act.Comms", "888 000").setIsPledge(false))), 
+						GroupColumnModel.withSubColumns("Total Costs",
+							SimpleColumnModel.withContents("Actual Commitments", "Activity with both MTEFs and Act.Comms", "888 000", "TAC_activity_1", "213 231").setIsPledge(false)))
+					.withTrailCells(null, "65 000", "150 000", "213 231", "888 000", "1 101 231"))
+				.withTrailCells(null, "65 000", "150 000", "213 231", "888 000", "1 101 231")
+				.withPositionDigest(true,
+					"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Pipeline MTEF Projections 2012/2013: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC Projection MTEF Projections 2012/2013: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 2), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 5, colSpan: 1))",
+					"(line 1:RHLC 2011: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1), RHLC 2015: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 1))",
+					"(line 2:RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1))");
+		
+		runReportTest("AMP-21275-split-mtef-projections-as-columns-small", "AMP-21275-split-mtef-projections-as-columns-small", mtefActivities, cor, null, "en");
+	}
+	
+	@Test
+	public void testMtefProjectionsAllAsColumns() {
+		GroupReportModel cor = GroupReportModel.withColumnReports("AMP-21275-all-plain-mtefs",
+				ColumnReportDataModel.withColumns("AMP-21275-all-plain-mtefs",
+						SimpleColumnModel.withContents("Project Title", "Activity with both MTEFs and Act.Comms", "Activity with both MTEFs and Act.Comms", "Pure MTEF Project", "Pure MTEF Project", "Test MTEF directed", "Test MTEF directed", "mtef activity 1", "mtef activity 1", "TAC_activity_1", "TAC_activity_1").setIsPledge(false), 
+						SimpleColumnModel.withContents("MTEF 2011/2012", "Pure MTEF Project", "33 888", "Activity with both MTEFs and Act.Comms", "700 000", "Test MTEF directed", "150 000", "mtef activity 1", "789 123").setIsPledge(false), 
+						SimpleColumnModel.withContents("Pipeline MTEF Projections 2011/2012", "Activity with both MTEFs and Act.Comms", "700 000", "Pure MTEF Project", "33 888", "Test MTEF directed", "150 000").setIsPledge(false), 
+						SimpleColumnModel.withContents("Projection MTEF Projections 2011/2012", "mtef activity 1", "789 123").setIsPledge(false), 
+						SimpleColumnModel.withContents("MTEF 2012/2013", "Activity with both MTEFs and Act.Comms", "150 000", "Test MTEF directed", "65 000").setIsPledge(false), 
+						SimpleColumnModel.withContents("Pipeline MTEF Projections 2012/2013", "Test MTEF directed", "65 000").setIsPledge(false), 
+						SimpleColumnModel.withContents("Projection MTEF Projections 2012/2013", "Activity with both MTEFs and Act.Comms", "150 000").setIsPledge(false), 
+						SimpleColumnModel.withContents("MTEF 2013/2014", MUST_BE_EMPTY).setIsPledge(false), 
+						SimpleColumnModel.withContents("Pipeline MTEF Projections 2013/2014", MUST_BE_EMPTY).setIsPledge(false), 
+						SimpleColumnModel.withContents("Projection MTEF Projections 2013/2014", MUST_BE_EMPTY).setIsPledge(false), 
+						GroupColumnModel.withSubColumns("Funding",
+							GroupColumnModel.withSubColumns("2011",
+								SimpleColumnModel.withContents("Actual Commitments", "TAC_activity_1", "213 231").setIsPledge(false)), 
+							GroupColumnModel.withSubColumns("2015",
+								SimpleColumnModel.withContents("Actual Commitments", "Activity with both MTEFs and Act.Comms", "888 000").setIsPledge(false))), 
+						GroupColumnModel.withSubColumns("Total Costs",
+							SimpleColumnModel.withContents("Actual Commitments", "Activity with both MTEFs and Act.Comms", "888 000", "TAC_activity_1", "213 231").setIsPledge(false)))
+					.withTrailCells(null, "1 673 011", "883 888", "789 123", "215 000", "65 000", "150 000", "0", "0", "0", "213 231", "888 000", "1 101 231"))
+				.withTrailCells(null, "1 673 011", "883 888", "789 123", "215 000", "65 000", "150 000", "0", "0", "0", "213 231", "888 000", "1 101 231")
+				.withPositionDigest(true,
+					"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC MTEF 2011/2012: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC Pipeline MTEF Projections 2011/2012: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1), RHLC Projection MTEF Projections 2011/2012: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 3, colSpan: 1), RHLC MTEF 2012/2013: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 4, colSpan: 1), RHLC Pipeline MTEF Projections 2012/2013: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 5, colSpan: 1), RHLC Projection MTEF Projections 2012/2013: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 6, colSpan: 1), RHLC MTEF 2013/2014: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 7, colSpan: 1), RHLC Pipeline MTEF Projections 2013/2014: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 8, colSpan: 1), RHLC Projection MTEF Projections 2013/2014: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 9, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 10, colSpan: 2), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 12, colSpan: 1))",
+					"(line 1:RHLC 2011: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 10, colSpan: 1), RHLC 2015: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 11, colSpan: 1))",
+					"(line 2:RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1))");
+		
+		runReportTest("AMP-21275-all-plain-mtefs", "AMP-21275-all-plain-mtefs", mtefActivities, cor, null, "en");
+	}
+	
+	@Test
+	public void testMtefProjectionsAllAsColumnsRare() {
+		GroupReportModel cor = GroupReportModel.withColumnReports("AMP-21275-all-plain-mtefs-rare",
+				ColumnReportDataModel.withColumns("AMP-21275-all-plain-mtefs-rare",
+						SimpleColumnModel.withContents("Project Title", "Activity with both MTEFs and Act.Comms", "Activity with both MTEFs and Act.Comms", "Pure MTEF Project", "Pure MTEF Project", "Test MTEF directed", "Test MTEF directed", "mtef activity 1", "mtef activity 1", "TAC_activity_1", "TAC_activity_1").setIsPledge(false), 
+						SimpleColumnModel.withContents("MTEF 2011/2012", "Pure MTEF Project", "33 888", "Activity with both MTEFs and Act.Comms", "700 000", "Test MTEF directed", "150 000", "mtef activity 1", "789 123").setIsPledge(false), 
+						SimpleColumnModel.withContents("Pipeline MTEF Projections 2011/2012", "Activity with both MTEFs and Act.Comms", "700 000", "Pure MTEF Project", "33 888", "Test MTEF directed", "150 000").setIsPledge(false), 
+						SimpleColumnModel.withContents("MTEF 2012/2013", "Activity with both MTEFs and Act.Comms", "150 000", "Test MTEF directed", "65 000").setIsPledge(false), 
+						SimpleColumnModel.withContents("Projection MTEF Projections 2012/2013", "Activity with both MTEFs and Act.Comms", "150 000").setIsPledge(false), 
+						SimpleColumnModel.withContents("MTEF 2013/2014", MUST_BE_EMPTY).setIsPledge(false), 
+						GroupColumnModel.withSubColumns("Funding",
+							GroupColumnModel.withSubColumns("2011",
+								SimpleColumnModel.withContents("Actual Commitments", "TAC_activity_1", "213 231").setIsPledge(false)), 
+							GroupColumnModel.withSubColumns("2015",
+								SimpleColumnModel.withContents("Actual Commitments", "Activity with both MTEFs and Act.Comms", "888 000").setIsPledge(false))), 
+						GroupColumnModel.withSubColumns("Total Costs",
+							SimpleColumnModel.withContents("Actual Commitments", "Activity with both MTEFs and Act.Comms", "888 000", "TAC_activity_1", "213 231").setIsPledge(false)))
+					.withTrailCells(null, "1 673 011", "883 888", "215 000", "150 000", "0", "213 231", "888 000", "1 101 231"))
+				.withTrailCells(null, "1 673 011", "883 888", "215 000", "150 000", "0", "213 231", "888 000", "1 101 231")
+				.withPositionDigest(true,
+					"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC MTEF 2011/2012: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC Pipeline MTEF Projections 2011/2012: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1), RHLC MTEF 2012/2013: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 3, colSpan: 1), RHLC Projection MTEF Projections 2012/2013: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 4, colSpan: 1), RHLC MTEF 2013/2014: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 5, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 6, colSpan: 2), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 8, colSpan: 1))",
+					"(line 1:RHLC 2011: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 1), RHLC 2015: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 1))",
+					"(line 2:RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1))");
+		
+		runReportTest("AMP-21275-all-plain-mtefs-rare", "AMP-21275-all-plain-mtefs-rare", mtefActivities, cor, null, "en");
+	}
+	
+	@Test
+	public void testMtefProjectionsAllAsColumnsVeryRare() {
+		GroupReportModel cor = GroupReportModel.withColumnReports("AMP-21275-all-plain-mtefs-very-rare",
+				ColumnReportDataModel.withColumns("AMP-21275-all-plain-mtefs-very-rare",
+						SimpleColumnModel.withContents("Project Title", "Activity with both MTEFs and Act.Comms", "Activity with both MTEFs and Act.Comms", "Pure MTEF Project", "Pure MTEF Project", "Test MTEF directed", "Test MTEF directed", "mtef activity 1", "mtef activity 1", "TAC_activity_1", "TAC_activity_1").setIsPledge(false), 
+						SimpleColumnModel.withContents("Pipeline MTEF Projections 2011/2012", "Activity with both MTEFs and Act.Comms", "700 000", "Pure MTEF Project", "33 888", "Test MTEF directed", "150 000").setIsPledge(false), 
+						SimpleColumnModel.withContents("MTEF 2012/2013", "Activity with both MTEFs and Act.Comms", "150 000", "Test MTEF directed", "65 000").setIsPledge(false), 
+						SimpleColumnModel.withContents("Projection MTEF Projections 2012/2013", "Activity with both MTEFs and Act.Comms", "150 000").setIsPledge(false), 
+						GroupColumnModel.withSubColumns("Funding",
+							GroupColumnModel.withSubColumns("2011",
+								SimpleColumnModel.withContents("Actual Commitments", "TAC_activity_1", "213 231").setIsPledge(false)), 
+							GroupColumnModel.withSubColumns("2015",
+								SimpleColumnModel.withContents("Actual Commitments", "Activity with both MTEFs and Act.Comms", "888 000").setIsPledge(false))), 
+						GroupColumnModel.withSubColumns("Total Costs",
+							SimpleColumnModel.withContents("Actual Commitments", "Activity with both MTEFs and Act.Comms", "888 000", "TAC_activity_1", "213 231").setIsPledge(false)))
+					.withTrailCells(null, "883 888", "215 000", "150 000", "213 231", "888 000", "1 101 231"))
+				.withTrailCells(null, "883 888", "215 000", "150 000", "213 231", "888 000", "1 101 231")
+				.withPositionDigest(true,
+					"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Pipeline MTEF Projections 2011/2012: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC MTEF 2012/2013: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1), RHLC Projection MTEF Projections 2012/2013: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 3, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 4, colSpan: 2), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 6, colSpan: 1))",
+					"(line 1:RHLC 2011: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 1), RHLC 2015: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 1))",
+					"(line 2:RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1))");
+		
+		runReportTest("AMP-21275-all-plain-mtefs-very-rare", "AMP-21275-all-plain-mtefs-very-rare", mtefActivities, cor, null, "en");
+	}	
 }

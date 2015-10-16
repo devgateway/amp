@@ -108,6 +108,20 @@ public class CellDataSetPostProcessing {
 		return true;
 	}
 	
+//	public void removeZeroMTEFColumns(Set<Integer> mtefColumns) {
+//		List<TotalNode>[] rowTotals = cellDataSet.getRowTotalsLists();
+//		TotalAggregator[][] matrixTotals = rowTotals[0].get(0).getTotalGroups();
+//		if (matrixTotals == null || matrixTotals.length == 0 || matrixTotals[0] == null) return;
+//		
+//		TotalAggregator[] byColTotals = matrixTotals[0];
+//		SortedSet<Integer> colsToDelete = new TreeSet<>();
+//		for(int columnNumber:mtefColumns) {
+//			if (isZero(byColTotals, columnNumber))
+//				colsToDelete.add(columnNumber);
+//		}
+//		deleteColumns(colsToDelete);
+//	}
+	
 	public void removeEmptyFlowsColumns(boolean internalIdUsed) {
 //		if (System.currentTimeMillis() < 1)
 //			return;
@@ -145,14 +159,14 @@ public class CellDataSetPostProcessing {
 		//colsToDelete.clear();
 		//colsToDelete.add(1 + spec.getColumns().size());
 		
+		deleteColumns(colsToDelete);
+	}
+	
+	protected void deleteColumns(SortedSet<Integer> colsToDelete) {
 		SortedSet<Integer> measToDelete = new TreeSet<>();
 		for(int colNr:colsToDelete)
 			measToDelete.add(colNr - spec.getColumns().size());
 
-		//cellDataSet.setCellSetHeaders(SaikuUtils.removeColumns(cellDataSet.getCellSetHeaders(), colsToDelete));
-		//cellDataSet.setCellSetBody(SaikuUtils.removeColumns(cellDataSet.getCellSetBody(), colsToDelete));
-		//colsToDelete.clear();
-		//measToDelete.clear();
 		cleanupColumnsFromCellDataSet(colsToDelete, measToDelete, new ArrayList<String>());
 		removeColumnsFromLeafHeaders(colsToDelete, 0);
 	}

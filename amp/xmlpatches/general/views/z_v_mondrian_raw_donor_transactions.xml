@@ -63,7 +63,7 @@ SELECT <!-- MTEFs -->
 	aa.amp_activity_id AS amp_activity_id,
 	mf.amp_fund_mtef_projection_id AS amp_fund_detail_id,
 	3 AS transaction_type,
-	999 AS adjustment_type,
+	mf.amp_projected_categoryvalue_id AS adjustment_type,
 	mf.projection_date AS transaction_date,
 	
 	<!-- 10000 + extract(year from mf.projection_date) AS date_code, -->

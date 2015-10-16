@@ -314,6 +314,9 @@ public class MondrianMapping {
 			// standard trivial measures
 			for (String transactionType:ArConstants.TRANSACTION_TYPE_NAME_TO_ID.keySet())
 				for (AmpCategoryValue adj: CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.ADJUSTMENT_TYPE_KEY)) {
+					if (transactionType.equals(ArConstants.MTEF_PROJECTION))
+						continue; // MTEF projections live their own life
+					
 					String measureName = adj.getValue() + " " + transactionType;
 					addMeasureDefinition(measureName);
 					
@@ -354,7 +357,10 @@ public class MondrianMapping {
 			dependency.put(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS, ColumnConstants.TOTAL_GRAND_ACTUAL_DISBURSEMENTS);
 			addMeasureDefinition(MeasureConstants.UNDISBURSED_BALANCE);
 			addMeasureDefinition(MeasureConstants.PLEDGES_COMMITMENT_GAP);
+			
 			addMeasureDefinition(MeasureConstants.MTEF_PROJECTIONS);
+			addMeasureDefinition(MeasureConstants.PIPELINE_MTEF_PROJECTIONS);
+			addMeasureDefinition(MeasureConstants.PROJECTION_MTEF_PROJECTIONS);
 			
 			addMeasureDefinition(MeasureConstants.REAL_COMMITMENTS);
 			addMeasureDefinition(MeasureConstants.REAL_DISBURSEMENTS);

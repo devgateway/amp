@@ -54,6 +54,7 @@ import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.onepager.models.MTEFYearsModel;
 import org.dgfoundation.amp.reports.PartialReportArea;
+import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.queries.MDXGenerator;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXAttribute;
@@ -136,6 +137,12 @@ public class MondrianReportGenerator implements ReportExecutor {
 	
 	private final ReportEnvironment environment;
 	protected final String translatedUndefined;
+	
+//	/**
+//	 * leafHeaders' columnNumbers with MTEFs - those with zero values will be removed from the report output
+//	 */
+//	protected Set<Integer> columnNumbersWithMtefs;
+//	
 	
 	/**
 	 * the spec used during the current report generation run. Ideally we'd have this field <strong>final</strong> and initialized in the constructor,
@@ -498,7 +505,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		// at the moment only dates are filtered out, but years, quarters and months are not :(
 		// ignore DATE filters, as those are now processed through the SQL  filter
 
-		if (element.type == ElementType.DATE || element.type == ElementType.MTEF_DATE)
+		if (element.type == ElementType.DATE || MtefConverter.MTEF_DATE_ELEMENT_TYPES.contains(element.type))
 			return true;
 
 		if (element.type == ElementType.ENTITY) {
@@ -642,6 +649,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		postprocessUndefinedEntries(cellDataSet);
 		CellDataSetToAmpHierarchies.concatenateNonHierarchicalColumns(spec, cellDataSet, leafHeaders, this.translatedUndefined, cellDataSetActivities);
 		boolean internalIdUsed = postProcessor.removeDummyColumns();
+		//postProcessor.removeZeroMTEFColumns(this.columnNumbersWithMtefs);
 		if (spec.getUsesFundingFlows()) {
 			postProcessor.removeEmptyFlowsColumns(internalIdUsed);
 			if (SAIKU_TOTALS) {
@@ -667,6 +675,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 * @param spec
 	 */
 	protected void processMtefHeaders(CellDataSet cellDataSet) {
+		//this.columnNumbersWithMtefs = new TreeSet<>();
+
 		if (spec.getGroupingCriteria() == GroupingCriteria.GROUPING_TOTALS_ONLY)
 			return;
 		//if (System.currentTimeMillis() > 1) return;
@@ -674,16 +684,20 @@ public class MondrianReportGenerator implements ReportExecutor {
 		if (headers == null || headers.length <= 1) return;
 		// skim through last line
 		int yearLevelInHeader = headers.length - getYearLevelInHeader() - 1;
+				
 		int measureLevelInHeader = headers.length - 1 - (spec.getUsesFundingFlows() ? 1 : 0);
 		Map<String, String> mtefMeasures = new HashMap<String, String>() {{
 			put("[Measures].[MTEF Projections]", "MTEF");
 			put("[Measures].[Real MTEFs]", "Real MTEFs");
+			put("[Measures].[Pipeline MTEF Projections]", "Pipeline MTEF Projections");
+			put("[Measures].[Projection MTEF Projections]", "Projection MTEF Projections");
 		}};
 		for(int i = 0; i < headers[measureLevelInHeader].length; i++) {
 			AbstractBaseCell measureCell = headers[measureLevelInHeader][i];
 			AbstractBaseCell yearCell = headers[yearLevelInHeader][i];
 			if (measureCell.getRawValue() != null && mtefMeasures.containsKey(measureCell.getRawValue()) && yearCell != null) {
 				// this is a MTEF cell and it needs translation
+				//this.columnNumbersWithMtefs.add(i);
 				int year = parseYear(yearCell.getRawValue());
 				if (year > 0) {
 					String englishFormattedValue = /*MTEFYearsModel.getFiscal() ? */String.format("%s %d/%d", mtefMeasures.get(measureCell.getRawValue()), year, year + 1); /* : String.format("MTEF %d", year); -- commented out for old-reports compatibility reasons*/

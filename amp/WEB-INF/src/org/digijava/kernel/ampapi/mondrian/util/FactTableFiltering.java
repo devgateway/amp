@@ -57,9 +57,14 @@ public class FactTableFiltering {
 				subquery.append(fragment);
 			}
 
+//			String dateFilteringFragment = buildDateFilteringFragment(ReportElement.ElementType.DATE, String.format("(transaction_type <> %d) AND (transaction_type <> %d)", Constants.MTEFPROJECTION, 200 + Constants.MTEFPROJECTION));
+//			String realMtefFilteringFragment = buildDateFilteringFragment(ReportElement.ElementType.REAL_MTEF_DATE, "transaction_type = " + (200 + Constants.MTEFPROJECTION));
+//			String mtefFilteringFragment = buildDateFilteringFragment(ReportElement.ElementType.MTEF_DATE, "transaction_type = " + Constants.MTEFPROJECTION);
+			
 			String dateFilteringFragment = buildDateFilteringFragment(ReportElement.ElementType.DATE, String.format("(transaction_type <> %d) AND (transaction_type <> %d)", Constants.MTEFPROJECTION, 200 + Constants.MTEFPROJECTION));
-			String mtefFilteringFragment = buildDateFilteringFragment(ReportElement.ElementType.MTEF_DATE, "transaction_type = " + Constants.MTEFPROJECTION);
 			String realMtefFilteringFragment = buildDateFilteringFragment(ReportElement.ElementType.REAL_MTEF_DATE, "transaction_type = " + (200 + Constants.MTEFPROJECTION));
+			String mtefFilteringFragment = "transaction_type = " + Constants.MTEFPROJECTION;
+			
 			String datesQuery = String.format("%sAND ((%s) OR (%s) OR (%s))%s", DATE_FILTERS_TAG_START, dateFilteringFragment, mtefFilteringFragment, realMtefFilteringFragment, DATE_FILTERS_TAG_END);
 			subquery.append(datesQuery);
 		}
@@ -77,19 +82,21 @@ public class FactTableFiltering {
 	 * process the funding-date filter(s), excluding MTEFs
 	 * @return
 	 */
-	protected String buildDateFilteringFragment(ReportElement.ElementType elementType, String transactionTypeFilteringQuery) {
+	public String buildDateFilteringFragment(ReportElement.ElementType elementType, String transactionTypeFilteringQuery) {
 		StringBuilder fragment = new StringBuilder();
 		ActivityFilter flt = new ActivityFilter("display_date_code");
-		// tag date filters section to reuse "all filters without date filters" criteria in other queries 
-		for(Entry<ReportElement, List<FilterRule>> filterElement:mrf.getFilterRules().entrySet())
-			if (filterElement.getKey().type.equals(elementType)) {
-				String dateQuery = flt.buildQuery(filterElement.getValue());
-				if (dateQuery != null && !dateQuery.isEmpty())
-					fragment.append(dateQuery);
-			}
+		if (mrf != null && mrf.getFilterRules() != null) {
+			// tag date filters section to reuse "all filters without date filters" criteria in other queries 
+			for(Entry<ReportElement, List<FilterRule>> filterElement:mrf.getFilterRules().entrySet())
+				if (filterElement.getKey().type.equals(elementType)) {
+					String dateQuery = flt.buildQuery(filterElement.getValue());
+					if (dateQuery != null && !dateQuery.isEmpty())
+						fragment.append(dateQuery);
+				}
+		}
 		String res = String.format("%s %s", transactionTypeFilteringQuery, fragment.toString());
 		return res;
-	}	
+	}
 	
 	/**
 	 * builds a subquery of the form AND (primary_sector_id IN (...))

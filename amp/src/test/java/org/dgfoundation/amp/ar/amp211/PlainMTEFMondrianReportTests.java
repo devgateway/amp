@@ -176,18 +176,19 @@ public class PlainMTEFMondrianReportTests extends MondrianReportsTestCase {
 	
 	@Test
 	public void testOneSingleMtefColumn() {
-		ReportAreaForTests correctReportEn = new ReportAreaForTests()
+		ReportAreaForTests correctReport = new ReportAreaForTests()
 	    .withContents("Project Title", "Report Totals", "2011-MTEF Projections", "0", "2011-Actual Commitments", "213 231", "2012-MTEF Projections", "215 000", "2012-Actual Commitments", "0", "2015-MTEF Projections", "0", "2015-Actual Commitments", "888 000", "Total Measures-MTEF Projections", "215 000", "Total Measures-Actual Commitments", "1 101 231")
-	    .withChildren(
-	      new ReportAreaForTests().withContents("Project Title", "TAC_activity_1", "2011-MTEF Projections", "", "2011-Actual Commitments", "213 231", "2012-MTEF Projections", "", "2012-Actual Commitments", "", "2015-MTEF Projections", "", "2015-Actual Commitments", "", "Total Measures-MTEF Projections", "0", "Total Measures-Actual Commitments", "213 231"),
-	      new ReportAreaForTests().withContents("Project Title", "Test MTEF directed", "2011-MTEF Projections", "", "2011-Actual Commitments", "", "2012-MTEF Projections", "65 000", "2012-Actual Commitments", "", "2015-MTEF Projections", "", "2015-Actual Commitments", "", "Total Measures-MTEF Projections", "65 000", "Total Measures-Actual Commitments", "0"),
-	      new ReportAreaForTests().withContents("Project Title", "Pure MTEF Project", "2011-MTEF Projections", "", "2011-Actual Commitments", "", "2012-MTEF Projections", "", "2012-Actual Commitments", "", "2015-MTEF Projections", "", "2015-Actual Commitments", "", "Total Measures-MTEF Projections", "0", "Total Measures-Actual Commitments", "0"),
-	      new ReportAreaForTests().withContents("Project Title", "Activity with both MTEFs and Act.Comms", "2011-MTEF Projections", "", "2011-Actual Commitments", "", "2012-MTEF Projections", "150 000", "2012-Actual Commitments", "", "2015-MTEF Projections", "", "2015-Actual Commitments", "888 000", "Total Measures-MTEF Projections", "150 000", "Total Measures-Actual Commitments", "888 000"));
+	  .withChildren(
+	    new ReportAreaForTests().withContents("Project Title", "TAC_activity_1", "2011-MTEF Projections", "", "2011-Actual Commitments", "213 231", "2012-MTEF Projections", "", "2012-Actual Commitments", "", "2015-MTEF Projections", "", "2015-Actual Commitments", "", "Total Measures-MTEF Projections", "0", "Total Measures-Actual Commitments", "213 231"),
+	    new ReportAreaForTests().withContents("Project Title", "Test MTEF directed", "2011-MTEF Projections", "", "2011-Actual Commitments", "", "2012-MTEF Projections", "65 000", "2012-Actual Commitments", "", "2015-MTEF Projections", "", "2015-Actual Commitments", "", "Total Measures-MTEF Projections", "65 000", "Total Measures-Actual Commitments", "0"),
+	    new ReportAreaForTests().withContents("Project Title", "Pure MTEF Project", "2011-MTEF Projections", "", "2011-Actual Commitments", "", "2012-MTEF Projections", "", "2012-Actual Commitments", "", "2015-MTEF Projections", "", "2015-Actual Commitments", "", "Total Measures-MTEF Projections", "0", "Total Measures-Actual Commitments", "0"),
+	    new ReportAreaForTests().withContents("Project Title", "mtef activity 1", "2011-MTEF Projections", "", "2011-Actual Commitments", "", "2012-MTEF Projections", "", "2012-Actual Commitments", "", "2015-MTEF Projections", "", "2015-Actual Commitments", "", "Total Measures-MTEF Projections", "0", "Total Measures-Actual Commitments", "0"),
+	    new ReportAreaForTests().withContents("Project Title", "Activity with both MTEFs and Act.Comms", "2011-MTEF Projections", "", "2011-Actual Commitments", "", "2012-MTEF Projections", "150 000", "2012-Actual Commitments", "", "2015-MTEF Projections", "", "2015-Actual Commitments", "888 000", "Total Measures-MTEF Projections", "150 000", "Total Measures-Actual Commitments", "888 000"));
 		
 		runMondrianTestCase(
 			"AMP-20872-one-single-MTEF-year",						
 			activities,
-			correctReportEn,
+			correctReport,
 			"en");
 	}
 	
@@ -240,5 +241,10 @@ public class PlainMTEFMondrianReportTests extends MondrianReportsTestCase {
 		MtefConverter.instance.convertMtefs(report, spec);
 		assertEquals("[entity: MTEF Projections]", spec.getMeasures().toString());
 		assertEquals("{ElementType = MTEF_DATE, NamedTypedEntity =[null]=[FilterRule=RANGE, [12011 : 12011], FilterRule=RANGE, [12012 : 12012]]}", spec.getFilters().getFilterRules().toString());
+	}
+	
+	@Test
+	public void testMtefProjectionsAsColumns() {
+		
 	}
 }

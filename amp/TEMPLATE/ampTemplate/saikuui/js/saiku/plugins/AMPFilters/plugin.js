@@ -329,6 +329,7 @@ FilterUtils.convertJavaFiltersToJS = function(data) {
 			/*"Donor Id" : []*/
 		}
 	};
+	
 	_.each(data, function(item, i) {
 		switch (item.name) {
 
@@ -336,6 +337,7 @@ FilterUtils.convertJavaFiltersToJS = function(data) {
 		case 'Responsible Organization':
 		case 'Type Of Assistance':
 		case 'Financing Instrument':
+		case 'Funding Status':	
 		case 'Status':
 		case 'Approval Status':
 		case 'Donor Group':

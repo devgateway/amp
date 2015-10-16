@@ -391,7 +391,7 @@ function generateDataRows(page, options) {
 				var styleClass = getCellDataStyleClass(contentMatrix, cleanValue, i, j);
 				var coloredPrefix = "";
 				
-				if (isCellNotValidated(contentMatrix, i, j)) {
+				if (cellContainsAsterisk(contentMatrix, i, j)) {
 					coloredPrefix = "*";
 				}
 				
@@ -480,12 +480,9 @@ function getCellDataStyleClass(contentMatrix, cleanValue, i, j) {
 	return styleClass;
 }
 
-function isCellNotValidated(contentMatrix, i, j) {
-	if (contentMatrix[i][j].color && 
-		contentMatrix[i][j].color != "activity_status_validated" &&
-		contentMatrix[i][j].color != "activity_status_pledge") {
-		
-		return true;
+function cellContainsAsterisk(contentMatrix, i, j) {
+	if (contentMatrix[i][j].asteriskPrefix) {
+		return contentMatrix[i][j].asteriskPrefix;
 	}
 	
 	return false;
@@ -658,6 +655,20 @@ AMPTableRenderer.prototype.postProcessTooltips = function() {
  * Populate cell with colors based on values of 'Draft' and 'Approval Status' hidden columns 
  * validated, unvalidated, draft, pledge
  * 
+ * New Draft (*) => draft == 'true' && (aproval_status != 1 || approval_status != 2)
+ * Existing Draft => draft == 'true' && (aproval_status == 1 || approval_status == 2)
+ * Started Validated (*) => draft == 'false' && aproval_status == 3 => started validated
+ * New Un-validated (*) => draft == 'false' && aproval_status == 4 => new unvalidated
+ * 
+ * More details in org.dgfoundation.amp.ar.AmpArFilter.buildApprovalStatusQuery()
+ * 
+ * 1 - Approved (validated)
+ * 2 - Edited (unvalidated) 
+ * 3 - Started approved (validated)
+ * 4 - Started (unvalidated) 
+ * 5 - Not Approved (unvalidated)
+ * 6 - Rejected (unvalidated)
+ * More details in org.dgfoundation.amp.ar.AmpArFilter.activityStatusToNr
  */
 function fillContentsWithColors() {
 	for (var i = 0; i < this.contentMatrix.length; i++) {
@@ -668,20 +679,29 @@ function fillContentsWithColors() {
 				var activityIdValue = parseInt(this.contentMatrix[i][activityIdColumn].value);
 				
 				var color = undefined;
+				var asteriskPrefix = false;
 				
 				if (isActivityPledge(activityIdValue)) {
 					color = 'pledge';
 				} else if (draftValue === 'true') {
 					color = 'draft';
+					if (statusValue != '1' && statusValue != '2') {
+						asteriskPrefix = true;
+					}
 				} else if (this.ACTIVITY_STATUS_CODES.validated.indexOf(statusValue) > -1) {
 					color = 'validated'
 				} else if (this.ACTIVITY_STATUS_CODES.unvalidated.indexOf(statusValue) > -1) {
 					color = 'unvalidated';
+					if (statusValue == '4') {
+						asteriskPrefix = true;
+					}
 				}
 				
 				if (color) {
 					this.contentMatrix[i][j].color = "activity_status_" + color;
 				}
+				
+				this.contentMatrix[i][j].asteriskPrefix = asteriskPrefix;
 			}
 		}
 	}

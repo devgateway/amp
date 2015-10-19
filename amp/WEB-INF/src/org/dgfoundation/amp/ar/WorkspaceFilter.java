@@ -174,14 +174,14 @@ public class WorkspaceFilter
 		//return "41, 43, 44, 45";
 		//return "20, 21"; // masha
 		//return "17041";
-		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('TAC_activity_1', 'Test MTEF directed', 'Pure MTEF Project', 'mtef activity 1', 'Activity with both MTEFs and Act.Comms')";
+//		return "SELECT amp_activity_id from amp_activity WHERE name IN ('TAC_activity_1', 'Test MTEF directed', 'Pure MTEF Project', 'mtef activity 1', 'Activity with both MTEFs and Act.Comms')";
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('Proposed Project Cost 1 - USD', 'Test MTEF directed', 'Eth Water', 'activity with directed MTEFs')";
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('Proposed Project Cost 1 - USD', 'Proposed Project Cost 2 - EUR', 'SubNational no percentages', 'Project with documents')";
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('Proposed Project Cost 1 - USD', 'Test MTEF directed', 'Eth Water', 'activity with directed MTEFs')";
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('TAC_activity_1', 'TAC_activity_2', 'Proposed Project Cost 2 - EUR', 'Test MTEF directed', 'Eth Water')";
 //		return "SELECT amp_activity_id from amp_activity WHERE name IN ('TAC_activity_2')";
-		//return "SELECT amp_activity_id FROM amp_activity WHERE name IN ('Eth Water', 'pledged 2', 'activity with directed MTEFs', 'Activity with both MTEFs and Act.Comms')";
-		//return "SELECT amp_activity_id FROM amp_activity WHERE name IN ('Test MTEF directed')";
+		//return "SELECT amp_activity_id FROM amp_activity WHERE name IN ('activity with capital spending', 'Activity with planned disbursements', 'activity with pipeline MTEFs and act. disb')";
+		//return "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id >= 43";
 		return TEAM_FILTER;
 	}
 	

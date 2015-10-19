@@ -365,6 +365,7 @@ public class MondrianMapping {
 			addMeasureDefinition(MeasureConstants.REAL_COMMITMENTS);
 			addMeasureDefinition(MeasureConstants.REAL_DISBURSEMENTS);
 			addMeasureDefinition(MeasureConstants.REAL_MTEFS);
+			addMeasureDefinition(MeasureConstants.FORECAST_EXECUTION_RATE);
 			
 			addMeasureDefinition(MeasureConstants.ALWAYS_PRESENT);
 			//put(new ReportMeasure(MeasureConstants.REAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL), new MDXMeasure(MoConstants.REAL_DISBURSEMENTS));

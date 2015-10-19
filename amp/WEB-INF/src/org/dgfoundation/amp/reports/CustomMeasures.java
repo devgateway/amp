@@ -20,16 +20,19 @@ public class CustomMeasures {
 	/** measures whose distribution per year/quarter/months must be hidden from the output */
 	public final static Set<String> NO_DISTRIBUTION = new HashSet<String>() {{
 		add(MeasureConstants.EXECUTION_RATE);
+		add(MeasureConstants.FORECAST_EXECUTION_RATE);
 	}};
 	
 	/** measures without raw totals */
 	public final static Set<String> NO_RAW_TOTALS = new HashSet<String>() {{
 		add(MeasureConstants.EXECUTION_RATE);
+		add(MeasureConstants.FORECAST_EXECUTION_RATE);
 	}};
 	
 	public final static Map<String, List<String>> MEASURE_DEPENDENCY = new HashMap<String, List<String>>() {{
 		put(MeasureConstants.EXECUTION_RATE, Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS));
 		put("Total Filtered Actual Disbursements", Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS));
 		put("Total Filtered Planned Disbursements", Arrays.asList(MeasureConstants.PLANNED_DISBURSEMENTS));
+		put(MeasureConstants.FORECAST_EXECUTION_RATE, Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PIPELINE_MTEF_PROJECTIONS, MeasureConstants.PROJECTION_MTEF_PROJECTIONS));
 	}};
 }

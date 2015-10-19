@@ -37,6 +37,7 @@ public class CustomAmounts {
 	/** all columns and measures that display % amounts */
 	public final static Set<String> PERCENTAGE_AMOUNTS = new HashSet<String>() {{
 		add(MeasureConstants.EXECUTION_RATE);
+		add(MeasureConstants.FORECAST_EXECUTION_RATE);
 		add(MeasureConstants.CONSUMPTION_RATE);
 		add(MeasureConstants.DISBURSMENT_RATIO);
 		add(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS);

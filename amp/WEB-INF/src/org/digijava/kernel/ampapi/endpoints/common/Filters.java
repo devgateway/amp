@@ -732,7 +732,7 @@ public class Filters {
                 }
             } else {
                 // display only child workspaces in case of management workspaces
-                if (ws != null && "Management".equals(ws.getAccessType())) {
+                if (ws != null && Constants.ACCESS_TYPE_MNGMT.equals(ws.getAccessType())) {
                     teamNames = DatabaseViewFetcher
                             .fetchInternationalizedView("amp_team", PARENT_WS_CONDITION + ws.getAmpTeamId(), "amp_team_id", "name");
                 } else {
@@ -771,13 +771,24 @@ public class Filters {
         if (ampTeam == null) {
             showWorkspaceFilter = false;
         } else {
-            if (ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM)
-                    || (!ampTeam.getComputation() && !showWorkspaceFilterInTeamWorkspace)) {
+            boolean isComputation = ampTeam.getComputation() != null && ampTeam.getComputation();
+
+            // showWorkspaceFilterInTeamWorkspace matters for computation workspace
+            if (ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM) && isComputation && !showWorkspaceFilterInTeamWorkspace) {
+                showWorkspaceFilter = false;
+            }
+
+            // showWorkspaceFilterInTeamWorkspace matters for management workspace
+            if (ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_MNGMT) && !showWorkspaceFilterInTeamWorkspace) {
+                showWorkspaceFilter = false;
+            }
+
+            // if it's regular team, non computation workspace
+            if (ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM) && !isComputation) {
                 showWorkspaceFilter = false;
             }
         }
         return showWorkspaceFilter;
-
     }
 
 	/**

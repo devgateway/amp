@@ -6,8 +6,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -213,101 +217,110 @@ public class QueryUtil {
 	    return orgTypes;
 	}
 
-public static List<JsonBean> getOrgGroups() {
-	final List<JsonBean> orgGroups=new ArrayList<JsonBean>();
-    PersistenceManager.getSession().doWork(new Work(){
-			public void execute(Connection conn) throws SQLException {
-				Map<Long,String>orgGroupsNames=QueryUtil.getTranslatedName(conn, "amp_org_group", "amp_org_grp_id", "org_grp_name");
-				String query=" select aog.amp_org_grp_id orgGrpId, "+
-							 " aog.org_grp_name grpName, "+
-							 " aog.org_grp_code orgCode, "+
-							 " aog.org_type  orgType, "+
-							 " o.amp_org_id orgId  "+
-							 " from amp_org_group aog "+ 
-							 " left outer join amp_organisation o on aog.amp_org_grp_id=o.org_grp_id "+
-							 " order by orgGrpId,o.name";
-				try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
-					ResultSet rs = rsi.rs;
-					Long lastOrgGrpId=0L;
-					List <Long>orgsId=null;
-					while (rs.next()){
-						if (!lastOrgGrpId.equals(rs.getLong("orgGrpId"))) {
-							lastOrgGrpId = rs.getLong("orgGrpId");
-							JsonBean orgGrp = new JsonBean();
-							orgsId = new ArrayList<Long>();
-							orgGrp.set("id", rs.getLong("orgGrpId"));
-							if	(orgGroupsNames != null) {
-								orgGrp.set("name", orgGroupsNames.get(lastOrgGrpId));	
-							} else{
-								orgGrp.set("name", rs.getString("grpName"));
+	public static List<JsonBean> getOrgGroups() {
+		final List<JsonBean> orgGroups=new ArrayList<JsonBean>();
+	    PersistenceManager.getSession().doWork(new Work(){
+				public void execute(Connection conn) throws SQLException {
+					Map<Long,String>orgGroupsNames=QueryUtil.getTranslatedName(conn, "amp_org_group", "amp_org_grp_id", "org_grp_name");
+					String query=" select aog.amp_org_grp_id orgGrpId, "+
+								 " aog.org_grp_name grpName, "+
+								 " aog.org_grp_code orgCode, "+
+								 " aog.org_type  orgType, "+
+								 " o.amp_org_id orgId  "+
+								 " from amp_org_group aog "+ 
+								 " left outer join amp_organisation o on aog.amp_org_grp_id=o.org_grp_id "+
+								 " order by orgGrpId,o.name";
+					try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
+						ResultSet rs = rsi.rs;
+						Long lastOrgGrpId=0L;
+						List <Long>orgsId=null;
+						while (rs.next()){
+							if (!lastOrgGrpId.equals(rs.getLong("orgGrpId"))) {
+								lastOrgGrpId = rs.getLong("orgGrpId");
+								JsonBean orgGrp = new JsonBean();
+								orgsId = new ArrayList<Long>();
+								orgGrp.set("id", rs.getLong("orgGrpId"));
+								if	(orgGroupsNames != null) {
+									orgGrp.set("name", orgGroupsNames.get(lastOrgGrpId));	
+								} else{
+									orgGrp.set("name", rs.getString("grpName"));
+								}
+								orgGrp.set("typeId", rs.getLong("orgType"));
+								orgGrp.set("orgIds", orgsId);
+								orgGroups.add(orgGrp);
 							}
-							orgGrp.set("typeId", rs.getLong("orgType"));
-							orgGrp.set("orgIds", orgsId);
-							orgGroups.add(orgGrp);
-						}
-						if (rs.getLong("orgId") != 0){
-							orgsId.add(rs.getLong("orgId"));
+							if (rs.getLong("orgId") != 0){
+								orgsId.add(rs.getLong("orgId"));
+							}
 						}
 					}
 				}
-			}
-    });
-    return orgGroups;
-}
-
+	    });
+	    return orgGroups;
+	}
+	
+	/**
+	 * Get all organizations
+	 * 
+	 * @return List<JsonBean> organizations, each JSON contains information about organization:
+	 * {id : long}, {acronym : String}, {name : String}, {groupId : long}, {rolesIds : list}
+	 * 
+	 */
 	public static List<JsonBean> getOrgs() {
-		final List<JsonBean> orgs = new ArrayList<JsonBean>();
 		final List<String> roleCodes = OrganisationUtil.getVisibleRoles();
+		final SortedMap<Long, JsonBean> orgs = new TreeMap<Long, JsonBean>();
 		PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {
-				
 				//go and fetch translated version of organisation name if multilingual is enabled
-				
-				Map<Long, String> organisationsNames = QueryUtil.getTranslatedName(conn,"amp_organisation","amp_org_id","name");
-				String query = "SELECT DISTINCT o.amp_org_id orgId, o.name ,  o.acronym ,  o.org_grp_id grpId, aor.role roleId" +
-						", EXISTS(SELECT af.amp_donor_org_id FROM amp_funding af WHERE o.amp_org_id = af.amp_donor_org_id AND ((af.source_role_id IS NULL) OR af.source_role_id = (SELECT amp_role_id FROM amp_role WHERE role_code='DN'))) AS hasFundings  " +
+				Map<Long, String> organisationsNames = QueryUtil.getTranslatedName(conn, "amp_organisation", "amp_org_id", "name");
+				String query = "SELECT DISTINCT o.amp_org_id orgId, o.name, o.acronym, o.org_grp_id grpId, aor.role roleId " +
 						" FROM amp_org_role aor JOIN amp_organisation o ON aor.organisation=o.amp_org_id" +
-						" WHERE " +
-						"     o.deleted IS NULL OR o.deleted = false" +
-						"     AND aor.role IN (SELECT r.amp_role_id FROM amp_role r WHERE r.role_code IN ("
-						+ Util.toCSStringForIN(roleCodes) + "))   " +
-						" UNION     " +
-						" SELECT DISTINCT o.amp_org_id orgId, o.name ,  o.acronym ,  o.org_grp_id grpId, af.source_role_id roleId," +
-						" (af.source_role_id IS NULL OR af.source_role_id = (SELECT amp_role_id FROM amp_role WHERE role_code='DN')) AS hasFundings  " +
+						" WHERE (o.deleted IS NULL OR o.deleted = false) "
+						+ "AND aor.role IN (SELECT r.amp_role_id FROM amp_role r WHERE r.role_code IN (" + Util.toCSStringForIN(roleCodes) + "))   " +
+						" UNION " +
+						" SELECT DISTINCT o.amp_org_id orgId, o.name, o.acronym, o.org_grp_id grpId, af.source_role_id roleId " +
 						" FROM amp_funding af JOIN amp_organisation o ON o.amp_org_id = af.amp_donor_org_id " +
-						" WHERE " +
-						"    o.deleted IS NULL OR o.deleted = false" +
-						" AND af.source_role_id IN (SELECT r.amp_role_id FROM amp_role r WHERE r.role_code IN ("
-						+ Util.toCSStringForIN(roleCodes) + ")) " +
+						" WHERE (o.deleted IS NULL OR o.deleted = false)" +
+						" AND af.source_role_id IN (SELECT r.amp_role_id FROM amp_role r WHERE r.role_code IN (" + Util.toCSStringForIN(roleCodes) + ")) " +
 						" ORDER BY orgId"; 
 				try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
 					ResultSet rs = rsi.rs;
 					Long lastOrgId = 0L;
-					List<Long> rolesId = null;
+					JsonBean org = null;
+					Set<Long> roles = null;
 					while (rs.next()) {
-						if (!lastOrgId .equals(rs.getLong("orgId"))) {
-							lastOrgId  = rs.getLong("orgId");
-							JsonBean org = new JsonBean();
-							rolesId = new ArrayList<Long>();
-							org.set("id", lastOrgId);
+						long currentOrgId = rs.getLong("orgId");
+						if (lastOrgId.equals(currentOrgId)) {
+							roles.add(rs.getLong("roleId"));
+							orgs.get(currentOrgId).set("rolesIds", roles);
+						} else {
+							org = new JsonBean();
+							roles = new HashSet<Long>();
+							roles.add(rs.getLong("roleId"));
+							
+							org.set("id", currentOrgId);
+							org.set("acronym", rs.getString("acronym"));
+							org.set("groupId", rs.getLong("grpId"));	
+							org.set("rolesIds", roles);
+							
 							if (ContentTranslationUtil.multilingualIsEnabled()) {
-								org.set("name", organisationsNames.get(lastOrgId));
+								org.set("name", organisationsNames.get(currentOrgId));
 							} else {
 								org.set("name", rs.getString("name"));
 							}
-							org.set("acronym", rs.getString("acronym"));
-							org.set("groupId", rs.getLong("grpId"));	
-							org.set("rolesIds", rolesId);
-							org.set("hasFundings", rs.getBoolean("hasFundings"));
-							orgs.add(org);
+							
+							orgs.put(currentOrgId, org);
+							lastOrgId = currentOrgId;
 						}
-						rolesId.add(rs.getLong("roleId"));
 					}
 				}
-
 			}
 		});
-		return orgs;
+		
+		ArrayList<JsonBean> orgBeans = new ArrayList<JsonBean>();
+		orgBeans.addAll(orgs.values());
+		
+		return orgBeans;
 	}
 	
 	public static Map<Long, String> getTranslatedName(Connection conn,String tableName,String id,String name)

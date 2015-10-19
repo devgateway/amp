@@ -31961,26 +31961,7 @@ module.exports = Backbone.Collection.extend({
 		var self = this;
 		orgTypesJSON = _.filter(orgTypesJSON, function(type) {
 			type.children = self._filterOrgs(type.children, roleID);
-
-			// The list of "Donor" has some special rules:
-			// 1) It needs to be present in the amp_funding table even if the org hasnt the role "DN" (amp_org_role
-			// table).
-			// Failing to enforce this rule will cause some orgs to be missing (ie: MAYORALITIES) and others to appear
-			// by
-			// mistake (ie: WORLD DIABETES FOUNDATION), both in Moldova db.
-			// So here we filter out those orgs that dont have funding. Notice we need to do it here because the all
-			// filter
-			// by org share the same data collections.
-			for ( var i = 0; i < type.children.length; i++) {
-				type.children[i].children = _.filter(type.children[i].children, function(item) {
-					return (item['hasFundings'] === true);
-				});
-			}
-			
-			type.children = _.filter(type.children, function (group) {
-				return group.children.length > 0;
-			});
-
+	
 			_.each(type.children, function(group) {
 				group.filterId = 'Donor Group';
 			});	

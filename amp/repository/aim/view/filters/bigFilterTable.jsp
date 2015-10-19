@@ -24,7 +24,7 @@
 	<c:set var="selectorHeaderSize" scope="page" value="${reqSelectorHeaderSize}" />
 </logic:notEmpty>	
 	<div class="grouping_selector_wrapper" style="float: left; width: 40%; padding: 0px; height: 98%;">
-		<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; width: 100%; color: white; padding-top:5px; height: ${selectorHeaderSize}%; border: 1px solid #CCCCCC;border-bottom: 0px;">
+		<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; width: 100%; padding-top: 5px; height: ${selectorHeaderSize}%; border: 1px solid #CCCCCC; border-bottom: 0px;">
 			<div class="inside">
 				<b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b> 
 			</div>
@@ -74,7 +74,7 @@
 		</div>
 	</div>
 	<div class="member_selector_wrapper" style="float:left; width: 60%; padding: 0px; height: 98%;background: white;" >
-		<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding-top:5px; height: ${selectorHeaderSize}%;border: 1px solid #CCCCCC;border-bottom: 0px;">
+		<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; padding-top: 5px; height: ${selectorHeaderSize}%; border: 1px solid #CCCCCC; border-bottom: 0px;">
 				<div class="inside" style="float: left" >&nbsp;
 					<b class="ins_header">
 						<digi:trn>Member Selector</digi:trn>

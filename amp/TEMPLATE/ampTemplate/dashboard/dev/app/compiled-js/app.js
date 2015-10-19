@@ -2715,20 +2715,20 @@ var template = _.template("<h4 data-i18n=\"amp.dashboard:download-preview\">Prev
 
 
 module.exports = BackboneDash.View.extend({
- 
-  //TODO: This is wrong because different countries have other measures (ie: ssc).	
+
+  //TODO: This is wrong because different countries have other measures (ie: ssc).
   adjTypeTranslation : {"Actual Commitments":"amp.dashboard:ftype-actual-commitment",
-			"Actual Disbursements":"amp.dashboard:ftype-actual-disbursement",
-				"Actual Expenditures":"amp.dashboard:ftype-actual-expenditure",
-				"Planned Commitments": "amp.dashboard:ftype-planned-commitment",
-				"Planned Disbursements": "amp.dashboard:ftype-planned-disbursement",
-				"Planned Expenditures": "amp.dashboard:ftype-planned-expenditures"
-			    },
+      "Actual Disbursements":"amp.dashboard:ftype-actual-disbursement",
+        "Actual Expenditures":"amp.dashboard:ftype-actual-expenditure",
+        "Planned Commitments": "amp.dashboard:ftype-planned-commitment",
+        "Planned Disbursements": "amp.dashboard:ftype-planned-disbursement",
+        "Planned Expenditures": "amp.dashboard:ftype-planned-expenditures"
+          },
   initialize: function(options) {
     this.app = options.app;
     this.dashChartOptions = _({}).extend(options.chartOptions, {
       height: 450,  // sync with css!!!
-      width: 970,	// sync with css!!!
+      width: 970, // sync with css!!!
       trimLabels: false
     });
   },
@@ -2739,21 +2739,21 @@ module.exports = BackboneDash.View.extend({
     if (this.model.get('view') === 'table') {
       this.renderCSV(this.$('.preview-area .table-wrap').removeClass('hidden'));
     } else {
-    	// Here we will define an interval that will check periodically if the bootstrap modal is fully rendered.
-    	// In that moment the interval is finished and the chart is rendered.
-    	var self = this;
-    	var rendered = false; // This flag is used to avoid triggering the render process twice in case the browser mess up the interval.
-    	var interval = window.setInterval(function() {
-    		if ($('.dash-download-modal').closest('.in').length > 0) {
-    			window.clearInterval(interval);    			   			
-    			nv.tooltip.cleanup();
-    			if (rendered === false) {
-    				rendered = true;
-    				self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'), 
-    						self.$('.preview-area .canvas-wrap'));
-    			}
-    		}
-    	}, 100);      
+      // Here we will define an interval that will check periodically if the bootstrap modal is fully rendered.
+      // In that moment the interval is finished and the chart is rendered.
+      var self = this;
+      var rendered = false; // This flag is used to avoid triggering the render process twice in case the browser mess up the interval.
+      var interval = window.setInterval(function() {
+        if ($('.dash-download-modal').closest('.in').length > 0) {
+          window.clearInterval(interval);
+          nv.tooltip.cleanup();
+          if (rendered === false) {
+            rendered = true;
+            self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'), 
+                self.$('.preview-area .canvas-wrap'));
+          }
+        }
+      }, 100);
     }
     return this;
   },
@@ -2779,7 +2779,7 @@ module.exports = BackboneDash.View.extend({
       canvasContainer.html(img);
       $(canvasContainer).removeClass('hidden');
       $('.modal-preview-area').remove();
-      this.makeDownloadable(img.src, 'chart', '.png');      
+      this.makeDownloadable(img.src, 'chart', '.png');
     });
 
   },
@@ -2867,45 +2867,47 @@ module.exports = BackboneDash.View.extend({
       .map(function(row) {
         row.push(currency || '');
         if (adjtype) {
-        	var key = self.adjTypeTranslation [adjtype];
+          var key = self.adjTypeTranslation [adjtype];
             var trnAdjType = this.app.translator.translateSync(key, adjtype);
             row.push(trnAdjType);
         }
         return row;
       })
-      .value();  
-    
+      .value();
+
     // prepend a header row
     headerRow = [];
     var amountTrn = this.app.translator.translateSync('amp.dashboard:download-amount', 'Amount');
     var currencyTrn = this.app.translator.translateSync('amp.dashboard:currency', 'Currency');
     var typeTrn = this.app.translator.translateSync('amp.dashboard:type', 'Type');
     var yearTrn = this.app.translator.translateSync('amp.dashboard:year', 'Year');
-    
-	if (this.model.url.indexOf('/tops') > -1) {
-	    headerRow.push(this.model.get('title'));
-	    headerRow.push(amountTrn);
-	    headerRow.push(currencyTrn);
-	    headerRow.push(typeTrn);
-	} else if (this.model.url.indexOf('/aid-predictability') > -1) {
-	    headerRow.push(yearTrn);
-	    _.each(keys, function(item) {
-	    	headerRow.push(item);
-	    });
-	    headerRow.push(currencyTrn);
-	} else if (this.model.url.indexOf('/ftype') > -1) {
-		headerRow.push(yearTrn);
-	    _.each(keys, function(item) {
-	    	headerRow.push(item);
-	    });
-	    headerRow.push(currencyTrn);
-	    headerRow.push(typeTrn);
-	}    
+
+  if (this.model.url.indexOf('/tops') > -1) {
+      headerRow.push(this.model.get('title'));
+      headerRow.push(amountTrn);
+      headerRow.push(currencyTrn);
+      headerRow.push(typeTrn);
+  } else if (this.model.url.indexOf('/aid-predictability') > -1) {
+      headerRow.push(yearTrn);
+      _.each(keys, function(item) {
+        headerRow.push(item);
+      });
+      headerRow.push(currencyTrn);
+  } else if (this.model.url.indexOf('/ftype') > -1) {
+    headerRow.push(yearTrn);
+      _.each(keys, function(item) {
+        headerRow.push(item);
+      });
+      headerRow.push(currencyTrn);
+      headerRow.push(typeTrn);
+  }
 
     csvTransformed.unshift(headerRow);
 
     textContent = baby.unparse(csvTransformed, {
-    	quotes: true
+      delimiter: '\t',
+      encoding: 'utf-16',
+      quotes: true
     });
 
     preview = document.createElement('textarea');
@@ -2960,10 +2962,10 @@ module.exports = BackboneDash.View.extend({
         .attr('href', stuff)
         .attr('download', fileName);
     }
-    
+
     // AMP-19813
     if (ext.indexOf('csv') !== -1) {
-    	$('.modal-preview-area').remove();
+      $('.modal-preview-area').remove();
     }
   }
 
@@ -29008,6 +29010,10 @@ module.exports = Backbone.Collection.extend({
   },
 
 
+//  contains: function(key) {
+//	  if ()
+//  },
+  
   parse: function(data) {
     //only keep filters with ui == true;
     data = _.filter(data, function(obj) {
@@ -29069,6 +29075,7 @@ module.exports = Backbone.Collection.extend({
         var tmpModel = new GenericFilterModel({
           url: url + '/' + APIFilter.id,
           name: APIFilter.name,
+          tab: APIFilter.tab,
           ui: true,
           group: attrs.id,
           empty: false
@@ -29127,6 +29134,7 @@ module.exports = Backbone.Collection.extend({
             {
               ui: true,
               group: 'Donor',
+              tab: 'Funding Organizations',
               data: self.orgTypeCollection.toJSON()
             });
 
@@ -29138,6 +29146,7 @@ module.exports = Backbone.Collection.extend({
             {
               ui: true,
               group: 'Role', //TODO: ?should this be 'Role' or role.id or role.get('name')?
+              tab: 'All Agencies',
               data: self.orgGroupCollection.toJSON()
             });
 
@@ -29190,29 +29199,14 @@ module.exports = Backbone.Collection.extend({
 
 
 	  // special case for donor tree, since it has type
-	_filterDonorOrgs : function(orgTypesJSON, roleID) {
+  _filterDonorOrgs : function(orgTypesJSON, roleID) {
 		var self = this;
 		orgTypesJSON = _.filter(orgTypesJSON, function(type) {
 			type.children = self._filterOrgs(type.children, roleID);
-
-			// The list of "Donor" has some special rules:
-			// 1) It needs to be present in the amp_funding table even if the org hasnt the role "DN" (amp_org_role
-			// table).
-			// Failing to enforce this rule will cause some orgs to be missing (ie: MAYORALITIES) and others to appear
-			// by
-			// mistake (ie: WORLD DIABETES FOUNDATION), both in Moldova db.
-			// So here we filter out those orgs that dont have funding. Notice we need to do it here because the all
-			// filter
-			// by org share the same data collections.
-			for ( var i = 0; i < type.children.length; i++) {
-				type.children[i].children = _.filter(type.children[i].children, function(item) {
-					return (item['hasFundings'] === true);
-				});
-			}
-
+	
 			_.each(type.children, function(group) {
 				group.filterId = 'Donor Group';
-			});
+			});	
 
 			type.filterId = 'Donor Type';
 			type.isSelectable = false; // stops tree from creating 'unkown' children.
@@ -29258,41 +29252,30 @@ module.exports = Backbone.Collection.extend({
     });
   },
 
-	  makeTreeHelper : function(parentCollection, childCollection, keyForForeignID, keyForCollectionDestination) {
-		var self = this;
-		var donorRole = _.filter(self.orgRolesCollection.models, function(item) {
-			return item.get('name') === 'Donor'
-		})[0];
-		parentCollection.each(function(parent) {
-			var idsToJoin = parent.get(keyForForeignID);
-			var tempCollection = [];
-			_.each(idsToJoin, function(id) {
-				// id == 0 check should be redundent when Julian commits update.
-				if (id !== 0) {
-					var leaf = childCollection.get({
-						id : id
-					});
-					if (leaf) {
-						if (leaf.get('hasFundings') === true) {
-							// Because of the business logic of old filters, if an organization has been used as a funding org
-							// (present in amp_funding) then we need to
-							// add it to the list of 'Donors' no matter which is the 'role' of that organization, so in order to
-							// make it appear in the tree we also need to
-							// add the 'DN' rol to it, otherwise it will be ignored even if its in tempCollection.
-							var roles = leaf.get('rolesIds');
-							if (roles != undefined) {
-								roles.push(donorRole.get('id'));
-								leaf.set('rolesIds', roles);
-							}
-						}
-						tempCollection.push(leaf.toJSON());
-					} else {
-						// console.warn('missing id', childCollection, ' does not have an id of ', id);
-					}
-				}
-			});
-			parent.set(keyForCollectionDestination, tempCollection);
-		});
+  makeTreeHelper : function(parentCollection, childCollection, keyForForeignID, keyForCollectionDestination) {
+     var self = this;
+     var donorRole = _.filter(self.orgRolesCollection.models, function(item) {
+		return item.get('name') === 'Donor';
+	})[0];
+     parentCollection.each(function(parent) {
+     var idsToJoin = parent.get(keyForForeignID);
+   	 var tempCollection = childCollection.toJSON();
+			
+	// Because of the business logic of old filters, if an organization has been used as a funding org
+	// (present in amp_funding) then we need to
+	// add it to the list of 'Donors' no matter which is the 'role' of that organization, so in order to
+	// make it appear in the tree we also need to
+	// add the 'DN' rol to it, otherwise it will be ignored even if its in tempCollection.
+	tempCollection = _.each(tempCollection,function(aux) {
+	if (aux.hasFundings === true && aux.rolesIds != undefined) {
+		aux.rolesIds.push(donorRole);
+	}
+	});
+	tempCollection = _.filter(tempCollection,function(val) {
+	return _.contains(idsToJoin, val.id);
+	});
+	parent.set(keyForCollectionDestination, tempCollection);
+	});
 	}
 });
 
@@ -30334,6 +30317,11 @@ var AllFilterCollection = require('../collections/all-filters-collection');
 var Template = "<%\n  // this renders the \"big\" filter list (the tabs)\n%>\n<div class=\"panel-heading\">\n  <a type=\"button\" class=\"close cancel\"  aria-hidden=\"true\">&times;</a>\n  <h3 data-i18n=\"amp.gis:title-filters\" class=\"panel-title\">Filters</h3>\n</div>\n<div class=\"panel-body filter-body\">\n\n  <ul class=\"nav nav-tabs filter-titles\" role=\"tablist\">\n  </ul>\n\n  <div class=\"tab-content filter-options\">\n    <img src=\"img_2/loading-icon.gif\" />\n  </div>\n</div>\n<div class=\"panel-footer\">\n  &nbsp;\n  <div class=\"pull-right\" style=\"display: inline-block; margin-bottom: 5px;\">\n    <button type=\"button\" class=\"btn btn-sm btn-danger reset\"  data-i18n=\"amp.gis:button-reset\"  title=\"Turn off all filters.\">Reset</button>\n    <button type=\"button\" class=\"btn btn-sm btn-warning cancel\"  data-i18n=\"amp.gis:button-cancel\"  title=\"Revert filters to state when opened.\">Cancel</button>\n    <button type=\"button\" class=\"btn btn-sm btn-success apply\"  data-i18n=\"amp.gis:button-apply\" >Apply</button>\n  </div>\n</div>\n";
 var TitleTemplate = "<%\n// renders the title of a tab \n%>\n<li class=\"\"><a data-i18n=\"amp.gis:pane-filters-<%= name.replace(/ /g,'') %>\" href=\"#filter-pane-<%= name.replace(/ /g,'') %>\" role=\"tab\" data-toggle=\"tab\"><%= name %></a></li>\n";
 
+var filterInstancesNames = {donors: 'Funding Organizations', sectors : 'Sectors', programs: 'Programs', 
+		  activity: 'Activity', allAgencies: 'All Agencies', financials: 'Financial',
+			  locations: 'Location', others: 'Other'};
+
+
 module.exports = Backbone.View.extend({
   id: 'tool-filters',
   name: 'Filters',
@@ -30377,8 +30365,22 @@ module.exports = Backbone.View.extend({
 
   },
 
+  
+//  
+//  _generateFilterViewInstance : function(keyname) {
+//	  return new TopLevelFilterView({name:filterInstancesNames[keyname], translator: this.translator, translate: this.translate});
+//  },	  					  
+	  					
+  
   _createTopLevelFilterViews: function() {
-    this.filterViewsInstances = {
+    //this.filterViewsInstances = {
+    		for (key in filterInstancesNames) {
+    			if (filterInstancesNames.hasOwnProperty(key)) {
+    				
+    				this.filterViewsInstances[key] = new TopLevelFilterView({name:filterInstancesNames[key], translator: this.translator, translate: this.translate});
+    			}
+    		}
+    		/*
       donors: new TopLevelFilterView({name:'Funding Organizations', translator: this.translator, translate: this.translate}),
       sectors: new TopLevelFilterView({name:'Sector', translator: this.translator, translate: this.translate}),
       programs: new TopLevelFilterView({name:'Programs', translator: this.translator, translate: this.translate}),
@@ -30387,7 +30389,7 @@ module.exports = Backbone.View.extend({
       financials: new TopLevelFilterView({name:'Financial', translator: this.translator, translate: this.translate}),
       locations: new TopLevelFilterView({name:'Location', translator: this.translator, translate: this.translate}),
       others: new TopLevelFilterView({name:'Other', translator: this.translator, translate: this.translate})
-    };
+    };*/
   },
 
 
@@ -30474,6 +30476,19 @@ module.exports = Backbone.View.extend({
     
     for (var filterView in this.filterViewsInstances) {
       if (this.filterViewsInstances.hasOwnProperty(filterView)) {
+     	  contained = false;
+    	  var index;
+    	  for (index = 0; index < this.allFilters.length; index++) {
+    		  if ((this.allFilters.models[index].attributes.tab === this.filterViewsInstances[filterView].name) || 
+    		  (this.allFilters.models[index].attributes.group === this.filterViewsInstances[filterView].name)){
+    			  contained = true;
+    			  break;
+    		  } 
+    	  }
+    	  if (!contained) {
+    		  delete this.filterViewsInstances[filterView];
+    		  continue;
+    	  }
         var tmpFilterView = this.filterViewsInstances[filterView];
         renderingTitleNumber = renderingTitleNumber + 1;
         // console.log('rendering top-level-filter-view ' + tmpFilterView.name); CONSTANTIN - comment to be removed once filters sanitisation is done
@@ -30779,6 +30794,12 @@ module.exports = Backbone.View.extend({
     });
   },
 
+  cleanupUnusedTabs: function() {
+	  console.log(this);
+//	debugger(self);
+  },
+  
+  
   /**
    * renders the items in a tab
    * the first element of the tab's contents will be rendered IFF options.renderFirstElement has been specified

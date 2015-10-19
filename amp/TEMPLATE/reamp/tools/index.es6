@@ -5,9 +5,7 @@
  * @param {Function} func
  * @returns {Function}
  */
-export function callFunc(func){
-  return obj => obj[func]();
-}
+export var callFunc = funcName => obj => obj[funcName]();
 
 /**
  * Converts an object to an array
@@ -55,3 +53,9 @@ export var spy = cb => (...args) => {
   console.log(...args);
   return cb(...args);
 };
+
+/**
+ * Composes functions. compose(a, b, c)(1) is the same as a(b(c(1)))
+ * @param cbs An infinite number of functions
+ */
+export var compose = (...cbs) => initial => cbs.reduce((accum, cb) => cb(accum), initial);

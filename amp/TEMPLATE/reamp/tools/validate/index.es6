@@ -28,8 +28,7 @@ export var point = validator => maybePoint => validator(maybePoint) || "." == ma
 var takeDigits = n => number => String(number).substr(0, n + 1);
 
 export var inBounds = _from => to => (inputVal:string) => {
-  var nrDigits = inputVal.length - 1;
-  var floatVal = parseFloat(inputVal);
+  var nrDigits = inputVal.length - 1, floatVal = parseFloat(inputVal);
   return takeDigits(nrDigits)(_from) <= floatVal && floatVal <= takeDigits(nrDigits)(to);
 };
 

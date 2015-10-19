@@ -1,9 +1,6 @@
-import {obj2arr} from "amp/tools";
-
-var translations = null;
+import {callFunc} from "amp/tools";
 
 export function loadTranslations(initial){
-  translations = initial;
   return fetch("/rest/translations/label-translations", {
     method: 'post',
     credentials: 'same-origin',
@@ -12,11 +9,5 @@ export function loadTranslations(initial){
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(initial)
-  }).then(response => response.json())
-    .then(labels => {
-      translations = labels;
-      return this;
-    });
+  }).then(callFunc('json'))
 }
-
-export var t = key => translations[key];

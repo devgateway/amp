@@ -1,5 +1,4 @@
 import * as AMP from "amp/architecture";
-import {t} from "amp/modules/translate";
 import * as Rate from "./rate";
 import * as NewRate from "./new-rate";
 import cn from "classnames";
@@ -120,7 +119,8 @@ export var init = () =>
       status: SaveStatus.INITIAL,
       saveFailReason: "",
       saved: state,
-      current: state
+      current: state,
+      translations: null
     })
   });
 
@@ -134,10 +134,11 @@ var ratesAreValid = model =>
     });
 
 var getValidationMessage = model => {
+  var __ = key => model.getIn(['translations', key]);
   if(!ratesAreValid(model)){
     return (
       <div className="help-block">
-        {t('amp.deflator:invalidRates')}
+        {__('amp.deflator:invalidRates')}
       </div>
     )
   }
@@ -145,13 +146,14 @@ var getValidationMessage = model => {
   if(!haveChanges(model)){
     return (
       <div className="help-block">
-        {t('amp.deflator:noChanges')}
+        {__('amp.deflator:noChanges')}
       </div>
     )
   }
 };
 
 var getSaveStatus = model => {
+  var __ = key => model.getIn(['translations', key]);
   switch(model.status()){
     case SaveStatus.SAVING:
       return (
@@ -167,7 +169,7 @@ var getSaveStatus = model => {
           <span className="label label-success">
             <i className="glyphicon glyphicon-ok"/>
             &nbsp;
-            {t('amp.deflator:saved')}
+            {__('amp.deflator:saved')}
           </span>
         </div>
       )
@@ -177,7 +179,7 @@ var getSaveStatus = model => {
           <span className="label label-danger">
             <i className="glyphicon glyphicon-remove"/>
             &nbsp;
-            {t('amp.deflator:savingFailed') + " " + model.saveFailReason()}
+            {__('amp.deflator:savingFailed') + " " + model.saveFailReason()}
           </span>
         </div>
       )
@@ -189,6 +191,8 @@ var savingInProgress = model => model.status() == SaveStatus.SAVING;
 var disableSaving = model => !haveChanges(model) || !ratesAreValid(model) || savingInProgress(model);
 
 export var view = AMP.view((model: Model, actions) => {
+  var translations = model.translations();
+  var __ = key => translations.get(key);
   var state = model.current();
   var currentCurrency = state.currentCurrency();
   var currentInflationRates = currentCurrency.inflationRates();
@@ -200,26 +204,26 @@ export var view = AMP.view((model: Model, actions) => {
           <table className="table table-striped">
             <caption>
               <h2>
-                {t('amp.deflator:title')} {currentCurrency.name()}
+                {__('amp.deflator:title')} {currentCurrency.name()}
                 ({currentCurrency.code()})
               </h2>
             </caption>
             <thead>
             <tr>
-              <th>{t('amp.deflator:year')}</th>
-              <th>{t('amp.deflator:inflation')}</th>
+              <th>{__('amp.deflator:year')}</th>
+              <th>{__('amp.deflator:inflation')}</th>
               <th className="constant-currency">
                 <span>
-                  {t('amp.deflator:constantCurrency')}
+                  {__('amp.deflator:constantCurrency')}
                   <div className="tooltip bottom" role="tooltip">
                     <div className="tooltip-arrow"></div>
                     <div className="tooltip-inner">
-                      {t('amp.deflator:constantCurrencyHelp')}
+                      {__('amp.deflator:constantCurrencyHelp')}
                     </div>
                   </div>
                 </span>
               </th>
-              <th>{t('amp.deflator:delete')}</th>
+              <th>{__('amp.deflator:delete')}</th>
             </tr>
             </thead>
             <tbody>
@@ -233,14 +237,17 @@ export var view = AMP.view((model: Model, actions) => {
             </tbody>
             <tfoot>
             <tr>
-              <NewRate.view actions={actions.newRate()} model={state.newRate().set('repeatedYearWarning', repeatedYear)}/>
+              <NewRate.view
+                actions={actions.newRate()}
+                model={state.newRate().repeatedYearWarning(repeatedYear).translations(translations)}
+              />
               <td colSpan="3" className="text-right">
                 <button
                   className={cn("btn btn-success", {disabled: disableSaving(model)})}
                   disabled={disableSaving(model)}
                   onClick={actions.saveStarted}
                 >
-                  {t('amp.deflator:save')}
+                  {__('amp.deflator:save')}
                 </button>
                 {getValidationMessage(model)}
                 {getSaveStatus(model)}
@@ -293,3 +300,20 @@ export var update = (action, model) => actions.match(action, {
     _: () => AMP.updateSubmodel(['current', 'newRate'], NewRate.update, newRateAction, model)
   })
 });
+
+var newRateTranslations = NewRate.translations;
+
+export var translations = {
+  ...newRateTranslations,
+  "amp.deflator:invalidRates": "One or more rates are invalid. Please verify the rates highlighted in red",
+  "amp.deflator:noChanges": "No changes",
+  "amp.deflator:saved": "Saved",
+  "amp.deflator:save": "Save",
+  "amp.deflator:savingFailed": "Saving failed",
+  "amp.deflator:title": "Inflation rates for",
+  "amp.deflator:year": "Year",
+  "amp.deflator:inflation": "Inflation(%)",
+  "amp.deflator:constantCurrency": "Constant currency",
+  "amp.deflator:constantCurrencyHelp": "Select which deflated currencies you want to convert to real currencies",
+  "amp.deflator:delete": "Delete"
+};

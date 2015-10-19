@@ -1,14 +1,13 @@
-import {init, view, update, actions} from "./index.jsx";
-import {run} from "amp/architecture";
+import {translations, init, view, update, actions} from "./index.jsx";
+import {run, Model} from "amp/architecture";
 import boilerplate from "../../../../../ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js";
 import {loadTranslations} from "amp/modules/translate";
-import labels from "./translations.json";
 
 Promise.all([
   init(),
-  loadTranslations(labels)
-]).then(([model]) => run({
-  model: model,
+  loadTranslations(translations)
+]).then(([model, translations]) => run({
+  model: model.set('translations', new Model(translations)),
   view: view,
   actions: actions,
   update: update,

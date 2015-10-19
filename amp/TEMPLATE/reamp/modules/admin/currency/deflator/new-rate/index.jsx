@@ -1,6 +1,5 @@
 import * as AMP from "amp/architecture";
 import React from "react";
-import {t} from "amp/modules/translate";
 import * as validate from "amp/tools/validate";
 import style from "./style.less";
 import cn from "classnames";
@@ -19,7 +18,8 @@ export class Model extends AMP.Model{}
 
 export var model = new Model({
   year: '',
-  repeatedYearWarning: false
+  repeatedYearWarning: false,
+  translations: null
 });
 
 var changeYear = yearChanged => e => {
@@ -37,29 +37,32 @@ var submitYear = yearSubmitted => e => {
 var maybeNavigate = inc => dec => e => {
   if(KEY_UP == keyCode(e)) inc();
   if(KEY_DOWN == keyCode(e)) dec();
-}
+};
 
-export var view = AMP.view(({repeatedYearWarning, year},
-  {yearChanged, yearSubmitted, increment, decrement}) => (
+export var view = AMP.view(({repeatedYearWarning, year, translations},
+  {yearChanged, yearSubmitted, increment, decrement}) => {
+  var __ = key => translations().get(key);
+  return (
     <td className={cn("edit-on-hover add-new-rate", {"has-error": repeatedYearWarning()})}>
       <form onSubmit={submitYear(yearSubmitted)} action="#">
         <input
-          className="form-control edit"
-          placeholder={t('amp.deflator:newRateHint')}
-          onChange={changeYear(yearChanged)}
-          onKeyDown={maybeNavigate(increment)(decrement)}
-          value={year()}
-        />
-        <button className="btn btn-primary view">{t('amp.deflator:add')}</button>
+            className="form-control edit"
+            placeholder={__('amp.deflator:newRateHint')}
+            onChange={changeYear(yearChanged)}
+            onKeyDown={maybeNavigate(increment)(decrement)}
+            value={year()}
+            />
+        <button className="btn btn-primary view">{__('amp.deflator:add')}</button>
         <div className="help-block">
           {repeatedYearWarning() ?
-          t('amp.deflator:repeatedYear') + " " + year() :
-              t('amp.deflator:yearConstraints')
+            __('amp.deflator:repeatedYear') + " " + year() :
+            __('amp.deflator:yearConstraints')
           }
         </div>
       </form>
     </td>
-));
+  )
+});
 
 var withInt = cb => n => cb(parseInt(n));
 var yearStep = step =>
@@ -74,3 +77,10 @@ export var update = (action, model: Model) => actions.match(action, {
 
   decrement: () => model.year(yearStep(-1))
 });
+
+export var translations = {
+  "amp.deflator:newRateHint": "Enter the year and press Enter",
+  "amp.deflator:add": "Add inflation rate",
+  "amp.deflator:yearConstraints": "Year must be between 1970 and 2050",
+  "amp.deflator:repeatedYear": "There is already an entry for"
+};

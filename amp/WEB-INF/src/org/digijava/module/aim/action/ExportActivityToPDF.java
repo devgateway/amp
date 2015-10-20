@@ -832,7 +832,8 @@ public class ExportActivityToPDF extends Action {
                 }
 
                 if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Project Life")) {
-                    outputValue += TranslatorWorker.translateText("Proposed Project Life")+ "\t: " + myForm.getPlanning().getProposedProjectLife() +"\n";
+                    Integer life = myForm.getPlanning().getProposedProjectLife();
+                    outputValue += TranslatorWorker.translateText("Proposed Project Life")+ "\t: " + (life == null ? "" : life) + "\n";
                 }
 
                 if(FeaturesUtil.isVisibleField("Duration of Project")){

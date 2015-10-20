@@ -67,6 +67,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	// private Object[] selectedDonors;
 	private Object[] selectedRisks;
 	private Object[] selectedFinancingInstruments;
+	private Object[] selectedFundingStatus;
 	private Object[] selectedAidModalities;
 	private Long[] selectedTypeOfAssistance;
 	private Long[] selectedModeOfPayment;
@@ -892,6 +893,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.selectedFinancingInstruments = selectedFinancingInstruments;
 	}
 	
+	public Object[] getSelectedFundingStatus() {
+		return selectedFundingStatus;
+	}
+
+	public void setSelectedFundingStatus(Object[] selectedFundingStatus) {
+		this.selectedFundingStatus = selectedFundingStatus;
+	}
+
 	public void setSelectedAidModalities(final Object[] selectedAidModalities){
 		this.selectedAidModalities = selectedAidModalities;
 	}

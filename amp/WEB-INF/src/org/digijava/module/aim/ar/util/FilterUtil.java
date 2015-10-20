@@ -222,6 +222,8 @@ public class FilterUtil {
 		form.setSelectedProjectCategory( FilterUtil.getObjectsIds(filter.getProjectCategory()) );
 		
 		form.setSelectedFinancingInstruments( FilterUtil.getObjectsIds(filter.getFinancingInstruments()) );
+		
+		form.setSelectedFundingStatus( FilterUtil.getObjectsIds(filter.getFundingStatus()) );
 		form.setSelectedAidModalities(FilterUtil.getObjectsIds(filter.getAidModalities()));
 
 		form.setSelectedTypeOfAssistance( FilterUtil.getObjectsIds(filter.getTypeOfAssistance()) );

@@ -1160,14 +1160,30 @@
 			</Formula>
 		</CalculatedMember>
 		
+		<CalculatedMember name="Total Filtered Most Recent MTEF" dimension="Measures" visible="false">
+			<Formula>
+				SUM (NonEmptyCrossJoin([Dates.Year].[All Periods], {Measures.[Most Recent MTEF]}))
+			</Formula>
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>
+		</CalculatedMember>
+
 		<CalculatedMember name="Forecast Execution Rate" dimension="Measures">
 		 	<Formula>
+				IIf((Measures.[Total Filtered Most Recent MTEF]=0) 
+				OR IsEmpty(Measures.[Total Filtered Most Recent MTEF])
+				OR IsEmpty([Measures].[Actual Disbursements]),
+								
+				null, 
+				Measures.[Actual Disbursements] / [Measures].[Total Filtered Most Recent MTEF] * 100)
+			</Formula>
+		
+<!-- 	 	<Formula>
 				IIf((Measures.[Total Filtered Actual Disbursements]=0) 
 				OR IsEmpty(Measures.[Total Filtered Actual Disbursements])
 				OR IsEmpty([Measures].[Most Recent MTEF]),
 				null, 
 				[Measures].[Most Recent MTEF] / Measures.[Total Filtered Actual Disbursements] * 100)
-			</Formula>
+			</Formula>  -->
 <!--		<Formula>
 				IIf((Measures.[Most Recent MTEF] = 0) OR IsEmpty(Measures.[Most Recent MTEF]) OR IsEmpty(Measures.[Actual Disbursements]), null, 
 				Measures.[Most Recent MTEF] * 100.0 / Measures.[Actual Disbursements]) 

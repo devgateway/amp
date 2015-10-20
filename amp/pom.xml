@@ -1123,8 +1123,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <nodeVersion>v0.10.29</nodeVersion>
-                            <!-- temporarily downgrade back from 1.4.9 to 1.3.6 -->
-                            <npmVersion>1.3.6</npmVersion>
+                            <npmVersion>1.4.9</npmVersion>
                             <!-- optional: where to download node and npm from. Defaults to http://nodejs.org/dist/ -->
                             <downloadRoot>http://nodejs.org/dist/</downloadRoot>
                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>

@@ -318,7 +318,15 @@ public class ActivityUtil {
 					if (rejected) {
 						a.setApprovalStatus(Constants.REJECTED_STATUS);
 					} else {
-						a.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
+						if (newActivity) {
+							a.setApprovalStatus(Constants.STARTED_STATUS);
+						} else {
+							if (oldA.getApprovalStatus() != null
+									&& Constants.STARTED_STATUS.compareTo(oldA.getApprovalStatus()) == 0)
+								a.setApprovalStatus(Constants.STARTED_STATUS);
+							else
+								a.setApprovalStatus(Constants.EDITED_STATUS);
+						}
 					}
 				} else {
 					// If activity belongs to the same workspace where TL/AP is

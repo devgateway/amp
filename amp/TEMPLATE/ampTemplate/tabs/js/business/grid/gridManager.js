@@ -235,16 +235,13 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 									} else {
 										switch (approvalStatus) {
 										case '1':
+										case '3':
 											return statusMapping.Approved;
 											break;
 										case '2':
 										case '5':
 										case '6':
-											return statusMapping.Existing_Unvalidated;
-											break;
-										case '3':
-											$(row).find('.wrap-title')[0].textContent = '* ' + $(row).find('.wrap-title')[0].textContent;
-											return statusMapping.Approved;
+											return statusMapping.Existing_Unvalidated;									
 											break;
 										case '4':
 											$(row).find('.wrap-title')[0].textContent = '* ' + $(row).find('.wrap-title')[0].textContent;

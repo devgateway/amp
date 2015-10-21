@@ -14,6 +14,8 @@ public abstract class NamedTypedEntity {
 		
 	protected final int hashCode; 
 	
+	protected String description;
+	
 	/**
 	 * 
 	 * @param columnName - the name of the column
@@ -31,6 +33,14 @@ public abstract class NamedTypedEntity {
 		return this.entityName;
 	}
 	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	@Override public boolean equals(Object oth) {
 		return this.entityName.equals(((NamedTypedEntity) oth).entityName);
 	}

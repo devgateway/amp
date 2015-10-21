@@ -8,6 +8,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -20,6 +21,7 @@ import java.util.TreeSet;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -933,6 +935,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 			for (String measureName : outputtedMeasures)
 				reportColumns.add(ReportOutputColumn.buildTranslated(measureName, environment.locale, totalMeasuresColumn));
 		}
+		
+		configureDescriptionForMeasures(spec, reportColumns); // add description to the columns
+		
 		return reportColumns;
 	}
 	
@@ -959,6 +964,19 @@ public class MondrianReportGenerator implements ReportExecutor {
 			logger.error(error);
 		else
 			throw new AmpApiException(error);
+	}
+	
+	private void configureDescriptionForMeasures(ReportSpecification spec, List<ReportOutputColumn> leafColumns) {
+		Map <String, String> measureNameDescriptions = new HashMap<String, String>();
+		for (ReportMeasure measure : spec.getMeasures()) {
+			if (StringUtils.isNotEmpty(measure.getDescription())) {
+				measureNameDescriptions.put(measure.getMeasureName(), TranslatorWorker.translateText(measure.getDescription()));
+			}
+		}
+		
+		for (ReportOutputColumn leaf : leafColumns) {
+			leaf.setDescription(measureNameDescriptions.get(leaf.originalColumnName));
+		}
 	}
 }
 

@@ -188,8 +188,15 @@ function generateHeaderHtml(headers) {
 					} else {
 						colName = this.headerMatrix[i][j].columnName
 					}
+					
+					var title = "";
+					if (this.headerMatrix[i][j].description) {
+						title = "title = '" + this.headerMatrix[i][j].description + "'";
+					}
+					
 					col = "<th" + style + id + " data-header-level='" + i + "'"
-							+ sortingType + " colspan='" + groupCount + "'><div class = 'i18n'>"
+							+ sortingType + " colspan='" + groupCount + "'"
+							+ title + "><div class = 'i18n'>"
 							+ colName + "</div></th>";
 	
 					// We change 'j' in order to skip the next N columns.

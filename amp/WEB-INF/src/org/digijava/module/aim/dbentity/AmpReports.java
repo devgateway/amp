@@ -618,10 +618,10 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	}
 	
 	
-	public String[] getOrderedMeasureNames() {
-		String[] res = new String[getMeasures().size()];
+	public AmpMeasures[] getOrderedMeasures() {
+		AmpMeasures[] res = new AmpMeasures[getMeasures().size()];
 		for (AmpReportMeasures measure:getMeasures())
-			res[measure.getOrder() - 1] = measure.getMeasure().getMeasureName();
+			res[measure.getOrder() - 1] = measure.getMeasure();
 		return res;
 	}
 	

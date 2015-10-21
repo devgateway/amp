@@ -110,11 +110,11 @@ public class SQLUtils {
 	}
 
 	public static boolean isView(Connection conn, String viewName) {
-		return getLong(conn, "select count(*) from information_schema.tables WHERE table_schema='public' AND lower(table_type)='view' and table_name='" + viewName + "'") >= 0;
+		return getLong(conn, "select count(*) from information_schema.tables WHERE table_schema='public' AND lower(table_type)='view' and table_name='" + viewName + "'") > 0;
 	}
 	
 	public static boolean isTable(Connection conn, String viewName) {
-		return getLong(conn, "select count(*) from information_schema.tables WHERE table_schema='public' AND lower(table_type)='base table' and table_name='" + viewName + "'") >= 0;
+		return getLong(conn, "select count(*) from information_schema.tables WHERE table_schema='public' AND lower(table_type)='base table' and table_name='" + viewName + "'") > 0;
 	}	
 	
 	/**

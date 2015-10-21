@@ -1154,13 +1154,13 @@
 			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>
 		</CalculatedMember>
 
-		<CalculatedMember name="Most Recent MTEF" dimension="Measures" visible="false">
+		<CalculatedMember name="Most Recent MTEF" dimension="Measures" visible="true">
 			<Formula>
 				IIf(IsEmpty(Measures.[Pipeline MTEF Projections]), Measures.[Projection MTEF Projections], Measures.[Pipeline MTEF Projections]) 
 			</Formula>
 		</CalculatedMember>
 		
-		<CalculatedMember name="Total Filtered Most Recent MTEF" dimension="Measures" visible="false">
+		<CalculatedMember name="Total Filtered Most Recent MTEF" dimension="Measures" visible="true">
 			<Formula>
 				SUM (NonEmptyCrossJoin([Dates.Year].[All Periods], {Measures.[Most Recent MTEF]}))
 			</Formula>

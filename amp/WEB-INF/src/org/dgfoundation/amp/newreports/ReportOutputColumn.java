@@ -30,6 +30,8 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	 */
 	public final String originalColumnName;
 	
+	public String description;
+	
 	transient
 	public final List<ReportOutputColumn> children = new ArrayList<ReportOutputColumn>();
 	
@@ -71,6 +73,14 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 		return res;
 	}
 	
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
 	@Override
 	public String toString() {
 		return this.getHierarchicalName();

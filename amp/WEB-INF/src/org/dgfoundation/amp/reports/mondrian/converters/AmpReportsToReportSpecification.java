@@ -32,6 +32,7 @@ import org.dgfoundation.amp.newreports.SortingInfo;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -143,13 +144,18 @@ public class AmpReportsToReportSpecification {
 		}
 		
 		boolean measuresMovedAsColumns = false;
-		for (String measureName: report.getOrderedMeasureNames()) {
+		for (AmpMeasures measure: report.getOrderedMeasures()) {
 			// if old reports will become obsolete, then remove these compatibility adjustments
+			String measureName = measure.getMeasureName();
 			if (MondrianMapping.definedColumns.contains(measureName)) {
-				spec.addColumn(new ReportColumn(measureName));
+				ReportColumn measureColumn = new ReportColumn(measureName);
+				measureColumn.setDescription(measure.getDescription());
+				spec.addColumn(measureColumn);
 				measuresMovedAsColumns = true;
 			} else {
-				spec.addMeasure(new ReportMeasure((measureName)));
+				ReportMeasure measureColumn = new ReportMeasure(measureName);
+				measureColumn.setDescription(measure.getDescription());
+				spec.addMeasure(measureColumn);
 			}
 		}
 		/* workaround for reports that have all measures that are now columns in Mondrian based reports:

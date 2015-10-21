@@ -19,9 +19,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.ecs.rtf.Header;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.ValueWrapper;
@@ -52,7 +51,6 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.newreports.TextCell;
-import org.dgfoundation.amp.onepager.models.MTEFYearsModel;
 import org.dgfoundation.amp.reports.PartialReportArea;
 import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
@@ -89,7 +87,6 @@ import org.olap4j.metadata.Member;
 import org.olap4j.query.SortOrder;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
-import org.saiku.olap.dto.resultset.MemberCell;
 import org.saiku.olap.util.OlapResultSetUtil;
 import org.saiku.service.olap.totals.TotalNode;
 import org.saiku.service.olap.totals.aggregators.TotalAggregator;
@@ -1069,6 +1066,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 				
 		leafColumns.addAll(this.totalsHeaders); // add totals headers to the leaf headers
 		
+		configureDescriptionForMeasures(spec, leafColumns); // add description to the leaf headers
+		
 		this.leafHeaders = leafColumns;
 	}
 	
@@ -1095,6 +1094,19 @@ public class MondrianReportGenerator implements ReportExecutor {
 			logger.error(error);
 		else
 			throw new AmpApiException(error);
+	}
+	
+	private void configureDescriptionForMeasures(ReportSpecificationImpl spec, List<ReportOutputColumn> leafColumns) {
+		Map <String, String> measureNameDescriptions = new HashMap<String, String>();
+		for (ReportMeasure measure : spec.getMeasures()) {
+			if (StringUtils.isNotEmpty(measure.getDescription())) {
+				measureNameDescriptions.put(measure.getMeasureName(), TranslatorWorker.translateText(measure.getDescription()));
+			}
+		}
+		
+		for (ReportOutputColumn leaf : leafColumns) {
+			leaf.setDescription(measureNameDescriptions.get(leaf.originalColumnName));
+		}
 	}
 }
 

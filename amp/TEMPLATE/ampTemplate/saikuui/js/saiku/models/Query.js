@@ -88,8 +88,6 @@ var Query = Backbone.Model.extend({
 	            // TODO: Check if the filter widget is really ready (in older versions the parse of dates where processed too late).
 	            self.initFiltersDeferred.resolve();
             });                                                                     
-        } else {
-        	console.error('ERROR: Race condition with filters!!!');
         }
     },
     

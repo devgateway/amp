@@ -30,7 +30,7 @@
 		<META HTTP-EQUIV="Cache-Control" CONTENT="private">
 		
 		<!-- FIX ANNOYING ISSUE WITH IE 8-9 -->
-		<script type="text/javascript"> if (!window.console) console = {log: function() {}, warn: function() {}, error: function() {}}; </script>
+		<script type="text/javascript"> if (!window.console) console = {log: function() {}, warn: function() {}, error: function() {}, info: function(){}}; </script>
         
         <link type="text/css" href="css_2/tabs.css" rel="stylesheet" />
         

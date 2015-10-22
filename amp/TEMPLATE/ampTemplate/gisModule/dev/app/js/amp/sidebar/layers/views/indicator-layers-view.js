@@ -25,7 +25,7 @@ module.exports = Backbone.View.extend({
       siblingGroupList: this.parentMultisectionControl.radioButtonGroup
     });
 
-    this.app.data.indicators.load().then(function() {
+    this.app.data.indicators.loadAll().then(function() {
       self._registerSerializer();
     });
 

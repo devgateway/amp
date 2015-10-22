@@ -16,6 +16,7 @@ module.exports = Backbone.View.extend({
     $.when(this.app.data.filter.loaded, this.app.data._stateWait).then(function() {
       self.listenTo(self.app.data.indicators, 'show', self.showLayer);
       self.listenTo(self.app.data.indicators, 'hide', self.hideLayer);
+      self.listenTo(self.app.data.indicators, 'sync', self.refreshLayer);
 
       self.listenTo(self.app.data.hilightFundingCollection, 'show', self.refreshLayer);
       self.listenTo(self.app.data.hilightFundingCollection, 'hide', self.hideLayer);

@@ -71,6 +71,8 @@ public class Funding implements Serializable {
 	private String subtotalPipelineEDD;
 	private String subtotalEDD;
 	private String subtotalMTEFs;
+    private String subtotalMTEFsPipeline;
+    private String subtotalMTEFsProjection;
 	private String undisbursementbalance;
 	
 	/**
@@ -516,8 +518,16 @@ public class Funding implements Serializable {
 	
 	@java.lang.SuppressWarnings("all")
 	public String getSubtotalMTEFs() {
-		return this.subtotalMTEFs;
-	}
+        return this.subtotalMTEFs;
+    }
+
+    public String getSubtotalMTEFsPipeline() {
+        return this.subtotalMTEFsPipeline;
+    }
+
+    public String getSubtotalMTEFsProjection() {
+        return this.subtotalMTEFsProjection;
+    }
 	
 	@java.lang.SuppressWarnings("all")
 	public String getUndisbursementbalance() {
@@ -764,6 +774,14 @@ public class Funding implements Serializable {
 	public void setSubtotalMTEFs(final String subtotalMTEFs) {
 		this.subtotalMTEFs = subtotalMTEFs;
 	}
+
+    public void setSubtotalMTEFsPipeline(final String subtotalMTEFsPipeline) {
+        this.subtotalMTEFsPipeline = subtotalMTEFsPipeline;
+    }
+
+    public void setSubtotalMTEFsProjection(final String subtotalMTEFsProjection) {
+        this.subtotalMTEFsProjection = subtotalMTEFsProjection;
+    }
 	
 	@java.lang.SuppressWarnings("all")
 	public void setUndisbursementbalance(final String undisbursementbalance) {

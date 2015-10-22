@@ -205,6 +205,8 @@ public class ActivityFundingDigest {
 						currFunding.setSubtotalPipelineExpenditures(formatNumber(calculationsSubtotal.getTotPipelineExp().doubleValue()));
 						currFunding.setSubtotalExpenditures(formatNumber(calculationsSubtotal.getTotActualExp().doubleValue()));
 						currFunding.setSubtotalMTEFs(formatNumber(calculationsSubtotal.getTotalMtef().doubleValue()));
+                        currFunding.setSubtotalMTEFsPipeline(formatNumber(calculationsSubtotal.getTotalMtefPipeline().doubleValue()));
+                        currFunding.setSubtotalMTEFsProjection(formatNumber(calculationsSubtotal.getTotalMtefProjection().doubleValue()));
 						currFunding.setSubtotalActualDisbursementsOrders(formatNumber(calculationsSubtotal.getTotActualDisbOrder().doubleValue()));
 						currFunding.setSubtotalPlannedDisbursementsOrders(formatNumber(calculationsSubtotal.getTotPlannedDisbOrder().doubleValue()));
 						currFunding.setSubtotalPipelineDisbursementsOrders(formatNumber(calculationsSubtotal.getTotPipelineDisbOrder().doubleValue()));

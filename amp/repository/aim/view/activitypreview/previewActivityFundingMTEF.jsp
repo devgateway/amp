@@ -28,24 +28,50 @@
 	
 	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="3">
-			<c:set var="showFiscalYear" value="true" />
-			<%@include file="previewActivityFundingDetail.jspf" %>
-			<c:remove var="showFiscalYear"/> 
+		    <logic:equal name="fundingDetail" property="projectionTypeName.value" value="pipeline">
+                <c:set var="showFiscalYear" value="true" />
+                <%@include file="previewActivityFundingDetail.jspf" %>
+                <c:remove var="showFiscalYear"/>
+            </logic:equal>
 		</logic:equal>
    	</logic:iterate>
-
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
-            <digi:trn key='aim:subtotalActualdisbursement'>Subtotal MTEF Projections</digi:trn>:
+            <digi:trn key='aim:subtotalActualdisbursementPipeline'>Subtotal MTEF Projections Pipeline</digi:trn>:
 		</td>
 		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee"	style="border-top: 1px solid #000000">
-			 <c:if test="${not empty funding.subtotalMTEFs}">
-                <b>${funding.subtotalMTEFs} ${aimEditActivityForm.currName}</b>
+			 <c:if test="${not empty funding.subtotalMTEFsPipeline}">
+                <b>${funding.subtotalMTEFsPipeline} ${aimEditActivityForm.currName}</b>
              </c:if>&nbsp;
         </td>
                    
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
+
+
+
+	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
+		<logic:equal name="fundingDetail" property="transactionType" value="3">
+		    <logic:equal name="fundingDetail" property="projectionTypeName.value" value="projection">
+                <c:set var="showFiscalYear" value="true" />
+                <%@include file="previewActivityFundingDetail.jspf" %>
+                <c:remove var="showFiscalYear"/>
+            </logic:equal>
+		</logic:equal>
+   	</logic:iterate>
+	<tr>
+		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+            <digi:trn key='aim:subtotalActualdisbursementPipeline'>Subtotal MTEF Projections Projection</digi:trn>:
+		</td>
+		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee"	style="border-top: 1px solid #000000">
+			 <c:if test="${not empty funding.subtotalMTEFsProjection}">
+                <b>${funding.subtotalMTEFsProjection} ${aimEditActivityForm.currName}</b>
+             </c:if>&nbsp;
+        </td>
+
+		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
+	</tr>
+
 </c:if>
 
 <tr>

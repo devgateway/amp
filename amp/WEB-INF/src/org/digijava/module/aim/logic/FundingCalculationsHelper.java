@@ -3,30 +3,23 @@ package org.digijava.module.aim.logic;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang.ObjectUtils.Null;
 import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.FundingInformationItem;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.RegionalFundingsHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 import com.sun.istack.logging.Logger;
 
@@ -61,6 +54,9 @@ public class FundingCalculationsHelper {
 	DecimalWraper totalCommitments = new DecimalWraper();
 	DecimalWraper unDisbursementsBalance = new DecimalWraper();
 	DecimalWraper totalMtef = new DecimalWraper();
+    DecimalWraper totalMtefPipeline = new DecimalWraper();
+    DecimalWraper totalMtefProjection = new DecimalWraper();
+
 	DecimalWraper totalPledged = new DecimalWraper();
 	
 	boolean debug;
@@ -173,19 +169,25 @@ public class FundingCalculationsHelper {
 		/**
 		 * no adjustment type for MTEF transactions or PLEDGED amounts, so this "if" is outside the PLANNED / ACTUAL / PIPELINE branching if's
 		 */
-		if (fundDet.getTransactionType().intValue() == Constants.MTEFPROJECTION) {
+		if (fundDet.getTransactionType() == Constants.MTEFPROJECTION) {
 			totalMtef.add(amt);
+            String projectionType = ((AmpFundingMTEFProjection)fundDet).getProjected().getValue();
+            if ("pipeline".equals(projectionType)) {
+                totalMtefPipeline.add(amt);
+            } else if ("projection".equals(projectionType)) {
+                totalMtefProjection.add(amt);
+            }
 			return;
 		}
-		if (fundDet.getTransactionType().intValue() == Constants.PLEDGE){
+		if (fundDet.getTransactionType() == Constants.PLEDGE){
 			totalPledged.add(amt);
 		}
 		if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
 			//fundingDetail.setAdjustmentTypeName("Planned");
-			if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
+			if (fundDet.getTransactionType() == Constants.DISBURSEMENT) {
 				totPlanDisb.add(amt);
 				//totPlanDisb.setCalculations(totPlanDisb.getCalculations() + " + " + amt.getCalculations());
-			} else if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
+			} else if (fundDet.getTransactionType() == Constants.COMMITMENT) {
 				totPlannedComm.add(amt);
 				//totPlannedComm.setCalculations(totPlannedComm.getCalculations() + " + " + amt.getCalculations());
 			} else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
@@ -383,8 +385,17 @@ public class FundingCalculationsHelper {
 	public DecimalWraper getTotalMtef() {
 		return this.totalMtef;
 	}
-	
-	public DecimalWraper getTotalPledged(){
+
+    public DecimalWraper getTotalMtefPipeline() {
+        return this.totalMtefPipeline;
+    }
+
+    public DecimalWraper getTotalMtefProjection() {
+        return this.totalMtefProjection;
+    }
+
+
+    public DecimalWraper getTotalPledged(){
 		return this.totalPledged;
 	}
 	

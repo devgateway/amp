@@ -29,22 +29,46 @@
 		</td>		
 	</tr>
 	<c:if test="${!empty funding.fundingDetails}">
-	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
-		<logic:equal name="fundingDetail" property="transactionType" value="3">
-				<c:set var="showFiscalYear" value="true" />
-				<%@include file="previewActivityFundingDetail.jspf" %>
-				<c:remove var="showFiscalYear"/>
-			</logic:equal>
-		<%-- </logic:equal> --%>
-	</logic:iterate>
+        <logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
+            <logic:equal name="fundingDetail" property="transactionType" value="3">
+                <logic:equal name="fundingDetail" property="projectionTypeName.value" value="pipeline">
+                    <c:set var="showFiscalYear" value="true" />
+                    <%@include file="previewActivityFundingDetail.jspf" %>
+                    <c:remove var="showFiscalYear"/>
+                </logic:equal>
+            </logic:equal>
+        </logic:iterate>
 	</c:if>
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
-			<digi:trn>Subtotal MTEFs</digi:trn>:
+			<digi:trn>Subtotal MTEFs Pipeline</digi:trn>:
 		</td>
 		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
-			<c:if test="${not empty funding.subtotalMTEFs}">
- 				<b>${funding.subtotalMTEFs} ${aimEditActivityForm.currCode}</b>
+			<c:if test="${not empty funding.subtotalMTEFsPipeline}">
+ 				<b>${funding.subtotalMTEFsPipeline} ${aimEditActivityForm.currCode}</b>
+ 			</c:if> &nbsp;
+           </td>
+		<%-- <td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td> --%>
+	</tr>
+
+	<c:if test="${!empty funding.fundingDetails}">
+        <logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
+            <logic:equal name="fundingDetail" property="transactionType" value="3">
+                <logic:equal name="fundingDetail" property="projectionTypeName.value" value="projection">
+                    <c:set var="showFiscalYear" value="true" />
+                    <%@include file="previewActivityFundingDetail.jspf" %>
+                    <c:remove var="showFiscalYear"/>
+                </logic:equal>
+            </logic:equal>
+        </logic:iterate>
+	</c:if>
+	<tr>
+		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+			<digi:trn>Subtotal MTEFs Projection</digi:trn>:
+		</td>
+		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
+			<c:if test="${not empty funding.subtotalMTEFsProjection}">
+ 				<b>${funding.subtotalMTEFsProjection} ${aimEditActivityForm.currCode}</b>
  			</c:if> &nbsp;
            </td>
 		<%-- <td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td> --%>

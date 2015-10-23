@@ -1,13 +1,6 @@
 package org.digijava.module.gpi.model;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.jcr.Node;
 import javax.servlet.ServletContext;
@@ -15,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -291,7 +285,7 @@ public class GPIUseCase {
 		filter.setEndYer(form.getSelectedEndYear());
 
 		// Get all surveys.
-		Collection<AmpActivityVersion> commonData = getCommonSurveyData(filter);
+		Collection<Object[]> commonData = getCommonSurveyData(filter);
 
 		// Execute the logic for generating each report.
 		preMainReportRows = report.generateReport(commonData, filter);
@@ -308,15 +302,15 @@ public class GPIUseCase {
 	 * Return a collection with all common columns needed later to generate each report.
 	 */
 	private Collection getCommonSurveyData(GPIFilter filter) {
-		logger.warn("commonData");
+//		logger.warn("commonData");
 		long time = Calendar.getInstance().getTimeInMillis();
-		Collection<AmpActivityVersion> commonData = null;
+		Collection<Object[]> commonData = null;
 		Session session = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String selectQueryString = new StringBuilder()
 					.append("SELECT aa.amp_activity_id, af.amp_funding_id, afd.amp_fund_detail_id, afd.transaction_date, aog.amp_org_grp_id, aog.org_grp_name, ")
-					.append( "(SELECT COUNT(*) FROM amp_gpi_survey ags WHERE ags.amp_activity_id = aa.amp_activity_id) AS surveys, afd.transaction_amount, afd.transaction_type, ac.currency_code, acv.category_value ")
+					.append( "(SELECT COUNT(*) FROM amp_gpi_survey ags WHERE ags.amp_activity_id = aa.amp_activity_id) AS surveys, afd.transaction_amount, afd.transaction_type, ac.currency_code, acv.category_value, acv.id ")
 					.append(" FROM amp_activity aa JOIN amp_funding af ON aa.amp_activity_id = af.amp_activity_id")
 					.append(" JOIN amp_funding_detail afd ON af.amp_funding_id = afd.amp_funding_id")
 					.append(" JOIN amp_organisation ao ON af.amp_donor_org_id = ao.amp_org_id")
@@ -386,13 +380,26 @@ public class GPIUseCase {
 			}
 
 			Query query = session.createSQLQuery(selectQueryString + where + endQueryString);
-			logger.warn(query.getQueryString());
+//			logger.warn(query.getQueryString());
 			commonData = query.list();
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e, e);
 			e.printStackTrace();
 		}
-		logger.warn("commonData: " + ((Calendar.getInstance().getTimeInMillis() - time) / 1000) + "s");
+//		logger.warn("commonData: " + ((Calendar.getInstance().getTimeInMillis() - time) / 1000) + "s");
+		// pass 2: translate orgGrpNames and adjustmentType names
+		Map<Long, String> orgGrpNames = DatabaseViewFetcher.fetchInternationalizedView("amp_org_group", null, "amp_org_grp_id", "org_grp_name");
+		Map<Long, String> adjustmentTypeNames = DatabaseViewFetcher.fetchInternationalizedView("amp_category_value", null, "id", "category_value");
+		for (Object[] row : commonData) {
+
+			Long orgGrpId = PersistenceManager.getLong(row[4]);
+			Long adjTypeId = PersistenceManager.getLong(row[11]);
+			if (orgGrpId != null && orgGrpNames.containsKey(orgGrpId))
+				row[5] = orgGrpNames.get(orgGrpId);
+			if (adjTypeId!= null && adjustmentTypeNames.containsKey(adjTypeId))
+				row[11] = adjustmentTypeNames.get(adjTypeId);
+
+		}
 		return commonData;
 	}
 }

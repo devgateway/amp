@@ -57,7 +57,8 @@ public class GPIAction extends Action {
 			gpiForm.setMainTableRows(report.getReportRows());
 			gpiForm.setMiniTable(report.getMiniTable());
 		} catch(Exception e){
-			logger.error(e);
+			e.printStackTrace();
+//			logger.error(e, e);
 		}
 
 		// Set output.

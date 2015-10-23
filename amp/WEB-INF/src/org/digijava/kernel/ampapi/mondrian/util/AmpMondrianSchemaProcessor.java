@@ -35,8 +35,8 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.Session;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -76,6 +76,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		String standAlone = connectInfo.get("Standalone");
 		if (standAlone != null) {
 			currentEnvironment.set(null);
+			// by default DonorReport will be run
 			currentReport.set(null);
 		}
 		return processContents(contents);
@@ -262,6 +263,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			removeDefinitionsWithMissingDependencies(xmlSchema);
 			contents = XMLGlobals.saveToString(xmlSchema);
 			contents = contents.replaceAll("@@undefined_amount@@", MoConstants.UNDEFINED_AMOUNT_STR);
+			contents = updatePledgeContacts(contents);
 			expandedSchema = contents;
 			// System.err.println("the expanded schema is: " + expandedSchema);
 		}
@@ -603,6 +605,16 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		c.add(Calendar.DAY_OF_YEAR, -1);
 		contents = contents.replaceAll("@@selected_year_end@@", DateTimeUtil.toJulianDayString(c.getTime()));
 		
+		return contents;
+	}
+	
+	protected String updatePledgeContacts(String contents) {
+		String startStr = "<!-- Pledge Contacts - START -->";
+		String endStr = "<!-- Pledge Contacts - END -->";
+		String contactsGeneric = contents.substring(contents.indexOf(startStr), contents.indexOf(endStr) + endStr.length());
+		String contacts1 = contactsGeneric.replace("@@nr@@", "1");
+		String contacts2 = contactsGeneric.replace("@@nr@@", "2");		
+		contents = contents.replace(contactsGeneric, (contacts1 + contacts2).replace(startStr, "").replace(endStr, ""));
 		return contents;
 	}
 

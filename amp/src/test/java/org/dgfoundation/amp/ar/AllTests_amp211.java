@@ -13,6 +13,7 @@ import org.dgfoundation.amp.ar.amp211.InflationRatesTests;
 import org.dgfoundation.amp.ar.amp211.NewFeaturesMondrianReportTests;
 import org.dgfoundation.amp.ar.amp211.OldReportsNewFeaturesTests;
 import org.dgfoundation.amp.ar.amp211.PlainMTEFMondrianReportTests;
+import org.dgfoundation.amp.ar.amp211.PledgeReportsTests211;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -41,6 +42,7 @@ public class AllTests_amp211
 		suite.addTest(new JUnit4TestAdapter(BooleanFilterTests.class));
 		suite.addTest(new JUnit4TestAdapter(FundingFlowsMondrianReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(OldReportsNewFeaturesTests.class));
+		suite.addTest(new JUnit4TestAdapter(PledgeReportsTests211.class));
 		suite.addTest(new JUnit4TestAdapter(NewFeaturesMondrianReportTests.class));
 		
 		return suite;

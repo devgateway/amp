@@ -72,6 +72,11 @@ public final class MoConstants {
 	public static final String ACTIVITY_CURRENCY_AMOUNTS = "Activity Currency Amounts";
 	public static final String ACTIVITY_TOTAL_AMOUNTS = "Activity Total Amounts";
 	public static final String DATES = "Dates";
+	public static final String PLEDGES_CONTACTS = "Pledge Contacts";
+	public static final String PLEDGES_DETAIL_DATES = "Pledges Detail Dates";
+	public static final String PLEDGES_DETAIL_START_DATE = "Pledges Detail Start Date";
+	public static final String PLEDGES_DETAIL_END_DATE = "Pledges Detail End Date";
+	public static final String PLEDGES_DETAIL_DATE_RANGE = "Pledges Detail Date Range";
 	public static final String ACTIVITY_DATES = "Activity Dates";
 	public static final String LOCATION = "Location"; 
 	public static final String COMPONENT = "Component";
@@ -288,6 +293,19 @@ public final class MoConstants {
 	public static final String ATTR_CUMULATIVE_EXECUTION_RATE = "Cumulative Execution Rate";
 	public static final String ATTR_UNDISBURSED_CUMULATIVE_BALANCE = "Undisbursed Cumulative Balance";
 	public static final String ATTR_UNCOMMITTED_CUMULATIVE_BALANCE = "Uncommitted Cumulative Balance";
+	public static final String ATTR_CONTACT_NAME = "Contact Name";
+	public static final String ATTR_CONTACT_TITLE = "Contact Title";
+	public static final String ATTR_CONTACT_ADDRESS = "Contact Address";
+	public static final String ATTR_CONTACT_EMAIL = "Contact Email";
+	public static final String ATTR_CONTACT_MINISTRY = "Contact Ministry";
+	public static final String ATTR_CONTACT_PHONE = "Contact Phone";
+	public static final String ATTR_CONTACT_FAX = "Contact Fax";
+	public static final String ATTR_CONTACT_ALTERNAME_NAME = "Contact Alternate Name";
+	public static final String ATTR_CONTACT_ALTERNAME_EMAIL = "Contact Alternate Email";
+	public static final String ATTR_CONTACT_ALTERNAME_PHONE = "Contact Alternate Phone";
+	public static final String ATTR_START_DATE = "Start Date";
+	public static final String ATTR_END_DATE = "End Date";
+	public static final String ATTR_DATE_RANGE = "Date Range";
 	
 	//properties
 	public static final String P_KEY = "Key";

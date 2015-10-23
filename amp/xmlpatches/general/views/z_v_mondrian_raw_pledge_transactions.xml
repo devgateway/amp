@@ -28,6 +28,9 @@ SELECT <!-- pledge funding -->
 	pf.adjustment_type,
 	pf.transaction_date,
 	to_char(pf.transaction_date, 'J')::integer AS date_code,
+	to_char(pf.transaction_date, gs.date_format) AS transaction_start_date,
+	pf.transaction_end_date AS transaction_end_date,
+	to_char(pf.transaction_date, gs.date_format) || ' - ' || pf.transaction_end_date AS transaction_range,
 	pf.transaction_amount,
 	pf.currency_id,
 	pf.originating_org_id,
@@ -53,7 +56,9 @@ SELECT <!-- pledge funding -->
 	
 	pf.related_activity_id AS related_entity_id
 	
-FROM v_mondrian_pledge_transactions pf WHERE (pf.transaction_date BETWEEN '1970-1-1' AND '2050-1-1');
+FROM v_mondrian_pledge_transactions pf, 
+     (SELECT settingsvalue as date_format FROM amp_global_settings WHERE settingsname LIKE 'Default Date Format') AS gs 
+WHERE (pf.transaction_date BETWEEN '1970-1-1' AND '2050-1-1');
 			</lang>
 		</script>
 	</apply>

@@ -260,7 +260,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		};
 		String[] suffixList = new String[] {"Email", "Fax", "Name", "Phone", "Title",
 				//and pledges specific
-				"Address", "Alternate Contact", "Telephone"};
+				"Address", "Alternate Contact", "Telephone", "Alternate Phone", "Alternate Email"};
 		for (String[] con : contacts)
 			for (String suffix : suffixList)
 				put(con[0] + " " + suffix, con[1]);

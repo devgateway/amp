@@ -289,6 +289,19 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.UNCOMMITTED_CUMULATIVE_BALANCE, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_UNCOMMITTED_CUMULATIVE_BALANCE, MoConstants.ATTR_UNCOMMITTED_CUMULATIVE_BALANCE));
 			addColumnDefinition(ColumnConstants.PLEDGE_STATUS, new MDXLevel("Pledge Status", MoConstants.H_CATEGORY_NAME, MoConstants.ATTR_CATEGORY_NAME));
 			
+			for (String idx : new String[]{"1", "2"}) {
+				addColumnDefinition(ColumnConstants.PLEDGE_CONTACT_1___NAME.replace("1", idx), new MDXLevel(MoConstants.PLEDGES_CONTACTS, MoConstants.ATTR_CONTACT_NAME + idx, MoConstants.ATTR_CONTACT_NAME + idx));
+				addColumnDefinition(ColumnConstants.PLEDGE_CONTACT_1___TITLE.replace("1", idx), new MDXLevel(MoConstants.PLEDGES_CONTACTS, MoConstants.ATTR_CONTACT_TITLE + idx, MoConstants.ATTR_CONTACT_TITLE + idx));
+				addColumnDefinition(ColumnConstants.PLEDGE_CONTACT_1___ADDRESS.replace("1", idx), new MDXLevel(MoConstants.PLEDGES_CONTACTS, MoConstants.ATTR_CONTACT_ADDRESS + idx, MoConstants.ATTR_CONTACT_ADDRESS + idx));
+				addColumnDefinition(ColumnConstants.PLEDGE_CONTACT_1___EMAIL.replace("1", idx), new MDXLevel(MoConstants.PLEDGES_CONTACTS, MoConstants.ATTR_CONTACT_EMAIL + idx, MoConstants.ATTR_CONTACT_EMAIL + idx));
+				addColumnDefinition(ColumnConstants.PLEDGE_CONTACT_1___MINISTRY.replace("1", idx), new MDXLevel(MoConstants.PLEDGES_CONTACTS, MoConstants.ATTR_CONTACT_MINISTRY + idx, MoConstants.ATTR_CONTACT_MINISTRY + idx));
+				addColumnDefinition(ColumnConstants.PLEDGE_CONTACT_1___TELEPHONE.replace("1", idx), new MDXLevel(MoConstants.PLEDGES_CONTACTS, MoConstants.ATTR_CONTACT_PHONE + idx, MoConstants.ATTR_CONTACT_PHONE + idx));
+				addColumnDefinition(ColumnConstants.PLEDGE_CONTACT_1___FAX.replace("1", idx), new MDXLevel(MoConstants.PLEDGES_CONTACTS, MoConstants.ATTR_CONTACT_FAX + idx, MoConstants.ATTR_CONTACT_FAX + idx));
+				addColumnDefinition(ColumnConstants.PLEDGE_CONTACT_1___ALTERNATE_CONTACT.replace("1", idx), new MDXLevel(MoConstants.PLEDGES_CONTACTS, MoConstants.ATTR_CONTACT_ALTERNAME_NAME + idx, MoConstants.ATTR_CONTACT_ALTERNAME_NAME + idx));
+				addColumnDefinition(ColumnConstants.PLEDGE_CONTACT_1___ALTERNATE_EMAIL.replace("1", idx), new MDXLevel(MoConstants.PLEDGES_CONTACTS, MoConstants.ATTR_CONTACT_ALTERNAME_EMAIL + idx, MoConstants.ATTR_CONTACT_ALTERNAME_EMAIL + idx));
+				addColumnDefinition(ColumnConstants.PLEDGE_CONTACT_1___ALTERNATE_PHONE.replace("1", idx), new MDXLevel(MoConstants.PLEDGES_CONTACTS, MoConstants.ATTR_CONTACT_ALTERNAME_PHONE + idx, MoConstants.ATTR_CONTACT_ALTERNAME_PHONE + idx));
+			}
+			
 			addColumnDefinition(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS, new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, MoConstants.ATTR_PRIOR_ACTUAL_DISBURSEMENTS, MoConstants.ATTR_PRIOR_ACTUAL_DISBURSEMENTS));
 			addColumnDefinition(MeasureConstants.CUMULATED_DISBURSEMENTS, new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, MoConstants.ATTR_CUMULATED_DISBURSEMENTS, MoConstants.ATTR_CUMULATED_DISBURSEMENTS));
 			addColumnDefinition(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS, new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, MoConstants.ATTR_SELECTED_YEAR_PLANNED_DISBURSEMENTS, MoConstants.ATTR_SELECTED_YEAR_PLANNED_DISBURSEMENTS));
@@ -306,6 +319,10 @@ public class MondrianMapping {
 			//put(new ReportColumn(ColumnConstants.ON_OFF_TREASURY_BUDGET, ReportEntityType.ENTITY_TYPE_ACTIVITY, new MDXAttribute(MoConstants., MoConstants.ATTR_));
 			
 			addColumnDefinition(ColumnConstants.FUNDING_YEAR, new MDXLevel(MoConstants.DATES, MoConstants.H_YEAR, MoConstants.ATTR_YEAR));
+			
+			addColumnDefinition(ColumnConstants.PLEDGES_DETAIL_START_DATE, new MDXLevel(MoConstants.PLEDGES_DETAIL_DATES, MoConstants.PLEDGES_DETAIL_START_DATE, MoConstants.PLEDGES_DETAIL_START_DATE));
+			addColumnDefinition(ColumnConstants.PLEDGES_DETAIL_END_DATE, new MDXLevel(MoConstants.PLEDGES_DETAIL_DATES, MoConstants.PLEDGES_DETAIL_END_DATE, MoConstants.PLEDGES_DETAIL_END_DATE));
+			addColumnDefinition(ColumnConstants.PLEDGES_DETAIL_DATE_RANGE, new MDXLevel(MoConstants.PLEDGES_DETAIL_DATES, MoConstants.PLEDGES_DETAIL_DATE_RANGE, MoConstants.PLEDGES_DETAIL_DATE_RANGE));
 			
 			//TODO: review/complete mappings based on Mondrian Schema
 			

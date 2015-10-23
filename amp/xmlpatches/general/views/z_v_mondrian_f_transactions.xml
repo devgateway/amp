@@ -32,6 +32,10 @@ SELECT
 	fd.adjustment_type AS adjustment_type,
 	fd.transaction_date AS transaction_date,
 	to_char(fd.transaction_date, 'J')::integer AS date_code,
+	<!-- donor transactions has no start/end/range, but exact date, this undefined -->
+	'Undefined' AS transaction_start_date,
+    'Undefined' AS transaction_end_date,
+    'Undefined' AS transaction_range,
 
 	CASE
 		WHEN (fd.amp_currency_id != (SELECT amp_currency_id FROM amp_currency WHERE currency_code = (SELECT settingsvalue FROM amp_global_settings WHERE settingsname = 'Base Currency'))) AND (fd.fixed_exchange_rate IS NOT NULL) AND (fd.fixed_exchange_rate > 0) THEN fd.transaction_amount / fd.fixed_exchange_rate 

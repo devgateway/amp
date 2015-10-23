@@ -217,6 +217,11 @@ public class MondrianTablesRepository {
 				}
 			})
 			/* no pledges addon */;
+			
+	public final static MondrianTableDescription MONDRIAN_PLEDGE_CONTACTS = 
+			new MondrianTableDescription("mondrian_activity_contacts", "amp_activity_id", Arrays.asList("amp_activity_id"))
+				.withSupplimentalRows(1)
+				.withPledgeView("v_mondrian_pledge_contacts");
 	
 	public final static MondrianTableDescription MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE = 
 			new MondrianTableDescription("mondrian_raw_donor_transactions", "amp_fund_detail_id", Arrays.asList("amp_activity_id", "amp_fund_detail_id", "donor_id"))
@@ -241,7 +246,8 @@ public class MondrianTablesRepository {
 			MONDRIAN_ACTIVITY_FIXED_TEXTS,
 			MONDRIAN_LONG_TEXTS, 
 			MONDRIAN_ACTIVITY_TRN_TEXTS,
-			MONDRIAN_ACTIVITY_CURRENCY_NUMBERS);
+			MONDRIAN_ACTIVITY_CURRENCY_NUMBERS,
+			MONDRIAN_PLEDGE_CONTACTS);
 	
 	public final static List<MondrianTableDescription> MONDRIAN_RAW_TRANSACTIONS_TABLES = Arrays.asList(MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE/*, MONDRIAN_RAW_COMPONENT_TRANSACTIONS_TABLE*/);
 	
@@ -268,6 +274,10 @@ public class MondrianTablesRepository {
 				new DatabaseTableColumn("transaction_date", "date NOT NULL", true),
 				new DatabaseTableColumn("date_code", "integer NOT NULL", true), // for currency reasons
 				new DatabaseTableColumn("display_date_code", "integer NOT NULL", true), // for display reasons
+				// using string pre discussion with Constantin to be consistent with old reports that are not following calendar settings
+				new DatabaseTableColumn("transaction_start_date", "varchar(20) NOT NULL", true),
+				new DatabaseTableColumn("transaction_end_date", "varchar(20) NOT NULL", true),
+				new DatabaseTableColumn("transaction_range", "varchar(50) NOT NULL", true),
 		
 				/**
 				 * regarding currencies: if a transaction has a fixed_exchange_rate, BASE_CURRENCY would have been written in currency_id and transaction_amount would be translated

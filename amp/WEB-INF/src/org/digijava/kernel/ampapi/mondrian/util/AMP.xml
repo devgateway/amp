@@ -299,7 +299,7 @@
 			<Level name="Specified Location" column="id" type="String" nameColumn="location_name" />			
 		</Hierarchy>
 	</Dimension>
-		
+	
 	<Cube name="Donor Funding">
 		<Table name="mondrian_fact_table" >
 			<SQL dialect="generic"><![CDATA[@@filteredActivities@@]]> </SQL>
@@ -322,7 +322,7 @@
 		<DimensionUsage name="Pledges Type Of Assistance" source="Category Value" foreignKey="terms_of_assistance_id" />
 		<DimensionUsage name="Pledges Aid Modality" source="Category Value" foreignKey="modality_id" />
 		<DimensionUsage name="Disaster Response Marker" source="Hardcoded Texts" foreignKey="disaster_response" />
-
+		
 		<Dimension name="Related Projects" foreignKey="related_entity_id">
 			<Hierarchy hasAll="true" allMemberName="All Related Projects" primaryKey="amp_activity_id" name="Related Projects">
 				<Table name="mondrian_activity_texts@@locale@@" />
@@ -399,7 +399,7 @@
 			</Hierarchy>
 			
 		</Dimension>
-
+		
 		<Dimension name="Activity Fixed Texts" foreignKey="entity_id">
 			<Hierarchy hasAll="true" allMemberName="All Activity Id" primaryKey="amp_activity_id" name="Activity Id">
 				<Table name="mondrian_activity_fixed_texts" />
@@ -905,6 +905,51 @@
 		<DimensionUsage name="Pledge Secondary Sector"	source="AMP Sector" foreignKey="secondary_sector_id" />
 		<DimensionUsage name="Pledge Tertiary Sector"	source="AMP Sector" foreignKey="tertiary_sector_id" />
 		
+		<Dimension name="Pledge Contacts" foreignKey="entity_id">
+		   <!-- Pledge Contacts - START -->
+		   <Hierarchy hasAll="true" allMemberName="All Contact Title@@nr@@" primaryKey="amp_activity_id" name="Contact Title@@nr@@">
+				<Table name="mondrian_activity_contacts" />
+				<Level name="Contact Title@@nr@@" type="Integer" column="amp_activity_id" nameColumn="title@@nr@@" />
+			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All Contact Name@@nr@@" primaryKey="amp_activity_id" name="Contact Name@@nr@@">
+				<Table name="mondrian_activity_contacts" />
+				<Level name="Contact Name@@nr@@" type="Integer" column="amp_activity_id" nameColumn="name@@nr@@" />
+			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All Contact Address@@nr@@" primaryKey="amp_activity_id" name="Contact Address@@nr@@">
+				<Table name="mondrian_activity_contacts" />
+				<Level name="Contact Address@@nr@@" type="Integer" column="amp_activity_id" nameColumn="address@@nr@@" />
+			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All Contact Email@@nr@@" primaryKey="amp_activity_id" name="Contact Email@@nr@@">
+				<Table name="mondrian_activity_contacts" />
+				<Level name="Contact Email@@nr@@" type="Integer" column="amp_activity_id" nameColumn="email@@nr@@" />
+			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All Contact Ministry@@nr@@" primaryKey="amp_activity_id" name="Contact Ministry@@nr@@">
+				<Table name="mondrian_activity_contacts" />
+				<Level name="Contact Ministry@@nr@@" type="Integer" column="amp_activity_id" nameColumn="ministry@@nr@@" />
+			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All Contact Phone@@nr@@" primaryKey="amp_activity_id" name="Contact Phone@@nr@@">
+				<Table name="mondrian_activity_contacts" />
+				<Level name="Contact Phone@@nr@@" type="Integer" column="amp_activity_id" nameColumn="phone@@nr@@" />
+			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All Contact Fax@@nr@@" primaryKey="amp_activity_id" name="Contact Fax@@nr@@">
+				<Table name="mondrian_activity_contacts" />
+				<Level name="Contact Fax@@nr@@" type="Integer" column="amp_activity_id" nameColumn="fax@@nr@@" />
+			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All Contact Alternate Name@@nr@@" primaryKey="amp_activity_id" name="Contact Alternate Name@@nr@@">
+				<Table name="mondrian_activity_contacts" />
+				<Level name="Contact Alternate Name@@nr@@" type="Integer" column="amp_activity_id" nameColumn="alternate_name@@nr@@" />
+			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All Contact Alternate Email@@nr@@" primaryKey="amp_activity_id" name="Contact Alternate Email@@nr@@">
+				<Table name="mondrian_activity_contacts" />
+				<Level name="Contact Alternate Email@@nr@@" type="Integer" column="amp_activity_id" nameColumn="alternate_email@@nr@@" />
+			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All Contact Alternate Phone@@nr@@" primaryKey="amp_activity_id" name="Contact Alternate Phone@@nr@@">
+				<Table name="mondrian_activity_contacts" />
+				<Level name="Contact Alternate Phone@@nr@@" type="Integer" column="amp_activity_id" nameColumn="alternate_phone@@nr@@" />
+			</Hierarchy>
+		<!-- Pledge Contacts - END -->
+		</Dimension>
+		
 		<DimensionUsage name="Dates" source="AMP Date" foreignKey="display_date_code" />
 		
 		<Dimension name="Flow Name">
@@ -914,7 +959,45 @@
 			</Hierarchy>
 		</Dimension>
 
-
+		<Dimension name="Pledges Detail Dates" foreignKey="entity_internal_id">
+			<Hierarchy hasAll="true" allMemberName="All Pledges Detail Start Date" primaryKey="pledge_detail_id" name="Pledges Detail Start Date">
+				<View alias='v_pledges_detail_start_date'>
+					<SQL dialect="generic">
+						<![CDATA[
+						SELECT DISTINCT mft_internal.entity_internal_id as pledge_detail_id, transaction_start_date
+						FROM mondrian_fact_table mft_internal
+						WHERE mft_internal.entity_id > 800000000 AND mft_internal.transaction_type=7 
+						]]>
+					</SQL>
+				</View>
+				<Level name="Pledges Detail Start Date" column="pledge_detail_id" nameColumn="transaction_start_date" />
+			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All Pledges Detail End Date" primaryKey="pledge_detail_id" name="Pledges Detail End Date">
+				<View alias='v_pledges_detail_end_date'>
+					<SQL dialect="generic">
+						<![CDATA[
+						SELECT DISTINCT mft_internal.entity_internal_id as pledge_detail_id, transaction_end_date
+						FROM mondrian_fact_table mft_internal
+						WHERE mft_internal.entity_id > 800000000 AND mft_internal.transaction_type=7 
+						]]>
+					</SQL>
+				</View>
+				<Level name="Pledges Detail End Date" column="pledge_detail_id" nameColumn="transaction_end_date" />
+			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All Pledges Detail Date Range" primaryKey="pledge_detail_id" name="Pledges Detail Date Range">
+			<View alias='v_pledges_detail_date_range'>
+					<SQL dialect="generic">
+						<![CDATA[
+						SELECT DISTINCT mft_internal.entity_internal_id as pledge_detail_id, transaction_range
+						FROM mondrian_fact_table mft_internal
+						WHERE mft_internal.entity_id > 800000000 AND mft_internal.transaction_type=7 
+						]]>
+					</SQL>
+				</View>
+				<Level name="Pledges Detail Date Range" column="pledge_detail_id" nameColumn="transaction_range" />
+			</Hierarchy>
++		</Dimension>
+		
 		<Measure name="@@trivial_measure@@" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic" aggregator="sum">

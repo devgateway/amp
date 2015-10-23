@@ -322,8 +322,8 @@ public class AMPStartupListener extends HttpServlet implements
 			checkMondrianETLSanity();
 			doMonetETL();
 			importGazeteer ();
-		} catch (Exception e) {
-			logger.error("Exception while initialising AMP :" + e.getMessage());
+		} catch (Throwable e) {
+			logger.error("Exception while initialising AMP :" + e.getMessage(), e);
 			throw new Error(e);
 		}
 	}

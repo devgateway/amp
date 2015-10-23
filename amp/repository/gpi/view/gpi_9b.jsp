@@ -71,7 +71,7 @@
 	           <tr <%=color%> >
 	               <logic:equal name="element" property="year" value="${gpiForm.selectedStartYear}">
 		               <td align="center" rowspan="${gpiForm.selectedEndYear + 1 - gpiForm.selectedStartYear}" height="65" class="inside" style="font-size: 11px; color: #484846;">
-		                   <strong><digi:trn><bean:write name="element" property="donorGroup.orgGrpName"/></digi:trn></strong>
+						   <span style="font-weight: bold"><bean:write name="element" property="donorGroup.orgGrpName"/></span>
 		               </td>
 	               </logic:equal>
 	               <td align="center" class="inside" style="font-size: 11px; color: #484846;">

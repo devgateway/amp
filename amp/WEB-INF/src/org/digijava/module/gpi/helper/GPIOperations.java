@@ -16,7 +16,7 @@ import org.digijava.module.gpi.model.GPIFilter;
 
 public interface GPIOperations {
 
-	public abstract Collection<GPIReportAbstractRow> generateReport(Collection<AmpActivityVersion> commonData, GPIFilter filter);
+	public abstract Collection<GPIReportAbstractRow> generateReport(Collection<Object[]> commonData, GPIFilter filter);
 
 	public abstract Collection<GPIReportAbstractRow> reportPostProcess(Collection<GPIReportAbstractRow> baseReport, int startYear, int endYear) throws Exception;
 }

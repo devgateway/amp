@@ -180,7 +180,15 @@ html.chrome .bd_drop{margin-top:15px;}
 
 .search_label {font-size:10px; color:#7F7F7F;}
 .tbl_spacing {padding-bottom:5px;}
-.tri {background-image:url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif); background-repeat: no-repeat; list-style-position:inside; list-style:none; display:block; font-size:11px; padding-bottom:1px; padding-left:7px; background-position: 4px -1px;}
+.tri {
+    background: url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif) no-repeat 4px -1px;
+    list-style: none inside none;
+    display:block;
+    font-size:11px;
+    padding-bottom:1px;
+    padding-left:11px;
+
+}
 #quickfloat .tri { border-top: 1px solid white; border-bottom: 1px solid white; padding-left: 12px; background-repeat: no-repeat; list-style-position:inside; list-style:none; display:block; font-size:11px; padding-bottom:1px;}
 html.ie #quickfloat ul{margin:0px 0px 0px -5px;}
 html.ie #quickfloat .tri {background-image:url(/TEMPLATE/ampTemplate/img_2/ico_tri_1.gif); background-position: 5px -5px; background-repeat: no-repeat;  list-style:none; width:148px; font-size:12px; padding-left: 12px; padding-bottom:5px; }

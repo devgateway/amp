@@ -30,7 +30,7 @@ define([ 'marionette', 'models/document', 'collections/documents',
 
 		var DocumentItemView = Marionette.ItemView.extend({
 			tagName : 'li',
-			className : 'document-item',
+			className : 'document-item tri',
 			template : _.template(documentTemplate)
 		});
 		var DocumentsItemsView = Marionette.CollectionView.extend({

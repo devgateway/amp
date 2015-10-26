@@ -13,6 +13,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.hibernate.Session;
 import org.joda.time.DateTime;
+import org.joda.time.chrono.GregorianChronology;
 
 import java.text.SimpleDateFormat;
 
@@ -266,14 +267,13 @@ public class FiscalCalendarUtil {
 		Calendar cal = Calendar.getInstance();
 		worker.setTime(cal.getTime());
 		
-		int deltaYears = fromDate.get(Calendar.YEAR) - worker.getCalendarDate().getYear();
-		cal.add(Calendar.YEAR, deltaYears);
-		worker.setTime(cal.getTime());
+		int deltaYears = cal.get(Calendar.YEAR) - worker.getCalendarDate().getYear();
+		fromDate.add(Calendar.YEAR, deltaYears);
 		
-		int deltaDays = fromDate.get(Calendar.DAY_OF_YEAR) - worker.getCalendarDate().getDayOfYear();
-		cal.add(Calendar.DAY_OF_YEAR, deltaDays);
+		int deltaDays = cal.get(Calendar.DAY_OF_YEAR) - worker.getCalendarDate().getDayOfYear();
+		fromDate.add(Calendar.DAY_OF_YEAR, deltaDays);
 		
-		return cal.getTime();
+		return fromDate.getTime();
 	}
 	
 	public static Date toDate(DateTime jodaTime) {
@@ -284,4 +284,56 @@ public class FiscalCalendarUtil {
 		return cal.getTime();
 	}
 	
+	public static DateTime toDateTime(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		DateTime dateTime = new DateTime(GregorianChronology.getInstance());
+		dateTime = dateTime.withDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH));
+		return dateTime;
+	}
+	
+	public static Date toGregorianDate(AmpFiscalCalendar fromCal, Integer year, int daysOffset) {
+		return getDateTime(fromCal, year, daysOffset, null).toDate();
+	}
+	
+	public static Integer getActualGregorianYear(AmpFiscalCalendar fromCal, Integer year, int daysOffset) {
+		return getActualYear(fromCal, year, daysOffset, null);
+	}
+	
+	public static Integer getActualYear(AmpFiscalCalendar fromCal, Integer year, int daysOffset, 
+			AmpFiscalCalendar toCal) {
+		return getDateTime(fromCal, year, daysOffset, toCal).getYear();
+	}
+	
+	/**
+	 * 
+	 * @param fromCal
+	 * @param year
+	 * @param daysOffset
+	 * @param toCal or null if to convert to Gregorian calendar
+	 * @return
+	 */
+	private static DateTime getDateTime(AmpFiscalCalendar fromCal, Integer year, int daysOffset, 
+			AmpFiscalCalendar toCal) {
+		Calendar tmpCal = Calendar.getInstance();
+		tmpCal.set(year, 0, 1);
+		
+		if (fromCal == null) {
+			tmpCal.add(Calendar.DAY_OF_YEAR, daysOffset);
+			return toDateTime(tmpCal.getTime());
+		}
+		
+		tmpCal.setTime(FiscalCalendarUtil.toGregorianDate(tmpCal.getTime(), fromCal));
+		
+		if (toCal == null) {
+			tmpCal.add(Calendar.DAY_OF_YEAR, daysOffset);
+			return toDateTime(tmpCal.getTime());
+		} else {
+			ICalendarWorker calWorker = toCal.getworker();
+			calWorker.setTime(tmpCal.getTime());
+			DateTime startYearDate = calWorker.getCalendarDate();
+			startYearDate.plusDays(daysOffset);
+			return startYearDate;
+		}
+	}
 }

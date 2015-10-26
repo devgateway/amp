@@ -432,16 +432,16 @@ public class SettingsUtils {
 		settings.add(new SettingOptions(yearSettingsName, false, yearNumber, null, null, false));
 
 		if (!yearNumber.equals("-1")) {
-			Date gsDate = yearEnd ? 
-				CalendarUtil.getEndDate(calendarId, Integer.parseInt(yearNumber))
-						:
-				CalendarUtil.getStartDate(calendarId, Integer.parseInt(yearNumber));
+			int yearDelta = yearEnd ? 1 : 0;
+			int daysDelta = yearEnd ? -1 : 0;
+			Date gsDate = FiscalCalendarUtil.toGregorianDate(gsCalendar, Integer.parseInt(yearNumber) + yearDelta, 
+					daysDelta); 
 			
 			/*
 			 * uncomment when filter picker support for other calendars will be available
 			Date date = FiscalCalendarUtil.convertDate(gsCalendar, gsDate, currentCalendar);
 			*/
-			Date date = FiscalCalendarUtil.toGregorianDate(gsDate, gsCalendar);
+			Date date = gsDate;
 				
 			settings.add(new SettingOptions(dateSettingsName, false, DateTimeUtil.parseDateForPicker2(date, Constants.CALENDAR_DATE_PICKER), null, null, true));
 		}
@@ -634,12 +634,13 @@ public class SettingsUtils {
 			start = Integer.valueOf((String) yearRange.get(SettingsConstants.YEAR_FROM));
 			end = Integer.valueOf((String) yearRange.get(SettingsConstants.YEAR_TO));
 		} else {
-			start = AmpARFilter.getDefaultStartYear();
-			end = AmpARFilter.getDefaultEndYear();
+			start = AmpARFilter.getDefaultStartYear(reportSettings.getCalendar());
+			end = AmpARFilter.getDefaultEndYear(reportSettings.getCalendar());
 		}
 		
 		// clear previous year settings
 		reportSettings.getFilterRules().remove(yearRangeElement);
+		reportSettings.setOldCalendar(null);
 		// TODO: update settings to store [ALL, ALL] range just to reflect
 		// the previous selection
 		if (!(start == -1 && end == -1)) {

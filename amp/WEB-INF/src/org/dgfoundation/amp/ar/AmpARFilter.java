@@ -885,11 +885,19 @@ public class AmpARFilter extends PropertyListable {
 	}
 	
 	public static Integer getDefaultStartYear() {
-		return getDefaultYear(getEffectiveSettings(), getDefaultCalendar(), true);
+		return getDefaultStartYear(getDefaultCalendar());
 	}
 	
 	public static Integer getDefaultEndYear() {
-		return getDefaultYear(getEffectiveSettings(), getDefaultCalendar(), false);
+		return getDefaultEndYear(getDefaultCalendar());
+	}
+	
+	public static Integer getDefaultStartYear(AmpFiscalCalendar current) {
+		return getDefaultYear(getEffectiveSettings(), current, true);
+	}
+	
+	public static Integer getDefaultEndYear(AmpFiscalCalendar current) {
+		return getDefaultYear(getEffectiveSettings(), current, false);
 	}
 	
 	protected static Integer getDefaultYear(AmpApplicationSettings settings, AmpFiscalCalendar current, 
@@ -915,19 +923,11 @@ public class AmpARFilter extends PropertyListable {
 		if (current != sourceCalendar) {
 			int yearDelta = startYear ? 0 : 1;
 			int daysDelta = startYear ? 0 : -1;
-			renderSettingsYear = getActualYear(sourceCalendar, renderSettingsYear + yearDelta, daysDelta, current);
+			renderSettingsYear = FiscalCalendarUtil
+					.getActualYear(sourceCalendar, renderSettingsYear + yearDelta, daysDelta, current);
 		}
 		
 		return renderSettingsYear;
-	}
-	
-	public static Integer getActualYear(AmpFiscalCalendar fromCal, Integer year, int daysOffset, 
-			AmpFiscalCalendar toCal) {
-		Calendar tmpCal = Calendar.getInstance();
-		tmpCal.set(year, 0, 1);
-		tmpCal.add(Calendar.DAY_OF_YEAR, daysOffset);
-		tmpCal.setTime(FiscalCalendarUtil.convertDate(fromCal, tmpCal.getTime(), toCal));
-		return tmpCal.get(Calendar.YEAR);
 	}
 	
 	private static Integer getValidYear(Integer year) {

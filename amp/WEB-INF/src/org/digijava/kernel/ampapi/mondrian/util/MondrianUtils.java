@@ -14,13 +14,13 @@ import java.util.List;
 import mondrian.olap.MondrianException;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.olap4j.CellSet;
 import org.olap4j.OlapException;
@@ -136,8 +136,8 @@ public class MondrianUtils {
 	 */
 	public static FilterRule getYearsRangeFilter(Integer start, Integer end, AmpFiscalCalendar fromCalendar,
 			AmpFiscalCalendar toCalendar) throws Exception {
-		start = AmpARFilter.getActualYear(fromCalendar, start, 0, toCalendar);
-		end = AmpARFilter.getActualYear(fromCalendar, end + 1, -1, toCalendar);
+		start = FiscalCalendarUtil.getActualYear(fromCalendar, start, 0, toCalendar);
+		end = FiscalCalendarUtil.getActualYear(fromCalendar, end + 1, -1, toCalendar);
 		return getDatesRangeFilterRule(ElementType.YEAR, start, end, 
 				getFiscalYear(start, toCalendar),
 				getFiscalYear(end, toCalendar),

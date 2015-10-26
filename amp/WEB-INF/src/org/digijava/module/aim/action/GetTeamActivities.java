@@ -17,7 +17,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -29,8 +28,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.RepairDbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
-public class GetTeamActivities
-        extends Action {
+public class GetTeamActivities extends Action {
 
     private static Logger logger = Logger.getLogger(GetTeamActivities.class);
     public static final String ARCHIVED_PARAMETER	= "selectedSubTab";
@@ -131,44 +129,31 @@ public class GetTeamActivities
                 taForm.setTeamName(ampTeam.getName());
 
                 if(taForm.getAllActivities() == null) {
-                    Collection col = null;
-                    if(true) {
-                        if(ampTeam.getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
-                            col = TeamUtil.getManagementTeamActivities(id,taForm.getKeyword());
-                            taForm.setDonorFlag(true);
-                        } else if(false) {
-                            col = TeamUtil.getAllTeamActivities(id,true,taForm.getKeyword());
-                            taForm.setDonorFlag(true);
-                        } else {
-                            //col = TeamUtil.getAllTeamActivities(id);
-                        	col = TeamUtil.getAllTeamActivities(id,true,taForm.getKeyword());
-                            taForm.setDonorFlag(false);
-                        }
-                    }else {
-                        col = TeamUtil.getAllTeamActivities(id,true,taForm.getKeyword());
+                    Collection<AmpActivityVersion> col = null;
+                    if(Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(ampTeam.getAccessType())) {
+                        col = TeamUtil.getManagementTeamActivities(id, taForm.getKeyword());
+                        taForm.setDonorFlag(true);
+                    } else {
+                    	col = TeamUtil.getAllTeamActivities(id, true, taForm.getKeyword());
                         taForm.setDonorFlag(false);
                     }
+                   
                     logger.info("Loaded " + col.size() + " activities for the team " + ampTeam.getName());
                     taForm.setAllActivities(col);
                 }
 
-                Comparator acronymComp = new Comparator() {
-                    public int compare(Object o1, Object o2) {
-                    	AmpActivityVersion r1 = (AmpActivityVersion) o1;
-                    	AmpActivityVersion r2 = (AmpActivityVersion) o2;
-                        
-                        return r1.getDonors().trim().toLowerCase().compareTo(r2.getDonors().trim().toLowerCase());
+                Comparator<AmpActivityVersion> acronymComp = new Comparator<AmpActivityVersion>() {
+                    public int compare(AmpActivityVersion o1, AmpActivityVersion o2) {
+                        return o1.getDonors().trim().toLowerCase().compareTo(o2.getDonors().trim().toLowerCase());
                     }
                 };
-                Comparator racronymComp = new Comparator() {
-                    public int compare(Object o1, Object o2) {
-                    	AmpActivityVersion r1 = (AmpActivityVersion) o1;
-                    	AmpActivityVersion r2 = (AmpActivityVersion) o2;
-                        return -(r1.getDonors().trim().toLowerCase().compareTo(r2.getDonors().trim().toLowerCase()));
+                Comparator<AmpActivityVersion> racronymComp = new  Comparator<AmpActivityVersion>() {
+                    public int compare(AmpActivityVersion o1, AmpActivityVersion o2) {
+                        return -(o1.getDonors().trim().toLowerCase().compareTo(o2.getDonors().trim().toLowerCase()));
                     }
                 };
 
-                List temp = (List) taForm.getAllActivities();
+                List<AmpActivityVersion> temp = (List<AmpActivityVersion>) taForm.getAllActivities();
                 String sort = (taForm.getSort() == null) ? null : taForm.getSort().trim();
                 String sortOrder = (taForm.getSortOrder() == null) ? null : taForm.getSortOrder().trim();
 

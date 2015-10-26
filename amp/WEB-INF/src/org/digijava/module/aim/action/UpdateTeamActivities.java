@@ -17,8 +17,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.ar.ReportContextData;
-import org.dgfoundation.amp.error.CurrentReportContextIdException;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -33,6 +31,8 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.message.triggers.ActivitySaveTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
+
+import clover.org.apache.commons.lang.StringUtils;
 
 public class UpdateTeamActivities extends Action {
 
@@ -211,7 +211,8 @@ public class UpdateTeamActivities extends Action {
 		} else {
 			/* show all unassigned activities */
 
-			if ((reset!=null && reset.equalsIgnoreCase("true")) || request.getParameter("page") == null || Integer.parseInt(request.getParameter("page")) == 0) {
+			if ((reset!=null && reset.equalsIgnoreCase("true")) || request.getParameter("page") == null 
+					|| Integer.parseInt(request.getParameter("page")) == 0) {
 				page = 1;
 			} else {
 				page = Integer.parseInt(request.getParameter("page"));
@@ -219,62 +220,53 @@ public class UpdateTeamActivities extends Action {
 
 			AmpTeam ampTeam = TeamUtil.getAmpTeam(id);
 
-			Collection col = null;
-			if (session.getAttribute("unassignedActivityList") == null || (taForm.getKeyword()!=null && taForm.getKeyword().length()>0)|| (reset!=null && reset.equalsIgnoreCase("true"))) {
-				
+			Collection<AmpActivity> col = null;
+			if (session.getAttribute("unassignedActivityList") == null 
+					|| StringUtils.isNotBlank(taForm.getKeyword()) 
+					|| (reset !=null && reset.equalsIgnoreCase("true"))) {
 				
 				 List<AmpActivity> temp = new ArrayList<AmpActivity>();
-				 for(AmpActivity act:TeamUtil.getAllTeamAmpActivities(null,false,taForm.getKeyword()))
-				 {
+				 for(AmpActivity act : TeamUtil.getAllTeamAmpActivities(null, true, taForm.getKeyword())) {
 					 if (((org.dgfoundation.amp.onepager.util.ActivityUtil.ACTIVITY_TYPE_PROJECT.equals(act.getActivityType()) 
-						        || act.getActivityType() == null)
-						    	&& !ampTeam.isSSCWorkspace())  || 
+						        || act.getActivityType() == null)	&& !ampTeam.isSSCWorkspace())  || 
 						    	(org.dgfoundation.amp.onepager.util.ActivityUtil.ACTIVITY_TYPE_SSC.equals(act.getActivityType())  
-								    	&& 	ampTeam.isSSCWorkspace()))
-					 {
-				       temp.add(act);
+								    	&& 	ampTeam.isSSCWorkspace())) {
+						 temp.add(act);
 					 }
 				 }
 				Collections.sort(temp);
-				col = (Collection) temp;
+				col = (Collection<AmpActivity>) temp;
 				session.setAttribute("unassignedActivityList", col);
 			}
 			
-			List actList = (List) session.getAttribute("unassignedActivityList");
-
+			List<AmpActivity> actList = (List<AmpActivity>) session.getAttribute("unassignedActivityList");
 			
-			Comparator acronymComp = new Comparator() {
-				public int compare(Object o1, Object o2) {
-					AmpActivityVersion r1 = (AmpActivityVersion) o1;
-					AmpActivityVersion r2 = (AmpActivityVersion) o2;
-			        return r1.getDonors().trim().toLowerCase().compareTo(r2.getDonors().trim().toLowerCase());
-				}
-			};
-			Comparator racronymComp = new Comparator() {
-				public int compare(Object o1, Object o2) {
-					AmpActivityVersion r1 = (AmpActivityVersion) o1;
-					AmpActivityVersion r2 = (AmpActivityVersion) o2;
-					return -(r1.getDonors().trim().toLowerCase().compareTo(r2.getDonors().trim().toLowerCase()));
+			Comparator<AmpActivity> acronymComp = new Comparator<AmpActivity>() {
+				public int compare(AmpActivity o1, AmpActivity o2) {
+			        return o1.getDonors().trim().toLowerCase().compareTo(o2.getDonors().trim().toLowerCase());
 				}
 			};
 			
-//			List temp = (List)actList;
+			Comparator<AmpActivity> racronymComp = new Comparator<AmpActivity>() {
+				public int compare(AmpActivity o1, AmpActivity o2) {
+					return -(o1.getDonors().trim().toLowerCase().compareTo(o2.getDonors().trim().toLowerCase()));
+				}
+			};
+			
 			String sort = (taForm.getSort() == null) ? null : taForm.getSort().trim();
 			String sortOrder = (taForm.getSortOrder() == null) ? null : taForm.getSortOrder().trim();
 			
-			if ( sort == null || "".equals(sort) || sortOrder == null || "".equals(sortOrder)) {
+			if (StringUtils.isEmpty(sort) || StringUtils.isEmpty(sortOrder)) {
 				Collections.sort(actList);
 				taForm.setSort("activity");
 				taForm.setSortOrder("asc");
-			}
-			else {
+			} else {
 				if ("activity".equals(sort)) {
 					if ("asc".equals(sortOrder))
 						Collections.sort(actList);
 					else
 						Collections.sort(actList,Collections.reverseOrder());
-				}
-				else if ("donor".equals(sort)) {
+				} else if ("donor".equals(sort)) {
 					if ("asc".equals(sortOrder))
 						Collections.sort(actList, acronymComp);
 					else
@@ -290,10 +282,10 @@ public class UpdateTeamActivities extends Action {
 				edIndex = actList.size();
 			}
 
-			Vector vect = new Vector();
+			Vector<AmpActivity> vect = new Vector<AmpActivity>();
 			vect.addAll(actList);
 
-			col = new ArrayList();
+			col = new ArrayList<AmpActivity>();
 			for (int i = (stIndex - 1); i < edIndex; i++) {
 				col.add(vect.get(i));
 			}

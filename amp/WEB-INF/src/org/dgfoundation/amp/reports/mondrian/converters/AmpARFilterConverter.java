@@ -97,6 +97,7 @@ public class AmpARFilterConverter {
 	
 	public MondrianReportFilters buildFilters() {
 		filterRules = new MondrianReportFilters();
+		filterRules.setCalendar(arFilter.getCalendarType());
 		buildCurrentFilters();
 		//TODO: to clarify how pledge specific filters should be applied, e.g. if "include pledges" is selected, then translate current filter into pledge filter?
 		/*

@@ -92,11 +92,14 @@ public class FilterUtils {
 	 * @param filter
 	 * @return
 	 */
-	public static MondrianReportFilters getApiColumnFilter(LinkedHashMap<String, Object> filter) {
+	public static MondrianReportFilters getApiColumnFilter(LinkedHashMap<String, Object> filter, 
+			MondrianReportFilters filterRules) {
 		if (filter == null) {
-			return null;
+			return filterRules;
 		}
-		MondrianReportFilters filterRules = new MondrianReportFilters();
+		if (filterRules == null) {
+			filterRules = new MondrianReportFilters();
+		}
 		Set<String> validColumns = ConstantsUtil.getConstantsSet(ColumnConstants.class);
 		for (Entry<String, Object> entry : filter.entrySet()) {
 			if (validColumns.contains(entry.getKey())) {
@@ -146,10 +149,15 @@ public class FilterUtils {
 		return activitIds;
 	}
 	
-	public static MondrianReportFilters getFilterRules(LinkedHashMap<String, Object> columnFilter, LinkedHashMap<String, Object> otherFilter, List<String> activityIds) {
-		MondrianReportFilters filterRules = null;
+	public static MondrianReportFilters getFilterRules(LinkedHashMap<String, Object> columnFilter, 
+			LinkedHashMap<String, Object> otherFilter, List<String> activityIds) {
+		return getFilterRules(columnFilter, otherFilter, activityIds, null);
+	}
+			
+	public static MondrianReportFilters getFilterRules(LinkedHashMap<String, Object> columnFilter, 
+			LinkedHashMap<String, Object> otherFilter, List<String> activityIds, MondrianReportFilters filterRules) {
 			if(columnFilter!=null){
-				filterRules = FilterUtils.getApiColumnFilter(columnFilter);	
+				filterRules = FilterUtils.getApiColumnFilter(columnFilter, filterRules);	
 			}
 			if(otherFilter!=null){
 				filterRules = FilterUtils.getApiOtherFilters(otherFilter, filterRules);
@@ -172,8 +180,8 @@ public class FilterUtils {
 	 * @return MondrianReportFilters
 	 * @see #getFilters(JsonBean, List)
 	 */
-	public static MondrianReportFilters getFilters(JsonBean filtersConfig) {
-		return getFilters(filtersConfig, null);
+	public static MondrianReportFilters getFilters(JsonBean filtersConfig, MondrianReportFilters filters) {
+		return getFilters(filtersConfig, null, filters);
 	}
 	
 	/**
@@ -182,8 +190,8 @@ public class FilterUtils {
 	 * @param activitIds    the list of activities to filter by
 	 * @return MondrianReportFilters
 	 */
-	public static MondrianReportFilters getFilters(JsonBean filtersConfig, List<String> activitIds) {
-		MondrianReportFilters filters = null;
+	public static MondrianReportFilters getFilters(JsonBean filtersConfig, List<String> activitIds,
+			MondrianReportFilters filters) {
 		
 		//we check if we have filter by keyword
 		LinkedHashMap<String, Object> otherFilter=null;
@@ -197,7 +205,7 @@ public class FilterUtils {
 		
 		filters = FilterUtils.getFilterRules(
 				(LinkedHashMap<String, Object>) filtersConfig.get("columnFilters"),
-				otherFilter, activitIds);
+				otherFilter, activitIds, filters);
 		
 		return filters;
 	}
@@ -248,7 +256,7 @@ public class FilterUtils {
 	 * @param spec
 	 */
 	public static void applyFilterRules(JsonBean config, ReportSpecificationImpl spec, Integer months) {
-		MondrianReportFilters filterRules = FilterUtils.getFilters(config);
+		MondrianReportFilters filterRules = FilterUtils.getFilters(config, (MondrianReportFilters) spec.getFilters());
 		if (months != null) {
 			Calendar cal = Calendar.getInstance();
 			Calendar currentCal = Calendar.getInstance();

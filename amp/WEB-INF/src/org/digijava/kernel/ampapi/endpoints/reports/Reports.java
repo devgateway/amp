@@ -75,7 +75,6 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
@@ -746,7 +745,8 @@ public class Reports {
 				MondrianReportFilters mondrianReportFilters = null;
 				if (requestFilters != null) {
 					filters.any().putAll(requestFilters);
-					mondrianReportFilters = FilterUtils.getFilters(filters);
+					mondrianReportFilters = FilterUtils.getFilters(filters,
+							MondrianReportUtils.getCurrentUserDefaultFilters(null));
 
 					// Transform back to legacy AmpARFilters.
 					MondrianReportFiltersConverter converter = new MondrianReportFiltersConverter(mondrianReportFilters);

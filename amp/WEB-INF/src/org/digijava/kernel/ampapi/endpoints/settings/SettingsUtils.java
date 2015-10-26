@@ -46,6 +46,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.h2.util.StringUtils;
 
@@ -404,36 +405,43 @@ public class SettingsUtils {
 
 		// Dashboard / GIS specific date range settings
 
-		String defaultCalendar = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
-		long defaultCalendarId = Long.parseLong(defaultCalendar);
+		long defaultCalendarId = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR);
+		AmpFiscalCalendar gsFiscalCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(defaultCalendarId);
+		AmpFiscalCalendar currentCalendar = AmpARFilter.getDefaultCalendar();
 
 		addDateSetting(settings, GlobalSettingsConstants.DASHBOARD_DEFAULT_MAX_YEAR_RANGE,
 				"dashboard-default-max-date", "dashboard-default-max-year-range", 
-				defaultCalendarId, true);
+				defaultCalendarId, gsFiscalCalendar, currentCalendar, true);
 		addDateSetting(settings, GlobalSettingsConstants.DASHBOARD_DEFAULT_MIN_YEAR_RANGE,
 				"dashboard-default-min-date", "dashboard-default-min-year-range", 
-				defaultCalendarId, false);
+				defaultCalendarId, gsFiscalCalendar, currentCalendar, false);
 		addDateSetting(settings, GlobalSettingsConstants.GIS_DEFAUL_MAX_YEAR_RANGE, "gis-default-max-date",
-				"gis-default-max-year-range", defaultCalendarId, true);
+				"gis-default-max-year-range", defaultCalendarId, gsFiscalCalendar, currentCalendar, true);
 		addDateSetting(settings, GlobalSettingsConstants.GIS_DEFAUL_MIN_YEAR_RANGE, "gis-default-min-date",
-				"gis-default-min-year-range", defaultCalendarId, false);
+				"gis-default-min-year-range", defaultCalendarId, gsFiscalCalendar, currentCalendar, false);
 
 		return settings;
 	}
 	
 	protected static void addDateSetting(List<SettingOptions> settings, String globalSettingsName,
 			String dateSettingsName, String yearSettingsName,
-			long calendarId,
+			long calendarId, AmpFiscalCalendar gsCalendar, AmpFiscalCalendar currentCalendar,
 			boolean yearEnd) throws Exception {
 		
 		String yearNumber = FeaturesUtil.getGlobalSettingValue(globalSettingsName);
 		settings.add(new SettingOptions(yearSettingsName, false, yearNumber, null, null, false));
 
 		if (!yearNumber.equals("-1")) {
-			Date date = yearEnd ? 
+			Date gsDate = yearEnd ? 
 				CalendarUtil.getEndDate(calendarId, Integer.parseInt(yearNumber))
 						:
 				CalendarUtil.getStartDate(calendarId, Integer.parseInt(yearNumber));
+			
+			/*
+			 * uncomment when filter picker support for other calendars will be available
+			Date date = FiscalCalendarUtil.convertDate(gsCalendar, gsDate, currentCalendar);
+			*/
+			Date date = FiscalCalendarUtil.toGregorianDate(gsDate, gsCalendar);
 				
 			settings.add(new SettingOptions(dateSettingsName, false, DateTimeUtil.parseDateForPicker2(date, Constants.CALENDAR_DATE_PICKER), null, null, true));
 		}
@@ -594,8 +602,10 @@ public class SettingsUtils {
 	private static void configureCalendar(MondrianReportSettings reportSettings, Map<String, Object> settings, 
 			boolean setDefaults) {
 		String calendarId = settings == null ? null : String.valueOf(settings.get(SettingsConstants.CALENDAR_TYPE_ID));
-		if (settings != null && StringUtils.isNumber(calendarId))
+		if (settings != null && StringUtils.isNumber(calendarId)) {
+			reportSettings.setOldCalendar(reportSettings.getCalendar());
 			reportSettings.setCalendar(DbUtil.getAmpFiscalCalendar(Long.valueOf(calendarId)));
+		}
 		
 		if (setDefaults && reportSettings.getCalendar() == null)
 			reportSettings.setCalendar(DbUtil.getAmpFiscalCalendar(Long.valueOf(EndpointUtils.getDefaultCalendarId())));
@@ -611,20 +621,22 @@ public class SettingsUtils {
 		ReportElement yearRangeElement = new ReportElement(ElementType.YEAR); 
 		boolean preExistingYearRangeSetting = (reportSettings.getFilterRules().get(yearRangeElement) != null) && 
 				(!reportSettings.getFilterRules().get(yearRangeElement).isEmpty());
+		
+		// TODO: once year range settings will be configurable through UI / API, then always re-apply
+		if (preExistingYearRangeSetting && !setDefaults && reportSettings.getCalendar() == reportSettings.getOldCalendar())
+			return;
+		
 		// apply year range settings
-		Integer start = 0;
-		Integer end = 0;
+		Integer start = null;
+		Integer end = null;
 		if (settings!= null && settings.get(SettingsConstants.YEAR_RANGE_ID) != null) {
 			Map<String, Object> yearRange = (Map<String, Object>) settings.get(SettingsConstants.YEAR_RANGE_ID);
 			start = Integer.valueOf((String) yearRange.get(SettingsConstants.YEAR_FROM));
 			end = Integer.valueOf((String) yearRange.get(SettingsConstants.YEAR_TO));
 		} else {
-			start = new Integer(EndpointUtils.getDefaultReportStartYear());
-			end = new Integer(EndpointUtils.getDefaultReportEndYear());
+			start = AmpARFilter.getDefaultStartYear();
+			end = AmpARFilter.getDefaultEndYear();
 		}
-		
-		if (preExistingYearRangeSetting && !setDefaults)
-			return;
 		
 		// clear previous year settings
 		reportSettings.getFilterRules().remove(yearRangeElement);

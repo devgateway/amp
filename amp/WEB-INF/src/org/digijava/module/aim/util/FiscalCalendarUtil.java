@@ -12,6 +12,8 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.hibernate.Session;
+import org.joda.time.DateTime;
+
 import java.text.SimpleDateFormat;
 
 public class FiscalCalendarUtil {
@@ -215,4 +217,71 @@ public class FiscalCalendarUtil {
 		Integer year = getYearOnCalendar(cal, pyear, defauCalendar);
 		return year;
 	}
+	
+	/**
+	 * 
+	 * @param calendarId
+	 * @param year
+	 * @return
+	 */
+	public static Date convertDate(Long fromCalendarId, Date fromDate, Long toCalendarId) {
+		return convertDate(FiscalCalendarUtil.getAmpFiscalCalendar(fromCalendarId), fromDate, 
+				FiscalCalendarUtil.getAmpFiscalCalendar(toCalendarId));
+	}
+	
+	/**
+	 * 
+	 * @param fromCalendar
+	 * @param fromDate
+	 * @param toCalendar
+	 * @return
+	 */
+	public static Date convertDate(AmpFiscalCalendar fromCalendar, Date fromDate, AmpFiscalCalendar toCalendar) {
+		if (fromCalendar == null || fromDate == null || toCalendar == null || fromCalendar == toCalendar)
+			return fromDate;
+		
+		Date gregDate = toGregorianDate(fromDate, fromCalendar);
+		ICalendarWorker toCalWorker = toCalendar.getworker();
+		toCalWorker.setTime(gregDate);
+		DateTime toDateTime = toCalWorker.getCalendarDate();
+		Date result = toDate(toDateTime);
+		return result;
+	}
+	
+	/**
+	 * 
+	 * Note: Since no general solution existed so far for so many years, agreed on this quick solution to reduce 
+	 * conversion bugs and it will be redesign as part of migration to Java8 and new Reports Engine (after Mondrian era)  
+	 * 
+	 * @param date
+	 * @param fromCalendar
+	 * @return
+	 */
+	public static Date toGregorianDate(Date date, AmpFiscalCalendar fromCalendar) {
+		ICalendarWorker worker = fromCalendar.getworker();
+		
+		Calendar fromDate = Calendar.getInstance();
+		fromDate.setTime(date);
+		
+		Calendar cal = Calendar.getInstance();
+		worker.setTime(cal.getTime());
+		
+		int deltaYears = fromDate.get(Calendar.YEAR) - worker.getCalendarDate().getYear();
+		cal.add(Calendar.YEAR, deltaYears);
+		worker.setTime(cal.getTime());
+		
+		int deltaDays = fromDate.get(Calendar.DAY_OF_YEAR) - worker.getCalendarDate().getDayOfYear();
+		cal.add(Calendar.DAY_OF_YEAR, deltaDays);
+		
+		return cal.getTime();
+	}
+	
+	public static Date toDate(DateTime jodaTime) {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, jodaTime.getYear());
+		cal.set(Calendar.MONTH, jodaTime.getMonthOfYear() - 1);
+		cal.set(Calendar.DATE, jodaTime.getDayOfMonth());
+		return cal.getTime();
+	}
+	
 }

@@ -43,6 +43,7 @@ import org.digijava.module.aim.util.DbUtil;
 
 /**
  * Reports utility methods
+ * 
  * @author Nadejda Mandrescu
  */
 public class MondrianReportUtils {
@@ -85,6 +86,17 @@ public class MondrianReportUtils {
 			settings.setCalendar(ampAppSettings.getFiscalCalendar());
 		}
 		return settings;
+	}
+	
+	public static MondrianReportFilters getCurrentUserDefaultFilters(MondrianReportFilters oldFilters) {
+		MondrianReportFilters filters = oldFilters != null ? oldFilters : new MondrianReportFilters(); 
+		if (oldFilters != null && oldFilters.getCalendar() != null) {
+			filters.setCalendar(oldFilters.getCalendar());
+		} else {
+			// configure default
+			filters.setCalendar(AmpARFilter.getDefaultCalendar());
+		}
+		return filters;
 	}
 	
 	/**

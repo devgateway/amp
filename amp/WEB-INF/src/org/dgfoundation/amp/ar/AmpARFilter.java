@@ -53,6 +53,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.Constants.GlobalSettings;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -876,10 +877,64 @@ public class AmpARFilter extends PropertyListable {
 	private void initRenderStartEndYears(AmpApplicationSettings settings)
 	{
 		///Set the range depending of workspace setup / global setting and selected calendar
-		Integer renderStartSettingsYear = (settings == null) ? null : settings.getReportStartYear();
-		Integer renderendSettingsYear = (settings == null) ? null : settings.getReportEndYear();
-		setRenderStartYear(getCalendarYear(settings, renderStartSettingsYear, org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE));
-		setRenderEndYear(getCalendarYear(settings, renderendSettingsYear, org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE));	
+		Integer renderStartSettingsYear = getDefaultYear(settings, calendarType, true);
+		Integer renderEndSettingsYear = getDefaultYear(settings, calendarType, false);
+		
+		setRenderStartYear(renderStartSettingsYear);
+		setRenderEndYear(renderEndSettingsYear);	
+	}
+	
+	public static Integer getDefaultStartYear() {
+		return getDefaultYear(getEffectiveSettings(), getDefaultCalendar(), true);
+	}
+	
+	public static Integer getDefaultEndYear() {
+		return getDefaultYear(getEffectiveSettings(), getDefaultCalendar(), false);
+	}
+	
+	protected static Integer getDefaultYear(AmpApplicationSettings settings, AmpFiscalCalendar current, 
+			boolean startYear) {
+		
+		// 1st default priority are Workspace Settings
+		Integer renderSettingsYear = (settings == null) ? null : getValidYear(
+				startYear ? settings.getReportStartYear() : settings.getReportEndYear());
+		
+		// this is the calendar the settings are taken from, 
+		// that we need to keep track for any year conversions to the actually used calendar
+		AmpFiscalCalendar sourceCalendar = renderSettingsYear == null ? null : settings.getFiscalCalendar();
+		
+		// 2nd default priority are Global Settings
+		if (renderSettingsYear == null) {
+			renderSettingsYear = FeaturesUtil.getGlobalSettingValueInteger(startYear ?
+					GlobalSettings.START_YEAR_DEFAULT_VALUE : GlobalSettings.END_YEAR_DEFAULT_VALUE);
+			Long gsCalendarId = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR);
+			sourceCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(gsCalendarId);
+		}
+		
+		// now convert the years to the actual calendar if needed
+		if (current != sourceCalendar) {
+			int yearDelta = startYear ? 0 : 1;
+			int daysDelta = startYear ? 0 : -1;
+			renderSettingsYear = getActualYear(sourceCalendar, renderSettingsYear + yearDelta, daysDelta, current);
+		}
+		
+		return renderSettingsYear;
+	}
+	
+	public static Integer getActualYear(AmpFiscalCalendar fromCal, Integer year, int daysOffset, 
+			AmpFiscalCalendar toCal) {
+		Calendar tmpCal = Calendar.getInstance();
+		tmpCal.set(year, 0, 1);
+		tmpCal.add(Calendar.DAY_OF_YEAR, daysOffset);
+		tmpCal.setTime(FiscalCalendarUtil.convertDate(fromCal, tmpCal.getTime(), toCal));
+		return tmpCal.get(Calendar.YEAR);
+	}
+	
+	private static Integer getValidYear(Integer year) {
+		// TODO: we may also have to check if it is in the allowed year range (is there any?)
+		if (year == null || year == 0)
+			return null;
+		return year;
 	}
 	
 	/**

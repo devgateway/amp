@@ -667,6 +667,11 @@ public class FeaturesUtil {
 		String globalValue = getGlobalSettingValue(globalSettingName);
         return globalValue != null ? Long.parseLong(globalValue) : -1l;
 	}
+	
+	public static Integer getGlobalSettingValueInteger(String globalSettingName) {
+		String globalValue = getGlobalSettingValue(globalSettingName);
+        return globalValue != null ? Integer.parseInt(globalValue) : -1;
+	}
 
 	public static Double getGlobalSettingDouble(String globalSettingName) {
 		String globalValue = getGlobalSettingValue(globalSettingName);

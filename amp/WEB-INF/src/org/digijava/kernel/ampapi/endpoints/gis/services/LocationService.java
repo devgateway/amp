@@ -119,12 +119,13 @@ public class LocationService {
 		MondrianReportSettings mrs = (MondrianReportSettings) spec.getSettings();
 		mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
 		
-		 MondrianReportFilters filterRules = new MondrianReportFilters(); 
+		MondrianReportFilters filterRules = new MondrianReportFilters(spec.getSettings().getCalendar()); 
 		
 		if(config != null){
 			Object columnFilters = config.get("columnFilters");
 			if(columnFilters!=null){
-				filterRules = FilterUtils.getApiColumnFilter((LinkedHashMap<String, Object>) config.get("columnFilters"));	
+				filterRules = FilterUtils.getApiColumnFilter(
+						(LinkedHashMap<String, Object>) config.get("columnFilters"), filterRules);	
 			}
  		}
 		Map<String, String> admLevelToGeoCode;
@@ -768,11 +769,11 @@ public class LocationService {
 		spec.setCalculateRowTotals(true);
 		spec.setDisplayEmptyFundingRows(true);
 		
-		MondrianReportFilters filterRules = FilterUtils.getFilters(config);
-		
 		SettingsUtils.applyExtendedSettings(spec, config);
 		MondrianReportSettings mrs = (MondrianReportSettings) spec.getSettings();
 		mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
+		
+		MondrianReportFilters filterRules = FilterUtils.getFilters(config, new MondrianReportFilters(mrs.getCalendar()));
 		if (filterRules != null) {
 			spec.setFilters(filterRules);
 		}

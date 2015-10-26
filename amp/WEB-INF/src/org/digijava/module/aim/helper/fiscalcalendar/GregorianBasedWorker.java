@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.joda.time.DateTime;
+import org.joda.time.chrono.GregorianChronology;
 
 public class GregorianBasedWorker implements ICalendarWorker {
 
@@ -18,6 +20,8 @@ public class GregorianBasedWorker implements ICalendarWorker {
 	private GregorianCalendar internalCalendar = null;
 
 	private Date internalTime = null;
+	
+	private DateTime calendarDate = null;
 
 	private AmpFiscalCalendar fiscalCalendar = null;
 
@@ -55,6 +59,13 @@ public class GregorianBasedWorker implements ICalendarWorker {
 			toAdd = (fiscalCalendar.getStartDayNum() - 1);
 			internalCalendar.add(GregorianCalendar.DAY_OF_MONTH, 0-toAdd);
 		}
+		calendarDate = new DateTime(GregorianChronology.getInstance());
+		calendarDate = calendarDate.withDate(internalCalendar.get(GregorianCalendar.YEAR),
+				internalCalendar.get(GregorianCalendar.MONTH) + 1, internalCalendar.get(GregorianCalendar.DAY_OF_MONTH));
+	}
+	
+	public DateTime getCalendarDate() {
+		return calendarDate;
 	}
 
 	public ComparableMonth getMonth() throws Exception {

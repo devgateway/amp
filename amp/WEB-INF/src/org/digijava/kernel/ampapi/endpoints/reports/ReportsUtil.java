@@ -36,6 +36,7 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.reports.ActivityType;
 import org.dgfoundation.amp.reports.CachedReportData;
 import org.dgfoundation.amp.reports.PartialReportArea;
@@ -281,8 +282,9 @@ public class ReportsUtil {
 		addMeasures(specImpl, formParams);
 		
 		// update report data presentation
+		AmpFiscalCalendar oldCalendar = specImpl.getSettings() == null ? null : specImpl.getSettings().getCalendar(); 
 		SettingsUtils.applySettings(specImpl, formParams, false);
-		configureFilters(specImpl, formParams);
+		configureFilters(specImpl, formParams, oldCalendar);
 		configureSorting(specImpl, formParams);
 		
 		// update report data
@@ -340,12 +342,26 @@ public class ReportsUtil {
 		}
 	}
 	
-	public static void configureFilters(ReportSpecificationImpl spec, JsonBean formParams) {
+	public static void configureFilters(ReportSpecificationImpl spec, JsonBean formParams, 
+			AmpFiscalCalendar oldCalendar) {
 		JsonBean filters = new JsonBean();
 		LinkedHashMap<String, Object> requestFilters = (LinkedHashMap<String, Object>) formParams.get(EPConstants.FILTERS);
 		if (requestFilters != null) {
 			filters.any().putAll(requestFilters);
-			MondrianReportFilters formFilters = FilterUtils.getFilters(filters);
+			MondrianReportFilters newFilters = null;
+			if (spec.getFilters() != null) {
+				newFilters = (MondrianReportFilters) spec.getFilters();
+				// TODO: we need calendar + date to be linked in UI as well OR make same form for filters and settings
+				// for now, if this is a calendar setting, let's check if any filters still exist and needs to be converted 
+				if (spec.getSettings().getCalendar() != oldCalendar
+						&& newFilters.getFilterRules().get(new ReportElement(ElementType.DATE)) != null) {
+					newFilters.setOldCalendar(oldCalendar);
+				}
+			} else {
+				newFilters = MondrianReportUtils.getCurrentUserDefaultFilters((MondrianReportFilters) spec.getFilters());
+			}
+			newFilters.setCalendar(spec.getSettings().getCalendar());
+			MondrianReportFilters formFilters = FilterUtils.getFilters(filters, newFilters);
 			MondrianReportFilters stickyFilters = copyStickyMtefEntries(spec.getFilters(), formFilters);
 			spec.setFilters(stickyFilters);
 		}

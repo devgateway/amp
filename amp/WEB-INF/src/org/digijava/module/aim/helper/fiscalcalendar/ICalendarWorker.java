@@ -2,11 +2,19 @@ package org.digijava.module.aim.helper.fiscalcalendar;
 
 import java.util.Date;
 
+import org.joda.time.DateTime;
+
 public interface ICalendarWorker  {
 
+	/**
+	 * The date in the given calendar
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public DateTime getCalendarDate();
+	
 	public Date getDate() throws Exception;
-	
-	
 	
 	/**
 	 * Get the the YEAR according to the current fiscal calendar configuration
@@ -41,7 +49,6 @@ public interface ICalendarWorker  {
 
 	
 	public Integer getYearDiff(ICalendarWorker worker) throws Exception;
-	
 	
 	public String getFiscalYear() throws Exception;
    

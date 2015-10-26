@@ -10,14 +10,22 @@ import org.dgfoundation.amp.newreports.ReportSettings;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 
 /**
- * Report Settings 
+ * Report Settings
+ * 
  * @author Nadejda Mandrescu
- *
  */
 public class MondrianReportSettings extends MondrianReportFilters implements ReportSettings {
 	private String currencyCode = null;
 	private DecimalFormat currencyFormat = null;
 	private AmountsUnits unitsOption;
+	
+	public MondrianReportSettings() {
+		super();
+	}
+	
+	public MondrianReportSettings(AmpFiscalCalendar calendar) {
+		super(calendar);
+	}
 	
 	@Override
 	public String getCurrencyCode() {
@@ -44,19 +52,7 @@ public class MondrianReportSettings extends MondrianReportFilters implements Rep
 	public void setCurrencyFormat(DecimalFormat currencyFormat) {
 		this.currencyFormat = currencyFormat;
 	}
-
-	@Override
-	public AmpFiscalCalendar getCalendar() {
-		return calendar;
-	}
 	
-	/**
-	 * Configures the calendar type
-	 * @param calendar
-	 */
-	public void setCalendar(AmpFiscalCalendar calendar) {
-		this.calendar = calendar;
-	}
 
 	@Override
 	/** if the stored value is null, returns the default one (GlobalSettings.AMOUNTS_IN_THOUSANDS) */

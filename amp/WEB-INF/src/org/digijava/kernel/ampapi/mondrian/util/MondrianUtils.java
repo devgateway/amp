@@ -14,6 +14,7 @@ import java.util.List;
 import mondrian.olap.MondrianException;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
@@ -28,9 +29,9 @@ import org.olap4j.mdx.parser.MdxParseException;
 import org.olap4j.metadata.Datatype;
 
 /**
- * Mondrian utility class 
+ * Mondrian utility class
+ * 
  * @author Nadejda Mandrescu
- *
  */
 public class MondrianUtils {
 	protected static final Logger logger = Logger.getLogger(MondrianUtils.class);
@@ -83,15 +84,6 @@ public class MondrianUtils {
 		return e.getMessage();
 	}
 	
-	/* candidate for removal
-	public static MDXAttribute getDuplicate(MDXAttribute mdxAttr) {
-		MDXLevel newLevel = new MDXLevel(mdxAttr);
-		String hierarchy = MondrianMapping.getDuplicateHierarchy(newLevel.getHierarchy());   
-		newLevel.setHierarchy(hierarchy);
-		return newLevel;
-	}
-	*/
-	
 	/**
 	 * Prints formated cellSet to standard system console or file if {@link PRINT_PATH} is configured
 	 * @param cellSet
@@ -142,11 +134,13 @@ public class MondrianUtils {
 	 * @param calendar - (optional) the calendar to use to store actual names
 	 * @throws Exception if range is invalid
 	 */
-	public static FilterRule getYearsRangeFilter(Integer from, Integer to,
-			AmpFiscalCalendar calendar) throws Exception {
-		return getDatesRangeFilterRule(ElementType.YEAR, from, to, 
-				getFiscalYear(from, calendar), 
-				getFiscalYear(to, calendar),
+	public static FilterRule getYearsRangeFilter(Integer start, Integer end, AmpFiscalCalendar fromCalendar,
+			AmpFiscalCalendar toCalendar) throws Exception {
+		start = AmpARFilter.getActualYear(fromCalendar, start, 0, toCalendar);
+		end = AmpARFilter.getActualYear(fromCalendar, end + 1, -1, toCalendar);
+		return getDatesRangeFilterRule(ElementType.YEAR, start, end, 
+				getFiscalYear(start, toCalendar),
+				getFiscalYear(end, toCalendar),
 				false);
 	}
 	
@@ -186,10 +180,25 @@ public class MondrianUtils {
 	 * @param to - the date to end with or null
 	 * @throws AmpApiException if range is invalid
 	 */
-	public static FilterRule getDateRangeFilterRule(Date from, Date to) throws AmpApiException {
-		return getDatesRangeFilterRule(ElementType.DATE,  
-				DateTimeUtil.toJulianDayNumber(from), DateTimeUtil.toJulianDayNumber(to), 
-				DateTimeUtil.formatDateOrNull(from), DateTimeUtil.formatDateOrNull(to), false);
+	public static FilterRule getDateRangeFilterRule(Date start, Date end, AmpFiscalCalendar toCalendar, 
+			AmpFiscalCalendar fromCalendar) 
+			throws AmpApiException {
+		/*
+		 * once UI will be fully in sync with current Calendar (filter picker + keeping track for calendar of the dates)
+		 * you can uncomment this part
+		Date gregStart = start == null ? null : FiscalCalendarUtil.toGregorianDate(start, 
+				fromCalendar != null ? fromCalendar : toCalendar);
+		Date gregEnd = end == null ? null : FiscalCalendarUtil.toGregorianDate(end, 
+				fromCalendar != null ? fromCalendar : toCalendar);
+		start = FiscalCalendarUtil.convertDate(fromCalendar, start, toCalendar);
+		end = FiscalCalendarUtil.convertDate(fromCalendar, end, toCalendar);
+		return getDatesRangeFilterRule(ElementType.DATE,
+				DateTimeUtil.toJulianDayNumber(gregStart), DateTimeUtil.toJulianDayNumber(gregEnd), 
+				DateTimeUtil.formatDateOrNull(start), DateTimeUtil.formatDateOrNull(end), false);
+		*/
+		return getDatesRangeFilterRule(ElementType.DATE,
+				DateTimeUtil.toJulianDayNumber(start), DateTimeUtil.toJulianDayNumber(end),
+				DateTimeUtil.formatDateOrNull(start), DateTimeUtil.formatDateOrNull(end), false);
 	}
 	
 	private static FilterRule getDatesRangeFilterRule(ElementType elemType, Integer from, Integer to, 

@@ -560,7 +560,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 
 	private void initDefault() {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("default", ArConstants.DONOR_TYPE);
-		MondrianReportSettings settings = new MondrianReportSettings();
+		MondrianReportSettings settings = new MondrianReportSettings(null);
 		spec.setSettings(settings);
 
 		registerReport(spec, buildReportEnvironment());

@@ -14,6 +14,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.NamedTypedEntity;
@@ -25,10 +26,10 @@ import org.dgfoundation.amp.reports.mondrian.converters.AmpARFilterConverter;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * Mondrian Report Filters - can be used to populate it Manually, either via {@link AmpARFilterConverter} support
+ * 
  * @author Nadejda Mandrescu
  */
 public class MondrianReportFilters implements ReportFilters {
@@ -55,6 +56,8 @@ public class MondrianReportFilters implements ReportFilters {
 	 */
 	protected AmpFiscalCalendar calendar = null;
 	
+	protected AmpFiscalCalendar oldCalendar = null;
+	
 	/**
 	 * The computed year filter to be used in some fundings filtering for computed measures like "Selected Year Planned Disbursements"
 	 */
@@ -65,10 +68,11 @@ public class MondrianReportFilters implements ReportFilters {
 	 * @param filterRules
 	 */
 	public MondrianReportFilters(Map<ReportElement, List<FilterRule>> filterRules) {
-		this(filterRules, null);
+		this(filterRules, AmpARFilter.getDefaultCalendar());
 	}
 	
 	public MondrianReportFilters() {
+		this.calendar = AmpARFilter.getDefaultCalendar();
 	}
 	
 	public MondrianReportFilters(Map<ReportElement, List<FilterRule>> filterRules, AmpFiscalCalendar calendar) {
@@ -171,7 +175,7 @@ public class MondrianReportFilters implements ReportFilters {
 	 */
 	public void addYearsRangeFilterRule(Integer from, Integer to) throws Exception {
 		addFilterRule(new ReportElement(ElementType.YEAR), 
-				MondrianUtils.getYearsRangeFilter(from, to, calendar));
+				MondrianUtils.getYearsRangeFilter(from, to, oldCalendar, calendar));
 	}
 	
 	/**
@@ -203,7 +207,7 @@ public class MondrianReportFilters implements ReportFilters {
 	 * @throws AmpApiException if range is invalid
 	 */
 	public void addDateRangeFilterRule(Date from, Date to) throws AmpApiException {
-		addFilterRule(new ReportElement(ElementType.DATE), MondrianUtils.getDateRangeFilterRule(from, to));
+		addFilterRule(new ReportElement(ElementType.DATE), MondrianUtils.getDateRangeFilterRule(from, to, calendar, oldCalendar));
 	}
 	
 	/**
@@ -216,7 +220,7 @@ public class MondrianReportFilters implements ReportFilters {
 	 */
 	public void addDateRangeFilterRule(ReportColumn column, Date from, Date to) throws AmpApiException {
 		//validate
-		addFilterRule(dateFilterRules, column, MondrianUtils.getDateRangeFilterRule(from, to));
+		addFilterRule(dateFilterRules, column, MondrianUtils.getDateRangeFilterRule(from, to, calendar, oldCalendar));
 	}
 	
 	/**
@@ -344,6 +348,32 @@ public class MondrianReportFilters implements ReportFilters {
 		this.computedYear = computedYear;
 	}
 	
+	public AmpFiscalCalendar getCalendar() {
+		return calendar;
+	}
+	
+	/**
+	 * Configures the calendar type
+	 * @param calendar
+	 */
+	public void setCalendar(AmpFiscalCalendar calendar) {
+		this.calendar = calendar;
+	}
+	
+	/**
+	 * @return the oldCalendar
+	 */
+	public AmpFiscalCalendar getOldCalendar() {
+		return oldCalendar;
+	}
+
+	/**
+	 * @param oldCalendar the oldCalendar to set
+	 */
+	public void setOldCalendar(AmpFiscalCalendar oldCalendar) {
+		this.oldCalendar = oldCalendar;
+	}
+
 	@Override public String toString() {
 		return String.format("{filterRules: %s, dateFilterRules: %s, sqlFilterRules: %s}", filterRules, dateFilterRules, sqlFilterRules);
 	}

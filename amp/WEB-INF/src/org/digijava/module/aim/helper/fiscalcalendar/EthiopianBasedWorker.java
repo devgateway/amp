@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.joda.time.DateTime;
+import org.joda.time.chrono.EthiopicChronology;
 
 public class EthiopianBasedWorker implements ICalendarWorker {
 
@@ -18,6 +20,8 @@ public class EthiopianBasedWorker implements ICalendarWorker {
 	private int fiscalMonth;
 	
 	private Date internalTime = null;
+	
+	private DateTime calendarDate = null;
 
 	private AmpFiscalCalendar fiscalCalendar = null;
 
@@ -68,7 +72,14 @@ public class EthiopianBasedWorker implements ICalendarWorker {
 		toAdd = -(fiscalCalendar.getStartDayNum() - 1);
 		internalCalendar.add(GregorianCalendar.DAY_OF_MONTH, toAdd);
 		internalEthiopianCalendar = EthiopianCalendar.getEthiopianDate(internalCalendar);
-
+		
+		calendarDate = new DateTime(EthiopicChronology.getInstance());
+		calendarDate = calendarDate.withDate(internalEthiopianCalendar.ethYear, 
+				internalEthiopianCalendar.ethMonth, internalEthiopianCalendar.ethDay);
+	}
+	
+	public DateTime getCalendarDate() {
+		return calendarDate;
 	}
 
 	private void checkSetTimeCalled() throws Exception {

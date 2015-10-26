@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.joda.time.DateTime;
+import org.joda.time.chrono.EthiopicChronology;
 
 /**
  * EthiopianFiscalBasedWorker
@@ -27,6 +29,8 @@ public class EthiopianFiscalBasedWorker implements ICalendarWorker {
 	private EthiopianCalendar internalEthiopianCalendar = null;
 
 	private Date internalTime = null;
+	
+	private DateTime calendarDate = null;
 
 	private AmpFiscalCalendar fiscalCalendar = null;
 
@@ -71,9 +75,15 @@ public class EthiopianFiscalBasedWorker implements ICalendarWorker {
 		toAdd = -(fiscalCalendar.getStartDayNum() - 1);
 		internalCalendar.add(GregorianCalendar.DAY_OF_MONTH, toAdd);
 		internalEthiopianCalendar = EthiopianCalendar.getEthiopianDate(internalCalendar);
-
+		
+		calendarDate = new DateTime(EthiopicChronology.getInstance());
+		calendarDate = calendarDate.withDate(internalEthiopianCalendar.ethYear, 
+				internalEthiopianCalendar.ethMonth, internalEthiopianCalendar.ethDay);
 	}
-
+	
+	public DateTime getCalendarDate() {
+		return calendarDate;
+	}
 
 	private void checkSetTimeCalled() throws Exception {
 		if (internalTime == null)

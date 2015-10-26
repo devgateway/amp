@@ -51,6 +51,10 @@ public class NepaliBasedWorker implements ICalendarWorker {
 		return CalendarUtil.shiftGregorianDate(gregYear, gregMonth, gregDay, null, 56, 8, 17);
 	}
 	
+	public DateTime getCalendarDate() {
+		return nepaliCalendar;
+	}
+	
 	/*public Comparable getMonth() throws Exception {
 		return this.getMonthName(nepaliCalendar.getMonth()) +"-"+ nepaliCalendar.getMonth();
 	}*/

@@ -121,8 +121,9 @@ public class ReportsFilterPicker extends Action {
 		if ("true".equals(sourceIsReportWizard) ) {
 			filterForm.setSourceIsReportWizard(true);
 			if ( request.getParameter("doreset") != null ) {
-				FilterUtil.populateForm(filterForm, FilterUtil.getOrCreateFilter(longAmpReportId, null), longAmpReportId);
-				modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
+				AmpARFilter reportFilter = FilterUtil.getOrCreateFilter(longAmpReportId, null);
+				FilterUtil.populateForm(filterForm, reportFilter, longAmpReportId);
+				modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_FILTERS, reportFilter);
 				return mapping.findForward("forward");
 			}
 		}
@@ -155,8 +156,9 @@ public class ReportsFilterPicker extends Action {
  		// init form
 		if (request.getParameter("init") != null)
 		{
-			FilterUtil.populateForm(filterForm, FilterUtil.getOrCreateFilter(longAmpReportId, null), longAmpReportId);
-			modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS);
+			AmpARFilter reportFilter = FilterUtil.getOrCreateFilter(longAmpReportId, null);
+			FilterUtil.populateForm(filterForm, reportFilter, longAmpReportId);
+			modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS, reportFilter);
 			return null;
 		}
 
@@ -199,10 +201,11 @@ public class ReportsFilterPicker extends Action {
 			return decideNextForward(mapping, filterForm, request, arf);
 		}
 
-		FilterUtil.populateForm(filterForm, FilterUtil.getOrCreateFilter(longAmpReportId, null), longAmpReportId);
+		AmpARFilter reportFilter = FilterUtil.getOrCreateFilter(longAmpReportId, null);
+		FilterUtil.populateForm(filterForm, reportFilter, longAmpReportId);
 		try
 		{
-			modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_ALL);
+			modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_ALL, reportFilter);
 		}
 		catch(Exception e)
 		{
@@ -395,7 +398,7 @@ public class ReportsFilterPicker extends Action {
      * fills the dropdowns part of ReportsFilterPickerForm pertaining to "settings"
      * @param filterForm
      */
-    public static void fillSettingsFormDropdowns(ReportsFilterPickerForm filterForm)
+    public static void fillSettingsFormDropdowns(ReportsFilterPickerForm filterForm, AmpARFilter reportFilter)
     {
         StopWatch.reset("Filters-Settings");
         StopWatch.next("Filters-Settings", true, "Settings part dropdowns START");
@@ -404,7 +407,10 @@ public class ReportsFilterPicker extends Action {
         filterForm.setToYears(new ArrayList<BeanWrapperImpl>());
 
 
-        Long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.YEAR_RANGE_START));
+        Integer yearFrom = FeaturesUtil.getGlobalSettingValueInteger(
+        		org.digijava.module.aim.helper.Constants.GlobalSettings.YEAR_RANGE_START);
+        yearFrom = FiscalCalendarUtil.getActualYear(FiscalCalendarUtil.getGSCalendar(), yearFrom, 0, 
+        		reportFilter.getCalendarType());
         Long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
 
         if (filterForm.getCountYear() == null) {
@@ -412,7 +418,7 @@ public class ReportsFilterPicker extends Action {
         }
 
         if (filterForm.getCountYearFrom() == null) {
-            filterForm.setCountYearFrom(yearFrom);
+            filterForm.setCountYearFrom(yearFrom.longValue());
         }
 
         for (long i = yearFrom; i <= (yearFrom + countYear); i++) {
@@ -560,11 +566,12 @@ public class ReportsFilterPicker extends Action {
 	 * @param filterForm the form to populate
 	 * @throws Exception
 	 */
-	public static void modeRefreshDropdowns(ReportsFilterPickerForm filterForm, int subsection) throws DgException {
+	public static void modeRefreshDropdowns(ReportsFilterPickerForm filterForm, int subsection, 
+			AmpARFilter reportFilter) throws DgException {
 		 	 	
 		if ((subsection & AmpARFilter.FILTER_SECTION_SETTINGS) > 0)
 		{
-			fillSettingsFormDropdowns(filterForm);
+			fillSettingsFormDropdowns(filterForm, reportFilter);
 		}
 		
 		if ((subsection & AmpARFilter.FILTER_SECTION_FILTERS) == 0)

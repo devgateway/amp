@@ -685,7 +685,7 @@ public class Reports {
 		AmpARFilter arFilter = FilterUtil.buildFilter(null, reportId);
 		ReportsFilterPickerForm oldFilterForm = new ReportsFilterPickerForm();
 		FilterUtil.populateForm(oldFilterForm, arFilter, reportId);
-		ReportsFilterPicker.fillSettingsFormDropdowns(oldFilterForm);
+		ReportsFilterPicker.fillSettingsFormDropdowns(oldFilterForm, arFilter);
 		Map<String, Object> settings = new HashMap<String, Object>();
 		settings.put("decimalSeparators", oldFilterForm.getAlldecimalSymbols());
 		settings.put("decimalSymbols", oldFilterForm.getAlldecimalSymbols());

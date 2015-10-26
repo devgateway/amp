@@ -336,4 +336,9 @@ public class FiscalCalendarUtil {
 			return startYearDate;
 		}
 	}
+	
+	public static AmpFiscalCalendar getGSCalendar() {
+		Long calendarCode = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR);
+		return getAmpFiscalCalendar(calendarCode);
+	}
 }

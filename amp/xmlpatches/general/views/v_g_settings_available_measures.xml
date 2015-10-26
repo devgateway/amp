@@ -22,7 +22,7 @@
 			<lang delimiter=";" type="postgres">
 			--we use the seeting name as id so we dont have to fetch the measure again in code
 				CREATE OR REPLACE VIEW v_g_settings_available_measures AS
-						select measureid as id   ,measurename as value  
+						select measurename as id   ,measurename as value  
 							from amp_features_visibility fv ,amp_features_templates ft ,amp_measures m
 								where ft.feature=fv.id and parent =(select id from amp_modules_visibility where name ='Measures')
 								and ft.template = (select CAST ( settingsvalue   AS bigint )from amp_global_settings where settingsname ='Visibility Template')

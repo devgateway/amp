@@ -3,6 +3,7 @@ package org.digijava.module.message.jobs;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,16 +28,20 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
+import org.digijava.kernel.ampapi.endpoints.scorecard.model.Quarter;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.message.triggers.ActivityMeassureComparisonTrigger;
 import org.hibernate.jdbc.Work;
+import org.joda.time.DateTime;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
@@ -81,6 +86,19 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 			// we first set the current member since its needed by features util
 			TLSUtils.getRequest().getSession().setAttribute(Constants.CURRENT_MEMBER,
 					new TeamMember(TeamUtil.getAmpTeamMember(ampTeamMemberId.value)));
+
+			// we first need to check if we are 25 days after the last quarter
+			// ended
+//			Long gsCalendarId = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR);
+//			AmpFiscalCalendar fiscalCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(gsCalendarId);
+//			Quarter currentQuarter = new Quarter(fiscalCalendar, new Date());
+//			System.out.println("Current cuarter "+ currentQuarter.getQuarterNumber() );
+//			
+//			DateTime now = new DateTime();
+//			
+//			DateTime lastQuarterStartDayPlus25 = new DateTime(currentQuarter.getPreviousQuarter().getQuarterStartDate());
+//			lastQuarterStartDayPlus25.plusDays(25);
+			
 			// if measures are configured we used those (if still active) if not
 			// default ones
 			String configuredMeasureA = FeaturesUtil
@@ -114,7 +132,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 				ReportSpecificationImpl spec = new ReportSpecificationImpl(name, ArConstants.DONOR_TYPE);
 				GeneratedReport report = null;
 				List<AmpActivityVersion> activitiesToNofity = new ArrayList<AmpActivityVersion>();
-				
+
 				Double percentage = FeaturesUtil
 						.getGlobalSettingDouble(GlobalSettingsConstants.ACTIVITY_NOTIFICATION_THRESHOLD) != null
 								? FeaturesUtil.getGlobalSettingDouble(
@@ -124,6 +142,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 				spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
 				spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
 				spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
+				spec.setCalculateColumnTotals(true);
 				spec.addMeasure(new ReportMeasure(measureA));
 				spec.addMeasure(new ReportMeasure(measureB));
 				ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class,
@@ -132,18 +151,22 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 				try {
 					report = generator.executeReport(spec);
 					List<ReportArea> ll = report.reportContents.getChildren();
+					int i =0;
 					for (ReportArea reportArea : ll) {
 						AmpActivityVersion activityToNotify = new AmpActivityVersion();
 						Double dblMeasureA = 0D;
 						Double dblMeasureB = 0D;
 						Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
 						Set<ReportOutputColumn> col = row.keySet();
+						
+						i++;
 						for (ReportOutputColumn reportOutputColumn : col) {
-							if (reportOutputColumn.originalColumnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)) {
+							
+						if (reportOutputColumn.originalColumnName.equals(measureA)) {
 								dblMeasureA = (Double) row.get(reportOutputColumn).value;
 							} else {
 								if (reportOutputColumn.originalColumnName
-										.equals(MeasureConstants.PLANNED_DISBURSEMENTS)) {
+										.equals(measureB)) {
 									dblMeasureB = (Double) row.get(reportOutputColumn).value;
 								} else {
 									if (reportOutputColumn.originalColumnName.equals(ColumnConstants.ACTIVITY_ID)) {
@@ -163,19 +186,19 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 								}
 
 							}
-							if (!dblMeasureA.equals(0D) && !dblMeasureB.equals(0D)
-									&& ((dblMeasureA / dblMeasureB) * 100) > percentage) {
+						}
+						if (!dblMeasureA.equals(0D) && !dblMeasureB.equals(0D)
+								&& ((dblMeasureA / dblMeasureB) * 100) > percentage) {
+							activitiesToNofity.add(activityToNotify);
+						} else {
+							if ((dblMeasureA.equals(0D) ^ dblMeasureB.equals(0D)) && dblMeasureA.equals(0D)) {
 								activitiesToNofity.add(activityToNotify);
-							} else {
-								if ((dblMeasureA.equals(0D) ^ dblMeasureB.equals(0D)) && dblMeasureA.equals(0D)) {
-									activitiesToNofity.add(activityToNotify);
-								}
 							}
-
 						}
 					}
 					if (activitiesToNofity.size() > 0) {
 						for (AmpActivityVersion activityToNofify : activitiesToNofity) {
+							System.out.println("activity id:" + activityToNofify.getAmpId());
 							new ActivityMeassureComparisonTrigger(activityToNofify);
 						}
 					}

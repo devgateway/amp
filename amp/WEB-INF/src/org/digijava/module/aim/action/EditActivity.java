@@ -744,7 +744,7 @@ public class EditActivity extends Action {
 
         String typeOfCooperationKeyPrefix = "";
         String typeOfImplementationKeyPrefix = "";
-        if (currentTeam.getWorkspacePrefix() != null) {
+        if (currentTeam != null && currentTeam.getWorkspacePrefix() != null) {
             typeOfCooperationKeyPrefix += "SSC_";
             typeOfImplementationKeyPrefix = "SSC_";
         }

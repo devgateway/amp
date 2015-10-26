@@ -88,6 +88,10 @@ public class ComputedTeamActivityGate extends Gate {
 
 		TeamMember tm = (TeamMember) scope
 				.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
+		/* no teammember -> anonymous access (not logged in) -> gatekeeper says no */
+
+		if (tm == null)
+			return false;
 
 		//AmpTeamMember atm = (AmpTeamMember) session.get(AmpTeamMember.class, tm
 		//		.getMemberId());

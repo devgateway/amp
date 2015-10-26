@@ -5,6 +5,7 @@ import org.digijava.module.message.triggers.ActivityCurrentCompletionDateTrigger
 import org.digijava.module.message.triggers.ActivityDisbursementDateTrigger;
 import org.digijava.module.message.triggers.ActivityFinalDateForContractingTrigger;
 import org.digijava.module.message.triggers.ActivityFinalDateForDisbursementsTrigger;
+import org.digijava.module.message.triggers.ActivityMeassureComparisonTrigger;
 import org.digijava.module.message.triggers.ActivityProposedApprovalDateTrigger;
 import org.digijava.module.message.triggers.ActivityProposedCompletionDateTrigger;
 import org.digijava.module.message.triggers.ActivityProposedStartDateTrigger;
@@ -57,7 +58,8 @@ public class MessageConstants {
                                                                 ApprovedResourceShareTrigger.class,
                                                                 RejectResourceSharetrigger.class,
                                                                 UserRegistrationTrigger.class,
-                                                                ActivityValidationWorkflowTrigger.class
+                                                                ActivityValidationWorkflowTrigger.class,
+                                                                ActivityMeassureComparisonTrigger.class
                                                                 };
 
     public static final  String[] triggerName=new String[] {"User added to workspace", 
@@ -82,7 +84,8 @@ public class MessageConstants {
                                                             "Resource Share is Approved",
                                                             "Reject Resource Share",
                                                             "New User Registration",
-                                                            "Activity validation workflow notification"};
+                                                            "Activity validation workflow notification",
+                                                            "Activity measure comparison notification"};
 
 	public static final String PRIORITY_LEVEL_NAME= "Priorty level";
 	public static final String PRIORITY_LEVEL_KEY= "priorty_level";

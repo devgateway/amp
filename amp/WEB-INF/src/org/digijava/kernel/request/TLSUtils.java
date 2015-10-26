@@ -1,8 +1,10 @@
 package org.digijava.kernel.request;
 
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -154,6 +156,10 @@ public class TLSUtils {
 	public static void populateMockTlsUtils() {
 		HttpServletRequest mockRequest = Mockito.mock(HttpServletRequest.class);
 		HttpSession mockSession = Mockito.mock(HttpSession.class);
+		
+		
+		ServletContext mockServletContext=Mockito.mock(ServletContext.class);
+		
 		Mockito.when(mockRequest.getSession()).thenReturn(mockSession);
 		final Map<String, Object> requestAttributes = new ConcurrentHashMap<String, Object>();
 
@@ -165,6 +171,27 @@ public class TLSUtils {
 		getMockSetter(sessionAttributes).when(mockSession).setAttribute(Mockito.anyString(), Mockito.anyObject());
 		getMockGetter(sessionAttributes).when(mockSession).getAttribute(Mockito.anyString());
 
+		
+		Mockito.when(mockRequest.getServletContext()).thenReturn(mockServletContext);
+		final Map<String, Object> servletContextAttributes = new ConcurrentHashMap<String, Object>();
+
+		
+		getMockSetter(servletContextAttributes).when(mockServletContext).setAttribute(Mockito.anyString(), Mockito.anyObject());
+		getMockGetter(servletContextAttributes).when(mockServletContext).getAttribute(Mockito.anyString());
+
+		
+		Stubber schemaStubber=Mockito.doAnswer(new Answer<String>() {
+
+			@Override
+			public String answer(InvocationOnMock invocation) throws Throwable {
+    	        String schemaPath = invocation.getArgumentAt(0, String.class);
+				return Paths.get(schemaPath).toAbsolutePath().toString();
+
+			}
+			
+		});
+		schemaStubber.when(mockServletContext).getRealPath(Mockito.anyString());
+		
 		TLSUtils.getThreadLocalInstance().request = mockRequest;
 	}
 

@@ -52,6 +52,8 @@ import org.digijava.module.message.triggers.ActivityCurrentCompletionDateTrigger
 import org.digijava.module.message.triggers.ActivityDisbursementDateTrigger;
 import org.digijava.module.message.triggers.ActivityFinalDateForContractingTrigger;
 import org.digijava.module.message.triggers.ActivityFinalDateForDisbursementsTrigger;
+import org.digijava.module.message.triggers.ActivityLevelNotificationTrigger;
+import org.digijava.module.message.triggers.ActivityMeassureComparisonTrigger;
 import org.digijava.module.message.triggers.ActivityProposedApprovalDateTrigger;
 import org.digijava.module.message.triggers.ActivityProposedCompletionDateTrigger;
 import org.digijava.module.message.triggers.ActivityProposedStartDateTrigger;
@@ -143,7 +145,8 @@ public class AmpMessageWorker {
 				} else if (e.getTrigger().equals(ApprovedResourceShareTrigger.class)
 						|| e.getTrigger().equals(RejectResourceSharetrigger.class)) {
 					newMsg = processResourceShareEvent(e, newApproval, template, false);
-				} else if (e.getTrigger().equals(ActivityValidationWorkflowTrigger.class)) {
+				} else if (e.getTrigger().equals(ActivityMeassureComparisonTrigger.class) || e.getTrigger().equals(ActivityValidationWorkflowTrigger.class)  ) {
+
 					// This should be generalize but not to modify already
 					// running (for long time) code we process this particular
 					// case in a separate piece of
@@ -767,30 +770,29 @@ public class AmpMessageWorker {
 		listTeamsToNotify = getTeamsForActivity(
 				(Long) e.getParameters().get(ActivityValidationWorkflowTrigger.PARAM_ACTIVITY_ID),
 				template.getRelatedTriggerName());
+		if (listTeamsToNotify != null) {
+			for (Team ampTeam : listTeamsToNotify) {
+				teamsToNotify.append(ampTeam.getTeamName());
+				teamsToNotify.append(";");
+			}
+			receivers = StringUtils.split(template.getReceivers(), ",");
+			for (int j = 0; j < receivers.length; j++) {
+				if (teamsToNotify.toString().contains(StringUtils.split(receivers[j], ";")[1])) {
+					if (receivers[j].indexOf("<") > 0) {
+						myHashMap.put(MessageConstants.OBJECT_LOGIN,
+								StringUtils.left(receivers[j], receivers[j].indexOf("<")));
+					}
+					AmpAlert newAlert = null;
+					try {
+						newAlert = (AmpAlert) BeanUtils.cloneBean(alert);
+						alerts.add(createAlertFromTemplate(template, myHashMap, newAlert, receivers[j]));
+					} catch (Exception ex) {
+						logger.error("Cannot clone AmpAlert", ex);
+					}
 
-		for (Team ampTeam : listTeamsToNotify) {
-			teamsToNotify.append(ampTeam.getTeamName());
-			teamsToNotify.append(";");
-		}
-		receivers = StringUtils.split(template.getReceivers(), ",");
-		for (int j = 0; j < receivers.length; j++) {
-			if (teamsToNotify.toString().contains(StringUtils.split(receivers[j], ";")[1])) {
-				if (receivers[j].indexOf("<") > 0) {
-					myHashMap.put(MessageConstants.OBJECT_LOGIN,
-							StringUtils.left(receivers[j], receivers[j].indexOf("<")));
 				}
-				AmpAlert newAlert = null;
-				try {
-					newAlert = (AmpAlert)BeanUtils.cloneBean(alert);
-					alerts.add(createAlertFromTemplate(template, myHashMap, newAlert, receivers[j]));
-				} catch (Exception ex) {
-					logger.error("Cannot clone AmpAlert",ex);
-				} 
-				
-
 			}
 		}
-
 		return alerts;
 	}
 
@@ -824,7 +826,7 @@ public class AmpMessageWorker {
 			String teamsConfigured = null;
 			StringBuffer teamsToSearch = new StringBuffer();
 			// ids of team to filter out the AmpTeamLeads query
-			final List<Long> teamIds = new ArrayList<Long>();
+			final List<Long> teamMemberIds = new ArrayList<Long>();
 
 			// we get the set of unique teams configured to receive alter so we
 			// can
@@ -862,14 +864,14 @@ public class AmpMessageWorker {
 				public void execute(Connection conn) throws SQLException {
 					RsInfo teamIdQry = SQLUtils.rawRunQuery(conn, query, null);
 					while (teamIdQry.rs.next()) {
-						teamIds.add(teamIdQry.rs.getLong(1));
+						teamMemberIds.add(teamIdQry.rs.getLong(1));
 					}
 					teamIdQry.close();
 				}
 
 			});
 			final StringBuffer wsQueries = new StringBuffer();
-			Collection<AmpTeamMember> l = TeamMemberUtil.getAllAmpTeamMembersByAmpTeamMemberId(teamIds);
+			Collection<AmpTeamMember> l = TeamMemberUtil.getAllAmpTeamMembersByAmpTeamMemberId(teamMemberIds);
 			for (AmpTeamMember ampTeamMember : l) {
 
 				TeamMember member = new TeamMember(ampTeamMember);

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.util.CalendarUtil;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.joda.time.Chronology;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.GregorianChronology;
@@ -53,6 +54,10 @@ public class NepaliBasedWorker implements ICalendarWorker {
 	
 	public DateTime getCalendarDate() {
 		return nepaliCalendar;
+	}
+	
+	public Chronology getChronology() {
+		return GregorianChronology.getInstance();
 	}
 	
 	/*public Comparable getMonth() throws Exception {

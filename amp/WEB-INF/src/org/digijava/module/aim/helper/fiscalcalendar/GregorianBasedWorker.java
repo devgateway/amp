@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.joda.time.Chronology;
 import org.joda.time.DateTime;
 import org.joda.time.chrono.GregorianChronology;
 
@@ -66,6 +67,10 @@ public class GregorianBasedWorker implements ICalendarWorker {
 	
 	public DateTime getCalendarDate() {
 		return calendarDate;
+	}
+	
+	public Chronology getChronology() {
+		return GregorianChronology.getInstance();
 	}
 
 	public ComparableMonth getMonth() throws Exception {

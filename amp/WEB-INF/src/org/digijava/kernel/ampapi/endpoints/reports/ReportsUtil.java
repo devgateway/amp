@@ -348,19 +348,16 @@ public class ReportsUtil {
 		LinkedHashMap<String, Object> requestFilters = (LinkedHashMap<String, Object>) formParams.get(EPConstants.FILTERS);
 		if (requestFilters != null) {
 			filters.any().putAll(requestFilters);
-			MondrianReportFilters newFilters = null;
+			MondrianReportFilters newFilters = new MondrianReportFilters(spec.getSettings().getCalendar());
 			if (spec.getFilters() != null) {
-				newFilters = (MondrianReportFilters) spec.getFilters();
 				// TODO: we need calendar + date to be linked in UI as well OR make same form for filters and settings
 				// for now, if this is a calendar setting, let's check if any filters still exist and needs to be converted 
 				if (spec.getSettings().getCalendar() != oldCalendar
 						&& newFilters.getFilterRules().get(new ReportElement(ElementType.DATE)) != null) {
 					newFilters.setOldCalendar(oldCalendar);
 				}
-			} else {
-				newFilters = MondrianReportUtils.getCurrentUserDefaultFilters((MondrianReportFilters) spec.getFilters());
 			}
-			newFilters.setCalendar(spec.getSettings().getCalendar());
+			
 			MondrianReportFilters formFilters = FilterUtils.getFilters(filters, newFilters);
 			MondrianReportFilters stickyFilters = copyStickyMtefEntries(spec.getFilters(), formFilters);
 			spec.setFilters(stickyFilters);

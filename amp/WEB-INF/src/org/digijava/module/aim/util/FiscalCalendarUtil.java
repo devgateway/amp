@@ -12,6 +12,7 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.hibernate.Session;
+import org.joda.time.Chronology;
 import org.joda.time.DateTime;
 import org.joda.time.chrono.GregorianChronology;
 
@@ -225,7 +226,7 @@ public class FiscalCalendarUtil {
 	 * @param year
 	 * @return
 	 */
-	public static Date convertDate(Long fromCalendarId, Date fromDate, Long toCalendarId) {
+	public static DateTime convertDate(Long fromCalendarId, Date fromDate, Long toCalendarId) {
 		return convertDate(FiscalCalendarUtil.getAmpFiscalCalendar(fromCalendarId), fromDate, 
 				FiscalCalendarUtil.getAmpFiscalCalendar(toCalendarId));
 	}
@@ -237,16 +238,18 @@ public class FiscalCalendarUtil {
 	 * @param toCalendar
 	 * @return
 	 */
-	public static Date convertDate(AmpFiscalCalendar fromCalendar, Date fromDate, AmpFiscalCalendar toCalendar) {
-		if (fromCalendar == null || fromDate == null || toCalendar == null || fromCalendar == toCalendar)
-			return fromDate;
-		
-		Date gregDate = toGregorianDate(fromDate, fromCalendar);
-		ICalendarWorker toCalWorker = toCalendar.getworker();
-		toCalWorker.setTime(gregDate);
-		DateTime toDateTime = toCalWorker.getCalendarDate();
-		Date result = toDate(toDateTime);
-		return result;
+	public static DateTime convertDate(AmpFiscalCalendar fromCalendar, Date fromDate, AmpFiscalCalendar toCalendar) {
+		DateTime dateTime = null;
+		if (fromCalendar == null || fromDate == null || toCalendar == null || fromCalendar == toCalendar) {
+			dateTime = fromCalendar == null ? toDateTime(fromDate) : 
+				toDateTime(fromDate, fromCalendar.getworker().getChronology());
+		} else {
+			Date gregDate = toGregorianDate(fromDate, fromCalendar);
+			ICalendarWorker toCalWorker = toCalendar.getworker();
+			toCalWorker.setTime(gregDate);
+			dateTime = toCalWorker.getCalendarDate();
+		}
+		return dateTime;
 	}
 	
 	/**
@@ -276,18 +279,14 @@ public class FiscalCalendarUtil {
 		return fromDate.getTime();
 	}
 	
-	public static Date toDate(DateTime jodaTime) {
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, jodaTime.getYear());
-		cal.set(Calendar.MONTH, jodaTime.getMonthOfYear() - 1);
-		cal.set(Calendar.DATE, jodaTime.getDayOfMonth());
-		return cal.getTime();
-	}
-	
 	public static DateTime toDateTime(Date date) {
+		return toDateTime(date, GregorianChronology.getInstance());
+	}
+		
+	public static DateTime toDateTime(Date date, Chronology chronology) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
-		DateTime dateTime = new DateTime(GregorianChronology.getInstance());
+		DateTime dateTime = new DateTime(chronology);
 		dateTime = dateTime.withDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH));
 		return dateTime;
 	}

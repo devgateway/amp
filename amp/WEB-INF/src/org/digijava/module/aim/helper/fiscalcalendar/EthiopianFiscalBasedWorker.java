@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.joda.time.Chronology;
 import org.joda.time.DateTime;
 import org.joda.time.chrono.EthiopicChronology;
 
@@ -83,6 +84,10 @@ public class EthiopianFiscalBasedWorker implements ICalendarWorker {
 	
 	public DateTime getCalendarDate() {
 		return calendarDate;
+	}
+	
+	public Chronology getChronology() {
+		return EthiopicChronology.getInstance();
 	}
 
 	private void checkSetTimeCalled() throws Exception {

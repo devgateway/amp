@@ -2,6 +2,7 @@ package org.digijava.module.aim.helper.fiscalcalendar;
 
 import java.util.Date;
 
+import org.joda.time.Chronology;
 import org.joda.time.DateTime;
 
 public interface ICalendarWorker  {
@@ -13,6 +14,8 @@ public interface ICalendarWorker  {
 	 * @throws Exception
 	 */
 	public DateTime getCalendarDate();
+	
+	public Chronology getChronology();
 	
 	public Date getDate() throws Exception;
 	

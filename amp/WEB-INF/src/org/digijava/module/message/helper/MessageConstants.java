@@ -134,7 +134,6 @@ public class MessageConstants {
 	public static final String APPROVED_BY="approved by";
 	public static final String OBJECT_LOGIN="login";
 	public static final String OBJECT_ORGANIZATION = "organization";
-	public static final String AMP_ID = "ampId";
     
     /**
      * email statuses

@@ -12,16 +12,16 @@
 				settingsvalue = 'true' WHERE settingsname='Recreate the views on thenext server restart';
 
 				insert into amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section)values( nextval('amp_global_settings_seq'),'Activity notification threshold',
-				'1','t_Double','Ratio threshold between Measure A and Measure B when to notifiy users ( Measure A / Measure B)','general');
+				'1','t_Double','Ratio threshold between Measure A and Measure B when to notifiy users','general');
 
 				insert into amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section)
 				values( nextval('amp_global_settings_seq'),'Team to run report for activity notification',null,'v_g_settings_team_to_notify','Team to run report for ratio calculation between Measure A and Measure B','general');
 
 				insert into amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section)
-				values( nextval('amp_global_settings_seq'),'Measure A for Threshold',null,'v_g_settings_available_measures','Measure A to calculate ratio threshold (Measure A / Measure B)','general');
+				values( nextval('amp_global_settings_seq'),'Measure A for Threshold',null,'v_g_settings_available_measures','Measure A to calculate ratio threshold','general');
 
 				insert into amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section)
-				values( nextval('amp_global_settings_seq'),'Measure B for Threshold',null,'v_g_settings_available_measures','Measure B to calculate ratio threshold (Measure A / Measure B)','general');				
+				values( nextval('amp_global_settings_seq'),'Measure B for Threshold',null,'v_g_settings_available_measures','Measure B to calculate ratio threshold','general');				
 
 
 			</lang>

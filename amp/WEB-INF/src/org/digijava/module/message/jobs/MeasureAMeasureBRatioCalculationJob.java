@@ -3,7 +3,6 @@ package org.digijava.module.message.jobs;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +10,6 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.ValueWrapper;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -35,16 +33,13 @@ import org.digijava.kernel.ampapi.endpoints.scorecard.model.Quarter;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.message.triggers.ActivityMeassureComparisonTrigger;
 import org.hibernate.jdbc.Work;
@@ -94,15 +89,8 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 
 		if (ampTeamMemberId.value != null) {
 			// we first set the current member since its needed by features util
-			AmpTeamMember ampTeamMemberForReport = TeamUtil.getAmpTeamMember(ampTeamMemberId.value);
 			TLSUtils.getRequest().getSession().setAttribute(Constants.CURRENT_MEMBER,
-					new TeamMember(ampTeamMemberForReport));
-			//we build AmpARFilter for report calculation 
-			AmpARFilter af = FilterUtil.buildFilter(ampTeamMemberForReport.getAmpTeam(), null);
-			af.generateFilterQuery(TLSUtils.getRequest(), true);
-
-			TLSUtils.getRequest().getSession().setAttribute(ArConstants.TEAM_FILTER, af);
-
+					new TeamMember(TeamUtil.getAmpTeamMember(ampTeamMemberId.value)));
 			Date lowerDateReport = null;
 			Date upperDateReport = null;
 			// we first need to check if we are 25 days after the last quarter
@@ -168,17 +156,17 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 						logger.debug(this.getClass() + " start date " + lowerDateReport);
 						logger.debug(this.getClass() + " end date " + upperDateReport);
 					} catch (AmpApiException e1) {
-						
-						logger.error(e1);
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					}
-					 spec.setFilters(filterRules);
+//					spec.setFilters(filterRules);
 					ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class,
-							ReportEnvironment.buildFor(TLSUtils.getRequest()), true);
+							ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 
 					try {
 						report = generator.executeReport(spec);
 						List<ReportArea> ll = report.reportContents.getChildren();
-
+						int i = 0;
 						for (ReportArea reportArea : ll) {
 							AmpActivityVersion activityToNotify = new AmpActivityVersion();
 							Double dblMeasureA = 0D;
@@ -186,6 +174,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 							Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
 							Set<ReportOutputColumn> col = row.keySet();
 
+							i++;
 							for (ReportOutputColumn reportOutputColumn : col) {
 
 								if (reportOutputColumn.originalColumnName.equals(measureA)) {
@@ -215,8 +204,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 								}
 							}
 							if (!dblMeasureA.equals(0D) && !dblMeasureB.equals(0D)
-									&& (100 - (( dblMeasureA * 100) / dblMeasureB)) > percentage) {
-
+									&& ((dblMeasureA / dblMeasureB) * 100) > percentage) {
 								activitiesToNofity.add(activityToNotify);
 							} else {
 								if ((dblMeasureA.equals(0D) ^ dblMeasureB.equals(0D)) && dblMeasureA.equals(0D)) {

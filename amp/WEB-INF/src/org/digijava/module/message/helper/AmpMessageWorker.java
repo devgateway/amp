@@ -760,8 +760,7 @@ public class AmpMessageWorker {
 		// receivers in TemplateAlerts
 		myHashMap.put(MessageConstants.OBJECT_NAME,
 				(String) e.getParameters().get(ActivityValidationWorkflowTrigger.PARAM_NAME));
-		myHashMap.put(MessageConstants.AMP_ID,
-				(String) e.getParameters().get(ActivityValidationWorkflowTrigger.PARAM_AMP_ID));
+
 		// url
 		myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\""
 				+ e.getParameters().get(ActivityValidationWorkflowTrigger.PARAM_URL) + "\">activity URL</a>");

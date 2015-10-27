@@ -93,7 +93,7 @@ public class Quarter {
 		calendar.set(Calendar.MONTH, (fiscalCalendar.getStartMonthNum() - 1) + (quarterNumber - 1) * 3);
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
-		calendar.set(Calendar.SECOND, 1);
+		calendar.set(Calendar.SECOND, 0);
 		return calendar.getTime();
 	}
 	
@@ -106,9 +106,9 @@ public class Quarter {
 		Date start = getQuarterStartDate();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(start);
-		calendar.add(Calendar.DAY_OF_YEAR, 90);
-		calendar.add(Calendar.SECOND, -2);
-		//it adds 90 days to the start of the quarter, and substracts 2 secs so time is 23:59:59
+		calendar.add(Calendar.MONTH, 3);
+		calendar.add(Calendar.SECOND, -1);
+		//it adds 90 days to the start of the quarter, and substracts 1 secs so time is 23:59:59
 		return calendar.getTime();
 	}
 

@@ -164,7 +164,7 @@ function typeChanged(value){
   }
 }
 
-		function shoValidationmsg(){
+		function showValidationmsg(){
 		<logic:equal name="quartzJobManagerForm" property="invalidTrigger" value="true">
 			<c:set var="invalidTrigger">
 				<digi:trn>The trigeer will never be fired</digi:trn>
@@ -512,6 +512,7 @@ function typeChanged(value){
   </table>
 </digi:form>
 <script type="text/javascript">
+
     window.onload = onLoad;
     function onLoad(){
         
@@ -533,7 +534,7 @@ function typeChanged(value){
         }
         
         typeChanged(parseInt(val));
-        shoValidationmsg();
+        showValidationmsg();
        }
 </script>
 

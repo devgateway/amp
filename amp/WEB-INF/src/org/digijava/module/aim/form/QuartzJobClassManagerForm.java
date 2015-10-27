@@ -12,6 +12,10 @@ public class QuartzJobClassManagerForm extends ActionForm{
     private String name;
     private String classFullname;
     private String action;
+    /*
+     * 1 for invalid class
+     */
+    private String errorCode;
     private Collection<AmpQuartzJobClass> clsCol;
 
     public QuartzJobClassManagerForm() {
@@ -23,6 +27,7 @@ public class QuartzJobClassManagerForm extends ActionForm{
         classFullname=null;
         clsCol=null;
         action=null;
+        errorCode=null;
     }
 
     public String getClassFullname() {
@@ -64,4 +69,13 @@ public class QuartzJobClassManagerForm extends ActionForm{
     public void setAction(String action) {
         this.action = action;
     }
+
+	public String getErrorCode() {
+		return errorCode;
+	}
+
+	public void setErrorCode(String errorCode) {
+		this.errorCode = errorCode;
+	}
+    
 }

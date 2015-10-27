@@ -45,10 +45,17 @@ function saveJc(){
 
 function cancel()
 {
-	document.quartzJobClassManagerForm.action = "/aim/quartzJobClassManager.do";
-	document.quartzJobClassManagerForm.submit();
+	window.location.replace("/aim/quartzJobClassManager.do~action=all");
 }
-
+function showValidationmsg(){
+	<logic:equal name="quartzJobClassManagerForm" property="errorCode" value="1">
+		<c:set var="invalidClassName">
+			<digi:trn>The Job class name is invalid</digi:trn>
+		</c:set> 
+		alert("${invalidClassName}");
+	</logic:equal>		
+}
+$(document).ready(function() {showValidationmsg();});
 </script>
 
 <digi:form action="/quartzJobClassManager.do" method="post">
@@ -59,7 +66,7 @@ function cancel()
       &nbsp;&nbsp;&nbsp;
       </td>
       <td>
-        <table>
+        <table >
           <tr>
             <!-- Start Navigation -->
             <td>

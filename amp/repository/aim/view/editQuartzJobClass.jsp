@@ -11,6 +11,15 @@
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
 <script type="text/javascript">
+function showValidationmsg(){
+	<logic:equal name="quartzJobClassManagerForm" property="errorCode" value="1">
+		<c:set var="invalidClassName">
+			<digi:trn>The Job class name is invalid</digi:trn>
+		</c:set> 
+		alert("${invalidClassName}");
+	</logic:equal>		
+}
+
 function setAction(action){
   var act=document.getElementById("hdnAction");
   if(act!=null){
@@ -42,12 +51,18 @@ function saveJc(){
     document.quartzJobClassManagerForm.submit();
   }
 }
+function cancel()
+{
+	window.location.replace("/aim/quartzJobClassManager.do~action=all");
+}
+
+$(document).ready(function() {showValidationmsg();});
 </script>
 
 <digi:form action="/quartzJobClassManager.do" method="post">
   <html:hidden name="quartzJobClassManagerForm" property="id" styleId="hdnId" />
   <html:hidden name="quartzJobClassManagerForm" property="action" styleId="hdnAction" />
-  <table>
+  <table >
     <tr>
       <td>
       &nbsp;&nbsp;&nbsp;
@@ -123,7 +138,12 @@ function saveJc(){
                 <digi:trn key="aim:job:btnSave">Save</digi:trn>
               </c:set>
               <input type="button" value="${trn}" onclick="saveJc()"/>
+			<c:set var="btnCancel">
+				<digi:trn key="btn:cancel">Cancel</digi:trn>
+			</c:set>
+            <input type="button" value="${btnCancel}" onclick="cancel()" />
             </td>
+
           </tr>
         </table>
       </td>

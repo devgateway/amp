@@ -26,9 +26,11 @@ import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.Quarter;
+import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -50,6 +52,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 
 	protected static Logger logger = Logger.getLogger(MeasureAMeasureBRatioCalculationJob.class);
 	private static Double DEFAULT_PERCENTAGE = 1D;
+	private DateTime previousFireTime;
 
 	@Override
 	public void executeInternal(JobExecutionContext context) throws JobExecutionException {
@@ -57,7 +60,9 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 		if (TLSUtils.getRequest() == null) {
 			TLSUtils.populateMockTlsUtils();
 		}
-
+		if (context.getTrigger().getPreviousFireTime() != null) {
+			previousFireTime = new DateTime(context.getTrigger().getPreviousFireTime());
+		}
 		Long ampTeamId = FeaturesUtil
 				.getGlobalSettingValueLong(GlobalSettingsConstants.TEAM_TO_RUN_REPORT_FORACTIVITY_NOTIFICATION);
 		final ValueWrapper<Long> ampTeamMemberId = new ValueWrapper<Long>(null);
@@ -86,137 +91,173 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 			// we first set the current member since its needed by features util
 			TLSUtils.getRequest().getSession().setAttribute(Constants.CURRENT_MEMBER,
 					new TeamMember(TeamUtil.getAmpTeamMember(ampTeamMemberId.value)));
-
+			Date lowerDateReport = null;
+			Date upperDateReport = null;
 			// we first need to check if we are 25 days after the last quarter
 			// ended
-//			Long gsCalendarId = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR);
-//			AmpFiscalCalendar fiscalCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(gsCalendarId);
-//			Quarter currentQuarter = new Quarter(fiscalCalendar, new Date());
-//			System.out.println("Current cuarter "+ currentQuarter.getQuarterNumber() );
-//			
-//			DateTime now = new DateTime();
-//			
-//			DateTime lastQuarterStartDayPlus25 = new DateTime(currentQuarter.getPreviousQuarter().getQuarterStartDate());
-//			lastQuarterStartDayPlus25.plusDays(25);
-			
-			// if measures are configured we used those (if still active) if not
-			// default ones
-			String configuredMeasureA = FeaturesUtil
-					.getGlobalSettingValue(GlobalSettingsConstants.MEASURE_A_FOR_THRESHOLD);
-			String configuredMeasureB = FeaturesUtil
-					.getGlobalSettingValue(GlobalSettingsConstants.MEASURE_B_FOR_THRESHOLD);
-			if (configuredMeasureA != null) {
+			Quarter previousQuarter = checkIfShouldRunReport();
+			if (previousQuarter != null) {
+				lowerDateReport = previousQuarter.getQuarterStartDate();
+				upperDateReport = previousQuarter.getQuarterEndDate();
 
-				// the measure is configured, we check if still visible
-				if (MeasuresVisibility.getVisibleMeasures().contains(configuredMeasureA)) {
-					measureA = configuredMeasureA;
-				} else {
-					// in this case the measure is configured but is not longer
-					// visible
-					measureA = null;
+				// if measures are configured we used those (if still active) if
+				// not
+				// default ones
+				String configuredMeasureA = FeaturesUtil
+						.getGlobalSettingValue(GlobalSettingsConstants.MEASURE_A_FOR_THRESHOLD);
+				String configuredMeasureB = FeaturesUtil
+						.getGlobalSettingValue(GlobalSettingsConstants.MEASURE_B_FOR_THRESHOLD);
+				if (configuredMeasureA != null) {
+
+					// the measure is configured, we check if still visible
+					if (MeasuresVisibility.getVisibleMeasures().contains(configuredMeasureA)) {
+						measureA = configuredMeasureA;
+					} else {
+						// in this case the measure is configured but is not
+						// longer
+						// visible
+						measureA = null;
+					}
 				}
-			}
-			if (configuredMeasureB != null) {
-				// the measure is configured, we check if still visible
-				if (MeasuresVisibility.getVisibleMeasures().contains(configuredMeasureB)) {
-					measureB = configuredMeasureB;
-				} else {
-					// in this case the measure is configured but is not longer
-					// visible
-					measureB = null;
+				if (configuredMeasureB != null) {
+					// the measure is configured, we check if still visible
+					if (MeasuresVisibility.getVisibleMeasures().contains(configuredMeasureB)) {
+						measureB = configuredMeasureB;
+					} else {
+						// in this case the measure is configured but is not
+						// longer
+						// visible
+						measureB = null;
+					}
 				}
-			}
-			if (measureA != null && measureB != null) {
+				if (measureA != null && measureB != null) {
 
-				String name = "MeasureAMeasureBRatioCalculationJob";
-				ReportSpecificationImpl spec = new ReportSpecificationImpl(name, ArConstants.DONOR_TYPE);
-				GeneratedReport report = null;
-				List<AmpActivityVersion> activitiesToNofity = new ArrayList<AmpActivityVersion>();
+					String name = "MeasureAMeasureBRatioCalculationJob";
+					ReportSpecificationImpl spec = new ReportSpecificationImpl(name, ArConstants.DONOR_TYPE);
+					GeneratedReport report = null;
+					List<AmpActivityVersion> activitiesToNofity = new ArrayList<AmpActivityVersion>();
 
-				Double percentage = FeaturesUtil
-						.getGlobalSettingDouble(GlobalSettingsConstants.ACTIVITY_NOTIFICATION_THRESHOLD) != null
-								? FeaturesUtil.getGlobalSettingDouble(
-										GlobalSettingsConstants.ACTIVITY_NOTIFICATION_THRESHOLD)
-								: DEFAULT_PERCENTAGE;
+					Double percentage = FeaturesUtil
+							.getGlobalSettingDouble(GlobalSettingsConstants.ACTIVITY_NOTIFICATION_THRESHOLD) != null
+									? FeaturesUtil.getGlobalSettingDouble(
+											GlobalSettingsConstants.ACTIVITY_NOTIFICATION_THRESHOLD)
+									: DEFAULT_PERCENTAGE;
 
-				spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
-				spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
-				spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
-				spec.setCalculateColumnTotals(true);
-				spec.addMeasure(new ReportMeasure(measureA));
-				spec.addMeasure(new ReportMeasure(measureB));
-				ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class,
-						ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
+					spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
+					spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
+					spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
+					spec.setCalculateColumnTotals(true);
+					spec.addMeasure(new ReportMeasure(measureA));
+					spec.addMeasure(new ReportMeasure(measureB));
+					MondrianReportFilters filterRules = new MondrianReportFilters();
 
-				try {
-					report = generator.executeReport(spec);
-					List<ReportArea> ll = report.reportContents.getChildren();
-					int i =0;
-					for (ReportArea reportArea : ll) {
-						AmpActivityVersion activityToNotify = new AmpActivityVersion();
-						Double dblMeasureA = 0D;
-						Double dblMeasureB = 0D;
-						Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
-						Set<ReportOutputColumn> col = row.keySet();
-						
-						i++;
-						for (ReportOutputColumn reportOutputColumn : col) {
-							
-						if (reportOutputColumn.originalColumnName.equals(measureA)) {
-								dblMeasureA = (Double) row.get(reportOutputColumn).value;
-							} else {
-								if (reportOutputColumn.originalColumnName
-										.equals(measureB)) {
-									dblMeasureB = (Double) row.get(reportOutputColumn).value;
+					try {
+						filterRules.addDateRangeFilterRule(lowerDateReport, upperDateReport);
+						logger.debug(this.getClass() + " start date " + lowerDateReport);
+						logger.debug(this.getClass() + " end date " + upperDateReport);
+					} catch (AmpApiException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+//					spec.setFilters(filterRules);
+					ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class,
+							ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
+
+					try {
+						report = generator.executeReport(spec);
+						List<ReportArea> ll = report.reportContents.getChildren();
+						int i = 0;
+						for (ReportArea reportArea : ll) {
+							AmpActivityVersion activityToNotify = new AmpActivityVersion();
+							Double dblMeasureA = 0D;
+							Double dblMeasureB = 0D;
+							Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
+							Set<ReportOutputColumn> col = row.keySet();
+
+							i++;
+							for (ReportOutputColumn reportOutputColumn : col) {
+
+								if (reportOutputColumn.originalColumnName.equals(measureA)) {
+									dblMeasureA = (Double) row.get(reportOutputColumn).value;
 								} else {
-									if (reportOutputColumn.originalColumnName.equals(ColumnConstants.ACTIVITY_ID)) {
-										activityToNotify.setAmpActivityId(
-												new Long(row.get(reportOutputColumn).value.toString()));
+									if (reportOutputColumn.originalColumnName.equals(measureB)) {
+										dblMeasureB = (Double) row.get(reportOutputColumn).value;
 									} else {
-										if (reportOutputColumn.originalColumnName
-												.equals(ColumnConstants.PROJECT_TITLE)) {
-											activityToNotify.setName((String) row.get(reportOutputColumn).value);
+										if (reportOutputColumn.originalColumnName.equals(ColumnConstants.ACTIVITY_ID)) {
+											activityToNotify.setAmpActivityId(
+													new Long(row.get(reportOutputColumn).value.toString()));
 										} else {
-											if (reportOutputColumn.originalColumnName.equals(ColumnConstants.AMP_ID)) {
-												activityToNotify.setAmpId((String) row.get(reportOutputColumn).value);
+											if (reportOutputColumn.originalColumnName
+													.equals(ColumnConstants.PROJECT_TITLE)) {
+												activityToNotify.setName((String) row.get(reportOutputColumn).value);
+											} else {
+												if (reportOutputColumn.originalColumnName
+														.equals(ColumnConstants.AMP_ID)) {
+													activityToNotify
+															.setAmpId((String) row.get(reportOutputColumn).value);
+												}
 											}
+
 										}
-
 									}
-								}
 
+								}
 							}
-						}
-						if (!dblMeasureA.equals(0D) && !dblMeasureB.equals(0D)
-								&& ((dblMeasureA / dblMeasureB) * 100) > percentage) {
-							activitiesToNofity.add(activityToNotify);
-						} else {
-							if ((dblMeasureA.equals(0D) ^ dblMeasureB.equals(0D)) && dblMeasureA.equals(0D)) {
+							if (!dblMeasureA.equals(0D) && !dblMeasureB.equals(0D)
+									&& ((dblMeasureA / dblMeasureB) * 100) > percentage) {
 								activitiesToNofity.add(activityToNotify);
+							} else {
+								if ((dblMeasureA.equals(0D) ^ dblMeasureB.equals(0D)) && dblMeasureA.equals(0D)) {
+									activitiesToNofity.add(activityToNotify);
+								}
 							}
 						}
-					}
-					if (activitiesToNofity.size() > 0) {
-						for (AmpActivityVersion activityToNofify : activitiesToNofity) {
-							System.out.println("activity id:" + activityToNofify.getAmpId());
-							new ActivityMeassureComparisonTrigger(activityToNofify);
+						if (activitiesToNofity.size() > 0) {
+							for (AmpActivityVersion activityToNofify : activitiesToNofity) {
+								logger.debug("AMP ID:" + activityToNofify.getAmpId());
+								new ActivityMeassureComparisonTrigger(activityToNofify);
+							}
 						}
+						TLSUtils.getThreadLocalInstance().request = null;
+					} catch (AMPException e) {
+						logger.error("Cannot execute JOB", e);
 					}
-					TLSUtils.getThreadLocalInstance().request = null;
-				} catch (AMPException e) {
-					logger.error("Cannot execute JOB", e);
+				} else {
+					// in this case the measures were configured but not visible
+					// any
+					// more
+					logger.error(this.getClass()
+							+ " could not run because one (or both)of the following measures were configured and not visible anymmore  "
+							+ GlobalSettingsConstants.MEASURE_A_FOR_THRESHOLD + " or "
+							+ GlobalSettingsConstants.MEASURE_B_FOR_THRESHOLD);
 				}
 			} else {
-				// in this case the measures were configured but not visible any
-				// more
-				logger.error(this.getClass()
-						+ " could not run because one (or both)of the following measures were configured and not visible anymmore  "
-						+ GlobalSettingsConstants.MEASURE_A_FOR_THRESHOLD + " or "
-						+ GlobalSettingsConstants.MEASURE_B_FOR_THRESHOLD);
+				// should run report
+				logger.error(this.getClass() + " Shouldnt run since its not 25 days after the last quarter ended ");
 			}
 		} else {
 			logger.error(this.getClass() + " could not run because the team is not correctly configured for setting "
 					+ GlobalSettingsConstants.TEAM_TO_RUN_REPORT_FORACTIVITY_NOTIFICATION);
+		}
+	}
+
+	private Quarter checkIfShouldRunReport() {
+		Long gsCalendarId = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR);
+		AmpFiscalCalendar fiscalCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(gsCalendarId);
+
+		Quarter currentQuarter = new Quarter(fiscalCalendar, new Date());
+
+		DateTime lastQuarterStartDayPlus25 = new DateTime(currentQuarter.getPreviousQuarter().getQuarterEndDate());
+		lastQuarterStartDayPlus25.plusDays(25);
+
+		// we at least have
+		if (previousFireTime == null || previousFireTime.isBefore(lastQuarterStartDayPlus25)) {
+			// if the last fire date is before 25 days after the quarter has
+			// ended
+			return currentQuarter.getPreviousQuarter();
+		} else {
+			// not returning null for now for testing purposes.
+			return currentQuarter.getPreviousQuarter();
 		}
 	}
 }

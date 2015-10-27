@@ -15,7 +15,8 @@ public abstract class ActivityLevelNotificationTrigger extends Trigger {
     public static final String PARAM_TRIGGER_SENDER="sender";
     public static final String PARAM_URL="activity url";
     public static final String PARAM_ACTIVITY_ID="activity_id";
-    public static final String [] parameterNames=new String[]{PARAM_NAME,PARAM_TRIGGER_SENDER,PARAM_URL,PARAM_ACTIVITY_ID};
+    public static final String PARAM_AMP_ID="amp_id";
+    private static final String [] parameterNames=new String[]{PARAM_NAME,PARAM_TRIGGER_SENDER,PARAM_URL,PARAM_ACTIVITY_ID,PARAM_AMP_ID};
 
 	public ActivityLevelNotificationTrigger(Object source) {
 		if(! (source instanceof AmpActivityVersion)) throw new RuntimeException("Incompatible object. Source must be a ! " + AmpActivity.class);
@@ -32,6 +33,7 @@ public abstract class ActivityLevelNotificationTrigger extends Trigger {
 		
 		e.getParameters().put(PARAM_URL, ActivityGatekeeper.buildPreviewUrl(activity.getAmpActivityId().toString()));
 		e.getParameters().put(PARAM_ACTIVITY_ID, activity.getAmpActivityId());
+		e.getParameters().put(PARAM_AMP_ID, activity.getAmpId());
 		
 		return e;
 

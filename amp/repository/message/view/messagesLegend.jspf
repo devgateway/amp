@@ -10,6 +10,12 @@
 					</TR>
 					<TR>
 						<TD nowrap="nowrap">
+							<digi:trn key="message:patternName"> <b>{ampId}</b> - Stands for the name of the activity amp_id&nbsp;</digi:trn>
+						<br />
+						</TD>
+					</TR>					
+					<TR>
+						<TD nowrap="nowrap">
 							<digi:trn key="message:patternCreatedBy"> <b>{Created By}</b> - Stands for the name of the creator of the activity &nbsp;</digi:trn>
 						<br />
 						</TD>

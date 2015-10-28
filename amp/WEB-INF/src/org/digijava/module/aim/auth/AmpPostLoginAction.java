@@ -64,6 +64,13 @@ public class AmpPostLoginAction extends Action {
         Subject subject = UserUtils.getUserSubject(currentUser);
         boolean siteAdmin = DgSecurityManager.permitted(subject, site,
             ResourcePermission.INT_ADMIN);
+        
+        if(currentUser.isBanned()) { // user is banned
+        	SecurityContextHolder.getContext().setAuthentication(null);
+        	out.println(getJsonResponse("userBanned"));
+        	return null;
+        }
+        
         /*
          * if the member is part of multiple teams the below collection contains more than one element.
          * Otherwise it will have only one element.

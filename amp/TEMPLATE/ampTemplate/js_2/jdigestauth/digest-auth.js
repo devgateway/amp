@@ -43,6 +43,9 @@ function ajaxLogin() {
 						case 'noTeamMember':
 							reportError("unassigned_user");
 							break;
+						case 'userBanned':
+							reportError("banned_user");
+							break;
 						case 'invalidUser':
 							// isn't the generic onFailure actually called for this use case?
 							reportError("invalid_user");

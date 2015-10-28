@@ -83,6 +83,7 @@ var loginFailed = function(data, status) {
 						<img src='/TEMPLATE/ampTemplate/img_2/login_error.gif'> <span
 							id="invalid_user_pwd"><digi:trn>Invalid username or password</digi:trn>.</span>
 							<span id="unassigned_user"><digi:trn>You can not login into AMP because you are not assigned to a workspace</digi:trn>.</span>
+							<span id="banned_user"><digi:trn>Your username has been banned. Please contact the AMP administrator</digi:trn>.</span>
 							<span id="invalid_user"><digi:trn>Invalid User</digi:trn>.</span>
 							<span id="suspend"></span>
 					</div>

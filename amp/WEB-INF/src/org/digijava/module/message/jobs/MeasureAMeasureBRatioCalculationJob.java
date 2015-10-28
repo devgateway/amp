@@ -215,7 +215,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 								}
 							}
 							if (!dblMeasureA.equals(0D) && !dblMeasureB.equals(0D)
-									&& (100 - (( dblMeasureA * 100) / dblMeasureB)) > percentage) {
+									&& (100 - (( dblMeasureA * 100) / dblMeasureB)) >= percentage) {
 
 								activitiesToNofity.add(activityToNotify);
 							} else {

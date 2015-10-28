@@ -199,10 +199,10 @@ FilterUtils.getDateIntervalType = function(element) {
 		return "max";
 	if (max === undefined)
 		return "min";
-	if (element.valueToName.min === undefined) {
+	if (element.valueToName[min] === undefined) {
 		return "max";
 	}
-	if (element.valueToName.max === undefined) {
+	if (element.valueToName[max] === undefined) {
 		return "min";
 	}		
 	return "both";
@@ -224,7 +224,7 @@ FilterUtils.extractFilters = function(content) {
 		if (subElement instanceof Array) {
 			var element = subElement[0];
 			var content = [];
-			if (element.name === 'DATE') {
+			if (item === 'DATE') {
 				var dateIntervalType = FilterUtils.getDateIntervalType(element, item, i);
 			}
 			if (element.values !== null) {
@@ -245,8 +245,10 @@ FilterUtils.extractFilters = function(content) {
 						var item = {};
 						item.id = i;
 						item.name = item_;
-						if (dateIntervalType !== undefined)
+						if (dateIntervalType !== undefined) {
 							item.dateIntervalType = dateIntervalType;
+							item.type = element["min"] === i ? "min" : "max";
+						}
 						content.push(item);
 					}
 				});
@@ -405,9 +407,9 @@ FilterUtils.convertJavaFiltersToJS = function(data) {
 			//FilterUtils.fillDateBlob(blob.otherFilters.date, item.attributes);
 			var newDate = {};
 			_.map(item.values, function(item_, i) {						
-				if(i === 0) {
+				if (item_.type === "min") {
 					newDate['start'] = item_.name;
-				} else if(i === 1) {
+				} else if (item_.type === "max") {
 					newDate['end'] = item_.name;
 				}
 				return newDate;

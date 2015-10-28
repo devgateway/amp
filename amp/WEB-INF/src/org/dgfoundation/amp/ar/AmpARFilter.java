@@ -920,7 +920,7 @@ public class AmpARFilter extends PropertyListable {
 		}
 		
 		// now convert the years to the actual calendar if needed
-		if (current != sourceCalendar) {
+		if (!current.getAmpFiscalCalId().equals(sourceCalendar.getAmpFiscalCalId())) {
 			int yearDelta = startYear ? 0 : 1;
 			int daysDelta = startYear ? 0 : -1;
 			renderSettingsYear = FiscalCalendarUtil

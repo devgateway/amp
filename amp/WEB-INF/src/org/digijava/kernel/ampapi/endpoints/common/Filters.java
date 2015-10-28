@@ -748,8 +748,8 @@ public class Filters {
 	@GET
 	@Path("/workspaces")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = "Workspaces", id = "Workspaces", visibilityCheck = "hasToShowWorkspaceFilter",
-            tab=EPConstants.TAB_OTHER)
+	@ApiMethod(ui = true, name = "Workspaces", id = "Workspaces", columns = ColumnConstants.TEAM_ID, 
+				visibilityCheck = "hasToShowWorkspaceFilter", tab = EPConstants.TAB_OTHER)
 	public JsonBean getWorkspaces() {
 		List<SimpleJsonBean> teamsListJson = new ArrayList<SimpleJsonBean>();
 		if (hasToShowWorkspaceFilter()) {
@@ -789,7 +789,7 @@ public class Filters {
 			teamsListJson = orderByProperty(teamsListJson, NAME_PROPERTY);
 		}
 		JsonBean js = new JsonBean();
-		js.set("filterId", "Workspaces");
+		js.set("filterId", ColumnConstants.TEAM_ID);
 		js.set("name", TranslatorWorker.translateText("Workspaces"));
 		js.set("values", teamsListJson);
 		

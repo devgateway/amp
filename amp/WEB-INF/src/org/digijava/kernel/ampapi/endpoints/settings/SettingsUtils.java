@@ -623,7 +623,9 @@ public class SettingsUtils {
 				(!reportSettings.getFilterRules().get(yearRangeElement).isEmpty());
 		
 		// TODO: once year range settings will be configurable through UI / API, then always re-apply
-		if (preExistingYearRangeSetting && !setDefaults && reportSettings.getCalendar() == reportSettings.getOldCalendar())
+		if (preExistingYearRangeSetting && !setDefaults && (reportSettings.getOldCalendar() == null ||
+				reportSettings.getCalendar().getAmpFiscalCalId().equals(
+						reportSettings.getOldCalendar().getAmpFiscalCalId())))
 			return;
 		
 		// apply year range settings

@@ -70,11 +70,13 @@ import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
+import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
@@ -244,33 +246,8 @@ public class Reports {
 		formParams.set(EPConstants.ADD_COLUMNS, extraColumns);
 		
 		// Convert jqgrid sorting params into ReportUtils sorting params.
-		if (formParams.getString("sidx") != null) {
-			List<Map<String, Object>> sorting = new ArrayList<Map<String, Object>>();
-			String[] auxColumns = formParams.get("sidx").toString().split(",");
-			for (int i = 0; i < auxColumns.length; i++) {
-				if (!auxColumns[i].trim().equals("")) {
-					Map<String, Object> sort = new HashMap<String, Object>();
-					Boolean asc = true;
-					if (auxColumns[i].contains(" asc") || formParams.getString("sord").equals("asc")) {
-						asc = true;
-						auxColumns[i] = auxColumns[i].replace(" asc", "");
-					} else if (auxColumns[i].contains(" desc") || formParams.getString("sord").equals("desc")) {
-						asc = false;
-						auxColumns[i] = auxColumns[i].replace(" desc", "");
-					}
-					List<String> listOfColumns = new ArrayList<String>();
-					listOfColumns.add(auxColumns[i].trim());
-					sort.put("columns", listOfColumns);
-					sort.put("asc", asc);
-					
-					// TODO: Testing what happens if we use only the last column
-					// coming from jqgrid (specially on hierarchical reports).
-					if (i == auxColumns.length - 1) {
-						sorting.add(sort);
-					}
-				}
-			}
-			formParams.set("sorting", sorting);
+		if (formParams.getString("sidx") != null) {			
+			formParams.set(EPConstants.SORTING, convertJQgridSortingParams(formParams));
 		}
 		
 		// AMP-18516: Fix "page" parameter when is entered manually by user.
@@ -752,6 +729,17 @@ public class Reports {
 					MondrianReportFiltersConverter converter = new MondrianReportFiltersConverter(mondrianReportFilters);
 					newFilters = converter.buildFilters();
 					// converter.mergeWithOldFilters(oldFilters);
+					
+					if (formParams.getString("sidx") != null && !formParams.getString("sidx").equals("")) {			
+						formParams.set(EPConstants.SORTING, convertJQgridSortingParams(formParams));									
+						logger.info(formParams.get(EPConstants.SORTING));
+						newFilters.setSortByAsc(formParams.getString("sord").equals("asc") ? true : false);
+						String column = ((Map) ((List) formParams.get(EPConstants.SORTING)).get(0)).get("columns")
+								.toString();
+						column = column.substring(column.indexOf("[") + 1, column.indexOf("]"));
+						newFilters.setSortBy("/" + column);
+					}
+					
 					logger.info(newFilters);
 
 					Set<AmpFilterData> fdSet = AmpFilterData.createFilterDataSet(report, newFilters);
@@ -845,5 +833,39 @@ public class Reports {
 		colorSettings.put("activityStatusCodes", activityStatusCodes);
 		
 		return colorSettings;
+	}
+	
+	private List<Map<String, Object>> convertJQgridSortingParams(JsonBean formParams) {
+		List<Map<String, Object>> sorting = new ArrayList<Map<String, Object>>();
+		// Convert jqgrid sorting params into ReportUtils sorting params.
+		if (formParams.getString("sidx") != null) {
+
+			String[] auxColumns = formParams.get("sidx").toString().split(",");
+			for (int i = 0; i < auxColumns.length; i++) {
+				if (!auxColumns[i].trim().equals("")) {
+					Map<String, Object> sort = new HashMap<String, Object>();
+					Boolean asc = true;
+					if (auxColumns[i].contains(" asc") || formParams.getString("sord").equals("asc")) {
+						asc = true;
+						auxColumns[i] = auxColumns[i].replace(" asc", "");
+					} else if (auxColumns[i].contains(" desc") || formParams.getString("sord").equals("desc")) {
+						asc = false;
+						auxColumns[i] = auxColumns[i].replace(" desc", "");
+					}
+					List<String> listOfColumns = new ArrayList<String>();
+					listOfColumns.add(auxColumns[i].trim());
+					sort.put("columns", listOfColumns);
+					sort.put("asc", asc);
+					
+					// TODO: Testing what happens if we use only the last column
+					// coming from jqgrid (specially on hierarchical reports).
+					if (i == auxColumns.length - 1) {
+						sorting.add(sort);
+					}
+				}
+			}
+			formParams.set(EPConstants.SORTING, sorting);
+		}
+		return sorting;
 	}
 }

@@ -46,6 +46,8 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 			app.TabsApp.filters = FilterUtils.extractFilters(firstContent.get('reportMetadata').get('reportSpec').get('filters'));
 			// Variable to save the current serialized filters from widget.
 			app.TabsApp.serializedFilters = null;
+			// Save default sorters if any.
+			app.TabsApp.currentSorting = FilterUtils.extractSorters(firstContent.get('reportMetadata').get('reportSpec').get('sorters'));
 			// Define the views.
 			var FilterItemView = Marionette.ItemView.extend({
 				tagName : 'div',

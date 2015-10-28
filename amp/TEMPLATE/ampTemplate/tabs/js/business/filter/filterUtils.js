@@ -7,6 +7,20 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 			throw new TypeError("FilterUtils constructor cannot be called as a function.");
 		}
 	}
+	
+	FilterUtils.extractSorters = function(content) {
+		var sorting = {};
+		if (content !== null && content.models !== null) {
+			sorting.sord = content.models[0].get('ascending') ? "asc" : "desc";
+			var auxTuple = content.models[0].get('sortByTuple');
+			for (var k in auxTuple.attributes) {
+				if (k !== "id") {
+					sorting.sidx = k.substring(k.indexOf("[") + 1, k.indexOf("]"));
+				}
+			}			
+		}
+		return sorting;
+	}
 
 	/**
 	 * N-O-T-I-C-E: THIS FILE IS A BIG ALMOST-COPY-PASTE OFF saiku/plugins/AMPFilters/plugin.js.

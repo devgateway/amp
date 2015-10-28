@@ -62,7 +62,16 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 	};
 
 	FilterManager.saveTab = function(dialogView) {
+		// If filterWidget was never opened.
+		if (app.TabsApp.serializedFilters === null) {
+			var blob = FilterUtils.convertJavaFiltersToJS(app.TabsApp.filters);
+			app.TabsApp.filtersWidget.deserialize(blob, {
+				silent : true
+			});
+			app.TabsApp.serializedFilters = app.TabsApp.filtersWidget.serialize();
+		}
 		var transformedFilters = FilterUtils.widgetFiltersToJavaFilters(app.TabsApp.serializedFilters);
+		
 		var reportsInputs = jQuery('[id^="newTabNameInput"]');
 		var reportNames = _.map(reportsInputs, function(input)
 				{ 
@@ -71,9 +80,13 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 				var value=input.value;
 				return {lang:lang,name:value}; 
 		});
+		var sidx = (app.TabsApp.currentTab.get('currentSorting') !== null ? app.TabsApp.currentTab.get('currentSorting').sidx : null);
+		var sord = (app.TabsApp.currentTab.get('currentSorting') !== null ? app.TabsApp.currentTab.get('currentSorting').sord : null);
 		var data = JSON.stringify({
 			filters : transformedFilters,
-			reportData : reportNames
+			reportData : reportNames,
+			sidx: sidx,
+			sord: sord
 		});
 		var tabId = app.TabsApp.currentTab.get('id');
 		jQuery.ajax({

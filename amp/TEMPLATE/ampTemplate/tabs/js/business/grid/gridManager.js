@@ -46,6 +46,10 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 			filters : jsonFilters,
 			settings : settings
 		};
+		if (app.TabsApp.currentSorting !== undefined) {
+			data.sidx = app.TabsApp.currentSorting.sidx;
+			data.sord = app.TabsApp.currentSorting.sord;
+		}
 		jQuery(grid).jqGrid('setGridParam', {
 			postData : data
 		});
@@ -123,6 +127,8 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 								return obj.page.totalRecords;
 							}
 						},
+						sortname : (app.TabsApp.currentSorting.sidx !== undefined ? app.TabsApp.currentSorting.sidx : ""),
+						sortorder : (app.TabsApp.currentSorting.sord !== undefined ? app.TabsApp.currentSorting.sord : "asc"),
 						colNames : columnsMapping.createJQGridColumnNames(tableStructure, grouping),
 						colModel : colModel,
 						height : (jQuery(window).height() * 0.50),
@@ -144,6 +150,12 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 							TranslationManager.searchAndTranslate();
 						},
 						gridComplete : function() {
+							// Save current sorting settings in case we save the tab later.
+							app.TabsApp.currentTab.set('currentSorting', {
+								sidx: grid.getGridParam("postData").sidx, 
+								sord: grid.getGridParam("postData").sord
+							});
+							
 							// background colors.
 							jQuery(grid).find(">tbody>tr.jqgrow:odd").addClass("myAltRowClassEven");
 							jQuery(grid).find(">tbody>tr.jqgrow:even").addClass("myAltRowClassOdd");

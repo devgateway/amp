@@ -38,6 +38,9 @@ public class MondrianReportFiltersConverter {
 	private AmpARFilter ampARFilter;
 
 	public MondrianReportFiltersConverter(MondrianReportFilters mondrianFilters) {
+		if (mondrianFilters == null) {
+			mondrianFilters = new MondrianReportFilters();
+		}
 		this.mondrianFilters = mondrianFilters;
 	}
 

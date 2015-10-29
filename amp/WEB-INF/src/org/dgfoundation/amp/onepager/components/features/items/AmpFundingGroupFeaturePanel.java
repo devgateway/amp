@@ -13,6 +13,7 @@ import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -59,7 +60,8 @@ public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation
 		super(id, model, fmName, true);
 		fundingOrgModel = model;
 		fundingRoleModel = role;
-		String suffix = role.getObject() == null ? "" : " (" + role.getObject().getName() + ")";
+		String translatedRole = TranslatorWorker.translateText(role.getObject().getName());
+		String suffix = role.getObject() == null ? "" : " (" + translatedRole + ")";
 		add(new Label("donorOrg", model.getObject().getName() + suffix));
 		
 //		AmpLabelFieldPanel<AmpOrganisation> sourceOrg = new AmpLabelFieldPanel<AmpOrganisation>(

@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
@@ -76,7 +77,6 @@ public class TeamUtil {
      * type' and 'team category'
      *
      * @param workspaceType
-     * @param teamCategory
      * @return The collection of all teams
      */
 
@@ -290,7 +290,7 @@ public class TeamUtil {
     
     /**
      * Retrieves all workspaces by the given workspace prefix
-     * @param prefix
+     * @param wsPrefix
      * @return
      */
     public static List<AmpTeam> getAllTeamsByPrefix(String wsPrefix) {
@@ -363,16 +363,9 @@ public class TeamUtil {
     		} 
     		else
     			logger.error("[createTeam(-)] fiscal calendar collection is empty");
-                
-    		qryStr = "select curr from " + AmpCurrency.class.getName()
-    				+ " curr " + "where (curr.currencyCode=:code)";
-    		qry = session.createQuery(qryStr);
-    		qry.setString("code", "USD");
-    		List<AmpCurrency> currencies = qry.list();
-    		AmpCurrency curr = null;
-    		if(currencies.size() > 0)
-    			curr = currencies.get(0);
 
+
+            AmpCurrency curr = EndpointUtils.getDefaultCurrency(null);
 
     		// create application settings for the team and save
     		AmpApplicationSettings ampAppSettings = new AmpApplicationSettings();

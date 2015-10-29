@@ -4,11 +4,12 @@
 define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentView', 'text!views/html/filtersWrapperTemplate.html',
 		'text!views/html/filtersItemTemplate.html', 'models/tab', 'text!views/html/invisibleTabLinkTemplate.html',
 		'text!views/html/legendsTemplate.html', 'business/grid/gridManager', 'business/translations/translationManager',
-		'business/filter/filterUtils', 'util/tabUtils', 'jquery', 'jqueryui' ], function(Marionette, Content, Legend, DynamicContentView,
+		'business/filter/filterUtils', 'util/tabUtils', 'jquery', 'jqueryui' ,'models/settings'], function(Marionette, Content, Legend, DynamicContentView,
 		filtersTemplate, filtersItemTemplate, Tab, invisibleTabLinkTemplate, legendsTemplate, gridManager, TranslationManager, FilterUtils,
-		TabUtils, jQuery) {
+		TabUtils, jQuery, Settings) {
 
 	"use strict";
+	//var settingsForCurrency = app.TabsApp.settings;
 
 	function TabEvents() {
 		// Constructor
@@ -117,7 +118,15 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 				break;
 			}
 			var legend = new Legend({
-				currencyCode : firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode'),
+				currencyCode : function(){
+					var reportCurrency = firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode');
+					if (reportCurrency)
+						return reportCurrency;
+					else {
+						//get default currency, which is mapped to '0' due to some brilliance of architectural mind
+						return app.TabsApp.settings.get('0').defaultId;
+					}
+					},
 				units : units,
 				id : app.TabsApp.currentTab.get('id')
 			});

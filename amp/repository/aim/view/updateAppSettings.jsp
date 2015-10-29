@@ -271,7 +271,7 @@ function loadShareRules(){
 								</td>
 								<td class="inside">
 									<html:select property="currencyId" styleClass="inputx insidex">
-										<html:option value="">------ <digi:trn key="aim:selDefCurrency">Select Currency</digi:trn> ------</html:option>
+
 										<html:optionsCollection name="aimUpdateAppSettingsForm" property="currencies" value="ampCurrencyId" label="currencyName" />
 									</html:select>
 								</td>

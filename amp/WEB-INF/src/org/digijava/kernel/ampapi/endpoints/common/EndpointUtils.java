@@ -43,6 +43,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -79,12 +80,28 @@ public class EndpointUtils {
 	 * @return default currency code for public or logged in user
 	 */
 	public static String getDefaultCurrencyCode() {
-		AmpApplicationSettings appSettings = getAppSettings();
-		if(appSettings != null && appSettings.getCurrency() != null)
-			return appSettings.getCurrency().getCurrencyCode();
-		return CurrencyUtil.getDefaultCurrency().getCurrencyCode();
+		return getDefaultCurrency(null).getCurrencyCode();
 	}
-	
+
+	/**
+	 * @return default currency id for public or logged in user
+	 */
+	public static Long getDefaultCurrencyId(AmpApplicationSettings appSettings) {
+		return getDefaultCurrency(appSettings).getAmpCurrencyId();
+	}
+
+	/**
+	 * @return default currency entity for public or logged in user
+	 */
+	public static AmpCurrency getDefaultCurrency(AmpApplicationSettings appSettings) {
+		if (appSettings == null)
+			appSettings = getAppSettings();
+		if(appSettings != null && appSettings.getCurrency() != null)
+			return appSettings.getCurrency();
+		return CurrencyUtil.getDefaultCurrency();
+
+	}
+
 	/**
 	 * @return default calendar id for public or logged in user
 	 */

@@ -2,6 +2,7 @@ package org.digijava.module.aim.action;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.*;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -123,9 +124,8 @@ public class UpdateAppSettings extends Action {
 				uForm.setValidation(ampAppSettings.getValidation());
 				uForm.setShowAllCountries(ampAppSettings.getShowAllCountries());
 
-                if (ampAppSettings.getCurrency() != null) {
-				    uForm.setCurrencyId(ampAppSettings.getCurrency().getAmpCurrencyId());
-                }
+				uForm.setCurrencyId(EndpointUtils.getDefaultCurrencyId(ampAppSettings));
+
                 if(ampAppSettings.getFiscalCalendar()!=null){
 				uForm.setFisCalendarId(ampAppSettings.getFiscalCalendar().getAmpFiscalCalId());
                 }

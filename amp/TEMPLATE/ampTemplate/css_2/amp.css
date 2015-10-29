@@ -108,7 +108,7 @@ td.inside_inner_title { border-width: 1px 1px 1px 1px;border-color: #CCC; border
 .header { height:51px;text-align:center;width:1000px;margin:0 auto;position:relative;}
 .logo {color:#FFFFFF; font-size:14px; font-weight:bold; float:left;padding:0px; width:480px; border: 0px; margin: 8px 0px 0px 0px; display: inline;}
 .logo a {color:#FFFFFF; text-decoration: none !important;  display: table-cell;}
-.flag {width:30px; height: 20px; border: 0px; vertical-align: middle; float:left;margin-right:10px];}
+.flag {width:30px; height: 20px; border: 0px; vertical-align: middle; float:left;margin-right:4px;}
 .logo .title {display: table-cell; padding-left: 8px; vertical-align: middle; }
 .logo .title .label {display: block; text-align: left;}
 .top_nav {position:absolute; right:30px; top:30px;}
@@ -212,7 +212,7 @@ li.ui-tabs-selected.filter_tab {border:1px solid #D0D0D0; float:left; margin-rig
 .show_hide_setting {float:right; font-size:11px; padding:5px;width:200px;}
 .paging {font-size:11px; color:#CCCCCC; margin-top:10px; margin-bottom:10px;}
 .paging_sel {color:#FFFFFF; background-color:#FF6000; padding:2px 2px 2px 4px;text-align:center;}
-.show_legend {float:right; font-size:11px; padding-top:9px;} 
+.show_legend {float:right; font-size:11px; padding-top:9px;}
 .desktop_project_name {font-size:11px; font-family:Arial, Helvetica, sans-serif; padding-left:10px;}
 .desktop_project_name_op {font-size:11px; color:#FF6000;  font-family: Arial, Helvetica, sans-serif;background-color: #FDF5F0}
 .desktop_project_name_op_level1 {background-color: #FBE8DD; margin-right: 10px;margin-bottom: 3px}
@@ -246,7 +246,7 @@ a.settingsbut{float:left;display:block;width:250px;}
 .issue_act {float:right; color:#999999;}
 .rep_tree_item_1 {background-color:#E1E1E1;  border:1px solid #CECECE; padding:1px; font-size:11px; margin-left:17px; margin-top:5px; margin-bottom:5px;}
 .rep_tree_item {background-color:#E1E1E1;  border:1px solid #CECECE; padding:1px; font-size:11px; margin-top:5px; margin-bottom:5px;}
-.message {background-color:#F6F6F6; margin-top:10px; margin-left:21px; margin-bottom:10px; margin-right:10px; font-size:12px; line-height:18px; border:1px solid #E5E5E5;} 
+.message {background-color:#F6F6F6; margin-top:10px; margin-left:21px; margin-bottom:10px; margin-right:10px; font-size:12px; line-height:18px; border:1px solid #E5E5E5;}
 .message_cont {padding:10px; font-size:11px; line-height:18px;}
 .message_body {font-size:12px; padding:10px;}
 .create_message {font-size:12px; padding:10px;}
@@ -330,7 +330,7 @@ html.chrome #show_login_pop_box{margin-top:44px;}
 	width:100%;
     padding-top: 10px;
 	text-align:center;
-	
+
 }
 .dialog {display:none;}
 
@@ -368,7 +368,7 @@ table.report_indicator{margin-bottom:15px}
 
 .highlight {font-size:12px; font-weight:bold; border-bottom:1px solid #CCCCCC; padding-bottom:10px;}
 .crumb {font-size:12px;display:none;}
-.wht {background-color:#FFFFFF; border:1px solid #CCCCCC; padding:10px; font-size:12px; margin:10px;} 
+.wht {background-color:#FFFFFF; border:1px solid #CCCCCC; padding:10px; font-size:12px; margin:10px;}
 .dashboard_inner{border:1px solid #dadad6;border-bottom:2px solid #c2c1ba;width: 97%; margin-top: 30px; padding: 20px 10px 10px;}
 .dashboard_tab_opt{margin:10px 0}
 .dashboard_tab_opt img{vertical-align:middle}
@@ -387,7 +387,7 @@ table.report_indicator{margin-bottom:15px}
 .jtree{margin-top:-1px;float:right}
 .indicator_title{border-color:#c2c1ba;border-style:solid solid none;border-width:1px 1px medium;font-weight:bold;font-size:11px;padding:5px}
 
-.adm_category_desc {margin-top: 5px; width: 480px; height: 100px; border:1px solid #CCCCCC; background-color:#F2F2F2;} 
+.adm_category_desc {margin-top: 5px; width: 480px; height: 100px; border:1px solid #CCCCCC; background-color:#F2F2F2;}
 
 ul.first-of-type li.yui-gen14 {}
 
@@ -414,7 +414,7 @@ div.breadcrumbsplaceholder {height:25px; clear:both;margin:20px 0px 20px 0px; wi
     padding: 2px;
 	background-color: #FFFFFF;
     border: 1px solid #D0D0D0;}
-#Tab_Name td#reportsearchform1 input, #Tab_Name td#reportsearchform2 input	
+#Tab_Name td#reportsearchform1 input, #Tab_Name td#reportsearchform2 input
 	{ background-color: #5E8AD1;
     border-color: #99BAF1 #225099 #225099 #99BAF1;
     border-style: solid;
@@ -423,8 +423,8 @@ div.breadcrumbsplaceholder {height:25px; clear:both;margin:20px 0px 20px 0px; wi
     font-size: 10px;
     font-weight: bold;
     padding: 2px;}
-	
-.home_sec_title {text-align: left; border-bottom: 1px solid rgb(204, 204, 204); margin-bottom: 25px; font-size: 18px; font-weight: bold; padding-bottom:15px;} 
+
+.home_sec_title {text-align: left; border-bottom: 1px solid rgb(204, 204, 204); margin-bottom: 25px; font-size: 18px; font-weight: bold; padding-bottom:15px;}
 table#viewAllUsers, table#viewAllUsers tr td{border:1px solid #ebebeb;padding:3px;font-size:11px; color:#000;}
 table#viewAllUsers tr td table tr td {border:none;}
 td.usersSelectForm input, td.usersSelectForm select, table.viewUserContainer tr td select, table.viewUserContainer tr td input{background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px;}
@@ -436,7 +436,7 @@ table#addUserContainer input.inp-text, table#addUserContainer select, table#addU
     font-size: 11px;
     margin: 5px;
     padding: 2px;}
-	
+
 table#addUserContainer td.addUserButContainer input, td.addUserButContainer input 	{background-color: #5E8AD1;
     border-color: #99BAF1 #225099 #225099 #99BAF1;
     border-style: solid;
@@ -502,13 +502,13 @@ div.adminicon{float:right;}
 	line-height:30px;
 }
 #breadcrumbs, #breadcrumbs  li.yuimenuitem a {
-	color: #376091; 
-	font-size: 10px; 
-	font-family:arial; 
+	color: #376091;
+	font-size: 10px;
+	font-family:arial;
 	padding:3px 10px 3px 0px;
-	margin:0px;	
-	padding-top:0px; 
-	font-weight:bold; 
+	margin:0px;
+	padding-top:0px;
+	font-weight:bold;
 	text-decoration:none;
 	text-align: left;
 	background:url(/TEMPLATE/ampTemplate/img_2/breadcrumbsep.gif) no-repeat right;
@@ -544,7 +544,7 @@ html.ie #amphomesidebar{width:200px;}
     padding: 2px;
 	background-color: #FFFFFF;
     border: 1px solid #D0D0D0;}
-#Tab_Name td#reportsearchform1 input, #Tab_Name td#reportsearchform2 input	
+#Tab_Name td#reportsearchform1 input, #Tab_Name td#reportsearchform2 input
 	{ background-color: #5E8AD1;
     border-color: #99BAF1 #225099 #225099 #99BAF1;
     border-style: solid;
@@ -553,8 +553,8 @@ html.ie #amphomesidebar{width:200px;}
     font-size: 10px;
     font-weight: bold;
     padding: 2px;}
-	
-.home_sec_title {text-align: left; border-bottom: 1px solid rgb(204, 204, 204); margin-bottom: 25px; font-size: 18px; font-weight: bold; padding-bottom:15px;} 
+
+.home_sec_title {text-align: left; border-bottom: 1px solid rgb(204, 204, 204); margin-bottom: 25px; font-size: 18px; font-weight: bold; padding-bottom:15px;}
 table#viewAllUsers, table#viewAllUsers tr td{border:1px solid #ebebeb;padding:3px;font-size:11px; color:#000;}
 table#viewAllUsers tr td table tr td {border:none;}
 td.usersSelectForm input, td.usersSelectForm select, table.viewUserContainer tr td select, table.viewUserContainer tr td input{background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px;}
@@ -566,7 +566,7 @@ table#addUserContainer input.inp-text, table#addUserContainer select, table#addU
     font-size: 11px;
     margin: 5px;
     padding: 2px;}
-	
+
 table#addUserContainer td.addUserButContainer input, td.addUserButContainer input 	{background-color: #5E8AD1;
     border-color: #99BAF1 #225099 #225099 #99BAF1;
     border-style: solid;
@@ -632,13 +632,13 @@ div.adminicon{float:right;}
 	line-height:30px;
 }
 #breadcrumbs, #breadcrumbs  li.yuimenuitem a {
-	color: #376091; 
-	font-size: 10px; 
-	font-family:arial; 
+	color: #376091;
+	font-size: 10px;
+	font-family:arial;
 	padding:3px 10px 3px 0px;
-	margin:0px;	
-	padding-top:0px; 
-	font-weight:bold; 
+	margin:0px;
+	padding-top:0px;
+	font-weight:bold;
 	text-decoration:none;
 	text-align: left;
 	background:url(/TEMPLATE/ampTemplate/img_2/breadcrumbsep.gif) no-repeat right;
@@ -696,7 +696,7 @@ div.adminicon{float:right;}
 	table-layout:fixed;
 }
 /**-----IE FIXES-----**/
-/* 
+/*
 html.ie .main_menu{height:25px;margin:0 auto;text-align:left;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;z-index:9000;margin-top:3px;}
 */
 .menucontainer{position:relative;height:30px;}
@@ -705,12 +705,12 @@ html.ie .main_menu{height:25px;margin:0 auto;text-align:left;border:none;positio
 html.chrome .login_nav{padding:0px;margin:0px;}
 html.chrome .login_here {
 	background-color: #65B457;
-	width: 125px; 
+	width: 125px;
 	height: 33px;
 	text-align: center;
 	margin-top:10px;
 }
-html.chrome .login_here:hover { 
+html.chrome .login_here:hover {
     background-color: #B4EEAA;
     color:#519847;
 }
@@ -726,7 +726,7 @@ html.ie .login_here {
 	top: 15px;
 	left: 10px;
 }
-html.ie .login_here:hover { 
+html.ie .login_here:hover {
     background-color: #B4EEAA;
     color:#519847;
 }
@@ -778,7 +778,7 @@ a.hoverUnderline {text-decoration: none;}
 a:focus.hoverUnderline {outline: 0px none blue !important;}
 a:HOVER.hoverUnderline {text-decoration: underline;}
 .innerTabHeader{padding:0px 5px 0px 0px;}
-#currentDisplaySettings li{padding:3px;background: #e7e7e7;border:1px solid #d4d3d3;list-style:none;display:block;margin:5px;float:left;font-weight:bold;} 
+#currentDisplaySettings li{padding:3px;background: #e7e7e7;border:1px solid #d4d3d3;list-style:none;display:block;margin:5px;float:left;font-weight:bold;}
 td.addNewIndicatorLabel{font-size:11px;font-family:arial;color:#000;font-weight:bold;}
 /* This line brakes markup in IE when no WS is selected html.ie li#yui-gen5{width:85px;padding-top:-3px;}*/
 h1.admintitle{font-size:16px;text-transform:none;color: #376091;padding:0px 0px 5px 0px;border-bottom:1px dotted #cccccc;margin:0px 0px 10px 0px;}
@@ -1045,11 +1045,11 @@ div.innerTab {
 
 .dashboards_left_container
 {
-	height: 210px; 
-	border: 1px solid #CCCCCC; 
-	overflow: auto; 
-	background: white; 
-	maxHeight: 210px; 
+	height: 210px;
+	border: 1px solid #CCCCCC;
+	overflow: auto;
+	background: white;
+	maxHeight: 210px;
 	padding: 5px;
 	padding-left: 20px;
 }
@@ -1086,7 +1086,7 @@ table.component-funding-table tr
 
 
 
-/* 
+/*
 	AMP-specific changes to the SAM YUI skin START
 	we do not want to change the YUI css files for obvious reasons, so instead we'll be using this file included right after the sam css
 */
@@ -1110,10 +1110,10 @@ table.component-funding-table tr
 	border-radius: 4px !important;
 }
 
-/* 
+/*
 	AMP-specific changes to the SAM YUI skin END
 	we do not want to change the YUI css files for obvious reasons, so instead we'll be using this file included right after the sam css
-*/ 
+*/
 
 .dataTable li{
 	list-style-position: inside;

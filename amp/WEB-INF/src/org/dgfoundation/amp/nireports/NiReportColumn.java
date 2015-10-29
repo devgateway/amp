@@ -10,9 +10,11 @@ import java.util.List;
 public abstract class NiReportColumn {
 	
 	public final String name;
+	public final NiDimension.LevelColumn levelColumn;
 	
-	protected NiReportColumn(String name) {
+	protected NiReportColumn(String name, NiDimension.LevelColumn levelColumn) {
 		this.name = name;
+		this.levelColumn = levelColumn;
 	}
 	
 	public abstract List<CellColumn> fetchColumn(NiFilters filters);

@@ -3,7 +3,7 @@ package org.dgfoundation.amp.nireports;
 import com.google.common.base.Function;
 
 /**
- * 
+ * an internal consumption Cell, which roughly corresponds to an API ReportCell
  * @author Dolghier Constantin
  *
  */

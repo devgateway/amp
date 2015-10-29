@@ -11,7 +11,7 @@ import org.dgfoundation.amp.algo.AmpCollections;
 import com.google.common.base.Function;
 
 /**
- * 
+ * a leaf column
  * @author Dolghier Constantin
  *
  */
@@ -19,13 +19,13 @@ public class CellColumn extends Column {
 	
 	protected final Map<Long, List<Cell>> items;
 	
-	public CellColumn(String name, Map<Long, List<Cell>> items) {
-		super(name);
+	public CellColumn(String name, Map<Long, List<Cell>> items, GroupColumn parent) {
+		super(name, parent);
 		this.items = new HashMap<>(items);
 	}
 	
-	public CellColumn(String name, List<Cell> items) {
-		this(name, AmpCollections.distribute(items, Cell.TO_ACTIVITY_ID));
+	public CellColumn(String name, List<Cell> items, GroupColumn parent) {
+		this(name, AmpCollections.distribute(items, Cell.TO_ACTIVITY_ID), parent);
 	}
 	
 	public Map<Long, List<Cell>> getItems() {

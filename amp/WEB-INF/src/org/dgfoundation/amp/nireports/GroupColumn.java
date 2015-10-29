@@ -12,8 +12,8 @@ import java.util.List;
 public class GroupColumn extends Column {
 	public final List<Column> subColumns;
 	
-	public GroupColumn(String name, List<Column> subColumns) {
-		super(name);
+	public GroupColumn(String name, List<Column> subColumns, GroupColumn parent) {
+		super(name, parent);
 		this.subColumns = Collections.unmodifiableList(new ArrayList<>(subColumns)); 
 	}
 	

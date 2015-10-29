@@ -1,0 +1,53 @@
+== A. runtime data structures ==
+0. Cell<Amount> or Cell<Text> - contains 0+ values
+1. Amount - immutable
+2. Column: contains either cells or subcolumns
+3. any column (measure) should be splittable by Funding Flow - at the last temporal level
+4. 3 types of hierarchies:
+	4a: percentages
+	4b: flows (make it somehow generic through attributes?)
+	4c: per-transaction attribute equaling the column
+	4d: (does it make sense?): hierarchy by something which has no percentage, no attribute, no per-transaction value
+5. ReportSubArea:
+	Map<ReportColumn
+	
+HOW TO HANDLE MULTIPLE VALUES PER CELL?
+	TEXT VALUES
+	AMOUNT VALUES
+		
+== B. fetching ==
+5. multi-level columns/hierarchies: Sectors/Programs/Locations
+	5a: should implement them as one single internal column, with different displayed fields?
+6. fetching: only fetch IDs (to minimize JOINs and over-socket traffic)
+	fundings: initially a view, maybe incrementally build a table in v.2 (relatively cheap)
+
+== C. running ==
+ Column.splitByYear/Month/
+ totals
+generate hierarchies:
+	column.filter(metadata = X, percentage = Y)
+		-> if cell has metadata, but different amount -> f.o.
+		->  
+	
+	
+== D. filters ==
+
+
+== E. sorting ==
+
+
+
+
+templating engine:
+https://en.wikipedia.org/wiki/Thymeleaf
+ OR
+Apache Velocity
+ OR
+Mustache
+ OR
+http://blog.stackhunter.com/2014/01/17/10-reasons-to-replace-your-jsps-with-freemarker-templates/
+
+Calendars:
+	-> http://blog.joda.org/2009/11/why-jsr-310-isn-joda-time_4941.html
+	-> http://java-performance.info/jsr-310-java-8-datetime-library-performance-well-joda-time-2-3-j-u-calendar/
+	

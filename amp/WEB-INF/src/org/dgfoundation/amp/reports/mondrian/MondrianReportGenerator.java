@@ -20,7 +20,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.Semaphore;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.ValueWrapper;
@@ -76,6 +75,8 @@ import org.digijava.kernel.ampapi.saiku.util.SaikuPrintUtils;
 import org.digijava.kernel.ampapi.saiku.util.SaikuUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpMeasures;
+import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.calendar.util.CalendarUtil;
 import org.olap4j.Axis;
 import org.olap4j.Cell;
@@ -1034,10 +1035,11 @@ public class MondrianReportGenerator implements ReportExecutor {
 					if (reportColumn == null) {
 						String usedName = measureColumn.getName();
 						String usedCaption = measureColumn.getCaption();
+						String usedDescription = getMeasureDescription(measureColumn.getName());
 						if (i == members.size() - 1 && spec.getUsesFundingFlows() && usedName.equals("Undefined")) {
 							usedName = usedCaption = " ";
 						}
-						reportColumn = new ReportOutputColumn(usedCaption, parent, usedName);
+						reportColumn = new ReportOutputColumn(usedCaption, parent, usedName, usedDescription);
 						reportColumnsByFullName.put(fullColumnName, reportColumn);
 					}
 					if (i == members.size() - relevantDelta) {
@@ -1060,13 +1062,12 @@ public class MondrianReportGenerator implements ReportExecutor {
 		//add measures total columns
 		if (spec.isCalculateColumnTotals() && !GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria())) {
 			ReportOutputColumn totalMeasuresColumn = ReportOutputColumn.buildTranslated(MoConstants.TOTAL_MEASURES, environment.locale, null);
-			for (String measureName : outputtedMeasures)
-				this.totalsHeaders.add(ReportOutputColumn.buildTranslated(measureName, environment.locale, totalMeasuresColumn));
+			for (String measureName : outputtedMeasures) {
+				this.totalsHeaders.add(ReportOutputColumn.buildTranslated(measureName, getMeasureDescription(measureName), environment.locale, totalMeasuresColumn));
+			}
 		}
 				
 		leafColumns.addAll(this.totalsHeaders); // add totals headers to the leaf headers
-		
-		configureDescriptionForMeasures(spec, leafColumns); // add description to the leaf headers
 		
 		this.leafHeaders = leafColumns;
 	}
@@ -1096,17 +1097,16 @@ public class MondrianReportGenerator implements ReportExecutor {
 			throw new AmpApiException(error);
 	}
 	
-	private void configureDescriptionForMeasures(ReportSpecificationImpl spec, List<ReportOutputColumn> leafColumns) {
-		Map <String, String> measureNameDescriptions = new HashMap<String, String>();
-		for (ReportMeasure measure : spec.getMeasures()) {
-			if (StringUtils.isNotEmpty(measure.getDescription())) {
-				measureNameDescriptions.put(measure.getMeasureName(), TranslatorWorker.translateText(measure.getDescription()));
-			}
+	private String getMeasureDescription(String measureName) {
+		String measureDescription = null;
+		try {
+			AmpMeasures measure = AdvancedReportUtil.getMeasureByName(measureName);
+			measureDescription = measure != null ? measure.getDescription() : null;
+		} catch (RuntimeException e) {
+			logger.warn("Error in retrieiving measure " + measureName);
 		}
 		
-		for (ReportOutputColumn leaf : leafColumns) {
-			leaf.setDescription(measureNameDescriptions.get(leaf.originalColumnName));
-		}
+		return measureDescription;
 	}
 }
 

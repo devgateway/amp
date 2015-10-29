@@ -131,7 +131,7 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 				id : app.TabsApp.currentTab.get('id')
 			});
 			var legendView = new LegendView({
-				model : legend()
+				model : legend
 			});
 			dynamicLayoutView.legends.show(legendView);
 

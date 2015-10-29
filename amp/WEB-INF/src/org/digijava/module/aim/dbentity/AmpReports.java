@@ -596,7 +596,14 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 			res.add(measure.getMeasure().getMeasureName());
 		return res;
 	}
-	
+
+	public Set<String> getColumnNames()
+	{
+		Set<String> res = new HashSet<String>();
+		for(AmpReportColumn column:getColumns())
+			res.add(column.getColumn().getColumnName());
+		return res;
+	}
 	
 	/**
 	 * returns true if at least one of the measures of this report is implemented in Mondrian
@@ -608,7 +615,15 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 		reportMeasures.retainAll(availableMeasures);
 		return !reportMeasures.isEmpty();
 	}
-	
+
+	public boolean hasAvailableColumns() {
+		Set<String> reportColumns = getColumnNames();
+		Set<String> availableColumns = new HashSet<>(MondrianMapping.definedColumns);
+		reportColumns.retainAll(availableColumns);
+		return !reportColumns.isEmpty();
+
+	}
+
 	/**
 	 * returns true iff this report can be opened in Mondrian
 	 * @return

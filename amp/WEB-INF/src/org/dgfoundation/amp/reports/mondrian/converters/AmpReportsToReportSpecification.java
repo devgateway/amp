@@ -102,14 +102,10 @@ public class AmpReportsToReportSpecification {
 			// if old reports will become obsolete, then remove these compatibility adjustments
 			String measureName = measure.getMeasureName();
 			if (MondrianMapping.definedColumns.contains(measureName)) {
-				ReportColumn measureColumn = new ReportColumn(measureName);
-				measureColumn.setDescription(measure.getDescription());
-				spec.addColumn(measureColumn);
+				spec.addColumn(new ReportColumn(measureName));
 				measuresMovedAsColumns = true;
 			} else {
-				ReportMeasure measureColumn = new ReportMeasure(measureName);
-				measureColumn.setDescription(measure.getDescription());
-				spec.addMeasure(measureColumn);
+				spec.addMeasure(new ReportMeasure(measureName));
 			}
 		}
 		/* workaround for reports that have all measures that are now columns in Mondrian based reports:

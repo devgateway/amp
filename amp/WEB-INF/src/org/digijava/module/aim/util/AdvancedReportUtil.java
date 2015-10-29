@@ -187,6 +187,18 @@ public final class AdvancedReportUtil {
 		}
 	}
 	
+	public static AmpMeasures getMeasureByName(String name) {
+		try {
+			AmpMeasures ret = (AmpMeasures) PersistenceManager.getSession().createQuery("SELECT c FROM " + AmpMeasures.class.getName() + " c WHERE c.measureName = :name").setString("name", name).uniqueResult();
+			if (ret == null)
+				throw new RuntimeException("no measure with name " + name + " exists");
+			return ret;
+		}
+		catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
 	
 	public static List<AmpMeasures> getMeasureListbyType(String type)
 	{

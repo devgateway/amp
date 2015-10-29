@@ -28,24 +28,37 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	 */
 	public final String originalColumnName;
 	
-	public String description;
+	public final String description;
 	
 	transient
 	public final List<ReportOutputColumn> children = new ArrayList<ReportOutputColumn>();
 	
 	public ReportOutputColumn(String columnName, ReportOutputColumn parentColumn, String originalColumnName) {
+		this(columnName, parentColumn, originalColumnName, null);
+	}
+	
+	public ReportOutputColumn(String columnName, ReportOutputColumn parentColumn, String originalColumnName, String description) {
 		this.columnName = columnName;
+		
 		if (columnName == null || columnName.isEmpty())
 			throw new NullPointerException();
+		
 		this.parentColumn = parentColumn;
 		this.originalColumnName = originalColumnName;
+		this.description = description;
+		
 		if (parentColumn !=null) {
 			this.parentColumn.children.add(this);
 		}
+		
+	}
+	
+	public static ReportOutputColumn buildTranslated(String originalColumnName, String description, String locale, ReportOutputColumn parentColumn) {
+		return new ReportOutputColumn(TranslatorWorker.translateText(originalColumnName, locale, 3l), parentColumn, originalColumnName, description);
 	}
 	
 	public static ReportOutputColumn buildTranslated(String originalColumnName, String locale, ReportOutputColumn parentColumn){
-		return new ReportOutputColumn(TranslatorWorker.translateText(originalColumnName, locale, 3l), parentColumn, originalColumnName);
+		return buildTranslated(TranslatorWorker.translateText(originalColumnName, locale, 3l), null, locale, parentColumn);
 	}
 	/**
 	 * computes the full name of the column like, for example, [Funding][2007][Actual Commitments]
@@ -59,14 +72,6 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 		return res;
 	}
 	
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
 	@Override
 	public String toString() {
 		return this.getHierarchicalName();

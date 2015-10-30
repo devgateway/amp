@@ -18,15 +18,15 @@ other rows (if any): capital spending percent / classification / attached pledge
 
 <tr bgcolor="#ffffff">
 	<td width="20%" align="center"  bgcolor="#FFFFFF" >
-		<digi:trn><b><c:choose>
+		<span style="font-weight: bold"><c:choose>
 		<c:when test="${fundingDetail.transactionType == 3}">
-			<bean:write name="fundingDetail" property="projectionTypeName.value" />
+			<digi:trn><bean:write name="fundingDetail" property="projectionTypeName.value" /></digi:trn>
 		</c:when>
 		<c:otherwise>
-			<bean:write name="fundingDetail" property="adjustmentTypeName.value" />
+			<digi:trn><bean:write name="fundingDetail" property="adjustmentTypeName.value" /></digi:trn>
 		</c:otherwise>
 		</c:choose>
-		</b></digi:trn>
+		</span>
 	</td>
 	<td height="18px" align="right" nowrap>
 	    <module:display name="/Activity Form/Funding/Funding Group/Funding Item/${transaction}/Disaster Response"

@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -2586,35 +2588,8 @@ public class ExportActivityToWord extends Action {
 
                     // MTEF Projections
                     if(visibleModuleMTEFProjections && fnd.getMtefProjections() != null && fnd.getMtefProjections().size() > 0) {
-                        ExportSectionHelper mtefProjections = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
-                        ExportSectionHelperRowData sectionHelperRowData = new ExportSectionHelperRowData("Mtef Projections", null, null, true);
-                        mtefProjections.addRowData(sectionHelperRowData);
-
-                        for (AmpFundingMTEFProjection projection : fnd.getMtefProjections()) {
-
-                        	mtefExisting = true;
-                            String projectedType = projection.getProjected().getValue();
-
-                            sectionHelperRowData = new ExportSectionHelperRowData(TranslatorWorker.translateText(projectedType), null, null, true);
-                            sectionHelperRowData.addRowData(DateConversion.convertDateToFiscalYearString(projection.getProjectionDate()));
-                            
-                            sectionHelperRowData.addRowData(formatNumber(projection.getAmount()) + " " + projection.getAmpCurrency().getCurrencyCode());
-                            mtefProjections.addRowData(sectionHelperRowData);
-                        }
-                        
-                		
-
-                		
-                        FundingCalculationsHelper calc = new FundingCalculationsHelper();
-                        calc.doCalculations(fnd, toCurrCode);
-                    	String subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("MTEF Projections");
-                    	String subTotalValue = formatNumber(calc.getTotalMtef().doubleValue());
-
-                        mtefProjections.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
-                        mtefProjections.addRowData(new ExportSectionHelperRowData(subTotal).addRowData(subTotalValue + " " + toCurrCode));
-                        mtefProjections.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
-                        
-                        retVal.add(createSectionTable(mtefProjections, request, ampContext));
+                        ExportSectionHelper mtefSection = renderMtefSection(fnd, toCurrCode);
+                        retVal.add(createSectionTable(mtefSection, request, ampContext));
                     }
                 }
             }
@@ -2690,6 +2665,62 @@ public class ExportActivityToWord extends Action {
         return retVal;
     }
     
+    private ExportSectionHelper renderMtefSection(AmpFunding fnd, String toCurrCode) {
+    	FundingCalculationsHelper calc = new FundingCalculationsHelper();
+        calc.doCalculations(fnd, toCurrCode);
+        
+    	ExportSectionHelper mtefProjections = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+        ExportSectionHelperRowData sectionHelperRowData = new ExportSectionHelperRowData("Mtef Projections", null, null, true);
+        mtefProjections.addRowData(sectionHelperRowData);
+        
+        ArrayList<AmpFundingMTEFProjection> mtefList = new ArrayList<AmpFundingMTEFProjection>();
+        mtefList.addAll(fnd.getMtefProjections());
+        Collections.sort(mtefList, new Comparator<AmpFundingMTEFProjection>() {
+			@Override
+			public int compare(AmpFundingMTEFProjection o1, AmpFundingMTEFProjection o2) {
+				return o1.getProjectionDate().compareTo(o2.getProjectionDate());
+			}
+        	
+        });
+        
+        for (AmpFundingMTEFProjection projection : mtefList) {
+            String projectedType = projection.getProjected().getValue();
+            FundingDetail fd = getCalculatedMtefFundingDetail(calc, projection);
+            
+            String transactionAmount = fd == null ? formatNumber(projection.getAmount()) : fd.getTransactionAmount();
+            String transactionCurrencyCode = fd == null ? projection.getAmpCurrency().getCurrencyCode() : fd.getCurrencyCode();
+            
+            sectionHelperRowData = new ExportSectionHelperRowData(TranslatorWorker.translateText(projectedType), null, null, true);
+            sectionHelperRowData.addRowData(DateConversion.convertDateToFiscalYearString(projection.getProjectionDate()));
+            sectionHelperRowData.addRowData(transactionAmount + " " + transactionCurrencyCode);
+                        
+            mtefProjections.addRowData(sectionHelperRowData);
+        }
+        
+        renderMtefTotals(mtefProjections, "Sub-Total", "MTEF Projections", calc.getTotalMtef().doubleValue(), toCurrCode);
+        
+		return mtefProjections;
+	}
+    
+    private void renderMtefTotals(ExportSectionHelper mtefProjections, String totalType, String totalTitle, double totalAmount, String currencyCode) {
+    	String total = TranslatorWorker.translateText(totalType) + " " + TranslatorWorker.translateText(totalTitle);
+     	String totalValue = formatNumber(totalAmount);
+    	
+		mtefProjections.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
+		mtefProjections.addRowData(new ExportSectionHelperRowData(total).addRowData(totalValue + " " + currencyCode));
+		mtefProjections.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
+    }
+    
+    private FundingDetail getCalculatedMtefFundingDetail(FundingCalculationsHelper calc, AmpFundingMTEFProjection projection) {
+		for (FundingDetail fd : calc.getFundDetailList()) {
+	       	if (fd.getFundDetId() == projection.getDbId()) {
+	       		return fd;
+	       	}
+	    }
+		 
+		return null;
+	}
+  
 	private void generateIdentificationPart(HttpServletRequest request,	ServletContext ampContext, Paragraph p1, Table identificationSubTable1) 
 		throws WorkerException, Exception {
 		AmpCategoryValue catVal;

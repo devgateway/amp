@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -19,11 +21,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import mondrian.util.ArraySortedSet;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.bouncycastle.crypto.tls.TlsUtils;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
@@ -68,6 +73,7 @@ import org.digijava.module.aim.helper.ChartGenerator;
 import org.digijava.module.aim.helper.ChartParams;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -2497,12 +2503,12 @@ public class ExportActivityToWord extends Action {
                 Set <AmpFundingDetail> fndDets = fnd.getFundingDetails();
 
                 Map<String, Map<String, Set<AmpFundingDetail>>> structuredFundings = getStructuredFundings(fndDets);
-                String toCurrCode=null;
-
+                String toCurrCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+                
                 TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-                if (tm != null)
+                if (tm != null) 
                     toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
-
+                
                 if (structuredFundings.size() > 0) {
                     ExportSectionHelper eshDonorFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
                     for (String transTypeKey : structuredFundings.keySet()) {
@@ -2619,44 +2625,8 @@ public class ExportActivityToWord extends Action {
 
                 // MTEF Projections
                 if(visibleModuleMTEFProjections && fnd.getMtefProjections() != null && fnd.getMtefProjections().size() > 0) {
-                    ExportSectionHelper mtefProjections = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
-                    ExportSectionHelperRowData sectionHelperRowData = new ExportSectionHelperRowData("Mtef Projections", null, null, true);
-                    mtefProjections.addRowData(sectionHelperRowData);
-
-                    for (AmpFundingMTEFProjection projection : fnd.getMtefProjections()) {
-
-                        mtefExisting = true;
-                        String projectedType = "";
-
-                        projectedType = projection.getProjected().getValue();
-                        sectionHelperRowData = new ExportSectionHelperRowData(TranslatorWorker.translateText(projectedType), null, null, true);
-                        sectionHelperRowData.addRowData(DateConversion.convertDateToFiscalYearString(projection.getProjectionDate()));
-
-                        sectionHelperRowData.addRowData(formatNumber(projection.getAmount()) + " " + projection.getAmpCurrency().getCurrencyCode());
-
-                        String roleAndOrgForFundingFlows = getRoleAndOrgForFundingFlows(
-                                projection,
-                                "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections Table/Funding Flows OrgRole Selector");
-                        if (roleAndOrgForFundingFlows != null) {
-                            sectionHelperRowData.addRowData(roleAndOrgForFundingFlows);
-                        }
-
-                        mtefProjections.addRowData(sectionHelperRowData);
-                    }
-
-
-
-
-                    FundingCalculationsHelper calc = new FundingCalculationsHelper();
-                    calc.doCalculations(fnd, toCurrCode);
-                    String subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("MTEF Projections");
-                    String subTotalValue = formatNumber(calc.getTotalMtef().doubleValue());
-
-                    mtefProjections.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
-                    mtefProjections.addRowData(new ExportSectionHelperRowData(subTotal).addRowData(subTotalValue + " " + toCurrCode));
-                    mtefProjections.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
-
-                    retVal.add(createSectionTable(mtefProjections, request, ampContext));
+                    ExportSectionHelper mtefSection = renderMtefSection(fnd, toCurrCode);
+                    retVal.add(createSectionTable(mtefSection, request, ampContext));
                 }
             }
         }
@@ -2731,18 +2701,99 @@ public class ExportActivityToWord extends Action {
         return retVal;
     }
 
-    private String getRoleAndOrgForFundingFlows(FundingInformationItem fndDet,String fm) {
-        if(fndDet.getRecipientOrg() != null && fndDet.getRecipientRole() != null
-                && FeaturesUtil.isVisibleModule(fm)){
+    private ExportSectionHelper renderMtefSection(AmpFunding fnd, String toCurrCode) {
+    	FundingCalculationsHelper calc = new FundingCalculationsHelper();
+        calc.doCalculations(fnd, toCurrCode);
+        
+    	ExportSectionHelper mtefProjections = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+        ExportSectionHelperRowData sectionHelperRowData = new ExportSectionHelperRowData("Mtef Projections", null, null, true);
+        mtefProjections.addRowData(sectionHelperRowData);
+        
+        ArrayList<AmpFundingMTEFProjection> mtefList = new ArrayList<AmpFundingMTEFProjection>();
+        mtefList.addAll(fnd.getMtefProjections());
+        Collections.sort(mtefList, new Comparator<AmpFundingMTEFProjection>() {
+			@Override
+			public int compare(AmpFundingMTEFProjection o1, AmpFundingMTEFProjection o2) {
+				return o1.getProjectionDate().compareTo(o2.getProjectionDate());
+			}
+        	
+        });
+        
+        List<ExportSectionHelperRowData> mtefPipeline = new ArrayList<ExportSectionHelperRowData>();
+        List<ExportSectionHelperRowData> mtefProjection = new ArrayList<ExportSectionHelperRowData>();
+
+        for (AmpFundingMTEFProjection projection : mtefList) {
+            String projectedType = projection.getProjected().getValue();
+            FundingDetail fd = getCalculatedMtefFundingDetail(calc, projection);
+            
+            String transactionAmount = fd == null ? formatNumber(projection.getAmount()) : fd.getTransactionAmount();
+            String transactionCurrencyCode = fd == null ? projection.getAmpCurrency().getCurrencyCode() : fd.getCurrencyCode();
+            
+            sectionHelperRowData = new ExportSectionHelperRowData(TranslatorWorker.translateText(projectedType), null, null, true);
+            sectionHelperRowData.addRowData(DateConversion.convertDateToFiscalYearString(projection.getProjectionDate()));
+            sectionHelperRowData.addRowData(transactionAmount + " " + transactionCurrencyCode);
+            String roleAndOrgForFundingFlows = getRoleAndOrgForFundingFlows(
+                    projection,
+                    "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections Table/Funding Flows OrgRole Selector");
+            if (roleAndOrgForFundingFlows != null) {
+                sectionHelperRowData.addRowData(roleAndOrgForFundingFlows);
+            }
+            
+            if ("pipeline".equals(projectedType)) {
+            	mtefPipeline.add(sectionHelperRowData);
+            } else if ("projection".equals(projectedType)) {
+            	mtefProjection.add(sectionHelperRowData);
+            }
+        }
+        
+        renderMtefSubsection(mtefProjections, "MTEF Projections Pipeline", mtefPipeline, calc.getTotalMtefPipeline().doubleValue(), toCurrCode);
+        renderMtefSubsection(mtefProjections, "MTEF Projections Projection", mtefProjection, calc.getTotalMtefProjection().doubleValue(), toCurrCode);
+               
+        renderMtefTotals(mtefProjections, "Total", "MTEF Projections", calc.getTotalMtef().doubleValue(), toCurrCode);
+        
+		return mtefProjections;
+	}
+    
+	private void renderMtefSubsection(ExportSectionHelper mtefProjections, String mtefProjectType, List<ExportSectionHelperRowData> mtefProjectRows,
+    		double subTotal, String toCurrCode) {
+    	 if (mtefProjectRows.size() > 0) {
+         	for (ExportSectionHelperRowData row : mtefProjectRows) {
+        		 	mtefProjections.addRowData(row);
+         	}
+         	
+         	renderMtefTotals(mtefProjections, "Sub-Total", mtefProjectType, subTotal, toCurrCode);
+         }
+    }
+    
+    private void renderMtefTotals(ExportSectionHelper mtefProjections, String totalType, String totalTitle, double totalAmount, String currencyCode) {
+    	String total = TranslatorWorker.translateText(totalType) + " " + TranslatorWorker.translateText(totalTitle);
+     	String totalValue = formatNumber(totalAmount);
+    	
+		mtefProjections.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
+		mtefProjections.addRowData(new ExportSectionHelperRowData(total).addRowData(totalValue + " " + currencyCode));
+		mtefProjections.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
+    }
+    
+    private FundingDetail getCalculatedMtefFundingDetail(FundingCalculationsHelper calc, AmpFundingMTEFProjection projection) {
+		for (FundingDetail fd : calc.getFundDetailList()) {
+	       	if (fd.getFundDetId() == projection.getDbId()) {
+	       		return fd;
+	       	}
+	    }
+		 
+		return null;
+	}
+
+	private String getRoleAndOrgForFundingFlows(FundingInformationItem fndDet, String fm) {
+        if(fndDet.getRecipientOrg() != null && fndDet.getRecipientRole() != null && FeaturesUtil.isVisibleModule(fm)){
             String recStr = TranslatorWorker.translateText("Recipient:") + " ";
             recStr += fndDet.getRecipientOrg().getName() + "\n" + TranslatorWorker.translateText("as the") + " " + fndDet.getRecipientRole().getName();
             return recStr;
-        }else{
-            return null;
-        }
+        } 
+        
+        return null;
     }
-
-
+	
     private void generateIdentificationPart(HttpServletRequest request,	ServletContext ampContext, Paragraph p1, Table identificationSubTable1)
             throws WorkerException, Exception {
         AmpCategoryValue catVal;

@@ -119,6 +119,7 @@ public class MonitorTimer {
 			    		break;
 			    	case ERROR_UNKNOWN: //this shouldn't be happening
 			    						//broadcast unknown error and break the cycle
+			    		new SequentialRunner(CommandGenerator.generateRecreateDatabaseCommands()).run();
 			    		starter.run();
 			    		break;
 			    	}

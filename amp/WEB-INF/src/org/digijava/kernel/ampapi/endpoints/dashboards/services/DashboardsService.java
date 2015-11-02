@@ -357,7 +357,7 @@ public class DashboardsService {
 			intlAmount -= (Double) uRegion.getContents().get(amountCol).value;
 			mainDataIter.add(uRegion);
 		}
-		if (Math.abs(intlAmount) < EPSILON) {
+		if (Math.abs(intlAmount) > EPSILON) {
 			mainDataIter.add(createAreaTotals(report, TranslatorWorker.translateText(MoConstants.INTERNATIONAL), "-2", 
 					intlAmount, numberFormat));
 		}

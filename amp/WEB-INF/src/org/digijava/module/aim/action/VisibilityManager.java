@@ -103,7 +103,7 @@ public class VisibilityManager extends MultiAction {
 		try {
 			VisibilityTemplates  vtemplate = (VisibilityTemplates) um.unmarshal(vForm.getUploadFile().getInputStream());
 			VisibilityManagerExportHelper vhelper = new VisibilityManagerExportHelper();
-			vhelper.ImportFm(vtemplate);
+			vhelper.importXmlVisbilityTemplate(vtemplate);
 		} catch (JAXBException je) {
 			logger.error(je);
 		}
@@ -114,10 +114,10 @@ public class VisibilityManager extends MultiAction {
 		JAXBContext jc = JAXBContext.newInstance("org.dgfoundation.amp.visibility.feed.fm.schema");
 		Marshaller m = jc.createMarshaller();
 		VisibilityManagerExportHelper vhelper = new VisibilityManagerExportHelper();
-		if (vhelper.BuildVisibility()!=null){
+		if (vhelper.buildVisibilityTemplate() != null ){
 			response.setContentType("text/xml");
 			response.setHeader("content-disposition","attachment; filename=FmBackUp.xml");
-			m.marshal(vhelper.BuildVisibility(), response.getOutputStream());
+			m.marshal(vhelper.buildVisibilityTemplate(), response.getOutputStream());
 		}
 		return null;
 }

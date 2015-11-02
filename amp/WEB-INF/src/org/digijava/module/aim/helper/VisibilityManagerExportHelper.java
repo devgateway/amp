@@ -1,6 +1,5 @@
 package org.digijava.module.aim.helper;
 
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
@@ -8,6 +7,8 @@ import java.util.TreeSet;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.dgfoundation.amp.visibility.feed.fm.schema.FeatureType;
 import org.dgfoundation.amp.visibility.feed.fm.schema.FieldType;
@@ -15,7 +16,6 @@ import org.dgfoundation.amp.visibility.feed.fm.schema.ModuleType;
 import org.dgfoundation.amp.visibility.feed.fm.schema.ObjectFactory;
 import org.dgfoundation.amp.visibility.feed.fm.schema.TemplateType;
 import org.dgfoundation.amp.visibility.feed.fm.schema.VisibilityTemplates;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
@@ -35,13 +35,15 @@ import org.hibernate.Session;
  * that can represent the visibility status of all module/feature/field , for the sake of clarity and tree structure we will create three separate entities
  * Each object can be uniquely identified by its name inside its type only. 
  * Example: You can have a module called "Reports" and a feature called "Reports" but you NEVER have two features called "Reports". Therefore the name of the objects will be used as key along with the type.
+ * 
+ * For Activity Form features we had to import/export also the submodules tree
  * XML Example (sample dummy data):
  * <visibilityTemplates>
  * 	<template name="Donor">
  *  	<module name="Desktop" visible="true">
  *  		<module name="Reports" visible="true">
  *  			<feature name="Reports Wizard" visible="true">
- *  				field visible="false">Column Title</field>
+ *  				<field visible="false">Column Title</field>
  *  				<field visible="true">Cumulative Commitments</field>
  *  			</feature>
  *  		</module>
@@ -55,186 +57,241 @@ import org.hibernate.Session;
 public class VisibilityManagerExportHelper {
 	
 	private static SimpleDateFormat myFormatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+	private static Logger logger = Logger.getLogger(VisibilityManagerExportHelper.class);
 	
 	/**
+	 * Build the visibility templates in order to be exported in XML
 	 * 
 	 * @return VisibilityTemplates
 	 * 
 	 */
-	public VisibilityTemplates BuildVisibility() {
-		ObjectFactory objFactory = new ObjectFactory();
-		VisibilityTemplates vtemplate;
+	public VisibilityTemplates buildVisibilityTemplate() {
+		
 		try {
-			vtemplate = objFactory.createVisibilityTemplates();
-			TemplateType templates = null;
-			//Get all Templates 
-			for (Iterator Tempiter = FeaturesUtil.getAMPTemplatesVisibility().iterator(); Tempiter.hasNext();) {
-				templates = objFactory.createTemplateType();
-				AmpTemplatesVisibility amptemplates = (AmpTemplatesVisibility) Tempiter.next();
-				templates.setName(amptemplates.getName());
-				AmpTemplatesVisibility currenttemplate = FeaturesUtil.getTemplateById(amptemplates.getId());
+			ObjectFactory objFactory = new ObjectFactory();
+			VisibilityTemplates visibilityTemplates = objFactory.createVisibilityTemplates();
+			
+			//get all Templates 
+			Iterator<AmpTemplatesVisibility> templateIt = FeaturesUtil.getAMPTemplatesVisibility().iterator();
+			while(templateIt.hasNext()) {
+				AmpTemplatesVisibility ampTemplate = templateIt.next();
+				AmpTemplatesVisibility currentTemplate = FeaturesUtil.getTemplateById(ampTemplate.getId());
+				
 				AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
-				ampTreeVisibility.buildAmpTreeVisibilityMultiLevel(currenttemplate);
-				//Modules
-				Iterator moditer = ampTreeVisibility.getItems().values().iterator();
-				while (moditer.hasNext()) {
-					ModuleType modules = objFactory.createModuleType();
-					AmpTreeVisibility ampmoduletree = (AmpTreeVisibility) moditer.next();
-					AmpModulesVisibility ampmodule = (AmpModulesVisibility) ampmoduletree.getRoot();
-					modules.setName(ampmodule.getName());
-					modules.setVisible(ampmodule.isVisibleTemplateObj(currenttemplate));
-					//Submodules for each module	
-					Iterator submoduleiter = ampmodule.getSubmodules().iterator();
-					while (submoduleiter.hasNext()) {
-						ModuleType submodules = objFactory.createModuleType();
-						AmpModulesVisibility ampsubmodule = (AmpModulesVisibility) submoduleiter.next();
-						submodules.setName(ampsubmodule.getName());
-						submodules.setVisible(ampsubmodule.isVisibleTemplateObj(currenttemplate));
-						//Features for each Submodule
-						if (ampsubmodule.getItems() != null) {
-							Iterator featuresiter = ampsubmodule.getItems().iterator();
-							while (featuresiter.hasNext()) {
-								AmpFeaturesVisibility ampfeatures = (AmpFeaturesVisibility) featuresiter.next();
-								FeatureType feature = objFactory.createFeatureType();
-								feature.setName(ampfeatures.getName());
-								feature.setVisible(ampfeatures.isVisibleTemplateObj(currenttemplate));
-								//Fields for Submodules Features
-								if (ampfeatures.getItems() != null) {
-									Iterator fielditer = ampfeatures.getItems().iterator();
-									while (fielditer.hasNext()) {
-										AmpFieldsVisibility ampfield = (AmpFieldsVisibility) fielditer.next();
-										FieldType field = objFactory.createFieldType();
-										field.setValue(ampfield.getName());
-										field.setVisible(ampfield.isVisibleTemplateObj(currenttemplate));
-										feature.getField().add(field);
-									}
-								}
-								submodules.getFeature().add(feature);
-							}
-						}
-						modules.getModule().add(submodules);
-					}
-					if (ampmodule.getItems() != null) {
-						//Modules Features 
-						Iterator featuresiter = ampmodule.getItems().iterator();
-						while (featuresiter.hasNext()) {
-							AmpFeaturesVisibility ampfeatures = (AmpFeaturesVisibility) featuresiter.next();
-							FeatureType feature = objFactory.createFeatureType();
-							feature.setName(ampfeatures.getName());
-							feature.setVisible(ampfeatures.isVisibleTemplateObj(currenttemplate));
-							//Fields For Modules Features	
-							if (ampfeatures.getItems() != null) {
-								Iterator fielditer = ampfeatures.getItems().iterator();
-								while (fielditer.hasNext()) {
-									AmpFieldsVisibility ampfield = (AmpFieldsVisibility) fielditer.next();
-									FieldType field = objFactory.createFieldType();
-									field.setValue(ampfield.getName());
-									field.setVisible(ampfield.isVisibleTemplateObj(currenttemplate));
-									feature.getField().add(field);
-								}
-							}
-							modules.getFeature().add(feature);
-						}
-					}
-					templates.getModule().add(modules);
+				ampTreeVisibility.buildAmpTreeVisibilityMultiLevel(currentTemplate);
+				
+				TemplateType templateNode = objFactory.createTemplateType();
+				templateNode.setName(currentTemplate.getName());
+				
+				// add modules to the template
+				for (AmpTreeVisibility moduleTree : ampTreeVisibility.getItems().values()) {
+					AmpModulesVisibility ampmodule = (AmpModulesVisibility) moduleTree.getRoot();
+					ModuleType moduleNode = buildModuleNode(ampmodule, objFactory, currentTemplate);
+					
+					templateNode.getModule().add(moduleNode);
 				}
-				vtemplate.getTemplate().add(templates);
+				
+				visibilityTemplates.getTemplate().add(templateNode);
 			}
-			return vtemplate;
-		} catch (JAXBException e) {
-			e.printStackTrace();
-		}catch(Exception ex){
-			System.err.println(ex);
+			
+			return visibilityTemplates;
+		} catch (Exception e) {
+			logger.error("Error during the build of the template tree " + e.getMessage());
 		}
+		
 		return null;
 	}
 	
 	/**
-	 * 
-	 * @param vtemplate
+	 * Build the module elements <field> 
+	 * @param AmpModulesVisibility ampModule
+	 * @param ObjectFactory objFactory
+	 * @param AmpTemplatesVisibility ampTemplate
 	 */
-	public void ImportFm(VisibilityTemplates vtemplate) {
+	private ModuleType buildModuleNode(AmpModulesVisibility ampModule, ObjectFactory objFactory, AmpTemplatesVisibility ampTemplate) throws JAXBException {
+		
+		ModuleType moduleNode = objFactory.createModuleType();
+		moduleNode.setName(ampModule.getName());
+		moduleNode.setVisible(ampModule.isVisibleTemplateObj(ampTemplate));
+		
+		//Recursively import all the submodules	
+		for (AmpModulesVisibility ampSubModule : ampModule.getSubmodules()) {
+			ModuleType subModuleNode = buildModuleNode(ampSubModule, objFactory, ampTemplate);
+			
+			moduleNode.getModule().add(subModuleNode);
+		}
+		
+		addFeaturesToModuleNode(moduleNode, ampModule, objFactory, ampTemplate);
+		
+		return moduleNode;
+	}
+	
+	/**
+	 * Add the feature elements into the module node <field> 
+	 * @param ModuleType moduleNode
+	 * @param AmpModulesVisibility ampModule
+	 * @param ObjectFactory objFactory
+	 * @param AmpTemplatesVisibility ampTemplate
+	 */
+	private void addFeaturesToModuleNode(ModuleType moduleNode, AmpModulesVisibility ampModule, ObjectFactory objFactory, AmpTemplatesVisibility ampTemplate) throws JAXBException {
+		
+		for (AmpObjectVisibility ampFeature : ampModule.getItems()) {
+			FeatureType featureNode = objFactory.createFeatureType();
+			featureNode.setName(ampFeature.getName());
+			featureNode.setVisible(ampFeature.isVisibleTemplateObj(ampTemplate));
+			
+			addFieldsToFeatureNode(featureNode, ampFeature, objFactory, ampTemplate);
+			
+			moduleNode.getFeature().add(featureNode);
+		}
+	}
+	
+	/**
+	 * Add the fields elements into the feature node <field> 
+	 * @param FeatureType featureNode
+	 * @param AmpObjectVisibility ampFeature
+	 * @param ObjectFactory objFactory
+	 * @param AmpTemplatesVisibility ampTemplate
+	 */
+	private void addFieldsToFeatureNode(FeatureType featureNode, AmpObjectVisibility ampFeature, ObjectFactory objFactory, AmpTemplatesVisibility ampTemplate) throws JAXBException {
+		
+		for (AmpObjectVisibility ampField : ampFeature.getItems()) {
+			FieldType field = objFactory.createFieldType();
+			field.setValue(ampField.getName());
+			field.setVisible(ampField.isVisibleTemplateObj(ampTemplate));
+			
+			featureNode.getField().add(field);
+		}
+	}
+	
+	/** 
+	 * Creates a new template with all elements retrieved from the XML file
+	 * 
+	 * @param VisibilityTemplates vtemplate
+	 */
+	public void importXmlVisbilityTemplate(VisibilityTemplates vtemplate) {
+		
 		Session hbsession;
 		try {
 			hbsession = PersistenceManager.getRequestDBSession();
-			for (Iterator vtemplateiter = vtemplate.getTemplate().iterator(); vtemplateiter.hasNext();) {
-				TemplateType xmltemplate = (TemplateType) vtemplateiter.next();
-				String templatename = getImportedTemplateName(xmltemplate);
-				AmpTemplatesVisibility currenttemplate = new AmpTemplatesVisibility();
-				currenttemplate.setName(templatename);
+			for (Iterator<TemplateType> templateIt = vtemplate.getTemplate().iterator(); templateIt.hasNext();) {
+				TemplateType xmlTemplate = templateIt.next();
 				
-				AmpTreeVisibility modeltree = new AmpTreeVisibility();
-				modeltree.buildAmpTreeVisibilityMultiLevel(FeaturesUtil.getDefaultAmpTemplateVisibility());
-				currenttemplate.setItems(new TreeSet());
-				currenttemplate.setFeatures(new TreeSet());
-				currenttemplate.setFields(new TreeSet());
-				Iterator moditer = modeltree.getItems().values().iterator();
-				while(moditer.hasNext()){
-					AmpTreeVisibility amptree = (AmpTreeVisibility)moditer.next();
-					AmpModulesVisibility ampmodule = (AmpModulesVisibility) amptree.getRoot();
-					for (Iterator xmlmoditer = xmltemplate.getModule().iterator(); xmlmoditer.hasNext();) {
-						ModuleType xmlmodule = (ModuleType) xmlmoditer.next();
-						if (xmlmodule.getName().equalsIgnoreCase(ampmodule.getName())){
-							if (xmlmodule.isVisible()) {
-								currenttemplate.getItems().add(ampmodule);
-							}
-							
-							buildFeaturesAndFields(currenttemplate, ampmodule, xmlmodule);
-							
-							for (Iterator submoduleiter = ampmodule.getSubmodules().iterator();submoduleiter.hasNext();) {
-								AmpModulesVisibility submodule = (AmpModulesVisibility) submoduleiter.next();
-								for (Iterator xmlsubmoditer = xmlmodule.getModule().iterator(); xmlsubmoditer.hasNext();) {
-									ModuleType xmlsubmodule = (ModuleType) xmlsubmoditer.next();
-									if(xmlsubmodule.getName().equalsIgnoreCase(submodule.getName())){
-										if (xmlsubmodule.isVisible()) {
-											currenttemplate.getItems().add(submodule);
-										}
-										
-										buildFeaturesAndFields(currenttemplate, submodule, xmlsubmodule);
-									}
-								}	
-							}
-						}
+				AmpTemplatesVisibility visibilityTemplate = new AmpTemplatesVisibility();
+				String templateName = getImportedTemplateName(xmlTemplate);
+				visibilityTemplate.setName(templateName);
+				
+				AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
+				ampTreeVisibility.buildAmpTreeVisibilityMultiLevel(FeaturesUtil.getDefaultAmpTemplateVisibility());
+				
+				visibilityTemplate.setItems(new TreeSet<AmpObjectVisibility>());
+				visibilityTemplate.setFeatures(new TreeSet<AmpFeaturesVisibility>());
+				visibilityTemplate.setFields(new TreeSet<AmpFieldsVisibility>());
+
+				for (AmpTreeVisibility ampVisibilityTree : ampTreeVisibility.getItems().values()) {
+					AmpModulesVisibility ampModule = (AmpModulesVisibility) ampVisibilityTree.getRoot();
+					
+					Iterator<ModuleType> xmlModuleIt = xmlTemplate.getModule().iterator(); 
+					while(xmlModuleIt.hasNext()) {
+						ModuleType xmlModule = (ModuleType) xmlModuleIt.next();
+						importXmlModule(visibilityTemplate, ampModule, xmlModule);
 					}
 				}
 
-				hbsession.save(currenttemplate);
+				hbsession.save(visibilityTemplate);
 				
 			}
 		} catch (HibernateException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
-
-	private String getImportedTemplateName(TemplateType xmltemplate) {
-		return xmltemplate.getName()+"-"+ myFormatter.format(new Date());
+	
+	/**
+	 * Import the module into the template based on the xml element <module> 
+	 * @param AmpTemplatesVisibility template
+	 * @param AmpModulesVisibility ampModule
+	 * @param ModuleType xmlModule
+	 */
+	private void importXmlModule(AmpTemplatesVisibility template, AmpModulesVisibility ampModule, ModuleType xmlModule) {
+		
+		if (ampModule.getName().equalsIgnoreCase(xmlModule.getName())) {
+			if (xmlModule.isVisible()) {
+				template.getItems().add(ampModule);
+			}
+			
+			importXmlSubModules(template, ampModule, xmlModule);
+			importXmlFeatures(template, ampModule, xmlModule);
+		}
 	}
-
-	private void buildFeaturesAndFields(AmpTemplatesVisibility currentTemplate,
-			AmpModulesVisibility ampmodule, ModuleType xmlmodule) {
-		Iterator modfeaturesiter = ampmodule.getItems().iterator();
-		while (modfeaturesiter.hasNext()) {
-			AmpFeaturesVisibility feature = (AmpFeaturesVisibility) modfeaturesiter.next();
-			for (Iterator xmlfeatureiter = xmlmodule.getFeature().iterator(); xmlfeatureiter.hasNext();) {
-				FeatureType xmlfeature = (FeatureType) xmlfeatureiter.next();
-				if(xmlfeature.getName().equalsIgnoreCase(feature.getName())){
-					if (xmlfeature.isVisible()) {
-						currentTemplate.getFeatures().add(feature);
+	
+	/**
+	 * Import the modules elements into the template based on the subelements <module> 
+	 * @param AmpTemplatesVisibility template
+	 * @param AmpModulesVisibility ampModule
+	 * @param ModuleType xmlModule
+	 */
+	private void importXmlSubModules(AmpTemplatesVisibility template, AmpModulesVisibility ampModule, ModuleType xmlModule) {
+		
+		for (AmpModulesVisibility ampSubModule : ampModule.getSubmodules()) {
+			Iterator<ModuleType> xmlSubmoduleIt = xmlModule.getModule().iterator(); 
+			while (xmlSubmoduleIt.hasNext()) {
+				ModuleType xmlSubModule = xmlSubmoduleIt.next();
+				importXmlModule(template, ampSubModule, xmlSubModule);
+			}
+		}
+	}
+	
+	/**
+	 * Import the features elements into the template based on the element <feature> 
+	 * @param AmpTemplatesVisibility template
+	 * @param AmpModulesVisibility ampModule
+	 * @param ModuleType xmlModule
+	 */
+	private void importXmlFeatures(AmpTemplatesVisibility template, AmpModulesVisibility ampModule, ModuleType xmlModule) {
+		
+		Iterator<AmpObjectVisibility> ampFeatureIt = ampModule.getItems().iterator();
+		while (ampFeatureIt.hasNext()) {
+			AmpFeaturesVisibility ampFeature = (AmpFeaturesVisibility) ampFeatureIt.next();
+			
+			Iterator<FeatureType> xmlFeatureIt = xmlModule.getFeature().iterator();
+			while(xmlFeatureIt.hasNext()) {
+				FeatureType xmlFeature = (FeatureType) xmlFeatureIt.next();
+				if(ampFeature.getName().equals(xmlFeature.getName())) {
+					if (xmlFeature.isVisible()) {
+						template.getFeatures().add(ampFeature);
 					}
 					
-					Iterator fielditer = feature.getItems().iterator();
-					while(fielditer.hasNext()){
-						AmpFieldsVisibility field = (AmpFieldsVisibility) fielditer.next();
-						for (Iterator xmlfieliter = xmlfeature.getField().iterator(); xmlfieliter.hasNext();) {
-							FieldType xmlfield = (FieldType) xmlfieliter.next();
-							if(xmlfield.getValue().equalsIgnoreCase(field.getName()) ){
-								currentTemplate.getFields().add(field);
-							}
-						}
-					}
+					importXmlFields(template, ampFeature, xmlFeature);
 				}
 			}
 		}
 	}
 	
+	/**
+	 * Import the fields elements into the template based on the element <field> 
+	 * @param AmpTemplatesVisibility template
+	 * @param AmpFeaturesVisibility ampFeature
+	 * @param FeatureType xmlFeature
+	 */
+	private void importXmlFields(AmpTemplatesVisibility template, AmpFeaturesVisibility ampFeature, FeatureType xmlFeature) {
+
+		Iterator<AmpObjectVisibility> ampFieldIt = ampFeature.getItems().iterator();
+		while(ampFieldIt.hasNext()) {
+			AmpFieldsVisibility ampField = (AmpFieldsVisibility) ampFieldIt.next();
+			
+			Iterator<FieldType> xmlFieldIt = xmlFeature.getField().iterator();
+			while (xmlFieldIt.hasNext()) {
+				FieldType xmlField = (FieldType) xmlFieldIt.next();
+				
+				if(ampField.getName().equals(xmlField.getValue())){
+					template.getFields().add(ampField);
+				}
+			}
+		}
+	}
+	
+	
+	private String getImportedTemplateName(TemplateType xmlTemplate) {
+		return xmlTemplate.getName() + "-" + myFormatter.format(new Date());
+	}
 }

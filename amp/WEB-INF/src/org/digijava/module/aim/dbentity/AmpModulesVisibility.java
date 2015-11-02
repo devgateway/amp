@@ -24,7 +24,7 @@ public class AmpModulesVisibility extends AmpObjectVisibility implements Seriali
 	/**
 	 * @author dan
 	 */
-	private Set submodules;
+	private Set<AmpModulesVisibility> submodules;
 
 	/**
 	 * @see org.dgfoundation.amp.visibility.AmpObjectVisibility#getParent()
@@ -87,14 +87,14 @@ public class AmpModulesVisibility extends AmpObjectVisibility implements Seriali
 	/**
 	 * @return
 	 */
-	public Set getSubmodules() {
+	public Set<AmpModulesVisibility> getSubmodules() {
 		return submodules;
 	}
 
 	/**
 	 * @param submodules
 	 */
-	public void setSubmodules(Set submodules) {
+	public void setSubmodules(Set<AmpModulesVisibility> submodules) {
 		this.submodules = submodules;
 	}
 

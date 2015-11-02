@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -25,6 +26,7 @@ import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.mondrian.MondrianETL;
@@ -99,6 +101,9 @@ import org.saiku.service.olap.totals.aggregators.TotalAggregator;
  */
 public class MondrianReportGenerator implements ReportExecutor {
 	protected static final Logger logger = Logger.getLogger(MondrianReportGenerator.class);
+	
+	public final static String IS_MTEF_COLUMN = "is_mtef";
+	public final static String MTEF_TO_DELETE = "mtef_to_delete";
 	
 	//TODO: set to false
 	//e.g. skips to throw exceptions until schema def is complete and all mappings are configured based on it
@@ -647,13 +652,18 @@ public class MondrianReportGenerator implements ReportExecutor {
 		postprocessUndefinedEntries(cellDataSet);
 		CellDataSetToAmpHierarchies.concatenateNonHierarchicalColumns(spec, cellDataSet, leafHeaders, this.translatedUndefined, cellDataSetActivities);
 		boolean internalIdUsed = postProcessor.removeDummyColumns();
-		//postProcessor.removeZeroMTEFColumns(this.columnNumbersWithMtefs);
+		
+		SortedSet<Integer> columnsToDeleteFromOutput = new TreeSet<>();
+		
+//		postProcessor.removeZeroMTEFColumns(this.columnNumbersWithMtefs);
 		if (spec.getUsesFundingFlows()) {
-			postProcessor.removeEmptyFlowsColumns(internalIdUsed);
+			columnsToDeleteFromOutput.addAll(postProcessor.getEmptyFlowsColumns(internalIdUsed));
 			if (SAIKU_TOTALS) {
 				postProcessor.nullifyFundingFlowsMeasuresTotals();
 			}
 		}
+		columnsToDeleteFromOutput.addAll(postProcessor.getDummyMTEFColumns());
+		postProcessor.deleteColumns(columnsToDeleteFromOutput);
 				
 		//clear totals if were enabled for non-hierarchical merges
 		if (!spec.isCalculateColumnTotals())
@@ -700,16 +710,35 @@ public class MondrianReportGenerator implements ReportExecutor {
 				if (year > 0) {
 					String englishFormattedValue = /*MTEFYearsModel.getFiscal() ? */String.format("%s %d/%d", mtefMeasures.get(measureCell.getRawValue()), year, year + 1); /* : String.format("MTEF %d", year); -- commented out for old-reports compatibility reasons*/
 					String formattedValue = TranslatorWorker.translateText(englishFormattedValue, environment.locale, 3l);
-					//cell = new MemberCell();
+					String mtefColumnName = mtefMeasures.get(measureCell.getRawValue());
+					
+					/* compute whether this MTEF column belongs to a year we are not supposed to see because it has not been selected as a column
+					 *
+					 */
+					if (mtefColumnName == null)
+						throw new RuntimeException("could not backtrack from Mondrian output measure to AMP measure");
+					SortedSet<Integer> legalYears = spec.allowedYearsPerMeasure.get(mtefColumnName);
+					boolean shouldDelete = (!mtefColumnName.equals(MeasureConstants.REAL_MTEFS)) // Real MTEFs zero totals appear in each year - to mimic old reports 
+							&& !(legalYears == null || legalYears.isEmpty() || legalYears.contains(year));
+					Set<String> meta = new HashSet<>(Arrays.asList(IS_MTEF_COLUMN));
+					if (shouldDelete) {
+						meta.add(MTEF_TO_DELETE);
+					}
+					/* computation done */
+					
+
 					measureCell.setFormattedValue(formattedValue);
 					measureCell.setRawValue(formattedValue);
 					//headers[lastLineNr][i] = cell;
 					ReportOutputColumn roc = leafHeaders.get(i);
 					if (spec.getUsesFundingFlows()) {
 						roc.parentColumn.columnName = formattedValue;
+						roc = new ReportOutputColumn(roc.columnName, roc.parentColumn, roc.originalColumnName, meta); //replace flags. Since this is a leaf, parent holds no references
+						leafHeaders.set(i, roc);
 					} else {
 						// MTEF columns are leaves
-						roc = new ReportOutputColumn(formattedValue, roc.parentColumn, roc.originalColumnName);
+						
+						roc = new ReportOutputColumn(formattedValue, roc.parentColumn, roc.originalColumnName, meta);
 						leafHeaders.set(i, roc);
 					}
 				}
@@ -994,7 +1023,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		if (leafColumns != null && spec.getColumns() != null) {
 			for (ReportColumn reportColumn : spec.getColumns()) {
 				String originalColumnName = reportColumn.getColumnName();
-				ReportOutputColumn reportOutputColumn = ReportOutputColumn.buildTranslated(originalColumnName, environment.locale, null);
+				ReportOutputColumn reportOutputColumn = ReportOutputColumn.buildTranslated(originalColumnName, environment.locale, null, null);
 				leafColumns.add(reportOutputColumn);
 			}
 		}
@@ -1010,7 +1039,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		if (rowAxis != null && rowAxis.getPositionCount() > 0 ) {
 			for (Member textColumn : rowAxis.getPositions().get(0).getMembers()) {
 				ReportOutputColumn reportColumn = new ReportOutputColumn(textColumn.getLevel().getCaption(), null, 
-						MondrianMapping.fromFullNameToColumnName.get(textColumn.getLevel().getUniqueName()));
+						MondrianMapping.fromFullNameToColumnName.get(textColumn.getLevel().getUniqueName()), null);
 				leafColumns.add(reportColumn);
 			}
 		} else if (spec.isPopulateReportHeadersIfEmpty()) {
@@ -1039,7 +1068,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 						if (i == members.size() - 1 && spec.getUsesFundingFlows() && usedName.equals("Undefined")) {
 							usedName = usedCaption = " ";
 						}
-						reportColumn = new ReportOutputColumn(usedCaption, parent, usedName, usedDescription);
+						reportColumn = new ReportOutputColumn(usedCaption, parent, usedName, usedDescription, null);
 						reportColumnsByFullName.put(fullColumnName, reportColumn);
 					}
 					if (i == members.size() - relevantDelta) {
@@ -1061,9 +1090,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 		this.totalsHeaders = new ArrayList<>();
 		//add measures total columns
 		if (spec.isCalculateColumnTotals() && !GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria())) {
-			ReportOutputColumn totalMeasuresColumn = ReportOutputColumn.buildTranslated(MoConstants.TOTAL_MEASURES, environment.locale, null);
+			ReportOutputColumn totalMeasuresColumn = ReportOutputColumn.buildTranslated(MoConstants.TOTAL_MEASURES, environment.locale, null, null);
 			for (String measureName : outputtedMeasures) {
-				this.totalsHeaders.add(ReportOutputColumn.buildTranslated(measureName, getMeasureDescription(measureName), environment.locale, totalMeasuresColumn));
+				this.totalsHeaders.add(ReportOutputColumn.buildTranslated(measureName, getMeasureDescription(measureName), environment.locale, totalMeasuresColumn, null));
 			}
 		}
 				

@@ -1,7 +1,14 @@
 package org.dgfoundation.amp.newreports;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.digijava.kernel.translator.TranslatorWorker;
 
@@ -11,6 +18,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
  *
  */
 public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
+	
 	
 	/**
 	 * the <strong>localized</strong> name of the column<br />
@@ -32,14 +40,19 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	
 	public final String description;
 	
+	/**
+	 * flags about the column
+	 */
+	public final Set<Object> flags;
+	
 	transient
 	public final List<ReportOutputColumn> children = new ArrayList<ReportOutputColumn>();
 	
-	public ReportOutputColumn(String columnName, ReportOutputColumn parentColumn, String originalColumnName) {
-		this(columnName, parentColumn, originalColumnName, null);
+	public ReportOutputColumn(String columnName, ReportOutputColumn parentColumn, String originalColumnName, Collection<?> flags) {
+		this(columnName, parentColumn, originalColumnName, null, flags);
 	}
 	
-	public ReportOutputColumn(String columnName, ReportOutputColumn parentColumn, String originalColumnName, String description) {
+	public ReportOutputColumn(String columnName, ReportOutputColumn parentColumn, String originalColumnName, String description, Collection<?> flags) {
 		this.columnName = columnName;
 		
 		if (columnName == null || columnName.isEmpty())
@@ -53,14 +66,15 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 			this.parentColumn.children.add(this);
 		}
 		
+		this.flags = Collections.unmodifiableSet(new HashSet<>(flags == null ? new ArrayList<Object>() : flags));
 	}
 	
-	public static ReportOutputColumn buildTranslated(String originalColumnName, String description, String locale, ReportOutputColumn parentColumn) {
-		return new ReportOutputColumn(TranslatorWorker.translateText(originalColumnName, locale, 3l), parentColumn, originalColumnName, description);
+	public static ReportOutputColumn buildTranslated(String originalColumnName, String description, String locale, ReportOutputColumn parentColumn, Collection<?> flags) {
+		return new ReportOutputColumn(TranslatorWorker.translateText(originalColumnName, locale, 3l), parentColumn, originalColumnName, description, flags);
 	}
 	
-	public static ReportOutputColumn buildTranslated(String originalColumnName, String locale, ReportOutputColumn parentColumn){
-		return buildTranslated(TranslatorWorker.translateText(originalColumnName, locale, 3l), null, locale, parentColumn);
+	public static ReportOutputColumn buildTranslated(String originalColumnName, String locale, ReportOutputColumn parentColumn, Collection<?> flags){
+		return buildTranslated(TranslatorWorker.translateText(originalColumnName, locale, 3l), null, locale, parentColumn, flags);
 	}
 	
 	/**

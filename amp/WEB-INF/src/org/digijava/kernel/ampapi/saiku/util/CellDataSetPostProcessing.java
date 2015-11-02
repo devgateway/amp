@@ -20,6 +20,7 @@ import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.reports.CustomMeasures;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.service.olap.totals.TotalNode;
 import org.saiku.service.olap.totals.aggregators.TotalAggregator;
@@ -45,12 +46,12 @@ public class CellDataSetPostProcessing {
 		this.environment = environment;
 	}
 	
-	protected CellDataSetPostProcessing(CellDataSetPostProcessing o) {
-		this.spec = o.spec;
-		this.cellDataSet = o.cellDataSet;
-		this.leafHeaders = o.leafHeaders;
-		this.environment = o.environment;
-	}
+//	protected CellDataSetPostProcessing(CellDataSetPostProcessing o) {
+//		this.spec = o.spec;
+//		this.cellDataSet = o.cellDataSet;
+//		this.leafHeaders = o.leafHeaders;
+//		this.environment = o.environment;
+//	}
 	
 	/**
 	 * returns true IFF a column has a zero total
@@ -122,17 +123,34 @@ public class CellDataSetPostProcessing {
 //		deleteColumns(colsToDelete);
 //	}
 	
-	public void removeEmptyFlowsColumns(boolean internalIdUsed) {
-//		if (System.currentTimeMillis() < 1)
-//			return;
-		SortedSet<Integer> colsToDelete = new TreeSet<>();
+	/**
+	 * returns null if for some reason totals don't exist
+	 * @return
+	 */
+	public TotalAggregator[] getByColTotals() {
 		List<TotalNode>[] rowTotals = cellDataSet.getRowTotalsLists();
 		boolean canLook = rowTotals != null && rowTotals.length > 0 && rowTotals[0].size() > 0 && rowTotals[0].get(0).getTotalGroups() != null;
-		if (!canLook) return; // nothing to do
+		if (!canLook) 
+			return null; // nothing to do
 		TotalAggregator[][] matrixTotals = rowTotals[0].get(0).getTotalGroups();
-		if (matrixTotals == null || matrixTotals.length == 0 || matrixTotals[0] == null) return;
+		if (matrixTotals == null || matrixTotals.length == 0 || matrixTotals[0] == null)
+			return null;
 		
 		TotalAggregator[] byColTotals = matrixTotals[0];
+		return byColTotals;
+	}
+	
+	/**
+	 * return column numbers of cell corresponding to dummy funding flows (in the saikucell output) 
+	 * @param internalIdUsed
+	 * @return
+	 */
+	public SortedSet<Integer> getEmptyFlowsColumns(boolean internalIdUsed) {
+		TotalAggregator[] byColTotals = getByColTotals();
+		SortedSet<Integer> colsToDelete = new TreeSet<>();
+
+		if (byColTotals == null)
+			return colsToDelete;
 		
 		int measureStartId = 0; //(internalIdUsed ? 1 : 0);
 		int measuresEndId = byColTotals.length;
@@ -153,16 +171,44 @@ public class CellDataSetPostProcessing {
 		for(int columnNumber = measureStartId ; columnNumber < measuresEndId; columnNumber++) {
 			ReportOutputColumn selfHeader = leafHeaders.get(columnNumber + spec.getColumnNames().size());
 			if (hasFundingFlowParent(selfHeader) && isZero(byColTotals, columnNumber)) {
-				leafHeaders.set(columnNumber + spec.getColumnNames().size(), new ReportOutputColumn(" ", selfHeader.parentColumn, " "));
+				leafHeaders.set(columnNumber + spec.getColumnNames().size(), new ReportOutputColumn(" ", selfHeader.parentColumn, " ", selfHeader.flags));
 			}
 		}
 		//colsToDelete.clear();
 		//colsToDelete.add(1 + spec.getColumns().size());
-		
-		deleteColumns(colsToDelete);
+
+		return colsToDelete;
 	}
 	
-	protected void deleteColumns(SortedSet<Integer> colsToDelete) {
+	/**
+	 * partial copy-paste off {@link #getEmptyFlowsColumns(boolean)}, but this function will disappear in AMP 2.12
+	 * @return
+	 */
+	public SortedSet<Integer> getDummyMTEFColumns() {
+		TotalAggregator[] byColTotals = getByColTotals();
+		SortedSet<Integer> colsToDelete = new TreeSet<>();
+
+		if (byColTotals == null)
+			return colsToDelete;
+		
+		int measureStartId = 0; //(internalIdUsed ? 1 : 0);
+		int measuresEndId = byColTotals.length;
+		
+		for(int columnNumber = measureStartId; columnNumber < measuresEndId; columnNumber++) {
+			ReportOutputColumn selfHeader = leafHeaders.get(columnNumber + spec.getColumnNames().size());
+			if (selfHeader.flags.contains(MondrianReportGenerator.MTEF_TO_DELETE)) {
+				if (!isZero(byColTotals, columnNumber))
+					throw new RuntimeException("mtef column marked for output-deletion has no-zero contents!");
+				if (!selfHeader.flags.contains(MondrianReportGenerator.IS_MTEF_COLUMN))
+					throw new RuntimeException("mtef column marked for output-deletion is not marked as an MTEF column!");
+				colsToDelete.add(columnNumber + spec.getColumns().size());
+			}
+		}
+		
+		return colsToDelete;
+	}
+	
+	public void deleteColumns(SortedSet<Integer> colsToDelete) {
 		SortedSet<Integer> measToDelete = new TreeSet<>();
 		for(int colNr:colsToDelete)
 			measToDelete.add(colNr - spec.getColumns().size());

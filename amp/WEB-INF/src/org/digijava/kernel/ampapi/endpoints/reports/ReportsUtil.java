@@ -495,7 +495,7 @@ public class ReportsUtil {
 								errors.add("Invalid column name = " + column);
 								break;
 							}
-							fundingColumn = new ReportOutputColumn(column, fundingColumn, null);
+							fundingColumn = new ReportOutputColumn(column, fundingColumn, null, null);
 						}
 					}
 					if (fundingColumn != null)

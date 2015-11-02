@@ -161,5 +161,10 @@ public class MtefConverter {
 		addMeasureIfMandatedByColumn(spec, realMtefYears, ElementType.REAL_MTEF_DATE, MeasureConstants.REAL_MTEFS, false);
 		addMeasureIfMandatedByColumn(spec, pipelineMtefYears, ElementType.PIPELINE_MTEF_DATE, MeasureConstants.PIPELINE_MTEF_PROJECTIONS, false);
 		addMeasureIfMandatedByColumn(spec, projectionMtefYears, ElementType.PROJECTION_MTEF_DATE, MeasureConstants.PROJECTION_MTEF_PROJECTIONS, false);
+		
+		spec.allowedYearsPerMeasure.put("MTEF", mtefYears);
+		spec.allowedYearsPerMeasure.put(MeasureConstants.REAL_MTEFS, realMtefYears);
+		spec.allowedYearsPerMeasure.put(MeasureConstants.PIPELINE_MTEF_PROJECTIONS, pipelineMtefYears);
+		spec.allowedYearsPerMeasure.put(MeasureConstants.PROJECTION_MTEF_PROJECTIONS, projectionMtefYears);
 	}
 }

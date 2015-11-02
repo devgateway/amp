@@ -5,10 +5,13 @@ package org.dgfoundation.amp.newreports;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.ArConstants;
@@ -16,6 +19,7 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 
 /**
  * Stores a report configuration by implementing {@link ReportSpecification} and defines all data required to generate a report. 
+ * this is the Mondrian-specific implementation (full of hacks)
  * @author Nadejda Mandrescu
  *
  */
@@ -41,6 +45,11 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	private boolean alsoShowPledges = false;
 	private boolean usesFundingFlows = false;
 	private String projectTitleColumn = ColumnConstants.PROJECT_TITLE;
+	
+	/**
+	 * Mondrian-specific hack - not part of the API, thus public
+	 */
+	public Map<String, SortedSet<Integer>> allowedYearsPerMeasure = new HashMap<>();
 
     /**
      * If the report query results in empty data

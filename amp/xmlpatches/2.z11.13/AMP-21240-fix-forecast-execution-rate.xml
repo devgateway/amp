@@ -8,8 +8,8 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				INSERT INTO amp_measures(measureid, measurename, aliasname, type, description) VALUES 
-					(nextval('amp_measures_seq'), 'Forecast Execution Rate', 'Forecast Execution Rate', 'D', 'Actual Disbursements / (Most recent of (Pipeline MTEF for the year, Projection MTEF for the year)). Measure only makes sense in Annual and Totals-only reports');
+				UPDATE amp_measures SET description = 'Actual Disbursements / (Most recent of (Pipeline MTEF for the year, Projection MTEF for the year)). Measure only makes sense in Annual and Totals-only reports' 
+					WHERE measurename = 'Forecast Execution Rate';
 			</lang>
 		</script>
 	</apply>

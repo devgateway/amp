@@ -69,7 +69,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 			previousFireTime = new DateTime(context.getTrigger().getPreviousFireTime());
 		}
 		Long ampTeamId = FeaturesUtil
-				.getGlobalSettingValueLong(GlobalSettingsConstants.TEAM_TO_RUN_REPORT_FORACTIVITY_NOTIFICATION);
+				.getGlobalSettingValueLong(GlobalSettingsConstants.WORKSPACE_TO_RUN_REPORT_FUNDING_GAP_NOTIFICATION);
 		final ValueWrapper<Long> ampTeamMemberId = new ValueWrapper<Long>(null);
 		// default percentage is 1
 		String measureA = MeasureConstants.ACTUAL_DISBURSEMENTS;
@@ -116,9 +116,9 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 				// not
 				// default ones
 				String configuredMeasureA = FeaturesUtil
-						.getGlobalSettingValue(GlobalSettingsConstants.MEASURE_A_FOR_THRESHOLD);
+						.getGlobalSettingValue(GlobalSettingsConstants.MEASURE_A_FOR_FUNDING_GAP_NOTIFICATION);
 				String configuredMeasureB = FeaturesUtil
-						.getGlobalSettingValue(GlobalSettingsConstants.MEASURE_B_FOR_THRESHOLD);
+						.getGlobalSettingValue(GlobalSettingsConstants.MEASURE_B_FOR_FUNDING_GAP_NOTIFICATION);
 				if (configuredMeasureA != null) {
 
 					// the measure is configured, we check if still visible
@@ -150,9 +150,9 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 					List<AmpActivityVersion> activitiesToNofity = new ArrayList<AmpActivityVersion>();
 
 					Double percentage = FeaturesUtil
-							.getGlobalSettingDouble(GlobalSettingsConstants.ACTIVITY_NOTIFICATION_THRESHOLD) != null
+							.getGlobalSettingDouble(GlobalSettingsConstants.FUNDING_GAP_NOTIFICATION_THRESHOLD) != null
 									? FeaturesUtil.getGlobalSettingDouble(
-											GlobalSettingsConstants.ACTIVITY_NOTIFICATION_THRESHOLD)
+											GlobalSettingsConstants.FUNDING_GAP_NOTIFICATION_THRESHOLD)
 									: DEFAULT_PERCENTAGE;
 
 					spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
@@ -240,8 +240,8 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 					// more
 					logger.error(this.getClass()
 							+ " could not run because one (or both)of the following measures were configured and not visible anymmore  "
-							+ GlobalSettingsConstants.MEASURE_A_FOR_THRESHOLD + " or "
-							+ GlobalSettingsConstants.MEASURE_B_FOR_THRESHOLD);
+							+ GlobalSettingsConstants.MEASURE_A_FOR_FUNDING_GAP_NOTIFICATION + " or "
+							+ GlobalSettingsConstants.MEASURE_B_FOR_FUNDING_GAP_NOTIFICATION);
 				}
 			} else {
 				// should run report
@@ -249,7 +249,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 			}
 		} else {
 			logger.error(this.getClass() + " could not run because the team is not correctly configured for setting "
-					+ GlobalSettingsConstants.TEAM_TO_RUN_REPORT_FORACTIVITY_NOTIFICATION);
+					+ GlobalSettingsConstants.WORKSPACE_TO_RUN_REPORT_FUNDING_GAP_NOTIFICATION);
 		}
 	}
 

@@ -21,8 +21,8 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 				CREATE OR REPLACE VIEW v_g_settings_team_to_notify AS
-					select amp_team_id as id,name as value from amp_team where amp_team_id in
-				(select amp_team_id from amp_team_member );
+					select name as id,name as value from amp_team where amp_team_id in
+				(select amp_team_id from amp_team_member ) order by name asc
 			</lang>
 		</script>
 	</apply>

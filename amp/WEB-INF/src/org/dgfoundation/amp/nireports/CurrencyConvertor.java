@@ -9,5 +9,5 @@ import java.util.Date;
  *
  */
 public interface CurrencyConvertor {
-	public BigDecimal getRate(Date date);
+	public BigDecimal getRate(String fromCurrency, String toCurrency, Date date);
 }

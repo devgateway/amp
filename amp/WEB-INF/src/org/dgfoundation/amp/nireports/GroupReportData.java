@@ -13,6 +13,6 @@ public class GroupReportData extends ReportData {
 	
 	@Override
 	public boolean isLeaf() {
-		return true;
+		return false;
 	}
 }

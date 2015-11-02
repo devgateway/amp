@@ -3,6 +3,11 @@ package org.dgfoundation.amp.nireports;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * a leaf of a report - the bottom hierarchy, without any subreports
+ * @author Dolghier Constantin
+ *
+ */
 public class ColumnReportData extends ReportData {
 	
 	public final Map<CellColumn, ColumnContents> contents; // null for leafs	

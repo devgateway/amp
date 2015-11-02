@@ -32,6 +32,11 @@ public abstract class NiDimension {
 		return dimensionData;
 	}
 	
+	/**
+	 * 
+	 * @param rawDimensionData
+	 * @return
+	 */
 	protected List<List<Long>> freeze(List<Object[]> rawDimensionData) {
 		List<List<Long>> res = new ArrayList<>();
 		

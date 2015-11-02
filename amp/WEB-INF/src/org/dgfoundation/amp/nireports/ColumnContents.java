@@ -6,7 +6,7 @@ import java.util.Map;
 
 /**
  * the contents of a column inside of a leaf-level ReportData.<br />
- * TODO: for now it is mutable, but it under consideration
+ * TODO: for now it is mutable, but it is under consideration
  * @author Dolghier Constantin
  *
  */

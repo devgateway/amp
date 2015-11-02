@@ -12,9 +12,9 @@ public class MetaInfo implements Comparable<MetaInfo> {
 	public final Comparable<?> value;
 	
 	public MetaInfo(String category, Comparable<?> value) {
-		if (this.category == null)
+		if (category == null)
 			throw new RuntimeException("metaInfo category is null");
-		if (this.value == null)
+		if (value == null)
 			throw new RuntimeException("metaInfo value is null");
 		this.category = category;
 		this.value = value;

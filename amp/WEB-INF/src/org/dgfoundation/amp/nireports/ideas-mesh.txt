@@ -51,3 +51,10 @@ Calendars:
 	-> http://blog.joda.org/2009/11/why-jsr-310-isn-joda-time_4941.html
 	-> http://java-performance.info/jsr-310-java-8-datetime-library-performance-well-joda-time-2-3-j-u-calendar/
 	
+
+
+measures which are not affected by filters should be made columns
+	-> what about those which have meaning for both year and overall (e.g. Execution Rate / Forecast Execution Rate)
+	
+
+	

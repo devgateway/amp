@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 
+ * a column with subcolumns. The column has no cells of its own
  * @author Dolghier Constantin
  *
  */

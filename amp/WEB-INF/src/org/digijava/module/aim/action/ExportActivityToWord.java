@@ -2545,10 +2545,7 @@ public class ExportActivityToWord extends Action {
                                             addRowData(formatNumber(fndDet.getTransactionAmount())).
                                             addRowData(fndDet.getAmpCurrencyId().getCurrencyCode());
 
-
-
-
-                                    if (fndDet.getFixedExchangeRate() != null) {
+                                   if (fndDet.getFixedExchangeRate() != null) {
                                         String exchangeRateStr = TranslatorWorker.translateText("Exchange Rate: ");
                                         exchangeRateStr += DECIMAL_FORMAT.format(fndDet.getFixedExchangeRate());
                                         currentRowData.addRowData(exchangeRateStr);
@@ -2556,9 +2553,15 @@ public class ExportActivityToWord extends Action {
                                     String rolesOrgFundingFlows=getRoleAndOrgForFundingFlows(fndDet,ActivityUtil.getFmForFundingFlows(fndDet.getTransactionType() ));
                                     if(rolesOrgFundingFlows!=null){
                                         currentRowData.addRowData(rolesOrgFundingFlows);
-                                    }
+                                    }                                   
 
                                     eshDonorFundingDetails.addRowData(sectionHelperRowData);
+                                    
+                                    if (fndDet.getPledgeid() != null) {
+                                    	ExportSectionHelperRowData pledgeSectorData = new ExportSectionHelperRowData(null, null, null, true);
+                                    	pledgeSectorData.addRowData(TranslatorWorker.translateText("Source Pledge") + ": " + fndDet.getPledgeid().getEffectiveName());
+                                    	eshDonorFundingDetails.addRowData(pledgeSectorData);
+                                    }
                                 }
                             }
 
@@ -3310,7 +3313,7 @@ public class ExportActivityToWord extends Action {
 
             String label = TranslatorWorker.translateText("Government Approval Procedures");
 
-            String value = identification.getHumanitarianAid() == null ? "" :
+            String value = identification.getGovernmentApprovalProcedures() == null ? "" :
                     TranslatorWorker.translateText(identification.getGovernmentApprovalProcedures() ? "Yes" : "No");
 
             generateOverAllTableRows(identificationSubTable1, label, value , null);
@@ -3320,7 +3323,7 @@ public class ExportActivityToWord extends Action {
 
             String label = TranslatorWorker.translateText("Joint Criteria");
 
-            String value = identification.getHumanitarianAid() == null ? "" :
+            String value = identification.getJointCriteria() == null ? "" :
                     TranslatorWorker.translateText(identification.getJointCriteria() ? "Yes" : "No");
 
             generateOverAllTableRows(identificationSubTable1, label, value , null);

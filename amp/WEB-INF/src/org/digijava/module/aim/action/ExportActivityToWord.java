@@ -2506,9 +2506,6 @@ public class ExportActivityToWord extends Action {
 		                                        addRowData(formatNumber(fndDet.getTransactionAmount())).
 		                                        addRowData(fndDet.getAmpCurrencyId().getCurrencyCode());
 
-
-                                        
-
                                         if (fndDet.getFixedExchangeRate() != null) {
                                             String exchangeRateStr = TranslatorWorker.translateText("Exchange Rate: ");
                                             exchangeRateStr += DECIMAL_FORMAT.format(fndDet.getFixedExchangeRate());
@@ -2522,6 +2519,12 @@ public class ExportActivityToWord extends Action {
                                         }
 
                                         eshDonorFundingDetails.addRowData(sectionHelperRowData);
+                                        
+                                        if (fndDet.getPledgeid() != null) {
+                                        	ExportSectionHelperRowData pledgeSectorData = new ExportSectionHelperRowData(null, null, null, true);
+                                        	pledgeSectorData.addRowData(TranslatorWorker.translateText("Source Pledge") + ": " + fndDet.getPledgeid().getEffectiveName());
+                                        	eshDonorFundingDetails.addRowData(pledgeSectorData);
+                                        }
 									}
 	                            }
 

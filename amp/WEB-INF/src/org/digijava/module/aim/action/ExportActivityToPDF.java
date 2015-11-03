@@ -56,7 +56,25 @@ import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.Identification;
 import org.digijava.module.aim.form.ProposedProjCost;
-import org.digijava.module.aim.helper.*;
+import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.ChartGenerator;
+import org.digijava.module.aim.helper.ChartParams;
+import org.digijava.module.aim.helper.Components;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.Documents;
+import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.Funding;
+import org.digijava.module.aim.helper.FundingDetail;
+import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.GlobalSettings;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.Location;
+import org.digijava.module.aim.helper.Measures;
+import org.digijava.module.aim.helper.OrgProjectId;
+import org.digijava.module.aim.helper.ReferenceDoc;
+import org.digijava.module.aim.helper.RegionalFunding;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -78,6 +96,8 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 
+import clover.org.apache.commons.lang.StringUtils;
+
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -95,8 +115,6 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfPTableEvent;
 import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.pdf.draw.LineSeparator;
-
-import org.digijava.module.aim.helper.GlobalSettings;
 
 /**
  * Export Activity to PDF
@@ -2800,83 +2818,7 @@ public class ExportActivityToPDF extends Action {
 
                         // MTEF Projections
                         if(visibleModuleMTEFProjections) {
-
-                            output = TranslatorWorker.translateText("MTEF Projections:");
-                            PdfPCell titleCell = new PdfPCell(new Paragraph(postprocessText(output), titleFont));
-                            titleCell.setBorder(0);
-                            titleCell.setBackgroundColor(new Color(255,255,204));
-                            titleCell.setColspan(4);
-
-                            ArrayList<PdfPCell> cells = new ArrayList<>();
-                            boolean anythingAdded = false;
-
-                            if (funding.getMtefDetails() != null) {
-                            	/*
-                            	 * for some reason, in pdfexport it works with funding.getMtefDetails
-                            	 * in wordexport it works with [AmpFunding]fnd.getMtefProjections
-                            	 * inconsistency?
-                            	 * */
-                                for (FundingDetail mtefProjection : funding.getMtefDetails()) {
-                                    if (FeaturesUtil.isVisibleModule(mtefProjectionFields[0])) {
-                                        anythingAdded = true;
-                                        String projectedType = mtefProjection.getProjectionTypeName().getValue();
-                                        PdfPCell innerCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText(projectedType), plainFont));
-                                        innerCell.setBorder(0);
-                                        cells.add(innerCell);
-                                    } else {
-                                        cells.add(getEmptyCell());
-                                    }
-
-                                    if (FeaturesUtil.isVisibleModule(mtefProjectionFields[1])){
-                                        anythingAdded = true;
-                                        PdfPCell innerCell = new PdfPCell(new Paragraph(mtefProjection.getFiscalYear(), plainFont));
-                                        innerCell.setBorder(0);
-                                        cells.add(innerCell);
-                                    } else {
-                                        cells.add(getEmptyCell());
-                                    }
-
-                                    if (FeaturesUtil.isVisibleModule(mtefProjectionFields[2])) {
-                                        anythingAdded = true;
-                                        output = "";
-                                        if (mtefProjection.getTransactionAmount() != null && mtefProjection.getTransactionAmount().length() > 0) {
-                                            output = mtefProjection.getTransactionAmount() + " " + mtefProjection.getCurrencyCode();
-                                        }
-
-                                        PdfPCell innerCell = new PdfPCell(new Paragraph(output, plainFont));
-                                        innerCell.setBorder(0);
-                                        innerCell.setColspan(1);
-                                        cells.add(innerCell);
-                                    } else {
-                                        cells.add(getEmptyCell());
-                                    }
-
-                                    cells.add(getRoleOrgForFundingFlows(mtefProjection,mtefProjectionFields[4]));
-                                }
-                            }
-
-                            fundingTable.addCell(titleCell);
-                            if (anythingAdded)
-                            {
-                                if (true) {
-                                    if (funding.getSubtotalMTEFs() != null && funding.getSubtotalMTEFs().length() > 0)
-                                        output = funding.getSubtotalMTEFs() + currencyCode;
-                                    else
-                                        output = "";
-                                    PdfPCell subtotalCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("SUBTOTAL MTEFS:")+" \t\t         "+ output+"\n\n",plainFont));
-                                    subtotalCell.setBorder(0);
-                                    subtotalCell.setBackgroundColor(new Color(255,255,204));
-                                    subtotalCell.setColspan(4);
-                                    cells.add(subtotalCell);
-                                }
-                                for (PdfPCell cell: cells) {
-                                    fundingTable.addCell(cell);
-                                }
-                            } else {
-                                PdfPCell innerCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("No MTEF data"), plainFont));
-                                innerCell.setBorder(0);
-                                fundingTable.addCell(innerCell);
-                            }
+                        	renderMtefSection(fundingTable, funding, currencyCode);
                         }
 
                         //UNDISBURSED BALANCE
@@ -2980,6 +2922,107 @@ public class ExportActivityToPDF extends Action {
         mainLayout.addCell(fundingCell);
         //return fundingTable;
     }
+    
+	private void renderMtefSection(PdfPTable fundingTable, Funding funding, String currencyCode) {
+		String output = TranslatorWorker.translateText("MTEF Projections:");
+        PdfPCell titleCell = new PdfPCell(new Paragraph(postprocessText(output), titleFont));
+        titleCell.setBorder(0);
+        titleCell.setBackgroundColor(new Color(255,255,204));
+        titleCell.setColspan(4);
+
+        ArrayList<PdfPCell> cells = new ArrayList<>();
+        boolean anythingAdded = false;
+
+        if (funding.getMtefDetails() != null) {
+        	List<FundingDetail> mtefPipeline = new ArrayList<FundingDetail>();
+        	List<FundingDetail> mtefProjection = new ArrayList<FundingDetail>();
+        	
+        	for (FundingDetail mtefFunding : funding.getMtefDetails()) {
+        		if ("pipeline".equals(mtefFunding.getProjectionTypeName().getValue())) {
+        			mtefPipeline.add(mtefFunding);
+        		} else if ("projection".equals(mtefFunding.getProjectionTypeName().getValue())) {
+        			mtefProjection.add(mtefFunding);
+        		}
+        	}
+        	
+        	anythingAdded |= renderMtefSubsection(cells, mtefPipeline, "MTEF Projections Pipeline", funding.getSubtotalMTEFsPipeline(), currencyCode);
+        	anythingAdded |= renderMtefSubsection(cells, mtefProjection, "MTEF Projections Projection", funding.getSubtotalMTEFsProjection(), currencyCode);
+        }
+
+        fundingTable.addCell(titleCell);
+        
+        if (anythingAdded) {
+        	renderMtefSubTotals(cells, "Total MTEF Projections", funding.getSubtotalMTEFs(), currencyCode);
+        	for (PdfPCell cell : cells) {
+                fundingTable.addCell(cell);
+            }
+        } else {
+            PdfPCell innerCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("No MTEF data"), plainFont));
+            innerCell.setBorder(0);
+            fundingTable.addCell(innerCell);
+        }
+	}
+
+	private boolean renderMtefSubsection(ArrayList<PdfPCell> cells, List<FundingDetail> mtefList, String projectionType, String mtefSubTotal, String currencyCode) {
+    	boolean addedData = false;
+    	for (FundingDetail mtefFunding : mtefList) {
+            if (FeaturesUtil.isVisibleModule(mtefProjectionFields[0])) {
+            	addedData = true;
+                String projectedType = mtefFunding.getProjectionTypeName().getValue();
+                PdfPCell innerCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText(projectedType), plainFont));
+                innerCell.setBorder(0);
+                cells.add(innerCell);
+            } else {
+                cells.add(getEmptyCell());
+            }
+
+            if (FeaturesUtil.isVisibleModule(mtefProjectionFields[1])){
+            	addedData = true;
+                PdfPCell innerCell = new PdfPCell(new Paragraph(mtefFunding.getFiscalYear(), plainFont));
+                innerCell.setBorder(0);
+                cells.add(innerCell);
+            } else {
+                cells.add(getEmptyCell());
+            }
+
+            if (FeaturesUtil.isVisibleModule(mtefProjectionFields[2])) {
+            	addedData = true;
+                String output = "";
+                if (mtefFunding.getTransactionAmount() != null && mtefFunding.getTransactionAmount().length() > 0) {
+                    output = mtefFunding.getTransactionAmount() + " " + mtefFunding.getCurrencyCode();
+                }
+
+                PdfPCell innerCell = new PdfPCell(new Paragraph(output, plainFont));
+                innerCell.setBorder(0);
+                innerCell.setColspan(1);
+                cells.add(innerCell);
+            } else {
+                cells.add(getEmptyCell());
+            }
+
+            cells.add(getRoleOrgForFundingFlows(mtefFunding, mtefProjectionFields[4]));
+        }
+    	
+    	if (addedData) {
+    		renderMtefSubTotals(cells, "Sub-Total " + projectionType, mtefSubTotal, currencyCode);
+    	}
+    	
+    	return addedData;
+	}
+	
+	private void renderMtefSubTotals(ArrayList<PdfPCell> cells, String titleTotal, String subtotalMTEFs,  String currencyCode) {
+    	String output = "";
+    	
+    	if (StringUtils.isNotBlank(subtotalMTEFs)) {
+            output = subtotalMTEFs + " " + currencyCode;
+    	}
+        
+        PdfPCell subtotalCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText(titleTotal)+": \t\t         "+ output+"\n\n",plainFont));
+        subtotalCell.setBorder(0);
+        subtotalCell.setBackgroundColor(new Color(255,255,204));
+        subtotalCell.setColspan(4);
+        cells.add(subtotalCell);
+	}
 
     private void createSubtotalRow(PdfPTable fundingTable, String title, String value, String currencyCode) throws WorkerException{
 

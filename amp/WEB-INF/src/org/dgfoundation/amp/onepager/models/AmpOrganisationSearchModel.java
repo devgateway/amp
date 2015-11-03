@@ -26,6 +26,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 
 /**
  * @author mpostelnicu@dgateway.org since Sep 28, 2010
@@ -55,56 +56,64 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
 		@SuppressWarnings("deprecation")
 		@Override
 		public void execute(Connection connection) throws SQLException {
-		    String sqlQuery = "SELECT org.amp_org_id, org.name, org.acronym, org.org_type, orgname.translation  from amp_organisation org"
-				    + " LEFT OUTER JOIN amp_content_translation orgname ON org.amp_org_id = orgname.object_id"
-				    + " AND orgname.field_name = ? "
-				    + " AND orgname.object_class =? "
-				    + " AND orgname.locale = ?" 
-				    + " WHERE (org.deleted IS NULL OR org.deleted = ?)";
-		    AmpOrgGroup orgroup =null;
-
-			if (getParams()!=null && getParams().get(PARAM.GROUP_FILTER) != null) {
-			    orgroup = (AmpOrgGroup) getParams().get(PARAM.GROUP_FILTER);
-			    sqlQuery = sqlQuery + " AND org_grp_id = ?";
-			}
-
-		    if (input.length() > 0) {
-			sqlQuery = sqlQuery + " AND (((orgname.translation ILIKE ? OR acronym ILIKE ?"
-					+ ") AND orgname.translation is null)"
-					+ " OR ((orgname.translation ILIKE ? OR acronym ILIKE ?) AND orgname.translation is not null))";
-		    }
-		    AmpOrgType orgtype =null;
-		    if (getParams()!=null && getParams().get(PARAM.TYPE_FILTER) != null) {
-		    orgtype = (AmpOrgType) getParams().get(PARAM.TYPE_FILTER);
-			sqlQuery = sqlQuery + " AND org.org_grp_id in( "+
-					" select  amp_org_grp_id from amp_org_group where org_type=?)";
-		    }
-		    
-		    Integer maxResults = (Integer) getParams().get(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
-		    if (maxResults != null && maxResults.intValue() != 0) {
-			sqlQuery = sqlQuery + " LIMIT " + maxResults;
-		    }
-		    
+			String sqlQuery = null;
 		    ArrayList<FilterParam> params = new ArrayList<FilterParam>();
-		    
-		    params.add(new FilterParam("name", java.sql.Types.VARCHAR));
-		    params.add(new FilterParam("org.digijava.module.aim.dbentity.AmpOrganisation", java.sql.Types.VARCHAR));
-		    params.add(new FilterParam(TLSUtils.getEffectiveLangCode(), java.sql.Types.VARCHAR));
-		    params.add(new FilterParam(false, java.sql.Types.BOOLEAN));
-		    
-			if (getParams() != null && getParams().get(PARAM.GROUP_FILTER) != null) {
-				params.add(new FilterParam(orgroup.getIdentifier(), java.sql.Types.BIGINT));
-			}
-		    if (input!=null && input.length() > 0) {
-			    params.add(new FilterParam("%"+input + "%", java.sql.Types.VARCHAR));
-			    params.add(new FilterParam("%"+input + "%", java.sql.Types.VARCHAR));
-			    params.add(new FilterParam("%"+input + "%", java.sql.Types.VARCHAR));
-			    params.add(new FilterParam("%"+input + "%", java.sql.Types.VARCHAR));
-		    }
-		    if (getParams() != null && getParams().get(PARAM.TYPE_FILTER) != null) {
-				params.add(new FilterParam(orgtype.getIdentifier(), java.sql.Types.BIGINT));
-		    }
-		    
+		    boolean multilingualEnabled = ContentTranslationUtil.multilingualIsEnabled();
+			if (multilingualEnabled) {
+				   sqlQuery = "SELECT org.amp_org_id, org.name, org.acronym, org.org_type, orgname.translation  from amp_organisation org LEFT OUTER JOIN amp_content_translation orgname ON org.amp_org_id = orgname.object_id"
+						    + " AND orgname.field_name = ? "
+						    + " AND orgname.object_class =? "
+						    + " AND orgname.locale = ?" ;
+					params.add(new FilterParam("name", java.sql.Types.VARCHAR));
+				    params.add(new FilterParam("org.digijava.module.aim.dbentity.AmpOrganisation", java.sql.Types.VARCHAR));
+				    params.add(new FilterParam(TLSUtils.getEffectiveLangCode(), java.sql.Types.VARCHAR));
+				
+				}
+				else {
+					sqlQuery = "SELECT org.amp_org_id, org.name, org.acronym, org.org_type from amp_organisation org";
+				}
+				sqlQuery+= " WHERE (org.deleted IS NULL OR org.deleted = ?)";
+			    AmpOrgGroup orgroup =null;
+
+				if (getParams()!=null && getParams().get(PARAM.GROUP_FILTER) != null) {
+				    orgroup = (AmpOrgGroup) getParams().get(PARAM.GROUP_FILTER);
+				    sqlQuery = sqlQuery + " AND org_grp_id = ?";
+				}
+
+			    if (input.length() > 0) {
+			    	if (multilingualEnabled)  {
+			    		sqlQuery = sqlQuery +  " AND (orgname.translation ILIKE ? OR acronym ILIKE ?)";
+					    		
+			    	}
+			    	else {
+			    		sqlQuery +=" AND (name ILIKE ? OR acronym ILIKE ?)";
+			    	}
+				}
+			    AmpOrgType orgtype =null;
+			    if (getParams()!=null && getParams().get(PARAM.TYPE_FILTER) != null) {
+			    orgtype = (AmpOrgType) getParams().get(PARAM.TYPE_FILTER);
+				sqlQuery = sqlQuery + " AND org_grp_id in( "+
+						" select  amp_org_grp_id from amp_org_group where org_type=?)";
+			    }
+			    
+			    Integer maxResults = (Integer) getParams().get(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
+			    if (maxResults != null && maxResults.intValue() != 0) {
+				sqlQuery = sqlQuery + " LIMIT " + maxResults;
+			    }
+			    
+			    
+			    params.add(new FilterParam(false, java.sql.Types.BOOLEAN));
+			   if (getParams() != null && getParams().get(PARAM.GROUP_FILTER) != null) {
+					params.add(new FilterParam(orgroup.getIdentifier(), java.sql.Types.BIGINT));
+				}
+			    if (input!=null && input.length() > 0) {
+				    params.add(new FilterParam("%"+input + "%", java.sql.Types.VARCHAR));
+				    params.add(new FilterParam("%"+input + "%", java.sql.Types.VARCHAR));
+			    }
+			    if (getParams() != null && getParams().get(PARAM.TYPE_FILTER) != null) {
+					params.add(new FilterParam(orgtype.getIdentifier(), java.sql.Types.BIGINT));
+			    }
+			    
 		    RsInfo rsi = SQLUtils.rawRunQuery(connection, sqlQuery, params);
 		    ResultSet rs = rsi.rs;
 		    while (rs.next()) {

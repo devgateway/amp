@@ -189,15 +189,17 @@ function generateHeaderHtml(headers) {
 						colName = this.headerMatrix[i][j].columnName
 					}
 					
-					var title = "";
+					var helpIcon = "";
 					if (this.headerMatrix[i][j].description) {
-						title = "title = '" + this.headerMatrix[i][j].description + "'";
+						helpIcon = "<img src='/TEMPLATE/ampTemplate/images/help.gif's" +
+								" style= 'padding-left:5px'" +
+								" title='" + this.headerMatrix[i][j].description + "'>"
 					}
 					
 					col = "<th" + style + id + " data-header-level='" + i + "'"
 							+ sortingType + " colspan='" + groupCount + "'"
-							+ title + "><div class = 'i18n'>"
-							+ colName + "</div></th>";
+							+ "><div class = 'i18n'>"
+							+ colName + helpIcon + "</div></th>";
 	
 					// We change 'j' in order to skip the next N columns.
 					j += groupCount;

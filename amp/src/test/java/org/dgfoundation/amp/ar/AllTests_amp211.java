@@ -10,6 +10,7 @@ import org.apache.log4j.LogManager;
 import org.dgfoundation.amp.ar.amp211.BooleanFilterTests;
 import org.dgfoundation.amp.ar.amp211.FundingFlowsMondrianReportTests;
 import org.dgfoundation.amp.ar.amp211.InflationRatesTests;
+import org.dgfoundation.amp.ar.amp211.MondrianComputedMeasuresReportTests211;
 import org.dgfoundation.amp.ar.amp211.NewFeaturesMondrianReportTests;
 import org.dgfoundation.amp.ar.amp211.OldReportsNewFeaturesTests;
 import org.dgfoundation.amp.ar.amp211.PlainMTEFMondrianReportTests;
@@ -44,6 +45,7 @@ public class AllTests_amp211
 		suite.addTest(new JUnit4TestAdapter(OldReportsNewFeaturesTests.class));
 		suite.addTest(new JUnit4TestAdapter(PledgeReportsTests211.class));
 		suite.addTest(new JUnit4TestAdapter(NewFeaturesMondrianReportTests.class));
+		suite.addTest(new JUnit4TestAdapter(MondrianComputedMeasuresReportTests211.class));
 		
 		return suite;
 	}

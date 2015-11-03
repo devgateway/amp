@@ -127,10 +127,18 @@ public class MonetConnection implements AutoCloseable {
     }
 
     public boolean dropTable(String tableName) {
+    	return dropTableOrView(tableName, "TABLE");
+    }
+    
+    public boolean dropView(String viewName) {
+    	return dropTableOrView(viewName, "VIEW");
+    }
+    
+    private boolean dropTableOrView(String entityName, String type) {
         try {
             flush();
-            if (tableExists(tableName)) {
-                SQLUtils.executeQuery(this.conn, "DROP TABLE " + tableName);
+            if (tableExists(entityName)) {
+                SQLUtils.executeQuery(this.conn, "DROP " + type + " "+ entityName);
                 flush();
             }
         } catch (Exception e) {return false;}

@@ -376,7 +376,10 @@ public class ReportsUtil {
 			return newFilters; // no chance of stickies
 		
 		MondrianReportFilters result = newFilters == null ? new MondrianReportFilters() : newFilters;
-		boolean somethingAdded = false;
+		
+		boolean somethingAdded = oldFilters.getComputedYear() != null;
+		result.setComputedYear(oldFilters.getComputedYear());
+		
 		// set filters even if they are empty, that means filters are cleared up
 		// copy MTEF-hacky entries from old widget to new widget, since these are supposed to be sticky (not present in the filter form)
 		for(Entry<ReportElement, List<FilterRule>> elem: oldFilters.getFilterRules().entrySet()) {

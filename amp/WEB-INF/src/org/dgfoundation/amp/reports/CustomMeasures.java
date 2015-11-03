@@ -21,6 +21,16 @@ public class CustomMeasures {
 	public final static Set<String> NO_DISTRIBUTION = new HashSet<String>() {{
 		add(MeasureConstants.EXECUTION_RATE);
 		add(MeasureConstants.FORECAST_EXECUTION_RATE);
+		add(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS);
+		add(MeasureConstants.CUMULATED_DISBURSEMENTS);
+		add(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS);
+	}};
+	
+	/** measures that must not be filtered by dates filter */ 
+	public final static Set<String> NO_DATE_FILTERS = new HashSet<String>() {{
+		add(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS);
+		add(MeasureConstants.CUMULATED_DISBURSEMENTS);
+		add(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS);
 	}};
 	
 	/** measures without raw totals */
@@ -29,6 +39,7 @@ public class CustomMeasures {
 		add(MeasureConstants.FORECAST_EXECUTION_RATE);
 	}};
 	
+	/** calculated members dependencies, that will be removed if dependent measure is not present */
 	public final static Map<String, List<String>> MEASURE_DEPENDENCY = new HashMap<String, List<String>>() {{
 		put(MeasureConstants.EXECUTION_RATE, Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS));
 		put("Total Filtered Actual Disbursements", Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS));

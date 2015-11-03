@@ -301,7 +301,7 @@
 	</Dimension>
 	
 	<Cube name="Donor Funding">
-		<Table name="mondrian_fact_table" >
+		<Table name="@@mondrian_fact_table@@" >
 			<SQL dialect="generic"><![CDATA[@@filteredActivities@@]]> </SQL>
 		</Table>
 
@@ -643,11 +643,11 @@
 							ELSE 
 							(mondrian_activity_currency_numbers.ppc_transaction_exch_@@currency@@-
 								COALESCE((
-									SELECT sum("mondrian_fact_table".transaction_exch_@@currency@@)
-												FROM "mondrian_fact_table"
-												WHERE (mondrian_fact_table.transaction_type=0) AND (mondrian_fact_table.adjustment_type=@@actual@@) 
+									SELECT sum("@@mondrian_fact_table@@".transaction_exch_@@currency@@)
+												FROM "@@mondrian_fact_table@@"
+												WHERE (@@mondrian_fact_table@@.transaction_type=0) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) 
 												AND @@filteredActivities@@
-												AND "mondrian_fact_table"."entity_id" = "mondrian_activity_currency_numbers"."amp_activity_id"
+												AND "@@mondrian_fact_table@@"."entity_id" = "mondrian_activity_currency_numbers"."amp_activity_id"
 								), 0)
 							) END
 							AS "Uncommitted_Balance"
@@ -666,11 +666,11 @@
 							CASE WHEN mondrian_activity_currency_numbers.ppc_transaction_amount IS NULL THEN @@undefined_amount@@
 							ELSE  
 							(mondrian_activity_currency_numbers.ppc_transaction_exch_@@currency@@-
-								COALESCE((SELECT sum("mondrian_fact_table".transaction_exch_@@currency@@)
-												FROM "mondrian_fact_table"
-												WHERE (mondrian_fact_table.transaction_type=0) AND (mondrian_fact_table.adjustment_type=@@actual@@) AND (src_role='DN') 
+								COALESCE((SELECT sum("@@mondrian_fact_table@@".transaction_exch_@@currency@@)
+												FROM "@@mondrian_fact_table@@"
+												WHERE (@@mondrian_fact_table@@.transaction_type=0) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (src_role='DN') 
 												AND (@@filteredActivitiesWithoutDateFilters@@)
-												AND "mondrian_fact_table"."entity_id" = "mondrian_activity_currency_numbers"."amp_activity_id"), 
+												AND "@@mondrian_fact_table@@"."entity_id" = "mondrian_activity_currency_numbers"."amp_activity_id"), 
 										 0)
 							 ) END AS "uncommitted_cumulative_balance"
 						FROM mondrian_activity_currency_numbers
@@ -690,11 +690,11 @@
 					<SQL dialect="generic">
 						<![CDATA[
 						SELECT "mondrian_activity_fixed_texts"."amp_activity_id", COALESCE((
-							SELECT sum("mondrian_fact_table".transaction_exch_@@currency@@)
-												FROM "mondrian_fact_table"
-												WHERE (mondrian_fact_table.transaction_type=@@trn_type@@) AND (mondrian_fact_table.adjustment_type=@@adj_id@@) 
+							SELECT sum("@@mondrian_fact_table@@".transaction_exch_@@currency@@)
+												FROM "@@mondrian_fact_table@@"
+												WHERE (@@mondrian_fact_table@@.transaction_type=@@trn_type@@) AND (@@mondrian_fact_table@@.adjustment_type=@@adj_id@@) 
 												AND @@report_totals_filter@@
-												AND "mondrian_fact_table"."entity_id" = "mondrian_activity_fixed_texts"."amp_activity_id"), 0) AS "Total_@@adj_name@@_@@trn_name@@"
+												AND "@@mondrian_fact_table@@"."entity_id" = "mondrian_activity_fixed_texts"."amp_activity_id"), 0) AS "Total_@@adj_name@@_@@trn_name@@"
 						FROM "mondrian_activity_fixed_texts"
 						]]>
 					</SQL>
@@ -707,9 +707,9 @@
 					<SQL dialect="generic">
 						<![CDATA[
 						SELECT "mondrian_activity_fixed_texts"."amp_activity_id", (
-							SELECT sum("mondrian_fact_table".transaction_exch_@@currency@@)
-												FROM "mondrian_fact_table"
-												WHERE (mondrian_fact_table.transaction_type=@@trn_type@@) AND (mondrian_fact_table.adjustment_type=@@adj_id@@)
+							SELECT sum("@@mondrian_fact_table@@".transaction_exch_@@currency@@)
+												FROM "@@mondrian_fact_table@@"
+												WHERE (@@mondrian_fact_table@@.transaction_type=@@trn_type@@) AND (@@mondrian_fact_table@@.adjustment_type=@@adj_id@@)
 												AND (src_role='DN') 
 												AND (@@filteredActivities@@) 
 												) AS "Total_Grand_@@adj_name@@_@@trn_name@@"
@@ -720,79 +720,16 @@
 				<Level name="Grand Total Amount" type="Numeric" column="Grand_Total_Amount" />
 			</Hierarchy>
 			
-			<Hierarchy hasAll="true" allMemberName="All" primaryKey="amp_activity_id" name="Prior Actual Disbursements">
-				<View alias='v_prior_actual_disbursements'>
-					<!-- Current Year Actual Disbursements Until Previous Month (not included) -->
-					<SQL dialect="generic">
-						<![CDATA[
-						SELECT "mondrian_activity_fixed_texts"."amp_activity_id", COALESCE((
-							SELECT sum("mondrian_fact_table".transaction_exch_@@currency@@)
-												FROM "mondrian_fact_table"
-												WHERE (mondrian_fact_table.transaction_type=1) AND (mondrian_fact_table.adjustment_type=@@actual@@) AND (src_role='DN') 
-												AND (mondrian_fact_table.date_code >=@@current_year_start@@) 
-												AND (mondrian_fact_table.date_code <=@@month_before_last_month_end@@)
-												AND (@@filteredActivitiesWithoutDateFilters@@)
-												AND "mondrian_fact_table"."entity_id" = "mondrian_activity_fixed_texts"."amp_activity_id"), 0
-												) AS "prior_actual_disbursements"
-						FROM "mondrian_activity_fixed_texts"
-						]]>
-					</SQL>
-				</View>
-				<Level name="Prior Actual Disbursements" type="Numeric" column="prior_actual_disbursements" />
-			</Hierarchy>
-			
-			<Hierarchy hasAll="true" allMemberName="All" primaryKey="amp_activity_id" name="Cumulated Disbursements">
-				<View alias='v_cumulated_disbursements'>
-					<!-- Prior Actual Disbursements + Last Closed Month Disbursements -->
-					<SQL dialect="generic">
-						<![CDATA[
-						SELECT "mondrian_activity_fixed_texts"."amp_activity_id", COALESCE((
-							SELECT sum("mondrian_fact_table".transaction_exch_@@currency@@)
-												FROM "mondrian_fact_table"
-												WHERE (mondrian_fact_table.transaction_type=1) AND (mondrian_fact_table.adjustment_type=@@actual@@) AND (src_role='DN') 
-												AND (mondrian_fact_table.date_code >=@@current_year_start@@) 
-												AND (mondrian_fact_table.date_code <=@@last_month_end@@)
-												AND (@@filteredActivitiesWithoutDateFilters@@)
-												AND "mondrian_fact_table"."entity_id" = "mondrian_activity_fixed_texts"."amp_activity_id"), 0
-												) AS "cumulated_disbursements"
-						FROM "mondrian_activity_fixed_texts"
-						]]>
-					</SQL>
-				</View>
-				<Level name="Cumulated Disbursements" type="Numeric" column="cumulated_disbursements" />
-			</Hierarchy>
-			
-			<Hierarchy hasAll="true" allMemberName="All" primaryKey="amp_activity_id" name="Selected Year Planned Disbursements">
-				<View alias='v_selected_year_planned_disbursements'>
-					<!-- Selected Year Planned Disbursements = Sum Planned Disbursements of the selected year -->
-					<SQL dialect="generic">
-						<![CDATA[
-						SELECT "mondrian_activity_fixed_texts"."amp_activity_id", COALESCE((
-							SELECT sum("mondrian_fact_table".transaction_exch_@@currency@@)
-												FROM "mondrian_fact_table"
-												WHERE (mondrian_fact_table.transaction_type=1) AND (mondrian_fact_table.adjustment_type=@@planned@@) AND (src_role='DN') 
-												AND (mondrian_fact_table.date_code >=@@selected_year_start@@) 
-												AND (mondrian_fact_table.date_code <=@@selected_year_end@@)
-												AND (@@filteredActivitiesWithoutDateFilters@@)
-												AND "mondrian_fact_table"."entity_id" = "mondrian_activity_fixed_texts"."amp_activity_id"), 0
-												) AS "selected_year_planned_disbursements"
-						FROM "mondrian_activity_fixed_texts"
-						]]>
-					</SQL>
-				</View>
-				<Level name="Selected Year Planned Disbursements" type="Numeric" column="selected_year_planned_disbursements" />
-			</Hierarchy>
-			
 			<Hierarchy hasAll="true" allMemberName="All" primaryKey="amp_activity_id" name="Cumulative Commitment">
 				<View alias='v_cumulative_commitment'>
 					<SQL dialect="generic">
 						<![CDATA[
 						SELECT "mondrian_activity_fixed_texts"."amp_activity_id", 
-								COALESCE((SELECT sum("mondrian_fact_table".transaction_exch_@@currency@@)
-												FROM "mondrian_fact_table"
-												WHERE (mondrian_fact_table.transaction_type=0) AND (mondrian_fact_table.adjustment_type=@@actual@@) AND (src_role='DN') 
+								COALESCE((SELECT sum("@@mondrian_fact_table@@".transaction_exch_@@currency@@)
+												FROM "@@mondrian_fact_table@@"
+												WHERE (@@mondrian_fact_table@@.transaction_type=0) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (src_role='DN') 
 												AND (@@filteredActivitiesWithoutDateFilters@@)
-												AND "mondrian_fact_table"."entity_id" = "mondrian_activity_fixed_texts"."amp_activity_id"), 
+												AND "@@mondrian_fact_table@@"."entity_id" = "mondrian_activity_fixed_texts"."amp_activity_id"), 
 										 0) AS "cumulative_commitment"
 						FROM "mondrian_activity_fixed_texts"
 						]]>
@@ -807,11 +744,11 @@
 					<SQL dialect="generic">
 						<![CDATA[
 						SELECT "mondrian_activity_fixed_texts"."amp_activity_id", 
-								COALESCE((SELECT sum("mondrian_fact_table".transaction_exch_@@currency@@)
-												FROM "mondrian_fact_table"
-												WHERE (mondrian_fact_table.transaction_type=1) AND (mondrian_fact_table.adjustment_type=@@actual@@) AND (src_role='DN') 
+								COALESCE((SELECT sum("@@mondrian_fact_table@@".transaction_exch_@@currency@@)
+												FROM "@@mondrian_fact_table@@"
+												WHERE (@@mondrian_fact_table@@.transaction_type=1) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (src_role='DN') 
 												AND (@@filteredActivitiesWithoutDateFilters@@)
-												AND "mondrian_fact_table"."entity_id" = "mondrian_activity_fixed_texts"."amp_activity_id"), 
+												AND "@@mondrian_fact_table@@"."entity_id" = "mondrian_activity_fixed_texts"."amp_activity_id"), 
 										 0) AS "cumulative_disbursement"
 						FROM "mondrian_activity_fixed_texts"
 						]]>
@@ -826,17 +763,17 @@
 					<SQL dialect="generic">
 						<![CDATA[
 						SELECT "mondrian_activity_fixed_texts"."amp_activity_id", 
-								COALESCE((SELECT sum("mondrian_fact_table".transaction_exch_@@currency@@)
-												FROM "mondrian_fact_table"
-												WHERE (mondrian_fact_table.transaction_type=0) AND (mondrian_fact_table.adjustment_type=@@actual@@) AND (src_role='DN') 
+								COALESCE((SELECT sum("@@mondrian_fact_table@@".transaction_exch_@@currency@@)
+												FROM "@@mondrian_fact_table@@"
+												WHERE (@@mondrian_fact_table@@.transaction_type=0) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (src_role='DN') 
 												AND (@@filteredActivitiesWithoutDateFilters@@)
-												AND "mondrian_fact_table"."entity_id" = "mondrian_activity_fixed_texts"."amp_activity_id"), 
+												AND "@@mondrian_fact_table@@"."entity_id" = "mondrian_activity_fixed_texts"."amp_activity_id"), 
 										 0) - 
-								COALESCE((SELECT sum("mondrian_fact_table".transaction_exch_@@currency@@)
-												FROM "mondrian_fact_table"
-												WHERE (mondrian_fact_table.transaction_type=1) AND (mondrian_fact_table.adjustment_type=@@actual@@) AND (src_role='DN') 
+								COALESCE((SELECT sum("@@mondrian_fact_table@@".transaction_exch_@@currency@@)
+												FROM "@@mondrian_fact_table@@"
+												WHERE (@@mondrian_fact_table@@.transaction_type=1) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (src_role='DN') 
 												AND (@@filteredActivitiesWithoutDateFilters@@)
-												AND "mondrian_fact_table"."entity_id" = "mondrian_activity_fixed_texts"."amp_activity_id"), 
+												AND "@@mondrian_fact_table@@"."entity_id" = "mondrian_activity_fixed_texts"."amp_activity_id"), 
 										 0) AS "undisbursed_cumulative_balance"
 						FROM "mondrian_activity_fixed_texts"
 						]]>
@@ -856,12 +793,12 @@
 								ELSE "cumulative_amounts"."cd" / "cumulative_amounts"."cc" * 100 
 							END as "cumulative_execution_rate"
 						FROM (SELECT "mondrian_activity_fixed_texts"."amp_activity_id", 
-									sum(CASE mondrian_fact_table.transaction_type WHEN 0 THEN mondrian_fact_table.transaction_exch_@@currency@@ ELSE 0 END) as "cc", 
-									sum(CASE mondrian_fact_table.transaction_type WHEN 1 THEN mondrian_fact_table.transaction_exch_@@currency@@ ELSE 0 END) as "cd"
-							FROM "mondrian_activity_fixed_texts", "mondrian_fact_table"
-							WHERE ("mondrian_fact_table"."src_role"='DN') 
-							AND "mondrian_fact_table"."adjustment_type"=@@actual@@ AND "mondrian_fact_table"."transaction_type" in (0, 1)
-							AND "mondrian_activity_fixed_texts"."amp_activity_id" = "mondrian_fact_table"."entity_id"
+									sum(CASE @@mondrian_fact_table@@.transaction_type WHEN 0 THEN @@mondrian_fact_table@@.transaction_exch_@@currency@@ ELSE 0 END) as "cc", 
+									sum(CASE @@mondrian_fact_table@@.transaction_type WHEN 1 THEN @@mondrian_fact_table@@.transaction_exch_@@currency@@ ELSE 0 END) as "cd"
+							FROM "mondrian_activity_fixed_texts", "@@mondrian_fact_table@@"
+							WHERE ("@@mondrian_fact_table@@"."src_role"='DN') 
+							AND "@@mondrian_fact_table@@"."adjustment_type"=@@actual@@ AND "@@mondrian_fact_table@@"."transaction_type" in (0, 1)
+							AND "mondrian_activity_fixed_texts"."amp_activity_id" = "@@mondrian_fact_table@@"."entity_id"
 							GROUP BY "mondrian_activity_fixed_texts"."amp_activity_id") as "cumulative_amounts"
 						]]>
 					</SQL>
@@ -965,7 +902,7 @@
 					<SQL dialect="generic">
 						<![CDATA[
 						SELECT DISTINCT mft_internal.entity_internal_id as pledge_detail_id, transaction_start_date
-						FROM mondrian_fact_table mft_internal
+						FROM @@mondrian_fact_table@@ mft_internal
 						WHERE mft_internal.entity_id > 800000000 AND mft_internal.transaction_type=7 
 						]]>
 					</SQL>
@@ -977,7 +914,7 @@
 					<SQL dialect="generic">
 						<![CDATA[
 						SELECT DISTINCT mft_internal.entity_internal_id as pledge_detail_id, transaction_end_date
-						FROM mondrian_fact_table mft_internal
+						FROM @@mondrian_fact_table@@ mft_internal
 						WHERE mft_internal.entity_id > 800000000 AND mft_internal.transaction_type=7 
 						]]>
 					</SQL>
@@ -989,7 +926,7 @@
 					<SQL dialect="generic">
 						<![CDATA[
 						SELECT DISTINCT mft_internal.entity_internal_id as pledge_detail_id, transaction_range
-						FROM mondrian_fact_table mft_internal
+						FROM @@mondrian_fact_table@@ mft_internal
 						WHERE mft_internal.entity_id > 800000000 AND mft_internal.transaction_type=7 
 						]]>
 					</SQL>
@@ -1002,7 +939,7 @@
 			<MeasureExpression>
 				<SQL dialect="generic" aggregator="sum">
 					CASE 
-						WHEN @@non_ac_pledges_excluder@@ (mondrian_fact_table.transaction_type=@@trivial_measure_transaction_type@@) AND (mondrian_fact_table.adjustment_type=@@trivial_measure_adjustment_type@@) AND (src_role='DN') THEN "mondrian_fact_table".transaction_exch_@@currency@@ 
+						WHEN @@non_ac_pledges_excluder@@ (@@mondrian_fact_table@@.transaction_type=@@trivial_measure_transaction_type@@) AND (@@mondrian_fact_table@@.adjustment_type=@@trivial_measure_adjustment_type@@) AND (src_role='DN') THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@ 
 						ELSE null
 					END
 				</SQL>
@@ -1013,14 +950,14 @@
 			<MeasureExpression>
 				<SQL dialect="generic" aggregator="sum">
 					CASE
-						WHEN (mondrian_fact_table.entity_id &gt; 800000000) AND (mondrian_fact_table.entity_id &lt; 900000000) AND (mondrian_fact_table.transaction_type=0) AND (mondrian_fact_table.adjustment_type=@@actual@@) AND (src_role='DN')
-							THEN - "mondrian_fact_table".transaction_exch_@@currency@@
+						WHEN (@@mondrian_fact_table@@.entity_id &gt; 800000000) AND (@@mondrian_fact_table@@.entity_id &lt; 900000000) AND (@@mondrian_fact_table@@.transaction_type=0) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (src_role='DN')
+							THEN - "@@mondrian_fact_table@@".transaction_exch_@@currency@@
 							
-						WHEN (mondrian_fact_table.entity_id &gt; 800000000) AND (mondrian_fact_table.entity_id &lt; 900000000) AND ("mondrian_fact_table".transaction_type=7)
-							THEN "mondrian_fact_table".transaction_exch_@@currency@@
+						WHEN (@@mondrian_fact_table@@.entity_id &gt; 800000000) AND (@@mondrian_fact_table@@.entity_id &lt; 900000000) AND ("@@mondrian_fact_table@@".transaction_type=7)
+							THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@
 						 						 
-						WHEN (mondrian_fact_table.entity_id &lt; 800000000) AND (mondrian_fact_table.transaction_type=0) AND (mondrian_fact_table.adjustment_type=@@actual@@) AND (src_role='DN')
-							THEN "mondrian_fact_table".transaction_exch_@@currency@@
+						WHEN (@@mondrian_fact_table@@.entity_id &lt; 800000000) AND (@@mondrian_fact_table@@.transaction_type=0) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (src_role='DN')
+							THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@
 							
 						ELSE null
 					END
@@ -1032,8 +969,8 @@
 			<MeasureExpression>
 				<SQL dialect="generic" aggregator="sum">
 					CASE
-						WHEN (mondrian_fact_table.transaction_type=0) AND (mondrian_fact_table.adjustment_type=@@actual@@) AND (src_role='DN')
-							THEN "mondrian_fact_table".transaction_exch_@@currency@@
+						WHEN (@@mondrian_fact_table@@.transaction_type=0) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (src_role='DN')
+							THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@
 						ELSE null
 					END
 				</SQL>
@@ -1044,8 +981,8 @@
 			<MeasureExpression>
 				<SQL dialect="generic" aggregator="sum">
 					CASE
-						WHEN (mondrian_fact_table.transaction_type = 200) AND (mondrian_fact_table.adjustment_type=@@actual@@) AND (flow_name &lt;&gt; 'Undefined')
-							THEN "mondrian_fact_table".transaction_exch_@@currency@@
+						WHEN (@@mondrian_fact_table@@.transaction_type = 200) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (flow_name &lt;&gt; 'Undefined')
+							THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@
 						ELSE null
 					END
 				</SQL>
@@ -1056,8 +993,8 @@
 			<MeasureExpression>
 				<SQL dialect="generic" aggregator="sum">
 					CASE
-						WHEN (mondrian_fact_table.transaction_type = 201) AND (mondrian_fact_table.adjustment_type=@@actual@@) AND (flow_name &lt;&gt; 'Undefined')
-							THEN "mondrian_fact_table".transaction_exch_@@currency@@
+						WHEN (@@mondrian_fact_table@@.transaction_type = 201) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (flow_name &lt;&gt; 'Undefined')
+							THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@
 						ELSE null
 					END
 				</SQL>
@@ -1068,8 +1005,8 @@
 			<MeasureExpression>
 				<SQL dialect="generic" aggregator="sum">
 					CASE
-						WHEN (mondrian_fact_table.transaction_type = 203) AND (flow_name &lt;&gt; 'Undefined')
-							THEN "mondrian_fact_table".transaction_exch_@@currency@@
+						WHEN (@@mondrian_fact_table@@.transaction_type = 203) AND (flow_name &lt;&gt; 'Undefined')
+							THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@
 						ELSE null
 					END
 				</SQL>
@@ -1079,8 +1016,8 @@
 		<Measure name="Planned Disbursements - Capital" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic">
-					CASE WHEN mondrian_fact_table.transaction_type=1 AND mondrian_fact_table.adjustment_type=@@planned@@ AND src_role='DN' AND capital_spend_percent IS NOT NULL
-					THEN "mondrian_fact_table".transaction_exch_@@currency@@ * capital_spend_percent / 100.0 ELSE null END
+					CASE WHEN @@mondrian_fact_table@@.transaction_type=1 AND @@mondrian_fact_table@@.adjustment_type=@@planned@@ AND src_role='DN' AND capital_spend_percent IS NOT NULL
+					THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@ * capital_spend_percent / 100.0 ELSE null END
 				</SQL>
 			</MeasureExpression>
 		</Measure>
@@ -1088,8 +1025,8 @@
 		<Measure name="Planned Disbursements - Expenditure" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic"> 
-					CASE WHEN mondrian_fact_table.transaction_type=1 AND mondrian_fact_table.adjustment_type=@@planned@@ AND src_role='DN' AND capital_spend_percent IS NOT NULL
-					THEN "mondrian_fact_table".transaction_exch_@@currency@@ * (100 - capital_spend_percent) / 100.0 ELSE null END
+					CASE WHEN @@mondrian_fact_table@@.transaction_type=1 AND @@mondrian_fact_table@@.adjustment_type=@@planned@@ AND src_role='DN' AND capital_spend_percent IS NOT NULL
+					THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@ * (100 - capital_spend_percent) / 100.0 ELSE null END
 				</SQL>
 			</MeasureExpression>
 		</Measure>
@@ -1097,8 +1034,8 @@
 		<Measure name="Actual Disbursements - Capital" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic"> 
-					CASE WHEN mondrian_fact_table.transaction_type=1 AND mondrian_fact_table.adjustment_type=@@actual@@ AND src_role='DN' AND capital_spend_percent IS NOT NULL
-					THEN "mondrian_fact_table".transaction_exch_@@currency@@ * capital_spend_percent / 100.0 ELSE null END
+					CASE WHEN @@mondrian_fact_table@@.transaction_type=1 AND @@mondrian_fact_table@@.adjustment_type=@@actual@@ AND src_role='DN' AND capital_spend_percent IS NOT NULL
+					THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@ * capital_spend_percent / 100.0 ELSE null END
 				</SQL>
 			</MeasureExpression>
 		</Measure>
@@ -1106,8 +1043,8 @@
 		<Measure name="Actual Disbursements - Recurrent" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic">
-					CASE WHEN mondrian_fact_table.transaction_type=1 AND mondrian_fact_table.adjustment_type=@@actual@@ AND src_role='DN' AND capital_spend_percent IS NOT NULL
-					THEN "mondrian_fact_table".transaction_exch_@@currency@@ * (100 - capital_spend_percent) / 100.0 ELSE null END
+					CASE WHEN @@mondrian_fact_table@@.transaction_type=1 AND @@mondrian_fact_table@@.adjustment_type=@@actual@@ AND src_role='DN' AND capital_spend_percent IS NOT NULL
+					THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@ * (100 - capital_spend_percent) / 100.0 ELSE null END
 				</SQL>
 			</MeasureExpression>
 		</Measure>
@@ -1116,10 +1053,10 @@
 			<MeasureExpression>
 				<SQL dialect="generic">
 					CASE 
-						WHEN mondrian_fact_table.transaction_type=0 AND mondrian_fact_table.adjustment_type=@@actual@@ AND src_role='DN'
-							THEN - "mondrian_fact_table".transaction_exch_@@currency@@ 
-						WHEN "mondrian_fact_table".transaction_type=7
-							THEN "mondrian_fact_table".transaction_exch_@@currency@@
+						WHEN @@mondrian_fact_table@@.transaction_type=0 AND @@mondrian_fact_table@@.adjustment_type=@@actual@@ AND src_role='DN'
+							THEN - "@@mondrian_fact_table@@".transaction_exch_@@currency@@ 
+						WHEN "@@mondrian_fact_table@@".transaction_type=7
+							THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@
 					END					
 				</SQL>
 			</MeasureExpression>
@@ -1128,8 +1065,8 @@
 		<Measure name="MTEF Projections" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic"><![CDATA[
-					CASE WHEN (mondrian_fact_table.transaction_type=3) AND (src_role='DN') AND (@@mteffilter@@)
-					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE null END
+					CASE WHEN (@@mondrian_fact_table@@.transaction_type=3) AND (src_role='DN') AND (@@mteffilter@@)
+					THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@ ELSE null END
 				]]>	
 				</SQL>
 			</MeasureExpression>
@@ -1138,8 +1075,8 @@
 		<Measure name="Pipeline MTEF Projections" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic"><![CDATA[
-					CASE WHEN (mondrian_fact_table.transaction_type=3) AND (src_role='DN') AND (@@pipelinemteffilter@@)
-					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE null END
+					CASE WHEN (@@mondrian_fact_table@@.transaction_type=3) AND (src_role='DN') AND (@@pipelinemteffilter@@)
+					THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@ ELSE null END
 				]]>
 				</SQL>
 			</MeasureExpression>
@@ -1148,9 +1085,54 @@
 		<Measure name="Projection MTEF Projections" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic"><![CDATA[
-					CASE WHEN (mondrian_fact_table.transaction_type=3) AND (src_role='DN') AND (@@projectionmteffilter@@)
-					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE null END
+					CASE WHEN (@@mondrian_fact_table@@.transaction_type=3) AND (src_role='DN') AND (@@projectionmteffilter@@)
+					THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@ ELSE null END
 				]]>
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+		
+		<Measure name="Prior Actual Disbursements" aggregator="sum">
+			<!-- Current Year Actual Disbursements Until Previous Month (not included) -->
+			<MeasureExpression>
+				<SQL dialect="generic" aggregator="sum">
+					<![CDATA[
+					CASE 
+						WHEN (@@mondrian_fact_table@@.transaction_type=1 + @@transaction_type_gap@@) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (src_role='DN')
+						AND (@@mondrian_fact_table@@.date_code >=@@current_year_start@@) AND (@@mondrian_fact_table@@.date_code <=@@month_before_last_month_end@@) 
+						THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@
+						ELSE null
+					END]]>
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+		
+		<Measure name="Cumulated Disbursements" aggregator="sum">
+			<!-- Prior Actual Disbursements + Last Closed Month Disbursements -->
+			<MeasureExpression>
+				<SQL dialect="generic" aggregator="sum">
+					<![CDATA[
+					CASE 
+						WHEN (@@mondrian_fact_table@@.transaction_type=1 + @@transaction_type_gap@@) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (src_role='DN') 
+						AND (@@mondrian_fact_table@@.date_code >=@@current_year_start@@) AND (@@mondrian_fact_table@@.date_code <=@@last_month_end@@)
+						THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@
+						ELSE null
+					END]]>
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+
+		<Measure name="Selected Year Planned Disbursements" aggregator="sum">
+			<!-- Selected Year Planned Disbursements = Sum Planned Disbursements of the selected year -->
+			<MeasureExpression>
+				<SQL dialect="generic" aggregator="sum">
+					<![CDATA[
+					CASE 
+						WHEN (@@mondrian_fact_table@@.transaction_type=1 + @@transaction_type_gap@@) AND (@@mondrian_fact_table@@.adjustment_type=@@planned@@) AND (src_role='DN') 
+						AND (@@mondrian_fact_table@@.date_code >=@@selected_year_start@@) AND (@@mondrian_fact_table@@.date_code <=@@selected_year_end@@)
+						THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@
+						ELSE null
+					END]]>
 				</SQL>
 			</MeasureExpression>
 		</Measure>

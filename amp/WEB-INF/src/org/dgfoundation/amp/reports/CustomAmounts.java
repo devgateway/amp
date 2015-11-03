@@ -21,9 +21,7 @@ public class CustomAmounts {
 		add(ColumnConstants.CUMULATIVE_EXECUTION_RATE);
 		// note: some measures from legacy reports are processed as columns in Mondrian 
 		add(MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS);
-		add(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS);
 		add(ColumnConstants.PROPOSED_PROJECT_AMOUNT);
-		add(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS);
 		add(MeasureConstants.TOTAL_COMMITMENTS);
 		add(MeasureConstants.TOTAL_DISBURSEMENTS);
 		add(ColumnConstants.TOTAL_GRAND_ACTUAL_COMMITMENTS);

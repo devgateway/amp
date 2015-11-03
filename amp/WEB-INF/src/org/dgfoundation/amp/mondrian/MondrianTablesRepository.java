@@ -10,6 +10,7 @@ import org.dgfoundation.amp.mondrian.currencies.CurrencyAmountGroup;
 import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
 import org.dgfoundation.amp.mondrian.monet.DatabaseTableColumn;
 import org.dgfoundation.amp.mondrian.monet.DatabaseTableDescription;
+import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAgreement;
@@ -269,7 +270,7 @@ public class MondrianTablesRepository {
 	public final static DatabaseTableDescription FACT_TABLE = new DatabaseTableDescription("mondrian_fact_table", Arrays.asList(
 				new DatabaseTableColumn("entity_id", "integer NOT NULL", true), // P/A id 
 				new DatabaseTableColumn("entity_internal_id", "integer NOT NULL", true), // amp_funding_detail_id, amp_mtef_detail_id, amp_funding_pledges_detail_id
-				new DatabaseTableColumn("transaction_type", "integer NOT NULL", true), // ACV
+				new DatabaseTableColumn(MoConstants.TRANSACTION_TYPE, "integer NOT NULL", true), // ACV
 				new DatabaseTableColumn("adjustment_type", "integer NOT NULL", true),  // ACV
 				new DatabaseTableColumn("transaction_date", "date NOT NULL", true),
 				new DatabaseTableColumn("date_code", "integer NOT NULL", true), // for currency reasons
@@ -328,6 +329,8 @@ public class MondrianTablesRepository {
 				
 				new DatabaseTableColumn("related_entity_id", "integer", true) // mondrian_activity_texts id
 		));
+	
+	public final static String FACT_TABLE_VIEW_NO_DATE_FILTER = "v_" + FACT_TABLE.tableName + "_no_date_filter";
 	
 	public final static List<CurrencyAmountGroup> CURRENCY_GROUPS = Arrays.asList(
 			MONDRIAN_ACTIVITY_CURRENCY_NUMBERS.getCurrencyBlock("ppc_"),

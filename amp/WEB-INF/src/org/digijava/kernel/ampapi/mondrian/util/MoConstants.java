@@ -362,5 +362,15 @@ public final class MoConstants {
 	 * */ 
 	public static final String UNDEFINED_AMOUNT_STR = "-1.7976931348623155E308";
 	
-	public static final String HAS_AMP_PROPERTIES = "HAS_AMP_PROPERTIES";
+	/** 
+	 * AMP-19721
+	 * The gap between actual transaction type and virtual transaction type that bypasses date filters
+	 */
+	public static final String TRANSACTION_TYPE_GAP = "1000000";
+	
+	/**
+	 * AMP-19721
+	 * Transaction type column name
+	 */
+	public static final String TRANSACTION_TYPE = "transaction_type";
 }

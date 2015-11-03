@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.mondrian;
 
+import static org.dgfoundation.amp.mondrian.MondrianTablesRepository.FACT_TABLE;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.Connection;
@@ -7,29 +9,27 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.List;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.algo.BooleanWrapper;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.algo.BooleanWrapper;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.mondrian.currencies.CalculateExchangeRatesEtlJob;
 import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
-import org.dgfoundation.amp.onepager.models.MTEFYearsModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter;
 import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter.YearMtefInfo;
@@ -37,7 +37,6 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.time.StopWatch;
@@ -46,8 +45,6 @@ import org.hibernate.Session;
 import clover.com.google.common.base.Joiner;
 
 import com.google.common.base.Predicate;
-
-import static org.dgfoundation.amp.mondrian.MondrianTablesRepository.FACT_TABLE;
 
 
 /**
@@ -379,6 +376,7 @@ private EtlResult execute() throws Exception {
 			StopWatch.next(MONDRIAN_ETL, true, "generateExchangeRates");
 					
 			if (etlConfig.fullEtl) {
+				MonetDBView.createFactTableViewForNoDatesFilters(monetConn);
 				checkMondrianSanity();
 				StopWatch.next(MONDRIAN_ETL, true, "checkMondrianSanity");
 			}
@@ -779,6 +777,7 @@ private EtlResult execute() throws Exception {
 	 * drops preexisting fact table and creates an empty one
 	 */
 	protected void recreateFactTable() throws SQLException {
+		monetConn.dropView(MondrianTablesRepository.FACT_TABLE_VIEW_NO_DATE_FILTER);
 		monetConn.dropTable(FACT_TABLE.tableName);
 		FACT_TABLE.create(monetConn.conn, false);
 	}

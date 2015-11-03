@@ -31,8 +31,8 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
  * Provides the support for mapping from AMP tables & columns to Mondrian schema 
+ * 
  * @author Nadejda Mandrescu
- *
  */
 public class MondrianMapping {
 	public static MDXElement toMDXElement(NamedTypedEntity entity) {
@@ -302,10 +302,6 @@ public class MondrianMapping {
 				addColumnDefinition(ColumnConstants.PLEDGE_CONTACT_1___ALTERNATE_PHONE.replace("1", idx), new MDXLevel(MoConstants.PLEDGES_CONTACTS, MoConstants.ATTR_CONTACT_ALTERNAME_PHONE + idx, MoConstants.ATTR_CONTACT_ALTERNAME_PHONE + idx));
 			}
 			
-			addColumnDefinition(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS, new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, MoConstants.ATTR_PRIOR_ACTUAL_DISBURSEMENTS, MoConstants.ATTR_PRIOR_ACTUAL_DISBURSEMENTS));
-			addColumnDefinition(MeasureConstants.CUMULATED_DISBURSEMENTS, new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, MoConstants.ATTR_CUMULATED_DISBURSEMENTS, MoConstants.ATTR_CUMULATED_DISBURSEMENTS));
-			addColumnDefinition(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS, new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, MoConstants.ATTR_SELECTED_YEAR_PLANNED_DISBURSEMENTS, MoConstants.ATTR_SELECTED_YEAR_PLANNED_DISBURSEMENTS));
-			
 			addColumnDefinition(ColumnConstants.CUMULATIVE_COMMITMENT, new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, MoConstants.ATTR_CUMULATIVE_COMMITMENT, MoConstants.ATTR_CUMULATIVE_COMMITMENT));
 			addColumnDefinition(ColumnConstants.CUMULATIVE_DISBURSEMENT, new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, MoConstants.ATTR_CUMULATIVE_DISBURSEMENT, MoConstants.ATTR_CUMULATIVE_DISBURSEMENT));
 			addColumnDefinition(ColumnConstants.CUMULATIVE_EXECUTION_RATE, new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, MoConstants.ATTR_CUMULATIVE_EXECUTION_RATE, MoConstants.ATTR_CUMULATIVE_EXECUTION_RATE));
@@ -316,15 +312,12 @@ public class MondrianMapping {
 					ColumnConstants.AGREEMENT_EFFECTIVE_DATE, ColumnConstants.AGREEMENT_SIGNATURE_DATE, ColumnConstants.AGREEMENT_TITLE_CODE, ColumnConstants.AGREEMENT_PARLIAMENTARY_APPROVAL_DATE))
 				addColumnDefinition(colName, new MDXLevel(MoConstants.AGREEMENT, colName, colName));
 			
-			//put(new ReportColumn(ColumnConstants.ON_OFF_TREASURY_BUDGET, ReportEntityType.ENTITY_TYPE_ACTIVITY, new MDXAttribute(MoConstants., MoConstants.ATTR_));
 			
 			addColumnDefinition(ColumnConstants.FUNDING_YEAR, new MDXLevel(MoConstants.DATES, MoConstants.H_YEAR, MoConstants.ATTR_YEAR));
 			
 			addColumnDefinition(ColumnConstants.PLEDGES_DETAIL_START_DATE, new MDXLevel(MoConstants.PLEDGES_DETAIL_DATES, MoConstants.PLEDGES_DETAIL_START_DATE, MoConstants.PLEDGES_DETAIL_START_DATE));
 			addColumnDefinition(ColumnConstants.PLEDGES_DETAIL_END_DATE, new MDXLevel(MoConstants.PLEDGES_DETAIL_DATES, MoConstants.PLEDGES_DETAIL_END_DATE, MoConstants.PLEDGES_DETAIL_END_DATE));
 			addColumnDefinition(ColumnConstants.PLEDGES_DETAIL_DATE_RANGE, new MDXLevel(MoConstants.PLEDGES_DETAIL_DATES, MoConstants.PLEDGES_DETAIL_DATE_RANGE, MoConstants.PLEDGES_DETAIL_DATE_RANGE));
-			
-			//TODO: review/complete mappings based on Mondrian Schema
 			
 			//Measures - Entity type - All
 			AmpCategoryValue actualAdjType = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getAmpCategoryValueFromDB();
@@ -384,17 +377,11 @@ public class MondrianMapping {
 			addMeasureDefinition(MeasureConstants.REAL_MTEFS);
 			addMeasureDefinition(MeasureConstants.FORECAST_EXECUTION_RATE);
 			
+			addMeasureDefinition(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS);
+			addMeasureDefinition(MeasureConstants.CUMULATED_DISBURSEMENTS);
+			addMeasureDefinition(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS);
+			
 			addMeasureDefinition(MeasureConstants.ALWAYS_PRESENT);
-			//put(new ReportMeasure(MeasureConstants.REAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL), new MDXMeasure(MoConstants.REAL_DISBURSEMENTS));
-			//put(new ReportMeasure(MeasureConstants.EXECUTION_RATE, ReportEntityType.ENTITY_TYPE_ALL), new MDXMeasure(MoConstants.EXECUTION_RATE));
-			//TODO: review/complete mappings based on Mondrian Schema
-			
-			//Measures - Entity type - Pledges
-			
-//			put(new ReportMeasure(MeasureConstants.PLEDGES_ACTUAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_PLEDGE), new MDXMeasure(MoConstants.PLEDGE_PLEDGES_COMMITMENTS));
-//			put(new ReportMeasure(MeasureConstants.PLEDGES_ACTUAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_PLEDGE), new MDXMeasure(MoConstants.PLEDGE_PLEDGES_DISBURSEMENTS));
-//			put(new ReportMeasure(MeasureConstants.PLEDGES_COMMITMENT_GAP, ReportEntityType.ENTITY_TYPE_PLEDGE), new MDXMeasure(MoConstants.PLEDGE_PLEDGES_COMMITMENTS_GAP));
-			//TODO: review/complete mappings based on Mondrian Schema
 		}
 	};
 	

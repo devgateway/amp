@@ -65,7 +65,12 @@ public class FactTableFiltering {
 			String realMtefFilteringFragment = buildDateFilteringFragment(ReportElement.ElementType.REAL_MTEF_DATE, "transaction_type = " + (200 + Constants.MTEFPROJECTION));
 			String mtefFilteringFragment = "transaction_type = " + Constants.MTEFPROJECTION;
 			
-			String datesQuery = String.format("%sAND ((%s) OR (%s) OR (%s))%s", DATE_FILTERS_TAG_START, dateFilteringFragment, mtefFilteringFragment, realMtefFilteringFragment, DATE_FILTERS_TAG_END);
+			String noDateFilter = "transaction_type >= " + MoConstants.TRANSACTION_TYPE_GAP;
+			
+			String datesQuery = String.format("%sAND ((%s) OR (%s) OR (%s) OR (%s))%s", 
+					DATE_FILTERS_TAG_START,
+					dateFilteringFragment, mtefFilteringFragment, realMtefFilteringFragment, noDateFilter, 
+					DATE_FILTERS_TAG_END);
 			subquery.append(datesQuery);
 		}
 		String ret = subquery.toString().trim();

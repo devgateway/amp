@@ -19,9 +19,11 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.mondrian.MondrianETL;
+import org.dgfoundation.amp.mondrian.MondrianTablesRepository;
 import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
+import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.CustomMeasures;
@@ -54,6 +56,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	
 	protected static final Logger logger = Logger.getLogger(AmpMondrianSchemaProcessor.class);
 	protected static String expandedSchema;
+	protected String mondrianFactTable;
 	
 	/**
 	 * whether this is the first, e.g. expanding, run of the processor
@@ -79,6 +82,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			// by default DonorReport will be run
 			currentReport.set(null);
 		}
+		mondrianFactTable = getCubeFactTableName();
 		return processContents(contents);
 	}
 	finally {
@@ -94,6 +98,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			initDefault();
 		}
 		contents = expandSchema(contents);
+		contents = contents.replaceAll("@@mondrian_fact_table@@", mondrianFactTable);
 		contents = contents.replaceAll("@@actual@@", Long.toString(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase()));
 		contents = contents.replaceAll("@@planned@@", Long.toString(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getIdInDatabase()));
 		contents = contents.replaceAll("@@currency@@", Long.toString(getReportCurrency().getAmpCurrencyId()));
@@ -121,8 +126,9 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		
 		// process general filters & custom filters 
 		String entityFilteringSubquery = buildFilteringSubquery();
-		entityFilteringSubquery = entityFilteringSubquery.replaceAll(FactTableFiltering.DATE_FILTERS_TAG_START + "|" + FactTableFiltering.DATE_FILTERS_TAG_END, "");
 		String noDatesEntityFilteringSubquery = getNoDatesFilter(entityFilteringSubquery);
+		// order is important, keep it here, do not move up; these date filters tags solution will be soon removed
+		entityFilteringSubquery = entityFilteringSubquery.replaceAll(FactTableFiltering.DATE_FILTERS_TAG_START + "|" + FactTableFiltering.DATE_FILTERS_TAG_END, "");
 		String computedTotalsFilter = getComputedTotalsFilter();
 		
 		logger.info("the entity filtering subquery is: " + entityFilteringSubquery);
@@ -263,6 +269,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			removeDefinitionsWithMissingDependencies(xmlSchema);
 			contents = XMLGlobals.saveToString(xmlSchema);
 			contents = contents.replaceAll("@@undefined_amount@@", MoConstants.UNDEFINED_AMOUNT_STR);
+			contents = contents.replaceAll("@@transaction_type_gap@@", MoConstants.TRANSACTION_TYPE_GAP);
 			contents = updatePledgeContacts(contents);
 			expandedSchema = contents;
 			// System.err.println("the expanded schema is: " + expandedSchema);
@@ -533,7 +540,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		Set<Long> result = new HashSet<>(sets.get(0));
 		for(int i = 1; i < sets.size(); i++)
 			result.retainAll(sets.get(i));
-		return String.format("mondrian_fact_table.entity_id IN (%s)", Util.toCSStringForIN(result));
+		return String.format(mondrianFactTable + ".entity_id IN (%s)", Util.toCSStringForIN(result));
 	}
 	
 	/**
@@ -617,5 +624,21 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		contents = contents.replace(contactsGeneric, (contacts1 + contacts2).replace(startStr, "").replace(endStr, ""));
 		return contents;
 	}
-
+	
+	/**
+	 * @return the actual name of the fact table or fact view
+	 */
+	protected String getCubeFactTableName() {
+		ReportSpecification spec = currentReport.get();
+		String factTable = MondrianTablesRepository.FACT_TABLE.tableName;
+		if (spec != null && spec.getMeasures() != null && spec.getMeasures().size() > 0) {
+			for (ReportMeasure m : spec.getMeasures()) {
+				if (CustomMeasures.NO_DATE_FILTERS.contains(m.getMeasureName())) {
+					factTable = MondrianTablesRepository.FACT_TABLE_VIEW_NO_DATE_FILTER;
+					break;
+				}
+			}
+		}
+		return factTable;
+	}
 }

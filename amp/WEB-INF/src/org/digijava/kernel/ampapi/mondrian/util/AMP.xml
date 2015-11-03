@@ -933,7 +933,7 @@
 				</View>
 				<Level name="Pledges Detail Date Range" column="pledge_detail_id" nameColumn="transaction_range" />
 			</Hierarchy>
-+		</Dimension>
+		</Dimension>
 		
 		<Measure name="@@trivial_measure@@" aggregator="sum">
 			<MeasureExpression>
@@ -1091,7 +1091,27 @@
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-		
+	
+		<Measure name="Pipeline MTEF Projections - Unfiltered by date" aggregator="sum">
+			<MeasureExpression>
+				<SQL dialect="generic"><![CDATA[
+					CASE WHEN (@@mondrian_fact_table@@.transaction_type = 3 + @@transaction_type_gap@@) AND (src_role='DN') AND (@@pipelinemteffilternodate@@)
+					THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@ ELSE null END
+				]]>
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+
+		<Measure name="Projection MTEF Projections - Unfiltered by date" aggregator="sum">
+			<MeasureExpression>
+				<SQL dialect="generic"><![CDATA[
+					CASE WHEN (@@mondrian_fact_table@@.transaction_type = 3 + @@transaction_type_gap@@) AND (src_role='DN') AND (@@projectionmteffilternodate@@)
+					THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@ ELSE null END
+				]]>
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+				
 		<Measure name="Prior Actual Disbursements" aggregator="sum">
 			<!-- Current Year Actual Disbursements Until Previous Month (not included) -->
 			<MeasureExpression>
@@ -1219,13 +1239,13 @@
 			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>
 		</CalculatedMember>
 
-		<CalculatedMember name="Most Recent MTEF" dimension="Measures" visible="true">
+		<CalculatedMember name="Most Recent MTEF" dimension="Measures" visible="true"> <!-- not filtered by date -->
 			<Formula>
-				IIf(IsEmpty(Measures.[Pipeline MTEF Projections]), Measures.[Projection MTEF Projections], Measures.[Pipeline MTEF Projections]) 
+				IIf(IsEmpty(Measures.[Pipeline MTEF Projections - Unfiltered by date]), Measures.[Projection MTEF Projections - Unfiltered by date], Measures.[Pipeline MTEF Projections - Unfiltered by date]) 
 			</Formula>
 		</CalculatedMember>
 		
-		<CalculatedMember name="Total Filtered Most Recent MTEF" dimension="Measures" visible="true">
+		<CalculatedMember name="Total Filtered Most Recent MTEF" dimension="Measures" visible="true"> <!-- not filtered by date -->
 			<Formula>
 				SUM (NonEmptyCrossJoin([Dates.Year].[All Periods], {Measures.[Most Recent MTEF]}))
 			</Formula>
@@ -1236,10 +1256,10 @@
 		 	<Formula>
 				IIf((Measures.[Total Filtered Most Recent MTEF]=0) 
 				OR IsEmpty(Measures.[Total Filtered Most Recent MTEF])
-				OR IsEmpty([Measures].[Actual Disbursements]),
+				OR IsEmpty([Measures].[Actual Disbursements - Unfiltered by date]),
 								
 				null, 
-				Measures.[Actual Disbursements] / [Measures].[Total Filtered Most Recent MTEF] * 100)
+				Measures.[Actual Disbursements - Unfiltered by date] / [Measures].[Total Filtered Most Recent MTEF] * 100)
 			</Formula>
 		
 <!-- 	 	<Formula>

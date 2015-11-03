@@ -263,6 +263,11 @@ public class MondrianTablesRepository {
 	public final static List<String> FACT_TABLE_PRIMARY_KEY_COLUMNS = Arrays.asList("entity_type", "entity_internal_id", "primary_sector_id", "secondary_sector_id", "tertiary_sector_id", "location_id",
 			"primary_program_id", "secondary_program_id", "tertiary_program_id", "national_objectives_program_id", "ea_org_id", "ba_org_id", "ia_org_id", "ro_org_id"); 
 
+	/**
+	 * AMP-19721
+	 * Transaction type column name in the fact table
+	 */
+	public static final String TRANSACTION_TYPE = "transaction_type";
 		
 	/**
 	 * order of iteration is important, thus LinkedHashSet
@@ -270,7 +275,7 @@ public class MondrianTablesRepository {
 	public final static DatabaseTableDescription FACT_TABLE = new DatabaseTableDescription("mondrian_fact_table", Arrays.asList(
 				new DatabaseTableColumn("entity_id", "integer NOT NULL", true), // P/A id 
 				new DatabaseTableColumn("entity_internal_id", "integer NOT NULL", true), // amp_funding_detail_id, amp_mtef_detail_id, amp_funding_pledges_detail_id
-				new DatabaseTableColumn(MoConstants.TRANSACTION_TYPE, "integer NOT NULL", true), // ACV
+				new DatabaseTableColumn(TRANSACTION_TYPE, "integer NOT NULL", true), // ACV
 				new DatabaseTableColumn("adjustment_type", "integer NOT NULL", true),  // ACV
 				new DatabaseTableColumn("transaction_date", "date NOT NULL", true),
 				new DatabaseTableColumn("date_code", "integer NOT NULL", true), // for currency reasons

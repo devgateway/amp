@@ -124,6 +124,9 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		contents = contents.replaceAll("@@pipelinemteffilter@@", buildDateFilteringSubquery(ReportElement.ElementType.PIPELINE_MTEF_DATE, String.format("adjustment_type = %d", pipelineMtefAcv.existsInDatabase() ? pipelineMtefAcv.getIdInDatabase() : 12324))); // crap code but who cares, we're dumping this stuff soon
 		contents = contents.replaceAll("@@projectionmteffilter@@", buildDateFilteringSubquery(ReportElement.ElementType.PROJECTION_MTEF_DATE, String.format("adjustment_type = %d", projectionMtefAcv.existsInDatabase() ? projectionMtefAcv.getIdInDatabase() : 12324)));
 		
+		contents = contents.replaceAll("@@pipelinemteffilternodate@@", String.format("adjustment_type = %d", pipelineMtefAcv.existsInDatabase() ? pipelineMtefAcv.getIdInDatabase() : 12324)); // crap code but who cares, we're dumping this stuff soon
+		contents = contents.replaceAll("@@projectionmteffilternodate@@", String.format("adjustment_type = %d", projectionMtefAcv.existsInDatabase() ? projectionMtefAcv.getIdInDatabase() : 12324));
+				
 		// process general filters & custom filters 
 		String entityFilteringSubquery = buildFilteringSubquery();
 		String noDatesEntityFilteringSubquery = getNoDatesFilter(entityFilteringSubquery);
@@ -310,6 +313,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 					continue; // this one is hardcoded in AMP.xml for the sake of "pledges + activities" reports				
 				
 				addTrivialMeasure(trivialMeasureDefinitionNode, measureName, adj, trTypeId);
+				addTrivialMeasure(trivialMeasureDefinitionNode, measureName + MoConstants.UNFILTERED_DATE_SUFFIX, adj, trTypeId + Integer.parseInt(MoConstants.TRANSACTION_TYPE_GAP));
 			}
 		}
 		
@@ -631,7 +635,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	protected String getCubeFactTableName() {
 		ReportSpecification spec = currentReport.get();
 		String factTable = MondrianTablesRepository.FACT_TABLE.tableName;
-		if (spec != null && spec.getMeasures() != null && spec.getMeasures().size() > 0) {
+		if (spec != null && spec.getMeasures() != null) {
 			for (ReportMeasure m : spec.getMeasures()) {
 				if (CustomMeasures.NO_DATE_FILTERS.contains(m.getMeasureName())) {
 					factTable = MondrianTablesRepository.FACT_TABLE_VIEW_NO_DATE_FILTER;

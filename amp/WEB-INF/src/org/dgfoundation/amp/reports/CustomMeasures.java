@@ -31,6 +31,7 @@ public class CustomMeasures {
 		add(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS);
 		add(MeasureConstants.CUMULATED_DISBURSEMENTS);
 		add(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS);
+		add(MeasureConstants.FORECAST_EXECUTION_RATE);
 	}};
 	
 	/** measures without raw totals */

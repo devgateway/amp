@@ -32,6 +32,7 @@ import org.junit.Test;
 public class NewFeaturesMondrianReportTests extends MondrianReportsTestCase {
 
 	public final static List<String> activities = Arrays.asList("activity with capital spending", "Activity with planned disbursements", "activity with pipeline MTEFs and act. disb");
+	public final static List<String> activities2 = Arrays.asList("activity with capital spending", "Activity with planned disbursements", "activity with pipeline MTEFs and act. disb", "Test MTEF directed");
 
 	public NewFeaturesMondrianReportTests() {
 		super("amp 2.11 new features mondrian tests");
@@ -65,6 +66,21 @@ public class NewFeaturesMondrianReportTests extends MondrianReportsTestCase {
 		runMondrianTestCase(
 			"AMP-21240-forecast-execution-rate-totals-only",						
 			activities,
+			correctReport,
+			"en");
+	}
+	
+	@Test
+	public void testForecastExecutionRateTotalsOnlyWildDateFilters() {
+		ReportAreaForTests correctReport = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Total Measures-Actual Disbursements", "0", "Total Measures-Forecast Execution Rate", "", "Total Measures-Execution Rate", "", "Total Measures-Pipeline MTEF Projections", "0", "Total Measures-Projection MTEF Projections", "0")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "Test MTEF directed", "Total Measures-Actual Disbursements", "0", "Total Measures-Forecast Execution Rate", "66,87", "Total Measures-Execution Rate", "0", "Total Measures-Pipeline MTEF Projections", "0", "Total Measures-Projection MTEF Projections", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "activity with pipeline MTEFs and act. disb", "Total Measures-Actual Disbursements", "0", "Total Measures-Forecast Execution Rate", "129,41", "Total Measures-Execution Rate", "0", "Total Measures-Pipeline MTEF Projections", "0", "Total Measures-Projection MTEF Projections", "0"));
+
+		runMondrianTestCase(
+			"AMP-21240-forecast-execution-rate-date-filters-gone-wild",						
+			activities2,
 			correctReport,
 			"en");
 	}

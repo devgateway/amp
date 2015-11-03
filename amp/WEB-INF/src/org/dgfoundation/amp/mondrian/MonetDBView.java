@@ -11,7 +11,7 @@ import java.util.List;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
-import org.digijava.module.categorymanager.util.CategoryConstants;
+
 
 
 /**
@@ -34,9 +34,9 @@ public class MonetDBView {
 		// drop view first, if exists
 		conn.dropView(MondrianTablesRepository.FACT_TABLE_VIEW_NO_DATE_FILTER);
 		
-		String mirrorTransactionType = String.format("%1$s + %2$s as \"%1$s\"", MoConstants.TRANSACTION_TYPE, 
+		String mirrorTransactionType = String.format("%1$s + %2$s as \"%1$s\"", MondrianTablesRepository.TRANSACTION_TYPE, 
 				MoConstants.TRANSACTION_TYPE_GAP);
-		Collections.replaceAll(columnsList, MoConstants.TRANSACTION_TYPE, mirrorTransactionType);
+		Collections.replaceAll(columnsList, MondrianTablesRepository.TRANSACTION_TYPE, mirrorTransactionType);
 		String columns = Util.collectionAsString(columnsList);
 		
 		String viewQuery = String.format("CREATE VIEW %1$s AS "

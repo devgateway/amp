@@ -369,8 +369,8 @@ public final class MoConstants {
 	public static final String TRANSACTION_TYPE_GAP = "1000000";
 	
 	/**
-	 * AMP-19721
-	 * Transaction type column name
+	 * AMP-21526 - the prefix to add to trivial measures to generate non-filtered-by-date companion measures
 	 */
-	public static final String TRANSACTION_TYPE = "transaction_type";
+	public static final String UNFILTERED_DATE_SUFFIX = " - Unfiltered by date";
+	
 }

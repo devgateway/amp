@@ -53,7 +53,7 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
 	@Interchangeable(fieldTitle = "Name and Last Name")
 	private String nameAndLastName;
 	
-	@Interchangeable(fieldTitle = "Full Name")
+	@Interchangeable(fieldTitle = "Full Name", value = true)
 	private String fullname;
 	
 	/**

@@ -145,14 +145,15 @@ public class AmpMessageWorker {
 				} else if (e.getTrigger().equals(ApprovedResourceShareTrigger.class)
 						|| e.getTrigger().equals(RejectResourceSharetrigger.class)) {
 					newMsg = processResourceShareEvent(e, newApproval, template, false);
-				} else if (e.getTrigger().equals(ActivityMeassureComparisonTrigger.class) || e.getTrigger().equals(ActivityValidationWorkflowTrigger.class)  ) {
+				} else if (e.getTrigger().equals(ActivityMeassureComparisonTrigger.class)
+						|| e.getTrigger().equals(ActivityValidationWorkflowTrigger.class)) {
 
-					// This should be generalize but not to modify already
+					// This should be generalized but not to modify already
 					// running (for long time) code we process this particular
 					// case in a separate piece of
 					// code
-
-					List<AmpAlert> listNewMsg = processActivityValidationWorkflowEvent(e, newAlert, template);
+					
+					List<AmpAlert> listNewMsg = processActivityLevelEvent(e, newAlert, template,e.getTrigger().equals(ActivityMeassureComparisonTrigger.class));
 
 					for (AmpAlert ampMessage : listNewMsg) {
 						List<String> receivers = new ArrayList<>();
@@ -746,8 +747,7 @@ public class AmpMessageWorker {
 	/**
 	 * Activity's validation workflow Event processing
 	 */
-	private static List<AmpAlert> processActivityValidationWorkflowEvent(Event e, AmpAlert alert,
-			TemplateAlert template) {
+	private static List<AmpAlert> processActivityLevelEvent(Event e, AmpAlert alert, TemplateAlert template,boolean sendAlert) {
 
 		StringBuffer teamsToNotify = new StringBuffer();
 		String[] receivers;
@@ -787,6 +787,14 @@ public class AmpMessageWorker {
 					try {
 						newAlert = (AmpAlert) BeanUtils.cloneBean(alert);
 						alerts.add(createAlertFromTemplate(template, myHashMap, newAlert, receivers[j]));
+						AmpMessageUtil.saveOrUpdateMessage(newAlert);
+						//Ideally we should keep in the template a relationship with AmpTeamMember
+						//I will create a follow up ticket so we don't have to manipulate a 
+						//String
+						if(sendAlert){
+							AmpTeamMember receiver=getAmpTeamMemberFromReceiver(receivers[j]);
+							createMsgState(template, newAlert,receiver);
+						}
 					} catch (Exception ex) {
 						logger.error("Cannot clone AmpAlert", ex);
 					}
@@ -794,7 +802,25 @@ public class AmpMessageWorker {
 				}
 			}
 		}
+
 		return alerts;
+	}
+	/**
+	 * 
+	 * @param string
+	 * @return
+	 */
+	private static AmpTeamMember getAmpTeamMemberFromReceiver(String string) {
+		//this is probably slow, will create will be fixed once we redo and link the template
+		//with a AmpTeamMember instead of a string
+		String email = string.substring(string.indexOf("<") + 1, string.indexOf(">"));
+		String team = string.substring(string.indexOf(";") + 1, string.lastIndexOf(";"));
+		return TeamMemberUtil.getAmpTeamMemberByEmailAndTeam(email, team);
+	}
+
+	private static void createMsgState(TemplateAlert template, AmpMessage alert,AmpTeamMember receiver) throws Exception {
+		createMsgState(receiver, alert, false);
+
 	}
 
 	/**
@@ -810,10 +836,9 @@ public class AmpMessageWorker {
 
 		if (TLSUtils.getRequest() == null) {
 			TLSUtils.populateMockTlsUtils();
-		}				
+		}
 		TeamMember requestMember = (TeamMember) TLSUtils.getRequest().getSession()
 				.getAttribute(Constants.CURRENT_MEMBER);
-
 
 		if (TLSUtils.getRequest().getAttribute("activityTeams") != null) {
 			Map<Long, List<Team>> activityTeams;
@@ -922,7 +947,6 @@ public class AmpMessageWorker {
 			}
 			teamsToReturn = activityTeams.get(ampActivityId);
 		}
-
 
 		return teamsToReturn;
 	}
@@ -1239,11 +1263,16 @@ public class AmpMessageWorker {
 
 	private static void createMsgState(AmpMessageState state, AmpMessage newMsg, boolean calendarSaveActionWasCalled)
 			throws Exception {
+		createMsgState(state.getReceiver(), newMsg, calendarSaveActionWasCalled);
+	}
+
+	private static void createMsgState(AmpTeamMember receiver, AmpMessage newMsg, boolean calendarSaveActionWasCalled)
+			throws Exception {
 		AmpMessageState newState = new AmpMessageState();
 		Class clazz = newMsg.getClass();
 		newState.setMessage(newMsg);
 		// newState.setMemberId(state.getMemberId());
-		newState.setReceiver(state.getReceiver());
+		newState.setReceiver(receiver);
 		newState.setRead(false);
 		if (newMsg.getClassName().equals("c")) {
 			newState.setSender(((CalendarEvent) newMsg).getSenderEmail());
@@ -1254,9 +1283,9 @@ public class AmpMessageWorker {
 		if (setting != null && setting.getMsgStoragePerMsgType() != null) {
 			maxStorage = setting.getMsgStoragePerMsgType().intValue();
 		}
-		if (AmpMessageUtil.isInboxFull(newMsg.getClass(), state.getReceiver().getAmpTeamMemId())
-				|| (maxStorage >= 0 && AmpMessageUtil.getInboxMessagesCount(clazz,
-						state.getReceiver().getAmpTeamMemId(), false, false, maxStorage) >= maxStorage)) {
+		if (AmpMessageUtil.isInboxFull(newMsg.getClass(), receiver.getAmpTeamMemId())
+				|| (maxStorage >= 0 && AmpMessageUtil.getInboxMessagesCount(clazz, receiver.getAmpTeamMemId(), false,
+						false, maxStorage) >= maxStorage)) {
 			newState.setMessageHidden(true);
 		} else {
 			newState.setMessageHidden(false);
@@ -1341,5 +1370,12 @@ public class AmpMessageWorker {
 		wsQuery = StringUtils.left(wsQuery, indexToReplace) + " , " + teamId + " as ampTeamId , '" + teamName
 				+ "' as teamName " + StringUtils.mid(wsQuery, indexToReplace, wsQuery.length() - 1);
 		return wsQuery;
+	}
+	public static void main (String []args){
+		String receiver="Marina Baralo<maguibaralo@gmail.com>;Coordination Workspace;";
+		String email = receiver.substring(receiver.indexOf("<")+1,receiver.indexOf(">"));
+		String team = receiver.substring(receiver.indexOf(";")+1 ,receiver.lastIndexOf(";"));
+		System.out.println(email);
+		System.out.println(team);
 	}
 }

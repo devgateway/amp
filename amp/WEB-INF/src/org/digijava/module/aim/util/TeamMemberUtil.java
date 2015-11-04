@@ -1015,6 +1015,23 @@ public class TeamMemberUtil {
 		return retVal;
 	}
 	
+	public static AmpTeamMember getAmpTeamMemberByEmailAndTeam(String email, String teamName){
+
+		try {
+			Session session = null;
+			Query qry = null;
+			String queryString=null;
+			session= PersistenceManager.getRequestDBSession();session.flush();
+			queryString="select tm from " +AmpTeamMember.class.getName() + " tm where tm.user.email=:usermail and tm.ampTeam.name=:teamName";
+			qry=session.createQuery(queryString);
+			qry.setString("usermail",email);
+			qry.setString("teamName",teamName);
+			return (AmpTeamMember)qry.uniqueResult();
+		} catch (Exception e) {
+			logger.error("Unable to get TeamMember ",e );
+		}
+		return null;
+	}	
 	/**
 	 * null is the smallest number
 	 * @param a

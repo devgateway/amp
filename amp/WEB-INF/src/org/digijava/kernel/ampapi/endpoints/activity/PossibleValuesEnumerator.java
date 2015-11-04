@@ -240,8 +240,12 @@ public class PossibleValuesEnumerator {
 					valueFieldName = passField.getName();
 			}
 		}
-		if (idFieldName == null || valueFieldName == null)
+		if (idFieldName == null || valueFieldName == null) {
+			String err = "Cannot provide possible values for " + clazz.getName() + 
+					" since we need both 'id' and 'value' fields configured";
+			LOGGER.error(err);
 			return result;
+		}
 		String queryString = "SELECT cls."+idFieldName +
 							", cls." + valueFieldName +
 							" FROM " + clazz.getName() + " cls "+ 

@@ -89,6 +89,14 @@ class activityMapperBase implements activityMapperInterface {
     if ($formatter && $plugin['report field group'] == 'measures') {
       return $formatter->format($column->value);
     }
-    return filter_xss($column->displayedValue, array());
+
+    // We don't have to filter values in all the cases,
+    // text types are passed through check_plain when are being viewed.
+    $to_filter = TRUE;
+    if (in_array($plugin['property info']['type'], array('text'))) {
+      $to_filter = FALSE;
+    }
+    $filtered = ($to_filter) ? filter_xss($column->displayedValue, array()) : $column->displayedValue;
+    return $filtered;
   }
 }

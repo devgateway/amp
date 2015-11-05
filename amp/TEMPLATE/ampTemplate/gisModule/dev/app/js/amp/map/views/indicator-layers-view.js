@@ -117,25 +117,30 @@ module.exports = Backbone.View.extend({
     // Add popup
     if (feature && feature.properties) {
       // TODO: drs append  format value.
-      var unit = (layerModel.get('unit' ) ? layerModel.get('unit') : '');
+      var unit = (layerModel.get('unit') ? layerModel.get('unit') : '');
       var colorRamp = layerModel.get('colorRamp');
       var titleString = '';
       // this is a custom one.
       if (colorRamp) {
-      	titleString = layerModel.get ("title");
+        titleString = layerModel.get('title');
       }
       self.app.data.settings.load().then(function() {
-      
-      //only for not customs layers
-      if (titleString == '' && self.app.data.settings.get('0')) {
-        	titleString = self.app.data.settings.get('0').get('selectedName');
+
+        //only for not customs layers
+        if (titleString === '' && self.app.data.settings.get('0')) {
+          titleString = self.app.data.settings.get('0').get('selectedName');
         }
         var formattedTitleString = ['<strong>',
                              titleString,
                              ': ',
                              '</strong>'].join('');
-        var foundNF = _.find(self.app.data.settings.models, function(item) {return item.get('id') === 'number-format'});
-        var ampFormatter = new util.DecimalFormat(_.find(foundNF.get('options'), function(item) { return item.id === foundNF.get('defaultId')}).name);
+        var foundNF = _.find(self.app.data.settings.models, function(item) {
+          return item.get('id') === 'number-format';
+        });
+        var ampFormatter = new util.DecimalFormat(_.find(foundNF.get('options'), function(item) {
+          return item.id === foundNF.get('defaultId');
+        }).name);
+
         var fundingPopupTemplate = ['<strong>', feature.properties.name, '</strong>',
                         '<br/>', formattedTitleString, '',
                         ampFormatter.format(feature.properties.value), ' ', unit].join('');

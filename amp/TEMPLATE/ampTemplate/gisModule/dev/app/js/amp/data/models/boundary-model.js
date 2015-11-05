@@ -3,10 +3,10 @@ var LoadOnceMixin = require('../../mixins/load-once-mixin');
 
 
 module.exports = Backbone.Model
-.extend(LoadOnceMixin).extend({
-  // temporary so we get path to static files..
-  url: function() {
-	  return '/src/main/resources/gis/boundaries/'+ this.get("country") + '/' + this.id + '.json';
-  }
+  .extend(LoadOnceMixin).extend({
+    // temporary so we get path to static files..
+    url: function() {
+      return '/src/main/resources/gis/boundaries/' + this.get('country') + '/' + this.id + '.json';
+    }
 
-});
+  });

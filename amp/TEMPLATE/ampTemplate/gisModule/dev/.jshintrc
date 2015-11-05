@@ -19,7 +19,8 @@
     "__dirname": false,
     "exports": false,
     "module": false,
-    "require": false
+    "require": false,
+    "JSON": false
   },
   "devel": true,
   "browser": true

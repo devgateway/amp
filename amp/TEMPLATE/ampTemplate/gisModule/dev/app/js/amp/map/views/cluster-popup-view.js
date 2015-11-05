@@ -84,7 +84,10 @@ module.exports = Backbone.View.extend({
       return {label: org.name, value: org.amount};
     });
     if ((model.total - tmpTotal) > 1) {
-      data.push({ label: app.translator.translateSync("amp.gis:legend-others", "Others"), value: (model.total - tmpTotal)});
+      data.push({
+         label: app.translator.translateSync('amp.gis:legend-others', 'Others'),
+         value: (model.total - tmpTotal)
+       });
     }
 
     nvd3.addGraph(function() {
@@ -195,9 +198,13 @@ module.exports = Backbone.View.extend({
       self.app.data.settings.load().then(function() {
         self.tempDOM.find('#projects-pane .loading').remove();
 
-      /* Format the numerical columns */
-        var foundNF = _.find(self.app.data.settings.models, function(item) {return item.get('id') === 'number-format'});
-        var ampFormatter = new util.DecimalFormat(_.find(foundNF.get('options'), function(item) { return item.id === foundNF.get('defaultId')}).name);
+        /* Format the numerical columns */
+        var foundNF = _.find(self.app.data.settings.models, function(item) {
+          return item.get('id') === 'number-format';
+        });
+        var ampFormatter = new util.DecimalFormat(_.find(foundNF.get('options'), function(item) {
+           return item.id === foundNF.get('defaultId');
+         }).name);
         var currencyCode = self.app.data.settings.get('1').get('selected');
         var fundingType = 'Actual';
         var selected = self.app.data.settings.get('0').get('selected');

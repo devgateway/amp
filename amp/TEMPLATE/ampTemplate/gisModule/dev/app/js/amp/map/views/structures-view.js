@@ -132,10 +132,9 @@ module.exports = Backbone.View
       if (useIconsForSectors !== undefined && useIconsForSectors.get('name') === 'true') {
         if (maxIcons !== undefined && maxIcons.get('name') !== '') {
           if (maxIcons.get('name') === '0') {
-        	  self.MAX_NUM_FOR_ICONS = 99999; //always show  
-          }
-          else {
-        	  self.MAX_NUM_FOR_ICONS = parseInt(maxIcons.get('name'), 10);
+            self.MAX_NUM_FOR_ICONS = 99999; //always show
+          } else {
+            self.MAX_NUM_FOR_ICONS = parseInt(maxIcons.get('name'), 10);
           }
         } else {
           self.MAX_NUM_FOR_ICONS = 0;
@@ -154,8 +153,8 @@ module.exports = Backbone.View
       marker = self._createPlainMarker(latlng, feature);
     }
 
-    marker.feature = feature;  // L.geoJSON would do this implicitely
-                               // so add it manually to keep the same API
+    marker.feature = feature;  /* L.geoJSON would do this implicitely
+                                so add it manually to keep the same API */
 
     // self.markerCluster.addLayer(marker);
 
@@ -180,7 +179,7 @@ module.exports = Backbone.View
   _createSectorMarker: function(latlng, feature) {
     var sectorCode = 0; // temp code for catchall...
     var filterVertical = this.structureMenuModel.get('filterVertical');
-//feature.properties.activity.attributes.matchesFilters[filterVertical]
+    // feature.properties.activity.attributes.matchesFilters[filterVertical]
     if (feature.properties.activity.attributes &&
         _.has(feature.properties.activity.attributes.matchesFilters, filterVertical)) {
       if (feature.properties.activity.attributes.matchesFilters[filterVertical] === null) {

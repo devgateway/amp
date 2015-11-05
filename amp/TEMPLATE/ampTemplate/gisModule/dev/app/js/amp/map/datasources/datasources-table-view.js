@@ -84,15 +84,15 @@ module.exports = Backbone.View.extend({
    **/
   loadMoreFromCollection: function() {
     var self = this;
-    if (self.collection.getPageDetails().currentPosition < self.collection.getPageDetails().totalCount){
-	    if (!self.$el.find('.load-more').hasClass('disabled')) {
-	    	self.collection.fetchMore().done(function() {
-	        self.render(); //TODO: (drs) just append the new ones...?
-	      });
-	    }
-	    self.$el.find('.load-more').text('loading...').addClass('disabled');
-    }else{
-    	self.$el.find('.load-more').attr("disabled", "disabled").addClass('disabled');
+    if (self.collection.getPageDetails().currentPosition < self.collection.getPageDetails().totalCount) {
+      if (!self.$el.find('.load-more').hasClass('disabled')) {
+        self.collection.fetchMore().done(function() {
+          self.render(); //TODO: (drs) just append the new ones...?
+        });
+      }
+      self.$el.find('.load-more').text('loading...').addClass('disabled');
+    } else {
+      self.$el.find('.load-more').attr('disabled', 'disabled').addClass('disabled');
     }
   }
 

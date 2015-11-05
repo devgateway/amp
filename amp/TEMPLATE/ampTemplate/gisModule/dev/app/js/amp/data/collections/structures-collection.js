@@ -149,7 +149,7 @@ module.exports = Backbone.Collection
     };
   },
 
-// Migrated from Collection-Model
+  // Migrated from Collection-Model
   updatePaletteSet: function() {
     var self = this;
     var deferred = $.Deferred();
@@ -183,14 +183,14 @@ module.exports = Backbone.Collection
               return '';
             }
           } else {
-           //In cases where projects do not have sectors or donors (for example draft projects
+            //In cases where projects do not have sectors or donors (for example draft projects
             //or planned project with no funding) there needs to be a 'none' option for project sites
             //in the GIS legends
             if (activity.get('matchesFilters')[filterVertical] !== undefined) {
-              return self.appData.translator.translateSync ('amp.gis:legend-none','None');
+              return self.appData.translator.translateSync ('amp.gis:legend-none', 'None');
             } else {
               console.warn('Activity is missing desired vertical');
-              return self.appData.translator.translateSync ('amp.gis:legend-na','n/a');
+              return self.appData.translator.translateSync ('amp.gis:legend-na', 'n/a');
             }
           }
         })

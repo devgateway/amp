@@ -41,7 +41,7 @@ module.exports = Backbone.View.extend({
         callingModule: 'GIS',
         showDGFooter: false,
         useSingleRowHeader: true
-    });
+      });
     $.when(headerWidget.menu.menuRendered).then(function() {
       $('.dropdown-toggle').dropdown();
     });
@@ -55,6 +55,8 @@ module.exports = Backbone.View.extend({
     $(leafletZoomIn).attr('data-i18n', 'amp.gis:leaflet-button-zoom-in[title]');
     var leafletZoomOut = $('.leaflet-control-zoom-out');
     $(leafletZoomOut).attr('data-i18n', 'amp.gis:leaflet-button-zoom-out[title]');
+
+    /* TODO(thadk): test without app here? this?*/
     app.translator.translateDOM('.leaflet-control-zoom');
   },
 

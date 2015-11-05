@@ -37,10 +37,9 @@ module.exports = Backbone.View.extend({
       if (useIconsForSectors !== undefined && useIconsForSectors.get('name') === 'true') {
         if (maxLocationIcons !== undefined && maxLocationIcons.get('name') !== '') {
           if (maxLocationIcons.get('name') === '0') {
-        	  MAX_NUM_FOR_ICONS = 99999; //always show 
-          }
-          else {
-        	  MAX_NUM_FOR_ICONS = parseInt(maxLocationIcons.get('name'), 10);
+            MAX_NUM_FOR_ICONS = 99999; //always show
+          } else {
+            MAX_NUM_FOR_ICONS = parseInt(maxLocationIcons.get('name'), 10);
           }
         } else {
           MAX_NUM_FOR_ICONS = 0;
@@ -51,7 +50,7 @@ module.exports = Backbone.View.extend({
 
       // render icons if available
       if (self.model.structuresCollection.length < MAX_NUM_FOR_ICONS &&
-          self.model.get('filterVertical') === 'Primary Sector Id') {
+        self.model.get('filterVertical') === 'Primary Sector Id') {
         renderObject.imageBuckets = self.model.iconMappings;
         renderObject.palletteElements = self.model.structuresCollection.palette.get('elements');
       }
@@ -59,26 +58,25 @@ module.exports = Backbone.View.extend({
       self.app.translator.promise.then(function() {
         self.app.translator.translateDOM(
           self.template(_.extend({}, self.model.toJSON(), renderObject))
-          ).then(function(legend) {
-            self.$el.html(legend);
-          });
+        ).then(function(legend) {
+          self.$el.html(legend);
+        });
 
       });
       self.app.translator.translateList({
-          'amp.gis:legend-popover':'If there are less than',
-          'amp.gis:legend-popover-2':'points map will show icons otherwise: show coloured circles.',
-          'amp.gis:title-Region': 'Region'
-        }).then(function(legendPopoverList) {
-          console.log(legendPopoverList, "x");
-          var legendPopover = [legendPopoverList['amp.gis:legend-popover'],
-           ' ',
-           MAX_NUM_FOR_ICONS,
-           ' ',
-           legendPopoverList['amp.gis:legend-popover-2']
-           ].join('');
-          self.$('[data-toggle="popover"]').popover();
-          self.$('[data-toggle="popover"]').attr("data-content",legendPopover);
-        });
+        'amp.gis:legend-popover': 'If there are less than',
+        'amp.gis:legend-popover-2': 'points map will show icons otherwise: show coloured circles.',
+        'amp.gis:title-Region': 'Region'
+      }).then(function(legendPopoverList) {
+        var legendPopover = [legendPopoverList['amp.gis:legend-popover'],
+          ' ',
+          MAX_NUM_FOR_ICONS,
+          ' ',
+          legendPopoverList['amp.gis:legend-popover-2']
+        ].join('');
+        self.$('[data-toggle="popover"]').popover();
+        self.$('[data-toggle="popover"]').attr('data-content', legendPopover);
+      });
 
 
 

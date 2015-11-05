@@ -70,7 +70,7 @@ module.exports = Backbone.Collection
     }
   },
 
-  deserialize : function(jsonBlob) {
+  deserialize: function(jsonBlob) {
     var self = this;
     if (jsonBlob) {
       _.each(jsonBlob, function(v, k) {
@@ -81,11 +81,11 @@ module.exports = Backbone.Collection
           var setting = self.get(k);
           self.setSettingSelectedName(setting);
         } else {
-          console.log("cant find setting with key:" + k);
+          console.error('cant find setting with key:' + k);
         }
       });
     } else {
-      this.reset(this.map(function(setting){
+      this.reset(this.map(function(setting) {
         var clone = setting.clone();
         clone.set('selected', setting.get('defaultId'));
         return clone;

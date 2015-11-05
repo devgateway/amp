@@ -65,8 +65,14 @@ module.exports = Backbone.Collection
        * payload.size = this._pageSize;
        * payload.start = this._currentStartPosition;
        */
-      
-      this.url = ['/rest/gis/activities?start=', this.getPageDetails().currentPage, '&size=', this._pageSize].join('');
+
+      this.url =
+       [
+          '/rest/gis/activities?start=',
+         this.getPageDetails().currentPage,
+         '&size=',
+         this._pageSize
+       ].join('');
     }
 
     options = _.defaults((options || {}), {
@@ -80,7 +86,7 @@ module.exports = Backbone.Collection
     if (self._pageSize > 0) {
 
       activityFetch.then(function() {
-          /* On the very first page request, advance if succeeds */
+        /* On the very first page request, advance if succeeds */
         if (options && !options.isFetchMore) {
           self._currentStartPosition += self._pageSize;
         }
@@ -100,7 +106,7 @@ module.exports = Backbone.Collection
   /* Used for pagination */
   fetchMore: function(options) {
     options = _.defaults((options || {}), {
-      isFetchMore:true,
+      isFetchMore: true,
       remove: false
     });
     return this.fetch(options);

@@ -89,13 +89,14 @@ class activityMapperBase implements activityMapperInterface {
    * Value handler.
    */
   public static function getValue($plugin, $column, $formatter = NULL) {
+    if ($formatter && $plugin['report field group'] == 'measures') {
+      return $formatter->format($column->value);
+    }
+
     if ($column->value == '#null') {
       return NULL;
     }
 
-    if ($formatter && $plugin['report field group'] == 'measures') {
-      return $formatter->format($column->value);
-    }
 
     // We don't have to filter values in all the cases,
     // text types are passed through check_plain when are being viewed.

@@ -15,6 +15,7 @@ import org.dgfoundation.amp.ar.amp211.NewFeaturesMondrianReportTests;
 import org.dgfoundation.amp.ar.amp211.OldReportsNewFeaturesTests;
 import org.dgfoundation.amp.ar.amp211.PlainMTEFMondrianReportTests;
 import org.dgfoundation.amp.ar.amp211.PledgeReportsTests211;
+import org.dgfoundation.amp.ar.amp211.ReportCalendarTests;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -46,6 +47,7 @@ public class AllTests_amp211
 		suite.addTest(new JUnit4TestAdapter(PledgeReportsTests211.class));
 		suite.addTest(new JUnit4TestAdapter(NewFeaturesMondrianReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(MondrianComputedMeasuresReportTests211.class));
+		suite.addTest(new JUnit4TestAdapter(ReportCalendarTests.class));
 		
 		return suite;
 	}

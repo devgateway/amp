@@ -36,6 +36,7 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -63,6 +64,7 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		TLSUtils.populate(mockRequest);
 
 		AmpReports report = ReportTestingUtils.loadReportByName(reportName);
+		mockRequest.getSession().setAttribute(Constants.CURRENT_MEMBER, report.getOwnerId().toTeamMember());
 		return ReportsUtil.getReport(report.getAmpReportId());
 	}
 	

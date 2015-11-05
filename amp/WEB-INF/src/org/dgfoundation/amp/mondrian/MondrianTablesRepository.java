@@ -274,6 +274,7 @@ public class MondrianTablesRepository {
 	 */
 	public final static DatabaseTableDescription FACT_TABLE = new DatabaseTableDescription("mondrian_fact_table", Arrays.asList(
 				new DatabaseTableColumn("entity_id", "integer NOT NULL", true), // P/A id 
+				new DatabaseTableColumn("funding_id", "integer NOT NULL", true), // P/A id
 				new DatabaseTableColumn("entity_internal_id", "integer NOT NULL", true), // amp_funding_detail_id, amp_mtef_detail_id, amp_funding_pledges_detail_id
 				new DatabaseTableColumn(TRANSACTION_TYPE, "integer NOT NULL", true), // ACV
 				new DatabaseTableColumn("adjustment_type", "integer NOT NULL", true),  // ACV

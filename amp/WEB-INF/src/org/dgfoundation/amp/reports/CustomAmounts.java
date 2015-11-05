@@ -28,6 +28,7 @@ public class CustomAmounts {
 		add(ColumnConstants.TOTAL_GRAND_ACTUAL_DISBURSEMENTS);
 		add(ColumnConstants.UNCOMMITTED_BALANCE);
 		add(ColumnConstants.UNCOMMITTED_CUMULATIVE_BALANCE);
+		add(ColumnConstants.FORECAST_EXECUTION_RATE);
 		add(ColumnConstants.UNDISBURSED_CUMULATIVE_BALANCE);
 		add(MeasureConstants.UNDISBURSED_BALANCE);
 	}};
@@ -35,7 +36,6 @@ public class CustomAmounts {
 	/** all columns and measures that display % amounts */
 	public final static Set<String> PERCENTAGE_AMOUNTS = new HashSet<String>() {{
 		add(MeasureConstants.EXECUTION_RATE);
-		add(MeasureConstants.FORECAST_EXECUTION_RATE);
 		add(MeasureConstants.CONSUMPTION_RATE);
 		add(MeasureConstants.DISBURSMENT_RATIO);
 		add(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS);
@@ -44,6 +44,7 @@ public class CustomAmounts {
 		add(ColumnConstants.CUMULATIVE_EXECUTION_RATE);
 		add(ColumnConstants.PROJECT_AGE_RATIO);
 		add(ColumnConstants.AVERAGE_DISBURSEMENT_RATE);
+		add(ColumnConstants.FORECAST_EXECUTION_RATE);
 		
 	}};
 	

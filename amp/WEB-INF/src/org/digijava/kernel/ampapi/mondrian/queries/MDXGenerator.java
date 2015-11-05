@@ -1048,7 +1048,7 @@ public class MDXGenerator {
 				logger.error("Could not execute Olap Query \"" + mdx + "\", Error Details: " + MondrianUtils.getOlapExceptionMessage(e));
 			}
 		}
-		throw new AmpApiException("count not execute Olap Query after " + nrTries + " attempts, abandoning", ex);
+		throw new AmpApiException("could not execute Olap Query after " + nrTries + " attempts, abandoning", ex);
 	}
 	
 	/**

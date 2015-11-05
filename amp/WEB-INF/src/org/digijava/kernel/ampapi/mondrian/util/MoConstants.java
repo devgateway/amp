@@ -293,6 +293,7 @@ public final class MoConstants {
 	public static final String ATTR_CUMULATIVE_EXECUTION_RATE = "Cumulative Execution Rate";
 	public static final String ATTR_UNDISBURSED_CUMULATIVE_BALANCE = "Undisbursed Cumulative Balance";
 	public static final String ATTR_UNCOMMITTED_CUMULATIVE_BALANCE = "Uncommitted Cumulative Balance";
+	public static final String ATTR_FORECAST_EXECUTION_RATE = "Forecast Execution Rate";
 	public static final String ATTR_CONTACT_NAME = "Contact Name";
 	public static final String ATTR_CONTACT_TITLE = "Contact Title";
 	public static final String ATTR_CONTACT_ADDRESS = "Contact Address";

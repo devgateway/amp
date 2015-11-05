@@ -1,6 +1,6 @@
 DELETE FROM mondrian_fact_table WHERE entity_id @@activityIdCondition@@;
 
-INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type, adjustment_type, transaction_date, date_code, display_date_code, 
+INSERT INTO mondrian_fact_table (entity_id, funding_id, entity_internal_id, transaction_type, adjustment_type, transaction_date, date_code, display_date_code, 
   transaction_start_date, transaction_end_date, transaction_range, transaction_amount, 
   currency_id, donor_id, 
   financing_instrument_id, terms_of_assistance_id, funding_status_id, mode_of_payment_id, status_id, modality_id, type_of_cooperation_id, type_of_implementation_id, procurement_system_id,
@@ -13,6 +13,7 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
   related_entity_id)
   SELECT 
 	rawdonation.amp_activity_id AS entity_id,
+	rawdonation.funding_id AS funding_id,
 	rawdonation.amp_fund_detail_id AS entity_internal_id,
     rawdonation.transaction_type AS transaction_type,
     rawdonation.adjustment_type AS adjustment_type,
@@ -113,7 +114,7 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
 order by rawdonation.amp_activity_id;
 
 
-INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type, adjustment_type, transaction_date, date_code, display_date_code, 
+INSERT INTO mondrian_fact_table (entity_id, funding_id, entity_internal_id, transaction_type, adjustment_type, transaction_date, date_code, display_date_code, 
   transaction_start_date, transaction_end_date, transaction_range, transaction_amount, 
   currency_id, donor_id, 
   financing_instrument_id, terms_of_assistance_id, funding_status_id, mode_of_payment_id, status_id, modality_id, type_of_cooperation_id, type_of_implementation_id, procurement_system_id,
@@ -126,6 +127,7 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
   related_entity_id)
   SELECT 
 	rawdonation.amp_activity_id AS entity_id,
+	rawdonation.funding_id AS funding_id,
 	rawdonation.amp_fund_detail_id AS entity_internal_id,
     200 + rawdonation.transaction_type AS transaction_type,
     rawdonation.adjustment_type AS adjustment_type,

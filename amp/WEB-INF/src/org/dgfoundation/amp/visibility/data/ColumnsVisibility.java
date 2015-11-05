@@ -363,6 +363,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		put("Variance Of Disbursements", ColumnConstants.VARIANCE_OF_DISBURSEMENTS);
 		put(ColumnConstants.UNCOMMITTED_CUMULATIVE_BALANCE, ColumnConstants.UNCOMMITTED_CUMULATIVE_BALANCE);
 		put(ColumnConstants.UNDISBURSED_CUMULATIVE_BALANCE, ColumnConstants.UNDISBURSED_CUMULATIVE_BALANCE);
+		put(ColumnConstants.FORECAST_EXECUTION_RATE, ColumnConstants.FORECAST_EXECUTION_RATE);
 		put("Disaster Response Marker", ColumnConstants.DISASTER_RESPONSE_MARKER);
 	}};
 	

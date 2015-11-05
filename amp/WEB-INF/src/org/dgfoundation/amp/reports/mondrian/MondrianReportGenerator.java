@@ -1064,7 +1064,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 					if (reportColumn == null) {
 						String usedName = measureColumn.getName();
 						String usedCaption = measureColumn.getCaption();
-						String usedDescription = getMeasureDescription(measureColumn.getName());
+						String usedDescription = (i == members.size() - relevantDelta) ? 
+								getMeasureDescription(measureColumn.getName()) 
+								: null;
 						if (i == members.size() - 1 && spec.getUsesFundingFlows() && usedName.equals("Undefined")) {
 							usedName = usedCaption = " ";
 						}
@@ -1132,7 +1134,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			AmpMeasures measure = AdvancedReportUtil.getMeasureByName(measureName);
 			measureDescription = measure != null ? measure.getDescription() : null;
 		} catch (RuntimeException e) {
-			logger.warn("Error in retrieiving measure " + measureName);
+			logger.warn("Error in retrieving measure " + measureName);
 		}
 		
 		return measureDescription;

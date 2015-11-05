@@ -287,6 +287,7 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.PROPOSED_PROJECT_AMOUNT, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT));
 			addColumnDefinition(ColumnConstants.UNCOMMITTED_BALANCE, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_UNCOMMITTED_BALANCE, MoConstants.ATTR_UNCOMMITTED_BALANCE));
 			addColumnDefinition(ColumnConstants.UNCOMMITTED_CUMULATIVE_BALANCE, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_UNCOMMITTED_CUMULATIVE_BALANCE, MoConstants.ATTR_UNCOMMITTED_CUMULATIVE_BALANCE));
+			addColumnDefinition(ColumnConstants.FORECAST_EXECUTION_RATE, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_FORECAST_EXECUTION_RATE, MoConstants.ATTR_FORECAST_EXECUTION_RATE));
 			addColumnDefinition(ColumnConstants.PLEDGE_STATUS, new MDXLevel("Pledge Status", MoConstants.H_CATEGORY_NAME, MoConstants.ATTR_CATEGORY_NAME));
 			
 			for (String idx : new String[]{"1", "2"}) {
@@ -375,7 +376,6 @@ public class MondrianMapping {
 			addMeasureDefinition(MeasureConstants.REAL_COMMITMENTS);
 			addMeasureDefinition(MeasureConstants.REAL_DISBURSEMENTS);
 			addMeasureDefinition(MeasureConstants.REAL_MTEFS);
-			addMeasureDefinition(MeasureConstants.FORECAST_EXECUTION_RATE);
 			
 			addMeasureDefinition(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS);
 			addMeasureDefinition(MeasureConstants.CUMULATED_DISBURSEMENTS);

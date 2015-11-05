@@ -23,6 +23,7 @@
 			    CREATE OR REPLACE VIEW v_mondrian_raw_donor_transactions AS 
 SELECT  <!-- regular transactions -->
 	vmpt.amp_activity_id,
+	vmpt.amp_funding_id AS funding_id,
 	vmpt.amp_fund_detail_id,
 	vmpt.transaction_type,
 	vmpt.adjustment_type,
@@ -64,6 +65,7 @@ SELECT  <!-- regular transactions -->
 UNION ALL
 SELECT <!-- MTEFs -->
 	aa.amp_activity_id AS amp_activity_id,
+	f.amp_funding_id AS funding_id,
 	mf.amp_fund_mtef_projection_id AS amp_fund_detail_id,
 	3 AS transaction_type,
 	mf.amp_projected_categoryvalue_id AS adjustment_type,
@@ -111,6 +113,7 @@ SELECT <!-- MTEFs -->
 UNION ALL
 SELECT <!-- undefined donor -->
 	aav.amp_activity_id AS amp_activity_id,
+	999888777 as funding_id,
 	900000000 + aav.amp_activity_id AS amp_fund_detail_id,
 	999 AS transaction_type,
 	(SELECT acv.id FROM amp_category_value acv WHERE acv.category_value='Actual' AND acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'adjustment_type')) AS adjustment_type,
@@ -162,6 +165,7 @@ SELECT <!-- undefined donor -->
 UNION ALL
 SELECT <!-- component funding -->
 	ct.amp_activity_id AS amp_activity_id,
+	999888777 AS funding_id, <!-- component funding is not linked to a funding id -->
 	ct.amp_component_funding_id AS amp_fund_detail_id,
 	ct.transaction_type AS transaction_type,
 	ct.adjustment_type AS adjustment_type,

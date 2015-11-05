@@ -677,8 +677,44 @@
 						]]>
 					</SQL>
 				</View>
-				<!--  Proposed project cost - Cumulative Commitments -->
 				<Level name="Uncommitted Cumulative Balance" type="Numeric" column="uncommitted_cumulative_balance" />
+			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All Forecast Execution Rate" primaryKey="entity_id" name="Forecast Execution Rate">
+				<View alias="v_forecast_execution_rate">
+					<SQL dialect="generic">
+						<![CDATA[
+							SELECT v_actual_disbursements_by_entity_id.amp_activity_id AS entity_id,
+								CASE WHEN v_actual_disbursements_by_entity_id.total_actual_disbursements IS NULL OR v_most_recent_mtef_by_entity_id.total_most_recent_mtef IS NULL OR v_most_recent_mtef_by_entity_id.total_most_recent_mtef = 0 THEN @@undefined_amount@@ ELSE
+									100.0 * v_actual_disbursements_by_entity_id.total_actual_disbursements / v_most_recent_mtef_by_entity_id.total_most_recent_mtef END
+								AS fer
+							FROM
+(SELECT macn.amp_activity_id, SUM(mft.transaction_exch_@@currency@@) AS total_actual_disbursements 
+FROM 
+	mondrian_activity_currency_numbers macn
+		JOIN @@mondrian_fact_table@@ mft ON 
+			mft.entity_id = macn.amp_activity_id 
+			AND transaction_type = 1 + @@transaction_type_gap@@
+			AND adjustment_type = @@actual@@ AND src_role = 'DN'
+		GROUP BY macn.amp_activity_id) 
+	AS v_actual_disbursements_by_entity_id LEFT JOIN
+(select entity_id, SUM(most_recent_mtef) AS total_most_recent_mtef FROM
+(select entity_id, funding_id, display_date_code, CASE WHEN pipeline IS NULL THEN projection ELSE pipeline END AS most_recent_mtef FROM 
+(SELECT entity_id, funding_id, display_date_code, 
+	(SELECT sum(transaction_exch_@@currency@@) FROM @@mondrian_fact_table@@ temp WHERE temp.entity_id = v_mtef_by_type_funding_id.entity_id AND temp.funding_id = v_mtef_by_type_funding_id.funding_id AND temp.display_date_code = v_mtef_by_type_funding_id.display_date_code AND src_role='DN' AND temp.transaction_type = 3 + @@transaction_type_gap@@ AND temp.adjustment_type = @@pipelinemtefacv@@) AS pipeline,
+	(SELECT sum(transaction_exch_@@currency@@) FROM @@mondrian_fact_table@@ temp2 WHERE temp2.entity_id = v_mtef_by_type_funding_id.entity_id AND temp2.funding_id = v_mtef_by_type_funding_id.funding_id AND temp2.display_date_code = v_mtef_by_type_funding_id.display_date_code AND src_role='DN' AND temp2.transaction_type = 3 + @@transaction_type_gap@@ AND temp2.adjustment_type = @@projectionmtefacv@@) AS projection
+	FROM 
+(select distinct entity_id, funding_id, display_date_code from @@mondrian_fact_table@@ WHERE transaction_type = 3 + @@transaction_type_gap@@) AS v_mtef_by_type_funding_id
+) AS v_mtef_by_funding_id_year_type
+) AS v_mtef_by_funding_id_year
+GROUP BY entity_id) AS v_most_recent_mtef_by_entity_id
+ON 
+	v_actual_disbursements_by_entity_id.amp_activity_id = v_most_recent_mtef_by_entity_id.entity_id 
+	AND v_most_recent_mtef_by_entity_id.total_most_recent_mtef > 0
+						]]>
+					</SQL>
+				</View>
+				<Level name="Forecast Execution Rate" type="Numeric" column="fer" />
 			</Hierarchy>
 		</Dimension>
 			
@@ -1238,43 +1274,6 @@
 			</Formula>
 			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>
 		</CalculatedMember>
-
-		<CalculatedMember name="Most Recent MTEF" dimension="Measures" visible="true"> <!-- not filtered by date -->
-			<Formula>
-				IIf(IsEmpty(Measures.[Pipeline MTEF Projections - Unfiltered by date]), Measures.[Projection MTEF Projections - Unfiltered by date], Measures.[Pipeline MTEF Projections - Unfiltered by date]) 
-			</Formula>
-		</CalculatedMember>
-		
-		<CalculatedMember name="Total Filtered Most Recent MTEF" dimension="Measures" visible="true"> <!-- not filtered by date -->
-			<Formula>
-				SUM (NonEmptyCrossJoin([Dates.Year].[All Periods], {Measures.[Most Recent MTEF]}))
-			</Formula>
-			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>
-		</CalculatedMember>
-
-		<CalculatedMember name="Forecast Execution Rate" dimension="Measures">
-		 	<Formula>
-				IIf((Measures.[Total Filtered Most Recent MTEF]=0) 
-				OR IsEmpty(Measures.[Total Filtered Most Recent MTEF])
-				OR IsEmpty([Measures].[Actual Disbursements - Unfiltered by date]),
-								
-				null, 
-				Measures.[Actual Disbursements - Unfiltered by date] / [Measures].[Total Filtered Most Recent MTEF] * 100)
-			</Formula>
-		
-<!-- 	 	<Formula>
-				IIf((Measures.[Total Filtered Actual Disbursements]=0) 
-				OR IsEmpty(Measures.[Total Filtered Actual Disbursements])
-				OR IsEmpty([Measures].[Most Recent MTEF]),
-				null, 
-				[Measures].[Most Recent MTEF] / Measures.[Total Filtered Actual Disbursements] * 100)
-			</Formula>  -->
-<!--		<Formula>
-				IIf((Measures.[Most Recent MTEF] = 0) OR IsEmpty(Measures.[Most Recent MTEF]) OR IsEmpty(Measures.[Actual Disbursements]), null, 
-				Measures.[Most Recent MTEF] * 100.0 / Measures.[Actual Disbursements]) 
-			</Formula>   -->
-			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>
-		</CalculatedMember>
-		
+				
 	</Cube>
  </Schema>

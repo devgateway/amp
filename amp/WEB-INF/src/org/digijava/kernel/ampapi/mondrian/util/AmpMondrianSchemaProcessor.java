@@ -18,6 +18,7 @@ import mondrian.spi.DynamicSchemaProcessor;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MondrianTablesRepository;
 import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
@@ -126,9 +127,12 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		
 		contents = contents.replaceAll("@@pipelinemteffilternodate@@", String.format("adjustment_type = %d", pipelineMtefAcv.existsInDatabase() ? pipelineMtefAcv.getIdInDatabase() : 12324)); // crap code but who cares, we're dumping this stuff soon
 		contents = contents.replaceAll("@@projectionmteffilternodate@@", String.format("adjustment_type = %d", projectionMtefAcv.existsInDatabase() ? projectionMtefAcv.getIdInDatabase() : 12324));
-				
+
+		contents = contents.replaceAll("@@pipelinemtefacv@@", pipelineMtefAcv.existsInDatabase() ? pipelineMtefAcv.getIdInDatabase().toString() : "12324"); // crap code but who cares, we're dumping this stuff soon
+		contents = contents.replaceAll("@@projectionmtefacv@@", projectionMtefAcv.existsInDatabase() ? projectionMtefAcv.getIdInDatabase().toString() : "12324");
+
 		// process general filters & custom filters 
-		String entityFilteringSubquery = buildFilteringSubquery();
+		String entityFilteringSubquery = buildFilteringSubquery(); 
 		String noDatesEntityFilteringSubquery = getNoDatesFilter(entityFilteringSubquery);
 		// order is important, keep it here, do not move up; these date filters tags solution will be soon removed
 		entityFilteringSubquery = entityFilteringSubquery.replaceAll(FactTableFiltering.DATE_FILTERS_TAG_START + "|" + FactTableFiltering.DATE_FILTERS_TAG_END, "");
@@ -489,13 +493,13 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		switch (reportType) {
 		
 			case ArConstants.DONOR_TYPE:
-				return "component_id IS NULL OR component_id = 999999999";
+				return String.format("%s.component_id IS NULL OR %s.component_id = 999999999", mondrianFactTable, mondrianFactTable);
 
 			case ArConstants.COMPONENT_TYPE:
-				return "component_id IS NOT NULL AND component_id <> 999999999";
+				return String.format("%s.component_id IS NOT NULL AND %s.component_id <> 999999999", mondrianFactTable, mondrianFactTable);
 
 			case ArConstants.PLEDGES_TYPE:
-				return "entity_id >= " + MondrianETL.PLEDGE_ID_ADDER;
+				return String.format("%s.entity_id >= " + MondrianETL.PLEDGE_ID_ADDER, mondrianFactTable);
 						
 			default:
 				throw new RuntimeException("report type not implemented yet: " + reportType);
@@ -634,7 +638,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	 */
 	protected String getCubeFactTableName() {
 		ReportSpecification spec = currentReport.get();
-		String factTable = MondrianTablesRepository.FACT_TABLE.tableName;
+		String factTable = spec == null ? MondrianTablesRepository.FACT_TABLE_VIEW_NO_DATE_FILTER : MondrianTablesRepository.FACT_TABLE.tableName; // so that Saiku report wizard can use all the fancy hacky no-date-filters measures
 		if (spec != null && spec.getMeasures() != null) {
 			for (ReportMeasure m : spec.getMeasures()) {
 				if (CustomMeasures.NO_DATE_FILTERS.contains(m.getMeasureName())) {
@@ -642,6 +646,9 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 					break;
 				}
 			}
+		}
+		if (spec != null && spec.getColumnNames().contains(ColumnConstants.FORECAST_EXECUTION_RATE)) {
+			factTable = MondrianTablesRepository.FACT_TABLE_VIEW_NO_DATE_FILTER;
 		}
 		return factTable;
 	}

@@ -355,6 +355,7 @@ public class ColumnConstants {
 	public static final String TYPE_OF_IMPLEMENTATION = "Type of Implementation";
 	public static final String UNCOMMITTED_BALANCE = "Uncommitted Balance";
 	public static final String UNCOMMITTED_CUMULATIVE_BALANCE = "Uncommitted Cumulative Balance";
+	public static final String FORECAST_EXECUTION_RATE = "Forecast Execution Rate";
 	public static final String UNDISBURSED_CUMULATIVE_BALANCE = "Undisbursed Cumulative Balance";
 	public static final String VARIANCE_OF_COMMITMENTS = "Variance Of Commitments";
 	public static final String VARIANCE_OF_DISBURSEMENTS = "Variance Of Disbursements";

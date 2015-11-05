@@ -20,7 +20,6 @@ public class CustomMeasures {
 	/** measures whose distribution per year/quarter/months must be hidden from the output */
 	public final static Set<String> NO_DISTRIBUTION = new HashSet<String>() {{
 		add(MeasureConstants.EXECUTION_RATE);
-		add(MeasureConstants.FORECAST_EXECUTION_RATE);
 		add(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS);
 		add(MeasureConstants.CUMULATED_DISBURSEMENTS);
 		add(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS);
@@ -31,13 +30,11 @@ public class CustomMeasures {
 		add(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS);
 		add(MeasureConstants.CUMULATED_DISBURSEMENTS);
 		add(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS);
-		add(MeasureConstants.FORECAST_EXECUTION_RATE);
 	}};
 	
 	/** measures without raw totals */
 	public final static Set<String> NO_RAW_TOTALS = new HashSet<String>() {{
 		add(MeasureConstants.EXECUTION_RATE);
-		add(MeasureConstants.FORECAST_EXECUTION_RATE);
 	}};
 	
 	/** calculated members dependencies, that will be removed if dependent measure is not present */
@@ -45,6 +42,5 @@ public class CustomMeasures {
 		put(MeasureConstants.EXECUTION_RATE, Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS));
 		put("Total Filtered Actual Disbursements", Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS));
 		put("Total Filtered Planned Disbursements", Arrays.asList(MeasureConstants.PLANNED_DISBURSEMENTS));
-		put(MeasureConstants.FORECAST_EXECUTION_RATE, Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PIPELINE_MTEF_PROJECTIONS, MeasureConstants.PROJECTION_MTEF_PROJECTIONS));
 	}};
 }

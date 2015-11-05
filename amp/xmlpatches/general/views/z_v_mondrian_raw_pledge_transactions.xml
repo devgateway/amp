@@ -23,6 +23,7 @@
 			    CREATE OR REPLACE VIEW v_mondrian_raw_pledge_transactions AS 
 SELECT <!-- pledge funding -->
 	pf.pledge_id AS pledge_id,
+	pf.funding_id AS funding_id,
 	pf.amp_pledge_funding_id AS amp_fund_detail_id,
 	pf.transaction_type,
 	pf.adjustment_type,

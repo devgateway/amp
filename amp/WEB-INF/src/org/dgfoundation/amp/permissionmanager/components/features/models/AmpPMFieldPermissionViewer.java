@@ -6,6 +6,7 @@ package org.dgfoundation.amp.permissionmanager.components.features.models;
 import java.io.Serializable;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.PermissionMap;
@@ -25,6 +26,9 @@ public class AmpPMFieldPermissionViewer implements Comparable, Serializable{
 
 	public AmpPMFieldPermissionViewer(PermissionMap pm) {
 		this.fullName  	= FeaturesUtil.getModuleNameVisibility(pm.getObjectIdentifier());
+		if (fullName == null) {
+			System.out.println(pm.getObjectIdentifier());
+		}
 		this.path		= this.getPath(fullName);
 		this.name 		= this.getShortName(fullName);
 		this.strategy	= getStringBuilder(pm).toString();
@@ -67,13 +71,13 @@ public class AmpPMFieldPermissionViewer implements Comparable, Serializable{
 
 	
 	public String getPath(String s) {
-		if(s.contains("/"))
+		if(StringUtils.isNotEmpty(s) && s.contains("/"))
 			return s.substring(0,s.lastIndexOf("/"));
 		return s;
 	}
 	
 	public String getShortName(String s) {
-		if(s.contains("/"))
+		if(StringUtils.isNotEmpty(s) && s.contains("/"))
 			return s.substring(s.lastIndexOf("/")+1, s.length());
 		return s;
 	}

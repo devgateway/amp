@@ -2769,7 +2769,7 @@ public class ExportActivityToWord extends Action {
     }
     
     private void renderMtefTotals(ExportSectionHelper mtefProjections, String totalType, String totalTitle, double totalAmount, String currencyCode) {
-    	String total = TranslatorWorker.translateText(totalType) + " " + TranslatorWorker.translateText(totalTitle);
+    	String total = TranslatorWorker.translateText(totalType + " " + totalTitle);
      	String totalValue = formatNumber(totalAmount);
     	
 		mtefProjections.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));

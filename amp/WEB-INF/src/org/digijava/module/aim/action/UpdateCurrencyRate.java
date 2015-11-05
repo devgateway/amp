@@ -169,13 +169,17 @@ public class UpdateCurrencyRate extends Action {
 									//date = malawi_date_swap(date);
 									if (!is_valid_date(date))
 										throw new RuntimeException("invalid date, please use a dd/mm/yyyy format: " + date);
-									currencyRates = new CurrencyRates();
-									currencyRates.setCurrencyCode(code);
-									currencyRates.setExchangeRate(new Double(rate));
-									//DateTimeUtil.parseDate(date).toString();
-									currencyRates.setExchangeRateDate(date);
-									allCurrencyCodes.add(currencyRates.getCurrencyCode());
-									col.add(currencyRates);
+									
+									// to avoid "amp_currency_rate_check" constraint violation in DB
+									if(!baseCurrency.equalsIgnoreCase(code)) {
+										currencyRates = new CurrencyRates();
+										currencyRates.setCurrencyCode(code);
+										currencyRates.setExchangeRate(new Double(rate));
+										//DateTimeUtil.parseDate(date).toString();
+										currencyRates.setExchangeRateDate(date);
+										allCurrencyCodes.add(currencyRates.getCurrencyCode());
+										col.add(currencyRates);
+									}
 								} 
 							}
 							

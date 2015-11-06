@@ -100,6 +100,14 @@ public class MtefConverter {
 		this.mtefInfos = Collections.unmodifiableMap(mtefInfos);
 	}
 	
+	public static int getMtefStartDayCode() {
+		return MondrianETL.MTEF_RANGES_START_DAY_CODE + ArConstants.MIN_SUPPORTED_YEAR - 100;
+	}
+	
+	public static int getMtefEndDayCode() {
+		return MondrianETL.MTEF_RANGES_START_DAY_CODE + ArConstants.MAX_SUPPORTED_YEAR + 100;
+	}
+	
 	protected void addIfMtef(AmpReportColumn arc, SortedSet<Integer> years, String prefix) {
 		Integer yearNr = arc.getColumn().getMtefYear(prefix);
 		if (yearNr != null) {

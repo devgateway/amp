@@ -31,6 +31,7 @@ import org.dgfoundation.amp.reports.CustomMeasures;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
 import org.dgfoundation.amp.reports.mondrian.MondrianSQLFilters;
+import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -105,6 +106,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		contents = contents.replaceAll("@@currency@@", Long.toString(getReportCurrency().getAmpCurrencyId()));
 		contents = contents.replaceAll("@@calendar@@", getReportCalendarTag());
 		contents = updateDateLimits(contents, getReportSelectedYear());
+		contents = configureDatesSource(contents);
 		
 		// area for (pledges + activities) reports hacks. Holding my nose while writing this - let whatever genius wanted Mondrian as a report engine maintain this PoS :D
 		boolean isDonorReportWithPledges = (currentReport.get().getReportType() != ArConstants.PLEDGES_TYPE && currentReport.get().isAlsoShowPledges());
@@ -651,5 +653,39 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			factTable = MondrianTablesRepository.FACT_TABLE_VIEW_NO_DATE_FILTER;
 		}
 		return factTable;
+	}
+	
+	protected String configureDatesSource(String contents) {
+		String mondrian_date_source = "@@mondrian_date_source%d@@";
+		String datesSource = null;
+		if (hasMTEFs()) {
+			datesSource = "<Table name=\"mondrian_dates\" />";
+		} else {
+			String minCode = String.valueOf(MtefConverter.getMtefStartDayCode());
+			String maxCode = String.valueOf(MtefConverter.getMtefEndDayCode());
+			datesSource = "<View alias=\"v_mondrian_dates_%d\">"
+				+ "				<SQL dialect=\"generic\">"
+				+ "					<![CDATA["
+				+ "					SELECT * FROM mondrian_dates WHERE NOT (day_code >=" + minCode + " AND day_code <= " + maxCode +")"
+				+ "					]]>"
+				+ "				</SQL>"
+				+ "			</View>";
+		}
+		for (int refId = 1; refId <= 4; refId++) {
+			contents = contents.replaceAll(String.format(mondrian_date_source, refId), String.format(datesSource, refId));
+		}
+		return contents;
+	}
+	
+	protected boolean hasMTEFs() {
+		List<ReportMeasure> measures = currentReport.get().getMeasures();
+		if (measures != null && measures.size() > 0) {
+			for (ReportMeasure measure : measures) {
+				if (CustomMeasures.MTEFs.contains(measure.getMeasureName())) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

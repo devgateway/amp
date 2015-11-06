@@ -43,4 +43,13 @@ public class CustomMeasures {
 		put("Total Filtered Actual Disbursements", Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS));
 		put("Total Filtered Planned Disbursements", Arrays.asList(MeasureConstants.PLANNED_DISBURSEMENTS));
 	}};
+	
+	/** MTEF type measures that require some workarounds */
+	public final static Set<String> MTEFs = new HashSet<String>() {{
+		add("MTEF");
+		add(MeasureConstants.MTEF_PROJECTIONS);
+		add(MeasureConstants.REAL_MTEFS);
+		add(MeasureConstants.PIPELINE_MTEF_PROJECTIONS);
+		add(MeasureConstants.PROJECTION_MTEF_PROJECTIONS);
+	}};
 }

@@ -185,7 +185,7 @@
 		
 	<Dimension name="AMP Date" type="TimeDimension">
 		<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day_code" name="Dates">
-			<Table name="mondrian_dates" />
+			@@mondrian_date_source1@@
 			<Level name="Year" column="year_code@@calendar@@" nameColumn="year_name@@calendar@@" levelType="TimeYears" type="Integer" translated="false" />
 			<Level name="Quarter" column="quarter_code@@calendar@@" ordinalColumn="quarter_code@@calendar@@" nameColumn="quarter_name@@calendar@@" levelType="TimeQuarters" type="Integer" translated="false" />
 			<Level name="Month" column="month_code@@calendar@@" ordinalColumn="month_code@@calendar@@" nameColumn="month_name@@calendar@@" levelType="TimeMonths" type="Integer"  translated="false" />
@@ -196,15 +196,15 @@
 			</Level>
 		</Hierarchy>
 		<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day_code" name="Year">
-		  <Table name="mondrian_dates" />
+		  @@mondrian_date_source2@@
 		  <Level name="Year" column="year_code@@calendar@@" nameColumn="year_name@@calendar@@" levelType="TimeYears" type="Integer" translated="false" />
 		</Hierarchy>
 		<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day_code" name="Quarter">
-		  <Table name="mondrian_dates" />
+		  @@mondrian_date_source3@@
 		  <Level name="Quarter" column="quarter_code@@calendar@@" ordinalColumn="quarter_code@@calendar@@" nameColumn="quarter_name@@calendar@@" levelType="TimeQuarters" type="Integer" translated="false" />
 		</Hierarchy>
 		<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day_code" name="Month">
-		  <Table name="mondrian_dates" />
+		  @@mondrian_date_source4@@
 		  <Level name="Month" column="month_code@@calendar@@" ordinalColumn="month_code@@calendar@@" nameColumn="month_name@@calendar@@" levelType="TimeMonths" type="Integer" translated="false" />
 		</Hierarchy>
 	</Dimension>

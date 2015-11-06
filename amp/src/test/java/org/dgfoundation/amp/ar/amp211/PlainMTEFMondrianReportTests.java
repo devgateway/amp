@@ -248,4 +248,18 @@ public class PlainMTEFMondrianReportTests extends MondrianReportsTestCase {
 	public void testMtefProjectionsAsColumns() {
 		
 	}
+	
+	@Test
+	public void test_AMP_21561_NonMtefReportsNotBroken() {
+		ReportAreaForTests correctReportEn = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "2011-January-Actual Commitments", "0", "2011-February-Actual Commitments", "0", "2011-March-Actual Commitments", "0", "2011-April-Actual Commitments", "0", "2011-May-Actual Commitments", "0", "2011-June-Actual Commitments", "0", "2011-July-Actual Commitments", "0", "2011-August-Actual Commitments", "213 231", "2011-September-Actual Commitments", "0", "2011-October-Actual Commitments", "0", "2011-November-Actual Commitments", "0", "2011-December-Actual Commitments", "0", "2014-January-Actual Commitments", "0", "2014-February-Actual Commitments", "0", "2014-March-Actual Commitments", "32 000", "2014-April-Actual Commitments", "0", "2014-May-Actual Commitments", "0", "2014-June-Actual Commitments", "0", "2014-July-Actual Commitments", "0", "2014-August-Actual Commitments", "0", "2014-September-Actual Commitments", "0", "2014-October-Actual Commitments", "0", "2014-November-Actual Commitments", "0", "2014-December-Actual Commitments", "0", "Total Measures-Actual Commitments", "245 231")
+	    .withChildren(
+	      new ReportAreaForTests()    .withContents("Project Title", "TAC_activity_1", "2011-January-Actual Commitments", "", "2011-February-Actual Commitments", "", "2011-March-Actual Commitments", "", "2011-April-Actual Commitments", "", "2011-May-Actual Commitments", "", "2011-June-Actual Commitments", "", "2011-July-Actual Commitments", "", "2011-August-Actual Commitments", "213 231", "2011-September-Actual Commitments", "", "2011-October-Actual Commitments", "", "2011-November-Actual Commitments", "", "2011-December-Actual Commitments", "", "2014-January-Actual Commitments", "", "2014-February-Actual Commitments", "", "2014-March-Actual Commitments", "", "2014-April-Actual Commitments", "", "2014-May-Actual Commitments", "", "2014-June-Actual Commitments", "", "2014-July-Actual Commitments", "", "2014-August-Actual Commitments", "", "2014-September-Actual Commitments", "", "2014-October-Actual Commitments", "", "2014-November-Actual Commitments", "", "2014-December-Actual Commitments", "", "Total Measures-Actual Commitments", "213 231"),
+	      new ReportAreaForTests()    .withContents("Project Title", "activity with primary_program", "2011-January-Actual Commitments", "", "2011-February-Actual Commitments", "", "2011-March-Actual Commitments", "", "2011-April-Actual Commitments", "", "2011-May-Actual Commitments", "", "2011-June-Actual Commitments", "", "2011-July-Actual Commitments", "", "2011-August-Actual Commitments", "", "2011-September-Actual Commitments", "", "2011-October-Actual Commitments", "", "2011-November-Actual Commitments", "", "2011-December-Actual Commitments", "", "2014-January-Actual Commitments", "", "2014-February-Actual Commitments", "", "2014-March-Actual Commitments", "32 000", "2014-April-Actual Commitments", "", "2014-May-Actual Commitments", "", "2014-June-Actual Commitments", "", "2014-July-Actual Commitments", "", "2014-August-Actual Commitments", "", "2014-September-Actual Commitments", "", "2014-October-Actual Commitments", "", "2014-November-Actual Commitments", "", "2014-December-Actual Commitments", "", "Total Measures-Actual Commitments", "32 000")  );
+
+		
+		runMondrianTestCase("AMP-21561 Doubled Column",
+				Arrays.asList("TAC_activity_1", "activity with primary_program"), 
+				correctReportEn, "en");
+	}
 }

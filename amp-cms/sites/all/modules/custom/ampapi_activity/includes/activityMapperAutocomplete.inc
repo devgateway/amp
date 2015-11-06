@@ -28,7 +28,8 @@ class activityMapperAutocompleteBase extends activityMapperBase implements activ
         $returned_data = $returned_data->children;
         break;
     }
-
+    // Offer subclasses a possibility to filter-out the returned data.
+    $returned_data = $this->filterData($info, $returned_data);
     return $this->getMatchedValues($info, $returned_data);
   }
 
@@ -127,6 +128,20 @@ class activityMapperAutocompleteBase extends activityMapperBase implements activ
   }
 
   /**
+   * Public function that filters out the data according the certain values in $info.
+   *
+   * @param array $info
+   *   Info array.
+   * @param  array $data
+   *   Array of data that needs to be filtered.
+   * @return array
+   *   Filtered data.
+   */
+  public function filterData($info, $data) {
+    return $data;
+  }
+
+  /**
    * Test if the entry object show be included in the returned values or not.
    */
   private function _valueMatches(array $info, $entry, $search_string) {
@@ -213,14 +228,32 @@ class activityMapperSubFilterAutocomplete extends activityMapperAutocompleteBase
       return NULL;
     }
 
-    // Use sub-filter URL.
-    // @TODO: Fix organization role filters. AMP-19342
+    // This is the case where we use URL-based filtering (by changing the endpoint).
+    // Alternatively, see activityMapperAutocompleteBase::filterData().
+    $info['sub_filter_id'] = $sub_filter_type_id;
     if (isset($plugin['report filter endpoint']) && $plugin['report filter endpoint'] != 'filters/orgs') {
-      $info['sub_filter_id'] = $sub_filter_type_id;
       $info['endpoint'] = $plugin['report filter endpoint'] . '/' . $sub_filter_type_id;
     }
 
     return $info;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function filterData($info, $data) {
+    // Apply global / parent filter initially.
+    $filtered_data = parent::filterData($info, $data);
+
+    // Now, for filters/orgs, we want to apply sub_filter_id filtering.
+    if ($info['endpoint'] == 'filters/orgs' && isset($info['sub_filter_id'])) {
+      foreach ($filtered_data as $fd_key => $row) {
+        if (!in_array($info['sub_filter_id'], $row->rolesIds)) {
+          unset($filtered_data[$fd_key]);
+        }
+      }
+    }
+    return $filtered_data;
   }
 
   private function _getSubFilterTypeId($plugin) {

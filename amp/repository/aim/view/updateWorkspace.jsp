@@ -449,7 +449,7 @@ function workspaceChangeType(){
 
 	if(document.aimUpdateWorkspaceForm.workspaceType.value == "Management"){
 		//document.aimUpdateWorkspaceForm.addActivity.checked = false;
-		//document.aimUpdateWorkspaceForm.computation.checked = false;
+		    document.aimUpdateWorkspaceForm.computation.checked = false;
 			$("tr[id^='team_']").hide();
 			$("tr[id^='management_']").show('fast');
 			$("tr[id^='computation_']").hide()

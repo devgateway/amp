@@ -2,17 +2,19 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.UserDetailForm;
@@ -34,17 +36,16 @@ public class ViewUserProfile
         HttpSession httpSession = request.getSession();
         
         User user = null;
-        Long userid = null;
+        Long userId = null;
         String email = "";
         
         TeamMember teamMember = (TeamMember) httpSession.getAttribute("currentMember");       
         AmpTeamMember member = null;
         List<TeamMember> memberInformationn = new ArrayList<TeamMember>();
         
-        if (request.getParameter("id") != null) {
-            userid = Long.parseLong(request.getParameter("id"));
-        }
-        if (request.getParameter("email") != null && ! "".equals(request.getParameter("email"))) {
+        if (StringUtils.isNotEmpty(request.getParameter("id"))) {
+            userId = Long.parseLong(request.getParameter("id"));
+        } else if (StringUtils.isNotEmpty(request.getParameter("email"))) {
             email = request.getParameter("email");
             user = DbUtil.getUser(email);
             if (user == null || user.getId() == null) {
@@ -52,7 +53,7 @@ public class ViewUserProfile
                  saveErrors(request, errors);
                  return mapping.findForward("forward");
             } else {
-            	userid = user.getId();
+            	userId = user.getId();
             }
         }
 
@@ -60,38 +61,36 @@ public class ViewUserProfile
             if (user != null) {
                 member = TeamMemberUtil.getAmpTeamMember(user);
             } else {
-                member = TeamMemberUtil.getAmpTeamMember(userid);
+                member = TeamMemberUtil.getAmpTeamMember(userId);
             }
-
-            if (member == null && request.getParameter("id") != null) {
-                if (userid.equals(teamMember.getMemberId())) {
-                    user = DbUtil.getUser(teamMember.getMemberId());
-                    memberInformationn.add(new TeamMember(teamMember.getTeamName(),teamMember.getRoleName()));
-                } else {
-                	user = DbUtil.getUser(userid);
-                	if (user == null){
-                		errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.invalidUserId"));
-                    	saveErrors(request, errors);
-                    	mapping.findForward("forward");
-                	}
-                }
-            } else if (member != null) {
-//            	user = DbUtil.getUser(member.getUser().getId()); 
-//            	if(user.getAssignedOrgId()!=null && user.getOrganizationName() == null) {
-//                    AmpOrganisation organization = org.digijava.module.aim.util.DbUtil.getOrganisation(user.getAssignedOrgId());
-//                    if(organization != null){
-//                    	user.setOrganizationName( organization.getName() );
-//                    }
-    //
-//                }
+            
+            if (member == null) {
+            	if(userId != null) {
+	                if (userId.equals(teamMember.getMemberId())) {
+	                    user = DbUtil.getUser(teamMember.getMemberId());
+	                    memberInformationn.add(new TeamMember(teamMember.getTeamName(), teamMember.getRoleName()));
+	                } else {
+	                	user = DbUtil.getUser(userId);
+	                	if (user == null) {
+	                		errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.invalidUserId"));
+	                    	saveErrors(request, errors);
+	                    	mapping.findForward("forward");
+	                	}
+	                }
+            	}
+            } else {
             	user = DbUtil.getUser(member.getUser().getId());    
-                if (user != null) {
-                    memberInformationn = TeamMemberUtil.getMemberInformation(user.getId());
-                }
             }
+        } else {
+        	user = DbUtil.getUser(userId);
         }
+        
 
         if (user != null) {
+        	if (memberInformationn.size() == 0) {
+        		memberInformationn = TeamMemberUtil.getMemberInformation(user.getId());
+        	}
+        	
             formBean.setAddress(user.getAddress());
             formBean.setFirstNames(user.getFirstNames());
             formBean.setLastName(user.getLastName());

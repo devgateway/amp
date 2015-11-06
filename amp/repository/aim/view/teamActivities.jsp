@@ -280,9 +280,7 @@
 										<logic:empty name="aimTeamActivitiesForm" property="activities">
 											<tr>
 												<td class="inside1" align="center" colspan="4">
-																	<digi:trn key="aim:noNonDraftActivitiesPresent">
-																		No activities present. You cannot reassign draft activities.
-													</digi:trn>
+													<digi:trn key="aim:noNonDraftActivitiesPresent">No activities present.</digi:trn>
 												</td>
 											</tr>
 										</logic:empty>

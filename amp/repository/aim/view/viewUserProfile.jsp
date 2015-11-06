@@ -110,49 +110,39 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 							</td>
 						</tr>
 						<tr>
-							<td class="inside" colspan="2" align="center">&nbsp;
-								
-						  </td>
+							<td class="inside" colspan="2" align="center">&nbsp;</td>
 						</tr>
 						<tr>
 							<td class="inside" bgcolor="#C7D4DB" colspan="2" align="center">
 								<b><digi:trn key="aim:teamsAssociatedWith">Teams Associated with</digi:trn></b>
 							</td>
 						</tr>
-						
 						<tr>
-						<td colspan="2">
-						<div style="overflow: auto; height: 250px">
-						<table width="100%" class="inside">
-						<tr>
-							<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"  style="width:60%">
-								<digi:trn key="aim:teamName">Team Name</digi:trn>
+							<td colspan="2">
+								<div style="overflow: auto; height: 250px">
+									<table width="100%" class="inside">
+										<tr>
+											<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="width:60%;" align="center">
+												<b><digi:trn key="aim:teamName">Team Name</digi:trn></b>
+											</td>
+											<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="center">
+												<b><digi:trn key="aim:role">Role</digi:trn></b>
+											</td>
+										</tr>
+										
+										<c:forEach var="teamMemberDetail" items="${aimUserDetailForm.teamMemberTeamHelpers}">
+											<tr>
+					                           	<td class="inside" style="width:60%"><c:out value="${teamMemberDetail.teamName}"/></td>
+												<td class="inside"><digi:trn>${teamMemberDetail.roleName}</digi:trn></td>
+				                       		</tr>
+										</c:forEach>
+										
+									</table>
+								</div>
 							</td>
-							<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
-								<digi:trn key="aim:role">Role</digi:trn>
-							</td>
-						</tr>
-						
-						<c:forEach var="teamMemberDetail" items="${aimUserDetailForm.teamMemberTeamHelpers}">
-							
-							<tr>
-                                                            <td class="inside" style="width:60%">
-                                                                <c:out value="${teamMemberDetail.teamName}"/>
-                                                            </td>
-							<td class="inside">
-								<digi:trn>${teamMemberDetail.roleName}</digi:trn>
-							</td>
-                                                        </tr>
-								
-						
-						</c:forEach>
-						</table>
-						</div>
-						</td>
 						</tr>
 						</table>
 						</c:if>
-
 <br>					
 <div class="buttons" align="center">					
 	<input type="button" value="<digi:trn>Close</digi:trn>" class="buttonx_sm btn" onclick="hidePWorkspaceframe()">

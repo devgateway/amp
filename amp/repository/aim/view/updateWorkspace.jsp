@@ -465,7 +465,7 @@ function workspaceChangeType(){
 
 	if(document.aimUpdateWorkspaceForm.workspaceType.value == "Management"){
 		//document.aimUpdateWorkspaceForm.addActivity.checked = false;
-		//document.aimUpdateWorkspaceForm.computation.checked = false;
+		document.aimUpdateWorkspaceForm.computation.checked = false;
 			$("tr[id^='private_workspace']").hide(); //hide private ws
 			//unchecking private workspace checkbox in case its selected
 			$( "input[name='isolated']" ).prop('checked',false)

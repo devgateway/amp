@@ -130,7 +130,8 @@ var QueryRouter = Backbone.Router.extend({
 					filters: data.reportMetadata.reportSpec.filters,
 					settings: data.reportMetadata.reportSpec.settings,
 					hierarchies : data.reportMetadata.reportSpec.hierarchies,
-					columns : data.reportMetadata.reportSpec.columns
+					columns : data.reportMetadata.reportSpec.columns,
+					report_type : data.reportMetadata.reportSpec.reportType
 				},
 				initialize: function(){
 					//console.log("model created");

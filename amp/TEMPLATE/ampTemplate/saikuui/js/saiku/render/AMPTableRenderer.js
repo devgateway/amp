@@ -360,7 +360,9 @@ function generateDataRows(page, options) {
 	}
 	
 	// AMP-19189 fill the cell containing data with colors
-	fillContentsWithColors();
+	if (this.draftColumn && this.approvalStatusColumn && this.activityIdColumn) {
+		fillContentsWithColors();
+	}
 
 	for (var i = 0; i < this.contentMatrix.length; i++) {
 		// Skip total rows for CSV.

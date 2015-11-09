@@ -105,6 +105,7 @@ var SavedQuery = Backbone.Model.extend({
             formatter: Settings.CELLSET_FORMATTER,
             report_id: model.get('report_id'),
             report_token: model.get('report_token'),
+            report_type: model.get('report_type'),
             filters: model.get('filters'),
             raw_settings: model.get('settings'),
             hierarchies: model.get('hierarchies'),

@@ -132,7 +132,7 @@ var WorkspaceToolbar = Backbone.View.extend({
            	$(".export_dual_currency").hide();
     	}
 
-    	if (enabledGisFM && enabledGisFM.models[0].get('error') == undefined && enabledGisFM.models[0].get('GIS') !== undefined) {
+    	if (this.is_gis_enabled()) {
         	$(this.el).find('a.export_to_map').removeClass('disabled_toolbar');
         } else {
         	$(this.el).find('a.export_to_map').addClass('disabled_toolbar');
@@ -878,6 +878,14 @@ var WorkspaceToolbar = Backbone.View.extend({
     		reportIdentification=this.workspace.query.get('report_token');
     	}
     	return runUrl + reportIdentification;
+    },
+    
+    is_gis_enabled : function() {
+    // Map icon is enabled if FM "GIS" is enabled or the report type is not pledge
+    	return enabledGisFM && 
+    	enabledGisFM.models[0].get('error') == undefined && 
+    	enabledGisFM.models[0].get('GIS') !== undefined &&
+    	this.workspace.query.attributes.report_type != 5;
     }
 
 });

@@ -2924,7 +2924,7 @@ public class ExportActivityToPDF extends Action {
     }
     
 	private void renderMtefSection(PdfPTable fundingTable, Funding funding, String currencyCode) {
-		String output = TranslatorWorker.translateText("MTEF Projections:");
+		String output = TranslatorWorker.translateText("MTEF Projections") + ":";
         PdfPCell titleCell = new PdfPCell(new Paragraph(postprocessText(output), titleFont));
         titleCell.setBorder(0);
         titleCell.setBackgroundColor(new Color(255,255,204));

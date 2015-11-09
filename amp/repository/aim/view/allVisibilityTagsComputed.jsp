@@ -39,18 +39,18 @@
 <module:display name="/GIS"></module:display>
 
 <module:display  name="/Dashboards"></module:display>
-<feature:display name="/Top Donors" module="/Dashboards"/>
-<field:display name="/Show Names As Acronyms" feature="/Top Donors""/>
-<feature:display name="/Top Regions" module="/Dashboards"/>
-<feature:display name="/Top Sectors" module="/Dashboards"/>
-<feature:display name="/Top Donor Group" module="/Dashboards"/>
-<feature:display name="/Aid Predictability" module="/Dashboards"/>
-<feature:display name="/Funding Type" module="/Dashboards"/>
-<feature:display name="/Responsible Organizations" module="/Dashboards"/>
-<feature:display name="/Beneficiary Agencies" module="/Dashboards"/>
-<feature:display name="/Executing Agencies" module="/Dashboards"/>
-<feature:display name="/Implementing Agencies" module="/Dashboards"/>
-<feature:display name="/Peace-building and State-building Goals" module="/Dashboards"/>
+<feature:display name="Top Donors" module="/Dashboards"/>
+<field:display name="Show Names As Acronyms" feature="Top Donors""/>
+<feature:display name="Top Regions" module="/Dashboards"/>
+<feature:display name="Top Sectors" module="/Dashboards"/>
+<feature:display name="Top Donor Group" module="/Dashboards"/>
+<feature:display name="Aid Predictability" module="/Dashboards"/>
+<feature:display name="Funding Type" module="/Dashboards"/>
+<feature:display name="Responsible Organizations" module="/Dashboards"/>
+<feature:display name="Beneficiary Agencies" module="/Dashboards"/>
+<feature:display name="Executing Agencies" module="/Dashboards"/>
+<feature:display name="Implementing Agencies" module="/Dashboards"/>
+<feature:display name="Peace-building and State-building Goals" module="/Dashboards"/>
 
 <module:display name="HELP"></module:display> 
 <module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display> 

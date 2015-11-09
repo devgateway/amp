@@ -44,17 +44,17 @@ public class DashboardsFMSettings extends DataVisibility implements FMSettings {
 	
 	@SuppressWarnings("serial")
 	private static final Set<String> allPossibleValuesSet = new HashSet<String>() {{
-		add("/Aid Predictability");
-		add("/Funding Type");
-		add("/Top Donors");
-		add("/Top Regions");
-		add("/Top Donor Group");
-		add("/Top Sectors");
-		add("/Responsible Organizations");
-		add("/Implementing Agencies");
-		add("/Beneficiary Agencies");
-		add("/Executing Agencies");
-		add("/Peace-building and State-building Goals");
+		add("Aid Predictability");
+		add("Funding Type");
+		add("Top Donors");
+		add("Top Regions");
+		add("Top Donor Group");
+		add("Top Sectors");
+		add("Responsible Organizations");
+		add("Implementing Agencies");
+		add("Beneficiary Agencies");
+		add("Executing Agencies");
+		add("Peace-building and State-building Goals");
 	}};
 	
 	@SuppressWarnings("serial")
@@ -67,17 +67,17 @@ public class DashboardsFMSettings extends DataVisibility implements FMSettings {
 
 	@SuppressWarnings("serial")
 	protected static final Map<String, String> featuresToMeasuresMap = new HashMap<String, String>(){{
-		put("/Aid Predictability", "Aid Predictability");
-		put("/Funding Type", "Funding Type");
-		put("/Top Donors", "Top Donors");
-		put("/Top Regions", "Top Regions");
-		put("/Top Donor Group", "Top Donor Group");
-		put("/Responsible Organizations", "Responsible Organizations");
-		put("/Top Sectors", "Top Sectors");
-		put("/Implementing Agencies", "Implementing Agencies");
-		put("/Beneficiary Agencies", "Beneficiary Agencies");
-		put("/Executing Agencies", "Executing Agencies");
-		put("/Peace-building and State-building Goals", "Peace-building and State-building Goals");  
+		put("Aid Predictability", "Aid Predictability");
+		put("Funding Type", "Funding Type");
+		put("Top Donors", "Top Donors");
+		put("Top Regions", "Top Regions");
+		put("Top Donor Group", "Top Donor Group");
+		put("Responsible Organizations", "Responsible Organizations");
+		put("Top Sectors", "Top Sectors");
+		put("Implementing Agencies", "Implementing Agencies");
+		put("Beneficiary Agencies", "Beneficiary Agencies");
+		put("Executing Agencies", "Executing Agencies");
+		put("Peace-building and State-building Goals", "Peace-building and State-building Goals");  
 	}};
 	
 	protected Collection<String> getAllPrecursors() {
@@ -129,17 +129,17 @@ public class DashboardsFMSettings extends DataVisibility implements FMSettings {
 	@Override
 	protected List<String> getVisibleByDefault() {
 		List<String> currentlyVisible = new ArrayList<>();
-		currentlyVisible.add("/Aid Predictability");
-		currentlyVisible.add("/Funding Type");
-		currentlyVisible.add("/Top Donors");
-		currentlyVisible.add("/Top Regions");
-		currentlyVisible.add("/Top Donor Group");
-		currentlyVisible.add("/Responsible Organizations");
-		currentlyVisible.add("/Top Sectors");
-		currentlyVisible.add("/Beneficiary Agencies");
-		currentlyVisible.add("/Implementing Agencies");
-		currentlyVisible.add("/Executing Agencies");
-		currentlyVisible.add("/Peace-building and State-building Goals");
+		currentlyVisible.add("Aid Predictability");
+		currentlyVisible.add("Funding Type");
+		currentlyVisible.add("Top Donors");
+		currentlyVisible.add("Top Regions");
+		currentlyVisible.add("Top Donor Group");
+		currentlyVisible.add("Responsible Organizations");
+		currentlyVisible.add("Top Sectors");
+		currentlyVisible.add("Beneficiary Agencies");
+		currentlyVisible.add("Implementing Agencies");
+		currentlyVisible.add("Executing Agencies");
+		currentlyVisible.add("Peace-building and State-building Goals");
 		
 		return currentlyVisible;
 	}

@@ -130,7 +130,7 @@ public class DashboardsService {
 
 		switch (type.toUpperCase()) {
 		case "DO":
-			if (FeaturesUtil.isVisibleField("/Show Names As Acronyms")) {
+			if (FeaturesUtil.isVisibleField("Show Names As Acronyms")) {
 				spec.addColumn(new ReportColumn(MoConstants.ATTR_ORG_ACRONYM));
 				spec.addColumn(new ReportColumn(ColumnConstants.DONOR_ID));
 			} else {

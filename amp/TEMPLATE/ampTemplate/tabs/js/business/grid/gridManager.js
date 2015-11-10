@@ -240,32 +240,42 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 								// Calculated status based on draft and
 								// approval status.
 								var getApprovalStatus = function(draft, approvalStatus) {
+									var retVal ;
+									var isNew = false;
 									if (draft == 'true') {
 										if (approvalStatus == '2' || approvalStatus == '1') {
-											return statusMapping.Existing_Draft;
+											retVal = statusMapping.Existing_Draft;
 										} else {
-											$(row).find('.wrap-title')[0].textContent = '* ' + $(row).find('.wrap-title')[0].textContent; 
-											return statusMapping.New_Draft;
+											isNew = true;
+											retVal = statusMapping.New_Draft;
 										}
 									} else {
 										switch (approvalStatus) {
 										case '1':
 										case '3':
-											return statusMapping.Approved;
+											retVal = statusMapping.Approved;
 											break;
 										case '2':
 										case '5':
 										case '6':
-											return statusMapping.Existing_Unvalidated;									
+											retVal = statusMapping.Existing_Unvalidated;									
 											break;
 										case '4':
-											$(row).find('.wrap-title')[0].textContent = '* ' + $(row).find('.wrap-title')[0].textContent;
-											return statusMapping.New_Unvalidated;
+											isNew = true;
+											retVal = statusMapping.New_Unvalidated;
 											break;
 										default:
 											break;
 										}
 									}
+									if(isNew){
+										var starColumn = $(row).find(".wrap-title").first();
+										if(starColumn.length == 0){
+											starColumn = $(row).find(".wrap-cell").not("[style*='display:none']").first();
+										}
+										starColumn.text('* ' + starColumn.text());
+									}
+									return retVal;
 								};
 
 								// Assign colors for each row for loggued users.

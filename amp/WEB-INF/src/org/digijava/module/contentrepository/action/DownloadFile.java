@@ -2,6 +2,7 @@ package org.digijava.module.contentrepository.action;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Calendar;
 import java.util.Comparator;
 
 import javax.jcr.Node;
@@ -20,7 +21,6 @@ import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
-
 import org.springframework.util.FileCopyUtils;
 /**
  * 
@@ -52,11 +52,18 @@ public class DownloadFile extends Action {
 						return a.getUuid().compareTo(b.getUuid());
 					}
 				};
+				
 				request.getSession().setAttribute(Constants.MOST_RECENT_RESOURCES, new BoundedList<DocumentData>(5, documentDataComparator));
 			}
 			
 			NodeWrapper nodeWrapper = new NodeWrapper(node);
 			DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, nodeWrapper.getName(), null, null);
+			
+			/**
+            * We do not save this date to the document repository node
+            * Just refresh it for display purposes, indicating that document has just been accessed
+            */
+            documentData.setDate(Calendar.getInstance().getTime());
 			BoundedList<DocumentData> recentUUIDs = (BoundedList<DocumentData>)(request.getSession().getAttribute(Constants.MOST_RECENT_RESOURCES));
 			recentUUIDs.add(documentData);
 			
@@ -66,8 +73,7 @@ public class DownloadFile extends Action {
 		}
 
 		DocumentManagerUtil.logoutJcrSessions(request);
+		
 		return null;
 	}
-	
-
 }

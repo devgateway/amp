@@ -3,6 +3,7 @@ package org.digijava.module.aim.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -13,6 +14,7 @@ import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.dgfoundation.amp.utils.BoundedList;
 import org.digijava.kernel.ampapi.endpoints.documents.Documents;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -36,17 +38,38 @@ public class DesktopDocumentsUtil {
 			// TODO: Check why this is so slow.
 			Session jcrWriteSession = DocumentManagerUtil.getWriteSession(request);
 
-			ArrayList<DocumentData> list = new ArrayList<DocumentData>();
+			ArrayList<DocumentData> allDocuments = new ArrayList<DocumentData>();
 
 			DesktopDocumentsUtil desktopDocumentUtils = new DesktopDocumentsUtil();
 			Collection<DocumentData> tmp = desktopDocumentUtils.getTeamDocuments(tm, jcrWriteSession.getRootNode(), request);
+			allDocuments.addAll(tmp);
+			
 			// just keeps last top
-			list.addAll(tmp);
-			Collections.sort(list);
-			Collections.reverse(list);
+			BoundedList<DocumentData> downloadedDocs =
+	                (BoundedList<DocumentData>)(request.getSession().getAttribute(Constants.MOST_RECENT_RESOURCES));
+			
+			if (downloadedDocs != null) {
+	            allDocuments.addAll(downloadedDocs);
+	        }
+	        Collections.sort(allDocuments, new Comparator<DocumentData>() {
+	            @Override
+	            public int compare(DocumentData o1, DocumentData o2) {
+	            	if(o1 == null) {
+	            		if (o2 == null)
+	            			return 0;
+	            		return -1;
+	            	} 
+	            	
+	            	if (o2 == null) 
+	            		return 1;
+	                
+	            	return o2.getDate().compareTo(o1.getDate());
+	            }
+	        });
+
 
 			reducedList = new ArrayList<DocumentData>();
-			Iterator<DocumentData> it = list.iterator();
+			Iterator<DocumentData> it = allDocuments.iterator();
 			while (it.hasNext() && reducedList.size() <= top) {
 				DocumentData document = it.next();
 				// Checking to skip URLs
@@ -110,7 +133,7 @@ public class DesktopDocumentsUtil {
 				Boolean hasMakePublicRights = false;
 				Boolean hasDeleteRightsOnPublicVersion = false;
 
-				String uuid = documentNode.getUUID();
+				String uuid = documentNode.getIdentifier();
 				boolean isPublicVersion = uuidMapVer.containsKey(uuid);
 
 				if (isPublicVersion) { // This document is public and exactly
@@ -158,21 +181,24 @@ public class DesktopDocumentsUtil {
 						// Verify if the last (current) version is the public
 						// one.
 						Node lastVersion = DocumentManagerUtil.getNodeOfLastVersion(uuid, request);
-						String lastVerUUID = lastVersion.getUUID();
+						String lastVerUUID = lastVersion.getIdentifier();
 						if (uuidMapVer.containsKey(lastVerUUID)) {
 							documentData.setLastVersionIsPublic(true);
 						}
 
 					} else
 						documentData.setIsPublic(false);
-
-				}
-				// This is not the actual document node. It is the node of the
-				// public version. That's why one shouldn't have
-				// the above rights.
-				else {
+				} else {
+					// This is not the actual document node. It is the node of the
+					// public version. That's why one shouldn't have
+					// the above rights.
 					documentData.setShowVersionHistory(false);
 				}
+				
+				if (nodeWrapper.getCalendarDate() != null) {
+					documentData.setDate(nodeWrapper.getCalendarDate().getTime());
+				}
+				
 				documents.add(documentData);
 			}
 

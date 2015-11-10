@@ -811,7 +811,7 @@ public class ActivityUtil {
 				
 				if(temp.getType()!=null)
 					tdd.setCmDocTypeId(temp.getType().getId());
-				tdd.setDate(temp.getDate());
+				tdd.setDate(temp.getDate().getTime());
 				tdd.setYearofPublication(temp.getYear());
 				
 				if (temp.getWebLink() == null || temp.getWebLink().length() == 0){

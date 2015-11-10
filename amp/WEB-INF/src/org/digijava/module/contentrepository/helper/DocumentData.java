@@ -3,6 +3,7 @@ package org.digijava.module.contentrepository.helper;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +40,7 @@ public class DocumentData implements Comparable<DocumentData>, Serializable {
 	 * megabytes
 	 */
 	double fileSize			= 0;
-	Calendar date = null;
+	Date date = null;
 	String iconPath			= null;
 	String yearofPublication	= null;
 	
@@ -347,10 +348,10 @@ public class DocumentData implements Comparable<DocumentData>, Serializable {
 		
 		
 	}
-	public Calendar getDate() {
+	public Date getDate() {
 		return date;
 	}
-	public void setDate(Calendar date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 	

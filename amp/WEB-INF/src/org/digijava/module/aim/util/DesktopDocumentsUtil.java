@@ -56,12 +56,16 @@ public class DesktopDocumentsUtil {
         Collections.sort(allDocuments, new Comparator<DocumentData>() {
             @Override
             public int compare(DocumentData o1, DocumentData o2) {
-                if (o1 == null || o2 == null || o1.getDate() == null || o2.getDate() == null) {
-                    return 0;
-                } else {
-                    return o2.getDate().compareTo(o1.getDate());
-                }
-
+            	if(o1 == null) {
+            		if (o2 == null)
+            			return 0;
+            		return -1;
+            	} 
+            	
+            	if (o2 == null) 
+            		return 1;
+                
+            	return o2.getDate().compareTo(o1.getDate());
             }
         });
 
@@ -127,7 +131,7 @@ public class DesktopDocumentsUtil {
 				Boolean hasDeleteRights = false;
 				Boolean hasDeleteRightsOnPublicVersion = false;
 
-				String uuid = documentNode.getUUID();
+				String uuid = documentNode.getIdentifier();
 				boolean isPublicVersion = uuidMapVer.containsKey(uuid);
 
 				if (isPublicVersion) { // This document is public and exactly
@@ -176,21 +180,24 @@ public class DesktopDocumentsUtil {
 						// Verify if the last (current) version is the public
 						// one.
 						Node lastVersion = DocumentManagerUtil.getNodeOfLastVersion(uuid, request);
-						String lastVerUUID = lastVersion.getUUID();
+						String lastVerUUID = lastVersion.getIdentifier();
 						if (uuidMapVer.containsKey(lastVerUUID)) {
 							documentData.setLastVersionIsPublic(true);
 						}
-
 					} else
 						documentData.setIsPublic(false);
-
-				}
-				// This is not the actual document node. It is the node of the
-				// public version. That's why one shouldn't have
-				// the above rights.
-				else {
+				} else {
+					// This is not the actual document node. It is the node of the
+					// public version. That's why one shouldn't have
+					// the above rights.
+					
 					documentData.setShowVersionHistory(false);
 				}
+				
+				if (nodeWrapper.getCalendarDate() != null) {
+					documentData.setDate(nodeWrapper.getCalendarDate().getTime());
+				}
+				
 				documents.add(documentData);
 			}
 

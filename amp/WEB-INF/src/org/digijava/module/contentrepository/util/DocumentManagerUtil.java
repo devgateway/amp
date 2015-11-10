@@ -547,27 +547,32 @@ public class DocumentManagerUtil {
 	 * @param uuid
 	 * @return
 	 */
-	public static boolean deleteNode(Session session, String uuid){
-		if (uuid == null)
+	public static boolean deleteNode(Session session, String uuid) {
+		if (uuid == null) {
 			return false;
-		if (session == null)
+		}
+		
+		if (session == null) {
 			session = getWriteSession(TLSUtils.getRequest());
+		}
+		
 		boolean successfully = false;
 		String name = "";
 		try {
-			Node node = session.getNodeByUUID(uuid);
+			Node node = session.getNodeByIdentifier(uuid);
 			name = new NodeWrapper(node).tryGetName();
-			Node parent = node.getParent();
 			node.remove();
-			parent.save();			
+			session.save();
 			successfully = true;
+			
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(uuid, e);
 		}
 		finally{
-			logger.error(String.format("DELETED JackRabbit node with uuid = %s, name = %s, success: %b", uuid, name, successfully));
+			logger.info(String.format("DELETED JackRabbit node with uuid = %s, name = %s, success: %b", uuid, name, successfully));
 		}
+		
 		return false;
 	}
 	
@@ -667,29 +672,6 @@ public class DocumentManagerUtil {
 			return null;
 		}
 	}
-	
-//	public static boolean checkFileSize(FormFile formFile, ActionMessages errors) {
-//		int maxFileSizeInBytes		= Integer.MAX_VALUE;
-//		int maxFileSizeInMBytes		= Integer.MAX_VALUE;
-//		String maxFileSizeGS		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CR_MAX_FILE_SIZE); // File size in MB
-//		if (maxFileSizeGS != null) {
-//				maxFileSizeInMBytes		= Integer.parseInt( maxFileSizeGS );
-//				maxFileSizeInBytes		= 1024 * 1024 * maxFileSizeInMBytes; 
-//		}
-//		if ( formFile.getFileSize() > maxFileSizeInBytes) {
-//			errors.add("title", 
-//					new ActionMessage("error.contentrepository.addFile.fileTooLarge", maxFileSizeInMBytes + "")
-//					);
-//			return false;
-//			}
-//		if (formFile.getFileSize()<1){
-//			ActionMessage	error	= new ActionMessage("error.contentrepository.addFile.badPath");
-//			errors.add("title", error);
-//			return false;
-//		}
-//		return true;
-//	}
-
 	
 	public static boolean checkFileSize(FormFile formFile, ActionMessages errors) {
 		long maxFileSizeInBytes		= Long.MAX_VALUE;

@@ -49,6 +49,7 @@ public class DownloadFile extends Action {
 						return a.getUuid().compareTo(b.getUuid());
 					}
 				};
+				
 				request.getSession().setAttribute(Constants.MOST_RECENT_RESOURCES, new BoundedList<DocumentData>(5, documentDataComparator));
 			}
 			
@@ -59,7 +60,7 @@ public class DownloadFile extends Action {
              * We do not save this date to the document repository node
              * Just refresh it for display purposes, indicating that document has just been accessed
              */
-            documentData.setDate(Calendar.getInstance());
+            documentData.setDate(Calendar.getInstance().getTime());
 			BoundedList<DocumentData> recentUUIDs = (BoundedList<DocumentData>)(request.getSession().getAttribute(Constants.MOST_RECENT_RESOURCES));
 			recentUUIDs.add(documentData);
 			
@@ -69,8 +70,7 @@ public class DownloadFile extends Action {
 		}
 
 		DocumentManagerUtil.logoutJcrSessions(request);
+		
 		return null;
 	}
-	
-
 }

@@ -53,7 +53,13 @@ var Upgrade = Backbone.View.extend({
             $(this.el).html(this.template());
             Saiku.session.upgradeTimeout = current;
             if (typeof localStorage !== "undefined" && localStorage) {
-                localStorage.setItem("saiku.upgradeTimeout", current);
+            	try {
+            		localStorage.setItem("saiku.upgradeTimeout", current);
+            	} catch (e) {
+            		console.info(e);
+                	localStorage.clear();
+                	console.info("localStorage cleared!!!");
+            	}
             }
         }
         

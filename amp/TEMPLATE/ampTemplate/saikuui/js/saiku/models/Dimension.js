@@ -34,12 +34,16 @@ var Cube = Backbone.Model.extend({
             template_attributes: $(template_attributes).html(),
             data: response
         });
-
-
-        
-        typeof localStorage !== "undefined" && localStorage && localStorage.setItem("cube." + this.get('key'),
-                JSON.stringify(this));
-        
+      
+        try {
+	        if(typeof localStorage !== "undefined" && localStorage) {
+	        	localStorage.setItem("cube." + this.get('key'), JSON.stringify(this));
+	        }
+        } catch (e) {
+        	console.info(e);
+        	localStorage.clear();
+        	console.info("localStorage cleared!!!");
+        }
         return response;
     }
 });

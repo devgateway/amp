@@ -48,7 +48,15 @@ var SessionWorkspace = Backbone.Model.extend({
     refresh: function() {
         typeof localStorage !== "undefined" && localStorage && localStorage.clear();
         this.clear();
-        typeof localStorage !== "undefined" && localStorage && localStorage.setItem('saiku-version', Settings.VERSION);
+        try {
+	        if (typeof localStorage !== "undefined" && localStorage) {
+	        	localStorage.setItem('saiku-version', Settings.VERSION);
+	        }
+        } catch (e) {
+        	console.info(e);
+        	localStorage.clear();
+        	console.info("localStorage cleared!!!");
+        }
         this.fetch({success:this.process_datasources},{});
     },
         
@@ -60,7 +68,13 @@ var SessionWorkspace = Backbone.Model.extend({
     process_datasources: function(model, response) {
         // Save session in localStorage for other tabs to use
         if (typeof localStorage !== "undefined" && localStorage && localStorage.getItem('session') === null) {
-            localStorage.setItem('session', JSON.stringify(response));
+        	try {
+        		localStorage.setItem('session', JSON.stringify(response));
+        	} catch (e) {
+        		console.info(e);
+            	localStorage.clear();
+            	console.info("localStorage cleared!!!");
+        	}
             
             // Set expiration on localStorage to one day in the future
             var expires = (new Date()).getTime() +  Settings.LOCALSTORAGE_EXPIRATION;

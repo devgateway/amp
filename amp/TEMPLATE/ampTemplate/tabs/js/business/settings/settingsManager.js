@@ -77,7 +77,7 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'business/
 			app.TabsApp.dynamicContentRegion.currentView.legends.currentView.render();
 
 			// Destroy the dialog to unbind the event.
-			jQuery(settingsDialog.el).dialog('destroy');
+			jQuery(settingsDialog.el).dialog('destroy').remove();
 		});
 	};
 

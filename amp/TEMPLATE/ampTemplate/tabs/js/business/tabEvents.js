@@ -117,16 +117,11 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 				units = TranslationManager.getTranslated("Amounts in millions");
 				break;
 			}
+			var currencyCode = firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode') 
+				? firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode')
+				: app.TabsApp.settings.get('0').defaultId;
 			var legend = new Legend({
-				currencyCode : function(){
-					var reportCurrency = firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode');
-					if (reportCurrency)
-						return reportCurrency;
-					else {
-						//get default currency, which is mapped to '0' due to some brilliance of architectural mind
-						return app.TabsApp.settings.get('0').defaultId;
-					}
-					},
+				currencyCode : currencyCode,
 				units : units,
 				id : app.TabsApp.currentTab.get('id')
 			});

@@ -77,7 +77,9 @@ import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AdvancedReportUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.Session;
@@ -738,6 +740,13 @@ public class Reports {
 								.toString();
 						column = column.substring(column.indexOf("[") + 1, column.indexOf("]"));
 						newFilters.setSortBy("/" + column);
+					}
+					
+					if (formParams.get(EPConstants.SETTINGS) != null) {
+						String currency = ((LinkedHashMap<String, Object>) formParams.get(EPConstants.SETTINGS)).get("1").toString();
+						String calendar = ((LinkedHashMap<String, Object>) formParams.get(EPConstants.SETTINGS)).get("2").toString();
+						newFilters.setCurrency(CurrencyUtil.getAmpcurrency(currency));
+						newFilters.setCalendarType(FiscalCalendarUtil.getAmpFiscalCalendar(new Long(calendar)));
 					}
 					
 					logger.info(newFilters);

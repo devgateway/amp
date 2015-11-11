@@ -86,7 +86,8 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 			filters : transformedFilters,
 			reportData : reportNames,
 			sidx: sidx,
-			sord: sord
+			sord: sord,
+			settings: app.TabsApp.appliedSettings
 		});
 		var tabId = app.TabsApp.currentTab.get('id');
 		jQuery.ajax({

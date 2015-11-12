@@ -58,10 +58,14 @@ public class AMPReportExcelExport {
 	private static final Logger logger = Logger.getLogger(AMPReportExcelExport.class);
 
 	/**
-	 * generates a workbook containing data about 1 or 2 reports. Normally you'd want both reports to actually be the same one generated in different currencies,
-	 * but the code does not care and you can put as different reports as you want
-	 * @param report1 - the first report
-	 * @param report2 - the second report, might be null
+	 * generates a workbook containing data about 1 or 2 reports. Normally you'd want both reports to actually be the
+	 * same one generated in different currencies, but the code does not care and you can put as different reports as
+	 * you want
+	 * 
+	 * @param report1
+	 *            - the first report
+	 * @param report2
+	 *            - the second report, might be null
 	 */
 	public static byte[] generateExcel(ReportGenerationInfo report1, ReportGenerationInfo report2) throws IOException {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -76,7 +80,7 @@ public class AMPReportExcelExport {
 		logger.info("Return excel");
 		return os.toByteArray();
 	}
-	
+
 	protected static void addSheetsToWorkbook(Workbook wb, ReportGenerationInfo reportInfo) throws IOException {
 		// Generate html table.
 		String content = AMPJSConverter.convertToHtml(reportInfo.jb, reportInfo.type);
@@ -222,7 +226,8 @@ public class AMPReportExcelExport {
 			LinkedHashMap<String, Object> settings = (LinkedHashMap<String, Object>) queryModel.get("settings");
 			currency = settings.get(SettingsConstants.CURRENCY_ID).toString();
 			if (settings.containsKey(SettingsConstants.CALENDAR_TYPE_ID)) {
-				calendar = FiscalCalendarUtil.getAmpFiscalCalendar(new Long(settings.get(SettingsConstants.CALENDAR_TYPE_ID).toString())).getName();
+				calendar = FiscalCalendarUtil.getAmpFiscalCalendar(
+						new Long(settings.get(SettingsConstants.CALENDAR_TYPE_ID).toString())).getName();
 			}
 		}
 		Row currencyRow = sheet.createRow(i);
@@ -257,7 +262,7 @@ public class AMPReportExcelExport {
 	private static void generateSheet(Workbook wb, Sheet sheet, Document doc, int type, ReportSpecification report) {
 		int columns = report.getColumns().size();
 		int hierarchies = report.getHierarchies().size();
-		
+		boolean isSummaryReport = hierarchies == columns;
 		logger.info("Start generateSheet " + sheet.getSheetName());
 		Map<Integer, Integer> widths = new TreeMap<Integer, Integer>();
 		boolean emptyAsZero = FeaturesUtil
@@ -422,6 +427,11 @@ public class AMPReportExcelExport {
 			}
 			row.setHeight(cellHeight);
 			i++;
+		}
+
+		// If this is a "summary report" we need to "ignore" the last hierarchy in the post-processing.
+		if (isSummaryReport) {
+			hierarchies--;
 		}
 
 		// Postprocess according to sheet type.

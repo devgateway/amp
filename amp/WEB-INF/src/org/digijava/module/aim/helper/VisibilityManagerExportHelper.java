@@ -283,7 +283,7 @@ public class VisibilityManagerExportHelper {
 			while (xmlFieldIt.hasNext()) {
 				FieldType xmlField = (FieldType) xmlFieldIt.next();
 				
-				if(ampField.getName().equals(xmlField.getValue())){
+				if(ampField.getName().equals(xmlField.getValue()) && xmlField.isVisible()){
 					template.getFields().add(ampField);
 				}
 			}

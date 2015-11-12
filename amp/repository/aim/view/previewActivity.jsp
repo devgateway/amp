@@ -1498,59 +1498,60 @@ function collapseAll() {
 
 
 <!-- M & E  SECTION -->
-<fieldset>
-	<legend>
-		<span class=legend_label id="melink" style="cursor: pointer;">
-			<digi:trn>M &amp; E</digi:trn>
-		</span>	
-	</legend>
-	<div id="mediv" class="toggleDiv">
-
-		<table>
-			<field:display name="Activity Performance"  feature="Activity Dashboard">
-				<tr>
-					<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
-						<digi:trn key="aim:level">Activity Performance</digi:trn>:					
-					</td>
-					<td bgcolor="#ffffff">
-						<% if (actPerfChartUrl != null) { %>
-								<img src="<%= actPerfChartUrl %>" width="370" height="450" border="0" usemap="#<%= actPerfChartFileName %>"><br><br>
-						<% } else { %>
+<module:display name="M & E" parentModule="MONITORING AND EVALUATION">
+	<fieldset>
+		<legend>
+			<span class=legend_label id="melink" style="cursor: pointer;">
+				<digi:trn>M &amp; E</digi:trn>
+			</span>	
+		</legend>
+		<div id="mediv" class="toggleDiv">
+	
+			<table>
+				<field:display name="Activity Performance"  feature="Activity Dashboard">
+					<tr>
+						<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+							<digi:trn key="aim:level">Activity Performance</digi:trn>:					
+						</td>
+						<td bgcolor="#ffffff">
+							<% if (actPerfChartUrl != null) { %>
+									<img src="<%= actPerfChartUrl %>" width="370" height="450" border="0" usemap="#<%= actPerfChartFileName %>"><br><br>
+							<% } else { %>
+									<br><span class="red-log"><digi:trn key="aim:noDataPresentFor">No data present for</digi:trn>
+								    <digi:trn key="aim:activityPerformanceChart">Activity-Performance chart</digi:trn>
+								    </span><br><br>
+							<% } %>
+						</td>
+					</tr>
+				</field:display>
+		
+				<field:display name="Activity Risk"  feature="Activity Dashboard">
+					<tr>
+						<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+							<digi:trn key="aim:level">Activity Risk</digi:trn>:					
+						</td>
+						<td bgcolor="#ffffff">
+							<% if (actRiskChartUrl != null) { %>
+								<digi:trn key="aim:overallActivityRisk">Overall Risk</digi:trn>:
+								<font color="${riskColor}">
+		
+								<b><digi:trn key="<%=riskName%>"><%=riskName%></digi:trn></b>
+								</font>	
+								<img src="<%= actRiskChartUrl %>" width="370" height="350" border="0" usemap="#<%= actRiskChartFileName %>">
+								<br><br>
+							<% } else { %>
 								<br><span class="red-log"><digi:trn key="aim:noDataPresentFor">No data present for</digi:trn>
-							    <digi:trn key="aim:activityPerformanceChart">Activity-Performance chart</digi:trn>
+						  	    <digi:trn key="aim:activityRiskChart">Activity-Risk chart</digi:trn>
 							    </span><br><br>
-						<% } %>
-					</td>
-				</tr>
-			</field:display>
+							<% } %>										
+						</td>
+					</tr>
+				</field:display>
+				</table>
+		</div>
 	
-			<field:display name="Activity Risk"  feature="Activity Dashboard">
-				<tr>
-					<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
-						<digi:trn key="aim:level">Activity Risk</digi:trn>:					
-					</td>
-					<td bgcolor="#ffffff">
-						<% if (actRiskChartUrl != null) { %>
-							<digi:trn key="aim:overallActivityRisk">Overall Risk</digi:trn>:
-							<font color="${riskColor}">
-	
-							<b><digi:trn key="<%=riskName%>"><%=riskName%></digi:trn></b>
-							</font>	
-							<img src="<%= actRiskChartUrl %>" width="370" height="350" border="0" usemap="#<%= actRiskChartFileName %>">
-							<br><br>
-						<% } else { %>
-							<br><span class="red-log"><digi:trn key="aim:noDataPresentFor">No data present for</digi:trn>
-					  	    <digi:trn key="aim:activityRiskChart">Activity-Risk chart</digi:trn>
-						    </span><br><br>
-						<% } %>										
-					</td>
-				</tr>
-			</field:display>
-			</table>
-	</div>
-
-</fieldset>
-
+	</fieldset>
+</module:display>
 
 <!-- END OF M & E  SECTION -->
 

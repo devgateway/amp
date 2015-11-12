@@ -245,6 +245,7 @@ public class AMPReportExcelExport {
 	private static void generateSheet(Workbook wb, Sheet sheet, Document doc, int hierarchies, int columns, int type,
 			ReportSpecificationImpl report) {
 		logger.info("Start generateSheet " + sheet.getSheetName());
+		boolean isSummaryReport = hierarchies == columns;
 		Map<Integer, Integer> widths = new TreeMap<Integer, Integer>();
 		boolean emptyAsZero = FeaturesUtil
 				.getGlobalSettingValueBoolean(GlobalSettingsConstants.REPORTS_EMPTY_VALUES_AS_ZERO_XLS);
@@ -252,7 +253,6 @@ public class AMPReportExcelExport {
 		Element headerRows = doc.getElementsByTag("thead").first();
 		int i = 0;
 		int headers;
-		int totalColNumber = 0;
 		for (Element headerRowElement : headerRows.getElementsByTag("tr")) {
 			Row row = sheet.createRow(i);
 			int j = 0;
@@ -299,7 +299,6 @@ public class AMPReportExcelExport {
 				}
 				setMaxColWidth(widths, cell, j);
 				j++;
-				totalColNumber++;
 			}
 			i++;
 		}
@@ -408,6 +407,11 @@ public class AMPReportExcelExport {
 			}
 			row.setHeight(cellHeight);
 			i++;
+		}
+
+		// If this is a "summary report" we need to "ignore" the last hierarchy in the post-processing.
+		if (isSummaryReport) {
+			hierarchies--;
 		}
 
 		// Postprocess according to sheet type.

@@ -191,7 +191,7 @@ function generateHeaderHtml(headers) {
 					
 					var helpIcon = "";
 					if (this.headerMatrix[i][j].description) {
-						helpIcon = "<img src='/TEMPLATE/ampTemplate/images/help.gif's" +
+						helpIcon = "<img src='/TEMPLATE/ampTemplate/images/help.gif'" +
 								" style= 'padding-left:5px'" +
 								" title='" + this.headerMatrix[i][j].description + "'>"
 					}

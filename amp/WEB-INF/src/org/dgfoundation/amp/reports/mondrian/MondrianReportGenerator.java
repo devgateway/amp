@@ -8,7 +8,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -19,9 +19,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -890,19 +888,22 @@ public class MondrianReportGenerator implements ReportExecutor {
 		//<fully qualified column name, ReportOutputColumn instance>, where fully qualified means with all parents name: /root/root-child/root-grandchild/...
 		Map<String, ReportOutputColumn> reportColumnsByFullName = new LinkedHashMap<String,ReportOutputColumn>();
 		List<ReportOutputColumn> reportColumns = new ArrayList<ReportOutputColumn>(); //leaf report columns list
+		Set<String> allMeasureNames = getAllMeasureNames();
 
 		//build the list of available columns
 		if (rowAxis != null && rowAxis.getPositionCount() > 0 ) {
 			for (Member textColumn : rowAxis.getPositions().get(0).getMembers()) {
-				ReportOutputColumn reportColumn = new ReportOutputColumn(textColumn.getLevel().getCaption(), null, 
-						MondrianMapping.fromFullNameToColumnName.get(textColumn.getLevel().getUniqueName()));
+				String originalColumnName = MondrianMapping.fromFullNameToColumnName.get(textColumn.getLevel().getUniqueName());
+				
+				// get description of the measure which could be a column
+				String columnDescription = allMeasureNames.contains(originalColumnName) ? getMeasureDescription(originalColumnName) : null; 
+				
+				ReportOutputColumn reportColumn = new ReportOutputColumn(textColumn.getLevel().getCaption(), null, originalColumnName, columnDescription);
 				reportColumns.add(reportColumn);
 			}
 		} else if (spec.isPopulateReportHeadersIfEmpty()) {
 			addStaticColumnHeaders(reportColumns, spec);
 		}
-		
-		int colIdx = reportColumns.size();
 		
 		LinkedHashSet<String> outputtedMeasures = new LinkedHashSet<>(); // the set of the measures for which saiku generated an output (and we are supposed to generate totals)
 		//int measuresLeafPos = columnAxis.getAxisMetaData().getHierarchies().size();
@@ -914,7 +915,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 					fullColumnName += "/" +  measureColumn.getName();
 					ReportOutputColumn reportColumn = reportColumnsByFullName.get(fullColumnName);
 					if (reportColumn == null) {
-						reportColumn = new ReportOutputColumn(measureColumn.getCaption(), parent, measureColumn.getName());
+						String measureDescription = allMeasureNames.contains(measureColumn.getName()) ? getMeasureDescription( measureColumn.getName()) : null;
+						reportColumn = new ReportOutputColumn(measureColumn.getCaption(), parent, measureColumn.getName(), measureDescription);
 						reportColumnsByFullName.put(fullColumnName, reportColumn);
 					}
 					if (measureColumn.getDepth() == 0) { //lowest depth ==0 => this is leaf column
@@ -929,7 +931,6 @@ public class MondrianReportGenerator implements ReportExecutor {
 						//}
 					}
 				}
-				colIdx ++;
 			}
 		//add measures total columns
 		if (spec.isCalculateColumnTotals() && !GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria())) {
@@ -976,6 +977,17 @@ public class MondrianReportGenerator implements ReportExecutor {
 		}
 		
 		return measureDescription;
+	}
+	
+	private Set<String> getAllMeasureNames() {
+		Set<String> measureNames = new HashSet<String>();
+		List<AmpMeasures> measures = AdvancedReportUtil.getMeasureList();
+		
+		for (AmpMeasures m : measures) {
+			measureNames.add(m.getMeasureName());
+		}
+		
+		return measureNames;
 	}
 }
 

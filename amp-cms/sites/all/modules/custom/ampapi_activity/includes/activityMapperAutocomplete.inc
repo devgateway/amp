@@ -59,7 +59,6 @@ class activityMapperAutocompleteBase extends activityMapperBase implements activ
     if (in_array($info['type'], array('autocomplete', 'tokeninput'))) {
       $search_string = transliteration_get($info['string'], '', $language->language);
     }
-
     foreach ($entries as $entry) {
       if (count($matches) >= 10) {
         break;
@@ -224,6 +223,7 @@ class activityMapperSubFilterAutocomplete extends activityMapperAutocompleteBase
     $info = parent::getAutocompleteInfo($plugin, $data, $type);
 
     $sub_filter_type_id = $this->_getSubFilterTypeId($plugin);
+
     if (is_null($sub_filter_type_id)) {
       return NULL;
     }
@@ -272,27 +272,11 @@ class activityMapperSubFilterAutocomplete extends activityMapperAutocompleteBase
       return FALSE;
     }
 
-    if (isset($plugin['report sub-filter type'])) {
-      $lookup_type = $plugin['report sub-filter type'];
-    }
-    else {
-      $lookup_type = $plugin['report field key'];
-
-      // #ConsistentAPI.
-      if ($lookup_type == 'Donor Agency') {
-        $lookup_type = 'Donor';
-      }
-    }
+    // Setup the new and correct filterId value.
+    $look_up_filter = (isset($plugin['report sub-filter filter-id'])) ? $plugin['report sub-filter filter-id'] : '';
 
     foreach ($sub_filter_data as $info) {
-      if (isset($info->filterId) && $info->filterId == $lookup_type) {
-        return $info->id;
-      }
-
-      // The API is consistently un-consistent. "Organization Type" sub-filters
-      //don't have a filterId property.
-      // #ConsistentAPI.
-      if (isset($info->name) && $info->name == $lookup_type) {
+      if (isset($info->filterId) && $info->filterId == $look_up_filter) {
         return $info->id;
       }
     }

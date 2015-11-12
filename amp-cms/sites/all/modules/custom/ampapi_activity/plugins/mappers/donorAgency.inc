@@ -21,6 +21,9 @@ $plugin = array(
   'report filter endpoint' => 'filters/orgs',
   'report filter endpoint extra' => 'filters/org-roles',
 
+  // These are used to filter out entries:
+  // When filterId is available, we'll tr 'report sub-filter filter-id'.
+  'report sub-filter filter-id' => 'Donor',
   'handler' => 'donorAgencyMapper',
 );
 

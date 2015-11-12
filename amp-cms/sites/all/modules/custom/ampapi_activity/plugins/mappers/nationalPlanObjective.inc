@@ -18,7 +18,7 @@ $plugin = array(
   'report filter key' => 'National Planning Objectives Level 1 Id',  // Not sure if this is the one to use!
 
   'report filter endpoint' => 'filters/programs',
-  'report sub-filter type' => 'National Plan Objective',
+  'report sub-filter filter-id' => 'National Plan Objective',
   'report filter endpoint extra' => 'filters/programs',
 
   'handler' => 'nationalPlanObjectiveMapper',

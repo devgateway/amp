@@ -1032,14 +1032,18 @@ public class MondrianReportGenerator implements ReportExecutor {
 	protected void buildLeafAndTotalsHeaders(CellSetAxis rowAxis, CellSetAxis columnAxis) {
 		//<fully qualified column name, ReportOutputColumn instance>, where fully qualified means with all parents name: /root/root-child/root-grandchild/...
 		Map<String, ReportOutputColumn> reportColumnsByFullName = new LinkedHashMap<String,ReportOutputColumn>();
-		
+		Set<String> allMeasureNames = getAllMeasureNames();
 		List<ReportOutputColumn> leafColumns = new ArrayList<ReportOutputColumn>(); //leaf report columns list
 
 		//build the list of available columns
 		if (rowAxis != null && rowAxis.getPositionCount() > 0 ) {
 			for (Member textColumn : rowAxis.getPositions().get(0).getMembers()) {
+				String originalColumnName = MondrianMapping.fromFullNameToColumnName.get(textColumn.getLevel().getUniqueName());
+				// get description of the measure which could be a column
+				String columnDescription = allMeasureNames.contains(originalColumnName) ? getMeasureDescription(originalColumnName) : null; 
+				
 				ReportOutputColumn reportColumn = new ReportOutputColumn(textColumn.getLevel().getCaption(), null, 
-						MondrianMapping.fromFullNameToColumnName.get(textColumn.getLevel().getUniqueName()), null);
+						originalColumnName, columnDescription, null);
 				leafColumns.add(reportColumn);
 			}
 		} else if (spec.isPopulateReportHeadersIfEmpty()) {
@@ -1064,9 +1068,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 					if (reportColumn == null) {
 						String usedName = measureColumn.getName();
 						String usedCaption = measureColumn.getCaption();
-						String usedDescription = (i == members.size() - relevantDelta) ? 
-								getMeasureDescription(measureColumn.getName()) 
-								: null;
+						String usedDescription = (i == members.size() - relevantDelta) && allMeasureNames.contains(measureColumn.getName()) ? 
+								getMeasureDescription(measureColumn.getName()) : null;
 						if (i == members.size() - 1 && spec.getUsesFundingFlows() && usedName.equals("Undefined")) {
 							usedName = usedCaption = " ";
 						}
@@ -1134,10 +1137,21 @@ public class MondrianReportGenerator implements ReportExecutor {
 			AmpMeasures measure = AdvancedReportUtil.getMeasureByName(measureName);
 			measureDescription = measure != null ? measure.getDescription() : null;
 		} catch (RuntimeException e) {
-			logger.warn("Error in retrieving measure " + measureName);
+			logger.info("Could not retrieve measure " + measureName);
 		}
 		
 		return measureDescription;
+	}
+	
+	private Set<String> getAllMeasureNames() {
+		Set<String> measureNames = new HashSet<String>();
+		List<AmpMeasures> measures = AdvancedReportUtil.getMeasureList();
+		
+		for (AmpMeasures m : measures) {
+			measureNames.add(m.getMeasureName());
+		}
+		
+		return measureNames;
 	}
 }
 

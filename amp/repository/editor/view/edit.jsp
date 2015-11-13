@@ -143,7 +143,7 @@ function cancelText(){
 	var lang = obj.value;
 	<digi:context name="showText" property="context/module/moduleinstance/showEditText.do" />
 
-  	var szQuery = "<%=showText%> ?langCode=" + lang;
+  	var szQuery = "<%=showText%>?langCode=" + lang;
 		ret = window.confirm("Switching language will refresh \n page with content on that language.");
 		if (ret) {
 			document.location.href = szQuery;

@@ -42,27 +42,11 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
 import org.digijava.module.aim.form.ProposedProjCost;
-import org.digijava.module.aim.helper.ActivityDocumentsUtil;
-import org.digijava.module.aim.helper.ActivitySector;
-import org.digijava.module.aim.helper.AmpContactsWorker;
-import org.digijava.module.aim.helper.Components;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.CurrencyWorker;
-import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.FundingDetail;
-import org.digijava.module.aim.helper.FundingValidator;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.Issues;
-import org.digijava.module.aim.helper.Location;
-import org.digijava.module.aim.helper.Measures;
-import org.digijava.module.aim.helper.OrgProjectId;
-import org.digijava.module.aim.helper.RegionalFunding;
-import org.digijava.module.aim.helper.RegionalFundingsHelper;
-import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.helper.*;
 import org.digijava.module.aim.util.*;
 import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
 import org.digijava.module.aim.version.exception.CannotGetLastVersionForVersionException;
@@ -342,8 +326,13 @@ public class EditActivity extends Action {
         }
       }
       
-      List<AmpActivityBudgetStructure> budgetStructure = DbUtil.getBudgetStructure(eaForm.getActivityId());
-      eaForm.setBudgetStructure(budgetStructure);
+        List<AmpActivityBudgetStructure> budgetStructure = DbUtil.getBudgetStructure(eaForm.getActivityId());
+        List<BudgetStructure> pojoBS = new ArrayList<BudgetStructure>();
+        for (AmpActivityBudgetStructure aabs : budgetStructure) {
+            pojoBS.add(new BudgetStructure(aabs.getBudgetStructureName(), aabs.getBudgetStructurePercentage()));
+        }
+
+      eaForm.setBudgetStructure(pojoBS);
       List nationalPlanObjectivePrograms=new ArrayList();
       List primaryPrograms=new ArrayList();
       List secondaryPrograms=new ArrayList();
@@ -451,15 +440,10 @@ public class EditActivity extends Action {
                 sessList.remove(sessId);
                 Collections.sort(sessList);
 
-                ampContext.setAttribute(Constants.EDIT_ACT_LIST,
-                                        activityMap);
-                ampContext.setAttribute(Constants.USER_ACT_LIST,
-                                        userActList);
-                ampContext.setAttribute(Constants.SESSION_LIST,
-                                        sessList);
-                ampContext.setAttribute(Constants.TS_ACT_LIST,
-                                        tsaMap);
-
+                ampContext.setAttribute(Constants.EDIT_ACT_LIST, activityMap);
+                ampContext.setAttribute(Constants.USER_ACT_LIST, userActList);
+                ampContext.setAttribute(Constants.SESSION_LIST, sessList);
+                ampContext.setAttribute(Constants.TS_ACT_LIST, tsaMap);
               }
               else
                 canEdit = false;
@@ -473,7 +457,7 @@ public class EditActivity extends Action {
       }
 
       //logger.info("CanEdit = " + canEdit);
-      //AMP-3461 When an activity is open by a user, an other user should be able to preview it
+      //AMP-3461 When an activity is opened by a user, another user should be able to preview it
       if (!canEdit && !isPreview) {
         errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
             "error.aim.activityAlreadyOpenedForEdit"));
@@ -522,12 +506,9 @@ public class EditActivity extends Action {
             tsaList.put(activityId,
                         new Long(System.currentTimeMillis()));
 
-            ampContext.setAttribute(Constants.SESSION_LIST,
-                                    sessList);
-            ampContext.setAttribute(Constants.EDIT_ACT_LIST,
-                                    activityMap);
-            ampContext.setAttribute(Constants.USER_ACT_LIST,
-                                    userActList);
+            ampContext.setAttribute(Constants.SESSION_LIST, sessList);
+            ampContext.setAttribute(Constants.EDIT_ACT_LIST, activityMap);
+            ampContext.setAttribute(Constants.USER_ACT_LIST, userActList);
             ampContext.setAttribute(Constants.TS_ACT_LIST, tsaList);
           }
           eaForm.setEditAct(true);
@@ -1120,11 +1101,10 @@ public class EditActivity extends Action {
                 }
 
                 if(actLoc.getLocationPercentage()!=null){
-                	String strPercentage	= FormatHelper.formatNumberNotRounded((double)actLoc.getLocationPercentage() );
-                	//TODO Check the right why to show numbers in percentages, here it calls formatNumberNotRounded but so the format
-                	//depends on global settings which is not correct
-
-                	location.setPercent( strPercentage.replace(",", ".") );
+//                	String strPercentage	= FormatHelper.formatNumberNotRounded((double)actLoc.getLocationPercentage() );
+                    String strPercentage = FormatHelper.formatPercentage(actLoc.getLocationPercentage());
+                    location.setPercent(strPercentage);
+//                	location.setPercent( strPercentage.replace(",", ".") );
                 }
 
                 if ( setFullPercForDefaultCountry && (actLoc.getLocationPercentage()==null || actLoc.getLocationPercentage() == 0.0) &&
@@ -1256,7 +1236,7 @@ public class EditActivity extends Action {
                 	  if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
                 		  eaForm.getAgencies().getRespOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
                 	  if(orgRole.getPercentage() != null ){
-                		  eaForm.getAgencies().getRespOrgPercentage().put(organisation.getAmpOrgId().toString(), orgRole.getPercentage().toString());
+                		  eaForm.getAgencies().getRespOrgPercentage().put(organisation.getAmpOrgId().toString(), FormatHelper.formatPercentage(orgRole.getPercentage()));
                       }
                  }
               if (orgRole.getRole().getRoleCode().equals(
@@ -1266,7 +1246,7 @@ public class EditActivity extends Action {
             	  if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
             		  eaForm.getAgencies().getExecutingOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
             	  if(orgRole.getPercentage() != null ){
-            		  eaForm.getAgencies().getExecutingOrgPercentage().put(organisation.getAmpOrgId().toString(), orgRole.getPercentage().toString());
+            		  eaForm.getAgencies().getExecutingOrgPercentage().put(organisation.getAmpOrgId().toString(), FormatHelper.formatPercentage(orgRole.getPercentage()));
                   }
              }
               else if (orgRole.getRole().getRoleCode().equals(
@@ -1278,7 +1258,7 @@ public class EditActivity extends Action {
                 if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
                 	eaForm.getAgencies().getImpOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
                 if(orgRole.getPercentage() != null ){
-          		  eaForm.getAgencies().getImpOrgPercentage().put(organisation.getAmpOrgId().toString(), orgRole.getPercentage().toString());
+          		  eaForm.getAgencies().getImpOrgPercentage().put(organisation.getAmpOrgId().toString(), FormatHelper.formatPercentage(orgRole.getPercentage()));
                 }
               }
 
@@ -1288,7 +1268,7 @@ public class EditActivity extends Action {
                 if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
           		  eaForm.getAgencies().getBenOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
                 if(orgRole.getPercentage() != null ){
-          		  eaForm.getAgencies().getBenOrgPercentage().put(organisation.getAmpOrgId().toString(), orgRole.getPercentage().toString());
+          		  eaForm.getAgencies().getBenOrgPercentage().put(organisation.getAmpOrgId().toString(), FormatHelper.formatPercentage(orgRole.getPercentage()));
                 }
               }
               else if (orgRole.getRole().getRoleCode().equals(Constants.CONTRACTING_AGENCY)
@@ -1297,7 +1277,7 @@ public class EditActivity extends Action {
                 if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
           		  eaForm.getAgencies().getConOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
                 if(orgRole.getPercentage() != null ){
-          		  eaForm.getAgencies().getConOrgPercentage().put(organisation.getAmpOrgId().toString(), orgRole.getPercentage().toString());
+          		  eaForm.getAgencies().getConOrgPercentage().put(organisation.getAmpOrgId().toString(), FormatHelper.formatPercentage(orgRole.getPercentage()));
                 }
               }
               else if (orgRole.getRole().getRoleCode().equals( Constants.REPORTING_AGENCY)
@@ -1306,7 +1286,7 @@ public class EditActivity extends Action {
                 if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
           		  eaForm.getAgencies().getRepOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
                 if(orgRole.getPercentage() != null ){
-          		  eaForm.getAgencies().getRepOrgPercentage().put(organisation.getAmpOrgId().toString(), orgRole.getPercentage().toString());
+          		  eaForm.getAgencies().getRepOrgPercentage().put(organisation.getAmpOrgId().toString(), FormatHelper.formatPercentage(orgRole.getPercentage()));
                 }
               } else if (orgRole.getRole().getRoleCode().equals(Constants.SECTOR_GROUP)
                       && (!eaForm.getAgencies().getSectGroups().contains(organisation))) {
@@ -1314,7 +1294,7 @@ public class EditActivity extends Action {
                if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
          		  eaForm.getAgencies().getSectOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
                if(orgRole.getPercentage() != null ){
-         		  eaForm.getAgencies().getSectOrgPercentage().put(organisation.getAmpOrgId().toString(), orgRole.getPercentage().toString());
+         		  eaForm.getAgencies().getSectOrgPercentage().put(organisation.getAmpOrgId().toString(), FormatHelper.formatPercentage(orgRole.getPercentage()));
                }
              } else if (orgRole.getRole().getRoleCode().equals(Constants.REGIONAL_GROUP)
                      && (!eaForm.getAgencies().getRegGroups().contains( organisation))) {
@@ -1322,43 +1302,30 @@ public class EditActivity extends Action {
               if ( orgRole.getAdditionalInfo() != null && orgRole.getAdditionalInfo().length() > 0 )
         		  eaForm.getAgencies().getRegOrgToInfo().put(organisation.getAmpOrgId().toString(), orgRole.getAdditionalInfo() );
               if(orgRole.getPercentage() != null ){
-        		  eaForm.getAgencies().getRegOrgPercentage().put(organisation.getAmpOrgId().toString(), orgRole.getPercentage().toString());
+        		  eaForm.getAgencies().getRegOrgPercentage().put(organisation.getAmpOrgId().toString(), FormatHelper.formatPercentage(orgRole.getPercentage()));
               }
             }
 
             }
           }
 
-          if (activity.getIssues() != null
-              && activity.getIssues().size() > 0) {
+          if (activity.getIssues() != null && activity.getIssues().size() > 0) {
             ArrayList issueList = new ArrayList();
-            Iterator iItr = activity.getIssues().iterator();
-            while (iItr.hasNext()) {
-              AmpIssues ampIssue = (AmpIssues) iItr.next();
+            for (AmpIssues ampIssue : activity.getIssues()) {
               Issues issue = new Issues();
               issue.setId(ampIssue.getAmpIssueId());
               issue.setName(ampIssue.getName());
               issue.setIssueDate(FormatHelper.formatDate(ampIssue.getIssueDate()));
               ArrayList measureList = new ArrayList();
-              if (ampIssue.getMeasures() != null
-                  && ampIssue.getMeasures().size() > 0) {
-                Iterator mItr = ampIssue.getMeasures()
-                    .iterator();
-                while (mItr.hasNext()) {
-                  AmpMeasure ampMeasure = (AmpMeasure) mItr
-                      .next();
+              if (ampIssue.getMeasures() != null && ampIssue.getMeasures().size() > 0) {
+                for (AmpMeasure ampMeasure : ampIssue.getMeasures()) {
                   Measures measure = new Measures();
                   measure.setId(ampMeasure.getAmpMeasureId());
                   measure.setName(ampMeasure.getName());
                   measure.setMeasureDate(FormatHelper.formatDate(ampMeasure.getMeasureDate()));
                   ArrayList actorList = new ArrayList();
-                  if (ampMeasure.getActors() != null
-                      && ampMeasure.getActors().size() > 0) {
-                    Iterator aItr = ampMeasure.getActors()
-                        .iterator();
-                    while (aItr.hasNext()) {
-                      AmpActor actor = (AmpActor) aItr
-                          .next();
+                  if (ampMeasure.getActors() != null && ampMeasure.getActors().size() > 0) {
+                    for (AmpActor actor : ampMeasure.getActors()) {
                       actorList.add(actor);
                     }
                   }
@@ -1378,26 +1345,20 @@ public class EditActivity extends Action {
         // Regional Observations step.
 		if (activity.getRegionalObservations() != null) {
 			ArrayList issueList = new ArrayList();
-			Iterator iItr = activity.getRegionalObservations().iterator();
-			while (iItr.hasNext()) {
-				AmpRegionalObservation ampRegionalObservation = (AmpRegionalObservation) iItr.next();
+			for (AmpRegionalObservation ampRegionalObservation : activity.getRegionalObservations()) {
 				Issues issue = new Issues();
 				issue.setId(ampRegionalObservation.getAmpRegionalObservationId());
 				issue.setName(ampRegionalObservation.getName());
 				issue.setIssueDate(FormatHelper.formatDate(ampRegionalObservation.getObservationDate()));
 				ArrayList measureList = new ArrayList();
 				if (ampRegionalObservation.getRegionalObservationMeasures() != null) {
-					Iterator mItr = ampRegionalObservation.getRegionalObservationMeasures().iterator();
-					while (mItr.hasNext()) {
-						AmpRegionalObservationMeasure ampMeasure = (AmpRegionalObservationMeasure) mItr.next();
+					for (AmpRegionalObservationMeasure ampMeasure : ampRegionalObservation.getRegionalObservationMeasures()) {
 						Measures measure = new Measures();
 						measure.setId(ampMeasure.getAmpRegionalObservationMeasureId());
 						measure.setName(ampMeasure.getName());
 						ArrayList actorList = new ArrayList();
 						if (ampMeasure.getActors() != null) {
-							Iterator aItr = ampMeasure.getActors().iterator();
-							while (aItr.hasNext()) {
-								AmpRegionalObservationActor actor = (AmpRegionalObservationActor) aItr.next();
+							for (AmpRegionalObservationActor actor : ampMeasure.getActors()) {
 								AmpActor auxAmpActor = new AmpActor();
 								auxAmpActor.setAmpActorId(actor.getAmpRegionalObservationActorId());
 								auxAmpActor.setName(actor.getName());
@@ -1749,13 +1710,11 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
   }
 
   private EditActivityForm setSectorsToForm(EditActivityForm form, AmpActivityVersion activity) {
-		Collection sectors = activity.getSectors();
+		Collection<AmpActivitySector> sectors = activity.getSectors();
 
 		if (sectors != null && sectors.size() > 0) {
 			List<ActivitySector> activitySectors = new ArrayList<ActivitySector>();
-			Iterator sectItr = sectors.iterator();
-			while (sectItr.hasNext()) {
-				AmpActivitySector ampActSect = (AmpActivitySector) sectItr.next();
+            for (AmpActivitySector ampActSect : sectors) {
 				if (ampActSect != null) {
 					AmpSector sec = ampActSect.getSectorId();
 					if (sec != null) {
@@ -1796,8 +1755,8 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 									actSect.setSubsectorLevel2Name(subsectorLevel2.getName());
 								}
 							}
-							actSect.setSectorPercentage(ampActSect.getSectorPercentage());
-                                                        actSect.setSectorScheme(parent.getAmpSecSchemeId().getSecSchemeName());
+							actSect.setSectorPercentage(FormatHelper.formatPercentage(ampActSect.getSectorPercentage()));
+                            actSect.setSectorScheme(parent.getAmpSecSchemeId().getSecSchemeName());
 
 						}
 
@@ -1811,23 +1770,20 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 		return form;
 	}
 
-  private Collection getSectosHelper(Collection sectors){
-	  return null;
-  }
 
+    /**
+     *
+     * @param activity
+     * @param eaForm
+     * @param toCurrCode
+     */
+    private void getComponents(AmpActivityVersion activity, EditActivityForm eaForm, String toCurrCode) {
 
-/**
- * @param activity
- * @param eaForm
- * @param componets
- */
-	private void getComponents(AmpActivityVersion activity, EditActivityForm eaForm, String toCurrCode) {
-
-		Collection componets = activity.getComponents();
+//		Collection activityComponents = activity.getComponents();
 		List<Components<FundingDetail>> selectedComponents = new ArrayList<Components<FundingDetail>>();
-		Iterator compItr = componets.iterator();
-		while (compItr.hasNext()) {
-			AmpComponent temp = (AmpComponent) compItr.next();
+//		Iterator compItr = componets.iterator();
+		for(AmpComponent temp : activity.getComponents()) {
+//			AmpComponent temp = (AmpComponent) compItr.next();
 			Components<FundingDetail> tempComp = new Components<FundingDetail>();
 			tempComp.setTitle(temp.getTitle());
 			tempComp.setComponentId(temp.getAmpComponentId());
@@ -1881,7 +1837,6 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 				fd.setCurrencyName(ampCompFund.getCurrency().getCurrencyName());
 				fd.setTransactionDate(DateConversion.ConvertDateToString(ampCompFund.getTransactionDate()));
 				fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(ampCompFund.getTransactionDate()));
-				
 				fd.setTransactionType(ampCompFund.getTransactionType().intValue());
 				fd.setComponentOrganisation(ampCompFund.getReportingOrganization());
 				fd.setComponentTransactionDescription(ampCompFund.getDescription());
@@ -1895,10 +1850,7 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 				} else if (fd.getTransactionType() == 2) {
 					tempComp.getExpenditures().add(fd);
 				}
-
-
 			}
-
 			ComponentsUtil.calculateFinanceByYearInfo(tempComp, fundingComponentActivity);
 			selectedComponents.add(tempComp);
 		}
@@ -1908,12 +1860,10 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 		int index = 0;
 		while (compIterator.hasNext()) {
 			Components components = (Components) compIterator.next();
-
             if (components.getType_Id() != null) {
                 AmpComponentType type = ComponentsUtil.getComponentTypeById(components.getType_Id());
                 components.setTypeName(type.getName());
             }
-
 			List list = null;
 			if (components.getCommitments() != null) {
 				list = new ArrayList(components.getCommitments());

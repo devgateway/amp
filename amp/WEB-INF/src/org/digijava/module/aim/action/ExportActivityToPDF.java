@@ -57,6 +57,7 @@ import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.Identification;
 import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.BudgetStructure;
 import org.digijava.module.aim.helper.ChartGenerator;
 import org.digijava.module.aim.helper.ChartParams;
 import org.digijava.module.aim.helper.Components;
@@ -1292,7 +1293,7 @@ public class ExportActivityToPDF extends Action {
                 String costOutput="";
                 columnName=TranslatorWorker.translateText("Budget Structure");
                 if(myForm.getBudgetStructure().size()>0){
-                    for(AmpActivityBudgetStructure abs: myForm.getBudgetStructure()){
+                    for(BudgetStructure abs: myForm.getBudgetStructure()){
                         costOutput += " "+abs.getBudgetStructureName()+": "+abs.getBudgetStructurePercentage()+"%\n";
                     }
                 }

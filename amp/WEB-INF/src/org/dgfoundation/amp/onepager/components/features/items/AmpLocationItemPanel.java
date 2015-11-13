@@ -55,7 +55,8 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
 		this.locationModel = model;
 		
 		PropertyModel<Double> percModel = new PropertyModel<Double>(model, "locationPercentage");
-		final AmpPercentageTextField percentageField=new AmpPercentageTextField("percentage",percModel,"locationPercentage",percentageValidationField,locationPercentageRequired.isVisible()){
+		final AmpPercentageTextField percentageField = new AmpPercentageTextField("percentage", percModel,
+				"locationPercentage", percentageValidationField, locationPercentageRequired.isVisible()){
 			private static final long serialVersionUID = 1L;
 			@Override
 			protected void onBeforeRender() {
@@ -129,20 +130,13 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
 				// toggleHeading(target, setModel.getObject());
 
 				// remove any regional funding with this region
-				if (CategoryConstants.IMPLEMENTATION_LOCATION_REGION
-						.equalsCategoryValue(
-								model.getObject().getLocation()
-										.getLocation()
-										.getParentCategoryValue())) {
-					final IModel<Set<AmpRegionalFunding>> regionalFundings = new PropertyModel<Set<AmpRegionalFunding>>(
-							am, "regionalFundings");
+				if (CategoryConstants.IMPLEMENTATION_LOCATION_REGION.
+						equalsCategoryValue(model.getObject().getLocation().getLocation().getParentCategoryValue())) {
+					final IModel<Set<AmpRegionalFunding>> regionalFundings = new PropertyModel<Set<AmpRegionalFunding>>(am, "regionalFundings");
 					Iterator<AmpRegionalFunding> iterator = regionalFundings.getObject().iterator();
 					while (iterator.hasNext()) {
-						AmpRegionalFunding ampRegionalFunding = (AmpRegionalFunding) iterator
-								.next();
-						if (ampRegionalFunding.getRegionLocation().equals(
-								model.getObject().getLocation()
-										.getLocation()))
+						AmpRegionalFunding ampRegionalFunding = (AmpRegionalFunding) iterator.next();
+						if (ampRegionalFunding.getRegionLocation().equals(model.getObject().getLocation().getLocation()))
 							iterator.remove();
 					}
 					regionalFundingFeature.getList().removeAll();

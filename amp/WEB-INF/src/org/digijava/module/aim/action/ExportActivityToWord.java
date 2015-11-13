@@ -1647,7 +1647,7 @@ public class ExportActivityToWord extends Action {
                 while(it.hasNext()){
                     AmpActivityBudgetStructure abs = it.next();
                     eshBudgetStructureTable.addRowData(new ExportSectionHelperRowData(abs.getBudgetStructureName(), null, null,  true).
-                            addRowData(abs.getBudgetStructurePercentage()+"%"));
+                            addRowData(FormatHelper.formatPercentage(abs.getBudgetStructurePercentage()) + "%"));
                 }
             }
 

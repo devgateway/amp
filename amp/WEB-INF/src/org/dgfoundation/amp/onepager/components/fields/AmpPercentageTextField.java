@@ -65,7 +65,7 @@ public class AmpPercentageTextField extends AmpTextFieldPanel<Double> {
 	
 	public IConverter getInternalConverter(java.lang.Class<?> type) {
 		DoubleConverter converter = (DoubleConverter) DoubleConverter.INSTANCE;
-		NumberFormat formatter = FormatHelper.getDecimalFormat(true);
+		NumberFormat formatter = FormatHelper.getPercentageDefaultFormat(true);
 		
 //		formatter.setMinimumFractionDigits(0);
 		converter.setNumberFormat(getLocale(), formatter);

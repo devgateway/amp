@@ -16,6 +16,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.SectorUtil;
 
 public class AddSelectedSectors
@@ -95,12 +96,12 @@ public class AddSelectedSectors
             logger.info("adding now...");
             if (eaForm.getCols() == null) {
               if (selsearchedSector.length == 1) {
-                sctr.setSectorPercentage(new Float(100));
+                sctr.setSectorPercentage(FormatHelper.formatPercentage(new Float(100)));
               }
             }
             else if (eaForm.getCols().size() == 0) {
               if (selsearchedSector.length == 1) {
-                sctr.setSectorPercentage(new Float(100));
+                sctr.setSectorPercentage(FormatHelper.formatPercentage(new Float(100)));
               }
             }
             else if (eaForm.getCols().size() == 1) {

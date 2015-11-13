@@ -51,11 +51,11 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
 		this.ampRegionalObservationId = ampRegionalObservationId;
 	}
 
-	public Set getRegionalObservationMeasures() {
+	public Set<AmpRegionalObservationMeasure> getRegionalObservationMeasures() {
 		return regionalObservationMeasures;
 	}
 
-	public void setRegionalObservationMeasures(Set regionalObservationMeasures) {
+	public void setRegionalObservationMeasures(Set<AmpRegionalObservationMeasure> regionalObservationMeasures) {
 		this.regionalObservationMeasures = regionalObservationMeasures;
 	}
 

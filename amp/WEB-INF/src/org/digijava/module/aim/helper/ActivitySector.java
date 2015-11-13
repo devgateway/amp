@@ -18,7 +18,8 @@ public class ActivitySector implements Comparable<ActivitySector>, Serializable 
 	private String subsectorLevel1Name;
 	private Long subsectorLevel2Id;
 	private String subsectorLevel2Name;
-	private Float sectorPercentage;
+//	private Float sectorPercentage;
+	private String sectorPercentage;
 	private String view;
 	private int count;
 	private String sectorScheme;
@@ -151,11 +152,11 @@ public class ActivitySector implements Comparable<ActivitySector>, Serializable 
 		this.subsectorLevel2Name = subsectorLevel2Name;
 	}
 	
-	public Float getSectorPercentage() {
+	public String getSectorPercentage() {
 		return sectorPercentage;
 	}
 	
-	public void setSectorPercentage(Float sectorPercentage) {
+	public void setSectorPercentage(String sectorPercentage) {
 		this.sectorPercentage = sectorPercentage;
 	}
 	

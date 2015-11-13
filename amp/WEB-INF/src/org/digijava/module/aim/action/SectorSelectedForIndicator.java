@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.NewIndicatorForm;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.SectorUtil;
 
 public class SectorSelectedForIndicator extends Action {
@@ -90,9 +91,9 @@ public class SectorSelectedForIndicator extends Action {
 			}
 
             if(prevSelSectors==null){
-                actSect.setSectorPercentage(new Float(100));
+                actSect.setSectorPercentage(FormatHelper.formatPercentage(new Float(100)));
             }else if(prevSelSectors.size()==0){
-                    actSect.setSectorPercentage(new Float(100));
+                    actSect.setSectorPercentage(FormatHelper.formatPercentage(new Float(100)));
             }else if(prevSelSectors.size()==1){
                 Iterator prevItr = prevSelSectors.iterator();
                 while(prevItr.hasNext()) {

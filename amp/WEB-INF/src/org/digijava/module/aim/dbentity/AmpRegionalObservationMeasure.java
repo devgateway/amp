@@ -29,11 +29,11 @@ public class AmpRegionalObservationMeasure implements Serializable, Cloneable {
 		this.name = name;
 	}
 
-	public Set getActors() {
+	public Set<AmpRegionalObservationActor> getActors() {
 		return actors;
 	}
 
-	public void setActors(Set actors) {
+	public void setActors(Set<AmpRegionalObservationActor> actors) {
 		this.actors = actors;
 	}
 

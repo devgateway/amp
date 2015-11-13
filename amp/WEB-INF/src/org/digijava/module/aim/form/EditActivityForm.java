@@ -25,16 +25,7 @@ import org.dgfoundation.amp.exprlogic.MathExpression;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.helpers.ActivityFundingDigest;
-import org.digijava.module.aim.helper.ActivityIndicator;
-import org.digijava.module.aim.helper.ActivitySector;
-import org.digijava.module.aim.helper.Components;
-import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.FundingDetail;
-import org.digijava.module.aim.helper.FundingOrganization;
-import org.digijava.module.aim.helper.KeyValue;
-import org.digijava.module.aim.helper.OrgProjectId;
-import org.digijava.module.aim.helper.ReferenceDoc;
-import org.digijava.module.aim.helper.SurveyFunding;
+import org.digijava.module.aim.helper.*;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
 import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.contentrepository.helper.DocumentData;
@@ -6578,7 +6569,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private Issues issues = null;
 	private Issues observations = null;
 	private boolean totDisbIsBiggerThanTotCom;
-	private List<AmpActivityBudgetStructure> budgetStructure;
+	private List<BudgetStructure> budgetStructure;
 	
 	public EditActivityForm() {
 		reset = false;
@@ -7044,7 +7035,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	}
 	
 	@java.lang.SuppressWarnings("all")
-	public List<AmpActivityBudgetStructure> getBudgetStructure() {
+	public List<BudgetStructure> getBudgetStructure() {
 		return budgetStructure;
 	}
 	
@@ -7324,7 +7315,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	}
 	
 	@java.lang.SuppressWarnings("all")
-	public void setBudgetStructure(List<AmpActivityBudgetStructure> budgetStructure) {
+	public void setBudgetStructure(List<BudgetStructure> budgetStructure) {
 		this.budgetStructure = budgetStructure;
 	}
 	

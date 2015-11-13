@@ -103,12 +103,22 @@ public class FormatHelper {
     }
    
 
+	public static String formatNumberDefaultFormat(Double number) {
+		String result;
+		if ( number == null)
+			return "";
+		DecimalFormat formatter = getDecimalFormat();
+		result = formatter.format(number);
+		return result;
+	}
+
+
    public static String formatNumber(Number number) {                                                                                                   
        String result;
        if ( number == null || number.doubleValue() == 0.0) 
     	   		return "";
-       DecimalFormat formater = getDecimalFormat();                                                     
-	   result = formater.format(number);                                                                                                            
+       DecimalFormat formatter = getDecimalFormat();
+	   result = formatter.format(number);
        return result;                                                                                                                               
     }
 
@@ -172,6 +182,49 @@ public class FormatHelper {
    public static DecimalFormat getDefaultFormat() {
 	   return getDefaultFormat(false);
    }
+
+
+
+	public static String formatPercentage(Number number) {
+		String result;
+		if ( number == null || number.doubleValue() == 0.0)
+			return "";
+		DecimalFormat formatter = getPercentageDefaultFormat(false);
+		result = formatter.format(number);
+		return result;
+	}
+
+	/**
+	 * used in percentage rendering in AF preview and similar places
+	 * @param replaceSpacesToNoBrSpace
+	 * @return
+	 */
+	public static DecimalFormat getPercentageDefaultFormat(boolean replaceSpacesToNoBrSpace) {
+
+		// get settings from global setting
+
+		String format = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
+		String decimalSeparator = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR);
+		String groupSeparator = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GROUP_SEPARATOR);
+
+		if(replaceSpacesToNoBrSpace) {
+			decimalSeparator=decimalSeparator.replace(' ', '\u00A0');
+			groupSeparator=groupSeparator.replace(' ', '\u00A0');
+		}
+
+		DecimalFormatSymbols decSymbols = new DecimalFormatSymbols();
+		decSymbols.setDecimalSeparator(decimalSeparator.charAt(0));
+
+
+		if(groupSeparator!=null){
+			decSymbols.setGroupingSeparator(groupSeparator.charAt(0));
+		}
+		DecimalFormat formatter = new DecimalFormat(format, decSymbols);
+		//detect number of fraction digits
+//		formatter.setMinimumFractionDigits(3);
+		return formatter;
+	}
+
 
     /**
      * 

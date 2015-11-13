@@ -44,6 +44,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -1219,8 +1220,8 @@ public class DataDispatcher extends MultiAction {
 								actSect.setSubsectorLevel2Name(subsectorLevel2.getName());
 							}
 						}
-						actSect.setSectorPercentage(ampActSect.getSectorPercentage());
-                                                    actSect.setSectorScheme(parent.getAmpSecSchemeId().getSecSchemeName());
+						actSect.setSectorPercentage(FormatHelper.formatPercentage(ampActSect.getSectorPercentage()));
+						actSect.setSectorScheme(parent.getAmpSecSchemeId().getSecSchemeName());
                                                     
 					}
                                            

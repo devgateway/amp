@@ -372,8 +372,8 @@ public class ShowActivityPrintPreview
 }
 
                         if(actLoc.getLocationPercentage()!=null)
-                        location.setPercent(FormatHelper.formatNumber( actLoc.getLocationPercentage().doubleValue()));
-
+//                            location.setPercent(FormatHelper.formatNumber( actLoc.getLocationPercentage().doubleValue()));
+                            location.setPercent(FormatHelper.formatPercentage(actLoc.getLocationPercentage()));
                         locs.add(location);
                       }
                     }
@@ -429,8 +429,8 @@ public class ShowActivityPrintPreview
         									actSect.setSubsectorLevel2Name(subsectorLevel2.getName());
         								}
         							}
-        							actSect.setSectorPercentage(ampActSect.getSectorPercentage());
-                                                                actSect.setSectorScheme(parent.getAmpSecSchemeId().getSecSchemeName());
+        							actSect.setSectorPercentage(FormatHelper.formatPercentage(ampActSect.getSectorPercentage()));
+                                    actSect.setSectorScheme(parent.getAmpSecSchemeId().getSecSchemeName());
                                                                 
         						}
                                                        

@@ -171,7 +171,7 @@ public class AmpBudgetSectionFormTableFeature extends AmpFormTableFeaturePanel <
 				new AmpBudgetStructureModel(new PropertyModel<Set<AmpActivityBudgetStructure>>(am, "actBudgetStructure")), "",true,true) {
 			public IConverter getInternalConverter(java.lang.Class<?> type) {
 				DoubleConverter converter = (DoubleConverter) DoubleConverter.INSTANCE;
-				NumberFormat formatter = FormatHelper.getDecimalFormat(true);
+				NumberFormat formatter = FormatHelper.getPercentageDefaultFormat(true);
 				converter.setNumberFormat(getLocale(), formatter);
 				return converter; 
 			}

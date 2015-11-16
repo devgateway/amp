@@ -1,7 +1,7 @@
 <wicket:extend>
 	<div style="position: relative; top: -30px; float: right;">
-		<a id="expandRegionItems" onclick="$(this).parents('div:eq(2)').find('.invisible-item')..css('display','block');$('#expandRegionItems').hide();$('#collapseRegionItems').show();"><wicket:trn>Expand all</wicket:trn></a>
-		<a style="display: none;" id="collapseRegionItems" onclick="$(this).parents('div:eq(2)').find('.invisible-item').hide();$('#expandRegionItems').show();$('#collapseRegionItems').hide();"><wicket:trn>Collapse all</wicket:trn></a>
+		<a href="#" id="expandRegionItems" onclick="$(this).parents('div:eq(2)').find('.invisible-item').css('display','block');$('#expandRegionItems').hide();$('#collapseRegionItems').show();"><wicket:trn>Expand all</wicket:trn></a>
+		<a href="#" style="display: none;" id="collapseRegionItems" onclick="$(this).parents('div:eq(2)').find('.invisible-item').hide();$('#expandRegionItems').show();$('#collapseRegionItems').hide();"><wicket:trn>Collapse all</wicket:trn></a>
 	</div>
 	<tr><td colspan="2"><p/>
 		<div wicket:id="listRegions">

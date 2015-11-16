@@ -47,7 +47,7 @@ module.exports = BackboneDash.View.extend({
           nv.tooltip.cleanup();
           if (rendered === false) {
             rendered = true;
-            self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'), 
+            self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'),
                 self.$('.preview-area .canvas-wrap'));
           }
         }
@@ -84,7 +84,7 @@ module.exports = BackboneDash.View.extend({
 
   prepareCanvas: function(canvas, h, w) {
     var ctx = canvas.getContext('2d'),
-        moneyContext = (this.model.get('sumarizedTotal') !== undefined ? ': ' + util.translateLanguage(this.model.get('sumarizedTotal')) + ' ': ' ') + this.model.get('currency'),        
+        moneyContext = (this.model.get('sumarizedTotal') !== undefined ? ': ' + util.translateLanguage(this.model.get('sumarizedTotal')) + ' ': ' ') + this.model.get('currency'),
         adjType = this.model.get('adjtype');
 
     if (adjType) {
@@ -203,7 +203,7 @@ module.exports = BackboneDash.View.extend({
     csvTransformed.unshift(headerRow);
 
     textContent = baby.unparse(csvTransformed, {
-      delimiter: '\t',
+      delimiter: ';',
       encoding: 'utf-16',
       quotes: true
     });

@@ -202,7 +202,7 @@ module.exports = BackboneDash.View.extend({
      */
 
     textContent = baby.unparse(csvTransformed, {
-      delimiter: '\t',
+      delimiter: ';',
       encoding: 'utf-16',
     	quotes: true
     });

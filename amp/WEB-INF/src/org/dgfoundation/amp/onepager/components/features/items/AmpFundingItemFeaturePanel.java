@@ -69,7 +69,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		if (fundingModel.getObject().getFundingDetails() == null)
 			fundingModel.getObject().setFundingDetails(new TreeSet<AmpFundingDetail>());
 		//this should be changed to a propertyModel
-		Label itemNumber=new Label("itemNumber", new Model(item+1));
+		Label itemNumber=new Label("itemNumber", new Model(item + 1));
 		add(itemNumber);
 		Label itemNumberLabel=new TrnLabel("itemNumberLabel", new Model<String>("Funding Item"));
 		add(itemNumberLabel);
@@ -79,9 +79,10 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		fundingSummary.add(UpdateEventBehavior.of(FundingSectionSummaryEvent.class));
 		fundingSummary.setOutputMarkupId(true);
 		
-		
 		final WebMarkupContainer wmc = new WebMarkupContainer("fundingContainer");
+		
 		wmc.setOutputMarkupId(true);
+		
 		add(wmc);
 		
 		if (isTabView) {
@@ -150,7 +151,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 				}
 			}
 		};
-		wmc.add(addNewFunding);
+		
 		
 		AmpTextAreaFieldPanel donorObjective = new AmpTextAreaFieldPanel("donorObjective", new PropertyModel<String>(fundingModel,"donorObjective"), "Donor Objective", false);
 		wmc.add(donorObjective);
@@ -310,6 +311,9 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		AmpDonorExpendituresSubsectionFeature expenditures = new AmpDonorExpendituresSubsectionFeature(
 				"expenditures", fundingModel,"Expenditures",Constants.EXPENDITURE);
 		wmc.add(expenditures);
+
+
+		add(addNewFunding);
 	}
 
 	public AmpDonorFundingInfoSubsectionFeature getFundingInfo() {

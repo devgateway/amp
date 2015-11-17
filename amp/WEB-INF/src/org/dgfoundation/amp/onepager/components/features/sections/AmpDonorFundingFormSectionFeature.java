@@ -86,6 +86,7 @@ public class AmpDonorFundingFormSectionFeature extends
 	private AmpOrgRoleSelectorComponent orgRoleSelector;
 	private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>>();
 	private AmpSearchOrganizationComponent<String> originalSearchOrganizationSelector;
+	final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs;
 	private boolean isTabsView;
 
 	private final static String[] ACTIVITY_ROLE_FILTER = { Constants.FUNDING_AGENCY };
@@ -100,6 +101,10 @@ public class AmpDonorFundingFormSectionFeature extends
 		return tabsList;
 	}
 
+	
+	public void setSearchOrgsFieldVisibility(boolean visible) {
+		this.searchOrgs.setVisibilityAllowed(visible);
+	}
 	public String[] getRoleFilter() {
 		String[] roleFilter = ACTIVITY_ROLE_FILTER;
 		if (ActivityUtil.ACTIVITY_TYPE_SSC
@@ -349,7 +354,7 @@ public class AmpDonorFundingFormSectionFeature extends
 		};
 		wmc.add(orgRolelist);
 
-		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs = new AmpAutocompleteFieldPanel<AmpOrganisation>(
+		searchOrgs = new AmpAutocompleteFieldPanel<AmpOrganisation>(
 				"searchAutocomplete", "Search Organizations", true,true,
 				AmpOrganisationSearchModel.class,id) {
 			@Override

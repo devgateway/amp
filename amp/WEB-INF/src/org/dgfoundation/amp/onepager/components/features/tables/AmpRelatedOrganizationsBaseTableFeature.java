@@ -143,14 +143,29 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
     	updateSearchVisibility(null);
     }
     
+    private boolean listContainsDonorOrg(List<AmpOrgRole> roles) {
+    	for (AmpOrgRole role : roles) {
+    		if (role.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY))
+    			return true;
+    	}
+    	return false;
+    }
+    
     private void updateSearchVisibility(AjaxRequestTarget target ) {
         if (maxSizeCollectionValidationField.isVisible()){
             List<AmpOrgRole> tmpList = listModel.getObject();
-            if (tmpList != null && tmpList.size() > 0){
+            if (tmpList != null && tmpList.size() > 0 ) {
                 searchOrganization.setVisibilityAllowed(false);
+                if (this.getId().equals("donorOrganization")) {
+                	donorFundingSection.setSearchOrgsFieldVisibility(false);
+                }
+                	
             }
             else{
                 searchOrganization.setVisibilityAllowed(true);
+                if (this.getId().equals("donorOrganization")) {
+                	donorFundingSection.setSearchOrgsFieldVisibility(true);
+                }
             }
             if(target!=null){
             	target.add(searchOrganization);

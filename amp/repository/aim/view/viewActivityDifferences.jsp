@@ -181,8 +181,8 @@
 				--%>
 			</table>
 			<br/>
-			<input type="button" value="<digi:trn>Back to current version of the activity</digi:trn>" onclick="javascript:back()" />
-			<logic:equal name="aimCompareActivityVersionsForm" property="advancemode" value="true">
+		  	<input type="button" value="<digi:trn>Back to current version of the activity</digi:trn>" onclick="javascript:back()" />
+		  	<logic:equal name="aimCompareActivityVersionsForm" property="advancemode" value="true">
 				<input id="mergeButton" type="button" value="<digi:trn>Enable Merge Process</digi:trn>" onclick="javascript:enableMerge();" />
 			</logic:equal>
 			<input id="saveButton" type="button" value="<digi:trn>Save New Activity</digi:trn>" onclick="javascript:save();" />
@@ -274,9 +274,12 @@ setHoveredRow("rowHighlight");
 
 if(document.getElementById('method').value == "enableMerge") {
 	document.getElementById('mergeButton').disabled = "disabled";
+	document.getElementById('mergeButton').style.display = 'none';
 	document.getElementById('saveButton').disabled = "";
+	document.getElementById('saveButton').style.display = 'block';
 } else {
 	document.getElementById('saveButton').disabled = "disabled";
+	document.getElementById('saveButton').style.display = 'none';
 }
 
 </script>

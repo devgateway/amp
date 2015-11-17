@@ -274,9 +274,12 @@ setHoveredRow("rowHighlight");
 
 if(document.getElementById('method').value == "enableMerge") {
 	document.getElementById('mergeButton').disabled = "disabled";
+	document.getElementById('mergeButton').style.display = 'none';
 	document.getElementById('saveButton').disabled = "";
+	document.getElementById('saveButton').style.display = 'block';
 } else {
 	document.getElementById('saveButton').disabled = "disabled";
+	document.getElementById('saveButton').style.display = 'none';
 }
 
 </script>

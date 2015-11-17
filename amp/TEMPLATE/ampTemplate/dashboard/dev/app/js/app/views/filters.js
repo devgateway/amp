@@ -17,43 +17,46 @@ module.exports = BackboneDash.View.extend({
     'click .show-filter-details': 'showFilterDetails',
     'click .hide-filter-details': 'hideFilterDetails'
   },
-  
+
   initialize: function(options) {
     this.finishedFirstLoad = false;
-	this.app = options.app;
+    this.app = options.app;
     this.listenTo(this.app.filter, 'cancel', this.hideFilter);
     this.listenTo(this.app.filter, 'apply', this.applyFilter);
     this.app.settings.load().done(_(function() {
-    	// Extract default dates from Global Settings.
-    	var blob = {};
-    	// AMP-19254, AMP-20537: override the "date" range with the Dashboards-specific one from the settings blob (a hack...) 
-    	this.app.filter.extractDates(this.app.settings.models, blob, 'dashboard-default-min-date', 'dashboard-default-max-date');
-    	
-	    this.app.filter.loaded.done(_(function() {
-	      console.info('filters loaded');
-	      this.app.state.register(this, 'filters', {
-	        // namespace serialized filters so we can hook in extra state to store
-	        // later if desired (anything dashboards-ui related, for example)
-	        get: _(function() { 
-	        	return {filter: this.app.filter.serialize() }; 
-	        }).bind(this),
-	        set: _(function(state) {
-	        	if (state.filter.otherFilters !== undefined && state.filter.otherFilters.date !== undefined) {
-	        		filtersViewLog.log('Using saved date filters.');
-	        	} else {
-	        		filtersViewLog.log('Using default filter dates.');
-	        		// AMP-21118: Dont override all filters, just dates section.
-	        		state.filter.otherFilters = blob.otherFilters;
-	        	}
-	        	this.app.filter.deserialize(state.filter);
-	        	this.app.filter.finishedFirstLoad = true;
-	        }).bind(this),
-	        empty: {filter: {}}
-	      });
-	    }).bind(this));
+      // Extract default dates from Global Settings.
+      var blob = {};
+      // AMP-19254, AMP-20537: override the "date" range with the Dashboards-specific one from the settings blob (a hack...)
+      this.app.filter.extractDates(this.app.settings.models, blob, 'dashboard-default-min-date', 'dashboard-default-max-date');
+
+      this.app.filter.loaded.done(_(function() {
+        console.info('filters loaded');
+        this.app.state.register(this, 'filters', {
+          // namespace serialized filters so we can hook in extra state to store
+          // later if desired (anything dashboards-ui related, for example)
+          get: _(function() {
+            return {
+              filter: this.app.filter.serialize()
+            };
+          }).bind(this),
+          set: _(function(state) {
+            if (state.filter.otherFilters !== undefined && state.filter.otherFilters.date !== undefined) {
+              filtersViewLog.log('Using saved date filters.');
+            } else {
+              filtersViewLog.log('Using default filter dates.');
+              // AMP-21118: Dont override all filters, just dates section.
+              state.filter.otherFilters = blob.otherFilters;
+            }
+            this.app.filter.deserialize(state.filter);
+            this.app.filter.finishedFirstLoad = true;
+          }).bind(this),
+          empty: {
+            filter: {}
+          }
+        });
+      }).bind(this));
     }).bind(this));
   },
-
   render: function() {
     this.$el.html(template());
     this.app.filter.setElement(this.el.querySelector('#filter-popup'));
@@ -97,16 +100,16 @@ module.exports = BackboneDash.View.extend({
     var applied = _(filters.columnFilters).map(function(filter, key) {
       return {
         name: filter.filterName || key,
-        id: key.replace(/[^\w]/g, ''),  // remove anything non-alphanum
+        id: key.replace(/[^\w]/g, ''), // remove anything non-alphanum
         detail: _(filter).map(function(value) {
-        	if (value.attributes !== undefined) {
-        		return value.get('name');
-        	} else {       		
-        		// To fix problem with dates.
-        		if (value !== key && value !== filter.filterName) {
-        			return value;
-        		}
-        	}
+          if (value.attributes !== undefined) {
+            return value.get('name');
+          } else {
+            // To fix problem with dates.
+            if (value !== key && value !== filter.filterName) {
+              return value;
+            }
+          }
         })
       };
     });
@@ -115,7 +118,7 @@ module.exports = BackboneDash.View.extend({
       // ... there is no obvious way to get nice strings out.
       var dateRange = filters.otherFilters.date;
       var dateRangeText = app.translator.translateSync("amp.dashboard:date-range","Date Range");
-	  applied.push({
+      applied.push({
         name: dateRangeText,
         detail: [dateRange.start + '&mdash;' + dateRange.end]
       });

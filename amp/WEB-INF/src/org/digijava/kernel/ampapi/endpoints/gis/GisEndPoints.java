@@ -273,8 +273,7 @@ public class GisEndPoints {
 	@ApiMethod(ui = false, id = "ActivitiesNewLists")
 	public JsonBean getActivitiesNew(JsonBean config, @QueryParam("start") Integer page,@QueryParam("size") Integer pageSize) {
 		try{
-			
-			return ActivityService.getActivitiesMondrian(config,null,page,pageSize);
+			return ActivityService.getActivitiesMondrian(config,null,page * pageSize, pageSize);
 		}catch(AmpApiException ex){
 			throw new WebApplicationException(ex);
 		}	
@@ -297,7 +296,7 @@ public class GisEndPoints {
 					Arrays.asList(activityIds.getPath().split("\\s*,\\s*")),
 					null, null);
 		} catch (AmpApiException ex) {
-			throw new WebApplicationException(ex);
+			throw new WebApplicationException(ex); 
 		}
 	}
 	

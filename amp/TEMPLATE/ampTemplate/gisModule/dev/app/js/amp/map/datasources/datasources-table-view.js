@@ -92,7 +92,7 @@ module.exports = Backbone.View.extend({
       }
       self.$el.find('.load-more').text('loading...').addClass('disabled');
     } else {
-      self.$el.find('.load-more').attr('disabled', 'disabled').addClass('disabled');
+    	self.$el.find('.load-more').hide();
     }
   }
 

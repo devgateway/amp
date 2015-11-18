@@ -3,8 +3,6 @@ package org.dgfoundation.amp.reports.saiku.export;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,12 +10,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.digijava.kernel.ampapi.endpoints.reports.JSONReportPage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.saiku.web.export.PdfReport;
-import org.saiku.web.rest.objects.resultset.QueryResult;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.PageSize;
@@ -59,10 +57,15 @@ public class AMPPdfExport extends PdfReport {
 		StringBuilder htmlString = new StringBuilder(
 				"<!DOCTYPE html><html><head><title></title></head><body><div>AMP Export - ").append(
 				dateFormat.format(date)).append("</div><div>&nbsp;</div>");
+		JSONReportPage jrp=(JSONReportPage)jb.get("page");
 		String currency = report.getSettings().getCurrencyCode();
 		if (queryModel.containsKey("settings")) {
 			LinkedHashMap<String, Object> settings = (LinkedHashMap<String, Object>) queryModel.get("settings");
 			currency = settings.get("1").toString();
+		}
+		if(currency == null){
+			//we get the default currency
+			currency = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
 		}
 		htmlString.append("<div><b>").append(TranslatorWorker.translateText("Currency")).append(": </b>")
 				.append(currency).append("</div>");

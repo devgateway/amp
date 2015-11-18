@@ -11,7 +11,13 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.dgfoundation.amp.newreports.FilterRule;
@@ -19,9 +25,7 @@ import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -221,6 +225,10 @@ public class AMPReportExcelExport {
 		i += 2;
 		j = 0;
 		String currency = report.getSettings().getCurrencyCode();
+		if (currency == null) {
+			// we get the default currency
+			currency = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+		}		
 		String calendar = report.getSettings().getCalendar().getName();
 		if (queryModel.containsKey("settings")) {
 			LinkedHashMap<String, Object> settings = (LinkedHashMap<String, Object>) queryModel.get("settings");

@@ -28,6 +28,7 @@ public class EPConstants {
 	// config update
 	public static final String REPORT_NAME = "name";
 	public static final String IS_CUSTOM = "custom";
+	public static final String IS_DYNAMIC = "dinamic";
 	public static final String REGENERATE = "regenerate";
 	public static final String ADD_COLUMNS = "add_columns";
 	public static final String ADD_HIERARCHIES = "add_hierarchies";

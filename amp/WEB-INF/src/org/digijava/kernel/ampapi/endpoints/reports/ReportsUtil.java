@@ -15,6 +15,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 
 import net.sf.json.JSONObject;
 
@@ -59,6 +61,7 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.util.MaxSizeLinkedHashMap;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -198,6 +201,9 @@ public class ReportsUtil {
 			if (queryModel.get("regenerate") != null) {
 				newParams.set("regenerate", queryModel.get("regenerate"));
 			}
+			if (original.get(EPConstants.IS_DYNAMIC) != null) {
+				newParams.set(EPConstants.IS_DYNAMIC, true);
+			}
 		}
 		
 		if (original.get(EPConstants.ADD_COLUMNS) != null) {
@@ -219,7 +225,16 @@ public class ReportsUtil {
 				String reportName = formParams.getString(EPConstants.REPORT_NAME);
 				spec = EndpointUtils.getReportSpecification(formParams, reportName);
 			} else {
-				spec = ReportsUtil.getReport(reportId);
+				if (Boolean.TRUE.equals(formParams.get(EPConstants.IS_DYNAMIC))) {
+					try {
+						spec = AmpReportsToReportSpecification.convert(ReportsUtil.getAmpReportFromSession(reportId.intValue()));
+					} catch (AMPException e) {
+						logger.error("Cannot get report from session",e);
+						throw new RuntimeException("Cannot restore report from session: " + reportId);
+					}
+				}else{
+					spec = ReportsUtil.getReport(reportId);
+				}
 			}
 			// add additional requests
 			update(spec, formParams);
@@ -781,5 +796,18 @@ public class ReportsUtil {
 
 	}
 
+	public static AmpReports getAmpReportFromSession(Integer reportToken) {
+		MaxSizeLinkedHashMap<Integer, AmpReports> reportsList = (MaxSizeLinkedHashMap<Integer, AmpReports>) TLSUtils.getRequest().getSession().getAttribute("reportStack");
+		if (reportsList == null) {
+			throw new WebApplicationException(Response.Status.NO_CONTENT);
+		}
+		
+		AmpReports ampReport = reportsList.get(reportToken);
+		if (ampReport == null) {
+			throw new WebApplicationException(Response.Status.NO_CONTENT);
+		}
+		return ampReport;
+	}
+	
 	
 }

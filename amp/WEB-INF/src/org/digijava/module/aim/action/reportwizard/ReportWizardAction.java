@@ -612,10 +612,15 @@ public class ReportWizardAction extends MultiAction {
  * @throws Exception
  */
     private ActionForward runReport(AmpReports ampReport, HttpServletRequest request, HttpServletResponse response)throws Exception {
-    	String reportToken = UUID.randomUUID().toString();
-    	MaxSizeLinkedHashMap<String, AmpReports> reportsList = (MaxSizeLinkedHashMap<String, AmpReports>)request.getSession().getAttribute("reportStack");
+    	Integer reportToken = UUID.randomUUID().toString().hashCode();
+    	//Even is quite not possible to have a reportId with such a big number
+    	//we use a negative number just in case
+		if (reportToken > 0) {
+			reportToken = reportToken * (-1);
+		}
+    	MaxSizeLinkedHashMap<Integer, AmpReports> reportsList = (MaxSizeLinkedHashMap<Integer, AmpReports>)request.getSession().getAttribute("reportStack");
     	if (reportsList == null) {
-    		reportsList = new MaxSizeLinkedHashMap<String, AmpReports>(Constants.MAX_REPORTS_IN_SESSION);
+    		reportsList = new MaxSizeLinkedHashMap<Integer, AmpReports>(Constants.MAX_REPORTS_IN_SESSION);
     	}
     	reportsList.put(reportToken, ampReport);
     	request.getSession().setAttribute("reportStack", reportsList);
@@ -686,12 +691,12 @@ public class ReportWizardAction extends MultiAction {
         MultilingualInputFieldValues.serialize(ampReport, "name", null, null, request);
 
         if ((request.getParameter("openReport") != null) && request.getParameter("openReport").equals("true")) {
-            callSaikuReport (ampReport.getAmpReportId().toString(), response,"openReportId", ampReport.hasAvailableMeasures());
+            callSaikuReport (ampReport.getAmpReportId().intValue(), response,"openReportId", ampReport.hasAvailableMeasures());
         }
         return null;
     }
 
-	private void callSaikuReport(String reportId, HttpServletResponse response, String varName, boolean hasAvailableMeasures ) throws IOException {
+	private void callSaikuReport(Integer reportId, HttpServletResponse response, String varName, boolean hasAvailableMeasures ) throws IOException {
 		PrintWriter out = response.getWriter();
 		StringBuilder responseString = new StringBuilder();
 		responseString.append(varName + "=" + reportId);

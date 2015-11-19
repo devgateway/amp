@@ -20,6 +20,7 @@ import org.dgfoundation.amp.onepager.components.features.tables.AmpOverallFundin
 import org.dgfoundation.amp.onepager.events.OverallFundingTotalsEvents;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
+import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -74,44 +75,44 @@ public class AmpOverviewSection extends AmpComponentPanel<Void> implements AmpRe
 		fundingSourcesNumberPanel.getTextContainer().add(attributeModifier);
 		wmc.add(fundingSourcesNumberPanel);
 
-        String typeOfCooperationKeyPrefix = "";
-        String typeOfImplementationKeyPrefix = "";
-        if (tm.getWorkspacePrefix() != null) {
-            typeOfCooperationKeyPrefix += "SSC_";
+		String sscKeyPrefix = "";
+        String sscModalitiesPathPrefix = "";
+        if (ActivityUtil.ACTIVITY_TYPE_SSC.equals(((AmpAuthWebSession) getSession()).getFormType())) {
+        	sscKeyPrefix = "SSC_";
+        	sscModalitiesPathPrefix = "SSC ";
         }
 
 		AmpCategorySelectFieldPanel typeOfCooperation = new AmpCategorySelectFieldPanel(
-				"typeOfCooperation", CategoryConstants.TYPE_OF_COOPERATION_KEY,
+				"typeOfCooperation", 
+				sscKeyPrefix + CategoryConstants.TYPE_OF_COOPERATION_KEY,
 				new AmpCategoryValueByKeyModel(
 						new PropertyModel<Set<AmpCategoryValue>>(am,
 								"categories"),
-						CategoryConstants.TYPE_OF_COOPERATION_KEY),
+						sscKeyPrefix + CategoryConstants.TYPE_OF_COOPERATION_KEY),
 				CategoryConstants.TYPE_OF_COOPERATION_NAME, true, false, null,
 				AmpFMTypes.MODULE);
 		wmc.add(typeOfCooperation);
 
 		AmpCategorySelectFieldPanel typeOfImplementation = new AmpCategorySelectFieldPanel(
 				"typeOfImplementation",
-				CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY,
+				sscKeyPrefix + CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY,
 				new AmpCategoryValueByKeyModel(
 						new PropertyModel<Set<AmpCategoryValue>>(am,
 								"categories"),
-						CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY),
+						sscKeyPrefix + CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY),
 				CategoryConstants.TYPE_OF_IMPLEMENTATION_NAME, true, false,
 				null, AmpFMTypes.MODULE);
 		wmc.add(typeOfImplementation);
 
 		AmpCategorySelectFieldPanel modalities = new AmpCategorySelectFieldPanel(
 				"modalities",
-				CategoryConstants.MODALITIES_KEY,
+				sscKeyPrefix + CategoryConstants.MODALITIES_KEY,
 				new AmpCategoryValueByKeyModel(
 						new PropertyModel<Set<AmpCategoryValue>>(am,
-								"categories"), CategoryConstants.MODALITIES_KEY),
-				CategoryConstants.MODALITIES_NAME, true, false, null,
+								"categories"), sscKeyPrefix + CategoryConstants.MODALITIES_KEY),
+				sscModalitiesPathPrefix + CategoryConstants.MODALITIES_NAME, true, false, null,
 				AmpFMTypes.MODULE);
-		wmc.add(modalities);				
-		
-		
+		wmc.add(modalities);						
 		
 		AmpOverallFundingTotalsTable overallFunding = new AmpOverallFundingTotalsTable(
 				"overallFunding", "Overall Funding Totals", new PropertyModel<Set<AmpFunding>>(am, "funding"));

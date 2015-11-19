@@ -291,11 +291,15 @@ public class ExportActivityToPDF extends Action {
                 createGeneralInfoRow(mainLayout, columnName, columnVal);
             }
 
-            if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Modalities")){
-
-                columnName=TranslatorWorker.translateText("Modalities");
-                columnVal=identification.getSscModalitiesAsString("\n");
-                createGeneralInfoRow(mainLayout,columnName,columnVal);
+            String sscPrefix = "";
+			if (identification.getTeam() != null && identification.getTeam().isSSCWorkspace()) {
+				sscPrefix = "SSC ";
+			}
+			
+			if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/" + sscPrefix + "Modalities")) {
+                columnName = TranslatorWorker.translateText("Modalities");
+                columnVal = identification.getSscModalitiesAsString("\n");
+                createGeneralInfoRow(mainLayout, columnName, columnVal);
             }
 
             //objective

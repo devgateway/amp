@@ -653,7 +653,13 @@ function collapseAll() {
 				<hr />
 			</module:display>
 
-			<module:display name="/Activity Form/Funding/Modalities" parentModule="/Activity Form/Funding">
+			<c:set var="modalitiesPath" value="/Activity Form/Funding/Overview Section/Modalities"/>
+			<c:if test="${aimEditActivityForm.identification.team !=null && aimEditActivityForm.identification.team.isSSCWorkspace()}">
+				<c:set var="modalitiesPath" value="/Activity Form/Funding/Overview Section/SSC Modalities"/>
+			</c:if>
+
+			<module:display name="${modalitiesPath}"
+				parentModule="/Activity Form/Funding/Overview Section">
 				<digi:trn>Modalities</digi:trn>:&nbsp;<br />
 				<c:if test="${not empty aimEditActivityForm.identification.ssc_modalities}">				
 				<b>
@@ -663,7 +669,6 @@ function collapseAll() {
 				</b>
 				</c:if>
 				<hr />
-				
 			</module:display>
 
 			

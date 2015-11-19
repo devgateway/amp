@@ -709,32 +709,35 @@ public class EditActivity extends Action {
             	eaForm.getIdentification().setApprovalStatus(Constants.EDITED_STATUS);
             }
         }
+        
+        String sscPrefix = "";
+        if (currentTeam != null && currentTeam.getWorkspacePrefix() != null) {
+        	sscPrefix =  "SSC_";
+        }
+        
         //AMP-17127
         //for modalities that is a SSC category we have to add the SSC prefix
-        List<AmpCategoryValue> modalities = CategoryManagerUtil.getAmpCategoryValuesFromListByKey("SSC_" + CategoryConstants.MODALITIES_KEY, activity.getCategories());
-        String []actModalities=null;
-        if(modalities!=null && modalities.size()>0){
+        List<AmpCategoryValue> modalities = CategoryManagerUtil.getAmpCategoryValuesFromListByKey(sscPrefix + 
+        		CategoryConstants.MODALITIES_KEY, activity.getCategories());
+        String[] actModalities=null;
+        
+        if(modalities !=null && modalities.size() >0){
         	actModalities=new String[modalities.size()];
         	int m=0;
+        	
         	for (AmpCategoryValue modal : modalities) {
-        		actModalities[m]=modal.getLabel();
+        		actModalities[m] = modal.getLabel();
 				m++;
 			}        	
-         }
-        eaForm.getIdentification().setSsc_modalities(actModalities );
-
-        String typeOfCooperationKeyPrefix = "";
-        String typeOfImplementationKeyPrefix = "";
-        if (currentTeam != null && currentTeam.getWorkspacePrefix() != null) {
-            typeOfCooperationKeyPrefix += "SSC_";
-            typeOfImplementationKeyPrefix = "SSC_";
         }
+        eaForm.getIdentification().setSsc_modalities(actModalities );
+       
         AmpCategoryValue typeOfCooperation = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
-                typeOfCooperationKeyPrefix + CategoryConstants.TYPE_OF_COOPERATION_KEY, activity.getCategories());
+        		sscPrefix + CategoryConstants.TYPE_OF_COOPERATION_KEY, activity.getCategories());
         eaForm.getIdentification().setSsc_typeOfCooperation(typeOfCooperation == null ? null : typeOfCooperation.getLabel());
 
         AmpCategoryValue typeOfImplementation = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
-                typeOfImplementationKeyPrefix + CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY, activity.getCategories());
+        		sscPrefix + CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY, activity.getCategories());
         eaForm.getIdentification().setSsc_typeOfImplementation(typeOfImplementation == null ? null : typeOfImplementation.getLabel());
 
        // eaForm.getIdentification().setFundingSourcesNumber(activity.getFundingSourcesNumber());

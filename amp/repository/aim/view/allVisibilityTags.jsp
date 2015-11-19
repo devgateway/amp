@@ -411,10 +411,6 @@
 <field:display name="Activity Created On" feature="Identification"></field:display> 
 <field:display name="Component Title" feature="Identification"></field:display>
 <field:display name="Component Description" feature="Identification"></field:display>
-<field:display name="Type of Cooperation" feature="Overview Section"></field:display>
-<field:display name="Type of Implementation" feature="Overview Section"></field:display>
-<field:display name="Modalities" feature="Identification"></field:display>
-<field:display name="SSC Modalities" feature="Identification"></field:display>
 <field:display name="Activity Performance" feature="Activity Dashboard"></field:display>
 <field:display name="Activity Printer Friendly Button Performance" feature="Activity Dashboard"></field:display>
 <field:display name="Activity Printer Friendly Button Risk" feature="Activity Dashboard"></field:display>

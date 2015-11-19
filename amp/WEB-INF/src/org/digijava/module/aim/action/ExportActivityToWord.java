@@ -2786,7 +2786,12 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 
-		if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Modalities")) {
+		String sscPrefix = "";
+		if (identification.getTeam() != null && identification.getTeam().isSSCWorkspace()) {
+			sscPrefix = "SSC ";
+		}
+		
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/" + sscPrefix + "Modalities")) {
 			columnName=TranslatorWorker.translateText("Modalities");
 			//for AMP-17127 they are multiple modalities for activities of SSC
 			columnVal=identification.getSscModalitiesAsString("\n");

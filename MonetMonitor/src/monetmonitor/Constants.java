@@ -2,8 +2,8 @@ package monetmonitor;
 
 
 import java.util.HashMap;
-
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * 
@@ -14,35 +14,34 @@ import java.util.Map;
  */
 public class  Constants {
 	
+	
+	private static Properties props = new Properties();
 	public static Map<String, String> parametersMap = new HashMap<String, String>();
 
 	
+	public static Properties getPropertiesInstance() {
+		return props;
+	}
+	
 	public static String getMonetFarmPath() {
-		return parametersMap.get("MONET_FARM_PATH");
+		return props.getProperty("MONET_FARM_PATH");
 	}
-	
-//	public static String getDatabaseName() {
-//		return parametersMap.get("DB_NAME");
-//	}
-	
-	public static boolean getNoGui() {
-		return parametersMap.get("NO_GUI").contains("true");
-	}
+
 	
 	public static String getMonetExecPath() {
-		return parametersMap.get("MONET_EXEC_PATH");
+		return props.getProperty("MONET_EXEC_PATH");
 	}
 
 	public static String getLogfilePath() {
-		return parametersMap.get("LOG_FILE_PATH");
+		return props.getProperty("LOG_FILE_PATH");
 	}
 	
 	public static int getTimerDelay() {
 		//remove eventual trailing spaces
-		return Integer.parseInt(parametersMap.get("TIMER_DELAY").replaceAll(" ", ""));
+		return Integer.parseInt(props.getProperty("TIMER_DELAY").replaceAll(" ", ""));
 	}
 	public static String getDbName() {
-		return parametersMap.get("DB_NAME").replace(" ", "");
+		return props.getProperty("DB_NAME").replace(" ", "");
 	}
 	/*#create db command
 CREATE_DB_COMMAND monetdb create 
@@ -54,20 +53,24 @@ STOP_DB_COMMMAND monetdb stop
 DESTROY_COMMAND monetdb destroy 
 	 * */
 	public static String getCommandStop() {
-		return parametersMap.get("STOP_DB_COMMAND");
+		return props.getProperty("STOP_DB_COMMAND");
 	}
 	public static String getCommandCreate() {
-		return parametersMap.get("CREATE_DB_COMMAND");
+		return props.getProperty("CREATE_DB_COMMAND");
 	}
 	public static String getCommandRelease() {
-		return parametersMap.get("RELEASE_DB_COMMAND");
+		return props.getProperty("RELEASE_DB_COMMAND");
 	}
 	public static String getCommandDestroy() {
-		return parametersMap.get("DESTROY_DB_COMMAND");
+		return props.getProperty("DESTROY_DB_COMMAND");
+	}
+
+	public static String getCommandStatus() {
+		return props.getProperty("STATUS_DB_COMMAND");
 	}
 	
 	public static String getPostgresUser() {
-		return parametersMap.get("PG_USERNAME");
+		return props.getProperty("PG_USERNAME");
 	}
 	
 	/* it's called "swearword" for obfuscation
@@ -75,11 +78,29 @@ DESTROY_COMMAND monetdb destroy
 	 * and keeping it hashed or somehow otherwise of a lock is too much fuss 
 	*/
 	public static String getPostgresPassword() {
-		return parametersMap.get("PG_SWEARWORD");
+		return props.getProperty("PG_SWEARWORD");
 	}
 	
 	public static String getPostgresPort() {
-		return parametersMap.get("PG_PORT").replaceAll(" ", "");
+		return props.getProperty("PG_PORT").replaceAll(" ", "");
+	}
+
+	//default value == 100
+	public static int getHealthThreshold() {
+		return Integer.parseInt(props.getProperty("HEALTH_THRESHOLD", "100"));
+	}
+
+	public static int getBroadcastFrequency() {
+		return Integer.parseInt(props.getProperty("BROADCAST_FREQUENCY", "1200"));
+	}
+
+	public static int getMemCheckFrequency() {
+		return Integer.parseInt(props.getProperty("MEMCHECK_FREQUENCY", "75"));
+	}
+
+	
+	public static boolean debugLogMode() {
+		return props.getProperty("LOG_LEVEL").contains("debug");
 	}
 	
 }

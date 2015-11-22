@@ -63,11 +63,7 @@ public abstract class Runner {
 //			return false;
 		if (!allowedToRun()) 
 			return false;
-		try {
-			Utils.broadcastStatus(getCustomMessage());
-		} catch (Exception e) {
-			System.err.println("Error in status shower:" + e.getMessage());
-		}
+		Utils.broadcastStatus(getCustomMessage());
 
 		if (thread == null){
 			thread = new MonetThread();

@@ -24,6 +24,7 @@ public class PostgresWriter {
 		}
 	}
 	
+	
 	/**
 	 * Checks whether all Postgres credentials are available from the settings file
 	 * @return
@@ -105,13 +106,16 @@ public class PostgresWriter {
 	 * @return
 	 */
 	public boolean addErrorToLogs(String cause) {
-		if (!isPostgresAvailable())
+		if (!isPostgresAvailable()) {
+			Utils.broadcastStatus("Postgres not configured!");
 			return false;
+		}
 		Connection conn = null;
 		try {
 			conn = getConnection();
 			addEntryToAmpEtlChangelog(cause, conn);
 		} catch (SQLException exc) {
+			Utils.broadcastStatus("Exception thrown when writing message cause: " + cause);
 			exc.printStackTrace();
 		} finally {
 			closeConnection(conn);

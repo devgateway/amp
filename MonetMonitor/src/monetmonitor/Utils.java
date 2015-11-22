@@ -23,7 +23,7 @@ public class Utils {
 	 * @param statusMessage
 	 * @throws Exception
 	 */
-	public static void broadcastStatus(String statusMessage) throws Exception {
+	public static void broadcastStatus(String statusMessage) {
 		for (StatusShower st : statusShowers) {
 			st.showStatus(statusMessage);
 		}

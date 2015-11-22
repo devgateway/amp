@@ -14,7 +14,7 @@ public interface StatusShower {
 	 * 			to the statusShower destination
 	 * @throws Exception
 	 */
-	public void showStatus(String status) throws Exception;
+	public void showStatus(String status);
 	/**
 	 * Perform any class init code (may be NOP)
 	 */

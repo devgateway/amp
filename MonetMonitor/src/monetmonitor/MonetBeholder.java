@@ -60,12 +60,7 @@ public abstract class MonetBeholder {
 			
 			return BeholderObservationResult.SUCCESS;
 		} catch (java.sql.SQLException exc) {
-			try {
-				Utils.broadcastStatus(exc.getMessage());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				Utils.broadcastStatus("Exception message:" + exc.getMessage());
 			if (exc.getMessage().contains("internal error while starting"))
 				return BeholderObservationResult.ERROR_INTERNAL_MONETDB;
 			if (exc.getMessage().contains("no such database"))
@@ -74,7 +69,7 @@ public abstract class MonetBeholder {
 				new PostgresWriter().addErrorToLogs(lastRunQuery);
 				return BeholderObservationResult.ERROR_INTERNAL_MONETDB;
 			}
-			if (exc.getMessage().contains("Connection refused"))
+			if (exc.getMessage().contains("Connection refused") || exc.getMessage().contains("Connection reset") )
 				return BeholderObservationResult.ERROR_CANNOT_CONNECT;
 //			End of stream reached
 			if (exc.getMessage().contains("is under maintenance"))

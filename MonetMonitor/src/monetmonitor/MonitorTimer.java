@@ -31,23 +31,29 @@ public class MonitorTimer {
 	  
 	  MonetServerStarter starter;
 	  
+	  int iteration;
+	  
 	  
 	 
 	  
 	  
 	  BeholderObservationResult prevStatus = BeholderObservationResult.ERROR_UNKNOWN;
+	private HealthChecker healthChecker;
 	  /**
 	   * 
 	   * @param beh reference to the MonetBeholder class (it checks if MonetMonitor is responding)
 	   * @param st reference to the MonetStarter class (starts if MonetBeholder doesn't get an answer from the server)
 	   */
-	  void startTimer(MonetBeholder beh,  MonetServerStarter st){
+	  void startTimer(MonetBeholder beh,  MonetServerStarter st, HealthChecker hc){
 		  this.beholder = beh;
 		  this.starter = st;
+		  this.healthChecker = hc;
 		    Runnable checkServerTask = new Runnable () {
 				@Override
 				public void run() {
+					iteration++;
 			    	BeholderObservationResult serverStatus = beholder.check();
+//			    	BeholderObservationResult healthStatus = healthChecker.runHealthCheck();
 			    	String statusMessage = null;
 			    	switch(serverStatus) {
 			    	case SUCCESS: 						statusMessage = "Server running"; break;
@@ -56,18 +62,20 @@ public class MonitorTimer {
 			    	case ERROR_UNKNOWN: 				statusMessage = "Unknown error"; break;
 			    	case ERROR_DATABASE_MAINTENANCE: 	statusMessage = "Database under maintenance"; break;
 			    	case ERROR_NO_DATABASE: 			statusMessage = "Database missing"; break;
+			    	case ERROR_HEALTH_BELOW_THRESHOLD:  statusMessage = "Database health below threshold"; break;
 			    	}
 
 			    	/*
 			    	 * [1]Part broadcasting server status message <-------------------------
 			    	 */
-			    	try{
-			    		if (prevStatus != serverStatus)
-			    			Utils.broadcastStatus(statusMessage);
-			    		prevStatus = serverStatus;
-			    	} catch (Exception exc) {
-			    		System.err.println("Error in status shower:" + exc.getMessage());
+//			    	if (iteration == Constants.getBroadcastFrequency())
+//			    		iteration = 0;
+			    	if (iteration % Constants.getMemCheckFrequency() == 0) {
+			    		new MemoryChecker().getFreeMemory();
 			    	}
+		    		if (prevStatus != serverStatus || (iteration % Constants.getBroadcastFrequency() == 0) || Constants.debugLogMode())
+		    			Utils.broadcastStatus(statusMessage);
+		    		prevStatus = serverStatus;
 			    	/*
 			    	 * ------------------------>[1] End of part broadcasting server status 
 			    	 */
@@ -75,54 +83,51 @@ public class MonitorTimer {
 			    	/*
 			    	 * [2]Part attempting to correct server's status <-------------------------
 			    	 */
-			    	switch(serverStatus) {
-			    	case SUCCESS: //do nothing, server is online, it's fine
-			    		break;
-			    	case ERROR_CANNOT_CONNECT: 
-			    		//attempt to start the server
-//			    		try {
-//		    			Utils.broadcastStatus("Starting server...");
-//					} catch (Exception e) {
-//			    		System.err.println("Error in status shower:" + e.getMessage());
-//					}
-
-			    		starter.run();
-			    		break; 
-			    	case ERROR_NO_DATABASE:
-			    		new SequentialRunner(CommandGenerator.generateCreateDatabaseCommands()).run();
-//			    		Semaphore sem = new Semaphore();
-//			    		
-//			    		new MonetDatabaseCreator(sem).run();
-//			    		new MonetDatabaseReleaser(sem).run();
-			    		break;
-			    	case ERROR_INTERNAL_MONETDB:
-			    		
-			    		new SequentialRunner(CommandGenerator.generateRecreateDatabaseCommands()).run();
-			    		//attempt to recreate the db 
-//			    		try {
-//		    			Utils.broadcastStatus("Recreating database...");
-//					} catch (Exception e) {
-//			    		System.err.println("Error in status shower:" + e.getMessage());
-//					}
-//			    		Semaphore sem2 = new Semaphore();
-//			    		new MonetDatabaseStopper(sem2).run();
-//			    		new MonetDatabaseDestroyer(sem2).run();
-//			    		new MonetDatabaseCreator(sem2).run();
-//			    		new MonetDatabaseReleaser(sem2).run();
-//			    		
-			    		starter.run();
-			    		break;
-			    	case ERROR_DATABASE_MAINTENANCE:
-//			    		new MonetDatabaseReleaser().run();
-			    		new SequentialRunner(CommandGenerator.generateReleaseDatabaseCommands()).run();;
-			    		starter.run();
-			    		break;
-			    	case ERROR_UNKNOWN: //this shouldn't be happening
-			    						//broadcast unknown error and break the cycle
-			    		new SequentialRunner(CommandGenerator.generateRecreateDatabaseCommands()).run();
-			    		starter.run();
-			    		break;
-			    	}
+		    		
+		    		//recreate the database before we take a chance at starting it
+		    		
+//			    	if (healthStatus.equals(BeholderObservationResult.ERROR_HEALTH_BELOW_THRESHOLD)){
+//			    		Utils.broadcastStatus("Recreating database...");
+//			    		new SequentialRunner(CommandGenerator.generateRecreateDatabaseCommands()).run();
+//			    		starter.run();
+//			    	} else {
+				    	switch(serverStatus) {
+				    	case SUCCESS: //do nothing, server is online, it's fine
+				    		break;
+				    	case ERROR_CANNOT_CONNECT: 
+				    		//attempt to start the server
+			    			Utils.broadcastStatus("Starting server...");
+				    		starter.run();
+				    		break; 
+				    	case ERROR_NO_DATABASE:
+				    		Utils.broadcastStatus("Creating database...");
+				    		new SequentialRunner(CommandGenerator.generateCreateDatabaseCommands()).run();
+				    		starter.run();
+				    		break;
+				    	case ERROR_INTERNAL_MONETDB: 
+				    		Utils.broadcastStatus("Recreating database...");
+				    		new SequentialRunner(CommandGenerator.generateRecreateDatabaseCommands()).run();
+				    		starter.run();
+				    		break;
+				    	case ERROR_DATABASE_MAINTENANCE:
+				    		Utils.broadcastStatus("Releasing database...");
+				    		new SequentialRunner(CommandGenerator.generateReleaseDatabaseCommands()).run();;
+				    		starter.run();
+				    		break;
+				    	case ERROR_UNKNOWN: //this shouldn't be happening
+				    						//broadcast unknown error and break the cycle
+				    		Utils.broadcastStatus("Recreating database...");
+				    		new SequentialRunner(CommandGenerator.generateRecreateDatabaseCommands()).run();
+				    		starter.run();
+				    		break;
+						case ERROR_HEALTH_BELOW_THRESHOLD:
+							//it's not possible to get this from the beholder
+							break;
+						default:
+							//whatever
+							break;
+				    	}
+//			    	}
 //			    	if (!serverStatus.equals(BeholderObservationResult.SUCCESS)) {
 //			    		try {
 //			    			Utils.broadcastStatus("Starting server...");

@@ -1057,7 +1057,7 @@ public class LuceneUtil implements Serializable {
         StringBuffer sBuffer = new StringBuffer();
         if (newActivity.getOrgrole() != null && Hibernate.isInitialized(newActivity.getOrgrole()) ) {
             for (AmpOrgRole role : newActivity.getOrgrole()) {
-                if(role.getBudgets()!=null){
+                if(role.getBudgets()!=null && Hibernate.isInitialized(role.getBudgets())){
                     for (AmpOrgRoleBudget budget : role.getBudgets()){
                         if (budget.getBudgetCode() != null) {
                             sBuffer.append(budget.getBudgetCode() + " ; ");

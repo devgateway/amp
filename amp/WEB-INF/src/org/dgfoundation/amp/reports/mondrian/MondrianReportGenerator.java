@@ -718,7 +718,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 					if (mtefColumnName == null)
 						throw new RuntimeException("could not backtrack from Mondrian output measure to AMP measure");
 					SortedSet<Integer> legalYears = spec.allowedYearsPerMeasure.get(mtefColumnName);
-					boolean shouldDelete = (!mtefColumnName.equals(MeasureConstants.REAL_MTEFS)) // Real MTEFs zero totals appear in each year - to mimic old reports 
+					boolean shouldDelete = (true || !mtefColumnName.equals(MeasureConstants.REAL_MTEFS)) // Real MTEFs zero totals appear in each year - to mimic old reports; annuled correspondence by AMP-21547
 							&& !(legalYears == null || legalYears.isEmpty() || legalYears.contains(year));
 					Set<String> meta = new HashSet<>(Arrays.asList(IS_MTEF_COLUMN));
 					if (shouldDelete) {

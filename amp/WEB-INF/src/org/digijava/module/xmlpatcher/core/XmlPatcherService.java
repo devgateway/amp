@@ -273,6 +273,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
 		}
 		logger.info("XML Patcher session finished");
 		logger.info("refreshing GlobalSettingsCache...");
+		PersistenceManager.getSession().getTransaction().commit();
 		FeaturesUtil.buildGlobalSettingsCache(FeaturesUtil.getGlobalSettings()); // refresh global settings cache, as the startup process might have changed it (through XML patches, for example)
 	}
 

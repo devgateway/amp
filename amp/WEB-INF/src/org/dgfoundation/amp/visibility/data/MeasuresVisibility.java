@@ -16,6 +16,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
@@ -41,9 +42,11 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 	protected final static String ANNUAL_PROPOSED_PROJECT_COST_ID_NAME = "AnnualPropProjCost";
 	protected final static String DIRECTED_DISBURSEMENTS_ID_NAME = "DirectedDisbursements";
 	protected final static String PROPOSED_PROJECT_COST_ID_NAME = "ProposedProjectCost";
+	protected final static String MTEF_ID_NAME = "MtefsEnabled";
+	
 	protected final static Map<String, String> fieldsToMeasuresMap = new HashMap<String, String>();
 	protected final static String ADJUSTMENT_PREFIX = "adjustment_type: ";
-	
+
 	public MeasuresVisibility() {
 	}
 	
@@ -58,6 +61,7 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 			put("/Activity Form/Funding/Proposed Project Cost/Annual Proposed Project Cost/Add Projection", ANNUAL_PROPOSED_PROJECT_COST_ID_NAME);
 			put("/Activity Form/Funding/Proposed Project Cost/Amount", PROPOSED_PROJECT_COST_ID_NAME);
 			put("/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Recipient Organization", DIRECTED_DISBURSEMENTS_ID_NAME);
+			put("/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections", MTEF_ID_NAME);
 	}};
 	
 	@SuppressWarnings("serial")
@@ -90,6 +94,7 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 		put(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.REAL_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual", DIRECTED_DISBURSEMENTS_ID_NAME));
+		put(ColumnConstants.FORECAST_EXECUTION_RATE, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual", MTEF_ID_NAME));
 		// skipping REAL_COMMITMENTS and REAL_MTEF, as could not find support for those in the AF
 		put(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Planned"));
 		put(MeasureConstants.TOTAL_COMMITMENTS, Arrays.asList(ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual"));

@@ -92,14 +92,18 @@ function contentwidget_lastupdated_widget_retrieve_data($plugin, $widget_setting
 
     // Make a POST request.
     $response = restclient_post($plugin['resource api path'] . '?' . drupal_http_build_query($parameters), $variables);
+
+    // We want to cache only successful responses.
+    if (restclient_response_code($response) == RESTCLIENT_RESPONSE_SUCCESS) {
+      // 1 hours cache life time for requests should be plenty for now.
+      $expire = 3600;
+      cache_set($cache_id, $response, 'cache', REQUEST_TIME + $expire);
+    }
   }
 
   // @TODO: Add support for more response codes.
   if (restclient_response_code($response) == RESTCLIENT_RESPONSE_SUCCESS) {
     if (!empty($response->data)) {
-      // 1 hours cache life time for requests should be plenty for now.
-      $expire = 3600;
-      cache_set($cache_id, $response, 'cache', REQUEST_TIME + $expire);
       $data = json_decode($response->data);
     }
     else {

@@ -1,11 +1,13 @@
 package org.digijava.module.aim.form;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class DynLocationManagerForm extends ActionForm {
 	public enum Option{
@@ -13,7 +15,7 @@ public class DynLocationManagerForm extends ActionForm {
 	}
 	private Collection<AmpCategoryValueLocations> firstLevelLocations;
 	private Collection<AmpCategoryValueLocations> unorganizedLocations;
-	private AmpCategoryClass implementationLocation;
+	private List<AmpCategoryValue> locationLevels = new ArrayList<AmpCategoryValue>();
 	private int numOfLayers;
 	private Long firstLayerId;
 	private String treeStructure;
@@ -59,15 +61,15 @@ public class DynLocationManagerForm extends ActionForm {
 			Collection<AmpCategoryValueLocations> unorganizedLocations) {
 		this.unorganizedLocations = unorganizedLocations;
 	}
-
-	public AmpCategoryClass getImplementationLocation() {
-		return implementationLocation;
+	
+	public List<AmpCategoryValue> getLocationLevels() {
+		return locationLevels;
 	}
-
-	public void setImplementationLocation(AmpCategoryClass implementationLocation) {
-		this.implementationLocation = implementationLocation;
+	
+	public void setLocationLevels(List<AmpCategoryValue> locationLevels) {
+		this.locationLevels = locationLevels;
 	}
-
+	
 	public int getNumOfLayers() {
 		return numOfLayers;
 	}

@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -32,6 +33,7 @@ import org.dgfoundation.amp.algo.DatabaseWaver;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpLocation;
@@ -41,7 +43,6 @@ import org.digijava.module.aim.exception.DynLocationStructuralException;
 import org.digijava.module.aim.exception.DynLocationStructureStringException;
 import org.digijava.module.aim.form.DynLocationManagerForm;
 import org.digijava.module.aim.form.DynLocationManagerForm.Option;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
@@ -63,9 +64,7 @@ public class DynLocationManagerUtil {
 		}
 	}
 	
-	public static Collection<AmpCategoryValueLocations> getHighestLayerLocations(
-			AmpCategoryClass implLoc, DynLocationManagerForm myForm,
-			ActionMessages errors) {
+	public static Collection<AmpCategoryValueLocations> getHighestLayerLocations(DynLocationManagerForm myForm,	ActionMessages errors) {
 		Collection<AmpCategoryValueLocations> locations = null;
 		Session dbSession = null;
 		Collection<AmpCategoryValueLocations> rootLocations = null;
@@ -75,8 +74,7 @@ public class DynLocationManagerUtil {
 
 		try {
 			dbSession = PersistenceManager.getSession();
-			String queryString = "select loc from "
-					+ AmpCategoryValueLocations.class.getName() + " loc";
+			String queryString = "select loc from " + AmpCategoryValueLocations.class.getName() + " loc";
 			Query qry = dbSession.createQuery(queryString);
 			locations = qry.list();
 			if (locations != null && locations.size() > 0) {
@@ -111,37 +109,30 @@ public class DynLocationManagerUtil {
 	
 	
 	public static void deleteLocation(Long id, ActionMessages errors) {
-		Session dbSession = null;
+		Session dbSession = PersistenceManager.getSession();
 		try {
-			dbSession = PersistenceManager.getSession();
-//beginTransaction();
-
-			AmpCategoryValueLocations loc = (AmpCategoryValueLocations) dbSession
-					.load(AmpCategoryValueLocations.class, id);
+			AmpCategoryValueLocations loc = (AmpCategoryValueLocations) dbSession.load(AmpCategoryValueLocations.class, id);
 			
-			if ( loc.getParentLocation() != null )
-				loc.getParentLocation().getChildLocations().remove(loc);
-//			String queryString = "delete from " + AmpLocation.class.getName()
-//					+ " a where a.location=" + loc.getId();
-//			Query qry = dbSession.createQuery(queryString);
-//			qry.executeUpdate();
-
-			if (loc != null)
+			AmpLocation ampLoc = DynLocationManagerUtil.getAmpLocation(loc);
+			if (ampLoc != null && ampLoc.getActivities() != null && ampLoc.getActivities().size() > 0) {
+				errors.add("title", new ActionMessage("error.aim.dynRegionManager.locationIsInUse"));
+			} else {
+				if (loc.getParentLocation() != null)
+					loc.getParentLocation().getChildLocations().remove(loc);
+				
+				if (ampLoc != null) {
+					dbSession.delete(ampLoc);
+				}
+				
 				dbSession.delete(loc);
-//session.flush();
-			//tx.commit();
+			}
 		} catch (Exception e) {
-			//tx.rollback();
-			if (errors != null)
-				errors.add("title", new ActionMessage(
-						"error.aim.dynRegionManager.locationIsInUse"));
-			e.printStackTrace();
+			errors.add("title", new ActionMessage("error.aim.dynRegionManager.locationIsInUse"));
+			logger.error(e);
 		}
 	}
 
-	public static void saveStructure(String treeStructure,
-			String unorganizedLocations, AmpCategoryClass implLoc,
-			ActionMessages errors) {
+	public static void saveStructure(String treeStructure, String unorganizedLocations, List<AmpCategoryValue> levelLocations, ActionMessages errors) {
 		if (treeStructure.length() < 4)
 			return;
 		Collection<AmpCategoryValueLocations> locations = null;
@@ -170,8 +161,7 @@ public class DynLocationManagerUtil {
 				Integer layerIndex = nodeInfo.getLayerIndex();
 
 				AmpCategoryValueLocations loc = locationsMap.get(id);
-				AmpCategoryValue layer = implLoc.getPossibleValues().get(
-						layerIndex);
+				AmpCategoryValue layer = levelLocations.get(layerIndex);
 				AmpCategoryValueLocations parent = locationsMap.get(parentId);
 
 				loc.setParentCategoryValue(layer);
@@ -219,16 +209,15 @@ public class DynLocationManagerUtil {
 		}
 	}
 
-	private static Collection<AmpCategoryValueLocations> findRootLocations(
-			Collection<AmpCategoryValueLocations> allLocations) {
-		TreeSet<AmpCategoryValueLocations> returnLocations = new TreeSet<AmpCategoryValueLocations>(
-				alphabeticalLocComp);
-		Iterator<AmpCategoryValueLocations> iterator = allLocations.iterator();
-		while (iterator.hasNext()) {
-			AmpCategoryValueLocations loc = iterator.next();
-			if (loc.getParentLocation() == null)
+	private static Collection<AmpCategoryValueLocations> findRootLocations(Collection<AmpCategoryValueLocations> allLocations) {
+		TreeSet<AmpCategoryValueLocations> returnLocations = new TreeSet<AmpCategoryValueLocations>(alphabeticalLocComp);
+		
+		for(AmpCategoryValueLocations loc : allLocations) {
+			if (loc.getParentLocation() == null) {
 				returnLocations.add(loc);
+			}
 		}
+		
 		return returnLocations;
 	}
 
@@ -252,19 +241,15 @@ public class DynLocationManagerUtil {
 		}
 	}
 
-	public static void checkTree(
-			Collection<AmpCategoryValueLocations> rootLocations,
-			Collection<AmpCategoryValueLocations> badLayerLocations) {
+	public static void checkTree(Collection<AmpCategoryValueLocations> rootLocations, Collection<AmpCategoryValueLocations> badLayerLocations) {
 
 		badLayerLocations.clear();
 
 		Iterator<AmpCategoryValueLocations> locIter = rootLocations.iterator();
 		while (locIter.hasNext()) {
 			AmpCategoryValueLocations tempLoc = locIter.next();
-			if (tempLoc.getChildLocations() != null
-					&& tempLoc.getChildLocations().size() > 0) {
-				checkSiblings(tempLoc.getChildLocations(), badLayerLocations,
-						tempLoc.getParentCategoryValue().getIndex());
+			if (tempLoc.getChildLocations() != null	&& tempLoc.getChildLocations().size() > 0) {
+				checkSiblings(tempLoc.getChildLocations(), badLayerLocations, tempLoc.getParentCategoryValue().getIndex());
 			}
 		}
 
@@ -948,8 +933,7 @@ public class DynLocationManagerUtil {
 	}
 
 	public static Comparator<AmpCategoryValueLocations> alphabeticalLocComp = new Comparator<AmpCategoryValueLocations>() {
-		public int compare(AmpCategoryValueLocations o1,
-				AmpCategoryValueLocations o2) {
+		public int compare(AmpCategoryValueLocations o1, AmpCategoryValueLocations o2) {
 			return o1.getName().compareTo(o2.getName());
 		}
 	};
@@ -962,19 +946,22 @@ public class DynLocationManagerUtil {
 
             int physicalNumberOfCells = hssfRow.getPhysicalNumberOfCells();
             List<AmpCategoryValue> implLocs = new ArrayList<AmpCategoryValue>(
-                    CategoryManagerUtil
-                            .getAmpCategoryValueCollectionByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY));
+                    CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.IMPLEMENTATION_LOCATION_KEY));
+            
             int i = 1;
             int hierarchyNumberOfCells=implLocs.size();
             // last five cells are not hierarchy cells and first cell is db id
-            if (hierarchyNumberOfCells+6 != physicalNumberOfCells) {
+            if (hierarchyNumberOfCells + 6 != physicalNumberOfCells) {
                 return ErrorCode.NUMBER_NOT_MATCH;
             }
 
             for (AmpCategoryValue location : implLocs) {
-                if (!hssfRow.getCell(i).getStringCellValue().equals(location.getValue())) {
+            	String cellValue = hssfRow.getCell(i).getStringCellValue();
+                if (!StringUtils.equalsIgnoreCase(cellValue, location.getValue())
+                		&& !StringUtils.equalsIgnoreCase(cellValue, TranslatorWorker.translateText(location.getValue()))) {
                     return ErrorCode.NAME_NOT_MATCH;
                 }
+                
                 i++;
             }
 
@@ -1021,9 +1008,11 @@ public class DynLocationManagerUtil {
                     String longitude = getValue(cell);
                     cell = hssfRow.getCell(k++);
                     String geoID = getValue(cell);
+                    
                     if (geoID != null && geoID.contains(".0")) {
                         geoID = geoID.replace(".0", "");
                     }
+                    
                     cell = hssfRow.getCell(k++);
                     String iso = getValue(cell);
                     cell = hssfRow.getCell(k++);
@@ -1054,6 +1043,7 @@ public class DynLocationManagerUtil {
                                 if (location.getParentCategoryValue() != null && !location.getParentCategoryValue().equals(implLoc)) {
                                     break;
                                 }
+                                
                                 location.setName(name);
                                 location.setGsLat(lalitude);
                                 location.setGsLong(longitude);
@@ -1065,10 +1055,10 @@ public class DynLocationManagerUtil {
                                 boolean edit = location.getId() != null;
                                 LocationUtil.saveLocation(location, edit);
                             }
-
                         } else {
                             parentLoc = getLocationByName(name, implLoc, parentLoc);
                             if (parentLoc == null) {
+                            	logger.error("Parent location is null");
                                 return ErrorCode.INCORRECT_CONTENT;
                             }
                         }
@@ -1077,21 +1067,9 @@ public class DynLocationManagerUtil {
             }
 
         }
-        catch (NullPointerException e) {
-            logger.error("file is not ok");
-            throw new AimException("Cannot import regions", e);
-        }
-        catch (IllegalStateException e) {
-            logger.error("file is not ok", e);
-            return ErrorCode.INCORRECT_CONTENT;
-        }
-        catch(IOException e){
-            logger.error("file is not ok", e);
-            return ErrorCode.INCORRECT_CONTENT;
-        }
         catch (Exception e) {
-            logger.error(e);
-            throw new AimException("Cannot import regions", e);
+            logger.error("Exception throwed during the import of the regions.", e);
+            return ErrorCode.INCORRECT_CONTENT;
         }
 
         return ErrorCode.CORRECT_CONTENT;
@@ -1109,7 +1087,7 @@ public class DynLocationManagerUtil {
 	}
 	
 	public enum ErrorCode{
-		NUMBER_NOT_MATCH,NAME_NOT_MATCH,INCORRECT_CONTENT,CORRECT_CONTENT,INEXISTANT_ADM_LEVEL,LOCATION_NOT_FOUND
+		NUMBER_NOT_MATCH, NAME_NOT_MATCH, INCORRECT_CONTENT, CORRECT_CONTENT, INEXISTANT_ADM_LEVEL, LOCATION_NOT_FOUND
 	}
 
 	public static class NodeInfo {

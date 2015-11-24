@@ -6,7 +6,6 @@ import java.io.InputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -20,35 +19,32 @@ import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil.ErrorCode;
 
 public class ImportIntoDynLocationManagerXSL extends Action {
-	private static Logger logger = Logger
-			.getLogger(ImportIntoDynLocationManagerXSL.class);
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws java.lang.Exception {
+	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, 
+			HttpServletResponse response) throws Exception {
+		
 		DynLocationManagerForm  ioForm = (DynLocationManagerForm)form;
-		if (request.getParameter("import") != null){
+		if (request.getParameter("import") != null) {
 			FormFile uploadedFile = ioForm.getFileUploaded();
 			byte[] fileData = uploadedFile.getFileData();
 			InputStream inputStream = new ByteArrayInputStream(fileData);
-			Option option=(ioForm.getOption()==1)?Option.OVERWRITE:Option.NEW;
+			Option option = (ioForm.getOption()==1) ? Option.OVERWRITE : Option.NEW;
+			
 			ActionMessages errors = new ActionMessages();
 			ErrorCode errorCode=DynLocationManagerUtil.importExcelFile(inputStream, option);
 			switch (errorCode) {
-			case INCORRECT_CONTENT:errors.add(
-					ActionMessages.GLOBAL_MESSAGE,
-					new ActionMessage(
-							"error.aim.regionImportWrongContent")); break;
-			case NUMBER_NOT_MATCH:errors.add(
-					ActionMessages.GLOBAL_MESSAGE,
-					new ActionMessage(
-							"error.aim.regionImportImpsNumberMisMatch")); break;
-			case NAME_NOT_MATCH:errors.add(
-					ActionMessages.GLOBAL_MESSAGE,
-					new ActionMessage(
-							"error.aim.regionImportImpsNameMisMatch")); break;
-			case CORRECT_CONTENT: return mapping.findForward("success"); 
+				case INCORRECT_CONTENT:
+					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.regionImportWrongContent")); 
+					break;
+				case NUMBER_NOT_MATCH:
+					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.regionImportImpsNumberMisMatch")); 
+					break;
+				case NAME_NOT_MATCH: 
+					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.regionImportImpsNameMisMatch")); 
+					break;
+				case CORRECT_CONTENT: return mapping.findForward("success"); 
 			}
+			
 			saveErrors(request, errors);
 		}
 

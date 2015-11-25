@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.nireports;
+package org.dgfoundation.amp.nireports.schema;
 
 import java.util.ArrayList;
 import java.util.Collections;

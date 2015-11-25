@@ -4,9 +4,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.dgfoundation.amp.nireports.NiReportColumn;
-import org.dgfoundation.amp.nireports.NiReportMeasure;
-import org.dgfoundation.amp.nireports.NiReportsSchema;
+import org.dgfoundation.amp.nireports.schema.NiReportColumn;
+import org.dgfoundation.amp.nireports.schema.NiReportMeasure;
+import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 
 /**
  * 

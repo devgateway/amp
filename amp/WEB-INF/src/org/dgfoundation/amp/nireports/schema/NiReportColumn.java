@@ -1,6 +1,12 @@
-package org.dgfoundation.amp.nireports;
+package org.dgfoundation.amp.nireports.schema;
 
 import java.util.List;
+import java.util.Map;
+
+import org.dgfoundation.amp.nireports.CellColumn;
+import org.dgfoundation.amp.nireports.ImmutablePair;
+import org.dgfoundation.amp.nireports.NiFilters;
+import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
 /**
  * 
@@ -11,10 +17,12 @@ public abstract class NiReportColumn {
 	
 	public final String name;
 	public final NiDimension.LevelColumn levelColumn;
+	public final ImmutablePair<String, String> fundingViewFilter;
 	
-	protected NiReportColumn(String name, NiDimension.LevelColumn levelColumn) {
+	protected NiReportColumn(String name, NiDimension.LevelColumn levelColumn, ImmutablePair<String, String> fundingViewFilter) {
 		this.name = name;
 		this.levelColumn = levelColumn;
+		this.fundingViewFilter = fundingViewFilter;
 	}
 	
 	public abstract List<CellColumn> fetchColumn(NiFilters filters);

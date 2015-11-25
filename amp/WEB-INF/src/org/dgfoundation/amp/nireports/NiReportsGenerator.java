@@ -3,6 +3,7 @@ package org.dgfoundation.amp.nireports;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 
 /**
  * 

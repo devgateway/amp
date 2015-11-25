@@ -1,0 +1,1 @@
+[{"uniqueName":"amp","name":"amp","catalogs":[{"uniqueName":"AMP","name":"AMP","schemas":[{"uniqueName":"AMP","name":"AMP","cubes":[{"uniqueName":"[amp].[AMP].[AMP].[Donor Funding]","name":"Donor Funding","connection":"amp","catalog":"AMP","schema":"AMP","caption":"Donor Funding","visible":true}]}]}]}]

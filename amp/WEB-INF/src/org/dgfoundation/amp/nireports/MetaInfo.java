@@ -7,36 +7,28 @@ package org.dgfoundation.amp.nireports;
  * @author Dolghier Constantin
  * 
  */
-public class MetaInfo implements Comparable<MetaInfo> {
-	public final String category;
-	public final Comparable<?> value;
+public class MetaInfo extends ImmutablePair<String, Comparable<?>> implements Comparable<MetaInfo> {
+//	public final String category;
+//	public final Comparable<?> value;
 	
 	public MetaInfo(String category, Comparable<?> value) {
-		if (category == null)
-			throw new RuntimeException("metaInfo category is null");
-		if (value == null)
-			throw new RuntimeException("metaInfo value is null");
-		this.category = category;
-		this.value = value;
+		super(category, value);
 	}
 	
-	@Override
-	public boolean equals(Object obj) {
-		MetaInfo oth = (MetaInfo) obj;
-		return this.category.equals(oth.category) && this.value.equals(oth.value);
+	public String getCategory() {
+		return this.k;
 	}
-
-	@Override
-	public int hashCode() {		
-		return this.category.hashCode() ^ (19 * this.value.hashCode());
+	
+	public Comparable<?> getValue() {
+		return this.v;
 	}
 	
 	@Override
 	public int compareTo(MetaInfo oth) {
-		int delta = this.category.compareTo(oth.category);
+		int delta = this.k.compareTo(oth.k);
 		if (delta != 0)
 			return delta;
-		return ((Comparable)this.value).compareTo(oth.value);
+		return ((Comparable)this.v).compareTo(oth.v);
 	}
 
 }

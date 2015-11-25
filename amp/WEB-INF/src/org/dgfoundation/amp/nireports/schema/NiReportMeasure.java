@@ -1,7 +1,10 @@
-package org.dgfoundation.amp.nireports;
+package org.dgfoundation.amp.nireports.schema;
 
 import java.util.List;
 import java.util.Set;
+
+import org.dgfoundation.amp.nireports.CategAmountCell;
+import org.dgfoundation.amp.nireports.NiReportContext;
 
 
 /**

@@ -1,7 +1,9 @@
 package org.dgfoundation.amp.nireports;
 
-import java.util.*;
-import java.util.Map.Entry;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+
 
 /**
  * holds the metadata of a cell, indexed by category for O(1) lookup
@@ -37,7 +39,7 @@ public class MetaInfoSet implements Iterable<MetaInfo>
 			throw new RuntimeException("not allowed to add null metainfo!");
 		if (frozen)
 			throw new RuntimeException("trying to add metainfo to a frozen MetaInfoSet");
-		this.metadata.put(info.category, info);
+		this.metadata.put(info.getCategory(), info);
 	}
 	
 	public void addAll(MetaInfoSet infoSet) {
@@ -48,7 +50,7 @@ public class MetaInfoSet implements Iterable<MetaInfo>
 	
 	public boolean catEquals(String category, Comparable<?> value) {
 		MetaInfo mInfo = getMetaInfo(category);
-		return mInfo != null && mInfo.value.equals(value);
+		return mInfo != null && mInfo.getValue().equals(value);
 	}
 	
 	/**

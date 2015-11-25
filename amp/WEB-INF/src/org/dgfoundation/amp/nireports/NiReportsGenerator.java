@@ -22,6 +22,8 @@ public class NiReportsGenerator implements ReportExecutor {
 	
 	@Override
 	public GeneratedReport executeReport(ReportSpecification report) {
+		NiFilters filters = schema.getFiltersConverter().apply(report.getFilters());
+		NiReportContext context = new NiReportContext(filters, currencyConvertor);
 		return null;
 	}
 }

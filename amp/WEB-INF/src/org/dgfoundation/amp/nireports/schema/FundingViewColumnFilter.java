@@ -1,6 +1,5 @@
 package org.dgfoundation.amp.nireports.schema;
 
-import org.dgfoundation.amp.nireports.ImmutablePair;
 
 public class FundingViewColumnFilter {
 	

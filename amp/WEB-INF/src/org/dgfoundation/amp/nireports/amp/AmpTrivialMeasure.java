@@ -1,7 +1,6 @@
 package org.dgfoundation.amp.nireports.amp;
 
 import org.dgfoundation.amp.nireports.CategAmountCell;
-import org.dgfoundation.amp.nireports.MetaInfo;
 import org.dgfoundation.amp.nireports.schema.NiTransactionMeasure;
 
 import clover.com.google.common.base.Predicate;

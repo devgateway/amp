@@ -83,7 +83,7 @@ public abstract class NiDimension {
 	}	
 	
 	/**
-	 * a class signaling that an AMP column is a level in a multi-column Dimension (for example: "Donor type" in the "Organizations" dimension or Primary Sector SubSubSector in the "Sectors" dimension)
+	 * a class signaling that a column is a level in a multi-column Dimension (for example: "Donor type" in the "Organizations" dimension or Primary Sector SubSubSector in the "Sectors" dimension)
 	 * @author Dolghier Constantin
 	 *
 	 */

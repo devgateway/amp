@@ -28,7 +28,7 @@ public abstract class NiReportMeasure {
 	public abstract List<CategAmountCell> buildCells(NiReportContext context);
 	
 	/**
-	 * returns the list of measures which should be fetched before this measure's {@link #buildCells(NiReportContext)} function will be called
+	 * returns the list of measures which should be computed before this measure's {@link #buildCells(NiReportContext)} function will be called
 	 * @return
 	 */
 	public abstract Set<String> getPrecursorMeasures();

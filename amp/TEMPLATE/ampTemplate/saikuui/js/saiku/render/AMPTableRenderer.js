@@ -459,8 +459,13 @@ function generateDataRows(page, options) {
 					} else {
 						if (this.type === 'xlsx' || this.type === 'csv') {
 							cell += this.contentMatrix[i][j].value;
-						} else {
-							cell += this.contentMatrix[i][j].displayedValue;
+						} else {							
+							var auxNonTotalVal = this.contentMatrix[i][j].displayedValue;
+							if (auxNonTotalVal === '' || auxNonTotalVal === null) {								
+								// This was requested on AMP-21487.
+								auxNonTotalVal = '0';
+							}
+							cell += auxNonTotalVal;
 						}
 					}
 					cell += "</td>";

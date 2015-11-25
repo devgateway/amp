@@ -11,9 +11,9 @@ import java.util.Map;
  */
 public abstract class ReportData {
 	public final Map<CellColumn, Cell> trailCells;
-	public final NiReportContext context;	
+	public final NiReportsEngine context;	
 		
-	public ReportData(NiReportContext context) {
+	public ReportData(NiReportsEngine context) {
 		this.context = context;
 		this.trailCells = new HashMap<>();
 	}

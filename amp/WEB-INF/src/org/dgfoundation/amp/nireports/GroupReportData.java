@@ -6,7 +6,7 @@ import java.util.List;
 public class GroupReportData extends ReportData {
 	public final List<ReportData> subreports;
 
-	public GroupReportData(NiReportContext context) {
+	public GroupReportData(NiReportsEngine context) {
 		super(context);
 		this.subreports = new ArrayList<ReportData>();
 	}

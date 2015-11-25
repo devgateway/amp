@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.dgfoundation.amp.nireports.CategAmountCell;
-import org.dgfoundation.amp.nireports.NiReportContext;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
 
 
 /**
@@ -25,7 +25,7 @@ public abstract class NiReportMeasure {
 	 * @param source
 	 * @return
 	 */
-	public abstract List<CategAmountCell> buildCells(NiReportContext context);
+	public abstract List<CategAmountCell> buildCells(NiReportsEngine context);
 	
 	/**
 	 * returns the list of measures which should be computed before this measure's {@link #buildCells(NiReportContext)} function will be called

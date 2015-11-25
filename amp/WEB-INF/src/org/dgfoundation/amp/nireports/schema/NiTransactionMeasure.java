@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.dgfoundation.amp.nireports.CategAmountCell;
-import org.dgfoundation.amp.nireports.NiReportContext;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
 
 import clover.com.google.common.base.Predicate;
 
@@ -24,7 +24,7 @@ public class NiTransactionMeasure extends NiReportMeasure {
 	}
 	
 	@Override
-	public List<CategAmountCell> buildCells(NiReportContext context) {
+	public List<CategAmountCell> buildCells(NiReportsEngine context) {
 		// TODO: replace by java8 awesomeness once ampdev is migrated to j8
 		List<CategAmountCell> ret = new ArrayList<>();
 		for(CategAmountCell cac:context.funding) {

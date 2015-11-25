@@ -6,6 +6,7 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 
 /**
+ * the Reports API entrypoint for NiReports, used for anything not directly linked with NiReports or the task of generating a report:
  * 
  * @author Dolghier Constantin
  *
@@ -22,8 +23,13 @@ public class NiReportsGenerator implements ReportExecutor {
 	
 	@Override
 	public GeneratedReport executeReport(ReportSpecification report) {
-		NiFilters filters = schema.getFiltersConverter().apply(report.getFilters());
-		NiReportContext context = new NiReportContext(filters, currencyConvertor);
+		NiReportsEngine engine = new NiReportsEngine(schema, currencyConvertor, report);
+		GroupReportData reportOutput = engine.execute();
+		GeneratedReport apiReport = generateApiOutput(reportOutput, engine);
+		return apiReport;
+	}
+	
+	protected GeneratedReport generateApiOutput(GroupReportData reportOutput, NiReportsEngine context) {
 		return null;
 	}
 }

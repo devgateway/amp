@@ -12,7 +12,7 @@ public class ColumnReportData extends ReportData {
 	
 	public final Map<CellColumn, ColumnContents> contents; // null for leafs	
 	
-	public ColumnReportData(NiReportContext context) {
+	public ColumnReportData(NiReportsEngine context) {
 		super(context);
 		this.contents = new HashMap<CellColumn, ColumnContents>();
 	}

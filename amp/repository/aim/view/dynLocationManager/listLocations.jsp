@@ -15,6 +15,7 @@
 
 <logic:notEmpty scope="request" name="locCollection">
 	<ul>
+		<c:set var="lvlIndex" scope="request" value="${lvlIndex+1}" />
 		<logic:iterate scope="request" name="locCollection" id="loc" type="org.digijava.module.aim.dbentity.AmpCategoryValueLocations">
 			<bean:define id="locCV" type="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" name="loc" property="parentCategoryValue" />
 		
@@ -23,13 +24,13 @@
 				<bean:define id="liClassString" toScope="page" value="class='dhtmlgoodies_sheet.gif'"/>
 			</logic:empty>
 			<li id="lid-${loc.id}" ${liClassString} >
-				<a  class="atree" id="aid-${loc.id}"><c:out value="${loc.name}"/></a> 
+				<a class="atree" id="aid-${loc.id}"><c:out value="${loc.name}"/></a> 
 				<span style="display: none;">${locCV.index}</span> 
 				<span class="spantree">[<digi:trn><c:out value="${locCV.value }"/></digi:trn>]</span>
-				<c:if test="${locCV.index < myForm.numOfLayers - 1}">
+				<c:if test="${lvlIndex < fn:length(locationLevels)}">
 					<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 13px; cursor: pointer;" 
-						title="Add ${locCV.ampCategoryClass.possibleValues[locCV.index+1].value}" 
-						onclick="addLocation(${loc.id}, ${locCV.ampCategoryClass.possibleValues[locCV.index+1].id})" />
+						title="Add <digi:trn><c:out value="${locationLevels[lvlIndex].value}"/></digi:trn>" 
+						onclick="addLocation(${loc.id}, ${locationLevels[lvlIndex].id})" />
 				</c:if>
 				<img src="/TEMPLATE/ampTemplate/images/application_edit.png" style="height: 13px; cursor: pointer;" 
 						onclick="editLocation(${loc.id})" title="Edit" />
@@ -42,9 +43,11 @@
 					<bean:define id="locCollection" toScope="request" name="loc" property="childLocations" />
 					<jsp:include page="listLocations.jsp" />
 					<bean:define id="locCollection" toScope="request" name="tempLocCollection" scope="request"/>
+					<c:set var="lvlIndex" scope="request" value="${lvlIndex-1}" />
 				</logic:notEmpty>
 			</li>
 		</logic:iterate>
 	</ul>
 </logic:notEmpty>
+
 	

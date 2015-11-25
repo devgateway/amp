@@ -181,7 +181,7 @@
 		return -1;		
 	}
 
-	function addLocation( parentDbId, locCategDbId ) {
+	function addLocation(parentDbId, locCategDbId ) {
 		var myForm						= document.getElementById("addNewLocationForm");
 		myForm.parentCatValId.value		= locCategDbId;
 		myForm.parentLocationId.value 	= parentDbId;
@@ -189,15 +189,14 @@
 		myForm.target="_self";
 		myForm.submit();
 	}
-	function editLocation( locationDbId ) {
+	
+	function editLocation(locationDbId) {
 		var myForm						= document.getElementById("addNewLocationForm");
 		myForm.editedId.value			= locationDbId;
 		myForm.event.value 				= "edit";
 		myForm.target="_self";
 		myForm.submit();
 	}
-
-	
 
 	YAHOOAmp.util.Event.addListener(window, "load", initTree) ;
 	 function exportXSL(){
@@ -328,6 +327,8 @@
 							<font size="3">
 								<ul id="dhtmlgoodies_tree" class="DHTMLSuite_tree">
 									<c:set var="locCollection" scope="request" value="${aimDynLocationManagerForm.firstLevelLocations}" />
+									<c:set var="locationLevels" scope="request" value="${aimDynLocationManagerForm.locationLevels}" />
+									<c:set var="lvlIndex" value="${0}"/>
 									<li noDrag="true" id="li-root">
 										<a class="atree" id="a-root"><digi:trn>ROOT</digi:trn></a>
 										<ul>
@@ -335,7 +336,7 @@
 												<a class="atree" id="a-locations"><digi:trn>Locations</digi:trn></a>
 												<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 13px; cursor: pointer;" 
 														onclick="addLocation(-1, ${aimDynLocationManagerForm.firstLayerId})" 
-														title="Add ${aimDynLocationManagerForm.implementationLocation.possibleValues[0]}" />
+														title="Add ${locationLevels[lvlIndex]}" />
 												<jsp:include page="listLocations.jsp" />
 											</li>
 											<logic:notEmpty name="aimDynLocationManagerForm" property="unorganizedLocations">
@@ -369,8 +370,8 @@
 <div id="exportIndicatorTableContent" style="display: none;">
 	<div id="exportPanelErrors"></div>
 	<form id="exportIndicatorTableForm" method="post" style="margin-left:80px;">
-		<c:forEach var="categoryValue" items="${aimDynLocationManagerForm.implementationLocation.possibleValues}">
-			 <input type="radio" name="admLevel" value="${categoryValue.id}">${categoryValue.value}<br>
+		<c:forEach var="categoryValue" items="${aimDynLocationManagerForm.locationLevels}">
+			 <input type="radio" name="admLevel" value="${categoryValue.id}"><digi:trn>${categoryValue.value}</digi:trn><br>
 		</c:forEach>
 		<br>
 		<input type="button" value="Export" class="buttonx leftButton" onclick="exportIndicatorTable();"/>

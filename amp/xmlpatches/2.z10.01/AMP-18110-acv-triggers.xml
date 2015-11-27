@@ -9,7 +9,7 @@
 	<apply>
 		<script>
 			<lang delimiter="@" type="postgres">
-
+<!-- 
 CREATE OR REPLACE FUNCTION trn_updated_proc() RETURNS trigger AS $BODY$
     BEGIN
     	IF (OLD.message_key != NEW.message_key) OR (OLD.message_utf8 != NEW.message_utf8) THEN
@@ -41,7 +41,7 @@ CREATE TRIGGER trn_updated_trig BEFORE UPDATE ON dg_message
 
 CREATE TRIGGER trn_deleted_trig BEFORE DELETE ON dg_message
     FOR EACH ROW EXECUTE PROCEDURE trn_deleted_proc()@@@
-
+ -->
 			</lang>
 		</script>
 	</apply>

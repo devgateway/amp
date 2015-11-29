@@ -15,6 +15,7 @@ public class QuartzJobManagerForm extends ActionForm {
 	private static final long serialVersionUID = 1L;
 	private boolean invalidTrigger = false;
 	private boolean invalidEndDate = false;
+	private boolean invalidClass = false;
 	
 
 
@@ -221,5 +222,13 @@ public class QuartzJobManagerForm extends ActionForm {
 
 	public void setInvalidEndDate(boolean invalidEndDate) {
 		this.invalidEndDate = invalidEndDate;
+	}
+
+	public boolean isInvalidClass() {
+		return invalidClass;
+	}
+
+	public void setInvalidClass(boolean invalidClass) {
+		this.invalidClass = invalidClass;
 	}
 }

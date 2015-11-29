@@ -98,8 +98,13 @@ public class QuartzJobManager extends Action {
 					QuartzJobUtils.addJob(job);
 				}
 				qmform.reset();
+			} catch (ClassNotFoundException exc)  {
+				qmform.setInvalidClass(true);
+//				exc.printStackTrace();
+				return mapping.findForward("addJob");
 			} catch (Exception e) {
 				qmform.setInvalidTrigger(true);
+				e.printStackTrace();
 				return mapping.findForward("addJob");
 			}
 

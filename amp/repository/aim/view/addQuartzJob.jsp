@@ -167,12 +167,21 @@ function typeChanged(value){
 		function showValidationmsg(){
 		<logic:equal name="quartzJobManagerForm" property="invalidTrigger" value="true">
 			<c:set var="invalidTrigger">
-				<digi:trn>The trigeer will never be fired</digi:trn>
+				<digi:trn>The trigger will never be fired</digi:trn>
 			</c:set> 
 			
 			alert("${invalidTrigger}");
 		</logic:equal>		
 
+		<logic:equal name="quartzJobManagerForm" property="invalidClass" value="true">
+			<c:set var="invalidClass">
+				<digi:trn>Cannot find job class. Please check class configuration in the Job Class Manager</digi:trn>
+			</c:set> 
+			
+			alert("${invalidClass}");
+	   </logic:equal>		
+		
+		
 		<logic:equal name="quartzJobManagerForm" property="invalidEndDate" value="true">
 		<c:set var="invalidEndDate">
 			<digi:trn>End Date should be after Start Date</digi:trn>

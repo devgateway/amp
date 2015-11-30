@@ -5,12 +5,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Collection;
+import java.util.function.Function;
 
 import org.dgfoundation.amp.algo.Graph;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.junit.Test;
 
-import com.google.common.base.Function;
 
 /**
  * 
@@ -72,7 +72,6 @@ public class GraphAlgorithmsTests extends AmpTestCase {
 		shouldFail(() -> {graph.sortTopologically().toString();}, new RuntimeException("cycle detected, the notoutput data is: [node three, id = 3]"));
 	}
 
-	//TODO: move to jdk8
 	static class MapDrivenDepenciesSource implements Function<String, Collection<String>> {
 		final Map<String, Collection<String>> src;
 		public MapDrivenDepenciesSource(Map<String, Collection<String>> src) {

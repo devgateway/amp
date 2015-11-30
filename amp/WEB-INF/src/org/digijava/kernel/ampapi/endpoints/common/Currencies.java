@@ -39,7 +39,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.caching.AmpCaching;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
 
 @Path("currencies")
 public class Currencies {

@@ -30,7 +30,7 @@ public class ImmutablePair<K, V> {
 		if (!(oth instanceof ImmutablePair))
 			return false;
 		
-		ImmutablePair<K, V> other = (ImmutablePair) oth;
+		ImmutablePair<K, V> other = (ImmutablePair<K, V>) oth;
 		return this.k.equals(other.k) && this.v.equals(other.v); 
 	}
 	

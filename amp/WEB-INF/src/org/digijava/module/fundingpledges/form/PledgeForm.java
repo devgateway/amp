@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
@@ -46,8 +48,6 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
@@ -74,52 +74,34 @@ public class PledgeForm extends ActionForm implements Serializable {
 	/**
 	 * extract IdNamePercentage from a FPL entry
 	 */
-	public static final Function<AmpCategoryValueLocations, IdNamePercentage> PLEDGE_LOCATION_EXTRACTOR = new Function<AmpCategoryValueLocations, IdNamePercentage>(){
-		
-		public IdNamePercentage apply(AmpCategoryValueLocations acvl) {
-			return new IdNamePercentage(acvl.getId(), acvl.getName(), acvl.getHierarchicalName());
-		}
-	};
+	public static final Function<AmpCategoryValueLocations, IdNamePercentage> PLEDGE_LOCATION_EXTRACTOR = acvl -> new IdNamePercentage(acvl.getId(), acvl.getName(), acvl.getHierarchicalName());
 	
 	/**
 	 * extract IdNamePercentage from a FPP entry
 	 */
-	public static final Function<AmpTheme, IdNamePercentage> PLEDGE_PROGRAM_EXTRACTOR = new Function<AmpTheme, IdNamePercentage>(){
-		
-		public IdNamePercentage apply(AmpTheme theme) {
-			AmpTheme rootTheme = theme.getRootTheme();
-			AmpActivityProgramSettings sett = null;
-			if ((rootTheme.getProgramSettings() != null) && (!rootTheme.getProgramSettings().isEmpty()))
-				sett = rootTheme.getProgramSettings().iterator().next(); // normally shouldn't have >1 theme: that would be a huge bug somewhere else
-			long settId = sett == null ? -1 : sett.getAmpProgramSettingsId();
-			String settName = sett == null ? "" : sett.getName();
-			return new IdNamePercentage(theme.getAmpThemeId(), theme.getName(), settId, settName, theme.getHierarchicalName());
-		}
+	public static final Function<AmpTheme, IdNamePercentage> PLEDGE_PROGRAM_EXTRACTOR = theme -> {
+		AmpTheme rootTheme = theme.getRootTheme();
+		AmpActivityProgramSettings sett = null;
+		if ((rootTheme.getProgramSettings() != null) && (!rootTheme.getProgramSettings().isEmpty()))
+			sett = rootTheme.getProgramSettings().iterator().next(); // normally shouldn't have >1 theme: that would be a huge bug somewhere else
+		long settId = sett == null ? -1 : sett.getAmpProgramSettingsId();
+		String settName = sett == null ? "" : sett.getName();
+		return new IdNamePercentage(theme.getAmpThemeId(), theme.getName(), settId, settName, theme.getHierarchicalName());
 	};
 	
 	/**
 	 * extract IdNamePercentage from a FPS entry
 	 */
-	public static final Function<AmpSector, IdNamePercentage> PLEDGE_SECTOR_EXTRACTOR = new Function<AmpSector, IdNamePercentage>(){
-		
-		public IdNamePercentage apply(AmpSector sector) {
-			AmpClassificationConfiguration classificationConfig = SectorUtil.getClassificationConfigBySectorSchemeId(sector.getAmpSecSchemeId().getAmpSecSchemeId());
-			String translatedSchemeName = TranslatorWorker.translateText(classificationConfig.getName() + " Sectors");
-			return new IdNamePercentage(sector.getAmpSectorId(), sector.getName(), sector.getAmpSecSchemeId().getAmpSecSchemeId(), translatedSchemeName, sector.getHierarchicalName());
-		}
+	public static final Function<AmpSector, IdNamePercentage> PLEDGE_SECTOR_EXTRACTOR = sector -> {
+		AmpClassificationConfiguration classificationConfig = SectorUtil.getClassificationConfigBySectorSchemeId(sector.getAmpSecSchemeId().getAmpSecSchemeId());
+		String translatedSchemeName = TranslatorWorker.translateText(classificationConfig.getName() + " Sectors");
+		return new IdNamePercentage(sector.getAmpSectorId(), sector.getName(), sector.getAmpSecSchemeId().getAmpSecSchemeId(), translatedSchemeName, sector.getHierarchicalName());
 	};
-	public static final Function<IdNamePercentage, KeyValue> BY_ROOT_DISTRIBUTION = new Function<IdNamePercentage, KeyValue>(){
 		
-		public KeyValue apply(IdNamePercentage from) {
-			return new KeyValue(from.getRootId(), from.getRootName());
-		}
-	};
-	public static final Function<AmpCurrency, IdWithValueShim> AMP_CURRENCY_TO_ID_WITH_SHIM = new Function<AmpCurrency, IdWithValueShim>(){
-		
-		public IdWithValueShim apply(AmpCurrency curr) {
-			return new IdWithValueShim(curr.getAmpCurrencyId(), curr.getCurrencyName());
-		}
-	};
+	public static final Function<IdNamePercentage, KeyValue> BY_ROOT_DISTRIBUTION = from -> new KeyValue(from.getRootId(), from.getRootName());
+	
+	public static final Function<AmpCurrency, IdWithValueShim> AMP_CURRENCY_TO_ID_WITH_SHIM = curr -> new IdWithValueShim(curr.getAmpCurrencyId(), curr.getCurrencyName());
+	
 	private static final long serialVersionUID = 1L;
 	private Long pledgeId;
 	//private FundingPledges fundingPledges;
@@ -335,12 +317,7 @@ public class PledgeForm extends ActionForm implements Serializable {
 	 * @return
 	 */
 	public List<DisableableKeyValue> selectSingleAvailableOption(List<DisableableKeyValue> res) {
-		List<DisableableKeyValue> realOptions = Lists.newArrayList(Iterables.filter(res, new Predicate<DisableableKeyValue>(){
-			
-			public boolean apply(DisableableKeyValue dkv) {
-				return dkv.isEnabled() && dkv.getKeyAsLong() > 0;
-			}
-		}));
+		List<DisableableKeyValue> realOptions = Lists.newArrayList(Iterables.filter(res, dkv -> dkv.isEnabled() && dkv.getKeyAsLong() > 0));
 		if (realOptions.size() == 1) return realOptions;
 		return res;
 	}
@@ -449,12 +426,7 @@ public class PledgeForm extends ActionForm implements Serializable {
 	 * @return
 	 */
 	public List<DisableableKeyValue> getAllRootPrograms() {
-		return mergeLists(DISABLEABLE_KV_PLEASE_SELECT, Lists.transform(ProgramUtil.getConfiguredParentThemes(), new Function<AmpTheme, DisableableKeyValue>(){
-			
-			public DisableableKeyValue apply(AmpTheme theme) {
-				return new DisableableKeyValue(theme.getAmpThemeId(), theme.getName(), true);
-			}
-		}));
+		return mergeLists(DISABLEABLE_KV_PLEASE_SELECT, Lists.transform(ProgramUtil.getConfiguredParentThemes(), theme -> new DisableableKeyValue(theme.getAmpThemeId(), theme.getName(), true)));
 	}
 	
 	/**
@@ -499,15 +471,11 @@ public class PledgeForm extends ActionForm implements Serializable {
 	 * @return
 	 */
 	public List<DisableableKeyValue> getAllRootSectors() {
-		return mergeLists(DISABLEABLE_KV_PLEASE_SELECT, Lists.transform(SectorUtil.getAllSectorSchemes(), new Function<AmpSectorScheme, DisableableKeyValue>(){
-			
-			public DisableableKeyValue apply(AmpSectorScheme theme) {
+		return mergeLists(DISABLEABLE_KV_PLEASE_SELECT, Lists.transform(SectorUtil.getAllSectorSchemes(), (AmpSectorScheme theme) -> {
 				AmpClassificationConfiguration classificationConfig = SectorUtil.getClassificationConfigBySectorSchemeId(theme.getAmpSecSchemeId());
 				String translatedName = TranslatorWorker.translateText(classificationConfig.getName() + " Sectors");
 				return new DisableableKeyValue(theme.getAmpSecSchemeId(), translatedName, true);
-			}
-		}));
-	}
+			}));};
 	
 	/**
 	 * returns set of ids all the selected sectors
@@ -554,7 +522,7 @@ public class PledgeForm extends ActionForm implements Serializable {
 	}
 	
 	public List<IdWithValueShim> getValidCurrencies() {
-		return Lists.transform(CurrencyUtil.getUsableNonVirtualCurrencies(), AMP_CURRENCY_TO_ID_WITH_SHIM);
+		return CurrencyUtil.getUsableNonVirtualCurrencies().stream().map(AMP_CURRENCY_TO_ID_WITH_SHIM).collect(Collectors.toList());
 	}
 	
 	public boolean getFundingShowTypeOfAssistance() {

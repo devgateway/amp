@@ -7,12 +7,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.function.Function;
 
-import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.Identifiable;
-import org.digijava.module.fundingpledges.form.IdNamePercentage;
 
-import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
@@ -25,8 +23,7 @@ public class AmpCollections {
 	 * @param mapper
 	 * @return
 	 */
-	public static<K, V> Map<K, List<V>> distribute(Collection<V> values, Function<V, K> mapper)
-	{
+	public static<K, V> Map<K, List<V>> distribute(Collection<V> values, Function<V, K> mapper) {
 		Map<K, List<V>> res = new TreeMap<K, List<V>>();
 		for(V v:values)
 		{
@@ -38,12 +35,7 @@ public class AmpCollections {
 		return res;
 	}
 	
-	public static final Function<Identifiable, Long> BY_ID_DISTRIBUTION = new Function<Identifiable, Long>(){
-		
-		public Long apply(Identifiable from) {
-			return (Long) from.getIdentifier();
-		}
-	};
+	public static final Function<Identifiable, Long> BY_ID_DISTRIBUTION = from -> (Long) from.getIdentifier(); 
 	
 	/**
 	 * 
@@ -52,8 +44,7 @@ public class AmpCollections {
 	 * @return
 	 */
 	@SafeVarargs
-	public static<V> List<V> mergeLists(Iterable<V>... lists)
-	{
+	public static<V> List<V> mergeLists(Iterable<V>... lists) {
 		return Lists.newArrayList(Iterables.concat(lists));
 	}
 	
@@ -63,8 +54,7 @@ public class AmpCollections {
 	 * @param b
 	 * @return
 	 */
-	public static Integer nullCompare(Comparable a, Comparable b)
-	{
+	public static Integer nullCompare(Comparable a, Comparable b) {
 		if (a == null && b == null)
 			return null;
 		if (a == null)

@@ -64,7 +64,6 @@ public class NiReportsEngine {
 	//TODO: migrate to JDK8
 	protected void fetchColumns() {
 		funding = schema.getFundingFetcher().fetchColumn(filters);
-		//TODO: translate this to j8 one-liner
 		for(NiReportColumn<?> colToFetch:getReportColumns())
 			fetchedColumns.put(colToFetch.name, fetchColumn(colToFetch));
 	}
@@ -102,7 +101,6 @@ public class NiReportsEngine {
 		
 	}
 	
-	//TODO: migrate to jdk8
 	protected List<NiReportColumn<? extends Cell>> getReportColumns() {
 		List<NiReportColumn<? extends Cell>> res = new ArrayList<>();
 		for(String columnName:spec.getColumnNames()) {

@@ -8,13 +8,14 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
+
 
 /**
  * generic graph algorithm holder
- * TODO: migrate to jdk8
  * TODO: replace Set<Integer> with a more efficient native-based implementation (like Trove or HPPC), in case this class will see heavy usage
  * @author Dolghier Constantin
  *
@@ -27,7 +28,7 @@ public class Graph<K> {
 	protected final LinkedHashMap<Integer, K> nodeToElem = new LinkedHashMap<>();
 	
 	/**
-	 * Map<
+	 * Map<node_nr, dependency_node_nrs>
 	 */
 	protected final HashMap<Integer, Set<Integer>> elemDependencies = new HashMap<>();
 	protected final Function<K, Collection<K>> dependenciesComputer;
@@ -40,13 +41,9 @@ public class Graph<K> {
 	public Graph(Collection<K> items, Function<K, Collection<K>> dependenciesComputer) {
 		this.dependenciesComputer = dependenciesComputer;
 		discoverGraph(items);
-		for(K item:elemToNode.keySet()) {
-			Set<Integer> dependenciesAsNodes = new HashSet<>();
-			int node = elemToNode.get(item);
-			for(K dep:dependenciesComputer.apply(item))
-				dependenciesAsNodes.add(elemToNode.get(dep));
-			elemDependencies.put(node, dependenciesAsNodes);
-		}
+		elemToNode.forEach((item, node) -> {
+			elemDependencies.put(node, dependenciesComputer.apply(item).stream().map(dep -> elemToNode.get(dep)).collect(Collectors.toSet()));
+		});
 	}
 	
 	/**
@@ -98,7 +95,6 @@ public class Graph<K> {
 	//TODO: create e MapWithDefaultValue once we move to jdk8
 	public LinkedHashSet<K> sortTopologically() {
 		Map<Integer, TopoNodeInfo> nodesInfo = new HashMap<>();
-		
 		Set<Integer> terminalNodes = new TreeSet<>();
 		for(int node:elemToNode.values()) {
 			nodesInfo.put(node, new TopoNodeInfo(node));

@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.dgfoundation.amp.algo.AmpCollections;
 
-import com.google.common.base.Function;
 
 /**
  * a leaf column

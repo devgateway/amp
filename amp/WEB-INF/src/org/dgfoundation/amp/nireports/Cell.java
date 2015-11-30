@@ -1,6 +1,6 @@
 package org.dgfoundation.amp.nireports;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
 
 /**
  * an internal consumption Cell, which roughly corresponds to an API ReportCell
@@ -20,9 +20,5 @@ public abstract class Cell {
 		this(activityId, -1);
 	}
 	
-	public static Function<Cell, Long> TO_ACTIVITY_ID = new Function<Cell, Long>() {
-		@Override public Long apply(Cell cell) {
-			return cell.activityId;
-		}
-	};
+	public static Function<Cell, Long> TO_ACTIVITY_ID = cell -> cell.activityId;
 }

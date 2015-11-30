@@ -17,9 +17,8 @@ import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
 
 /**
- * entry point for AMP 2.11 tests. Initializes standalone AMP as part of the discovery process. <br />
+ * entry point for AMP 2.12 tests. Initializes standalone AMP as part of the discovery process. <br />
  * standalone AMP configuration is taken off standAloneAmpHibernate.cfg.xml <br />
- * <strong>Please notice that it uses the same amp_tests_210 database, just that the testcases are run separately</strong>
  * @author Dolghier Constantin
  *
  */
@@ -50,8 +49,8 @@ public class AllTests_amp212
 		try {
 			configureLog4j();
 			HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
-			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_211";
-			MonetConnection.MONET_CFG_OVERRIDE_URL = "jdbc:monetdb://localhost/amp_tests_211";
+			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_212";
+			MonetConnection.MONET_CFG_OVERRIDE_URL = "jdbc:monetdb://localhost/amp_tests_212";
 			
 			org.digijava.kernel.ampapi.mondrian.util.Connection.IS_TESTING = true;
 			//HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_moldova_27";

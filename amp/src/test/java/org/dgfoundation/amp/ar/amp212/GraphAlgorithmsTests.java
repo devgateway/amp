@@ -58,8 +58,7 @@ public class GraphAlgorithmsTests extends AmpTestCase {
 				put("one", Arrays.asList("two"));
 				put("two", Arrays.asList("one"));
 			}}));
-		assertEquals("[five, four, three, two, one]", graph.sortTopologically().toString());
-		//shouldFail(runnable, message);
+		shouldFail(() -> {graph.sortTopologically().toString();}, new RuntimeException("cycle detected, the notoutput data is: [node one, id = 1][node two, id = 3]"));
 	}
 
 	
@@ -70,7 +69,7 @@ public class GraphAlgorithmsTests extends AmpTestCase {
 				put("one", Arrays.asList("two"));
 				put("three", Arrays.asList("three"));
 			}}));
-		assertEquals("[five, four, three, two, one]", graph.sortTopologically().toString());
+		shouldFail(() -> {graph.sortTopologically().toString();}, new RuntimeException("cycle detected, the notoutput data is: [node three, id = 3]"));
 	}
 
 	//TODO: move to jdk8

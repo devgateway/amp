@@ -276,7 +276,7 @@
     </target>
 
     <target name="autoBuild">
-        <javac srcdir="${src}" destdir="${classes}" deprecation="off" debug="${debug}" source="1.7" target="1.7" fork="yes" memoryMaximumSize="1024m">
+        <javac srcdir="${src}" destdir="${classes}" deprecation="off" debug="${debug}" source="1.8" target="1.8" fork="yes" memoryMaximumSize="1024m">
             <classpath refid="compile.classpath"/>
         </javac>
     </target>
@@ -285,7 +285,7 @@
     <target name="compile" depends="prepare,resources,jaxb">
     	<property name="cp" refid="compile.classpath"/>
     	<echo message="Classpath = ${cp}"/>
-        <javac srcdir="${src};${gen-src}" destdir="${classes}" deprecation="off" debug="${debug}" source="1.7" target="1.7" fork="yes" memoryMaximumSize="1024m" encoding="utf8">
+        <javac srcdir="${src};${gen-src}" destdir="${classes}" deprecation="off" debug="${debug}" source="1.8" target="1.8" fork="yes" memoryMaximumSize="1024m" encoding="utf8">
             <classpath refid="compile.classpath"/>
         </javac>
     </target>

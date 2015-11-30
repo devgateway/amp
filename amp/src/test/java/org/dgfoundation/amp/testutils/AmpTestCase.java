@@ -22,6 +22,10 @@ public abstract class AmpTestCase extends TestCase
 	}
 	
 	public void shouldFail(AmpRunnable runnable){
+		shouldFail(runnable, null);
+	}
+	
+	public void shouldFail(AmpRunnable runnable, Exception correctException) {
 		try{
 			runnable.run();
 			throw new RuntimeException("did not throw exception");
@@ -29,8 +33,15 @@ public abstract class AmpTestCase extends TestCase
 		catch(Throwable thr){
 			if (thr.getMessage().equals("did not throw exception"))
 				throw new RuntimeException("code which should have failed did not throw an exception!");
-			// it is ok, we want an exception
-			System.out.println("caught an ok exception: " + thr.getMessage());
+			
+			boolean shouldCheckException = correctException != null;
+			
+			if ((!shouldCheckException) || (shouldCheckException && thr.getClass() == correctException.getClass() && thr.getMessage().equals(correctException.getMessage()))) {
+				// it is ok, we want an exception
+				System.out.println("caught an ok exception: " + thr.getMessage());
+				return;
+			}
+			throw new RuntimeException(String.format("code which should have failed with (%s %s) has instead failed with (%s %s)", correctException.getClass(), correctException.getMessage(), thr.getClass(), thr.getMessage()));
 		}
 	}
 	

@@ -350,9 +350,6 @@ function _ampapi_activity_get_filter_status($name, $handler, $ssc_status) {
       // exposed. Otherwise the form values will override this change.
       $handler->view->filter[$name]->value = TRUE;
     }
-    else {
-      return FALSE;
-    }
   }
 
   // Some filers have a key that is different from the field key. like:

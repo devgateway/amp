@@ -51,6 +51,7 @@ function ampapi_activity_views_data_alter(&$data) {
         switch($plugin['property info']['type']) {
           case 'boolean':
             $data[$efq_data_key][$property_name]['filter']['handler'] = 'ampapi_activity_views_handler_filter_boolean';
+            $data[$efq_data_key][$property_name]['field']['handler'] = 'ampapi_activity_views_handler_field_boolean';
             break;
           case 'text':
           default:

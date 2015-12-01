@@ -35,4 +35,15 @@ class ampapi_activity_views_handler_filter_boolean extends efq_views_handler_fil
       $this->query->query->propertyCondition($this->real_field, $this->value, "=");
     }
   }
+
+  /**
+   * Overridden exposed form options.
+   */
+  function exposed_translate(&$form, $type) {
+    parent::exposed_translate($form, $type);
+    if ($type == 'value' && empty($this->always_required) && empty($this->options['expose']['required']) && $form['#type'] == 'select' && empty($form['#multiple'])) {
+      $any_label = t('- Choose -');
+      $form['#options']['All'] = $any_label;
+    }
+  }
 }

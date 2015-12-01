@@ -8,7 +8,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				drop view v_g_settings_team_to_notify;
+				drop view if exists v_g_settings_team_to_notify;
 				UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart';
 
 			</lang>

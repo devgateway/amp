@@ -46,7 +46,7 @@ public class AmpInflationRate implements Serializable, Comparable<AmpInflationRa
 	
 	public AmpInflationRate() {}
 	
-	public AmpInflationRate(AmpCurrency currency, Date periodStart, double inflationRate, boolean constantCurrency) {
+	public AmpInflationRate(AmpCurrency currency, Date periodStart, double inflationRate) {
 		this.currency = currency;
 		this.periodStart = periodStart;
 		this.inflationRate = inflationRate;

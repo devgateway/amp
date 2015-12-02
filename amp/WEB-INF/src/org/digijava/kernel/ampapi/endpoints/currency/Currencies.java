@@ -93,11 +93,11 @@ public class Currencies {
 	}
 	
 	/**
-	 * Provides inflation rates already stored in AMP
+	 * Provides inflation rates already stored in AMP, sorted by date 
 	 * @return <pre>
 	 * {
-	 *     "USD": ["2008-01-01’ : 1.2, ...],
-	 *     "ETB": ["2008-01-01' : 12.7, ...],
+	 *     "USD": {"2008-01-01" : 1.2, ...},		//sorted by date
+	 *     "ETB": {"2008-01-01" : 12.7, ...},
 	 *     ...
 	 * }
 	 * </pre>
@@ -108,6 +108,26 @@ public class Currencies {
 	@ApiMethod(id = "inflation-rates", authTypes = {AuthRule.IN_ADMIN}, ui = false)
 	public JsonBean getAmpInflationRates() {
 		return CurrencyService.getAmpInflationRates();
+	}
+	
+	/**
+	 * Save new inflation rates AMP. Input example:
+	 * <pre>
+	 * {
+	 *     "USD": {"2008-01-01" : 1.2, ...},
+	 *     "ETB": {"2008-01-01" : 12.7, ...},
+	 *     ...
+	 * }
+	 * </pre>
+	 * @param inflationRates data input
+	 * @return no output with 200 HTTP status or validation error with 400 HTTP status (bad request) 
+	 */
+	@POST
+	@Path("/inflation-rates")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(id = "inflation-rates", authTypes = {AuthRule.IN_ADMIN}, ui = false)
+	public JsonBean saveInflationRates(JsonBean inflationRates) {
+		return CurrencyService.saveInflationRates(inflationRates);
 	}
 	
 	

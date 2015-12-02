@@ -8,6 +8,7 @@ import java.util.List;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpInflationRate;
 import org.digijava.module.aim.dbentity.AmpInflationSource;
+import org.hibernate.Session;
 
 /**
  * Common currency inflation rates utility methods
@@ -33,5 +34,13 @@ public class CurrencyInflationUtil {
 	public static List<AmpInflationRate> getInflationRates() {
 		return PersistenceManager.getRequestDBSession().createQuery(
 				"select o from " +  AmpInflationRate.class.getName() + " o").list();
+	}
+	
+	public static void deleteAllInflationRates() {
+		Session session = PersistenceManager.getRequestDBSession();
+		for (AmpInflationRate air : getInflationRates()) {
+			session.delete(air);
+		}
+		session.flush();
 	}
 }

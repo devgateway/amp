@@ -49,19 +49,46 @@ public class Currencies {
 	@Context
 	private HttpServletResponse httpResponse;
 	
-	@GET
-	@Path("/currencies")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	/**
 	 * Provides standard currency (doesn't include constant currencies)
 	 * @return { "currency-code1": "currency-name1", "currency-code2": "currency-name2", ...}
 	 */
+	@GET
+	@Path("/currencies")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(id = "standard-currencies", authTypes = {AuthRule.IN_ADMIN}, ui = false)
 	public JsonBean getStandardCurrencies() {
 		JsonBean standardCurrencies = new JsonBean();
 		for (AmpCurrency ampCurrencies : CurrencyUtil.getActiveAmpCurrencyByCode()) {
 			standardCurrencies.set(ampCurrencies.getCurrencyCode(), ampCurrencies.getCurrencyName());
 		}
 		return standardCurrencies;
+	}
+	
+	
+	/**
+	 * Provides inflation rates data sources
+	 * @return <pre>
+	 * [{
+	 *    id: 123,
+	 *    name: “FRED-GNPDEF”,
+	 *    description: “Gross National Product: Implicit Price Deflator (USD) provide by US. Bureau of Economic Analysis”,
+	 *    settings: { // for any future need to display and/or change the settings, not required for now
+	 *        currency: USD,
+	 *        frequency: Q,
+	 *        api-token : “...”
+	 *    },
+	 *  },
+	 *  ... // another source, e.g. CSV import
+	 * ]
+	 * </pre>
+	 */
+	@GET
+	@Path("/inflation-sources")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(id = "inflation-sources", authTypes = {AuthRule.IN_ADMIN}, ui = false)
+	public List<JsonBean> getCurrencyInflationDataSources() {
+		return CurrencyService.getInflationDataSources();
 	}
 	
 	

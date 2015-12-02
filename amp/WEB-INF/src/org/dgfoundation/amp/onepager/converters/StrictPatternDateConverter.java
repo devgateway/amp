@@ -29,7 +29,7 @@ public class StrictPatternDateConverter extends PatternDateConverter {
     public Date convertToObject(String value, Locale locale) {
     	Date date = null;
     	try {
-    		date = getDateFormatter().parse(value);
+    		date = getDateFormatter(locale).parse(value);
 			if (date == null) {
 				throw getException();
 			}
@@ -48,16 +48,15 @@ public class StrictPatternDateConverter extends PatternDateConverter {
         return date;
     }
 
-	private SimpleDateFormat getDateFormatter() {
-		SimpleDateFormat formatter = new SimpleDateFormat();
+	private SimpleDateFormat getDateFormatter(Locale locale) {
+		SimpleDateFormat formatter = new SimpleDateFormat(FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT), locale);
     	formatter.setLenient(false);  
-    	formatter.applyPattern(FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT));
 		return formatter;
 	}
 
 	@Override
 	public String convertToString(Date date, Locale locale) {
-		String strValue = getDateFormatter().format(date);
+		String strValue = getDateFormatter(locale).format(date);
 
 		if (date == null) {
 			throw getException();

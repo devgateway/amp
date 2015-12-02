@@ -25,7 +25,6 @@ public enum IRFrequency {
 		this.title = title;
 	}
 	
-	
 	public String getTranslatedName() {
 		return TranslatorWorker.translateText(title);
 	}

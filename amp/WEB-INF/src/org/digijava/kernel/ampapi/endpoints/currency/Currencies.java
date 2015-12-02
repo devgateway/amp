@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.common;
+package org.digijava.kernel.ampapi.endpoints.currency;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,6 +33,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpInflationRate;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.caching.AmpCaching;
@@ -40,7 +41,7 @@ import org.digijava.module.aim.util.caching.AmpCaching;
 import com.google.common.base.Function;
 
 //DEFLATOR: cleanup unused
-@Path("currencies")
+@Path("currency")
 public class Currencies {
 	
 	@Context
@@ -48,6 +49,24 @@ public class Currencies {
 	@Context
 	private HttpServletResponse httpResponse;
 	
+	@GET
+	@Path("/currencies")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	/**
+	 * Provides standard currency (doesn't include constant currencies)
+	 * @return { "currency-code1": "currency-name1", "currency-code2": "currency-name2", ...}
+	 */
+	public JsonBean getStandardCurrencies() {
+		JsonBean standardCurrencies = new JsonBean();
+		for (AmpCurrency ampCurrencies : CurrencyUtil.getActiveAmpCurrencyByCode()) {
+			standardCurrencies.set(ampCurrencies.getCurrencyCode(), ampCurrencies.getCurrencyName());
+		}
+		return standardCurrencies;
+	}
+	
+	
+	
+	/******************************** REVIEW AND CLEANUP below *************************************************/
 	
 	@GET
 	@Path("/inflatableCurrencies")

@@ -17,5 +17,7 @@ public class CurrencyEPConstants {
 	public static final String CURRENCY_CODE = "currency-code";
 	public static final String FREQUENCY = "frequency";
 	public static final String API_TOKEN = "api_token";
+	
+	public static final String DATE_FORMAT = "yyyy-MM-dd";
 
 }

@@ -83,12 +83,31 @@ public class Currencies {
 	 * ]
 	 * </pre>
 	 */
+	
 	@GET
 	@Path("/inflation-sources")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(id = "inflation-sources", authTypes = {AuthRule.IN_ADMIN}, ui = false)
 	public List<JsonBean> getCurrencyInflationDataSources() {
 		return CurrencyService.getInflationDataSources();
+	}
+	
+	/**
+	 * Provides inflation rates already stored in AMP
+	 * @return <pre>
+	 * {
+	 *     "USD": ["2008-01-01’ : 1.2, ...],
+	 *     "ETB": ["2008-01-01' : 12.7, ...],
+	 *     ...
+	 * }
+	 * </pre>
+	 */
+	@GET
+	@Path("/inflation-rates")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(id = "inflation-rates", authTypes = {AuthRule.IN_ADMIN}, ui = false)
+	public JsonBean getAmpInflationRates() {
+		return CurrencyService.getAmpInflationRates();
 	}
 	
 	

@@ -3,16 +3,22 @@
  */
 package org.digijava.kernel.ampapi.endpoints.currency;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.dgfoundation.amp.currency.CurrencyInflationUtil;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpInflationRate;
 import org.digijava.module.aim.dbentity.AmpInflationSource;
+import org.digijava.module.aim.util.CurrencyUtil;
 
 
 /**
@@ -22,6 +28,9 @@ import org.digijava.module.aim.dbentity.AmpInflationSource;
  */
 public class CurrencyService {
 	
+	/**
+	 * @see Currencies#getCurrencyInflationDataSources()
+	 */
 	public static List<JsonBean> getInflationDataSources(){
 		List<JsonBean> dataSources = new ArrayList<JsonBean>();
 		List<AmpInflationSource> ampSources = CurrencyInflationUtil.getInflationDataSources();
@@ -44,6 +53,28 @@ public class CurrencyService {
 		}
 		
 		return dataSources;
+	}
+	
+	/**
+	 * @see Currencies#getAmpInflationRates()
+	 */
+	public static JsonBean getAmpInflationRates(){
+		JsonBean result = new JsonBean();
+		SimpleDateFormat dbDateExportFormat = new SimpleDateFormat(CurrencyEPConstants.DATE_FORMAT); 
+		List<AmpInflationRate> rates = CurrencyInflationUtil.getInflationRates();
+		if (rates != null && rates.size() > 0) {
+			for (AmpInflationRate rate : rates) {
+				String currencyCode = rate.getCurrency().getCurrencyCode();
+				SortedMap<String, Double> currencyRates = (TreeMap<String, Double>) result.get(currencyCode);
+				if (currencyRates == null) {
+					currencyRates = new TreeMap<String, Double>();
+					result.set(currencyCode, currencyRates);
+				}
+				currencyRates.put(dbDateExportFormat.format(rate.getPeriodStart()), rate.getInflationRate());
+			}
+		}
+		
+		return result;
 	}
 
 }

@@ -130,7 +130,7 @@ public class MonetConnection implements AutoCloseable {
 		try {
 			flush();
 			if (tableExists(tableName)) {
-				SQLUtils.executeQuery(this.conn, "DROP TABLE " + tableName);
+				SQLUtils.executeQuery(this.conn, "DROP TABLE " + tableName + " CASCADE");
 				flush();
 			}
 		} catch (Exception e) {return false;}		

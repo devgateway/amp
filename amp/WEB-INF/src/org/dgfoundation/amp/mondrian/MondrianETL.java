@@ -596,6 +596,8 @@ private EtlResult execute() throws Exception {
 		} else {
 			monetConn.createTableFromQuery(conn, query, mondrianTable.tableName);
 		}
+		if (mondrianTable.epilogue != null)
+			mondrianTable.epilogue.run(etlConfig, conn, monetConn, locales);
 	}
 	
 	/**

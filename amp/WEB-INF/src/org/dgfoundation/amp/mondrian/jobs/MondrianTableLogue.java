@@ -2,6 +2,7 @@ package org.dgfoundation.amp.mondrian.jobs;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.LinkedHashSet;
 
 import org.dgfoundation.amp.mondrian.EtlConfiguration;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
@@ -12,5 +13,5 @@ import org.dgfoundation.amp.mondrian.monet.MonetConnection;
  *
  */
 public interface MondrianTableLogue {
-	public void run(EtlConfiguration etlConfiguration, Connection conn, MonetConnection monetConn) throws SQLException;
+	public void run(EtlConfiguration etlConfiguration, Connection conn, MonetConnection monetConn, LinkedHashSet<String> locales) throws SQLException;
 }

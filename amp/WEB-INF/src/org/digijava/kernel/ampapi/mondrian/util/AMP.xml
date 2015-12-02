@@ -34,24 +34,24 @@
 
 	<Dimension name="AMP Organization" >
 		<Hierarchy hasAll="true" allMemberName="All Orgs" primaryKey="amp_org_id" name="Organization Name">
-			<Table name="mondrian_organizations@@locale@@" />
+			<Table name="mondrian_organizations@@locale@@@@nopledges@@" />
 			<Level name="Organization Name" uniqueMembers="true" type="Integer" column="amp_org_id" nameColumn="org_name" />
 			<Level name="Organization Code" type="Integer" column="amp_org_id" nameColumn="org_code" translated="false"/>
 			<Level name="Organization Acronym" type="Integer" column="amp_org_id" nameColumn="org_acronym" translated="false"/>
 		</Hierarchy>
 		
 		<Hierarchy hasAll="true" allMemberName="All Orgs" primaryKey="amp_org_id" name="Organization Id">
-			<Table name="mondrian_organizations@@locale@@" />
+			<Table name="mondrian_organizations@@locale@@@@nopledges@@" />
 			<Level name="Organization Id" uniqueMembers="true" type="Integer" column="amp_org_id"/>
 		</Hierarchy>
 		
 		<Hierarchy hasAll="true" allMemberName="All Types" primaryKey="amp_org_id" name="Organization Type Name">
-			<Table name="mondrian_organizations@@locale@@" />
+			<Table name="mondrian_organizations@@locale@@@@nopledges@@" />
 			<Level name="Organization Type Name" uniqueMembers="true" type="Integer" column="amp_org_type_id" nameColumn="org_type_name" />
 		</Hierarchy>
 		
 		<Hierarchy hasAll="true" allMemberName="All Groups" primaryKey="amp_org_id" name="Organization Group Name">
-			<Table name="mondrian_organizations@@locale@@" />
+			<Table name="mondrian_organizations@@locale@@@@nopledges@@" />
 			<Level name="Organization Group Name" uniqueMembers="true" type="Integer" column="amp_org_grp_id" nameColumn="org_grp_name" />
 		</Hierarchy>
 	</Dimension>

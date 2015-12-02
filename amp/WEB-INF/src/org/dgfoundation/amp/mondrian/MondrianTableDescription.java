@@ -1,10 +1,8 @@
 package org.dgfoundation.amp.mondrian;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,7 +25,6 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.SiteUtils;
 
 import com.google.common.base.Function;
-import com.google.common.collect.HashBiMap;
 
 import static org.dgfoundation.amp.mondrian.MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL;
 
@@ -67,7 +64,7 @@ public class MondrianTableDescription {
 	
 	public int supplementalRows = 0;
 	
-	//public MondrianTableLogue epilogue;
+	public MondrianTableLogue epilogue;
 	
 	//public final Set<String> idColumnNames; 
 			
@@ -112,7 +109,7 @@ public class MondrianTableDescription {
 		return this;
 	}
 	
-	public MondrianTableDescription withSupplimentalRows(int sRows) {
+	public MondrianTableDescription withSupplementalRows(int sRows) {
 		this.supplementalRows = sRows;
 		return this;
 	}
@@ -121,10 +118,10 @@ public class MondrianTableDescription {
 		return new CurrencyAmountGroup(this.tableName, this.tableName, primaryKeyColumnName, primaryKeyColumnName, prefix);
 	}
 	
-//	public MondrianTableDescription withPrologue(MondrianTableLogue prologue) {
-//		this.prologue = prologue;
-//		return this;
-//	}
+	public MondrianTableDescription withEpilogue(MondrianTableLogue epilogue) {
+		this.epilogue = epilogue;
+		return this;
+	}
 	
 	/**
 	 * this one goes through a layer of indirection, because the tables might be unavailable at MTD construction time - but they will be available when needed at ETL time

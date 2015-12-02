@@ -87,7 +87,8 @@ nv.models.customizedMultiBarChart = function() {
 
       try{
         if(data[0].values[0].x.length > 4){
-          margin.bottom += 130;
+        	//margin.bottom += 130;
+        	margin.bottom = 130;
         }
       }catch(e){}
 

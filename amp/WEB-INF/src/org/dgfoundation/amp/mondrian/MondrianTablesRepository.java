@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.mondrian;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -9,12 +10,14 @@ import java.util.List;
 import org.dgfoundation.amp.ar.viewfetcher.I18nViewColumnDescription;
 import org.dgfoundation.amp.ar.viewfetcher.I18nViewDescription;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
+import org.dgfoundation.amp.ar.viewfetcher.SimpleColumnValueCalculator;
 import org.dgfoundation.amp.mondrian.currencies.CurrencyAmountGroup;
 import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
 import org.dgfoundation.amp.mondrian.jobs.MondrianTableLogue;
 import org.dgfoundation.amp.mondrian.monet.DatabaseTableColumn;
 import org.dgfoundation.amp.mondrian.monet.DatabaseTableDescription;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAgreement;
@@ -106,7 +109,15 @@ public class MondrianTablesRepository {
 				.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
 					@Override public I18nViewDescription getObject() {
 						return new I18nViewDescription("mondrian_organizations")
-						.addColumnDef(new I18nViewColumnDescription("org_name", "amp_org_id", AmpOrganisation.class, "name"))
+						.addCalculatedColDef("org_name", new SimpleColumnValueCalculator() {
+							@Override protected String calculateValue(ResultSet resultSet) throws SQLException {
+								long id = resultSet.getLong("amp_org_id");
+								if (id >= MondrianETL.PLEDGE_ID_ADDER && id != MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL)
+									return String.format("%s %s", TranslatorWorker.translateText("Org for group"), resultSet.getString("org_grp_name"));
+								return resultSet.getString("org_name_raw");
+							}
+						})
+						.addColumnDef(new I18nViewColumnDescription("org_name_raw", "amp_org_id", AmpOrganisation.class, "name"))
 						.addColumnDef(new I18nViewColumnDescription("org_grp_name", "amp_org_grp_id", AmpOrgGroup.class, "orgGrpName"))
 						.addColumnDef(new I18nViewColumnDescription("org_type_name", "amp_org_type_id", AmpOrgType.class, "orgType"))
 						.addColumnDef(new I18nViewColumnDescription("org_type_code", "amp_org_type_id", AmpOrgType.class, "orgTypeCode"));

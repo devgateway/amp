@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -39,6 +40,8 @@ public class AmpFiscalCalendar implements Serializable, Identifiable,OrgProfileV
 	private Boolean isFiscal; // This indicates whether calendar is fiscal or
 
 	// not.
+	
+	private Set<AmpCurrency> constantCurrencies;
 
 	/**
 	 * @return
@@ -165,6 +168,20 @@ public class AmpFiscalCalendar implements Serializable, Identifiable,OrgProfileV
 	public String[] getSubHeaders() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/**
+	 * @return the constantCurrencies
+	 */
+	public Set<AmpCurrency> getConstantCurrencies() {
+		return constantCurrencies;
+	}
+
+	/**
+	 * @param constantCurrencies the constantCurrencies to set
+	 */
+	public void setConstantCurrencies(Set<AmpCurrency> constantCurrencies) {
+		this.constantCurrencies = constantCurrencies;
 	}
 
 }

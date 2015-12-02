@@ -29,18 +29,17 @@ import org.dgfoundation.amp.ar.VirtualCurrenciesMaintainer;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpInflationRate;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.caching.AmpCaching;
 
 import com.google.common.base.Function;
 
+//DEFLATOR: cleanup unused
 @Path("currencies")
 public class Currencies {
 	
@@ -83,7 +82,7 @@ public class Currencies {
 			elem.set("inflationRate", rate.getInflationRate());
 			elem.set("year", rate.getYear());
 			elem.set("constantCurrency", rate.isConstantCurrency());
-			elem.set("currencyCode", rate.getBaseCurrency().getCurrencyCode());
+			elem.set("currencyCode", rate.getCurrency().getCurrencyCode());
 			jsonRates.add(elem);
 		}
 		return AmpCollections.distribute(jsonRates, new Function<JsonBean, String>() {
@@ -102,9 +101,9 @@ public class Currencies {
 		SortedSet<AmpCurrency> currenciesToDelete = new TreeSet<>();
 		List<AmpInflationRate> allInflationRates = PersistenceManager.getSession().createQuery("FROM " + AmpInflationRate.class.getName()).list();
 		for(AmpInflationRate ir:allInflationRates) {
-			if (!okCurrencyCodes.contains(ir.getBaseCurrency().getCurrencyCode())) {
+			if (!okCurrencyCodes.contains(ir.getCurrency().getCurrencyCode())) {
 				//ratesToDelete.add(ir);
-				currenciesToDelete.add(ir.getBaseCurrency());
+				currenciesToDelete.add(ir.getCurrency());
 				PersistenceManager.getSession().delete(ir);
 			}
 		}
@@ -185,9 +184,10 @@ public class Currencies {
 	}
 	
 	protected AmpInflationRate buildInflationRate(AmpCurrency baseCurrency, Map<String, ?> raw) {
-		return new AmpInflationRate(baseCurrency, 
+		//DEFLATOR: review
+		return null;/*new AmpInflationRate(baseCurrency, 
 				PersistenceManager.getInteger(raw.get("year")), 
 				PersistenceManager.getDouble(raw.get("inflationRate")),
-				PersistenceManager.getBoolean(raw.get("constantCurrency")));
+				PersistenceManager.getBoolean(raw.get("constantCurrency")));*/
 	}
 }

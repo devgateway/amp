@@ -371,7 +371,10 @@ public class SimpleSQLPatcher {
             		"ALTER TABLE IF EXISTS amp_menu_entry DROP COLUMN IF EXISTS is_admin CASCADE",
             		"ALTER TABLE IF EXISTS amp_menu_entry DROP COLUMN IF EXISTS is_team CASCADE"
             ));
-            
+            // AMP-21756: it is not yet used, thus let's recreate
+            addPatch(new SimpleSQLPatch("013",
+            		"DROP TABLE IF EXISTS amp_inflation_rates CASCADE"
+            ));            
 	}};
 	DataSource dataSource;
 	

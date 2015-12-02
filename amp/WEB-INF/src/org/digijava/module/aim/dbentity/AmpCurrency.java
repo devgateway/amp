@@ -28,6 +28,8 @@ public class AmpCurrency implements Serializable, Comparable<AmpCurrency>, Ident
     private AmpCategoryValueLocations countryLocation;
 	private Integer activeFlag;
 	
+	private AmpFiscalCalendar calendar; 
+	
 	private boolean virtual;
 	
 	/**
@@ -167,5 +169,17 @@ public class AmpCurrency implements Serializable, Comparable<AmpCurrency>, Ident
 		} catch (Exception ex) {			
 			throw new RuntimeException("Error retriving currency exchange rate for "+ currencyCode,ex);
 		}
+	}
+	/**
+	 * @return the calendar
+	 */
+	public AmpFiscalCalendar getCalendar() {
+		return calendar;
+	}
+	/**
+	 * @param calendar the calendar to set
+	 */
+	public void setCalendar(AmpFiscalCalendar calendar) {
+		this.calendar = calendar;
 	}
 }	

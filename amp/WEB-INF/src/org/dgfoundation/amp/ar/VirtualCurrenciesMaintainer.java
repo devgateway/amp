@@ -30,6 +30,7 @@ import org.digijava.module.aim.util.caching.AmpCaching;
  * @author Dolghier Constantin
  *
  */
+//DEFLATOR: what can be kept for new implementation?
 public class VirtualCurrenciesMaintainer {
 	
 	protected static Logger logger = Logger.getLogger(VirtualCurrenciesMaintainer.class);
@@ -159,7 +160,7 @@ public class VirtualCurrenciesMaintainer {
 		int maxYear = rates.isEmpty() ? baseYear : rates.get(rates.size() - 1).getYear();
 		
 		for(int i = 1; i < rates.size() - 1; i++)
-			if (!rates.get(i - 1).getBaseCurrency().equals(rates.get(i).getBaseCurrency()))
+			if (!rates.get(i - 1).getCurrency().equals(rates.get(i).getCurrency()))
 				throw new RuntimeException("all the inflation rates given to computePriceIndices should have the same base currency!");
 		
 		SortedMap<Integer, Double> inflRates = new TreeMap<>();
@@ -206,7 +207,7 @@ public class VirtualCurrenciesMaintainer {
 	 * @return
 	 */
 	protected AmpCurrency ensureVirtualCurrencyExists(AmpInflationRate rate) {
-		String newCurrencyCode = buildConstantCurrencyCode(rate.getBaseCurrency(), rate.getYear());
+		String newCurrencyCode = buildConstantCurrencyCode(rate.getCurrency(), rate.getYear());
 		AmpCurrency newCurr = CurrencyUtil.getCurrencyByCode(newCurrencyCode);
 		if (newCurr != null) {
 			newCurr.setActiveFlag(1);
@@ -227,11 +228,11 @@ public class VirtualCurrenciesMaintainer {
 	protected AmpCurrency createVirtualCurrency(AmpInflationRate rate) {
 		AmpCurrency newCurr = new AmpCurrency();
 		newCurr.setActiveFlag(1);
-		newCurr.setCountryLocation(rate.getBaseCurrency().getCountryLocation());
-		newCurr.setCountryName(rate.getBaseCurrency().getCountryName());
+		newCurr.setCountryLocation(rate.getCurrency().getCountryLocation());
+		newCurr.setCountryName(rate.getCurrency().getCountryName());
 		newCurr.setVirtual(true);
-		newCurr.setCurrencyCode(buildConstantCurrencyCode(rate.getBaseCurrency(), rate.getYear()));
-		newCurr.setCurrencyName(buildConstantCurrencyName(rate.getBaseCurrency(), rate.getYear()));
+		newCurr.setCurrencyCode(buildConstantCurrencyCode(rate.getCurrency(), rate.getYear()));
+		newCurr.setCurrencyName(buildConstantCurrencyName(rate.getCurrency(), rate.getYear()));
 		return newCurr;
 	}
 	

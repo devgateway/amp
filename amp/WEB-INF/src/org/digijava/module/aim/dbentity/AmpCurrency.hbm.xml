@@ -16,6 +16,8 @@
 		<property name="virtual" column="virtual_flag" type="java.lang.Boolean" />
 		<many-to-one name="countryLocation" column="country_location_id"
 			class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
+		<many-to-one name="calendar" column="amp_fiscal_cal_id"
+			class="org.digijava.module.aim.dbentity.AmpFiscalCalendar" cascade="none" />
 
 	</class>
 </hibernate-mapping>

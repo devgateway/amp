@@ -9,10 +9,9 @@
 			</generator>
 		</id>
 
-		<property name="year" column="data_year" type="java.lang.Integer" unique-key='yearCurrencyInflation' />
+		<property name="periodStart" column="period_start" type="java.util.Date" unique-key='periodCurrencyInflation' />
 		<property name="inflationRate" column="inflation_rate" type="java.lang.Double" />
-		<property name="constantCurrency" column="constantCurrency" type="java.lang.Boolean" />
-		<many-to-one name="baseCurrency" column="base_currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" unique-key='yearCurrencyInflation' />
+		<many-to-one name="currency" column="currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" not-null="true" unique-key='periodCurrencyInflation' />
 
 	</class>
 </hibernate-mapping>

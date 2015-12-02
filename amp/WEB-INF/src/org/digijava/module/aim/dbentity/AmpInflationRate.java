@@ -1,11 +1,12 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.dgfoundation.amp.ar.ArConstants;
 
 /**
@@ -17,6 +18,7 @@ public class AmpInflationRate implements Serializable, Comparable<AmpInflationRa
 {
 	private static final long serialVersionUID = 1L;
 	
+	//DEFLATOR: review, do we continue to enforce this limits?
 	public final static int MIN_DEFLATION_YEAR = ArConstants.MIN_SUPPORTED_YEAR;
 	public final static int MAX_DEFLATION_YEAR = ArConstants.MAX_SUPPORTED_YEAR;
 
@@ -26,31 +28,28 @@ public class AmpInflationRate implements Serializable, Comparable<AmpInflationRa
 	 * the currency related to which the inflation rate is specified
 	 */
 	@NotNull
-	private AmpCurrency baseCurrency;
+	private AmpCurrency currency;
 
 	/**
-	 * the Gregorian year for which we specify the inflation rate compared with the previous year on
+	 * the Gregorian period start date for which we specify the inflation rate compared with the previous period
 	 */
-	private int year;
+	private Date periodStart;
+	
+	//DEFLATOR: remove in the end, keeping it temporarily here to move on with iterative changes
+	private Integer year;
 	
 	/**
-	 * inflation rate expressed as a percentage of the prices of the previous year. <br />
+	 * inflation rate expressed as a percentage change of the prices from previous period. <br />
 	 * Thus, inflationRate = -50% means prices have halved while inflationRate = +100% means prices have doubled
 	 */
 	private double inflationRate;
 	
-	/**
-	 * whether for this currency and this year one should create a constant currency
-	 */
-	private boolean constantCurrency;
-	
 	public AmpInflationRate() {}
 	
-	public AmpInflationRate(AmpCurrency baseCurrency, int year, double inflationRate, boolean constantCurrency) {
-		this.baseCurrency = baseCurrency;
-		this.year = year;
+	public AmpInflationRate(AmpCurrency currency, Date periodStart, double inflationRate, boolean constantCurrency) {
+		this.currency = currency;
+		this.periodStart = periodStart;
 		this.inflationRate = inflationRate;
-		this.constantCurrency = constantCurrency;
 	}
 	
 	@Override public boolean equals(Object obj) {
@@ -61,11 +60,11 @@ public class AmpInflationRate implements Serializable, Comparable<AmpInflationRa
 	}
 	
 	@Override public int compareTo(AmpInflationRate other) {
-		if (!this.baseCurrency.equals(other.baseCurrency))
-			return this.baseCurrency.compareTo(other.baseCurrency);
+		if (!this.currency.equals(other.currency))
+			return this.currency.compareTo(other.currency);
 		
-		if (this.year != other.year)
-			return this.year - other.year;
+		if (this.periodStart.equals(other.periodStart))
+			return this.periodStart.compareTo(other.periodStart);
 		
 		return Double.compare(this.inflationRate, other.inflationRate);
 	}
@@ -78,20 +77,30 @@ public class AmpInflationRate implements Serializable, Comparable<AmpInflationRa
 		this.id = id;
 	}
 
-	public AmpCurrency getBaseCurrency() {
-		return baseCurrency;
+	public AmpCurrency getCurrency() {
+		return currency;
 	}
 
-	public void setBaseCurrency(AmpCurrency baseCurrency) {
-		this.baseCurrency = baseCurrency;
+	public void setCurrency(AmpCurrency currency) {
+		this.currency = currency;
 	}
-
+	
+	// DEFLATOR: remove it in the end
 	public int getYear() {
+		if (year == null) {
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(periodStart);
+			year = cal.get(Calendar.YEAR);
+		}
 		return year;
 	}
 
-	public void setYear(int year) {
-		this.year = year;
+	public Date getPeriodStart() {
+		return periodStart;
+	}
+
+	public void setPeriodStart(Date periodStart) {
+		this.periodStart = periodStart;
 	}
 
 	public double getInflationRate() {
@@ -102,12 +111,9 @@ public class AmpInflationRate implements Serializable, Comparable<AmpInflationRa
 		this.inflationRate = inflationRate;
 	}
 
+	//DEFLATOR: remove in the end
 	public boolean isConstantCurrency() {
-		return constantCurrency;
-	}
-
-	public void setConstantCurrency(Boolean constantCurrency) {
-		this.constantCurrency = constantCurrency != null && constantCurrency;
+		return false;
 	}
 
 	/**
@@ -115,19 +121,19 @@ public class AmpInflationRate implements Serializable, Comparable<AmpInflationRa
 	 * @param air
 	 */
 	public void importDataFrom(AmpInflationRate air) {
-		this.baseCurrency = air.baseCurrency;
-		this.constantCurrency = air.constantCurrency;
+		this.currency = air.currency;
 		this.inflationRate = air.inflationRate;
-		this.year = air.year;
+		this.periodStart = air.periodStart;
 	}
 
 	@AssertTrue()
 	private boolean isValid() {
-		boolean res = (this.inflationRate > -100) && (this.baseCurrency != null) && (!this.baseCurrency.isVirtual()) && (this.year >= MIN_DEFLATION_YEAR) && (this.year <= MAX_DEFLATION_YEAR);
+		//boolean res = (this.inflationRate > -100) && (this.currency != null) && (!this.currency.isVirtual()) && (this.periodStart >= MIN_DEFLATION_YEAR) && (this.year <= MAX_DEFLATION_YEAR);
+		boolean res = (this.inflationRate > -100) && (this.currency != null) && (!this.currency.isVirtual());
 		return res;
 	}
 	
 	@Override public String toString() {
-		return String.format("currency: %s, year: %d, rate: %.2f, constant: %s", baseCurrency.getCurrencyCode(), this.year, this.inflationRate, this.constantCurrency);
+		return String.format("currency: %s, year: %d, rate: %.2f, constant: %s", currency.getCurrencyCode(), this.periodStart, this.inflationRate);
 	}
 }	

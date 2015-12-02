@@ -111,16 +111,20 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			initDefault();
 		}
 		contents = expandSchema(contents);
-		contents = contents.replaceAll("@@mondrian_fact_table@@", mondrianFactTable);
-		contents = contents.replaceAll("@@actual@@", Long.toString(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase()));
-		contents = contents.replaceAll("@@planned@@", Long.toString(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getIdInDatabase()));
-		contents = contents.replaceAll("@@currency@@", Long.toString(getReportCurrency().getAmpCurrencyId()));
-		contents = contents.replaceAll("@@calendar@@", getReportCalendarTag());
+		boolean isDonorReportWithPledges = (currentReport.get().getReportType() != ArConstants.PLEDGES_TYPE && currentReport.get().isAlsoShowPledges());
+		boolean pledgesRelevant = currentReport.get().getReportType() == ArConstants.PLEDGES_TYPE || isDonorReportWithPledges;
+		
+		contents = contents.replace("@@mondrian_fact_table@@", mondrianFactTable);
+		contents = contents.replace("@@actual@@", Long.toString(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase()));
+		contents = contents.replace("@@planned@@", Long.toString(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getIdInDatabase()));
+		contents = contents.replace("@@currency@@", Long.toString(getReportCurrency().getAmpCurrencyId()));
+		contents = contents.replace("@@calendar@@", getReportCalendarTag());
+		contents = contents.replace("@@nopledges@@", pledgesRelevant ? "" : "_no_pledges");
+		
 		contents = updateDateLimits(contents, getReportSelectedYear());
 		contents = configureDatesSource(contents);
 		
 		// area for (pledges + activities) reports hacks. Holding my nose while writing this - let whatever genius wanted Mondrian as a report engine maintain this PoS :D
-		boolean isDonorReportWithPledges = (currentReport.get().getReportType() != ArConstants.PLEDGES_TYPE && currentReport.get().isAlsoShowPledges());
 		String nonAcPledgeExcluderString = isDonorReportWithPledges ? "(mondrian_fact_table.entity_id &lt; 800000000) AND " : ""; // annulate non-Actual-Commitments trivial measures IFF running an "also show pledges" report
 		String actualCommitmentsDefinition = "__" + (isDonorReportWithPledges ? "Actual Commitments United" : "Actual Commitments Usual") + "__";
 		contents = contents.replace(actualCommitmentsDefinition, "Actual Commitments");

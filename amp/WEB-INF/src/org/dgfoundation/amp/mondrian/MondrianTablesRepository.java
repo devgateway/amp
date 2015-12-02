@@ -1,6 +1,9 @@
 package org.dgfoundation.amp.mondrian;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.dgfoundation.amp.ar.viewfetcher.I18nViewColumnDescription;
@@ -8,8 +11,10 @@ import org.dgfoundation.amp.ar.viewfetcher.I18nViewDescription;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
 import org.dgfoundation.amp.mondrian.currencies.CurrencyAmountGroup;
 import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
+import org.dgfoundation.amp.mondrian.jobs.MondrianTableLogue;
 import org.dgfoundation.amp.mondrian.monet.DatabaseTableColumn;
 import org.dgfoundation.amp.mondrian.monet.DatabaseTableDescription;
+import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -106,7 +111,18 @@ public class MondrianTablesRepository {
 						.addColumnDef(new I18nViewColumnDescription("org_grp_name", "amp_org_grp_id", AmpOrgGroup.class, "orgGrpName"))
 						.addColumnDef(new I18nViewColumnDescription("org_type_name", "amp_org_type_id", AmpOrgType.class, "orgType"))
 						.addColumnDef(new I18nViewColumnDescription("org_type_code", "amp_org_type_id", AmpOrgType.class, "orgTypeCode"));
+					}})
+				.withEpilogue(new MondrianTableLogue() {
+
+					@Override public void run(EtlConfiguration etlConfiguration, Connection conn, MonetConnection monetConn, LinkedHashSet<String> locales) throws SQLException {
+						if (!etlConfiguration.fullEtl)
+							return;
+						for(String locale:locales) {
+							monetConn.executeQuery(String.format("CREATE VIEW mondrian_organizations_%s_no_pledges AS SELECT * FROM mondrian_organizations_%s WHERE amp_org_id < 800000000 OR amp_org_id = " + MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL, 
+								locale, locale));
+						}
 					}});
+				
 	
 	public final static MondrianTableDescription MONDRIAN_ACTIVITY_TEXTS = 
 			new MondrianTableDescription("mondrian_activity_texts", "amp_activity_id", Arrays.asList("amp_activity_id"))
@@ -121,7 +137,7 @@ public class MondrianTablesRepository {
 							.addColumnDef(new I18nViewColumnDescription("name", "amp_activity_id", AmpActivityVersion.class, "name"))
 							.addColumnDef(new I18nViewColumnDescription("team_name", "team_id", AmpTeam.class, "name"));							
 					}})
-				.withSupplimentalRows(1)
+				.withSupplementalRows(1)
 				.withPledgeView("v_mondrian_pledge_texts");
 
 	public final static MondrianTableDescription MONDRIAN_COMPONENTS =
@@ -221,7 +237,7 @@ public class MondrianTablesRepository {
 			
 	public final static MondrianTableDescription MONDRIAN_PLEDGE_CONTACTS = 
 			new MondrianTableDescription("mondrian_activity_contacts", "amp_activity_id", Arrays.asList("amp_activity_id"))
-				.withSupplimentalRows(1)
+				.withSupplementalRows(1)
 				.withPledgeView("v_mondrian_pledge_contacts");
 	
 	public final static MondrianTableDescription MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE = 

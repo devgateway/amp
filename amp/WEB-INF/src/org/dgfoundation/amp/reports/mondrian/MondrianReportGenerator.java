@@ -1137,7 +1137,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			AmpMeasures measure = AdvancedReportUtil.getMeasureByName(measureName);
 			measureDescription = measure != null ? measure.getDescription() : null;
 		} catch (RuntimeException e) {
-			logger.info("Could not retrieve measure " + measureName);
+			logger.debug("Could not retrieve measure " + measureName + " description");
 		}
 		
 		return measureDescription;

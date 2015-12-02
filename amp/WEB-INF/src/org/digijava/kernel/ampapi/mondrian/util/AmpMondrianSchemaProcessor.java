@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MondrianTablesRepository;
 import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
@@ -59,6 +60,16 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	protected static final Logger logger = Logger.getLogger(AmpMondrianSchemaProcessor.class);
 	protected static String expandedSchema;
 	protected String mondrianFactTable;
+	
+	protected static final String SECTOR_VIEW_TEMPLATE = "<View alias=\"v_mondrian_sectors_@@typenameescaped@@_@@instancenr@@\">\n" + 
+			"<SQL dialect=\"generic\">\n" + 
+				"<![CDATA[\n" + 
+					"SELECT * FROM mondrian_sectors@@locale@@ WHERE typename='@@typename@@' OR typename='Undefined'\n" + 
+				"]]>\n" + 
+			"</SQL>\n" + 
+			"</View>";
+			
+	protected static final String PROGRAM_VIEW_TEMPLATE = SECTOR_VIEW_TEMPLATE.replace("mondrian_sectors", "mondrian_programs").replace("typename=", "program_setting_name=");
 	
 	/**
 	 * whether this is the first, e.g. expanding, run of the processor
@@ -252,9 +263,9 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	protected String expandSchema(String contents) {
 		if (expandedSchema == null) {
 			logger.warn("expanding AMP schema...");
+			IntWrapper idsGenerator = new IntWrapper();
 			expandingRun = true;
 			Document xmlSchema = XMLGlobals.createNewXML(contents);
-			
 			//Node dimensionsParentNode = XMLGlobals.selectNode(xmlSchema, "/Schema/Cube");
 			while(true) {
 				NodeList dimUsages = XMLGlobals.selectNodes(xmlSchema, "//DimensionUsage");
@@ -264,6 +275,8 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 				String name = dimUsage.getAttribute("name");
 				String dim = dimUsage.getAttribute("source");
 				String foreignKey = dimUsage.getAttribute("foreignKey");
+				
+				String typeName = dimUsage.hasAttribute("typeName") ? dimUsage.getAttribute("typeName") : null;
 				//logger.warn(String.format("expanding DimensionUsage: name = %s,  dim = %s, key = %s", name, dim, foreignKey));
 				
 				Node dimensionDefinition = XMLGlobals.selectNode(xmlSchema, "//Dimension[@name='" + dim + "']");
@@ -271,6 +284,8 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 				newDimensionDefinition.setAttribute("foreignKey", foreignKey);
 				newDimensionDefinition.setAttribute("name", name);
 				
+				processTypedNodesIfAny(newDimensionDefinition, idsGenerator, "SectorViewDefinition", SECTOR_VIEW_TEMPLATE, typeName);
+				processTypedNodesIfAny(newDimensionDefinition, idsGenerator, "ProgramViewDefinition", PROGRAM_VIEW_TEMPLATE, typeName);
 				dimUsage.getParentNode().replaceChild(newDimensionDefinition, dimUsage);
 			}
 			insertCommonMeasuresDefinitions(xmlSchema);
@@ -281,11 +296,25 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			contents = contents.replaceAll("@@transaction_type_gap@@", MoConstants.TRANSACTION_TYPE_GAP);
 			contents = updatePledgeContacts(contents);
 			expandedSchema = contents;
-			// System.err.println("the expanded schema is: " + expandedSchema);
+			//System.err.println("the expanded schema is: " + expandedSchema);
 		}
 		//System.err.println("the expanded schema is: " + expandedSchema);
 		//expandedSchema = expandedSchema.replace("@@activity_status_key@@", buildActivityStatusSQL());
 		return expandedSchema;
+	}
+
+	protected void processTypedNodesIfAny(Element newDimensionDefinition, IntWrapper idsGenerator, String elementToSearch, String template, String typeName) {
+		NodeList customNodes = XMLGlobals.selectNodes(newDimensionDefinition, "//" + elementToSearch);
+		if (customNodes.getLength() == 0) return;
+		if (typeName == null)
+			throw new RuntimeException(String.format("invalid schema specification: Dimension %s has a custom element", newDimensionDefinition.getNodeName()));
+		
+		for(int i = 0; i < customNodes.getLength(); i++) {
+			Node oldViewNode = customNodes.item(i);
+			String newTemplateText = template.replace("@@typename@@", typeName).replace("@@instancenr@@", Integer.toString(idsGenerator.inc().value)).replace("@@typenameescaped@@", typeName.toLowerCase().replace(' ', '_'));
+			Node viewNode = newDimensionDefinition.getOwnerDocument().adoptNode(XMLGlobals.createNewNode(newTemplateText));
+			oldViewNode.getParentNode().replaceChild(viewNode, oldViewNode);
+		}
 	}
 	
 	/**

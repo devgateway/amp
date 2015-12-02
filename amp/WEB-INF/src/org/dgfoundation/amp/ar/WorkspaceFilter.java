@@ -135,24 +135,28 @@ public class WorkspaceFilter
 			//+ Util.toCSString(ampTeams) + ") )" ;
 				
 		TEAM_FILTER += "AND approval_status IN ("+used_approval_status+") ";
+		String isolated_filter = " amp_activity_id IN (select amp_activity_id FROM amp_activity_version aav WHERE "
+				+ "aav.amp_team_id IN (select amp_team_id from amp_team WHERE isolated = true)) ";
+
 		// computed workspace filter -- append it to the team filter so normal
 		// team activities are also possible
 		//AMP-4495 - in computed workspace, the unapproved or draft activities from other
 		//worskpaces should not be displayed
 			if (teamAssignedOrgs != null && teamAssignedOrgs.size() > 0) {
-
 				TEAM_FILTER += " OR amp_activity_id IN (SELECT DISTINCT(aor.activity) FROM amp_org_role aor, amp_activity a WHERE aor.organisation IN ("
 						+ Util.toCSStringForIN(teamAssignedOrgs) + ") AND aor.activity=a.amp_activity_id AND a.amp_team_id IS NOT NULL AND a.approval_status IN (" +
-						used_approval_status	+") ) " + (hideDraft ? "AND draft<>true ":"");
+						used_approval_status	+") ) " + (hideDraft ? "AND draft<>true ":"")
+						+ String.format(" AND (NOT %s)", isolated_filter);
 				TEAM_FILTER += " OR amp_activity_id IN (SELECT distinct(af.amp_activity_id) FROM amp_funding af, amp_activity b WHERE af.amp_donor_org_id IN ("
 						+ Util.toCSStringForIN(teamAssignedOrgs) + ") AND af.amp_activity_id=b.amp_activity_id AND b.amp_team_id IS NOT NULL AND b.approval_status IN (" +
-						used_approval_status	+") )" + (hideDraft ? "AND draft<>true ":"");
+						used_approval_status	+") )" + (hideDraft ? "AND draft<>true ":"")
+						+ String.format(" AND (NOT %s)", isolated_filter);
 			}
 
-		String isolated_filter = " amp_activity_id IN (select amp_activity_id FROM amp_activity_version aav WHERE "
-					+ "aav.amp_team_id IN (select amp_team_id from amp_team WHERE isolated = true)) ";
 		if (this.teamMember !=null && this.teamMember.getTeamIsolated()) {
-			TEAM_FILTER = String.format("%s OR %s", TEAM_FILTER, isolated_filter );
+			String isolatedSubfilter = String.format(" amp_activity_id IN "
+					+ "(SELECT amp_activity_id FROM amp_activity_version WHERE amp_team_id IN (%s))",Util.toCSStringForIN((ampTeams)));
+			TEAM_FILTER = String.format("%s OR ( %s AND %s )", TEAM_FILTER, isolated_filter, isolatedSubfilter );
 		}
 		else {
 			TEAM_FILTER = String.format("%s AND (NOT %s)", TEAM_FILTER, isolated_filter );

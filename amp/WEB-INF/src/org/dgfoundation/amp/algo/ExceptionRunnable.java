@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.mondrian;
+package org.dgfoundation.amp.algo;
 
 /**
  * a piece of code which might throw an Exception

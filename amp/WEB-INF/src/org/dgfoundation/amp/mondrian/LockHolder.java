@@ -6,6 +6,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 
+import org.dgfoundation.amp.algo.ExceptionRunnable;
+
 /**
  * Lock utils
  * @author Constantin Dolghier

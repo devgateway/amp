@@ -1,19 +1,30 @@
 package org.dgfoundation.amp.nireports;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.algo.Graph;
+import org.dgfoundation.amp.algo.VivificatingMap;
+import org.dgfoundation.amp.algo.timing.InclusiveTimer;
+import org.dgfoundation.amp.algo.timing.RunNode;
 import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.newreports.ReportWarning;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
+import org.dgfoundation.amp.nireports.schema.NiReportMeasure;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 
 /**
- * The NiReports engine API-independent entrypoint
- * No schema-specific code below this point.
- * Code can change its APIs at any point below this point - using the AMP Reports API here is entirely optional
+ * The NiReports engine API-independent entrypoint <br />
+ * No schema-specific code below this point. <br />
+ * Code can change its APIs at any point below this point - using the AMP Reports API here is entirely optional <br />
  * 
  * @author Dolghier Constantin
  *
@@ -30,10 +41,12 @@ public class NiReportsEngine {
 	
 	final Map<String, CellColumn> fetchedColumns = new LinkedHashMap<>();
 	final Map<String, CellColumn> fetchedMeasures = new LinkedHashMap<>();
+	final VivificatingMap<Long, Set<ReportWarning>> reportWarnings = new VivificatingMap<>(new HashMap<>(), () -> new HashSet<ReportWarning>());
 	
 	GroupReportData rootReportData;
 	public List<CategAmountCell> funding;
 	final ReportSpecification spec;
+	InclusiveTimer timer;
 	
 	public NiReportsEngine(NiReportsSchema schema, CurrencyConvertor currencyConvertor, ReportSpecification reportSpec) {
 		this.schema = schema;
@@ -43,11 +56,14 @@ public class NiReportsEngine {
 	}
 	 
 	public GroupReportData execute() {
-		fetchData();
-		createInitialReport();
-		categorizeData();
-		createHierarchies();
-		createTotals();
+		this.timer = new InclusiveTimer("Report " + spec.getReportName());
+		timer.run("fetch", this::fetchData);
+		timer.run("init", this::createInitialReport);
+		timer.run("categorize", this::categorizeData);
+		timer.run("hierarchies", this::createHierarchies);
+		timer.run("totals", this::createTotals);
+		RunNode timingInfo = timer.getCurrentState();
+		logger.error(String.format("it took %d millies to generate report, the breakdown is: %s", timer.getWallclockTime(), timingInfo.asUserString(3)));
 		return rootReportData;
 	}
 	
@@ -57,15 +73,15 @@ public class NiReportsEngine {
 	 * 3. fetches the measures 
 	 */
 	protected void fetchData() {
-		fetchColumns();
-		fetchMeasures();
+		timer.run("columns", this::fetchColumns);
+		timer.run("measures", this::fetchMeasures);
 	}
 	
-	//TODO: migrate to JDK8
 	protected void fetchColumns() {
-		funding = schema.getFundingFetcher().fetchColumn(filters);
-		for(NiReportColumn<?> colToFetch:getReportColumns())
-			fetchedColumns.put(colToFetch.name, fetchColumn(colToFetch));
+		timer.run("funding", () -> funding = schema.getFundingFetcher().fetchColumn(filters));
+		for(NiReportColumn<?> colToFetch:getReportColumns()) {
+			timer.run(colToFetch.name, () -> fetchedColumns.put(colToFetch.name, fetchColumn(colToFetch)));
+		};
 	}
 	
 	protected CellColumn fetchColumn(NiReportColumn<? extends Cell> colToFetch) {
@@ -78,7 +94,20 @@ public class NiReportsEngine {
 	 * 
 	 */
 	protected void fetchMeasures() {
-		
+		Map<String, NiReportMeasure> measures = schema.getMeasures();
+		LinkedHashSet<String> measNames = new LinkedHashSet<>(spec.getMeasures().stream().map(meas -> meas.getMeasureName()).collect(Collectors.toList()));
+		List<NiReportMeasure> measuresToFetch = new ArrayList<>();
+		for(String measName:measNames) {
+			if (measures.containsKey(measName))
+				measuresToFetch.add(measures.get(measName));
+			else
+				addReportWarning(new ReportWarning(String.format("measure %s not supported in NiReports", measName)));
+		}
+		Graph<NiReportMeasure> measuresGraph = new Graph<>(measuresToFetch, meas -> meas.getPrecursorMeasures().stream().map(measName -> measures.get(measName)).collect(Collectors.toList()));
+		LinkedHashSet<NiReportMeasure> measuresInSortOrder = measuresGraph.sortTopologically();
+		for(NiReportMeasure meas:measuresInSortOrder) {
+			timer.run(meas.name, () -> meas.buildCells(this));
+		}
 	}
 	
 	protected void createInitialReport() {
@@ -106,11 +135,15 @@ public class NiReportsEngine {
 		for(String columnName:spec.getColumnNames()) {
 			NiReportColumn<? extends Cell> col = schema.getColumns().get(columnName);
 			if (col == null) {
-				logger.error(String.format("column %s not supported in NiReports, ignoring", columnName));
+				addReportWarning(new ReportWarning(String.format("column %s not supported in NiReports", columnName)));
 			} else {
 				res.add(col);
 			}
 		}
 		return res;
+	}
+	
+	protected void addReportWarning(ReportWarning warning) {
+		reportWarnings.getOrCreate(warning.entityId).add(warning);
 	}
 }

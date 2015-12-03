@@ -14,7 +14,7 @@ import org.junit.Test;
 
 /**
  * 
- * testcases for Currency Deflator (https://jira.dgfoundation.org/browse/AMP-20534)
+ * testcases for graph algorithms
  * @author Constantin Dolghier
  *
  */

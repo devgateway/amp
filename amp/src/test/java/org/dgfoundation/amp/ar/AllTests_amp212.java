@@ -8,6 +8,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.dgfoundation.amp.ar.amp212.GraphAlgorithmsTests;
+import org.dgfoundation.amp.ar.amp212.InclusiveRunnerTests;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -30,7 +31,8 @@ public class AllTests_amp212
 		setUp();
 		
 		TestSuite suite = new TestSuite(AllTests_amp212.class.getName());
-		suite.addTest(new JUnit4TestAdapter(GraphAlgorithmsTests.class));		
+		suite.addTest(new JUnit4TestAdapter(GraphAlgorithmsTests.class));	
+		suite.addTest(new JUnit4TestAdapter(InclusiveRunnerTests.class));
 		return suite;
 	}
 	

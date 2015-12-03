@@ -1,8 +1,8 @@
 package org.dgfoundation.amp.nireports;
 
 /**
- * <b> Immutable</b>class describing a piece of metadata.
- * The enclosed value should be immutable (or at least <strong>never</strong> changed), or you will be in a world of pain
+ * <b> Immutable</b> class describing a piece of metadata.
+ * The enclosed value should be immutable (or at least <b>never</b> changed), or you will be in a world of pain
  * 
  * @author Dolghier Constantin
  * 

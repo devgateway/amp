@@ -3172,8 +3172,8 @@ public class ExportActivityToWord extends Action {
             }
             if(catVal!=null){
                 columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal);
+                generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
             }
-            generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
         }
 
         if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Government Agreement Number")){

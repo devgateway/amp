@@ -635,17 +635,6 @@ body {background:none;}
 									</tr>
 									</feature:display>
 
-									<field:display name="Project Category" feature="Identification">
-									<tr>
-										<td class="field_name" ><b>
-									  <digi:trn key="aim:ProjectCategory">Project Category</digi:trn>		</b>								</td>
-										<td bgcolor="#ffffff">
-											<c:if test="${aimEditActivityForm.identification.projectCategory > 0}">
-												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectCategory}"/>
-											</c:if>
-&nbsp;										</td>
-									</tr>
-									</field:display>
 		</feature:display>
 		<module:display name="/Activity Form/Identification/Humanitarian Aid" parentModule="/Activity Form/Identification">
 								<tr>
@@ -2225,7 +2214,7 @@ body {background:none;}
 												</div>
 											</logic:notEmpty>
 										</module:display>
-										<module:display name="/Activity Form/Related Organizations/Responsible Organization" parentModule="/Activity Form/Related Organizations">
+										<module:display name="/Activity Form/Organizations/Responsible Organization" parentModule="/Activity Form/Organizations">
 											<b><digi:trn key="aim:responsibleOrganisation">Responsible Organization</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrganisations">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
@@ -2348,8 +2337,7 @@ body {background:none;}
 											</logic:notEmpty><br/>
 											</module:display>
 
-											<module:display name="/Activity Form/Related Organizations/Beneficiary Agency" parentModule="/Activity Form/Related Organizations">
-
+											<module:display name="/Activity Form/Organizations/Beneficiary Agency" parentModule="/Activity Form/Organizations">
 											<b><digi:trn key="aim:beneficiary2Agency">Beneficiary Agency</digi:trn></b><br/>
 
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.benAgencies">
@@ -2391,7 +2379,7 @@ body {background:none;}
 												</logic:notEmpty><br/>
 											</module:display>
 
-											<module:display name="/Activity Form/Related Organizations/Contracting Agency" parentModule="/Activity Form/Related Organizations">
+											<module:display name="/Activity Form/Organizations/Contracting Agency" parentModule="/Activity Form/Organizations">
 											<b><digi:trn key="aim:contracting2Agency">Contracting Agency</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.conAgencies">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">

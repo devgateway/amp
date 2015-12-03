@@ -19,5 +19,8 @@ public class CurrencyEPConstants {
 	public static final String API_TOKEN = "api_token";
 	
 	public static final String DATE_FORMAT = "yyyy-MM-dd";
+	
+	// Data Sources
+	public static final String FRED_GNPDEF = "FRED-GNPDEF";
 
 }

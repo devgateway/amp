@@ -50,6 +50,9 @@ public class FredDataSource {
 		queryParamsGNPDEF.get("frequency").add(frequency.name().toLowerCase());
 	}
 	
+	/**
+	 * @return SortedMap<period_start_date_as_date, value_as_double>
+	 */
 	public SortedMap<Date, Double> getGNPDEFObservations() {
 		SortedMap<Date, Double> result = new TreeMap<Date, Double>();
 		SortedMap<String, Double> observations = getGNPDEFObservationsAsIs();
@@ -64,7 +67,7 @@ public class FredDataSource {
 	}
 	
 	/**
-	 * @return SortedMap<period_start_date_as_string, value_as_string>
+	 * @return SortedMap<period_start_date_as_string, value_as_double>
 	 */
 	public SortedMap<String, Double> getGNPDEFObservationsAsIs() {
 		RestClient rc = RestClient.getInstance(Type.JSON);

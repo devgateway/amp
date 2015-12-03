@@ -18,9 +18,11 @@ import java.util.TreeMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.currency.CurrencyInflationUtil;
+import org.dgfoundation.amp.currency.inflation.ds.FredDataSource;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEPGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -160,5 +162,47 @@ public class CurrencyService {
 		
 		return result;
 	}
-
+	
+	/**
+	 * @see Currencies#getAmpInflationRates(Long)
+	 */
+	public static JsonBean getInflationRatesFromSource(Long sourceId) {
+		AmpInflationSource ds = CurrencyInflationUtil.getInflationDataSource(sourceId);
+		if (ds == null) {
+			return ApiError.toError(new ApiErrorMessage(CurrencyErrors.INVALID_SOURCE_ID, String.valueOf(sourceId)));
+		}
+		JsonBean result = null;
+		switch (ds.getName()) {
+		case CurrencyEPConstants.FRED_GNPDEF:
+			FredDataSource fredDS = new FredDataSource(ds.getApiToken(), ds.getFrequency());
+			Map<String, SortedMap<String, Double>> inflRates = new HashMap<String, SortedMap<String, Double>>();
+			inflRates.put(ds.getCurrency().getCurrencyCode(), fredDS.getGNPDEFObservationsAsIs());
+			result = toInflationRatesResult(inflRates);
+			break;
+		}
+		return result;
+	}
+	
+	protected static Map<String, SortedMap<String, Double>> convert(Map<String, SortedMap<Date, Double>> inflRates) {
+		Map<String, SortedMap<String, Double>> result = new HashMap<String, SortedMap<String, Double>>();
+		for(Entry<String, SortedMap<Date, Double>> entry : inflRates.entrySet()) {
+			SortedMap<String, Double> series = new TreeMap<String, Double>();
+			for (Entry<Date, Double> sEntry : entry.getValue().entrySet()) {
+				series.put(DATE_FORMATTER.format(sEntry.getKey()), sEntry.getValue());
+			}
+			result.put(entry.getKey(), series);
+		}
+		return result;
+	}
+	
+	protected static JsonBean toInflationRatesOnDates(Map<String, SortedMap<Date, Double>> inflationRatesPerCurrency) {
+		return toInflationRatesResult(convert(inflationRatesPerCurrency));
+	}
+	
+	protected static JsonBean toInflationRatesResult(Map<String, SortedMap<String, Double>> inflationRatesPerCurrency) {
+		JsonBean result = new JsonBean();
+		result.any().putAll(inflationRatesPerCurrency);
+		return result;
+	}
+	
 }

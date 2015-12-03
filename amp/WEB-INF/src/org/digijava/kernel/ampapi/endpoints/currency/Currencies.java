@@ -130,7 +130,24 @@ public class Currencies {
 		return CurrencyService.saveInflationRates(inflationRates);
 	}
 	
-	
+	/**
+	 * Retrieve and provide inflation rates from the selected datasource
+	 * @param sourceId source ID to query for inflation rates 
+	 * @return <pre>
+	 * {
+	 *     "USD": {"2008-01-01" : 1.2, ...},		//sorted by date
+	 *     "ETB": {"2008-01-01" : 12.7, ...},
+	 *     ...
+	 * }
+	 * </pre>
+	 */
+	@GET
+	@Path("/inflation-rates/{source_id}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(id = "inflation-rates", authTypes = {AuthRule.IN_ADMIN}, ui = false)
+	public JsonBean getAmpInflationRates(@PathParam("source_id") Long sourceId) {
+		return CurrencyService.getInflationRatesFromSource(sourceId);
+	}
 	
 	/******************************** REVIEW AND CLEANUP below *************************************************/
 	

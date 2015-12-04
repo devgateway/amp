@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.nireports.amp;
+package org.dgfoundation.amp.nireports;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import static org.dgfoundation.amp.nireports.NiUtils.failIf;
  * @author Dolghier Constantin
  *
  */
-public abstract class ReportsSchema implements NiReportsSchema {
+public abstract class AbstractReportsSchema implements NiReportsSchema {
 	protected Map<String, NiReportColumn<?>> columns = new HashMap<>();
 	protected Map<String, NiReportMeasure> measures = new HashMap<>();
 	
@@ -28,13 +28,13 @@ public abstract class ReportsSchema implements NiReportsSchema {
 		return Collections.unmodifiableMap(measures);
 	}
 		
-	public ReportsSchema addColumn(NiReportColumn<?> col) {
+	public AbstractReportsSchema addColumn(NiReportColumn<?> col) {
 		failIf(columns.containsKey(col.name), "double definition of column with name " + col.name);
 		columns.put(col.name, col);
 		return this;
 	}
 	
-	public ReportsSchema addMeasure(NiReportMeasure meas) {
+	public AbstractReportsSchema addMeasure(NiReportMeasure meas) {
 		failIf(measures.containsKey(meas.name), "double definition of measure with name " + meas.name);
 		measures.put(meas.name, meas);
 		return this;

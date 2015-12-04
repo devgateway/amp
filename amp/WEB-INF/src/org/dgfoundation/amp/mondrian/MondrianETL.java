@@ -22,6 +22,7 @@ import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.BooleanWrapper;
 import org.dgfoundation.amp.algo.ExceptionRunnable;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -1150,9 +1151,7 @@ private EtlResult execute() throws Exception {
 			}
 			//CloseExpiredActivitiesJob.cleanupSession(session);
 			catch(Exception e) {
-				if (e instanceof RuntimeException)
-					throw (RuntimeException) e;
-				throw new RuntimeException(e);
+				throw AlgoUtils.translateException(e);
 			}
 			finally {
 				PersistenceManager.cleanupSession(session);

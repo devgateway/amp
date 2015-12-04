@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.nireports;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -11,6 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.Graph;
 import org.dgfoundation.amp.algo.VivificatingMap;
 import org.dgfoundation.amp.algo.timing.InclusiveTimer;
@@ -48,6 +50,12 @@ public class NiReportsEngine {
 	final ReportSpecification spec;
 	InclusiveTimer timer;
 	
+	/**
+	 * schema-specific scratchpad which is not used by the NiReports engine per se, but is made available to the callbacks <br />
+	 * 
+	 */
+	public SchemaSpecificScratchpad schemaSpecificScratchpad;
+	
 	public NiReportsEngine(NiReportsSchema schema, CurrencyConvertor currencyConvertor, ReportSpecification reportSpec) {
 		this.schema = schema;
 		this.currencyConvertor = currencyConvertor;
@@ -56,15 +64,21 @@ public class NiReportsEngine {
 	}
 	 
 	public GroupReportData execute() {
-		this.timer = new InclusiveTimer("Report " + spec.getReportName());
-		timer.run("fetch", this::fetchData);
-		timer.run("init", this::createInitialReport);
-		timer.run("categorize", this::categorizeData);
-		timer.run("hierarchies", this::createHierarchies);
-		timer.run("totals", this::createTotals);
-		RunNode timingInfo = timer.getCurrentState();
-		logger.error(String.format("it took %d millies to generate report, the breakdown is: %s", timer.getWallclockTime(), timingInfo.asUserString(3)));
-		return rootReportData;
+		try(SchemaSpecificScratchpad pad = schema.getScratchpadSupplier().apply(this)) {
+			this.schemaSpecificScratchpad = pad;
+			this.timer = new InclusiveTimer("Report " + spec.getReportName());
+			timer.run("fetch", this::fetchData);
+			timer.run("init", this::createInitialReport);
+			timer.run("categorize", this::categorizeData);
+			timer.run("hierarchies", this::createHierarchies);
+			timer.run("totals", this::createTotals);
+			RunNode timingInfo = timer.getCurrentState();
+			logger.error(String.format("it took %d millies to generate report, the breakdown is:\n%s", timer.getWallclockTime(), timingInfo.asUserString(3)));
+			return rootReportData;
+		}
+		catch(Exception e) {
+			throw AlgoUtils.translateException(e);
+		}
 	}
 	
 	/**
@@ -78,14 +92,14 @@ public class NiReportsEngine {
 	}
 	
 	protected void fetchColumns() {
-		timer.run("funding", () -> funding = schema.getFundingFetcher().fetchColumn(filters));
+		timer.run("funding", () -> funding = schema.getFundingFetcher().fetchColumn(this));
 		for(NiReportColumn<?> colToFetch:getReportColumns()) {
 			timer.run(colToFetch.name, () -> fetchedColumns.put(colToFetch.name, fetchColumn(colToFetch)));
 		};
 	}
 	
 	protected CellColumn fetchColumn(NiReportColumn<? extends Cell> colToFetch) {
-		List<Cell> cells = (List) colToFetch.fetchColumn(filters);
+		List<Cell> cells = (List) colToFetch.fetchColumn(this);
 		return new CellColumn(colToFetch.name, cells, null);
 	}
 	
@@ -146,4 +160,9 @@ public class NiReportsEngine {
 	protected void addReportWarning(ReportWarning warning) {
 		reportWarnings.getOrCreate(warning.entityId).add(warning);
 	}
+	
+	public NiFilters getFilters() {
+		return filters;
+	}
+	
 }

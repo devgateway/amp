@@ -32,6 +32,10 @@ public class InclusiveRunnerTests extends AmpTestCase {
 		super("inclusive runner tests");
 	}
 		
+	/**
+	 * busy wait (busy waiting is more stable then waiting, so easier to testcases timing code)
+	 * @param millies
+	 */
 	public final static void delay(long millies) {
 		long start = System.currentTimeMillis();
 		while (System.currentTimeMillis() - start < millies);

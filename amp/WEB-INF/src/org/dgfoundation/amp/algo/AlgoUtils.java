@@ -162,4 +162,14 @@ public class AlgoUtils {
 		}
 		return iter;
 	}
+	
+	/**
+	 * encapsulates nonRuntimeException in runtimeerrorexceptions
+	 * @param e
+	 */
+	public static RuntimeException translateException(Exception e){
+		if (e instanceof RuntimeException)
+			return (RuntimeException) e;
+		return new RuntimeException(e);
+	}
 }

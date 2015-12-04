@@ -11,8 +11,6 @@ import java.text.Normalizer.Form;
  * @author Nadejda Mandrescu
  */
 public class TextCell extends ReportCell {
-	
-	
 	public TextCell(Comparable<?> value) {
 		super(value, value == null ? "" : String.valueOf(value));
 	}

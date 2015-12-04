@@ -1,6 +1,8 @@
 package org.dgfoundation.amp.nireports;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+
 import org.joda.time.DateTime;
 
 /**
@@ -8,13 +10,14 @@ import org.joda.time.DateTime;
  * @author Dolghier Constantin
  *
  */
-public class MonetaryAmount {
-	public final BigInteger amount;
+public class MonetaryAmount implements Comparable<MonetaryAmount> {
+	
+	public final BigDecimal amount;
 	
 	/**
 	 * will be null for summed-up transactions
 	 */
-	public final BigInteger origAmount;
+	public final BigDecimal origAmount;
 	
 	/**
 	 * will be null for summed-up transactions
@@ -26,22 +29,32 @@ public class MonetaryAmount {
 	 */
 	public final DateTime date;
 	
-	public MonetaryAmount(BigInteger amount, BigInteger origAmount, String origCurrency, DateTime date) {
+	public MonetaryAmount(BigDecimal amount, BigDecimal origAmount, String origCurrency, DateTime date) {
 		this.amount = amount;
 		this.origAmount = origAmount;
 		this.origCurrency = origCurrency;
 		this.date = date;
 	}
 	
-	public MonetaryAmount(BigInteger amount) {
+	public MonetaryAmount(BigDecimal amount) {
 		this(amount, null, null, null);
 	}
 	
-	public MonetaryAmount multiplyBy(BigInteger other) {
+	public MonetaryAmount multiplyBy(BigDecimal other) {
 		return new MonetaryAmount(amount.multiply(other), origAmount, origCurrency, null);
 	}
 	
 	public MonetaryAmount add(MonetaryAmount other) {
 		return new MonetaryAmount(amount.add(other.amount));
+	}
+
+	@Override
+	public int compareTo(MonetaryAmount o) {
+		return amount.compareTo(o.amount);
+	}
+	
+	@Override
+	public String toString() {
+		return amount.toString();
 	}
 }

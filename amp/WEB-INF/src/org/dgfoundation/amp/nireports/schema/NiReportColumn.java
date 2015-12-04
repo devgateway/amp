@@ -1,10 +1,16 @@
 package org.dgfoundation.amp.nireports.schema;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.TreeMap;
 
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiFilters;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
 
 /**
  * 
@@ -14,20 +20,20 @@ import org.dgfoundation.amp.nireports.NiFilters;
 public abstract class NiReportColumn<K extends Cell> {
 	
 	public final String name;
-	public final NiDimension.LevelColumn levelColumn;
+	public final Optional<NiDimension.LevelColumn> levelColumn;
 	
 	/**
-	 * might be null if this column is never filtered on
+	 * never null
 	 */
-	public final ImmutablePair<String, String> fundingViewFilter;
+	public final Map<String, String> filtering;
 	
-	protected NiReportColumn(String name, NiDimension.LevelColumn levelColumn, ImmutablePair<String, String> fundingViewFilter) {
+	protected NiReportColumn(String name, NiDimension.LevelColumn levelColumn, Map<String, String> filtering) {
 		this.name = name;
-		this.levelColumn = levelColumn;
-		this.fundingViewFilter = fundingViewFilter;
+		this.levelColumn = Optional.ofNullable(levelColumn);
+		this.filtering = filtering == null ? Collections.emptyMap() : Collections.unmodifiableMap(new TreeMap<>(filtering));
 	}
 	
-	public abstract List<K> fetchColumn(NiFilters filters);
+	public abstract List<K> fetchColumn(NiReportsEngine engine);
 	
 	@Override public int hashCode() {
 		return name.hashCode();

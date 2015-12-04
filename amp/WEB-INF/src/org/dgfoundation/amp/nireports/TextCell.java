@@ -1,0 +1,14 @@
+package org.dgfoundation.amp.nireports;
+
+/**
+ * TODO: merge back these changes into ReportCell once the internal API is stabilized
+ * @author Dolghier Constantin
+ *
+ */
+public class TextCell extends Cell {
+
+	public TextCell(String text, long activityId, long entityId) {
+		super(text, text, activityId, entityId);
+	}
+
+}

@@ -17,7 +17,7 @@ public class CategAmountCell extends Cell {
 	public final MetaInfoSet metaInfo;
 	
 	public CategAmountCell(long activityId, MonetaryAmount amount, MetaInfoSet metaInfo) {
-		super(activityId, -1);
+		super(amount, amount.toString(), activityId, -1);
 		this.amount = amount;
 		this.metaInfo = metaInfo;
 	}

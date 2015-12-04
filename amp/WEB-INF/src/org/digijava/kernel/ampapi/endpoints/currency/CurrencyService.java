@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.currency.CurrencyInflationUtil;
 import org.dgfoundation.amp.currency.inflation.ds.FredDataSource;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiEPGroup;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -98,7 +98,7 @@ public class CurrencyService {
 	 */
 	public static JsonBean saveInflationRates(JsonBean jsonRates){
 		JsonBean result = null;
-		ApiEPGroup errors = new ApiEPGroup();
+		ApiEMGroup errors = new ApiEMGroup();
 		
 		// prepare and validate data
 		Map<AmpCurrency, Map<Date, Double>> ratesPerCurrency = new HashMap<AmpCurrency, Map<Date, Double>>();
@@ -132,7 +132,7 @@ public class CurrencyService {
 						logger.error(e.getMessage());
 						errors.addApiErrorMessage(CurrencyErrors.INVALID_DATE_FORMAT, String.format(sInfo, dateStr));
 					}
-					if (!(value instanceof Double)) {
+					if (!(value instanceof Number)) {
 						errors.addApiErrorMessage(CurrencyErrors.INVALID_INFLATION_RATE_VALUE, String.format(sInfo, value));
 					} else if (currency != null && date != null) {
 						// now if everything is valid, record it
@@ -141,7 +141,7 @@ public class CurrencyService {
 							dateValues = new TreeMap<Date, Double>();
 							ratesPerCurrency.put(currency, dateValues);
 						}
-						dateValues.put(date, (Double) value);
+						dateValues.put(date, ((Number) value).doubleValue());
 					}
 				}
 			}

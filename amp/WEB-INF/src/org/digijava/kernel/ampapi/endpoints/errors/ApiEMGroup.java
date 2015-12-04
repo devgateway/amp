@@ -12,11 +12,11 @@ import java.util.TreeMap;
  * 
  * @author Nadejda Mandrescu
  */
-public class ApiEPGroup {
+public class ApiEMGroup {
 	
 	private Map<Integer, ApiErrorMessage> errorGroups= new TreeMap<Integer, ApiErrorMessage>();
 	
-	public ApiEPGroup() {
+	public ApiEMGroup() {
 	}
 	
 	public Collection<ApiErrorMessage> getAllErrors() {

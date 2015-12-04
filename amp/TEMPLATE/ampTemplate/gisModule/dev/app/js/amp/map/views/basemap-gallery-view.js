@@ -29,6 +29,7 @@ module.exports = Backbone.View.extend({
       basemaps: this.collection,
       current: this.collection.getBasemap()
     }));
+    $('.dropdown-toggle').dropdown();
     return this;
   },
 

@@ -92,10 +92,11 @@ public class NiReportsEngine {
 	}
 	
 	protected void fetchColumns() {
-		timer.run("funding", () -> funding = schema.getFundingFetcher().fetchColumn(this));
+		timer.run("Funding", () -> funding = schema.getFundingFetcher().fetchColumn(this));
 		for(NiReportColumn<?> colToFetch:getReportColumns()) {
 			timer.run(colToFetch.name, () -> fetchedColumns.put(colToFetch.name, fetchColumn(colToFetch)));
 		};
+		fetchedColumns.values().forEach(col -> logger.error(String.format("the column %s contents is %s", col.name, col.getItems().toString())));
 	}
 	
 	protected CellColumn fetchColumn(NiReportColumn<? extends Cell> colToFetch) {

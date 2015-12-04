@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.ar;
 
+import java.sql.Connection;
+
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -10,6 +12,7 @@ import org.apache.log4j.LogManager;
 import org.dgfoundation.amp.ar.amp212.GraphAlgorithmsTests;
 import org.dgfoundation.amp.ar.amp212.InclusiveRunnerTests;
 import org.dgfoundation.amp.ar.amp212.NiReportsFetchingTests;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -67,6 +70,7 @@ public class AllTests_amp212
 //			Configuration cfg = HibernateClassLoader.getConfiguration();
 			//System.out.println("AMP started up!");
 			TLSUtils.getThreadLocalInstance().setForcedLangCode(SiteUtils.getDefaultSite().getDefaultLanguage().getCode());
+			InternationalizedViewsRepository.i18Models.size(); // force init outside of testcases
 		}
 		catch(Exception e) {
 			throw new RuntimeException(e);

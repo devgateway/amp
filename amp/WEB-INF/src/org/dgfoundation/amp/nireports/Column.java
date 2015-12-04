@@ -19,7 +19,7 @@ public abstract class Column {
 	}
 	
 	public String getHierName() {
-		if (parent == null)
+		if (parent != null)
 			return String.format("%s / %s", parent.getHierName(), name);
 		return name;
 	}

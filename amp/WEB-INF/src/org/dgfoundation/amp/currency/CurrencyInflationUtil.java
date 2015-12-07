@@ -41,6 +41,13 @@ public class CurrencyInflationUtil {
 				"select o from " +  AmpInflationRate.class.getName() + " o").list();
 	}
 	
+	public static List<AmpInflationRate> getInflationRates(String currencyCode) {
+		return PersistenceManager.getRequestDBSession().createQuery(
+				"select r from " +  AmpInflationRate.class.getName() + " r, "
+				+ AmpCurrency.class.getName() + " c "
+						+ "where r.currency = c and c.currencyCode = " + currencyCode).list();
+	}
+	
 	public static void deleteAllInflationRates() {
 		Session session = PersistenceManager.getRequestDBSession();
 		for (AmpInflationRate air : getInflationRates()) {

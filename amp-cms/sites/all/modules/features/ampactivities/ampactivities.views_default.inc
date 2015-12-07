@@ -389,6 +389,12 @@ function ampactivities_views_default_views() {
   $handler->display->display_options['fields']['ssc_triangular_disbursements']['table'] = 'efq_activity';
   $handler->display->display_options['fields']['ssc_triangular_disbursements']['field'] = 'ssc_triangular_disbursements';
   $handler->display->display_options['fields']['ssc_triangular_disbursements']['link_to_entity'] = 0;
+  /* Field: Activity: Disaster Response Marker */
+  $handler->display->display_options['fields']['disaster_response_marker']['id'] = 'disaster_response_marker';
+  $handler->display->display_options['fields']['disaster_response_marker']['table'] = 'efq_activity';
+  $handler->display->display_options['fields']['disaster_response_marker']['field'] = 'disaster_response_marker';
+  $handler->display->display_options['fields']['disaster_response_marker']['not'] = 0;
+  $handler->display->display_options['fields']['disaster_response_marker']['link_to_entity'] = 0;
   /* Sort criterion: Activity: Title */
   $handler->display->display_options['sorts']['title']['id'] = 'title';
   $handler->display->display_options['sorts']['title']['table'] = 'efq_activity';
@@ -490,7 +496,6 @@ function ampactivities_views_default_views() {
     'standard' => 'standard',
   );
   $handler->display->display_options['filters']['activities_search_type']['group'] = 1;
-  $handler->display->display_options['filters']['activities_search_type']['exposed'] = TRUE;
   $handler->display->display_options['filters']['activities_search_type']['expose']['operator_id'] = 'activities_search_type_op';
   $handler->display->display_options['filters']['activities_search_type']['expose']['label'] = 'Activities Search Type';
   $handler->display->display_options['filters']['activities_search_type']['expose']['operator'] = 'activities_search_type_op';
@@ -512,13 +517,19 @@ function ampactivities_views_default_views() {
   $handler->display->display_options['filters']['disaster_response_marker']['id'] = 'disaster_response_marker';
   $handler->display->display_options['filters']['disaster_response_marker']['table'] = 'efq_activity';
   $handler->display->display_options['filters']['disaster_response_marker']['field'] = 'disaster_response_marker';
-  $handler->display->display_options['filters']['disaster_response_marker']['value'] = '0';
+  $handler->display->display_options['filters']['disaster_response_marker']['value'] = 'All';
   $handler->display->display_options['filters']['disaster_response_marker']['exposed'] = TRUE;
   $handler->display->display_options['filters']['disaster_response_marker']['expose']['operator_id'] = '';
   $handler->display->display_options['filters']['disaster_response_marker']['expose']['label'] = 'Disaster Response Marker';
   $handler->display->display_options['filters']['disaster_response_marker']['expose']['operator'] = 'disaster_response_marker_op';
   $handler->display->display_options['filters']['disaster_response_marker']['expose']['identifier'] = 'drm';
-  $handler->display->display_options['filters']['disaster_response_marker']['expose']['required'] = TRUE;
+  $handler->display->display_options['filters']['disaster_response_marker']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    4 => 0,
+    3 => 0,
+    5 => 0,
+  );
 
   /* Display: Search Page */
   $handler = $view->new_display('page', 'Search Page', 'search_page');
@@ -584,6 +595,7 @@ function ampactivities_views_default_views() {
     t('Bilateral SSC Disbursements'),
     t('Triangular SSC Commitments'),
     t('Triangular SSC Disbursements'),
+    t('Disaster Response Marker'),
     t('Search Terms'),
     t('search keywords within activities'),
     t('filter activities by donor agency'),
@@ -595,7 +607,6 @@ function ampactivities_views_default_views() {
     t('filter activities by location'),
     t('Activities Search Type'),
     t('Humanitarian Aid'),
-    t('Disaster Response Marker'),
     t('Search Page'),
     t('Export Page'),
   );

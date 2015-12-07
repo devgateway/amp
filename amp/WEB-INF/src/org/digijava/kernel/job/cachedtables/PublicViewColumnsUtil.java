@@ -31,8 +31,6 @@ public class PublicViewColumnsUtil
 	 * Злой маньяк Constantin is taking care that this rule is enforced!
 	 */
 	public final static boolean CRASH_ON_INVALID_COLUMNS = true;
-
-	public final static Map<String, CachedTableState> missingViews = new TreeMap<String, CachedTableState>();
 	
 	public static String getPublicViewTable(String extractorView)
 	{
@@ -101,7 +99,7 @@ public class PublicViewColumnsUtil
 	 * @param updateData if false, only check & update database scheme; if true - update data unconditionally
 	 */
 	public static void maintainPublicViewCaches(java.sql.Connection conn, boolean updateData)
-	{
+	{		
 		logger.info(String.format("doing maintenance on public view caches, updateData = %b", updateData));
 		Map<String, CachedTableState> viewsStates = getExtractorColumns(conn);
 		for(String viewName:viewsStates.keySet())
@@ -118,22 +116,21 @@ public class PublicViewColumnsUtil
 				logger.error("error while doing maintenance on the view!", e);
 			}
 		}
+
+		TreeSet<String> missingViews = new TreeSet<>();
+		for(String viewName:viewsStates.keySet())
+			if (viewsStates.get(viewName) == CachedTableState.ORIGINAL_TABLE_MISSING)
+				missingViews.add(viewName);
 		
-		if (missingViews.size() > 0) {
-			
-			StringBuffer msg = new StringBuffer();
-			for(String viewName:missingViews.keySet())
-			{
-				CachedTableState viewState = missingViews.get(viewName);
-				msg.append(String.format("the view %s's cache has the schema state %s \n", viewName, viewState));
-			}
-			
+		if (!missingViews.isEmpty()) {
 			logger.fatal("--------------------------------------------------------------------------");
 			logger.fatal("DO NOT IGNORE THIS MESSAGE OR DISABLE THE CHECK."); 
-			logger.fatal("\nThis is a list of a column references non-existant views:\n\n" + msg.toString() + "\n"); 
+			logger.fatal("This is a list of columns referencing non-existant views:\n" + missingViews.toString() + "\n"); 
 			logger.fatal("FIX THE DATABASE.");
 			logger.fatal("--------------------------------------------------------------------------");
-			throw new Error("This is a list of a column references non-existant views:\n" + msg.toString() + " \nFIX THE DATABASE!");
+			
+			if (CRASH_ON_INVALID_COLUMNS)
+				throw new Error("The following columns reference non-existant views: " + missingViews.toString());
 		}
 		
 		
@@ -144,15 +141,7 @@ public class PublicViewColumnsUtil
 		switch(viewState)
 		{
 			case ORIGINAL_TABLE_MISSING:
-			{
-				logger.error(String.format("a view referenced in amp_columns [%s] is nonexistant in the database. THIS IS A SERIOUS ERROR!", viewName));
-				if (CRASH_ON_INVALID_COLUMNS)
-				{
-					logger.info("Adding " + viewName + " view to missingViews to crash AMP. Offending amp_columns-referenced view is " + viewName);
-					missingViews.put(viewName, viewState);
-				}
-				return;
-			}
+				break;
 			case CACHED_TABLE_MISSING:
 			{
 				String cachedView = getPublicViewTable(viewName);

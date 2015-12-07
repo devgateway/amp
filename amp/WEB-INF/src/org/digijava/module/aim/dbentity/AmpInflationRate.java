@@ -18,7 +18,6 @@ public class AmpInflationRate implements Serializable, Comparable<AmpInflationRa
 {
 	private static final long serialVersionUID = 1L;
 	
-	//DEFLATOR: review, do we continue to enforce this limits?
 	public final static int MIN_DEFLATION_YEAR = ArConstants.MIN_SUPPORTED_YEAR;
 	public final static int MAX_DEFLATION_YEAR = ArConstants.MAX_SUPPORTED_YEAR;
 

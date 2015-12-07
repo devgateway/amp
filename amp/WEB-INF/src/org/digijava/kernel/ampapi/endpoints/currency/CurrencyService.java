@@ -8,15 +8,21 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.currency.CurrencyInflationUtil;
 import org.dgfoundation.amp.currency.inflation.ds.FredDataSource;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
@@ -27,9 +33,11 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpInflationRate;
 import org.digijava.module.aim.dbentity.AmpInflationSource;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
 
 
 /**
@@ -205,4 +213,167 @@ public class CurrencyService {
 		return result;
 	}
 	
+	/**
+	 * @see Currencies#getConstantCurrencies()
+	 */
+	public static JsonBean getConstantCurrencies() {
+		JsonBean result = new JsonBean();
+		Map<AmpFiscalCalendar, List<ConstantCurrency>> cCurrencies = 
+				CurrencyInflationUtil.getConstantCurrenciesByCalendar();
+		
+		for (Entry<AmpFiscalCalendar, List<ConstantCurrency>> calEntry : cCurrencies.entrySet()) {
+			// collect years per currency
+			Map<String, SortedSet<Integer>> currencyYears = new HashMap<String, SortedSet<Integer>>();
+			for (ConstantCurrency cc: calEntry.getValue()) {
+				SortedSet<Integer> years = currencyYears.get(cc.standardCurrencyCode);
+				if (years == null) {
+					years = new TreeSet<Integer>();
+					currencyYears.put(cc.standardCurrencyCode, years);
+				}
+				years.add(cc.year);
+			}
+			// build simplified years view
+			SortedMap<String, String> calCurrYears = new TreeMap<String, String>();
+			for (Entry<String, SortedSet<Integer>> cYears : currencyYears.entrySet()) {
+				if (cYears.getValue().size() != 0) {
+					StringBuilder sb = new StringBuilder(); 
+					Iterator<Integer> iter = cYears.getValue().iterator(); 
+					Integer from = iter.next();
+					Integer to = from;
+					Integer next = null;
+					do {
+						next = iter.hasNext() ? iter.next() : null;
+						// if consecutive year, then shift "to"
+						if (next != null && next - to == 1) {
+							to = next;
+						}
+						// add new range
+						if (next == null || next - to > 1) {
+							sb.append(sb.length() > 0 ? ", " : "")
+								.append(from == to ? from.toString() : String.format("%d-%d", from, to));
+							from = next;
+							to = next;
+						}
+					} while(next != null);
+					calCurrYears.put(cYears.getKey(), sb.toString());
+				}
+			}
+			result.set(calEntry.getKey().getAmpFiscalCalId().toString(), calCurrYears);
+		}
+		
+		return result;
+	}
+
+	/**
+	 * @see Currencies#saveConstantCurrencies(JsonBean)
+	 */
+	public static JsonBean saveConstantCurrencies(JsonBean input) {
+		ApiEMGroup errors = new ApiEMGroup();
+		Map<AmpFiscalCalendar, Map<AmpCurrency, SortedSet<Integer>>> constantsInput = getConstantsInput(input, errors);
+		
+		if (errors.size() > 0) {
+			return ApiError.toError(errors.getAllErrors());
+		} else {
+			Set<AmpCurrency> newConstantCurrencies = new HashSet<AmpCurrency>();
+			for (Entry<AmpFiscalCalendar, Map<AmpCurrency, SortedSet<Integer>>> calEntry : constantsInput.entrySet()) {
+				for (Entry<AmpCurrency, SortedSet<Integer>> currEntry : calEntry.getValue().entrySet()) {
+					for (Integer year : currEntry.getValue()) {
+						ConstantCurrency cc = CurrencyInflationUtil.createOrActivateConstantCurrency(
+								currEntry.getKey(), calEntry.getKey(), year);
+						PersistenceManager.getSession().saveOrUpdate(cc.currency);
+						newConstantCurrencies.add(cc.currency);
+					}
+				}
+			}
+			List<AmpCurrency> oldConstantCurrencies = CurrencyInflationUtil.getConstantAmpCurrencies();
+			oldConstantCurrencies.removeAll(newConstantCurrencies);
+			// TBD if to keep intermediate amounts for base / infl. rate input currency constants 
+			for (AmpCurrency oldConstCurrency : oldConstantCurrencies) {
+				CurrencyInflationUtil.deleteConstantCurrencies(oldConstCurrency);
+			}
+		}
+		
+		return null;
+	}
+	
+	public static Map<AmpFiscalCalendar, Map<AmpCurrency, SortedSet<Integer>>> getConstantsInput(JsonBean input, 
+			ApiEMGroup errors) {
+		Map<AmpFiscalCalendar, Map<AmpCurrency, SortedSet<Integer>>> constInput = new HashMap<AmpFiscalCalendar, 
+				Map<AmpCurrency, SortedSet<Integer>>>();
+		for (Entry<String, Object> calEntry : input.any().entrySet()) {
+			// validate calendar
+			AmpFiscalCalendar calendar = !NumberUtils.isDigits(calEntry.getKey()) ? null :
+				DbUtil.getAmpFiscalCalendar(Long.valueOf(calEntry.getKey()));
+			if (calendar == null) {
+				errors.addApiErrorMessage(CurrencyErrors.INVALID_CALENDAR_ID, calEntry.getKey());
+			} else if (!(calEntry.getValue() instanceof Map)) {
+					errors.addApiErrorMessage(CurrencyErrors.INVALID_CONSTANT_CURRENCIES_SERIES, calEntry.getKey());
+			} else {
+				// check if data was already provided for this calendar
+				Map<AmpCurrency, SortedSet<Integer>> currYears = constInput.get(calendar);
+				if (currYears != null) {
+					errors.addApiErrorMessage(CurrencyErrors.DUPLICATE_CALENDAR, calEntry.getKey());
+				} else {
+					currYears = new HashMap<AmpCurrency, SortedSet<Integer>>();
+					constInput.put(calendar, currYears);
+					for (Entry<?, ?> sEntry : ((Map<?, ?>) calEntry.getValue()).entrySet()) {
+						String currCode = sEntry.getKey().toString();
+						AmpCurrency standardCurrency = CurrencyUtil.getCurrencyByCode(currCode);
+						// verify if valid and unique currency input
+						ApiErrorMessage err = standardCurrency == null ? CurrencyErrors.INVALID_CURRENCY_CODE :
+							(currYears.containsKey(standardCurrency) ? CurrencyErrors.DUPLICATE_CURRENCY : null);
+						if (err != null) {
+							errors.addApiErrorMessage(err, String.format("%s: {...%s...}", calEntry.getKey(), currCode));
+						} else {
+							SortedSet<Integer> years = parseYears(sEntry.getValue().toString().split(","), errors);
+							if (years.size() > 0) {
+								currYears.put(standardCurrency, years);
+							}
+						}
+					}
+				}
+			}
+		}
+		return constInput;
+	}
+	
+	private static SortedSet<Integer> parseYears(String[] ranges, ApiEMGroup errors) {
+		// will ignore duplicate years
+		SortedSet<Integer> years = new TreeSet<Integer>();
+		for (String range : ranges) {
+			String[] fromTo = range.split("-");
+			if (fromTo.length == 1) { // one year from list
+				Integer year = getYear(fromTo[0], errors);
+				if (year != null) {
+					years.add(year);
+				}
+			} else if (fromTo.length == 2) {
+				Integer from = getYear(fromTo[0], errors);
+				Integer to = getYear(fromTo[1], errors);
+				if (from != null && to != null) {
+					for (int year = from; year <= to; year ++) {
+						years.add(year);
+					}
+				}
+			} else {
+				errors.addApiErrorMessage(CurrencyErrors.INVALID_CURRENCY_YEARS, range);
+			}
+		}
+		return years;
+	}
+	
+	private static Integer getYear(String value, ApiEMGroup errors) {
+		Integer year = null;
+		value = value.trim();
+		if (NumberUtils.isDigits(value)) {
+			year = Integer.valueOf(value);
+			if (year < AmpInflationRate.MIN_DEFLATION_YEAR || year > AmpInflationRate.MAX_DEFLATION_YEAR) {
+				year = null;
+			}
+		}
+		if (year == null) {
+			errors.addApiErrorMessage(CurrencyErrors.INVALID_CURRENCY_YEARS, value);
+		}
+		return year;
+	}
 }

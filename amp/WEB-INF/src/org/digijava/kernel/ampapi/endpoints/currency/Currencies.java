@@ -125,7 +125,7 @@ public class Currencies {
 	@POST
 	@Path("/inflation-rates")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(id = "inflation-rates", authTypes = {AuthRule.IN_ADMIN}, ui = false)
+	@ApiMethod(id = "store-inflation-rates", authTypes = {AuthRule.IN_ADMIN}, ui = false)
 	public JsonBean saveInflationRates(JsonBean inflationRates) {
 		return CurrencyService.saveInflationRates(inflationRates);
 	}
@@ -144,9 +144,52 @@ public class Currencies {
 	@GET
 	@Path("/inflation-rates/{source_id}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(id = "inflation-rates", authTypes = {AuthRule.IN_ADMIN}, ui = false)
-	public JsonBean getAmpInflationRates(@PathParam("source_id") Long sourceId) {
+	@ApiMethod(id = "inflation-rates-from-source", authTypes = {AuthRule.IN_ADMIN}, ui = false)
+	public JsonBean getInflationRatesFromSource(@PathParam("source_id") Long sourceId) {
 		return CurrencyService.getInflationRatesFromSource(sourceId);
+	}
+	
+	/**
+	 * Provides configured constant currencies per calendar
+	 * @return <pre>
+	 * {
+	 *    "4": { // calendar_id for Gregorian Calendar in AMP Ethiopia
+	 *      "USD": "2008, 2010-2015",
+	 *      "ETB": "2008-2015"
+	 *    },
+	 *    "1": {...},
+	 *    ...
+	 * }
+	 * </pre>
+	 */
+	@GET
+	@Path("/constant-currencies")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(id = "get-constant-currencies", authTypes = {AuthRule.IN_ADMIN}, ui = false)
+	public JsonBean getConstantCurrencies() {
+		return CurrencyService.getConstantCurrencies();
+	}
+	
+	/**
+	 * Stores constant currencies per calendar
+	 * @param input <pre>
+	 * {
+	 *    "4": { // calendar_id for Gregorian Calendar in AMP Ethiopia
+	 *      "USD": "2008, 2010-2015",
+	 *      "ETB": "2008-2015"
+	 *    },
+	 *    "1": {...},
+	 *    ...
+	 * }
+	 * </pre>
+	 * @return nothing or error
+	 */
+	@POST
+	@Path("/constant-currencies")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(id = "save-constant-currencies", authTypes = {AuthRule.IN_ADMIN}, ui = false)
+	public JsonBean saveConstantCurrencies(JsonBean input) {
+		return CurrencyService.saveConstantCurrencies(input);
 	}
 	
 	/******************************** REVIEW AND CLEANUP below *************************************************/

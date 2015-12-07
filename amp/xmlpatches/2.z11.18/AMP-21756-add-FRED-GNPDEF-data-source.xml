@@ -5,7 +5,7 @@
     <jira>AMP-21756</jira>
     <keyword>deflator</keyword>
     <author>nmandrescu</author>
-    <description>configure </description>
+    <description>configure FRED-GNPDEF currency inflation rates data source</description>
     <apply>
         <script>
             <lang delimiter=";" type="postgres">

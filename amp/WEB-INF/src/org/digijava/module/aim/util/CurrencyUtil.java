@@ -772,4 +772,10 @@ public class CurrencyUtil {
 	public static void maintainVirtualCurrencies() {
 		new VirtualCurrenciesMaintainer().work();
 	}
+	
+	public static void deleteCurrencyRates(String currencyCode) {
+		PersistenceManager.getSession().createQuery(
+				String.format("delete from %s o where o.fromCurrencyCode = %s or o.toCurrencyCode = %s", 
+						AmpCurrencyRate.class.getName(), currencyCode, currencyCode));
+	}
 }

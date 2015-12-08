@@ -135,7 +135,6 @@ public class CCExchangeRate {
 		double iRCurrToCCstdCurrOnToDate = iRcurrToBaseOnToDate * baseToCCstdCurrOnToDate;
 		
 		Calendar c = Calendar.getInstance();
-		Calendar debugTo = Calendar.getInstance();
 		
 		for (Entry<Long, Double> inflRatesCurrExchangeRates : fromBaseToInflCurrRates.entrySet()) {
 			Long from = inflRatesCurrExchangeRates.getKey();
@@ -143,13 +142,6 @@ public class CCExchangeRate {
 			double baseToIRCurrOnFromDate = isInflCurrBaseCurrency ? 1 : getExchangeRate(fromBaseToInflCurrRates, from);
 			
 			c.setTimeInMillis(from);
-			System.out.println("From=" + c.getTime());
-			debugTo.setTimeInMillis(to);
-			System.out.println("To=" + debugTo.getTime());
-			debugTo.setTimeInMillis(periodEnd);
-			System.out.println("PeriodEnd=" + debugTo.getTime());
-			System.out.println("inflationRates.size()=" +inflationRates.size());
-			System.out.flush();
 			
 			boolean inverse = false;
 			if (from > to) {

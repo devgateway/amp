@@ -13,5 +13,10 @@
     "id": "adm-2",
     "label": "ADM 2",
     "country": "MG"
+  },
+  {
+    "id": "adm-3",
+    "label": "ADM 3",
+    "country": "MG"
   }
 ]

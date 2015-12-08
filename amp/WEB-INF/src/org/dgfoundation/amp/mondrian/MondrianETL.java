@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.List;
@@ -346,10 +347,16 @@ private EtlResult execute() throws Exception {
 			if (redoTrnDimensions && !etlConfig.fullEtl) {
 				// some trn-translation changed, but not requested FULL ETL -> fully redo the trn-backed dimensions
 				FULL_ETL_LOCK.writeLock();
-				logger.info("redoing trn-backed dimensions, as some translations have changed and doing just an incremental ETL");
-				for(MondrianTableDescription table:MondrianTablesRepository.TRN_BACKED_DIMENSIONS)
-					generateStarTable(table);
-				FULL_ETL_LOCK.writeUnlock();
+				try {
+					// this code block happens to crash because of MonetDB, so the lock unlock is in a finally block
+					logger.info("redoing trn-backed dimensions, as some translations have changed and doing just an incremental ETL");
+					for(MondrianTableDescription table:MondrianTablesRepository.TRN_BACKED_DIMENSIONS) {
+						generateStarTable(table);
+					}
+				}
+				finally {
+					FULL_ETL_LOCK.writeUnlock();
+				}
 			}
 
 			generateActivitiesEntries(); // update/generate all the per-activity tables
@@ -1047,6 +1054,20 @@ private EtlResult execute() throws Exception {
 		}
 	}
 	
+	/**
+	 * inserts a FULL ETL request into amp_etl_changelog. This is done in a completely separate PostgreSQL connection, because this function is normally called when the ETL has failed.
+	 * We don't know the reason the ETL has failed - it can be anything, including a bug in the ETL which leads to the JDBC conn having been invalidated - thus the separate SQL conn
+	 */
+	public static void insertFullEtlRequest() {
+		try(Connection conn = PersistenceManager.getJdbcConnection()) {
+			SQLUtils.executeQuery(conn, "INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('full_etl_request', 999)");
+			SQLUtils.flush(conn);
+		}
+		catch(Exception e) {
+			logger.error(e);
+		}
+	}
+	
 	public static EtlResult runETL(boolean forceFull) {
 		synchronized(ETL_LOCK) {
 			Session session = PersistenceManager.getSession();
@@ -1062,6 +1083,7 @@ private EtlResult execute() throws Exception {
 			}
 			//CloseExpiredActivitiesJob.cleanupSession(session);
 			catch(Exception e) {
+				insertFullEtlRequest();
 				if (e instanceof RuntimeException)
 					throw (RuntimeException) e;
 				throw new RuntimeException(e);

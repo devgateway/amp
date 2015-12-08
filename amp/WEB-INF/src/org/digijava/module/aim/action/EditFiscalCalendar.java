@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -161,6 +162,8 @@ public class EditFiscalCalendar extends Action {
 
 								DbUtil.update(ampFisCal);
 								logger.debug("FiscalCalendar updated");
+								// also regenerate constant currencies linked to this calendar
+								CCExchangeRate.regenerateConstantCurrenciesExchangeRates(false, ampFisCal);
 								return mapping.findForward("added");
 							 }
 					    } else if ("delete".equals(action)){

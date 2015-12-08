@@ -25,7 +25,6 @@ import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.util.DigiCacheManager;
-import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.form.CurrencyRateForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyRateLoader;
@@ -184,7 +183,7 @@ public class ShowCurrencyRates extends Action {
         }
 
 		crForm.setCurrentPage(new Integer(page));		
-		crForm.setCurrencyCodes(CurrencyUtil.removeVirtualCurrencies(CurrencyUtil.getActiveAmpCurrencyByName()));
+		crForm.setCurrencyCodes(CurrencyUtil.getActiveAmpCurrencyByName());
 		crForm.setTimePeriods(getTimePeriods());
 		crForm.setUpdateCRateAmount(null);
 		crForm.setUpdateCRateCode(null);

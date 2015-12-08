@@ -20,6 +20,7 @@ import org.dgfoundation.amp.mondrian.currencies.ExchangeRates;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpInflationRate;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
@@ -236,11 +237,26 @@ public class CCExchangeRate {
 	
 	/**
 	 * Regenerate exchange rates to all constant currencies
+	 * 
+	 * @param calledFromQuartzJob flag to decide the calling environment
 	 */
 	public static void regenerateConstantCurrenciesExchangeRates(boolean calledFromQuartzJob) {
+		regenerateConstantCurrenciesExchangeRates(calledFromQuartzJob, null);
+	}
+	
+	/**
+	 * Regenerate exchange rates to all constant currencies
+	 * 
+	 * @param calledFromQuartzJob flag to decide the calling environment
+	 * @param calendar the fiscal calendar for which Constant Currency rates must be updated
+	 *                 or null if all constant currencies must be updated 
+	 */
+	public static void regenerateConstantCurrenciesExchangeRates(boolean calledFromQuartzJob, AmpFiscalCalendar cal) {
 		CCExchangeRate ccER = new CCExchangeRate(new InflationRateGenerator(), 
 				getInflRatesgroupByCurrencyCodeAndOrderByDate());
-		List<ConstantCurrency> ccs = CurrencyInflationUtil.getAllConstantCurrencies();
+		// limit the constant currencies to regenerate to calendar if specified
+		List<ConstantCurrency> ccs = cal == null ? CurrencyInflationUtil.getAllConstantCurrencies() :
+			CurrencyInflationUtil.wrap(cal.getConstantCurrencies());
 		List<AmpCurrencyRate> newRates = new ArrayList<AmpCurrencyRate>();
 		List<String> ccCodes = new ArrayList<String>();
 		

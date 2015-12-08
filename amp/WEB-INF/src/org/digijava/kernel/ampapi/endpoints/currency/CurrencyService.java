@@ -24,6 +24,7 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.currency.CurrencyInflationUtil;
+import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
 import org.dgfoundation.amp.currency.inflation.ds.FredDataSource;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
@@ -166,6 +167,8 @@ public class CurrencyService {
 					PersistenceManager.getRequestDBSession().save(air);
 				}
 			}
+			// regenerate exchange rates based on new inflation rates
+			CCExchangeRate.regenerateConstantCurrenciesExchangeRates(false);
 		}
 		
 		return result;
@@ -285,12 +288,14 @@ public class CurrencyService {
 					}
 				}
 			}
+			// delete old constant currencies
 			List<AmpCurrency> oldConstantCurrencies = CurrencyInflationUtil.getConstantAmpCurrencies();
 			oldConstantCurrencies.removeAll(newConstantCurrencies);
-			// TBD if to keep intermediate amounts for base / infl. rate input currency constants 
 			for (AmpCurrency oldConstCurrency : oldConstantCurrencies) {
 				CurrencyInflationUtil.deleteConstantCurrencies(oldConstCurrency);
 			}
+			// generate exchange rates for the new constant currencies
+			CCExchangeRate.regenerateConstantCurrenciesExchangeRates(false);
 		}
 		
 		return null;

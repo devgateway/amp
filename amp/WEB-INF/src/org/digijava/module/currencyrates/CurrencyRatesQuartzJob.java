@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
@@ -103,6 +104,11 @@ public class CurrencyRatesQuartzJob extends ConnectionCleaningJob {
 			}
 			this.lastExcecution = new Date();
 			DailyCurrencyRateSingleton.getInstance().setLastExcecution(this.lastExcecution);
+			/* 
+			 * fully regenerate Constant Currencies exchange rate, because our exchange rates are not continuous
+			 * and thus we could have used worse exchange rates previously available to calculate an ER for a CC 
+			 */
+			CCExchangeRate.regenerateConstantCurrenciesExchangeRates(true);
 
 		} catch (Exception e) {
 			logger.error("Could not get exchange rate, caused by: " + e.getMessage());

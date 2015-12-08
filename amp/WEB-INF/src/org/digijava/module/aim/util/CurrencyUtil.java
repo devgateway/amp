@@ -246,21 +246,21 @@ public class CurrencyUtil {
 			session = PersistenceManager.getRequestDBSession();
 			
 			if (active == CurrencyUtil.ORDER_BY_CURRENCY_CODE) {
-				qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left join fetch  curr.countryLocation dg order by curr.currencyCode "+sortOrder;
+				qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left join fetch  curr.countryLocation dg where curr.virtual is false order by curr.currencyCode "+sortOrder;
 				qry = session.createQuery(qryStr);
 			}else if(active == CurrencyUtil.ORDER_BY_CURRENCY_NAME){
-				qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left join fetch  curr.countryLocation dg order by curr.currencyName "+sortOrder;
+				qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left join fetch  curr.countryLocation dg where curr.virtual is false order by curr.currencyName "+sortOrder;
 			qry = session.createQuery(qryStr);
 			}else if(active == CurrencyUtil.ORDER_BY_CURRENCY_COUNTRY_NAME){
-				qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left outer join curr.countryLocation dg order by dg.name "+sortOrder;
+				qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left outer join curr.countryLocation dg where curr.virtual is false order by dg.name "+sortOrder;
 			qry = session.createQuery(qryStr);
 			}else {
 				qryStr = "select curr from " + AmpCurrency.class.getName() + " curr " +
-					"where (curr.activeFlag=:flag) order by curr.currencyCode "+sortOrder;
+					"where (curr.activeFlag=:flag) and curr.virtual is false order by curr.currencyCode "+sortOrder;
 				qry = session.createQuery(qryStr);
 				qry.setParameter("flag",new Integer(active),IntegerType.INSTANCE);
 			}
-			col = removeVirtualCurrencies(qry.list());
+			col = qry.list();
 		} catch (Exception e) {
 			logger.error("Exception from getAllCurrencies()", e);
 		}
@@ -535,8 +535,12 @@ public class CurrencyUtil {
 		}
 	}
 
-	
 	public static ArrayList<AmpCurrency> getActiveAmpCurrencyByName() {
+		// don't include by default, each module should explicitly request if it needs them
+		return getActiveAmpCurrencyByName(false);
+	}
+	
+	public static ArrayList<AmpCurrency> getActiveAmpCurrencyByName(boolean includeVirtual) {
 		if (AmpCaching.getInstance().currencyCache.activeCurrencies != null)
 			return new ArrayList<AmpCurrency>(AmpCaching.getInstance().currencyCache.activeCurrencies);
 		AmpCurrency ampCurrency = null;
@@ -548,7 +552,7 @@ public class CurrencyUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			queryString = " select c from " + AmpCurrency.class.getName()
-					+ " c where c.activeFlag='1' order by c.currencyName";
+					+ " c where c.activeFlag='1' and c.virtual is " + includeVirtual + " order by c.currencyName";
 			q = session.createQuery(queryString);
 			iter = q.list().iterator();
 

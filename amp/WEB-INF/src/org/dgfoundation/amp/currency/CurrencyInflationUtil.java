@@ -4,6 +4,7 @@
 package org.dgfoundation.amp.currency;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,7 +72,15 @@ public class CurrencyInflationUtil {
 	 * @return a valid list of constant currencies
 	 */
 	public static List<ConstantCurrency> getAllConstantCurrencies() {
-		List<AmpCurrency> ampCurrencies = getConstantAmpCurrencies();
+		return wrap(getConstantAmpCurrencies());
+	}
+	
+	/**
+	 * Wraps a list of AmpCurrency elements into a ConstantCurrency, taking only valid elements
+	 * @param ampCurrencies the list of AmpCurrency elements
+	 * @return wrapped list
+	 */
+	public static List<ConstantCurrency> wrap(Collection<AmpCurrency> ampCurrencies) {
 		List<ConstantCurrency> ccs = new ArrayList<ConstantCurrency>();
 		for (AmpCurrency ampCurrency : ampCurrencies) {
 			ConstantCurrency cc = getConstantCurrency(ampCurrency);

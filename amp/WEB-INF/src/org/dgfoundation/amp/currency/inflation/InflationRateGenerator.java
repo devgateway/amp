@@ -4,7 +4,6 @@
 package org.dgfoundation.amp.currency.inflation;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedMap;
@@ -21,7 +20,7 @@ import org.digijava.module.aim.dbentity.AmpInflationRate;
 public class InflationRateGenerator {
 	protected static final Logger logger = Logger.getLogger(InflationRateGenerator.class);
 	
-	protected Map<Long, Map<Date, Map<Date, Double>>> tempData = new TreeMap<Long, Map<Date, Map<Date, Double>>>();
+	protected Map<Long, Map<Long, Map<Long, Double>>> tempData = new TreeMap<Long, Map<Long, Map<Long, Double>>>();
 	
 	public InflationRateGenerator() {
 	}
@@ -31,32 +30,32 @@ public class InflationRateGenerator {
 	 * @param to the date to which inflation rate must be detected
 	 * @see #getInflationRateDeltaPartial(SortedMap)
 	 */
-	public double getInflationRateDeltaPartial(Date from, Date to, 
-			SortedMap<Date, AmpInflationRate> sortedInflationRates) {
-		if (from.after(to))
+	public double getInflationRateDeltaPartial(Long from, Long to, 
+			SortedMap<Long, AmpInflationRate> sortedInflationRates) {
+		if (from > to)
 			throw new RuntimeException(
 					String.format("'from' date must be no later that 'to' date, but 'from' = %s, 'to' = %s", from, to));
 		// move to next day to make sure that only full periods are included
 		Calendar c = Calendar.getInstance();
-		c.setTime(from);
+		c.setTimeInMillis(from);
 		c.add(Calendar.DATE, 1);
-		from = c.getTime();
-		c.setTime(to);
+		from = c.getTimeInMillis();
+		c.setTimeInMillis(to);
 		c.add(Calendar.DATE, 1);
-		to = c.getTime();
+		to = c.getTimeInMillis();
 		sortedInflationRates = sortedInflationRates.subMap(from, to);
 		if (sortedInflationRates.size() == 0)
 			return 1d;
 		// detect if it was generated before
 		Long currId = sortedInflationRates.values().iterator().next().getCurrency().getAmpCurrencyId();
-		Map<Date, Map<Date, Double>> availableData = tempData.get(currId);
+		Map<Long, Map<Long, Double>> availableData = tempData.get(currId);
 		if (availableData == null) {
-			availableData = new TreeMap<Date, Map<Date, Double>>();
+			availableData = new TreeMap<Long, Map<Long, Double>>();
 			tempData.put(currId, availableData);
 		}
-		Map<Date, Double> fromMap = availableData.get(sortedInflationRates.firstKey());
+		Map<Long, Double> fromMap = availableData.get(sortedInflationRates.firstKey());
 		if (fromMap == null) {
-			fromMap = new TreeMap<Date, Double>();
+			fromMap = new TreeMap<Long, Double>();
 			availableData.put(sortedInflationRates.firstKey(), fromMap);
 		}
 		Double value = fromMap.get(sortedInflationRates.lastKey());
@@ -75,9 +74,9 @@ public class InflationRateGenerator {
 	 * IRCfrom-to = [ (irc1/100 + 1) x (irc2/100 + 1) x ... x (ircn/100 + 1) - 1] x 100
 	 * </pre>
 	 */
-	public static final double getInflationRateDeltaPartial(SortedMap<Date, AmpInflationRate> sortedInflationRates) {
+	public static final double getInflationRateDeltaPartial(SortedMap<Long, AmpInflationRate> sortedInflationRates) {
 		double irc = 1d;
-		for (Entry<Date, AmpInflationRate> entry : sortedInflationRates.entrySet()) {
+		for (Entry<Long, AmpInflationRate> entry : sortedInflationRates.entrySet()) {
 			irc = irc * (entry.getValue().getInflationRate() / 100 + 1);
 		}
 		return irc;

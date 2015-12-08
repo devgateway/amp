@@ -173,6 +173,7 @@ public class AmpFiscalCalendar implements Serializable, Identifiable,OrgProfileV
 	/**
 	 * @return the constantCurrencies
 	 */
+	@JsonIgnore
 	public Set<AmpCurrency> getConstantCurrencies() {
 		return constantCurrencies;
 	}

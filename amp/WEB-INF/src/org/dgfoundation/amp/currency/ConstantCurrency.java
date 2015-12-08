@@ -71,5 +71,10 @@ public class ConstantCurrency {
 		}
 		return null;
 	}
+	
+	@Override
+	public String toString() {
+		return currency == null ? "null" : currency.getCurrencyCode();
+	}
 
 }

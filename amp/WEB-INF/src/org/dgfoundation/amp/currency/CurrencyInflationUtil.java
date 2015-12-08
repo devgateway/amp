@@ -12,11 +12,11 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpInflationRate;
 import org.digijava.module.aim.dbentity.AmpInflationSource;
 import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.DbUtil;
 import org.hibernate.Session;
 
 /**
@@ -68,19 +68,29 @@ public class CurrencyInflationUtil {
 	}
 	
 	/**
+	 * @return a valid list of constant currencies
+	 */
+	public static List<ConstantCurrency> getAllConstantCurrencies() {
+		List<AmpCurrency> ampCurrencies = getConstantAmpCurrencies();
+		List<ConstantCurrency> ccs = new ArrayList<ConstantCurrency>();
+		for (AmpCurrency ampCurrency : ampCurrencies) {
+			ConstantCurrency cc = getConstantCurrency(ampCurrency);
+			if (cc != null) 
+				ccs.add(cc);
+		}
+		return ccs;
+	}
+	
+	/**
 	 * @return a valid map of constant currencies per calendar
 	 */
 	public static Map<AmpFiscalCalendar, List<ConstantCurrency>> getConstantCurrenciesByCalendar() {
 		Map<AmpFiscalCalendar, List<ConstantCurrency>> constCurrencies = new HashMap<AmpFiscalCalendar, List<ConstantCurrency>>();
 		List<AmpCurrency> ampCurrencies = getConstantAmpCurrencies();
 		for (AmpCurrency ampCurrency : ampCurrencies) {
-			ConstantCurrency cc = new ConstantCurrency(ampCurrency);
-			if (cc.year == null || cc.calendar == null) {
-				// we need to understand why we have invalid entries to fix it properly, for now just skipping
-				logger.error(String.format("Skipping invalid constant currency id=%d, code=%s, please review!!!", 
-						ampCurrency.getAmpCurrencyId(), ampCurrency.getCurrencyCode()));
-				continue;
-			}
+			ConstantCurrency cc = getConstantCurrency(ampCurrency);
+			if (cc == null) continue;
+			
 			List<ConstantCurrency> calConstCurrencies = constCurrencies.get(ampCurrency.getCalendar());
 			if (calConstCurrencies == null) {
 				calConstCurrencies = new ArrayList<ConstantCurrency>();
@@ -89,6 +99,17 @@ public class CurrencyInflationUtil {
 			calConstCurrencies.add(cc);
 		}
 		return constCurrencies;
+	}
+	
+	private static ConstantCurrency getConstantCurrency(AmpCurrency ampCurrency) {
+		ConstantCurrency cc = new ConstantCurrency(ampCurrency);
+		if (cc.year == null || cc.calendar == null) {
+			// we need to understand why we have invalid entries to fix it properly, for now just skipping
+			logger.error(String.format("Skipping invalid constant currency id=%d, code=%s, please review!!!", 
+					ampCurrency.getAmpCurrencyId(), ampCurrency.getCurrencyCode()));
+			cc = null;
+		}
+		return cc;
 	}
 	
 	public static ConstantCurrency createOrActivateConstantCurrency(AmpCurrency standardCurrency, 
@@ -100,7 +121,7 @@ public class CurrencyInflationUtil {
 			constCurrency.setVirtual(true);
 			constCurrency.setCalendar(calendar);
 			constCurrency.setCurrencyCode(constCurrencyCode);
-			constCurrency.setCountryName(ConstantCurrency.buildConstantCurrencyName(standardCurrency, calendar, year));
+			constCurrency.setCurrencyName(ConstantCurrency.buildConstantCurrencyName(standardCurrency, calendar, year));
 			constCurrency.setCountryName(standardCurrency.getCountryName());
 			constCurrency.setCountryLocation(standardCurrency.getCountryLocation());
 		}
@@ -129,6 +150,17 @@ public class CurrencyInflationUtil {
 				logger.error(e.getMessage());
 			}
 		}
+	}
+	
+	/**
+	 * @return standard currency exchange rates
+	 */
+	public static List<AmpCurrencyRate> getStandardExchangeRates() {
+		String subquery = "select c.currencyCode from " + AmpCurrency.class.getName() + " c "
+				+ "where c.activeFlag = 1 and c.virtual is false";
+		return PersistenceManager.getSession().createQuery(String.format("select r from " 
+				+ AmpCurrencyRate.class.getName() + " r "
+						+ "where r.fromCurrencyCode in (%s) and r.toCurrencyCode in (%s)", subquery, subquery)).list();
 	}
 	
 }

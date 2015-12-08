@@ -775,7 +775,15 @@ public class CurrencyUtil {
 	
 	public static void deleteCurrencyRates(String currencyCode) {
 		PersistenceManager.getSession().createQuery(
-				String.format("delete from %s o where o.fromCurrencyCode = %s or o.toCurrencyCode = %s", 
-						AmpCurrencyRate.class.getName(), currencyCode, currencyCode));
+				String.format("delete from %s o where o.fromCurrencyCode = '%s' or o.toCurrencyCode = '%s'", 
+						AmpCurrencyRate.class.getName(), currencyCode, currencyCode)).executeUpdate();
+	}
+	
+	public static void deleteCurrencyRates(List<String> currencyCode) {
+		Query q = PersistenceManager.getSession().createQuery("delete from " + AmpCurrencyRate.class.getName() 
+				+ " o where o.fromCurrencyCode in (:currCodes) or o.toCurrencyCode in (:currCodes)");
+		q.setParameterList("currCodes", currencyCode);
+		int deleted = q.executeUpdate();
+		//logger.debug("Deleted" + deleted);
 	}
 }

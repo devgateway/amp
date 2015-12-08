@@ -2,6 +2,7 @@ package org.dgfoundation.amp.mondrian.currencies;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.TreeMap;
 
 
@@ -27,6 +28,10 @@ public class ExchangeRates {
 	
 	public void importRate(long date, double rate) {
 		rates.put(date, rate);
+	}
+	
+	public void importRate(Map<Long, Double> ratesPerDate) {
+		rates.putAll(ratesPerDate);
 	}
 	
 	/**

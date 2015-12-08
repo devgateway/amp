@@ -366,6 +366,11 @@ public class SettingsUtils {
 				GisConstants.USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST, new SettingOptions.Option(Boolean.toString(FeaturesUtil
 						.isVisibleFeature(GisConstants.USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST)))));
 
+		settings.add(new SettingOptions("project-sites",
+				GisConstants.PROJECT_SITES, new SettingOptions.Option(Boolean.toString(FeaturesUtil
+						.isVisibleFeature(GisConstants.PROJECT_SITES)))));
+		
+		
 		settings.add(new SettingOptions("max-locations-icons", GlobalSettingsConstants.MAX_LOCATIONS_ICONS,
 				new SettingOptions.Option(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MAX_LOCATIONS_ICONS))));
 

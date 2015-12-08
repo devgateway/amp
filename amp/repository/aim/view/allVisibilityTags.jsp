@@ -1128,6 +1128,7 @@ deleted 6 fields, do not reinsert
 <field:display name="External Aid Resources" feature="Widgets"></field:display>
 
 <feature:display name="Use icons for Sectors in Project List" module="/GIS"></feature:display>
+<feature:display name="Project sites" module="/GIS"></feature:display>
 
 <!-- Public View Modules/Features/Fields -->
 <module:display name="Login - User Management" parentModule="PUBLIC VIEW"></module:display>

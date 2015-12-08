@@ -57,13 +57,31 @@ module.exports = BaseControlView.extend({
 
     // add content
     this._loaded.then(function() {
-      self.$('.content', self.el).html(self.template({title: self.title}));
-      self.$('.layer-selector', self.el).html(self.projectLayerCollection.map(function(cluster) {
-        return (new OptionView({
-          model: cluster,
-          app: self.app
-         })).render().el;
-      }));
+    	self.app.data.settings.load().then(function(){       
+    		//check if we need to show Project Sites
+            var foundPS = _.find(self.app.data.settings.models, function(item) {
+                return item.get('id') === 'project-sites';
+              });
+            
+            if (foundPS !== undefined && foundPS.attributes.selected !== 'true') {
+            	//need to remove project-sites
+            	//find the index of project-sites in projectLayerCollection
+            	var index = undefined;
+            	for (i = 0; i < self.projectLayerCollection.models.length; i++ ) {
+            		if (self.projectLayerCollection.models[i].attributes.title === 'Project Sites') {
+            			index = i;
+            		}
+            	}
+            	self.projectLayerCollection.models.splice(index, 1);  
+            }
+    		self.$('.content', self.el).html(self.template({title: self.title}));
+        self.$('.layer-selector', self.el).html(self.projectLayerCollection.map(function(cluster) {
+            return (new OptionView({
+              model: cluster,
+              app: self.app
+             })).render().el;
+          }));
+        });
     });
     return this;
   }

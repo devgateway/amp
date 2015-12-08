@@ -64,6 +64,7 @@ _.extend(GISData.prototype, Backbone.Events, {
     this.structuresMenu = new StructuresMenu([
       {}  // just the one model, all defaults
     ], {
+    	settings:this.settings,
       filter: this.filter,
       appData: this
     });

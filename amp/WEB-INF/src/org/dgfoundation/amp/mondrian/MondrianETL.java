@@ -1150,7 +1150,7 @@ private EtlResult execute() throws Exception {
 	public static void insertFullEtlRequest() {
 		try(Connection conn = PersistenceManager.getJdbcConnection()) {
 			SQLUtils.executeQuery(conn, "INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('full_etl_request', 999)");
-			//conn.commit();
+			SQLUtils.flush(conn);
 		}
 		catch(Exception e) {
 			logger.error(e);

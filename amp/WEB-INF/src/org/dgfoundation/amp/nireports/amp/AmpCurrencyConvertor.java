@@ -1,9 +1,11 @@
 package org.dgfoundation.amp.nireports.amp;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 import org.dgfoundation.amp.nireports.CurrencyConvertor;
+import org.dgfoundation.amp.nireports.NiCurrency;
 
 /**
  * TODO: this will be the currency convertor
@@ -17,7 +19,7 @@ public class AmpCurrencyConvertor implements CurrencyConvertor {
 	}
 	
 	@Override
-	public BigDecimal getRate(String fromCurrency, String toCurrency, Date date) {
+	public BigDecimal getRate(NiCurrency fromCurrency, NiCurrency toCurrency, LocalDate date) {
 		return BigDecimal.ONE;
 	}
 

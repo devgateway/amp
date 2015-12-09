@@ -1,10 +1,15 @@
 package org.dgfoundation.amp.nireports;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 
@@ -30,13 +35,13 @@ public abstract class SqlSourcedColumn<K extends Cell> extends NiReportColumn<K>
 	}
 		
 	protected String buildPrimaryFilteringQuery(NiReportsEngine engine) {
-		return String.format("%s IN (%s)", mainColumn, Util.toCSStringForIN(engine.filters.getActivityIds()));
+		return String.format("%s IN (%s)", mainColumn, Util.toCSStringForIN(engine.filters.getActivityIds(engine)));
 	}
 
 	protected String buildCondition(NiReportsEngine engine) {
 		StringBuilder columnFilters = new StringBuilder("(1 = 1)");
 		for(String filterField:filtering.keySet()) {
-			Set<Long> ids = engine.filters.getSelectedIds(filterField);
+			Set<Long> ids = engine.filters.getSelectedIds(engine, filterField);
 			if (ids != null) columnFilters.append(String.format(" AND (%s IN (%s))", filtering.get(filterField), Util.toCSStringForIN(ids)));
 		}
 		String condition = String.format("WHERE (%s) AND (%s)", buildPrimaryFilteringQuery(engine), columnFilters);
@@ -47,6 +52,21 @@ public abstract class SqlSourcedColumn<K extends Cell> extends NiReportColumn<K>
 		String condition = buildCondition(engine);
 		String query = String.format("SELECT * FROM %s %s", viewName, condition);
 		return query;
+	}
+	
+	protected IdValuePair readIdValuePair(ResultSet rs, String idColumnName, Map<Long, Optional<String>> mp) throws SQLException {
+		long id = rs.getLong(idColumnName);
+		if (id <= 0)
+			return null;
+		Optional<String> v = mp.get(id);
+		return new IdValuePair(id, v);
+	}
+	
+	protected Map<Long, Optional<String>> fetchValues(String viewName, String idColumnName, String payloadColumnName) {
+		Map<Long, Optional<String>> res = new HashMap<>(); 
+		Map<Long, String> raw = DatabaseViewFetcher.fetchInternationalizedView(viewName, null, idColumnName, payloadColumnName);
+		raw.forEach((key, value) -> {res.put(key, Optional.ofNullable(value));});
+		return res;
 	}
 		
 }

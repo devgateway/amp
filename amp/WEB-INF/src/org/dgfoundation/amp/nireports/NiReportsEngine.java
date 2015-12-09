@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,8 +38,8 @@ public class NiReportsEngine {
 	
 	// some of the fields below are public because they are part of the "internal" API and might be used by callbacks from deep inside ComputedMeasures / etc
 	
-	final NiReportsSchema schema;
-	final CurrencyConvertor currencyConvertor;
+	public final NiReportsSchema schema;
+	public final CurrencyConvertor currencyConvertor;
 	final NiFilters filters;
 	
 	final Map<String, CellColumn> fetchedColumns = new LinkedHashMap<>();
@@ -47,7 +48,12 @@ public class NiReportsEngine {
 	
 	GroupReportData rootReportData;
 	public List<CategAmountCell> funding;
-	final ReportSpecification spec;
+	public final ReportSpecification spec;
+	
+	/**
+	 * the currency code used to render the report
+	 */
+	public final NiCurrency usedCurrency;
 	InclusiveTimer timer;
 	
 	/**
@@ -61,6 +67,7 @@ public class NiReportsEngine {
 		this.currencyConvertor = currencyConvertor;
 		this.spec = reportSpec;
 		this.filters = schema.getFiltersConverter().apply(reportSpec.getFilters());
+		this.usedCurrency = schema.getCurrencyByCode(Optional.ofNullable(spec.getSettings() == null ? null : spec.getSettings().getCurrencyCode()));
 	}
 	 
 	public GroupReportData execute() {
@@ -96,10 +103,10 @@ public class NiReportsEngine {
 		for(NiReportColumn<?> colToFetch:getReportColumns()) {
 			timer.run(colToFetch.name, () -> fetchedColumns.put(colToFetch.name, fetchColumn(colToFetch)));
 		};
-		fetchedColumns.values().forEach(col -> logger.error(String.format("the column %s contents is %s", col.name, col.getItems().toString())));
+		//fetchedColumns.values().forEach(col -> logger.error(String.format("the column %s contents is %s", col.name, col.getItems().toString())));
 	}
 	
-	protected CellColumn fetchColumn(NiReportColumn<? extends Cell> colToFetch) {
+	protected CellColumn fetchColumn(NiReportColumn<? extends Cell> colToFetch) throws Exception {
 		List<Cell> cells = (List) colToFetch.fetchColumn(this);
 		return new CellColumn(colToFetch.name, cells, null);
 	}

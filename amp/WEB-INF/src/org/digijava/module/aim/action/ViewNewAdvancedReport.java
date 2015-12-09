@@ -6,6 +6,7 @@
  */
 package org.digijava.module.aim.action;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -24,14 +25,22 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
+import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.VirtualCurrenciesMaintainer;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MonetLeak;
+import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.GroupingCriteria;
+import org.dgfoundation.amp.newreports.ReportExecutor;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.nireports.NiReportsGenerator;
+import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.reports.DateColumns;
 import org.dgfoundation.amp.reports.mondrian.FiltersGroup;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
@@ -93,6 +102,14 @@ public class ViewNewAdvancedReport extends Action {
 		return "ok";
 	}
 	
+	protected String runNiReportsBench() throws Exception {
+		ReportExecutor executor = AmpReportsSchema.getExecutor();
+		GeneratedReport output = executor.executeReport(
+				ReportSpecificationImpl.buildFor("simple report", Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.TEAM), Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), null, GroupingCriteria.GROUPING_YEARLY));
+		
+		return "<plaintext>" + output.timings.asUserString(2);
+	}
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
@@ -117,6 +134,10 @@ public class ViewNewAdvancedReport extends Action {
 		if (request.getParameter("redo_virtual_currencies") != null) {
 			ARUtil.writeResponse(response, redo_virtual_currencies());
 			return null;
+		}
+		
+		if (request.getParameter("nireports_bench") != null) { // http://localhost:8080/aim/viewNewAdvancedReport.do~nireports_bench=true
+			ARUtil.writeResponse(response, runNiReportsBench());
 		}
 		
 		

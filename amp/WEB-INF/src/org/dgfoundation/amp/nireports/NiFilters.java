@@ -14,12 +14,12 @@ public interface NiFilters {
 	 * null = no filtering
 	 * @return
 	 */
-	public Set<Long> getActivityIds();
+	public Set<Long> getActivityIds(NiReportsEngine engine);
 	
 	/**
 	 * the IDs of the entities (sector/donor/etc) which should be fetched for a given column
 	 * @param columnName
 	 * @return
 	 */
-	public Set<Long> getSelectedIds(String columnName);
+	public Set<Long> getSelectedIds(NiReportsEngine engine, String columnName);
 }

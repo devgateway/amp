@@ -20,6 +20,7 @@ import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
+import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.PartialReportArea;
@@ -110,27 +111,7 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 	}
 	
 	public ReportSpecificationImpl buildSpecification(String reportName, List<String> columns, List<String> measures, List<String> hierarchies, GroupingCriteria groupingCriteria) {
-		ReportSpecificationImpl spec = new ReportSpecificationImpl(reportName, ArConstants.DONOR_TYPE);
-		
-		for(String columnName:columns)
-			spec.addColumn(new ReportColumn(columnName));
-		
-		for(String measureName:measures)
-			spec.addMeasure(new ReportMeasure(measureName));
-		
-		if (hierarchies != null) {
-			for(String hierarchyName:hierarchies) {
-				if (!columns.contains(hierarchyName))
-					throw new RuntimeException("hierarchy should be present in column list: " + hierarchyName);
-				spec.getHierarchies().add(new ReportColumn(hierarchyName));
-			}
-		}
-
-		spec.setCalculateColumnTotals(true);
-		spec.setCalculateRowTotals(true);
-		spec.setGroupingCriteria(groupingCriteria);
-
-		return spec;
+		return ReportSpecificationImpl.buildFor(reportName, columns, measures, hierarchies, groupingCriteria);
 	}
 	
 	/**

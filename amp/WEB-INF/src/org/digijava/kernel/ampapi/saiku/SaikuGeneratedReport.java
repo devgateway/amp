@@ -29,7 +29,7 @@ public class SaikuGeneratedReport extends GeneratedReport{
 			List<ReportOutputColumn> rootHeaders,
 			List<ReportOutputColumn> leafHeaders, ReportEnvironment environment) {
 		super(spec, generationTime, requestingUser, reportContents, rootHeaders,
-				leafHeaders);
+				leafHeaders, null);
 		this.cellDataSet = cellDataSet;
 		//translateHeaders(environment);
 	}

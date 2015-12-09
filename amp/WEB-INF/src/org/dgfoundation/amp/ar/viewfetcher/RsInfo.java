@@ -3,6 +3,7 @@ package org.dgfoundation.amp.ar.viewfetcher;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.function.Consumer;
 
 import org.digijava.kernel.persistence.PersistenceManager;
 
@@ -18,6 +19,12 @@ public class RsInfo implements AutoCloseable {
 	public RsInfo(ResultSet rs, Statement statement) {
 		this.rs = rs;
 		this.statement = statement;
+	}
+	
+	public void forEach(Consumer<ResultSet> c) throws SQLException {
+		while (rs.next()) {
+			c.accept(rs);
+		}
 	}
 	
 	@Override public void close() throws SQLException {

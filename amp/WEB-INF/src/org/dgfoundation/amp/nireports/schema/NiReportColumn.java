@@ -33,7 +33,7 @@ public abstract class NiReportColumn<K extends Cell> {
 		this.filtering = filtering == null ? Collections.emptyMap() : Collections.unmodifiableMap(new TreeMap<>(filtering));
 	}
 	
-	public abstract List<K> fetchColumn(NiReportsEngine engine);
+	public abstract List<K> fetchColumn(NiReportsEngine engine) throws Exception;
 	
 	@Override public int hashCode() {
 		return name.hashCode();

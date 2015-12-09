@@ -29,9 +29,9 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 		
 	@Test
 	public void testProjectTitle() throws AMPException {
-		ReportExecutor executor = new NiReportsGenerator(AmpReportsSchema.getInstance(), AmpCurrencyConvertor.getInstance());
+		ReportExecutor executor = AmpReportsSchema.getExecutor();
 		ReportSpecification spec = buildSpecification("simple report", Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.TEAM), Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), null, GroupingCriteria.GROUPING_YEARLY);
 		executor.executeReport(spec);
+		executor.executeReport(spec);
 	}
-	
 }

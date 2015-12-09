@@ -14,7 +14,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.module.aim.helper.Constants;
 
 /**
- * quick & dirty SQL patches made for ugly things like DROPping tables or columns from entities which would otherwise have been locked by Hibernate
+ * quick & dirty SQL patcher made for ugly things like DROPping tables or columns from entities which would otherwise have been locked by Hibernate
  * use the fully-featured patcher for "normal" patches!
  * <strong>You should only call / use the class BEFORE having initialized Hibernate</strong>
  * @author Dolghier Constantin
@@ -371,7 +371,10 @@ public class SimpleSQLPatcher {
             		"ALTER TABLE IF EXISTS amp_menu_entry DROP COLUMN IF EXISTS is_admin CASCADE",
             		"ALTER TABLE IF EXISTS amp_menu_entry DROP COLUMN IF EXISTS is_team CASCADE"
             ));
-            
+            // AMP-21756: it is not yet used, thus let's recreate
+            addPatch(new SimpleSQLPatch("013",
+            		"DROP TABLE IF EXISTS amp_inflation_rates CASCADE"
+            ));            
 	}};
 	DataSource dataSource;
 	
@@ -396,14 +399,14 @@ public class SimpleSQLPatcher {
 	protected void createTrickyViewsIfNeeded(Connection conn) throws Exception {
 		boolean recreatingViews = SQLUtils.getLong(conn, "select count(*) from amp_global_settings where settingsvalue = 'true' and settingsname='Recreate the views on the next server restart'") > 0;
 		boolean ampActivityIsNotView = !SQLUtils.isView(conn, "amp_activity");
-		boolean ampActivityExpandedIsNotView = !SQLUtils.isView(conn, "v_amp_activity_expanded");
+		//boolean ampActivityExpandedIsNotView = !SQLUtils.isView(conn, "v_amp_activity_expanded");
 		boolean aaHasOtherColumnsThanAav = !SQLUtils.getTableColumnsWithTypes(conn, "amp_activity", false).toString().equals(SQLUtils.getTableColumnsWithTypes(conn, "amp_activity_version", false).toString());
 
-		logger.warn(String.format("asked to recreate views: %b, amp_activity is not view: %b, aaHasOtherColumnsThanAav: %b, v_amp_activity_expanded is not view: %b", recreatingViews, ampActivityIsNotView, aaHasOtherColumnsThanAav, ampActivityExpandedIsNotView));
-		if (recreatingViews || ampActivityExpandedIsNotView || ampActivityIsNotView || aaHasOtherColumnsThanAav) {
+		logger.warn(String.format("asked to recreate views: %b, amp_activity is not view: %b, aaHasOtherColumnsThanAav: %b, v_amp_activity_expanded is not view: %b", recreatingViews, ampActivityIsNotView, aaHasOtherColumnsThanAav, false/* ampActivityExpandedIsNotView*/));
+		if (recreatingViews /*|| ampActivityExpandedIsNotView*/ || ampActivityIsNotView || aaHasOtherColumnsThanAav) {
 			logger.error("forcing recreating views!");
 			SQLUtils.executeQuery(conn, "UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart'");
-			if (SQLUtils.isTable(conn, "amp_etl_changelog")) {
+			if (SQLUtils.isTable(conn, "amp_etl_changelog") && (recreatingViews || ampActivityIsNotView || aaHasOtherColumnsThanAav)) {
 				SQLUtils.executeQuery(conn, "INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('full_etl_request', 999)");
 			}
 			createDummyViewIfMissingOrTable(conn, "amp_activity", "SELECT aav.* from amp_activity_version aav JOIN amp_activity_group aag ON aav.amp_activity_id = aag.amp_activity_last_version_id AND (aav.deleted IS NULL or aav.deleted = false)", recreatingViews);

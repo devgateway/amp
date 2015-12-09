@@ -3,6 +3,7 @@ package org.dgfoundation.amp.algo;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -12,19 +13,20 @@ import java.util.function.Supplier;
  */
 public class VivificatingMap<K, V> implements Map<K, V> {
 	protected final Map<K, V> map;
-	protected final Supplier<V> defaultValueSupplier;
+	protected final Function<K, V> defaultValueSupplier;
 
-	public VivificatingMap(Map<K, V> map, Supplier<V> defaultValueSupplier) {
+	public VivificatingMap(Map<K, V> map, final Supplier<V> defaultValueSupplier) {
+		this.map = map;
+		this.defaultValueSupplier = (k -> defaultValueSupplier.get());
+	}
+	
+	public VivificatingMap(Map<K, V> map, Function<K, V> defaultValueSupplier) {
 		this.map = map;
 		this.defaultValueSupplier = defaultValueSupplier;
 	}
 	
 	public V getOrCreate(K key) {
-		if (!containsKey(key))
-			put(key, defaultValueSupplier.get());
-		
-		V res = get(key);
-		return res;
+		return computeIfAbsent(key, defaultValueSupplier);
 	}
 	
 	@Override

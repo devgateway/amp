@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.nireports;
 
+import org.dgfoundation.amp.algo.timing.RunNode;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -29,7 +30,8 @@ public class NiReportsGenerator implements ReportExecutor {
 		return apiReport;
 	}
 	
-	protected GeneratedReport generateApiOutput(GroupReportData reportOutput, NiReportsEngine context) {
-		return null;
+	protected GeneratedReport generateApiOutput(GroupReportData reportOutput, NiReportsEngine engine) {
+		RunNode timings = engine.timer.getCurrentState();
+		return new GeneratedReport(engine.spec, (int) timings.getTotalTime(), null, null, null, null, timings);
 	}
 }

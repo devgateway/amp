@@ -1,7 +1,10 @@
 package org.dgfoundation.amp.newreports;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.dgfoundation.amp.algo.timing.InclusiveTimer;
+import org.dgfoundation.amp.algo.timing.RunNode;
 import org.digijava.module.aim.helper.TeamMember;
 
 public class GeneratedReport {
@@ -39,14 +42,20 @@ public class GeneratedReport {
 	 */
 	public final List<ReportOutputColumn> leafHeaders;
 	
+	/**
+	 * might be null, but not putting an {@link Optional} here because we have lots of old frontend code 
+	 */
+	public final RunNode timings;
+	
 	public GeneratedReport(ReportSpecification spec, int generationTime, TeamMember requestingUser, ReportArea reportContents, 
-			List<ReportOutputColumn> rootHeaders, List<ReportOutputColumn> leafHeaders) {
+			List<ReportOutputColumn> rootHeaders, List<ReportOutputColumn> leafHeaders, RunNode timings) {
 		this.spec = spec;
 		this.generationTime = generationTime;
 		this.requestingUser = requestingUser;
 		this.reportContents = reportContents;
 		this.rootHeaders = rootHeaders;
 		this.leafHeaders = leafHeaders;
+		this.timings = timings;
 	}
 }
 

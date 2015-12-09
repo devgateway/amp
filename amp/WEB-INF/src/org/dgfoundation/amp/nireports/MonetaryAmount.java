@@ -2,6 +2,7 @@ package org.dgfoundation.amp.nireports;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
 
 import org.joda.time.DateTime;
 
@@ -22,14 +23,14 @@ public class MonetaryAmount implements Comparable<MonetaryAmount> {
 	/**
 	 * will be null for summed-up transactions
 	 */
-	public final String origCurrency;
+	public final NiCurrency origCurrency;
 	
 	/**
 	 * withTimeAtStartOfDay()
 	 */
-	public final DateTime date;
+	public final LocalDate date;
 	
-	public MonetaryAmount(BigDecimal amount, BigDecimal origAmount, String origCurrency, DateTime date) {
+	public MonetaryAmount(BigDecimal amount, BigDecimal origAmount, NiCurrency origCurrency, LocalDate date) {
 		this.amount = amount;
 		this.origAmount = origAmount;
 		this.origCurrency = origCurrency;

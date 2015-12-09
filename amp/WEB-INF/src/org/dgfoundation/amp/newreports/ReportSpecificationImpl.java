@@ -396,4 +396,28 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	public void setProjectTitleColumn(String projectTitleColumn) {
 		this.projectTitleColumn = projectTitleColumn;
 	}
+	
+	public static ReportSpecificationImpl buildFor(String reportName, List<String> columns, List<String> measures, List<String> hierarchies, GroupingCriteria groupingCriteria) {
+		ReportSpecificationImpl spec = new ReportSpecificationImpl(reportName, ArConstants.DONOR_TYPE);
+		
+		for(String columnName:columns)
+			spec.addColumn(new ReportColumn(columnName));
+		
+		for(String measureName:measures)
+			spec.addMeasure(new ReportMeasure(measureName));
+		
+		if (hierarchies != null) {
+			for(String hierarchyName:hierarchies) {
+				if (!columns.contains(hierarchyName))
+					throw new RuntimeException("hierarchy should be present in column list: " + hierarchyName);
+				spec.getHierarchies().add(new ReportColumn(hierarchyName));
+			}
+		}
+		
+		spec.setCalculateColumnTotals(true);
+		spec.setCalculateRowTotals(true);
+		spec.setGroupingCriteria(groupingCriteria);
+
+		return spec;
+	}
 }

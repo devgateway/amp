@@ -3,8 +3,11 @@ package org.dgfoundation.amp.nireports.schema;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.digijava.kernel.persistence.PersistenceManager;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
+
+import static org.dgfoundation.amp.nireports.NiUtils.failIf;
 
 /**
  * 
@@ -18,18 +21,32 @@ public abstract class NiDimension {
 	public final int depth;
 	
 	public NiDimension(String name, int depth) {
+		failIf(depth < 2, "a NiDimension must have a depth of at least 2!");
+		failIf(name == null, "a NiDimension must have a name");
 		this.name = name;
 		this.depth = depth;
 	}
 	
 	protected List<List<Long>> dimensionData;
 	
-	public List<List<Long>> getDimensionData() {
-		boolean shouldRefetch = dimensionData == null || dimensionChanged();
+	public List<List<Long>> getDimensionData(NiReportsEngine engine) {
+		boolean shouldRefetch = dimensionData == null || dimensionChanged(engine);
 		if (shouldRefetch) {
-			dimensionData = freeze(fetchDimension());
+			dimensionData = freeze(fetchDimension(engine));
+			fetchAuxiliaryData(engine);
 		}
 		return dimensionData;
+	}
+	
+	/**
+	 * callback is called every time after fetchDimension has been called and its data postprocessed and frozen into {@link #dimensionData}
+	 */
+	protected abstract void fetchAuxiliaryData(NiReportsEngine engine);
+	
+	protected List<Long> freezeRow(List<Long> row) {
+		if (row == null || row.size() != depth)
+			throw new RuntimeException(String.format("%s: all returned rows should have length %d", this, depth));
+		return Collections.unmodifiableList(new ArrayList<>(row));
 	}
 	
 	/**
@@ -37,20 +54,8 @@ public abstract class NiDimension {
 	 * @param rawDimensionData
 	 * @return
 	 */
-	protected List<List<Long>> freeze(List<Object[]> rawDimensionData) {
-		List<List<Long>> res = new ArrayList<>();
-		
-		for(Object[] rawRow:rawDimensionData) {
-			List<Long> row = new ArrayList<>();
-			
-			for(Object cell:rawRow)
-				row.add(PersistenceManager.getLong(cell));
-			
-			if (row.size() != depth)
-				throw new RuntimeException(String.format("row contains %d elements instead of %d: %s", row.size(), depth, row.toString()));
-			
-			res.add(Collections.unmodifiableList(row));
-		}
+	protected List<List<Long>> freeze(List<List<Long>> rawDimensionData) {
+		List<List<Long>> res = rawDimensionData.stream().map(this::freezeRow).collect(Collectors.toList());
 		return Collections.unmodifiableList(res);
 	}
 	
@@ -68,18 +73,18 @@ public abstract class NiDimension {
 	 * fetches the dimension data from the underlying storage. Notice that all the elements of the returned list should have a length of exactly {@link #depth}
 	 * @return
 	 */
-	public abstract List<Object[]> fetchDimension();
+	public abstract List<List<Long>> fetchDimension(NiReportsEngine engine);
 	
 	/**
 	 * should return true if the dimension in the underlying storage has changed since the last call to {@link #fetchDimension()}.
 	 * this function should be as fast as possible
 	 * @return
 	 */
-	public abstract boolean dimensionChanged();
-	
+	public abstract boolean dimensionChanged(NiReportsEngine engine);
+		
 	@Override
 	public String toString() {
-		return String.format("NiDimension %s", this.name);
+		return String.format("NiDimension %s with depth %d", this.name, this.depth);
 	}	
 	
 	/**

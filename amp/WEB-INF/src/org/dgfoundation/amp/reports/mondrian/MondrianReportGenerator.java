@@ -948,7 +948,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		CellDataSetToGeneratedReport translator = new CellDataSetToGeneratedReport(
 				spec, cellDataSet, leafHeaders, cellDataSetActivities);
 		ReportAreaImpl root = translator.transformTo(reportAreaType);
-		GeneratedReport genRep = new GeneratedReport(spec, duration + (int)(System.currentTimeMillis() - start), null, root, getRootHeaders(leafHeaders), leafHeaders); 
+		GeneratedReport genRep = new GeneratedReport(spec, duration + (int)(System.currentTimeMillis() - start), null, root, getRootHeaders(leafHeaders), leafHeaders, null); 
 		return genRep;
 	}
 	
@@ -1008,7 +1008,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		}
 			
 		//we should have requesting user already configure in spec - spec must have all required data
-		GeneratedReport genRep = new GeneratedReport(spec, duration, null, root, getRootHeaders(leafHeaders), leafHeaders); 
+		GeneratedReport genRep = new GeneratedReport(spec, duration, null, root, getRootHeaders(leafHeaders), leafHeaders, null); 
 		return genRep;
 	}
 	

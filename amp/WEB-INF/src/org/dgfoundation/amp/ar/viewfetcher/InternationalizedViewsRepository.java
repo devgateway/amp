@@ -496,11 +496,12 @@ public class InternationalizedViewsRepository {
 
 				addViewDef(this, new I18nViewDescription("v_minorities").
 						addDgEditorColumnDef("ebody", "locale"));
-				
-				//REMOVED DUE TO ACTIVITY CLEAN UP
-//				addViewDef(this, new I18nViewDescription("v_contracting_arrangements").
-//						addColumnDef(new I18nViewColumnDescription("body", "v_contracting_arrangements", "locale")));
 
+				addViewDef(this, new I18nViewDescription("v_ni_orgs_dimension")
+						.addColumnDef(new I18nViewColumnDescription("org_name", "amp_org_id", AmpOrganisation.class, "name"))
+						.addColumnDef(new I18nViewColumnDescription("org_grp_name", "amp_org_grp_id", AmpOrgGroup.class, "orgGrpName"))
+						.addColumnDef(new I18nViewColumnDescription("org_type_name", "amp_org_type_id", AmpOrgType.class, "orgType"))
+						);
 				buildProgramsMultilingualData();
 			}
 			

@@ -15,8 +15,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Consumer;
 
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.ar.FilterParam;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.Criteria;
@@ -153,6 +155,21 @@ public class SQLUtils {
 		catch(SQLException e)
 		{
 			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * runs a query and calls the consumer for each row of the result
+	 * @param connection
+	 * @param query
+	 * @param consumer
+	 */
+	public static void forEachRow(Connection connection, String query, Consumer<ResultSet> consumer) {
+		try(RsInfo rsInfo = rawRunQuery(connection, query, null)) {
+			rsInfo.forEach(consumer);
+		}
+		catch(SQLException ex) {
+			throw AlgoUtils.translateException(ex);
 		}
 	}
 	
@@ -514,5 +531,20 @@ public class SQLUtils {
 		for(int i = 0; i < rs.getMetaData().getColumnCount(); i++)
 			res.add(rs.getMetaData().getColumnName(i + 1));
 		return res;
+	}
+	
+	/**
+	 * rethrows any exception as a RunTimeException - good for lambdas
+	 * @param rs
+	 * @param columnName
+	 * @return
+	 */
+	public static long getLong(ResultSet rs, String columnName) {
+		try {
+			return rs.getLong(columnName);
+		}
+		catch(Exception e) {
+			throw AlgoUtils.translateException(e);
+		}
 	}
 }

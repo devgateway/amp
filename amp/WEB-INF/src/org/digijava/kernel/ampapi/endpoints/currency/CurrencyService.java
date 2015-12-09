@@ -137,6 +137,10 @@ public class CurrencyService {
 					Date date = null;
 					try {
 						date = DATE_FORMATTER.parse(dateStr);
+						if (date.before(AmpInflationRate.MIN_DATE) || date.after(AmpInflationRate.MAX_DATE)) {
+							errors.addApiErrorMessage(CurrencyErrors.INVALID_PERIOD, String.format(sInfo, dateStr));
+							date = null; // reset
+						}
 					} catch (ParseException e) {
 						logger.error(e.getMessage());
 						errors.addApiErrorMessage(CurrencyErrors.INVALID_DATE_FORMAT, String.format(sInfo, dateStr));
@@ -361,7 +365,7 @@ public class CurrencyService {
 					}
 				}
 			} else {
-				errors.addApiErrorMessage(CurrencyErrors.INVALID_CURRENCY_YEARS, range);
+				errors.addApiErrorMessage(CurrencyErrors.INVALID_PERIOD, range);
 			}
 		}
 		return years;
@@ -377,7 +381,7 @@ public class CurrencyService {
 			}
 		}
 		if (year == null) {
-			errors.addApiErrorMessage(CurrencyErrors.INVALID_CURRENCY_YEARS, value);
+			errors.addApiErrorMessage(CurrencyErrors.INVALID_PERIOD, value);
 		}
 		return year;
 	}

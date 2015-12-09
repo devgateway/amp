@@ -166,5 +166,13 @@ public class DateTimeUtil {
 		if (date == null) return null;
 		return formatDate(date);
 	}
+	
+	public static Date parseDate(String date, String pattern) {
+		try {
+			return new SimpleDateFormat(pattern).parse(date);
+		} catch (ParseException e) {
+			return null;
+		}
+	}
 
 }

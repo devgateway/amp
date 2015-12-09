@@ -8,6 +8,8 @@ import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 
 import org.dgfoundation.amp.ar.ArConstants;
+import org.digijava.kernel.ampapi.endpoints.currency.CurrencyEPConstants;
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * https://jira.dgfoundation.org/browse/AMP-20534, https://jira.dgfoundation.org/browse/AMP-20923
@@ -20,6 +22,10 @@ public class AmpInflationRate implements Serializable, Comparable<AmpInflationRa
 	
 	public final static int MIN_DEFLATION_YEAR = ArConstants.MIN_SUPPORTED_YEAR;
 	public final static int MAX_DEFLATION_YEAR = ArConstants.MAX_SUPPORTED_YEAR;
+	public final static String MIN_DATE_STR = MIN_DEFLATION_YEAR + "-01-01";
+	public final static String MAX_DATE_STR = MAX_DEFLATION_YEAR + "-12-31";
+	public final static Date MIN_DATE = DateTimeUtil.parseDate(MIN_DATE_STR, CurrencyEPConstants.DATE_FORMAT);
+	public final static Date MAX_DATE = DateTimeUtil.parseDate(MAX_DATE_STR, CurrencyEPConstants.DATE_FORMAT);
 
 	private Long id;
 	

@@ -20,6 +20,7 @@ import org.dgfoundation.amp.currency.IRFrequency;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.restclient.RestClient;
 import org.digijava.kernel.restclient.RestClient.Type;
+import org.digijava.module.aim.dbentity.AmpInflationRate;
 
 /**
  * Use of FRED®API 
@@ -39,6 +40,8 @@ public class FredDataSource {
 	//DEFLATOR: also not making it very configurable yet since the approach plan may change again
 	public Map<String, List<String>> queryParamsGNPDEF = new HashMap<String, List<String>>() {{
 		put("series_id", Arrays.asList("GNPDEF"));
+		put("observation_start", Arrays.asList(AmpInflationRate.MIN_DATE_STR));
+		put("observation_end", Arrays.asList(AmpInflationRate.MAX_DATE_STR));
 		put("file_type", Arrays.asList("json"));
 		put("units", Arrays.asList("pch"));
 		put("api_key", new ArrayList<String>());
@@ -73,9 +76,9 @@ public class FredDataSource {
 		RestClient rc = RestClient.getInstance(Type.JSON);
 		String json = rc.requestGET(FRED_OBSERVATIONS_EP_URL, queryParamsGNPDEF);
 		SortedMap<String, Double> result = new TreeMap<String, Double>();
-		if (json != null) { 
-			List<Map<String, String>> observations = 
-					(List<Map<String, String>>) JsonBean.getJsonBeanFromString(json).get("observations");
+		List<Map<String, String>> observations = json == null ? null :  
+				(List<Map<String, String>>) JsonBean.getJsonBeanFromString(json).get("observations");
+		if (observations != null) {
 			for (Map<String, String> pair : observations) {
 				String valStr = pair.get("value").trim();
 				Double value = Double.parseDouble(".".equals(valStr) ? "0" : valStr);

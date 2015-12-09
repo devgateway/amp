@@ -18,8 +18,8 @@ public class CurrencyErrors {
 	public static final ApiErrorMessage INVALID_INFLATION_RATE_VALUE = new ApiErrorMessage(3, "Invalid inflation rate value");
 	public static final ApiErrorMessage INVALID_CURRENCY_CODE = new ApiErrorMessage(4, "Invalid currency code");
 	public static final ApiErrorMessage INVALID_INFLATION_RATE_SERIES = new ApiErrorMessage(5, "Invalid inflation rates series");
-	public static final ApiErrorMessage INVALID_CURRENCY_YEARS = new ApiErrorMessage(6, 
-			String.format("Invalid currency years, allowed: [%d -%d]", 
+	public static final ApiErrorMessage INVALID_PERIOD = new ApiErrorMessage(6, 
+			String.format("Invalid period, must be between %d  and %d", 
 					AmpInflationRate.MIN_DEFLATION_YEAR, AmpInflationRate.MAX_DEFLATION_YEAR));
 	public static final ApiErrorMessage INVALID_CALENDAR_ID = new ApiErrorMessage(7, "Invalid calendar id");
 	public static final ApiErrorMessage DUPLICATE_CALENDAR = new ApiErrorMessage(8, "Duplicate input for calendar id");

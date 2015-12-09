@@ -268,8 +268,6 @@ implements AmpRequiredComponentContainer{
 			budgetClassificationContainer.add(budgetClassification);
 			add(budgetClassificationContainer);
 
-			//AmpActivityBudgetField activityBudget = new AmpActivityBudgetField("activityBudget", new PropertyModel(am, "budget"), "Activity Budget", budgetExtras, budgetClassification);
-			//add(activityBudget);
 
 			final AmpCategorySelectFieldPanel activityBudget = new AmpCategorySelectFieldPanel(
 					"activityBudget",

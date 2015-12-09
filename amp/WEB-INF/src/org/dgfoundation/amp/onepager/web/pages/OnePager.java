@@ -4,6 +4,21 @@
  */
 package org.dgfoundation.amp.onepager.web.pages;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
@@ -53,21 +68,16 @@ import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.OnepagerSection;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
-
-import javax.servlet.http.HttpSession;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author mpostelnicu@dgateway.org since Sep 22, 2010
@@ -339,6 +349,21 @@ public class OnePager extends AmpHeaderFooter {
 			locations.add(actLoc);
 			activity.setLocations(locations);
 		}
+		
+		//we set the default value for activity budget if configured as a global setting
+		Integer defaultActivityBudgetId = FeaturesUtil
+				.getGlobalSettingValueInteger(GlobalSettingsConstants.DEFAULT_VALUE_FOR_ACTIVITY_BUDGET);
+		if (defaultActivityBudgetId != null && defaultActivityBudgetId!=-1) {
+			AmpCategoryValue defaultAmpCategoryValue = CategoryManagerUtil
+					.getAmpCategoryValueFromDb(defaultActivityBudgetId.longValue());
+			if (defaultAmpCategoryValue != null) {
+				if (activity.getCategories() == null) {
+					am.getObject().setCategories(new HashSet<AmpCategoryValue>());
+					activity.getCategories().add(defaultAmpCategoryValue);
+				}
+			}
+		}
+
 	}
 	
 	public void initializeFormComponents(final IModel<AmpActivityVersion> am) throws Exception {

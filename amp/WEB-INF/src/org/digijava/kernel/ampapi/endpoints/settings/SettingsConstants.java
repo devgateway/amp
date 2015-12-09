@@ -18,12 +18,10 @@ import org.dgfoundation.amp.ar.MeasureConstants;
 public class SettingsConstants {
 	// TODO: legacy numeric ids defined in GIS API proposal - better to change them to more meaning-full ids
 	public static final String FUNDING_TYPE_ID = "0";
-	
-	/**
-	 * LOL LOL LOL
-	 */
 	public static final String CURRENCY_ID = "1";
 	public static final String CALENDAR_TYPE_ID = "2";
+	// TODO: legacy numeric ids - END
+	public static final String CALENDAR_CURRENCIES_ID = "calendarCurrencies";
 	public static final String AMOUNT_FORMAT_ID = "amountFormat";
 	public static final String AMOUNT_PATTERN_ID = "ammountPattern";
 	public static final String YEAR_RANGE_ID = "yearRange";
@@ -52,6 +50,7 @@ public class SettingsConstants {
 		put(CURRENCY_ID, "Currency");
 		put(CALENDAR_TYPE_ID, "Calendar Type");
 		put(AMOUNT_FORMAT_ID, "Amount Format");
+		put(CALENDAR_CURRENCIES_ID, "Calendar Currencies");
 		put(AMOUNT_PATTERN_ID, "Amount Pattern");
 		put(YEAR_RANGE_ID, "Year Range *");
 		put(CUSTOM, "Custom");

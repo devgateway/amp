@@ -6,14 +6,15 @@ package org.digijava.kernel.ampapi.endpoints.settings;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -22,23 +23,20 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.util.CalendarUtil;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -64,7 +62,7 @@ public class SettingsUtils {
 	public static SettingOptions getCurrencySettings() {
 		//build currency options
 		List<SettingOptions.Option> options = new ArrayList<SettingOptions.Option>();
-		for (AmpCurrency ampCurrency : CurrencyUtil.getActiveAmpCurrencyByName()) {
+		for (AmpCurrency ampCurrency : CurrencyUtil.getActiveAmpCurrencyByName(true)) {
 			SettingOptions.Option currencyOption = new SettingOptions.Option(
 					ampCurrency.getCurrencyCode(), ampCurrency.getCurrencyName());
 			options.add(currencyOption);
@@ -95,6 +93,38 @@ public class SettingsUtils {
 		return new SettingOptions(SettingsConstants.CALENDAR_TYPE_ID, false,
 				SettingsConstants.ID_NAME_MAP.get(SettingsConstants.CALENDAR_TYPE_ID),
 				defaultId, options, true);
+	}
+	
+	/**
+	 * @return currency allowed options per calendar
+	 */
+	public static SettingOptions getCalendarCurrencySettings() {
+		List<SettingOptions.Option> options = new ArrayList<SettingOptions.Option>();
+		String standardCurrencies = getCurrencyCodes(CurrencyUtil.getActiveAmpCurrencyByName());
+		for (AmpFiscalCalendar ampCalendar : DbUtil.getAllFisCalenders()) {
+			// get applicable currencies
+			String calendarCurrencies = standardCurrencies + getCurrencyCodes(ampCalendar.getConstantCurrencies());
+			if (calendarCurrencies.length() > 0)
+				calendarCurrencies = calendarCurrencies.substring(0, calendarCurrencies.length() - 1);
+			SettingOptions.Option calendarOption = new SettingOptions.Option(
+					String.valueOf(ampCalendar.getAmpFiscalCalId()),
+					ampCalendar.getName(), calendarCurrencies, true);
+			options.add(calendarOption);
+		}
+		//identifies the default calendar 
+		String defaultId = EndpointUtils.getDefaultCalendarId();
+		
+		return new SettingOptions(SettingsConstants.CALENDAR_CURRENCIES_ID, false,
+				SettingsConstants.ID_NAME_MAP.get(SettingsConstants.CALENDAR_CURRENCIES_ID),
+				defaultId, options, true);
+	}
+	
+	private static String getCurrencyCodes(Collection<AmpCurrency> currencies) {
+		StringBuilder sb = new StringBuilder();
+		for (AmpCurrency c : currencies) {
+			sb.append(c.getCurrencyCode()).append(",");
+		}
+		return sb.toString();
 	}
 	
 	/**
@@ -460,6 +490,7 @@ public class SettingsUtils {
 		List<SettingOptions> settings = new ArrayList<SettingOptions>();
 		settings.add(getCurrencySettings());
 		settings.add(getCalendarSettings());
+		settings.add(getCalendarCurrencySettings());
 		return settings;
 	}
 	

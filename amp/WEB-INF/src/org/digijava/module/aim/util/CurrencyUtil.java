@@ -779,6 +779,8 @@ public class CurrencyUtil {
 	}
 	
 	public static void deleteCurrencyRates(List<String> currencyCode) {
+		if (currencyCode.size() == 0)
+			return;
 		Query q = PersistenceManager.getSession().createQuery("delete from " + AmpCurrencyRate.class.getName() 
 				+ " o where o.fromCurrencyCode in (:currCodes) or o.toCurrencyCode in (:currCodes)");
 		q.setParameterList("currCodes", currencyCode);

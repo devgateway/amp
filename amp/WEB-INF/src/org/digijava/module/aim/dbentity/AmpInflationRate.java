@@ -40,9 +40,6 @@ public class AmpInflationRate implements Serializable, Comparable<AmpInflationRa
 	 */
 	private Date periodStart;
 	
-	//DEFLATOR: remove in the end, keeping it temporarily here to move on with iterative changes
-	private Integer year;
-	
 	/**
 	 * inflation rate expressed as a percentage change of the prices from previous period. <br />
 	 * Thus, inflationRate = -50% means prices have halved while inflationRate = +100% means prices have doubled
@@ -90,16 +87,6 @@ public class AmpInflationRate implements Serializable, Comparable<AmpInflationRa
 		this.currency = currency;
 	}
 	
-	// DEFLATOR: remove it in the end
-	public int getYear() {
-		if (year == null) {
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(periodStart);
-			year = cal.get(Calendar.YEAR);
-		}
-		return year;
-	}
-
 	public Date getPeriodStart() {
 		return periodStart;
 	}
@@ -116,11 +103,6 @@ public class AmpInflationRate implements Serializable, Comparable<AmpInflationRa
 		this.inflationRate = inflationRate;
 	}
 
-	//DEFLATOR: remove in the end
-	public boolean isConstantCurrency() {
-		return false;
-	}
-
 	/**
 	 * copies all the fields except id from an another instance
 	 * @param air
@@ -133,8 +115,7 @@ public class AmpInflationRate implements Serializable, Comparable<AmpInflationRa
 
 	@AssertTrue()
 	private boolean isValid() {
-		//boolean res = (this.inflationRate > -100) && (this.currency != null) && (!this.currency.isVirtual()) && (this.periodStart >= MIN_DEFLATION_YEAR) && (this.year <= MAX_DEFLATION_YEAR);
-		boolean res = (this.inflationRate > -100) && (this.currency != null) && (!this.currency.isVirtual());
+		boolean res = (this.inflationRate > -100) && (this.currency != null) && (!this.currency.isVirtual()) && (!this.periodStart.before(MIN_DATE)) && (!this.periodStart.after(MAX_DATE));
 		return res;
 	}
 	

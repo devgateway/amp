@@ -28,8 +28,8 @@ import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.ReportContextData;
-import org.dgfoundation.amp.ar.VirtualCurrenciesMaintainer;
 import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MonetLeak;
 import org.dgfoundation.amp.reports.DateColumns;
@@ -89,7 +89,7 @@ public class ViewNewAdvancedReport extends Action {
 	}
 	
 	protected String redo_virtual_currencies() {
-		new VirtualCurrenciesMaintainer().work();
+		CCExchangeRate.regenerateConstantCurrenciesExchangeRates(false);
 		return "ok";
 	}
 	

@@ -6,7 +6,6 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.dgfoundation.amp.algo.AlgoUtils;
-import org.dgfoundation.amp.ar.VirtualCurrenciesMaintainer;
 import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
 import org.dgfoundation.amp.testutils.AmpRunnable;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -95,26 +94,26 @@ public class InflationRatesTests extends MondrianReportsTestCase {
 		assertEquals(0.0001, AlgoUtils.keepNDecimals(0.0000001, 4));
 	}
 	
-	class MyVirtualCurrenciesMaintainer extends VirtualCurrenciesMaintainer {
-		
-		public SortedMap<String, List<AmpCurrencyRate>> savedExchangeRates = new TreeMap<>();
-		
-		@Override protected void saveExchangeRates(AmpCurrency virtualCurrency, List<AmpCurrencyRate> ratesToWrite) {
-			savedExchangeRates.put(virtualCurrency.getCurrencyCode(), ratesToWrite);
-		}
-		
-		@Override
-		protected AmpCurrency ensureVirtualCurrencyExists(AmpInflationRate rate) {
-			return createVirtualCurrency(rate);
-		}
-	}
+//	class MyVirtualCurrenciesMaintainer extends VirtualCurrenciesMaintainer {
+//		
+//		public SortedMap<String, List<AmpCurrencyRate>> savedExchangeRates = new TreeMap<>();
+//		
+//		@Override protected void saveExchangeRates(AmpCurrency virtualCurrency, List<AmpCurrencyRate> ratesToWrite) {
+//			savedExchangeRates.put(virtualCurrency.getCurrencyCode(), ratesToWrite);
+//		}
+//		
+//		@Override
+//		protected AmpCurrency ensureVirtualCurrencyExists(AmpInflationRate rate) {
+//			return createVirtualCurrency(rate);
+//		}
+//	}
 	
 	@Test
 	public void testEntriesCreation() {
-		MyVirtualCurrenciesMaintainer mvcm = new MyVirtualCurrenciesMaintainer();
-		AmpCurrency usd = CurrencyUtil.getCurrencyByCode("USD");
 		//DEFLATOR: update tests
 		/*
+		MyVirtualCurrenciesMaintainer mvcm = new MyVirtualCurrenciesMaintainer();
+		AmpCurrency usd = CurrencyUtil.getCurrencyByCode("USD");
 		List<AmpInflationRate> rates = Arrays.asList(
 				new AmpInflationRate(usd, 2007, 1.1, true),
 				new AmpInflationRate(usd, 2008, 2.0, true),

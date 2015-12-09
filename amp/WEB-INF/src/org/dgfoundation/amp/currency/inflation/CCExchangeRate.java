@@ -203,7 +203,7 @@ public class CCExchangeRate {
 	
 	protected boolean isValid() {
 		if (inflationRatesPerCurrency.isEmpty()) {
-			logger.error("No inflation rates available, cannot generate constant currency exchange rates");
+			logger.error("No inflation rates available, cannot generate constant currency exchange rates for " + this.cc);
 		} else if (this.cc == null || this.standardCurrencyReferredByCC == null) {
 			logger.error("Cannot calculate exchange rate for " + this.cc);
 		} else {
@@ -232,7 +232,6 @@ public class CCExchangeRate {
 			exRates.put(r.getExchangeRateDate().getTime(), value);
 			baseExchangeRates.put(r.getExchangeRateDate().getTime(), 1.0);
 		}
-		
 	}
 	
 	/**

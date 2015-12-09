@@ -8,7 +8,6 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.dgfoundation.amp.algo.AlgoUtils;
-import org.dgfoundation.amp.ar.VirtualCurrenciesMaintainer;
 import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
 import org.dgfoundation.amp.testutils.AmpRunnable;
 import org.dgfoundation.amp.testutils.ReportsTestCase;

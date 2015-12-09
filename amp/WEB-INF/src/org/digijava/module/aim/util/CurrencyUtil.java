@@ -19,7 +19,6 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.VirtualCurrenciesMaintainer;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -772,10 +771,6 @@ public class CurrencyUtil {
     		logger.debug("AMP_CURRENCY_RATE table consistency check - PASS");
     	}
     }
-	
-	public static void maintainVirtualCurrencies() {
-		new VirtualCurrenciesMaintainer().work();
-	}
 	
 	public static void deleteCurrencyRates(String currencyCode) {
 		PersistenceManager.getSession().createQuery(

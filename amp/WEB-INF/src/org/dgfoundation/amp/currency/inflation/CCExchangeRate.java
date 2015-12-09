@@ -204,7 +204,7 @@ public class CCExchangeRate {
 	protected boolean isValid() {
 		if (inflationRatesPerCurrency.isEmpty()) {
 			logger.error("No inflation rates available, cannot generate constant currency exchange rates");
-		} if (this.cc == null || this.standardCurrencyReferredByCC == null) {
+		} else if (this.cc == null || this.standardCurrencyReferredByCC == null) {
 			logger.error("Cannot calculate exchange rate for " + this.cc);
 		} else {
 			return true;

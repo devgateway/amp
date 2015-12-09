@@ -174,5 +174,11 @@ public class DateTimeUtil {
 			return null;
 		}
 	}
+	
+	public static SimpleDateFormat getStrictSimpleDateFormat(String pattern) {
+		SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+		sdf.setLenient(false);
+		return sdf;
+	}
 
 }

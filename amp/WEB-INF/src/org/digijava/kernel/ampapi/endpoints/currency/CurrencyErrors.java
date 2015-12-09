@@ -14,7 +14,7 @@ import org.digijava.module.aim.dbentity.AmpInflationRate;
 public class CurrencyErrors {
 	
 	public static final ApiErrorMessage INVALID_SOURCE_ID = new ApiErrorMessage(1, "Invalid source_id");
-	public static final ApiErrorMessage INVALID_DATE_FORMAT = new ApiErrorMessage(2, "Invalid date");
+	public static final ApiErrorMessage INVALID_DATE_FORMAT = new ApiErrorMessage(2, "Invalid date format");
 	public static final ApiErrorMessage INVALID_INFLATION_RATE_VALUE = new ApiErrorMessage(3, "Invalid inflation rate value");
 	public static final ApiErrorMessage INVALID_CURRENCY_CODE = new ApiErrorMessage(4, "Invalid currency code");
 	public static final ApiErrorMessage INVALID_INFLATION_RATE_SERIES = new ApiErrorMessage(5, "Invalid inflation rates series");

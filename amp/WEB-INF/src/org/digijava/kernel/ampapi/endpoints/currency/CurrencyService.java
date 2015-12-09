@@ -39,6 +39,7 @@ import org.digijava.module.aim.dbentity.AmpInflationRate;
 import org.digijava.module.aim.dbentity.AmpInflationSource;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.common.util.DateTimeUtil;
 
 
 /**
@@ -49,10 +50,8 @@ import org.digijava.module.aim.util.DbUtil;
 public class CurrencyService {
 	
 	protected static final Logger logger = Logger.getLogger(CurrencyService.class);
-	protected static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(CurrencyEPConstants.DATE_FORMAT);
-	{
-		DATE_FORMATTER.setLenient(false);
-	}
+	protected static final SimpleDateFormat DATE_FORMATTER = DateTimeUtil.getStrictSimpleDateFormat(
+			CurrencyEPConstants.DATE_FORMAT);
 	
 	/**
 	 * @see Currencies#getCurrencyInflationDataSources()

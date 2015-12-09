@@ -99,7 +99,10 @@ public class NiReportsEngine {
 	}
 	
 	protected void fetchColumns() {
-		timer.run("Funding", () -> funding = schema.getFundingFetcher().fetchColumn(this));
+		timer.run("Funding", () -> { 
+			funding = schema.getFundingFetcher().fetchColumn(this);
+			timer.putMetaInNode("cells", funding.size());
+			});
 		for(NiReportColumn<?> colToFetch:getReportColumns()) {
 			timer.run(colToFetch.name, () -> fetchedColumns.put(colToFetch.name, fetchColumn(colToFetch)));
 		};
@@ -108,6 +111,7 @@ public class NiReportsEngine {
 	
 	protected CellColumn fetchColumn(NiReportColumn<? extends Cell> colToFetch) throws Exception {
 		List<Cell> cells = (List) colToFetch.fetchColumn(this);
+		timer.putMetaInNode("cells", cells.size());
 		return new CellColumn(colToFetch.name, cells, null);
 	}
 	

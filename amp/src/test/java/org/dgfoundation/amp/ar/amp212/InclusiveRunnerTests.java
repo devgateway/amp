@@ -109,4 +109,36 @@ public class InclusiveRunnerTests extends AmpTestCase {
 		thr2.join();
 		assertEquals("{name: <threaded bench>, totalTime: 750 ms, subNodes: [{name: <thread 1>, totalTime: 400 ms, subNodes: [{name: <11>, totalTime: 250 ms}, {name: <12>, totalTime: 50 ms}]}, {name: <thread 2>, totalTime: 150 ms}, {name: <main thread>, totalTime: 200 ms, subNodes: [{name: <m1>, totalTime: 50 ms}, {name: <m2>, totalTime: 100 ms}]}]}", timer.getCurrentState().asFastString(TESTCASES_FORMATTER));
 	}
+	
+	@Test
+	public void testMetaToString() {
+		InclusiveTimer timer = new InclusiveTimer("meta test");
+		timer.run("meta setter", () -> {
+			timer.getCurrentNode().putMeta("meta1", "value1");
+			timer.getCurrentNode().putMeta("meta2", "value2");
+		});
+		assertEquals("{name: <meta test>, totalTime: 0 ms, subNodes: [{name: <meta setter>, totalTime: 0 ms, meta1=value1, meta2=value2}]}", timer.getCurrentState().asFastString(TESTCASES_FORMATTER));
+	}
+	
+	@Test
+	public void testMetaInclusive() {
+		InclusiveTimer timer = new InclusiveTimer("meta included");
+		timer.run("meta meta", () -> {
+			timer.putMetaInNode("some", "someValue");
+			timer.run("undermeta", () -> timer.putMetaInNode("other", "otherValue"));
+		});
+		assertEquals("{name: <meta included>, totalTime: 0 ms, subNodes: [{name: <meta meta>, totalTime: 0 ms, some=someValue, subNodes: [{name: <undermeta>, totalTime: 0 ms, other=otherValue}]}]}", timer.getCurrentState().asFastString(TESTCASES_FORMATTER));
+	}
+	
+	@Test
+	public void testMetaAddingUnsupported() {
+		InclusiveTimer timer = new InclusiveTimer("random name");
+		shouldFail(() -> timer.getCurrentNode());
+		timer.run("something", () -> {
+			shouldFail(() -> timer.putMetaInNode("name", "some name"));
+			shouldFail(() -> timer.putMetaInNode("totalTime", "some name"));
+			timer.putMetaInNode("aha", "ahem");
+		});
+		assertEquals("{name: <random name>, totalTime: 0 ms, subNodes: [{name: <something>, totalTime: 0 ms, aha=ahem}]}", timer.getCurrentState().asFastString(TESTCASES_FORMATTER));
+	}
 }

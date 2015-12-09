@@ -95,4 +95,24 @@ public class InclusiveTimer {
 	protected Stack<RunTree> getCurrentStack() {
 		return treeLeaves.getOrCreate(Thread.currentThread());
 	}
+	
+	/**
+	 * will throw an exception if currently not running anything
+	 * @return
+	 */
+	public RunNode getCurrentNode() {
+		Stack<RunTree> stack = getCurrentStack();
+		if (stack == null || stack.isEmpty())
+			throw new RuntimeException("not inside an InclusiveTimer benchmark!");
+		return stack.peek();
+	}
+	
+	/**
+	 * syntactic sugar for {@link #getCurrentNode()}.{@link RunNode#putMeta(String, Object)}. Please see these function for documentation
+	 * @param key
+	 * @param value
+	 */
+	public void putMetaInNode(String key, Object value) {
+		getCurrentNode().putMeta(key, value);
+	}
 }

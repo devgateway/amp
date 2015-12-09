@@ -1,12 +1,17 @@
 package org.dgfoundation.amp.algo.timing;
 
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
+
+import org.dgfoundation.amp.nireports.NiUtils;
 
 public class RunTree implements RunNode {
 	protected final String name;
 	protected final RunTree parent;
+	protected final LinkedHashMap<String, Object> meta = new LinkedHashMap<>();
 	
 	public RunTree(String name, RunTree parent) {
 		this.name = name;
@@ -58,6 +63,20 @@ public class RunTree implements RunNode {
 	@Override
 	public String toString() {
 		return this.asFastString(j -> String.format("%d ms", j));
+	}
+
+	@Override
+	public Map<String, Object> getMeta() {
+		return Collections.unmodifiableMap(meta);
+	}
+
+	@Override
+	public void putMeta(String key, Object value) {
+		NiUtils.failIf(key == null, "meta key should be nonnull");
+		NiUtils.failIf(key.equals("name") || key.equals("totalTime"), "meta key cannot have one of the reserved values (name, totalTime)");
+		if (meta.containsKey(key))
+			throw new RuntimeException(String.format("meta with key %s already exists, has value %s and you are trying to replace it with %s", key, meta.get(key), value));
+		meta.put(key, value);
 	}
 }
 

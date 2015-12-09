@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.algo.timing;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.function.IntFunction;
 import java.util.function.LongFunction;
@@ -15,6 +16,13 @@ public interface RunNode {
 	public String getName();
 	public Set<? extends RunNode> getSubNodes();
 	public long getTotalTime();
+	public Map<String, Object> getMeta();
+	
+	/** 
+	 * @param key if a value with the given key already exists, will throw exception. Also, "name" and "totalTime" are disallowed keys
+	 * @param value if it is null, then this call does nothing
+	 */
+	public void putMeta(String key, Object value);
 	
 	public default String asString(IntFunction<String> prefixBuilder, LongFunction<String> numberFormatter, int depth) {
 		StringBuilder subnodesString = getSubNodes() == null || getSubNodes().isEmpty() ? null : new StringBuilder(", subNodes: [");
@@ -27,7 +35,13 @@ public interface RunNode {
 			};
 			subnodesString.append("]");
 		}
-		StringBuilder bld = new StringBuilder(String.format("%s{name: <%s>, totalTime: %s", prefixBuilder.apply(depth), getName(), numberFormatter.apply(getTotalTime())));
+		Map<String, Object> meta = getMeta();
+		String metaStr = (meta == null || meta.isEmpty()) ? "" : meta.toString();
+		if (!metaStr.isEmpty()) { // cut the Map-generated {PAYLOAD} braces
+			metaStr = metaStr.substring(1, metaStr.length() - 1);
+			metaStr = ", " + metaStr;
+		}
+		StringBuilder bld = new StringBuilder(String.format("%s{name: <%s>, totalTime: %s%s", prefixBuilder.apply(depth), getName(), numberFormatter.apply(getTotalTime()), metaStr));
 		if (subnodesString != null)
 			bld.append(subnodesString);
 		bld.append("}");

@@ -21,9 +21,11 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.restclient.RestClient;
 import org.digijava.kernel.restclient.RestClient.Type;
 import org.digijava.module.aim.dbentity.AmpInflationRate;
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * Use of FRED®API 
+ * Based on Source: U.S. Bureau of Economic Analysis.
  * 
  * @author Nadejda Mandrescu
  */
@@ -32,10 +34,7 @@ public class FredDataSource {
 	
 	//DEFLATOR: move EP url to settings once Settings v2 are available
 	public static final String FRED_OBSERVATIONS_EP_URL = "https://api.stlouisfed.org/fred/series/observations";
-	public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
-	{
-		DATE_FORMATTER.setLenient(false);
-	}
+	public static final SimpleDateFormat DATE_FORMATTER = DateTimeUtil.getStrictSimpleDateFormat("yyyy-MM-dd");
 	
 	//DEFLATOR: also not making it very configurable yet since the approach plan may change again
 	public Map<String, List<String>> queryParamsGNPDEF = new HashMap<String, List<String>>() {{

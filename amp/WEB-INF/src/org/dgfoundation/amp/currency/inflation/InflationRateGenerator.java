@@ -4,6 +4,7 @@
 package org.dgfoundation.amp.currency.inflation;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedMap;
@@ -22,7 +23,16 @@ public class InflationRateGenerator {
 	
 	protected Map<Long, Map<Long, Map<Long, Double>>> tempData = new TreeMap<Long, Map<Long, Map<Long, Double>>>();
 	
-	public InflationRateGenerator() {
+	protected SortedMap<Long, AmpInflationRate> sortedInflationRates = new TreeMap<Long, AmpInflationRate>(); 
+	
+	public InflationRateGenerator(List<AmpInflationRate> inflationRates) {
+		for (AmpInflationRate r : inflationRates) {
+			sortedInflationRates.put(r.getPeriodStart().getTime(), r);
+		}
+	}
+	
+	public InflationRateGenerator(SortedMap<Long, AmpInflationRate> sortedInflationRates) {
+		this.sortedInflationRates = sortedInflationRates;
 	}
 	
 	/**
@@ -30,8 +40,7 @@ public class InflationRateGenerator {
 	 * @param to the date to which inflation rate must be detected
 	 * @see #getInflationRateDeltaPartial(SortedMap)
 	 */
-	public double getInflationRateDeltaPartial(Long from, Long to, 
-			SortedMap<Long, AmpInflationRate> sortedInflationRates) {
+	public double getInflationRateDeltaPartial(Long from, Long to) {
 		if (from > to)
 			throw new RuntimeException(
 					String.format("'from' date must be no later that 'to' date, but 'from' = %s, 'to' = %s", from, to));
@@ -43,7 +52,7 @@ public class InflationRateGenerator {
 		c.setTimeInMillis(to);
 		c.add(Calendar.DATE, 1);
 		to = c.getTimeInMillis();
-		sortedInflationRates = sortedInflationRates.subMap(from, to);
+		SortedMap<Long, AmpInflationRate> sortedInflationRates = this.sortedInflationRates.subMap(from, to);
 		if (sortedInflationRates.size() == 0)
 			return 1d;
 		// detect if it was generated before

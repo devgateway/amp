@@ -41,7 +41,7 @@ public class CCExchangeRate {
 	/** the Constant Currency for which to generate exchange rates */
 	private ConstantCurrency cc;
 	private AmpCurrency standardCurrencyReferredByCC;
-	private InflationRateGenerator irg;
+	private Map<String, InflationRateGenerator> irgPerCurrency = new HashMap<String, InflationRateGenerator>();
 	private String inflationRatesCurrency;
 	
 	/** Exchange rates from the base currency to any other <date.getTime(), <other-currency-code, exchange-rate>> */
@@ -49,10 +49,8 @@ public class CCExchangeRate {
 	
 	private Map<String, SortedMap<Long, AmpInflationRate>> inflationRatesPerCurrency;
 	
-	public CCExchangeRate(InflationRateGenerator irg, 
-			Map<String, SortedMap<Long, AmpInflationRate>> inflationRatesPerCurrency) {
+	public CCExchangeRate(Map<String, SortedMap<Long, AmpInflationRate>> inflationRatesPerCurrency) {
 		this.baseCurrency = CurrencyUtil.getDefaultCurrency();
-		this.irg = irg;
 		this.inflationRatesPerCurrency = inflationRatesPerCurrency;
 		initExchanteRates();
 	}
@@ -72,18 +70,8 @@ public class CCExchangeRate {
 			 *  => if so, then process only the appropriate list for the current constant currency
 			 *  ------------------- TBD END --------------------------------- */
 			
-			SortedMap<Long, AmpInflationRate> inflationRates = inflationRatesPerCurrency.get(cc.standardCurrencyCode);
-			// if there are inflation rates for the current currency
-			// or if we need to propagate it from some other 
-			if (inflationRates != null) {
-				inflationRatesCurrency = cc.standardCurrencyCode;
-			} else {
-				// currently expected only 1 "other" currency inflation rates
-				Entry<String , SortedMap<Long, AmpInflationRate>> first = inflationRatesPerCurrency.entrySet().iterator().next();
-				inflationRatesCurrency = first.getKey();
-				inflationRates = first.getValue();
-			}
-			
+			SortedMap<Long, AmpInflationRate> inflationRates = getInflationRates();
+			InflationRateGenerator irg = getInflationRateGenerator(inflationRatesCurrency, inflationRates);
 			Long periodEnd = getClosedPeriodEnd(inflationRates);
 			
 			// standard exchange rates from the base currency to the inflation rate currency
@@ -107,7 +95,7 @@ public class CCExchangeRate {
 				}
 			}
 			
-			return generateExchangeRates(periodEnd, fromBaseRates, inflationRates);
+			return generateExchangeRates(periodEnd, fromBaseRates, irg);
 		}
 		return Collections.emptyList();
 	}
@@ -123,7 +111,7 @@ public class CCExchangeRate {
 	 * @param inflationRates
 	 */
 	protected List<AmpCurrencyRate> generateExchangeRates(Long periodEnd, Map<Long, Double> fromBaseToInflCurrRates, 
-			SortedMap<Long, AmpInflationRate> inflationRates) {
+			InflationRateGenerator irg) {
 		List<AmpCurrencyRate> exchangeRatesToCC = new ArrayList<AmpCurrencyRate>();
 		// check if inflation rate is provided for the base currency
 		boolean isInflCurrBaseCurrency = baseCurrency.getCurrencyCode().equals(inflationRatesCurrency);
@@ -150,7 +138,7 @@ public class CCExchangeRate {
 				from = periodEnd;
 				inverse = true;
 			}
-			double irc = irg.getInflationRateDeltaPartial(from, to, inflationRates);
+			double irc = irg.getInflationRateDeltaPartial(from, to);
 			if (inverse) {
 				irc = 1 / irc;
 			}
@@ -180,7 +168,7 @@ public class CCExchangeRate {
 	protected Long getClosedPeriodEnd(SortedMap<Long, AmpInflationRate> reference) {
 		// we do our exchange rates based on Gregorian, so we need to get Constant Currency period end in Gregorian
 		Long periodEnd = FiscalCalendarUtil.toGregorianDate(cc.calendar, cc.year + 1, -1).getTime();
-		// as agreed, we will approximate to the closes period end from existing inflation rates periods
+		// as agreed, we will approximate to the closest period end from existing inflation rates periods
 		SortedMap<Long, AmpInflationRate> subMap = reference.headMap(periodEnd);
 		Long prev = subMap.isEmpty() ? null : subMap.lastKey();
 		subMap = reference.tailMap(periodEnd);
@@ -234,6 +222,30 @@ public class CCExchangeRate {
 		}
 	}
 	
+	private SortedMap<Long, AmpInflationRate> getInflationRates() {
+		SortedMap<Long, AmpInflationRate> inflationRates = inflationRatesPerCurrency.get(cc.standardCurrencyCode);
+		// if there are inflation rates for the current currency or if we need to propagate it from some other 
+		if (inflationRates != null) {
+			inflationRatesCurrency = cc.standardCurrencyCode;
+		} else {
+			// currently expected only 1 "other" currency inflation rates
+			Entry<String , SortedMap<Long, AmpInflationRate>> first = inflationRatesPerCurrency.entrySet().iterator().next();
+			inflationRatesCurrency = first.getKey();
+			inflationRates = first.getValue();
+		}
+		return inflationRates;
+	}
+	
+	private InflationRateGenerator getInflationRateGenerator(String currencyCode, 
+			SortedMap<Long, AmpInflationRate> inflationRates) {
+		InflationRateGenerator irg = irgPerCurrency.get(currencyCode);
+		if (irg == null) {
+			irg = new InflationRateGenerator(inflationRates);
+			irgPerCurrency.put(currencyCode, irg);
+		}
+		return irg;
+	}
+	
 	/**
 	 * Regenerate exchange rates to all constant currencies
 	 * 
@@ -251,8 +263,7 @@ public class CCExchangeRate {
 	 *                 or null if all constant currencies must be updated 
 	 */
 	public static void regenerateConstantCurrenciesExchangeRates(boolean calledFromQuartzJob, AmpFiscalCalendar cal) {
-		CCExchangeRate ccER = new CCExchangeRate(new InflationRateGenerator(), 
-				getInflRatesgroupByCurrencyCodeAndOrderByDate());
+		CCExchangeRate ccER = new CCExchangeRate(getInflRatesgroupByCurrencyCodeAndOrderByDate());
 		// limit the constant currencies to regenerate to calendar if specified
 		List<ConstantCurrency> ccs = cal == null ? CurrencyInflationUtil.getAllConstantCurrencies() :
 			CurrencyInflationUtil.wrap(cal.getConstantCurrencies());

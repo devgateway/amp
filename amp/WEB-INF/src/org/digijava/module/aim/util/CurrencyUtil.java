@@ -534,12 +534,24 @@ public class CurrencyUtil {
 		}
 	}
 
-	public static ArrayList<AmpCurrency> getActiveAmpCurrencyByName() {
+	public static List<AmpCurrency> getActiveAmpCurrencyByName() {
 		// don't include by default, each module should explicitly request if it needs them
 		return getActiveAmpCurrencyByName(false);
 	}
 	
-	public static ArrayList<AmpCurrency> getActiveAmpCurrencyByName(boolean includeVirtual) {
+	public static List<AmpCurrency> getActiveAmpCurrencyByName(boolean includeVirtual) {
+		List<AmpCurrency> currencies = getActiveAlsoVirtualAmpCurrencyByName();
+		if (!includeVirtual) {
+			for(Iterator<AmpCurrency> iter = currencies.iterator(); iter.hasNext(); ) {
+				if (iter.next().isVirtual()) {
+					iter.remove();
+				}
+			}
+		}
+		return currencies;
+	}
+	
+	private static List<AmpCurrency> getActiveAlsoVirtualAmpCurrencyByName() {
 		if (AmpCaching.getInstance().currencyCache.activeCurrencies != null)
 			return new ArrayList<AmpCurrency>(AmpCaching.getInstance().currencyCache.activeCurrencies);
 		AmpCurrency ampCurrency = null;
@@ -551,7 +563,7 @@ public class CurrencyUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			queryString = " select c from " + AmpCurrency.class.getName()
-					+ " c where c.activeFlag='1' and c.virtual is " + includeVirtual + " order by c.currencyName";
+					+ " c where c.activeFlag='1' order by c.currencyName";
 			q = session.createQuery(queryString);
 			iter = q.list().iterator();
 

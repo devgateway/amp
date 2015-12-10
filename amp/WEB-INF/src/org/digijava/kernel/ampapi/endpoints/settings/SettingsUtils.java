@@ -100,7 +100,7 @@ public class SettingsUtils {
 	 */
 	public static SettingOptions getCalendarCurrencySettings() {
 		List<SettingOptions.Option> options = new ArrayList<SettingOptions.Option>();
-		String standardCurrencies = getCurrencyCodes(CurrencyUtil.getActiveAmpCurrencyByName());
+		String standardCurrencies = getCurrencyCodes(CurrencyUtil.getActiveAmpCurrencyByName(false));
 		for (AmpFiscalCalendar ampCalendar : DbUtil.getAllFisCalenders()) {
 			// get applicable currencies
 			String calendarCurrencies = standardCurrencies + getCurrencyCodes(ampCalendar.getConstantCurrencies());

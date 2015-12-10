@@ -126,11 +126,12 @@ public class MondrianTablesRepository {
 				.withEpilogue(new MondrianTableLogue() {
 
 					@Override public void run(EtlConfiguration etlConfiguration, Connection conn, MonetConnection monetConn, LinkedHashSet<String> locales) throws SQLException {
-						if (!etlConfiguration.fullEtl)
-							return;
 						for(String locale:locales) {
-							monetConn.executeQuery(String.format("CREATE VIEW mondrian_organizations_%s_no_pledges AS SELECT * FROM mondrian_organizations_%s WHERE amp_org_id < 800000000 OR amp_org_id = " + MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL, 
-								locale, locale));
+							String viewName = String.format("mondrian_organizations_%s_no_pledges", locale);
+							if (!monetConn.tableExists(viewName)) {
+								monetConn.executeQuery(String.format("CREATE VIEW %s AS SELECT * FROM mondrian_organizations_%s WHERE amp_org_id < 800000000 OR amp_org_id = " + MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL, 
+										viewName, locale));
+							}
 						}
 					}});
 				

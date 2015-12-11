@@ -55,6 +55,10 @@ public class CCExchangeRate {
 		initExchanteRates();
 	}
 	
+	public Map<String, InflationRateGenerator> getIrgPerCurrency() {
+		return irgPerCurrency;
+	}
+	
 	/**
 	 * Generate exchange rates for the given constant currency
 	 * @param cc the constant currency

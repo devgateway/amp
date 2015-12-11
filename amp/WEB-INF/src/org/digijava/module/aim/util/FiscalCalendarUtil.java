@@ -141,6 +141,16 @@ public class FiscalCalendarUtil {
 		return fisCal;
 	}
 	
+	public static AmpFiscalCalendar getAmpFiscalCalendar(String calendarName) {
+		try {
+			return (AmpFiscalCalendar) PersistenceManager.getSession().createQuery("select o from " + AmpFiscalCalendar.class.getName() 
+					+ " o where o.name like '" + calendarName + "'").uniqueResult();
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		return null;
+	}
+	
 	public static int getYear(Long fisCalId,String date) {
 		Session session = null;
 		int fiscalYr = 0;
@@ -288,6 +298,8 @@ public class FiscalCalendarUtil {
 		cal.setTime(date);
 		DateTime dateTime = new DateTime(chronology);
 		dateTime = dateTime.withDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH));
+		// clear any HH:mm:ss
+		dateTime = dateTime.minusMillis(dateTime.getMillisOfDay());
 		return dateTime;
 	}
 	
@@ -315,7 +327,7 @@ public class FiscalCalendarUtil {
 	private static DateTime getDateTime(AmpFiscalCalendar fromCal, Integer year, int daysOffset, 
 			AmpFiscalCalendar toCal) {
 		Calendar tmpCal = Calendar.getInstance();
-		tmpCal.set(year, 0, 1);
+		tmpCal.set(year, 0, 1, 0, 0, 0);
 		
 		if (fromCal == null) {
 			tmpCal.add(Calendar.DAY_OF_YEAR, daysOffset);

@@ -3,6 +3,7 @@
  */
 package org.dgfoundation.amp.currency.inflation;
 
+import java.sql.Date;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Iterator;
@@ -11,9 +12,14 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.collections.MapIterator;
+import org.apache.commons.collections.keyvalue.MultiKey;
 import org.apache.commons.collections.map.MultiKeyMap;
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.algo.AlgoUtils;
 import org.digijava.module.aim.dbentity.AmpInflationRate;
+
+import clover.com.google.common.collect.Multiset.Entry;
 
 /**
  * Generates Inflation Rates 
@@ -26,15 +32,13 @@ public class InflationRateGenerator {
 	protected static final long _1_DAY_TO_MS = TimeUnit.DAYS.toMillis(1);
 	protected static final double EPSILON = Math.ulp(0d);
 	// we set it to true during testing, and if ever really needed, can be used in prod
-	protected static boolean GENERATE_ALL = false;
+	public static boolean GENERATE_ALL = false;
 	
 	/** temporary cache {@code <from, to, inflation> }*/
 	protected MultiKeyMap tempData = new MultiKeyMap();
 	
 	/** inflation sorted ascending by date */
 	protected SortedMap<Long, Double> sortedInflationRates = new TreeMap<Long, Double>();
-	
-	private boolean isGenerateAll = GENERATE_ALL;
 	
 	/**
 	 * Inflation Rate Generator based on same currency inflation rates list
@@ -81,22 +85,8 @@ public class InflationRateGenerator {
 		}
 	}
 	
-	/**
-	 * @return whether all intermediate periods inflation ranges are also generated
-	 */
-	public boolean isGenerateAll() {
-		return isGenerateAll;
-	}
-
-	/**
-	 * @param isGenerateAll configures whether all intermediate periods inflation ranges should be also generated
-	 */
-	public void setGenerateAll(boolean isGenerateAll) {
-		this.isGenerateAll = isGenerateAll;
-	}
-	
 	public MultiKeyMap getAllGeneratedInflationRates() {
-		if (!isGenerateAll)
+		if (!GENERATE_ALL)
 			throw new RuntimeException("Not allowed, was not configured to generated intermidate inflation rates");
 		return tempData;
 	}
@@ -130,7 +120,7 @@ public class InflationRateGenerator {
 		
 		if (sir.size() == 0)
 			return 1d;
-		double inflation = isGenerateAll ? getPartialInflationBetween2(sir.firstKey(), sir.lastKey(), sir)
+		double inflation = GENERATE_ALL ? getPartialInflationBetweenAll(sir.firstKey(), sir.lastKey(), sir)
 				: getPartialInflationBetween(sir);
 		return inflation;
 	}
@@ -155,20 +145,34 @@ public class InflationRateGenerator {
 	 * Generates inflation rates delta for all intermediate periods (for testing)
 	 * @see #getInflationBetween(Long, Long, SortedMap)
 	 */
-	protected double getPartialInflationBetween2(Long firstPeriod, Long lastPeriod, SortedMap<Long, Double> sir) {
+	protected double getPartialInflationBetweenAll(Long firstPeriod, Long lastPeriod, SortedMap<Long, Double> sir) {
+		if (firstPeriod == lastPeriod)
+			return 1d;
 		Double inflation = (Double) tempData.get(firstPeriod, lastPeriod);
 		if (inflation == null) {
 			// calculate and generate intermediate values as well for future
 			SortedMap<Long, Double> subSir = sir.tailMap(firstPeriod + 1);
-			double upperInflation = subSir.size() == 0 ? 1d: getPartialInflationBetween2(subSir.firstKey(), lastPeriod, subSir);
+			double upperInflation = subSir.size() == 0 ? 1d: getPartialInflationBetweenAll(subSir.firstKey(), 
+					lastPeriod, subSir);
 			inflation = (sir.get(firstPeriod) / 100 + 1) * upperInflation;
 			tempData.put(firstPeriod, lastPeriod, inflation);
 			// and other intermediate values generation
 			subSir = sir.headMap(lastPeriod);
 			if (subSir.size() > 0)
-				getPartialInflationBetween2(firstPeriod, subSir.lastKey(), subSir);
+				getPartialInflationBetweenAll(firstPeriod, subSir.lastKey(), subSir);
 		}
 		return inflation;
+	}
+	
+	public static SortedMap<String, Double> toDatePeriodStrRates(MultiKeyMap input) {
+		SortedMap<String, Double> result = new TreeMap<String, Double>();
+		for (MapIterator iter = input.mapIterator(); iter.hasNext(); ) {
+			MultiKey inputKey = (MultiKey) iter.next();
+			result.put(new Date((Long) inputKey.getKey(0)) + " to " + new Date((Long) inputKey.getKey(1)),
+					// and also convert to full exchange rate change between these 2 dates
+					AlgoUtils.keepNDecimals(((Double) iter.getValue() - 1) * 100, 6));
+		}
+		return result;
 	}
 
 }

@@ -47,11 +47,11 @@ public class CCExchangeRate {
 	/** Exchange rates from the base currency to any other <date.getTime(), <other-currency-code, exchange-rate>> */
 	private Map<String, Map<Long, Double>> fromBaseToOtherCurrency;
 	
-	private Map<String, SortedMap<Long, AmpInflationRate>> inflationRatesPerCurrency;
+	private Map<String, List<AmpInflationRate>> inflationRatesPerCurrency;
 	
-	public CCExchangeRate(Map<String, SortedMap<Long, AmpInflationRate>> inflationRatesPerCurrency) {
+	public CCExchangeRate(List<AmpInflationRate> inflationRates) {
 		this.baseCurrency = CurrencyUtil.getDefaultCurrency();
-		this.inflationRatesPerCurrency = inflationRatesPerCurrency;
+		this.inflationRatesPerCurrency = groupByCurrencyCode(inflationRates);
 		initExchanteRates();
 	}
 	
@@ -70,21 +70,20 @@ public class CCExchangeRate {
 			 *  => if so, then process only the appropriate list for the current constant currency
 			 *  ------------------- TBD END --------------------------------- */
 			
-			SortedMap<Long, AmpInflationRate> inflationRates = getInflationRates();
+			List<AmpInflationRate> inflationRates = getInflationRates();
 			InflationRateGenerator irg = getInflationRateGenerator(inflationRatesCurrency, inflationRates);
-			Long periodEnd = getClosedPeriodEnd(inflationRates);
+			Long periodEnd = getClosedPeriodEnd(irg.getSortedByDateInflationRates());
 			
 			// standard exchange rates from the base currency to the inflation rate currency
 			Map<Long, Double> fromBaseRates = fromBaseToOtherCurrency.get(inflationRatesCurrency);
-			ExchangeRates exchageRates = new ExchangeRates(baseCurrency.getAmpCurrencyId(), 
-					inflationRates.entrySet().iterator().next().getValue().getCurrency().getAmpCurrencyId());
+			ExchangeRates exchageRates = new ExchangeRates(baseCurrency.getAmpCurrencyId(), -1);
 			exchageRates.importRate(fromBaseRates);
 			/*
 			 * also keep approximate exchange rates for start & end periods of given inflation rates,
 			 * to minimize inflation rates impact for approximate exchange rates to the constant currency
 			 */
 			Calendar c = Calendar.getInstance();
-			for (Long inflRatePeriodStart : inflationRates.keySet()) {
+			for (Long inflRatePeriodStart : irg.getSortedByDateInflationRates().keySet()) {
 				for (int day = -1; day < 1; day ++) {
 					c.setTimeInMillis(inflRatePeriodStart);
 					c.add(Calendar.DATE, day);
@@ -138,7 +137,7 @@ public class CCExchangeRate {
 				from = periodEnd;
 				inverse = true;
 			}
-			double irc = irg.getInflationRateDeltaPartial(from, to);
+			double irc = irg.getInflationRate(from, to);
 			if (inverse) {
 				irc = 1 / irc;
 			}
@@ -165,11 +164,11 @@ public class CCExchangeRate {
 	 * @param reference the inflation rates reference
 	 * @return
 	 */
-	protected Long getClosedPeriodEnd(SortedMap<Long, AmpInflationRate> reference) {
+	protected Long getClosedPeriodEnd(SortedMap<Long, Double> reference) {
 		// we do our exchange rates based on Gregorian, so we need to get Constant Currency period end in Gregorian
 		Long periodEnd = FiscalCalendarUtil.toGregorianDate(cc.calendar, cc.year + 1, -1).getTime();
 		// as agreed, we will approximate to the closest period end from existing inflation rates periods
-		SortedMap<Long, AmpInflationRate> subMap = reference.headMap(periodEnd);
+		SortedMap<Long, Double> subMap = reference.headMap(periodEnd);
 		Long prev = subMap.isEmpty() ? null : subMap.lastKey();
 		subMap = reference.tailMap(periodEnd);
 		Long next = subMap.isEmpty() ? null : subMap.firstKey();
@@ -222,14 +221,14 @@ public class CCExchangeRate {
 		}
 	}
 	
-	private SortedMap<Long, AmpInflationRate> getInflationRates() {
-		SortedMap<Long, AmpInflationRate> inflationRates = inflationRatesPerCurrency.get(cc.standardCurrencyCode);
+	private List<AmpInflationRate> getInflationRates() {
+		List<AmpInflationRate> inflationRates = inflationRatesPerCurrency.get(cc.standardCurrencyCode);
 		// if there are inflation rates for the current currency or if we need to propagate it from some other 
 		if (inflationRates != null) {
 			inflationRatesCurrency = cc.standardCurrencyCode;
 		} else {
 			// currently expected only 1 "other" currency inflation rates
-			Entry<String , SortedMap<Long, AmpInflationRate>> first = inflationRatesPerCurrency.entrySet().iterator().next();
+			Entry<String , List<AmpInflationRate>> first = inflationRatesPerCurrency.entrySet().iterator().next();
 			inflationRatesCurrency = first.getKey();
 			inflationRates = first.getValue();
 		}
@@ -237,7 +236,7 @@ public class CCExchangeRate {
 	}
 	
 	private InflationRateGenerator getInflationRateGenerator(String currencyCode, 
-			SortedMap<Long, AmpInflationRate> inflationRates) {
+			List<AmpInflationRate> inflationRates) {
 		InflationRateGenerator irg = irgPerCurrency.get(currencyCode);
 		if (irg == null) {
 			irg = new InflationRateGenerator(inflationRates);
@@ -263,7 +262,7 @@ public class CCExchangeRate {
 	 *                 or null if all constant currencies must be updated 
 	 */
 	public static void regenerateConstantCurrenciesExchangeRates(boolean calledFromQuartzJob, AmpFiscalCalendar cal) {
-		CCExchangeRate ccER = new CCExchangeRate(getInflRatesgroupByCurrencyCodeAndOrderByDate());
+		CCExchangeRate ccER = new CCExchangeRate(CurrencyInflationUtil.getInflationRates());
 		// limit the constant currencies to regenerate to calendar if specified
 		List<ConstantCurrency> ccs = cal == null ? CurrencyInflationUtil.getAllConstantCurrencies() :
 			CurrencyInflationUtil.wrap(cal.getConstantCurrencies());
@@ -291,17 +290,16 @@ public class CCExchangeRate {
 		
 	}
 	
-	protected static Map<String, SortedMap<Long, AmpInflationRate>> getInflRatesgroupByCurrencyCodeAndOrderByDate() {
-		Map<String, SortedMap<Long, AmpInflationRate>> inflRates = 
-				new HashMap<String, SortedMap<Long, AmpInflationRate>>();
-		for (AmpInflationRate air : CurrencyInflationUtil.getInflationRates()) {
+	protected Map<String, List<AmpInflationRate>> groupByCurrencyCode(List<AmpInflationRate> inflationRates) {
+		Map<String, List<AmpInflationRate>> inflRates = new HashMap<String, List<AmpInflationRate>>();
+		for (AmpInflationRate air : inflationRates) {
 			String currCode = air.getCurrency().getCurrencyCode();
-			SortedMap<Long, AmpInflationRate> rates = inflRates.get(currCode);
+			List<AmpInflationRate> rates = inflRates.get(currCode);
 			if (rates == null) {
-				rates = new TreeMap<Long, AmpInflationRate>();
+				rates = new ArrayList<AmpInflationRate>();
 				inflRates.put(currCode, rates);
 			}
-			rates.put(air.getPeriodStart().getTime(), air);
+			rates.add(air);
 		}
 		return inflRates;
 	}

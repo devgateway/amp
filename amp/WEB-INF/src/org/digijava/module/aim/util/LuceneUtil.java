@@ -755,7 +755,7 @@ public class LuceneUtil implements Serializable {
      */
     protected static String buildLuceneValueForField(long id, String fieldName)
     {
-        List<String> languages = TranslatorUtil.getLocaleCache(SiteUtils.getDefaultSite());
+        List<String> languages = TranslatorUtil.getLanguages();
 
         List<AmpContentTranslation> valueTranslationsList = ContentTranslationUtil.loadFieldTranslations(activityClassName, id, fieldName);
 

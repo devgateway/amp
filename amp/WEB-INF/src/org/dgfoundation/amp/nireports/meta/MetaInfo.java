@@ -1,4 +1,6 @@
-package org.dgfoundation.amp.nireports;
+package org.dgfoundation.amp.nireports.meta;
+
+import org.dgfoundation.amp.nireports.ImmutablePair;
 
 /**
  * <b> Immutable</b> class describing a piece of metadata.
@@ -8,8 +10,6 @@ package org.dgfoundation.amp.nireports;
  * 
  */
 public class MetaInfo extends ImmutablePair<String, Comparable<?>> implements Comparable<MetaInfo> {
-//	public final String category;
-//	public final Comparable<?> value;
 	
 	public MetaInfo(String category, Comparable<?> value) {
 		super(category, value);
@@ -30,5 +30,6 @@ public class MetaInfo extends ImmutablePair<String, Comparable<?>> implements Co
 			return delta;
 		return ((Comparable)this.v).compareTo(oth.v);
 	}
+	 
 
 }

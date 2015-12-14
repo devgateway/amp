@@ -1,10 +1,8 @@
 package org.dgfoundation.amp.nireports.schema;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 
 import static org.dgfoundation.amp.nireports.NiUtils.failIf;
@@ -17,6 +15,9 @@ import static org.dgfoundation.amp.nireports.NiUtils.failIf;
  *
  */
 public abstract class NiDimension {
+
+	protected static Logger logger = Logger.getLogger(NiDimension.class);
+
 	public final String name;
 	public final int depth;
 	
@@ -27,60 +28,32 @@ public abstract class NiDimension {
 		this.depth = depth;
 	}
 	
-	protected List<List<Long>> dimensionData;
-	
-	public List<List<Long>> getDimensionData(NiReportsEngine engine) {
-		boolean shouldRefetch = dimensionData == null || dimensionChanged(engine);
-		if (shouldRefetch) {
-			dimensionData = freeze(fetchDimension(engine));
-			fetchAuxiliaryData(engine);
-		}
-		return dimensionData;
-	}
-	
 	/**
-	 * callback is called every time after fetchDimension has been called and its data postprocessed and frozen into {@link #dimensionData}
-	 */
-	protected abstract void fetchAuxiliaryData(NiReportsEngine engine);
-	
-	protected List<Long> freezeRow(List<Long> row) {
-		if (row == null || row.size() != depth)
-			throw new RuntimeException(String.format("%s: all returned rows should have length %d", this, depth));
-		return Collections.unmodifiableList(new ArrayList<>(row));
-	}
-	
-	/**
-	 * 
-	 * @param rawDimensionData
+	 * slow! Normally you do not call it directly - it should be used via {@link NiReportsEngine}!
 	 * @return
 	 */
-	protected List<List<Long>> freeze(List<List<Long>> rawDimensionData) {
-		List<List<Long>> res = rawDimensionData.stream().map(this::freezeRow).collect(Collectors.toList());
-		return Collections.unmodifiableList(res);
-	}
+	public DimensionSnapshot getDimensionData() {
+		List<DimensionLevel> data = fetchDimension();
+		if (data.size() != depth)
+			throw new RuntimeException(String.format("fetchDimension() returned an array with %d elements, instead of: %d", data.size(), depth));
+		return new DimensionSnapshot(data);
+	}	
 	
 	/**
 	 * 
 	 * @param level: 0...(depth-1)
 	 */
-	public LevelColumn getLevelColumn(int level) {
+	public LevelColumn getLevelColumn(String instanceName, int level) {
 		if (level >= depth)
 			throw new RuntimeException(String.format("cannot build LevelColumn for dimension %s, because level is: %d; allowed range: 0...%d", this.name, level, depth - 1));
-		return new LevelColumn(this, level);
+		return new LevelColumn(this, instanceName, level);
 	}
 	
 	/**
 	 * fetches the dimension data from the underlying storage. Notice that all the elements of the returned list should have a length of exactly {@link #depth}
 	 * @return
 	 */
-	public abstract List<List<Long>> fetchDimension(NiReportsEngine engine);
-	
-	/**
-	 * should return true if the dimension in the underlying storage has changed since the last call to {@link #fetchDimension()}.
-	 * this function should be as fast as possible
-	 * @return
-	 */
-	public abstract boolean dimensionChanged(NiReportsEngine engine);
+	protected abstract List<DimensionLevel> fetchDimension();
 		
 	@Override
 	public String toString() {
@@ -94,10 +67,12 @@ public abstract class NiDimension {
 	 */
 	public static class LevelColumn {
 		public final NiDimension dimension;
+		public final String instanceName;
 		public final int level;
 		
-		private LevelColumn(NiDimension dimension, int level) {
+		private LevelColumn(NiDimension dimension, String instanceName, int level) {
 			this.dimension = dimension;
+			this.instanceName = instanceName;
 			this.level = level;
 		}
 	}

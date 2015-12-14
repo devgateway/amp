@@ -57,4 +57,6 @@ measures which are not affected by filters should be made columns
 	-> what about those which have meaning for both year and overall (e.g. Execution Rate / Forecast Execution Rate)
 	
 
-	
+=====================================
+test that the timer counts all time spent, including if task dies
+test MetaInfoGenerator

@@ -74,7 +74,7 @@ public class MultilingualInputFieldValues
 			this.locales = Collections.unmodifiableList(new ArrayList<String>(){{add(TLSUtils.getSite().getDefaultLanguage().getCode());}});
 		}
 		else if (locales == null || locales.isEmpty() || !ContentTranslationUtil.multilingualIsEnabled())
-			this.locales = Collections.unmodifiableList(TranslatorUtil.getLocaleCache(RequestUtils.getSite(TLSUtils.getRequest())));
+			this.locales = Collections.unmodifiableList(TranslatorUtil.getLanguages());
 		else
 			this.locales = Collections.unmodifiableList(new ArrayList<String>(locales));
 		

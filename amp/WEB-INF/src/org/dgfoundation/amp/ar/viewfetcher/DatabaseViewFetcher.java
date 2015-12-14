@@ -5,12 +5,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.algo.ExceptionConsumer;
 import org.dgfoundation.amp.ar.FilterParam;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -155,24 +159,23 @@ public abstract class DatabaseViewFetcher implements ViewFetcher
 	 * @param columnNames
 	 * @return
 	 */
-	public static java.util.Map<Long, String> fetchInternationalizedView(final String viewName, final String condition, final String idColumnName, final String payloadColumnName)
-	{
-		final java.util.Map<Long, String> res = new java.util.HashMap<Long, String>();
-		PersistenceManager.getSession().doWork(new org.hibernate.jdbc.Work()
-		{
-			public void execute(Connection conn) throws SQLException
-			{
-				ViewFetcher fetcher = getFetcherForView(viewName, condition, TLSUtils.getEffectiveLangCode(), new java.util.HashMap<PropertyDescription, ColumnValuesCacher>(), conn, idColumnName, payloadColumnName);
-				try(RsInfo rs = fetcher.fetch(null)) {
-					while (rs.rs.next()) {
-						Long id = rs.rs.getLong(idColumnName);
-						String val = rs.rs.getString(payloadColumnName);
-						res.put(id, val);
-					}
-				}
-			}
-		});
+	public static Map<Long, String> fetchInternationalizedView(final String viewName, final String condition, final String idColumnName, final String payloadColumnName) {
+		return PersistenceManager.getSession().doReturningWork(conn -> 
+			fetchViewAsKeyValue(conn, TLSUtils.getEffectiveLangCode(), viewName, idColumnName, payloadColumnName));
+	}
+	
+	public static void fetchView(Connection conn, final String locale, final String viewName, final String condition, List<String> columns, Consumer<ResultSet> consumer) {
+		ViewFetcher fetcher = getFetcherForView(viewName, condition, locale, new java.util.HashMap<PropertyDescription, ColumnValuesCacher>(), conn, columns.toArray(new String[0]));
+		fetcher.forEach(consumer);
+	}
+	
+	public static Map<Long, String> fetchViewAsKeyValue(Connection conn, final String locale, final String viewName, String idColumnName, String payloadColumnName) {
+		Map<Long, String> res = new HashMap<>();
+		fetchView(conn, locale, viewName, null, Arrays.asList(idColumnName, payloadColumnName), ExceptionConsumer.of(rs -> {
+			Long id = rs.getLong(idColumnName);
+			String val = rs.getString(payloadColumnName);
+			res.put(id, val);
+		}));
 		return res;
 	}
 }
-

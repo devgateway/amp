@@ -88,4 +88,8 @@ public class VivificatingMap<K, V> implements Map<K, V> {
 	public Set<java.util.Map.Entry<K, V>> entrySet() {
 		return map.entrySet();
 	}
+	
+	public Map<K, V> decapsulate() {
+		return this.map;
+	}
 }

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
@@ -20,6 +21,9 @@ import org.dgfoundation.amp.algo.timing.InclusiveTimer;
 import org.dgfoundation.amp.algo.timing.RunNode;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportWarning;
+import org.dgfoundation.amp.nireports.meta.MetaInfo;
+import org.dgfoundation.amp.nireports.schema.DimensionSnapshot;
+import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportMeasure;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
@@ -51,10 +55,15 @@ public class NiReportsEngine {
 	public final ReportSpecification spec;
 	
 	/**
+	 * do not access directly! use {@link #getDimensionSnapshot(NiDimension)} instead
+	 */
+	protected Map<NiDimension, DimensionSnapshot> usedDimensions = new HashMap<>();
+	
+	/**
 	 * the currency code used to render the report
 	 */
 	public final NiCurrency usedCurrency;
-	InclusiveTimer timer;
+	public InclusiveTimer timer;
 	
 	/**
 	 * schema-specific scratchpad which is not used by the NiReports engine per se, but is made available to the callbacks <br />
@@ -171,6 +180,15 @@ public class NiReportsEngine {
 	
 	protected void addReportWarning(ReportWarning warning) {
 		reportWarnings.getOrCreate(warning.entityId).add(warning);
+	}
+	
+	public synchronized DimensionSnapshot getDimensionSnapshot(NiDimension dimension) {
+		if (!usedDimensions.containsKey(dimension)) {
+			timer.run("fetch_dimension", () -> {
+				timer.run(dimension.name, () -> usedDimensions.put(dimension, dimension.getDimensionData()));
+			});
+		}
+		return usedDimensions.get(dimension);
 	}
 	
 	public NiFilters getFilters() {

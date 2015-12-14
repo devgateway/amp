@@ -160,7 +160,7 @@ public class MondrianETL {
 		this.conn = postgresConn;
 		this.monetConn = monetConn;
 		this.forceFullEtl = forceFullEtl | !monetConn.tableExists(Fingerprint.FINGERPRINT_TABLE);
-		this.locales = new LinkedHashSet<>(TranslatorUtil.getLocaleCache(SiteUtils.getDefaultSite()));
+		this.locales = new LinkedHashSet<>(TranslatorUtil.getLanguages());
 	}
 	
 	/**

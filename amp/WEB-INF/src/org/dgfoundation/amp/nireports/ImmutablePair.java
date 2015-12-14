@@ -12,12 +12,16 @@ public class ImmutablePair<K, V> {
 	public final K k;
 	public final V v;
 	
+	public final int __hashCode;
+	
 	public ImmutablePair(K k, V v) {
 		NiUtils.failIf(k == null, "k should not be null");
 		NiUtils.failIf(v == null, "v should not be null");
 		
 		this.k = k;
 		this.v = v;
+		
+		__hashCode = 19 * this.k.hashCode() + this.v.hashCode();
 	}
 	
 	@Override
@@ -36,6 +40,6 @@ public class ImmutablePair<K, V> {
 	
 	@Override
 	public int hashCode() {
-		return 19 * this.k.hashCode() + this.v.hashCode();
+		return __hashCode;
 	}
 }

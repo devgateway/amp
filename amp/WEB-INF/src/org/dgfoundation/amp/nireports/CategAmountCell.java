@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.nireports;
 
+import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
+
 /**
  * a cell with an amount and an attached metadata
  * @author Dolghier Constantin

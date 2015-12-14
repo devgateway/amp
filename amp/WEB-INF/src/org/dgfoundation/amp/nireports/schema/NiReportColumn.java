@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiFilters;

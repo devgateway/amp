@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 /**
  * holds the metadata of a cell, indexed by category for O(1) lookup <br />
+ * This is an append-only datastructure by design <br />
  * This class is in the critical path; no nice code here - all we care about is speed and client code expressivity <br />
  * Java does not have extension methods, so we live with what we can
  * @author Dolghier Constantin
@@ -46,7 +47,7 @@ public class MetaInfoSet implements Iterable<MetaInfo>
 	 * @param value
 	 * @return
 	 */
-	public boolean containsMeta(String category, Comparable value) {
+	public boolean containsMeta(String category, Object value) {
 		MetaInfo info = getMetaInfo(category);
 		return info != null && info.v.equals(value);
 	}
@@ -65,13 +66,21 @@ public class MetaInfoSet implements Iterable<MetaInfo>
 		this.metadata.putAll(infoSet.metadata);
 	}
 
-	public void add(String category, Comparable<?> value) {
+	public void add(String category, Object value) {
 		add(generator.getMetaInfo(category, value));
 	}
 
-	public boolean catEquals(String category, Comparable<?> value) {
+	public boolean catEquals(String category, Object value) {
 		MetaInfo mInfo = getMetaInfo(category);
 		return mInfo != null && mInfo.getValue().equals(value);
+	}
+	
+	/**
+	 * returns the number of cells in the map
+	 * @return
+	 */
+	public int getSize() {
+		return metadata.size();
 	}
 	
 	/**

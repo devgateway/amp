@@ -21,7 +21,7 @@ public class MetaInfoGenerator {
 	final ValueWrapper<Long> callsCount = new ValueWrapper<Long>(0l);
 	final ValueWrapper<Long> uncachedCount = new ValueWrapper<Long>(0l);
 	
-	public MetaInfo getMetaInfo(String category, Comparable value) {
+	public MetaInfo getMetaInfo(String category, Object value) {
 		callsCount.value ++;
 		return cache.computeIfAbsent(category, cat -> new HashMap<Object, MetaInfo>()).computeIfAbsent(value, val -> {
 			uncachedCount.value ++;

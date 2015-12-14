@@ -9,9 +9,9 @@ import org.dgfoundation.amp.nireports.ImmutablePair;
  * @author Dolghier Constantin
  * 
  */
-public class MetaInfo extends ImmutablePair<String, Comparable<?>> implements Comparable<MetaInfo> {
+public class MetaInfo extends ImmutablePair<String, Object> {
 	
-	public MetaInfo(String category, Comparable<?> value) {
+	public MetaInfo(String category, Object value) {
 		super(category, value);
 	}
 	
@@ -19,15 +19,7 @@ public class MetaInfo extends ImmutablePair<String, Comparable<?>> implements Co
 		return this.k;
 	}
 	
-	public Comparable<?> getValue() {
+	public Object getValue() {
 		return this.v;
-	}
-	
-	@Override
-	public int compareTo(MetaInfo oth) {
-		int delta = this.k.compareTo(oth.k);
-		if (delta != 0)
-			return delta;
-		return ((Comparable)this.v).compareTo(oth.v);
 	}
 }

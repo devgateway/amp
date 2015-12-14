@@ -8,19 +8,7 @@
 	4b: flows (make it somehow generic through attributes?)
 	4c: per-transaction attribute equaling the column
 	4d: (does it make sense?): hierarchy by something which has no percentage, no attribute, no per-transaction value
-5. ReportSubArea:
-	Map<ReportColumn
-	
-HOW TO HANDLE MULTIPLE VALUES PER CELL?
-	TEXT VALUES
-	AMOUNT VALUES
 		
-== B. fetching ==
-5. multi-level columns/hierarchies: Sectors/Programs/Locations
-	5a: should implement them as one single internal column, with different displayed fields?
-6. fetching: only fetch IDs (to minimize JOINs and over-socket traffic)
-	fundings: initially a view, maybe incrementally build a table in v.2 (relatively cheap)
-
 == C. running ==
  Column.splitByYear/Month/
  totals
@@ -56,7 +44,3 @@ Calendars:
 measures which are not affected by filters should be made columns
 	-> what about those which have meaning for both year and overall (e.g. Execution Rate / Forecast Execution Rate)
 	
-
-=====================================
-test that the timer counts all time spent, including if task dies
-test MetaInfoGenerator

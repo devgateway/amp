@@ -111,6 +111,21 @@ public class InclusiveRunnerTests extends AmpTestCase {
 	}
 	
 	@Test
+	public void testCrashedTask() {
+		InclusiveTimer timer = new InclusiveTimer("test crash");
+		shouldFail(() -> 
+			timer.run("root", () -> {
+				delay(150);
+				timer.run("subtask", () -> {
+					delay(50);
+					throw new RuntimeException("simulating a crash");
+				});
+			}));
+		assertEquals("{name: <test crash>, totalTime: 200 ms, subNodes: [{name: <root>, totalTime: 200 ms, subNodes: [{name: <subtask>, totalTime: 50 ms}]}]}", 
+			timer.getCurrentState().asFastString(TESTCASES_FORMATTER));
+	}
+	
+	@Test
 	public void testMetaToString() {
 		InclusiveTimer timer = new InclusiveTimer("meta test");
 		timer.run("meta setter", () -> {

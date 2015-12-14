@@ -3,6 +3,7 @@ package org.dgfoundation.amp.nireports.meta;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.stream.Collectors;
 
 /**
  * holds the metadata of a cell, indexed by category for O(1) lookup <br />
@@ -39,6 +40,17 @@ public class MetaInfoSet implements Iterable<MetaInfo>
 		return getMetaInfo(category) != null;
 	}
 	
+	/**
+	 * returns 
+	 * @param category
+	 * @param value
+	 * @return
+	 */
+	public boolean containsMeta(String category, Comparable value) {
+		MetaInfo info = getMetaInfo(category);
+		return info != null && info.v.equals(value);
+	}
+	
 	public void add(MetaInfo info) {
 		if (info == null)
 			throw new RuntimeException("not allowed to add null metainfo!");
@@ -72,6 +84,6 @@ public class MetaInfoSet implements Iterable<MetaInfo>
 	
 	@Override
 	public String toString() {
-		return String.format("MetaInfoSet: " + this.metadata.toString());
+		return String.format("MetaInfoSet: %s", this.metadata.entrySet().stream().map(entry -> String.format("%s: %s", entry.getValue().k, entry.getValue().v)).collect(Collectors.toList()));
 	}
 }

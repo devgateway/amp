@@ -2,7 +2,6 @@ package org.dgfoundation.amp.nireports.schema;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.nireports.CategAmountCell;
@@ -15,7 +14,7 @@ import org.dgfoundation.amp.nireports.SchemaSpecificScratchpad;
 import com.google.common.base.Function;
 
 /**
- * an interface describing the Schema of a reports' implementation
+ * an interface describing the Schema of an API's reporting needs
  * @author Constantin Dolghier
  *
  */

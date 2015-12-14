@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.dgfoundation.amp.algo.ExceptionConsumer;
+import org.dgfoundation.amp.algo.ExceptionRunnable;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -23,6 +25,12 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.nireports.CurrencyConvertor;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.NiReportsEngineForTesting;
+import org.dgfoundation.amp.nireports.TestcasesReportsSchema;
+import org.dgfoundation.amp.nireports.amp.AmpCurrencyConvertor;
+import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.reports.PartialReportArea;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
@@ -190,6 +198,19 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		MondrianReportFilters mrf = new MondrianReportFilters();
 		mrf.addFilterRule(new ReportColumn(column), new FilterRule(value, inclusive));
 		return mrf;
+	}
+	
+	/**
+	 * runs a given lambda in the context of a fully initialized NiReports engine, which will have its activity filters overridden to generate ids corresponding to a given list of names in English
+	 * @param activityNames
+	 * @param runnable
+	 */
+	public void runNiReportsTestcase(List<String> activityNames, ExceptionConsumer<NiReportsEngine> runnable) {
+		NiReportsEngineForTesting engine = new NiReportsEngineForTesting(
+			new TestcasesReportsSchema(AmpReportsSchema.getInstance(), new ActivityIdsFetcher(activityNames)), 
+			AmpCurrencyConvertor.getInstance(), 
+			runnable);
+		engine.execute(); // will run runnable in the engine's context
 	}
 
     /**

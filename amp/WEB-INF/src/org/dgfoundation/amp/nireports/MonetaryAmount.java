@@ -1,10 +1,8 @@
 package org.dgfoundation.amp.nireports;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDate;
 
-import org.joda.time.DateTime;
 
 /**
  * <strong>immutable</strong> representation of a transaction
@@ -31,6 +29,7 @@ public class MonetaryAmount implements Comparable<MonetaryAmount> {
 	public final LocalDate date;
 	
 	public MonetaryAmount(BigDecimal amount, BigDecimal origAmount, NiCurrency origCurrency, LocalDate date) {
+		NiUtils.failIf(origAmount == null ^ origCurrency == null, "orgAmount and origCurrency must either be both null or both nonnull");
 		this.amount = amount;
 		this.origAmount = origAmount;
 		this.origCurrency = origCurrency;
@@ -51,11 +50,33 @@ public class MonetaryAmount implements Comparable<MonetaryAmount> {
 
 	@Override
 	public int compareTo(MonetaryAmount o) {
-		return amount.compareTo(o.amount);
+		int amountsDelta = amount.compareTo(o.amount);
+		if (amountsDelta != 0)
+			return amountsDelta;
+		
+		if (date != null || o.date != null) {
+			// at least one of the dates is not null
+			if (date == null)
+				return 1;
+			if (o.date == null)
+				return -1;
+			int datesDelta = date.compareTo(o.date);
+			if (datesDelta != 0)
+				return datesDelta;
+		}
+		return 0;
+	}
+	
+	/**
+	 * amount as should be displayed in the report
+	 * @return
+	 */
+	public String getDisplayable() {
+		return amount.toString();
 	}
 	
 	@Override
 	public String toString() {
-		return amount.toString();
+		return String.format("%s %s", amount, date == null ? "(no date)" : "on " + date.toString());
 	}
 }

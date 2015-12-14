@@ -1,20 +1,11 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.schema.NiTransactionMeasure;
 
-import clover.com.google.common.base.Predicate;
+public class AmpTrivialMeasure extends NiTransactionMeasure {
 
-public class AmpTrivialMeasure extends NiTransactionMeasure{
-
-	public AmpTrivialMeasure(final String measureName) {
-		super(measureName, new Predicate<CategAmountCell>(){
-
-			@Override public boolean apply(CategAmountCell cac) {
-				return cac.metaInfo.catEquals(CategAmountCell.TRANSACTION_MEASURE, measureName);
-			}
-			
-		});
+	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName) {
+		super(measureName, cac -> cac.metaInfo.containsMeta(MetaCategory.TRANSACTION_TYPE.category, Long.valueOf(transactionType)) &&
+				cac.metaInfo.containsMeta(MetaCategory.ADJUSTMENT_TYPE.category, adjustmentTypeName));
 	}
-
 }

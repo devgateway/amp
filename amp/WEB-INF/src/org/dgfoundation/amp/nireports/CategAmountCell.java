@@ -8,19 +8,18 @@ import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
  *
  */
 public class CategAmountCell extends Cell {
-	
-	/**
-	 * the MetaInfo category of a cell's transaction
-	 */
-	public final static String TRANSACTION_MEASURE = "measure";
-
-	
+		
 	public final MonetaryAmount amount;
 	public final MetaInfoSet metaInfo;
 	
 	public CategAmountCell(long activityId, MonetaryAmount amount, MetaInfoSet metaInfo) {
-		super(amount, amount.toString(), activityId, -1);
+		super(amount, amount.getDisplayable(), activityId, -1);
 		this.amount = amount;
 		this.metaInfo = metaInfo;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("(actId: %d, %s with meta: {%s}", this.activityId, amount, metaInfo);
 	}
 }

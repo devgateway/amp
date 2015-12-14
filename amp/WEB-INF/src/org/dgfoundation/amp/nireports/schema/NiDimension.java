@@ -9,7 +9,7 @@ import static org.dgfoundation.amp.nireports.NiUtils.failIf;
 
 /**
  * 
- * a class describing a set of related Columns, where one is hierarchically inferior to another. This class only references level ids; it is up to the Schema to map columns to levels within the dimension
+ * a class describing a set of related Columns, arranged in a stack. There might be multiple Columns on a given level of the stack. This class only references level ids; it is up to the Schema to map columns to levels within the dimension
  * identity comparisons are good here by design
  * @author Dolghier Constantin
  *

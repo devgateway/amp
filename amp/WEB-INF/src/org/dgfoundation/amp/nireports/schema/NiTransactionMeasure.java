@@ -1,13 +1,12 @@
 package org.dgfoundation.amp.nireports.schema;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
-
-import clover.com.google.common.base.Predicate;
 
 /**
  * a trivial measure defined as a transaction 
@@ -24,14 +23,8 @@ public class NiTransactionMeasure extends NiReportMeasure {
 	}
 	
 	@Override
-	public List<CategAmountCell> buildCells(NiReportsEngine context) {
-		// TODO: replace by java8 awesomeness once ampdev is migrated to j8
-		List<CategAmountCell> ret = new ArrayList<>();
-		for(CategAmountCell cac:context.funding) {
-			if (criterion.apply(cac))
-				ret.add(cac);
-		}
-		return ret;
+	public List<CategAmountCell> buildCells(NiReportsEngine engine) {
+		return engine.funding.stream().filter(cell -> criterion.test(cell)).collect(Collectors.toList());
 	}
 
 	/**

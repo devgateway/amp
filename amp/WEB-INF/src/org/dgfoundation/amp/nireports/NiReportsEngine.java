@@ -1,7 +1,6 @@
 package org.dgfoundation.amp.nireports;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -10,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
@@ -21,7 +19,6 @@ import org.dgfoundation.amp.algo.timing.InclusiveTimer;
 import org.dgfoundation.amp.algo.timing.RunNode;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportWarning;
-import org.dgfoundation.amp.nireports.meta.MetaInfo;
 import org.dgfoundation.amp.nireports.schema.DimensionSnapshot;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
@@ -29,7 +26,7 @@ import org.dgfoundation.amp.nireports.schema.NiReportMeasure;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 
 /**
- * The NiReports engine API-independent entrypoint <br />
+ * The NiReports engine API-independent entrypoint. A single report should be run per class instance <br />
  * No schema-specific code below this point. <br />
  * Code can change its APIs at any point below this point - using the AMP Reports API here is entirely optional <br />
  * 
@@ -46,8 +43,8 @@ public class NiReportsEngine {
 	public final CurrencyConvertor currencyConvertor;
 	final NiFilters filters;
 	
-	final Map<String, CellColumn> fetchedColumns = new LinkedHashMap<>();
-	final Map<String, CellColumn> fetchedMeasures = new LinkedHashMap<>();
+	final Map<String, ColumnContents> fetchedColumns = new LinkedHashMap<>();
+	final Map<String, ColumnContents> fetchedMeasures = new LinkedHashMap<>();
 	final VivificatingMap<Long, Set<ReportWarning>> reportWarnings = new VivificatingMap<>(new HashMap<>(), () -> new HashSet<ReportWarning>());
 	
 	GroupReportData rootReportData;
@@ -83,11 +80,7 @@ public class NiReportsEngine {
 		try(SchemaSpecificScratchpad pad = schema.getScratchpadSupplier().apply(this)) {
 			this.schemaSpecificScratchpad = pad;
 			this.timer = new InclusiveTimer("Report " + spec.getReportName());
-			timer.run("fetch", this::fetchData);
-			timer.run("init", this::createInitialReport);
-			timer.run("categorize", this::categorizeData);
-			timer.run("hierarchies", this::createHierarchies);
-			timer.run("totals", this::createTotals);
+			timer.run("exec", this::runReport);
 			RunNode timingInfo = timer.getCurrentState();
 			logger.error(String.format("it took %d millies to generate report, the breakdown is:\n%s", timer.getWallclockTime(), timingInfo.asUserString(3)));
 			return rootReportData;
@@ -95,6 +88,17 @@ public class NiReportsEngine {
 		catch(Exception e) {
 			throw AlgoUtils.translateException(e);
 		}
+	}
+	
+	/**
+	 * overrideable by users
+	 */
+	protected void runReport() {
+		timer.run("fetch", this::fetchData);
+		timer.run("init", this::createInitialReport);
+		timer.run("categorize", this::categorizeData);
+		timer.run("hierarchies", this::createHierarchies);
+		timer.run("totals", this::createTotals);
 	}
 	
 	/**
@@ -118,10 +122,10 @@ public class NiReportsEngine {
 		//fetchedColumns.values().forEach(col -> logger.error(String.format("the column %s contents is %s", col.name, col.getItems().toString())));
 	}
 	
-	protected CellColumn fetchColumn(NiReportColumn<? extends Cell> colToFetch) throws Exception {
+	protected ColumnContents fetchColumn(NiReportColumn<? extends Cell> colToFetch) throws Exception {
 		List<Cell> cells = (List) colToFetch.fetchColumn(this);
 		timer.putMetaInNode("cells", cells.size());
-		return new CellColumn(colToFetch.name, cells, null);
+		return new ColumnContents(cells);
 	}
 	
 	/**

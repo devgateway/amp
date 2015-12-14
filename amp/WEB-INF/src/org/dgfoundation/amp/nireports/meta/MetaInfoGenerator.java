@@ -3,8 +3,6 @@ package org.dgfoundation.amp.nireports.meta;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.rpc.holders.LongWrapperHolder;
-
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 

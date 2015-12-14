@@ -30,6 +30,4 @@ public class MetaInfo extends ImmutablePair<String, Comparable<?>> implements Co
 			return delta;
 		return ((Comparable)this.v).compareTo(oth.v);
 	}
-	 
-
 }

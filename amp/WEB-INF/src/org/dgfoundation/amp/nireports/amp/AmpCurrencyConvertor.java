@@ -19,7 +19,7 @@ public class AmpCurrencyConvertor implements CurrencyConvertor {
 	}
 	
 	@Override
-	public BigDecimal getRate(NiCurrency fromCurrency, NiCurrency toCurrency, LocalDate date) {
+	public BigDecimal getExchangeRate(NiCurrency fromCurrency, NiCurrency toCurrency, LocalDate date) {
 		return BigDecimal.ONE;
 	}
 

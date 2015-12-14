@@ -9,5 +9,5 @@ import java.time.LocalDate;
  *
  */
 public interface CurrencyConvertor {
-	public BigDecimal getRate(NiCurrency fromCurrency, NiCurrency toCurrency, LocalDate date);
+	public BigDecimal getExchangeRate(NiCurrency fromCurrency, NiCurrency toCurrency, LocalDate date);
 }

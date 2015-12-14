@@ -16,7 +16,4 @@ public class GroupColumn extends Column {
 		super(name, parent);
 		this.subColumns = Collections.unmodifiableList(new ArrayList<>(subColumns)); 
 	}
-	
-	
-	
 }

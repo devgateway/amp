@@ -18,6 +18,11 @@ import org.digijava.module.aim.util.CurrencyUtil;
 
 import com.google.common.base.Function;
 
+/**
+ * the big, glorious, immaculate, AMP Reports schema
+ * @author Dolghier Constantin
+ *
+ */
 public class AmpReportsSchema extends AbstractReportsSchema {
 
 	private static AmpReportsSchema instance = buildInstance();

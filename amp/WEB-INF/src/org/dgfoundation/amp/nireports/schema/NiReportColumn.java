@@ -1,21 +1,22 @@
 package org.dgfoundation.amp.nireports.schema;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.nireports.Cell;
-import org.dgfoundation.amp.nireports.ImmutablePair;
-import org.dgfoundation.amp.nireports.NiFilters;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 
 /**
- * 
+ * a class which holds complete info for NiReports so that those know how to: 
+ * <ol>
+ * 	<li>name a column</li>
+ * 	<li>fetch a column, using filters</li> 
+ * 	<li>split a column by hierarchies</li> 
+ * 	<li>aggregate a column</li>s
+ * </ol> 
  * @author Dolghier Constantin
  *
  */
@@ -25,7 +26,7 @@ public abstract class NiReportColumn<K extends Cell> {
 	public final Optional<NiDimension.LevelColumn> levelColumn;
 	
 	/**
-	 * never null
+	 * never null, but might be empty
 	 */
 	public final Map<String, String> filtering;
 	
@@ -35,6 +36,12 @@ public abstract class NiReportColumn<K extends Cell> {
 		this.filtering = filtering == null ? Collections.emptyMap() : Collections.unmodifiableMap(new TreeMap<>(filtering));
 	}
 	
+	/**
+	 * fetch a column's initial contents, filtered but before any structure or hierarchies have been applied
+	 * @param engine
+	 * @return
+	 * @throws Exception
+	 */
 	public abstract List<K> fetchColumn(NiReportsEngine engine) throws Exception;
 	
 	@Override public int hashCode() {

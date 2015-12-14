@@ -10,6 +10,8 @@ import java.util.Set;
 
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
+import org.dgfoundation.amp.nireports.amp.MetaCategory;
+import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 
@@ -18,9 +20,10 @@ import org.dgfoundation.amp.nireports.schema.NiReportColumn;
  * a column which fetches its input from a view which contains 3 or more columns: <br />
  * 	1. amp_activity_id (or pledge_id)
  *  2. (undefined, but normally payload)
- *  3. entity_id (e.g. sector_id, donor_id etc)
+ *  3. entity_id (e.g. sector_id, donor_id etc) <br />
  *  
- *  All the extra columns are ignored by this class and are to be used / ignored by the subclasses
+ *  All the extra columns are ignored by this class and are to be used / ignored by the subclasses <br />
+ *  This abstract class also functions as a utility methods repository
  * @author Dolghier Constantin
  *
  */
@@ -34,10 +37,20 @@ public abstract class SqlSourcedColumn<K extends Cell> extends NiReportColumn<K>
 		this.mainColumn = mainColumn;
 	}
 		
+	/**
+	 * builds the condition for filtering view rows based on entity IDs
+	 * @param engine
+	 * @return
+	 */
 	protected String buildPrimaryFilteringQuery(NiReportsEngine engine) {
 		return String.format("%s IN (%s)", mainColumn, Util.toCSStringForIN(engine.filters.getActivityIds(engine)));
 	}
 
+	/**
+	 * builds the complete condition for filtering view rows, based both on entity IDs and filters (#fundingFilterRows)
+	 * @param engine
+	 * @return
+	 */
 	protected String buildCondition(NiReportsEngine engine) {
 		StringBuilder columnFilters = new StringBuilder("(1 = 1)");
 		for(String filterField:filtering.keySet()) {
@@ -48,25 +61,66 @@ public abstract class SqlSourcedColumn<K extends Cell> extends NiReportColumn<K>
 		return condition;
 	}
 	
+	/**
+	 * builds the complete fetching query
+	 * @param engine
+	 * @return
+	 */
 	protected String buildQuery(NiReportsEngine engine) {
 		String condition = buildCondition(engine);
 		String query = String.format("SELECT * FROM %s %s", viewName, condition);
 		return query;
 	}
 	
-	protected IdValuePair readIdValuePair(ResultSet rs, String idColumnName, Map<Long, Optional<String>> mp) throws SQLException {
+	/**
+	 * reads a long from a ResultSet. If the long is nonnull, looks up its value in the supplied map. If a value exists, returns it as a key-value pair
+	 * @param rs
+	 * @param idColumnName
+	 * @param mp
+	 * @return
+	 * @throws SQLException
+	 */
+	protected IdValuePair readIdValuePair(ResultSet rs, String idColumnName, Map<Long, String> mp) throws SQLException {
 		long id = rs.getLong(idColumnName);
-		if (id <= 0)
+		if (rs.wasNull())
 			return null;
-		Optional<String> v = mp.get(id);
+		String v = mp.get(id);
+		if (v == null)
+			return null;
 		return new IdValuePair(id, v);
 	}
 	
-	protected Map<Long, Optional<String>> fetchValues(String viewName, String idColumnName, String payloadColumnName) {
-		Map<Long, Optional<String>> res = new HashMap<>(); 
-		Map<Long, String> raw = DatabaseViewFetcher.fetchInternationalizedView(viewName, null, idColumnName, payloadColumnName);
-		raw.forEach((key, value) -> {res.put(key, Optional.ofNullable(value));});
-		return res;
+	/**
+	 * reads a valuePair from a ResultSet. If present, writes the String value to a metaset and returns it. Please see {@link #readIdValuePair(ResultSet, String, Map)}
+	 * @param set
+	 * @param idColumnName
+	 * @param categ
+	 * @param row
+	 * @param map
+	 * @return
+	 * @throws SQLException
+	 */
+	protected IdValuePair addMetaIfIdValueExists(MetaInfoSet set, String idColumnName, MetaCategory categ, ResultSet row, Map<Long, String> map) throws SQLException {
+		IdValuePair pair = readIdValuePair(row, idColumnName, map);
+		if (pair != null)
+			set.add(categ.category, pair.v);
+		return pair;
 	}
-		
+	
+	/**
+	 * reads a long from a ResultSet. If present, it is written to a metaset and returns it
+	 * @param set
+	 * @param categ
+	 * @param row
+	 * @param columnName
+	 * @return
+	 * @throws SQLException
+	 */
+	protected long addMetaIfLongExists(MetaInfoSet set, MetaCategory categ, ResultSet row, String columnName) throws SQLException {
+		long val = row.getLong(columnName);
+		if (!row.wasNull())
+			set.add(categ.category, val);
+		return val;
+	}
+	
 }

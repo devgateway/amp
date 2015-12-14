@@ -11,6 +11,10 @@ package org.dgfoundation.amp.nireports;
  */
 public abstract class Column {
 	public final String name;
+	
+	/**
+	 * might be null
+	 */
 	public final GroupColumn parent;
 			
 	protected Column(String name, GroupColumn parent) {

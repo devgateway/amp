@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.function.Consumer;
 
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
+import org.dgfoundation.amp.algo.ExceptionConsumer;
 import org.dgfoundation.amp.ar.FilterParam;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.Criteria;
@@ -546,5 +548,27 @@ public class SQLUtils {
 		catch(Exception e) {
 			throw AlgoUtils.translateException(e);
 		}
+	}
+	
+	/**
+	 * this is written lambda-free so as to maximize performance
+	 * @param conn
+	 * @param query
+	 * @param idColumnName
+	 * @param payloadColumnName
+	 * @param map
+	 * @return
+	 */
+	public static Map<Long, String> collectKeyValue(Connection conn, String query) {
+		HashMap<Long, String> map = new HashMap<>();
+		try(RsInfo rsi = rawRunQuery(conn, query, null)) {
+			while (rsi.rs.next()) {
+				map.put(rsi.rs.getLong(1), rsi.rs.getString(2));
+			}
+		}
+		catch(SQLException e) {
+			throw AlgoUtils.translateException(e);
+		}
+		return map;
 	}
 }

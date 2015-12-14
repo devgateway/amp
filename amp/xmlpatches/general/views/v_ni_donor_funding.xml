@@ -73,6 +73,7 @@
         amp_funding f
         JOIN amp_funding_mtef_projection m ON m.amp_funding_id = f.amp_funding_id;
 
+ <!-- now here it comes the debug counterpart -->
 	DROP VIEW IF EXISTS v_ni_donor_funding_debug;
 	CREATE VIEW v_ni_donor_funding_debug AS
 		SELECT
@@ -113,7 +114,7 @@
 			LEFT JOIN amp_agreement agr ON agr.id = vdf.agreement_id
 			LEFT JOIN amp_organisation recipient ON recipient.amp_org_id = vdf.recipient_org_id
 			LEFT JOIN amp_role recipient_role ON recipient_role.amp_role_id = vdf.recipient_role_id
-			LEFT JOIN amp_role source_role ON source_role.amp_role_id = vdf.recipient_role_id
+			LEFT JOIN amp_role source_role ON source_role.amp_role_id = vdf.source_role_id
 			
 		ORDER BY amp_activity_id;
         	</lang>

@@ -1,6 +1,5 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +18,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
  *
  */
 public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
-	
+	 
 	public final Map<PropertyDescription, ColumnValuesCacher> columnCachers = new HashMap<>();
 	public final Connection connection;
 
@@ -27,7 +26,7 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 		try {this.connection = PersistenceManager.getJdbcConnection();}
 		catch(Exception e) {throw AlgoUtils.translateException(e);}
 	}
-	
+		
 	public static AmpReportsScratchpad get(NiReportsEngine engine) {
 		return (AmpReportsScratchpad) engine.schemaSpecificScratchpad;
 	}

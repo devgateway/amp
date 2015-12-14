@@ -1,15 +1,18 @@
 package org.dgfoundation.amp.nireports.amp;
 
 import java.sql.Connection;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.nireports.NiFilters;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 
+/**
+ * TODO: this class should become an AmpARFilter wrapper
+ * @author Dolghier Constantin
+ *
+ */
 public class AmpNiFilters implements NiFilters {
 
 	@Override

@@ -132,14 +132,27 @@ public class SectorUtil {
 		return col;
 	}// End Search Sector.
 
-
 	public static List<AmpSectorScheme> getAllSectorSchemes() {
+		return getAllSectorSchemes(false);
+	}
+	
+	/**
+	 * Get allSector Scheme
+	 * @param classificationConfiguration check if the sector scheme has its associated ClassificationConfiguration 
+	 * @return
+	 */
+	public static List<AmpSectorScheme> getAllSectorSchemes(boolean classificationConfiguration) {
 		try {
 			String sectorSchemeNameHql = AmpSectorScheme.hqlStringForName("ss");
-			String queryString = "select ss from "
-					+ AmpSectorScheme.class.getName() + " ss "
-					+ "order by " + sectorSchemeNameHql;
-			Query qry = PersistenceManager.getSession().createQuery(queryString);
+			
+			StringBuffer queryString =new StringBuffer( "select ss from " + AmpSectorScheme.class.getName() + " ss ");
+			if(classificationConfiguration){ 
+				queryString.append("where exists ( from "+ AmpClassificationConfiguration.class.getName() +" cc where cc.classification.ampSecSchemeId=ss.ampSecSchemeId )");
+			}
+			queryString.append(" order by " + sectorSchemeNameHql);
+			
+			
+			Query qry = PersistenceManager.getSession().createQuery(queryString.toString());
 			List<AmpSectorScheme> col = new ArrayList<>(qry.list());
 			return col;
 		} catch (Exception ex) {

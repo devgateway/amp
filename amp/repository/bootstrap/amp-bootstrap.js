@@ -3,15 +3,17 @@
  * @author Dolghier Constantin
  */
 
-$.fn.disable = function() { // disable a div in its entirety
-	$(this).addClass("disabled-div");
-	$(this).find("input,textarea,button,a").addClass("disabled-by-me").attr("disabled", "disabled");
-    return true;
+//Remove disable enable function that was added to jquery since its being overwritten by amp-boilerplate
+
+function disableAreaOnPledges(area) { // disable a div in its entirety
+	$(area).addClass("disabled-div");
+	$(area).find("input,textarea,button,a").addClass("disabled-by-me").attr("disabled", "disabled");
+	return true;
 };
 
-$.fn.enable = function() { // redo the actions of "disable" from above
-	$(this).removeClass("disabled-div");
-	$(this).find("input.disabled-by-me, textarea.disabled-by-me, button.disabled-by-me, a.disabled-by-me").removeAttr("disabled").removeClass("disabled-by-me");
+function enableAreaOnPledges(area) { // redo the actions of "disable" from above
+	$(area).removeClass("disabled-div");
+	$(area).find("input.disabled-by-me, textarea.disabled-by-me, button.disabled-by-me, a.disabled-by-me").removeAttr("disabled").removeClass("disabled-by-me");
 	return true;
 };
 

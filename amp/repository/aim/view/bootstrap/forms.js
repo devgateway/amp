@@ -261,7 +261,7 @@ InteractiveFormArea.prototype.showAdditionArea = function(elem){
 	_self = this;
 	_self.refreshAddArea(function(){ // ajax-refresh the area, then show it
 		$(_self.addItemsButtonId).hide();
-		$(_self.dataDivId).disable();
+		disableAreaOnPledges(_self.dataDivId);
 		$(_self.changeDivId).show();
 	});
 };
@@ -285,7 +285,7 @@ InteractiveFormArea.prototype.hideAddArea = function() {
 	_self = this;
 	$(_self.changeDivId).hide();
 	$(_self.addItemsButtonId).show();
-	$(_self.dataDivId).enable();
+	enableAreaOnPledges(_self.dataDivId);
 };
 
 /**

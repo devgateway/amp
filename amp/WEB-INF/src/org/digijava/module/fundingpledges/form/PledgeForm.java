@@ -499,7 +499,7 @@ public class PledgeForm extends ActionForm implements Serializable {
 	 * @return
 	 */
 	public List<DisableableKeyValue> getAllRootSectors() {
-		return mergeLists(DISABLEABLE_KV_PLEASE_SELECT, Lists.transform(SectorUtil.getAllSectorSchemes(), new Function<AmpSectorScheme, DisableableKeyValue>(){
+		return mergeLists(DISABLEABLE_KV_PLEASE_SELECT, Lists.transform(SectorUtil.getAllSectorSchemes(true), new Function<AmpSectorScheme, DisableableKeyValue>(){
 			
 			public DisableableKeyValue apply(AmpSectorScheme theme) {
 				AmpClassificationConfiguration classificationConfig = SectorUtil.getClassificationConfigBySectorSchemeId(theme.getAmpSecSchemeId());

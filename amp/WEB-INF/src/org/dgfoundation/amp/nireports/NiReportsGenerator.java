@@ -15,16 +15,14 @@ import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 public class NiReportsGenerator implements ReportExecutor {
 	
 	public final NiReportsSchema schema;
-	public final CurrencyConvertor currencyConvertor;
 	
-	public NiReportsGenerator(NiReportsSchema schema, CurrencyConvertor currencyConvertor) {
+	public NiReportsGenerator(NiReportsSchema schema) {
 		this.schema = schema;
-		this.currencyConvertor = currencyConvertor;
 	}
 	
 	@Override
 	public GeneratedReport executeReport(ReportSpecification report) {
-		NiReportsEngine engine = new NiReportsEngine(schema, currencyConvertor, report);
+		NiReportsEngine engine = new NiReportsEngine(schema, report);
 		GroupReportData reportOutput = engine.execute();
 		GeneratedReport apiReport = generateApiOutput(reportOutput, engine);
 		return apiReport;

@@ -28,7 +28,9 @@ import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import static org.dgfoundation.amp.nireports.amp.MetaConstants.*;
@@ -80,13 +82,15 @@ public class AmpFundingColumn extends SqlSourcedColumn<CategAmountCell> {
 		Map<Long, String> roles = DatabaseViewFetcher.fetchInternationalizedView("amp_role", null, "amp_role_id", "role_code");
 		
 		//Map<Long, String> currencyCodes = DatabaseViewFetcher.fetchInternationalizedView("amp_currency", null, "amp_currency_id", "currency_code");
-		VivificatingMap<Long, NiCurrency> currencies = new VivificatingMap<Long, NiCurrency>(new HashMap<>(), id -> CurrencyUtil.getAmpcurrency(id));
+		VivificatingMap<Long, AmpCurrency> currencies = new VivificatingMap<Long, AmpCurrency>(new HashMap<>(), id -> CurrencyUtil.getAmpcurrency(id));
 		
-		//AmpReportsSchema schema = (AmpReportsSchema) engine.schema;
-		NiCurrency usedCurrency = engine.usedCurrency;
+		AmpReportsSchema schema = (AmpReportsSchema) engine.schema;
+		AmpCurrency usedCurrency = scratchpad.getUsedCurrency();
 		
 		List<CategAmountCell> cells = new ArrayList<>();
 		MetaInfoGenerator metaGenerator = new MetaInfoGenerator();
+		
+//		NiCurrency baseCurrency = CurrencyUtil.getAmpcurrency(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY));
 		
 		try(RsInfo rs = SQLUtils.rawRunQuery(scratchpad.connection, query, null)) {
 			while (rs.rs.next()) {
@@ -100,7 +104,7 @@ public class AmpFundingColumn extends SqlSourcedColumn<CategAmountCell> {
 				BigDecimal transactionAmount = rs.rs.getBigDecimal("transaction_amount");
 				
 				long currencyId = rs.rs.getLong("currency_id");
-				NiCurrency srcCurrency = currencies.getOrCreate(currencyId);
+				AmpCurrency srcCurrency = currencies.getOrCreate(currencyId);
 				BigDecimal fixed_exchange_rate = rs.rs.getBigDecimal("fixed_exchange_rate");
 												 				
 				BigDecimal capitalSpendPercent = rs.rs.getBigDecimal("capital_spend_percent");
@@ -111,10 +115,8 @@ public class AmpFundingColumn extends SqlSourcedColumn<CategAmountCell> {
 				addMetaIfIdValueExists(metaSet, "source_role_id", MetaCategory.SOURCE_ROLE, rs.rs, roles);
 				addMetaIfIdValueExists(metaSet, "adjustment_type", MetaCategory.ADJUSTMENT_TYPE, rs.rs, adjustmentTypes);
 				
-				BigDecimal usedExchangeRate = (fixed_exchange_rate == null || fixed_exchange_rate.compareTo(BigDecimal.ZERO) <= 0) ? 
-						engine.currencyConvertor.getExchangeRate(srcCurrency, usedCurrency, transactionDate) : 
-						fixed_exchange_rate;
-				MonetaryAmount amount = new MonetaryAmount(transactionAmount.multiply(usedExchangeRate), transactionAmount, srcCurrency, transactionDate);
+				BigDecimal usedExchangeRate = BigDecimal.valueOf(schema.currencyConvertor.getExchangeRate(srcCurrency, usedCurrency, fixed_exchange_rate == null ? null : fixed_exchange_rate.doubleValue(), transactionDate));
+				MonetaryAmount amount = new MonetaryAmount(transactionAmount.multiply(usedExchangeRate), transactionAmount, srcCurrency, transactionDate, scratchpad.getPrecisionSetting());
 				CategAmountCell cell = new CategAmountCell(ampActivityId, amount, metaSet);
 				cells.add(cell);
 			}

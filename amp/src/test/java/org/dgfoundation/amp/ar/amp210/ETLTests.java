@@ -7,16 +7,15 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.currencyconvertor.DateRateInfo;
+import org.dgfoundation.amp.currencyconvertor.ExchangeRates;
+import org.dgfoundation.amp.currencyconvertor.OneCurrencyCalculator;
 import org.dgfoundation.amp.mondrian.currencies.CurrencyETL;
-import org.dgfoundation.amp.mondrian.currencies.DateRateInfo;
-import org.dgfoundation.amp.mondrian.currencies.ExchangeRates;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MondrianTableDescription;
 import org.dgfoundation.amp.mondrian.PercentagesDistribution;
 import org.dgfoundation.amp.newreports.NumberedTypedEntity;
 import org.dgfoundation.amp.testutils.AmpTestCase;
-
-
 import org.junit.Test;
 
 /**
@@ -201,17 +200,17 @@ public class ETLTests extends AmpTestCase
 	public void testCurrencyETL() {
 		DateRateInfo rateA = new DateRateInfo(10, 0, 21.0);
 		DateRateInfo rateB = new DateRateInfo(12, 2, 31.0);
-		
-		assertEquals(21.0, CurrencyETL.chooseBestRate(rateA, rateB));
-		assertEquals(1/21.0, CurrencyETL.chooseBestRate(rateB, rateA));
+
+		assertEquals(21.0, OneCurrencyCalculator.chooseBestRate(rateA, rateB));
+		assertEquals(1/21.0, OneCurrencyCalculator.chooseBestRate(rateB, rateA));
 		
 		rateB = new DateRateInfo(10, 0, 10);
-		assertEquals(21.0, CurrencyETL.chooseBestRate(rateA, rateB)); // should favour direct exchange rate
-		assertEquals(10.0, CurrencyETL.chooseBestRate(rateB, rateA)); // should favour direct exchange rate
+		assertEquals(21.0, OneCurrencyCalculator.chooseBestRate(rateA, rateB)); // should favour direct exchange rate
+		assertEquals(10.0, OneCurrencyCalculator.chooseBestRate(rateB, rateA)); // should favour direct exchange rate
 		
 		rateA = new DateRateInfo(15, 3, 8);
 		rateB = new DateRateInfo(19, 1, 0.12);
-		assertEquals(8.333333, CurrencyETL.chooseBestRate(rateA, rateB), 0.0001); // should favour the opposite exchange rate, because it is closer
+		assertEquals(8.333333, OneCurrencyCalculator.chooseBestRate(rateA, rateB), 0.0001); // should favour the opposite exchange rate, because it is closer
 	}
 	
 	@Test
@@ -248,12 +247,11 @@ public class ETLTests extends AmpTestCase
 			put(700l, 1/0.22);
 		}};
 		
-		SortedSet<Long> interestingDates = new TreeSet<>(cor.keySet());
-		Map<Long, Double> rates = CurrencyETL.computeCurrencyRates(interestingDates, inverse, direct);
-		System.out.println(rates.toString()); // debug output
+		OneCurrencyCalculator calc = new OneCurrencyCalculator(inverse, direct);
+//		System.out.println(rates.toString()); // debug output
 		
-		for (long day:interestingDates) {
-			assertEquals("comparing on day " + day, cor.get(day), rates.get(day), 0.001);
+		for (long day:cor.keySet()) {
+			assertEquals("comparing on day " + day, cor.get(day), calc.getRate(day), 0.001);
 		}
 	}
 	

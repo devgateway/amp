@@ -2,6 +2,8 @@ package org.dgfoundation.amp.nireports;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.ExceptionConsumer;
@@ -13,14 +15,18 @@ import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 
 public class NiReportsEngineForTesting extends NiReportsEngine {
 	
-	public final static ReportSpecification EMPTY_REPORT_SPEC = ReportSpecificationImpl.buildFor("dummy", new ArrayList<>(), 
+	public final static Supplier<ReportSpecificationImpl> EMPTY_REPORT_SPEC_SUPPLIER = () -> ReportSpecificationImpl.buildFor("dummy", new ArrayList<>(), 
 			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), null, GroupingCriteria.GROUPING_TOTALS_ONLY);
-
-	final ExceptionConsumer<NiReportsEngine> runnable;
 	
-	public NiReportsEngineForTesting(NiReportsSchema schema, CurrencyConvertor currencyConvertor, ExceptionConsumer<NiReportsEngine> runnable) {
-		super(schema, currencyConvertor, EMPTY_REPORT_SPEC);
+	final ExceptionConsumer<NiReportsEngine> runnable;
+
+	public NiReportsEngineForTesting(NiReportsSchema schema, Function<ReportSpecificationImpl, ReportSpecification> reportSpecSupplier, ExceptionConsumer<NiReportsEngine> runnable) {
+		super(schema, reportSpecSupplier.apply(EMPTY_REPORT_SPEC_SUPPLIER.get()));
 		this.runnable = runnable;
+	}
+
+	public NiReportsEngineForTesting(NiReportsSchema schema, ExceptionConsumer<NiReportsEngine> runnable) {
+		this(schema, i -> i, runnable);
 	}
 	
 	@Override

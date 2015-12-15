@@ -40,7 +40,6 @@ public class NiReportsEngine {
 	// some of the fields below are public because they are part of the "internal" API and might be used by callbacks from deep inside ComputedMeasures / etc
 	
 	public final NiReportsSchema schema;
-	public final CurrencyConvertor currencyConvertor;
 	final NiFilters filters;
 	
 	final Map<String, ColumnContents> fetchedColumns = new LinkedHashMap<>();
@@ -59,7 +58,7 @@ public class NiReportsEngine {
 	/**
 	 * the currency code used to render the report
 	 */
-	public final NiCurrency usedCurrency;
+	//public final NiCurrency usedCurrency;
 	public InclusiveTimer timer;
 	
 	/**
@@ -68,12 +67,10 @@ public class NiReportsEngine {
 	 */
 	public SchemaSpecificScratchpad schemaSpecificScratchpad;
 	
-	public NiReportsEngine(NiReportsSchema schema, CurrencyConvertor currencyConvertor, ReportSpecification reportSpec) {
+	public NiReportsEngine(NiReportsSchema schema, ReportSpecification reportSpec) {
 		this.schema = schema;
-		this.currencyConvertor = currencyConvertor;
 		this.spec = reportSpec;
 		this.filters = schema.getFiltersConverter().apply(reportSpec.getFilters());
-		this.usedCurrency = schema.getCurrencyByCode(Optional.ofNullable(spec.getSettings() == null ? null : spec.getSettings().getCurrencyCode()));
 	}
 	 
 	public GroupReportData execute() {

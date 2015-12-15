@@ -17,14 +17,6 @@ generate hierarchies:
 		-> if cell has metadata, but different amount -> f.o.
 		->  
 	
-	
-== D. filters ==
-
-
-== E. sorting ==
-
-
-
 
 templating engine:
 https://en.wikipedia.org/wiki/Thymeleaf
@@ -43,4 +35,10 @@ Calendars:
 
 measures which are not affected by filters should be made columns
 	-> what about those which have meaning for both year and overall (e.g. Execution Rate / Forecast Execution Rate)
+	
+	
+	
+ADD TESTS FOR:
+	MonetaryAmount
+	NiPrecisionSettings (AmpPrecisionSetting)
 	

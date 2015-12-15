@@ -1,0 +1,25 @@
+package org.dgfoundation.amp.currencyconvertor;
+
+import java.time.LocalDate;
+
+import org.digijava.module.aim.dbentity.AmpCurrency;
+
+/**
+ * a class which can convert amounts from one currency to another currency
+ * @author Dolghier Constantin
+ *
+ */
+public interface CurrencyConvertor {	
+	
+	/**
+	 * returns the exchange rate from one currency to another on a given date. <br />
+
+	 * @param fromCurrency
+	 * @param toCurrency
+	 * @param fixedExchangeRate - in case this one is non-null and non-zero, then fromCurrency is converted to the AMP base currency instead at the given exchange rate
+	 * @param date
+	 * @return
+	 */
+	public double getExchangeRate(AmpCurrency fromCurrency, AmpCurrency toCurrency, Double fixedExchangeRate, LocalDate date);
+	
+}

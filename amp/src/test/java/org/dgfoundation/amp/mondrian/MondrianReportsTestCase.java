@@ -4,12 +4,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.dgfoundation.amp.algo.ExceptionConsumer;
 import org.dgfoundation.amp.algo.ExceptionRunnable;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
@@ -25,11 +27,9 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.nireports.CurrencyConvertor;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiReportsEngineForTesting;
 import org.dgfoundation.amp.nireports.TestcasesReportsSchema;
-import org.dgfoundation.amp.nireports.amp.AmpCurrencyConvertor;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.reports.PartialReportArea;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
@@ -39,6 +39,7 @@ import org.dgfoundation.amp.testutils.ActivityIdsFetcher;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.dgfoundation.amp.testutils.PledgeIdsFetcher;
 import org.dgfoundation.amp.testutils.ReportTestingUtils;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -48,6 +49,7 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+
 
 public abstract class MondrianReportsTestCase extends AmpTestCase
 {
@@ -116,6 +118,11 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		catch(Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	protected ReportSpecificationImpl changeReportCurrency(ReportSpecificationImpl input, String currencyCode) {
+		input.getOrCreateSettings().setCurrencyCode(currencyCode);
+		return input;
 	}
 	
 	public ReportSpecificationImpl buildSpecification(String reportName, List<String> columns, List<String> measures, List<String> hierarchies, GroupingCriteria groupingCriteria) {
@@ -207,8 +214,20 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 	 */
 	public void runNiReportsTestcase(List<String> activityNames, ExceptionConsumer<NiReportsEngine> runnable) {
 		NiReportsEngineForTesting engine = new NiReportsEngineForTesting(
-			new TestcasesReportsSchema(AmpReportsSchema.getInstance(), new ActivityIdsFetcher(activityNames)), 
-			AmpCurrencyConvertor.getInstance(), 
+			new TestcasesReportsSchema(new ActivityIdsFetcher(activityNames)), 
+			runnable);
+		engine.execute(); // will run runnable in the engine's context
+	}
+	
+	/**
+	 * runs a given lambda in the context of a fully initialized NiReports engine, which will have its activity filters overridden to generate ids corresponding to a given list of names in English
+	 * @param activityNames
+	 * @param runnable
+	 */
+	public void runNiReportsTestcase(List<String> activityNames, Function<ReportSpecificationImpl, ReportSpecification> reportSpecSupplier, ExceptionConsumer<NiReportsEngine> runnable) {
+		NiReportsEngineForTesting engine = new NiReportsEngineForTesting(
+			new TestcasesReportsSchema(new ActivityIdsFetcher(activityNames)), 
+			reportSpecSupplier,
 			runnable);
 		engine.execute(); // will run runnable in the engine's context
 	}

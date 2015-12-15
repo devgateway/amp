@@ -66,4 +66,43 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 			cells.toString());
 		});
 	}
+	
+	@Test
+	public void testExchangeRatesToBase() throws Exception {
+		runNiReportsTestcase(Arrays.asList("with weird currencies"), engine -> {
+			List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetchColumn(engine);
+			assertEquals("[" + 
+				"(actId: 79, 106227.592617 on 2015-10-06 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, " + 
+				"(actId: 79, 2536.783359 on 2014-12-16 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, " + 
+				"(actId: 79, 6250 on 2015-10-14 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}" + 
+			"]",
+			cells.toString());
+		});
+	}
+	
+	@Test
+	public void testExchangeRatesToEur() throws Exception {
+		runNiReportsTestcase(Arrays.asList("with weird currencies"), rep -> changeReportCurrency(rep, "EUR"), engine -> {
+			List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetchColumn(engine);
+			assertEquals("[" + 
+				"(actId: 79, 80000 on 2015-10-06 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, " + 
+				"(actId: 79, 1910.451547 on 2014-12-16 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, " + 
+				"(actId: 79, 10000 on 2015-10-14 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}" + 
+			"]", 
+			cells.toString());
+		});
+	}
+	
+	@Test
+	public void testExchangeRatesToMdl() throws Exception {
+		runNiReportsTestcase(Arrays.asList("with weird currencies"), rep -> changeReportCurrency(rep, "MDL"), engine -> {
+			List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetchColumn(engine);
+			assertEquals("[" + 
+				"(actId: 79, 2093745.850485 on 2015-10-06 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, " + 
+				"(actId: 79, 50000 on 2014-12-16 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, " + 
+				"(actId: 79, 123187.5 on 2015-10-14 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}" + 
+			"]", 
+			cells.toString());
+		});
+	}
 }

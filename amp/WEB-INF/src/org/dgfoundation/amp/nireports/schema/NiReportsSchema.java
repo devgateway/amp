@@ -8,6 +8,7 @@ import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiCurrency;
 import org.dgfoundation.amp.nireports.NiFilters;
+import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.SchemaSpecificScratchpad;
 
@@ -48,10 +49,4 @@ public interface NiReportsSchema {
 	 * @return
 	 */
 	public Function<NiReportsEngine, SchemaSpecificScratchpad> getScratchpadSupplier();
-	
-	/**
-	 * returns a currency by its code
-	 * @return
-	 */
-	public NiCurrency getCurrencyByCode(Optional<String> currencyCode);
 }

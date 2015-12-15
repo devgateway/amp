@@ -683,6 +683,13 @@ public class CurrencyUtil {
 		return col;
 	}
 
+	public static AmpCurrency getBaseCurrency() {
+		 String currCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+         if (currCode == null)
+        	 currCode = "USD";
+         return CurrencyUtil.getAmpcurrency(currCode);
+	}
+	
 	/*
 	 * For Deleting a Currency...
 	 */

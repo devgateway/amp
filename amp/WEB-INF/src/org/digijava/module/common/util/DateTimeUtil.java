@@ -19,6 +19,7 @@ package org.digijava.module.common.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -143,6 +144,10 @@ public class DateTimeUtil {
 		return result;
 	}
 		
+	public static int toJulianDayNumber(LocalDate date) {
+		return (int) (date.toEpochDay() + 2440588);
+	}
+	
 	public static Integer toJulianDayNumber(Date date){
 		if (date == null) return null;
 		Calendar cal = Calendar.getInstance();

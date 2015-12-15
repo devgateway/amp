@@ -28,24 +28,27 @@ public class MonetaryAmount implements Comparable<MonetaryAmount> {
 	 */
 	public final LocalDate date;
 	
-	public MonetaryAmount(BigDecimal amount, BigDecimal origAmount, NiCurrency origCurrency, LocalDate date) {
+	public final NiPrecisionSetting precisionSetting;
+		
+	public MonetaryAmount(BigDecimal amount, BigDecimal origAmount, NiCurrency origCurrency, LocalDate date, NiPrecisionSetting precisionSetting) {
 		NiUtils.failIf(origAmount == null ^ origCurrency == null, "orgAmount and origCurrency must either be both null or both nonnull");
-		this.amount = amount;
+		this.amount = precisionSetting.adjustPrecision(amount);
 		this.origAmount = origAmount;
 		this.origCurrency = origCurrency;
 		this.date = date;
+		this.precisionSetting = precisionSetting;
 	}
 	
-	public MonetaryAmount(BigDecimal amount) {
-		this(amount, null, null, null);
+	public MonetaryAmount(BigDecimal amount, NiPrecisionSetting precisionSetting) {
+		this(amount, null, null, null, precisionSetting);
 	}
 	
 	public MonetaryAmount multiplyBy(BigDecimal other) {
-		return new MonetaryAmount(amount.multiply(other), origAmount, origCurrency, null);
+		return new MonetaryAmount(amount.multiply(other), origAmount, origCurrency, null, precisionSetting);
 	}
 	
 	public MonetaryAmount add(MonetaryAmount other) {
-		return new MonetaryAmount(amount.add(other.amount));
+		return new MonetaryAmount(amount.add(other.amount), precisionSetting);
 	}
 
 	@Override
@@ -77,6 +80,6 @@ public class MonetaryAmount implements Comparable<MonetaryAmount> {
 	
 	@Override
 	public String toString() {
-		return String.format("%s %s", amount, date == null ? "(no date)" : "on " + date.toString());
+		return String.format("%s %s", amount.stripTrailingZeros().toPlainString(), date == null ? "(no date)" : "on " + date.toString());
 	}
 }

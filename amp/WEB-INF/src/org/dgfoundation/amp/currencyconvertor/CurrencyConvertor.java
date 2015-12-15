@@ -9,7 +9,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
  * @author Dolghier Constantin
  *
  */
-public interface CurrencyConvertor {	
+public interface CurrencyConvertor {
 	
 	/**
 	 * returns the exchange rate from one currency to another on a given date. <br />
@@ -20,6 +20,6 @@ public interface CurrencyConvertor {
 	 * @param date
 	 * @return
 	 */
-	public double getExchangeRate(AmpCurrency fromCurrency, AmpCurrency toCurrency, Double fixedExchangeRate, LocalDate date);
+	public double getExchangeRate(String fromCurrencyCode, String toCurrencyCode, Double fixedExchangeRate, LocalDate date);
 	
 }

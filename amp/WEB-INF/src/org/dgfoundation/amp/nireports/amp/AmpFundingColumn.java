@@ -115,7 +115,7 @@ public class AmpFundingColumn extends SqlSourcedColumn<CategAmountCell> {
 				addMetaIfIdValueExists(metaSet, "source_role_id", MetaCategory.SOURCE_ROLE, rs.rs, roles);
 				addMetaIfIdValueExists(metaSet, "adjustment_type", MetaCategory.ADJUSTMENT_TYPE, rs.rs, adjustmentTypes);
 				
-				BigDecimal usedExchangeRate = BigDecimal.valueOf(schema.currencyConvertor.getExchangeRate(srcCurrency, usedCurrency, fixed_exchange_rate == null ? null : fixed_exchange_rate.doubleValue(), transactionDate));
+				BigDecimal usedExchangeRate = BigDecimal.valueOf(schema.currencyConvertor.getExchangeRate(srcCurrency.getCurrencyCode(), usedCurrency.getCurrencyCode(), fixed_exchange_rate == null ? null : fixed_exchange_rate.doubleValue(), transactionDate));
 				MonetaryAmount amount = new MonetaryAmount(transactionAmount.multiply(usedExchangeRate), transactionAmount, srcCurrency, transactionDate, scratchpad.getPrecisionSetting());
 				CategAmountCell cell = new CategAmountCell(ampActivityId, amount, metaSet);
 				cells.add(cell);

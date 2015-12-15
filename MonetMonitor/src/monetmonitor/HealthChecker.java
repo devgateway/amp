@@ -38,7 +38,7 @@ amp_monet_test  S 10m   17%  2h  mapi:monetdb://calcifer:50000/amp_monet_test
 		    BufferedReader input = new BufferedReader(streamReader);
 		    String line;
 		    while ((line = input.readLine()) != null) {
-		    	System.out.println("Status response:" + line);
+//		    	System.out.println("Status response:" + line);
 //		    	Utils.toLog("MonetDB response to command " +  + ":>>> " + line);
 		    	if (line.contains("cannot find a control socket")){
 		    		//monetdbd is down -> health checker doesn't have a proper response to this

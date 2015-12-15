@@ -31,6 +31,7 @@ public class MonetBeholderConnectivity extends MonetBeholder{
 	 */
 	protected void runQuery(Connection conn) throws nl.cwi.monetdb.mcl.MCLException, java.sql.SQLException{
 		String tableListQuery = "select tables.name from tables";
+//		String tableListQuerySELECT c.name, c.type FROM sys.columns c WHERE c.table_id = (SELECT t.id FROM sys.tables t WHERE t.name='etl_fingerprints') ORDER BY c.number
 		runSelect(conn, tableListQuery);
 	}
 	

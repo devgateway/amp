@@ -37,6 +37,11 @@ public class MonetBeholderSanity extends MonetBeholder {
 			String tableIntegrityQuery = String.format("select count(*) from  %s", name);
 			runSelect(conn, tableIntegrityQuery);
 		}
+		String lastSelect = "SELECT c.name, c.type FROM sys.columns c WHERE c.table_id = (SELECT t.id FROM sys.tables t WHERE t.name='etl_fingerprints') ORDER BY c.number";
+		runSelect(conn, lastSelect);
+		
+		
+		
 
 	}	
 	static Set<String> internalMonetTables = null;	

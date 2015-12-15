@@ -53,7 +53,7 @@ public class MonitorTimer {
 				public void run() {
 					iteration++;
 			    	BeholderObservationResult serverStatus = beholder.check();
-//			    	BeholderObservationResult healthStatus = healthChecker.runHealthCheck();
+			    	BeholderObservationResult healthStatus = healthChecker.runHealthCheck();
 			    	String statusMessage = null;
 			    	switch(serverStatus) {
 			    	case SUCCESS: 						statusMessage = "Server running"; break;
@@ -86,11 +86,11 @@ public class MonitorTimer {
 		    		
 		    		//recreate the database before we take a chance at starting it
 		    		
-//			    	if (healthStatus.equals(BeholderObservationResult.ERROR_HEALTH_BELOW_THRESHOLD)){
-//			    		Utils.broadcastStatus("Recreating database...");
-//			    		new SequentialRunner(CommandGenerator.generateRecreateDatabaseCommands()).run();
-//			    		starter.run();
-//			    	} else {
+			    	if (healthStatus.equals(BeholderObservationResult.ERROR_HEALTH_BELOW_THRESHOLD)){
+			    		Utils.broadcastStatus("Recreating database...");
+			    		new SequentialRunner(CommandGenerator.generateRecreateDatabaseCommands()).run();
+			    		starter.run();
+			    	} else {
 				    	switch(serverStatus) {
 				    	case SUCCESS: //do nothing, server is online, it's fine
 				    		break;
@@ -135,7 +135,7 @@ public class MonitorTimer {
 //				    		System.err.println("Error in status shower:" + e.getMessage());
 //						}
 //			    		starter.run();
-//			    	}
+			    	}
 			    	/*
 			    	 * ----------------> [2]end of part attempting to correct server's status
 			    	 */

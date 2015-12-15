@@ -60,7 +60,6 @@ public class Currencies {
 	 * ]
 	 * </pre>
 	 */
-	
 	@GET
 	@Path("/inflation-sources")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")

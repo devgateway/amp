@@ -213,6 +213,14 @@ public class CCExchangeRate {
 		List<AmpCurrencyRate> acr = CurrencyInflationUtil.getStandardExchangeRates(); 
 		for (AmpCurrencyRate r : acr) {
 			boolean isFromTheBaseCurrency = baseCurrency.getCurrencyCode().equals(r.getFromCurrencyCode());
+			if (!isFromTheBaseCurrency && !baseCurrency.getCurrencyCode().equals(r.getToCurrencyCode())) {
+				/*
+				 * DEFLATOR: skipping any other to other currencies now, until the feature requirements are stable
+				 * Out of scope here: we need Currency Rates Manager to workaround this 
+				 * and provide propagated exchange rates for periods when a different base currency was used
+				 */
+				continue;
+			}
 			String otherCurrency = isFromTheBaseCurrency ? r.getToCurrencyCode() : r.getFromCurrencyCode();
 			Map<Long, Double> exRates = fromBaseToOtherCurrency.get(otherCurrency);
 			if (exRates == null) {

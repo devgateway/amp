@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.menu.AmpView;
+import org.dgfoundation.amp.menu.MenuUtils;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportElement;
@@ -423,7 +425,7 @@ public class SettingsUtils {
 				.getEffectiveLangCode())));
 
 		// Workspace Settings
-		if (tm != null) {
+		if (MenuUtils.getCurrentView() == AmpView.TEAM) {
 			settings.add(new SettingOptions("team-id", "team-id", new SettingOptions.Option(EndpointUtils
 					.getAppSettings().getTeam().getAmpTeamId().toString())));
 			settings.add(new SettingOptions("team-lead", "team-lead", new SettingOptions.Option(String.valueOf(tm

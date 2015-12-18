@@ -109,15 +109,6 @@ function isYearValidator(input){
  */
 function init_custom_looks(divId)
 {
-
-
-	$(divId + ' select').addClass('select_quickfix');
-
-	//	.each(function(){
-    //
-	//});
-/* code below commented out in memory of Emanuel having broken pledges with his bugridden amp-boilerplate
-	//alert('called');
 	$(divId + ' select').addClass('text-left');
 	$(divId + ' select').selectpicker({
 		style: 'btn-primary btn-xs',
@@ -125,7 +116,7 @@ function init_custom_looks(divId)
 		//size: 5
 	});
 	$(divId + ' select.live-search').attr('data-live-search', 'true'); // Struts is stupid and does not allow to inject custom attributes
-*/
+	
     $(divId + ' .date-range-start').each(function(){
     	$(this).datetimepicker({pickTime: false});
     	$(this).on("dp.change", function(e) {

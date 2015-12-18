@@ -147,6 +147,11 @@
 			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
 		</layout>
 		
+		<layout name="footerLayoutPledges" file="footerLayoutPledges.jsp">
+			<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>
+			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
+		</layout>
+		
 		<layout name="footerNoAdminLayout" file="footerNoAdminLayout.jsp">
 			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
 		</layout>
@@ -159,6 +164,14 @@
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
 			<put-item name="footer" layout="footerLayout"/>
 			<put-item name="body"/>
+		</layout>
+		<layout name="pledgesLayout">
+		<put name="title">AMP</put>
+			<put-item name="headerTop" layout="headerTopLayout"/>
+			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
+	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
+			<put-item name="footer" layout="footerLayoutPledges"/>
+			<put-item name="body" file="/repository/aim/view/addPledge.jsp"/>			
 		</layout>
 		<layout name="logoutLayout" file="logoutLayout.jsp">
 			<put-item name="logout" module="aim" instance="default" teaser="logout"/>

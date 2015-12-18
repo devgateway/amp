@@ -187,17 +187,17 @@
       <forward name="forward" path="/aim/viewPledgesList.do" redirect="true"/>
     </action>
     <action name="pledgeForm" path="/aim/addPledge" scope="session" type="org.digijava.module.fundingpledges.action.AddPledge">
-      <forward name="forward" path="/showLayout.do?layout=addPledge" />
-      <forward name="added" path="/aim/addPledge.do" redirect="true" />
+      <forward name="forward" path="/showLayout.do?layout=pledgesLayout" />
+      <forward name="added" path="/aim/addPledge.do?layout=pledgesLayout" redirect="true" />
     </action>
     <action name="pledgeForm" path="/aim/addFundingPledgeDetail" scope="session" type="org.digijava.module.fundingpledges.action.AddFundingPledgeDetail">
-      <forward name="forward" path="/aim/addPledge.do" redirect="true"/>
+      <forward name="forward" path="/aim/addPledge.do?layout=pledgesLayout" redirect="true"/>
     </action>
     <action name="pledgeForm" path="/aim/removePledgeLocation" scope="session" type="org.digijava.module.fundingpledges.action.RemovePledgeLocation">
-      <forward name="forward" path="/aim/addPledge.do" redirect="true"/>
+      <forward name="forward" path="/aim/addPledge.do?layout=pledgesLayout" redirect="true"/>
     </action>
      <action name="pledgeForm" path="/aim/pledgeLocationSelected" scope="session" type="org.digijava.module.fundingpledges.action.PledgeLocationSelected">
-      <forward name="forward" path="/aim/addPledge.do" redirect="true"/>
+      <forward name="forward" path="/aim/addPledge.do?layout=pledgesLayout" redirect="true"/>
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="pledgeForm" path="/aim/selectPledgeLocation" scope="session" type="org.digijava.module.fundingpledges.action.SelectPledgeLocation">
@@ -206,16 +206,16 @@
     </action>
     <action name="pledgeForm" path="/aim/selectPledgeProgram" scope="session" type="org.digijava.module.fundingpledges.action.SelectPledgeProgram" validate="false">
       <forward name="forward" path="/showLayout.do?layout=selectPledgeProgram" />
-      <forward name="added" path="/aim/addPledge.do" />
+      <forward name="added" path="/aim/addPledge.do?layout=pledgesLayout" />
     </action>
     <action name="pledgeForm" path="/aim/removePledgeProgram" scope="session" type="org.digijava.module.fundingpledges.action.RemovePledgeProgram">
-      <forward name="forward" path="/aim/addPledge.do" redirect="true"/>
+      <forward name="forward" path="/aim/addPledge.do?layout=pledgesLayout" redirect="true"/>
     </action>
     <action name="pledgeForm" path="/aim/removePledgeSector" scope="session" type="org.digijava.module.fundingpledges.action.RemovePledgeSector">
-      <forward name="forward" path="/aim/addPledge.do" redirect="true"/>
+      <forward name="forward" path="/aim/addPledge.do?layout=pledgesLayout" redirect="true"/>
     </action>
      <action name="pledgeForm" path="/aim/savePledge" scope="session" type="org.digijava.module.fundingpledges.action.SavePledge">
-      <forward name="success" path="/aim/addPledge.do" redirect="true"/>
+      <forward name="success" path="/aim/addPledge.do?layout=pledgesLayout" redirect="true"/>
       <forward name="forward" path="/aim/viewPledgesList.do" redirect="true"/>
     </action>
     <action name="viewPledgesForm" path="/aim/viewPledgesList" scope="request" type="org.digijava.module.fundingpledges.action.ShowPledgesList">

@@ -299,6 +299,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			contents = contents.replaceAll("@@undefined_amount@@", MoConstants.UNDEFINED_AMOUNT_STR);
 			contents = contents.replaceAll("@@transaction_type_gap@@", MoConstants.TRANSACTION_TYPE_GAP);
 			contents = updatePledgeContacts(contents);
+			contents = configurePledgeDetailDates(contents);
 			expandedSchema = contents;
 			//System.err.println("the expanded schema is: " + expandedSchema);
 		}
@@ -720,5 +721,22 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			}
 		}
 		return false;
+	}
+	
+	protected String configurePledgeDetailDates(String contents) {
+		String template = "SELECT DISTINCT mft_internal.entity_internal_id as pledge_detail_id, @@pledge_detail_date_type@@ "
+					+ " FROM @@mondrian_fact_table@@ mft_internal"
+					+ " WHERE mft_internal.entity_id > 800000000 AND mft_internal.transaction_type=7" 
+					+ " UNION " 
+					+ " SELECT DISTINCT mft_internal.entity_internal_id as pledge_detail_id, '' as @@pledge_detail_date_type@@"
+					+ " FROM mondrian_fact_table mft_internal " 
+					+ " WHERE mft_internal.entity_internal_id not in" 
+						+ " (SELECT DISTINCT mft2.entity_internal_id FROM mondrian_fact_table mft2"
+					    + " WHERE mft2.entity_id > 800000000 AND mft2.transaction_type=7)"; 
+		
+		contents = contents.replace("@@transaction_start_date@@", template.replace("@@pledge_detail_date_type@@", "transaction_start_date"));
+		contents = contents.replace("@@transaction_end_date@@", template.replace("@@pledge_detail_date_type@@", "transaction_end_date"));
+		contents = contents.replace("@@transaction_range@@", template.replace("@@pledge_detail_date_type@@", "transaction_range"));
+		return contents;
 	}
 }

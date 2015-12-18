@@ -936,10 +936,9 @@ ON
 			<Hierarchy hasAll="true" allMemberName="All Pledges Detail Start Date" primaryKey="pledge_detail_id" name="Pledges Detail Start Date">
 				<View alias='v_pledges_detail_start_date'>
 					<SQL dialect="generic">
+						<!-- also keeping empty result for non-pledge transaction for the proper cross joins -->
 						<![CDATA[
-						SELECT DISTINCT mft_internal.entity_internal_id as pledge_detail_id, transaction_start_date
-						FROM @@mondrian_fact_table@@ mft_internal
-						WHERE mft_internal.entity_id > 800000000 AND mft_internal.transaction_type=7 
+						@@transaction_start_date@@
 						]]>
 					</SQL>
 				</View>
@@ -949,9 +948,7 @@ ON
 				<View alias='v_pledges_detail_end_date'>
 					<SQL dialect="generic">
 						<![CDATA[
-						SELECT DISTINCT mft_internal.entity_internal_id as pledge_detail_id, transaction_end_date
-						FROM @@mondrian_fact_table@@ mft_internal
-						WHERE mft_internal.entity_id > 800000000 AND mft_internal.transaction_type=7 
+						@@transaction_end_date@@
 						]]>
 					</SQL>
 				</View>
@@ -961,9 +958,7 @@ ON
 			<View alias='v_pledges_detail_date_range'>
 					<SQL dialect="generic">
 						<![CDATA[
-						SELECT DISTINCT mft_internal.entity_internal_id as pledge_detail_id, transaction_range
-						FROM @@mondrian_fact_table@@ mft_internal
-						WHERE mft_internal.entity_id > 800000000 AND mft_internal.transaction_type=7 
+						@@transaction_range@@
 						]]>
 					</SQL>
 				</View>

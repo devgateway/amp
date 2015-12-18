@@ -955,11 +955,11 @@ private EtlResult execute() throws Exception {
 	 * @param tableName
 	 * @throws SQLException
 	 */
-	protected void runEtlOnTable(String query, String tableName, boolean forceIncremental) throws SQLException {
+	protected void runEtlOnTable(String query, Set<Long> ids, String tableName, boolean forceIncremental) throws SQLException {
 		try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
 			// Map<activityId, percentages_on_sector_scheme
 			Map<Long, PercentagesDistribution> secs = PercentagesDistribution.readInput(rsi.rs);
-			serializeETLTable(secs, tableName, false, forceIncremental);
+			serializeETLTable(secs, ids, tableName, false, forceIncremental);
 		}
 	}
 
@@ -972,13 +972,13 @@ private EtlResult execute() throws Exception {
 			return;
 		//logger.warn("generating orgs ETL tables...");
 		String activitiesCondition = etlConfig.activityIdsIn("amp_activity_id");
-		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_executing_agency WHERE (%s)", activitiesCondition), "etl_executing_agencies", false);
-		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_beneficiary_agency WHERE (%s)", activitiesCondition), "etl_beneficiary_agencies", false);
-		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_implementing_agency WHERE (%s)", activitiesCondition), "etl_implementing_agencies", false);
-		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_responsible_organisation WHERE (%s)", activitiesCondition), "etl_responsible_agencies", false);
-		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_contracting_agency WHERE (%s)", activitiesCondition), "etl_contracting_agencies", false);
-		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_regional_group WHERE (%s)", activitiesCondition), "etl_regional_groups", false);
-		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_sector_group WHERE (%s)", activitiesCondition), "etl_sector_groups", false);
+		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_executing_agency WHERE (%s)", activitiesCondition), etlConfig.activityIds, "etl_executing_agencies", false);
+		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_beneficiary_agency WHERE (%s)", activitiesCondition), etlConfig.activityIds, "etl_beneficiary_agencies", false);
+		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_implementing_agency WHERE (%s)", activitiesCondition), etlConfig.activityIds, "etl_implementing_agencies", false);
+		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_responsible_organisation WHERE (%s)", activitiesCondition), etlConfig.activityIds, "etl_responsible_agencies", false);
+		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_contracting_agency WHERE (%s)", activitiesCondition), etlConfig.activityIds, "etl_contracting_agencies", false);
+		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_regional_group WHERE (%s)", activitiesCondition), etlConfig.activityIds, "etl_regional_groups", false);
+		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_sector_group WHERE (%s)", activitiesCondition), etlConfig.activityIds, "etl_sector_groups", false);
 	}
 	
 	/**
@@ -1014,11 +1014,11 @@ private EtlResult execute() throws Exception {
 		//logger.warn("generating location ETL tables...");
 		String activitiesCondition = etlConfig.activityIdsIn("aal.amp_activity_id");
 		String query = String.format("select aal.amp_activity_id, acvl.id, aal.location_percentage from amp_activity_location aal, amp_category_value_location acvl, amp_location al WHERE (%s) AND (aal.amp_location_id = al.amp_location_id) AND (al.location_id = acvl.id)", activitiesCondition);
-		runEtlOnTable(query, "etl_locations", false);
+		runEtlOnTable(query, etlConfig.activityIds, "etl_locations", false);
 		
 		String pledgesCondition = etlConfig.pledgeIdsIn("pledge_id");
 		String pledgesQuery = String.format("select pledge_id + %d AS amp_activity_id, location_id, location_percentage from amp_funding_pledges_location WHERE (%s)", PLEDGE_ID_ADDER, pledgesCondition);
-		runEtlOnTable(pledgesQuery, "etl_locations", true);		
+		runEtlOnTable(pledgesQuery, etlConfig.pledgeIds, "etl_locations", true);		
 	}
 	
 	protected void generateProgramsEtlTables(String schemeName) throws SQLException {
@@ -1026,11 +1026,11 @@ private EtlResult execute() throws Exception {
 			return;
 		String activitiesCondition = etlConfig.activityIdsIn("aap.amp_activity_id");
 		String query = String.format("select aap.amp_activity_id, aap.amp_program_id, aap.program_percentage FROM amp_activity_program aap, v_mondrian_programs vmp WHERE (%s) AND (aap.amp_program_id = vmp.amp_theme_id) AND (vmp.program_setting_name = '%s')", activitiesCondition, schemeName);
-		runEtlOnTable(query, "etl_activity_program_" + schemeName.replace(' ', '_').toLowerCase(), false);
+		runEtlOnTable(query, etlConfig.activityIds, "etl_activity_program_" + schemeName.replace(' ', '_').toLowerCase(), false);
 		
 		String pledgesCondition = etlConfig.pledgeIdsIn("afpp.pledge_id");
 		String pledgesQuery = String.format("select afpp.pledge_id + %d AS amp_activity_id, afpp.amp_program_id, afpp.program_percentage FROM amp_funding_pledges_program afpp, v_mondrian_programs vmp WHERE (%s) AND (afpp.amp_program_id = vmp.amp_theme_id) AND (vmp.program_setting_name = '%s')", PLEDGE_ID_ADDER, pledgesCondition, schemeName);
-		runEtlOnTable(pledgesQuery, "etl_activity_program_" + schemeName.replace(' ', '_').toLowerCase(), true);
+		runEtlOnTable(pledgesQuery, etlConfig.pledgeIds, "etl_activity_program_" + schemeName.replace(' ', '_').toLowerCase(), true);
 	}
 	
 	protected void generateSectorsEtlTables(String schemeName) throws SQLException {
@@ -1038,11 +1038,11 @@ private EtlResult execute() throws Exception {
 			return;
 		String activitiesCondition = etlConfig.activityIdsIn("aas.amp_activity_id");
 		String query = String.format("select aas.amp_activity_id, aas.amp_sector_id, aas.sector_percentage from amp_activity_sector aas, v_mondrian_sectors vms WHERE (%s) AND (aas.amp_sector_id = vms.amp_sector_id) AND (vms.typename='%s')", activitiesCondition, schemeName);
-		runEtlOnTable(query, "etl_activity_sector_" + schemeName.toLowerCase(), false);
+		runEtlOnTable(query, etlConfig.activityIds, "etl_activity_sector_" + schemeName.toLowerCase(), false);
 		
 		String pledgesCondition = etlConfig.pledgeIdsIn("afps.pledge_id");
 		String pledgesQuery = String.format("select afps.pledge_id + %d AS amp_activity_id, afps.amp_sector_id, afps.sector_percentage from amp_funding_pledges_sector afps, v_mondrian_sectors vms WHERE (%s) AND (afps.amp_sector_id = vms.amp_sector_id) AND (vms.typename='%s')", PLEDGE_ID_ADDER, pledgesCondition, schemeName);
-		runEtlOnTable(pledgesQuery, "etl_activity_sector_" + schemeName.toLowerCase(), true);
+		runEtlOnTable(pledgesQuery, etlConfig.pledgeIds, "etl_activity_sector_" + schemeName.toLowerCase(), true);
 	}
 	
 	/**
@@ -1053,7 +1053,7 @@ private EtlResult execute() throws Exception {
 	 * @param tableName
 	 * @throws SQLException
 	 */
-	protected void serializeETLTable(Map<Long, PercentagesDistribution> percs, String tableName, boolean createIndices, boolean forceIncremental) throws SQLException {
+	protected void serializeETLTable(Map<Long, PercentagesDistribution> percs, Set<Long> ids, String tableName, boolean createIndices, boolean forceIncremental) throws SQLException {
 		boolean recreateTable = etlConfig.fullEtl && (!forceIncremental);
 		
 		if (recreateTable) {
@@ -1061,6 +1061,9 @@ private EtlResult execute() throws Exception {
 			monetConn.executeQuery("CREATE TABLE " + tableName + " (act_id integer, ent_id integer, percentage double)");
 		} else {
 			monetConn.executeQuery("DELETE FROM " + tableName + " WHERE act_id IN (" + Util.toCSStringForIN(percs.keySet()) + ")");
+			Set<Long> leftIds = new HashSet<>(ids);
+			leftIds.removeAll(percs.keySet());
+			monetConn.executeQuery("DELETE FROM " + tableName + " WHERE act_id IN (" + Util.toCSStringForIN(leftIds) + ")");
 		}
 				
 		List<List<Object>> entries = new ArrayList<>();

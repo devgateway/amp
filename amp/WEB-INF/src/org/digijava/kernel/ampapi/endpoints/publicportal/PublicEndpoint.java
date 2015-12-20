@@ -58,4 +58,17 @@ public class PublicEndpoint {
 			@QueryParam("months") Integer months,@DefaultValue("1") @QueryParam("fundingType") Integer fundingType) {
 		return PublicPortalService.getDonorFunding(config, count, months,fundingType);
 	}	
+	
+	@POST
+	@Path("/activitiesPledges")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = false, id = "activitiesPledges")
+	/**
+	 * Retrieves the count for activities that have been at least linked 
+	 * to one pledge
+	 * @return JsonBean object with results
+	 */
+	public JsonBean getActivitiesPledgesCount(JsonBean config) {
+		return PublicPortalService.getActivitiesPledgesCount(config);
+	}		
 }

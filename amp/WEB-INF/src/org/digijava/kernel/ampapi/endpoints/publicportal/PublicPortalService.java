@@ -1,7 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.publicportal;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -20,20 +19,17 @@ import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.ActivityType;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -250,6 +246,44 @@ public class PublicPortalService {
 			result.set("Total " + measureName, total);
 		}
 		result.set("count", count == null ? 0 : count);
+	}
+
+	public static JsonBean getActivitiesPledgesCount(JsonBean config) {
+		JsonBean activitiesPledgesCount = new JsonBean();
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_activitiesPledgesCount",
+				ArConstants.DONOR_TYPE);
+		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
+		spec.addColumn(new ReportColumn(ColumnConstants.RELATED_PLEDGES));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
+
+		FilterUtils.applyFilterRules(config, spec, null);
+		spec.setCalculateColumnTotals(true);
+		spec.setCalculateRowTotals(true);
+		spec.setDisplayEmptyFundingRows(true);
+
+		GeneratedReport report = EndpointUtils.runReport(spec);
+		int count=0;
+		
+		if (report != null) {
+			for (ReportArea reportArea : report.reportContents.getChildren()) {
+				Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
+				Set<ReportOutputColumn> col = row.keySet();
+
+				for (ReportOutputColumn reportOutputColumn : col) {
+					String columnValue = row.get(reportOutputColumn).displayedValue.toString();
+					//For now we don't check for RELATED_PLEDGES name since its returning null
+					//will change it when AMP-21923 is fixed 
+					if (reportOutputColumn.originalColumnName==null ) {
+						if(columnValue!=null && !columnValue.equals("")){
+							count++;
+						}
+					}
+				}
+
+			}
+		}
+		activitiesPledgesCount.set("ActivitiesWithPledgesCount", count);
+		return activitiesPledgesCount;
 	}
 	
 } 

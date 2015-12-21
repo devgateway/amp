@@ -863,7 +863,7 @@ ON
 		<DimensionUsage name="Primary Program" source="AMP Program" foreignKey="primary_program_id" typeName="Primary Program" />
 		<DimensionUsage name="Secondary Program" source="AMP Program" foreignKey="secondary_program_id" typeName="Secondary Program" />
 		<DimensionUsage name="Tertiary Program" source="AMP Program" foreignKey="tertiary_program_id" typeName="Tertiary Program" />
-		<DimensionUsage name="National Objectives" source="AMP Program" foreignKey="national_objectives_program_id" typeName="National Planning Objective" />
+		<DimensionUsage name="National Objectives" source="AMP Program" foreignKey="national_objectives_program_id" typeName="National Plan Objective" />
 
 		<DimensionUsage name="Pledges Primary Program" source="AMP Program" foreignKey="primary_program_id" typeName="Primary Program" />
 		<DimensionUsage name="Pledges Secondary Program" source="AMP Program" foreignKey="secondary_program_id" typeName="Secondary Program" />

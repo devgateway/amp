@@ -273,7 +273,8 @@ public class CCExchangeRate {
 	 * @param calendar the fiscal calendar for which Constant Currency rates must be updated
 	 *                 or null if all constant currencies must be updated 
 	 */
-	public static void regenerateConstantCurrenciesExchangeRates(boolean calledFromQuartzJob, AmpFiscalCalendar cal) {
+	public static synchronized void regenerateConstantCurrenciesExchangeRates(boolean calledFromQuartzJob, 
+			AmpFiscalCalendar cal) {
 		CCExchangeRate ccER = new CCExchangeRate(CurrencyInflationUtil.getInflationRates());
 		// limit the constant currencies to regenerate to calendar if specified
 		List<ConstantCurrency> ccs = cal == null ? CurrencyInflationUtil.getAllConstantCurrencies() :
@@ -295,6 +296,7 @@ public class CCExchangeRate {
 			for (AmpCurrencyRate acr: newRates) {
 				PersistenceManager.getSession().save(acr);
 			}
+			PersistenceManager.getSession().flush();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw new RuntimeException(e);

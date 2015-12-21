@@ -16,6 +16,8 @@ export function obj2arr(obj){
   return Object.keys(obj).map(key => obj[key]);
 }
 
+export var identity = whatever => whatever
+
 export function fetchJson(url) {
   return fetch(url, {credentials: 'same-origin'}).then(callFunc('json'))
 }

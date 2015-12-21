@@ -119,6 +119,10 @@ export default class Model{
     , this);
   }
 
+  head(){
+    return this.entries()[0];
+  }
+
   pop(){
     return this.entries().pop();
   }

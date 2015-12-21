@@ -7,13 +7,15 @@ import {ensureArray} from "amp/tools";
 
 export {createAction as actions}
 
-export function view(cb){
-  return class extends View{
+export function view(cb, name = "Unnamed"){
+  var view = class extends View{
     render(){
       var {model, actions} = this.props;
       return cb(model, actions);
     }
   }
+  view.displayName = name;
+  return view;
 }
 
 class View extends React.Component {

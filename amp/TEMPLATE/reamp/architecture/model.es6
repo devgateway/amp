@@ -25,10 +25,8 @@ export default class Model{
   set(key, val){
     if(this.get(key) === val) return this;
     var clone = shallowCopy(this.__data);
-    return new this.constructor({
-      ...clone,
-      [key]: val
-    });
+    clone[key] = val;
+    return new this.constructor(clone);
   }
 
   sortKeys(){
@@ -48,7 +46,7 @@ export default class Model{
     return this.set(key, cb(this.get(key)));
   }
 
-  getIn(path:Array<string>):Model{
+  getIn(path:Array<string>){
     return path.reduce((model, key) => model.get(key), this);
   }
 
@@ -60,6 +58,11 @@ export default class Model{
   unsetIn(path:Array<string>):Model{
     var head = path[0], tail = path.slice(1);
     return !tail.length ? this.unset(head) : this.update(head, model => model.unsetIn(tail));
+  }
+
+  updateIn(path:Array<string>, cb):Model{
+    var head = path[0], tail = path.slice(1);
+    return !tail.length ? this.update(head, cb) : this.update(head, model => model.updateIn(tail, cb));
   }
 
   keys():Array<string>{
@@ -80,8 +83,44 @@ export default class Model{
     return this.keys().map(this.get.bind(this));
   }
 
-  map(...args){
+  find(cb){
+    return this.entries().find(cb);
+  }
+
+  filterEntries(cb){
+    return new this.constructor(this.entries().filter(cb));
+  }
+
+  filter(cb){
+    return this.keys().reduce(
+      (result, key) => cb(this.get(key)) ? result : result.unset(key)
+    , this)
+  }
+
+  reduce(cb, maybeInitial){
+    return this.entries().reduce(cb, maybeInitial);
+  }
+
+  size(){
+    return this.entries().length;
+  }
+
+  sort(cb){
+    return new this.constructor(this.entries().sort(cb));
+  }
+
+  mapEntries(...args){
     return this.entries().map(...args);
+  }
+
+  map(cb){
+    return this.keys().reduce(
+      (result, key) => result.set(key, cb(this.get(key), key))
+    , this);
+  }
+
+  pop(){
+    return this.entries().pop();
   }
 
   some(...args){

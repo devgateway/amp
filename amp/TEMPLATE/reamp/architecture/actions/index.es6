@@ -4,12 +4,15 @@ var makeTuples = (a, b) => a.map((val, key) => [val, b[key]]);
 
 var validateType = ([type, param]) => "string" == typeof type ? type == typeof param : param instanceof type;
 
-//var getOffendingParam = (typles, index = 1) =>
+var getOffendingParam = ([tuple, ...tuples], index = 1) =>
+    validateType(tuple) ?
+        getOffendingParam(tuples, index + 1) :
+        [index, tuple[1], tuple[0]];
 
 var validateParams = (paramTypes, params) => {
   if(!makeTuples(paramTypes, params).every(validateType)){
-    var [index, paramName, paramType] = getOffendingParam(makeTuples(paramTypes, params));
-    throw new Error("Invalid value for parameter", index, "! Expected", paramName, "to be", paramType, "!");
+    var [index, paramValue, paramType] = getOffendingParam(makeTuples(paramTypes, params));
+    console.error("Invalid value for parameter", index, "! Expected", paramValue, "to be", paramType, "!");
   }
 };
 

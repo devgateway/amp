@@ -71,7 +71,7 @@ function contentblock_cbreference_content_type_render($subtype, $conf, $panel_ar
         $block->content['#prefix'] = '<div class="empty-contentblock clearfix">';
         $block->content['#suffix'] = '</div>';
       }
-      elseif ($block->delta == 'totalactivities') {
+      elseif ($block->delta == 'totalactivities' || $block->delta == 'totalpledges') {
         $message = t('You have not configured this block. Click !here to go to the block settings page to edit content.', array(
           '!here' => l(t('here'), 'admin/settings/content-sections/' . $conf['machine_name']),
         ));
@@ -110,6 +110,7 @@ function contentblock_cbreference_content_type_render($subtype, $conf, $panel_ar
 
   module_load_include('inc', 'contentblock', 'contentblock.cbreference');
   $function = 'contentblock_cbreference_render__' . $entity->machine_name;
+
   if (!empty($cbreference_info['is section'])) {
    $function = 'contentblock_cbreference_render__section';
   }

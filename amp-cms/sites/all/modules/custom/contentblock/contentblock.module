@@ -158,7 +158,7 @@ function contentblock_get_types() {
 }
 
 /**
- * Returns a list of question types.
+ * Returns a list of fixed contentblocks types.
  */
 function contentblock_get_fixed_types($type = NULL) {
   $items = array();
@@ -189,6 +189,14 @@ function contentblock_get_fixed_types($type = NULL) {
   $items['totalactivities'] = array(
     'title' => t('Total Activities'),
     'description' => t('Will display the total commitments, disbursements and the total number of activities in system.'),
+    'action label' => t('Edit'),
+    'available_fields' => array(
+    ),
+  );
+
+  $items['totalpledges'] = array(
+    'title' => t('Total Pledges'),
+    'description' => t('Will display the total pledges and pledge-related total commitments, disbursements and the total number of activities in system.'),
     'action label' => t('Edit'),
     'available_fields' => array(
     ),

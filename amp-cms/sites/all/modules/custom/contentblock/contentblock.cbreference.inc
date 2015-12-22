@@ -267,3 +267,21 @@ function contentblock_cbreference_render__totalactivities($entity, $pane_conf) {
 
   return $view;
 }
+
+/**
+ * Contentblock entity render callback for 'totalpledges'.
+ */
+function contentblock_cbreference_render__totalpledges($entity, $pane_conf) {
+  // Set up preview file information.
+  $view = array();
+
+  // Get the type info.
+  $plugin = contentwidget_get_predefined_widget('totalpledges');
+  if ($function = ctools_plugin_get_function($plugin, 'render callback')) {
+    // Because of entity_translation, the provided $langcode is the original entity language.
+    $entity_langcode = entity_translation_get_existing_language($entity->entityType(), $entity);
+    $view[] = $function($plugin, array(), $entity, $entity_langcode);
+  }
+
+  return $view;
+}

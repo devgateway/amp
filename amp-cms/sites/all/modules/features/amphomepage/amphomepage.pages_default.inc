@@ -125,6 +125,33 @@ function amphomepage_default_page_manager_pages() {
     $display->content['new-8fdf20e8-2571-4d2e-a05d-56219b1d1938'] = $pane;
     $display->panels['col_a1'][1] = 'new-8fdf20e8-2571-4d2e-a05d-56219b1d1938';
     $pane = new stdClass();
+    $pane->pid = 'new-503fe895-350b-40a7-8628-d300f9003906';
+    $pane->panel = 'col_a1';
+    $pane->type = 'cbreference';
+    $pane->subtype = 'cbreference';
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array(
+      'machine_name' => 'totalpledges',
+      'style' => 'normal',
+      'override_title' => 0,
+      'override_title_text' => '',
+    );
+    $pane->cache = array();
+    $pane->style = array(
+      'settings' => NULL,
+    );
+    $pane->css = array(
+      'css_id' => '',
+      'css_class' => 'homepage-totalpledges-block',
+    );
+    $pane->extras = array();
+    $pane->position = 2;
+    $pane->locks = array();
+    $pane->uuid = '503fe895-350b-40a7-8628-d300f9003906';
+    $display->content['new-503fe895-350b-40a7-8628-d300f9003906'] = $pane;
+    $display->panels['col_a1'][2] = 'new-503fe895-350b-40a7-8628-d300f9003906';
+    $pane = new stdClass();
     $pane->pid = 'new-30252a81-9a35-45fd-8c23-63676af590db';
     $pane->panel = 'col_b1';
     $pane->type = 'embeddedform';

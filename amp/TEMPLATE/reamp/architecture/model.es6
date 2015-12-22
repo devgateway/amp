@@ -18,6 +18,10 @@ export default class Model{
     );
   }
 
+  steal(target, ...keys){
+    return keys.reduce((result, key) => result.set(key, target.get(key)), this);
+  }
+
   get(key){
     return this.__data[key];
   }
@@ -125,6 +129,15 @@ export default class Model{
 
   pop(){
     return this.entries().pop();
+  }
+
+  push(value){
+    return this.set(this.size() + 1, value);
+  }
+
+  pushIn(path, value){
+    var head = path[0], tail = path.slice(1);
+    return !head ? this.push(value) : this.update(head, model => model.pushIn(tail, value));
   }
 
   some(...args){

@@ -22,6 +22,18 @@ export function fetchJson(url) {
   return fetch(url, {credentials: 'same-origin'}).then(callFunc('json'))
 }
 
+export function postJson(endpoint, payload){
+  return fetch(endpoint, {
+    method: 'post',
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  })
+}
+
 export function range(from, to){
   var arr = [];
   for(var counter = from; counter <= to; counter++){

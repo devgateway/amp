@@ -25,5 +25,6 @@ public class CurrencyErrors {
 	public static final ApiErrorMessage DUPLICATE_CALENDAR = new ApiErrorMessage(8, "Duplicate input for calendar id");
 	public static final ApiErrorMessage DUPLICATE_CURRENCY = new ApiErrorMessage(9, "Duplicate input for currency");
 	public static final ApiErrorMessage INVALID_CONSTANT_CURRENCIES_SERIES = new ApiErrorMessage(10, "Invalid constant currencies series");
+	public static final ApiErrorMessage DUPLICATE_YEAR = new ApiErrorMessage(11, "Duplicate year entry");
 	
 }

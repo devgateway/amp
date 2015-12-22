@@ -346,28 +346,38 @@ public class CurrencyService {
 	}
 	
 	private static SortedSet<Integer> parseYears(String[] ranges, ApiEMGroup errors) {
-		// will ignore duplicate years
+		// will validate if there are duplicate years
 		SortedSet<Integer> years = new TreeSet<Integer>();
 		for (String range : ranges) {
 			String[] fromTo = range.split("-");
 			if (fromTo.length == 1) { // one year from list
 				Integer year = getYear(fromTo[0], errors);
 				if (year != null) {
-					years.add(year);
+					addYear(year, years, errors);
 				}
 			} else if (fromTo.length == 2) {
 				Integer from = getYear(fromTo[0], errors);
 				Integer to = getYear(fromTo[1], errors);
-				if (from != null && to != null) {
+				if (from != null && to != null && from <= to) {
 					for (int year = from; year <= to; year ++) {
-						years.add(year);
+						addYear(year, years, errors);
 					}
+				} else {
+					errors.addApiErrorMessage(CurrencyErrors.INVALID_PERIOD, range);
 				}
 			} else {
 				errors.addApiErrorMessage(CurrencyErrors.INVALID_PERIOD, range);
 			}
 		}
 		return years;
+	}
+	
+	private static void addYear(Integer year, SortedSet<Integer> years, ApiEMGroup errors) {
+		if (years.contains(year)) {
+			errors.addApiErrorMessage(CurrencyErrors.DUPLICATE_YEAR, String.valueOf(year));
+		} else {
+			years.add(year);
+		}
 	}
 	
 	private static Integer getYear(String value, ApiEMGroup errors) {

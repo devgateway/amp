@@ -19,8 +19,6 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.digijava.module.aim.dbentity.AmpInflationRate;
 
-import clover.com.google.common.collect.Multiset.Entry;
-
 /**
  * Generates Inflation Rates 
  * 
@@ -32,7 +30,7 @@ public class InflationRateGenerator {
 	protected static final long _1_DAY_TO_MS = TimeUnit.DAYS.toMillis(1);
 	protected static final double EPSILON = Math.ulp(0d);
 	// we set it to true during testing, and if ever really needed, can be used in prod
-	public static boolean GENERATE_ALL = false;
+	public static boolean GENERATE_ALL = true;
 	
 	/** temporary cache {@code <from, to, inflation> }*/
 	protected MultiKeyMap tempData = new MultiKeyMap();

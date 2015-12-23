@@ -50,11 +50,7 @@ public class CurrencyInflationUtil {
 	}
 	
 	public static void deleteAllInflationRates() {
-		Session session = PersistenceManager.getRequestDBSession();
-		for (AmpInflationRate air : getInflationRates()) {
-			session.delete(air);
-		}
-		session.flush();
+		PersistenceManager.getSession().createSQLQuery("DELETE FROM amp_inflation_rates WHERE 1=1").executeUpdate();
 	}
 	
 	public static List<AmpCurrency> getConstantAmpCurrencies() {
@@ -161,15 +157,25 @@ public class CurrencyInflationUtil {
 		}
 	}
 	
+	public static List<AmpCurrencyRate> getStandardExchangeRatesToFromBase() {
+		String base = CurrencyUtil.getDefaultCurrency().getCurrencyCode();
+		return PersistenceManager.getSession().createQuery(getStdExchangeRatesQuery() 
+				+ String.format(" and (r.fromCurrencyCode = '%s' or r.toCurrencyCode = '%s')", base, base)).list();
+	}
+	
 	/**
 	 * @return standard currency exchange rates
 	 */
 	public static List<AmpCurrencyRate> getStandardExchangeRates() {
+		return PersistenceManager.getSession().createQuery(getStdExchangeRatesQuery()).list();
+	}
+	
+	private static String getStdExchangeRatesQuery() {
 		String subquery = "select c.currencyCode from " + AmpCurrency.class.getName() + " c "
 				+ "where c.activeFlag = 1 and c.virtual is false";
-		return PersistenceManager.getSession().createQuery(String.format("select r from " 
+		return String.format("select r from " 
 				+ AmpCurrencyRate.class.getName() + " r "
-						+ "where r.fromCurrencyCode in (%s) and r.toCurrencyCode in (%s)", subquery, subquery)).list();
+						+ "where r.fromCurrencyCode in (%s) and r.toCurrencyCode in (%s)", subquery, subquery);
 	}
 	
 }

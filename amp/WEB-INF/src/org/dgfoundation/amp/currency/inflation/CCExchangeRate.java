@@ -275,7 +275,7 @@ public class CCExchangeRate {
 	 */
 	public static synchronized void regenerateConstantCurrenciesExchangeRates(boolean calledFromQuartzJob, 
 			AmpFiscalCalendar cal) {
-		logger.info("generateExchangeRates START");
+		logger.info("regenerateConstantCurrenciesExchangeRates START");
 		CCExchangeRate ccER = new CCExchangeRate(CurrencyInflationUtil.getInflationRates());
 		logger.info("after CurrencyInflationUtil.getInflationRates()");
 		// limit the constant currencies to regenerate to calendar if specified
@@ -293,7 +293,6 @@ public class CCExchangeRate {
 		// cleanup all previous rates for these constant currencies
 		CurrencyUtil.deleteCurrencyRates(ccCodes);
 		logger.info("after deleteing deleting old currency rates");
-		PersistenceManager.getSession().flush();
 		if (!calledFromQuartzJob) {
 			AmpCaching.getInstance().currencyCache.reset();
 		}
@@ -302,8 +301,9 @@ public class CCExchangeRate {
 				PersistenceManager.getSession().save(acr);
 			}
 			logger.info("after saving new currency rates");
-			PersistenceManager.getSession().flush();
-			logger.info("generateExchangeRates END");
+			// commenting out, since it significantly increases the duration
+			//PersistenceManager.getSession().flush();
+			logger.info("regenerateConstantCurrenciesExchangeRates END");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw new RuntimeException(e);

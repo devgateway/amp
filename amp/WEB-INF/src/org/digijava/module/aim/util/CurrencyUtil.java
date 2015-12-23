@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
@@ -793,10 +794,8 @@ public class CurrencyUtil {
 	public static void deleteCurrencyRates(List<String> currencyCode) {
 		if (currencyCode.size() == 0)
 			return;
-		Query q = PersistenceManager.getSession().createQuery("delete from " + AmpCurrencyRate.class.getName() 
-				+ " o where o.fromCurrencyCode in (:currCodes) or o.toCurrencyCode in (:currCodes)");
-		q.setParameterList("currCodes", currencyCode);
-		int deleted = q.executeUpdate();
-		//logger.debug("Deleted" + deleted);
+		String codes = Util.toCSString(currencyCode);
+		PersistenceManager.getSession().createSQLQuery(String.format("DELETE FROM amp_currency_rate r " 
+				+ " WHERE r.from_currency_code in (%s) OR r.to_currency_code in (%s)", codes, codes)).executeUpdate();
 	}
 }

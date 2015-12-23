@@ -25,7 +25,7 @@ export default function (definitions){
     forward(send){
       return Object.keys(definitions).reduce((obj, name) => {
         var definition = definitions[name];
-        var paramTypes = null == definition ? [] : ensureArray(definition);
+        var paramTypes = null == definition ? [] : ensureArray(definition).slice(0);
         if(isUnion(paramTypes)){
           var union = paramTypes.pop();
           obj[name] = (...params) => {

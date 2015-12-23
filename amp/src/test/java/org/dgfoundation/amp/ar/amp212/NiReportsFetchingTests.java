@@ -10,8 +10,8 @@ import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.CategAmountCell;
+import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.junit.Test;
 
@@ -72,7 +72,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 		runNiReportsTestcase(Arrays.asList("with weird currencies"), engine -> {
 			List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetchColumn(engine);
 			assertEquals("[" + 
-				"(actId: 79, 106227.592617 on 2015-10-06 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, " + 
+				"(actId: 79, 87680.841736 on 2015-10-06 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, " + 
 				"(actId: 79, 3632.137149 on 2014-12-16 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, " + 
 				"(actId: 79, 6250 on 2015-10-14 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}" + 
 			"]",
@@ -86,7 +86,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 			List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetchColumn(engine);
 			assertEquals("[" + 
 				"(actId: 79, 80000 on 2015-10-06 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, " + 
-				"(actId: 79, 2735.362487 on 2014-12-16 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, " + 
+				"(actId: 79, 3313.961935 on 2014-12-16 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, " + 
 				"(actId: 79, 10000 on 2015-10-14 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}" + 
 			"]", 
 			cells.toString());
@@ -98,7 +98,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 		runNiReportsTestcase(Arrays.asList("with weird currencies"), rep -> changeReportCurrency(rep, "MDL"), engine -> {
 			List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetchColumn(engine);
 			assertEquals("[" + 
-				"(actId: 79, 2093745.850485 on 2015-10-06 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, " + 
+				"(actId: 79, 1728189.390618 on 2015-10-06 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, " + 
 				"(actId: 79, 50000 on 2014-12-16 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, " + 
 				"(actId: 79, 123187.5 on 2015-10-14 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}" + 
 			"]", 

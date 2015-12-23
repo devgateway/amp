@@ -1,14 +1,11 @@
 package org.dgfoundation.amp.nireports.schema;
 
 import java.util.Map;
-import java.util.Optional;
 
 import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.Cell;
-import org.dgfoundation.amp.nireports.NiCurrency;
 import org.dgfoundation.amp.nireports.NiFilters;
-import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.SchemaSpecificScratchpad;
 

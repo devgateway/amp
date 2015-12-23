@@ -19,7 +19,11 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_donor_groups AS SELECT a.amp_activity_id, b.org_grp_name AS name, b.amp_org_grp_id FROM amp_funding a, amp_organisation c, amp_org_group b WHERE ((a.amp_donor_org_id = c.amp_org_id) AND (c.org_grp_id = b.amp_org_grp_id)) ORDER BY a.amp_activity_id;;;
+			    	CREATE OR REPLACE VIEW v_donor_groups AS
+			    		SELECT vd.amp_activity_id, orggroup.org_grp_name AS name, orggroup.amp_org_grp_id FROM 
+							v_donors vd 
+								JOIN amp_organisation org ON org.amp_org_id = vd.amp_donor_org_id
+								JOIN amp_org_group orggroup ON orggroup.amp_org_grp_id = org.org_grp_id;
         		</lang>
 		</script>
 	</apply>

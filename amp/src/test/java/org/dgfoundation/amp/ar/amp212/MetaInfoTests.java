@@ -17,7 +17,7 @@ import org.junit.Test;
 
 /**
  * 
- * testcases for graph algorithms
+ * testcases for metadata
  * @author Constantin Dolghier
  *
  */

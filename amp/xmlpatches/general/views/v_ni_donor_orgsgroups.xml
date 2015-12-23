@@ -2,8 +2,8 @@
 <tns:patch closeOnSuccess="false" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-	<jira>AMP-21831</jira>
-	<keyword>NiReports</keyword>
+	<jira>AMP-21453</jira>
+	<keyword>Views</keyword>
 	<author>Dolghier Constantin</author>
 	<description>recreate view, this will always be the last version of the view</description>
 	<trigger type="all">
@@ -17,18 +17,16 @@
 		</condition>
 	</trigger> 
 	<apply>
-		<script>
+		<script> <!-- v_donors: all donors which are mentioned in amp_funding with:
+		  - a src-role of DN 
+		     OR
+		  - containing amp_funding_details with an adjustment_type::category_class:key of "SSC_adjustment_type"   
+		   -->
 			<lang delimiter=";" type="postgres">
-				DROP VIEW IF EXISTS v_ni_orgs_dimension CASCADE;
-    			CREATE OR REPLACE VIEW v_ni_orgs_dimension AS 
-					SELECT org.amp_org_id, org.name AS org_name, org.org_code, 
-						grp.amp_org_grp_id AS amp_org_grp_id, grp.org_grp_name AS org_grp_name, 
-						tp.amp_org_type_id AS amp_org_type_id, tp.org_type AS org_type_name, tp.org_type_code,
-						org.acronym AS org_acronym 
-						FROM amp_organisation org 
-							LEFT JOIN amp_org_group grp ON org.org_grp_id = grp.amp_org_grp_id
-							LEFT JOIN amp_org_type tp ON grp.org_type = tp.amp_org_type_id
-        	</lang>
+				CREATE OR REPLACE VIEW v_ni_donor_orgsgroups AS 
+					SELECT d.amp_activity_id, orgs.org_grp_name AS org_grp_name, orgs.org_grp_id AS org_grp_id
+						FROM v_ni_donor_orgs d JOIN v_ni_all_orgs_dimension orgs ON orgs.org_id = d.org_id;
+			</lang>
 		</script>
 	</apply>
 </tns:patch>

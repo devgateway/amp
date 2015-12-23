@@ -5,13 +5,16 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.SqlSourcedColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.digijava.kernel.request.TLSUtils;
@@ -22,12 +25,12 @@ import org.digijava.kernel.request.TLSUtils;
  * @author Dolghier Constantin
  *
  */
-public abstract class AmpSqlSourcedColumn<K extends Cell> extends SqlSourcedColumn<K> {
+public abstract class AmpSqlSourcedColumn<K extends Cell> extends PsqlSourcedColumn<K> {
 
 	public AmpSqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, Map<String, String> fundingViewFilter, String viewName, String mainColumn) {
 		super(columnName, levelColumn, fundingViewFilter, viewName, mainColumn);
 	}
-
+	
 	@Override
 	public final List<K> fetchColumn(NiReportsEngine engine) {
 		String locale = TLSUtils.getEffectiveLangCode();

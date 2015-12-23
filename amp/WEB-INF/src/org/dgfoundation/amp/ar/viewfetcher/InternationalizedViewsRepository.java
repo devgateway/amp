@@ -497,12 +497,22 @@ public class InternationalizedViewsRepository {
 				addViewDef(this, new I18nViewDescription("v_minorities").
 						addDgEditorColumnDef("ebody", "locale"));
 
-				addViewDef(this, new I18nViewDescription("v_ni_orgs_dimension")
-						.addColumnDef(new I18nViewColumnDescription("org_name", "amp_org_id", AmpOrganisation.class, "name"))
-						.addColumnDef(new I18nViewColumnDescription("org_grp_name", "amp_org_grp_id", AmpOrgGroup.class, "orgGrpName"))
-						.addColumnDef(new I18nViewColumnDescription("org_type_name", "amp_org_type_id", AmpOrgType.class, "orgType"))
+				addViewDef(this, new I18nViewDescription("v_ni_all_orgs_dimension")
+						.addColumnDef(new I18nViewColumnDescription("org_name", "org_id", AmpOrganisation.class, "name"))
+						.addColumnDef(new I18nViewColumnDescription("org_grp_name", "org_grp_id", AmpOrgGroup.class, "orgGrpName"))
+						.addColumnDef(new I18nViewColumnDescription("org_type_name", "org_type_id", AmpOrgType.class, "orgType"))
 						);
 				buildProgramsMultilingualData();
+				
+				addViewDef(this, new I18nViewDescription("v_ni_donor_orgs")
+					.addColumnDef(new I18nViewColumnDescription("org_name", "org_id", AmpOrganisation.class, "name")));
+				
+				addViewDef(this, new I18nViewDescription("v_ni_donor_orgsgroups")
+					.addColumnDef(new I18nViewColumnDescription("org_grp_name", "org_grp_id", AmpOrgGroup.class, "orgGrpName")));
+
+				addViewDef(this, new I18nViewDescription("v_ni_donor_orgstypes")
+				.addColumnDef(new I18nViewColumnDescription("org_type_name", "org_type_id", AmpOrgType.class, "orgType")));				
+				
 			}
 			
 			private void buildProgramsMultilingualData(){

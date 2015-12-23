@@ -55,10 +55,7 @@ public class NiReportsEngine {
 	 */
 	protected Map<NiDimension, DimensionSnapshot> usedDimensions = new HashMap<>();
 	
-	/**
-	 * the currency code used to render the report
-	 */
-	//public final NiCurrency usedCurrency;
+
 	public InclusiveTimer timer;
 	
 	/**

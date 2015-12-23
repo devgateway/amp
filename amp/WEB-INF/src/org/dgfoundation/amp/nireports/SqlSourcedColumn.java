@@ -2,11 +2,13 @@ package org.dgfoundation.amp.nireports;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
@@ -28,13 +30,21 @@ import org.dgfoundation.amp.nireports.schema.NiReportColumn;
  *
  */
 public abstract class SqlSourcedColumn<K extends Cell> extends NiReportColumn<K> {
+	
 	public final String viewName;
 	public final String mainColumn;
+
+	/**
+	 * never null, but might be empty
+	 */
+	public final Map<String, String> filtering;
+
 	
-	public SqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, Map<String, String> fundingViewFilter, String viewName, String mainColumn) {
-		super(columnName, levelColumn, fundingViewFilter);
+	public SqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, Map<String, String> filtering, String viewName, String mainColumn) {
+		super(columnName, levelColumn);
 		this.viewName = viewName;
 		this.mainColumn = mainColumn;
+		this.filtering = filtering == null ? Collections.emptyMap() : Collections.unmodifiableMap(new TreeMap<>(filtering));
 	}
 		
 	/**

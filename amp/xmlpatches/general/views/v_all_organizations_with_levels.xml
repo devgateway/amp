@@ -2,9 +2,9 @@
 <tns:patch closeOnSuccess="false" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-	<jira>AMP-18143</jira>
+	<jira>AMP-17836</jira>
 	<keyword>Views</keyword>
-	<author>cdolghier</author>
+	<author>Constantin Dolghier</author>
 	<description>recreate view, this will always be the last version of the view</description>
 	<trigger type="all">
 		<condition type="custom">
@@ -19,16 +19,15 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				DROP VIEW IF EXISTS v_secondary_sub_sectors;
-			   	CREATE OR REPLACE VIEW v_secondary_sub_sectors AS 
-					SELECT sa.amp_activity_id, rs.name AS sectorname, rs.amp_sector_id AS amp_sector_id, sum(sa.sector_percentage) AS sector_percentage 
-					FROM amp_activity_sector sa
-						JOIN all_sectors_with_levels aswl ON sa.amp_sector_id = aswl.amp_sector_id
-						JOIN amp_sector rs ON rs.amp_sector_id = aswl.id1
-						JOIN amp_classification_config acc ON acc.id = sa.classification_config_id
-					WHERE acc.name = 'Secondary'
-					GROUP BY sa.amp_activity_id, rs.amp_sector_id
-					ORDER BY sa.amp_activity_id;
+				DROP VIEW IF EXISTS v_all_organizations_with_levels;
+			    CREATE OR REPLACE VIEW v_all_organizations_with_levels AS 
+					SELECT org.amp_org_id, org.name AS org_name, org.org_code, 
+						COALESCE(grp.amp_org_grp_id, 999999999) amp_org_grp_id, COALESCE(grp.org_grp_name, 'Undefined') org_grp_name, 
+						COALESCE(tp.amp_org_type_id, 999999999) amp_org_type_id, COALESCE(tp.org_type, 'Undefined') org_type_name, tp.org_type_code,
+						COALESCE(org.acronym, 'Undefined') as org_acronym  
+						FROM amp_organisation org 
+							FULL OUTER JOIN amp_org_group grp ON org.org_grp_id = grp.amp_org_grp_id
+							FULL OUTER JOIN amp_org_type tp ON grp.org_type = tp.amp_org_type_id;
 			</lang>
 		</script>
 	</apply>

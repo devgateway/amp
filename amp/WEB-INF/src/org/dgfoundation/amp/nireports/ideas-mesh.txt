@@ -42,4 +42,3 @@ ADD TESTS FOR:
 	MonetaryAmount
 	NiPrecisionSettings (AmpPrecisionSetting)
 	AmpCurrencyConvertor
-add new entries to amp_currency_rate and update testcases

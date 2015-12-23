@@ -26,7 +26,7 @@
 			    		JOIN amp_activity_program ap ON (a.amp_activity_id = ap.amp_activity_id) 
 			    		JOIN amp_program_settings aps ON (aps.amp_program_settings_id = ap.program_setting) AND (aps.name='Primary Program')
 			    		JOIN amp_theme t ON (t.amp_theme_id = ap.amp_program_id)
-			    		ORDER BY a.amp_activity_id, t.name;;;
+			    		ORDER BY a.amp_activity_id, t.name;
         		</lang>
 		</script>
 	</apply>

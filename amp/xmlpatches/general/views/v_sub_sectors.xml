@@ -25,7 +25,8 @@
 					FROM amp_activity_sector sa
 						JOIN all_sectors_with_levels aswl ON sa.amp_sector_id = aswl.amp_sector_id
 						JOIN amp_sector rs ON rs.amp_sector_id = aswl.id1
-						WHERE aswl.sector_config_name = 'Primary'
+						JOIN amp_classification_config acc ON acc.id = sa.classification_config_id
+					WHERE acc.name = 'Primary'
 					GROUP BY sa.amp_activity_id, rs.amp_sector_id
 					ORDER BY sa.amp_activity_id;
         	</lang>

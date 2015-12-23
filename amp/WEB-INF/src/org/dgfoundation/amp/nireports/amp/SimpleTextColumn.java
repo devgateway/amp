@@ -2,15 +2,11 @@ package org.dgfoundation.amp.nireports.amp;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
 
-import org.dgfoundation.amp.nireports.NiFilters;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.SqlSourcedColumn;
 import org.dgfoundation.amp.nireports.TextCell;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
-import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 
 /**
  * a simple text column which fetches its input from a view which contains 3 or more columns: <br />
@@ -32,8 +28,8 @@ public class SimpleTextColumn extends AmpSqlSourcedColumn<TextCell> {
 	protected TextCell extractCell(NiReportsEngine engine, ResultSet rs) throws SQLException {
 		return new TextCell(rs.getString(2), rs.getLong(1), rs.getLong(3));
 	}
-	
-	public static SimpleTextColumn fromView(String columnName, String viewName) {
-		return new SimpleTextColumn(columnName, null, null, viewName);
+		
+	public static SimpleTextColumn fromView(String columnName, String viewName, NiDimension.LevelColumn levelColumn) {
+		return new SimpleTextColumn(columnName, levelColumn, null, viewName);
 	}
 }

@@ -36,7 +36,7 @@ public class MonetaryAmount implements Comparable<MonetaryAmount> {
 		this.origAmount = origAmount;
 		this.origCurrency = origCurrency;
 		this.date = date;
-		this.precisionSetting = precisionSetting;
+		this.precisionSetting = precisionSetting;		
 	}
 	
 	public MonetaryAmount(BigDecimal amount, NiPrecisionSetting precisionSetting) {

@@ -24,16 +24,10 @@ public abstract class NiReportColumn<K extends Cell> {
 	
 	public final String name;
 	public final Optional<NiDimension.LevelColumn> levelColumn;
-	
-	/**
-	 * never null, but might be empty
-	 */
-	public final Map<String, String> filtering;
-	
-	protected NiReportColumn(String name, NiDimension.LevelColumn levelColumn, Map<String, String> filtering) {
+		
+	protected NiReportColumn(String name, NiDimension.LevelColumn levelColumn) {
 		this.name = name;
 		this.levelColumn = Optional.ofNullable(levelColumn);
-		this.filtering = filtering == null ? Collections.emptyMap() : Collections.unmodifiableMap(new TreeMap<>(filtering));
 	}
 	
 	/**

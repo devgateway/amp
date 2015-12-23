@@ -75,5 +75,24 @@ public abstract class NiDimension {
 			this.instanceName = instanceName;
 			this.level = level;
 		}
+		
+		@Override
+		public boolean equals(Object oth) {
+			if (!(oth instanceof LevelColumn))
+				return false;
+			
+			LevelColumn other = (LevelColumn) oth;
+			if (dimension != other.dimension)
+				return false;
+			if (!instanceName.equals(other.instanceName))
+				return false;
+			
+			return level == other.level; 
+		}
+		
+		@Override
+		public String toString() {
+			return String.format("Dimension: %s of %s, level: %d", instanceName, dimension.name, level);
+		}
 	}
 }

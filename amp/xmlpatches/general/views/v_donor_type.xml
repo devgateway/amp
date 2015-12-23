@@ -19,11 +19,12 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_donor_type AS 
-			    	SELECT f.amp_activity_id, ot.org_type, ot.amp_org_type_id AS org_type_id 
-			    	FROM amp_funding f, amp_organisation o, amp_org_group gr, amp_org_type ot 
-			    	WHERE (((f.amp_donor_org_id = o.amp_org_id) AND (o.org_grp_id = gr.amp_org_grp_id)) AND (ot.amp_org_type_id = gr.org_type) AND (f.source_role_id = (SELECT amp_role_id FROM amp_role WHERE role_code = 'DN' ))) 
-			    	ORDER BY f.amp_activity_id, ot.org_type;;;
+			    	CREATE OR REPLACE VIEW v_donor_type AS
+			    		SELECT vd.amp_activity_id, orgtype.org_type, orgtype.amp_org_type_id AS org_type_id 
+			    			FROM v_donors vd 
+								JOIN amp_organisation org ON org.amp_org_id = vd.amp_donor_org_id
+								JOIN amp_org_group orggroup ON orggroup.amp_org_grp_id = org.org_grp_id
+								JOIN amp_org_type orgtype ON orgtype.amp_org_type_id = orggroup.org_type;
         		</lang>
 		</script>
 	</apply>

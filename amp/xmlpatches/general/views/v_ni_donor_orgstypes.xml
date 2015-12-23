@@ -2,9 +2,9 @@
 <tns:patch closeOnSuccess="false" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-	<jira>AMP-18143</jira>
+	<jira>AMP-21453</jira>
 	<keyword>Views</keyword>
-	<author>cdolghier</author>
+	<author>Dolghier Constantin</author>
 	<description>recreate view, this will always be the last version of the view</description>
 	<trigger type="all">
 		<condition type="custom">
@@ -17,18 +17,15 @@
 		</condition>
 	</trigger> 
 	<apply>
-		<script>
+		<script> <!-- v_donors: all donors which are mentioned in amp_funding with:
+		  - a src-role of DN 
+		     OR
+		  - containing amp_funding_details with an adjustment_type::category_class:key of "SSC_adjustment_type"   
+		   -->
 			<lang delimiter=";" type="postgres">
-				DROP VIEW IF EXISTS v_secondary_sub_sectors;
-			   	CREATE OR REPLACE VIEW v_secondary_sub_sectors AS 
-					SELECT sa.amp_activity_id, rs.name AS sectorname, rs.amp_sector_id AS amp_sector_id, sum(sa.sector_percentage) AS sector_percentage 
-					FROM amp_activity_sector sa
-						JOIN all_sectors_with_levels aswl ON sa.amp_sector_id = aswl.amp_sector_id
-						JOIN amp_sector rs ON rs.amp_sector_id = aswl.id1
-						JOIN amp_classification_config acc ON acc.id = sa.classification_config_id
-					WHERE acc.name = 'Secondary'
-					GROUP BY sa.amp_activity_id, rs.amp_sector_id
-					ORDER BY sa.amp_activity_id;
+				CREATE OR REPLACE VIEW v_ni_donor_orgstypes AS 
+					SELECT d.amp_activity_id, orgs.org_type_name AS org_type_name, orgs.org_type_id AS org_type_id
+						FROM v_ni_donor_orgs d JOIN v_ni_all_orgs_dimension orgs ON orgs.org_id = d.org_id;
 			</lang>
 		</script>
 	</apply>

@@ -41,7 +41,7 @@ import static org.dgfoundation.amp.nireports.amp.MetaConstants.*;
  * @author Dolghier Constantin
  *
  */
-public class AmpFundingColumn extends SqlSourcedColumn<CategAmountCell> {
+public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 
 	public AmpFundingColumn() {
 		super("Funding", null, getFundingViewFilter(), "v_ni_donor_funding", "amp_activity_id");
@@ -52,7 +52,7 @@ public class AmpFundingColumn extends SqlSourcedColumn<CategAmountCell> {
 		res.put(ColumnConstants.TYPE_OF_ASSISTANCE, "terms_assist_id");
 		res.put(ColumnConstants.FINANCING_INSTRUMENT, "financing_instrument_id");
 		res.put(ColumnConstants.DONOR_AGENCY, "donor_org_id");
-		res.put(ColumnConstants.MODE_OF_PAYMENT, "mode_pf_payment_id");
+		res.put(ColumnConstants.MODE_OF_PAYMENT, "mode_of_payment_id");
 		res.put(ColumnConstants.FUNDING_STATUS, "funding_status_id");
 		res.put(ColumnConstants.DISASTER_RESPONSE_MARKER, "disaster_response_code");
 		return res;

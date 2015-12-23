@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-21453</jira>
+	<keyword>Views</keyword>
+	<author>Dolghier Constantin</author>
+	<description>recreate view, this will always be the last version of the view</description>
+	<trigger type="all">
+		<condition type="custom">
+			<script returnVar="val">
+				<lang type="sql">
+					SELECT settingsvalue FROM amp_global_settings where settingsname='Recreate the views on the next server restart';
+				</lang>
+			</script>
+ 			<test>val.equalsIgnoreCase("true")</test>
+		</condition>
+	</trigger> 
+	<apply>
+		<script> <!-- v_donors: all donors which are mentioned in amp_funding with:
+		  - a src-role of DN 
+		     OR
+		  - containing amp_funding_details with an adjustment_type::category_class:key of "SSC_adjustment_type"   
+		   -->
+			<lang delimiter=";" type="postgres">
+				DROP VIEW IF EXISTS v_ni_donor_orgs CASCADE;
+				CREATE OR REPLACE VIEW v_ni_donor_orgs AS 
+					SELECT f.amp_activity_id, org.name AS org_name, f.amp_donor_org_id AS org_id 
+						FROM amp_funding f JOIN amp_organisation org ON org.amp_org_id = f.amp_donor_org_id
+  						WHERE
+  							(f.source_role_id = (SELECT amp_role.amp_role_id FROM amp_role WHERE amp_role.role_code::text = 'DN'::text)) 
+  								OR 
+  							(f.amp_funding_id IN (
+  								SELECT DISTINCT(amp_funding_id) FROM amp_funding_detail det	WHERE det.adjustment_type IN (SELECT id from amp_category_value 
+  											WHERE amp_category_class_id=(SELECT id FROM amp_category_class WHERE keyname='SSC_adjustment_type'))));
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

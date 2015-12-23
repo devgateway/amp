@@ -73,6 +73,8 @@ public class AllTests_amp212
 			//System.out.println("AMP started up!");
 			TLSUtils.getThreadLocalInstance().setForcedLangCode(SiteUtils.getDefaultSite().getDefaultLanguage().getCode());
 			InternationalizedViewsRepository.i18Models.size(); // force init outside of testcases
+			org.apache.struts.mock.MockHttpServletRequest mockRequest = new org.apache.struts.mock.MockHttpServletRequest(new org.apache.struts.mock.MockHttpSession());
+			TLSUtils.populate(mockRequest);
 		}
 		catch(Exception e) {
 			throw new RuntimeException(e);

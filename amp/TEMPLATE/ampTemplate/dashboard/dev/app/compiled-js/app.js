@@ -410,6 +410,12 @@ function chart(options) {
   if (!options.nvControls) {
     _chart.showControls(false);
   }
+  
+  if(options.stacked){
+	  _chart.multibar.stacked(true); 
+  }else{
+	  _chart.multibar.stacked(false);
+  }
 
   _chart.yAxis
     .tickFormat(options.shortFormatter)
@@ -2584,13 +2590,14 @@ module.exports = BackboneDash.View.extend({
     this.beautifyLegends(this);
   },
 
-  getChartOptions: function() {
+  getChartOptions: function() {	  
     var co = _(_(this.chartOptions).clone() || {}).defaults({
       trimLabels: !this.model.get('big'),
       getTTContent: this.getTTContent,
       clickHandler: this.chartClickHandler,
       width: this.$('.panel-body').width(),
       height: this.$('.panel-body').height()
+      
     });
     return co;
   },
@@ -2638,11 +2645,17 @@ module.exports = BackboneDash.View.extend({
     this.$el[shouldBreak ? 'addClass' : 'removeClass']('clearfix');
   },
 
-  download: function() {
+  download: function() {     
+	var chartOptions = _(this.getChartOptions()).omit('height', 'width');
+	
+	if(this.model.get('view') == 'multibar'){
+	  chartOptions.stacked = this.isStacked();
+	}
+	
     var downloadView = new DownloadView({
       app: this.app,
       model: this.model,
-      chartOptions: _(this.getChartOptions()).omit('height', 'width')
+      chartOptions: chartOptions
     });
     var specialClass = 'dash-download-modal';
     this.app.modal('Download chart', {
@@ -2653,6 +2666,25 @@ module.exports = BackboneDash.View.extend({
     
     // Translate modal popup.	
    	app.translator.translateDOM($("." + specialClass));
+  },
+  
+  isStacked: function(){
+	  var stacked = false;
+	  var groupedLegendTrn = app.translator.translateSync("amp.dashboard:filters-chart-legends-Grouped","Grouped");
+	  var stackedLegendTrn = app.translator.translateSync("amp.dashboard:filters-chart-legends-Stacked","Stacked");	  
+	  $(this.$el).find(".nv-series").each(function(i, elem) {
+               //TODO: investigate why $(elem).hasClass does not work
+		       if($(elem).attr('class').indexOf('disabled') == -1){		    	 
+		    	 var key = $(elem).find('.nv-legend-text').text();	
+		    	 if(key == groupedLegendTrn){
+		    		 stacked = false;  
+		    	 }else if(key == stackedLegendTrn){
+		    		 stacked = true;  
+		    	 }
+		     }	 
+	 });
+	 
+	 return stacked;
   },
   
   //AMP-18630: Here we setup a simple tooltip for each legend element.
@@ -2819,8 +2851,9 @@ module.exports = BackboneDash.View.extend({
     this.dashChartOptions = _({}).extend(options.chartOptions, {
       height: 450,  // sync with css!!!
       width: 970,	// sync with css!!!
-      trimLabels: false
-    });
+      trimLabels: false,
+      nvControls: false      
+    });    
   },
 
   render: function() {

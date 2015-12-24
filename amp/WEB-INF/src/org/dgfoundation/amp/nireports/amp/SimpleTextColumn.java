@@ -19,17 +19,31 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
  *
  */
 public class SimpleTextColumn extends AmpSqlSourcedColumn<TextCell> {
-	
+		
 	public SimpleTextColumn(String columnName, NiDimension.LevelColumn levelColumn, Map<String, String> fundingViewFilter, String viewName) {
 		super(columnName, levelColumn, fundingViewFilter, viewName, "amp_activity_id");
 	}
 
 	@Override
 	protected TextCell extractCell(NiReportsEngine engine, ResultSet rs) throws SQLException {
-		return new TextCell(rs.getString(2), rs.getLong(1), rs.getLong(3));
+		if (withoutEntity)
+			return new TextCell(rs.getString(2), rs.getLong(1), rs.getLong(1));
+		else
+			return new TextCell(rs.getString(2), rs.getLong(1), rs.getLong(3));
 	}
 		
 	public static SimpleTextColumn fromView(String columnName, String viewName, NiDimension.LevelColumn levelColumn) {
 		return new SimpleTextColumn(columnName, levelColumn, null, viewName);
+	}
+	
+	public static SimpleTextColumn fromViewWithoutEntity(String columnName, String viewName) {
+		return new SimpleTextColumn(columnName, null, null, viewName).withoutEntity();
+	}
+	
+	private boolean withoutEntity = false;
+	
+	private SimpleTextColumn withoutEntity() {
+		this.withoutEntity = true;
+		return this;
 	}
 }

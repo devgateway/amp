@@ -27,8 +27,9 @@ module.exports = BackboneDash.View.extend({
     this.dashChartOptions = _({}).extend(options.chartOptions, {
       height: 450,  // sync with css!!!
       width: 970,	// sync with css!!!
-      trimLabels: false
-    });
+      trimLabels: false,
+      nvControls: false      
+    });    
   },
 
   render: function() {

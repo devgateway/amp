@@ -36,6 +36,12 @@ function chart(options) {
   if (!options.nvControls) {
     _chart.showControls(false);
   }
+  
+  if(options.stacked){
+	  _chart.multibar.stacked(true); 
+  }else{
+	  _chart.multibar.stacked(false);
+  }
 
   _chart.yAxis
     .tickFormat(options.shortFormatter)

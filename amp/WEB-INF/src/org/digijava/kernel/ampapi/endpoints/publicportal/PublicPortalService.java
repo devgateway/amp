@@ -271,9 +271,7 @@ public class PublicPortalService {
 
 				for (ReportOutputColumn reportOutputColumn : col) {
 					String columnValue = row.get(reportOutputColumn).displayedValue.toString();
-					//For now we don't check for RELATED_PLEDGES name since its returning null
-					//will change it when AMP-21923 is fixed 
-					if (reportOutputColumn.originalColumnName==null ) {
+					if (ColumnConstants.RELATED_PLEDGES.equals(reportOutputColumn.originalColumnName)) {
 						if(columnValue!=null && !columnValue.equals("")){
 							count++;
 						}

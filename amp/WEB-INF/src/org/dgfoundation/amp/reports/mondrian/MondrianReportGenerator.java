@@ -60,6 +60,7 @@ import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXAttribute;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXConfig;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXElement;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXFilter;
+import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXLevel;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXTuple;
 import org.digijava.kernel.ampapi.mondrian.util.AmpMondrianSchemaProcessor;
@@ -1038,7 +1039,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		//build the list of available columns
 		if (rowAxis != null && rowAxis.getPositionCount() > 0 ) {
 			for (Member textColumn : rowAxis.getPositions().get(0).getMembers()) {
-				String originalColumnName = MondrianMapping.fromFullNameToColumnName.get(textColumn.getLevel().getUniqueName());
+				String originalColumnName = MondrianMapping.fromFullNameToColumnName.get(getFullLevelName(textColumn));
 				// get description of the measure which could be a column
 				String columnDescription = allMeasureNames.contains(originalColumnName) ? getMeasureDescription(originalColumnName) : null; 
 				
@@ -1104,6 +1105,13 @@ public class MondrianReportGenerator implements ReportExecutor {
 		leafColumns.addAll(this.totalsHeaders); // add totals headers to the leaf headers
 		
 		this.leafHeaders = leafColumns;
+	}
+	
+	private String getFullLevelName(Member textColumn) {
+		MDXLevel mdxLevel = new MDXLevel(textColumn.getDimension().getName(), textColumn.getHierarchy().getCaption(), 
+				textColumn.getLevel().getName());
+		return mdxLevel.getFullName();
+		//return textColumn.getLevel().getUniqueName();
 	}
 	
 	private void refillStack(Deque<List<ReportArea>> stack, int maxSize) {

@@ -1,17 +1,14 @@
 package org.dgfoundation.amp.ar;
 
-import java.util.HashSet;
-import java.util.List;
-
 import org.dgfoundation.amp.testmodels.ColumnReportDataModel;
 import org.dgfoundation.amp.testmodels.GroupColumnModel;
 import org.dgfoundation.amp.testmodels.GroupReportModel;
 import org.dgfoundation.amp.testmodels.SimpleColumnModel;
 import org.dgfoundation.amp.testutils.*;
 
-import org.hibernate.cfg.*;
 
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.NULL_PLACEHOLDER;
+import static org.dgfoundation.amp.testutils.ReportTestingUtils.MUST_BE_EMPTY;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -101,17 +98,20 @@ public class MiscColumnsTests extends ReportsTestCase
 	
 	public void testProjectedProjectCostUSD()
 	{
-		GroupReportModel prop_cost_eur_correct = GroupReportModel.withColumnReports("Proposed-cost-USD",
-				ColumnReportDataModel.withColumns("Proposed-cost-USD", 
-					SimpleColumnModel.withContents("Project Title", "Proposed Project Cost 1 - USD", "Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR", "Proposed Project Cost 2 - EUR"),
-					SimpleColumnModel.withContents("Proposed Project Amount", "Proposed Project Cost 1 - USD", "1 000 000", "Proposed Project Cost 2 - EUR", "3 359 312,01"),
-					GroupColumnModel.withSubColumns("Total Costs",
-							SimpleColumnModel.withContents("Actual Commitments", NULL_PLACEHOLDER),
-							SimpleColumnModel.withContents("Actual Disbursements", NULL_PLACEHOLDER)
-							)
-				));
+		GroupReportModel prop_cost_usd_correct = GroupReportModel.withColumnReports("Proposed-cost-USD",
+				ColumnReportDataModel.withColumns("Proposed-cost-USD",
+						SimpleColumnModel.withContents("Project Title", "Proposed Project Cost 2 - EUR", "Proposed Project Cost 2 - EUR", "Proposed Project Cost 1 - USD", "Proposed Project Cost 1 - USD").setIsPledge(false), 
+						SimpleColumnModel.withContents("Proposed Project Amount", "Proposed Project Cost 2 - EUR", "3 399 510,47", "Proposed Project Cost 1 - USD", "1 000 000").setIsPledge(false), 
+						GroupColumnModel.withSubColumns("Total Costs",
+							SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(false), 
+							SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false)))
+					.withTrailCells(null, "4 399 510,47", "0", "0"))
+				.withTrailCells(null, "4 399 510,47", "0", "0")
+				.withPositionDigest(true,
+					"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1), RHLC Proposed Project Amount: (startRow: 0, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1), RHLC Total Costs: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2))",
+					"(line 1:RHLC Actual Commitments: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1), RHLC Actual Disbursements: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1))");
 		
-		runReportTest("Proposed-cost in USD", "Proposed-cost-USD", new String[] {"Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR"}, prop_cost_eur_correct);
+		runReportTest("Proposed-cost in USD", "Proposed-cost-USD", new String[] {"Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR"}, prop_cost_usd_correct);
 	}
 
 }

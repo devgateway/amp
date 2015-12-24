@@ -60,19 +60,20 @@ public class PledgeReportsTests extends ReportsTestCase
 						SimpleColumnModel.withContents("Pledge Status", "Test pledge 1", "second status", "Heavily used pledge", "default status").setIsPledge(true), 
 						GroupColumnModel.withSubColumns("Funding",
 							GroupColumnModel.withSubColumns("2012",
-								SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1,25", "free text name 2", "1 044 176,71").setIsPledge(true)), 
+								SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1,25", "free text name 2", "1 041 110,52").setIsPledge(true)), 
 							GroupColumnModel.withSubColumns("2013",
 								SimpleColumnModel.withContents("Actual Pledge", "Heavily used pledge", "1 800 000").setIsPledge(true)), 
 							GroupColumnModel.withSubColumns("2014",
 								SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1 033 244,98", "Heavily used pledge", "8 200 000").setIsPledge(true))), 
 						GroupColumnModel.withSubColumns("Total Costs",
-							SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1 033 246,23", "ACVL Pledge Name 2", "938 069,75", "free text name 2", "1 044 176,71", "Heavily used pledge", "10 000 000").setIsPledge(true)))
-					.withTrailCells(null, null, "1 044 177,96", "1 800 000", "9 233 244,98", "13 015 492,69"))
-				.withTrailCells(null, null, "1 044 177,96", "1 800 000", "9 233 244,98", "13 015 492,69")
+							SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1 033 246,23", "ACVL Pledge Name 2", "938 069,75", "free text name 2", "1 041 110,52", "Heavily used pledge", "10 000 000").setIsPledge(true)))
+					.withTrailCells(null, null, "1 041 111,77", "1 800 000", "9 233 244,98", "13 012 426,5"))
+				.withTrailCells(null, null, "1 041 111,77", "1 800 000", "9 233 244,98", "13 012 426,5")
 				.withPositionDigest(true,
 					"(line 0:RHLC Pledges Titles: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Pledge Status: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 3), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 5, colSpan: 1))",
 					"(line 1:RHLC 2012: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1), RHLC 2013: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1), RHLC 2014: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 1))",
 					"(line 2:RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1))");
+		
 		runReportTest("Pledge report with Pledge Status Column", "AMP-16003-flat", new String[] {"irrelevant since this is a pledge report"}, fddr_correct);
 	}
 	
@@ -83,14 +84,14 @@ public class PledgeReportsTests extends ReportsTestCase
 							SimpleColumnModel.withContents("Pledges Titles", "ACVL Pledge Name 2", "ACVL Pledge Name 2", "free text name 2", "free text name 2").setIsPledge(true), 
 							GroupColumnModel.withSubColumns("Funding",
 								GroupColumnModel.withSubColumns("2012",
-									SimpleColumnModel.withContents("Actual Pledge", "free text name 2", "1 044 176,71").setIsPledge(true)), 
+									SimpleColumnModel.withContents("Actual Pledge", "free text name 2", "1 041 110,52").setIsPledge(true)), 
 								GroupColumnModel.withSubColumns("2013",
 									SimpleColumnModel.withContents("Actual Pledge", MUST_BE_EMPTY).setIsPledge(true)), 
 								GroupColumnModel.withSubColumns("2014",
 									SimpleColumnModel.withContents("Actual Pledge", MUST_BE_EMPTY).setIsPledge(true))), 
 							GroupColumnModel.withSubColumns("Total Costs",
-								SimpleColumnModel.withContents("Actual Pledge", "ACVL Pledge Name 2", "938 069,75", "free text name 2", "1 044 176,71").setIsPledge(true)))
-						.withTrailCells(null, "1 044 176,71", "0", "0", "1 982 246,46"),
+								SimpleColumnModel.withContents("Actual Pledge", "ACVL Pledge Name 2", "938 069,75", "free text name 2", "1 041 110,52").setIsPledge(true)))
+						.withTrailCells(null, "1 041 110,52", "0", "0", "1 979 180,27"),
 						ColumnReportDataModel.withColumns("Pledge Status: default status",
 							SimpleColumnModel.withContents("Pledges Titles", "Heavily used pledge", "Heavily used pledge").setIsPledge(true), 
 							GroupColumnModel.withSubColumns("Funding",
@@ -115,12 +116,13 @@ public class PledgeReportsTests extends ReportsTestCase
 							GroupColumnModel.withSubColumns("Total Costs",
 								SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1 033 246,23").setIsPledge(true)))
 						.withTrailCells(null, "1,25", "0", "1 033 244,98", "1 033 246,23"))
-					.withTrailCells(null, "1 044 177,96", "1 800 000", "9 233 244,98", "13 015 492,69"))
-				.withTrailCells(null, "1 044 177,96", "1 800 000", "9 233 244,98", "13 015 492,69")
+					.withTrailCells(null, "1 041 111,77", "1 800 000", "9 233 244,98", "13 012 426,5"))
+				.withTrailCells(null, "1 041 111,77", "1 800 000", "9 233 244,98", "13 012 426,5")
 				.withPositionDigest(true,
 					"(line 0:RHLC Pledges Titles: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 3), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 4, colSpan: 1))",
 					"(line 1:RHLC 2012: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 1), RHLC 2013: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1), RHLC 2014: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1))",
 					"(line 2:RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1))");
+		
 		runReportTest("Pledge report with Pledge Status Hier", "AMP-16003-by-pledge-status", new String[] {"irrelevant since this is a pledge report"}, fddr_correct);
 	}
 
@@ -398,9 +400,9 @@ public class PledgeReportsTests extends ReportsTestCase
 									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(true), 
 									SimpleColumnModel.withContents("Commitment Gap", "ACVL Pledge Name 2", "938 069,75").setIsPledge(true)), 
 								GroupColumnModel.withSubColumns("2012",
-									SimpleColumnModel.withContents("Actual Pledge", "free text name 2", "1 044 176,71").setIsPledge(true), 
+									SimpleColumnModel.withContents("Actual Pledge", "free text name 2", "1 041 110,52").setIsPledge(true), 
 									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(true), 
-									SimpleColumnModel.withContents("Commitment Gap", "free text name 2", "1 044 176,71").setIsPledge(true)), 
+									SimpleColumnModel.withContents("Commitment Gap", "free text name 2", "1 041 110,52").setIsPledge(true)), 
 								GroupColumnModel.withSubColumns("2013",
 									SimpleColumnModel.withContents("Actual Pledge", MUST_BE_EMPTY).setIsPledge(true), 
 									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(true), 
@@ -410,10 +412,10 @@ public class PledgeReportsTests extends ReportsTestCase
 									SimpleColumnModel.withContents("Actual Commitments", "ACVL Pledge Name 2", "50 000").setIsPledge(true), 
 									SimpleColumnModel.withContents("Commitment Gap", "ACVL Pledge Name 2", "-50 000").setIsPledge(true))), 
 							GroupColumnModel.withSubColumns("Total Costs",
-								SimpleColumnModel.withContents("Actual Pledge", "ACVL Pledge Name 2", "938 069,75", "free text name 2", "1 044 176,71").setIsPledge(true), 
+								SimpleColumnModel.withContents("Actual Pledge", "ACVL Pledge Name 2", "938 069,75", "free text name 2", "1 041 110,52").setIsPledge(true), 
 								SimpleColumnModel.withContents("Actual Commitments", "ACVL Pledge Name 2", "50 000").setIsPledge(true), 
-								SimpleColumnModel.withContents("Commitment Gap", "ACVL Pledge Name 2", "888 069,75", "free text name 2", "1 044 176,71").setIsPledge(true)))
-						.withTrailCells(null, null, null, null, null, null, null, null, "938 069,75", "0", "938 069,75", "1 044 176,71", "0", "1 044 176,71", "0", "0", "0", "0", "50 000", "-50 000", "1 982 246,46", "50 000", "1 932 246,46"),
+								SimpleColumnModel.withContents("Commitment Gap", "ACVL Pledge Name 2", "888 069,75", "free text name 2", "1 041 110,52").setIsPledge(true)))
+						.withTrailCells(null, null, null, null, null, null, null, null, "938 069,75", "0", "938 069,75", "1 041 110,52", "0", "1 041 110,52", "0", "0", "0", "0", "50 000", "-50 000", "1 979 180,27", "50 000", "1 929 180,27"),
 						ColumnReportDataModel.withColumns("Pledges Regions: Transnistrian Region",
 							SimpleColumnModel.withContents("Pledges Titles", "Test pledge 1", "Test pledge 1").setIsPledge(true), 
 							SimpleColumnModel.withContents("Pledges sectors", "Test pledge 1", "[112 - BASIC EDUCATION, 113 - SECONDARY EDUCATION]").setIsPledge(true), 
@@ -445,8 +447,8 @@ public class PledgeReportsTests extends ReportsTestCase
 								SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(true), 
 								SimpleColumnModel.withContents("Commitment Gap", "Test pledge 1", "51 662,31").setIsPledge(true)))
 						.withTrailCells(null, null, null, null, null, null, null, null, "0", "0", "0", "0,06", "0", "0,06", "0", "0", "0", "51 662,25", "0", "51 662,25", "51 662,31", "0", "51 662,31"))
-					.withTrailCells(null, null, null, null, null, null, null, null, "938 069,75", "0", "938 069,75", "1 044 177,96", "0", "1 044 177,96", "1 800 000", "2 670 000", "-870 000", "9 233 244,98", "3 350 000", "5 883 244,98", "13 015 492,69", "6 020 000", "6 995 492,69"))
-				.withTrailCells(null, null, null, null, null, null, null, null, "938 069,75", "0", "938 069,75", "1 044 177,96", "0", "1 044 177,96", "1 800 000", "2 670 000", "-870 000", "9 233 244,98", "3 350 000", "5 883 244,98", "13 015 492,69", "6 020 000", "6 995 492,69")
+					.withTrailCells(null, null, null, null, null, null, null, null, "938 069,75", "0", "938 069,75", "1 041 111,77", "0", "1 041 111,77", "1 800 000", "2 670 000", "-870 000", "9 233 244,98", "3 350 000", "5 883 244,98", "13 012 426,5", "6 020 000", "6 992 426,5"))
+				.withTrailCells(null, null, null, null, null, null, null, null, "938 069,75", "0", "938 069,75", "1 041 111,77", "0", "1 041 111,77", "1 800 000", "2 670 000", "-870 000", "9 233 244,98", "3 350 000", "5 883 244,98", "13 012 426,5", "6 020 000", "6 992 426,5")
 				.withPositionDigest(true,
 					"(line 0:RHLC Pledges Titles: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Pledges sectors: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC Pledges Secondary Sectors: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1), RHLC Pledges Secondary Programs: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 3, colSpan: 1), RHLC Pledges Programs: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 4, colSpan: 1), RHLC Pledges National Plan Objectives: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 5, colSpan: 1), RHLC Pledges Tertiary Sectors: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 6, colSpan: 1), RHLC Related Projects: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 7, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 8, colSpan: 12), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 20, colSpan: 3))",
 					"(line 1:RHLC 1998: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 8, colSpan: 3), RHLC 2012: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 11, colSpan: 3), RHLC 2013: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 14, colSpan: 3), RHLC 2014: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 17, colSpan: 3))",
@@ -518,9 +520,9 @@ public class PledgeReportsTests extends ReportsTestCase
 									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(true), 
 									SimpleColumnModel.withContents("Commitment Gap", "ACVL Pledge Name 2", "938 069,75").setIsPledge(true)), 
 								GroupColumnModel.withSubColumns("2012",
-									SimpleColumnModel.withContents("Actual Pledge", "free text name 2", "1 044 176,71").setIsPledge(true), 
+									SimpleColumnModel.withContents("Actual Pledge", "free text name 2", "1 041 110,52").setIsPledge(true), 
 									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(true), 
-									SimpleColumnModel.withContents("Commitment Gap", "free text name 2", "1 044 176,71").setIsPledge(true)), 
+									SimpleColumnModel.withContents("Commitment Gap", "free text name 2", "1 041 110,52").setIsPledge(true)), 
 								GroupColumnModel.withSubColumns("2013",
 									SimpleColumnModel.withContents("Actual Pledge", MUST_BE_EMPTY).setIsPledge(true), 
 									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(true), 
@@ -530,16 +532,17 @@ public class PledgeReportsTests extends ReportsTestCase
 									SimpleColumnModel.withContents("Actual Commitments", "ACVL Pledge Name 2", "50 000").setIsPledge(true), 
 									SimpleColumnModel.withContents("Commitment Gap", "ACVL Pledge Name 2", "-50 000").setIsPledge(true))), 
 							GroupColumnModel.withSubColumns("Total Costs",
-								SimpleColumnModel.withContents("Actual Pledge", "ACVL Pledge Name 2", "938 069,75", "free text name 2", "1 044 176,71").setIsPledge(true), 
+								SimpleColumnModel.withContents("Actual Pledge", "ACVL Pledge Name 2", "938 069,75", "free text name 2", "1 041 110,52").setIsPledge(true), 
 								SimpleColumnModel.withContents("Actual Commitments", "ACVL Pledge Name 2", "50 000").setIsPledge(true), 
-								SimpleColumnModel.withContents("Commitment Gap", "ACVL Pledge Name 2", "888 069,75", "free text name 2", "1 044 176,71").setIsPledge(true)))
-						.withTrailCells(null, null, "938 069,75", "0", "938 069,75", "1 044 176,71", "0", "1 044 176,71", "0", "0", "0", "0", "50 000", "-50 000", "1 982 246,46", "50 000", "1 932 246,46"))
-					.withTrailCells(null, null, "938 069,75", "0", "938 069,75", "1 044 177,96", "0", "1 044 177,96", "1 800 000", "2 670 000", "-870 000", "9 233 244,98", "3 350 000", "5 883 244,98", "13 015 492,69", "6 020 000", "6 995 492,69"))
-				.withTrailCells(null, null, "938 069,75", "0", "938 069,75", "1 044 177,96", "0", "1 044 177,96", "1 800 000", "2 670 000", "-870 000", "9 233 244,98", "3 350 000", "5 883 244,98", "13 015 492,69", "6 020 000", "6 995 492,69")
+								SimpleColumnModel.withContents("Commitment Gap", "ACVL Pledge Name 2", "888 069,75", "free text name 2", "1 041 110,52").setIsPledge(true)))
+						.withTrailCells(null, null, "938 069,75", "0", "938 069,75", "1 041 110,52", "0", "1 041 110,52", "0", "0", "0", "0", "50 000", "-50 000", "1 979 180,27", "50 000", "1 929 180,27"))
+					.withTrailCells(null, null, "938 069,75", "0", "938 069,75", "1 041 111,77", "0", "1 041 111,77", "1 800 000", "2 670 000", "-870 000", "9 233 244,98", "3 350 000", "5 883 244,98", "13 012 426,5", "6 020 000", "6 992 426,5"))
+				.withTrailCells(null, null, "938 069,75", "0", "938 069,75", "1 041 111,77", "0", "1 041 111,77", "1 800 000", "2 670 000", "-870 000", "9 233 244,98", "3 350 000", "5 883 244,98", "13 012 426,5", "6 020 000", "6 992 426,5")
 				.withPositionDigest(true,
 					"(line 0:RHLC Pledges Titles: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Related Projects: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 12), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 14, colSpan: 3))",
 					"(line 1:RHLC 1998: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 3), RHLC 2012: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 3), RHLC 2013: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 8, colSpan: 3), RHLC 2014: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 11, colSpan: 3))",
 					"(line 2:RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1), RHLC Commitment Gap: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1), RHLC Commitment Gap: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1), RHLC Commitment Gap: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1), RHLC Commitment Gap: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 15, colSpan: 1), RHLC Commitment Gap: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 16, colSpan: 1))");
+		
 				runReportTest("Rich pledge report, by primary sector", "AMP-17196-by-pledge-primary-sector", new String[] {"irrelevant since this is a pledge report"}, fddr_correct);					
 	}	
 	
@@ -561,9 +564,9 @@ public class PledgeReportsTests extends ReportsTestCase
 									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(true), 
 									SimpleColumnModel.withContents("Commitment Gap", "ACVL Pledge Name 2", "938 069,75").setIsPledge(true)), 
 								GroupColumnModel.withSubColumns("2012",
-									SimpleColumnModel.withContents("Actual Pledge", "free text name 2", "1 044 176,71").setIsPledge(true), 
+									SimpleColumnModel.withContents("Actual Pledge", "free text name 2", "1 041 110,52").setIsPledge(true), 
 									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(true), 
-									SimpleColumnModel.withContents("Commitment Gap", "free text name 2", "1 044 176,71").setIsPledge(true)), 
+									SimpleColumnModel.withContents("Commitment Gap", "free text name 2", "1 041 110,52").setIsPledge(true)), 
 								GroupColumnModel.withSubColumns("2013",
 									SimpleColumnModel.withContents("Actual Pledge", MUST_BE_EMPTY).setIsPledge(true), 
 									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(true), 
@@ -573,10 +576,10 @@ public class PledgeReportsTests extends ReportsTestCase
 									SimpleColumnModel.withContents("Actual Commitments", "ACVL Pledge Name 2", "50 000").setIsPledge(true), 
 									SimpleColumnModel.withContents("Commitment Gap", "ACVL Pledge Name 2", "-50 000").setIsPledge(true))), 
 							GroupColumnModel.withSubColumns("Total Costs",
-								SimpleColumnModel.withContents("Actual Pledge", "ACVL Pledge Name 2", "938 069,75", "free text name 2", "1 044 176,71").setIsPledge(true), 
+								SimpleColumnModel.withContents("Actual Pledge", "ACVL Pledge Name 2", "938 069,75", "free text name 2", "1 041 110,52").setIsPledge(true), 
 								SimpleColumnModel.withContents("Actual Commitments", "ACVL Pledge Name 2", "50 000").setIsPledge(true), 
-								SimpleColumnModel.withContents("Commitment Gap", "ACVL Pledge Name 2", "888 069,75", "free text name 2", "1 044 176,71").setIsPledge(true)))
-						.withTrailCells(null, null, null, null, null, null, null, null, "938 069,75", "0", "938 069,75", "1 044 176,71", "0", "1 044 176,71", "0", "0", "0", "0", "50 000", "-50 000", "1 982 246,46", "50 000", "1 932 246,46"),
+								SimpleColumnModel.withContents("Commitment Gap", "ACVL Pledge Name 2", "888 069,75", "free text name 2", "1 041 110,52").setIsPledge(true)))
+						.withTrailCells(null, null, null, null, null, null, null, null, "938 069,75", "0", "938 069,75", "1 041 110,52", "0", "1 041 110,52", "0", "0", "0", "0", "50 000", "-50 000", "1 979 180,27", "50 000", "1 929 180,27"),
 						ColumnReportDataModel.withColumns("Pledges Secondary Sectors: 3 NATIONAL COMPETITIVENESS",
 							SimpleColumnModel.withContents("Pledges Titles", "Test pledge 1", "Test pledge 1").setIsPledge(true), 
 							SimpleColumnModel.withContents("Pledges sectors", "Test pledge 1", "[112 - BASIC EDUCATION, 113 - SECONDARY EDUCATION]").setIsPledge(true), 
@@ -670,8 +673,8 @@ public class PledgeReportsTests extends ReportsTestCase
 								SimpleColumnModel.withContents("Actual Commitments", "Heavily used pledge", "5 970 000").setIsPledge(true), 
 								SimpleColumnModel.withContents("Commitment Gap", "Heavily used pledge", "4 030 000").setIsPledge(true)))
 						.withTrailCells(null, null, null, null, null, null, null, null, "0", "0", "0", "0", "0", "0", "1 800 000", "2 670 000", "-870 000", "8 200 000", "3 300 000", "4 900 000", "10 000 000", "5 970 000", "4 030 000"))
-					.withTrailCells(null, null, null, null, null, null, null, null, "938 069,75", "0", "938 069,75", "1 044 177,96", "0", "1 044 177,96", "1 800 000", "2 670 000", "-870 000", "9 233 244,98", "3 350 000", "5 883 244,98", "13 015 492,69", "6 020 000", "6 995 492,69"))
-				.withTrailCells(null, null, null, null, null, null, null, null, "938 069,75", "0", "938 069,75", "1 044 177,96", "0", "1 044 177,96", "1 800 000", "2 670 000", "-870 000", "9 233 244,98", "3 350 000", "5 883 244,98", "13 015 492,69", "6 020 000", "6 995 492,69")
+					.withTrailCells(null, null, null, null, null, null, null, null, "938 069,75", "0", "938 069,75", "1 041 111,77", "0", "1 041 111,77", "1 800 000", "2 670 000", "-870 000", "9 233 244,98", "3 350 000", "5 883 244,98", "13 012 426,5", "6 020 000", "6 992 426,5"))
+				.withTrailCells(null, null, null, null, null, null, null, null, "938 069,75", "0", "938 069,75", "1 041 111,77", "0", "1 041 111,77", "1 800 000", "2 670 000", "-870 000", "9 233 244,98", "3 350 000", "5 883 244,98", "13 012 426,5", "6 020 000", "6 992 426,5")
 				.withPositionDigest(true,
 					"(line 0:RHLC Pledges Titles: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Pledges sectors: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC Pledges Secondary Programs: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1), RHLC Pledges Programs: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 3, colSpan: 1), RHLC Pledges National Plan Objectives: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 4, colSpan: 1), RHLC Pledges Tertiary Sectors: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 5, colSpan: 1), RHLC Pledges Regions: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 6, colSpan: 1), RHLC Related Projects: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 7, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 8, colSpan: 12), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 20, colSpan: 3))",
 					"(line 1:RHLC 1998: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 8, colSpan: 3), RHLC 2012: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 11, colSpan: 3), RHLC 2013: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 14, colSpan: 3), RHLC 2014: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 17, colSpan: 3))",
@@ -699,9 +702,9 @@ public class PledgeReportsTests extends ReportsTestCase
 								SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(true), 
 								SimpleColumnModel.withContents("Commitment Gap", "ACVL Pledge Name 2", "938 069,75").setIsPledge(true)), 
 							GroupColumnModel.withSubColumns("2012",
-								SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1,25", "free text name 2", "1 044 176,71").setIsPledge(true), 
+								SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1,25", "free text name 2", "1 041 110,52").setIsPledge(true), 
 								SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(true), 
-								SimpleColumnModel.withContents("Commitment Gap", "Test pledge 1", "1,25", "free text name 2", "1 044 176,71").setIsPledge(true)), 
+								SimpleColumnModel.withContents("Commitment Gap", "Test pledge 1", "1,25", "free text name 2", "1 041 110,52").setIsPledge(true)), 
 							GroupColumnModel.withSubColumns("2013",
 								SimpleColumnModel.withContents("Actual Pledge", "Heavily used pledge", "1 800 000").setIsPledge(true), 
 								SimpleColumnModel.withContents("Actual Commitments", "Heavily used pledge", "2 670 000").setIsPledge(true), 
@@ -711,15 +714,16 @@ public class PledgeReportsTests extends ReportsTestCase
 								SimpleColumnModel.withContents("Actual Commitments", "ACVL Pledge Name 2", "50 000", "Heavily used pledge", "3 300 000").setIsPledge(true), 
 								SimpleColumnModel.withContents("Commitment Gap", "Test pledge 1", "1 033 244,98", "ACVL Pledge Name 2", "-50 000", "Heavily used pledge", "4 900 000").setIsPledge(true))), 
 						GroupColumnModel.withSubColumns("Total Costs",
-							SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1 033 246,23", "ACVL Pledge Name 2", "938 069,75", "free text name 2", "1 044 176,71", "Heavily used pledge", "10 000 000").setIsPledge(true), 
+							SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1 033 246,23", "ACVL Pledge Name 2", "938 069,75", "free text name 2", "1 041 110,52", "Heavily used pledge", "10 000 000").setIsPledge(true), 
 							SimpleColumnModel.withContents("Actual Commitments", "ACVL Pledge Name 2", "50 000", "Heavily used pledge", "5 970 000").setIsPledge(true), 
-							SimpleColumnModel.withContents("Commitment Gap", "Test pledge 1", "1 033 246,23", "ACVL Pledge Name 2", "888 069,75", "free text name 2", "1 044 176,71", "Heavily used pledge", "4 030 000").setIsPledge(true)))
-					.withTrailCells(null, null, null, null, null, null, null, null, null, "938 069,75", "0", "938 069,75", "1 044 177,96", "0", "1 044 177,96", "1 800 000", "2 670 000", "-870 000", "9 233 244,98", "3 350 000", "5 883 244,98", "13 015 492,69", "6 020 000", "6 995 492,69"))
-				.withTrailCells(null, null, null, null, null, null, null, null, null, "938 069,75", "0", "938 069,75", "1 044 177,96", "0", "1 044 177,96", "1 800 000", "2 670 000", "-870 000", "9 233 244,98", "3 350 000", "5 883 244,98", "13 015 492,69", "6 020 000", "6 995 492,69")
+							SimpleColumnModel.withContents("Commitment Gap", "Test pledge 1", "1 033 246,23", "ACVL Pledge Name 2", "888 069,75", "free text name 2", "1 041 110,52", "Heavily used pledge", "4 030 000").setIsPledge(true)))
+					.withTrailCells(null, null, null, null, null, null, null, null, null, "938 069,75", "0", "938 069,75", "1 041 111,77", "0", "1 041 111,77", "1 800 000", "2 670 000", "-870 000", "9 233 244,98", "3 350 000", "5 883 244,98", "13 012 426,5", "6 020 000", "6 992 426,5"))
+				.withTrailCells(null, null, null, null, null, null, null, null, null, "938 069,75", "0", "938 069,75", "1 041 111,77", "0", "1 041 111,77", "1 800 000", "2 670 000", "-870 000", "9 233 244,98", "3 350 000", "5 883 244,98", "13 012 426,5", "6 020 000", "6 992 426,5")
 				.withPositionDigest(true,
 					"(line 0:RHLC Pledges Titles: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Pledges sectors: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC Pledges Secondary Sectors: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1), RHLC Pledges Secondary Programs: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 3, colSpan: 1), RHLC Pledges Programs: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 4, colSpan: 1), RHLC Pledges National Plan Objectives: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 5, colSpan: 1), RHLC Pledges Tertiary Sectors: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 6, colSpan: 1), RHLC Related Projects: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 7, colSpan: 1), RHLC Pledges Regions: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 8, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 9, colSpan: 12), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 21, colSpan: 3))",
 					"(line 1:RHLC 1998: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 9, colSpan: 3), RHLC 2012: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 12, colSpan: 3), RHLC 2013: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 15, colSpan: 3), RHLC 2014: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 18, colSpan: 3))",
 					"(line 2:RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1), RHLC Commitment Gap: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1), RHLC Commitment Gap: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 15, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 16, colSpan: 1), RHLC Commitment Gap: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 17, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 18, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 19, colSpan: 1), RHLC Commitment Gap: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 20, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 21, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 22, colSpan: 1), RHLC Commitment Gap: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 23, colSpan: 1))");
+		
 		runReportTest("Rich pledge report, flat", "AMP-17196-flat", new String[] {"irrelevant since this is a pledge report"}, fddr_correct);					
 	}
 	
@@ -772,9 +776,9 @@ public class PledgeReportsTests extends ReportsTestCase
 									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(true), 
 									SimpleColumnModel.withContents("Commitment Gap", MUST_BE_EMPTY).setIsPledge(true)), 
 								GroupColumnModel.withSubColumns("2012",
-									SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1,25", "free text name 2", "1 044 176,71").setIsPledge(true), 
+									SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1,25", "free text name 2", "1 041 110,52").setIsPledge(true), 
 									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(true), 
-									SimpleColumnModel.withContents("Commitment Gap", "Test pledge 1", "1,25", "free text name 2", "1 044 176,71").setIsPledge(true)), 
+									SimpleColumnModel.withContents("Commitment Gap", "Test pledge 1", "1,25", "free text name 2", "1 041 110,52").setIsPledge(true)), 
 								GroupColumnModel.withSubColumns("2013",
 									SimpleColumnModel.withContents("Actual Pledge", MUST_BE_EMPTY).setIsPledge(true), 
 									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(true), 
@@ -784,10 +788,10 @@ public class PledgeReportsTests extends ReportsTestCase
 									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(true), 
 									SimpleColumnModel.withContents("Commitment Gap", "Test pledge 1", "1 033 244,98").setIsPledge(true))), 
 							GroupColumnModel.withSubColumns("Total Costs",
-								SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1 033 246,23", "free text name 2", "1 044 176,71").setIsPledge(true), 
+								SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1 033 246,23", "free text name 2", "1 041 110,52").setIsPledge(true), 
 								SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(true), 
-								SimpleColumnModel.withContents("Commitment Gap", "Test pledge 1", "1 033 246,23", "free text name 2", "1 044 176,71").setIsPledge(true)))
-						.withTrailCells(null, null, null, null, null, null, null, null, "0", "0", "0", "1 044 177,96", "0", "1 044 177,96", "0", "0", "0", "1 033 244,98", "0", "1 033 244,98", "2 077 422,94", "0", "2 077 422,94"),
+								SimpleColumnModel.withContents("Commitment Gap", "Test pledge 1", "1 033 246,23", "free text name 2", "1 041 110,52").setIsPledge(true)))
+						.withTrailCells(null, null, null, null, null, null, null, null, "0", "0", "0", "1 041 111,77", "0", "1 041 111,77", "0", "0", "0", "1 033 244,98", "0", "1 033 244,98", "2 074 356,75", "0", "2 074 356,75"),
 						ColumnReportDataModel.withColumns("Related Projects: pledged 2",
 							SimpleColumnModel.withContents("Pledges Titles", "Heavily used pledge", "Heavily used pledge").setIsPledge(true), 
 							SimpleColumnModel.withContents("Pledges sectors", "Heavily used pledge", "112 - BASIC EDUCATION").setIsPledge(true), 
@@ -850,12 +854,13 @@ public class PledgeReportsTests extends ReportsTestCase
 								SimpleColumnModel.withContents("Actual Commitments", "Heavily used pledge", "3 300 000").setIsPledge(true), 
 								SimpleColumnModel.withContents("Commitment Gap", "Heavily used pledge", "4 030 000").setIsPledge(true)))
 						.withTrailCells(null, null, null, null, null, null, null, null, "0", "0", "0", "0", "0", "0", "1 800 000", "0", "-870 000", "8 200 000", "3 300 000", "4 900 000", "10 000 000", "3 300 000", "4 030 000"))
-					.withTrailCells(null, null, null, null, null, null, null, null, "938 069,75", "0", "938 069,75", "1 044 177,96", "0", "1 044 177,96", "1 800 000", "2 670 000", "-870 000", "9 233 244,98", "3 350 000", "5 883 244,98", "13 015 492,69", "6 020 000", "6 995 492,69"))
-				.withTrailCells(null, null, null, null, null, null, null, null, "938 069,75", "0", "938 069,75", "1 044 177,96", "0", "1 044 177,96", "1 800 000", "2 670 000", "-870 000", "9 233 244,98", "3 350 000", "5 883 244,98", "13 015 492,69", "6 020 000", "6 995 492,69")
+					.withTrailCells(null, null, null, null, null, null, null, null, "938 069,75", "0", "938 069,75", "1 041 111,77", "0", "1 041 111,77", "1 800 000", "2 670 000", "-870 000", "9 233 244,98", "3 350 000", "5 883 244,98", "13 012 426,5", "6 020 000", "6 992 426,5"))
+				.withTrailCells(null, null, null, null, null, null, null, null, "938 069,75", "0", "938 069,75", "1 041 111,77", "0", "1 041 111,77", "1 800 000", "2 670 000", "-870 000", "9 233 244,98", "3 350 000", "5 883 244,98", "13 012 426,5", "6 020 000", "6 992 426,5")
 				.withPositionDigest(true,
 					"(line 0:RHLC Pledges Titles: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Pledges sectors: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC Pledges Secondary Sectors: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1), RHLC Pledges Secondary Programs: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 3, colSpan: 1), RHLC Pledges Programs: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 4, colSpan: 1), RHLC Pledges National Plan Objectives: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 5, colSpan: 1), RHLC Pledges Tertiary Sectors: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 6, colSpan: 1), RHLC Pledges Regions: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 7, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 8, colSpan: 12), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 20, colSpan: 3))",
 					"(line 1:RHLC 1998: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 8, colSpan: 3), RHLC 2012: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 11, colSpan: 3), RHLC 2013: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 14, colSpan: 3), RHLC 2014: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 17, colSpan: 3))",
 					"(line 2:RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1), RHLC Commitment Gap: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1), RHLC Commitment Gap: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 15, colSpan: 1), RHLC Commitment Gap: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 16, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 17, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 18, colSpan: 1), RHLC Commitment Gap: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 19, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 20, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 21, colSpan: 1), RHLC Commitment Gap: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 22, colSpan: 1))");
+		
 		runReportTest("Rich pledge report by related project", "AMP-17196-by-related-project", new String[] {"irrelevant since this is a pledge report"}, fddr_correct);					
 	}
 	
@@ -869,19 +874,20 @@ public class PledgeReportsTests extends ReportsTestCase
 						SimpleColumnModel.withContents("Pledges Titles", "Test pledge 1", "Test pledge 1", "ACVL Pledge Name 2", "ACVL Pledge Name 2", "free text name 2", "free text name 2", "Heavily used pledge", "Heavily used pledge").setIsPledge(true), 
 						GroupColumnModel.withSubColumns("Funding",
 							GroupColumnModel.withSubColumns("2012",
-								SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1,25", "free text name 2", "1 044 176,71").setIsPledge(true)), 
+								SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1,25", "free text name 2", "1 041 110,52").setIsPledge(true)), 
 							GroupColumnModel.withSubColumns("2013",
 								SimpleColumnModel.withContents("Actual Pledge", "Heavily used pledge", "1 800 000").setIsPledge(true)), 
 							GroupColumnModel.withSubColumns("2014",
 								SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1 033 244,98", "Heavily used pledge", "8 200 000").setIsPledge(true))), 
 						GroupColumnModel.withSubColumns("Total Costs",
-							SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1 033 246,23", "ACVL Pledge Name 2", "938 069,75", "free text name 2", "1 044 176,71", "Heavily used pledge", "10 000 000").setIsPledge(true)))
-					.withTrailCells(null, null, null, null, "1 044 177,96", "1 800 000", "9 233 244,98", "13 015 492,69"))
-				.withTrailCells(null, null, null, null, "1 044 177,96", "1 800 000", "9 233 244,98", "13 015 492,69")
+							SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1 033 246,23", "ACVL Pledge Name 2", "938 069,75", "free text name 2", "1 041 110,52", "Heavily used pledge", "10 000 000").setIsPledge(true)))
+					.withTrailCells(null, null, null, null, "1 041 111,77", "1 800 000", "9 233 244,98", "13 012 426,5"))
+				.withTrailCells(null, null, null, null, "1 041 111,77", "1 800 000", "9 233 244,98", "13 012 426,5")
 				.withPositionDigest(true,
 					"(line 0:RHLC Pledges Detail Date Range: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Pledges Detail End Date: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC Pledges Detail Start Date: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1), RHLC Pledges Titles: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 3, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 4, colSpan: 3), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 7, colSpan: 1))",
 					"(line 1:RHLC 2012: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 1), RHLC 2013: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 1), RHLC 2014: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 1))",
 					"(line 2:RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1))");
+		
 		runReportTest("Basic pledge report with date range", "AMP-16007-date-range-columns", new String[] {"irrelevant since this is a pledge report"}, fddr_correct/*, new PledgesFilterModifier("Test pledge 1", "ACVL Pledge Name 2", "free text name 2"), null*/);
 	}
 	

@@ -248,25 +248,25 @@ public class SscTests27 extends ReportsTestCase
 			localHelper.doCalculations(funding, "USD");
 			if (funding.getAmpDonorOrgId().getName().equals("Finland"))
 			{
-				assertEquals(BigDecimal.valueOf(150000), localHelper.getTotOdaSscComm().getValue());
-				assertEquals(BigDecimal.valueOf(35000), localHelper.getTotBilateralSscComm().getValue());
-				assertEquals(BigDecimal.valueOf(0), localHelper.getTotTriangularSscComm().getValue());
+				assertBigDecimalEquals(BigDecimal.valueOf(150000), localHelper.getTotOdaSscComm().getValue());
+				assertBigDecimalEquals(BigDecimal.valueOf(35000), localHelper.getTotBilateralSscComm().getValue());
+				assertBigDecimalEquals(BigDecimal.valueOf(0), localHelper.getTotTriangularSscComm().getValue());
 			} else if (funding.getAmpDonorOrgId().getName().equals("USAID"))
 			{
 				assertEquals(BigDecimal.valueOf(0), localHelper.getTotOdaSscComm().getValue());
-				assertEquals(BigDecimal.valueOf(12000), localHelper.getTotBilateralSscComm().getValue());
-				assertEquals(BigDecimal.valueOf(64000), localHelper.getTotTriangularSscComm().getValue());				
+				assertBigDecimalEquals(BigDecimal.valueOf(12000), localHelper.getTotBilateralSscComm().getValue());
+				assertBigDecimalEquals(BigDecimal.valueOf(64000), localHelper.getTotTriangularSscComm().getValue());				
 			} else if (funding.getAmpDonorOrgId().getName().equals("World Bank"))
 			{
-				assertEquals(BigDecimal.valueOf(0), localHelper.getTotOdaSscComm().getValue());
-				assertEquals(BigDecimal.valueOf(7000), localHelper.getTotBilateralSscComm().getValue());
-				assertEquals(BigDecimal.valueOf(0), localHelper.getTotTriangularSscComm().getValue());
+				assertBigDecimalEquals(BigDecimal.valueOf(0), localHelper.getTotOdaSscComm().getValue());
+				assertBigDecimalEquals(BigDecimal.valueOf(7000), localHelper.getTotBilateralSscComm().getValue());
+				assertBigDecimalEquals(BigDecimal.valueOf(0), localHelper.getTotTriangularSscComm().getValue());
 			} else
 				throw new RuntimeException("unexpected donor org found in " + act.getName() + ": " + funding.getAmpDonorOrgId().getName());
 		}
-		assertEquals(BigDecimal.valueOf(150000), globalHelper.getTotOdaSscComm().getValue());
-		assertEquals(BigDecimal.valueOf(54000), globalHelper.getTotBilateralSscComm().getValue());
-		assertEquals(BigDecimal.valueOf(64000), globalHelper.getTotTriangularSscComm().getValue());
+		assertBigDecimalEquals(BigDecimal.valueOf(150000), globalHelper.getTotOdaSscComm().getValue());
+		assertBigDecimalEquals(BigDecimal.valueOf(54000), globalHelper.getTotBilateralSscComm().getValue());
+		assertBigDecimalEquals(BigDecimal.valueOf(64000), globalHelper.getTotTriangularSscComm().getValue());
 	}
 	
 	public void testActivityPreviewTotals2()
@@ -281,15 +281,15 @@ public class SscTests27 extends ReportsTestCase
 			localHelper.doCalculations(funding, "USD");
 			if (funding.getAmpDonorOrgId().getName().equals("Norway"))
 			{
-				assertEquals(BigDecimal.valueOf(25000), localHelper.getTotOdaSscComm().getValue());
-				assertEquals(BigDecimal.valueOf(0), localHelper.getTotBilateralSscComm().getValue());
-				assertEquals(BigDecimal.valueOf(0), localHelper.getTotTriangularSscComm().getValue());
+				assertBigDecimalEquals(BigDecimal.valueOf(25000), localHelper.getTotOdaSscComm().getValue());
+				assertBigDecimalEquals(BigDecimal.valueOf(0), localHelper.getTotBilateralSscComm().getValue());
+				assertBigDecimalEquals(BigDecimal.valueOf(0), localHelper.getTotTriangularSscComm().getValue());
 			} else
 				throw new RuntimeException("unexpected donor org found in " + act.getName() + ": " + funding.getAmpDonorOrgId().getName());
 		}
-		assertEquals(BigDecimal.valueOf(25000), globalHelper.getTotOdaSscComm().getValue());
-		assertEquals(BigDecimal.valueOf(0), globalHelper.getTotBilateralSscComm().getValue());
-		assertEquals(BigDecimal.valueOf(0), globalHelper.getTotTriangularSscComm().getValue());
+		assertBigDecimalEquals(BigDecimal.valueOf(25000), globalHelper.getTotOdaSscComm().getValue());
+		assertBigDecimalEquals(BigDecimal.valueOf(0), globalHelper.getTotBilateralSscComm().getValue());
+		assertBigDecimalEquals(BigDecimal.valueOf(0), globalHelper.getTotTriangularSscComm().getValue());
 	}
 	
 }

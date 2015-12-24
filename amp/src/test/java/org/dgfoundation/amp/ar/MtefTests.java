@@ -303,27 +303,28 @@ public class MtefTests extends ReportsTestCase
 	
 	public void testPurePlainMtefEURInThousandsMoreActivities()
 	{
-		GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-16100-flat-mtefs-eur", 
-				ColumnReportDataModel.withColumns("AMP-16100-flat-mtefs-eur", 
-						SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
-						SimpleColumnModel.withContents("MTEF 2011/2012", "Pure MTEF Project", "25", "Test MTEF directed", "112"),
-						SimpleColumnModel.withContents("MTEF 2012/2013", "Test MTEF directed", "49"),
-						SimpleColumnModel.withContents("MTEF 2013/2014", MUST_BE_EMPTY),
-						GroupColumnModel.withSubColumns("Funding", 
-								GroupColumnModel.withSubColumns("2010", 
-										SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY),
-										SimpleColumnModel.withContents("Actual Disbursements", "TAC_activity_2", "332", "Test MTEF directed", "105")
-										),
-								GroupColumnModel.withSubColumns("2011", 
-										SimpleColumnModel.withContents("Actual Commitments", "TAC_activity_2", "747"),
-										SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY)
-										)
-												
-								),
-						GroupColumnModel.withSubColumns("Total Costs", 
-								SimpleColumnModel.withContents("Actual Commitments", "TAC_activity_2", "747"),
-								SimpleColumnModel.withContents("Actual Disbursements", "TAC_activity_2", "332", "Test MTEF directed", "105")
-						))).withTrailCells(null, "137", "49", "0", "0", "438", "747", "0", "747", "438");
+		GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-16100-flat-mtefs-eur",
+				ColumnReportDataModel.withColumns("AMP-16100-flat-mtefs-eur",
+						SimpleColumnModel.withContents("Project Title", "Test MTEF directed", "Test MTEF directed", "Pure MTEF Project", "Pure MTEF Project", "TAC_activity_2", "TAC_activity_2").setIsPledge(false), 
+						SimpleColumnModel.withContents("MTEF 2011/2012", "Test MTEF directed", "112", "Pure MTEF Project", "25").setIsPledge(false), 
+						SimpleColumnModel.withContents("MTEF 2012/2013", "Test MTEF directed", "49").setIsPledge(false), 
+						SimpleColumnModel.withContents("MTEF 2013/2014", MUST_BE_EMPTY).setIsPledge(false), 
+						GroupColumnModel.withSubColumns("Funding",
+							GroupColumnModel.withSubColumns("2010",
+								SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(false), 
+								SimpleColumnModel.withContents("Actual Disbursements", "Test MTEF directed", "113", "TAC_activity_2", "355").setIsPledge(false)), 
+							GroupColumnModel.withSubColumns("2011",
+								SimpleColumnModel.withContents("Actual Commitments", "TAC_activity_2", "747").setIsPledge(false), 
+								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false))), 
+						GroupColumnModel.withSubColumns("Total Costs",
+							SimpleColumnModel.withContents("Actual Commitments", "TAC_activity_2", "747").setIsPledge(false), 
+							SimpleColumnModel.withContents("Actual Disbursements", "Test MTEF directed", "113", "TAC_activity_2", "355").setIsPledge(false)))
+					.withTrailCells(null, "137", "49", "0", "0", "467", "747", "0", "747", "467"))
+				.withTrailCells(null, "137", "49", "0", "0", "467", "747", "0", "747", "467")
+				.withPositionDigest(true,
+					"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC MTEF 2011/2012: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC MTEF 2012/2013: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1), RHLC MTEF 2013/2014: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 3, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 4, colSpan: 4), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 8, colSpan: 2))",
+					"(line 1:RHLC 2010: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2), RHLC 2011: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 2))",
+					"(line 2:RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1))");
 		
 		AmpReportModifier modifier = new AmpReportModifier() {			
 			@Override

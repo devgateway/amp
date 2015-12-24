@@ -21,6 +21,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.exceptions.UsedCategoryException;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import com.sun.istack.logging.Logger;
@@ -137,8 +138,8 @@ public class FundingCalculationsHelper {
 //			}
 			//DecimalWraper amt = CurrencyWorker.convertWrapper(fundDet.getTransactionAmount().doubleValue(), frmExRt, toExRt, dt);
 			DecimalWraper amt = new DecimalWraper();
-			fundDet.getTransactionDate();
-			amt.setValue(BigDecimal.valueOf(fundDet.getTransactionAmount()).multiply(BigDecimal.valueOf(AmpCurrencyConvertor.getInstance().getExchangeRate(fundDet.getAmpCurrencyId().getCurrencyCode(), toCurrCode, fixedExchangeRate, dt.toLocalDate()))));
+			//fundDet.getTransactionDate();
+			amt.setValue(BigDecimal.valueOf(fundDet.getTransactionAmount()).multiply(BigDecimal.valueOf(AmpCurrencyConvertor.getInstance().getExchangeRate(fundDet.getAmpCurrencyId().getCurrencyCode(), userCurrencyCode, fixedExchangeRate, dt.toLocalDate()))));
 			if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
 				fundingDetail.setClassification(fundDet.getExpCategory());
 			}

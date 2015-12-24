@@ -245,7 +245,7 @@ public final class Util {
 	 */
 	public static double getExchange(final String currencyCode, final java.sql.Date currencyDate) {
 		CurrencyConvertor convertor = AmpCurrencyConvertor.getInstance();
-		return convertor.getExchangeRate(currencyCode, CurrencyUtil.getBaseCurrencyCode(), null, currencyDate.toLocalDate()); // WARNING: Date.toLocalDate() is jdk8 code!
+		return convertor.getExchangeRate(CurrencyUtil.getBaseCurrencyCode(), currencyCode, null, currencyDate.toLocalDate()); // WARNING: Date.toLocalDate() is jdk8 code!
 	}
 	
 	/**

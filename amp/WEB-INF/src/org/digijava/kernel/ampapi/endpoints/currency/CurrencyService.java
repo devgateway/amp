@@ -40,6 +40,7 @@ import org.digijava.module.aim.dbentity.AmpInflationSource;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.hibernate.Session;
 
 
 /**
@@ -105,7 +106,6 @@ public class CurrencyService {
 	 * @see Currencies#saveInflationRates(JsonBean)
 	 */
 	public static JsonBean saveInflationRates(JsonBean jsonRates){
-		logger.info("saveInflationRates START");
 		JsonBean result = null;
 		ApiEMGroup errors = new ApiEMGroup();
 		
@@ -164,21 +164,17 @@ public class CurrencyService {
 			result = ApiError.toError(errors.getAllErrors());
 		} else {
 			// if no errors, then cleanup existing rates and create new ones
-			logger.info("saveInflationRates deleteing previous inflation rates START");
 			CurrencyInflationUtil.deleteAllInflationRates();
-			logger.info("saveInflationRates deleteing previous inflation rates END");
-			logger.info("saveInflationRates saving new inflation rates START");
+			Session session = PersistenceManager.getSession();
 			for (Entry<AmpCurrency, Map<Date, Double>> entry : ratesPerCurrency.entrySet()) {
 				for (Entry<Date, Double> vEntry : entry.getValue().entrySet()) {
 					AmpInflationRate air = new AmpInflationRate(entry.getKey(), vEntry.getKey(), vEntry.getValue());
-					PersistenceManager.getRequestDBSession().save(air);
+					session.save(air);
 				}
 			}
-			logger.info("saveInflationRates saving new inflation rates END");
 			// regenerate exchange rates based on new inflation rates
 			CCExchangeRate.regenerateConstantCurrenciesExchangeRates(false);
 		}
-		logger.info("saveInflationRates END");
 		
 		return result;
 	}
@@ -280,26 +276,24 @@ public class CurrencyService {
 	 * @see Currencies#saveConstantCurrencies(JsonBean)
 	 */
 	public static JsonBean saveConstantCurrencies(JsonBean input) {
-		logger.info("saveConstantCurrencies Start");
 		ApiEMGroup errors = new ApiEMGroup();
 		Map<AmpFiscalCalendar, Map<AmpCurrency, SortedSet<Integer>>> constantsInput = getConstantsInput(input, errors);
 		
 		if (errors.size() > 0) {
 			return ApiError.toError(errors.getAllErrors());
 		} else {
-			logger.info("saveConstantCurrencies define new Constant Currencies in DB");
 			Set<AmpCurrency> newConstantCurrencies = new HashSet<AmpCurrency>();
+			Session session = PersistenceManager.getSession();
 			for (Entry<AmpFiscalCalendar, Map<AmpCurrency, SortedSet<Integer>>> calEntry : constantsInput.entrySet()) {
 				for (Entry<AmpCurrency, SortedSet<Integer>> currEntry : calEntry.getValue().entrySet()) {
 					for (Integer year : currEntry.getValue()) {
 						ConstantCurrency cc = CurrencyInflationUtil.createOrActivateConstantCurrency(
 								currEntry.getKey(), calEntry.getKey(), year);
-						PersistenceManager.getSession().saveOrUpdate(cc.currency);
+						session.saveOrUpdate(cc.currency);
 						newConstantCurrencies.add(cc.currency);
 					}
 				}
 			}
-			logger.info("saveConstantCurrencies delete old Constant Currencies in DB");
 			// delete old constant currencies
 			List<AmpCurrency> oldConstantCurrencies = CurrencyInflationUtil.getConstantAmpCurrencies();
 			oldConstantCurrencies.removeAll(newConstantCurrencies);
@@ -309,7 +303,6 @@ public class CurrencyService {
 			// generate exchange rates for the new constant currencies
 			CCExchangeRate.regenerateConstantCurrenciesExchangeRates(false);
 		}
-		logger.info("saveConstantCurrencies END");
 		
 		return null;
 	}

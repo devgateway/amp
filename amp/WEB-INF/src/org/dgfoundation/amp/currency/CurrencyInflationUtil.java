@@ -18,7 +18,6 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpInflationRate;
 import org.digijava.module.aim.dbentity.AmpInflationSource;
 import org.digijava.module.aim.util.CurrencyUtil;
-import org.hibernate.Session;
 
 /**
  * Common currency inflation rates utility methods
@@ -140,7 +139,7 @@ public class CurrencyInflationUtil {
 			logger.error(String.format("Skipping invalid constant currency id=%d, code=%s, please review!!!", 
 					ampConstCurrency.getAmpCurrencyId(), ampConstCurrency.getCurrencyCode()));
 		} else {
-			// replace all references with standard currency or default is standard one is removed
+			// replace all references with standard currency or default if the standard one is removed
 			AmpCurrency standarCurrency = CurrencyUtil.getCurrencyByCode(cc.standardCurrencyCode);
 			if (standarCurrency == null)
 				standarCurrency = CurrencyUtil.getDefaultCurrency();

@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -18,16 +17,16 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
+import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
 import org.dgfoundation.amp.menu.MenuStructure;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
-import org.dgfoundation.amp.visibility.data.DataVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -39,7 +38,6 @@ import org.digijava.module.aim.helper.CountryBean;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.services.auditcleaner.AuditCleaner;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.currencyrates.CurrencyRatesService;
@@ -66,6 +64,7 @@ public class GlobalSettings extends Action {
 	HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
 		boolean refreshGlobalSettingsCache			= false;
+		boolean regenerateCCExchanteRates = false;
 		HttpSession session = request.getSession();
 		if (session.getAttribute("ampAdmin") == null) {
 			return mapping.findForward("index");
@@ -96,6 +95,7 @@ public class GlobalSettings extends Action {
 			String allValues = gsForm.getAllValues();
 			StringTokenizer token = new StringTokenizer(allValues, "&");
 			AmpGlobalSettings projectValidationSetting = FeaturesUtil.getGlobalSettingsCache().get(GlobalSettingsConstants.PROJECTS_VALIDATION);
+			AmpGlobalSettings baseCurrencyGS = FeaturesUtil.getGlobalSettingsCache().get(GlobalSettingsConstants.BASE_CURRENCY);
 			while (token.hasMoreTokens()) {
 				String element = token.nextToken();
 				String[] nameValue = element.split("=");				
@@ -103,6 +103,9 @@ public class GlobalSettings extends Action {
 				String newValue = nameValue.length < 2 ? "" : nameValue[1];
 				if (projectValidationSetting.getGlobalId().equals(id) && !newValue.equals(projectValidationSetting.getGlobalSettingsValue())) {
 					resetWorkspaceValidationSettings(newValue);
+				}
+				if (baseCurrencyGS.getGlobalId().equals(id) && !newValue.equals(baseCurrencyGS.getGlobalSettingsValue())) {
+					regenerateCCExchanteRates = true;
 				}
 				// allow empty fields, like Public Portal URL when Public Portal = false
 				this.updateGlobalSetting(id, newValue);
@@ -165,6 +168,9 @@ public class GlobalSettings extends Action {
 		}
 		Collection<CountryBean> countries = org.digijava.module.aim.util.DbUtil.getTranlatedCountries(request);
 		gsForm.setCountryNameCol(countries);
+		
+		if (regenerateCCExchanteRates)
+			CCExchangeRate.regenerateConstantCurrenciesExchangeRates(false);
 
 		saveErrors(request, errors);
 		return mapping.findForward("viewGS");

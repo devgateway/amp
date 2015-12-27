@@ -65,4 +65,21 @@ public class AmpCollections {
 		return a.compareTo(b);
 	}
 	
+	/**
+	 * safely gets an element of an array
+	 * @param row
+	 * @param j
+	 * @return -1 if element is offbounds; 0 if element is null; elementvalue else
+	 */
+	public static long safeGet(List<Long> row, int j) {
+		if (j < 0 || j >= row.size())
+			return 0;
+		
+		Long z = row.get(j);
+		if (z == null)
+			return 0;
+		
+		return z.longValue();
+	}
+	
 }

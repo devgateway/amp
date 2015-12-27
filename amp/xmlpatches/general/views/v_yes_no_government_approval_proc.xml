@@ -19,8 +19,15 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_yes_no_government_approval_proc AS SELECT a.amp_activity_id, CASE a.governmentapprovalprocedures WHEN true THEN 'yes'::text WHEN false THEN 'no'::text ELSE 'unallocated'::text END AS governmentapprovalprocedures FROM amp_activity a ORDER BY a.amp_activity_id;;;
-        		</lang>
+			   	CREATE OR REPLACE VIEW v_yes_no_government_approval_proc AS
+			   		SELECT a.amp_activity_id, 
+			   			CASE a.governmentapprovalprocedures
+			   				WHEN true THEN 'yes'::text 
+			   				WHEN false THEN 'no'::text
+			   				ELSE 'unallocated'::text
+			   			END AS governmentapprovalprocedures
+			   			FROM amp_activity_version a ORDER BY a.amp_activity_id;
+        	</lang>
 		</script>
 	</apply>
 </tns:patch>

@@ -76,7 +76,7 @@ public class NiReportsEngine {
 			this.timer = new InclusiveTimer("Report " + spec.getReportName());
 			timer.run("exec", this::runReport);
 			RunNode timingInfo = timer.getCurrentState();
-			logger.error(String.format("it took %d millies to generate report, the breakdown is:\n%s", timer.getWallclockTime(), timingInfo.asUserString(3)));
+			logger.warn(String.format("it took %d millies to generate report, the breakdown is:\n%s", timer.getWallclockTime(), timingInfo.asUserString(3)));
 			return rootReportData;
 		}
 		catch(Exception e) {

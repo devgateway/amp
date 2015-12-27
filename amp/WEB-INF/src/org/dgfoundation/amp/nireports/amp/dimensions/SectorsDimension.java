@@ -10,16 +10,15 @@ import org.dgfoundation.amp.nireports.amp.SqlSourcedNiDimension;
  * @author Dolghier Constantin
  *
  */
-public final class SectorsDimension extends SqlSourcedNiDimension<String> {
+public final class SectorsDimension extends SqlSourcedNiDimension {
 	
 	public final static SectorsDimension instance = new SectorsDimension("Sectors dimension");
 	
 	private SectorsDimension(String name) {
-		super(name, "amp_location_cache", Arrays.asList("country_id", "region_id", "zone_id", "district_id"));
+		super(name, "ni_all_sectors_with_levels", Arrays.asList("id0", "id1", "id2"));
 	}
 	
-	public final static int LEVEL_COUNTRY = 0;
-	public final static int LEVEL_REGION = 1;
-	public final static int LEVEL_ZONE = 2;
-	public final static int LEVEL_DISTRICT = 3;
+	public final static int LEVEL_ROOT = 0;
+	public final static int LEVEL_SUBSECTOR = 1;
+	public final static int LEVEL_SUBSUBSECTOR = 2;
 }

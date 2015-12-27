@@ -19,8 +19,14 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_executing_agency_type AS SELECT f.activity AS amp_activity_id, ot.org_type AS name, b.org_type FROM amp_org_role f, amp_organisation o, amp_role r, amp_org_group b, amp_org_type ot WHERE (((((f.organisation = o.amp_org_id) AND (f.role = r.amp_role_id)) AND ((r.role_code)::text = 'EA'::text)) AND (o.org_grp_id = b.amp_org_grp_id)) AND (b.org_type = ot.amp_org_type_id)) ORDER BY f.activity, o.name;;;
-        		</lang>
+				DROP VIEW IF EXISTS v_executing_agency_type CASCADE;
+			   	CREATE OR REPLACE VIEW v_executing_agency_type AS
+			   		SELECT f.activity AS amp_activity_id, org.org_type_name, org.org_type_id, sum(f.percentage) AS percentage 
+						FROM amp_org_role f
+							JOIN ni_all_orgs_dimension org ON org.org_id = f.organisation
+							JOIN amp_role r ON (f.role = r.amp_role_id) AND (r.role_code = 'EA')
+						GROUP BY f.activity, org.org_type_id, org.org_type_name;
+        	</lang>
 		</script>
 	</apply>
 </tns:patch>

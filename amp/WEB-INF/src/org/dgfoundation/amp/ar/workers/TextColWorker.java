@@ -16,6 +16,7 @@ import javax.sql.rowset.serial.SerialClob;
 import javax.sql.rowset.serial.SerialException;
 
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.TextCell;
@@ -61,6 +62,8 @@ public class TextColWorker extends ColumnWorker {
 		Long id = null;
 		if (thirdRowIsId) {
 			id = new Long(rs.getLong(3));
+			if (id <= 0 && !this.columnName.equals(ColumnConstants.PLEDGES_TITLES))
+				return null; // <pledges titles>'s id is different
 		}
 		
 		TextCell ret=new TextCell(ownerId);

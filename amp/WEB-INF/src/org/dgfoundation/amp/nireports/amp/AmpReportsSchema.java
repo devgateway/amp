@@ -27,7 +27,9 @@ import org.dgfoundation.amp.nireports.NiReportsGenerator;
 import org.dgfoundation.amp.nireports.SchemaSpecificScratchpad;
 import org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
+import org.dgfoundation.amp.nireports.amp.dimensions.ProgramsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension;
+import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 
@@ -40,9 +42,10 @@ import com.google.common.base.Function;
  */
 public class AmpReportsSchema extends AbstractReportsSchema {
 
-	public final OrganisationsDimension orgsDimension = OrganisationsDimension.instance;
-	public final LocationsDimension locsDimension = LocationsDimension.instance;
-	public final SectorsDimension secsDimension = SectorsDimension.instance;
+	public final static OrganisationsDimension orgsDimension = OrganisationsDimension.instance;
+	public final static LocationsDimension locsDimension = LocationsDimension.instance;
+	public final static SectorsDimension secsDimension = SectorsDimension.instance;
+	public final static ProgramsDimension progsDimension = ProgramsDimension.instance;
 	
 	private static AmpReportsSchema instance = new AmpReportsSchema();
 	
@@ -306,7 +309,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
 	/**
 	 * initialized the NiReports subsystem. <br />
-	 * Notice that this is not strictly necesary for being able to run NiReports, but it runs many self-checks as part of running a very simple report and cached some frequently-used data
+	 * Notice that this is not strictly necessary for being able to run NiReports, but it runs many self-checks as part of running a very simple report and cached some frequently-used data
 	 * @throws AMPException
 	 */
 	public static void init() throws AMPException {
@@ -315,6 +318,11 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
 			null,
 			GroupingCriteria.GROUPING_YEARLY));
+		
+		// test dimensions: make a snapshot of each
+		for(NiDimension dimension:Arrays.asList(orgsDimension, locsDimension, secsDimension, progsDimension)) {
+			dimension.getDimensionData().toString();
+		}
 	}
 	
 	// ========== implementation code below ==========

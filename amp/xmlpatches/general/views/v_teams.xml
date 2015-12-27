@@ -19,8 +19,10 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_teams AS SELECT a.amp_activity_id, t.name, t.amp_team_id FROM amp_activity a, amp_team t WHERE (a.amp_team_id = t.amp_team_id) ORDER BY a.amp_activity_id, t.amp_team_id;;;
-        		</lang>
+			   	CREATE OR REPLACE VIEW v_teams AS
+			   		SELECT a.amp_activity_id, t.name, t.amp_team_id 
+			   			FROM amp_activity_version a JOIN amp_team t ON a.amp_team_id = t.amp_team_id;
+        	</lang>
 		</script>
 	</apply>
 </tns:patch>

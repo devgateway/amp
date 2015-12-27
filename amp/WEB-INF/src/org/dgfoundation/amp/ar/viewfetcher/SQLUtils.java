@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -17,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
@@ -173,6 +175,26 @@ public class SQLUtils {
 		catch(SQLException ex) {
 			throw AlgoUtils.translateException(ex);
 		}
+	}
+	
+	/**
+	 * calls a given function for each row of the result and accumulates the results in a List
+	 * @param connection
+	 * @param query
+	 * @param mapper
+	 * @return
+	 */
+	public static<K> List<K> collect(Connection connection, String query, Function<ResultSet, K> mapper) {
+		List<K> res = new ArrayList<>();
+		try(RsInfo rsInfo = rawRunQuery(connection, query, null)) {
+			while(rsInfo.rs.next()) {
+				res.add(mapper.apply(rsInfo.rs));
+			}
+		}
+		catch(SQLException ex) {
+			throw AlgoUtils.translateException(ex);
+		}
+		return Collections.unmodifiableList(res);
 	}
 	
 	/**
@@ -541,9 +563,12 @@ public class SQLUtils {
 	 * @param columnName
 	 * @return
 	 */
-	public static long getLong(ResultSet rs, String columnName) {
+	public static Long getLong(ResultSet rs, String columnName) {
 		try {
-			return rs.getLong(columnName);
+			Long res = rs.getLong(columnName);
+			if (rs.wasNull())
+				return null;
+			return res;
 		}
 		catch(Exception e) {
 			throw AlgoUtils.translateException(e);

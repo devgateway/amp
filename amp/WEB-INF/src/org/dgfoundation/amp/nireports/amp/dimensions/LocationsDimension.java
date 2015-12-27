@@ -10,12 +10,12 @@ import org.dgfoundation.amp.nireports.amp.SqlSourcedNiDimension;
  * @author Dolghier Constantin
  *
  */
-public final class LocationsDimension extends SqlSourcedNiDimension<String> {
+public final class LocationsDimension extends SqlSourcedNiDimension {
 	
 	public final static LocationsDimension instance = new LocationsDimension("Locations dimension");
 	
 	private LocationsDimension(String name) {
-		super(name, "amp_location_cache", Arrays.asList("country_id", "region_id", "zone_id", "district_id"));
+		super(name, "ni_all_locations_with_levels", Arrays.asList("country_id", "region_id", "zone_id", "district_id"));
 	}
 	
 	public final static int LEVEL_COUNTRY = 0;

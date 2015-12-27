@@ -19,13 +19,12 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				DROP VIEW IF EXISTS v_regions;
+				DROP VIEW IF EXISTS v_regions CASCADE;
 				CREATE OR REPLACE VIEW v_regions AS 
-			    	SELECT ra.amp_activity_id, regions.region_name AS region, regions.region_id AS region_id, sum(ra.location_percentage) AS location_percentage 
-						FROM amp_activity_location ra, amp_location_cache regions
-						WHERE (ra.amp_location_id = regions.amp_location_id) AND (regions.region_id IS NOT NULL)
-						GROUP BY ra.amp_activity_id, regions.region_id, regions.region_name;
-        		</lang>
+			    	SELECT ra.amp_activity_id, loc.region_name, loc.region_id, sum(ra.location_percentage) AS percentage 
+						FROM amp_activity_location ra JOIN ni_all_locations_with_levels loc on loc.amp_location_id = ra.amp_location_id
+						GROUP BY ra.amp_activity_id, loc.region_id, loc.region_name;
+       		</lang>
 		</script>
 	</apply>
 </tns:patch>

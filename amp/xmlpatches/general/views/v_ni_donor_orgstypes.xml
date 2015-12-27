@@ -15,7 +15,7 @@
 			</script>
  			<test>val.equalsIgnoreCase("true")</test>
 		</condition>
-	</trigger> 
+	</trigger>
 	<apply>
 		<script> <!-- v_donors: all donors which are mentioned in amp_funding with:
 		  - a src-role of DN 
@@ -25,7 +25,7 @@
 			<lang delimiter=";" type="postgres">
 				CREATE OR REPLACE VIEW v_ni_donor_orgstypes AS 
 					SELECT d.amp_activity_id, orgs.org_type_name AS org_type_name, orgs.org_type_id AS org_type_id
-						FROM v_ni_donor_orgs d JOIN v_ni_all_orgs_dimension orgs ON orgs.org_id = d.org_id;
+						FROM v_ni_donor_orgs d JOIN ni_all_orgs_dimension orgs ON orgs.org_id = d.org_id;
 			</lang>
 		</script>
 	</apply>

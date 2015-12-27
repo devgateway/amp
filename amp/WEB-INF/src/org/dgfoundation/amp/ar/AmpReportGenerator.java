@@ -368,12 +368,12 @@ public class AmpReportGenerator extends ReportGenerator {
 		ColumnWorker ce;
 		boolean transformToMetaTextCell = false;
 		
-		// this code stinks -> in the unlikely case Mondrian is ditched, needs to use AmpColumns[extractorView].cellType (which woul dneed to be refactor to in-java something
+		// this code stinks -> in the unlikely case Mondrian is ditched, needs to use AmpColumns[extractorView].cellType (which would need to be refactored to in-java something
 		if (viewName.equals(ArConstants.VIEW_PLEDGES_FUNDING))
 			ce = new CategAmountColWorker(filter.getGeneratedFilterQuery(), viewName, columnName, this);
 		else
 			if (viewName.equals("v_pledges_titles")) {				
-				ce = new TextColWorker(filter.getGeneratedFilterQuery(), viewName, columnName, this);
+				ce = new TextColWorker(filter.getGeneratedFilterQuery(), viewName, ColumnConstants.PLEDGES_TITLES, this);
 				transformToMetaTextCell = true;
 			}
 			else

@@ -87,7 +87,7 @@ $BODY$
 CREATE OR REPLACE FUNCTION update_sector_level_caches_internal()
 RETURNS bigint AS
 $BODY$
-BEGIN
+BEGIN   <!-- WARNING THIS TRIGGER HAS BEEN ALTERED IN AMP-21453-define-sector-nicache-tables.xml in AMP 2.12 -->
 	TRUNCATE all_sectors_with_levels;
 
 	INSERT INTO all_sectors_with_levels 

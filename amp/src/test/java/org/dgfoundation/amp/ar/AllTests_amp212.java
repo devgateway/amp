@@ -8,6 +8,8 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.dgfoundation.amp.ar.amp212.CurrencyConvertorTests;
+import org.dgfoundation.amp.ar.amp212.DimensionsFetchingTests;
+import org.dgfoundation.amp.ar.amp212.DimensionSnapshotTests;
 import org.dgfoundation.amp.ar.amp212.GraphAlgorithmsTests;
 import org.dgfoundation.amp.ar.amp212.InclusiveRunnerTests;
 import org.dgfoundation.amp.ar.amp212.MetaInfoTests;
@@ -40,6 +42,8 @@ public class AllTests_amp212
 		suite.addTest(new JUnit4TestAdapter(NiReportsFetchingTests.class));
 		suite.addTest(new JUnit4TestAdapter(MetaInfoTests.class)); 
 		suite.addTest(new JUnit4TestAdapter(CurrencyConvertorTests.class));
+		suite.addTest(new JUnit4TestAdapter(DimensionsFetchingTests.class));
+		suite.addTest(new JUnit4TestAdapter(DimensionSnapshotTests.class));
 		return suite;
 	}
 	

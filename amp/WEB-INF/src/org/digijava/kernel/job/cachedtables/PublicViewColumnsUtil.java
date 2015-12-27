@@ -130,10 +130,10 @@ public class PublicViewColumnsUtil
 			
 			logger.fatal("--------------------------------------------------------------------------");
 			logger.fatal("DO NOT IGNORE THIS MESSAGE OR DISABLE THE CHECK."); 
-			logger.fatal("\nThis is a list of a column references non-existant views:\n\n" + msg.toString() + "\n"); 
+			logger.fatal("\nThis is a list of a column referencing non-existant views:\n\n" + msg.toString() + "\n"); 
 			logger.fatal("FIX THE DATABASE.");
 			logger.fatal("--------------------------------------------------------------------------");
-			throw new Error("This is a list of a column references non-existant views:\n" + msg.toString() + " \nFIX THE DATABASE!");
+			throw new Error("This is a list of a column referencing non-existant views:\n" + msg.toString() + " \nFIX THE DATABASE!");
 		}
 		
 		
@@ -212,6 +212,7 @@ public class PublicViewColumnsUtil
 				logger.debug(String.format("\t\t...creating an index for column %s of cached table %s", columnName, cacheName));
 				SQLUtils.executeQuery(conn, String.format("CREATE INDEX ON %s(%s)", cacheName, columnName));
 			}
+		SQLUtils.flush(conn);
 	}
 	
 	/**

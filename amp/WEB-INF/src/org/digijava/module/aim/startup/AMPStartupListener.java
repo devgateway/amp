@@ -312,6 +312,7 @@ public class AMPStartupListener extends HttpServlet implements
 			runCacheRefreshingQuery("update_location_level_caches_internal", "location");
 			runCacheRefreshingQuery("update_program_level_caches_internal", "program");
 			runCacheRefreshingQuery("update_sector_level_caches_internal", "sector");
+			runCacheRefreshingQuery("update_organisation_caches_internal", "organisation");
 			
 			PersistenceManager.getSession().getTransaction().commit();
 			
@@ -359,6 +360,7 @@ public class AMPStartupListener extends HttpServlet implements
 			session = PersistenceManager.getSession();
 			
 			ReportsUtil.checkDatabaseSanity(session);
+			ReportsUtil.checkFilteringConfigurationSanity(session);
 			ReportsUtil.checkPledgesViewsSanity(session);
 			ReportsUtil.checkLocationsSanity(session);
 			CurrencyUtil.checkDatabaseSanity(session);

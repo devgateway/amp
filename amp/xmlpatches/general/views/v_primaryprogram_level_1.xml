@@ -21,15 +21,14 @@
 			<lang delimiter=";" type="postgres">
 				DROP VIEW IF EXISTS v_primaryprogram_level_1;
 				CREATE OR REPLACE VIEW v_primaryprogram_level_1 AS
-					SELECT a.amp_activity_id, level.name AS name, level.amp_theme_id AS amp_program_id, SUM(a.program_percentage) as percentage
+					SELECT a.amp_activity_id, COALESCE(level.name, '#') AS name, apl.id1 AS amp_program_id, SUM(a.program_percentage) as percentage
 						FROM amp_activity_program a	
-							JOIN all_programs_with_levels apl ON a.amp_program_id = apl.amp_theme_id
-							JOIN amp_theme level ON level.amp_theme_id = apl.id1
+							JOIN ni_all_programs_with_levels apl ON a.amp_program_id = apl.amp_theme_id
+							LEFT JOIN amp_theme level ON level.amp_theme_id = apl.id1
 							JOIN amp_program_settings aps ON aps.amp_program_settings_id = a.program_setting
    						WHERE aps.name = 'Primary Program'
-					GROUP BY a.amp_activity_id, level.amp_theme_id
-					ORDER BY amp_activity_id
-          	</lang>
+					GROUP BY a.amp_activity_id, apl.id1, level.amp_theme_id;
+			</lang>
 		</script>
 	</apply>
 </tns:patch>

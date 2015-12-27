@@ -19,8 +19,20 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_contracting_agency AS SELECT f.activity AS amp_activity_id, o.name, f.organisation AS amp_org_id, sum(f.percentage) AS percentage FROM amp_org_role f, amp_organisation o, amp_role r WHERE (((f.organisation = o.amp_org_id) AND (f.role = r.amp_role_id)) AND ((r.role_code)::text = 'CA'::text)) GROUP BY f.activity, f.role, f.organisation, o.name ORDER BY f.activity, o.name;;;
-        		</lang>
+				DROP VIEW IF EXISTS v_contracting_agency CASCADE;
+		    	CREATE OR REPLACE VIEW v_contracting_agency AS
+			   		SELECT f.activity AS amp_activity_id, org.org_name, org.org_id, sum(f.percentage) AS percentage
+						FROM amp_org_role f
+							JOIN ni_all_orgs_dimension org ON org.org_id = f.organisation
+							JOIN amp_role r ON (f.role = r.amp_role_id) AND (r.role_code = 'CA')
+						GROUP BY f.activity, org.org_id, org.org_name;
+						
+				DROP VIEW IF EXISTS v_contracting_agency_acronym CASCADE;
+			    CREATE OR REPLACE VIEW v_contracting_agency_acronym AS 
+			    	SELECT ca.amp_activity_id, org.acronym, ca.org_id, ca.percentage 
+			    		FROM v_contracting_agency ca
+			    			JOIN amp_organisation org ON org.amp_org_id = ca.org_id;
+        	</lang>
 		</script>
 	</apply>
 </tns:patch>

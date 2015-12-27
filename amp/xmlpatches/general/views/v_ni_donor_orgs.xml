@@ -28,7 +28,7 @@
 					SELECT f.amp_activity_id, org.name AS org_name, f.amp_donor_org_id AS org_id 
 						FROM amp_funding f JOIN amp_organisation org ON org.amp_org_id = f.amp_donor_org_id
   						WHERE
-  							(f.source_role_id = (SELECT amp_role.amp_role_id FROM amp_role WHERE amp_role.role_code::text = 'DN'::text)) 
+  							(f.source_role_id = (SELECT amp_role.amp_role_id FROM amp_role WHERE amp_role.role_code = 'DN')) 
   								OR 
   							(f.amp_funding_id IN (
   								SELECT DISTINCT(amp_funding_id) FROM amp_funding_detail det	WHERE det.adjustment_type IN (SELECT id from amp_category_value 

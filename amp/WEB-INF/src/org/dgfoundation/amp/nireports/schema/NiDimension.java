@@ -10,7 +10,8 @@ import static org.dgfoundation.amp.nireports.NiUtils.failIf;
 /**
  * 
  * a class describing a set of related Columns, arranged in a stack. There might be multiple Columns on a given level of the stack. This class only references level ids; it is up to the Schema to map columns to levels within the dimension
- * identity comparisons are good here by design
+ * identity comparisons are good here by design.<br />
+ * Use by it defining {@link #fetchDimension()}
  * @author Dolghier Constantin
  *
  */
@@ -95,4 +96,15 @@ public abstract class NiDimension {
 			return String.format("Dimension: %s of %s, level: %d", instanceName, dimension.name, level);
 		}
 	}
+	
+	
+	public final static int LEVEL_0 = 0;
+	public final static int LEVEL_1 = 1;
+	public final static int LEVEL_2 = 2;
+	public final static int LEVEL_3 = 3;
+	public final static int LEVEL_4 = 4;
+	public final static int LEVEL_5 = 5;
+	public final static int LEVEL_6 = 6;
+	public final static int LEVEL_7 = 7;
+	public final static int LEVEL_8 = 8;
 }

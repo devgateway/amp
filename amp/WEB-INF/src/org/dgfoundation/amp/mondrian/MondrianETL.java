@@ -324,7 +324,10 @@ private EtlResult execute() throws Exception {
 		SQLUtils.executeQuery(conn, "INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('etl', " + currentEtlId + ")");
 		currentEtlEventId = SQLUtils.getLong(conn, "SELECT max(event_id) FROM amp_etl_changelog WHERE entity_name = 'etl'");
 
-		boolean fullEtlRequestedDB = !collectEtlEntities("full_etl_request").isEmpty(); // was full_etl requested?
+		boolean fullEtlRequestedDB = (!collectEtlEntities("full_etl_request").isEmpty()) // was full_etl requested?
+				||
+				!collectEtlEntities("exchange_rate").isEmpty(); // AN EXCHANGE RATE CHANGE CAN AFFECT CALCULATED EXCHANGE RATES FOR ALL THE SURROUNDING DATES (in real-life AMP installations we don't have an exchange rate for each day for each currency) 
+		
 		if (fullEtlRequestedDB) {
 			forceFullEtl |= fullEtlRequestedDB;
 			reasonsForFull.add("DB_requested");
@@ -965,13 +968,13 @@ private EtlResult execute() throws Exception {
 			return;
 		//logger.warn("generating orgs ETL tables...");
 		String activitiesCondition = etlConfig.activityIdsIn("amp_activity_id");
-		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_executing_agency WHERE (%s)", activitiesCondition), "etl_executing_agencies", false);
-		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_beneficiary_agency WHERE (%s)", activitiesCondition), "etl_beneficiary_agencies", false);
-		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_implementing_agency WHERE (%s)", activitiesCondition), "etl_implementing_agencies", false);
-		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_responsible_organisation WHERE (%s)", activitiesCondition), "etl_responsible_agencies", false);
-		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_contracting_agency WHERE (%s)", activitiesCondition), "etl_contracting_agencies", false);
-		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_regional_group WHERE (%s)", activitiesCondition), "etl_regional_groups", false);
-		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_sector_group WHERE (%s)", activitiesCondition), "etl_sector_groups", false);
+		runEtlOnTable(String.format("select amp_activity_id, org_id, percentage from v_executing_agency WHERE (%s)", activitiesCondition), "etl_executing_agencies", false);
+		runEtlOnTable(String.format("select amp_activity_id, org_id, percentage from v_beneficiary_agency WHERE (%s)", activitiesCondition), "etl_beneficiary_agencies", false);
+		runEtlOnTable(String.format("select amp_activity_id, org_id, percentage from v_implementing_agency WHERE (%s)", activitiesCondition), "etl_implementing_agencies", false);
+		runEtlOnTable(String.format("select amp_activity_id, org_id, percentage from v_responsible_organisation WHERE (%s)", activitiesCondition), "etl_responsible_agencies", false);
+		runEtlOnTable(String.format("select amp_activity_id, org_id, percentage from v_contracting_agency WHERE (%s)", activitiesCondition), "etl_contracting_agencies", false);
+		runEtlOnTable(String.format("select amp_activity_id, org_id, percentage from v_regional_group WHERE (%s)", activitiesCondition), "etl_regional_groups", false);
+		runEtlOnTable(String.format("select amp_activity_id, org_id, percentage from v_sector_group WHERE (%s)", activitiesCondition), "etl_sector_groups", false);
 	}
 	
 	/**

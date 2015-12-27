@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.TreeSet;
 
 import org.digijava.module.fundingpledges.action.DisableableKeyValue;
 
@@ -39,7 +40,7 @@ public abstract class AmpTestCase extends TestCase
 			
 			if ((!shouldCheckException) || (shouldCheckException && thr.getClass() == correctException.getClass() && thr.getMessage().equals(correctException.getMessage()))) {
 				// it is ok, we want an exception
-				System.out.println("caught an ok exception: " + thr.getMessage());
+				//System.out.println("caught an ok exception: " + thr.getMessage());
 				return;
 			}
 			throw new RuntimeException(String.format("code which should have failed with (%s %s) has instead failed with (%s %s)", correctException.getClass(), correctException.getMessage(), thr.getClass(), thr.getMessage()));
@@ -53,6 +54,15 @@ public abstract class AmpTestCase extends TestCase
 	 */
 	public void assertBigDecimalEquals(BigDecimal a, BigDecimal b) {
 		assertEquals(0, a.compareTo(b));
+	}
+	
+	/**
+	 * sorts the elements of a collection ascendingly and then compares its toString() result with a given cor
+	 * @param cor
+	 * @param col
+	 */
+	public void assertColEquals(String cor, Collection<?> col) {
+		assertEquals(cor, new TreeSet<>(col).toString());
 	}
 	
 	public void testDisableableKeyValues(Collection<DisableableKeyValue> res, DisableableKeyValue... cor){

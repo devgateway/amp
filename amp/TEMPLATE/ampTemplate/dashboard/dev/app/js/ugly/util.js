@@ -1,9 +1,10 @@
 // hopefully not that ugly, but seemed as good a place as any for this stuff...
 
-var d3 = require('d3-browserify');
+var d3 = require('d3');
 
 
 var formatKMB = function(precision, decimalSeparator) {
+  var app = window.app;
   var formatSI = d3.format('.' + (precision || 3) + 's');
   decimalSeparator = decimalSeparator || '.';
   return function(value) {
@@ -13,19 +14,20 @@ var formatKMB = function(precision, decimalSeparator) {
       .replace('G', app.translator.translateSync('amp.dashboard:chart-billion'))  // now just need to convert G Gigia -> B Billion
       .replace('T', app.translator.translateSync('amp.dashboard:chart-trillion'))
       .replace('P', app.translator.translateSync('amp.dashboard:chart-peta'))
-	  .replace('E', app.translator.translateSync('amp.dashboard:chart-exa'))
+      .replace('E', app.translator.translateSync('amp.dashboard:chart-exa'))
       .replace('.', decimalSeparator);
   };
 };
 
 var translateLanguage = function(value) {
-    return value
-      .replace('k', app.translator.translateSync('amp.dashboard:chart-thousand'))
-      .replace('M', app.translator.translateSync('amp.dashboard:chart-million'))
-      .replace('B', app.translator.translateSync('amp.dashboard:chart-billion'))
-      .replace('T', app.translator.translateSync('amp.dashboard:chart-trillion'))
-      .replace('P', app.translator.translateSync('amp.dashboard:chart-peta'))
-      .replace('E', app.translator.translateSync('amp.dashboard:chart-exa'));
+  var app = window.app;
+  return value
+    .replace('k', app.translator.translateSync('amp.dashboard:chart-thousand'))
+    .replace('M', app.translator.translateSync('amp.dashboard:chart-million'))
+    .replace('B', app.translator.translateSync('amp.dashboard:chart-billion'))
+    .replace('T', app.translator.translateSync('amp.dashboard:chart-trillion'))
+    .replace('P', app.translator.translateSync('amp.dashboard:chart-peta'))
+    .replace('E', app.translator.translateSync('amp.dashboard:chart-exa'));
 };
 
 var formatShortText = function(maxWidth) {

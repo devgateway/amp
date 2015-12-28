@@ -1,6 +1,6 @@
 var fs = require('fs');
 var _ = require('underscore');
-var d3 = require('d3-browserify');
+var d3 = require('d3');
 var util = require('../../ugly/util');
 var common = require('./common');
 var barSpecific = require('./_bar');

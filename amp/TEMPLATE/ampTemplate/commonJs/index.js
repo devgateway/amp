@@ -9,7 +9,7 @@ require('bootstrap/dist/js/bootstrap');
 require('backbone').$ = jQuery;
 
 // nvd3 will want d3 global sigh...
-window.d3 = require('d3-browserify');
+window.d3 = require('d3');
 
 
 /*

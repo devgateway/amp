@@ -1,5 +1,5 @@
 var nv = window.nv;  // nvd3 is a pain
-var d3 = require('d3-browserify');
+var d3 = require('d3');
 var util = require('../../ugly/util');
 var Numeral = require('numeral');
 var _ = require('underscore');

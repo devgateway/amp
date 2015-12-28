@@ -41,4 +41,15 @@ measures which are not affected by filters should be made columns
 ADD TESTS FOR:
 	MonetaryAmount
 	NiPrecisionSettings (AmpPrecisionSetting)
-	AmpCurrencyConvertor
+
+	
+REDO *info* columns as being part of the hierarchy
+REDO *funding* columns as being part of the donor hierarchy
+REDO v_organization_projectid
+pledges sectors + programs should be somehow fixed (data model is broken)
+change views which depend on amp_activity to depend on amp_activity_version  -> Aldo
+add startup check for NULL ids in NiReports
+change TrnCols to work via I18vRepository
+pledges titles: make a new view for NiReports
+public view cache: redo to only cache "latest and last validated" ids
+	

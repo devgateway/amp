@@ -243,15 +243,7 @@ public class MondrianETL {
 	}	
 	
 	protected Set<Long> getAllValidatedAndLatestIds() {
-		Set<Long> latestIds = new TreeSet<Long>(SQLUtils.<Long>fetchAsList(conn, "SELECT amp_activity_id FROM amp_activity", 1));
-		Set<Long> latestValidatedIds = new TreeSet<Long>(SQLUtils.<Long>fetchAsList(conn,
-				"SELECT aag.amp_activity_group_id, max(aav.amp_activity_id) FROM amp_activity_version aav, amp_activity_group aag WHERE aag.amp_activity_group_id = aav.amp_activity_group_id AND (aav.deleted IS NULL OR aav.deleted = false) AND aav.approval_status IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") GROUP BY aag.amp_activity_group_id", 2));
-		
-//		logger.warn("last activity version ids: " + latestIds.toString());
-//		logger.warn("last validated activity version ids: " + latestIds.toString());
-		Set<Long> res = new TreeSet<Long>();
-		res.addAll(latestIds);
-		res.addAll(latestValidatedIds);
+		Set<Long> res = new TreeSet<Long>(SQLUtils.fetchLongs(conn, "SELECT amp_activity_id FROM v_activity_latest_and_validated"));
 		return res;
 	}
 	

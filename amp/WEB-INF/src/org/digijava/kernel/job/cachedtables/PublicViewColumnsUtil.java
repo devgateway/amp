@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.job.CachedTableState;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.Session;
 
 /**
@@ -87,6 +88,18 @@ public class PublicViewColumnsUtil
 				return CachedTableState.CACHED_TABLE_DIFFERENT_STRUCTURE;
 		}
 		return CachedTableState.CACHED_TABLE_OK;
+	}
+	
+	/**
+	 * unconditionally redoes all the public view caches
+	 */
+	public static void redoCaches() {
+		try(java.sql.Connection conn = PersistenceManager.getJdbcConnection()) {
+			maintainPublicViewCaches(conn, true);
+		}
+		catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	/**
@@ -202,7 +215,9 @@ public class PublicViewColumnsUtil
 		}
 		else {
 			SQLUtils.executeQuery(conn, String.format("DROP TABLE IF EXISTS %s", cacheName));
-			SQLUtils.executeQuery(conn, String.format("CREATE TABLE %s AS SELECT * FROM %s;", cacheName, viewName));
+			LinkedHashSet<String> cols = SQLUtils.getTableColumns(viewName); 
+			String condition = (!cols.isEmpty()) && cols.iterator().next().toLowerCase().equals("amp_activity_id") ? "WHERE amp_activity_id IN (SELECT amp_activity_id FROM v_activity_latest_and_validated)" : "";
+			SQLUtils.executeQuery(conn, String.format("CREATE TABLE %s AS SELECT * FROM %s %s;", cacheName, viewName, condition));
 			SQLUtils.executeQuery(conn, String.format("GRANT SELECT ON " + cacheName + " TO public")); // AMP-17052: cache tables should be world-visible
 		}
 		

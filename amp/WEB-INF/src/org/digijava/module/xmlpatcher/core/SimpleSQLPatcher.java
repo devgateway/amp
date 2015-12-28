@@ -10,6 +10,8 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.module.aim.helper.Constants;
 
@@ -438,13 +440,34 @@ public class SimpleSQLPatcher {
    					executePatch(patch, conn, hashes.isEmpty());
    				}
    			}
-   			
+   			defineActivityVersionsViews(conn);
    			runDrcCleanup(conn);
    			createTrickyViewsIfNeeded(conn);
    			conn.setAutoCommit(false);
    			
    			conn.setAutoCommit(autoCommit);
    		}
+	}
+	
+	/**
+	 * (re)define the views which are concerned with activity versioning. Notice that, since some of these views are dependent on AmpARFilter constants, they are being redefined (WITHOUT DROPping) at each startup 
+	 * @param conn
+	 */
+	void defineActivityVersionsViews(Connection conn) {
+		String query = String.format("CREATE OR REPLACE VIEW v_activity_versions AS " + 
+			"SELECT aag.amp_activity_group_id, max(aav.amp_activity_id) as amp_activity_latest_validated_id, aag.amp_activity_last_version_id " + 
+			"FROM amp_activity_group aag " + 
+			"LEFT JOIN amp_activity_version aav ON (aag.amp_activity_group_id = aav.amp_activity_group_id) " + 
+			"AND (aav.deleted IS NULL OR aav.deleted = false) AND (aav.draft IS NULL or aav.draft = false) " + 
+			"AND (aav.approval_status IN (%s)) " + 
+			"GROUP BY aag.amp_activity_group_id", Util.toCSString(AmpARFilter.validatedActivityStatus));
+		SQLUtils.executeQuery(conn, query);
+		
+		String query2 = "CREATE OR REPLACE VIEW v_activity_latest_and_validated AS " + 
+				"SELECT distinct amp_activity_latest_validated_id AS amp_activity_id FROM v_activity_versions WHERE amp_activity_latest_validated_id IS NOT NULL " + 
+				"UNION " + 
+				"SELECT distinct amp_activity_last_version_id AS amp_activity_id FROM v_activity_versions";
+		SQLUtils.executeQuery(conn, query2);
 	}
 	
 	/**

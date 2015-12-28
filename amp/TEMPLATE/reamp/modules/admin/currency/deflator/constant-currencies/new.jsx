@@ -1,24 +1,60 @@
 import * as AMP from "amp/architecture";
 import React from "react";
-import {callFunc, identity, fetchJson} from "amp/tools";
+import {callFunc, identity, fetchJson, range} from "amp/tools";
+import {MIN_YEAR, MAX_YEAR} from "amp/tools/validate";
 import {SETTINGS} from "amp/config/endpoints";
 
-export class Model extends AMP.Model{}
+var eq = (field, val) => model => model.get(field) == val;
 
-export var init = (inflationRatesPromise, currenciesPromise, calendarsPromise, translationsPromise) =>
-  Promise.all([inflationRatesPromise, currenciesPromise, calendarsPromise, translationsPromise])
-    .then(
-      ([inflationRates, currencies, calendars, translations]) => {
+var within = arr => maybeEl => arr.indexOf(maybeEl) !== -1;
+
+var not = cb => (...args) => !cb(...args);
+
+var ensureInBounds = bounds => maybeEl => within(bounds)(maybeEl) ? maybeEl : bounds[0];
+
+export class Model extends AMP.Model{
+  constructor(...args){
+    super(...args);
+    //let's find all ranges for currently selected currency
+    var currentConstantCurrencies = this.constantCurrencies().filterEntries(eq('currency', this.currency()));
+    var existingYears = currentConstantCurrencies.size() ? //did we find something?
+        currentConstantCurrencies//sweet!
+            .map(({from, to}) => range(from(), to()))//convert the internal data structures to plain arrays
+            .reduce((a, b) => a.concat(b), [])//then concat them all into one array
+        : [];//we found nothing? the return an empty array(without this we would get an empty Model
+
+    var fromYears = range(MIN_YEAR, MAX_YEAR).filter(not(within(existingYears)));
+    this.fromYears = () => fromYears;
+
+    var ensuredFrom = ensureInBounds(fromYears)(this.from());
+    this.ensuredFrom = () => ensuredFrom;
+
+    var upperBound = Math.min.apply(Math,
+        currentConstantCurrencies
+            .filter(({from}) => from() > ensuredFrom)
+            .mapEntries(({from}) => from() - 1)
+            .concat([MAX_YEAR])
+    );
+
+    var toYears = range(ensuredFrom, upperBound);
+    this.toYears = () => toYears;
+
+    var ensuredTo = ensureInBounds(toYears)(this.to());
+    this.ensuredTo = () => ensuredTo;
+
+
+  }
+}
+
+export var init = (...args) =>
+  Promise.all(args).then(([constantCurrencies, currencies, calendars, translations]) => {
         var defaultCurrency = currencies.head().code();
-        var defaultYear = inflationRates.has(defaultCurrency) ?
-            inflationRates.get(defaultCurrency).years().head() :
-            null;
         return new Model({
+          constantCurrencies: constantCurrencies,
           calendar: calendars.head().id(),
           currency: defaultCurrency,
-          from: defaultYear,
-          to: defaultYear,
-          inflationRates: inflationRates,
+          from: MIN_YEAR,
+          to: new Date().getFullYear(),
           calendars: calendars,
           currencies: currencies,
           translations: translations
@@ -27,12 +63,11 @@ export var init = (inflationRatesPromise, currenciesPromise, calendarsPromise, t
     );
 
 export var actions = AMP.actions({
-  changeCalendar: "string",
+  changeCalendar: "number",
   changeCurrency: "string",
-  changeFrom: "string",
-  changeTo: "string",
-  add: ["string", "string", "number", "number"],
-  addRates: "string"
+  changeFrom: "number",
+  changeTo: "number",
+  add: ["number", "string", "number", "number"]
 });
 
 var select = (value, updateCb, children) => //create a select.input-sm.form-control
@@ -47,62 +82,39 @@ var dropdown = (
     updateCb,//function to call when the <select> changes
     valueCb = identity,//function that returns the value
     labelCb = identity//function that returns the label
-) => <td>{select(value, updateCb, entries.mapEntries(entry => option(valueCb(entry), labelCb(entry))))}</td>
+) => {
+  var mapCb = entry => option(valueCb(entry), labelCb(entry));
+  var entries = "function" == typeof entries.mapEntries ?
+      entries.mapEntries(mapCb) :
+      entries.map(mapCb);
+  return <td>{select(value, updateCb, entries)}</td>
+}
 
 var getCurrencyName = currency => currency.name() + "(" + currency.code() + ")";
 
-var ensureYearInBounds = bounds => year => bounds.has(year) ? year : bounds.head();
-
-function maybeSave(
-  __,//translator function
-  inflationRates,//all inflation rates
-  currency,//currently selected currency in the add new constant currency diaolog
-  fromValue,//current value of "from year" select
-  toValue,//current value fo "to year" select
-  changeFrom,//action to be called when from year changes
-  changeTo,//action to be called when to year changes
-  addRates,//action to be called when user wants to add missing rates
-  add//action to be called when adding a rate
-){
-  var fromYears = inflationRates.has(currency) ? inflationRates.get(currency).years() : null;
-  if(null === fromYears) return (
-      <td colSpan="3">
-        {__("amp.deflator:cannotAddConstantCurrency")}
-        &nbsp;
-        <a href="javascript:void(0)" onClick={addRates}>{__("amp.deflator:add")}?</a>
-      </td>
-  );
-  var toYears = fromYears.filter(year => year >= fromValue);
-  var ensuredYear = ensureYearInBounds(toYears)(toValue);
-  return [
-    dropdown(fromValue, fromYears, changeFrom),
-    dropdown(ensuredYear, toYears, changeTo),
-    <td>
-      <button className="btn btn-default btn-sm" onClick={e => add(ensuredYear)}>
-        {__("amp.deflator:add")}
-      </button>
-    </td>
-  ]
-}
-
+var ensureInt = cb => value => cb(parseInt(value));
 
 export var view = AMP.view((model, actions) => {
-  var {calendar, currency, from, to, calendars, currencies, inflationRates, translations} = model;
-  var {changeCalendar, changeCurrency, changeFrom, changeTo, addRates, add} = actions;
+  var {calendar, currency, ensuredFrom, ensuredTo, fromYears, toYears, calendars, currencies, translations} = model;
+  var {changeCalendar, changeCurrency, changeFrom, changeTo, add} = actions;
   var __ = key => translations().get(key);
-  var onAddRates = addRates.bind(null, currency());
-  var onAdd = add.bind(null, calendar(), currency(), from());
+  var onAdd = add.bind(null, calendar(), currency(), ensuredFrom(), ensuredTo());
   return (
     <tr>
-      {dropdown(calendar(), calendars(), changeCalendar, callFunc("id"), callFunc("name"))}
+      {dropdown(calendar(), calendars(), ensureInt(changeCalendar), callFunc("id"), callFunc("name"))}
       {dropdown(currency(), currencies(), changeCurrency, callFunc("code"), getCurrencyName)}
-      {maybeSave(__, inflationRates(), currency(), from(), to(), changeFrom, changeTo, onAddRates, onAdd)}
+      {dropdown(ensuredFrom(), fromYears(), ensureInt(changeFrom))}
+      {dropdown(ensuredTo(), toYears(), ensureInt(changeTo))}
+      <td>
+        <button className="btn btn-default btn-sm" onClick={onAdd}>
+          {__("amp.deflator:add")}
+        </button>
+      </td>
     </tr>
   )
 });
 
 export var translations = {
-  "amp.deflator:cannotAddConstantCurrency": "Selected currency has no inflation rates.",
   "amp.deflator:add": "Add"
 };
 
@@ -111,6 +123,5 @@ export var update = (action, model) => actions.match(action, {
   changeCurrency: model.currency,
   changeFrom: model.from,
   changeTo: model.to,
-  add: () => model,
-  addRates: () => model
+  add: () => model
 });

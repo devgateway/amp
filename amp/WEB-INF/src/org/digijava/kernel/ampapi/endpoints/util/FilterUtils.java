@@ -27,7 +27,9 @@ import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.search.util.SearchUtil;
 
@@ -60,7 +62,18 @@ public class FilterUtils {
 			String end = denull(String.valueOf(date.get("end")));
 			
 			if (start != null || end != null) {
-				SimpleDateFormat sdf = new SimpleDateFormat(MoConstants.DATE_FORMAT);
+				String defaultDateFormat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
+				String customDateFormat = MoConstants.DATE_FORMAT;
+				
+				// AMP-21865 - make changes in the format date
+				// in years-filter-model.js the date format is changed (from '/' to '-' and the the order of the elements: yyyy/mm/dd => dd-mm-yyyy) 
+				
+				if (defaultDateFormat.indexOf("/") > -1) {
+					String[] dateElements = defaultDateFormat.split("/");
+					customDateFormat = dateElements[2] + "-" + dateElements[1] + "-" + dateElements[0];
+				} 
+				
+				SimpleDateFormat sdf = new SimpleDateFormat(customDateFormat);
 				if (COLUMN_DATES_FILTER.contains(dateColumn)) {
 					filterRules.addDateRangeFilterRule(new ReportColumn(dateColumn),
 							start == null ? null : sdf.parse(start), end == null ? null : sdf.parse(end));

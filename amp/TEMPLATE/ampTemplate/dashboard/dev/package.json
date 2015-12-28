@@ -41,9 +41,9 @@
     "babyparse": "^0.2.1",
     "backbone": "~1.1.2",
     "bootstrap": "~3.2.0",
-    "d3-browserify": "~3.4.11",
+    "d3": "=3.5.12",
     "jquery": "~2.1.1",
-    "nvd3": "~1.1.15-beta",
+    "nvd3": "git://github.com/novus/nvd3.git#v1.7.1",
     "underscore": "=1.7.0"
   },
   "browserify": {

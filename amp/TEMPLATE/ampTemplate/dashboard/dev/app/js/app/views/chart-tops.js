@@ -1,4 +1,4 @@
-var d3 = require('d3-browserify');
+var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var ModalView = require('./chart-tops-info-modal');
 

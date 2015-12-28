@@ -1,5 +1,5 @@
 var nv = window.nv;  // nvd3 is a pain
-var d3 = require('d3-browserify');
+var d3 = require('d3');
 var util = require('../../ugly/util');
 var Numeral = require('numeral');
 var _ = require('underscore');
@@ -207,13 +207,13 @@ function formatNumber(number) {
 			symbol : '$'
 		}
 	};
-	console.log(ampLang);
+	//console.log(ampLang);
 	Numeral.language('amp', ampLang);
 	// Apply new language.
 	Numeral.language('amp');
 	// Apply the format.
 	var stringNumber = new Numeral(number).format(format);
-	console.log("stringNumber: " + stringNumber);
+	//console.log("stringNumber: " + stringNumber);
 	return stringNumber;
 }
 

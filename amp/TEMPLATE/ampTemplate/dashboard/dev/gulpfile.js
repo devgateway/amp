@@ -31,7 +31,7 @@ var paths = {
     sources: ['./app/less/**/*.less'],
     libs: [
       './node_modules/bootstrap/dist/css/bootstrap.css',
-      './node_modules/nvd3/nv.d3.css',
+      './node_modules/nvd3/build/nv.d3.css',
       '../../node_modules/amp-filter/dist/amp-filter.css'
     ],
     testStyles: './bower_components/mocha/mocha.css'
@@ -51,7 +51,7 @@ function _browserifier(entry, destFolder, destName, options) {
   bundler.external([
     'backbone',
     // don't need bootstrap here, as it just registers jQ plugins
-    'd3-browserify',
+    'd3',
     'jquery',
     'underscore'
   ]);

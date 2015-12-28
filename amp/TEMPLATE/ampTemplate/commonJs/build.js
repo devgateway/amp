@@ -9,7 +9,7 @@ var bundleStream = browserify()
   .require([
     'backbone',
     // bootstrap registers as jQ plugin, does not need to be here.
-    'd3-browserify',
+    'd3',
     'jquery',
     'underscore'
   ])

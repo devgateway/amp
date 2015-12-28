@@ -610,6 +610,8 @@ function generateHeaderRows(column, iRow, iCol) {
  */
 function cleanText(text, maxLength) {
 	text = text.replace(/<(?:.|\n)*?>/gm, '').replace(/["']/g, "");
+	text = _.escape(text);
+	
 	var tooltip = undefined;
 	if (maxLength !== undefined) {
 		if (text.length > maxLength) {

@@ -71,11 +71,13 @@ public class DesktopDocumentsUtil {
 
         reducedList = new ArrayList<DocumentData>();
         Iterator<DocumentData> it = allDocuments.listIterator();
+        Set<String> uidList = new HashSet<String>();
         while (it.hasNext() && reducedList.size() <= top) {
             DocumentData document = it.next();
-            // Checking to skip URLs
-            if (!document.getContentType().equalsIgnoreCase("URL")) {
+            // Checking to skip URLs and duplicates
+            if (!document.getContentType().equalsIgnoreCase("URL") && !uidList.contains(document.getUuid())) {
                 reducedList.add(document);
+                uidList.add(document.getUuid());
             }
         }
         DocumentManagerUtil.logoutJcrSessions(request);

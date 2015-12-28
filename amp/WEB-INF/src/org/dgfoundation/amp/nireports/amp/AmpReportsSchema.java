@@ -103,7 +103,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addTextColumn(ColumnConstants.FUNDING_STATUS, "v_funding_status");
 		addTextColumn(ColumnConstants.HUMANITARIAN_AID, "v_humanitarian_aid");
 		addTextColumn(ColumnConstants.IMPLEMENTATION_LEVEL, "v_implementation_level");
-		addTextColumn(ColumnConstants.IMPLEMENTING_AGENCY_DEPARTMENT_DIVISION, "v_implementing_agency_info");
+//		addTextColumn(ColumnConstants.IMPLEMENTING_AGENCY_DEPARTMENT_DIVISION, "v_implementing_agency_info");
 		addTextColumn(ColumnConstants.INDIRECT_ON_BUDGET, "v_indirect_on_budget");
 		addTextColumn(ColumnConstants.INSTITUTIONS, "v_institutions");
 		addTextColumn(ColumnConstants.MEASURES_TAKEN, "v_measures_taken");
@@ -145,8 +145,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addTextColumn(ColumnConstants.PROJECT_IMPACT, "v_proj_impact");
 		addTextColumn(ColumnConstants.PROJECT_IMPLEMENTING_UNIT, "v_project_impl_unit");
 		addTextColumn(ColumnConstants.PURPOSE, "v_purposes");
-		addTextColumn(ColumnConstants.REGIONAL_GROUP, "v_regional_group");
-		addTextColumn(ColumnConstants.REGIONAL_GROUP_DEPARTMENT_DIVISION, "v_regional_group_info");
+//		addTextColumn(ColumnConstants.REGIONAL_GROUP, "v_regional_group");
+//		addTextColumn(ColumnConstants.REGIONAL_GROUP_DEPARTMENT_DIVISION, "v_regional_group_info");
 		addTextColumn(ColumnConstants.REGIONAL_OBSERVATIONS, "v_regional_observations");
 		addTextColumn(ColumnConstants.RELATED_PLEDGES, "v_related_pledges");
 		addTextColumn(ColumnConstants.RELATED_PROJECTS, "v_pledges_projects");

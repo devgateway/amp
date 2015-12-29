@@ -42,7 +42,7 @@ public class IndicatorLayerManager extends Action {
                 indicatorLayerForm.setDescription(null);
                 indicatorLayerForm.setIndicatorLayerId(null);
                 indicatorLayerForm.setNumberOfClasses(null);
-                indicatorLayerForm.setAdmLevelList(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(
+                indicatorLayerForm.setAdmLevelList(CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(
                         "implementation_location", true));
                 return mapping.findForward("addEdit");
             case "delete":
@@ -60,7 +60,7 @@ public class IndicatorLayerManager extends Action {
                 indicatorLayerForm.setIndicatorLayerId(layerToEdit.getId());
                 indicatorLayerForm.setNumberOfClasses(layerToEdit.getNumberOfClasses());
                 indicatorLayerForm.setSelectedColorRampIndex(ColorRampUtil.getIndexByColors(layerToEdit.getColorRamp()));
-                indicatorLayerForm.setAdmLevelList(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(
+                indicatorLayerForm.setAdmLevelList(CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(
                         "implementation_location", true));
                 return mapping.findForward("addEdit");
             default :

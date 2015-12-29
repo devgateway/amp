@@ -1227,14 +1227,15 @@ public class DynLocationManagerUtil {
         	 admLevel = admLevelCell.getStringCellValue();
          }
 			List<AmpCategoryValue> implLocs = new ArrayList<AmpCategoryValue>(
-					CategoryManagerUtil
-							.getAmpCategoryValueCollectionByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY));
+					CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY));
+			
 			for (AmpCategoryValue admLevelValue:implLocs) {
-        	 if (admLevel.equalsIgnoreCase(admLevelValue.getValue())) {
-        		 selectedAdmLevel = admLevelValue;
-        		 break;
-        	 }
+				if (admLevel.equalsIgnoreCase(admLevelValue.getValue()) && admLevelValue.isVisible()) {
+					selectedAdmLevel = admLevelValue;
+					break;
+				}
          }
+			
          if (selectedAdmLevel == null) {
              return new ErrorWrapper(ErrorCode.INEXISTANT_ADM_LEVEL);
          }
@@ -1246,7 +1247,7 @@ public class DynLocationManagerUtil {
          if (indicatorNumberOfCells+2 < physicalNumberOfCells) {
              return new ErrorWrapper(ErrorCode.NUMBER_NOT_MATCH);
          }
-         List <AmpIndicatorLayer>  orderedIndicators = new ArrayList ();
+         List<AmpIndicatorLayer>  orderedIndicators = new ArrayList<AmpIndicatorLayer>();
          for (int i=2;i<physicalNumberOfCells;i++) {
         	 String cellValue = hssfRow.getCell(i).getStringCellValue();
         	 boolean found = false;
@@ -1264,30 +1265,27 @@ public class DynLocationManagerUtil {
          for (int j = 1; j < hssfSheet.getPhysicalNumberOfRows(); j++) {
              hssfRow = hssfSheet.getRow(j);
              if (hssfRow != null) {
-
                  AmpCategoryValueLocations locationObject = null;
-                 
                  String geoCodeId = null;
+                 
                  Cell geoCodeIdCell = hssfRow.getCell(1);
                  if (geoCodeIdCell != null) {
                 	 geoCodeId = getValue(geoCodeIdCell);
                 	 //some versions of excel converts to numeric and adds a .0 at the end
-                	 geoCodeId=geoCodeId.replace(".0", "");
-                	 if (geoCodeId != null && !geoCodeId.trim().equals("")) {
-                		   locationObject = DynLocationManagerUtil.getLocationByGeoCode(geoCodeId, selectedAdmLevel);
-                		   if(locationObject==null){
-                			   geoIdsWithProblems.add(geoCodeId);
-                			   continue;
-                		   }
-                     }
-                	 else {
+                	 if (StringUtils.isNotEmpty(geoCodeId) && !".0".equals(geoCodeId)) {
+                		 geoCodeId = geoCodeId.replace(".0", "");
+                		 locationObject = DynLocationManagerUtil.getLocationByGeoCode(geoCodeId, selectedAdmLevel);
+                		 if(locationObject == null) {
+                			 geoIdsWithProblems.add(geoCodeId);
+                			 continue;
+                		 }
+                     } else {
                 		 continue;
                 	 }
-                    
                  }
                 
                  int index = 2;
-                 for (AmpIndicatorLayer indicator:orderedIndicators) {
+                 for (AmpIndicatorLayer indicator : orderedIndicators) {
                 	 Cell cell = hssfRow.getCell(index++);
                 	 String value = getValue(cell);
                 	 AmpLocationIndicatorValue locationIndicatorValue = DynLocationManagerUtil.getLocationIndicatorValue (1l,indicator.getId());

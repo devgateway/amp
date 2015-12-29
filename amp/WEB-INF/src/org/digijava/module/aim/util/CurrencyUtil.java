@@ -70,7 +70,7 @@ public class CurrencyUtil {
 		try {
 			session = PersistenceManager.getSession();
 			qryStr = "select currency from " + AmpCurrency.class.getName() + "" +
-					" currency where (currency.activeFlag='1') and (currency.virtual is false) ";
+					" currency where (currency.activeFlag='1') ";
 			qry = session.createQuery(qryStr);
 			Set<String> allCurrencies = new HashSet<>();
 			Collection res = qry.list();

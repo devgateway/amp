@@ -118,9 +118,7 @@ public class InternationalizedViewsRepository {
 			Collections.<String, I18nViewDescription>unmodifiableMap(
 			new HashMap<String, I18nViewDescription>()
 			{{
-				addViewDef(this, new I18nViewDescription("amp_category_value").
-						addTrnColDef("category_value", "id"));
-
+				addSimpleTranslatedView(this, "amp_category_value", "category_value", "id");
 				
 				addViewDef(this, new I18nViewDescription("amp_team").
 								addColumnDef(new I18nViewColumnDescription("name", "amp_team_id", AmpTeam.class, "name")));
@@ -208,7 +206,7 @@ public class InternationalizedViewsRepository {
 						addColumnDef(new I18nViewColumnDescription("org_grp_name", "org_grp_id", AmpOrgGroup.class, "orgGrpName")));
 
 				addViewDef(this, new I18nViewDescription("v_component_funding_organization_name").
-						addColumnDef(new I18nViewColumnDescription("title", "amp_org_id", AmpOrganisation.class, "name")));
+						addColumnDef(new I18nViewColumnDescription("org_name", "org_id", AmpOrganisation.class, "name")));
 
 				addViewDef(this, new I18nViewDescription("v_contracting_agency").
 						addColumnDef(new I18nViewColumnDescription("org_name", "org_id", AmpOrganisation.class, "name")));
@@ -261,24 +259,19 @@ public class InternationalizedViewsRepository {
 				addViewDef(this, new I18nViewDescription("v_executing_agency_type").
 						addColumnDef(new I18nViewColumnDescription("org_type_name", "org_type_id", AmpOrgType.class, "orgType")));
 				
-				addViewDef(this, new I18nViewDescription("v_financial_instrument").
-						addTrnColDef("category_value", "id"));
-				
-				addViewDef(this, new I18nViewDescription("v_humanitarian_aid").
-						addTrnColDef("val", "val_id"));
-				
-				addViewDef(this, new I18nViewDescription("v_disaster_response_marker").
-						addTrnColDef("val", "val_id"));				
-				
-				addViewDef(this, new I18nViewDescription("v_funding_status").
-						addTrnColDef("funding_status_name", "funding_status_code"));
-				
+				addSimpleTranslatedView(this, "v_financial_instrument", "category_value", "id");
+				addSimpleTranslatedView(this, "v_financing_instrument", "category_value", "id");
+				addSimpleTranslatedView(this, "v_humanitarian_aid", "val", "val_id");
+				addSimpleTranslatedView(this, "v_disaster_response_marker", "val", "val_id");
+				addSimpleTranslatedView(this, "v_funding_status", "funding_status_name", "funding_status_code");
+				addSimpleTranslatedView(this, "v_implementation_level", "name", "level_code");
+
 				addViewDef(this, new I18nViewDescription("v_implementing_agency").
 						addColumnDef(new I18nViewColumnDescription("org_name", "org_id", AmpOrganisation.class, "name")));
 				
 				addViewDef(this, new I18nViewDescription("v_implementing_agency_groups").
 						addColumnDef(new I18nViewColumnDescription("org_grp_name", "org_grp_id", AmpOrgGroup.class, "orgGrpName")));
-
+				
 				addViewDef(this, new I18nViewDescription("v_implementing_agency_type").
 						addColumnDef(new I18nViewColumnDescription("org_type_name", "org_type_id", AmpOrgType.class, "orgType")));
 
@@ -288,14 +281,17 @@ public class InternationalizedViewsRepository {
 				addViewDef(this, new I18nViewDescription("v_indicator_name").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_me_indicator_id", AmpIndicator.class, "name")));
 
-				addViewDef(this, new I18nViewDescription("v_institutions").
-						addTrnColDef("name", "id"));
+				addSimpleTranslatedView(this, "v_indirect_on_budget", "iob_text", "iob_id");
+				addSimpleTranslatedView(this, "v_institutions", "name", "id");
 				
+				addSimpleTranslatedView(this, "v_line_ministries_observations", "name", "amp_line_ministry_observation_id");
+
+				addSimpleTranslatedView(this, "v_modalities", "name", "level_code");
+				addSimpleTranslatedView(this, "v_mode_of_payment", "mode_of_payment_name", "mode_of_payment_code");
+				addSimpleTranslatedView(this, "v_multi_donor", "value", "id");
+
 				addViewDef(this, new I18nViewDescription("v_measures_taken").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_measure_id", AmpMeasure.class, "name")));
-
-				addViewDef(this, new I18nViewDescription("v_mode_of_payment").
-						addTrnColDef("mode_of_payment_name", "mode_of_payment_code"));
 				
 				addViewDef(this, new I18nViewDescription("v_mtef_funding").
 						addColumnDef(new I18nViewColumnDescription("donor_name", "org_id", AmpOrganisation.class, "name")).
@@ -304,6 +300,10 @@ public class InternationalizedViewsRepository {
 						addTrnColDef("terms_assist_name", "terms_assist_id").
 						addTrnColDef("financing_instrument_name", "financing_instrument_id"));
 								
+				addSimpleTranslatedView(this, "v_on_off_budget", "budget", "budget_id");
+				
+				addSimpleTranslatedView(this, "v_pledges_aid_modality", "name", "amp_modality_id");
+				
 				addViewDef(this, new I18nViewDescription("v_pledges_donor").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_donor_org_id", AmpOrganisation.class, "name")));
 				
@@ -333,9 +333,13 @@ public class InternationalizedViewsRepository {
 				addViewDef(this, new I18nViewDescription("v_pledges_secondary_programs").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
 
+				addSimpleTranslatedView(this, "v_pledges_status", "name", "amp_status_id");
+				
 				addViewDef(this, new I18nViewDescription("v_pledges_tertiary_programs").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
 
+				addSimpleTranslatedView(this, "v_pledges_type_of_assistance", "category_value", "id");
+				
 				addViewDef(this, new I18nViewDescription("v_pledges_npd_objectives").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
 
@@ -366,8 +370,7 @@ public class InternationalizedViewsRepository {
 				addViewDef(this, new I18nViewDescription("v_pledges_zones").
 						addColumnDef(new I18nViewColumnDescription("zone_name", "zone_id", AmpCategoryValueLocations.class, "name")));
 								
-				addViewDef(this, new I18nViewDescription("v_procurement_system").
-						addTrnColDef("name", "id"));
+				addSimpleTranslatedView(this, "v_procurement_system", "name", "id");
 								
 				addViewDef(this, new I18nViewDescription("v_regional_funding").
 						addColumnDef(new I18nViewColumnDescription("region_name", "region_id", AmpCategoryValueLocations.class, "name")));
@@ -410,8 +413,7 @@ public class InternationalizedViewsRepository {
 						addColumnDef(new I18nViewColumnDescription("name", "amp_sector_id", AmpSector.class, "name")));
 						//.addColumnDef(new I18nViewColumnDescription("sec_scheme_name", "amp_sector_scheme_id", AmpSectorScheme.class, "secSchemeName")));
 
-				addViewDef(this, new I18nViewDescription("v_status").
-						addTrnColDef("name", "amp_status_id"));
+				addSimpleTranslatedView(this, "v_status", "name", "amp_status_id");
 				
 				addViewDef(this, new I18nViewDescription("v_structures").
 						addColumnDef(new I18nViewColumnDescription("title", "amp_structure_id", AmpStructure.class, "title")));
@@ -436,8 +438,7 @@ public class InternationalizedViewsRepository {
 				addViewDef(this, new I18nViewDescription("v_teams").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_team_id", AmpTeam.class, "name")));
 
-				addViewDef(this, new I18nViewDescription("v_terms_assist").
-						addTrnColDef("terms_assist_name", "terms_assist_code"));
+				addSimpleTranslatedView(this, "v_terms_assist", "terms_assist_name", "terms_assist_code");
 								
 				addViewDef(this, new I18nViewDescription("v_tertiary_sectors").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_sector_id", AmpSector.class, "name")));
@@ -465,6 +466,9 @@ public class InternationalizedViewsRepository {
 				addViewDef(this, new I18nViewDescription("v_component_type").
 						addColumnDef(new I18nViewColumnDescription("component_type", "component_type_id", AmpComponentType.class, "name")));
 			
+				addSimpleTranslatedView(this, "v_yes_no_government_approval_proc", "value", "id");
+				addSimpleTranslatedView(this, "v_yes_no_joint_criteria", "value", "id");
+				
 //				addViewDef(this, new I18nViewDescription("v_activity_pledges_title").
 //						addColumnDef(new I18nViewColumnDescription("pledge_title", "pledge_id", AmpCategoryValue.class, "value")));
 				
@@ -512,7 +516,7 @@ public class InternationalizedViewsRepository {
 					.addColumnDef(new I18nViewColumnDescription("org_grp_name", "org_grp_id", AmpOrgGroup.class, "orgGrpName")));
 
 				addViewDef(this, new I18nViewDescription("v_ni_donor_orgstypes")
-				.addColumnDef(new I18nViewColumnDescription("org_type_name", "org_type_id", AmpOrgType.class, "orgType")));				
+					.addColumnDef(new I18nViewColumnDescription("org_type_name", "org_type_id", AmpOrgType.class, "orgType")));				
 				
 			}
 			
@@ -594,5 +598,10 @@ public class InternationalizedViewsRepository {
 			map.put(clonedView.viewName, clonedView);
 		}
 		
+	}
+	
+	private static void addSimpleTranslatedView(HashMap<String, I18nViewDescription> map, String viewName, String payloadColumn, String idColumn) {
+		addViewDef(map, new I18nViewDescription(viewName).
+				addTrnColDef(payloadColumn, idColumn));
 	}
 }

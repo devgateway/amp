@@ -99,6 +99,7 @@ public class InclusiveRunnerTests extends AmpTestCase {
 			}));
 		thr1.start();
 		Thread thr2 = new Thread(() -> timer.run("thread 2", () -> delay(150)));
+		delay(30); // give thread 1 enough time to start
 		thr2.start();
 		timer.run("main thread", () -> {
 			delay(50);

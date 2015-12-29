@@ -19,6 +19,8 @@
 				UPDATE amp_columns_filters SET view_field_name='zone_id' WHERE (column_id = (select columnid from amp_columns where columnname='Zone')) AND (bean_field_name='relatedLocations');
 				UPDATE amp_columns_filters SET view_field_name='org_id' WHERE (column_id = (select columnid from amp_columns where columnname='Implementing Agency')) AND (bean_field_name='implementingAgency');
 				UPDATE amp_columns_filters SET view_field_name='org_id' WHERE (column_id = (select columnid from amp_columns where columnname='Beneficiary Agency')) AND (bean_field_name='beneficiaryAgency');
+				
+				UPDATE amp_columns_filters SET view_field_name='category_value' WHERE (column_id = (select columnid from amp_columns where columnname='Financing Instrument')) AND (bean_field_name='financingInstruments');
 			</lang>
 		</script>
 	</apply>

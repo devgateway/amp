@@ -51,7 +51,7 @@ public class ColumnFilterGenerator {
 		}});
 		
 		put("v_pledges_type_of_assistance", new HashSet<ViewDonorFilteringInfo>(){{
-			add(new ViewDonorFilteringInfo("terms_assist_code", "typeOfAssistance"));
+			add(new ViewDonorFilteringInfo("id", "typeOfAssistance"));
 		}});
 		
 		put("v_pledges_sectors", new HashSet<ViewDonorFilteringInfo>(){{

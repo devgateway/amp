@@ -19,14 +19,18 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
+				DROP VIEW IF EXISTS v_yes_no_joint_criteria CASCADE;
 			   	CREATE OR REPLACE VIEW v_yes_no_joint_criteria AS
 			   		SELECT a.amp_activity_id, 
 			   			CASE a.jointcriteria
 			   				WHEN true THEN 'yes'::text
 			   				WHEN false THEN 'no'::text
-			   				ELSE 'unallocated'::text
-			   			END AS jointcriteria 
-			   			FROM amp_activity_version a;
+			   			END AS value,
+						CASE a.jointcriteria
+			   				WHEN true THEN 1
+			   				WHEN false THEN 2
+			   			END AS id
+			   			FROM amp_activity_version a WHERE jointcriteria IS NOT NULL;
         	</lang>
 		</script>
 	</apply>

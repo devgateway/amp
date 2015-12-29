@@ -19,8 +19,15 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_pledges_type_of_assistance AS SELECT p.id AS pledge_id, val.category_value AS terms_assist_name, val.id AS terms_assist_code FROM ((amp_funding_pledges p JOIN amp_funding_pledges_details fund ON ((p.id = fund.pledge_id))) JOIN amp_category_value val ON ((fund.type_of_assistance = val.id))) GROUP BY p.id, val.id, val.category_value ORDER BY p.id, val.category_value;;;
-        		</lang>
+				DROP VIEW IF EXISTS v_pledges_type_of_assistance;
+				
+			    CREATE OR REPLACE VIEW v_pledges_type_of_assistance AS
+			    	SELECT DISTINCT ON (1, 2, 3) p.id AS pledge_id, val.category_value, val.id 
+			    		FROM amp_funding_pledges p 
+			    			JOIN amp_funding_pledges_details fund ON p.id = fund.pledge_id
+			    			JOIN amp_category_value val ON fund.type_of_assistance = val.id
+			    		GROUP BY p.id, val.id;
+        	</lang>
 		</script>
 	</apply>
 </tns:patch>

@@ -19,14 +19,18 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
+				DROP VIEW IF EXISTS v_yes_no_government_approval_proc CASCADE;
 			   	CREATE OR REPLACE VIEW v_yes_no_government_approval_proc AS
 			   		SELECT a.amp_activity_id, 
 			   			CASE a.governmentapprovalprocedures
 			   				WHEN true THEN 'yes'::text 
 			   				WHEN false THEN 'no'::text
-			   				ELSE 'unallocated'::text
-			   			END AS governmentapprovalprocedures
-			   			FROM amp_activity_version a ORDER BY a.amp_activity_id;
+			   			END AS value,
+			   			CASE a.governmentapprovalprocedures
+			   				WHEN true THEN 1
+			   				WHEN false THEN 2
+			   			END AS id
+			   			FROM amp_activity_version a WHERE a.governmentapprovalprocedures IS NOT NULL;
         	</lang>
 		</script>
 	</apply>

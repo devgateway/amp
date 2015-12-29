@@ -108,39 +108,40 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 	@Test
 	public void testExchangeRatesToMdl() throws Exception {
 		runNiReportsTestcase(
-				Arrays.asList("with weird currencies"),
-				rep -> changeReportCurrency(rep, "MDL"),
-				engine -> {
-					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetchColumn(engine);
-					assertEquals(
-							"["
-									+ "(actId: 79, 1728189.390618 on 2015-10-06 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, "
-									+ "(actId: 79, 50000 on 2014-12-16 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, "
-									+ "(actId: 79, 123187.5 on 2015-10-14 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}"
-									+ "]", cells.toString());
-				});
+			Arrays.asList("with weird currencies"),
+			rep -> changeReportCurrency(rep, "MDL"),
+			engine -> {
+				List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetchColumn(engine);
+				assertEquals(
+					"["
+						+ "(actId: 79, 1728189.390618 on 2015-10-06 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, "
+						+ "(actId: 79, 50000 on 2014-12-16 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, "
+						+ "(actId: 79, 123187.5 on 2015-10-14 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}"
+					+ "]",
+				cells.toString());
+		});
 	}
 
 	@Test
 	public void testActivityUpdatedBy() throws Exception {
 		runNiReportsTestcase(
-				Arrays.asList("Unvalidated activity", "execution rate activity"),
-				engine -> {
-					List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.ACTIVITY_UPDATED_BY)
-							.fetchColumn(engine);
-					assertEquals("[(actId: 64, <ATL ATL (atl@amp.org)>), (actId: 77, <ATL ATL (atl@amp.org)>)]",
-							cells.toString());
-				});
+			Arrays.asList("Unvalidated activity", "execution rate activity"),
+			engine -> {
+				List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.ACTIVITY_UPDATED_BY)
+					.fetchColumn(engine);
+				assertEquals("[(actId: 64, <ATL ATL (atl@amp.org)>), (actId: 77, <ATL ATL (atl@amp.org)>)]",
+					cells.toString());
+			});
 	}
 
 	@Test
 	public void testImplementationLever() throws Exception {
 		runNiReportsTestcase(Arrays.asList("Unvalidated activity", "execution rate activity"),
-				engine -> {
-					List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.IMPLEMENTATION_LEVEL)
-							.fetchColumn(engine);
-					assertEquals("[(actId: 77, <Provincial>), (actId: 64, <National>)]", cells.toString());
-				});
+			engine -> {
+				List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.IMPLEMENTATION_LEVEL)
+					.fetchColumn(engine);
+				assertEquals("[(actId: 77, <Provincial>), (actId: 64, <National>)]", cells.toString());
+			});
 	}
 
 	@Test
@@ -162,9 +163,9 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 
 	@Test
 	public void testJointCriteria() throws Exception {
-		runNiReportsTestcase(Arrays.asList("Unvalidated activity", "execution rate activity"), engine -> {
+		runNiReportsTestcase(Arrays.asList("Unvalidated activity", "execution rate activity", "Activity with Zones"), engine -> {
 			List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.JOINT_CRITERIA).fetchColumn(engine);
-			assertEquals("[(actId: 64, <unallocated>), (actId: 77, <unallocated>)]", cells.toString());
+			assertEquals("[(actId: 33, <Yes>)]", cells.toString());
 		});
 	}
 }

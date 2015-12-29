@@ -31,6 +31,7 @@ public class I18nViewDescription {
 		return this;
 	}
 	
+	
 	public I18nViewDescription addTrnColDef(String columnName, String idColumnName)
 	{
 		if (!viewColumns.contains(columnName))

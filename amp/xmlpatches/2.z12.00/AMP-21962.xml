@@ -9,48 +9,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			CREATE OR REPLACE VIEW v_activity_pledges_title AS 
-	    	 SELECT DISTINCT ac.amp_activity_id, cv.category_value as pledge_title ,fp.id AS pledge_id, cv.id AS title_id  
-			   FROM amp_funding_pledges fp 
-			   JOIN amp_category_value cv ON cv.id = fp.title 
-			   JOIN amp_funding_detail fd ON fd.pledge_id = fp.id 
-			   JOIN amp_funding fu ON fd.amp_funding_id = fu.amp_funding_id 
-			   JOIN amp_activity_version ac ON fu.amp_activity_id = ac.amp_activity_id  
-			  WHERE ac.amp_team_id IS NOT NULL AND ac.deleted &lt;&gt; true AND ac.draft &lt;&gt; true;; 
-			  
-			CREATE OR REPLACE VIEW v_actors AS SELECT ai.amp_activity_id, act.name, act.amp_actor_id FROM amp_activity_version a, amp_measure m, amp_issues ai, amp_actor act WHERE (((ai.amp_activity_id = a.amp_activity_id) AND (ai.amp_issue_id = m.amp_issue_id)) AND (act.amp_measure_id = m.amp_measure_id)) ORDER BY ai.amp_activity_id;;;
-
-			CREATE OR REPLACE VIEW v_budget_code_project_id AS SELECT a.amp_activity_id, a.budget_code_project_id FROM amp_activity_version a ORDER BY a.amp_activity_id;;;
-			
-			CREATE OR REPLACE VIEW v_budget_department AS SELECT a.amp_activity_id, (((dep.code)::text || ' - '::text) || (dep.name)::text) AS budget_sector FROM amp_activity_version a, amp_departments dep WHERE (a.budget_department = dep.id_department) ORDER BY a.amp_activity_id;;;
-			
-			CREATE OR REPLACE VIEW v_budget_extras_fy AS SELECT a.amp_activity_id, a.fy FROM amp_activity_version a ORDER BY a.amp_activity_id;;;
-			
-			CREATE OR REPLACE VIEW v_budget_organization AS 
-			    		SELECT a.amp_activity_id, (org.name::text || ' - '::text) || org.budget_org_code::text AS budget_sector, org.amp_org_id as amp_org_id, org.name as orgname, org.budget_org_code
-			    			FROM amp_activity_version a, amp_organisation org 
-			    			WHERE (a.budget_organization = org.amp_org_id) 
-			    			ORDER BY a.amp_activity_id;;;
-			
-			CREATE OR REPLACE VIEW v_budget_program AS 
-			    	SELECT a.amp_activity_id, (prog.theme_code::text || ' - '::text) || prog.name::text AS budget_program, prog.amp_theme_id, prog.name AS progname, prog.theme_code 
-			    	FROM amp_activity_version a, amp_theme prog WHERE (a.budget_program = prog.amp_theme_id) 
-			    	ORDER BY a.amp_activity_id;;;
-					
-			CREATE OR REPLACE VIEW v_budget_sector AS SELECT a.amp_activity_id, (((bs.code)::text || ' - '::text) || (bs.sector_name)::text) AS budget_sector FROM amp_activity_version a, amp_budget_sector bs WHERE (a.budget_sector = bs.budged_sector_id) ORDER BY a.amp_activity_id;;;
-			
-			CREATE OR REPLACE VIEW v_component_funding_description AS 
-					SELECT f.activity_id AS amp_activity_id, f.description AS description, f.amp_component_funding_id
-						FROM amp_component_funding f, amp_components c, amp_activity_components aac, amp_activity_version activ
-						WHERE f.amp_component_id = c.amp_component_id AND f.activity_id = aac.amp_activity_id AND activ.amp_activity_id = aac.amp_activity_id AND f.amp_component_id = aac.amp_component_id
-  						ORDER BY f.activity_id;
-						
-			CREATE OR REPLACE VIEW v_component_funding_organization_name AS 
-					SELECT f.activity_id AS amp_activity_id, org.name AS title, f.rep_organization_id AS amp_org_id
-   					FROM amp_component_funding f, amp_components c, amp_activity_components aac, amp_activity_version activ, amp_organisation org
-  					WHERE f.amp_component_id = c.amp_component_id AND f.activity_id = aac.amp_activity_id AND activ.amp_activity_id = aac.amp_activity_id AND f.amp_component_id = aac.amp_component_id AND org.amp_org_id = f.rep_organization_id
-  					ORDER BY f.activity_id;		
-					
+<!-- 					
 			CREATE OR REPLACE VIEW v_costing_donors AS SELECT eu.amp_activity_id, o.name, euc.donor_id FROM amp_activity_version a, amp_eu_activity eu, amp_eu_activity_contributions euc, amp_organisation o WHERE (((a.amp_activity_id = eu.amp_activity_id) AND (eu.id = euc.eu_activity_id)) AND (euc.donor_id = o.amp_org_id)) ORDER BY o.name;;;
 			
 			CREATE OR REPLACE VIEW v_creation_date AS SELECT a.amp_activity_id, a.date_created AS creation_date FROM amp_activity_version a ORDER BY a.amp_activity_id;;;
@@ -78,78 +37,7 @@
   					ORDER BY li.amp_activity_id;
 			
 			CREATE OR REPLACE VIEW v_measures_taken AS SELECT ai.amp_activity_id, m.name, m.amp_measure_id FROM amp_activity_version a, amp_measure m, amp_issues ai WHERE ((ai.amp_activity_id = a.amp_activity_id) AND (ai.amp_issue_id = m.amp_issue_id)) ORDER BY ai.amp_activity_id;;;
-
-			CREATE OR REPLACE VIEW v_pledges_funding_st AS 
-	    	SELECT coalesce(f.id,-1)AS pledge_id,afd.amp_fund_detail_id, afd.amp_fund_detail_id as id,
-            afd.transaction_type, afd.adjustment_type, 
-            cval3.category_value AS adjustment_type_name, afd.transaction_date, 
-            afd.transaction_amount, c.currency_code, cval.id AS terms_assist_id, 
-            cval.category_value AS terms_assist_name, b.org_grp_name, 
-            ot.org_type AS donor_type_name, 
-            cval2.category_value AS financing_instrument_name, 
-            cval2.id AS financing_instrument_id,
-            modalities.name AS aid_modality_name,
-            modalities.level_code AS aid_modality_id,
-            b.amp_org_grp_id, ot.amp_org_type_id AS org_type_id, 
-            a.name AS related_project,
-            a.amp_activity_id AS related_project_id
-           FROM amp_funding_pledges f
-			   RIGHT JOIN amp_funding_detail afd ON afd.pledge_id = f.id
-			   LEFT JOIN amp_funding ampf ON ampf.amp_funding_id = afd.amp_funding_id
-			   LEFT JOIN amp_category_value cval ON cval.id = ampf.type_of_assistance_category_va
-			   LEFT JOIN amp_org_group b ON b.amp_org_grp_id = f.amp_org_grp_id
-			   LEFT JOIN amp_org_type ot ON ot.amp_org_type_id = b.org_type
-			   LEFT JOIN amp_category_value cval2 ON cval2.id = ampf.financing_instr_category_value
-			   
-			   LEFT JOIN amp_currency c ON c.amp_currency_id = afd.amp_currency_id
-			   LEFT JOIN amp_category_value cval3 ON cval3.id = afd.adjustment_type
-			   
-			   LEFT JOIN amp_activity_version a ON (a.amp_activity_id = ampf.amp_activity_id) AND (a.draft != true) AND (a.deleted != true)
-			   
-			   LEFT JOIN v_modalities modalities ON modalities.amp_activity_id = a.amp_activity_id
-			  WHERE (a.amp_team_id IS NOT NULL)
-			UNION ALL 
-			         SELECT f.id AS pledge_id,  
-			            fd.id AS amp_fund_detail_id, fd.id AS id,  
-			            7 AS transaction_type, 
-			            1 AS adjustment_type, 'Actual'::text AS adjustment_type_name, 
-			            CASE 
-							WHEN fd.datestart IS NULL THEN to_date('02 Jan '::text || fd.year::text, 'DD Mon YYYY'::text)
-							ELSE fd.datestart
-						END AS transaction_date, 
-			            fd.amount AS transaction_amount, c.currency_code, 
-			            cval.id AS terms_assist_id, 
-			            cval.category_value AS terms_assist_name, b.org_grp_name, 
-			            ot.org_type AS donor_type_name,
-						NULL AS financing_instrument_name, 
-						NULL AS financing_instrument_id,			             
-			            cval2.category_value AS aid_modality_name, 
-			            cval2.id AS aid_modality_id, 
-			            b.amp_org_grp_id, ot.amp_org_type_id AS org_type_id, 
-			            a.name AS related_project,
-			            a.amp_activity_id AS related_project_id
-			           FROM amp_funding_pledges f
-			      JOIN amp_funding_pledges_details fd ON f.id = fd.pledge_id
-				LEFT JOIN amp_category_value cval ON cval.id = fd.type_of_assistance
-				LEFT JOIN amp_currency c ON c.amp_currency_id = fd.currency
-				LEFT JOIN amp_org_group b ON b.amp_org_grp_id = f.amp_org_grp_id
-				LEFT JOIN amp_org_type ot ON ot.amp_org_type_id = b.org_type
-				LEFT JOIN amp_category_value cval2 ON cval2.id = fd.aid_modality
-				LEFT JOIN (SELECT pledge_id, max(amp_funding_id) as amp_funding_id FROM amp_funding_detail GROUP BY pledge_id) afd ON afd.pledge_id = f.id
-				LEFT JOIN amp_funding ampf ON ampf.amp_funding_id = afd.amp_funding_id
-				LEFT JOIN amp_activity_version a ON (a.amp_activity_id = ampf.amp_activity_id) AND (a.draft != true) AND (a.deleted != true);
-				
-			    CREATE OR REPLACE VIEW v_pledges_projects AS 
-			    	SELECT 
-			    		coalesce(fp.id,-1) AS pledge_id, 
-			    		ac.name AS title, ac.amp_activity_id,
-			    		ac.amp_team_id,ac.approval_status
-			    	FROM 
-			    		amp_funding_pledges fp RIGHT JOIN amp_funding_detail fd ON fd.pledge_id = fp.id
-			    		JOIN amp_funding fu ON fd.amp_funding_id = fu.amp_funding_id 
-			    		JOIN amp_activity_version ac ON fu.amp_activity_id = ac.amp_activity_id
-			    		WHERE ac.amp_team_id IS NOT NULL AND ac.deleted != true AND ac.draft != true 
-			    	GROUP BY ac.amp_activity_id, fp.id, ac.name,ac.amp_team_id, ac.approval_status;
+			
 					
 				CREATE OR REPLACE VIEW v_project_code AS SELECT a.amp_activity_id, a.project_code FROM amp_activity_version a WHERE (btrim((a.project_code)::text) != ''::text);;;
 				
@@ -169,29 +57,9 @@
 				CREATE OR REPLACE VIEW v_proposed_project_life AS SELECT
 				a.amp_activity_id, a.proposed_project_life FROM amp_activity_version a ORDER
 				BY a.amp_activity_id;
-
-				CREATE OR REPLACE VIEW v_related_pledges AS 
-			    		SELECT distinct aa.amp_activity_id, p.title, aa.amp_activity_id AS act_id
-			    		FROM amp_funding_detail fd 
-			    			JOIN amp_funding fu ON fd.amp_funding_id = fu.amp_funding_id
-			    			JOIN amp_activity_version aa ON fu.amp_activity_id = aa.amp_activity_id
-			    			JOIN v_pledges_titles p ON p.pledge_id = fd.pledge_id
-			    		ORDER BY aa.amp_activity_id;
 				
 				CREATE OR REPLACE VIEW v_terms_assist AS SELECT a.amp_activity_id, val.category_value AS terms_assist_name, val.id AS terms_assist_code FROM amp_activity_version a, amp_funding fund, amp_category_value val WHERE ((fund.amp_activity_id = a.amp_activity_id) AND (val.id = fund.type_of_assistance_category_va)) GROUP BY a.amp_activity_id, val.id, val.category_value ORDER BY a.amp_activity_id, val.category_value;;;
-				
-				CREATE OR REPLACE VIEW vportal_top_last_modified AS 
-				SELECT a.amp_activity_id, translate_field('org.digijava.module.aim.dbentity.AmpActivityVersion'::character varying, 'name'::character varying, a.amp_activity_id, 'amp_activity_version'::character varying, 'name'::character varying, 'amp_activity_id'::character varying, 'ro'::bpchar) AS name, string_agg(translate_field('org.digijava.module.aim.dbentity.AmpOrganisation'::character varying, 'name'::character varying, o.amp_org_id, 'amp_organisation'::character varying, 'name'::character varying, 'amp_org_id'::character varying, 'ro'::bpchar)::text, ','::text) AS org_names, to_char(a.modified_date, 'DD-MM-YYYY'::text) AS date_label, 'ro'::text AS lang, a.modified_date
-				FROM amp_activity_version a, amp_organisation o, amp_funding f
-				WHERE a.draft &lt;&gt; true AND (a.approval_status::text = ANY (ARRAY['started_approved'::character varying::text, 'approved'::character varying::text])) AND a.modified_date IS NOT NULL AND f.amp_donor_org_id = o.amp_org_id AND f.amp_activity_id = a.amp_activity_id
-				GROUP BY a.amp_activity_id, to_char(a.modified_date, 'DD-MM-YYYY'::text), a.modified_date
-				UNION 
-				SELECT a.amp_activity_id, translate_field('org.digijava.module.aim.dbentity.AmpActivityVersion'::character varying, 'name'::character varying, a.amp_activity_id, 'amp_activity_version'::character varying, 'name'::character varying, 'amp_activity_id'::character varying, 'en'::bpchar) AS name, string_agg(translate_field('org.digijava.module.aim.dbentity.AmpOrganisation'::character varying, 'name'::character varying, o.amp_org_id, 'amp_organisation'::character varying, 'name'::character varying, 'amp_org_id'::character varying, 'en'::bpchar)::text, ','::text) AS org_names, to_char(a.modified_date, 'DD-MM-YYYY'::text) AS date_label, 'en'::text AS lang, a.modified_date
-				FROM amp_activity_version a, amp_organisation o, amp_funding f
-				WHERE a.draft &lt;&gt; true AND (a.approval_status::text = ANY (ARRAY['started_approved'::character varying::text, 'approved'::character varying::text])) AND a.modified_date IS NOT NULL AND f.amp_donor_org_id = o.amp_org_id AND f.amp_activity_id = a.amp_activity_id
-				GROUP BY a.amp_activity_id, to_char(a.modified_date, 'DD-MM-YYYY'::text), a.modified_date
-				ORDER BY 6 DESC;
-				
+-->				
 				
 			</lang>
 		</script>

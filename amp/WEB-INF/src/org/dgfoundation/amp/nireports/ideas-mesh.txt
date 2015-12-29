@@ -51,5 +51,5 @@ change views which depend on amp_activity to depend on amp_activity_version  -> 
 add startup check for NULL ids in NiReports
 change TrnCols to work via I18vRepository
 pledges titles: make a new view for NiReports
-public view cache: redo to only cache "latest and last validated" ids
-	
+rewrite ACV-backed views to use JOIN's instead of WHEREs
+v_component_funding_description, v_component_funding_organization_name - add as being part of 2 hierarchies

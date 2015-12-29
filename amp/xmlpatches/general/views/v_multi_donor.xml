@@ -19,8 +19,23 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_multi_donor AS SELECT a.amp_activity_id, CASE WHEN (count(DISTINCT f.amp_donor_org_id) > 1) THEN 'yes'::text ELSE 'no'::text END AS value FROM (amp_activity a LEFT JOIN amp_funding f ON ((a.amp_activity_id = f.amp_activity_id))) GROUP BY a.amp_activity_id;;;
-        		</lang>
+				DROP VIEW IF EXISTS v_multi_donor CASCADE;
+			   	CREATE OR REPLACE VIEW v_multi_donor AS
+					SELECT z.amp_activity_id,
+						CASE
+							WHEN z.nr_donors> 1 THEN 'yes'
+							ELSE 'no'
+						END AS value,
+						CASE
+							WHEN z.nr_donors> 1 THEN 1
+							ELSE 2
+						END AS id
+ 					FROM
+						(SELECT a.amp_activity_id, count(DISTINCT f.amp_donor_org_id) AS nr_donors
+							FROM amp_activity_version a 
+								LEFT JOIN amp_funding f ON a.amp_activity_id = f.amp_activity_id AND f.source_role_id = (SELECT amp_role_id FROM amp_role WHERE role_code='DN')
+							GROUP BY a.amp_activity_id) AS z;
+			</lang>
 		</script>
 	</apply>
 </tns:patch>

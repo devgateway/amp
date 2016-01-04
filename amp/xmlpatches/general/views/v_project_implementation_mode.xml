@@ -21,18 +21,18 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
+					DROP VIEW IF EXISTS v_project_implementation_mode;
 					CREATE OR REPLACE VIEW v_project_implementation_mode AS 
 					 SELECT a.amp_activity_id, 
 					        CASE
-					            WHEN acv.id IS NULL THEN ''::text
-					            ELSE acv.category_value::text
+					            WHEN acv.id IS NULL THEN ''
+					            ELSE acv.category_value
 					        END AS project_implementation_mode, 
 					    acv.id AS project_implementation_mode_id
 					   FROM amp_activities_categoryvalues aac
 					   JOIN amp_category_value acv ON aac.amp_categoryvalue_id = acv.id
-					   JOIN amp_category_class acc ON acc.id = acv.amp_category_class_id AND acc.keyname::text = 'project_implementation_mode'::text
-					   RIGHT JOIN amp_activity a ON a.amp_activity_id = aac.amp_activity_id
-					  ORDER BY a.amp_activity_id;
+					   JOIN amp_category_class acc ON acc.id = acv.amp_category_class_id AND acc.keyname = 'project_implementation_mode'
+					   RIGHT JOIN amp_activity_version a ON a.amp_activity_id = aac.amp_activity_id;
 			</lang>
 		</script>
 	</apply>

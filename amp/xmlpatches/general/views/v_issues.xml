@@ -19,7 +19,10 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_issues AS SELECT ai.amp_activity_id, ai.name, ai.amp_issue_id FROM amp_issues ai, amp_activity a WHERE (ai.amp_activity_id = a.amp_activity_id) ORDER BY ai.amp_activity_id;;;
+			    	CREATE OR REPLACE VIEW v_issues AS 
+			    		SELECT ai.amp_activity_id, ai.name, ai.amp_issue_id 
+			    			FROM amp_issues ai 
+			    			JOIN amp_activity_version a ON ai.amp_activity_id = a.amp_activity_id;;;
         		</lang>
 		</script>
 	</apply>

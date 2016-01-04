@@ -19,7 +19,12 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_terms_assist AS SELECT a.amp_activity_id, val.category_value AS terms_assist_name, val.id AS terms_assist_code FROM amp_activity a, amp_funding fund, amp_category_value val WHERE ((fund.amp_activity_id = a.amp_activity_id) AND (val.id = fund.type_of_assistance_category_va)) GROUP BY a.amp_activity_id, val.id, val.category_value ORDER BY a.amp_activity_id, val.category_value;;;
+			    	CREATE OR REPLACE VIEW v_terms_assist AS 
+			    		SELECT a.amp_activity_id, val.category_value AS terms_assist_name, val.id AS terms_assist_code 
+			    		FROM amp_activity_version a 
+			    			JOIN amp_funding fund ON fund.amp_activity_id = a.amp_activity_id
+			    			JOIN amp_category_value val ON val.id = fund.type_of_assistance_category_va
+			    		GROUP BY a.amp_activity_id, val.id, val.category_value;;;
         		</lang>
 		</script>
 	</apply>

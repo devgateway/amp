@@ -19,7 +19,10 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_gov_agreement_number AS SELECT a.amp_activity_id, a.gov_agreement_number FROM amp_activity a WHERE (btrim((a.gov_agreement_number)::text) != ''::text);;;
+			    	CREATE OR REPLACE VIEW v_gov_agreement_number AS 
+			    		SELECT a.amp_activity_id, a.gov_agreement_number 
+			    			FROM amp_activity_version a 
+			    			WHERE btrim(a.gov_agreement_number) != '';;;
         		</lang>
 		</script>
 	</apply>

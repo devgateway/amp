@@ -27,7 +27,7 @@
 			   JOIN amp_category_value cv ON cv.id = fp.title 
 			   JOIN amp_funding_detail fd ON fd.pledge_id = fp.id 
 			   JOIN amp_funding fu ON fd.amp_funding_id = fu.amp_funding_id 
-			   JOIN amp_activity ac ON fu.amp_activity_id = ac.amp_activity_id  
+			   JOIN amp_activity_version ac ON fu.amp_activity_id = ac.amp_activity_id  
 			  WHERE ac.amp_team_id IS NOT NULL AND ac.deleted &lt;&gt; true AND ac.draft &lt;&gt; true;; 
         </lang>
 		</script>

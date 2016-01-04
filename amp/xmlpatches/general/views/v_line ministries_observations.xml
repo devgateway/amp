@@ -11,7 +11,8 @@
 			<lang delimiter=";" type="postgres">
 			   	CREATE OR REPLACE VIEW v_line_ministries_observations AS 
  					SELECT li.amp_activity_id, li.name, li.amp_line_ministry_observation_id, li.observationdate
-   						FROM amp_activity_version a JOIN amp_line_ministry_observation li ON li.amp_activity_id = a.amp_activity_id;
+   						FROM amp_activity_version a 
+   						JOIN amp_line_ministry_observation li ON li.amp_activity_id = a.amp_activity_id;
         	</lang>
 		</script>
 	</apply>

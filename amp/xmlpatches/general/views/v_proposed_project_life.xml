@@ -21,9 +21,9 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				CREATE OR REPLACE VIEW v_proposed_project_life AS SELECT
-				a.amp_activity_id, a.proposed_project_life FROM amp_activity a ORDER
-				BY a.amp_activity_id;
+				CREATE OR REPLACE VIEW v_proposed_project_life AS 
+				SELECT a.amp_activity_id, a.proposed_project_life 
+				FROM amp_activity_version a;
 			</lang>
 		</script>
 	</apply>

@@ -19,7 +19,13 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_funding_status AS SELECT a.amp_activity_id, val.category_value AS funding_status_name, val.id AS funding_status_code FROM amp_activity a, amp_funding fund, amp_category_value val, amp_category_class c WHERE ((((fund.amp_activity_id = a.amp_activity_id) AND (val.id = fund.funding_status_category_va)) AND ((c.keyname)::text = 'funding_status'::text)) AND (c.id = val.amp_category_class_id)) GROUP BY a.amp_activity_id, val.id, val.category_value ORDER BY a.amp_activity_id, val.category_value;;;
+			    	CREATE OR REPLACE VIEW v_funding_status AS 
+			    		SELECT a.amp_activity_id, val.category_value AS funding_status_name, val.id AS funding_status_code 
+			    			FROM amp_activity_version a 
+			    			JOIN amp_funding fund ON fund.amp_activity_id = a.amp_activity_id
+			    			JOIN amp_category_value val ON val.id = fund.funding_status_category_va
+			    			JOIN amp_category_class c ON c.keyname = 'funding_status' AND c.id = val.amp_category_class_id
+			    			GROUP BY a.amp_activity_id, val.id, val.category_value;;;
         		</lang>
 		</script>
 	</apply>

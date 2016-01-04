@@ -25,7 +25,7 @@
    						FROM amp_activity_components aac
    							JOIN amp_component_funding f ON (f.activity_id = aac.amp_activity_id) AND (f.amp_component_id = aac.amp_component_id)
    							JOIN amp_components c ON (f.amp_component_id = c.amp_component_id)
-   							JOIN amp_activity activ ON activ.amp_activity_id = aac.amp_activity_id
+   							JOIN amp_activity_version activ ON activ.amp_activity_id = aac.amp_activity_id
    							JOIN amp_organisation org ON org.amp_org_id = f.rep_organization_id;
   			</lang>
 		</script>

@@ -23,9 +23,8 @@
 			    		SELECT distinct aa.amp_activity_id, p.title, aa.amp_activity_id AS act_id
 			    		FROM amp_funding_detail fd 
 			    			JOIN amp_funding fu ON fd.amp_funding_id = fu.amp_funding_id
-			    			JOIN amp_activity aa ON fu.amp_activity_id = aa.amp_activity_id
-			    			JOIN v_pledges_titles p ON p.pledge_id = fd.pledge_id
-			    		ORDER BY aa.amp_activity_id;
+			    			JOIN amp_activity_version aa ON fu.amp_activity_id = aa.amp_activity_id
+			    			JOIN v_pledges_titles p ON p.pledge_id = fd.pledge_id;
 			</lang>
 		</script>
 	</apply>

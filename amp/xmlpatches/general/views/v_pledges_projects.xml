@@ -27,7 +27,7 @@
 			    	FROM 
 			    		amp_funding_pledges fp RIGHT JOIN amp_funding_detail fd ON fd.pledge_id = fp.id
 			    		JOIN amp_funding fu ON fd.amp_funding_id = fu.amp_funding_id 
-			    		JOIN amp_activity ac ON fu.amp_activity_id = ac.amp_activity_id
+			    		JOIN amp_activity_version ac ON fu.amp_activity_id = ac.amp_activity_id
 			    		WHERE ac.amp_team_id IS NOT NULL AND ac.deleted != true AND ac.draft != true 
 			    	GROUP BY ac.amp_activity_id, fp.id, ac.name,ac.amp_team_id, ac.approval_status;
         		</lang>

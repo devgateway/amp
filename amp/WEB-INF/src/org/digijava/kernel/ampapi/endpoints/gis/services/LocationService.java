@@ -615,7 +615,7 @@ public class LocationService {
 			coloumnsValues.add(date.toString());//0
 			coloumnsValues.add(a.getAmpId());//1
 			coloumnsValues.add(a.getName());//2
-			coloumnsValues.add(a.getDescription());//3
+			//coloumnsValues.add(a.getDescription());//3
 			coloumnsValues.add(a.getImplementationLevel());//4
 			coloumnsValues.add(geocodeInfo.get(a.getGeoCode()).getLocationName());//5
 			coloumnsValues.add(geocodeInfo.get(a.getGeoCode()).getLatitude());//6

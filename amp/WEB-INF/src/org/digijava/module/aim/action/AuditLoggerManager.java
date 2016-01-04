@@ -189,7 +189,7 @@ public class AuditLoggerManager extends MultiAction {
 	private HSSFWorkbook XlsMaker( AuditLoggerManagerForm form, HttpServletRequest request, HttpServletResponse response) {
 		int interval = Integer.parseInt(form.getFrecuency());
 		Collection<AmpAuditLogger> Xlslogs=AuditLoggerUtil.getLogByPeriod(interval);
-		Collections.sort((List<AmpAuditLogger>) Xlslogs);
+		//Collections.sort((List<AmpAuditLogger>) Xlslogs);
 		HSSFWorkbook wb = new HSSFWorkbook();
 		response.setContentType("application/vnd.ms-excel");
 		response.setHeader("Content-disposition", "inline; filename=Audit-logger.xls");

@@ -406,7 +406,7 @@ public class AuditLoggerUtil {
 			session = PersistenceManager.getSession();
 			qryStr = "select f from " + 
 				AmpAuditLogger.class.getName() 
-				+ " f where f.modifyDate >= :dateParam";
+				+ " f where f.modifyDate >= :dateParam order by loggedDate desc";
 			qry = session.createQuery(qryStr);
 			qry.setParameter("dateParam",getDateRange(interval),DateType.INSTANCE);
 			col = qry.list();

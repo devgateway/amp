@@ -56,10 +56,10 @@ function ajaxLogin() {
 							for (reasonIdx = 0; reasonIdx < suspendReasons.length; reasonIdx ++){
 								suspUserErrTxt += suspendReasons[reasonIdx];
 								if (reasonIdx < suspendReasons.length) {
-									suspUserErrTxt += "<br>"
+									suspUserErrTxt += "<br />"
 								}
 							}
-							$('#suspend').text(suspUserErrTxt);
+							$('#suspend').html(suspUserErrTxt);
 							reportError("suspend");
 							break;
 						case 'noError':

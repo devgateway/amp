@@ -683,6 +683,7 @@ body {background:none;}
 											</td>
 <td bgcolor="#ffffff">
 												<table width="100%" cellSpacing="2" cellPadding="1">
+												<module:display name="/Activity Form/Planning/Line Ministry Rank" parentModule="/Activity Form/Planning">
 												<field:display feature="Planning" name="Line Ministry Rank">
 												<tr>
 													<td width="32%"><digi:trn key="aim:lineMinRank">
@@ -694,7 +695,7 @@ body {background:none;}
 													${aimEditActivityForm.planning.lineMinRank}													</c:if>													</td>
 												</tr>
 												</field:display>
-
+												</module:display>
 												<module:display name="/Activity Form/Planning/Proposed Approval Date" parentModule="/Activity Form/Planning">
 												<tr>
 													<td width="32%">

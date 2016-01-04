@@ -16,7 +16,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
-<%@ taglib uri="/taglib/globalsettings" prefix="gs"%>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs"%> 
 
 <jsp:include page="activityHistoryUtil.jsp" flush="true" />
 <%@page import="java.math.BigDecimal"%>
@@ -1739,8 +1739,8 @@ function collapseAll() {
                     <module:display name="/Activity Form/Aid Effectivenes/${option.indicator.ampIndicatorName}"
                         parentModule="/Activity Form/Aid Effectivenes">
                         <div>
-                            <b>${option.indicator.ampIndicatorName}</b> -
-                            ${option.ampIndicatorOptionName}
+                            <b>${fn:escapeXml(option.indicator.ampIndicatorName)}</b> -
+                            ${fn:escapeXml(option.ampIndicatorOptionName)}
                         </div>
                     </module:display>
                 </logic:iterate>

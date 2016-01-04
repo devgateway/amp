@@ -77,9 +77,14 @@ Backbone.sync = function(method, model, options) {
     
     // Generate AJAX action
     var type = methodMap[method];
-    var url = Settings.REST_URL
-        + (_.isFunction(model.url) ? model.url() : model.url);
-    
+    var url = null;
+    if ((_.isFunction(model.url) ? model.url() : model.url).indexOf(".json") === -1) {
+    	url = Settings.REST_URL
+        	+ (_.isFunction(model.url) ? model.url() : model.url);
+    } else {
+    	url = model.url();
+    }
+        
     // Prepare for failure
     if (typeof Settings.ERRORS == "undefined") {
         Settings.ERRORS = 0;

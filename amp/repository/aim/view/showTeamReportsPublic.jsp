@@ -351,7 +351,7 @@ function submitForm(action){
 																						%>
 																						
 	 																					<% if (onlySaikuButton) { %>
-																							<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}" />
+																							<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui/index_reports.html#report/open/${report.ampReportId}" />
 																						<% } %>
 																					    
 																						<a

@@ -260,7 +260,7 @@
 										<c:forEach items="${resultReports}" var="report">
 											<li><a title="<digi:trn>Click here to view the report</digi:trn>"
                                                     onclick="return popup(this,'');"
-                                                    href="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}">
+                                                    href="/TEMPLATE/ampTemplate/saikuui/index_reports.html#report/open/${report.ampReportId}">
                                                     ${report.objectFilteredName}
 												</a>
 											</li>

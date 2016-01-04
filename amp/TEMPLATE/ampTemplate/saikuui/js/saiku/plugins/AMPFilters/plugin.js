@@ -450,7 +450,7 @@ FilterUtils.convertJavaFiltersToJS = function(data) {
 			blob.otherFilters[item.name] = newDate;
 			break;
 		default:
-			console.error(item);
+			console.info(item);
 			break;
 		}
 	});

@@ -128,7 +128,10 @@ var Session = Backbone.Model.extend({
     },
 
     url: function() {
-
-        return "session";
+    	if (Settings.AMP_REPORT_API_BRIDGE) {
+    		return "/TEMPLATE/ampTemplate/saikuui/mockData/session.json";
+    	} else {
+    		return "session";
+    	}
     }
 });

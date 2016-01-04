@@ -291,6 +291,10 @@ var Query = Backbone.Model.extend({
     },
     
     url: function() {
-        return "api/query/" + encodeURI(this.uuid);
+    	if (Settings.AMP_REPORT_API_BRIDGE) {
+    		return "/TEMPLATE/ampTemplate/saikuui/mockData/query.json";
+    	} else {
+    		return "api/query/" + encodeURI(this.uuid);
+    	}
     }
 });

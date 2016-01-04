@@ -509,7 +509,7 @@ $(document).ready(function() {
 					                              									<c:if test="${!aimTeamReportsForm.showTabs}">
 	 																					<c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}" />
 	 																					<% if (onlySaikuButton) { %>
-																							<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}" />
+																							<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui/index_reports.html#report/open/${report.ampReportId}" />
 																						<% } %>
 																					    	
 	 																					  	<a href="${reportLink}" styleClass="h-box" onclick="return popup(this,'');" title="<digi:trn>Click here to view the Report</digi:trn>">

@@ -157,7 +157,7 @@ SaveReportEngine.prototype.openReport = function(reportId, isSaiku) {
     var reportUrl = '';
 
     if (isSaiku) {
-         reportUrl = '/TEMPLATE/ampTemplate/saikuui/index.html#report/open/' + reportId;
+         reportUrl = '/TEMPLATE/ampTemplate/saikuui/index_report.html#report/open/' + reportId;
     } else {
          reportUrl = '/viewNewAdvancedReport.do?view=reset&widget=false&resetSettings=true&ampReportId=' + reportId;
     }

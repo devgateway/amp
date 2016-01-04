@@ -3,6 +3,7 @@ package org.digijava.module.aim.action;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.*;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
 import org.digijava.module.aim.form.AidEffectivenessIndicatorForm;
@@ -106,7 +107,7 @@ public class AidEffectivenessIndicatorsAction extends Action {
                             }
 
                             handleLocalException(request, null, "error.admin.aidEffectivenessIndicator.option.hasRelatedActivities",
-                                    option.getAmpIndicatorOptionName());
+                            		DgUtil.dehtmlize(option.getAmpIndicatorOptionName()));
                             executeSearch(request, indicatorForm);
                             return mapping.findForward("error");
                         }
@@ -193,7 +194,7 @@ public class AidEffectivenessIndicatorsAction extends Action {
                     AidEffectivenessIndicatorUtil.deleteIndicator(indicatorId);
                 }  else {
                     handleLocalException(request, null, "error.admin.aidEffectivenessIndicator.hasRelatedActivities",
-                            indicator.getAmpIndicatorName());
+                    		DgUtil.dehtmlize(indicator.getAmpIndicatorName()));
                     executeSearch(request, indicatorForm);
                     return mapping.findForward("search");
                 }

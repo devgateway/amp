@@ -3,7 +3,6 @@
  */
 package org.dgfoundation.amp.reports.mondrian;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,7 +13,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
@@ -44,7 +42,6 @@ public class MondrianReportSpec implements ReportSpecification {
 	 * the encapsulated MondrianReportSpecificationImpl
 	 */
 	private final ReportSpecificationImpl emb;
-	protected boolean usesFundingFlows = false;
 	
 	/**
 	 * this can only be reset and not set
@@ -203,14 +200,6 @@ public class MondrianReportSpec implements ReportSpecification {
 		if (emb.getSettings() == null) {
 			emb.setSettings(MondrianReportUtils.getCurrentUserDefaultSettings());
 		}
-	}
-	
-	public boolean getUsesFundingFlows() {
-		return usesFundingFlows;
-	}
-
-	void setUsesFundingFlows(boolean usesFundingFlows) {
-		this.usesFundingFlows = usesFundingFlows;
 	}
 
 	public String getProjectTitleColumn() {

@@ -17,8 +17,8 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
-import org.dgfoundation.amp.reports.mondrian.ReportSettingsImpl;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -406,7 +406,7 @@ public class AmpARFilterConverter {
 		settings.setCalendar(arFilter.getCalendarType());
 		try {
 			if (arFilter.getRenderStartYear() != null || arFilter.getRenderEndYear() != null) {
-				settings.addYearsRangeFilterRule(
+				settings.setYearsRangeFilterRule(
 						(arFilter.getRenderStartYear() == -1 ? 1950 : arFilter.getRenderStartYear()), // 1950 / 2150 are ugly hacks because the API does not support both NULLs (e.g. unlimited) 
 						(arFilter.getRenderEndYear() == -1 ? 2150 : arFilter.getRenderEndYear())
 						);

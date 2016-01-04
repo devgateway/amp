@@ -10,7 +10,6 @@ import java.util.Set;
 
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.reports.mondrian.ReportSettingsImpl;
 
 /**
  * Stores a report configuration by implementing {@link ReportSpecification} and defines all data required to generate a report. 
@@ -120,7 +119,6 @@ public class ReportSpecificationImpl implements ReportSpecification {
 		return settings;
 	}
 
-	//TODO-BOZO: change typename to ReportSettingsImpl
 	public ReportSettingsImpl getOrCreateSettings() {
 		if (settings == null)
 			settings = new ReportSettingsImpl();

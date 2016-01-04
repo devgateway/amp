@@ -23,10 +23,10 @@ import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportMeasure;
+import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
-import org.dgfoundation.amp.reports.mondrian.ReportSettingsImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
@@ -180,16 +180,11 @@ public class SettingsUtils {
 		String selectedStartYearId = null;
 		String selectedEndYearId = null;
 		
-		if (spec.getSettings() != null && spec.getSettings().getFilterRules() != null
-				&& spec.getSettings().getFilterRules() != null
-				&& spec.getSettings().getFilterRules().containsKey(new ReportElement(ElementType.YEAR))) {
+		if (spec.getSettings() != null && spec.getSettings().getYearRangeFilter() != null) {
 			// not sure if the plan to use multiple year range settings is still valid AMP-17715
-			for (FilterRule filter : spec.getSettings().getFilterRules().get(new ReportElement(ElementType.YEAR))) {
-				selectedStartYearId = getSelectedYearId(filter.min); 
-				selectedEndYearId = getSelectedYearId(filter.max);
-				// now 1 range
-				break;
-			}
+			// ONE YEAR LATER: apparently not anymore :D
+			selectedStartYearId = getSelectedYearId(spec.getSettings().getYearRangeFilter().min); 
+			selectedEndYearId = getSelectedYearId(spec.getSettings().getYearRangeFilter().max);
 		} else {
 			selectedStartYearId = EndpointUtils.getDefaultReportStartYear();
 			selectedEndYearId = EndpointUtils.getDefaultReportEndYear();
@@ -618,9 +613,7 @@ public class SettingsUtils {
 	 * @param setDefaults: if true AND there is no range setting in @reportSettings, then reportSettings will be populated with the workspace/system's default 
 	 */
 	public static void configureYearRange(ReportSettingsImpl reportSettings, Map<String, Object> settings, boolean setDefaults) {
-		ReportElement yearRangeElement = new ReportElement(ElementType.YEAR); 
-		boolean preExistingYearRangeSetting = (reportSettings.getFilterRules().get(yearRangeElement) != null) && 
-				(!reportSettings.getFilterRules().get(yearRangeElement).isEmpty());
+		boolean preExistingYearRangeSetting = reportSettings.getYearRangeFilter() != null;
 		
 		// TODO: once year range settings will be configurable through UI / API, then always re-apply
 		if (preExistingYearRangeSetting && !setDefaults && (reportSettings.getOldCalendar() == null ||
@@ -641,7 +634,7 @@ public class SettingsUtils {
 		}
 		
 		// clear previous year settings
-		reportSettings.getFilterRules().remove(yearRangeElement);
+		reportSettings.setYearRangeFilter(null);
 		reportSettings.setOldCalendar(null);
 		// TODO: update settings to store [ALL, ALL] range just to reflect
 		// the previous selection
@@ -649,7 +642,7 @@ public class SettingsUtils {
 			try {
 				start = start == -1 ? null : start;
 				end = end == -1 ? null : end;
-				reportSettings.addYearsRangeFilterRule(start, end);
+				reportSettings.setYearsRangeFilterRule(start, end);
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}

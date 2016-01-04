@@ -456,7 +456,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		//add settings
 		addSettings(spec.getSettings(), config);
 		
-		config.setCrossJoinWithColumns(spec.getUsesFundingFlows() ? "[Flow Name].[Flow Name].Members" : null); // ugly and hacky... hopefully we're dropping the whole charade soon
+		//config.setCrossJoinWithColumns(spec.getUsesFundingFlows() ? "[Flow Name].[Flow Name].Members" : null); // ugly and hacky... hopefully we're dropping the whole charade soon
 		return config;
 	}
 	
@@ -655,12 +655,12 @@ public class MondrianReportGenerator implements ReportExecutor {
 		SortedSet<Integer> columnsToDeleteFromOutput = new TreeSet<>();
 		
 //		postProcessor.removeZeroMTEFColumns(this.columnNumbersWithMtefs);
-		if (spec.getUsesFundingFlows()) {
-			columnsToDeleteFromOutput.addAll(postProcessor.getEmptyFlowsColumns(internalIdUsed));
-			if (SAIKU_TOTALS) {
-				postProcessor.nullifyFundingFlowsMeasuresTotals();
-			}
-		}
+//		if (spec.getUsesFundingFlows()) {
+//			columnsToDeleteFromOutput.addAll(postProcessor.getEmptyFlowsColumns(internalIdUsed));
+//			if (SAIKU_TOTALS) {
+//				postProcessor.nullifyFundingFlowsMeasuresTotals();
+//			}
+//		}
 		columnsToDeleteFromOutput.addAll(postProcessor.getDummyMTEFColumns());
 		postProcessor.deleteColumns(columnsToDeleteFromOutput);
 				
@@ -693,7 +693,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		// skim through last line
 		int yearLevelInHeader = headers.length - getYearLevelInHeader() - 1;
 				
-		int measureLevelInHeader = headers.length - 1 - (spec.getUsesFundingFlows() ? 1 : 0);
+		int measureLevelInHeader = headers.length - 1;// - (spec.getUsesFundingFlows() ? 1 : 0);
 		Map<String, String> mtefMeasures = new HashMap<String, String>() {{
 			put("[Measures].[MTEF Projections]", "MTEF");
 			put("[Measures].[Real MTEFs]", "Real MTEFs");
@@ -731,11 +731,11 @@ public class MondrianReportGenerator implements ReportExecutor {
 					measureCell.setRawValue(formattedValue);
 					//headers[lastLineNr][i] = cell;
 					ReportOutputColumn roc = leafHeaders.get(i);
-					if (spec.getUsesFundingFlows()) {
+					/*if (spec.getUsesFundingFlows()) {
 						roc.parentColumn.columnName = formattedValue;
 						roc = new ReportOutputColumn(roc.columnName, roc.parentColumn, roc.originalColumnName, meta); //replace flags. Since this is a leaf, parent holds no references
 						leafHeaders.set(i, roc);
-					} else {
+					} else */{
 						// MTEF columns are leaves
 						
 						roc = new ReportOutputColumn(formattedValue, roc.parentColumn, roc.originalColumnName, meta);
@@ -813,17 +813,12 @@ public class MondrianReportGenerator implements ReportExecutor {
 	}
 	
 	private void applyFilterSetting(CellDataSet cellDataSet) throws AMPException {
-		if (spec.getSettings() == null || spec.getSettings().getFilterRules() == null) return;
-		for (Entry<ReportElement, List<FilterRule>> pair : spec.getSettings().getFilterRules().entrySet()) {
-			switch(pair.getKey().type) {
-			case YEAR: 
-				if (!GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria())) {
-					applyYearRangeSetting(spec, pair.getValue(), cellDataSet);
-				}
-				break;
-			default: throw new AMPException("Not supported: settings behavior over " + pair.getKey().type);
-			}
-		}
+		if (spec.getSettings() == null || 
+				GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria()) || 
+				spec.getSettings().getYearRangeFilter() == null)
+			return;
+		
+		applyYearRangeSetting(spec, Arrays.asList(spec.getSettings().getYearRangeFilter()), cellDataSet);
 	}
 	
 	/**
@@ -831,7 +826,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 * @return the number of levels to skip from bottom to get upto the years level. -1 if no years level exists
 	 */
 	private int getYearLevelInHeader() {
-		int added = spec.getUsesFundingFlows() ? 1 : 0;
+		int added = 0; //spec.getUsesFundingFlows() ? 1 : 0;
 		switch(spec.getGroupingCriteria()) {
 			case GROUPING_YEARLY : return added + 1;
 
@@ -1050,7 +1045,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			addStaticColumnHeaders(leafColumns);
 		}
 		
-		int relevantDelta =  spec.getUsesFundingFlows() ? 2 : 1;
+		int relevantDelta =  1; //spec.getUsesFundingFlows() ? 2 : 1;
 				
 		LinkedHashSet<String> outputtedMeasures = new LinkedHashSet<>(); // the set of the measures for which saiku generated an output (and we are supposed to generate totals)
 		//int measuresLeafPos = columnAxis.getAxisMetaData().getHierarchies().size();
@@ -1070,9 +1065,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 						String usedCaption = measureColumn.getCaption();
 						String usedDescription = (i == members.size() - relevantDelta) && allMeasureNames.contains(measureColumn.getName()) ? 
 								getMeasureDescription(measureColumn.getName()) : null;
-						if (i == members.size() - 1 && spec.getUsesFundingFlows() && usedName.equals("Undefined")) {
-							usedName = usedCaption = " ";
-						}
+//						if (i == members.size() - 1 && spec.getUsesFundingFlows() && usedName.equals("Undefined")) {
+//							usedName = usedCaption = " ";
+//						}
 						reportColumn = new ReportOutputColumn(usedCaption, parent, usedName, usedDescription, null);
 						reportColumnsByFullName.put(fullColumnName, reportColumn);
 					}

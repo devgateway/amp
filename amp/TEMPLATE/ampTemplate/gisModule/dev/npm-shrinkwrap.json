@@ -2098,9 +2098,9 @@
       "resolved": "https://registry.npmjs.org/d3-browserify/-/d3-browserify-3.4.12.tgz"
     },
     "esri-leaflet": {
-      "version": "1.0.0-rc.5",
-      "from": "esri-leaflet@~1.0.0-rc.4",
-      "resolved": "https://registry.npmjs.org/esri-leaflet/-/esri-leaflet-1.0.0-rc.5.tgz"
+      "version": "1.0.1",
+      "from": "esri-leaflet@~1.0.1",
+      "resolved": "https://registry.npmjs.org/esri-leaflet/-/esri-leaflet-1.0.1.tgz"
     },
     "gulp": {
       "version": "3.8.10",

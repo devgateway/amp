@@ -26,7 +26,7 @@ import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
+import org.dgfoundation.amp.reports.mondrian.ReportSettingsImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
@@ -524,14 +524,14 @@ public class SettingsUtils {
 	 * @see SettingsUtils#applySettings(ReportSpecificationImpl, JsonBean)
 	 */
 	public static void applySettings(ReportSpecificationImpl spec, JsonBean config, boolean setDefaults) {
-		if (spec.getSettings() != null && !MondrianReportSettings.class.isAssignableFrom(spec.getSettings().getClass())) {
+		if (spec.getSettings() != null && !ReportSettingsImpl.class.isAssignableFrom(spec.getSettings().getClass())) {
 			logger.error("Unsupported conversion for: " + spec.getSettings().getClass());
 			return;
 		}
 		
-		MondrianReportSettings reportSettings = (MondrianReportSettings) spec.getSettings();
+		ReportSettingsImpl reportSettings = (ReportSettingsImpl) spec.getSettings();
 		if (reportSettings == null) {
-			reportSettings = new MondrianReportSettings();
+			reportSettings = new ReportSettingsImpl();
 			spec.setSettings(reportSettings);
 		}
 		
@@ -550,7 +550,7 @@ public class SettingsUtils {
 	 * @param settings
 	 * @param setDefaults
 	 */
-	private static void configureCurrencyCode(MondrianReportSettings reportSettings, Map<String, Object> settings, 
+	private static void configureCurrencyCode(ReportSettingsImpl reportSettings, Map<String, Object> settings, 
 			boolean setDefaults) {
 		String currency = settings == null ? null : (String) settings.get(SettingsConstants.CURRENCY_ID);
 		if (currency != null)
@@ -566,7 +566,7 @@ public class SettingsUtils {
 	 * @param settings
 	 * @param setDefaults
 	 */
-	private static void configureNumberFormat(MondrianReportSettings reportSettings, Map<String, Object> settings, 
+	private static void configureNumberFormat(ReportSettingsImpl reportSettings, Map<String, Object> settings, 
 			boolean setDefaults) {
 		// apply numberFormat
 		Map<String, Object> amountFormat = settings == null ? null : 
@@ -599,7 +599,7 @@ public class SettingsUtils {
 	 * @param settings
 	 * @param setDefaults
 	 */
-	private static void configureCalendar(MondrianReportSettings reportSettings, Map<String, Object> settings, 
+	private static void configureCalendar(ReportSettingsImpl reportSettings, Map<String, Object> settings, 
 			boolean setDefaults) {
 		String calendarId = settings == null ? null : String.valueOf(settings.get(SettingsConstants.CALENDAR_TYPE_ID));
 		if (settings != null && StringUtils.isNumber(calendarId)) {
@@ -617,7 +617,7 @@ public class SettingsUtils {
 	 * @param settings
 	 * @param setDefaults: if true AND there is no range setting in @reportSettings, then reportSettings will be populated with the workspace/system's default 
 	 */
-	public static void configureYearRange(MondrianReportSettings reportSettings, Map<String, Object> settings, boolean setDefaults) {
+	public static void configureYearRange(ReportSettingsImpl reportSettings, Map<String, Object> settings, boolean setDefaults) {
 		ReportElement yearRangeElement = new ReportElement(ElementType.YEAR); 
 		boolean preExistingYearRangeSetting = (reportSettings.getFilterRules().get(yearRangeElement) != null) && 
 				(!reportSettings.getFilterRules().get(yearRangeElement).isEmpty());

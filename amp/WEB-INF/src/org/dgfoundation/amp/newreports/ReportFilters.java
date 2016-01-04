@@ -6,15 +6,11 @@ import java.util.Map;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 
 /**
- * TODO: specify a generic filters. Should we reuse AmpARFilter?
  * @author Dolghier Constantin
  *
  */
 public interface ReportFilters {
-	
-	Map<ReportElement, List<FilterRule>> getFilterRules();
-	
-	Integer getComputedYear();
-	
-	AmpFiscalCalendar getCalendar();
+	public Map<ReportElement, List<FilterRule>> getFilterRules();
+	public Integer getComputedYear();
+	public AmpFiscalCalendar getCalendar();
 }

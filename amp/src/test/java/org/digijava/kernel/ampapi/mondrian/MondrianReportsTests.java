@@ -167,20 +167,18 @@ public class MondrianReportsTests extends AmpTestCase {
 		
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
-		spec.setCalculateColumnTotals(true);
-		spec.setCalculateRowTotals(true);
 		spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
 		generateAndValidate(spec, true);
 	}
 	
 	private ReportSpecificationImpl getDefaultSpec(String name, boolean doTotals) {
+		if (!doTotals)
+			throw new RuntimeException("doTotals==false not supported anymore");
 		ReportSpecificationImpl spec = new ReportSpecificationImpl(name, ArConstants.DONOR_TYPE);
 		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_TYPE));
 		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
-		spec.setCalculateColumnTotals(doTotals);
-		spec.setCalculateRowTotals(doTotals);
 		return spec;
 	}
 	

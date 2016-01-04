@@ -637,10 +637,6 @@ public class ReportsUtil {
 	}
 	
 	private static void setOtherOptions(ReportSpecificationImpl spec, JsonBean formParams) {
-		Boolean doRowTotals = (Boolean) formParams.get(EPConstants.DO_ROW_TOTALS);
-		if (doRowTotals != null) {
-			spec.setCalculateRowTotals(doRowTotals);
-		}
 		
 		Boolean showEmptyRows = (Boolean) formParams.get(EPConstants.SHOW_EMPTY_ROWS);
 		if (showEmptyRows != null) {

@@ -36,7 +36,7 @@ import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
+import org.dgfoundation.amp.reports.mondrian.ReportSettingsImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportSorter;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
@@ -217,7 +217,6 @@ public class DashboardsService {
 		// applies settings, including funding type as a measure
 		SettingsUtils.applyExtendedSettings(spec, config);
 		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false, true));
-		spec.setCalculateRowTotals(true);
 		ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		GeneratedReport report = null;
 
@@ -445,8 +444,6 @@ public class DashboardsService {
 		spec.getHierarchies().add(new ReportColumn(ColumnConstants.COUNTRY));
 		spec.addMeasure(new ReportMeasure(MoConstants.PLANNED_DISBURSEMENTS));
 		spec.addMeasure(new ReportMeasure(MoConstants.ACTUAL_DISBURSEMENTS));
-		spec.setCalculateRowTotals(true);
-		spec.setCalculateColumnTotals(true);
 		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
 		
 		MondrianReportFilters filterRules = null;
@@ -536,12 +533,11 @@ public class DashboardsService {
 		spec.addColumn(new ReportColumn(ColumnConstants.FUNDING_YEAR));
 		spec.addColumn(new ReportColumn(MoConstants.TYPE_OF_ASSISTANCE));
 		spec.getHierarchies().addAll(spec.getColumns());
-		spec.setCalculateRowTotals(true);
 		
 		// also configures funding type
 		SettingsUtils.applyExtendedSettings(spec, filter);
 		
-		spec.addSorter(new SortingInfo(spec.getMeasures().get(0), false));
+		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
 		
 		ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		GeneratedReport report = null;
@@ -636,7 +632,6 @@ public class DashboardsService {
 		// applies settings, including funding type as a measure
 		SettingsUtils.applyExtendedSettings(spec, config);
 		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false, true));
-		spec.setCalculateRowTotals(true);
 		ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		GeneratedReport report = null;
 
@@ -716,7 +711,7 @@ public class DashboardsService {
 	 */
 	private static void setCustomSettings(JsonBean config, ReportSpecificationImpl spec) {
 		LinkedHashMap<String, Object> userSettings = (LinkedHashMap<String, Object>) config.get("settings");
-		MondrianReportSettings defaultSettings = MondrianReportUtils.getCurrentUserDefaultSettings();
+		ReportSettingsImpl defaultSettings = MondrianReportUtils.getCurrentUserDefaultSettings();
 		defaultSettings.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
 		if (userSettings.get("1") != null) {
 			defaultSettings.setCurrencyCode(userSettings.get("1").toString());

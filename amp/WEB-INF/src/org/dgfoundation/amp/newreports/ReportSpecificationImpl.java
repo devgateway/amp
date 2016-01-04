@@ -4,19 +4,13 @@
 package org.dgfoundation.amp.newreports;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
+import org.dgfoundation.amp.reports.mondrian.ReportSettingsImpl;
 
 /**
  * Stores a report configuration by implementing {@link ReportSpecification} and defines all data required to generate a report. 
@@ -25,38 +19,26 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
  *
  */
 public class ReportSpecificationImpl implements ReportSpecification {
-	private int reportType;	
-	private String reportName = null;
-	private Set<ReportColumn> columns = new LinkedHashSet<ReportColumn>();
-	private Set<ReportColumn> dummyColumns = new LinkedHashSet<ReportColumn>();
-	private Set<ReportColumn> hierarchies = new LinkedHashSet<ReportColumn>();
-	private List<ReportMeasure> measures = new ArrayList<ReportMeasure>();
-	private ReportFilters filters = null;
-	private ReportSettings settings = null;
-	private List<SortingInfo> sorters = null;
-	private GroupingCriteria groupingCriteria = GroupingCriteria.GROUPING_TOTALS_ONLY;
+	protected int reportType;	
+	protected String reportName = null;
+	protected Set<ReportColumn> columns = new LinkedHashSet<ReportColumn>();
+	protected Set<ReportColumn> hierarchies = new LinkedHashSet<ReportColumn>();
+	protected Set<ReportMeasure> measures = new LinkedHashSet<ReportMeasure>();
+	protected ReportFilters filters = null;
+	protected ReportSettings settings = null;
+	protected List<SortingInfo> sorters = null;
+	protected GroupingCriteria groupingCriteria = GroupingCriteria.GROUPING_TOTALS_ONLY;
 	//private boolean summaryReport = false;
-	private boolean calculateRowTotals = false;
-	private boolean calculateColumnTotals = false;
-	private int rowsHierarchiesTotals = 0;
-	private int colsHierarchyTotals = 0;
-	private boolean displayEmptyFundingColumns = false;
-	private boolean displayEmptyFundingRows = false;
-	private boolean emptyOutputForUnspecifiedData = true;
-	private boolean alsoShowPledges = false;
-	private boolean usesFundingFlows = false;
-	private String projectTitleColumn = ColumnConstants.PROJECT_TITLE;
+	protected boolean displayEmptyFundingColumns = false;
+	protected boolean displayEmptyFundingRows = false;
+	protected boolean emptyOutputForUnspecifiedData = true;
+	protected boolean alsoShowPledges = false;
 	
-	/**
-	 * Mondrian-specific hack - not part of the API, thus public
-	 */
-	public Map<String, SortedSet<Integer>> allowedYearsPerMeasure = new HashMap<>();
-
     /**
      * If the report query results in empty data
      * Should the headers be populated
      */
-    private boolean populateReportHeadersIfEmpty = false;
+    protected boolean populateReportHeadersIfEmpty = false;
 	
 	public ReportSpecificationImpl(String reportName, int reportType) {
 		if (!ArConstants.LEGAL_REPORT_TYPES.contains(reportType))
@@ -75,12 +57,9 @@ public class ReportSpecificationImpl implements ReportSpecification {
 		return columns;
 	}
 	
-	@Override
-	public Set<String> getColumnNames() {
-		LinkedHashSet<String> res = new LinkedHashSet<String>();
-		for(ReportColumn col:columns)
-			res.add(col.getColumnName());
-		return Collections.unmodifiableSet(res);
+	public void setColumns(Set<ReportColumn> cols) {
+		this.columns.clear();
+		this.columns.addAll(cols);
 	}
 
 	/**
@@ -90,35 +69,11 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	 * @param column - {@link ReportColumn}  
 	 */
 	public void addColumn(ReportColumn column) {
-		addColumn(column, false);;
+		this.columns.add(column);
 	}
-	
+		
 	@Override
-	public Set<ReportColumn> getDummyColumns() {
-		return Collections.unmodifiableSet(dummyColumns);
-	}
-	
-	public void addColumn(ReportColumn dummyColumn, boolean dummy) {
-		this.columns.add(dummyColumn);
-		if (dummy) {
-			this.dummyColumns.add(dummyColumn);
-		}
-	}
-
-	/**
-	 * remove the dummyColumns from the columns list; also clear {@link #dummyColumns}
-	 */
-	@Override public void removeDummyColumns() {
-		Iterator<ReportColumn> columnsIter = columns.iterator();
-		while(columnsIter.hasNext()) {
-			ReportColumn col = columnsIter.next();
-			if (dummyColumns.contains(col)) columnsIter.remove();
-		}
-		dummyColumns.clear();
-	}
-	
-	@Override
-	public List<ReportMeasure> getMeasures() {
+	public Set<ReportMeasure> getMeasures() {
 		return measures;
 	}
 		
@@ -165,10 +120,11 @@ public class ReportSpecificationImpl implements ReportSpecification {
 		return settings;
 	}
 
-	public MondrianReportSettings getOrCreateSettings() {
+	//TODO-BOZO: change typename to ReportSettingsImpl
+	public ReportSettingsImpl getOrCreateSettings() {
 		if (settings == null)
-			settings = new MondrianReportSettings();
-		return (MondrianReportSettings) settings;
+			settings = new ReportSettingsImpl();
+		return (ReportSettingsImpl) settings;
 	}
 	/**
 	 * @param settings the settings to set
@@ -227,32 +183,6 @@ public class ReportSpecificationImpl implements ReportSpecification {
 //	}
 
 	/**
-	 * Configures whether totals for each hierarchy group and grand row totals must be calculated
-	 * @param calculateRowTotals 
-	 */
-	public void setCalculateRowTotals(boolean calculateRowTotals) {
-		this.calculateRowTotals = calculateRowTotals;
-	}
-
-	@Override
-	public boolean isCalculateRowTotals() {
-		return calculateRowTotals;
-	}
-
-	/**
-	 * Configures whether totals per each measure column must be calculated when grouping by dates is configured.
-	 * @param calculateColumnTotals 
-	 */
-	public void setCalculateColumnTotals(boolean calculateColumnTotals) {
-		this.calculateColumnTotals = calculateColumnTotals;
-	}
-	
-	@Override
-	public boolean isCalculateColumnTotals() {
-		return calculateColumnTotals;
-	}
-	
-	/**
 	 * Configures whether columns with no funding data should be displayed or not
 	 * @param displayEmptyFundingColumns
 	 */
@@ -276,34 +206,6 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	@Override
 	public boolean isDisplayEmptyFundingRows() {
 		return this.displayEmptyFundingRows;
-	}
-
-	/**
-	 * @return the number of rows hierarchies to calculate the subtotals
-	 */
-	public int getRowsHierarchiesTotals() {
-		return rowsHierarchiesTotals;
-	}
-
-	/**
-	 * @param rowsHierarchiesTotals the rowHierarchiesTotals to set
-	 */
-	public void setRowsHierarchiesTotals(int rowsHierarchiesTotals) {
-		this.rowsHierarchiesTotals = rowsHierarchiesTotals;
-	}
-
-	/**
-	 * @return the number of column hierarchies to calculate the subtotals
-	 */
-	public int getColsHierarchyTotals() {
-		return colsHierarchyTotals;
-	}
-
-	/**
-	 * @param colsHierarchyTotals the number of column hierarchies to calculate the subtotals
-	 */
-	public void setColsHierarchyTotals(int colsHierarchyTotals) {
-		this.colsHierarchyTotals = colsHierarchyTotals;
 	}
 
 	@Override
@@ -339,70 +241,8 @@ public class ReportSpecificationImpl implements ReportSpecification {
     public void setAlsoShowPledges(boolean alsoShowPledges) {
     	this.alsoShowPledges = alsoShowPledges;
     }
-    
-	/**
-	 * 1. checks that every column specified in "hierarchies" is also present in "columns"
-	 * 2. brings the columns specified as hierarchies to front
-	 * 
-	 * Somehow hacky, but faster to code than redoing the whole rest of the code to support input in any order. Sorry, Nadia :=)  
-	 * 
-	 * Nadia's note: I'm glad that you made up your mind to not change the rest of the code :P
-	 */
-	public void reorderColumnsByHierarchies() {
-		//if (getHierarchies() == null) return; // nothing to do
-		LinkedHashSet<ReportColumn> newCols = new LinkedHashSet<>();
-		for(ReportColumn hier:getHierarchies()) {
-			if (!columns.contains(hier))
-				throw new RuntimeException("column specified as hierarchy, but not as column: " + hier);
-			newCols.add(hier);
-		}
-		for(ReportColumn col:columns) {
-			if (!newCols.contains(col))
-				newCols.add(col);
-		}
-		this.columns = newCols;
-		
-		/**
-		 * ugly workaround for AMP-18558 when the report has no hierarchies - a saiku bug which is easier to workaround than fix
-		 */
-		if (getColumns().isEmpty() && getHierarchies().isEmpty()) {
-			ReportColumn constantDummyColumn = new ReportColumn(ColumnConstants.CONSTANT);
-			getColumns().add(constantDummyColumn);
-			getHierarchies().add(constantDummyColumn);
-			setCalculateRowTotals(false);
-			/* we must not reconfigure column totals to be calculated 
-			setCalculateColumnTotals(true);
-			*/
-		}
-	}
+   
 
-	public boolean getUsesFundingFlows() {
-		return usesFundingFlows;
-	}
-
-	void setUsesFundingFlows(boolean usesFundingFlows) {
-		this.usesFundingFlows = usesFundingFlows;
-	}
-	
-	/**
-	 * sets {@link #usesFundingFlows} to true iff one of the funding-flows-using measure is used by the report
-	 */
-	public void computeUsesFundingFlows() {
-		boolean res = false;
-		for(ReportMeasure rm:this.measures) {
-			res |= (ArConstants.DIRECTED_MEASURE_TO_DIRECTED_TRANSACTION_VALUE.keySet().contains(rm.getMeasureName()));
-		}
-		this.setUsesFundingFlows(res);
-	}
-
-	public String getProjectTitleColumn() {
-		return projectTitleColumn;
-	}
-
-	public void setProjectTitleColumn(String projectTitleColumn) {
-		this.projectTitleColumn = projectTitleColumn;
-	}
-	
 	public static ReportSpecificationImpl buildFor(String reportName, List<String> columns, List<String> measures, List<String> hierarchies, GroupingCriteria groupingCriteria) {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl(reportName, ArConstants.DONOR_TYPE);
 		
@@ -420,8 +260,6 @@ public class ReportSpecificationImpl implements ReportSpecification {
 			}
 		}
 		
-		spec.setCalculateColumnTotals(true);
-		spec.setCalculateRowTotals(true);
 		spec.setGroupingCriteria(groupingCriteria);
 
 		return spec;

@@ -3,9 +3,12 @@ package org.dgfoundation.amp.algo;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Function;
 
@@ -82,4 +85,37 @@ public class AmpCollections {
 		return z.longValue();
 	}
 	
+	/**
+	 * returns the iteration order of an element in a collection. The equivalent of {@link List#indexOf(Object)}. <br />
+	 * Please notice that the result of this function is meaningful only if the underlying collection iterates in a consistent way
+	 * @param coll
+	 * @param elem
+	 * @return
+	 */
+	public static<K> int indexOf(Collection<K> coll, K elem) {
+		int pos = 0;
+		Iterator<K> it = coll.iterator();
+		while (it.hasNext()) {
+			if (it.next().equals(elem))
+				return pos;
+			pos ++;
+		}
+		return -1;
+	}
+	
+	/**
+	 * returns an ordered set which is the union of 2 union. The elements in the result are contained in the same order as (s1 + <any in s2 which are not contained in s1>)
+	 * @param s1
+	 * @param s2
+	 * @return
+	 */
+	public static<K> LinkedHashSet<K> union(Collection<K> s1, Collection<K> s2) {
+		LinkedHashSet<K> res = new LinkedHashSet<>();
+		res.addAll(s1);
+		for(K k:s2) {
+			if (!res.contains(k))
+				res.add(k);
+		}
+		return res;
+	}
 }

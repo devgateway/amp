@@ -23,12 +23,12 @@ public class NiReportsGenerator implements ReportExecutor {
 	@Override
 	public GeneratedReport executeReport(ReportSpecification report) {
 		NiReportsEngine engine = new NiReportsEngine(schema, report);
-		GroupReportData reportOutput = engine.execute();
+		ReportData reportOutput = engine.execute();
 		GeneratedReport apiReport = generateApiOutput(reportOutput, engine);
 		return apiReport;
 	}
 	
-	protected GeneratedReport generateApiOutput(GroupReportData reportOutput, NiReportsEngine engine) {
+	protected GeneratedReport generateApiOutput(ReportData reportOutput, NiReportsEngine engine) {
 		RunNode timings = engine.timer.getCurrentState();
 		return new GeneratedReport(engine.spec, (int) timings.getTotalTime(), null, null, null, null, timings);
 	}

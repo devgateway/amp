@@ -62,48 +62,48 @@ public class MondrianComputedMeasuresReportTests extends MondrianReportsTestCase
 	}
 	
 	
-	@Test
-	public void test_UncommittedBalance() {
-		ReportAreaForTests correctReport = new ReportAreaForTests()
-	    .withContents("Project Title", "Report Totals", "Proposed Project Amount", "", "Uncommitted Balance", "", "Actual Commitments", "75 000")
-	    .withChildren(
-	      new ReportAreaForTests()
-	          .withContents("Project Title", "Proposed Project Cost 1 - USD", "Proposed Project Amount", "1 000 000", "Uncommitted Balance", "1 000 000", "Actual Commitments", "0"),
-	      new ReportAreaForTests()
-	          .withContents("Project Title", "Proposed Project Cost 2 - EUR", "Proposed Project Amount", "3 399 510,47", "Uncommitted Balance", "3 399 510,47", "Actual Commitments", "0"),
-	      new ReportAreaForTests()
-	          .withContents("Project Title", "Project with documents", "Proposed Project Amount", "", "Uncommitted Balance", "", "Actual Commitments", "0"),
-	      new ReportAreaForTests()
-	          .withContents("Project Title", "SubNational no percentages", "Proposed Project Amount", "60 000", "Uncommitted Balance", "-15 000", "Actual Commitments", "75 000")  );
-		
-		List<String> activities = Arrays.asList("Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR", "SubNational no percentages", "Project with documents");
-		runMondrianTestCase("Uncommitted Balance",
-				activities,
-				correctReport,
-				"en"); 
-	}
+//	@Test
+//	public void test_UncommittedBalance() {
+//		ReportAreaForTests correctReport = new ReportAreaForTests()
+//	    .withContents("Project Title", "Report Totals", "Proposed Project Amount", "", "Uncommitted Balance", "", "Actual Commitments", "75 000")
+//	    .withChildren(
+//	      new ReportAreaForTests()
+//	          .withContents("Project Title", "Proposed Project Cost 1 - USD", "Proposed Project Amount", "1 000 000", "Uncommitted Balance", "1 000 000", "Actual Commitments", "0"),
+//	      new ReportAreaForTests()
+//	          .withContents("Project Title", "Proposed Project Cost 2 - EUR", "Proposed Project Amount", "3 399 510,47", "Uncommitted Balance", "3 399 510,47", "Actual Commitments", "0"),
+//	      new ReportAreaForTests()
+//	          .withContents("Project Title", "Project with documents", "Proposed Project Amount", "", "Uncommitted Balance", "", "Actual Commitments", "0"),
+//	      new ReportAreaForTests()
+//	          .withContents("Project Title", "SubNational no percentages", "Proposed Project Amount", "60 000", "Uncommitted Balance", "-15 000", "Actual Commitments", "75 000")  );
+//		
+//		List<String> activities = Arrays.asList("Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR", "SubNational no percentages", "Project with documents");
+//		runMondrianTestCase("Uncommitted Balance",
+//				activities,
+//				correctReport,
+//				"en"); 
+//	}
 	
-	@Test
-	public void test_TotalCommitments() {
-		// another measure be appear instead of AC based on AMP-19808 solution 
-		ReportAreaForTests correctReport = new ReportAreaForTests()
-	    .withContents("Project Title", "Report Totals", "Total Commitments", "", "2011-Actual Commitments", "213 231", "2013-Actual Commitments", "111 333", "Total Measures-Actual Commitments", "324 564")
-	    .withChildren(
-	      new ReportAreaForTests()
-	          .withContents("Project Title", "TAC_activity_1", "Total Commitments", "213 231", "2011-Actual Commitments", "213 231", "2013-Actual Commitments", "", "Total Measures-Actual Commitments", "213 231"),
-	      new ReportAreaForTests()
-	          .withContents("Project Title", "Test MTEF directed", "Total Commitments", "0", "2011-Actual Commitments", "", "2013-Actual Commitments", "", "Total Measures-Actual Commitments", "0"),
-	      new ReportAreaForTests()
-	          .withContents("Project Title", "Project with documents", "Total Commitments", "0", "2011-Actual Commitments", "", "2013-Actual Commitments", "", "Total Measures-Actual Commitments", "0"),
-	      new ReportAreaForTests()
-	          .withContents("Project Title", "SSC Project 1", "Total Commitments", "111 333", "2011-Actual Commitments", "", "2013-Actual Commitments", "111 333", "Total Measures-Actual Commitments", "111 333")  );
-		
-		List<String> activities = Arrays.asList("TAC_activity_1", "Test MTEF directed", "SSC Project 1", "Project with documents");
-		runMondrianTestCase("AMP-17400-no-projects",
-				activities,
-				correctReport,
-				"en");
-	}
+//	@Test
+//	public void test_TotalCommitments() {
+//		// another measure be appear instead of AC based on AMP-19808 solution 
+//		ReportAreaForTests correctReport = new ReportAreaForTests()
+//	    .withContents("Project Title", "Report Totals", "Total Commitments", "", "2011-Actual Commitments", "213 231", "2013-Actual Commitments", "111 333", "Total Measures-Actual Commitments", "324 564")
+//	    .withChildren(
+//	      new ReportAreaForTests()
+//	          .withContents("Project Title", "TAC_activity_1", "Total Commitments", "213 231", "2011-Actual Commitments", "213 231", "2013-Actual Commitments", "", "Total Measures-Actual Commitments", "213 231"),
+//	      new ReportAreaForTests()
+//	          .withContents("Project Title", "Test MTEF directed", "Total Commitments", "0", "2011-Actual Commitments", "", "2013-Actual Commitments", "", "Total Measures-Actual Commitments", "0"),
+//	      new ReportAreaForTests()
+//	          .withContents("Project Title", "Project with documents", "Total Commitments", "0", "2011-Actual Commitments", "", "2013-Actual Commitments", "", "Total Measures-Actual Commitments", "0"),
+//	      new ReportAreaForTests()
+//	          .withContents("Project Title", "SSC Project 1", "Total Commitments", "111 333", "2011-Actual Commitments", "", "2013-Actual Commitments", "111 333", "Total Measures-Actual Commitments", "111 333")  );
+//		
+//		List<String> activities = Arrays.asList("TAC_activity_1", "Test MTEF directed", "SSC Project 1", "Project with documents");
+//		runMondrianTestCase("AMP-17400-no-projects",
+//				activities,
+//				correctReport,
+//				"en");
+//	}
 	
 	@Test
 	public void test_PercentageOfTotalCommitments() {
@@ -144,8 +144,6 @@ public class MondrianComputedMeasuresReportTests extends MondrianReportsTestCase
 		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
-		spec.setCalculateColumnTotals(true);
-		spec.setCalculateRowTotals(true);
 		
 		runMondrianTestCase(spec, "en", activities, correctReport);
 	}

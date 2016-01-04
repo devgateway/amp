@@ -10,6 +10,7 @@ import java.util.ListIterator;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
+import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
@@ -112,7 +113,7 @@ public class MondrianReportSorter {
 	 */
 	private void sortByMeasuresTotals(ReportMeasure measure, int level, boolean asc) throws AMPException {
 		//detect first the measure number
-		int colId = spec.getMeasures().indexOf(measure);
+		int colId = AmpCollections.indexOf(spec.getMeasures(), measure);
 		if (colId == -1)
 			throw new AMPException("Cannot sort by inexistent ReportMeasure = " + measure);
 		colId = leafHeaders.size() - spec.getMeasures().size() + colId;

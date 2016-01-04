@@ -21,6 +21,7 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.reports.CustomMeasures;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportSpec;
 import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.service.olap.totals.TotalNode;
 import org.saiku.service.olap.totals.aggregators.TotalAggregator;
@@ -33,12 +34,12 @@ import org.saiku.service.olap.totals.aggregators.TotalAggregator;
  */
 public class CellDataSetPostProcessing {
 	
-	protected ReportSpecification spec;
+	protected MondrianReportSpec spec;
 	protected CellDataSet cellDataSet;
 	protected List<ReportOutputColumn> leafHeaders;
 	protected ReportEnvironment environment;
 	
-	public CellDataSetPostProcessing(ReportSpecification spec, CellDataSet cellDataSet, 
+	public CellDataSetPostProcessing(MondrianReportSpec spec, CellDataSet cellDataSet, 
 			List<ReportOutputColumn> leafHeaders, ReportEnvironment environment) {
 		this.spec = spec;
 		this.cellDataSet = cellDataSet;

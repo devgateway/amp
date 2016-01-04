@@ -29,7 +29,7 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.CustomMeasures;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
+import org.dgfoundation.amp.reports.mondrian.ReportSettingsImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianSQLFilters;
 import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -577,7 +577,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 
 	private void initDefault() {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("default", ArConstants.DONOR_TYPE);
-		MondrianReportSettings settings = new MondrianReportSettings(null);
+		ReportSettingsImpl settings = new ReportSettingsImpl(null);
 		spec.setSettings(settings);
 
 		registerReport(spec, buildReportEnvironment());
@@ -678,7 +678,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	}
 	
 	protected boolean hasMTEFs() {
-		List<ReportMeasure> measures = currentReport.get().getMeasures();
+		Set<ReportMeasure> measures = currentReport.get().getMeasures();
 		if (measures != null && measures.size() > 0) {
 			for (ReportMeasure measure : measures) {
 				if (CustomMeasures.MTEFs.contains(measure.getMeasureName())) {

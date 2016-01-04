@@ -153,7 +153,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 * as synchronized and initializing this field at the function entrypoint (and it is the sole function exposed by {@link org.dgfoundation.amp.reports.mondrian.ReportExecutor})
 	 * 
 	 */
-	protected ReportSpecificationImpl spec;
+	protected MondrianReportSpec spec;
 		
 	/**
 	 * Mondrian Report Generator
@@ -211,11 +211,10 @@ public class MondrianReportGenerator implements ReportExecutor {
 		return waiting;
 	}
 
-	protected static ReportSpecificationImpl buildInternallyUsedReportSpec(ReportSpecification specOrig) {
-		ReportSpecificationImpl spec = (ReportSpecificationImpl) specOrig;
+	protected static MondrianReportSpec buildInternallyUsedReportSpec(ReportSpecification specOrig) {
+		MondrianReportSpec spec = new MondrianReportSpec((ReportSpecificationImpl) specOrig);
 		spec.reorderColumnsByHierarchies();
-		spec.computeUsesFundingFlows();
-		MondrianReportUtils.configureDefaults(spec);
+		spec.configureDefaults();
 		addDummyColumns(spec);
 		spec.reorderColumnsByHierarchies();
 		return spec;
@@ -394,7 +393,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 *  Adds a dummy hierarchy by internal id (which is entity id) to group by non-hierarchical columns,
 	 *  but only if there are non-hierarchical columns
 	 */
-	private static void addDummyColumns(ReportSpecificationImpl spec) {
+	private static void addDummyColumns(MondrianReportSpec spec) {
 		//if we have more columns than hierarchies, then add the dummy hierarchy to group non-hierarchical columns by it
 		if (spec.getHierarchies().size() < spec.getColumns().size()) {
 			ReportColumn internalId = new ReportColumn(ColumnConstants.INTERNAL_USE_ID);
@@ -461,9 +460,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 		return config;
 	}
 	
-	private void configureSortingRules(MDXConfig config, ReportSpecification spec, boolean doHierarchiesTotals) throws AMPException {
+	private void configureSortingRules(MDXConfig config, MondrianReportSpec spec, boolean doHierarchiesTotals) throws AMPException {
 		if (spec.getSorters() == null || spec.getSorters().size() == 0 ) return;
-		boolean nonBreakingSort = spec.isCalculateRowTotals() || doHierarchiesTotals;
+		boolean nonBreakingSort = spec.getCalculateRowTotals() || doHierarchiesTotals;
 		
 		for (SortingInfo sortInfo : spec.getSorters()) {
 			MDXTuple tuple = new MDXTuple();
@@ -627,7 +626,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		//SaikuUtils.removeColumns(cellDataSet, dummyColumnsToRemove);
 		processMtefHeaders(cellDataSet);
 		
-		boolean calculateTotalsOnRows = spec.isCalculateRowTotals()
+		boolean calculateTotalsOnRows = spec.getCalculateRowTotals()
 				//enable totals for non-hierarchical columns
 				|| spec.getHierarchies().size() < spec.getColumns().size();
 		
@@ -668,7 +667,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 		//clear totals if were enabled for non-hierarchical merges
 		if (!spec.isCalculateColumnTotals())
 			cellDataSet.setColTotalsLists(null);
-		if (!spec.isCalculateRowTotals())
+		
+		if (!spec.getCalculateRowTotals())
 			cellDataSet.setRowTotalsLists(null);
 		
 		// update coordinates after data re-shuffle
@@ -953,7 +953,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	}
 	
 	@Deprecated
-	private GeneratedReport toGeneratedReport(ReportSpecification spec, CellSet cellSet, int duration) throws AMPException {
+	private GeneratedReport toGeneratedReport(MondrianReportSpec spec, CellSet cellSet, int duration) throws AMPException {
 		CellSetAxis rowAxis = cellSet.getAxes().get(Axis.ROWS.axisOrdinal());
 		CellSetAxis columnAxis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
 		ReportAreaImpl root = MondrianReportUtils.getNewReportArea(reportAreaType);
@@ -962,7 +962,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			/* Build Report Areas */
 			// stack of current group of children
 			Deque<List<ReportArea>> stack = new ArrayDeque<List<ReportArea>>();
-			int maxStackSize = 1 + (spec.isCalculateRowTotals() ? rowAxis.getAxisMetaData().getHierarchies().size()  : 0); 
+			int maxStackSize = 1 + (spec.getCalculateRowTotals() ? rowAxis.getAxisMetaData().getHierarchies().size()  : 0); 
 			refillStack(stack, maxStackSize); //prepare the stack
 			
 			int cellOrdinal = 0; //initial position of row data from the cellSet

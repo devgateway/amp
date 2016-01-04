@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
+import org.dgfoundation.amp.reports.mondrian.ReportSettingsImpl;
 import org.digijava.kernel.ampapi.mondrian.util.AmpMondrianSchemaProcessor;
 import org.saiku.service.PlatformUtilsService;
 import org.saiku.service.util.dto.Plugin;

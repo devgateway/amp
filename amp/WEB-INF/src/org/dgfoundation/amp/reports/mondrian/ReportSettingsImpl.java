@@ -14,16 +14,16 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
  * 
  * @author Nadejda Mandrescu
  */
-public class MondrianReportSettings extends MondrianReportFilters implements ReportSettings {
+public class ReportSettingsImpl extends MondrianReportFilters implements ReportSettings {
 	private String currencyCode = null;
 	private DecimalFormat currencyFormat = null;
 	private AmountsUnits unitsOption;
 	
-	public MondrianReportSettings() {
+	public ReportSettingsImpl() {
 		super();
 	}
 	
-	public MondrianReportSettings(AmpFiscalCalendar calendar) {
+	public ReportSettingsImpl(AmpFiscalCalendar calendar) {
 		super(calendar);
 	}
 	

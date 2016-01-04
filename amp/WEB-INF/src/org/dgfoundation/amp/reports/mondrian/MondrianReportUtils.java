@@ -76,8 +76,8 @@ public class MondrianReportUtils {
 	/**
 	 * @return default configuration for the current user settings
 	 */
-	public static MondrianReportSettings getCurrentUserDefaultSettings() {
-		MondrianReportSettings settings = new MondrianReportSettings();
+	public static ReportSettingsImpl getCurrentUserDefaultSettings() {
+		ReportSettingsImpl settings = new ReportSettingsImpl();
 		settings.setCurrencyFormat(FormatHelper.getDefaultFormat());
 		AmpApplicationSettings ampAppSettings = AmpARFilter.getEffectiveSettings();
 		if (ampAppSettings == null) {
@@ -97,22 +97,7 @@ public class MondrianReportUtils {
 			filters.setCalendar(AmpARFilter.getDefaultCalendar());
 		}
 		return filters;
-	}
-	
-	/**
-	 * Configures default & mandatory behavior
-	 * @param spec - report specification
-	 */
-	public static void configureDefaults(ReportSpecification spec) {
-		if (spec instanceof ReportSpecificationImpl) {
-			ReportSpecificationImpl s = (ReportSpecificationImpl)spec;
-			if (s.getSettings() == null) {
-				s.setSettings(getCurrentUserDefaultSettings());
-			}
-			if (GroupingCriteria.GROUPING_TOTALS_ONLY.equals(s.getGroupingCriteria()))
-				s.setCalculateColumnTotals(false);
-		}
-	}
+	}	
 	
 	/**
 	 * Retrieves column index for the specified column from the given ReportSpecification

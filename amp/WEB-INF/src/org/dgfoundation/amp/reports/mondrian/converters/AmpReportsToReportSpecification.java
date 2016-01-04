@@ -77,7 +77,6 @@ public class AmpReportsToReportSpecification {
 		configureReportData();
 		configureNonEmpty();
 		configureHierarchies();
-		makeFundingFlowsHacks();
 		configureSorting();
 		
 		spec.setEmptyOutputForUnspecifiedData(report.getDrilldownTab() == null || !report.getDrilldownTab());
@@ -87,48 +86,7 @@ public class AmpReportsToReportSpecification {
 		AmpARFilterConverter arFilterTranslator = new AmpARFilterConverter(arFilter);
 		spec.setSettings(arFilterTranslator.buildSettings());
 		spec.setFilters(arFilterTranslator.buildFilters());
-		
-		MtefConverter.instance.convertMtefs(this.report, this.spec);
-		makeFundingFlowsHacks(); // yes, twice
-		
 		return spec;
-	}
-
-	/**
-	 * AMP-21236: delete all roles- and roles-superior columns (like GROUP / TYPE)
-	 * minimum-cost minimally-breaking
-	 */
-	protected void makeFundingFlowsHacks() {
-		if (!MondrianETL.BUG_CHOOSER)
-			return; // if it is true, then no workaround is needed - the bug does not exist (but an another one, unworkaroundable starts manifesting)
-		
-		spec.computeUsesFundingFlows();
-		
-		Set<String> hierNames = new HashSet<>();
-		if (spec.getHierarchies() != null) {
-			for(ReportColumn hier:spec.getHierarchies())
-				hierNames.add(hier.getColumnName());
-		}
-		
-		Set<String> columnsToRemove = new HashSet<>();
-		if (spec.getUsesFundingFlows()) {
-			for(ReportColumn col:spec.getColumns()) {
-				if (ArConstants.COLUMNS_LINKED_WITH_FLOW_ROLES.contains(col.getColumnName()) && (!hierNames.contains(col.getColumnName())))
-					columnsToRemove.add(col.getColumnName());
-			}
-		}
-		
-		// delete columns
-		Iterator<ReportColumn> colsIt = spec.getColumns().iterator();
-		while (colsIt.hasNext())
-			if (columnsToRemove.contains(colsIt.next().getColumnName()))
-				colsIt.remove();
-
-		// this code should not normally change anything, because columnsToRemove only contains cols which are NOT in hiers. Left here for refactoring easiness
-		Iterator<ReportColumn> hiersIt = spec.getHierarchies().iterator();
-		while (hiersIt.hasNext())
-			if (columnsToRemove.contains(hiersIt.next().getColumnName()))
-				hiersIt.remove();
 	}
 	
 	private void configureReportData() {
@@ -137,45 +95,25 @@ public class AmpReportsToReportSpecification {
 			for (AmpReportHierarchy hierarchy : report.getHierarchies())
 				spec.addColumn(new ReportColumn(hierarchy.getColumn().getColumnName()));
 		} else {
-			for (AmpColumns column : getOrderedColumns()) 
-				if (!column.isMtefColumn() && !column.isRealMtefColumn()) { // MTEF columns are processed separately by MtefConverter, which reads the AmpReports instance directly
-					spec.addColumn(new ReportColumn(column.getColumnName()));
-				}
+			for (AmpColumns column : getOrderedColumns())
+				spec.addColumn(new ReportColumn(column.getColumnName()));
 		}
 		
-		boolean measuresMovedAsColumns = false;
 		for (AmpMeasures measure: report.getOrderedMeasures()) {
 			// if old reports will become obsolete, then remove these compatibility adjustments
 			String measureName = measure.getMeasureName();
-			if (MondrianMapping.definedColumns.contains(measureName)) {
-				spec.addColumn(new ReportColumn(measureName));
-				measuresMovedAsColumns = true;
-			} else {
-				spec.addMeasure(new ReportMeasure(measureName));
-			}
+			spec.addMeasure(new ReportMeasure(measureName));
 		}
-		/* workaround for reports that have all measures that are now columns in Mondrian based reports:
-		 * add a dummy measure (most common Actual Commitments) & follow up ticket: AMP-19808
-		 * => remove this workaround when a proper fix is available
-		 */
-		if (measuresMovedAsColumns && spec.getMeasures().size() == 0) {
-			spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
-		}
-		// end AMP-19808 workaround
-		
-		spec.setCalculateColumnTotals(true);
-		spec.setCalculateRowTotals(true);
-		
+				
 		//workaround for AMP-18257, issue #1
 		final String groupingOption = report.getDrilldownTab() ? "" : report.getOptions(); 
 		
 		switch(groupingOption) {
-		case "A": spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY); break;
-		case "Q": spec.setGroupingCriteria(GroupingCriteria.GROUPING_QUARTERLY); break;
-		case "M": spec.setGroupingCriteria(GroupingCriteria.GROUPING_MONTHLY); break;
-		default: 
-			spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
-			spec.setCalculateColumnTotals(false);
+			case "A": spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY); break;
+			case "Q": spec.setGroupingCriteria(GroupingCriteria.GROUPING_QUARTERLY); break;
+			case "M": spec.setGroupingCriteria(GroupingCriteria.GROUPING_MONTHLY); break;
+			default: 
+				spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
 			break;
 		}
 	}
@@ -223,9 +161,6 @@ public class AmpReportsToReportSpecification {
 	}
 	
 	private void configureHierarchies() {
-		spec.setColsHierarchyTotals(0);
-		spec.setRowsHierarchiesTotals(report.getHierarchies().size());
-
 		Set<ReportColumn> hierarchies = new LinkedHashSet<ReportColumn>(report.getHierarchies().size());
 		for (AmpReportHierarchy column : report.getHierarchies()) {
 			hierarchies.add(new ReportColumn(column.getColumn().getColumnName()));

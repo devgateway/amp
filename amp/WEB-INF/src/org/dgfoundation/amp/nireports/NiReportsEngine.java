@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
+import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.Graph;
 import org.dgfoundation.amp.algo.VivificatingMap;
 import org.dgfoundation.amp.algo.timing.InclusiveTimer;
@@ -46,9 +47,25 @@ public class NiReportsEngine {
 	final Map<String, ColumnContents> fetchedMeasures = new LinkedHashMap<>();
 	final VivificatingMap<Long, Set<ReportWarning>> reportWarnings = new VivificatingMap<>(new HashMap<>(), () -> new HashSet<ReportWarning>());
 	
-	GroupReportData rootReportData;
+	ReportData rootReportData;
 	public List<CategAmountCell> funding;
 	public final ReportSpecification spec;
+	
+	/**
+	 * all the columns which are used in the actually-run report. Some of them might have been added virtually (like for example as a dependency of a measure, filter or an another column)
+	 */
+	public LinkedHashSet<String> actualColumns;
+	
+	/**
+	 * all the measures which are used in the actually-run report. Some of them might have been added virtually (like for example as a dependency of a measure)
+	 */
+	public LinkedHashSet<String> actualMeasures;
+	
+	/**
+	 * all the hierarchies which are used in the actually-run report. Some of them might have been added virtually (like for example as a dependency of a filter). <br />
+	 * This is fully included in {@link #actualColumns}, else it's a bug
+	 */
+	public LinkedHashSet<String> actualHierarchies;
 	
 	/**
 	 * do not access directly! use {@link #getDimensionSnapshot(NiDimension)} instead
@@ -70,7 +87,7 @@ public class NiReportsEngine {
 		this.filters = schema.getFiltersConverter().apply(reportSpec.getFilters());
 	}
 	 
-	public GroupReportData execute() {
+	public ReportData execute() {
 		try(SchemaSpecificScratchpad pad = schema.getScratchpadSupplier().apply(this)) {
 			this.schemaSpecificScratchpad = pad;
 			this.timer = new InclusiveTimer("Report " + spec.getReportName());
@@ -103,6 +120,8 @@ public class NiReportsEngine {
 	protected void fetchData() {
 		timer.run("columns", this::fetchColumns);
 		timer.run("measures", this::fetchMeasures);
+		NiUtils.failIf(this.actualColumns.isEmpty(), "columnless reports not supported");
+		NiUtils.failIf(!this.actualColumns.containsAll(this.actualHierarchies), () -> String.format("not all hierarchies (%s) are also specified as columns (%s)", this.actualHierarchies.toString(), this.actualColumns.toString()));
 	}
 	
 	protected void fetchColumns() {
@@ -127,14 +146,16 @@ public class NiReportsEngine {
 	 * 
 	 */
 	protected void fetchMeasures() {
+		this.actualMeasures = new LinkedHashSet<>(spec.getMeasureNames());
 		Map<String, NiReportMeasure> measures = schema.getMeasures();
-		LinkedHashSet<String> measNames = new LinkedHashSet<>(spec.getMeasures().stream().map(meas -> meas.getMeasureName()).collect(Collectors.toList()));
 		List<NiReportMeasure> measuresToFetch = new ArrayList<>();
-		for(String measName:measNames) {
+		for(String measName:spec.getMeasureNames()) {
 			if (measures.containsKey(measName))
 				measuresToFetch.add(measures.get(measName));
-			else
+			else {
 				addReportWarning(new ReportWarning(String.format("measure %s not supported in NiReports", measName)));
+				this.actualMeasures.remove(measName);
+			}
 		}
 		Graph<NiReportMeasure> measuresGraph = new Graph<>(measuresToFetch, meas -> meas.getPrecursorMeasures().stream().map(measName -> measures.get(measName)).collect(Collectors.toList()));
 		LinkedHashSet<NiReportMeasure> measuresInSortOrder = measuresGraph.sortTopologically();
@@ -144,6 +165,7 @@ public class NiReportsEngine {
 	}
 	
 	protected void createInitialReport() {
+		this.rootReportData = new ColumnReportData(this);
 		
 	}
 	
@@ -165,10 +187,14 @@ public class NiReportsEngine {
 	
 	protected List<NiReportColumn<? extends Cell>> getReportColumns() {
 		List<NiReportColumn<? extends Cell>> res = new ArrayList<>();
-		for(String columnName:spec.getColumnNames()) {
+		this.actualHierarchies = new LinkedHashSet<>(spec.getHierarchyNames());
+		this.actualColumns = new LinkedHashSet<>(spec.getColumnNames());
+		for(String columnName:AmpCollections.union(spec.getHierarchyNames(), spec.getColumnNames())) {
 			NiReportColumn<? extends Cell> col = schema.getColumns().get(columnName);
 			if (col == null) {
 				addReportWarning(new ReportWarning(String.format("column %s not supported in NiReports", columnName)));
+				this.actualHierarchies.remove(columnName);
+				this.actualColumns.remove(columnName);
 			} else {
 				res.add(col);
 			}

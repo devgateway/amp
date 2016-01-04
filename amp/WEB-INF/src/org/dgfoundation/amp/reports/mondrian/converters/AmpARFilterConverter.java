@@ -18,7 +18,7 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
+import org.dgfoundation.amp.reports.mondrian.ReportSettingsImpl;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -82,7 +82,7 @@ public class AmpARFilterConverter {
 	
 	//either transform filter by IDS, either by Names => if by IDS, then Level properties will be used
 	private MondrianReportFilters filterRules;
-	private MondrianReportSettings settings;
+	private ReportSettingsImpl settings;
 	private AmpARFilter arFilter;
 	private boolean isPledgeFilter;
 
@@ -383,8 +383,8 @@ public class AmpARFilterConverter {
 		addFilterRule(columnName, new FilterRule(names, values, true));
 	}
 	
-	public MondrianReportSettings buildSettings() {
-		settings = new MondrianReportSettings();
+	public ReportSettingsImpl buildSettings() {
+		settings = new ReportSettingsImpl();
 		settings.setUnitsOption(arFilter.getUnitsOptions()); // might be null and we are ok with that - the getter will never return a null
 		addCurrencySettings();
 		addDateSettings();

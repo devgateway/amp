@@ -17,6 +17,7 @@ import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportSpec;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
@@ -29,7 +30,7 @@ import org.saiku.service.olap.totals.aggregators.TotalAggregator;
  * @author Nadejda Mandrescu
  */
 public class CellDataSetToAmpHierarchies {
-	private final ReportSpecification spec;
+	private final MondrianReportSpec spec;
 	private final CellDataSet cellDataSet;
 
 	private final NumberFormat numberFormat = NumberFormat.getNumberInstance();
@@ -43,7 +44,7 @@ public class CellDataSetToAmpHierarchies {
 	private final List<Integer> activities;
 	private final String translatedUndefined;
 	
-	private CellDataSetToAmpHierarchies(ReportSpecification spec, CellDataSet cellDataSet, 
+	private CellDataSetToAmpHierarchies(MondrianReportSpec spec, CellDataSet cellDataSet, 
 			List<ReportOutputColumn> leafHeaders, String translatedUndefined, List<Integer> activities) {
 		this.spec = spec;
 		this.cellDataSet = cellDataSet;
@@ -59,7 +60,7 @@ public class CellDataSetToAmpHierarchies {
 	 * @param leafHeaders - list of leaf headers 
 	 * @param activities - list of internal ids (those that are merged) 
 	 */
-	public static void concatenateNonHierarchicalColumns(ReportSpecification spec, CellDataSet cellDataSet, 
+	public static void concatenateNonHierarchicalColumns(MondrianReportSpec spec, CellDataSet cellDataSet, 
 			List<ReportOutputColumn> leafHeaders, String translatedUndefined, List<Integer> activities) {
 		(new CellDataSetToAmpHierarchies(spec, cellDataSet, leafHeaders, translatedUndefined, activities)).concatenate();
 	}
@@ -212,7 +213,7 @@ public class CellDataSetToAmpHierarchies {
 		cellDataSet.setCellSetHeaders(SaikuUtils.removeColumns(cellDataSet.getCellSetHeaders(), columnsToRemove));
 		
 		//update row totals to remove unneeded totals
-		if (spec.isCalculateRowTotals()) {
+		{
 			@SuppressWarnings("unchecked")
 			List<TotalNode>[] newTotalLists = (List<TotalNode>[])new ArrayList[startColumnIndex + 1];
 			for (int i = 0; i < startColumnIndex + 1; i++) {

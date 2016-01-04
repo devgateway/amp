@@ -158,7 +158,6 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 					spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
 					spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
 					spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
-					spec.setCalculateColumnTotals(true);
 					spec.addMeasure(new ReportMeasure(measureA));
 					spec.addMeasure(new ReportMeasure(measureB));
 					MondrianReportFilters filterRules = new MondrianReportFilters();

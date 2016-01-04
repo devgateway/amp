@@ -26,6 +26,7 @@ import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.onepager.models.MTEFYearsModel;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportSpec;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
@@ -106,17 +107,9 @@ public class MtefConverter {
 	
 	public static int getMtefEndDayCode() {
 		return MondrianETL.MTEF_RANGES_START_DAY_CODE + ArConstants.MAX_SUPPORTED_YEAR + 100;
-	}
+	}	
 	
-	protected void addIfMtef(AmpReportColumn arc, SortedSet<Integer> years, String prefix) {
-		Integer yearNr = arc.getColumn().getMtefYear(prefix);
-		if (yearNr != null) {
-			yearNr = Math.min(Math.max(yearNr, 1970), 2050); // clamp between 1970 and 2050 - this is what our Mondrian reports implementation supports (for now)
-			years.add(yearNr); 
-		}
-	}
-	
-	protected List<FilterRule> buildRulesFor(SortedSet<Integer> years) {
+	public List<FilterRule> buildRulesFor(SortedSet<Integer> years) {
 		if (years.isEmpty()) return null; // nothing to do
 
 		// build list of items to add
@@ -129,50 +122,5 @@ public class MtefConverter {
 				true, true));
 		}
 		return filterRules;
-	}
-		
-	protected void addMeasureIfMandatedByColumn(ReportSpecificationImpl spec, SortedSet<Integer> years, ElementType elementType, String measureToAdd, boolean addMeasureAtBeginning) {
-		List<FilterRule> rules = buildRulesFor(years);
-		if (rules == null)
-			return;
-		
-		// we have to add MTEF info to filters -> ensure that a filters instance exists
-		if (spec.getFilters() == null)
-			spec.setFilters(new MondrianReportFilters());
-
-		spec.getFilters().getFilterRules().put(new ReportElement(elementType), rules);
-		ReportMeasure measure = new ReportMeasure(measureToAdd);
-		if (!spec.getMeasures().contains(measure)) {
-			if (addMeasureAtBeginning)
-				spec.getMeasures().add(0, measure);
-			else
-				spec.getMeasures().add(measure);
-		}
-	}
-	
-	/**
-	 * scans the report for MTEF columns and converts them to "mtef" measure reference + filter entries <br />
-	 * this function is thread-safe, because it has no off-stack state <br />
-	 * dies if the input is fishy - this is done on purpose
-	 */
-	public void convertMtefs(AmpReports report, ReportSpecificationImpl spec) {
-		SortedSet<Integer> mtefYears = new TreeSet<>(), realMtefYears = new TreeSet<>(), pipelineMtefYears = new TreeSet<>(), projectionMtefYears = new TreeSet<>();
-		
-		for(AmpReportColumn arc:report.getColumns()) {
-			addIfMtef(arc, mtefYears, "mtef");
-			addIfMtef(arc, realMtefYears, "realmtef");
-			addIfMtef(arc, pipelineMtefYears, "pipelinemtef");
-			addIfMtef(arc, projectionMtefYears, "projectionmtef");
-		}
-						
-		addMeasureIfMandatedByColumn(spec, mtefYears, ElementType.MTEF_DATE, MeasureConstants.MTEF_PROJECTIONS, true);
-		addMeasureIfMandatedByColumn(spec, realMtefYears, ElementType.REAL_MTEF_DATE, MeasureConstants.REAL_MTEFS, false);
-		addMeasureIfMandatedByColumn(spec, pipelineMtefYears, ElementType.PIPELINE_MTEF_DATE, MeasureConstants.PIPELINE_MTEF_PROJECTIONS, false);
-		addMeasureIfMandatedByColumn(spec, projectionMtefYears, ElementType.PROJECTION_MTEF_DATE, MeasureConstants.PROJECTION_MTEF_PROJECTIONS, false);
-		
-		spec.allowedYearsPerMeasure.put("MTEF", mtefYears);
-		spec.allowedYearsPerMeasure.put(MeasureConstants.REAL_MTEFS, realMtefYears);
-		spec.allowedYearsPerMeasure.put(MeasureConstants.PIPELINE_MTEF_PROJECTIONS, pipelineMtefYears);
-		spec.allowedYearsPerMeasure.put(MeasureConstants.PROJECTION_MTEF_PROJECTIONS, projectionMtefYears);
 	}
 }

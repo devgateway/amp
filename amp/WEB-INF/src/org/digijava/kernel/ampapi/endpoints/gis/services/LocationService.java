@@ -45,7 +45,7 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
+import org.dgfoundation.amp.reports.mondrian.ReportSettingsImpl;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
@@ -116,7 +116,7 @@ public class LocationService {
 		spec.getHierarchies().addAll(spec.getColumns());
 		// also configures the measure(s) from funding type settings request
 		SettingsUtils.applyExtendedSettings(spec, config);
-		MondrianReportSettings mrs = (MondrianReportSettings) spec.getSettings();
+		ReportSettingsImpl mrs = (ReportSettingsImpl) spec.getSettings();
 		mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
 		
 		MondrianReportFilters filterRules = new MondrianReportFilters(spec.getSettings().getCalendar()); 
@@ -565,9 +565,6 @@ public class LocationService {
 
 	}
 	public static void getCommonSpecForExport(ReportSpecificationImpl spec) {
-		boolean doTotals=true;
-
-
 		//hierarchies
 //		Set<ReportColumn> hierarchies=new LinkedHashSet<ReportColumn>();
 //		hierarchies.add(c);
@@ -579,9 +576,6 @@ public class LocationService {
 
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
-
-		spec.setCalculateColumnTotals(doTotals);
-		spec.setCalculateRowTotals(doTotals);
 	}
 	public static HSSFWorkbook generateExcelExportByLocation(LinkedHashMap<String, Object> filters) {
 
@@ -764,13 +758,10 @@ public class LocationService {
 			implementationLevelHierarchy.add(implementationLevelColumn);
 			spec.setHierarchies(implementationLevelHierarchy);
 		}
-
-		spec.setCalculateColumnTotals(true);
-		spec.setCalculateRowTotals(true);
 		spec.setDisplayEmptyFundingRows(true);
 		
 		SettingsUtils.applyExtendedSettings(spec, config);
-		MondrianReportSettings mrs = (MondrianReportSettings) spec.getSettings();
+		ReportSettingsImpl mrs = (ReportSettingsImpl) spec.getSettings();
 		mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
 		
 		MondrianReportFilters filterRules = FilterUtils.getFilters(config, new MondrianReportFilters(mrs.getCalendar()));

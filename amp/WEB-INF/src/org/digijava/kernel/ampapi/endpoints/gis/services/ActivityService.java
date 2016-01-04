@@ -37,7 +37,7 @@ import org.dgfoundation.amp.reports.ReportAreaMultiLinked;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
+import org.dgfoundation.amp.reports.mondrian.ReportSettingsImpl;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
@@ -101,13 +101,11 @@ public class ActivityService {
 		// apply custom settings
 		configureMeasures(spec, config);
 		
- 		spec.setCalculateColumnTotals(doTotals);
  		
  		// AMP-19772: Needed to avoid problems on GIS js. 
  		spec.setDisplayEmptyFundingRows(true);
 		
- 		spec.setCalculateRowTotals(doTotals);
- 		MondrianReportSettings mrs = (MondrianReportSettings) spec.getSettings();
+ 		ReportSettingsImpl mrs = (ReportSettingsImpl) spec.getSettings();
  		mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
 
 		MondrianReportFilters filterRules = FilterUtils.getFilterRules(

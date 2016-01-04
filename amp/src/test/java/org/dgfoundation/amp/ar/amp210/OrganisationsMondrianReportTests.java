@@ -138,8 +138,6 @@ public class OrganisationsMondrianReportTests extends MondrianReportsTestCase {
 				null,
 				GroupingCriteria.GROUPING_YEARLY);
 		spec.setDisplayEmptyFundingRows(true);
-		spec.setCalculateColumnTotals(true);
-		spec.setCalculateRowTotals(true);
 		runMondrianTestCase(spec, "en", activities, correctReport);
 	}
 	
@@ -165,8 +163,6 @@ public class OrganisationsMondrianReportTests extends MondrianReportsTestCase {
 				GroupingCriteria.GROUPING_YEARLY);
 		
 		spec.setDisplayEmptyFundingRows(true);
-		spec.setCalculateColumnTotals(true);
-		spec.setCalculateRowTotals(true);
 		
 		MondrianReportFilters filters = new MondrianReportFilters();
 		filters.addFilterRule(new ReportColumn(ColumnConstants.RESPONSIBLE_ORGANIZATION), new FilterRule("21378", true)); //72 local
@@ -203,8 +199,6 @@ public class OrganisationsMondrianReportTests extends MondrianReportsTestCase {
 				GroupingCriteria.GROUPING_YEARLY);
 		
 		spec.setDisplayEmptyFundingRows(true);
-		spec.setCalculateColumnTotals(true);
-		spec.setCalculateRowTotals(true);
 		
 		MondrianReportFilters filters = new MondrianReportFilters();
 		filters.addFilterRule(new ReportColumn(ColumnConstants.EXECUTING_AGENCY), new FilterRule("21697", true)); //world bank
@@ -256,8 +250,6 @@ public class OrganisationsMondrianReportTests extends MondrianReportsTestCase {
 				null,
 				GroupingCriteria.GROUPING_YEARLY);
 		spec.setDisplayEmptyFundingRows(true);
-		spec.setCalculateColumnTotals(true);
-		spec.setCalculateRowTotals(true);
 		
 		MondrianReportFilters filters = new MondrianReportFilters();
 		filters.addFilterRule(new ReportColumn(ColumnConstants.IMPLEMENTING_AGENCY_TYPE), new FilterRule("38", true)); // "default"

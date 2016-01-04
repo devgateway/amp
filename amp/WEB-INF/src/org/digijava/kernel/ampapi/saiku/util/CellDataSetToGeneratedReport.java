@@ -35,6 +35,7 @@ import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.reports.CustomAmounts;
 import org.dgfoundation.amp.reports.DateColumns;
 import org.dgfoundation.amp.reports.PartialReportArea;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportSpec;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
@@ -51,7 +52,7 @@ import org.saiku.service.olap.totals.aggregators.TotalAggregator;
 public class CellDataSetToGeneratedReport {
 	protected static final Logger logger = Logger.getLogger(CellDataSetToGeneratedReport.class);
 	
-	private ReportSpecification spec;
+	private MondrianReportSpec spec;
 	private final CellDataSet cellDataSet;
 	private final List<ReportOutputColumn> leafHeaders;
 	private final List<Integer> cellDataSetActivities;
@@ -70,7 +71,7 @@ public class CellDataSetToGeneratedReport {
 	private Set<Integer> amountMultiplierColumns = new TreeSet<Integer>();
 	private final AmountsUnits unitsOption;
 	
-	public CellDataSetToGeneratedReport(ReportSpecification spec, CellDataSet cellDataSet, 
+	public CellDataSetToGeneratedReport(MondrianReportSpec spec, CellDataSet cellDataSet, 
 			List<ReportOutputColumn> leafHeaders, List<Integer> cellDataSetActivities) {
 		this.spec = spec;
 		this.cellDataSet = cellDataSet;
@@ -94,8 +95,7 @@ public class CellDataSetToGeneratedReport {
 		Locale locale  = new Locale("en", "US");
 		readingNumberFormat = NumberFormat.getInstance(locale);
 		//init measure totals if they are available
-		if (spec.isCalculateColumnTotals() && 
-				cellDataSet.getColTotalsLists() != null && cellDataSet.getColTotalsLists().length > 0 
+		if (cellDataSet.getColTotalsLists() != null && cellDataSet.getColTotalsLists().length > 0 
 				&& cellDataSet.getColTotalsLists()[0] != null && cellDataSet.getColTotalsLists()[0].size() > 0) {
 			this.measureTotals = cellDataSet.getColTotalsLists()[0].get(0).getTotalGroups();
 			emptyColTotalsMeasuresIndexes = MondrianReportUtils.getEmptyColTotalsMeasuresIndexes(spec);
@@ -121,7 +121,7 @@ public class CellDataSetToGeneratedReport {
 			hSize--;
 		
 		int maxDepth = spec.getColumns().isEmpty() ? 1 :  
-				(spec.isCalculateRowTotals() ? Math.max(1, hSize) - (hSize / spec.getColumns().size()) : 1);
+				(spec.getCalculateRowTotals() ? Math.max(1, hSize) - (hSize / spec.getColumns().size()) : 1);
 
 		int maxStackSize = 1 + maxDepth * 2; //* 2 for totals, where maxDepth != 0 
 		
@@ -312,7 +312,7 @@ public class CellDataSetToGeneratedReport {
 		while(depth > 0) {
 			stack.peek().add(current);
 			depth --;
-			if (spec.isCalculateRowTotals() && totColId >=0) {
+			if (totColId >=0) {
 				current = MondrianReportUtils.getNewReportArea(current.getClass());
 				current.setChildren(stack.pop());
 				if(current instanceof SaikuReportArea)

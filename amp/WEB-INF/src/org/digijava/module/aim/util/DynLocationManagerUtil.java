@@ -965,7 +965,7 @@ public class DynLocationManagerUtil {
                 i++;
             }
 
-            for (int j = 1; j < hssfSheet.getPhysicalNumberOfRows() - 1; j++) {
+            for (int j = 1; j < hssfSheet.getPhysicalNumberOfRows(); j++) {
                 AmpCategoryValueLocations parentLoc=null;
                 hssfRow = hssfSheet.getRow(j);
 

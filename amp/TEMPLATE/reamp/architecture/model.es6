@@ -16,6 +16,8 @@ export default class Model{
         return this.set(key, valOrUpdate);
       }
     );
+
+    this.__ = key => this.translations().get(key);
   }
 
   steal(target, ...keys){

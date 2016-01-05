@@ -13,6 +13,8 @@ class Model extends AMP.Model{
     if("newConstantCurrency" == key) return target.steal(this, 'constantCurrencies');
     return target;
   }
+
+
 }
 
 var parseCalendars = (calendars, calendar) => calendars.set(calendar.id, new AMP.Model({
@@ -34,8 +36,8 @@ function parseConstantCurrencies(blueprint, data){
         accum = accum.set(makeKey(calendar, currency, from, to), blueprint
             .calendar(calendar)
             .currency(currency)
-            .from(from)
-            .to(to)
+            .from(parseInt(from))
+            .to(parseInt(to))
         )
       }
     }
@@ -98,18 +100,18 @@ export var view = AMP.view((model, actions) => {
               var key = makeKey(calendar(), currency(), from(), to());
               return <Entry.view
                   key={key}
-                  model={constantCurrency}
+                  model={constantCurrency.checkMerging(model.newConstantCurrency())}
                   actions={actions.entry(key)}
               />
           })}
         </tbody>
         <tfoot>
-        <NewConstantCurrency.view
-            model={model.newConstantCurrency()}
-            actions={actions.newConstantCurrency()}
-        />
         <tr>
-          <td colSpan="5" className="text-right">
+          <NewConstantCurrency.view
+              model={model.newConstantCurrency()}
+              actions={actions.newConstantCurrency()}
+          />
+          <td className="text-right">
             {showSave(__)(actions.save)(model.saveStatus())}
           </td>
         </tr>
@@ -157,13 +159,21 @@ export var update = (action, model) => actions.match(action, {
           AMP.updateSubmodel.bind(null, ['newConstantCurrency'], NewConstantCurrency.update, newConstantCurrencyAction);
       return NewConstantCurrency.actions.match(newConstantCurrencyAction, {
         add: (calendar, currency, from, to) => updateSubmodel(
-            model.setIn(['constantCurrencies', makeKey(calendar, currency, from, to)], model.entryModel()
+            model.constantCurrencies(constantCurrencies =>
+                constantCurrencies.filter(constantCurrency =>
+                    !constantCurrency.isIntersectedOrTouched(calendar, currency, from, to)
+                )
+            ).setIn(['constantCurrencies', makeKey(calendar, currency, from, to)], model.entryModel()
                 .calendar(calendar)
                 .currency(currency)
                 .from(from)
                 .to(to)
             )
         ),
+        maybeClose: () => {
+          var [submodel, sideEffect] = updateSubmodel(model);
+          return [submodel, actions => sideEffect(actions.newConstantCurrency())]
+        },
         _: () => updateSubmodel(model)
       })
     },

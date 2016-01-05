@@ -357,11 +357,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 				MondrianReportUtils.flushCache();
 			}
 				
-		if (PartialReportArea.class.isAssignableFrom(reportAreaType)
-				/* if there are no leaf entries to be associated with internal use id, 
-				 * then we do not need to collect them
-				 */
-				&& spec.getHierarchies().size() < spec.getColumns().size()) {
+		// if there are no leaf entries to be associated with internal use id, then we cannot collect them
+		if (spec.getHierarchies().size() < spec.getColumns().size()) {
 			cellDataSetActivities = new ArrayList<Integer>();
 		}
 	}	

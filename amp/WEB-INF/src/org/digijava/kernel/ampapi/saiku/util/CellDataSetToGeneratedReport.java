@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -58,6 +59,15 @@ public class CellDataSetToGeneratedReport {
 	private DecimalFormat numberFormat;
 	private NumberFormat readingNumberFormat;
 	
+	/*
+	 * This is to simulate what we do with PartialReportArea already, but other ReportArea types can be used.
+	 * Will be activated only when needed for special computed columns.
+	 */
+	private final boolean hasActivitySumAmounts;
+	private final Map<Integer, ReportArea> activityLeafs;
+	private final Map<ReportArea, Integer> reportAreaInternalId;
+	
+	
 	/**
 	 * measureTotals[MEASURE][ROW]
 	 */
@@ -76,6 +86,9 @@ public class CellDataSetToGeneratedReport {
 		this.cellDataSet = cellDataSet;
 		this.leafHeaders = leafHeaders;
 		this.cellDataSetActivities = cellDataSetActivities;
+		this.hasActivitySumAmounts = hasActivitySumAmounts(); 
+		this.activityLeafs = new TreeMap<Integer, ReportArea>();
+		this.reportAreaInternalId = new HashMap<ReportArea, Integer>();
 		this.unitsOption = this.spec.getSettings().getUnitsOption();
 		init();
 	}
@@ -109,8 +122,7 @@ public class CellDataSetToGeneratedReport {
 		ReportAreaImpl root = MondrianReportUtils.getNewReportArea(reportAreaType);
 		boolean isSaikuReport = root instanceof SaikuReportArea;
 		boolean isPartialArea = root instanceof PartialReportArea;
-		Iterator<Integer> idIter =  isPartialArea && cellDataSetActivities != null 
-				? cellDataSetActivities.iterator() : null;
+		Iterator<Integer> idIter =  cellDataSetActivities != null ? cellDataSetActivities.iterator() : null;
 		
 		Deque<List<ReportArea>> stack = new ArrayDeque<List<ReportArea>>();
 		//assumption that concatenation was done and totals are required starting for the 1st non-hierarchical column backwards
@@ -141,7 +153,13 @@ public class CellDataSetToGeneratedReport {
 			}
 			if (idIter != null) {
 				if (idIter.hasNext()) {
-					((PartialReportArea) reportArea).addInternalUseId(idIter.next());
+					Integer internalId = idIter.next();
+					if (hasActivitySumAmounts) {
+						this.activityLeafs.put(internalId, reportArea);
+						this.reportAreaInternalId.put(reportArea, internalId);
+					}
+					if (isPartialArea)
+						((PartialReportArea) reportArea).addInternalUseId(internalId);
 				} else {
 					logger.error("Abnormal case: each CellDataSet row must have an associated ID");
 				}
@@ -227,6 +245,43 @@ public class CellDataSetToGeneratedReport {
 		}
 		
 		return notNullColId;
+	}
+	
+	private ReportCell getColumnValue(ReportAreaImpl current, String defaultValue, ReportOutputColumn roc) {
+		if (hasActivitySumAmounts && CustomAmounts.ACTIVITY_SUM_AMOUNTS.contains(roc.originalColumnName)) {
+			double value = getActivityAmountsSum(current, roc);
+			return new AmountCell(value, this.numberFormat);
+		}
+		return new TextCell(defaultValue);
+	}
+	
+	private double getActivityAmountsSum(ReportAreaImpl current, ReportOutputColumn roc) {
+		double value = 0;
+		if (current.getChildren() != null && current.getChildren().size() > 0) {
+			/*
+			 * This is already done in PartialReportArea, but not ReportArea implementations extend it.
+			 */
+			Set<Integer> uniqueActivities = new TreeSet<Integer>();
+			getUniqueActivities(current, uniqueActivities);
+			for (Integer internalId: uniqueActivities) {
+				ReportArea ra = activityLeafs.get(internalId);
+				AmountCell ac = (AmountCell) ra.getContents().get(roc);
+				if (ac != null && ac.value != null)
+					value += ((Number) ac.value).doubleValue();
+			}
+		}
+		return value;
+	}
+	
+	private void getUniqueActivities(ReportArea current, Set<Integer> uniqueActivities) {
+		if (current.getChildren() != null && current.getChildren().size() > 0) {
+			for (ReportArea child: current.getChildren()) {
+				getUniqueActivities(child, uniqueActivities);
+				Integer internalId = this.reportAreaInternalId.get(child);
+				if (internalId != null)
+					uniqueActivities.add(internalId);
+			}
+		}
 	}
 
 //	/**
@@ -350,8 +405,9 @@ public class CellDataSetToGeneratedReport {
 		String totalsName = getTotalsName(current, colId - 1);
 		int totColNameId = Math.max(0,  colId - 1);
 		for (int a = 0; a < cellDataSet.getLeftOffset(); a++, headerPos++) {
-			String value = a == totColNameId ? totalsName : ""; 
-			contents.put(leafHeaders.get(headerPos), new TextCell(value));
+			String value = a == totColNameId ? totalsName : "";
+			ReportOutputColumn roc = leafHeaders.get(headerPos);
+			contents.put(roc, getColumnValue(current, value, roc));
 		}
 		//adding data totals of the current area
 		for (int a = 0; a < totals.length; a ++) //normally totals.length == 1
@@ -443,7 +499,15 @@ public class CellDataSetToGeneratedReport {
 				amountMultiplierColumns.add(headerPos);
 			}
 			headerPos ++;
-		}	 
+		}
 	}
 	
+	private boolean hasActivitySumAmounts() {
+		for (ReportOutputColumn roc : leafHeaders) {
+			if (CustomAmounts.ACTIVITY_SUM_AMOUNTS.contains(roc.originalColumnName)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

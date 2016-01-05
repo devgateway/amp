@@ -87,16 +87,12 @@ public class MondrianComputedMeasuresReportTests extends MondrianReportsTestCase
 	public void test_TotalCommitments() {
 		// another measure be appear instead of AC based on AMP-19808 solution 
 		ReportAreaForTests correctReport = new ReportAreaForTests()
-	    .withContents("Project Title", "Report Totals", "Total Commitments", "", "2011-Actual Commitments", "213 231", "2013-Actual Commitments", "111 333", "Total Measures-Actual Commitments", "324 564")
+	    .withContents("Project Title", "Report Totals", "Total Commitments", "324 564", "2011-Actual Commitments", "213 231", "2013-Actual Commitments", "111 333", "Total Measures-Actual Commitments", "324 564")
 	    .withChildren(
-	      new ReportAreaForTests()
-	          .withContents("Project Title", "TAC_activity_1", "Total Commitments", "213 231", "2011-Actual Commitments", "213 231", "2013-Actual Commitments", "", "Total Measures-Actual Commitments", "213 231"),
-	      new ReportAreaForTests()
-	          .withContents("Project Title", "Test MTEF directed", "Total Commitments", "0", "2011-Actual Commitments", "", "2013-Actual Commitments", "", "Total Measures-Actual Commitments", "0"),
-	      new ReportAreaForTests()
-	          .withContents("Project Title", "Project with documents", "Total Commitments", "0", "2011-Actual Commitments", "", "2013-Actual Commitments", "", "Total Measures-Actual Commitments", "0"),
-	      new ReportAreaForTests()
-	          .withContents("Project Title", "SSC Project 1", "Total Commitments", "111 333", "2011-Actual Commitments", "", "2013-Actual Commitments", "111 333", "Total Measures-Actual Commitments", "111 333")  );
+	      new ReportAreaForTests()    .withContents("Project Title", "TAC_activity_1", "Total Commitments", "213 231", "2011-Actual Commitments", "213 231", "2013-Actual Commitments", "", "Total Measures-Actual Commitments", "213 231"),
+	      new ReportAreaForTests()    .withContents("Project Title", "Test MTEF directed", "Total Commitments", "0", "2011-Actual Commitments", "", "2013-Actual Commitments", "", "Total Measures-Actual Commitments", "0"),
+	      new ReportAreaForTests()    .withContents("Project Title", "Project with documents", "Total Commitments", "0", "2011-Actual Commitments", "", "2013-Actual Commitments", "", "Total Measures-Actual Commitments", "0"),
+	      new ReportAreaForTests()    .withContents("Project Title", "SSC Project 1", "Total Commitments", "111 333", "2011-Actual Commitments", "", "2013-Actual Commitments", "111 333", "Total Measures-Actual Commitments", "111 333")  );
 		
 		List<String> activities = Arrays.asList("TAC_activity_1", "Test MTEF directed", "SSC Project 1", "Project with documents");
 		runMondrianTestCase("AMP-17400-no-projects",

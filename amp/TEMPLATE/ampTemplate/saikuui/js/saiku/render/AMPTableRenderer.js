@@ -379,7 +379,8 @@ function generateDataRows(page, options) {
 		for (var j = 0; j < this.contentMatrix[i].length; j++) {
 			if (!isHiddenColumn(j)) {
 				var cell = "";
-				if (j < this.metadataColumns.length) {
+				var isNumericCell = isNumber(this.contentMatrix[i][j].value);
+				if (!isNumericCell && j < this.metadataColumns.length) {
 					if (this.contentMatrix[i][j].isGrouped === true) {
 						continue;
 					}
@@ -751,4 +752,9 @@ function isActivityPledge(activityIdValue) {
 	var idNumber = parseInt(activityIdValue, 10);
 	
 	return idNumber && idNumber > this.PLEDGE_ID_ADDER;
+}
+
+// cannot use $.isNumber during export
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
 }

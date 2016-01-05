@@ -2,10 +2,7 @@ package org.digijava.module.message.jobs;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -13,22 +10,19 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteUtils;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
-import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.startup.AMPStartupListener;
 import org.digijava.module.aim.startup.AmpBackgroundActivitiesCloser;
-import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.esrigis.helpers.DbHelper;
-import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -47,43 +41,26 @@ public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements 
 	 * @return
 	 * @throws CloneNotSupportedException
 	 */
-	protected AmpActivityVersion cloneActivity(Session session, AmpTeamMember member, AmpActivityVersion oldActivity, String newStatus, Long closedProjectStatusCategoryValue) throws CloneNotSupportedException {
-        ContentTranslationUtil.cloneTranslations(oldActivity);
-        Long ampActivityGroupId = oldActivity.getAmpActivityGroup().getAmpActivityGroupId();
-		AmpActivityVersion auxActivity = ActivityVersionUtil.cloneActivity(oldActivity, member);
-		auxActivity.setAmpActivityId(null);
-
-		session.evict(oldActivity);
+	protected AmpActivityVersion cloneActivity(Session session, AmpTeamMember member, AmpActivityVersion oldActivity, String newStatus, Long closedProjectStatusCategoryValue) throws CloneNotSupportedException
+	{		
+        AmpActivityVersion prevVersion = oldActivity.getAmpActivityGroup().getAmpActivityLastVersion();
+		oldActivity.getAmpActivityGroup().setAutoClosedOnExpiration(true);
+		oldActivity.setModifiedDate(Calendar.getInstance().getTime());
+		oldActivity.setModifiedBy(member);
 		
-		// Code related to versioning.
-		AmpActivityGroup auxActivityGroup = (AmpActivityGroup) session.load(AmpActivityGroup.class, ampActivityGroupId);
-		AmpActivityVersion prevVersion		= auxActivityGroup.getAmpActivityLastVersion();
-		auxActivityGroup.setAmpActivityLastVersion(auxActivity);
-		auxActivityGroup.setAutoClosedOnExpiration(true);
-		session.save(auxActivityGroup);
-		auxActivity.setAmpActivityGroup(auxActivityGroup);
-		auxActivity.setModifiedDate(Calendar.getInstance().getTime());
-		auxActivity.setModifiedBy(member);
-		       
-		// don't ask me why is this done
-        AmpActivityContact actCont;
-        Set<AmpActivityContact> contacts = new HashSet<AmpActivityContact>();
-        Set<AmpActivityContact> activityContacts = auxActivity.getActivityContacts();
-        if (activityContacts != null){
-            Iterator<AmpActivityContact> it = activityContacts.iterator();
-            while(it.hasNext()){
-                actCont = it.next();
-                actCont.setId(null);
-                actCont.setActivity(auxActivity);
-                session.save(actCont);
-                contacts.add(actCont);
-            }
-            auxActivity.setActivityContacts(contacts);
-        }
-        auxActivity.setApprovalStatus(newStatus);
-        auxActivity.getCategories().remove(CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.ACTIVITY_STATUS_NAME, auxActivity.getCategories()));
-        auxActivity.getCategories().add(CategoryManagerUtil.getAmpCategoryValueFromDb(closedProjectStatusCategoryValue));
-        session.save(auxActivity);
+		oldActivity.setApprovalStatus(newStatus);
+		oldActivity.getCategories().remove(CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.ACTIVITY_STATUS_NAME, oldActivity.getCategories()));
+		oldActivity.getCategories().add(CategoryManagerUtil.getAmpCategoryValueFromDb(closedProjectStatusCategoryValue));
+        
+		AmpActivityVersion auxActivity = null;
+        try {
+        	auxActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(oldActivity, null, 
+        			member, oldActivity.getDraft(), session, false, false);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new RuntimeException(e);
+		}
+        session.flush();
         
         java.util.Locale javaLocale = new java.util.Locale("en");
         LuceneUtil.addUpdateActivity(AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH, true, 
@@ -130,6 +107,7 @@ public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements 
     		}
     		
     		String newStatus = Constants.APPROVED_STATUS;
+    		session.setFlushMode(FlushMode.MANUAL);
     		for(AmpActivityVersion ver:closeableActivities) {
     			if ("On".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION))) {
     				 newStatus = ver.getApprovalStatus().equals(Constants.STARTED_APPROVED_STATUS) ? Constants.STARTED_STATUS : Constants.EDITED_STATUS;
@@ -147,6 +125,7 @@ public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements 
 
     			logger.info(String.format("... done, new amp_activity_id=%d\n", newVer.getAmpActivityId()));
     		}
+    		session.setFlushMode(FlushMode.AUTO);
     	}
     	catch(Exception e) {
     		// not rethrowing, because we don't want the thread to die

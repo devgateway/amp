@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.util.string.Strings;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
@@ -345,7 +346,7 @@ public class ContentTranslationUtil {
             	Field field = propertyDescription.field;
             	
             	// all translateable fields are of type String, so comparing currentState[i].previousState[i] is ok  (they are both String instances)  
-                if ((previousState == null || (currentState[i] != null && !currentState[i].equals(previousState[i])))){
+                if ((previousState == null || (StringUtils.isNotBlank((String)currentState[i]) && !currentState[i].equals(previousState[i])))){
                 	// "field.getAnnotation(TranslatableField.class) != null" deleted from "if", as InternationalizedModelDescription only contains translateable fields
                 	FieldTranslationPack ftp;
                     Long ftpId;

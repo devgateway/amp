@@ -226,7 +226,7 @@ public class AmpBackgroundActivitiesCloser
 		teamMember = TeamMemberUtil.getAmpTeamMemberByUserByTeam(user, team);
 		
 		if (teamMember == null)
-			throw new RuntimeException("BUG creating a new AmpTeamMember");
+			return newMember;
 		
 		return teamMember;
 	}

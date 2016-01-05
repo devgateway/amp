@@ -704,14 +704,22 @@ public class PersistenceManager {
         Transaction transaction = session.getTransaction();
         if (transaction != null) {
             try{if (transaction.isActive()) session.flush();}catch(Exception e){logger.error("error while flushing HSession", e);};
-            try {transaction.commit();}
-            catch(Exception e){
-                //System.out.println("error committing transaction");
-                //e.printStackTrace();
-            }
-        }
-        try{session.close();}catch(Exception e){};
-    }
+			try {
+				if (transaction.isActive())
+					transaction.commit();
+			} catch(Exception e) {
+				//System.out.println("error committing transaction");
+				//e.printStackTrace();
+			}
+		}
+		try {
+			if (session.isOpen())
+				session.close();
+		} catch(Exception e) {
+//			System.out.println("error closing the session");
+//			e.printStackTrace();
+		}
+	}
 
     /**
      * <strong>This is a lifecycle management function</strong><br />

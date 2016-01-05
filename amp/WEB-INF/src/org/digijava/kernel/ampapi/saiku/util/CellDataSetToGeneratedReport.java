@@ -102,9 +102,7 @@ public class CellDataSetToGeneratedReport {
 		}
 		this.rowTotals = cellDataSet.getRowTotalsLists();
 		this.isTotalsOnlyReport = GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria());
-		if (!this.isTotalsOnlyReport) {
-			emptyRowTotalsMeasuresIndexes = MondrianReportUtils.getEmptyRowTotalsMeasuresIndexes(spec, leafHeaders);
-		}
+		emptyRowTotalsMeasuresIndexes = MondrianReportUtils.getEmptyRowTotalsMeasuresIndexes(spec, leafHeaders);
 	}
 	
 	public ReportAreaImpl transformTo(Class<? extends ReportAreaImpl> reportAreaType) throws AMPException {

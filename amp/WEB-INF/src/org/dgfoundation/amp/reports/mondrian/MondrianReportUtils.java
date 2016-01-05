@@ -262,12 +262,14 @@ public class MondrianReportUtils {
 	 * @return
 	 */
 	public static Set<Integer> getEmptyRowTotalsMeasuresIndexes(ReportSpecification spec, List<ReportOutputColumn> leafHeaders) {
+		boolean isTotalsOnly = GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria());
 		Set<Integer> orderIds = new TreeSet<Integer>();
 		if (spec != null && leafHeaders != null) {
 			int pos = 0;
 			for (ReportOutputColumn roc : leafHeaders) {
 				if (CustomMeasures.NO_RAW_TOTALS.contains(roc.originalColumnName) 
-						&& roc.parentColumn != null && !MoConstants.TOTAL_MEASURES.equals(roc.parentColumn.originalColumnName)) {
+						&& (isTotalsOnly || roc.parentColumn != null 
+								&& !MoConstants.TOTAL_MEASURES.equals(roc.parentColumn.originalColumnName))) {
 					orderIds.add(pos - spec.getColumns().size());
 				}
 				pos++;

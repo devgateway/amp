@@ -58,11 +58,11 @@ public class NewFeaturesMondrianReportTests extends MondrianReportsTestCase {
 	@Test
 	public void testForecastExecutionRateTotalsOnly() {
 		ReportAreaForTests correctReport = new ReportAreaForTests()
-	    .withContents("Project Title", "Report Totals", "Forecast Execution Rate", "", "Actual Disbursements", "190 770", "Execution Rate", "185,14")
-	    .withChildren(
-	      new ReportAreaForTests().withContents("Project Title", "activity with capital spending", "Forecast Execution Rate", "", "Actual Disbursements", "80 000", "Execution Rate", "88,89"),
-	      new ReportAreaForTests().withContents("Project Title", "Activity with planned disbursements", "Forecast Execution Rate", "", "Actual Disbursements", "770", "Execution Rate", "96,25"),
-	      new ReportAreaForTests().withContents("Project Title", "activity with pipeline MTEFs and act. disb", "Forecast Execution Rate", "129,41", "Actual Disbursements", "110 000", "Execution Rate", "0"));
+			    .withContents("Project Title", "Report Totals", "Forecast Execution Rate", "", "Actual Disbursements", "190 770", "Execution Rate", "")
+			    .withChildren(
+			      new ReportAreaForTests()    .withContents("Project Title", "activity with capital spending", "Forecast Execution Rate", "", "Actual Disbursements", "80 000", "Execution Rate", "88,89"),
+			      new ReportAreaForTests()    .withContents("Project Title", "Activity with planned disbursements", "Forecast Execution Rate", "", "Actual Disbursements", "770", "Execution Rate", "96,25"),
+			      new ReportAreaForTests()    .withContents("Project Title", "activity with pipeline MTEFs and act. disb", "Forecast Execution Rate", "129,41", "Actual Disbursements", "110 000", "Execution Rate", "0")  );
 
 		runMondrianTestCase(
 			"AMP-21240-forecast-execution-rate-totals-only",						

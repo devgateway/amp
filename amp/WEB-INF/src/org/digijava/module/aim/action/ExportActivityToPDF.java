@@ -675,32 +675,35 @@ public class ExportActivityToPDF extends Action {
                 }
             }
 
+            /**
+			 * Budget Extras
+			 */
             if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras")){
                 //AMP-16421
-                if(identification.getBudgetCV().equals(identification.getBudgetCVOn())){
+                if(identification.getBudgetCV() != null && identification.getBudgetCV().equals(identification.getBudgetCVOn())) {
                     if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/FY")){
-                        columnName=TranslatorWorker.translateText("FY");
-                        createGeneralInfoRow(mainLayout,columnName,identification.getFY());
+                        columnName = TranslatorWorker.translateText("FY");
+                        createGeneralInfoRow(mainLayout, columnName, identification.getFY());
                     }
-                    if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Ministry Code")){
-                        columnName=TranslatorWorker.translateText("Ministry Code");
-                        createGeneralInfoRow(mainLayout,columnName,identification.getMinistryCode());
+                    if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Ministry Code")) {
+                        columnName = TranslatorWorker.translateText("Ministry Code");
+                        createGeneralInfoRow(mainLayout, columnName, identification.getMinistryCode());
                     }
-                    if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Project Code")){
-                        columnName=TranslatorWorker.translateText("Project Code");
-                        createGeneralInfoRow(mainLayout,columnName,identification.getProjectCode());
+                    if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Project Code")) {
+                        columnName = TranslatorWorker.translateText("Project Code");
+                        createGeneralInfoRow(mainLayout, columnName, identification.getProjectCode());
                     }
-                    if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Vote")){
-                        columnName=TranslatorWorker.translateText("Vote");
-                        createGeneralInfoRow(mainLayout,columnName,identification.getVote());
+                    if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Vote")) {
+                        columnName = TranslatorWorker.translateText("Vote");
+                        createGeneralInfoRow(mainLayout, columnName, identification.getVote());
                     }
-                    if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Sub-Vote")){
-                        columnName=TranslatorWorker.translateText("Sub-Vote");
-                        createGeneralInfoRow(mainLayout,columnName,identification.getSubVote());
+                    if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Sub-Vote")) {
+                        columnName = TranslatorWorker.translateText("Sub-Vote");
+                        createGeneralInfoRow(mainLayout, columnName, identification.getSubVote());
                     }
-                    if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Sub-Program")){
-                        columnName=TranslatorWorker.translateText("Sub-Program");
-                        createGeneralInfoRow(mainLayout,columnName,identification.getSubProgram());
+                    if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Sub-Program")) {
+                        columnName = TranslatorWorker.translateText("Sub-Program");
+                        createGeneralInfoRow(mainLayout, columnName, identification.getSubProgram());
                     }
                 }
             }

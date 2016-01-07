@@ -286,6 +286,19 @@
 																			</td>
 																		</tr>
 																	</logic:equal>
+																	<logic:equal name="aimAddFiscalCalForm" property="flag" value="orgConstantCurrencies" >
+																		<tr>
+																			<td colspan="2" width="60%"  align="center">
+																				<html:button  styleClass="dr-menu" property="submitButton"  onclick="msg()">
+																					<digi:trn key="btn:deleteThisCalendar">Delete this Calendar</digi:trn>
+																				</html:button>
+																				<BR /><b><digi:trn key="aim:warningDeleteConstCurrMsg"><font color="#FF0000">
+																						This calendar is in use by constant currencies. If you delete the calendar, then its related constant currencies will be deleted too!</font>
+																					</digi:trn>
+																				</b>
+																			</td>
+																		</tr>
+																	</logic:equal>
 																</table>
 														  </td>
 														</tr>

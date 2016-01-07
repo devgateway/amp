@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action ;
 
 import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,9 +14,11 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.dgfoundation.amp.currency.CurrencyInflationUtil;
 import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.AddFiscalCalendarForm;
@@ -98,6 +101,12 @@ public class EditFiscalCalendar extends Action {
 							}
 							editForm.setFlag("delete");
 							
+					    	List<AmpCurrency> constantCurrencies = DbUtil.getFiscalCalConstantCurrencies(editForm.getFiscalCalId());
+					    	
+					    	if (constantCurrencies.size() > 0) {
+					    		editForm.setFlag("orgConstantCurrencies");
+					    	}
+					    	
 							if (editForm.getFiscalCalName() == null) {
 								
 								logger.debug("Inside IF [EDIT]");
@@ -188,6 +197,12 @@ public class EditFiscalCalendar extends Action {
 						    	
 						    	AmpFiscalCalendar ampFisCal = DbUtil.getAmpFiscalCalendar(editForm.getFiscalCalId());
 								if (ampFisCal != null) {
+									List<AmpCurrency> currencies = DbUtil.getFiscalCalConstantCurrencies(editForm.getFiscalCalId());
+									
+									for (AmpCurrency oldConstCurrency : currencies) {
+							    		CurrencyInflationUtil.deleteConstantCurrencies(oldConstCurrency);
+							    	}
+									
 									DbUtil.delete(ampFisCal);
 									logger.debug("FIscal Calendar deleted");
 								}

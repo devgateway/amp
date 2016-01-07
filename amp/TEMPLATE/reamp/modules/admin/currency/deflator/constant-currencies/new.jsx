@@ -96,8 +96,8 @@ var form = (
     {changeCalendar, changeCurrency, changeFrom, changeTo, add, maybeClose}//actions
   ) => (
     <form className="form-inline add-new-cc" action="javascript:void(0)">
-      {dropdown(calendar(), calendars(), ensureInt(changeCalendar), maybeClose, callFunc("id"), callFunc("name"))}
       {dropdown(currency(), currencies(), changeCurrency, maybeClose, callFunc("code"), getCurrencyName)}
+      {dropdown(calendar(), calendars(), ensureInt(changeCalendar), maybeClose, callFunc("id"), callFunc("name"))}
       {dropdown(from(), fromYears(), ensureInt(changeFrom), maybeClose)}
       {dropdown(ensuredTo(), toYears(), ensureInt(changeTo), maybeClose)}
       <button className="btn btn-default btn-sm" onClick={e => add(calendar(), currency(), mergedFrom(), mergedTo())}>
@@ -120,7 +120,7 @@ var button = (__, onMouseEnter) => (
 );
 
 export var view = AMP.view((model, actions) =>
-    <td colSpan="4" onMouseOut={actions.maybeClose}>
+    <td colSpan="4">
       {model.open() ? form(model, actions) : button(model.__, actions.toggle.bind(null, true))}
     </td>
 );

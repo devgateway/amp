@@ -32,7 +32,8 @@ export var init = (...promises) =>
       calendars: calendars,
       currencies: currencies,
       translations: translations,
-      highlight: false
+      highlight: false,
+      deletedAt: null
     }));
 
 export var actions = AMP.actions({

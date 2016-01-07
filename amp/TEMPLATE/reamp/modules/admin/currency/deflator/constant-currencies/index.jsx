@@ -5,6 +5,7 @@ import {SETTINGS, CONSTANT_CURRENCIES} from "amp/config/endpoints";
 import {fetchJson, postJson} from "amp/tools";
 import React from "react";
 import {showSave, RequestStatus} from "../tools";
+import {Alert} from "react-bootstrap";
 require("./style.less");
 
 class Model extends AMP.Model{
@@ -13,8 +14,6 @@ class Model extends AMP.Model{
     if("newConstantCurrency" == key) return target.steal(this, 'constantCurrencies');
     return target;
   }
-
-
 }
 
 var parseCalendars = (calendars, calendar) => calendars.set(calendar.id, new AMP.Model({
@@ -66,7 +65,8 @@ export var init = (currenciesPromise, translationsPromise) => {
     newConstantCurrency: newConstantCurrency,
     entryModel: entryModel,
     constantCurrencies: constantCurrencies,
-    saveStatus: RequestStatus.INITIAL
+    saveStatus: RequestStatus.INITIAL,
+    trash: false
   }))
 };
 
@@ -75,50 +75,61 @@ export var actions = AMP.actions({
   saveSuccess: null,
   saveFail: null,
   resetSaveStatus: null,
+  cleanTrash: "number",
+  undelete: Entry.Model,
   newConstantCurrency: NewConstantCurrency.actions,
   entry: ["string", Entry.actions]
 });
 
-export var view = AMP.view((model, actions) => {
-  var translations = model.translations();
-  var __ = key => translations.get(key);
-  return (
-      <table className="table table-striped constant-currencies">
-        <caption><h2>{__('amp.deflator:constantCurrencies')}</h2></caption>
-        <thead>
-        <tr className="constant-currency-entry">
-          <th>{__('amp.deflator:currency')}</th>
-          <th>{__('amp.deflator:calendar')}</th>
-          <th>{__('amp.deflator:from')}</th>
-          <th>{__('amp.deflator:to')}</th>
-          <th>{__('amp.deflator:actions')}</th>
-        </tr>
-        </thead>
-        <tbody>
-          {model.constantCurrencies().mapEntries((constantCurrency) => {
-              var {calendar, currency, from, to} = constantCurrency;
-              var key = makeKey(calendar(), currency(), from(), to());
-              return <Entry.view
-                  key={key}
-                  model={constantCurrency.checkMerging(model.newConstantCurrency())}
-                  actions={actions.entry(key)}
-              />
-          })}
-        </tbody>
-        <tfoot>
-        <tr>
-          <NewConstantCurrency.view
-              model={model.newConstantCurrency()}
-              actions={actions.newConstantCurrency()}
+export var view = AMP.view(({__, constantCurrencies, newConstantCurrency, saveStatus, trash}, actions) => (
+  <table className="table table-striped constant-currencies">
+    <caption><h2>{__('amp.deflator:constantCurrencies')}</h2></caption>
+    <thead>
+      <tr className="constant-currency-entry">
+        <th>{__('amp.deflator:currency')}</th>
+        <th>{__('amp.deflator:calendar')}</th>
+        <th>{__('amp.deflator:from')}</th>
+        <th>{__('amp.deflator:to')}</th>
+        <th>{__('amp.deflator:actions')}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {constantCurrencies().mapEntries((constantCurrency) => {
+          var {calendar, currency, from, to} = constantCurrency;
+          var key = makeKey(calendar(), currency(), from(), to());
+          return <Entry.view
+              key={key}
+              model={constantCurrency.checkMerging(newConstantCurrency())}
+              actions={actions.entry(key)}
           />
-          <td className="text-right">
-            {showSave(__)(actions.save)(model.saveStatus())}
-          </td>
-        </tr>
-        </tfoot>
-      </table>
-  )
-});
+      })}
+    </tbody>
+    <tfoot>
+      <tr onMouseLeave={actions.newConstantCurrency().maybeClose}>
+        <NewConstantCurrency.view
+            model={newConstantCurrency()}
+            actions={actions.newConstantCurrency()}
+        />
+        <td className="text-right">
+          {maybeUndoPopup(__, trash(), actions)}
+          {showSave(__)(actions.save)(saveStatus())}
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+));
+
+var maybeUndoPopup = (__, maybeConstantCurrency, {cleanTrash, undelete}) => {
+  return maybeConstantCurrency ? (
+      <Alert className="undo-popup" bsStyle="info" onDismiss={e => cleanTrash(maybeConstantCurrency.deletedAt())}>
+        {maybeConstantCurrency.currency()} {maybeConstantCurrency.from()}&ndash;{maybeConstantCurrency.to()}&nbsp;
+        {__('amp.deflator:ccDeleted')}&nbsp;
+        <a href="javascript:void(0);" className="alert-link" onClick={e => undelete(maybeConstantCurrency)}>
+          {__('amp.deflator:undo')}
+        </a>
+      </Alert>
+  ) : null;
+};
 
 var save = constantCurrencies => actions => postJson(CONSTANT_CURRENCIES,
       constantCurrencies.reduce((result, {calendar, currency, from, to}) => {
@@ -135,6 +146,11 @@ var save = constantCurrencies => actions => postJson(CONSTANT_CURRENCIES,
   ).catch(() => actions.saveFail());
 
 var resetSaveStatus = actions => setTimeout(actions.resetSaveStatus, 3000);
+
+var cleanTrashEffect = timestamp => ({cleanTrash}) => setTimeout(
+  () => document.querySelector(".undo-popup:hover") ? null : cleanTrash(timestamp)
+  , 5000
+);
 
 export var update = (action, model) => actions.match(action, {
     save: () => [
@@ -181,10 +197,24 @@ export var update = (action, model) => actions.match(action, {
     entry: (id, entryAction) => {
       var updateSubmodel = AMP.updateSubmodel.bind(null, ['constantCurrencies', id], Entry.update, entryAction);
       return Entry.actions.match(entryAction, {
-        remove: () => model.unsetIn(['constantCurrencies', id]),
-        _ : () => updateSubmodel(model)
+        remove: () => {
+          var timestampedCC = model.getIn(['constantCurrencies', id]).deletedAt(new Date().getTime());
+          return [
+            model.trash(timestampedCC).unsetIn(['constantCurrencies', id]),
+            cleanTrashEffect(timestampedCC.deletedAt())
+          ]
+        },
+        _: () => updateSubmodel(model)
       })
-    }
+    },
+
+    cleanTrash: timestamp => false !== model.trash() && timestamp == model.trash().deletedAt() ?
+        model.trash(false) :
+        model,
+
+    undelete: target => model.setIn(
+            ['constantCurrencies', makeKey(target.calendar(), target.currency(), target.from(), target.to())]
+        , target.deletedAt(null)).trash(false)
   });
 
 export var translations = {
@@ -197,5 +227,7 @@ export var translations = {
   "amp.deflator:to": "To",
   "amp.deflator:actions": "Actions",
   "amp.deflator:success": "Success",
-  "amp.deflator:failed": "Failed"
+  "amp.deflator:failed": "Failed",
+  "amp.deflator:ccDeleted": "constant currency deleted.",
+  "amp.deflator:undo": "Undo?"
 };

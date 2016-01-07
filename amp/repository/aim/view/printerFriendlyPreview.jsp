@@ -592,7 +592,7 @@ body {background:none;}
 										</field:display>
 
 										<module:display name="/Activity Form/Identification/Budget Extras" parentModule="/Activity Form/Identification">
-										<c:if test="${aimEditActivityForm.identification.budgetCV==aimEditActivityForm.identification.budgetCVOn}">
+										<c:if test="${aimEditActivityForm.identification.budgetCV == aimEditActivityForm.identification.budgetCVOn}">
 											<module:display name="/Activity Form/Identification/Budget Extras/FY" parentModule="/Activity Form/Identification/Budget Extras">
 												<digi:trn>FY</digi:trn>:&nbsp;
 												<b><bean:write name="aimEditActivityForm" property="identification.FY"/></b>
@@ -624,13 +624,7 @@ body {background:none;}
 												<br />
 											</module:display>
 										</c:if>
-									</module:display>
-										<c:if test="${aimEditActivityForm.identification.budgetCV == aimEditActivityForm.identification.budgetCVOn}">
-										<p/>
-										<field:display name="Project Code" feature="Budget">
-											<digi:trn key="aim:actProjectCode">Project Code</digi:trn>: <bean:write name="aimEditActivityForm" property="identification.projectCode"/>
-										</field:display>
-										</c:if>
+										</module:display>
 										</td>
 									</tr>
 									</feature:display>

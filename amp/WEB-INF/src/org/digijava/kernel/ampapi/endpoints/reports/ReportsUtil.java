@@ -297,7 +297,7 @@ public class ReportsUtil {
 		addMeasures(specImpl, formParams);
 		
 		// update report data presentation
-		AmpFiscalCalendar oldCalendar = specImpl.getSettings() == null ? null : specImpl.getSettings().getCalendar(); 
+		AmpFiscalCalendar oldCalendar = specImpl.getSettings() == null ? null : (AmpFiscalCalendar) specImpl.getSettings().getCalendar(); 
 		SettingsUtils.applySettings(specImpl, formParams, false);
 		configureFilters(specImpl, formParams, oldCalendar);
 		configureSorting(specImpl, formParams);
@@ -363,7 +363,7 @@ public class ReportsUtil {
 		LinkedHashMap<String, Object> requestFilters = (LinkedHashMap<String, Object>) formParams.get(EPConstants.FILTERS);
 		if (requestFilters != null) {
 			filters.any().putAll(requestFilters);
-			MondrianReportFilters newFilters = new MondrianReportFilters(spec.getSettings().getCalendar());
+			MondrianReportFilters newFilters = new MondrianReportFilters((AmpFiscalCalendar) spec.getSettings().getCalendar());
 			if (spec.getFilters() != null) {
 				// TODO: we need calendar + date to be linked in UI as well OR make same form for filters and settings
 				// for now, if this is a calendar setting, let's check if any filters still exist and needs to be converted 
@@ -460,7 +460,7 @@ public class ReportsUtil {
 		}
 		MondrianReportFilters filters = (MondrianReportFilters) spec.getFilters();
 		if (filters == null) {
-			AmpFiscalCalendar calendar = spec.getSettings() == null ? null : spec.getSettings().getCalendar();
+			AmpFiscalCalendar calendar = spec.getSettings() == null ? null : (AmpFiscalCalendar) spec.getSettings().getCalendar();
 			filters = new MondrianReportFilters(calendar);
 			spec.setFilters(filters);
 		}

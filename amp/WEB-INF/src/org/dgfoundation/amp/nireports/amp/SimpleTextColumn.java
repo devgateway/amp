@@ -6,7 +6,9 @@ import java.util.Map;
 
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.TextCell;
+import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
+import org.dgfoundation.amp.nireports.schema.TextualTokenBehaviour;
 
 /**
  * a simple text column which fetches its input from a view which contains 3 or more columns: <br />
@@ -21,7 +23,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
 public class SimpleTextColumn extends AmpSqlSourcedColumn<TextCell> {
 		
 	public SimpleTextColumn(String columnName, NiDimension.LevelColumn levelColumn, Map<String, String> fundingViewFilter, String viewName) {
-		super(columnName, levelColumn, fundingViewFilter, viewName, "amp_activity_id");
+		super(columnName, levelColumn, fundingViewFilter, viewName, "amp_activity_id", TextualTokenBehaviour.instance);
 	}
 
 	@Override

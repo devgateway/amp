@@ -7,6 +7,7 @@ import java.util.Map;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.PercentageTextCell;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
+import org.dgfoundation.amp.nireports.schema.PercentageTokenBehaviour;
 
 /**
  * a text column which fetches its input from a view which contains 4 or more columns: <br />
@@ -22,7 +23,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
 public class PercentageTextColumn extends AmpSqlSourcedColumn<PercentageTextCell> {
 	
 	public PercentageTextColumn(String columnName, NiDimension.LevelColumn levelColumn, Map<String, String> fundingViewFilter, String viewName) {
-		super(columnName, levelColumn, fundingViewFilter, viewName, "amp_activity_id");
+		super(columnName, levelColumn, fundingViewFilter, viewName, "amp_activity_id", PercentageTokenBehaviour.instance);
 	}
 
 	@Override

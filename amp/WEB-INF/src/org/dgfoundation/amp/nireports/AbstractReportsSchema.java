@@ -16,7 +16,7 @@ import static org.dgfoundation.amp.nireports.NiUtils.failIf;
  */
 public abstract class AbstractReportsSchema implements NiReportsSchema {
 	protected Map<String, NiReportColumn<?>> columns = new HashMap<>();
-	protected Map<String, NiReportMeasure> measures = new HashMap<>();
+	protected Map<String, NiReportMeasure<?>> measures = new HashMap<>();
 	
 	@Override
 	public Map<String, NiReportColumn<?>> getColumns() {
@@ -24,18 +24,20 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 	}
 	
 	@Override
-	public Map<String, NiReportMeasure> getMeasures() {
+	public Map<String, NiReportMeasure<?>> getMeasures() {
 		return Collections.unmodifiableMap(measures);
 	}
 		
 	public AbstractReportsSchema addColumn(NiReportColumn<?> col) {
 		failIf(columns.containsKey(col.name), "double definition of column with name " + col.name);
+		failIf(col.getBehaviour() == null, "no behaviour specified for column with name " + col.name);
 		columns.put(col.name, col);
 		return this;
 	}
 	
-	public AbstractReportsSchema addMeasure(NiReportMeasure meas) {
+	public AbstractReportsSchema addMeasure(NiReportMeasure<?> meas) {
 		failIf(measures.containsKey(meas.name), "double definition of measure with name " + meas.name);
+		failIf(meas.getBehaviour() == null, "no behaviour specified for measure with name " + meas.name);
 		measures.put(meas.name, meas);
 		return this;
 	}

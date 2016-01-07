@@ -12,4 +12,15 @@ public class NiUtils {
 		if (b)
 			throw new RuntimeException(msg.get());
 	}
+	
+	/**
+	 * returns ((Number) obj).intValue() or -1, if obj is null
+	 * @param obj
+	 * @return
+	 */
+	public static int getInt(Object obj) {
+		if (obj == null)
+			return -1;
+		return ((Number) obj).intValue();
+	}
 }

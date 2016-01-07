@@ -27,7 +27,7 @@ public interface NiReportsSchema {
 	 * returns the list of measures which exist in the schema
 	 * @return
 	 */
-	public Map<String, NiReportMeasure> getMeasures();
+	public Map<String, NiReportMeasure<?>> getMeasures();
 	
 	/**
 	 * returns the fetcher of funding

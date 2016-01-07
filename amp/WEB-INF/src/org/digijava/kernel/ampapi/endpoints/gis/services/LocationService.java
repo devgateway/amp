@@ -59,6 +59,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -119,7 +120,7 @@ public class LocationService {
 		ReportSettingsImpl mrs = (ReportSettingsImpl) spec.getSettings();
 		mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
 		
-		MondrianReportFilters filterRules = new MondrianReportFilters(spec.getSettings().getCalendar()); 
+		MondrianReportFilters filterRules = new MondrianReportFilters((AmpFiscalCalendar) spec.getSettings().getCalendar());
 		
 		if(config != null){
 			Object columnFilters = config.get("columnFilters");
@@ -764,7 +765,7 @@ public class LocationService {
 		ReportSettingsImpl mrs = (ReportSettingsImpl) spec.getSettings();
 		mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
 		
-		MondrianReportFilters filterRules = FilterUtils.getFilters(config, new MondrianReportFilters(mrs.getCalendar()));
+		MondrianReportFilters filterRules = FilterUtils.getFilters(config, new MondrianReportFilters((AmpFiscalCalendar) mrs.getCalendar()));
 		if (filterRules != null) {
 			spec.setFilters(filterRules);
 		}

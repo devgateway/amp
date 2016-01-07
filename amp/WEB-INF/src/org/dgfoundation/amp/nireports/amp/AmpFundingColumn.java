@@ -16,6 +16,7 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.IdValuePair;
 import org.dgfoundation.amp.nireports.ImmutablePair;
@@ -25,8 +26,10 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.SqlSourcedColumn;
 import org.dgfoundation.amp.nireports.meta.MetaInfoGenerator;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
+import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
+import org.dgfoundation.amp.nireports.schema.TrivialMeasureBehaviour;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -44,7 +47,7 @@ import static org.dgfoundation.amp.nireports.amp.MetaConstants.*;
 public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 
 	public AmpFundingColumn() {
-		super("Funding", null, getFundingViewFilter(), "v_ni_donor_funding", "amp_activity_id");
+		super("Funding", null, getFundingViewFilter(), "v_ni_donor_funding", "amp_activity_id", TrivialMeasureBehaviour.getInstance());
 	}
 
 	protected static Map<String, String> getFundingViewFilter() {
@@ -89,6 +92,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		
 		List<CategAmountCell> cells = new ArrayList<>();
 		MetaInfoGenerator metaGenerator = new MetaInfoGenerator();
+		CalendarConverter calendarConverter = engine.calendar;
 		
 //		NiCurrency baseCurrency = CurrencyUtil.getAmpcurrency(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY));
 		
@@ -99,8 +103,9 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 								
 				for(ImmutablePair<MetaCategory, String> longOptionalColumn:longColumnsToFetch)
 					addMetaIfLongExists(metaSet, longOptionalColumn.k, rs.rs, longOptionalColumn.v);
-								
-				LocalDate transactionDate = rs.rs.getDate("transaction_date").toLocalDate();
+							
+				java.sql.Date transactionMoment = rs.rs.getDate("transaction_date");
+				LocalDate transactionDate = transactionMoment.toLocalDate();
 				BigDecimal transactionAmount = rs.rs.getBigDecimal("transaction_amount");
 				
 				long currencyId = rs.rs.getLong("currency_id");
@@ -117,7 +122,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 				
 				BigDecimal usedExchangeRate = BigDecimal.valueOf(schema.currencyConvertor.getExchangeRate(srcCurrency.getCurrencyCode(), usedCurrency.getCurrencyCode(), fixed_exchange_rate == null ? null : fixed_exchange_rate.doubleValue(), transactionDate));
 				MonetaryAmount amount = new MonetaryAmount(transactionAmount.multiply(usedExchangeRate), transactionAmount, srcCurrency, transactionDate, scratchpad.getPrecisionSetting());
-				CategAmountCell cell = new CategAmountCell(ampActivityId, amount, metaSet);
+				CategAmountCell cell = new CategAmountCell(ampActivityId, amount, metaSet, calendarConverter.translate(transactionMoment));
 				cells.add(cell);
 			}
 		}
@@ -126,5 +131,4 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		engine.timer.putMetaInNode("meta_cache_uncached", metaCacheStats.v);
 		return cells;
 	}
-
 }

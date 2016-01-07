@@ -14,6 +14,7 @@ import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.nireports.amp.MetaCategory;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
+import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 
@@ -40,8 +41,8 @@ public abstract class SqlSourcedColumn<K extends Cell> extends NiReportColumn<K>
 	public final Map<String, String> filtering;
 
 	
-	public SqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, Map<String, String> filtering, String viewName, String mainColumn) {
-		super(columnName, levelColumn);
+	public SqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, Map<String, String> filtering, String viewName, String mainColumn, Behaviour behaviour) {
+		super(columnName, levelColumn, behaviour);
 		this.viewName = viewName;
 		this.mainColumn = mainColumn;
 		this.filtering = filtering == null ? Collections.emptyMap() : Collections.unmodifiableMap(new TreeMap<>(filtering));

@@ -108,7 +108,7 @@ public class EthiopianFiscalBasedWorker implements ICalendarWorker {
 
 	@Override
 	public String getFiscalYear() throws Exception {
-		if (this.fiscalCalendar.getIsFiscal() != null && this.fiscalCalendar.getIsFiscal()) {
+		if (this.fiscalCalendar.getIsFiscal()) {
 			if (fiscalCalendar.getStartMonthNum() == 1) {
 				return "Fiscal Year " + (this.getYear());
 			} else {

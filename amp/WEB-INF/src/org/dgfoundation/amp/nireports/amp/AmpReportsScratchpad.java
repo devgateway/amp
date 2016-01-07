@@ -10,6 +10,7 @@ import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
+import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.SchemaSpecificScratchpad;
@@ -62,5 +63,10 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	@Override
 	public NiPrecisionSetting getPrecisionSetting() {
 		return precisionSetting;
+	}
+
+	@Override
+	public CalendarConverter getDefaultCalendar() {
+		return AmpARFilter.getDefaultCalendar();
 	}
 }

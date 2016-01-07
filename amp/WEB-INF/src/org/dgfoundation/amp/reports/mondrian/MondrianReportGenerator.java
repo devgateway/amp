@@ -443,7 +443,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 				config.addColumnMeasure(elem);
 		}
 		//add grouping columns for measure
-		config.getColumnAttributes().addAll(MondrianMapping.getDateElements(spec.getGroupingCriteria(), spec.getSettings().getCalendar()));
+		config.getColumnAttributes().addAll(MondrianMapping.getDateElements(spec.getGroupingCriteria()));
 		//add sorting
 		configureSortingRules(config, spec, doHierarchiesTotals);
 		

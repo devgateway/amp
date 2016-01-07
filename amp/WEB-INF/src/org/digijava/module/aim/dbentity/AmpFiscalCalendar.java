@@ -1,11 +1,16 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.dgfoundation.amp.algo.AlgoUtils;
+import org.dgfoundation.amp.newreports.CalendarConverter;
+import org.dgfoundation.amp.nireports.TranslatedDate;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
 import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
@@ -18,7 +23,7 @@ import org.digijava.module.aim.util.Identifiable;
 
 import java.util.Arrays;
 
-public class AmpFiscalCalendar implements Serializable, Identifiable,OrgProfileValue {
+public class AmpFiscalCalendar implements Serializable, Identifiable, OrgProfileValue, CalendarConverter {
 	
 	//IATI-check: to be ignored
 //	@Interchangeable(fieldTitle="Fiscal Calendar ID")
@@ -120,7 +125,7 @@ public class AmpFiscalCalendar implements Serializable, Identifiable,OrgProfileV
 		description = string;
 	}
 
-	public Object getIdentifier() {
+	public Long getIdentifier() {
 		return this.getAmpFiscalCalId();
 	}
 
@@ -145,9 +150,9 @@ public class AmpFiscalCalendar implements Serializable, Identifiable,OrgProfileV
 
 	}
 
-
-	public Boolean getIsFiscal() {
-		return isFiscal;
+	@Override
+	public boolean getIsFiscal() {
+		return isFiscal == null ? false : isFiscal.booleanValue();
 	}
 
 	public void setIsFiscal(Boolean isFiscal) {
@@ -165,6 +170,16 @@ public class AmpFiscalCalendar implements Serializable, Identifiable,OrgProfileV
 	public String[] getSubHeaders() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public TranslatedDate translate(Date date) {
+		ICalendarWorker worker = this.getworker();
+		worker.setTime(date);
+		try {
+			return new TranslatedDate(worker.getYear(), worker.getFiscalYear(), worker.getQuarter(), worker.getMonth().getMonthId(), worker.getMonth().getMonthStr());
+		}
+		catch(Exception e) {throw AlgoUtils.translateException(e);}
 	}
 
 }

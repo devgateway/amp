@@ -3,7 +3,7 @@ package org.dgfoundation.amp.nireports.schema;
 import java.util.List;
 import java.util.Set;
 
-import org.dgfoundation.amp.nireports.CategAmountCell;
+import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 
 
@@ -18,11 +18,12 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
  * @author Dolghier Constantin
  *
  */
-public abstract class NiReportMeasure {
+public abstract class NiReportMeasure<K extends Cell> extends NiReportedEntity<K> {
 		
 	public final String name;
 	
-	protected NiReportMeasure(String name) {
+	protected NiReportMeasure(String name, Behaviour behaviour) {
+		super(behaviour);
 		this.name = name;
 	}
 	
@@ -31,20 +32,20 @@ public abstract class NiReportMeasure {
 	 * @param source
 	 * @return
 	 */
-	public abstract List<CategAmountCell> buildCells(NiReportsEngine context);
+	public abstract List<K> buildCells(NiReportsEngine context);
 	
 	/**
 	 * returns the list of measures which should be computed before this measure's {@link #buildCells(NiReportContext)} function will be called
 	 * @return
 	 */
-	public abstract Set<String> getPrecursorMeasures();
+	public abstract Set<String> getPrecursorMeasures();	
 	
 	@Override public int hashCode() {
 		return name.hashCode();
 	}
 	
 	@Override public boolean equals(Object oth) {
-		NiReportMeasure o = (NiReportMeasure) oth;
+		NiReportMeasure<?> o = (NiReportMeasure<?>) oth;
 		return this.name.equals(o.name);
 	}
 	

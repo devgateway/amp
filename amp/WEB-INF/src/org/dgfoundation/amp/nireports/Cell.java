@@ -2,12 +2,14 @@ package org.dgfoundation.amp.nireports;
 
 import java.util.function.Function;
 
+import org.dgfoundation.amp.nireports.meta.CategCell;
+
 /**
  * an internal consumption Cell, which roughly corresponds to an API ReportCell
  * @author Dolghier Constantin
  *
  */
-public abstract class Cell implements Comparable<Cell>/*extends ReportCell */{
+public abstract class Cell implements Comparable<Cell>, CategCell /*extends ReportCell */{
 	public final long activityId;
 	public final long entityId;
 	public final Comparable value;

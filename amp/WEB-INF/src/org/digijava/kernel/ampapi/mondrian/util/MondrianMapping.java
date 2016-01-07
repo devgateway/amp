@@ -40,7 +40,7 @@ public class MondrianMapping {
 		return elem==null ? null : elem.clone();
 	}
 	
-	public static List<MDXAttribute> getDateElements(GroupingCriteria grouping, AmpFiscalCalendar calendar) {
+	public static List<MDXAttribute> getDateElements(GroupingCriteria grouping) {
 		List<MDXAttribute> dateTuple = new ArrayList<MDXAttribute>();
 		
 		String dateDimension = MoConstants.DATES;

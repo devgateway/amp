@@ -10,6 +10,8 @@ import static org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimensi
 
 import java.util.Arrays;
 
+import org.apache.wicket.util.crypt.TrivialCrypt;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
@@ -32,6 +34,7 @@ import org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
+import org.digijava.module.aim.helper.Constants;
 
 import com.google.common.base.Function;
 
@@ -261,8 +264,20 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addTextColumnWithPercentages(ColumnConstants.REGION, "v_regions", locsDimension.getLevelColumn(LOC_DIMENSION_LOC, LEVEL_REGION));
 		addTextColumnWithPercentages(ColumnConstants.ZONE, "v_zones", locsDimension.getLevelColumn(LOC_DIMENSION_LOC, LEVEL_ZONE));
 		addTextColumnWithPercentages(ColumnConstants.DISTRICT, "v_districts", locsDimension.getLevelColumn(LOC_DIMENSION_LOC, LEVEL_DISTRICT));
+		
+		addTrivialMeasures();
 	}
 		
+	private AmpReportsSchema addTrivialMeasures() {
+		addMeasure(new AmpTrivialMeasure(MeasureConstants.ACTUAL_COMMITMENTS, Constants.COMMITMENT, "Actual"));
+		addMeasure(new AmpTrivialMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, Constants.DISBURSEMENT, "Actual"));
+		
+		addMeasure(new AmpTrivialMeasure(MeasureConstants.PLANNED_COMMITMENTS, Constants.COMMITMENT, "Planned"));
+		addMeasure(new AmpTrivialMeasure(MeasureConstants.PLANNED_DISBURSEMENTS, Constants.DISBURSEMENT, "Planned"));
+
+		return this;
+	}
+	
 	private AmpReportsSchema addTextColumn(String columnName, String view) {
 		return addTextColumn(columnName, view, null);
 	}

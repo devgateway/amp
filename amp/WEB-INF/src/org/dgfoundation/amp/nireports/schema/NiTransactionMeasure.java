@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.nireports.schema;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -13,12 +14,12 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
  * @author Dolghier Constantin
  *
  */
-public class NiTransactionMeasure extends NiReportMeasure {
+public class NiTransactionMeasure extends NiReportMeasure<CategAmountCell> {
 	
 	public final Predicate<CategAmountCell> criterion;
 	
 	public NiTransactionMeasure(String measureName, Predicate<CategAmountCell> criterion) {
-		super(measureName);
+		super(measureName, TrivialMeasureBehaviour.instance);
 		this.criterion = criterion;
 	}
 	
@@ -32,7 +33,6 @@ public class NiTransactionMeasure extends NiReportMeasure {
 	 */
 	@Override
 	public Set<String> getPrecursorMeasures() {
-		return null;
+		return Collections.emptySet();
 	}
-
 }

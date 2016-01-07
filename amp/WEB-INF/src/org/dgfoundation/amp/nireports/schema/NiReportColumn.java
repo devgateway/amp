@@ -20,12 +20,13 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
  * @author Dolghier Constantin
  *
  */
-public abstract class NiReportColumn<K extends Cell> {
+public abstract class NiReportColumn<K extends Cell> extends NiReportedEntity<K> {
 	
 	public final String name;
 	public final Optional<NiDimension.LevelColumn> levelColumn;
 		
-	protected NiReportColumn(String name, NiDimension.LevelColumn levelColumn) {
+	protected NiReportColumn(String name, NiDimension.LevelColumn levelColumn, Behaviour behaviour) {
+		super(behaviour);
 		this.name = name;
 		this.levelColumn = Optional.ofNullable(levelColumn);
 	}

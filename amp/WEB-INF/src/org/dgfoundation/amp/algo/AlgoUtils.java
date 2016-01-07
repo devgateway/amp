@@ -185,4 +185,10 @@ public class AlgoUtils {
 		});
 		return initMap;
 	}
+	
+	public static<K extends Comparable<K>> K min(K a, K b) {
+		if (a.compareTo(b) <= 0)
+			return a;
+		return b;
+	}
 }

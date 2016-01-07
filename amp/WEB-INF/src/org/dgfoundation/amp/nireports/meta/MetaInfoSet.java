@@ -75,6 +75,11 @@ public class MetaInfoSet implements Iterable<MetaInfo>
 		return mInfo != null && mInfo.getValue().equals(value);
 	}
 	
+	public MetaInfoSet freeze() {
+		frozen = true;
+		return this;
+	}
+	
 	/**
 	 * returns the number of cells in the map
 	 * @return
@@ -95,4 +100,12 @@ public class MetaInfoSet implements Iterable<MetaInfo>
 	public String toString() {
 		return String.format("MetaInfoSet: %s", this.metadata.entrySet().stream().map(entry -> String.format("%s: %s", entry.getValue().k, entry.getValue().v)).collect(Collectors.toList()));
 	}
+	
+	private final static MetaInfoSet empty = new MetaInfoSet(new MetaInfoGenerator()).freeze();
+	
+	/**
+	 * returns a frozen (immutable) instance
+	 * @return
+	 */
+	public static MetaInfoSet empty() {return empty;}
 }

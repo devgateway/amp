@@ -2,6 +2,9 @@ package org.dgfoundation.amp.nireports;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+
+import org.dgfoundation.amp.nireports.runtime.CellColumn;
 
 
 /**
@@ -10,7 +13,7 @@ import java.util.Map;
  *
  */
 public abstract class ReportData {
-	public final Map<CellColumn, Cell> trailCells;
+	public final Map<CellColumn<?>, Cell> trailCells;
 	public final NiReportsEngine context;	
 		
 	public ReportData(NiReportsEngine context) {
@@ -18,5 +21,6 @@ public abstract class ReportData {
 		this.trailCells = new HashMap<>();
 	}
 	
-	public abstract boolean isLeaf();	
+	public abstract Set<Long> getIds();
+	public abstract boolean isLeaf();
 }

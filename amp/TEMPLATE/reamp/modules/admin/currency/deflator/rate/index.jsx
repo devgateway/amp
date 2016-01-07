@@ -6,39 +6,41 @@ import {allow, negative, point, number} from "amp/tools/validate";
 const KEY_UP = 38;
 const KEY_DOWN = 40;
 import {keyCode} from "amp/tools";
+import DatePicker from "react-date-picker";
+require('react-date-picker/index.css');
 
 export var actions = AMP.actions({
   remove: null,
   change: 'string',
-  toggleConstant: 'boolean',
   up: HTMLElement,
   down: HTMLElement
 });
 
 
-export class Model extends AMP.Model{
-  inflationRate: string;
-  deletable: boolean;
-  valid: boolean;
-}
+export class Model extends AMP.Model{}
 
 export var model = new Model({
-  constantCurrency: false,
-  inflationRate: "",
-  year: "",
-  deletable: false,
-  valid: false
+  value: null,
+  period: null,
+  valid: true,
+  translations: null,
+  deletedAt: null
 });
 
-export var view = AMP.view(({inflationRate, valid, year, constantCurrency, deletable}
-    , {remove, change, toggleConstant, up, down}) => {
+export var humanReadablePeriod = period =>
+    new Date(period).toLocaleDateString(undefined, {month: 'short', year: 'numeric', day: 'numeric'})
+
+export var view = AMP.view((
+    {valid, value, period, translations}//model
+    , {remove, change, up, down}//actions
+) => {
+  var __ = key => translations().get(key);
   var onChange = e => {
     var value = e.target.value;
     if(0 == value.length || negative(point(number))(value)){
       change(value);
     }
   };
-  var onToggleConstant = e => toggleConstant(e.target.checked);
   var handleArrowNavigation = e => {
     if(KEY_UP == keyCode(e)) up(e.target);
     if(KEY_DOWN == keyCode(e)) down(e.target);
@@ -46,33 +48,30 @@ export var view = AMP.view(({inflationRate, valid, year, constantCurrency, delet
   return (
     <tr
       className={cn('inflation-rate-entry', {"danger has-error": !valid()})}
-      onKeyUp={handleArrowNavigation}
     >
       <td>
-        <span className="form-control input-sm view">{year()}</span>
+        <span className="form-control input-sm view">{humanReadablePeriod(period())}</span>
       </td>
-      <td className="edit-on-hover inflation-rate">
+      <td className="inflation-rate edit-on-hover">
         <input className="form-control input-sm edit" required
-          value={inflationRate()} onChange={onChange}
+               value={value()} onChange={onChange}
         />
-        <span className="form-control input-sm view">{inflationRate()}</span>
+        <span className="form-control input-sm view">{value()}</span>
       </td>
       <td>
-        <input type="checkbox" checked={constantCurrency()} onChange={onToggleConstant}/>
-      </td>
-      <td>
-        {deletable() ?
-          <i onClick={remove} className="glyphicon glyphicon-trash"></i>
-          : null}
+        <button className="btn btn-default btn-xs" onClick={remove}>
+          <i className="glyphicon glyphicon-trash"/> {__('amp.deflator:delete')}
+        </button>
       </td>
     </tr>
   )
-});
-
-function pass(){}
+}, "Rate");
 
 export var update = (action, model) => actions.match(action, {
-  change: model.inflationRate,
-  toggleConstant: model.constantCurrency,
-  _: pass
+  change: model.value,
+  _: () => model
 });
+
+export var translations = {
+  "amp.deflator:delete": "Delete"
+}

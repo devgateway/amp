@@ -119,17 +119,15 @@ export var view = AMP.view(({__, constantCurrencies, newConstantCurrency, saveSt
   </table>
 ));
 
-var maybeUndoPopup = (__, maybeConstantCurrency, {cleanTrash, undelete}) => {
-  return maybeConstantCurrency ? (
-      <Alert className="undo-popup" bsStyle="info" onDismiss={e => cleanTrash(maybeConstantCurrency.deletedAt())}>
-        {maybeConstantCurrency.currency()} {maybeConstantCurrency.from()}&ndash;{maybeConstantCurrency.to()}&nbsp;
-        {__('amp.deflator:ccDeleted')}&nbsp;
-        <a href="javascript:void(0);" className="alert-link" onClick={e => undelete(maybeConstantCurrency)}>
-          {__('amp.deflator:undo')}
-        </a>
-      </Alert>
-  ) : null;
-};
+var maybeUndoPopup = (__, maybeConstantCurrency, {cleanTrash, undelete}) => maybeConstantCurrency ? (
+    <Alert className="undo-popup" bsStyle="info" onDismiss={e => cleanTrash(maybeConstantCurrency.deletedAt())}>
+      {maybeConstantCurrency.currency()} {maybeConstantCurrency.from()}&ndash;{maybeConstantCurrency.to()}&nbsp;
+      {__('amp.deflator:ccDeleted')}&nbsp;
+      <a href="javascript:void(0);" className="alert-link" onClick={e => undelete(maybeConstantCurrency)}>
+        {__('amp.deflator:undo')}
+      </a>
+    </Alert>
+) : null;
 
 var save = constantCurrencies => actions => postJson(CONSTANT_CURRENCIES,
       constantCurrencies.reduce((result, {calendar, currency, from, to}) => {

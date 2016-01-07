@@ -1,7 +1,6 @@
 package org.dgfoundation.amp.ar;
 
 //import org.dgfoundation.amp.testutils.LiberiaFiller;
-import org.dgfoundation.amp.esri.EsriTestCases;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;

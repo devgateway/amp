@@ -313,13 +313,6 @@ public class InternationalizedViewsRepository {
 				addViewDef(this, new I18nViewDescription("v_pledges_donor_type").
 						addColumnDef(new I18nViewColumnDescription("org_type_name", "org_type_id", AmpOrgType.class, "orgType")));
 				
-				addViewDef(this, new I18nViewDescription("v_pledges_funding").
-						addColumnDef(new I18nViewColumnDescription("org_name", "org_id", AmpOrganisation.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("p_sectorname", "p_sector_id", AmpSector.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("region", "region_id", AmpCategoryValueLocations.class, "name")).
-						addTrnColDef("type_of_assistance_name", "type_of_assistance_id").
-						addTrnColDef("aid_modality_name", "aid_modality_id"));
-
 				addViewDef(this, new I18nViewDescription("v_pledges_funding_st").
 						addColumnDef(new I18nViewColumnDescription("org_grp_name", "amp_org_grp_id", AmpOrgGroup.class, "orgGrpName")).
 						addColumnDef(new I18nViewColumnDescription("donor_type_name", "org_type_id", AmpOrgType.class, "orgType")).

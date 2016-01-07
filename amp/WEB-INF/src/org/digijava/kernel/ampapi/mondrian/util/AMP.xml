@@ -522,7 +522,7 @@
 			</Hierarchy>
 		</Dimension>
 
-		<Dimension name="Activity Long Texts" foreignKey="entity_id">
+<!-- <Dimension name="Activity Long Texts" foreignKey="entity_id">
 			<Hierarchy hasAll="true" allMemberName="All Project Description" primaryKey="amp_activity_id" name="Project Description">
 				<Table name="mondrian_activity_long_texts@@locale@@" />
 				<Level name="Project Description" column="amp_activity_id" type="String" nameColumn="descr_body" />
@@ -573,7 +573,7 @@
 				<Level name="Program Description" column="amp_activity_id" type="String" nameColumn="program_description_body" />
 			</Hierarchy>
 			
-		</Dimension>			
+		</Dimension> -->
 		
 		<Dimension name="Component" foreignKey="component_id">
 			<Hierarchy hasAll="true" allMemberName="All Component Names" name="Component Name" primaryKey="amp_component_id">

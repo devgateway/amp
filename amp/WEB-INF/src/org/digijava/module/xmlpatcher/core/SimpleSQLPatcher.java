@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.job.cachedtables.PublicViewColumnsUtil;
 import org.digijava.module.aim.helper.Constants;
 
 /**
@@ -448,7 +449,7 @@ public class SimpleSQLPatcher {
    			conn.setAutoCommit(autoCommit);
    		}
 	}
-	
+		
 	/**
 	 * (re)define the views which are concerned with activity versioning. Notice that, since some of these views are dependent on AmpARFilter constants, they are being redefined (WITHOUT DROPping) at each startup 
 	 * @param conn

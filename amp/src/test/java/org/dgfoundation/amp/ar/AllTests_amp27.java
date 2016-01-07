@@ -1,7 +1,6 @@
 package org.dgfoundation.amp.ar;
 
 //import org.dgfoundation.amp.testutils.LiberiaFiller;
-import org.dgfoundation.amp.esri.EsriTestCases;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -35,7 +34,6 @@ public class AllTests_amp27
 		suite.addTest(DirectedDisbursementsTests_amp27.suite());
 		suite.addTest(MultilingualTests.suite());
 		suite.addTest(MultilingualThroughTrnTests.suite());
-		suite.addTest(EsriTestCases.suite());
 		suite.addTest(SscTests27.suite());
 		suite.addTest(CategoryManagerTests.suite());
 		suite.addTest(MiscColumnsTests27.suite());

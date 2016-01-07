@@ -198,26 +198,26 @@ public class MondrianTablesRepository {
 				}
 			});
 	
-	public final static MondrianTableDescription MONDRIAN_LONG_TEXTS = 
-			new MondrianTableDescription("mondrian_activity_long_texts", "amp_activity_id", Arrays.asList("amp_activity_id", "language")) {
-				{
-					isFiltering = true;
-				}
-				@Override public boolean rowIsRelevant(java.sql.ResultSet rs, String locale) throws java.sql.SQLException {
-					return rs.getString("language").equals(locale);
-				}}
-			//.withFingerprintedJob(Arrays.asList("SELECT 1"))
-			.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
-				@Override public I18nViewDescription getObject() {
-					I18nViewDescription res = new I18nViewDescription("mondrian_activity_long_texts");
-					for(String col:Arrays.asList("descr", "lessons_learned", "objectives", "results", "purpose", "projectcomments", "project_impact",
-							"activity_summary", "conditionality", "project_management", "equalopportunity", "environment", "minorities", "program_description")) {
-						res.addDgEditorColumnDef(col + "_body", "language");
-					}
-					return res;
-				}
-			})
-			/* no pledges addon */;
+//	public final static MondrianTableDescription MONDRIAN_LONG_TEXTS = 
+//			new MondrianTableDescription("mondrian_activity_long_texts", "amp_activity_id", Arrays.asList("amp_activity_id", "language")) {
+//				{
+//					isFiltering = true;
+//				}
+//				@Override public boolean rowIsRelevant(java.sql.ResultSet rs, String locale) throws java.sql.SQLException {
+//					return rs.getString("language").equals(locale);
+//				}}
+//			//.withFingerprintedJob(Arrays.asList("SELECT 1"))
+//			.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
+//				@Override public I18nViewDescription getObject() {
+//					I18nViewDescription res = new I18nViewDescription("mondrian_activity_long_texts");
+//					for(String col:Arrays.asList("descr", "lessons_learned", "objectives", "results", "purpose", "projectcomments", "project_impact",
+//							"activity_summary", "conditionality", "project_management", "equalopportunity", "environment", "minorities", "program_description")) {
+//						res.addDgEditorColumnDef(col + "_body", "language");
+//					}
+//					return res;
+//				}
+//			})
+//			/* no pledges addon */;
 			
 	public final static MondrianTableDescription MONDRIAN_PLEDGE_CONTACTS = 
 			new MondrianTableDescription("mondrian_activity_contacts", "amp_activity_id", Arrays.asList("amp_activity_id"))
@@ -245,7 +245,7 @@ public class MondrianTablesRepository {
 	public final static List<MondrianTableDescription> MONDRIAN_ACTIVITY_DIMENSIONS = Arrays.asList(
 			MONDRIAN_ACTIVITY_TEXTS,
 			MONDRIAN_ACTIVITY_FIXED_TEXTS,
-			MONDRIAN_LONG_TEXTS, 
+			//MONDRIAN_LONG_TEXTS, 
 			MONDRIAN_ACTIVITY_TRN_TEXTS,
 			MONDRIAN_ACTIVITY_CURRENCY_NUMBERS,
 			MONDRIAN_PLEDGE_CONTACTS);

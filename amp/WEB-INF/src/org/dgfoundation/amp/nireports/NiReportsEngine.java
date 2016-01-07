@@ -25,6 +25,7 @@ import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportWarning;
 import org.dgfoundation.amp.nireports.meta.CategCell;
+import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
@@ -55,7 +56,7 @@ public class NiReportsEngine {
 	// some of the fields below are public because they are part of the "internal" API and might be used by callbacks from deep inside ComputedMeasures / etc
 	
 	public final NiReportsSchema schema;
-	public CalendarConverter calendar;
+	public CachingCalendarConverter calendar;
 	
 	final NiFilters filters;
 	
@@ -106,10 +107,10 @@ public class NiReportsEngine {
 	public ReportData execute() {
 		try(SchemaSpecificScratchpad pad = schema.getScratchpadSupplier().apply(this)) {
 			this.schemaSpecificScratchpad = pad;
-			this.calendar = this.spec.getSettings() != null && this.spec.getSettings().getCalendar() != null ? this.spec.getSettings().getCalendar() : pad.getDefaultCalendar();
+			this.calendar = new CachingCalendarConverter(this.spec.getSettings() != null && this.spec.getSettings().getCalendar() != null ? this.spec.getSettings().getCalendar() : pad.getDefaultCalendar());
 			
 			this.timer = new InclusiveTimer("Report " + spec.getReportName());
-			timer.run("exec", this::runReport);
+			timer.run("exec", this::runReportAndCleanup);
 			RunNode timingInfo = timer.getCurrentState();
 			printReportWarnings();
 			logger.warn(String.format("it took %d millies to generate report, the breakdown is:\n%s", timer.getWallclockTime(), timingInfo.asUserString(3)));
@@ -118,6 +119,20 @@ public class NiReportsEngine {
 		catch(Exception e) {
 			throw AlgoUtils.translateException(e);
 		}
+	}
+	
+	/** writes statistics in the {@link InclusiveTimer} instance */
+	protected void writeStatistics() {
+		timer.putMetaInNode("calendar_translations", new HashMap<String, Integer>(){{
+			put("calls", calendar.getCalls());
+			put("noncached", calendar.getNonCachedCalls());
+			put("percent_cached", calendar.getCalls() == 0? 0 : 100 - (100 * calendar.getNonCachedCalls() / calendar.getCalls()));
+		}});
+	}
+	
+	protected void runReportAndCleanup() {
+		runReport();
+		writeStatistics();
 	}
 	
 	/**

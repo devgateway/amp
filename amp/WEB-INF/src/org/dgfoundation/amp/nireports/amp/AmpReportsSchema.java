@@ -7,11 +7,21 @@ import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.L
 import static org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension.LEVEL_ORGANISATION;
 import static org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension.LEVEL_ORGANISATION_GROUP;
 import static org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension.LEVEL_ORGANISATION_TYPE;
+import static org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension.LEVEL_ROOT;
+import static org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension.LEVEL_SUBSECTOR;
+import static org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension.LEVEL_SUBSUBSECTOR;
+import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_0;
+import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_1;
+import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_2;
+import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_3;
+import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_4;
+import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_5;
+import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_6;
+import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_7;
+import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_8;
 
 import java.util.Arrays;
 
-import org.apache.wicket.util.crypt.TrivialCrypt;
-import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
@@ -57,7 +67,22 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 */
 	public final static String ORG_DIMENSION_DONOR = "DN";
 	public final static String ORG_DIMENSION_IA = "IMPL";
+	public final static String ORG_DIMENSION_BA = "BENE";
+	public final static String ORG_DIMENSION_EA = "EXEC";
+	public final static String ORG_DIMENSION_RO = "RESP";
+	public final static String ORG_DIMENSION_CA = "CONT";
+	public final static String ORG_DIMENSION_RG = "REGG";
+	public final static String ORG_DIMENSION_SG = "SECG";	
 	
+	public final static String SEC_DIMENSION_PS = "PRIS";
+	public final static String SEC_DIMENSION_SS = "SECS";	
+	public final static String SEC_DIMENSION_TS = "TERS";	
+	
+	public final static String PROG_DIMENSION_PP = "PRIP";
+	public final static String PROG_DIMENSION_SP = "SECP";	
+	public final static String PROG_DIMENSION_TP = "TERP";
+	public final static String PROG_DIMENSION_NO = "NATO";
+
 	public final static String LOC_DIMENSION_LOC = "LOC";
 	
 	public static AmpReportsSchema getInstance() {
@@ -76,9 +101,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addTextColumn(ColumnConstants.AGREEMENT_CODE, "v_agreement_code");
 		addTextColumn(ColumnConstants.AGREEMENT_TITLE_CODE, "v_agreement_title_code");
 		addTextColumn(ColumnConstants.AMP_ID, "v_amp_id");
-//		addTextColumn(ColumnConstants.BENEFICIARY_AGENCY, "v_beneficiary_agency");
-//		addTextColumn(ColumnConstants.BENEFICIARY_AGENCY__DEPARTMENT_DIVISION, "v_beneficiary_agency_info");
-//		addTextColumn(ColumnConstants.BENEFICIARY_AGENCY_GROUPS, "v_beneficiary_agency_groups");
 		addTextColumn(ColumnConstants.BUDGET_ORGANIZATION, "v_budget_organization");
 		addTextColumn(ColumnConstants.BUDGET_PROGRAM, "v_budget_program");
 		addTextColumn(ColumnConstants.BUDGET_STRUCTURE, "v_budget_structure");
@@ -86,10 +108,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addTextColumn(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION, "v_component_funding_organization_name");
 		addTextColumn(ColumnConstants.COMPONENT_NAME, "v_components");
 		addTextColumn(ColumnConstants.COMPONENT_TYPE, "v_component_type");
-//		addTextColumn(ColumnConstants.CONTRACTING_AGENCY, "v_contracting_agency");
-//		addTextColumn(ColumnConstants.CONTRACTING_AGENCY_ACRONYM, "v_contracting_agency_acronym");
-//		addTextColumn(ColumnConstants.CONTRACTING_AGENCY_DEPARTMENT_DIVISION, "v_contracting_agency_info");
-//		addTextColumn(ColumnConstants.CONTRACTING_AGENCY_GROUPS, "v_contracting_agency_groups");
 		addTextColumn(ColumnConstants.COSTING_DONOR, "v_costing_donors");
 		addTextColumn(ColumnConstants.CREDIT_DONATION, "v_credit_donation");
 		addTextColumn(ColumnConstants.DESCRIPTION_OF_COMPONENT_FUNDING, "v_component_funding_description");
@@ -97,10 +115,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addTextColumn(ColumnConstants.DONOR_CONTACT_ORGANIZATION, "v_donor_cont_org");
 		addTextColumn(ColumnConstants.ENVIRONMENT, "v_environment");
 		addTextColumn(ColumnConstants.EQUAL_OPPORTUNITY, "v_equalopportunity");
-//		addTextColumn(ColumnConstants.EXECUTING_AGENCY, "v_executing_agency");
-//		addTextColumn(ColumnConstants.EXECUTING_AGENCY_DEPARTMENT_DIVISION, "v_executing_agency_info");
-//		addTextColumn(ColumnConstants.EXECUTING_AGENCY_GROUPS, "v_executing_agency_groups");
-//		addTextColumn(ColumnConstants.EXECUTING_AGENCY_TYPE, "v_executing_agency_type");
 		addTextColumn(ColumnConstants.FINANCIAL_INSTRUMENT, "v_financial_instrument");
 		addTextColumn(ColumnConstants.FINANCING_INSTRUMENT, "v_financing_instrument");
 		addTextColumn(ColumnConstants.FUNDING_STATUS, "v_funding_status");
@@ -113,33 +127,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addTextColumn(ColumnConstants.MINORITIES, "v_minorities");
 		addTextColumn(ColumnConstants.MODALITIES, "v_modalities");
 		addTextColumn(ColumnConstants.MODE_OF_PAYMENT, "v_mode_of_payment");
-//		addTextColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, "v_nationalobjectives_level_1");
-//		addTextColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_DETAIL, "v_nationalobjectives");
-//		addTextColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, "v_nationalobjectives_level_1");
-//		addTextColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2, "v_nationalobjectives_level_2");
-//		addTextColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3, "v_nationalobjectives_level_3");
-//		addTextColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_4, "v_nationalobjectives_level_4");
-//		addTextColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_5, "v_nationalobjectives_level_5");
-//		addTextColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_6, "v_nationalobjectives_level_6");
-//		addTextColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_7, "v_nationalobjectives_level_7");
-//		addTextColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_8, "v_nationalobjectives_level_8");
 		addTextColumn(ColumnConstants.ON_OFF_TREASURY_BUDGET, "v_on_off_budget");
 		addTextColumn(ColumnConstants.ORGANIZATIONS_AND_PROJECT_ID, "v_project_id");
 		addTextColumn(ColumnConstants.PAYMENT_CAPITAL___RECURRENT, "v_mode_of_payment_capital_recurrent");
 		addTextColumn(ColumnConstants.PHYSICAL_PROGRESS, "v_physical_progress");
-//		addTextColumn(ColumnConstants.PRIMARY_PROGRAM, "v_primaryprogram_level_1");
-//		addTextColumn(ColumnConstants.PRIMARY_PROGRAM_DETAIL, "v_primaryprogram");
-//		addTextColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1, "v_primaryprogram_level_1");
-//		addTextColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_2, "v_primaryprogram_level_2");
-//		addTextColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_3, "v_primaryprogram_level_3");
-//		addTextColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_4, "v_primaryprogram_level_4");
-//		addTextColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_5, "v_primaryprogram_level_5");
-//		addTextColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_6, "v_primaryprogram_level_6");
-//		addTextColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_7, "v_primaryprogram_level_7");
-//		addTextColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_8, "v_primaryprogram_level_8");
-//		addTextColumn(ColumnConstants.PRIMARY_SECTOR, "v_sectors");
-//		addTextColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, "v_sub_sectors");
-//		addTextColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, "v_sub_sub_sectors");
 		addTextColumn(ColumnConstants.PROCUREMENT_SYSTEM, "v_procurement_system");
 		addTextColumn(ColumnConstants.PROGRAM_DESCRIPTION, "v_program_description");
 		addTextColumn(ColumnConstants.PROJECT_CATEGORY, "v_project_category");
@@ -148,30 +139,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addTextColumn(ColumnConstants.PROJECT_IMPACT, "v_proj_impact");
 		addTextColumn(ColumnConstants.PROJECT_IMPLEMENTING_UNIT, "v_project_impl_unit");
 		addTextColumn(ColumnConstants.PURPOSE, "v_purposes");
-//		addTextColumn(ColumnConstants.REGIONAL_GROUP, "v_regional_group");
-//		addTextColumn(ColumnConstants.REGIONAL_GROUP_DEPARTMENT_DIVISION, "v_regional_group_info");
 		addTextColumn(ColumnConstants.REGIONAL_OBSERVATIONS, "v_regional_observations");
 		addTextColumn(ColumnConstants.RELATED_PLEDGES, "v_related_pledges");
 		addTextColumn(ColumnConstants.RELATED_PROJECTS, "v_pledges_projects");
-//		addTextColumn(ColumnConstants.RESPONSIBLE_ORGANIZATION, "v_responsible_organisation");
-//		addTextColumn(ColumnConstants.RESPONSIBLE_ORGANIZATION_DEPARTMENT_DIVISION, "v_responsible_org_info");
-//		addTextColumn(ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS, "v_responsible_org_groups");
 		addTextColumn(ColumnConstants.RESULTS, "v_results");
-//		addTextColumn(ColumnConstants.SECONDARY_PROGRAM, "v_secondaryprogram_level_1");
-//		addTextColumn(ColumnConstants.SECONDARY_PROGRAM_DETAIL, "v_secondaryprogram");
-//		addTextColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1, "v_secondaryprogram_level_1");
-//		addTextColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_2, "v_secondaryprogram_level_2");
-//		addTextColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_3, "v_secondaryprogram_level_3");
-//		addTextColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_4, "v_secondaryprogram_level_4");
-//		addTextColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_5, "v_secondaryprogram_level_5");
-//		addTextColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_6, "v_secondaryprogram_level_6");
-//		addTextColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_7, "v_secondaryprogram_level_7");
-//		addTextColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_8, "v_secondaryprogram_level_8");
-//		addTextColumn(ColumnConstants.SECONDARY_SECTOR, "v_secondary_sectors");
-//		addTextColumn(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, "v_secondary_sub_sectors");
-//		addTextColumn(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, "v_secondary_sub_sub_sectors");
-//		addTextColumn(ColumnConstants.SECTOR_GROUP, "v_sector_group");
-//		addTextColumn(ColumnConstants.SECTOR_GROUP_DEPARTMENT_DIVISION, "v_sector_group_info");
 //		addTextColumn(ColumnConstants.SECTOR_LOCATION, "v_sectorloc");
 		addTextColumn(ColumnConstants.SECTOR_MINISTRY_CONTACT_ORGANIZATION, "v_sect_min_cont_org");
 //		addTextColumn(ColumnConstants.SECTOR_TAG, "v_tag_sectors");
@@ -180,19 +151,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addTextColumn(ColumnConstants.SSC_MODALITIES, "v_ssc_modalities");
 		addTextColumn(ColumnConstants.STATUS, "v_status");
 		addTextColumn(ColumnConstants.STRUCTURES_COLUMN, "v_structures");
-//		addTextColumn(ColumnConstants.TERTIARY_PROGRAM, "v_tertiaryprogram_level_1");
-//		addTextColumn(ColumnConstants.TERTIARY_PROGRAM_DETAIL, "v_tertiaryprogram");
-//		addTextColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_1, "v_tertiaryprogram_level_1");
-//		addTextColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_2, "v_tertiaryprogram_level_2");
-//		addTextColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_3, "v_tertiaryprogram_level_3");
-//		addTextColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_4, "v_tertiaryprogram_level_4");
-//		addTextColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_5, "v_tertiaryprogram_level_5");
-//		addTextColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_6, "v_tertiaryprogram_level_6");
-//		addTextColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_7, "v_tertiaryprogram_level_7");
-//		addTextColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_8, "v_tertiaryprogram_level_8");
-//		addTextColumn(ColumnConstants.TERTIARY_SECTOR, "v_tertiary_sectors");
-//		addTextColumn(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, "v_tertiary_sub_sectors");
-//		addTextColumn(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, "v_tertiary_sub_sub_sectors");
 		addTextColumn(ColumnConstants.TYPE_OF_ASSISTANCE, "v_terms_assist");
 		addTextColumn(ColumnConstants.TYPE_OF_COOPERATION, "v_type_of_cooperation");
 		addTextColumn(ColumnConstants.TYPE_OF_IMPLEMENTATION, "v_type_of_implementation");
@@ -260,6 +218,86 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addTextColumnWithPercentages(ColumnConstants.IMPLEMENTING_AGENCY_GROUPS, "v_implementing_agency_groups", orgsDimension.getLevelColumn(ORG_DIMENSION_IA, LEVEL_ORGANISATION_GROUP));
 		addTextColumnWithPercentages(ColumnConstants.IMPLEMENTING_AGENCY_TYPE, "v_implementing_agency_type", orgsDimension.getLevelColumn(ORG_DIMENSION_IA, LEVEL_ORGANISATION_TYPE));
 		
+		addTextColumnWithPercentages(ColumnConstants.BENEFICIARY_AGENCY, "v_beneficiary_agency", orgsDimension.getLevelColumn(ORG_DIMENSION_BA, LEVEL_ORGANISATION));
+		addTextColumnWithPercentages(ColumnConstants.BENEFICIARY_AGENCY_GROUPS, "v_beneficiary_agency_groups", orgsDimension.getLevelColumn(ORG_DIMENSION_BA, LEVEL_ORGANISATION_GROUP));
+		//addTextColumnWithPercentages(ColumnConstants.BENEFICIARY_AGENCY__DEPARTMENT_DIVISION, "v_beneficiary_agency_info", orgsDimension.getLevelColumn(ORG_DIMENSION_BA, LEVEL_ORGANISATION_TYPE));
+		
+		addTextColumnWithPercentages(ColumnConstants.EXECUTING_AGENCY, "v_executing_agency", orgsDimension.getLevelColumn(ORG_DIMENSION_EA, LEVEL_ORGANISATION));
+		addTextColumnWithPercentages(ColumnConstants.EXECUTING_AGENCY_GROUPS, "v_executing_agency_groups", orgsDimension.getLevelColumn(ORG_DIMENSION_EA, LEVEL_ORGANISATION_GROUP ));
+		addTextColumnWithPercentages(ColumnConstants.EXECUTING_AGENCY_TYPE, "v_executing_agency_type", orgsDimension.getLevelColumn(ORG_DIMENSION_EA, LEVEL_ORGANISATION_TYPE));
+		//addTextColumnWithPercentages(ColumnConstants.EXECUTING_AGENCY_DEPARTMENT_DIVISION, "v_executing_agency_info", orgsDimension.getLevelColumn(ORG_DIMENSION_EA, LEVEL_ORGANISATION));
+		
+		addTextColumnWithPercentages(ColumnConstants.RESPONSIBLE_ORGANIZATION, "v_responsible_organisation", orgsDimension.getLevelColumn(ORG_DIMENSION_RO, LEVEL_ORGANISATION));
+		addTextColumnWithPercentages(ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS, "v_responsible_org_groups", orgsDimension.getLevelColumn(ORG_DIMENSION_RO, LEVEL_ORGANISATION_GROUP));
+		//addTextColumnWithPercentages(ColumnConstants.RESPONSIBLE_ORGANIZATION_DEPARTMENT_DIVISION, "v_responsible_org_info", orgsDimension.getLevelColumn(ORG_DIMENSION_RO, LEVEL_ORGANISATION_TYPE));
+		
+		addTextColumnWithPercentages(ColumnConstants.CONTRACTING_AGENCY, "v_contracting_agency", orgsDimension.getLevelColumn(ORG_DIMENSION_CA, LEVEL_ORGANISATION));
+		addTextColumnWithPercentages(ColumnConstants.CONTRACTING_AGENCY_GROUPS, "v_contracting_agency_groups", orgsDimension.getLevelColumn(ORG_DIMENSION_CA, LEVEL_ORGANISATION_GROUP));
+		//addTextColumnWithPercentages(ColumnConstants.CONTRACTING_AGENCY_DEPARTMENT_DIVISION, "v_contracting_agency_info", orgsDimension.getLevelColumn(ORG_DIMENSION_CA, LEVEL_ORGANISATION_GROUP));
+		//addTextColumnWithPercentages(ColumnConstants.CONTRACTING_AGENCY_ACRONYM, "v_contracting_agency_acronym", orgsDimension.getLevelColumn(ORG_DIMENSION_CA, LEVEL_ORGANISATION_GROUP));
+		
+		addTextColumnWithPercentages(ColumnConstants.REGIONAL_GROUP, "v_regional_group", orgsDimension.getLevelColumn(ORG_DIMENSION_RG, LEVEL_ORGANISATION_GROUP));
+		//addTextColumnWithPercentages(ColumnConstants.REGIONAL_GROUP_DEPARTMENT_DIVISION, "v_regional_group_info", orgsDimension.getLevelColumn(ORG_DIMENSION_RG, LEVEL_ORGANISATION_GROUP));
+
+		addTextColumnWithPercentages(ColumnConstants.SECTOR_GROUP, "v_sector_group", orgsDimension.getLevelColumn(ORG_DIMENSION_SG, LEVEL_ORGANISATION_GROUP));
+		//addTextColumnWithPercentages(ColumnConstants.SECTOR_GROUP_DEPARTMENT_DIVISION, "v_sector_group_info", orgsDimension.getLevelColumn(ORG_DIMENSION_RG, LEVEL_ORGANISATION_GROUP));
+
+		addTextColumnWithPercentages(ColumnConstants.PRIMARY_SECTOR, "v_sectors", secsDimension.getLevelColumn(SEC_DIMENSION_PS, LEVEL_ROOT));
+		addTextColumnWithPercentages(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, "v_sub_sectors", secsDimension.getLevelColumn(SEC_DIMENSION_PS, LEVEL_SUBSECTOR));
+		addTextColumnWithPercentages(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, "v_sub_sub_sectors", secsDimension.getLevelColumn(SEC_DIMENSION_PS, LEVEL_SUBSUBSECTOR));
+
+		addTextColumnWithPercentages(ColumnConstants.TERTIARY_SECTOR, "v_tertiary_sectors", secsDimension.getLevelColumn(SEC_DIMENSION_TS, LEVEL_ROOT));
+		addTextColumnWithPercentages(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, "v_tertiary_sub_sectors", secsDimension.getLevelColumn(SEC_DIMENSION_TS, LEVEL_SUBSECTOR));
+		addTextColumnWithPercentages(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, "v_tertiary_sub_sub_sectors", secsDimension.getLevelColumn(SEC_DIMENSION_TS, LEVEL_SUBSUBSECTOR));
+
+		addTextColumnWithPercentages(ColumnConstants.SECONDARY_SECTOR, "v_secondary_sectors", secsDimension.getLevelColumn(SEC_DIMENSION_SS, LEVEL_ROOT));
+		addTextColumnWithPercentages(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, "v_secondary_sub_sectors", secsDimension.getLevelColumn(SEC_DIMENSION_SS, LEVEL_SUBSECTOR));
+		addTextColumnWithPercentages(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, "v_secondary_sub_sub_sectors", secsDimension.getLevelColumn(SEC_DIMENSION_SS, LEVEL_SUBSUBSECTOR));
+
+		addTextColumnWithPercentages(ColumnConstants.PRIMARY_PROGRAM, "v_primaryprogram_level_1", progsDimension.getLevelColumn(PROG_DIMENSION_PP, LEVEL_1));
+		//addTextColumnWithPercentages(ColumnConstants.PRIMARY_PROGRAM_DETAIL, "v_primaryprogram", progsDimension.getLevelColumn(PROG_DIMENSION_PP, LEVEL_1));
+		addTextColumnWithPercentages(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1, "v_primaryprogram_level_1", progsDimension.getLevelColumn(PROG_DIMENSION_PP, LEVEL_1));
+		addTextColumnWithPercentages(ColumnConstants.PRIMARY_PROGRAM_LEVEL_2, "v_primaryprogram_level_2", progsDimension.getLevelColumn(PROG_DIMENSION_PP, LEVEL_2));
+		addTextColumnWithPercentages(ColumnConstants.PRIMARY_PROGRAM_LEVEL_3, "v_primaryprogram_level_3", progsDimension.getLevelColumn(PROG_DIMENSION_PP, LEVEL_3));
+		addTextColumnWithPercentages(ColumnConstants.PRIMARY_PROGRAM_LEVEL_4, "v_primaryprogram_level_4", progsDimension.getLevelColumn(PROG_DIMENSION_PP, LEVEL_4));
+		addTextColumnWithPercentages(ColumnConstants.PRIMARY_PROGRAM_LEVEL_5, "v_primaryprogram_level_5", progsDimension.getLevelColumn(PROG_DIMENSION_PP, LEVEL_5));
+		addTextColumnWithPercentages(ColumnConstants.PRIMARY_PROGRAM_LEVEL_6, "v_primaryprogram_level_6", progsDimension.getLevelColumn(PROG_DIMENSION_PP, LEVEL_6));
+		addTextColumnWithPercentages(ColumnConstants.PRIMARY_PROGRAM_LEVEL_7, "v_primaryprogram_level_7", progsDimension.getLevelColumn(PROG_DIMENSION_PP, LEVEL_7));
+		addTextColumnWithPercentages(ColumnConstants.PRIMARY_PROGRAM_LEVEL_8, "v_primaryprogram_level_8", progsDimension.getLevelColumn(PROG_DIMENSION_PP, LEVEL_8));
+
+		addTextColumnWithPercentages(ColumnConstants.SECONDARY_PROGRAM, "v_secondaryprogram_level_1", progsDimension.getLevelColumn(PROG_DIMENSION_SP, LEVEL_1));
+		//addTextColumnWithPercentages(ColumnConstants.SECONDARY_PROGRAM_DETAIL, "v_secondaryprogram", progsDimension.getLevelColumn(PROG_DIMENSION_SP, LEVEL_0));
+		addTextColumnWithPercentages(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1, "v_secondaryprogram_level_1", progsDimension.getLevelColumn(PROG_DIMENSION_SP, LEVEL_1));
+		addTextColumnWithPercentages(ColumnConstants.SECONDARY_PROGRAM_LEVEL_2, "v_secondaryprogram_level_2", progsDimension.getLevelColumn(PROG_DIMENSION_SP, LEVEL_2));
+		addTextColumnWithPercentages(ColumnConstants.SECONDARY_PROGRAM_LEVEL_3, "v_secondaryprogram_level_3", progsDimension.getLevelColumn(PROG_DIMENSION_SP, LEVEL_3));
+		addTextColumnWithPercentages(ColumnConstants.SECONDARY_PROGRAM_LEVEL_4, "v_secondaryprogram_level_4", progsDimension.getLevelColumn(PROG_DIMENSION_SP, LEVEL_4));
+		addTextColumnWithPercentages(ColumnConstants.SECONDARY_PROGRAM_LEVEL_5, "v_secondaryprogram_level_5", progsDimension.getLevelColumn(PROG_DIMENSION_SP, LEVEL_5));
+		addTextColumnWithPercentages(ColumnConstants.SECONDARY_PROGRAM_LEVEL_6, "v_secondaryprogram_level_6", progsDimension.getLevelColumn(PROG_DIMENSION_SP, LEVEL_6));
+		addTextColumnWithPercentages(ColumnConstants.SECONDARY_PROGRAM_LEVEL_7, "v_secondaryprogram_level_7", progsDimension.getLevelColumn(PROG_DIMENSION_SP, LEVEL_7));
+		addTextColumnWithPercentages(ColumnConstants.SECONDARY_PROGRAM_LEVEL_8, "v_secondaryprogram_level_8", progsDimension.getLevelColumn(PROG_DIMENSION_SP, LEVEL_8));
+
+		addTextColumnWithPercentages(ColumnConstants.TERTIARY_PROGRAM, "v_tertiaryprogram_level_1", progsDimension.getLevelColumn(PROG_DIMENSION_TP, LEVEL_1));
+		//addTextColumnWithPercentages(ColumnConstants.TERTIARY_PROGRAM_DETAIL, "v_tertiaryprogram", progsDimension.getLevelColumn(PROG_DIMENSION_PP, LEVEL_8));
+		addTextColumnWithPercentages(ColumnConstants.TERTIARY_PROGRAM_LEVEL_1, "v_tertiaryprogram_level_1", progsDimension.getLevelColumn(PROG_DIMENSION_TP, LEVEL_1));
+		addTextColumnWithPercentages(ColumnConstants.TERTIARY_PROGRAM_LEVEL_2, "v_tertiaryprogram_level_2", progsDimension.getLevelColumn(PROG_DIMENSION_TP, LEVEL_2));
+		addTextColumnWithPercentages(ColumnConstants.TERTIARY_PROGRAM_LEVEL_3, "v_tertiaryprogram_level_3", progsDimension.getLevelColumn(PROG_DIMENSION_TP, LEVEL_3));
+		addTextColumnWithPercentages(ColumnConstants.TERTIARY_PROGRAM_LEVEL_4, "v_tertiaryprogram_level_4", progsDimension.getLevelColumn(PROG_DIMENSION_TP, LEVEL_4));
+		addTextColumnWithPercentages(ColumnConstants.TERTIARY_PROGRAM_LEVEL_5, "v_tertiaryprogram_level_5", progsDimension.getLevelColumn(PROG_DIMENSION_TP, LEVEL_5));
+		addTextColumnWithPercentages(ColumnConstants.TERTIARY_PROGRAM_LEVEL_6, "v_tertiaryprogram_level_6", progsDimension.getLevelColumn(PROG_DIMENSION_TP, LEVEL_6));
+		addTextColumnWithPercentages(ColumnConstants.TERTIARY_PROGRAM_LEVEL_7, "v_tertiaryprogram_level_7", progsDimension.getLevelColumn(PROG_DIMENSION_TP, LEVEL_7));
+		addTextColumnWithPercentages(ColumnConstants.TERTIARY_PROGRAM_LEVEL_8, "v_tertiaryprogram_level_8", progsDimension.getLevelColumn(PROG_DIMENSION_TP, LEVEL_8));
+
+		addTextColumnWithPercentages(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, "v_nationalobjectives_level_1", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_0));
+		addTextColumnWithPercentages(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_DETAIL, "v_nationalobjectives", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_0));
+		addTextColumnWithPercentages(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, "v_nationalobjectives_level_1", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_1));
+		addTextColumnWithPercentages(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2, "v_nationalobjectives_level_2", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_2));
+		addTextColumnWithPercentages(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3, "v_nationalobjectives_level_3", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_3));
+		addTextColumnWithPercentages(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_4, "v_nationalobjectives_level_4", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_4));
+		addTextColumnWithPercentages(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_5, "v_nationalobjectives_level_5", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_5));
+		addTextColumnWithPercentages(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_6, "v_nationalobjectives_level_6", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_6));
+		addTextColumnWithPercentages(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_7, "v_nationalobjectives_level_7", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_7));
+		addTextColumnWithPercentages(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_8, "v_nationalobjectives_level_8", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_8));
+
 		addTextColumnWithPercentages(ColumnConstants.COUNTRY, "v_countries", locsDimension.getLevelColumn(LOC_DIMENSION_LOC, LEVEL_COUNTRY));
 		addTextColumnWithPercentages(ColumnConstants.REGION, "v_regions", locsDimension.getLevelColumn(LOC_DIMENSION_LOC, LEVEL_REGION));
 		addTextColumnWithPercentages(ColumnConstants.ZONE, "v_zones", locsDimension.getLevelColumn(LOC_DIMENSION_LOC, LEVEL_ZONE));

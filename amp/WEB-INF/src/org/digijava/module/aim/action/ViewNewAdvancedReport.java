@@ -105,7 +105,11 @@ public class ViewNewAdvancedReport extends Action {
 	protected String runNiReportsBench() throws Exception {
 		ReportExecutor executor = AmpReportsSchema.getExecutor();
 		GeneratedReport output = executor.executeReport(
-				ReportSpecificationImpl.buildFor("simple report", Arrays.asList(ColumnConstants.PROJECT_TITLE), Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), null, GroupingCriteria.GROUPING_YEARLY));
+				ReportSpecificationImpl.buildFor("simple report", 
+						Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+						Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+						null, 
+						GroupingCriteria.GROUPING_QUARTERLY));
 		
 		return "<plaintext>" + output.timings.asUserString(2);
 	}

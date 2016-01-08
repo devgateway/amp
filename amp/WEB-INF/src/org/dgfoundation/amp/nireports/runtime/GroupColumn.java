@@ -6,11 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.dgfoundation.amp.nireports.Cell;
-import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.NiUtils;
 
 /**
@@ -78,22 +75,22 @@ public class GroupColumn extends Column {
 	}
 
 	@Override
-	public void forEachCell(Consumer<Cell> acceptor) {
+	public void forEachCell(Consumer<NiCell> acceptor) {
 		for(Column col:subColumns)
 			col.forEachCell(acceptor);
 	}
 
 	@Override
-	public GroupColumn verticallySplitByCategory(Function<Cell, ComparableValue<String>> categorizer) {
+	public GroupColumn verticallySplitByCategory(VSplitStrategy strategy) {
 		List<Column> newSubs = new ArrayList<>();
 		for(Column col:getSubColumns())
-			newSubs.add(col.verticallySplitByCategory(categorizer));
+			newSubs.add(col.verticallySplitByCategory(strategy));
 		GroupColumn res = new GroupColumn(name, newSubs, parent);
 		return res;
 	}
 
 	@Override
 	public String debugDigest(boolean withContents) {
-		return String.format("[%s with subcolumns %s]", name, getSubColumns().stream().map(z -> z.debugDigest(withContents)).collect(Collectors.toList()));
+		return String.format("[%s -> %s]", name, getSubColumns().stream().map(z -> z.debugDigest(withContents)).collect(Collectors.toList()));
 	}
 }

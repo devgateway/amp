@@ -71,7 +71,7 @@ public class CurrencyConvertorTests extends MondrianReportsTestCase {
 				Arrays.asList("with weird currencies"),
 				engine -> {
 
-					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetchColumn(engine);
+					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);
 
 					assertEquals(
 							"["

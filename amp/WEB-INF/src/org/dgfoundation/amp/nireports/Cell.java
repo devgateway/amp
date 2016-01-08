@@ -1,11 +1,10 @@
 package org.dgfoundation.amp.nireports;
 
-import java.util.function.Function;
-
 import org.dgfoundation.amp.nireports.meta.CategCell;
 
 /**
- * an internal consumption Cell, which roughly corresponds to an API ReportCell
+ * an internal consumption Cell, which roughly corresponds to an API ReportCell.
+ * When subclassing, make sure you subclass {@link #buildCopy()}
  * @author Dolghier Constantin
  *
  */
@@ -14,7 +13,7 @@ public abstract class Cell implements Comparable<Cell>, CategCell /*extends Repo
 	public final long entityId;
 	public final Comparable value;
 	public final String displayedValue;
-	
+		
 	public Cell(Comparable<?> value, String displayedValue, long activityId, long entityId) {
 		this.value = value;
 		this.displayedValue = displayedValue;
@@ -25,7 +24,7 @@ public abstract class Cell implements Comparable<Cell>, CategCell /*extends Repo
 	public Cell(Comparable<?> value, String displayedValue, long activityId) {
 		this(value, displayedValue, activityId, -1);
 	}
-	
+
 	@Override
 	public int compareTo(Cell other) {
 		return value.compareTo(other.value);
@@ -35,6 +34,4 @@ public abstract class Cell implements Comparable<Cell>, CategCell /*extends Repo
 	public String toString() {
 		return String.format("(actId: %d, <%s>)", activityId, displayedValue);
 	}
-	
-	public static Function<Cell, Long> TO_ACTIVITY_ID = cell -> cell.activityId;
 }

@@ -41,7 +41,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 	@Test
 	public void testProjectTitle() throws Exception {
 		runNiReportsTestcase(Arrays.asList("Unvalidated activity", "execution rate activity"), engine -> {
-			List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.PROJECT_TITLE).fetchColumn(engine);
+			List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.PROJECT_TITLE).fetch(engine);
 			assertEquals("[(actId: 64, <Unvalidated activity>), (actId: 77, <execution rate activity>)]", cells.toString());
 		});
 	}
@@ -51,7 +51,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 		runNiReportsTestcase(
 				Arrays.asList("SubNational no percentages", "Unvalidated activity"),
 				engine -> {
-					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetchColumn(engine);
+					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);
 					assertEquals(
 							"["
 									+ "(actId: 40, 75000 on 2014-02-05 with meta: {MetaInfoSet: [donor_org: 21700, terms_of_assistance: 2119, financing_instrument: 2120, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, "
@@ -65,7 +65,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 		runNiReportsTestcase(
 				Arrays.asList("Pure MTEF Project"),
 				engine -> {
-					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetchColumn(engine);
+					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);
 					assertEquals(
 							"["
 									+ "(actId: 19, 55333 on 2012-01-01 with meta: {MetaInfoSet: [donor_org: 21700, terms_of_assistance: 2119, financing_instrument: 2120, source_role: EA, adjustment_type: Actual, transaction_type: 3]}, "
@@ -79,7 +79,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 		runNiReportsTestcase(
 				Arrays.asList("with weird currencies"),
 				engine -> {
-					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetchColumn(engine);
+					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);
 					assertEquals(
 							"["
 									+ "(actId: 79, 87680.841736 on 2015-10-06 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, "
@@ -95,7 +95,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 				Arrays.asList("with weird currencies"),
 				rep -> changeReportCurrency(rep, "EUR"),
 				engine -> {
-					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetchColumn(engine);
+					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);
 					assertEquals(
 							"["
 									+ "(actId: 79, 80000 on 2015-10-06 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, "
@@ -111,7 +111,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 			Arrays.asList("with weird currencies"),
 			rep -> changeReportCurrency(rep, "MDL"),
 			engine -> {
-				List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetchColumn(engine);
+				List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);
 				assertEquals(
 					"["
 						+ "(actId: 79, 1728189.390618 on 2015-10-06 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, "
@@ -128,18 +128,18 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 			Arrays.asList("Unvalidated activity", "execution rate activity"),
 			engine -> {
 				List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.ACTIVITY_UPDATED_BY)
-					.fetchColumn(engine);
+					.fetch(engine);
 				assertEquals("[(actId: 64, <ATL ATL (atl@amp.org)>), (actId: 77, <ATL ATL (atl@amp.org)>)]",
 					cells.toString());
 			});
 	}
 
 	@Test
-	public void testImplementationLever() throws Exception {
+	public void testImplementationLevel() throws Exception {
 		runNiReportsTestcase(Arrays.asList("Unvalidated activity", "execution rate activity"),
 			engine -> {
 				List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.IMPLEMENTATION_LEVEL)
-					.fetchColumn(engine);
+					.fetch(engine);
 				assertEquals("[(actId: 77, <Provincial>), (actId: 64, <National>)]", cells.toString());
 			});
 	}
@@ -148,7 +148,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 	public void testRelatedProjects() throws Exception {
 		runNiReportsTestcase(Arrays.asList("Unvalidated activity", "execution rate activity"), engine -> {
 			List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.RELATED_PROJECTS)
-					.fetchColumn(engine);
+					.fetch(engine);
 			assertEquals("[(actId: -1, <Unvalidated activity>), (actId: -1, <execution rate activity>)]", cells.toString());
 		});
 	}
@@ -156,7 +156,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 	@Test
 	public void testFy() throws Exception {
 		runNiReportsTestcase(Arrays.asList("Unvalidated activity", "execution rate activity"), engine -> {
-			List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.FY).fetchColumn(engine);
+			List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.FY).fetch(engine);
 			assertEquals("[(actId: 64, <null>), (actId: 77, <null>)]", cells.toString());
 		});
 	}
@@ -164,7 +164,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 	@Test
 	public void testJointCriteria() throws Exception {
 		runNiReportsTestcase(Arrays.asList("Unvalidated activity", "execution rate activity", "Activity with Zones"), engine -> {
-			List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.JOINT_CRITERIA).fetchColumn(engine);
+			List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.JOINT_CRITERIA).fetch(engine);
 			assertEquals("[(actId: 33, <Yes>)]", cells.toString());
 		});
 	}

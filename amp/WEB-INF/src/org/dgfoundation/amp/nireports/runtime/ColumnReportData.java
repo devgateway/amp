@@ -12,13 +12,11 @@ import org.dgfoundation.amp.nireports.ReportData;
  */
 public class ColumnReportData extends ReportData {
 	
-	public final static String ROOT_COLUMN_NAME = "ROOT";
-	
 	public final GroupColumn contents;	
 	
-	public ColumnReportData(NiReportsEngine context) {
+	public ColumnReportData(NiReportsEngine context, GroupColumn rawData) {
 		super(context);
-		this.contents = new GroupColumn(ROOT_COLUMN_NAME, null, null);
+		this.contents = rawData;
 	}
 	
 	@Override

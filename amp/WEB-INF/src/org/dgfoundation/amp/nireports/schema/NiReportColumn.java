@@ -22,22 +22,12 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
  */
 public abstract class NiReportColumn<K extends Cell> extends NiReportedEntity<K> {
 	
-	public final String name;
 	public final Optional<NiDimension.LevelColumn> levelColumn;
 		
 	protected NiReportColumn(String name, NiDimension.LevelColumn levelColumn, Behaviour behaviour) {
-		super(behaviour);
-		this.name = name;
+		super(name, behaviour);
 		this.levelColumn = Optional.ofNullable(levelColumn);
 	}
-	
-	/**
-	 * fetch a column's initial contents, filtered but before any structure or hierarchies have been applied
-	 * @param engine
-	 * @return
-	 * @throws Exception
-	 */
-	public abstract List<K> fetchColumn(NiReportsEngine engine) throws Exception;
 	
 	@Override public int hashCode() {
 		return name.hashCode();

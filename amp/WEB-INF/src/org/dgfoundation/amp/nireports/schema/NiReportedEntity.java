@@ -1,6 +1,9 @@
 package org.dgfoundation.amp.nireports.schema;
 
+import java.util.List;
+
 import org.dgfoundation.amp.nireports.Cell;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
 
 /**
  * specifies an entity a report can be run on, e.g. a measure or a column
@@ -11,10 +14,14 @@ import org.dgfoundation.amp.nireports.Cell;
 public abstract class NiReportedEntity<K extends Cell> {
 	
 	protected final Behaviour behaviour;
-	
-	protected NiReportedEntity(Behaviour behaviour) {
+	public final String name;
+
+	protected NiReportedEntity(String name, Behaviour behaviour) {
+		this.name = name;
 		this.behaviour = behaviour;
 	}
+
+	public abstract List<K> fetch(NiReportsEngine engine) throws Exception;
 	
 	/**
 	 * returns the behaviour of this column/measure
@@ -23,4 +30,22 @@ public abstract class NiReportedEntity<K extends Cell> {
 	public Behaviour getBehaviour() {
 		return behaviour;
 	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public String getRepresentingString() {
+		return String.format("%s %s", this.getClass().getName(), getName());
+	}
+	
+	@Override public int hashCode() {
+		return getRepresentingString().hashCode();
+	}
+	
+	@Override public boolean equals(Object oth) {
+		NiReportedEntity<?> o = (NiReportedEntity<?>) oth;
+		return getRepresentingString().equals(o.getRepresentingString());
+	}
+
 }

@@ -1,7 +1,5 @@
 package org.dgfoundation.amp.nireports;
 
-import java.time.LocalDate;
-
 import org.dgfoundation.amp.nireports.meta.CategCell;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 
@@ -10,18 +8,18 @@ import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
  * @author Dolghier Constantin
  *
  */
-public class CategAmountCell extends Cell implements CategCell, DatedCell {
+public final class CategAmountCell extends Cell implements CategCell, DatedCell {
 		
 	public final MonetaryAmount amount;
 	public final MetaInfoSet metaInfo;
 	public final TranslatedDate translatedDate;
 	
-	public CategAmountCell(long activityId, MonetaryAmount amount, MetaInfoSet metaInfo, TranslatedDate transalatedDate) {
+	public CategAmountCell(long activityId, MonetaryAmount amount, MetaInfoSet metaInfo, TranslatedDate translatedDate) {
 		super(amount, amount.getDisplayable(), activityId, -1);
 		this.amount = amount;
 		this.metaInfo = metaInfo;
 		this.metaInfo.freeze();
-		this.translatedDate = transalatedDate;
+		this.translatedDate = translatedDate;
 	}
 
 	@Override

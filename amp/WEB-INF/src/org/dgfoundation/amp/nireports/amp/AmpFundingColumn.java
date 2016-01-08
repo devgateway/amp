@@ -75,7 +75,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 			);
 	
 	@Override
-	public List<CategAmountCell> fetchColumn(NiReportsEngine engine) throws Exception {
+	public List<CategAmountCell> fetch(NiReportsEngine engine) throws Exception {
 		AmpReportsScratchpad scratchpad = AmpReportsScratchpad.get(engine);
 
 		String query = buildQuery(engine);

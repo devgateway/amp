@@ -24,7 +24,7 @@ public class NiTransactionMeasure extends NiReportMeasure<CategAmountCell> {
 	}
 	
 	@Override
-	public List<CategAmountCell> buildCells(NiReportsEngine engine) {
+	public List<CategAmountCell> fetch(NiReportsEngine engine) {
 		return engine.funding.stream().filter(cell -> criterion.test(cell)).collect(Collectors.toList());
 	}
 

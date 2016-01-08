@@ -15,6 +15,6 @@ public interface Behaviour {
 	public TimeRange getTimeRange();
 	
 	public default String getDebugDigest() {
-		return String.format("timeRange: %s", getTimeRange());
+		return String.format("%s", getTimeRange());
 	}
 }

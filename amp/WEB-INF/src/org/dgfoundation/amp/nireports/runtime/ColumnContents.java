@@ -16,21 +16,21 @@ import org.dgfoundation.amp.nireports.Cell;
  * @author Dolghier Constantin
  *
  */
-public class ColumnContents<K extends Cell> {
-	public Map<Long, List<? extends K>> data = new HashMap<>();
+public class ColumnContents {
+	public Map<Long, List<NiCell>> data = new HashMap<>();
 	
-	public ColumnContents(Map<Long, ? extends List<? extends K>> data) {
+	public ColumnContents(Map<Long, ? extends List<NiCell>> data) {
 		Objects.requireNonNull(data);
 		this.data.putAll(data);
 	}
 	
-	public ColumnContents(List<? extends K> items) {
-		this(items.stream().collect(Collectors.groupingBy(z -> z.activityId)));
+	public ColumnContents(List<NiCell> items) {
+		this(items.stream().collect(Collectors.groupingBy(z -> z.getMainId())));
 	}
 	
 	public int countCells() {
 		int sum = 0;
-		for(List<? extends K> l:data.values())
+		for(List<NiCell> l:data.values())
 			sum += l.size();
 		return sum;
 	}
@@ -39,9 +39,9 @@ public class ColumnContents<K extends Cell> {
 	 * expensive!
 	 * @return
 	 */
-	public List<K> getLinearData() {
-		List<K> res = new ArrayList<>();
-		for(List<? extends K> list:data.values())
+	public List<NiCell> getLinearData() {
+		List<NiCell> res = new ArrayList<>();
+		for(List<NiCell> list:data.values())
 			res.addAll(list);
 		return res;
 	}

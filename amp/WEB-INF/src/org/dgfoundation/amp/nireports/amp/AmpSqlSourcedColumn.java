@@ -29,7 +29,7 @@ public abstract class AmpSqlSourcedColumn<K extends Cell> extends PsqlSourcedCol
 	}
 	
 	@Override
-	public final List<K> fetchColumn(NiReportsEngine engine) {
+	public final List<K> fetch(NiReportsEngine engine) {
 		String locale = TLSUtils.getEffectiveLangCode();
 		String queryCondition = buildCondition(engine);
 		ViewFetcher fetcher = DatabaseViewFetcher.getFetcherForView(viewName, queryCondition, locale, AmpReportsScratchpad.get(engine).columnCachers, AmpReportsScratchpad.get(engine).connection, "*");

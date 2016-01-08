@@ -21,8 +21,8 @@ public abstract class Column {
 	
 	/** returns the ids of all the primary entities enclosed in this column and all of its subcolumns (if any) */
 	public abstract Set<Long> getIds();
-	public abstract void forEachCell(Consumer<Cell> acceptor);
-	public abstract GroupColumn verticallySplitByCategory(Function<Cell, ComparableValue<String>> categorizer);
+	public abstract void forEachCell(Consumer<NiCell> acceptor);
+	public abstract GroupColumn verticallySplitByCategory(VSplitStrategy strategy);
 	public abstract String debugDigest(boolean withContents);
 			
 	protected Column(String name, GroupColumn parent) {
@@ -46,7 +46,8 @@ public abstract class Column {
 
 	@Override
 	public String toString() {
-		return String.format("%s %s", this.getClass().getSimpleName(), getHierName());
+		return debugDigest(false);
+		//return String.format("%s %s", this.getClass().getSimpleName(), getHierName());
 	}
 	
 	@Override

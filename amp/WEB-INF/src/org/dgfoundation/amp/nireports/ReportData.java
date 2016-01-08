@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
+import org.dgfoundation.amp.nireports.runtime.NiCell;
 
 
 /**
@@ -13,7 +14,7 @@ import org.dgfoundation.amp.nireports.runtime.CellColumn;
  *
  */
 public abstract class ReportData {
-	public final Map<CellColumn<?>, Cell> trailCells;
+	public final Map<CellColumn, NiCell> trailCells;
 	public final NiReportsEngine context;	
 		
 	public ReportData(NiReportsEngine context) {

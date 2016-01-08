@@ -53,12 +53,8 @@ v_component_funding_description, v_component_funding_organization_name - add as 
 remove ORDER BY from views
 v_activity_pledges_title:
 	views which link pledges to activities are... different. These have to be changed, but in an another way - for later
-change views which depend on amp_activity to depend on amp_activity_version  -> Aldo
 	
 make a per-column "slow check" function; implement it for PercentageColumns; make an endpoint for it
-define all PercentageColumns: programs/sectors/locations/agencies
 implement RunNode -> jsonb
 
-add type constraints on Column/GroupColumn
-define cached_* having amp_activity_id as first column AS views filtering on amp_activity_id
-add caching to calendars switching
+https://jira.dgfoundation.org/browse/AMP-22006 - DO NOT MERGE THIS ONE TO AMP 2.12

@@ -9,7 +9,7 @@ import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
  * @author Dolghier Constantin
  *
  */
-public class PercentageTextCell extends Cell {
+public final class PercentageTextCell extends Cell {
 	public final BigDecimal percentage;
 	
 	public PercentageTextCell(String text, long activityId, long entityId, BigDecimal percentage) {

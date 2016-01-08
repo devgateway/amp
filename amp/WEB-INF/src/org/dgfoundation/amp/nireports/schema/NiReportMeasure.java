@@ -19,36 +19,17 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
  *
  */
 public abstract class NiReportMeasure<K extends Cell> extends NiReportedEntity<K> {
-		
-	public final String name;
-	
+			
 	protected NiReportMeasure(String name, Behaviour behaviour) {
-		super(behaviour);
-		this.name = name;
+		super(name, behaviour);
 	}
 	
 	/**
-	 * selects the cells which are relevant for this measure from a combination of columns / filter data (usually just a selection of the funding column)
-	 * @param source
-	 * @return
-	 */
-	public abstract List<K> buildCells(NiReportsEngine context);
-	
-	/**
-	 * returns the list of measures which should be computed before this measure's {@link #buildCells(NiReportContext)} function will be called
+	 * returns the list of measures which should be computed before this measure's {@link #fetch(NiReportContext)} function will be called
 	 * @return
 	 */
 	public abstract Set<String> getPrecursorMeasures();	
-	
-	@Override public int hashCode() {
-		return name.hashCode();
-	}
-	
-	@Override public boolean equals(Object oth) {
-		NiReportMeasure<?> o = (NiReportMeasure<?>) oth;
-		return this.name.equals(o.name);
-	}
-	
+		
 	@Override public String toString() {
 		return String.format("measdef: <%s>", name);
 	}

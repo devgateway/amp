@@ -145,9 +145,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addTextColumn(ColumnConstants.RESULTS, "v_results");
 //		addTextColumn(ColumnConstants.SECTOR_LOCATION, "v_sectorloc");
 		addTextColumn(ColumnConstants.SECTOR_MINISTRY_CONTACT_ORGANIZATION, "v_sect_min_cont_org");
-//		addTextColumn(ColumnConstants.SECTOR_TAG, "v_tag_sectors");
-//		addTextColumn(ColumnConstants.SECTOR_TAG_SUB_SECTOR, "v_tag_sub_sectors");
-//		addTextColumn(ColumnConstants.SECTOR_TAG_SUB_SUB_SECTOR, "v_tag_sub_sub_sectors");
 		addTextColumn(ColumnConstants.SSC_MODALITIES, "v_ssc_modalities");
 		addTextColumn(ColumnConstants.STATUS, "v_status");
 		addTextColumn(ColumnConstants.STRUCTURES_COLUMN, "v_structures");
@@ -287,8 +284,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addTextColumnWithPercentages(ColumnConstants.TERTIARY_PROGRAM_LEVEL_7, "v_tertiaryprogram_level_7", progsDimension.getLevelColumn(PROG_DIMENSION_TP, LEVEL_7));
 		addTextColumnWithPercentages(ColumnConstants.TERTIARY_PROGRAM_LEVEL_8, "v_tertiaryprogram_level_8", progsDimension.getLevelColumn(PROG_DIMENSION_TP, LEVEL_8));
 
-		addTextColumnWithPercentages(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, "v_nationalobjectives_level_1", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_0));
-		addTextColumnWithPercentages(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_DETAIL, "v_nationalobjectives", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_0));
+		addTextColumnWithPercentages(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, "v_nationalobjectives_level_1", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_1));
+		//addTextColumnWithPercentages(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_DETAIL, "v_nationalobjectives", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_0));
 		addTextColumnWithPercentages(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, "v_nationalobjectives_level_1", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_1));
 		addTextColumnWithPercentages(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2, "v_nationalobjectives_level_2", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_2));
 		addTextColumnWithPercentages(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3, "v_nationalobjectives_level_3", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_3));

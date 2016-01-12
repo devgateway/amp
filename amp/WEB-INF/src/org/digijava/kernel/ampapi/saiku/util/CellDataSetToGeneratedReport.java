@@ -6,7 +6,6 @@ package org.digijava.kernel.ampapi.saiku.util;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -16,6 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -29,6 +29,7 @@ import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
+import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -42,6 +43,7 @@ import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.service.olap.totals.TotalNode;
+import org.saiku.service.olap.totals.aggregators.SumAggregator;
 import org.saiku.service.olap.totals.aggregators.TotalAggregator;
 
 /**
@@ -193,6 +195,8 @@ public class CellDataSetToGeneratedReport {
 			((PartialReportArea) root).setTotalLeafActivitiesCount(root.getChildren().size());
 		}
 		
+		updateCustomMeasureTotals(root);
+		
 		return root;
 		//return (ReportAreaImpl) root.getChildren().get(1);
 	}
@@ -234,13 +238,19 @@ public class CellDataSetToGeneratedReport {
 		if (measureTotals != null) {
 			int headerColId = rowLength;
 			for (int colId = 0; colId < measureTotals.length; colId ++) {
-				if (headerColId >= leafHeaders.size())
-					break; // AMP-20702: ugly workaround for a Saiku bug which has been previously workarounded "too toughly" via AMP-18748
-				//Unfortunately cannot use getValue() because during concatenation we override the value, but the only way to override is via formatted value
-				double value = parseValue(measureTotals[colId][rowId].getFormattedValue(), false, headerColId); 
+				if (headerColId >= leafHeaders.size()) {
+					logger.error("Invalid headerColId >= leafHeaders.size()");
+					break;
+				}	
+				SumAggregator sa = (SumAggregator) measureTotals[colId][rowId];
+				double value = measureTotals[colId][rowId].getValue();
+				if (amountMultiplierColumns.contains(headerColId)) {
+					// clear & remember the new one
+					sa.addData(-value);
+					value *= unitsOption.multiplier;
+					sa.addData(value);
+				}
 				contents.put(leafHeaders.get(headerColId++), new AmountCell(value, this.numberFormat));
-				//also re-format, via MDX formatting works a bit differently
-				measureTotals[colId][rowId].setFormattedValue(this.numberFormat.format(value));
 			}
 		}
 		
@@ -282,6 +292,65 @@ public class CellDataSetToGeneratedReport {
 					uniqueActivities.add(internalId);
 			}
 		}
+	}
+	
+	private void updateCustomMeasureTotals(ReportArea root) {
+		Map<ReportOutputColumn, Integer> measureColToMeasurePos = new HashMap<ReportOutputColumn, Integer>();
+		int measurePos = 0;
+		for (ReportMeasure m : spec.getMeasures()) {
+			if (CustomAmounts.ACTIVITY_SUM_AMOUNTS.contains(m.getMeasureName())) {
+				for (ReportOutputColumn roc : leafHeaders) {
+					String fullOrigName = roc.toString();
+					if (fullOrigName.contains(MoConstants.TOTAL_MEASURES) && roc.originalColumnName.equals(m.getMeasureName())) {
+						measureColToMeasurePos.put(roc, measurePos);
+						break;
+					}
+				}
+			}
+			measurePos ++;
+		}
+		if (!measureColToMeasurePos.isEmpty())
+			updateMeasureTotals(root, measureColToMeasurePos, new TreeMap<Integer, Integer>(), 0);
+	}
+	
+	private int updateMeasureTotals(ReportArea current, Map<ReportOutputColumn, Integer> measureColToMeasurePos, 
+			Map<Integer, Integer> internalIdCount, int rowId) {
+		if (current.getChildren() != null && current.getChildren().size() > 0) {
+			Map<Integer, Integer> currentInternalIdCount = new TreeMap <Integer, Integer>();
+			for (ReportArea child: current.getChildren()) {
+				rowId = updateMeasureTotals(child, measureColToMeasurePos, currentInternalIdCount, rowId);
+			}
+			for (Entry<ReportOutputColumn, Integer> rocToPos: measureColToMeasurePos.entrySet()) {
+				ReportOutputColumn roc = rocToPos.getKey();
+				Integer measurePos = rocToPos.getValue();
+				// update current totals
+				AmountCell data = (AmountCell) current.getContents().get(roc);
+				Double value = (Double) data.value; 
+				
+				TotalAggregator[] cdsTotals = cellDataSet.getColTotalsLists()[0].get(0).getTotalGroups()[measurePos];
+				for (Entry<Integer, Integer> entry : currentInternalIdCount.entrySet()) {
+					if (entry.getValue() > 1) {
+						int firstRowId = cellDataSetActivities.indexOf(entry.getKey());
+						Double repeatingAmount = Double.valueOf(cdsTotals[firstRowId].getFormattedValue());
+						repeatingAmount = repeatingAmount * unitsOption.multiplier * (entry.getValue() - 1);
+						value -= repeatingAmount;
+					}
+					// merge into global
+					update(internalIdCount, entry.getKey(), entry.getValue());
+				}
+				// update total amount
+				current.getContents().put(roc, new AmountCell(value, this.numberFormat));
+			}
+		} else {
+			update(internalIdCount, cellDataSetActivities.get(rowId), 1);
+			rowId++;
+		}
+		return rowId;
+	}
+	
+	protected void update(Map<Integer, Integer> internalIdCount, Integer internalId, Integer count) {
+		Integer oldCount = internalIdCount.get(internalId);
+		internalIdCount.put(internalId, oldCount == null ? count : oldCount + count);
 	}
 
 //	/**

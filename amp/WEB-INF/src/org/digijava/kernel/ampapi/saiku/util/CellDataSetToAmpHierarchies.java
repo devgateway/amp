@@ -21,6 +21,7 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.service.olap.totals.TotalNode;
+import org.saiku.service.olap.totals.aggregators.SumAggregator;
 import org.saiku.service.olap.totals.aggregators.TotalAggregator;
 
 /**
@@ -242,8 +243,8 @@ public class CellDataSetToAmpHierarchies {
 				if (total != null) {
 					int mPos = 0;
 					for (int a = 0; a < measuresTotalsToKeep.get(newDataRowId).length; a++, mPos++) {
-						String value = numberFormat.format(measuresTotalsToKeep.get(newDataRowId)[mPos]);
-						res[a][newDataRowId].setFormattedValue(value);
+						SumAggregator sa = (SumAggregator) res[a][newDataRowId];
+						sa.addData(-sa.getValue() + measuresTotalsToKeep.get(newDataRowId)[mPos]);
 					}
 				}
 			}

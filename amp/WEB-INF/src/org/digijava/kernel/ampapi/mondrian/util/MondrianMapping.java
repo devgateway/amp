@@ -88,7 +88,7 @@ public class MondrianMapping {
 	
 	public static final Set<String> definedColumns = new HashSet<String>();
 	public static final Set<String> definedMeasures = new HashSet<String>();
-	public static final Map<String, String> dependency = new HashMap<String, String>();
+	public static final Map<String, List<String>> dependency = new HashMap<String, List<String>>();
 	
 	final static String[] idSuffixList = new String[] {"", " Id"};
 	
@@ -285,7 +285,6 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.COMPONENT_TYPE, new MDXLevel(MoConstants.COMPONENT, MoConstants.H_COMPONENT_TYPE, MoConstants.ATTR_COMPONENT_TYPE));
 			addColumnDefinition(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION, new MDXLevel(MoConstants.COMPONENT_FUNDING_ORGANIZATION, MoConstants.H_ORG_NAME, MoConstants.ATTR_ORG_NAME));
 			addColumnDefinition(ColumnConstants.PROPOSED_PROJECT_AMOUNT, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT));
-			addColumnDefinition(ColumnConstants.UNCOMMITTED_BALANCE, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_UNCOMMITTED_BALANCE, MoConstants.ATTR_UNCOMMITTED_BALANCE));
 			addColumnDefinition(ColumnConstants.UNCOMMITTED_CUMULATIVE_BALANCE, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_UNCOMMITTED_CUMULATIVE_BALANCE, MoConstants.ATTR_UNCOMMITTED_CUMULATIVE_BALANCE));
 			addColumnDefinition(ColumnConstants.FORECAST_EXECUTION_RATE, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_FORECAST_EXECUTION_RATE, MoConstants.ATTR_FORECAST_EXECUTION_RATE));
 			addColumnDefinition(ColumnConstants.PLEDGE_STATUS, new MDXLevel("Pledge Status", MoConstants.H_CATEGORY_NAME, MoConstants.ATTR_CATEGORY_NAME));
@@ -364,9 +363,11 @@ public class MondrianMapping {
 			addMeasureDefinition(MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT);
 			addMeasureDefinition(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS);
 			addMeasureDefinition(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS);
-			dependency.put(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, ColumnConstants.TOTAL_GRAND_ACTUAL_COMMITMENTS);
-			dependency.put(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS, ColumnConstants.TOTAL_GRAND_ACTUAL_DISBURSEMENTS);
+			dependency.put(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, Arrays.asList(ColumnConstants.TOTAL_GRAND_ACTUAL_COMMITMENTS));
+			dependency.put(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS, Arrays.asList(ColumnConstants.TOTAL_GRAND_ACTUAL_DISBURSEMENTS));
 			addMeasureDefinition(MeasureConstants.UNDISBURSED_BALANCE);
+			addMeasureDefinition(MeasureConstants.UNCOMMITTED_BALANCE);
+			dependency.put(MeasureConstants.UNCOMMITTED_BALANCE, Arrays.asList(ColumnConstants.PROPOSED_PROJECT_AMOUNT, ColumnConstants.INTERNAL_USE_ID));
 			addMeasureDefinition(MeasureConstants.PLEDGES_COMMITMENT_GAP);
 			
 			addMeasureDefinition(MeasureConstants.MTEF_PROJECTIONS);

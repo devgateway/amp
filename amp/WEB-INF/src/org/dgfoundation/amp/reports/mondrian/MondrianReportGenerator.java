@@ -52,7 +52,6 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.newreports.TextCell;
-import org.dgfoundation.amp.reports.PartialReportArea;
 import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.queries.MDXGenerator;
@@ -358,7 +357,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			}
 				
 		// if there are no leaf entries to be associated with internal use id, then we cannot collect them
-		if (spec.getHierarchies().size() < spec.getColumns().size()) {
+		if (!spec.isSummary()) {
 			cellDataSetActivities = new ArrayList<Integer>();
 		}
 	}	
@@ -401,10 +400,16 @@ public class MondrianReportGenerator implements ReportExecutor {
 		}
 		
 		for (ReportMeasure rm : spec.getMeasures()) {
-			String dependency = MondrianMapping.dependency.get(rm.getMeasureName());
-			if (dependency != null && !spec.getColumnNames().contains(dependency)) {
-				ReportColumn rc = new ReportColumn(dependency);
-				spec.addColumn(rc, true);
+			List<String> dependecies = MondrianMapping.dependency.get(rm.getMeasureName());
+			if (dependecies != null && dependecies.size() > 0) {
+				for (String dependency : dependecies) {
+					if (!spec.getColumnNames().contains(dependency)) {
+						ReportColumn rc = new ReportColumn(dependency);
+						spec.addColumn(rc, true);
+						if (ColumnConstants.INTERNAL_USE_ID.equals(dependency))
+							spec.getHierarchies().add(rc);
+					}
+				}
 			}
 		}
 	}
@@ -648,6 +653,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 //		SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST_FILTERING");
 		
 		postprocessUndefinedEntries(cellDataSet);
+		postProcessor.postProcessAmountsBeforeHierarchicalMerge();
 		CellDataSetToAmpHierarchies.concatenateNonHierarchicalColumns(spec, cellDataSet, leafHeaders, this.translatedUndefined, cellDataSetActivities);
 		boolean internalIdUsed = postProcessor.removeDummyColumns();
 		

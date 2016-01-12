@@ -23,6 +23,7 @@ public class CustomMeasures {
 		add(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS);
 		add(MeasureConstants.CUMULATED_DISBURSEMENTS);
 		add(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS);
+		add(MeasureConstants.UNCOMMITTED_BALANCE);
 	}};
 	
 	/** measures that must not be filtered by dates filter */ 

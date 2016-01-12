@@ -65,16 +65,12 @@ public class MondrianComputedMeasuresReportTests extends MondrianReportsTestCase
 	@Test
 	public void test_UncommittedBalance() {
 		ReportAreaForTests correctReport = new ReportAreaForTests()
-	    .withContents("Project Title", "Report Totals", "Proposed Project Amount", "", "Uncommitted Balance", "", "Actual Commitments", "75 000")
+	    .withContents("Project Title", "Report Totals", "Proposed Project Amount", "4 459 510,47", "Actual Commitments", "75 000", "Uncommitted Balance", "4 384 510,47")
 	    .withChildren(
-	      new ReportAreaForTests()
-	          .withContents("Project Title", "Proposed Project Cost 1 - USD", "Proposed Project Amount", "1 000 000", "Uncommitted Balance", "1 000 000", "Actual Commitments", "0"),
-	      new ReportAreaForTests()
-	          .withContents("Project Title", "Proposed Project Cost 2 - EUR", "Proposed Project Amount", "3 399 510,47", "Uncommitted Balance", "3 399 510,47", "Actual Commitments", "0"),
-	      new ReportAreaForTests()
-	          .withContents("Project Title", "Project with documents", "Proposed Project Amount", "", "Uncommitted Balance", "", "Actual Commitments", "0"),
-	      new ReportAreaForTests()
-	          .withContents("Project Title", "SubNational no percentages", "Proposed Project Amount", "60 000", "Uncommitted Balance", "-15 000", "Actual Commitments", "75 000")  );
+	      new ReportAreaForTests()    .withContents("Project Title", "Proposed Project Cost 1 - USD", "Proposed Project Amount", "1 000 000", "Actual Commitments", "0", "Uncommitted Balance", "1 000 000"),
+	      new ReportAreaForTests()    .withContents("Project Title", "Proposed Project Cost 2 - EUR", "Proposed Project Amount", "3 399 510,47", "Actual Commitments", "0", "Uncommitted Balance", "3 399 510,47"),
+	      new ReportAreaForTests()    .withContents("Project Title", "Project with documents", "Proposed Project Amount", "", "Actual Commitments", "0", "Uncommitted Balance", "0"),
+	      new ReportAreaForTests()    .withContents("Project Title", "SubNational no percentages", "Proposed Project Amount", "60 000", "Actual Commitments", "75 000", "Uncommitted Balance", "-15 000")  );
 		
 		List<String> activities = Arrays.asList("Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR", "SubNational no percentages", "Project with documents");
 		runMondrianTestCase("Uncommitted Balance",
@@ -149,14 +145,11 @@ public class MondrianComputedMeasuresReportTests extends MondrianReportsTestCase
 	@Test
 	public void test_AMP_19708_Cumulative_Amounts() {
 		ReportAreaForTests correctReport = new ReportAreaForTests()
-	    .withContents("Project Title", "Report Totals", "Proposed Project Amount", "", "Uncommitted Cumulative Balance", "", "Cumulative Commitment", "", "Cumulative Disbursement", "", "Undisbursed Cumulative Balance", "", "Cumulative Execution Rate", "", "2010-Actual Commitments", "0", "2010-Actual Disbursements", "143 777", "2014-Actual Commitments", "154 670,69", "2014-Actual Disbursements", "80 000", "Total Measures-Actual Commitments", "154 670,69", "Total Measures-Actual Disbursements", "223 777")
+	    .withContents("Project Title", "Report Totals", "Proposed Project Amount", "60 000", "Uncommitted Cumulative Balance", "", "Cumulative Commitment", "", "Cumulative Disbursement", "", "Undisbursed Cumulative Balance", "", "Cumulative Execution Rate", "", "2010-Actual Commitments", "0", "2010-Actual Disbursements", "143 777", "2014-Actual Commitments", "154 670,69", "2014-Actual Disbursements", "80 000", "Total Measures-Actual Commitments", "154 670,69", "Total Measures-Actual Disbursements", "223 777")
 	    .withChildren(
-	      new ReportAreaForTests()
-	          .withContents("Project Title", "Test MTEF directed", "Proposed Project Amount", "", "Uncommitted Cumulative Balance", "", "Cumulative Commitment", "0", "Cumulative Disbursement", "143 777", "Undisbursed Cumulative Balance", "-143 777", "Cumulative Execution Rate", "", "2010-Actual Commitments", "", "2010-Actual Disbursements", "143 777", "2014-Actual Commitments", "", "2014-Actual Disbursements", "", "Total Measures-Actual Commitments", "0", "Total Measures-Actual Disbursements", "143 777"),
-	      new ReportAreaForTests()
-	          .withContents("Project Title", "SubNational no percentages", "Proposed Project Amount", "60 000", "Uncommitted Cumulative Balance", "-15 000", "Cumulative Commitment", "75 000", "Cumulative Disbursement", "0", "Undisbursed Cumulative Balance", "75 000", "Cumulative Execution Rate", "0", "2010-Actual Commitments", "", "2010-Actual Disbursements", "", "2014-Actual Commitments", "75 000", "2014-Actual Disbursements", "", "Total Measures-Actual Commitments", "75 000", "Total Measures-Actual Disbursements", "0"),
-	      new ReportAreaForTests()
-	          .withContents("Project Title", "activity with capital spending", "Proposed Project Amount", "", "Uncommitted Cumulative Balance", "", "Cumulative Commitment", "79 670,69", "Cumulative Disbursement", "80 000", "Undisbursed Cumulative Balance", "-329,31", "Cumulative Execution Rate", "100,41", "2010-Actual Commitments", "", "2010-Actual Disbursements", "", "2014-Actual Commitments", "79 670,69", "2014-Actual Disbursements", "80 000", "Total Measures-Actual Commitments", "79 670,69", "Total Measures-Actual Disbursements", "80 000")  );
+	      new ReportAreaForTests()    .withContents("Project Title", "Test MTEF directed", "Proposed Project Amount", "", "Uncommitted Cumulative Balance", "", "Cumulative Commitment", "0", "Cumulative Disbursement", "143 777", "Undisbursed Cumulative Balance", "-143 777", "Cumulative Execution Rate", "", "2010-Actual Commitments", "", "2010-Actual Disbursements", "143 777", "2014-Actual Commitments", "", "2014-Actual Disbursements", "", "Total Measures-Actual Commitments", "0", "Total Measures-Actual Disbursements", "143 777"),
+	      new ReportAreaForTests()    .withContents("Project Title", "SubNational no percentages", "Proposed Project Amount", "60 000", "Uncommitted Cumulative Balance", "-15 000", "Cumulative Commitment", "75 000", "Cumulative Disbursement", "0", "Undisbursed Cumulative Balance", "75 000", "Cumulative Execution Rate", "0", "2010-Actual Commitments", "", "2010-Actual Disbursements", "", "2014-Actual Commitments", "75 000", "2014-Actual Disbursements", "", "Total Measures-Actual Commitments", "75 000", "Total Measures-Actual Disbursements", "0"),
+	      new ReportAreaForTests()    .withContents("Project Title", "activity with capital spending", "Proposed Project Amount", "", "Uncommitted Cumulative Balance", "", "Cumulative Commitment", "79 670,69", "Cumulative Disbursement", "80 000", "Undisbursed Cumulative Balance", "-329,31", "Cumulative Execution Rate", "100,41", "2010-Actual Commitments", "", "2010-Actual Disbursements", "", "2014-Actual Commitments", "79 670,69", "2014-Actual Disbursements", "80 000", "Total Measures-Actual Commitments", "79 670,69", "Total Measures-Actual Disbursements", "80 000")  );
 		
 		List<String> activities = Arrays.asList("Test MTEF directed", "SubNational no percentages", "activity with capital spending");
 		runMondrianTestCase("AMP-19708 Cumulative Amounts",

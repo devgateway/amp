@@ -23,6 +23,7 @@ import org.dgfoundation.amp.reports.CustomMeasures;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.service.olap.totals.TotalNode;
+import org.saiku.service.olap.totals.aggregators.SumAggregator;
 import org.saiku.service.olap.totals.aggregators.TotalAggregator;
 
 /**
@@ -240,10 +241,16 @@ public class CellDataSetPostProcessing {
 		for(int i = 0; i < Math.min(columnNames.length, matrix.length); i++) {
 			String columnName = columnNames[i];
 			if (ArConstants.DIRECTED_MEASURE_TO_DIRECTED_TRANSACTION_VALUE.containsKey(columnName)) {
-				for(int j = 0; j < matrix[i].length; j++)
-					matrix[i][j].setFormattedValue("");
+				for(int j = 0; j < matrix[i].length; j++) {
+					SumAggregator sa = (SumAggregator) matrix[i][j];
+					sa.addData(- sa.getValue());
+				}
 			}
 		}
+	}
+	
+	public void postProcessAmountsBeforeHierarchicalMerge() {
+		(new UncommittedBalancePostProcess(spec, cellDataSet, leafHeaders)).processBeforeMergeByHierarchy();
 	}
 	
 	/**

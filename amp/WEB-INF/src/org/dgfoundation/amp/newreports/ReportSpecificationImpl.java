@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
@@ -402,5 +403,23 @@ public class ReportSpecificationImpl implements ReportSpecification {
 
 	public void setProjectTitleColumn(String projectTitleColumn) {
 		this.projectTitleColumn = projectTitleColumn;
+	}
+	
+	@JsonIgnore
+	public boolean isSummary() {
+		if (columns.size() == hierarchies.size() 
+				|| ColumnConstants.CONSTANT.equals(getColumns().iterator().next().getColumnName()))
+			return true;
+		int actualColCount = columns.size();
+		int actualHierCount = hierarchies.size();
+		for (ReportColumn rc : dummyColumns) {
+			if (columns.contains(rc)) {
+				actualColCount --;
+			}
+			if (hierarchies.contains(rc)) {
+				actualHierCount --;
+			}
+		}
+		return actualColCount == actualHierCount;
 	}
 }

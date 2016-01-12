@@ -634,29 +634,6 @@
 				<Table name="mondrian_activity_currency_numbers" />
 				<Level name="Proposed Project Amount" type="Numeric" column="ppc_transaction_exch_@@currency@@" />
 			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Uncommitted Balance" primaryKey="amp_activity_id" name="Uncommitted Balance">
-				<View alias="v_uncommitted_balance">
-					<SQL dialect="generic">
-						<![CDATA[
-						SELECT mondrian_activity_currency_numbers.amp_activity_id, 
-							CASE WHEN mondrian_activity_currency_numbers.ppc_transaction_amount IS NULL THEN @@undefined_amount@@
-							ELSE 
-							(mondrian_activity_currency_numbers.ppc_transaction_exch_@@currency@@-
-								COALESCE((
-									SELECT sum("@@mondrian_fact_table@@".transaction_exch_@@currency@@)
-												FROM "@@mondrian_fact_table@@"
-												WHERE (@@mondrian_fact_table@@.transaction_type=0) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) 
-												AND @@filteredActivities@@
-												AND "@@mondrian_fact_table@@"."entity_id" = "mondrian_activity_currency_numbers"."amp_activity_id"
-								), 0)
-							) END
-							AS "Uncommitted_Balance"
-						FROM mondrian_activity_currency_numbers
-						]]>
-					</SQL>
-				</View>
-				<Level name="Uncommitted Balance" type="Numeric" column="Uncommitted_Balance" />
-			</Hierarchy>
 			
 			<Hierarchy hasAll="true" allMemberName="All Uncommited Cumulative Balance" primaryKey="amp_activity_id" name="Uncommitted Cumulative Balance">
 				<View alias="v_uncommitted_cumulative_balance">
@@ -1266,6 +1243,25 @@ ON
 				OR IsEmpty([Measures].[Actual Disbursements]),
 				null, 
 				[Measures].[Actual Disbursements] / Measures.[Total Filtered Planned Disbursements] * 100)
+			</Formula>
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>
+		</CalculatedMember>
+		
+		<CalculatedMember name="Proposed Project Amount" dimension="Measures" visible="false">
+			<Formula>
+				 IIf(IsEmpty([Activity Currency Amounts.Proposed Project Amount].[Proposed Project Amount].CurrentMember.name)
+				 OR (Cast([Activity Currency Amounts.Proposed Project Amount].[Proposed Project Amount].CurrentMember.name as Numeric) &lt;= @@undefined_amount@@),
+				 null,
+				 Cast([Activity Currency Amounts.Proposed Project Amount].[Proposed Project Amount].CurrentMember.name as Numeric))
+			</Formula>
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>
+		</CalculatedMember>
+		
+		<CalculatedMember name="Uncommitted Balance" dimension="Measures">
+		 	<Formula>
+		 		IIf(IsEmpty(Measures.[Proposed Project Amount]),
+		 		null,
+		 		[Measures].[Proposed Project Amount] - [Measures].[Actual Commitments]) 
 			</Formula>
 			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>
 		</CalculatedMember>

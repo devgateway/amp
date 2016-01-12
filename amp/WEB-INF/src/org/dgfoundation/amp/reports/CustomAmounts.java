@@ -18,6 +18,8 @@ public class CustomAmounts {
 	public final static Set<String> ACTIVITY_SUM_AMOUNTS = new HashSet<String>() {{
 		add(MeasureConstants.TOTAL_COMMITMENTS);
 		add(MeasureConstants.TOTAL_DISBURSEMENTS);
+		add(ColumnConstants.PROPOSED_PROJECT_AMOUNT);
+		add(MeasureConstants.UNCOMMITTED_BALANCE);
 	}};
 	
 	/** columns that provide amounts and not text data */
@@ -31,7 +33,6 @@ public class CustomAmounts {
 		add(ColumnConstants.PROPOSED_PROJECT_AMOUNT);
 		add(ColumnConstants.TOTAL_GRAND_ACTUAL_COMMITMENTS);
 		add(ColumnConstants.TOTAL_GRAND_ACTUAL_DISBURSEMENTS);
-		add(ColumnConstants.UNCOMMITTED_BALANCE);
 		add(ColumnConstants.UNCOMMITTED_CUMULATIVE_BALANCE);
 		add(ColumnConstants.FORECAST_EXECUTION_RATE);
 		add(ColumnConstants.UNDISBURSED_CUMULATIVE_BALANCE);

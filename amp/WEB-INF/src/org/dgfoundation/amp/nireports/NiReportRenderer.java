@@ -68,7 +68,7 @@ public class NiReportRenderer {
 			bld.append("<tr>");
 			for(CellColumn leafHeader:headers.leafColumns) {
 				List<NiCell> cells = leafHeader.getContents().data.get(id);
-				String contents = cells == null || cells.isEmpty() ? "" : cells.get(0).getCell().displayedValue;
+				String contents = cells == null || cells.isEmpty() ? "" : ensureMaxLen(leafHeader.getBehaviour().doHorizontalReduce(cells).getDisplayedValue(), 40);
 				bld.append("<td class='nireport_data_cell'>");
 				bld.append(contents);
 				bld.append("</td>");
@@ -76,5 +76,11 @@ public class NiReportRenderer {
 			bld.append("</tr>\n");
 		}
 		return bld.toString();
+	}
+	
+	protected String ensureMaxLen(String s, int maxLen) {
+		if (s.length() <= maxLen)
+			return s;
+		return s.substring(0, maxLen - 3) + "...";
 	}
 }

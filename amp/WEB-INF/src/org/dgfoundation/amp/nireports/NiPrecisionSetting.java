@@ -9,4 +9,6 @@ import java.math.BigDecimal;
  */
 public interface NiPrecisionSetting {
 	public BigDecimal adjustPrecision(BigDecimal src);
+	
+	public final static NiPrecisionSetting IDENTITY_PRECISION_SETTING = (z -> z); 
 }

@@ -33,12 +33,22 @@ public class NiReportsGenerator implements ReportExecutor {
 	public String renderReport(ReportSpecification report) {
 		NiReportsEngine engine = new NiReportsEngine(schema, report);
 		ReportData reportOutput = engine.execute();
-		String pageHeader = String.format("<html><head>%s\n%s</head><body>%s", 
+		long start = System.currentTimeMillis();
+		String renderedReport = new NiReportRenderer(engine, reportOutput).render();
+		long renderTime = System.currentTimeMillis() - start;
+		int reportX = engine.headers.leafColumns.size();
+		int reportY = reportOutput.getIds().size();
+		
+		String pageHeader = String.format("<html><head>%s\n%s</head><body> <div style='position: fixed; left: 0; right: 0; top: 0; bottom: 0; z-index: 9999; background-size: cover; background-image: url(/TEMPLATE/ampTemplate/nireports/nickel.png)'></div>%s", 
 				"<link href='/TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>", 
 				"<link href='/TEMPLATE/ampTemplate/nireports/nireports_view.css' rel='stylesheet' type='text/css'>",
-				String.format("<div style='padding: 20px; margin: 25px; border: 1px dotted black; border-radius: 7px'>report runtime: %d millies</div>", engine.timer.getWallclockTime())
-				);
-		return String.format("%s\n%s%s", pageHeader, new NiReportRenderer(engine, reportOutput).render(), "</body></html>");
+				String.format("<div style='padding: 5px; margin: 25px; border: 1px dotted black; border-radius: 7px'>%s\n%s\n%s</div>", 
+						String.format("<p>report runtime: %d millies</p>", engine.timer.getCurrentState().getTotalTime()),
+						String.format("<p>report rendertime: %d millies</p>", renderTime),
+						String.format("<p>report size Y*X = %d*%d (%d cells)</p>", reportY, reportX, reportY * reportX))
+						);				
+		
+		return String.format("%s\n%s%s", pageHeader, renderedReport, "</body></html>");
 	}
 	
 	protected GeneratedReport generateApiOutput(ReportData reportOutput, NiReportsEngine engine) {

@@ -8,30 +8,18 @@ import org.dgfoundation.amp.nireports.meta.CategCell;
  * @author Dolghier Constantin
  *
  */
-public abstract class Cell implements Comparable<Cell>, CategCell /*extends ReportCell */{
+public abstract class Cell implements Comparable, CategCell {
 	public final long activityId;
 	public final long entityId;
-	public final Comparable value;
-	public final String displayedValue;
 		
-	public Cell(Comparable<?> value, String displayedValue, long activityId, long entityId) {
-		this.value = value;
-		this.displayedValue = displayedValue;
+	public Cell(long activityId, long entityId) {
 		this.activityId = activityId;
 		this.entityId = entityId;
 	}
 	
-	public Cell(Comparable<?> value, String displayedValue, long activityId) {
-		this(value, displayedValue, activityId, -1);
-	}
-
-	@Override
-	public int compareTo(Cell other) {
-		return value.compareTo(other.value);
+	public Cell(long activityId) {
+		this(activityId, -1);
 	}
 	
-	@Override
-	public String toString() {
-		return String.format("(actId: %d, <%s>)", activityId, displayedValue);
-	}
+	public abstract String getDisplayedValue();
 }

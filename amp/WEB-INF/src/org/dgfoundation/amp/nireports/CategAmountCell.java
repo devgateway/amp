@@ -8,14 +8,14 @@ import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
  * @author Dolghier Constantin
  *
  */
-public final class CategAmountCell extends Cell implements CategCell, DatedCell {
+public final class CategAmountCell extends Cell implements CategCell, DatedCell, NumberedCell {
 		
 	public final MonetaryAmount amount;
 	public final MetaInfoSet metaInfo;
 	public final TranslatedDate translatedDate;
 	
 	public CategAmountCell(long activityId, MonetaryAmount amount, MetaInfoSet metaInfo, TranslatedDate translatedDate) {
-		super(amount, amount.getDisplayable(), activityId, -1);
+		super(activityId);
 		this.amount = amount;
 		this.metaInfo = metaInfo;
 		this.metaInfo.freeze();
@@ -35,5 +35,21 @@ public final class CategAmountCell extends Cell implements CategCell, DatedCell 
 	@Override
 	public TranslatedDate getTranslatedDate() {
 		return translatedDate;
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		CategAmountCell cac = (CategAmountCell) o;
+		return amount.compareTo(cac.amount);
+	}
+
+	@Override
+	public String getDisplayedValue() {
+		return amount.getDisplayable();
+	}
+
+	@Override
+	public MonetaryAmount getAmount() {
+		return amount;
 	}
 }

@@ -8,7 +8,7 @@ import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
  * @author Dolghier Constantin
  *
  */
-public class NiCell {
+public class NiCell implements Comparable<NiCell> {
 	/** null for trail cells */
 	protected final NiReportedEntity<?> entity;
 	protected final Cell cell;
@@ -28,5 +28,11 @@ public class NiCell {
 	
 	public long getMainId() {
 		return cell.activityId;
+	}
+
+	@Override
+	public int compareTo(NiCell o) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

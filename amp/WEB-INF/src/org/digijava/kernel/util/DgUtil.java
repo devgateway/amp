@@ -420,6 +420,17 @@ public class DgUtil {
                              language.getCode());
                 return language;
             }
+            
+            //using session attribute
+            if (request.getSession() != null){
+            	language = (Locale)request.getSession().getAttribute(Constants.NAVIGATION_LANGUAGE);
+            	if(language != null){
+            		logger.debug("Language, determined from session attribute is: " +
+                            language.getCode());
+            		return language;
+            	}
+            }
+            	
             // Determine list of accepted languages from request
 
             // request.getLocales() contains at least one value: if
@@ -758,8 +769,8 @@ public class DgUtil {
         // determine current user language
         Locale language = DgUtil.getLanguageFromRequest(request);
         logger.debug("Navigation language, determined from request is: " +
-                     language == null ? null : language.getCode());
-
+                     language == null ? null : language.getCode());        
+        
        setSessionLanguage(request, response, language);
 
         User user = RequestUtils.getUser(request);

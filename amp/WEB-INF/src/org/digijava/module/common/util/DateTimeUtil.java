@@ -26,6 +26,10 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeUtils;
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -142,7 +146,20 @@ public class DateTimeUtil {
                 }
 		return result;
 	}
-		
+	
+//	public static int toJulianDayNumber(LocalDate date) {
+//		return (int) (date.toEpochDay() + 2440588);
+//	}
+
+	public static Integer toJulianDayNumber(LocalDate date){
+		if (date == null)
+			return null;
+		return (int) (Days.daysBetween(new LocalDate(1970,1,1), date).getDays() + 2440588);
+//		return (int) (date.toDateTimeAtStartOfDay().getmi);
+//		return DateTimeUtils.toJulianDayNumber(date.toDateTime().getMillis());
+//		return (int) (date.toDate() + 2440588);
+	}	
+	@Deprecated
 	public static Integer toJulianDayNumber(Date date){
 		if (date == null) return null;
 		Calendar cal = Calendar.getInstance();

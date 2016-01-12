@@ -17,6 +17,7 @@ import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.StringGenerator;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -48,8 +49,9 @@ public class ReportTestingUtils
 	 * @param activitiyNames - the names of the activities which should be presented to the report (through WorkspaceFilter). If null, WorkspaceFilter will not filter out any
 	 * @return
 	 */
-	public static GroupReportData runReportOn(String reportName, AmpReportModifier modifier, String... activityNames)
-	{		
+//	public static GroupReportData runReportOn(String reportName, AmpReportModifier modifier, String... activityNames)
+	public static ImmutablePair<GroupReportData, String> runReportOn(String reportName, AmpReportModifier modifier, String... activityNames) {
+				
 //		Session hibSession = PersistenceManager.getSession();
 		
 		AmpReports report = loadReportByName(reportName);
@@ -75,7 +77,7 @@ public class ReportTestingUtils
 		arg.generate();
 		
 		GroupReportData result = arg.getReport();
-		return result;
+		return new ImmutablePair<GroupReportData, String>(result, arg.describeReportInCode(result,  0, true));
 	}
 	
 	/**

@@ -51,6 +51,7 @@ public class AllTests_amp27
 	{
 		try
 		{ 
+			
 			HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
 			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_27_amp211";
 			//HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_moldova_27";
@@ -62,6 +63,9 @@ public class AllTests_amp27
 			PersistenceManager.initialize(false, null);
 			Configuration cfg = HibernateClassLoader.getConfiguration();
 			//System.out.println("AMP started up!");
+			
+			org.apache.struts.mock.MockHttpServletRequest mockRequest = new org.apache.struts.mock.MockHttpServletRequest(new org.apache.struts.mock.MockHttpSession());
+			TLSUtils.populate(mockRequest);
 			TLSUtils.getThreadLocalInstance().setForcedLangCode(SiteUtils.getDefaultSite().getDefaultLanguage().getCode());
 		}
 		catch(Exception e)

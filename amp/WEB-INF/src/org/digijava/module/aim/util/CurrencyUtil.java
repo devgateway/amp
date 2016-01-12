@@ -699,6 +699,11 @@ public class CurrencyUtil {
 		return col;
 	}
 
+	
+	public static AmpCurrency getBaseCurrency() {
+		return CurrencyUtil.getAmpcurrency(getBaseCurrencyCode());
+	}
+	
 	/*
 	 * For Deleting a Currency...
 	 */
@@ -758,7 +763,12 @@ public class CurrencyUtil {
 		return defaultCurrency;
 	}
 	
-	
+    public static String getBaseCurrencyCode() {
+        String currCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+        if (currCode == null)
+            currCode = BASE_CODE;
+        return currCode;
+    }	
 	/**
 	 * checks AMP_CURRENCY_RATE table for invalid entries
 	 * @throws AimException

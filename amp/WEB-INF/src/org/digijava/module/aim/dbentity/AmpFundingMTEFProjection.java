@@ -60,9 +60,10 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 			
 		}
 		public AmpFundingMTEFProjection(Integer transactionType, AmpCategoryValue adjustmentType, Double transactionAmount, Date transactionDate, AmpCurrency ampCurrencyId, Double fixedExchangeRate) {
-			this.amount=transactionAmount;
-			this.projectionDate=transactionDate;
-			this.ampCurrency=ampCurrencyId;
+			this.amount = transactionAmount;
+			this.projectionDate = transactionDate;
+			this.ampCurrency = ampCurrencyId;
+			this.projected = adjustmentType;
 		}
 		public Date getReportingDate() {
 			return reportingDate;
@@ -178,7 +179,7 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 		
 		public AmpCategoryValue getAdjustmentType()
 		{
-			return CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getAmpCategoryValueFromDB();
+			return projected == null ? CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getAmpCategoryValueFromDB() : projected;
 		}
 		
 		public String getDisbOrderId()

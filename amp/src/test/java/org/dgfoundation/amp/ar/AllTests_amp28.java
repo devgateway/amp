@@ -71,6 +71,8 @@ public class AllTests_amp28
 			PersistenceManager.initialize(false, null);
 //			Configuration cfg = HibernateClassLoader.getConfiguration();
 			//System.out.println("AMP started up!");
+			org.apache.struts.mock.MockHttpServletRequest mockRequest = new org.apache.struts.mock.MockHttpServletRequest(new org.apache.struts.mock.MockHttpSession());
+			TLSUtils.populate(mockRequest);
 			TLSUtils.getThreadLocalInstance().setForcedLangCode(SiteUtils.getDefaultSite().getDefaultLanguage().getCode());
 		}
 		catch(Exception e)

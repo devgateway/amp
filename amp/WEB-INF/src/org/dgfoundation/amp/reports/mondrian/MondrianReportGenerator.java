@@ -352,7 +352,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	}
 	
 	private void init() {
-		if (!Connection.IS_TESTING)
+//		if (!Connection.IS_TESTING)
 			if(MondrianETL.runETL(false).cacheInvalidated) {
 				MondrianReportUtils.flushCache();
 			}

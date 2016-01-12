@@ -22,6 +22,8 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
+import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
+import org.dgfoundation.amp.currencyconvertor.CurrencyConvertor;
 import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -36,6 +38,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.Identifiable;
@@ -47,6 +50,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.jdbc.ReturningWork;
 import org.hibernate.type.StringType;
+import org.joda.time.LocalDate;
 import org.springframework.beans.BeanWrapperImpl;
 
 public final class Util {
@@ -238,74 +242,11 @@ public final class Util {
 	
 
 	/**
-	 * QUICK access to exchange rates. Gets the exchange rate for the given
-	 * currency at the specified date. The exchange rate is fetched directy from
-	 * the DB using a stored function. Afterwards it is stored inside the digi
-	 * cache for later usage so we do not need to access the DB again. All the
-	 * logic involving exchange rate calculation is done at the DB level,
-	 * therefore the result is returned very quickly.
-	 * 
-	 * @param currency
-	 *            the currency code
-	 * @param currencyDate
-	 *            the currency date
-	 * @return the exchange rate
-	 * @author mihai 06.05.2007
-	 * @see CategAmountColWorker
-	 * @see AmountCell
+	 * refactored to use the NiReports retrofitted currency exchange rates service
 	 */
 	public static double getExchange(final String currencyCode, final java.sql.Date currencyDate) {
-
-		String baseCurrency = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
-		if (baseCurrency == null)
-			baseCurrency = Constants.DEFAULT_CURRENCY;
-
-		if (baseCurrency.equals(currencyCode))
-			return 1;
-
-		// we try the digi cache:
-		final AbstractCache ratesCache = DigiCacheManager.getInstance().getCache(ArConstants.EXCHANGE_RATES_CACHE);
-
-		Double cacheRet = (Double) ratesCache.get(new String(currencyCode + currencyDate));
-		if (cacheRet != null)
-			return cacheRet.doubleValue();
-		Session sess = PersistenceManager.getSession();
-		double fret = sess.doReturningWork(new ReturningWork<Double>() {
-			@Override
-			public Double execute(Connection conn) throws SQLException {
-
-				double ret = 1;
-
-				String query = "SELECT getExchange(?,?)";
-				PreparedStatement ps;
-				try {
-					ps = conn.prepareStatement(query);
-					ps.setString(1, currencyCode);
-					ps.setDate(2, currencyDate);
-
-					ResultSet rs = ps.executeQuery();
-
-					if (rs.next())
-						ret = rs.getDouble(1);
-					else
-						new RuntimeException("cannot get exchange rate for " + currencyCode).printStackTrace();
-
-					rs.close();
-
-				} catch (SQLException e) {
-					logger.error("Unable to get exchange rate for currencty " + currencyCode + " for the date "
-							+ currencyDate);
-					logger.error(e);
-					e.printStackTrace();
-				}
-
-				ratesCache.put(new String(currencyCode + currencyDate), new Double(ret));
-
-				return ret;
-			}
-
-		});
-		return fret;
+		CurrencyConvertor convertor = AmpCurrencyConvertor.getInstance();
+		return convertor.getExchangeRate(CurrencyUtil.getBaseCurrencyCode(), currencyCode, null, new LocalDate(currencyDate));
 	}
 	/**
 	 * As the name implies only the years are checked by this function. 

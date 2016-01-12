@@ -17,7 +17,7 @@
   <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
   <property name="hibernate.connection.url">jdbc:postgresql://localhost/amp_tests_210</property>
   <property name="hibernate.connection.username">postgres</property>
-  <property name="hibernate.connection.password">m0n1t0r</property>
+  <property name="hibernate.connection.password">abc</property>
   <!--
   		END ALTER HERE
    -->

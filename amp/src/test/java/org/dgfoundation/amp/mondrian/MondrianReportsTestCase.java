@@ -46,6 +46,11 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		super(name);
 	}
 	
+	protected ReportSpecificationImpl changeReportCurrency(ReportSpecificationImpl input, String currencyCode) {
+		input.getOrCreateSettings().setCurrencyCode(currencyCode);
+		return input;
+	}
+	
 	/**
 	 * runs a single report test and compares the result with the expected cor 
 	 * @param testName - test name to be displayed in case of error

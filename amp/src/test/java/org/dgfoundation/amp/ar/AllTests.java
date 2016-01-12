@@ -61,6 +61,8 @@ public class AllTests {
 			Configuration cfg = HibernateClassLoader.getConfiguration();
 			//System.out.println("AMP started up!");
 			//TLSUtils.getThreadLocalInstance().setLocale(SiteUtils.getDefaultSite().getDefaultLanguage());
+			org.apache.struts.mock.MockHttpServletRequest mockRequest = new org.apache.struts.mock.MockHttpServletRequest(new org.apache.struts.mock.MockHttpSession());
+			TLSUtils.populate(mockRequest);
 			TLSUtils.getThreadLocalInstance().setForcedLangCode(SiteUtils.getDefaultSite().getDefaultLanguage().getCode());
 		}
 		catch(Exception e)

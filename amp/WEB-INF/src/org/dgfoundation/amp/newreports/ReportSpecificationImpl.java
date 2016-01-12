@@ -16,6 +16,7 @@ import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
 
 /**
  * Stores a report configuration by implementing {@link ReportSpecification} and defines all data required to generate a report. 
@@ -162,6 +163,12 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	 */
 	public ReportSettings getSettings() {
 		return settings;
+	}
+	
+	public MondrianReportSettings getOrCreateSettings() {
+		if (settings == null)
+			settings = new MondrianReportSettings();
+		return (MondrianReportSettings) settings;
 	}
 
 	/**

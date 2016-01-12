@@ -7,9 +7,9 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.ReportData;
+import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.testmodels.GroupReportModel;
 import org.digijava.module.aim.dbentity.AmpReports;
-
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.um.exception.UMException;
 
@@ -40,10 +40,12 @@ public abstract class ReportsTestCase extends AmpTestCase
 		{
 			throw new RuntimeException(e);
 		}
-		GroupReportData report = ReportTestingUtils.runReportOn(reportName, modifier, activities);
+		ImmutablePair<GroupReportData, String> report = ReportTestingUtils.runReportOn(reportName, modifier, activities);
 		////System.out.println(ReportTestingUtils.describeReportInCode(report, 1, true));
 //		checkThatAllCRDsHaveIdenticalReportHeadingsLayoutData(report);
-		String error = correctResult.matches(report);
+		String error = correctResult.matches(report.k);
+		if (error != null)
+			System.err.format("test %s, report %s, the output is: %s\n", testName, reportName, report.v);
 		assertNull(String.format("test %s, report %s: %s", testName, reportName, error), error);
 	}
 	

@@ -20,7 +20,7 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.currency.CurrencyInflationUtil;
-import org.dgfoundation.amp.mondrian.currencies.ExchangeRates;
+import org.dgfoundation.amp.currencyconvertor.ExchangeRates;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
@@ -116,7 +116,7 @@ public class CCExchangeRate {
 		double iRCurrToCCstdCurrOnToDate = iRcurrToBaseOnToDate * baseToCCstdCurrOnToDate;
 		
 		ExchangeRates fromBaseToInflCurrRates = new ExchangeRates(baseCurrency.getAmpCurrencyId(), -1);
-		fromBaseToInflCurrRates.importRate(fromBaseToOtherCurrency.get(inflationRatesCurrency));
+		fromBaseToInflCurrRates.importRates(fromBaseToOtherCurrency.get(inflationRatesCurrency));
 		
 		Calendar c = Calendar.getInstance();
 		SortedSet<Long> ccExchangeRatesDates = generateCCExchangeRateDates(irg.getSortedByDateInflationRates().keySet());
@@ -151,7 +151,7 @@ public class CCExchangeRate {
 	
 	protected double getExchangeRate(Map<Long, Double> exchangeRates, Long date) {
 		ExchangeRates er = new ExchangeRates(0, 0);
-		er.importRate(exchangeRates);
+		er.importRates(exchangeRates);
 		return er.getRatesOnDate(date).rate;
 	}
 	

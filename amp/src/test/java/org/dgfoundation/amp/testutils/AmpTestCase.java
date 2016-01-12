@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.testutils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -43,6 +44,15 @@ public abstract class AmpTestCase extends TestCase
 			}
 			throw new RuntimeException(String.format("code which should have failed with (%s %s) has instead failed with (%s %s)", correctException.getClass(), correctException.getMessage(), thr.getClass(), thr.getMessage()));
 		}
+	}
+	
+	/**
+	 * compares 2 BigDecimal values by value, not by value/scale (as equals() would do)
+	 * @param a
+	 * @param b
+	 */
+	public void assertBigDecimalEquals(BigDecimal a, BigDecimal b) {
+		assertEquals(0,  a.compareTo(b));
 	}
 	
 	public void testDisableableKeyValues(Collection<DisableableKeyValue> res, DisableableKeyValue... cor){

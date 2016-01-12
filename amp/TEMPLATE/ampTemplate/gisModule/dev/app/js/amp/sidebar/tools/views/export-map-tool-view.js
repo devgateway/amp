@@ -20,9 +20,37 @@ module.exports = Backbone.View.extend({
   },
 
   render: function() {
-    // append is important because 'share' is inside same el
-    this.$el.append(this.template());
+	  var self = this;
+  	this.app.data.settings.load().then(function(){
+  		
+        var foundPS = _.find(self.app.data.settings.models, function(item) {
+            return item.get('id') === 'project-sites';
+          });
 
+        //occasionally, foundPS.attributes.selected will be undefined, so we have to dig through the attributes
+        if (foundPS !== undefined && foundPS.attributes.options[0].value !== 'true') {
+        	//need to remove project-sites
+        	//find the index of project-sites in projectLayerCollection
+//        	var index = undefined;
+//        	for (i = 0; i < self.projectLayerCollection.models.length; i++ ) {
+//        		if (self.projectLayerCollection.models[i].attributes.title === 'Project Sites') {
+//        			index = i;
+//        		}
+//        	}
+//        	self.projectLayerCollection.models.splice(index, 1);
+    	    // append is important because 'share' is inside same el
+//        	var value = $(self.template()).find('button.hideable').css('display','none').html();
+        	
+        	self.$el.append(self.template());
+        	self.$el.find('button.hideable').css('display', 'none')
+        } else {
+    	    // append is important because 'share' is inside same el
+    	    self.$el.append(self.template());
+        	
+        }
+  		
+  		
+  	});
     return this;
   },
 

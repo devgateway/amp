@@ -514,7 +514,7 @@ $(document).ready(function() {
 																					    	
 	 																					  	<a href="${reportLink}" styleClass="h-box" onclick="return popup(this,'');" title="<digi:trn>Click here to view the Report</digi:trn>">
 																						  	<b>
-								                              										<p style="max-width: 400px;white-space: normal" title='<c:out value="${report.name}"/>'>
+								                              										<p style="display: inline; max-width: 400px; white-space: normal" title='<c:out value="${report.name}"/>'>
 																										<c:choose>
 																											<c:when test="${fn:length(report.name) > 25}">
 																												<c:out value="${fn:substring(report.name, 0, 25)}" />...
@@ -527,7 +527,9 @@ $(document).ready(function() {
 								                              									</b>
 	 																				    	</a>
 																						  	
-																					    
+					                              										<a href="/rest/data/nireport/${report.ampReportId}" title="Open Report in NiReports">
+					                              											<img src="/TEMPLATE/ampTemplate/nireports/nireportsicon.png" />
+					                              										</a>
 																					</c:if>
 						                          									<c:if test="${aimTeamReportsForm.showTabs}">
 						                          										<b>

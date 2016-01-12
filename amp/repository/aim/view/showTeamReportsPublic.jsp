@@ -344,6 +344,7 @@ function submitForm(action){
 																				<td class="report_inside" style="font-size: 11px;"
 																					bgcolor="${color}">
 																					<div class="t_sm" title="${report.name}">
+																					
 																						<c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}"/>
 																						
 																						<%
@@ -369,6 +370,10 @@ function submitForm(action){
 																								</c:choose>
 																							</b>
 																						</a>
+					                              										<a href="/rest/data/nireport/${report.ampReportId}" title="Open Report in NiReports">
+					                              											<img src="/TEMPLATE/ampTemplate/nireports/nireportsicon.png" />
+					                              										</a>
+																						
 																						<br>
 																						<logic:present name="report" property="reportDescription">
 																							<c:choose>

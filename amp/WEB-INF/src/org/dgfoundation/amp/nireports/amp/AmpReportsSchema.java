@@ -30,6 +30,7 @@ import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportFilters;
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.AbstractReportsSchema;
 import org.dgfoundation.amp.nireports.CategAmountCell;
@@ -353,8 +354,13 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 * @return
 	 */
 	public static ReportExecutor getExecutor() {
-		ReportExecutor res = new NiReportsGenerator(AmpReportsSchema.getInstance());
+		ReportExecutor res = new NiReportsGenerator(getInstance());
 		return res;
+	}
+	
+	public static String getRenderedReport(ReportSpecification spec) {
+		NiReportsGenerator niGen = new NiReportsGenerator(getInstance());
+		return niGen.renderReport(spec);
 	}
 
 	/**

@@ -30,6 +30,7 @@ import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
@@ -168,6 +169,14 @@ public class Reports {
 		}
 		metadata.getReportSpec().setMeasures(translatedMeasures);*/
 		return result;
+	}
+	
+	@GET
+	@Path("/nireport/{report_id}")
+	@Produces(MediaType.TEXT_HTML + ";charset=utf-8")
+	public String generateRenderedReport(@PathParam("report_id") Long reportId) {
+		ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
+		return AmpReportsSchema.getRenderedReport(spec);
 	}
 	
 	@GET

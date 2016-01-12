@@ -9,6 +9,7 @@ import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
  *
  */
 public class NiCell {
+	/** null for trail cells */
 	protected final NiReportedEntity<?> entity;
 	protected final Cell cell;
 	

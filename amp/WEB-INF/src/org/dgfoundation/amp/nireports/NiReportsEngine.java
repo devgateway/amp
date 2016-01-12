@@ -62,6 +62,10 @@ public class NiReportsEngine {
 	final Map<String, ColumnContents> fetchedMeasures = new LinkedHashMap<>();
 	final VivificatingMap<Long, Set<ReportWarning>> reportWarnings = new VivificatingMap<>(new HashMap<>(), () -> new HashSet<ReportWarning>());
 	
+	/**
+	 * only available once {@link #createInitialReport()} has exited
+	 */
+	public NiHeaderInfo headers;
 	ReportData rootReportData;
 	public List<CategAmountCell> funding;
 	public final ReportSpecification spec;
@@ -197,6 +201,7 @@ public class NiReportsEngine {
 		rawData.maybeAddColumn(buildFundingColumn(TOTALS_COLUMN_NAME, Function.identity()));
 		
 		GroupColumn catData = categorizeData(rawData);
+		this.headers = new NiHeaderInfo(catData);
 		this.rootReportData = new ColumnReportData(this, catData);
 	}
 

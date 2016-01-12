@@ -40,7 +40,6 @@ measures which are not affected by filters should be made columns
 	
 ADD TESTS FOR:
 	MonetaryAmount
-	NiPrecisionSettings (AmpPrecisionSetting)
 
 	
 REDO *info* columns as being part of the hierarchy

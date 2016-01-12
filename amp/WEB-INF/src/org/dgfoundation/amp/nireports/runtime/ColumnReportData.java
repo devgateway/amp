@@ -17,6 +17,8 @@ public class ColumnReportData extends ReportData {
 	public ColumnReportData(NiReportsEngine context, GroupColumn rawData) {
 		super(context);
 		this.contents = rawData;
+//		for(CellColumn leafColumn: this.context.headers.getLeafColumns())
+//			trailCells.put(leafColumn, new NiCell(leafColumn.getBehaviour().generateEmptyCell(), null));
 	}
 	
 	@Override

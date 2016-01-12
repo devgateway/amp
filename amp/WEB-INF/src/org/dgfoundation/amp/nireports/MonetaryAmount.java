@@ -75,7 +75,7 @@ public class MonetaryAmount implements Comparable<MonetaryAmount> {
 	 * @return
 	 */
 	public String getDisplayable() {
-		return amount.toString();
+		return amount.stripTrailingZeros().toPlainString();
 	}
 	
 	@Override

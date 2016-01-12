@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.nireports.runtime;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.nireports.NiUtils;
+import org.dgfoundation.amp.nireports.ReportHeadingCell;
 
 /**
  * a column with subcolumns. The column has no cells of its own.
@@ -90,7 +92,63 @@ public class GroupColumn extends Column {
 	}
 
 	@Override
+	public List<CellColumn> getLeafColumns() {
+		return subColumns.stream().flatMap(z -> z.getLeafColumns().stream()).collect(Collectors.toList());
+	}
+
+	@Override
 	public String debugDigest(boolean withContents) {
 		return String.format("[%s -> %s]", name, getSubColumns().stream().map(z -> z.debugDigest(withContents)).collect(Collectors.toList()));
+	}
+
+	public void calculateHeaders() {
+		calculatePositionInHeadingLayout(calculateTotalRowSpan(), 0, 0);
+	}
+	
+	@Override
+	public void calculatePositionInHeadingLayout(int totalRowSpan, int startingDepth, int startColumn) {
+		int selfRowSpan = /*this.isTotalColumn()*/ this.parent == null ? totalRowSpan - calculateChildrenMaxRowSpan() : 1;
+		//selfRowSpan = getRowSpanInHeading_internal();
+		if (selfRowSpan <= 0)
+			throw new RuntimeException("selfRowSpan should be >= 1!");
+		this.reportHeaderCell = new ReportHeadingCell(startingDepth, totalRowSpan, selfRowSpan, startColumn, this.getWidth(), this.name);
+		int startColumnSum = 0;
+		for(Column item:this.getSubColumns()) {
+			item.calculatePositionInHeadingLayout(totalRowSpan - this.reportHeaderCell.getRowSpan(), startingDepth + this.reportHeaderCell.getRowSpan(), startColumn + startColumnSum);
+			startColumnSum += item.getWidth();
+		}
+	}
+	
+	@Override
+	public int getWidth() {
+		int ret = 0;
+		for(Column column:getSubColumns()){			
+			ret += column.getWidth();
+		}
+		return Math.max(1, ret); // at least the column title
+	}
+
+    public int calculateChildrenMaxRowSpan() {    	
+		int maxColSpan = 0;
+		for(Column c:this.getSubColumns()) {
+			maxColSpan = Math.max(maxColSpan, c.calculateTotalRowSpan());
+		}
+		return maxColSpan;
+    }
+
+	@Override
+	public int calculateTotalRowSpan() {
+		return calculateChildrenMaxRowSpan() + 1; // self + max of children
+	}
+	
+	@Override
+	public List<Column> getChildrenStartingAtDepth(int depth) {
+		if (reportHeaderCell.getStartRow() == depth)
+			return Arrays.asList(this);
+		
+		if (reportHeaderCell.getStartRow() > depth)
+			return Collections.emptyList();
+		
+		return subColumns.stream().flatMap(z -> z.getChildrenStartingAtDepth(depth).stream()).collect(Collectors.toList());
 	}
 }

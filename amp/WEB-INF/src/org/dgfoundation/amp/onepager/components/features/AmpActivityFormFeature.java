@@ -523,10 +523,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		saveAndSubmit.getButton().add(isSubmit);
 		
 		AttributePrepender closeEditors = new AttributePrepender("onclick", new Model<String>("$('a[data-is_close=true]:visible').click();"), "");
+		AttributePrepender clickMonEval = new AttributePrepender("onclick", new Model<String>("$('.mon_eval_button:visible').click();"), "");
 		
 		saveAndSubmit.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
 		saveAndSubmit.getButton().add(updateEditors);
 		saveAndSubmit.getButton().add(closeEditors);
+		saveAndSubmit.getButton().add(clickMonEval);
 		saveAndSubmit.getButton().setDefaultFormProcessing(false);
 		
 		activityForm.add(saveAndSubmit);
@@ -555,6 +557,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		
 		saveReject.getButton().add(new AttributePrepender("onclick", new Model<String>("showRejectActivityPanel();"), ""));
 		saveReject.getButton().add(closeEditors);
+		saveReject.getButton().add(clickMonEval);
+		
+
 		
 		saveReject.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons rejectButton")));
         activityForm.add(saveReject);
@@ -570,6 +575,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 //		saveAsDraft.getButton().add(new AttributeModifier("onclick", "showDraftPanel();disableButton();"));
         saveAsDraft.getButton().add(new AttributePrepender("onclick", new Model<String>("showDraftPanel();disableButton();"), ""));
         saveAsDraft.getButton().add(closeEditors);
+        saveAsDraft.getButton().add(clickMonEval);
 
 		saveAsDraft.setVisible(false);
 		saveAsDraft.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));

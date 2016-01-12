@@ -11,6 +11,7 @@ import java.util.Set;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractSingleSelectChoice;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -105,10 +106,12 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 		
 		final Model<Boolean> valuesSet = new Model<Boolean>(false);
 
-		Iterator<AmpIndicatorValue> iterator = values.getObject().iterator();
-		while (iterator.hasNext()) {
-			AmpIndicatorValue val = (AmpIndicatorValue) iterator
-					.next();
+//		Iterator<AmpIndicatorValue> iterator = values.getObject().iterator();
+//		while (iterator.hasNext()) {
+//		AmpIndicatorValue val = (AmpIndicatorValue) iterator
+//		.next();
+
+		for (AmpIndicatorValue val : values.getObject()){
 			
 			switch (val.getValueType()) {
 			case AmpIndicatorValue.BASE:
@@ -159,7 +162,15 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 		
 		AmpAjaxLinkField setValue = new AmpAjaxLinkField("setValues", "Set Value", "Set Value") {
 			@Override
+			protected void onConfigure() {
+				super.onConfigure();
+				this.getButton().add(new AttributeAppender("class", new Model("mon_eval_button"), " "));
+			}
+			
+			
+			@Override
 			protected void onClick(AjaxRequestTarget art) {
+				
 				AmpCategoryValue logFrame = logFrameModel.getObject();
 				AmpIndicatorRiskRatings riskVal = riskModel.getObject();
 				

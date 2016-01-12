@@ -57,20 +57,39 @@ module.exports = Backbone.View.extend({
   // can't call it export because that's a reserved word.
   exportOption: function(e) {
     $('#map-loading').show();
-    var currentTarget = e.currentTarget;
-    var exportType = $(currentTarget).data('type');
+    var self = this;
+    //add deferrance here -- have to wait for filters to load
+    $.when(self.app.state.filtersLoaded().then(
+			  //success handler
+			  function(status){
+				  
+				    var currentTarget = e.currentTarget;
+				    var exportType = $(currentTarget).data('type');
+				    var currentStateModel =  self.savedMaps.create({  // create does POST
+				        title: 'export',
+				        description: 'export',
+				        stateBlob: self.app.state.freeze() 
+				      });
+				    self.listenTo(currentStateModel, 'sync',
+				    	      function(model) {
+				    	        $('#map-loading').hide();
+				    	        self._getExport(model, exportType);
+				    	      });
+			  }, 
+			  //failure handler
+			  function(status){
+				  alert('fail');
+			  },
+			  //pending handler
+			  function(status){
+				    $('#map-loading').show();
+			  })
+    		); 
+    	
+    	
+    	
+    
 
-    var currentStateModel = this.savedMaps.create({  // create does POST
-      title: 'export',
-      description: 'export',
-      stateBlob: this.app.state.freeze()
-    });
-
-    this.listenTo(currentStateModel, 'sync',
-      function(model) {
-        $('#map-loading').hide();
-        this._getExport(model, exportType);
-      });
   },
 
   // Download export

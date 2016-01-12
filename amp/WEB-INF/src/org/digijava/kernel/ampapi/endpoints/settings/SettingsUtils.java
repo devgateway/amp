@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.menu.AmpView;
 import org.dgfoundation.amp.menu.MenuUtils;
 import org.dgfoundation.amp.newreports.AmountsUnits;
@@ -65,8 +66,11 @@ public class SettingsUtils {
 		//build currency options
 		List<SettingOptions.Option> options = new ArrayList<SettingOptions.Option>();
 		for (AmpCurrency ampCurrency : CurrencyUtil.getActiveAmpCurrencyByName(true)) {
+			String ccValue = ampCurrency.isVirtual() ? 
+					ConstantCurrency.retrieveCCCurrencyCodeWithoutCalendar(ampCurrency.getCurrencyCode()) :
+						ampCurrency.getCurrencyCode();
 			SettingOptions.Option currencyOption = new SettingOptions.Option(
-					ampCurrency.getCurrencyCode(), ampCurrency.getCurrencyName());
+					ampCurrency.getCurrencyCode(), ampCurrency.getCurrencyName(), ccValue);
 			options.add(currencyOption);
 		}
 		//identifies the base currency 

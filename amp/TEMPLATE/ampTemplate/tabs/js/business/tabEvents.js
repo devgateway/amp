@@ -120,8 +120,10 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 			var currencyCode = firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode') 
 				? firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode')
 				: app.TabsApp.settings.get('0').defaultId;
+			var currencyValue = _.findWhere(app.TabsApp.settings.get('0').options, {id: currencyCode}).value;
 			var legend = new Legend({
 				currencyCode : currencyCode,
+				currencyValue : currencyValue,
 				units : units,
 				id : app.TabsApp.currentTab.get('id')
 			});

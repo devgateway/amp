@@ -43,9 +43,10 @@ var AMPSettings = Backbone.View.extend({
 					async : false
 				}).done(function(data) {
 					self.populate_dropdowns(data);
+					self.currencies = data[0].options;
 					if (window.currentSettings["1"] === null) {
 						var foundCurrency = _.find(data, function(item) {return item.id === '1'});
-						window.currentSettings["1"] = _.find(foundCurrency.options, function(item) { return item.id === foundCurrency.defaultId}).value;
+						window.currentSettings["1"] = _.find(foundCurrency.options, function(item) { return item.id === foundCurrency.defaultId}).id;
 					}
 				});
 			},
@@ -74,7 +75,7 @@ var AMPSettings = Backbone.View.extend({
 				$.each(currencyValues.options, function(index, object) {   
 				     $('#amp_currency')
 				         .append($("<option></option>")
-				         .attr("value", object.value)
+				         .attr("value", object.id)
 				         .text(object.name)); 
 				});
 				var calendarValues = _.findWhere(data, {"id": this.SETTINGS["calendar"]});

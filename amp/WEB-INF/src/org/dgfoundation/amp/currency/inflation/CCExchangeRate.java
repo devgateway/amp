@@ -156,6 +156,7 @@ public class CCExchangeRate {
 	}
 	
 	/**
+	 * <pre>
 	 * Build CC exchange rate dates:
 	 * 1) for the currency in which we have inflation rates: use only inflation rate dates
 	 * 2) for other currencies to which we propagate inflation rate via exchange rate:
@@ -171,7 +172,7 @@ public class CCExchangeRate {
 	 * 
 	 * NOTE:
 	 * Keep in mind that taking all suitable exchange rate dates for accuracy will end up with AMP-21954
-	 * 
+	 * </pre>
 	 * @return sorted dates for the new exchange rates to be generated for the current CC  
 	 */
 	protected SortedSet<Long> generateCCExchangeRateDates(Set<Long> inflationDates) {

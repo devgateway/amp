@@ -20,6 +20,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportElement;
@@ -238,6 +239,8 @@ public class AMPReportExcelExport {
 						new Long(settings.get(SettingsConstants.CALENDAR_TYPE_ID).toString())).getName();
 			}
 		}
+		// AMP-21951: workaround to hide calendar id
+		currency = ConstantCurrency.retrieveCCCurrencyCodeWithoutCalendar(currency);
 		Row currencyRow = sheet.createRow(i);
 		Cell currencyTitleCell = currencyRow.createCell(j);
 		currencyTitleCell.setCellValue(TranslatorWorker.translateText("Currency"));

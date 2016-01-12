@@ -72,6 +72,12 @@ public class ConstantCurrency {
 		return null;
 	}
 	
+	public static String retrieveCCCurrencyCodeWithoutCalendar(String constantCurrencyCode) {
+		if (constantCurrencyCode != null && constantCurrencyCode.contains("-"))
+			return constantCurrencyCode.substring(0, constantCurrencyCode.indexOf("-"));
+		return constantCurrencyCode;
+	}
+	
 	@Override
 	public String toString() {
 		return currency == null ? "null" : currency.getCurrencyCode();

@@ -66,10 +66,12 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'business/
 
             var currentLegendModel = app.TabsApp.dynamicContentRegion.currentView.legends.currentView.model;
             var unitsValue = currentLegendModel.attributes.units;
+            var currencyValue = _.findWhere(app.TabsApp.settings.get('0').options, {id: app.TabsApp.appliedSettings["1"]}).value;
 
 			// Update the legend section.
 			var legend = new Legend({
 				currencyCode : app.TabsApp.appliedSettings["1"],
+				currencyValue : currencyValue,
 				id : null,
 				units : unitsValue
 			});

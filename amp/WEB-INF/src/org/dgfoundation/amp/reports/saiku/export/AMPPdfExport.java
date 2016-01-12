@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.digijava.kernel.ampapi.endpoints.reports.JSONReportPage;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -67,6 +68,8 @@ public class AMPPdfExport extends PdfReport {
 			//we get the default currency
 			currency = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
 		}
+		// AMP-21951: workaround to hide calendar id
+		currency = ConstantCurrency.retrieveCCCurrencyCodeWithoutCalendar(currency);
 		htmlString.append("<div><b>").append(TranslatorWorker.translateText("Currency")).append(": </b>")
 				.append(currency).append("</div>");
 		String units = report.getSettings().getUnitsOption().userMessage;

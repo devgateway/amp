@@ -434,7 +434,7 @@ function fnSubmit() {
 										</td>
 										<td align="right">
 										<c:if test="${aimCurrencyRateForm.lastRateUpdate != null}">
-											<digi:trn key="aim:LastUpdate">Last Update: </digi:trn>
+											<digi:trn key="aim:LastUpdate">Last successful automatic update</digi:trn>: 
 											<c:out value="${aimCurrencyRateForm.lastRateUpdate}"/>
 										</c:if>
 										</td>

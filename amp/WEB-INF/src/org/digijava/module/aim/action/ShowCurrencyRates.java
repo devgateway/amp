@@ -180,6 +180,7 @@ public class ShowCurrencyRates extends Action {
             }
         } else {
             crForm.setCurrencyRates(null);
+            crForm.setPages(null);
         }
 
 		crForm.setCurrentPage(new Integer(page));		

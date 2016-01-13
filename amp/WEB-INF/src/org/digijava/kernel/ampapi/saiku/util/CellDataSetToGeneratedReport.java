@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.AmountCell;
@@ -33,6 +34,7 @@ import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.reports.CustomAmounts;
 import org.dgfoundation.amp.reports.DateColumns;
@@ -309,8 +311,17 @@ public class CellDataSetToGeneratedReport {
 			}
 			measurePos ++;
 		}
-		if (!measureColToMeasurePos.isEmpty())
+		if (!measureColToMeasurePos.isEmpty()) {
 			updateMeasureTotals(root, measureColToMeasurePos, new TreeMap<Integer, Integer>(), 0);
+			/*
+			 * This attempt to workaround removes undesired children, but doesn't solve the totals problem
+			if ( ((ReportSpecificationImpl) spec).isSummary()) {
+				// workaround for such measures like Uncommitted Balance where we need to temporarily use dummy internal_id in summary reports
+				// remove sub-areas lower than given list of hierarchies
+				removeChildren(root, 0, Math.max(spec.getHierarchies().size() * 2 - 1, 1));
+			}
+			*/
+		}
 	}
 	
 	private int updateMeasureTotals(ReportArea current, Map<ReportOutputColumn, Integer> measureColToMeasurePos, 
@@ -351,6 +362,27 @@ public class CellDataSetToGeneratedReport {
 	protected void update(Map<Integer, Integer> internalIdCount, Integer internalId, Integer count) {
 		Integer oldCount = internalIdCount.get(internalId);
 		internalIdCount.put(internalId, oldCount == null ? count : oldCount + count);
+	}
+	
+	protected void removeChildren(ReportArea current, int currentDepth, int maxDepth) {
+		if (current.getChildren() == null)
+			return;
+		if (currentDepth < maxDepth) {
+			for (Iterator<ReportArea> iter = current.getChildren().iterator(); iter.hasNext(); ) {
+				ReportArea child = iter.next();
+				Iterator<Entry<ReportOutputColumn, ReportCell>> cellIter = child.getContents().entrySet().iterator();
+				for(int colNo = 0; colNo < currentDepth && cellIter.hasNext(); colNo++) {
+					cellIter.next();
+				}
+				if (cellIter.hasNext() && StringUtils.isBlank((String)cellIter.next().getValue().value)) {
+					iter.remove();
+				} else {
+					removeChildren(child, currentDepth + 1, maxDepth);
+				}
+			}
+		} else {
+			current.getChildren().clear();
+		}
 	}
 
 //	/**

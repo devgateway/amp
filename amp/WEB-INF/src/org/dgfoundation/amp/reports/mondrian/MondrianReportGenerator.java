@@ -63,7 +63,6 @@ import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXLevel;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXTuple;
 import org.digijava.kernel.ampapi.mondrian.util.AmpMondrianSchemaProcessor;
-import org.digijava.kernel.ampapi.mondrian.util.Connection;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
@@ -357,7 +356,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			}
 				
 		// if there are no leaf entries to be associated with internal use id, then we cannot collect them
-		if (!spec.isSummary()) {
+		if (!spec.isSummary() || spec.getHierarchies().contains(new ReportColumn(ColumnConstants.INTERNAL_USE_ID))) {
 			cellDataSetActivities = new ArrayList<Integer>();
 		}
 	}	

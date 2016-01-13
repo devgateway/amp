@@ -2040,18 +2040,73 @@ module.exports = BackboneDash.Model.extend({
 
   initialize: function(attrs, options) {
     this.app = options.app;
-    this.url = options.url;
+    this.url = options.url;    
+    var _self = this;
+    // In "currencies" collection we add another field with the complete copy for future use. 
+    if (this.originalAllCurrencies === undefined && attrs.id === '1') {
+    	this.set('originalAllCurrencies', []);
+    	_.each(attrs.options, function(item) {
+    		// Need to copy one by one or this list will lose elements when changing calendars.
+    		_self.get('originalAllCurrencies').push(item);
+    	});
+    }
   },
 
-  select: function(optionId) {
+  select: function(optionId, triggerChange) {
     // unselect old
     var old = _(this.attributes.options).findWhere({selected: true});
-    delete old.selected;
+	if(old !== null && old !== undefined) {
+		delete old.selected;
+	}    
     // select new
     var newOpt = _(this.attributes.options).findWhere({id: optionId});
-    newOpt.selected = true;
+    if(newOpt !== undefined) {
+    	newOpt.selected = true;
+    } else {
+    	// This can happen if we are loading a saved dashboard and the currency is loaded before the calendar.
+    	if (this.attributes.id === "1") {
+	    	newOpt = _(this.attributes.originalAllCurrencies).findWhere({id: optionId});
+	    	newOpt.selected = true;
+    	}
+    }
 
-    this.trigger('change');  // sort of a hack to do this manually...
+    // If we are changing the calendar --> Update list of currencies.
+    if (this.attributes.id === "2") {
+    	var currenciesForThisCalendar = _.find(_.find(app.settings.models, function(item) {return item.id === "calendarCurrencies";}).get('options'), function(item2) {return item2.id === optionId}).value.split(',');
+    	var allCurrencies = _.find(app.settings.models, function(item) {return item.id === '1'});
+    	// 'options' is linked to the calendar select, now we clean it one by one (assigning to [] will break the view).
+    	for (var i = allCurrencies.get('options').length - 1; i >= 0; i--) {
+    		allCurrencies.get('options').splice(i, 1);
+    	}
+    	// Match the currencies for this calendar with the list of all currencies.
+    	_.each(currenciesForThisCalendar, function(item) {
+    		var auxCurrency = _.find(allCurrencies.get('originalAllCurrencies'), function(item2) {
+    			return item2.id === item;
+    		});
+    		if(auxCurrency !== undefined) {
+    			allCurrencies.get('options').push(auxCurrency);
+    		}
+    	});
+    	// Check if currently selected currency is still valid for the current calendar and make sure we always have a selected currency.
+    	var selectedCurrency = _.find(allCurrencies.get('options'), function(item) {return item.selected === true});
+    	if (selectedCurrency !== undefined) {
+    		if (_.find(allCurrencies.get('originalAllCurrencies'), function(item) {return item.id === selectedCurrency.id}) === undefined) {
+    			selectedCurrency.selected = false;
+    			allCurrencies.get('options')[0].selected = true;
+    		}
+    	} else {
+    		allCurrencies.get('options')[0].selected = true;
+    	}
+    }
+    
+    // Before linking calendar with currencies triggering 'change' was the default behavior.
+    if (triggerChange === true) {
+    	this.trigger('change');  // sort of a hack to do this manually...
+    }
+  },
+  
+  apply: function() {
+	  this.trigger('change');
   }
 
 });
@@ -2101,10 +2156,10 @@ module.exports = BackboneDash.Collection.extend({
           var settings = JSON.parse(localStorage.settings);
           if("object" == typeof settings && null !== settings){
             if(settings[1]){
-              this.findWhere({id: "1"}).select(settings[1]);
+              this.findWhere({id: "1"}).select(settings[1], false);              
             }
             if(settings[2]){
-              this.findWhere({id: "2"}).select(settings[2]);
+              this.findWhere({id: "2"}).select(settings[2], false);
             }
           }
         }
@@ -2173,7 +2228,7 @@ module.exports = BackboneDash.Collection.extend({
   fromState: function(state) {
     // select options from an array with the same format we send to the api
     _(state).each(function(optId, settingId) {
-      this.get(settingId).select(optId);
+      this.get(settingId).select(optId, true);
     }, this);
   },
 
@@ -3277,7 +3332,7 @@ var PredictabilityChart = require('../models/chart-aid-predictability');
 var FundingTypeChart = require('../models/chart-funding-type');
 
 var template = _.template("<div class=\"container\">\n</div>\n");
-var modalTemplate = _.template("<div class=\"modal fade\" id=\"<%= m.id %>\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n  <div class=\"modal-dialog <%= m.specialClass %>\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span data-i18n=\"amp.dashboard:close\" class=\"sr-only\">Close</span></button>\n        <h4 class=\"modal-title text-<%= m.tone %>\" data-i18n=\"<%= m.i18nTitle %>\"><%= m.title %></h4>\n      </div>\n      <div class=\"modal-body\">\n        <% if (m.content) { %>\n          <%= m.content %>\n        <% } %>\n        <% if (m.messages) { %>\n          <% _(m.messages).each(function(message) { %>\n            <p><%= message %></p>\n          <% }) %>\n        <% } %>\n      </div>\n      <div class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-<%= m.tone %>\" data-i18n=\"amp.dashboard:close\" data-dismiss=\"modal\">Close</button>\n      </div>\n    </div>\n  </div>\n</div>\n");
+var modalTemplate = _.template("<div class=\"modal fade\" id=\"<%= m.id %>\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n  <div class=\"modal-dialog <%= m.specialClass %>\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">&times;</span><span data-i18n=\"amp.dashboard:close\" class=\"sr-only\">Close</span></button>\n        <h4 class=\"modal-title text-<%= m.tone %>\" data-i18n=\"<%= m.i18nTitle %>\"><%= m.title %></h4>\n      </div>\n      <div class=\"modal-body\">\n        <% if (m.content) { %>\n          <%= m.content %>\n        <% } %>\n        <% if (m.messages) { %>\n          <% _(m.messages).each(function(message) { %>\n            <p><%= message %></p>\n          <% }) %>\n        <% } %>\n      </div>      \n    </div>\n  </div>\n</div>\n");
 
 var EnabledChartsCollection = require('../models/enabled-charts-collection');
 
@@ -3397,14 +3452,15 @@ module.exports = BackboneDash.View.extend({
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 var logger = require('../../../../../../../reamp/tools/log')('amp:dashboards:settings:modal');
-var template = _.template("<div class=\"tab-content filter-options\">\n  <div class=\"tab-pane active\">\n    <ul class=\"sub-filters-titles nav nav-pills nav-stacked\">\n      <% _(settings.getVisible()).each(function(setting) { %>\n        <li <%= setting.id === current.id ? 'class=\"active\"' : '' %>>\n          <a class=\"setting-select\" href=\"#<%= setting.id %>\"><span><%= setting.get('name') %></span></a>\n        </li>\n      <% }) %>\n    </ul>\n    <div class=\"sub-filters-content\">\n      <select class=\"form-control setting-value\">\n        <% _(current.get('options')).each(function(option) { %>\n          <option value=\"<%= option.value %>\" <%= option.selected ? 'selected=\"selected\"' : '' %>><%= option.name %></option>\n        <% }) %>\n      </select>\n    </div>\n  </div>\n</div>\n");
+var template = _.template("<div class=\"tab-content filter-options\">\n  <div class=\"tab-pane active\">\n    <ul class=\"sub-filters-titles nav nav-pills nav-stacked\">\n      <% _(settings.getVisible()).each(function(setting) { %>\n        <li <%= setting.id === current.id ? 'class=\"active\"' : '' %>>\n          <a class=\"setting-select\" href=\"#<%= setting.id %>\"><span><%= setting.get('name') %></span></a>\n        </li>\n      <% }) %>\n    </ul>\n    <div class=\"sub-filters-content\">\n      <select class=\"form-control setting-value\">\n        <% _(current.get('options')).each(function(option) { %>\n          <option value=\"<%= option.id %>\" <%= option.selected ? 'selected=\"selected\"' : '' %>><%= option.name %></option>\n        <% }) %>\n      </select>\n    </div>\n  </div>\n</div>\n<div class=\"modal-footer\">\n\t<button type=\"button\" class=\"btn btn-success apply\" data-i18n=\"amp.dashboard:apply\" data-dismiss=\"modal\">Apply</button>\n    <button type=\"button\" class=\"btn btn-primary\" data-i18n=\"amp.dashboard:close\" data-dismiss=\"modal\">Close</button>\n</div>\n");
 
 
 module.exports = BackboneDash.View.extend({
 
   events: {
     'click .setting-select': 'selectSetting',
-    'change .setting-value': 'changeSetting'
+    'change .setting-value': 'changeSetting',
+    'click .apply': 'applySettings'
   },
 
   initialize: function(options) {
@@ -3463,7 +3519,11 @@ module.exports = BackboneDash.View.extend({
       settings[id] = optionId;
       localStorage.settings = JSON.stringify(settings);
     }
-    this.current.select(optionId);
+    this.current.select(optionId, false);
+  },
+  
+  applySettings: function(e) {
+	  this.current.apply();
   }
 });
 

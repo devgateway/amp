@@ -22,8 +22,8 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'business/
 			return settings;
 		});
 	};
-
-	SettingsManager.openDialog = function() {
+	
+	SettingsManager.initialize = function() {
 		var SettingDialogContainerView = Marionette.ItemView.extend({
 			template : _.template(settingsDialogTemplate)
 		});
@@ -44,13 +44,20 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'business/
 		jQuery(settingsDialog.el).dialog({
 			modal : true,
 			title : TranslationManager.getTranslated("Settings"),
-			width : 300
+			width : '450px'
 		});
 		jQuery(".buttonify").button();
+		$('#settings-missing-values-error').hide();
 		TranslationManager.searchAndTranslate();
 
 		// Register apply button click.
 		jQuery(".settings-container #applySettingsBtn").on("click", function() {
+			if($('#currency').val() === null || $('#calendar').val() === null) {
+				$('#settings-missing-values-error').show();
+				TranslationManager.searchAndTranslate();
+				return false;
+			}
+			
 			jQuery('#calendar').removeAttr('selected');
 			jQuery('#currency').removeAttr('selected');
 			jQuery(settingsDialog.el).dialog('close');
@@ -79,8 +86,33 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'business/
 			app.TabsApp.dynamicContentRegion.currentView.legends.currentView.render();
 
 			// Destroy the dialog to unbind the event.
-			jQuery(settingsDialog.el).dialog('destroy').remove();
+			//jQuery(settingsDialog.el).dialog('destroy').remove();			
 		});
+		
+		//Register calendar change.
+		jQuery(".settings-container #calendar").on("change", function() {
+			var calendarSelect = $('.settings-container #calendar');
+			var currencySelect = $('.settings-container #currency');
+			var selectedCalendar = $(calendarSelect).val();				
+			var calendarCurrencies = _.find(app.TabsApp.settings.attributes, function(item) {return item.id === 'calendarCurrencies'}).options;
+			//Note: uniq is used because the list has duplicated currencies.
+			var availableCurrenciesForCalendar = _.uniq(_.findWhere(calendarCurrencies, {id: selectedCalendar}).value.split(","));
+			var allCurrencies = _.find(app.TabsApp.settings.attributes, function(item) {return item.id === '1'}).options;
+			$(currencySelect).empty();
+			$.each(availableCurrenciesForCalendar, function(index, object) {   
+				$(currencySelect)
+			         .append($("<option></option>")
+			         .attr("value", object)
+			         .text(_.find(allCurrencies, function(item){return item.id === object}).name)); 
+			});
+			$(currencySelect).val(availableCurrenciesForCalendar[0]);
+		});
+		jQuery(settingsDialog.el).dialog('close');
+		app.TabsApp.settingsDialogView = settingsDialog;
+	};
+
+	SettingsManager.openDialog = function() {
+		jQuery(app.TabsApp.settingsDialogView.el).dialog('open');
 	};
 
 	return SettingsManager;

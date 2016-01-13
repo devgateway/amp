@@ -10,7 +10,8 @@ module.exports = BackboneDash.View.extend({
 
   events: {
     'click .setting-select': 'selectSetting',
-    'change .setting-value': 'changeSetting'
+    'change .setting-value': 'changeSetting',
+    'click .apply': 'applySettings'
   },
 
   initialize: function(options) {
@@ -69,6 +70,10 @@ module.exports = BackboneDash.View.extend({
       settings[id] = optionId;
       localStorage.settings = JSON.stringify(settings);
     }
-    this.current.select(optionId);
+    this.current.select(optionId, false);
+  },
+  
+  applySettings: function(e) {
+	  this.current.apply();
   }
 });

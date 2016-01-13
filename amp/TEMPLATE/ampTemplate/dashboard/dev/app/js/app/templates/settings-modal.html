@@ -10,9 +10,13 @@
     <div class="sub-filters-content">
       <select class="form-control setting-value">
         <% _(current.get('options')).each(function(option) { %>
-          <option value="<%= option.value %>" <%= option.selected ? 'selected="selected"' : '' %>><%= option.name %></option>
+          <option value="<%= option.id %>" <%= option.selected ? 'selected="selected"' : '' %>><%= option.name %></option>
         <% }) %>
       </select>
     </div>
   </div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-success apply" data-i18n="amp.dashboard:apply" data-dismiss="modal">Apply</button>
+    <button type="button" class="btn btn-primary" data-i18n="amp.dashboard:close" data-dismiss="modal">Close</button>
 </div>

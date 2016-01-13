@@ -5,7 +5,8 @@ var AMPSettings = Backbone.View.extend({
 			
 			SETTINGS : {
 				"currency": "1",
-				"calendar": "2"
+				"calendar": "2",
+				"calendarCurrencies": "calendarCurrencies"
 			},
 
 			initialize : function(args) {
@@ -19,7 +20,7 @@ var AMPSettings = Backbone.View.extend({
 					id : this.id
 				});
 
-				_.bindAll(this, "render", "show", "add_amp_settings", "hideContainer", "applySettings");
+				_.bindAll(this, "render", "show", "add_amp_settings", "hideContainer", "applySettings", "updateCurrenciesForCalendar");
 
 				this.add_button();
 				this.workspace.toolbar.amp_settings = this.show;
@@ -29,6 +30,7 @@ var AMPSettings = Backbone.View.extend({
 				//$("#settings-container").find(".panel-heading .close").on("click", this.hideContainer);
 				$("#settings-container").find(".cancel").on("click", this.hideContainer);
 				$("#settings-container").find(".apply").on("click", this.applySettings);
+				$("#settings-container").find("#amp_calendar").on("change", this.updateCurrenciesForCalendar);
 
 				var raw_settings = this.workspace.query.get('raw_settings');
 				settings = {
@@ -48,6 +50,15 @@ var AMPSettings = Backbone.View.extend({
 						var foundCurrency = _.find(data, function(item) {return item.id === '1'});
 						window.currentSettings["1"] = _.find(foundCurrency.options, function(item) { return item.id === foundCurrency.defaultId}).id;
 					}
+					
+					// Keep link between calendars and currencies.
+					var calendarCurrencies = _.findWhere(data, {"id": self.SETTINGS["calendarCurrencies"]});
+					if (calendarCurrencies !== undefined && calendarCurrencies !== null) {
+						window.settings.calendarCurrencies = calendarCurrencies.options;
+					}
+					
+					// Keep all currencies for later.
+					window.settings.allCurrencies = _.find(data, function(item) {return item.id === '1'}).options;
 				});
 			},
 			
@@ -57,6 +68,10 @@ var AMPSettings = Backbone.View.extend({
 			},
 			
 			applySettings: function() {
+				if($('#amp_currency').val() === null || $('#amp_calendar').val() === null) {
+					$('#settings-missing-values-error').show();
+					return;
+				}
 				var settings = {
 					"1": $('#amp_currency').val(),
 					"2": $('#amp_calendar').val(),
@@ -70,24 +85,26 @@ var AMPSettings = Backbone.View.extend({
 				$("#settings-container").hide();
 			},
 			
-			populate_dropdowns: function(data) {
-				var currencyValues = _.findWhere(data, {"id": this.SETTINGS["currency"]});
-				$.each(currencyValues.options, function(index, object) {   
-				     $('#amp_currency')
-				         .append($("<option></option>")
-				         .attr("value", object.id)
-				         .text(object.name)); 
-				});
-				var calendarValues = _.findWhere(data, {"id": this.SETTINGS["calendar"]});
-				$.each(calendarValues.options, function(index, object) { 
-				     $('#amp_calendar')
-				         .append($("<option></option>")
-				         .attr("value", object.value)
-				         .text(object.name)); 
-				});
+			populate_dropdowns: function(data) {				
+				var selectedCalendar = $('#amp_calendar').val();
+				if (selectedCalendar !== null) {
+					var currencyValues = _.findWhere(data, {"id": this.SETTINGS["currency"]});
+					var calendarCurrencies = _.find(data, function(item) {return item.id === 'calendarCurrencies'}).options;
+					var availableCurrenciesForCalendar = _.uniq(_.findWhere(calendarCurrencies, {id: selectedCalendar}).value.split(","));				
+					this.populateCurrencyPopup(availableCurrenciesForCalendar, currencyValues.options);										
+				} else {
+					var calendarValues = _.findWhere(data, {"id": this.SETTINGS["calendar"]});
+					$.each(calendarValues.options, function(index, object) { 
+					     $('#amp_calendar')
+					         .append($("<option></option>")
+					         .attr("value", object.value)
+					         .text(object.name)); 
+					});
+					$('#amp_calendar').val(null);
+				}
 			},
+			
 			add_button : function() {
-
 				this.settings_button = $(
 						'<a href="#amp_settings" class="amp_settings button i18n" title="Settings">Settings</a>')
 						.css(
@@ -105,14 +122,17 @@ var AMPSettings = Backbone.View.extend({
 				$(this.el).toggle();
 				var settings;
 				settings = window.currentSettings;
-				$('#amp_currency').val(settings["1"]);
 				$('#amp_calendar').val(settings["2"]);
+				$('#amp_calendar').trigger("change");
+				$('#amp_currency').val(settings["1"]);								
 
 				$(event.target).toggleClass('on');
 
 				if ($(event.target).hasClass('on')) {
 					$('#settings-container').show();
-				} else {
+					$('#settings-missing-values-error').hide();
+					$('#settings-container').css('width', 'auto');
+				} else {					
 					$('#settings-container').hide();
 				}
 
@@ -131,6 +151,24 @@ var AMPSettings = Backbone.View.extend({
 				var self = this;
 				alert("save_amp_settings: To be implemented");
 			},
+			
+			updateCurrenciesForCalendar: function() {
+				var selectedCalendar = $('#amp_calendar').val();				
+				//Note: uniq is used because the list has duplicated currencies.
+				var availableCurrencies = _.uniq(_.findWhere(window.settings.calendarCurrencies, {id: selectedCalendar}).value.split(","));
+				$("#amp_currency").empty();				
+				this.populateCurrencyPopup(window.settings.allCurrencies, availableCurrencies);
+				$('#amp_currency').val($("#amp_currency option:first").val());
+			},
+			
+			populateCurrencyPopup: function(data, calendarCurrencies) {
+				$.each(calendarCurrencies, function(index, object) {   
+				     $('#amp_currency')
+				         .append($("<option></option>")
+				         .attr("value", _.find(data, function(item) {return item.id === object}).id)
+				         .text(_.find(data, function(item) {return item.id === object}).name)); 
+				});				
+			}
 
 		});
 

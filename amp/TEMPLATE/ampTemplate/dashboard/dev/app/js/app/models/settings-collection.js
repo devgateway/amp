@@ -42,10 +42,10 @@ module.exports = BackboneDash.Collection.extend({
           var settings = JSON.parse(localStorage.settings);
           if("object" == typeof settings && null !== settings){
             if(settings[1]){
-              this.findWhere({id: "1"}).select(settings[1]);
+              this.findWhere({id: "1"}).select(settings[1], false);              
             }
             if(settings[2]){
-              this.findWhere({id: "2"}).select(settings[2]);
+              this.findWhere({id: "2"}).select(settings[2], false);
             }
           }
         }
@@ -114,7 +114,7 @@ module.exports = BackboneDash.Collection.extend({
   fromState: function(state) {
     // select options from an array with the same format we send to the api
     _(state).each(function(optId, settingId) {
-      this.get(settingId).select(optId);
+      this.get(settingId).select(optId, true);
     }, this);
   },
 

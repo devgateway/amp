@@ -14,24 +14,10 @@
 
 <div class="settings-container">
 	<input type="hidden" id="selectedCurrency" value="<%=selectedCurrency%>"/>
-	<input type="hidden" id="selectedCalendar" value="<%=selectedCalendar%>"/>	
+	<input type="hidden" id="selectedCalendar" value="<%=selectedCalendar%>"/>
+	<span style="color: red; font-weight: bold; display: none;" class="i18n" id="settings-missing-values-error">Error: Please select Currency and Calendar.</span>	
 	<table width="100%" align="center">
 		<tbody>
-			<tr>
-				<td data-i18n="tabs.common:currency">Currency</td>
-				<td>
-					<select name="currency" id="currency"> 
-						<% for(var c in currencies) { %> 
-							<% 
-							var selected = ''; 
-							if(currencies[c].id === selectedCurrency) { 
-								selected = "selected = 'selected' ";
-							} 
-							%>
-							<option value="<%= currencies[c].id%>"<%= selected %>><%= currencies[c].name%></option> <% } %>
-					</select>
-				</td>
-			</tr>
 			<tr>
 				<td data-i18n="tabs.common:calendar">Calendar</td>
 				<td>
@@ -46,6 +32,21 @@
 					</select>
 				</td>
 			</tr>
+			<tr>
+				<td data-i18n="tabs.common:currency">Currency</td>
+				<td>
+					<select name="currency" id="currency"> 
+						<% for(var c in currencies) { %> 
+							<% 
+							var selected = ''; 
+							if(currencies[c].id === selectedCurrency) { 
+								selected = "selected = 'selected' ";
+							} 
+							%>
+							<option value="<%= currencies[c].id%>"<%= selected %>><%= currencies[c].name%></option> <% } %>
+					</select>
+				</td>
+			</tr>			
 	</table>
 	<br>
 	<div>

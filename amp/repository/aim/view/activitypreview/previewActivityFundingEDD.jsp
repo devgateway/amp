@@ -41,7 +41,7 @@
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
 			<c:if test="${not empty funding.subtotalPlannedEDD}">
-          		  <b>${funding.subtotalPlannedEDD} ${aimEditActivityForm.currName}</b>
+          		  <b>${funding.subtotalPlannedEDD} ${aimEditActivityForm.currCode}</b>
             </c:if>&nbsp;
 			</td>
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
@@ -76,7 +76,7 @@
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
 			 <c:if test="${not empty funding.subtotalActualEDD}">
-                <b>${funding.subtotalActualEDD} ${aimEditActivityForm.currName}</b>
+                <b>${funding.subtotalActualEDD} ${aimEditActivityForm.currCode}</b>
              </c:if>&nbsp;
         </td>
                    
@@ -109,7 +109,7 @@
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
 			 <c:if test="${not empty funding.subtotalPipelineEDD}">
-                <b>${funding.subtotalPipelineEDD} ${aimEditActivityForm.currName}</b>
+                <b>${funding.subtotalPipelineEDD} ${aimEditActivityForm.currCode}</b>
              </c:if>&nbsp;
         </td>
                    

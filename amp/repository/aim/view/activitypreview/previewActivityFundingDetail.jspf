@@ -55,9 +55,9 @@ other rows (if any): capital spending percent / classification / attached pledge
 
 	<c:choose>
 		<c:when test="${aimEditActivityForm.funding.fixerate}">
-			<td height="18" align="right">
-				<b><bean:write name="fundingDetail" property="transactionAmount" /></b> &nbsp;
-				<b><bean:write name="fundingDetail" property="currencyName" /></b>
+			<td height="18" align="right" nowrap="nowrap">
+				<b><bean:write name="fundingDetail" property="transactionAmount" /> <bean:write name="fundingDetail" property="currencyCode" /></b>
+				&nbsp;
 			</td>
 			<td align='right'>
 				<b><bean:write name="fundingDetail" property="formattedRate" /></b>
@@ -65,8 +65,8 @@ other rows (if any): capital spending percent / classification / attached pledge
 		</c:when>
 		<c:otherwise>
 			<td height="18" align="right" colspan="2">
-				<b><bean:write name="fundingDetail" property="transactionAmount" /></b> &nbsp;
-				<b><bean:write name="fundingDetail" property="currencyName" /></b>
+				<b><bean:write name="fundingDetail" property="transactionAmount" /> <bean:write name="fundingDetail" property="currencyCode" /></b>
+				&nbsp;
 			</td>
 		</c:otherwise>
 	</c:choose>	

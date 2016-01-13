@@ -1,8 +1,8 @@
 <tr>
 	<td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase;">
 		<c:out value="${activity_funding_text}" />:</td>
-		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; font-weight: bold">
-			${activity_funding_amount} ${aimEditActivityForm.currName}
-			&nbsp;
-	</td>
+		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB;">
+			<b>${activity_funding_amount} ${aimEditActivityForm.currCode}</b> &nbsp;
+		</td>
+		<td bgcolor="#eeeeee">&nbsp;</td>
 </tr>

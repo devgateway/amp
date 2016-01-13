@@ -34,7 +34,6 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
-import org.digijava.module.aim.dbentity.AmpActivityBudgetStructure;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -97,8 +96,6 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 
-import clover.org.apache.commons.lang.StringUtils;
-
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -116,6 +113,8 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfPTableEvent;
 import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.pdf.draw.LineSeparator;
+
+import clover.org.apache.commons.lang.StringUtils;
 
 /**
  * Export Activity to PDF
@@ -1282,8 +1281,8 @@ public class ExportActivityToPDF extends Action {
                     if(myForm.getFunding().getProProjCost().getFunAmount()!=null){
                         costOutput+=" "+myForm.getFunding().getProProjCost().getFunAmount();
                     }
-                    if(myForm.getFunding().getProProjCost().getCurrencyName()!=null){
-                        costOutput+=" "+myForm.getFunding().getProProjCost().getCurrencyName();
+                    if(myForm.getFunding().getProProjCost().getCurrencyCode()!=null){
+                        costOutput+=" "+myForm.getFunding().getProProjCost().getCurrencyCode();
                     }
                     if(myForm.getFunding().getProProjCost().getFunDate()!=null){
                         costOutput+="\n"+TranslatorWorker.translateText("Date")+ "\t: "+myForm.getFunding().getProProjCost().getFunDate();
@@ -2133,7 +2132,7 @@ public class ExportActivityToPDF extends Action {
                                         amount.setBorder(0);
                                         String currency ="";
                                         if (FeaturesUtil.isVisibleModule("/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency")){
-                                            currency = ipaDisb.getCurrency().getCurrencyName();
+                                            currency = ipaDisb.getCurrency().getCurrencyCode();
                                         }
                                         amount.addElement(new Paragraph(ipaDisb.getAmount().floatValue() + " "+ currency, plainFont));
                                         disbursmentsInnerTable.addCell(amount);
@@ -2209,7 +2208,7 @@ public class ExportActivityToPDF extends Action {
                                         if (FeaturesUtil.isVisibleModule("/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency")){
                                             PdfPCell currency=new PdfPCell();
                                             currency.setBorder(0);
-                                            currency.addElement(new Paragraph(fundingDetail.getCurrencyName(),plainFont));
+                                            currency.addElement(new Paragraph(fundingDetail.getCurrencyCode(),plainFont));
                                             fundDisbursmentsInnerTable.addCell(currency);
                                         }
                                         if (FeaturesUtil.isVisibleModule("/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date")){
@@ -3161,7 +3160,7 @@ public class ExportActivityToPDF extends Action {
                 ProposedProjCost ppc = it.next();
                 innerCell = new PdfPCell();
                 innerCell.setBorder(0);
-                innerCell = new PdfPCell(new Paragraph(ppc.getFunAmount() + " " + ppc.getCurrencyName(), plainFont));
+                innerCell = new PdfPCell(new Paragraph(ppc.getFunAmount() + " " + ppc.getCurrencyCode(), plainFont));
                 dataTable.addCell(innerCell);
                 innerCell = new PdfPCell();
                 innerCell.setBorder(0);

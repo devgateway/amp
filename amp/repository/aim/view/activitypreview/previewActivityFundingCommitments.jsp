@@ -55,7 +55,7 @@
 		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
 				<c:if test="${not empty funding.subtotalPlannedCommitments}">
-                	<b>${funding.subtotalPlannedCommitments} ${aimEditActivityForm.currName}</b>
+                	<b>${funding.subtotalPlannedCommitments} ${aimEditActivityForm.currCode}</b>
                 </c:if>&nbsp;
             </td>
  	<td align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
@@ -91,9 +91,9 @@
 			style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
 			key='aim:subtotalactualcommittment'>Subtotal Actual Commitments </digi:trn>:
 		</td>
-		<td  colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000;">
+		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000;">
 			<c:if test="${not empty funding.subtotalActualCommitments}">
-           		<b>${funding.subtotalActualCommitments} ${aimEditActivityForm.currName}</b>
+           		<b>${funding.subtotalActualCommitments} ${aimEditActivityForm.currCode}</b>
             </c:if>&nbsp;
         </td>    
 		<td align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
@@ -130,7 +130,7 @@
 			</td>
 			<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000;">
 				<c:if test="${not empty funding.subtotalPipelineCommitments}">
-					<b>${funding.subtotalPipelineCommitments} ${aimEditActivityForm.currName}</b>
+					<b>${funding.subtotalPipelineCommitments} ${aimEditActivityForm.currCode}</b>
 				</c:if>&nbsp;
 			</td>    
 			<td align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
@@ -167,7 +167,7 @@
 			</td>
 			<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000;">
 				<c:if test="${not empty funding.subtotalOfficialDevelopmentAidCommitments}">
-					<b>${funding.subtotalOfficialDevelopmentAidCommitments} ${aimEditActivityForm.currName}</b>
+					<b>${funding.subtotalOfficialDevelopmentAidCommitments} ${aimEditActivityForm.currCode}</b>
 				</c:if>&nbsp;
 			</td>    
 			<td align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
@@ -204,7 +204,7 @@
 			</td>
 			<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000;">
 				<c:if test="${not empty funding.subtotalBilateralSscCommitments}">
-					<b>${funding.subtotalBilateralSscCommitments} ${aimEditActivityForm.currName}</b>
+					<b>${funding.subtotalBilateralSscCommitments} ${aimEditActivityForm.currCode}</b>
 				</c:if>&nbsp;
 			</td>    
 			<td align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
@@ -240,7 +240,7 @@
 			</td>
 			<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000;">
 				<c:if test="${not empty funding.subtotalTriangularSscCommitments}">
-					<b>${funding.subtotalTriangularSscCommitments} ${aimEditActivityForm.currName}</b>
+					<b>${funding.subtotalTriangularSscCommitments} ${aimEditActivityForm.currCode}</b>
 				</c:if>&nbsp;
 			</td>    
 			<td align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>

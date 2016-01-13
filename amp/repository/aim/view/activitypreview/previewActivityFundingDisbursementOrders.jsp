@@ -52,7 +52,7 @@
 	  <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase;">
 			<c:if test="${not empty funding.subtotalActualDisbursementsOrders}">
-           			${funding.subtotalActualDisbursementsOrders} ${aimEditActivityForm.currName}
+           			${funding.subtotalActualDisbursementsOrders} ${aimEditActivityForm.currCode}
             </c:if> &nbsp;
            </td>
 	  <TD align="right" bgcolor="#eeeeee"

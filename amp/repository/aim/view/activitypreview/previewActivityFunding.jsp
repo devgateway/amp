@@ -434,8 +434,9 @@
                                 		<digi:trn>Delivery Rate</digi:trn>:
                                 	</td>
                             		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; font-weight: bold">
-                            			${aimEditActivityForm.funding.deliveryRate}
+                            			${aimEditActivityForm.funding.deliveryRate}&nbsp;
                             		</td>
+                            		<td bgcolor="#eeeeee">&nbsp;</td>
                         		</tr>
 							</c:if>
                         </table>

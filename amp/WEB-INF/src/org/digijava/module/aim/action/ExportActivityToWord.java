@@ -21,14 +21,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import mondrian.util.ArraySortedSet;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.bouncycastle.crypto.tls.TlsUtils;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
@@ -73,7 +70,6 @@ import org.digijava.module.aim.helper.ChartGenerator;
 import org.digijava.module.aim.helper.ChartParams;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -1197,7 +1193,7 @@ public class ExportActivityToWord extends Action {
                                                 .isVisibleModule(
                                                         "/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency")) {
                                             currency = ipaDisb.getCurrency()
-                                                    .getCurrencyName();
+                                                    .getCurrencyCode();
                                         }
                                         rowData.addRowData(ipaDisb.getAmount()
                                                 .floatValue() + " " + currency);
@@ -1276,7 +1272,7 @@ public class ExportActivityToWord extends Action {
                                                 .isVisibleModule(
                                                         "/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency")) {
                                             rowData.addRowData(fundingDetail
-                                                    .getCurrencyName());
+                                                    .getCurrencyCode());
                                         }
                                         if (FeaturesUtil
                                                 .isVisibleModule(
@@ -1593,15 +1589,13 @@ public class ExportActivityToWord extends Action {
         if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Proposed Project Cost")) {
             ExportSectionHelper eshTitle = new ExportSectionHelper("Proposed Project Cost", true).setWidth(100f).setAlign("left");
             retVal.add(createSectionTable(eshTitle, request, ampContext));
-            String currencyName = null;
+            String currencyCode = null;
             if(myForm.getFunding().getProProjCost()!=null){
-                currencyName = myForm.getFunding().getProProjCost().getCurrencyName();
+                currencyCode = myForm.getFunding().getProProjCost().getCurrencyCode();
             }
-            if(currencyName == null) {
-                currencyName = CurrencyUtil.getCurrencyByCode(Constants.DEFAULT_CURRENCY).getCurrencyName();
+            if(currencyCode == null) {
+                currencyCode = CurrencyUtil.getCurrencyByCode(Constants.DEFAULT_CURRENCY).getCurrencyCode();
             }
-            String translatedCurrency = TranslatorWorker.translateText(currencyName);
-            translatedCurrency=("".equalsIgnoreCase(currencyName))?currencyName:translatedCurrency;
             //        FundingCalculationsHelper fch = new FundingCalculationsHelper();
             //        fch.doCalculations(allComponents, currencyCode);
             ExportSectionHelper eshProjectCostTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
@@ -1610,7 +1604,7 @@ public class ExportActivityToWord extends Action {
 
             eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Cost", null, null,  true).
                     addRowData(myForm.getFunding().getProProjCost().getFunAmount()).
-                    addRowData(translatedCurrency));
+                    addRowData(currencyCode));
             eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Date", null, null,  true).
                     addRowData(DateConversion.ConvertDateToString(act.getFunDate())));
 
@@ -1620,8 +1614,7 @@ public class ExportActivityToWord extends Action {
                 for (ProposedProjCost ppc : proposedProjectCostList) {
                     eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
                             ppc.getFunDate(), null, null, true).addRowData(
-                            FormatHelper.formatNumber(ppc.getFunAmountAsDouble()))
-                            .addRowData(ppc.getCurrencyName()));
+                            FormatHelper.formatNumber(ppc.getFunAmountAsDouble()) + " " + ppc.getCurrencyCode()));
                 }
             }
             retVal.add(createSectionTable(eshProjectCostTable, request, ampContext));
@@ -2153,8 +2146,7 @@ public class ExportActivityToWord extends Action {
                                 .addRowData(regFnd.getRegionLocation().getName())
                                 .addRowData(regFnd.getAdjustmentType().getLabel(), true)
                                 .addRowData(DateConversion.ConvertDateToString(regFnd.getTransactionDate()))
-                                .addRowData(regFnd.getTransactionAmount().toString())
-                                .addRowData(regFnd.getCurrency().getCurrencyCode()));
+                                .addRowData(regFnd.getTransactionAmount().toString() + " " + regFnd.getCurrency().getCurrencyCode()));
                         retVal.add(createSectionTable(eshRegFundingDetails,	request, ampContext));
                     }
                 }
@@ -2168,8 +2160,7 @@ public class ExportActivityToWord extends Action {
                                 .addRowData(regFnd.getRegionLocation().getName())
                                 .addRowData(regFnd.getAdjustmentType().getLabel(), true)
                                 .addRowData(DateConversion.ConvertDateToString(regFnd.getTransactionDate()))
-                                .addRowData(regFnd.getTransactionAmount().toString())
-                                .addRowData(regFnd.getCurrency().getCurrencyCode()));
+                                .addRowData(regFnd.getTransactionAmount().toString() + " " + regFnd.getCurrency().getCurrencyCode()));
                         retVal.add(createSectionTable(eshRegFundingDetails,	request, ampContext));
                     }
                 }
@@ -2183,8 +2174,7 @@ public class ExportActivityToWord extends Action {
                                 .addRowData(regFnd.getRegionLocation().getName())
                                 .addRowData(regFnd.getAdjustmentType().getLabel(), true)
                                 .addRowData(DateConversion.ConvertDateToString(regFnd.getTransactionDate()))
-                                .addRowData(regFnd.getTransactionAmount().toString())
-                                .addRowData(regFnd.getCurrency().getCurrencyCode()));
+                                .addRowData(regFnd.getTransactionAmount().toString() + " " + regFnd.getCurrency().getCurrencyCode()));
                         retVal.add(createSectionTable(eshRegFundingDetails,	request, ampContext));
                     }
                 }

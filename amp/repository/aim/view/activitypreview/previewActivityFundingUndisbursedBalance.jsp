@@ -19,7 +19,7 @@
 			<digi:trn key="aim:undisbursedBalance">Undisbursed Balance</digi:trn>:
 		</td>
 		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
-			<b>${funding.undisbursementbalance} ${aimEditActivityForm.currName}</b>
+			<b>${funding.undisbursementbalance} ${aimEditActivityForm.currCode}</b>
 			&nbsp;
 		</td>
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>

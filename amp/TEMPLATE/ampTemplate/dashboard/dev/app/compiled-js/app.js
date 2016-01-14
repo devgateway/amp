@@ -1540,7 +1540,9 @@ module.exports = ChartModel.extend({
 	
 
 	defaults : {
-		title : ''
+		title : '',
+		showPlannedDisbursements: true,
+		showActualDisbursements: true		
 	},
 
   _prepareTranslations: function() {
@@ -1558,7 +1560,13 @@ module.exports = ChartModel.extend({
   },
 
   parse: function(data) {
-	this.set('title', data.title);
+	this.set('title', data.title);	
+	if(!_.isUndefined(data.showPlannedDisbursements)){
+		this.set('showPlannedDisbursements', data.showPlannedDisbursements);
+	}
+	if(!_.isUndefined(data.showActualDisbursements)){
+		this.set('showActualDisbursements', data.showActualDisbursements);
+	}	
 	
     function pick(which) {
       return function(d) {
@@ -1575,12 +1583,14 @@ module.exports = ChartModel.extend({
       {
         key: this.localizedPredictabilityList['amp.dashboard:aid-predictability-planned-disbursements'],
         originalKey: 'planned',
-        values: _(data.years).map(pick('planned disbursements'))
+        values: _(data.years).map(pick('planned disbursements')),
+        disabled: !this.get('showPlannedDisbursements')
       },
       {
         key: this.localizedPredictabilityList['amp.dashboard:aid-predictability-actual-disbursements'],
         originalKey: 'actual',
-        values: _(data.years).map(pick('actual disbursements'))
+        values: _(data.years).map(pick('actual disbursements')),
+        disabled: !this.get('showActualDisbursements')
       }
     ];
     return data;
@@ -1598,7 +1608,8 @@ module.exports = ChartModel.extend({
   defaults: {
     typed: true,
     limit: 3,
-    title: ''
+    title: '',
+    stacked: false
   },
 
   _prepareTranslations: function() {
@@ -2268,6 +2279,7 @@ module.exports = BackboneDash.Collection.extend({
 },{"../backbone-dash":3,"./setting":21,"jquery":"jquery","underscore":"underscore"}],23:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
+var _ = require('underscore');
 
 
 module.exports = ChartViewBase.extend({
@@ -2276,7 +2288,21 @@ module.exports = ChartViewBase.extend({
     big: false,
     view: 'multibar'
   },
-
+  events: function(){
+      return _.extend({},ChartViewBase.prototype.events,{
+          'click .nv-series' : 'changeChartColumns'
+      });
+  },  
+  changeChartColumns: function(e){
+	  var key = $(e.currentTarget).find('.nv-legend-text').text();
+	  var plannedDisbursementTrn = app.translator.translateSync("amp.dashboard:aid-predictability-planned-disbursements","Planned Disbursements");
+	  var actualDisbursementTrn = app.translator.translateSync("amp.dashboard:aid-predictability-actual-disbursements","Actual Disbursements");
+	  if(key == plannedDisbursementTrn){
+		  this.model.set('showPlannedDisbursements', !this.model.get('showPlannedDisbursements'));	
+	  }else if(key == actualDisbursementTrn){
+		  this.model.set('showActualDisbursements', !this.model.get('showActualDisbursements'));	
+	  }	
+  },
   chartViews: [
     'multibar',
     'table'
@@ -2329,7 +2355,7 @@ module.exports = ChartViewBase.extend({
 
 });
 
-},{"./chart-view-base":27,"d3":"d3"}],24:[function(require,module,exports){
+},{"./chart-view-base":27,"d3":"d3","underscore":"underscore"}],24:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var _ = require('underscore');
@@ -2342,7 +2368,16 @@ module.exports = ChartViewBase.extend({
     adjtype: 'FAKE',
     view: 'multibar'
   },
-
+  events: function(){
+      return _.extend({},ChartViewBase.prototype.events,{
+          'click .nv-series' : 'changeChartColumns'
+      });
+  },   
+  changeChartColumns: function(e){	  
+	  var key = $(e.currentTarget).find('.nv-legend-text').text();	  
+	  var stackedLegendTrn = app.translator.translateSync("amp.dashboard:filters-chart-legends-Stacked","Stacked");	
+	  this.model.set('stacked', (key == stackedLegendTrn ));	 
+  },
   chartViews: [
     'multibar',
     'table'
@@ -2520,15 +2555,15 @@ module.exports = BackboneDash.View.extend({
     'click .chart-view': 'changeChartView',
     'click .download': 'download',
     'click .expand': 'big',
-    'click .retry': 'render'
+    'click .retry': 'render'    
   },
 
   chartViews: [
     'bar',
     'pie',
     'table'
-  ],
-
+  ],  
+  
   initialize: function(options) {
     this.app = options.app;
     this.model.set(this.uiDefaults);
@@ -2550,7 +2585,7 @@ module.exports = BackboneDash.View.extend({
     this.listenTo(this.model, 'change:view', this.render);
 
     this.app.state.register(this, 'chart:' + this.model.url, {
-      get: _.partial(_(this.model.pick).bind(this.model), 'limit', 'adjtype', 'view', 'big'),
+      get: _.partial(_(this.model.pick).bind(this.model), 'limit', 'adjtype', 'view', 'big','stacked','showPlannedDisbursements','showActualDisbursements'),
       set: _(this.model.set).bind(this.model),
       empty: null
     });
@@ -2667,6 +2702,9 @@ module.exports = BackboneDash.View.extend({
       height: this.$('.panel-body').height()
       
     });
+    if(this.model.get('view') == 'multibar'){
+  	  co.stacked = this.model.get('stacked');
+  	}
     return co;
   },
 
@@ -2714,12 +2752,7 @@ module.exports = BackboneDash.View.extend({
   },
 
   download: function() {     
-	var chartOptions = _(this.getChartOptions()).omit('height', 'width');
-	
-	if(this.model.get('view') == 'multibar'){
-	  chartOptions.stacked = this.isStacked();
-	}
-	
+	var chartOptions = _(this.getChartOptions()).omit('height', 'width');	
     var downloadView = new DownloadView({
       app: this.app,
       model: this.model,
@@ -2734,27 +2767,8 @@ module.exports = BackboneDash.View.extend({
     
     // Translate modal popup.	
    	app.translator.translateDOM($("." + specialClass));
-  },
-  
-  isStacked: function(){
-	  var stacked = false;
-	  var groupedLegendTrn = app.translator.translateSync("amp.dashboard:filters-chart-legends-Grouped","Grouped");
-	  var stackedLegendTrn = app.translator.translateSync("amp.dashboard:filters-chart-legends-Stacked","Stacked");	  
-	  $(this.$el).find(".nv-series").each(function(i, elem) {
-               //TODO: investigate why $(elem).hasClass does not work
-		       if($(elem).attr('class').indexOf('disabled') == -1){		    	 
-		    	 var key = $(elem).find('.nv-legend-text').text();	
-		    	 if(key == groupedLegendTrn){
-		    		 stacked = false;  
-		    	 }else if(key == stackedLegendTrn){
-		    		 stacked = true;  
-		    	 }
-		     }	 
-	 });
-	 
-	 return stacked;
-  },
-  
+  },  
+
   //AMP-18630: Here we setup a simple tooltip for each legend element.
   beautifyLegends : function(self) {	  
 	  var hasValues = false;
@@ -31143,6 +31157,20 @@ _.extend(State.prototype, Backbone.Events, {
     }
   },
 
+  
+  filtersLoaded: function() {
+	  var dfd = jQuery.Deferred();
+	  var self = this;
+	  var timer = setInterval(function() {
+		  if (self._stateRegistry.filters !== undefined) {
+			  clearInterval(timer);
+			  dfd.resolve();
+		  }
+	  }, 1000);
+	  return dfd.promise(); 
+  },
+  
+  
   freeze: function(options) {
     options = options || {};
     var stateSnapshot = {};

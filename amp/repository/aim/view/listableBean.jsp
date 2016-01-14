@@ -34,7 +34,7 @@
 		<logic:iterate id="prop" name="pMap">
 			<TR>
 				<TD align="right"><B>${prop.key}:</B></TD>
-				<TD>${prop.value}</TD>
+				<TD><c:out value="${prop.value}" /></TD>
 			</TR>
 		</logic:iterate>
 	</TABLE>
@@ -44,7 +44,7 @@
 <logic:equal name="style" value="list">
 	<I>${listable.beanName}</I>
 	<logic:iterate id="prop" name="bean" property="	">
-		<B>${prop.key}: </B>${prop.value}
+		<B>${prop.key}: </B><c:out value="${prop.value}" />
 	</logic:iterate>
 </logic:equal>
 
@@ -52,7 +52,7 @@
 	<I>${listable.beanName}</I>
 	<logic:iterate id="prop" name="pMap">
     	<c:if test="${prop.key != 'renderEndYear' && prop.key != 'renderStartYear' }">
-            <i>${prop.key}</i>: ${prop.value}
+            <i>${prop.key}</i>: <c:out value="${prop.value}" />
 		</c:if> |
 	</logic:iterate>
 </logic:equal>

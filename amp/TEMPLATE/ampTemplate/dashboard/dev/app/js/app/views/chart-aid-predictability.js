@@ -1,5 +1,6 @@
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
+var _ = require('underscore');
 
 
 module.exports = ChartViewBase.extend({
@@ -8,7 +9,21 @@ module.exports = ChartViewBase.extend({
     big: false,
     view: 'multibar'
   },
-
+  events: function(){
+      return _.extend({},ChartViewBase.prototype.events,{
+          'click .nv-series' : 'changeChartColumns'
+      });
+  },  
+  changeChartColumns: function(e){
+	  var key = $(e.currentTarget).find('.nv-legend-text').text();
+	  var plannedDisbursementTrn = app.translator.translateSync("amp.dashboard:aid-predictability-planned-disbursements","Planned Disbursements");
+	  var actualDisbursementTrn = app.translator.translateSync("amp.dashboard:aid-predictability-actual-disbursements","Actual Disbursements");
+	  if(key == plannedDisbursementTrn){
+		  this.model.set('showPlannedDisbursements', !this.model.get('showPlannedDisbursements'));	
+	  }else if(key == actualDisbursementTrn){
+		  this.model.set('showActualDisbursements', !this.model.get('showActualDisbursements'));	
+	  }	
+  },
   chartViews: [
     'multibar',
     'table'

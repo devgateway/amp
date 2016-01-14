@@ -6,7 +6,9 @@ module.exports = ChartModel.extend({
 	
 
 	defaults : {
-		title : ''
+		title : '',
+		showPlannedDisbursements: true,
+		showActualDisbursements: true		
 	},
 
   _prepareTranslations: function() {
@@ -24,7 +26,13 @@ module.exports = ChartModel.extend({
   },
 
   parse: function(data) {
-	this.set('title', data.title);
+	this.set('title', data.title);	
+	if(!_.isUndefined(data.showPlannedDisbursements)){
+		this.set('showPlannedDisbursements', data.showPlannedDisbursements);
+	}
+	if(!_.isUndefined(data.showActualDisbursements)){
+		this.set('showActualDisbursements', data.showActualDisbursements);
+	}	
 	
     function pick(which) {
       return function(d) {
@@ -41,12 +49,14 @@ module.exports = ChartModel.extend({
       {
         key: this.localizedPredictabilityList['amp.dashboard:aid-predictability-planned-disbursements'],
         originalKey: 'planned',
-        values: _(data.years).map(pick('planned disbursements'))
+        values: _(data.years).map(pick('planned disbursements')),
+        disabled: !this.get('showPlannedDisbursements')
       },
       {
         key: this.localizedPredictabilityList['amp.dashboard:aid-predictability-actual-disbursements'],
         originalKey: 'actual',
-        values: _(data.years).map(pick('actual disbursements'))
+        values: _(data.years).map(pick('actual disbursements')),
+        disabled: !this.get('showActualDisbursements')
       }
     ];
     return data;

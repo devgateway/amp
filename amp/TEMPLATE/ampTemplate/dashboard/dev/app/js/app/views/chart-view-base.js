@@ -26,15 +26,15 @@ module.exports = BackboneDash.View.extend({
     'click .chart-view': 'changeChartView',
     'click .download': 'download',
     'click .expand': 'big',
-    'click .retry': 'render'
+    'click .retry': 'render'    
   },
 
   chartViews: [
     'bar',
     'pie',
     'table'
-  ],
-
+  ],  
+  
   initialize: function(options) {
     this.app = options.app;
     this.model.set(this.uiDefaults);
@@ -56,7 +56,7 @@ module.exports = BackboneDash.View.extend({
     this.listenTo(this.model, 'change:view', this.render);
 
     this.app.state.register(this, 'chart:' + this.model.url, {
-      get: _.partial(_(this.model.pick).bind(this.model), 'limit', 'adjtype', 'view', 'big'),
+      get: _.partial(_(this.model.pick).bind(this.model), 'limit', 'adjtype', 'view', 'big','stacked','showPlannedDisbursements','showActualDisbursements'),
       set: _(this.model.set).bind(this.model),
       empty: null
     });
@@ -173,6 +173,9 @@ module.exports = BackboneDash.View.extend({
       height: this.$('.panel-body').height()
       
     });
+    if(this.model.get('view') == 'multibar'){
+  	  co.stacked = this.model.get('stacked');
+  	}
     return co;
   },
 
@@ -220,12 +223,7 @@ module.exports = BackboneDash.View.extend({
   },
 
   download: function() {     
-	var chartOptions = _(this.getChartOptions()).omit('height', 'width');
-	
-	if(this.model.get('view') == 'multibar'){
-	  chartOptions.stacked = this.isStacked();
-	}
-	
+	var chartOptions = _(this.getChartOptions()).omit('height', 'width');	
     var downloadView = new DownloadView({
       app: this.app,
       model: this.model,
@@ -240,27 +238,8 @@ module.exports = BackboneDash.View.extend({
     
     // Translate modal popup.	
    	app.translator.translateDOM($("." + specialClass));
-  },
-  
-  isStacked: function(){
-	  var stacked = false;
-	  var groupedLegendTrn = app.translator.translateSync("amp.dashboard:filters-chart-legends-Grouped","Grouped");
-	  var stackedLegendTrn = app.translator.translateSync("amp.dashboard:filters-chart-legends-Stacked","Stacked");	  
-	  $(this.$el).find(".nv-series").each(function(i, elem) {
-               //TODO: investigate why $(elem).hasClass does not work
-		       if($(elem).attr('class').indexOf('disabled') == -1){		    	 
-		    	 var key = $(elem).find('.nv-legend-text').text();	
-		    	 if(key == groupedLegendTrn){
-		    		 stacked = false;  
-		    	 }else if(key == stackedLegendTrn){
-		    		 stacked = true;  
-		    	 }
-		     }	 
-	 });
-	 
-	 return stacked;
-  },
-  
+  },  
+
   //AMP-18630: Here we setup a simple tooltip for each legend element.
   beautifyLegends : function(self) {	  
 	  var hasValues = false;

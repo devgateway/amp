@@ -1541,11 +1541,8 @@ function collapseAll() {
 </module:display>
 <!-- END SECTORS SECTION -->
 
-
-
-
 <!-- M & E  SECTION -->
-<module:display name="M & E" parentModule="MONITORING AND EVALUATION">
+<module:display name="M & E" parentModule="MONITORING AND EVALUATING">
 
 	<fieldset>
 		<legend>
@@ -1554,7 +1551,6 @@ function collapseAll() {
 			</span>	
 		</legend>
 		<div id="mediv" class="toggleDiv">
-	
 			<table>
 				<field:display name="Activity Performance"  feature="Activity Dashboard">
 					<tr>
@@ -1595,9 +1591,8 @@ function collapseAll() {
 						</td>
 					</tr>
 				</field:display>
-				</table>
+			</table>
 		</div>
-	
 	</fieldset>
 </module:display>
 

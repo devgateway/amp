@@ -42,7 +42,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 	public void testProjectTitle() throws Exception {
 		runNiReportsTestcase(Arrays.asList("Unvalidated activity", "execution rate activity"), engine -> {
 			List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.PROJECT_TITLE).fetch(engine);
-			assertEquals("[(actId: 64, <Unvalidated activity>), (actId: 77, <execution rate activity>)]", cells.toString());
+			assertEquals("[Unvalidated activity (id: 64, eid: 64), execution rate activity (id: 77, eid: 77)]", cells.toString());
 		});
 	}
 
@@ -127,9 +127,8 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 		runNiReportsTestcase(
 			Arrays.asList("Unvalidated activity", "execution rate activity"),
 			engine -> {
-				List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.ACTIVITY_UPDATED_BY)
-					.fetch(engine);
-				assertEquals("[(actId: 64, <ATL ATL (atl@amp.org)>), (actId: 77, <ATL ATL (atl@amp.org)>)]",
+				List<? extends Cell> cells = sorted(engine.schema.getColumns().get(ColumnConstants.ACTIVITY_UPDATED_BY).fetch(engine));
+				assertEquals("[ATL ATL (atl@amp.org) (id: 64, eid: 3), ATL ATL (atl@amp.org) (id: 77, eid: 3)]",
 					cells.toString());
 			});
 	}
@@ -138,34 +137,32 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 	public void testImplementationLevel() throws Exception {
 		runNiReportsTestcase(Arrays.asList("Unvalidated activity", "execution rate activity"),
 			engine -> {
-				List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.IMPLEMENTATION_LEVEL)
-					.fetch(engine);
-				assertEquals("[(actId: 77, <Provincial>), (actId: 64, <National>)]", cells.toString());
+				List<? extends Cell> cells = sorted(engine.schema.getColumns().get(ColumnConstants.IMPLEMENTATION_LEVEL).fetch(engine));
+				assertEquals("[National (id: 64, eid: 70), Provincial (id: 77, eid: 69)]", cells.toString());
 			});
 	}
 
-	@Test
-	public void testRelatedProjects() throws Exception {
-		runNiReportsTestcase(Arrays.asList("Unvalidated activity", "execution rate activity"), engine -> {
-			List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.RELATED_PROJECTS)
-					.fetch(engine);
-			assertEquals("[(actId: -1, <Unvalidated activity>), (actId: -1, <execution rate activity>)]", cells.toString());
-		});
-	}
+//	@Test
+//	public void testRelatedProjects() throws Exception {
+//		runNiReportsTestcase(Arrays.asList("Unvalidated activity", "execution rate activity"), engine -> {
+//			List<? extends Cell> cells = sorted(engine.schema.getColumns().get(ColumnConstants.RELATED_PROJECTS).fetch(engine));
+//			assertEquals("[Unvalidated activity (id: -1, eid: 64), execution rate activity (id: -1, eid: 77)]", cells.toString());
+//		});
+//	}
 
 	@Test
 	public void testFy() throws Exception {
 		runNiReportsTestcase(Arrays.asList("Unvalidated activity", "execution rate activity"), engine -> {
-			List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.FY).fetch(engine);
-			assertEquals("[(actId: 64, <null>), (actId: 77, <null>)]", cells.toString());
+			List<? extends Cell> cells = sorted(engine.schema.getColumns().get(ColumnConstants.FY).fetch(engine));
+			assertEquals("[]", cells.toString());
 		});
 	}
 
 	@Test
 	public void testJointCriteria() throws Exception {
 		runNiReportsTestcase(Arrays.asList("Unvalidated activity", "execution rate activity", "Activity with Zones"), engine -> {
-			List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.JOINT_CRITERIA).fetch(engine);
-			assertEquals("[(actId: 33, <Yes>)]", cells.toString());
+			List<? extends Cell> cells = sorted(engine.schema.getColumns().get(ColumnConstants.JOINT_CRITERIA).fetch(engine));
+			assertEquals("[Yes (id: 33)]", cells.toString());
 		});
 	}
 }

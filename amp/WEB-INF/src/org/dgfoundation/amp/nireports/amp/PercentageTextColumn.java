@@ -28,7 +28,10 @@ public class PercentageTextColumn extends AmpSqlSourcedColumn<PercentageTextCell
 
 	@Override
 	protected PercentageTextCell extractCell(NiReportsEngine engine, ResultSet rs) throws SQLException {
-		return new PercentageTextCell(rs.getString(2), rs.getLong(1), rs.getLong(3), rs.getBigDecimal(4));
+		String text = rs.getString(2);
+		if (text == null)
+			return null;
+		return new PercentageTextCell(text, rs.getLong(1), rs.getLong(3), rs.getBigDecimal(4));
 	}
 		
 	public static PercentageTextColumn fromView(String columnName, String viewName, NiDimension.LevelColumn levelColumn) {

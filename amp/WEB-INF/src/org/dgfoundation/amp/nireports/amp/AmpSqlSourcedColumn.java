@@ -36,7 +36,9 @@ public abstract class AmpSqlSourcedColumn<K extends Cell> extends PsqlSourcedCol
 		List<K> res = new ArrayList<>();
 		try(RsInfo rs = fetcher.fetch(null)) {
 			while (rs.rs.next()) {
-				res.add(extractCell(engine, rs.rs));
+				K cell = extractCell(engine, rs.rs);
+				if (cell != null)
+					res.add(cell);
 			}
 		}
 		catch(Exception e) {

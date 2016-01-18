@@ -75,5 +75,16 @@ public abstract class AmpTestCase extends TestCase
 			assertEquals(corList.get(i), resList.get(i));
 		}
 	}
+	
+	/**
+	 * sorts the input list in a copy
+	 * @param in
+	 * @return
+	 */
+	public static<K> List<K> sorted(Collection<K> in) {
+		ArrayList<K> res = new ArrayList<>(in);
+		res.sort(null);
+		return res;
+	}
 
 }

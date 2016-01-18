@@ -16,6 +16,8 @@ public interface RunNode {
 	public String getName();
 	public Set<? extends RunNode> getSubNodes();
 	public long getTotalTime();
+	
+	/** value is either java class (String / Integer / Long / blabla) OR java collection (List, Set, Map) */
 	public Map<String, Object> getMeta();
 	
 	/** 

@@ -56,4 +56,7 @@ v_activity_pledges_title:
 make a per-column "slow check" function; implement it for PercentageColumns; make an endpoint for it
 implement RunNode -> jsonb
 
+in case fetching a column/measure crashes -> remove said column/measure from report and add a note about it to warnings
+RELATED_PROJECTS: take care of the (id / related id) stuff
+
 https://jira.dgfoundation.org/browse/AMP-22006 - DO NOT MERGE THIS ONE TO AMP 2.12

@@ -28,10 +28,15 @@ public class SimpleTextColumn extends AmpSqlSourcedColumn<TextCell> {
 
 	@Override
 	protected TextCell extractCell(NiReportsEngine engine, ResultSet rs) throws SQLException {
+		String text = rs.getString(2);
+		
+		if (text == null)
+			return null;
+		
 		if (withoutEntity)
-			return new TextCell(rs.getString(2), rs.getLong(1), rs.getLong(1));
+			return new TextCell(text, rs.getLong(1), -1);
 		else
-			return new TextCell(rs.getString(2), rs.getLong(1), rs.getLong(3));
+			return new TextCell(text, rs.getLong(1), rs.getLong(3));
 	}
 		
 	public static SimpleTextColumn fromView(String columnName, String viewName, NiDimension.LevelColumn levelColumn) {

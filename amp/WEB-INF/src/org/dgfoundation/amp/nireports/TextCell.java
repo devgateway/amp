@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.nireports;
 
+import java.util.Objects;
+
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 
 /**
@@ -12,6 +14,7 @@ public final class TextCell extends Cell {
 	
 	public TextCell(String text, long activityId, long entityId) {
 		super(activityId, entityId);
+		Objects.requireNonNull(text);
 		this.text = text == null ? "" : text;
 	}
 
@@ -26,6 +29,11 @@ public final class TextCell extends Cell {
 		return text.compareTo(tc.text);
 	}
 
+	@Override
+	public String toString() {
+		return String.format("%s (id: %d%s)", text, this.activityId, this.entityId > 0 ? String.format(", eid: %d", this.entityId) : "");
+	}
+	
 	@Override
 	public String getDisplayedValue() {
 		return text;

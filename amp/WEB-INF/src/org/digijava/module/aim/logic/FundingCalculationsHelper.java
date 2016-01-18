@@ -88,7 +88,6 @@ public class FundingCalculationsHelper {
 		//Iterator<? extends FundingInformationItem> fundDetItr = details.iterator();
 		fundDetailList = new ArrayList<FundingDetail>();
 		int indexId = 0;
-		String toCurrCode = Constants.DEFAULT_CURRENCY;
 		AmpCategoryValue actualAdjustmentType = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getAmpCategoryValueFromDB();
 		if (actualAdjustmentType == null) {
 			throw new RuntimeException("ACTUAL adjustment type not found in the database");
@@ -133,8 +132,8 @@ public class FundingCalculationsHelper {
 			if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
 				fundingDetail.setClassification(fundDet.getExpCategory());
 			}
-			fundingDetail.setCurrencyCode(toCurrCode);
-		    AmpCurrency curr = CurrencyUtil.getAmpcurrency(toCurrCode);
+			fundingDetail.setCurrencyCode(userCurrencyCode);
+		    AmpCurrency curr = CurrencyUtil.getAmpcurrency(userCurrencyCode);
 		    if(curr != null) {
 		    	fundingDetail.setCurrencyName(curr.getCountryName());
 		    }

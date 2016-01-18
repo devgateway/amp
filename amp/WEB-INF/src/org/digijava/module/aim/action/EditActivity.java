@@ -8,6 +8,7 @@ package org.digijava.module.aim.action;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -743,56 +744,26 @@ public class EditActivity extends Action {
        // eaForm.getIdentification().setFundingSourcesNumber(activity.getFundingSourcesNumber());
 
         if (activity != null) {
-        	// set title,description and objective
-
+        	
+        	// set annual budgets and proposed project cost
         	Set<AmpAnnualProjectBudget> annualBudgets = activity.getAnnualProjectBudgets();
 			List<ProposedProjCost> proposedAnnualBudgets = new ArrayList<ProposedProjCost>();
 			if (annualBudgets != null) {
                 for (AmpAnnualProjectBudget annualBudget : annualBudgets) {
-                    ProposedProjCost ppc = new ProposedProjCost();
-                    AmpAnnualProjectBudget anProjBudget = annualBudget;
-                    java.sql.Date dt = new java.sql.Date(anProjBudget.getYear().getTime());
-                    if (anProjBudget.getAmpCurrencyId() != null) {
-                        ppc.setCurrencyCode(anProjBudget.getAmpCurrencyId().getCurrencyCode());
-                        ppc.setCurrencyName(anProjBudget.getAmpCurrencyId().getCurrencyName());
-
-                    } else {
-                        AmpCurrency currency = CurrencyUtil.getCurrencyByCode(activity.getCurrencyCode());
-                        ppc.setCurrencyCode(currency.getCurrencyCode());
-                        ppc.setCurrencyName(currency.getCurrencyName());
-
-                    }
-                    double frmExRt = Util.getExchange(ppc.getCurrencyCode(), dt);
-                    double toExRt = frmExRt;
-                    DecimalWraper amt = CurrencyWorker.convertWrapper(anProjBudget.getAmount(), frmExRt,
-                            toExRt, dt);
-                    ppc.setFunAmount(amt.getCalculations());
-                    ppc.setFunAmountAsDouble(amt.doubleValue());
-                    ppc.setFunDate(Integer.toString(dt.getYear() + 1900));
+                	String ppcCurrencyCode = annualBudget.getAmpCurrencyId() != null ? annualBudget.getAmpCurrencyId().getCurrencyCode() : null; 
+                    ProposedProjCost ppc = getProposedProjectCost(activity, eaForm, annualBudget.getAmount(), ppcCurrencyCode, annualBudget.getYear(), true);
                     proposedAnnualBudgets.add(ppc);
                 }
 			}
+			
 			Collections.sort(proposedAnnualBudgets);
 			eaForm.getFunding().setProposedAnnualBudgets(proposedAnnualBudgets);
-        	ProposedProjCost pg = new ProposedProjCost();
-        	if (activity.getFunAmount() != null){
-        		pg.setFunAmountAsDouble(activity.getFunAmount());
-        		pg.setFunAmount(FormatHelper.formatNumber(activity.getFunAmount()));
-        	}
-        	pg.setCurrencyCode(activity.getCurrencyCode());
-        	if (pg.getCurrencyCode() != null) {
-    			AmpCurrency currency = CurrencyUtil.getCurrencyByCode(pg.getCurrencyCode());
-    			if (currency != null) 
-    				pg.setCurrencyName(currency.getCurrencyName());
-        	}
-        	else {
-        		pg.setCurrencyCode(CurrencyUtil.getWorkspaceCurrency(tm).getCurrencyCode());
-        		pg.setCurrencyName(CurrencyUtil.getWorkspaceCurrency(tm).getCurrencyName());
-        	}
-        	pg.setFunDate(FormatHelper.formatDate(activity.getFunDate()));
-        	eaForm.getFunding().setProProjCost(pg);
+        	
+			ProposedProjCost activityPPC = new ProposedProjCost();
+			activityPPC = getProposedProjectCost(activity, eaForm, activity.getFunAmount(), activity.getCurrencyCode(), activity.getFunDate(), false);
+        	eaForm.getFunding().setProProjCost(activityPPC);
 
-          //load programs by type
+          // load programs by type
           if(ProgramUtil.getAmpActivityProgramSettingsList()!=null){
                        List activityNPO=ActivityUtil.getActivityProgramsByProgramType(activityId,ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
                        List activityPP=ActivityUtil.getActivityProgramsByProgramType(activityId,ProgramUtil.PRIMARY_PROGRAM);
@@ -813,14 +784,12 @@ public class EditActivity extends Action {
           eaForm.setSelectedEffectivenessIndicatorOptions(activity.getSelectedEffectivenessIndicatorOptions());
           eaForm.setAllEffectivenessIndicators(AidEffectivenessIndicatorUtil.getAllActiveIndicators());
 
-
-          
+          // set title,description and objective
           eaForm.getIdentification().setTitle(activity.getName().trim());
           eaForm.getCosting().setCosts(new ArrayList(activity.getCosts()));
           eaForm.getIdentification().setTeam(activity.getTeam());
           eaForm.getIdentification().setCreatedBy(activity.getActivityCreator());
           eaForm.getIdentification().setModifiedBy(activity.getModifiedBy());
-          
           
 
          // eaForm.getIdentification().setBudget(activity.getBudget());
@@ -1643,6 +1612,40 @@ public class EditActivity extends Action {
 
     return mapping.findForward("forward");
   }
+
+	private ProposedProjCost getProposedProjectCost(AmpActivityVersion activity, EditActivityForm eaForm, 
+			Double ppcAmount, String ppcCurrencyCode, Date year, boolean yearDate) {
+		ProposedProjCost ppc = new ProposedProjCost();
+		Calendar c = Calendar.getInstance();
+		c.setTime(year);
+		
+		AmpCurrency ppcCurrency;
+		if (ppcCurrencyCode != null) {
+			ppcCurrency = CurrencyUtil.getCurrencyByCode(ppcCurrencyCode);
+		} else if (activity.getCurrencyCode() != null) {
+			ppcCurrency = CurrencyUtil.getCurrencyByCode(activity.getCurrencyCode());
+		} else {
+			ppcCurrency = CurrencyUtil.getCurrencyByCode(eaForm.getCurrCode());
+		}
+	
+		java.sql.Date ppcDate = new java.sql.Date(c.getTimeInMillis());
+		double frmExRt = Util.getExchange(ppcCurrency.getCurrencyCode(), ppcDate);
+		double toExRt = Util.getExchange(eaForm.getCurrCode(), ppcDate);
+		
+		DecimalWraper amt = CurrencyWorker.convertWrapper(ppcAmount, frmExRt, toExRt, ppcDate);
+		ppc.setFunAmountAsDouble(amt.doubleValue());
+		ppc.setCurrencyCode(eaForm.getCurrCode());
+		ppc.setCurrencyName(eaForm.getCurrName());
+		ppc.setFunAmount(FormatHelper.formatNumber(amt.doubleValue()));
+		
+		if (yearDate) {
+			ppc.setFunDate(Integer.toString(c.get(Calendar.YEAR)));
+		} else {
+			ppc.setFunDate(FormatHelper.formatDate(activity.getFunDate()));
+		}
+		
+		return ppc;
+	}
 
   public final static ArrayList<AmpStructure> eager_copy(Set<AmpStructure> structures) throws CloneNotSupportedException
   {

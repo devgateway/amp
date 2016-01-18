@@ -32,9 +32,11 @@ module.exports = BaseControlView.extend({
         set: function(state) {
           state = state || {};
           self.app.data.filter.reset({silent: true});
-          // AMP-19254, AMP-20537: override the "date" range with the GIS-specific one from the settings blob (a hack...)
-      	  self.app.data.filter.extractDates(self.app.data.settings.models, state, 'gis-default-min-date', 'gis-default-max-date');
-          var res = self.app.data.filter.deserialize(state);
+          // AMP-21118, AMP-19254, AMP-20537: override the "date" range with the GIS-specific one from the settings blob (a hack...)
+          if (_.isEmpty(state)){ 
+        	  self.app.data.filter.extractDates(self.app.data.settings.models, state, 'gis-default-min-date', 'gis-default-max-date'); 
+          }          
+      	  var res = self.app.data.filter.deserialize(state);
           self.app.data.filter.finishedFirstLoad = true; //copy-pasted off AMP-20206, most probably bad code
         },
         empty: null

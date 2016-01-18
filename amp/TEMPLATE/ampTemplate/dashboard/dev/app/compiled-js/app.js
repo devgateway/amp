@@ -3237,9 +3237,7 @@ module.exports = BackboneDash.View.extend({
             };
           }).bind(this),
           set: _(function(state) {
-            if (state.filter.otherFilters !== undefined && state.filter.otherFilters.date !== undefined) {
-              filtersViewLog.log('Using saved date filters.');
-            } else {
+            if (_.isEmpty(state.filter)){            
               filtersViewLog.log('Using default filter dates.');
               // AMP-21118: Dont override all filters, just dates section.
               state.filter.otherFilters = blob.otherFilters;

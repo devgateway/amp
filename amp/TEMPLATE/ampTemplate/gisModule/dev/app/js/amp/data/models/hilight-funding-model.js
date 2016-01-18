@@ -18,7 +18,8 @@ module.exports = IndicatorJoinModel.extend({
 
     // if filters or settings change then get data from API and update model
     this.listenTo(this.collection.filter, 'apply', this.refreshModel);
-    this.listenTo(this.collection.settings, 'change:selected', this.refreshModel);
+    //this.listenTo(this.collection.settings, 'change:selected', this.refreshModel);
+    this.listenTo(this.collection.settings, 'applySettings', this.refreshModel);
 
     // If the model updates, then refresh dependencies.
     this.listenTo(this, 'sync', this.refreshDependencies);

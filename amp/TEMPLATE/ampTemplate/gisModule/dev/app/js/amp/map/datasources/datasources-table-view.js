@@ -18,7 +18,8 @@ module.exports = Backbone.View.extend({
     this.app = options.app;
     this.collection = this.app.data.activities;
     this.listenTo(this.app.data.filter, 'apply', this.refreshModel);
-    this.listenTo(this.app.data.settings, 'change:selected', this.refreshModel);
+    //this.listenTo(this.app.data.settings, 'change:selected', this.refreshModel);
+    this.listenTo(this.app.data.settings, 'applySettings', this.refreshModel);
     _.bindAll(this, 'render');
   },
 

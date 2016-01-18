@@ -19,7 +19,8 @@ module.exports = Backbone.Model
     });
 
     this.listenTo(this.collection.filter, 'apply', this.refreshModel);
-    this.listenTo(this.collection.settings, 'change:selected', this.refreshModel);
+    //this.listenTo(this.collection.settings, 'change:selected', this.refreshModel);
+    this.listenTo(this.collection.settings, 'applySettings', this.refreshModel);
   },
 
   // if filters change and layer is selected update it.

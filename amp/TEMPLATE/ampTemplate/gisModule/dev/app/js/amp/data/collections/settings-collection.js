@@ -34,6 +34,13 @@ module.exports = Backbone.Collection
           console.warn('no match', setting.get('options'), {id: setting.get('selected')});
         }
       }
+      if (setting.get('id') === '1' && setting.get('copyOfAllCurrencies') === undefined) {
+    	  var auxList = [];
+    	  _.each(setting.get('options'), function(item) {
+    		  auxList.push(item);
+    	  });
+    	  setting.set('copyOfAllCurrencies', auxList);
+      }
     });
     return tmpJSON;
   },

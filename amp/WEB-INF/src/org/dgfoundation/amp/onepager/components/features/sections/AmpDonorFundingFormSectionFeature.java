@@ -401,7 +401,7 @@ public class AmpDonorFundingFormSectionFeature extends
 		AmpSearchOrganizationComponent<String> searchOrganization = new AmpSearchOrganizationComponent<String>(
 				"searchFundingOrgs", new Model<String>(),
 				"Search Funding Organizations", searchOrgs, null);
-		wmc.add(searchOrganization);
+		add(searchOrganization);
 
 		orgRoleSelector = new AmpOrgRoleSelectorComponent("orgRoleSelector", am, getRoleFilter());
 		add(orgRoleSelector);

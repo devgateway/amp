@@ -1,9 +1,7 @@
 package org.digijava.module.aim.action ;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,7 +33,6 @@ public class FiscalCalendarManager extends Action {
 					 }
 
 					 final int NUM_RECORDS = 10;
-					 Collection<AmpFiscalCalendar> fisCal = new ArrayList<AmpFiscalCalendar>();
 					 FiscalCalendarForm fcForm = (FiscalCalendarForm) form;
 					 int page = 0;
 					 
@@ -50,7 +47,7 @@ public class FiscalCalendarManager extends Action {
 					 Collection<AmpFiscalCalendar> ampFisCal = (Collection<AmpFiscalCalendar>)session.getAttribute("ampFisCal");
 					 if (ampFisCal == null) {
 						ampFisCal = DbUtil.getAllFisCalenders();
-						session.setAttribute("ampFisCal",ampFisCal);
+						session.setAttribute("ampFisCal", ampFisCal);
 					 }
 					 
 					 int numPages = ampFisCal.size() / NUM_RECORDS;
@@ -59,40 +56,22 @@ public class FiscalCalendarManager extends Action {
 					 /*
 					  * check whether the numPages is less than the page . if yes return error.
 					  */					 
-					 int stIndex = ((page - 1) * NUM_RECORDS) + 1;
 					 int edIndex = page * NUM_RECORDS;
 					 if (edIndex > ampFisCal.size()) {
 						edIndex = ampFisCal.size();
 					 }
 
-					 Vector<AmpFiscalCalendar> vect = new Vector<AmpFiscalCalendar>();
-					 vect.addAll(ampFisCal);
-					 
-					 final String[] MONTHS = { "January","February","March","April","May","June","July",
-					 						   "August","September","October","November","December"};
-					 Vector<String> month = new Vector<String>();
-					 Calendar c = Calendar.getInstance();
-					 int mon;
-					 
-					 for (int i = (stIndex-1); i < edIndex; i++) {
-						fisCal.add(vect.get(i));
-						mon = (vect.get(i)).getStartMonthNum().intValue();
-						c.set(Calendar.MONTH, mon - 1);
-						month.add(MONTHS[c.get(Calendar.MONTH)]);
-					 }
-					 
 					 Collection<Integer> pages = null;					 
 					 if (numPages > 1) {
 						pages = new ArrayList<Integer>();
-						for (int i = 0;i < numPages;i ++) {
+						for (int i = 0; i < numPages;i ++) {
 						  Integer pageNum = new Integer(i+1);
 						  pages.add(pageNum);
 						}
 					 }
 					 
-					 fcForm.setFiscalCal(fisCal);
+					 fcForm.setFiscalCal(ampFisCal);
 					 fcForm.setPages(pages);
-					 fcForm.setMonth(month);
 					
 					 logger.debug("FiscalCalendar manager returning");
 					 return mapping.findForward("forward");

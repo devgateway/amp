@@ -108,7 +108,6 @@
 																  </thead>
 																		<!--  to export table we are adding class "yui-dt-data" to its tbody-->
 															<tbody class="yui-dt-data">
-                                                                <c:set value="0" var="monthIndex"/>
 																<logic:iterate name="aimFiscalCalendarForm" property="fiscalCal" id="fiscalCal">
 																	<tr>
 																		<td height="5" width="593" colspan="4">
@@ -136,11 +135,7 @@
 																	  	<c:if test="${fiscalCal.isFiscal==false}"><digi:trn key="aim:fiscalCalendar:no">No</digi:trn></c:if>
 																	  </td>
 																		<td width="117">
-																			<c:set var="startMonth">
-                                                                            	<digi:trn key="calendar:${aimFiscalCalendarForm.month[monthIndex]}">${aimFiscalCalendarForm.month[monthIndex]}</digi:trn>
-                                                                          	</c:set>
-                                                                          	<c:out value="${startMonth}" />
-		                                                                  	<c:set value="${monthIndex + 1}" var="monthIndex"/>
+                                                                            <bean:write name="fiscalCal" property="startMonthNum"/>
                                                               			</td>
 																		<td width="105">
 																			<bean:write name="fiscalCal" property="startDayNum"/>

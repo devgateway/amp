@@ -39,6 +39,12 @@ function chart(options) {
     _chart.showControls(false);
   }
 
+  if(options.stacked){
+	  _chart.multibar.stacked(true); 
+  }else{
+	  _chart.multibar.stacked(false);
+  }
+  
   _chart.yAxis
     .tickFormat(options.shortFormatter)
     .showMaxMin(false);

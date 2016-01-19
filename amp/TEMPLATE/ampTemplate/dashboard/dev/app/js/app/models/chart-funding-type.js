@@ -7,7 +7,8 @@ module.exports = ChartModel.extend({
   defaults: {
     typed: true,
     limit: 3,
-    title: ''
+    title: '',
+    stacked: false
   },
 
   _prepareTranslations: function() {

@@ -10,16 +10,26 @@ module.exports = ChartViewBase.extend({
     adjtype: 'FAKE',
     view: 'multibar'
   },
-
+  events: function(){
+      return _.extend({},ChartViewBase.prototype.events,{
+          'click .nv-series' : 'changeChartColumns'
+      });
+  },   
+  changeChartColumns: function(e){	  
+	  var key = $(e.currentTarget).find('.nv-legend-text').text();	 
+	  var stackedLegendTrn = app.translator.translateSync("amp.dashboard:filters-chart-legends-Stacked","Stacked");
+	  var groupedLegendTrn = app.translator.translateSync("amp.dashboard:filters-chart-legends-Grouped","Grouped");
+	  if(key == stackedLegendTrn || key == groupedLegendTrn){
+		  this.model.set('stacked', (key == stackedLegendTrn ));	
+	  }	 
+  },
   chartViews: [
     'multibar',
     'table'
-  ],
-
+  ], 
   downloadChartOptions: {
     trimLabels: false
   },
-
   getTTContent: function(context) {
     var app = this.app;
     var of = app.translator.translateSync('amp.dashboard:of','of');

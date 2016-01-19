@@ -56,7 +56,7 @@ module.exports = BackboneDash.View.extend({
     this.listenTo(this.model, 'change:view', this.render);
 
     this.app.state.register(this, 'chart:' + this.model.url, {
-      get: _.partial(_(this.model.pick).bind(this.model), 'limit', 'adjtype', 'view', 'big'),
+    	get: _.partial(_(this.model.pick).bind(this.model), 'limit', 'adjtype', 'view', 'big','stacked','showPlannedDisbursements','showActualDisbursements'),
       set: _(this.model.set).bind(this.model),
       empty: null
     });
@@ -164,19 +164,21 @@ module.exports = BackboneDash.View.extend({
     
     this.beautifyLegends(this);
   },
-
-  getChartOptions: function() {
-    var co = _(_(this.chartOptions).clone() || {}).defaults({
-      trimLabels: !this.model.get('big'),
-      getTTContent: this.getTTContent,
-      clickHandler: this.chartClickHandler,
-      width: this.$('.panel-body').width(),
-      height: this.$('.panel-body').height()
-    });
-    return co;
-  },
-
-  failLoading: function() {
+  getChartOptions: function() {	  
+	    var co = _(_(this.chartOptions).clone() || {}).defaults({
+	      trimLabels: !this.model.get('big'),
+	      getTTContent: this.getTTContent,
+	      clickHandler: this.chartClickHandler,
+	      width: this.$('.panel-body').width(),
+	      height: this.$('.panel-body').height()
+	      
+	    });
+	    if(this.model.get('view') == 'multibar'){
+	  	  co.stacked = this.model.get('stacked');
+	  	}
+	    return co;
+	},
+   failLoading: function() {
     this.message.html('Failed to load data <small>' + arguments[2] +
       ' <button type="button" class="retry btn btn-warning btn-sm">' +
       '<span class="glyphicon glyphicon-refresh"></span> Retry</button></small>').show();

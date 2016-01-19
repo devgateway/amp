@@ -53,16 +53,16 @@ remove ORDER BY from views
 v_activity_pledges_title:
 	views which link pledges to activities are... different. These have to be changed, but in an another way - for later
 	
-make a per-column "slow check" function; implement it for PercentageColumns; make an endpoint for it
-implement RunNode -> jsonb
+make a per-column "slow check" function; implement it for PercentageColumns; make an endpoint for it -> Aldo, done & reviewed
+implement RunNode -> jsonb -> Alex
 
 in case fetching a column/measure crashes -> remove said column/measure from report and add a note about it to warnings
 	-> treat the case when fetching a column which is also a hierarchy fails
 	
-filters caching
+filters: activities-id caching
 year range settings
-
-reimplement GroupColumn::findLeaf() in O(depth) or O(1)
+undefineds-collapsing via ReportData merging
+NiReportOutput-to-ReportsAPI-output
 	
 RELATED_PROJECTS: take care of the (id / related id) stuff
 

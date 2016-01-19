@@ -354,6 +354,8 @@ FilterUtils.convertJavaFiltersToJS = function(data) {
 		case 'Executing Agency':
 		case 'Implementing Agency':
 		case 'Beneficiary Agency':
+		case 'Regional Group':
+		case 'Sector Group':
 			blob.columnFilters[item.name + ' Id'] = _.map(item.values, function(item_) {
 				return parseInt(item_.id);
 			});

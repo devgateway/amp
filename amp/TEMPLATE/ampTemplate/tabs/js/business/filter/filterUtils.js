@@ -291,6 +291,8 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 				case 'Executing Agency':
 				case 'Implementing Agency':
 				case 'Beneficiary Agency':
+				case 'Regional Group':
+				case 'Sector Group':
 					blob.columnFilters[item.get('name') + ' Id'] = _.map(item.get('values'), function(item_) {
 						return parseInt(item_.id);
 					});

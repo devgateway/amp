@@ -28,6 +28,8 @@ public class OrganisationUtil {
 		put(Constants.ROLE_CODE_EXECUTING_AGENCY, ColumnConstants.EXECUTING_AGENCY);
 		put(Constants.ROLE_CODE_RESPONSIBLE_ORG, ColumnConstants.RESPONSIBLE_ORGANIZATION);
 		put(Constants.ROLE_CODE_CONTRACTING_AGENCY, ColumnConstants.CONTRACTING_AGENCY);
+		put(Constants.ROLE_CODE_REGIONAL_GROUP, ColumnConstants.REGIONAL_GROUP);
+		put(Constants.ROLE_CODE_SECTOR_GROUP, ColumnConstants.SECTOR_GROUP);
 	}};
 	
 	/**

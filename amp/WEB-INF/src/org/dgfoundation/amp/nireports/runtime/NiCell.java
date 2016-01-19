@@ -12,9 +12,11 @@ public class NiCell implements Comparable<NiCell> {
 	/** null for trail cells */
 	protected final NiReportedEntity<?> entity;
 	protected final Cell cell;
+	protected final boolean undefinedCell;
 	
 	public NiCell(Cell cell, NiReportedEntity<?> entity) {
 		this.cell = cell;
+		this.undefinedCell = cell.entityId <= 0;
 		this.entity = entity;
 	}
 
@@ -32,7 +34,20 @@ public class NiCell implements Comparable<NiCell> {
 
 	@Override
 	public int compareTo(NiCell o) {
-		// TODO Auto-generated method stub
-		return 0;
+		if (undefinedCell && o.undefinedCell)
+			return 0;
+		if (undefinedCell ^ o.undefinedCell) {
+			if (undefinedCell)
+				return 1;
+			return -1;
+		}
+		
+		// gone till here -> neither of the cells is undefined
+		return cell.compareTo(o.cell);
+	}
+	
+	@Override
+	public String toString() {
+		return cell.getDisplayedValue();
 	}
 }

@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.nireports.amp;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
@@ -31,6 +32,9 @@ public class PercentageTextColumn extends AmpSqlSourcedColumn<PercentageTextCell
 		String text = rs.getString(2);
 		if (text == null)
 			return null;
+		BigDecimal percentage = rs.getBigDecimal(4);
+		if (percentage == null)
+			return null; // TODO: how do we want to treat nulls?
 		return new PercentageTextCell(text, rs.getLong(1), rs.getLong(3), rs.getBigDecimal(4));
 	}
 		

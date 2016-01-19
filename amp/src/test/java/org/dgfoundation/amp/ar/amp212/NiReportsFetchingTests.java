@@ -162,7 +162,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 	public void testJointCriteria() throws Exception {
 		runNiReportsTestcase(Arrays.asList("Unvalidated activity", "execution rate activity", "Activity with Zones"), engine -> {
 			List<? extends Cell> cells = sorted(engine.schema.getColumns().get(ColumnConstants.JOINT_CRITERIA).fetch(engine));
-			assertEquals("[Yes (id: 33)]", cells.toString());
+			assertEquals("[Yes (id: 33, eid: 33)]", cells.toString());
 		});
 	}
 }

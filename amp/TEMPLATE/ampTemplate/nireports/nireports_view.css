@@ -1,5 +1,5 @@
-tr.firstLevel, td.firstLevel {
-	background:#BFC9CE; 
+.ni_hierarchyLevel1 {
+	background:#9FA9EE; 
 	border-bottom: black 1px solid;
 	border-right: 1px solid black;
 	padding-left: 5px;
@@ -8,8 +8,8 @@ tr.firstLevel, td.firstLevel {
 	font-size:11px;
 }
 
-tr.secondLevel, td.secondLevel {
-	background: #D6DCDF;
+.ni_hierarchyLevel2 {
+	background: #B6BCFF;
 	border-bottom:#A9A9A9 2px solid;
 	border-right: #383838 1px solid;
 	padding-left: 5px;
@@ -18,8 +18,8 @@ tr.secondLevel, td.secondLevel {
 	font-size:11px;
 }
 
-tr.thirdLevel, td.thirdLevel {
-	background: #E9EBED;
+.ni_hierarchyLevel3 {
+	background: #C9CBFF;
 	border-bottom:#A9A9A9 2px solid;
 	border-right:#8B9EA3 1px solid;
 	padding-left: 5px;
@@ -29,8 +29,8 @@ tr.thirdLevel, td.thirdLevel {
 	font-size:11px;
 }
 
-tr.fourthLevel, td.fourthLevel {
-	background: #EDE9ED;
+.ni_hierarchyLevel4 {
+	background: #CDC9FF;
 	border-bottom:#A9A9A9 2px solid;
 	border-right:#DBEEF3 1px solid;
 	padding-left: 5px;
@@ -40,8 +40,8 @@ tr.fourthLevel, td.fourthLevel {
 	font-size:11px;
 }
 
-tr.fifthLevel, td.fifthLevel {
-	background: #FFFFFF;
+.ni_hierarchyLevel5 {
+	background: #EEEEFF;
 	border-bottom:#A9A9A9 2px solid;
 	border-right:#DBEEF3 1px solid;
 	padding-left: 5px;
@@ -53,9 +53,6 @@ tr.fifthLevel, td.fifthLevel {
 
 tr.oddActivity {
 	
-}
-
-td.hierarchyCell{
 }
 
 td.reportTotals{
@@ -139,4 +136,4 @@ a.nohoverlink:hover{
 	background-color:transparent;
 }
 
-.clsTableCellDataHtml div {padding-left:5px !important;}
+td.ni_hierarchyCell div {padding-left:5px !important;}

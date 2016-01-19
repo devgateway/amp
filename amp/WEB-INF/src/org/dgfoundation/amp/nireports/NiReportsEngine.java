@@ -195,16 +195,23 @@ public class NiReportsEngine {
 		//ColumnReportData fetchedData = new ColumnReportData(this);
 		GroupColumn rawData = new GroupColumn("RAW", null, null);
 		
-		fetchedColumns.forEach((name, contents) -> rawData.addColumn(new CellColumn(name, contents, null, schema.getColumns().get(name).getBehaviour()))); // regular columns
+		fetchedColumns.forEach((name, contents) -> rawData.addColumn(new CellColumn(name, contents, rawData, schema.getColumns().get(name).getBehaviour()))); // regular columns
 		
-		rawData.maybeAddColumn(buildFundingColumn(FUNDING_COLUMN_NAME, this::separateYears));
-		rawData.maybeAddColumn(buildFundingColumn(TOTALS_COLUMN_NAME, Function.identity()));
+		rawData.maybeAddColumn(buildFundingColumn(FUNDING_COLUMN_NAME, rawData, this::separateYears));
+		rawData.maybeAddColumn(buildFundingColumn(TOTALS_COLUMN_NAME, rawData, Function.identity()));
 		
 		GroupColumn catData = categorizeData(rawData);
 		this.headers = new NiHeaderInfo(catData);
-		this.rootReportData = new ColumnReportData(this, catData);
+		this.rootReportData = new ColumnReportData(this, null, discoverLeaves(catData));
 	}
 
+	protected Map<CellColumn, ColumnContents> discoverLeaves(GroupColumn gc) {
+		Map<CellColumn, ColumnContents> res = new HashMap<>();
+		for(CellColumn cc:gc.getLeafColumns())
+			res.put(cc, cc.getContents());
+		return res;
+	}
+	
 	/**
 	 * this function is a semihack - it belongs somewhere in {@link NiReportsSchema}. TODO: refactor when the engine is almost done and we have a clear picture of the necessities
 	 * @param fundingColumn
@@ -236,8 +243,8 @@ public class NiReportsEngine {
 		return z;
 	}
 	
-	protected Column buildFundingColumn(String columnName, Function<GroupColumn, GroupColumn> postprocessor) {
-		GroupColumn fundingColumn = new GroupColumn(columnName, null, null);  // yearly funding
+	protected Column buildFundingColumn(String columnName, GroupColumn parentColumn, Function<GroupColumn, GroupColumn> postprocessor) {
+		GroupColumn fundingColumn = new GroupColumn(columnName, null, parentColumn);  // yearly funding
 		fetchedMeasures.forEach((name, contents) -> {
 			NiReportMeasure<?> meas = schema.getMeasures().get(name);
 			if (meas.getBehaviour().getTimeRange() != TimeRange.NONE)
@@ -258,7 +265,16 @@ public class NiReportsEngine {
 	}
 	
 	protected void createHierarchies() {
-		
+		for(String hier: this.actualHierarchies) {
+			CellColumn cel = (CellColumn) this.headers.rootColumn.findChildByName(hier);
+			NiUtils.failIf(cel == null, () -> String.format("could not find fetched column used for hierarchies: %s", hier));
+			if (cel != null) {
+				timer.run(hier, () -> {
+//					Behaviour beh = schema.getColumns().get(hier).getBehaviour();
+					this.rootReportData = this.rootReportData.horizSplit(cel);
+				});
+			}
+		}
 	}
 	
 	protected void createTotals() {

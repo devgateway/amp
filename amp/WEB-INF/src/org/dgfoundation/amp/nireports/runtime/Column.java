@@ -1,12 +1,7 @@
 package org.dgfoundation.amp.nireports.runtime;
 
 import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Function;
-
-import org.dgfoundation.amp.nireports.Cell;
-import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.ReportHeadingCell;
 
 /**
@@ -19,15 +14,15 @@ public abstract class Column {
 	/**
 	 * might be null
 	 */
-	protected GroupColumn parent;
+	protected final GroupColumn parent;
+	
+	protected final String hierarchicalName;
 	
 	/**
 	 * will be null before {@link #calculatePositionInHeadingLayout(int, int, int)} has been called. This one will be called last step in report execution
 	 */
 	protected ReportHeadingCell reportHeaderCell;
 	
-	/** returns the ids of all the primary entities enclosed in this column and all of its subcolumns (if any) */
-	public abstract Set<Long> getIds();
 	public abstract void forEachCell(Consumer<NiCell> acceptor);
 	public abstract GroupColumn verticallySplitByCategory(VSplitStrategy strategy);
 	public abstract String debugDigest(boolean withContents);
@@ -53,20 +48,15 @@ public abstract class Column {
 	protected Column(String name, GroupColumn parent) {
 		this.name = name;
 		this.parent = parent;
+		this.hierarchicalName = parent == null ? name : String.format("%s / %s", parent.getHierName(), name);
 	}
 	
 	public String getHierName() {
-		if (parent != null)
-			return String.format("%s / %s", parent.getHierName(), name);
-		return name;
+		return hierarchicalName;
 	}
 	
 	public GroupColumn getParent() {
 		return parent;
-	}
-
-	public void setParent(GroupColumn parent) {
-		this.parent = parent;
 	}
 
 	public ReportHeadingCell getReportHeaderCell() {

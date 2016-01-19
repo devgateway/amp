@@ -35,11 +35,6 @@ public class CellColumn extends Column {
 	}
 
 	@Override
-	public Set<Long> getIds() {
-		return contents.data.keySet();
-	}
-
-	@Override
 	public void forEachCell(Consumer<NiCell> acceptor) {
 		contents.data.values().forEach(list -> list.forEach(cell -> acceptor.accept(cell)));
 	}

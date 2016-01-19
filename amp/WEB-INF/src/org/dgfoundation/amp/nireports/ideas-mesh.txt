@@ -57,6 +57,13 @@ make a per-column "slow check" function; implement it for PercentageColumns; mak
 implement RunNode -> jsonb
 
 in case fetching a column/measure crashes -> remove said column/measure from report and add a note about it to warnings
+	-> treat the case when fetching a column which is also a hierarchy fails
+	
+filters caching
+year range settings
+
+reimplement GroupColumn::findLeaf() in O(depth) or O(1)
+	
 RELATED_PROJECTS: take care of the (id / related id) stuff
 
 https://jira.dgfoundation.org/browse/AMP-22006 - DO NOT MERGE THIS ONE TO AMP 2.12

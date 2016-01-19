@@ -38,4 +38,9 @@ public class TrivialMeasureBehaviour implements Behaviour {
 	public Cell getZeroCell() {
 		return new AmountCell(-1, new MonetaryAmount(BigDecimal.ZERO, NiPrecisionSetting.IDENTITY_PRECISION_SETTING));
 	}
+
+	@Override
+	public Cell filterCell(NiCell oldCell, NiCell splitCell) {
+		return oldCell.getCell();
+	}
 }

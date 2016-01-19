@@ -34,7 +34,7 @@ public class SimpleTextColumn extends AmpSqlSourcedColumn<TextCell> {
 			return null;
 		
 		if (withoutEntity)
-			return new TextCell(text, rs.getLong(1), -1);
+			return new TextCell(text, rs.getLong(1), rs.getLong(1));
 		else
 			return new TextCell(text, rs.getLong(1), rs.getLong(3));
 	}

@@ -36,4 +36,9 @@ public class PercentageTokenBehaviour implements Behaviour {
 	public Cell getZeroCell() {
 		return new PercentageTextCell("", -1, -1, null);
 	}
+	
+	@Override
+	public Cell filterCell(NiCell oldCell, NiCell splitCell) {
+		return oldCell.getCell();
+	}
 }

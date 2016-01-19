@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.dgfoundation.amp.nireports.Cell;
-import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.TextCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 
@@ -30,9 +29,13 @@ public class TextualTokenBehaviour implements Behaviour {
 		return new TextCell(v.size() == 1 ? v.iterator().next().toString() : v.toString(), cells.get(0).getMainId(), -1);
 	}
 
-
 	@Override
 	public Cell getZeroCell() {
 		return new TextCell("", -1, -1);
+	}
+
+	@Override
+	public Cell filterCell(NiCell oldCell, NiCell splitCell) {
+		return oldCell.getCell();
 	}
 }

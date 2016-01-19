@@ -1,13 +1,13 @@
 package org.dgfoundation.amp.nireports;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
+import org.dgfoundation.amp.nireports.runtime.GroupReportData;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 
 /**
@@ -29,13 +29,16 @@ public class NiReportRenderer {
 	}
 	
 	public String render() {
-		String headers = renderHeaders();
-		String body = renderBody(report);
-		return String.format("<table class='nireport_table inside' cellpadding='0' cellspacing='0' %s>%s\n%s</table>", "width='100%'", headers, body);
+		StringBuilder res = new StringBuilder(String.format("<table class='nireport_table inside' cellpadding='0' cellspacing='0' %s>", "width='100%'"));
+		renderHeaders(res);
+		res.append("\n");
+		renderBody(res, report);
+		res.append("</table>");
+		return res.toString();
 	}
 	
-	protected String renderHeaders() {
-		StringBuilder res = new StringBuilder("<thead>");
+	protected StringBuilder renderHeaders(StringBuilder res) {
+		res.append("<thead>");
 		NiHeaderInfo headers = engine.headers;
 		for(int i = 1; i < headers.rasterizedHeaders.size(); i++) {
 			SortedMap<Integer, Column> headerRow = headers.rasterizedHeaders.get(i);
@@ -47,27 +50,49 @@ public class NiReportRenderer {
 			res.append("</tr>\n");
 		}
 		res.append("</thead>");
-		return res.toString();
+		return res;
 	}
 	
-	protected String renderBody(ReportData element) {
-		StringBuilder res = new StringBuilder("<tbody>\n");
-		if (element instanceof ColumnReportData) {
-			res.append(renderCRD((ColumnReportData) element));
-		} else {
-			
-		}
+	protected StringBuilder renderBody(StringBuilder res, ReportData element) {
+		res.append("<tbody>\n");
+		renderReportData(res, element, 0);
 		res.append("</tbody>");
-		return res.toString();
+		return res;
 	}
 	
-	protected String renderCRD(ColumnReportData crd) {
-		StringBuilder bld = new StringBuilder();
-		SortedSet<Long> ids = new TreeSet<>(crd.contents.getIds());
-		for(Long id:ids) {
+	protected StringBuilder renderReportData(StringBuilder bld, ReportData element, int level) {
+		if (element instanceof ColumnReportData) {
+			renderColumnRD(bld, (ColumnReportData) element, level);
+		} else {
+			renderGroupRD(bld, (GroupReportData) element, level);
+		}
+		return bld;
+	}
+	
+	protected StringBuilder renderGroupRD(StringBuilder bld, GroupReportData grd, int level) {
+		if (level == 0)
 			bld.append("<tr>");
-			for(CellColumn leafHeader:headers.leafColumns) {
-				List<NiCell> cells = leafHeader.getContents().data.get(id);
+		
+		for(ReportData subReport:grd.getSubReports()) {
+			bld.append(String.format("<td class='ni_hierarchyCell ni_hierarchyLevel%d' rowspan='%d'>%s</td>", level + 1, subReport.getRowSpan(false), subReport.splitter.getCell().getDisplayedValue()));
+			renderReportData(bld, subReport, level + 1);
+		}
+		
+		return bld;
+	}
+	
+	protected StringBuilder renderColumnRD(StringBuilder bld, ColumnReportData crd, int level) {
+		ArrayList<Long> ids = new ArrayList<>(crd.getIds());
+		ids.sort(null);
+		boolean isFirstId = true;
+		for(Long id:ids) {
+			if (level == 0 || !isFirstId)
+				bld.append("<tr>");
+			isFirstId = false;
+			int sz = headers.leafColumns.size();
+			for(int i = level; i < sz; i++) {
+				CellColumn leafHeader = headers.leafColumns.get(i);
+				List<NiCell> cells = crd.getContents().get(leafHeader).data.get(id);
 				String contents = cells == null || cells.isEmpty() ? "" : ensureMaxLen(leafHeader.getBehaviour().doHorizontalReduce(cells).getDisplayedValue(), 40);
 				bld.append("<td class='nireport_data_cell'>");
 				bld.append(contents);
@@ -75,7 +100,7 @@ public class NiReportRenderer {
 			}
 			bld.append("</tr>\n");
 		}
-		return bld.toString();
+		return bld;
 	}
 	
 	protected String ensureMaxLen(String s, int maxLen) {

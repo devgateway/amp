@@ -1,9 +1,14 @@
 package org.dgfoundation.amp.nireports.schema;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.DatedCell;
+import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 
 /**
@@ -25,6 +30,22 @@ public interface Behaviour {
 	 * @return
 	 */
 	public Cell doHorizontalReduce(List<NiCell> cells);
+	public Cell filterCell(NiCell oldCell, NiCell splitCell);
+	
+	public default ColumnContents horizSplit(ColumnContents oldContents, NiCell splitCell, Set<Long> acceptableMainIds) {
+		Map<Long, List<NiCell>> z = new HashMap<>();
+		for(Long mainId:acceptableMainIds) {
+			List<NiCell> oldCells = oldContents.data.get(mainId);
+			if (oldCells == null)
+				continue;
+			for(NiCell oldCell:oldCells) {
+				Cell filteredCell = filterCell(oldCell, splitCell);
+				if (filteredCell != null)
+					z.computeIfAbsent(mainId, id -> new ArrayList<>()).add(new NiCell(filteredCell, oldCell.getEntity()));
+			}
+		}
+		return new ColumnContents(z);
+	}
 	
 	public default Cell horizontalReduce(List<NiCell> cells) {
 		if (cells == null || cells.isEmpty())

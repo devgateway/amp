@@ -631,3 +631,11 @@ tr.wicketFundingRowItem:nth-child(odd) {background: #FFFFFF}
         margin-top: 0px;
     }
 }
+
+.mask {
+	z-index:10 !important; 
+}
+
+.yui-panel-container.shadow {
+	z-index:100 !important; 
+}

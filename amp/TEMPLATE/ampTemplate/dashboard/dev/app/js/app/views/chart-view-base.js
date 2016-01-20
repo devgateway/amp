@@ -190,7 +190,9 @@ module.exports = BackboneDash.View.extend({
     if (this.model.get('total')) {
     	this.$('.chart-total').html(util.translateLanguage(this.model.get('sumarizedTotal'))); // this shall use the format from the server and translate it in the front end
     }
-    this.$('.chart-currency').html(this.model.get('currency'));
+    var self = this;
+    var currencyName = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')}).value;
+    this.$('.chart-currency').html(currencyName);
   },
 
   resetNumbers: function() {

@@ -21,7 +21,20 @@ module.exports = ChartViewBase.extend({
 	  var groupedLegendTrn = app.translator.translateSync("amp.dashboard:filters-chart-legends-Grouped","Grouped");
 	  if(key == stackedLegendTrn || key == groupedLegendTrn){
 		  this.model.set('stacked', (key == stackedLegendTrn ));	
-	  }	 
+	  }else{
+		  var seriesToExclude = this.model.get('seriesToExclude') ? this.model.get('seriesToExclude') : [];
+		  var indexOfKeyInExclusionList = _.indexOf(seriesToExclude, key);
+		  if($(e.currentTarget).attr('class').indexOf('disabled') != -1){
+			  if(indexOfKeyInExclusionList == -1){
+				  seriesToExclude.push(key);
+			  }			  
+		  }else{
+			  if(indexOfKeyInExclusionList != -1){
+				  seriesToExclude.splice(indexOfKeyInExclusionList, 1);
+			  }
+		  }
+		  this.model.set('seriesToExclude',seriesToExclude);
+	  }
   },
   chartViews: [
     'multibar',

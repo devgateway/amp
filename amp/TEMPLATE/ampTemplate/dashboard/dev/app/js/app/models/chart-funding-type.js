@@ -8,7 +8,8 @@ module.exports = ChartModel.extend({
     typed: true,
     limit: 3,
     title: '',
-    stacked: false
+    stacked: false,
+    seriesToExclude: []
   },
 
   _prepareTranslations: function() {
@@ -71,7 +72,8 @@ module.exports = ChartModel.extend({
               y: yearValue && yearValue.amount || 0,
               z: yearValue && yearValue.formattedAmount || 0,
             };
-          })
+          }),
+          disabled: (_.indexOf(self.get('seriesToExclude'),localizedName) != -1)
         };
       })
       .value();
@@ -96,6 +98,7 @@ module.exports = ChartModel.extend({
         key: localizedOthers,
         color: '#777',
         special: 'others',
+        disabled: (_.indexOf(self.get('seriesToExclude'),localizedOthers) != -1),
         values: _(data.processed)
           .chain()
           .filter(function(series) { return _(othersNames).contains(series.key); })

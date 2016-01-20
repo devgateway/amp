@@ -507,12 +507,13 @@ var WorkspaceDropZone = Backbone.View.extend({
                                     expression: sortOrderLiteral,
                                     expressionType: "Order"
                                 })).render().open();
-                            } else if (key == "clearsort") {
-                                a.sortOrder = null;
-                                a.sortEvaluationLiteral = null;
-                                alert('maybe?');
-                                self.synchronize_query();
-                                self.workspace.query.run();
+                            } else if (key == "clearsort") {                                
+                                if(confirm("Are you sure you wish to clear this sort selection?")){
+                                	a.sortOrder = null;
+                                    a.sortEvaluationLiteral = null;
+                                	self.synchronize_query();
+                                    self.workspace.query.run();
+                                }         
                             } else if (key.indexOf("show_totals_") == 0){
                                 var total = key.substring("show_totals_".length);
                                 var aggs = [];

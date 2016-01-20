@@ -16,9 +16,25 @@ module.exports = ChartViewBase.extend({
       });
   },   
   changeChartColumns: function(e){	  
-	  var key = $(e.currentTarget).find('.nv-legend-text').text();	  
-	  var stackedLegendTrn = app.translator.translateSync("amp.dashboard:filters-chart-legends-Stacked","Stacked");	
-	  this.model.set('stacked', (key == stackedLegendTrn ));	 
+	  var key = $(e.currentTarget).find('.nv-legend-text').text();	 
+	  var stackedLegendTrn = app.translator.translateSync("amp.dashboard:filters-chart-legends-Stacked","Stacked");
+	  var groupedLegendTrn = app.translator.translateSync("amp.dashboard:filters-chart-legends-Grouped","Grouped");
+	  if(key == stackedLegendTrn || key == groupedLegendTrn){
+		  this.model.set('stacked', (key == stackedLegendTrn ));	
+	  }else{
+		  var seriesToExclude = this.model.get('seriesToExclude') ? this.model.get('seriesToExclude') : [];
+		  var indexOfKeyInExclusionList = _.indexOf(seriesToExclude, key);
+		  if($(e.currentTarget).attr('class').indexOf('disabled') != -1){
+			  if(indexOfKeyInExclusionList == -1){
+				  seriesToExclude.push(key);
+			  }			  
+		  }else{
+			  if(indexOfKeyInExclusionList != -1){
+				  seriesToExclude.splice(indexOfKeyInExclusionList, 1);
+			  }
+		  }
+		  this.model.set('seriesToExclude',seriesToExclude);
+	  }	 
   },
   chartViews: [
     'multibar',

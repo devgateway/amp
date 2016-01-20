@@ -1609,7 +1609,8 @@ module.exports = ChartModel.extend({
     typed: true,
     limit: 3,
     title: '',
-    stacked: false
+    stacked: false,
+    seriesToExclude: []
   },
 
   _prepareTranslations: function() {
@@ -1672,7 +1673,8 @@ module.exports = ChartModel.extend({
               y: yearValue && yearValue.amount || 0,
               z: yearValue && yearValue.formattedAmount || 0,
             };
-          })
+          }),
+          disabled: (_.indexOf(self.get('seriesToExclude'),localizedName) != -1)
         };
       })
       .value();
@@ -1737,6 +1739,7 @@ module.exports = ChartModel.extend({
 	        key: localizedOthers,
 	        color: '#777',
 	        special: 'others',
+	        disabled: (_.indexOf(self.get('seriesToExclude'), localizedOthers) != -1),
 	        values: othersSeriesValues
 	    };
     	
@@ -2374,9 +2377,25 @@ module.exports = ChartViewBase.extend({
       });
   },   
   changeChartColumns: function(e){	  
-	  var key = $(e.currentTarget).find('.nv-legend-text').text();	  
-	  var stackedLegendTrn = app.translator.translateSync("amp.dashboard:filters-chart-legends-Stacked","Stacked");	
-	  this.model.set('stacked', (key == stackedLegendTrn ));	 
+	  var key = $(e.currentTarget).find('.nv-legend-text').text();	 
+	  var stackedLegendTrn = app.translator.translateSync("amp.dashboard:filters-chart-legends-Stacked","Stacked");
+	  var groupedLegendTrn = app.translator.translateSync("amp.dashboard:filters-chart-legends-Grouped","Grouped");
+	  if(key == stackedLegendTrn || key == groupedLegendTrn){
+		  this.model.set('stacked', (key == stackedLegendTrn ));	
+	  }else{
+		  var seriesToExclude = this.model.get('seriesToExclude') ? this.model.get('seriesToExclude') : [];
+		  var indexOfKeyInExclusionList = _.indexOf(seriesToExclude, key);
+		  if($(e.currentTarget).attr('class').indexOf('disabled') != -1){
+			  if(indexOfKeyInExclusionList == -1){
+				  seriesToExclude.push(key);
+			  }			  
+		  }else{
+			  if(indexOfKeyInExclusionList != -1){
+				  seriesToExclude.splice(indexOfKeyInExclusionList, 1);
+			  }
+		  }
+		  this.model.set('seriesToExclude',seriesToExclude);
+	  }	 
   },
   chartViews: [
     'multibar',
@@ -2585,7 +2604,7 @@ module.exports = BackboneDash.View.extend({
     this.listenTo(this.model, 'change:view', this.render);
 
     this.app.state.register(this, 'chart:' + this.model.url, {
-      get: _.partial(_(this.model.pick).bind(this.model), 'limit', 'adjtype', 'view', 'big','stacked','showPlannedDisbursements','showActualDisbursements'),
+      get: _.partial(_(this.model.pick).bind(this.model), 'limit', 'adjtype', 'view', 'big','stacked','showPlannedDisbursements','showActualDisbursements','seriesToExclude'),
       set: _(this.model.set).bind(this.model),
       empty: null
     });

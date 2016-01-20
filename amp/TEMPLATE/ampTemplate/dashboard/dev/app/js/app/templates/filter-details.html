@@ -6,8 +6,11 @@
   </button>
 </div>
 <% _(applied).each(function(filter) { %>
-  <h5><%= filter.name %></h5>
-  <ul>
+  <h5>
+    <a href="#filter-detail-<%= filter.id %>" data-toggle="collapse" aria-expanded="false"><%= filter.name %></a>
+    (<%= filter.detail.length %>)
+  </h5>
+  <ul id="filter-detail-<%= filter.id %>" class="collapse">
     <% _(filter.detail).each(function(detail) { %>
       <li><%= detail %></li>
     <% }) %>

@@ -8,6 +8,8 @@ package org.digijava.module.aim.util;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
@@ -48,6 +51,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.categorymanager.util.IdWithValueShim;
 import org.digijava.module.visualization.util.DashboardUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
@@ -60,6 +64,7 @@ import org.digijava.module.aim.dbentity.AmpStructure;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.jdbc.ReturningWork;
+import org.hibernate.jdbc.Work;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.StringType;
@@ -632,6 +637,59 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
   // function for getting fundings for components and ids ends here
 
+  
+  
+  /**
+   * checks whether the 'name' activity title exists as a translation in any language 
+   * in any latest version of an activity
+   * excluding the activity group of the current activity
+   * @param name title of the activity
+   * @param g activity group of the activity in question
+   * @return
+   */
+  public static IdWithValueShim getActivityCollisions(final String name, final AmpActivityGroup g) {
+	  final IdWithValueShim result = new IdWithValueShim(-1l, "");
+	  PersistenceManager.getSession().doWork(new Work() {
+			public void execute(Connection conn) throws SQLException {
+				String groupClause = "";
+				if (g != null)
+					groupClause = " AND object_id NOT IN (SELECT amp_activity_id FROM amp_activity_version WHERE amp_activity_group_id = " + g.getAmpActivityGroupId() + ") ";
+				
+				
+				
+				String query = "SELECT aav.amp_activity_id, team.name FROM amp_activity_version aav "
+						+ "left outer JOIN amp_team team ON aav.amp_team_id = team.amp_team_id "
+						+ "WHERE amp_activity_id IN"
+						+ "(SELECT object_id FROM amp_content_translation WHERE object_class = 'org.digijava.module.aim.dbentity.AmpActivityVersion' AND field_name='name' "
+						+ groupClause
+						+ " AND object_id IN (SELECT amp_activity_last_version_id FROM amp_activity_group) "
+						+ " AND translation = '" + name + "') ";
+
+				try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
+					while (rsi.rs.next()) {
+						
+						Long id = rsi.rs.getLong(1);
+						String teamName = rsi.rs.getString(2);
+						result.setId(id);
+						result.setValue(teamName);
+					}
+		
+						
+				}
+				
+			}
+	  });
+	  if (result.getId() == -1l)
+		  return null;
+	  return result;
+  
+  }
+	  
+
+  
+  
+  
+  
   public static AmpActivity getActivityByNameExcludingGroup(String name , AmpActivityGroup g) {
 	  
 	  Session session = PersistenceManager.getSession();		

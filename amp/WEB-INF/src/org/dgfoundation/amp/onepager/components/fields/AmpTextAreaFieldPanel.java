@@ -35,7 +35,12 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
     protected TextArea<String> textAreaContainer;
     private Component translationDecorator;
     private WebMarkupContainer closeLink;
-
+    /**
+     * Since all validation errors are going through TranslatableValidators.onError(), 
+     * and there is no way to send the validator that generated the cause, 
+     * it will be bound on 
+     */
+    private boolean uniqueTitleValidatorError = false;
     public TextArea<String> getTextAreaContainer() {
 		return textAreaContainer;
 	}
@@ -170,4 +175,12 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
     public boolean isComponentMultilingual () {
     	return translationDecorator instanceof TranslationDecorator;
     }
+
+	public boolean isUniqueTitleValidatorError() {
+		return uniqueTitleValidatorError;
+	}
+
+	public void setUniqueTitleValidatorError(boolean uniqueTitleValidatorError) {
+		this.uniqueTitleValidatorError = uniqueTitleValidatorError;
+	}
 }

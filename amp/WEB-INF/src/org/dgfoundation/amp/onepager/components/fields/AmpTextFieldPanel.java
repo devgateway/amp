@@ -23,6 +23,12 @@ public class AmpTextFieldPanel<T> extends AmpFieldPanel<T> {
 	public static int DEFAULT_MAX_SIZE=255;
 	protected TextField<T> textContainer;
     private Component translationDecorator;
+    /**
+     * Since all validation errors are going through TranslatableValidators.onError(), 
+     * and there is no way to send the validator that generated the cause, 
+     * it will be bound on 
+     */
+    private boolean uniqueTitleValidatorError = false;
 
 
     public TextField<T> getTextContainer() {
@@ -100,6 +106,7 @@ public class AmpTextFieldPanel<T> extends AmpFieldPanel<T> {
         if (translationDecorator instanceof TranslationDecorator){
             ((TranslationDecorator) translationDecorator).getSwitchingDisabled().setObject(Boolean.TRUE);
         }
+        
         TranslatableValidators.onError(target, formComponent, translationDecorator);
     }
     @Override
@@ -114,4 +121,12 @@ public class AmpTextFieldPanel<T> extends AmpFieldPanel<T> {
     public boolean isComponentMultilingual () {
     	return translationDecorator instanceof TranslationDecorator;
     }
+
+	public boolean isUniqueTitleValidatorError() {
+		return uniqueTitleValidatorError;
+	}
+
+	public void setUniqueTitleValidatorError(boolean uniqueTitleValidatorError) {
+		this.uniqueTitleValidatorError = uniqueTitleValidatorError;
+	}
 }

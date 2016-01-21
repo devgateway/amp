@@ -163,11 +163,11 @@ class activityMapperAutocompleteBase extends activityMapperBase implements activ
         }
 
         // Filter out donors without funding.
-        if ($info['plugin']['property name'] == 'donor_agency') {
-          if (empty($entry->hasFundings)) {
-            $matches = FALSE;
-          }
-        }
+        // if ($info['plugin']['property name'] == 'donor_agency') {
+        //   if (empty($entry->hasFundings)) {
+        //     $matches = FALSE;
+        //   }
+        // }
 
         if ($matches) {
           return TRUE;

@@ -37,7 +37,7 @@ export var view = AMP.view((
   var __ = key => translations().get(key);
   var onChange = e => {
     var value = e.target.value;
-    if(0 == value.length || negative(point(number))(value)){
+    if(0 == value.length || (negative(point(number))(value) && (+value) > -1000 && (+value) < 1000)){
       change(value);
     }
   };

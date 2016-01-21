@@ -193,7 +193,7 @@ function generateHeaderHtml(headers) {
 					if (this.headerMatrix[i][j].description) {
 						helpIcon = "<img src='/TEMPLATE/ampTemplate/images/help.gif'" +
 								" style= 'padding-left:5px'" +
-								" title='" + this.headerMatrix[i][j].description + "'>"
+								" title='" + this.headerMatrix[i][j].description + "'/>"
 					}
 					
 					col = "<th" + style + id + " data-header-level='" + i + "'"

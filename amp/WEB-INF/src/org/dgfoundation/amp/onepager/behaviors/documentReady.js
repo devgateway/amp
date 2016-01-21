@@ -1,4 +1,4 @@
-enableComputateVisibleSections = false;
+enableComputateVisibleSec7tions = false;
 onepagerMode = ${onepagerMode};
 isTabView = ${isTabView};
 
@@ -39,14 +39,40 @@ function computateVisibleSections(){
 	}
 }
 
+// Manage the position of the right menu in AF after scrolling
 function adjustQuickLinks(){
-	var mainContentLeft = $('#mainContent').offset().left;
+	var contentMarginLeft = $('#stepHead').offset().left;
+	var contentMarginTop = $('#stepHead').offset().top;
+	var contentHeight = $('#stepHead').height() + $('#mainContent').height() + 55; 
+	var contentWidth = $('#stepHead').width() + 40;
+	var rightMenuHeight = $('#rightMenu').height();
+	var rightMenuWidth = $('#rightMenu').width();
+	
+	// the initial position of the right menu should be below the next menu
+	if (contentMarginTop < 130) {
+		contentMarginTop = 130;
+	}
+	
 	var currentScrollLeft = $(window).scrollLeft();
-	mainContentLeft = mainContentLeft + 800 - currentScrollLeft;
-	$('#rightMenu').css('top', "15%");
-	$('#rightMenu').css('left', mainContentLeft + "px");
-	if (onepagerMode)
+	rightMenuMargin = contentMarginLeft + contentWidth - currentScrollLeft;
+	
+	if (($(window).scrollTop() + rightMenuHeight) > contentHeight) {
+		$('#rightMenu').css('position', 'absolute');
+		$('#rightMenu').css('top', (contentHeight + contentMarginTop - rightMenuHeight) + "px");
+		if ($(window).width() < (contentWidth + rightMenuWidth)) {
+			$('#rightMenu').css('left', contentWidth + "px");
+		} else {
+			$('#rightMenu').css('left', rightMenuMargin + "px");
+		}
+	} else {
+		$('#rightMenu').css('position', 'fixed')
+		$('#rightMenu').css('top', contentMarginTop + "px");
+		$('#rightMenu').css('left', rightMenuMargin + "px");
+	}
+	
+	if (onepagerMode) {
 		computateVisibleSections();
+	}
 }
 
 
@@ -108,8 +134,8 @@ function rightMenuEnable(){
 		}
 	}
 
-	var mainContentTop = $('#mainContent').offset().top - 23;
-	var mainContentLeft = $('#mainContent').offset().left + 800;
+	var mainContentTop = $('#stepHead').offset().top;
+	var mainContentLeft = $('#stepHead').offset().left + $('#stepHead').width() + 40;
 	$('#rightMenu').css('top', mainContentTop + "px");
 	$('#rightMenu').css('left', mainContentLeft + "px");
 

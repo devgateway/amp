@@ -545,7 +545,7 @@ public class DynLocationManagerUtil {
 			dbSession = PersistenceManager.getSession();
 			String queryString = "select loc from "
 					+ AmpCategoryValueLocations.class.getName()
-					+ " loc where (loc.iso=:iso)";
+					+ " loc where (lower(loc.iso) like :iso)";
 			if (cvLocationLayer != null) {
 				queryString += " AND (loc.parentCategoryValue=:cvId) ";
 			}
@@ -554,7 +554,7 @@ public class DynLocationManagerUtil {
 			if (cvLocationLayer != null) {
 				qry.setLong("cvId", cvLocationLayer.getId());
 			}
-			qry.setString("iso", locationIso);
+			qry.setString("iso", locationIso.toLowerCase());
 			AmpCategoryValueLocations loc = (AmpCategoryValueLocations) qry
 					.uniqueResult();
 			return loc;

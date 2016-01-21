@@ -81,7 +81,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		String query = buildQuery(engine);
 		
 		//TODO: do not commit this uncommented
-		query = query + " AND (transaction_date >= '2005-01-01')";
+		query = query + " AND (transaction_date >= '2014-01-01')";
 		Map<Long, String> adjustmentTypes = SQLUtils.collectKeyValue(scratchpad.connection, 
 				String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname = '%s'", CategoryConstants.ADJUSTMENT_TYPE_KEY));
 		

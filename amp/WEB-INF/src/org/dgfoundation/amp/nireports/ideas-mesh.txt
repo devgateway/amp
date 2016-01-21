@@ -63,7 +63,13 @@ filters: activities-id caching
 year range settings
 undefineds-collapsing via ReportData merging
 NiReportOutput-to-ReportsAPI-output
-	
+scan amp_columns @startup; add entries for missing ones
+scan amp_measures @startup; add entries for missing ones
 RELATED_PROJECTS: take care of the (id / related id) stuff
 
 https://jira.dgfoundation.org/browse/AMP-22006 - DO NOT MERGE THIS ONE TO AMP 2.12
+
+
+http://localhost:8080/rest/data/nireport/10 - report behaviour when no funding
+by-year-hierarchies: generate list of all measures at the bottom
+gross filtering-out of entries while fetching funding

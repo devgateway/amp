@@ -18,8 +18,6 @@ import org.digijava.kernel.translator.TranslatorWorker;
  *
  */
 public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
-	
-	
 	/**
 	 * the <strong>localized</strong> name of the column<br />
 	 * This one is not <strong>final</strong> because of a hack I had to do for AMP-21282<br />
@@ -27,26 +25,18 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	 */
 	public String columnName;
 	
-	/**
-	 * the parent column, if any. Might be null for top-level columns, like "Funding" or "Project Title"
-	 */
+	/** the parent column, if any. Might be null for top-level columns, like "Funding" or "Project Title" */
 	public final ReportOutputColumn parentColumn;
-	
-	
-	/**
-	 * the <strong> unlocalized</strong> name of the column
-	 */
+		
+	/** the <strong> unlocalized</strong> name of the column */
 	public final String originalColumnName;
 	
 	public final String description;
 	
-	/**
-	 * flags about the column
-	 */
+	/** flags about the column */
 	public final Set<Object> flags;
 	
-	transient
-	public final List<ReportOutputColumn> children = new ArrayList<ReportOutputColumn>();
+	transient public final List<ReportOutputColumn> children = new ArrayList<ReportOutputColumn>();
 	
 	public ReportOutputColumn(String columnName, ReportOutputColumn parentColumn, String originalColumnName, Collection<?> flags) {
 		this(columnName, parentColumn, originalColumnName, null, flags);

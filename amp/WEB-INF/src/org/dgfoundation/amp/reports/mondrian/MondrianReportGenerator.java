@@ -644,6 +644,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			}
 		}
 		CellDataSetPostProcessing postProcessor = new CellDataSetPostProcessing(spec, cellDataSet, leafHeaders, environment); 
+		postProcessor.postProcessAmountsBeforeHierarchicalMerge();
 		
 		formatSaikuDates(cellDataSet);
 		applyFilterSetting(cellDataSet);
@@ -652,7 +653,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 //		SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST_FILTERING");
 		
 		postprocessUndefinedEntries(cellDataSet);
-		postProcessor.postProcessAmountsBeforeHierarchicalMerge();
+		
 		CellDataSetToAmpHierarchies.concatenateNonHierarchicalColumns(spec, cellDataSet, leafHeaders, this.translatedUndefined, cellDataSetActivities);
 		boolean internalIdUsed = postProcessor.removeDummyColumns();
 		

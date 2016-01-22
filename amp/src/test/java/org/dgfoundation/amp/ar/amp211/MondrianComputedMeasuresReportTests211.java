@@ -55,5 +55,21 @@ public class MondrianComputedMeasuresReportTests211 extends MondrianReportsTestC
 				correctReport,
 				"en");
 	}
+	
+	public void test_AMP_19710_UncommittedBalanceYearRange() {
+		ReportAreaForTests correctReport = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Proposed Project Amount", "4 459 510,47", "Total Measures-Actual Commitments", "75 000", "Total Measures-Uncommitted Balance", "4 384 510,47")
+	    .withChildren(
+	      new ReportAreaForTests()    .withContents("Project Title", "Proposed Project Cost 1 - USD", "Proposed Project Amount", "1 000 000", "Total Measures-Actual Commitments", "0", "Total Measures-Uncommitted Balance", "1 000 000"),
+	      new ReportAreaForTests()    .withContents("Project Title", "Proposed Project Cost 2 - EUR", "Proposed Project Amount", "3 399 510,47", "Total Measures-Actual Commitments", "0", "Total Measures-Uncommitted Balance", "3 399 510,47"),
+	      new ReportAreaForTests()    .withContents("Project Title", "Project with documents", "Proposed Project Amount", "", "Total Measures-Actual Commitments", "0", "Total Measures-Uncommitted Balance", "0"),
+	      new ReportAreaForTests()    .withContents("Project Title", "SubNational no percentages", "Proposed Project Amount", "60 000", "Total Measures-Actual Commitments", "75 000", "Total Measures-Uncommitted Balance", "-15 000")  );
+		
+		List<String> activities = Arrays.asList("Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR", "SubNational no percentages", "Project with documents");
+		runMondrianTestCase("AMP-19710-Uncommitted-Balance-ReducedYearRange",
+				activities,
+				correctReport,
+				"en");
+	}
 
 }

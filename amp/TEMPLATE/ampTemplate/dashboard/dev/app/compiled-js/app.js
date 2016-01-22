@@ -3336,7 +3336,7 @@ module.exports = BackboneDash.View.extend({
       var dateRangeText = app.translator.translateSync("amp.dashboard:date-range","Date Range");
       applied.push({
         name: dateRangeText,
-        detail: [dateRange.start + '&mdash;' + dateRange.end]
+        detail: [this.app.filter.formatDate(dateRange.start) + '&mdash;' + this.app.filter.formatDate(dateRange.end)]
       });
     }
     this.$('.applied-filters').html(detailsTemplate({ applied: applied }));
@@ -29317,6 +29317,10 @@ _.extend(Widget.prototype, Backbone.Events, {
     return this.view.serialize({wholeModel: true});
   },
 
+  formatDate: function(date){
+	  return this.view.formatDate(date);  
+  },
+  
   // return json blob of serialized filter state, ids only.
   serialize: function() {
     return this.view.serialize({});
@@ -30287,7 +30291,7 @@ module.exports = Backbone.View.extend({
 
   template: _.template(Template),
   titleTemplate: _.template(TitleTemplate),
-
+  PARAMS_DATE_FORMAT:'yy-mm-dd', //backend expects filters to be submitted in this format
   initialize:function(options) {
     var self = this;
     this.draggable = options.draggable;
@@ -30334,7 +30338,7 @@ module.exports = Backbone.View.extend({
     		for (key in filterInstancesNames) {
     			if (filterInstancesNames.hasOwnProperty(key)) {
     				
-    				this.filterViewsInstances[key] = new TopLevelFilterView({name:filterInstancesNames[key], translator: this.translator, translate: this.translate, settings:this.settings, dateFormatMappings: this.dateFormatMappings});
+    				this.filterViewsInstances[key] = new TopLevelFilterView({name:filterInstancesNames[key], translator: this.translator, translate: this.translate, filterView: this});
     			}
     		}
     		/*
@@ -30579,6 +30583,28 @@ module.exports = Backbone.View.extend({
     }, this));
   },
 
+  getDateFormat: function(){
+	  if(this.dFormat){
+		  return this.dFormat;
+	  }	
+	  
+	  var dateFormatSetting = this.settings.findWhere({ id: 'default-date-format' });
+	  if(dateFormatSetting && dateFormatSetting.get("options") && dateFormatSetting.get("options").length > 0){			
+			var foundMapping =_.findWhere(this.dateFormatMappings, {ampformat: dateFormatSetting.get("options")[0].name});
+			if(foundMapping){
+				this.dFormat = foundMapping.datepickerformat;
+			}
+	  }	  
+	  if(!this.dFormat){
+		  this.dFormat = this.PARAMS_DATE_FORMAT;
+	  }	  
+	  return this.dFormat;
+   },
+  
+   formatDate: function(date){
+	   return $.datepicker.formatDate(this.getDateFormat(), ($.datepicker.parseDate(this.PARAMS_DATE_FORMAT,date)));
+   }, 
+   
   cancel: function() {
     if(this.filterStash){
       this.deserialize(this.filterStash, {silent: true});
@@ -30752,9 +30778,8 @@ module.exports = Backbone.View.extend({
     this.name = options.name;
     this.translator = options.translator;
     this.translate = options.translate;
-    this.filterCollection = new Backbone.Collection();
-    this.settings = options.settings;
-    this.dateFormatMappings = options.dateFormatMappings;
+    this.filterView = options.filterView; 
+    this.filterCollection = new Backbone.Collection();    
     this.filterCollection.on('change:numSelected', function(){
       self._refreshTitle();
     });
@@ -30789,8 +30814,7 @@ module.exports = Backbone.View.extend({
     			el: self.$('.sub-filters-content'),
     			translator: self.translator,
     			translate: self.translate,
-    			settings: self.settings,
-    			dateFormatMappings: self.dateFormatMappings
+    			filterView: self.filterView    			
     		});
     		self.viewList.push(view);
     	} else {
@@ -30861,19 +30885,15 @@ module.exports = BaseFilterView.extend({
 
   className: BaseFilterView.prototype.className + ' filter-years',
   template: _.template(Template),
-  _loaded: null,
-  PARAMS_DATE_FORMAT:'yy-mm-dd', //backend expects filters to be submitted in this format
-  dFormat: null,
+  _loaded: null, 
   initialize:function(options) {
     var self = this;
     
-    this.settings = options.settings;    
+    this.filterView = options.filterView;    
     BaseFilterView.prototype.initialize.apply(this, [options]);
-
     this.model = options.model;
     this.translator = options.translator;
-    this.translate = options.translate;
-    this.dateFormatMappings = options.dateFormatMappings;
+    this.translate = options.translate;    
 //    console.log("just built a years-filter-view for " + self.model.get('name'));
     this._loaded = this.model.fetch().then(function() {
     	//console.log("just loaded a years-filter-view for: " + JSON.stringify({name: self.model.get('name'), start: self.model.get('selectedStart'), end: self.model.get('selectedEnd')}));
@@ -30915,14 +30935,14 @@ module.exports = BaseFilterView.extend({
       defaultDate: this.model.get('selectedStart'),
       //minDate: this.model.get('startYear'),
       //maxDate: this.model.get('endYear'),
-      dateFormat: this._getDateFormat(),
+      dateFormat: this.filterView.getDateFormat(),
       changeMonth: true,
       changeYear: true,
       numberOfMonths: 1,
       yearRange: 'c-60:c+60',
       onClose: function(selectedDate) {
         self.$('#end-date').datepicker('option', 'minDate', selectedDate);        
-        self.model.set('selectedStart', $.datepicker.formatDate(self.PARAMS_DATE_FORMAT, $.datepicker.parseDate(self._getDateFormat(), selectedDate)));
+        self.model.set('selectedStart', $.datepicker.formatDate(self.filterView.PARAMS_DATE_FORMAT, $.datepicker.parseDate(self.filterView.getDateFormat(), selectedDate)));
         // self._updateTitle();
       }
     });    
@@ -30931,14 +30951,14 @@ module.exports = BaseFilterView.extend({
       defaultDate: this.model.get('selectedEnd'),
       //minDate: this.model.get('startYear'),
       //maxDate: this.model.get('endYear'),
-      dateFormat: this._getDateFormat(),
+      dateFormat: this.filterView.getDateFormat(),
       changeMonth: true,
       changeYear: true,
       numberOfMonths: 1,
       yearRange: 'c-60:c+60',
       onClose: function(selectedDate) {
         self.$('#start-date').datepicker('option', 'maxDate', selectedDate);        
-        self.model.set('selectedEnd', $.datepicker.formatDate(self.PARAMS_DATE_FORMAT, $.datepicker.parseDate(self._getDateFormat(), selectedDate)));
+        self.model.set('selectedEnd', $.datepicker.formatDate(self.filterView.PARAMS_DATE_FORMAT, $.datepicker.parseDate(self.filterView.getDateFormat(), selectedDate)));
         // self._updateTitle();
       }
     });
@@ -30948,7 +30968,7 @@ module.exports = BaseFilterView.extend({
   },
 
   renderTitle:function() {
-    BaseFilterView.prototype.renderTitle.apply(this);
+	BaseFilterView.prototype.renderTitle.apply(this);
     this._updateTitle();
 
     return this;
@@ -30956,9 +30976,9 @@ module.exports = BaseFilterView.extend({
 
   //TODO: do more in template.
   _updateTitle:function() {	  
-	var selectedStart = this.model.get('selectedStart') ? $.datepicker.formatDate(this._getDateFormat(), ($.datepicker.parseDate(this.PARAMS_DATE_FORMAT, this.model.get('selectedStart')))) : "";
-	var selectedEnd = this.model.get('selectedEnd') ? $.datepicker.formatDate(this._getDateFormat(), ($.datepicker.parseDate(this.PARAMS_DATE_FORMAT, this.model.get('selectedEnd'))))	: "";
-	$('#datePicker').datepicker({ dateFormat: this._getDateFormat() });
+	var selectedStart = this.model.get('selectedStart') ? $.datepicker.formatDate(this.filterView.getDateFormat(), ($.datepicker.parseDate(this.filterView.PARAMS_DATE_FORMAT, this.model.get('selectedStart')))) : "";
+	var selectedEnd = this.model.get('selectedEnd') ? $.datepicker.formatDate(this.filterView.getDateFormat(), ($.datepicker.parseDate(this.filterView.PARAMS_DATE_FORMAT, this.model.get('selectedEnd'))))	: "";
+	$('#datePicker').datepicker({ dateFormat: this.filterView.getDateFormat() });
 	this.$('#start-date').datepicker("setDate", selectedStart);
 	this.$('#end-date').datepicker("setDate", selectedEnd);	
 	 this.$titleEl.find('.filter-count').text(selectedStart + ' - ' +  selectedEnd);	        
@@ -30966,24 +30986,6 @@ module.exports = BaseFilterView.extend({
      this.$('.end-year').text(selectedEnd)
   },
 
-  _getDateFormat: function(){
-	  if(this.dFormat){
-		  return this.dFormat;
-	  }	
-	  
-	  var dateFormatSetting = this.settings.findWhere({ id: 'default-date-format' });
-	  if(dateFormatSetting && dateFormatSetting.get("options") && dateFormatSetting.get("options").length > 0){			
-			var foundMapping =_.findWhere(this.dateFormatMappings, {ampformat: dateFormatSetting.get("options")[0].name});
-			if(foundMapping){
-				this.dFormat = foundMapping.datepickerformat;
-			}
-	  }	  
-	  if(!this.dFormat){
-		  this.dFormat = this.PARAMS_DATE_FORMAT;
-	  }	  
-	  return this.dFormat;
-   },
-  
   _renderSlider: function() {
     var self = this;
 

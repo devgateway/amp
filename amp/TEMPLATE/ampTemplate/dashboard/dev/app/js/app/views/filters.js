@@ -118,7 +118,7 @@ module.exports = BackboneDash.View.extend({
       var dateRangeText = app.translator.translateSync("amp.dashboard:date-range","Date Range");
       applied.push({
         name: dateRangeText,
-        detail: [dateRange.start + '&mdash;' + dateRange.end]
+        detail: [this.app.filter.formatDate(dateRange.start) + '&mdash;' + this.app.filter.formatDate(dateRange.end)]
       });
     }
     this.$('.applied-filters').html(detailsTemplate({ applied: applied }));

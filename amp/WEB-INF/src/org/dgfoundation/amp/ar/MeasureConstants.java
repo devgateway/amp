@@ -21,6 +21,9 @@ public class MeasureConstants {
 	public static final String CONSUMPTION_RATE = "Consumption Rate";
 	public static final String CUMULATED_DISBURSEMENTS = "Cumulated Disbursements"; 
 	public static final String CUMULATED_SSC_COMMITMENTS = "Cumulated SSC Commitments";
+	public static final String CUMULATIVE_COMMITMENT = "Cumulative Commitment";
+	public static final String CUMULATIVE_DISBURSEMENT = "Cumulative Disbursement";
+	public static final String CUMULATIVE_EXECUTION_RATE = "Cumulative Execution Rate";
 	public static final String DISBURSMENT_RATIO = "Disbursment Ratio";
 	public static final String OFFICIAL_DEVELOPMENT_AID_COMMITMENTS = "Official Development Aid Commitments";
 	public static final String PIPELINE_COMMITMENTS = "Pipeline Commitments";
@@ -38,7 +41,9 @@ public class MeasureConstants {
 	public static final String TOTAL_DISBURSEMENTS = "Total Disbursements";
 	public static final String TRIANGULAR_SSC_COMMITMENTS = "Triangular SSC Commitments";
 	public static final String UNCOMMITTED_BALANCE = "Uncommitted Balance";
+	public static final String UNCOMMITTED_CUMULATIVE_BALANCE = "Uncommitted Cumulative Balance";
 	public static final String UNDISBURSED_BALANCE = "Undisbursed Balance";
+	public static final String UNDISBURSED_CUMULATIVE_BALANCE = "Undisbursed Cumulative Balance";
 	public static final String REAL_DISBURSEMENTS = "Real Disbursements";
 	public static final String REAL_COMMITMENTS = "Real Commitments";
 	public static final String REAL_MTEFS = "Real MTEFs";

@@ -139,7 +139,11 @@ public class AmpReportsToReportSpecification {
 		} else {
 			for (AmpColumns column : getOrderedColumns()) 
 				if (!column.isMtefColumn() && !column.isRealMtefColumn()) { // MTEF columns are processed separately by MtefConverter, which reads the AmpReports instance directly
-					spec.addColumn(new ReportColumn(column.getColumnName()));
+					if (MondrianMapping.definedMeasures.contains(column.getColumnName())) {
+						spec.addMeasure(new ReportMeasure(column.getColumnName()));
+					} else {
+						spec.addColumn(new ReportColumn(column.getColumnName()));
+					}
 				}
 		}
 		
@@ -147,6 +151,7 @@ public class AmpReportsToReportSpecification {
 		for (AmpMeasures measure: report.getOrderedMeasures()) {
 			// if old reports will become obsolete, then remove these compatibility adjustments
 			String measureName = measure.getMeasureName();
+			// TODO: if (report.getHideActivities()) {
 			if (MondrianMapping.definedColumns.contains(measureName)) {
 				spec.addColumn(new ReportColumn(measureName));
 				measuresMovedAsColumns = true;

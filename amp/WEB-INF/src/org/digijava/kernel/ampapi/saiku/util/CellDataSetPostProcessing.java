@@ -250,7 +250,7 @@ public class CellDataSetPostProcessing {
 	}
 	
 	public void postProcessAmountsBeforeHierarchicalMerge() {
-		(new UncommittedBalancePostProcess(spec, cellDataSet, leafHeaders)).processBeforeMergeByHierarchy();
+		(new PPCDependentMeasuresPostProcess(spec, cellDataSet, leafHeaders)).processBeforeMergeByHierarchy();
 	}
 	
 	/**

@@ -1338,6 +1338,33 @@ body {background:none;}
                                                                               		</tr>
 																				</logic:notEmpty>
 																			</field:display>
+																			
+																			
+																			<field:display name="Agreement" feature="Funding Information">
+																				<logic:notEmpty name="funding" property="title">
+                                                                              		<tr>
+                                                                                		<td align="left" width="339">
+                                                                                  			<a><digi:trn>Agreement Title</digi:trn></a>
+																				 		</td>
+                                                                                		<td width="10">:</td>
+                                                                                		<td align="left">
+                                                                                			<digi:trn><bean:write name="funding" property="title"/></digi:trn>
+                                                                                  		</td>
+                                                                              		</tr>
+<tr>
+                                                                                		<td align="left" width="339">
+                                                                                  			<a><digi:trn>Agreement Code</digi:trn></a>
+																				 		</td>
+                                                                                		<td width="10">:</td>
+                                                                                		<td align="left">
+                                                                                			<digi:trn><bean:write name="funding" property="code"/></digi:trn>
+                                                                                  		</td>
+                                                                              		</tr>
+																				</logic:notEmpty>
+																			</field:display>
+																			
+																			
+																			
 				                                                            </table>
                                                                            </td>
                                                                         </tr>
@@ -2188,7 +2215,7 @@ body {background:none;}
 									  </b>									</td>
 
 										<td bgcolor="#ffffff">
-										<module:display name="/Activity Form/Related Organizations/Donor Organization" parentModule="/Activity Form/Related Organizations">
+										<module:display name="/Activity Form/Organizations/Donor Organization" parentModule="/Activity Form/Related Organizations">
 											<b><digi:trn key="aim:donororganisation">Donor Organization</digi:trn></b>
 											<br/>
 											<logic:notEmpty name="aimEditActivityForm" property="funding.fundingOrganizations">
@@ -2250,7 +2277,7 @@ body {background:none;}
 											<br/>
 											</module:display>
 
-                                           <module:display name="/Activity Form/Related Organizations/Executing Agency" parentModule="/Activity Form/Related Organizations">
+                                           <module:display name="/Activity Form/Organizations/Executing Agency" parentModule="/Activity Form/Related Organizations">
 											<b><digi:trn key="aim:executingAgency">Executing Agency</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.executingAgencies">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
@@ -2290,7 +2317,7 @@ body {background:none;}
 											<br/>
 											</module:display>
 
-											<module:display name="/Activity Form/Related Organizations/Implementing Agency" parentModule="/Activity Form/Related Organizations">
+											<module:display name="/Activity Form/Organizations/Implementing Agency" parentModule="/Activity Form/Related Organizations">
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.impAgencies">
 											<b><digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn></b><br/>
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
@@ -2415,7 +2442,7 @@ body {background:none;}
 
 											</logic:notEmpty><br/>
 											</module:display>
-											<module:display name="/Activity Form/Related Organizations/Sector Group" parentModule="/Activity Form/Related Organizations">
+											<module:display name="/Activity Form/Organizations/Sector Group" parentModule="/Activity Form/Related Organizations">
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.sectGroups">
 											<field:display name="Sector Group" feature="Sector Group">
 											<b><digi:trn key="aim:sectorGroup">Sector Group</digi:trn></b><br/>
@@ -2458,7 +2485,7 @@ body {background:none;}
 											</logic:notEmpty>
 											</module:display>
 
-											<module:display name="/Activity Form/Related Organizations/Regional Group" parentModule="/Activity Form/Related Organizations">
+											<module:display name="/Activity Form/Organizations/Regional Group" parentModule="/Activity Form/Related Organizations">
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.regGroups">
 											<b><digi:trn key="aim:regionalGroup">Regional Group</digi:trn></b><br/>
 											<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">

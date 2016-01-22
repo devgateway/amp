@@ -112,7 +112,6 @@ function contentwidget_totalpledges_widget_retrieve_report_data($plugin, $widget
       $request_body['filters']['columnFilters'][$drm_key] = array($drm_value);
     }
 
-
     $variables['body'] = empty($request_body) ? '{}' : json_encode($request_body);
 
     // Set the API Resource Endpoint.
@@ -148,15 +147,18 @@ function contentwidget_totalpledges_widget_retrieve_report_data($plugin, $widget
   // Get the number formatting pattern.
   $number_format = NULL;
   $currency = '';
-  foreach ($response_data->settings as $info) {
-    if ($info->id == 'ammountPattern') {
-      $number_format = $info->value;
-    }
+  // There's a case (for now) when API returns wrong data, we should handle it.
+  if (!is_null($response_data->settings)) {
+    foreach ($response_data->settings as $info) {
+      if ($info->id == 'ammountPattern') {
+        $number_format = $info->value;
+      }
 
-    // @HACK: The id for currency is "1"!!!
-    // @see: Documentation for /rest/gis/settings
-    if ($info->id == '1') {
-      $currency = $info->value->defaultId;
+      // @HACK: The id for currency is "1"!!!
+      // @see: Documentation for /rest/gis/settings
+      if ($info->id == '1') {
+        $currency = $info->value->defaultId;
+      }
     }
   }
   if (is_null($number_format)) {
@@ -168,40 +170,48 @@ function contentwidget_totalpledges_widget_retrieve_report_data($plugin, $widget
   $formatter_locale = NULL;
   $formatter = new NumberFormatter($formatter_locale, NumberFormatter::PATTERN_DECIMAL, $number_format);
 
-  foreach ($response_data->headers as $h_info) {
-    // @TODO: use mappers.
-    if (!in_array($h_info->hierarchicalName, array('[Actual Pledge]', '[Actual Commitments]', '[Actual Disbursements]'))) {
-      continue;
-    }
+  // There's a case (for now) when API returns wrong data, we should handle it.
+  if (isset($response_data->headers)) {
+    foreach ($response_data->headers as $h_info) {
+      // @TODO: use mappers.
+      if (!in_array($h_info->hierarchicalName, array('[Actual Pledge]', '[Actual Commitments]', '[Actual Disbursements]'))) {
+        continue;
+      }
 
-    if (!isset($response_data->page->pageArea->contents->{$h_info->hierarchicalName}->value)) {
-      continue;
-    }
+      if (!isset($response_data->page->pageArea->contents->{$h_info->hierarchicalName}->value)) {
+        continue;
+      }
 
-    if ($formatter) {
-      $value = $response_data->page->pageArea->contents->{$h_info->hierarchicalName}->value;
-      // Display configuration in millions.
-      // @TODO: Add configuration options.
-      $value = $value / 1000 / 1000;
+      if ($formatter) {
+        $value = $response_data->page->pageArea->contents->{$h_info->hierarchicalName}->value;
+        // Display configuration in millions.
+        // @TODO: Add configuration options.
+        $value = $value / 1000 / 1000;
 
-      $amount = '<span class="amount">' . $formatter->format($value) . '</span> ';
-      $amount .= '<span class="text">' . t('Millions !currencysymbol', array('!currencysymbol' => $currency)) . '</span>';
-    }
-    else {
-      $amount = check_plain($response_data->page->pageArea->contents->{$h_info->hierarchicalName}->displayedValue);
-    }
+        $amount = '<span class="amount">' . $formatter->format($value) . '</span> ';
+        $amount .= '<span class="text">' . t('Millions !currencysymbol', array('!currencysymbol' => $currency)) . '</span>';
+      }
+      else {
+        $amount = check_plain($response_data->page->pageArea->contents->{$h_info->hierarchicalName}->displayedValue);
+      }
 
-    switch ($h_info->hierarchicalName) {
-      case '[Actual Pledge]':
-        $report_totals['actual_pledge'] = $amount;
-        break;
-      case '[Actual Commitments]':
-        $report_totals['actual_commitments'] = $amount;
-        break;
-      case '[Actual Disbursements]':
-        $report_totals['actual_disbursements'] = $amount;
-        break;
+      switch ($h_info->hierarchicalName) {
+        case '[Actual Pledge]':
+          $report_totals['actual_pledge'] = $amount;
+          break;
+        case '[Actual Commitments]':
+          $report_totals['actual_commitments'] = $amount;
+          break;
+        case '[Actual Disbursements]':
+          $report_totals['actual_disbursements'] = $amount;
+          break;
+      }
     }
+  }
+  else {
+    $report_totals['actual_pledge'] = '<span class="text">' . t('Not Available') . '</span>';
+    $report_totals['actual_commitments'] = '<span class="text">' . t('Not Available') . '</span>';
+    $report_totals['actual_disbursements'] = '<span class="text">' . t('Not Available') . '</span>';
   }
 
   // 1 hours cache life time for requests should be plenty for now.

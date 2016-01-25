@@ -105,13 +105,13 @@ function amp_validator_check_year_range(itemsClass){
 }
 
 function amp_validator_check_date_range(itemsClass){
-	return function(inputItem){	
-	
+	return function(inputItem){		
+		  
 		var dateRangeStartItem = $('.validate-date-range-start.' + itemsClass);
 		var dateRangeEndItem = $('.validate-date-range-end.' + itemsClass);
-		
-		var dateStart = moment(dateRangeStartItem.val(), 'YYYY-MM-DD');
-		var dateEnd = moment(dateRangeEndItem.val(), 'YYYY-MM-DD');
+		var dateFormat = dateRangeStartItem.data('date-format') ? dateRangeStartItem.data('date-format') : 'YYYY-MM-DD';
+		var dateStart = moment(dateRangeStartItem.val(), dateFormat);
+		var dateEnd = moment(dateRangeEndItem.val(), dateFormat);
 
 		if (!dateStart.isValid())
 			return {success: false, error_message: please_enter_date_message};

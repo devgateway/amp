@@ -5,6 +5,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>
+<%@ page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
+<%@ page import="org.digijava.module.aim.util.FeaturesUtil"%>
 
 <digi:instance property="pledgeForm" />
 
@@ -46,9 +48,9 @@
 					<c:choose>
 						<c:when test="${pledgeForm.fundingShowDateRange}">
 							<label for="pledgeFundingDateStart_${indexLoc}"><digi:trn key="aim:year">Pledge Time Frame</digi:trn></label> <br />
-							<input name="selectedFunding[${indexLoc}].fundingDateStart" type="text" id="pledgeFundingDateStart_${indexLoc}" data-date-format="YYYY-MM-DD" class="form-control input-sm inline-input validate-date-range-start date-range-start validate-date-range-group-${selectedFunding.uniqueId}" value="${selectedFunding.fundingDateStart}"/>
+							<input name="selectedFunding[${indexLoc}].fundingDateStart" type="text" id="pledgeFundingDateStart_${indexLoc}" data-date-format="${FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT).toUpperCase()}" class="form-control input-sm inline-input validate-date-range-start date-range-start validate-date-range-group-${selectedFunding.uniqueId}" value="${selectedFunding.getFundingDateStartSettingsFormat()}"/> 
 							&nbsp;&nbsp; &dash; &nbsp;&nbsp;
-							<input name="selectedFunding[${indexLoc}].fundingDateEnd" type="text" id="pledgeFundingDateEnd_${indexLoc}" data-date-format="YYYY-MM-DD" class="form-control input-sm inline-input validate-date-range-end date-range-end validate-date-range-group-${selectedFunding.uniqueId}" value="${selectedFunding.fundingDateEnd}"/>
+							<input name="selectedFunding[${indexLoc}].fundingDateEnd" type="text" id="pledgeFundingDateEnd_${indexLoc}" data-date-format="${FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT).toUpperCase()}" class="form-control input-sm inline-input validate-date-range-end date-range-end validate-date-range-group-${selectedFunding.uniqueId}" value="${selectedFunding.getFundingDateEndSettingsFormat()}"/>
 						</c:when>
 						<c:otherwise>
 							<label for="pledgeFundingYear_${indexLoc}"><digi:trn key="aim:year">Year</digi:trn></label>

@@ -61,7 +61,7 @@ public class FundingPledgesDetailsShim implements UniquelyIdentifiable {
 	}
 	
 	public String getFundingTimeFrame(){
-		return FundingPledgesDetails.getDatesDescriptionOf(this.getFundingYear(), this.getFundingDateStart(), this.getFundingDateEnd());
+		return FundingPledgesDetails.getDatesDescriptionOf(this.getFundingYear(), this.getFundingDateStartAsDate(), this.getFundingDateEndAsDate());
 	}
 	
 	public Date getFundingDateStartAsDate(){
@@ -70,6 +70,15 @@ public class FundingPledgesDetailsShim implements UniquelyIdentifiable {
 	
 	public Date getFundingDateEndAsDate(){
 		return FundingPledgesDetails.parseDate(fundingDateEnd);
+	}
+	
+	public String getFundingDateStartSettingsFormat(){
+		return FundingPledgesDetails.formatGlobalSettingsDateFormat(FundingPledgesDetails.parseDate(fundingDateStart));
+	}
+	
+	public String getFundingDateEndSettingsFormat(){
+		//
+		return FundingPledgesDetails.formatGlobalSettingsDateFormat(FundingPledgesDetails.parseDate(fundingDateEnd));
 	}
 
 	@Override public String toString(){

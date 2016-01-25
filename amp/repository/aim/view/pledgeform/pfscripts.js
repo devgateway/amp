@@ -103,6 +103,7 @@ function pledge_form_submit(bigDivSelector){
 	if (!validated)
 		return;
 	var data = getFormData('#pledge_form_big_div');
+	formatDatesToISO(data);
 	$.post("/savePledge.do",
 			data,
 			function(data){
@@ -116,6 +117,21 @@ function pledge_form_submit(bigDivSelector){
 					go_to_pledge_list();
 		});
 }
+
+
+function formatDatesToISO(arrayData){
+	var expectedDateFormat = 'YYYY-MM-DD';
+	var dateRangeStartItem = $('.validate-date-range-start');
+	var dateFormat = dateRangeStartItem.data('date-format') ? dateRangeStartItem.data('date-format') : 'YYYY-MM-DD';
+	for (index = 0; index < arrayData.length; ++index) {
+	    if (arrayData[index].name.indexOf('Date') != -1) {	        
+	    	arrayData[index].value = moment(arrayData[index].value, dateFormat).format(expectedDateFormat);        
+	    }
+	}
+	return arrayData;
+}
+
+
 
 function go_to_pledge_list(){
 	parent.window.location = '/viewPledgesList.do';

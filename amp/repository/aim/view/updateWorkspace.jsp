@@ -262,6 +262,7 @@ YAHOO.util.Event.addListener(window, "load", initWorkspacePage) ;
 function initWorkspacePage() {
 	workspaceChangeType();
 	computationChange();
+	privateChange();
 }
 
 function toggleGroup(group_id){
@@ -476,14 +477,28 @@ function workspaceChangeType(){
 
 }
 
-function   computationChange(){
+function computationChange(){
 	if(document.aimUpdateWorkspaceForm.computation.checked == true){
 		$("tr[id^='computation_']").show('fast');
-		$("tr[id^='private_workspace']").show(); //Show private ws when its computation ws
+		$("[name='isolated']").attr("disabled", true); //Show private ws when its computation ws
+		$("[name='isolated").attr('checked', false);
+	} else {
+		$("tr[id^='computation_']").hide();
+		$("[name='isolated']").removeAttr("disabled");
 	}
-	else $("tr[id^='computation_']").hide();
 }
-  
+
+function privateChange() {
+	if(document.aimUpdateWorkspaceForm.isolated.checked == true) {
+		$("[name='isolated']").removeAttr("disabled");
+		$("[name='computation']").attr('disabled', true);
+		$("[name='computation").attr('checked', false);
+		$("tr[id^='computation_']").hide();
+	} else {
+		$("[name='computation']").removeAttr("disabled");
+	}
+}
+
 function relTeam() { 
 	
 	var index2  = document.aimUpdateWorkspaceForm.workspaceType.selectedIndex;
@@ -849,7 +864,7 @@ function cancel()
 															<table>
 																<tr>
 																	<td style="font-size:12px; font-weight:bold;">
-																		<html:checkbox property="isolated" value="true">
+																		<html:checkbox property="isolated" value="true" onclick="privateChange()">
 																			<digi:trn>Private workspace</digi:trn>
 																		</html:checkbox>
 																	</td>

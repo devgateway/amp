@@ -495,6 +495,8 @@ function submitForm(action){
 																								src="/TEMPLATE/ampTemplate/images/icons/pdf.gif"
 																								border="0" />
 																						</digi:link>
+																						<!-- Show Printer Friendly icon removed with AMP-22055 -->
+																						<!--  
 																						<feature:display
 																							name="Show Printer Friendly option"
 																							module="Public Reports">
@@ -511,7 +513,7 @@ function submitForm(action){
 																									src="/TEMPLATE/ampTemplate/img_2/ico-print.png"
 																									border="0" />
 																							</a>
-																						</feature:display>
+																						</feature:display> -->
 																					</p></td>
 																			</tr>
 																		</logic:iterate>

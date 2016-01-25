@@ -28,6 +28,7 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpAnalyticalReport;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpContact;
@@ -1448,9 +1449,17 @@ public class TeamMemberUtil {
 						session.delete(ampCont);
 					}
 				}
+				
+				qryStr = "select atr from " + AmpAnalyticalReport.class.getName() + " atr where (atr.owner=:memberId) ";
+				qry = session.createQuery(qryStr).setLong("memberId", anId);
+				List<AmpAnalyticalReport> ampAnalyticalReports = qry.list();
+				if (ampAnalyticalReports != null && ampAnalyticalReports.size() > 0) {
+					for (AmpAnalyticalReport ampAnRep : ampAnalyticalReports) {
+						session.delete(ampAnRep);
+					}
+				}
 
 				session.delete(ampMember);
-
 			}
 		}
     }

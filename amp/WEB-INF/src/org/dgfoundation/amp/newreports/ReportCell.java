@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.newreports;
 
+import java.util.Map;
+
 import org.dgfoundation.amp.algo.AmpCollections;
 
 /**
@@ -10,7 +12,7 @@ import org.dgfoundation.amp.algo.AmpCollections;
 public abstract class ReportCell implements Comparable<ReportCell> {
 	public final Comparable<?> value;
 	public final String displayedValue;
-	public final long entityId;
+	public final Map<Long, String> entities;
 
 	//to facilitate the sorting, we will store the parent area
 	transient public ReportArea area;
@@ -18,7 +20,7 @@ public abstract class ReportCell implements Comparable<ReportCell> {
 	public ReportCell(Comparable<?> value, String displayedValue) {
 		this.value = value;
 		this.displayedValue = displayedValue;
-		this.entityId = -1; // not implemented yet!
+		this.entities = null; // not implemented yet!
 	}
 	
 	@Override public int compareTo(ReportCell oth) {

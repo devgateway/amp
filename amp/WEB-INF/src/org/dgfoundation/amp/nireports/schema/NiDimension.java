@@ -1,6 +1,8 @@
 package org.dgfoundation.amp.nireports.schema;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
@@ -47,7 +49,19 @@ public abstract class NiDimension {
 	public LevelColumn getLevelColumn(String instanceName, int level) {
 		if (level >= depth)
 			throw new RuntimeException(String.format("cannot build LevelColumn for dimension %s, because level is: %d; allowed range: 0...%d", this.name, level, depth - 1));
-		return new LevelColumn(this, instanceName, level);
+		return new LevelColumn(getDimensionUsage(instanceName), level);
+	}
+	
+	
+	protected Map<String, NiDimensionUsage> _dimensionUsages = new ConcurrentHashMap<>();
+	
+	/**
+	 * generates a cached NiDimensionUsage instance (single object per instanceName)
+	 * @param instanceName
+	 * @return
+	 */
+	public NiDimensionUsage getDimensionUsage(String instanceName) {
+		return _dimensionUsages.computeIfAbsent(instanceName, z -> new NiDimensionUsage(this, z));
 	}
 	
 	/**
@@ -61,19 +75,80 @@ public abstract class NiDimension {
 		return String.format("NiDimension %s with depth %d", this.name, this.depth);
 	}	
 	
+	public static class Coordinate {
+		public final int level;
+		public final long id;
+		
+		public Coordinate(int level, long id) {
+			this.level = level;
+			this.id = id;
+		}
+		
+		@Override
+		public boolean equals(Object oth) {
+			if (!(oth instanceof Coordinate))
+				return false;
+			return this.equals((Coordinate) oth);
+		}
+		
+		public boolean equals(Coordinate oth) {
+			return this.level == oth.level && this.id == oth.id;
+		}
+		
+		@Override
+		public int hashCode() {
+			return level + 19 * Long.hashCode(id);
+		}
+		
+		@Override
+		public String toString() {
+			return String.format("(level: %d, id: %d)", level, id);
+		}
+	}
+	
+	/**
+	 * an immutable class for managing an instance of a Dimension (e.g. "Implementing Agency" is an instance of "Organisation")
+	 * @author Dolghier Constantin
+	 *
+	 */
+	public static class NiDimensionUsage {
+		public final NiDimension dimension;
+		public final String instanceName;
+		
+		private NiDimensionUsage(NiDimension dimension, String instanceName) {
+			this.dimension = dimension;
+			this.instanceName = instanceName;
+		}
+		
+		@Override
+		public final int hashCode() {
+			return System.identityHashCode(dimension) + 19 ^ instanceName.hashCode();
+		}
+		
+		@Override
+		public final boolean equals(Object oth) {
+			if (!(oth instanceof NiDimensionUsage)) return false;
+			NiDimensionUsage other = (NiDimensionUsage) oth;
+			return this.dimension == other.dimension && this.instanceName.equals(other.instanceName);
+		}
+		
+		@Override
+		public String toString() {
+			return String.format("DimUsg: %s.%s", dimension, instanceName);
+		}
+	}
+	
 	/**
 	 * a class signaling that a column is a level in a multi-column Dimension (for example: "Donor type" in the "Organizations" dimension or Primary Sector SubSubSector in the "Sectors" dimension)
 	 * @author Dolghier Constantin
 	 *
 	 */
 	public static class LevelColumn {
-		public final NiDimension dimension;
-		public final String instanceName;
+		public final NiDimensionUsage dimensionUsage;
 		public final int level;
 		
-		private LevelColumn(NiDimension dimension, String instanceName, int level) {
-			this.dimension = dimension;
-			this.instanceName = instanceName;
+		private LevelColumn(NiDimensionUsage dimensionUsage, int level) {
+			this.dimensionUsage = dimensionUsage;
 			this.level = level;
 		}
 		
@@ -83,17 +158,19 @@ public abstract class NiDimension {
 				return false;
 			
 			LevelColumn other = (LevelColumn) oth;
-			if (dimension != other.dimension)
-				return false;
-			if (!instanceName.equals(other.instanceName))
+			if (dimensionUsage != other.dimensionUsage)
 				return false;
 			
 			return level == other.level; 
 		}
 		
+		public Coordinate getCoordinate(long id) {
+			return new Coordinate(this.level, id);
+		}
+		
 		@Override
 		public String toString() {
-			return String.format("Dimension: %s of %s, level: %d", instanceName, dimension.name, level);
+			return String.format("%s (level: %d)", dimensionUsage, level);
 		}
 	}
 	

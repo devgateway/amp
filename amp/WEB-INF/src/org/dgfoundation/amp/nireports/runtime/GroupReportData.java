@@ -17,8 +17,8 @@ import org.dgfoundation.amp.nireports.ReportData;
 public class GroupReportData extends ReportData {
 	protected final List<ReportData> subreports;
 	
-	public GroupReportData(NiReportsEngine context, NiCell splitter) {
-		super(context, splitter);
+	public GroupReportData(NiReportsEngine context, NiCell splitter, HierarchiesTracker hierarchies) {
+		super(context, splitter, hierarchies);
 		this.subreports = new ArrayList<ReportData>();
 	}
 	
@@ -45,7 +45,7 @@ public class GroupReportData extends ReportData {
 	
 	@Override
 	public GroupReportData horizSplit(CellColumn column) {
-		GroupReportData res = new GroupReportData(this.context, this.splitter);
+		GroupReportData res = new GroupReportData(this.context, this.splitter, this.hierarchies);
 		for(ReportData oldSubReport:subreports) {
 			ReportData newSubReport = oldSubReport.horizSplit(column);
 			res.subreports.add(newSubReport);

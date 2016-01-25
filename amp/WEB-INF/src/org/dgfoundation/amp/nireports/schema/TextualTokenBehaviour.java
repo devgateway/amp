@@ -1,11 +1,13 @@
 package org.dgfoundation.amp.nireports.schema;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.TextCell;
+import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 
 public class TextualTokenBehaviour implements Behaviour {
@@ -20,22 +22,20 @@ public class TextualTokenBehaviour implements Behaviour {
 	}
 	
 	@Override
-	public Cell doHorizontalReduce(List<NiCell> cells) {
+	public Cell doHorizontalReduce(List<NiCell> cells, HierarchiesTracker hiersTracker) {
 		Set<String> v = new TreeSet<>();
 		for(NiCell niCell:cells) {
 			TextCell cell = (TextCell) niCell.getCell();
-			v.add(cell.text);
+			if (!niCell.isUndefinedCell())
+				v.add(cell.text);
 		}
-		return new TextCell(v.size() == 1 ? v.iterator().next().toString() : v.toString(), cells.get(0).getMainId(), -1);
+		String text = v.toString();
+		text = text.substring(1, text.length() - 1);
+		return new TextCell(text, cells.get(0).getMainId());
 	}
 
 	@Override
 	public Cell getZeroCell() {
-		return new TextCell("", -1, -1);
-	}
-
-	@Override
-	public Cell filterCell(NiCell oldCell, NiCell splitCell) {
-		return oldCell.getCell();
+		return new TextCell("", -1);
 	}
 }

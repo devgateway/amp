@@ -1,13 +1,17 @@
 package org.dgfoundation.amp.nireports.schema;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.nireports.NiUtils;
+import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 
 /**
  * a snapshot of a {@link NiDimension} at a given moment
@@ -108,6 +112,17 @@ public class DimensionSnapshot {
 		return getAcceptableDescendants(level, ids, targetLevel);
 	}
 	
+	/**
+	 * returns an {@link IdsAcceptor} which filters based on given coordinates in this Dimension Snapshot
+	 * @param splitterCell
+	 * @return
+	 */
+	public IdsAcceptor getCachingIdsAcceptor(Coordinate splitterCell) {
+		if (depth == 1)
+			return new IdentityIdsAcceptor(splitterCell.id);
+		return new CachingIdsAcceptor(splitterCell);
+	}
+	
 	public static<K> K throw_up(String msg) {
 		throw new RuntimeException(msg);
 	}
@@ -115,5 +130,26 @@ public class DimensionSnapshot {
 	@Override
 	public String toString() {
 		return String.format("depth = %d, data = %s", depth, data);
+	}
+	
+	class CachingIdsAcceptor implements IdsAcceptor {
+		
+		Coordinate splitterCell;
+		Map<Integer, Set<Long>> levelCaches = new ConcurrentHashMap<>();
+		
+		CachingIdsAcceptor(Coordinate splitterCell) {
+			this.splitterCell = splitterCell;
+		}
+		
+		@Override
+		public boolean isAcceptable(Coordinate cellCoos) {
+			Set<Long> acceptables = levelCaches.computeIfAbsent(cellCoos.level, z -> getAcceptableNeighbours(splitterCell.level, Arrays.asList(splitterCell.id), z));
+			return acceptables.contains(cellCoos.id);
+		}
+		
+		@Override
+		public String toString() {
+			return String.format("caching acceptor on %s: %s", splitterCell, levelCaches.toString());
+		}
 	}
 }

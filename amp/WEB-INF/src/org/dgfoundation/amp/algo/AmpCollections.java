@@ -3,13 +3,16 @@ package org.dgfoundation.amp.algo;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.digijava.module.aim.util.Identifiable;
@@ -117,5 +120,20 @@ public class AmpCollections {
 				res.add(k);
 		}
 		return res;
+	}
+	
+	/**
+	 * returns a map which is the result of applying a function to all the elements of a map
+	 * @param in
+	 * @param mapper
+	 * @param out
+	 * @return
+	 */
+	public static<K, V, Z> Map<K, Z> remap(Map<K, V> in, BiFunction<K, V, Z> mapper, Map<K, Z> out) {
+		if (out == null)
+			out = new HashMap<>();
+		for(Entry<K, V> entry:in.entrySet())
+			out.put(entry.getKey(), mapper.apply(entry.getKey(), entry.getValue()));
+		return out;
 	}
 }

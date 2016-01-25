@@ -6,6 +6,9 @@ import java.util.Set;
 
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.GroupReportData;
+import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
+import org.dgfoundation.amp.nireports.runtime.PerItemHierarchiesTracker;
+import org.dgfoundation.amp.nireports.runtime.IdsAcceptorsBuilder;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 
@@ -17,18 +20,23 @@ import org.dgfoundation.amp.nireports.schema.Behaviour;
  */
 public abstract class ReportData {
 	public final Map<CellColumn, NiCell> trailCells;
+	
+	/**TODO: maybe turn it into a reference to {@link IdsAcceptorsBuilder} */
 	public final NiReportsEngine context;
 
 	/**
 	 * the value cell which generated this subreport during horizSplit
 	 */
 	public final NiCell splitter;
+	
+	public final HierarchiesTracker hierarchies;
 
 		
-	public ReportData(NiReportsEngine context, NiCell splitter) {
+	protected ReportData(NiReportsEngine context, NiCell splitter, HierarchiesTracker hierarchies) {
 		this.context = context;
 		this.trailCells = new HashMap<>();
 		this.splitter = splitter;
+		this.hierarchies = hierarchies;
 	}
 	
 	/**

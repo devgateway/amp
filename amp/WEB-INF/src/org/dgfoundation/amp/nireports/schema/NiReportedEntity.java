@@ -1,9 +1,11 @@
 package org.dgfoundation.amp.nireports.schema;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
 /**
  * specifies an entity a report can be run on, e.g. a measure or a column
@@ -30,7 +32,7 @@ public abstract class NiReportedEntity<K extends Cell> {
 	public Behaviour getBehaviour() {
 		return behaviour;
 	}
-	
+		
 	public String getName() {
 		return name;
 	}

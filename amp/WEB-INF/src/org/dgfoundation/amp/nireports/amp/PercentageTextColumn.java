@@ -23,6 +23,7 @@ import org.dgfoundation.amp.nireports.schema.PercentageTokenBehaviour;
  */
 public class PercentageTextColumn extends AmpSqlSourcedColumn<PercentageTextCell> {
 	
+	public final static BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
 	public PercentageTextColumn(String columnName, NiDimension.LevelColumn levelColumn, Map<String, String> fundingViewFilter, String viewName) {
 		super(columnName, levelColumn, fundingViewFilter, viewName, "amp_activity_id", PercentageTokenBehaviour.instance);
 	}
@@ -33,9 +34,9 @@ public class PercentageTextColumn extends AmpSqlSourcedColumn<PercentageTextCell
 		if (text == null)
 			return null;
 		BigDecimal percentage = rs.getBigDecimal(4);
-		if (percentage == null)
+		if (percentage == null || percentage.compareTo(BigDecimal.ZERO) < 0 || percentage.compareTo(ONE_HUNDRED) > 0)
 			return null; // TODO: how do we want to treat nulls?
-		return new PercentageTextCell(text, rs.getLong(1), rs.getLong(3), rs.getBigDecimal(4));
+		return new PercentageTextCell(text, rs.getLong(1), rs.getLong(3), this.levelColumn, percentage.divide(ONE_HUNDRED));
 	}
 		
 	public static PercentageTextColumn fromView(String columnName, String viewName, NiDimension.LevelColumn levelColumn) {

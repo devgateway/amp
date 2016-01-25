@@ -1,7 +1,12 @@
 package org.dgfoundation.amp.nireports;
 
+import java.util.Collections;
+import java.util.Map;
+
 import org.dgfoundation.amp.nireports.meta.CategCell;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
+import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
+import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 /**
  * a cell with an amount and an attached metadata
@@ -41,5 +46,10 @@ public final class AmountCell extends Cell implements CategCell, NumberedCell {
 	@Override
 	public String getDisplayedValue() {
 		return amount.getDisplayable();
+	}
+
+	@Override
+	public Map<NiDimensionUsage, Coordinate> getCoordinates() {
+		return Collections.emptyMap();
 	}
 }

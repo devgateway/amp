@@ -26,11 +26,17 @@ import org.dgfoundation.amp.nireports.runtime.Column;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.runtime.GroupColumn;
+import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
+import org.dgfoundation.amp.nireports.runtime.PerItemHierarchiesTracker;
+import org.dgfoundation.amp.nireports.runtime.IdsAcceptorsBuilder;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.DimensionSnapshot;
+import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
+import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
+import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportMeasure;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
@@ -45,7 +51,7 @@ import org.dgfoundation.amp.nireports.schema.TimeRange;
  * @author Dolghier Constantin
  *
  */
-public class NiReportsEngine {
+public class NiReportsEngine implements IdsAcceptorsBuilder {
 	
 	public static final Logger logger = Logger.getLogger(NiReportsEngine.class);
 	public static final String FUNDING_COLUMN_NAME = "Funding";
@@ -202,7 +208,7 @@ public class NiReportsEngine {
 		
 		GroupColumn catData = categorizeData(rawData);
 		this.headers = new NiHeaderInfo(catData);
-		this.rootReportData = new ColumnReportData(this, null, discoverLeaves(catData));
+		this.rootReportData = new ColumnReportData(this, null, discoverLeaves(catData), HierarchiesTracker.EMPTY);
 	}
 
 	protected Map<CellColumn, ColumnContents> discoverLeaves(GroupColumn gc) {
@@ -347,5 +353,10 @@ public class NiReportsEngine {
 	public NiFilters getFilters() {
 		return filters;
 	}
-	
+
+	@Override
+	public IdsAcceptor buildAcceptor(NiDimensionUsage dimUsage, Coordinate coos) {
+		DimensionSnapshot snapshot = getDimensionSnapshot(dimUsage.dimension);
+		return snapshot.getCachingIdsAcceptor(coos);
+	}
 }

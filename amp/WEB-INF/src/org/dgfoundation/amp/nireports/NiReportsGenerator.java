@@ -22,15 +22,13 @@ public class NiReportsGenerator implements ReportExecutor {
 	public NiReportsGenerator(NiReportsSchema schema) {
 		this.schema = schema;
 	}
-	
-	@Override
-	public GeneratedReport executeReport(ReportSpecification report) {
+
+	public GeneratedReport executeReport(ReportSpecification report/*, NiReportsFormatter outputFormatter*/) {
 		NiReportsEngine engine = new NiReportsEngine(schema, report);
 		ReportData reportOutput = engine.execute();
-		GeneratedReport apiReport = generateApiOutput(reportOutput, engine);
+		GeneratedReport apiReport = generateApiOutput(reportOutput, engine)/*outputFormatter.format(reportOutput, engine)*/;
 		return apiReport;
 	}
-	
 	
 	/** TODO: refactor once finalized */
 	public String renderReport(ReportSpecification report) {

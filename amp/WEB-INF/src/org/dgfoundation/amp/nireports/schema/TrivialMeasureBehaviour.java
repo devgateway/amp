@@ -8,6 +8,7 @@ import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.MonetaryAmount;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NumberedCell;
+import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 
 /**
@@ -26,10 +27,11 @@ public class TrivialMeasureBehaviour implements Behaviour {
 	}
 	
 	@Override
-	public Cell doHorizontalReduce(List<NiCell> cells) {
+	public Cell doHorizontalReduce(List<NiCell> cells, HierarchiesTracker hiersTracker) {
 		MonetaryAmount res = new MonetaryAmount(BigDecimal.ZERO, ((NumberedCell) cells.get(0).getCell()).getAmount().precisionSetting);
 		for(NiCell cell:cells) {
-			res = res.add(((NumberedCell) cell.getCell()).getAmount());
+			BigDecimal percentage = hiersTracker.calculatePercentage(cell.getMainId(), cell.getEntity().getBehaviour());
+			res = res.add(((NumberedCell) cell.getCell()).getAmount().multiplyBy(percentage));
 		}
 		return new AmountCell(cells.get(0).getMainId(), res);
 	}
@@ -37,10 +39,5 @@ public class TrivialMeasureBehaviour implements Behaviour {
 	@Override
 	public Cell getZeroCell() {
 		return new AmountCell(-1, new MonetaryAmount(BigDecimal.ZERO, NiPrecisionSetting.IDENTITY_PRECISION_SETTING));
-	}
-
-	@Override
-	public Cell filterCell(NiCell oldCell, NiCell splitCell) {
-		return oldCell.getCell();
 	}
 }

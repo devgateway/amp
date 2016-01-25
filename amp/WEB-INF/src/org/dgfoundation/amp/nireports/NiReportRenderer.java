@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.nireports;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedMap;
@@ -8,6 +9,7 @@ import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.runtime.GroupReportData;
+import org.dgfoundation.amp.nireports.runtime.PerItemHierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 
 /**
@@ -92,8 +94,9 @@ public class NiReportRenderer {
 			int sz = headers.leafColumns.size();
 			for(int i = level; i < sz; i++) {
 				CellColumn leafHeader = headers.leafColumns.get(i);
+				//BigDecimal percentage = crd.hierarchies.calculatePercentage(leafHeader.getBehaviour().getHierarchiesListener());
 				List<NiCell> cells = crd.getContents().get(leafHeader).data.get(id);
-				String contents = cells == null || cells.isEmpty() ? "" : ensureMaxLen(leafHeader.getBehaviour().doHorizontalReduce(cells).getDisplayedValue(), 40);
+				String contents = cells == null || cells.isEmpty() ? "" : ensureMaxLen(leafHeader.getBehaviour().doHorizontalReduce(cells, crd.hierarchies).getDisplayedValue(), 40);
 				bld.append("<td class='nireport_data_cell'>");
 				bld.append(contents);
 				bld.append("</td>");

@@ -40,7 +40,9 @@ public class GeneratedReport {
 	 * Ordered list of leaf headers of the report. Each leaf header can have a ancestors identified via parentColumn
 	 * TODO: not sure if headers are useful via root or leaf
 	 */
-	public final List<ReportOutputColumn> leafHeaders;
+	public final List<ReportOutputColumn> leafHeaders;  //Map<ROC, Integer>
+	
+	//TODO: Nadia public final List<List<HeaderCell>> renderedHeaders;
 	
 	/**
 	 * might be null, but not putting an {@link Optional} here because we have lots of old frontend code 

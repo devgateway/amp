@@ -31,6 +31,10 @@ public class NiCell implements Comparable<NiCell> {
 	public long getMainId() {
 		return cell.activityId;
 	}
+	
+	public boolean isUndefinedCell() {
+		return this.undefinedCell;
+	}
 
 	@Override
 	public int compareTo(NiCell o) {

@@ -34,9 +34,9 @@ public class SimpleTextColumn extends AmpSqlSourcedColumn<TextCell> {
 			return null;
 		
 		if (withoutEntity)
-			return new TextCell(text, rs.getLong(1), rs.getLong(1));
+			return new TextCell(text, rs.getLong(1), rs.getLong(1), this.levelColumn);
 		else
-			return new TextCell(text, rs.getLong(1), rs.getLong(3));
+			return new TextCell(text, rs.getLong(1), rs.getLong(3), this.levelColumn);
 	}
 		
 	public static SimpleTextColumn fromView(String columnName, String viewName, NiDimension.LevelColumn levelColumn) {

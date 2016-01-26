@@ -760,7 +760,10 @@ public class EditActivity extends Action {
 			eaForm.getFunding().setProposedAnnualBudgets(proposedAnnualBudgets);
         	
 			ProposedProjCost activityPPC = new ProposedProjCost();
-			activityPPC = getProposedProjectCost(activity, eaForm, activity.getFunAmount(), activity.getCurrencyCode(), activity.getFunDate(), false);
+					if (activity.getFunAmount() != null && activity.getFunDate() != null) {
+						activityPPC = getProposedProjectCost(activity, eaForm, activity.getFunAmount(),
+								activity.getCurrencyCode(), activity.getFunDate(), false);
+					}
         	eaForm.getFunding().setProProjCost(activityPPC);
 
           // load programs by type
@@ -1615,6 +1618,7 @@ public class EditActivity extends Action {
 
 	private ProposedProjCost getProposedProjectCost(AmpActivityVersion activity, EditActivityForm eaForm, 
 			Double ppcAmount, String ppcCurrencyCode, Date year, boolean yearDate) {
+
 		ProposedProjCost ppc = new ProposedProjCost();
 		Calendar c = Calendar.getInstance();
 		c.setTime(year);

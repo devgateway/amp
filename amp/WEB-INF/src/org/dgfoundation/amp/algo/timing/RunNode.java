@@ -1,11 +1,14 @@
 package org.dgfoundation.amp.algo.timing;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.IntFunction;
 import java.util.function.LongFunction;
 
 import org.apache.commons.lang.StringUtils;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
  * an object returned by InclusiveTimer to represent a read-only identifying view in the runtime tree
@@ -21,10 +24,33 @@ public interface RunNode {
 	public Map<String, Object> getMeta();
 	
 	/** 
-	 * @param key if a value with the given key already exists, will throw exception. Also, "name" and "totalTime" are disallowed keys
+	 * @param key if a value with the given key already exists, will throw exception. Also, "name", "subNodes" and "totalTime" are disallowed keys
 	 * @param value if it is null, then this call does nothing
 	 */
 	public void putMeta(String key, Object value);
+	
+	
+	
+	public default JsonBean asJsonBean() {
+		JsonBean result = new JsonBean();
+		result.set("name", getName());
+		result.set("totalTime", getTotalTime());
+		for (Map.Entry<String, Object> entry : this.getMeta().entrySet()) {
+			result.set(entry.getKey(), entry.getValue());
+		}
+		
+		List<JsonBean> subNodes = new ArrayList<JsonBean>();
+		if (getSubNodes() != null)
+			for (RunNode subNode : getSubNodes()) {
+				subNodes.add(subNode.asJsonBean());
+			}
+		if (subNodes.size() > 0)
+			result.set("subNodes", subNodes);
+		
+		
+		
+		return result;
+	}
 	
 	public default String asString(IntFunction<String> prefixBuilder, LongFunction<String> numberFormatter, int depth) {
 		StringBuilder subnodesString = getSubNodes() == null || getSubNodes().isEmpty() ? null : new StringBuilder(", subNodes: [");
@@ -66,4 +92,7 @@ public interface RunNode {
 	public default String asUserString(final int blanksPerLevel, LongFunction<String> numberFormatter) {
 		return asString(depth -> depth == 0 ? "" : ("\n" + StringUtils.repeat(" ", blanksPerLevel * (depth + 1))), numberFormatter, 0);
 	}
+
+	
+	
 }

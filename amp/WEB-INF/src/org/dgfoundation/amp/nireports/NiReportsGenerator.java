@@ -1,11 +1,20 @@
 package org.dgfoundation.amp.nireports;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.DeserializationConfig;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.dgfoundation.amp.algo.timing.RunNode;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.currencyconvertor.OneCurrencyCalculator;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.util.CurrencyUtil;
 
 /**
  * the Reports API entrypoint for NiReports, used for anything not directly linked with NiReports or the task of generating a report:
@@ -27,7 +36,22 @@ public class NiReportsGenerator implements ReportExecutor {
 		NiReportsEngine engine = new NiReportsEngine(schema, report);
 		ReportData reportOutput = engine.execute();
 		GeneratedReport apiReport = generateApiOutput(reportOutput, engine)/*outputFormatter.format(reportOutput, engine)*/;
+		writeRunNodeToDatabase(apiReport.timings);
 		return apiReport;
+	}
+	private void writeRunNodeToDatabase(RunNode node) {
+		PersistenceManager.getSession().doWork(conn -> {
+			List<String> columnNames = Arrays.asList("name", "totaltime", "wallclocktime", "data");
+			String json;
+			try {
+				//the .toString() method adds 'JsonBean' before the structure, which shouldn't be there for the insert
+				json = new ObjectMapper().configure(DeserializationConfig.Feature.UNWRAP_ROOT_VALUE, true).writer().writeValueAsString(node.asJsonBean());
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			List<Object> values = Arrays.asList(node.getName(), node.getTotalTime(), node.getTotalTime(), json);
+			SQLUtils.insert(conn, "amp_nireports_log", "id", "amp_nireports_log_id_seq", columnNames, Arrays.asList(values));
+		});
 	}
 	
 	/** TODO: refactor once finalized */
@@ -50,7 +74,12 @@ public class NiReportsGenerator implements ReportExecutor {
 				String.format("<div style='padding: 5px; margin: 20px; border: 1px dotted black; border-radius: 7px'>%s\n%s\n%s</div>", 
 						String.format("<p style='margin: 10px'>%s</p>", reportRunTime),
 						String.format("<p style='margin: 10px'>%s</p>", reportRenderTime),
-						String.format("<p style='margin: 10px'>%s</p>", reportSize)));
+						String.format("<p style='margin: 10px'>%s</p>", reportSize)
+//						String.format("<div>%s</div>",)
+						));
+		
+		
+		
 		
 		logger.error(reportRunTime);
 		logger.error(reportRenderTime);

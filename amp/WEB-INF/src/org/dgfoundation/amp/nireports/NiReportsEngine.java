@@ -126,7 +126,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 			timer.run("exec", this::runReportAndCleanup);
 			RunNode timingInfo = timer.getCurrentState();
 			printReportWarnings();
-			logger.warn(String.format("it took %d millies to generate report, the breakdown is:\n%s", timer.getWallclockTime(), timingInfo.asUserString(3)));
+			logger.warn("JsonBean structure of RunNode:" + timingInfo.asJsonBean());
 			return rootReportData;
 		}
 		catch(Exception e) {

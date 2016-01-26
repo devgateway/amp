@@ -44,7 +44,7 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'business/
 		jQuery(settingsDialog.el).dialog({
 			modal : true,
 			title : TranslationManager.getTranslated("Settings"),
-			width : '450px'
+			width : 'auto'
 		});
 		jQuery(".buttonify").button();
 		$('#settings-missing-values-error').hide();

@@ -44,7 +44,7 @@ _.extend(Title.prototype, Backbone.Events, {
 
     localizedTitleList.then(function(localTitles) {
       /* return localized title */
-      self.current = _.values(localTitles).join(', ');
+      self.current = _.reject(_.values(localTitles), function(ttle){ return _.isUndefined(ttle)}).join(', ');
       self.trigger('update', self.current);
 
     }).fail(function() {

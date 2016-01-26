@@ -48,7 +48,7 @@ _.extend(Title.prototype, Backbone.Events, {
       self.trigger('update', self.current);
 
     }).fail(function() {
-      self.current = _.values(titles).join(', ');
+      self.current = _.reject(_.values(titles), function(ttle){ return _.isUndefined(ttle)}).join(', ');    	
       self.trigger('update', self.current);
     });
 

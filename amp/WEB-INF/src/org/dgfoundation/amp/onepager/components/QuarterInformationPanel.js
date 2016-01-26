@@ -13,7 +13,7 @@ function initializeQuarter(q1, q2, q3, q4){
         $('.quarterHover').hover(
             function(){
                 //get the current element's position
-                var pos = $(this).position();
+                var pos = $(this).offset();
                 // .outerWidth() takes into account border and padding.
                 var width = $(this).outerWidth();
                 $('#quarterInformationPanel').css({top: pos.top, left: (pos.left + width)});

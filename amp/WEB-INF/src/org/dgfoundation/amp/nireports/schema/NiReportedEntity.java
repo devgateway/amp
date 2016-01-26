@@ -3,6 +3,7 @@ package org.dgfoundation.amp.nireports.schema;
 import java.util.List;
 import java.util.Optional;
 
+import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
@@ -24,6 +25,7 @@ public abstract class NiReportedEntity<K extends Cell> {
 	}
 
 	public abstract List<K> fetch(NiReportsEngine engine) throws Exception;
+	public abstract List<ReportRenderWarning> performCheck();
 	
 	/**
 	 * returns the behaviour of this column/measure

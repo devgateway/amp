@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 
@@ -34,5 +35,10 @@ public class NiTransactionMeasure extends NiReportMeasure<CategAmountCell> {
 	@Override
 	public Set<String> getPrecursorMeasures() {
 		return Collections.emptySet();
+	}
+
+	@Override
+	public List<ReportRenderWarning> performCheck() {
+		return null;
 	}
 }

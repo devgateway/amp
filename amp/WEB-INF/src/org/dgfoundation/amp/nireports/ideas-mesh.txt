@@ -71,9 +71,11 @@ generate the following in-memory schemas:
 	-> testcases schema
 	-> report wizard schema (as a tiny layer on top of testcases schema)
 
+cache activity ids filter
 https://jira.dgfoundation.org/browse/AMP-22006 - DO NOT MERGE THIS ONE TO AMP 2.12
 
 
 http://localhost:8080/rest/data/nireport/10 - report behaviour when no funding
 by-year-hierarchies: generate list of all measures at the bottom
 gross filtering-out of entries while fetching funding
+define the trivial measures in AmpReportsSchema

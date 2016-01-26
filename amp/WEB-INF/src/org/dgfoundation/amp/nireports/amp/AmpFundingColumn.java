@@ -7,36 +7,25 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.algo.VivificatingMap;
-import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.CalendarConverter;
+import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.CategAmountCell;
-import org.dgfoundation.amp.nireports.IdValuePair;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.MonetaryAmount;
-import org.dgfoundation.amp.nireports.NiCurrency;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.SqlSourcedColumn;
 import org.dgfoundation.amp.nireports.meta.MetaInfoGenerator;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
-import org.dgfoundation.amp.nireports.schema.Behaviour;
-import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.TrivialMeasureBehaviour;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-
-import static org.dgfoundation.amp.nireports.amp.MetaConstants.*;
 
 /**
  * the {@link NiReportColumn} which fetches the funding
@@ -133,5 +122,10 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		engine.timer.putMetaInNode("meta_cache_calls", metaCacheStats.k);
 		engine.timer.putMetaInNode("meta_cache_uncached", metaCacheStats.v);
 		return cells;
+	}
+	
+	@Override
+	public List<ReportRenderWarning> performCheck() {
+		return null;
 	}
 }

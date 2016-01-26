@@ -8,8 +8,11 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -21,6 +24,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import mondrian.util.Pair;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -28,9 +33,11 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
+import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
@@ -45,6 +52,7 @@ import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
+import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -72,8 +80,6 @@ import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.Session;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
-
-import mondrian.util.Pair;
 
 /***
  * 
@@ -806,4 +812,32 @@ public class Reports {
 		}
 		return sorting;
 	}
+		
+	@GET
+	@Path("/checkConsistency")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public Map<String, List<ReportRenderWarningEx>> checkConsistency() {
+		long start = System.currentTimeMillis();
+		NiReportsSchema schema = AmpReportsSchema.getInstance();
+		Map<String, List<ReportRenderWarning>> warnings = schema.performColumnChecks(Optional.empty());
+		Map<String, List<ReportRenderWarningEx>> res = new TreeMap<>();
+		for(String colName:warnings.keySet()) {
+			List<ReportRenderWarningEx> z = remap(warnings.get(colName));
+			if (z != null)
+				res.put(colName, z);
+		}
+		long delta = System.currentTimeMillis() - start;
+//		res.put("CHECK_TIME", delta);
+		return res;
+	}
+	
+	protected static List<ReportRenderWarningEx> remap(List<ReportRenderWarning> in) {
+		if (in == null)
+			return null;
+		List<ReportRenderWarningEx> res = new ArrayList<>();
+		for(ReportRenderWarning z:in)
+			res.add(new ReportRenderWarningEx(z));
+		return res;
+	}
+	
 }

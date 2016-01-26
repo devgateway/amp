@@ -2,11 +2,12 @@ package org.dgfoundation.amp.nireports.amp;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
+import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.TextCell;
-import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.TextualTokenBehaviour;
 
@@ -52,5 +53,10 @@ public class SimpleTextColumn extends AmpSqlSourcedColumn<TextCell> {
 	private SimpleTextColumn withoutEntity() {
 		this.withoutEntity = true;
 		return this;
+	}
+
+	@Override
+	public List<ReportRenderWarning> performCheck(){
+		return null;
 	}
 }

@@ -1,8 +1,15 @@
 package org.dgfoundation.amp.nireports.schema;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.newreports.ReportFilters;
+import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiFilters;
@@ -46,4 +53,13 @@ public interface NiReportsSchema {
 	 * @return
 	 */
 	public Function<NiReportsEngine, SchemaSpecificScratchpad> getScratchpadSupplier();
+	
+	public default Map<String, List<ReportRenderWarning>> performColumnChecks(Optional<Set<String>> columns) {
+		Set<String> checkedColumns = columns.isPresent() ? columns.get() : getColumns().keySet();
+		Map<String, List<ReportRenderWarning>> res = new HashMap<>();
+		for(String colName:checkedColumns) {
+			res.put(colName, getColumns().get(colName).performCheck());
+		}
+		return res;
+	}
 }

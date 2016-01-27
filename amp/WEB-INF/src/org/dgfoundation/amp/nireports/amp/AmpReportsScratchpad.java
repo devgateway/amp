@@ -11,10 +11,12 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
 import org.dgfoundation.amp.newreports.CalendarConverter;
+import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.SchemaSpecificScratchpad;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 
@@ -33,6 +35,8 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	
 	public final Connection connection;
 	
+	public final ReportEnvironment environment;
+	
 	/**
 	 * the currency used to render the report - do not write anything to it!
 	 */
@@ -45,6 +49,7 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 		catch(Exception e) {throw AlgoUtils.translateException(e);}
 		this.usedCurrency = engine.spec.getSettings() == null || engine.spec.getSettings().getCurrencyCode() == null ? AmpARFilter.getDefaultCurrency() : 
 			CurrencyUtil.getAmpcurrency(engine.spec.getSettings().getCurrencyCode());
+		this.environment = ReportEnvironment.buildFor(TLSUtils.getRequest());
 	}
 	
 	public AmpCurrency getUsedCurrency() {

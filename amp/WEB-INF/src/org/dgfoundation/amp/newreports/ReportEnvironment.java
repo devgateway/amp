@@ -10,7 +10,7 @@ import org.digijava.module.aim.helper.TeamMember;
 
 /**
  * describes the per-run settings of the environment under which to run a report
- * current implementation limitation in AMSP: pledgesFilter is only applied in pledge reports (and those disregard workspace filters)
+ * current implementation limitation in AMP: pledgesFilter is only applied in pledge reports (and those disregard workspace filters)
  * @author Constantin Dolghier
  *
  */
@@ -41,12 +41,12 @@ public class ReportEnvironment {
 	
 	public static ReportEnvironment buildFor(HttpServletRequest request) {
 		TLSUtils.populate(request);
+		TeamMember tm = request != null && request.getSession() != null ? (TeamMember) request.getSession().getAttribute("currentMember") : null;
+		AmpARFilter ar = request != null && request.getSession() != null ? (AmpARFilter) request.getSession().getAttribute(ArConstants.TEAM_FILTER) : null;
+		
 		return new ReportEnvironment(
-				TLSUtils.getEffectiveLangCode(),
-				new CompleteWorkspaceFilter(
-						(TeamMember) request.getSession().getAttribute("currentMember"),
-						(AmpARFilter) request.getSession().getAttribute(ArConstants.TEAM_FILTER)
-						),
-				AmpARFilter.getDefaultCurrency().getCurrencyCode());
+			TLSUtils.getEffectiveLangCode(),
+			new CompleteWorkspaceFilter(tm, ar),
+			AmpARFilter.getDefaultCurrency().getCurrencyCode());
 	}	
 }

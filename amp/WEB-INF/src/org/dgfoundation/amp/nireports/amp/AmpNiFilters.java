@@ -6,7 +6,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.nireports.NiFilters;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 
@@ -24,7 +26,9 @@ public class AmpNiFilters implements NiFilters {
 	public Set<Long> getActivityIds(NiReportsEngine engine) {
 		if (cachedActivityIds == null) {
 			Connection conn = AmpReportsScratchpad.get(engine).connection;
-			cachedActivityIds = Collections.unmodifiableSet(new HashSet<Long>(SQLUtils.fetchLongs(conn, "SELECT amp_activity_id FROM amp_activity")));
+			//cachedActivityIds = Collections.unmodifiableSet(new HashSet<Long>(SQLUtils.fetchLongs(conn, "SELECT amp_activity_id FROM amp_activity")));
+			ReportEnvironment environ = AmpReportsScratchpad.get(engine).environment;
+			cachedActivityIds = Collections.unmodifiableSet(environ.workspaceFilter.getIds());
 			//cachedActivityIds = new HashSet<>(Arrays.asList(52l, 65l));
 		}
 		return cachedActivityIds;

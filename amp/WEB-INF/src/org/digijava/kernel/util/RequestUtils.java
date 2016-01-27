@@ -159,6 +159,8 @@ public class RequestUtils {
      * @return current SiteDomain object
      */
     public static SiteDomain getSiteDomain(HttpServletRequest request) {
+    	if (request == null)
+    		return null;
         return (SiteDomain) request.getAttribute(Constants.CURRENT_SITE);
     }
 

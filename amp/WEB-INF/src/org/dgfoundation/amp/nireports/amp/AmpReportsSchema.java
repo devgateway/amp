@@ -36,7 +36,6 @@ import org.dgfoundation.amp.nireports.AbstractReportsSchema;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.NiFilters;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.NiReportsGenerator;
 import org.dgfoundation.amp.nireports.SchemaSpecificScratchpad;
 import org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
@@ -349,12 +348,16 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		return engine -> new AmpReportsScratchpad(engine);
 	}
 	
+	public static ReportExecutor getExecutor() {
+		return getExecutor(true);
+	}
+	
 	/**
 	 * users entrypoint for running reports using NiReports
 	 * @return
 	 */
-	public static ReportExecutor getExecutor() {
-		ReportExecutor res = new NiReportsGenerator(getInstance());
+	public static ReportExecutor getExecutor(boolean logToDb) {
+		ReportExecutor res = new NiReportsGenerator(getInstance(), logToDb);
 		return res;
 	}
 	
@@ -369,7 +372,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 * @throws AMPException
 	 */
 	public static void init() throws AMPException {
-		AmpReportsSchema.getExecutor().executeReport(ReportSpecificationImpl.buildFor("self-test report", 
+		AmpReportsSchema.getExecutor(false).executeReport(ReportSpecificationImpl.buildFor("self-test report", 
 			Arrays.asList(ColumnConstants.PROJECT_TITLE), 
 			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
 			null,

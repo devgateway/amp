@@ -20,16 +20,22 @@ import org.dgfoundation.amp.algo.timing.InclusiveTimer;
 import org.dgfoundation.amp.algo.timing.RunNode;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportWarning;
+import org.dgfoundation.amp.nireports.output.NiColumnReportData;
+import org.dgfoundation.amp.nireports.output.NiGroupReportData;
+import org.dgfoundation.amp.nireports.output.NiReportData;
 import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.runtime.GroupColumn;
+import org.dgfoundation.amp.nireports.runtime.GroupReportData;
 import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.PerItemHierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.IdsAcceptorsBuilder;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
+import org.dgfoundation.amp.nireports.runtime.ReportData;
+import org.dgfoundation.amp.nireports.runtime.ReportDataVisitor;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.DimensionSnapshot;
@@ -73,6 +79,8 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	 */
 	public NiHeaderInfo headers;
 	ReportData rootReportData;
+	NiReportData reportOutput;
+	
 	public List<CategAmountCell> funding;
 	public final ReportSpecification spec;
 	
@@ -117,7 +125,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		this.filters = schema.getFiltersConverter().apply(reportSpec.getFilters());
 	}
 	 
-	public ReportData execute() {
+	public NiReportData execute() {
 		try(SchemaSpecificScratchpad pad = schema.getScratchpadSupplier().apply(this)) {
 			this.schemaSpecificScratchpad = pad;
 			this.calendar = new CachingCalendarConverter(this.spec.getSettings() != null && this.spec.getSettings().getCalendar() != null ? this.spec.getSettings().getCalendar() : pad.getDefaultCalendar());
@@ -127,11 +135,33 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 			RunNode timingInfo = timer.getCurrentState();
 			printReportWarnings();
 			logger.warn("JsonBean structure of RunNode:" + timingInfo.asJsonBean());
-			return rootReportData;
+			
+			this.reportOutput = this.rootReportData.accept(new ReportDataOutputter());
+			return this.reportOutput;
 		}
 		catch(Exception e) {
 			throw AlgoUtils.translateException(e);
 		}
+	}
+	
+	/**
+	 * TODO: refactor, move to separate file in *.outputs
+	 * @author Dolghier Constantin
+	 *
+	 */
+	class ReportDataOutputter implements ReportDataVisitor<NiReportData> {
+		
+		@Override
+		public NiReportData visitLeaf(ColumnReportData crd) {
+			Map<CellColumn, Map<Long, Cell>> contents = AmpCollections.remap(crd.getContents(), (cellColumn, columnContents) -> columnContents.flatten(crd.hierarchies, cellColumn.getBehaviour()), null);
+			return new NiColumnReportData(contents, crd.trailCells, crd.splitter);
+		}
+
+		@Override
+		public NiReportData visitGroup(GroupReportData grd, List<NiReportData> visitedChildren) {
+			return new NiGroupReportData(visitedChildren, grd.trailCells, grd.splitter);
+		}
+		
 	}
 	
 	/** writes statistics in the {@link InclusiveTimer} instance */

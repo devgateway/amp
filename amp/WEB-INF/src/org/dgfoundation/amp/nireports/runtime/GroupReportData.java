@@ -5,9 +5,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.ReportData;
 
 /**
  * a report containing subreports
@@ -54,10 +54,9 @@ public class GroupReportData extends ReportData {
 	}
 
 	@Override
-	public int computeRowSpan(boolean summaryReport) {
-		int sum = /*1*/0;
-		for(ReportData rd:subreports)
-			sum += rd.getRowSpan(summaryReport);
-		return sum;
+	public <K> K accept(ReportDataVisitor<K> visitor) {
+		List<K> visitedChildren = subreports.stream().map(z -> z.accept(visitor)).collect(Collectors.toList());
+		K res = visitor.visitGroup(this, visitedChildren);
+		return res;
 	}
 }

@@ -10,6 +10,7 @@ import org.codehaus.jackson.annotate.JsonAnySetter;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.dgfoundation.amp.algo.AlgoUtils;
 
 /**
  * 
@@ -80,17 +81,21 @@ public class JsonBean {
 		}
 	}
 
+	/**
+	 * renders this bean as a String
+	 */
+	public String asJsonString() {
+		try {
+			return new ObjectMapper().configure(DeserializationConfig.Feature.UNWRAP_ROOT_VALUE, true).writer().writeValueAsString(this);
+		}
+		catch(Exception e) {
+			throw AlgoUtils.translateException(e);
+		}
+	}
+	
 	@Override
 	public String toString() {
-        ObjectMapper mapper = new ObjectMapper().configure(
-        		DeserializationConfig.Feature.UNWRAP_ROOT_VALUE, true);
-        String json=null;
-		try {
-			json = mapper.writer().writeValueAsString(this);
-		} catch (IOException e) {
-				
-		}
-		return "JsonBean [" + json  +"]";
+		return "JsonBean [" + asJsonString() +"]";
 	}
 	
 }

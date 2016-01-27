@@ -11,6 +11,8 @@ import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.nireports.runtime.GroupReportData;
+import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 
 public class NiReportsEngineForTesting extends NiReportsEngine {
@@ -31,7 +33,7 @@ public class NiReportsEngineForTesting extends NiReportsEngine {
 	
 	@Override
 	protected void runReport() {
-		try {runnable.accept(this);}
+		try {runnable.accept(this); this.rootReportData = new GroupReportData(this, null, HierarchiesTracker.EMPTY);}
 		catch(Exception e) {throw AlgoUtils.translateException(e);}
 	}
 }

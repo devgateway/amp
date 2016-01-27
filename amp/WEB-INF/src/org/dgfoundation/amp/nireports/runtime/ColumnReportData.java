@@ -14,7 +14,7 @@ import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
-import org.dgfoundation.amp.nireports.ReportData;
+import org.dgfoundation.amp.nireports.output.NiReportData;
 import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
@@ -100,10 +100,7 @@ public class ColumnReportData extends ReportData {
 	}
 
 	@Override
-	public int computeRowSpan(boolean summaryReport) {
-		if (summaryReport)
-			return 1;
-		return getIds().size()/* + 1*/;
+	public <K> K accept(ReportDataVisitor<K> visitor) {
+		return visitor.visitLeaf(this);
 	}
-	
 }

@@ -8,11 +8,13 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.nireports.Cell;
+import org.dgfoundation.amp.nireports.schema.Behaviour;
 
 
 /**
  * the contents of a column inside of a {@link CellColumn} <br />
  * it is mutable, because it is used during report generation
+ * TODO: refactor given the fact that outputs have been separated
  * @author Dolghier Constantin
  *
  */
@@ -46,6 +48,16 @@ public class ColumnContents {
 		return res;
 	}
 	
+	public Map<Long, Cell> flatten(HierarchiesTracker hierarchies, Behaviour behaviour) {
+		Map<Long, Cell> res = new HashMap<>();
+		for(long id:data.keySet()) {
+			List<NiCell> cells = data.get(id);
+			Cell z = behaviour.doHorizontalReduce(cells, hierarchies);
+			res.put(id, z);
+		}
+		return res;
+	}
+
 	@Override
 	public String toString() {
 		return data.toString();

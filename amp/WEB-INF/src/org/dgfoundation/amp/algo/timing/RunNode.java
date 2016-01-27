@@ -28,9 +28,11 @@ public interface RunNode {
 	 * @param value if it is null, then this call does nothing
 	 */
 	public void putMeta(String key, Object value);
-	
-	
-	
+		
+	/**
+	 * renders the node as Json-ready bean
+	 * @return
+	 */
 	public default JsonBean asJsonBean() {
 		JsonBean result = new JsonBean();
 		result.set("name", getName());
@@ -46,9 +48,7 @@ public interface RunNode {
 			}
 		if (subNodes.size() > 0)
 			result.set("subNodes", subNodes);
-		
-		
-		
+
 		return result;
 	}
 	
@@ -92,7 +92,4 @@ public interface RunNode {
 	public default String asUserString(final int blanksPerLevel, LongFunction<String> numberFormatter) {
 		return asString(depth -> depth == 0 ? "" : ("\n" + StringUtils.repeat(" ", blanksPerLevel * (depth + 1))), numberFormatter, 0);
 	}
-
-	
-	
 }

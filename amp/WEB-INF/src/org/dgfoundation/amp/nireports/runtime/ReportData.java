@@ -1,15 +1,12 @@
-package org.dgfoundation.amp.nireports;
+package org.dgfoundation.amp.nireports.runtime;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
-import org.dgfoundation.amp.nireports.runtime.CellColumn;
-import org.dgfoundation.amp.nireports.runtime.GroupReportData;
-import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
-import org.dgfoundation.amp.nireports.runtime.PerItemHierarchiesTracker;
-import org.dgfoundation.amp.nireports.runtime.IdsAcceptorsBuilder;
-import org.dgfoundation.amp.nireports.runtime.NiCell;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.output.NiReportData;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 
 
@@ -19,7 +16,7 @@ import org.dgfoundation.amp.nireports.schema.Behaviour;
  *
  */
 public abstract class ReportData {
-	public final Map<CellColumn, NiCell> trailCells;
+	public final Map<CellColumn, NiCell> trailCells = new HashMap<>();
 	
 	/**TODO: maybe turn it into a reference to {@link IdsAcceptorsBuilder} */
 	public final NiReportsEngine context;
@@ -31,10 +28,8 @@ public abstract class ReportData {
 	
 	public final HierarchiesTracker hierarchies;
 
-		
 	protected ReportData(NiReportsEngine context, NiCell splitter, HierarchiesTracker hierarchies) {
 		this.context = context;
-		this.trailCells = new HashMap<>();
 		this.splitter = splitter;
 		this.hierarchies = hierarchies;
 	}
@@ -47,15 +42,5 @@ public abstract class ReportData {
 	public abstract GroupReportData horizSplit(CellColumn column);
 	public abstract Set<Long> getIds();
 	public abstract boolean isLeaf();
-	/** function will only be called once per instance and the value of the argument will not change */
-	protected abstract int computeRowSpan(boolean summaryReport);
-	
-	protected int _rowSpan = -1;
-	/** computes the rowspan  */
-	public int getRowSpan(boolean summaryReport) {
-		if (_rowSpan < 0) {
-			_rowSpan = computeRowSpan(summaryReport);
-		}
-		return _rowSpan;
-	}
+	public abstract<K> K accept(ReportDataVisitor<K> visitor);
 }

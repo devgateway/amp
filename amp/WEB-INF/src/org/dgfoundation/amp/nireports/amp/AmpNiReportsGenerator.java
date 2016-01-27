@@ -5,7 +5,6 @@ import org.dgfoundation.amp.algo.timing.RunNode;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.nireports.NiReportsGenerator;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 
 /**

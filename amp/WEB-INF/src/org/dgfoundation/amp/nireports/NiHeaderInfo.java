@@ -17,13 +17,13 @@ import org.dgfoundation.amp.nireports.runtime.GroupColumn;
  */
 public class NiHeaderInfo {
 	public final GroupColumn rootColumn; // the root headers
-	final List<CellColumn> leafColumns;
+	public final List<CellColumn> leafColumns;
 	
 	/**
 	 * [i] = columns which start on row i of the header, SortedMap<startingColumn, Column> 
 	 * 
 	 */
-	final List<SortedMap<Integer, Column>> rasterizedHeaders;
+	public final List<SortedMap<Integer, Column>> rasterizedHeaders;
 	
 	public NiHeaderInfo(GroupColumn rootColumn) {
 		this.rootColumn = rootColumn;

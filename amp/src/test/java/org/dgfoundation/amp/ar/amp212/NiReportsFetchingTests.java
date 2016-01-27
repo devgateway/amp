@@ -30,7 +30,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 
 	@Test
 	public void testSpeed() throws AMPException {
-		ReportExecutor executor = AmpReportsSchema.getExecutor();
+		ReportExecutor executor = AmpReportsSchema.getExecutor(false);
 		ReportSpecification spec = buildSpecification("simple report",
 				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.TEAM),
 				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), null, GroupingCriteria.GROUPING_YEARLY);

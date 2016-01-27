@@ -6,7 +6,13 @@ import java.util.Set;
 
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
+import org.dgfoundation.amp.nireports.runtime.ReportData;
 
+/**
+ * a flattened report output subregion (see {@link ReportData})
+ * @author Dolghier Constantin
+ *
+ */
 public abstract class NiReportData {
 	public final Map<CellColumn, NiCell> trailCells;
 	public final NiCell splitter;

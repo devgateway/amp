@@ -3,30 +3,72 @@ package org.dgfoundation.amp.nireports.output;
 import java.util.ArrayList;
 import java.util.SortedMap;
 
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiHeaderInfo;
-import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.ReportHeadingCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
 
 /**
- * renders the result of running a NiReport to a string
- * TODO: maybe a generic visitor?
- * TODO: move to output
+ * renders the result of running a NiReport to a html string. See {@link NiReportOutputBuilder}
  * @author Dolghier Constantin
  *
  */
 public class NiReportHtmlRenderer {
 	
-	final NiReportsEngine engine;
+	protected static final Logger logger = Logger.getLogger(NiReportHtmlRenderer.class);
+	
 	final NiReportData report;
 	final NiHeaderInfo headers;
 	
-	public NiReportHtmlRenderer(NiReportsEngine engine, NiReportData report) {
-		this.engine = engine;
+	public NiReportHtmlRenderer(NiReportData report, NiHeaderInfo headers) {
 		this.report = report;
-		this.headers = engine.headers;
+		this.headers = headers;
+	}
+	
+	/**
+	 * a formatter which renders the table only (no html shell)
+	 * @return
+	 */
+	public static NiReportOutputBuilder<String> buildNiReportOutputter() {
+		return (ReportSpecification spec, NiReportRunResult runResult) -> new NiReportHtmlRenderer(runResult.reportOut, runResult.headers).render();
+	}
+
+	/**
+	 * a formatter which renders a full html document - basic styles around the output of {@link #buildNiReportFullPageOutputter()}
+	 * @return
+	 */
+	public static NiReportOutputBuilder<String> buildNiReportFullPageOutputter() {
+		return NiReportHtmlRenderer::fullPageOutput;//(ReportSpecification spec, NiReportRunResult runResult) -> new NiReportHtmlRenderer(runResult.reportOut, runResult.headers).render();
+	}
+
+	public static String fullPageOutput(ReportSpecification spec, NiReportRunResult reportRun) {
+		long start = System.currentTimeMillis();
+		String renderedReport = new NiReportHtmlRenderer(reportRun.reportOut, reportRun.headers).render();
+		long renderTime = System.currentTimeMillis() - start;
+		int reportX = reportRun.headers.leafColumns.size();
+		int reportY = reportRun.reportOut.getIds().size();
+		
+		String reportRunTime = String.format("report runtime: %d millies CPU, %d millies wallclock", reportRun.timings.getTotalTime(), reportRun.wallclockTime);
+		String reportRenderTime = String.format("report rendertime: %d millies", renderTime);
+		String reportSize = String.format("report size Y*X = %d*%d (%d cells)", reportY, reportX, reportY * reportX);
+		
+		String pageHeader = String.format("<html><head>%s\n%s</head><body> <div style='position: fixed; left: 0; right: 0; top: 0; bottom: 0; z-index: 9999; background-size: cover; background-image: url(/TEMPLATE/ampTemplate/nireports/nickel2.png)'></div>%s", 
+				"<link href='/TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>", 
+				"<link href='/TEMPLATE/ampTemplate/nireports/nireports_view.css' rel='stylesheet' type='text/css'>",
+				String.format("<div style='padding: 5px; margin: 20px; border: 1px dotted black; border-radius: 7px'>%s\n%s\n%s</div>", 
+						String.format("<p style='margin: 10px'>%s</p>", reportRunTime),
+						String.format("<p style='margin: 10px'>%s</p>", reportRenderTime),
+						String.format("<p style='margin: 10px'>%s</p>", reportSize)));
+		
+		logger.error(reportRunTime);
+		logger.error(reportRenderTime);
+		logger.error(reportSize);
+		
+		return String.format("%s\n%s%s", pageHeader, renderedReport, "</body></html>");
+
 	}
 	
 	public String render() {
@@ -40,7 +82,6 @@ public class NiReportHtmlRenderer {
 	
 	protected StringBuilder renderHeaders(StringBuilder res) {
 		res.append("<thead>");
-		NiHeaderInfo headers = engine.headers;
 		for(int i = 1; i < headers.rasterizedHeaders.size(); i++) {
 			SortedMap<Integer, Column> headerRow = headers.rasterizedHeaders.get(i);
 			res.append("<tr class='nireport_header'>");

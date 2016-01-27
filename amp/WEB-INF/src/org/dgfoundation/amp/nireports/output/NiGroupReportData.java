@@ -6,8 +6,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
+import org.dgfoundation.amp.nireports.runtime.GroupReportData;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 
+/**
+ * a flattened non-leaf node of a report output (see {@link GroupReportData})
+ * @author Dolghier Constantin
+ *
+ */
 public class NiGroupReportData extends NiReportData {
 	public final List<NiReportData> subreports;
 

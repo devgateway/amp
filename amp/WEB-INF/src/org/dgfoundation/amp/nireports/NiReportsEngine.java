@@ -23,6 +23,7 @@ import org.dgfoundation.amp.newreports.ReportWarning;
 import org.dgfoundation.amp.nireports.output.NiColumnReportData;
 import org.dgfoundation.amp.nireports.output.NiGroupReportData;
 import org.dgfoundation.amp.nireports.output.NiReportData;
+import org.dgfoundation.amp.nireports.output.NiReportRunResult;
 import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
@@ -79,7 +80,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	 */
 	public NiHeaderInfo headers;
 	ReportData rootReportData;
-	NiReportData reportOutput;
+	public NiReportData reportOutput;
 	
 	public List<CategAmountCell> funding;
 	public final ReportSpecification spec;
@@ -125,7 +126,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		this.filters = schema.getFiltersConverter().apply(reportSpec.getFilters());
 	}
 	 
-	public NiReportData execute() {
+	public NiReportRunResult execute() {
 		try(SchemaSpecificScratchpad pad = schema.getScratchpadSupplier().apply(this)) {
 			this.schemaSpecificScratchpad = pad;
 			this.calendar = new CachingCalendarConverter(this.spec.getSettings() != null && this.spec.getSettings().getCalendar() != null ? this.spec.getSettings().getCalendar() : pad.getDefaultCalendar());
@@ -137,7 +138,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 			logger.warn("JsonBean structure of RunNode:" + timingInfo.asJsonBean());
 			
 			this.reportOutput = this.rootReportData.accept(new ReportDataOutputter());
-			return this.reportOutput;
+			return new NiReportRunResult(this.reportOutput, timer.getCurrentState(), timer.getWallclockTime(), this.headers);
 		}
 		catch(Exception e) {
 			throw AlgoUtils.translateException(e);

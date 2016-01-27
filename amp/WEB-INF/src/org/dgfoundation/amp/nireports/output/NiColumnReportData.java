@@ -6,8 +6,14 @@ import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
+import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 
+/**
+ * a flattened leaf region of a report output (see {@link ColumnReportData})
+ * @author Dolghier Constantin
+ *
+ */
 public class NiColumnReportData extends NiReportData {
 	public final Map<CellColumn, Map<Long, Cell>> contents;
 	

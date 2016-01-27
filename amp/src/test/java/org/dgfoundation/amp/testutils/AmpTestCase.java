@@ -86,5 +86,14 @@ public abstract class AmpTestCase extends TestCase
 		res.sort(null);
 		return res;
 	}
+	
+	/**
+	 * returns a toString() of a sorted list of the elements in the input 
+	 * @param in
+	 * @return
+	 */
+	public static String sortedString(Collection<?> in) {
+		return sorted(in).toString();
+	}
 
 }

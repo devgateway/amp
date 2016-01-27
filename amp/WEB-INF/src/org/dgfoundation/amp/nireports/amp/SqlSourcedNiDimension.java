@@ -17,7 +17,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
  * @author Dolghier Constantin
  *
  */
-public abstract class SqlSourcedNiDimension extends TabularSourcedNiDimension {
+public class SqlSourcedNiDimension extends TabularSourcedNiDimension {
 
 	public final String sourceViewName;
 	public final List<String> idColumnsNames;

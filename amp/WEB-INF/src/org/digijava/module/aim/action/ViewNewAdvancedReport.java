@@ -103,6 +103,8 @@ public class ViewNewAdvancedReport extends Action {
 	}
 	
 	protected String runNiReportsBench() throws Exception {
+		// on DRC: wget "http://localhost:8080/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=3309" >/dev/null
+		// on DRC: wget "http://localhost:8080/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=3309" >/dev/null
 		ReportExecutor executor = AmpReportsSchema.getExecutor();
 		GeneratedReport output = executor.executeReport(
 				ReportSpecificationImpl.buildFor("simple report", 

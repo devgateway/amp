@@ -6,7 +6,9 @@ import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
+import org.dgfoundation.amp.nireports.amp.SqlSourcedNiDimension;
 import org.dgfoundation.amp.nireports.schema.DimensionSnapshot;
+import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.junit.Test;
 
 /**
@@ -40,7 +42,7 @@ public class DimensionsFetchingTests extends MondrianReportsTestCase {
 		assertEquals(-866015659, snapshot.data.get(1).toString().hashCode());
 		assertEquals(23, snapshot.data.get(1).parents.keySet().stream().filter(z -> z > 0).count());
 		assertEquals(-701710115, snapshot.data.get(2).toString().hashCode());
-		assertEquals("[9108, 9109, 9110, 9111, 9112, 9113, 9114, 9115, 9116, 9120]", snapshot.data.get(2).parents.keySet().stream().filter(z -> z > 0).collect(Collectors.toList()).toString());
+		assertEquals("[9108, 9109, 9110, 9111, 9112, 9113, 9114, 9115, 9116, 9120]", sortedString(snapshot.data.get(2).parents.keySet().stream().filter(z -> z > 0).collect(Collectors.toList())));
 		assertEquals(1186115440, snapshot.data.get(3).toString().hashCode());
 		assertEquals("[9117, 9118, 9121]", snapshot.data.get(3).parents.keySet().stream().filter(z -> z > 0).collect(Collectors.toList()).toString());
 	}
@@ -49,7 +51,17 @@ public class DimensionsFetchingTests extends MondrianReportsTestCase {
 	public void testSectorsFetching() {
 		DimensionSnapshot snapshot = schema.secsDimension.getDimensionData();
 		assertEquals("[6237]", snapshot.getAcceptableAscendants(2, Arrays.asList(6238l, 6239l)).toString());
-		assertEquals("[6237, 6460]", new TreeSet<>(snapshot.getAcceptableAscendants(2, Arrays.asList(6238l, 6239l, 6462l))).toString());
+		assertEquals("[6237, 6460]", sortedString(snapshot.getAcceptableAscendants(2, Arrays.asList(6238l, 6239l, 6462l))));
 		shouldFail(() -> snapshot.getAcceptableDescendants(2, Arrays.asList(6238l)));
+	}
+	
+	@Test
+	public void testAcvDimensionFetching() {
+		DimensionSnapshot snapshot = schema.catsDimension.getDimensionData();
+		assertEquals("[16]", sortedString(snapshot.getAcceptableNeighbours(1, Arrays.asList(108l, 109l), 0)));
+		assertEquals("[16, 20]", sortedString(snapshot.getAcceptableNeighbours(1, Arrays.asList(108l, 120l), 0)));
+		assertEquals("[223, 224, 225]", sortedString(snapshot.getAcceptableNeighbours(0, Arrays.asList(38l), 1)));
+		assertEquals("[223, 224, 225]", sortedString(snapshot.getAcceptableNeighbours(1, Arrays.asList(223l, 225l, 224l), 1)));
+		assertEquals("[2, 3]", sortedString(snapshot.getAcceptableNeighbours(0, Arrays.asList(1l, 2l, 3l, 4l), 0)));
 	}
 }

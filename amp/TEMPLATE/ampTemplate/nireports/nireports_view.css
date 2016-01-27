@@ -51,6 +51,11 @@
 	font-size:11px;
 }
 
+td.ni_trailcell {
+	text-align: right;
+	font-weight: bolder;	
+}
+
 tr.oddActivity {
 	
 }

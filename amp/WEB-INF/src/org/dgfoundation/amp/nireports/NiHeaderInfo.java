@@ -18,6 +18,7 @@ import org.dgfoundation.amp.nireports.runtime.GroupColumn;
 public class NiHeaderInfo {
 	public final GroupColumn rootColumn; // the root headers
 	public final List<CellColumn> leafColumns;
+	public final int nrHierarchies;
 	
 	/**
 	 * [i] = columns which start on row i of the header, SortedMap<startingColumn, Column> 
@@ -25,9 +26,10 @@ public class NiHeaderInfo {
 	 */
 	public final List<SortedMap<Integer, Column>> rasterizedHeaders;
 	
-	public NiHeaderInfo(GroupColumn rootColumn) {
+	public NiHeaderInfo(GroupColumn rootColumn, int nrHierarchies) {
 		this.rootColumn = rootColumn;
 		this.leafColumns = rootColumn.getLeafColumns();
+		this.nrHierarchies = nrHierarchies;
 		rootColumn.calculateHeaders();
 		this.rasterizedHeaders = Collections.unmodifiableList(buildRasterizedHeaders(rootColumn));
 	}

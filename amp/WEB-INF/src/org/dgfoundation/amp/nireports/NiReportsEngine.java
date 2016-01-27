@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.nireports;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,6 +9,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -133,12 +135,11 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 			
 			this.timer = new InclusiveTimer("Report " + spec.getReportName());
 			timer.run("exec", this::runReportAndCleanup);
-			RunNode timingInfo = timer.getCurrentState();
 			printReportWarnings();
-			logger.warn("JsonBean structure of RunNode:" + timingInfo.asJsonBean());
-			
-			this.reportOutput = this.rootReportData.accept(new ReportDataOutputter());
-			return new NiReportRunResult(this.reportOutput, timer.getCurrentState(), timer.getWallclockTime(), this.headers);
+			NiReportRunResult runResult = new NiReportRunResult(this.reportOutput, timer.getCurrentState(), timer.getWallclockTime(), this.headers);
+			//logger.warn("JsonBean structure of RunNode:" + timingInfo.asJsonBean());
+			logger.warn(String.format("it took %d millies to generate report, the breakdown is:\n%s", runResult.wallclockTime, runResult.timings.asUserString(3)));
+			return runResult; 
 		}
 		catch(Exception e) {
 			throw AlgoUtils.translateException(e);
@@ -152,15 +153,27 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	 */
 	class ReportDataOutputter implements ReportDataVisitor<NiReportData> {
 		
+		Map<CellColumn, Cell> buildDummyTrailCells(ReportData rd) {
+			HashMap<CellColumn, Cell> res = new HashMap<>();
+			for(CellColumn leaf:headers.leafColumns) {
+				//BigDecimal numericalValue = BigDecimal.valueOf(leaf.getHierName().hashCode() * new TreeSet<>(rd.getIds()).toString().hashCode() % 10000).divide(BigDecimal.valueOf(100));
+				String splitterString = rd.splitter != null && rd.splitter.getCell() != null ? rd.splitter.getCell().getDisplayedValue() : "";
+				BigDecimal numericalValue = BigDecimal.valueOf(leaf.getHierName().hashCode() * splitterString.hashCode() % 10000).divide(BigDecimal.valueOf(100));
+				AmountCell cell = new AmountCell(-1, new MonetaryAmount(numericalValue, schemaSpecificScratchpad.getPrecisionSetting()));
+				res.put(leaf, cell);
+			}
+			return res;
+		}
+		
 		@Override
 		public NiReportData visitLeaf(ColumnReportData crd) {
 			Map<CellColumn, Map<Long, Cell>> contents = AmpCollections.remap(crd.getContents(), (cellColumn, columnContents) -> columnContents.flatten(crd.hierarchies, cellColumn.getBehaviour()), null);
-			return new NiColumnReportData(contents, crd.trailCells, crd.splitter);
+			return new NiColumnReportData(contents, /*crd.trailCells, */buildDummyTrailCells(crd), crd.splitter);
 		}
 
 		@Override
 		public NiReportData visitGroup(GroupReportData grd, List<NiReportData> visitedChildren) {
-			return new NiGroupReportData(visitedChildren, grd.trailCells, grd.splitter);
+			return new NiGroupReportData(visitedChildren, buildDummyTrailCells(grd), /*grd.trailCells, */grd.splitter);
 		}
 		
 	}
@@ -186,7 +199,12 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		timer.run("fetch", this::fetchData);
 		timer.run("init", this::createInitialReport);
 		timer.run("hierarchies", this::createHierarchies);
+		timer.run("flatten", this::flatten);
 		timer.run("totals", this::createTotals);
+	}
+	
+	protected void flatten() {
+		this.reportOutput = this.rootReportData.accept(new ReportDataOutputter());
 	}
 	
 	/**
@@ -238,7 +256,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		rawData.maybeAddColumn(buildFundingColumn(TOTALS_COLUMN_NAME, rawData, Function.identity()));
 		
 		GroupColumn catData = categorizeData(rawData);
-		this.headers = new NiHeaderInfo(catData);
+		this.headers = new NiHeaderInfo(catData, this.actualHierarchies.size());
 		this.rootReportData = new ColumnReportData(this, null, discoverLeaves(catData), HierarchiesTracker.EMPTY);
 	}
 

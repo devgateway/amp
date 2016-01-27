@@ -17,7 +17,7 @@ import org.dgfoundation.amp.nireports.runtime.NiCell;
 public class NiColumnReportData extends NiReportData {
 	public final Map<CellColumn, Map<Long, Cell>> contents;
 	
-	public NiColumnReportData(Map<CellColumn, Map<Long, Cell>> contents, Map<CellColumn, NiCell> trailCells, NiCell splitterCell) {
+	public NiColumnReportData(Map<CellColumn, Map<Long, Cell>> contents, Map<CellColumn, Cell> trailCells, NiCell splitterCell) {
 		super(trailCells, contents.values().stream().flatMap(z -> z.keySet().stream()).collect(Collectors.toSet()), splitterCell);
 		this.contents = Collections.unmodifiableMap(contents);
 	}
@@ -31,6 +31,6 @@ public class NiColumnReportData extends NiReportData {
 	public int computeRowSpan(boolean summaryReport) {
 		if (summaryReport)
 			return 1;
-		return getIds().size()/* + 1*/;
+		return getIds().size() + 1;
 	}
 }

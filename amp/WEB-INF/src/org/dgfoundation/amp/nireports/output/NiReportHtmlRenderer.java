@@ -108,6 +108,25 @@ public class NiReportHtmlRenderer {
 		} else {
 			renderGroupRD(bld, (NiGroupReportData) element, level);
 		}
+		renderTrailCells(bld, element, level);
+		return bld;
+	}
+	
+	protected StringBuilder renderTrailCells(StringBuilder bld, NiReportData elem, int level) {
+		boolean isFirstId = true;
+		if (level == 0 || !isFirstId)
+			bld.append("<tr>");
+		int sz = headers.leafColumns.size();
+		for(int i = level; i < sz; i++) {
+			CellColumn leafHeader = headers.leafColumns.get(i);
+			//BigDecimal percentage = crd.hierarchies.calculatePercentage(leafHeader.getBehaviour().getHierarchiesListener());
+			Cell cell = elem.trailCells.get(leafHeader);
+			String contents = i < headers.nrHierarchies || cell == null ? "" : ensureMaxLen(cell.getDisplayedValue(), 50);
+			bld.append(String.format("<td class='nireport_data_cell ni_hierarchyLevel%d ni_trailcell'>", level + 1));
+			bld.append(contents);
+			bld.append("</td>");
+		}
+		bld.append("</tr>\n");
 		return bld;
 	}
 	

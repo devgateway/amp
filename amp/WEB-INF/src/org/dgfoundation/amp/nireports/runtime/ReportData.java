@@ -3,10 +3,8 @@ package org.dgfoundation.amp.nireports.runtime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 
 import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.output.NiReportData;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 
 

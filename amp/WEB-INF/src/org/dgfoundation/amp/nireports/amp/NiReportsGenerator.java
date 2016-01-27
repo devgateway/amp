@@ -10,7 +10,6 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.output.NiReportRunResult;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
@@ -52,13 +51,7 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
 			writeRunNodeToDatabase(reportRun.timings, reportRun.wallclockTime);
 		}
 	}
-	
-	public<K> K executeReport(ReportSpecification spec, Function<NiReportRunResult, K> outputBuilder) {
-		NiReportsEngine engine = new NiReportsEngine(schema, spec);
-		NiReportRunResult reportRun = engine.execute();
-		return outputBuilder.apply(reportRun);
-	}
-	
+		
 	@Override
 	public GeneratedReport executeReport(ReportSpecification spec) {
 		GeneratedReport apiReport = executeReport(spec, AmpNiReportsFormatter.asAmpFormatter());

@@ -16,6 +16,9 @@ import org.dgfoundation.amp.nireports.amp.MetaCategory;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
+import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
+import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
+import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 
 
@@ -132,6 +135,25 @@ public abstract class SqlSourcedColumn<K extends Cell> extends NiReportColumn<K>
 		if (!row.wasNull())
 			set.add(categ.category, val);
 		return val;
+	}
+	
+	/**
+	 * reads a long from a ResultSet. If present, it is used as an id in a given LevelColumn which is inserted in a given coos set
+	 * @param coos
+	 * @param row
+	 * @param viewColName
+	 * @param levelColumn
+	 * @return
+	 * @throws SQLException
+	 */
+	protected Coordinate addCoordinateIfLongExists(Map<NiDimensionUsage, Coordinate> coos, ResultSet row, String viewColName, LevelColumn levelColumn) throws SQLException {
+		long val = row.getLong(viewColName);
+		if (row.wasNull())
+			return null;
+		
+		Coordinate newVal = levelColumn.getCoordinate(val);
+		coos.put(levelColumn.dimensionUsage, newVal);
+		return newVal;
 	}
 	
 }

@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.algo.VivificatingMap;
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -19,8 +20,14 @@ import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.MonetaryAmount;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.amp.dimensions.CategoriesDimension;
+import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
 import org.dgfoundation.amp.nireports.meta.MetaInfoGenerator;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
+import org.dgfoundation.amp.nireports.schema.NiDimension;
+import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
+import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
+import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.TrivialMeasureBehaviour;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -46,19 +53,21 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		res.put(ColumnConstants.DONOR_AGENCY, "donor_org_id");
 		res.put(ColumnConstants.MODE_OF_PAYMENT, "mode_of_payment_id");
 		res.put(ColumnConstants.FUNDING_STATUS, "funding_status_id");
-		res.put(ColumnConstants.DISASTER_RESPONSE_MARKER, "disaster_response_code");
+		//res.put(ColumnConstants.DISASTER_RESPONSE_MARKER, "disaster_response_code");
 		return res;
 	}
 		
+	protected Map<String, LevelColumn> buildOptionalDimensionCols(AmpReportsSchema schema) {
+		Map<String, NiReportColumn<?>> cols = schema.getColumns();
+		Map<String, LevelColumn> res = new HashMap<>();
+		getFundingViewFilter().forEach((colName, viewColName) -> res.put(viewColName, cols.get(colName).levelColumn.get()));
+		return res;
+	}
+	
 	// columns of type long which are optional
 	protected static List<ImmutablePair<MetaCategory, String>> longColumnsToFetch = Arrays.asList(
-			new ImmutablePair<>(MetaCategory.TRANSACTION_TYPE, "transaction_type"),
 			new ImmutablePair<>(MetaCategory.PLEDGE_ID, "pledge_id"),
-			new ImmutablePair<>(MetaCategory.TERMS_OF_ASSISTANCE, "terms_assist_id"),
-			new ImmutablePair<>(MetaCategory.FINANCING_INSTRUMENT, "financing_instrument_id"),
-			new ImmutablePair<>(MetaCategory.DONOR_ORG, "donor_org_id"),
-			new ImmutablePair<>(MetaCategory.MODE_OF_PAYMENT, "mode_of_payment_id"),
-			new ImmutablePair<>(MetaCategory.FUNDING_STATUS, "funding_status_id"),
+			new ImmutablePair<>(MetaCategory.TRANSACTION_TYPE, "transaction_type"),			
 			new ImmutablePair<>(MetaCategory.AGREEMENT_ID, "agreement_id"),
 			new ImmutablePair<>(MetaCategory.RECIPIENT_ORG, "recipient_org_id")
 			);
@@ -70,7 +79,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		String query = buildQuery(engine);
 		
 		//TODO: do not commit this uncommented
-		query = query + " AND (transaction_date >= '2004-01-01') AND (transaction_date <= '2013-01-01')";
+		query = query + " AND (transaction_date >= '2004-01-01') AND (transaction_date <= '2016-01-01')";
 		Map<Long, String> adjustmentTypes = SQLUtils.collectKeyValue(scratchpad.connection, 
 				String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname = '%s'", CategoryConstants.ADJUSTMENT_TYPE_KEY));
 		
@@ -85,17 +94,21 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		List<CategAmountCell> cells = new ArrayList<>();
 		MetaInfoGenerator metaGenerator = new MetaInfoGenerator();
 		CalendarConverter calendarConverter = engine.calendar;
-		
-//		NiCurrency baseCurrency = CurrencyUtil.getAmpcurrency(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY));
+		Map<String, LevelColumn> optionalDimensionCols = buildOptionalDimensionCols(schema);
 		
 		try(RsInfo rs = SQLUtils.rawRunQuery(scratchpad.connection, query, null)) {
 			while (rs.rs.next()) {
 				MetaInfoSet metaSet = new MetaInfoSet(metaGenerator);
+				Map<NiDimensionUsage, Coordinate> coos = new HashMap<>();
+				
 				long ampActivityId = rs.rs.getLong(this.mainColumn);
 								
 				for(ImmutablePair<MetaCategory, String> longOptionalColumn:longColumnsToFetch)
 					addMetaIfLongExists(metaSet, longOptionalColumn.k, rs.rs, longOptionalColumn.v);
 							
+				for(Map.Entry<String, LevelColumn> optDim:optionalDimensionCols.entrySet())
+					addCoordinateIfLongExists(coos, rs.rs, optDim.getKey(), optDim.getValue());
+
 				java.sql.Date transactionMoment = rs.rs.getDate("transaction_date");
 				LocalDate transactionDate = transactionMoment.toLocalDate();
 				BigDecimal transactionAmount = rs.rs.getBigDecimal("transaction_amount");
@@ -114,7 +127,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 				
 				BigDecimal usedExchangeRate = BigDecimal.valueOf(schema.currencyConvertor.getExchangeRate(srcCurrency.getCurrencyCode(), usedCurrency.getCurrencyCode(), fixed_exchange_rate == null ? null : fixed_exchange_rate.doubleValue(), transactionDate));
 				MonetaryAmount amount = new MonetaryAmount(transactionAmount.multiply(usedExchangeRate), transactionAmount, srcCurrency, transactionDate, scratchpad.getPrecisionSetting());
-				CategAmountCell cell = new CategAmountCell(ampActivityId, amount, metaSet, calendarConverter.translate(transactionMoment));
+				CategAmountCell cell = new CategAmountCell(ampActivityId, amount, metaSet, coos, calendarConverter.translate(transactionMoment));
 				cells.add(cell);
 			}
 		}

@@ -134,7 +134,7 @@ public abstract class NiDimension {
 		
 		@Override
 		public String toString() {
-			return String.format("DimUsg: %s.%s", dimension, instanceName);
+			return String.format("DimUsg: %s.%s", dimension.name, instanceName);
 		}
 	}
 	
@@ -170,7 +170,7 @@ public abstract class NiDimension {
 		
 		@Override
 		public String toString() {
-			return String.format("%s (level: %d)", dimensionUsage, level);
+			return String.format("%s.%s (level: %d)", dimensionUsage.dimension.name, dimensionUsage.instanceName, level);
 		}
 	}
 	

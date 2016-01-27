@@ -48,9 +48,4 @@ public final class TextCell extends Cell {
 	public String getDisplayedValue() {
 		return text;
 	}
-
-	@Override
-	public Map<NiDimensionUsage, Coordinate> getCoordinates() {
-		return Collections.emptyMap();
-	}
 }

@@ -225,14 +225,24 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 			timer.putMetaInNode("cells", funding.size());
 			});
 		for(NiReportColumn<?> colToFetch:getReportColumns()) {
-			timer.run(colToFetch.name, () -> fetchedColumns.put(colToFetch.name, fetchEntity(colToFetch)));
+			timer.run(colToFetch.name, () -> {
+				ColumnContents cc = fetchEntity(colToFetch);
+				if (cc != null)
+					fetchedColumns.put(colToFetch.name, cc);
+			});
 		};
 	}
 	
 	protected ColumnContents fetchEntity(NiReportedEntity<?> colToFetch) throws Exception {
-		List<? extends Cell> cells = colToFetch.fetch(this);
-		timer.putMetaInNode("cells", cells.size());
-		return new ColumnContents(cells.stream().map(z -> new NiCell(z, colToFetch)).collect(Collectors.toList()));
+		try {
+			List<? extends Cell> cells = colToFetch.fetch(this);
+			timer.putMetaInNode("cells", cells.size());
+			return new ColumnContents(cells.stream().map(z -> new NiCell(z, colToFetch)).collect(Collectors.toList()));
+		}
+		catch(Exception e) {
+			timer.putMetaInNode("error", e.getMessage());
+			return null;
+		}
 	}
 	
 	/**

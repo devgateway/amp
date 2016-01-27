@@ -79,3 +79,7 @@ http://localhost:8080/rest/data/nireport/10 - report behaviour when no funding
 by-year-hierarchies: generate list of all measures at the bottom
 gross filtering-out of entries while fetching funding
 define the trivial measures in AmpReportsSchema
+
+testcases for the whole coos stack: tracker, fetching, filtering, applying percentages
+remove activities without funding under a hierarchy
+do not ignore null-percentage rows

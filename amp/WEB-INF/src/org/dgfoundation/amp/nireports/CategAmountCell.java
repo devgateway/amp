@@ -1,7 +1,11 @@
 package org.dgfoundation.amp.nireports;
 
+import java.util.Map;
+
 import org.dgfoundation.amp.nireports.meta.CategCell;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
+import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
+import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 /**
  * a cell with an amount and an attached metadata
@@ -14,8 +18,8 @@ public final class CategAmountCell extends Cell implements CategCell, DatedCell,
 	public final MetaInfoSet metaInfo;
 	public final TranslatedDate translatedDate;
 	
-	public CategAmountCell(long activityId, MonetaryAmount amount, MetaInfoSet metaInfo, TranslatedDate translatedDate) {
-		super(activityId);
+	public CategAmountCell(long activityId, MonetaryAmount amount, MetaInfoSet metaInfo, Map<NiDimensionUsage, Coordinate> coos, TranslatedDate translatedDate) {
+		super(activityId, -1, coos);
 		this.amount = amount;
 		this.metaInfo = metaInfo;
 		this.metaInfo.freeze();

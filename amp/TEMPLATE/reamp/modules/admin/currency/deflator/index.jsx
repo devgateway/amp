@@ -182,7 +182,7 @@ var downloadInflationRates = id => currency => actions => fetchJson(INFLATION_RA
 var resetInflationDownloadStatus = id => actions => setTimeout(actions.resetInflationDownloadStatus.bind(null, id), 3000);
 
 var save = inflationRates => actions =>
-    postJson(INFLATION_RATES, inflationRates.map(currency => currency.map(callFunc('value'))).toJS())
+    postJson(INFLATION_RATES, inflationRates.map(currency => currency.map(period => +period.value())).toJS())
         .then(response => (response.status >= 200 && response.status < 300) ?
             actions.saveSuccess() :
             actions.saveFail()

@@ -37,7 +37,9 @@ export var view = AMP.view((
   var __ = key => translations().get(key);
   var onChange = e => {
     var value = e.target.value;
-    if(0 == value.length || (negative(point(number))(value) && (+value) > -1000 && (+value) < 1000)){
+    var floatValue = +value;
+    var inBounds = -100 < floatValue && floatValue < 100;
+    if(0 == value.length || (negative(point(number))(value) && (isNaN(floatValue) || inBounds))){
       change(value);
     }
   };
@@ -68,7 +70,7 @@ export var view = AMP.view((
 }, "Rate");
 
 export var update = (action, model) => actions.match(action, {
-  change: value => model.value(+value),
+  change: model.value,
   _: () => model
 });
 

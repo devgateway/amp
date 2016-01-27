@@ -1,5 +1,6 @@
 import React from "react";
-import {ProgressBar, Glyphicon} from "react-bootstrap";
+import {ProgressBar, Glyphicon, Dropdown, MenuItem} from "react-bootstrap";
+import * as AMP from "amp/architecture";
 
 //Describes an XHR request status
 export const RequestStatus = {
@@ -33,7 +34,8 @@ export var showSave = __ => saveAction => saveStatus => {
   }
 };
 
-//show a display
+//show a download button in case there's only one inflation source, shows a dropdown in case there's multiple sources
+//show a status in case fetching from a data source is in progress
 export var maybeDownload = __ => ({inflationRatesDownloadStarted}) => inflationSources => {
   var wrap = dom => <small className="pull-right">
     {dom}
@@ -70,8 +72,9 @@ export var maybeDownload = __ => ({inflationRatesDownloadStarted}) => inflationS
           <Glyphicon glyph="download-alt"/> {__('amp.deflator:download')}
         </Dropdown.Toggle>
         <Dropdown.Menu>
-          <MenuItem eventKey="1">Dropdown link</MenuItem>
-          <MenuItem eventKey="2">Dropdown link</MenuItem>
+          {inflationSources.mapEntries(({id, name}) => (
+              <MenuItem onClick={inflationRatesDownloadStarted.bind(null, id())} eventKey={id()} key={id()}>{name()}</MenuItem>
+          ))}
         </Dropdown.Menu>
       </Dropdown>
   );

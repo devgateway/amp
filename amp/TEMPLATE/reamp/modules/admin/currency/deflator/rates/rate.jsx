@@ -68,7 +68,7 @@ export var view = AMP.view((
 }, "Rate");
 
 export var update = (action, model) => actions.match(action, {
-  change: model.value,
+  change: value => model.value(+value),
   _: () => model
 });
 

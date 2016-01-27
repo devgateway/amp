@@ -50,12 +50,6 @@ export var view = AMP.view((model: Model, actions) => {
         </tbody>
         <tfoot>
         <tr>
-          <th colSpan="3">
-            {__('amp.deflator:addNew')}
-          </th>
-        </tr>
-
-        <tr>
           <td colSpan="3" className="text-right">
             {maybeUndoPopup(__, model.trash(), actions)}
             {showSave(__)(actions.save)(model.saveStatus())}

@@ -211,11 +211,16 @@ export var update = (action, model) => actions.match(action, {
     downloadInflationRates(sourceId)(getInflationRateCurrency(model)(sourceId))
   ],
 
-  inflationRatesDownloadSuccess: (sourceId, rates) => [
-    setInflationSourceDownloadStatus(model)(sourceId)(RequestStatus.SUCCESS)
-      .setIn(['inflationRates', getInflationRateCurrency(model)(sourceId)], parseRates(model.translations())(rates)),
-    resetInflationDownloadStatus(sourceId)
-  ],
+  inflationRatesDownloadSuccess: (sourceId, rates) => {
+    var newModel = setInflationSourceDownloadStatus(model)(sourceId)(RequestStatus.SUCCESS);
+    return [
+      !newModel.hasIn(['inflationRates', getInflationRateCurrency(model)(sourceId)]) ||
+          confirm(model.__('amp:deflator:overwriteWarning')) ?
+              newModel.setIn(['inflationRates', getInflationRateCurrency(model)(sourceId)], parseRates(model.translations())(rates)) :
+              newModel,
+      resetInflationDownloadStatus(sourceId)
+    ]
+  },
 
   inflationRatesDownloadFail: (sourceId, reason) =>  [
     setInflationSourceDownloadStatus(model)(sourceId)(RequestStatus.FAIL),
@@ -305,5 +310,6 @@ export var translations = {
   "amp.deflator:downloadAll": "Download all",
   "amp.deflator:frequency": "Frequency",
   "amp.deflator:quarterly": "Quarterly",
-  "amp.deflator:rateDeleted": "rate deleted."
+  "amp.deflator:rateDeleted": "rate deleted.",
+  "amp:deflator:overwriteWarning": "Current inflation rates will be overwritten. Continue?"
 };

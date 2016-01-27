@@ -4,11 +4,12 @@ import {CURRENCIES_LIST, INFLATION_SOURCES, INFLATION_RATES} from "amp/config/en
 import {fetchJson, postJson, callFunc} from "amp/tools";
 import {Nav, NavItem, NavDropdown, MenuItem} from "react-bootstrap";
 import cn from "classnames";
-import {Glyphicon, ProgressBar, Alert} from "react-bootstrap";
-import * as Rate from "./rate";
+import {Glyphicon, Alert} from "react-bootstrap";
 import * as ConstantCurrencies from "./constant-currencies";
-import * as NewConstantCurrency from "./constant-currencies/new";
-import {RequestStatus, showSave} from "./tools";
+import * as InflationRates from "./rates";
+import * as Rate from "./rates/rate";
+import * as InflationSources from "./sources";
+import {RequestStatus} from "./tools";
 require('./style.less');
 
 const TABS = {
@@ -74,8 +75,6 @@ var sortByHasSourceThenByCode = (a, b) => {
   return a.code().localeCompare(b.code())
 };
 
-var sortByPeriod = (a, b) => a.period().localeCompare(b.period());
-
 export function init(translationsPromise){
   var parsedTranslationsPromise = translationsPromise.then(translations => new AMP.Model(translations));
   var inflationSourcesPromise = fetchJson(INFLATION_SOURCES)
@@ -117,158 +116,6 @@ export function init(translationsPromise){
       })
   );
 }
-
-var maybeDownload = __ => ({inflationRatesDownloadStarted}) => inflationSources => {
-  var wrap = dom => <small className="pull-right">
-    {dom}
-  </small>;
-
-  if(inflationSources.some(inflationSource => inflationSource.downloadStatus() == RequestStatus.RUNNING)){
-    return wrap(
-      <ProgressBar active now={100} style={{width: 100}}/>
-    )
-  }
-
-  if(inflationSources.some(inflationSource => inflationSource.downloadStatus() == RequestStatus.SUCCESS)){
-    return wrap(
-        <span className="label label-success">
-          <i className="glyphicon glyphicon-ok"/>
-          &nbsp;
-          {__('amp.deflator:success')}
-        </span>
-    )
-  }
-
-  if(inflationSources.some(inflationSource => inflationSource.downloadStatus() == RequestStatus.FAIL)){
-    return wrap(
-        <span className="label label-danger">
-          <i className="glyphicon glyphicon-remove"/>
-          &nbsp;
-          {__('amp.deflator:failed')}
-        </span>
-    )
-  }
-
-  if(inflationSources.size() < 1) return null;
-
-  if(inflationSources.size() == 1){
-    var inflationSource = inflationSources.pop();
-    return wrap(
-      <button className="btn btn-default" onClick={inflationRatesDownloadStarted.bind(null, inflationSource.id())}>
-        <Glyphicon glyph="download-alt"/> {__('amp.deflator:downloadFrom')} {inflationSource.name()}
-      </button>
-    )
-  }
-
-  return wrap(
-    <Dropdown id="download-dropdown">
-      <Dropdown.Toggle>
-        <Glyphicon glyph="download-alt"/> {__('amp.deflator:download')}
-      </Dropdown.Toggle>
-      <Dropdown.Menu>
-        <MenuItem eventKey="1">Dropdown link</MenuItem>
-        <MenuItem eventKey="2">Dropdown link</MenuItem>
-      </Dropdown.Menu>
-    </Dropdown>
-  );
-};
-
-var maybeUndoPopup = (__, maybeRate, {cleanTrash, undelete}) => maybeRate ? (
-    <Alert className="undo-popup" bsStyle="info" onDismiss={e => cleanTrash(maybeRate.deletedAt())}>
-      {Rate.humanReadablePeriod(maybeRate.period())}&nbsp;
-      {__('amp.deflator:rateDeleted')}&nbsp;
-      <a href="javascript:void(0);" className="alert-link" onClick={e => undelete(maybeRate)}>
-        {__('amp.deflator:undo')}
-      </a>
-    </Alert>
-) : null;
-
-export var InflationRates = AMP.view((model: Model, actions) => {
-  var translations = model.translations();
-  var __ = key => translations.get(key);
-  var currency = model.getCurrentCurrency();
-  var code = model.currentCurrencyCode();
-  var inflationSources = model.inflationSources().filter(inflationSource => inflationSource.currency() == code);
-  var inflationRates = model.inflationRates().get(code);
-  return (
-    <table className="table table-striped inflation-rates">
-      <caption>
-        <h2>
-          {__('amp.deflator:inflationRatesFor')} {currency.name()} ({currency.code()})&nbsp;
-          {maybeDownload(__)(actions)(inflationSources)}
-        </h2>
-      </caption>
-      <thead>
-      <tr>
-        <th>{__('amp.deflator:timePeriod')}</th>
-        <th>{__('amp.deflator:inflation')}</th>
-        <th>{__('amp.deflator:actions')}</th>
-      </tr>
-      </thead>
-      <tbody>
-        {inflationRates ? inflationRates.sort(sortByPeriod).mapEntries(inflationRate => (
-          <Rate.view
-              key={inflationRate.period()}
-              model={inflationRate.set('translations', translations)}
-              actions={actions.rate(code, inflationRate.period())}
-          />
-        )):null}
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colSpan="3" className="text-right">
-            {maybeUndoPopup(__, model.trash(), actions)}
-            {showSave(__)(actions.save)(model.saveStatus())}
-          </td>
-        </tr>
-      </tfoot>
-    </table>
-  )
-}, 'InflationRates');
-
-var InflationSources = AMP.view((model, actions) => {
-  var __ = key => model.translations().get(key);
-  return (
-      <table className="table table-striped">
-        <caption>
-          <h2>
-            {__('amp.deflator:inflationSources')}
-          </h2>
-        </caption>
-        <thead>
-          <tr>
-            <th>{__('amp.deflator:nameAndDescription')}</th>
-            <th>{__('amp.deflator:currency')}</th>
-            <th>{__('amp.deflator:frequency')}</th>
-            <th>{__('amp.deflator:actions')}</th>
-          </tr>
-        </thead>
-        <tbody>
-        {model.inflationSources().mapEntries(source => (
-          <tr key={source.id()}>
-            <td className="title-and-desc">
-              <strong>{source.name()}</strong>
-              <p>{source.desc()}</p>
-            </td>
-            <td>{source.currency()}</td>
-            <td>
-              {function(frequency){
-                switch(frequency){
-                  case "Q": return __('amp.deflator:quarterly')
-                  default: return "NOT IMPLEMENTED"
-                }
-              }(source.frequency())}
-            </td>
-            <td>
-              {maybeDownload(__)(actions)(new AMP.Model([source]))}
-            </td>
-          </tr>
-        ))}
-        </tbody>
-        <tfoot>
-        </tfoot>
-      </table>
-  )});
 
 export var view = AMP.view((model, actions) => {
   var {changeTab, changeCurrentCurrency} = actions;
@@ -312,14 +159,14 @@ export var view = AMP.view((model, actions) => {
           <div className="col-md-12">
             {function(currentTab){
                 switch(currentTab){
-                    case TABS.INFLATION_SOURCES: return <InflationSources model={model} actions={actions}/>;
+                    case TABS.INFLATION_SOURCES: return <InflationSources.view model={model} actions={actions}/>;
                     case TABS.CONSTANT_CURRENCIES: return (
                       <ConstantCurrencies.view
                           model={model.constantCurrencies()}
                           actions={actions.constantCurrencies()}
                       />
                     )
-                    default: return <InflationRates model={model} actions={actions}/>
+                    default: return <InflationRates.view model={model} actions={actions}/>
                 }
             }(model.currentTab())}
           </div>
@@ -438,6 +285,7 @@ export var update = (action, model) => actions.match(action, {
 export var translations = {
   ...Rate.translations,
   ...ConstantCurrencies.translations,
+  "amp.deflator:addNew": "Add new",
   "amp.deflator:title": "Currency deflator",
   "amp.deflator:inflationRates": "Inflation rates",
   "amp.deflator:constantCurrencies": "Constant currencies",

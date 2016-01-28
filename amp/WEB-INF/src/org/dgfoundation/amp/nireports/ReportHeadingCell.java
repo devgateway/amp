@@ -45,6 +45,10 @@ public class ReportHeadingCell {
 	public int getRowSpan() {
 		return rowSpan;
 	}
+	
+	public int getTotalRowSpan() {
+		return totalRowSpan;
+	}
 
 	public int getStartColumn(){
 		return startColumn;

@@ -2,12 +2,13 @@ package org.dgfoundation.amp.nireports.amp;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.timing.RunNode;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
@@ -30,19 +31,22 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
 	
 	protected static final Logger logger = Logger.getLogger(NiReportsGenerator.class);
 	public final boolean logReport;
+	public final Class<? extends ReportAreaImpl> reportAreaClazz;
 	
-	public NiReportsGenerator(NiReportsSchema schema) {
-		this(schema, true);
+	public NiReportsGenerator(NiReportsSchema schema, Class<? extends ReportAreaImpl> reportAreaClazz) {
+		this(schema, reportAreaClazz, true);
 	}
 	
 	/**
 	 * constructs an instance
 	 * @param schema the schema to use
+	 * @param reportAreaClazz the ReportArea implementation to be used
 	 * @param logReport whether to log execution nodes to the DB
 	 */
-	public NiReportsGenerator(NiReportsSchema schema, boolean logReport) {
+	public NiReportsGenerator(NiReportsSchema schema, Class<? extends ReportAreaImpl> reportAreaClazz, boolean logReport) {
 		super(schema);
 		this.logReport = logReport;
+		this.reportAreaClazz = reportAreaClazz;
 	}
 
 	@Override
@@ -54,7 +58,7 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
 		
 	@Override
 	public GeneratedReport executeReport(ReportSpecification spec) {
-		GeneratedReport apiReport = executeReport(spec, AmpNiReportsFormatter.asAmpFormatter());
+		GeneratedReport apiReport = executeReport(spec, AmpNiReportsFormatter.asAmpFormatter(reportAreaClazz));
 		return apiReport;
 	}
 	

@@ -943,67 +943,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 		CellDataSetToGeneratedReport translator = new CellDataSetToGeneratedReport(
 				spec, cellDataSet, leafHeaders, cellDataSetActivities);
 		ReportAreaImpl root = translator.transformTo(reportAreaType);
-		GeneratedReport genRep = new GeneratedReport(spec, duration + (int)(System.currentTimeMillis() - start), null, root, getRootHeaders(leafHeaders), leafHeaders, null); 
-		return genRep;
-	}
-	
-	@Deprecated
-	private GeneratedReport toGeneratedReport(MondrianReportSpec spec, CellSet cellSet, int duration) throws AMPException {
-		CellSetAxis rowAxis = cellSet.getAxes().get(Axis.ROWS.axisOrdinal());
-		CellSetAxis columnAxis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
-		ReportAreaImpl root = MondrianReportUtils.getNewReportArea(reportAreaType);
-		
-		if (rowAxis.getPositionCount() > 0 && columnAxis.getPositionCount() > 0 ) {
-			/* Build Report Areas */
-			// stack of current group of children
-			Deque<List<ReportArea>> stack = new ArrayDeque<List<ReportArea>>();
-			int maxStackSize = 1 + (spec.getCalculateRowTotals() ? rowAxis.getAxisMetaData().getHierarchies().size()  : 0); 
-			refillStack(stack, maxStackSize); //prepare the stack
-			
-			int cellOrdinal = 0; //initial position of row data from the cellSet
-			boolean wasAreaEnd = false; 
-			
-			for (Position rowPos : rowAxis.getPositions()) {
-				int columnPos = 0;
-				boolean areaEnd = false; 
-				ReportAreaImpl reportArea = MondrianReportUtils.getNewReportArea(reportAreaType);
-				Map<ReportOutputColumn, ReportCell> contents = new LinkedHashMap<ReportOutputColumn, ReportCell>();
-				
-				for (Member member : rowPos.getMembers()) {
-					TextCell text = new TextCell(member.getName());
-					contents.put(leafHeaders.get(columnPos++), text);
-					areaEnd = areaEnd || member.isAll();
-				}
-				
-				for (Position colPos : columnAxis.getPositions()) {
-					Cell cell = cellSet.getCell(cellOrdinal++);
-					if (cell.getValue() instanceof OlapException) {
-						logger.error("Unexpected cell error: " + MondrianUtils.getOlapExceptionMessage((OlapException)cell.getValue()));
-					} else {
-						if (cell.getValue() != null) {
-							AmountCell amount = new AmountCell(new BigDecimal(cell.getValue().toString()), null);
-							contents.put(leafHeaders.get(columnPos++), amount);
-						} else 
-							columnPos++; //skip column
-					} 
-				}
-				
-				reportArea.setContents(contents);
-				
-				if (areaEnd) {
-					reportArea.setChildren(stack.pop());
-				} else if (wasAreaEnd) { 
-					//was an area end but now is simple content => refill with new children lists to the stack 
-					refillStack(stack, maxStackSize);
-				}
-				stack.peek().add(reportArea);
-				wasAreaEnd = areaEnd;
-			}
-			root.setChildren(stack.pop());
-		}
-			
-		//we should have requesting user already configure in spec - spec must have all required data
-		GeneratedReport genRep = new GeneratedReport(spec, duration, null, root, getRootHeaders(leafHeaders), leafHeaders, null); 
+		GeneratedReport genRep = new GeneratedReport(spec, duration + (int)(System.currentTimeMillis() - start), 
+				null, root, getRootHeaders(leafHeaders), leafHeaders, null, null);
 		return genRep;
 	}
 	

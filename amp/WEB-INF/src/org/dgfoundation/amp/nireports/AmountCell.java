@@ -52,4 +52,9 @@ public final class AmountCell extends Cell implements CategCell, NumberedCell {
 	public Map<NiDimensionUsage, Coordinate> getCoordinates() {
 		return Collections.emptyMap();
 	}
+
+	@Override
+	public <K> K accept(CellVisitor<K> visitor) {
+		return visitor.visit(this);
+	}
 }

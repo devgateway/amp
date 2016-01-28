@@ -57,4 +57,9 @@ public final class CategAmountCell extends Cell implements CategCell, DatedCell,
 	public MonetaryAmount getAmount() {
 		return amount;
 	}
+
+	@Override
+	public <K> K accept(CellVisitor<K> visitor) {
+		return visitor.visit(this);
+	}
 }

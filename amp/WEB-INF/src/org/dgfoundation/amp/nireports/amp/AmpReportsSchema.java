@@ -36,6 +36,7 @@ import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
 import org.dgfoundation.amp.currencyconvertor.CurrencyConvertor;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
+import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -483,12 +484,12 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 * @return
 	 */
 	public static ReportExecutor getExecutor(boolean logToDb) {
-		ReportExecutor res = new NiReportsGenerator(getInstance(), logToDb);
+		ReportExecutor res = new NiReportsGenerator(getInstance(), ReportAreaImpl.class, logToDb);
 		return res;
 	}
 	
 	public static String getRenderedReport(ReportSpecification spec) {
-		NiReportsGenerator niGen = new NiReportsGenerator(getInstance());
+		NiReportsGenerator niGen = new NiReportsGenerator(getInstance(), ReportAreaImpl.class);
 		return niGen.renderReport(spec);
 	}
 

@@ -3,7 +3,7 @@ package org.dgfoundation.amp.newreports;
 import java.util.List;
 import java.util.Optional;
 
-import org.dgfoundation.amp.algo.timing.InclusiveTimer;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.dgfoundation.amp.algo.timing.RunNode;
 import org.digijava.module.aim.helper.TeamMember;
 
@@ -40,17 +40,19 @@ public class GeneratedReport {
 	 * Ordered list of leaf headers of the report. Each leaf header can have a ancestors identified via parentColumn
 	 * TODO: not sure if headers are useful via root or leaf
 	 */
-	public final List<ReportOutputColumn> leafHeaders;  //Map<ROC, Integer>
+	public final List<ReportOutputColumn> leafHeaders;
 	
-	//TODO: Nadia public final List<List<HeaderCell>> renderedHeaders;
+	public final List<List<HeaderCell>> generatedHeaders;
 	
 	/**
 	 * might be null, but not putting an {@link Optional} here because we have lots of old frontend code 
 	 */
+	@JsonIgnore
 	public final RunNode timings;
 	
-	public GeneratedReport(ReportSpecification spec, int generationTime, TeamMember requestingUser, ReportArea reportContents, 
-			List<ReportOutputColumn> rootHeaders, List<ReportOutputColumn> leafHeaders, RunNode timings) {
+	public GeneratedReport(ReportSpecification spec, int generationTime, TeamMember requestingUser, 
+			ReportArea reportContents, List<ReportOutputColumn> rootHeaders, List<ReportOutputColumn> leafHeaders, 
+			List<List<HeaderCell>> generatedHeaders, RunNode timings) {
 		this.spec = spec;
 		this.generationTime = generationTime;
 		this.requestingUser = requestingUser;
@@ -58,7 +60,9 @@ public class GeneratedReport {
 		this.rootHeaders = rootHeaders;
 		this.leafHeaders = leafHeaders;
 		this.timings = timings;
+		this.generatedHeaders = generatedHeaders;
 	}
+	
 }
 
 	

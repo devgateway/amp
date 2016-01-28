@@ -58,4 +58,9 @@ public final class PercentageTextCell extends Cell {
 	public String getDisplayedValue() {
 		return text;
 	}
+
+	@Override
+	public <K> K accept(CellVisitor<K> visitor) {
+		return visitor.visit(this);
+	}
 }

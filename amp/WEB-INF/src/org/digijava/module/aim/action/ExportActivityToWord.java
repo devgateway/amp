@@ -3218,7 +3218,7 @@ public class ExportActivityToWord extends Action {
             identificationSubTable1.addCell(cell);
         }
 
-        if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras")){
+
             //AMP-16421
             if(identification.getBudgetCV().equals(identification.getBudgetCVOn())){
                 if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/FY")){
@@ -3247,7 +3247,6 @@ public class ExportActivityToWord extends Action {
                     generateOverAllTableRows(identificationSubTable1,columnName,identification.getSubProgram(),null);
                 }
             }
-        }
 
         if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Classification")) {
             cell = new RtfCell();

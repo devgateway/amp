@@ -591,7 +591,6 @@ body {background:none;}
 											<br>
 										</field:display>
 
-										<module:display name="/Activity Form/Identification/Budget Extras" parentModule="/Activity Form/Identification">
 										<c:if test="${aimEditActivityForm.identification.budgetCV == aimEditActivityForm.identification.budgetCVOn}">
 											<module:display name="/Activity Form/Identification/Budget Extras/FY" parentModule="/Activity Form/Identification/Budget Extras">
 												<digi:trn>FY</digi:trn>:&nbsp;
@@ -624,7 +623,7 @@ body {background:none;}
 												<br />
 											</module:display>
 										</c:if>
-										</module:display>
+
 										</td>
 									</tr>
 									</feature:display>

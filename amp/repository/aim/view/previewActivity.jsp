@@ -1018,7 +1018,6 @@ function collapseAll() {
 		</c:if>
 		</module:display>
 		
-		<module:display name="/Activity Form/Identification/Budget Extras" parentModule="/Activity Form/Identification">
 			<c:if test="${aimEditActivityForm.identification.budgetCV==aimEditActivityForm.identification.budgetCVOn}">
 				<module:display name="/Activity Form/Identification/Budget Extras/FY" parentModule="/Activity Form/Identification">
 					<digi:trn>FY</digi:trn>:&nbsp;
@@ -1054,7 +1053,7 @@ function collapseAll() {
 				</module:display>
 				
 			</c:if>
-		</module:display>
+
 		<hr>	
 		<module:display name="/Activity Form/Identification/Budget Classification" parentModule="/Activity Form/Identification">
 			<c:if test="${!empty aimEditActivityForm.identification.selectedbudgedsector}">

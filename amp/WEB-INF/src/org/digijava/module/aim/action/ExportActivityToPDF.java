@@ -96,6 +96,8 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 
+import clover.org.apache.commons.lang.StringUtils;
+
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -113,8 +115,6 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfPTableEvent;
 import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.pdf.draw.LineSeparator;
-
-import clover.org.apache.commons.lang.StringUtils;
 
 /**
  * Export Activity to PDF
@@ -677,7 +677,7 @@ public class ExportActivityToPDF extends Action {
             /**
 			 * Budget Extras
 			 */
-            if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras")){
+
                 //AMP-16421
                 if(identification.getBudgetCV() != null && identification.getBudgetCV().equals(identification.getBudgetCVOn())) {
                     if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/FY")){
@@ -705,7 +705,6 @@ public class ExportActivityToPDF extends Action {
                         createGeneralInfoRow(mainLayout, columnName, identification.getSubProgram());
                     }
                 }
-            }
 
             if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Classification")) {
 

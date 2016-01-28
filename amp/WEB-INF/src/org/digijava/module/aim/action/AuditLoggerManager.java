@@ -7,11 +7,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -189,7 +187,7 @@ public class AuditLoggerManager extends MultiAction {
 	private HSSFWorkbook XlsMaker( AuditLoggerManagerForm form, HttpServletRequest request, HttpServletResponse response) {
 		int interval = Integer.parseInt(form.getFrecuency());
 		Collection<AmpAuditLogger> Xlslogs=AuditLoggerUtil.getLogByPeriod(interval);
-		//Collections.sort((List<AmpAuditLogger>) Xlslogs);
+
 		HSSFWorkbook wb = new HSSFWorkbook();
 		response.setContentType("application/vnd.ms-excel");
 		response.setHeader("Content-disposition", "inline; filename=Audit-logger.xls");

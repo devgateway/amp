@@ -21,10 +21,17 @@ import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_6;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_7;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_8;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
 import org.dgfoundation.amp.currencyconvertor.CurrencyConvertor;
 import org.dgfoundation.amp.error.AMPException;
@@ -47,6 +54,7 @@ import org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.helper.Constants;
 
 import com.google.common.base.Function;
@@ -64,6 +72,63 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static ProgramsDimension progsDimension = ProgramsDimension.instance;
 	public final static CategoriesDimension catsDimension = CategoriesDimension.instance;
 	
+
+	@SuppressWarnings("serial")
+	public final static Map<String, String> columnDescriptions = new HashMap<String, String>() {{
+		put(ColumnConstants.CUMULATIVE_COMMITMENT,  "Sum of all ACTUAL COMMITMENTS independent of filters");
+		put(ColumnConstants.CUMULATIVE_DISBURSEMENT,  "Sum of all ACTUAL DISBURSEMENTS independent of filters");
+		put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES,  "Level-1 subprogram of the selected national objective");
+		put(ColumnConstants.PROJECT_PERIOD,  "Project Period (months),  Proposed Completion Date - Actual Start date");
+		put(ColumnConstants.OVERAGE,  "Overage (months),  Age of project - Project period");
+		put(ColumnConstants.OVERAGE_PROJECT,  "Current date - Date of Planned Completion");
+		put(ColumnConstants.AGE_OF_PROJECT_MONTHS,  "Current date - Date of Agreement Effective");
+		put(ColumnConstants.PREDICTABILITY_OF_FUNDING ,  "((Planned Disbursements - Actual Disbursements) / Planned Disbursements) X 100");
+		put(ColumnConstants.AVERAGE_SIZE_OF_PROJECTS,  "Total Commitments / Count Of Activities");
+		put(ColumnConstants.VARIANCE_OF_COMMITMENTS,  "Max Commitments - Min Commitments");
+		put(ColumnConstants.VARIANCE_OF_DISBURSEMENTS,  "Max Disbursements- Min Disbursements");
+		put(ColumnConstants.EXECUTION_RATE,  "(Cumulative Disbursement/ Cumulative Commitment) * 100 ");
+		put(ColumnConstants.AVERAGE_SIZE_OF_DISBURSEMENTS,  "Sun Actual Disbursments / Number of Actual disbursments");
+		put(ColumnConstants.ACTIVITY_COUNT,  "Count Of Activities under the current hierarchy");
+		put(ColumnConstants.AVERAGE_DISBURSEMENT_RATE,  "Sum of Execution Rate / Number of Activities");
+		put(ColumnConstants.PROJECT_AGE_RATIO,  "Project Age Ratio,  Age of project / Project Period");
+//		put(ColumnConstants.PERCENTAGE_OF_TOTAL_DISBURSMENTS,  "AMP 1.x Disbursement Ratio");
+		put(ColumnConstants.PRIMARY_PROGRAM_DETAIL,  "The Primary Program, as entered in the database");
+		put(ColumnConstants.SECONDARY_PROGRAM_DETAIL,  "The Secondary Program, as entered in the database");
+		put(ColumnConstants.TERTIARY_PROGRAM_DETAIL,  "The Tertiary Program, as entered in the database");
+		put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_DETAIL,  "The National Planning Objectives, as entered in the database");
+		put(ColumnConstants.PRIMARY_PROGRAM,  "Level-1 subprogram of the selected primary program");
+		put(ColumnConstants.SECONDARY_PROGRAM,  "Level-1 subprogram of the selected secondary program");
+		put(ColumnConstants.TERTIARY_PROGRAM,  "Level-1 subprogram of the selected tertiary program");
+		put(ColumnConstants.CALCULATED_PROJECT_LIFE,  "Difference in days between Planned Start Date and Actual Completion Date");
+		put(ColumnConstants.CUMULATIVE_EXECUTION_RATE,  "(Cumulative Disbursement/ Cumulative Commitment) * 100 ");
+		put(ColumnConstants.UNCOMMITTED_CUMULATIVE_BALANCE,  "Proposed project cost - Cummalative Commitments");
+		put(ColumnConstants.UNDISBURSED_CUMULATIVE_BALANCE,  "Cumulative Commitment - Cumulative Disbursement");	
+		
+		
+	}};
+	@SuppressWarnings("serial")
+	public final static Map<String, String> measureDescriptions = new HashMap<String, String>(){{
+
+
+		put(MeasureConstants.CONSUMPTION_RATE , "(Selected Year Cumulated Disbursements / Selected Year of Planned Disbursements) * 100"); 
+		put(MeasureConstants.CUMULATED_DISBURSEMENTS , "Prior Actual Disbursements + Previous Month Disbursements"); 
+		put(MeasureConstants.DISBURSMENT_RATIO , "Sum of actual disbursment / Total actual disb * 100"); 
+		put(MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS , "Actual Disbursements Of Previous Month");
+		put(MeasureConstants.CURRENT_MONTH_DISBURSEMENTS , "Sum of Actual Disbursements of the current month");
+		put(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS , "Current Year Actual Disbursements Until Previous Month (not included)"); 
+		put(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS , "Selected Year Planned Disbursements");
+		put(MeasureConstants.UNCOMMITTED_BALANCE , "Proposed project cost - Cumulative commitments"); 
+		put(MeasureConstants.UNDISBURSED_BALANCE , "Cumulative Commitment - Cumulative Disbursement");
+		put(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS , "Actual commitments for the project / Total actual commitments * 100");
+		put(MeasureConstants.LAST_YEAR_OF_PLANNED_DISBURSEMENTS , "Previous Year Planned Disbursements");
+		put(MeasureConstants.PERCENTAGE_OF_DISBURSEMENT , "(Total Actual Disbursements for Year,Quarter,Month / Total Actual Disbursements) * 100");
+		put(MeasureConstants.PLEDGES_COMMITMENT_GAP , "Total Pledge - Total Actual Commitments");
+		put(MeasureConstants.EXECUTION_RATE , "Sum Of Actual Disb (Dependent on Filter) / Sum Of Planned Disb (Dependent on Filter) * 100");
+//		put(MeasureConstants.FORECAST_EXECUTION_RATE , "Actual Disbursements / (Most recent of (Pipeline MTEF for the year, Projection MTEF for the year)). "
+//					+ "Measure only makes sense in Annual and Totals-only reports");
+		
+	}};
+
 	private static AmpReportsSchema instance = new AmpReportsSchema();
 	
 	/**
@@ -307,6 +372,51 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addTrivialMeasures();
 	}
 		
+	/**
+	 * This method is created for the following scenario:
+	 * 		- a column was added to AmpReportsSchema
+	 * 		- this column doesn't exist in the old reports schema (described by AmpColumns)
+	 * 	In this scenario, opening a report with said 
+	 *  new column in the old reports engine would probably result in a crash.
+	 *  To avoid this, an entry referring to an empty view is added -- so that the column is shown having no data
+	 *  (since there's no point in backporting the column entirely). 
+	 */
+	public void synchronizeAmpColumnsBackport() {
+		synchronizeAmpReportEntityBackport("columnname", "amp_columns", this.columns, "columnid", "amp_columns_seq");
+ 	}
+
+	
+	/**
+	 * This method is created for the following scenario:
+	 * 		- a measure was added to AmpReportsSchema
+	 * 		- this measure doesn't exist in the old reports schema (described by AmpMeasures)
+	 * 	In this scenario, opening a report with said 
+	 *  new measure in the old reports engine would probably result in a crash.
+	 *  Therefore, an empty
+	 */
+	public void synchronizeAmpMeasureBackport() {
+		synchronizeAmpReportEntityBackport("measurename", "amp_measures", this.measures, "measureid", "amp_measures_seq");
+	}	
+	
+	private void synchronizeAmpReportEntityBackport(String nameColumnEntity, String tableName, Map<String, ?> niEntity, String idColumn,
+		String seqname) {
+		PersistenceManager.getSession().doWork(conn -> {
+			List<String> entityNamesList = SQLUtils.fetchAsList(conn, String.format("SELECT %s FROM %s", nameColumnEntity, tableName), 1);
+			Set<String> entityNames = new HashSet<String>(entityNamesList);
+			List<String> toBeAdded = new ArrayList<String>();
+			for (String niEntityName: niEntity.keySet())
+				if (!entityNames.contains(niEntityName)) 
+					toBeAdded.add(niEntityName);
+			//c is for columns (otherwise, it's measures)
+			boolean c = tableName.equals("amp_columns");
+			List<String> insertEntityNames = Arrays.asList(nameColumnEntity, "celltype", c ? "extractorview" : "type");
+			List<List<Object>> values = new ArrayList<List<Object>>(); 
+			for (String added: toBeAdded) 
+				values.add(Arrays.asList(added, "org.dgfoundation.amp.ar.cell.TextCell", c? "v_empty_text_column" : "A"));
+			SQLUtils.insert(conn, tableName, idColumn, "amp_columns_seq", insertEntityNames, values);
+		});
+	}
+	
 	private AmpReportsSchema addTrivialMeasures() {
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.ACTUAL_COMMITMENTS, Constants.COMMITMENT, "Actual", false));
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, Constants.DISBURSEMENT, "Actual", false));

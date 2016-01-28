@@ -18,12 +18,16 @@ public abstract class NiReportedEntity<K extends Cell> {
 	
 	protected final Behaviour behaviour;
 	public final String name;
-
-	protected NiReportedEntity(String name, Behaviour behaviour) {
+	public final String description;
+	
+	
+	protected NiReportedEntity(String name, Behaviour behaviour, String description) {
 		this.name = name;
 		this.behaviour = behaviour;
+		this.description = description;
 	}
 
+	
 	public abstract List<K> fetch(NiReportsEngine engine) throws Exception;
 	public abstract List<ReportRenderWarning> performCheck();
 	

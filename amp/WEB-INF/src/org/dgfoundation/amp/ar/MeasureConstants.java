@@ -3,6 +3,9 @@
  */
 package org.dgfoundation.amp.ar;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Constants for Measure Names. <b>
  * Values are pulled from amp_measures.measurename 
@@ -72,5 +75,4 @@ public class MeasureConstants {
 	public static final String EXECUTION_RATE = "Execution Rate";
 	//public static final String FORECAST_EXECUTION_RATE = "Forecast Execution Rate";
 	public static final String ALWAYS_PRESENT = "Always Present";
-	
 }

@@ -290,6 +290,9 @@ public class AMPStartupListener extends HttpServlet implements
 
 			//AmpBackgroundActivitiesCloser.createActivityCloserUserIfNeeded();
 			initializeQuartz(sce);
+			
+			AmpReportsSchema.getInstance().synchronizeAmpColumnsBackport();
+			AmpReportsSchema.getInstance().synchronizeAmpMeasureBackport();
 
 			logger.info("Checking if any MTEF columns need to be created...");
 			DynamicColumnsUtil.createInexistentMtefColumns(ampContext);

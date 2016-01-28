@@ -20,8 +20,8 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
  */
 public abstract class NiReportMeasure<K extends Cell> extends NiReportedEntity<K> {
 			
-	protected NiReportMeasure(String name, Behaviour behaviour) {
-		super(name, behaviour);
+	protected NiReportMeasure(String name, Behaviour behaviour, String description) {
+		super(name, behaviour, description);
 	}
 	
 	/**

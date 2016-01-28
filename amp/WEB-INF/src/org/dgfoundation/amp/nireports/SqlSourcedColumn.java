@@ -44,8 +44,9 @@ public abstract class SqlSourcedColumn<K extends Cell> extends NiReportColumn<K>
 	public final Map<String, String> filtering;
 
 	
-	public SqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, Map<String, String> filtering, String viewName, String mainColumn, Behaviour behaviour) {
-		super(columnName, levelColumn, behaviour);
+	public SqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, Map<String, String> filtering, String viewName, 
+			String mainColumn, Behaviour behaviour, String description) {
+		super(columnName, levelColumn, behaviour, description);
 		this.viewName = viewName;
 		this.mainColumn = mainColumn;
 		this.filtering = filtering == null ? Collections.emptyMap() : Collections.unmodifiableMap(new TreeMap<>(filtering));

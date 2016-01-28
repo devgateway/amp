@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-22084</jira>
+	<keyword>empty text column view</keyword>
+	<author>acartaleanu</author>
+	<description>Create NiReports log table</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				CREATE OR REPLACE VIEW v_empty_text_column(amp_activity_id, name, id) 
+					AS SELECT null::bigint AS amp_activity_id, null::varchar AS name, null::bigint AS id LIMIT 0;
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

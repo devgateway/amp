@@ -68,20 +68,17 @@ public class CurrencyConvertorTests extends MondrianReportsTestCase {
 	@Test
 	public void testDonorFunding() throws Exception {
 		runNiReportsTestcase(
-				Arrays.asList("with weird currencies"),
-				engine -> {
-
-					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);
-
-					assertEquals(
-							"["
-									+ "(actId: 79, 87680.841736 on 2015-10-06 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, "
-									+ "(actId: 79, 3632.137149 on 2014-12-16 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, "
-									+ "(actId: 79, 6250 on 2015-10-14 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}"
-									+ "]", cells.toString());
-
+			Arrays.asList("with weird currencies"),
+			engine -> {
+				List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);
+				assertEquals(
+					"["
+						+ "(actId: 79, 87680.841736 on 2015-10-06, adjustment_type: Actual, transaction_type: 0), "
+						+ "(actId: 79, 3632.137149 on 2014-12-16, adjustment_type: Actual, transaction_type: 0), "
+						+ "(actId: 79, 6250 on 2015-10-14, adjustment_type: Actual, transaction_type: 0)"
+						+ "]", 
+						digestCellsList(cells, this::digestTransactionAmounts));
 				});
-
 	}
 
 	@Test

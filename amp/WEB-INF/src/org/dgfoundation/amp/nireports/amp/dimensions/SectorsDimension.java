@@ -12,7 +12,7 @@ import org.dgfoundation.amp.nireports.amp.SqlSourcedNiDimension;
  */
 public final class SectorsDimension extends SqlSourcedNiDimension {
 	
-	public final static SectorsDimension instance = new SectorsDimension("Sectors dimension");
+	public final static SectorsDimension instance = new SectorsDimension("sectors");
 	
 	private SectorsDimension(String name) {
 		super(name, "ni_all_sectors_with_levels", Arrays.asList("id0", "id1", "id2"));

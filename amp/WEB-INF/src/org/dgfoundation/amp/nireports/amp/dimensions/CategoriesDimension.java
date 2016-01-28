@@ -11,7 +11,7 @@ import org.dgfoundation.amp.nireports.amp.SqlSourcedNiDimension;
  *
  */
 public class CategoriesDimension extends SqlSourcedNiDimension {
-	public final static CategoriesDimension instance = new CategoriesDimension("categories");
+	public final static CategoriesDimension instance = new CategoriesDimension("cats");
 	
 	private CategoriesDimension(String name) {
 		super(name, "amp_category_value", Arrays.asList("amp_category_class_id", "id"));

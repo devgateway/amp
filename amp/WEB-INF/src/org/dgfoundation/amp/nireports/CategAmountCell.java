@@ -2,6 +2,7 @@ package org.dgfoundation.amp.nireports;
 
 import java.util.Map;
 
+import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.meta.CategCell;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
@@ -28,7 +29,7 @@ public final class CategAmountCell extends Cell implements CategCell, DatedCell,
 
 	@Override
 	public String toString() {
-		return String.format("(actId: %d, %s with meta: {%s}", this.activityId, amount, metaInfo);
+		return String.format("(actId: %d, amt: %s, coos: {%s}, meta: {%s}", this.activityId, amount, AmpCollections.sortedMap(coordinates, (a, b) -> a.toString().compareTo(b.toString())), metaInfo);
 	}
 
 	@Override

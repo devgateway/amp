@@ -2,6 +2,8 @@ package org.dgfoundation.amp.ar.amp212;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -13,6 +15,7 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
+import org.dgfoundation.amp.nireports.amp.MetaCategory;
 import org.junit.Test;
 
 /**
@@ -42,7 +45,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 	public void testProjectTitle() throws Exception {
 		runNiReportsTestcase(Arrays.asList("Unvalidated activity", "execution rate activity"), engine -> {
 			List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.PROJECT_TITLE).fetch(engine);
-			assertEquals("[Unvalidated activity (id: 64, eid: 64), execution rate activity (id: 77, eid: 77)]", cells.toString());
+			assertEquals("[Unvalidated activity (id: 64, eid: 64, coos: {}), execution rate activity (id: 77, eid: 77, coos: {})]", cells.toString());
 		});
 	}
 
@@ -53,10 +56,10 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 				engine -> {
 					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);
 					assertEquals(
-							"["
-									+ "(actId: 40, 75000 on 2014-02-05 with meta: {MetaInfoSet: [donor_org: 21700, terms_of_assistance: 2119, financing_instrument: 2120, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, "
-									+ "(actId: 64, 45000 on 2015-01-06 with meta: {MetaInfoSet: [donor_org: 21695, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, transaction_type: 0]}]",
-							cells.toString());
+						"[" 
+						+ "(actId: 40, amt: 75000 on 2014-02-05, coos: {{cats.Financing Instrument=(level: 1, id: 2120), cats.Mode of Payment=(level: 1, id: 2094), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21700)}}, meta: {MetaInfoSet: [source_role: DN, adjustment_type: Actual, transaction_type: 0]}, "
+     					+ "(actId: 64, amt: 45000 on 2015-01-06, coos: {{cats.Financing Instrument=(level: 1, id: 2125), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21695)}}, meta: {MetaInfoSet: [source_role: DN, adjustment_type: Actual, transaction_type: 0]}]",
+						cells.toString());
 				});
 	}
 
@@ -67,10 +70,10 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 				engine -> {
 					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);
 					assertEquals(
-							"["
-									+ "(actId: 19, 55333 on 2012-01-01 with meta: {MetaInfoSet: [donor_org: 21700, terms_of_assistance: 2119, financing_instrument: 2120, source_role: EA, adjustment_type: Actual, transaction_type: 3]}, "
-									+ "(actId: 19, 33888 on 2011-01-01 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2120, source_role: DN, adjustment_type: Actual, transaction_type: 3]}"
-									+ "]", cells.toString());
+						"["
+							+ "(actId: 19, amt: 55333 on 2012-01-01, coos: {{cats.Financing Instrument=(level: 1, id: 2120), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21700)}}, meta: {MetaInfoSet: [source_role: EA, adjustment_type: Actual, transaction_type: 3]}, "
+							+ "(actId: 19, amt: 33888 on 2011-01-01, coos: {{cats.Financing Instrument=(level: 1, id: 2120), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21699)}}, meta: {MetaInfoSet: [source_role: DN, adjustment_type: Actual, transaction_type: 3]}"
+							+ "]", cells.toString());
 				});
 	}
 
@@ -81,14 +84,15 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 				engine -> {
 					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);
 					assertEquals(
-							"["
-									+ "(actId: 79, 87680.841736 on 2015-10-06 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, "
-									+ "(actId: 79, 3632.137149 on 2014-12-16 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, "
-									+ "(actId: 79, 6250 on 2015-10-14 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}"
-									+ "]", cells.toString());
+						"["
+							+ "(actId: 79, 87680.841736 on 2015-10-06, adjustment_type: Actual, transaction_type: 0), "
+							+ "(actId: 79, 3632.137149 on 2014-12-16, adjustment_type: Actual, transaction_type: 0), " 
+							+ "(actId: 79, 6250 on 2015-10-14, adjustment_type: Actual, transaction_type: 0)"
+							+ "]",
+						digestCellsList(cells, this::digestTransactionAmounts));
 				});
 	}
-
+	
 	@Test
 	public void testExchangeRatesToEur() throws Exception {
 		runNiReportsTestcase(
@@ -97,11 +101,12 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 				engine -> {
 					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);
 					assertEquals(
-							"["
-									+ "(actId: 79, 80000 on 2015-10-06 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, "
-									+ "(actId: 79, 3313.961935 on 2014-12-16 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, "
-									+ "(actId: 79, 10000 on 2015-10-14 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}"
-									+ "]", cells.toString());
+						"["
+							+ "(actId: 79, 80000 on 2015-10-06, adjustment_type: Actual, transaction_type: 0), "
+							+ "(actId: 79, 3313.961935 on 2014-12-16, adjustment_type: Actual, transaction_type: 0), "
+							+ "(actId: 79, 10000 on 2015-10-14, adjustment_type: Actual, transaction_type: 0)"
+							+ "]", 
+					digestCellsList(cells, this::digestTransactionAmounts));
 				});
 	}
 
@@ -114,11 +119,11 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 				List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);
 				assertEquals(
 					"["
-						+ "(actId: 79, 1728189.390618 on 2015-10-06 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, "
-						+ "(actId: 79, 50000 on 2014-12-16 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}, "
-						+ "(actId: 79, 123187.5 on 2015-10-14 with meta: {MetaInfoSet: [donor_org: 21699, terms_of_assistance: 2119, financing_instrument: 2125, source_role: DN, adjustment_type: Actual, mode_of_payment: 2094, transaction_type: 0]}"
+						+ "(actId: 79, 1728189.390618 on 2015-10-06, adjustment_type: Actual, transaction_type: 0), "
+						+ "(actId: 79, 50000 on 2014-12-16, adjustment_type: Actual, transaction_type: 0), "
+						+ "(actId: 79, 123187.5 on 2015-10-14, adjustment_type: Actual, transaction_type: 0)"
 					+ "]",
-				cells.toString());
+				digestCellsList(cells, this::digestTransactionAmounts));
 		});
 	}
 
@@ -128,7 +133,10 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 			Arrays.asList("Unvalidated activity", "execution rate activity"),
 			engine -> {
 				List<? extends Cell> cells = sorted(engine.schema.getColumns().get(ColumnConstants.ACTIVITY_UPDATED_BY).fetch(engine));
-				assertEquals("[ATL ATL (atl@amp.org) (id: 64, eid: 3), ATL ATL (atl@amp.org) (id: 77, eid: 3)]",
+				assertEquals("[" + 
+					"ATL ATL (atl@amp.org) (id: 64, eid: 3, coos: {}), " + 
+					"ATL ATL (atl@amp.org) (id: 77, eid: 3, coos: {})"
+					+ "]",
 					cells.toString());
 			});
 	}
@@ -138,7 +146,11 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 		runNiReportsTestcase(Arrays.asList("Unvalidated activity", "execution rate activity"),
 			engine -> {
 				List<? extends Cell> cells = sorted(engine.schema.getColumns().get(ColumnConstants.IMPLEMENTATION_LEVEL).fetch(engine));
-				assertEquals("[National (id: 64, eid: 70), Provincial (id: 77, eid: 69)]", cells.toString());
+					assertEquals("[" + 
+						"National (id: 64, eid: 70, coos: {cats.Implementation Level=(level: 1, id: 70)}), " + 
+						"Provincial (id: 77, eid: 69, coos: {cats.Implementation Level=(level: 1, id: 69)})"
+						+ "]", 
+					cells.toString());
 			});
 	}
 
@@ -162,7 +174,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 	public void testJointCriteria() throws Exception {
 		runNiReportsTestcase(Arrays.asList("Unvalidated activity", "execution rate activity", "Activity with Zones"), engine -> {
 			List<? extends Cell> cells = sorted(engine.schema.getColumns().get(ColumnConstants.JOINT_CRITERIA).fetch(engine));
-			assertEquals("[Yes (id: 33, eid: 33)]", cells.toString());
+			assertEquals("[Yes (id: 33, eid: 33, coos: {})]", cells.toString());
 		});
 	}
 }

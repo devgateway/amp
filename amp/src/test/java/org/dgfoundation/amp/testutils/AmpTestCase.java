@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.digijava.module.fundingpledges.action.DisableableKeyValue;
 
@@ -94,6 +96,10 @@ public abstract class AmpTestCase extends TestCase
 	 */
 	public static String sortedString(Collection<?> in) {
 		return sorted(in).toString();
+	}
+	
+	public<K> String digestCellsList(List<K> cells, Function<K, String> digester) {
+		return cells.stream().map(digester).collect(Collectors.toList()).toString();
 	}
 
 }

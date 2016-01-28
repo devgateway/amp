@@ -12,7 +12,7 @@ import org.dgfoundation.amp.nireports.amp.SqlSourcedNiDimension;
  */
 public final class OrganisationsDimension extends SqlSourcedNiDimension {
 	
-	public final static OrganisationsDimension instance = new OrganisationsDimension("Organisations dimension");
+	public final static OrganisationsDimension instance = new OrganisationsDimension("orgs");
 	
 	public final static int LEVEL_ORGANISATION = 2;
 	public final static int LEVEL_ORGANISATION_GROUP = 1;

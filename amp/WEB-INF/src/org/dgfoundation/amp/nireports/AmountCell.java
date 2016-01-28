@@ -29,7 +29,7 @@ public final class AmountCell extends Cell implements CategCell, NumberedCell {
 
 	@Override
 	public String toString() {
-		return String.format("(actId: %d, %s", this.activityId, amount);
+		return String.format("(actId: %d, amt: %s)", this.activityId, amount);
 	}
 
 	@Override

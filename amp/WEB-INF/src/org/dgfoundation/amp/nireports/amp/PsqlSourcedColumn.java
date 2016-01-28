@@ -12,7 +12,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
 
 
 /**
- * a {@link SqlSourcedColumn} which used AMP's PostgreSQL infrastructure as a source of data
+ * a {@link SqlSourcedColumn} which uses AMP's PostgreSQL infrastructure as a source of data
  * @author Dolghier Constantin
  *
  */

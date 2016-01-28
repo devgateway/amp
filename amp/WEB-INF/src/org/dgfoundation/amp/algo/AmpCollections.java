@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -135,5 +136,17 @@ public class AmpCollections {
 		for(Entry<K, V> entry:in.entrySet())
 			out.put(entry.getKey(), mapper.apply(entry.getKey(), entry.getValue()));
 		return out;
+	}
+	
+	/**
+	 * returns a sorted-map-view of the input map, with its keys sorted according to a given comparator
+	 * @param in
+	 * @param comp
+	 * @return
+	 */
+	public static<K, V> SortedMap<K, V> sortedMap(Map<K, V> in, Comparator<K> comp) {
+		SortedMap<K, V> res = new TreeMap<K, V>(comp);
+		res.putAll(in);
+		return res;
 	}
 }

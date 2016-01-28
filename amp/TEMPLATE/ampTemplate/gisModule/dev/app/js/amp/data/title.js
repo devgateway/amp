@@ -34,16 +34,25 @@ _.extend(Title.prototype, Backbone.Events, {
 
     /* Convert from [{x:y},{z:a}] to {x:y,z:a} */
     if (!_.isEmpty(titles)) {
-      unwrappedTitles = _.reduce(titles, function(memo, num) { return _.extend(memo, num); });
+      unwrappedTitles = _.reduce(titles, function(memo, num) { 
+    	  return _.extend(memo, num); 
+      });
     } else {
       unwrappedTitles = {};
     }
-
+    
+    var copyOfTitles = _(unwrappedTitles).clone();    
     /*TODO remove window and use data, first pass data doesn't have translator? */
     var localizedTitleList = window.app.translator.translateList(unwrappedTitles);
 
     localizedTitleList.then(function(localTitles) {
-      /* return localized title */
+      /* return localized title */    
+    	
+      //if no localized titles available, use original title
+      var localTitles = _.object(_.map(localTitles, function (value, key) {
+    	    return [key, _.isUndefined(value) ? copyOfTitles[key] : value];
+    	}));
+      
       self.current = _.reject(_.values(localTitles), function(ttle){ return _.isUndefined(ttle)}).join(', ');
       self.trigger('update', self.current);
 

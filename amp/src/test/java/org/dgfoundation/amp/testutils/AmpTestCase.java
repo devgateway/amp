@@ -5,11 +5,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeSet;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.dgfoundation.amp.nireports.ImmutablePair;
+import org.dgfoundation.amp.nireports.NiUtils;
 import org.digijava.module.fundingpledges.action.DisableableKeyValue;
 
 import junit.framework.TestCase;
@@ -54,8 +59,9 @@ public abstract class AmpTestCase extends TestCase
 	 * @param a
 	 * @param b
 	 */
-	public void assertBigDecimalEquals(BigDecimal a, BigDecimal b) {
-		assertEquals(0, a.compareTo(b));
+	public void assertBigDecimalEquals(BigDecimal expected, BigDecimal given) {
+		if (expected.compareTo(given) != 0)
+			fail(String.format("expected: %s, given: %s", expected, given));
 	}
 	
 	/**
@@ -102,4 +108,47 @@ public abstract class AmpTestCase extends TestCase
 		return cells.stream().map(digester).collect(Collectors.toList()).toString();
 	}
 
+	/**
+	 * builds an {@link ImmutablePair} of the two given arguments
+	 * @param k
+	 * @param v
+	 * @return
+	 */
+	public<K, V> ImmutablePair<K, V> pair(K k, V v) {
+		return new ImmutablePair<>(k, v);
+	}
+	
+	public<K, V> Map<K, V> buildMap(ImmutablePair<K, V> in) {
+		return buildMap(Arrays.asList(in));
+	}
+	
+	public<K, V> Map<K, V> buildMap(K k, V v) {
+		return buildMap(pair(k, v));
+	}
+	
+	public<K, V> Map<K, V> buildMap(ImmutablePair<K, V> in1, ImmutablePair<K, V> in2) {
+		return buildMap(Arrays.asList(in1, in2));
+	}
+	
+	public<K, V> Map<K, V> buildMap(List<ImmutablePair<K, V>> in) {
+		Map<K, V> res = new HashMap<>();
+		in.forEach(z -> NiUtils.failIf(res.put(z.k, z.v) != null, "same key specified twice"));
+		return res;
+	}
+	
+	/**
+	 * returns an always-yes predicate
+	 * @return
+	 */
+	public<K> Predicate<K> yes() {
+		return a -> true;
+	}
+	
+	/**
+	 * returns an always-yes predicate
+	 * @return
+	 */
+	public<K> Predicate<K> no() {
+		return a -> false;
+	}
 }

@@ -9,7 +9,7 @@ import java.util.Map;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 
 /**
- * an umbrella for multiple-values
+ * an umbrella for multiple-main-ids-trackers
  * @author Dolghier Constantin
  *
  */

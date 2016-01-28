@@ -47,9 +47,7 @@ public abstract class NiDimension {
 	 * @param level: 0...(depth-1)
 	 */
 	public LevelColumn getLevelColumn(String instanceName, int level) {
-		if (level >= depth)
-			throw new RuntimeException(String.format("cannot build LevelColumn for dimension %s, because level is: %d; allowed range: 0...%d", this.name, level, depth - 1));
-		return new LevelColumn(getDimensionUsage(instanceName), level);
+		return getDimensionUsage(instanceName).getLevelColumn(level);
 	}
 	
 	
@@ -120,6 +118,12 @@ public abstract class NiDimension {
 			this.instanceName = instanceName;
 		}
 		
+		private Map<Integer, LevelColumn> _levels = new ConcurrentHashMap<>();
+		
+		public LevelColumn getLevelColumn(int level) {
+			return _levels.computeIfAbsent(level, z -> new LevelColumn(this, z));
+		}
+		
 		@Override
 		public final int hashCode() {
 			return System.identityHashCode(dimension) + 19 ^ instanceName.hashCode();
@@ -148,6 +152,8 @@ public abstract class NiDimension {
 		public final int level;
 		
 		private LevelColumn(NiDimensionUsage dimensionUsage, int level) {
+			if (level >= dimensionUsage.dimension.depth)
+				throw new RuntimeException(String.format("cannot build LevelColumn for DimUsage %s, because level is: %d; allowed range: 0...%d", dimensionUsage, level, dimensionUsage.dimension.depth - 1));
 			this.dimensionUsage = dimensionUsage;
 			this.level = level;
 		}

@@ -17,7 +17,7 @@ public final class PercentageTextCell extends Cell {
 	public final String text;
 	
 	public PercentageTextCell(String text, long activityId, long entityId, Optional<LevelColumn> levelColumn, BigDecimal percentage) {
-		super(activityId, entityId, buildCoordinates(levelColumn, entityId));
+		super(activityId, entityId, buildCoordinates(levelColumn, entityId), levelColumn);
 		Objects.requireNonNull(text);
 		this.percentage = percentage;
 		if (this.percentage != null) {

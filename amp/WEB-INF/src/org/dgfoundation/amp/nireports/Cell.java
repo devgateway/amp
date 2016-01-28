@@ -22,11 +22,13 @@ public abstract class Cell implements Comparable, CategCell {
 	public final long activityId;
 	public final long entityId;
 	public final Map<NiDimensionUsage, Coordinate> coordinates;
+	public final Optional<LevelColumn> mainLevel;
 		
-	public Cell(long activityId, long entityId, Map<NiDimensionUsage, Coordinate> coordinates) {
+	public Cell(long activityId, long entityId, Map<NiDimensionUsage, Coordinate> coordinates, Optional<LevelColumn> mainLevel) {
 		this.activityId = activityId;
 		this.entityId = entityId;
 		this.coordinates = Collections.unmodifiableMap(coordinates);
+		this.mainLevel = mainLevel;
 	}
 	
 	protected static Map<NiDimensionUsage, Coordinate> buildCoordinates(Optional<LevelColumn> levelColumn, long entityId) {
@@ -38,7 +40,7 @@ public abstract class Cell implements Comparable, CategCell {
 	}
 
 	public Cell(long activityId) {
-		this(activityId, -1, Collections.emptyMap());
+		this(activityId, -1, Collections.emptyMap(), Optional.empty());
 	}
 	
 	/**

@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
+import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 /**
@@ -25,19 +26,34 @@ public class PerItemHierarchiesTracker {
 		this.percentages = percentages;
 		this.percentage = percentage;
 	}
-
+	
+	/**
+	 * advances a hierarchy according to the main level of a given cell.<br />
+	 * Please notice that this function will return <strong>this</strong>crash in case the cell does not have a mainLevel: THIS IS INTENTIONAL, as one cannot calculate percentages by columns whose cells have no main dimension <br />
+	 * @param cell
+	 * @return
+	 */
 	public PerItemHierarchiesTracker advanceHierarchy(Cell cell) {
+		if (cell.mainLevel.isPresent())
+			return advanceHierarchy(cell.mainLevel.get(), cell.entityId, cell.getPercentage());
+		return this;
+	}
+	
+	public PerItemHierarchiesTracker advanceHierarchy(LevelColumn level, long id, BigDecimal cellPercentage) {
+		Coordinate coo = level.getCoordinate(id);
+		SplitCellPercentage newValue = new SplitCellPercentage(coo, cellPercentage);
+		SplitCellPercentage oldValue = percentages.get(level.dimensionUsage);
+		
+		if (oldValue != null && oldValue.isDeeperOrEqual(newValue))
+			return this;
+
 		Map<NiDimensionUsage, SplitCellPercentage> res = new HashMap<>(percentages); // copy
-		BigDecimal percentage = BigDecimal.ONE;
-		for(Map.Entry<NiDimensionUsage, Coordinate> entry:cell.getCoordinates().entrySet()) {
-			SplitCellPercentage newValue = new SplitCellPercentage(entry.getValue(), cell.getPercentage());
-			SplitCellPercentage oldValue = percentages.get(entry.getKey());
-			if (oldValue == null || newValue.isDeeperOrEqual(oldValue)) {
-				res.put(entry.getKey(), newValue);
-			}
-			percentage = percentage.multiply(res.get(entry.getKey()).getEffectivePercentage());
-		}
-		return new PerItemHierarchiesTracker(res, percentage);
+		res.put(level.dimensionUsage, newValue);
+		BigDecimal computedPercentage = BigDecimal.ONE;
+		for(SplitCellPercentage scp:res.values())
+			computedPercentage = computedPercentage.multiply(scp.getEffectivePercentage());
+		
+		return new PerItemHierarchiesTracker(res, computedPercentage);
 	}
 	
 	public BigDecimal calculatePercentage(Predicate<NiDimensionUsage> acceptor) {

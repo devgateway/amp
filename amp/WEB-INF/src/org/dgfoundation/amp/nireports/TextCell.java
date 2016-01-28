@@ -15,7 +15,7 @@ public final class TextCell extends Cell {
 	public final String text;
 	
 	public TextCell(String text, long activityId, long entityId, Optional<LevelColumn> levelColumn) {
-		super(activityId, entityId, buildCoordinates(levelColumn, entityId));
+		super(activityId, entityId, buildCoordinates(levelColumn, entityId), levelColumn);
 		Objects.requireNonNull(text);
 		this.text = text == null ? "" : text;
 	}

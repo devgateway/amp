@@ -12,6 +12,7 @@ import org.dgfoundation.amp.ar.amp212.CurrencyConvertorTests;
 import org.dgfoundation.amp.ar.amp212.DimensionsFetchingTests;
 import org.dgfoundation.amp.ar.amp212.DimensionSnapshotTests;
 import org.dgfoundation.amp.ar.amp212.GraphAlgorithmsTests;
+import org.dgfoundation.amp.ar.amp212.HierarchyTrackingTestcases;
 import org.dgfoundation.amp.ar.amp212.InclusiveRunnerTests;
 import org.dgfoundation.amp.ar.amp212.MetaInfoTests;
 import org.dgfoundation.amp.ar.amp212.NiReportsFetchingTests;
@@ -46,6 +47,7 @@ public class AllTests_amp212
 		suite.addTest(new JUnit4TestAdapter(DimensionsFetchingTests.class));
 		suite.addTest(new JUnit4TestAdapter(DimensionSnapshotTests.class));
 		suite.addTest(new JUnit4TestAdapter(BigDecimalPrecisionTests.class));
+		suite.addTest(new JUnit4TestAdapter(HierarchyTrackingTestcases.class));
 		
 		return suite;
 	}

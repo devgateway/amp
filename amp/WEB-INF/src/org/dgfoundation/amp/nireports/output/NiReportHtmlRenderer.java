@@ -122,7 +122,9 @@ public class NiReportHtmlRenderer {
 			//BigDecimal percentage = crd.hierarchies.calculatePercentage(leafHeader.getBehaviour().getHierarchiesListener());
 			Cell cell = elem.trailCells.get(leafHeader);
 			String contents = i < headers.nrHierarchies || cell == null ? "" : ensureMaxLen(cell.getDisplayedValue(), 50);
-			bld.append(String.format("<td class='nireport_data_cell ni_hierarchyLevel%d ni_trailcell'>", level + 1));
+			bld.append("<td class='nireport_data_cell ni_hierarchyLevel");
+			bld.append(level + 1);
+			bld.append(" ni_trailcell'>");
 			bld.append(contents);
 			bld.append("</td>");
 		}

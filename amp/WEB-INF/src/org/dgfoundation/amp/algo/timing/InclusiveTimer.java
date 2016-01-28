@@ -38,7 +38,7 @@ public class InclusiveTimer {
 	 */
 	public synchronized void run(String name, ExceptionRunnable<?> runnable) {
 		final RunTree parentTask = getCurrentStack().isEmpty() ? null : getCurrentStack().peek();
-		run(name, (selfTask) -> runnable.run(), parentTask);
+		run(name, selfTask -> runnable.run(), parentTask);
 	}
 	
 	/**

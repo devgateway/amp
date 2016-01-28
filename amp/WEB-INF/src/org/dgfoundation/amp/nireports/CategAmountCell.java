@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.nireports;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.meta.CategCell;
@@ -20,7 +21,7 @@ public final class CategAmountCell extends Cell implements CategCell, DatedCell,
 	public final TranslatedDate translatedDate;
 	
 	public CategAmountCell(long activityId, MonetaryAmount amount, MetaInfoSet metaInfo, Map<NiDimensionUsage, Coordinate> coos, TranslatedDate translatedDate) {
-		super(activityId, -1, coos);
+		super(activityId, -1, coos, Optional.empty());
 		this.amount = amount;
 		this.metaInfo = metaInfo;
 		this.metaInfo.freeze();

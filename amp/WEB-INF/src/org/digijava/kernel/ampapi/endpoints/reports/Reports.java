@@ -15,11 +15,13 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -33,11 +35,14 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
+import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
+import org.dgfoundation.amp.reports.PartialReportArea;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
@@ -186,6 +191,17 @@ public class Reports {
 	}
 	
 	@GET
+	@Path("/nireport-to-amp-reports-api/{report_id}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@Deprecated
+	//NIREPORTS: temporarily for debugging purpose only
+	public GeneratedReport geteneratedReport(@PathParam("report_id") Long reportId) {
+		ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
+		NiReportsGenerator generator = new NiReportsGenerator(AmpReportsSchema.getInstance(), PartialReportArea.class);
+		return generator.executeReport(spec);
+	}
+	
+	@GET
 	@Path("/report/{report_id}/result")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final GeneratedReport getReportResult(@PathParam("report_id") Long reportId) {
@@ -227,7 +243,7 @@ public class Reports {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final JsonBean getReportResultByPage(JsonBean formParams,
 			@PathParam("report_id") Long reportId) {
-		return ReportsUtil.getReportResultByPage(reportId, formParams);
+		return ReportsUtil.getReportResultByPage(reportId, formParams, false);
 	}
 	
 	@POST
@@ -327,8 +343,9 @@ public class Reports {
 	@POST
 	@Path("/saikureport/{report_id}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public final JsonBean getSaikuReport(JsonBean queryObject, @PathParam("report_id") Long reportId) {			
-
+	public final JsonBean getSaikuReport(JsonBean queryObject, @PathParam("report_id") Long reportId, 
+			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
+		
 		ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
 		if(spec == null){
 			try {
@@ -348,7 +365,8 @@ public class Reports {
 			queryObject.set(EPConstants.ADD_COLUMNS, extraColumns);
 		}
 		
-		JsonBean report = getReportResultByPage(ReportsUtil.convertSaikuParamsToReports(queryObject), reportId);
+		JsonBean report = ReportsUtil.getReportResultByPage(reportId, 
+				ReportsUtil.convertSaikuParamsToReports(queryObject), asNiReport);
 		
 		// Add data needed on Saiku UI.
 		// TODO: Make a mayor refactoring on the js code so it doesnt need these extra parameters to work properly.
@@ -376,10 +394,11 @@ public class Reports {
 	@POST
 	@Path("/saikureport/run/{report_token}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public final JsonBean getSaikuReport(JsonBean formParams, @PathParam("report_token") String reportToken) {
+	public final JsonBean getSaikuReport(JsonBean formParams, @PathParam("report_token") String reportToken, 
+			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
 		//here we fetch the report by reportToken from session session
 		formParams.set(EPConstants.IS_DYNAMIC, true);
-		return getSaikuReport(formParams,new Long(reportToken));
+		return getSaikuReport(formParams, new Long(reportToken), asNiReport);
 	}
 
 	
@@ -427,8 +446,9 @@ public class Reports {
 	@POST
 	@Path("/saikureport/export/xls/{report_id}")
 	@Produces({"application/vnd.ms-excel" })
-	public final Response exportXlsSaikuReport(String query, @PathParam("report_id") Long reportId) {
-		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.XLSX);
+	public final Response exportXlsSaikuReport(String query, @PathParam("report_id") Long reportId, 
+			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
+		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.XLSX, asNiReport);
 	}
 	@POST
 	@Path("/saikureport/export/xls/run/{report_token}")
@@ -439,14 +459,16 @@ public class Reports {
 	@POST
 	@Path("/saikureport/export/csv/{report_id}")
 	@Produces({"text/csv"})
-	public final Response exportCsvSaikuReport(String query, @PathParam("report_id") Long reportId) {
-		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.CSV);
+	public final Response exportCsvSaikuReport(String query, @PathParam("report_id") Long reportId, 
+			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
+		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.CSV, asNiReport);
 
 	}
 	@POST
 	@Path("/saikureport/export/csv/run/{report_token}")
 	@Produces({"text/csv"})
-	public final Response exportCsvSaikuReport(String query, @PathParam("report_token") Integer reportToken) {
+	public final Response exportCsvSaikuReport(String query, @PathParam("report_token") Integer reportToken,
+			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
 
 		return exportInMemorySaikuReport(query, reportToken,AMPReportExportConstants.CSV);
 	}
@@ -454,9 +476,10 @@ public class Reports {
 	@POST
 	@Path("/saikureport/export/pdf/{report_id}")
 	@Produces({"application/pdf"})
-	public final Response exportPdfSaikuReport(String query, @PathParam("report_id") Long reportId) {
+	public final Response exportPdfSaikuReport(String query, @PathParam("report_id") Long reportId, 
+			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
 
-		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.PDF);
+		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.PDF, asNiReport);
 	}
 
 	@POST
@@ -472,13 +495,13 @@ public class Reports {
 		return exportSaikuReport(query, ReportsUtil.getAmpReportFromSession(reportToken), reportType,true);
 	}
 	
-	public final Response exportSaikuReport(String query, AmpReports ampReport, String type) {
-		
-		return exportSaikuReport(query, ampReport, type,false);
+	public final Response exportSaikuReport(String query, AmpReports ampReport, String type, Boolean asNiReport) {
+		return exportSaikuReport(query, ampReport, type, false, asNiReport);
 	}
 	
-	public final Response exportSaikuReport(String query, AmpReports ampReport, String type,Boolean isDinamic) {
-		return exportSaikuReport(query, type, ampReport,isDinamic);
+	public final Response exportSaikuReport(String query, AmpReports ampReport, String type, Boolean isDinamic, 
+			Boolean asNiReport) {
+		return exportSaikuReport(query, type, ampReport, isDinamic, asNiReport);
         
 	}
 
@@ -490,7 +513,8 @@ public class Reports {
 	 * @param ampCurrencyCode
 	 * @return
 	 */
-	protected ReportGenerationInfo changeReportCurrencyTo(JsonBean queryObject, ReportGenerationInfo origReport, long ampReportId, String ampCurrencyCode) {
+	protected ReportGenerationInfo changeReportCurrencyTo(JsonBean queryObject, ReportGenerationInfo origReport, 
+			long ampReportId, String ampCurrencyCode, Boolean asNiReport) {
 		System.out.println();
 		JsonBean newQueryObject = queryObject.copy();
 		LinkedHashMap<String, Object> newQueryModel = new LinkedHashMap<String, Object>((LinkedHashMap<String, Object>) queryObject.get("queryModel"));
@@ -501,15 +525,18 @@ public class Reports {
 		settings.put(SettingsConstants.CURRENCY_ID, ampCurrencyCode);
 
 		newQueryObject.set("queryModel", newQueryModel);
-
-		JsonBean newResult = getSaikuReport(newQueryObject, ampReportId);
+		
+		JsonBean newResult = getSaikuReport(newQueryObject, ampReportId, asNiReport);
 		ReportSpecification newReport = origReport.report; // sick and tired of shitcode 
 		return new ReportGenerationInfo(newResult, origReport.type, newReport, newQueryModel, String.format(" - %s", ampCurrencyCode));
 	}
-	private Response exportSaikuReport(String query, String type, AmpReports ampReport) {
-		return exportSaikuReport(query, type, ampReport,false);
+	
+	private Response exportSaikuReport(String query, String type, AmpReports ampReport, Boolean asNiReport) {
+		return exportSaikuReport(query, type, ampReport, false, asNiReport);
 	}
-	private Response exportSaikuReport(String query, String type, AmpReports ampReport,Boolean isDinamic) {
+	
+	private Response exportSaikuReport(String query, String type, AmpReports ampReport, Boolean isDinamic, 
+			Boolean asNiReport) {
 		try {
 			logger.info("Starting export to " + type);
 			String decodedQuery = java.net.URLDecoder.decode(query, "UTF-8");
@@ -527,7 +554,7 @@ public class Reports {
 
 			}
 			logger.info("Obtain report result...");
-			JsonBean result = getSaikuReport(queryObject, ampReport.getAmpReportId());
+			JsonBean result = getSaikuReport(queryObject, ampReport.getAmpReportId(), asNiReport);
 
 			byte[] doc = null;
 			String filename = "export";
@@ -557,7 +584,7 @@ public class Reports {
 				String secondCurrencyCode = queryModel.containsKey("secondCurrency") ? queryModel.get("secondCurrency").toString() : null;
 				logger.error(String.format("setts 1 = %s, 2 = %s, secondCurrency=%s", queryModel.get("1"), queryModel.get("2"), secondCurrencyCode));
 				if (secondCurrencyCode != null) {
-					report2 = changeReportCurrencyTo(queryObject, report1, ampReport.getAmpReportId(), secondCurrencyCode);
+					report2 = changeReportCurrencyTo(queryObject, report1, ampReport.getAmpReportId(), secondCurrencyCode, asNiReport);
 				}
 				doc = AMPReportExcelExport.generateExcel(report1, report2);
 				break;

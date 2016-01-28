@@ -28,6 +28,9 @@ import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
+import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
+import org.dgfoundation.amp.reports.PartialReportArea;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
@@ -156,7 +159,8 @@ public class EndpointUtils {
 	 * @return GeneratedReport that stores all report info and report output
 	 */
 	public static GeneratedReport runReport(ReportSpecification spec) {
-		return runReport(spec, ReportAreaImpl.class);
+		//NIREPORTS: leaving all other clients to use Mondrian so far 
+		return runReport(spec, ReportAreaImpl.class, false);
 	}
 	
 	/**
@@ -168,7 +172,21 @@ public class EndpointUtils {
 	 * @return GeneratedReport that stores all report info and report output
 	 */
 	public static GeneratedReport runReport(ReportSpecification spec, Class<? extends ReportAreaImpl> clazz) {
-		ReportExecutor generator = new MondrianReportGenerator(clazz, ReportEnvironment.buildFor(TLSUtils.getRequest()));
+		//NIREPORTS: leaving all other clients to use Mondrian so far
+		return runReport(spec, clazz, false);
+	}
+	
+	/**
+	 * This is a temporarily method to generate the report using either Mondrian or 
+	 * @param spec
+	 * @param asNiReport
+	 * @return
+	 */
+	@Deprecated
+	//NIREPORTS: remove before 2.12 official release
+	public static GeneratedReport runReport(ReportSpecification spec, Class<? extends ReportAreaImpl> clazz, boolean asNiReport) {
+		ReportExecutor generator = asNiReport ? new NiReportsGenerator(AmpReportsSchema.getInstance(), clazz) :   
+				new MondrianReportGenerator(clazz, ReportEnvironment.buildFor(TLSUtils.getRequest()));
 		GeneratedReport report = null;
 		try {
 			report = generator.executeReport(spec);

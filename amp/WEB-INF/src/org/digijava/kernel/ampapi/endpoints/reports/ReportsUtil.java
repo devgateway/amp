@@ -141,7 +141,7 @@ public class ReportsUtil {
 	 * </dl>
 	 * @return JsonBean result for the requested page and pagination information
 	 */
-	public static final JsonBean getReportResultByPage(Long reportId, JsonBean formParams) {
+	public static final JsonBean getReportResultByPage(Long reportId, JsonBean formParams, boolean asNiReport) {
 		JsonBean result = new JsonBean();
 		
 		// read pagination data
@@ -151,7 +151,7 @@ public class ReportsUtil {
 		int start = (page - 1) * recordsPerPage;
 		
 		// get the report (from cache if it was cached)
-		CachedReportData cachedReportData = getCachedReportData(reportId, formParams);
+		CachedReportData cachedReportData = getCachedReportData(reportId, formParams, asNiReport);
 		ReportAreaMultiLinked[] areas = null;
 		if (cachedReportData != null) {
 			areas = cachedReportData.areas;
@@ -213,7 +213,7 @@ public class ReportsUtil {
 		return newParams;
 	}
 	
-	private static CachedReportData getCachedReportData(Long reportId, JsonBean formParams) {
+	private static CachedReportData getCachedReportData(Long reportId, JsonBean formParams, Boolean asNiReport) {
 		boolean regenerate = mustRegenerate(reportId, formParams);
 		boolean resort = formParams.get(EPConstants.SORTING) != null; 
 		CachedReportData cachedReportData = null;
@@ -239,7 +239,7 @@ public class ReportsUtil {
 			// add additional requests
 			update(spec, formParams);
 			// regenerate
-			GeneratedReport generatedReport = EndpointUtils.runReport(spec, PartialReportArea.class);
+			GeneratedReport generatedReport = EndpointUtils.runReport(spec, PartialReportArea.class, asNiReport);
 			cachedReportData = ReportPaginationUtils.cacheReportData(reportId, generatedReport);
 		} else {
 			cachedReportData = ReportCacher.getReportData(reportId);

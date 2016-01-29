@@ -345,7 +345,7 @@ public class Reports {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final JsonBean getSaikuReport(JsonBean queryObject, @PathParam("report_id") Long reportId, 
 			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
-		
+//		asNiReport = true;  TODO-Constantin: find a better way to do it :D
 		ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
 		if(spec == null){
 			try {

@@ -79,15 +79,22 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	}
 	
 	/**
+	 * cached result of {@link #getHierarchicalName()}
+	 */
+	String _hierName = null;
+	/**
 	 * computes the full name of the column like, for example, [Funding][2007][Actual Commitments]
 	 * <strong>unlocalized</strong>
 	 * @return
 	 */
 	public String getHierarchicalName() {
-		String res = String.format("[%s]", this.originalColumnName);
-		if (parentColumn != null)
-			res = parentColumn.getHierarchicalName() + res;
-		return res;
+		if (_hierName == null) {
+			String res = String.format("[%s]", this.originalColumnName);
+			if (parentColumn != null)
+				res = parentColumn.getHierarchicalName() + res;
+			_hierName = res;
+		}
+		return _hierName;
 	}
 	
 	@Override
@@ -96,7 +103,7 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	}
 	
 	@Override
-	public int hashCode() {
+	public final int hashCode() {
 		return getHierarchicalName().hashCode();
 	}
 	

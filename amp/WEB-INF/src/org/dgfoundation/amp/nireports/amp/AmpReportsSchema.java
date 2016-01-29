@@ -489,7 +489,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	}
 	
 	public static String getRenderedReport(ReportSpecification spec) {
-		NiReportsGenerator niGen = new NiReportsGenerator(getInstance(), ReportAreaImpl.class);
+		NiReportsGenerator niGen = new NiReportsGenerator(getInstance());
 		return niGen.renderReport(spec);
 	}
 

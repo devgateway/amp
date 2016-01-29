@@ -28,7 +28,11 @@ public class NiReportExecutor {
 		NiReportsEngine engine = new NiReportsEngine(schema, spec);
 		NiReportRunResult reportRun = engine.execute();
 		consume(reportRun);
-		return outputBuilder.buildOutput(spec, reportRun);
+		long start = System.currentTimeMillis();
+		K res = outputBuilder.buildOutput(spec, reportRun);
+		long delta = System.currentTimeMillis() - start;
+		logger.error(String.format("converting output to external API took %d millies", delta));
+		return res;
 	}
 
 	public String renderReport(ReportSpecification spec) {

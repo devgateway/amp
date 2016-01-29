@@ -3,7 +3,10 @@
  */
 package org.dgfoundation.amp.nireports.amp.converters;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -22,6 +25,7 @@ import org.digijava.module.aim.helper.FormatHelper;
 public class AmpCellVisitor implements CellVisitor<ReportCell> {
 	
 	private DecimalFormat decimalFormatter;
+	private Map<BigDecimal, String> formattedValues = new HashMap<>();
 	
 	public AmpCellVisitor(ReportSpecification spec) {
 		if (spec.getSettings() != null && spec.getSettings().getCurrencyFormat() != null) {
@@ -51,9 +55,15 @@ public class AmpCellVisitor implements CellVisitor<ReportCell> {
 		return visitNumberedCell(cell);
 	}
 	
+	public String formatNumber(BigDecimal value) {
+		if (decimalFormatter == null || value == null) 
+			return value == null ? "" : String.valueOf(value);
+		return decimalFormatter.format(value.doubleValue()); // TODO: research a BigDecimal formatter?
+	}
+	
 	public ReportCell visitNumberedCell(NumberedCell cell) {
-		return new org.dgfoundation.amp.newreports.AmountCell(((NumberedCell) cell).getAmount().amount, 
-				decimalFormatter);
+		BigDecimal amt = cell.getAmount().amount;
+		return new org.dgfoundation.amp.newreports.AmountCell(amt, formattedValues.computeIfAbsent(amt, this::formatNumber));
 	}
 	
 }

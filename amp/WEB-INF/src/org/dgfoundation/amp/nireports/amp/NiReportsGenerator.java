@@ -31,12 +31,20 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
 	
 	protected static final Logger logger = Logger.getLogger(NiReportsGenerator.class);
 	public final boolean logReport;
+	
+	/**
+	 * field to be removed once Mondrian-based reporting is done with
+	 */
 	public final Class<? extends ReportAreaImpl> reportAreaClazz;
 	
+	public NiReportsGenerator(NiReportsSchema schema) {
+		this(schema, ReportAreaImpl.class);
+	}
+
 	public NiReportsGenerator(NiReportsSchema schema, Class<? extends ReportAreaImpl> reportAreaClazz) {
 		this(schema, reportAreaClazz, true);
 	}
-	
+
 	/**
 	 * constructs an instance
 	 * @param schema the schema to use
@@ -58,7 +66,7 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
 		
 	@Override
 	public GeneratedReport executeReport(ReportSpecification spec) {
-		GeneratedReport apiReport = executeReport(spec, AmpNiReportsFormatter.asAmpFormatter(reportAreaClazz));
+		GeneratedReport apiReport = executeReport(spec, AmpNiReportsFormatter.asAmpFormatter(ReportAreaImpl.buildSupplier(reportAreaClazz)));
 		return apiReport;
 	}
 	

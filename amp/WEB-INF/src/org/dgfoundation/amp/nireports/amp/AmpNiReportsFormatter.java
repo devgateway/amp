@@ -2,12 +2,14 @@ package org.dgfoundation.amp.nireports.amp;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.function.Supplier;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.GeneratedReport;
@@ -37,21 +39,21 @@ public class AmpNiReportsFormatter {
 	
 	public final NiReportRunResult runResult;
 	public final ReportSpecification spec;
-	public final Class<? extends ReportAreaImpl> reportAreaClazz;
+	public final Supplier<ReportAreaImpl> reportAreaSupplier;
 	
 	private ReportAreaImpl reportContents = null;
-	private List<ReportOutputColumn> leafHeaders = new ArrayList<ReportOutputColumn>();
-	private List<ReportOutputColumn> rootHeaders = new ArrayList<ReportOutputColumn>();
-	private List<List<HeaderCell>> generatedHeaders = new ArrayList<List<HeaderCell>>();
-	private Map<Column, ReportOutputColumn> niColumnToROC = new HashMap<Column, ReportOutputColumn>();
+	private List<ReportOutputColumn> leafHeaders = new ArrayList<>();
+	private List<ReportOutputColumn> rootHeaders = new ArrayList<>();
+	private List<List<HeaderCell>> generatedHeaders = new ArrayList<>();
+	private Map<Column, ReportOutputColumn> niColumnToROC = new IdentityHashMap<>();
 	
 	private final AmpCellVisitor cellVisitor;
 	
 	public AmpNiReportsFormatter(ReportSpecification spec, NiReportRunResult runResult, 
-			Class<? extends ReportAreaImpl> reportAreaClazz) {
+			Supplier<ReportAreaImpl> reportAreaSupplier) {
 		this.runResult = runResult;
 		this.spec = spec;
-		this.reportAreaClazz = reportAreaClazz;
+		this.reportAreaSupplier = reportAreaSupplier;
 		this.cellVisitor = new AmpCellVisitor(spec);
 	}
 	
@@ -62,9 +64,9 @@ public class AmpNiReportsFormatter {
 				leafHeaders, generatedHeaders, runResult.timings);
 	}
 
-	public static NiReportOutputBuilder<GeneratedReport> asAmpFormatter(Class<? extends ReportAreaImpl> reportAreaClazz) {
+	public static NiReportOutputBuilder<GeneratedReport> asAmpFormatter(Supplier<ReportAreaImpl> reportAreaSupplier) {
 		return (ReportSpecification spec, NiReportRunResult runResult) -> 
-			new AmpNiReportsFormatter(spec, runResult, reportAreaClazz).format();
+			new AmpNiReportsFormatter(spec, runResult, reportAreaSupplier).format();
 	}
 	
 	protected void buildHeaders() {
@@ -87,7 +89,7 @@ public class AmpNiReportsFormatter {
 	
 	/** Provides {@link ReportArea} structure */
 	protected ReportAreaImpl getReportContents(NiReportData niReportData) {
-		ReportAreaImpl ra = getReportArea();
+		ReportAreaImpl ra = reportAreaSupplier.get();
 		runResult.headers.leafColumns.forEach(niCellColumn ->
 			ra.getContents().put(niColumnToROC.get(niCellColumn), convert(niReportData.trailCells.get(niCellColumn))));
 		
@@ -103,7 +105,7 @@ public class AmpNiReportsFormatter {
 		SortedMap<Long, ReportAreaImpl> idReportArea = new TreeMap<Long, ReportAreaImpl>();
 		runResult.headers.leafColumns.forEach(niCellColumn ->
 			niColumnReportData.getIds().forEach(id ->
-				idReportArea.computeIfAbsent(id, val -> getReportArea()).getContents().put(
+				idReportArea.computeIfAbsent(id, val -> reportAreaSupplier.get()).getContents().put(
 					niColumnToROC.get(niCellColumn), convert(niColumnReportData.contents.get(niCellColumn).get(id)))));
 		return new ArrayList<ReportArea>(idReportArea.values());
 	}
@@ -112,19 +114,7 @@ public class AmpNiReportsFormatter {
 		List<ReportArea> children = new ArrayList<ReportArea>();
 		niGroupReportData.subreports.forEach(subReport -> children.add(getReportContents(subReport)));
 		return children;
-	}
-	
-	protected ReportAreaImpl getReportArea() {
-		try {
-			ReportAreaImpl ra = reportAreaClazz.newInstance();
-			ra.setContents(new LinkedHashMap<ReportOutputColumn, ReportCell>());
-			return ra;
-		} catch (InstantiationException | IllegalAccessException e) {
-			logger.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
-		
-	}
+	}	
 	
 	protected ReportCell convert(Cell cell) {
 		if (cell == null) 

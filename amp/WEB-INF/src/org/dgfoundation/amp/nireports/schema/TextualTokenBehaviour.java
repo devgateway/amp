@@ -10,7 +10,7 @@ import org.dgfoundation.amp.nireports.TextCell;
 import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 
-public class TextualTokenBehaviour implements Behaviour {
+public class TextualTokenBehaviour implements Behaviour<TextCell> {
 	
 	public final static TextualTokenBehaviour instance = new TextualTokenBehaviour(); 
 	private TextualTokenBehaviour(){}
@@ -22,7 +22,7 @@ public class TextualTokenBehaviour implements Behaviour {
 	}
 	
 	@Override
-	public Cell doHorizontalReduce(List<NiCell> cells, HierarchiesTracker hiersTracker) {
+	public TextCell doHorizontalReduce(List<NiCell> cells, HierarchiesTracker hiersTracker) {
 		Set<String> v = new TreeSet<>();
 		for(NiCell niCell:cells) {
 			TextCell cell = (TextCell) niCell.getCell();
@@ -35,7 +35,7 @@ public class TextualTokenBehaviour implements Behaviour {
 	}
 
 	@Override
-	public Cell getZeroCell() {
+	public TextCell getZeroCell() {
 		return new TextCell("", -1);
 	}
 }

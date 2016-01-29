@@ -1,12 +1,12 @@
 package org.dgfoundation.amp.nireports.schema;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import org.dgfoundation.amp.nireports.Cell;
@@ -22,7 +22,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
  * @author Dolghier Constantin
  *
  */
-public interface Behaviour {
+public interface Behaviour<V extends Cell> {
 	
 	/**
 	 * @return the maximum supported resolution. For any result which is not NONE, the column should contain cells which implement {@link DatedCell}
@@ -35,7 +35,7 @@ public interface Behaviour {
 	 * @param cells
 	 * @return
 	 */
-	public Cell doHorizontalReduce(List<NiCell> cells, HierarchiesTracker hiersTracker);
+	public V doHorizontalReduce(List<NiCell> cells, HierarchiesTracker hiersTracker);
 	public default Cell filterCell(Map<NiDimensionUsage, IdsAcceptor> acceptors, NiCell oldCell, NiCell splitCell) {
 		if (cellMeetsCoos(acceptors, oldCell, splitCell))
 			return oldCell.getCell();
@@ -76,7 +76,7 @@ public interface Behaviour {
 	 * computes a "zero" cell, which is different from an "empty" cell. For numerical cells, this is a cell with zero. For textual cells, this is an "" cell, although these do not have 
 	 * @return
 	 */
-	public Cell getZeroCell();
+	public V getZeroCell();
 	
 	public default String getDebugDigest() {
 		return String.format("%s", getTimeRange());
@@ -97,5 +97,9 @@ public interface Behaviour {
 				return false;
 		}
 		return true;
+	}
+
+	public default V doVerticalReduce(Collection<V> cells) {
+		return getZeroCell();
 	}
 }

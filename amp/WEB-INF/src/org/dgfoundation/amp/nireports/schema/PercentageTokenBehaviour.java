@@ -11,7 +11,7 @@ import org.dgfoundation.amp.nireports.PercentageTextCell;
 import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 
-public class PercentageTokenBehaviour implements Behaviour {
+public class PercentageTokenBehaviour implements Behaviour<PercentageTextCell> {
 
 	public final static PercentageTokenBehaviour instance = new PercentageTokenBehaviour();
 	
@@ -26,7 +26,7 @@ public class PercentageTokenBehaviour implements Behaviour {
 	/**
 	 * hierPercentage is ignored in textual cells
 	 */
-	public Cell doHorizontalReduce(List<NiCell> cells, HierarchiesTracker hiersTracker) {
+	public PercentageTextCell doHorizontalReduce(List<NiCell> cells, HierarchiesTracker hiersTracker) {
 		Set<String> v = new TreeSet<>();
 		BigDecimal percentage = BigDecimal.ZERO;
 		for(NiCell niCell:cells) {
@@ -41,7 +41,7 @@ public class PercentageTokenBehaviour implements Behaviour {
 	}
 
 	@Override
-	public Cell getZeroCell() {
+	public PercentageTextCell getZeroCell() {
 		return new PercentageTextCell("", -1, -1, Optional.empty(), null);
 	}
 }

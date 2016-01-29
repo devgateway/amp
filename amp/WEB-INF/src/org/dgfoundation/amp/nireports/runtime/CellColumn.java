@@ -3,14 +3,11 @@ package org.dgfoundation.amp.nireports.runtime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Set;
+import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
-import org.dgfoundation.amp.ar.helper.ReportHeadingLayoutCell;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.NiUtils;
@@ -25,9 +22,9 @@ import org.dgfoundation.amp.nireports.schema.Behaviour;
 public class CellColumn extends Column {
 	
 	final ColumnContents contents;
-	final Behaviour behaviour;
+	final Behaviour<Cell> behaviour;
 		
-	public CellColumn(String name, ColumnContents contents, GroupColumn parent, Behaviour behaviour) {
+	public CellColumn(String name, ColumnContents contents, GroupColumn parent, Behaviour<Cell> behaviour) {
 		super(name, parent);
 		NiUtils.failIf(contents == null, "CellColumn should have a non-null contents");
 		this.contents = contents;
@@ -52,7 +49,7 @@ public class CellColumn extends Column {
 		return contents;
 	}
 
-	public Behaviour getBehaviour() {
+	public Behaviour<Cell> getBehaviour() {
 		return behaviour;
 	}
 	

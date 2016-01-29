@@ -1,6 +1,5 @@
 package org.dgfoundation.amp.nireports;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,7 +8,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -19,7 +17,6 @@ import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.Graph;
 import org.dgfoundation.amp.algo.VivificatingMap;
 import org.dgfoundation.amp.algo.timing.InclusiveTimer;
-import org.dgfoundation.amp.algo.timing.RunNode;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportWarning;
 import org.dgfoundation.amp.nireports.output.NiColumnReportData;
@@ -34,7 +31,6 @@ import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.runtime.GroupColumn;
 import org.dgfoundation.amp.nireports.runtime.GroupReportData;
 import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
-import org.dgfoundation.amp.nireports.runtime.PerItemHierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.IdsAcceptorsBuilder;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.runtime.ReportData;
@@ -151,29 +147,34 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	 * @author Dolghier Constantin
 	 *
 	 */
+	
 	class ReportDataOutputter implements ReportDataVisitor<NiReportData> {
 		
-		Map<CellColumn, Cell> buildDummyTrailCells(ReportData rd) {
-			HashMap<CellColumn, Cell> res = new HashMap<>();
-			for(CellColumn leaf:headers.leafColumns) {
-				//BigDecimal numericalValue = BigDecimal.valueOf(leaf.getHierName().hashCode() * new TreeSet<>(rd.getIds()).toString().hashCode() % 10000).divide(BigDecimal.valueOf(100));
-				String splitterString = rd.splitter != null && rd.splitter.getCell() != null ? rd.splitter.getCell().getDisplayedValue() : "";
-				BigDecimal numericalValue = BigDecimal.valueOf(leaf.getHierName().hashCode() * splitterString.hashCode() % 10000).divide(BigDecimal.valueOf(100));
-				AmountCell cell = new AmountCell(-1, new MonetaryAmount(numericalValue, schemaSpecificScratchpad.getPrecisionSetting()));
-				res.put(leaf, cell);
-			}
-			return res;
+		/**
+		 * builds the trail cells for GroupReportData 
+		 */
+		Map<CellColumn, Cell> buildGroupTrailCells(List<NiReportData> visitedChildren) {
+			return headers.leafColumns.stream().collect(Collectors.toMap(cellColumn -> cellColumn, cellColumn -> 
+				cellColumn.getBehaviour().doVerticalReduce(visitedChildren.stream().map(child -> child.trailCells.get(cellColumn)).collect(Collectors.toList()))));
+		}
+		
+		/**
+		 * builds the trail cells for ColumnReportData 
+		 */
+		Map<CellColumn, Cell> buildTrailCells(Map<CellColumn, Map<Long, Cell>> contents) {
+			return headers.leafColumns.stream().collect(Collectors.toMap(cellColumn -> cellColumn, cellColumn -> 
+				cellColumn.getBehaviour().doVerticalReduce(contents.get(cellColumn).values())));
 		}
 		
 		@Override
 		public NiReportData visitLeaf(ColumnReportData crd) {
 			Map<CellColumn, Map<Long, Cell>> contents = AmpCollections.remap(crd.getContents(), (cellColumn, columnContents) -> columnContents.flatten(crd.hierarchies, cellColumn.getBehaviour()), null);
-			return new NiColumnReportData(contents, /*crd.trailCells, */buildDummyTrailCells(crd), crd.splitter);
+			return new NiColumnReportData(contents, buildTrailCells(contents), crd.splitter);
 		}
 
 		@Override
 		public NiReportData visitGroup(GroupReportData grd, List<NiReportData> visitedChildren) {
-			return new NiGroupReportData(visitedChildren, buildDummyTrailCells(grd), /*grd.trailCells, */grd.splitter);
+			return new NiGroupReportData(visitedChildren, buildGroupTrailCells(visitedChildren), grd.splitter);
 		}
 		
 	}

@@ -1187,4 +1187,4 @@ deleted 6 fields, do not reinsert
 <feature:display name="Show Names As Acronyms" module="Dashboard Org. Info"></feature:display>
 
 <!-- preview activity -->
-<module:display name="/Activity Form/Related Organizations/Donor Organization" parentModule="/Activity Form/Related Organizations"></module:display>
+<module:display name="/Activity Form/Organizations/Donor Organization" parentModule="/Activity Form/Organizations"></module:display>

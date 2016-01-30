@@ -66,7 +66,7 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
 		
 	@Override
 	public GeneratedReport executeReport(ReportSpecification spec) {
-		GeneratedReport apiReport = executeReport(spec, AmpNiReportsFormatter.asAmpFormatter(ReportAreaImpl.buildSupplier(reportAreaClazz)));
+		GeneratedReport apiReport = executeReport(spec, AmpNiReportsFormatter.asOutputBuilder(ReportAreaImpl.buildSupplier(reportAreaClazz)));
 		return apiReport;
 	}
 	

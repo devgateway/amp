@@ -27,10 +27,10 @@ public class TrivialMeasureBehaviour implements Behaviour<AmountCell> {
 	}
 	
 	@Override
-	public AmountCell doHorizontalReduce(List<NiCell> cells, HierarchiesTracker hiersTracker) {
+	public AmountCell doHorizontalReduce(List<NiCell> cells) {
 		MonetaryAmount res = new MonetaryAmount(BigDecimal.ZERO, ((NumberedCell) cells.get(0).getCell()).getAmount().precisionSetting);
 		for(NiCell cell:cells) {
-			BigDecimal percentage = hiersTracker.calculatePercentage(cell.getMainId(), cell.getEntity().getBehaviour());
+			BigDecimal percentage = cell.calculatePercentage();
 			res = res.add(((NumberedCell) cell.getCell()).getAmount().multiplyBy(percentage));
 		}
 		return new AmountCell(cells.get(0).getMainId(), res);

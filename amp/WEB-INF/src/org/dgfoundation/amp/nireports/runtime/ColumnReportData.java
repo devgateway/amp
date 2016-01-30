@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.algo.AmpCollections;
+import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
@@ -26,8 +27,8 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 public class ColumnReportData extends ReportData {
 	final Map<CellColumn, ColumnContents> contents;
 	
-	public ColumnReportData(NiReportsEngine context, NiCell splitter, Map<CellColumn, ColumnContents> contents, HierarchiesTracker hierarchies) {
-		super(context, splitter, hierarchies);
+	public ColumnReportData(NiReportsEngine context, NiCell splitter, Map<CellColumn, ColumnContents> contents) {
+		super(context, splitter);
 		this.contents = Collections.unmodifiableMap(contents);
 	}
 	
@@ -63,36 +64,37 @@ public class ColumnReportData extends ReportData {
 		ColumnContents dataColumn = contents.get(z);
 		NiUtils.failIf(dataColumn == null, String.format("could not find leaf %s in %s", z, this));
 		Map<Long, Set<Long>> actIds = new HashMap<>(); // Map<entityId, Set<mainIds-which-have-this-value>>
-		Map<Long, NiCell> values = new HashMap<>(); // Map<entityId, entity_value>
+		Map<Long, NiCell> splitters = new HashMap<>(); // Map<entityId, entity_value>
 		Map<Long, Map<Long, NiCell>> percentages = new HashMap<>(); // Map<entityId, Map<activityId, Percentage>>
 		for(NiCell splitCell:dataColumn.getLinearData()) {
 			Cell cell = splitCell.getCell();
 			long entityId = cell.entityId;
-			values.putIfAbsent(entityId, splitCell);
+			splitters.putIfAbsent(entityId, splitCell);
 			actIds.computeIfAbsent(entityId, zz -> new HashSet<>()).add(cell.activityId);
 			percentages.computeIfAbsent(entityId, zz -> new HashMap<>()).put(cell.activityId, splitCell);
 			/*Map<Long, BigDecimal> catPercs = percentages.computeIfAbsent(entityId, zz -> new HashMap<>());
 			add(catPercs, cell.activityId, cell.getPercentage());*/
 		}
 
-		List<Long> orderedCatIds = new ArrayList<>(values.keySet());
-		orderedCatIds.sort((catIdA, catIdB) -> values.get(catIdA).compareTo(values.get(catIdB)));
+		List<Long> orderedCatIds = new ArrayList<>(splitters.keySet());
+		orderedCatIds.sort((catIdA, catIdB) -> splitters.get(catIdA).compareTo(splitters.get(catIdB)));
 
-		GroupReportData res = new GroupReportData(context, splitter, hierarchies);
+//		GroupReportData res = new GroupReportData(context, splitter, hierarchies, children);
 		IdsAcceptorsBuilder bld = context;
+		List<ColumnReportData> newChildren = new ArrayList<>();
 		for(long catId:orderedCatIds) {
-			NiCell splitCell = values.get(catId);
+			NiCell splitCell = splitters.get(catId);
 			Map<NiDimensionUsage, IdsAcceptor> acceptors = AmpCollections.remap(splitCell.cell.getCoordinates(), bld::buildAcceptor, null);
 			Map<CellColumn, ColumnContents> subContents = new HashMap<>();
 			for(CellColumn cc:contents.keySet()) {
 				ColumnContents oldContents = contents.get(cc);
-				ColumnContents newContents = cc.getBehaviour().horizSplit(oldContents, splitCell, actIds.get(catId), acceptors);
+				ColumnContents newContents = cc.getBehaviour().horizSplit(oldContents, percentages.get(catId), actIds.get(catId), acceptors);
 				subContents.put(cc, newContents);
 			}
-			ColumnReportData sub = new ColumnReportData(context, splitCell, subContents, hierarchies.advanceHierarchy(percentages.get(catId)));
-			res.addSubReport(sub);
+			ColumnReportData sub = new ColumnReportData(context, splitCell, subContents);
+			newChildren.add(sub);
 		}
-		return res;
+		return this.clone(newChildren);
 	}
 	
 	public Map<CellColumn, ColumnContents> getContents() {
@@ -102,5 +104,10 @@ public class ColumnReportData extends ReportData {
 	@Override
 	public <K> K accept(ReportDataVisitor<K> visitor) {
 		return visitor.visitLeaf(this);
+	}
+
+	@Override
+	public ReportData collapse(ReportCollapsingStrategy strategy) {
+		return this; // do not collapse same-name projects
 	}
 }

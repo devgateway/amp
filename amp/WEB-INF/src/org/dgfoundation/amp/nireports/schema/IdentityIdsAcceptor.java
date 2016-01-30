@@ -1,5 +1,8 @@
 package org.dgfoundation.amp.nireports.schema;
 
+import java.util.Map;
+import java.util.Set;
+
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 
 /**
@@ -8,20 +11,21 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
  *
  */
 public class IdentityIdsAcceptor implements IdsAcceptor {
-
-	final long id;
-	public IdentityIdsAcceptor(long id) {
-		this.id = id;
+	
+	final Map<Integer, Set<Long>> splitterCells;
+	
+	public IdentityIdsAcceptor(Map<Integer, Set<Long>> splitterCells) {
+		this.splitterCells = splitterCells;
 	}
 	
 	@Override
 	public boolean isAcceptable(Coordinate cellCoos) {
-		return cellCoos.id == this.id;
+		return splitterCells.containsKey(cellCoos.level) && splitterCells.get(cellCoos.level).contains(cellCoos.id);
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("(id = %d)", this.id);
+		return String.format("(cells = %s)", this.splitterCells);
 	}
 
 }

@@ -22,7 +22,7 @@ public class TextualTokenBehaviour implements Behaviour<TextCell> {
 	}
 	
 	@Override
-	public TextCell doHorizontalReduce(List<NiCell> cells, HierarchiesTracker hiersTracker) {
+	public TextCell doHorizontalReduce(List<NiCell> cells) {
 		Set<String> v = new TreeSet<>();
 		for(NiCell niCell:cells) {
 			TextCell cell = (TextCell) niCell.getCell();

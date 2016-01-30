@@ -87,6 +87,14 @@ public interface ReportSpecification extends Cloneable {
      */
     public boolean isAlsoShowPledges();
 
+    /**
+     * whether to collapse same-named hierarchies with different IDs
+     * @return
+     */
+    public default ReportCollapsingStrategy getSubreportsCollapsing() {
+    	return ReportCollapsingStrategy.UNKNOWNS;
+    }
+    
 	/**
 	 * these are the simple names of the columns {@see #getColumns()}
 	 * @return the set of column names to use

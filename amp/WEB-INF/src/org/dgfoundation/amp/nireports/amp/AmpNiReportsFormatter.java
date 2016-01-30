@@ -64,7 +64,7 @@ public class AmpNiReportsFormatter {
 				leafHeaders, generatedHeaders, runResult.timings);
 	}
 
-	public static NiReportOutputBuilder<GeneratedReport> asAmpFormatter(Supplier<ReportAreaImpl> reportAreaSupplier) {
+	public static NiReportOutputBuilder<GeneratedReport> asOutputBuilder(Supplier<ReportAreaImpl> reportAreaSupplier) {
 		return (ReportSpecification spec, NiReportRunResult runResult) -> 
 			new AmpNiReportsFormatter(spec, runResult, reportAreaSupplier).format();
 	}

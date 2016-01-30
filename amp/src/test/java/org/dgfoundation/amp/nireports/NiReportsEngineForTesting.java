@@ -2,6 +2,7 @@ package org.dgfoundation.amp.nireports;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -33,7 +34,7 @@ public class NiReportsEngineForTesting extends NiReportsEngine {
 	
 	@Override
 	protected void runReport() {
-		try {runnable.accept(this); this.rootReportData = new GroupReportData(this, null, HierarchiesTracker.EMPTY);}
+		try {runnable.accept(this); this.rootReportData = new GroupReportData(this, null, Collections.emptyList());}
 		catch(Exception e) {throw AlgoUtils.translateException(e);}
 	}
 }

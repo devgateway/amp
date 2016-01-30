@@ -35,7 +35,7 @@ public interface Behaviour<V extends Cell> {
 	 * @param cells
 	 * @return
 	 */
-	public V doHorizontalReduce(List<NiCell> cells, HierarchiesTracker hiersTracker);
+	public V doHorizontalReduce(List<NiCell> cells);
 	public default Cell filterCell(Map<NiDimensionUsage, IdsAcceptor> acceptors, NiCell oldCell, NiCell splitCell) {
 		if (cellMeetsCoos(acceptors, oldCell, splitCell))
 			return oldCell.getCell();
@@ -51,25 +51,26 @@ public interface Behaviour<V extends Cell> {
 		return null;
 	}
 	
-	public default ColumnContents horizSplit(ColumnContents oldContents, NiCell splitCell, Set<Long> acceptableMainIds, Map<NiDimensionUsage, IdsAcceptor> acceptors) {
+	public default ColumnContents horizSplit(ColumnContents oldContents, Map<Long, NiCell> splitCells, Set<Long> acceptableMainIds, Map<NiDimensionUsage, IdsAcceptor> acceptors) {
 		Map<Long, List<NiCell>> z = new HashMap<>();
 		for(Long mainId:acceptableMainIds) {
 			List<NiCell> oldCells = oldContents.data.get(mainId);
 			if (oldCells == null)
 				continue;
 			for(NiCell oldCell:oldCells) {
+				NiCell splitCell = splitCells.get(oldCell.getMainId());
 				Cell filteredCell = filterCell(acceptors, oldCell, splitCell);
 				if (filteredCell != null)
-					z.computeIfAbsent(mainId, id -> new ArrayList<>()).add(new NiCell(filteredCell, oldCell.getEntity()));
+					z.computeIfAbsent(mainId, id -> new ArrayList<>()).add(oldCell.advanceHierarchy(filteredCell, splitCell.getCell()));
 			}
 		}
 		return new ColumnContents(z);
 	}
 	
-	public default Cell horizontalReduce(List<NiCell> cells, HierarchiesTracker hierTracker) {
+	public default Cell horizontalReduce(List<NiCell> cells) {
 		if (cells == null || cells.isEmpty())
 			return getZeroCell();
-		return doHorizontalReduce(cells, hierTracker);
+		return doHorizontalReduce(cells);
 	}
 	
 	/**

@@ -1,9 +1,11 @@
 package org.dgfoundation.amp.nireports.runtime;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 
@@ -14,8 +16,6 @@ import org.dgfoundation.amp.nireports.schema.Behaviour;
  *
  */
 public abstract class ReportData {
-	public final Map<CellColumn, NiCell> trailCells = new HashMap<>();
-	
 	/**TODO: maybe turn it into a reference to {@link IdsAcceptorsBuilder} */
 	public final NiReportsEngine context;
 
@@ -23,13 +23,15 @@ public abstract class ReportData {
 	 * the value cell which generated this subreport during horizSplit
 	 */
 	public final NiCell splitter;
-	
-	public final HierarchiesTracker hierarchies;
 
-	protected ReportData(NiReportsEngine context, NiCell splitter, HierarchiesTracker hierarchies) {
+	protected ReportData(NiReportsEngine context, NiCell splitter) {
 		this.context = context;
 		this.splitter = splitter;
-		this.hierarchies = hierarchies;
+	}
+	
+	public GroupReportData clone(List<? extends ReportData> children) {
+		GroupReportData res = new GroupReportData(context, splitter, children);
+		return res;
 	}
 	
 	/**
@@ -41,4 +43,12 @@ public abstract class ReportData {
 	public abstract Set<Long> getIds();
 	public abstract boolean isLeaf();
 	public abstract<K> K accept(ReportDataVisitor<K> visitor);
+	
+	//TODO: maybe replace with a forwardvisitor
+	public abstract ReportData collapse(ReportCollapsingStrategy strategy);
+	
+	@Override
+	public String toString() {
+		return String.format("%s: %s (id: %d)", this.getClass().getSimpleName(), this.splitter == null ? null : this.splitter.getDisplayedValue(), this.splitter == null ? -1 : this.splitter.cell.entityId);
+	}
 }

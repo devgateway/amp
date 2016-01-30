@@ -17,11 +17,13 @@ import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.Graph;
 import org.dgfoundation.amp.algo.VivificatingMap;
 import org.dgfoundation.amp.algo.timing.InclusiveTimer;
+import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportWarning;
 import org.dgfoundation.amp.nireports.output.NiColumnReportData;
 import org.dgfoundation.amp.nireports.output.NiGroupReportData;
 import org.dgfoundation.amp.nireports.output.NiReportData;
+import org.dgfoundation.amp.nireports.output.NiReportDataOutputter;
 import org.dgfoundation.amp.nireports.output.NiReportRunResult;
 import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
@@ -29,12 +31,11 @@ import org.dgfoundation.amp.nireports.runtime.Column;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.runtime.GroupColumn;
-import org.dgfoundation.amp.nireports.runtime.GroupReportData;
 import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.IdsAcceptorsBuilder;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
+import org.dgfoundation.amp.nireports.runtime.PerItemHierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.ReportData;
-import org.dgfoundation.amp.nireports.runtime.ReportDataVisitor;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.DimensionSnapshot;
@@ -142,43 +143,6 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		}
 	}
 	
-	/**
-	 * TODO: refactor, move to separate file in *.outputs
-	 * @author Dolghier Constantin
-	 *
-	 */
-	
-	class ReportDataOutputter implements ReportDataVisitor<NiReportData> {
-		
-		/**
-		 * builds the trail cells for GroupReportData 
-		 */
-		Map<CellColumn, Cell> buildGroupTrailCells(List<NiReportData> visitedChildren) {
-			return headers.leafColumns.stream().collect(Collectors.toMap(cellColumn -> cellColumn, cellColumn -> 
-				cellColumn.getBehaviour().doVerticalReduce(visitedChildren.stream().map(child -> child.trailCells.get(cellColumn)).collect(Collectors.toList()))));
-		}
-		
-		/**
-		 * builds the trail cells for ColumnReportData 
-		 */
-		Map<CellColumn, Cell> buildTrailCells(Map<CellColumn, Map<Long, Cell>> contents) {
-			return headers.leafColumns.stream().collect(Collectors.toMap(cellColumn -> cellColumn, cellColumn -> 
-				cellColumn.getBehaviour().doVerticalReduce(contents.get(cellColumn).values())));
-		}
-		
-		@Override
-		public NiReportData visitLeaf(ColumnReportData crd) {
-			Map<CellColumn, Map<Long, Cell>> contents = AmpCollections.remap(crd.getContents(), (cellColumn, columnContents) -> columnContents.flatten(crd.hierarchies, cellColumn.getBehaviour()), null);
-			return new NiColumnReportData(contents, buildTrailCells(contents), crd.splitter);
-		}
-
-		@Override
-		public NiReportData visitGroup(GroupReportData grd, List<NiReportData> visitedChildren) {
-			return new NiGroupReportData(visitedChildren, buildGroupTrailCells(visitedChildren), grd.splitter);
-		}
-		
-	}
-	
 	/** writes statistics in the {@link InclusiveTimer} instance */
 	protected void writeStatistics() {
 		timer.putMetaInNode("calendar_translations", new HashMap<String, Integer>(){{
@@ -200,12 +164,21 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		timer.run("fetch", this::fetchData);
 		timer.run("init", this::createInitialReport);
 		timer.run("hierarchies", this::createHierarchies);
+		timer.run("posthierproc", this::postHierarchiesPostprocess);
 		timer.run("flatten", this::flatten);
-		timer.run("totals", this::createTotals);
+	}
+	
+	protected void postHierarchiesPostprocess() {
+		if (spec.getSubreportsCollapsing() != ReportCollapsingStrategy.NEVER)
+			collapseHierarchies();
+	}
+
+	protected void collapseHierarchies() {
+		timer.run("collapsing", () -> this.rootReportData = this.rootReportData.collapse(spec.getSubreportsCollapsing()));
 	}
 	
 	protected void flatten() {
-		this.reportOutput = this.rootReportData.accept(new ReportDataOutputter());
+		this.reportOutput = this.rootReportData.accept(new NiReportDataOutputter(headers));
 	}
 	
 	/**
@@ -238,7 +211,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		try {
 			List<? extends Cell> cells = colToFetch.fetch(this);
 			timer.putMetaInNode("cells", cells.size());
-			return new ColumnContents(cells.stream().map(z -> new NiCell(z, colToFetch)).collect(Collectors.toList()));
+			return new ColumnContents(cells.stream().map(z -> new NiCell(z, colToFetch, PerItemHierarchiesTracker.EMPTY)).collect(Collectors.toList()));
 		}
 		catch(Exception e) {
 			timer.putMetaInNode("error", e.getMessage());
@@ -268,7 +241,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		
 		GroupColumn catData = categorizeData(rawData);
 		this.headers = new NiHeaderInfo(catData, this.actualHierarchies.size());
-		this.rootReportData = new ColumnReportData(this, null, discoverLeaves(catData), HierarchiesTracker.EMPTY);
+		this.rootReportData = new ColumnReportData(this, null, discoverLeaves(catData));
 	}
 
 	protected Map<CellColumn, ColumnContents> discoverLeaves(GroupColumn gc) {
@@ -336,17 +309,12 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 			NiUtils.failIf(cel == null, () -> String.format("could not find fetched column used for hierarchies: %s", hier));
 			if (cel != null) {
 				timer.run(hier, () -> {
-//					Behaviour beh = schema.getColumns().get(hier).getBehaviour();
 					this.rootReportData = this.rootReportData.horizSplit(cel);
 				});
 			}
 		}
 	}
-	
-	protected void createTotals() {
 		
-	}
-	
 	/**
 	 * <strong>HAS A SIDE EFFECT</strong>: fills {@link #actualHierarchies} and {@link #actualColumns} <br />
 	 * returns a list of the supported columns of the ones mandated by the report. This function will become an one-liner when NiReports will become the reference reporting engine
@@ -415,7 +383,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 
 	@Override
-	public IdsAcceptor buildAcceptor(NiDimensionUsage dimUsage, Coordinate coos) {
+	public IdsAcceptor buildAcceptor(NiDimensionUsage dimUsage, List<Coordinate> coos) {
 		DimensionSnapshot snapshot = getDimensionSnapshot(dimUsage.dimension);
 		return snapshot.getCachingIdsAcceptor(coos);
 	}

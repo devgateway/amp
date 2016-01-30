@@ -48,11 +48,11 @@ public class ColumnContents {
 		return res;
 	}
 	
-	public Map<Long, Cell> flatten(HierarchiesTracker hierarchies, Behaviour behaviour) {
+	public Map<Long, Cell> flatten(Behaviour<?> behaviour) {
 		Map<Long, Cell> res = new HashMap<>();
 		for(long id:data.keySet()) {
 			List<NiCell> cells = data.get(id);
-			Cell z = behaviour.doHorizontalReduce(cells, hierarchies);
+			Cell z = behaviour.doHorizontalReduce(cells);
 			res.put(id, z);
 		}
 		return res;

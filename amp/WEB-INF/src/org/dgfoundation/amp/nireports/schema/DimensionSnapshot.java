@@ -3,6 +3,7 @@ package org.dgfoundation.amp.nireports.schema;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -117,10 +118,14 @@ public class DimensionSnapshot {
 	 * @param splitterCell
 	 * @return
 	 */
-	public IdsAcceptor getCachingIdsAcceptor(Coordinate splitterCell) {
+	public IdsAcceptor getCachingIdsAcceptor(List<Coordinate> splitters) {
+		Map<Integer, Set<Long>> splitterCells = new HashMap<>();
+		for(Coordinate coo:splitters) {
+			splitterCells.computeIfAbsent(coo.level, lev -> new HashSet<>()).add(coo.id);
+		}
 		if (depth == 1)
-			return new IdentityIdsAcceptor(splitterCell.id);
-		return new CachingIdsAcceptor(splitterCell);
+			return new IdentityIdsAcceptor(splitterCells);
+		return new CachingIdsAcceptor(splitterCells);
 	}
 	
 	public static<K> K throw_up(String msg) {
@@ -134,22 +139,33 @@ public class DimensionSnapshot {
 	
 	class CachingIdsAcceptor implements IdsAcceptor {
 		
-		Coordinate splitterCell;
-		Map<Integer, Set<Long>> levelCaches = new ConcurrentHashMap<>();
+		final Map<Integer, Set<Long>> splitterCells;
+		final Map<Integer, Set<Long>> levelCaches = new ConcurrentHashMap<>();
 		
-		CachingIdsAcceptor(Coordinate splitterCell) {
-			this.splitterCell = splitterCell;
+		/**
+		 * 
+		 * @param splitters should all belong to the same NiDimension (but might be different levels)
+		 */
+		CachingIdsAcceptor(Map<Integer, Set<Long>> splitterCells) {
+			this.splitterCells = splitterCells;
 		}
 		
 		@Override
 		public boolean isAcceptable(Coordinate cellCoos) {
-			Set<Long> acceptables = levelCaches.computeIfAbsent(cellCoos.level, z -> getAcceptableNeighbours(splitterCell.level, Arrays.asList(splitterCell.id), z));
+			Set<Long> acceptables = levelCaches.computeIfAbsent(cellCoos.level, this::buildAcceptableNeighbours);
 			return acceptables.contains(cellCoos.id);
+		}
+		
+		protected Set<Long> buildAcceptableNeighbours(int targetLevel) {
+			Set<Long> res = new HashSet<>();
+			for(Map.Entry<Integer, Set<Long>> splitterLevel:splitterCells.entrySet())
+				res.addAll(getAcceptableNeighbours(splitterLevel.getKey(), splitterLevel.getValue(), targetLevel));
+			return res;
 		}
 		
 		@Override
 		public String toString() {
-			return String.format("caching acceptor on %s: %s", splitterCell, levelCaches.toString());
+			return String.format("caching acceptor on %s: %s", splitterCells.toString(), levelCaches.toString());
 		}
 	}
 }

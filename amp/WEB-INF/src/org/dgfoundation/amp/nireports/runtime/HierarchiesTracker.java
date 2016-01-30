@@ -31,7 +31,7 @@ public class HierarchiesTracker {
 		return new HierarchiesTracker(res);
 	}
 	
-	public BigDecimal calculatePercentage(long actId, Behaviour behaviour) {
+	public BigDecimal calculatePercentage(long actId, Behaviour<?> behaviour) {
 		if (!perActivityTrackers.containsKey(actId))
 			return BigDecimal.ONE; // no info -> no percentages
 		return perActivityTrackers.get(actId).calculatePercentage(behaviour.getHierarchiesListener());

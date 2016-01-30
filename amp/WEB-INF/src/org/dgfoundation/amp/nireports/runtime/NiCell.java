@@ -1,6 +1,9 @@
 package org.dgfoundation.amp.nireports.runtime;
 
+import java.math.BigDecimal;
+
 import org.dgfoundation.amp.nireports.Cell;
+import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 
 /**
@@ -9,17 +12,25 @@ import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
  *
  */
 public class NiCell implements Comparable<NiCell> {
-	/** null for trail cells */
 	protected final NiReportedEntity<?> entity;
 	protected final Cell cell;
 	protected final boolean undefinedCell;
 	
-	public NiCell(Cell cell, NiReportedEntity<?> entity) {
+	/** null for splitter cells */
+	protected final PerItemHierarchiesTracker hiersTracker;
+	
+	public NiCell(Cell cell, NiReportedEntity<?> entity, PerItemHierarchiesTracker hiersTracker) {
+		NiUtils.failIf(cell == null, "not allowed to have NiCells without contents");
 		this.cell = cell;
 		this.undefinedCell = cell.entityId <= 0;
 		this.entity = entity;
+		this.hiersTracker = hiersTracker;
 	}
 
+	public NiCell advanceHierarchy(Cell newContents, Cell splitCell) {
+		return new NiCell(newContents, entity, hiersTracker.advanceHierarchy(splitCell));
+	}
+	
 	public NiReportedEntity<?> getEntity() {
 		return entity;
 	}
@@ -36,6 +47,10 @@ public class NiCell implements Comparable<NiCell> {
 		return this.undefinedCell;
 	}
 
+	public BigDecimal calculatePercentage() {
+		return hiersTracker.calculatePercentage(getEntity().getBehaviour().getHierarchiesListener());
+	}
+	
 	@Override
 	public int compareTo(NiCell o) {
 		if (undefinedCell && o.undefinedCell)
@@ -50,8 +65,16 @@ public class NiCell implements Comparable<NiCell> {
 		return cell.compareTo(o.cell);
 	}
 	
+	public String getDisplayedValue() {
+		return cell.getDisplayedValue();
+	}
+	
+	public PerItemHierarchiesTracker getHiersTracker() {
+		return this.hiersTracker;
+	}
+	
 	@Override
 	public String toString() {
-		return cell.getDisplayedValue();
+		return cell.toString();
 	}
 }

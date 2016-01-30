@@ -10,6 +10,7 @@ import org.dgfoundation.amp.nireports.NiHeaderInfo;
 import org.dgfoundation.amp.nireports.ReportHeadingCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
+import org.dgfoundation.amp.nireports.runtime.NiCell;
 
 /**
  * renders the result of running a NiReport to a html string. See {@link NiReportOutputBuilder}
@@ -137,11 +138,23 @@ public class NiReportHtmlRenderer {
 			bld.append("<tr>");
 		
 		for(NiReportData subReport:grd.subreports) {
-			bld.append(String.format("<td class='ni_hierarchyCell ni_hierarchyLevel%d' rowspan='%d'>%s</td>", level + 1, subReport.getRowSpan(false), subReport.splitter.getCell().getDisplayedValue()));
+			bld.append(String.format("<td class='ni_hierarchyCell ni_hierarchyLevel%d' rowspan='%d'>%s</td>", level + 1, subReport.getRowSpan(false), subreportTitle(subReport)));
 			renderReportData(bld, subReport, level + 1);
 		}
 		
 		return bld;
+	}
+
+	/**
+	 * renderer-specific way of naming an undefined subhier name in an output. In the reference renderer it outputs debug data
+	 * @param subReport
+	 * @return
+	 */
+	protected String subreportTitle(NiReportData subReport) {
+		NiCell cell = subReport.splitter;
+		if (cell == null) return "";
+		if (cell.isUndefinedCell()) return String.format("Undefined %s: %d", cell.getEntity().name, cell.getCell().entityId);
+		return cell.getDisplayedValue();
 	}
 	
 	protected StringBuilder renderColumnRD(StringBuilder bld, NiColumnReportData crd, int level) {

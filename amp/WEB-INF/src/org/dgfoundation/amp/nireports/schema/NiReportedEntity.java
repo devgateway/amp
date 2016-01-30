@@ -16,15 +16,16 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
  */
 public abstract class NiReportedEntity<K extends Cell> {
 	
-	protected final Behaviour behaviour;
+	protected final Behaviour<Cell> behaviour;
 	public final String name;
 	public final String description;
+	public final String representingString;
 	
-	
-	protected NiReportedEntity(String name, Behaviour behaviour, String description) {
+	protected NiReportedEntity(String name, Behaviour<Cell> behaviour, String description) {
 		this.name = name;
 		this.behaviour = behaviour;
 		this.description = description;
+		this.representingString = String.format("%s %s", this.getClass().getName(), getName());
 	}
 
 	
@@ -35,7 +36,7 @@ public abstract class NiReportedEntity<K extends Cell> {
 	 * returns the behaviour of this column/measure
 	 * @return
 	 */
-	public Behaviour getBehaviour() {
+	public Behaviour<Cell> getBehaviour() {
 		return behaviour;
 	}
 		
@@ -43,17 +44,13 @@ public abstract class NiReportedEntity<K extends Cell> {
 		return name;
 	}
 	
-	public String getRepresentingString() {
-		return String.format("%s %s", this.getClass().getName(), getName());
-	}
-	
 	@Override public int hashCode() {
-		return getRepresentingString().hashCode();
+		return representingString.hashCode();
 	}
 	
 	@Override public boolean equals(Object oth) {
 		NiReportedEntity<?> o = (NiReportedEntity<?>) oth;
-		return getRepresentingString().equals(o.getRepresentingString());
+		return representingString.equals(o.representingString);
 	}
 
 }

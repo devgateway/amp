@@ -23,10 +23,7 @@ public class PercentageTokenBehaviour implements Behaviour<PercentageTextCell> {
 	private PercentageTokenBehaviour(){}
 	
 	@Override
-	/**
-	 * hierPercentage is ignored in textual cells
-	 */
-	public PercentageTextCell doHorizontalReduce(List<NiCell> cells, HierarchiesTracker hiersTracker) {
+	public PercentageTextCell doHorizontalReduce(List<NiCell> cells) {
 		Set<String> v = new TreeSet<>();
 		BigDecimal percentage = BigDecimal.ZERO;
 		for(NiCell niCell:cells) {

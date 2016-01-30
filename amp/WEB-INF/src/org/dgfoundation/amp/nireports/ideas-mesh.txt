@@ -1,84 +1,37 @@
-== A. runtime data structures ==
-0. Cell<Amount> or Cell<Text> - contains 0+ values
-1. Amount - immutable
-2. Column: contains either cells or subcolumns
-3. any column (measure) should be splittable by Funding Flow - at the last temporal level
-4. 3 types of hierarchies:
-	4a: percentages
 	4b: flows (make it somehow generic through attributes?)
 	4c: per-transaction attribute equaling the column
-	4d: (does it make sense?): hierarchy by something which has no percentage, no attribute, no per-transaction value
 		
 == C. running ==
- Column.splitByYear/Month/
- totals
-generate hierarchies:
-	column.filter(metadata = X, percentage = Y)
-		-> if cell has metadata, but different amount -> f.o.
-		->  
 	
-
-templating engine:
-https://en.wikipedia.org/wiki/Thymeleaf
- OR
-Apache Velocity
- OR
-Mustache
- OR
-http://blog.stackhunter.com/2014/01/17/10-reasons-to-replace-your-jsps-with-freemarker-templates/
-
-Calendars:
-	-> http://blog.joda.org/2009/11/why-jsr-310-isn-joda-time_4941.html
-	-> http://java-performance.info/jsr-310-java-8-datetime-library-performance-well-joda-time-2-3-j-u-calendar/
-	
-
-
 measures which are not affected by filters should be made columns
 	-> what about those which have meaning for both year and overall (e.g. Execution Rate / Forecast Execution Rate)
-	
-	
-	
-ADD TESTS FOR:
-	MonetaryAmount
-
 	
 REDO *info* columns as being part of the hierarchy
 REDO *funding* columns as being part of the donor hierarchy
 REDO v_organization_projectid
 pledges sectors + programs should be somehow fixed (data model is broken)
-add startup check for NULL ids in NiReports
 pledges titles: make a new view for NiReports
 v_component_funding_description, v_component_funding_organization_name - add as being part of 2 hierarchies
 remove ORDER BY from views
 v_activity_pledges_title:
 	views which link pledges to activities are... different. These have to be changed, but in an another way - for later
 	
-make a per-column "slow check" function; implement it for PercentageColumns; make an endpoint for it -> Aldo, done & reviewed
-	implement RunNode -> jsonb -> Alex
-
 in case fetching a column/measure crashes -> remove said column/measure from report and add a note about it to warnings
 	-> treat the case when fetching a column which is also a hierarchy fails
 	
 filters: activities-id caching
 year range settings
-undefineds-collapsing via ReportData merging
-NiReportOutput-to-ReportsAPI-output
-	scan amp_columns @startup; add entries for missing ones  -> Alex
-	scan amp_measures @startup; add entries for missing ones -> Alex
 RELATED_PROJECTS: take care of the (id / related id) stuff
 generate the following in-memory schemas:
 	-> benchmarks schema
-	-> testcases schema
+	-> testcases schema  -> Alex
 	-> report wizard schema (as a tiny layer on top of testcases schema)
 
-cache activity ids filter
 https://jira.dgfoundation.org/browse/AMP-22006 - DO NOT MERGE THIS ONE TO AMP 2.12
-
 
 http://localhost:8080/rest/data/nireport/10 - report behaviour when no funding
 by-year-hierarchies: generate list of all measures at the bottom
 gross filtering-out of entries while fetching funding
-define the trivial measures in AmpReportsSchema
 
 testcases for the whole coos stack: tracker, fetching, filtering, applying percentages
 remove activities without funding under a hierarchy
@@ -86,3 +39,4 @@ do not ignore null-percentage rows
 test ReportCollapsingStrategy != UNKNOWNS
 testcases ReportDataCollapser!!
 change all references to Behaviour with ones to Behaviour<?>
+caching layer on top of workspace filter

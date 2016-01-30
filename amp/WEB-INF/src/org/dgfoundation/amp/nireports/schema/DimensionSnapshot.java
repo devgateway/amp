@@ -104,6 +104,7 @@ public class DimensionSnapshot {
 	 * @return
 	 */
 	public Set<Long> getAcceptableNeighbours(int level, Collection<Long> ids, int targetLevel) {
+		//System.out.format("called getAcceptableNeighbours on %d, %d, %s\n", level, targetLevel, ids);
 		if (targetLevel == level) {
 			return ids.stream().filter(z -> data.get(level).parents.containsKey(z)).collect(Collectors.toSet());
 		}

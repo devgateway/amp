@@ -13,7 +13,7 @@ import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.DatedCell;
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
-import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
+import org.dgfoundation.amp.nireports.runtime.MultiHierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 

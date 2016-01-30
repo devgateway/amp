@@ -3,6 +3,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
+
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiHeaderInfo;
@@ -47,7 +49,8 @@ public class NiReportDataOutputter implements ReportDataVisitor<NiReportData> {
 	}
 
 	@Override
-	public NiReportData visitGroup(GroupReportData grd, List<NiReportData> visitedChildren) {
+	public NiReportData visitGroup(GroupReportData grd) {
+		List<NiReportData> visitedChildren = grd.getSubReports().stream().map(z -> z.accept(this)).collect(toList());
 		return new NiGroupReportData(visitedChildren, buildGroupTrailCells(visitedChildren), grd.splitter);
 	}
 		

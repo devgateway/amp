@@ -8,7 +8,7 @@ import org.dgfoundation.amp.nireports.AmountCell;
 import org.dgfoundation.amp.nireports.MonetaryAmount;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NumberedCell;
-import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
+import org.dgfoundation.amp.nireports.runtime.MultiHierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 
 /**

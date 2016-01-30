@@ -43,10 +43,7 @@ public abstract class ReportData {
 	public abstract Set<Long> getIds();
 	public abstract boolean isLeaf();
 	public abstract<K> K accept(ReportDataVisitor<K> visitor);
-	
-	//TODO: maybe replace with a forwardvisitor
-	public abstract ReportData collapse(ReportCollapsingStrategy strategy);
-	
+		
 	@Override
 	public String toString() {
 		return String.format("%s: %s (id: %d)", this.getClass().getSimpleName(), this.splitter == null ? null : this.splitter.getDisplayedValue(), this.splitter == null ? -1 : this.splitter.cell.entityId);

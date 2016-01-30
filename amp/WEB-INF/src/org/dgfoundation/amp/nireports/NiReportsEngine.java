@@ -25,16 +25,17 @@ import org.dgfoundation.amp.nireports.output.NiGroupReportData;
 import org.dgfoundation.amp.nireports.output.NiReportData;
 import org.dgfoundation.amp.nireports.output.NiReportDataOutputter;
 import org.dgfoundation.amp.nireports.output.NiReportRunResult;
+import org.dgfoundation.amp.nireports.runtime.CacheHitsCounter;
 import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.runtime.GroupColumn;
-import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
+import org.dgfoundation.amp.nireports.runtime.MultiHierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.IdsAcceptorsBuilder;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
-import org.dgfoundation.amp.nireports.runtime.PerItemHierarchiesTracker;
+import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.ReportData;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
@@ -119,6 +120,9 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	 */
 	public SchemaSpecificScratchpad schemaSpecificScratchpad;
 	
+	public CacheHitsCounter hiersTrackerCounter = new CacheHitsCounter();
+	HierarchiesTracker rootEmptyTracker = HierarchiesTracker.buildEmpty(hiersTrackerCounter);
+	
 	public NiReportsEngine(NiReportsSchema schema, ReportSpecification reportSpec) {
 		this.schema = schema;
 		this.spec = reportSpec;
@@ -150,6 +154,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 			put("noncached", calendar.getNonCachedCalls());
 			put("percent_cached", calendar.getCalls() == 0? 0 : 100 - (100 * calendar.getNonCachedCalls() / calendar.getCalls()));
 		}});
+		timer.putMetaInNode("hierarchies_tracker_stats", hiersTrackerCounter.getStats());
 	}
 	
 	protected void runReportAndCleanup() {
@@ -174,7 +179,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 
 	protected void collapseHierarchies() {
-		timer.run("collapsing", () -> this.rootReportData = this.rootReportData.collapse(spec.getSubreportsCollapsing()));
+		timer.run("collapsing", () -> this.rootReportData = this.rootReportData.accept(new ReportHierarchiesCollapser(spec.getSubreportsCollapsing())));
 	}
 	
 	protected void flatten() {
@@ -211,7 +216,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		try {
 			List<? extends Cell> cells = colToFetch.fetch(this);
 			timer.putMetaInNode("cells", cells.size());
-			return new ColumnContents(cells.stream().map(z -> new NiCell(z, colToFetch, PerItemHierarchiesTracker.EMPTY)).collect(Collectors.toList()));
+			return new ColumnContents(cells.stream().map(z -> new NiCell(z, colToFetch, rootEmptyTracker)).collect(Collectors.toList()));
 		}
 		catch(Exception e) {
 			timer.putMetaInNode("error", e.getMessage());

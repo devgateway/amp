@@ -8,14 +8,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.algo.AmpCollections;
-import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
-import org.dgfoundation.amp.nireports.output.NiReportData;
 import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
@@ -105,9 +102,5 @@ public class ColumnReportData extends ReportData {
 	public <K> K accept(ReportDataVisitor<K> visitor) {
 		return visitor.visitLeaf(this);
 	}
-
-	@Override
-	public ReportData collapse(ReportCollapsingStrategy strategy) {
-		return this; // do not collapse same-name projects
-	}
+	
 }

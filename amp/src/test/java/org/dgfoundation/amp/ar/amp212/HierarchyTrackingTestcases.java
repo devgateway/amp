@@ -11,7 +11,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.dgfoundation.amp.nireports.ImmutablePair;
-import org.dgfoundation.amp.nireports.runtime.PerItemHierarchiesTracker;
+import org.dgfoundation.amp.nireports.runtime.CacheHitsCounter;
+import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
 import org.dgfoundation.amp.nireports.schema.ConstantNiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
@@ -51,7 +52,7 @@ public class HierarchyTrackingTestcases extends AmpTestCase {
 	NiDimensionUsage threeDigitsX = threeDigits.getDimensionUsage("x");
 	NiDimensionUsage threeDigitsY = threeDigits.getDimensionUsage("y");	
 	
-	PerItemHierarchiesTracker PER_ITEM_EMPTY = PerItemHierarchiesTracker.EMPTY;
+	HierarchiesTracker PER_ITEM_EMPTY = HierarchiesTracker.buildEmpty(new CacheHitsCounter());
 	BigDecimal ONE = BigDecimal.ONE;
 	BigDecimal ZERO = BigDecimal.ZERO;
 	BigDecimal HALF = fraction(2);
@@ -67,27 +68,27 @@ public class HierarchyTrackingTestcases extends AmpTestCase {
 	
 	@Test
 	public void testPerItemImmutability() {
-		PerItemHierarchiesTracker t1 = PER_ITEM_EMPTY;
-		PerItemHierarchiesTracker t2 = t1.advanceHierarchy(twoDigitsA.getLevelColumn(1), 11, BigDecimal.ONE);
+		HierarchiesTracker t1 = PER_ITEM_EMPTY;
+		HierarchiesTracker t2 = t1.advanceHierarchy(twoDigitsA.getLevelColumn(1), 11, BigDecimal.ONE);
 		assertTrue(t1 != t2);
 	}
 	
 	@Test
 	public void testEmptyFiltering() {
 		// test the way "no hiers" is filtering
-		PerItemHierarchiesTracker t1 = PER_ITEM_EMPTY;
+		HierarchiesTracker t1 = PER_ITEM_EMPTY;
 		assertBigDecimalEquals(t1.calculatePercentage(yes()), BigDecimal.ONE); // we do no filtering
 		assertBigDecimalEquals(t1.calculatePercentage(no()), BigDecimal.ONE); // we do no filtering
 	}
 	
 	@Test
 	public void testPercentagesCalculations() {
-		PerItemHierarchiesTracker z1 = PER_ITEM_EMPTY.advanceHierarchy(twoDigitsA.getLevelColumn(1), 11, HALF);
+		HierarchiesTracker z1 = PER_ITEM_EMPTY.advanceHierarchy(twoDigitsA.getLevelColumn(1), 11, HALF);
 		
 		assertBigDecimalEquals(HALF, z1.calculatePercentage(yes()));
 		assertBigDecimalEquals(ONE, z1.calculatePercentage(no()));
 		
-		PerItemHierarchiesTracker z2 = z1.advanceHierarchy(twoDigitsB.getLevelColumn(1), 11, fraction(5));
+		HierarchiesTracker z2 = z1.advanceHierarchy(twoDigitsB.getLevelColumn(1), 11, fraction(5));
 		assertBigDecimalEquals(fraction(10), z2.calculatePercentage(yes()));
 		assertBigDecimalEquals(ONE, z2.calculatePercentage(no()));
 		assertBigDecimalEquals(HALF, z2.calculatePercentage(z -> z == twoDigitsA));
@@ -96,7 +97,7 @@ public class HierarchyTrackingTestcases extends AmpTestCase {
 	
 	@Test
 	public void testEmbeddedDimensionWalking() {
-		PerItemHierarchiesTracker z = PER_ITEM_EMPTY.advanceHierarchy(twoDigitsA.getLevelColumn(0), 1, fraction(2)); // twoA: (0, 0.5)
+		HierarchiesTracker z = PER_ITEM_EMPTY.advanceHierarchy(twoDigitsA.getLevelColumn(0), 1, fraction(2)); // twoA: (0, 0.5)
 		assertBigDecimalEquals(fraction(2), z.calculatePercentage(yes()));
 		assertBigDecimalEquals(fraction(2), z.calculatePercentage(null));
 		
@@ -104,7 +105,7 @@ public class HierarchyTrackingTestcases extends AmpTestCase {
 		assertBigDecimalEquals(fraction(5), z.calculatePercentage(yes()));
 		assertBigDecimalEquals(fraction(5), z.calculatePercentage(null));
 		
-		PerItemHierarchiesTracker q = z.advanceHierarchy(twoDigitsB.getLevelColumn(0), 1, fraction(2)); // twoA: (1, 0.2), twoB: (0, 0.5)
+		HierarchiesTracker q = z.advanceHierarchy(twoDigitsB.getLevelColumn(0), 1, fraction(2)); // twoA: (1, 0.2), twoB: (0, 0.5)
 		assertBigDecimalEquals(fraction(10), q.calculatePercentage(yes()));
 		assertBigDecimalEquals(fraction(10), q.calculatePercentage(null));
 		
@@ -118,14 +119,14 @@ public class HierarchyTrackingTestcases extends AmpTestCase {
 	
 	@Test
 	public void testOuterDimensionWalking() {
-		PerItemHierarchiesTracker q = PER_ITEM_EMPTY.advanceHierarchy(twoDigitsA.getLevelColumn(1), 12, fraction(5));
+		HierarchiesTracker q = PER_ITEM_EMPTY.advanceHierarchy(twoDigitsA.getLevelColumn(1), 12, fraction(5));
 		q = q.advanceHierarchy(twoDigitsA.getLevelColumn(0), 1, fraction(2)); // should be ignored
 		assertBigDecimalEquals(fraction(5), q.calculatePercentage(dim -> dim == twoDigitsA));
 		assertBigDecimalEquals(fraction(5), q.calculatePercentage(yes()));
 		assertBigDecimalEquals(fraction(5), q.calculatePercentage(null));
 		assertBigDecimalEquals(ONE, q.calculatePercentage(no()));
 		
-		PerItemHierarchiesTracker z = q.advanceHierarchy(twoDigitsA.getLevelColumn(0), 1, fraction(2)); // should be ignored
+		HierarchiesTracker z = q.advanceHierarchy(twoDigitsA.getLevelColumn(0), 1, fraction(2)); // should be ignored
 		z = z.advanceHierarchy(threeDigitsX.getLevelColumn(0), 6, fraction(2));
 		assertBigDecimalEquals(fraction(10), z.calculatePercentage(yes()));
 		assertBigDecimalEquals(fraction(10), z.calculatePercentage(null));

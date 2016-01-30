@@ -17,9 +17,9 @@ public class NiCell implements Comparable<NiCell> {
 	protected final boolean undefinedCell;
 	
 	/** null for splitter cells */
-	protected final PerItemHierarchiesTracker hiersTracker;
+	protected final HierarchiesTracker hiersTracker;
 	
-	public NiCell(Cell cell, NiReportedEntity<?> entity, PerItemHierarchiesTracker hiersTracker) {
+	public NiCell(Cell cell, NiReportedEntity<?> entity, HierarchiesTracker hiersTracker) {
 		NiUtils.failIf(cell == null, "not allowed to have NiCells without contents");
 		this.cell = cell;
 		this.undefinedCell = cell.entityId <= 0;
@@ -69,7 +69,7 @@ public class NiCell implements Comparable<NiCell> {
 		return cell.getDisplayedValue();
 	}
 	
-	public PerItemHierarchiesTracker getHiersTracker() {
+	public HierarchiesTracker getHiersTracker() {
 		return this.hiersTracker;
 	}
 	

@@ -8,7 +8,7 @@ import java.util.TreeSet;
 
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.PercentageTextCell;
-import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
+import org.dgfoundation.amp.nireports.runtime.MultiHierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 
 public class PercentageTokenBehaviour implements Behaviour<PercentageTextCell> {

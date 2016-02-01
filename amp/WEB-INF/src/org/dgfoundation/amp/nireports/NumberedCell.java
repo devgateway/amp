@@ -7,7 +7,13 @@ import java.math.BigDecimal;
  * @author Dolghier Constantin
  *
  */
-public interface NumberedCell {
+public interface NumberedCell extends Comparable {
 	public BigDecimal getAmount();
 	public NiPrecisionSetting getPrecision();
+	
+	@Override
+	public default int compareTo(Object oth) {
+		NumberedCell other = (NumberedCell) oth;
+		return getAmount().compareTo(other.getAmount());
+	}
 }

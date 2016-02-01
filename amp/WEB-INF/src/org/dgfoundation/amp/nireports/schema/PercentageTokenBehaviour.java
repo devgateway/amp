@@ -2,16 +2,16 @@ package org.dgfoundation.amp.nireports.schema;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.dgfoundation.amp.nireports.Cell;
+import static java.util.stream.Collectors.toSet;
 import org.dgfoundation.amp.nireports.PercentageTextCell;
-import org.dgfoundation.amp.nireports.runtime.MultiHierarchiesTracker;
+import org.dgfoundation.amp.nireports.output.NiSplitCell;
+import org.dgfoundation.amp.nireports.output.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 
-public class PercentageTokenBehaviour implements Behaviour<PercentageTextCell> {
+public class PercentageTokenBehaviour implements Behaviour<NiTextCell> {
 
 	public final static PercentageTokenBehaviour instance = new PercentageTokenBehaviour();
 	
@@ -23,7 +23,7 @@ public class PercentageTokenBehaviour implements Behaviour<PercentageTextCell> {
 	private PercentageTokenBehaviour(){}
 	
 	@Override
-	public PercentageTextCell doHorizontalReduce(List<NiCell> cells) {
+	public NiTextCell doHorizontalReduce(List<NiCell> cells) {
 		Set<String> v = new TreeSet<>();
 		BigDecimal percentage = BigDecimal.ZERO;
 		for(NiCell niCell:cells) {
@@ -34,11 +34,19 @@ public class PercentageTokenBehaviour implements Behaviour<PercentageTextCell> {
 		}
 		String text = v.toString();
 		text = text.substring(1, text.length() - 1);
-		return new PercentageTextCell(text, cells.get(0).getMainId(), -1, Optional.empty(), BigDecimal.ONE);
+		return new NiTextCell(text, cells.get(0).getMainId());
 	}
 
 	@Override
-	public PercentageTextCell getZeroCell() {
-		return new PercentageTextCell("", -1, -1, Optional.empty(), BigDecimal.ONE);
+	public NiTextCell getZeroCell() {
+		return new NiTextCell("", -1);
+	}
+
+	@Override
+	public NiSplitCell mergeSplitterCells(List<NiCell> splitterCells) {
+		return new NiSplitCell((NiReportColumn<?>) splitterCells.get(0).getEntity(), 
+				splitterCells.get(0).getDisplayedValue(), 
+				splitterCells.stream().map(z -> z.getCell().entityId).collect(toSet()), 
+				splitterCells.stream().anyMatch(z -> z.isUndefinedCell()));
 	}
 }

@@ -26,9 +26,9 @@ public class AmpNiFilters implements NiFilters {
 	public Set<Long> getActivityIds(NiReportsEngine engine) {
 		if (cachedActivityIds == null) {
 			Connection conn = AmpReportsScratchpad.get(engine).connection;
-			cachedActivityIds = Collections.unmodifiableSet(new HashSet<Long>(SQLUtils.fetchLongs(conn, "SELECT amp_activity_id FROM amp_activity")));
+			//cachedActivityIds = Collections.unmodifiableSet(new HashSet<Long>(SQLUtils.fetchLongs(conn, "SELECT amp_activity_id FROM amp_activity")));
 			ReportEnvironment environ = AmpReportsScratchpad.get(engine).environment;
-			//cachedActivityIds = Collections.unmodifiableSet(environ.workspaceFilter.getIds());
+			cachedActivityIds = Collections.unmodifiableSet(environ.workspaceFilter.getIds());
 			//cachedActivityIds = new HashSet<>(Arrays.asList(36l, 65l));
 		}
 		return cachedActivityIds;

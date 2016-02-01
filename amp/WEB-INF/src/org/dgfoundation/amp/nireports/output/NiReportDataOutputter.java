@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 
 import org.dgfoundation.amp.algo.AmpCollections;
-import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiHeaderInfo;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
@@ -29,7 +28,7 @@ public class NiReportDataOutputter implements ReportDataVisitor<NiReportData> {
 	/**
 	 * builds the trail cells for GroupReportData 
 	 */
-	Map<CellColumn, Cell> buildGroupTrailCells(List<NiReportData> visitedChildren) {
+	Map<CellColumn, NiOutCell> buildGroupTrailCells(List<NiReportData> visitedChildren) {
 		return headers.leafColumns.stream().collect(Collectors.toMap(cellColumn -> cellColumn, cellColumn -> 
 			cellColumn.getBehaviour().doVerticalReduce(visitedChildren.stream().map(child -> child.trailCells.get(cellColumn)).collect(Collectors.toList()))));
 	}
@@ -37,14 +36,14 @@ public class NiReportDataOutputter implements ReportDataVisitor<NiReportData> {
 	/**
 	 * builds the trail cells for ColumnReportData 
 	 */
-	Map<CellColumn, Cell> buildTrailCells(Map<CellColumn, Map<Long, Cell>> contents) {
+	Map<CellColumn, NiOutCell> buildTrailCells(Map<CellColumn, Map<Long, NiOutCell>> contents) {
 		return headers.leafColumns.stream().collect(Collectors.toMap(cellColumn -> cellColumn, cellColumn -> 
 			cellColumn.getBehaviour().doVerticalReduce(contents.get(cellColumn).values())));
 	}
 		
 	@Override
 	public NiReportData visitLeaf(ColumnReportData crd) {
-		Map<CellColumn, Map<Long, Cell>> contents = AmpCollections.remap(crd.getContents(), (cellColumn, columnContents) -> columnContents.flatten(cellColumn.getBehaviour()), null);
+		Map<CellColumn, Map<Long, NiOutCell>> contents = AmpCollections.remap(crd.getContents(), (cellColumn, columnContents) -> columnContents.flatten(cellColumn.getBehaviour()), null);
 		return new NiColumnReportData(contents, buildTrailCells(contents), crd.splitter);
 	}
 

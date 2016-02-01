@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.dgfoundation.amp.nireports.meta.CategCell;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
+import org.dgfoundation.amp.nireports.output.CellVisitor;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
@@ -52,11 +53,6 @@ public final class AmountCell extends Cell implements CategCell, NumberedCell {
 	@Override
 	public Map<NiDimensionUsage, Coordinate> getCoordinates() {
 		return Collections.emptyMap();
-	}
-
-	@Override
-	public <K> K accept(CellVisitor<K> visitor) {
-		return visitor.visit(this);
 	}
 
 	@Override

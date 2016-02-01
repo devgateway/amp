@@ -52,8 +52,6 @@ public abstract class Cell implements Comparable, CategCell {
 	
 	public abstract String getDisplayedValue();
 	
-	public abstract <K> K accept(CellVisitor<K> visitor);
-	
 	public Map<NiDimensionUsage, Coordinate> getCoordinates() {
 		return coordinates;
 	}

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.GroupReportData;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
@@ -18,7 +17,7 @@ import org.dgfoundation.amp.nireports.runtime.NiCell;
 public class NiGroupReportData extends NiReportData {
 	public final List<NiReportData> subreports;
 
-	public NiGroupReportData(List<NiReportData> subreports, Map<CellColumn, Cell> trailCells, NiCell splitter) {
+	public NiGroupReportData(List<NiReportData> subreports, Map<CellColumn, NiOutCell> trailCells, NiSplitCell splitter) {
 		super(trailCells, subreports.stream().flatMap(z -> z.getIds().stream()).collect(Collectors.toSet()), splitter);
 		this.subreports = Collections.unmodifiableList(subreports);
 	}

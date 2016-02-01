@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.output.NiSplitCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 
 
@@ -22,9 +23,9 @@ public abstract class ReportData {
 	/**
 	 * the value cell which generated this subreport during horizSplit
 	 */
-	public final NiCell splitter;
+	public final NiSplitCell splitter;
 
-	protected ReportData(NiReportsEngine context, NiCell splitter) {
+	protected ReportData(NiReportsEngine context, NiSplitCell splitter) {
 		this.context = context;
 		this.splitter = splitter;
 	}
@@ -46,6 +47,6 @@ public abstract class ReportData {
 		
 	@Override
 	public String toString() {
-		return String.format("%s: %s (id: %d)", this.getClass().getSimpleName(), this.splitter == null ? null : this.splitter.getDisplayedValue(), this.splitter == null ? -1 : this.splitter.cell.entityId);
+		return String.format("%s: %s (id: %s)", this.getClass().getSimpleName(), this.splitter == null ? null : this.splitter.getDisplayedValue(), this.splitter == null ? -1 : this.splitter.entityIds.toString());
 	}
 }

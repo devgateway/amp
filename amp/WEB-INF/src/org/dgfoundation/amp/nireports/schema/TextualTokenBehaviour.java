@@ -1,16 +1,17 @@
 package org.dgfoundation.amp.nireports.schema;
 
-import java.math.BigDecimal;
+import static java.util.stream.Collectors.toSet;
+
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.TextCell;
-import org.dgfoundation.amp.nireports.runtime.MultiHierarchiesTracker;
+import org.dgfoundation.amp.nireports.output.NiSplitCell;
+import org.dgfoundation.amp.nireports.output.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 
-public class TextualTokenBehaviour implements Behaviour<TextCell> {
+public class TextualTokenBehaviour implements Behaviour<NiTextCell> {
 	
 	public final static TextualTokenBehaviour instance = new TextualTokenBehaviour(); 
 	private TextualTokenBehaviour(){}
@@ -22,7 +23,7 @@ public class TextualTokenBehaviour implements Behaviour<TextCell> {
 	}
 	
 	@Override
-	public TextCell doHorizontalReduce(List<NiCell> cells) {
+	public NiTextCell doHorizontalReduce(List<NiCell> cells) {
 		Set<String> v = new TreeSet<>();
 		for(NiCell niCell:cells) {
 			TextCell cell = (TextCell) niCell.getCell();
@@ -31,11 +32,20 @@ public class TextualTokenBehaviour implements Behaviour<TextCell> {
 		}
 		String text = v.toString();
 		text = text.substring(1, text.length() - 1);
-		return new TextCell(text, cells.get(0).getMainId());
+		return new NiTextCell(text, cells.get(0).getMainId());
 	}
 
 	@Override
-	public TextCell getZeroCell() {
-		return new TextCell("", -1);
+	public NiTextCell getZeroCell() {
+		return new NiTextCell("", -1);
+	}
+
+
+	@Override
+	public NiSplitCell mergeSplitterCells(List<NiCell> splitterCells) {
+		return new NiSplitCell((NiReportColumn<?>) splitterCells.get(0).getEntity(), 
+			splitterCells.get(0).getDisplayedValue(), 
+			splitterCells.stream().map(z -> z.getCell().entityId).collect(toSet()), 
+			splitterCells.stream().anyMatch(z -> z.isUndefinedCell()));
 	}
 }

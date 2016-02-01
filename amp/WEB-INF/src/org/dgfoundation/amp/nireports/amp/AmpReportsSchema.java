@@ -434,9 +434,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	
 	private AmpReportsSchema addTrivialMeasures() {
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.ACTUAL_COMMITMENTS, Constants.COMMITMENT, "Actual", false));
-		addMeasure(new AmpTrivialMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, Constants.DISBURSEMENT, "Actual", false));
-		
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.PLANNED_COMMITMENTS, Constants.COMMITMENT, "Planned", false));
+
+		addMeasure(new AmpTrivialMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, Constants.DISBURSEMENT, "Actual", false));
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.PLANNED_DISBURSEMENTS, Constants.DISBURSEMENT, "Planned", false));
 
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.ACTUAL_EXPENDITURES, Constants.EXPENDITURE, "Actual", false));
@@ -451,13 +451,13 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.ACTUAL_RELEASE_OF_FUNDS, Constants.DISBURSEMENT, "Actual", false));
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.PLANNED_RELEASE_OF_FUNDS, Constants.DISBURSEMENT, "Planned", false));
 
-		addMeasure(new AmpTrivialMeasure(MeasureConstants.OFFICIAL_DEVELOPMENT_AID_COMMITMENTS, Constants.COMMITMENT, "Actual", false));
+		//addMeasure(new AmpTrivialMeasure(MeasureConstants.OFFICIAL_DEVELOPMENT_AID_COMMITMENTS, Constants.COMMITMENT, "Actual", false));
 
-		addMeasure(new AmpTrivialMeasure(MeasureConstants.BILATERAL_SSC_COMMITMENTS, Constants.COMMITMENT, "Actual", false));
-		addMeasure(new AmpTrivialMeasure(MeasureConstants.TRIANGULAR_SSC_COMMITMENTS, Constants.COMMITMENT, "Actual", false));
+		//addMeasure(new AmpTrivialMeasure(MeasureConstants.BILATERAL_SSC_COMMITMENTS, Constants.COMMITMENT, "Actual", false));
+		//addMeasure(new AmpTrivialMeasure(MeasureConstants.TRIANGULAR_SSC_COMMITMENTS, Constants.COMMITMENT, "Actual", false));
 
-		addMeasure(new AmpTrivialMeasure(MeasureConstants.ANNUAL_PROPOSED_PROJECT_COST, Constants.COMMITMENT, "Actual", false));
-		addMeasure(new AmpTrivialMeasure(MeasureConstants.PROJECTION_MTEF_PROJECTIONS, Constants.COMMITMENT, "Actual", false));
+		//addMeasure(new AmpTrivialMeasure(MeasureConstants.ANNUAL_PROPOSED_PROJECT_COST, Constants.COMMITMENT, "Actual", false));
+		//addMeasure(new AmpTrivialMeasure(MeasureConstants.PROJECTION_MTEF_PROJECTIONS, Constants.COMMITMENT, "Actual", false));
 		
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.PIPELINE_MTEF_PROJECTIONS, Constants.PIPELINE, "Pipeline", false));
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.PIPELINE_ESTIMATED_DISBURSEMENTS, Constants.PIPELINE, "Pipeline", false));

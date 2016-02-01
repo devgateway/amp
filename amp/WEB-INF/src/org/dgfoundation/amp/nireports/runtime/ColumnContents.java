@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.nireports.Cell;
+import org.dgfoundation.amp.nireports.output.NiOutCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 
 
@@ -48,11 +49,11 @@ public class ColumnContents {
 		return res;
 	}
 	
-	public Map<Long, Cell> flatten(Behaviour<?> behaviour) {
-		Map<Long, Cell> res = new HashMap<>();
+	public Map<Long, NiOutCell> flatten(Behaviour<?> behaviour) {
+		Map<Long, NiOutCell> res = new HashMap<>();
 		for(long id:data.keySet()) {
 			List<NiCell> cells = data.get(id);
-			Cell z = behaviour.doHorizontalReduce(cells);
+			NiOutCell z = behaviour.doHorizontalReduce(cells);
 			res.put(id, z);
 		}
 		return res;

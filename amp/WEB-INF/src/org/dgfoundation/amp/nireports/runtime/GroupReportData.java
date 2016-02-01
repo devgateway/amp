@@ -14,6 +14,7 @@ import static java.util.stream.Collectors.toList;
 
 import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.output.NiSplitCell;
 
 /**
  * a report containing subreports
@@ -23,7 +24,7 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 public class GroupReportData extends ReportData {
 	protected final List<ReportData> subreports;
 	
-	public GroupReportData(NiReportsEngine context, NiCell splitter, List<? extends ReportData> subreports) {
+	public GroupReportData(NiReportsEngine context, NiSplitCell splitter, List<? extends ReportData> subreports) {
 		super(context, splitter);
 		this.subreports = Collections.unmodifiableList(new ArrayList<ReportData>(subreports));
 	}

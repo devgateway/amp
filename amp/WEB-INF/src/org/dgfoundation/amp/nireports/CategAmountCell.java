@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.meta.CategCell;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
+import org.dgfoundation.amp.nireports.output.CellVisitor;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
@@ -63,10 +64,5 @@ public final class CategAmountCell extends Cell implements CategCell, DatedCell,
 	@Override
 	public NiPrecisionSetting getPrecision() {
 		return amount.precisionSetting;
-	}
-
-	@Override
-	public <K> K accept(CellVisitor<K> visitor) {
-		return visitor.visit(this);
 	}
 }

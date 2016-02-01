@@ -4,9 +4,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
-import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.runtime.ReportData;
 
 /**
@@ -15,11 +13,11 @@ import org.dgfoundation.amp.nireports.runtime.ReportData;
  *
  */
 public abstract class NiReportData {
-	public final Map<CellColumn, Cell> trailCells;
-	public final NiCell splitter;
+	public final Map<CellColumn, NiOutCell> trailCells;
+	public final NiSplitCell splitter;
 	public final Set<Long> ids;
 	
-	protected NiReportData(Map<CellColumn, Cell> trailCells, Set<Long> ids, NiCell splitter) {
+	protected NiReportData(Map<CellColumn, NiOutCell> trailCells, Set<Long> ids, NiSplitCell splitter) {
 		this.trailCells = Collections.unmodifiableMap(trailCells);
 		this.splitter = splitter;
 		this.ids = Collections.unmodifiableSet(ids);

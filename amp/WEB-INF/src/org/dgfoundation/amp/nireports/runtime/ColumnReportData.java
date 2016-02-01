@@ -8,12 +8,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
+import org.dgfoundation.amp.nireports.output.NiSplitCell;
 import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
+import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 /**
@@ -24,7 +27,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 public class ColumnReportData extends ReportData {
 	final Map<CellColumn, ColumnContents> contents;
 	
-	public ColumnReportData(NiReportsEngine context, NiCell splitter, Map<CellColumn, ColumnContents> contents) {
+	public ColumnReportData(NiReportsEngine context, NiSplitCell splitter, Map<CellColumn, ColumnContents> contents) {
 		super(context, splitter);
 		this.contents = Collections.unmodifiableMap(contents);
 	}
@@ -61,27 +64,29 @@ public class ColumnReportData extends ReportData {
 		ColumnContents dataColumn = contents.get(z);
 		NiUtils.failIf(dataColumn == null, String.format("could not find leaf %s in %s", z, this));
 		Map<Long, Set<Long>> actIds = new HashMap<>(); // Map<entityId, Set<mainIds-which-have-this-value>>
-		Map<Long, NiCell> splitters = new HashMap<>(); // Map<entityId, entity_value>
+		Map<Long, List<NiCell>> splitterArrays = new HashMap<>(); // Map<entityId, entity_value>
 		Map<Long, Map<Long, NiCell>> percentages = new HashMap<>(); // Map<entityId, Map<activityId, Percentage>>
 		for(NiCell splitCell:dataColumn.getLinearData()) {
 			Cell cell = splitCell.getCell();
 			long entityId = cell.entityId;
-			splitters.putIfAbsent(entityId, splitCell);
+			splitterArrays.computeIfAbsent(entityId, zz-> new ArrayList<>()).add(splitCell);
 			actIds.computeIfAbsent(entityId, zz -> new HashSet<>()).add(cell.activityId);
 			percentages.computeIfAbsent(entityId, zz -> new HashMap<>()).put(cell.activityId, splitCell);
-			/*Map<Long, BigDecimal> catPercs = percentages.computeIfAbsent(entityId, zz -> new HashMap<>());
-			add(catPercs, cell.activityId, cell.getPercentage());*/
 		}
 
+		Map<Long, NiSplitCell> splitters = splitterArrays.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry-> z.behaviour.mergeSplitterCells(entry.getValue())));
 		List<Long> orderedCatIds = new ArrayList<>(splitters.keySet());
 		orderedCatIds.sort((catIdA, catIdB) -> splitters.get(catIdA).compareTo(splitters.get(catIdB)));
 
-//		GroupReportData res = new GroupReportData(context, splitter, hierarchies, children);
 		IdsAcceptorsBuilder bld = context;
 		List<ColumnReportData> newChildren = new ArrayList<>();
 		for(long catId:orderedCatIds) {
-			NiCell splitCell = splitters.get(catId);
-			Map<NiDimensionUsage, IdsAcceptor> acceptors = AmpCollections.remap(splitCell.cell.getCoordinates(), bld::buildAcceptor, null);
+			//NiCell splitCell = splitters.get(catId).get(0); // choose any, because they all have the same coordinates
+			NiSplitCell splitCell = splitters.get(catId);
+			Map<NiDimensionUsage, IdsAcceptor> acceptors = new HashMap<>(); //AmpCollections.remap(splitCell.cell.getCoordinates(), bld::buildAcceptor, null);
+			IdsAcceptor acceptor = bld.buildAcceptor(splitCell.getLevelColumn().dimensionUsage, splitCell.getLevelColumn().getCoordinate(catId));
+			acceptors.put(splitCell.getLevelColumn().dimensionUsage, acceptor);
+			
 			Map<CellColumn, ColumnContents> subContents = new HashMap<>();
 			for(CellColumn cc:contents.keySet()) {
 				ColumnContents oldContents = contents.get(cc);

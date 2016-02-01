@@ -121,7 +121,7 @@ public class NiReportHtmlRenderer {
 		for(int i = level; i < sz; i++) {
 			CellColumn leafHeader = headers.leafColumns.get(i);
 			//BigDecimal percentage = crd.hierarchies.calculatePercentage(leafHeader.getBehaviour().getHierarchiesListener());
-			Cell cell = elem.trailCells.get(leafHeader);
+			NiOutCell cell = elem.trailCells.get(leafHeader);
 			String contents = i < headers.nrHierarchies || cell == null ? "" : ensureMaxLen(cell.getDisplayedValue(), 50);
 			bld.append("<td class='nireport_data_cell ni_hierarchyLevel");
 			bld.append(level + 1);
@@ -151,9 +151,9 @@ public class NiReportHtmlRenderer {
 	 * @return
 	 */
 	protected String subreportTitle(NiReportData subReport) {
-		NiCell cell = subReport.splitter;
+		NiSplitCell cell = subReport.splitter;
 		if (cell == null) return "";
-		if (cell.isUndefinedCell()) return String.format("Undefined %s: %d", cell.getEntity().name, cell.getCell().entityId);
+		if (cell.undefined) return String.format("Undefined %s: %s", cell.entity.name, cell.entityIds.toString());
 		return cell.getDisplayedValue();
 	}
 	
@@ -169,7 +169,7 @@ public class NiReportHtmlRenderer {
 			for(int i = level; i < sz; i++) {
 				CellColumn leafHeader = headers.leafColumns.get(i);
 				//BigDecimal percentage = crd.hierarchies.calculatePercentage(leafHeader.getBehaviour().getHierarchiesListener());
-				Cell cell = crd.contents.get(leafHeader).get(id);
+				NiOutCell cell = crd.contents.get(leafHeader).get(id);
 				String contents = cell == null ? "" : ensureMaxLen(cell.getDisplayedValue(), 50);
 				bld.append("<td class='nireport_data_cell'>");
 				bld.append(contents);

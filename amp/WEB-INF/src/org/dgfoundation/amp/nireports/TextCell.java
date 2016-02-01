@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
+import org.dgfoundation.amp.nireports.output.CellVisitor;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
 /**
@@ -44,10 +45,5 @@ public final class TextCell extends Cell {
 	@Override
 	public String getDisplayedValue() {
 		return text;
-	}
-
-	@Override
-	public <K> K accept(CellVisitor<K> visitor) {
-		return visitor.visit(this);
 	}
 }

@@ -12,6 +12,7 @@ import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.ReportHeadingCell;
+import org.dgfoundation.amp.nireports.output.NiOutCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 
 /**
@@ -49,8 +50,8 @@ public class CellColumn extends Column {
 		return contents;
 	}
 
-	public Behaviour<Cell> getBehaviour() {
-		return (Behaviour<Cell>) behaviour; // code ugly as sin because CellColumn has not been parametrized
+	public Behaviour<NiOutCell> getBehaviour() {
+		return (Behaviour<NiOutCell>) behaviour; // code ugly as sin because CellColumn has not been parametrized
 	}
 	
 	@Override

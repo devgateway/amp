@@ -10,12 +10,11 @@ import java.util.Map;
 
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.nireports.AmountCell;
-import org.dgfoundation.amp.nireports.CategAmountCell;
-import org.dgfoundation.amp.nireports.CellVisitor;
 import org.dgfoundation.amp.nireports.NumberedCell;
-import org.dgfoundation.amp.nireports.PercentageTextCell;
-import org.dgfoundation.amp.nireports.TextCell;
+import org.dgfoundation.amp.nireports.output.CellVisitor;
+import org.dgfoundation.amp.nireports.output.NiAmountCell;
+import org.dgfoundation.amp.nireports.output.NiSplitCell;
+import org.dgfoundation.amp.nireports.output.NiTextCell;
 import org.digijava.module.aim.helper.FormatHelper;
 
 /**
@@ -36,22 +35,12 @@ public class AmpCellVisitor implements CellVisitor<ReportCell> {
 	}
 
 	@Override
-	public ReportCell visit(TextCell cell) {
-		return new org.dgfoundation.amp.newreports.TextCell(cell.getDisplayedValue());
+	public ReportCell visit(NiTextCell cell) {
+		return asTextCell(cell.getDisplayedValue());
 	}
 	
 	@Override
-	public ReportCell visit(PercentageTextCell cell) {
-		return new org.dgfoundation.amp.newreports.TextCell(cell.getDisplayedValue());
-	}
-
-	@Override
-	public ReportCell visit(AmountCell cell) {
-		return visitNumberedCell(cell);
-	}
-
-	@Override
-	public ReportCell visit(CategAmountCell cell) {
+	public ReportCell visit(NiAmountCell cell) {
 		return visitNumberedCell(cell);
 	}
 	
@@ -64,6 +53,15 @@ public class AmpCellVisitor implements CellVisitor<ReportCell> {
 	public ReportCell visitNumberedCell(NumberedCell cell) {
 		BigDecimal amt = cell.getAmount();
 		return new org.dgfoundation.amp.newreports.AmountCell(amt, formattedValues.computeIfAbsent(amt, this::formatNumber));
+	}
+
+	@Override
+	public ReportCell visit(NiSplitCell cell) {
+		return asTextCell(cell.text);
+	}
+	
+	public org.dgfoundation.amp.newreports.TextCell asTextCell(String text) {
+		return new org.dgfoundation.amp.newreports.TextCell(text);
 	}
 	
 }

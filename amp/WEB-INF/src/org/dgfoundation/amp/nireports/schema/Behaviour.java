@@ -12,6 +12,8 @@ import java.util.function.Predicate;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.DatedCell;
 import org.dgfoundation.amp.nireports.NiUtils;
+import org.dgfoundation.amp.nireports.output.NiOutCell;
+import org.dgfoundation.amp.nireports.output.NiSplitCell;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.MultiHierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
@@ -22,7 +24,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
  * @author Dolghier Constantin
  *
  */
-public interface Behaviour<V extends Cell> {
+public interface Behaviour<V extends NiOutCell> {
 	
 	/**
 	 * @return the maximum supported resolution. For any result which is not NONE, the column should contain cells which implement {@link DatedCell}
@@ -67,7 +69,7 @@ public interface Behaviour<V extends Cell> {
 		return new ColumnContents(z);
 	}
 	
-	public default Cell horizontalReduce(List<NiCell> cells) {
+	public default NiOutCell horizontalReduce(List<NiCell> cells) {
 		if (cells == null || cells.isEmpty())
 			return getZeroCell();
 		return doHorizontalReduce(cells);
@@ -78,6 +80,7 @@ public interface Behaviour<V extends Cell> {
 	 * @return
 	 */
 	public V getZeroCell();
+	public NiSplitCell mergeSplitterCells(List<NiCell> splitterCells);
 	
 	public default String getDebugDigest() {
 		return String.format("%s", getTimeRange());

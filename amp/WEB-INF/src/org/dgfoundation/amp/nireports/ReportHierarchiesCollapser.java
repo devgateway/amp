@@ -43,7 +43,7 @@ public class ReportHierarchiesCollapser implements ReportDataVisitor<ReportData>
 		LinkedHashMap<String, List<ReportData>> childrenByName = new LinkedHashMap<>();
 		final String dummyUnknownName = "####dummy####unknown"; // the key by which unknown will go under childrenByName 
 		for(ReportData subReport:grd.getSubReports()) {
-			String key = subReport.splitter.isUndefinedCell() ? dummyUnknownName : subReport.splitter.getDisplayedValue();
+			String key = subReport.splitter.undefined ? dummyUnknownName : subReport.splitter.getDisplayedValue();
 			childrenByName.computeIfAbsent(key, ignored -> new ArrayList<>()).add(subReport);
 		}
 		List<ReportData> newChildren = new ArrayList<>();

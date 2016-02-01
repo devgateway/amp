@@ -8,6 +8,8 @@ import org.dgfoundation.amp.nireports.AmountCell;
 import org.dgfoundation.amp.nireports.MonetaryAmount;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NumberedCell;
+import org.dgfoundation.amp.nireports.output.NiAmountCell;
+import org.dgfoundation.amp.nireports.output.NiSplitCell;
 import org.dgfoundation.amp.nireports.runtime.MultiHierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 
@@ -16,7 +18,7 @@ import org.dgfoundation.amp.nireports.runtime.NiCell;
  * @author Dolghier Constantin
  *
  */
-public class TrivialMeasureBehaviour implements Behaviour<AmountCell> {
+public class TrivialMeasureBehaviour implements Behaviour<NiAmountCell> {
 	public static TrivialMeasureBehaviour getInstance() {return instance;}
 	private final static TrivialMeasureBehaviour instance = new TrivialMeasureBehaviour();
 	private TrivialMeasureBehaviour() {}
@@ -27,7 +29,7 @@ public class TrivialMeasureBehaviour implements Behaviour<AmountCell> {
 	}
 	
 	@Override
-	public AmountCell doHorizontalReduce(List<NiCell> cells) {
+	public NiAmountCell doHorizontalReduce(List<NiCell> cells) {
 		NiPrecisionSetting precision = ((NumberedCell) cells.get(0).getCell()).getPrecision();
 		BigDecimal res = precision.adjustPrecision(BigDecimal.ZERO);
 		for(NiCell cell:cells) {
@@ -35,24 +37,32 @@ public class TrivialMeasureBehaviour implements Behaviour<AmountCell> {
 			BigDecimal toAdd = ((NumberedCell) cell.getCell()).getAmount().multiply(percentage);
 			res = res.add(toAdd);
 		}
-		return new AmountCell(cells.get(0).getMainId(), new MonetaryAmount(res, precision));
+		return new NiAmountCell(res, precision);
 	}
 
 	@Override
-	public AmountCell getZeroCell() {
-		return new AmountCell(-1, new MonetaryAmount(BigDecimal.ZERO, NiPrecisionSetting.IDENTITY_PRECISION_SETTING));
+	public NiAmountCell getZeroCell() {
+		return new NiAmountCell(BigDecimal.ZERO, NiPrecisionSetting.IDENTITY_PRECISION_SETTING);
 	}
 	
 	@Override
-	public AmountCell doVerticalReduce(Collection<AmountCell> cells) {
+	public NiAmountCell doVerticalReduce(Collection<NiAmountCell> cells) {
 		if (cells.isEmpty()) {
 			return getZeroCell();
 		}
 		
-		java.util.Iterator<AmountCell> it = cells.iterator();
-		MonetaryAmount res = it.next().amount;
+		java.util.Iterator<NiAmountCell> it = cells.iterator();
+		NiAmountCell first = it.next();
+		NiPrecisionSetting precisionSetting = first.getPrecision();
+		BigDecimal res = first.getAmount();
+		
 		while(it.hasNext())
 			res = res.add(it.next().amount);
-		return new AmountCell(-1, res);
+		return new NiAmountCell(res, precisionSetting);
+	}
+
+	@Override
+	public NiSplitCell mergeSplitterCells(List<NiCell> splitterCells) {
+		throw new RuntimeException("doing hierarchies by numeric values not supported");
 	}
 }

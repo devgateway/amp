@@ -23,6 +23,7 @@ import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.amp.converters.AmpCellVisitor;
 import org.dgfoundation.amp.nireports.output.NiColumnReportData;
 import org.dgfoundation.amp.nireports.output.NiGroupReportData;
+import org.dgfoundation.amp.nireports.output.NiOutCell;
 import org.dgfoundation.amp.nireports.output.NiReportData;
 import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
 import org.dgfoundation.amp.nireports.output.NiReportRunResult;
@@ -116,9 +117,9 @@ public class AmpNiReportsFormatter {
 		return children;
 	}	
 	
-	protected ReportCell convert(Cell cell) {
+	protected ReportCell convert(NiOutCell cell) {
 		if (cell == null) 
-			return new org.dgfoundation.amp.newreports.TextCell("");
+			return new org.dgfoundation.amp.newreports.TextCell(""); //TODO: should return null for the sake of sparse output
 		return cell.accept(cellVisitor);
 	}
 	

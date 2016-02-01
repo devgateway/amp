@@ -45,3 +45,5 @@ configurable behaviour with entries-missing hierarchies
 refactor workspacefilter
 respect thousands/millions settings
 delete items without funding from hierarchies
+format numbers, during the output stage, as BigDecimal (AmpNiReportsFormatter)
+summary reports in output stages

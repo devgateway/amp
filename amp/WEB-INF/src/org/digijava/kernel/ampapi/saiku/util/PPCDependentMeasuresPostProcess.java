@@ -11,11 +11,11 @@ import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.reports.CustomMeasures;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
+import org.olap4j.metadata.Measure;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.olap.dto.resultset.DataCell;
@@ -91,7 +91,7 @@ public class PPCDependentMeasuresPostProcess {
 			for (Integer measurePos : ppcDepependentMeasuresPos) {
 				int count = increaseOccurance ? 0 : -1;
 				for (int col = measurePos + cellDataSet.getLeftOffset(); col < cells[row].length; 
-						col += spec.getMeasures().size()) {
+						col += cellDataSet.getSelectedMeasures().length) {
 					if (((DataCell) cells[row][col]).getRawNumber() != null) {
 						count++;
 					}
@@ -113,9 +113,9 @@ public class PPCDependentMeasuresPostProcess {
 	protected SortedSet<Integer> getPPCDependentMeasuresPositions() {
 		SortedSet<Integer> positions = new TreeSet<Integer>();
 		int pos = -1;
-		for (ReportMeasure rm : spec.getMeasures()) {
+		for (Measure rm : cellDataSet.getSelectedMeasures()) {
 			pos ++;
-			if (CustomMeasures.PPC_DEPENDENCY.contains(rm.getMeasureName())) {
+			if (CustomMeasures.PPC_DEPENDENCY.contains(rm.getName())) {
 				positions.add(pos);
 			}
 		}

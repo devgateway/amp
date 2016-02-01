@@ -658,7 +658,7 @@ $(document).ready(function() {
 					                                							</ul>
 					                              								</td>
 					                              							<%if (tm != null) {%>
-					                              								<td width="200" class="inside" style="padding-right: 10px; padding-left: 10px; font-size: 11px; width: 150px;" align="center" bgcolor="<%=color%>">  
+					                              								<td width="200" class="inside" style="padding-right: 5px; padding-left: 5px; font-size: 11px; width: 150px;" align="center" bgcolor="<%=color%>">  
 						                                							<div style='position:relative;display:none;' id='report-<bean:write name="report" property="ampReportId"/>'>
 						                                							<ul> 
 						                                  								<logic:iterate name="report" property="columns" id="column" indexId="index"  >
@@ -723,6 +723,9 @@ $(document).ready(function() {
 						                                								<c:set target="${urlParams}" property="rid">
 						                                  									<bean:write name="report" property="ampReportId" />
 						                                								</c:set>
+						                                								<a href="/TEMPLATE/ampTemplate/saikuui/index_reports.html#report/open/${report.ampReportId}?nireport=true" 
+						                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
+						                                								<img src= "/TEMPLATE/ampTemplate/saikuui/images/nireport_saiku.png" border="0" /></a>
 																						<%
 																							if (!report.isTab() && !onlySaikuButton) {
 																						%>

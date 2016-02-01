@@ -80,7 +80,8 @@ Backbone.sync = function(method, model, options) {
     var url = null;
     if ((_.isFunction(model.url) ? model.url() : model.url).indexOf(".json") === -1) {
     	url = Settings.REST_URL
-        	+ (_.isFunction(model.url) ? model.url() : model.url);
+        	+ (_.isFunction(model.url) ? model.url() : model.url) 
+        	+ "?nireport=" + Settings.NIREPORT; // AMP-22070 temporary parameter, will be removed when Mondrian will not be used
     } else {
     	url = model.url();
     }
@@ -139,6 +140,11 @@ Backbone.sync = function(method, model, options) {
     if (typeof options.data != "undefined") {
       data = options.data;
     }
+    
+    if (data) {
+    	data.nireport=Settings.NIREPORT;
+	}
+    
     // Default JSON-request options.
     params = {
       url:          url,

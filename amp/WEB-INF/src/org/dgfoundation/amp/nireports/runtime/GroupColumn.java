@@ -18,7 +18,7 @@ import org.dgfoundation.amp.nireports.ReportHeadingCell;
  */
 public class GroupColumn extends Column {
 	protected List<Column> subColumns;
-	protected boolean mutable;
+	protected boolean mutable;	
 	
 	/**
 	 * constructs a mutable or immutable instance of the class, depending on whether a list of subcolumns has been supplied

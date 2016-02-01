@@ -25,12 +25,10 @@ public class PercentageTokenBehaviour implements Behaviour<NiTextCell> {
 	@Override
 	public NiTextCell doHorizontalReduce(List<NiCell> cells) {
 		Set<String> v = new TreeSet<>();
-		BigDecimal percentage = BigDecimal.ZERO;
 		for(NiCell niCell:cells) {
 			PercentageTextCell cell = (PercentageTextCell) niCell.getCell();
 			if (!niCell.isUndefinedCell())
 				v.add(cell.text);
-			percentage = percentage.add(cell.percentage);
 		}
 		String text = v.toString();
 		text = text.substring(1, text.length() - 1);

@@ -86,10 +86,7 @@ module.exports = BackboneDash.View.extend({
   prepareCanvas: function(canvas, h, w) {
     var ctx = canvas.getContext('2d'),
     	moneyContext = (this.model.get('sumarizedTotal') !== undefined ? ': ' + util.translateLanguage(this.model.get('sumarizedTotal')) + ' ': ' ') + this.model.get('currency'),
-        adjType = this.model.get('adjtype');
-    console.log("------------ download -----------");
-    console.log(util.translateLanguage(this.model.get('sumarizedTotal')));
-    console.log(this.model.get('sumarizedTotal'));
+        adjType = this.model.get('adjtype');    
     if (adjType) {
     	var key = this.adjTypeTranslation [adjType];
         var trnAdjType = this.app.translator.translateSync(key, adjType);

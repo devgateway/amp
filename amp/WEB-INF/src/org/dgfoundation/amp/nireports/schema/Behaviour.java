@@ -55,10 +55,10 @@ public interface Behaviour<V extends Cell> {
 		Map<Long, List<NiCell>> z = new HashMap<>();
 		for(Long mainId:acceptableMainIds) {
 			List<NiCell> oldCells = oldContents.data.get(mainId);
+			NiCell splitCell = splitCells.get(mainId);
 			if (oldCells == null)
 				continue;
 			for(NiCell oldCell:oldCells) {
-				NiCell splitCell = splitCells.get(oldCell.getMainId());
 				Cell filteredCell = filterCell(acceptors, oldCell, splitCell);
 				if (filteredCell != null)
 					z.computeIfAbsent(mainId, id -> new ArrayList<>()).add(oldCell.advanceHierarchy(filteredCell, splitCell.getCell()));

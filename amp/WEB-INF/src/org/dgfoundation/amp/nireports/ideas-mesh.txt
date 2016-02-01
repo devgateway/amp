@@ -40,3 +40,8 @@ test ReportCollapsingStrategy != UNKNOWNS
 testcases ReportDataCollapser!!
 change all references to Behaviour with ones to Behaviour<?>
 caching layer on top of workspace filter
+lucene indexer
+configurable behaviour with entries-missing hierarchies
+refactor workspacefilter
+respect thousands/millions settings
+delete items without funding from hierarchies

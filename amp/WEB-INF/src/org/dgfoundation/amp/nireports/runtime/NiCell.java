@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.nireports.runtime;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiUtils;
@@ -48,7 +49,7 @@ public class NiCell implements Comparable<NiCell> {
 	}
 
 	public BigDecimal calculatePercentage() {
-		return hiersTracker.calculatePercentage(getEntity().getBehaviour().getHierarchiesListener());
+		return hiersTracker.calculatePercentage(getEntity().getBehaviour().getHierarchiesListener()).setScale(6, RoundingMode.HALF_EVEN); //TODO: maybe use the per-report precision setting
 	}
 	
 	@Override

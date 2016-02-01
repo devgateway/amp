@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.nireports.schema;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -60,6 +61,10 @@ public abstract class NiDimension {
 	 */
 	public NiDimensionUsage getDimensionUsage(String instanceName) {
 		return _dimensionUsages.computeIfAbsent(instanceName, z -> new NiDimensionUsage(this, z));
+	}
+	
+	public List<NiDimensionUsage> getDUs() {
+		return new ArrayList<>(_dimensionUsages.values());
 	}
 	
 	/**

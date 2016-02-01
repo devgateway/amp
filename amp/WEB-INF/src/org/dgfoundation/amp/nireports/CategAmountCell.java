@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.nireports;
 
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Optional;
 
@@ -55,8 +56,13 @@ public final class CategAmountCell extends Cell implements CategCell, DatedCell,
 	}
 
 	@Override
-	public MonetaryAmount getAmount() {
-		return amount;
+	public BigDecimal getAmount() {
+		return amount.amount;
+	}
+	
+	@Override
+	public NiPrecisionSetting getPrecision() {
+		return amount.precisionSetting;
 	}
 
 	@Override

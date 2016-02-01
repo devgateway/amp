@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.nireports;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Map;
 
@@ -23,8 +24,8 @@ public final class AmountCell extends Cell implements CategCell, NumberedCell {
 	}
 	
 	@Override
-	public MonetaryAmount getAmount() {
-		return amount;
+	public BigDecimal getAmount() {
+		return amount.amount;
 	}
 
 	@Override
@@ -56,5 +57,10 @@ public final class AmountCell extends Cell implements CategCell, NumberedCell {
 	@Override
 	public <K> K accept(CellVisitor<K> visitor) {
 		return visitor.visit(this);
+	}
+
+	@Override
+	public NiPrecisionSetting getPrecision() {
+		return amount.precisionSetting;
 	}
 }

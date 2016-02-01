@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.NumberedTypedEntity;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
@@ -21,12 +20,13 @@ import org.dgfoundation.amp.nireports.schema.PercentageTokenBehaviour;
 import org.digijava.kernel.persistence.PersistenceManager;
 
 /**
- * a text column which fetches its input from a view which contains 4 or more columns: <br />
- * 	1. amp_activity_id (or pledge_id)
- *  2. payload (text)
- *  3. entity_id (e.g. sector_id, donor_id etc)
- *  4. percentage  TODO: do we allow NULLs here?
- *  
+ * 
+ * a text column which fetches its input from a normalized view (sum of percentages over an entity id = 100, no nulls, else the output will be denormalized) which contains 4 or more columns: <br /><ol>
+ * 	<li>amp_activity_id (or pledge_id)</li>
+ *  <li>payload (text)</li>
+ *  <li>entity_id (e.g. sector_id, donor_id etc)</li>
+ *  <li>percentage</li>
+ *  </ol>  
  *  All the extra columns are ignored
  * @author Dolghier Constantin
  *
@@ -44,8 +44,8 @@ public class PercentageTextColumn extends AmpSqlSourcedColumn<PercentageTextCell
 		if (text == null)
 			return null;
 		BigDecimal percentage = rs.getBigDecimal(4);
-		if (percentage == null || percentage.compareTo(BigDecimal.ZERO) < 0 || percentage.compareTo(ONE_HUNDRED) > 0)
-			return null; // TODO: how do we want to treat nulls?
+		if (percentage == null || percentage.compareTo(BigDecimal.ZERO) <= 0 || percentage.compareTo(ONE_HUNDRED) > 0)
+			return null;
 		return new PercentageTextCell(text, rs.getLong(1), rs.getLong(3), this.levelColumn, percentage.divide(ONE_HUNDRED));
 	}
 		
@@ -85,6 +85,4 @@ public class PercentageTextColumn extends AmpSqlSourcedColumn<PercentageTextCell
 	
 	private static final int AMP_ACTIVITY_ID = 0;
 	private static final int PERCENTAGE = 1;
-	private static final int PERCENTAGE_ROWS = 2;
-	private static final int NULL_INCLUDED_PERCENTAGE_ROWS = 3;
 }

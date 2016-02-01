@@ -21,7 +21,7 @@
 			<lang delimiter=";" type="postgres">
 				DROP VIEW IF EXISTS v_tertiaryprogram_level_8;
 			    CREATE OR REPLACE VIEW v_tertiaryprogram_level_8 AS
-					SELECT a.amp_activity_id, COALESCE(level.name, '#') AS name, apl.id8 AS amp_program_id, SUM(a.program_percentage) as percentage
+					SELECT a.amp_activity_id, COALESCE(level.name, '#') AS name, apl.id8 AS amp_program_id, SUM(a.program_percentage) as percentage, COUNT(*) - COUNT(a.program_percentage) AS cnt_nulls
 						FROM amp_activity_program a	
 							JOIN ni_all_programs_with_levels apl ON a.amp_program_id = apl.amp_theme_id
 							LEFT JOIN amp_theme level ON level.amp_theme_id = apl.id8

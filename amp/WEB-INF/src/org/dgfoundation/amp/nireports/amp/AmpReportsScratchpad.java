@@ -1,12 +1,12 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.sql.Connection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.dgfoundation.amp.algo.AlgoUtils;
+import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
@@ -15,6 +15,7 @@ import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.SchemaSpecificScratchpad;
+import org.dgfoundation.amp.nireports.amp.PercentagesCorrector.Snapshot;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -31,11 +32,13 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	/**
 	 * caching area for i18n fetchers
 	 */
-	public final Map<PropertyDescription, ColumnValuesCacher> columnCachers = new HashMap<>();
+	public final Map<PropertyDescription, ColumnValuesCacher> columnCachers = new ConcurrentHashMap<>();
+	public final Map<PercentagesCorrector, PercentagesCorrector.Snapshot> percsCorrectors = new ConcurrentHashMap<>();
 	
 	public final Connection connection;
 	
 	public final ReportEnvironment environment;
+	public final NiReportsEngine engine;
 	
 	/**
 	 * the currency used to render the report - do not write anything to it!
@@ -45,6 +48,7 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	protected final NiPrecisionSetting precisionSetting = new AmpPrecisionSetting();
 
 	public AmpReportsScratchpad(NiReportsEngine engine) {
+		this.engine = engine;
 		try {this.connection = PersistenceManager.getJdbcConnection();}
 		catch(Exception e) {throw AlgoUtils.translateException(e);}
 		this.usedCurrency = engine.spec.getSettings() == null || engine.spec.getSettings().getCurrencyCode() == null ? AmpARFilter.getDefaultCurrency() : 
@@ -56,6 +60,19 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 		return usedCurrency;
 	}
 		
+	public PercentagesCorrector.Snapshot buildOrGetSnapshot(PercentagesCorrector corrector, Set<Long> ids) {
+		return percsCorrectors.computeIfAbsent(corrector, z -> buildSnapshot(z, ids));
+	}
+		
+	public Snapshot buildSnapshot(PercentagesCorrector corrector, Set<Long> ids) {
+		final ValueWrapper<Snapshot> snapshot = new ValueWrapper<>(null);
+		engine.timer.run("normalize_percentages", () -> {
+			snapshot.set(corrector.buildSnapshot(this.connection, ids));
+			engine.timer.putMetaInNode("denormal activities", snapshot.value.sumOfPercentages.size());
+		});
+		return snapshot.value;
+	}
+	
 	public static AmpReportsScratchpad get(NiReportsEngine engine) {
 		return (AmpReportsScratchpad) engine.schemaSpecificScratchpad;
 	}

@@ -16,12 +16,12 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
  */
 public abstract class NiReportedEntity<K extends Cell> {
 	
-	protected final Behaviour<Cell> behaviour;
+	protected final Behaviour<?> behaviour;
 	public final String name;
 	public final String description;
 	public final String representingString;
 	
-	protected NiReportedEntity(String name, Behaviour<Cell> behaviour, String description) {
+	protected NiReportedEntity(String name, Behaviour<?> behaviour, String description) {
 		this.name = name;
 		this.behaviour = behaviour;
 		this.description = description;
@@ -36,7 +36,7 @@ public abstract class NiReportedEntity<K extends Cell> {
 	 * returns the behaviour of this column/measure
 	 * @return
 	 */
-	public Behaviour<Cell> getBehaviour() {
+	public Behaviour<?> getBehaviour() {
 		return behaviour;
 	}
 		

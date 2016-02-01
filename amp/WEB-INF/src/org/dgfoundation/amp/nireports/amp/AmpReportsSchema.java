@@ -25,8 +25,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Supplier;
 
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
@@ -37,6 +41,7 @@ import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportFilters;
+import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.AbstractReportsSchema;
@@ -52,6 +57,7 @@ import org.dgfoundation.amp.nireports.amp.dimensions.ProgramsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
+import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.helper.Constants;
@@ -65,6 +71,8 @@ import com.google.common.base.Function;
  */
 public class AmpReportsSchema extends AbstractReportsSchema {
 
+	public static final Logger logger = Logger.getLogger(AmpReportsSchema.class);
+	
 	public final static OrganisationsDimension orgsDimension = OrganisationsDimension.instance;
 	public final static LocationsDimension locsDimension = LocationsDimension.instance;
 	public final static SectorsDimension secsDimension = SectorsDimension.instance;
@@ -127,31 +135,39 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 //					+ "Measure only makes sense in Annual and Totals-only reports");
 		
 	}};
-
-	private static AmpReportsSchema instance = new AmpReportsSchema();
 	
 	/**
 	 * the name of the "Donor" instance of the Organisation Dimension
 	 */
-	public final static String ORG_DIMENSION_DONOR = "DN";
-	public final static String ORG_DIMENSION_IA = "IMPL";
-	public final static String ORG_DIMENSION_BA = "BENE";
-	public final static String ORG_DIMENSION_EA = "EXEC";
-	public final static String ORG_DIMENSION_RO = "RESP";
-	public final static String ORG_DIMENSION_CA = "CONT";
-	public final static String ORG_DIMENSION_RG = "REGG";
-	public final static String ORG_DIMENSION_SG = "SECG";	
+	public final static NiDimensionUsage DONOR_DIM_USG = orgsDimension.getDimensionUsage("DN");
+	public final static NiDimensionUsage IA_DIM_USG = orgsDimension.getDimensionUsage("IA");
+	public final static NiDimensionUsage BA_DIM_USG = orgsDimension.getDimensionUsage("BA");
+	public final static NiDimensionUsage EA_DIM_USG = orgsDimension.getDimensionUsage("EA");
+	public final static NiDimensionUsage RO_DIM_USG = orgsDimension.getDimensionUsage("RO");
+	public final static NiDimensionUsage CA_DIM_USG = orgsDimension.getDimensionUsage("CA");
+	public final static NiDimensionUsage RG_DIM_USG = orgsDimension.getDimensionUsage("RG");
+	public final static NiDimensionUsage SG_DIM_USG = orgsDimension.getDimensionUsage("SG");	
 	
-	public final static String SEC_DIMENSION_PS = "PRIS";
-	public final static String SEC_DIMENSION_SS = "SECS";	
-	public final static String SEC_DIMENSION_TS = "TERS";	
+	public final static NiDimensionUsage PS_DIM_USG = secsDimension.getDimensionUsage("Primary");
+	public final static NiDimensionUsage SS_DIM_USG = secsDimension.getDimensionUsage("Secondary");	
+	public final static NiDimensionUsage TS_DIM_USG = secsDimension.getDimensionUsage("Tertiary");	
 	
-	public final static String PROG_DIMENSION_PP = "PRIP";
-	public final static String PROG_DIMENSION_SP = "SECP";	
-	public final static String PROG_DIMENSION_TP = "TERP";
-	public final static String PROG_DIMENSION_NO = "NATO";
+	public final static NiDimensionUsage PP_DIM_USG = progsDimension.getDimensionUsage("Primary Program");
+	public final static NiDimensionUsage SP_DIM_USG = progsDimension.getDimensionUsage("Secondary Program");	
+	public final static NiDimensionUsage TP_DIM_USG = progsDimension.getDimensionUsage("Tertiary Program");
+	public final static NiDimensionUsage NPO_DIM_USG = progsDimension.getDimensionUsage("National Plan Objective");
 
-	public final static String LOC_DIMENSION_LOC = "LOC";
+	public final static NiDimensionUsage LOC_DIM_USG = locsDimension.getDimensionUsage("LOCS");
+	
+	private static AmpReportsSchema instance = new AmpReportsSchema();
+		
+	public final Map<NiDimensionUsage, PercentagesCorrector> PERCENTAGE_CORRECTORS = new HashMap<NiDimensionUsage, PercentagesCorrector>() {{
+		putAll(orgsDimension.getAllPercentagesCorrectors());
+		putAll(secsDimension.getAllPercentagesCorrectors());
+		putAll(progsDimension.getAllPercentagesCorrectors());
+		putAll(locsDimension.getAllPercentagesCorrectors());
+		putAll(locsDimension.getAllPercentagesCorrectors());
+	}};
 	
 	public static AmpReportsSchema getInstance() {
 		return instance;
@@ -275,98 +291,98 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_entity(ColumnConstants.VOTE, "v_vote");
 		
 		
-		single_dimension(ColumnConstants.DONOR_AGENCY, "v_ni_donor_orgs", orgsDimension.getLevelColumn(ORG_DIMENSION_DONOR, LEVEL_ORGANISATION));
-		single_dimension(ColumnConstants.DONOR_GROUP, "v_ni_donor_orgsgroups", orgsDimension.getLevelColumn(ORG_DIMENSION_DONOR, LEVEL_ORGANISATION_GROUP));
-		single_dimension(ColumnConstants.DONOR_TYPE, "v_ni_donor_orgstypes", orgsDimension.getLevelColumn(ORG_DIMENSION_DONOR, LEVEL_ORGANISATION_TYPE));
+		single_dimension(ColumnConstants.DONOR_AGENCY, "v_ni_donor_orgs", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+		single_dimension(ColumnConstants.DONOR_GROUP, "v_ni_donor_orgsgroups", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION_GROUP));
+		single_dimension(ColumnConstants.DONOR_TYPE, "v_ni_donor_orgstypes", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION_TYPE));
 		
-		with_percentage(ColumnConstants.IMPLEMENTING_AGENCY, "v_implementing_agency", orgsDimension.getLevelColumn(ORG_DIMENSION_IA, LEVEL_ORGANISATION));
-		with_percentage(ColumnConstants.IMPLEMENTING_AGENCY_GROUPS, "v_implementing_agency_groups", orgsDimension.getLevelColumn(ORG_DIMENSION_IA, LEVEL_ORGANISATION_GROUP));
-		with_percentage(ColumnConstants.IMPLEMENTING_AGENCY_TYPE, "v_implementing_agency_type", orgsDimension.getLevelColumn(ORG_DIMENSION_IA, LEVEL_ORGANISATION_TYPE));
+		with_percentage(ColumnConstants.IMPLEMENTING_AGENCY, "v_implementing_agency", IA_DIM_USG, LEVEL_ORGANISATION);
+		with_percentage(ColumnConstants.IMPLEMENTING_AGENCY_GROUPS, "v_implementing_agency_groups", IA_DIM_USG, LEVEL_ORGANISATION_GROUP);
+		with_percentage(ColumnConstants.IMPLEMENTING_AGENCY_TYPE, "v_implementing_agency_type", IA_DIM_USG, LEVEL_ORGANISATION_TYPE);
 		
-		with_percentage(ColumnConstants.BENEFICIARY_AGENCY, "v_beneficiary_agency", orgsDimension.getLevelColumn(ORG_DIMENSION_BA, LEVEL_ORGANISATION));
-		with_percentage(ColumnConstants.BENEFICIARY_AGENCY_GROUPS, "v_beneficiary_agency_groups", orgsDimension.getLevelColumn(ORG_DIMENSION_BA, LEVEL_ORGANISATION_GROUP));
+		with_percentage(ColumnConstants.BENEFICIARY_AGENCY, "v_beneficiary_agency", BA_DIM_USG, LEVEL_ORGANISATION);
+		with_percentage(ColumnConstants.BENEFICIARY_AGENCY_GROUPS, "v_beneficiary_agency_groups", BA_DIM_USG, LEVEL_ORGANISATION_GROUP);
 		//addTextColumnWithPercentages(ColumnConstants.BENEFICIARY_AGENCY__DEPARTMENT_DIVISION, "v_beneficiary_agency_info", orgsDimension.getLevelColumn(ORG_DIMENSION_BA, LEVEL_ORGANISATION_TYPE));
 		
-		with_percentage(ColumnConstants.EXECUTING_AGENCY, "v_executing_agency", orgsDimension.getLevelColumn(ORG_DIMENSION_EA, LEVEL_ORGANISATION));
-		with_percentage(ColumnConstants.EXECUTING_AGENCY_GROUPS, "v_executing_agency_groups", orgsDimension.getLevelColumn(ORG_DIMENSION_EA, LEVEL_ORGANISATION_GROUP ));
-		with_percentage(ColumnConstants.EXECUTING_AGENCY_TYPE, "v_executing_agency_type", orgsDimension.getLevelColumn(ORG_DIMENSION_EA, LEVEL_ORGANISATION_TYPE));
+		with_percentage(ColumnConstants.EXECUTING_AGENCY, "v_executing_agency", EA_DIM_USG, LEVEL_ORGANISATION);
+		with_percentage(ColumnConstants.EXECUTING_AGENCY_GROUPS, "v_executing_agency_groups", EA_DIM_USG, LEVEL_ORGANISATION_GROUP);
+		with_percentage(ColumnConstants.EXECUTING_AGENCY_TYPE, "v_executing_agency_type", EA_DIM_USG, LEVEL_ORGANISATION_TYPE);
 		//addTextColumnWithPercentages(ColumnConstants.EXECUTING_AGENCY_DEPARTMENT_DIVISION, "v_executing_agency_info", orgsDimension.getLevelColumn(ORG_DIMENSION_EA, LEVEL_ORGANISATION));
-		
-		with_percentage(ColumnConstants.RESPONSIBLE_ORGANIZATION, "v_responsible_organisation", orgsDimension.getLevelColumn(ORG_DIMENSION_RO, LEVEL_ORGANISATION));
-		with_percentage(ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS, "v_responsible_org_groups", orgsDimension.getLevelColumn(ORG_DIMENSION_RO, LEVEL_ORGANISATION_GROUP));
+
+		with_percentage(ColumnConstants.RESPONSIBLE_ORGANIZATION, "v_responsible_organisation", RO_DIM_USG, LEVEL_ORGANISATION);
+		with_percentage(ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS, "v_responsible_org_groups", RO_DIM_USG, LEVEL_ORGANISATION_GROUP);
 		//addTextColumnWithPercentages(ColumnConstants.RESPONSIBLE_ORGANIZATION_DEPARTMENT_DIVISION, "v_responsible_org_info", orgsDimension.getLevelColumn(ORG_DIMENSION_RO, LEVEL_ORGANISATION_TYPE));
-		
-		with_percentage(ColumnConstants.CONTRACTING_AGENCY, "v_contracting_agency", orgsDimension.getLevelColumn(ORG_DIMENSION_CA, LEVEL_ORGANISATION));
-		with_percentage(ColumnConstants.CONTRACTING_AGENCY_GROUPS, "v_contracting_agency_groups", orgsDimension.getLevelColumn(ORG_DIMENSION_CA, LEVEL_ORGANISATION_GROUP));
+
+		with_percentage(ColumnConstants.CONTRACTING_AGENCY, "v_contracting_agency", CA_DIM_USG, LEVEL_ORGANISATION);
+		with_percentage(ColumnConstants.CONTRACTING_AGENCY_GROUPS, "v_contracting_agency_groups", CA_DIM_USG, LEVEL_ORGANISATION_GROUP);
 		//addTextColumnWithPercentages(ColumnConstants.CONTRACTING_AGENCY_DEPARTMENT_DIVISION, "v_contracting_agency_info", orgsDimension.getLevelColumn(ORG_DIMENSION_CA, LEVEL_ORGANISATION_GROUP));
 		//addTextColumnWithPercentages(ColumnConstants.CONTRACTING_AGENCY_ACRONYM, "v_contracting_agency_acronym", orgsDimension.getLevelColumn(ORG_DIMENSION_CA, LEVEL_ORGANISATION_GROUP));
-		
-		with_percentage(ColumnConstants.REGIONAL_GROUP, "v_regional_group", orgsDimension.getLevelColumn(ORG_DIMENSION_RG, LEVEL_ORGANISATION_GROUP));
+
+		with_percentage(ColumnConstants.REGIONAL_GROUP, "v_regional_group", RG_DIM_USG, LEVEL_ORGANISATION_GROUP);
 		//addTextColumnWithPercentages(ColumnConstants.REGIONAL_GROUP_DEPARTMENT_DIVISION, "v_regional_group_info", orgsDimension.getLevelColumn(ORG_DIMENSION_RG, LEVEL_ORGANISATION_GROUP));
 
-		with_percentage(ColumnConstants.SECTOR_GROUP, "v_sector_group", orgsDimension.getLevelColumn(ORG_DIMENSION_SG, LEVEL_ORGANISATION_GROUP));
+		with_percentage(ColumnConstants.SECTOR_GROUP, "v_sector_group", SG_DIM_USG, LEVEL_ORGANISATION_GROUP);
 		//addTextColumnWithPercentages(ColumnConstants.SECTOR_GROUP_DEPARTMENT_DIVISION, "v_sector_group_info", orgsDimension.getLevelColumn(ORG_DIMENSION_RG, LEVEL_ORGANISATION_GROUP));
 
-		with_percentage(ColumnConstants.PRIMARY_SECTOR, "v_sectors", secsDimension.getLevelColumn(SEC_DIMENSION_PS, LEVEL_ROOT));
-		with_percentage(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, "v_sub_sectors", secsDimension.getLevelColumn(SEC_DIMENSION_PS, LEVEL_SUBSECTOR));
-		with_percentage(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, "v_sub_sub_sectors", secsDimension.getLevelColumn(SEC_DIMENSION_PS, LEVEL_SUBSUBSECTOR));
+		with_percentage(ColumnConstants.PRIMARY_SECTOR, "v_sectors", PS_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, "v_sub_sectors", PS_DIM_USG, LEVEL_SUBSECTOR);
+		with_percentage(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, "v_sub_sub_sectors", PS_DIM_USG, LEVEL_SUBSUBSECTOR);
 
-		with_percentage(ColumnConstants.TERTIARY_SECTOR, "v_tertiary_sectors", secsDimension.getLevelColumn(SEC_DIMENSION_TS, LEVEL_ROOT));
-		with_percentage(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, "v_tertiary_sub_sectors", secsDimension.getLevelColumn(SEC_DIMENSION_TS, LEVEL_SUBSECTOR));
-		with_percentage(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, "v_tertiary_sub_sub_sectors", secsDimension.getLevelColumn(SEC_DIMENSION_TS, LEVEL_SUBSUBSECTOR));
+		with_percentage(ColumnConstants.TERTIARY_SECTOR, "v_tertiary_sectors", TS_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, "v_tertiary_sub_sectors", TS_DIM_USG, LEVEL_SUBSECTOR);
+		with_percentage(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, "v_tertiary_sub_sub_sectors", TS_DIM_USG, LEVEL_SUBSUBSECTOR);
 
-		with_percentage(ColumnConstants.SECONDARY_SECTOR, "v_secondary_sectors", secsDimension.getLevelColumn(SEC_DIMENSION_SS, LEVEL_ROOT));
-		with_percentage(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, "v_secondary_sub_sectors", secsDimension.getLevelColumn(SEC_DIMENSION_SS, LEVEL_SUBSECTOR));
-		with_percentage(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, "v_secondary_sub_sub_sectors", secsDimension.getLevelColumn(SEC_DIMENSION_SS, LEVEL_SUBSUBSECTOR));
+		with_percentage(ColumnConstants.SECONDARY_SECTOR, "v_secondary_sectors", SS_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, "v_secondary_sub_sectors", SS_DIM_USG, LEVEL_SUBSECTOR);
+		with_percentage(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, "v_secondary_sub_sub_sectors", SS_DIM_USG, LEVEL_SUBSUBSECTOR);
 
-		with_percentage(ColumnConstants.PRIMARY_PROGRAM, "v_primaryprogram_level_1", progsDimension.getLevelColumn(PROG_DIMENSION_PP, LEVEL_1));
+		with_percentage(ColumnConstants.PRIMARY_PROGRAM, "v_primaryprogram_level_1", PP_DIM_USG, LEVEL_1);
 		//addTextColumnWithPercentages(ColumnConstants.PRIMARY_PROGRAM_DETAIL, "v_primaryprogram", progsDimension.getLevelColumn(PROG_DIMENSION_PP, LEVEL_1));
-		with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1, "v_primaryprogram_level_1", progsDimension.getLevelColumn(PROG_DIMENSION_PP, LEVEL_1));
-		with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_2, "v_primaryprogram_level_2", progsDimension.getLevelColumn(PROG_DIMENSION_PP, LEVEL_2));
-		with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_3, "v_primaryprogram_level_3", progsDimension.getLevelColumn(PROG_DIMENSION_PP, LEVEL_3));
-		with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_4, "v_primaryprogram_level_4", progsDimension.getLevelColumn(PROG_DIMENSION_PP, LEVEL_4));
-		with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_5, "v_primaryprogram_level_5", progsDimension.getLevelColumn(PROG_DIMENSION_PP, LEVEL_5));
-		with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_6, "v_primaryprogram_level_6", progsDimension.getLevelColumn(PROG_DIMENSION_PP, LEVEL_6));
-		with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_7, "v_primaryprogram_level_7", progsDimension.getLevelColumn(PROG_DIMENSION_PP, LEVEL_7));
-		with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_8, "v_primaryprogram_level_8", progsDimension.getLevelColumn(PROG_DIMENSION_PP, LEVEL_8));
+		with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1, "v_primaryprogram_level_1", PP_DIM_USG, LEVEL_1);
+		with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_2, "v_primaryprogram_level_2", PP_DIM_USG, LEVEL_2);
+		with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_3, "v_primaryprogram_level_3", PP_DIM_USG, LEVEL_3);
+		with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_4, "v_primaryprogram_level_4", PP_DIM_USG, LEVEL_4);
+		with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_5, "v_primaryprogram_level_5", PP_DIM_USG, LEVEL_5);
+		with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_6, "v_primaryprogram_level_6", PP_DIM_USG, LEVEL_6);
+		with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_7, "v_primaryprogram_level_7", PP_DIM_USG, LEVEL_7);
+		with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_8, "v_primaryprogram_level_8", PP_DIM_USG, LEVEL_8);
 
-		with_percentage(ColumnConstants.SECONDARY_PROGRAM, "v_secondaryprogram_level_1", progsDimension.getLevelColumn(PROG_DIMENSION_SP, LEVEL_1));
+		with_percentage(ColumnConstants.SECONDARY_PROGRAM, "v_secondaryprogram_level_1", SP_DIM_USG, LEVEL_1);
 		//addTextColumnWithPercentages(ColumnConstants.SECONDARY_PROGRAM_DETAIL, "v_secondaryprogram", progsDimension.getLevelColumn(PROG_DIMENSION_SP, LEVEL_0));
-		with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1, "v_secondaryprogram_level_1", progsDimension.getLevelColumn(PROG_DIMENSION_SP, LEVEL_1));
-		with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_2, "v_secondaryprogram_level_2", progsDimension.getLevelColumn(PROG_DIMENSION_SP, LEVEL_2));
-		with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_3, "v_secondaryprogram_level_3", progsDimension.getLevelColumn(PROG_DIMENSION_SP, LEVEL_3));
-		with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_4, "v_secondaryprogram_level_4", progsDimension.getLevelColumn(PROG_DIMENSION_SP, LEVEL_4));
-		with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_5, "v_secondaryprogram_level_5", progsDimension.getLevelColumn(PROG_DIMENSION_SP, LEVEL_5));
-		with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_6, "v_secondaryprogram_level_6", progsDimension.getLevelColumn(PROG_DIMENSION_SP, LEVEL_6));
-		with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_7, "v_secondaryprogram_level_7", progsDimension.getLevelColumn(PROG_DIMENSION_SP, LEVEL_7));
-		with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_8, "v_secondaryprogram_level_8", progsDimension.getLevelColumn(PROG_DIMENSION_SP, LEVEL_8));
+		with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1, "v_secondaryprogram_level_1", SP_DIM_USG, LEVEL_1);
+		with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_2, "v_secondaryprogram_level_2", SP_DIM_USG, LEVEL_2);
+		with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_3, "v_secondaryprogram_level_3", SP_DIM_USG, LEVEL_3);
+		with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_4, "v_secondaryprogram_level_4", SP_DIM_USG, LEVEL_4);
+		with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_5, "v_secondaryprogram_level_5", SP_DIM_USG, LEVEL_5);
+		with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_6, "v_secondaryprogram_level_6", SP_DIM_USG, LEVEL_6);
+		with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_7, "v_secondaryprogram_level_7", SP_DIM_USG, LEVEL_7);
+		with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_8, "v_secondaryprogram_level_8", SP_DIM_USG, LEVEL_8);
 
-		with_percentage(ColumnConstants.TERTIARY_PROGRAM, "v_tertiaryprogram_level_1", progsDimension.getLevelColumn(PROG_DIMENSION_TP, LEVEL_1));
+		with_percentage(ColumnConstants.TERTIARY_PROGRAM, "v_tertiaryprogram_level_1", TP_DIM_USG, LEVEL_1);
 		//addTextColumnWithPercentages(ColumnConstants.TERTIARY_PROGRAM_DETAIL, "v_tertiaryprogram", progsDimension.getLevelColumn(PROG_DIMENSION_PP, LEVEL_8));
-		with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_1, "v_tertiaryprogram_level_1", progsDimension.getLevelColumn(PROG_DIMENSION_TP, LEVEL_1));
-		with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_2, "v_tertiaryprogram_level_2", progsDimension.getLevelColumn(PROG_DIMENSION_TP, LEVEL_2));
-		with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_3, "v_tertiaryprogram_level_3", progsDimension.getLevelColumn(PROG_DIMENSION_TP, LEVEL_3));
-		with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_4, "v_tertiaryprogram_level_4", progsDimension.getLevelColumn(PROG_DIMENSION_TP, LEVEL_4));
-		with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_5, "v_tertiaryprogram_level_5", progsDimension.getLevelColumn(PROG_DIMENSION_TP, LEVEL_5));
-		with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_6, "v_tertiaryprogram_level_6", progsDimension.getLevelColumn(PROG_DIMENSION_TP, LEVEL_6));
-		with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_7, "v_tertiaryprogram_level_7", progsDimension.getLevelColumn(PROG_DIMENSION_TP, LEVEL_7));
-		with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_8, "v_tertiaryprogram_level_8", progsDimension.getLevelColumn(PROG_DIMENSION_TP, LEVEL_8));
+		with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_1, "v_tertiaryprogram_level_1", TP_DIM_USG, LEVEL_1);
+		with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_2, "v_tertiaryprogram_level_2", TP_DIM_USG, LEVEL_2);
+		with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_3, "v_tertiaryprogram_level_3", TP_DIM_USG, LEVEL_3);
+		with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_4, "v_tertiaryprogram_level_4", TP_DIM_USG, LEVEL_4);
+		with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_5, "v_tertiaryprogram_level_5", TP_DIM_USG, LEVEL_5);
+		with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_6, "v_tertiaryprogram_level_6", TP_DIM_USG, LEVEL_6);
+		with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_7, "v_tertiaryprogram_level_7", TP_DIM_USG, LEVEL_7);
+		with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_8, "v_tertiaryprogram_level_8", TP_DIM_USG, LEVEL_8);
 
-		with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, "v_nationalobjectives_level_1", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_1));
+		with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, "v_nationalobjectives_level_1", NPO_DIM_USG, LEVEL_1);
 		//addTextColumnWithPercentages(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_DETAIL, "v_nationalobjectives", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_0));
-		with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, "v_nationalobjectives_level_1", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_1));
-		with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2, "v_nationalobjectives_level_2", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_2));
-		with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3, "v_nationalobjectives_level_3", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_3));
-		with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_4, "v_nationalobjectives_level_4", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_4));
-		with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_5, "v_nationalobjectives_level_5", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_5));
-		with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_6, "v_nationalobjectives_level_6", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_6));
-		with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_7, "v_nationalobjectives_level_7", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_7));
-		with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_8, "v_nationalobjectives_level_8", progsDimension.getLevelColumn(PROG_DIMENSION_NO, LEVEL_8));
+		with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, "v_nationalobjectives_level_1", NPO_DIM_USG, LEVEL_1);
+		with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2, "v_nationalobjectives_level_2", NPO_DIM_USG, LEVEL_2);
+		with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3, "v_nationalobjectives_level_3", NPO_DIM_USG, LEVEL_3);
+		with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_4, "v_nationalobjectives_level_4", NPO_DIM_USG, LEVEL_4);
+		with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_5, "v_nationalobjectives_level_5", NPO_DIM_USG, LEVEL_5);
+		with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_6, "v_nationalobjectives_level_6", NPO_DIM_USG, LEVEL_6);
+		with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_7, "v_nationalobjectives_level_7", NPO_DIM_USG, LEVEL_7);
+		with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_8, "v_nationalobjectives_level_8", NPO_DIM_USG, LEVEL_8);
 
-		with_percentage(ColumnConstants.COUNTRY, "v_countries", locsDimension.getLevelColumn(LOC_DIMENSION_LOC, LEVEL_COUNTRY));
-		with_percentage(ColumnConstants.REGION, "v_regions", locsDimension.getLevelColumn(LOC_DIMENSION_LOC, LEVEL_REGION));
-		with_percentage(ColumnConstants.ZONE, "v_zones", locsDimension.getLevelColumn(LOC_DIMENSION_LOC, LEVEL_ZONE));
-		with_percentage(ColumnConstants.DISTRICT, "v_districts", locsDimension.getLevelColumn(LOC_DIMENSION_LOC, LEVEL_DISTRICT));
+		with_percentage(ColumnConstants.COUNTRY, "v_countries", LOC_DIM_USG, LEVEL_COUNTRY);
+		with_percentage(ColumnConstants.REGION, "v_regions", LOC_DIM_USG, LEVEL_REGION);
+		with_percentage(ColumnConstants.ZONE, "v_zones", LOC_DIM_USG, LEVEL_ZONE);
+		with_percentage(ColumnConstants.DISTRICT, "v_districts", LOC_DIM_USG, LEVEL_DISTRICT);
 		
 		addTrivialMeasures();
 	}
@@ -474,13 +490,18 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	private AmpReportsSchema no_entity(String columnName, String view) {
 		return addColumn(SimpleTextColumn.fromViewWithoutEntity(columnName, view));
 	}
-
+	
 	private AmpReportsSchema with_percentage(String columnName, String viewName, LevelColumn levelColumn) {
+		logger.error(String.format("(column %s) NiDimension %s has no percentages corrector, using raw percentages", columnName, levelColumn.dimensionUsage));
 		return addColumn(PercentageTextColumn.fromView(columnName, viewName, levelColumn));
 	}
 		
-//	public final MathContext mathContext = new MathContext(5, RoundingMode.HALF_EVEN); // banker's rounding
-	
+	private AmpReportsSchema with_percentage(String columnName, String viewName, NiDimensionUsage dimUsg, int level) {
+		PercentagesCorrector cor = PERCENTAGE_CORRECTORS.get(dimUsg);
+		NiUtils.failIf(cor == null, String.format("%s: you forgot to configure percentage correctors for %s", columnName, dimUsg));
+		return addColumn(new NormalizedPercentagesColumn(columnName, dimUsg.getLevelColumn(level), null, viewName, "amp_activity_id", cor));
+	}
+			
 	protected final CurrencyConvertor currencyConvertor = AmpCurrencyConvertor.getInstance();
 	
 	@Override
@@ -538,4 +559,21 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	@Override public AmpReportsSchema addColumn(NiReportColumn<?> col) {
 		return (AmpReportsSchema) super.addColumn(col);
 	}
+	
+	/**
+	 * also checks the percentages on the system
+	 */
+	@Override
+	public Map<String, List<ReportRenderWarning>> performColumnChecks(Optional<Set<String>> columns) {
+		Map<String, List<ReportRenderWarning>> sp = new HashMap<>(super.performColumnChecks(columns));
+		try(java.sql.Connection conn = PersistenceManager.getJdbcConnection()) {
+			for(Map.Entry<NiDimensionUsage, PercentagesCorrector> z:PERCENTAGE_CORRECTORS.entrySet()) {
+				sp.put(z.getKey().toString(), z.getValue().validateDb(z.getKey().toString(), conn));
+			}
+		}
+		catch(Exception e) {
+			throw AlgoUtils.translateException(e);
+		}
+		return sp;
+	};
 }

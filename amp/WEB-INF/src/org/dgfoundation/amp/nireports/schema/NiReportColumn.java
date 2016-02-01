@@ -19,7 +19,7 @@ public abstract class NiReportColumn<K extends Cell> extends NiReportedEntity<K>
 	
 	public final Optional<NiDimension.LevelColumn> levelColumn;
 		
-	protected NiReportColumn(String name, NiDimension.LevelColumn levelColumn, Behaviour behaviour, String description) {
+	protected NiReportColumn(String name, NiDimension.LevelColumn levelColumn, Behaviour<?> behaviour, String description) {
 		super(name, behaviour, description);
 		this.levelColumn = Optional.ofNullable(levelColumn);
 	}

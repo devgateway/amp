@@ -24,7 +24,8 @@
 					SELECT afps.pledge_id,
     					rs.name AS sectorname,
     					rs.amp_sector_id,
-    					sum(afps.sector_percentage) AS sector_percentage
+    					sum(afps.sector_percentage) AS sector_percentage,
+    					COUNT(*) - COUNT(afps.sector_percentage) AS cnt_nulls
    						FROM amp_funding_pledges_sector afps
      						JOIN all_sectors_with_levels aswl ON afps.amp_sector_id = aswl.amp_sector_id
      						JOIN amp_sector rs ON rs.amp_sector_id = aswl.id0

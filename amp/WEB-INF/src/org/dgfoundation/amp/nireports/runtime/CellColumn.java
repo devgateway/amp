@@ -22,9 +22,9 @@ import org.dgfoundation.amp.nireports.schema.Behaviour;
 public class CellColumn extends Column {
 	
 	final ColumnContents contents;
-	final Behaviour<Cell> behaviour;
+	final Behaviour<?> behaviour;
 		
-	public CellColumn(String name, ColumnContents contents, GroupColumn parent, Behaviour<Cell> behaviour) {
+	public CellColumn(String name, ColumnContents contents, GroupColumn parent, Behaviour<?> behaviour) {
 		super(name, parent);
 		NiUtils.failIf(contents == null, "CellColumn should have a non-null contents");
 		this.contents = contents;
@@ -50,7 +50,7 @@ public class CellColumn extends Column {
 	}
 
 	public Behaviour<Cell> getBehaviour() {
-		return behaviour;
+		return (Behaviour<Cell>) behaviour; // code ugly as sin because CellColumn has not been parametrized
 	}
 	
 	@Override

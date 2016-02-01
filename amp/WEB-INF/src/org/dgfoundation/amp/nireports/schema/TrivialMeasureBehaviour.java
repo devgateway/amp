@@ -28,12 +28,14 @@ public class TrivialMeasureBehaviour implements Behaviour<AmountCell> {
 	
 	@Override
 	public AmountCell doHorizontalReduce(List<NiCell> cells) {
-		MonetaryAmount res = new MonetaryAmount(BigDecimal.ZERO, ((NumberedCell) cells.get(0).getCell()).getAmount().precisionSetting);
+		NiPrecisionSetting precision = ((NumberedCell) cells.get(0).getCell()).getPrecision();
+		BigDecimal res = precision.adjustPrecision(BigDecimal.ZERO);
 		for(NiCell cell:cells) {
 			BigDecimal percentage = cell.calculatePercentage();
-			res = res.add(((NumberedCell) cell.getCell()).getAmount().multiplyBy(percentage));
+			BigDecimal toAdd = ((NumberedCell) cell.getCell()).getAmount().multiply(percentage);
+			res = res.add(toAdd);
 		}
-		return new AmountCell(cells.get(0).getMainId(), res);
+		return new AmountCell(cells.get(0).getMainId(), new MonetaryAmount(res, precision));
 	}
 
 	@Override

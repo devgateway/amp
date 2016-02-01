@@ -24,7 +24,8 @@
 			    	SELECT afpp.pledge_id,
     					level.name,
     					level.amp_theme_id AS amp_program_id,
-    					sum(afpp.program_percentage) AS percentage
+    					sum(afpp.program_percentage) AS percentage,
+    					COUNT(*) - COUNT(afpp.program_percentage) AS cnt_nulls 
    					FROM amp_funding_pledges_program afpp
      					JOIN all_programs_with_levels apl ON afpp.amp_program_id = apl.amp_theme_id
      					JOIN amp_theme level ON level.amp_theme_id = apl.id1

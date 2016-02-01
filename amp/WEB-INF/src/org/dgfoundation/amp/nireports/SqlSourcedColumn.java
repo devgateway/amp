@@ -45,7 +45,7 @@ public abstract class SqlSourcedColumn<K extends Cell> extends NiReportColumn<K>
 
 	
 	public SqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, Map<String, String> filtering, String viewName, 
-			String mainColumn, Behaviour behaviour, String description) {
+			String mainColumn, Behaviour<?> behaviour, String description) {
 		super(columnName, levelColumn, behaviour, description);
 		this.viewName = viewName;
 		this.mainColumn = mainColumn;
@@ -58,7 +58,7 @@ public abstract class SqlSourcedColumn<K extends Cell> extends NiReportColumn<K>
 	 * @return
 	 */
 	protected String buildPrimaryFilteringQuery(NiReportsEngine engine) {
-		return String.format("%s IN (%s)", mainColumn, Util.toCSStringForIN(engine.filters.getActivityIds(engine)));
+		return String.format("%s IN (%s)", mainColumn, Util.toCSStringForIN(engine.getMainIds()));
 	}
 
 	/**

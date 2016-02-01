@@ -3,12 +3,15 @@ package org.dgfoundation.amp.nireports.amp;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.schema.TabularSourcedNiDimension;
 import org.digijava.kernel.persistence.PersistenceManager;
 
@@ -17,7 +20,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
  * @author Dolghier Constantin
  *
  */
-public class SqlSourcedNiDimension extends TabularSourcedNiDimension {
+public abstract class SqlSourcedNiDimension extends TabularSourcedNiDimension {
 
 	public final String sourceViewName;
 	public final List<String> idColumnsNames;
@@ -56,6 +59,19 @@ public class SqlSourcedNiDimension extends TabularSourcedNiDimension {
 		columns.removeAll(SQLUtils.getTableColumns(sourceViewName));
 		if (!columns.isEmpty())
 			throw new RuntimeException(String.format("SqlSourcedNiDimension %s: column(s) <%s> do not exist in the view <%s>", name, columns.toString(), sourceViewName));
+	}
+	
+	/** override in children */
+	protected abstract PercentagesCorrector buildPercentagesCorrector(NiDimensionUsage dimUsg);
+	
+	protected Map<NiDimensionUsage, PercentagesCorrector> getAllPercentagesCorrectors() {
+		Map<NiDimensionUsage, PercentagesCorrector> res = new HashMap<>();
+		for(NiDimensionUsage dimUsg:this.getDUs()) {
+			PercentagesCorrector cor = buildPercentagesCorrector(dimUsg);
+			if (cor != null)
+				res.put(dimUsg, cor);
+		}
+		return res;
 	}
 		
 	@Override

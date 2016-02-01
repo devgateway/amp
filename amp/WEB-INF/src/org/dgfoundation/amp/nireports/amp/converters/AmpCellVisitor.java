@@ -62,7 +62,7 @@ public class AmpCellVisitor implements CellVisitor<ReportCell> {
 	}
 	
 	public ReportCell visitNumberedCell(NumberedCell cell) {
-		BigDecimal amt = cell.getAmount().amount;
+		BigDecimal amt = cell.getAmount();
 		return new org.dgfoundation.amp.newreports.AmountCell(amt, formattedValues.computeIfAbsent(amt, this::formatNumber));
 	}
 	

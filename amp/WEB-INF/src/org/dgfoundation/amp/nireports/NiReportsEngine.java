@@ -220,6 +220,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		}
 		catch(Exception e) {
 			timer.putMetaInNode("error", e.getMessage());
+			logger.error(e.getMessage(), e);
 			return null;
 		}
 	}
@@ -387,6 +388,15 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		return filters;
 	}
 
+	/**
+	 * returns the "workspace ids", potentially reduced after the per-report filters have been applied
+	 * TODO: specify that after filters have been implemented
+	 * @return
+	 */
+	public Set<Long> getMainIds() {
+		return filters.getActivityIds(this);
+	}
+	
 	@Override
 	public IdsAcceptor buildAcceptor(NiDimensionUsage dimUsage, List<Coordinate> coos) {
 		DimensionSnapshot snapshot = getDimensionSnapshot(dimUsage.dimension);

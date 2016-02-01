@@ -21,7 +21,7 @@
 			<lang delimiter=";" type="postgres">
 				DROP VIEW IF EXISTS v_tag_sub_sectors;
 			    CREATE OR REPLACE VIEW v_tag_sub_sectors AS 
-					SELECT a.amp_activity_id, COALESCE(level.name, '#') AS name, asl.id1 AS amp_sector_id, SUM(a.sector_percentage) as percentage
+					SELECT a.amp_activity_id, COALESCE(level.name, '#') AS name, asl.id1 AS amp_sector_id, SUM(a.sector_percentage) as percentage, COUNT(*) - COUNT(a.sector_percentage) AS cnt_nulls
 						FROM amp_activity_sector a	
 							JOIN ni_all_sectors_with_levels asl ON a.amp_sector_id = asl.amp_sector_id
 							LEFT JOIN amp_sector level ON level.amp_sector_id = asl.id1

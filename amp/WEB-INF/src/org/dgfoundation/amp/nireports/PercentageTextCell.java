@@ -19,6 +19,7 @@ public final class PercentageTextCell extends Cell {
 	public PercentageTextCell(String text, long activityId, long entityId, Optional<LevelColumn> levelColumn, BigDecimal percentage) {
 		super(activityId, entityId, buildCoordinates(levelColumn, entityId), levelColumn);
 		Objects.requireNonNull(text);
+		Objects.requireNonNull(percentage);
 		this.percentage = percentage;
 		if (this.percentage != null) {
 			NiUtils.failIf(this.percentage.compareTo(BigDecimal.ZERO) < 0, () -> String.format("percentage should be between 0.0 and 1.0, but is instead %.2f", percentage.doubleValue()));

@@ -44,6 +44,7 @@ public class MonetaryAmount implements Comparable<MonetaryAmount> {
 	}
 	
 	public MonetaryAmount multiplyBy(BigDecimal other) {
+		System.out.println("multiplying " + amount.toPlainString() + " by " + other.toPlainString());
 		return new MonetaryAmount(amount.multiply(other), origAmount, origCurrency, null, precisionSetting);
 	}
 	

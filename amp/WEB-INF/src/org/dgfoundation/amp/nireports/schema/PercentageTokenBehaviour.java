@@ -34,11 +34,11 @@ public class PercentageTokenBehaviour implements Behaviour<PercentageTextCell> {
 		}
 		String text = v.toString();
 		text = text.substring(1, text.length() - 1);
-		return new PercentageTextCell(text, cells.get(0).getMainId(), -1, Optional.empty(), null);
+		return new PercentageTextCell(text, cells.get(0).getMainId(), -1, Optional.empty(), BigDecimal.ONE);
 	}
 
 	@Override
 	public PercentageTextCell getZeroCell() {
-		return new PercentageTextCell("", -1, -1, Optional.empty(), null);
+		return new PercentageTextCell("", -1, -1, Optional.empty(), BigDecimal.ONE);
 	}
 }

@@ -45,6 +45,11 @@ public class NiSplitCell implements NiOutCell {
 	}
 
 	@Override
+	public String toString() {
+		return getDisplayedValue();
+	}
+	
+	@Override
 	public String getDisplayedValue() {
 		return text;
 	}

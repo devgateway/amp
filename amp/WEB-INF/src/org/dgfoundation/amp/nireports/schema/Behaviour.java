@@ -17,6 +17,7 @@ import org.dgfoundation.amp.nireports.output.NiSplitCell;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.MultiHierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
+import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 /**
@@ -74,6 +75,8 @@ public interface Behaviour<V extends NiOutCell> {
 			return getZeroCell();
 		return doHorizontalReduce(cells);
 	}
+	
+	public Cell buildUnallocatedCell(long mainId, long entityId, LevelColumn levelColumn);
 	
 	/**
 	 * computes a "zero" cell, which is different from an "empty" cell. For numerical cells, this is a cell with zero. For textual cells, this is an "" cell, although these do not have 

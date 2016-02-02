@@ -66,6 +66,11 @@ public class HierarchiesTracker {
 		});
 	}
 	
+	@Override
+	public String toString() {
+		return String.format("%.2f perc (%s)", percentage.doubleValue(), percentages.toString());
+	}
+	
 	public BigDecimal calculatePercentage(Predicate<NiDimensionUsage> acceptor) {
 		if (acceptor == null)
 			return percentage;

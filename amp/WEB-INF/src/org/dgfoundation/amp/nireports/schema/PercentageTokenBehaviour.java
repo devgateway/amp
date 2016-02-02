@@ -2,14 +2,18 @@ package org.dgfoundation.amp.nireports.schema;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
 import static java.util.stream.Collectors.toSet;
+
+import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.PercentageTextCell;
 import org.dgfoundation.amp.nireports.output.NiSplitCell;
 import org.dgfoundation.amp.nireports.output.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
+import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
 public class PercentageTokenBehaviour implements Behaviour<NiTextCell> {
 
@@ -46,5 +50,10 @@ public class PercentageTokenBehaviour implements Behaviour<NiTextCell> {
 				splitterCells.get(0).getDisplayedValue(), 
 				splitterCells.stream().map(z -> z.getCell().entityId).collect(toSet()), 
 				splitterCells.stream().anyMatch(z -> z.isUndefinedCell()));
+	}
+
+	@Override
+	public Cell buildUnallocatedCell(long mainId, long entityId, LevelColumn levelColumn) {
+		return new PercentageTextCell("", mainId, entityId, Optional.of(levelColumn), BigDecimal.ONE);
 	}
 }

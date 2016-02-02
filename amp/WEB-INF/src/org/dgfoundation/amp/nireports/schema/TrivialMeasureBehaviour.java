@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.dgfoundation.amp.nireports.AmountCell;
+import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.MonetaryAmount;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NumberedCell;
@@ -12,6 +13,7 @@ import org.dgfoundation.amp.nireports.output.NiAmountCell;
 import org.dgfoundation.amp.nireports.output.NiSplitCell;
 import org.dgfoundation.amp.nireports.runtime.MultiHierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
+import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
 /**
  * the behaviour of a trivial measure
@@ -37,6 +39,7 @@ public class TrivialMeasureBehaviour implements Behaviour<NiAmountCell> {
 			BigDecimal toAdd = ((NumberedCell) cell.getCell()).getAmount().multiply(percentage);
 			res = res.add(toAdd);
 		}
+		System.err.format("reduced %d cells to %.2f: %s\n", cells.size(), res.doubleValue(), cells.toString());
 		return new NiAmountCell(res, precision);
 	}
 
@@ -63,6 +66,11 @@ public class TrivialMeasureBehaviour implements Behaviour<NiAmountCell> {
 
 	@Override
 	public NiSplitCell mergeSplitterCells(List<NiCell> splitterCells) {
+		throw new RuntimeException("doing hierarchies by numeric values not supported");
+	}
+
+	@Override
+	public Cell buildUnallocatedCell(long mainId, long entityId, LevelColumn levelColumn) {
 		throw new RuntimeException("doing hierarchies by numeric values not supported");
 	}
 }

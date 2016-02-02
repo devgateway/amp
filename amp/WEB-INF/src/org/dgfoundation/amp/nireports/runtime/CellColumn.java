@@ -8,12 +8,12 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 
-import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.ReportHeadingCell;
 import org.dgfoundation.amp.nireports.output.NiOutCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
+import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 
 /**
  * a leaf column
@@ -24,12 +24,18 @@ public class CellColumn extends Column {
 	
 	final ColumnContents contents;
 	final Behaviour<?> behaviour;
+	final NiReportedEntity<?> entity;
 		
-	public CellColumn(String name, ColumnContents contents, GroupColumn parent, Behaviour<?> behaviour) {
+	public CellColumn(String name, ColumnContents contents, GroupColumn parent, NiReportedEntity<?> entity) {
+		this(name, contents, parent, entity, entity.getBehaviour());
+	}
+	
+	public CellColumn(String name, ColumnContents contents, GroupColumn parent, NiReportedEntity<?> entity, Behaviour<?> behaviour) {
 		super(name, parent);
 		NiUtils.failIf(contents == null, "CellColumn should have a non-null contents");
 		this.contents = contents;
 		this.behaviour = behaviour;
+		this.entity = entity;
 	}
 
 	@Override
@@ -38,11 +44,11 @@ public class CellColumn extends Column {
 	}
 
 	@Override
-	public GroupColumn verticallySplitByCategory(VSplitStrategy strategy) {
+	public GroupColumn verticallySplitByCategory(VSplitStrategy strategy, GroupColumn newParent) {
 		SortedMap<ComparableValue<String>, List<NiCell>> values = new TreeMap<>();
 		this.forEachCell(cell -> values.computeIfAbsent(strategy.categorize(cell), z -> new ArrayList<>()).add(cell));
-		GroupColumn res = new GroupColumn(this.name, null, this.parent);
-		values.forEach((key, cells) -> res.addColumn(new CellColumn(key.getValue(), new ColumnContents(cells), res, strategy.getBehaviour(key, this))));
+		GroupColumn res = new GroupColumn(this.name, null, newParent);
+		values.forEach((key, cells) -> res.addColumn(new CellColumn(key.getValue(), new ColumnContents(cells), res, this.entity, strategy.getBehaviour(key, this))));
 		return res;
 	}
 

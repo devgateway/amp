@@ -24,7 +24,7 @@ public abstract class Column {
 	protected ReportHeadingCell reportHeaderCell;
 	
 	public abstract void forEachCell(Consumer<NiCell> acceptor);
-	public abstract GroupColumn verticallySplitByCategory(VSplitStrategy strategy);
+	public abstract GroupColumn verticallySplitByCategory(VSplitStrategy strategy, GroupColumn newParent);
 	public abstract String debugDigest(boolean withContents);
 	
 	// header-related stuff

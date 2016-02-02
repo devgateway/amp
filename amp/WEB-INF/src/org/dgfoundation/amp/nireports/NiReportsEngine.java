@@ -20,6 +20,7 @@ import org.dgfoundation.amp.algo.timing.InclusiveTimer;
 import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportWarning;
+import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
 import org.dgfoundation.amp.nireports.output.NiColumnReportData;
 import org.dgfoundation.amp.nireports.output.NiGroupReportData;
 import org.dgfoundation.amp.nireports.output.NiReportData;
@@ -240,7 +241,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		//ColumnReportData fetchedData = new ColumnReportData(this);
 		GroupColumn rawData = new GroupColumn("RAW", null, null);
 		
-		fetchedColumns.forEach((name, contents) -> rawData.addColumn(new CellColumn(name, contents, rawData, schema.getColumns().get(name).getBehaviour()))); // regular columns
+		fetchedColumns.forEach((name, contents) -> rawData.addColumn(new CellColumn(name, contents, rawData, schema.getColumns().get(name)))); // regular columns
 		
 		rawData.maybeAddColumn(buildFundingColumn(FUNDING_COLUMN_NAME, rawData, this::separateYears));
 		rawData.maybeAddColumn(buildFundingColumn(TOTALS_COLUMN_NAME, rawData, Function.identity()));
@@ -271,7 +272,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		List<NiCell> allCells = new ArrayList<>();
 		fundingColumn.forEachCell(cell -> allCells.add(cell));
 		
-		Column res = new CellColumn(fundingColumn.name, new ColumnContents(allCells), fundingColumn.getParent(), null);
+		Column res = new CellColumn(fundingColumn.name, new ColumnContents(allCells), fundingColumn.getParent(), null, null); // TODO: change to proper YEAR entity
 		List<VSplitStrategy> splitCriterias = new ArrayList<>();
 		for(TimeRange tr:categories) {
 			VSplitStrategy func = cell -> tr.getDateComponentCategorizer().apply((DatedCell) cell.getCell());
@@ -279,12 +280,12 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		}
 		
 		for(VSplitStrategy splitCriteria:splitCriterias)
-			res = res.verticallySplitByCategory(splitCriteria);
+			res = res.verticallySplitByCategory(splitCriteria, fundingColumn.getParent());
 		
 		VSplitStrategy restoreMeasures = VSplitStrategy.build(
 			cell -> new ComparableValue<String>(cell.getEntity().getName(), AmpCollections.indexOf(actualMeasures, cell.getEntity().getName())),
 			cat -> behaviours.get(cat.getValue()));
-		GroupColumn z = res.verticallySplitByCategory(restoreMeasures);
+		GroupColumn z = res.verticallySplitByCategory(restoreMeasures, fundingColumn.getParent());
 		return z;
 	}
 	
@@ -293,7 +294,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		fetchedMeasures.forEach((name, contents) -> {
 			NiReportMeasure<?> meas = schema.getMeasures().get(name);
 			if (meas.getBehaviour().getTimeRange() != TimeRange.NONE)
-				fundingColumn.addColumn(new CellColumn(name, contents, fundingColumn, meas.getBehaviour()));
+				fundingColumn.addColumn(new CellColumn(name, contents, fundingColumn, meas));
 		});
 		GroupColumn res = postprocessor.apply(fundingColumn);
 		return res;

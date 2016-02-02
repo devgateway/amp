@@ -76,6 +76,6 @@ public class NiCell implements Comparable<NiCell> {
 	
 	@Override
 	public String toString() {
-		return cell.toString();
+		return String.format("%s %s", cell.getDisplayedValue(), hiersTracker == null ? "" : hiersTracker.toString());
 	}
 }

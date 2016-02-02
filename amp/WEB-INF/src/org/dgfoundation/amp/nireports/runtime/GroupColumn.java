@@ -28,6 +28,9 @@ public class GroupColumn extends Column {
 	 */
 	public GroupColumn(String name, List<Column> subColumns, GroupColumn parent) {
 		super(name, parent);
+		if (subColumns != null) {
+			subColumns.forEach(z -> NiUtils.failIf(z.getParent() != this, String.format("trying to add a foreing child %s to %s", z.getHierName(), this.getHierName())));
+		}
 		this.mutable = subColumns == null;
 		this.subColumns = mutable ?
 				new ArrayList<>() : Collections.unmodifiableList(new ArrayList<>(subColumns)); 
@@ -55,7 +58,7 @@ public class GroupColumn extends Column {
 		if (!mutable)
 			return;
 		subColumns = Collections.unmodifiableList(subColumns);
-		mutable = true;
+		mutable = false;
 	}
 
 	/**
@@ -85,11 +88,11 @@ public class GroupColumn extends Column {
 	}
 
 	@Override
-	public GroupColumn verticallySplitByCategory(VSplitStrategy strategy) {
-		List<Column> newSubs = new ArrayList<>();
+	public GroupColumn verticallySplitByCategory(VSplitStrategy strategy, GroupColumn newParent) {
+		GroupColumn res = new GroupColumn(name, null, newParent);
 		for(Column col:getSubColumns())
-			newSubs.add(col.verticallySplitByCategory(strategy));
-		GroupColumn res = new GroupColumn(name, newSubs, parent);
+			res.addColumn(col.verticallySplitByCategory(strategy, res));
+		
 		return res;
 	}
 

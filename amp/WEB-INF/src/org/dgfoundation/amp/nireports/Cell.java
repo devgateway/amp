@@ -32,7 +32,7 @@ public abstract class Cell implements Comparable, CategCell {
 	}
 	
 	protected static Map<NiDimensionUsage, Coordinate> buildCoordinates(Optional<LevelColumn> levelColumn, long entityId) {
-		if (entityId < 0 || !levelColumn.isPresent())
+		if (!levelColumn.isPresent())
 			return Collections.emptyMap();
 		HashMap<NiDimensionUsage, Coordinate> res = new HashMap<>();
 		res.put(levelColumn.get().dimensionUsage, levelColumn.get().getCoordinate(entityId));

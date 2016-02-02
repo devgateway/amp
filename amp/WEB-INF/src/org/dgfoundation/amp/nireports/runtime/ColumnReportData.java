@@ -1,6 +1,5 @@
 package org.dgfoundation.amp.nireports.runtime;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -8,9 +7,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
@@ -45,36 +44,76 @@ public class ColumnReportData extends ReportData {
 		return res;
 	}
 
-	//TODO: test this one
-	protected void add(Map<Long, BigDecimal> map, long key, BigDecimal add) {
-		if (add == null)
-			map.put(key, add); // anything + null = null
+//	//TODO: test this one
+//	protected void add(Map<Long, BigDecimal> map, long key, BigDecimal add) {
+//		if (add == null)
+//			map.put(key, add); // anything + null = null
+//		
+//		if (!map.containsKey(key))
+//			map.put(key, add);
+//		
+//		if (map.get(key) == null)
+//			return; // null + anything = null
+//		
+//		map.put(key, map.get(key).add(add));
+//	}
+	
+	class SplitDigest {
+		final CellColumn cellColumn;
+		final NiReportColumn<?> schemaColumn;
+		final ColumnContents contents;
 		
-		if (!map.containsKey(key))
-			map.put(key, add);
+		Map<Long, Set<Long>> actIds = new HashMap<>(); // Map<entityId, Set<mainIds-which-have-this-value>>
+		Map<Long, List<NiCell>> splitterArrays = new HashMap<>(); // Map<entityId, entity_value>
+		Map<Long, Map<Long, NiCell>> percentages = new HashMap<>(); // Map<entityId, Map<activityId, Percentage>>
 		
-		if (map.get(key) == null)
-			return; // null + anything = null
+		public SplitDigest(CellColumn cellColumn, ColumnContents contents, Supplier<Set<Long>> allIds) {
+			this.contents = contents;
+			this.schemaColumn = (NiReportColumn<?>) cellColumn.entity;
+			this.cellColumn = cellColumn;
+			
+			for(NiCell splitCell:contents.getLinearData()) {
+				processCell(splitCell);
+			}
+			
+//			actIds.put(UNALLOCATED_ID, new HashSet<>(ALL_IDS_NOT_ANYWHERE_ELSE));
+//			splitters.put(UNALLOCATED_ID, DUMMY_UNALLOCATED_CELL);
+//			percentages.put(UNALLOCATED_ID, new HashMap<ALL_IDS_NOT_ANYWHERE_ELSE, DUMMY_UNALLOCATED_CELL>());
+
+			long UNALLOCATED_ID = -999999999;
+			Set<Long> missingActIdsInSplitterColumn = new HashSet<>(allIds.get());
+			missingActIdsInSplitterColumn.removeAll(cellColumn.contents.data.keySet());
+			//missingActIdsInSplitterColumn.clear();
+			
+			for(long missingActId:missingActIdsInSplitterColumn) {
+				Cell unallocatedCell = cellColumn.getBehaviour().buildUnallocatedCell(missingActId, UNALLOCATED_ID, schemaColumn.levelColumn.get()); //TODO: will crash if making hierarchies on a non-same-level column 
+				NiCell unallocatedSplitterCell = new NiCell(unallocatedCell, cellColumn.entity, null);
+				processCell(unallocatedSplitterCell);
+			}
+		}
 		
-		map.put(key, map.get(key).add(add));
+		public void processCell(NiCell splitCell) {
+			Cell cell = splitCell.cell;
+			long entityId = cell.entityId;
+			splitterArrays.computeIfAbsent(entityId, zz-> new ArrayList<>()).add(splitCell);
+			actIds.computeIfAbsent(entityId, zz -> new HashSet<>()).add(cell.activityId);
+			percentages.computeIfAbsent(entityId, zz -> new HashMap<>()).put(cell.activityId, splitCell);
+		}
+		
+		public Map<Long, NiSplitCell> buildSplitters() {
+			return splitterArrays.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry-> cellColumn.behaviour.mergeSplitterCells(entry.getValue())));			
+		}
 	}
 	
 	@Override
 	public GroupReportData horizSplit(CellColumn z) {
 		ColumnContents dataColumn = contents.get(z);
 		NiUtils.failIf(dataColumn == null, String.format("could not find leaf %s in %s", z, this));
-		Map<Long, Set<Long>> actIds = new HashMap<>(); // Map<entityId, Set<mainIds-which-have-this-value>>
-		Map<Long, List<NiCell>> splitterArrays = new HashMap<>(); // Map<entityId, entity_value>
-		Map<Long, Map<Long, NiCell>> percentages = new HashMap<>(); // Map<entityId, Map<activityId, Percentage>>
-		for(NiCell splitCell:dataColumn.getLinearData()) {
-			Cell cell = splitCell.getCell();
-			long entityId = cell.entityId;
-			splitterArrays.computeIfAbsent(entityId, zz-> new ArrayList<>()).add(splitCell);
-			actIds.computeIfAbsent(entityId, zz -> new HashSet<>()).add(cell.activityId);
-			percentages.computeIfAbsent(entityId, zz -> new HashMap<>()).put(cell.activityId, splitCell);
-		}
-
-		Map<Long, NiSplitCell> splitters = splitterArrays.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry-> z.behaviour.mergeSplitterCells(entry.getValue())));
+				
+		SplitDigest splitDigest = new SplitDigest(z, dataColumn, this::getIds);
+		
+		Map<Long, NiSplitCell> splitters = splitDigest.buildSplitters();
+				
 		List<Long> orderedCatIds = new ArrayList<>(splitters.keySet());
 		orderedCatIds.sort((catIdA, catIdB) -> splitters.get(catIdA).compareTo(splitters.get(catIdB)));
 
@@ -90,7 +129,8 @@ public class ColumnReportData extends ReportData {
 			Map<CellColumn, ColumnContents> subContents = new HashMap<>();
 			for(CellColumn cc:contents.keySet()) {
 				ColumnContents oldContents = contents.get(cc);
-				ColumnContents newContents = cc.getBehaviour().horizSplit(oldContents, percentages.get(catId), actIds.get(catId), acceptors);
+				ColumnContents newContents = cc.getBehaviour().horizSplit(oldContents, splitDigest.percentages.get(catId), splitDigest.actIds.get(catId), acceptors);
+				System.err.format("splitting %s by %s.%s: %s became %s\n", cc.getHierName(), z.getHierName(), splitCell.toString(), oldContents, newContents);
 				subContents.put(cc, newContents);
 			}
 			ColumnReportData sub = new ColumnReportData(context, splitCell, subContents);

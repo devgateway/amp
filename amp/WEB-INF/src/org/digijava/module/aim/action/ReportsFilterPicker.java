@@ -459,7 +459,7 @@ public class ReportsFilterPicker extends Action {
 			 filterForm.setCustomGroupSize(usedDecimalFormat.getGroupingSize());
 		 }
 		
-		filterForm.setCurrencies(CurrencyUtil.getUsableCurrencies());			
+		filterForm.setCurrencies(CurrencyUtil.getUsableCurrencies(true));			
 		AmpCurrency defaultCurrency = AmpARFilter.getDefaultCurrency();
 		filterForm.setDefaultCurrency(defaultCurrency.getAmpCurrencyId());
 		

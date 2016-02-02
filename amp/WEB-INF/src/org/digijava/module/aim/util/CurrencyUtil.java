@@ -620,10 +620,15 @@ public class CurrencyUtil {
 	 */
 	public static List<AmpCurrency> getUsableCurrencies()
 	{
+		// keeping old references as not using virtual currencies, since not requested
+		return getUsableCurrencies(false);
+	}
+	
+	public static List<AmpCurrency> getUsableCurrencies(boolean includeVirtual) {
 		//Only currencies having exchanges rates AMP-2620
 		List<AmpCurrency> usableCurrencies = new ArrayList<AmpCurrency>();		
 	
-		for (AmpCurrency currency:getActiveAmpCurrencyByName())
+		for (AmpCurrency currency:getActiveAmpCurrencyByName(includeVirtual))
 			if (currency.isRate()){
 				usableCurrencies.add(currency);
 			}

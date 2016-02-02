@@ -25,6 +25,7 @@ import org.dgfoundation.amp.nireports.output.NiReportData;
 import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
 import org.dgfoundation.amp.nireports.output.NiReportRunResult;
 import org.dgfoundation.amp.nireports.runtime.Column;
+import org.digijava.kernel.translator.TranslatorWorker;
 
 /**
  * part of the (NiReportsCore, AmpReportsSchema, Reports API) intersection - formats the output
@@ -74,8 +75,11 @@ public class AmpNiReportsFormatter {
 			List<HeaderCell> ampHeaderRow = new ArrayList<HeaderCell>();
 			for (Entry<Integer, Column> entry : niHeaderRow.entrySet()) {
 				Column niCol = entry.getValue();
+				//TODO: until column info is available to clarify if a year column, doing some temporary assumption to not translate columns with numbers
+				String trnName = niCol.name.matches("[^0-9]*[0-9]+[^0-9]*") ? niCol.name : 
+					TranslatorWorker.translateText(niCol.name);
 				ReportOutputColumn roc = niColumnToROC.computeIfAbsent(niCol, val -> 
-					new ReportOutputColumn(niCol.name, niColumnToROC.get(niCol.getParent()), niCol.name, null));
+					new ReportOutputColumn(trnName, niColumnToROC.get(niCol.getParent()), niCol.name, null));
 				ampHeaderRow.add(new HeaderCell(niCol.getReportHeaderCell(), roc));
 				if (i == 1)
 					rootHeaders.add(roc);

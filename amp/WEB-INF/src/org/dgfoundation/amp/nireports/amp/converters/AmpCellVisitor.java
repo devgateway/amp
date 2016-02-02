@@ -15,6 +15,7 @@ import org.dgfoundation.amp.nireports.output.CellVisitor;
 import org.dgfoundation.amp.nireports.output.NiAmountCell;
 import org.dgfoundation.amp.nireports.output.NiSplitCell;
 import org.dgfoundation.amp.nireports.output.NiTextCell;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.FormatHelper;
 
 /**
@@ -36,7 +37,9 @@ public class AmpCellVisitor implements CellVisitor<ReportCell> {
 
 	@Override
 	public ReportCell visit(NiTextCell cell) {
-		return asTextCell(cell.getDisplayedValue());
+		String text = ("".equals(cell.getDisplayedValue()) && cell.entityId != -1) ?
+			TranslatorWorker.translateText("Undefined") : cell.getDisplayedValue();  
+		return asTextCell(text);
 	}
 	
 	@Override

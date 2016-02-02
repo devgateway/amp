@@ -2,6 +2,7 @@ package org.dgfoundation.amp.nireports.amp;
 
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -17,6 +18,7 @@ import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.nireports.amp.converters.AmpCellVisitor;
 import org.dgfoundation.amp.nireports.output.NiColumnReportData;
 import org.dgfoundation.amp.nireports.output.NiGroupReportData;
@@ -58,7 +60,7 @@ public class AmpNiReportsFormatter {
 	
 	public GeneratedReport format() {
 		buildHeaders();
-		reportContents = getReportContents(runResult.reportOut);
+		reportContents = getReportContents(runResult.reportOut, 0);
 		return new GeneratedReport(spec, (int) runResult.wallclockTime, null, reportContents, rootHeaders, 
 				leafHeaders, generatedHeaders, runResult.timings);
 	}
@@ -90,7 +92,7 @@ public class AmpNiReportsFormatter {
 	}
 	
 	/** Provides {@link ReportArea} structure */
-	protected ReportAreaImpl getReportContents(NiReportData niReportData) {
+	protected ReportAreaImpl getReportContents(NiReportData niReportData, int level) {
 		ReportAreaImpl ra = reportAreaSupplier.get();
 		runResult.headers.leafColumns.forEach(niCellColumn ->
 			ra.getContents().put(niColumnToROC.get(niCellColumn), convert(niReportData.trailCells.get(niCellColumn))));
@@ -98,9 +100,28 @@ public class AmpNiReportsFormatter {
 		if (niReportData instanceof NiColumnReportData) {
 			ra.setChildren(getChildren((NiColumnReportData) niReportData));
 		} else {
-			ra.setChildren(getChildren((NiGroupReportData) niReportData));
+			ra.setChildren(getChildren((NiGroupReportData) niReportData, level));
 		}
+		
+		fixHierarchyTrailCells(ra, level);
+		
 		return ra;
+	}
+	
+	protected void fixHierarchyTrailCells(ReportAreaImpl ra, int level) {
+		// building trail cells as needed for Reports API, while NiReportData trail cell for hierarchies is empty 
+		ReportArea child = ra.getChildren().iterator().next();
+		Iterator<Entry<ReportOutputColumn, ReportCell>> iter = ra.getContents().entrySet().iterator();
+		if (level == 0 && iter.hasNext()) {
+			iter.next().setValue(new TextCell(TranslatorWorker.translateText("Report Totals")));
+		}
+		for (int i = 0; i < level && iter.hasNext(); i++) {
+			Entry<ReportOutputColumn, ReportCell> entry = iter.next();
+			String displayedValue = child.getContents().get(entry.getKey()).displayedValue;
+			if (i + 1 == level)
+				displayedValue += " " + TranslatorWorker.translateText("Totals"); 
+			entry.setValue(new TextCell(displayedValue));
+		}
 	}
 	
 	protected List<ReportArea> getChildren(NiColumnReportData niColumnReportData) {
@@ -112,9 +133,9 @@ public class AmpNiReportsFormatter {
 		return new ArrayList<ReportArea>(idReportArea.values());
 	}
 	
-	protected List<ReportArea> getChildren(NiGroupReportData niGroupReportData) {
+	protected List<ReportArea> getChildren(NiGroupReportData niGroupReportData, int level) {
 		List<ReportArea> children = new ArrayList<ReportArea>();
-		niGroupReportData.subreports.forEach(subReport -> children.add(getReportContents(subReport)));
+		niGroupReportData.subreports.forEach(subReport -> children.add(getReportContents(subReport, level + 1)));
 		return children;
 	}	
 	

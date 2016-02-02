@@ -26,6 +26,7 @@ import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.FilterParam;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
@@ -679,29 +680,29 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 	  PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {
 				String groupClause = "";
-				if (g != null)
-					groupClause = " AND object_id NOT IN (SELECT amp_activity_id FROM amp_activity_version WHERE amp_activity_group_id = " + g.getAmpActivityGroupId() + ") ";
-				
-				
-				
+				Long groupId = null;
+				if (g != null) {
+					groupClause = " AND object_id NOT IN (SELECT amp_activity_id FROM amp_activity_version WHERE amp_activity_group_id = ?) ";
+					groupId = g.getAmpActivityGroupId();
+				}
 				String query = "SELECT aav.amp_activity_id, team.name FROM amp_activity_version aav "
 						+ "left outer JOIN amp_team team ON aav.amp_team_id = team.amp_team_id "
 						+ "WHERE amp_activity_id IN"
 						+ "(SELECT object_id FROM amp_content_translation WHERE object_class = 'org.digijava.module.aim.dbentity.AmpActivityVersion' AND field_name='name' "
 						+ groupClause
 						+ " AND object_id IN (SELECT amp_activity_last_version_id FROM amp_activity_group) "
-						+ " AND translation = '" + name + "') ";
-
-				try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
+						+ " AND translation = ?) ";
+				List<FilterParam> params = new ArrayList<FilterParam>();
+				if (groupId != null)
+					params.add(new FilterParam(groupId, java.sql.Types.BIGINT));
+				params.add(new FilterParam(name, java.sql.Types.VARCHAR));
+				try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, params)) {
 					while (rsi.rs.next()) {
-						
 						Long id = rsi.rs.getLong(1);
 						String teamName = rsi.rs.getString(2);
 						result.setId(id);
 						result.setValue(teamName);
 					}
-		
-						
 				}
 				
 			}

@@ -115,8 +115,8 @@ public class AmpNiReportsFormatter {
 	}	
 	
 	protected ReportCell convert(NiOutCell cell) {
-		if (cell == null) 
-			return new org.dgfoundation.amp.newreports.TextCell(""); //TODO: should return null for the sake of sparse output
+		if (cell == null)
+			return null;
 		return cell.accept(cellVisitor);
 	}
 	

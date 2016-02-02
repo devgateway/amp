@@ -136,7 +136,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	private List<ReportOutputColumn> totalsHeaders = null; // list of output columns which are totals. they reside at the end of the output's cols list 
 	
 	// stores INTERNAL_USE_ID for each row from the CellDataSet, if this feature is required 
-	private List<Integer> cellDataSetActivities = null;
+	private List<Long> cellDataSetActivities = null;
 	
 	private final ReportEnvironment environment;
 	protected final String translatedUndefined;
@@ -360,7 +360,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 				 * then we do not need to collect them
 				 */
 				&& spec.getHierarchies().size() < spec.getColumns().size()) {
-			cellDataSetActivities = new ArrayList<Integer>();
+			cellDataSetActivities = new ArrayList<Long>();
 		}
 	}	
 	

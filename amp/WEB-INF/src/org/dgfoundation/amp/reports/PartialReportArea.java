@@ -22,7 +22,7 @@ public class PartialReportArea extends ReportAreaImpl {
 	protected int totalLeafActivitiesCount = -1;
 	protected int currentLeafActivitiesCount = -1;
 	transient 
-	protected Set<Integer> leafActivities = new TreeSet<Integer>();
+	protected Set<Long> leafActivities = new TreeSet<Long>();
 	
 	public PartialReportArea() {
 		super();
@@ -135,15 +135,19 @@ public class PartialReportArea extends ReportAreaImpl {
 		this.currentLeafActivitiesCount = currentLeafActivitiesCount;
 	}
 
-	public void addInternalUseId(Integer id) {
+	public void addInternalUseId(Long id) {
 		leafActivities.add(id);
 	}
 	
-	public void addAllInternalUseId(Set<Integer> idSet) {
+	public void addAllInternalUseId(Set<Long> idSet) {
 		leafActivities.addAll(idSet);
 	}
 	
-	protected Set<Integer> getLeafActivities() {
+	protected Set<Long> getLeafActivities() {
 		return leafActivities;
 	}
+	
+//	public <K> K accept(ReportAreaVisitor<K> visitor) {
+//		return visitor.visit(this);
+//	}
 }

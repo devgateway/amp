@@ -47,7 +47,7 @@ public class AmpCellVisitor implements CellVisitor<ReportCell> {
 	public String formatNumber(BigDecimal value) {
 		if (decimalFormatter == null || value == null) 
 			return value == null ? "" : String.valueOf(value);
-		return decimalFormatter.format(value.doubleValue()); // TODO: research a BigDecimal formatter?
+		return decimalFormatter.format(value);
 	}
 	
 	public ReportCell visitNumberedCell(NumberedCell cell) {

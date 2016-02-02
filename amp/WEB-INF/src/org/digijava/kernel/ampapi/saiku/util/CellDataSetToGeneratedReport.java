@@ -55,7 +55,7 @@ public class CellDataSetToGeneratedReport {
 	private MondrianReportSpec spec;
 	private final CellDataSet cellDataSet;
 	private final List<ReportOutputColumn> leafHeaders;
-	private final List<Integer> cellDataSetActivities;
+	private final List<Long> cellDataSetActivities;
 	private DecimalFormat numberFormat;
 	private NumberFormat readingNumberFormat;
 	
@@ -72,7 +72,7 @@ public class CellDataSetToGeneratedReport {
 	private final AmountsUnits unitsOption;
 	
 	public CellDataSetToGeneratedReport(MondrianReportSpec spec, CellDataSet cellDataSet, 
-			List<ReportOutputColumn> leafHeaders, List<Integer> cellDataSetActivities) {
+			List<ReportOutputColumn> leafHeaders, List<Long> cellDataSetActivities) {
 		this.spec = spec;
 		this.cellDataSet = cellDataSet;
 		this.leafHeaders = leafHeaders;
@@ -111,7 +111,7 @@ public class CellDataSetToGeneratedReport {
 		ReportAreaImpl root = MondrianReportUtils.getNewReportArea(reportAreaType);
 		boolean isSaikuReport = root instanceof SaikuReportArea;
 		boolean isPartialArea = root instanceof PartialReportArea;
-		Iterator<Integer> idIter =  isPartialArea && cellDataSetActivities != null 
+		Iterator<Long> idIter =  isPartialArea && cellDataSetActivities != null 
 				? cellDataSetActivities.iterator() : null;
 		
 		Deque<List<ReportArea>> stack = new ArrayDeque<List<ReportArea>>();

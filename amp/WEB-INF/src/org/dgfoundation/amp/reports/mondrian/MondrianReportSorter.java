@@ -149,7 +149,7 @@ public class MondrianReportSorter {
 				if (mdxMeasure == null)
 					throw new AMPException("Invalid sorting info: " + sInfo);
 				sortCol = ReportOutputColumn.buildTranslated(mdxMeasure.getName(), environment.locale, sortCol, null);
-				int colId = leafHeaders.indexOf(sortCol); //TODO-NiReports: ROC equals() and hashCode() are not comparison sorters, so this code has been broken
+				int colId = leafHeaders.indexOf(sortCol);
 				if (colId == -1)
 					throw new AMPException("Cannot sort by inexistent leafcolumn: " + sortCol);
 				sortByColumn(rootArea, colId , level, sInfo.ascending);

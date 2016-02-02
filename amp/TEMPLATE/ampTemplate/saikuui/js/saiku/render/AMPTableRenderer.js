@@ -438,7 +438,7 @@ function generateDataRows(page, options) {
 				cell += "</th>";
 			} else {
 				// Change amount styles if is a subtotal.
-				if (this.contentMatrix[i][j].isTotal === true) {
+				if (this.contentMatrix[i][j] != null && this.contentMatrix[i][j].isTotal === true) {
 					cell = "<td class='data total'>";
 					if (this.type === 'xlsx' || this.type === 'csv') {
 						cell += this.contentMatrix[i][j].value;
@@ -460,7 +460,7 @@ function generateDataRows(page, options) {
 						if (this.type === 'xlsx' || this.type === 'csv') {
 							cell += this.contentMatrix[i][j].value;
 						} else {							
-							var auxNonTotalVal = this.contentMatrix[i][j].displayedValue;
+							var auxNonTotalVal = this.contentMatrix[i][j] == null ? "" : this.contentMatrix[i][j].displayedValue;
 							if (auxNonTotalVal === '' || auxNonTotalVal === null) {								
 								// This was requested on AMP-21487.
 								auxNonTotalVal = '0';
@@ -543,13 +543,14 @@ function extractDataFromTree(node) {
 				// If this is a hierarchy column.
 				if (i < this.metadataHierarchies.length) {
 					// If current cell is empty then take the above cell value.
-					if (dataValue.displayedValue.length === 0) {
+					if (dataValue != null && dataValue.displayedValue.length === 0) {
 						dataValue = this.contentMatrix[this.currentContentIndexRow - 1][i];
 					}
 				}
 			}
 			// Save isTotal flag.
-			dataValue.isTotal = node.isTotal;
+			if (dataValue != null)
+				dataValue.isTotal = node.isTotal;
 			this.contentMatrix[this.currentContentIndexRow][i] = dataValue;
 		}
 		this.currentContentIndexRow++;

@@ -5,6 +5,7 @@ package org.dgfoundation.amp.reports;
 
 import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.TreeSet;
 
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
@@ -38,8 +39,8 @@ public class ReportAreaMultiLinked extends PartialReportArea {
 		this.contents = area.getContents();
 		if (area instanceof PartialReportArea) {
 			PartialReportArea pra = (PartialReportArea) area;
-			this.totalLeafActivitiesCount = pra.totalLeafActivitiesCount;
-			this.leafActivities = pra.leafActivities;
+			this.totalLeafActivitiesCount = pra.getTotalLeafActivitiesCount();
+			this.leafActivities = new TreeSet<>(pra.leafActivities);
 		}
 		if (area.getChildren() != null && area.getChildren().size() > 0) {
 			LinkedList<ReportArea> cList = new LinkedList<ReportArea>();

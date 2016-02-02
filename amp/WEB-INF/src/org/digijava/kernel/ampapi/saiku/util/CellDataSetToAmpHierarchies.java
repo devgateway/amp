@@ -41,11 +41,11 @@ public class CellDataSetToAmpHierarchies {
 	private int noOfColumnsToMerge;
 	private SortedSet<String>[] sbList;
 	private final List<ReportOutputColumn> leafHeaders;
-	private final List<Integer> activities;
+	private final List<Long> activities;
 	private final String translatedUndefined;
 	
 	private CellDataSetToAmpHierarchies(MondrianReportSpec spec, CellDataSet cellDataSet, 
-			List<ReportOutputColumn> leafHeaders, String translatedUndefined, List<Integer> activities) {
+			List<ReportOutputColumn> leafHeaders, String translatedUndefined, List<Long> activities) {
 		this.spec = spec;
 		this.cellDataSet = cellDataSet;
 		this.leafHeaders = leafHeaders;
@@ -61,7 +61,7 @@ public class CellDataSetToAmpHierarchies {
 	 * @param activities - list of internal ids (those that are merged) 
 	 */
 	public static void concatenateNonHierarchicalColumns(MondrianReportSpec spec, CellDataSet cellDataSet, 
-			List<ReportOutputColumn> leafHeaders, String translatedUndefined, List<Integer> activities) {
+			List<ReportOutputColumn> leafHeaders, String translatedUndefined, List<Long> activities) {
 		(new CellDataSetToAmpHierarchies(spec, cellDataSet, leafHeaders, translatedUndefined, activities)).concatenate();
 	}
 	
@@ -162,7 +162,7 @@ public class CellDataSetToAmpHierarchies {
 				}
 				// remember the internal id
 				if (activities != null) {
-					activities.add(Integer.valueOf(cellDataSet.getCellSetBody()[groupStartRowId][startColumnIndex - 1].getFormattedValue()));
+					activities.add(Long.valueOf(cellDataSet.getCellSetBody()[groupStartRowId][startColumnIndex - 1].getFormattedValue()));
 				}
 				//update indexes
 				groupStartRowId = rowId + 1;

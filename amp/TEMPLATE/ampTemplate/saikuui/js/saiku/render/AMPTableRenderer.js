@@ -517,7 +517,8 @@ function findGroupVertically(matrix, i, j) {
 			// Due to the way the tree data is structured we don't need to check
 			// for cells with the same value than the one being compared but
 			// with empty cells.
-			if (matrix[k][j].displayedValue.length === 0) {
+			if (k > 0 && matrix[k][j].displayedValue === matrix[k-1][j].displayedValue ||
+				matrix[k][j].displayedValue.length === 0) {
 				count++;
 				// Mark the cell so we don't draw it later.
 				matrix[k][j].isGrouped = true;

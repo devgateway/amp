@@ -6,11 +6,9 @@ package org.dgfoundation.amp.onepager.components.features.subsections;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.Util;
@@ -19,20 +17,15 @@ import org.dgfoundation.amp.onepager.components.QuarterInformationPanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpMTEFProjectionFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.categorymanager.action.CategoryManager;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
  * @author mpostelnicu@dgateway.org since Nov 5, 2010
  */
-public class AmpMTEFProjectionSubsectionFeature extends
-		AmpSubsectionFeaturePanel<AmpFunding> {
+public class AmpMTEFProjectionSubsectionFeature extends AmpSubsectionFeatureFundingPanel<AmpFunding> {
 
 	protected AmpMTEFProjectionFormTableFeature mtefTableFeature;
 
@@ -42,13 +35,13 @@ public class AmpMTEFProjectionSubsectionFeature extends
 	 * @param model
 	 * @throws Exception
 	 */
-	public AmpMTEFProjectionSubsectionFeature(String id, 
-			final IModel<AmpFunding> model,String fmName) throws Exception {
-		super(id, fmName, model);
+	public AmpMTEFProjectionSubsectionFeature(String id, final IModel<AmpFunding> model, String fmName) throws Exception {
+		super(id, fmName, model, Constants.MTEFPROJECTION);
+		
 		mtefTableFeature = new AmpMTEFProjectionFormTableFeature("mtefTableFeature", "MTEF Projections Table", model);
 		add(mtefTableFeature);
-		final IModel<Set<AmpFundingMTEFProjection>> setModel = new PropertyModel<Set<AmpFundingMTEFProjection>>(
-				model, "mtefProjections");
+		
+		final IModel<Set<AmpFundingMTEFProjection>> setModel = new PropertyModel<Set<AmpFundingMTEFProjection>>(model, "mtefProjections");
 		
 		AmpAjaxLinkField addMTEF=new AmpAjaxLinkField("addMTEF","Add Projection","Add Projection") {
 			@Override

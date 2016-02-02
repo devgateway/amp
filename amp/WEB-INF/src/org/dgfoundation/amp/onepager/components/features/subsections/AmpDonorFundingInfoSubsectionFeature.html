@@ -8,19 +8,31 @@
             </tr>
         </wicket:fm>
 
-        <wicket:fm fmNames="Financing Instrument;Type of Assistence;Funding Organization Id">
+        <wicket:fm fmNames="Financing Instrument;Type of Assistence;Funding Organization Id;Show Type of Assistence in summary;Show Financing Instrument in summary;Show Financing id in summary">
             <tr align="left">
-                <td><span wicket:id="typeOfAssistance"/><span wicket:id="showTypeOfAssistance"/></td>
-                <td><span wicket:id="financingInstrument"/><span wicket:id="showFinancingInstrument"/></td>
-                <td><span wicket:id="financingId"/><span wicket:id="showFinancingId"/></td>
+                <td>
+	                <wicket:fm fmNames="Type of Assistence;Show Type of Assistence in summary">
+	                	<span wicket:id="typeOfAssistance"/><span wicket:id="showTypeOfAssistance"/>
+	                </wicket:fm>
+                </td>
+                <td>
+                	<wicket:fm fmNames="Financing Instrument;Show Financing Instrument in summary">
+                		<span wicket:id="financingInstrument"/><span wicket:id="showFinancingInstrument"/>
+                	</wicket:fm>
+                </td>
+                <td>
+                	<wicket:fm fmNames="Funding Organization Id;Show Financing id in summary">
+               			<span wicket:id="financingId"/><span wicket:id="showFinancingId"/>
+               		</wicket:fm>
+               	</td>
             </tr>
         </wicket:fm>
-        <wicket:fm fmNames="Funding Status;Mode of Payment;Loan Terms;Funding Classification Date">
+        <wicket:fm fmNames="Funding Status;Mode of Payment;Loan Terms;Funding Classification Date;Required Validator for Funding Status;Show Funding Status in summary;Show Mode of Payment in summary">
             <tr align="left">
-                <wicket:fm fmNames="Funding Status">
+                <wicket:fm fmNames="Funding Status;Required Validator for Funding Status;Show Funding Status in summary">
                     <td><span wicket:id="fundingStatus"/><span wicket:id="fundingStatusRequired"/><span wicket:id="showFundingStatus"/></td>
                 </wicket:fm>
-                <wicket:fm fmNames="Mode of Payment">
+                <wicket:fm fmNames="Mode of Payment;Show Mode of Payment in summary">
                     <td><span wicket:id="modeOfPayment"/><span wicket:id="showModeOfPayment"/></td>
                 </wicket:fm>
                 <wicket:fm fmNames="Loan Terms">

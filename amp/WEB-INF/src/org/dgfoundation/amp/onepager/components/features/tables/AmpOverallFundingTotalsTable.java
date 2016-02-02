@@ -59,20 +59,41 @@ public class AmpOverallFundingTotalsTable extends AmpComponentPanel<Void> {
                 = new AmpLabelInformationFieldPanel("totalPlannedExpenditures",
                 new AmpOverallFundingModel(funding, null, Constants.EXPENDITURE, CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()),
                 "Total Planned Expenditure");
-		add(totalPlannedExpenditures);		
+		add(totalPlannedExpenditures);
+		
+		AmpLabelInformationFieldPanel totalMtefProjectionsProjection = new AmpLabelInformationFieldPanel("totalMtefProjectionsProjection",
+		        new AmpOverallFundingModel(funding, null, Constants.MTEFPROJECTION, CategoryConstants.MTEF_PROJECTION_PROJECTION.getValueKey()),
+		        "Total MTEF Projections Projection");
+		add(totalMtefProjectionsProjection);
+
+		AmpLabelInformationFieldPanel totalMtefProjectionsPipeline = new AmpLabelInformationFieldPanel("totalMtefProjectionsPipeline",
+				new AmpOverallFundingModel(funding, null, Constants.MTEFPROJECTION, CategoryConstants.MTEF_PROJECTION_PIPELINE.getValueKey()),
+				"Total MTEF Projections Pipeline");
+		add(totalMtefProjectionsPipeline);
+		
 		AmpCategoryValue planned = CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getAmpCategoryValueFromDB();
 		AmpCategoryValue actual = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getAmpCategoryValueFromDB();
+		AmpCategoryValue projection = CategoryConstants.MTEF_PROJECTION_PROJECTION.getAmpCategoryValueFromDB();
+		AmpCategoryValue pipeline = CategoryConstants.MTEF_PROJECTION_PIPELINE.getAmpCategoryValueFromDB();
+		
 		if (planned == null || !actual.isVisible()) {
 			totalActualCommitments.setVisibilityAllowed(false);
 			totalActualDisbursements.setVisibilityAllowed(false);
 			totalActualExpenditures.setVisibilityAllowed(false);
 		}
+		
 		if (planned == null || !planned.isVisible()) {
 			totalPlannedCommitments.setVisibilityAllowed(false);
 			totalPlannedDisbursements.setVisibilityAllowed(false);
 			totalPlannedExpenditures.setVisibilityAllowed(false);
 		}
-
+		
+		if (projection == null || !projection.isVisible()) {
+			totalMtefProjectionsProjection.setVisibilityAllowed(false);
+		}
+		
+		if (pipeline == null || !pipeline.isVisible()) {
+			totalMtefProjectionsPipeline.setVisibilityAllowed(false);
+		}
 	}
-
 }

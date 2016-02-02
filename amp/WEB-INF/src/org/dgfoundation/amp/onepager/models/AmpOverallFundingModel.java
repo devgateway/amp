@@ -1,13 +1,13 @@
 package org.dgfoundation.amp.onepager.models;
 
-import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.FundingInformationItem;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.TeamMember;
@@ -80,8 +80,17 @@ public class AmpOverallFundingModel implements IModel {
 	}
 
 	private void processFunding(String toCurrCode, DecimalWraper amount, AmpFunding funding) {
-		for (AmpFundingDetail fundingDetail : funding.getFundingDetails()) {
-			if (fundingDetail.getAdjustmentType() != null && fundingDetail.getAdjustmentType().getValue() != null
+		
+		Set<FundingInformationItem> fundingDetails = new HashSet<>();
+		
+		if (transactionType == Constants.MTEFPROJECTION) {
+        	fundingDetails.addAll(funding.getMtefProjections());
+		} else {
+			fundingDetails.addAll(funding.getFundingDetails());
+		}
+		
+		for (FundingInformationItem fundingDetail : fundingDetails) {
+    		if (fundingDetail.getAdjustmentType() != null && fundingDetail.getAdjustmentType().getValue() != null
 					&& fundingDetail.getAdjustmentType().getValue().equals(adjustmentType)
 					&& fundingDetail.getTransactionType() == transactionType) {
 
@@ -90,30 +99,31 @@ public class AmpOverallFundingModel implements IModel {
 					amount.add(getDecimalWraper(fundingDetail, toCurrCode));
 				}
 			}
-		}
+    	}
 	}
 
-	private DecimalWraper getDecimalWraper(AmpFundingDetail fundDet, String toCurrCode) {
+	private DecimalWraper getDecimalWraper(FundingInformationItem fundDet, String toCurrCode) {
 		java.sql.Date dt = new java.sql.Date(fundDet.getTransactionDate().getTime());
-
 		Double fixedExchangeRate = fundDet.getFixedExchangeRate();
-		if (fixedExchangeRate != null && (Math.abs(fixedExchangeRate) < 1.0E-15))
+		
+		if (fixedExchangeRate != null && (Math.abs(fixedExchangeRate) < 1.0E-15)) {
 			fixedExchangeRate = null;
+		}
+		
 		double frmExRt;
 		if (fixedExchangeRate == null) {
 			frmExRt = Util.getExchange(fundDet.getAmpCurrencyId().getCurrencyCode(), dt);
 		} else {
 			frmExRt = fixedExchangeRate;
 		}
+		
 		double toExRt;
-
 		if (fundDet.getAmpCurrencyId().getCurrencyCode().equalsIgnoreCase(toCurrCode)) {
 			toExRt = frmExRt;
 		} else {
 			toExRt = Util.getExchange(toCurrCode, dt);
 		}
+		
 		return CurrencyWorker.convertWrapper(fundDet.getTransactionAmount(), frmExRt, toExRt, dt);
-
 	}
-
 }

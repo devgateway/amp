@@ -1,7 +1,7 @@
 package org.dgfoundation.amp.nireports.amp;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -43,7 +43,7 @@ public class AmpNiReportsFormatter {
 	private List<ReportOutputColumn> leafHeaders = new ArrayList<>();
 	private List<ReportOutputColumn> rootHeaders = new ArrayList<>();
 	private List<List<HeaderCell>> generatedHeaders = new ArrayList<>();
-	private Map<Column, ReportOutputColumn> niColumnToROC = new HashMap<>();
+	private Map<Column, ReportOutputColumn> niColumnToROC = new IdentityHashMap<>();
 	
 	private final AmpCellVisitor cellVisitor;
 	

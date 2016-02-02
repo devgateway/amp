@@ -164,7 +164,7 @@ public class SQLUtils {
 	 * @return
 	 * @throws SQLException
 	 */
-	public static RsInfo rawRunQuery(Connection connection, String query, ArrayList<FilterParam> params) throws SQLException
+	public static RsInfo rawRunQuery(Connection connection, String query, List<FilterParam> params) throws SQLException
 	{
 		//logger.info("Running raw SQL query: " + query);
 		

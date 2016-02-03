@@ -68,6 +68,7 @@ public class DateTimeUtil {
 	 */
 	public static String formatDate(Date date){
 		// TODO This should be in some other Utility class, FormatUtil may be, or just Util
+		if (date == null) return null;
 		String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
 		if (pattern==null){
 			pattern=Constants.CALENDAR_DATE_FORMAT;
@@ -79,6 +80,18 @@ public class DateTimeUtil {
 		return result;
 	}
 
+	/**
+	 * Formats date using the supplied date pattern
+	 * @param date
+	 * @return
+	 */
+	public static String formatDate(Date date, String format){		
+		if (date == null) return null;		
+		SimpleDateFormat formater = new SimpleDateFormat(format);
+		String result = formater.format(date);
+		return result;
+	}
+	
 	public static Date parseDate(String date) throws Exception{
 		// TODO This should be in some other Utility class, FormatUtil may be, or just Util
 		String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
@@ -185,6 +198,7 @@ public class DateTimeUtil {
 	}
 	
 	public static Date parseDate(String date, String pattern) {
+		if (date == null) return null;
 		try {
 			return new SimpleDateFormat(pattern).parse(date);
 		} catch (ParseException e) {

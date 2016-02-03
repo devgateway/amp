@@ -3,14 +3,14 @@ package org.digijava.module.fundingpledges.form;
 
 import java.util.Date;
 
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.Identifiable;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
+import org.digijava.module.common.util.DateTimeUtil;
 
 import static org.dgfoundation.amp.algo.AlgoUtils.*;
 
@@ -38,8 +38,8 @@ public class FundingPledgesDetailsShim implements UniquelyIdentifiable {
 		this.amount = FormatHelper.formatNumber(fpd.getAmount());
 		this.currencyId = getIdFrom(fpd.getCurrency());
 		this.fundingYear = getLongFrom(fpd.getFundingYear());
-		this.fundingDateStart = FundingPledgesDetails.formatDate(fpd.getFundingDateStart());
-		this.fundingDateEnd = FundingPledgesDetails.formatDate(fpd.getFundingDateEnd());
+		this.fundingDateStart = DateTimeUtil.formatDate(fpd.getFundingDateStart(),AmpARFilter.SDF_OUT_FORMAT_STRING);
+		this.fundingDateEnd = DateTimeUtil.formatDate(fpd.getFundingDateEnd(),AmpARFilter.SDF_OUT_FORMAT_STRING);
 	}
 	
 	public FundingPledgesDetails buildFundingPledgesDetail(FundingPledges pledge){
@@ -65,20 +65,20 @@ public class FundingPledgesDetailsShim implements UniquelyIdentifiable {
 	}
 	
 	public Date getFundingDateStartAsDate(){
-		return FundingPledgesDetails.parseDate(fundingDateStart);
+		return DateTimeUtil.parseDate(fundingDateStart, AmpARFilter.SDF_OUT_FORMAT_STRING);
 	}
 	
 	public Date getFundingDateEndAsDate(){
-		return FundingPledgesDetails.parseDate(fundingDateEnd);
+		return DateTimeUtil.parseDate(fundingDateEnd, AmpARFilter.SDF_OUT_FORMAT_STRING);
 	}
 	
 	public String getFundingDateStartSettingsFormat(){
-		return FundingPledgesDetails.formatGlobalSettingsDateFormat(FundingPledgesDetails.parseDate(fundingDateStart));
+		return DateTimeUtil.formatDate(this.getFundingDateStartAsDate());
 	}
 	
 	public String getFundingDateEndSettingsFormat(){
 		//
-		return FundingPledgesDetails.formatGlobalSettingsDateFormat(FundingPledgesDetails.parseDate(fundingDateEnd));
+		return DateTimeUtil.formatDate(this.getFundingDateEndAsDate());
 	}
 
 	@Override public String toString(){

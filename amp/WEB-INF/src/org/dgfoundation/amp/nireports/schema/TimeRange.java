@@ -7,9 +7,11 @@ import java.util.stream.Collectors;
 import java.util.function.Function;
 
 import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.DatedCell;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.runtime.NiCell;
+import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 
 /**
  * types of supported resolutions for specifying the date of a cell
@@ -18,19 +20,19 @@ import org.dgfoundation.amp.nireports.DatedCell;
  */
 public enum TimeRange implements Comparable<TimeRange> {
 	NONE(null, cell -> new ComparableValue<>("null", "null")), 
-	YEAR(DatedCell.CATEG_YEAR, cell -> cell.getTranslatedDate().year), 
-	QUARTER(DatedCell.CATEG_QUARTER, cell -> cell.getTranslatedDate().quarter), 
-	MONTH(DatedCell.CATEG_MONTH, cell -> cell.getTranslatedDate().month);
+	YEAR(NiReportsEngine.PSEUDOCOLUMN_YEAR, cell -> cell.getTranslatedDate().year), 
+	QUARTER(NiReportsEngine.PSEUDOCOLUMN_QUARTER, cell -> cell.getTranslatedDate().quarter), 
+	MONTH(NiReportsEngine.PSEUDOCOLUMN_MONTH, cell -> cell.getTranslatedDate().month);
 	
-	private String category;
+	private String entityType;
 	private Function<DatedCell, ComparableValue<String>> categorizer;
 	
 //	public String getCategory() {
 //		return category;
 //	}
 	
-	private TimeRange(String category, Function<DatedCell, ComparableValue<String>> categorizer) {
-		this.category = category;
+	private TimeRange(String entityType, Function<DatedCell, ComparableValue<String>> categorizer) {
+		this.entityType = entityType;
 		this.categorizer = categorizer;
 	}
 	
@@ -63,5 +65,22 @@ public enum TimeRange implements Comparable<TimeRange> {
 			default:
 				throw new RuntimeException("unsupported GroupingCriteria: " + crit);
 		}
+	}
+	
+	public VSplitStrategy asVSplitStrategy() {
+		return new VSplitStrategy() {
+
+			@Override
+			public String getEntityType() {
+				return entityType;
+			}
+			
+			@Override
+			public ComparableValue<String> categorize(NiCell cell) {
+				return categorizer.apply((DatedCell) cell.getCell());
+			}
+			
+		};
+
 	}
 }

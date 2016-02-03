@@ -8,9 +8,9 @@ import org.dgfoundation.amp.nireports.meta.CategCell;
  *
  */
 public interface DatedCell extends CategCell {
-	public final static String CATEG_YEAR = "Year";
-	public final static String CATEG_QUARTER = "Quarter";
-	public final static String CATEG_MONTH = "Month";
+//	public final static String CATEG_YEAR = "Year";
+//	public final static String CATEG_QUARTER = "Quarter";
+//	public final static String CATEG_MONTH = "Month";
 //	
 //	public default int getYear() {
 //		return NiUtils.getInt(getMetaInfo().getMetaInfo(CATEG_YEAR).v);

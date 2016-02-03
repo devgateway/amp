@@ -9,7 +9,13 @@ import org.dgfoundation.amp.nireports.ReportHeadingCell;
  *
  */
 public abstract class Column {
+	
 	public final String name;
+	
+	/**
+	 * null for root columns or where does not make sense
+	 */
+	public final NiColSplitCell splitCell;
 	
 	/**
 	 * might be null
@@ -45,9 +51,10 @@ public abstract class Column {
 	public abstract List<CellColumn> getLeafColumns();
 	public abstract List<Column> getChildrenStartingAtDepth(int depth);
 			
-	protected Column(String name, GroupColumn parent) {
+	protected Column(String name, GroupColumn parent, NiColSplitCell splitCell) {
 		this.name = name;
 		this.parent = parent;
+		this.splitCell = splitCell;
 		this.hierarchicalName = parent == null ? name : String.format("%s / %s", parent.getHierName(), name);
 	}
 	

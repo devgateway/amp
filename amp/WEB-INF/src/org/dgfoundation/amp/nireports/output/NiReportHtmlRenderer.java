@@ -87,8 +87,12 @@ public class NiReportHtmlRenderer {
 			SortedMap<Integer, Column> headerRow = headers.rasterizedHeaders.get(i);
 			res.append("<tr class='nireport_header'>");
 			for(Integer startCol:headerRow.keySet()) {
-				ReportHeadingCell rhc = headerRow.get(startCol).getReportHeaderCell();
-				res.append(String.format("<td class='nireport_header' rowSpan='%d' colSpan='%d'>%s</td>", rhc.getRowSpan(), rhc.getColSpan(), rhc.getName()));
+				Column col = headerRow.get(startCol);
+				ReportHeadingCell rhc = col.getReportHeaderCell();
+				String cellHtml = col.splitCell == null ? rhc.getName() : 
+					//String.format("<span title='%s -> %s'>%s*</span>", col.splitCell.entityType, col.splitCell.info.getComparable(), rhc.getName());
+					String.format("%s<br /><font class='headermeta'>%s -> %s</font>", rhc.getName(), col.splitCell.entityType, col.splitCell.info.getComparable());
+				res.append(String.format("<td class='nireport_header' rowSpan='%d' colSpan='%d'>%s</td>", rhc.getRowSpan(), rhc.getColSpan(), cellHtml));
 			}
 			res.append("</tr>\n");
 		}

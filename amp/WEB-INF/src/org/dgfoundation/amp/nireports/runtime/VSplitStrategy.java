@@ -19,6 +19,10 @@ import org.dgfoundation.amp.nireports.schema.Behaviour;
 public interface VSplitStrategy {
 	public ComparableValue<String> categorize(NiCell cell);
 	
+	public default String getEntityType() {
+		return null;
+	}
+	
 	public default Behaviour<?> getBehaviour(ComparableValue<String> cat, CellColumn splittedColumn) {
 		return splittedColumn.behaviour;
 	}
@@ -27,7 +31,7 @@ public interface VSplitStrategy {
 		return new ArrayList<>(existant);
 	}
 
-	public static VSplitStrategy build(Function<NiCell, ComparableValue<String>> cat, Function<ComparableValue<String>, Behaviour<?>> beh, Function<Set<ComparableValue<String>>, List<ComparableValue<String>>> subColumnNames) {
+	public static VSplitStrategy build(Function<NiCell, ComparableValue<String>> cat, Function<ComparableValue<String>, Behaviour<?>> beh, Function<Set<ComparableValue<String>>, List<ComparableValue<String>>> subColumnNames, String entityType) {
 		return new VSplitStrategy() {
 
 			@Override public ComparableValue<String> categorize(NiCell cell) {
@@ -41,6 +45,11 @@ public interface VSplitStrategy {
 			@Override
 			public List<ComparableValue<String>> getSubcolumnsNames(Set<ComparableValue<String>> existant) {
 				return subColumnNames == null ? VSplitStrategy.super.getSubcolumnsNames(existant) : subColumnNames.apply(existant);
+			}
+			
+			@Override
+			public String getEntityType() {
+				return entityType;
 			}
 		};
 	}

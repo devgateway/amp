@@ -26,8 +26,8 @@ public class GroupColumn extends Column {
 	 * @param subColumns if null, then instance is mutable, else immutable
 	 * @param parent
 	 */
-	public GroupColumn(String name, List<Column> subColumns, GroupColumn parent) {
-		super(name, parent);
+	public GroupColumn(String name, List<Column> subColumns, GroupColumn parent, NiColSplitCell splitCell) {
+		super(name, parent, splitCell);
 		if (subColumns != null) {
 			subColumns.forEach(z -> NiUtils.failIf(z.getParent() != this, String.format("trying to add a foreing child %s to %s", z.getHierName(), this.getHierName())));
 		}
@@ -89,7 +89,7 @@ public class GroupColumn extends Column {
 
 	@Override
 	public GroupColumn verticallySplitByCategory(VSplitStrategy strategy, GroupColumn newParent) {
-		GroupColumn res = new GroupColumn(name, null, newParent);
+		GroupColumn res = new GroupColumn(name, null, newParent, splitCell);
 		for(Column col:getSubColumns())
 			res.addColumn(col.verticallySplitByCategory(strategy, res));
 		

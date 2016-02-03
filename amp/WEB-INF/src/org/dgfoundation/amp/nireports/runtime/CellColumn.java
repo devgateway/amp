@@ -9,10 +9,13 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 
+import static java.util.Collections.emptyList;
+
 import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.ReportHeadingCell;
 import org.dgfoundation.amp.nireports.output.NiOutCell;
+import org.dgfoundation.amp.nireports.output.NiSplitCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 
@@ -27,12 +30,12 @@ public class CellColumn extends Column {
 	final Behaviour<?> behaviour;
 	final NiReportedEntity<?> entity;
 		
-	public CellColumn(String name, ColumnContents contents, GroupColumn parent, NiReportedEntity<?> entity) {
-		this(name, contents, parent, entity, entity.getBehaviour());
+	public CellColumn(String name, ColumnContents contents, GroupColumn parent, NiReportedEntity<?> entity, NiColSplitCell splitCell) {
+		this(name, contents, parent, entity, entity.getBehaviour(), splitCell);
 	}
 	
-	public CellColumn(String name, ColumnContents contents, GroupColumn parent, NiReportedEntity<?> entity, Behaviour<?> behaviour) {
-		super(name, parent);
+	public CellColumn(String name, ColumnContents contents, GroupColumn parent, NiReportedEntity<?> entity, Behaviour<?> behaviour, NiColSplitCell splitCell) {
+		super(name, parent, splitCell);
 		NiUtils.failIf(contents == null, "CellColumn should have a non-null contents");
 		this.contents = contents;
 		this.behaviour = behaviour;
@@ -48,9 +51,15 @@ public class CellColumn extends Column {
 	public GroupColumn verticallySplitByCategory(VSplitStrategy strategy, GroupColumn newParent) {
 		SortedMap<ComparableValue<String>, List<NiCell>> values = new TreeMap<>();
 		this.forEachCell(cell -> values.computeIfAbsent(strategy.categorize(cell), z -> new ArrayList<>()).add(cell));
-		GroupColumn res = new GroupColumn(this.name, null, newParent);
+		GroupColumn res = new GroupColumn(this.name, null, newParent, this.splitCell);
 		List<ComparableValue<String>> subColumnNames = strategy.getSubcolumnsNames(values.keySet());
-		subColumnNames.forEach(key -> res.addColumn(new CellColumn(key.getValue(), new ColumnContents(Optional.ofNullable(values.get(key)).orElse(Collections.emptyList())), res, this.entity, strategy.getBehaviour(key, this))));
+		subColumnNames.forEach(key -> res.addColumn(
+			new CellColumn(key.getValue(), 
+				new ColumnContents(Optional.ofNullable(values.get(key)).orElse(emptyList())), 
+				res, 
+				this.entity,
+				strategy.getBehaviour(key, this),
+				strategy.getEntityType() == null ? null : new NiColSplitCell(strategy.getEntityType(), key))));
 		return res;
 	}
 

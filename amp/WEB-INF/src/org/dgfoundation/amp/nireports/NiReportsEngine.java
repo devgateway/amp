@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.nireports;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -37,6 +38,7 @@ import org.dgfoundation.amp.nireports.runtime.MultiHierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.IdsAcceptorsBuilder;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
+import org.dgfoundation.amp.nireports.runtime.NiColSplitCell;
 import org.dgfoundation.amp.nireports.runtime.ReportData;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
@@ -64,6 +66,14 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	public static final Logger logger = Logger.getLogger(NiReportsEngine.class);
 	public static final String FUNDING_COLUMN_NAME = "Funding";
 	public static final String TOTALS_COLUMN_NAME = "Totals";
+	
+	public static final String PSEUDOCOLUMN_YEAR = "#date#year";
+	public static final String PSEUDOCOLUMN_QUARTER = "#date#quarter";
+	public static final String PSEUDOCOLUMN_MONTH = "#date#month";
+	public static final String PSEUDOCOLUMN_MEASURE = "#ni#measure";
+	public static final String PSEUDOCOLUMN_COLUMN = "#ni#column";
+	
+	public final static Set<String> PSEUDOCOLUMNS = new HashSet<>(Arrays.asList(PSEUDOCOLUMN_MONTH, PSEUDOCOLUMN_QUARTER, PSEUDOCOLUMN_YEAR, PSEUDOCOLUMN_MEASURE, PSEUDOCOLUMN_COLUMN));
 	
 	// some of the fields below are public because they are part of the "internal" API and might be used by callbacks from deep inside ComputedMeasures / etc
 	
@@ -239,9 +249,9 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	
 	protected void createInitialReport() {
 		//ColumnReportData fetchedData = new ColumnReportData(this);
-		GroupColumn rawData = new GroupColumn("RAW", null, null);
+		GroupColumn rawData = new GroupColumn("RAW", null, null, null);
 		
-		fetchedColumns.forEach((name, contents) -> rawData.addColumn(new CellColumn(name, contents, rawData, schema.getColumns().get(name)))); // regular columns
+		fetchedColumns.forEach((name, contents) -> rawData.addColumn(new CellColumn(name, contents, rawData, schema.getColumns().get(name), new NiColSplitCell(PSEUDOCOLUMN_COLUMN, new ComparableValue<String>(name, name))))); // regular columns
 		
 		TimeRange userRequestedRange = TimeRange.forCriteria(spec.getGroupingCriteria());
 		if (userRequestedRange != TimeRange.NONE)
@@ -267,18 +277,17 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	 */
 	protected GroupColumn separateYears(GroupColumn fundingColumn) {
 		TimeRange userRequestedRange = TimeRange.forCriteria(spec.getGroupingCriteria());
-		Map<String, Behaviour> behaviours = fundingColumn.getSubColumns().stream().collect(Collectors.toMap(z -> z.name, z -> ((CellColumn)z).getBehaviour()));
+		Map<String, Behaviour<?>> behaviours = fundingColumn.getSubColumns().stream().collect(Collectors.toMap(z -> z.name, z -> ((CellColumn)z).getBehaviour()));
 		
 		List<TimeRange> categories = TimeRange.getRange(TimeRange.YEAR, userRequestedRange); // get all the ranges between year and what the report requests
 		
 		List<NiCell> allCells = new ArrayList<>();
 		fundingColumn.forEachCell(cell -> allCells.add(cell));
 		
-		Column res = new CellColumn(fundingColumn.name, new ColumnContents(allCells), fundingColumn.getParent(), null, null); // TODO: change to proper YEAR entity
+		Column res = new CellColumn(fundingColumn.name, new ColumnContents(allCells), fundingColumn.getParent(), null, null, fundingColumn.splitCell);
 		List<VSplitStrategy> splitCriterias = new ArrayList<>();
 		for(TimeRange tr:categories) {
-			VSplitStrategy func = cell -> tr.getDateComponentCategorizer().apply((DatedCell) cell.getCell());
-			splitCriterias.add(func);
+			splitCriterias.add(tr.asVSplitStrategy());
 		}
 		
 		for(VSplitStrategy splitCriteria:splitCriterias)
@@ -287,7 +296,8 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		VSplitStrategy restoreMeasures = VSplitStrategy.build(
 			cell -> new ComparableValue<String>(cell.getEntity().getName(), AmpCollections.indexOf(actualMeasures, cell.getEntity().getName())),
 			cat -> behaviours.get(cat.getValue()),
-			spec.isDisplayEmptyFundingColumns() ? null : z -> getAsComparable(actualMeasures));
+			spec.isDisplayEmptyFundingColumns() ? null : z -> getAsComparable(actualMeasures),
+			PSEUDOCOLUMN_MEASURE);
 		GroupColumn z = res.verticallySplitByCategory(restoreMeasures, fundingColumn.getParent());
 		return z;
 	}
@@ -307,11 +317,11 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 	
 	protected Column buildFundingColumn(String columnName, GroupColumn parentColumn, Function<GroupColumn, GroupColumn> postprocessor) {
-		GroupColumn fundingColumn = new GroupColumn(columnName, null, parentColumn);  // yearly funding
+		GroupColumn fundingColumn = new GroupColumn(columnName, null, parentColumn, null);  // yearly funding
 		fetchedMeasures.forEach((name, contents) -> {
 			NiReportMeasure<?> meas = schema.getMeasures().get(name);
 			if (meas.getBehaviour().getTimeRange() != TimeRange.NONE)
-				fundingColumn.addColumn(new CellColumn(name, contents, fundingColumn, meas));
+				fundingColumn.addColumn(new CellColumn(name, contents, fundingColumn, meas, meas.getBehaviour(), new NiColSplitCell(PSEUDOCOLUMN_MEASURE, new ComparableValue<String>(name, name))));
 		});
 		GroupColumn res = postprocessor.apply(fundingColumn);
 		return res;

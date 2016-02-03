@@ -28,7 +28,7 @@ import org.junit.Test;
 public class NiReportsFetchingTests extends MondrianReportsTestCase {
 
 	public NiReportsFetchingTests() {
-		super("inclusive runner tests");
+		super("AmpReportsSchema fetching tests");
 	}
 
 	@Test
@@ -43,7 +43,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 
 	@Test
 	public void testProjectTitle() throws Exception {
-		runNiReportsTestcase(Arrays.asList("Unvalidated activity", "execution rate activity"), engine -> {
+		runInEngineContext(Arrays.asList("Unvalidated activity", "execution rate activity"), engine -> {
 			List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.PROJECT_TITLE).fetch(engine);
 			assertEquals("[Unvalidated activity (id: 64, eid: 64, coos: {}), execution rate activity (id: 77, eid: 77, coos: {})]", cells.toString());
 		});
@@ -51,7 +51,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 
 	@Test
 	public void testFundingSimple() throws Exception {
-		runNiReportsTestcase(
+		runInEngineContext(
 				Arrays.asList("SubNational no percentages", "Unvalidated activity"),
 				engine -> {
 					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);
@@ -65,7 +65,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 
 	@Test
 	public void testFundingDoubleFundingProject() throws Exception {
-		runNiReportsTestcase(
+		runInEngineContext(
 				Arrays.asList("Pure MTEF Project"),
 				engine -> {
 					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);
@@ -79,7 +79,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 
 	@Test
 	public void testExchangeRatesToBase() throws Exception {
-		runNiReportsTestcase(
+		runInEngineContext(
 				Arrays.asList("with weird currencies"),
 				engine -> {
 					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);
@@ -95,7 +95,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 	
 	@Test
 	public void testExchangeRatesToEur() throws Exception {
-		runNiReportsTestcase(
+		runInEngineContext(
 				Arrays.asList("with weird currencies"),
 				rep -> changeReportCurrency(rep, "EUR"),
 				engine -> {
@@ -112,7 +112,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 
 	@Test
 	public void testExchangeRatesToMdl() throws Exception {
-		runNiReportsTestcase(
+		runInEngineContext(
 			Arrays.asList("with weird currencies"),
 			rep -> changeReportCurrency(rep, "MDL"),
 			engine -> {
@@ -129,7 +129,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 
 	@Test
 	public void testActivityUpdatedBy() throws Exception {
-		runNiReportsTestcase(
+		runInEngineContext(
 			Arrays.asList("Unvalidated activity", "execution rate activity"),
 			engine -> {
 				List<? extends Cell> cells = sorted(engine.schema.getColumns().get(ColumnConstants.ACTIVITY_UPDATED_BY).fetch(engine));
@@ -143,7 +143,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 
 	@Test
 	public void testImplementationLevel() throws Exception {
-		runNiReportsTestcase(Arrays.asList("Unvalidated activity", "execution rate activity"),
+		runInEngineContext(Arrays.asList("Unvalidated activity", "execution rate activity"),
 			engine -> {
 				List<? extends Cell> cells = sorted(engine.schema.getColumns().get(ColumnConstants.IMPLEMENTATION_LEVEL).fetch(engine));
 					assertEquals("[" + 
@@ -164,7 +164,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 
 	@Test
 	public void testFy() throws Exception {
-		runNiReportsTestcase(Arrays.asList("Unvalidated activity", "execution rate activity"), engine -> {
+		runInEngineContext(Arrays.asList("Unvalidated activity", "execution rate activity"), engine -> {
 			List<? extends Cell> cells = sorted(engine.schema.getColumns().get(ColumnConstants.FY).fetch(engine));
 			assertEquals("[]", cells.toString());
 		});
@@ -172,9 +172,24 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 
 	@Test
 	public void testJointCriteria() throws Exception {
-		runNiReportsTestcase(Arrays.asList("Unvalidated activity", "execution rate activity", "Activity with Zones"), engine -> {
+		runInEngineContext(Arrays.asList("Unvalidated activity", "execution rate activity", "Activity with Zones"), engine -> {
 			List<? extends Cell> cells = sorted(engine.schema.getColumns().get(ColumnConstants.JOINT_CRITERIA).fetch(engine));
 			assertEquals("[Yes (id: 33, eid: 33, coos: {})]", cells.toString());
+		});
+	}
+	
+	@Test
+	public void testPercentagesNormalization() throws Exception {
+		// "new activity with contracting" lacks location entries
+		List<String> acts = Arrays.asList("new activity with contracting",  "Activity with both MTEFs and Act.Comms", "Activity with Zones");
+		runInEngineContext(acts, engine -> {
+			List<? extends Cell> cells = nicelySorted(engine.schema.getColumns().get(ColumnConstants.REGION).fetch(engine));
+			assertEquals("[Anenii Noi County (id, mainId, %) = (33, 9085, 0.50), Balti County (id, mainId, %) = (33, 9086, 0.50), Balti County (id, mainId, %) = (70, 9086, 0.30), Drochia County (id, mainId, %) = (70, 9090, 0.70)]", 
+					cells.toString());
+
+			List<? extends Cell> cellsZone = nicelySorted(engine.schema.getColumns().get(ColumnConstants.ZONE).fetch(engine));
+			assertEquals("[Bulboaca (id, mainId, %) = (33, 9108, 0.50), Glodeni (id, mainId, %) = (33, 9111, 0.50),  (id, mainId, %) = (70, -9090, 0.70),  (id, mainId, %) = (70, -9086, 0.30)]", 
+					cellsZone.toString());
 		});
 	}
 }

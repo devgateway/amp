@@ -243,7 +243,9 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		
 		fetchedColumns.forEach((name, contents) -> rawData.addColumn(new CellColumn(name, contents, rawData, schema.getColumns().get(name)))); // regular columns
 		
-		rawData.maybeAddColumn(buildFundingColumn(FUNDING_COLUMN_NAME, rawData, this::separateYears));
+		TimeRange userRequestedRange = TimeRange.forCriteria(spec.getGroupingCriteria());
+		if (userRequestedRange != TimeRange.NONE)
+			rawData.maybeAddColumn(buildFundingColumn(FUNDING_COLUMN_NAME, rawData, this::separateYears));
 		rawData.maybeAddColumn(buildFundingColumn(TOTALS_COLUMN_NAME, rawData, Function.identity()));
 		
 		GroupColumn catData = categorizeData(rawData);

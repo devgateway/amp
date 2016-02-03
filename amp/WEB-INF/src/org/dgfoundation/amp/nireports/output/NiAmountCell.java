@@ -10,7 +10,7 @@ import org.dgfoundation.amp.nireports.NumberedCell;
  * @author Dolghier Constantin
  *
  */
-public class NiAmountCell implements NiOutCell, NumberedCell {
+public class NiAmountCell extends NiOutCell implements NumberedCell {
 
 	public final BigDecimal amount;
 	public final NiPrecisionSetting precisionSetting;

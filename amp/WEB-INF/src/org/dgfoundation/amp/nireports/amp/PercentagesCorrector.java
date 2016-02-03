@@ -72,7 +72,7 @@ public class PercentagesCorrector {
 		/** keys are a subset of the ones of {@link #sumOfPercentages} */
 		public final Map<Long, Integer> nrOfNulls;
 		
-		private Snapshot(Map<Long, Double> sumOfPercentages/*, Map<Long, Integer> nrOfNulls*/) {
+		public Snapshot(Map<Long, Double> sumOfPercentages/*, Map<Long, Integer> nrOfNulls*/) {
 			this.sumOfPercentages = Collections.unmodifiableMap(sumOfPercentages);
 			this.nrOfNulls = Collections.emptyMap();//Collections.unmodifiableMap(nrOfNulls);
 		}

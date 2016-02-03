@@ -130,7 +130,7 @@ public class ColumnReportData extends ReportData {
 			for(CellColumn cc:contents.keySet()) {
 				ColumnContents oldContents = contents.get(cc);
 				ColumnContents newContents = cc.getBehaviour().horizSplit(oldContents, splitDigest.percentages.get(catId), splitDigest.actIds.get(catId), acceptors);
-				System.err.format("splitting %s by %s.%s: %s became %s\n", cc.getHierName(), z.getHierName(), splitCell.toString(), oldContents, newContents);
+				//System.err.format("splitting %s by %s.%s: %s became %s\n", cc.getHierName(), z.getHierName(), splitCell.toString(), oldContents, newContents);
 				subContents.put(cc, newContents);
 			}
 			ColumnReportData sub = new ColumnReportData(context, splitCell, subContents);

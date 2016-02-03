@@ -39,7 +39,7 @@ public class TrivialMeasureBehaviour implements Behaviour<NiAmountCell> {
 			BigDecimal toAdd = ((NumberedCell) cell.getCell()).getAmount().multiply(percentage);
 			res = res.add(toAdd);
 		}
-		System.err.format("reduced %d cells to %.2f: %s\n", cells.size(), res.doubleValue(), cells.toString());
+		//System.err.format("reduced %d cells to %.2f: %s\n", cells.size(), res.doubleValue(), cells.toString());
 		return new NiAmountCell(res, precision);
 	}
 

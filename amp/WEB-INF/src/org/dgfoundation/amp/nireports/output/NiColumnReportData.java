@@ -32,4 +32,9 @@ public class NiColumnReportData extends NiReportData {
 			return 1;
 		return getIds().size() + 1;
 	}
+
+	@Override
+	public <K> K accept(NiReportDataVisitor<K> visitor) {
+		return visitor.visit(this);
+	}
 }

@@ -5,14 +5,18 @@ package org.dgfoundation.amp.nireports.output;
  * @author Dolghier Constantin
  *
  */
-public interface NiOutCell extends Comparable {
+public abstract class NiOutCell implements Comparable {
 	
 	/**
 	 * this is for debugging reasons; the final way the cells looks is to be decided by the export phase
 	 * @return
 	 */
-	public String getDisplayedValue();
+	public abstract String getDisplayedValue();
 	
-	public<K> K accept(CellVisitor<K> visitor);
+	public abstract<K> K accept(CellVisitor<K> visitor);
 	
+	@Override
+	public String toString() {
+		return getDisplayedValue();
+	}
 }

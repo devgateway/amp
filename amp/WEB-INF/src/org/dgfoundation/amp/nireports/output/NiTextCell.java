@@ -5,7 +5,7 @@ package org.dgfoundation.amp.nireports.output;
  * @author Dolghier Constantin
  *
  */
-public class NiTextCell implements NiOutCell {
+public class NiTextCell extends NiOutCell {
 	public final String text;
 	public final long entityId;
 	

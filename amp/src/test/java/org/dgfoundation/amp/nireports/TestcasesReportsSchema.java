@@ -10,10 +10,10 @@ import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import com.google.common.base.Function;
 
 public class TestcasesReportsSchema extends AmpReportsSchema {
-	public final IdsGeneratorSource workspaceFilter;
+	public static IdsGeneratorSource workspaceFilter;
+	public final static TestcasesReportsSchema instance = new TestcasesReportsSchema(); 
 	
-	public TestcasesReportsSchema(IdsGeneratorSource workspaceFilter) {
-		this.workspaceFilter = workspaceFilter;
+	private TestcasesReportsSchema() {
 	}
 
 	@Override

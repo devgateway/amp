@@ -34,4 +34,9 @@ public class NiGroupReportData extends NiReportData {
 			sum += rd.getRowSpan(summaryReport);
 		return sum;
 	}
+
+	@Override
+	public <K> K accept(NiReportDataVisitor<K> visitor) {
+		return visitor.visit(this);
+	}
 }

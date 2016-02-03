@@ -181,8 +181,9 @@ public class WorkspaceFilter
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('TAC_activity_1', 'TAC_activity_2', 'Proposed Project Cost 2 - EUR', 'Test MTEF directed', 'Eth Water')";
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('pledged education activity 1', 'pledged 2')"; //"pledged education activity 1", "pledged 2"
 		//return "SELECT amp_activity_id FROM amp_activity WHERE name IN ('activity with capital spending', 'Activity with planned disbursements', 'activity with pipeline MTEFs and act. disb')";
-		//return "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id IN(36)";
+		//return "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id IN(70)";
 		//return "SELECT amp_activity_id FROM amp_activity";
+		//return "SELECT amp_activity_id FROM amp_activity where lower(name) in ('new activity with contracting', 'activity_with_disaster_response')";
 		return TEAM_FILTER;
 	}
 	

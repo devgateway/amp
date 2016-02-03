@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,14 +85,18 @@ public abstract class AmpTestCase extends TestCase
 		}
 	}
 	
+	public static<K> List<K> sorted(Collection<K> in) {
+		return sorted(in, null);
+	}
+	
 	/**
 	 * sorts the input list in a copy
 	 * @param in
 	 * @return
 	 */
-	public static<K> List<K> sorted(Collection<K> in) {
+	public static<K> List<K> sorted(Collection<K> in, Comparator<K> comp) {
 		ArrayList<K> res = new ArrayList<>(in);
-		res.sort(null);
+		res.sort(comp);
 		return res;
 	}
 	

@@ -67,7 +67,7 @@ public class CurrencyConvertorTests extends MondrianReportsTestCase {
 
 	@Test
 	public void testDonorFunding() throws Exception {
-		runNiReportsTestcase(
+		runInEngineContext(
 			Arrays.asList("with weird currencies"),
 			engine -> {
 				List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);

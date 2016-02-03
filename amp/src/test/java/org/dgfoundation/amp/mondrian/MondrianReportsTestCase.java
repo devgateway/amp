@@ -1,6 +1,8 @@
 package org.dgfoundation.amp.mondrian;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,11 +31,15 @@ import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.CategAmountCell;
+import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiReportsEngineForTesting;
 import org.dgfoundation.amp.nireports.TestcasesReportsSchema;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.amp.MetaCategory;
+import org.dgfoundation.amp.nireports.output.NiReportDataVisitor;
+import org.dgfoundation.amp.nireports.output.NiReportExecutor;
+import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
 import org.dgfoundation.amp.reports.PartialReportArea;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
@@ -57,6 +63,17 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 {
 	public MondrianReportsTestCase(String name) {
 		super(name);
+	}
+	
+	public static<K extends Cell> List<K> nicelySorted(Collection<K> in) {
+		return sorted(in, (a, b) -> {
+			int delta = Long.compare(a.activityId, b.activityId);
+			if (delta == 0)
+				delta = a.getDisplayedValue().compareTo(b.getDisplayedValue());
+			if (delta == 0)
+				delta = Long.compare(a.entityId, b.entityId);
+			return delta;
+		});
 	}
 	
 	/**
@@ -214,10 +231,9 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 	 * @param activityNames
 	 * @param runnable
 	 */
-	public void runNiReportsTestcase(List<String> activityNames, ExceptionConsumer<NiReportsEngine> runnable) {
-		NiReportsEngineForTesting engine = new NiReportsEngineForTesting(
-			new TestcasesReportsSchema(new ActivityIdsFetcher(activityNames)), 
-			runnable);
+	public void runInEngineContext(List<String> activityNames, ExceptionConsumer<NiReportsEngine> runnable) {
+		TestcasesReportsSchema.workspaceFilter = new ActivityIdsFetcher(activityNames);
+		NiReportsEngineForTesting engine = new NiReportsEngineForTesting(TestcasesReportsSchema.instance, runnable);
 		engine.execute(); // will run runnable in the engine's context
 	}
 	
@@ -226,9 +242,9 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 	 * @param activityNames
 	 * @param runnable
 	 */
-	public void runNiReportsTestcase(List<String> activityNames, Function<ReportSpecificationImpl, ReportSpecification> reportSpecSupplier, ExceptionConsumer<NiReportsEngine> runnable) {
-		NiReportsEngineForTesting engine = new NiReportsEngineForTesting(
-			new TestcasesReportsSchema(new ActivityIdsFetcher(activityNames)), 
+	public void runInEngineContext(List<String> activityNames, Function<ReportSpecificationImpl, ReportSpecification> reportSpecSupplier, ExceptionConsumer<NiReportsEngine> runnable) {
+		TestcasesReportsSchema.workspaceFilter = new ActivityIdsFetcher(activityNames);
+		NiReportsEngineForTesting engine = new NiReportsEngineForTesting(TestcasesReportsSchema.instance, 
 			reportSpecSupplier,
 			runnable);
 		engine.execute(); // will run runnable in the engine's context
@@ -341,6 +357,21 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 	public String digestTransactionAmounts(CategAmountCell cell) {
 		return String.format("(actId: %d, %s, adjustment_type: %s, transaction_type: %s)", cell.activityId, cell.amount, cell.metaInfo.getMetaInfo(MetaCategory.ADJUSTMENT_TYPE.category).v, cell.metaInfo.getMetaInfo(MetaCategory.TRANSACTION_TYPE.category).v);
 	}
-
+	
+	public NiReportExecutor getExecutor(List<String> activityNames) {
+		NiReportExecutor res = new NiReportExecutor(TestcasesReportsSchema.instance);
+		TestcasesReportsSchema.workspaceFilter = new ActivityIdsFetcher(activityNames);
+		return res;
+	}
+	
+	public<K> K buildNiReportDigest(ReportSpecification spec, NiReportExecutor executor, NiReportOutputBuilder<K> outputBuilder) {
+		return executor.executeReport(spec, outputBuilder);
+	}
+	
+	public<K> K buildNiReportDigest(ReportSpecification spec, List<String> activityNames, NiReportOutputBuilder<K> outputBuilder) {
+		NiReportExecutor executor = getExecutor(activityNames);
+		return executor.executeReport(spec, outputBuilder);
+	}
+	
 }
 

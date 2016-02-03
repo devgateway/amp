@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ReportData;
+import org.dgfoundation.amp.nireports.runtime.ReportDataVisitor;
 
 /**
  * a flattened report output subregion (see {@link ReportData})
@@ -40,4 +41,6 @@ public abstract class NiReportData {
 		}
 		return _rowSpan;
 	}
+	
+	public abstract<K> K accept(NiReportDataVisitor<K> visitor);
 }

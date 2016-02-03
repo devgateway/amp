@@ -31,7 +31,7 @@ public class NiReportExecutor {
 		long start = System.currentTimeMillis();
 		K res = outputBuilder.buildOutput(spec, reportRun);
 		long delta = System.currentTimeMillis() - start;
-		logger.error(String.format("converting output to external API took %d millies", delta));
+		logger.warn(String.format("converting output to external API took %d millies", delta));
 		return res;
 	}
 

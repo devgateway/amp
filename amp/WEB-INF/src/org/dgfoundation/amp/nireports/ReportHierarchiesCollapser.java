@@ -5,10 +5,12 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
 import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
+import org.dgfoundation.amp.nireports.output.NiSplitCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
@@ -40,7 +42,7 @@ public class ReportHierarchiesCollapser implements ReportDataVisitor<ReportData>
 		if (grd.getSubReports().isEmpty() || strategy == ReportCollapsingStrategy.NEVER)
 			return grd;
 		boolean containsCRDs = grd.getSubReports().get(0) instanceof ColumnReportData; // all the children have the same type
-		LinkedHashMap<String, List<ReportData>> childrenByName = new LinkedHashMap<>();
+		Map<String, List<ReportData>> childrenByName = new HashMap<>();
 		final String dummyUnknownName = "####dummy####unknown"; // the key by which unknown will go under childrenByName 
 		for(ReportData subReport:grd.getSubReports()) {
 			String key = subReport.splitter.undefined ? dummyUnknownName : subReport.splitter.getDisplayedValue();
@@ -57,6 +59,7 @@ public class ReportHierarchiesCollapser implements ReportDataVisitor<ReportData>
 				newChildren.addAll(children.stream().map(z -> z.accept(this)).collect(toList()));
 			}
 		}
+		newChildren.sort((a, b) -> a.splitter.compareTo(b.splitter)); // splitter is always nonnull for children
 		return grd.clone(newChildren);
 	}
 		
@@ -68,7 +71,7 @@ public class ReportHierarchiesCollapser implements ReportDataVisitor<ReportData>
 		}
 		//TODO: all the ids except one will be lost - ATM the datastructures do not allow holding multiple IDs
 		//NiCell splitter = children.get(0).splitter; 
-		ColumnReportData res = new ColumnReportData(children.get(0).context, children.get(0).splitter, contents);
+		ColumnReportData res = new ColumnReportData(children.get(0).context, NiSplitCell.merge(children.stream().map(z -> z.splitter)), contents);
 		return res;
 	}
 	
@@ -77,7 +80,7 @@ public class ReportHierarchiesCollapser implements ReportDataVisitor<ReportData>
 		for(GroupReportData child:children)
 			newChildren.addAll(child.getSubReports());
 		GroupReportData grouped = new GroupReportData(children.get(0).context, children.get(0).splitter, newChildren);
-		ReportData res = grouped.accept(this);
+		ReportData res = grouped.accept(new ReportHierarchiesCollapser(ReportCollapsingStrategy.ALWAYS));
 		return res;
 	}
 	

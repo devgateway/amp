@@ -46,7 +46,12 @@ public final class PercentageTextCell extends Cell {
 	@Override
 	public int compareTo(Object o) {
 		PercentageTextCell ptc = (PercentageTextCell) o;
-		return text.compareTo(ptc.text);
+		int delta = text.compareTo(ptc.text);
+		if (delta == 0)
+			delta = Long.compare(entityId, ptc.entityId);
+		if (delta == 0)
+			delta = Long.compare(activityId, ptc.entityId);
+		return delta;
 	}
 	
 	@Override

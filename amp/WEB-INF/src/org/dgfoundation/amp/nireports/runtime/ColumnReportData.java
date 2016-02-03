@@ -108,7 +108,7 @@ public class ColumnReportData extends ReportData {
 	@Override
 	public GroupReportData horizSplit(CellColumn z) {
 		ColumnContents dataColumn = contents.get(z);
-		NiUtils.failIf(dataColumn == null, String.format("could not find leaf %s in %s", z, this));
+		NiUtils.failIf(dataColumn == null, () -> String.format("could not find leaf %s in %s", z, this));
 				
 		SplitDigest splitDigest = new SplitDigest(z, dataColumn, this::getIds);
 		

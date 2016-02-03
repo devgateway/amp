@@ -302,6 +302,9 @@ function buildTotalsRow(page) {
 			var td = "<td class='data total i18n'";
 			var auxTd = "";
 			var cell = page.pageArea.contents[this.headerMatrix[this.lastHeaderRow][j].hierarchicalName];
+			if (cell == null) {
+				cell = {value: null, displayedValue: ""};
+			}
 			if (this.type === 'xlsx' || this.type === 'csv') {
 				auxTd += cell.value;
 			} else if (this.type === 'pdf') {
@@ -356,7 +359,7 @@ function generateDataRows(page, options) {
 	this.currentContentIndexRow = 0;
 	for (var i = 0; i < page.pageArea.children.length; i++) {
 		extractDataFromTree(page.pageArea.children[i],
-				this.currentContentIndexRow);
+				page.pageArea, 0, i === page.pageArea.children.length - 1, []);
 	}
 	
 	// AMP-19189 fill the cell containing data with colors
@@ -389,13 +392,18 @@ function generateDataRows(page, options) {
 						group = findGroupVertically(this.contentMatrix, i, j);
 					}
 					var rowSpan = " rowspan='" + group + "' ";
+					var colId = j > 0 ? j - 1 : j;
 					var value = this.contentMatrix[i][j].displayedValue;
+					var totalValue = Settings.NIREPORT ? this.contentMatrix[i][colId].displayedValue : value;
 					var cleanValue = {};
+					var cleanTotalValue = {};
 					if (this.type === 'csv' || this.type === 'xlsx') {
 						value = "" + value + "";
 						cleanValue = cleanText(value);
+						cleanTotalValue = cleanText(totalValue);
 					} else {
 						cleanValue = cleanText(value, 60);
+						cleanTotalValue = cleanText(totalValue, 60);
 					}
 				
 				
@@ -409,7 +417,7 @@ function generateDataRows(page, options) {
 				// Ignore subtotal rows text and change style.
 				if (this.contentMatrix[i][j].isTotal === true) {
 					if (applyTotalRowStyle === false
-							&& cleanValue.text.length > 0) {
+							&& cleanTotalValue.text.length > 0) {
 						// This flag indicates in which column we start applying
 						// the total style.
 						applyTotalRowStyle = true;
@@ -419,9 +427,9 @@ function generateDataRows(page, options) {
 					if (applyTotalRowStyle === true) {
 						// Trying something new here: show tooltip on the
 						// now empty "Hierarchy Value Totals" row.
-						if (cleanValue.text !== undefined) {
+						if (cleanTotalValue.text !== undefined) {
 							styleClass = " class='row_total tooltipped i18n' data-subtotal='true' original-title='"
-									+ cleanValue.text + "' ";
+									+ cleanTotalValue.text + "' ";
 						} else {
 							styleClass = " class='row_total' ";
 						}
@@ -517,8 +525,9 @@ function findGroupVertically(matrix, i, j) {
 			// Due to the way the tree data is structured we don't need to check
 			// for cells with the same value than the one being compared but
 			// with empty cells.
-			if (k > 0 && matrix[k][j].displayedValue === matrix[k-1][j].displayedValue ||
-				matrix[k][j].displayedValue.length === 0) {
+			// TODO: keep only the option for Settings.NIREPORT when Mondrian Saiku is removed
+			if (Settings.NIREPORT && k > 0 && matrix[k][j].displayedValue === matrix[k-1][j].displayedValue ||
+				Settings.NIREPORT == undefined && matrix[k][j].displayedValue.length === 0) {
 				count++;
 				// Mark the cell so we don't draw it later.
 				matrix[k][j].isGrouped = true;
@@ -534,7 +543,7 @@ function findGroupVertically(matrix, i, j) {
 /**
  * Convert data tree to 2d matrix structure.
  */
-function extractDataFromTree(node) {
+function extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchiesData) {
 	if (node.children == null) {
 		// Add this node to contentMatrix, the order of the cells is defined by
 		// the header's last row.
@@ -550,19 +559,28 @@ function extractDataFromTree(node) {
 				}
 			}
 			// Save isTotal flag.
-			if (dataValue != null)
-				dataValue.isTotal = node.isTotal;
+			if (dataValue == null) {
+				dataValue = {displayedValue : ""};
+			}
+			if (Settings.NIREPORT && dataValue.displayedValue === "" && i < level)
+				dataValue.displayedValue = hierarchiesData[i].displayedValue;
+			dataValue.isTotal = node.isTotal;
 			this.contentMatrix[this.currentContentIndexRow][i] = dataValue;
 		}
 		this.currentContentIndexRow++;
 	} else {
+		var colName = this.headerMatrix[this.lastHeaderRow][level].hierarchicalName;
+		hierarchiesData[level] = node.contents[colName];
 		for (var i = 0; i < node.children.length; i++) {
-			extractDataFromTree(node.children[i]);
+			extractDataFromTree(node.children[i], node, level + 1, i === node.children.length - 1, hierarchiesData);
 		}
 		// Add the node that represents the subtotal.
 		node.children = null;
 		node.isTotal = true;
-		extractDataFromTree(node);
+		if (Settings.NIREPORT && isLastSubNode) {
+			node.contents[colName].isGrouped = true;
+		}
+		extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchiesData);
 	}
 }
 

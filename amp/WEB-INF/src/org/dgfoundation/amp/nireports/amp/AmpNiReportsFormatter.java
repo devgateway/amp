@@ -109,12 +109,14 @@ public class AmpNiReportsFormatter {
 	}
 	
 	protected void fixHierarchyTrailCells(ReportAreaImpl ra, int level) {
-		// building trail cells as needed for Reports API, while NiReportData trail cell for hierarchies is empty 
-		ReportArea child = ra.getChildren().iterator().next();
+		// building trail cells as needed for Reports API, while NiReportData trail cell for hierarchies is empty
 		Iterator<Entry<ReportOutputColumn, ReportCell>> iter = ra.getContents().entrySet().iterator();
 		if (level == 0 && iter.hasNext()) {
 			iter.next().setValue(new TextCell(TranslatorWorker.translateText("Report Totals")));
 		}
+		if (ra.getChildren().isEmpty())
+			return;
+		ReportArea child = ra.getChildren().iterator().next();
 		for (int i = 0; i < level && iter.hasNext(); i++) {
 			Entry<ReportOutputColumn, ReportCell> entry = iter.next();
 			String displayedValue = child.getContents().get(entry.getKey()).displayedValue;

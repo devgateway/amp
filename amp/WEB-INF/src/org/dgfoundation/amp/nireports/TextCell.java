@@ -20,10 +20,6 @@ public final class TextCell extends Cell {
 		Objects.requireNonNull(text);
 		this.text = text == null ? "" : text;
 	}
-
-	public TextCell(String text, long activityId) {
-		this(text, activityId, -1, Optional.empty());
-	}
 	
 	@Override
 	public MetaInfoSet getMetaInfo() {

@@ -22,15 +22,9 @@ public final class PercentageTextCell extends Cell {
 		Objects.requireNonNull(text);
 		Objects.requireNonNull(percentage);
 		this.percentage = percentage;
-		if (this.percentage != null) {
-			NiUtils.failIf(this.percentage.compareTo(BigDecimal.ZERO) < 0, () -> String.format("percentage should be between 0.0 and 1.0, but is instead %.2f", percentage.doubleValue()));
-			NiUtils.failIf(this.percentage.compareTo(BigDecimal.ONE) > 0, () -> String.format("percentage should be between 0.0 and 1.0, but is instead %.2f", percentage.doubleValue()));
-		}
-		this.text = text == null ? "" : text;
-	}
-
-	public PercentageTextCell(String text, long activityId, BigDecimal percentage) {
-		this(text, activityId, -1, Optional.empty(), percentage);
+		NiUtils.failIf(this.percentage.compareTo(BigDecimal.ZERO) < 0, () -> String.format("percentage should be between 0.0 and 1.0, but is instead %.2f", percentage.doubleValue()));
+		NiUtils.failIf(this.percentage.compareTo(BigDecimal.ONE) > 0, () -> String.format("percentage should be between 0.0 and 1.0, but is instead %.2f", percentage.doubleValue()));
+		this.text = text;
 	}
 
 	@Override

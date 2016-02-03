@@ -76,6 +76,7 @@ import org.digijava.kernel.ampapi.saiku.util.SaikuPrintUtils;
 import org.digijava.kernel.ampapi.saiku.util.SaikuUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.calendar.util.CalendarUtil;
@@ -1044,7 +1045,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			for (Member textColumn : rowAxis.getPositions().get(0).getMembers()) {
 				String originalColumnName = MondrianMapping.fromFullNameToColumnName.get(getFullLevelName(textColumn));
 				// get description of the measure which could be a column
-				String columnDescription = allMeasureNames.contains(originalColumnName) ? getMeasureDescription(originalColumnName) : null; 
+				String columnDescription = allMeasureNames.contains(originalColumnName) ? getComputedMeasureDescription(originalColumnName) : null; 
 				
 				ReportOutputColumn reportColumn = new ReportOutputColumn(textColumn.getLevel().getCaption(), null, 
 						originalColumnName, columnDescription, null);
@@ -1073,7 +1074,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 						String usedName = measureColumn.getName();
 						String usedCaption = measureColumn.getCaption();
 						String usedDescription = (i == members.size() - relevantDelta) && allMeasureNames.contains(measureColumn.getName()) ? 
-								getMeasureDescription(measureColumn.getName()) : null;
+								getComputedMeasureDescription(measureColumn.getName()) : null;
 						if (i == members.size() - 1 && spec.getUsesFundingFlows() && usedName.equals("Undefined")) {
 							usedName = usedCaption = " ";
 						}
@@ -1101,7 +1102,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		if (spec.isCalculateColumnTotals() && !GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria())) {
 			ReportOutputColumn totalMeasuresColumn = ReportOutputColumn.buildTranslated(MoConstants.TOTAL_MEASURES, environment.locale, null, null);
 			for (String measureName : outputtedMeasures) {
-				this.totalsHeaders.add(ReportOutputColumn.buildTranslated(measureName, getMeasureDescription(measureName), environment.locale, totalMeasuresColumn, null));
+				this.totalsHeaders.add(ReportOutputColumn.buildTranslated(measureName, getComputedMeasureDescription(measureName), environment.locale, totalMeasuresColumn, null));
 			}
 		}
 				
@@ -1142,15 +1143,28 @@ public class MondrianReportGenerator implements ReportExecutor {
 			throw new AmpApiException(error);
 	}
 	
-	private String getMeasureDescription(String measureName) {
+	/**
+	 * return the description of a computed measure (the entity can be found in amp_measures or in amp_columns).
+	 * @param measureName
+	 */
+	
+	private String getComputedMeasureDescription(String measureName) {
 		String measureDescription = null;
-		try {
-			AmpMeasures measure = AdvancedReportUtil.getMeasureByName(measureName);
-			measureDescription = measure != null ? measure.getDescription() : null;
-		} catch (RuntimeException e) {
-			logger.debug("Could not retrieve measure " + measureName + " description");
-		}
 		
+		AmpMeasures measure = (AmpMeasures) PersistenceManager.getSession().
+				createQuery("SELECT c FROM " + AmpMeasures.class.getName() + " c WHERE c.measureName = :name AND expression is not null").
+				setString("name", measureName).uniqueResult();
+		
+		if (measure != null) {
+			measureDescription = measure.getDescription();
+		} else {
+			AmpColumns computedColumn = (AmpColumns) PersistenceManager.getSession().
+					createQuery("SELECT c FROM " + AmpColumns.class.getName() + " c WHERE c.columnName = :name AND tokenExpression is not null").
+					setString("name", measureName).uniqueResult();
+			
+			measureDescription = computedColumn != null ? computedColumn.getDescription() : null;
+		}
+			
 		return measureDescription;
 	}
 	

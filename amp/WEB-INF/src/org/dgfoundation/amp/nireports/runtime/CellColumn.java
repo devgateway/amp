@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.Consumer;
@@ -48,7 +49,8 @@ public class CellColumn extends Column {
 		SortedMap<ComparableValue<String>, List<NiCell>> values = new TreeMap<>();
 		this.forEachCell(cell -> values.computeIfAbsent(strategy.categorize(cell), z -> new ArrayList<>()).add(cell));
 		GroupColumn res = new GroupColumn(this.name, null, newParent);
-		values.forEach((key, cells) -> res.addColumn(new CellColumn(key.getValue(), new ColumnContents(cells), res, this.entity, strategy.getBehaviour(key, this))));
+		List<ComparableValue<String>> subColumnNames = strategy.getSubcolumnsNames(values.keySet());
+		subColumnNames.forEach(key -> res.addColumn(new CellColumn(key.getValue(), new ColumnContents(Optional.ofNullable(values.get(key)).orElse(Collections.emptyList())), res, this.entity, strategy.getBehaviour(key, this))));
 		return res;
 	}
 

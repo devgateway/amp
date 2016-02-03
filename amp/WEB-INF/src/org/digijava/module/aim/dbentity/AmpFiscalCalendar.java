@@ -177,7 +177,8 @@ public class AmpFiscalCalendar implements Serializable, Identifiable, OrgProfile
 		ICalendarWorker worker = this.getworker();
 		worker.setTime(date);
 		try {
-			return new TranslatedDate(worker.getYear(), worker.getFiscalYear(), worker.getQuarter(), worker.getMonth().getMonthId(), worker.getMonth().getMonthStr());
+			return new TranslatedDate(worker.getYear(), worker.getFiscalYear(true), worker.getQuarter(), 
+					worker.getMonth().getMonthId(), worker.getMonth().getMonthStr());
 		}
 		catch(Exception e) {throw AlgoUtils.translateException(e);}
 	}

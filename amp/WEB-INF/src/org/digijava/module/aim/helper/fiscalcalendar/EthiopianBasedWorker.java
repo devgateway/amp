@@ -121,9 +121,9 @@ public class EthiopianBasedWorker implements ICalendarWorker {
 		}
 	}
 
-	public String getFiscalYear() throws Exception {
+	public String getFiscalYear(boolean translate) throws Exception {
 		if (this.fiscalCalendar.getIsFiscal()) {
-			return "Fiscal Year," + this.getYear() + " - " + (this.getYear() + 1);
+			return getFiscalPrefix(translate) + "," + this.getYear() + " - " + (this.getYear() + 1);
 		}
 		return this.getYear().toString();
 	}

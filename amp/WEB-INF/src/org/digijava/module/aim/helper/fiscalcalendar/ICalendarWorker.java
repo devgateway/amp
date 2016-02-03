@@ -2,6 +2,7 @@ package org.digijava.module.aim.helper.fiscalcalendar;
 
 import java.util.Date;
 
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.joda.time.Chronology;
 import org.joda.time.DateTime;
 
@@ -53,7 +54,11 @@ public interface ICalendarWorker  {
 	
 	public Integer getYearDiff(ICalendarWorker worker) throws Exception;
 	
-	public String getFiscalYear() throws Exception;
+	public String getFiscalYear(boolean translate) throws Exception;
    
 	public ComparableMonth getFiscalMonth() throws Exception;
+	
+	public default String getFiscalPrefix(boolean translate) {
+		return translate ? TranslatorWorker.translateText("Fiscal Year") : "Fiscal Year";
+	}
 }

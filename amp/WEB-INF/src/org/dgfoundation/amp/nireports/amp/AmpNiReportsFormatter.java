@@ -19,6 +19,7 @@ import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.TextCell;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.converters.AmpCellVisitor;
 import org.dgfoundation.amp.nireports.output.NiColumnReportData;
 import org.dgfoundation.amp.nireports.output.NiGroupReportData;
@@ -26,6 +27,7 @@ import org.dgfoundation.amp.nireports.output.NiOutCell;
 import org.dgfoundation.amp.nireports.output.NiReportData;
 import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
 import org.dgfoundation.amp.nireports.output.NiReportRunResult;
+import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
 import org.digijava.kernel.translator.TranslatorWorker;
 
@@ -49,18 +51,19 @@ public class AmpNiReportsFormatter {
 	private Map<Column, ReportOutputColumn> niColumnToROC = new IdentityHashMap<>();
 	
 	private final AmpCellVisitor cellVisitor;
+	private boolean isRoot = true;
 	
 	public AmpNiReportsFormatter(ReportSpecification spec, NiReportRunResult runResult, 
 			Supplier<ReportAreaImpl> reportAreaSupplier) {
 		this.runResult = runResult;
 		this.spec = spec;
 		this.reportAreaSupplier = reportAreaSupplier;
-		this.cellVisitor = new AmpCellVisitor(spec);
+		this.cellVisitor = new AmpCellVisitor(spec, runResult.headers != null ? runResult.headers.leafColumns.size() : 0);
 	}
 	
 	public GeneratedReport format() {
 		buildHeaders();
-		reportContents = getReportContents(runResult.reportOut, 0);
+		reportContents = getReportContents(runResult.reportOut);
 		return new GeneratedReport(spec, (int) runResult.wallclockTime, null, reportContents, rootHeaders, 
 				leafHeaders, generatedHeaders, runResult.timings);
 	}
@@ -77,9 +80,7 @@ public class AmpNiReportsFormatter {
 			List<HeaderCell> ampHeaderRow = new ArrayList<HeaderCell>();
 			for (Entry<Integer, Column> entry : niHeaderRow.entrySet()) {
 				Column niCol = entry.getValue();
-				//TODO: until column info is available to clarify if a year column, doing some temporary assumption to not translate columns with numbers
-				String trnName = niCol.name.matches("[^0-9]*[0-9]+[^0-9]*") ? niCol.name : 
-					TranslatorWorker.translateText(niCol.name);
+				String trnName = getColumnNameTranslation(niCol);
 				ReportOutputColumn roc = niColumnToROC.computeIfAbsent(niCol, val -> 
 					new ReportOutputColumn(trnName, niColumnToROC.get(niCol.getParent()), niCol.name, null));
 				ampHeaderRow.add(new HeaderCell(niCol.getReportHeaderCell(), roc));
@@ -91,57 +92,57 @@ public class AmpNiReportsFormatter {
 		runResult.headers.leafColumns.forEach(niColumn -> leafHeaders.add(niColumnToROC.get(niColumn)));
 	}
 	
+	protected String getColumnNameTranslation(Column niCol) {
+		if (niCol.splitCell != null && NiReportsEngine.PSEUDOCOLUMN_YEAR.equals(niCol.splitCell.entityType)) {
+			return niCol.name;
+		}
+		return TranslatorWorker.translateText(niCol.name);
+	}
+	
 	/** Provides {@link ReportArea} structure */
-	protected ReportAreaImpl getReportContents(NiReportData niReportData, int level) {
+	protected ReportAreaImpl getReportContents(NiReportData niReportData) {
 		ReportAreaImpl ra = reportAreaSupplier.get();
-		runResult.headers.leafColumns.forEach(niCellColumn ->
-			ra.getContents().put(niColumnToROC.get(niCellColumn), convert(niReportData.trailCells.get(niCellColumn))));
+		if (isRoot) {
+			isRoot = false;
+		} else {
+			this.cellVisitor.pushRD(niReportData);
+		}
+		
+		runResult.headers.leafColumns.forEach(niCellColumn -> {
+			this.cellVisitor.incLevel();
+			ra.getContents().put(niColumnToROC.get(niCellColumn), convert(niReportData.trailCells.get(niCellColumn), niCellColumn));
+		});
 		
 		if (niReportData instanceof NiColumnReportData) {
 			ra.setChildren(getChildren((NiColumnReportData) niReportData));
 		} else {
-			ra.setChildren(getChildren((NiGroupReportData) niReportData, level));
+			ra.setChildren(getChildren((NiGroupReportData) niReportData));
 		}
-		
-		fixHierarchyTrailCells(ra, level);
+		this.cellVisitor.popRD();
 		
 		return ra;
 	}
 	
-	protected void fixHierarchyTrailCells(ReportAreaImpl ra, int level) {
-		// building trail cells as needed for Reports API, while NiReportData trail cell for hierarchies is empty
-		Iterator<Entry<ReportOutputColumn, ReportCell>> iter = ra.getContents().entrySet().iterator();
-		if (level == 0 && iter.hasNext()) {
-			iter.next().setValue(new TextCell(TranslatorWorker.translateText("Report Totals")));
-		}
-		if (ra.getChildren().isEmpty())
-			return;
-		ReportArea child = ra.getChildren().iterator().next();
-		for (int i = 0; i < level && iter.hasNext(); i++) {
-			Entry<ReportOutputColumn, ReportCell> entry = iter.next();
-			String displayedValue = child.getContents().get(entry.getKey()).displayedValue;
-			if (i + 1 == level)
-				displayedValue += " " + TranslatorWorker.translateText("Totals"); 
-			entry.setValue(new TextCell(displayedValue));
-		}
-	}
-	
 	protected List<ReportArea> getChildren(NiColumnReportData niColumnReportData) {
+		this.cellVisitor.setLeaf(true);
 		SortedMap<Long, ReportAreaImpl> idReportArea = new TreeMap<Long, ReportAreaImpl>();
-		runResult.headers.leafColumns.forEach(niCellColumn ->
+		runResult.headers.leafColumns.forEach(niCellColumn -> {
+			this.cellVisitor.incLevel();
 			niColumnReportData.getIds().forEach(id ->
 				idReportArea.computeIfAbsent(id, val -> reportAreaSupplier.get()).getContents().put(
-					niColumnToROC.get(niCellColumn), convert(niColumnReportData.contents.get(niCellColumn).get(id)))));
+					niColumnToROC.get(niCellColumn), convert(niColumnReportData.contents.get(niCellColumn).get(id), niCellColumn)));
+		});
+		this.cellVisitor.setLeaf(false);
 		return new ArrayList<ReportArea>(idReportArea.values());
 	}
 	
-	protected List<ReportArea> getChildren(NiGroupReportData niGroupReportData, int level) {
+	protected List<ReportArea> getChildren(NiGroupReportData niGroupReportData) {
 		List<ReportArea> children = new ArrayList<ReportArea>();
-		niGroupReportData.subreports.forEach(subReport -> children.add(getReportContents(subReport, level + 1)));
+		niGroupReportData.subreports.forEach(subReport -> children.add(getReportContents(subReport)));
 		return children;
-	}	
+	}
 	
-	protected ReportCell convert(NiOutCell cell) {
+	protected ReportCell convert(NiOutCell cell, CellColumn niCellColumn) {
 		if (cell == null)
 			return null;
 		return cell.accept(cellVisitor);

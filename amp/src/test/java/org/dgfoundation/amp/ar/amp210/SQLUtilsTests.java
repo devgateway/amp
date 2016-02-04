@@ -52,7 +52,7 @@ public class SQLUtilsTests extends AmpTestCase
 		assertEquals("{site_domain_id=bigint, site_domain=character varying, site_path=character varying, site_id=bigint, language_code=character varying, is_default=boolean, enable_security=boolean}", cols.toString());
 		
 		cols = SQLUtils.getTableColumnsWithTypes("v_regions", true);
-		assertEquals("{amp_activity_id=bigint, region_name=character varying, region_id=bigint, percentage=real}", cols.toString());
+		assertEquals("{amp_activity_id=bigint, region_name=character varying, region_id=bigint, percentage=real, cnt_nulls=bigint}", cols.toString());
 	}
 	
 	/**

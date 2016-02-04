@@ -4,6 +4,8 @@
 package org.dgfoundation.amp.newreports;
 
 import java.text.DecimalFormat;
+import java.util.function.Predicate;
+
 
 /**
  * Stores Report Settings like currency to display, currency format, calendar type, year ranges to display and other. 
@@ -26,4 +28,10 @@ public interface ReportSettings {
 	
 	/** returns the Year Range Setting of the report. The year numbers are in the target calendar; in case of FiscalCalendars, the number specifies the FY first year */
 	public FilterRule getYearRangeFilter();
+		
+	public default Predicate<Long> buildYearSettingsPredicate() {
+		FilterRule rule = getYearRangeFilter();
+		if (rule == null) return z -> true;
+		return rule.buildPredicate();
+	}
 }

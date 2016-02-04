@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 import org.dgfoundation.amp.nireports.ReportHeadingCell;
 
 /**
- * column-with-contents
+ * a column. All columns are immutable in the upside direction (thus a {@link CellColumn} is always immutable), but children can be changed
  *
  */
 public abstract class Column {
@@ -28,10 +28,11 @@ public abstract class Column {
 	 * will be null before {@link #calculatePositionInHeadingLayout(int, int, int)} has been called. This one will be called last step in report execution
 	 */
 	protected ReportHeadingCell reportHeaderCell;
-	
+		
 	public abstract void forEachCell(Consumer<NiCell> acceptor);
 	public abstract GroupColumn verticallySplitByCategory(VSplitStrategy strategy, GroupColumn newParent);
 	public abstract String debugDigest(boolean withContents);
+	public abstract<K> K accept(ColumnVisitor<K> cv);
 	
 	// header-related stuff
 	/**
@@ -69,7 +70,7 @@ public abstract class Column {
 	public ReportHeadingCell getReportHeaderCell() {
 		return reportHeaderCell;
 	}
-
+	
 	@Override
 	public String toString() {
 		return debugDigest(false);

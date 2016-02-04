@@ -2,16 +2,22 @@ package org.dgfoundation.amp.ar.amp212;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.dgfoundation.amp.algo.AlgoUtils;
+import org.dgfoundation.amp.algo.ExceptionRunnable;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
+import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportExecutor;
+import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.TrailCellsDigest;
@@ -101,7 +107,7 @@ public class AmpSchemaSanityTests extends MondrianReportsTestCase {
 	
 	@Test
 	public void testByRegionReportTotals() {
-		ReportSpecification spec = buildSpecification("plain", 
+		ReportSpecification spec = buildSpecification("ByRegion", 
 			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION), 
 			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
 			Arrays.asList(ColumnConstants.REGION), 
@@ -119,7 +125,7 @@ public class AmpSchemaSanityTests extends MondrianReportsTestCase {
 	
 	@Test
 	public void testByRegionByZoneReportTotals() {
-		ReportSpecification spec = buildSpecification("plain", 
+		ReportSpecification spec = buildSpecification("ByRegionByZone", 
 			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.ZONE), 
 			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
 			Arrays.asList(ColumnConstants.REGION, ColumnConstants.ZONE), 
@@ -143,7 +149,7 @@ public class AmpSchemaSanityTests extends MondrianReportsTestCase {
 
 	@Test
 	public void testByZoneReportTotals() {
-		ReportSpecification spec = buildSpecification("plain", 
+		ReportSpecification spec = buildSpecification("ByZone", 
 			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.ZONE), 
 			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
 			Arrays.asList(ColumnConstants.ZONE), 
@@ -158,7 +164,7 @@ public class AmpSchemaSanityTests extends MondrianReportsTestCase {
 	
 	@Test
 	public void testByZoneByRegionReportTotals() {
-		ReportSpecification spec = buildSpecification("plain", 
+		ReportSpecification spec = buildSpecification("ByZoneByRegion", 
 			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.ZONE, ColumnConstants.REGION), 
 			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
 			Arrays.asList(ColumnConstants.ZONE, ColumnConstants.REGION), 
@@ -181,8 +187,8 @@ public class AmpSchemaSanityTests extends MondrianReportsTestCase {
 	}
 
 	@Test
-	public void testByTypeOfAssistance_still_has_dummy_zero_subreport() {
-		ReportSpecification spec = buildSpecification("plain", 
+	public void testByTypeOfAssistance() {
+		ReportSpecification spec = buildSpecification("ByTypeOfAssistance_", 
 			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.TYPE_OF_ASSISTANCE), 
 			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
 			Arrays.asList(ColumnConstants.TYPE_OF_ASSISTANCE), 
@@ -199,7 +205,7 @@ public class AmpSchemaSanityTests extends MondrianReportsTestCase {
 	
 	@Test
 	public void testByZoneByPrimarySector() {
-		ReportSpecification spec = buildSpecification("plain", 
+		ReportSpecification spec = buildSpecification("ByZoneByPrimarySector", 
 			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.ZONE, ColumnConstants.PRIMARY_SECTOR), 
 			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
 			Arrays.asList(ColumnConstants.ZONE, ColumnConstants.PRIMARY_SECTOR), 
@@ -218,7 +224,7 @@ public class AmpSchemaSanityTests extends MondrianReportsTestCase {
 
 	@Test
 	public void testByRegionByPrimarySectorByZone() {
-		ReportSpecification spec = buildSpecification("plain", 
+		ReportSpecification spec = buildSpecification("ByRegionByPrimarySectorByZone", 
 			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.ZONE), 
 			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
 			Arrays.asList(ColumnConstants.REGION, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.ZONE), 
@@ -231,5 +237,33 @@ public class AmpSchemaSanityTests extends MondrianReportsTestCase {
 		assertEquals(
 			"{(root) -> Anenii Noi County -> 110 - EDUCATION -> Bulboaca=0, (root) -> Anenii Noi County -> 110 - EDUCATION -> Dolboaca=0, (root) -> Anenii Noi County -> 110 - EDUCATION -> =1243888, (root) -> Anenii Noi County -> 110 - EDUCATION=1243888, (root) -> Anenii Noi County -> 120 - HEALTH -> Dolboaca=0, (root) -> Anenii Noi County -> 120 - HEALTH=0, (root) -> Anenii Noi County=1243888, (root) -> Balti County -> 110 - EDUCATION -> Apareni=16500, (root) -> Balti County -> 110 - EDUCATION -> Glodeni=160882.5, (root) -> Balti County -> 110 - EDUCATION -> =0, (root) -> Balti County -> 110 - EDUCATION=177382.5, (root) -> Balti County -> 112 - BASIC EDUCATION -> Apareni=2750, (root) -> Balti County -> 112 - BASIC EDUCATION -> Glodeni=160882.5, (root) -> Balti County -> 112 - BASIC EDUCATION -> =0, (root) -> Balti County -> 112 - BASIC EDUCATION=163632.5, (root) -> Balti County -> 120 - HEALTH -> Apareni=8250, (root) -> Balti County -> 120 - HEALTH -> Glodeni=0, (root) -> Balti County -> 120 - HEALTH=8250, (root) -> Balti County=349265, (root) -> Cahul County -> 113 - SECONDARY EDUCATION -> =450000, (root) -> Cahul County -> 113 - SECONDARY EDUCATION=450000, (root) -> Cahul County=450000, (root) -> Chisinau City -> 110 - EDUCATION -> =45000, (root) -> Chisinau City -> 110 - EDUCATION=45000, (root) -> Chisinau City=45000, (root) -> Chisinau County -> 110 - EDUCATION -> =190000, (root) -> Chisinau County -> 110 - EDUCATION=190000, (root) -> Chisinau County=190000, (root) -> Drochia County -> 110 - EDUCATION -> =80000, (root) -> Drochia County -> 110 - EDUCATION=80000, (root) -> Drochia County -> 112 - BASIC EDUCATION -> =0, (root) -> Drochia County -> 112 - BASIC EDUCATION=0, (root) -> Drochia County=80000, (root) -> Dubasari County -> 110 - EDUCATION -> =45000, (root) -> Dubasari County -> 110 - EDUCATION=45000, (root) -> Dubasari County -> 112 - BASIC EDUCATION -> =123321, (root) -> Dubasari County -> 112 - BASIC EDUCATION=123321, (root) -> Dubasari County=168321, (root) -> Edinet County -> 112 - BASIC EDUCATION -> =131845, (root) -> Edinet County -> 112 - BASIC EDUCATION=131845, (root) -> Edinet County=131845, (root) -> Falesti County -> 130 - POPULATION POLICIES/PROGRAMMES AND REPRODUCTIVE HEALTH -> =453213, (root) -> Falesti County -> 130 - POPULATION POLICIES/PROGRAMMES AND REPRODUCTIVE HEALTH=453213, (root) -> Falesti County=453213, (root) -> Transnistrian Region -> 110 - EDUCATION -> Slobozia=13500, (root) -> Transnistrian Region -> 110 - EDUCATION -> Tiraspol=0, (root) -> Transnistrian Region -> 110 - EDUCATION=13500, (root) -> Transnistrian Region -> 112 - BASIC EDUCATION -> Slobozia=2250, (root) -> Transnistrian Region -> 112 - BASIC EDUCATION=2250, (root) -> Transnistrian Region -> 120 - HEALTH -> Slobozia=6750, (root) -> Transnistrian Region -> 120 - HEALTH=6750, (root) -> Transnistrian Region=22500, (root) ->  -> 110 - EDUCATION -> =72000, (root) ->  -> 110 - EDUCATION=72000, (root) ->  -> 112 - BASIC EDUCATION -> =770, (root) ->  -> 112 - BASIC EDUCATION=770, (root) ->  -> 113 - SECONDARY EDUCATION -> =0, (root) ->  -> 113 - SECONDARY EDUCATION=0, (root) ->  ->  -> =0, (root) ->  -> =0, (root) -> =72770, (root)=3206802}",
 			buildNiReportDigest(spec, acts, new TrailCellsDigest("RAW / Totals / Actual Disbursements")).toString());
+	}
+	
+	@Test
+	public void testYearRangeSettings() throws Exception {
+		ReportSpecificationImpl spec = buildSpecification("byImplementingAgency", 
+			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.IMPLEMENTING_AGENCY), 
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+			Arrays.asList(ColumnConstants.IMPLEMENTING_AGENCY), 
+			GroupingCriteria.GROUPING_YEARLY);
+		
+		List<ExceptionRunnable<Exception>> actions = Arrays.asList(
+				() -> spec.getOrCreateSettings().setYearsRangeFilterRule(2012, 2012),
+				() -> spec.getOrCreateSettings().setYearRangeFilter(new FilterRule("2012", true))
+				);
+		actions.forEach(act -> {
+			try{act.run();}
+			catch(Exception e){throw AlgoUtils.translateException(e);}
+		
+			assertEquals(
+					"{(root) -> 72 Local Public Administrations from RM=96840.576201, (root) -> Finland=165740.48, (root) -> Ministry of Economy=0, (root) -> Ministry of Finance=0, (root) -> UNDP=82715.52, (root) -> USAID=0, (root) -> =19063394.610187, (root)=19408691.186388}",
+					buildNiReportDigest(spec, acts, new TrailCellsDigest("RAW / Totals / Actual Commitments")).toString()); // totals shouldn't change through YRS
+		
+			assertEquals(
+					"{(root) -> 72 Local Public Administrations from RM=0, (root) -> Finland=25000, (root) -> Ministry of Economy=0, (root) -> Ministry of Finance=0, (root) -> UNDP=0, (root) -> USAID=0, (root) -> =0, (root)=25000}",
+					buildNiReportDigest(spec, acts, new TrailCellsDigest("RAW / Funding / 2012 / Actual Commitments")).toString());
+		
+			shouldFail(() -> buildNiReportDigest(spec, acts, new TrailCellsDigest("RAW / Funding / 2013 / Actual Commitments"))); // should not find column
+		});
 	}
 }

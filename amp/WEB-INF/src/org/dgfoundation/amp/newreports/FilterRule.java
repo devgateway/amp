@@ -4,12 +4,18 @@
 package org.dgfoundation.amp.newreports;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.dgfoundation.amp.algo.AmpCollections;
 
 /**
  * Filter rule that can be of one of {@link FilterType} type
@@ -26,6 +32,11 @@ public class FilterRule {
 	/** the value to use as a filter value when filtering booleans for FALSEs */
 	public static final String FALSE_VALUE = "2";
 	
+	public final static Map<String, Long> HARDCODED_VALUES = Collections.unmodifiableMap(new HashMap<String, Long>() {{
+		put(NULL_VALUE, null);
+		put("true", Long.parseLong(TRUE_VALUE));
+		put("false", Long.parseLong(FALSE_VALUE));
+	}});
 	
 	/** 
 	 * Possible types of rules: a range filter (of values/ids), a single value filter (value/id), a list filter (of values/ids) <br>
@@ -151,6 +162,36 @@ public class FilterRule {
 		}
 	}
 	
+	public static Long parseStr(String v) {
+		if (HARDCODED_VALUES.containsKey(v))
+			return HARDCODED_VALUES.get(v);
+		return Long.valueOf(v);
+	}
+	
+	/**
+	 * returns this filter rule as a set {@link Predicate}
+	 * @return
+	 */
+	public Predicate<Long> buildPredicate() {
+		switch(filterType) {
+			case RANGE : {
+				Predicate<Long> res = z -> true;
+					if (min != null) res = res.and(z -> z >= Long.parseLong(min));
+					if (max != null) res = res.and(z -> z <= Long.parseLong(max));
+					return res;
+			}
+			case SINGLE_VALUE : 
+				return z -> z.equals(parseStr(value));
+			
+			case VALUES :
+				Set<Long> cor = values.stream().map(FilterRule::parseStr).collect(Collectors.toSet());
+				return cor::contains;
+				
+			default:
+				throw new RuntimeException("unknown filter type: " + filterType);
+		}
+	}
+		
 	@Override
 	public String toString() {
 		switch(filterType) {

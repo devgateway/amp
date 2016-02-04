@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.Semaphore;
+import java.util.function.Predicate;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
@@ -817,8 +818,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 				GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria()) || 
 				spec.getSettings().getYearRangeFilter() == null)
 			return;
-		
-		applyYearRangeSetting(spec, Arrays.asList(spec.getSettings().getYearRangeFilter()), cellDataSet);
+		applyYearRangeSetting(spec, spec.getSettings().buildYearSettingsPredicate(), cellDataSet);
 	}
 	
 	/**
@@ -842,14 +842,12 @@ public class MondrianReportGenerator implements ReportExecutor {
 		}
 	}
 		
-	protected void applyYearRangeSetting(ReportSpecification spec, List<FilterRule> filters, CellDataSet cellDataSet) throws AMPException {
+	protected void applyYearRangeSetting(ReportSpecification spec, Predicate<Long> yearsSet, CellDataSet cellDataSet) throws AMPException {
 		if (leafHeaders == null || leafHeaders.size() == 0) return;
 
 		//detect the level where years are displayed
 		int levelsToSkip = getYearLevelInHeader();
 
-		Set<Integer> yearsSet = getYearSettings(filters);
-		
 		Iterator<ReportOutputColumn> iter = leafHeaders.iterator();
 		AlgoUtils.skipNPositions(iter, spec.getColumns().size()); // skip output cols which are not measures (e.g. they have no years)
 		
@@ -861,8 +859,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 			ReportOutputColumn leafColumn = iter.next();
 			ReportOutputColumn column = leafColumn.moveUp(levelsToSkip);
 			if (column != null) { //must not be null actually
-				int year = CalendarUtil.parseYear(spec.getSettings().getCalendar(), column.columnName);
-				boolean isAllowed = yearsSet.contains(year);				
+				long year = CalendarUtil.parseYear(spec.getSettings().getCalendar(), column.columnName);
+				boolean isAllowed = yearsSet.test(year);				
 				if (!isAllowed) {
 					leafColumnsNumberToRemove.add(pos);
 					// remove also the leaf header
@@ -912,30 +910,6 @@ public class MondrianReportGenerator implements ReportExecutor {
 				}
 			}
 		}
-	}
-	
-	private SortedSet<Integer> getYearSettings(List<FilterRule> filters) {
-		SortedSet<Integer> yearSet = new TreeSet<>();
-		//build the list of ranges and selective set of years
-		for(FilterRule rule : filters) {
-			switch(rule.filterType) {
-			case RANGE :
-				int min = rule.min == null ? ArConstants.MIN_SUPPORTED_YEAR : Integer.parseInt(rule.min);
-				int max = rule.max == null ? ArConstants.MAX_SUPPORTED_YEAR : Integer.parseInt(rule.max);
-				for(int i = min; i <= max; i++)
-					yearSet.add(i);
-				break;
-			case SINGLE_VALUE : 
-				yearSet.add(Integer.parseInt(rule.value)); 
-				break;
-			case VALUES : 
-				for (String value : rule.values) {
-					yearSet.add(Integer.parseInt(value));
-				}
-				break;
-			}
-		}
-		return yearSet;
 	}
 	
 	private GeneratedReport toGeneratedReport(CellDataSet cellDataSet, int duration) throws AMPException {

@@ -154,4 +154,8 @@ public class AmpCollections {
 	public static<K, V> Map<K, V> map(List<K> in, Function<K, V> func) {
 		return in.stream().collect(Collectors.toMap(z -> z, z -> func.apply(z)));
 	}
+	
+	public static<K, V> Set<V> mapToSet(List<K> in, Function<K, V> func) {
+		return in.stream().map(func).collect(Collectors.toSet());
+	}
 }

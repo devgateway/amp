@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.nireports.NiUtils;
@@ -13,6 +14,7 @@ import org.dgfoundation.amp.nireports.ReportHeadingCell;
 /**
  * a column with subcolumns. The column has no cells of its own.
  * An instance can be either mutable or immutable, depending on the used constructor. Once frozen, an instance cannot be unfrozen
+ * 
  * @author Dolghier Constantin
  *
  */
@@ -31,9 +33,9 @@ public class GroupColumn extends Column {
 		if (subColumns != null) {
 			subColumns.forEach(z -> NiUtils.failIf(z.getParent() != this, String.format("trying to add a foreing child %s to %s", z.getHierName(), this.getHierName())));
 		}
-		this.mutable = subColumns == null;
-		this.subColumns = mutable ?
-				new ArrayList<>() : Collections.unmodifiableList(new ArrayList<>(subColumns)); 
+		this.mutable = true;
+		this.subColumns = subColumns == null ?
+				new ArrayList<>() : new ArrayList<>(subColumns); 
 	}
 	
 	/** adds a column, if it is not null */
@@ -53,13 +55,6 @@ public class GroupColumn extends Column {
 		subColumns.add(subColumn);
 		NiUtils.failIf(subColumn.getParent() != this, () -> String.format("you attempted to add subcolumn <%s> to GroupColumn<%s> with a different parent", subColumn.debugDigest(false), this.debugDigest(false)));
 	}
-	
-	public void freeze() {
-		if (!mutable)
-			return;
-		subColumns = Collections.unmodifiableList(subColumns);
-		mutable = false;
-	}
 
 	/**
 	 * returns a read-only view of the subcolumns
@@ -67,6 +62,13 @@ public class GroupColumn extends Column {
 	 */
 	public List<Column> getSubColumns() {
 		return Collections.unmodifiableList(this.subColumns);
+	}
+	
+	public void replaceChildren(List<Column> children) {
+		if (!mutable)
+			throw new RuntimeException("not allowed to mutate a frozen instance");
+		this.subColumns.clear();
+		this.subColumns.addAll(children);
 	}
 	
 	/**
@@ -155,5 +157,10 @@ public class GroupColumn extends Column {
 			return Collections.emptyList();
 		
 		return subColumns.stream().flatMap(z -> z.getChildrenStartingAtDepth(depth).stream()).collect(Collectors.toList());
+	}
+
+	@Override
+	public <K> K accept(ColumnVisitor<K> cv) {
+		return cv.visit(this);
 	}
 }

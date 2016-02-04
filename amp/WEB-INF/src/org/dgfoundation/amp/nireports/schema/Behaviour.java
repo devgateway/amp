@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.DatedCell;
 import org.dgfoundation.amp.nireports.NiUtils;
@@ -109,4 +110,10 @@ public interface Behaviour<V extends NiOutCell> {
 	public default V doVerticalReduce(Collection<V> cells) {
 		return getZeroCell();
 	}
+	
+	/**
+	 * whether this CellColumn having a value in a given subreport means keeping the subreport in case {@link ReportSpecification#isDisplayEmptyFundingRows()} is true and we are running a report with hierarchies
+	 * @return
+	 */
+	public boolean isKeepingSubreports();
 }

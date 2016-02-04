@@ -57,4 +57,10 @@ public class TextualTokenBehaviour implements Behaviour<NiTextCell> {
 	public Cell buildUnallocatedCell(long mainId, long entityId, LevelColumn levelColumn) {
 		return new TextCell("", mainId, entityId, Optional.of(levelColumn));
 	}
+
+
+	@Override
+	public boolean isKeepingSubreports() {
+		return false;
+	}
 }

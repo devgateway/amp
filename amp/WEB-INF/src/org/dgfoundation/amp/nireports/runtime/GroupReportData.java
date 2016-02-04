@@ -16,6 +16,8 @@ import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.output.NiSplitCell;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+
 /**
  * a report containing subreports
  * @author Dolghier Constantin
@@ -52,7 +54,7 @@ public class GroupReportData extends ReportData {
 	
 	@Override
 	public GroupReportData horizSplit(CellColumn column) {
-		GroupReportData res = this.clone(subreports.stream().map(z -> z.horizSplit(column)).collect(toList()));
+		GroupReportData res = this.clone(subreports.stream().map(z -> z.horizSplit(column)).filter(z -> z != null && !z.subreports.isEmpty()).collect(toList()));
 		return res;
 	}
 

@@ -73,4 +73,9 @@ public class TrivialMeasureBehaviour implements Behaviour<NiAmountCell> {
 	public Cell buildUnallocatedCell(long mainId, long entityId, LevelColumn levelColumn) {
 		throw new RuntimeException("doing hierarchies by numeric values not supported");
 	}
+
+	@Override
+	public boolean isKeepingSubreports() {
+		return true;
+	}
 }

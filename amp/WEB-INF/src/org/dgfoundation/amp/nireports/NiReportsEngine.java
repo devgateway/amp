@@ -12,6 +12,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toMap;
+
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
@@ -21,9 +23,6 @@ import org.dgfoundation.amp.algo.timing.InclusiveTimer;
 import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportWarning;
-import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
-import org.dgfoundation.amp.nireports.output.NiColumnReportData;
-import org.dgfoundation.amp.nireports.output.NiGroupReportData;
 import org.dgfoundation.amp.nireports.output.NiReportData;
 import org.dgfoundation.amp.nireports.output.NiReportDataOutputter;
 import org.dgfoundation.amp.nireports.output.NiReportRunResult;
@@ -34,7 +33,6 @@ import org.dgfoundation.amp.nireports.runtime.Column;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.runtime.GroupColumn;
-import org.dgfoundation.amp.nireports.runtime.MultiHierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.IdsAcceptorsBuilder;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
@@ -258,16 +256,9 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 			rawData.maybeAddColumn(buildFundingColumn(FUNDING_COLUMN_NAME, rawData, this::separateYears));
 		rawData.maybeAddColumn(buildFundingColumn(TOTALS_COLUMN_NAME, rawData, Function.identity()));
 		
-		GroupColumn catData = categorizeData(rawData);
+		GroupColumn catData = rawData;
 		this.headers = new NiHeaderInfo(catData, this.actualHierarchies.size());
-		this.rootReportData = new ColumnReportData(this, null, discoverLeaves(catData));
-	}
-
-	protected Map<CellColumn, ColumnContents> discoverLeaves(GroupColumn gc) {
-		Map<CellColumn, ColumnContents> res = new HashMap<>();
-		for(CellColumn cc:gc.getLeafColumns())
-			res.put(cc, cc.getContents());
-		return res;
+		this.rootReportData = new ColumnReportData(this, null, AmpCollections.map(catData.getLeafColumns(), cc -> cc.getContents()));
 	}
 	
 	/**
@@ -303,7 +294,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 	
 	/**
-	 * gets the {@link #actualMeasures} list as a (name, index) list
+	 * gets a set as a list of ComparableValue(elem, index-of-elem-in-set)
 	 * @return
 	 */
 	protected<K> List<ComparableValue<K>> getAsComparable(Set<K> in) {
@@ -317,7 +308,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 	
 	protected Column buildFundingColumn(String columnName, GroupColumn parentColumn, Function<GroupColumn, GroupColumn> postprocessor) {
-		GroupColumn fundingColumn = new GroupColumn(columnName, null, parentColumn, null);  // yearly funding
+		GroupColumn fundingColumn = new GroupColumn(columnName, null, parentColumn, null);
 		fetchedMeasures.forEach((name, contents) -> {
 			NiReportMeasure<?> meas = schema.getMeasures().get(name);
 			if (meas.getBehaviour().getTimeRange() != TimeRange.NONE)
@@ -325,12 +316,6 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		});
 		GroupColumn res = postprocessor.apply(fundingColumn);
 		return res;
-	}
-	
-	protected GroupColumn categorizeData(GroupColumn fetchedData) {
-//		TimeRange userRequestedRange = TimeRange.forCriteria(spec.getGroupingCriteria());
-		//fetchedData.contents.getSubColumns())
-		return fetchedData;
 	}
 	
 	protected void runComputedMeasures() {

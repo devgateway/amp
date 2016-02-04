@@ -15,6 +15,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.digijava.module.aim.util.Identifiable;
 
@@ -148,5 +149,9 @@ public class AmpCollections {
 		SortedMap<K, V> res = new TreeMap<K, V>(comp);
 		res.putAll(in);
 		return res;
+	}
+	
+	public static<K, V> Map<K, V> map(List<K> in, Function<K, V> func) {
+		return in.stream().collect(Collectors.toMap(z -> z, z -> func.apply(z)));
 	}
 }

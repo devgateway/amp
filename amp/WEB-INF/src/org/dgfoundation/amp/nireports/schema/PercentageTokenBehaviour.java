@@ -56,4 +56,9 @@ public class PercentageTokenBehaviour implements Behaviour<NiTextCell> {
 	public Cell buildUnallocatedCell(long mainId, long entityId, LevelColumn levelColumn) {
 		return new PercentageTextCell("", mainId, entityId, Optional.of(levelColumn), BigDecimal.ONE);
 	}
+
+	@Override
+	public boolean isKeepingSubreports() {
+		return false;
+	}
 }

@@ -20,6 +20,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.FundingInformationItem;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
@@ -238,11 +239,12 @@ public class FundingPledgesDetails implements FundingInformationItem, Identifiab
 	 * @param fundingDateEnd
 	 * @return
 	 */
-	public static String getDatesDescriptionOf(Long fundingYear, Object fundingDateStart, Object fundingDateEnd){
+	public static String getDatesDescriptionOf(Long fundingYear, Date fundingDateStart, Date fundingDateEnd){
 		String unspecified = TranslatorWorker.translateText("unspecified");
 		String year = fundingYear == null ? null : fundingYear.toString();
+		
 		String dates = (fundingDateStart != null && fundingDateEnd != null) ? 
-				formatDate(fundingDateStart) + " - " + formatDate(fundingDateEnd) : null;
+				DateTimeUtil.formatDate(fundingDateStart) + " - " + DateTimeUtil.formatDate(fundingDateEnd) : null;
 		List<String> values = new ArrayList<>(); 
 		if (isDateRangeEnabled()){
 			values.add(dates);
@@ -257,36 +259,7 @@ public class FundingPledgesDetails implements FundingInformationItem, Identifiab
 		throw new RuntimeException("bug finding a suitable date to display!");
 	}
 
-	/**
-	 * if the input is Date, formats it to yyyy-mm-dd format, else returns as-is
-	 * @param date
-	 * @return
-	 */
-	public static String formatDate(Object date){
-		if (date == null)
-			return null;
-		if (date instanceof Date){
-			SimpleDateFormat sdfOut = new SimpleDateFormat(AmpARFilter.SDF_OUT_FORMAT_STRING);
-			return sdfOut.format((Date) date);
-		}
-		return date.toString();
-	}
 	
-	/**
-	 * parses a yyyy-mm-dd date. Rethrows any error
-	 * @param inp
-	 * @return
-	 */
-	public static Date parseDate(String inp){
-		try{
-			if (inp == null)
-				return null;
-			return new SimpleDateFormat(AmpARFilter.SDF_OUT_FORMAT_STRING).parse(inp);
-		}
-		catch(Exception e){
-			throw new RuntimeException(e);
-		}
-	}
 	
 	public static boolean isDateRangeEnabled(){
 		return FeaturesUtil.isVisibleField("Pledge Funding - Year Range");

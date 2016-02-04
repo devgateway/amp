@@ -241,7 +241,12 @@ InteractiveFormArea.prototype.submitClicked = function(elem, noIds) {
 	var zzz = getFormData(_self.dataDivId);
 	zzz.push({name: this.submitAttrName, value: selectedIds});
 	zzz.push({name: 'extraAction', value: _self.submitActionName});
-
+	
+	//AMP-20986: format to iso date before submitting - probably this should be done for all forms/actions.
+	if(_self.submitActionName == 'pledge_funding_submit'){
+		formatDatesToISO(zzz);
+	}	
+	
 	$.post(this.ajaxPage, 
 			zzz,
 			function(data) {

@@ -389,6 +389,8 @@ public class SettingsUtils {
 
 		settings.add(new SettingOptions("language", "language", new SettingOptions.Option(TLSUtils
 				.getEffectiveLangCode())));
+		
+		settings.add(new SettingOptions("default-date-format", GlobalSettingsConstants.DEFAULT_DATE_FORMAT, new SettingOptions.Option(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT))));
 
 		// Workspace Settings
 		if (tm != null) {

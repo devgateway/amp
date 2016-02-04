@@ -132,12 +132,12 @@ var filtersToHtml = function(filters) {
 					values : [ {
 						id : dateContent.start,
 						name : dateContent.start,
-						trnName : dateContent.start //doesn't need translation for now
+						trnName : window.currentFilter.formatDate(dateContent.start) //doesn't need translation for now
 					},
 					{
 						id : dateContent.end,
 						name : dateContent.end,
-						trnName : dateContent.end //doesn't need translation for now
+						trnName : window.currentFilter.formatDate(dateContent.end) //doesn't need translation for now
 						
 					}]
 				};

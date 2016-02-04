@@ -178,12 +178,12 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 						values : [ {
 							id : dateContent.start,
 							name : dateContent.start,
-							trnName : dateContent.start //doesn't need translation for now
+							trnName : app.TabsApp.filtersWidget.formatDate(dateContent.start) //doesn't need translation for now
 						},
 						{
 							id : dateContent.end,
 							name : dateContent.end,
-							trnName : dateContent.end //doesn't need translation for now
+							trnName : app.TabsApp.filtersWidget.formatDate(dateContent.end) //doesn't need translation for now
 							
 						}]
 					});

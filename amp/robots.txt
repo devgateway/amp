@@ -1,3 +1,18 @@
 User-agent: *
-Disallow: /portal
-# Disallow: /viewTeamReports.do
+Disallow: /*saikuui
+Disallow: /*viewNewAdvancedReport.do
+Disallow: /*xlsExport.do
+Disallow: /*pdfExport.do
+Disallow: /*csvExport.do
+Disallow: /*portal/activities?
+Disallow: /*showActivityLog
+Disallow: /*exportActToWord
+Disallow: /*wicket
+Disallow: /*downloadFile
+Disallow: /*esrigis
+Disallow: /*launchDashboard
+Disallow: /*js
+Disallow: /*repository
+Disallow: /*css
+Disallow: /*script
+Disallow: /*styles

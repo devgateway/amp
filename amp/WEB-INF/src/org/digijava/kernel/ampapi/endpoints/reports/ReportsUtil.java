@@ -157,6 +157,7 @@ public class ReportsUtil {
 			areas = cachedReportData.areas;
 			if (cachedReportData.report != null) {
 				result.set("headers", cachedReportData.report.leafHeaders);
+				result.set("generatedHeaders", cachedReportData.report.generatedHeaders);
 			}
 		}
 		

@@ -268,8 +268,8 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 			// ended
 			return currentQuarter.getPreviousQuarter();
 		} else {
-			// not returning null for now for testing purposes.
-			return currentQuarter.getPreviousQuarter();
+
+			return null;
 		}
 	}
 }

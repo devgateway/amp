@@ -1591,8 +1591,8 @@ body {background:none;}
                                                     <logic:iterate id="option" name="aimEditActivityForm" property="selectedEffectivenessIndicatorOptions">
                                                         <module:display name="/Activity Form/Aid Effectivenes/${option.indicator.ampIndicatorName}"
                                                             parentModule="/Activity Form/Aid Effectivenes">
-                                                            <b>${option.indicator.ampIndicatorName}</b> -
-                                                            ${option.ampIndicatorOptionName}
+                                                            <b>${fn:escapeXml(option.indicator.ampIndicatorName)}</b> -
+                                                            ${fn:escapeXml(option.ampIndicatorOptionName)}
                                                             </br>
                                                         </module:display>
                                                     </logic:iterate>

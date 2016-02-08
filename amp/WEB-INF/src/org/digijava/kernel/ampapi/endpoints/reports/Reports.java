@@ -251,12 +251,14 @@ public class Reports {
 	public final List<JSONTab> getTabs() {
 
 		TeamMember tm = (TeamMember) httpRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
-		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
-		if (ampTeamMember != null) {
-			return getDefaultTabs(ampTeamMember);
-		} else {
-			return getPublicTabs();
+		if (tm != null) {
+			AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
+			if (ampTeamMember != null) {
+				return getDefaultTabs(ampTeamMember);
+			}
 		}
+		
+		return getPublicTabs();
 	}
 
 	private List<JSONTab> getDefaultTabs(AmpTeamMember ampTeamMember) {
@@ -713,9 +715,11 @@ public class Reports {
 	private Map<String, AmpContentTranslation> populateContentTranslations (List<Map<String,String>> reportData, long reportId) {
 		List<Pair<String, String>> rawData = new ArrayList<>();
 		for (Map<String,String> langAndName : reportData) {
-			String locale = langAndName.get("lang");
-			String translation = langAndName.get("name");
-			rawData.add(new Pair<>(locale, translation));
+			if(StringUtils.isNotEmpty(langAndName.get("name"))) {
+				String locale = langAndName.get("lang");
+				rawData.add(new Pair<>(locale, langAndName.get("name")));
+			}
+			
 		}
 		return MultilingualInputFieldValues.populateContentTranslations(rawData, AmpReports.class, reportId, "name");
 	}

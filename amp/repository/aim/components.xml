@@ -162,6 +162,9 @@
 	<page page="components/selectOrganization" title="AMP - Select Organization" />
 	<page page="components/selectOrganization" name="aim_orgComponentPopUp" title="AMP - Select Organization" />
 
+	<page page="selectSectorForind" name="aim_selectSectorForind" title="AMP - Select Sector" />
+	<page page="editSectorForind" name="aim_selectSectorForindEdit" title="AMP - Select Sector" />
+
 	<page name="donorTeamList" title=" - Donor Teams List" />
 	<page name="donorTeamActivities" title=" - Donor Team Activities" />
 	<page name="donorTeamUnAssignedActivities" title=" - Unassigned Activities" />

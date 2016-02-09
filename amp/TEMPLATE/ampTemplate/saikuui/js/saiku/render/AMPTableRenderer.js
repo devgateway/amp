@@ -54,7 +54,7 @@ AMPTableRenderer.prototype.render = function(data, options) {
 
 		// Create HTML table, with header + content.
 		var table = "<table>";
-		var headerHtml = generateHeaderHtml(data.headers);
+		var headerHtml = generateHeaderHtml(data);
 		var contentHtml = generateContentHtml(data.page, {
 			reportTotalsString : data.reportTotalsString
 		});
@@ -95,7 +95,9 @@ function getEntityTypeByColumnNumber(headerRowNumber, headerColumnNumber) {
 	return undefined;
 }
 
-function generateHeaderHtml(headers) {
+function generateHeaderHtml(data) {
+	
+	var headers = data.headers;
 	// Discover tree depth.
 	var maxHeaderLevel = 0;
 	_.each(headers, function(item) {
@@ -135,6 +137,11 @@ function generateHeaderHtml(headers) {
 	// Check columns metadata
 	calculateColumnsDisposition();
 	// Generate header HTML.
+	
+	if (Settings.NIREPORT) {
+		return generateNiReportHeaderHtml(data.generatedHeaders);
+	} 
+	
 	var header = "<thead>";
 	for (var i = 0; i < this.headerMatrix.length; i++) {
 		var row = "<tr>";
@@ -217,6 +224,38 @@ function generateHeaderHtml(headers) {
 		header += row;
 	}
 	header += "</thead>";
+	return header;
+}
+
+function generateNiReportHeaderHtml(headers) {
+	var header = "<thead>"
+	
+	for(var i = 0; i < headers.length; i++) {
+		header += "<tr class='nireport_header'>";
+		for(var j = 0; j < headers[i].length; j++) {
+			header += "<th id='" + headers[i][j].fullOriginalName + "' ";
+			header += "class='col hand-pointer'";
+
+			if (i == headers.length - headers[i][j].rowSpan) {
+				header += " sorting='true' ";
+			}
+			
+			header += "rowSpan='" + headers[i][j].rowSpan + "' colSpan='" + headers[i][j].colSpan + "'>";
+			header += "<div class = 'i18n'>"+ headers[i][j].name;
+			
+			if (headers[i][j].description) {
+				header += "<img src='/TEMPLATE/ampTemplate/images/help.gif'" +
+						" style= 'padding-left:5px'" + 
+						" title='" + headers[i][j].description + "'>"
+			}
+			
+			header +="</div></th>";
+		}
+		header += "</tr>\n";
+	}
+		
+	header += "</thead>";
+	
 	return header;
 }
 

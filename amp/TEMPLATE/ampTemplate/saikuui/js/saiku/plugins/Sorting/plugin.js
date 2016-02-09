@@ -23,30 +23,40 @@ Saiku.Sorting = {
 	processClickOnHeader : function(event) {
 		var clickedColumn = event.currentTarget;
 		var id = $(clickedColumn).attr('id');
-		var type = $(clickedColumn).data('sorting-type');
+		
+		if (Settings.NIREPORT) {
+			sortNiReportColumn(id);
+			if ($(clickedColumn).attr('sorting')) {
+				runQuery();
+			} else {
+				event.preventDefault();
+			}
+		} else {
+			var type = $(clickedColumn).data('sorting-type');
 
-		switch (type) {
-		case 'HEADER_COMMON':
-			if (sortColumn(id, type) === true) {
-				runQuery();
-			} else {
-				event.preventDefault();
+			switch (type) {
+			case 'HEADER_COMMON':
+				if (sortColumn(id, type) === true) {
+					runQuery();
+				} else {
+					event.preventDefault();
+				}
+				break;
+			case 'HEADER_MEASURE':
+				if (sortColumn(id, type) === true) {
+					runQuery();
+				} else {
+					event.preventDefault();
+				}
+				break;
+			case 'HEADER_HIERARCHY':
+				if (sortColumn(id, type) === true) {
+					runQuery();
+				} else {
+					event.preventDefault();
+				}
+				break;
 			}
-			break;
-		case 'HEADER_MEASURE':
-			if (sortColumn(id, type) === true) {
-				runQuery();
-			} else {
-				event.preventDefault();
-			}
-			break;
-		case 'HEADER_HIERARCHY':
-			if (sortColumn(id, type) === true) {
-				runQuery();
-			} else {
-				event.preventDefault();
-			}
-			break;
 		}
 	},
 
@@ -144,6 +154,26 @@ function sortColumn(id, type) {
 	return sort;
 }
 
+function sortNiReportColumn(id) {
+	var foundItem = _.find(Saiku.Sorting.currentSorting, function(item) {
+		return item.id === id;
+	});
+	
+	if (foundItem !== undefined) {
+		foundItem.asc = !foundItem.asc;
+		resetSorting();
+		Saiku.Sorting.currentSorting.push(foundItem);
+	} else {
+		resetSorting();
+		Saiku.Sorting.currentSorting.push({
+			columns : convertNiReportIdToName(id),
+			asc : true,
+			id : id
+		});
+	}
+}
+
+
 /*
  * Call the event that refresh the table.
  */
@@ -170,6 +200,14 @@ function updateArrowIcon(data) {
 						}
 						$(col).find("div").append(imgHtml);
 					});
+}
+
+function convertNiReportIdToName(id) {
+	var name = "";
+	name = id.replace("[Funding]", '');
+	name = name.replace("[Totals]", '');
+	
+	return name.match(/[^[]+(?=\])/g);
 }
 
 function convertIdToName(id, type) {

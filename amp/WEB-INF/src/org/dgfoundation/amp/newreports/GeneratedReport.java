@@ -2,8 +2,8 @@ package org.dgfoundation.amp.newreports;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.dgfoundation.amp.algo.timing.RunNode;
 import org.digijava.module.aim.helper.TeamMember;
 
@@ -47,12 +47,16 @@ public class GeneratedReport {
 	/**
 	 * might be null, but not putting an {@link Optional} here because we have lots of old frontend code 
 	 */
-	@JsonIgnore
 	public final RunNode timings;
+	
+	/**
+	 * Report warnings 
+	 */
+	public final Set<ReportWarning> reportWarnings;
 	
 	public GeneratedReport(ReportSpecification spec, int generationTime, TeamMember requestingUser, 
 			ReportArea reportContents, List<ReportOutputColumn> rootHeaders, List<ReportOutputColumn> leafHeaders, 
-			List<List<HeaderCell>> generatedHeaders, RunNode timings) {
+			List<List<HeaderCell>> generatedHeaders, RunNode timings, Set<ReportWarning> reportWarnings) {
 		this.spec = spec;
 		this.generationTime = generationTime;
 		this.requestingUser = requestingUser;
@@ -61,6 +65,7 @@ public class GeneratedReport {
 		this.leafHeaders = leafHeaders;
 		this.timings = timings;
 		this.generatedHeaders = generatedHeaders;
+		this.reportWarnings = reportWarnings;
 	}
 	
 }

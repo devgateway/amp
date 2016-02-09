@@ -159,7 +159,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 			this.timer = new InclusiveTimer("Report " + spec.getReportName());
 			timer.run("exec", this::runReportAndCleanup);
 			printReportWarnings();
-			NiReportRunResult runResult = new NiReportRunResult(this.reportOutput, timer.getCurrentState(), timer.getWallclockTime(), this.headers);
+			NiReportRunResult runResult = new NiReportRunResult(this.reportOutput, timer.getCurrentState(), timer.getWallclockTime(), this.headers, getReportWarnings());
 			//logger.warn("JsonBean structure of RunNode:" + timingInfo.asJsonBean());
 			logger.warn(String.format("it took %d millies to generate report, the breakdown is:\n%s", runResult.wallclockTime, runResult.timings.asUserString(3)));
 			return runResult; 
@@ -429,6 +429,15 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	
 	protected void addReportWarning(ReportWarning warning) {
 		reportWarnings.getOrCreate(warning.entityId).add(warning);
+	}
+	
+	protected Set<ReportWarning> getReportWarnings() {
+		//return reportWarnings.values().stream().flatMap(v -> v.stream()).collect(Collectors.toSet());
+		Set<ReportWarning> warnings = new HashSet<ReportWarning>();
+		for (Set<ReportWarning> w : reportWarnings.values()) {
+			warnings.addAll(w);
+		}
+		return warnings;
 	}
 	
 	protected void printReportWarnings() {

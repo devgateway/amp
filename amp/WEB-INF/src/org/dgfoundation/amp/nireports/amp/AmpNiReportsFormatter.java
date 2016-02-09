@@ -2,7 +2,7 @@ package org.dgfoundation.amp.nireports.amp;
 
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
-import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -16,9 +16,9 @@ import org.dgfoundation.amp.newreports.HeaderCell;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
+import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.converters.AmpCellVisitor;
 import org.dgfoundation.amp.nireports.output.NiColumnReportData;
@@ -50,27 +50,41 @@ public class AmpNiReportsFormatter {
 	private List<List<HeaderCell>> generatedHeaders = new ArrayList<>();
 	private Map<Column, ReportOutputColumn> niColumnToROC = new IdentityHashMap<>();
 	
+	private OutputSettings outputSettings;
 	private final AmpCellVisitor cellVisitor;
 	private boolean isRoot = true;
 	
 	public AmpNiReportsFormatter(ReportSpecification spec, NiReportRunResult runResult, 
-			Supplier<ReportAreaImpl> reportAreaSupplier) {
+			Supplier<ReportAreaImpl> reportAreaSupplier, OutputSettings outputSettings) {
 		this.runResult = runResult;
 		this.spec = spec;
 		this.reportAreaSupplier = reportAreaSupplier;
-		this.cellVisitor = new AmpCellVisitor(spec, runResult.headers != null ? runResult.headers.leafColumns.size() : 0);
+		this.outputSettings = outputSettings == null ?  new OutputSettings() : outputSettings;
+		this.cellVisitor = new AmpCellVisitor(spec, 
+				runResult.headers != null ? runResult.headers.leafColumns.size() : 0, this.outputSettings);
+		init();
+	}
+	
+	public void init() {
+		if (outputSettings.isProvideEntityIds()) {
+			LinkedHashSet<ReportColumn> columns = new LinkedHashSet<>(spec.getColumns());
+			columns.removeAll(spec.getHierarchies());
+			if (!columns.isEmpty()) {
+				outputSettings.addEntityToProvideIds(columns.iterator().next().getColumnName());
+			}
+		}
 	}
 	
 	public GeneratedReport format() {
 		buildHeaders();
 		reportContents = getReportContents(runResult.reportOut);
 		return new GeneratedReport(spec, (int) runResult.wallclockTime, null, reportContents, rootHeaders, 
-				leafHeaders, generatedHeaders, runResult.timings);
+				leafHeaders, generatedHeaders, runResult.timings, runResult.warnings);
 	}
 
-	public static NiReportOutputBuilder<GeneratedReport> asOutputBuilder(Supplier<ReportAreaImpl> reportAreaSupplier) {
-		return (ReportSpecification spec, NiReportRunResult runResult) -> 
-			new AmpNiReportsFormatter(spec, runResult, reportAreaSupplier).format();
+	public static NiReportOutputBuilder<GeneratedReport> asOutputBuilder(Supplier<ReportAreaImpl> reportAreaSupplier,
+			OutputSettings outputSettings) {
+		return (ReportSpecification spec, NiReportRunResult runResult) -> new AmpNiReportsFormatter(spec, runResult, reportAreaSupplier, outputSettings).format();
 	}
 	
 	protected void buildHeaders() {
@@ -145,6 +159,7 @@ public class AmpNiReportsFormatter {
 	protected ReportCell convert(NiOutCell cell, CellColumn niCellColumn) {
 		if (cell == null)
 			return null;
+		cellVisitor.setCurrentColumn(niCellColumn);
 		return cell.accept(cellVisitor);
 	}
 	

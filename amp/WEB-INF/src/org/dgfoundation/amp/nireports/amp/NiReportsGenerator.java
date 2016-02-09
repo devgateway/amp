@@ -2,7 +2,6 @@ package org.dgfoundation.amp.nireports.amp;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.timing.RunNode;
@@ -36,6 +35,7 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
 	 * field to be removed once Mondrian-based reporting is done with
 	 */
 	public final Class<? extends ReportAreaImpl> reportAreaClazz;
+	protected OutputSettings outputSettings;
 	
 	public NiReportsGenerator(NiReportsSchema schema) {
 		this(schema, ReportAreaImpl.class);
@@ -66,7 +66,8 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
 		
 	@Override
 	public GeneratedReport executeReport(ReportSpecification spec) {
-		GeneratedReport apiReport = executeReport(spec, AmpNiReportsFormatter.asOutputBuilder(ReportAreaImpl.buildSupplier(reportAreaClazz)));
+		GeneratedReport apiReport = executeReport(spec,
+				AmpNiReportsFormatter.asOutputBuilder(ReportAreaImpl.buildSupplier(reportAreaClazz), outputSettings));
 		return apiReport;
 	}
 	
@@ -77,5 +78,9 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
 			List<Object> values = Arrays.asList(node.getName(), node.getTotalTime(), wallclockTime, json);
 			SQLUtils.insert(conn, "amp_nireports_log", "id", "amp_nireports_log_id_seq", columnNames, Arrays.asList(values));
 		});
+	}
+	
+	public void setOutputSettings(OutputSettings outputSettings) {
+		this.outputSettings = outputSettings;
 	}
 }

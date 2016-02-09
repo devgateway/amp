@@ -8,6 +8,9 @@ import java.util.function.IntFunction;
 import java.util.function.LongFunction;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
@@ -15,8 +18,11 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
  * @author Dolghier Constantin
  *
  */
+@JsonSerialize(include=Inclusion.NON_NULL)
 public interface RunNode {
+	@JsonIgnore
 	public String getName();
+	@JsonIgnore
 	public Set<? extends RunNode> getSubNodes();
 	public long getTotalTime();
 	
@@ -28,6 +34,10 @@ public interface RunNode {
 	 * @param value if it is null, then this call does nothing
 	 */
 	public void putMeta(String key, Object value);
+	
+	public default JsonBean getDetails() {
+		return asJsonBean();
+	}
 		
 	/**
 	 * renders the node as Json-ready bean
@@ -52,6 +62,7 @@ public interface RunNode {
 		return result;
 	}
 	
+	@JsonIgnore
 	public default String asString(IntFunction<String> prefixBuilder, LongFunction<String> numberFormatter, int depth) {
 		StringBuilder subnodesString = getSubNodes() == null || getSubNodes().isEmpty() ? null : new StringBuilder(", subNodes: [");
 		if (subnodesString != null) {
@@ -81,14 +92,17 @@ public interface RunNode {
 	 * @param numberFormatter
 	 * @return
 	 */
+	@JsonIgnore
 	public default String asFastString(LongFunction<String> numberFormatter) {
 		return asString(z -> "", numberFormatter, 0);
 	}
 	
+	@JsonIgnore
 	public default String asUserString(final int blanksPerLevel) {
 		return asUserString(blanksPerLevel, duration -> String.format("%d ms", duration));
 	}
 	
+	@JsonIgnore
 	public default String asUserString(final int blanksPerLevel, LongFunction<String> numberFormatter) {
 		return asString(depth -> depth == 0 ? "" : ("\n" + StringUtils.repeat(" ", blanksPerLevel * (depth + 1))), numberFormatter, 0);
 	}

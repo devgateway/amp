@@ -1,6 +1,9 @@
 package org.dgfoundation.amp.nireports.output;
 
+import java.util.Set;
+
 import org.dgfoundation.amp.algo.timing.RunNode;
+import org.dgfoundation.amp.newreports.ReportWarning;
 import org.dgfoundation.amp.nireports.NiHeaderInfo;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 
@@ -14,11 +17,14 @@ public class NiReportRunResult {
 	public final RunNode timings;
 	public final NiHeaderInfo headers;
 	public final long wallclockTime;
+	public final Set<ReportWarning> warnings; 
 	
-	public NiReportRunResult(NiReportData reportOut, RunNode timings, long wallclockTime, NiHeaderInfo headers) {
+	public NiReportRunResult(NiReportData reportOut, RunNode timings, long wallclockTime, NiHeaderInfo headers, 
+			Set<ReportWarning> warnings) {
 		this.reportOut = reportOut;
 		this.timings = timings;
 		this.wallclockTime = wallclockTime;
 		this.headers = headers;
+		this.warnings = warnings;
 	}
 }

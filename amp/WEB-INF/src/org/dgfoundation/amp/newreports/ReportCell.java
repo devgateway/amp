@@ -1,18 +1,23 @@
 package org.dgfoundation.amp.newreports;
 
 import java.util.Map;
+import java.util.Set;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.dgfoundation.amp.algo.AmpCollections;
 
 /**
  * class describing a report cell
+ * 
  * @author Dolghier Constantin
- *
  */
+@JsonSerialize(include=Inclusion.NON_NULL)
 public abstract class ReportCell implements Comparable<ReportCell> {
 	public final Comparable<?> value;
 	public final String displayedValue;
-	public final Map<Long, String> entities;
+	private Map<Long, String> entitiesIdsValues;
+	private Set<Long> entitiesIds;
 
 	//to facilitate the sorting, we will store the parent area
 	transient public ReportArea area;
@@ -20,7 +25,6 @@ public abstract class ReportCell implements Comparable<ReportCell> {
 	public ReportCell(Comparable<?> value, String displayedValue) {
 		this.value = value;
 		this.displayedValue = displayedValue;
-		this.entities = null; // not implemented yet!
 	}
 	
 	@Override public int compareTo(ReportCell oth) {
@@ -42,5 +46,33 @@ public abstract class ReportCell implements Comparable<ReportCell> {
 	
 	@Override public String toString() {
 		return String.format("[%s]", this.displayedValue);
+	}
+
+	/**
+	 * @return the entitiesIdsValues
+	 */
+	public Map<Long, String> getEntitiesIdsValues() {
+		return entitiesIdsValues;
+	}
+
+	/**
+	 * @param entitiesIdsValues the entitiesIdsValues to set
+	 */
+	public void setEntitiesIdsValues(Map<Long, String> entitiesIdsValues) {
+		this.entitiesIdsValues = entitiesIdsValues;
+	}
+
+	/**
+	 * @return the entitiesIds
+	 */
+	public Set<Long> getEntitiesIds() {
+		return entitiesIds;
+	}
+
+	/**
+	 * @param entitiesIds the entitiesIds to set
+	 */
+	public void setEntitiesIds(Set<Long> entitiesIds) {
+		this.entitiesIds = entitiesIds;
 	}
 }

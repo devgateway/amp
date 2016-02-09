@@ -3,9 +3,6 @@
  */
 package org.dgfoundation.amp.ar;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Constants for Column Names. <br>
  * Values are pulled from amp_columns.columnname and several are defined manually.

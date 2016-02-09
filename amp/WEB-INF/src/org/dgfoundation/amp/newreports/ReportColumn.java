@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.newreports;
 
+import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
+
 /**
  * class describing a column to be used in a report
  * @author Dolghier Constantin
@@ -12,7 +14,7 @@ public class ReportColumn extends NamedTypedEntity {
 	 * @param columnName - the name of the column
 	 */
 	public ReportColumn(String columnName) {
-		super(columnName);
+		super(columnName, AmpReportsSchema.columnDescriptions.get(columnName));
 	}
 	
 	public String getColumnName() {

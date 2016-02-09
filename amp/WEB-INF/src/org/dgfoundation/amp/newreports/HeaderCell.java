@@ -14,16 +14,19 @@ import org.dgfoundation.amp.nireports.ReportHeadingCell;
 public class HeaderCell extends ReportHeadingCell {
 	
 	/** not translated original name */
-	public String originalName;
+	public final String originalName;
 	
 	/** full not translated name of the column from the uppermost header till the current header cell level */
-	public String fullOriginalName;
+	public final String fullOriginalName;
+	
+	//public final String description;
 	
 	public HeaderCell(int startRow, int totalRowSpan, int rowSpan,
 			int startColumn, int colSpan, ReportOutputColumn roc) {
 		super(startRow, totalRowSpan, rowSpan, startColumn, colSpan, roc.columnName);
 		this.originalName = roc.originalColumnName;
 		this.fullOriginalName = roc.getHierarchicalName();
+		//this.description  = roc.description;
 	}
 	
 	public HeaderCell(ReportHeadingCell niHeaderCell, ReportOutputColumn roc) {

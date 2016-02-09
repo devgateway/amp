@@ -9,13 +9,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.ColumnConstants;
 
 /**
  * Stores a report configuration by implementing {@link ReportSpecification} and defines all data required to generate a report. 
- * this is the Mondrian-specific implementation (full of hacks)
+ * 
  * @author Nadejda Mandrescu
- *
  */
 public class ReportSpecificationImpl implements ReportSpecification {
 	protected int reportType;	

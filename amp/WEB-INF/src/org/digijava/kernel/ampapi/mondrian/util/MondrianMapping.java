@@ -271,6 +271,7 @@ public class MondrianMapping {
 								
 			addColumnDefinition(ColumnConstants.COUNTRY, new MDXLevel(MoConstants.LOCATION, MoConstants.H_COUNTRIES,  MoConstants.ATTR_COUNTRY_NAME));
 			addColumnDefinition(ColumnConstants.REGION, new MDXLevel(MoConstants.LOCATION, MoConstants.H_REGIONS,  MoConstants.ATTR_REGION_NAME));
+			addColumnDefinition(ColumnConstants.REGION_ID, new MDXLevel(MoConstants.LOCATION, MoConstants.ATTR_REGION_ID,  MoConstants.ATTR_REGION_ID));
 			addColumnDefinition(ColumnConstants.ZONE, new MDXLevel(MoConstants.LOCATION, MoConstants.H_ZONES, MoConstants.ATTR_ZONE_NAME));
 			addColumnDefinition(ColumnConstants.DISTRICT, new MDXLevel(MoConstants.LOCATION, MoConstants.H_DISTRICTS, MoConstants.ATTR_DISTRICT_NAME));
 			addColumnDefinition(ColumnConstants.LOCATION, new MDXLevel(MoConstants.LOCATION, MoConstants.ATTR_LOCATION_NAME,  MoConstants.ATTR_LOCATION_NAME));

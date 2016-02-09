@@ -163,7 +163,7 @@ public class DashboardsService {
 			break;
 		case "RE":
 			spec.addColumn(new ReportColumn(ColumnConstants.REGION));
-			spec.addColumn(new ReportColumn(ColumnConstants.REGIONAL_GROUP_ID));
+			spec.addColumn(new ReportColumn(ColumnConstants.REGION_ID));
 			title = TranslatorWorker.translateText(DashboardConstants.TOP_REGIONS);
 			name = DashboardConstants.TOP_REGIONS;
 			break;

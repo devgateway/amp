@@ -251,6 +251,7 @@ public final class MoConstants {
 	public static final String ATTR_ALL_DATES = "All Periods";
 	public static final String ATTR_COUNTRY_NAME = "Country";
 	public static final String ATTR_REGION_NAME = "Region";
+	public static final String ATTR_REGION_ID = "Region Id";
 	public static final String ATTR_ZONE_NAME = "Zone";
 	public static final String ATTR_DISTRICT_NAME = "District";
 	public static final String ATTR_LOCATION_NAME = "Specified Location";

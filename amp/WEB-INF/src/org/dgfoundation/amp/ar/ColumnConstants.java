@@ -263,6 +263,7 @@ public class ColumnConstants {
 	public static final String PROPOSED_START_DATE = "Proposed Start Date";
 	public static final String PURPOSE = "Purpose";
 	public static final String REGION = "Region";
+	public static final String REGION_ID = "Region Id";
 	public static final String REGIONAL_GROUP = "Regional Group";
 	public static final String REGIONAL_GROUP_ID = "Regional Group Id";
 	public static final String REGIONAL_GROUP_GROUP = "Regional Group Group";	

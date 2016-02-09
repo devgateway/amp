@@ -282,6 +282,10 @@
 			<Table name="mondrian_locations@@locale@@" />
 			<Level name="Region" column="region_id" type="Integer" nameColumn="region_name" />
 		</Hierarchy>
+		<Hierarchy hasAll="true" allMemberName="All Locations" name="Region Id" primaryKey="id">
+			<Table name="mondrian_locations@@locale@@" />
+			<Level name="Region Id" column="region_id" type="Integer" nameColumn="region_id" />
+		</Hierarchy>
 		<Hierarchy hasAll="true" allMemberName="All Locations" name="Zone" primaryKey="id">
 			<Table name="mondrian_locations@@locale@@" />
 			<Level name="Zone" column="zone_id" type="Integer" nameColumn="zone_name" />

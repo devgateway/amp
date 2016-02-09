@@ -19,7 +19,7 @@ module.exports = Backbone.Model
   fetch: function() {
     if (!_(this).has('_esriLoaded')) {
       this._esriLoaded = new Deferred();
-      this.esriLayer = new L.esri.DynamicMapLayer(this.get('link'), {
+      this.esriLayer = new L.esri.DynamicMapLayer({url:this.get('link'),
         opacity: 0.5
       });
       this._esriLoaded.resolveWith(this, [this, this.esriLayer]);

@@ -46,7 +46,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		super("Funding", null, getFundingViewFilter(), "v_ni_donor_funding", "amp_activity_id", TrivialMeasureBehaviour.getInstance());
 	}
 
-	protected static Map<String, String> getFundingViewFilter() {
+	public static Map<String, String> getFundingViewFilter() {
 		Map<String, String> res = new HashMap<>();
 		res.put(ColumnConstants.TYPE_OF_ASSISTANCE, "terms_assist_id");
 		res.put(ColumnConstants.FINANCING_INSTRUMENT, "financing_instrument_id");
@@ -105,7 +105,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 								
 				for(ImmutablePair<MetaCategory, String> longOptionalColumn:longColumnsToFetch)
 					addMetaIfLongExists(metaSet, longOptionalColumn.k, rs.rs, longOptionalColumn.v);
-							
+				
 				for(Map.Entry<String, LevelColumn> optDim:optionalDimensionCols.entrySet())
 					addCoordinateIfLongExists(coos, rs.rs, optDim.getKey(), optDim.getValue());
 

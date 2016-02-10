@@ -1,0 +1,155 @@
+package org.dgfoundation.amp.testmodels.nicolumns;
+
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import org.dgfoundation.amp.codegenerators.FundingIdsMapper;
+import org.dgfoundation.amp.nireports.CategAmountCell;
+import org.dgfoundation.amp.nireports.Cell;
+import org.dgfoundation.amp.nireports.MonetaryAmount;
+import org.dgfoundation.amp.nireports.PercentageTextCell;
+import org.dgfoundation.amp.nireports.TextCell;
+import org.dgfoundation.amp.nireports.TranslatedDate;
+import org.dgfoundation.amp.nireports.amp.AmpPrecisionSetting;
+import org.dgfoundation.amp.nireports.meta.MetaInfo;
+import org.dgfoundation.amp.nireports.meta.MetaInfoGenerator;
+import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
+import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
+import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
+import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
+import org.dgfoundation.amp.testmodels.HardcodedFundingNames;
+import org.dgfoundation.amp.testmodels.TestModelConstants;
+
+/**
+ * Cell source for hardcoded columns (TestColumn)
+ * @author acartaleanu
+ *
+ * @param <K> - the type of cell used for populating
+ */
+public abstract class HardcodedCells<K extends Cell> {
+
+	private Map<String, Long> activityIds;
+	protected Map<String, Map<String, Long>> fundingIds;
+	private final List<K> CELLS;
+	private Map<String, Long> entityIds;
+	
+	public List<K> getCells() {
+		return CELLS;
+	}
+	
+	public HardcodedCells(Map<String, Long> activityIds, Map<String, Long> entityIds) {
+		this.activityIds = activityIds;
+		this.fundingIds = new HardcodedFundingNames().getParams();
+		this.entityIds = entityIds;
+		this.CELLS = populateCells();
+	}
+
+	/**
+	 * must override in child class
+	 * child class contains createCell statements, depending on what kind of Cells it's made of
+	 * @return
+	 */
+	protected abstract List<K> populateCells();
+	
+	/**
+	 * Create percentage text cell (sectors, programs, locations...)
+	 * @param activityName the activity title
+	 * @param text
+	 * @param percentage percentage in the range of 0..1
+	 * @return
+	 */
+	protected PercentageTextCell createCell(String activityName, String text, Double percentage) {
+		//if entity ID is empty because the cell is empty, activity id is supplied instead
+		long entityId = entityIds.get(text) == null ? activityIds.get(activityName) : entityIds.get(text);
+		return new PercentageTextCell(text, activityIds.get(activityName), entityId, Optional.empty(), new BigDecimal(percentage));
+	}
+	
+	/**
+	 * Create simple text cell
+	 * @param activityName the activity title
+	 * @param text
+	 * @return
+	 */
+	protected TextCell createCell(String activityName, String text) {
+		return new TextCell(text, activityIds.get(activityName), entityIds.get(text), Optional.empty());
+	}
+	
+	/**
+	 * Adds funding parameter id if value != null.
+	 * This is done for: pledge, transaction type, agreement, recipient org.
+	 * Mirrors code in AmpFundingColumn.fetch().
+	 * @param categoryName
+	 * @param value
+	 * @param mis
+	 */
+	private void addToMetaIfExists(String categoryName, String value, MetaInfoSet mis) {
+		if (value != null)
+			mis.add(new MetaInfo(categoryName, fundingIds.get(categoryName).get(value)));
+	}
+	
+	/**
+	 * Adds funding parameter as string (not as id), if != null.
+	 * This is done for: recipient role, source role, adjustment type
+	 * Mirrors code in AmpFundingColumn.fetch().
+	 * @param categoryName
+	 * @param value
+	 * @param mis
+	 */
+	private void addToMetaIfExistsDirectly(String categoryName, String value, MetaInfoSet mis) {
+		if (value != null)
+			mis.add(new MetaInfo(categoryName, value));
+	}
+	/*			this.donor_org = donor_org;
+			this.funding_status = funding_status;
+			this.mode_of_payment = mode_of_payment;
+			this.terms_assist = terms_assist;
+			this.financing_instrument = financing_instrument;*/
+	
+	/**
+	 * Adds funding parameter (as id) to the coordinates map, if != null.
+	 * this is done for: donor org, funding status, mode of payment, terms of assistance (type of assistance in other places), financing instrument.
+	 * @param categoryName
+	 * @param value
+	 * @param coos
+	 */
+	private void addToCoordsIfExists(String categoryName, String value, Map<NiDimensionUsage, Coordinate> coos) {
+		if (value == null)
+			return;
+		Map<String, LevelColumn> optionalIdsMap = new FundingIdsMapper().getOptionalIdsMap();
+		Long val = fundingIds.get(categoryName).get(value);
+		LevelColumn levelColumn = optionalIdsMap.get(categoryName);
+		Coordinate newVal = levelColumn.getCoordinate(val);
+		coos.put(levelColumn.dimensionUsage, newVal);
+	}
+	
+	
+	protected CategAmountCell createCell(String amount, String activityTitle, int year, String month, 
+			String pledge, String transaction_type, String agreement, String recipient_org, 
+			String recipient_role, String source_role, String adjustment_type,
+			String donor_org, String funding_status, String mode_of_payment, 
+			String terms_assist, String financing_instrument) {
+		
+		
+		MetaInfoGenerator mig = new MetaInfoGenerator();
+		Map<NiDimensionUsage, Coordinate> coos = new HashMap<NiDimensionUsage, Coordinate>();
+		MetaInfoSet mis = new MetaInfoSet(mig);
+		TranslatedDate td = new GregorianTestDateGenerator(year, month).toTranslatedDate();
+		addToMetaIfExists(TestModelConstants.PLEDGE_ID, pledge, mis);
+		addToMetaIfExists(TestModelConstants.TRANSACTION_TYPE, transaction_type, mis);
+		addToMetaIfExists(TestModelConstants.AGREEMENT_ID, agreement, mis);
+		addToMetaIfExists(TestModelConstants.RECIPIENT_ORG, recipient_org, mis);
+		addToMetaIfExistsDirectly(TestModelConstants.RECIPIENT_ROLE, recipient_role, mis);
+		addToMetaIfExistsDirectly(TestModelConstants.SOURCE_ROLE, source_role, mis);
+		addToMetaIfExistsDirectly(TestModelConstants.ADJUSTMENT_TYPE, adjustment_type, mis);
+		addToCoordsIfExists(TestModelConstants.DONOR_ORG_ID, donor_org, coos);
+		addToCoordsIfExists(TestModelConstants.FUNDING_STATUS_ID, funding_status, coos);
+		addToCoordsIfExists(TestModelConstants.MODE_OF_PAYMENT_ID, mode_of_payment, coos);
+		addToCoordsIfExists(TestModelConstants.TERMS_ASSIST_ID, terms_assist, coos);
+		addToCoordsIfExists(TestModelConstants.FINANCING_INSTRUMENT_ID, financing_instrument, coos);
+		return new CategAmountCell(activityIds.get(activityTitle), new MonetaryAmount(new BigDecimal(amount), new AmpPrecisionSetting()), 
+				mis, coos, td);
+	}
+}

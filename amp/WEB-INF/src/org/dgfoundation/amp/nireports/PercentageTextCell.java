@@ -44,7 +44,7 @@ public final class PercentageTextCell extends Cell {
 		if (delta == 0)
 			delta = Long.compare(entityId, ptc.entityId);
 		if (delta == 0)
-			delta = Long.compare(activityId, ptc.entityId);
+			delta = Long.compare(activityId, ptc.activityId);
 		return delta;
 	}
 	

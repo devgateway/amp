@@ -17,8 +17,11 @@ import org.dgfoundation.amp.ar.amp212.HierarchyTrackingTestcases;
 import org.dgfoundation.amp.ar.amp212.InclusiveRunnerTests;
 import org.dgfoundation.amp.ar.amp212.MetaInfoTests;
 import org.dgfoundation.amp.ar.amp212.NiReportsFetchingTests;
+import org.dgfoundation.amp.ar.amp212.OffDbNiReportEngineTests;
+import org.dgfoundation.amp.ar.amp212.TestCodeGenerator;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
+import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -40,6 +43,7 @@ public class AllTests_amp212
 		setUp();
 		
 		TestSuite suite = new TestSuite(AllTests_amp212.class.getName());
+		
 		suite.addTest(new JUnit4TestAdapter(GraphAlgorithmsTests.class));	
 		suite.addTest(new JUnit4TestAdapter(InclusiveRunnerTests.class));
 		suite.addTest(new JUnit4TestAdapter(NiReportsFetchingTests.class));
@@ -50,7 +54,7 @@ public class AllTests_amp212
 		suite.addTest(new JUnit4TestAdapter(DimensionSnapshotTests.class));
 		suite.addTest(new JUnit4TestAdapter(BigDecimalPrecisionTests.class));
 		suite.addTest(new JUnit4TestAdapter(HierarchyTrackingTestcases.class));
-		
+		suite.addTest(new JUnit4TestAdapter(OffDbNiReportEngineTests.class));
 		return suite;
 	}
 	

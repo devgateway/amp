@@ -90,7 +90,7 @@ public class AmpCurrencyConvertor implements CurrencyConvertor {
 			return getExchangeRate(baseCurrencyCode, toCurrencyCode, null, date) / fixedExchangeRate; 
 		}
 		
-		long julianCode = DateTimeUtil.toJulianDayNumber(date);
+		Integer julianCode = DateTimeUtil.toJulianDayNumber(date);
 		double res = getCalculator(fromCurrencyCode).getRate(julianCode) / getCalculator(toCurrencyCode).getRate(julianCode);
 		return res;
 	}

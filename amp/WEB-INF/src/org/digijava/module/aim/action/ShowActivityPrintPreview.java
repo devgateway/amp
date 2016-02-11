@@ -989,12 +989,11 @@ public class ShowActivityPrintPreview
 		} else {
 			ppcCurrency = CurrencyUtil.getCurrencyByCode(eaForm.getCurrCode());
 		}
-     	
-		java.sql.Date ppcDate = new java.sql.Date(activity.getFunDate().getTime());
+		java.sql.Date ppcDate = activity.getFunDate() != null ? new java.sql.Date(activity.getFunDate().getTime()) : null;
 		double frmExRt = Util.getExchange(ppcCurrency.getCurrencyCode(), ppcDate);
 		double toExRt = Util.getExchange(eaForm.getCurrCode(), ppcDate);
-		
-		DecimalWraper amt = CurrencyWorker.convertWrapper(activity.getFunAmount(), frmExRt, toExRt, ppcDate);
+		double funAmount = activity.getFunAmount() != null ? activity.getFunAmount() : 0; 
+		DecimalWraper amt = CurrencyWorker.convertWrapper(funAmount, frmExRt, toExRt, ppcDate);
 		pg.setFunAmountAsDouble(amt.doubleValue());
 		pg.setCurrencyCode(eaForm.getCurrCode());
 		pg.setCurrencyName(eaForm.getCurrName());

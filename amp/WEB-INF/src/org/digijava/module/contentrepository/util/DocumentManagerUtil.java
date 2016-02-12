@@ -401,9 +401,10 @@ public class DocumentManagerUtil {
 		try {
 			//session.getRootNode().refresh(false);
 			//session.refresh(false);
-			return session.getNodeByUUID(uuid);
+			return session.getNodeByIdentifier(uuid);
 		} catch (Exception e) {
 			e.printStackTrace();
+//			throw new RuntimeException(e);
 			return null;
 		}
 	}

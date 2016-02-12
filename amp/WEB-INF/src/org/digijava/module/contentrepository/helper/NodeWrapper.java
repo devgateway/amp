@@ -340,6 +340,14 @@ public class NodeWrapper{
 //			if (tempDoc.getWebLink().indexOf("http://") >= 0){
 //				tempDoc.setWebLink(tempDoc.getWebLink().replaceFirst("http://", ""));
 //			}
+			//for the case when the file title is missing -- we have to set it to something
+			//so we'll set it to the link
+			if (tempDoc.getTitle() == null) 
+				tempDoc.setTitle(tempDoc.getWebLink());
+			if (tempDoc.getName() == null) 
+				tempDoc.setTitle(tempDoc.getWebLink());
+			
+			
 			if (tempDoc.getName().indexOf("http://") >= 0){
 				tempDoc.setName(tempDoc.getName().replaceFirst("http://", ""));
 			}
@@ -357,6 +365,24 @@ public class NodeWrapper{
 				newNode.checkout();
 			}
 			else{
+				if (tempDoc.getTitle() == null) {
+					logger.error("title is null!");
+					//use one of the translated titles
+					//it's a deeply broken document, but we can't just ignore it
+					for (String localTitle: tempDoc.getTranslatedTitles().values()) {
+						if (localTitle != null) {
+							tempDoc.setTitle(localTitle);
+							break;
+						}
+					}
+					//if it's still null, set it to "<missing title>"
+					if (tempDoc.getTitle() == null) {
+						tempDoc.setTitle("<missing title>");
+					}
+ 
+					
+				}
+					
 				String encTitle	= URLEncoder.encode(tempDoc.getTitle(), "UTF-8");
 				newNode	= parentNode.addNode(encTitle);
 				newNode.addMixin("mix:versionable");

@@ -95,7 +95,7 @@ public class ActivityGatekeeper {
 		synchronized (timestamp) {
 			if (verifyLock(id, hash)){
 				clearLists(id);
-				logger.debug("activity ulocked");
+				logger.debug("activity unlocked");
 			}
 		}
 	}

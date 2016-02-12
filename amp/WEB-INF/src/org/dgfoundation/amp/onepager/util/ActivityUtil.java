@@ -23,10 +23,12 @@ import java.util.Set;
 
 import javax.jcr.Node;
 import javax.jcr.Property;
+import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
@@ -244,7 +246,7 @@ public class ActivityUtil {
 			
 			saveIndicators(a, session);
 
-			saveResources(a); 
+			saveResources(a, session); 
 			saveEditors(session, createNewVersion); 
 			saveComments(a, session,draft); 
 			saveAgreements(session);
@@ -590,7 +592,7 @@ public class ActivityUtil {
 		}
 	}
 
-	private static void saveResources(AmpActivityVersion a) {
+	private static void saveResources(AmpActivityVersion a, Session session) {
 		AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
 		
 		HttpServletRequest req = SessionUtil.getCurrentServletRequest();
@@ -605,7 +607,7 @@ public class ActivityUtil {
         /*
          * update titles
          */
-        if (existingTitles != null && !existingTitles.isEmpty()) {
+        if (existingTitles != null) {
             for (TemporaryDocument d : existingTitles) {
                 Node node = DocumentManagerUtil.getWriteNode(d.getExistingDocument().getUuid(), req);
                 if (node != null && d != null) {
@@ -617,7 +619,7 @@ public class ActivityUtil {
             		//The call to -> getTranslatedTitleByLang(TLSUtils.getLangCode()); 
                     //returns null. 
                     //In that scenario we act as if we were changing the document name
-                    boolean onlyOneLanguageSaved = nw.getTitle () == null;
+                    boolean onlyOneLanguageSaved = nw.getTitle() == null;
                     if (onlyOneLanguageSaved || !nw.getTitle().equals(d.getTitle())) {
                         logger.warn("lang "+TLSUtils.getLangCode());
                     	if (onlyOneLanguageSaved) {
@@ -634,12 +636,13 @@ public class ActivityUtil {
                             String fileName = nw.getName();
                             Bytes fileSize = null;
                             InputStream fileData = null;
+                            String asd = "";
                             try {
-                                Property data = nw.getNode().getProperty(CrConstants.PROPERTY_DATA);
-                                fileData = data.getStream();
-                                
-                                Property size = nw.getNode().getProperty(CrConstants.PROPERTY_FILE_SIZE);
-                                fileSize = Bytes.bytes(size.getLong());
+                            	if (nw.getNode().hasProperty(CrConstants.PROPERTY_DATA))
+                            		fileData = nw.getNode().getProperty(CrConstants.PROPERTY_DATA).getStream();
+//                            		.getBinary().getStream();
+                                if (nw.getNode().hasProperty(CrConstants.PROPERTY_FILE_SIZE))
+                                	fileSize = Bytes.bytes(nw.getNode().getProperty(CrConstants.PROPERTY_FILE_SIZE).getLong());
                                 DocumentManagerUtil.logoutJcrSessions(req);
                             } catch (RepositoryException e) {
                                 logger.error("Error while getting data stream from JCR:", e);
@@ -651,18 +654,12 @@ public class ActivityUtil {
                                 private String fileName;
                                 private Bytes fileSize;
                                 private InputStream fileData;
-
-
                                 public FileItemEx(String fileNameIn, String contentTypeIn, InputStream fileDataIn, Bytes fileSizeIn) {
                                     fileName = fileNameIn;
                                     contentType = contentTypeIn;
                                     fileData = fileDataIn;
                                     fileSize = fileSizeIn;
-
                                 }
-
-
-
                                 @Override
                                 public InputStream getInputStream() throws IOException {
                                     return fileData;  //To change body of implemented methods use File | Settings | File Templates.
@@ -685,6 +682,8 @@ public class ActivityUtil {
 
                                 @Override
                                 public long getSize() {
+                                	if (fileSize == null)
+                                		return 0;
                                     return fileSize.bytes();  //To change body of implemented methods use File | Settings | File Templates.
                                 }
 
@@ -754,14 +753,10 @@ public class ActivityUtil {
 		 * remove old resources
 		 */
 		if (deletedResources != null){
-			Iterator<AmpActivityDocument> it = deletedResources.iterator();
-			while (it.hasNext()) {
-				AmpActivityDocument tmpDoc = (AmpActivityDocument) it
-				.next();
+			for (AmpActivityDocument tmpDoc : deletedResources) {
 				Iterator<AmpActivityDocument> it2 = a.getActivityDocuments().iterator();
 				while (it2.hasNext()) {
-					AmpActivityDocument existDoc = (AmpActivityDocument) it2
-							.next();
+					AmpActivityDocument existDoc = (AmpActivityDocument) it2.next();
 					if (existDoc.getUuid().compareTo(tmpDoc.getUuid()) == 0){
 						it2.remove();
 						break;
@@ -774,12 +769,8 @@ public class ActivityUtil {
 		 * Add new resources
 		 */
 		if (newResources != null){
-			Iterator<TemporaryDocument> it2 = newResources.iterator();
-			while (it2.hasNext()) {
-				TemporaryDocument temp = (TemporaryDocument) it2
-				.next();
+			for (TemporaryDocument temp : newResources) {
 				TemporaryDocumentData tdd = new TemporaryDocumentData(); 
-                
 				tdd.setTitle(temp.getTitle());
 				tdd.setName(temp.getFileName());
 				tdd.setDescription(temp.getDescription());
@@ -811,9 +802,10 @@ public class ActivityUtil {
 				
 				if(temp.getType()!=null)
 					tdd.setCmDocTypeId(temp.getType().getId());
-				tdd.setDate(temp.getDate().getTime());
-				tdd.setYearofPublication(temp.getYear());
-				
+				if (temp.getDate() != null)
+					tdd.setDate(temp.getDate().getTime());
+				if (temp.getYear() != null)
+					tdd.setYearofPublication(temp.getYear());
 				if (temp.getWebLink() == null || temp.getWebLink().length() == 0){
                     if (temp.getFile() != null){
 
@@ -893,6 +885,7 @@ public class ActivityUtil {
 				}
 			}
 		}
+		
 	}
 
 	private static void populateTranslatedTitles(TemporaryDocument d, NodeWrapper nw) {
@@ -919,20 +912,12 @@ public class ActivityUtil {
 		if (a.getAmpActivityId() != null){
 			//cleanup old indicators
 			Set<IndicatorActivity> old = IndicatorUtil.getAllIndicatorsForActivity(a.getAmpActivityId());
-			
 			if (old != null){
-				Iterator<IndicatorActivity> it = old.iterator();
-				while (it.hasNext()) {
-					IndicatorActivity oldInd = (IndicatorActivity) it
-					.next();
-					
+				for (IndicatorActivity oldInd : old) {
 					boolean found=false;
 					if (a.getIndicators() == null)
 						continue;
-					Iterator<IndicatorActivity> it2 = a.getIndicators().iterator();
-					while (it2.hasNext()) {
-						IndicatorActivity newind = (IndicatorActivity) it2
-								.next();
+					for (IndicatorActivity newind : a.getIndicators()) {
 						if ((newind.getId() != null) && (newind.getId().compareTo(oldInd.getId()) == 0)){
 							found=true;
 							break;
@@ -944,15 +929,11 @@ public class ActivityUtil {
 					}
 				}
 			}
-			
 		}
 		
 		Set<IndicatorActivity> inds = a.getIndicators();
 		if (inds != null){
-			Iterator<IndicatorActivity> it = inds.iterator();
-			while (it.hasNext()) {
-				IndicatorActivity ind = (IndicatorActivity) it
-						.next();
+			for (IndicatorActivity ind : inds) {
 				ind.setActivity(a);
 				session.saveOrUpdate(ind);
 			}
@@ -1013,27 +994,17 @@ public class ActivityUtil {
             			session.merge(activityContact.getContact());
             		}
             	}
-          
             }
         }
-
-
-
-
     }
-    
     
 	private static void saveAnnualProjectBudgets(AmpActivityVersion a,
 			Session session) throws Exception {
 		if (a.getAmpActivityId() != null) {
-			Iterator<AmpAnnualProjectBudget> it = a.getAnnualProjectBudgets()
-					.iterator();
-			while (it.hasNext()) {
-				AmpAnnualProjectBudget annualBudget = it.next();
+			for (AmpAnnualProjectBudget annualBudget : a.getAnnualProjectBudgets()){
 				annualBudget.setActivity(a);
 				session.saveOrUpdate(annualBudget);
 			}
-
 		}
 	}
 

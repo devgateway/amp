@@ -59,7 +59,8 @@ amp_monet_test  S 10m   17%  2h  mapi:monetdb://calcifer:50000/amp_monet_test
 		    }
 		    input.close();
 		} catch( Exception io) {
-			Utils.broadcastStatus("error when parsing status message!");
+			Utils.broadcastStatus("error when parsing status message in healthchecker! + " + io.getMessage());
+			io.printStackTrace();
 		} 
 		return res;
 	}

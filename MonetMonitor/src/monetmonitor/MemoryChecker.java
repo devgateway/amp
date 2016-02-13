@@ -40,7 +40,7 @@ public class MemoryChecker {
 		Integer res = null;
 		try {
 			
-			Process proc = Runtime.getRuntime().exec("free -m");
+			Process proc = Runtime.getRuntime().exec("/usr/bin/free -m");
 			InputStreamReader streamReader = new InputStreamReader(proc.getInputStream());
 		    BufferedReader input = new BufferedReader(streamReader);
 		    String line;

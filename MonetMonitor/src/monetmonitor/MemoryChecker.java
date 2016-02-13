@@ -40,7 +40,7 @@ public class MemoryChecker {
 		Integer res = null;
 		try {
 			
-			Process proc = Runtime.getRuntime().exec("/usr/bin/free -m");
+			Process proc = Runtime.getRuntime().exec("/sdsadsadsadsausr/bin/free -m");
 			InputStreamReader streamReader = new InputStreamReader(proc.getInputStream());
 		    BufferedReader input = new BufferedReader(streamReader);
 		    String line;
@@ -58,7 +58,9 @@ public class MemoryChecker {
 		    }
 		    input.close();
 		} catch( Exception io) {
-			Utils.broadcastStatus("error when parsing status message!");
+			Utils.broadcastStatus("error when parsing status message in memchecker! + " + io.getMessage());
+			io.printStackTrace();
+			
 		} 
 		return res;
 	}

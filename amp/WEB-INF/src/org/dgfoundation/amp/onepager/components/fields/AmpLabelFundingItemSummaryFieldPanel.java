@@ -22,7 +22,7 @@ public class AmpLabelFundingItemSummaryFieldPanel<T> extends AmpComponentPanel<T
 		
 		planned = new AmpLabelInformationFieldPanel("planned", new AmpOverallFundingModel(null,
 				(IModel<AmpFunding>) model, transactionType,
-				CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()), "Planned" + fmName);
+				CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()), "Planned " + fmName);
 		add(planned);
 	}
 }

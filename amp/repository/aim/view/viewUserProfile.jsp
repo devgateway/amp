@@ -144,7 +144,10 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 						</table>
 						</c:if>
 <br>					
-<div class="buttons" align="center">					
-	<input type="button" value="<digi:trn>Close</digi:trn>" class="buttonx_sm btn" onclick="hidePWorkspaceframe()">
+<div class="buttons" align="center">	
+<!-- 
+<input type="button" value="<digi:trn>Close</digi:trn>" class="buttonx_sm btn" onclick="hidePWorkspaceframe()">
+ -->				
+	
 </div>
 	

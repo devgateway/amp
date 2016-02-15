@@ -2080,7 +2080,11 @@ module.exports = BackboneDash.Model.extend({
     	// This can happen if we are loading a saved dashboard and the currency is loaded before the calendar.
     	if (this.attributes.id === "1") {
 	    	newOpt = _(this.attributes.originalAllCurrencies).findWhere({id: optionId});
-	    	newOpt.selected = true;
+	    	if (newOpt !== undefined) {
+	    		newOpt.selected = true;
+	    	} else {
+	    		console.info('Saved currency was deleted.');
+	    	}
     	}
     }
 

@@ -40,6 +40,7 @@ public class EPConstants {
     public static final String FORCE_HEADERS = "forceHeaders";
     public static final String PROJECT_TYPE = "projectType";
     public static final String REPORT_TYPE = "reportType";
+    public static final String NI_REPORT = "nireport";
     
     // report type & activities configurations
     public static final String DEFAULT_REPORT_TYPE = "D";
@@ -116,8 +117,5 @@ public class EPConstants {
 	public static final String TAB_LOCATIONS = "Location";
 	public static final String TAB_OTHER= "Other";
 	public static final String TAB_UNASSIGNED= "Unassigned";
-	
-	
-	
 	
 }

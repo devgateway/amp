@@ -4,17 +4,16 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +29,6 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
-import org.dgfoundation.amp.reports.PartialReportArea;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
@@ -49,7 +47,6 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -159,8 +156,7 @@ public class EndpointUtils {
 	 * @return GeneratedReport that stores all report info and report output
 	 */
 	public static GeneratedReport runReport(ReportSpecification spec) {
-		//NIREPORTS: leaving all other clients to use Mondrian so far 
-		return runReport(spec, ReportAreaImpl.class, false);
+		return runReport(spec, ReportAreaImpl.class);
 	}
 	
 	/**
@@ -172,20 +168,11 @@ public class EndpointUtils {
 	 * @return GeneratedReport that stores all report info and report output
 	 */
 	public static GeneratedReport runReport(ReportSpecification spec, Class<? extends ReportAreaImpl> clazz) {
-		//NIREPORTS: leaving all other clients to use Mondrian so far
-		return runReport(spec, clazz, false);
-	}
-	
-	/**
-	 * This is a temporarily method to generate the report using either Mondrian or 
-	 * @param spec
-	 * @param asNiReport
-	 * @return
-	 */
-	@Deprecated
-	//NIREPORTS: remove before 2.12 official release
-	public static GeneratedReport runReport(ReportSpecification spec, Class<? extends ReportAreaImpl> clazz, boolean asNiReport) {
-		ReportExecutor generator = asNiReport ? new NiReportsGenerator(AmpReportsSchema.getInstance(), clazz) :   
+		//NIREPORTS: remove before 2.12 official release
+		Optional<Boolean> asNiReport = Optional.ofNullable((Boolean) TLSUtils.getRequest().getAttribute(EPConstants.NI_REPORT));
+		logger.info("As NiReport: " + (asNiReport.isPresent() && asNiReport.get()));
+		ReportExecutor generator = asNiReport.isPresent() && asNiReport.get() ? 
+				new NiReportsGenerator(AmpReportsSchema.getInstance(), clazz) :
 				new MondrianReportGenerator(clazz, ReportEnvironment.buildFor(TLSUtils.getRequest()));
 		GeneratedReport report = null;
 		try {
@@ -194,6 +181,16 @@ public class EndpointUtils {
 			logger.error("error running report", e);
 		}
 		return report;
+	}
+	
+	/**
+	 * Temporary: force it to use or not NiReports. Default behavior handled through AuthRequestFilter.DEFAULT_USE_NIREPORTS
+	 * @param useNiReports
+	 */
+	//NIREPORTS: remove before 2.12 official release
+	@Deprecated
+	public static void useNiReports(boolean useNiReports) {
+		TLSUtils.getRequest().setAttribute(EPConstants.NI_REPORT, useNiReports);
 	}
 	
 	/**

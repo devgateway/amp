@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -17,8 +16,6 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-
-import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -32,13 +29,13 @@ import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
-import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.reports.ActivityType;
 import org.dgfoundation.amp.reports.CachedReportData;
 import org.dgfoundation.amp.reports.PartialReportArea;
@@ -70,6 +67,8 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
+
+import net.sf.json.JSONObject;
 
 public class ReportsUtil {
 	protected static final Logger logger = Logger.getLogger(ReportsUtil.class);
@@ -141,7 +140,7 @@ public class ReportsUtil {
 	 * </dl>
 	 * @return JsonBean result for the requested page and pagination information
 	 */
-	public static final JsonBean getReportResultByPage(Long reportId, JsonBean formParams, boolean asNiReport) {
+	public static final JsonBean getReportResultByPage(Long reportId, JsonBean formParams) {
 		JsonBean result = new JsonBean();
 		
 		// read pagination data
@@ -151,7 +150,7 @@ public class ReportsUtil {
 		int start = (page - 1) * recordsPerPage;
 		
 		// get the report (from cache if it was cached)
-		CachedReportData cachedReportData = getCachedReportData(reportId, formParams, asNiReport);
+		CachedReportData cachedReportData = getCachedReportData(reportId, formParams);
 		ReportAreaMultiLinked[] areas = null;
 		if (cachedReportData != null) {
 			areas = cachedReportData.areas;
@@ -214,7 +213,7 @@ public class ReportsUtil {
 		return newParams;
 	}
 	
-	private static CachedReportData getCachedReportData(Long reportId, JsonBean formParams, Boolean asNiReport) {
+	private static CachedReportData getCachedReportData(Long reportId, JsonBean formParams) {
 		boolean regenerate = mustRegenerate(reportId, formParams);
 		boolean resort = formParams.get(EPConstants.SORTING) != null; 
 		CachedReportData cachedReportData = null;
@@ -240,7 +239,7 @@ public class ReportsUtil {
 			// add additional requests
 			update(spec, formParams);
 			// regenerate
-			GeneratedReport generatedReport = EndpointUtils.runReport(spec, PartialReportArea.class, asNiReport);
+			GeneratedReport generatedReport = EndpointUtils.runReport(spec, PartialReportArea.class);
 			cachedReportData = ReportPaginationUtils.cacheReportData(reportId, generatedReport);
 		} else {
 			cachedReportData = ReportCacher.getReportData(reportId);

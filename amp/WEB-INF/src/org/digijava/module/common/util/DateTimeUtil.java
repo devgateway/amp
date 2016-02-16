@@ -192,9 +192,14 @@ public class DateTimeUtil {
 		return String.valueOf(toJulianDayNumber(date));
 	}
 	
-	public static String formatDateOrNull(Date date) {
+	public static String formatDateOrNull(Date date, String pattern) {
 		if (date == null) return null;
-		return formatDate(date);
+		if (pattern == null) return formatDate(date);
+		return formatDate(date, pattern);
+	}
+	
+	public static String formatDateOrNull(Date date) {
+		return formatDateOrNull(date, null);
 	}
 	
 	public static Date parseDate(String date, String pattern) {

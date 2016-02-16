@@ -1,4 +1,4 @@
-enableComputateVisibleSec7tions = false;
+enableComputateVisibleSections = false;
 onepagerMode = ${onepagerMode};
 isTabView = ${isTabView};
 

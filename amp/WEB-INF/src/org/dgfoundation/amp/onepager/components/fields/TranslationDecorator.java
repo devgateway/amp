@@ -1,5 +1,9 @@
     package org.dgfoundation.amp.onepager.components.fields;
 
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -23,13 +27,7 @@ import org.dgfoundation.amp.onepager.util.AttributePrepender;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
-
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Set;
 
 /**
  * @author aartimon@developmentgateway.org
@@ -78,8 +76,6 @@ public class TranslationDecorator extends Panel {
                 IndicatingAjaxLink link = new IndicatingAjaxLink("link") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        if (switchingDisabled.getObject())
-                            return; //error state or switching disabled
                         if (language.equals(getSession().getLocale().getLanguage()))
                             langModel.setObject(null);
                         else

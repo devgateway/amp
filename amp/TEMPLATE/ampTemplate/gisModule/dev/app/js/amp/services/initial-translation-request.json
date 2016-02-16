@@ -96,5 +96,6 @@
 "amp.gis.fundingType-PlannedDisbursements":"Planned Disbursements",
 "amp.gis.cluster.tooltip-of-total":"of total",
 "amp.gis:leaflet-button-zoom-in[title]":"Zoom in",
-"amp.gis:leaflet-button-zoom-out[title]":"Zoom out"
+"amp.gis:leaflet-button-zoom-out[title]":"Zoom out",
+"amp.gis:page-title":"Aid Management Platform - GIS"
 }

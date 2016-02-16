@@ -41,7 +41,6 @@ import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.validators.AmpUniqueActivityTitleValidator;
-import org.dgfoundation.amp.onepager.validators.StringRequiredValidator;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -82,7 +81,6 @@ implements AmpRequiredComponentContainer{
 			IModel<String> m = new PropertyModel<String>(am, "name");
 			final AmpTextAreaFieldPanel title = new AmpTextAreaFieldPanel("title", m, "Project Title", false, false, false, true);
 
-			title.getTextAreaContainer().add(new StringRequiredValidator());
 			title.getTextAreaContainer().add(new AmpUniqueActivityTitleValidator(new PropertyModel<AmpActivityGroup>(am, "ampActivityGroup")));
 			title.getTextAreaContainer().add(StringValidator.maximumLength(255));
 			title.getTextAreaContainer().add(new AttributeModifier("style", "width: 710px; margin: 0px;"));

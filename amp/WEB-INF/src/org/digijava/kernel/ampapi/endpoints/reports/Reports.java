@@ -192,10 +192,7 @@ public class Reports {
 	//NIREPORTS: temporarily for debugging purpose only
 	public GeneratedReport geteneratedReport(@PathParam("report_id") Long reportId) {
 		ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
-		OutputSettings os = new OutputSettings();
-		os.setProvideEntityIds(true);
 		NiReportsGenerator generator = new NiReportsGenerator(AmpReportsSchema.getInstance(), PartialReportArea.class);
-		generator.setOutputSettings(os);
 		return generator.executeReport(spec);
 	}
 	

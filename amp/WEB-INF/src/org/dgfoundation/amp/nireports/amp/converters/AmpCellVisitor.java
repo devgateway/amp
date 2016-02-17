@@ -99,7 +99,7 @@ public class AmpCellVisitor implements CellVisitor<ReportCell> {
 
 	@Override
 	public ReportCell visit(NiSplitCell cell, CellColumn niCellColumn) {
-		boolean needSubCells = outputSettings.getProvideIdsAndValues().contains(niCellColumn.name);
+		boolean needSubCells = outputSettings.idsValuesColumns.contains(niCellColumn.name);
 		return asTextCell(
 			cell.undefined ? (cell.entity.name + ": " + TranslatorWorker.translateText("Undefined")) : cell.text, 
 			any(cell.entityIds, -1l), 

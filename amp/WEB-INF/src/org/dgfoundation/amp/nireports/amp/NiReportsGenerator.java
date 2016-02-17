@@ -35,14 +35,14 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
 	 * field to be removed once Mondrian-based reporting is done with
 	 */
 	public final Class<? extends ReportAreaImpl> reportAreaClazz;
-	protected OutputSettings outputSettings;
+	public final OutputSettings outputSettings;
 	
 	public NiReportsGenerator(NiReportsSchema schema) {
 		this(schema, ReportAreaImpl.class);
 	}
 
 	public NiReportsGenerator(NiReportsSchema schema, Class<? extends ReportAreaImpl> reportAreaClazz) {
-		this(schema, reportAreaClazz, true);
+		this(schema, reportAreaClazz, true, null);
 	}
 
 	/**
@@ -51,10 +51,11 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
 	 * @param reportAreaClazz the ReportArea implementation to be used
 	 * @param logReport whether to log execution nodes to the DB
 	 */
-	public NiReportsGenerator(NiReportsSchema schema, Class<? extends ReportAreaImpl> reportAreaClazz, boolean logReport) {
+	public NiReportsGenerator(NiReportsSchema schema, Class<? extends ReportAreaImpl> reportAreaClazz, boolean logReport, OutputSettings outputSettings) {
 		super(schema);
-		this.logReport = logReport;
 		this.reportAreaClazz = reportAreaClazz;
+		this.logReport = logReport;
+		this.outputSettings = outputSettings;
 	}
 
 	@Override
@@ -78,9 +79,5 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
 			List<Object> values = Arrays.asList(node.getName(), node.getTotalTime(), wallclockTime, json);
 			SQLUtils.insert(conn, "amp_nireports_log", "id", "amp_nireports_log_id_seq", columnNames, Arrays.asList(values));
 		});
-	}
-	
-	public void setOutputSettings(OutputSettings outputSettings) {
-		this.outputSettings = outputSettings;
 	}
 }

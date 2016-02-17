@@ -1,11 +1,15 @@
 package org.dgfoundation.amp.nireports.amp;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.Supplier;
@@ -50,7 +54,7 @@ public class AmpNiReportsFormatter {
 	private List<List<HeaderCell>> generatedHeaders = new ArrayList<>();
 	private Map<Column, ReportOutputColumn> niColumnToROC = new IdentityHashMap<>();
 	
-	private OutputSettings outputSettings;
+	private final OutputSettings outputSettings;
 	private final AmpCellVisitor cellVisitor;
 	private boolean isRoot = true;
 	
@@ -59,20 +63,22 @@ public class AmpNiReportsFormatter {
 		this.runResult = runResult;
 		this.spec = spec;
 		this.reportAreaSupplier = reportAreaSupplier;
-		this.outputSettings = outputSettings == null ?  new OutputSettings() : outputSettings;
+		this.outputSettings = outputSettings == null ? defaultOutputSettings(spec) : outputSettings;
 		this.cellVisitor = new AmpCellVisitor(spec, 
 				runResult.headers != null ? runResult.headers.leafColumns.size() : 0, this.outputSettings);
-		init();
 	}
 	
-	public void init() {
-		if (outputSettings.isProvideEntityIds()) {
-			LinkedHashSet<ReportColumn> columns = new LinkedHashSet<>(spec.getColumns());
-			columns.removeAll(spec.getHierarchies());
-			if (!columns.isEmpty()) {
-				outputSettings.addEntityToProvideIds(columns.iterator().next().getColumnName());
-			}
-		}
+	
+	/**
+	 * builds an {@link OutputSettings} instance to use in case the user hasn't supplied one 	
+	 * @param spec
+	 * @return
+	 */
+	protected OutputSettings defaultOutputSettings(ReportSpecification spec) {
+		LinkedHashSet<ReportColumn> columns = new LinkedHashSet<>(spec.getColumns());
+		columns.removeAll(spec.getHierarchies());
+		Set<String> idsValuesColumns = columns.isEmpty() ? Collections.emptySet() : new HashSet<>(Arrays.asList(columns.iterator().next().getColumnName()));
+		return new OutputSettings(idsValuesColumns);
 	}
 	
 	public GeneratedReport format() {

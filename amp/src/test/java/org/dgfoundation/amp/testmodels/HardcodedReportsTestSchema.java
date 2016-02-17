@@ -145,7 +145,7 @@ public class HardcodedReportsTestSchema extends AbstractReportsSchema {
 	}
 
 	public static ReportExecutor getExecutor(boolean logToDb) {
-		ReportExecutor res = new NiReportsGenerator(getInstance(), ReportAreaImpl.class, logToDb);
+		ReportExecutor res = new NiReportsGenerator(getInstance(), ReportAreaImpl.class, logToDb, null);
 		return res;
 	}	
 	

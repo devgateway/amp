@@ -100,9 +100,7 @@ public class AmpNiReportsFormatter {
 			List<HeaderCell> ampHeaderRow = new ArrayList<HeaderCell>();
 			for (Entry<Integer, Column> entry : niHeaderRow.entrySet()) {
 				Column niCol = entry.getValue();
-				String trnName = getColumnNameTranslation(niCol);
-				ReportOutputColumn roc = niColumnToROC.computeIfAbsent(niCol, val -> 
-					new ReportOutputColumn(trnName, niColumnToROC.get(niCol.getParent()), niCol.name, null));
+				ReportOutputColumn roc = niColumnToROC.computeIfAbsent(niCol, this::buildReportOutputColumn);
 				ampHeaderRow.add(new HeaderCell(niCol.getReportHeaderCell(), roc));
 				if (i == 1)
 					rootHeaders.add(roc);
@@ -112,7 +110,18 @@ public class AmpNiReportsFormatter {
 		runResult.headers.leafColumns.forEach(niColumn -> leafHeaders.add(niColumnToROC.get(niColumn)));
 	}
 	
-	protected String getColumnNameTranslation(Column niCol) {
+	protected ReportOutputColumn buildReportOutputColumn(Column niCol) {
+		String trnName = getNameTranslation(niCol);
+		String trnDescription = getDescriptionTranslation(niCol);
+		return new ReportOutputColumn(trnName, niColumnToROC.get(niCol.getParent()), niCol.name, trnDescription, null);
+	}
+	
+	protected String getDescriptionTranslation(Column niCol) {
+		String description = niCol.getDescription();
+		return description == null ? null : TranslatorWorker.translateText(description);
+	}
+	
+	protected String getNameTranslation(Column niCol) {
 		if (niCol.splitCell != null && NiReportsEngine.PSEUDOCOLUMN_YEAR.equals(niCol.splitCell.entityType)) {
 			return niCol.name;
 		}

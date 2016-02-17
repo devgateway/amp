@@ -31,7 +31,8 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	public final String description;
 	
 	/** flags about the column */
-	public final Set<Object> flags;
+	@Deprecated
+	public final Set<Object> flags; //TODO: delete it after Mondrian-based reporting will be out. This is a hack used by Mondrian only
 	
 	transient public final List<ReportOutputColumn> children = new ArrayList<ReportOutputColumn>();
 	

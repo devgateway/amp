@@ -25,9 +25,9 @@ import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
  */
 public class CellColumn extends Column {
 	
-	final ColumnContents contents;
-	final Behaviour<?> behaviour;
-	final NiReportedEntity<?> entity;
+	public final ColumnContents contents;
+	public final Behaviour<?> behaviour;
+	public final NiReportedEntity<?> entity;
 		
 	public CellColumn(String name, ColumnContents contents, GroupColumn parent, NiReportedEntity<?> entity, NiColSplitCell splitCell) {
 		this(name, contents, parent, entity, entity.getBehaviour(), splitCell);
@@ -107,6 +107,11 @@ public class CellColumn extends Column {
 			return Collections.emptyList();
 	}
 
+	@Override
+	public String getDescription() {
+		return entity != null ? entity.description : null;
+	}
+	
 	@Override
 	public <K> K accept(ColumnVisitor<K> cv) {
 		return cv.visit(this);

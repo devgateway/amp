@@ -198,7 +198,7 @@ _.extend(App.prototype, BackboneDash.Events, {
 
 module.exports = App;
 
-},{"./backbone-dash":3,"./check-support":11,"./models/saved-dashes-collection.js":20,"./models/settings-collection":22,"./views/fail":31,"./views/main":33,"amp-filter/src/main":63,"amp-state/index":76,"amp-translate":77,"amp-url/index":78,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
+},{"./backbone-dash":3,"./check-support":11,"./models/saved-dashes-collection.js":20,"./models/settings-collection":22,"./views/fail":31,"./views/main":33,"amp-filter/src/main":63,"amp-state/index":77,"amp-translate":78,"amp-url/index":79,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -371,7 +371,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":79,"../../ugly/util":41,"d3":"d3"}],5:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":80,"../../ugly/util":41,"d3":"d3"}],5:[function(require,module,exports){
 /*
  * Drawing a multibar chart in AMP? Please use ./chart.js instead.
  */
@@ -432,7 +432,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":79,"./customized/multiBarChart.js":10}],6:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":80,"./customized/multiBarChart.js":10}],6:[function(require,module,exports){
 /*
  * Drawing a pie chart in AMP? Please use ./chart.js instead.
  */
@@ -3358,7 +3358,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../../../../../../../reamp/tools/log":79,"../backbone-dash":3,"underscore":"underscore"}],33:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":80,"../backbone-dash":3,"underscore":"underscore"}],33:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -3489,7 +3489,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"../models/chart-aid-predictability":13,"../models/chart-funding-type":14,"../models/chart-tops":16,"../models/charts-collection":17,"../models/enabled-charts-collection":18,"./charts":28,"./controls":29,"amp-boilerplate":45,"amp-state/index":76,"underscore":"underscore"}],34:[function(require,module,exports){
+},{"../backbone-dash":3,"../models/chart-aid-predictability":13,"../models/chart-funding-type":14,"../models/chart-tops":16,"../models/charts-collection":17,"../models/enabled-charts-collection":18,"./charts":28,"./controls":29,"amp-boilerplate":45,"amp-state/index":77,"underscore":"underscore"}],34:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -3569,7 +3569,7 @@ module.exports = BackboneDash.View.extend({
   }
 });
 
-},{"../../../../../../../reamp/tools/log":79,"../backbone-dash":3,"underscore":"underscore"}],35:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":80,"../backbone-dash":3,"underscore":"underscore"}],35:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -19935,7 +19935,7 @@ module.exports = {
 };
 window.boilerplate = Widget;
 
-},{"./src/views/header-footer-view.js":51,"./src/views/menu-view.js":52,"amp-translate":77,"backbone":"backbone","bootstrap/dist/js/bootstrap":46,"jquery":"jquery","underscore":"underscore"}],46:[function(require,module,exports){
+},{"./src/views/header-footer-view.js":51,"./src/views/menu-view.js":52,"amp-translate":78,"backbone":"backbone","bootstrap/dist/js/bootstrap":46,"jquery":"jquery","underscore":"underscore"}],46:[function(require,module,exports){
 /*!
  * Bootstrap v3.3.2 (http://getbootstrap.com)
  * Copyright 2011-2015 Twitter, Inc.
@@ -29402,7 +29402,7 @@ _.extend(Widget.prototype, Backbone.Events, {
 
 module.exports = Widget;
 
-},{"./views/filters-view":72,"backbone":"backbone","bootstrap/dist/js/bootstrap":54,"jquery":"jquery","jquery-ui/draggable":57,"underscore":"underscore"}],64:[function(require,module,exports){
+},{"./views/filters-view":73,"backbone":"backbone","bootstrap/dist/js/bootstrap":54,"jquery":"jquery","jquery-ui/draggable":57,"underscore":"underscore"}],64:[function(require,module,exports){
 var Backbone = require('backbone');
 
   // Parent model for filters.
@@ -30236,6 +30236,34 @@ var TreeNodeView = Backbone.View.extend({
 module.exports = TreeNodeView;
 
 },{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],71:[function(require,module,exports){
+var _ = require('underscore');
+
+var extractDates = function(settings, filtersOut, minName, maxName) {
+    filtersOut.otherFilters = filtersOut.otherFilters || {};
+    filtersOut.otherFilters.date = filtersOut.otherFilters.date || {
+        start: '',
+        end: ''
+      };
+
+    var defaultMinDate = _.find(settings, function(item) {
+      return item.get('id') === minName;
+    });
+    if (defaultMinDate !== undefined && defaultMinDate.get('name') !== '') {
+      filtersOut.otherFilters.date.start = defaultMinDate.get('name');
+    }
+    var defaultMaxDate = _.find(settings, function(item) {
+      return item.get('id') === maxName;
+    });
+    if (defaultMaxDate !== undefined && defaultMaxDate.get('name') !== '') {
+      filtersOut.otherFilters.date.end = defaultMaxDate.get('name');
+    }
+  }
+
+module.exports = {
+		extractDates: extractDates
+}
+
+},{"underscore":"underscore"}],72:[function(require,module,exports){
 
 var _ = require('underscore');
 var $ = require('jquery');
@@ -30279,7 +30307,7 @@ module.exports = Backbone.View.extend({
 
 });
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],72:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],73:[function(require,module,exports){
 /**
  * this is the view which renders the big Filter contents (the tabs)
  */
@@ -30299,6 +30327,8 @@ var TitleTemplate = "<%\n// renders the title of a tab \n%>\n<li class=\"\"><a d
 var filtersViewLog = require("../../../../../reamp/tools/log")('amp:filters:top-level:view');
 
 var SettingsCollection = require('../collections/settings-collection');
+
+var DateUtils = require('../utils/date-utils');
 
 var filterInstancesNames = {donors: 'Funding Organizations', sectors : 'Sectors', programs: 'Programs', 
 	  activity: 'Activity', allAgencies: 'All Agencies', financials: 'Financial',
@@ -30601,8 +30631,16 @@ module.exports = Backbone.View.extend({
   },
 
   resetFilters: function() {
+	var self = this;
     this.allFilters.each(function(filter) {
-      filter.reset();
+    if(filter.get('name').indexOf('Date')!=-1 || (filter.get('column') != undefined && filter.get('column').indexOf('Date') != -1)) {   	 
+    	 var blob = {};
+    	 //this.app.filter.extractDates(this.app.settings.models, blob, 'dashboard-default-min-date', 'dashboard-default-max-date');
+    	 DateUtils.extractDates(self.settings.models, blob, 'dashboard-default-min-date', 'dashboard-default-max-date');
+    	 filter.deserialize(blob.otherFilters);
+     }else{
+    	 filter.reset();
+     }      
     });
   },
 
@@ -30645,7 +30683,7 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"../../../../../reamp/tools/log":79,"../collections/all-filters-collection":60,"../collections/settings-collection":61,"../views/top-level-filter-view":74,"amp-translate":77,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],73:[function(require,module,exports){
+},{"../../../../../reamp/tools/log":80,"../collections/all-filters-collection":60,"../collections/settings-collection":61,"../utils/date-utils":71,"../views/top-level-filter-view":75,"amp-translate":78,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],74:[function(require,module,exports){
 
 var _ = require('underscore');
 
@@ -30777,7 +30815,7 @@ module.exports = BaseFilterView.extend({
 });
 
 
-},{"../tree/tree-node-view":70,"../views/base-filter-view":71,"underscore":"underscore"}],74:[function(require,module,exports){
+},{"../tree/tree-node-view":70,"../views/base-filter-view":72,"underscore":"underscore"}],75:[function(require,module,exports){
 
 var _ = require('underscore');
 var $ = require('jquery');
@@ -30902,7 +30940,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../../../../../reamp/tools/log":79,"../collections/settings-collection":61,"../models/years-filter-model":68,"../views/generic-filter-view":73,"../views/years-filter-view":75,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],75:[function(require,module,exports){
+},{"../../../../../reamp/tools/log":80,"../collections/settings-collection":61,"../models/years-filter-model":68,"../views/generic-filter-view":74,"../views/years-filter-view":76,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],76:[function(require,module,exports){
 
 var _ = require('underscore');
 var BaseFilterView = require('../views/base-filter-view');
@@ -31057,7 +31095,7 @@ module.exports = BaseFilterView.extend({
 
 });
 
-},{"../lib/jquery.nouislider.min.js":62,"../views/base-filter-view":71,"jquery-ui/datepicker":56,"underscore":"underscore"}],76:[function(require,module,exports){
+},{"../lib/jquery.nouislider.min.js":62,"../views/base-filter-view":72,"jquery-ui/datepicker":56,"underscore":"underscore"}],77:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -31267,7 +31305,7 @@ _.extend(State.prototype, Backbone.Events, {
 State.StateLoadError = StateLoadError;
 module.exports = State;
 
-},{"backbone":"backbone","underscore":"underscore"}],77:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],78:[function(require,module,exports){
 // TODO: move this up a dir, and instantiate and attach to the app
 
 
@@ -31483,7 +31521,7 @@ function Translator(options) {
 
 module.exports = Translator;
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],78:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],79:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -31534,7 +31572,7 @@ _.extend(URL.prototype, Backbone.Events, {
 
 module.exports = URL;
 
-},{"backbone":"backbone","underscore":"underscore"}],79:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],80:[function(require,module,exports){
 module.exports =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache

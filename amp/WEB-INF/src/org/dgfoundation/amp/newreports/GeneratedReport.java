@@ -4,7 +4,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.dgfoundation.amp.algo.timing.RunNode;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.helper.TeamMember;
 
 public class GeneratedReport {
@@ -47,12 +51,15 @@ public class GeneratedReport {
 	/**
 	 * might be null, but not putting an {@link Optional} here because we have lots of old frontend code 
 	 */
+	@JsonIgnore
 	public final RunNode timings;
 	
 	/**
 	 * Report warnings 
 	 */
 	public final Set<ReportWarning> reportWarnings;
+	
+	public final JsonBean jsonTimings;
 	
 	public GeneratedReport(ReportSpecification spec, int generationTime, TeamMember requestingUser, 
 			ReportArea reportContents, List<ReportOutputColumn> rootHeaders, List<ReportOutputColumn> leafHeaders, 
@@ -64,6 +71,7 @@ public class GeneratedReport {
 		this.rootHeaders = rootHeaders;
 		this.leafHeaders = leafHeaders;
 		this.timings = timings;
+		this.jsonTimings = timings == null ? null : timings.asJsonBean(); 
 		this.generatedHeaders = generatedHeaders;
 		this.reportWarnings = reportWarnings;
 	}

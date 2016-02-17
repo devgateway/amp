@@ -868,7 +868,12 @@
     <action name="aimIndicatorForm" path="/aim/searchIndicators" scope="session" type="org.digijava.module.aim.action.SearchIndicators" validate="false">
       <forward name="forward" path="/showLayout.do?layout=selectCreateIndicators" />
       <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
+    </action>    
+    <action name="aimUpdateIndicatorValuesForm" path="/aim/getActivityIndicators" scope="session" type="org.digijava.module.aim.action.GetActivityIndicators" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=meActivityIndicators" />
+      <forward name="AddIndicatorForStepNine" path="/aim/addIndicatorForStepNine.do"/>
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>    
     <action name="aimIndicatorForm" path="/aim/addIndicatorsTL" scope="session" type="org.digijava.module.aim.action.AddIndicatorsTL" validate="false">
       <forward name="forward" path="/aim/getActivityIndicators.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />

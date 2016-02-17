@@ -1,12 +1,15 @@
 package org.dgfoundation.amp.nireports.schema;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
 import static java.util.stream.Collectors.toSet;
+import static org.dgfoundation.amp.algo.AmpCollections.any;
 
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.PercentageTextCell;
@@ -29,19 +32,21 @@ public class PercentageTokenBehaviour implements Behaviour<NiTextCell> {
 	@Override
 	public NiTextCell doHorizontalReduce(List<NiCell> cells) {
 		Set<String> v = new TreeSet<>();
+		Map<Long, String> entityIdsValues = new HashMap<>();
 		for(NiCell niCell:cells) {
 			PercentageTextCell cell = (PercentageTextCell) niCell.getCell();
 			if (!niCell.isUndefinedCell())
 				v.add(cell.text);
+			entityIdsValues.put(cell.entityId, cell.text);
 		}
 		String text = v.toString();
 		text = text.substring(1, text.length() - 1);
-		return new NiTextCell(text, cells.get(0).getMainId());
+		return new NiTextCell(text, any(entityIdsValues.keySet(), -1l), entityIdsValues);
 	}
 
 	@Override
 	public NiTextCell getZeroCell() {
-		return new NiTextCell("", -1);
+		return new NiTextCell("", -1, null);
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 
@@ -79,8 +80,8 @@ public class NiSplitCell extends NiOutCell {
 	}
 
 	@Override
-	public <K> K accept(CellVisitor<K> visitor) {
-		return visitor.visit(this);
+	public <K> K accept(CellVisitor<K> visitor, CellColumn niCellColumn) {
+		return visitor.visit(this, niCellColumn);
 	}
 
 }

@@ -23,7 +23,7 @@ public final class DateCell extends ReportCell {
 	public final static Date DUMMY_DATE = new Date(70, 2, 2);
 	
 	public DateCell(Date value, String displayedValue) {
-		super(value, displayedValue);
+		super(value, displayedValue, -1, null);
 	}
 	
 	public static DateCell buildDateFromRepOut(String repOut) {

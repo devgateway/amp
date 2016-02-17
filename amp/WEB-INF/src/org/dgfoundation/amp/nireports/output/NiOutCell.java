@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.nireports.output;
 
+import org.dgfoundation.amp.nireports.runtime.CellColumn;
+
 /**
  * a cell which stays in the output of NiReports
  * @author Dolghier Constantin
@@ -13,7 +15,7 @@ public abstract class NiOutCell implements Comparable {
 	 */
 	public abstract String getDisplayedValue();
 	
-	public abstract<K> K accept(CellVisitor<K> visitor);
+	public abstract<K> K accept(CellVisitor<K> visitor, CellColumn niCellColumn);
 	
 	@Override
 	public String toString() {

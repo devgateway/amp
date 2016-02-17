@@ -159,8 +159,7 @@ public class AmpNiReportsFormatter {
 	protected ReportCell convert(NiOutCell cell, CellColumn niCellColumn) {
 		if (cell == null)
 			return null;
-		cellVisitor.setCurrentColumn(niCellColumn);
-		return cell.accept(cellVisitor);
+		return cell.accept(cellVisitor, niCellColumn);
 	}
 	
 }

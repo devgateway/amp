@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NumberedCell;
+import org.dgfoundation.amp.nireports.runtime.CellColumn;
 
 /**
  * a class holding a monetary amount
@@ -37,8 +38,8 @@ public class NiAmountCell extends NiOutCell implements NumberedCell {
 	}
 
 	@Override
-	public <K> K accept(CellVisitor<K> visitor) {
-		return visitor.visit(this);
+	public <K> K accept(CellVisitor<K> visitor, CellColumn niCellColumn) {
+		return visitor.visit(this, niCellColumn);
 	}
 
 }

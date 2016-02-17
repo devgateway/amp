@@ -7,10 +7,9 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -26,6 +25,8 @@ import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.FormatHelper;
 
+import static org.dgfoundation.amp.algo.AmpCollections.any;
+
 /**
  * Amp Visitor for NiReports cells 
  * @author Nadejda Mandrescu
@@ -39,7 +40,6 @@ public class AmpCellVisitor implements CellVisitor<ReportCell> {
 	private final int levelReset;
 	private boolean isLeaf = false;
 	private final OutputSettings outputSettings;
-	private CellColumn currentColumn;
 	
 	public AmpCellVisitor(ReportSpecification spec, int columnsCount, OutputSettings outputSettings) {
 		if (spec.getSettings() != null && spec.getSettings().getCurrencyFormat() != null) {
@@ -67,26 +67,22 @@ public class AmpCellVisitor implements CellVisitor<ReportCell> {
 		if (currentRDs.size() > 0)
 			currentRDs.remove(currentRDs.size() - 1);
 	}
-	
-	public void setCurrentColumn(CellColumn currentColumn) {
-		this.currentColumn = currentColumn;
-	}
 
 	@Override
-	public ReportCell visit(NiTextCell cell) {
+	public ReportCell visit(NiTextCell cell, CellColumn niCellColumn) {
 		if (!isLeaf || level < currentRDs.size()) {
 			if (!isLeaf && level == currentRDs.size() - 1)
-				return visit(currentRDs.get(level).splitter);
+				return visit(currentRDs.get(level).splitter, niCellColumn);
 			else
 				return null;
 		}
 		String text = ("".equals(cell.getDisplayedValue()) && cell.entityId != -1) ?
 			TranslatorWorker.translateText("Undefined") : cell.getDisplayedValue();  
-		return asTextCell(text, new HashSet<Long>(){{add(cell.entityId);}});
+		return asTextCell(text, cell.entityId, cell.entitiesIdsValues);
 	}
 	
 	@Override
-	public ReportCell visit(NiAmountCell cell) {
+	public ReportCell visit(NiAmountCell cell, CellColumn niCellColumn) {
 		return visitNumberedCell(cell);
 	}
 	
@@ -102,21 +98,16 @@ public class AmpCellVisitor implements CellVisitor<ReportCell> {
 	}
 
 	@Override
-	public ReportCell visit(NiSplitCell cell) {
-		return asTextCell(cell.undefined ? 
-				cell.entity.name + ": " + TranslatorWorker.translateText("Undefined"): cell.text, cell.entityIds);
+	public ReportCell visit(NiSplitCell cell, CellColumn niCellColumn) {
+		boolean needSubCells = outputSettings.getProvideIdsAndValues().contains(niCellColumn.name);
+		return asTextCell(
+			cell.undefined ? (cell.entity.name + ": " + TranslatorWorker.translateText("Undefined")) : cell.text, 
+			any(cell.entityIds, -1l), 
+			needSubCells ? cell.entityIds.stream().collect(Collectors.toMap(z -> z, z -> cell.text)) : null);
 	}
 	
-	public TextCell asTextCell(String text, Set<Long> entityIds) {
-		TextCell tc = new TextCell(text);
-		
-		if (outputSettings.getProvideIdsOnly().contains(currentColumn.name)) {
-			tc.setEntitiesIds(entityIds);
-		} else if (outputSettings.getProvideIdsAndValues().contains(currentColumn.name)) {
-			//TODO: waiting for NiReports to implement support for this part
-		}
-
+	public TextCell asTextCell(String text, long entityId, Map<Long, String> entityIdsValues) {
+		TextCell tc = new TextCell(text, entityId, entityIdsValues);
 		return tc;
 	}
-	
 }

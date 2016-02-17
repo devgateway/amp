@@ -1,5 +1,9 @@
 package org.dgfoundation.amp.nireports.output;
 
+import java.util.Map;
+
+import org.dgfoundation.amp.nireports.runtime.CellColumn;
+
 /**
  * a cell which holds a text
  * @author Dolghier Constantin
@@ -7,11 +11,21 @@ package org.dgfoundation.amp.nireports.output;
  */
 public class NiTextCell extends NiOutCell {
 	public final String text;
-	public final long entityId;
 	
-	public NiTextCell(String text, long entityId) {
+	/**
+	 * tthe main entityId. In case the cell holds a multitude of them, an arbitrary one of them will be stored. Values <= 0 mean "no entity" 
+	 */
+	public final long entityId; 
+	
+	/**
+	 * Might be null if this option has been disabled during report output stages for this column (maps are expensive)
+	 */
+	public final Map<Long, String> entitiesIdsValues;
+	
+	public NiTextCell(String text, long entityId, Map<Long, String> entitiesIdsValues) {
 		this.text = text;
 		this.entityId = entityId;
+		this.entitiesIdsValues = entitiesIdsValues;
 	}
 	
 	@Override
@@ -26,8 +40,8 @@ public class NiTextCell extends NiOutCell {
 	}
 
 	@Override
-	public <K> K accept(CellVisitor<K> visitor) {
-		return visitor.visit(this);
+	public <K> K accept(CellVisitor<K> visitor, CellColumn niCellColumn) {
+		return visitor.visit(this, niCellColumn);
 	}
 
 }

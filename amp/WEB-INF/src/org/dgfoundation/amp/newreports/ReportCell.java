@@ -16,15 +16,25 @@ import org.dgfoundation.amp.algo.AmpCollections;
 public abstract class ReportCell implements Comparable<ReportCell> {
 	public final Comparable<?> value;
 	public final String displayedValue;
-	private Map<Long, String> entitiesIdsValues;
-	private Set<Long> entitiesIds;
+	
+	/**
+	 * the main entityId. In case the cell holds a multitude of them, an arbitrary one of them will be stored. Values <= 0 mean "no entity" 
+	 */
+	public final long entityId;
+	
+	/**
+	 * Map<entityId, displayedValue> for the cells embedded within this cell. Might be null if this option has been disabled during report output stages for this column (maps are expensive)
+	 */
+	public final Map<Long, String> entitiesIdsValues;
 
 	//to facilitate the sorting, we will store the parent area
 	transient public ReportArea area;
 	
-	public ReportCell(Comparable<?> value, String displayedValue) {
+	public ReportCell(Comparable<?> value, String displayedValue, long entityId, Map<Long, String> entitiesIdsValues) {
 		this.value = value;
 		this.displayedValue = displayedValue;
+		this.entityId = entityId;
+		this.entitiesIdsValues = entitiesIdsValues;
 	}
 	
 	@Override public int compareTo(ReportCell oth) {
@@ -46,33 +56,5 @@ public abstract class ReportCell implements Comparable<ReportCell> {
 	
 	@Override public String toString() {
 		return String.format("[%s]", this.displayedValue);
-	}
-
-	/**
-	 * @return the entitiesIdsValues
-	 */
-	public Map<Long, String> getEntitiesIdsValues() {
-		return entitiesIdsValues;
-	}
-
-	/**
-	 * @param entitiesIdsValues the entitiesIdsValues to set
-	 */
-	public void setEntitiesIdsValues(Map<Long, String> entitiesIdsValues) {
-		this.entitiesIdsValues = entitiesIdsValues;
-	}
-
-	/**
-	 * @return the entitiesIds
-	 */
-	public Set<Long> getEntitiesIds() {
-		return entitiesIds;
-	}
-
-	/**
-	 * @param entitiesIds the entitiesIds to set
-	 */
-	public void setEntitiesIds(Set<Long> entitiesIds) {
-		this.entitiesIds = entitiesIds;
 	}
 }

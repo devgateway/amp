@@ -158,4 +158,16 @@ public class AmpCollections {
 	public static<K, V> Set<V> mapToSet(List<K> in, Function<K, V> func) {
 		return in.stream().map(func).collect(Collectors.toSet());
 	}
+	
+	/**
+	 * chooses an arbitrary element from a collection. If the collection is empty, returns a given element
+	 * @param col
+	 * @param defaultValue
+	 * @return
+	 */
+	public static<K> K any(Collection<K> col, K defaultValue) {
+		if (col.isEmpty())
+			return defaultValue;
+		return col.iterator().next();
+	}
 }

@@ -33,8 +33,8 @@ app.translator = translator;
 
 
 // hook up the title
-var windowTitle = new WindowTitle('AMP GIS Module');
-windowTitle.listenTo(app.data.title, 'update', windowTitle.set);
+var windowTitle = new WindowTitle('Aid Management Platform - GIS');
+//windowTitle.listenTo(app.data.title, 'update', windowTitle.set);
 
 
 $(document).ready(function() {

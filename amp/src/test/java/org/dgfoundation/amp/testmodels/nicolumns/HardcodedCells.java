@@ -1,11 +1,13 @@
 package org.dgfoundation.amp.testmodels.nicolumns;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.codegenerators.FundingIdsMapper;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.Cell;
@@ -17,10 +19,12 @@ import org.dgfoundation.amp.nireports.amp.AmpPrecisionSetting;
 import org.dgfoundation.amp.nireports.meta.MetaInfo;
 import org.dgfoundation.amp.nireports.meta.MetaInfoGenerator;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
+import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.testmodels.HardcodedFundingNames;
+import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
 import org.dgfoundation.amp.testmodels.TestModelConstants;
 
 /**
@@ -31,22 +35,24 @@ import org.dgfoundation.amp.testmodels.TestModelConstants;
  */
 public abstract class HardcodedCells<K extends Cell> {
 
-	private Map<String, Long> activityIds;
-	protected Map<String, Map<String, Long>> fundingIds;
-	private final List<K> CELLS;
-	private Map<String, Long> entityIds;
+	protected final Map<String, Long> activityIds;
+	protected final Map<String, Map<String, Long>> fundingIds;
+	protected final List<K> cells;
+	protected final Map<String, Long> entityIds;
+	public final Optional<LevelColumn> levelColumn;
 	
-	public List<K> getCells() {
-		return CELLS;
-	}
-	
-	public HardcodedCells(Map<String, Long> activityIds, Map<String, Long> entityIds) {
+	public HardcodedCells(Map<String, Long> activityIds, Map<String, Long> entityIds, LevelColumn levelColumn) {
 		this.activityIds = activityIds;
 		this.fundingIds = new HardcodedFundingNames().getParams();
 		this.entityIds = entityIds;
-		this.CELLS = populateCells();
+		this.levelColumn = Optional.ofNullable(levelColumn);
+		this.cells = populateCells();
 	}
 
+	public List<K> getCells() {
+		return cells;
+	}
+	
 	/**
 	 * must override in child class
 	 * child class contains createCell statements, depending on what kind of Cells it's made of
@@ -61,10 +67,10 @@ public abstract class HardcodedCells<K extends Cell> {
 	 * @param percentage percentage in the range of 0..1
 	 * @return
 	 */
-	protected PercentageTextCell createCell(String activityName, String text, Double percentage) {
+	protected PercentageTextCell cell(String activityName, String text, Double percentage) {
 		//if entity ID is empty because the cell is empty, activity id is supplied instead
 		long entityId = entityIds.get(text) == null ? activityIds.get(activityName) : entityIds.get(text);
-		return new PercentageTextCell(text, activityIds.get(activityName), entityId, Optional.empty(), new BigDecimal(percentage));
+		return new PercentageTextCell(text, activityIds.get(activityName), entityId, levelColumn, BigDecimal.valueOf(percentage));
 	}
 	
 	/**
@@ -73,8 +79,9 @@ public abstract class HardcodedCells<K extends Cell> {
 	 * @param text
 	 * @return
 	 */
-	protected TextCell createCell(String activityName, String text) {
-		return new TextCell(text, activityIds.get(activityName), entityIds.get(text), Optional.empty());
+	protected TextCell cell(String activityName, String text) {
+		long entityId = entityIds.get(text);
+		return new TextCell(text, activityIds.get(activityName), entityId, levelColumn);
 	}
 	
 	/**
@@ -115,23 +122,24 @@ public abstract class HardcodedCells<K extends Cell> {
 	 * @param value
 	 * @param coos
 	 */
-	private void addToCoordsIfExists(String categoryName, String value, Map<NiDimensionUsage, Coordinate> coos) {
+	private void addToCoordsIfExists(LevelColumn levelColumn, String categoryName, String value, Map<NiDimensionUsage, Coordinate> coos) {
 		if (value == null)
 			return;
-		Map<String, LevelColumn> optionalIdsMap = new FundingIdsMapper().getOptionalIdsMap();
+		//Map<String, LevelColumn> optionalIdsMap = new FundingIdsMapper().getOptionalIdsMap();
 		Long val = fundingIds.get(categoryName).get(value);
-		LevelColumn levelColumn = optionalIdsMap.get(categoryName);
+		//LevelColumn levelColumn = optionalIdsMap.get(categoryName);
 		Coordinate newVal = levelColumn.getCoordinate(val);
 		coos.put(levelColumn.dimensionUsage, newVal);
 	}
 	
 	
-	protected CategAmountCell createCell(String amount, String activityTitle, int year, String month, 
+	protected CategAmountCell cell(String amount, String activityTitle, int year, String month, 
 			String pledge, String transaction_type, String agreement, String recipient_org, 
 			String recipient_role, String source_role, String adjustment_type,
 			String donor_org, String funding_status, String mode_of_payment, 
 			String terms_assist, String financing_instrument) {
 		
+		NiDimension cats = HardcodedReportsTestSchema.catsDimension;
 		
 		MetaInfoGenerator mig = new MetaInfoGenerator();
 		Map<NiDimensionUsage, Coordinate> coos = new HashMap<NiDimensionUsage, Coordinate>();
@@ -144,12 +152,25 @@ public abstract class HardcodedCells<K extends Cell> {
 		addToMetaIfExistsDirectly(TestModelConstants.RECIPIENT_ROLE, recipient_role, mis);
 		addToMetaIfExistsDirectly(TestModelConstants.SOURCE_ROLE, source_role, mis);
 		addToMetaIfExistsDirectly(TestModelConstants.ADJUSTMENT_TYPE, adjustment_type, mis);
-		addToCoordsIfExists(TestModelConstants.DONOR_ORG_ID, donor_org, coos);
-		addToCoordsIfExists(TestModelConstants.FUNDING_STATUS_ID, funding_status, coos);
-		addToCoordsIfExists(TestModelConstants.MODE_OF_PAYMENT_ID, mode_of_payment, coos);
-		addToCoordsIfExists(TestModelConstants.TERMS_ASSIST_ID, terms_assist, coos);
-		addToCoordsIfExists(TestModelConstants.FINANCING_INSTRUMENT_ID, financing_instrument, coos);
+		addToCoordsIfExists(HardcodedReportsTestSchema.DONOR_DIM_USG.getLevelColumn(2), TestModelConstants.DONOR_ORG_ID, donor_org, coos);
+		addToCoordsIfExists(degenerate(cats, "funding_status"), TestModelConstants.FUNDING_STATUS_ID, funding_status, coos);
+		addToCoordsIfExists(degenerate(cats, "mode_of_payment"), TestModelConstants.MODE_OF_PAYMENT_ID, mode_of_payment, coos);
+		addToCoordsIfExists(degenerate(cats, "type_of_assistance"), TestModelConstants.TERMS_ASSIST_ID, terms_assist, coos);
+		addToCoordsIfExists(degenerate(cats, "fin_instr"), TestModelConstants.FINANCING_INSTRUMENT_ID, financing_instrument, coos);
 		return new CategAmountCell(activityIds.get(activityTitle), new MonetaryAmount(new BigDecimal(amount), new AmpPrecisionSetting()), 
 				mis, coos, td);
+	}
+	
+	protected Map<NiDimensionUsage, Coordinate> coos(long entityId) {
+		if (!this.levelColumn.isPresent())
+			return Collections.emptyMap();
+		
+		Map<NiDimensionUsage, Coordinate> res = new HashMap<>();
+		res.put(levelColumn.get().dimensionUsage, levelColumn.get().getCoordinate(entityId));
+		return res;
+	}
+	
+	public static LevelColumn degenerate(NiDimension dim, String name) {
+		return dim.getLevelColumn(name, dim.depth - 1);
 	}
 }

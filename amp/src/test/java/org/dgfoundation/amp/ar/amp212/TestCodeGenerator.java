@@ -105,12 +105,6 @@ public class TestCodeGenerator  {
 	}
 	
 
-	private void generateFundingTypesNames() {
-		FundingTypesGenerator gen = new FundingTypesGenerator(new FundingIdsMapper().getAllParams());
-		System.out.println(gen.generate());
-	}
-
-
 	public void generateDimensions() {
 		NiDimensionGenerator programGen = new NiDimensionGenerator(new NaturalTreeGenerator("amp_theme", "amp_theme_id", "parent_theme_id", "name").getRoots());
 		NiDimensionGenerator sectorsGen = new NiDimensionGenerator(new NaturalTreeGenerator("amp_sector", "amp_sector_id", "parent_sector_id", "name").getRoots());

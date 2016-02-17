@@ -26,7 +26,7 @@ public class TestModelConstants {
 	
 	/*Dimension depth constants*/
 	public final static int SECTORS_DIMENSION_DEPTH = 3;
-	public final static int PROGRAMS_DIMENSION_DEPTH = 3;
+	public final static int PROGRAMS_DIMENSION_DEPTH = 4;
 	public final static int ORGS_DIMENSION_DEPTH = 3;
 	public final static int LOCATIONS_DIMENSION_DEPTH = 4;
 	public final static int CATEGORIES_DIMENSION_DEPTH = 2;

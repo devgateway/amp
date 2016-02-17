@@ -33,18 +33,18 @@ public abstract class ColumnGenerator extends CodeGenerator {
 	protected String getFilePart1() {
 		return "package org.dgfoundation.amp.testmodels.nicolumns;\n" +
 	
-			"\n" +
 			"import java.util.Arrays;\n" +
 			"import java.util.List;\n" +
 			"import java.util.Map;\n" +
+			"import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;\n" + 
 			"\n" +
 			String.format("import org.dgfoundation.amp.nireports.%s;\n", clazz.getSimpleName()) +
 			"\n" +
 			"\n" +
 			String.format("public class %s extends HardcodedCells<%s>{\n", getCanonicalNameWithCells(this.name), clazz.getSimpleName()) +
 			"\n" +
-			String.format("	public %s(Map<String, Long> activityNames, Map<String, Long> entityNames) {\n", getCanonicalNameWithCells(this.name)) +
-			"		super(activityNames, entityNames);\n" +
+			String.format("	public %s(Map<String, Long> activityNames, Map<String, Long> entityNames, LevelColumn lc) {\n", getCanonicalNameWithCells(this.name)) +
+			"		super(activityNames, entityNames, lc);\n" +
 			"	}\n" +
 			"\n" +
 			"	@Override\n" +

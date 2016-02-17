@@ -2,32 +2,28 @@ package org.dgfoundation.amp.testmodels.nicolumns;
 
 import java.util.List;
 
+import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 
-public  class TestColumn<K extends Cell> extends NiReportColumn<K> {
-
-	private List<K> cells;
-
+public  class HardcodedColumn<K extends Cell> extends NiReportColumn<K> {
+	protected List<K> cells;
 	
-	public TestColumn(String name, HardcodedCells<K> cells, LevelColumn levelColumn,
-			@SuppressWarnings("rawtypes") Behaviour behaviour) {
+	public HardcodedColumn(String name, HardcodedCells<K> cells, LevelColumn levelColumn, Behaviour<?> behaviour) {
 		super(name, levelColumn, behaviour, null);
 		this.cells = cells.getCells();
 	}
-
 	
 	@Override
 	public List<K> fetch(NiReportsEngine engine) throws Exception {
 		return cells;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public List performCheck() {
+	public List<ReportRenderWarning> performCheck() {
 		return null;
 	}
 }

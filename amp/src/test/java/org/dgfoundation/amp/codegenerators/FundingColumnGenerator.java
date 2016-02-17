@@ -257,7 +257,7 @@ public class FundingColumnGenerator extends ColumnGenerator {
 		strb.append("return Arrays.asList(\n");
 		for (int i = 0; i < entries.size(); i++) {
 			Entry ent = entries.get(i);
-			strb.append("\t\t\tcreateCell(");
+			strb.append("\t\t\tcell(");
 			strb.append(ent.toString());
 			strb.append(")");
 			if (i < entries.size() - 1)

@@ -2,6 +2,7 @@ package org.dgfoundation.amp.testmodels.dimensions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,23 +32,23 @@ public abstract class HardcodedNiDimension extends NiDimension {
 			parentsPerLevel.add(new HashMap<>());
 			childrenPerLevel.add(new HashMap<>());
 		}
-		populateMaps(rootElements, 0);
+		
+		for(HNDNode rootNode:rootElements)
+			populateMaps(rootNode, 0l, 0);
+		
 		for(int level = 0; level < depth; level++) {
 			computedLevels.add(new DimensionLevel(level, childrenPerLevel.get(level), parentsPerLevel.get(level), level == depth - 1));
 		}
 		return computedLevels;
 	}
 	
-	private void populateMaps(List<HNDNode> roots, int level){
-		for (HNDNode rootNode : roots) {
-			long parentId = rootNode.id;
-			entityIds.put(rootNode.name, rootNode.id);
-			for (HNDNode child : rootNode.children) {
-				entityIds.put(child.name, child.id);
-				parentsPerLevel.get(level).put(child.id, parentId);
-				childrenPerLevel.get(level).put(child.id, child.getChildrenIds());
-				populateMaps(child.children, level + 1);
-			}
+	private void populateMaps(HNDNode node, long parentId, int level) {
+		parentsPerLevel.get(level).put(node.id, parentId);
+		entityIds.put(node.name, node.id);
+			
+		for (HNDNode child : node.children) {
+			childrenPerLevel.get(level).computeIfAbsent(node.id, z -> new HashSet<>()).add(child.id);
+			populateMaps(child, node.id, level + 1);
 		}
 	}
 	
@@ -61,8 +62,7 @@ public abstract class HardcodedNiDimension extends NiDimension {
 	}
 
 	/**
-	 * Must override in subclass.
-	 * Will contain element() calls, representing heirarchical trees describing said dimension.
+	 * Will contain element() calls, representing trees describing said dimension
 	 * @return
 	 */
 	protected abstract List<HNDNode> buildHardcodedElements();

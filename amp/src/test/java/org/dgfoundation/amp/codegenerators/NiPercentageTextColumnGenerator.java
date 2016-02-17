@@ -78,7 +78,7 @@ public class NiPercentageTextColumnGenerator extends ColumnGenerator {
 		strb.append("Arrays.asList(\n");
 		for (int i = 0; i < entries.size(); i++) {
 			Entry ent = entries.get(i);
-			strb.append("\t\t\tcreateCell(");
+			strb.append("\t\t\tcell(");
 			strb.append(String.format("%s, %s, %s", escape(ent.aavname), escape(ent.text), ent.percentage));
 			strb.append(")");
 			if (i < entries.size() - 1)

@@ -5,12 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.dgfoundation.amp.nireports.PercentageTextCell;
+import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
 
 public class SecondaryProgramCells extends HardcodedCells<PercentageTextCell>{
 
-	public SecondaryProgramCells(Map<String, Long> activityNames, Map<String, Long> entityNames) {
-		super(activityNames, entityNames);
+	public SecondaryProgramCells(Map<String, Long> activityNames, Map<String, Long> entityNames, LevelColumn lc) {
+		super(activityNames, entityNames, lc);
 	}
 
 	@Override

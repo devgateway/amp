@@ -5,12 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.dgfoundation.amp.nireports.TextCell;
+import org.dgfoundation.amp.nireports.schema.NiDimension;
 
 
 public class FundingStatusCells extends HardcodedCells<TextCell>{
 
-	public FundingStatusCells(Map<String, Long> activityNames, Map<String, Long> entityNames) {
-		super(activityNames, entityNames);
+	public FundingStatusCells(Map<String, Long> activityNames, Map<String, Long> entityNames, NiDimension dim) {
+		super(activityNames, entityNames, degenerate(dim, "funding_status"));
 	}
 
 	@Override

@@ -16,17 +16,22 @@ import org.digijava.kernel.persistence.PersistenceManager;
  */
 public class NiTextColumnGenerator extends ColumnGenerator {
 
-
 	final List<Entry> entries;
-	
 	
 	class Entry {
 		public final String aavname;
 		public final String text;
+		public final long id;
 		
-		public Entry(String aavname, String name) {
+		public Entry(String aavname, String name, long id) {
 			this.aavname = aavname;
 			this.text = name;
+			this.id = id;
+		}
+		
+		@Override
+		public String toString() {
+			return String.format("%s: %s (%d)", aavname, name, id);
 		}
 	}
 	
@@ -36,9 +41,8 @@ public class NiTextColumnGenerator extends ColumnGenerator {
 	}
 	
 	private Map<Long, String> getActivityNames() {
-		String query = "SELECT amp_activity_id, name FROM amp_activity_version WHERE amp_team_id IN "
-				+ "(SELECT amp_team_id FROM amp_team WHERE name = 'test workspace')"
-				+ "AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity)";
+		String query = "SELECT amp_activity_id, name FROM amp_activity WHERE amp_team_id IN "
+				+ "(SELECT amp_team_id FROM amp_team WHERE name = 'test workspace')";
 		return (Map<Long, String>) PersistenceManager.getSession().doReturningWork(connection -> SQLUtils.collectKeyValue(connection, query));
 	}
 	
@@ -51,12 +55,12 @@ public class NiTextColumnGenerator extends ColumnGenerator {
 					@SuppressWarnings("unchecked")
 					List<TextCell> cells = (List<TextCell>) eng.schema.getColumns().get(name).fetch(eng);
 					for (TextCell cell : cells) {
-						entries.add(new Entry(activityNames.get(cell.activityId), cell.text));
+						entries.add(new Entry(activityNames.get(cell.activityId), cell.text, cell.entityId));
 					}
 					entries.sort((Entry e1, Entry e2) -> {
-						if (e1.aavname.equals(e2.aavname))
-							return e1.text.compareTo(e2.text);
-						return e1.aavname.compareTo(e2.aavname);
+						if (e1.aavname.equalsIgnoreCase(e2.aavname))
+							return e1.text.compareToIgnoreCase(e2.text);
+						return e1.aavname.compareToIgnoreCase(e2.aavname);
 					});
 					
 				});
@@ -69,8 +73,8 @@ public class NiTextColumnGenerator extends ColumnGenerator {
 		strb.append("Arrays.asList(\n");
 		for (int i = 0; i < entries.size(); i++) {
 			Entry ent = entries.get(i);
-			strb.append("\t\t\tcell(");
-			strb.append(String.format("%s, %s", escape(ent.aavname), escape(ent.text)));
+			strb.append("\t\tcell(");
+			strb.append(String.format("%s, %s, %s", escape(ent.aavname), escape(ent.text), ent.id));
 			strb.append(")");
 			if (i < entries.size() - 1)
 				strb.append(",");

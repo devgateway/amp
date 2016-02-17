@@ -18,7 +18,7 @@ import org.dgfoundation.amp.ar.amp212.InclusiveRunnerTests;
 import org.dgfoundation.amp.ar.amp212.MetaInfoTests;
 import org.dgfoundation.amp.ar.amp212.NiReportsFetchingTests;
 import org.dgfoundation.amp.ar.amp212.OffDbNiReportEngineTests;
-import org.dgfoundation.amp.ar.amp212.TestCodeGenerator;
+import org.dgfoundation.amp.ar.amp212.CodeGenerator;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;

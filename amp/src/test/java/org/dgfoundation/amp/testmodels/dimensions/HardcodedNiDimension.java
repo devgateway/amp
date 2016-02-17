@@ -11,7 +11,11 @@ import org.dgfoundation.amp.nireports.schema.DimensionLevel;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 
 
-
+/**
+ * a hardcoded NiDimension which is using a tree as a source of its data. Because NiReports need a full tree, missing nodes are simulated by using -X nodes 
+ * @author simple
+ *
+ */
 public abstract class HardcodedNiDimension extends NiDimension {
 
 	protected final List<HNDNode> rootElements;
@@ -42,14 +46,31 @@ public abstract class HardcodedNiDimension extends NiDimension {
 		return computedLevels;
 	}
 	
-	private void populateMaps(HNDNode node, long parentId, int level) {
+	protected void populateMaps(HNDNode node, long parentId, int level) {
 		parentsPerLevel.get(level).put(node.id, parentId);
 		entityIds.put(node.name, node.id);
 			
-		for (HNDNode child : node.children) {
+		for (HNDNode child:node.children) {
 			childrenPerLevel.get(level).computeIfAbsent(node.id, z -> new HashSet<>()).add(child.id);
 			populateMaps(child, node.id, level + 1);
 		}
+		//if (node.children.isEmpty())
+			populateNegatives(node.id, node.id, level + 1);
+	}
+	
+	/**
+	 * goes all the way till the bottom of the tree and completes it with negatives of the last positive seen
+	 * @param positiveId
+	 * @param parentId
+	 * @param level
+	 */
+	protected void populateNegatives(long positiveId, long parentId, int level) {
+		if (level >= depth)
+			return;
+		entityIds.put("Undefined", - positiveId);
+		childrenPerLevel.get(level - 1).computeIfAbsent(parentId, z -> new HashSet<>()).add( - positiveId);
+		parentsPerLevel.get(level).put( - positiveId, parentId);
+		populateNegatives(positiveId, - positiveId, level + 1);
 	}
 	
 	@Override

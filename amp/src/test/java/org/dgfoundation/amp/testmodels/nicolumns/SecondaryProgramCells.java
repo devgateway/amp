@@ -1,11 +1,10 @@
 package org.dgfoundation.amp.testmodels.nicolumns;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
 import org.dgfoundation.amp.nireports.PercentageTextCell;
-import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
 
 public class SecondaryProgramCells extends HardcodedCells<PercentageTextCell>{

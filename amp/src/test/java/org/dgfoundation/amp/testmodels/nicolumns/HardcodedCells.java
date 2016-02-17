@@ -63,27 +63,26 @@ public abstract class HardcodedCells<K extends Cell> {
 	/**
 	 * Create percentage text cell (sectors, programs, locations...)
 	 * @param activityName the activity title
-	 * @param text
+	 * @param text the payload of the cell
+	 * @param entityId the id of the cell
 	 * @param percentage percentage in the range of 0..1
 	 * @return
 	 */
-	protected PercentageTextCell cell(String activityName, String text, Double percentage) {
-		//if entity ID is empty because the cell is empty, activity id is supplied instead
-		long entityId = entityIds.get(text) == null ? activityIds.get(activityName) : entityIds.get(text);
+	protected PercentageTextCell cell(String activityName, String text, long entityId, Double percentage) {
 		return new PercentageTextCell(text, activityIds.get(activityName), entityId, levelColumn, BigDecimal.valueOf(percentage));
 	}
-	
+
 	/**
 	 * Create simple text cell
 	 * @param activityName the activity title
 	 * @param text
+	 * @param entityId the id of the cell 
 	 * @return
 	 */
-	protected TextCell cell(String activityName, String text) {
-		long entityId = entityIds.get(text);
+	protected TextCell cell(String activityName, String text, long entityId) {
 		return new TextCell(text, activityIds.get(activityName), entityId, levelColumn);
 	}
-	
+
 	/**
 	 * Adds funding parameter id if value != null.
 	 * This is done for: pledge, transaction type, agreement, recipient org.

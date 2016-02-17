@@ -3,19 +3,15 @@ package org.dgfoundation.amp.ar.amp212;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AllTests_amp212;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.codegenerators.ActivityTitlesGenerator;
 import org.dgfoundation.amp.codegenerators.CategoriesTreeGenerator;
 import org.dgfoundation.amp.codegenerators.ColumnGenerator;
 import org.dgfoundation.amp.codegenerators.FundingColumnGenerator;
-import org.dgfoundation.amp.codegenerators.FundingIdsMapper;
-import org.dgfoundation.amp.codegenerators.FundingTypesGenerator;
 import org.dgfoundation.amp.codegenerators.NaturalTreeGenerator;
 import org.dgfoundation.amp.codegenerators.NiDimensionGenerator;
 import org.dgfoundation.amp.codegenerators.NiPercentageTextColumnGenerator;
@@ -23,46 +19,30 @@ import org.dgfoundation.amp.codegenerators.NiTextColumnGenerator;
 import org.dgfoundation.amp.codegenerators.OrganizationsTreeGenerator;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.nireports.TestcasesReportsSchema;
-import org.dgfoundation.amp.nireports.TrailCellsDigest;
-import org.dgfoundation.amp.nireports.output.NiReportExecutor;
-import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
-import org.dgfoundation.amp.testmodels.HardcodedActivities;
-import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
-import org.dgfoundation.amp.testutils.AmpTestCase;
-import org.junit.Test;
 
-
-public class TestCodeGenerator  {
-
-	
-	/**
-	 * 
-	 * Code generation for OffDbNiReportEngineTests.
-	 * Columns can be generated directly to files, the rest can be picked up from the console (System.out.println(new CodeGenerator().generate()).).
-	 * 
-	 * All code generation is db-dependent, so don't run this without the testcases initialization from AllTests_amp212.
-	 * 
-	 * Every CodeGenerator-derived class contains a .generate() method, which creates an ArrayList of elements
-	 * (whichever those are, depending on the container).
-	 * 
-	 * @author Alexandru Cartaleanu
-	 *
-	 */
-
+/**
+ * 
+ * Code generation for OffDbNiReportEngineTests.
+ * Columns can be generated directly to files, the rest can be picked up from the console (System.out.println(new CodeGenerator().generate()).).
+ * 
+ * All code generation is db-dependent, so don't run this without the testcases initialization from AllTests_amp212.
+ * 
+ * Every CodeGenerator-derived class contains a .generate() method, which creates an ArrayList of elements
+ * (whichever those are, depending on the container).
+ * 
+ * @author Alexandru Cartaleanu
+ *
+ */
+public class CodeGenerator  {
 		
 	static Logger log = Logger.getLogger(OffDbNiReportEngineTests.class);
-	
-	
+		
 //	HardcodedReportsTestSchema schema = new HardcodedReportsTestSchema();
-
 
 	public ReportSpecificationImpl buildSpecification(String reportName, List<String> columns, List<String> measures, List<String> hierarchies, GroupingCriteria groupingCriteria) {
 		return ReportSpecificationImpl.buildFor(reportName, columns, measures, hierarchies, groupingCriteria);
 	}
-
 	
 	private void generateColumns() throws FileNotFoundException, UnsupportedEncodingException {
 		List<ColumnGenerator> gens = Arrays.asList(
@@ -119,19 +99,20 @@ public class TestCodeGenerator  {
 		System.out.println(catGen.generate());
 
 	}
+	
+	
 	public void generateCode() throws FileNotFoundException, UnsupportedEncodingException  {
-
 //			generateFunding();
 			generateActivityNames();
 //			generateFundingTypesNames();
 //			generateDimensions();
-//			generateColumns();
+			generateColumns();
 	}
 	
 	
 	public static void main(String[] args)  throws AMPException, FileNotFoundException, UnsupportedEncodingException {
 		AllTests_amp212.configureLog4j();
 		AllTests_amp212.setUp();
-		new TestCodeGenerator().generateCode();
+		new CodeGenerator().generateCode();
 	}
 }

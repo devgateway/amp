@@ -1,6 +1,5 @@
 package org.dgfoundation.amp.ar.amp212;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +19,6 @@ import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.junit.Test;
 
 
-
 /**
  * 
  * testcases for the NiReports AmpPrecisionSetting
@@ -28,7 +26,6 @@ import org.junit.Test;
  * @author Alexandru Cartaleanu
  *
  */
-
 public class OffDbNiReportEngineTests extends AmpTestCase {
 	
 	static Logger log = Logger.getLogger(OffDbNiReportEngineTests.class);
@@ -40,12 +37,10 @@ public class OffDbNiReportEngineTests extends AmpTestCase {
 		super("NiReportsEngine tests");
 	}
 	
-	
 	public<K> K buildNiReportDigest(ReportSpecification spec, List<String> activityNames, NiReportOutputBuilder<K> outputBuilder) {
 		NiReportExecutor executor = getExecutor(activityNames);
 		return executor.executeReport(spec, outputBuilder);
-	}
-	
+	}	
 	
 	public NiReportExecutor getExecutor(List<String> activityNames) {
 		NiReportExecutor res = new NiReportExecutor(HardcodedReportsTestSchema.getInstance());

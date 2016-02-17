@@ -59,14 +59,12 @@ public abstract class ColumnGenerator extends CodeGenerator {
 			"}";
 	}
 		
-	
-	
 	private static String getCanonicalNameWithCells(String name) {
 		return WordUtils.capitalize(name).replaceAll(" ", "").replaceAll("-", "") + "Cells";
 	}
 	
 	public void generateToFile() throws FileNotFoundException, UnsupportedEncodingException {
-		String path = System.getProperty("user.dir") + "/src/test/java/org/dgfoundation/amp/testmodels/nicolumns/" 
+		String path = "/home/simple/Desktop/codegen/" 
 				+ getCanonicalNameWithCells(this.name) + ".java";
 		PrintWriter writer = new PrintWriter(path, "UTF-8");
 		writer.print(String.format(getFilePart1(), clazz.getName(), getCanonicalNameWithCells(this.name), getCanonicalNameWithCells(this.name)));

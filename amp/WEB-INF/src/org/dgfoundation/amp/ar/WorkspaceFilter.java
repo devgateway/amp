@@ -183,8 +183,8 @@ public class WorkspaceFilter
 		//return "SELECT amp_activity_id FROM amp_activity WHERE name IN ('activity with capital spending', 'Activity with planned disbursements', 'activity with pipeline MTEFs and act. disb')";
 		//return "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id IN(70)";
 		//return "SELECT amp_activity_id FROM amp_activity";
-		return "SELECT amp_activity_id FROM amp_activity where name in ('activity with pipeline MTEFs and act. disb')";
-		//return TEAM_FILTER;
+		//return "SELECT amp_activity_id FROM amp_activity where name in ('activity with pipeline MTEFs and act. disb')";
+		return TEAM_FILTER;
 	}
 	
 	/**

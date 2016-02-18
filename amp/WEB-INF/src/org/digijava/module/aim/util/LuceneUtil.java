@@ -17,6 +17,7 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -1201,6 +1202,36 @@ public class LuceneUtil implements Serializable {
         return null;
     }
 
+    private static String escape(String s) {
+    	StringBuilder bld = new StringBuilder(); 
+    	for (int i = 0; i < s.length(); i++) {
+    		bld.append("\\");
+    		bld.append(s.charAt(i));
+    	}
+    	return bld.toString();
+    }
+    
+    private static String wrapKeywords(String searchString, String searchMode) {
+    	/*
+    	 Special Lucene symbols:
+    	 + - && || ! ( ) { } [ ] ^ " ~ * ? : \ /
+    	 * */
+    	//this was in the old implementation, no idea why
+    	//let it be here for history
+//      searchString = searchString.replaceAll("\\s\\w{1,2}\\s", " ");
+//      searchString = searchString.replaceAll("^\\w{1,2}\\s", " ");
+//      searchString = searchString.replaceAll("\\s\\w{1,2}$", " ");  
+    	List<String> symbols = Arrays.asList("+", "-", "&&", "||", "!", "(", ")", "{", "}", 
+    										"[", "]", "^", "\"", "~", "*", "?", ":", "\\", "/");
+    	for (String symbol : symbols)
+    		searchString = searchString.replace(symbol, escape(symbol));
+    	StringBuilder bld = new StringBuilder();
+    	for (String word : searchString.split(" ")) {
+    		bld.append(String.format("\"%s\" ", word));
+    	}
+    	return bld.toString().trim();
+    }
+    
     public static Document[] search(String index, String field, String origSearchString, int maxLuceneResults, boolean retry, String searchMode){
         QueryParser parser = new QueryParser(field, analyzer);
         if (LuceneUtil.SEARCH_MODE_AND.toString().equals(searchMode)) {
@@ -1208,37 +1239,13 @@ public class LuceneUtil implements Serializable {
         } else {
             parser.setDefaultOperator(QueryParser.OR_OPERATOR);
         }
-
         Query query = null;
         Document[] resultDocuments = null;
-
-
         Searcher indexSearcher = null;
         try {
             indexSearcher = new IndexSearcher(index);
-
-            String searchString = origSearchString.trim();
-            //AMP-21172
-            //if (searchString.charAt(0) == '*') {
-            //    searchString = searchString.substring(1);
-            //}
-            searchString = searchString.replace("!","\\!");
-            searchString = searchString.replace("*","\\*");
-            //AMP-3806
-            searchString = searchString.replace("+","\\+");
-            searchString = searchString.replace("-","\\-");
-            searchString = searchString.replace("&","\\&");
-            searchString = searchString.replace("(","\\(");
-            searchString = searchString.replace(")","\\)");
-            searchString = searchString.replace("{","\\{");
-            searchString = searchString.replace("{","\\}");
-            searchString = searchString.replace("[","\\[");
-            searchString = searchString.replace("]","\\]");
-            searchString = searchString.replaceAll("\\s\\w{1,2}\\s", " ");
-            searchString = searchString.replaceAll("^\\w{1,2}\\s", " ");
-            searchString = searchString.replaceAll("\\s\\w{1,2}$", " ");
-
-            query = parser.parse(searchString.trim());
+            String searchString = wrapKeywords(origSearchString, searchMode);
+            query = parser.parse(searchString);
             TopDocs topDocs = indexSearcher.search(query, maxLuceneResults);
             resultDocuments = new Document[topDocs.totalHits];
 

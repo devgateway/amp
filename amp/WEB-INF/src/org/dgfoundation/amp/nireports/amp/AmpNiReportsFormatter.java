@@ -92,9 +92,9 @@ public class AmpNiReportsFormatter {
 			OutputSettings outputSettings) {
 		return (ReportSpecification spec, NiReportRunResult runResult) -> new AmpNiReportsFormatter(spec, runResult, reportAreaSupplier, outputSettings).format();
 	}
-	
+
+	/** build generated headers and compute ReportOutputColumn's */
 	protected void buildHeaders() {
-		// build generated headers and computer ReportOutputColumn
 		for (int i = 1; i < runResult.headers.rasterizedHeaders.size(); i++) {
 			SortedMap<Integer, Column> niHeaderRow = runResult.headers.rasterizedHeaders.get(i);
 			List<HeaderCell> ampHeaderRow = new ArrayList<HeaderCell>();
@@ -153,6 +153,8 @@ public class AmpNiReportsFormatter {
 	}
 	
 	protected List<ReportArea> getChildren(NiColumnReportData niColumnReportData) {
+		if (spec.isSummaryReport())
+			return Collections.emptyList();
 		this.cellVisitor.setLeaf(true);
 		SortedMap<Long, ReportAreaImpl> idReportArea = new TreeMap<Long, ReportAreaImpl>();
 		runResult.headers.leafColumns.forEach(niCellColumn -> {

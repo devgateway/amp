@@ -5,12 +5,10 @@ import java.util.SortedMap;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiHeaderInfo;
 import org.dgfoundation.amp.nireports.ReportHeadingCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
-import org.dgfoundation.amp.nireports.runtime.NiCell;
 
 /**
  * renders the result of running a NiReport to a html string. See {@link NiReportOutputBuilder}
@@ -23,10 +21,12 @@ public class NiReportHtmlRenderer {
 	
 	final NiReportData report;
 	final NiHeaderInfo headers;
+	final ReportSpecification spec;
 	
-	public NiReportHtmlRenderer(NiReportData report, NiHeaderInfo headers) {
+	public NiReportHtmlRenderer(NiReportData report, NiHeaderInfo headers, ReportSpecification spec) {
 		this.report = report;
 		this.headers = headers;
+		this.spec = spec;
 	}
 	
 	/**
@@ -34,7 +34,7 @@ public class NiReportHtmlRenderer {
 	 * @return
 	 */
 	public static NiReportOutputBuilder<String> buildNiReportOutputter() {
-		return (ReportSpecification spec, NiReportRunResult runResult) -> new NiReportHtmlRenderer(runResult.reportOut, runResult.headers).render();
+		return (ReportSpecification spec, NiReportRunResult runResult) -> new NiReportHtmlRenderer(runResult.reportOut, runResult.headers, spec).render();
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class NiReportHtmlRenderer {
 
 	public static String fullPageOutput(ReportSpecification spec, NiReportRunResult reportRun) {
 		long start = System.currentTimeMillis();
-		String renderedReport = new NiReportHtmlRenderer(reportRun.reportOut, reportRun.headers).render();
+		String renderedReport = new NiReportHtmlRenderer(reportRun.reportOut, reportRun.headers, spec).render();
 		long renderTime = System.currentTimeMillis() - start;
 		int reportX = reportRun.headers.leafColumns.size();
 		int reportY = reportRun.reportOut.getIds().size();
@@ -142,7 +142,7 @@ public class NiReportHtmlRenderer {
 			bld.append("<tr>");
 		
 		for(NiReportData subReport:grd.subreports) {
-			bld.append(String.format("<td class='ni_hierarchyCell ni_hierarchyLevel%d' rowspan='%d'>%s</td>", level + 1, subReport.getRowSpan(false), subreportTitle(subReport)));
+			bld.append(String.format("<td class='ni_hierarchyCell ni_hierarchyLevel%d' rowspan='%d'>%s</td>", level + 1, subReport.getRowSpan(spec.isSummaryReport()), subreportTitle(subReport)));
 			renderReportData(bld, subReport, level + 1);
 		}
 		
@@ -162,6 +162,8 @@ public class NiReportHtmlRenderer {
 	}
 	
 	protected StringBuilder renderColumnRD(StringBuilder bld, NiColumnReportData crd, int level) {
+		if (spec.isSummaryReport())
+			return bld; // trail cells are rendered elsewhere
 		ArrayList<Long> ids = new ArrayList<>(crd.getIds());
 		ids.sort(null);
 		boolean isFirstId = true;

@@ -30,6 +30,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	protected boolean displayEmptyFundingRows = false;
 	protected boolean emptyOutputForUnspecifiedData = true;
 	protected boolean alsoShowPledges = false;
+	protected boolean summaryReport = false;
 	
     /**
      * If the report query results in empty data
@@ -259,5 +260,14 @@ public class ReportSpecificationImpl implements ReportSpecification {
 		spec.setGroupingCriteria(groupingCriteria);
 
 		return spec;
+	}
+
+	public void setSummaryReport(boolean summaryReport) {
+		this.summaryReport = summaryReport;
+	}
+	
+	@Override
+	public boolean isSummaryReport() {
+		return summaryReport;
 	}
 }

@@ -90,6 +90,7 @@ public class AmpReportsToReportSpecification {
 	}
 	
 	private void configureReportData() {
+		spec.setSummaryReport(report.getHideActivities());
 		if (report.getHideActivities()) {
 			//this is a summary report
 			for (AmpReportHierarchy hierarchy : report.getHierarchies())

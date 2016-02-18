@@ -51,14 +51,14 @@ public class OffDbNiReportEngineTests extends AmpTestCase {
 		return ReportSpecificationImpl.buildFor(reportName, columns, measures, hierarchies, groupingCriteria);
 	}
 	
-	private void outputForSpecs(ReportSpecification spec, String outputBuilderString) {
-		System.out.println("For request: " + outputBuilderString);
-		System.out.println(buildNiReportDigest(spec, acts, new TrailCellsDigest("RAW / Totals / Actual Commitments")).toString());
-		System.out.println("----------------------");
-	}
+//	private void outputForSpecs(ReportSpecification spec, String outputBuilderString) {
+//		System.out.println("For request: " + outputBuilderString);
+//		System.out.println(buildNiReportDigest(spec, acts, new TrailCellsDigest("RAW / Totals / Actual Commitments")).toString());
+//		System.out.println("----------------------");
+//	}
 	
 	@Test
-	public void testPlainReportTotals() {
+	public void testPlainReportTotals() {  //CHECKED
 		ReportSpecification spec = buildSpecification("plain", 
 				Arrays.asList(ColumnConstants.PROJECT_TITLE), 
 				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
@@ -76,13 +76,13 @@ public class OffDbNiReportEngineTests extends AmpTestCase {
 				null, 
 				GroupingCriteria.GROUPING_TOTALS_ONLY);
 		
-		outputForSpecs(spec, "RAW / Totals / Actual Commitments");
+		//outputForSpecs(spec, "RAW / Totals / Actual Commitments");
 		
 		assertEquals("{(root)=19408691.186388}", buildNiReportDigest(spec, acts, new TrailCellsDigest("RAW / Totals / Actual Commitments")).toString());
 	}
 	
 	@Test
-	public void testByRegionReportTotals() {
+	public void testByRegionReportTotals() { //CHECKED
 		ReportSpecification spec = buildSpecification("ByRegion", 
 			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION), 
 			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
@@ -106,7 +106,7 @@ public class OffDbNiReportEngineTests extends AmpTestCase {
 	}
 	
 	@Test
-	public void testByRegionByZoneReportTotals() {
+	public void testByRegionByZoneReportTotals() { //CHECKED
 		ReportSpecification spec = buildSpecification("ByRegionByZone", 
 			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.ZONE), 
 			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
@@ -135,7 +135,7 @@ public class OffDbNiReportEngineTests extends AmpTestCase {
 	}
 
 	@Test
-	public void testByZoneReportTotals() {
+	public void testByZoneReportTotals() { //CHECKED
 		ReportSpecification spec = buildSpecification("ByZone", 
 			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.ZONE), 
 			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
@@ -154,7 +154,7 @@ public class OffDbNiReportEngineTests extends AmpTestCase {
 	}
 	
 	@Test
-	public void testByZoneByRegionReportTotals() {
+	public void testByZoneByRegionReportTotals() { //CHECKED
 		ReportSpecification spec = buildSpecification("ByZoneByRegion", 
 			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.ZONE, ColumnConstants.REGION), 
 			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
@@ -183,7 +183,7 @@ public class OffDbNiReportEngineTests extends AmpTestCase {
 	}
 
 	@Test
-	public void testByTypeOfAssistance() {
+	public void testByTypeOfAssistance() { //CHECKED
 		ReportSpecification spec = buildSpecification("ByTypeOfAssistance_", 
 			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.TYPE_OF_ASSISTANCE), 
 			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 

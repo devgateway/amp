@@ -88,6 +88,12 @@ public interface ReportSpecification extends Cloneable {
     public boolean isAlsoShowPledges();
 
     /**
+     * whether to collapse the CRDs to trail cells only when displaying
+     * @return
+     */
+    public boolean isSummaryReport();
+    
+    /**
      * whether to collapse same-named hierarchies with different IDs
      * @return
      */

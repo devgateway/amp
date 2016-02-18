@@ -94,8 +94,8 @@ public class AmpSchemaSanityTests extends MondrianReportsTestCase {
 				null, 
 				GroupingCriteria.GROUPING_YEARLY);
 		
-		String res = buildNiReportDigest(spec, acts, new TrailCellsDigest("RAW / Totals / Actual Commitments")).toString();
-		System.out.println(res);
+//		String res = buildNiReportDigest(spec, acts, new TrailCellsDigest("RAW / Totals / Actual Commitments")).toString();
+//		System.out.println(res);
 		
 		assertEquals("{(root)=19408691.186388}", buildNiReportDigest(spec, acts, new TrailCellsDigest("RAW / Totals / Actual Commitments")).toString());
 		assertEquals("{(root)=8159813.768451}", buildNiReportDigest(spec, acts, new TrailCellsDigest("RAW / Funding / 2014 / Actual Commitments")).toString());

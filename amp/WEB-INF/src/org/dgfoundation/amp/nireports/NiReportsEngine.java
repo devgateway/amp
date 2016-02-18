@@ -251,7 +251,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	protected void fetchData() {
 		timer.run("columns", this::fetchColumns);
 		timer.run("measures", this::fetchMeasures);
-		NiUtils.failIf(this.actualColumns.isEmpty(), "columnless reports not supported");
+		//NiUtils.failIf(this.actualColumns.isEmpty(), "columnless reports not supported");
 		NiUtils.failIf(!this.actualColumns.containsAll(this.actualHierarchies), () -> String.format("not all hierarchies (%s) are also specified as columns (%s)", this.actualHierarchies.toString(), this.actualColumns.toString()));
 	}
 	

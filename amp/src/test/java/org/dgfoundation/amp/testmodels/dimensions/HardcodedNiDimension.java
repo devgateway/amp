@@ -54,8 +54,7 @@ public abstract class HardcodedNiDimension extends NiDimension {
 			childrenPerLevel.get(level).computeIfAbsent(node.id, z -> new HashSet<>()).add(child.id);
 			populateMaps(child, node.id, level + 1);
 		}
-		//if (node.children.isEmpty())
-			populateNegatives(node.id, node.id, level + 1);
+		populateNegatives(node.id, node.id, level + 1);
 	}
 	
 	/**

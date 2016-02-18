@@ -43,12 +43,14 @@ public class NiReportDataOutputter implements ReportDataVisitor<NiReportData> {
 		
 	@Override
 	public NiReportData visitLeaf(ColumnReportData crd) {
+		//System.out.format("visiting leaf %s", crd);
 		Map<CellColumn, Map<Long, NiOutCell>> contents = AmpCollections.remap(crd.getContents(), (cellColumn, columnContents) -> columnContents.flatten(cellColumn.getBehaviour()), null);
 		return new NiColumnReportData(contents, buildTrailCells(contents), crd.splitter);
 	}
 
 	@Override
 	public NiReportData visitGroup(GroupReportData grd) {
+		//System.out.format("visiting grd %s with %d subreports: %s\n", grd, grd.getSubReports().size(), grd.getSubReports());
 		List<NiReportData> visitedChildren = grd.getSubReports().stream().map(z -> z.accept(this)).collect(toList());
 		return new NiGroupReportData(visitedChildren, buildGroupTrailCells(visitedChildren), grd.splitter);
 	}

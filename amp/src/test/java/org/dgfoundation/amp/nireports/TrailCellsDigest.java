@@ -1,6 +1,5 @@
 package org.dgfoundation.amp.nireports;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Stack;

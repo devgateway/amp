@@ -3,6 +3,7 @@ package org.dgfoundation.amp.nireports.output;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ReportData;
@@ -43,4 +44,9 @@ public abstract class NiReportData {
 	}
 	
 	public abstract<K> K accept(NiReportDataVisitor<K> visitor);
+	
+	@Override
+	public String toString() {
+		return String.format("%s split by %s, trails = %s", this.getClass().getSimpleName(), splitter, trailCells == null ? null : trailCells.entrySet().stream().collect(Collectors.toMap(z -> z.getKey().getHierName(), z -> z.getValue())));
+	}
 }

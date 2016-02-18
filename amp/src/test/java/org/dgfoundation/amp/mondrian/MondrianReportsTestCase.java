@@ -358,7 +358,7 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		return String.format("(actId: %d, %s, adjustment_type: %s, transaction_type: %s)", cell.activityId, cell.amount, cell.metaInfo.getMetaInfo(MetaCategory.ADJUSTMENT_TYPE.category).v, cell.metaInfo.getMetaInfo(MetaCategory.TRANSACTION_TYPE.category).v);
 	}
 	
-	public NiReportExecutor getExecutor(List<String> activityNames) {
+	public static NiReportExecutor getExecutor(List<String> activityNames) {
 		NiReportExecutor res = new NiReportExecutor(TestcasesReportsSchema.instance);
 		TestcasesReportsSchema.workspaceFilter = new ActivityIdsFetcher(activityNames);
 		return res;
@@ -368,7 +368,7 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		return executor.executeReport(spec, outputBuilder);
 	}
 	
-	public<K> K buildNiReportDigest(ReportSpecification spec, List<String> activityNames, NiReportOutputBuilder<K> outputBuilder) {
+	public static <K> K buildNiReportDigest(ReportSpecification spec, List<String> activityNames, NiReportOutputBuilder<K> outputBuilder) {
 		NiReportExecutor executor = getExecutor(activityNames);
 		return executor.executeReport(spec, outputBuilder);
 	}

@@ -14,7 +14,7 @@ public class OrganizationsTestDimension extends HardcodedNiDimension {
 		super(name, depth);
 	}
 
-	public final static OrganizationsTestDimension instance = new OrganizationsTestDimension("Organizations dimension", TestModelConstants.ORGS_DIMENSION_DEPTH);
+	public final static OrganizationsTestDimension instance = new OrganizationsTestDimension("orgs", TestModelConstants.ORGS_DIMENSION_DEPTH);
 
 	@Override
 	protected List<HNDNode> buildHardcodedElements() {

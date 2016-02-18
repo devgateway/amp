@@ -257,7 +257,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	
 	protected void fetchColumns() {
 		timer.run("Funding", () -> { 
-			funding = schema.getFundingFetcher().fetch(this);
+			funding = selectRelevant(schema.getFundingFetcher().fetch(this));
 			timer.putMetaInNode("cells", funding.size());
 			});
 		for(NiReportColumn<?> colToFetch:getReportColumns()) {
@@ -271,7 +271,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	
 	protected ColumnContents fetchEntity(NiReportedEntity<?> colToFetch) throws Exception {
 		try {
-			List<? extends Cell> cells = colToFetch.fetch(this);
+			List<? extends Cell> cells = selectRelevant(colToFetch.fetch(this));
 			timer.putMetaInNode("cells", cells.size());
 			return new ColumnContents(cells.stream().map(z -> new NiCell(z, colToFetch, rootEmptyTracker)).collect(Collectors.toList()));
 		}
@@ -280,6 +280,20 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 			logger.error(e.getMessage(), e);
 			return null;
 		}
+	}
+	
+	/**
+	 * filters out the relevant part of the supplied input
+	 * TODO: when filters are implemented, filter on all dimensions
+	 * @param in
+	 * @return
+	 */
+	protected<K extends Cell> List<K> selectRelevant(List<K> in) {
+		timer.putMetaInNode("fetched_raw", in.size());
+		Set<Long> ids = this.filters.getActivityIds(this);
+		if (ids == null) return in;
+		List<K> res = in.stream().filter(z -> ids.contains(z.activityId)).collect(Collectors.toList());
+		return res;
 	}
 	
 	/**
@@ -442,7 +456,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	
 	protected void printReportWarnings() {
 		if (!reportWarnings.isEmpty())
-			logger.error(reportWarnings.toString());
+			logger.error("report render warnings: " + reportWarnings.decapsulate().toString());
 	}
 	
 	public synchronized DimensionSnapshot getDimensionSnapshot(NiDimension dimension) {

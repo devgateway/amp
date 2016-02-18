@@ -131,7 +131,8 @@ public class ColumnReportData extends ReportData {
 			for(CellColumn cc:contents.keySet()) {
 				ColumnContents oldContents = contents.get(cc);
 				ColumnContents newContents = cc.getBehaviour().horizSplit(oldContents, splitDigest.percentages.get(catId), splitDigest.actIds.get(catId), acceptors);
-				//System.err.format("splitting %s by %s.%s: %s became %s\n", cc.getHierName(), z.getHierName(), splitCell.toString(), oldContents, newContents);
+//				if (cc.getHierName().equals("RAW / Funding / 2006 / Actual Commitments"))
+//					System.err.format("splitting %s.%s by %s.%s; %d cells became %d: %s\n", this, cc.getHierName(), z.getHierName(), splitCell.toString(), oldContents.countCells(), newContents.countCells(), newContents);
 				subContents.put(cc, newContents);
 				
 				keepSubreport |= (cc.getBehaviour().isKeepingSubreports() && !newContents.data.isEmpty());

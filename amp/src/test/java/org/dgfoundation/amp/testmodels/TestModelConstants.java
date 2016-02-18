@@ -33,6 +33,8 @@ public class TestModelConstants {
 	
 	/*Dimension level constants*/
 	public static int LEVEL_CATEGORY = 1;
+	public static int LEVEL_ORGANIZATION_TYPE = 0;
+	public static int LEVEL_ORGANIZATION_GROUP = 1;
 	public static int LEVEL_ORGANIZATION = 2;
 	public static int LEVEL_COUNTRY = 0;
 	public static int LEVEL_REGION = 1;
@@ -42,11 +44,6 @@ public class TestModelConstants {
 	public static int LEVEL_SUBSECTOR = 1;
 	public static int LEVEL_SUBSUBSECTOR = 2;
 	public static int LEVEL_PROGRAM_0 = 0;
-	public static int LEVEL_PROGRAM_1 = 0;
-	public static int LEVEL_PROGRAM_2 = 0;
-	
-	
-	
-	
-	
+	public static int LEVEL_PROGRAM_1 = 1;
+	public static int LEVEL_PROGRAM_2 = 2;
 }

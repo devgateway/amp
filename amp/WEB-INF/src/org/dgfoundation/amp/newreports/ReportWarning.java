@@ -30,6 +30,11 @@ public class ReportWarning implements Comparable<ReportWarning> {
 	}
 	
 	@Override
+	public String toString() {
+		return String.format("entityId: %d, message: %s", entityId, message);
+	}
+	
+	@Override
 	public int compareTo(ReportWarning oth) {
 		int delta = Long.compare(entityId, oth.entityId);
 		if (delta != 0) return 0;

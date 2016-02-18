@@ -92,4 +92,9 @@ public class VivificatingMap<K, V> implements Map<K, V> {
 	public Map<K, V> decapsulate() {
 		return this.map;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("VivificatingMap with defaultValueSupplier %s encapsulating: %s", defaultValueSupplier, this.map);
+	}
 }

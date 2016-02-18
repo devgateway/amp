@@ -1,15 +1,9 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import java.sql.Connection;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.dgfoundation.amp.ar.WorkspaceFilter;
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.nireports.NiFilters;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 
@@ -35,7 +29,7 @@ public class TestNiFilters implements NiFilters {
 	
 	@Override
 	public Set<Long> getSelectedIds(NiReportsEngine engine, String columnName) {
-		return cachedActivityIds;
+		return null;
 
 	};
 	

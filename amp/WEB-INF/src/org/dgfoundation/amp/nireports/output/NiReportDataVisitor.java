@@ -12,6 +12,7 @@ public interface NiReportDataVisitor<K> extends NiReportOutputBuilder<K> {
 	public K visit(NiColumnReportData crd);
 	public K visit(NiGroupReportData grd);
 	
+	@Override
 	public default K buildOutput(ReportSpecification spec, NiReportRunResult reportRun) {
 		return reportRun.reportOut.accept(this);
 	}

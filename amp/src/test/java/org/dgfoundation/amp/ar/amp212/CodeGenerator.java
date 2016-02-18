@@ -23,10 +23,10 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 
 /**
  * 
- * Code generation for OffDbNiReportEngineTests.
+ * Code generation for an offline schema
  * Columns can be generated directly to files, the rest can be picked up from the console (System.out.println(new CodeGenerator().generate()).).
  * 
- * All code generation is db-dependent, so don't run this without the testcases initialization from AllTests_amp212.
+ * All code generation depends on a different schema existing and fully functioning (in AMP: db-dependent AmpReportsSchema)
  * 
  * Every CodeGenerator-derived class contains a .generate() method, which creates an ArrayList of elements
  * (whichever those are, depending on the container).
@@ -54,11 +54,16 @@ public class CodeGenerator  {
 				 new NiPercentageTextColumnGenerator(ColumnConstants.REGION),
 				 new NiPercentageTextColumnGenerator(ColumnConstants.ZONE),
 				 new NiPercentageTextColumnGenerator(ColumnConstants.DISTRICT),
-				 new NiPercentageTextColumnGenerator(ColumnConstants.PRIMARY_PROGRAM),
+				 //new NiPercentageTextColumnGenerator(ColumnConstants.PRIMARY_PROGRAM),
 				 new NiPercentageTextColumnGenerator(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1),
 				 new NiPercentageTextColumnGenerator(ColumnConstants.PRIMARY_PROGRAM_LEVEL_2),
-				 new NiPercentageTextColumnGenerator(ColumnConstants.SECONDARY_PROGRAM),
+				 
 				 new NiPercentageTextColumnGenerator(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1),
+				 new NiPercentageTextColumnGenerator(ColumnConstants.SECONDARY_PROGRAM_LEVEL_2),
+				 
+				 new NiPercentageTextColumnGenerator(ColumnConstants.IMPLEMENTING_AGENCY),
+				 new NiPercentageTextColumnGenerator(ColumnConstants.IMPLEMENTING_AGENCY_GROUPS),
+				 new NiPercentageTextColumnGenerator(ColumnConstants.IMPLEMENTING_AGENCY_TYPE),
 				 
 				 new NiTextColumnGenerator(ColumnConstants.PROJECT_TITLE),
 				 new NiTextColumnGenerator(ColumnConstants.STATUS),
@@ -67,7 +72,9 @@ public class CodeGenerator  {
 				 new NiTextColumnGenerator(ColumnConstants.FUNDING_STATUS),
 				 new NiTextColumnGenerator(ColumnConstants.TYPE_OF_ASSISTANCE),
 				 new NiTextColumnGenerator(ColumnConstants.FINANCING_INSTRUMENT),
-				 new NiTextColumnGenerator(ColumnConstants.DONOR_AGENCY)
+				 new NiTextColumnGenerator(ColumnConstants.DONOR_AGENCY),
+				 new NiTextColumnGenerator(ColumnConstants.DONOR_GROUP),
+				 new NiTextColumnGenerator(ColumnConstants.DONOR_TYPE)
 				);
 		for (ColumnGenerator gen : gens)
 			gen.generateToFile();
@@ -97,7 +104,6 @@ public class CodeGenerator  {
 		System.out.println(sectorsGen.generate());
 		System.out.println(orgGen.generate());
 		System.out.println(catGen.generate());
-
 	}
 	
 	

@@ -272,4 +272,9 @@ public class MondrianReportSpec implements ReportSpecification {
 	public boolean isAlsoShowPledges() {
 		return emb.isAlsoShowPledges();
 	}
+
+	@Override
+	public boolean isSummaryReport() {
+		return emb.isSummaryReport();
+	}
 }

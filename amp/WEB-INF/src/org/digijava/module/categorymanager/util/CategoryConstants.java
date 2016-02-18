@@ -307,7 +307,7 @@ public class CategoryConstants {
 				AmpCategoryClass c = CategoryManagerUtil.loadAmpCategoryClassByKey(this.getCategoryKey());
 				if (c != null){
 					for(AmpCategoryValue categoryValue : c.getPossibleValues())
-						if (categoryValue.getValue().equalsIgnoreCase(this.getValueKey())) {
+						if (categoryValue != null && categoryValue.getValue().equalsIgnoreCase(this.getValueKey())) {
 							databaseAcvlId = categoryValue.getId();
 							break;
 						}

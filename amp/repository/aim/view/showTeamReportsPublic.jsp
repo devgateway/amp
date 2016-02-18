@@ -119,15 +119,14 @@ function submitForm(action){
 												<tr>
 													<td>
 													<div style="float:right; margin-right:15px; margin-top:8px;">
-													
-														<div class="t_sm">
-            <b><digi:trn>Icons Reference</digi:trn></b>
-		<br/>
-		<img src="img_2/ico_exc.gif">&nbsp;&nbsp;<digi:trn>Click on this icon to get report in Excel format</digi:trn> &nbsp;&nbsp;|&nbsp;&nbsp;
-		<img src="img_2/ico_pdf.gif">&nbsp;&nbsp;<digi:trn>Click on this icon to get report in PDF format</digi:trn>
-	</div>
-													
-													
+													<!--  Show XML, PDF and Printer Friendly icon removed with AMP-20044
+													<div class="t_sm">
+												            <b><digi:trn>Icons Reference</digi:trn></b>
+														<br/>
+														<img src="img_2/ico_exc.gif">&nbsp;&nbsp;<digi:trn>Click on this icon to get report in Excel format</digi:trn> &nbsp;&nbsp;|&nbsp;&nbsp;
+														<img src="img_2/ico_pdf.gif">&nbsp;&nbsp;<digi:trn>Click on this icon to get report in PDF format</digi:trn>
+													</div>
+													-->
 													</div>
 														<table cellpadding="6" cellspacing="6">
 															<tr>
@@ -472,6 +471,8 @@ function submitForm(action){
 																						%>
 																							<%@ include file="saiku_button.jspf" %> 
 																						<% } %>
+																						<!-- Show XML, PDF and Printer Friendly icon removed with AMP-20044 -->
+																						<!--  
 																						<c:set var="translation">
 																							<digi:trn>Get report in Excel format</digi:trn>&nbsp;
 																						</c:set>
@@ -512,6 +513,7 @@ function submitForm(action){
 																									border="0" />
 																							</a>
 																						</feature:display>
+																						-->
 																					</p></td>
 																			</tr>
 																		</logic:iterate>

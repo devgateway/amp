@@ -2,6 +2,7 @@ package org.dgfoundation.amp.nireports.amp;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.nireports.NiUtils;
+import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.TabularSourcedNiDimension;
 import org.digijava.kernel.persistence.PersistenceManager;
 
@@ -20,7 +21,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
  * @author Dolghier Constantin
  *
  */
-public abstract class SqlSourcedNiDimension extends TabularSourcedNiDimension {
+public class SqlSourcedNiDimension extends TabularSourcedNiDimension {
 
 	public final String sourceViewName;
 	public final List<String> idColumnsNames;
@@ -35,6 +36,17 @@ public abstract class SqlSourcedNiDimension extends TabularSourcedNiDimension {
 		this.sourceViewName = sourceViewName;
 		this.idColumnsNames = Collections.unmodifiableList(new ArrayList<>(idColumnsNames));
 		check();
+	}
+	
+	/**
+	 * builds an SQL-sourced degenerate dimension
+	 * @param name
+	 * @param sourceViewName
+	 * @param idColumnName
+	 * @return
+	 */
+	public static NiDimension buildDegenerateDimension(String name, String sourceViewName, String idColumnName) {
+		return new SqlSourcedNiDimension(name, sourceViewName, Arrays.asList(idColumnName));
 	}
 
 	@Override
@@ -61,8 +73,10 @@ public abstract class SqlSourcedNiDimension extends TabularSourcedNiDimension {
 			throw new RuntimeException(String.format("SqlSourcedNiDimension %s: column(s) <%s> do not exist in the view <%s>", name, columns.toString(), sourceViewName));
 	}
 	
-	/** override in children */
-	protected abstract PercentagesCorrector buildPercentagesCorrector(NiDimensionUsage dimUsg);
+	/** override in children if this dimension has unsure percentages */
+	protected PercentagesCorrector buildPercentagesCorrector(NiDimensionUsage dimUsg) {
+		return null;
+	}
 	
 	protected Map<NiDimensionUsage, PercentagesCorrector> getAllPercentagesCorrectors() {
 		Map<NiDimensionUsage, PercentagesCorrector> res = new HashMap<>();

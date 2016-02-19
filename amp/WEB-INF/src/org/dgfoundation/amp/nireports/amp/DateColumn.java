@@ -28,7 +28,7 @@ public class DateColumn extends AmpSqlSourcedColumn<DateCell> {
 		super(columnName, levelColumn, fundingViewFilter, viewName, "amp_activity_id", DateTokenBehaviour.instance);
 	}
 
-	public DateColumn(String columnName, String viewName, String entityColumn) {
+	public DateColumn(String columnName, String viewName) {
 		this(columnName, null, null, viewName);
 	}
 

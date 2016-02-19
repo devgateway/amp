@@ -1,10 +1,8 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.TreeSet;
 
 import org.dgfoundation.amp.nireports.schema.ConstantNiDimension;
 import org.dgfoundation.amp.nireports.schema.DimensionSnapshot;
@@ -120,6 +118,22 @@ public class DimensionSnapshotTests extends AmpTestCase {
 		
 		assertColEquals("[1, 2]", snapshot.getAcceptableNeighbours(1, Arrays.asList(1l, 2l), 2));
 		assertColEquals("[1, 2]", snapshot.getAcceptableNeighbours(2, Arrays.asList(1l, 2l), 1));
+	}
+	
+	@Test
+	public void testDegenerateDimension() {
+		DimensionSnapshot snapshot = getSnapshot("identity", 1, Arrays.asList(
+			Arrays.asList(1l),
+			Arrays.asList(2l),
+			Arrays.asList(3l),
+			// intentional gap
+			Arrays.asList(7l)));
+		
+		assertEquals("depth = 1, data = [level 0, info: [(id: 1, parent: 0, children: []), (id: 2, parent: 0, children: []), (id: 3, parent: 0, children: []), (id: 7, parent: 0, children: [])]]", snapshot.toString());
+		assertColEquals("[1]", snapshot.getAcceptableNeighbours(0, Arrays.asList(1l), 0));
+		assertColEquals("[1, 2]", snapshot.getAcceptableNeighbours(0, Arrays.asList(1l, 2l), 0));
+		assertColEquals("[2]", snapshot.getAcceptableNeighbours(0, Arrays.asList(2l, 5l, 6l), 0));
+		assertColEquals("[1, 7]", snapshot.getAcceptableNeighbours(0, Arrays.asList(1l, 5l, 7l), 0));
 	}
 	
 	public DimensionSnapshot getSnapshot(String name, int depth, List<List<Long>> list) {

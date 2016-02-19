@@ -78,6 +78,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static SectorsDimension secsDimension = SectorsDimension.instance;
 	public final static ProgramsDimension progsDimension = ProgramsDimension.instance;
 	public final static CategoriesDimension catsDimension = CategoriesDimension.instance;
+	public final static NiDimension agreementsDimension = SqlSourcedNiDimension.buildDegenerateDimension("agrs", "amp_agreement", "id");
 	
 
 	@SuppressWarnings("serial")
@@ -158,6 +159,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static NiDimensionUsage NPO_DIM_USG = progsDimension.getDimensionUsage("National Plan Objective");
 
 	public final static NiDimensionUsage LOC_DIM_USG = locsDimension.getDimensionUsage("LOCS");
+	public final static NiDimensionUsage AGR_DIM_USG = agreementsDimension.getDimensionUsage("agr");
+	public final static LevelColumn AGR_LEVEL_COLUMN = AGR_DIM_USG.getLevelColumn(0);
 	
 	private static AmpReportsSchema instance = new AmpReportsSchema();
 		
@@ -182,8 +185,14 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_dimension(ColumnConstants.ACTIVITY_PLEDGES_TITLE, "v_activity_pledges_title");
 		no_dimension(ColumnConstants.ACTIVITY_UPDATED_BY, "v_activity_modified_by");
 		no_dimension(ColumnConstants.ACTORS, "v_actors");
-		no_dimension(ColumnConstants.AGREEMENT_CODE, "v_agreement_code");
-		no_dimension(ColumnConstants.AGREEMENT_TITLE_CODE, "v_agreement_title_code");
+		
+		single_dimension(ColumnConstants.AGREEMENT_CODE, "v_agreement_code", AGR_LEVEL_COLUMN);
+		single_dimension(ColumnConstants.AGREEMENT_TITLE_CODE, "v_agreement_title_code", AGR_LEVEL_COLUMN);
+		date_column(ColumnConstants.AGREEMENT_CLOSE_DATE, "v_agreement_close_date", AGR_LEVEL_COLUMN);
+		date_column(ColumnConstants.AGREEMENT_SIGNATURE_DATE, "v_agreement_signature_date", AGR_LEVEL_COLUMN);
+		date_column(ColumnConstants.AGREEMENT_EFFECTIVE_DATE, "v_agreement_effective_date", AGR_LEVEL_COLUMN);
+		date_column(ColumnConstants.AGREEMENT_PARLIAMENTARY_APPROVAL_DATE, "v_agreement_parlimentary_date", AGR_LEVEL_COLUMN);
+		
 		no_dimension(ColumnConstants.AMP_ID, "v_amp_id");
 		no_dimension(ColumnConstants.BUDGET_ORGANIZATION, "v_budget_organization");
 		no_dimension(ColumnConstants.BUDGET_PROGRAM, "v_budget_program");
@@ -484,7 +493,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 * @return
 	 */
 	private AmpReportsSchema degenerate_dimension(String columnName, String view, NiDimension dimension) {
-		NiUtils.failIf(dimension != catsDimension, String.format(dimension.toString() + " is not whitelisted as a shortcut degenerate dimension"));
+		NiUtils.failIf(dimension != catsDimension && dimension != agreementsDimension, String.format(dimension.toString() + " is not whitelisted as a shortcut degenerate dimension"));
 		return single_dimension(columnName, view, dimension.getLevelColumn(columnName, dimension.depth - 1)); // taking the leaves
 	}
 	
@@ -496,10 +505,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		return addColumn(SimpleTextColumn.fromViewWithoutEntity(columnName, view));
 	}
 	
-	private AmpReportsSchema with_percentage(String columnName, String viewName, LevelColumn levelColumn) {
-		logger.error(String.format("(column %s) NiDimension %s has no percentages corrector, using raw percentages", columnName, levelColumn.dimensionUsage));
-		return addColumn(PercentageTextColumn.fromView(columnName, viewName, levelColumn));
-	}
+//	private AmpReportsSchema with_percentage(String columnName, String viewName, LevelColumn levelColumn) {
+//		logger.error(String.format("(column %s) NiDimension %s has no percentages corrector, using raw percentages", columnName, levelColumn.dimensionUsage));
+//		return addColumn(PercentageTextColumn.fromView(columnName, viewName, levelColumn));
+//	}
 		
 	private AmpReportsSchema with_percentage(String columnName, String viewName, NiDimensionUsage dimUsg, int level) {
 		PercentagesCorrector cor = PERCENTAGE_CORRECTORS.get(dimUsg);
@@ -507,8 +516,25 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		return addColumn(new NormalizedPercentagesColumn(columnName, dimUsg.getLevelColumn(level), null, viewName, "amp_activity_id", cor));
 	}
 			
+	/**
+	 * adds an entityLess date field
+	 * @param columnName
+	 * @param viewName
+	 * @return
+	 */
 	private AmpReportsSchema date_column(String columnName, String viewName) {
-		return addColumn(new DateColumn(columnName, viewName, "amp_activity_id"));
+		return addColumn(new DateColumn(columnName, viewName));
+	}
+	
+	/**
+	 * adds a date field ties to a degenerate dimension
+	 * @param columnName
+	 * @param viewName
+	 * @param dim
+	 * @return
+	 */
+	private AmpReportsSchema date_column(String columnName, String viewName, LevelColumn levelColumn) {
+		return addColumn(new DateColumn(columnName, levelColumn, null, viewName));
 	}
 	
 	protected final CurrencyConvertor currencyConvertor = AmpCurrencyConvertor.getInstance();

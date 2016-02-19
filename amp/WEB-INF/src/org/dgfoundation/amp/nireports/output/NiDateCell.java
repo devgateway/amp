@@ -45,7 +45,7 @@ public class NiDateCell extends NiOutCell {
 
 	@Override
 	public String getDisplayedValue() {
-		return sortedValues.toString();
+		return sortedValues.isEmpty() ? "" : sortedValues.toString();
 	}
 
 	@Override

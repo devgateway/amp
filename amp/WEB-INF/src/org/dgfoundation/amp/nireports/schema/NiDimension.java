@@ -26,7 +26,7 @@ public abstract class NiDimension {
 	public final int depth;
 	
 	public NiDimension(String name, int depth) {
-		failIf(depth < 2, "a NiDimension must have a depth of at least 2!");
+		//failIf(depth < 2, "a NiDimension must have a depth of at least 2!");
 		failIf(name == null, "a NiDimension must have a name");
 		this.name = name;
 		this.depth = depth;

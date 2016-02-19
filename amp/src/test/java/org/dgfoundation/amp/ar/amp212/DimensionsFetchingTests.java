@@ -1,14 +1,11 @@
 package org.dgfoundation.amp.ar.amp212;
 
 import java.util.Arrays;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
-import org.dgfoundation.amp.nireports.amp.SqlSourcedNiDimension;
 import org.dgfoundation.amp.nireports.schema.DimensionSnapshot;
-import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.junit.Test;
 
 /**
@@ -63,5 +60,12 @@ public class DimensionsFetchingTests extends MondrianReportsTestCase {
 		assertEquals("[223, 224, 225]", sortedString(snapshot.getAcceptableNeighbours(0, Arrays.asList(38l), 1)));
 		assertEquals("[223, 224, 225]", sortedString(snapshot.getAcceptableNeighbours(1, Arrays.asList(223l, 225l, 224l), 1)));
 		assertEquals("[2, 3]", sortedString(snapshot.getAcceptableNeighbours(0, Arrays.asList(1l, 2l, 3l, 4l), 0)));
+	}
+	
+	@Test
+	public void testAgreementDimensionFetching() {
+		DimensionSnapshot snapshot = schema.agreementsDimension.getDimensionData();
+		assertEquals("depth = 1, data = [level 0, info: [(id: 1, parent: 0, children: []), (id: 2, parent: 0, children: []), (id: 3, parent: 0, children: [])]]", snapshot.toString());
+		assertEquals("[2, 3]", sortedString(snapshot.getAcceptableNeighbours(0, Arrays.asList(2l, 3l, 17l), 0)));
 	}
 }

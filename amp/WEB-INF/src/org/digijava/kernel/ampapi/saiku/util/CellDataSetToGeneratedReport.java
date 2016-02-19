@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.AmountsUnits;
-import org.dgfoundation.amp.newreports.DateCell;
+import org.dgfoundation.amp.newreports.MondrianDateCell;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
@@ -195,7 +195,7 @@ public class CellDataSetToGeneratedReport {
 			//textual columns
 			if (colId < spec.getColumns().size() && !CustomAmounts.ACTIVITY_AMOUNTS.contains(roc.originalColumnName)) { 
 				if (DateColumns.ACTIVITY_DATES.contains(roc.originalColumnName)) {
-					cellData = DateCell.buildDateFromRepOut(value);
+					cellData = MondrianDateCell.buildDateFromRepOut(value);
 				} else { 
 					// do not reformat only text cells (we rely upon formatted value == null) 
 					reformat = false;

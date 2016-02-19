@@ -2,8 +2,8 @@ package org.dgfoundation.amp.ar.amp212;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+
+import static org.dgfoundation.amp.algo.AmpCollections.sorted;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -15,7 +15,6 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
-import org.dgfoundation.amp.nireports.amp.MetaCategory;
 import org.junit.Test;
 
 /**

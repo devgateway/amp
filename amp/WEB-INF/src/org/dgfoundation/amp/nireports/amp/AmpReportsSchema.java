@@ -384,6 +384,11 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		with_percentage(ColumnConstants.ZONE, "v_zones", LOC_DIM_USG, LEVEL_ZONE);
 		with_percentage(ColumnConstants.DISTRICT, "v_districts", LOC_DIM_USG, LEVEL_DISTRICT);
 		
+		
+		date_column(ColumnConstants.ACTIVITY_CREATED_ON, "v_creation_date");
+		date_column(ColumnConstants.ACTIVITY_UPDATED_ON, "v_updated_date");
+		//TODO: add the rest of the date columns here
+		
 		addTrivialMeasures();
 	}
 		
@@ -502,6 +507,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		return addColumn(new NormalizedPercentagesColumn(columnName, dimUsg.getLevelColumn(level), null, viewName, "amp_activity_id", cor));
 	}
 			
+	private AmpReportsSchema date_column(String columnName, String viewName) {
+		return addColumn(new DateColumn(columnName, viewName, "amp_activity_id"));
+	}
+	
 	protected final CurrencyConvertor currencyConvertor = AmpCurrencyConvertor.getInstance();
 	
 	@Override

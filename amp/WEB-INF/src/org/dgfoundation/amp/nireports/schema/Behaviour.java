@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.nireports.schema;
 
+import static java.util.stream.Collectors.toSet;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -84,7 +86,18 @@ public interface Behaviour<V extends NiOutCell> {
 	 * @return
 	 */
 	public V getZeroCell();
-	public NiSplitCell mergeSplitterCells(List<NiCell> splitterCells);
+	
+	/**
+	 * merges 1+ splitter cells with the same displayed value into one NiSplitCell
+	 * @param splitterCells
+	 * @return
+	 */
+	public default NiSplitCell mergeSplitterCells(List<NiCell> splitterCells) {
+		return new NiSplitCell((NiReportColumn<?>) splitterCells.get(0).getEntity(), 
+			splitterCells.get(0).getDisplayedValue(), 
+			splitterCells.stream().map(z -> z.getCell().entityId).collect(toSet()), 
+			splitterCells.stream().anyMatch(z -> z.isUndefinedCell()));
+	}
 	
 	public default String getDebugDigest() {
 		return String.format("%s", getTimeRange());

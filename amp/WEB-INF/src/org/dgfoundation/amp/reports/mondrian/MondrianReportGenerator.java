@@ -32,7 +32,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.newreports.AmountCell;
-import org.dgfoundation.amp.newreports.DateCell;
+import org.dgfoundation.amp.newreports.MondrianDateCell;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.FilterRule.FilterType;
 import org.dgfoundation.amp.newreports.GeneratedReport;
@@ -195,7 +195,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			for (int i = 0; i < result.length; i++) {
 				for (Integer cellIndex : dateColumnsIndexes) {
 					AbstractBaseCell cell = result[i][cellIndex];
-					cell.setFormattedValue(DateCell.parseMondrianDate(cell.getFormattedValue()).right);
+					cell.setFormattedValue(MondrianDateCell.parseMondrianDate(cell.getFormattedValue()).right);
 				}
 			}
 		}

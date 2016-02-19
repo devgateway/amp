@@ -1,7 +1,9 @@
 package org.dgfoundation.amp.algo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -140,6 +142,21 @@ public class AmpCollections {
 	}
 	
 	/**
+	 * returns a map which is the result of applying a function to all the values of a map
+	 * @param in
+	 * @param mapper
+	 * @param out
+	 * @return
+	 */
+	public static<K, V, Z> Map<K, Z> remap(Map<K, V> in, Function<V, Z> mapper, Map<K, Z> out) {
+		if (out == null)
+			out = new HashMap<>();
+		for(Entry<K, V> entry:in.entrySet())
+			out.put(entry.getKey(), mapper.apply(entry.getValue()));
+		return out;
+	}
+	
+	/**
 	 * returns a sorted-map-view of the input map, with its keys sorted according to a given comparator
 	 * @param in
 	 * @param comp
@@ -158,7 +175,33 @@ public class AmpCollections {
 	public static<K, V> Set<V> mapToSet(List<K> in, Function<K, V> func) {
 		return in.stream().map(func).collect(Collectors.toSet());
 	}
+
+	/**
+	 * returns a list containing the input elements in sorted order
+	 * @param in
+	 * @return
+	 */
+	public static<K> List<K> sorted(Collection<K> in) {
+		return sorted(in, null);
+	}
 	
+	/**
+	 * sorts the input list in a copy
+	 * @param in
+	 * @return
+	 */
+	public static<K> List<K> sorted(Collection<K> in, Comparator<K> comp) {
+		if (in.isEmpty())
+			return Collections.emptyList();
+		
+		if (in.size() == 1)
+			return Arrays.asList(in.iterator().next());
+		
+		ArrayList<K> res = new ArrayList<>(in);
+		res.sort(comp);
+		return res;
+	}
+
 	/**
 	 * chooses an arbitrary element from a collection. If the collection is empty, returns a given element
 	 * @param col
@@ -169,5 +212,14 @@ public class AmpCollections {
 		if (col.isEmpty())
 			return defaultValue;
 		return col.iterator().next();
+	}
+	
+	/**
+	 * returns a Comparable token which would compare the elements of a list in given order
+	 * @param col
+	 * @return
+	 */
+	public static<K extends Comparable<?>> Comparable<?> orderedListWrapper(List<K> col) {
+		return new ComparableList<K>(col);
 	}
 }

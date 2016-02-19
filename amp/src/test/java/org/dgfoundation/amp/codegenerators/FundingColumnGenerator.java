@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.dgfoundation.amp.algo.AmpCollections.sorted;
+
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.ImmutablePair;
@@ -23,7 +25,6 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
 import org.dgfoundation.amp.testmodels.TestModelConstants;
-import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.digijava.kernel.persistence.PersistenceManager;
 
 /**
@@ -142,7 +143,7 @@ public class FundingColumnGenerator extends ColumnGenerator {
 		runInEngineContext( 
 				new ArrayList<String>(getActivityNames().values()), 
 				eng -> {
-					List<CategAmountCell> cells = AmpTestCase.sorted((List<CategAmountCell>) eng.schema.getFundingFetcher().fetch(eng));
+					List<CategAmountCell> cells = sorted((List<CategAmountCell>) eng.schema.getFundingFetcher().fetch(eng));
 					Map<Long, String> activityNames = getActivityNames();
 					for (CategAmountCell cell : cells) {
 						

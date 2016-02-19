@@ -8,12 +8,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static java.util.stream.Collectors.toSet;
 import static org.dgfoundation.amp.algo.AmpCollections.any;
 
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.PercentageTextCell;
-import org.dgfoundation.amp.nireports.output.NiSplitCell;
 import org.dgfoundation.amp.nireports.output.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
@@ -47,14 +45,6 @@ public class PercentageTokenBehaviour implements Behaviour<NiTextCell> {
 	@Override
 	public NiTextCell getZeroCell() {
 		return new NiTextCell("", -1, null);
-	}
-
-	@Override
-	public NiSplitCell mergeSplitterCells(List<NiCell> splitterCells) {
-		return new NiSplitCell((NiReportColumn<?>) splitterCells.get(0).getEntity(), 
-				splitterCells.get(0).getDisplayedValue(), 
-				splitterCells.stream().map(z -> z.getCell().entityId).collect(toSet()), 
-				splitterCells.stream().anyMatch(z -> z.isUndefinedCell()));
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.digijava.module.fundingpledges.action.DisableableKeyValue;
@@ -84,29 +85,14 @@ public abstract class AmpTestCase extends TestCase
 			assertEquals(corList.get(i), resList.get(i));
 		}
 	}
-	
-	public static<K> List<K> sorted(Collection<K> in) {
-		return sorted(in, null);
-	}
-	
-	/**
-	 * sorts the input list in a copy
-	 * @param in
-	 * @return
-	 */
-	public static<K> List<K> sorted(Collection<K> in, Comparator<K> comp) {
-		ArrayList<K> res = new ArrayList<>(in);
-		res.sort(comp);
-		return res;
-	}
-	
+		
 	/**
 	 * returns a toString() of a sorted list of the elements in the input 
 	 * @param in
 	 * @return
 	 */
 	public static String sortedString(Collection<?> in) {
-		return sorted(in).toString();
+		return AmpCollections.sorted(in).toString();
 	}
 	
 	public<K> String digestCellsList(List<K> cells, Function<K, String> digester) {

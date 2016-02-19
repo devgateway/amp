@@ -5,12 +5,14 @@ package org.dgfoundation.amp.nireports.amp.converters;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.dgfoundation.amp.newreports.DateCell;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.TextCell;
@@ -18,10 +20,12 @@ import org.dgfoundation.amp.nireports.NumberedCell;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.nireports.output.CellVisitor;
 import org.dgfoundation.amp.nireports.output.NiAmountCell;
+import org.dgfoundation.amp.nireports.output.NiDateCell;
 import org.dgfoundation.amp.nireports.output.NiReportData;
 import org.dgfoundation.amp.nireports.output.NiSplitCell;
 import org.dgfoundation.amp.nireports.output.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
+import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.FormatHelper;
 
@@ -40,6 +44,7 @@ public class AmpCellVisitor implements CellVisitor<ReportCell> {
 	private final int levelReset;
 	private boolean isLeaf = false;
 	private final OutputSettings outputSettings;
+	private final DateTimeFormatter dateFormatter;
 	
 	public AmpCellVisitor(ReportSpecification spec, int columnsCount, OutputSettings outputSettings) {
 		if (spec.getSettings() != null && spec.getSettings().getCurrencyFormat() != null) {
@@ -49,6 +54,7 @@ public class AmpCellVisitor implements CellVisitor<ReportCell> {
 		}
 		this.levelReset = columnsCount;
 		this.outputSettings = outputSettings;
+		this.dateFormatter = DateTimeFormatter.ofPattern(MoConstants.DATE_DISPLAY_FORMAT);
 	}
 	
 	public void setLeaf(boolean isLeaf) {
@@ -84,6 +90,13 @@ public class AmpCellVisitor implements CellVisitor<ReportCell> {
 	@Override
 	public ReportCell visit(NiAmountCell cell, CellColumn niCellColumn) {
 		return visitNumberedCell(cell);
+	}
+	
+	@Override
+	public DateCell visit(NiDateCell cell, CellColumn niCellColumn) {
+		List<String> formattedDates = cell.sortedValues.stream().map(date -> date.format(dateFormatter)).collect(Collectors.toList());
+		String formattedValue = String.join(", ", formattedDates);
+		return new DateCell(cell.comparableToken, formattedValue, cell.entityId, cell.entitiesIdsValues);
 	}
 	
 	public String formatNumber(BigDecimal value) {

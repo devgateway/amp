@@ -74,6 +74,11 @@ td.nireport_header {
 	white-space: nowrap;
 	align: center;
 	/* vertical-align: top; */
+	
+	overflow: hidden;
+	word-wrap: break-word;
+	max-width: 100px;
+	white-space: normal;
 }
 
 tr.nireport_header, td.nireport_header {
@@ -93,6 +98,8 @@ table.nireport_table {
 	border-collapse: collapse;
 	font-size:11px;
 	font-family:Arial, Helvetica, sans-serif;
+	table-layout: fixed;
+	width: 100%;
 	/*background-color: #E4EAFA;*/
 }
 
@@ -103,10 +110,11 @@ td.nireport_data_cell {
     cursor: default;
 	font-family:Arial, Helvetica, sans-serif;
 	font-size:11px;
-	white-space: nowrap;
+	//white-space: nowrap;
 	/* background-color: rgb(231, 231, 255); */
 	padding: 5px;
 	padding-left: 12px;
+	white-space: normal;
 }
 
 a.settingsLink:link, a.settingsLink, A.settingsLink:active, A.settingsLink:visited{

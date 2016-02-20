@@ -4,14 +4,14 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
-import org.dgfoundation.amp.nireports.AmountCell;
 import org.dgfoundation.amp.nireports.Cell;
-import org.dgfoundation.amp.nireports.MonetaryAmount;
+import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NumberedCell;
 import org.dgfoundation.amp.nireports.output.NiAmountCell;
 import org.dgfoundation.amp.nireports.output.NiSplitCell;
-import org.dgfoundation.amp.nireports.runtime.MultiHierarchiesTracker;
+import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
@@ -23,7 +23,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 public class TrivialMeasureBehaviour implements Behaviour<NiAmountCell> {
 	public static TrivialMeasureBehaviour getInstance() {return instance;}
 	private final static TrivialMeasureBehaviour instance = new TrivialMeasureBehaviour();
-	private TrivialMeasureBehaviour() {}
+	protected TrivialMeasureBehaviour() {}
 	
 	@Override
 	public TimeRange getTimeRange() {
@@ -78,4 +78,11 @@ public class TrivialMeasureBehaviour implements Behaviour<NiAmountCell> {
 	public boolean isKeepingSubreports() {
 		return true;
 	}
+
+	@Override
+	public ImmutablePair<String, ColumnContents> getTotalCells(NiReportsEngine context, NiReportedEntity<?> entity, ColumnContents fetchedContents) {
+		// trivial measures are copied verbatim to totals
+		return new ImmutablePair<String, ColumnContents>(entity.name, fetchedContents);
+	}
+
 }

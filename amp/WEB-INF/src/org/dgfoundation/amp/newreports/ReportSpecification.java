@@ -52,12 +52,6 @@ public interface ReportSpecification extends Cloneable {
 	public List<SortingInfo> getSorters();
 	
 	public GroupingCriteria getGroupingCriteria();
-	
-//	/**
-//	 * returns true iff the report must hide entities and only show (sub)totals
-//	 * @return
-//	 */
-//	public boolean isSummaryReport();
 			
 	/**
 	 * @return whether columns with no funding data should be displayed or not

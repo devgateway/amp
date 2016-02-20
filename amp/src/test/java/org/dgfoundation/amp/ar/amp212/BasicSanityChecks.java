@@ -350,11 +350,14 @@ public abstract class BasicSanityChecks extends AmpTestCase {
 	@Test
 	public void testDoubleHierarchiesDoNotChangeTotals() {
 		int fails = 0;
+		long start = System.currentTimeMillis();
+		long reps = 0;
 		// double-hierarchy reports
 		for(boolean isSummary:Arrays.asList(true, false)) {
 			for(String hier1Name:hierarchiesToTry)
 				for(String hier2Name:hierarchiesToTry) 
 					if (hier1Name != hier2Name) {
+						reps ++;
 						ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s summary: %b", hier1Name, hier2Name, isSummary), 
 								Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name), 
 								Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
@@ -369,6 +372,8 @@ public abstract class BasicSanityChecks extends AmpTestCase {
 			}
 		}
 		System.err.println("nr of failures: " + fails);
+		long delta = System.currentTimeMillis() - start;
+		System.err.format("I ran %d reports in %d millies (%d per second)\n", reps, delta, reps * 1000 / delta);
 	}
 	
 	@Test

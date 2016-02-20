@@ -4,9 +4,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.algo.VivificatingMap;
@@ -24,6 +26,7 @@ import org.dgfoundation.amp.nireports.amp.dimensions.CategoriesDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
 import org.dgfoundation.amp.nireports.meta.MetaInfoGenerator;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
+import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
@@ -43,7 +46,11 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 
 	public AmpFundingColumn() {
-		super("Funding", null, getFundingViewFilter(), "v_ni_donor_funding", "amp_activity_id", TrivialMeasureBehaviour.getInstance());
+		this("Funding", "v_ni_donor_funding", "amp_activity_id", TrivialMeasureBehaviour.getInstance());
+	}
+
+	protected AmpFundingColumn(String columnName, String viewName, String mainEntityColumn, Behaviour<?> behaviour) {
+		super(columnName, null, getFundingViewFilter(), viewName, mainEntityColumn, behaviour);
 	}
 
 	public static Map<String, String> getFundingViewFilter() {
@@ -96,6 +103,8 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		CalendarConverter calendarConverter = engine.calendar;
 		Map<String, LevelColumn> optionalDimensionCols = buildOptionalDimensionCols(schema);
 		
+		Set<String> ignoredColumns = getIgnoredColumns();
+		
 		try(RsInfo rs = SQLUtils.rawRunQuery(scratchpad.connection, query, null)) {
 			while (rs.rs.next()) {
 				MetaInfoSet metaSet = new MetaInfoSet(metaGenerator);
@@ -104,7 +113,8 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 				long ampActivityId = rs.rs.getLong(this.mainColumn);
 								
 				for(ImmutablePair<MetaCategory, String> longOptionalColumn:longColumnsToFetch)
-					addMetaIfLongExists(metaSet, longOptionalColumn.k, rs.rs, longOptionalColumn.v);
+					if (!ignoredColumns.contains(longOptionalColumn.v))
+						addMetaIfLongExists(metaSet, longOptionalColumn.k, rs.rs, longOptionalColumn.v);
 				
 				for(Map.Entry<String, LevelColumn> optDim:optionalDimensionCols.entrySet())
 					addCoordinateIfLongExists(coos, rs.rs, optDim.getKey(), optDim.getValue());
@@ -137,6 +147,14 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		return cells;
 	}
 	
+	/**
+	 * returns a set of ColumnNames to ignore (for subclasses which only supply a subset of the data)
+	 * @return
+	 */
+	protected Set<String> getIgnoredColumns() {
+		return Collections.emptySet();
+	}
+
 	@Override
 	public List<ReportRenderWarning> performCheck() {
 		return null;

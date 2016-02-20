@@ -64,11 +64,11 @@ public class AmpReportsToReportSpecification {
 	 * @return {@link ReportSpecificationImpl}
 	 * @throws AMPException 
 	 */
-	public static ReportSpecificationImpl convert(AmpReports report) throws AMPException {
+	public static ReportSpecificationImpl convert(AmpReports report) {
 		return (new AmpReportsToReportSpecification(report)).convert();
 	}
 	
-	private ReportSpecificationImpl convert() throws AMPException {
+	private ReportSpecificationImpl convert() {
 		//init data
 		arFilter = FilterUtil.buildFilterFromSource(report);
 		spec = new ReportSpecificationImpl(report.getName(), report.getType().intValue());

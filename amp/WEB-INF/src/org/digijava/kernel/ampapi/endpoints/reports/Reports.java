@@ -131,7 +131,7 @@ public class Reports {
 		ReportSpecificationImpl spec = null;
 		try {
 			spec = AmpReportsToReportSpecification.convert(ampReport);
-		} catch (AMPException e1) {
+		} catch (Exception e1) {
 			JSONResult result = new JSONResult();
 			result.setErrorMessage(e1.getMessage());
 			return result;
@@ -344,7 +344,7 @@ public class Reports {
 		if(spec == null){
 			try {
 				spec = AmpReportsToReportSpecification.convert(ReportsUtil.getAmpReportFromSession(reportId.intValue()));
-			} catch (AMPException e) {
+			} catch (Exception e) {
 				logger.error("Cannot get report from session",e);
 				throw new RuntimeException("Cannot restore report from session: " + reportId);
 			}

@@ -228,7 +228,7 @@ public class ReportsUtil {
 				if (Boolean.TRUE.equals(formParams.get(EPConstants.IS_DYNAMIC))) {
 					try {
 						spec = AmpReportsToReportSpecification.convert(ReportsUtil.getAmpReportFromSession(reportId.intValue()));
-					} catch (AMPException e) {
+					} catch (Exception e) {
 						logger.error("Cannot get report from session",e);
 						throw new RuntimeException("Cannot restore report from session: " + reportId);
 					}

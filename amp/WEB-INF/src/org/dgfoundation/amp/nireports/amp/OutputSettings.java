@@ -6,7 +6,6 @@ package org.dgfoundation.amp.nireports.amp;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.dgfoundation.amp.newreports.ReportWarning;
 
 /**
  * Stores custom output settings and information

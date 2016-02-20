@@ -27,12 +27,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Supplier;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
 import org.dgfoundation.amp.currencyconvertor.CurrencyConvertor;
@@ -61,6 +61,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import com.google.common.base.Function;
 
@@ -175,6 +176,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public static AmpReportsSchema getInstance() {
 		return instance;
 	}
+	
+	protected final static NiReportColumn<CategAmountCell> fundingColumn = new AmpFundingColumn();
 	
 	protected AmpReportsSchema() {
 		no_dimension(ColumnConstants.PROJECT_TITLE, "v_titles");
@@ -393,6 +396,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		with_percentage(ColumnConstants.ZONE, "v_zones", LOC_DIM_USG, LEVEL_ZONE);
 		with_percentage(ColumnConstants.DISTRICT, "v_districts", LOC_DIM_USG, LEVEL_DISTRICT);
 		
+		addMtefColumns();
 		
 		date_column(ColumnConstants.ACTIVITY_CREATED_ON, "v_creation_date");
 		date_column(ColumnConstants.ACTIVITY_UPDATED_ON, "v_updated_date");
@@ -401,6 +405,14 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addTrivialMeasures();
 	}
 		
+	protected void addMtefColumns() {
+		for(int mtefYear:DynamicColumnsUtil.getMtefYears()) {
+			addColumn(new MtefColumn("MTEF " + mtefYear + "/" + (mtefYear + 1), mtefYear, "MTEF", Optional.empty()));
+			addColumn(new MtefColumn("Pipeline MTEF Projections " + mtefYear + "/" + (mtefYear + 1), mtefYear, "Pipeline MTEF", Optional.of(CategoryConstants.MTEF_PROJECTION_PIPELINE)));
+			addColumn(new MtefColumn("Projection MTEF Projections " + mtefYear + "/" + (mtefYear + 1), mtefYear, "Projection MTEF", Optional.of(CategoryConstants.MTEF_PROJECTION_PROJECTION)));
+		}
+	}
+	
 	/**
 	 * This method is created for the following scenario:
 	 * 		- a column was added to AmpReportsSchema
@@ -541,7 +553,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	
 	@Override
 	public NiReportColumn<CategAmountCell> getFundingFetcher() {
-		return new AmpFundingColumn();
+		return fundingColumn;
 	}
 
 	@Override

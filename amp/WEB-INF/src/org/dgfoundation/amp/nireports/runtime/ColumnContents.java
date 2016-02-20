@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.output.NiOutCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 
@@ -63,5 +62,12 @@ public class ColumnContents {
 	public String toString() {
 		return data.toString();
 	}
+
+	public void add(ColumnContents v) {
+		v.data.forEach(this::addCells); 
+	}
 	
+	protected void addCells(long id, List<NiCell> cells) {
+		this.data.computeIfAbsent(id, z -> new ArrayList<>()).addAll(cells);
+	}
 }

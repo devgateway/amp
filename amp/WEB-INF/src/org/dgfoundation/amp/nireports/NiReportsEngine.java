@@ -2,6 +2,7 @@ package org.dgfoundation.amp.nireports;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -316,7 +317,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		TimeRange userRequestedRange = TimeRange.forCriteria(spec.getGroupingCriteria());
 		if (userRequestedRange != TimeRange.NONE)
 			rawData.maybeAddColumn(buildFundingColumn(FUNDING_COLUMN_NAME, rawData, this::separateYears));
-		rawData.maybeAddColumn(buildFundingColumn(TOTALS_COLUMN_NAME, rawData, Function.identity()));
+		rawData.maybeAddColumn(buildTotalsColumn(TOTALS_COLUMN_NAME, rawData));
 		
 		GroupColumn catData = rawData;
 		this.headers = new NiHeaderInfo(catData, this.actualHierarchies.size());
@@ -378,6 +379,36 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		});
 		GroupColumn res = postprocessor.apply(fundingColumn);
 		return res;
+	}
+	
+	/**
+	 * builds the initial "totals" column
+	 * @param columnName
+	 * @param parentColumn
+	 * @return
+	 */
+	protected Column buildTotalsColumn(String columnName, GroupColumn parentColumn) {
+		LinkedHashMap<NiReportedEntity<?>, ColumnContents> fetchedEntities = new LinkedHashMap<>();
+		
+		// step1: collect fetched entitities in a unified map, measures after columns
+		fetchedMeasures.forEach((name, contents) -> {fetchedEntities.put(schema.getMeasures().get(name), contents);});
+		fetchedColumns.forEach((name, contents) -> {fetchedEntities.put(schema.getColumns().get(name), contents);});
+		
+		//step2: collect/generate the totals cells
+		LinkedHashMap<String, ImmutablePair<NiReportedEntity<?>, ColumnContents>> totalsColumnsContents = new LinkedHashMap<>();
+		fetchedEntities.forEach((entity, contents) -> {
+			ImmutablePair<String, ColumnContents> measTotals = entity.getBehaviour().getTotalCells(this, entity, contents);  //meas.getBehaviour().getCellsFor
+			if (measTotals != null)
+				totalsColumnsContents.computeIfAbsent(measTotals.k, z -> new ImmutablePair<>(entity, new ColumnContents(Collections.emptyMap()))).v.add(measTotals.v);
+		});
+
+		//step3: create the Ni columns based on the collected cells
+		GroupColumn totalsColumn = new GroupColumn(columnName, null, parentColumn, null);
+		totalsColumnsContents.forEach((name, cont) -> {
+			totalsColumn.addColumn(new CellColumn(name, cont.v, totalsColumn, cont.k, cont.k.getBehaviour(), new NiColSplitCell(PSEUDOCOLUMN_MEASURE, new ComparableValue<String>(name, name))));
+		});
+		
+		return totalsColumn;
 	}
 	
 	protected void runComputedMeasures() {

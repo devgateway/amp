@@ -59,11 +59,10 @@ public class NiReportHtmlRenderer {
 		String pageHeader = String.format("<html><head>%s\n%s</head><body> <div style='position: fixed; left: 0; right: 0; top: 0; bottom: 0; z-index: 9999; background-size: cover; background-image: url(/TEMPLATE/ampTemplate/nireports/nickel3.png)'></div>%s", 
 				"<link href='/TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>", 
 				"<link href='/TEMPLATE/ampTemplate/nireports/nireports_view.css' rel='stylesheet' type='text/css'>",
-				""
-//				String.format("<div style='padding: 5px; margin: 20px; border: 1px dotted black; border-radius: 7px'>%s\n%s\n%s</div>", 
-//						String.format("<p style='margin: 10px'>%s</p>", reportRunTime),
-//						String.format("<p style='margin: 10px'>%s</p>", reportRenderTime),
-//						String.format("<p style='margin: 10px'>%s</p>", reportSize))
+				String.format("<div style='padding: 5px; margin: 20px; border: 1px dotted black; border-radius: 7px'>%s\n%s\n%s</div>", 
+						String.format("<p style='margin: 10px'>%s</p>", reportRunTime),
+						String.format("<p style='margin: 10px'>%s</p>", reportRenderTime),
+						String.format("<p style='margin: 10px'>%s</p>", reportSize))
 						);
 		
 		logger.error(reportRunTime);
@@ -93,7 +92,7 @@ public class NiReportHtmlRenderer {
 				ReportHeadingCell rhc = col.getReportHeaderCell();
 				String cellHtml = col.splitCell == null ? rhc.getName() : 
 					String.format("%s<br /><font class='headermeta'>%s -> %s</font>", rhc.getName(), col.splitCell.entityType, col.splitCell.info.getComparable());
-				cellHtml = rhc.getName(); // TODO: temp
+				//cellHtml = rhc.getName(); // TODO: temp
 				res.append(String.format("<td class='nireport_header' rowSpan='%d' colSpan='%d'>%s</td>", rhc.getRowSpan(), rhc.getColSpan(), cellHtml));
 			}
 			res.append("</tr>\n");

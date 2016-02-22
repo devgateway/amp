@@ -50,7 +50,7 @@ public class NiReportHtmlRenderer {
 		String renderedReport = new NiReportHtmlRenderer(reportRun.reportOut, reportRun.headers, spec).render();
 		long renderTime = System.currentTimeMillis() - start;
 		int reportX = reportRun.headers.leafColumns.size();
-		int reportY = reportRun.reportOut.getIds().size();
+		int reportY = reportRun.reportOut.getRowSpan(false);
 		
 		String reportRunTime = String.format("report runtime: %d millies CPU, %d millies wallclock", reportRun.timings.getTotalTime(), reportRun.wallclockTime);
 		String reportRenderTime = String.format("report rendertime: %d millies", renderTime);

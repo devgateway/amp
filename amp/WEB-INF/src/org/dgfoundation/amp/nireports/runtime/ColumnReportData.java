@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
@@ -18,6 +19,8 @@ import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
+import static org.dgfoundation.amp.algo.AmpCollections.remap;
+import static org.dgfoundation.amp.algo.AmpCollections.keepEntries;
 /**
  * a leaf of a report - the bottom hierarchy, without any subreports
  * @author Dolghier Constantin
@@ -119,6 +122,8 @@ public class ColumnReportData extends ReportData {
 
 		IdsAcceptorsBuilder bld = context;
 		List<ColumnReportData> newChildren = new ArrayList<>();
+		boolean keepEmptyFundingRows = context.spec.isDisplayEmptyFundingRows();
+		
 		for(long catId:orderedCatIds) {
 			//NiCell splitCell = splitters.get(catId).get(0); // choose any, because they all have the same coordinates
 			NiSplitCell splitCell = splitters.get(catId);
@@ -126,7 +131,9 @@ public class ColumnReportData extends ReportData {
 			IdsAcceptor acceptor = bld.buildAcceptor(splitCell.getLevelColumn().dimensionUsage, splitCell.getLevelColumn().getCoordinate(catId));
 			acceptors.put(splitCell.getLevelColumn().dimensionUsage, acceptor);
 			
-			boolean keepSubreport = context.spec.isDisplayEmptyFundingRows();
+//			boolean keepSubreport = context.spec.isDisplayEmptyFundingRows();
+			Set<Long> entitiesWithFunding = new HashSet<>();
+			
 			Map<CellColumn, ColumnContents> subContents = new HashMap<>();
 			for(CellColumn cc:contents.keySet()) {
 				ColumnContents oldContents = contents.get(cc);
@@ -135,10 +142,14 @@ public class ColumnReportData extends ReportData {
 //					System.err.format("splitting %s.%s by %s.%s; %d cells became %d: %s\n", this, cc.getHierName(), z.getHierName(), splitCell.toString(), oldContents.countCells(), newContents.countCells(), newContents);
 				subContents.put(cc, newContents);
 				
-				keepSubreport |= (cc.getBehaviour().isKeepingSubreports() && !newContents.data.isEmpty());
+				if (cc.getBehaviour().isKeepingSubreports())
+					entitiesWithFunding.addAll(newContents.data.keySet());
 			}
-			if (keepSubreport) {
-				ColumnReportData sub = new ColumnReportData(context, splitCell, subContents);
+			if (keepEmptyFundingRows || (!entitiesWithFunding.isEmpty())) {
+				ColumnReportData sub = new ColumnReportData(context, splitCell, 
+					keepEmptyFundingRows ? 
+						subContents : 
+						remap(subContents, zz -> new ColumnContents(keepEntries(zz.data, entitiesWithFunding)), null));
 				newChildren.add(sub);
 			}
 		}

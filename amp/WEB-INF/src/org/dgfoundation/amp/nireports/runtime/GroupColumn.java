@@ -91,7 +91,7 @@ public class GroupColumn extends Column {
 
 	@Override
 	public GroupColumn verticallySplitByCategory(VSplitStrategy strategy, GroupColumn newParent) {
-		GroupColumn res = new GroupColumn(name, null, newParent, splitCell);
+		GroupColumn res = asGroupColumn(null, newParent);
 		for(Column col:getSubColumns())
 			res.addColumn(col.verticallySplitByCategory(strategy, res));
 		

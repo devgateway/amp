@@ -19,8 +19,10 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.output.NiOutCell;
 import org.dgfoundation.amp.nireports.output.NiSplitCell;
+import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
+import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
@@ -133,5 +135,18 @@ public interface Behaviour<V extends NiOutCell> {
 	
 	public default ImmutablePair<String, ColumnContents> getTotalCells(NiReportsEngine context, NiReportedEntity<?> entity, ColumnContents fetchedContents) {
 		return null; // by default no entities go to totals
+	}
+	
+	public default List<VSplitStrategy> getSubMeasureHierarchies(NiReportsEngine context) {
+		return null; // by default entities do not split sub-measure
+	}
+	
+	/**
+	 * whether the reports engine should delete leaves of this column when they are empty report-wise
+	 * @param column
+	 * @return
+	 */
+	public default boolean shouldDeleteLeafIfEmpty(CellColumn column) {
+		return false;
 	}
 }

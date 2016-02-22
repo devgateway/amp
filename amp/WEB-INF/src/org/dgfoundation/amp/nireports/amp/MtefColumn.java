@@ -17,16 +17,22 @@ public class MtefColumn extends AmpFundingColumn {
 
 	final int mtefYear;
 	final Optional<Long> adjustmentTypeCode;
-	
-	public MtefColumn(String columnName, int mtefYear, String totalColumnName, Optional<HardCodedCategoryValue> adjustmentType) {
-		super(columnName, "v_ni_mtef_funding", "amp_activity_id", new MtefBehaviour(totalColumnName));
+	final boolean directed;
+
+	public MtefColumn(String columnName, int mtefYear, String totalColumnName, boolean directed, Optional<HardCodedCategoryValue> adjustmentType) {
+		super(columnName, "v_ni_mtef_funding", "amp_activity_id", directed ? new DirectedMeasureBehaviour(totalColumnName) : new MtefBehaviour(totalColumnName));
 		this.mtefYear = mtefYear;
 		this.adjustmentTypeCode = adjustmentType.map(z -> z.existsInDatabase() ? z.getIdInDatabase() : -1);
+		this.directed = directed;
 	}
 	
 	@Override
 	protected String buildCondition(NiReportsEngine engine) {
-		return String.format("%s AND (source_role_id = (SELECT amp_role_id FROM amp_role WHERE role_code = 'DN')) AND (mtef_year = %d)%s", super.buildCondition(engine), mtefYear, adjustmentTypeCode.isPresent() ? String.format(" AND (adjustment_type = %d)", adjustmentTypeCode.get()) : "");
+		String directedCond = directed ? "(source_role_id IS NOT NULL) AND (recipient_role_id IS NOT NULL) AND (recipient_org_id IS NOT NULL) AND (donor_org_id IS NOT NULL)" : 
+			"source_role_id = (SELECT amp_role_id FROM amp_role WHERE role_code = 'DN')"; 
+		
+		return String.format("%s AND (%s) AND (mtef_year = %d)%s", super.buildCondition(engine), directedCond, mtefYear,
+			adjustmentTypeCode.isPresent() ? String.format(" AND (adjustment_type = %d)", adjustmentTypeCode.get()) : "");
 	}
 	
 	@Override

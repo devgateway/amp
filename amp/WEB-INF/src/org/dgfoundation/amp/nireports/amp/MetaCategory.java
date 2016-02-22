@@ -17,9 +17,12 @@ public enum MetaCategory {
 	PLEDGE_ID("pledge_id"),
 	FUNDING_STATUS("funding_status"),
 	MODE_OF_PAYMENT("mode_of_payment"),
-	RECIPIENT_ORG("recipient_org"),
+	
+	SOURCE_ROLE("source_role"),
+	SOURCE_ORG("source_org"),
 	RECIPIENT_ROLE("recipient_role"),
-	SOURCE_ROLE("source_role");
+	RECIPIENT_ORG("recipient_org"),
+	DIRECTED_TRANSACTION_FLOW("directed_transaction_flow");
 	
 	public final String category;
 	private MetaCategory(String category) {

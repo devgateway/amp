@@ -157,6 +157,29 @@ public class AmpCollections {
 	}
 	
 	/**
+	 * @param in
+	 * @param keysToKeep
+	 * @return
+	 */
+	public static<K, V> Map<K, V> keepEntries(Map<K, V> in, Set<K> keysToKeep) {
+		return in.entrySet().stream().filter(z -> keysToKeep.contains(z.getKey())).collect(Collectors.toMap(z -> z.getKey(), z -> z.getValue()));
+	}
+	
+	/**
+	 * mutates in-place a map 
+	 * @param in
+	 * @param keysToKeep
+	 */
+	public static<K, V> void mutableKeepEntries(Map<K, V> in, Set<K> keysToKeep) {
+		Iterator<Map.Entry<K, V>> it = in.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<K, V> z = it.next();
+			if (!keysToKeep.contains(z.getKey()))
+				it.remove();
+		}
+	}
+	
+	/**
 	 * returns a sorted-map-view of the input map, with its keys sorted according to a given comparator
 	 * @param in
 	 * @param comp

@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.algo.VivificatingMap;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
@@ -76,7 +77,8 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 			new ImmutablePair<>(MetaCategory.PLEDGE_ID, "pledge_id"),
 			new ImmutablePair<>(MetaCategory.TRANSACTION_TYPE, "transaction_type"),			
 			new ImmutablePair<>(MetaCategory.AGREEMENT_ID, "agreement_id"),
-			new ImmutablePair<>(MetaCategory.RECIPIENT_ORG, "recipient_org_id")
+			new ImmutablePair<>(MetaCategory.RECIPIENT_ORG, "recipient_org_id"),
+			new ImmutablePair<>(MetaCategory.SOURCE_ORG, "donor_org_id")
 			);
 	
 	@Override
@@ -134,6 +136,15 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 				addMetaIfIdValueExists(metaSet, "recipient_role_id", MetaCategory.RECIPIENT_ROLE, rs.rs, roles);
 				addMetaIfIdValueExists(metaSet, "source_role_id", MetaCategory.SOURCE_ROLE, rs.rs, roles);
 				addMetaIfIdValueExists(metaSet, "adjustment_type", MetaCategory.ADJUSTMENT_TYPE, rs.rs, adjustmentTypes);
+				
+				if (metaSet.hasMetaInfo(MetaCategory.SOURCE_ROLE.category) && metaSet.hasMetaInfo(MetaCategory.RECIPIENT_ROLE.category)
+					&& metaSet.hasMetaInfo(MetaCategory.SOURCE_ORG.category) && metaSet.hasMetaInfo(MetaCategory.RECIPIENT_ORG.category)) 
+				{
+						metaSet.add(MetaCategory.DIRECTED_TRANSACTION_FLOW.category,
+							String.format("%s-%s",
+									ArConstants.userFriendlyNameOfRole(metaSet.getMetaInfo(MetaCategory.SOURCE_ROLE.category).v.toString()), 
+									ArConstants.userFriendlyNameOfRole(metaSet.getMetaInfo(MetaCategory.RECIPIENT_ROLE.category).v.toString())));
+				}
 				
 				BigDecimal usedExchangeRate = BigDecimal.valueOf(schema.currencyConvertor.getExchangeRate(srcCurrency.getCurrencyCode(), usedCurrency.getCurrencyCode(), fixed_exchange_rate == null ? null : fixed_exchange_rate.doubleValue(), transactionDate));
 				MonetaryAmount amount = new MonetaryAmount(transactionAmount.multiply(usedExchangeRate), transactionAmount, srcCurrency, transactionDate, scratchpad.getPrecisionSetting());

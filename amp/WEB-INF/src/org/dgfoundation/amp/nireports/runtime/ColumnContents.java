@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.output.NiOutCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 
@@ -58,6 +60,10 @@ public class ColumnContents {
 		return res;
 	}
 
+//	public ColumnContents keepEntries(Set<Long> ids) {
+//		return new ColumnContents(AmpCollections.keepEntries(data, ids));
+//	}
+	
 	@Override
 	public String toString() {
 		return data.toString();

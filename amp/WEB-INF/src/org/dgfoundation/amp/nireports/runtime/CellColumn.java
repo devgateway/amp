@@ -43,14 +43,14 @@ public class CellColumn extends Column {
 
 	@Override
 	public void forEachCell(Consumer<NiCell> acceptor) {
-		contents.data.values().forEach(list -> list.forEach(cell -> acceptor.accept(cell)));
+		contents.data.values().forEach(list -> list.forEach(acceptor::accept));
 	}
 
 	@Override
 	public GroupColumn verticallySplitByCategory(VSplitStrategy strategy, GroupColumn newParent) {
 		SortedMap<ComparableValue<String>, List<NiCell>> values = new TreeMap<>();
 		this.forEachCell(cell -> values.computeIfAbsent(strategy.categorize(cell), z -> new ArrayList<>()).add(cell));
-		GroupColumn res = new GroupColumn(this.name, null, newParent, this.splitCell);
+		GroupColumn res = this.asGroupColumn(null, newParent);
 		List<ComparableValue<String>> subColumnNames = strategy.getSubcolumnsNames(values.keySet());
 		subColumnNames.forEach(key -> res.addColumn(
 			new CellColumn(key.getValue(), 

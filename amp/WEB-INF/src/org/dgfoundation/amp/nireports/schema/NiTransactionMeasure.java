@@ -20,7 +20,11 @@ public class NiTransactionMeasure extends NiReportMeasure<CategAmountCell> {
 	public final Predicate<CategAmountCell> criterion;
 	
 	public NiTransactionMeasure(String measureName, Predicate<CategAmountCell> criterion, String description) {
-		super(measureName, TrivialMeasureBehaviour.getInstance(), description);
+		this(measureName, criterion, TrivialMeasureBehaviour.getInstance(), description);
+	}
+	
+	public NiTransactionMeasure(String measureName, Predicate<CategAmountCell> criterion, Behaviour<?> behaviour, String description) {
+		super(measureName, behaviour, description);
 		this.criterion = criterion;
 	}
 	

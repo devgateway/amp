@@ -13,7 +13,7 @@ import org.dgfoundation.amp.nireports.schema.Behaviour;
  * 1. (TODO) generating subclasses
  * 2. mapping individual cells to subclasses
  * 3. specifying the behaviour of generated {@link CellColumn}s
- * @author Dolghier Constanti
+ * @author Dolghier Constantin
  *
  */
 public interface VSplitStrategy {
@@ -45,6 +45,22 @@ public interface VSplitStrategy {
 			@Override
 			public List<ComparableValue<String>> getSubcolumnsNames(Set<ComparableValue<String>> existant) {
 				return subColumnNames == null ? VSplitStrategy.super.getSubcolumnsNames(existant) : subColumnNames.apply(existant);
+			}
+			
+			@Override
+			public String getEntityType() {
+				return entityType;
+			}
+		};
+	}
+	
+	
+	public static VSplitStrategy build(Function<NiCell, ComparableValue<String>> cat, String entityType) {
+		return new VSplitStrategy() {
+			
+			@Override
+			public ComparableValue<String> categorize(NiCell cell) {
+				return cat.apply(cell);
 			}
 			
 			@Override

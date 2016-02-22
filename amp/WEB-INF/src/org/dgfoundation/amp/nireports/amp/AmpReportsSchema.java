@@ -30,6 +30,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
@@ -81,6 +82,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static CategoriesDimension catsDimension = CategoriesDimension.instance;
 	public final static NiDimension agreementsDimension = SqlSourcedNiDimension.buildDegenerateDimension("agrs", "amp_agreement", "id");
 	
+	/**
+	 * the pseudocolumn of the header Splitter for cells which are funding flows
+	 */
+	public final static String PSEUDOCOLUMN_FLOW = "#amp#FundingFlow";
 
 	@SuppressWarnings("serial")
 	public final static Map<String, String> columnDescriptions = new HashMap<String, String>() {{
@@ -141,14 +146,14 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	/**
 	 * the name of the "Donor" instance of the Organisation Dimension
 	 */
-	public final static NiDimensionUsage DONOR_DIM_USG = orgsDimension.getDimensionUsage("DN");
-	public final static NiDimensionUsage IA_DIM_USG = orgsDimension.getDimensionUsage("IA");
-	public final static NiDimensionUsage BA_DIM_USG = orgsDimension.getDimensionUsage("BA");
-	public final static NiDimensionUsage EA_DIM_USG = orgsDimension.getDimensionUsage("EA");
-	public final static NiDimensionUsage RO_DIM_USG = orgsDimension.getDimensionUsage("RO");
-	public final static NiDimensionUsage CA_DIM_USG = orgsDimension.getDimensionUsage("CA");
-	public final static NiDimensionUsage RG_DIM_USG = orgsDimension.getDimensionUsage("RG");
-	public final static NiDimensionUsage SG_DIM_USG = orgsDimension.getDimensionUsage("SG");	
+	public final static NiDimensionUsage DONOR_DIM_USG = orgsDimension.getDimensionUsage(Constants.FUNDING_AGENCY);
+	public final static NiDimensionUsage IA_DIM_USG = orgsDimension.getDimensionUsage(Constants.IMPLEMENTING_AGENCY);
+	public final static NiDimensionUsage BA_DIM_USG = orgsDimension.getDimensionUsage(Constants.BENEFICIARY_AGENCY);
+	public final static NiDimensionUsage EA_DIM_USG = orgsDimension.getDimensionUsage(Constants.EXECUTING_AGENCY);
+	public final static NiDimensionUsage RO_DIM_USG = orgsDimension.getDimensionUsage(Constants.RESPONSIBLE_ORGANISATION);
+	public final static NiDimensionUsage CA_DIM_USG = orgsDimension.getDimensionUsage(Constants.CONTRACTING_AGENCY);
+	public final static NiDimensionUsage RG_DIM_USG = orgsDimension.getDimensionUsage(Constants.REGIONAL_GROUP);
+	public final static NiDimensionUsage SG_DIM_USG = orgsDimension.getDimensionUsage(Constants.SECTOR_GROUP);	
 	
 	public final static NiDimensionUsage PS_DIM_USG = secsDimension.getDimensionUsage("Primary");
 	public final static NiDimensionUsage SS_DIM_USG = secsDimension.getDimensionUsage("Secondary");	
@@ -419,13 +424,15 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		date_column(ColumnConstants.PROPOSED_START_DATE, "v_proposed_start_date");
 		
 		addTrivialMeasures();
+		addFundingFlowMeasures();
 	}
 		
 	protected void addMtefColumns() {
 		for(int mtefYear:DynamicColumnsUtil.getMtefYears()) {
-			addColumn(new MtefColumn("MTEF " + mtefYear + "/" + (mtefYear + 1), mtefYear, "MTEF", Optional.empty()));
-			addColumn(new MtefColumn("Pipeline MTEF Projections " + mtefYear + "/" + (mtefYear + 1), mtefYear, "Pipeline MTEF", Optional.of(CategoryConstants.MTEF_PROJECTION_PIPELINE)));
-			addColumn(new MtefColumn("Projection MTEF Projections " + mtefYear + "/" + (mtefYear + 1), mtefYear, "Projection MTEF", Optional.of(CategoryConstants.MTEF_PROJECTION_PROJECTION)));
+			addColumn(new MtefColumn("MTEF " + mtefYear + "/" + (mtefYear + 1), mtefYear, "MTEF", false, Optional.empty()));
+			addColumn(new MtefColumn("Pipeline MTEF Projections " + mtefYear + "/" + (mtefYear + 1), mtefYear, "Pipeline MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PIPELINE)));
+			addColumn(new MtefColumn("Projection MTEF Projections " + mtefYear + "/" + (mtefYear + 1), mtefYear, "Projection MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PROJECTION)));
+			addColumn(new MtefColumn("Real MTEF " + mtefYear + "/" + (mtefYear + 1), mtefYear, "Real MTEF", true, Optional.empty()));
 		}
 	}
 	
@@ -506,6 +513,12 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 //		addMeasure(new AmpTrivialMeasure(MeasureConstants.PIPELINE_ESTIMATED_DISBURSEMENTS, Constants.PIPELINE, "Pipeline", false));
 //		addMeasure(new AmpTrivialMeasure(MeasureConstants.PIPELINE_RELEASE_OF_FUNDS, Constants.PIPELINE, "Pipeline", false));
 		
+		return this;
+	}
+	
+	private AmpReportsSchema addFundingFlowMeasures() {
+		addMeasure(new AmpTrivialMeasure(MeasureConstants.REAL_DISBURSEMENTS, Constants.DISBURSEMENT, "Actual", true));
+		addMeasure(new AmpTrivialMeasure(MeasureConstants.REAL_COMMITMENTS, Constants.COMMITMENT, "Actual", true));
 		return this;
 	}
 	

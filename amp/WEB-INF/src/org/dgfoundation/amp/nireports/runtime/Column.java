@@ -59,6 +59,10 @@ public abstract class Column {
 		this.hierarchicalName = parent == null ? name : String.format("%s / %s", parent.getHierName(), name);
 	}
 	
+	public GroupColumn asGroupColumn(List<Column> subColumns, GroupColumn newParent) {
+		return new GroupColumn(this.name, subColumns, newParent, this.splitCell);
+	}
+	
 	public String getHierName() {
 		return hierarchicalName;
 	}

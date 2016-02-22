@@ -24,10 +24,8 @@ import org.apache.wicket.markup.html.form.CheckGroup;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.RadioGroup;
-import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.apache.wicket.util.convert.IConverter;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.behaviors.ComponentVisualErrorBehavior2;
@@ -59,7 +57,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	IndicatingAjaxLink editTooltipLink;
     IndicatingAjaxLink editTitleLink;
     protected String fmName;
-	protected Image tooltipIcon;
+	protected WebMarkupContainer tooltipIcon;
 	protected boolean hideLabel;
 	protected boolean showTooltipIfLabelHidden;
 	protected boolean showTranslatorIconIfLabelHidden;
@@ -370,7 +368,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
         editTooltipLink.setVisible(showTooltipEditor);
         editTooltipLink.add(new AttributeModifier("data-ot",TranslatorWorker.translateText("Please click to enter tooltip, save an empty value for disabling the tooltip")));
         add(editTooltipLink);
-        tooltipIcon=new Image("tooltip_icon", new ContextRelativeResource("/TEMPLATE/ampTemplate/img_2/tooltip-icon.png"));
+        tooltipIcon= new WebMarkupContainer("tooltip_icon");
         
         tooltipIcon.setVisible(false);
         add(tooltipIcon);

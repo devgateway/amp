@@ -46,7 +46,7 @@
      NULL AS disaster_response,
      NULL as recipient_org_id, NULL as recipient_role_id,
      (SELECT amp_role_id FROM amp_role WHERE role_code='DN')
-    FROM amp_annual_project_budget apb
+    FROM amp_annual_project_budget apb;
 
  <!-- now here it comes the debug counterpart -->
 	DROP VIEW IF EXISTS v_ni_donor_funding_debug;

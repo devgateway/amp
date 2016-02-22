@@ -95,7 +95,17 @@ public class TrnTag
 
     private int max;
     private Boolean invisibleLinks = null;
+    
+    private boolean neverShowLinks = false; 
 
+
+	public boolean isNeverShowLinks() {
+		return neverShowLinks;
+	}
+
+	public void setNeverShowLinks(boolean neverShowLinks) {
+		this.neverShowLinks = neverShowLinks;
+	}
 
 	public Boolean getInvisibleLinks() {
 		return invisibleLinks;
@@ -306,10 +316,15 @@ public class TrnTag
 
         //Compute back url...
         backUrl = "";
-        showLinks = TranslatorWorker.isTranslationMode(request);
-        if (!showLinks) {
-            showLinks = linkAlwaysVisible.booleanValue();
+        if(neverShowLinks){
+        	showLinks = false;
+        }else{
+        	showLinks = TranslatorWorker.isTranslationMode(request);
+            if (!showLinks) {
+                showLinks = linkAlwaysVisible.booleanValue();
+            }
         }
+        
 
         //Determine Locale
         String langCode = getLocale();

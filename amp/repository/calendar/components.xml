@@ -14,14 +14,14 @@
 	<page page="adminEvents" name="calendarAdmin" title="Blank site page title with administer calendar body" />
 	<page page="settings" name="calendarItemsSettings" title="Blank site page title with calendar settings body" />
 
-    <page page="viewEvents" name="viewEvents" title="View Events" />
-    <page page="noEvents" name="noEvents" title="No Events" />
-    <page page="calendarOrgPopupLayout" name="calendarOrgPopupLayout" title="Calendar Organisation Popup" />
-    <page page="showAmpEvent" name="showAmpEvent" title="Show Amp Event" />
-    <page page="previewAmpEvent" name="previewAmpEvent" title="Preview Amp Event" />   
-    <page page="recurringEventPopupLayout" name="recurringEventPopupLayout" title="Recurring Event" />
-    <page page="printViewPopupLayout" name="printViewPopupLayout" title="Print Preview" />
-    <page page="printPreviewPopupLayout" name="printPreviewPopupLayout" title="Print Preview" />
+    <page page="viewEvents" name="viewEvents" title=" - View Events" />
+    <page page="noEvents" name="noEvents" title=" - No Events" />
+    <page page="calendarOrgPopupLayout" name="calendarOrgPopupLayout" title=" - Calendar Organisation Popup" />
+    <page page="showAmpEvent" name="showAmpEvent" title=" - Show Amp Event" />
+    <page page="previewAmpEvent" name="previewAmpEvent" title=" - Preview Amp Event" />   
+    <page page="recurringEventPopupLayout" name="recurringEventPopupLayout" title=" - Recurring Event" />
+    <page page="printViewPopupLayout" name="printViewPopupLayout" title=" - Print Preview" />
+    <page page="printPreviewPopupLayout" name="printPreviewPopupLayout" title=" - Print Preview" />
 </secondary-pages>
 
 <module>

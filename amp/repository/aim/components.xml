@@ -3,12 +3,12 @@
 <secondary-pages>
 	
 
-	<page name="allContacts" page="viewAddressBook" title="Address Book"/>
-	<page name="addContact" page="addEditAmpContact" title="Add/Edit Contact"/>
+	<page name="allContacts" page="viewAddressBook" title=" - Address Book"/>
+	<page name="addContact" page="addEditAmpContact" title=" - Add/Edit Contact"/>
 
 	<page name="viewAhSurveyFormulas" title=" - View AhSurvey Formulas" />
 	<page name="viewAhSurveis" title=" - View AhSurveis " />
-	<page name="addSectorToIndicator" title="Add Sector" />
+	<page name="addSectorToIndicator" title="- Add Sector" />
 	
 	<page name="manageGPI" title="Manage Global Partnership Indicators" />
 
@@ -382,13 +382,13 @@
     <page page="manageClassificationsConfig" name="manageClassificationsConfig" title="Manage Classifications Configuration" />
     <page page="editSectorClassConfig" name="editSectorClassConfig" title="Add/Edit Classifications Configuration" />
     <!-- quartzJobManager settings -->
-    <page name="quartzJobManager" title="Job Manager" />
-    <page name="addQuartzJob" title="Add Job" />
-    <page name="editQuartzJob" title="Edit Job" />
+    <page name="quartzJobManager" title="- Job Manager" />
+    <page name="addQuartzJob" title=" - Add Job" />
+    <page name="editQuartzJob" title=" - Edit Job" />
 
-    <page name="addQuartzJobClass" title="Add Job Class" />
-    <page name="editQuartzJobClass" title="Edit Job Class" />
-    <page name="quartzJobClassManager" title="Job Class Manager" />
+    <page name="addQuartzJobClass" title=" - Add Job Class" />
+    <page name="editQuartzJobClass" title=" - Edit Job Class" />
+    <page name="quartzJobClassManager" title=" - Job Class Manager" />
 
 	<page name="addPledge" page="addPledge" title =" - Add Pledge " />
 	<page name="viewPledgesList" page="viewPledgesList" title =" - Pledges List " />

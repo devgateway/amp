@@ -4,7 +4,7 @@
 	<page  name="viewSelectedMessage" title="view Message"/>
 	<page name="allMessages" title="show all messages"/>
 	<page name="forwardMessage" title="Forward Message"/>
-	<page page="messageSettings" name="messageSettings" title="Message Settings"></page>
+	<page page="messageSettings" name="messageSettings" title=" - Message Settings"></page>
 	<page page="templateAlertsManager" name="templateAlertsManager" title="TemplateAlert Manager"/>
 	<page page="addOrEditTemplate" name="addOrEditTemplate" title="Add/Edit Template"/>
 	<page page="exportImportTemplatesPage" name="exportImportTemplatesPage" title="Export/Importy Templates"/>

@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <config>
 	<secondary-pages>
-		<page name="sectorDashboard" title="Visualization Dashboard" />
-		<page name="donorDashboard" title="Visualization Dashboard" />
-		<page name="regionDashboard" title="Visualization Dashboard" />
-		<page name="showDashboard" title="Visualization Dashboard" />
-		<page name="showProjectsList" title="Visualization Dashboard" />
-		<page name="viewDashboardsList" page="viewDashboardsList" title ="Dashboards List" />
-		<page name="addDashboard" page="addDashboard" title ="Add Dashboard" />
-		<page name="dashboardLauncher" page="dashboardLauncher" title ="Dashboard Launcher" />
-		<page name="launchDashboard" page="launchDashboard" title ="Launch Dashboard" />
-		<page name="exportProjectList" page="exportProjectList" title ="Visualization Dashboard" />
+		<page name="sectorDashboard" title=" - Visualization Dashboard" />
+		<page name="donorDashboard" title=" - Visualization Dashboard" />
+		<page name="regionDashboard" title=" - Visualization Dashboard" />
+		<page name="showDashboard" title=" - Visualization Dashboard" />
+		<page name="showProjectsList" title=" - Visualization Dashboard" />
+		<page name="viewDashboardsList" page="viewDashboardsList" title =" - Dashboards List" />
+		<page name="addDashboard" page="addDashboard" title =" - Add Dashboard" />
+		<page name="dashboardLauncher" page="dashboardLauncher" title =" - Dashboard Launcher" />
+		<page name="launchDashboard" page="launchDashboard" title =" - Launch Dashboard" />
+		<page name="exportProjectList" page="exportProjectList" title =" - Visualization Dashboard" />
 	</secondary-pages>
 	
 </config>

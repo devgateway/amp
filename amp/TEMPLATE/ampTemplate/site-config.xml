@@ -103,7 +103,7 @@
 		
 		 
 		<layout name="ampMessageLayout" file="ampMessagesLayout.jsp">
-			<put name="title">MESSAGES</put>
+			<put name="title"> - MESSAGES</put>
 			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>

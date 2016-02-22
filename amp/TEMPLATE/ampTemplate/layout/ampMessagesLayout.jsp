@@ -19,10 +19,10 @@
 			String key=(title.replaceAll(" ",""));
 			%>
 			<c:set var="key">aim:pagetitle:<%=key%></c:set>
-				<digi:trn>Aid Management Platform </digi:trn> 
-				<digi:trn key="${key}">
-					<%=title%>
-				</digi:trn>
+		<digi:trn neverShowLinks = "true">Aid Management Platform </digi:trn>
+		<digi:trn key="${key}" neverShowLinks ="true">
+			<%=title%>
+		</digi:trn>
 		</title>
 		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 		<META HTTP-EQUIV="Expires" CONTENT="0">

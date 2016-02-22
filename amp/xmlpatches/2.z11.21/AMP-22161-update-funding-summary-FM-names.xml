@@ -11,10 +11,10 @@
 				UPDATE amp_modules_visibility SET name = '/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments/Planned Commitments' 														
 			   	WHERE name = '/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments/PlannedCommitments';
 
-				UPDATE amp_modules_visibility SET name = '/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments/Planned Disbursements' 														
+				UPDATE amp_modules_visibility SET name = '/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements/Planned Disbursements' 														
 				WHERE name = '/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements/PlannedDisbursements';
 
-				UPDATE amp_modules_visibility SET name = '/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments/Planned Expenditures' 														
+				UPDATE amp_modules_visibility SET name = '/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures/Planned Expenditures' 														
 				WHERE name = '/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures/PlannedExpenditures';
 			</lang>
 		</script>

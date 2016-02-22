@@ -3,8 +3,10 @@ package org.dgfoundation.amp.codegenerators;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Map;
 
 import org.apache.commons.lang.WordUtils;
+import org.dgfoundation.amp.nireports.schema.NiDimension;
 
 /**
  * Class for generating NiColumns.
@@ -37,12 +39,16 @@ public abstract class ColumnGenerator extends CodeGenerator {
 			"import java.util.List;\n" +
 			"import java.util.Map;\n" +
 			"import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;\n" + 
+			"import org.dgfoundation.amp.nireports.schema.NiDimension;\n" + 
 			"\n" +
 			String.format("import org.dgfoundation.amp.nireports.%s;\n", clazz.getSimpleName()) +
 			"\n" +
 			"\n" +
 			String.format("public class %s extends HardcodedCells<%s>{\n", getCanonicalNameWithCells(this.name), clazz.getSimpleName()) +
 			"\n" +
+			String.format("	public %s(Map<String, Long> activityNames, Map<String, Long> entityNames, NiDimension dim, String key) {\n", getCanonicalNameWithCells(this.name)) +
+			"		super(activityNames, entityNames, degenerate(dim, key));\n" +
+			"	}\n" +
 			String.format("	public %s(Map<String, Long> activityNames, Map<String, Long> entityNames, LevelColumn lc) {\n", getCanonicalNameWithCells(this.name)) +
 			"		super(activityNames, entityNames, lc);\n" +
 			"	}\n" +
@@ -64,7 +70,8 @@ public abstract class ColumnGenerator extends CodeGenerator {
 	}
 	
 	public void generateToFile() throws FileNotFoundException, UnsupportedEncodingException {
-		String path = "/home/simple/Desktop/codegen/" 
+//		String path = "/home/simple/Desktop/codegen/" 
+		String path = System.getProperty("user.dir") + "/src/test/java/org/dgfoundation/amp/testmodels/nicolumns/" 
 				+ getCanonicalNameWithCells(this.name) + ".java";
 		PrintWriter writer = new PrintWriter(path, "UTF-8");
 		writer.print(String.format(getFilePart1(), clazz.getName(), getCanonicalNameWithCells(this.name), getCanonicalNameWithCells(this.name)));

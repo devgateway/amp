@@ -400,7 +400,23 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		
 		date_column(ColumnConstants.ACTIVITY_CREATED_ON, "v_creation_date");
 		date_column(ColumnConstants.ACTIVITY_UPDATED_ON, "v_updated_date");
-		//TODO: add the rest of the date columns here
+		date_column(ColumnConstants.ACTUAL_APPROVAL_DATE, "v_actual_approval_date");
+		date_column(ColumnConstants.ACTUAL_COMPLETION_DATE, "v_actual_completion_date");
+		date_column(ColumnConstants.ACTUAL_START_DATE, "v_actual_start_date");
+		date_column(ColumnConstants.CURRENT_COMPLETION_DATE, "v_actual_completion_date");
+		date_column(ColumnConstants.DONOR_COMMITMENT_DATE, "v_donor_commitment_date");
+		date_column(ColumnConstants.FINAL_DATE_FOR_CONTRACTING, "v_contracting_date");
+		date_column(ColumnConstants.FINAL_DATE_FOR_DISBURSEMENTS, "v_disbursements_date");
+		date_column(ColumnConstants.FUNDING_CLASSIFICATION_DATE, "v_funding_classification_date");
+		date_column(ColumnConstants.FUNDING_END_DATE, "v_funding_end_date");
+		date_column(ColumnConstants.FUNDING_START_DATE, "v_funding_start_date");
+		date_column(ColumnConstants.ORIGINAL_COMPLETION_DATE, "v_original_completion_date");
+		/*pledge columns -- commented for now, should be added once pledge reports are implemented*/
+//		date_column(ColumnConstants.PLEDGES_DETAIL_START_DATE, "v_pledges_funding_start_date"); 
+//		date_column(ColumnConstants.PLEDGES_DETAIL_END_DATE, "v_pledges_funding_end_date "); 
+		date_column(ColumnConstants.PROPOSED_APPROVAL_DATE, "v_actual_proposed_date"); 
+		date_column(ColumnConstants.PROPOSED_COMPLETION_DATE, "v_proposed_completion_date"); 
+		date_column(ColumnConstants.PROPOSED_START_DATE, "v_proposed_start_date");
 		
 		addTrivialMeasures();
 	}

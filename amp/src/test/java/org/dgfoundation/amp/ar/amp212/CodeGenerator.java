@@ -13,6 +13,7 @@ import org.dgfoundation.amp.codegenerators.CategoriesTreeGenerator;
 import org.dgfoundation.amp.codegenerators.ColumnGenerator;
 import org.dgfoundation.amp.codegenerators.FundingColumnGenerator;
 import org.dgfoundation.amp.codegenerators.NaturalTreeGenerator;
+import org.dgfoundation.amp.codegenerators.NiDateColumnGenerator;
 import org.dgfoundation.amp.codegenerators.NiDimensionGenerator;
 import org.dgfoundation.amp.codegenerators.NiPercentageTextColumnGenerator;
 import org.dgfoundation.amp.codegenerators.NiTextColumnGenerator;
@@ -74,7 +75,10 @@ public class CodeGenerator  {
 				 new NiTextColumnGenerator(ColumnConstants.FINANCING_INSTRUMENT),
 				 new NiTextColumnGenerator(ColumnConstants.DONOR_AGENCY),
 				 new NiTextColumnGenerator(ColumnConstants.DONOR_GROUP),
-				 new NiTextColumnGenerator(ColumnConstants.DONOR_TYPE)
+				 new NiTextColumnGenerator(ColumnConstants.DONOR_TYPE),
+				 new NiDateColumnGenerator(ColumnConstants.ACTIVITY_CREATED_ON),
+				 new NiDateColumnGenerator(ColumnConstants.ACTIVITY_UPDATED_ON)
+				 
 				);
 		for (ColumnGenerator gen : gens)
 			gen.generateToFile();
@@ -106,15 +110,13 @@ public class CodeGenerator  {
 		System.out.println(catGen.generate());
 	}
 	
-	
 	public void generateCode() throws FileNotFoundException, UnsupportedEncodingException  {
 //			generateFunding();
-			generateActivityNames();
+//			generateActivityNames();
 //			generateFundingTypesNames();
 //			generateDimensions();
 			generateColumns();
 	}
-	
 	
 	public static void main(String[] args)  throws AMPException, FileNotFoundException, UnsupportedEncodingException {
 		AllTests_amp212.configureLog4j();

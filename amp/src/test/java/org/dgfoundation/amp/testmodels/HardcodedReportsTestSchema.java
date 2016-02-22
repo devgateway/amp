@@ -14,6 +14,7 @@ import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.AbstractReportsSchema;
 import org.dgfoundation.amp.nireports.CategAmountCell;
+import org.dgfoundation.amp.nireports.DateCell;
 import org.dgfoundation.amp.nireports.NiFilters;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.PercentageTextCell;
@@ -24,12 +25,15 @@ import org.dgfoundation.amp.nireports.amp.TestNiFilters;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.PercentageTokenBehaviour;
 import org.dgfoundation.amp.nireports.schema.TextualTokenBehaviour;
+import org.dgfoundation.amp.nireports.schema.DateTokenBehaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.testmodels.dimensions.CategoriesTestDimension;
 import org.dgfoundation.amp.testmodels.dimensions.LocationsTestDimension;
 import org.dgfoundation.amp.testmodels.dimensions.OrganizationsTestDimension;
 import org.dgfoundation.amp.testmodels.dimensions.ProgramsTestDimension;
 import org.dgfoundation.amp.testmodels.dimensions.SectorsTestDimension;
+import org.dgfoundation.amp.testmodels.nicolumns.ActivityCreatedOnCells;
+import org.dgfoundation.amp.testmodels.nicolumns.ActivityUpdatedOnCells;
 import org.dgfoundation.amp.testmodels.nicolumns.CountryCells;
 import org.dgfoundation.amp.testmodels.nicolumns.DistrictCells;
 import org.dgfoundation.amp.testmodels.nicolumns.DonorAgencyCells;
@@ -125,6 +129,9 @@ public class HardcodedReportsTestSchema extends AbstractReportsSchema {
 		addTextColumn(ColumnConstants.MODE_OF_PAYMENT, new ModeOfPaymentCells(activityNames, catsDimension.getEntityIds(), catsDimension));
 		addTextColumn(ColumnConstants.FUNDING_STATUS, new FundingStatusCells(activityNames, catsDimension.getEntityIds(), catsDimension));
 		
+		addDateColumn(ColumnConstants.ACTIVITY_CREATED_ON, new ActivityCreatedOnCells(activityNames, activityNames, null));
+		addDateColumn(ColumnConstants.ACTIVITY_UPDATED_ON, new ActivityUpdatedOnCells(activityNames, activityNames, null));
+		
 		//4x trivial measures
 		addMeasure(new TrivialTestMeasure(MeasureConstants.ACTUAL_COMMITMENTS, Constants.COMMITMENT, "Actual", false));
 		addMeasure(new TrivialTestMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, Constants.DISBURSEMENT, "Actual", false));
@@ -139,6 +146,10 @@ public class HardcodedReportsTestSchema extends AbstractReportsSchema {
 	
 	private static Map<String, Long> generateActivityNamesMap() {
 		return new HardcodedActivities().getActIdsMap();
+	}
+	
+	private void addDateColumn(String name, HardcodedCells<DateCell> cells) {
+		addColumn(new HardcodedColumn<DateCell>(name, cells, cells.levelColumn.orElse(null), DateTokenBehaviour.instance));
 	}
 	
 	private void addPercentageColumn(String name, HardcodedCells<PercentageTextCell> cells) {

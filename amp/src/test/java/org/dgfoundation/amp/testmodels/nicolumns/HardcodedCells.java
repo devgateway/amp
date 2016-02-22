@@ -1,6 +1,8 @@
 package org.dgfoundation.amp.testmodels.nicolumns;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +13,7 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.codegenerators.FundingIdsMapper;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.Cell;
+import org.dgfoundation.amp.nireports.DateCell;
 import org.dgfoundation.amp.nireports.MonetaryAmount;
 import org.dgfoundation.amp.nireports.PercentageTextCell;
 import org.dgfoundation.amp.nireports.TextCell;
@@ -49,6 +52,12 @@ public abstract class HardcodedCells<K extends Cell> {
 		this.cells = populateCells();
 	}
 
+	protected DateCell dateCell(String activityName, String date) {
+			DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
+			LocalDate ld = LocalDate.parse(date, formatter);
+			return new DateCell(ld, activityIds.get(activityName), activityIds.get(activityName), levelColumn);
+	}	
+	
 	public List<K> getCells() {
 		return cells;
 	}

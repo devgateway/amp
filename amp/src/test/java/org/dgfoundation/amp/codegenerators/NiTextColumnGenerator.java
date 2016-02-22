@@ -77,8 +77,7 @@ public class NiTextColumnGenerator extends ColumnGenerator {
 			strb.append(String.format("%s, %s, %s", escape(ent.aavname), escape(ent.text), ent.id));
 			strb.append(")");
 			if (i < entries.size() - 1)
-				strb.append(",");
-			strb.append("\n");
+				strb.append(",\n");
 		}
 		strb.append(");");
 		return strb.toString();

@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.ar.amp212;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -13,6 +14,7 @@ import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.GrandTotalsDigest;
+import org.dgfoundation.amp.nireports.RawDataDigest;
 import org.dgfoundation.amp.nireports.TrailCellsDigest;
 import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
 import org.dgfoundation.amp.testutils.AmpTestCase;
@@ -238,6 +240,21 @@ public abstract class BasicSanityChecks extends AmpTestCase {
 			buildDigest(spec, acts, new TrailCellsDigest("RAW / Totals / Actual Disbursements")).toString());
 	}
 
+	/**
+	 * checks that several activities output amounts and dates	
+	 */
+	@Test
+	public void testWithDates() {
+		ReportSpecification spec = buildSpecification("ByActivityUpdateOnByActivityCreatedOn", 
+			Arrays.asList(ColumnConstants.ACTIVITY_UPDATED_ON, ColumnConstants.ACTIVITY_CREATED_ON), 
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+			null, 
+			GroupingCriteria.GROUPING_YEARLY);
+		assertEquals(
+			"{0=1200, 1=1200, 2=567421, 3=75000, 4=[2015-03-22], 5=[2013-12-20], 6=[2014-02-21], 7=[2015-03-22], 8=[2013-08-20], 9=[2014-02-21], 10=75000, 11=567421}",
+			buildDigest(spec, acts, new RawDataDigest(new HashSet<Long>(Arrays.asList(40L, 31L, 66L)))).toString());
+	}	
+	
 	@Test
 	public void testByRegionByPrimarySectorByZone() {
 		ReportSpecification spec = buildSpecification("ByRegionByPrimarySectorByZone", 

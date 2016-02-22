@@ -3,10 +3,18 @@
  *
  */
 package org.dgfoundation.amp.onepager.models;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -17,10 +25,8 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import java.util.*;
 
 /**
  * @author mpostelnicu@dgateway.org since Oct 13, 2010
@@ -111,7 +117,7 @@ public class AmpLocationSearchModel extends
 			while (it.hasNext()) {
 				AmpCategoryValueLocations location = it.next();
 				AmpCategoryValueLocations locationRegion = DynLocationManagerUtil.getAncestorByLayer(location, CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
-				if (!assignedRegion.getId().equals(locationRegion.getId()))
+				if (locationRegion == null || !assignedRegion.getId().equals(locationRegion.getId()))
 					it.remove();
 			}
 		}

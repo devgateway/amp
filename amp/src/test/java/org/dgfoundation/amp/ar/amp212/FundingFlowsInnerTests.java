@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.ar.amp212;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.function.Predicate;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.amp.MetaCategory;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
@@ -18,6 +20,8 @@ import org.dgfoundation.amp.nireports.schema.DimensionLevel;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
+import org.dgfoundation.amp.testmodels.LoggingIdsAcceptors;
+import org.dgfoundation.amp.testmodels.dimensions.OrganizationsTestDimension;
 import org.digijava.module.aim.helper.Constants;
 import org.junit.Test;
 
@@ -70,12 +74,62 @@ public class FundingFlowsInnerTests extends NiTestCase {
 		assertEquals("[(<DN-IMPL>: DN-IMPL), (<IMPL-EXEC>: IMPL-EXEC)]", soleStrat.getSubcolumnsNames(new TreeSet<>(Arrays.asList(cat2, cat3, cat2, cat1))).toString());
 	}
 	
-	@Test
-	public void testFilterCell() {
-		NiCell primSectorSplitterCell = buildColumnNiCell(buildCell(10, buildMetaInfo(), buildCoos(HardcodedReportsTestSchema.DONOR_DIM_USG, new NiDimension.Coordinate(2, 2l))), ColumnConstants.PRIMARY_SECTOR);
-		NiCell fundingCell = buildMeasureNiCell(buildCell(100, 
-				buildMetaInfo(MetaCategory.SOURCE_ROLE, Constants.FUNDING_AGENCY, MetaCategory.SOURCE_ORG, 2l, MetaCategory.RECIPIENT_ROLE, Constants.EXECUTING_AGENCY, MetaCategory.RECIPIENT_ORG, 15l), 
-				buildCoos()), MeasureConstants.REAL_COMMITMENTS);
-		//beh.
+	void testFiltering(NiCell splitterCell, NiCell fundingCell, String expectedAcceptorCalls, boolean shouldPass) {
+		LoggingIdsAcceptors acceptor = new LoggingIdsAcceptors(splitterCell.getCell());
+		Cell filteredCell = beh.filterCell(acceptor.getAcceptors(), fundingCell, splitterCell);
+		assertEquals(expectedAcceptorCalls, acceptor.getCalls().toString());
+		
+		if (shouldPass) {
+			assertTrue(filteredCell == fundingCell.getCell());
+		} else {
+			assertTrue(filteredCell == null);
+		}
 	}
+
+	@Test
+	public void testFilterCellByDonor() {
+		//NiCell primSectorSplitterCell = buildColumnNiCell(buildCell(10, buildMetaInfo(), buildCoos(HardcodedReportsTestSchema.DONOR_DIM_USG, new NiDimension.Coordinate(2, 2l))), ColumnConstants.PRIMARY_SECTOR);
+		NiCell donorSplitterCell = buildColumnNiCell(buildTextCell("USAID", 21696l, HardcodedReportsTestSchema.DONOR_DIM_USG.getLevelColumn(2), buildMetaInfo()), ColumnConstants.DONOR_AGENCY);
+		NiCell donorGroupSplitterCell = buildColumnNiCell(buildTextCell("American", 19l, HardcodedReportsTestSchema.DONOR_DIM_USG.getLevelColumn(1), buildMetaInfo()), ColumnConstants.DONOR_GROUP);
+				
+		NiCell fundingCell = buildMeasureNiCell(buildCell(100, 
+				buildMetaInfo(MetaCategory.SOURCE_ROLE, Constants.FUNDING_AGENCY, MetaCategory.SOURCE_ORG, 21696l, MetaCategory.RECIPIENT_ROLE, Constants.EXECUTING_AGENCY, MetaCategory.RECIPIENT_ORG, 21701l), 
+				buildCoos(HardcodedReportsTestSchema.DONOR_DIM_USG, new NiDimension.Coordinate(OrganizationsTestDimension.LEVEL_2, 21694l))), MeasureConstants.REAL_COMMITMENTS);
+		
+		testFiltering(donorSplitterCell, fundingCell, "[orgs.DN: (level: 2, id: 21696) -> true]", true);
+		testFiltering(donorGroupSplitterCell, fundingCell, "[orgs.DN: (level: 2, id: 21696) -> true]", true);
+	}
+		
+	@Test
+	public void testFilterForeignCellByImplementingAgency() {
+		NiCell iaSplitterCell = buildColumnNiCell(buildPercentageTextCell("USAID", 21696l, 0.25, HardcodedReportsTestSchema.IA_DIM_USG.getLevelColumn(2), buildMetaInfo()), ColumnConstants.IMPLEMENTING_AGENCY);
+		NiCell iaGroupSplitterCell = buildColumnNiCell(buildPercentageTextCell("American", 19l, 0.4, HardcodedReportsTestSchema.IA_DIM_USG.getLevelColumn(1), buildMetaInfo()), ColumnConstants.IMPLEMENTING_AGENCY_GROUPS);
+
+		NiCell fundingCell = buildMeasureNiCell(buildCell(100, 
+				buildMetaInfo(MetaCategory.SOURCE_ROLE, Constants.FUNDING_AGENCY, MetaCategory.SOURCE_ORG, 21696l, MetaCategory.RECIPIENT_ROLE, Constants.EXECUTING_AGENCY, MetaCategory.RECIPIENT_ORG, 21701l), 
+				buildCoos(HardcodedReportsTestSchema.DONOR_DIM_USG, new NiDimension.Coordinate(OrganizationsTestDimension.LEVEL_2, 21694l))), MeasureConstants.REAL_COMMITMENTS);
+
+		testFiltering(iaSplitterCell, fundingCell, "[]", false);
+		testFiltering(iaGroupSplitterCell, fundingCell, "[]", false);
+	}
+	
+	@Test
+	public void testFilterByImplementingAgency() {
+		NiCell iaSplitterCell = buildColumnNiCell(buildPercentageTextCell("USAID", 21696l, 0.25, HardcodedReportsTestSchema.IA_DIM_USG.getLevelColumn(2), buildMetaInfo()), ColumnConstants.IMPLEMENTING_AGENCY);
+		NiCell iaGroupSplitterCell = buildColumnNiCell(buildPercentageTextCell("American", 19l, 0.4, HardcodedReportsTestSchema.IA_DIM_USG.getLevelColumn(1), buildMetaInfo()), ColumnConstants.IMPLEMENTING_AGENCY_GROUPS);
+
+		NiCell fundingCell = buildMeasureNiCell(buildCell(100, 
+				buildMetaInfo(MetaCategory.SOURCE_ROLE, Constants.IMPLEMENTING_AGENCY, MetaCategory.SOURCE_ORG, 21696l, MetaCategory.RECIPIENT_ROLE, Constants.EXECUTING_AGENCY, MetaCategory.RECIPIENT_ORG, 21701l),
+				buildCoos(HardcodedReportsTestSchema.DONOR_DIM_USG, new NiDimension.Coordinate(OrganizationsTestDimension.LEVEL_2, 21694l))), MeasureConstants.REAL_COMMITMENTS);
+
+		testFiltering(iaSplitterCell, fundingCell, "[orgs.IA: (level: 2, id: 21696) -> true]", true);
+		testFiltering(iaGroupSplitterCell, fundingCell, "[orgs.IA: (level: 2, id: 21696) -> true]", true);
+		
+		NiCell iaAdvancedCell = fundingCell.advanceHierarchy(fundingCell.getCell(), iaSplitterCell.getCell());
+		assertEquals("1", iaAdvancedCell.getHiersTracker().calculatePercentage(beh.getHierarchiesListener()).toString());
+		
+		NiCell iaGroupAdvancedCell = fundingCell.advanceHierarchy(fundingCell.getCell(), iaGroupSplitterCell.getCell());
+		assertEquals("1", iaGroupAdvancedCell.getHiersTracker().calculatePercentage(beh.getHierarchiesListener()).toString());
+	}
+
 }

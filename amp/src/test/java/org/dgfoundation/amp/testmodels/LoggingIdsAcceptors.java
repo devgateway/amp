@@ -2,6 +2,7 @@ package org.dgfoundation.amp.testmodels;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -27,9 +28,12 @@ public class LoggingIdsAcceptors {
 	}
 	
 	public Map<NiDimensionUsage, IdsAcceptor> getAcceptors() {
-		return acceptors;
+		return Collections.unmodifiableMap(acceptors);
 	}
 
+	public List<String> getCalls() {
+		return Collections.unmodifiableList(calls);
+	}
 	
 	class MyIdsAcceptor implements IdsAcceptor {
 

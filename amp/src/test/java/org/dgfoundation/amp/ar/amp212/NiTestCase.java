@@ -4,12 +4,15 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.MonetaryAmount;
 import org.dgfoundation.amp.nireports.NiUtils;
+import org.dgfoundation.amp.nireports.PercentageTextCell;
+import org.dgfoundation.amp.nireports.TextCell;
 import org.dgfoundation.amp.nireports.TranslatedDate;
 import org.dgfoundation.amp.nireports.amp.AmpPrecisionSetting;
 import org.dgfoundation.amp.nireports.amp.DirectedMeasureBehaviour;
@@ -20,6 +23,7 @@ import org.dgfoundation.amp.nireports.runtime.CacheHitsCounter;
 import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
+import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
 import org.dgfoundation.amp.testutils.AmpTestCase;
@@ -46,6 +50,16 @@ public class NiTestCase extends AmpTestCase {
 	
 	protected Cell buildCell(int amount, MetaInfoSet metaInfo, Map<NiDimensionUsage, Coordinate> coos) {
 		CategAmountCell cell = new CategAmountCell(1, new MonetaryAmount(BigDecimal.valueOf(amount), new AmpPrecisionSetting()), metaInfo, coos, new TranslatedDate(2000, "2000", 1, 1, "January"));
+		return cell;
+	}
+	
+	protected Cell buildTextCell(String text, long entityId, LevelColumn levelColumn, MetaInfoSet metaInfo) {
+		TextCell cell = new TextCell(text, 10l, entityId, Optional.ofNullable(levelColumn));
+		return cell;
+	}
+	
+	protected Cell buildPercentageTextCell(String text, long entityId, double percentage, LevelColumn levelColumn, MetaInfoSet metaInfo) {
+		PercentageTextCell cell = new PercentageTextCell(text, 10l, entityId, Optional.ofNullable(levelColumn), BigDecimal.valueOf(percentage));
 		return cell;
 	}
 	
@@ -84,4 +98,5 @@ public class NiTestCase extends AmpTestCase {
 	protected NiCell buildColumnNiCell(Cell cell, String columnName) {
 		return new NiCell(cell, HardcodedReportsTestSchema.getInstance().getColumns().get(columnName), HierarchiesTracker.buildEmpty(chc));
 	}
+	
 }

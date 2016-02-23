@@ -56,24 +56,43 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);
 					assertEquals(
 						"[" 
-						+ "(actId: 40, amt: 75000 on 2014-02-05, coos: {{cats.Financing Instrument=(level: 1, id: 2120), cats.Mode of Payment=(level: 1, id: 2094), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21700)}}, meta: {MetaInfoSet: [source_role: DN, adjustment_type: Actual, transaction_type: 0]}, "
-     					+ "(actId: 64, amt: 45000 on 2015-01-06, coos: {{cats.Financing Instrument=(level: 1, id: 2125), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21695)}}, meta: {MetaInfoSet: [source_role: DN, adjustment_type: Actual, transaction_type: 0]}]",
+						+ "(actId: 40, amt: 75000 on 2014-02-05, coos: {{cats.Financing Instrument=(level: 1, id: 2120), cats.Mode of Payment=(level: 1, id: 2094), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21700)}}, meta: {MetaInfoSet: [source_org: 21700, source_role: DN, adjustment_type: Actual, transaction_type: 0]}, "
+     					+ "(actId: 64, amt: 45000 on 2015-01-06, coos: {{cats.Financing Instrument=(level: 1, id: 2125), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21695)}}, meta: {MetaInfoSet: [source_org: 21695, source_role: DN, adjustment_type: Actual, transaction_type: 0]}]",
 						cells.toString());
 				});
 	}
 
 	@Test
-	public void testFundingDoubleFundingProject() throws Exception {
+	public void testMtefFunding() throws Exception {
 		runInEngineContext(
 				Arrays.asList("Pure MTEF Project"),
 				engine -> {
-					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);
-					assertEquals(
-						"["
-							+ "(actId: 19, amt: 55333 on 2012-01-01, coos: {{cats.Financing Instrument=(level: 1, id: 2120), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21700)}}, meta: {MetaInfoSet: [source_role: EA, adjustment_type: Actual, transaction_type: 3]}, "
-							+ "(actId: 19, amt: 33888 on 2011-01-01, coos: {{cats.Financing Instrument=(level: 1, id: 2120), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21699)}}, meta: {MetaInfoSet: [source_role: DN, adjustment_type: Actual, transaction_type: 3]}"
-							+ "]", cells.toString());
+					List<CategAmountCell> cells = (List) engine.schema.getColumns().get("MTEF 2011/2012").fetch(engine);
+					assertEquals("[(actId: 19, amt: 33888 on 2011-01-01, coos: {{cats.Financing Instrument=(level: 1, id: 2120), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21699)}}, meta: {MetaInfoSet: [source_org: 21699, source_role: DN]}]",
+						cells.toString());
 				});
+		
+		runInEngineContext(
+				Arrays.asList("Pure MTEF Project"),
+				engine -> {
+					List<CategAmountCell> cells2 = (List) engine.schema.getColumns().get("MTEF 2012/2013").fetch(engine);
+					assertEquals("[]", // directed transaction
+						cells2.toString());
+				});
+	}
+	
+	@Test
+	public void testRealMtefFunding() throws Exception {
+		runInEngineContext(
+			Arrays.asList("activity with directed MTEFs"),
+			engine -> {
+				List<CategAmountCell> cells = (List) engine.schema.getColumns().get("Real MTEF 2011/2012").fetch(engine);
+				assertEquals("[" + 
+					"(actId: 73, amt: 110500 on 2011-01-01, coos: {{cats.Financing Instrument=(level: 1, id: 2125), cats.Mode of Payment=(level: 1, id: 2094), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21698)}}, meta: {MetaInfoSet: [recipient_role: EA, directed_transaction_flow: IMPL-EXEC, source_org: 21698, source_role: IA, recipient_org: 21694]}, " + 
+					"(actId: 73, amt: 50000 on 2011-01-01, coos: {{cats.Financing Instrument=(level: 1, id: 2120), cats.Mode of Payment=(level: 1, id: 2096), cats.Type Of Assistance=(level: 1, id: 2124), orgs.DN=(level: 2, id: 21696)}}, meta: {MetaInfoSet: [recipient_role: BA, directed_transaction_flow: EXEC-BENF, source_org: 21696, source_role: EA, recipient_org: 21702]}" 
+				+ "]",
+				cells.toString());
+			});
 	}
 
 	@Test

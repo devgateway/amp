@@ -247,12 +247,12 @@ public abstract class BasicSanityChecks extends AmpTestCase {
 	public void testWithDates() {
 		ReportSpecification spec = buildSpecification("ByActivityUpdateOnByActivityCreatedOn", 
 			Arrays.asList(ColumnConstants.ACTIVITY_UPDATED_ON, ColumnConstants.ACTIVITY_CREATED_ON), 
-			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
 			null, 
 			GroupingCriteria.GROUPING_YEARLY);
 		assertEquals(
-			"{0=1200, 1=1200, 2=567421, 3=75000, 4=[2015-03-22], 5=[2013-12-20], 6=[2014-02-21], 7=[2015-03-22], 8=[2013-08-20], 9=[2014-02-21], 10=75000, 11=567421}",
-			buildDigest(spec, acts, new RawDataDigest(new HashSet<Long>(Arrays.asList(40L, 31L, 66L)))).toString());
+			"{0=1200, 1=123456, 2=97562.978885, 3=[2015-03-22], 4=[2015-03-22], 5=[2015-12-15], 6=1200, 7=123456, 8=93930.841736, 9=[2015-03-22], 10=[2015-03-22], 11=[2015-12-15], 12=3632.137149}",
+			buildDigest(spec, acts, new RawDataDigest(new HashSet<>(Arrays.asList(79l, 67L, 66L)))).toString());
 	}	
 	
 	@Test

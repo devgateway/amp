@@ -33,8 +33,11 @@ import java.security.Policy;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
@@ -47,6 +50,9 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServlet;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.ampapi.endpoints.security.Security;
+import org.digijava.kernel.ampapi.endpoints.security.SecurityService;
 import org.digijava.kernel.config.moduleconfig.ModuleConfig;
 import org.digijava.kernel.exception.IncompatibleEnvironmentException;
 import org.digijava.kernel.mail.scheduler.MailSpoolManager;
@@ -64,6 +70,7 @@ import org.digijava.kernel.viewmanager.ViewConfigFactory;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.translation.util.HashKeyPatch;
 import org.digijava.module.xmlpatcher.core.SimpleSQLPatcher;
+import org.hibernate.jdbc.Work;
 
 /**
  * Parses digi.xml configuration file,
@@ -84,6 +91,12 @@ public class ConfigLoaderListener
 
     private static final String  DISABLE_MEM_PARAM=". To disable checking for development purposes, add -Damp.disableMemCheck=true to the VM arguments.";
     
+    
+	private static String STARTUP_BEGIN_MESSAGE = "Attempting to start up AMP";
+	private static String STARTUP_COMPLETE_MESSAGE = "AMP startup apparently successful";
+	private static String STARTUP_FAILED_MESSAGE = "AMP startup failed; exception message: ";
+	private static String STARTUP_LOGGER = "AMP startup";
+    
     private static String MODULE_LISTENERS = ConfigLoaderListener.class.
         getName() + ".moduleContextListeners";
     private static ExecutorService exec ;
@@ -100,10 +113,10 @@ public class ConfigLoaderListener
     	if(bugFixingVersionString.length()==0) return 0;
     	return Integer.parseInt(bugFixingVersionString);
     }
-    
+
     public void contextInitialized(ServletContextEvent sce) {
         //ResourceStreamHandlerFactory.installIfNeeded();
-
+    	String path = sce.getServletContext().getRealPath("/") + Security.getSiteConfigPath();
         try {
             String jaasConfPath = sce.getServletContext().getRealPath("/WEB-INF/jaas.config");
             if (jaasConfPath != null) {
@@ -112,7 +125,6 @@ public class ConfigLoaderListener
                     System.setProperty("java.security.auth.login.config", jaasConfPath);
                 }
             }
-
             // Custom cache manager must be initialized first
             DigiConfigManager.initialize(sce.getServletContext().getRealPath("/repository"));
             // Initialize services
@@ -124,6 +136,9 @@ public class ConfigLoaderListener
             PersistenceManager.initialize(true);
 
             checkDatabaseCompatibility( sce.getServletContext().getRealPath("/compat.properties"));
+            BuildVersionVerifier bvv = BuildVersionVerifier.getInstance(path);
+            bvv.writeVersionToStartupLog(STARTUP_LOGGER, STARTUP_BEGIN_MESSAGE, path);
+            bvv.checkAmpVersionCompatibility();
 
             checkMemoryAllocation( sce.getServletContext().getRealPath("/compat.properties"));
             
@@ -157,19 +172,28 @@ public class ConfigLoaderListener
 			tats = new TrnAccesTimeSaver();
 			exec = Executors.newSingleThreadExecutor();
 			exec.execute(tats);
-			
           
             PersistenceManager.getSession().getTransaction().commit();
-        
         }
         catch (Exception ex) {
             logger.debug("Unable to initialize", ex);
+        	try {
+				BuildVersionVerifier.getInstance(path).writeVersionToStartupLog(STARTUP_LOGGER, STARTUP_FAILED_MESSAGE + ex.getMessage(), path);
+			} catch (Exception e) {
+				logger.error("Failed to write error message to startup log: " + e.getMessage());
+			}
             throw new RuntimeException("Unable to initialize", ex);
         }
 
+        try {
+			BuildVersionVerifier.getInstance(path).writeVersionToStartupLog(STARTUP_LOGGER, STARTUP_COMPLETE_MESSAGE, path);
+		} catch (Exception e) {
+			logger.error("Failed to write error message to startup log: " + e.getMessage());
+			e.printStackTrace();
+		}
     }
 
-    /**
+	/**
      * Uses Memory pool MXBeans to check if AMP has the right amount of memory allocated
      * @param propertiesFileName path to the compat.properties
      * @throws FileNotFoundException
@@ -204,9 +228,8 @@ public class ConfigLoaderListener
         long maxMemRequired=Long.parseLong(compat.getProperty("jvm.maxmem"));
         if(verify &&  maxMemRequired>maxMemAvaiable) throw new IncompatibleEnvironmentException("The JVM does not have enough TOTAL memory allocated; Max available="+maxMemAvaiable+"m; Max required="+maxMemRequired+"m"+DISABLE_MEM_PARAM); 
         logger.info("Memory Allocation Check OK.");
-		
 	}
-
+    
     /**
      * Checks if the database server to which AMP connects as well as the JDBC driver used are compatible with the testing environment that AMP is using.
      * @param propertiesFileName path to the compat.properties file
@@ -236,7 +259,6 @@ public class ConfigLoaderListener
 		int jdbcMinorVersion=Integer.parseInt((String)compat.get(prefix+".jdbc.version.minor"));
 		int jdbcBugfixingVersion=Integer.parseInt((String)compat.get(prefix+".jdbc.version.bugfixing"));
 		
-		
 		if(metaData.getDatabaseMajorVersion()!=dbMajorVersion || 
 				//metaData.getDatabaseMinorVersion()!=dbMinorVersion || 
 				dbBugfixingVersion>parseBugFixingVersion(metaData.getDatabaseProductVersion(), metaData.getDatabaseMajorVersion()+"."+metaData.getDatabaseMinorVersion())) 
@@ -246,7 +268,6 @@ public class ConfigLoaderListener
 				// metaData.getDriverMinorVersion()!=jdbcMinorVersion || 
 				jdbcBugfixingVersion>parseBugFixingVersion(metaData.getDriverVersion(), metaData.getDriverMajorVersion()+"."+metaData.getDriverMinorVersion())) 
 			throw new IncompatibleEnvironmentException("JDBC driver version ("+metaData.getDriverVersion()+") is incompatible. JDBC version needs to be "+jdbcMajorVersion+"."+jdbcMinorVersion+" and bugfixing version at least "+jdbcBugfixingVersion);
-	
 		
 		logger.info("Database compatibility OK.");
 		
@@ -326,9 +347,6 @@ public class ConfigLoaderListener
             DigiCacheManager.shutdown();
 			exec.shutdownNow();
             ServiceManager.getInstance().shutdown(0);
-         
-         
-     
         }
     }
 }

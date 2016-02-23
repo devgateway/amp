@@ -49,6 +49,10 @@ public class Security {
 	private static String SITE_CONFIG_PATH = "TEMPLATE" + System.getProperty("file.separator") + "ampTemplate"
 			+ System.getProperty("file.separator") + "site-config.xml";
 
+	
+	public static String getSiteConfigPath() {
+		return SITE_CONFIG_PATH;
+	}
 	@Context
 	private HttpServletRequest httpRequest;
 

@@ -6,8 +6,11 @@ package org.digijava.module.aim.startup;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Properties;
 
 import javax.servlet.ServletContext;
@@ -21,10 +24,12 @@ import org.dgfoundation.amp.ar.PledgesToActivitiesBridge;
 import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.importers.GazeteerCSVImporter;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MondrianUtils;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.kernel.ampapi.endpoints.security.SecurityService;
 import org.digijava.kernel.job.cachedtables.PublicViewColumnsUtil;
 import org.digijava.kernel.lucene.LuceneModules;
 import org.digijava.kernel.lucene.LuceneWorker;
@@ -34,7 +39,6 @@ import org.digijava.module.aim.dbentity.AmpQuartzJobClass;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettings;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.QuartzJobForm;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -45,6 +49,7 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Session;
+import org.hibernate.jdbc.Work;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
@@ -65,6 +70,10 @@ public class AMPStartupListener extends HttpServlet implements
 	 * READ ONLY, the result of calling ServletContext.getRealPath("/")
 	 */
 	public static String SERVLET_CONTEXT_ROOT_REAL_PATH = null;
+	
+
+	
+	
 
 	
 	@Override
@@ -216,14 +225,23 @@ public class AMPStartupListener extends HttpServlet implements
 		logger.info(String.format("ETL took %.2f seconds", elapsedSecs));
 	}
 	
+	
+
+	
+	
+
+	
+	
+	
 	public void contextInitialized(ServletContextEvent sce) {
         logger.debug("I am running with a new code!!!!");
+        
+        
 		ServletContext ampContext = null;
 
 		try {
 			ampContext = sce.getServletContext();
 			SERVLET_CONTEXT_ROOT_REAL_PATH = ampContext.getRealPath("/");
-
 			ampContext.setAttribute(Constants.ME_FEATURE, new Boolean(true));
 			ampContext.setAttribute(Constants.AA_FEATURE, new Boolean(true));
 			ampContext.setAttribute(Constants.PI_FEATURE, new Boolean(true));

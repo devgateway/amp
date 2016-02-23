@@ -139,7 +139,10 @@ public class AmpNiReportsFormatter {
 		
 		runResult.headers.leafColumns.forEach(niCellColumn -> {
 			this.cellVisitor.incLevel();
-			ra.getContents().put(niColumnToROC.get(niCellColumn), convert(niReportData.trailCells.get(niCellColumn), niCellColumn));
+			ReportCell reportCell = convert(niReportData.trailCells.get(niCellColumn), niCellColumn);
+			if (reportCell != null) {
+				ra.getContents().put(niColumnToROC.get(niCellColumn), reportCell);
+			}
 		});
 		
 		if (niReportData instanceof NiColumnReportData) {
@@ -159,9 +162,13 @@ public class AmpNiReportsFormatter {
 		SortedMap<Long, ReportAreaImpl> idReportArea = new TreeMap<Long, ReportAreaImpl>();
 		runResult.headers.leafColumns.forEach(niCellColumn -> {
 			this.cellVisitor.incLevel();
-			niColumnReportData.getIds().forEach(id ->
-				idReportArea.computeIfAbsent(id, val -> reportAreaSupplier.get()).getContents().put(
-					niColumnToROC.get(niCellColumn), convert(niColumnReportData.contents.get(niCellColumn).get(id), niCellColumn)));
+			niColumnReportData.getIds().forEach(id -> {
+				ReportCell reportCell = convert(niColumnReportData.contents.get(niCellColumn).get(id), niCellColumn);
+				if (reportCell != null) {
+					idReportArea.computeIfAbsent(id, val -> reportAreaSupplier.get()).getContents().put(
+							niColumnToROC.get(niCellColumn), reportCell);
+				}
+			});
 		});
 		this.cellVisitor.setLeaf(false);
 		return new ArrayList<ReportArea>(idReportArea.values());

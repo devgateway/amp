@@ -5,7 +5,6 @@
 
 package org.digijava.module.aim.action;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,20 +35,86 @@ import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpActivityBudgetStructure;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpActor;
+import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpComponentType;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.dbentity.AmpIssues;
+import org.digijava.module.aim.dbentity.AmpLineMinistryObservation;
+import org.digijava.module.aim.dbentity.AmpLineMinistryObservationActor;
+import org.digijava.module.aim.dbentity.AmpLineMinistryObservationMeasure;
+import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpMeasure;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRegionalObservation;
+import org.digijava.module.aim.dbentity.AmpRegionalObservationActor;
+import org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
 import org.digijava.module.aim.form.ProposedProjCost;
-import org.digijava.module.aim.helper.*;
-import org.digijava.module.aim.util.*;
+import org.digijava.module.aim.helper.ActivityDocumentsUtil;
+import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.AmpContactsWorker;
+import org.digijava.module.aim.helper.BudgetStructure;
+import org.digijava.module.aim.helper.Components;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.FundingDetail;
+import org.digijava.module.aim.helper.FundingValidator;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.Issues;
+import org.digijava.module.aim.helper.Location;
+import org.digijava.module.aim.helper.Measures;
+import org.digijava.module.aim.helper.OrgProjectId;
+import org.digijava.module.aim.helper.RegionalFunding;
+import org.digijava.module.aim.helper.RegionalFundingsHelper;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.ActivityVersionUtil;
+import org.digijava.module.aim.util.AidEffectivenessIndicatorUtil;
+import org.digijava.module.aim.util.AuditLoggerUtil;
+import org.digijava.module.aim.util.ComponentsUtil;
+import org.digijava.module.aim.util.ContactInfoUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DecimalWraper;
+import org.digijava.module.aim.util.DocumentUtil;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.aim.util.EUActivityUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
+import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.version.exception.CannotGetLastVersionForVersionException;
 import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.budget.helper.BudgetDbUtil;
@@ -64,10 +129,7 @@ import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.hibernate.Hibernate;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.type.StringType;
 
 
 /**
@@ -135,7 +197,7 @@ public class EditActivity extends Action {
     	activityId	= this.getCorrectActivityVersionIdToUse(activityId, eaForm);
     }
     catch(CannotGetLastVersionForVersionException e) {
-    	e.printStackTrace();
+    	logger.error(e.getMessage(), e);
     }
 
 
@@ -201,9 +263,9 @@ public class EditActivity extends Action {
 							return null;
 						}
 					}
-					}catch(Exception ex){
+					} catch(Exception ex){
 						ARUtil.writeResponse(response, "Could not update activity please check logs ----" + ex.getMessage() );
-						ex.printStackTrace();
+						logger.error(ex.getMessage(), ex);
 						return null;
 					}
 				}
@@ -646,8 +708,7 @@ public class EditActivity extends Action {
         	//this does not work, throws java.lang.IllegalStateException: No modifications are allowed to a locked ParameterMap
         	request.getParameterMap().put("viewAllRights", tmp);
 		} catch (Exception e) {
-			logger.error(e);
-			e.printStackTrace();
+			addErrorMessageToForm(eaForm, e);
 		}
 
         if (activity.getActivityDocuments() != null && activity.getActivityDocuments().size() > 0) {
@@ -1373,7 +1434,7 @@ public class EditActivity extends Action {
 				}
 	    	  }
 		} catch (Exception e) {
-			e.printStackTrace();
+			addErrorMessageToForm(eaForm, e);
 		}
 	      contactInfo.setActivityContacts(activityContacts);
 	      if(activityContacts!=null && activityContacts.size()>0){
@@ -1520,11 +1581,10 @@ public class EditActivity extends Action {
       //load the possible projection values
       eaForm.getFunding().setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));
 
+    } catch (Exception e) {
+    	addErrorMessageToForm(eaForm, e);
     }
-    catch (Exception e) {
-        logger.error(e);
-        e.printStackTrace();
-    }
+    
     if (request.getParameter("logframepr") != null)
       if (request.getParameter("logframepr").compareTo("true") == 0) {
         session.setAttribute("logframepr", "true");
@@ -1897,5 +1957,9 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 
 		eaForm.getComponents().setSelectedComponents(selectedComponents);
 	}
-
+    
+    private void addErrorMessageToForm(EditActivityForm eaForm, Exception e) {
+		eaForm.getWarningMessges().add(TranslatorUtil.getTranslation("An error occurred when loading the page. Please contact the AMP administrator."));
+		logger.error(e.getMessage(), e);
+	}
 }

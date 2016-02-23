@@ -84,7 +84,7 @@ public class AmpCellVisitor implements CellVisitor<ReportCell> {
 		}
 		String text = ("".equals(cell.getDisplayedValue()) && cell.entityId != -1) ?
 			TranslatorWorker.translateText("Undefined") : cell.getDisplayedValue();  
-		return asTextCell(text, cell.entityId, cell.entitiesIdsValues);
+		return asTextCell(text, cell.entityId, outputSettings.idsValuesColumns.contains(niCellColumn.entity.name) ? cell.entitiesIdsValues : null);
 	}
 	
 	@Override

@@ -25,7 +25,7 @@ public final class MondrianDateCell extends ReportCell {
 	public final static Date DUMMY_DATE = new Date(70, 2, 2);
 	
 	public MondrianDateCell(Date value, String displayedValue) {
-		super(value, displayedValue, -1, null);
+		super(value, displayedValue);
 	}
 	
 	public static MondrianDateCell buildDateFromRepOut(String repOut) {

@@ -20,24 +20,12 @@ public abstract class ReportCell implements Comparable<ReportCell> {
 	
 	public final String displayedValue;
 	
-	/**
-	 * the main entityId. In case the cell holds a multitude of them, an arbitrary one of them will be stored. Values <= 0 mean "no entity" 
-	 */
-	public final long entityId;
-	
-	/**
-	 * Map<entityId, displayedValue> for the cells embedded within this cell. Might be null if this option has been disabled during report output stages for this column (maps are expensive)
-	 */
-	public final Map<Long, String> entitiesIdsValues;
-
 	//to facilitate the sorting, we will store the parent area
 	transient public ReportArea area;
 	
-	public ReportCell(Comparable<?> value, String displayedValue, long entityId, Map<Long, String> entitiesIdsValues) {
+	public ReportCell(Comparable<?> value, String displayedValue) {
 		this.value = value;
 		this.displayedValue = displayedValue;
-		this.entityId = entityId;
-		this.entitiesIdsValues = entitiesIdsValues;
 	}
 	
 	@Override public int compareTo(ReportCell oth) {

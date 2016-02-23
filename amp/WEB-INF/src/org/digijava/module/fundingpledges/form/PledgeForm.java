@@ -27,6 +27,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -569,6 +570,10 @@ public class PledgeForm extends ActionForm implements Serializable {
 	
 	public boolean getFundingShowDateRange(){
 		return FundingPledgesDetails.isDateRangeEnabled();
+	}
+	
+	public String getGlobalDateFormat() {
+		return FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT).toUpperCase();
 	}
 	
 	public int deleteUniquelyIdentifiable(Collection<? extends UniquelyIdentifiable> col, long id) {

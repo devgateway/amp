@@ -644,9 +644,7 @@ public class FeaturesUtil {
 	public static String getGlobalSettingValue(String globalSettingName) {
 		if (globalSettingsCache == null)
 			buildGlobalSettingsCache(getGlobalSettings());
-			
 		Map<String, AmpGlobalSettings> settings = globalSettingsCache;
-		
 		AmpGlobalSettings value = settings.get(globalSettingName);
 		if (value == null)
 			return null;

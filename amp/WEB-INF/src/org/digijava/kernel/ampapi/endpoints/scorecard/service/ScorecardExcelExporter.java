@@ -111,6 +111,7 @@ public class ScorecardExcelExporter {
 			HSSFCell quarter = row.createCell(++headerIndex);
 			quarter.setCellValue(headerName.toString());
 			quarter.setCellStyle(blueHeaderStyle);
+			worksheet.autoSizeColumn(headerIndex);
 		}
 	}
 

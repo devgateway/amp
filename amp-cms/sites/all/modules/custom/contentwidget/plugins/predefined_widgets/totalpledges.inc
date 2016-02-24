@@ -150,9 +150,10 @@ function contentwidget_totalpledges_widget_retrieve_report_data($plugin, $widget
   // There's a case (for now) when API returns wrong data, we should handle it.
   if (!is_null($response_data->settings)) {
     foreach ($response_data->settings as $info) {
-      if ($info->id == 'ammountPattern') {
-        $number_format = $info->value;
-      }
+      // TODO: For now we've decided to keep things hardcoded for the widget.
+      // if ($info->id == 'ammountPattern') {
+      //   $number_format = $info->value;
+      // }
 
       // @HACK: The id for currency is "1"!!!
       // @see: Documentation for /rest/gis/settings
@@ -162,7 +163,7 @@ function contentwidget_totalpledges_widget_retrieve_report_data($plugin, $widget
     }
   }
   if (is_null($number_format)) {
-    $number_format = '###0.00';
+    $number_format = '###,###.###';
   }
 
   // @see https://php.net/manual/en/numberformatter.create.php
@@ -339,10 +340,12 @@ function contentwidget_totalpledges_widget_render($plugin, $widget_settings, $en
 
   $data = contentwidget_totalpledges_widget_retrieve_report_data($plugin, $widget_settings, $langcode);
   $data_activities = contentwidget_totalpledges_widget_retrieve_activities_data($plugin, $widget_settings, $langcode);
-  $data = array_merge($data, $data_activities);
 
   if (empty($data)) {
     return;
+  }
+  else {
+    $data = array_merge($data, $data_activities);
   }
 
   $info_blocks = array(

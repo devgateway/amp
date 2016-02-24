@@ -18,6 +18,7 @@ import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
+import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
@@ -32,6 +33,7 @@ import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 /**
  * @author mpostelnicu@dgateway.org since Nov 8, 2010
  */
+@SuppressWarnings("serial")
 public class AmpDonorCommitmentsFormTableFeature extends
 		AmpDonorFormTableFeaturePanel {
 
@@ -42,6 +44,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 	 * @param fmName
 	 * @throws Exception
 	 */
+	@SuppressWarnings("serial")
 	public AmpDonorCommitmentsFormTableFeature(String id,
 			final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
 		super(id, model, fmName, Constants.COMMITMENT, 7);
@@ -49,7 +52,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 		list = new ListEditor<AmpFundingDetail>("listCommitments", setModel, new AmpFundingDetail.FundingDetailComparator()) {
 			@Override
 			protected void onPopulateItem(
-					org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {
+					ListItem<AmpFundingDetail> item) {
 				item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
 
 				AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
@@ -63,50 +66,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 					};
 				};
 
-                final PropertyModel<Double> fixedExchangeRateModel = new PropertyModel<Double>(item.getModel(), "fixedExchangeRate");
-                IModel<Boolean> fixedRate = new IModel<Boolean>(){
-                    @Override
-                    public Boolean getObject() {
-                        if (fixedExchangeRateModel.getObject() == null)
-                            return Boolean.FALSE;
-                        return Boolean.TRUE;
-                    }
-
-                    @Override
-                    public void setObject(Boolean object) {
-                        //do nothing
-                    }
-
-                    @Override
-                    public void detach() {
-                        //do nothing
-                    }
-                };
-
-                final AmpTextFieldPanel<Double> exchangeRate = new AmpTextFieldPanel<Double>("fixedExchangeRate",
-                        fixedExchangeRateModel, "Exchange Rate", false, false);
-                exchangeRate.getTextContainer().add(new RangeValidator<Double>(0.001d, null));
-                exchangeRate.getTextContainer().add(new AttributeModifier("size", new Model<String>("6")));
-                exchangeRate.setOutputMarkupId(true);
-                exchangeRate.setIgnorePermissions(true);
-                exchangeRate.setEnabled(fixedRate.getObject());
-                item.add(exchangeRate);
-
-                AmpCheckBoxFieldPanel enableFixedRate = new AmpCheckBoxFieldPanel(
-                        "enableFixedRate", fixedRate, "Fixed exchange rate", false, false){
-                    @Override
-                    protected void onAjaxOnUpdate(AjaxRequestTarget target) {
-                        Boolean state = this.getModel().getObject();
-                        if (state)
-                            fixedExchangeRateModel.setObject(null);
-                        else
-                            fixedExchangeRateModel.setObject(0D);
-                        exchangeRate.setEnabled(!state);
-                        target.add(exchangeRate.getParent().getParent().getParent());
-                    }
-                };
-                item.add(enableFixedRate);
-
+				appendFixedExchangeRateToItem(item);
 
 				item.add(new AmpSelectFieldPanel<FundingPledges>("pledge",
 						new PropertyModel<FundingPledges>(item.getModel(),

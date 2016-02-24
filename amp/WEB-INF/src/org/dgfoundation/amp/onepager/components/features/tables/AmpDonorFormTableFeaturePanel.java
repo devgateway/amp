@@ -12,14 +12,19 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
+import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -147,4 +152,41 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 		};
 	}
 
+	protected ListItem<AmpFundingDetail> appendFixedExchangeRateToItem(ListItem<AmpFundingDetail> item) {
+		final PropertyModel<Double> fixedExchangeRateModel = new PropertyModel<Double>(item.getModel(), "fixedExchangeRate");
+	    @SuppressWarnings("serial")
+		IModel<Boolean> fixedRate = new IModel<Boolean>(){
+	    	@Override
+	    	public Boolean getObject() {
+	    		return fixedExchangeRateModel.getObject() != null;
+	    	}
+	    	@Override
+	    	public void setObject(Boolean object) {}
+	    	@Override
+	    	public void detach() {}
+	    };
+
+	    final AmpTextFieldPanel<Double> exchangeRate = new AmpTextFieldPanel<Double>("fixedExchangeRate",
+	            fixedExchangeRateModel, "Exchange Rate", false, false);
+		exchangeRate.getTextContainer().add(new RangeValidator<Double>(0.001d, null));
+		exchangeRate.getTextContainer().add(new AttributeModifier("size", new Model<String>("6")));
+		exchangeRate.setOutputMarkupId(true);
+		exchangeRate.setIgnorePermissions(true);
+		exchangeRate.setEnabled(fixedRate.getObject());
+		item.add(exchangeRate);
+	
+		@SuppressWarnings("serial")
+		AmpCheckBoxFieldPanel enableFixedRate = new AmpCheckBoxFieldPanel(
+				"enableFixedRate", fixedRate, "Fixed exchange rate", false, false){
+			@Override
+			protected void onAjaxOnUpdate(AjaxRequestTarget target) {
+				Boolean state = this.getModel().getObject();
+				fixedExchangeRateModel.setObject(state ? null : 0D);
+	            exchangeRate.setEnabled(!state);
+	            target.add(exchangeRate.getParent().getParent().getParent());
+	        }
+	    };
+	    item.add(enableFixedRate);
+	    return item;
+	}
 }

@@ -18,7 +18,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
@@ -37,7 +36,6 @@ import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpHomeThumbnail;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSiteFlag;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
@@ -639,6 +637,45 @@ public class FeaturesUtil {
 	public static int getEsriMapsRegionsHighlightSelectedColourScheme()
 	{
 		return Integer.valueOf(getGlobalSettingValue(GlobalSettingsConstants.ESRI_REGIONS_HIGHLIGHT_COLOUR_SCHEME));
+	}
+	
+	public static AmpGlobalSettings getGlobalSetting(String globalSettingName) {
+		
+		AmpGlobalSettings ampGlobalSettings = null;
+		List<AmpGlobalSettings> coll = null;
+		Session session = null;
+		Query qry = null;
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = new String();
+			queryString = "select a from " + AmpGlobalSettings.class.getName()
+			+ " a where (a.globalSettingsName=:globalSettingName) ";
+			qry = session.createQuery(queryString);
+			qry.setParameter("globalSettingName", globalSettingName, StringType.INSTANCE);
+			coll = qry.list();
+			if(coll.size()!=0)
+				ampGlobalSettings = (AmpGlobalSettings) coll.iterator().next();
+		}
+		catch (Exception ex) {
+			logger.error(ex, ex);
+		}
+
+		if (ampGlobalSettings == null)
+			return null;
+		return ampGlobalSettings;
+	}
+	
+
+	public static void updateGlobalSetting(AmpGlobalSettings ampGlobalSettings) {
+		Session session = null;
+		try {
+			session = PersistenceManager.getSession();
+			session.save(ampGlobalSettings);
+		}
+		catch (Exception ex) {
+			logger.error(ex);
+		}
+		return;
 	}
 	
 	public static String getGlobalSettingValue(String globalSettingName) {

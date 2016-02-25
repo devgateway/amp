@@ -34,9 +34,12 @@ public class DateColumn extends AmpSqlSourcedColumn<DateCell> {
 
 	@Override
 	protected DateCell extractCell(NiReportsEngine engine, ResultSet rs) throws SQLException {
-		LocalDate date = rs.getDate(2).toLocalDate();
-		if (date == null)
+		java.sql.Date sqlDate = rs.getDate(2);
+		if (sqlDate == null)
 			return null;
+		LocalDate date = sqlDate.toLocalDate();
+//		if (date == null)
+//			return null;
 		return new DateCell(date, rs.getLong(1), this.levelColumn.isPresent() ? rs.getLong(3) : rs.getLong(1), this.levelColumn);
 	}
 		

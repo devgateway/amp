@@ -8,17 +8,10 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.dgfoundation.amp.ar.amp212.AmpSchemaSanityTests;
-import org.dgfoundation.amp.ar.amp212.BigDecimalPrecisionTests;
 import org.dgfoundation.amp.ar.amp212.CurrencyConvertorTests;
 import org.dgfoundation.amp.ar.amp212.DimensionsFetchingTests;
-import org.dgfoundation.amp.ar.amp212.DimensionSnapshotTests;
-import org.dgfoundation.amp.ar.amp212.FundingFlowsInnerTests;
-import org.dgfoundation.amp.ar.amp212.GraphAlgorithmsTests;
-import org.dgfoundation.amp.ar.amp212.HierarchyTrackingTestcases;
-import org.dgfoundation.amp.ar.amp212.InclusiveRunnerTests;
-import org.dgfoundation.amp.ar.amp212.MetaInfoTests;
 import org.dgfoundation.amp.ar.amp212.NiReportsFetchingTests;
-import org.dgfoundation.amp.ar.amp212.OffDbNiReportEngineTests;
+import org.dgfoundation.amp.ar.amp212.OfflineTests;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.digijava.kernel.persistence.HibernateClassLoader;
@@ -43,18 +36,13 @@ public class AllTests_amp212
 		
 		TestSuite suite = new TestSuite(AllTests_amp212.class.getName());
 		
-		suite.addTest(new JUnit4TestAdapter(GraphAlgorithmsTests.class));	
-		suite.addTest(new JUnit4TestAdapter(InclusiveRunnerTests.class));
+		suite.addTest(OfflineTests.suite());
 		suite.addTest(new JUnit4TestAdapter(NiReportsFetchingTests.class));
 		suite.addTest(new JUnit4TestAdapter(AmpSchemaSanityTests.class));
-		suite.addTest(new JUnit4TestAdapter(MetaInfoTests.class)); 
-		suite.addTest(new JUnit4TestAdapter(FundingFlowsInnerTests.class));
+
 		suite.addTest(new JUnit4TestAdapter(CurrencyConvertorTests.class));
 		suite.addTest(new JUnit4TestAdapter(DimensionsFetchingTests.class));
-		suite.addTest(new JUnit4TestAdapter(DimensionSnapshotTests.class));
-		suite.addTest(new JUnit4TestAdapter(BigDecimalPrecisionTests.class));
-		suite.addTest(new JUnit4TestAdapter(HierarchyTrackingTestcases.class));
-		suite.addTest(new JUnit4TestAdapter(OffDbNiReportEngineTests.class));
+
 		return suite;
 	}
 	

@@ -243,17 +243,17 @@ public abstract class BasicSanityChecks extends AmpTestCase {
 	/**
 	 * checks that several activities output amounts and dates	
 	 */
-	@Test
-	public void testWithDates() {
-		ReportSpecification spec = buildSpecification("ByActivityUpdateOnByActivityCreatedOn", 
-			Arrays.asList(ColumnConstants.ACTIVITY_UPDATED_ON, ColumnConstants.ACTIVITY_CREATED_ON), 
-			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
-			null, 
-			GroupingCriteria.GROUPING_YEARLY);
-		assertEquals(
-			"{0=1200, 1=123456, 2=97562.978885, 3=[2015-03-22], 4=[2015-03-22], 5=[2015-12-15], 6=1200, 7=123456, 8=93930.841736, 9=[2015-03-22], 10=[2015-03-22], 11=[2015-12-15], 12=3632.137149}",
-			buildDigest(spec, acts, new RawDataDigest(new HashSet<>(Arrays.asList(79l, 67L, 66L)))).toString());
-	}	
+//	@Test
+//	public void testWithDates() {
+//		ReportSpecification spec = buildSpecification("ByActivityUpdateOnByActivityCreatedOn", 
+//			Arrays.asList(ColumnConstants.ACTIVITY_UPDATED_ON, ColumnConstants.ACTIVITY_CREATED_ON), 
+//			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+//			null, 
+//			GroupingCriteria.GROUPING_YEARLY);
+//		assertEquals(
+//			"{0=1200, 1=123456, 2=97562.978885, 3=[2015-03-22], 4=[2015-03-22], 5=[2015-12-15], 6=1200, 7=123456, 8=93930.841736, 9=[2015-03-22], 10=[2015-03-22], 11=[2015-12-15], 12=3632.137149}",
+//			buildDigest(spec, acts, new RawDataDigest(new HashSet<>(Arrays.asList(79l, 67L, 66L)))).toString());
+//	}	
 	
 	@Test
 	public void testByRegionByPrimarySectorByZone() {

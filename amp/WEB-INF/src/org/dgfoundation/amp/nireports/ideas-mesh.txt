@@ -1,6 +1,3 @@
-	4b: flows (make it somehow generic through attributes?)
-	4c: per-transaction attribute equaling the column
-		
 == C. running ==
 	
 measures which are not affected by filters should be made columns
@@ -12,7 +9,6 @@ REDO v_organization_projectid
 pledges sectors + programs should be somehow fixed (data model is broken)
 pledges titles: make a new view for NiReports
 v_component_funding_description, v_component_funding_organization_name - add as being part of 2 hierarchies
-remove ORDER BY from views
 v_activity_pledges_title:
 	views which link pledges to activities are... different. These have to be changed, but in an another way - for later
 	
@@ -20,30 +16,18 @@ in case fetching a column/measure crashes -> remove said column/measure from rep
 	-> treat the case when fetching a column which is also a hierarchy fails
 	
 filters: activities-id caching
-year range settings
 RELATED_PROJECTS: take care of the (id / related id) stuff
 generate the following in-memory schemas:
 	-> benchmarks schema
-	-> testcases schema  -> Alex
 	-> report wizard schema (as a tiny layer on top of testcases schema)
 
 https://jira.dgfoundation.org/browse/AMP-22006 - DO NOT MERGE THIS ONE TO AMP 2.12
 
 http://localhost:8080/rest/data/nireport/10 - report behaviour when no funding
-by-year-hierarchies: generate list of all measures at the bottom
 gross filtering-out of entries while fetching funding
 
-testcases for the whole coos stack: tracker, fetching, filtering, applying percentages
-remove activities without funding under a hierarchy
-do not ignore null-percentage rows
-test ReportCollapsingStrategy != UNKNOWNS
-testcases ReportDataCollapser!!
-change all references to Behaviour with ones to Behaviour<?>
 caching layer on top of workspace filter
 lucene indexer
-configurable behaviour with entries-missing hierarchies
 refactor workspacefilter
-respect thousands/millions settings
-delete items without funding from hierarchies
 format numbers, during the output stage, as BigDecimal (AmpNiReportsFormatter)
 summary reports in output stages

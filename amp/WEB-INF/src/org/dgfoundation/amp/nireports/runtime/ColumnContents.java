@@ -30,6 +30,20 @@ public class ColumnContents {
 		this.data.putAll(data);
 	}
 	
+	/**
+	 * creates an instance which only keeps the lines with the given ids
+	 * @param data
+	 * @param idsToKeep
+	 */
+	public ColumnContents(Map<Long, ? extends List<NiCell>> rawData, Set<Long> idsToKeep) {
+		Objects.requireNonNull(rawData);
+		for(Long id:idsToKeep) {
+			List<NiCell> idCells = rawData.get(id);
+			if(idCells != null)
+				this.data.put(id, idCells);
+		}
+	}	
+	
 	public ColumnContents(List<NiCell> items) {
 		this(items.stream().collect(Collectors.groupingBy(z -> z.getMainId())));
 	}

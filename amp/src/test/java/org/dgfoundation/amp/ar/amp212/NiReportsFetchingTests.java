@@ -1,12 +1,16 @@
 package org.dgfoundation.amp.ar.amp212;
 
+import java.sql.Connection;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.dgfoundation.amp.algo.AmpCollections.sorted;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
@@ -15,6 +19,7 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.junit.Test;
 
 /**
@@ -44,7 +49,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 	public void testProjectTitle() throws Exception {
 		runInEngineContext(Arrays.asList("Unvalidated activity", "execution rate activity"), engine -> {
 			List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.PROJECT_TITLE).fetch(engine);
-			assertEquals("[Unvalidated activity (id: 64, eid: 64, coos: {}), execution rate activity (id: 77, eid: 77, coos: {})]", cells.toString());
+			assertEquals("[Unvalidated activity (id: 64, eid: 64), execution rate activity (id: 77, eid: 77)]", cells.toString());
 		});
 	}
 
@@ -152,8 +157,8 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 			engine -> {
 				List<? extends Cell> cells = sorted(engine.schema.getColumns().get(ColumnConstants.ACTIVITY_UPDATED_BY).fetch(engine));
 				assertEquals("[" + 
-					"ATL ATL (atl@amp.org) (id: 64, eid: 3, coos: {}), " + 
-					"ATL ATL (atl@amp.org) (id: 77, eid: 3, coos: {})"
+					"ATL ATL (atl@amp.org) (id: 64, eid: 3), " + 
+					"ATL ATL (atl@amp.org) (id: 77, eid: 3)"
 					+ "]",
 					cells.toString());
 			});
@@ -192,7 +197,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 	public void testJointCriteria() throws Exception {
 		runInEngineContext(Arrays.asList("Unvalidated activity", "execution rate activity", "Activity with Zones"), engine -> {
 			List<? extends Cell> cells = sorted(engine.schema.getColumns().get(ColumnConstants.JOINT_CRITERIA).fetch(engine));
-			assertEquals("[Yes (id: 33, eid: 33, coos: {})]", cells.toString());
+			assertEquals("[Yes (id: 33, eid: 33)]", cells.toString());
 		});
 	}
 	
@@ -202,12 +207,23 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 		List<String> acts = Arrays.asList("new activity with contracting",  "Activity with both MTEFs and Act.Comms", "Activity with Zones");
 		runInEngineContext(acts, engine -> {
 			List<? extends Cell> cells = nicelySorted(engine.schema.getColumns().get(ColumnConstants.REGION).fetch(engine));
-			assertEquals("[Anenii Noi County (id, mainId, %) = (33, 9085, 0.50), Balti County (id, mainId, %) = (33, 9086, 0.50), Balti County (id, mainId, %) = (70, 9086, 0.30), Drochia County (id, mainId, %) = (70, 9090, 0.70)]", 
+			assertEquals("[Anenii Noi County (id: 33, eid: 9085, coos: {locs.LOCS=(level: 1, id: 9085)}, p: 0.50), Balti County (id: 33, eid: 9086, coos: {locs.LOCS=(level: 1, id: 9086)}, p: 0.50), Balti County (id: 70, eid: 9086, coos: {locs.LOCS=(level: 1, id: 9086)}, p: 0.30), Drochia County (id: 70, eid: 9090, coos: {locs.LOCS=(level: 1, id: 9090)}, p: 0.70)]", 
 					cells.toString());
 
 			List<? extends Cell> cellsZone = nicelySorted(engine.schema.getColumns().get(ColumnConstants.ZONE).fetch(engine));
-			assertEquals("[Bulboaca (id, mainId, %) = (33, 9108, 0.50), Glodeni (id, mainId, %) = (33, 9111, 0.50),  (id, mainId, %) = (70, -9090, 0.70),  (id, mainId, %) = (70, -9086, 0.30)]", 
+			assertEquals("[Anenii Noi County (id: 33, eid: 9085, coos: {locs.LOCS=(level: 1, id: 9085)}, p: 0.50), Balti County (id: 33, eid: 9086, coos: {locs.LOCS=(level: 1, id: 9086)}, p: 0.50), Balti County (id: 70, eid: 9086, coos: {locs.LOCS=(level: 1, id: 9086)}, p: 0.30), Drochia County (id: 70, eid: 9090, coos: {locs.LOCS=(level: 1, id: 9090)}, p: 0.70)]", 
 					cellsZone.toString());
 		});
+	}
+	
+	@Test
+	public void testPercentagesCorrectorsFetching() throws Exception {
+		AmpReportsSchema schema = AmpReportsSchema.getInstance();
+		try(Connection conn = PersistenceManager.getJdbcConnection()) {
+			Set<Long> ids = new HashSet<>(SQLUtils.fetchLongs(conn, "SELECT amp_activity_id FROM amp_activity_version"));
+			assertEquals("sumOfPercs: {}", schema.PERCENTAGE_CORRECTORS.get(schema.PS_DIM_USG).buildSnapshot(conn, ids).toString());
+			assertEquals("", schema.PERCENTAGE_CORRECTORS.get(schema.LOC_DIM_USG).buildSnapshot(conn, ids).toString());
+			assertEquals("", schema.PERCENTAGE_CORRECTORS.get(schema.PP_DIM_USG).buildSnapshot(conn, ids).toString());
+		}
 	}
 }

@@ -63,6 +63,9 @@ public class ReportHierarchiesCollapser implements ReportDataVisitor<ReportData>
 	}
 		
 	protected ColumnReportData collapseCRDs(List<ColumnReportData> children) {
+		if (children.size() == 1) // make the common case fast
+			return new ColumnReportData(children.get(0).context, children.get(0).splitter, children.get(0).getContents());
+		
 		Map<CellColumn, ColumnContents> contents = new HashMap<>();
 		for(CellColumn leaf:leaves) {
 			contents.put(leaf, mergeColumnContents(children.stream().map(child -> child.getContents().get(leaf)).filter(z -> z != null).collect(toList())));
@@ -76,7 +79,6 @@ public class ReportHierarchiesCollapser implements ReportDataVisitor<ReportData>
 		for(GroupReportData child:children)
 			newChildren.addAll(child.getSubReports());
 		GroupReportData grouped = new GroupReportData(children.get(0).context, NiSplitCell.merge(children.stream().map(z -> z.splitter)), newChildren);
-//		ReportData res = grouped.accept(new ReportHierarchiesCollapser(ReportCollapsingStrategy.ALWAYS, leaves));
 		ReportData res = grouped.accept(this);
 		return res;
 	}

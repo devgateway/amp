@@ -20,7 +20,6 @@ import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 import static org.dgfoundation.amp.algo.AmpCollections.remap;
-import static org.dgfoundation.amp.algo.AmpCollections.keepEntries;
 /**
  * a leaf of a report - the bottom hierarchy, without any subreports
  * @author Dolghier Constantin
@@ -46,20 +45,6 @@ public class ColumnReportData extends ReportData {
 			res.addAll(col.data.keySet());
 		return res;
 	}
-
-//	//TODO: test this one
-//	protected void add(Map<Long, BigDecimal> map, long key, BigDecimal add) {
-//		if (add == null)
-//			map.put(key, add); // anything + null = null
-//		
-//		if (!map.containsKey(key))
-//			map.put(key, add);
-//		
-//		if (map.get(key) == null)
-//			return; // null + anything = null
-//		
-//		map.put(key, map.get(key).add(add));
-//	}
 	
 	class SplitDigest {
 		final CellColumn cellColumn;
@@ -149,7 +134,7 @@ public class ColumnReportData extends ReportData {
 				ColumnReportData sub = new ColumnReportData(context, splitCell, 
 					keepEmptyFundingRows ? 
 						subContents : 
-						remap(subContents, zz -> new ColumnContents(keepEntries(zz.data, entitiesWithFunding)), null));
+						remap(subContents, zz -> new ColumnContents(zz.data, entitiesWithFunding), null));
 				newChildren.add(sub);
 			}
 		}

@@ -22,7 +22,7 @@ public class OrganizationsTestDimension extends HardcodedNiDimension {
 				element(38, "Default", 
 						element(17, "Default Group", 
 							element(21378, "72 Local Public Administrations from RM" ), 
-							element(21698, "Finland" ) ), 
+							element(21698, "Finl.and" ) ), 
 						element(18, "European", 
 							element(21694, "Norway" ) ), 
 						element(19, "American", 

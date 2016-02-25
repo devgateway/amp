@@ -86,6 +86,11 @@ public class PercentagesCorrector {
 			double cellValue = 100 * nrNulls + (raw == null ? 0 : raw.doubleValue());
 			return 100 * cellValue / sumOfPercentages.get(mainId);
 		}
+		
+		@Override
+		public String toString() {
+			return String.format("sumOfPercs: %s", sumOfPercentages.toString());
+		}
 	}
 	
 	public List<ReportRenderWarning> validateDb(String entityName, java.sql.Connection conn) {

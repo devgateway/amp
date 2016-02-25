@@ -754,14 +754,14 @@ public class ReportsFilterPicker extends Action {
 							rootActivityStatus, "selectedStatuses");
 			filterForm.getOtherCriteriaElements().add(activityStatusElement);
 		}
-		if (true) { //Here needs to be a check to see if the field/feature is enabled
+		/*if (true) { //Here needs to be a check to see if the field/feature is enabled
 			Collection<AmpCategoryValue> expenditureClassesValues	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.EXPENDITURE_CLASS_KEY, true);	
 			HierarchyListableImplementation rootExpenditureClass	= new HierarchyListableImplementation("All", "0", expenditureClassesValues);
 			GroupingElement<HierarchyListableImplementation> expenditureClassElement	=
 					new GroupingElement<HierarchyListableImplementation>("Expenditure Class", "filter_expenditure_class_div", 
 							rootExpenditureClass, "selectedExpenditureClasses");
 			filterForm.getOtherCriteriaElements().add(expenditureClassElement);
-		}
+		}*/
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
 			Collection<AmpTeam> creatorsList	= TeamUtil.getAllRelatedTeams();
 			List<HierarchyListableImplementation> children	= new ArrayList<HierarchyListableImplementation>();
@@ -1390,7 +1390,7 @@ public class ReportsFilterPicker extends Action {
 		
 		arf.setStatuses(pumpCategoryValueSetFromForm(filterForm.getSelectedStatuses()));
 		
-		arf.setExpenditureClass(pumpCategoryValueSetFromForm(filterForm.getSelectedExpenditureClasses()));
+		//arf.setExpenditureClass(pumpCategoryValueSetFromForm(filterForm.getSelectedExpenditureClasses()));
 		
 		if (filterForm.getSelectedWorkspaces() != null && filterForm.getSelectedWorkspaces().length > 0)
 			arf.setWorkspaces(new HashSet<AmpTeam>());

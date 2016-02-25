@@ -365,6 +365,9 @@ public class AmpARFilter extends PropertyListable {
 	private Set<AmpCategoryValue> typeOfAssistance = null;
 	private Set<AmpCategoryValue> modeOfPayment = null;
 	private Set<AmpCategoryValue> activityPledgesTitle = null;
+	
+	private Set<AmpCategoryValue> expenditureClass = null;
+	
 	// private Long ampModalityId=null;
 
 	private AmpCurrency currency = null;
@@ -3521,6 +3524,14 @@ public class AmpARFilter extends PropertyListable {
 		this.disasterResponse = disasterResponse;
 	}
 	
+	public Set<AmpCategoryValue> getExpenditureClass() {
+		return expenditureClass;
+	}
+
+	public void setExpenditureClass(Set<AmpCategoryValue> expenditureClass) {
+		this.expenditureClass = expenditureClass;
+	}
+
 	public static boolean isTrue(Boolean b) {
 		return b != null && b;
 	}

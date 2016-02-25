@@ -250,6 +250,9 @@ public class CategoryConstants {
 	public static final String PROJECT_IMPLEMENTATION_MODE_NAME		= "Project Implementation Mode";
 	public static final String PROJECT_IMPLEMENTATION_MODE_KEY			= "project_implementation_mode";
 	
+	public static final String EXPENDITURE_CLASS_NAME = "Expenditure Class";
+    public static final String EXPENDITURE_CLASS_KEY = "expenditure_class";
+	
 	public static class HardCodedCategoryValue
 	{
 		private String valueKey;

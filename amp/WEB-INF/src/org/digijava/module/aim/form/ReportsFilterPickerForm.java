@@ -167,6 +167,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private boolean showWorkspaceFilter;
 	private String selectedActivityPledgesSettings = "-1";
 	
+	private Object[] selectedExpenditureClasses;
+	
 	public int getCalendarsSize() {
 		if (calendars == null) return 0;
 		return calendars.size();
@@ -1347,5 +1349,13 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setSelectedDisasterResponse(Object[] selectedDisasterResponse) {
 		this.selectedDisasterResponse = selectedDisasterResponse;
+	}
+
+	public Object[] getSelectedExpenditureClasses() {
+		return selectedExpenditureClasses;
+	}
+
+	public void setSelectedExpenditureClasses(Object[] selectedExpenditureClasses) {
+		this.selectedExpenditureClasses = selectedExpenditureClasses;
 	}
 }

@@ -33,8 +33,9 @@ public final class TextCell extends Cell {
 
 	@Override
 	public String toString() {
-		String entityStr = this.entityId > 0 ? String.format(", eid: %d", this.entityId) : "";
-		return String.format("%s (id: %d%s, coos: %s)", text, this.activityId, entityStr, coordinates);
+		//String entityStr = this.entityId > 0 ? String.format(", eid: %d", this.entityId) : "";
+		String entityStr = String.format(", eid: %d", this.entityId);
+		return String.format("%s (id: %d%s%s)", text, this.activityId, entityStr, coordinates.isEmpty() ? "" : String.format(", coos: %s", coordinates));
 	}
 	
 	@Override

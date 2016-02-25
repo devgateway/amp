@@ -12,6 +12,8 @@ import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.output.NiOutCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 
+import static org.dgfoundation.amp.algo.AmpCollections.remap;
+import static org.dgfoundation.amp.algo.AmpCollections.relist;
 
 /**
  * the contents of a column inside of a {@link CellColumn} <br />
@@ -69,6 +71,10 @@ public class ColumnContents {
 		return data.toString();
 	}
 
+	public String debugString() {
+		return remap(data, l -> relist(l, NiCell::getCell), null).toString();
+	}
+	
 	public void add(ColumnContents v) {
 		v.data.forEach(this::addCells); 
 	}

@@ -1,11 +1,12 @@
 package org.dgfoundation.amp.nireports;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
@@ -27,9 +28,11 @@ import org.dgfoundation.amp.nireports.runtime.ReportDataVisitor;
 public class ReportHierarchiesCollapser implements ReportDataVisitor<ReportData> {
 
 	protected final ReportCollapsingStrategy strategy;
+	protected final List<CellColumn> leaves;
 	
-	public ReportHierarchiesCollapser(ReportCollapsingStrategy strategy) {
+	public ReportHierarchiesCollapser(ReportCollapsingStrategy strategy, Collection<CellColumn> leaves) {
 		this.strategy = strategy;
+		this.leaves = Collections.unmodifiableList(new ArrayList<>(leaves));
 	}
 	
 	@Override
@@ -42,35 +45,28 @@ public class ReportHierarchiesCollapser implements ReportDataVisitor<ReportData>
 		if (grd.getSubReports().isEmpty() || strategy == ReportCollapsingStrategy.NEVER)
 			return grd;
 		boolean containsCRDs = grd.getSubReports().get(0) instanceof ColumnReportData; // all the children have the same type
-		Map<String, List<ReportData>> childrenByName = new HashMap<>();
-		final String dummyUnknownName = "####dummy####unknown"; // the key by which unknown will go under childrenByName 
+		Map<ReportDataDigest, List<ReportData>> childrenByName = new HashMap<>();
+		Function<ReportData, ReportDataDigest> digester = strategy == ReportCollapsingStrategy.ALWAYS ? ALWAYS_DIGESTER : UNKNOWNS_DIGESTER;
+		
 		for(ReportData subReport:grd.getSubReports()) {
-			String key = subReport.splitter.undefined ? dummyUnknownName : subReport.splitter.getDisplayedValue();
+			ReportDataDigest key = digester.apply(subReport);
 			childrenByName.computeIfAbsent(key, ignored -> new ArrayList<>()).add(subReport);
 		}
 		List<ReportData> newChildren = new ArrayList<>();
-		for(String childName:childrenByName.keySet()) {
-			List<? extends ReportData> children = childrenByName.get(childName);
-			boolean unknown = childName.equals(dummyUnknownName);
-			if (unknown || strategy == ReportCollapsingStrategy.ALWAYS) {
-				ReportData newChild = containsCRDs ? collapseCRDs(grd.context.headers, (List<ColumnReportData>) children) : collapseGRDs(strategy, (List<GroupReportData>) children);
-				newChildren.add(newChild);
-			} else {
-				newChildren.addAll(children.stream().map(z -> z.accept(this)).collect(toList()));
-			}
+		for(ReportDataDigest childDigest:childrenByName.keySet()) {
+			List<? extends ReportData> children = childrenByName.get(childDigest);
+			ReportData newChild = containsCRDs ? collapseCRDs((List<ColumnReportData>) children) : collapseGRDs(strategy, (List<GroupReportData>) children);
+			newChildren.add(newChild);
 		}
 		newChildren.sort((a, b) -> a.splitter.compareTo(b.splitter)); // splitter is always nonnull for children
 		return grd.clone(newChildren);
 	}
 		
-	protected ColumnReportData collapseCRDs(NiHeaderInfo headers, List<ColumnReportData> children) {
-		List<CellColumn> leaves = headers.leafColumns;
+	protected ColumnReportData collapseCRDs(List<ColumnReportData> children) {
 		Map<CellColumn, ColumnContents> contents = new HashMap<>();
 		for(CellColumn leaf:leaves) {
 			contents.put(leaf, mergeColumnContents(children.stream().map(child -> child.getContents().get(leaf)).filter(z -> z != null).collect(toList())));
 		}
-		//TODO: all the ids except one will be lost - ATM the datastructures do not allow holding multiple IDs
-		//NiCell splitter = children.get(0).splitter; 
 		ColumnReportData res = new ColumnReportData(children.get(0).context, NiSplitCell.merge(children.stream().map(z -> z.splitter)), contents);
 		return res;
 	}
@@ -79,8 +75,9 @@ public class ReportHierarchiesCollapser implements ReportDataVisitor<ReportData>
 		List<ReportData> newChildren = new ArrayList<>();
 		for(GroupReportData child:children)
 			newChildren.addAll(child.getSubReports());
-		GroupReportData grouped = new GroupReportData(children.get(0).context, children.get(0).splitter, newChildren);
-		ReportData res = grouped.accept(new ReportHierarchiesCollapser(ReportCollapsingStrategy.ALWAYS));
+		GroupReportData grouped = new GroupReportData(children.get(0).context, NiSplitCell.merge(children.stream().map(z -> z.splitter)), newChildren);
+//		ReportData res = grouped.accept(new ReportHierarchiesCollapser(ReportCollapsingStrategy.ALWAYS, leaves));
+		ReportData res = grouped.accept(this);
 		return res;
 	}
 	
@@ -93,4 +90,66 @@ public class ReportHierarchiesCollapser implements ReportDataVisitor<ReportData>
 		return new ColumnContents(res);
 	}
 
+	interface ReportDataDigest {};
+	
+	final static Function<ReportData, ReportDataDigest> UNKNOWNS_DIGESTER = rd -> new UnknownDigest(rd); 
+	final static Function<ReportData, ReportDataDigest> ALWAYS_DIGESTER = rd -> new AlwaysDigest(rd);
+	
+	/**
+	 * a ReportData digest which equals 2 RD's if both of them are undefined OR they have the same id
+	 * @author Dolghier Constantin
+	 *
+	 */
+	static class UnknownDigest implements ReportDataDigest {
+		final long id;
+		final boolean undefined;
+		
+		public UnknownDigest(ReportData rd) {
+			this.id = rd.splitter.entityIds.iterator().next();
+			this.undefined = rd.splitter.undefined;
+		}
+		
+		@Override
+		public int hashCode() {
+			return undefined ? Boolean.hashCode(undefined) : Long.hashCode(id);
+		}
+		
+		@Override
+		public boolean equals(Object o) {
+			UnknownDigest other = (UnknownDigest) o;
+			if (undefined ^ other.undefined)
+				return false;
+			// both defined or both undefined
+			return undefined || (id == other.id);
+		}
+	}
+	
+	/**
+	 * a ReportData digest which equals 2 RD's if both of them are undefined OR they have the same name
+	 * @author Dolghier Constantin
+	 *
+	 */
+	static class AlwaysDigest implements ReportDataDigest {
+		final String name;
+		final boolean undefined;
+		
+		public AlwaysDigest(ReportData rd) {
+			this.name = rd.splitter.getDisplayedValue();
+			this.undefined = rd.splitter.undefined;
+		}
+		
+		@Override
+		public int hashCode() {
+			return undefined? Boolean.hashCode(undefined) : name.hashCode(); 
+		}
+		
+		@Override
+		public boolean equals(Object o) {
+			AlwaysDigest other = (AlwaysDigest) o;
+			if (undefined && other.undefined)
+				return true;
+			// both defined or both undefined
+			return name.equals(other.name);
+		}
+	}
 }

@@ -157,6 +157,21 @@ public class AmpCollections {
 	}
 	
 	/**
+	 * remaps both keys and values
+	 * @param in
+	 * @param keyMapper
+	 * @param valueMapper
+	 * @param sorted
+	 * @return
+	 */
+	public static<K, V, A, B> Map<A, B> remap(Map<K, V> in, Function<K, A> keyMapper, Function<V, B> valueMapper, boolean sorted) {
+		Map<A, B> res = sorted ? new TreeMap<>() : new LinkedHashMap<>();
+		in.forEach((k, v) -> 
+			res.put(keyMapper.apply(k), valueMapper.apply(v)));
+		return res;
+	}
+	
+	/**
 	 * @param in
 	 * @param keysToKeep
 	 * @return
@@ -189,6 +204,10 @@ public class AmpCollections {
 		SortedMap<K, V> res = new TreeMap<K, V>(comp);
 		res.putAll(in);
 		return res;
+	}
+	
+	public static<K, V> List<V> relist(List<K> in, Function<K, V> func) {
+		return in.stream().map(func).collect(Collectors.toList());
 	}
 	
 	public static<K, V> Map<K, V> map(List<K> in, Function<K, V> func) {

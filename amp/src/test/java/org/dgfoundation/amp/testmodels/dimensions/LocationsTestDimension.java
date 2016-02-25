@@ -11,7 +11,7 @@ import org.dgfoundation.amp.testmodels.TestModelConstants;
 
 public class LocationsTestDimension extends HardcodedNiDimension {
 
-	public final static LocationsTestDimension instance = new LocationsTestDimension("Locations test dimension", TestModelConstants.LOCATIONS_DIMENSION_DEPTH);
+	public final static LocationsTestDimension instance = new LocationsTestDimension("locs", TestModelConstants.LOCATIONS_DIMENSION_DEPTH);
 	
 	public LocationsTestDimension(String name, int depth) {
 		super(name, depth);

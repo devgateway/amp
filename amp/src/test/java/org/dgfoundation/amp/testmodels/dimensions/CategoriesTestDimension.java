@@ -11,7 +11,7 @@ import org.dgfoundation.amp.testmodels.TestModelConstants;
 
 public class CategoriesTestDimension extends HardcodedNiDimension {
 
-	public final static CategoriesTestDimension instance = new CategoriesTestDimension("Categories", TestModelConstants.CATEGORIES_DIMENSION_DEPTH);
+	public final static CategoriesTestDimension instance = new CategoriesTestDimension("cats", TestModelConstants.CATEGORIES_DIMENSION_DEPTH);
 	
 	public CategoriesTestDimension(String name, int depth) {
 		super(name, depth);

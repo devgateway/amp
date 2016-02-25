@@ -28,7 +28,7 @@ import org.junit.Test;
 public class FundingFlowsInnerTests extends NiTestCase {
 		
 	public FundingFlowsInnerTests() {
-		super("FundingFlows tests");
+		super("FundingFlows tests", HardcodedReportsTestSchema.getInstance());
 	}
 	
 	@Test
@@ -48,7 +48,7 @@ public class FundingFlowsInnerTests extends NiTestCase {
 		
 		// should return True for both null and non-null column
 		assertTrue(beh.shouldDeleteLeafIfEmpty(null));
-		assertTrue(beh.shouldDeleteLeafIfEmpty(new CellColumn("some-name", new ColumnContents(Collections.emptyList()), null, HardcodedReportsTestSchema.getInstance().getColumns().get(ColumnConstants.PROJECT_TITLE), null)));
+		assertTrue(beh.shouldDeleteLeafIfEmpty(new CellColumn("some-name", new ColumnContents(Collections.emptyList()), null, schema.getColumns().get(ColumnConstants.PROJECT_TITLE), null)));
 	}
 
 	@SuppressWarnings("static-access")
@@ -89,8 +89,8 @@ public class FundingFlowsInnerTests extends NiTestCase {
 	@Test
 	public void testFilterCellByDonor() {
 		//NiCell primSectorSplitterCell = buildColumnNiCell(buildCell(10, buildMetaInfo(), buildCoos(HardcodedReportsTestSchema.DONOR_DIM_USG, new NiDimension.Coordinate(2, 2l))), ColumnConstants.PRIMARY_SECTOR);
-		NiCell donorSplitterCell = buildColumnNiCell(buildTextCell("USAID", 21696l, HardcodedReportsTestSchema.DONOR_DIM_USG.getLevelColumn(2), buildMetaInfo()), ColumnConstants.DONOR_AGENCY);
-		NiCell donorGroupSplitterCell = buildColumnNiCell(buildTextCell("American", 19l, HardcodedReportsTestSchema.DONOR_DIM_USG.getLevelColumn(1), buildMetaInfo()), ColumnConstants.DONOR_GROUP);
+		NiCell donorSplitterCell = buildColumnNiCell(textCell("USAID", 21696l, HardcodedReportsTestSchema.DONOR_DIM_USG.getLevelColumn(2)), ColumnConstants.DONOR_AGENCY);
+		NiCell donorGroupSplitterCell = buildColumnNiCell(textCell("American", 19l, HardcodedReportsTestSchema.DONOR_DIM_USG.getLevelColumn(1)), ColumnConstants.DONOR_GROUP);
 				
 		NiCell fundingCell = buildMeasureNiCell(buildCell(100, 
 				buildMetaInfo(MetaCategory.SOURCE_ROLE, Constants.FUNDING_AGENCY, MetaCategory.SOURCE_ORG, 21696l, MetaCategory.RECIPIENT_ROLE, Constants.EXECUTING_AGENCY, MetaCategory.RECIPIENT_ORG, 21701l), 
@@ -102,8 +102,8 @@ public class FundingFlowsInnerTests extends NiTestCase {
 		
 	@Test
 	public void testFilterForeignCellByImplementingAgency() {
-		NiCell iaSplitterCell = buildColumnNiCell(buildPercentageTextCell("USAID", 21696l, 0.25, HardcodedReportsTestSchema.IA_DIM_USG.getLevelColumn(2), buildMetaInfo()), ColumnConstants.IMPLEMENTING_AGENCY);
-		NiCell iaGroupSplitterCell = buildColumnNiCell(buildPercentageTextCell("American", 19l, 0.4, HardcodedReportsTestSchema.IA_DIM_USG.getLevelColumn(1), buildMetaInfo()), ColumnConstants.IMPLEMENTING_AGENCY_GROUPS);
+		NiCell iaSplitterCell = buildColumnNiCell(percentageTextCell("USAID", 21696l, 0.25, HardcodedReportsTestSchema.IA_DIM_USG.getLevelColumn(2)), ColumnConstants.IMPLEMENTING_AGENCY);
+		NiCell iaGroupSplitterCell = buildColumnNiCell(percentageTextCell("American", 19l, 0.4, HardcodedReportsTestSchema.IA_DIM_USG.getLevelColumn(1)), ColumnConstants.IMPLEMENTING_AGENCY_GROUPS);
 
 		NiCell fundingCell = buildMeasureNiCell(buildCell(100, 
 				buildMetaInfo(MetaCategory.SOURCE_ROLE, Constants.FUNDING_AGENCY, MetaCategory.SOURCE_ORG, 21696l, MetaCategory.RECIPIENT_ROLE, Constants.EXECUTING_AGENCY, MetaCategory.RECIPIENT_ORG, 21701l), 
@@ -115,8 +115,8 @@ public class FundingFlowsInnerTests extends NiTestCase {
 	
 	@Test
 	public void testFilterByImplementingAgency() {
-		NiCell iaSplitterCell = buildColumnNiCell(buildPercentageTextCell("USAID", 21696l, 0.25, HardcodedReportsTestSchema.IA_DIM_USG.getLevelColumn(2), buildMetaInfo()), ColumnConstants.IMPLEMENTING_AGENCY);
-		NiCell iaGroupSplitterCell = buildColumnNiCell(buildPercentageTextCell("American", 19l, 0.4, HardcodedReportsTestSchema.IA_DIM_USG.getLevelColumn(1), buildMetaInfo()), ColumnConstants.IMPLEMENTING_AGENCY_GROUPS);
+		NiCell iaSplitterCell = buildColumnNiCell(percentageTextCell("USAID", 21696l, 0.25, HardcodedReportsTestSchema.IA_DIM_USG.getLevelColumn(2)), ColumnConstants.IMPLEMENTING_AGENCY);
+		NiCell iaGroupSplitterCell = buildColumnNiCell(percentageTextCell("American", 19l, 0.4, HardcodedReportsTestSchema.IA_DIM_USG.getLevelColumn(1)), ColumnConstants.IMPLEMENTING_AGENCY_GROUPS);
 
 		NiCell fundingCell = buildMeasureNiCell(buildCell(100, 
 				buildMetaInfo(MetaCategory.SOURCE_ROLE, Constants.IMPLEMENTING_AGENCY, MetaCategory.SOURCE_ORG, 21696l, MetaCategory.RECIPIENT_ROLE, Constants.EXECUTING_AGENCY, MetaCategory.RECIPIENT_ORG, 21701l),

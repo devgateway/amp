@@ -50,7 +50,9 @@ public final class PercentageTextCell extends Cell {
 	
 	@Override
 	public String toString() {
-		return String.format("%s (id, mainId, %%) = (%d, %d, %.2f)", text, this.activityId, this.entityId, this.percentage.doubleValue());
+		String entityStr = String.format(", eid: %d", this.entityId);
+		return String.format("%s (id: %d%s%s, p: %.2f)", text, this.activityId, entityStr, coordinates.isEmpty() ? "" : String.format(", coos: %s", coordinates), this.percentage.doubleValue());
+		//return String.format("%s (id, mainId, %%) = (%d, %d, %.2f)", text, this.activityId, this.entityId, this.percentage.doubleValue());
 //		String entityStr = this.entityId > 0 ? String.format(", eid: %d", this.entityId) : "";
 //		String percentageStr = percentage == null ? "(n/a)" : String.format("%.2f", percentage.doubleValue());
 //		return String.format("%s (id: %d%s, coos: %s%s %%)", text, this.activityId, entityStr, coordinates, percentageStr);

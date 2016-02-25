@@ -256,7 +256,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 
 	protected void collapseHierarchies() {
-		timer.run("collapsing", () -> this.rootReportData = this.rootReportData.accept(new ReportHierarchiesCollapser(spec.getSubreportsCollapsing())));
+		timer.run("collapsing", () -> this.rootReportData = this.rootReportData.accept(new ReportHierarchiesCollapser(spec.getSubreportsCollapsing(), this.headers.getLeafColumns())));
 	}
 	
 	protected void flatten() {

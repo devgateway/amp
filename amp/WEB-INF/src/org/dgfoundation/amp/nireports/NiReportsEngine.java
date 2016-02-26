@@ -10,6 +10,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -89,7 +93,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	
 	final Map<String, ColumnContents> fetchedColumns = new LinkedHashMap<>();
 	final Map<String, ColumnContents> fetchedMeasures = new LinkedHashMap<>();
-	final VivificatingMap<Long, Set<ReportWarning>> reportWarnings = new VivificatingMap<>(new HashMap<>(), () -> new HashSet<ReportWarning>());
+	final SortedMap<Long, SortedSet<ReportWarning>> reportWarnings = new TreeMap<>();
 	
 	/**
 	 * only available once {@link #createInitialReport()} has exited
@@ -162,7 +166,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 			this.timer = new InclusiveTimer("Report " + spec.getReportName());
 			timer.run("exec", this::runReportAndCleanup);
 			printReportWarnings();
-			NiReportRunResult runResult = new NiReportRunResult(this.reportOutput, timer.getCurrentState(), timer.getWallclockTime(), this.headers, getReportWarnings());
+			NiReportRunResult runResult = new NiReportRunResult(this.reportOutput, timer.getCurrentState(), timer.getWallclockTime(), this.headers, reportWarnings);
 //			logger.warn("JsonBean structure of RunNode:" + timingInfo.asJsonBean());
 			logger.warn(String.format("it took %d millies to generate report, the breakdown is:\n%s", runResult.wallclockTime, runResult.timings.asUserString(3)));
 			return runResult; 
@@ -496,21 +500,12 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 	
 	protected void addReportWarning(ReportWarning warning) {
-		reportWarnings.getOrCreate(warning.entityId).add(warning);
-	}
-	
-	protected Set<ReportWarning> getReportWarnings() {
-		//return reportWarnings.values().stream().flatMap(v -> v.stream()).collect(Collectors.toSet());
-		Set<ReportWarning> warnings = new HashSet<ReportWarning>();
-		for (Set<ReportWarning> w : reportWarnings.values()) {
-			warnings.addAll(w);
-		}
-		return warnings;
+		reportWarnings.computeIfAbsent(warning.entityId, ignored -> new TreeSet<>()).add(warning);
 	}
 	
 	protected void printReportWarnings() {
 		if (!reportWarnings.isEmpty())
-			logger.error("report render warnings: " + reportWarnings.decapsulate().toString());
+			logger.error("report render warnings: " + reportWarnings.toString());
 	}
 	
 	public synchronized DimensionSnapshot getDimensionSnapshot(NiDimension dimension) {

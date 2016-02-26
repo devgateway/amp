@@ -17,6 +17,7 @@ import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.RawDataDigest;
 import org.dgfoundation.amp.nireports.TrailCellsDigest;
 import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
+import org.dgfoundation.amp.testmodels.ReportModelGenerator;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.junit.Test;
 
@@ -393,32 +394,32 @@ public abstract class BasicSanityChecks extends AmpTestCase {
 		System.err.format("I ran %d reports in %d millies (%d per second)\n", reps, delta, reps * 1000 / delta);
 	}
 	
-	@Test
-	public void testTripleHierarchiesDoNotChangeTotals() {
-		if (this.getClass().getSimpleName().equals("AmpSchemaSanityTests"))
-			return; // these are too slow if backed by DB
-		int fails = 0;
-		// double-hierarchy reports
-		for(boolean isSummary:Arrays.asList(true, false)) {
-			for(String hier1Name:hierarchiesToTry)
-				for(String hier2Name:hierarchiesToTry)
-					for(String hier3Name:hierarchiesToTry)
-					if (hier1Name != hier2Name && hier2Name != hier3Name && hier1Name != hier3Name) {
-						ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s, %s summary: %b", hier1Name, hier2Name, hier3Name, isSummary), 
-								Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name, hier3Name), 
-								Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
-								Arrays.asList(hier1Name, hier2Name, hier3Name), 
-								GroupingCriteria.GROUPING_YEARLY);
-						spec.setSummaryReport(isSummary);
-//						if (!buildDigest(spec, acts, fundingGrandTotalsDigester).toString().equals(correctTotals)) {
-//							fails ++;
-//							System.err.println("failed: " + spec.getReportName());
-//						}
-						assertEquals(spec.getReportName(), correctTotals, buildDigest(spec, acts, fundingGrandTotalsDigester).toString());
-			}
-		}
-		System.err.println("nr of failures: " + fails);
-	}
+//	@Test
+//	public void testTripleHierarchiesDoNotChangeTotals() {
+//		if (this.getClass().getSimpleName().equals("AmpSchemaSanityTests"))
+//			return; // these are too slow if backed by DB
+//		int fails = 0;
+//		// double-hierarchy reports
+//		for(boolean isSummary:Arrays.asList(true, false)) {
+//			for(String hier1Name:hierarchiesToTry)
+//				for(String hier2Name:hierarchiesToTry)
+//					for(String hier3Name:hierarchiesToTry)
+//					if (hier1Name != hier2Name && hier2Name != hier3Name && hier1Name != hier3Name) {
+//						ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s, %s summary: %b", hier1Name, hier2Name, hier3Name, isSummary), 
+//								Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name, hier3Name), 
+//								Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+//								Arrays.asList(hier1Name, hier2Name, hier3Name), 
+//								GroupingCriteria.GROUPING_YEARLY);
+//						spec.setSummaryReport(isSummary);
+////						if (!buildDigest(spec, acts, fundingGrandTotalsDigester).toString().equals(correctTotals)) {
+////							fails ++;
+////							System.err.println("failed: " + spec.getReportName());
+////						}
+//						assertEquals(spec.getReportName(), correctTotals, buildDigest(spec, acts, fundingGrandTotalsDigester).toString());
+//			}
+//		}
+//		System.err.println("nr of failures: " + fails);
+//	}
 	
 	@Test
 	public void testSummaryReportWithoutHierarchies() {
@@ -429,5 +430,18 @@ public abstract class BasicSanityChecks extends AmpTestCase {
 				GroupingCriteria.GROUPING_YEARLY);
 		initSpec.setSummaryReport(true);
 		assertEquals(correctTotals, buildDigest(initSpec, acts, fundingGrandTotalsDigester).toString());
+	}
+	
+	
+	@Test
+	public void testReportModelGenerator() {
+		ReportSpecification spec = buildSpecification("ByTypeOfAssistance_", 
+			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.PRIMARY_SECTOR), 
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+			Arrays.asList(ColumnConstants.REGION, ColumnConstants.PRIMARY_SECTOR),
+			GroupingCriteria.GROUPING_YEARLY);
+
+		assertEquals("",
+			buildDigest(spec, acts, new ReportModelGenerator()).toString());
 	}
 }

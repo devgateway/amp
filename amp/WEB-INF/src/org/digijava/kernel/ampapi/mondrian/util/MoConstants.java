@@ -13,7 +13,6 @@ public final class MoConstants {
 
 	//AMP Cubes
 	//public static String CONNECTION_DS = "jdbc:mondrian:Datasource=" + Constants.MONETDB_JNDI_ALIAS;
-	public static String CONNECTION_DS = String.format("jdbc:mondrian:JdbcDrivers=nl.cwi.monetdb.jdbc.MonetDriver;Jdbc=%s;JdbcUser=monetdb;JdbcPassword=monetdb;PoolNeeded=false", MonetConnection.getJdbcUrl());
 	public static final String SCHEMA_PROCESSOR = "DynamicSchemaProcessor=" + AmpMondrianSchemaProcessor.class.getCanonicalName();
 	public static final String SCHEMA_PATH = "WEB-INF/src/org/digijava/kernel/ampapi/mondrian/util/AMP.xml".replace("/", System.getProperty("file.separator"));
 	public static final String FUNDING_CUBE_NAME = "Donor Funding";

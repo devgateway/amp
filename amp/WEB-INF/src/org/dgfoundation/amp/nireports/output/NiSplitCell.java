@@ -13,7 +13,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 
 /**
- * a cell which holds a text
+ * a cell which holds info regarding the splitter cell of a hierarchy element
  * @author Dolghier Constantin
  *
  */

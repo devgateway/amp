@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 
 import javax.servlet.ServletRequest;
 
+import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.digijava.kernel.request.TLSUtils;
 import org.olap4j.OlapConnection;
 
@@ -32,7 +33,7 @@ public class Connection {
 	}
 	
 	public static String getConnection(String rootPath) {
-		connection = MoConstants.CONNECTION_DS + ";"
+		connection = MondrianETL.CONNECTION_DS + ";"
 				+ "Catalog=file:" + rootPath + "/saiku/saiku-repository/AMP.xml;PoolNeeded=false";
 		return connection;
 
@@ -43,7 +44,7 @@ public class Connection {
 			schemaPath = request.getServletContext().getRealPath(schemaPath);
 		else 
 			schemaPath = Paths.get(schemaPath).toAbsolutePath().toString();
-		return MoConstants.CONNECTION_DS +";Catalog=file:" + schemaPath + ";" + MoConstants.SCHEMA_PROCESSOR;
+		return MondrianETL.CONNECTION_DS +";Catalog=file:" + schemaPath + ";" + MoConstants.SCHEMA_PROCESSOR;
 	}
 	
 	public static OlapConnection getOlapConnectionByConnPath(String connPath) throws Exception {

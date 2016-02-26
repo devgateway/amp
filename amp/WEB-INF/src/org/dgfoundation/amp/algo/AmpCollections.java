@@ -206,7 +206,7 @@ public class AmpCollections {
 		return res;
 	}
 	
-	public static<K, V> List<V> relist(List<K> in, Function<K, V> func) {
+	public static<K, V> List<V> relist(Collection<K> in, Function<K, V> func) {
 		return in.stream().map(func).collect(Collectors.toList());
 	}
 	

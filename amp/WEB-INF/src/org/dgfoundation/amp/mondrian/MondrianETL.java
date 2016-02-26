@@ -57,6 +57,8 @@ import com.google.common.base.Predicate;
  */
 public class MondrianETL {
 		
+	public static String CONNECTION_DS = String.format("jdbc:mondrian:JdbcDrivers=nl.cwi.monetdb.jdbc.MonetDriver;Jdbc=%s;JdbcUser=monetdb;JdbcPassword=monetdb;PoolNeeded=false", MonetConnection.getJdbcUrl());
+
 	public final static String MONDRIAN_EXCHANGE_RATES_TABLE = "mondrian_exchange_rates";
 	public final static String MONDRIAN_DATE_TABLE = "mondrian_dates";
 	

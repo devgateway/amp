@@ -211,7 +211,7 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 					cells.toString());
 
 			List<? extends Cell> cellsZone = nicelySorted(engine.schema.getColumns().get(ColumnConstants.ZONE).fetch(engine));
-			assertEquals("[Anenii Noi County (id: 33, eid: 9085, coos: {locs.LOCS=(level: 1, id: 9085)}, p: 0.50), Balti County (id: 33, eid: 9086, coos: {locs.LOCS=(level: 1, id: 9086)}, p: 0.50), Balti County (id: 70, eid: 9086, coos: {locs.LOCS=(level: 1, id: 9086)}, p: 0.30), Drochia County (id: 70, eid: 9090, coos: {locs.LOCS=(level: 1, id: 9090)}, p: 0.70)]", 
+			assertEquals("[Bulboaca (id: 33, eid: 9108, coos: {locs.LOCS=(level: 2, id: 9108)}, p: 0.50), Glodeni (id: 33, eid: 9111, coos: {locs.LOCS=(level: 2, id: 9111)}, p: 0.50),  (id: 70, eid: -9090, coos: {locs.LOCS=(level: 2, id: -9090)}, p: 0.70),  (id: 70, eid: -9086, coos: {locs.LOCS=(level: 2, id: -9086)}, p: 0.30)]", 
 					cellsZone.toString());
 		});
 	}
@@ -222,8 +222,8 @@ public class NiReportsFetchingTests extends MondrianReportsTestCase {
 		try(Connection conn = PersistenceManager.getJdbcConnection()) {
 			Set<Long> ids = new HashSet<>(SQLUtils.fetchLongs(conn, "SELECT amp_activity_id FROM amp_activity_version"));
 			assertEquals("sumOfPercs: {}", schema.PERCENTAGE_CORRECTORS.get(schema.PS_DIM_USG).buildSnapshot(conn, ids).toString());
-			assertEquals("", schema.PERCENTAGE_CORRECTORS.get(schema.LOC_DIM_USG).buildSnapshot(conn, ids).toString());
-			assertEquals("", schema.PERCENTAGE_CORRECTORS.get(schema.PP_DIM_USG).buildSnapshot(conn, ids).toString());
+			assertEquals("sumOfPercs: {33=200.0, 40=200.0}", schema.PERCENTAGE_CORRECTORS.get(schema.LOC_DIM_USG).buildSnapshot(conn, ids).toString());
+			assertEquals("sumOfPercs: {}", schema.PERCENTAGE_CORRECTORS.get(schema.PP_DIM_USG).buildSnapshot(conn, ids).toString());
 		}
 	}
 }

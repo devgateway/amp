@@ -3,6 +3,8 @@ package org.dgfoundation.amp.newreports;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -57,13 +59,13 @@ public class GeneratedReport {
 	/**
 	 * Report warnings 
 	 */
-	public final Set<ReportWarning> reportWarnings;
+	public final SortedMap<Long, SortedSet<ReportWarning>> reportWarnings;
 	
 	public final JsonBean jsonTimings;
 	
 	public GeneratedReport(ReportSpecification spec, int generationTime, TeamMember requestingUser, 
 			ReportArea reportContents, List<ReportOutputColumn> rootHeaders, List<ReportOutputColumn> leafHeaders, 
-			List<List<HeaderCell>> generatedHeaders, RunNode timings, Set<ReportWarning> reportWarnings) {
+			List<List<HeaderCell>> generatedHeaders, RunNode timings, SortedMap<Long, SortedSet<ReportWarning>> reportWarnings) {
 		this.spec = spec;
 		this.generationTime = generationTime;
 		this.requestingUser = requestingUser;

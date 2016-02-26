@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.nireports.output;
 
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.SortedMap;
 
 import org.dgfoundation.amp.algo.timing.RunNode;
 import org.dgfoundation.amp.newreports.ReportWarning;
@@ -17,10 +18,10 @@ public class NiReportRunResult {
 	public final RunNode timings;
 	public final NiHeaderInfo headers;
 	public final long wallclockTime;
-	public final Set<ReportWarning> warnings; 
+	public final SortedMap<Long, SortedSet<ReportWarning>> warnings; 
 	
 	public NiReportRunResult(NiReportData reportOut, RunNode timings, long wallclockTime, NiHeaderInfo headers, 
-			Set<ReportWarning> warnings) {
+			SortedMap<Long, SortedSet<ReportWarning>> warnings) {
 		this.reportOut = reportOut;
 		this.timings = timings;
 		this.wallclockTime = wallclockTime;

@@ -356,16 +356,19 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		TimeRange userRequestedRange = TimeRange.forCriteria(spec.getGroupingCriteria());
 		Map<String, Behaviour<?>> behaviours = fundingColumn.getSubColumns().stream().collect(Collectors.toMap(z -> z.name, z -> ((CellColumn)z).getBehaviour()));
 		
-		List<TimeRange> categories = TimeRange.getRange(TimeRange.YEAR, userRequestedRange); // get all the ranges between year and what the report requests
+		//List<TimeRange> categories = TimeRange.getRange(TimeRange.YEAR, userRequestedRange); // get all the ranges between year and what the report requests
 		
 		List<NiCell> allCells = new ArrayList<>();
 		fundingColumn.forEachCell(cell -> allCells.add(cell));
 		
 		Column res = new CellColumn(fundingColumn.name, new ColumnContents(allCells), fundingColumn.getParent(), null, null, fundingColumn.splitCell);
 		List<VSplitStrategy> splitCriterias = new ArrayList<>();
-		for(TimeRange tr:categories) {
-			splitCriterias.add(tr.asVSplitStrategy());
-		}
+		splitCriterias.add(TimeRange.YEAR.asVSplitStrategy());
+		if (userRequestedRange != TimeRange.YEAR)
+			splitCriterias.add(userRequestedRange.asVSplitStrategy());
+//		for(TimeRange tr:categories) {
+//			splitCriterias.add(tr.asVSplitStrategy());
+//		}
 		
 		for(VSplitStrategy splitCriteria:splitCriterias)
 			res = res.verticallySplitByCategory(splitCriteria, fundingColumn.getParent());

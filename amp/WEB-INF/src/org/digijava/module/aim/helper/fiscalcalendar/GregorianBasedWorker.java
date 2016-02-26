@@ -79,7 +79,7 @@ public class GregorianBasedWorker implements ICalendarWorker {
 		ComparableMonth cm = monthCache.get(monthId);
 
 		if (cm == null) {
-			String monthStr = dateFormatSymbols.getMonths()[monthId];
+			String monthStr = dateFormatSymbols.getMonths()[internalTime.getMonth()];
 			cm = new ComparableMonth(monthId, monthStr);
 			monthCache.put(monthId, cm);
 		}

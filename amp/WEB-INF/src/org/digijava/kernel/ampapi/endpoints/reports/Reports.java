@@ -251,12 +251,14 @@ public class Reports {
 	public final JsonBean getReportResultForTabGrid(JsonBean formParams, 
 			@PathParam("report_id") Long reportId) {
 		
+		// TODO: normally all extra columns should come from formParams
 		List<String> extraColumns = new ArrayList<String>();
 		extraColumns.add(ColumnConstants.ACTIVITY_ID);
 		extraColumns.add(ColumnConstants.APPROVAL_STATUS);
 		extraColumns.add(ColumnConstants.DRAFT);
 		extraColumns.add(ColumnConstants.TEAM_ID);
 		formParams.set(EPConstants.ADD_COLUMNS, extraColumns);
+		//NIREPORTS: remove above when switching to NiReports only if possible!
 		
 		// Convert jqgrid sorting params into ReportUtils sorting params.
 		if (formParams.getString("sidx") != null) {			

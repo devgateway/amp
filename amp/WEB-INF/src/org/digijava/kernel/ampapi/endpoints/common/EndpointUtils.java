@@ -205,6 +205,10 @@ public class EndpointUtils {
 		TLSUtils.getRequest().setAttribute(EPConstants.NI_REPORT, useNiReports);
 	}
 	
+	@Deprecated
+	public static boolean isNiReports() {
+		return Boolean.TRUE.equals(TLSUtils.getRequest().getAttribute(EPConstants.NI_REPORT));
+	}
 	/**
 	 * Retrieves the value associated to the specified key if available 
 	 * or returns the default

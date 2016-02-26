@@ -335,6 +335,7 @@ public class ReportsUtil {
 	 */
 	public static OutputSettings buildOutputSettings(ReportSpecification spec, JsonBean formParams) {
 		Set<String> idsValuesColumns = null;
+		if (EndpointUtils.isNiReports())
 		if (formParams.get(EPConstants.COLUMNS_WITH_IDS) != null) {
 			idsValuesColumns = new HashSet<String> ((List<String>) formParams.get(EPConstants.COLUMNS_WITH_IDS));
 			// fixing the spec if some columns were not configured

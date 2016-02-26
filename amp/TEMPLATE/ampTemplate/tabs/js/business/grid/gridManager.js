@@ -7,6 +7,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 	var gridPagerBaseName = 'tab_grid_pager_';
 	var partialTotals = null;
 	var DEFAULT_ONE_PAGER_PARAMETER='activity';
+	var columnsWithIds = ['AMP_ID', 'Team'];
 	// This variable will contain the mappings between different column names
 	// (tab structure vs report data).
 	var headers = [];
@@ -18,7 +19,8 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 	}
 
 	function getURL(id) {
-		return '/rest/data/report/' + id + '/result/jqGrid';
+		// NIREPORTS: use nireport flag as needed. When ready, notify to finish full migration from backend.
+		return '/rest/data/report/' + id + '/result/jqGrid?nireport=false';
 	}
 
 	GridManager.prototype = {
@@ -40,9 +42,11 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 			postData : null
 		});
 
+		// TODO: we should also configure here "add_columns", etc as part of the client request, not on the backend
 		var data = {
 			page : 1,
 			regenerate : true,
+			columns_with_ids : columnsWithIds,
 			filters : jsonFilters,
 			settings : settings
 		};
@@ -100,6 +104,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 						postData : {
 							page : 1,
 							regenerate : true,
+							columns_with_ids : columnsWithIds,
 							filters : null
 						},
 						serializeGridData : function(postData) {
@@ -486,7 +491,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 						colName = findInMapByColumnName(key, 'hierarchicalName').originalColumnName;
 					}
 					if (colName != undefined && colName != null) {
-						if (element.displayedValue != null && element.displayedValue.toString().length > 0) {
+						if (element != null && element.displayedValue != null && element.displayedValue.toString().length > 0) {
 							row[colName] = element.displayedValue;
 						} else {
 							row[colName] = getParentContent(key, parent);

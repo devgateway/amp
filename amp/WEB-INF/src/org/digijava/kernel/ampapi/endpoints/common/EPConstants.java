@@ -14,8 +14,8 @@ import org.dgfoundation.amp.reports.ActivityType;
 
 /**
  * Endpoint related constants
+ * 
  * @author Nadejda Mandrescu
- *
  */
 public class EPConstants {
 	public static final String LANGUAGE = "language";
@@ -31,6 +31,7 @@ public class EPConstants {
 	public static final String IS_DYNAMIC = "dinamic";
 	public static final String REGENERATE = "regenerate";
 	public static final String ADD_COLUMNS = "add_columns";
+	public static final String COLUMNS_WITH_IDS = "columns_with_ids";
 	public static final String ADD_HIERARCHIES = "add_hierarchies";
 	public static final String ADD_MEASURES = "add_measures";
 	public static final String SORTING = "sorting";

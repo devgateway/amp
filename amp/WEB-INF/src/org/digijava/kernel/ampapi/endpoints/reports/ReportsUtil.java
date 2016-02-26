@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -36,6 +37,7 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.reports.ActivityType;
 import org.dgfoundation.amp.reports.CachedReportData;
 import org.dgfoundation.amp.reports.PartialReportArea;
@@ -116,12 +118,10 @@ public class ReportsUtil {
 	 *                        		sorting will define a column list as a tuple to sort by.</dd>
 	 *   <dt>regenerate</dt>	<dd>optional, set to true for all first access and any changes and 
 	 *                        		to false for consequent page navigation. Default to true</dd>
-	 *   <dt>add_columns</dt> 	<dd>optional, a list of columns names to be added to the
-	 *                        		report configuration</dd>
-	 *   <dt>add_hierarchies</dt>  <dd>optional, a list of hierarchies to be added to the
-	 *                             	report configuration</dd>
-	 *   <dt>add_measures</dt> 	<dd>optional, a list of measures to be added to the
-	 *                         		report configuration</dd>
+	 *   <dt>add_columns</dt> 	<dd>optional, a list of columns names to be added to the report configuration</dd>
+	 *   <dt>columns_with_ids</dt> 	<dd>optional, a list of columns names that should also provide ids</dd>
+	 *   <dt>add_hierarchies</dt>  <dd>optional, a list of hierarchies to be added to the report configuration</dd>
+	 *   <dt>add_measures</dt> 	<dd>optional, a list of measures to be added to the report configuration</dd>
 	 *   <dt>show_empty_rows</dt> <dd>optional, default false, to show rows with empty measures amounts</dd>
 	 *   <dt>show_empty_cols</dt> <dd>optional, default false, to show full column groups (by quarter, year) 
 	 *   							with empty measures amounts</dd>
@@ -133,10 +133,10 @@ public class ReportsUtil {
 	 *   						Default is "D" if not provided.</dd>
 	 *   <dt>projectType</dt>   <dd>an optional list of projects, mainly used to change usual default project
 	 *   						types included in the report. The list option per report type:
-	 *   						"D" : ["A", "S", "P"], where default is ["A", "S"] if both are reachable
-	 *   						"C" : ["A", "S"], where default is ["A", "S"]
-	 *   						"P" : ["P"], where default is ["P"]
-	 *   						where "A" - standard activity, "S" - SSC Activity, "P" - pledge</dd>
+	 *   						<br>"D" : ["A", "S", "P"], where default is ["A", "S"] if both are reachable
+	 *   						<br>"C" : ["A", "S"], where default is ["A", "S"]
+	 *   						<br>"P" : ["P"], where default is ["P"]
+	 *   						<br>where "A" - standard activity, "S" - SSC Activity, "P" - pledge</dd>
 	 * </dl>
 	 * @return JsonBean result for the requested page and pagination information
 	 */
@@ -239,7 +239,8 @@ public class ReportsUtil {
 			// add additional requests
 			update(spec, formParams);
 			// regenerate
-			GeneratedReport generatedReport = EndpointUtils.runReport(spec, PartialReportArea.class);
+			GeneratedReport generatedReport = EndpointUtils.runReport(spec, PartialReportArea.class, 
+					buildOutputSettings(spec, formParams));
 			cachedReportData = ReportPaginationUtils.cacheReportData(reportId, generatedReport);
 		} else {
 			cachedReportData = ReportCacher.getReportData(reportId);
@@ -282,8 +283,7 @@ public class ReportsUtil {
 	 * @param formParams
 	 * @return the updated spec
 	 */
-	public static ReportSpecification update(ReportSpecification spec, 
-			JsonBean formParams) {
+	public static ReportSpecification update(ReportSpecification spec, JsonBean formParams) {
 		if (spec == null || formParams == null) return spec;
 		if (!(spec instanceof ReportSpecificationImpl)) {
 			logger.error("Unsupported request for "  + spec.getClass());
@@ -314,14 +314,34 @@ public class ReportsUtil {
 	private static void addColumns(ReportSpecification spec, JsonBean formParams) {
 		//adding new columns if not present
 		if (formParams.get(EPConstants.ADD_COLUMNS) != null) {
-			List<String> columns = (List<String>) formParams.get(EPConstants.ADD_COLUMNS);
-			for (String columnName : columns) {
-				ReportColumn column = new ReportColumn(columnName);
-				if (!spec.getColumns().contains(column)) {
-					spec.getColumns().add(column);
-				}
+			addColumns(spec, (List<String>) formParams.get(EPConstants.ADD_COLUMNS));
+		}
+	}
+	
+	private static void addColumns(ReportSpecification spec, Collection<String> columns) {
+		for (String columnName : columns) {
+			ReportColumn column = new ReportColumn(columnName);
+			if (!spec.getColumns().contains(column)) {
+				spec.getColumns().add(column);
 			}
 		}
+	}
+	
+	/**
+	 * Builds special output settings as requested and updates spec if needed
+	 * @param spec
+	 * @param formParams
+	 * @return
+	 */
+	public static OutputSettings buildOutputSettings(ReportSpecification spec, JsonBean formParams) {
+		Set<String> idsValuesColumns = null;
+		if (formParams.get(EPConstants.COLUMNS_WITH_IDS) != null) {
+			idsValuesColumns = new HashSet<String> ((List<String>) formParams.get(EPConstants.COLUMNS_WITH_IDS));
+			// fixing the spec if some columns were not configured
+			addColumns(spec, idsValuesColumns);
+		}
+		
+		return new OutputSettings(idsValuesColumns);
 	}
 	
 	private static void addHierarchies(ReportSpecification spec, JsonBean formParams) {
@@ -668,7 +688,8 @@ public class ReportsUtil {
 		if (!regenerate && ReportCacher.getReportData(reportId) == null)
 				regenerate = true;
 		
-		// TODO: add here any other automatic detections for mandatory regenerate 
+		// TODO: add here any other automatic detections for mandatory regenerate
+		// e.g. check against cached spec version & new one 
 		
 		return regenerate;
 	}

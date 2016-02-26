@@ -29,6 +29,7 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
+import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
@@ -156,23 +157,34 @@ public class EndpointUtils {
 	 * @return GeneratedReport that stores all report info and report output
 	 */
 	public static GeneratedReport runReport(ReportSpecification spec) {
-		return runReport(spec, ReportAreaImpl.class);
+		return runReport(spec, ReportAreaImpl.class, null);
 	}
 	
 	/**
-	 * Generates a report based on a given specification and wraps the output
-	 * into the specified class
+	 * Generates report based on specification with additional output settings (if any)
+	 * 
+	 * @param spec report specification
+	 * @param outputSettings optional output settings
+	 * @return GeneratedReport that stores all report info and report output
+	 */
+	public static GeneratedReport runReport(ReportSpecification spec, OutputSettings outputSettings) {
+		return runReport(spec, ReportAreaImpl.class, null);
+	}
+	
+	/**
+	 * Generates a report based on a given specification and wraps the output into the specified class
 	 * 
 	 * @param spec report specification
 	 * @param clazz any class that extends {@link ReportAreaImpl}
 	 * @return GeneratedReport that stores all report info and report output
 	 */
-	public static GeneratedReport runReport(ReportSpecification spec, Class<? extends ReportAreaImpl> clazz) {
+	public static GeneratedReport runReport(ReportSpecification spec, Class<? extends ReportAreaImpl> clazz, 
+			OutputSettings outputSettings) {
 		//NIREPORTS: remove before 2.12 official release
 		Optional<Boolean> asNiReport = Optional.ofNullable((Boolean) TLSUtils.getRequest().getAttribute(EPConstants.NI_REPORT));
 		logger.info("As NiReport: " + (asNiReport.isPresent() && asNiReport.get()));
 		ReportExecutor generator = asNiReport.isPresent() && asNiReport.get() ? 
-				new NiReportsGenerator(AmpReportsSchema.getInstance(), clazz) :
+				new NiReportsGenerator(AmpReportsSchema.getInstance(), clazz, false, outputSettings) :
 				new MondrianReportGenerator(clazz, ReportEnvironment.buildFor(TLSUtils.getRequest()));
 		GeneratedReport report = null;
 		try {

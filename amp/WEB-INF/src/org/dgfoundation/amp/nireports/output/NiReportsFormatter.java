@@ -105,7 +105,8 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 	public ReportAreaImpl visit(NiColumnReportData crd) {
 		ReportAreaImpl res = reportAreaSupplier.get();
 		res.setContents(trailCells(crd));
-		res.setChildren(AmpCollections.relist(crd.getIds(), id -> renderCrdRow(crd, id)));
+		if (!spec.isSummaryReport())
+			res.setChildren(AmpCollections.relist(crd.getIds(), id -> renderCrdRow(crd, id)));
 		return res;
 	}
 
@@ -125,7 +126,7 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 	
 	protected Map<ReportOutputColumn, ReportCell> trailCells(NiReportData niReportData) {
 		Map<ReportOutputColumn, ReportCell> res = new HashMap<>();
-		for(int i = 0/*hiersStack.size()*/; i < runResult.headers.leafColumns.size(); i++) {
+		for(int i = hiersStack.size(); i < leafColumns.size(); i++) {
 			CellColumn niCellColumn = leafColumns.get(i);
 			ReportCell reportCell = convert(niReportData.trailCells.get(niCellColumn), niCellColumn);
 			if (reportCell != null)

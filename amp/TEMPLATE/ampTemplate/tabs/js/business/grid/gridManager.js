@@ -7,7 +7,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 	var gridPagerBaseName = 'tab_grid_pager_';
 	var partialTotals = null;
 	var DEFAULT_ONE_PAGER_PARAMETER='activity';
-	var columnsWithIds = ['AMP_ID', 'Team'];
+	var columnsWithIds = ['AMP ID', 'Team'];
 	// This variable will contain the mappings between different column names
 	// (tab structure vs report data).
 	var headers = [];

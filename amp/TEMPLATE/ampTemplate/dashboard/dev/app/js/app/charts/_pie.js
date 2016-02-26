@@ -16,16 +16,7 @@ function dataToNv(data) {
   if (!_.isArray(data[0].values)) {
     common.fail('Data series did not have a "values" array. Instead', data[0].values);
   }
-  var maxLabelLength = 25; //label length, consider adding to options
-  var valuesWithShortenedLabels = data[0].values.map(function(item){		  
-	  return {id: item.id, x: chopOffLongText(item.x, maxLabelLength), y: item.y, z: item.z, color: item.color, special: item.special};  
-  });
-  return valuesWithShortenedLabels
-  
-}
-
-function chopOffLongText(label, maxLabelLength){
-	  return label.length > maxLabelLength ? label.substring(0,maxLabelLength) + '...' : label;
+  return data[0].values;  
 }
 
 function countCategories(data) {

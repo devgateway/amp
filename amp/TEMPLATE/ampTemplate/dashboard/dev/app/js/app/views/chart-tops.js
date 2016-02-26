@@ -33,10 +33,8 @@ module.exports = ChartViewBase.extend({
     // clicking on the "others" bar loads five more.
     if (context.data[context.series.index]
                .values[context.x.index].special === 'others') {
-      this.model.set('limit', this.model.get('limit') + 5);
-      if (this.model.get('limit') > 10) {  // also make the chart bigger if lots of bars are shown
-        this.model.set('big', true);
-      }
+      this.model.set('limit', this.model.get('limit') + 5);      
+        this.model.set('big', true);      
     } else if (this.model.get('showCategoriesInfo') === true) {    	
     	this.modalView = new ModalView({ app: app, context: context, model: this.model });
     	this.openInfoWindow();    	    	

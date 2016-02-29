@@ -7,7 +7,7 @@ import java.util.TreeMap;
 
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.ar.VirtualCurrenciesMaintainer;
-import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
+import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.testutils.AmpRunnable;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -21,7 +21,7 @@ import org.junit.Test;
  * @author Constantin Dolghier
  *
  */
-public class InflationRatesTests extends MondrianReportsTestCase {
+public class InflationRatesTests extends ReportingTestCase {
 
 	public final static List<String> activities = Arrays.asList(
 			"TAC_activity_1", "Test MTEF directed", "Pure MTEF Project", "mtef activity 1", "Activity with both MTEFs and Act.Comms");

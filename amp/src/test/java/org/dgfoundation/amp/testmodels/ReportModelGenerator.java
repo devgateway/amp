@@ -23,9 +23,11 @@ import org.dgfoundation.amp.nireports.output.NiReportData;
 import org.dgfoundation.amp.nireports.output.NiReportDataVisitor;
 import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
 import org.dgfoundation.amp.nireports.output.NiReportRunResult;
+import org.dgfoundation.amp.nireports.output.NiReportsFormatter;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
 
+import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import static org.dgfoundation.amp.algo.AmpCollections.relist;
 
 public class ReportModelGenerator implements NiReportOutputBuilder<NiReportModel> {
@@ -37,11 +39,12 @@ public class ReportModelGenerator implements NiReportOutputBuilder<NiReportModel
 		DecimalFormatSymbols decSymbols = new DecimalFormatSymbols();
 		decSymbols.setDecimalSeparator(',');
 		CellFormatter cellFormatter = new CellFormatter(spec.getSettings(), new DecimalFormat("###,###,###.##", decSymbols), "dd/MM/yyyy", new OutputSettings(null));
+		NiReportsFormatter formatter = new NiReportsFormatter(spec, reportRun, () -> new ReportAreaImpl(), cellFormatter);
 		
 		return new NiReportModel(spec.getReportName())
 			.withHeaders(digestHeaders(reportRun.headers, colToNr))
 			.withWarnings(digestWarnings(reportRun.warnings))
-			.withBody(reportRun.reportOut.accept(new StringRenderer(reportRun.headers.leafColumns, (cell, column) -> cell.accept(cellFormatter, column).displayedValue, colToNr)));
+			.withBody(reportRun.reportOut.accept(formatter));
 	}
 
 	protected Map<CellColumn, Integer> indexLeaves(NiHeaderInfo headers) {
@@ -53,11 +56,11 @@ public class ReportModelGenerator implements NiReportOutputBuilder<NiReportModel
 	
 	protected List<String> digestHeaders(NiHeaderInfo headers, Map<CellColumn, Integer> colToNr) {
 		return relist(headers.rasterizedHeaders,
-			z -> String.join(";", relist(z.values(), col -> digestHeaderCell(col, colToNr))));
+			z -> String.join(";", relist(z.values(), this::digestHeaderCell)));
 	}
 	
-	String digestHeaderCell(Column col, Map<CellColumn, Integer> colToNr) {
-		return String.format("(%s%s: (startRow: %d, rowSpan: %d, totalRowSpan: %d, colStart: %d, colSpan: %d))", col.name, colToNr.containsKey(col) ? String.format(" [id: %d]", colToNr.get(col)) : "",
+	String digestHeaderCell(Column col) {
+		return String.format("(%s: (startRow: %d, rowSpan: %d, totalRowSpan: %d, colStart: %d, colSpan: %d))", col.name,
 			col.getReportHeaderCell().getStartRow(), col.getReportHeaderCell().getRowSpan(), col.getReportHeaderCell().getTotalRowSpan(), col.getReportHeaderCell().getStartColumn(), col.getReportHeaderCell().getColSpan());
 	}
 	

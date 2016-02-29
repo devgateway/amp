@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
+import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.testutils.AmpRunnable;
@@ -17,7 +17,7 @@ import org.junit.Test;
  * Tests report settings
  * @author Nadejda Mandrescu
  */
-public class SettingsMondrianReportTests extends MondrianReportsTestCase {
+public class SettingsMondrianReportTests extends ReportingTestCase {
 	
 	public SettingsMondrianReportTests() {
 		super("settings mondrian tests");

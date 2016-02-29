@@ -5,11 +5,11 @@ package org.dgfoundation.amp.ar.amp211;
 
 import java.util.Arrays;
 
-import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
+import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.junit.Test;
 
-public class ReportCalendarTests extends MondrianReportsTestCase {
+public class ReportCalendarTests extends ReportingTestCase {
 	
 	public ReportCalendarTests() {
 		super("Report Calendar conversion tests");

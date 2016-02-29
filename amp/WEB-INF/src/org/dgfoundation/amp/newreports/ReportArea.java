@@ -14,7 +14,7 @@ public interface ReportArea {
 	 * returns the <strong>localized</strong> owner. For a row, it is the activity/pledge/whatever which owns the row. For a report subregion, it is the "splitter cell"
 	 * @return
 	 */
-	public NamedTypedEntity getOwner();
+	public AreaOwner getOwner();
 	
 	/**
 	 * for a region, holds aggregates (trail cells). For a row, holds the values

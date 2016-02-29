@@ -15,11 +15,14 @@ public class NameFilteringTeamFilter implements StringGenerator {
 			
 	public Set<String> activityNames;	
 	
-	public NameFilteringTeamFilter(String[] activityNames)
-	{
+	public NameFilteringTeamFilter(String[] activityNames) {
 		this.activityNames = new HashSet<String>(Arrays.asList(activityNames));
 	}
-	
+
+	public NameFilteringTeamFilter(List<String> activityNames) {
+		this.activityNames = new HashSet<String>(activityNames);
+	}
+
 	@Override
 	public String getString() {
 		String locale = TLSUtils.getEffectiveLangCode();

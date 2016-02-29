@@ -3,11 +3,11 @@ package org.dgfoundation.amp.ar.amp210;
 import java.util.Arrays;
 import java.util.List;
 
-import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
+import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.junit.Test;
 
-public class AgreementColumnsReportsTests extends MondrianReportsTestCase {
+public class AgreementColumnsReportsTests extends ReportingTestCase {
 	
 	public AgreementColumnsReportsTests() {
 		super("donor reports with agreement columns");

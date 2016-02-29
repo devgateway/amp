@@ -5,7 +5,7 @@ package org.dgfoundation.amp.ar.amp210;
 
 import java.util.Arrays;
 
-import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
+import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.mondrian.PaginatedReportAreaForTests;
 import org.dgfoundation.amp.reports.PartialReportArea;
 import org.junit.Test;
@@ -15,7 +15,7 @@ import org.junit.Test;
  * 
  * @author Nadejda Mandrescu
  */
-public class TabsPaginationTests extends MondrianReportsTestCase {
+public class TabsPaginationTests extends ReportingTestCase {
 	
 	public TabsPaginationTests() {
 		super("tabs pagination tests");

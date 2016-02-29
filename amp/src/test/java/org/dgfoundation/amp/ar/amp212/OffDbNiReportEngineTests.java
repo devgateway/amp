@@ -1,12 +1,9 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import java.util.HashSet;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
-import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
 import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
 
 /**
@@ -26,16 +23,15 @@ public class OffDbNiReportEngineTests extends BasicSanityChecks {
 		nrRunReports = 0;
 	}
 	
-	@Override
-	public<K> K buildNiReportDigest(ReportSpecification spec, List<String> activityNames, NiReportOutputBuilder<K> outputBuilder) {
-		NiReportExecutor executor = getExecutor(activityNames);
-		return executor.executeReport(spec, outputBuilder);
-	}	
+//	@Override
+//	public<K> K buildNiReportDigest(ReportSpecification spec, List<String> activityNames, NiReportOutputBuilder<K> outputBuilder) {
+//		NiReportExecutor executor = getExecutor(activityNames);
+//		return executor.executeReport(spec, outputBuilder);
+//	}	
 	
-	protected NiReportExecutor getExecutor(List<String> activityNames) {
-		NiReportExecutor res = new NiReportExecutor(HardcodedReportsTestSchema.getInstance());
-		HardcodedReportsTestSchema.workspaceFilter = new HashSet<>(activityNames);
-		return res;
+	@Override
+	protected NiReportExecutor getNiExecutor(List<String> activityNames) {
+		return getOfflineExecutor(activityNames);
 	}
 	
 	@Override

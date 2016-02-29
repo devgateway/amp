@@ -2,6 +2,11 @@ package org.dgfoundation.amp.testmodels;
 
 import java.util.List;
 
+import org.dgfoundation.amp.algo.AmpCollections;
+import org.dgfoundation.amp.mondrian.ReportAreaDescriber;
+import org.dgfoundation.amp.mondrian.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.ReportArea;
+
 /**
  * a fully-rendered-to-text textual representation of a report NiReportData
  * @author Dolghier Constantin
@@ -12,9 +17,9 @@ public class NiReportModel {
 	public final String name;
 	public List<String> headers;
 	public List<String> warnings;
-	public List<String> body;
+	public ReportArea body;
 	
-	protected NiReportModel(String name) {
+	public NiReportModel(String name) {
 		this.name = name;
 	}
 	
@@ -32,7 +37,7 @@ public class NiReportModel {
 		return this;
 	}
 
-	public NiReportModel withBody(List<String> body) {
+	public NiReportModel withBody(ReportArea body) {
 		this.body = body;
 		return this;
 	}
@@ -44,7 +49,9 @@ public class NiReportModel {
 		String w = compare_list("warnings", this.warnings, other.warnings);
 		if (w != null) return w;
 		
-		String b = compare_list("body", this.body, other.body);
+		ReportAreaForTests corBody = (ReportAreaForTests) body;
+		ReportAreaForTests.deltaStack.clear();
+		String b = corBody.getDifferenceAgainst(other.body);
 		if (b != null) return b;
 		
 		return null;
@@ -76,11 +83,27 @@ public class NiReportModel {
 		return null;
 	}
 	
-	@Override
-	public String toString() {
-		return String.format("%s -> %s%s%s", this.getName(),
-			"\n" + String.join("\n", this.headers),
-			"\n" + String.join("\n", this.warnings),
-			"\n" + String.join("\n", this.body));
+	public String describeInCode() {
+		String str = String.format("new NiReportModel(\"%s\")\n\t.withHeaders(%s)\n\t.withWarnings(%s)\n\t.withBody(%s);",
+			this.name, listToCode(this.headers), listToCode(this.warnings), new ReportAreaDescriber(null).describeInCode(this.body, 3)
+		);
+		return str;
+	}
+	
+	//TODO: should add java-escaping of strings in relist callback
+	public String listToCode(List<String> list) {
+		if (list == null) return null;
+		StringBuilder res = new StringBuilder("Arrays.asList(");
+		for(int i = 0; i < list.size(); i++) {
+			String item = list.get(i);
+			res.append("\n\t\t");
+			res.append("\"");
+			res.append(item);
+			res.append("\"");
+			if (i != list.size() - 1)
+				res.append(",");
+		};
+		res.append(")");
+		return res.toString();
 	}
 }

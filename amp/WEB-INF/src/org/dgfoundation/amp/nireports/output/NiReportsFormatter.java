@@ -1,8 +1,10 @@
 package org.dgfoundation.amp.nireports.output;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -12,6 +14,7 @@ import java.util.function.Supplier;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AmpCollections;
+import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.HeaderCell;
 import org.dgfoundation.amp.newreports.ReportArea;
@@ -19,6 +22,8 @@ import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.nireports.amp.AmpNiReportsFormatter;
+import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
 
@@ -53,10 +58,10 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 		this.spec = spec;
 		this.reportAreaSupplier = reportAreaSupplier;
 		this.cellFormatter = cellFormatter;
+		buildHeaders();
 	}
 	
 	public GeneratedReport format() {
-		buildHeaders();
 		reportContents = runResult.reportOut.accept(this);
 		return new GeneratedReport(spec, (int) runResult.wallclockTime, null, reportContents, rootHeaders, 
 				leafHeaders, generatedHeaders, runResult.timings, runResult.warnings);
@@ -91,11 +96,12 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 
 	protected ReportAreaImpl renderCrdRow(NiColumnReportData crd, long id) {
 		ReportAreaImpl row = reportAreaSupplier.get();
-		Map<ReportOutputColumn, ReportCell> rowData = new HashMap<>();
+		Map<ReportOutputColumn, ReportCell> rowData = new LinkedHashMap<>();
 		for(int i = hiersStack.size(); i < runResult.headers.leafColumns.size(); i++) {
 			CellColumn niCellColumn = runResult.headers.leafColumns.get(i);
 			ReportCell reportCell = convert(crd.contents.get(niCellColumn).get(id), niCellColumn);
-			rowData.put(niColumnToROC.get(niCellColumn), reportCell);
+			if (reportCell != null)
+				rowData.put(niColumnToROC.get(niCellColumn), reportCell);
 		}
 		row.setContents(rowData);
 		return row;
@@ -104,6 +110,7 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 	@Override
 	public ReportAreaImpl visit(NiColumnReportData crd) {
 		ReportAreaImpl res = reportAreaSupplier.get();
+		res.setOwner(toAreaOwner(crd.splitter));
 		res.setContents(trailCells(crd));
 		if (!spec.isSummaryReport())
 			res.setChildren(AmpCollections.relist(crd.getIds(), id -> renderCrdRow(crd, id)));
@@ -113,6 +120,7 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 	@Override
 	public ReportAreaImpl visit(NiGroupReportData grd) {
 		ReportAreaImpl res = reportAreaSupplier.get();
+		res.setOwner(toAreaOwner(grd.splitter));
 		res.setContents(trailCells(grd));
 		List<ReportArea> rchildren = new ArrayList<>();
 		for(NiReportData child:grd.subreports) {
@@ -124,8 +132,13 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 		return res;
 	}
 	
+	protected AreaOwner toAreaOwner(NiSplitCell cell) {
+		if (cell == null) return null;
+		return new AreaOwner(cell.entity.name, convert(cell, null).displayedValue);
+	}
+	
 	protected Map<ReportOutputColumn, ReportCell> trailCells(NiReportData niReportData) {
-		Map<ReportOutputColumn, ReportCell> res = new HashMap<>();
+		Map<ReportOutputColumn, ReportCell> res = new LinkedHashMap<>();
 		for(int i = hiersStack.size(); i < leafColumns.size(); i++) {
 			CellColumn niCellColumn = leafColumns.get(i);
 			ReportCell reportCell = convert(niReportData.trailCells.get(niCellColumn), niCellColumn);
@@ -135,5 +148,13 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 		if (niReportData.splitter != null)
 			res.put(niColumnToROC.get(leafColumns.get(hiersStack.size() - 1)), niReportData.splitter.accept(cellFormatter, leafColumns.get(hiersStack.size() - 1)));
 		return res;
+	}
+	
+	public List<ReportOutputColumn> getLeafHeaders() {
+		return Collections.unmodifiableList(this.leafHeaders);
+	}
+	
+	public static NiReportOutputBuilder<GeneratedReport> asOutputBuilder(CellVisitor<ReportCell> formatter, OutputSettings outputSettings) {
+		return (ReportSpecification spec, NiReportRunResult runResult) -> new NiReportsFormatter(spec, runResult, () -> new ReportAreaImpl(), formatter).format();
 	}
 }

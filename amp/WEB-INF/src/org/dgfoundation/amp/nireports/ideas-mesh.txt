@@ -31,3 +31,4 @@ lucene indexer
 refactor workspacefilter
 format numbers, during the output stage, as BigDecimal (AmpNiReportsFormatter)
 summary reports in output stages
+refactor ReportEnvironment -> add mainIds to ReportSpecification after Mondrian would have been deleted

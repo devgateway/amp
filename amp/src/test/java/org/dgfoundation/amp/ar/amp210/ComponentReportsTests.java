@@ -4,13 +4,13 @@ import java.util.Arrays;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
+import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.junit.Test;
 
-public class ComponentReportsTests extends MondrianReportsTestCase {
+public class ComponentReportsTests extends ReportingTestCase {
 	
 	public ComponentReportsTests() {
 		super("component reports mondrian tests");

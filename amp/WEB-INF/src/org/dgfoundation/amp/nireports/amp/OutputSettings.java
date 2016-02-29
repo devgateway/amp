@@ -3,8 +3,11 @@
  */
 package org.dgfoundation.amp.nireports.amp;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.dgfoundation.amp.nireports.runtime.CellColumn;
 
 
 /**
@@ -15,9 +18,13 @@ import java.util.Set;
 public class OutputSettings {
 	
 	/** columns for which to provide ids/values map (expensive operation) */
-	public final HashSet<String> idsValuesColumns;
+	protected final Set<String> idsValuesColumns;
 	
 	public OutputSettings(Set<String> idsValuesColumns) {
-		this.idsValuesColumns = idsValuesColumns == null ? new HashSet<>() : new HashSet<>(idsValuesColumns);
+		this.idsValuesColumns = Collections.unmodifiableSet(idsValuesColumns == null ? new HashSet<>() : new HashSet<>(idsValuesColumns));
+	}
+	
+	public boolean needsIdsValues(CellColumn cc) {
+		return cc != null && cc.entity != null && idsValuesColumns.contains(cc.entity.name);
 	}
 }

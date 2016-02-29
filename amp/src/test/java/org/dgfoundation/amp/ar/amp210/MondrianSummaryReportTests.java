@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
+import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
@@ -20,7 +20,7 @@ import org.junit.Test;
  * @author Dolghier Constantin
  *
  */
-public class MondrianSummaryReportTests extends MondrianReportsTestCase {
+public class MondrianSummaryReportTests extends ReportingTestCase {
 	
 	public List<String> activities = Arrays.asList("TAC_activity_2", "date-filters-activity", "crazy funding 1");
 	

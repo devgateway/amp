@@ -6,11 +6,11 @@ package org.dgfoundation.amp.ar.amp211;
 import java.util.Arrays;
 import java.util.List;
 
-import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
+import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.junit.Test;
 
-public class MondrianComputedMeasuresReportTests211 extends MondrianReportsTestCase {
+public class MondrianComputedMeasuresReportTests211 extends ReportingTestCase {
 	
 	public MondrianComputedMeasuresReportTests211() {
 		super("computed measures mondrian tests 2.11");

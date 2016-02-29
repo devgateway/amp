@@ -15,7 +15,7 @@ import org.digijava.module.aim.helper.TeamMember;
  *
  */
 public class ReportEnvironment {
-	
+
 	public final String locale;
 	public final IdsGeneratorSource workspaceFilter;
 	public final IdsGeneratorSource pledgesFilter;
@@ -41,12 +41,17 @@ public class ReportEnvironment {
 	
 	public static ReportEnvironment buildFor(HttpServletRequest request) {
 		TLSUtils.populate(request);
-		TeamMember tm = request != null && request.getSession() != null ? (TeamMember) request.getSession().getAttribute("currentMember") : null;
-		AmpARFilter ar = request != null && request.getSession() != null ? (AmpARFilter) request.getSession().getAttribute(ArConstants.TEAM_FILTER) : null;
-		
-		return new ReportEnvironment(
-			TLSUtils.getEffectiveLangCode(),
-			new CompleteWorkspaceFilter(tm, ar),
-			AmpARFilter.getDefaultCurrency().getCurrencyCode());
-	}	
+		IdsGeneratorSource workspaceFilter;
+		if (request != null && request.getAttribute(OVERRIDDEN_WORKSPACE_FILTER) != null)
+			workspaceFilter = (IdsGeneratorSource) request.getAttribute(OVERRIDDEN_WORKSPACE_FILTER);
+		else {
+			TeamMember tm = request != null && request.getSession() != null ? (TeamMember) request.getSession().getAttribute("currentMember") : null;
+			AmpARFilter ar = request != null && request.getSession() != null ? (AmpARFilter) request.getSession().getAttribute(ArConstants.TEAM_FILTER) : null;
+			workspaceFilter = new CompleteWorkspaceFilter(tm, ar);
+		}
+		return new ReportEnvironment(TLSUtils.getEffectiveLangCode(), workspaceFilter, AmpARFilter.getDefaultCurrency().getCurrencyCode());
+	}
+	
+	public static String OVERRIDDEN_WORKSPACE_FILTER = "overrideWorkspaceFilter";
+
 }

@@ -61,12 +61,12 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 	public ReportCell visit(NiTextCell cell, CellColumn currentColumn) {
 		String text = ("".equals(cell.getDisplayedValue()) && cell.entityId != -1) ?
 				TranslatorWorker.translateText("Undefined") : cell.getDisplayedValue();  
-			return asTextCell(text, cell.entityId, outputSettings.idsValuesColumns.contains(currentColumn.entity.name) ? cell.entitiesIdsValues : null);
+			return asTextCell(text, cell.entityId, outputSettings.needsIdsValues(currentColumn) ? cell.entitiesIdsValues : null);
 	}
 
 	@Override
 	public ReportCell visit(NiSplitCell cell, CellColumn currentColumn) {
-		boolean needSubCells = outputSettings.idsValuesColumns.contains(currentColumn.name);
+		boolean needSubCells = outputSettings.needsIdsValues(currentColumn);
 		return asTextCell(
 			cell.undefined ? (cell.entity.name + ": " + TranslatorWorker.translateText("Undefined")) : cell.text, 
 			any(cell.entityIds, -1l), 

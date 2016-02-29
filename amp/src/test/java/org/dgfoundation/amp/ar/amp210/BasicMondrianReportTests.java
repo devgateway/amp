@@ -5,13 +5,13 @@ import java.util.List;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
+import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.junit.Test;
 
-public class BasicMondrianReportTests extends MondrianReportsTestCase {
+public class BasicMondrianReportTests extends ReportingTestCase {
 	
 	public BasicMondrianReportTests() {
 		super("basic mondrian tests");

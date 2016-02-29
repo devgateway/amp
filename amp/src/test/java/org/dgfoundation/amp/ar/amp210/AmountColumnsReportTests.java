@@ -6,7 +6,7 @@ package org.dgfoundation.amp.ar.amp210;
 import java.util.Arrays;
 import java.util.List;
 
-import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
+import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ import org.junit.Test;
  * Stores the set of tests that checks general specifics for amount columns
  * @author Nadejda Mandrescu
  */
-public class AmountColumnsReportTests extends MondrianReportsTestCase {
+public class AmountColumnsReportTests extends ReportingTestCase {
 		
 	public AmountColumnsReportTests() {
 		super("amount columns mondrian tests");

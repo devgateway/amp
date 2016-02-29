@@ -3,17 +3,11 @@ package org.dgfoundation.amp.ar.amp212;
 import java.util.Arrays;
 import java.util.List;
 
-import org.dgfoundation.amp.error.AMPException;
-import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.GrandTotalsDigest;
-import org.dgfoundation.amp.nireports.TrailCellsDigest;
-import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
+import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
-import org.dgfoundation.amp.testmodels.ReportModelGenerator;
 import org.dgfoundation.amp.testutils.ReportTestingUtils;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpReports;
 import org.junit.Test;
 
 /**
@@ -41,9 +35,8 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 	}
 	
 	@Override
-	protected <K> K buildNiReportDigest(ReportSpecification spec, List<String> activityNames,
-			NiReportOutputBuilder<K> outputBuilder) {
-		return MondrianReportsTestCase.buildNiReportDigest(spec, activityNames, outputBuilder);
+	protected NiReportExecutor getNiExecutor(List<String> activityNames) {
+		return getDbExecutor(activityNames);
 	}
 	
 	@Test

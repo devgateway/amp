@@ -14,7 +14,7 @@ import java.util.function.Supplier;
  * @author Nadejda Mandrescu
  */
 public class ReportAreaImpl implements ReportArea {
-	protected NamedTypedEntity owner;
+	protected AreaOwner owner;
 	protected Map<ReportOutputColumn, ReportCell> contents;
 	protected List<ReportArea> children;
 	
@@ -22,11 +22,11 @@ public class ReportAreaImpl implements ReportArea {
 	}
 	
 	@Override
-	public NamedTypedEntity getOwner() {
+	public AreaOwner getOwner() {
 		return owner;
 	}
 	
-	public void setOwner(NamedTypedEntity owner) {
+	public void setOwner(AreaOwner owner) {
 		this.owner = owner;
 	}
 

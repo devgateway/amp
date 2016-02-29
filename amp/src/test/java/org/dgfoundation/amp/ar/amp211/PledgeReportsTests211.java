@@ -5,11 +5,11 @@ package org.dgfoundation.amp.ar.amp211;
 
 import java.util.Arrays;
 
-import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
+import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.junit.Test;
 
-public class PledgeReportsTests211 extends MondrianReportsTestCase {
+public class PledgeReportsTests211 extends ReportingTestCase {
 	
 	public PledgeReportsTests211() {
 		super("pledge reports mondrian tests 211");

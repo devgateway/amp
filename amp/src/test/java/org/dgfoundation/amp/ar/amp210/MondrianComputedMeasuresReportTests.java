@@ -6,7 +6,7 @@ import java.util.List;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
+import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportColumn;
@@ -14,7 +14,7 @@ import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.junit.Test;
 
-public class MondrianComputedMeasuresReportTests extends MondrianReportsTestCase {
+public class MondrianComputedMeasuresReportTests extends ReportingTestCase {
 	
 	public MondrianComputedMeasuresReportTests() {
 		super("computed measures mondrian tests");

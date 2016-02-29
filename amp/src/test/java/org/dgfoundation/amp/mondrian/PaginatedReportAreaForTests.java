@@ -6,7 +6,7 @@ package org.dgfoundation.amp.mondrian;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.dgfoundation.amp.newreports.NamedTypedEntity;
+import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
@@ -62,7 +62,7 @@ public class PaginatedReportAreaForTests extends ReportAreaForTests {
 	}
 	
 	@Override
-	public PaginatedReportAreaForTests withOwner(NamedTypedEntity owner) {
+	public PaginatedReportAreaForTests withOwner(AreaOwner owner) {
 		super.withOwner(owner);
 		return this;
 	}

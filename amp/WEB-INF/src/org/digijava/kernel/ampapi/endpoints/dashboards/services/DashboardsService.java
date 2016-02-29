@@ -24,8 +24,6 @@ import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportEnvironment;
-import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
@@ -34,7 +32,6 @@ import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
@@ -43,7 +40,6 @@ import org.digijava.kernel.ampapi.endpoints.util.DashboardConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
@@ -596,15 +592,13 @@ public class DashboardsService {
 		List<JsonBean> values = new ArrayList<JsonBean>();
 
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetNDD", ArConstants.DONOR_TYPE);
-		spec.addColumn(new ReportColumn(MoConstants.ATTR_ACTIVITY_ID));
-		spec.addColumn(new ReportColumn(MoConstants.ATTR_PROJECT_TITLE));
+		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
 		spec.getHierarchies().addAll(spec.getColumns());
+		OutputSettings outSettings = new OutputSettings(new HashSet<String>(){{add(ColumnConstants.PROJECT_TITLE);}});
 		// applies settings, including funding type as a measure
 		SettingsUtils.applyExtendedSettings(spec, config);
 		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false, true));
-		ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
-		GeneratedReport report = null;
-
+		
 		MondrianReportFilters filterRules = null;
 		LinkedHashMap<String, Object> columnFilters = null;
 		LinkedHashMap<String, Object> otherFilter = null;
@@ -634,7 +628,7 @@ public class DashboardsService {
 		LinkedHashMap<String, Object> secondaryProgramFilter = new LinkedHashMap<String, Object>();
 		List<Integer> secondaryProgramIds = new ArrayList<Integer>();
 		secondaryProgramIds.add(id);
-		secondaryProgramFilter.put(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1_ID, secondaryProgramIds);
+		secondaryProgramFilter.put(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1, secondaryProgramIds);
 		columnFilters.putAll(secondaryProgramFilter);
 		filterRules = FilterUtils.getFilterRules(columnFilters, otherFilter, null);
 		if (filterRules != null) {
@@ -644,29 +638,21 @@ public class DashboardsService {
 		// AMP-18740: For dashboards we need to use the default number formatting and leave the rest of the settings
 		// configurable (calendar, currency, etc).
 		setCustomSettings(config, spec);
+		
+		GeneratedReport report = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
+		ReportOutputColumn titleCol = report.leafHeaders.get(0);
+		ReportOutputColumn amountCol = report.leafHeaders.get(0);
 
-		try {
-			report = generator.executeReport(spec);
-		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			err = e.getMessage();
-			retlist.set("error", err);
-		}
-
-		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
-			ReportAreaImpl reportArea = (ReportAreaImpl) iterator.next();
-			Iterator<ReportArea> iChildren = reportArea.getChildren().iterator();
-			while (iChildren.hasNext()) {
-				JsonBean row = new JsonBean();
-				ReportArea ra = iChildren.next();
-				LinkedHashMap<ReportOutputColumn, ReportCell> contents = (LinkedHashMap<ReportOutputColumn, ReportCell>) ra
-						.getContents();
-				row.set("name", ((ReportCell) contents.values().toArray()[1]).displayedValue);
-				row.set("amount", ((ReportCell) contents.values().toArray()[2]).value);
-				row.set("formattedAmount", ((ReportCell) contents.values().toArray()[2]).displayedValue);
-				row.set("id", ((ReportCell) contents.values().toArray()[0]).value);
-				values.add(row);
-			}
+		for (Iterator<ReportArea> iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
+			JsonBean row = new JsonBean();
+			Map<ReportOutputColumn, ReportCell> contents = iterator.next().getContents();
+			IdentifiedReportCell title = (IdentifiedReportCell) contents.get(titleCol);
+			AmountCell amount = (AmountCell) contents.get(amountCol);
+			row.set("name", title.displayedValue);
+			row.set("amount", amount.value);
+			row.set("formattedAmount", amount.displayedValue);
+			row.set("id", title.entityId);
+			values.add(row);
 		}
 		retlist.set("values", values);
 

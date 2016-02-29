@@ -35,11 +35,11 @@ import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityBudgetStructure;
@@ -1959,7 +1959,7 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 	}
     
     private void addErrorMessageToForm(EditActivityForm eaForm, Exception e) {
-		eaForm.getWarningMessges().add(TranslatorUtil.getTranslation("An error occurred when loading the page. Please contact the AMP administrator."));
+		eaForm.getWarningMessges().add(TranslatorWorker.translateText("An error occurred when loading the page. Please contact the AMP administrator."));
 		logger.error(e.getMessage(), e);
 	}
 }

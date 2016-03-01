@@ -84,8 +84,10 @@ module.exports = BackboneDash.View.extend({
   },
 
   prepareCanvas: function(canvas, h, w) {
+	var self = this;
+    var currencyName = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')}).value;
     var ctx = canvas.getContext('2d'),
-    	moneyContext = (this.model.get('sumarizedTotal') !== undefined ? ': ' + util.translateLanguage(this.model.get('sumarizedTotal')) + ' ': ' ') + this.model.get('currency'),
+    	moneyContext = (this.model.get('sumarizedTotal') !== undefined ? ': ' + util.translateLanguage(this.model.get('sumarizedTotal')) + ' ': ' ') + currencyName,
         adjType = this.model.get('adjtype');    
     if (adjType) {
     	var key = this.adjTypeTranslation [adjType];
@@ -133,8 +135,10 @@ module.exports = BackboneDash.View.extend({
   },
 
   renderCSV: function(csvContainer) {
+	var self = this;
+	var currencyName = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')}).value;
     var data = this.model.get('processed'),
-        currency = this.model.get('currency'),
+        currency = currencyName,
         adjtype = this.model.get('adjtype') || false,
         csvTransformed,
         headerRow,

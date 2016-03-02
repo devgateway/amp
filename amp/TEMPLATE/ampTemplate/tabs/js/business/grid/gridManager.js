@@ -380,7 +380,11 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 									jQuery(item.firstChild).attr("colspan", numberOfColumns);
 									jQuery.each(tableStructure.measures.models, function(j, measure) {
 										var auxTD = jQuery(item.firstChild).clone().html("").attr("colspan", 0).css("text-align", "right");
-										var content = partialTotals[i].contents["[" + measure.get('measureName') + "]"].displayedValue;
+										var content = "";
+										if (measure.get('measureName') && partialTotals[i].contents["[" + measure.get('measureName') + "]"]) {
+											content = partialTotals[i].contents["[" + measure.get('measureName') + "]"].displayedValue;
+										}
+										
 										jQuery(auxTD).html("<span><b>" + content + "</b></span>");
 										jQuery(item).append(auxTD);
 
@@ -543,7 +547,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 			if (item.reportColumnType == 'MEASURE') {
 				var col = {};
 				col.columnName = item.name;
-				if (data.page != null && data.page.pageArea != null) {
+				if (data.page != null && data.page.pageArea != null && data.page.pageArea.contents["[" + item.name + "]"]) {
 					try {
 						col.value = data.page.pageArea.contents["[" + item.name + "]"].value;
 						col.displayedValue = data.page.pageArea.contents["[" + item.name + "]"].displayedValue;

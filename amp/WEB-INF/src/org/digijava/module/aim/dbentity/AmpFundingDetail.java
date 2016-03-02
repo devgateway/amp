@@ -65,6 +65,19 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 					 discriminatorOption = CategoryConstants.ADJUSTMENT_TYPE_KEY)
 	private AmpCategoryValue adjustmentType;
 	
+	@Interchangeable(fieldTitle="Expenditure Class", importable = true, pickIdOnly = true, 
+			 		discriminatorOption = CategoryConstants.EXPENDITURE_CLASS_KEY)
+	private AmpCategoryValue expenditureClass;
+	
+	
+	public AmpCategoryValue getExpenditureClass() {
+		return expenditureClass;
+	}
+
+	public void setExpenditureClass(AmpCategoryValue expenditureClass) {
+		this.expenditureClass = expenditureClass;
+	}
+
 	@Interchangeable(fieldTitle="Transaction Date", importable=true)
 	private Date transactionDate;
 	@Interchangeable(fieldTitle="Transaction Date 2", importable=true)

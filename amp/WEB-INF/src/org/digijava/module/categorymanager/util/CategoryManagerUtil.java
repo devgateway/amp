@@ -885,18 +885,11 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 				collectionByKey.add(acv);
 		}
 		
-
-		
-		
-		
-		if (relatedCollection != null)
-		{
+		if (relatedCollection != null) {
 			Set<AmpCategoryValue> relatedReunion = new TreeSet<AmpCategoryValue>();
 			for (AmpCategoryValue ampCategoryValue : relatedCollection)
 				if (ampCategoryValue != null && ampCategoryValue.isVisible())
-				{
 					relatedReunion.addAll(CategoryManagerUtil.getAmpCategoryValueFromDb(ampCategoryValue.getId(), true).getUsedByValues());
-				}
 			collectionByKey.retainAll(relatedReunion);
 		}
 		return collectionByKey;

@@ -3235,6 +3235,14 @@ public class ExportActivityToPDF extends Action {
             plCommCell1.setColspan(4);
             fundingTable.addCell(plCommCell1);
         }
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Expenditure Class") && 
+        		fd.getExpenditureClass() != null) {
+            PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Expenditure Class") + ": " + fd.getExpenditureClass()), plainFont));
+            cell.setBorder(0);
+            cell.setBackgroundColor(new Color(255,255,204));
+            cell.setColspan(4);
+            fundingTable.addCell(cell);
+        }        
     }
 
     private PdfPCell getRoleOrgForFundingFlows(FundingDetail fd,String fm) {

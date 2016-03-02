@@ -1182,6 +1182,7 @@ public class EditActivity extends Action {
           eaForm.getFunding().setShowOfficialDevelopmentAid(CategoryConstants.ADJUSTMENT_TYPE_ODA_SSC.isActiveInDatabase());
           eaForm.getFunding().setShowBilateralSsc(CategoryConstants.ADJUSTMENT_TYPE_BILATERAL_SSC.isActiveInDatabase());
           eaForm.getFunding().setShowTriangularSsc(CategoryConstants.ADJUSTMENT_TYPE_TRIANGULAR_SSC.isActiveInDatabase());
+          
 
           String toCurrCode=null;
           if (tm != null)

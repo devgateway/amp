@@ -4,8 +4,9 @@
 	column 5 of layout left untouched (for spacing)
 first row (always):
 	col 1: Title	OR	Adjustments
-	col 2: Transaction date
-	col 3,4: Transaction amount, transaction currency, fixed exchange rate (if any)
+	col 2: Expenditure class (if any)
+	col 3: Transaction date
+	col 4,5: Transaction amount, transaction currency, fixed exchange rate (if any)
 	
 second row (if any):	
 	col 1: spacing
@@ -28,6 +29,7 @@ other rows (if any): capital spending percent / classification / attached pledge
 		</c:choose>
 		</span>
 	</td>
+
 	<td height="18px" align="right" nowrap>
 	    <module:display name="/Activity Form/Funding/Funding Group/Funding Item/${transaction}/Disaster Response"
 			parentModule="/Activity Form/Funding/Funding Group/Funding Item/${transaction}">
@@ -109,3 +111,15 @@ other rows (if any): capital spending percent / classification / attached pledge
 		</td>
 	</tr>
 </logic:present>
+	
+<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Expenditure Class">
+	<logic:present name="fundingDetail" property="expenditureClass">
+		<tr>
+		<td colspan="1" align="right"><digi:trn>Expenditure Category</digi:trn>:&nbsp;</td>
+		<td colspan="3" align="left">
+			<digi:trn><bean:write name="fundingDetail" property="expenditureClass.value" /></digi:trn>			
+		</td>
+	</tr>
+	</logic:present>
+</module:display>
+

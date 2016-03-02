@@ -2528,7 +2528,7 @@ public class ExportActivityToWord extends Action {
                                     ExportSectionHelperRowData sectionHelperRowData = new ExportSectionHelperRowData(getTransactionTypeLable(fndDet.getTransactionType()), null, null, true);
 									String disasterResponse = "";
 									if (Boolean.TRUE.equals(fndDet.getDisasterResponse())) {
-											disasterResponse = TranslatorWorker.translateText("Disaster Response");
+										disasterResponse = TranslatorWorker.translateText("Disaster Response");
 									}
 									
                                     ExportSectionHelperRowData currentRowData = sectionHelperRowData.
@@ -2556,6 +2556,14 @@ public class ExportActivityToWord extends Action {
                                     	pledgeSectorData.addRowData(TranslatorWorker.translateText("Source Pledge") + ": " + fndDet.getPledgename());
                                     	eshDonorFundingDetails.addRowData(pledgeSectorData);
                                     }
+                                    
+                                    if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Expenditure Class") 
+                                    		&& fndDet.getExpenditureClass() != null) {
+                                    	ExportSectionHelperRowData data = new ExportSectionHelperRowData(null, null, null, true);
+                                    	data.addRowData(TranslatorWorker.translateText("Expenditure Class") + ": " + fndDet.getExpenditureClass());
+                                    	eshDonorFundingDetails.addRowData(data);
+                                    }
+                                    
                                 }
                             }
 

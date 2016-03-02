@@ -36,6 +36,7 @@
 		<many-to-one name="ampFundingId" column="amp_funding_id" class="org.digijava.module.aim.dbentity.AmpFunding" index="idx_amp_funding_detail_funding_id" />
 		<many-to-one name="contract" column="ipa_contract_id" class="org.digijava.module.aim.dbentity.IPAContract" cascade="none" lazy="false" />
 		<many-to-one name="adjustmentType" column="adjustment_type" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" index="amp_funding_detail_adjustment_type" />
+		<many-to-one name="expenditureClass" column="expenditure_class" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" index="amp_funding_detail_expenditure_class" />
 
 		<many-to-one name="recipientOrg" column="recipient_org_id"
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />

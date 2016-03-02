@@ -29,6 +29,7 @@ public class FundingDetail implements Serializable, Comparable
 	private Date reportingDate;
 	private AmpCategoryValue adjustmentTypeName;
 	private AmpCategoryValue projectionTypeName;
+	private AmpCategoryValue expenditureClass;
 	private String transactionDate;
 	private String transactionAmount;
 	private Long reportingOrganizationId;
@@ -405,6 +406,14 @@ public class FundingDetail implements Serializable, Comparable
 
 	public void setDisasterResponse(Boolean disasterResponse) {
 		this.disasterResponse = disasterResponse;
+	}
+
+	public AmpCategoryValue getExpenditureClass() {
+		return expenditureClass;
+	}
+
+	public void setExpenditureClass(AmpCategoryValue expenditureClass) {
+		this.expenditureClass = expenditureClass;
 	}
  
 }

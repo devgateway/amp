@@ -5,6 +5,12 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -14,16 +20,64 @@ import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 
 /**
  * @author mpostelnicu@dgateway.org since Nov 8, 2010
  */
 public class AmpDonorExpendituresFormTableFeature extends
 		AmpDonorFormTableFeaturePanel {
+	
+	private static Logger logger = Logger.getLogger(AmpDonorExpendituresFormTableFeature.class);
+	 
+	protected AmpCategorySelectFieldPanel getExpenditureClassTypeComponent(
+			IModel<AmpFundingDetail> model) {
+		String transactionTypeString = "";
+
+		IModel<Set<AmpCategoryValue>> dependantModel = null;
+		AmpCategoryClass categClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.EXPENDITURE_CLASS_KEY);
+
+		//this can be skipped for this particular field
+		for (AmpCategoryValue val: categClass.getPossibleValues()) {
+//			if (val.equ){
+				if (val.getUsedByValues() != null && val.getUsedByValues().size() > 0){
+					HashSet<AmpCategoryValue> tmp = new HashSet<AmpCategoryValue>();
+					tmp.add(val);
+					dependantModel = new Model(tmp);
+				}
+				break;
+//			}
+		}
+		
+		try{
+			AmpCategorySelectFieldPanel expenditureClasses = new AmpCategorySelectFieldPanel(
+				"expenditureClass", CategoryConstants.EXPENDITURE_CLASS_KEY,
+						new PropertyModel<AmpCategoryValue>(model,"expenditureClass"),
+						CategoryConstants.EXPENDITURE_CLASS_NAME, //fmname
+						 false, false, false, dependantModel, false);
+			expenditureClasses.getChoiceContainer().setRequired(true);
+			return expenditureClasses;
+		}catch(Exception e)
+		{
+			logger.error("AmpCategorySelectFieldPanel initialization failed");
+		}
+		return null;
+
+		
+	}
+
+	
+	
+	
 	/**
 	 * @param id
 	 * @param model
@@ -41,6 +95,7 @@ public class AmpDonorExpendituresFormTableFeature extends
 					org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {
 
 				item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
+				item.add(getExpenditureClassTypeComponent(item.getModel()));
 				final AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
 				item.add(amountComponent);
 				
@@ -48,6 +103,11 @@ public class AmpDonorExpendituresFormTableFeature extends
 						"classification", new PropertyModel<String>(
 								item.getModel(), "expCategory"),
 						"Expenditure Classification", false, false);
+				
+				
+				
+				
+				
 				classification.getTextContainer().add(new AttributeModifier("size", new Model<String>("12")));
 				classification.setTextContainerDefaultMaxSize();
 				item.add(classification);

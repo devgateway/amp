@@ -111,6 +111,7 @@ public class FundingCalculationsHelper {
 			}
 			fundingDetail.setIndexId(indexId++);
 			fundingDetail.setAdjustmentTypeName(fundDet.getAdjustmentType());
+			fundingDetail.setExpenditureClass(fundDet.getExpenditureClass());
 			if(fundDet.getTransactionType().equals(Constants.MTEFPROJECTION)){
 				fundingDetail.setProjectionTypeName(((AmpFundingMTEFProjection)fundDet).getProjected());	
 			}

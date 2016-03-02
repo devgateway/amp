@@ -227,6 +227,15 @@ public class CategoryConstants {
 	 public static final HardCodedCategoryValue MODE_OF_PAYMENT_CAPITAL_DEVELOPMENT = 
 			 new CategoryConstants.HardCodedCategoryValue("mode_of_payment", "Capital Development", false);
 	 
+	 public static final HardCodedCategoryValue EXPENDITURE_CLASS_CAPITAL_EXPENDITURE = 
+			 new CategoryConstants.HardCodedCategoryValue("expenditure_class", "Capital Expenditure", false);
+	 public static final HardCodedCategoryValue EXPENDITURE_CLASS_COMPENSATION_SALARIES = 
+			 new CategoryConstants.HardCodedCategoryValue("expenditure_class", "Compensation / Salaries", false);
+	 public static final HardCodedCategoryValue EXPENDITURE_CLASS_GOODS_AND_SERVICES = 
+			 new CategoryConstants.HardCodedCategoryValue("expenditure_class", "Goods and Services", false);
+	 public static final HardCodedCategoryValue EXPENDITURE_CLASS_OTHERS = 
+			 new CategoryConstants.HardCodedCategoryValue("expenditure_class", "Others", false);
+	 
 	 
 	//Org. Manager : Staff Information type
 	 public static final String ORGANIZATION_STAFF_INFO_NAME="Staff Information Type";

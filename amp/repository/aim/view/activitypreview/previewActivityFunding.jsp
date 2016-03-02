@@ -223,31 +223,30 @@
 												<table width="100%" border="0" align="center" cellpadding="2" cellspacing="0" style="font-size:11px;">
 													<bean:define id="funding" name="funding" scope="page" toScope="request"
 														type="org.digijava.module.aim.helper.Funding">
-													</bean:define>
+														</bean:define>
 													<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments" 
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+														<bean:define id="transaction" value="Commitments" type="java.lang.String" toScope="request"/>
 														<jsp:include page="previewActivityFundingCommitments.jsp" />
 													</module:display>
 													<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements" 
 							 							parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+														<bean:define id="transaction" value="Disbursements" type="java.lang.String" toScope="request"/>
 														<jsp:include page="previewActivityFundingDisbursement.jsp" />
 													</module:display>
-
 													<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures"
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+														<bean:define id="transaction" value="Expenditures" type="java.lang.String" toScope="request"/>
 														<jsp:include page="previewActivityFundingExpenditures.jsp" />
 													</module:display>
-
                                                     <module:display name="/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections"
                                                             parentModule="/Activity Form/Funding/Funding Group/Funding Item">
                                                         <jsp:include page="previewActivityFundingMTEF.jsp" />
                                                     </module:display>
-
  												    <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Release of Funds"
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 														<jsp:include page="previewActivityFundingRoF.jsp" />
 													</module:display>
-
 													<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements"
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 														<jsp:include page="previewActivityFundingEDD.jsp" />

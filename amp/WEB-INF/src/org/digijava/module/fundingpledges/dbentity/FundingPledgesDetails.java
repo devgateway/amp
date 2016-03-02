@@ -278,4 +278,9 @@ public class FundingPledgesDetails implements FundingInformationItem, Identifiab
 	public Boolean getDisasterResponse() {
 		return null;
 	}
+
+	@Override
+	public AmpCategoryValue getExpenditureClass() {
+		return null;
+	}
 }

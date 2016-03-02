@@ -254,4 +254,8 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 		public Boolean getDisasterResponse() {
 			return null;
 		}
+		@Override
+		public AmpCategoryValue getExpenditureClass() {
+			return null;
+		}
 }

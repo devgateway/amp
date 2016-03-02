@@ -31,4 +31,5 @@ public interface FundingInformationItem {
 	public Long getDbId();
 	public void setTransactionAmount(Double transactionAmount);
 	public Boolean getDisasterResponse();
+	public AmpCategoryValue getExpenditureClass();
 }

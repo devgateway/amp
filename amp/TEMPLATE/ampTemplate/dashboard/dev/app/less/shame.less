@@ -114,8 +114,29 @@ h3 {
     .dash-chart-wrap {
       height: 300px;
       overflow-y: auto;
-      .big-chart & {
+      .big-chart-0 & {
         min-height: 400px;
+      }
+      .big-chart-1 & {
+        min-height: 475px;
+      }
+      .big-chart-2 & {
+        min-height: 625px;
+      }
+      .big-chart-3 & {
+        min-height: 775px;
+      }
+      .big-chart-4 & {
+        min-height: 925px;
+      }
+      .big-chart-5 & {
+        min-height: 1075px;
+      }
+      .big-chart-6 & {
+        min-height: 1225px;
+      }
+      .big-chart-7 & {
+        min-height: 1375px;
       }
     }
 
@@ -221,10 +242,11 @@ h3 {
   left: -99999em;
 }
 
-@preview-width: 1000px;  // sync with views/download.js
-@preview-height: 400px;  // sync with views/download.js
+//@preview-width: 1024px;  // sync with views/download.js
+//@preview-height: 400px;  // sync with views/download.js
 .dash-download-modal {
-	width: @preview-width;
+	/*width: @preview-width;*/
+	width: auto;
 }
 .modal-preview-area {
 	visibility: visible;
@@ -240,21 +262,21 @@ h3 {
     background-color:white;
 }
 .preview-area .svg-wrap {
-  height: @preview-height;
-  width: @preview-width - (15px * 2);
+  /*height: @preview-height;*/
+  /*width: @preview-width - (15px * 2);*/
   opacity: 0.0;
 }
 .preview-area .canvas-wrap {
-  height: @preview-height + 50px;
-  width: @preview-width - (15px * 2);
+  /*height: @preview-height + 50px;*/
+  /*width: @preview-width - (15px * 2);*/
 }
 .modal-dialog.download {
-  width: @preview-width + (15px * 2);
+  /*width: @preview-width + (15px * 2);*/
 }
 
 
 .modal-dialog .container {
-  width: auto;
+  /*width: auto;*/
 }
 
 .csv-preview {

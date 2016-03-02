@@ -10,7 +10,7 @@ window.app = app;  // for debugging convenience
 app.state.saved.load();
 //app.render();
 
-},{"./app/app-class":2,"./app/models/amp-user.js":12,"./ugly/lib-load-hacks":37,"jquery":"jquery"}],2:[function(require,module,exports){
+},{"./app/app-class":2,"./app/models/amp-user.js":13,"./ugly/lib-load-hacks":38,"jquery":"jquery"}],2:[function(require,module,exports){
 var _ = require('underscore');
 var Deferred = require('jquery').Deferred;
 var BackboneDash = require('./backbone-dash');
@@ -198,7 +198,7 @@ _.extend(App.prototype, BackboneDash.Events, {
 
 module.exports = App;
 
-},{"./backbone-dash":3,"./check-support":11,"./models/saved-dashes-collection.js":20,"./models/settings-collection":22,"./views/fail":31,"./views/main":33,"amp-filter/src/main":63,"amp-state/index":77,"amp-translate":78,"amp-url/index":79,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
+},{"./backbone-dash":3,"./check-support":12,"./models/saved-dashes-collection.js":21,"./models/settings-collection":23,"./views/fail":32,"./views/main":34,"amp-filter/src/main":64,"amp-state/index":78,"amp-translate":79,"amp-url/index":80,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -325,10 +325,15 @@ function countCategories(data) {
 }
 
 
-function chart(options) {
+function chart(options, data) {
   //this check is needed because I need strictly either 300 or 400 px, and sometimes, when the chart overflows, it
   //will give me >400 px height
   var height = options.height < 400 ? 300 : 400;
+  var calculatedHeight = util.calculateChartHeight(data[0].values.length, false, options.model);
+  if (calculatedHeight !== null) {
+	  height = calculatedHeight; 
+  }
+   
   barDebug.log("Setting height to", height);
   var _chart = nv.models.discreteBarChart()
     .valueFormat(options.shortFormatter)
@@ -349,7 +354,7 @@ function addLegend(svg, chart, nvData, trimLabels, width) {
     .margin({left: 20, right: 20})
     .rightAlign(false)
     .color(util.categoryColours(nvData[0].values.length))
-    .key(function(d) { return trimLabels ? util.formatShortText(12)(d.x) : d.x; });
+    .key(function(d) { return trimLabels ? util.formatShortText(12)(d.x) : util.formatShortText(85)(d.x); });
 
   d3.select(svg)
     .datum(nvData)
@@ -371,7 +376,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":80,"../../ugly/util":41,"d3":"d3"}],5:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":81,"../../ugly/util":42,"d3":"d3"}],5:[function(require,module,exports){
 /*
  * Drawing a multibar chart in AMP? Please use ./chart.js instead.
  */
@@ -432,7 +437,7 @@ module.exports = {
   chart: chart
 };
 
-},{"../../../../../../../reamp/tools/log":80,"./customized/multiBarChart.js":10}],6:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":81,"./customized/multiBarChart.js":10}],6:[function(require,module,exports){
 /*
  * Drawing a pie chart in AMP? Please use ./chart.js instead.
  */
@@ -442,6 +447,8 @@ var nv = window.nv;  // nvd3 is a pain
 
 var _ = require('underscore');
 var common = require('./common');
+var util = require('../../ugly/util');
+var customizedPieChart = require('./customized/pieChart.js');
 
 
 function dataToNv(data) {
@@ -460,13 +467,43 @@ function countCategories(data) {
 }
 
 
-function chart(options) {
-  var _chart = nv.models.pieChart()
+function chart(options, data) {
+	var height = options.height < 400 ? 300 : 400;
+	  var calculatedHeight = util.calculateChartHeight(data[0].values.length, false, options.model);
+	  if (calculatedHeight !== null) {
+		  height = calculatedHeight; 
+	  }
+
+  var _chart = nv.models.customizedPieChart()
     .valueFormat(options.shortFormatter)
     .labelType('percent')
+    .showLegend(false)
     .donut(true)
+    .height(height)
+    .margin({ top: 5, right: 5, bottom: 5, left: 5 })
     .donutRatio(0.35);
   return _chart;
+}
+
+function addLegend(svg, chart, nvData, trimLabels, width) {
+	  var legendHeight;
+
+	  var legend = nv.models.legend()
+	    .width(width || svg.clientWidth)
+	    .margin({left: 20, right: 20})
+	    .rightAlign(false)
+	    .color(util.categoryColours(nvData.length))
+	    .key(function(d) { return trimLabels ? util.formatShortText(12)(d.x) : util.formatShortText(85)(d.x); });
+
+	  d3.select(svg)
+	    .datum(nvData)
+	    .append('g')
+	      .attr('class', 'legend')
+	      .datum(nvData)
+	      .call(legend);
+
+	  legendHeight = svg.querySelector('.legend').getBBox().height;
+	  chart.margin({top: legendHeight + 15});
 }
 
 
@@ -485,12 +522,13 @@ module.exports = {
   dispatchName: 'pie',
   normalizeNvTTArgs: normalizeNvTTArgs,
   countCategories: countCategories,
+  addLegend: addLegend,
   removeLegend: removeLegend,
   dataToNv: dataToNv,
   chart: chart
 };
 
-},{"./common":9,"underscore":"underscore"}],7:[function(require,module,exports){
+},{"../../ugly/util":42,"./common":9,"./customized/pieChart.js":11,"underscore":"underscore"}],7:[function(require,module,exports){
 
 var _ = require('underscore');
 var util = require('../../ugly/util');
@@ -551,7 +589,7 @@ module.exports = {
   charter: charter
 };
 
-},{"../../ugly/util":41,"./common":9,"underscore":"underscore"}],8:[function(require,module,exports){
+},{"../../ugly/util":42,"./common":9,"underscore":"underscore"}],8:[function(require,module,exports){
 
 var _ = require('underscore');
 var d3 = require('d3');
@@ -605,7 +643,7 @@ function chart(type, data, options) {
 
 module.exports = chart;
 
-},{"../../ugly/util":41,"./_bar":4,"./_multibar":5,"./_pie":6,"./_table":7,"./common":9,"d3":"d3","underscore":"underscore"}],9:[function(require,module,exports){
+},{"../../ugly/util":42,"./_bar":4,"./_multibar":5,"./_pie":6,"./_table":7,"./common":9,"d3":"d3","underscore":"underscore"}],9:[function(require,module,exports){
 var nv = window.nv;  // nvd3 is a pain
 var d3 = require('d3');
 var util = require('../../ugly/util');
@@ -768,7 +806,7 @@ function nvBindOthersCb(chart, data, specific, clickHandler) {
 function nvCharter(specific) {
   return function(data, options) {
     var svg = mkChartSVG(options.height, options.width),
-        nvChart = specific.chart(options),
+        nvChart = specific.chart(options, data),
         nvData = specific.dataToNv(data);
     nvColorifyCategories(nvChart, data, specific);
     nvBindTooltip(nvChart, data, specific, options.ttTemplate, options.getTTContent);
@@ -834,7 +872,7 @@ module.exports = {
   formatNumber: formatNumber
 };
 
-},{"../../ugly/util":41,"d3":"d3","numeral":43,"underscore":"underscore"}],10:[function(require,module,exports){
+},{"../../ugly/util":42,"d3":"d3","numeral":44,"underscore":"underscore"}],10:[function(require,module,exports){
 
 nv.models.customizedMultiBarChart = function() {
   "use strict";
@@ -1380,6 +1418,247 @@ nv.models.customizedMultiBarChart = function() {
   return chart;
 }
 },{}],11:[function(require,module,exports){
+
+nv.models.customizedPieChart = function() {
+    "use strict";
+
+    //============================================================
+    // Public Variables with Default Settings
+    //------------------------------------------------------------
+
+    var pie = nv.models.pie();
+    var legend = nv.models.legend().margin({top: 0, right: 0, bottom: 0, left: 0});
+
+    var margin = {top: 30, right: 20, bottom: 20, left: 20}
+    //var legendMargin = {top: 30, right: 20, bottom: 20, left: 20}
+        , width = null
+        , height = null
+        , showLegend = true
+        , color = nv.utils.defaultColor()
+        , tooltips = true
+        , tooltip = function(key, y, e, graph) {
+            return '<h3 style="background-color: '
+                + e.color + '">' + key + '</h3>'
+                + '<p>' +  y + '</p>';
+        }
+        , state = nv.utils.state()
+        , defaultState = null
+        , noData = "No Data Available."
+        , duration = 250
+        , dispatch = d3.dispatch('tooltipShow', 'tooltipHide', 'stateChange', 'changeState','renderEnd')
+        ;
+
+    //============================================================
+    // Private Variables
+    //------------------------------------------------------------
+
+    var showTooltip = function(e, offsetElement) {
+        var tooltipLabel = pie.x()(e.point);
+        var left = e.pos[0] + ( (offsetElement && offsetElement.offsetLeft) || 0 ),
+            top = e.pos[1] + ( (offsetElement && offsetElement.offsetTop) || 0),
+            y = pie.valueFormat()(pie.y()(e.point)),
+            content = tooltip(tooltipLabel, y, e, chart)
+            ;
+        nv.tooltip.show([left, top], content, e.value < 0 ? 'n' : 's', null, offsetElement);
+    };
+
+    var renderWatch = nv.utils.renderWatch(dispatch);
+
+    var stateGetter = function(data) {
+        return function(){
+            return {
+                active: data.map(function(d) { return !d.disabled })
+            };
+        }
+    };
+
+    var stateSetter = function(data) {
+        return function(state) {
+            if (state.active !== undefined) {
+                data.forEach(function (series, i) {
+                    series.disabled = !state.active[i];
+                });
+            }
+        }
+    };
+
+    //============================================================
+    // Chart function
+    //------------------------------------------------------------
+
+    function chart(selection) {
+    	
+        renderWatch.reset();
+        renderWatch.models(pie);
+
+        selection.each(function(data) {
+            var container = d3.select(this);
+            nv.utils.initSVG(container);
+
+            var that = this;
+            var availableWidth = (width || parseInt(container.style('width'), 10) || 960)
+                    - margin.left - margin.right,
+                availableHeight = (height || parseInt(container.style('height'), 10) || 400)
+                    - margin.top - margin.bottom
+                ;
+
+            chart.update = function() { container.transition().call(chart); };
+            chart.container = this;
+
+            state.setter(stateSetter(data), chart.update)
+                .getter(stateGetter(data))
+                .update();
+
+            //set state.disabled
+            state.disabled = data.map(function(d) { return !!d.disabled });
+
+            if (!defaultState) {
+                var key;
+                defaultState = {};
+                for (key in state) {
+                    if (state[key] instanceof Array)
+                        defaultState[key] = state[key].slice(0);
+                    else
+                        defaultState[key] = state[key];
+                }
+            }
+
+            // Display No Data message if there's nothing to show.
+            if (!data || !data.length) {
+                var noDataText = container.selectAll('.nv-noData').data([noData]);
+
+                noDataText.enter().append('text')
+                    .attr('class', 'nvd3 nv-noData')
+                    .attr('dy', '-.7em')
+                    .style('text-anchor', 'middle');
+
+                noDataText
+                    .attr('x', margin.left + availableWidth / 2)
+                    .attr('y', margin.top + availableHeight / 2)
+                    .text(function(d) { return d });
+
+                return chart;
+            } else {
+                container.selectAll('.nv-noData').remove();
+            }
+
+            // Setup containers and skeleton of chart
+            var wrap = container.selectAll('g.nv-wrap.nv-pieChart').data([data]);
+            var gEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-pieChart').append('g');
+            var g = wrap.select('g');
+
+            gEnter.append('g').attr('class', 'nv-pieWrap').attr('transform', 'translate(0,' + $(".legend.nvd3-svg")[0].getBoundingClientRect().height + ')');
+            gEnter.append('g').attr('class', 'nv-legendWrap');
+
+            // Legend
+            if (showLegend) {
+                legend.width( availableWidth ).key(pie.x());
+
+                wrap.select('.nv-legendWrap')
+                    .datum(data)
+                    .call(legend);
+            }
+            //wrap.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+            // Main Chart Component(s)
+            pie.width(availableWidth).height(availableHeight);
+            var pieWrap = g.select('.nv-pieWrap').datum([data]);
+            d3.transition(pieWrap).call(pie);
+
+            // Event Handling/Dispatching (in chart's scope)
+            legend.dispatch.on('stateChange', function(newState) {
+                for (var key in newState) {
+                    state[key] = newState[key];
+                }
+                dispatch.stateChange(state);
+                chart.update();
+            });
+
+            pie.dispatch.on('elementMouseout.tooltip', function(e) {
+                dispatch.tooltipHide(e);
+            });
+
+            // Update chart from a state object passed to event handler
+            dispatch.on('changeState', function(e) {
+                if (typeof e.disabled !== 'undefined') {
+                    data.forEach(function(series,i) {
+                        series.disabled = e.disabled[i];
+                    });
+                    state.disabled = e.disabled;
+                }
+                chart.update();
+            });
+
+        });
+
+        renderWatch.renderEnd('pieChart immediate');
+        return chart;
+    }
+
+    //============================================================
+    // Event Handling/Dispatching (out of chart's scope)
+    //------------------------------------------------------------
+
+    pie.dispatch.on('elementMouseover.tooltip', function(e) {
+        e.pos = [e.pos[0] +  margin.left, e.pos[1] + margin.top];
+        dispatch.tooltipShow(e);
+    });
+
+    dispatch.on('tooltipShow', function(e) {
+        if (tooltips) showTooltip(e);
+    });
+
+    dispatch.on('tooltipHide', function() {
+        if (tooltips) nv.tooltip.cleanup();
+    });
+
+    //============================================================
+    // Expose Public Variables
+    //------------------------------------------------------------
+
+    // expose chart's sub-components
+    chart.legend = legend;
+    chart.dispatch = dispatch;
+    chart.pie = pie;
+    chart.options = nv.utils.optionsFunc.bind(chart);
+
+    // use Object get/set functionality to map between vars and chart functions
+    chart._options = Object.create({}, {    	
+        // simple options, just get/set the necessary values
+        noData:         {get: function(){return noData;},         set: function(_){noData=_;}},
+        tooltipContent: {get: function(){return tooltip;},        set: function(_){tooltip=_;}},
+        tooltips:       {get: function(){return tooltips;},       set: function(_){tooltips=_;}},
+        showLegend:     {get: function(){return showLegend;},     set: function(_){showLegend=_;}},
+        defaultState:   {get: function(){return defaultState;},   set: function(_){defaultState=_;}},
+        // options that require extra logic in the setter
+        color: {get: function(){return color;}, set: function(_){
+            color = _;
+            legend.color(color);
+            pie.color(color);
+        }},
+        duration: {get: function(){return duration;}, set: function(_){
+            duration = _;
+            renderWatch.reset(duration);
+        }},
+        margin: {get: function(){return margin;}, set: function(_){
+            margin.top    = _.top    !== undefined ? _.top    : margin.top;
+            margin.right  = _.right  !== undefined ? _.right  : margin.right;
+            margin.bottom = _.bottom !== undefined ? _.bottom : margin.bottom;
+            margin.left   = _.left   !== undefined ? _.left   : margin.left;
+        }},
+        /*legendMargin: {get: function(){return legendMargin;}, set: function(_){
+        	legendMargin.top    = _.top    !== undefined ? _.top    : legendMargin.top;
+        	legendMargin.right  = _.right  !== undefined ? _.right  : legendMargin.right;
+        	legendMargin.bottom = _.bottom !== undefined ? _.bottom : legendMargin.bottom;
+        	legendMargin.left   = _.left   !== undefined ? _.left   : legendMargin.left;
+        }},*/
+    });
+    
+    nv.utils.inheritOptions(chart, pie);
+    nv.utils.initOptions(chart);
+    return chart;
+};
+},{}],12:[function(require,module,exports){
 function queryselector() {
   return !!document.querySelector;  // fails on oooooooooold IE
 }
@@ -1508,7 +1787,7 @@ module.exports = function() {
   return missingFeatures;
 };
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
@@ -1530,7 +1809,7 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],13:[function(require,module,exports){
+},{"backbone":"backbone"}],14:[function(require,module,exports){
 var _ = require('underscore');
 var ChartModel = require('./chart-model-base');
 
@@ -1597,7 +1876,7 @@ module.exports = ChartModel.extend({
 
 });
 
-},{"./chart-model-base":15,"underscore":"underscore"}],14:[function(require,module,exports){
+},{"./chart-model-base":16,"underscore":"underscore"}],15:[function(require,module,exports){
 var _ = require('underscore');
 var ChartModel = require('./chart-model-base');
 var common = require('../charts/common');
@@ -1752,7 +2031,7 @@ module.exports = ChartModel.extend({
 
 });
 
-},{"../charts/common":9,"./chart-model-base":15,"underscore":"underscore"}],15:[function(require,module,exports){
+},{"../charts/common":9,"./chart-model-base":16,"underscore":"underscore"}],16:[function(require,module,exports){
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 
@@ -1792,7 +2071,7 @@ module.exports = BackboneDash.Model.extend({
 
 });
 
-},{"../backbone-dash":3,"underscore":"underscore"}],16:[function(require,module,exports){
+},{"../backbone-dash":3,"underscore":"underscore"}],17:[function(require,module,exports){
 var param = require('jquery').param;
 var _ = require('underscore');
 var ChartModel = require('./chart-model-base');
@@ -1803,7 +2082,8 @@ module.exports = ChartModel.extend({
 
   defaults: {
     limit: 5,
-    title: ''
+    title: '',
+    bigN: 0
   },
 
   _prepareTranslations: function() {
@@ -1891,7 +2171,7 @@ module.exports = ChartModel.extend({
 
 });
 
-},{"../charts/common":9,"./chart-model-base":15,"jquery":"jquery","underscore":"underscore"}],17:[function(require,module,exports){
+},{"../charts/common":9,"./chart-model-base":16,"jquery":"jquery","underscore":"underscore"}],18:[function(require,module,exports){
 var BackboneDash = require('../backbone-dash');
 
 
@@ -1901,7 +2181,7 @@ module.exports = BackboneDash.Collection.extend({
   }
 });
 
-},{"../backbone-dash":3}],18:[function(require,module,exports){
+},{"../backbone-dash":3}],19:[function(require,module,exports){
 var Backbone = require('backbone');
 var _ = require('underscore');
 
@@ -1940,7 +2220,7 @@ var EnabledChartsCollection = Backbone.Collection.extend({
 });
 
 module.exports = EnabledChartsCollection;
-},{"backbone":"backbone","underscore":"underscore"}],19:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],20:[function(require,module,exports){
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 
@@ -1985,7 +2265,7 @@ module.exports = BackboneDash.Model.extend({
   }
 });
 
-},{"../backbone-dash":3,"underscore":"underscore"}],20:[function(require,module,exports){
+},{"../backbone-dash":3,"underscore":"underscore"}],21:[function(require,module,exports){
 var _ = require('underscore');
 var Deferred = require('jquery').Deferred;
 var BackboneDash = require('../backbone-dash');
@@ -2044,7 +2324,7 @@ module.exports = BackboneDash.Collection.extend({
     return deferred.promise();
    }
 });
-},{"../backbone-dash":3,"./saved-dash":19,"jquery":"jquery","underscore":"underscore"}],21:[function(require,module,exports){
+},{"../backbone-dash":3,"./saved-dash":20,"jquery":"jquery","underscore":"underscore"}],22:[function(require,module,exports){
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 
@@ -2128,7 +2408,7 @@ module.exports = BackboneDash.Model.extend({
 
 });
 
-},{"../backbone-dash":3,"underscore":"underscore"}],22:[function(require,module,exports){
+},{"../backbone-dash":3,"underscore":"underscore"}],23:[function(require,module,exports){
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -2282,7 +2562,7 @@ module.exports = BackboneDash.Collection.extend({
   }
 
 });
-},{"../backbone-dash":3,"./setting":21,"jquery":"jquery","underscore":"underscore"}],23:[function(require,module,exports){
+},{"../backbone-dash":3,"./setting":22,"jquery":"jquery","underscore":"underscore"}],24:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var _ = require('underscore');
@@ -2361,7 +2641,7 @@ module.exports = ChartViewBase.extend({
 
 });
 
-},{"./chart-view-base":27,"d3":"d3","underscore":"underscore"}],24:[function(require,module,exports){
+},{"./chart-view-base":28,"d3":"d3","underscore":"underscore"}],25:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var _ = require('underscore');
@@ -2438,7 +2718,7 @@ module.exports = ChartViewBase.extend({
 
 });
 
-},{"./chart-view-base":27,"d3":"d3","underscore":"underscore"}],25:[function(require,module,exports){
+},{"./chart-view-base":28,"d3":"d3","underscore":"underscore"}],26:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -2490,7 +2770,7 @@ module.exports = BackboneDash.View.extend({
 	},
 
 });
-},{"../backbone-dash":3,"underscore":"underscore"}],26:[function(require,module,exports){
+},{"../backbone-dash":3,"underscore":"underscore"}],27:[function(require,module,exports){
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var ModalView = require('./chart-tops-info-modal');
@@ -2547,7 +2827,7 @@ module.exports = ChartViewBase.extend({
 
 });
 
-},{"./chart-tops-info-modal":25,"./chart-view-base":27,"d3":"d3"}],27:[function(require,module,exports){
+},{"./chart-tops-info-modal":26,"./chart-view-base":28,"d3":"d3"}],28:[function(require,module,exports){
 
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
@@ -2555,7 +2835,7 @@ var BackboneDash = require('../backbone-dash');
 var getChart = require('../charts/chart');
 var util = require('../../ugly/util');
 var DownloadView = require('./download');
-var template = _.template("<div class=\"col-xs-12 <% if (!model.get('big')) { %>col-md-6<% } else { %> big-chart<% } %>\">\n\n  <div class=\"panel panel-chart\">\n    <div class=\"panel-heading fix-title-height\">\n      <span class=\"pull-right big-number\">\n        <b class=\"chart-total\"></b>\n        <span class=\"chart-currency\"></span>\n      </span>\n      <h2 data-i18n=\"amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>\"><%= model.get('title') %></h2>\n    </div>\n\n    <div class=\"panel-body\">\n      <div class=\"chart-container\">\n        <h3 class=\"dash-chart-diagnostic text-center\"></h3>\n        <div class=\"dash-chart-wrap\">\n        </div>\n        <button type=\"button\" class=\"btn btn-link btn-xs pull-right reset\" style=\"display:none\" data-i18n=\"amp.dashboard:chart-reset\">reset others</button>\n      </div>\n    </div>\n\n    <div class=\"panel-footer clearfix\">\n\n      <div class=\"pull-right\">\n\n        <div class=\"btn-group\">\n          <% _(views).each(function(view) { %>\n            <button type=\"button\" data-view=\"<%= view %>\"\n                class=\"chart-view btn btn-sm btn-<%= (view === model.get('view')) ? 'primary' : 'default' %>\">\n              <span class=\"glyphicon glyphicon-<%= {\n                bar: 'signal',\n                multibar: 'signal',\n                pie: 'adjust',\n                table: 'th-list'\n              }[view] %>\"></span>\n            </button>\n          <% }) %>\n        </div>\n\n        <div class=\"btn-group\">\n          <a\n            class=\"btn btn-sm btn-default download\"\n            download=\"AMP <%= model.get('title') %> - <%= (new Date()).toISOString().split('T')[0] %>.png\"\n            target=\"_blank\">\n            <span class=\"glyphicon glyphicon-cloud-download\"></span>\n          </a>\n          <button type=\"button\" class=\"btn btn-sm btn-<%= model.get('big') ? 'primary' : 'default' %> expand hidden-xs hidden-sm\">\n            <span class=\"glyphicon glyphicon-fullscreen\"></span>\n          </button>\n        </div>\n\n      </div><!-- buttons in .pull-right -->\n\n      <% if (model.get('adjtype')) { %>\n        <form class=\"form-inline dash-form dash-adj-type\" role=\"form\">\n          <select class=\"form-control like-btn-sm ftype-options\">\n            <option>...</option>\n            <!-- gets populated after settings load -->\n          </select>\n          <span class=\"cheat-lineheight\"></span>\n        </form>\n      <% } %>\n\n    </div>\n  </div>\n\n  <div class=\"export-modal\"></div>\n</div>\n\n");
+var template = _.template("<div class=\"col-xs-12 <% if (!model.get('big')) { %>col-md-6<% } else { %> big-chart-<%= model.get('bigN')%> <% } %>\">\n\n  <div class=\"panel panel-chart\">\n    <div class=\"panel-heading fix-title-height\">\n      <span class=\"pull-right big-number\">\n        <b class=\"chart-total\"></b>\n        <span class=\"chart-currency\"></span>\n      </span>\n      <h2 data-i18n=\"amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>\"><%= model.get('title') %></h2>\n    </div>\n\n    <div class=\"panel-body\">\n      <div class=\"chart-container\">\n        <h3 class=\"dash-chart-diagnostic text-center\"></h3>\n        <div class=\"dash-chart-wrap\">\n        </div>\n        <button type=\"button\" class=\"btn btn-link btn-xs pull-right reset\" style=\"display:none\" data-i18n=\"amp.dashboard:chart-reset\">reset others</button>\n      </div>\n    </div>\n\n    <div class=\"panel-footer clearfix\">\n\n      <div class=\"pull-right\">\n\n        <div class=\"btn-group\">\n          <% _(views).each(function(view) { %>\n            <button type=\"button\" data-view=\"<%= view %>\"\n                class=\"chart-view btn btn-sm btn-<%= (view === model.get('view')) ? 'primary' : 'default' %>\">\n              <span class=\"glyphicon glyphicon-<%= {\n                bar: 'signal',\n                multibar: 'signal',\n                pie: 'adjust',\n                table: 'th-list'\n              }[view] %>\"></span>\n            </button>\n          <% }) %>\n        </div>\n\n        <div class=\"btn-group\">\n          <a\n            class=\"btn btn-sm btn-default download\"\n            download=\"AMP <%= model.get('title') %> - <%= (new Date()).toISOString().split('T')[0] %>.png\"\n            target=\"_blank\">\n            <span class=\"glyphicon glyphicon-cloud-download\"></span>\n          </a>\n          <button type=\"button\" class=\"btn btn-sm btn-<%= model.get('big') ? 'primary' : 'default' %> expand hidden-xs hidden-sm\">\n            <span class=\"glyphicon glyphicon-fullscreen\"></span>\n          </button>\n        </div>\n\n      </div><!-- buttons in .pull-right -->\n\n      <% if (model.get('adjtype')) { %>\n        <form class=\"form-inline dash-form dash-adj-type\" role=\"form\">\n          <select class=\"form-control like-btn-sm ftype-options\">\n            <option>...</option>\n            <!-- gets populated after settings load -->\n          </select>\n          <span class=\"cheat-lineheight\"></span>\n        </form>\n      <% } %>\n\n    </div>\n  </div>\n\n  <div class=\"export-modal\"></div>\n</div>\n\n");
 
 
 var adjOptTemplate = _.template('<option value="<%=opt.id%>" ' +
@@ -2700,7 +2980,7 @@ module.exports = BackboneDash.View.extend({
       this.resetNumbers();
       return;
     }
-    var chart = getChart(this.model.get('view'), this.model.get('processed'), this.getChartOptions());
+    var chart = getChart(this.model.get('view'), this.model.get('processed'), this.getChartOptions(), this.model);
     this.chartContainer.html(chart.el);
 
     this.renderNumbers();
@@ -2725,6 +3005,7 @@ module.exports = BackboneDash.View.extend({
     if(this.model.get('view') == 'multibar'){
   	  co.stacked = this.model.get('stacked');
   	}
+    co.model = this.model;
     return co;
   },
 
@@ -2839,7 +3120,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../../ugly/util":41,"../backbone-dash":3,"../charts/chart":8,"./download":30,"jquery":"jquery","underscore":"underscore"}],28:[function(require,module,exports){
+},{"../../ugly/util":42,"../backbone-dash":3,"../charts/chart":8,"./download":31,"jquery":"jquery","underscore":"underscore"}],29:[function(require,module,exports){
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 
@@ -2867,6 +3148,7 @@ module.exports = BackboneDash.View.extend({
     }, this);
     this.listenToOnce(this.app.filter, 'apply', this.applyFilter);
     this.listenTo(this.collection, 'change:big', this.injectBreaks);
+    this.listenTo(this.collection, 'change:bigN', this.redrawContainer);
   },
 
   render: function() {
@@ -2893,11 +3175,22 @@ module.exports = BackboneDash.View.extend({
       });
       if (chartView) { chartView.render(); }
     }
+  },
+  
+  redrawContainer: function(chartModel) {
+	  if (chartModel) {
+		  var chartView = _(this.chartViews).find(function(v) {
+			  return v.model === chartModel;
+	      });
+	      if (chartView) { 
+	    	  chartView.render(); 
+	      }
+	  } 
   }
 
 });
 
-},{"../backbone-dash":3,"../models/chart-aid-predictability":13,"../models/chart-funding-type":14,"../models/chart-tops":16,"./chart-aid-predictability":23,"./chart-funding-type":24,"./chart-tops":26,"underscore":"underscore"}],29:[function(require,module,exports){
+},{"../backbone-dash":3,"../models/chart-aid-predictability":14,"../models/chart-funding-type":15,"../models/chart-tops":17,"./chart-aid-predictability":24,"./chart-funding-type":25,"./chart-tops":27,"underscore":"underscore"}],30:[function(require,module,exports){
 var BackboneDash = require('../backbone-dash');
 var Filters = require('./filters');
 var Settings = require('./settings');
@@ -2926,7 +3219,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"./filters":32,"./settings":35,"./share":36}],30:[function(require,module,exports){
+},{"../backbone-dash":3,"./filters":33,"./settings":36,"./share":37}],31:[function(require,module,exports){
 var _ = require('underscore');
 var baby = require('babyparse');
 var canvg = require('../../ugly/lib-load-hacks').canvg;
@@ -2952,9 +3245,10 @@ module.exports = BackboneDash.View.extend({
 			    },
   initialize: function(options) {
     this.app = options.app;
+    var height = util.calculateChartHeight(this.model.get('values').length, true);
     this.dashChartOptions = _({}).extend(options.chartOptions, {
-      height: 450,  // sync with css!!!
-      width: 970,	// sync with css!!!
+      height: height, //450,  // sync with css!!!
+      width: $('.container').width(),	// sync with css!!!
       trimLabels: false,
       nvControls: false      
     });    
@@ -3045,6 +3339,8 @@ module.exports = BackboneDash.View.extend({
 
     // reset font to something normal (nvd3 uses css ugh...)
     ctx.font = 'normal 12px "sans-serif"';
+    
+    $('.modal.in .modal-dialog').width(w + 60);
   },
 
   chartToCanvas: function(svg, canvas, cb) {
@@ -3198,7 +3494,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../../ugly/lib-load-hacks":37,"../../ugly/util":41,"../backbone-dash":3,"../charts/chart":8,"babyparse":42,"underscore":"underscore"}],31:[function(require,module,exports){
+},{"../../ugly/lib-load-hacks":38,"../../ugly/util":42,"../backbone-dash":3,"../charts/chart":8,"babyparse":43,"underscore":"underscore"}],32:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -3220,7 +3516,7 @@ module.exports = BackboneDash.View.extend({
 });
 
 
-},{"../backbone-dash":3,"underscore":"underscore"}],32:[function(require,module,exports){
+},{"../backbone-dash":3,"underscore":"underscore"}],33:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -3351,7 +3647,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../../../../../../../reamp/tools/log":80,"../backbone-dash":3,"underscore":"underscore"}],33:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":81,"../backbone-dash":3,"underscore":"underscore"}],34:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -3482,7 +3778,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"../models/chart-aid-predictability":13,"../models/chart-funding-type":14,"../models/chart-tops":16,"../models/charts-collection":17,"../models/enabled-charts-collection":18,"./charts":28,"./controls":29,"amp-boilerplate":45,"amp-state/index":77,"underscore":"underscore"}],34:[function(require,module,exports){
+},{"../backbone-dash":3,"../models/chart-aid-predictability":14,"../models/chart-funding-type":15,"../models/chart-tops":17,"../models/charts-collection":18,"../models/enabled-charts-collection":19,"./charts":29,"./controls":30,"amp-boilerplate":46,"amp-state/index":78,"underscore":"underscore"}],35:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -3562,7 +3858,7 @@ module.exports = BackboneDash.View.extend({
   }
 });
 
-},{"../../../../../../../reamp/tools/log":80,"../backbone-dash":3,"underscore":"underscore"}],35:[function(require,module,exports){
+},{"../../../../../../../reamp/tools/log":81,"../backbone-dash":3,"underscore":"underscore"}],36:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -3607,7 +3903,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"./settings-modal":34,"underscore":"underscore"}],36:[function(require,module,exports){
+},{"../backbone-dash":3,"./settings-modal":35,"underscore":"underscore"}],37:[function(require,module,exports){
 
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
@@ -3664,7 +3960,7 @@ module.exports = BackboneDash.View.extend({
 
 });
 
-},{"../backbone-dash":3,"underscore":"underscore"}],37:[function(require,module,exports){
+},{"../backbone-dash":3,"underscore":"underscore"}],38:[function(require,module,exports){
 // nvd3 goes global sigh... make sure d3 is already global
 /* TODO: in this version of nvd3 v1.7.1, main is not specified in package.json,
  if we ever upgrade to 1.8+, change this back to just require(nvd3) */
@@ -3682,7 +3978,7 @@ module.exports = {
   canvg: window.canvg
 };
 
-},{"../../../node_modules/nvd3/build/nv.d3":44,"./lib-src/canvg":38,"./lib-src/rgbcolor":39,"./underscore-transpose":40}],38:[function(require,module,exports){
+},{"../../../node_modules/nvd3/build/nv.d3":45,"./lib-src/canvg":39,"./lib-src/rgbcolor":40,"./underscore-transpose":41}],39:[function(require,module,exports){
 /*
  * canvg.js - Javascript SVG parser and renderer on Canvas
  * MIT Licensed 
@@ -6641,7 +6937,7 @@ if (typeof(CanvasRenderingContext2D) != 'undefined') {
     }
 }
 
-},{}],39:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 // dependency for canvg
 /**
  * A class to parse color values
@@ -6934,7 +7230,7 @@ function RGBColor(color_string)
 
 module.exports = RGBColor;
 
-},{}],40:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 var _ = require('underscore');
 
 _.mixin({
@@ -6943,7 +7239,7 @@ _.mixin({
   }
 });
 
-},{"underscore":"underscore"}],41:[function(require,module,exports){
+},{"underscore":"underscore"}],42:[function(require,module,exports){
 // hopefully not that ugly, but seemed as good a place as any for this stuff...
 
 var d3 = require('d3');
@@ -7042,6 +7338,74 @@ function data(el, name, newValue) {
   el.setAttribute('data-' + toDashed(name), newValue);
 }
 
+/**
+ * This function calculates how much height we need to show a readable chart with different number of legends. 
+ */
+function calculateChartHeight(length, isDownload, model) {
+	var height = null;
+	var bigN = null;
+	if (length < 30) {
+		bigN = '0';
+		if (isDownload === true) {
+			height = 450;
+		}
+	} else if(length >= 30 && length < 40) {
+		if (isDownload === true) {
+			height = 550;
+		}  else {
+			height = 475;
+		}
+		bigN = '1';
+	} else if(length >= 40 && length < 50) {
+		if (isDownload === true) {
+			height = 700;
+		} else {
+			height = 625;
+		}
+		bigN = '2';
+	} else if(length >= 50 && length < 60) {
+		if (isDownload === true) {
+			height = 850;
+		} else {
+			height = 775;
+		}
+		bigN = '3';
+	} else if(length >= 60 && length < 70) {
+		if (isDownload === true) {
+			height = 1000;
+		} else {
+			height = 925;
+		}
+		bigN = '4';
+	} else if(length >= 70 && length < 80) {
+		if (isDownload === true) {
+			height = 1150;
+		} else {
+			height = 1075;
+		}
+		bigN = '5';
+	} else if(length >= 80 && length < 90) {
+		if (isDownload === true) {
+			height = 1150;
+		} else {
+			height = 1225;
+		}
+		bigN = '6';	
+	} else if(series >= 90) {
+		// Seriously????
+		if (isDownload === true) {
+			height = 1300;
+		} else {
+			height = 1375;
+		}
+		bigN = '7';
+	}
+	if (model !== undefined) {
+		model.set('bigN', bigN);
+	}
+	return height
+}
+
 
 module.exports = {
   formatKMB: formatKMB,
@@ -7051,10 +7415,11 @@ module.exports = {
   u16le64: u16le64,
   textAsDataURL: textAsDataURL,
   transformArgs: transformArgs,
-  data: data
+  data: data,
+  calculateChartHeight: calculateChartHeight
 };
 
-},{"d3":"d3"}],42:[function(require,module,exports){
+},{"d3":"d3"}],43:[function(require,module,exports){
 /*
 	Baby Parse
 	v0.2.1
@@ -7810,7 +8175,7 @@ module.exports = {
 
 }( typeof window !== 'undefined' ? window : this ));
 
-},{}],43:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 /*!
  * numeral.js
  * version : 1.5.3
@@ -8491,7 +8856,7 @@ module.exports = {
     }
 }).call(this);
 
-},{}],44:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 /* nvd3 version 1.7.1(https://github.com/novus/nvd3) 2015-02-05 */
 (function(){
 
@@ -19849,7 +20214,7 @@ nv.models.stackedAreaChart = function() {
 
 nv.version = "1.7.1";
 })();
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -19928,7 +20293,7 @@ module.exports = {
 };
 window.boilerplate = Widget;
 
-},{"./src/views/header-footer-view.js":51,"./src/views/menu-view.js":52,"amp-translate":78,"backbone":"backbone","bootstrap/dist/js/bootstrap":46,"jquery":"jquery","underscore":"underscore"}],46:[function(require,module,exports){
+},{"./src/views/header-footer-view.js":52,"./src/views/menu-view.js":53,"amp-translate":79,"backbone":"backbone","bootstrap/dist/js/bootstrap":47,"jquery":"jquery","underscore":"underscore"}],47:[function(require,module,exports){
 /*!
  * Bootstrap v3.3.2 (http://getbootstrap.com)
  * Copyright 2011-2015 Twitter, Inc.
@@ -22236,7 +22601,7 @@ if (typeof jQuery === 'undefined') {
 
 }(jQuery);
 
-},{}],47:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 var Backbone = require('backbone');
 var MenuModel = require('../models/amp-menus-model.js');
 
@@ -22252,7 +22617,7 @@ module.exports = Backbone.Collection.extend({
 
 });
 
-},{"../models/amp-menus-model.js":49,"backbone":"backbone"}],48:[function(require,module,exports){
+},{"../models/amp-menus-model.js":50,"backbone":"backbone"}],49:[function(require,module,exports){
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
@@ -22269,7 +22634,7 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],49:[function(require,module,exports){
+},{"backbone":"backbone"}],50:[function(require,module,exports){
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
@@ -22287,7 +22652,7 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],50:[function(require,module,exports){
+},{"backbone":"backbone"}],51:[function(require,module,exports){
 
 var $ = require('jquery');
 var Backbone = require('backbone');
@@ -22317,7 +22682,7 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],51:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],52:[function(require,module,exports){
 
 var Backbone = require('backbone');
 var _ = require('underscore');
@@ -22402,7 +22767,7 @@ module.exports = Backbone.View.extend({
 
 });
 
-},{"../models/amp-layout-model.js":48,"backbone":"backbone","bootstrap/dist/js/bootstrap":46,"underscore":"underscore"}],52:[function(require,module,exports){
+},{"../models/amp-layout-model.js":49,"backbone":"backbone","bootstrap/dist/js/bootstrap":47,"underscore":"underscore"}],53:[function(require,module,exports){
 
 var Backbone = require('backbone');
 require('bootstrap/dist/js/bootstrap');
@@ -22507,7 +22872,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../collections/amp-menus-collection.js":47,"../models/amp-menus-model.js":49,"./about-view.js":50,"./submenu-compositeview.js":53,"backbone":"backbone","bootstrap/dist/js/bootstrap":46,"underscore":"underscore"}],53:[function(require,module,exports){
+},{"../collections/amp-menus-collection.js":48,"../models/amp-menus-model.js":50,"./about-view.js":51,"./submenu-compositeview.js":54,"backbone":"backbone","bootstrap/dist/js/bootstrap":47,"underscore":"underscore"}],54:[function(require,module,exports){
 
 var Backbone = require('backbone');
 var _ = require('underscore');
@@ -22573,7 +22938,7 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"backbone":"backbone","underscore":"underscore"}],54:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],55:[function(require,module,exports){
 /*!
  * Bootstrap v3.3.0 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.
@@ -24851,7 +25216,7 @@ if (typeof jQuery === 'undefined') {
 
 }(jQuery);
 
-},{}],55:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -25175,7 +25540,7 @@ $.extend( $.ui, {
 
 })( jQuery );
 
-},{"jquery":"jquery"}],56:[function(require,module,exports){
+},{"jquery":"jquery"}],57:[function(require,module,exports){
 var jQuery = require('jquery');
 require('./core');
 
@@ -27218,7 +27583,7 @@ $.datepicker.version = "1.10.4";
 
 })(jQuery);
 
-},{"./core":55,"jquery":"jquery"}],57:[function(require,module,exports){
+},{"./core":56,"jquery":"jquery"}],58:[function(require,module,exports){
 var jQuery = require('jquery');
 require('./core');
 require('./mouse');
@@ -28183,7 +28548,7 @@ $.ui.plugin.add("draggable", "zIndex", {
 
 })(jQuery);
 
-},{"./core":55,"./mouse":58,"./widget":59,"jquery":"jquery"}],58:[function(require,module,exports){
+},{"./core":56,"./mouse":59,"./widget":60,"jquery":"jquery"}],59:[function(require,module,exports){
 var jQuery = require('jquery');
 require('./widget');
 
@@ -28357,7 +28722,7 @@ $.widget("ui.mouse", {
 
 })(jQuery);
 
-},{"./widget":59,"jquery":"jquery"}],59:[function(require,module,exports){
+},{"./widget":60,"jquery":"jquery"}],60:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -28882,7 +29247,7 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 
 })( jQuery );
 
-},{"jquery":"jquery"}],60:[function(require,module,exports){
+},{"jquery":"jquery"}],61:[function(require,module,exports){
 var Backbone = require('backbone');
 var _ = require('underscore');
 var $ = require('jquery');
@@ -29221,7 +29586,7 @@ module.exports = Backbone.Collection.extend({
 	}
 });
 
-},{"../models/generic-filter-model":65,"../models/org-role-filter-model":66,"../models/years-filter-model":68,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],61:[function(require,module,exports){
+},{"../models/generic-filter-model":66,"../models/org-role-filter-model":67,"../models/years-filter-model":69,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],62:[function(require,module,exports){
 
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
@@ -29234,7 +29599,7 @@ module.exports  = Backbone.Collection.extend({
 });
 
 
-},{"../models/setting":67,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],62:[function(require,module,exports){
+},{"../models/setting":68,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],63:[function(require,module,exports){
 /*
 
 $.Link (part of noUiSlider) - WTFPL */
@@ -29267,7 +29632,7 @@ b,a)})}function X(a){return this.each(function(){var b=c(this).val(),d=this.dest
 end:"mouseup touchend"},f="noUi-target noUi-base noUi-origin noUi-handle noUi-horizontal noUi-vertical noUi-background noUi-connect noUi-ltr noUi-rtl noUi-dragable  noUi-state-drag  noUi-state-tap noUi-active noUi-extended noUi-stacking".split(" ");c.fn.val=function(){var a=arguments,b=c(this[0]);return arguments.length?this.each(function(){(c(this).hasClass(f[0])?B:C).apply(c(this),a)}):(b.hasClass(f[0])?B:C).call(b)};c.noUiSlider={Link:c.Link};c.fn.noUiSlider=function(a,b){return(b?X:W).call(this,
 a)}})(window.jQuery||window.Zepto);
 
-},{}],63:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -29395,7 +29760,7 @@ _.extend(Widget.prototype, Backbone.Events, {
 
 module.exports = Widget;
 
-},{"./views/filters-view":73,"backbone":"backbone","bootstrap/dist/js/bootstrap":54,"jquery":"jquery","jquery-ui/draggable":57,"underscore":"underscore"}],64:[function(require,module,exports){
+},{"./views/filters-view":74,"backbone":"backbone","bootstrap/dist/js/bootstrap":55,"jquery":"jquery","jquery-ui/draggable":58,"underscore":"underscore"}],65:[function(require,module,exports){
 var Backbone = require('backbone');
 
   // Parent model for filters.
@@ -29420,7 +29785,7 @@ module.exports = Backbone.Model.extend({
 
 });
 
-},{"backbone":"backbone"}],65:[function(require,module,exports){
+},{"backbone":"backbone"}],66:[function(require,module,exports){
 var _ = require('underscore');
 
 var BaseFilterModel = require('../models/base-filter-model');
@@ -29573,7 +29938,7 @@ module.exports = BaseFilterModel.extend({
 });
 
 
-},{"../models/base-filter-model":64,"../tree/tree-node-model":69,"underscore":"underscore"}],66:[function(require,module,exports){
+},{"../models/base-filter-model":65,"../tree/tree-node-model":70,"underscore":"underscore"}],67:[function(require,module,exports){
 var $ = require('jquery');
 
 var GenericFilterModel = require('../models/generic-filter-model');
@@ -29628,7 +29993,7 @@ module.exports = GenericFilterModel.extend({
 });
 
 
-},{"../models/generic-filter-model":65,"../tree/tree-node-model":69,"jquery":"jquery"}],67:[function(require,module,exports){
+},{"../models/generic-filter-model":66,"../tree/tree-node-model":70,"jquery":"jquery"}],68:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 module.exports = Backbone.Model.extend({
@@ -29641,7 +30006,7 @@ module.exports = Backbone.Model.extend({
 		
 	}
 });
-},{"backbone":"backbone","underscore":"underscore"}],68:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],69:[function(require,module,exports){
 var $ = require('jquery');
 var BaseFilterModel = require('../models/base-filter-model');
 
@@ -29770,7 +30135,7 @@ module.exports = BaseFilterModel.extend({
 
 });
 
-},{"../models/base-filter-model":64,"jquery":"jquery"}],69:[function(require,module,exports){
+},{"../models/base-filter-model":65,"jquery":"jquery"}],70:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 var TreeNodeModel; // declare here to help with ref loop of collection and model
@@ -30041,7 +30406,7 @@ TreeNodeModel = Backbone.Model.extend({
 
 module.exports = TreeNodeModel;
 
-},{"backbone":"backbone","underscore":"underscore"}],70:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],71:[function(require,module,exports){
 
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -30228,7 +30593,7 @@ var TreeNodeView = Backbone.View.extend({
 
 module.exports = TreeNodeView;
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],71:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],72:[function(require,module,exports){
 var _ = require('underscore');
 
 var extractDates = function(settings, filtersOut, minName, maxName) {
@@ -30256,7 +30621,7 @@ module.exports = {
 		extractDates: extractDates
 }
 
-},{"underscore":"underscore"}],72:[function(require,module,exports){
+},{"underscore":"underscore"}],73:[function(require,module,exports){
 
 var _ = require('underscore');
 var $ = require('jquery');
@@ -30300,7 +30665,7 @@ module.exports = Backbone.View.extend({
 
 });
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],73:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],74:[function(require,module,exports){
 /**
  * this is the view which renders the big Filter contents (the tabs)
  */
@@ -30676,7 +31041,7 @@ module.exports = Backbone.View.extend({
 });
 
 
-},{"../../../../../reamp/tools/log":80,"../collections/all-filters-collection":60,"../collections/settings-collection":61,"../utils/date-utils":71,"../views/top-level-filter-view":75,"amp-translate":78,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],74:[function(require,module,exports){
+},{"../../../../../reamp/tools/log":81,"../collections/all-filters-collection":61,"../collections/settings-collection":62,"../utils/date-utils":72,"../views/top-level-filter-view":76,"amp-translate":79,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],75:[function(require,module,exports){
 
 var _ = require('underscore');
 
@@ -30808,7 +31173,7 @@ module.exports = BaseFilterView.extend({
 });
 
 
-},{"../tree/tree-node-view":70,"../views/base-filter-view":72,"underscore":"underscore"}],75:[function(require,module,exports){
+},{"../tree/tree-node-view":71,"../views/base-filter-view":73,"underscore":"underscore"}],76:[function(require,module,exports){
 
 var _ = require('underscore');
 var $ = require('jquery');
@@ -30933,7 +31298,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../../../../../reamp/tools/log":80,"../collections/settings-collection":61,"../models/years-filter-model":68,"../views/generic-filter-view":74,"../views/years-filter-view":76,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],76:[function(require,module,exports){
+},{"../../../../../reamp/tools/log":81,"../collections/settings-collection":62,"../models/years-filter-model":69,"../views/generic-filter-view":75,"../views/years-filter-view":77,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],77:[function(require,module,exports){
 
 var _ = require('underscore');
 var BaseFilterView = require('../views/base-filter-view');
@@ -31088,7 +31453,7 @@ module.exports = BaseFilterView.extend({
 
 });
 
-},{"../lib/jquery.nouislider.min.js":62,"../views/base-filter-view":72,"jquery-ui/datepicker":56,"underscore":"underscore"}],77:[function(require,module,exports){
+},{"../lib/jquery.nouislider.min.js":63,"../views/base-filter-view":73,"jquery-ui/datepicker":57,"underscore":"underscore"}],78:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -31298,7 +31663,7 @@ _.extend(State.prototype, Backbone.Events, {
 State.StateLoadError = StateLoadError;
 module.exports = State;
 
-},{"backbone":"backbone","underscore":"underscore"}],78:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],79:[function(require,module,exports){
 // TODO: move this up a dir, and instantiate and attach to the app
 
 
@@ -31514,7 +31879,7 @@ function Translator(options) {
 
 module.exports = Translator;
 
-},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],79:[function(require,module,exports){
+},{"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],80:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -31565,7 +31930,7 @@ _.extend(URL.prototype, Backbone.Events, {
 
 module.exports = URL;
 
-},{"backbone":"backbone","underscore":"underscore"}],80:[function(require,module,exports){
+},{"backbone":"backbone","underscore":"underscore"}],81:[function(require,module,exports){
 module.exports =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache

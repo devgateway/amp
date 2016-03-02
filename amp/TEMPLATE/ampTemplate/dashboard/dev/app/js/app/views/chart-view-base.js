@@ -151,7 +151,7 @@ module.exports = BackboneDash.View.extend({
       this.resetNumbers();
       return;
     }
-    var chart = getChart(this.model.get('view'), this.model.get('processed'), this.getChartOptions());
+    var chart = getChart(this.model.get('view'), this.model.get('processed'), this.getChartOptions(), this.model);
     this.chartContainer.html(chart.el);
 
     this.renderNumbers();
@@ -176,6 +176,7 @@ module.exports = BackboneDash.View.extend({
     if(this.model.get('view') == 'multibar'){
   	  co.stacked = this.model.get('stacked');
   	}
+    co.model = this.model;
     return co;
   },
 

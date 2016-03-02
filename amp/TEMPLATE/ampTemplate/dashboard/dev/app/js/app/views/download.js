@@ -24,9 +24,10 @@ module.exports = BackboneDash.View.extend({
 			    },
   initialize: function(options) {
     this.app = options.app;
+    var height = util.calculateChartHeight(this.model.get('values').length, true);
     this.dashChartOptions = _({}).extend(options.chartOptions, {
-      height: 450,  // sync with css!!!
-      width: 970,	// sync with css!!!
+      height: height, //450,  // sync with css!!!
+      width: $('.container').width(),	// sync with css!!!
       trimLabels: false,
       nvControls: false      
     });    
@@ -117,6 +118,8 @@ module.exports = BackboneDash.View.extend({
 
     // reset font to something normal (nvd3 uses css ugh...)
     ctx.font = 'normal 12px "sans-serif"';
+    
+    $('.modal.in .modal-dialog').width(w + 60);
   },
 
   chartToCanvas: function(svg, canvas, cb) {

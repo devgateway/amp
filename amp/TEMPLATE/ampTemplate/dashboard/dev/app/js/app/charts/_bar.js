@@ -20,10 +20,15 @@ function countCategories(data) {
 }
 
 
-function chart(options) {
+function chart(options, data) {
   //this check is needed because I need strictly either 300 or 400 px, and sometimes, when the chart overflows, it
   //will give me >400 px height
   var height = options.height < 400 ? 300 : 400;
+  var calculatedHeight = util.calculateChartHeight(data[0].values.length, false, options.model);
+  if (calculatedHeight !== null) {
+	  height = calculatedHeight; 
+  }
+   
   barDebug.log("Setting height to", height);
   var _chart = nv.models.discreteBarChart()
     .valueFormat(options.shortFormatter)
@@ -44,7 +49,7 @@ function addLegend(svg, chart, nvData, trimLabels, width) {
     .margin({left: 20, right: 20})
     .rightAlign(false)
     .color(util.categoryColours(nvData[0].values.length))
-    .key(function(d) { return trimLabels ? util.formatShortText(12)(d.x) : d.x; });
+    .key(function(d) { return trimLabels ? util.formatShortText(12)(d.x) : util.formatShortText(85)(d.x); });
 
   d3.select(svg)
     .datum(nvData)

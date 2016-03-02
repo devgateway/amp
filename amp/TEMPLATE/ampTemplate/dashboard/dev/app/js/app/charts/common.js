@@ -160,7 +160,7 @@ function nvBindOthersCb(chart, data, specific, clickHandler) {
 function nvCharter(specific) {
   return function(data, options) {
     var svg = mkChartSVG(options.height, options.width),
-        nvChart = specific.chart(options),
+        nvChart = specific.chart(options, data),
         nvData = specific.dataToNv(data);
     nvColorifyCategories(nvChart, data, specific);
     nvBindTooltip(nvChart, data, specific, options.ttTemplate, options.getTTContent);

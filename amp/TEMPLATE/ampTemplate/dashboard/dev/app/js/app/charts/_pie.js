@@ -7,6 +7,8 @@ var nv = window.nv;  // nvd3 is a pain
 
 var _ = require('underscore');
 var common = require('./common');
+var util = require('../../ugly/util');
+var customizedPieChart = require('./customized/pieChart.js');
 
 
 function dataToNv(data) {
@@ -25,13 +27,43 @@ function countCategories(data) {
 }
 
 
-function chart(options) {
-  var _chart = nv.models.pieChart()
+function chart(options, data) {
+	var height = options.height < 400 ? 300 : 400;
+	  var calculatedHeight = util.calculateChartHeight(data[0].values.length, false, options.model);
+	  if (calculatedHeight !== null) {
+		  height = calculatedHeight; 
+	  }
+
+  var _chart = nv.models.customizedPieChart()
     .valueFormat(options.shortFormatter)
     .labelType('percent')
+    .showLegend(false)
     .donut(true)
+    .height(height)
+    .margin({ top: 5, right: 5, bottom: 5, left: 5 })
     .donutRatio(0.35);
   return _chart;
+}
+
+function addLegend(svg, chart, nvData, trimLabels, width) {
+	  var legendHeight;
+
+	  var legend = nv.models.legend()
+	    .width(width || svg.clientWidth)
+	    .margin({left: 20, right: 20})
+	    .rightAlign(false)
+	    .color(util.categoryColours(nvData.length))
+	    .key(function(d) { return trimLabels ? util.formatShortText(12)(d.x) : util.formatShortText(85)(d.x); });
+
+	  d3.select(svg)
+	    .datum(nvData)
+	    .append('g')
+	      .attr('class', 'legend')
+	      .datum(nvData)
+	      .call(legend);
+
+	  legendHeight = svg.querySelector('.legend').getBBox().height;
+	  chart.margin({top: legendHeight + 15});
 }
 
 
@@ -50,6 +82,7 @@ module.exports = {
   dispatchName: 'pie',
   normalizeNvTTArgs: normalizeNvTTArgs,
   countCategories: countCategories,
+  addLegend: addLegend,
   removeLegend: removeLegend,
   dataToNv: dataToNv,
   chart: chart

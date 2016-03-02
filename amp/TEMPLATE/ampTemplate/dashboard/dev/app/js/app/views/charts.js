@@ -25,6 +25,7 @@ module.exports = BackboneDash.View.extend({
     }, this);
     this.listenToOnce(this.app.filter, 'apply', this.applyFilter);
     this.listenTo(this.collection, 'change:big', this.injectBreaks);
+    this.listenTo(this.collection, 'change:bigN', this.redrawContainer);
   },
 
   render: function() {
@@ -51,6 +52,17 @@ module.exports = BackboneDash.View.extend({
       });
       if (chartView) { chartView.render(); }
     }
+  },
+  
+  redrawContainer: function(chartModel) {
+	  if (chartModel) {
+		  var chartView = _(this.chartViews).find(function(v) {
+			  return v.model === chartModel;
+	      });
+	      if (chartView) { 
+	    	  chartView.render(); 
+	      }
+	  } 
   }
 
 });

@@ -96,6 +96,74 @@ function data(el, name, newValue) {
   el.setAttribute('data-' + toDashed(name), newValue);
 }
 
+/**
+ * This function calculates how much height we need to show a readable chart with different number of legends. 
+ */
+function calculateChartHeight(length, isDownload, model) {
+	var height = null;
+	var bigN = null;
+	if (length < 30) {
+		bigN = '0';
+		if (isDownload === true) {
+			height = 450;
+		}
+	} else if(length >= 30 && length < 40) {
+		if (isDownload === true) {
+			height = 550;
+		}  else {
+			height = 475;
+		}
+		bigN = '1';
+	} else if(length >= 40 && length < 50) {
+		if (isDownload === true) {
+			height = 700;
+		} else {
+			height = 625;
+		}
+		bigN = '2';
+	} else if(length >= 50 && length < 60) {
+		if (isDownload === true) {
+			height = 850;
+		} else {
+			height = 775;
+		}
+		bigN = '3';
+	} else if(length >= 60 && length < 70) {
+		if (isDownload === true) {
+			height = 1000;
+		} else {
+			height = 925;
+		}
+		bigN = '4';
+	} else if(length >= 70 && length < 80) {
+		if (isDownload === true) {
+			height = 1150;
+		} else {
+			height = 1075;
+		}
+		bigN = '5';
+	} else if(length >= 80 && length < 90) {
+		if (isDownload === true) {
+			height = 1150;
+		} else {
+			height = 1225;
+		}
+		bigN = '6';	
+	} else if(series >= 90) {
+		// Seriously????
+		if (isDownload === true) {
+			height = 1300;
+		} else {
+			height = 1375;
+		}
+		bigN = '7';
+	}
+	if (model !== undefined) {
+		model.set('bigN', bigN);
+	}
+	return height
+}
+
 
 module.exports = {
   formatKMB: formatKMB,
@@ -105,5 +173,6 @@ module.exports = {
   u16le64: u16le64,
   textAsDataURL: textAsDataURL,
   transformArgs: transformArgs,
-  data: data
+  data: data,
+  calculateChartHeight: calculateChartHeight
 };

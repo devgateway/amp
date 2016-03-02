@@ -8,7 +8,8 @@ module.exports = ChartModel.extend({
 
   defaults: {
     limit: 5,
-    title: ''
+    title: '',
+    bigN: 0
   },
 
   _prepareTranslations: function() {

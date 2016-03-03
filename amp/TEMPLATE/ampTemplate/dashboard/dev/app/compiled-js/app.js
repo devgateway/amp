@@ -1547,7 +1547,8 @@ nv.models.customizedPieChart = function() {
             var gEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-pieChart').append('g');
             var g = wrap.select('g');
 
-            gEnter.append('g').attr('class', 'nv-pieWrap').attr('transform', 'translate(0,' + $(".legend.nvd3-svg")[0].getBoundingClientRect().height + ')');
+            var heightOffset = $($(container[0])[0]).find(".legend.nvd3-svg")[0].getBoundingClientRect().height;
+            gEnter.append('g').attr('class', 'nv-pieWrap').attr('transform', 'translate(0,' + heightOffset + ')');
             gEnter.append('g').attr('class', 'nv-legendWrap');
 
             // Legend

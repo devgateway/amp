@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.newreports.DateCell;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportSettings;
@@ -59,7 +60,7 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 
 	@Override
 	public ReportCell visit(NiTextCell cell, CellColumn currentColumn) {
-		String text = ("".equals(cell.getDisplayedValue()) && cell.entityId != -1) ?
+		String text = (StringUtils.isEmpty(cell.getDisplayedValue()) && cell.entityId > 0) ?
 				TranslatorWorker.translateText("Undefined") : cell.getDisplayedValue();  
 			return asTextCell(text, cell.entityId, outputSettings.needsIdsValues(currentColumn) ? cell.entitiesIdsValues : null);
 	}

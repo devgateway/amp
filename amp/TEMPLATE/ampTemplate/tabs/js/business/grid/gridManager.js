@@ -20,7 +20,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 
 	function getURL(id) {
 		// NIREPORTS: use nireport flag as needed. When ready, notify to finish full migration from backend.
-		return '/rest/data/report/' + id + '/result/jqGrid?nireport=false';
+		return '/rest/data/report/' + id + '/result/jqGrid?nireport=true';
 	}
 
 	GridManager.prototype = {
@@ -247,8 +247,8 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 								var getApprovalStatus = function(draft, approvalStatus) {
 									var retVal ;
 									var isNew = false;
-									if (draft == 'true') {
-										if (approvalStatus == '2' || approvalStatus == '1') {
+									if (draft === 'true') {
+										if (approvalStatus === '2' || approvalStatus === '1') {
 											retVal = statusMapping.Existing_Draft;
 										} else {
 											isNew = true;
@@ -275,7 +275,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 									}
 									if(isNew){
 										var starColumn = $(row).find(".wrap-title").first();
-										if(starColumn.length == 0){
+										if(starColumn.length === 0){
 											starColumn = $(row).find(".wrap-cell").not("[style*='display:none']").first();
 										}
 										starColumn.text('* ' + starColumn.text());
@@ -285,31 +285,31 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 
 								// Assign colors for each row for loggued users.
 								var x = getApprovalStatus(draft, approvalStatus);
-								if (x == statusMapping.Approved) {
+								if (x === statusMapping.Approved) {
 									row.className = className + ' status_1';
 									// Create link to edit activity.
-									if (teamtype != "Management") {
+									if (teamtype !== "Management") {
 										jQuery(row.cells[0]).html(iconedit + link);
 									} else {
 										jQuery(row.cells[0]).html(link);
 									}
 
-								} else if (x == statusMapping.Existing_Draft || x == statusMapping.New_Draft) {
+								} else if (x === statusMapping.Existing_Draft || x === statusMapping.New_Draft) {
 									row.className = className + ' status_2';
 									jQuery(row.cells[0]).html(iconedit);
 
-								} else if (x == statusMapping.Existing_Unvalidated || x == statusMapping.New_Unvalidated) {
+								} else if (x === statusMapping.Existing_Unvalidated || x === statusMapping.New_Unvalidated) {
 									row.className = className + ' status_3';
 									// Cross team enable team lead and validators able to validate show icon.
 									if (crossTeamValidation && (teamlead || validator)) {
-										if (teamtype != "Management") {
+										if (teamtype !== "Management") {
 											jQuery(row.cells[0]).html(iconvalidated);
 										} else {
 											jQuery(row.cells[0]).html(link);
 										}
 										// Cross team disable team lead and validators able to validate only
 										// if the activity belongs to the workspace.
-									} else if (!crossTeamValidation && activityteamid == teamid && (teamlead || validator)) {
+									} else if (!crossTeamValidation && activityteamid === teamid && (teamlead || validator)) {
 										jQuery(row.cells[0]).html(iconvalidated);
 									} else {
 										jQuery(row.cells[0]).html(iconedit);
@@ -319,7 +319,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 								// Create link to preview activity on first not grouped column.
 								var colIndex = -1;
 								jQuery(jQuery(grid).jqGrid('getGridParam', 'colModel')).each(function(i, item) {
-									if (colIndex == -1 && item.hidden == false && i > 0) {
+									if (colIndex === -1 && item.hidden === false && i > 0) {
 										colIndex = i;
 									}
 								});
@@ -336,9 +336,9 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 							var totalColumnIndex = colModel.length - 1;
 							var auxI = 0;
 							jQuery.each(colModel, function(i, item) {								
-								if (item.reportColumnType == 'MEASURE') {									
+								if (item.reportColumnType === app.TabsApp.COLUMN_TYPE_MEASURE) {									
 									var sum = null;
-									if(numberOfPages == 0) {
+									if(numberOfPages === 0) {
 										colData[item.name] = "";
 									} else if(numberOfPages > 1) {
 										// TODO: Replace this js sum with data from the endpoint.
@@ -346,7 +346,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 										colData[item.name] = TabUtils.numberToString(sum, app.TabsApp.numericFormatOptions);
 									} else {
 										// Save extra time calculating the sum of elements.
-										if(grandTotals[auxI] != undefined) {
+										if(grandTotals[auxI] !== undefined) {
 											sum = grandTotals[auxI].displayedValue;
 											colData[item.name] = sum;
 										}
@@ -406,7 +406,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 
 	function extractMetadata(content) {
 		var Metadata = Backbone.DocumentModel.extend({
-			defausts : {
+			defaults : {
 				columns : [],
 				measures : [],
 				hierarchies : []
@@ -417,7 +417,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 		metadata.columns = metadataJson.get('columns');
 		metadata.hierarchies = metadataJson.get('hierarchies');
 		metadata.measures = metadataJson.get('measures');
-		metadata.projectTitleColumn = metadataJson.get('projectTitleColumn');
+		metadata.projectTitleColumn = metadataJson.get('projectTitleColumn'); //TODO: do we still need it?
 		return metadata;
 	}
 
@@ -429,7 +429,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 		var rows = [];
 		partialTotals = [];
 		// Process the headers for later usage.
-		if (data.headers != null) {
+		if (data.headers !== null) {
 			jQuery.each(data.headers, function(i, item) {
 				headers.push({
 					columnName : item["columnName"],
@@ -456,7 +456,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 	function postProcessHierarchies(rows, hierarchies) {
 		jQuery.each(rows, function(i, row) {
 			jQuery.each(hierarchies.models, function(j, hierarchy) {
-				if (row[hierarchy.get('columnName')] != undefined) {
+				if (row[hierarchy.get('columnName')] !== undefined) {
 					hierarchy.set('lastValue', row[hierarchy.get('columnName')]);
 				} else {
 					row[hierarchy.get('columnName')] = hierarchy.get('lastValue');
@@ -467,36 +467,39 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 
 	function findInMapByColumnName(name, property) {
 		var ret = undefined;
-		jQuery.each(headers, function(i, item) {
-			if (item[property] == name) {
-				ret = item;
-			}
+		ret = _.find(headers, function(item) {
+			return item[property] === name;
 		});
 		return ret;
 	}
 
 	function getContentRecursively(obj, rows, parent, partialTotals, level) {
-		if (obj != undefined && obj != null) {
+		if (obj !== undefined && obj !== null) {
 			level++;
-			if (obj.children == null || obj.children.length == 0) {
-				// console.log(obj.contents);
+			if (obj.children === null || obj.children.length === 0) {
+				// This is the leaf with content we want.
 				var row = {
 					id : 0
 				};
 				jQuery.each(obj.contents, function(key, element) {
 					var colName = null;
-					if (findInMapByColumnName(key, 'hierarchicalName') != undefined) {
+					var auxColumn = findInMapByColumnName(key, 'hierarchicalName'); 
+					if (auxColumn !== undefined) {
 						// TODO: compare the 3 options with the values from
 						// hierarchies to see if one matches and use that.
-						colName = findInMapByColumnName(key, 'hierarchicalName').originalColumnName;
+						colName = auxColumn.originalColumnName;
 					}
-					if (colName != undefined && colName != null) {
-						if (element != null && element.displayedValue != null && element.displayedValue.toString().length > 0) {
+					if (colName !== undefined && colName !== null) {
+						if (element !== null && element.displayedValue !== null && element.displayedValue.toString().length > 0) {
 							row[colName] = element.displayedValue;
 						} else {
 							row[colName] = getParentContent(key, parent);
 						}
 						row['id'] = Math.random();
+					}
+					// Property entityId replaced column AMP_ID on NiReports.
+					if (element.entityId !== undefined) {
+						row[app.TabsApp.COLUMN_ACTIVITY_ID] = element.entityId;
 					}
 				});
 				// console.log(row);
@@ -528,9 +531,9 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 	 * need to take some values from the parent by recursion.
 	 */
 	function getParentContent(key, parent) {
-		if (parent != undefined && parent != null) {
-			if (parent[key].displayedValue != null && parent[key].displayedValue.indexOf(' Totals') > 0) {
-				return parent[key].displayedValue.substring(0, parent[key].displayedValue.indexOf(' Totals'));
+		if (parent !== undefined && parent !== null) {
+			if (parent[key].displayedValue !== null && parent[key].displayedValue.indexOf(app.TabsApp.TOTAL_COLUMNS_DATA_SUFIX) > 0) {
+				return parent[key].displayedValue.substring(0, parent[key].displayedValue.indexOf(app.TabsApp.TOTAL_COLUMNS_DATA_SUFIX));
 			} else {
 				getParentContent(key, parent.parent);
 			}
@@ -545,13 +548,13 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 	function extractGrandTotals(data, colModel) {
 		var ret = [];
 		jQuery.each(colModel, function(i, item) {
-			if (item.reportColumnType == 'MEASURE') {
+			if (item.reportColumnType === app.TabsApp.COLUMN_TYPE_MEASURE) {
 				var col = {};
 				col.columnName = item.name;
-				if (data.page != null && data.page.pageArea != null) {
+				if (data.page !== null && data.page.pageArea !== null) {
 					try {
-						col.value = data.page.pageArea.contents["[" + item.name + "]"].value;
-						col.displayedValue = data.page.pageArea.contents["[" + item.name + "]"].displayedValue;
+						col.value = data.page.pageArea.contents["[Totals][" + item.name + "]"].value;
+						col.displayedValue = data.page.pageArea.contents["[Totals][" + item.name + "]"].displayedValue;
 						ret.push(col);
 					} catch (err) {
 						console.error(err + item.name);

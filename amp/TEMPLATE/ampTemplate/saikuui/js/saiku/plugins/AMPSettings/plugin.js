@@ -1,8 +1,7 @@
 var AMPSettings = Backbone.View.extend({
 			events : {
 				'click .edit_amp_settings' : 'add_amp_settings'
-			},
-			
+			},			
 			SETTINGS : {
 				"currency": "1",
 				"calendar": "2",
@@ -11,7 +10,7 @@ var AMPSettings = Backbone.View.extend({
 
 			initialize : function(args) {
 		    	if(!Settings.AMP_REPORT_API_BRIDGE) return; 
-
+                                
 				var self = this;
 				this.workspace = args.workspace;
 
@@ -24,6 +23,7 @@ var AMPSettings = Backbone.View.extend({
 
 				this.add_button();
 				this.workspace.toolbar.amp_settings = this.show;
+				this.settings_data = this.workspace.query.get('settings_data');
 
 				$(this.workspace.el).find('.workspace_results').prepend($(this.el).hide());
 				//TODO: Move this to use the this.el correctly instead of a set html
@@ -36,8 +36,15 @@ var AMPSettings = Backbone.View.extend({
 				settings = {
 						"1": raw_settings.currencyCode,
 						"2": raw_settings.calendar.ampFiscalCalId,
-						"3": raw_settings.unitsMultiplier
+						"3": raw_settings.unitsMultiplier						
 					};
+				
+				
+				if(raw_settings.columnFilterRules.YEAR !== null && raw_settings.columnFilterRules.YEAR !== undefined ){
+					settings.yearRange = {};
+					settings.yearRange.yearFrom = raw_settings.columnFilterRules.YEAR[0].min;
+					settings.yearRange.yearTo = raw_settings.columnFilterRules.YEAR[0].max;
+				}				
 				window.currentSettings = settings;
 
 				$.ajax({
@@ -72,10 +79,19 @@ var AMPSettings = Backbone.View.extend({
 					$('#settings-missing-values-error').show();
 					return;
 				}
+				if(parseInt($('#amp_year_range_from').val()) > parseInt($('#amp_year_range_to').val())){
+					$('#settings-invalid-year-range').show();
+					return;
+					
+				}
 				var settings = {
 					"1": $('#amp_currency').val(),
 					"2": $('#amp_calendar').val(),
-					"3": (window.currentSettings !== undefined ? window.currentSettings["3"] : '')
+					"3": (window.currentSettings !== undefined ? window.currentSettings["3"] : ''),
+					"yearRange":{
+						 "yearFrom":$('#amp_year_range_from').val(),
+						 "yearTo": $('#amp_year_range_to').val()
+						}
 				};
 				this.workspace.query.set('settings', settings);
 				window.currentSettings = settings;
@@ -102,7 +118,26 @@ var AMPSettings = Backbone.View.extend({
 					});
 					$('#amp_calendar').val(null);
 				}
-			},
+				
+				var yearRangeSettings = _.findWhere(this.settings_data, {id:'yearRange'});
+				if(yearRangeSettings){
+					var fromOptions = yearRangeSettings.value ? _.findWhere(yearRangeSettings.value, {id:'yearFrom'}).value.options : [];
+					var toOptions = yearRangeSettings.value ? _.findWhere(yearRangeSettings.value, {id:'yearTo'}).value.options : [];
+					
+					_.each(fromOptions,function(option ){
+						$('#amp_year_range_from')
+				         .append($("<option></option>")
+				         .attr("value", option.value)
+				         .text(option.name));
+					});
+					_.each(toOptions,function(option ){
+						$('#amp_year_range_to')
+				         .append($("<option></option>")
+				         .attr("value", option.value)
+				         .text(option.name));
+					});
+				}				
+			},	
 			
 			add_button : function() {
 				this.settings_button = $(
@@ -124,7 +159,12 @@ var AMPSettings = Backbone.View.extend({
 				settings = window.currentSettings;
 				$('#amp_calendar').val(settings["2"]);
 				$('#amp_calendar').trigger("change");
-				$('#amp_currency').val(settings["1"]);								
+				$('#amp_currency').val(settings["1"]);
+				if(settings.yearRange){
+					$('#amp_year_range_from').val(settings.yearRange.yearFrom)
+					$('#amp_year_range_to').val(settings.yearRange.yearTo)
+				}		
+				
 
 				$(event.target).toggleClass('on');
 

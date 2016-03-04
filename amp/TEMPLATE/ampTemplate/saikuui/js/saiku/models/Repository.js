@@ -108,6 +108,7 @@ var SavedQuery = Backbone.Model.extend({
             report_type: model.get('report_type'),
             filters: model.get('filters'),
             raw_settings: model.get('settings'),
+            settings_data: model.get('settings_data'),
             hierarchies: model.get('hierarchies'),
             columns: model.get('columns')
         },{

@@ -106,6 +106,7 @@ var process_spec = function(data) {
 		file: data.reportMetadata.name,
 		filters: data.reportMetadata.reportSpec.filters,
 		settings: data.reportMetadata.reportSpec.settings,
+		settings_data: data.reportMetadata.settings,
 		hierarchies : data.reportMetadata.reportSpec.hierarchies,
 		columns : data.reportMetadata.reportSpec.columns,
 		report_type : data.reportMetadata.reportSpec.reportType

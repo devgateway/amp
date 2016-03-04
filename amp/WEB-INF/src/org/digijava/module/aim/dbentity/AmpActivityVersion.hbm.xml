@@ -73,10 +73,6 @@
 		
 		<property name="programDescription" column="program_description" type="text" index="amp_activity_version_program_description_idx" />
 
-		<property access="field" name="funAmount" column="proj_cost_amount" type="java.lang.Double" />
-		<property name="funDate" column="proj_cost_date" type="java.util.Date" />
-		<property name="currencyCode" column="proj_cost_currcode" type="java.lang.String" />
-
 		<!--
 			tanzania adds
 		-->
@@ -293,6 +289,11 @@
 
 		<property name="activityType" column="activity_type" type="java.lang.Long" />
 		<property name="proposedProjectLife" column="proposed_project_life" type="java.lang.Integer" />
+		
+		<set name="costAmounts" cascade="all-delete-orphan" inverse="true" lazy="false">
+			<key column="amp_activity_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpFundingAmount" />
+		</set>
 
 	' 
 	>

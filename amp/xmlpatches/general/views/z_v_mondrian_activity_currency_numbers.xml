@@ -23,12 +23,14 @@
 			    CREATE OR REPLACE VIEW v_mondrian_activity_currency_numbers AS 
 SELECT <!-- proposed project cost per project column -->
 	aav.amp_activity_id AS amp_activity_id,
-	CASE WHEN aav.proj_cost_date IS NOT NULL AND proj_currency.amp_currency_id IS NOT NULL THEN aav.proj_cost_date ELSE NULL END AS ppc_transaction_date,
-	CASE WHEN aav.proj_cost_date IS NOT NULL AND proj_currency.amp_currency_id IS NOT NULL THEN to_char(aav.proj_cost_date, 'J')::integer ELSE NULL END AS ppc_date_code,
-	CASE WHEN aav.proj_cost_date IS NOT NULL AND proj_currency.amp_currency_id IS NOT NULL THEN proj_currency.amp_currency_id ELSE NULL END AS ppc_currency_id,
-	CASE WHEN aav.proj_cost_date IS NOT NULL AND proj_currency.amp_currency_id IS NOT NULL THEN aav.proj_cost_amount ELSE NULL END AS ppc_transaction_amount
-	FROM amp_activity_version aav LEFT JOIN amp_currency proj_currency ON proj_currency.currency_code = aav.proj_cost_currcode
-
+	CASE WHEN afa.date IS NOT NULL AND proj_currency.amp_currency_id IS NOT NULL THEN afa.date ELSE NULL END AS ppc_transaction_date,
+	CASE WHEN afa.date IS NOT NULL AND proj_currency.amp_currency_id IS NOT NULL THEN to_char(afa.date, 'J')::integer ELSE NULL END AS ppc_date_code,
+	CASE WHEN afa.date IS NOT NULL AND proj_currency.amp_currency_id IS NOT NULL THEN proj_currency.amp_currency_id ELSE NULL END AS ppc_currency_id,
+	CASE WHEN afa.date IS NOT NULL AND proj_currency.amp_currency_id IS NOT NULL THEN afa.amount ELSE NULL END AS ppc_transaction_amount
+	FROM amp_activity_version aav 
+		LEFT JOIN amp_funding_amount afa ON afa.amp_activity_id = aav.amp_activity_id
+		LEFT JOIN amp_currency proj_currency ON proj_currency.currency_code = afa.curr_code
+	WHERE afa.type = 0
 ORDER BY amp_activity_id;
 			</lang>
 		</script>

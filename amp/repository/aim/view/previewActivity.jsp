@@ -1601,70 +1601,20 @@ function collapseAll() {
 <!-- FUNDING SECTION -->
 
 <!-- PROPOSED PROJECT COST -->
-<module:display name="/Activity Form/Funding/Overview Section/Proposed Project Cost" parentModule="/Activity Form/Funding/Overview Section">
-<fieldset>
-	<legend>
-		<span class=legend_label id="proposedcostlink" style="cursor: pointer;">
-			<digi:trn>Proposed Project Cost</digi:trn>
-		</span>	</legend>
-	<div id="proposedcostdiv" class="toggleDiv">
-		<c:if test="${aimEditActivityForm.funding.proProjCost!=null}">
-			<table cellspacing="1" cellPadding="3" bgcolor="#aaaaaa" width="100%" >
-				<tr bgcolor="#f0f0f0">
-					<td>
-						<digi:trn key="aim:cost">Cost</digi:trn>					
-					</td>
-					<td bgcolor="#f0f0f0" align="left">
-						<c:if test="${aimEditActivityForm.funding.proProjCost.funAmount!=null}">
-							<b>${aimEditActivityForm.funding.proProjCost.funAmount}</b>						
-						</c:if>&nbsp;
-						<c:if test="${aimEditActivityForm.funding.proProjCost.currencyCode!=null}"> 
-							<b>${aimEditActivityForm.funding.proProjCost.currencyCode}</b>						
-						</c:if>					
-					</td>
-				</tr>
-				<tr bgcolor="#f0f0f0">
-					<c:if test="${aimEditActivityForm.funding.proProjCost.funDate!=null}">
-						<td>
-							<digi:trn>Date</digi:trn>					
-						</td>
-						<td bgcolor="#f0f0f0" align="left" width="150">
-								<b>${aimEditActivityForm.funding.proProjCost.funDate}</b>						
-						</td>
-					</c:if>
-					<c:if test="${aimEditActivityForm.funding.proProjCost.funDate==null}">
-						<td>*<digi:trn>cost could not be exchanged to workspace currency because date is not set</digi:trn></td>
-					</c:if>	
-				</tr>
-             </table>
-		</c:if>
-	</div>
-	<module:display name="/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost" 
-	parentModule="/Activity Form/Funding/Overview Section/Proposed Project Cost">
-	
-	
-	<c:if
-		test="${aimEditActivityForm.funding.proposedAnnualBudgets!=null 
-		&& aimEditActivityForm.funding.proposedAnnualBudgets.size()>0}">
-		<table cellspacing="1" cellPadding="3" bgcolor="#aaaaaa"
-			width="100%">
-			<tr bgcolor="#f0f0f0">
-				<td><b><digi:trn key="aim:cost">Cost</digi:trn></b></td>
-				<td><b><digi:trn key="aim:cost">Year</digi:trn></b></td>
-			</tr>
-			<c:forEach var="annualBudget"
-				items="${aimEditActivityForm.funding.proposedAnnualBudgets}">
-				<tr bgcolor="#f0f0f0">
-					<td>${annualBudget.funAmount}
-						${annualBudget.currencyCode}</td>
-					<td>${annualBudget.funDate}</td>
-				</tr>
-			</c:forEach>
-		</table>
-	</c:if>
-	</module:display>
-						</fieldset>
-</module:display>
+<jsp:include page = "projectCost.jsp">
+	<jsp:param name= "costName" value = "Proposed Project Cost" />
+	<jsp:param name= "projCost" value = "${aimEditActivityForm.funding.proProjCost}" />
+	<jsp:param name= "funAmount" value = "${aimEditActivityForm.funding.proProjCost == null ? null : aimEditActivityForm.funding.proProjCost.funAmount}" />
+	<jsp:param name= "currencyCode" value = "${aimEditActivityForm.funding.proProjCost == null ? null : aimEditActivityForm.funding.proProjCost.currencyCode}" />
+	<jsp:param name= "funDate" value = "${aimEditActivityForm.funding.proProjCost == null ? null : aimEditActivityForm.funding.proProjCost.funDate}" />
+</jsp:include>
+<jsp:include page = "projectCost.jsp">
+	<jsp:param name= "costName" value = "Revised Project Cost" />
+	<jsp:param name= "projCost" value = "${aimEditActivityForm.funding.revProjCost}" />
+	<jsp:param name= "funAmount" value = "${aimEditActivityForm.funding.revProjCost == null ? null : aimEditActivityForm.funding.revProjCost.funAmount}" />
+	<jsp:param name= "currencyCode" value = "${aimEditActivityForm.funding.revProjCost == null ? null : aimEditActivityForm.funding.revProjCost.currencyCode}" />
+	<jsp:param name= "funDate" value = "${aimEditActivityForm.funding.revProjCost == null ? null : aimEditActivityForm.funding.revProjCost.funDate}" />
+</jsp:include>
 <!-- END PROPOSED PROJECT COST -->
 
 <!-- BUDGET STRUCTURE -->

@@ -60,6 +60,7 @@ import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLineMinistryObservation;
 import org.digijava.module.aim.dbentity.AmpLineMinistryObservationActor;
@@ -386,6 +387,17 @@ public class EditActivity extends Action {
             propProjCost.getFunAmount() == null &&
             propProjCost.getFunDate() == null) {
           eaForm.getFunding().setProProjCost(null);
+        }
+      }
+      
+      ProposedProjCost revisedProjCost = null;
+      if (eaForm.getFunding().getRevProjCost() != null) {
+    	  revisedProjCost = new ProposedProjCost();
+    	  revisedProjCost = eaForm.getFunding().getProProjCost();
+        if (revisedProjCost.getCurrencyCode() == null &&
+        		revisedProjCost.getFunAmount() == null &&
+        				revisedProjCost.getFunDate() == null) {
+          eaForm.getFunding().setRevProjCost(null);
         }
       }
       
@@ -812,7 +824,8 @@ public class EditActivity extends Action {
 			if (annualBudgets != null) {
                 for (AmpAnnualProjectBudget annualBudget : annualBudgets) {
                 	String ppcCurrencyCode = annualBudget.getAmpCurrencyId() != null ? annualBudget.getAmpCurrencyId().getCurrencyCode() : null; 
-                    ProposedProjCost ppc = getProposedProjectCost(activity, eaForm, annualBudget.getAmount(), ppcCurrencyCode, annualBudget.getYear(), true);
+                    ProposedProjCost ppc = getProposedProjectCost(activity, eaForm, annualBudget.getAmount(), ppcCurrencyCode, 
+                    		annualBudget.getYear(), true, AmpFundingAmount.FundingType.PROPOSED);
                     proposedAnnualBudgets.add(ppc);
                 }
 			}
@@ -820,12 +833,9 @@ public class EditActivity extends Action {
 			Collections.sort(proposedAnnualBudgets);
 			eaForm.getFunding().setProposedAnnualBudgets(proposedAnnualBudgets);
         	
-			ProposedProjCost activityPPC = new ProposedProjCost();
-					if (activity.getFunAmount() != null && activity.getFunDate() != null) {
-						activityPPC = getProposedProjectCost(activity, eaForm, activity.getFunAmount(),
-								activity.getCurrencyCode(), activity.getFunDate(), false);
-					}
-        	eaForm.getFunding().setProProjCost(activityPPC);
+			eaForm.getFunding().setProProjCost(getProjectCost(activity, eaForm, AmpFundingAmount.FundingType.PROPOSED));
+			eaForm.getFunding().setRevProjCost(getProjectCost(activity, eaForm, AmpFundingAmount.FundingType.REVISED));
+        	
 
           // load programs by type
           if(ProgramUtil.getAmpActivityProgramSettingsList()!=null){
@@ -1182,7 +1192,6 @@ public class EditActivity extends Action {
           eaForm.getFunding().setShowOfficialDevelopmentAid(CategoryConstants.ADJUSTMENT_TYPE_ODA_SSC.isActiveInDatabase());
           eaForm.getFunding().setShowBilateralSsc(CategoryConstants.ADJUSTMENT_TYPE_BILATERAL_SSC.isActiveInDatabase());
           eaForm.getFunding().setShowTriangularSsc(CategoryConstants.ADJUSTMENT_TYPE_TRIANGULAR_SSC.isActiveInDatabase());
-          
 
           String toCurrCode=null;
           if (tm != null)
@@ -1678,17 +1687,18 @@ public class EditActivity extends Action {
   }
 
 	private ProposedProjCost getProposedProjectCost(AmpActivityVersion activity, EditActivityForm eaForm, 
-			Double ppcAmount, String ppcCurrencyCode, Date year, boolean yearDate) {
+			Double ppcAmount, String ppcCurrencyCode, Date year, boolean yearDate, AmpFundingAmount.FundingType funType) {
 
 		ProposedProjCost ppc = new ProposedProjCost();
 		Calendar c = Calendar.getInstance();
 		c.setTime(year);
 		
 		AmpCurrency ppcCurrency;
+		AmpFundingAmount activityPpc = activity.getProjectCostByType(funType);
 		if (ppcCurrencyCode != null) {
 			ppcCurrency = CurrencyUtil.getCurrencyByCode(ppcCurrencyCode);
-		} else if (activity.getCurrencyCode() != null) {
-			ppcCurrency = CurrencyUtil.getCurrencyByCode(activity.getCurrencyCode());
+		} else if (activityPpc != null && activityPpc.getCurrencyCode() != null) {
+			ppcCurrency = CurrencyUtil.getCurrencyByCode(activityPpc.getCurrencyCode());
 		} else {
 			ppcCurrency = CurrencyUtil.getCurrencyByCode(eaForm.getCurrCode());
 		}
@@ -1706,7 +1716,7 @@ public class EditActivity extends Action {
 		if (yearDate) {
 			ppc.setFunDate(Integer.toString(c.get(Calendar.YEAR)));
 		} else {
-			ppc.setFunDate(FormatHelper.formatDate(activity.getFunDate()));
+			ppc.setFunDate(FormatHelper.formatDate(activityPpc.getFunDate()));
 		}
 		
 		return ppc;
@@ -1958,6 +1968,17 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 
 		eaForm.getComponents().setSelectedComponents(selectedComponents);
 	}
+    
+    private ProposedProjCost getProjectCost(AmpActivityVersion activity,  EditActivityForm eaForm, 
+    		AmpFundingAmount.FundingType funType) {
+    	ProposedProjCost projCost = new ProposedProjCost();
+		AmpFundingAmount ppc = activity.getProjectCostByType(funType);
+				if (ppc != null && ppc.getFunAmount() != null && ppc.getFunDate() != null) {
+					projCost = getProposedProjectCost(activity, eaForm, ppc.getFunAmount(),
+							ppc.getCurrencyCode(), ppc.getFunDate(), false, funType);
+				}
+		return projCost;
+    }
     
     private void addErrorMessageToForm(EditActivityForm eaForm, Exception e) {
 		eaForm.getWarningMessges().add(TranslatorWorker.translateText("An error occurred when loading the page. Please contact the AMP administrator."));

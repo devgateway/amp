@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -25,6 +26,7 @@ import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -54,13 +56,26 @@ public class AmpOverviewSection extends AmpComponentPanel<Void> implements AmpRe
 		} else {
 			wmc.add(new AttributeAppender("class", new Model<String>("fundingOverviewDiv fundingOverviewDivNoTabs"), ""));
 		}
-
+		
+		
+		final IModel<Set<AmpFundingAmount>> costsModel = new PropertyModel<Set<AmpFundingAmount>>(am,
+				"costAmounts");
+		if (costsModel.getObject() == null)
+			costsModel.setObject(new HashSet<AmpFundingAmount>());
+		
         AmpProposedProjectCost propProjCost = new AmpProposedProjectCost(
-				"propProjCost", "Proposed Project Cost", am);
+				"propProjCost", "Proposed Project Cost", am, costsModel, AmpFundingAmount.FundingType.PROPOSED);
         propProjCost.add(new AttributePrepender("data-is_tab", new Model<String>("true"), ""));
 		wmc.add(propProjCost);
 		getRequiredFormComponents().addAll(
 				propProjCost.getRequiredFormComponents());
+		
+		AmpProjectCost revisedProjCost = new AmpProjectCost(
+				"revisedProjCost", "Revised Project Cost", am, costsModel, AmpFundingAmount.FundingType.REVISED);
+		revisedProjCost.add(new AttributePrepender("data-is_tab", new Model<String>("true"), ""));
+		wmc.add(revisedProjCost);
+		getRequiredFormComponents().addAll(
+				revisedProjCost.getRequiredFormComponents());
 		
 		RangeValidator<Integer> rangeValidator = new RangeValidator<Integer>(1,
 				10);

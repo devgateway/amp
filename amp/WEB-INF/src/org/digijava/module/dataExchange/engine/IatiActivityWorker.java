@@ -32,6 +32,7 @@ import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -789,13 +790,16 @@ public class IatiActivityWorker {
         if ((isCreate && settings.importEnabled("Other Funding Items")) || (!isCreate && settings.updateEnabled("Other Funding Items"))) {
             if(isValidString(proposedProjectCost.getCurrency()) )
                 proposedProjectCost.setCurrency(iatiDefaultCurrency);
-            activity.setCurrencyCode(proposedProjectCost.getCurrency());
+            AmpFundingAmount ppc = new AmpFundingAmount();
+            ppc.setActivity(activity);
+            ppc.setCurrencyCode(proposedProjectCost.getCurrency());
 
             if(proposedProjectCost.getDate() == null)
                 proposedProjectCost.setDate(new Date());
-            activity.setFunDate(proposedProjectCost.getDate());
+            ppc.setFunDate(proposedProjectCost.getDate());
 
-            activity.setFunAmount(proposedProjectCost.getAmount());
+            ppc.setFunAmount(proposedProjectCost.getAmount());
+            activity.addCostAmount(ppc);
         }
 
 

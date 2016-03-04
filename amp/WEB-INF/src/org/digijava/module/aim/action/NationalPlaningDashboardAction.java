@@ -24,6 +24,7 @@ import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
@@ -496,8 +497,9 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 			Iterator actItr = actList.iterator();
 			while (actItr.hasNext()) {
 				act = (AmpActivity) actItr.next();
-				if (act!=null && act.getFunAmount() != null) {
-					double usdVal = CurrencyWorker.convert(act.getFunAmount().doubleValue(), act.getCurrencyCode());
+				AmpFundingAmount ppc = act.getProjectCostByType(AmpFundingAmount.FundingType.PROPOSED);
+				if (act!=null && ppc != null && ppc.getFunAmount() != null) {
+					double usdVal = CurrencyWorker.convert(ppc.getFunAmount().doubleValue(), ppc.getCurrencyCode());
                     if(mnt!=null){
                         mnt = new Double(mnt.doubleValue() + usdVal);
                     }else{

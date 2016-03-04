@@ -50,6 +50,7 @@ import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgRoleBudget;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -1037,12 +1038,13 @@ public class ActivityImporter {
 		boolean isAnnualBudget = FMVisibility.isVisible("/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost", null);
 
 		if (isAnnualBudget && newActivity.getAnnualProjectBudgets() != null) {
+			AmpFundingAmount ppc = newActivity.getProjectCostByType(AmpFundingAmount.FundingType.PROPOSED);
 			double funAmount = 0d;
         	for(AmpAnnualProjectBudget apb : newActivity.getAnnualProjectBudgets()) {
-        		funAmount += InterchangeUtils.doPPCCalculations(apb, newActivity.getCurrencyCode());
+        		funAmount += InterchangeUtils.doPPCCalculations(apb, ppc.getCurrencyCode());
         	}
         	
-        	newActivity.setFunAmount(funAmount * AmountsUnits.getDefaultValue().multiplier);
+        	ppc.setFunAmount(funAmount * AmountsUnits.getDefaultValue().multiplier);
         }
 	}
 	

@@ -23,6 +23,7 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -117,7 +118,8 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 		iatiAct.setLastUpdatedDatetime(ExportHelper.getGregorianCalendar(ampAct.getUpdatedDate()!=null ? ampAct.getUpdatedDate() : ampAct.getCreatedDate()));
 		iatiAct.setVersion(new BigDecimal("1.03"));
 		iatiAct.setLang(this.lang);
-		iatiAct.setDefaultCurrency(ampAct.getCurrencyCode());
+		AmpFundingAmount ppc = ampAct.getProjectCostByType(AmpFundingAmount.FundingType.PROPOSED);
+		iatiAct.setDefaultCurrency(ppc == null ? null : ppc.getCurrencyCode());
 		//we don't have activity hierarchies in AMP, do we?
 		iatiAct.setHierarchy(1);
 		root.getIatiActivityOrAny().add(iatiAct);
@@ -529,7 +531,8 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	//budget
 	protected void addBudget(IatiActivity iatiAct, AmpActivityExpanded ampAct, AmpColumnEntry parent) throws AmpExportException {
 		//both mandatory
-		if (ampAct.getFunAmount()!=null && ampAct.getFunDate()!=null) {
+		AmpFundingAmount ppc = ampAct.getProjectCostByType(AmpFundingAmount.FundingType.PROPOSED);
+		if (ppc != null && ppc.getFunAmount() != null && ppc.getFunDate() != null) {
 			Budget budget = factory.createBudget();
 			//budget.setType();//N/A
 			for (AmpColumnEntry elem:parent.getElements()) {
@@ -537,11 +540,11 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 					switch(elem.getName()) {
 					case "period-start": 
 						budget.getPeriodStartOrPeriodEndOrValue().add(
-								factory.createBudgetPeriodStart(getDateType(ampAct.getFunDate())));
+								factory.createBudgetPeriodStart(getDateType(ppc.getFunDate())));
 						break;
 					case "value":
 						budget.getPeriodStartOrPeriodEndOrValue().add(
-								factory.createBudgetValue(getCurrencyType(new BigDecimal(ampAct.getFunAmount()), ampAct.getFunDate(), ampAct.getCurrencyCode())));
+								factory.createBudgetValue(getCurrencyType(new BigDecimal(ppc.getFunAmount()), ppc.getFunDate(), ppc.getCurrencyCode())));
 						break;
 					case "period-end": break; //N/A
 					}

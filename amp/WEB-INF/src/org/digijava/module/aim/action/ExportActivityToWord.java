@@ -537,10 +537,10 @@ public class ExportActivityToWord extends Action {
                     doc.add(tbl);
                 }
 
-                List<Table> proposedProjectCostTables = getProposedProjectCostTables(myForm, request, ampContext, activity);
-                for (Table tbl : proposedProjectCostTables) {
-                    doc.add(tbl);
-                }
+                addProjectCostTables(myForm, request, ampContext, myForm.getFunding().getProProjCost(), 
+                		"Proposed Project Cost", doc);
+                addProjectCostTables(myForm, request, ampContext, myForm.getFunding().getRevProjCost(), 
+                		"Revised Project Cost", doc);
 
                 List<Table> budgetStructureTables = getBudgetStructureTables(myForm, request, ampContext, activity);
                 for (Table tbl : budgetStructureTables) {
@@ -1579,46 +1579,41 @@ public class ExportActivityToWord extends Action {
         }
         return retVal;
     }
-    /*
+    
+    /**
      * Proposed Project Cost
      */
-    private List<Table> getProposedProjectCostTables (EditActivityForm myForm, HttpServletRequest request,	ServletContext ampContext, AmpActivityVersion act) throws BadElementException, WorkerException {
-        List<Table> retVal = new ArrayList<Table>();
-        HttpSession session=request.getSession();
-        if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Proposed Project Cost")) {
-            ExportSectionHelper eshTitle = new ExportSectionHelper("Proposed Project Cost", true).setWidth(100f).setAlign("left");
-            retVal.add(createSectionTable(eshTitle, request, ampContext));
+    private void addProjectCostTables(EditActivityForm myForm, HttpServletRequest request,
+    		ServletContext ampContext, ProposedProjCost projCost, String costName, com.lowagie.text.Document doc)
+    				throws WorkerException, DocumentException {
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/" + costName)) {
+            ExportSectionHelper eshTitle = new ExportSectionHelper(costName, true).setWidth(100f).setAlign("left");
+            doc.add(createSectionTable(eshTitle, request, ampContext));
             String currencyCode = null;
-            if(myForm.getFunding().getProProjCost()!=null){
-                currencyCode = myForm.getFunding().getProProjCost().getCurrencyCode();
+            if (projCost != null) {
+                currencyCode = projCost.getCurrencyCode();
             }
-            if(currencyCode == null) {
+            if (currencyCode == null) {
                 currencyCode = CurrencyUtil.getCurrencyByCode(Constants.DEFAULT_CURRENCY).getCurrencyCode();
             }
-            //        FundingCalculationsHelper fch = new FundingCalculationsHelper();
-            //        fch.doCalculations(allComponents, currencyCode);
             ExportSectionHelper eshProjectCostTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
-
-//            double convertedAmount = act.getFunAmount()==null?0D:act.getFunAmount();
-
             eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Cost", null, null,  true).
-                    addRowData(myForm.getFunding().getProProjCost().getFunAmount()).
+                    addRowData(projCost == null ? null : projCost.getFunAmount()).
                     addRowData(currencyCode));
             eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Date", null, null,  true).
-                    addRowData(DateConversion.ConvertDateToString(act.getFunDate())));
+                    addRowData(projCost == null ? null : projCost.getFunDate()));
 
-            List <ProposedProjCost> proposedProjectCostList = myForm.getFunding().getProposedAnnualBudgets();
-
-            if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")) {
+            if ("Proposed Project Cost".equals(costName) 
+            		&& FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")) {
+            	List <ProposedProjCost> proposedProjectCostList = myForm.getFunding().getProposedAnnualBudgets();
                 for (ProposedProjCost ppc : proposedProjectCostList) {
                     eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
                             ppc.getFunDate(), null, null, true).addRowData(
                             FormatHelper.formatNumber(ppc.getFunAmountAsDouble()) + " " + ppc.getCurrencyCode()));
                 }
             }
-            retVal.add(createSectionTable(eshProjectCostTable, request, ampContext));
+            doc.add(createSectionTable(eshProjectCostTable, request, ampContext));
         }
-        return retVal;
     }
 
     /*

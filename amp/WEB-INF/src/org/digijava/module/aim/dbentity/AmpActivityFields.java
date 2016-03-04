@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -20,6 +22,7 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableDiscrimina
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.dbentity.AmpFundingAmount.FundingType;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -282,23 +285,18 @@ LoggerIdentifiable, Cloneable {
 
 	protected String contactName;
 	//protected AmpTeamMember updatedBy; !!! Use modifiedBy
-
-	@Interchangeable(fieldTitle = "PPC Amount", importable = true,
-			fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/" + CategoryConstants.PROPOSE_PRJC_AMOUNT_NAME,
-			required = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Required Validator for Proposed Amount")
-	@VersionableFieldSimple(fieldTitle = "Fun Amount")
-	protected Double funAmount;
 	
-	@Interchangeable(fieldTitle = "PPC Currency Code", importable = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Currency")
-	@InterchangeableDiscriminator(discriminatorField="currencyCode", 
-	discriminatorClass="org.digijava.kernel.ampapi.endpoints.activity.discriminators.CurrencyDiscriminator")
-	@VersionableFieldSimple(fieldTitle = "Currency Code")
-	protected String currencyCode;
+	@Interchangeable(fieldTitle = "Project Costs", importable = true)
+	@InterchangeableDiscriminator(discriminatorField = "type",
+		settings = {
+			@Interchangeable(fieldTitle = "PPC Amount", importable = true, discriminatorOption = "0", multipleValues = false,
+					fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost"),
+			@Interchangeable(fieldTitle = "RPC Amount", importable = true, discriminatorOption = "1", multipleValues = false,
+			fmPath = "/Activity Form/Funding/Overview Section/Revised Project Cost")
+	})
+	@VersionableCollection(fieldTitle = "Project Costs")
+	Set<AmpFundingAmount> costAmounts;
 	
-	@Interchangeable(fieldTitle = "PPC Funding Date", importable = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/" + CategoryConstants.PROPOSE_PRJC_DATE_NAME)
-	@VersionableFieldSimple(fieldTitle = "Fun Date")
-	protected Date funDate;
-
 	/**
 	 * 
 	 * @deprecated
@@ -1327,18 +1325,6 @@ LoggerIdentifiable, Cloneable {
 			return documentSpace;
 		}
 
-		public String getCurrencyCode() {
-			return currencyCode;
-		}
-
-		public Double getFunAmount() {
-			return FeaturesUtil.applyThousandsForVisibility(funAmount);
-		}
-
-		public Date getFunDate() {
-			return funDate;
-		}
-
 		/**
 		 * @param survey
 		 *            The survey to set.
@@ -1349,18 +1335,6 @@ LoggerIdentifiable, Cloneable {
 
 		public void setDocumentSpace(String documentSpace) {
 			this.documentSpace = documentSpace;
-		}
-
-		public void setCurrencyCode(String currenyCode) {
-			this.currencyCode = currenyCode;
-		}
-
-		public void setFunAmount(Double funAmount) {
-			this.funAmount = FeaturesUtil.applyThousandsForEntry(funAmount);
-		}
-
-		public void setFunDate(Date funDate) {
-			this.funDate = funDate;
 		}
 
 		public Integer getLineMinRank() {
@@ -2106,7 +2080,38 @@ LoggerIdentifiable, Cloneable {
 
 	    public void setSelectedEffectivenessIndicatorOptions(Set<AmpAidEffectivenessIndicatorOption> selectedEffectivenessIndicatorOptions) {
 	        this.selectedEffectivenessIndicatorOptions = selectedEffectivenessIndicatorOptions;
+	    }
+	    
+	    public AmpFundingAmount getProjectCostByType(AmpFundingAmount.FundingType type) {
+	    	if (this.costAmounts != null && type != null) {
+	    		for (AmpFundingAmount fa : costAmounts) {
+	    			if (type.equals(fa.getFunType())) {
+	    				return fa;
+	    			}
+	    		}
+	    	}
+	    	return null;
+	    }
 
-	}
+		/**
+		 * @return the costAmounts
+		 */
+		public Set<AmpFundingAmount> getCostAmounts() {
+			return costAmounts;
+		}
+
+		/**
+		 * @param costAmounts the costAmounts to set
+		 */
+		public void setCostAmounts(Set<AmpFundingAmount> costAmounts) {
+			this.costAmounts = costAmounts;
+		}
+		
+		public void addCostAmount(AmpFundingAmount costAmount) {
+			if (this.costAmounts == null) {
+				this.costAmounts = new HashSet<AmpFundingAmount>();
+			}
+			this.costAmounts.add(costAmount);
+		}
 }
 

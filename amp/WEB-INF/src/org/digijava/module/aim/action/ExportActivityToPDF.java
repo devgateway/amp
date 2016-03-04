@@ -1273,22 +1273,13 @@ public class ExportActivityToPDF extends Action {
              * Proposed Project Cost
              */
             if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Proposed Project Cost")){
-                String costOutput="";
-                columnName=TranslatorWorker.translateText("Proposed Project Cost");
-                if(myForm.getFunding().getProProjCost()!=null){
-                    //costOutput="Cost \t";
-                    if(myForm.getFunding().getProProjCost().getFunAmount()!=null){
-                        costOutput+=" "+myForm.getFunding().getProProjCost().getFunAmount();
-                    }
-                    if(myForm.getFunding().getProProjCost().getCurrencyCode()!=null){
-                        costOutput+=" "+myForm.getFunding().getProProjCost().getCurrencyCode();
-                    }
-                    if(myForm.getFunding().getProProjCost().getFunDate()!=null){
-                        costOutput+="\n"+TranslatorWorker.translateText("Date")+ "\t: "+myForm.getFunding().getProProjCost().getFunDate();
-                    }
-                }
-
-                createGeneralInfoRow(mainLayout,columnName,costOutput);
+            	buildProjectCost(mainLayout, myForm.getFunding().getProProjCost(), "Proposed Project Cost");
+            }
+            /**
+             * Revised Project Cost
+             */
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Revised Project Cost")) {
+            	buildProjectCost(mainLayout, myForm.getFunding().getRevProjCost(), "Revised Project Cost");
             }
 
             /**
@@ -1502,6 +1493,23 @@ public class ExportActivityToPDF extends Action {
         // TODO Auto-generated method stub
         return null;
     }
+
+    private void buildProjectCost(PdfPTable mainLayout, ProposedProjCost proProjCost, String columnName) {
+    	String costOutput = "";
+        columnName = TranslatorWorker.translateText(columnName);
+        if (proProjCost != null) {
+            if (proProjCost.getFunAmount() != null) {
+                costOutput += " " + proProjCost.getFunAmount();
+            }
+            if (proProjCost.getCurrencyCode() != null) {
+                costOutput += " " + proProjCost.getCurrencyCode();
+            }
+            if (proProjCost.getFunDate() != null){
+                costOutput += "\n" + TranslatorWorker.translateText("Date") + "\t: " + proProjCost.getFunDate();
+            }
+        }
+        createGeneralInfoRow(mainLayout, columnName, costOutput);
+	}
 
     private void buildCommentsPart(String fieldName, String columnName, Map<String, List<AmpComments>> allComments,
                                    String locale, Long siteId, PdfPTable mainLayout) throws WorkerException {

@@ -41,6 +41,7 @@ import javax.servlet.http.HttpSession;
  */
 public class ActivityFundingDigest {
 	private ProposedProjCost proProjCost;
+	private ProposedProjCost revProjCost;
 	private List<ProposedProjCost> proposedAnnualBudgets;
 	private List<FundingOrganization> fundingOrganizations;
 	private String donorObjective;
@@ -451,6 +452,20 @@ public class ActivityFundingDigest {
 		return this.proProjCost;
 	}
 	
+	/**
+	 * @return the revProjCost
+	 */
+	public ProposedProjCost getRevProjCost() {
+		return revProjCost;
+	}
+
+	/**
+	 * @param revProjCost the revProjCost to set
+	 */
+	public void setRevProjCost(ProposedProjCost revProjCost) {
+		this.revProjCost = revProjCost;
+	}
+
 	@java.lang.SuppressWarnings("all")
 	public List<ProposedProjCost> getProposedAnnualBudgets() {
 		return this.proposedAnnualBudgets;

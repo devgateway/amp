@@ -2722,6 +2722,37 @@ body {background:none;}
                             				</c:if>										</td>
 									</tr>
 								  </module:display>
+								  
+								  <module:display name="/Activity Form/Funding/Overview Section/Revised Project Cost" parentModule="/Activity Form/Funding/Overview Section">
+								  	<tr>
+										<td class="field_name">
+											<b><digi:trn key="aim:revisedPrjectCost">Revised Project Cost</digi:trn></b>
+									  	</td>
+									  	<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.funding.revProjCost != null}">
+												<table cellspacing="1" cellPadding="3" bgcolor="#aaaaaa" width="100%">
+													<tr bgcolor="#ffffff">
+														<td><digi:trn key="aim:cost">Cost</digi:trn></td>
+                                                        <td bgcolor="#FFFFFF" align="left" >
+                                                          <c:if test="${aimEditActivityForm.funding.revProjCost.funAmount != null}">
+																 	<FONT color=blue>*</FONT> ${aimEditActivityForm.funding.revProjCost.funAmount}
+														  </c:if>&nbsp;
+														  <c:if test="${aimEditActivityForm.funding.revProjCost.currencyCode != null}">
+																${aimEditActivityForm.funding.revProjCost.currencyCode}
+														  </c:if>
+														</td>
+												    </tr>
+												    <tr bgcolor="#ffffff">
+														<td><digi:trn key="aim:proposedcompletiondate">Date</digi:trn></td>
+                                                        <td bgcolor="#FFFFFF" align="left" width="150">
+                                                        	<c:if test="${aimEditActivityForm.funding.revProjCost.funDate!=null}">
+                                                        		${aimEditActivityForm.funding.revProjCost.funDate}
+                                                         	</c:if>
+                                                        </td>
+                                                    </tr>
+												</table>
+											</c:if>
+								  </module:display>
 
 								  <module:display name="/Activity Form/Budget Structure/Budget Structure" parentModule="/Activity Form/Budget Structure">
 

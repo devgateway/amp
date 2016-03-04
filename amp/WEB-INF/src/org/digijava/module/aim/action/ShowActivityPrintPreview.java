@@ -36,6 +36,7 @@ import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -119,10 +120,10 @@ public class ShowActivityPrintPreview
 		        request.setAttribute("overallRisk", riskName);
 		        request.setAttribute("riskColor", rskColor);
 		        
-		        // set proposed project cost
+		        // set project costs
 
-                ProposedProjCost pg = getProposedProjectCost(eaForm, activity);
-                eaForm.getFunding().setProProjCost(pg);
+                eaForm.getFunding().setProProjCost(getProposedProjectCost(eaForm, activity, AmpFundingAmount.FundingType.PROPOSED));
+                eaForm.getFunding().setRevProjCost(getProposedProjectCost(eaForm, activity, AmpFundingAmount.FundingType.REVISED));
 
                 // set title,description and objective
                 
@@ -913,6 +914,7 @@ public class ShowActivityPrintPreview
                 eaForm.getPlanning().setProposedCompDate(null);
                 eaForm.getPrograms().setActPrograms(null);
                 eaForm.getFunding().setProProjCost(null);
+                eaForm.getFunding().setRevProjCost(null);
                 eaForm.getFunding().setRegionalFundings(null);
                 eaForm.getComponents().setSelectedComponents(null);
                 eaForm.getComponents().setCompTotalDisb(0);
@@ -981,24 +983,26 @@ public class ShowActivityPrintPreview
         return mapping.findForward("forward");
     }
 
-	private ProposedProjCost getProposedProjectCost(EditActivityForm eaForm, AmpActivityVersion activity) {
+	private ProposedProjCost getProposedProjectCost(EditActivityForm eaForm, AmpActivityVersion activity, 
+			AmpFundingAmount.FundingType funType) {
 		ProposedProjCost pg = new ProposedProjCost();
+		AmpFundingAmount ppc = activity.getProjectCostByType(funType);
 		AmpCurrency ppcCurrency;
-		if (activity.getCurrencyCode() != null) {
-			ppcCurrency = CurrencyUtil.getCurrencyByCode(activity.getCurrencyCode());
+		if (ppc != null && ppc.getCurrencyCode() != null) {
+			ppcCurrency = CurrencyUtil.getCurrencyByCode(ppc.getCurrencyCode());
 		} else {
 			ppcCurrency = CurrencyUtil.getCurrencyByCode(eaForm.getCurrCode());
 		}
-		java.sql.Date ppcDate = activity.getFunDate() != null ? new java.sql.Date(activity.getFunDate().getTime()) : null;
+		java.sql.Date ppcDate = ppc != null && ppc.getFunDate() != null ? new java.sql.Date(ppc.getFunDate().getTime()) : null;
 		double frmExRt = Util.getExchange(ppcCurrency.getCurrencyCode(), ppcDate);
 		double toExRt = Util.getExchange(eaForm.getCurrCode(), ppcDate);
-		double funAmount = activity.getFunAmount() != null ? activity.getFunAmount() : 0; 
+		double funAmount = ppc != null && ppc.getFunAmount() != null ? ppc.getFunAmount() : 0; 
 		DecimalWraper amt = CurrencyWorker.convertWrapper(funAmount, frmExRt, toExRt, ppcDate);
 		pg.setFunAmountAsDouble(amt.doubleValue());
 		pg.setCurrencyCode(eaForm.getCurrCode());
 		pg.setCurrencyName(eaForm.getCurrName());
 		pg.setFunAmount(FormatHelper.formatNumber(amt.doubleValue()));
-		pg.setFunDate(FormatHelper.formatDate(activity.getFunDate()));
+		pg.setFunDate(FormatHelper.formatDate(ppc == null ? null : ppc.getFunDate()));
 		return pg;
 	}
 

@@ -256,6 +256,7 @@ public class ActivityUtil {
 		
 		updateComponentFunding(a, session);
 		saveAnnualProjectBudgets(a, session);
+		saveProjectCosts(a, session);
 	
         if (createNewVersion){
             //a.setAmpActivityId(null); //hibernate will save as a new version
@@ -1007,7 +1008,14 @@ public class ActivityUtil {
 			}
 		}
 	}
-
-
-
+	
+	private static void saveProjectCosts(AmpActivityVersion a, Session session) throws Exception {
+		if (a.getCostAmounts() != null) {
+			for (AmpFundingAmount afa : a.getCostAmounts()) {
+				afa.setActivity(a);
+				session.saveOrUpdate(afa);
+			}
+		}
+			
+	}
 }

@@ -91,8 +91,8 @@ public class CategoryConstants {
 	public static final String ACTIVITY_BUDGET_NAME			= "Activity Budget";
 	public static final String ACTIVITY_BUDGET_KEY			= "activity_budget";
 	
-	public static final String PROPOSE_PRJC_AMOUNT_NAME 	= "Proposed Amount";
-	public static final String PROPOSE_PRJC_AMOUNT_KEY		= "funAmount";
+	public static final String PROJECT_AMOUNT_NAME 			= "Amount";
+	public static final String PROJECT_AMOUNT_KEY			= "funAmount";
 	
 	public static final String PROPOSE_PRJC_DATE_NAME 		= "Date";
 	public static final String PROPOSE_PRJC_DATE_KEY		= "funDate";

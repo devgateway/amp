@@ -19,7 +19,13 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_proposed_cost AS SELECT amp_activity.amp_activity_id, amp_activity.amp_activity_id AS object_id, amp_activity.amp_activity_id AS object_id2, amp_activity.proj_cost_amount AS transaction_amount, amp_activity.proj_cost_currcode AS currency_code, amp_activity.proj_cost_date AS transaction_date FROM amp_activity WHERE ((amp_activity.proj_cost_amount IS NOT NULL) AND (amp_activity.proj_cost_date IS NOT NULL));;;
+			    	CREATE OR REPLACE VIEW v_proposed_cost AS
+			    	SELECT amp_activity.amp_activity_id, amp_activity.amp_activity_id AS object_id, amp_activity.amp_activity_id AS object_id2, 
+			    		amp_funding_amount.amount AS transaction_amount, amp_funding_amount.curr_code AS currency_code, amp_funding_amount.date AS transaction_date 
+			    	FROM amp_activity, amp_funding_amount 
+			    	WHERE amp_activity.amp_activity_id = amp_funding_amount.amp_activity_id AND 
+			    		amp_funding_amount.type = 0 AND
+			    		(amp_funding_amount.amount IS NOT NULL) AND (amp_funding_amount.date IS NOT NULL);
         		</lang>
 		</script>
 	</apply>

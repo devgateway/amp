@@ -21,6 +21,7 @@ public class InterchangeableClassMapper {
 		put(java.lang.Boolean.class, ActivityEPConstants.FIELD_TYPE_BOOLEAN);
 		put(java.lang.Long.class, ActivityEPConstants.FIELD_TYPE_LONG);
 		put(java.lang.Float.class, ActivityEPConstants.FIELD_TYPE_FLOAT);
+		put(java.lang.Enum.class, ActivityEPConstants.FIELD_TYPE_STRING);
 	}};
 	
 	public static final Set<String> SIMPLE_TYPES = new HashSet<String>() {{
@@ -53,15 +54,21 @@ public class InterchangeableClassMapper {
 	}};
 	
 	public static String getCustomMapping(Class<?> clazz) {
-		return classToCustomType.get(clazz);
+		return classToCustomType.get(adjust(clazz));
 	}
 	
 	public static boolean containsSimpleClass(Class<?> clazz) {
-		return classToCustomType.containsKey(clazz);
+		return classToCustomType.containsKey(adjust(clazz));
 	}
 	
 	public static boolean containsSupportedClass(Class<?> clazz) {
-		return JSON_SUPPORTED_CLASSES.contains(clazz);
+		return JSON_SUPPORTED_CLASSES.contains(adjust(clazz));
+	}
+	
+	private static Class<?> adjust(Class<?> clazz) {
+		if (Enum.class.isAssignableFrom(clazz))
+			clazz = Enum.class;
+		return clazz;
 	}
 
 }

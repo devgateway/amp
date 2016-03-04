@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -635,16 +636,17 @@ public class InterchangeUtils {
 	 * @return String with Y|ND|N, where Y (yes) = always required, ND=for draft status=false, 
 	 * N (no) = not required. .
 	 */
-	public static String getRequiredValue(Field field, Interchangeable interchangeable) {
+	public static String getRequiredValue(Field field, Deque<Interchangeable> intchStack) {
+		Interchangeable fieldIntch = intchStack.peek();
 		String requiredValue = ActivityEPConstants.FIELD_NOT_REQUIRED;
-		String required = interchangeable.required();
+		String required = fieldIntch.required();
 		
 		if (required.equals(ActivityEPConstants.REQUIRED_ALWAYS)) {
 			requiredValue = ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
 		}
 		else if (required.equals(ActivityEPConstants.REQUIRED_ND) 
-				|| (!required.equals(ActivityEPConstants.REQUIRED_NONE) && FMVisibility.isVisible(required, interchangeable))
-				|| (hasRequiredValidatorEnabled(field, interchangeable))) {
+				|| (!required.equals(ActivityEPConstants.REQUIRED_NONE) && FMVisibility.isVisible(required, intchStack))
+				|| (hasRequiredValidatorEnabled(field, intchStack))) {
 			requiredValue = ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
 		}
 		return requiredValue;
@@ -873,8 +875,8 @@ public class InterchangeUtils {
 	 * @param interchangeable
 	 * @return boolean if the field contains unique validator 
 	 */
-	public static boolean hasUniqueValidatorEnabled(Field field, Interchangeable interchangeable) {
-		return hasValidatorEnabled(field, interchangeable, ActivityEPConstants.UNIQUE_VALIDATOR_NAME);
+	public static boolean hasUniqueValidatorEnabled(Field field, Deque<Interchangeable> intchStack) {
+		return hasValidatorEnabled(field, intchStack, ActivityEPConstants.UNIQUE_VALIDATOR_NAME);
 	}
 	
 	/**
@@ -883,8 +885,8 @@ public class InterchangeUtils {
 	 * @param interchangeable
 	 * @return boolean if the field contains tree collection validator 
 	 */
-	public static boolean hasTreeCollectionValidatorEnabled(Field field, Interchangeable interchangeable) {
-		return hasValidatorEnabled(field, interchangeable, ActivityEPConstants.TREE_COLLECTION_VALIDATOR_NAME);
+	public static boolean hasTreeCollectionValidatorEnabled(Field field, Deque<Interchangeable> intchStack) {
+		return hasValidatorEnabled(field, intchStack, ActivityEPConstants.TREE_COLLECTION_VALIDATOR_NAME);
 	}
 	
 	/**
@@ -893,16 +895,17 @@ public class InterchangeUtils {
 	 * @param interchangeable
 	 * @return boolean if the field contains maxsize validator 
 	 */
-	public static boolean hasMaxSizeValidatorEnabled(Field field, Interchangeable interchangeable) {
+	public static boolean hasMaxSizeValidatorEnabled(Field field, Deque<Interchangeable> intchStack) {
 		if (AmpActivityProgram.class.equals(getGenericClass(field))) {
 			try {
-				AmpActivityProgramSettings setting = ProgramUtil.getAmpActivityProgramSettings(interchangeable.discriminatorOption());
+				AmpActivityProgramSettings setting = ProgramUtil.getAmpActivityProgramSettings(
+						intchStack.peek().discriminatorOption());
 				return setting != null && !setting.isAllowMultiple();
 			} catch (DgException e) {
 				throw new RuntimeException(e);
 			}
 		} else {
-			return hasValidatorEnabled(field, interchangeable, ActivityEPConstants.MAX_SIZE_VALIDATOR_NAME);
+			return hasValidatorEnabled(field, intchStack, ActivityEPConstants.MAX_SIZE_VALIDATOR_NAME);
 		}
 	}
 	
@@ -912,8 +915,8 @@ public class InterchangeUtils {
 	 * @param interchangeable
 	 * @return boolean if the field contains required validator 
 	 */
-	public static boolean hasRequiredValidatorEnabled(Field field, Interchangeable interchangeable) {
-		return hasValidatorEnabled(field, interchangeable, ActivityEPConstants.MIN_SIZE_VALIDATOR_NAME);
+	public static boolean hasRequiredValidatorEnabled(Field field, Deque<Interchangeable> intchStack) {
+		return hasValidatorEnabled(field, intchStack, ActivityEPConstants.MIN_SIZE_VALIDATOR_NAME);
 	}
 	
 	/**
@@ -922,8 +925,8 @@ public class InterchangeUtils {
 	 * @param interchangeable
 	 * @return boolean if the field contains percentage validator 
 	 */
-	public static boolean hasPercentageValidatorEnabled(Field field, Interchangeable interchangeable) {
-		return hasValidatorEnabled(field, interchangeable, ActivityEPConstants.PERCENTAGE_VALIDATOR_NAME);
+	public static boolean hasPercentageValidatorEnabled(Field field, Deque<Interchangeable> intchStack) {
+		return hasValidatorEnabled(field, intchStack, ActivityEPConstants.PERCENTAGE_VALIDATOR_NAME);
 	}
 	
 	/**
@@ -933,8 +936,9 @@ public class InterchangeUtils {
 	 * @param validatorName the name of the validator (unique, maxSize, minSize, percentage, treeCollection)
 	 * @return boolean if the field contains unique validator 
 	 */
-	private static boolean hasValidatorEnabled(Field field, Interchangeable interchangeable, String validatorName) {
+	private static boolean hasValidatorEnabled(Field field, Deque<Interchangeable> intchStack, String validatorName) {
 		boolean isEnabled = false;
+		Interchangeable interchangeable = intchStack.peek();
 		Validators validators = interchangeable.validators();
 		
 		if (validators != null) {
@@ -953,7 +957,7 @@ public class InterchangeUtils {
 			}
 			
 			if (StringUtils.isNotBlank(validatorFmPath)) {
-				isEnabled = FMVisibility.isVisible(validatorFmPath, interchangeable);
+				isEnabled = FMVisibility.isVisible(validatorFmPath, intchStack);
 			}
 		}
 		

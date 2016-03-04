@@ -10,7 +10,7 @@ import java.util.Map;
  * specific activity values in for a full project information
  */
 public abstract class FieldsDiscriminator {
-	public abstract Map<String, Object> getPossibleValues();
+	public abstract Map<String, ?> getPossibleValues();
 	/**
 	 * Generates a JSON-friendly representation of the object provided, 
 	 * with an implied logical conversion for correspondence to AF

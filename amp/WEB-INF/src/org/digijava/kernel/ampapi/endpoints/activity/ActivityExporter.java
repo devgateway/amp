@@ -6,8 +6,10 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,7 @@ import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.editor.exception.EditorException;
@@ -64,7 +67,7 @@ public class ActivityExporter {
 
 		for (Field field : fields) {
 			try {
-				readFieldValue(field, activity, activity, resultJson, null, null);
+				readFieldValue(field, activity, activity, resultJson, null, new ArrayDeque<Interchangeable>());
 			} catch (IllegalArgumentException | IllegalAccessException
 					| NoSuchMethodException | SecurityException
 					| InvocationTargetException e) {
@@ -86,14 +89,15 @@ public class ActivityExporter {
 	 * @return
 	 */
 	private void readFieldValue(Field field, Object fieldInstance, Object parentObject, JsonBean resultJson, 
-			String fieldPath, Interchangeable parentInterchangeable) throws IllegalArgumentException, 
+			String fieldPath, Deque<Interchangeable> intchStack) throws IllegalArgumentException, 
 	IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException, EditorException {
 		
 		Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
 		InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
 		
 		if (interchangeable != null && !InterchangeUtils.isAmpActivityVersion(field.getType()) 
-				&& FMVisibility.isVisible(interchangeable.fmPath(), parentInterchangeable)) {
+				&& FMVisibility.isVisible(interchangeable.fmPath(), intchStack)) {
+			intchStack.push(interchangeable);
 			field.setAccessible(true);
 			String fieldTitle = InterchangeUtils.underscorify(interchangeable.fieldTitle());
 			
@@ -104,7 +108,7 @@ public class ActivityExporter {
 				// check if the member is a collection
 				
 				if (InterchangeUtils.isCompositeField(field)) {
-					generateCompositeValues(field, fieldValue, fieldPath, resultJson);
+					generateCompositeValues(field, fieldValue, fieldPath, intchStack, resultJson);
 				} else if(isFiltered(filteredFieldPath)) {
 					if (InterchangeUtils.isCollection(field)) {
 						Collection<Object> collectionItems = (Collection<Object>) fieldValue;
@@ -113,7 +117,7 @@ public class ActivityExporter {
 						if (collectionItems != null) {
 							// iterate over the objects of the collection
 							for (Object item : collectionItems) {
-								collectionJson.add(getObjectJson(item, filteredFieldPath, parentInterchangeable));
+								collectionJson.add(getObjectJson(item, filteredFieldPath, intchStack));
 							}
 						}
 						// put the array with object values in the result JSON
@@ -124,7 +128,7 @@ public class ActivityExporter {
 							Class<? extends Object> parentClassName = parentObject == null ? field.getDeclaringClass() : parentObject.getClass();
 							resultJson.set(fieldTitle, InterchangeUtils.getTranslationValues(field, parentClassName, fieldValue, InterchangeUtils.getId(parentObject)));
 						} else {
-							resultJson.set(fieldTitle, getObjectJson(fieldValue, filteredFieldPath, parentInterchangeable));
+							resultJson.set(fieldTitle, getObjectJson(fieldValue, filteredFieldPath, intchStack));
 						}
 					}
 				}
@@ -145,6 +149,7 @@ public class ActivityExporter {
 					}
 				}
 			}
+			intchStack.pop();
 		}		
 	}
 	
@@ -154,7 +159,8 @@ public class ActivityExporter {
 	 * @param fieldPath the underscorified path to the field currently exported 
 	 * @return itemJson object JSON containing the value of the item
 	 */
-	private JsonBean getObjectJson(Object item, String fieldPath, Interchangeable parentInterchangeable) throws IllegalArgumentException, IllegalAccessException, 
+	private JsonBean getObjectJson(Object item, String fieldPath, Deque<Interchangeable> intchStack) 
+			throws IllegalArgumentException, IllegalAccessException, 
 	NoSuchMethodException, SecurityException, InvocationTargetException, EditorException {
 		
 		Field[] itemFields = item.getClass().getDeclaredFields();
@@ -162,7 +168,7 @@ public class ActivityExporter {
 		
 		// iterate the fields of the object and generate the JSON
 		for (Field itemField : itemFields) {
-			readFieldValue(itemField, item, item, itemJson, fieldPath, parentInterchangeable);	
+			readFieldValue(itemField, item, item, itemJson, fieldPath, intchStack);	
 		}
 		
 		return itemJson;
@@ -177,7 +183,8 @@ public class ActivityExporter {
 	 * @param resultJson object JSON containing the value of the item
 	 * @param fieldPath the underscorified path to the field currently exported 
 	 */
-	private void generateCompositeValues(Field field, Object object, String fieldPath, JsonBean resultJson) throws IllegalArgumentException, 
+	private void generateCompositeValues(Field field, Object object, String fieldPath, 
+			Deque<Interchangeable> intchStack, JsonBean resultJson) throws IllegalArgumentException, 
 	IllegalAccessException, NoSuchMethodException, SecurityException, InvocationTargetException, EditorException {
 		
 		Interchangeable interchangeable = field.getAnnotation(Interchangeable.class);
@@ -197,7 +204,9 @@ public class ActivityExporter {
 		} catch (InstantiationException e) {
 			logger.error("Error in creating instance of class. " 	+ e.getMessage());
 			throw new RuntimeException(e);
-		}			
+		}
+		
+		intchStack.push(interchangeable);
 		
 		Map<String, Object> compositeMap = new HashMap<String, Object>();
 		Map<String, Interchangeable> compositeMapSettings = new HashMap<String, Interchangeable>();
@@ -245,12 +254,17 @@ public class ActivityExporter {
 						discOption = ((AmpOrgRole) obj).getRole().getRoleCode();
 					} else if (obj instanceof AmpActivityContact) {
 						discOption = ((AmpActivityContact) obj).getContactType();
+					} else if (obj instanceof AmpFundingAmount) {
+						discOption = "" + ((AmpFundingAmount) obj).getFunType().ordinal();
 					}
 					
 					String filteredFieldPath = filteredFieldsMap.get(discOption);
 					if (isRealCollection) {
+						Interchangeable current = compositeMapSettings.get(discOption);
+						if (current != null) intchStack.push(current);
 						((List<JsonBean>) compositeMap.get(discOption)).add(
-								getObjectJson(obj, filteredFieldPath, compositeMapSettings.get(discOption)));
+								getObjectJson(obj, filteredFieldPath, intchStack));
+						if (current != null) intchStack.pop();
 					}
 				}
 			}
@@ -258,11 +272,14 @@ public class ActivityExporter {
 		
 		// put in the result JSON the generated structure
 		for (Interchangeable setting : settings) {
+			intchStack.push(setting);
 			String fieldTitle = InterchangeUtils.underscorify(setting.fieldTitle());
-			if (isFiltered(fieldTitle) && FMVisibility.isVisible(setting.fmPath(), setting)) {
+			if (isFiltered(fieldTitle) && FMVisibility.isVisible(setting.fmPath(), intchStack)) {
 				resultJson.set(fieldTitle, compositeMap.get(setting.discriminatorOption()));
 			}
+			intchStack.pop();
 		}
+		intchStack.pop();
 	}
 	
 	/**

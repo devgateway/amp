@@ -4,8 +4,10 @@ import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,11 +67,11 @@ public class FieldsEnumerator {
 	 *         fields in the definition of the field's class, or field's generic
 	 *         type, if it's a collection
 	 */
-	private List<JsonBean> getChildrenOfField(Field field, Interchangeable parentInterchangeable) {
+	private List<JsonBean> getChildrenOfField(Field field, Deque<Interchangeable> intchStack) {
 		if (!InterchangeUtils.isCollection(field))
-			return getAllAvailableFields(field.getType(), parentInterchangeable);
+			return getAllAvailableFields(field.getType(), intchStack);
 		else
-			return getAllAvailableFields(InterchangeUtils.getGenericClass(field), parentInterchangeable);
+			return getAllAvailableFields(InterchangeUtils.getGenericClass(field), intchStack);
 	}
 	
 	private static Map<String, Field> getInterchangeableFields(Class<?> clazz) {
@@ -150,7 +152,9 @@ public class FieldsEnumerator {
 	 * @param field
 	 * @return
 	 */
-	private  JsonBean describeField(Field field, Interchangeable interchangeable, InterchangeableDiscriminator discriminator) {
+	private  JsonBean describeField(Field field, Deque<Interchangeable> intchStack, 
+			InterchangeableDiscriminator discriminator) {
+		Interchangeable interchangeable = intchStack.peek();
 		if (interchangeable == null)
 			return null;
 		
@@ -172,7 +176,7 @@ public class FieldsEnumerator {
 		
 
 		bean.set(ActivityEPConstants.FIELD_LABEL, InterchangeUtils.mapToBean(getLabelsForField(interchangeable.fieldTitle())));
-		bean.set(ActivityEPConstants.REQUIRED, InterchangeUtils.getRequiredValue(field, interchangeable));
+		bean.set(ActivityEPConstants.REQUIRED, InterchangeUtils.getRequiredValue(field, intchStack));
 		bean.set(ActivityEPConstants.IMPORTABLE, interchangeable.importable());
 		if (interchangeable.percentageConstraint()){
 			bean.set(ActivityEPConstants.PERCENTAGE, true);
@@ -197,27 +201,27 @@ public class FieldsEnumerator {
 		
 		if (!InterchangeUtils.isSimpleType(field.getType())) {
 			if (InterchangeUtils.isCollection(field)) {
-				if(!InterchangeUtils.hasMaxSizeValidatorEnabled(field, interchangeable) && interchangeable.multipleValues()) {
+				if(!InterchangeUtils.hasMaxSizeValidatorEnabled(field, intchStack) && interchangeable.multipleValues()) {
 					bean.set(ActivityEPConstants.MULTIPLE_VALUES, true);
 				} else {
 					bean.set(ActivityEPConstants.MULTIPLE_VALUES, false);
 				}
 				
-				if (InterchangeUtils.hasPercentageValidatorEnabled(field, interchangeable)) {
-					bean.set(ActivityEPConstants.PERCENTAGE_CONSTRAINT, getPercentageConstraint(field, interchangeable));
+				if (InterchangeUtils.hasPercentageValidatorEnabled(field, intchStack)) {
+					bean.set(ActivityEPConstants.PERCENTAGE_CONSTRAINT, getPercentageConstraint(field, intchStack));
 				}
 				
-				if (InterchangeUtils.hasUniqueValidatorEnabled(field, interchangeable)) {
-					bean.set(ActivityEPConstants.UNIQUE_CONSTRAINT, getUniqueConstraint(field, interchangeable));
+				if (InterchangeUtils.hasUniqueValidatorEnabled(field, intchStack)) {
+					bean.set(ActivityEPConstants.UNIQUE_CONSTRAINT, getUniqueConstraint(field, intchStack));
 				}
 				
-				if (InterchangeUtils.hasTreeCollectionValidatorEnabled(field, interchangeable)) {
+				if (InterchangeUtils.hasTreeCollectionValidatorEnabled(field, intchStack)) {
 					bean.set(ActivityEPConstants.TREE_COLLECTION_CONSTRAINT, true);
 				}
 			}
 			
 			if (!interchangeable.pickIdOnly() && !InterchangeUtils.isAmpActivityVersion(field.getClass())) {
-				List<JsonBean> children = getChildrenOfField(field, interchangeable);
+				List<JsonBean> children = getChildrenOfField(field, intchStack);
 				if (children != null && children.size() > 0) {
 					bean.set(ActivityEPConstants.CHILDREN, children);
 				}
@@ -248,7 +252,8 @@ public class FieldsEnumerator {
 	 * @return the list of available fields
 	 */
 	public static List<JsonBean> getAllAvailableFields(boolean internalUse) {
-		return (new FieldsEnumerator(internalUse)).getAllAvailableFields(AmpActivityFields.class, null);
+		return (new FieldsEnumerator(internalUse)).getAllAvailableFields(AmpActivityFields.class, 
+				new ArrayDeque<Interchangeable>());
 	}
 
 	/**
@@ -257,7 +262,7 @@ public class FieldsEnumerator {
 	 * @param clazz the class to be described
 	 * @return
 	 */
-	private List<JsonBean> getAllAvailableFields(Class<?> clazz, Interchangeable parentInterchangeable) {
+	private List<JsonBean> getAllAvailableFields(Class<?> clazz, Deque<Interchangeable> intchStack) {
 		List<JsonBean> result = new ArrayList<JsonBean>();
 		//StopWatch.next("Descending into", false, clazz.getName());
 		Field[] fields = clazz.getDeclaredFields();
@@ -266,30 +271,32 @@ public class FieldsEnumerator {
 			if (interchangeable == null || !internalUse && InterchangeUtils.isAmpActivityVersion(field.getType())) {
 				continue;
 			}
+			intchStack.push(interchangeable);
 			if (!InterchangeUtils.isCompositeField(field) || hasFieldDiscriminatorClass(field)) {
 				InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
 				
-				if (!FMVisibility.isVisible(interchangeable.fmPath(), parentInterchangeable)) {
-					continue;
-				}
-				JsonBean descr = describeField(field, interchangeable, discriminator);
-				if (descr != null) {
-					result.add(descr);
+				if (FMVisibility.isVisible(interchangeable.fmPath(), intchStack)) {
+					JsonBean descr = describeField(field, intchStack, discriminator);
+					if (descr != null) {
+						result.add(descr);
+					}
 				}
 			} else {
 				InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
 				Interchangeable[] settings = discriminator.settings();
 				for (int i = 0; i < settings.length; i++) {
 					String fmPath = settings[i].fmPath();
-					if (!FMVisibility.isVisible(fmPath, parentInterchangeable)) {
-						continue;
-					}
-					JsonBean descr = describeField(field, settings[i], discriminator);
-					if (descr != null) {
-						result.add(descr);
+					if (FMVisibility.isVisible(fmPath, intchStack)) {
+						intchStack.push(settings[i]);
+						JsonBean descr = describeField(field, intchStack, discriminator);
+						if (descr != null) {
+							result.add(descr);
+						}
+						intchStack.pop();
 					}
 				}
 			}
+			intchStack.pop();
 		}
 		return result;
 	}
@@ -333,12 +340,12 @@ public class FieldsEnumerator {
 	 * @param clazz the class to be described
 	 * @return
 	 */
-	private String getPercentageConstraint(Field field, Interchangeable parentInterchangeable) {
+	private String getPercentageConstraint(Field field, Deque<Interchangeable> intchStack) {
 		Class<?> genericClass = InterchangeUtils.getGenericClass(field);
 		Field[] fields = genericClass.getDeclaredFields();
 		for (Field f : fields) {
 			Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
-			if (interchangeable != null && FMVisibility.isVisible(interchangeable.fmPath(), parentInterchangeable) 
+			if (interchangeable != null && FMVisibility.isVisible(interchangeable.fmPath(), intchStack) 
 					&& interchangeable.percentageConstraint()) {
 				return InterchangeUtils.underscorify(interchangeable.fieldTitle());
 			}
@@ -354,12 +361,12 @@ public class FieldsEnumerator {
 	 * @param clazz the class to be described
 	 * @return
 	 */
-	private String getUniqueConstraint(Field field, Interchangeable parentInterchangeable) {
+	private String getUniqueConstraint(Field field, Deque<Interchangeable> intchStack) {
 		Class<?> genericClass = InterchangeUtils.getGenericClass(field);
 		Field[] fields = genericClass.getDeclaredFields();
 		for (Field f : fields) {
 			Interchangeable interchangeable = f.getAnnotation(Interchangeable.class);
-			if (interchangeable != null && FMVisibility.isVisible(interchangeable.fmPath(), parentInterchangeable) 
+			if (interchangeable != null && FMVisibility.isVisible(interchangeable.fmPath(), intchStack) 
 					&& interchangeable.uniqueConstraint()) {
 				return InterchangeUtils.underscorify(interchangeable.fieldTitle());
 			}

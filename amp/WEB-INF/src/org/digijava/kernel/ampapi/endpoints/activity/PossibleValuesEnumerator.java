@@ -21,6 +21,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -154,14 +155,17 @@ public class PossibleValuesEnumerator {
 		}
 		/*AmpActivitySector || AmpComponentFunding || AmpActivityProgram*/
 		List<Object[]> items;
-		if (InterchangeUtils.getClassOfField(field).equals(AmpSector.class)) {
+		Class<?> clazz = InterchangeUtils.getClassOfField(field);
+		if (clazz.equals(AmpSector.class)) {
 			items = getSpecialCaseObjectList(configValue, "all_sectors_with_levels",
 					 "ampSectorId", "name", "sector_config_name", "amp_sector_id", AmpSector.class);
-		} else if  (InterchangeUtils.getClassOfField(field).equals(AmpTheme.class)) {
+		} else if (clazz.equals(AmpTheme.class)) {
 			items = getSpecialCaseObjectList(configValue, "all_programs_with_levels",
 					 "ampThemeId", "name", "program_setting_name", "amp_theme_id", AmpTheme.class);
-		} else if (InterchangeUtils.getClassOfField(field).equals(AmpCategoryValue.class)){
+		} else if (clazz.equals(AmpCategoryValue.class)){
 			return getPossibleCategoryValues(field, configValue);
+		} else if (clazz.equals(AmpFundingAmount.class)){
+			return new ArrayList<JsonBean>();
 		} else {
 			//not a complex field, after all
 			return getPossibleValuesForField(field);

@@ -416,9 +416,16 @@ public class ActivityImporter {
 				Object res = null;
 				if (isCollection) {
 					try {
-						Object newSubElement = subElementClass.newInstance();
-						Object oldSubElement = null;
-						res = validateAndImport(newSubElement, oldSubElement, childrenFields, newChild, oldChild, fieldPath);
+						Long objId = getElementId(fieldDef, newJsonValue);
+						Object newSubElement = null;
+						// TODO: make it generic. Given unexpected need to support, I have to proceed very custom...
+						boolean isAFA = AmpFundingAmount.class.isAssignableFrom(subElementClass);
+						if (isAFA && objId != null) {	
+							newSubElement = getObjectReferencedById(subElementClass, objId);
+						} else {
+							newSubElement = subElementClass.newInstance();
+						}
+						res = validateAndImport(newSubElement, null, childrenFields, newChild, oldChild, fieldPath);
 					} catch (InstantiationException | IllegalAccessException e) {
 						logger.error(e.getMessage());
 						throw new RuntimeException(e);
@@ -439,6 +446,28 @@ public class ActivityImporter {
 			// TODO: we also need to validate other children, some can be mandatory
 		}
 		return newParent;
+	}
+	
+	/**
+	 * Identifies if an existing object has to be worked with
+	 * @param fieldDefOfAnObject
+	 * @param jsonValue
+	 * @return
+	 */
+	private Long getElementId(JsonBean fieldDefOfAnObject, Object jsonValue) {
+		List<JsonBean> children  = (List<JsonBean>) fieldDefOfAnObject.get(ActivityEPConstants.CHILDREN);
+		if (children != null && jsonValue != null) {
+			for (JsonBean childDef : children) {
+				if (Boolean.TRUE.equals(childDef.get(ActivityEPConstants.ID))) {
+					String idFieldName = childDef.getString(ActivityEPConstants.FIELD_NAME);
+					String idStr = String.valueOf(((List<Map<String, Object>>) jsonValue).get(0).get(idFieldName));
+					if (StringUtils.isNumeric(idStr))
+						return Long.valueOf(idStr);
+					break;
+				}
+			}
+		}
+		return null;
 	}
 	
 	/**

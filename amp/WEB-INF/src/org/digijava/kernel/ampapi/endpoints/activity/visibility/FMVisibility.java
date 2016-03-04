@@ -1,7 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.activity.visibility;
 
 import java.util.Date;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -32,10 +34,16 @@ public class FMVisibility {
 	 * @param fmPath, the String with the FM path
 	 * @return true if is enabled, false otherwise
 	 */
-	public static boolean isFmPathEnabled(String fmPath, Interchangeable interchangeable) {
+	public static boolean isFmPathEnabled(String fmPath, Deque<Interchangeable> intchStack) {
 		// pre-process
-		if (fmPath.contains(PARENT_FM)) {
-			fmPath = fmPath.replace(PARENT_FM, interchangeable.fmPath());
+		if (intchStack != null) {
+			Iterator<Interchangeable> iter = intchStack.iterator();
+			while (iter.hasNext() && fmPath.contains(PARENT_FM)) {
+				Interchangeable interchangeable = iter.next();
+				// skipping current field interchangeable path if it was pushed to the queue
+				if (!fmPath.equals(interchangeable.fmPath()))
+					fmPath = fmPath.replace(PARENT_FM, interchangeable.fmPath());
+			}
 		}
 		if (fmPath.startsWith(ANY_FM)) {
 			for(String anyFMOption : fmPath.substring(ANY_FM.length()).split("\\|")) {
@@ -73,7 +81,7 @@ public class FMVisibility {
 	 * @param field the field to determine its visibility
 	 * @return true if the field is visible, false otherwise
 	 */
-	public static boolean isVisible(String fmPath, Interchangeable interchangeable) {
+	public static boolean isVisible(String fmPath, Deque<Interchangeable> intchStack) {
 		if (fmPath == null)
 			return true;
 		HttpSession session = TLSUtils.getRequest().getSession();
@@ -82,7 +90,7 @@ public class FMVisibility {
 		if (fmPath.equals("")) {
 			isVisible = true;
 		} else {
-			isVisible = isFmPathEnabled(fmPath, interchangeable);
+			isVisible = isFmPathEnabled(fmPath, intchStack);
 		}
 		return isVisible;
 	}

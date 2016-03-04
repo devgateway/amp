@@ -98,8 +98,7 @@ public class EndpointUtils {
 			appSettings = getAppSettings();
 		if(appSettings != null && appSettings.getCurrency() != null)
 			return appSettings.getCurrency();
-		return CurrencyUtil.getDefaultCurrency();
-
+		return CurrencyUtil.getBaseCurrency();
 	}
 
 	/**
@@ -109,7 +108,7 @@ public class EndpointUtils {
 		AmpApplicationSettings appSettings = getAppSettings();
 		if(appSettings != null)
 			return String.valueOf(appSettings.getFiscalCalendar().getIdentifier());
-		return String.valueOf(DbUtil.getBaseFiscalCalendar());
+		return String.valueOf(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR));
 	}
 	
 	/**

@@ -2352,15 +2352,14 @@ function collapseAll() {
 									<li>
 										<b><bean:write name="respOrganisations" property="name"/></b>
 										<c:set var="tempOrgId" scope="page">${respOrganisations.ampOrgId}</c:set>
-										<!-- Additional Info field not found in the new activity form-->
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrgToInfo(${tempOrgId})">
 											<b>(<c:out value="${aimEditActivityForm.agencies.respOrgToInfo[tempOrgId]}"/>)</b>
 										</logic:notEmpty>
-										 <field:display name="Responsible Organization Percentage"  feature="Responsible Organization">
+										<module:display name="/Activity Form/Organizations/Responsible Organization/percentage" parentModule="/Activity Form/Organizations/Responsible Organization">
  	 	 	 		                         <logic:notEmpty name="aimEditActivityForm" property="agencies.respOrgPercentage(${tempOrgId})" >
 												<c:out value="${aimEditActivityForm.agencies.respOrgPercentage[tempOrgId]}" /> %
  	 	 	 								</logic:notEmpty>
- 	 	 	 							</field:display>
+ 	 	 	 							</module:display>
 									</li>
 								</ul>
 							</logic:iterate>
@@ -2386,15 +2385,14 @@ function collapseAll() {
 								<li>
 									<b><bean:write name="execAgencies" property="name" /></b>
 									<c:set var="tempOrgId">${execAgencies.ampOrgId}</c:set>
-									<!-- Additional Info field not found in the new activity form-->
 									<logic:notEmpty name="aimEditActivityForm" property="agencies.executingOrgToInfo(${tempOrgId})">
 										<b>(<c:out value="${aimEditActivityForm.agencies.executingOrgToInfo[tempOrgId]}"/>)</b>
 									</logic:notEmpty>
-									<field:display name="Executing Agency Percentage"  feature="Executing Agency">
+									<module:display name="/Activity Form/Organizations/Executing Agency/percentage" parentModule="/Activity Form/Organizations/Executing Agency">
                                         <logic:notEmpty name="aimEditActivityForm" property="agencies.executingOrgPercentage(${tempOrgId})" >
                                           <c:out value="${aimEditActivityForm.agencies.executingOrgPercentage[tempOrgId]}" /> %
                                         </logic:notEmpty>
-                                    </field:display>
+                                    </module:display>
 								</li>
 							</ul>
 						</logic:iterate>
@@ -2420,15 +2418,14 @@ function collapseAll() {
 									<li>
 										<b><bean:write name="impAgencies" property="name" /></b>
 										<c:set var="tempOrgId">${impAgencies.ampOrgId}</c:set>
-										<!-- Additional Info field not found in the new activity form-->
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.impOrgToInfo(${tempOrgId})">
 											<b>(<c:out value="${aimEditActivityForm.agencies.impOrgToInfo[tempOrgId]}"/>)</b>
 										</logic:notEmpty>
-										<field:display name="Implementing Agency Percentage"  feature="Implementing Agency">
+										<module:display name="/Activity Form/Organizations/Implementing Agency/percentage" parentModule="/Activity Form/Organizations/Implementing Agency">
                                             <logic:notEmpty name="aimEditActivityForm" property="agencies.impOrgPercentage(${tempOrgId})" >
                                               <c:out value="${aimEditActivityForm.agencies.impOrgPercentage[tempOrgId]}" /> %
                                             </logic:notEmpty>
-                                        </field:display>
+                                        </module:display>
 									</li>
 								</ul>
 							 </logic:iterate>
@@ -2458,11 +2455,11 @@ function collapseAll() {
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.benOrgToInfo(${tempOrgId})">
 											<b>(<c:out value="${aimEditActivityForm.agencies.benOrgToInfo[tempOrgId]}"/>)</b>
 										</logic:notEmpty>
-										<field:display name="Beneficiary Agency  Percentage"  feature="Beneficiary Agency">
+										<module:display name="/Activity Form/Organizations/Beneficiary Agency/percentage" parentModule="/Activity Form/Organizations/Beneficiary Agency">
                                             <logic:notEmpty name="aimEditActivityForm" property="agencies.benOrgPercentage(${tempOrgId})" >
                                               <c:out value="${aimEditActivityForm.agencies.benOrgPercentage[tempOrgId]}" /> %
                                             </logic:notEmpty>
-                                        </field:display>
+                                        </module:display>
 									</li>
 								</ul>
 							</logic:iterate>
@@ -2488,15 +2485,14 @@ function collapseAll() {
 									<li>
 										<b><bean:write name="conAgencies" property="name" /></b>
 										<c:set var="tempOrgId">${conAgencies.ampOrgId}</c:set>
-										<!-- Additional Info field not found in the new activity form-->
 										<logic:notEmpty name="aimEditActivityForm" property="agencies.conOrgToInfo(${tempOrgId})">
 											<b>(<c:out value="${aimEditActivityForm.agencies.conOrgToInfo[tempOrgId]}"/> )</b>
 										</logic:notEmpty>
-										<field:display name="Contracting Agency Percentage"  feature="Contracting Agency">
+										<module:display name="/Activity Form/Organizations/Contracting Agency/percentage" parentModule="/Activity Form/Organizations/Contracting Agency">
                                             <logic:notEmpty name="aimEditActivityForm" property="agencies.conOrgPercentage(${tempOrgId})" >
                                               <c:out value="${aimEditActivityForm.agencies.conOrgPercentage[tempOrgId]}" /> %
                                             </logic:notEmpty>
-                                        </field:display>
+                                        </module:display>
 									</li>
 								</ul>
 							</logic:iterate>
@@ -2529,11 +2525,11 @@ function collapseAll() {
 									<logic:notEmpty name="aimEditActivityForm" property="agencies.sectOrgToInfo(${tempOrgId})">
 										<b>(<c:out value="${aimEditActivityForm.agencies.sectOrgToInfo[tempOrgId]}"/> )</b>									
 									</logic:notEmpty>
-									<field:display name="Sector Group Percentage"  feature="Sector Group">
-																		<logic:notEmpty name="aimEditActivityForm" property="agencies.sectOrgPercentage(${tempOrgId})" >
-																		  <c:out value="${aimEditActivityForm.agencies.sectOrgPercentage[tempOrgId]}" /> %
-																		</logic:notEmpty> 
-																	</field:display>
+									<module:display name="/Activity Form/Organizations/Sector Group/percentage" parentModule="/Activity Form/Organizations/Sector Group">
+										<logic:notEmpty name="aimEditActivityForm" property="agencies.sectOrgPercentage(${tempOrgId})" >
+										  <c:out value="${aimEditActivityForm.agencies.sectOrgPercentage[tempOrgId]}" /> %
+										</logic:notEmpty> 
+									</module:display>
 								</li>
 							</ul>
 						</logic:iterate></td>
@@ -2562,11 +2558,11 @@ function collapseAll() {
 												<logic:notEmpty property="agencies.regOrgToInfo(${tempOrgId})" name="aimEditActivityForm">
 													<b>(<c:out value="${aimEditActivityForm.agencies.regOrgToInfo[tempOrgId]}"/>)</b>												
 												</logic:notEmpty>
-												<field:display name="Regional Group Percentage"  feature="Regional Group">
-																	<logic:notEmpty name="aimEditActivityForm" property="agencies.regOrgPercentage(${tempOrgId})" >
-																	  <c:out value="${aimEditActivityForm.agencies.regOrgPercentage[tempOrgId]}" /> %
-																	</logic:notEmpty> 
-																</field:display>
+												<module:display name="/Activity Form/Organizations/Regional Group/percentage" parentModule="/Activity Form/Organizations/Regional Group">
+													<logic:notEmpty name="aimEditActivityForm" property="agencies.regOrgPercentage(${tempOrgId})" >
+													  <c:out value="${aimEditActivityForm.agencies.regOrgPercentage[tempOrgId]}" /> %
+													</logic:notEmpty> 
+												</module:display>
 											</li>
 										</ul>
 									</logic:iterate>								</td>

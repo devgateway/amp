@@ -2243,19 +2243,17 @@ body {background:none;}
 																		<ul><li>
 																			<bean:write name="respOrg" property="name" />
 																			<c:set var="tempOrgId" scope="page">${respOrg.ampOrgId}</c:set>
-																			<field:display name="Responsible Organization Additional Info"  feature="Responsible Organization">
-																				<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrgToInfo(${tempOrgId})" >
+																			<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrgToInfo(${tempOrgId})" >
 																				(  <c:out value="${aimEditActivityForm.agencies.respOrgToInfo[tempOrgId]}" /> )
-																				</logic:notEmpty>
-																			</field:display>
-																			</li></ul>
+																			</logic:notEmpty>
+																		</li></ul>
 																	</td>
 																	<td width="15%" align="right">
-																		<field:display name="Responsible Organization Percentage"  feature="Responsible Organization">
+																		<module:display name="/Activity Form/Organizations/Responsible Organization/percentage" parentModule="/Activity Form/Organizations/Responsible Organization">
 																			<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrgPercentage(${tempOrgId})" >
 																			  <c:out value="${aimEditActivityForm.agencies.respOrgPercentage[tempOrgId]}" /> %
 																			</logic:notEmpty>
-																		</field:display>
+																		</module:display>
 																	</td>
 																</tr>
 															</table>
@@ -2278,20 +2276,18 @@ body {background:none;}
 																	<td width="85%">
 																		<ul><li>
 																			<bean:write name="execAgencies" property="name" />
-																<c:set var="tempOrgId">${execAgencies.ampOrgId}</c:set>
-																<field:display name="Executing Agency Additional Info"  feature="Executing Agency">
-																	<logic:notEmpty name="aimEditActivityForm" property="agencies.executingOrgToInfo(${tempOrgId})" >
-																	(  <c:out value="${aimEditActivityForm.agencies.executingOrgToInfo[tempOrgId]}" /> )
-																	</logic:notEmpty>
-																</field:display>
-																			</li></ul>
+																			<c:set var="tempOrgId">${execAgencies.ampOrgId}</c:set>
+																			<logic:notEmpty name="aimEditActivityForm" property="agencies.executingOrgToInfo(${tempOrgId})" >
+																				(  <c:out value="${aimEditActivityForm.agencies.executingOrgToInfo[tempOrgId]}" /> )
+																			</logic:notEmpty>
+																		</li></ul>
 																	</td>
 																	<td width="15%" align="right">
-																		<field:display name="Executing Agency Percentage"  feature="Executing Agency">
+																	<module:display name="/Activity Form/Organizations/Executing Agency/percentage" parentModule="/Activity Form/Organizations/Executing Agency">
 																		<logic:notEmpty name="aimEditActivityForm" property="agencies.executingOrgPercentage(${tempOrgId})" >
 																		  <c:out value="${aimEditActivityForm.agencies.executingOrgPercentage[tempOrgId]}" /> %
 																		</logic:notEmpty>
-																</field:display>
+																	</module:display>
 																	</td>
 																</tr>
 															</table>
@@ -2314,21 +2310,18 @@ body {background:none;}
 																	<td width="85%">
 																		<ul><li>
 																			<bean:write name="impAgencies" property="name" />
-																	<c:set var="tempOrgId">${impAgencies.ampOrgId}</c:set>
-																	<field:display name="Implementing Agency Additional Info"  feature="Implementing Agency">
-																		<logic:notEmpty name="aimEditActivityForm" property="agencies.impOrgToInfo(${tempOrgId})" >
-																		(  <c:out value="${aimEditActivityForm.agencies.impOrgToInfo[tempOrgId]}" /> )
-																		</logic:notEmpty>
-																	</field:display>
-																			</li></ul>
+																			<c:set var="tempOrgId">${impAgencies.ampOrgId}</c:set>
+																			<logic:notEmpty name="aimEditActivityForm" property="agencies.impOrgToInfo(${tempOrgId})" >
+																				(  <c:out value="${aimEditActivityForm.agencies.impOrgToInfo[tempOrgId]}" /> )
+																			</logic:notEmpty>
+																		</li></ul>
 																	</td>
 																	<td width="15%" align="right">
-																		<field:display name="Implementing Agency Percentage"  feature="Implementing Agency">
-																		<logic:notEmpty name="aimEditActivityForm" property="agencies.impOrgPercentage(${tempOrgId})" >
-																		  <c:out value="${aimEditActivityForm.agencies.impOrgPercentage[tempOrgId]}" /> %
-																		</logic:notEmpty>
-																	</field:display>
-
+																		<module:display name="/Activity Form/Organizations/Implementing Agency/percentage" parentModule="/Activity Form/Organizations/Implementing Agency">
+																			<logic:notEmpty name="aimEditActivityForm" property="agencies.impOrgPercentage(${tempOrgId})" >
+																			  <c:out value="${aimEditActivityForm.agencies.impOrgPercentage[tempOrgId]}" /> %
+																			</logic:notEmpty>
+																		</module:display>
 																	</td>
 																</tr>
 															</table>
@@ -2353,20 +2346,17 @@ body {background:none;}
 																		<ul><li>
 																			<bean:write name="benAgency" property="name" />
 																		<c:set var="tempOrgId">${benAgency.ampOrgId}</c:set>
-																		<field:display name="Beneficiary Agency  Additional Info"  feature="Beneficiary Agency">
 																			<logic:notEmpty name="aimEditActivityForm" property="agencies.benOrgToInfo(${tempOrgId})" >
-																			(  <c:out value="${aimEditActivityForm.agencies.benOrgToInfo[tempOrgId]}" /> )
+																				(  <c:out value="${aimEditActivityForm.agencies.benOrgToInfo[tempOrgId]}" /> )
 																			</logic:notEmpty>
-																		</field:display>
 																			</li></ul>
 																	</td>
 																	<td width="15%" align="right">
-																		<field:display name="Beneficiary Agency  Percentage"  feature="Beneficiary Agency">
+																		<module:display name="/Activity Form/Organizations/Beneficiary Agency/percentage" parentModule="/Activity Form/Organizations/Beneficiary Agency">
 																			<logic:notEmpty name="aimEditActivityForm" property="agencies.benOrgPercentage(${tempOrgId})" >
 																			  <c:out value="${aimEditActivityForm.agencies.benOrgPercentage[tempOrgId]}" /> %
 																			</logic:notEmpty>
-																		</field:display>
-
+																		</module:display>
 																	</td>
 																</tr>
 															</table>
@@ -2388,21 +2378,18 @@ body {background:none;}
 																	<td width="85%">
 																		<ul><li>
 																			<bean:write name="conAgencies" property="name" />
-																<c:set var="tempOrgId">${conAgencies.ampOrgId}</c:set>
-																	<field:display name="Contracting Agency Additional Info"  feature="Contracting Agency">
-																		<logic:notEmpty name="aimEditActivityForm" property="agencies.conOrgToInfo(${tempOrgId})" >
-																		(  <c:out value="${aimEditActivityForm.agencies.conOrgToInfo[tempOrgId]}" /> )
-																		</logic:notEmpty>
-																	</field:display>
-																			</li></ul>
+																			<c:set var="tempOrgId">${conAgencies.ampOrgId}</c:set>
+																			<logic:notEmpty name="aimEditActivityForm" property="agencies.conOrgToInfo(${tempOrgId})" >
+																				(  <c:out value="${aimEditActivityForm.agencies.conOrgToInfo[tempOrgId]}" /> )
+																			</logic:notEmpty>
+																		</li></ul>
 																	</td>
 																	<td width="15%" align="right">
-																		<field:display name="Contracting Agency Percentage"  feature="Contracting Agency">
-																		<logic:notEmpty name="aimEditActivityForm" property="agencies.conOrgPercentage(${tempOrgId})" >
-																		  <c:out value="${aimEditActivityForm.agencies.conOrgPercentage[tempOrgId]}" /> %
-																		</logic:notEmpty>
-																	</field:display>
-
+																		<module:display name="/Activity Form/Organizations/Contracting Agency/percentage" parentModule="/Activity Form/Organizations/Contracting Agency">
+																			<logic:notEmpty name="aimEditActivityForm" property="agencies.conOrgPercentage(${tempOrgId})" >
+																			  <c:out value="${aimEditActivityForm.agencies.conOrgPercentage[tempOrgId]}" /> %
+																			</logic:notEmpty>
+																		</module:display>
 																	</td>
 																</tr>
 															</table>
@@ -2413,41 +2400,37 @@ body {background:none;}
 											</logic:notEmpty><br/>
 											</module:display>
 											<module:display name="/Activity Form/Organizations/Sector Group" parentModule="/Activity Form/Organizations">
-											<logic:notEmpty name="aimEditActivityForm" property="agencies.sectGroups">
-											<field:display name="Sector Group" feature="Sector Group">
-											<b><digi:trn key="aim:sectorGroup">Sector Group</digi:trn></b><br/>
-												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
-														<tr><td>
-														<logic:iterate name="aimEditActivityForm" property="agencies.sectGroups"
-														id="sectGroup" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-															<table width="100%">
-																<tr>
-																	<td width="85%">
-																		<ul><li>
-																			<bean:write name="sectGroup" property="name" />
-																			<c:set var="tempOrgId">${sectGroup.ampOrgId}</c:set>
-																			<field:display name="Sector Group Additional Info"  feature="Sector Group">
-																				<logic:notEmpty name="aimEditActivityForm" property="agencies.sectOrgToInfo(${tempOrgId})" >
-																				(  <c:out value="${aimEditActivityForm.agencies.sectOrgToInfo[tempOrgId]}" /> )
-																				</logic:notEmpty>
-																			</field:display>
-																			</li></ul>
-																	</td>
-																	<td width="15%" align="right">
-																		<field:display name="Sector Group Percentage"  feature="Sector Group">
-																			<logic:notEmpty name="aimEditActivityForm" property="agencies.sectOrgPercentage(${tempOrgId})" >
-																			  <c:out value="${aimEditActivityForm.agencies.sectOrgPercentage[tempOrgId]}" /> %
-																			</logic:notEmpty>
-																		</field:display>
-																	</td>
-																</tr>
+												<logic:notEmpty name="aimEditActivityForm" property="agencies.sectGroups">
+													<b><digi:trn key="aim:sectorGroup">Sector Group</digi:trn></b><br/>
+														<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+																<tr><td>
+																<logic:iterate name="aimEditActivityForm" property="agencies.sectGroups"
+																id="sectGroup" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+																	<table width="100%">
+																		<tr>
+																			<td width="85%">
+																				<ul><li>
+																					<bean:write name="sectGroup" property="name" />
+																					<c:set var="tempOrgId">${sectGroup.ampOrgId}</c:set>
+																					<logic:notEmpty name="aimEditActivityForm" property="agencies.sectOrgToInfo(${tempOrgId})" >
+																						(  <c:out value="${aimEditActivityForm.agencies.sectOrgToInfo[tempOrgId]}" /> )
+																					</logic:notEmpty>
+																				</li></ul>
+																			</td>
+																			<td width="15%" align="right">
+																				<module:display name="/Activity Form/Organizations/Sector Group/percentage" parentModule="/Activity Form/Organizations/Sector Group">
+																					<logic:notEmpty name="aimEditActivityForm" property="agencies.sectOrgPercentage(${tempOrgId})" >
+																					  <c:out value="${aimEditActivityForm.agencies.sectOrgPercentage[tempOrgId]}" /> %
+																					</logic:notEmpty>
+																				</module:display>
+																			</td>
+																		</tr>
+																	</table>
+																</logic:iterate>
+																</td></tr>
 															</table>
-														</logic:iterate>
-														</td></tr>
-													</table>
-											<br/>
-											</field:display>
-											</logic:notEmpty>
+													<br/>
+												</logic:notEmpty>
 											</module:display>
 
 											<module:display name="/Activity Form/Organizations/Regional Group" parentModule="/Activity Form/Organizations">
@@ -2462,20 +2445,18 @@ body {background:none;}
 																	<td width="85%">
 																		<ul><li>
 																			<bean:write name="regGroup" property="name" />
-																<c:set var="tempOrgId">${regGroup.ampOrgId}</c:set>
-																<field:display name="Regional Group Additional Info"  feature="Regional Group">
-																	<logic:notEmpty property="agencies.regOrgToInfo(${tempOrgId})"  name="aimEditActivityForm">
-																		(  <c:out value="${aimEditActivityForm.agencies.regOrgToInfo[tempOrgId]}" /> )
-																	</logic:notEmpty>
-																</field:display>
-																			</li></ul>
+																			<c:set var="tempOrgId">${regGroup.ampOrgId}</c:set>
+																			<logic:notEmpty property="agencies.regOrgToInfo(${tempOrgId})"  name="aimEditActivityForm">
+																				(  <c:out value="${aimEditActivityForm.agencies.regOrgToInfo[tempOrgId]}" /> )
+																			</logic:notEmpty>
+																		</li></ul>
 																	</td>
 																	<td width="15%" align="right">
-																		<field:display name="Regional Group Percentage"  feature="Regional Group">
-																	<logic:notEmpty name="aimEditActivityForm" property="agencies.regOrgPercentage(${tempOrgId})" >
-																	  <c:out value="${aimEditActivityForm.agencies.regOrgPercentage[tempOrgId]}" /> %
-																	</logic:notEmpty>
-																</field:display>
+																		<module:display name="/Activity Form/Organizations/Regional Group/percentage" parentModule="/Activity Form/Organizations/Regional Group">
+																			<logic:notEmpty name="aimEditActivityForm" property="agencies.regOrgPercentage(${tempOrgId})" >
+																			  <c:out value="${aimEditActivityForm.agencies.regOrgPercentage[tempOrgId]}" /> %
+																			</logic:notEmpty>
+																		</module:display>
 																	</td>
 																</tr>
 															</table>
@@ -2487,10 +2468,6 @@ body {background:none;}
                                            </td>
 									</tr>
 									</module:display>
-
-
-
-
 
                                     <module:display name="/Activity Form/Contacts" parentModule="/Activity Form">
 									<module:display name="/Activity Form/Contacts/Donor Contact Information" parentModule="/Activity Form/Contacts">

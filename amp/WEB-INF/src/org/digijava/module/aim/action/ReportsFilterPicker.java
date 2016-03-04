@@ -3,6 +3,22 @@
  */
 package org.digijava.module.aim.action;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -19,14 +35,45 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.ar.util.ReportsUtil;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.OrgTypeSkeleton;
 import org.digijava.module.aim.form.DynamicDateFilter;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.*;
+import org.digijava.module.aim.util.AmpMath;
+import org.digijava.module.aim.util.AmpThemeSkeleton;
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.digijava.module.aim.util.HierarchyListableUtil;
+import org.digijava.module.aim.util.LocationSkeleton;
+import org.digijava.module.aim.util.MEIndicatorsUtil;
+import org.digijava.module.aim.util.OrgGroupSkeleton;
+import org.digijava.module.aim.util.OrganizationSkeleton;
+import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.SectorSkeleton;
+import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.aim.util.filters.DateListableImplementation;
 import org.digijava.module.aim.util.filters.GroupingElement;
@@ -35,23 +82,9 @@ import org.digijava.module.aim.util.time.StopWatch;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.contentrepository.helper.FilterValues;
-import org.hibernate.LazyInitializationException;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.jdbc.Work;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.DecimalFormat;
-import java.util.*;
 
 /**
  * @author mihai
@@ -301,7 +334,7 @@ public class ReportsFilterPicker extends Action {
 	
 	private static void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode, String rootElementName, String filterDivId, String selectId, boolean includeParent)
 	{		
-	 	if (FeaturesUtil.isVisibleFeature(featureName) ) {
+	 	if (FeaturesUtil.isVisibleModule("/Activity Form/Organizations/" + featureName) ) {
  	 		Collection<AmpOrganisation> relevantAgencies = (ReportsUtil.getAllOrgByRoleOfPortfolio(roleCode));
  	 		HierarchyListableUtil.changeTranslateable(relevantAgencies, false);
  	 		HierarchyListableImplementation rootRelevantAgencies = new HierarchyListableImplementation("All " + rootElementName, "0", relevantAgencies);
@@ -318,7 +351,7 @@ public class ReportsFilterPicker extends Action {
 	private static void addAgencyFilterFaster(ReportsFilterPickerForm filterForm, String featureName, String roleCode, String rootElementName, String filterDivId, String selectId, boolean includeParent)
 	{		
 		
-	 	if (FeaturesUtil.isVisibleFeature(featureName) ) {
+	 	if (FeaturesUtil.isVisibleModule("/Activity Form/Organizations/" + featureName)) {
  	 		List<OrganizationSkeleton> relevantAgencies = ReportsUtil.getAllOrgByRoleOfPortfolioFaster(roleCode);
  	 		HierarchyListableUtil.changeTranslateable(relevantAgencies, false);
  	 		HierarchyListableImplementation rootRelevantAgencies = new HierarchyListableImplementation("All " + rootElementName, "0", relevantAgencies);

@@ -665,7 +665,8 @@ public class SettingsUtils {
 	 * @param setDefaults: if true AND there is no range setting in @reportSettings, then reportSettings will be populated with the workspace/system's default 
 	 */
 	public static void configureYearRange(MondrianReportSettings reportSettings, Map<String, Object> settings, boolean setDefaults) {
-		ReportElement yearRangeElement = new ReportElement(ElementType.YEAR); 
+		ReportElement yearRangeElement = new ReportElement(ElementType.YEAR);
+		/* Disabling original workaround when year range setting was not implemented in Settings Widget
 		boolean preExistingYearRangeSetting = (reportSettings.getFilterRules().get(yearRangeElement) != null) && 
 				(!reportSettings.getFilterRules().get(yearRangeElement).isEmpty());
 		
@@ -674,6 +675,7 @@ public class SettingsUtils {
 				reportSettings.getCalendar().getAmpFiscalCalId().equals(
 						reportSettings.getOldCalendar().getAmpFiscalCalId())))
 			return;
+		*/
 		
 		// apply year range settings
 		Integer start = null;

@@ -1482,6 +1482,11 @@ public class ExportActivityToWord extends Action {
             columnName=TranslatorWorker.translateText("Actual Completion Date")+": ";
             generateOverAllTableRows(planningSubTable1,columnName,planning.getCurrentCompDate(),null);
         }
+        
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Project Implementation Delay")) {
+            columnName = TranslatorWorker.translateText("Project Implementation Delay") + ": ";
+            generateOverAllTableRows(planningSubTable1, columnName, planning.getProjectImplementationDelay(), null);
+        }
 
         if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Contracting")){
             columnName=TranslatorWorker.translateText("Final Date for Contracting")+": ";

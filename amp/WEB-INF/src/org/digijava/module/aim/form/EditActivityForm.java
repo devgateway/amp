@@ -1937,6 +1937,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String disbursementsDate;
 		private String proposedCompDate;
 		private String originalCompDate;
+		private String projectImplementationDelay;
 		private String currentCompDate;
 		private String revisedCompDate;
 		private Collection activityCloseDates;
@@ -2020,6 +2021,20 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			return this.currentCompDate;
 		}
 		
+		/**
+		 * @return the projectImplementationDelay
+		 */
+		public String getProjectImplementationDelay() {
+			return projectImplementationDelay;
+		}
+
+		/**
+		 * @param projectImplementationDelay the projectImplementationDelay to set
+		 */
+		public void setProjectImplementationDelay(String projectImplementationDelay) {
+			this.projectImplementationDelay = projectImplementationDelay;
+		}
+
 		@java.lang.SuppressWarnings("all")
 		public String getRevisedCompDate() {
 			return this.revisedCompDate;

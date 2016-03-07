@@ -766,6 +766,16 @@ body {background:none;}
 														<c:out value="${aimEditActivityForm.planning.currentCompDate}"/>													</td>
 												</tr>
 												</module:display>
+												
+												<module:display name="/Activity Form/Planning/Project Implementation Delay" parentModule="/Activity Form/Planning">
+												<tr>
+													<td width="32%">
+													<digi:trn>Project Implementation Delay</digi:trn></td>
+													<td width="1">:</td>
+													<td align="left">
+														<c:out value="${aimEditActivityForm.planning.projectImplementationDelay}"/>													</td>
+												</tr>
+												</module:display>
 
 												<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT">
 													<feature:display name="Planning" module="Project ID and Planning">

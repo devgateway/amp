@@ -1046,6 +1046,8 @@ public class EditActivity extends Action {
           eaForm.getPlanning().setCurrentCompDate(DateConversion
                                     .ConvertDateToString(activity
                                             .getActualCompletionDate()));
+          eaForm.getPlanning().setProjectImplementationDelay(DateConversion.getFormattedPeriod(
+        		  ActivityUtil.getProjectImplementationDelay(activity)));
 
           /*eaForm.getPlanning().setProposedCompDate(DateConversion.ConvertDateToString(
               activity.getProposedCompletionDate()));*/

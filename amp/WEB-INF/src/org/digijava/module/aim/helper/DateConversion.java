@@ -2,17 +2,20 @@ package org.digijava.module.aim.helper ;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.onepager.models.MTEFYearsModel;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.joda.time.LocalDateTime;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
+import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
 
 
 public class DateConversion
@@ -140,6 +143,39 @@ public class DateConversion
 		//if ( logger.isDebugEnabled() )
 			//logger.debug("getYear returning year="+yr) ;
 		return yr ;
+	}
+	
+	public static String getFormattedPeriod(Date from, Date to) {
+		return getFormattedPeriod(getPeriod(from, to));
+	}
+	
+	public static Period getPeriod(Date from, Date to) {
+		if (from == null || to == null)
+			return null;
+		
+		LocalDateTime fromLDT = LocalDateTime.fromDateFields(from);
+		LocalDateTime toLDT = LocalDateTime.fromDateFields(to);
+		return new Period(fromLDT, toLDT, PeriodType.yearMonthDayTime());
+	}
+	
+	public static String getFormattedPeriod(Period period) {
+		if (period == null)
+			return null;
+		PeriodFormatter formatter = getPeriodFormatter();
+		return formatter.print(period);
+	}
+	
+	public static PeriodFormatter getPeriodFormatter() {
+		String yearTrn = " " + TranslatorWorker.translateText("year");
+		String yearsTrn = " " + TranslatorWorker.translateText("years");
+		String monthTrn = " " + TranslatorWorker.translateText("month");
+		String monthsTrn = " " + TranslatorWorker.translateText("months");
+		String dayTrn = " " + TranslatorWorker.translateText("day");
+		String daysTrn = " " + TranslatorWorker.translateText("days");
+		return new PeriodFormatterBuilder()
+				.printZeroRarelyFirst().appendYears().appendSuffix(yearTrn, yearsTrn).appendSeparator(" ")
+				.printZeroRarelyFirst().appendMonths().appendSuffix(monthTrn, monthsTrn).appendSeparator(" ")
+				.printZeroAlways().appendDays().appendSuffix(dayTrn, daysTrn).toFormatter();
 	}
 
 }

@@ -1273,7 +1273,13 @@ function collapseAll() {
 					</ul>		
 				</field:display>
 			</feature:display>
-		</module:display>							
+		</module:display>
+		
+		<module:display name="/Activity Form/Planning/Project Implementation Delay" parentModule="/Activity Form/Planning">
+			<hr>
+			<digi:trn>Project Implementation Delay</digi:trn>:&nbsp;
+			<b>${aimEditActivityForm.planning.projectImplementationDelay}</b>
+		</module:display>
 							
 		<module:display name="/Activity Form/Planning/Final Date for Contracting" parentModule="/Activity Form/Planning">
 			<hr>

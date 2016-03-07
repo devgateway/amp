@@ -69,6 +69,7 @@ import org.hibernate.jdbc.Work;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.StringType;
+import org.joda.time.Period;
 
 public class ActivityUtil {
 
@@ -1874,5 +1875,34 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 			    fmForFundingFlows+="/Funding Flows OrgRole Selector";
 			return fmForFundingFlows;
 		}
-	    	 
+
+	public static Period getProjectImplementationDelay(AmpActivityVersion activity) {
+		Date fromDate = activity.getOriginalCompDate();
+		if (fromDate == null)
+			return null;
+		// OPTION 1 - start
+		if (activity.getProposedCompletionDate() != null)
+			fromDate = activity.getProposedCompletionDate();
+		// OPTION 1 - end
+		
+		Date toDate = activity.getActualCompletionDate();
+		
+		if (toDate == null) {
+			// OPTION 1 - start
+			toDate = new Date(System.currentTimeMillis()); 
+			// OPTION 1 - end
+			/*
+			// OPTION 2 - start
+			toDate = activity.getProposedCompletionDate();
+			if (toDate == null || System.currentTimeMillis() > toDate.getTime())
+				toDate = new Date(System.currentTimeMillis());
+			// OPTION 2 - end
+			*/
+		}
+		
+		if (fromDate.before(toDate))
+			return DateConversion.getPeriod(fromDate, toDate);
+		return null;
+	}
+	
 } // End

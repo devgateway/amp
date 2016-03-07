@@ -14,6 +14,7 @@
 <digi:instance property="aimEditActivityForm" />
 <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements" 
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+<c:set var="transaction" value="Estimated Disbursements/Estimated Disbursements Table" scope="page"/>
 <c:if test="${aimEditActivityForm.funding.showPlanned}">
 <c:if test="${!empty funding.plannedEDDDetails}">
 	<tr bgcolor="#ffffff">

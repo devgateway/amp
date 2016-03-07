@@ -13,7 +13,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures"
                 parentModule="/Activity Form/Funding/Funding Group/Funding Item">
-
+<c:set var="transaction" value="Expenditures/Expenditures Table" scope="page"/>
     <!-- expenditures -->
     <digi:instance property="aimEditActivityForm" />
 

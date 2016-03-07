@@ -14,6 +14,7 @@
 <digi:instance property="aimEditActivityForm" />
 <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Release of Funds" 
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+<c:set var="transaction" value="Release of Funds/Release of Funds Table" scope="page"/>
 <c:if test="${aimEditActivityForm.funding.showPlanned}">
 <c:if test="${!empty funding.plannedRoFDetails}">
 	<tr bgcolor="#ffffff">

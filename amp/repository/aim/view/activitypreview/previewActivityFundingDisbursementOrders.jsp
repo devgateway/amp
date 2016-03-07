@@ -12,6 +12,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <digi:instance property="aimEditActivityForm" />
 
+<c:set var="transaction" value="Disbursment Orders/Disbursment Orders Table" scope="page"/>
 	<!-- Disbursement orders-->
 	<tr bgcolor="#ffffff">
 		<td height="7" colspan="5" bgcolor="#ffffff"></td>

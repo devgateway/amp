@@ -29,7 +29,11 @@ define(
 			// Initialize constants.
 			app.TabsApp.COLUMN_ACTIVITY_ID = 'Actvity Id';
 			app.TabsApp.TOTAL_COLUMNS_DATA_SUFIX = ' Totals';
+			app.TabsApp.TOTAL_COLUMNS_NAME_SUFIX = '[Totals]';
 			app.TabsApp.COLUMN_TYPE_MEASURE = 'MEASURE';
+			app.TabsApp.COLUMNS_WITH_IDS = ['AMP ID', 'Team'];
+			app.TabsApp.DEFAULT_ONE_PAGER_PARAMETER = 'activity';
+			app.TabsApp.MANAGER_TYPE = 'Management';
 
 			// Define 2 regions where the tab and the content will be drawn.
 			// Each region is mapped to a <section> element on the html.

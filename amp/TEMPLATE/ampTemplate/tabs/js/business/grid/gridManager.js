@@ -480,7 +480,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 						row['id'] = Math.random();
 					}
 					// Property entityId replaced column AMP_ID on NiReports.
-					if (element.entityId !== undefined) {
+					if (key === "[" + app.TabsApp.COLUMNS_WITH_IDS[0] + "]" && element.entityId !== undefined) {
 						row[app.TabsApp.COLUMN_ACTIVITY_ID] = element.entityId;
 					}
 				});

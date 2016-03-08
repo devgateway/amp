@@ -368,6 +368,7 @@ public class MondrianTablesRepository {
 	
 	public final static List<CurrencyAmountGroup> CURRENCY_GROUPS = Arrays.asList(
 			MONDRIAN_ACTIVITY_CURRENCY_NUMBERS.getCurrencyBlock("ppc_"),
+			MONDRIAN_ACTIVITY_CURRENCY_NUMBERS.getCurrencyBlock("rpc_"),
 			new CurrencyAmountGroup(MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE.tableName, FACT_TABLE.tableName, "amp_activity_id", "entity_id", ""));
 }
 

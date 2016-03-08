@@ -639,6 +639,11 @@
 				<Level name="Proposed Project Amount" type="Numeric" column="ppc_transaction_exch_@@currency@@" />
 			</Hierarchy>
 			
+			<Hierarchy hasAll="true" allMemberName="All Revised Project Amount" primaryKey="amp_activity_id" name="Revised Project Amount">
+				<Table name="mondrian_activity_currency_numbers" />
+				<Level name="Revised Project Amount" type="Numeric" column="rpc_transaction_exch_@@currency@@" />
+			</Hierarchy>
+			
 			<Hierarchy hasAll="true" allMemberName="All Forecast Execution Rate" primaryKey="entity_id" name="Forecast Execution Rate">
 				<View alias="v_forecast_execution_rate">
 					<SQL dialect="generic">

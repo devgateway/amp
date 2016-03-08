@@ -285,6 +285,7 @@ public final class MoConstants {
 	public static final String ATTR_PROGRAM_LEVEL_7_NAME = "Program Level 7 Name";
 	public static final String ATTR_PROGRAM_LEVEL_8_NAME = "Program Level 8 Name";
 	public static final String ATTR_PROPOSED_PROJECT_AMOUNT = "Proposed Project Amount";
+	public static final String ATTR_REVISED_PROJECT_AMOUNT = "Revised Project Amount";
 	public static final String ATTR_UNCOMMITTED_BALANCE = "Uncommitted Balance";
 	public static final String ATTR_PRIOR_ACTUAL_DISBURSEMENTS = "Prior Actual Disbursements";
 	public static final String ATTR_CUMULATED_DISBURSEMENTS = "Cumulated Disbursements";

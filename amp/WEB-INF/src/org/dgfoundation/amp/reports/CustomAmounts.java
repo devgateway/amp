@@ -19,6 +19,7 @@ public class CustomAmounts {
 		add(MeasureConstants.TOTAL_COMMITMENTS);
 		add(MeasureConstants.TOTAL_DISBURSEMENTS);
 		add(ColumnConstants.PROPOSED_PROJECT_AMOUNT);
+		add(ColumnConstants.REVISED_PROJECT_AMOUNT);
 		add(MeasureConstants.UNCOMMITTED_BALANCE);
 		add(MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE);
 	}};
@@ -28,7 +29,6 @@ public class CustomAmounts {
 		addAll(ACTIVITY_SUM_AMOUNTS);
 		// note: some measures from legacy reports are processed as columns in Mondrian 
 		add(MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS);
-		add(ColumnConstants.PROPOSED_PROJECT_AMOUNT);
 		add(ColumnConstants.TOTAL_GRAND_ACTUAL_COMMITMENTS);
 		add(ColumnConstants.TOTAL_GRAND_ACTUAL_DISBURSEMENTS);
 		add(ColumnConstants.FORECAST_EXECUTION_RATE);

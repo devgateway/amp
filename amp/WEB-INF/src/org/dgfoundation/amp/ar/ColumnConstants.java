@@ -251,8 +251,8 @@ public class ColumnConstants {
 	public static final String PROJECT_COORDINATOR_CONTACT_PHONE = "Project Coordinator Contact Phone";
 	public static final String PROJECT_COORDINATOR_CONTACT_TITLE = "Project Coordinator Contact Title";
 	public static final String PROJECT_DESCRIPTION = "Project Description";
-
 	public static final String PROJECT_IMPACT = "Project Impact";
+	//public static final String PROJECT_IMPLEMENTATION_DELAY = "Project Implementation Delay";
 	public static final String PROJECT_IMPLEMENTING_UNIT = "Project Implementing Unit";
 	public static final String PROJECT_PERIOD = "Project Period";
 	public static final String PROJECT_TITLE = "Project Title";
@@ -267,7 +267,6 @@ public class ColumnConstants {
 	public static final String REGIONAL_GROUP = "Regional Group";
 	public static final String REGIONAL_GROUP_ID = "Regional Group Id";
 	public static final String REGIONAL_GROUP_GROUP = "Regional Group Group";	
-	
 	public static final String REGIONAL_GROUP_DEPARTMENT_DIVISION = "Regional Group Department/Division";
 	public static final String REGIONAL_OBSERVATIONS = "Regional Observations";
 	public static final String RELATED_PLEDGES = "Related Pledges";
@@ -277,6 +276,7 @@ public class ColumnConstants {
 	public static final String RESPONSIBLE_ORGANIZATION_DEPARTMENT_DIVISION = "Responsible Organization Department/Division";
 	public static final String RESPONSIBLE_ORGANIZATION_GROUPS = "Responsible Organization Groups";
 	public static final String RESULTS = "Results";
+	public static final String REVISED_PROJECT_AMOUNT = "Revised Project Amount";
 	public static final String SECONDARY_PROGRAM = "Secondary Program";
 	public static final String SECONDARY_PROGRAM_DETAIL = "Secondary Program Detail";
 	public static final String SECONDARY_PROGRAM_LEVEL_1 = "Secondary Program Level 1";

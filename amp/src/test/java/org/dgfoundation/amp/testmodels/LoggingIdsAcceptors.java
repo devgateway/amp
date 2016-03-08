@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 /**
  * ID acceptors array for a cell which log the calls done to them
- * @author simple
+ * @author Dolghier Constantin
  *
  */
 public class LoggingIdsAcceptors {

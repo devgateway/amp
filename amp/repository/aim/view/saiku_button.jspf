@@ -7,16 +7,16 @@
 <c:choose>
 	<c:when test="${!report.hasAvailableMeasures()}">
 		<c:set var="measurestooltip"><digi:trn>The requested report only includes unimplemented measures</digi:trn></c:set>
-		<a href="javascript: void(0)" style="padding-right: 5px;" title="${measurestooltip}"><img src= "/TEMPLATE/ampTemplate/saikuui/images/saiku_disabled.png" border="0" /></a>
+		<a href="javascript: void(0)" style="padding-right: 5px;" title="${measurestooltip}"><img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku_disabled.png" border="0" /></a>
 	</c:when>
 	<c:when test="${!report.hasAvailableColumns()}">
 		<c:set var="columnstooltip"><digi:trn>The requested report only includes unimplemented columns</digi:trn></c:set>
-		<a href="javascript: void(0)" style="padding-right: 5px;" title="${columnstooltip}"><img src= "/TEMPLATE/ampTemplate/saikuui/images/saiku_disabled.png" border="0" /></a>
+		<a href="javascript: void(0)" style="padding-right: 5px;" title="${columnstooltip}"><img src= "saikuui_nireports" border="0" /></a>
 	</c:when>
 
 
 	<c:otherwise>
-		<a href="/TEMPLATE/ampTemplate/saikuui/index_reports.html#report/open/${report.ampReportId}" onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the Report</digi:trn>"><img src= "/TEMPLATE/ampTemplate/saikuui/images/saiku.png" border="0" /></a>
+		<a href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the Report</digi:trn>"><img src= "/TEMPLATE/ampTemplate/saikuui/images/saiku.png" border="0" /></a>
 	</c:otherwise>
 
 

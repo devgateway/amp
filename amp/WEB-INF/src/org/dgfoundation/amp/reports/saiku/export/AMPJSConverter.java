@@ -27,11 +27,11 @@ public class AMPJSConverter extends JSConverter {
 		Scriptable globalScope = context.initStandardObjects();
 		Reader underscoreReader = new InputStreamReader(
 				AMPJSConverter.class
-						.getResourceAsStream("/../../TEMPLATE/ampTemplate/saikuui/js/backbone/underscore.js"));
+						.getResourceAsStream("/../../TEMPLATE/ampTemplate/saikuui_nireports/js/backbone/underscore.js"));
 		context.evaluateReader(globalScope, underscoreReader, "underscore.js", 1, null);
 		Reader ampReader = new InputStreamReader(
 				AMPJSConverter.class
-						.getResourceAsStream("/../../TEMPLATE/ampTemplate/saikuui/js/saiku/render/AMPTableRenderer.js"));
+						.getResourceAsStream("/../../TEMPLATE/ampTemplate/saikuui_nireports/js/saiku/render/AMPTableRenderer.js"));
 		context.evaluateReader(globalScope, ampReader, "AMPTableRenderer.js", 1, null);
 		String data = om.writeValueAsString(jb);
 		Object wrappedQr = Context.javaToJS(data, globalScope);

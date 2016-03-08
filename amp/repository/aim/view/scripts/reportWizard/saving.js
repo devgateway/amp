@@ -149,7 +149,7 @@ SaveReportEngine.prototype.checkEnter = function (e) {
 	return true;
 };
 SaveReportEngine.prototype.runReportInSaiku = function(reportToken) {
-	var reportUrl = '/TEMPLATE/ampTemplate/saikuui/index.html#report/run/' + reportToken;
+	var reportUrl = '/TEMPLATE/ampTemplate/saikuui_nireports/index.html#report/run/' + reportToken;
 	globalOpenPopup(null, reportUrl);
 
 }
@@ -157,7 +157,7 @@ SaveReportEngine.prototype.openReport = function(reportId, isSaiku) {
     var reportUrl = '';
 
     if (isSaiku) {
-         reportUrl = '/TEMPLATE/ampTemplate/saikuui/index_reports.html#report/open/' + reportId;
+         reportUrl = '/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/' + reportId;
     } else {
          reportUrl = '/viewNewAdvancedReport.do?view=reset&widget=false&resetSettings=true&ampReportId=' + reportId;
     }

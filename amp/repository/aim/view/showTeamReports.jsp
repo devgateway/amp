@@ -509,7 +509,7 @@ $(document).ready(function() {
 					                              									<c:if test="${!aimTeamReportsForm.showTabs}">
 	 																					<c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}" />
 	 																					<% if (onlySaikuButton) { %>
-																							<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui/index_reports.html#report/open/${report.ampReportId}" />
+																							<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" />
 																						<% } %>
 																					    	
 	 																					  	<a href="${reportLink}" styleClass="h-box" onclick="return popup(this,'');" title="<digi:trn>Click here to view the Report</digi:trn>">
@@ -723,9 +723,9 @@ $(document).ready(function() {
 						                                								<c:set target="${urlParams}" property="rid">
 						                                  									<bean:write name="report" property="ampReportId" />
 						                                								</c:set>
-						                                								<a href="/TEMPLATE/ampTemplate/saikuui/index_reports.html#report/open/${report.ampReportId}?nireport=true" 
+						                                								<a href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}?nireport=true" 
 						                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
-						                                								<img src= "/TEMPLATE/ampTemplate/saikuui/images/nireport_saiku.png" border="0" /></a>
+						                                								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/nireport_saiku.png" border="0" /></a>
 																						<%
 																							if (!report.isTab() && !onlySaikuButton) {
 																						%>

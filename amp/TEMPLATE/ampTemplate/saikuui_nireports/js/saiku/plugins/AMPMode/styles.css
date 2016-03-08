@@ -1,0 +1,48 @@
+.permanently_hidden {
+	display:none;
+}
+
+@font-face{
+	font-family:'Open Sans';
+	src:url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_light/OpenSans-Light-webfont.eot');
+	src:url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_light/OpenSans-Light-webfont.eot?#iefix') format('embedded-opentype'),url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_light/OpenSans-Light-webfont.woff') format('woff'),url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_light/OpenSans-Light-webfont.ttf') format('truetype'),url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_light/OpenSans-Light-webfont.svg#open_sanslight') format('svg');
+}
+@font-face{
+	font-family:'Open Sans';
+	src:url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot');
+	src:url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot?#iefix') format('embedded-opentype'),url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.woff') format('woff'),url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.ttf') format('truetype'),url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.svg#open_sansextrabold') format('svg');
+	font-weight:800;
+	font-style:normal
+}
+#filter-popup {
+	z-index: 1020;
+	position: fixed !important;
+	top: 20%;
+	left: 50%;
+	/*width: 810px;*/
+	/*margin-left: -405px;*/
+	/*font-size: 14px;
+	font-family: 'Open Sans';
+	line-height: 1.42857143;*/
+}
+.form-control
+{
+	margin-top:0px!important;
+}
+
+#settings-container {
+	z-index: 1020;
+	position: fixed !important;
+	top: 20%;
+	left: 50%;
+	width: 810px;
+	margin-left: -405px;
+	font-size: 14px;
+	font-family: 'Open Sans';
+	line-height: 1.42857143;
+}
+
+.workspace_toolbar .export_to_map {
+	background-image: url('/TEMPLATE/ampTemplate/module/aim/images/globe-icon_2.png');
+	background-position: 7px 7px;
+}

@@ -129,8 +129,14 @@ function InteractiveFormArea(masterDivId, ajaxPage, submitAttrName, actionName, 
 InteractiveFormArea.prototype.onDelete = function(element_id){
 	var _self = this;
 	var zzz = getFormData(_self.dataDivId);
+	
 	zzz.push({name: 'extraAction', value: _self.actionName + "_delete"});
 	zzz.push({name: 'id', value: element_id});
+	
+	if(_self.submitActionName == 'pledge_funding_submit'){
+		formatDatesToISO(zzz);
+	}	
+	
 	$.post(_self.ajaxPage,
 			zzz,
 			function(data){
@@ -327,4 +333,5 @@ function amp_bootstrap_form_update_area(url, action, replaceId, callback)
 		if (callback != null)
 			callback();
 	});
-}
+};
+

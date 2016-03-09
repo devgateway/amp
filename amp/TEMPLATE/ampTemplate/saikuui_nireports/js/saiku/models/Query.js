@@ -40,21 +40,38 @@ var Query = Backbone.Model.extend({
             }).toUpperCase();
         
         this.model = _.extend({ name: this.uuid }, SaikuQueryTemplate);
-
         this.helper = new SaikuQueryHelper(this);
-
         this.result = new Result({ limit: Settings.RESULT_LIMIT }, { query: this });
+
         //Start Custom Code for Pagination
        	this.set({page:1});
         // Use this flag to force using the saved filters (if any) for the report the first time is loaded.
         this.firstLoad = true;
         window.currentQuery = this;
         //End Custom Code for Pagination
+        
+        this.convertSavedFilters();
+    },    
+    
+    convertSavedFilters: function() {
+    	var self = this;
+        if (this.firstLoad === true) {
+        	// Get original filters from reports specs.
+        	var auxFilters = self.get('filters');
+	        // Cleanup filters property on this Query.
+        	self.set('filters', undefined);
+	        // TODO: Review this 2-steps process completely.
+	        var extractedFiltersFromSpecs = FilterUtils.extractFilters(auxFilters);
+	        var blob = FilterUtils.convertJavaFiltersToJS(extractedFiltersFromSpecs);
+	        console.log(blob);
+	        // Set these filters reformatted. 
+	        self.set('filters', blob);	       
+        }
     },
     
     // AMP-18921: workaround to the filters until they will be properly initialized, 
 	// that should be done as part of filters widget improvement as a whole
-    initFilters: function() {
+    initFilters_old: function() {
     	var self = this;
         if (window.currentFilter !== undefined && window.currentFilter.converted !== true) {
         	window.currentFilter.converted = true;
@@ -62,10 +79,11 @@ var Query = Backbone.Model.extend({
 	            //console.log(this.get('filters'));
 	            var auxFilters = self.get('filters');
 	            self.set('filters', undefined);
+	            // TODO: Review this 2-steps process completely.
 	            var extractedFiltersFromSpecs = FilterUtils.extractFilters(auxFilters);
-	            //console.log(extractedFiltersFromSpecs);
+	            console.log(extractedFiltersFromSpecs);
 	            var blob = FilterUtils.convertJavaFiltersToJS(extractedFiltersFromSpecs);
-	            //console.log(blob);
+	            console.log(blob);
 	                                
 	            window.currentFilter.deserialize(blob, {
 	            	silent : true
@@ -166,7 +184,7 @@ var Query = Backbone.Model.extend({
         	if(filters) {
         		this.set('filters', filters);
         		filtersApplied = true;
-        		this.set('filtersWithModels', window.currentFilter.serializeToModels());
+        		//this.set('filtersWithModels', window.currentFilter.serializeToModels());
         	}	        	
     	//}
 

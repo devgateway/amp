@@ -4,6 +4,7 @@ var AMPFilters = Backbone.View.extend({
 			},
 
 			initialize : function(args) {
+				console.log("plugin.initialize");
 				var self = this;
 				this.workspace = args.workspace;
 				this.initialized = false;
@@ -40,7 +41,34 @@ var AMPFilters = Backbone.View.extend({
 					//}
 					$('#filter-popup').hide();
 				});
-				this.workspace.query.initFilters();
+				
+				//this.workspace.query.initFilters();
+				this.parseSavedFilters(this);
+			},
+			
+			parseSavedFilters: function(obj) {
+		        if (window.currentFilter !== undefined) {
+		            window.currentFilter.loaded.done(function() {
+			            //console.log(this.get('filters'));
+			            var auxFilters = obj.workspace.query.get('filters');
+			            window.currentFilter.deserialize(auxFilters, {
+			            	silent : true
+			            });
+		            });                                                                     
+		        }
+			},
+			
+			deferredInitialization: function() {
+				console.log("plugin.deferredInitialization");
+				if (typeof args.workspace.amp_filters == "undefined") {
+					args.workspace.amp_filters = new AMPFilters({
+						workspace : args.workspace
+					});
+		            args.workspace.bind('query:result', function(args) {
+		            	args.workspace.toolbar.$el.find(".amp_settings").removeClass("disabled_toolbar");
+		            	args.workspace.toolbar.$el.find(".amp_filters").removeClass("disabled_toolbar")
+		        	});
+				}
 			},
 
 			add_button : function() {
@@ -92,7 +120,7 @@ var AMPFilters = Backbone.View.extend({
 
 		});
 
-Saiku.events.bind('session:new', function(session) {
+Saiku.events.bind('render:end', function(session) {
 	function new_workspace(args) {
 		if (typeof args.workspace.amp_filters == "undefined") {
 			args.workspace.amp_filters = new AMPFilters({
@@ -118,8 +146,7 @@ Saiku.events.bind('session:new', function(session) {
 				workspace : tab.content
 			});
 		}
-	}
-	;
+	};
 
 	Saiku.session.bind("workspace:new", new_workspace);
 	Saiku.session.bind("workspace:clear", clear_workspace);
@@ -232,8 +259,7 @@ FilterUtils.extractFilters = function(content) {
 			}
 			if (element.value !== null) {
 				content.push(self.parseValue(element, element.value));
-			}
-			else if (element.valueToName !== null) {
+			} else if (element.valueToName !== null) {
 				// This should be .models but the way the endpoint returns
 				// the data breaks backbone.
 				_.each(element.valueToName, function(item_, i) {

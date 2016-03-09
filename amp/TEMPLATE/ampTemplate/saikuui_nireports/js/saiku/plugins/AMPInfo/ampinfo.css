@@ -3,6 +3,7 @@
 	width: 500px;
 	position: relative;
 	top: -17px;
+	margin-right: 20px;
 }
 
 #amp_info_settings>h4{
@@ -42,12 +43,12 @@
 
 #amp_info_filters_block {
 	border: 2px solid rgb(56, 121, 146);
-	max-height: 300px;
-	min-height: 200px;
+	max-height: 500px;
+	min-height: 300px;
 	z-index: 2;
 	width: inherit;
-	/*position: absolute;
-	top:26px;*/
+	position: absolute;
+	top:26px;
 }
 
 .ui-widget {

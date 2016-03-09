@@ -395,10 +395,12 @@ var Workspace = Backbone.View
 
 				// is this a new query?
 				// Run query once the filters widget is ready.
-				this.query.initFiltersDeferred.done(function() {
+				/*this.query.initFiltersDeferred.done(function() {
 					// console.log(window.currentFilter.serialize());
 					self.query.run(true);
-				});
+				});*/
+				
+				self.query.run(true);
 				
 				Saiku.i18n.translate();
 			},

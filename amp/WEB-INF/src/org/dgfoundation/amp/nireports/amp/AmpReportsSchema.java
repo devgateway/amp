@@ -30,7 +30,6 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
-import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
@@ -254,6 +253,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		degenerate_dimension(ColumnConstants.TYPE_OF_IMPLEMENTATION, "v_type_of_implementation", catsDimension);
 		
 		// views with only 2 columns
+		no_entity(ColumnConstants.DRAFT, "v_drafts");
+		no_entity(ColumnConstants.APPROVAL_STATUS, "v_approval_status");
 		no_entity(ColumnConstants.AC_CHAPTER, "v_ac_chapters");
 		no_entity(ColumnConstants.ACCESSION_INSTRUMENT, "v_accession_instruments");
 		no_entity(ColumnConstants.ACTIVITY_CREATED_BY, "v_activity_creator");

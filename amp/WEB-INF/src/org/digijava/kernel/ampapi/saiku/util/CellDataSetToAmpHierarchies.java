@@ -17,6 +17,7 @@ import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.reports.CustomAmounts;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
@@ -191,8 +192,12 @@ public class CellDataSetToAmpHierarchies {
 			//get final totals reference
 			int mPos = 0;
 			for (int a = 0; a < colTotals.length; a++, mPos++) {
+				// skip % amounts that were already remembered once, given the nature of how they are calculated in Mondrian
+				if (cellDataSet.getSelectedMeasures().length > 0 
+					&& CustomAmounts.PERCENTAGE_AMOUNTS.contains(cellDataSet.getSelectedMeasures()[a].getName())
+						&& currentTotalMeasuresColumnTotals[mPos] > 0)
+						continue;
 				double value = colTotals[a][rowId].getValue();
-				//Double value = a < 0 ? 0 : colTotals[a][rowId].getValue();
 				currentTotalMeasuresColumnTotals[mPos] += value;
 			}
 		}

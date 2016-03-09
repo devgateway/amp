@@ -27,6 +27,7 @@ import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorDis
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorExpendituresSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorFundingInfoSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpEstimatedDonorDisbursementsSubsectionFeature;
+import org.dgfoundation.amp.onepager.components.features.subsections.AmpLoanDetailsSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpMTEFProjectionSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpReleaseOfFundsSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
@@ -60,6 +61,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 
 	private AmpDonorFundingInfoSubsectionFeature fundingInfo;
 	private AmpDonorDisbursementsSubsectionFeature disbursements;
+	private AmpLoanDetailsSubsectionFeature loanDetails; 
 	private Integer item;
 	public AmpFundingItemFeaturePanel(String id, String fmName,
 			final IModel<AmpFunding> fundingModel,final IModel<AmpActivityVersion> am, final AmpDonorFundingFormSectionFeature parent,Integer item) throws Exception {
@@ -312,8 +314,12 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 				"expenditures", fundingModel,"Expenditures",Constants.EXPENDITURE);
 		wmc.add(expenditures);
 
-
+		loanDetails = new AmpLoanDetailsSubsectionFeature("loanDetails",fundingModel,"Loan Details", fundingSummary);
+		wmc.add(loanDetails);
+		
 		add(addNewFunding);
+		
+		
 	}
 
 	public AmpDonorFundingInfoSubsectionFeature getFundingInfo() {
@@ -322,6 +328,11 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 
 	public AmpDonorDisbursementsSubsectionFeature getDisbursements() {
 		return disbursements;
+	}
+	
+	public AmpLoanDetailsSubsectionFeature getLoanDetails(){
+		return loanDetails;
+		
 	}
 	
 }

@@ -2767,6 +2767,24 @@ public class ExportActivityToPDF extends Action {
                             {
                                 addNewInfoCell(fundingTable, "Funding Classification Date", funding.getFundingClassificationDate());
                             }
+                            
+                            if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Loan Details/Ratification Date"))
+                            {
+                                addNewInfoCell(fundingTable, "Ratification Date", funding.getRatificationDate());
+                            }
+                            
+                            if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Loan Details/Maturity"))
+                            {
+                                addNewInfoCell(fundingTable, "Maturity", funding.getMaturity());
+                            }
+                            if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Loan Details/Interest Rate"))
+                            {
+                                addNewInfoCell(fundingTable, "Interest Rate", funding.getInterestRate() != null ? String.valueOf(funding.getInterestRate()) : "");
+                            }
+                            if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Loan Details/Grace Period"))
+                            {
+                                addNewInfoCell(fundingTable, "Grace Period", funding.getGracePeriod() != null ? String.valueOf(funding.getGracePeriod()) : "");
+                            }
                         }
                         //Donor objective
                         if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Donor Objective"))

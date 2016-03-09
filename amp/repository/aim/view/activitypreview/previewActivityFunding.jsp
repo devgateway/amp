@@ -144,6 +144,59 @@
 																	</tr>
 																</logic:notEmpty>
 																
+																<logic:notEmpty name="funding" property="ratificationDate">
+																<tr>
+																	<td align="left" width="150">
+																		<a title='<digi:trn>Ratification Date</digi:trn>'>
+																			<digi:trn>Ratification Date</digi:trn>
+																		</a>
+																	</td>
+																	<td width="1">:</td>
+																	<td align="left">
+																			<b><bean:write name="funding" property="ratificationDate"/></b>
+																	</td>
+																</tr>
+																</logic:notEmpty>
+																<logic:notEmpty name="funding" property="maturity">
+																<tr>
+																	<td align="left" width="150">
+																		<a title='<digi:trn>Maturity</digi:trn>'>
+																			<digi:trn>Maturity</digi:trn>
+																		</a>
+																	</td>
+																	<td width="1">:</td>
+																	<td align="left">
+																			<b><bean:write name="funding" property="maturity"/></b>
+																	</td>
+																</tr>
+																</logic:notEmpty>
+																<logic:notEmpty name="funding" property="interestRate">
+																<tr>
+																	<td align="left" width="150">
+																		<a title='<digi:trn>Interest Rate</digi:trn>'>
+																			<digi:trn>Interest Rate</digi:trn>
+																		</a>
+																	</td>
+																	<td width="1">:</td>
+																	<td align="left">
+																			<b><bean:write name="funding" property="interestRate"/></b>
+																	</td>
+																</tr>
+																</logic:notEmpty>
+																<logic:notEmpty name="funding" property="gracePeriod">
+																<tr>
+																	<td align="left" width="150">
+																		<a title='<digi:trn>Grace Period</digi:trn>'>
+																			<digi:trn>Grace Period</digi:trn>
+																		</a>
+																	</td>
+																	<td width="1">:</td>
+																	<td align="left">
+																			<b><bean:write name="funding" property="gracePeriod"/></b>
+																	</td>
+																</tr>
+																</logic:notEmpty>
+																
 																<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
 																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Donor Objective" parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 																	<tr>

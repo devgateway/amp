@@ -1516,7 +1516,7 @@ function collapseAll() {
 									</c:if>
 								</td>
 							<td width=15% align=right valign=top>
-                                <c:if test="${sector.sectorPercentage!='' && sector.sectorPercentage!='0'}">
+                                <c:if test="${sectors.sectorPercentage!='' && sectors.sectorPercentage!='0'}">
                                		<b>(<c:out value="${sectors.sectorPercentage}"/>)%</b>                                            
                                 </c:if>
                             </td>

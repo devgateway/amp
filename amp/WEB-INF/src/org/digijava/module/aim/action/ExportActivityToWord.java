@@ -2355,6 +2355,10 @@ public class ExportActivityToWord extends Action {
                         if (funding.getFundingClassificationDate() != null) {
                             addFundingRowData(null, eshDonorInfo, "Funding Classification Date",funding.getFundingClassificationDate(), false);
                         }
+                        
+                        addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Loan Details/Ratification Date",
+                                eshDonorInfo, "Ratification Date", funding.getRatificationDate(), true);
+                        
                         eshDonorInfo.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
                         retVal.add(createSectionTable(eshDonorInfo, request, ampContext));
 
@@ -2485,6 +2489,22 @@ public class ExportActivityToWord extends Action {
                 if (fnd.getFundingClassificationDate() != null)
                     eshDonorInfo.addRowData(new ExportSectionHelperRowData("Funding Classification Date", null, null, true)
                             .addRowData(DateConversion.ConvertDateToString(fnd.getFundingClassificationDate())));
+                
+                if (fnd.getRatificationDate() != null)
+                    eshDonorInfo.addRowData(new ExportSectionHelperRowData("Ratification Date", null, null, true)
+                            .addRowData(DateConversion.ConvertDateToString(fnd.getRatificationDate())));
+                
+                if (fnd.getMaturity() != null)
+                    eshDonorInfo.addRowData(new ExportSectionHelperRowData("Maturity", null, null, true)
+                            .addRowData(DateConversion.ConvertDateToString(fnd.getMaturity())));
+                
+                if (fnd.getInterestRate() != null)
+                    eshDonorInfo.addRowData(new ExportSectionHelperRowData("Interest Rate", null, null, true)
+                            .addRowData(String.valueOf(fnd.getInterestRate())));
+                
+                if (fnd.getGracePeriod() != null)
+                    eshDonorInfo.addRowData(new ExportSectionHelperRowData("Grace Period", null, null, true)
+                            .addRowData(String.valueOf(fnd.getGracePeriod())));
 
                 eshDonorInfo.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
                 retVal.add(createSectionTable(eshDonorInfo, request, ampContext));

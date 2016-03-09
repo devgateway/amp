@@ -44,6 +44,11 @@
         <property name="loanTerms" column="loan_terms" type="text" />
         
         <property name="orderNumber" column="order_number" type="java.lang.Integer" />
+        
+        <property name="ratificationDate" column="ratification_date" type="java.util.Date" />
+        <property name="gracePeriod" column="grace_period" type="java.lang.Integer" />
+        <property name="interestRate" column="interest_rate" type="java.lang.Float" />
+        <property name="maturity" column="maturity" type="java.util.Date" />
 		
 
 		<many-to-one name="ampDonorOrgId" column="amp_donor_org_id"
@@ -85,5 +90,6 @@
 		
 		<many-to-one name="agreement" column="agreement"
 			class="org.digijava.module.aim.dbentity.AmpAgreement" cascade="none" />
+			
 	</class>
 </hibernate-mapping>

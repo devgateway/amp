@@ -88,6 +88,14 @@ public class Funding implements Serializable {
 	private Long groupVersionedFunding;
 	private Float capitalSpendingPercentage;	
 	
+	/**
+	 * Loan fields
+	 */
+	private String ratificationDate;
+	private Integer gracePeriod;
+	private Float interestRate;
+	private String maturity;
+	
 	public boolean equals(Object e) {
 		if (e instanceof Funding) {
 			Funding tmp = (Funding)e;
@@ -258,6 +266,12 @@ public class Funding implements Serializable {
 		this.setDonorObjective(ampFunding.getDonorObjective());
 		this.setCapitalSpendingPercentage(ampFunding.getCapitalSpendingPercentage());
 		this.setFundingClassificationDate(DateConversion.ConvertDateToString(ampFunding.getFundingClassificationDate()));
+		this.setRatificationDate(DateConversion.ConvertDateToString(ampFunding.getRatificationDate()));
+		this.setGracePeriod(ampFunding.getGracePeriod());
+		this.setInterestRate(ampFunding.getInterestRate());
+		this.setMaturity(DateConversion.ConvertDateToString(ampFunding.getMaturity()));
+		
+		
 		if (ampFunding.getAgreement() != null) {
 			this.setTitle(ampFunding.getAgreement().getTitle());
 			this.setCode(ampFunding.getAgreement().getCode());
@@ -566,6 +580,26 @@ public class Funding implements Serializable {
 	}
 	
 	@java.lang.SuppressWarnings("all")
+	public String getRatificationDate() {
+		return ratificationDate;
+	}
+
+	@java.lang.SuppressWarnings("all")
+	public Integer getGracePeriod() {
+		return gracePeriod;
+	}
+
+	@java.lang.SuppressWarnings("all")
+	public Float getInterestRate() {
+		return interestRate;
+	}
+
+	@java.lang.SuppressWarnings("all")
+	public String getMaturity() {
+		return maturity;
+	}
+
+	@java.lang.SuppressWarnings("all")
 	public void setFundingId(final long fundingId) {
 		this.fundingId = fundingId;
 	}
@@ -819,9 +853,29 @@ public class Funding implements Serializable {
 		this.capitalSpendingPercentage = capitalSpendingPercentage;
 	}
 	
+	@java.lang.SuppressWarnings("all")
+	public void setRatificationDate(String ratificationDate) {
+		this.ratificationDate = ratificationDate;
+	}
+
+	@java.lang.SuppressWarnings("all")
+	public void setGracePeriod(Integer gracePeriod) {
+		this.gracePeriod = gracePeriod;
+	}
+
+	@java.lang.SuppressWarnings("all")
+	public void setInterestRate(Float interestRate) {
+		this.interestRate = interestRate;
+	}
+
+	@java.lang.SuppressWarnings("all")
+	public void setMaturity(String maturity) {
+		this.maturity = maturity;
+	}
+
 	@java.lang.Override
 	@java.lang.SuppressWarnings("all")
 	public java.lang.String toString() {
-		return "Funding(fundingId=" + this.getFundingId() + ", typeOfAssistance=" + this.getTypeOfAssistance() + ", financingInstrument=" + this.getFinancingInstrument() + ", fundingStatus=" + this.getFundingStatus() + ", modeOfPayment=" + this.getModeOfPayment() + ", orgFundingId=" + this.getOrgFundingId() + ", sourceRole=" + this.getSourceRole() + ", signatureDate=" + this.getSignatureDate() + ", fundingDetails=" + this.getFundingDetails() + ", currentFunding=" + this.getCurrentFunding() + ", propStartDate=" + this.getPropStartDate() + ", propCloseDate=" + this.getPropCloseDate() + ", actStartDate=" + this.getActStartDate() + ", actCloseDate=" + this.getActCloseDate() + ", reportingDate=" + this.getReportingDate() + ", conditions=" + this.getConditions() + ", donorObjective=" + this.getDonorObjective() + ", ampRawFunding=" + this.getAmpRawFunding() + ", subtotalActualCommitments=" + this.getSubtotalActualCommitments() + ", subtotalPlannedCommitments=" + this.getSubtotalPlannedCommitments() + ", subtotalPipelineCommitments=" + this.getSubtotalPipelineCommitments() + ", subtotalOfficialDevelopmentAidCommitments=" + this.getSubtotalOfficialDevelopmentAidCommitments() + ", subtotalBilateralSscCommitments=" + this.getSubtotalBilateralSscCommitments() + ", subtotalTriangularSscCommitments=" + this.getSubtotalTriangularSscCommitments() + ", subtotalPlannedDisbursements=" + this.getSubtotalPlannedDisbursements() + ", subtotalPipelineDisbursements=" + this.getSubtotalPipelineDisbursements() + ", subtotalDisbursements=" + this.getSubtotalDisbursements() + ", subtotalPlannedExpenditures=" + this.getSubtotalPlannedExpenditures() + ", subtotalPipelineExpenditures=" + this.getSubtotalPipelineExpenditures() + ", subtotalExpenditures=" + this.getSubtotalExpenditures() + ", subtotalActualDisbursementsOrders=" + this.getSubtotalActualDisbursementsOrders() + ", subtotalPlannedDisbursementsOrders=" + this.getSubtotalPlannedDisbursementsOrders() + ", subtotalPipelineDisbursementsOrders=" + this.getSubtotalPipelineDisbursementsOrders() + ", subtotalActualRoF=" + this.getSubtotalActualRoF() + ", subtotalPlannedRoF=" + this.getSubtotalPlannedRoF() + ", subtotalPipelineRoF=" + this.getSubtotalPipelineRoF() + ", subtotalRoF=" + this.getSubtotalRoF() + ", subtotalActualEDD=" + this.getSubtotalActualEDD() + ", subtotalPlannedEDD=" + this.getSubtotalPlannedEDD() + ", subtotalPipelineEDD=" + this.getSubtotalPipelineEDD() + ", subtotalEDD=" + this.getSubtotalEDD() + ", subtotalMTEFs=" + this.getSubtotalMTEFs() + ", undisbursementbalance=" + this.getUndisbursementbalance() + ", title=" + this.getTitle() + ", code=" + this.getCode() + ", fundingClassificationDate=" + this.getFundingClassificationDate() + ", groupVersionedFunding=" + this.getGroupVersionedFunding() + ", capitalSpendingPercentage=" + this.getCapitalSpendingPercentage() + ")";
+		return "Funding(fundingId=" + this.getFundingId() + ", typeOfAssistance=" + this.getTypeOfAssistance() + ", financingInstrument=" + this.getFinancingInstrument() + ", fundingStatus=" + this.getFundingStatus() + ", modeOfPayment=" + this.getModeOfPayment() + ", orgFundingId=" + this.getOrgFundingId() + ", sourceRole=" + this.getSourceRole() + ", signatureDate=" + this.getSignatureDate() + ", fundingDetails=" + this.getFundingDetails() + ", currentFunding=" + this.getCurrentFunding() + ", propStartDate=" + this.getPropStartDate() + ", propCloseDate=" + this.getPropCloseDate() + ", actStartDate=" + this.getActStartDate() + ", actCloseDate=" + this.getActCloseDate() + ", reportingDate=" + this.getReportingDate() + ", conditions=" + this.getConditions() + ", donorObjective=" + this.getDonorObjective() + ", ampRawFunding=" + this.getAmpRawFunding() + ", subtotalActualCommitments=" + this.getSubtotalActualCommitments() + ", subtotalPlannedCommitments=" + this.getSubtotalPlannedCommitments() + ", subtotalPipelineCommitments=" + this.getSubtotalPipelineCommitments() + ", subtotalOfficialDevelopmentAidCommitments=" + this.getSubtotalOfficialDevelopmentAidCommitments() + ", subtotalBilateralSscCommitments=" + this.getSubtotalBilateralSscCommitments() + ", subtotalTriangularSscCommitments=" + this.getSubtotalTriangularSscCommitments() + ", subtotalPlannedDisbursements=" + this.getSubtotalPlannedDisbursements() + ", subtotalPipelineDisbursements=" + this.getSubtotalPipelineDisbursements() + ", subtotalDisbursements=" + this.getSubtotalDisbursements() + ", subtotalPlannedExpenditures=" + this.getSubtotalPlannedExpenditures() + ", subtotalPipelineExpenditures=" + this.getSubtotalPipelineExpenditures() + ", subtotalExpenditures=" + this.getSubtotalExpenditures() + ", subtotalActualDisbursementsOrders=" + this.getSubtotalActualDisbursementsOrders() + ", subtotalPlannedDisbursementsOrders=" + this.getSubtotalPlannedDisbursementsOrders() + ", subtotalPipelineDisbursementsOrders=" + this.getSubtotalPipelineDisbursementsOrders() + ", subtotalActualRoF=" + this.getSubtotalActualRoF() + ", subtotalPlannedRoF=" + this.getSubtotalPlannedRoF() + ", subtotalPipelineRoF=" + this.getSubtotalPipelineRoF() + ", subtotalRoF=" + this.getSubtotalRoF() + ", subtotalActualEDD=" + this.getSubtotalActualEDD() + ", subtotalPlannedEDD=" + this.getSubtotalPlannedEDD() + ", subtotalPipelineEDD=" + this.getSubtotalPipelineEDD() + ", subtotalEDD=" + this.getSubtotalEDD() + ", subtotalMTEFs=" + this.getSubtotalMTEFs() + ", undisbursementbalance=" + this.getUndisbursementbalance() + ", title=" + this.getTitle() + ", code=" + this.getCode() + ", fundingClassificationDate=" + this.getFundingClassificationDate() + ", groupVersionedFunding=" + this.getGroupVersionedFunding() + ", capitalSpendingPercentage=" + this.getCapitalSpendingPercentage() + ", ratificationDate=" + this.getRatificationDate() + ", gracePeriod=" + this.getGracePeriod() + ", interestRate="+ this.getInterestRate() + ", maturity=" + this.getMaturity() +  ")";
 	}
 }

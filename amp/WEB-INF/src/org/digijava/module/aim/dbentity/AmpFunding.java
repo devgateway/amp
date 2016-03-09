@@ -118,6 +118,15 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	@Interchangeable(fieldTitle="Funding Classification Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Classification Date", importable=true)
 	private Date fundingClassificationDate;
 	
+	@Interchangeable(fieldTitle="Ratification Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Loan Details/Ratification Date", importable=true)
+	private Date ratificationDate;	
+	@Interchangeable(fieldTitle="Grace Period",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Loan Details/Grace Period", importable=true)
+	private Integer gracePeriod;	
+	@Interchangeable(fieldTitle="Interest Rate",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Loan Details/Interest Rate", importable=true)
+	private Float interestRate;	
+	@Interchangeable(fieldTitle="Maturity",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Loan Details/Maturity", importable=true)
+	private Date maturity;
+	
 	private Integer orderNumber;
 	
 	@Override
@@ -756,5 +765,37 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 
 	public void setOrderNumber(Integer orderNumber) {
 		this.orderNumber = orderNumber;
+	}
+
+	public Date getRatificationDate() {
+		return ratificationDate;
+	}
+
+	public void setRatificationDate(Date ratificationDate) {
+		this.ratificationDate = ratificationDate;
+	}
+
+	public Integer getGracePeriod() {
+		return gracePeriod;
+	}
+
+	public void setGracePeriod(Integer gracePeriod) {
+		this.gracePeriod = gracePeriod;
+	}
+
+	public Float getInterestRate() {
+		return interestRate;
+	}
+
+	public void setInterestRate(Float interestRate) {
+		this.interestRate = interestRate;
+	}
+
+	public Date getMaturity() {
+		return maturity;
+	}
+
+	public void setMaturity(Date maturity) {
+		this.maturity = maturity;
 	}
 }

@@ -390,32 +390,32 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 		System.err.format("I ran %d reports in %d millies (%d per second)\n", reps, delta, reps * 1000 / delta);
 	}
 	
-//	@Test
-//	public void testTripleHierarchiesDoNotChangeTotals() {
-//		if (this.getClass().getSimpleName().equals("AmpSchemaSanityTests"))
-//			return; // these are too slow if backed by DB
-//		int fails = 0;
-//		// double-hierarchy reports
-//		for(boolean isSummary:Arrays.asList(true, false)) {
-//			for(String hier1Name:hierarchiesToTry)
-//				for(String hier2Name:hierarchiesToTry)
-//					for(String hier3Name:hierarchiesToTry)
-//					if (hier1Name != hier2Name && hier2Name != hier3Name && hier1Name != hier3Name) {
-//						ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s, %s summary: %b", hier1Name, hier2Name, hier3Name, isSummary), 
-//								Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name, hier3Name), 
-//								Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
-//								Arrays.asList(hier1Name, hier2Name, hier3Name), 
-//								GroupingCriteria.GROUPING_YEARLY);
-//						spec.setSummaryReport(isSummary);
-////						if (!buildDigest(spec, acts, fundingGrandTotalsDigester).toString().equals(correctTotals)) {
-////							fails ++;
-////							System.err.println("failed: " + spec.getReportName());
-////						}
-//						assertEquals(spec.getReportName(), correctTotals, buildDigest(spec, acts, fundingGrandTotalsDigester).toString());
-//			}
-//		}
-//		System.err.println("nr of failures: " + fails);
-//	}
+	@Test
+	public void testTripleHierarchiesDoNotChangeTotals() {
+		if (this.getClass().getSimpleName().equals("AmpSchemaSanityTests"))
+			return; // these are too slow if backed by DB
+		int fails = 0;
+		// triple-hierarchy reports
+		for(boolean isSummary:Arrays.asList(true, false)) {
+			for(String hier1Name:hierarchiesToTry)
+				for(String hier2Name:hierarchiesToTry)
+					for(String hier3Name:hierarchiesToTry)
+					if (hier1Name != hier2Name && hier2Name != hier3Name && hier1Name != hier3Name) {
+						ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s, %s summary: %b", hier1Name, hier2Name, hier3Name, isSummary), 
+								Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name, hier3Name), 
+								Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+								Arrays.asList(hier1Name, hier2Name, hier3Name), 
+								GroupingCriteria.GROUPING_YEARLY);
+						spec.setSummaryReport(isSummary);
+//						if (!buildDigest(spec, acts, fundingGrandTotalsDigester).toString().equals(correctTotals)) {
+//							fails ++;
+//							System.err.println("failed: " + spec.getReportName());
+//						}
+						assertEquals(spec.getReportName(), correctTotals, buildDigest(spec, acts, fundingGrandTotalsDigester).toString());
+			}
+		}
+		System.err.println("nr of failures: " + fails);
+	}
 	
 	@Test
 	public void testSummaryReportWithoutHierarchies() {
@@ -584,4 +584,57 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 
 		runNiTestCase(cor, spec, acts);
 	}
+	
+	@Test
+	public void testRegionUndefinedHierarchyOutput() {
+		ReportSpecification spec = buildSpecification("pizdosheniaLuiViorel", 
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.PRIMARY_SECTOR), 
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+				Arrays.asList(ColumnConstants.REGION),
+				GroupingCriteria.GROUPING_YEARLY);
+		
+		NiReportModel cor = new NiReportModel("regionUndefinedHierarchy")
+		.withHeaders(Arrays.asList(
+				"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 11))",
+				"(Region: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Primary Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 6));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 9, colSpan: 2))",
+				"(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 2));(Actual Commitments: (startRow: 2, rowSpan: 2, totalRowSpan: 2, colStart: 9, colSpan: 1));(Actual Disbursements: (startRow: 2, rowSpan: 2, totalRowSpan: 2, colStart: 10, colSpan: 1))",
+				"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1))"))
+			.withWarnings(Arrays.asList())
+			.withBody(      new ReportAreaForTests(null)
+		      .withContents("Region", "", "Project Title", "", "Primary Sector", "", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "33,000", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "117,000", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "483,333", "Totals-Actual Disbursements", "0")
+		      .withChildren(
+		        new ReportAreaForTests(new AreaOwner("Region", "Balti County")).withContents("Project Title", "", "Primary Sector", "", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "333,333", "Totals-Actual Disbursements", "0", "Region", "Balti County")
+		        .withChildren(
+		          new ReportAreaForTests(null, "Project Title", "crazy funding 1", "Primary Sector", "110 - EDUCATION", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333")        ),
+		        new ReportAreaForTests(new AreaOwner("Region", "Region: Undefined")).withContents("Project Title", "", "Primary Sector", "", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "33,000", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "117,000", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "150,000", "Totals-Actual Disbursements", "0", "Region", "Region: Undefined")
+		        .withChildren(
+		          new ReportAreaForTests(null, "Project Title", "activity_with_disaster_response", "Primary Sector", "110 - EDUCATION, 113 - SECONDARY EDUCATION", "Funding-2014-Actual Commitments", "33,000", "Funding-2015-Actual Commitments", "117,000", "Totals-Actual Commitments", "150,000")        )      ));
+		
+		runNiTestCase(cor, spec, Arrays.asList("crazy funding 1", "activity_with_disaster_response"));
+	}
+	
+	@Test
+	public void testRegionUndefinedColumn() {
+		ReportSpecification spec = buildSpecification("regionUndefinedColumn", 
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.PRIMARY_SECTOR), 
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+				null,
+				GroupingCriteria.GROUPING_YEARLY);
+		
+		NiReportModel cor = new NiReportModel("regionUndefinedColumn")
+		.withHeaders(Arrays.asList(
+				"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 11))",
+				"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Region: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Primary Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 6));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 9, colSpan: 2))",
+				"(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 2));(Actual Commitments: (startRow: 2, rowSpan: 2, totalRowSpan: 2, colStart: 9, colSpan: 1));(Actual Disbursements: (startRow: 2, rowSpan: 2, totalRowSpan: 2, colStart: 10, colSpan: 1))",
+				"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1))"))
+			.withWarnings(Arrays.asList())
+			.withBody(      new ReportAreaForTests(null)
+		      .withContents("Project Title", "", "Region", "", "Primary Sector", "", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "33,000", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "117,000", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "483,333", "Totals-Actual Disbursements", "0")
+		      .withChildren(
+		        new ReportAreaForTests(null, "Project Title", "crazy funding 1", "Region", "Balti County", "Primary Sector", "110 - EDUCATION", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333"),
+		        new ReportAreaForTests(null, "Project Title", "activity_with_disaster_response", "Region", "", "Primary Sector", "110 - EDUCATION, 113 - SECONDARY EDUCATION", "Funding-2014-Actual Commitments", "33,000", "Funding-2015-Actual Commitments", "117,000", "Totals-Actual Commitments", "150,000")      ));
+		
+		runNiTestCase(cor, spec, Arrays.asList("crazy funding 1", "activity_with_disaster_response"));
+	}
+
 }

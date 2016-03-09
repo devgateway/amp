@@ -378,12 +378,18 @@ public abstract class ReportingTestCase extends AmpTestCase {
 	protected void runNiTestCase(NiReportModel cor, ReportSpecification spec, List<String> activityNames) {
 		NiReportModel out = buildDigest(spec, activityNames, new ReportModelGenerator());
 		String delta = null;
-		try {delta = cor.compare(out);}catch(Exception e) {delta = e.getMessage();};
+		try {delta = cor.compare(out);}
+		catch(Exception e) {
+			delta = e.getMessage();
+			if (delta == null || cor == null)
+				delta = "(null)";
+		};
 		if (delta != null) {
 			System.err.format("error for test %s: %s\n", spec.getReportName(), delta);
 			System.err.println("this is output for test " + spec.getReportName() + ": " + out.describeInCode());
 			//System.err.println("this is output for test " + spec.getReportName() + new ReportAreaDescriber().describeInCode(out.body, 2));
 		}
+		assertNull(delta);
 	}
 	
 //	public<K> K buildNiReportDigest(ReportSpecification spec, NiReportExecutor executor, NiReportOutputBuilder<K> outputBuilder) {

@@ -30,7 +30,8 @@ AmpValidator.prototype.validate = function(elem){
 	if ((elem.value.trim().length == 0) && (!_self.allowEmpty))
 		result = {success: false, error_message: please_enter_something_message, validate_class: false};
 	else
-		result = _self.validatorFunc(elem.value.trim());
+//		result = _self.validatorFunc(elem.value.trim());
+		result = _self.validatorFunc(elem);
 	//if ('success' in result)
 	if (result.hasOwnProperty('success'))
 		return result; // validator returned a complex object
@@ -42,7 +43,7 @@ AmpValidator.prototype.validate = function(elem){
  * @param elem
  * @returns {Boolean}
  */
-AmpValidator.prototype.validateAndHighlight = function(elem){
+AmpValidator.prototype.validateAndHighlight = function(elem, prevError){
 	var _self = this;
 	var res = _self.validate(elem);
 	if (!res.success)
@@ -54,19 +55,20 @@ AmpValidator.prototype.validateAndHighlight = function(elem){
 			setValidationStatus($(elem), 'has-error');
 		return false;
 	}
-	setValidationStatus($(elem), 'has-success'); // ok
+	if (!prevError)
+		setValidationStatus($(elem), 'has-success'); // ok
 	return true;
 };
 
 function amp_validator_hasMinimumLength(vml){
 	return function(inp){
-		return inp.length >= vml;
+		return inp.value.length >= vml;
 	};
 }
 
 function amp_validator_check_percentage(itemsClass){
 	return function(inputItem){		
-		if (!is_valid_percentage(inputItem))
+		if (!is_valid_percentage(inputItem.value))
 			return {success: false, error_message: "Not a valid percentage", validate_class: false};
 			
 		var totalValue = 0;
@@ -84,25 +86,44 @@ function amp_validator_check_percentage(itemsClass){
 	};
 }
 
+function amp_validator_check_year(itemsClass){
+	return function(inputItem){	
+		if (!isYearValidator(inputItem.value))
+			return {success: false, error_message: please_enter_year_message};
+		return {success: true};			
+	};
+}
+
 function amp_validator_check_year_range(itemsClass){
 	return function(inputItem){	
-		
 		var yearRangeStartItem = $('.validate-year-range-start.' + itemsClass);
 		if (!isYearValidator(yearRangeStartItem.val()))
-			return {success: false, error_message: please_enter_year_message};
-
+			return {success: true};
 		var yearRangeEndItem = $('.validate-year-range-end.' + itemsClass);
 		if (!isYearValidator(yearRangeEndItem.val()))
-			return {success: false, error_message: please_enter_year_message};
-		
+			return {success: true};
+		//if either startDate or endDate are invalid, it's up to the other validators to catch them
 		var yearStart = yearRangeStartItem.val();
 		var yearEnd = yearRangeEndItem.val();
 		if (yearEnd < yearStart)
 			return {success: false, error_message: "Start Year should be before End Year", validate_class: itemsClass};
-			
 		return {success: true};			
 	};
 }
+
+function amp_validator_check_date(itemsClass){
+	return function(inputItem){		
+		var defaultDateFormat = 'YYYY-MM-DD';
+		var dateFormat = defaultDateFormat;
+		if (inputItem.dataset)
+			dateFormat = inputItem.dataset.dateFormat ? inputItem.dataset.dateFormat : defaultDateFormat;
+		var date = moment(inputItem.value, dateFormat);
+		if (!date.isValid())
+			return {success: false, error_message: please_enter_date_message};
+		return {success: true};		
+	};
+}
+
 
 function amp_validator_check_date_range(itemsClass){
 	return function(inputItem){		
@@ -112,46 +133,44 @@ function amp_validator_check_date_range(itemsClass){
 		var dateFormat = dateRangeStartItem.data('date-format') ? dateRangeStartItem.data('date-format') : 'YYYY-MM-DD';
 		var dateStart = moment(dateRangeStartItem.val(), dateFormat);
 		var dateEnd = moment(dateRangeEndItem.val(), dateFormat);
-
+		//if either startDate or endDate are invalid, it's up to the other validators to catch them
 		if (!dateStart.isValid())
-			return {success: false, error_message: please_enter_date_message};
-
+			return {success: true};
 		if (!dateEnd.isValid())
-			return {success: false, error_message: please_enter_date_message};
-		
-		
+			return {success: true};
 		if (dateEnd < dateStart)
 			return {success: false, error_message: "Start Date should be before End Date", validate_class: itemsClass};
-			
 		return {success: true};			
 	};
 }
 
 function selectHasValue(selectVal){
-	if (typeof(selectVal) == 'undefined')
+	if (typeof(selectVal.value) == 'undefined')
 		return false;
-	if (selectVal == null)
+	if (selectVal.value == null)
 		return false;
-	if (selectVal == '')
+	if (selectVal.value == '')
 		return false;
-	if (isNaN(selectVal))
+	if (isNaN(selectVal.value))
 		return false;
-	return parseInt(selectVal) > 0;
+	return parseInt(selectVal.value) > 0;
 }
 
-function get_validator_for_element(elem)
+function get_validators_for_element(elem)
 {
+	var validators = [];
+	
 	if ($(elem).is('.validate-phone-number'))
-		return new AmpValidator(looksLikePhoneNumber, please_enter_phone_number_message);
+		validators.push(new AmpValidator(looksLikePhoneNumber, please_enter_phone_number_message));
 	
 	if ($(elem).is('.validate-email-address'))
-		return new AmpValidator(function(elem){return (elem.length == 0) || looksLikeEmail(elem);}, please_enter_email_message);
+		validators.push(new AmpValidator(function(elem){return (elem.value.length == 0) || looksLikeEmail(elem.value);}, please_enter_email_message));
 	
 	if ($(elem).is('select.validate-mandatory'))
-		return new AmpValidator(selectHasValue, please_enter_something_message);
+		validators.push(new AmpValidator(selectHasValue, please_enter_something_message));
 
 	if ($(elem).is('.validate-mandatory-number'))
-		return new AmpValidator(function(value){return (value.length > 0) && looksLikeAmount(value);}, please_enter_number_message).setAllowEmpty(false);
+		validators.push(new AmpValidator(function(value){return (value.value.length > 0) && looksLikeAmount(value.value);}, please_enter_number_message).setAllowEmpty(false));
 
 	if ($(elem).is('input.validate-mandatory') || $(elem).is('textarea.validate-mandatory'))
 	{
@@ -163,7 +182,7 @@ function get_validator_for_element(elem)
 				validate_min_length = parseInt(className.substring("validate-min-length-".length));
 			};
 		}
-		return new AmpValidator(amp_validator_hasMinimumLength(validate_min_length), please_enter_something_message);
+		validators.push(new AmpValidator(amp_validator_hasMinimumLength(validate_min_length), please_enter_something_message));
 	}
 
 	if ($(elem).is('.validate-year'))
@@ -174,10 +193,12 @@ function get_validator_for_element(elem)
 		for(var i = 0; i < classList.length; i++){
 			var className = classList[i];
 			if (className.indexOf("validate-year-range-group-") == 0){
-				return new AmpValidator(amp_validator_check_year_range(className)).setAllowEmpty(false).setErrMsg(please_enter_year_message); //amp_bootstrap_forms_check_percentage(elem, className);	
+				validators.push(new AmpValidator(amp_validator_check_year_range(className)).setAllowEmpty(false).setErrMsg(please_enter_year_message)); //amp_bootstrap_forms_check_percentage(elem, className);
+				validators.push(new AmpValidator(amp_validator_check_year(className)));
 			}
 		};				
-		return new AmpValidator(isYearRangeStartValidator(elem)).setAllowEmpty(false);
+		//this has no reference anywhere -- has it ever worked?
+//		validators.push(new AmpValidator(isYearRangeStartValidator(elem)).setAllowEmpty(false));
 	}
 
 	if ($(elem).is('.validate-date-range-start, .validate-date-range-end')){
@@ -185,10 +206,12 @@ function get_validator_for_element(elem)
 		for(var i = 0; i < classList.length; i++){
 			var className = classList[i];
 			if (className.indexOf("validate-date-range-group-") == 0){
-				return new AmpValidator(amp_validator_check_date_range(className)).setAllowEmpty(false).setErrMsg(please_enter_date_message); //amp_bootstrap_forms_check_percentage(elem, className);	
+				validators.push(new AmpValidator(amp_validator_check_date_range(className)).setAllowEmpty(false).setErrMsg(please_enter_date_message)); //amp_bootstrap_forms_check_percentage(elem, className);
+				validators.push(new AmpValidator(amp_validator_check_date(className)));
 			}
 		};				
-		return new AmpValidator(isYearRangeStartValidator(elem)).setAllowEmpty(false);
+		//this has no reference anywhere -- has it ever worked?
+//		validators.push(new AmpValidator(isYearRangeStartValidator(elem)).setAllowEmpty(false));
 	}
 	
 	if ($(elem).is('input.validate-percentage'))
@@ -197,10 +220,12 @@ function get_validator_for_element(elem)
 		for(var i = 0; i < classList.length; i++){
 			var className = classList[i];
 			if (className.indexOf("validate-percentage-") == 0){
-				return new AmpValidator(amp_validator_check_percentage(className)).setAllowEmpty(false); //amp_bootstrap_forms_check_percentage(elem, className);	
+				validators.push(new AmpValidator(amp_validator_check_percentage(className)).setAllowEmpty(false)); //amp_bootstrap_forms_check_percentage(elem, className);	
 			}
 		};
 	}
+	if (validators.length > 0)
+		return validators;
 	return false;
 }
 
@@ -216,9 +241,13 @@ function init_validation(divId)
 		var inputItemsSelector =  divId + " input, " + divId + " select, " + divId + " textarea";
 		$(inputItemsSelector).blur(function()
 		{
-			var validator = get_validator_for_element(this);
-			if (validator)
-				return validator.validateAndHighlight(this);
+			var validators = get_validators_for_element(this);
+			if (validators){
+				var prevError = false;
+				for (i = 0; i < validators.length; i++){
+					prevError |= validators[i].validateAndHighlight(this, prevError);
+				}
+			}
 		});
 	});
 }

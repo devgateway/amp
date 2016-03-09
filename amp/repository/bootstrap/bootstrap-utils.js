@@ -22,6 +22,7 @@ $(document).ready(function()
 function setValidationStatus(selector, val_status)
 {
 	selector.parent().removeClass('has-success').removeClass('has-warning').removeClass('has-error').addClass(val_status);
+//	selector.removeClass('has-success').removeClass('has-warning').removeClass('has-error').addClass(val_status);
 }
 
 function hasValidationError(selector)

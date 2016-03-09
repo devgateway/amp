@@ -56,12 +56,13 @@ function amp_bootstrap_form_validate(bigDivSelector){
 		var faultyElements = [];
 		$(inputItemsSelector).each(function(){
 			var elem = this;
-			var validator = get_validator_for_element(elem);
-			if (validator)
-			{
-				var val_result = validator.validateAndHighlight(elem);
-				if (!val_result)
-					faultyElements.push(elem);
+			var validators = get_validators_for_element(elem);
+			if (validators){
+				for (i = 0; i < validators.length; i++) {
+					var val_result = validators[i].validateAndHighlight(elem);
+					if (!val_result)
+						faultyElements.push(elem);
+				}
 			}
 		});
 		return faultyElements.length == 0;

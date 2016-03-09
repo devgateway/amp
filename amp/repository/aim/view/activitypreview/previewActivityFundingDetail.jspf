@@ -112,7 +112,8 @@ other rows (if any): capital spending percent / classification / attached pledge
 	</tr>
 </logic:present>
 	
-<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Expenditure Class">
+<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Expenditure Class" 
+		parentModule="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table">
 	<logic:present name="fundingDetail" property="expenditureClass">
 		<tr>
 		<td colspan="1" align="right"><digi:trn>Expenditure Category</digi:trn>:&nbsp;</td>

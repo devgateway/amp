@@ -312,6 +312,7 @@ public class MondrianTablesRepository {
 				// using string pre discussion with Constantin to be consistent with old reports that are not following calendar settings
 				new DatabaseTableColumn("transaction_start_date", "varchar(20) NOT NULL", true),
 				new DatabaseTableColumn("transaction_end_date", "varchar(20) NOT NULL", true),
+				new DatabaseTableColumn("expenditure_class", "integer", true),
 				new DatabaseTableColumn("transaction_range", "varchar(50) NOT NULL", true),
 		
 				/**

@@ -326,6 +326,7 @@
 		<DimensionUsage name="Pledges Type Of Assistance" source="Category Value" foreignKey="terms_of_assistance_id" />
 		<DimensionUsage name="Pledges Aid Modality" source="Category Value" foreignKey="modality_id" />
 		<DimensionUsage name="Disaster Response Marker" source="Hardcoded Texts" foreignKey="disaster_response" />
+		<DimensionUsage name="Expenditure Class" source="Category Value" foreignKey="expenditure_class" />
 		
 		<Dimension name="Related Projects" foreignKey="related_entity_id">
 			<Hierarchy hasAll="true" allMemberName="All Related Projects" primaryKey="amp_activity_id" name="Related Projects">

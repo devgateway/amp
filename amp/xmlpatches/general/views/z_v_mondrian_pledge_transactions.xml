@@ -37,6 +37,7 @@ SELECT	<!-- pledged money -->
 		ELSE to_char(afpd.dateend, gs.date_format)
 	END AS transaction_end_date,
 	afpd.amount AS transaction_amount,
+	(999999999) AS expenditure_class,
 	afpd.currency AS currency_id,
 	afpd.pledge_type AS pledge_type,
 	afpd.type_of_assistance AS type_of_assistance,
@@ -62,6 +63,7 @@ SELECT <!-- pledge-financed donor transactions -->
 	vmpt.transaction_date,
 	'Undefined' as transaction_end_date,
 	vmpt.transaction_amount,
+	(999999999) AS expenditure_class,
 	vmpt.currency_id,
 	999999999 AS pledge_type,
 	999999999 AS type_of_assistance,

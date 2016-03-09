@@ -33,6 +33,7 @@ SELECT  <!-- regular transactions -->
     vmpt.transaction_end_date,
     vmpt.transaction_range,
 	vmpt.transaction_amount,
+	vmpt.expenditure_class,
 	vmpt.currency_id,
 	vmpt.originating_org_id,
 	vmpt.financing_instrument_id,
@@ -79,6 +80,7 @@ SELECT <!-- MTEFs -->
     'Undefined' AS transaction_range,
 	
 	mf.amount AS transaction_amount,
+	(999999999) AS expenditure_class, 
 	mf.amp_currency_id AS currency_id,	
 	
 	f.amp_donor_org_id AS originating_org_id,
@@ -125,6 +127,9 @@ SELECT <!-- undefined donor -->
     'Undefined' AS transaction_range,
 
 	100 AS transaction_amount,
+	(999999999) AS expenditure_class, 
+	
+	
 
 	(SELECT amp_currency_id FROM amp_currency WHERE currency_code = (SELECT settingsvalue FROM amp_global_Settings WHERE settingsname = 'Base Currency')) AS currency_id,
 	(999999999) AS originating_org_id,
@@ -175,6 +180,8 @@ SELECT <!-- component funding -->
     'Undefined' AS transaction_end_date,
     'Undefined' AS transaction_range,
 	ct.transaction_amount AS transaction_amount,
+	(999999999) AS expenditure_class, 
+	
 	ct.currency_id AS currency_id,	
 	
 	ct.component_organisation_id AS originating_org_id,

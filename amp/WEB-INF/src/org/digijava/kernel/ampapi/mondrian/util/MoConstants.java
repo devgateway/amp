@@ -67,6 +67,7 @@ public final class MoConstants {
 	public static final String ACTIVITY_LONG_TEXTS = "Activity Long Texts";
 	public static final String ACTIVITY_TEXTS = "Activity Texts";
 	public static final String DISASTER_RESPONSE_MARKER = "Disaster Response Marker";
+	public static final String EXPENDITURE_CLASS = "Expenditure Class";
 	public static final String PLEDGE_TEXTS = "Pledge Texts";
 	public static final String ACTIVITY_FIXED_TEXTS = "Activity Fixed Texts";
 	public static final String ACTIVITY_CURRENCY_AMOUNTS = "Activity Currency Amounts";
@@ -178,6 +179,8 @@ public final class MoConstants {
 	public static final String H_ENVIRONMENT = "Environment";
 	public static final String H_MINORITIES = "Minorities";
 	public static final String H_PROGRAM_DESCRIPTION = "Program Description";
+	public static final String H_EXPENDITURE_CLASS = "Expenditure Class";
+	
 	//Attributes/Levels
 	public static final String ATTR_PROJECT_TITLE = "Project Title";
 	public static final String ATTR_APPROVAL_STATUS = "Approval Status";
@@ -195,6 +198,7 @@ public final class MoConstants {
 	public static final String ATTR_MODALITIES = ATTR_CATEGORY_NAME;
 	public static final String ATTR_TYPE_OF_COOPERATION = ATTR_CATEGORY_NAME;
 	public static final String ATTR_TYPE_OF_IMPLEMENTATION = ATTR_CATEGORY_NAME;
+	public static final String ATTR_EXPENDITURE_CLASS = ATTR_CATEGORY_NAME;
 	public static final String ATTR_PROCUREMENT_SYSTEM = ATTR_CATEGORY_NAME;
 	public static final String ATTR_FUNDING_STATUS = ATTR_CATEGORY_NAME;
 	public static final String ATTR_MODE_OF_PAYMENT = ATTR_CATEGORY_NAME;

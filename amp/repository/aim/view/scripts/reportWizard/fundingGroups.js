@@ -13,6 +13,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				,'Donor'
 				,'Donor Group'
 				,'Donor Agency'
+				,'Expenditure Class'
 				,'Primary Sector'
 				,'Status', 'Region', 'Country', 'District','Zone','Sector Location'
 				,'Type Of Assistance'

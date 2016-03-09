@@ -339,6 +339,7 @@
 <field:display feature="Funding Information" name="Agreement Close Date"></field:display>
 <field:display feature="Funding Information" name="Funding Classification Date"></field:display>
 <field:display feature="Funding Information" name="Agreement Parlimentary Approval Date"></field:display>
+<field:display feature="Funding Information" name="Expenditure Class"></field:display>
 <field:display feature="Government Contact Information" name="Government Email"></field:display> 
 <field:display feature="Government Contact Information" name="Government First Name"></field:display> 
 <field:display feature="Identification" name="AMP ID"></field:display> 

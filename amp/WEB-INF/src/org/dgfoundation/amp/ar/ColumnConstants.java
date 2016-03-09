@@ -165,6 +165,7 @@ public class ColumnConstants {
 	public static final String ON_OFF_TREASURY_BUDGET = "On/Off/Treasury Budget";
 	public static final String HUMANITARIAN_AID = "Humanitarian Aid";
 	public static final String DISASTER_RESPONSE_MARKER = "Disaster Response Marker";
+	public static final String EXPENDITURE_CLASS = "Expenditure Class";
 	public static final String ORGANIZATIONS_AND_PROJECT_ID = "Organizations and Project ID";
 	public static final String ORIGINAL_COMPLETION_DATE = "Original Completion Date";
 	public static final String MODALITIES = "Modalities";

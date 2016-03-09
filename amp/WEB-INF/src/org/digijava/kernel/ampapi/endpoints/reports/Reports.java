@@ -29,14 +29,13 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
-import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
-import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 import org.dgfoundation.amp.reports.PartialReportArea;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
@@ -355,7 +354,6 @@ public class Reports {
 		// AMP-19189 - add columns used for coloring the project title and amp id (but not for summary reports).
 		List<String> extraColumns = new ArrayList<String>();
 		if (spec.getColumns().size() != spec.getHierarchies().size()) {
-			extraColumns.add(ColumnConstants.ACTIVITY_ID);
 			extraColumns.add(ColumnConstants.APPROVAL_STATUS);
 			extraColumns.add(ColumnConstants.DRAFT);
 			queryObject.set(EPConstants.ADD_COLUMNS, extraColumns);
@@ -377,7 +375,7 @@ public class Reports {
 		report.set("columns", spec.getColumns());
 		report.set("hierarchies", spec.getHierarchies());
 		
-		report.set("colorSettings", getColorSettings());
+		report.set("colorSettings", getColorSettings(spec.getColumns()));
 		
 		// In caseIf this is a summarized report without hierarchies then we need to change the word 'constant' for 'Report
         // Totals' (translated).
@@ -722,13 +720,16 @@ public class Reports {
 		return ReportsUtil.exportToMap(config, reportId);
 	}
 	
-	public Map<String, Object> getColorSettings() {
+	public Map<String, Object> getColorSettings(Set<ReportColumn> reportColumns) {
 		
+		// columns that will be used for coloring and should be hidden in saiku if are not present in report specification
 		Set<String> hiddenColumnNames = new HashSet<String>();
 		hiddenColumnNames.add(ColumnConstants.APPROVAL_STATUS);
 		hiddenColumnNames.add(ColumnConstants.DRAFT);
-		hiddenColumnNames.add(ColumnConstants.ACTIVITY_ID);
-		// columns that will be used for coloring and should be hidden in saiku 
+
+		for (ReportColumn rc : reportColumns) {
+			hiddenColumnNames.remove(rc.getColumnName());
+		}
 
 		Map<String, Object> colorSettings = new HashMap<String, Object>();
 		

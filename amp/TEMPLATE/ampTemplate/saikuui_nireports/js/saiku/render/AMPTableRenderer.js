@@ -28,7 +28,6 @@ this.type = undefined;
 this.summarizedReport = undefined;
 this.draftColumn = undefined;
 this.approvalStatusColumn = undefined;
-this.activityIdColumn = undefined;
 this.hiddenColumns = undefined;
 this.ACTIVITY_STATUS_CODES = undefined;
 this.PLEDGE_ID_ADDER = 800000000; // java-side constant, taken MondrianETL 
@@ -128,7 +127,6 @@ function generateHeaderHtml(data) {
 	
 	this.draftColumn = getIndexOfColumn('Draft');
 	this.approvalStatusColumn = getIndexOfColumn('Approval Status');
-	this.activityIdColumn = getIndexOfColumn('Activity Id');
 	
 	for (var i=0; i < hiddenColumns.length; i++) {
 		hiddenColumns[i] = getIndexOfColumn(hiddenColumns[i]);
@@ -233,6 +231,10 @@ function generateNiReportHeaderHtml(headers) {
 	for(var i = 0; i < headers.length; i++) {
 		header += "<tr class='nireport_header'>";
 		for(var j = 0; j < headers[i].length; j++) {
+			if (headers[i][j].rowSpan == headers.length && isHiddenColumn(j)) {
+				continue;
+			}
+			
 			header += "<th id='" + headers[i][j].fullOriginalName + "' ";
 			header += "class='col hand-pointer'";
 
@@ -402,7 +404,7 @@ function generateDataRows(page, options) {
 	}
 	
 	// AMP-19189 fill the cell containing data with colors
-	if (this.draftColumn && this.approvalStatusColumn && this.activityIdColumn) {
+	if (this.draftColumn && this.approvalStatusColumn) {
 		fillContentsWithColors();
 	}
 
@@ -749,9 +751,9 @@ function fillContentsWithColors() {
 	for (var i = 0; i < this.contentMatrix.length; i++) {
 		for (var j = 0; j < this.contentMatrix[i].length; j++) {
 			if (!this.contentMatrix[i][j].isTotal && isColoredColumn(j)) {
-				var draftValue = this.contentMatrix[i][draftColumn].value;
-				var statusValue = parseInt(this.contentMatrix[i][approvalStatusColumn].value);
-				var activityIdValue = parseInt(this.contentMatrix[i][activityIdColumn].value);
+				var draftValue = this.contentMatrix[i][draftColumn].displayedValue;
+				var statusValue = parseInt(this.contentMatrix[i][approvalStatusColumn].displayedValue);
+				var activityIdValue = parseInt(this.contentMatrix[i][j].entityId);
 				
 				var color = undefined;
 				var asteriskPrefix = false;

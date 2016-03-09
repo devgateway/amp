@@ -241,7 +241,8 @@ public class InternationalizedViewsRepository {
 						addTrnColDef("terms_assist_name", "terms_assist_id").
 						addTrnColDef("financing_instrument_name", "financing_instrument_id").
 						addTrnColDef("mode_of_payment_name", "mode_of_payment_id").
-						addTrnColDef("funding_status_name", "funding_status_id"));
+						addTrnColDef("funding_status_name", "funding_status_id").
+						addTrnColDef("expenditure_class_name", "expenditure_class_id"));
 
 				addViewDef(this, new I18nViewDescription("v_donor_groups").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_org_grp_id", AmpOrgGroup.class, "orgGrpName")));
@@ -260,6 +261,9 @@ public class InternationalizedViewsRepository {
 
 				addViewDef(this, new I18nViewDescription("v_executing_agency_type").
 						addColumnDef(new I18nViewColumnDescription("name", "org_type", AmpOrgType.class, "orgType")));
+				
+				addViewDef(this, new I18nViewDescription("v_expenditure_class").
+						addTrnColDef("name", "id"));
 				
 				addViewDef(this, new I18nViewDescription("v_financial_instrument").
 						addTrnColDef("category_value", "id"));

@@ -43,7 +43,7 @@ public abstract class ReportsTestCase extends AmpTestCase
 		ImmutablePair<GroupReportData, String> report = ReportTestingUtils.runReportOn(reportName, modifier, activities);
 		////System.out.println(ReportTestingUtils.describeReportInCode(report, 1, true));
 //		checkThatAllCRDsHaveIdenticalReportHeadingsLayoutData(report);
-		String error = correctResult.matches(report.k);
+		String error = correctResult == null ? "missing Cor" : correctResult.matches(report.k);
 		if (error != null)
 			System.err.format("test %s, report %s, the output is: %s\n", testName, reportName, report.v);
 		assertNull(String.format("test %s, report %s: %s", testName, reportName, error), error);

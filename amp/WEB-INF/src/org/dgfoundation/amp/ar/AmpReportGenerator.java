@@ -333,6 +333,10 @@ public class AmpReportGenerator extends ReportGenerator {
 			// AMP-21355 - quite ugly, but speeds up fetching and it works
 			columnFilterSQLClause = String.format("%s AND ((transaction_type != 3) OR ((transaction_type = 3) AND (extract(year from transaction_date) IN (%s))))", columnFilterSQLClause, Util.toCSStringForIN(this.realMtefYears));
 		}
+		if ((extractorView != null) && extractorView.equals("v_donor_funding") && filter.getExpenditureClass() != null && !filter.getExpenditureClass().isEmpty()) {
+			// AMP-22234: again ugly, but code dies in AMP 2.12
+			columnFilterSQLClause = String.format("%s AND ((transaction_type != 2) OR ((transaction_type = 2) AND (expenditure_class_id IN (%s))))", columnFilterSQLClause, Util.toCSStringForIN(filter.getExpenditureClass()));
+		}
 		return columnFilterSQLClause;	
 	}
 	

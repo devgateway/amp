@@ -1378,6 +1378,8 @@ public class AmpARFilter extends PropertyListable {
 		
 		String TYPE_OF_ASSISTANCE_FILTER = "SELECT amp_activity_id FROM v_terms_assist WHERE terms_assist_code IN ("
 			+ Util.toCSString(typeOfAssistance) + ")";
+		
+		String EXPENDITURE_CLASS_FILTER = "SELECT amp_activity_id FROM v_expenditure_class WHERE id IN (" + Util.toCSStringForIN(expenditureClass) + ")";
 
 		String MODE_OF_PAYMENT_FILTER = "SELECT amp_activity_id FROM v_mode_of_payment WHERE mode_of_payment_code IN ("
 			+ Util.toCSString(modeOfPayment) + ")";
@@ -1586,8 +1588,14 @@ public class AmpARFilter extends PropertyListable {
 
 		if (typeOfAssistance != null && typeOfAssistance.size() > 0)
 			queryAppend(TYPE_OF_ASSISTANCE_FILTER);
+		
+		if (expenditureClass != null && expenditureClass.size() > 0)
+			queryAppend(EXPENDITURE_CLASS_FILTER);
+		
 		if (modeOfPayment != null && modeOfPayment.size() > 0)
 			queryAppend(MODE_OF_PAYMENT_FILTER);
+		
+		
 		if (projectCategory != null && projectCategory.size() > 0)
 			queryAppend(PROJECT_CATEGORY_FILTER);
 		

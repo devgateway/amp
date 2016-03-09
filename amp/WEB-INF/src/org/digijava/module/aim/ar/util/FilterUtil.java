@@ -217,7 +217,7 @@ public class FilterUtil {
 		
 		form.setSelectedStatuses( FilterUtil.getObjectsIds(filter.getStatuses()) ) ;
 		
-        //form.setSelectedExpenditureClasses(FilterUtil.getObjectsIds(filter.getExpenditureClass()));
+        form.setSelectedExpenditureClasses(FilterUtil.getObjectsIds(filter.getExpenditureClass()));
 		form.setSelectedWorkspaces( FilterUtil.getObjectsIds(filter.getNonPrivateWorkspaces()) ) ;
 
 		form.setSelectedProjectCategory( FilterUtil.getObjectsIds(filter.getProjectCategory()) );

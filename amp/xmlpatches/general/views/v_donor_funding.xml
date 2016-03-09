@@ -32,18 +32,26 @@
 			    			ELSE 999999999
 			    		END AS disaster_response_code,
 		    			fd.recipient_org_id AS recipient_id, recipient_org.name AS recipient_name, recipient_role.role_code AS recipient_role_code, recipient_role.name AS recipient_role_name, 
-		    			source_role.role_code AS source_role_code, source_role.name AS source_role_name, pld_t.category_value AS activity_pledges_title_name,pld_t.id as activity_pledges_title_id
+		    			source_role.role_code AS source_role_code, source_role.name AS source_role_name, pld_t.category_value AS activity_pledges_title_name, pld_t.id as activity_pledges_title_id,
+		    			expclass.id AS expenditure_class_id, expclass.category_value AS expenditure_class_name
+		    			
 					FROM amp_funding f LEFT JOIN amp_role source_role ON f.source_role_id = source_role.amp_role_id
+						JOIN amp_funding_detail fd ON fd.amp_funding_id = f.amp_funding_id
+						JOIN amp_category_value cval ON cval.id = f.type_of_assistance_category_va
+						JOIN amp_currency c ON c.amp_currency_id = fd.amp_currency_id
+						JOIN amp_organisation d ON d.amp_org_id = f.amp_donor_org_id
+						JOIN amp_org_group b ON d.org_grp_id = b.amp_org_grp_id
+						JOIN amp_org_type ot ON ot.amp_org_type_id = b.org_type
 						LEFT JOIN amp_category_value cval2 ON f.financing_instr_category_value = cval2.id
 						LEFT JOIN amp_category_value cval3 ON f.mode_of_payment_category_va = cval3.id
 						LEFT JOIN amp_category_value cval4 ON f.funding_status_category_va = cval4.id
-						LEFT JOIN amp_agreement agr ON f.agreement = agr.id, amp_funding_detail fd
+						LEFT JOIN amp_agreement agr ON f.agreement = agr.id
 						LEFT JOIN amp_category_value cval5 ON fd.adjustment_type = cval5.id
 						LEFT JOIN amp_funding_pledges fp ON fd.pledge_id = fp.id
 						LEFT JOIN amp_category_value pld_t ON pld_t.id = fp.title
 						LEFT JOIN amp_organisation recipient_org ON fd.recipient_org_id = recipient_org.amp_org_id
-						LEFT JOIN amp_role recipient_role ON fd.recipient_role_id = recipient_role.amp_role_id, amp_category_value cval, amp_currency c, amp_organisation d, amp_org_group b, amp_org_type ot
-					WHERE c.amp_currency_id = fd.amp_currency_id AND f.amp_funding_id = fd.amp_funding_id AND cval.id = f.type_of_assistance_category_va AND d.amp_org_id = f.amp_donor_org_id AND d.org_grp_id = b.amp_org_grp_id AND ot.amp_org_type_id = b.org_type
+						LEFT JOIN amp_role recipient_role ON fd.recipient_role_id = recipient_role.amp_role_id
+						LEFT JOIN amp_category_value expclass ON expclass.id = fd.expenditure_class
 					
 				UNION ALL
 				
@@ -55,8 +63,11 @@
 					NULL as capital_spend_percent, NULL as agreement_code, NULL as agreement_title_code, 
 					NULL AS disaster_response,
 					NULL as recipient_id, NULL as recipient_name, NULL as recipient_role_code, NULL AS recipient_role_name,
-					'DN' AS source_role_code, 'Donor' AS source_role_name, NULL as activity_pledges_title_name, NULL as activity_pledges_title_id
-				FROM amp_annual_project_budget apb JOIN amp_currency c ON c.amp_currency_id = apb.amp_currency_id
+					'DN' AS source_role_code, 'Donor' AS source_role_name, NULL as activity_pledges_title_name, NULL as activity_pledges_title_id,
+					NULL AS expenditure_class_id, NULL AS expenditure_class_name
+				
+				FROM amp_annual_project_budget apb 
+					JOIN amp_currency c ON c.amp_currency_id = apb.amp_currency_id
 				
 				UNION ALL
 				
@@ -79,7 +90,8 @@
 			    	recipient.amp_org_id AS recipient_id, recipient.name AS recipient_name,
 			    	dest_role.role_code AS recipient_role_code, dest_role.name AS recipient_role_name,
 			    	src_role.role_code AS source_role_code, src_role.name AS source_role_name,
-			    	NULL as activity_pledges_title_name, NULL as activity_pledges_title_id
+			    	NULL as activity_pledges_title_name, NULL as activity_pledges_title_id,
+			    	NULL AS expenditure_class_id, NULL AS expenditure_class_name
 			    	
 			    FROM
 			    	amp_funding f

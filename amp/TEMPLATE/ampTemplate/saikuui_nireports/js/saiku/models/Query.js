@@ -40,9 +40,7 @@ var Query = Backbone.Model.extend({
             }).toUpperCase();
         
         this.model = _.extend({ name: this.uuid }, SaikuQueryTemplate);
-        if (args.cube) {
-            this.model.cube = args.cube;
-        }
+
         this.helper = new SaikuQueryHelper(this);
 
         this.result = new Result({ limit: Settings.RESULT_LIMIT }, { query: this });
@@ -136,12 +134,7 @@ var Query = Backbone.Model.extend({
         var self = this;
         // Check for automatic execution
         Saiku.ui.unblock();
-        if (typeof this.model.properties != "undefined" && this.model.properties['saiku.olap.query.automatic_execution'] === false &&
-            ! (force === true)) {
-            return;
-        }
-        this.workspace.unblock();
-        
+        this.workspace.unblock();       
 
         $(this.workspace.el).find(".workspace_results_info").empty();
         this.workspace.trigger('query:run');

@@ -18,18 +18,9 @@
  * Repository query
  */
 var RepositoryUrl = "api/repository";
-var repoPathUrl = function() {
-    /*
-    return (Settings.BIPLUGIN5 ? "/repository"
-                    : (Settings.BIPLUGIN ? "/pentahorepository2" : "/repository2"));
-    */
-    if (Settings.BIPLUGIN)
-        return "pentaho/repository";
-    
+var repoPathUrl = function() {   
     return  RepositoryUrl;
 }
-
-
 
 var RepositoryObject = Backbone.Model.extend( {
     url: function( ) {
@@ -95,10 +86,6 @@ var SavedQuery = Backbone.Model.extend({
     move_query_to_workspace_json: function(model, response) {
         var json = JSON.stringify(response);
         var filename = model.get('file');
-
-        if(model.get('report_id') || model.get('report_token')) {
-        	Settings.AMP_REPORT_API_BRIDGE = true;
-        }
         
         var query = new Query({ 
             json: json,

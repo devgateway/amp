@@ -17,39 +17,6 @@
 /**
  * Model which fetches the dimensions and measures of a cube
  */
-if (Settings.AMP_REPORT_API_BRIDGE) {
-	var Cube = Backbone.Model.extend({
+var Cube = Backbone.Model.extend({
 		
-	});
-} else {
-	var Cube = Backbone.Model.extend({
-	    initialize: function(args) {
-	        this.url = Saiku.session.username + "/discover/" +
-	            args.key + "/metadata";
-	    },
-	    
-	    parse: function(response) {
-	        var template_dimensions = _.template($("#template-dimensions").html(), { dimensions: response.dimensions });
-	        var template_measures = _.template($("#template-measures").html(), { measures: response.measures });
-	        var template_attributes = _.template($("#template-attributes").html(), { cube: response });
-	
-	        this.set({ 
-	            template_measures: template_measures,
-	            template_dimensions: template_dimensions,
-	            template_attributes: $(template_attributes).html(),
-	            data: response
-	        });
-	      
-	        try {
-		        if(typeof localStorage !== "undefined" && localStorage) {
-		        	localStorage.setItem("cube." + this.get('key'), JSON.stringify(this));
-		        }
-	        } catch (e) {
-	        	console.info(e);
-	        	localStorage.clear();
-	        	console.info("localStorage cleared!!!");
-	        }
-	        return response;
-	    }
-	});
-}
+});

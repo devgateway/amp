@@ -1,8 +1,6 @@
 var AMPInfo = Backbone.View.extend({
 
     initialize: function(args) {
-    	if(!Settings.AMP_REPORT_API_BRIDGE) return; 
-
     	this.workspace = args.workspace;
         
         this.id = _.uniqueId("amp_info_");

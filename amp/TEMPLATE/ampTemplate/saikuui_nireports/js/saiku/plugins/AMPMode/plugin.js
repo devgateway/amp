@@ -5,6 +5,5 @@ Saiku.events.bind('session:new', function(session) {
 
 Saiku.events.bind('render:end', function(session) {
 	$("#ui-datepicker-div").hide();
-	if(Settings.AMP_REPORT_API_BRIDGE)
-		$("#header").find(".newtab").hide();
+	$("#header").find(".newtab").hide();
 });

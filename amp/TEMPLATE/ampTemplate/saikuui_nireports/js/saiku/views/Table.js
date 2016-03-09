@@ -44,221 +44,11 @@ var Table = Backbone.View.extend({
     },
     
     clicked_cell: function(event) {
-        var self = this;
-        
-        if (this.workspace.query.get('type') != 'QM' || Settings.MODE == "table") {
-            return false;
-        }
-        if ($(this.workspace.el).find( ".workspace_results.ui-selectable" ).length > 0) {
-            $(this.workspace.el).find( ".workspace_results" ).selectable( "destroy" );
-        }
-
-        var $target = ($(event.target).hasClass('row') || $(event.target).hasClass('col') ) ?
-            $(event.target).find('div') : $(event.target);
-        
-    var $body = $(document);
-    $.contextMenu('destroy', '.row, .col');
-    $.contextMenu({
-        appendTo: $target,
-        selector: '.row, .col', 
-        ignoreRightClick: true,
-         build: function($trigger, e) {
-            var $target = $(e.currentTarget).find('div');
-            var axis = $(e.currentTarget).hasClass('rows') ? "ROWS" : "COLUMNS"
-            var pos = $target.attr('rel').split(':');
-            var row = parseInt(pos[0])
-            var col = parseInt(pos[1])
-            var cell = self.workspace.query.result.lastresult().cellset[row][col];
-            var query = self.workspace.query;
-            var schema = query.get('schema');
-            var cube = query.get('connection') + "/" + 
-                query.get('catalog') + "/"
-                + ((schema == "" || schema == null) ? "null" : schema) 
-                + "/" + query.get('cube');
-
-            var d = cell.properties.dimension;
-            var h = cell.properties.hierarchy;
-            var l = cell.properties.level;
-            var l_caption = "";
-
-            var keep_payload = JSON.stringify(
-                {
-                    "hierarchy"     :  h,
-                    "uniquename"    : l,
-                    "type"          : "level",
-                    "action"        : "delete"
-                }) 
-            + "," +JSON.stringify(
-                {
-                    "hierarchy"     :  h,
-                    "uniquename"    : cell.properties.uniquename,
-                    "type"          : "member",
-                    "action"        : "add"
-                }       
-            );
-
-            var children_payload = cell.properties.uniquename;
-
-            var levels = [];
-            var items = {};
-            var cubeModel = Saiku.session.sessionworkspace.cube[cube];
-            var dimensions = (cubeModel && cubeModel.has('data')) ? cubeModel.get('data').dimensions : null;
-            if (!dimensions) {
-                Saiku.session.sessionworkspace.cube[cube].fetch({async : false});
-                dimensions = Saiku.session.sessionworkspace.cube[cube].get('data').dimensions;
-            }
-            var dimsel = {};
-            var used_levels = [];
-
-            self.workspace.query.action.get("/axis/" + axis + "/dimension/" + encodeURIComponent(d), { 
-                        success: function(response, model) {
-                            dimsel = model;
-                        },
-                        async: false
-            });
-
-            _.each(dimsel.selections, function(selection) {
-                if(_.indexOf(used_levels, selection.levelUniqueName) == -1)
-                    used_levels.push(selection.levelUniqueName);
-
-            });
-
-            _.each(dimensions, function(dimension) {
-                if (dimension.name == d) {
-                    _.each(dimension.hierarchies, function(hierarchy) {
-                        if (hierarchy.uniqueName == h) {
-                            _.each(hierarchy.levels, function(level) {
-                                items[level.name] = {
-                                    name: level.caption,
-                                    payload: JSON.stringify({
-                                        "hierarchy"     : h,
-                                        uniquename    : level.uniqueName,
-                                        type          : "level",
-                                        action        : "add"
-                                    })
-                                };
-                                if(_.indexOf(used_levels, level.uniqueName) > -1) {
-                                    items[level.name].disabled = true;
-                                    items["remove-" + level.name] = {
-                                        name: level.caption,
-                                        payload: JSON.stringify({
-                                            "hierarchy"     :  h,
-                                            uniquename    : level.uniqueName,
-                                            type          : "level",
-                                            action        : "delete"
-                                        })
-                                    };
-                                    
-                                }
-                                if (level.uniqueName == l) {
-                                    l_caption = level.caption;
-                                    l_name = level.name;
-                                }
-                                items["keep-" + level.name] = items[level.name];
-                                items["include-" + level.name] = JSON.parse(JSON.stringify(items[level.name]));
-                                items["keep-" + level.name].payload = keep_payload + "," + items[level.name].payload;
-                            });
-                        }
-                    });
-                }
-            });
-            items["keeponly"] = { payload: keep_payload };
-            items["getchildren"] = { payload: children_payload };
-            if (items.hasOwnProperty("remove-" + l_name) && items.hasOwnProperty("include-" + l_name)) {
-                items["showall"] = { payload: items["remove-" + l_name].payload + ", " + items["include-" + l_name].payload};
-            }
-            
-
-            
-            var lvlitems = function(prefix) {
-                var ritems = {};
-                for (key in items) {
-                    if (prefix != null && prefix.length < key.length && key.substr(0, prefix.length) == prefix) {
-                            ritems[key] = items[key];
-                    }
-                }
-                return ritems;
-            }
-
-            var member = $target.html();
-
-            var citems = {
-                    "name" : {name: "<b>" + member + "</b>", disabled: true },
-                    "sep1": "---------",
-                    "keeponly": {name: "Keep Only", i18n: true, payload: keep_payload }
-            };
-            if (d != "Measures") {
-                citems["getchildren"] = {name: "Show Children", i18n: true, payload: children_payload }
-                citems["fold1key"] = {
-                        name: "Include Level", i18n: true, 
-                        items: lvlitems("include-")
-                    };
-                citems["fold2key"] = {
-                        name: "Keep and Include Level", i18n: true, 
-                        items: lvlitems("keep-")
-                    };
-                citems["fold3key"] = {
-                        name: "Remove Level", i18n: true,
-                        items: lvlitems("remove-")
-                    };
-                citems["filterlevel"] = {
-                    name: "Filter Level", i18n: true
-                };
-                if (items["showall"]) {
-                    citems["showall"]  =  { name: "Remove Filters", i18n: true };
-                }
-            }
-            $.each(citems, function(key, item){
-            	recursive_menu_translate(item, Saiku.i18n.po_file);
-            });
-            return {
-                callback: function(key, options) {
-
-                    var url = '/axis/' + axis + '/dimension/' + encodeURIComponent(d);
-                    var children = false;
-                    if (key.indexOf("filterlevel") >= 0) {
-                        var key = encodeURIComponent(d) + "/hierarchy/" + encodeURIComponent(h) + "/" + encodeURIComponent(l);
-                        (new SelectionsModal({
-                            target: null,
-                            axis: axis,
-                            name: l_caption,
-                            key: key,
-                            workspace: self.workspace
-                        })).open();
-                        return;
-                    }
-                    if (key.indexOf("children") >= 0) {
-                        url = '/axis/' + axis + '/dimension/' + encodeURIComponent(d) + "/children";
-                        children = true;
-                    }
-                    if (children) {
-                        self.workspace.query.set({ 'formatter' : 'flat' });
-                    }
-                    self.workspace.query.action.put(url, { success: self.workspace.sync_query,
-                        dataType: "text",
-                        data: children ?
-                            {
-                                member: items[key].payload
-                            }
-                            :
-                            {
-                                selections: "[" + items[key].payload + "]"
-                            }
-                    });
-                    
-                },
-                items: citems
-            } 
-        }
-    });
-    $target.contextMenu();
-
-
+    	console.error("unimplemented");
     },
 
 
-    render: function(args, block) {
-
+    render: function(args, block) {    	
         if (typeof args == "undefined" || typeof args.data == "undefined" || 
             ($(this.workspace.el).is(':visible') && !$(this.el).is(':visible'))) {
             return;
@@ -276,7 +66,6 @@ var Table = Backbone.View.extend({
 
         // Render the table without blocking the UI thread
         _.delay(this.process_data, 2, args.data);
-
     },
 
     clearOut: function() {
@@ -290,24 +79,20 @@ var Table = Backbone.View.extend({
                 element.removeChild(table);
             }
         }
-
     },
 
-    process_data: function(data) {
-        
+    process_data: function(data) {        
         this.workspace.processing.hide();
         this.workspace.adjust();
         // Append the table
         this.clearOut();
-        if (!Settings.AMP_REPORT_API_BRIDGE) {
-        	$(this.el).html('<table></table>');
-        } else {
-        	if (data.page.pageArea !== null) {
-        		$(this.el).html('<table></table>');
-        	} else {
-        		$(this.el).html("<br><div class='i18n no_results'>The specified filtered report does not hold any data. Either pick a different filter criteria or use another report.</div>");
-        	}
-        }
+
+    	if (data.page.pageArea !== null) {
+    		$(this.el).html('<table></table>');
+    	} else {
+    		$(this.el).html("<br><div class='i18n no_results'>The specified filtered report does not hold any data. Either pick a different filter criteria or use another report.</div>");
+    	}
+        
         data.workspace = this.workspace;
         var contents = this.renderer.render(data, { 
             htmlObject:         $(this.el).find('table'),
@@ -325,22 +110,7 @@ var Table = Backbone.View.extend({
         } else {
             $(this.el).removeClass('headerhighlight');
         }
-        /*
-        var tipOptions = {
-          delayIn: 200,
-          delayOut:80,
-          offset:  2,
-          html:    true,
-          gravity: "nw",
-          fade:    false,
-          followMouse: true,
-          corners: true,
-          arrow:   false,
-          opacity: 1
-    };
-
-        $(this.el).find('th.row, th.col').tipsy(tipOptions);
-        */
+        
         $(this.el).find(".i18n").i18n(Saiku.i18n.po_file);
         this.workspace.trigger('table:rendered', this);
     }

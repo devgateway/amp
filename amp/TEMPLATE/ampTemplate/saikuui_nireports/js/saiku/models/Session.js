@@ -27,65 +27,30 @@ var Session = Backbone.Model.extend({
     upgradeTimeout: null,
     isadmin: false,
         
+    //IMPORTANT: Care with this file, some changes can cause stop loading Saiku.
     initialize: function(args, options) {
+    	console.log("Session.initialize");
         // Attach a custom event bus to this model
         _.extend(this, Backbone.Events);
         _.bindAll(this, "check_session", "process_session", "load_session","login");
         // Check if credentials are being injected into session
-        if (options && options.username && options.password) {
-            this.username = options.username;
-            this.password = options.password;
-            if (!Settings.DEMO) {
-                this.save({username:this.username, password:this.password},{success: this.check_session, error: this.check_session});
-            } else {
-                this.check_session();    
-            }
-
-        } else {
-            this.check_session();
-        }
+        this.check_session();
     },
 
     check_session: function() {
-        if (this.sessionid === null || this.username === null || this.password === null) {
-            this.clear();
-            this.fetch({ success: this.process_session })
-        } else {
-            this.username = encodeURIComponent(options.username);
-            this.load_session();
-        }
+    	console.log("Session.check_session");
+    	this.clear();
+        this.fetch({ success: this.process_session });
     },
 
     load_session: function() {
+    	console.log("Session.load_session");
         this.sessionworkspace = new SessionWorkspace();
     },
 
     process_session: function(model, response) {
-        if ((response === null || response.sessionid == null)) {
-            // Open form and retrieve credentials
-            Saiku.ui.unblock();
-            if (Settings.DEMO) {
-                this.form = new DemoLoginForm({ session: this });
-            } else {
-                this.form = new LoginForm({ session: this });
-            }
-            this.form.render().open();
-        } else {
-            this.sessionid = response.sessionid;
-            this.roles = response.roles;
-            this.isadmin = response.isadmin;
-            this.username = encodeURIComponent(response.username);
-            this.language = response.language;
-            /* Skipping setting the language with the Saiku Session since we already have it from AMP
-				
-            if (typeof this.language != "undefined" && this.language != Saiku.i18n.locale) {
-                Saiku.i18n.locale = this.language;
-                Saiku.i18n.automatic_i18n();
-            }
-            */
-            this.load_session();
-        }
-        
+    	console.log("Session.process_session");
+    	this.load_session();
         return this;
     },
     
@@ -93,45 +58,19 @@ var Session = Backbone.Model.extend({
         $(this.form.el).dialog('open');
     },
     
-    login: function(username, password) {
-        var that = this;
-        this.save({username:username, password:password},{dataType: "text", success: this.check_session, error: function(model, response){
-            that.login_failed(response.responseText)
-        }});
+    login: function(username, password) {        
         
     },
     login_failed: function(response){
-        this.form = new LoginForm({ session: this });
-        this.form.render().open();
-        this.form.setMessage(response);
+        
     },
     logout: function() {
-        // FIXME - This is a hack (inherited from old UI)
-        Saiku.ui.unblock();
-        $('#header').empty().hide();
-        $('#tab_panel').remove();
-        Saiku.tabs = new TabSet();
-        Saiku.toolbar.remove();
-        Saiku.toolbar = new Toolbar();
-        typeof localStorage !== "undefined" && localStorage && localStorage.clear();
-        this.id = _.uniqueId('queryaction_');
-        this.clear();
-        this.sessionid = null;
-        this.username = null;
-        this.password = null;
-        this.isadmin = false;
-        this.destroy({async: false });
-        //console.log("REFRESH!");
-        document.location.reload(false);
-        delete this.id;
-
+        
     },
 
     url: function() {
-    	if (Settings.AMP_REPORT_API_BRIDGE) {
-    		return "/TEMPLATE/ampTemplate/saikuui_nireports/mockData/session.json";
-    	} else {
-    		return "session";
-    	}
+    	console.log("Session.url");
+    	//TODO: Instead of loading this file add the content here.
+    	return "/TEMPLATE/ampTemplate/saikuui_nireports/mockData/session.json";
     }
 });

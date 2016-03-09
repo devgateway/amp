@@ -65,7 +65,6 @@ var Settings = {
     LOCALSTORAGE_EXPIRATION: 0 /* 10 hours, in ms */,
     UPGRADE: false,    
     AMP_PATH: '/rest/data/report',
-    AMP_REPORT_API_BRIDGE: AMP_REPORT_API_BRIDGE,
     PAGINATION: true,
     RESULTS_PER_PAGE: 10,
     USE_AMP_LANGUAGE: true,
@@ -223,6 +222,7 @@ Settings.Util.numberToString = function(number, settings) {
 	stringNumber = new numeral(number).format(format);
 	return stringNumber;
 };
+
 Settings.Util.stringToNumber = function(stringNumber, settings) {
 	var format = "";
 	var number = null;
@@ -245,7 +245,6 @@ Settings.Util.stringToNumber = function(stringNumber, settings) {
 	number = new numeral().unformat(stringNumber);
 	return number;
 };
-
 
 Settings.Util.createLanguage = function(auxSettings) {
 	var ret = {

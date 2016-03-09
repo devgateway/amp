@@ -4,8 +4,6 @@ var AMPGisExport = Backbone.View.extend({
 	},
 	
 	initialize : function(args) {
-    	if(!Settings.AMP_REPORT_API_BRIDGE) return; 
-
     	var self = this;
 		this.workspace = args.workspace;
 		this.initialized = false;

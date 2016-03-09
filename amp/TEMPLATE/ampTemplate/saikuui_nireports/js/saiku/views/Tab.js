@@ -30,7 +30,7 @@ var Tab = Backbone.View.extend({
     template: function() {        
         // Create tab
         return _.template("<a class='saikutab' href='#<%= id %>'><%= caption %></a>" +
-                "<span class='close_tab sprite'>Close tab</span>")
+                "<span class=''>&nbsp</span>")
             ({
                 id: this.id,
                 caption: this.caption
@@ -43,6 +43,7 @@ var Tab = Backbone.View.extend({
      * @param args
      */
     initialize: function(args) {
+    	console.log("Tab.initialize");
         _.extend(this, Backbone.Events);
         _.extend(this, args);
         this.content.tab = this;
@@ -56,6 +57,7 @@ var Tab = Backbone.View.extend({
      * @returns tab
      */
     render: function() {
+    	console.log("Tab.render");
         var self = this;
         // Render the content
         this.content.render();
@@ -75,29 +77,6 @@ var Tab = Backbone.View.extend({
         $.each(menuitems, function(key, item){
             recursive_menu_translate(item, Saiku.i18n.po_file);
         });
-
-        $.contextMenu('destroy', '.saikutab');
-        $.contextMenu({
-                selector: '.saikutab',
-                callback: function(key, options) {
-                    var selected = options.$trigger.attr('href').replace('#','');
-                    var tab = Saiku.tabs.find(selected);
-                 	  if (key == "closethis") {
-                        tab.remove();
-                        self.select();
-                        return;
-                    } else if (key == "closeothers") {
-                        tab.select();
-                        Saiku.tabs.close_others(tab);
-                    } else if (key == "duplicate") {
-                        Saiku.tabs.duplicate(tab);
-                    } else if (key == "new") {
-                        Saiku.tabs.new_tab();
-                    }
-                    //self.workspace.chart.exportChart(key);
-                },
-                items: menuitems
-            });
 
         return this;
     },

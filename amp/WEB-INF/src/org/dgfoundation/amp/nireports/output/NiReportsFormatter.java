@@ -64,7 +64,7 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 	public GeneratedReport format() {
 		reportContents = runResult.reportOut.accept(this);
 		return new GeneratedReport(spec, (int) runResult.wallclockTime, null, reportContents, rootHeaders, 
-				leafHeaders, generatedHeaders, runResult.timings, runResult.warnings);
+				leafHeaders, generatedHeaders, runResult.timings, runResult.warnings, runResult.reportOut.ids.isEmpty());
 	}
 	
 	/** build generated headers and compute ReportOutputColumn's */

@@ -918,7 +918,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 				spec, cellDataSet, leafHeaders, cellDataSetActivities);
 		ReportAreaImpl root = translator.transformTo(reportAreaType);
 		GeneratedReport genRep = new GeneratedReport(spec, duration + (int)(System.currentTimeMillis() - start), 
-				null, root, getRootHeaders(leafHeaders), leafHeaders, null, null, null);
+				null, root, getRootHeaders(leafHeaders), leafHeaders, null, null, null, false);
 		return genRep;
 	}
 	

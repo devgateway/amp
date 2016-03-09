@@ -63,9 +63,11 @@ public class GeneratedReport {
 	
 	public final JsonBean jsonTimings;
 	
+	public final boolean isEmpty;
+	
 	public GeneratedReport(ReportSpecification spec, int generationTime, TeamMember requestingUser, 
 			ReportArea reportContents, List<ReportOutputColumn> rootHeaders, List<ReportOutputColumn> leafHeaders, 
-			List<List<HeaderCell>> generatedHeaders, RunNode timings, SortedMap<Long, SortedSet<ReportWarning>> reportWarnings) {
+			List<List<HeaderCell>> generatedHeaders, RunNode timings, SortedMap<Long, SortedSet<ReportWarning>> reportWarnings, boolean isEmpty) {
 		this.spec = spec;
 		this.generationTime = generationTime;
 		this.requestingUser = requestingUser;
@@ -76,6 +78,7 @@ public class GeneratedReport {
 		this.jsonTimings = timings == null ? null : timings.asJsonBean(); 
 		this.generatedHeaders = generatedHeaders;
 		this.reportWarnings = reportWarnings;
+		this.isEmpty = isEmpty;
 	}
 	
 }

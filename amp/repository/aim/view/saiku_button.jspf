@@ -16,7 +16,7 @@
 
 
 	<c:otherwise>
-		<a href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the Report</digi:trn>"><img src= "/TEMPLATE/ampTemplate/saikuui/images/saiku.png" border="0" /></a>
+		<a href="/TEMPLATE/ampTemplate/saikuui/index_reports.html#report/open/${report.ampReportId}" onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the Report</digi:trn>"><img src= "/TEMPLATE/ampTemplate/saikuui/images/saiku.png" border="0" /></a>
 	</c:otherwise>
 
 

@@ -377,7 +377,7 @@ function generateContentHtml(page, options) {
 	// Add last row with totals.
 	var totalsRowNeeded =
 		(this.lastHeaderRow  >= 0) && // there exists a header 
-		(this.metadataHierarchies.length + this.metadataColumns.length < this.headerMatrix[this.lastHeaderRow].length);
+		(this.metadataHierarchies.length + this.metadataColumns.length <= this.headerMatrix[this.lastHeaderRow].length);
 
 	var totalRow = totalsRowNeeded ? buildTotalsRow(page) : "";
 	

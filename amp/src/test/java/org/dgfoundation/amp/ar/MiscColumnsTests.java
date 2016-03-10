@@ -113,5 +113,4 @@ public class MiscColumnsTests extends ReportsTestCase
 		
 		runReportTest("Proposed-cost in USD", "Proposed-cost-USD", new String[] {"Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR"}, prop_cost_usd_correct);
 	}
-
 }

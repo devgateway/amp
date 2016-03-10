@@ -179,7 +179,7 @@ public class WorkspaceFilter
 		//return "20, 21"; // masha
 		//return "17041";
 //		return "SELECT amp_activity_id from amp_activity WHERE name IN ('TAC_activity_1', 'Test MTEF directed', 'Pure MTEF Project', 'mtef activity 1', 'Activity with both MTEFs and Act.Comms')";
-		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('Proposed Project Cost 1 - USD', 'Test MTEF directed', 'Eth Water', 'activity with directed MTEFs')";
+		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('Proposed Project Cost 1 - USD', 'Test MTEF directed', 'Eth Water')"; //"Proposed Project Cost 1 - USD", "Test MTEF directed", "Eth Water"
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('Proposed Project Cost 1 - USD', 'Proposed Project Cost 2 - EUR', 'SubNational no percentages', 'Project with documents')";
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('Proposed Project Cost 1 - USD', 'Test MTEF directed', 'Eth Water', 'activity with directed MTEFs')";
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('TAC_activity_1', 'TAC_activity_2', 'Proposed Project Cost 2 - EUR', 'Test MTEF directed', 'Eth Water')";

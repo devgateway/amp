@@ -503,4 +503,42 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
 		
 		runReportTest("AMP-22234-flat-filtered-compensation", "AMP-22234-flat-filtered-compensation", expenditureClassActivities, cor, null, "en");
 	}
+	
+	@Test
+	public void testRevisedProjectCostEUR() {
+		GroupReportModel prop_cost_eur_correct = GroupReportModel.withColumnReports("AMP-22376-revised-project-amount-eur",
+				ColumnReportDataModel.withColumns("AMP-22376-revised-project-amount-eur",
+						SimpleColumnModel.withContents("Project Title", "Proposed Project Cost 2 - EUR", "Proposed Project Cost 2 - EUR", "Proposed Project Cost 1 - USD", "Proposed Project Cost 1 - USD").setIsPledge(false), 
+						SimpleColumnModel.withContents("Proposed Project Amount", "Proposed Project Cost 2 - EUR", "2 500 000", "Proposed Project Cost 1 - USD", "770 600").setIsPledge(false), 
+						SimpleColumnModel.withContents("Revised Project Amount", "Proposed Project Cost 2 - EUR", "2 350 000", "Proposed Project Cost 1 - USD", "916 522,7").setIsPledge(false), 
+						GroupColumnModel.withSubColumns("Total Costs",
+							SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(false), 
+							SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false)))
+					.withTrailCells(null, "3 270 600", "3 266 522,7", "0", "0"))
+				.withTrailCells(null, "3 270 600", "3 266 522,7", "0", "0")
+				.withPositionDigest(true,
+					"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1), RHLC Proposed Project Amount: (startRow: 0, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1), RHLC Revised Project Amount: (startRow: 0, rowSpan: 2, totalRowSpan: 2, colStart: 2, colSpan: 1), RHLC Total Costs: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2))",
+					"(line 1:RHLC Actual Commitments: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1), RHLC Actual Disbursements: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1))");
+		
+		runReportTest("AMP-22376-revised-project-amount-eur", "AMP-22376-revised-project-amount-eur", new String[] {"Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR"}, prop_cost_eur_correct);
+	}
+	
+	@Test
+	public void testRevisedProjectCostUSD() {
+		GroupReportModel prop_cost_usd_correct = GroupReportModel.withColumnReports("AMP-22376-revised-project-amount",
+				ColumnReportDataModel.withColumns("AMP-22376-revised-project-amount",
+						SimpleColumnModel.withContents("Project Title", "Proposed Project Cost 2 - EUR", "Proposed Project Cost 2 - EUR", "Proposed Project Cost 1 - USD", "Proposed Project Cost 1 - USD").setIsPledge(false), 
+						SimpleColumnModel.withContents("Proposed Project Amount", "Proposed Project Cost 2 - EUR", "3 399 510,47", "Proposed Project Cost 1 - USD", "1 000 000").setIsPledge(false), 
+						SimpleColumnModel.withContents("Revised Project Amount", "Proposed Project Cost 2 - EUR", "3 195 539,84", "Proposed Project Cost 1 - USD", "1 217 000").setIsPledge(false), 
+						GroupColumnModel.withSubColumns("Total Costs",
+							SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(false), 
+							SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false)))
+					.withTrailCells(null, "4 399 510,47", "4 412 539,84", "0", "0"))
+				.withTrailCells(null, "4 399 510,47", "4 412 539,84", "0", "0")
+				.withPositionDigest(true,
+					"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1), RHLC Proposed Project Amount: (startRow: 0, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1), RHLC Revised Project Amount: (startRow: 0, rowSpan: 2, totalRowSpan: 2, colStart: 2, colSpan: 1), RHLC Total Costs: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2))",
+					"(line 1:RHLC Actual Commitments: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1), RHLC Actual Disbursements: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1))");
+		
+		runReportTest("AMP-22376-revised-project-amount", "AMP-22376-revised-project-amount", new String[] {"Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR"}, prop_cost_usd_correct);
+	}
 }

@@ -404,7 +404,8 @@ public final class ArConstants {
 	public final static String HIERARCHY_SORTER_TITLE="Title";
 	//public final static String SORT_ASCENDING="sortAscending";
 	
-	public static final String VIEW_PROPOSED_COST="v_proposed_cost";	
+	public static final String VIEW_PROPOSED_COST="v_proposed_cost";
+	public static final String VIEW_REVISED_COST="v_revised_project_cost";
 	public static final String VIEW_COST="v_costs";	
 	public static final String VIEW_DONOR_FUNDING="v_donor_funding";
 	public static final String VIEW_COMPONENT_FUNDING="v_component_funding";

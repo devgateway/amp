@@ -278,6 +278,7 @@
 <feature:display name="Project Coordinator Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Project Fiche" module="Previews"></feature:display> 
 <feature:display name="Proposed Project Cost" module="Funding"></feature:display> 
+<feature:display name="Revised Project Cost" module="Funding"></feature:display>
 <feature:display name="Regional Funding" module="Funding"></feature:display> 
 <feature:display name="Regional Report" module="Report Types"></feature:display> 
 <feature:display name="Related Documents" module="Document"></feature:display> 
@@ -835,6 +836,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Duration of Project" feature="Planning"></field:display> 
 <field:display name="Closing Dates" feature="Planning"></field:display>
 <field:display name="Proposed Project Amount" feature="Proposed Project Cost"></field:display> 
+<field:display name="Revised Project Amount" feature="Proposed Project Cost"></field:display>
 <field:display name="Proposed Project Currency" feature="Proposed Project Cost"></field:display> 
 <field:display name="Proposed Project Date" feature="Proposed Project Cost"></field:display> 
 <field:display name="Proposed Project Planned" feature="Proposed Project Cost"></field:display> 

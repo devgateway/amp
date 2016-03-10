@@ -70,7 +70,7 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 		boolean showable=true;
 		
 		//proposed cost is by default not showable and should not appear in any funding totals. it is used to ease the use of destination post processed columns
-		if(this.getViewName().equals(ArConstants.VIEW_PROPOSED_COST))
+		if (this.getViewName().equals(ArConstants.VIEW_PROPOSED_COST) || this.getViewName().equals(ArConstants.VIEW_REVISED_COST))
 		    return false;
 		AmpARFilter filter=(AmpARFilter) generator.getFilter();
 		
@@ -206,7 +206,8 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 		}
 		//the most important meta name, the source name (donor name, region name, component name)
 		String headMetaName=rsmd.getColumnName(4).toLowerCase();
-		if (this.getViewName().equals("v_proposed_cost") || this.getViewName().equals("cached_v_proposed_cost") || tr_type == Constants.ANNUAL_PROPOSED_PROJECT_COST)
+		if (this.getViewName().equals("v_proposed_cost") || this.getViewName().equals("cached_v_proposed_cost") || tr_type == Constants.ANNUAL_PROPOSED_PROJECT_COST
+			|| this.getViewName().equals("v_revised_project_cost") || this.getViewName().equals("cached_v_revised_project_cost"))
 			headMetaName = null; // no source name for v_proposed_cost
 
 //		String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE);

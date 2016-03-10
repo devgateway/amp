@@ -532,6 +532,19 @@ public class Filters {
 	}
 	
 	/**
+	 * Funding status filter information 
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/expenditureClass/")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = true, id = "ExpenditureClass", columns = ColumnConstants.EXPENDITURE_CLASS, name="Expenditure Class")
+	public JsonBean getExpenditureClass() {
+		return getCategoryValue(CategoryConstants.EXPENDITURE_CLASS_KEY, ColumnConstants.EXPENDITURE_CLASS);
+	}
+
+	/**
 	 * Return financing instruments 
 	 * 
 	 * @return

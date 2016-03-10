@@ -30898,6 +30898,7 @@ module.exports = Backbone.View.extend({
       case 'ActivityBudgetList':
       case 'TypeOfAssistanceList':
       case 'ModeOfPaymentList':
+      case 'ExpenditureClass':
       case 'FinancingInstrumentsList':
         this.filterViewsInstances.financials.filterCollection.add(tmpModel);
         break;

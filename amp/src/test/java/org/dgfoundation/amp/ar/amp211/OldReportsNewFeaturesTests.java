@@ -541,4 +541,33 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
 		
 		runReportTest("AMP-22376-revised-project-amount", "AMP-22376-revised-project-amount", new String[] {"Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR"}, prop_cost_usd_correct);
 	}
+	
+	@Test
+	public void testLoanFields() {
+		GroupReportModel prop_cost_usd_correct = GroupReportModel.withColumnReports("AMP-22403-loan-fields",
+			ColumnReportDataModel.withColumns("AMP-22403-loan-fields",
+				SimpleColumnModel.withContents("Project Title", "crazy funding 1", "crazy funding 1", "with-loan-info", "with-loan-info").setIsPledge(false), 
+				SimpleColumnModel.withContents("Loan Grace Period", "with-loan-info", "[0, 15]").setIsPledge(false), 
+				SimpleColumnModel.withContents("Loan Interest Rate", "with-loan-info", "[2.1, 3.4]").setIsPledge(false), 
+				SimpleColumnModel.withContents("Loan Maturity Date", "with-loan-info", "[15/07/2014, 01/03/2016]").setIsPledge(false), 
+				SimpleColumnModel.withContents("Loan Ratification Date", "with-loan-info", "[06/05/2015, 14/10/2015]").setIsPledge(false), 
+				GroupColumnModel.withSubColumns("Funding",
+					GroupColumnModel.withSubColumns("2013",
+						SimpleColumnModel.withContents("Actual Commitments", "crazy funding 1", "333 333").setIsPledge(false), 
+						SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false)), 
+					GroupColumnModel.withSubColumns("2015",
+						SimpleColumnModel.withContents("Actual Commitments", "with-loan-info", "82 000").setIsPledge(false), 
+						SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false))), 
+				GroupColumnModel.withSubColumns("Total Costs",
+					SimpleColumnModel.withContents("Actual Commitments", "crazy funding 1", "333 333", "with-loan-info", "82 000").setIsPledge(false), 
+					SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false)))
+			.withTrailCells(null, null, null, null, null, "333 333", "0", "82 000", "0", "415 333", "0"))
+		.withTrailCells(null, null, null, null, null, "333 333", "0", "82 000", "0", "415 333", "0")
+		.withPositionDigest(true,
+			"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Loan Grace Period: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC Loan Interest Rate: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1), RHLC Loan Maturity Date: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 3, colSpan: 1), RHLC Loan Ratification Date: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 4, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 5, colSpan: 4), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 9, colSpan: 2))",
+			"(line 1:RHLC 2013: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 2), RHLC 2015: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 2))",
+			"(line 2:RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1))");
+		
+		runReportTest("AMP-22403-loan-fields", "AMP-22403-loan-fields", new String[] {"crazy funding 1", "with-loan-info"}, prop_cost_usd_correct);
+	}
 }

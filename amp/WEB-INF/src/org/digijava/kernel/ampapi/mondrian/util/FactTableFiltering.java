@@ -212,6 +212,7 @@ public class FactTableFiltering {
 			add(ColumnConstants.PROCUREMENT_SYSTEM, new IdentityExpander("procurement_system_id"));
 			add(ColumnConstants.PLEDGES_AID_MODALITY, new IdentityExpander("modality_id"));
 			add(ColumnConstants.STATUS, new IdentityExpander("status_id"));			
+			add(ColumnConstants.EXPENDITURE_CLASS, new IdentityExpander("expenditure_class"));
 			
 			add(ColumnConstants.ACTIVITY_ID, new IdentityExpander("entity_id"));
 			add(ColumnConstants.DISASTER_RESPONSE_MARKER, new BooleanExpander("disaster_response"));

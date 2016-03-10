@@ -138,6 +138,8 @@ public class FiltersGroup {
 		addIdentityMapping(filterGroupMap, ColumnConstants.PROCUREMENT_SYSTEM);
 		addIdentityMapping(filterGroupMap, ColumnConstants.PLEDGES_AID_MODALITY);
 		
+		addIdentityMapping(filterGroupMap, ColumnConstants.EXPENDITURE_CLASS);
+		
 		addIdentityMapping(filterGroupMap, ColumnConstants.PLEDGES_AID_MODALITY);
 		addIdentityMapping(filterGroupMap, ColumnConstants.PROCUREMENT_SYSTEM);
 		

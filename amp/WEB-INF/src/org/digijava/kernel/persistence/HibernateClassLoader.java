@@ -188,12 +188,12 @@ public class HibernateClassLoader {
 				if (required) {
 					logger.l7dlog(Level.FATAL,
 							"HibernateClassLoader.loadingHibernateClass.error",
-							params, null);
+							params, ex);
 					break;
 				} else {
 					logger.l7dlog(Level.ERROR,
 							"HibernateClassLoader.loadingHibernateClass.error",
-							params, null);
+							params, ex);
 				}
 			}
 

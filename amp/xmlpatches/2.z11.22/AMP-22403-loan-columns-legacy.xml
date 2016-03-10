@@ -2,8 +2,8 @@
 <tns:patch closeOnSuccess="true" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-	<jira>AMP-22376</jira>
-	<keyword>Cost</keyword>
+	<jira>AMP-22403</jira>
+	<keyword>Loans</keyword>
 	<author>cdolghier</author>
 	<description>revised project cost</description>
 	<apply>

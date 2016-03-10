@@ -20,7 +20,7 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 			   	CREATE OR REPLACE VIEW v_loan_maturity_date AS
-			   		SELECT af.amp_activity_id, af.maturity, af.amp_activity_id, ao.amp_org_id
+			   		SELECT af.amp_activity_id, af.maturity, af.amp_activity_id AS act_id, ao.amp_org_id
 			   			FROM amp_funding af
 			   				JOIN amp_organisation ao ON ao.amp_org_id = af.amp_donor_org_id
 			   			WHERE af.maturity IS NOT NULL;

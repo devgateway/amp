@@ -20,7 +20,7 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 			   	CREATE OR REPLACE VIEW v_loan_grace_period AS
-			   		SELECT af.amp_activity_id, af.grace_period, af.amp_activity_id, ao.amp_org_id
+			   		SELECT af.amp_activity_id, af.grace_period, af.amp_activity_id AS act_id, ao.amp_org_id
 			   			FROM amp_funding af
 			   				JOIN amp_organisation ao ON ao.amp_org_id = af.amp_donor_org_id
 			   			WHERE af.grace_period IS NOT NULL;

@@ -336,12 +336,15 @@ function isHeaderCellSortable(i, entityName) {
  */
 function buildTotalsRow(page) {
 	var totalRow = "<tr>";
+	var isFirstColumn = true;
 	for (var j = 0; j < this.headerMatrix[this.lastHeaderRow].length; j++) {
 		// This check is for those summarized reports that dont return any
 		// content.
+		
 		if (page.pageArea.contents !== null && !isHiddenColumn(j)) {
-			var td = "<td class='data total i18n'";
+			var td = "<td class='data total i18n' ";
 			var auxTd = "";
+			var reportTotals = "Report Totals";
 			var cell = page.pageArea.contents[this.headerMatrix[this.lastHeaderRow][j].hierarchicalName];
 			if (cell == null) {
 				cell = {value: null, displayedValue: ""};
@@ -351,15 +354,17 @@ function buildTotalsRow(page) {
 			} else if (this.type === 'pdf') {
 				auxTd += "<div class='total'>" + cell.displayedValue + "</div>";
 			} else if (type === 'html') {
-				if (j === 0) {
-					td += " original-title='" + cell.displayedValue
-							+ "' data-subtotal='true'";
+				if (isFirstColumn) {
+					cell.displayedValue = reportTotals;
 				}
+				
+				td += "original-title='" + reportTotals + "' data-subtotal='true'";
 				auxTd += "<div class='total i18n'>" + cell.displayedValue + "</div>";
 			}
 			td += ">";
 			td += auxTd + "</td>";
 			totalRow += td;
+			isFirstColumn = false;
 		}
 	}
 	totalRow += "</tr>";

@@ -1,9 +1,9 @@
 #amp_info_filters {
 	float: right;
 	width: 500px;
-	position: relative;
-	top: -17px;
-	margin-right: 20px;
+	position: fixed;
+	top: 79px;
+	right: 15px;
 }
 
 #amp_info_settings>h4{

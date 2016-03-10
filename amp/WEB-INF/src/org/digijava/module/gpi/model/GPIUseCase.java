@@ -1,8 +1,13 @@
 package org.digijava.module.gpi.model;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-import javax.jcr.Node;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -11,41 +16,28 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.UserUtils;
-import org.digijava.module.aim.action.GetSectors;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpGPISurvey;
-import org.digijava.module.aim.dbentity.AmpGPISurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpGPISurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.GPIDefaultFilters;
 import org.digijava.module.aim.dbentity.GPISetup;
 import org.digijava.module.aim.helper.ApplicationSettings;
-import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.helper.Constants.GlobalSettings;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.GPISetupUtil;
 import org.digijava.module.aim.util.HierarchyListableUtil;
 import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.filters.GroupingElement;
 import org.digijava.module.aim.util.filters.HierarchyListableImplementation;
-import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.contentrepository.helper.NodeWrapper;
-import org.digijava.module.contentrepository.util.DocToOrgDAO;
-import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.gpi.form.GPIForm;
 import org.digijava.module.gpi.helper.GPIAbstractReport;
 import org.digijava.module.gpi.helper.GPIReport1;
@@ -55,18 +47,8 @@ import org.digijava.module.gpi.helper.GPIReport9b;
 import org.digijava.module.gpi.helper.row.GPIReportAbstractRow;
 import org.digijava.module.gpi.util.GPIConstants;
 import org.digijava.module.gpi.util.GPIUtils;
-import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
 import org.hibernate.Query;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Property;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.type.LongType;
-import org.hibernate.type.Type;
 
 public class GPIUseCase {
 
@@ -172,17 +154,14 @@ public class GPIUseCase {
 		form.setDefaultCalendar(form.getSelectedCalendar());
 		form.setSelectedCurrency(CurrencyUtil.getAmpcurrency(appSettings.getCurrencyId()).getCurrencyCode());
 		form.setDefaultCurrency(form.getSelectedCurrency());
-		form.setSelectedEndYear(Calendar.getInstance().get(Calendar.YEAR));
+		form.setSelectedEndYear(getDefaultYear(appSettings, false));
 		form.setDefaultEndYear(form.getSelectedEndYear());
-		form.setSelectedStartYear(Calendar.getInstance().get(Calendar.YEAR) - 2);
+		form.setSelectedStartYear(getDefaultYear(appSettings, true));
 		form.setDefaultStartYear(form.getSelectedStartYear());
-		form.setStartYears(new int[10]);
-		form.setEndYears(new int[10]);
-		int auxYear = form.getSelectedEndYear() - 5;
-		for (int i = 0; i < 10; i++) {
-			form.getStartYears()[i] = auxYear + i;
-			form.getEndYears()[i] = auxYear + i;
-		}
+		
+		int[] years = getYearRange();
+		form.setStartYears(years);
+		form.setEndYears(years);
 
 		form.setSelectedDonors(null);
 		form.setSelectedDonorGroups(null);
@@ -402,4 +381,32 @@ public class GPIUseCase {
 		}
 		return commonData;
 	}
+	
+	/**
+	 * @param appSettings
+	 * @param start if this is about the start or end year
+	 * @return custom per Workspace or default from Global Settings (not bind per calendar per current requirements)
+	 */
+	private Integer getDefaultYear(ApplicationSettings appSettings, boolean start) {
+		Integer defaultSelection = start ? appSettings.getReportStartYear() : appSettings.getReportEndYear();
+		if (defaultSelection == null || defaultSelection == 0) {
+			defaultSelection = FeaturesUtil.getGlobalSettingValueInteger(
+					start ? GlobalSettings.START_YEAR_DEFAULT_VALUE : GlobalSettings.END_YEAR_DEFAULT_VALUE);
+		}
+		return defaultSelection;
+	}
+	
+	/**
+	 * @return year range not bind per calendar as per current requirements
+	 */
+	private int[] getYearRange() {
+		Integer startRange = FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.YEAR_RANGE_START);
+		Integer rangeSize = FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.NUMBER_OF_YEARS_IN_RANGE);
+		int[] years = new int[rangeSize];
+		for (int idx = 0; idx < rangeSize; idx++) {
+			years[idx] = startRange + idx;
+		}
+		return years;
+	}
+	
 }

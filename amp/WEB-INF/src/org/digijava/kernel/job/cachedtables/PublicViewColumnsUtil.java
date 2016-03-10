@@ -185,6 +185,7 @@ public class PublicViewColumnsUtil
 	{
 		logger.info(String.format("\t->creating a cache named %s for view %s...", cacheName, viewName));
 		cacheName = cacheName.toLowerCase();
+		boolean createIndices = false;
 		if (cacheName.equals("cached_amp_activity_group") && SQLUtils.tableExists(cacheName)) {
 			SQLUtils.executeQuery(conn, String.format("DELETE FROM %s", cacheName));
 			SQLUtils.executeQuery(conn, String.format("INSERT INTO %s SELECT * FROM %s WHERE amp_activity_last_version_id IS NOT NULL", cacheName, viewName));
@@ -193,14 +194,17 @@ public class PublicViewColumnsUtil
 			SQLUtils.executeQuery(conn, String.format("DROP TABLE IF EXISTS %s", cacheName));
 			SQLUtils.executeQuery(conn, String.format("CREATE TABLE %s AS SELECT * FROM %s;", cacheName, viewName));
 			SQLUtils.executeQuery(conn, String.format("GRANT SELECT ON " + cacheName + " TO public")); // AMP-17052: cache tables should be world-visible
+			createIndices = true;
 		}
 		
-		Collection<String> columns = SQLUtils.getTableColumns(viewName);
-		for(String columnName:columns)
-			if (looksLikeIndexableColumn(viewName, columnName)) {
-				logger.debug(String.format("\t\t...creating an index for column %s of cached table %s", columnName, cacheName));
-				SQLUtils.executeQuery(conn, String.format("CREATE INDEX ON %s(%s)", cacheName, columnName));
-			}
+		if (createIndices) {
+			Collection<String> columns = SQLUtils.getTableColumns(viewName);
+			for(String columnName:columns)
+				if (looksLikeIndexableColumn(viewName, columnName)) {
+					logger.debug(String.format("\t\t...creating an index for column %s of cached table %s", columnName, cacheName));
+					SQLUtils.executeQuery(conn, String.format("CREATE INDEX ON %s(%s)", cacheName, columnName));
+				}
+		}
 	}
 	
 	/**

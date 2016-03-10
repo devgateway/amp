@@ -1,6 +1,7 @@
 package org.digijava.module.xmlpatcher.core;
 
 import java.sql.Connection;
+import java.util.Arrays;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -11,6 +12,7 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.job.cachedtables.PublicViewColumnsUtil;
 import org.digijava.module.aim.helper.Constants;
 
 /**
@@ -439,12 +441,29 @@ public class SimpleSQLPatcher {
    				}
    			}
    			
+   			runIndicesCleanup(conn); //TODO: DELETE THIS CALL AND FUNCTION WHILE MERGING WITH AMP 2.12
    			runDrcCleanup(conn);
    			createTrickyViewsIfNeeded(conn);
    			conn.setAutoCommit(false);
    			
    			conn.setAutoCommit(autoCommit);
    		}
+	}
+	
+	/**
+	 * cleanup the indices accumulated on cached_amp_activity_group because of a very old bug in {@link PublicViewColumnsUtil}
+	 * @param conn
+	 */
+	void runIndicesCleanup(Connection conn) {
+		for(String colName: Arrays.asList("amp_activity_group_id", "amp_activity_last_version_id")) {
+			List<String> indicesToDelete = SQLUtils.fetchAsList(conn, "select indexname from pg_indexes where tablename = 'cached_amp_activity_group' and indexdef like '%(" + colName + ")' ORDER BY indexname", 1);
+			if (indicesToDelete.size() > 2) {
+				for(int i = 1; i < indicesToDelete.size(); i++) {
+					// keep first index, delete the rest
+					SQLUtils.executeQuery(conn, String.format("DROP INDEX %s", indicesToDelete.get(i)));
+				}
+			}
+		}
 	}
 	
 	/**

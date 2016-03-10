@@ -51,6 +51,7 @@ public class MeasureConstants {
 	public static final String PERCENTAGE_OF_TOTAL_DISBURSEMENTS = "Percentage Of Total Disbursements";
 	public static final String LAST_YEAR_OF_PLANNED_DISBURSEMENTS = "Last Year of Planned Disbursements";
 	public static final String PERCENTAGE_OF_DISBURSEMENT = "Percentage of Disbursement";
+	public static final String PROJECT_IMPLEMENTATION_DELAY = "Project Implementation Delay";
 	 
 	//type = D (?)
 	public static final String ANNUAL_PROPOSED_PROJECT_COST = "Annual Proposed Project Cost";

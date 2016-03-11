@@ -24,6 +24,7 @@ var repoPathUrl = function() {
 
 var RepositoryObject = Backbone.Model.extend( {
     url: function( ) {
+    	Saiku.logger.log("RepositoryObject");
         var segment = repoPathUrl() + "/resource";
         return segment;
     }
@@ -31,10 +32,12 @@ var RepositoryObject = Backbone.Model.extend( {
 
 var RepositoryAclObject = Backbone.Model.extend( {
     url: function( ) {
+    	Saiku.logger.log("RepositoryAclObject.url");
         var segment = repoPathUrl() + "/resource/acl";
         return segment;
     },
     parse: function(response) {
+    	Saiku.logger.log("RepositoryAclObject.parse");
         if (response != "OK") {
             _.extend(this.attributes, response);
         }
@@ -43,6 +46,7 @@ var RepositoryAclObject = Backbone.Model.extend( {
 
 var RepositoryZipExport = Backbone.Model.extend( {
     url: function( ) {
+    	Saiku.logger.log("RepositoryZipExport.url");
         var segment = repoPathUrl() + "/zip";
         return segment;
     }
@@ -51,17 +55,20 @@ var RepositoryZipExport = Backbone.Model.extend( {
 var SavedQuery = Backbone.Model.extend({
 
     parse: function(response) {
+    	Saiku.logger.log("SavedQuery.parse");
         //console.log("response: " + response);
         //this.xml = response;
     },
     
     url: function() {
+    	Saiku.logger.log("SavedQuery.url");
         var u = repoPathUrl() + "/resource";
         return u;
 
     },
     
     move_query_to_workspace: function(model, response) {
+    	Saiku.logger.log("SavedQuery.move_query_to_workspace");
         var file = response;
         var filename = model.get('file');
         for (var key in Settings) {
@@ -84,6 +91,7 @@ var SavedQuery = Backbone.Model.extend({
         var tab = Saiku.tabs.add(new Workspace({ query: query }));
     },
     move_query_to_workspace_json: function(model, response) {
+    	Saiku.logger.log("SavedQuery.move_query_to_workspace_json");
         var json = JSON.stringify(response);
         var filename = model.get('file');
         
@@ -113,18 +121,21 @@ var Repository = Backbone.Collection.extend({
     model: SavedQuery,
     
     initialize: function(args, options) {
+    	Saiku.logger.log("Repository.initialize");
         if (options && options.dialog) {
             this.dialog = options.dialog;
         }
     },
     
     parse: function(response) {
+    	Saiku.logger.log("Repository.parse");
         if (this.dialog) {
             this.dialog.populate(response);
         }
     },
     
     url: function() {
+    	Saiku.logger.log("Repository.url");
         var segment = repoPathUrl() + "?type=saiku";
         return segment;
     }

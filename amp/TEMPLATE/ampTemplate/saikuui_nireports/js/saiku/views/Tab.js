@@ -27,7 +27,7 @@ var Tab = Backbone.View.extend({
         'click .close_tab': 'remove'
     },
     
-    template: function() {        
+    template: function() {        	
         // Create tab
         return _.template("<a class='saikutab' href='#<%= id %>'><%= caption %></a>" +
                 "<span class=''>&nbsp</span>")
@@ -43,7 +43,7 @@ var Tab = Backbone.View.extend({
      * @param args
      */
     initialize: function(args) {
-    	console.log("Tab.initialize");
+    	Saiku.logger.log("Tab.initialize");
         _.extend(this, Backbone.Events);
         _.extend(this, args);
         this.content.tab = this;
@@ -57,7 +57,7 @@ var Tab = Backbone.View.extend({
      * @returns tab
      */
     render: function() {
-    	console.log("Tab.render");
+    	Saiku.logger.log("Tab.render");
         var self = this;
         // Render the content
         this.content.render();
@@ -72,6 +72,7 @@ var Tab = Backbone.View.extend({
     },
 
     set_caption: function(caption) {
+    	Saiku.logger.log("Tab.set_caption");
         $(this.el).find('.saikutab').html(caption);
     },
     
@@ -80,6 +81,7 @@ var Tab = Backbone.View.extend({
      * garbage collection to avoid memory leaks
      */
     destroy: function() {
+    	Saiku.logger.log("Tab.destroy");
         // Delete data
         if (this.content && this.content.query) {
             this.content.query.destroy();
@@ -91,6 +93,7 @@ var Tab = Backbone.View.extend({
      * @param el
      */
     select: function() {
+    	Saiku.logger.log("Tab.select");
         var self = this;
         // Deselect all tabs
         this.parent.select(this);
@@ -108,6 +111,7 @@ var Tab = Backbone.View.extend({
      * @returns {Boolean}
      */
     remove: function(event) {
+    	Saiku.logger.log("Tab.remove");
         if (!event || event.which === 2 || $(event.target).hasClass('close_tab')) {
             // Remote the tab object from the container
             this.parent.remove(this);
@@ -140,6 +144,7 @@ var TabPager = Backbone.View.extend({
     },
     
     initialize: function(args) {
+    	Saiku.logger.log("TabPager.initialize");
         this.tabset = args.tabset;
         $(this.el).hide().appendTo('body');
         
@@ -152,6 +157,7 @@ var TabPager = Backbone.View.extend({
     },
     
     render: function() {
+    	Saiku.logger.log("TabPager.render");
         var pager = "";
         for (var i = 0, len = this.tabset._tabs.length; i < len; i++) {
             pager += "<a href='#" + i + "'>" + 
@@ -162,6 +168,7 @@ var TabPager = Backbone.View.extend({
     },
     
     select: function(event) {
+    	Saiku.logger.log("TabPager.select");
         var index = $(event.target).attr('href').replace('#', '');
         this.tabset._tabs[index].select();
         $(this.el).hide();
@@ -189,6 +196,7 @@ var TabSet = Backbone.View.extend({
      * @returns tab_container
      */
     render: function() {
+    	Saiku.logger.log("TabSet.render");
         $(this.el).html('<a href="#pager" class="pager sprite"></a><ul><li class="newtab"><a class="new">+&nbsp;&nbsp;</a></li></ul>')
             .appendTo($('#header'));
         this.content = $('<div id="tab_panel">').appendTo($('body'));
@@ -201,6 +209,7 @@ var TabSet = Backbone.View.extend({
      * @param tab
      */
     add: function(content, close) {
+    	Saiku.logger.log("TabSet.add");
         // Add it to the set
         this.queryCount++;
 
@@ -220,6 +229,7 @@ var TabSet = Backbone.View.extend({
     },
 
     find: function(id) {
+    	Saiku.logger.log("TabSet.find");
         for (var i = 0, len = this._tabs.length; i < len; i++) {
             if (this._tabs[i].id == id) {
                 return this._tabs[i];
@@ -233,6 +243,7 @@ var TabSet = Backbone.View.extend({
      * @param tab
      */
     select: function(tab) {
+    	Saiku.logger.log("TabSet.select");
         // Clear selections
         $(this.el).find('li').removeClass('selected');
         
@@ -248,6 +259,7 @@ var TabSet = Backbone.View.extend({
      * @param tab
      */
     remove: function(tab) {
+    	Saiku.logger.log("TabSet.remove");
         // Add another tab if the last one has been deleted
         if (this._tabs.length == 1) {
             //this.add(new Workspace());
@@ -271,6 +283,7 @@ var TabSet = Backbone.View.extend({
     },
 
     close_others: function(tab) {
+    	Saiku.logger.log("TabSet.close_others");
         var index = _.indexOf(this._tabs, tab);
         this._tabs[index].select();
         
@@ -285,6 +298,7 @@ var TabSet = Backbone.View.extend({
     },
     
     close_all: function() {
+    	Saiku.logger.log("TabSet.close_all");
         for (var i = 0, len = this._tabs.length; i < len; i++) {
             var otherTab = this._tabs[i];
             otherTab.remove();
@@ -292,11 +306,13 @@ var TabSet = Backbone.View.extend({
     },
     
     togglePager: function() {
+    	Saiku.logger.log("TabSet.togglePager");
         $(this.pager.el).toggle();
         return false;
     },
 
     new_tab: function() {
+    	Saiku.logger.log("TabSet.newTab");
         this.add(new Workspace());
         var next = this._tabs.length - 1;
         this._tabs[next].select();
@@ -304,6 +320,7 @@ var TabSet = Backbone.View.extend({
     },
     
     duplicate: function(tab) {
+    	Saiku.logger.log("TabSet.duplicate");
         // Block UI to prevent other events
         Saiku.ui.block("Duplicating tab...");
         

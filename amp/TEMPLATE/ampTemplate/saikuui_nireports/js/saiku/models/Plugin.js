@@ -5,6 +5,7 @@ var Plugin = Backbone.Model.extend({
 var PluginCollection = Backbone.Collection.extend({
 	model : Plugin,
 	url : function() {
+		Saiku.logger.log("PluginCollection.url");
 		return "/TEMPLATE/ampTemplate/saikuui_nireports/mockData/plugins.json";
 	}
 });

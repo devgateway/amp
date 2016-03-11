@@ -19,6 +19,7 @@
  */
 var Member = Backbone.Model.extend({
     initialize: function(args, options) {
+    	Saiku.logger.log("Member.initialize");
         this.cube = options.cube;
         var dimension = options.dimension.split("/");
         this.hierarchy = decodeURIComponent(dimension[0]);
@@ -26,6 +27,7 @@ var Member = Backbone.Model.extend({
     },
     
     url: function() {
+    	Saiku.logger.log("Member.url");
         var url = encodeURI(Saiku.session.username + "/discover/") +
             this.cube + "/hierarchies/" + encodeURIComponent(this.hierarchy) + "/levels/" + encodeURIComponent(this.level);
         

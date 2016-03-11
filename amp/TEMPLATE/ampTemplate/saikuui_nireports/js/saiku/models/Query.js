@@ -23,6 +23,7 @@ var Query = Backbone.Model.extend({
     properties: null,
 
     initialize: function(args, options) {
+    	Saiku.logger.log("Query.initialize");
    		this.initFiltersDeferred = $.Deferred();    		
     	
         // Save cube
@@ -54,6 +55,7 @@ var Query = Backbone.Model.extend({
     },    
     
     transformSavedFilters: function() {
+    	Saiku.logger.log("Query.transformSavedFilters");
     	var self = this;
         if (this.firstLoad === true) {
         	// Get original filters from reports specs.
@@ -63,42 +65,14 @@ var Query = Backbone.Model.extend({
 	        // TODO: Review this 2-steps process completely.
 	        var extractedFiltersFromSpecs = FilterUtils.extractFilters(auxFilters);
 	        var blob = FilterUtils.convertJavaFiltersToJS(extractedFiltersFromSpecs);
-	        //console.log(blob);
+	        Saiku.logger.log(blob);
 	        // Set these filters reformatted. 
 	        self.set('filters', blob);	       
         }
     },
     
-    // AMP-18921: workaround to the filters until they will be properly initialized, 
-	// that should be done as part of filters widget improvement as a whole
-    initFilters_old: function() {
-    	var self = this;
-        if (window.currentFilter !== undefined && window.currentFilter.converted !== true) {
-        	window.currentFilter.converted = true;
-            window.currentFilter.loaded.done(function() {
-	            //console.log(this.get('filters'));
-	            var auxFilters = self.get('filters');
-	            self.set('filters', undefined);
-	            // TODO: Review this 2-steps process completely.
-	            var extractedFiltersFromSpecs = FilterUtils.extractFilters(auxFilters);
-	            //console.log(extractedFiltersFromSpecs);
-	            var blob = FilterUtils.convertJavaFiltersToJS(extractedFiltersFromSpecs);
-	            //console.log(blob);
-	                                
-	            window.currentFilter.deserialize(blob, {
-	            	silent : true
-	            });
-	            var serealized = window.currentFilter.serialize();
-	            //console.log(JSON.stringify(serealized));
-	            self.set('filters', serealized);
-	            //console.log(JSON.stringify(self.get('filters')));
-	            // TODO: Check if the filter widget is really ready (in older versions the parse of dates where processed too late).
-	            self.initFiltersDeferred.resolve();
-            });                                                                     
-        }
-    },
-    
     parse: function(response) {
+    	Saiku.logger.log("Query.parse");
         // Assign id so Backbone knows to PUT instead of POST
         this.id = this.uuid;
         if (response.name) {
@@ -110,44 +84,52 @@ var Query = Backbone.Model.extend({
     },
     
     setProperty: function(key, value) {
-            this.model.properties[key] = value;
+    	Saiku.logger.log("Query.setProperty");
+        this.model.properties[key] = value;
     },
 
     getProperty: function(key) {
+    	Saiku.logger.log("Query.getProperty");
         return this.model.properties[key];
     },
 
     run_query: function(filters, settings) {
+    	Saiku.logger.log("Query.run_query");
    		this.set({page: 1});
     	this.run(null, null, filters, settings);
     },
 	//Start Custom Code for Pagination    
     first_page: function() {
-	if (this.get('max_page_no') > 0) {
-		this.set({page:1}) ;
-	} else {
-		this.set({page:0}) ;
-	}
-    	this.run(true);
+    	Saiku.logger.log("Query.first_page");
+		if (this.get('max_page_no') > 0) {
+			this.set({page:1}) ;
+		} else {
+			this.set({page:0}) ;
+		}
+	    this.run(true);
     },
     prev_page: function() {
+    	Saiku.logger.log("Query.prev_page");
        	var prev_page = this.get('page') > 1 ? this.get('page') - 1 : this.get('page');    	
     	this.set({page: prev_page});
     	this.run(true);
     },
     next_page: function() {
+    	Saiku.logger.log("Query.next_page");
     	this.set({page: Math.min(this.get('page')+1, this.get('max_page_no'))});
     	this.run(true);
     },
     last_page: function() {
+    	Saiku.logger.log("Query.last_page");
     	var last_page = this.get('max_page_no');
     	this.set({page: last_page});
     	this.run(true);
     },
     //End Custom Code for Pagination
     run: function(force, mdx, filters, settings) {
-    	console.log('END!!!');
-    	console.log(new Date().getTime() - window.saiku_time + "ms");
+    	Saiku.logger.log("Query.run");
+    	Saiku.logger.log('END!!!');
+    	Saiku.logger.log(new Date().getTime() - window.saiku_time + "ms");
 
         var self = this;
         // Check for automatic execution
@@ -236,10 +218,11 @@ var Query = Backbone.Model.extend({
     },
 
     enrich: function() {
-        
+    	Saiku.logger.log("Query.enrich");
     },
     
     url: function() {
+    	Saiku.logger.log("Query.url");
    		return "/TEMPLATE/ampTemplate/saikuui_nireports/mockData/query.json";
     }
 });

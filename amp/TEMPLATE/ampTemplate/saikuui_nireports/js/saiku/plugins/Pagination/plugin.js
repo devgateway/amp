@@ -6,17 +6,17 @@ Saiku.events.bind('session:new', function(session) {
 
     function new_workspace(args) {
         args.workspace.bind('query:result', function(){
-	        	if(Settings.PAGINATION) {
-	        		$(".pagination_sprite").show();
-	        		$(".pagination_info").show();
-	        		$(this.el).find(".pagination_info").val(this.query.get('page') + "/" + this.query.get('max_page_no'));
-	        	}
-	        	else
-        		{
-	        		$(".pagination_sprite").hide();
-	        		$(".pagination_info").hide();
-        		}
-        	});
+        	Saiku.logger.log("Pagination.new_workspace");
+	        if(Settings.PAGINATION) {
+	        	$(".pagination_sprite").show();
+	        	$(".pagination_info").show();
+	        	$(this.el).find(".pagination_info").val(this.query.get('page') + "/" + this.query.get('max_page_no'));
+	        }
+	        else {
+	        	$(".pagination_sprite").hide();
+	        	$(".pagination_info").hide();
+        	}
+        });
     }
 
     // Attach stats to existing tabs

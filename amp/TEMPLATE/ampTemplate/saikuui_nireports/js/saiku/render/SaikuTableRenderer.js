@@ -37,40 +37,6 @@ SaikuTableRenderer.prototype._render = function(data, options) {
                 var html =  self.internalRender(self._data, self._options);
                 $(self._options.htmlObject).html(html);
                 $(".tooltipped").tipsy();
-                _.defer(function(that) {
-                    if (self._options.hasOwnProperty('batch') && self._options.hasBatchResult) {                        
-                        var batchRow = 0;
-                        var batchIsRunning = false;
-                        var batchIntervalSize = self._options.hasOwnProperty('batchIntervalSize') ? self._options.batchIntervalSize : 20;
-                        var batchIntervalTime = self._options.hasOwnProperty('batchIntervalTime') ? self._options.batchIntervalTime : 20;
-
-                        var len = self._options.batchResult.length;
-                        
-                        var batchInsert = function() {
-                            // maybe add check for reach table bottom - ($('.workspace_results').scrollTop() , $('.workspace_results table').height()
-                            if (!batchIsRunning && len > 0 && batchRow < len) {
-                                batchIsRunning = true;
-                                var batchContent = "";
-                                var startb = batchRow;
-                                for (var i = 0;  batchRow < len && i < batchIntervalSize ; i++, batchRow++) {
-                                    batchContent += self._options.batchResult[batchRow];
-                                }
-                                if (batchRow > startb) {
-                                    $(self._options.htmlObject).append( $(batchContent));
-                                }
-                                batchIsRunning = false;
-                            }
-                            if (batchRow >= len) {
-                                $(self._options.htmlObject).parent().parent().unbind('scroll');
-                            }
-                        };
-
-                        var lazyBatchInsert = _.debounce(batchInsert, batchIntervalTime);
-                        $(self._options.htmlObject).parent().parent().scroll(function () { 
-                            lazyBatchInsert();
-                        });
-                    }
-                });
                 data.workspace.trigger('saikuTableRender:tableRenderedInDOM', self);
                 return html;
             });

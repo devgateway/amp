@@ -29,10 +29,12 @@ var Toolbar = Backbone.View.extend({
     },
     
     initialize: function() {
+    	Saiku.logger.log("Toolbar.initialize");
         //this.render();
     },
     
     render: function() {
+    	Saiku.logger.log("Toolbar.render");
         $(this.el).attr('id', 'toolbar')
             .html(this.template());
         
@@ -43,6 +45,7 @@ var Toolbar = Backbone.View.extend({
     },
     
     call: function(e) {
+    	Saiku.logger.log("Toolbar.call");
         var target = $(e.target);
         var callback = target.attr('href').replace('#', '');
         if(this[callback]) {
@@ -50,10 +53,12 @@ var Toolbar = Backbone.View.extend({
         }
         e.preventDefault();
     },
+    
     /**
      * Add a new tab to the interface
      */
     new_query: function() {
+    	Saiku.logger.log("Toolbar.new_query");
         Saiku.tabs.add(new Workspace());
         return false;
     },
@@ -62,6 +67,7 @@ var Toolbar = Backbone.View.extend({
      * Open a query from the repository into a new tab
      */
     open_query: function() {
+    	Saiku.logger.log("Toolbar.open_query");
         var dialog = _.detect(Saiku.tabs._tabs, function(tab) {
             return tab.content instanceof OpenQuery;
         });

@@ -59,6 +59,7 @@ var WorkspaceToolbar = Backbone.View.extend({
     },
     
     initialize: function(args) {
+    	Saiku.logger.log("WorkspaceToolbar.initialized");
         // Keep track of parent workspace
         this.workspace = args.workspace;
         
@@ -85,6 +86,7 @@ var WorkspaceToolbar = Backbone.View.extend({
     },
     
     activate_buttons: function(args) {
+    	Saiku.logger.log("WorkspaceToolbar.activate_buttons");
         if (args != null && args.data && args.data.cellset && args.data.cellset.length > 0 ) {
         	
             $(args.workspace.toolbar.el).find('.button')
@@ -136,12 +138,14 @@ var WorkspaceToolbar = Backbone.View.extend({
     },
     
     render: function() {
+    	Saiku.logger.log("WorkspaceToolbar.render");
         $(this.el).html(this.template());
         
         return this; 
     },
     
     call: function(event) {
+    	Saiku.logger.log("WorkspaceToolbar.call");
         // Determine callback
         event.preventDefault();
         var callback = event.target.hash.replace('#', '');
@@ -167,6 +171,7 @@ var WorkspaceToolbar = Backbone.View.extend({
     },
 
     save_query: function(event) {
+    	Saiku.logger.log("WorkspaceToolbar.save_query");
         var self = this;
         if (this.workspace.query) {
             if (typeof this.editor != "undefined") {
@@ -183,23 +188,28 @@ var WorkspaceToolbar = Backbone.View.extend({
 
     
     run_query: function(event) {
+    	Saiku.logger.log("WorkspaceToolbar.run_query");
         this.workspace.query.run(true);        
     },
 
     //Start Custom Code for Pagination
     first_page: function(event) {
+    	Saiku.logger.log("WorkspaceToolbar.first_page");
         this.workspace.query.first_page();
     },
 
     prev_page: function(event) {
+    	Saiku.logger.log("WorkspaceToolbar.prev_page");
         this.workspace.query.prev_page();
     },
 
     next_page: function(event) {
+    	Saiku.logger.log("WorkspaceToolbar.next_page");
         this.workspace.query.next_page();
     },
 
     last_page: function(event) {
+    	Saiku.logger.log("WorkspaceToolbar.last_page");
         this.workspace.query.last_page();
     },
     //End Custom Code for Pagination
@@ -217,6 +227,7 @@ var WorkspaceToolbar = Backbone.View.extend({
     },
     
     toggle_sidebar: function() {
+    	Saiku.logger.log("WorkspaceToolbar.toggle_sidebar");
         this.workspace.toggle_sidebar();
     },
     
@@ -257,34 +268,11 @@ var WorkspaceToolbar = Backbone.View.extend({
     },
 
     clicked_cell_drillthrough_export: function(event) {
-        $target = $(event.target).hasClass('data') ?
-            $(event.target).find('div') : $(event.target);
-        var pos = $target.attr('rel');     
-        (new DrillthroughModal({
-            workspace: this.workspace,
-            maxrows: 10000,
-            title: "Drill-Through to CSV",
-            action: "export",
-            position: pos,
-            query: this.workspace.query
-        })).open();
-   
+           
     },
 
     clicked_cell_drillthrough: function(event) {
-        $target = $(event.target).hasClass('data') ?
-            $(event.target).find('div') : $(event.target);
-        var pos = $target.attr('rel');
-        (new DrillthroughModal({
-            workspace: this.workspace,
-            maxrows: 200,
-            title: "Drill-Through",
-            action: "table",
-            success: this.display_drillthrough,
-            position: pos,
-            query: this.workspace.query
-        })).open();
-   
+        
     },
 
     swap_axes_on_dropzones: function(model, response) {
@@ -296,11 +284,13 @@ var WorkspaceToolbar = Backbone.View.extend({
     },
     
     export_xls: function(event) {
+    	Saiku.logger.log("WorkspaceToolbar.export_xls");
         window.location = Settings.REST_URL +
             this.workspace.query.url() + "/export/xls/" + this.workspace.query.getProperty('saiku.olap.result.formatter');
     },
 
     export_amp_xls: function(event) {
+    	Saiku.logger.log("WorkspaceToolbar.export_amp_xls");
     	var auxQuery = this.workspace.currentQueryModel;
     	auxQuery.xls_type = 'styled';
 	    $.postDownload("/rest/data/saikureport/export/xls/" + this.calculate_url(),
@@ -308,6 +298,7 @@ var WorkspaceToolbar = Backbone.View.extend({
     },
 
     export_amp_xls_plain: function(event) {
+    	Saiku.logger.log("WorkspaceToolbar.export_xls_plain");
     	var auxQuery = this.workspace.currentQueryModel;
     	auxQuery.xls_type = 'plain';
 	    $.postDownload("/rest/data/saikureport/export/xls/" + this.calculate_url(),
@@ -315,27 +306,32 @@ var WorkspaceToolbar = Backbone.View.extend({
 
     },
     export_csv: function(event) {
+    	Saiku.logger.log("WorkspaceToolbar.export_csv");
         window.location = Settings.REST_URL +
             this.workspace.query.url() + "/export/csv";
     },
 
     export_amp_csv: function(event) {
+    	Saiku.logger.log("WorkspaceToolbar.export_amp_csv");
 	    $.postDownload("/rest/data/saikureport/export/csv/" + this.calculate_url(),
 	    	{query: JSON.stringify(this.workspace.currentQueryModel)}, "post");
 
     },
 
     export_pdf: function(event) {
+    	Saiku.logger.log("WorkspaceToolbar.export_pdf");
         window.location = Settings.REST_URL +
             this.workspace.query.url() + "/export/pdf/" + this.workspace.query.getProperty('saiku.olap.result.formatter');
     },
 
     export_amp_pdf: function(event) {
+    	Saiku.logger.log("WorkspaceToolbar.export_amp_pdf");
 	    $.postDownload("/rest/data/saikureport/export/pdf/" +  this.calculate_url(),
 	    	{query: JSON.stringify(this.workspace.currentQueryModel)}, "post");
     },
 
-    export_amp_dual_currency: function(){
+    export_amp_dual_currency: function() {
+    	Saiku.logger.log("WorkspaceToolbar.export_amp_dual_currency");
         var that = this;
         if(!this.deflatedCurrenciesPromise){
             this.deflatedCurrenciesPromise = $.get("/rest/amp/settings")
@@ -395,6 +391,7 @@ var WorkspaceToolbar = Backbone.View.extend({
     },
     
     calculate_url : function() {
+    	Saiku.logger.log("WorkspaceToolbar.calculate_url");
     	var runUrl='';
     	var reportIdentification; //this may be the actual ID or the report token if we are running the report without saving
     	if(this.workspace.query.get('report_id')){
@@ -414,6 +411,7 @@ var WorkspaceToolbar = Backbone.View.extend({
     },
     
     is_gis_enabled : function() {
+    	Saiku.logger.log("WorkspaceToolbar.is_gis_enabled");
     // Map icon is enabled if FM "GIS" is enabled or the report type is not pledge
     	return enabledGisFM && 
     	enabledGisFM.models[0].get('error') == undefined && 
@@ -424,6 +422,7 @@ var WorkspaceToolbar = Backbone.View.extend({
 });
 
 $.postDownload = function (path, params, method) {
+	Saiku.logger.log("WorkspaceToolbar.postDownload");
     method = method || "post";
     var form = document.getElementById("exportForm");
     if(!form) {

@@ -31,6 +31,7 @@ var QueryToolbar = Backbone.View.extend({
 
 
     initialize: function(args) {
+    	Saiku.logger.log("QueryToolbar.initialize");
         // Keep track of parent workspace
         this.workspace = args.workspace;
         
@@ -48,29 +49,33 @@ var QueryToolbar = Backbone.View.extend({
     },
     
     activate_buttons: function(args) {     
-
+    	Saiku.logger.log("QueryToolbar.activate_buttons");
     },
 
     template: function() {
+    	Saiku.logger.log("QueryToolbar.template");
         var template = $("#template-query-toolbar").html() || "";
         return _.template(template)();
     },
     
     render: function() {
+    	Saiku.logger.log("QueryToolbar.render");
         $(this.el).html(this.template());
         $(this.el).hide();
         return this; 
     },
     
     switch_render_button: function(event) {
-        
+    	Saiku.logger.log("QueryToolbar.switch_render_button");
     },
     
     switch_render: function(render_type) {
+    	Saiku.logger.log("QueryToolbar.switch_render");
         return false;
     },
 
-    call: function(event) {        
+    call: function(event) {
+    	Saiku.logger.log("QueryToolbar.call");
         event.preventDefault();
         return false;
     },

@@ -5,6 +5,7 @@ var FilterUtils = {};
  */
 
 FilterUtils.getDateIntervalType = function(element) {
+	Saiku.logger.log("FilterUtils.getDateIntervalType");
 	var min = element.min;
 	var max = element.max;
 	if (min === undefined)
@@ -21,11 +22,13 @@ FilterUtils.getDateIntervalType = function(element) {
 };
 
 FilterUtils.parseValue = function(elem, v) {
+	Saiku.logger.log("FilterUtils.parseValue");
 	var theName = elem.valueToName ? elem.valueToName[v] : v;
 	return {id: v, name: theName};
 };
 
 FilterUtils.extractFilters = function(content) {
+	Saiku.logger.log("FilterUtils.extractFilters");
 	var self = this;
 	var filters = new Array();
 	var filtersColumnsJson = content.columnFilterRules;
@@ -123,6 +126,7 @@ FilterUtils.extractFilters = function(content) {
 };
 
 FilterUtils.convertJavaFiltersToJS = function(data) {
+	Saiku.logger.log("FilterUtils.convertJavaFiltersToJS");
 	// Define some basic defaults needed in the widget filter.
 	var blob = {
 		otherFilters : {

@@ -29,7 +29,7 @@ var Session = Backbone.Model.extend({
         
     //IMPORTANT: Care with this file, some changes can cause stop loading Saiku.
     initialize: function(args, options) {
-    	console.log("Session.initialize");
+    	Saiku.logger.log("Session.initialize");
         // Attach a custom event bus to this model
         _.extend(this, Backbone.Events);
         _.bindAll(this, "check_session", "process_session", "load_session","login");
@@ -38,38 +38,39 @@ var Session = Backbone.Model.extend({
     },
 
     check_session: function() {
-    	console.log("Session.check_session");
+    	Saiku.logger.log("Session.check_session");
     	this.clear();
         this.fetch({ success: this.process_session });
     },
 
     load_session: function() {
-    	console.log("Session.load_session");
+    	Saiku.logger.log("Session.load_session");
         this.sessionworkspace = new SessionWorkspace();
     },
 
     process_session: function(model, response) {
-    	console.log("Session.process_session");
+    	Saiku.logger.log("Session.process_session");
     	this.load_session();
         return this;
     },
     
     error: function() {
+    	Saiku.logger.log("Session.error");
         $(this.form.el).dialog('open');
     },
     
     login: function(username, password) {        
-        
+    	Saiku.logger.log("Session.login");
     },
     login_failed: function(response){
-        
+    	Saiku.logger.log("Session.login_failed");
     },
     logout: function() {
-        
+    	Saiku.logger.log("Session.logout");
     },
 
     url: function() {
-    	console.log("Session.url");
+    	Saiku.logger.log("Session.url");
     	//TODO: Instead of loading this file add the content here.
     	return "/TEMPLATE/ampTemplate/saikuui_nireports/mockData/session.json";
     }

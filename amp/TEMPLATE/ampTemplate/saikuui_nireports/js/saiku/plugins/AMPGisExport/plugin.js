@@ -4,6 +4,7 @@ var AMPGisExport = Backbone.View.extend({
 	},
 	
 	initialize : function(args) {
+		Saiku.logger.log("AMPGisExport.initialize");
     	var self = this;
 		this.workspace = args.workspace;
 		this.initialized = false;
@@ -23,6 +24,7 @@ var AMPGisExport = Backbone.View.extend({
 	},
 	
 	add_button : function() {
+		Saiku.logger.log("AMPGisExport.add_button");
 		this.export_to_amp_button = $(
 				'<a href="#export_to_map" class="export_to_map button i18n" title="Export to Map"></a>');
 
@@ -32,6 +34,7 @@ var AMPGisExport = Backbone.View.extend({
 	},
 	
 	export_to_map : function() {
+		Saiku.logger.log("AMPGisExport.export_to_map");
 		var reportId = + this.workspace.query.get('report_id');
 		
 		// AMP-18921: workaround to the filters until they will be properly initialized, 
@@ -63,10 +66,11 @@ var AMPGisExport = Backbone.View.extend({
 		});
 	}	
 		
-	});
+});
 
 Saiku.events.bind('session:new', function(session) {
 	function new_workspace(args) {
+		Saiku.logger.log("AMPGisExport.new_workspace");
 		if (typeof args.workspace.export_to_map == "undefined") {
 			args.workspace.export_to_map = new AMPGisExport({
 				workspace : args.workspace
@@ -75,6 +79,7 @@ Saiku.events.bind('session:new', function(session) {
 	}
 
 	function clear_workspace(args) {
+		Saiku.logger.log("AMPGisExport.clear_workspace");
 		if (typeof args.workspace.export_to_map != "undefined") {
 			$(args.workspace.export_to_map.el).hide();
 		}

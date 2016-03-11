@@ -27,6 +27,7 @@ var Table = Backbone.View.extend({
     },
 
     initialize: function(args) {
+    	Saiku.logger.log("Table.initialize");
         this.workspace = args.workspace;
         this.renderer = new SaikuTableRenderer();
 
@@ -38,6 +39,7 @@ var Table = Backbone.View.extend({
     },
     
     clicked_header_cell : function(event) {
+    	Saiku.logger.log("Table.clicked_header_cell");
     	// For clicks on report's header cells.
     	if(Saiku.Sorting != undefined) {
     		Saiku.Sorting.processClickOnHeader(event);
@@ -45,11 +47,12 @@ var Table = Backbone.View.extend({
     },
     
     clicked_cell: function(event) {
+    	Saiku.logger.log("Table.cell");
     	// Keep this function for processing clicks on any report's cell.
     },
 
-
-    render: function(args, block) {    	
+    render: function(args, block) {
+    	Saiku.logger.log("Table.render");
         if (typeof args == "undefined" || typeof args.data == "undefined" || 
             ($(this.workspace.el).is(':visible') && !$(this.el).is(':visible'))) {
             return;
@@ -62,13 +65,14 @@ var Table = Backbone.View.extend({
             return;
         }
         this.clearOut();
-        $(this.el).html("<div class='i18n rendering_data'>Rendering data...</div>");
+        $(this.el).html('<span class="processing_image">&nbsp;&nbsp;</span> <span class="i18n rendering_data">Rendering data...</span>');
 
         // Render the table without blocking the UI thread
         _.delay(this.process_data, 2, args.data);
     },
 
     clearOut: function() {
+    	Saiku.logger.log("Table.clearOut");
         // Do some clearing in the renderer
         this.renderer.clear();
         $(this.workspace.el).find( ".workspace_results" ).unbind('scroll');
@@ -81,7 +85,8 @@ var Table = Backbone.View.extend({
         }
     },
 
-    process_data: function(data) {        
+    process_data: function(data) {
+    	Saiku.logger.log("Table.process_data");
         this.workspace.processing.hide();
         this.workspace.adjust();
         // Append the table
@@ -101,6 +106,7 @@ var Table = Backbone.View.extend({
     },
 
     post_process: function() {
+    	Saiku.logger.log("Table.post_process");
         if (this.workspace.query.get('type') == 'QM' && Settings.MODE != "view") {
             $(this.el).addClass('headerhighlight');
         } else {

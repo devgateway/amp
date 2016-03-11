@@ -1,6 +1,6 @@
 var Fullscreen = Backbone.Model.extend({
     initialize: function(args) {
-        //console.log('Fullscreen');
+    	Saiku.logger.log("Fullscreen.initialize");
         this.workspace = args.workspace;
         // Add buckets button
         _.bindAll(this, "change_handler", "adjust");
@@ -13,6 +13,7 @@ var Fullscreen = Backbone.Model.extend({
         }
     },
     add_button: function() {
+    	Saiku.logger.log("Fullscreen.add_button");
         var elem = $('.workspace_results', this.workspace.el).get(0);
         var supportsFullScreen = (elem && (elem.requestFullscreen || elem.msRequestFullscreen || elem.mozRequestFullScreen || elem.webkitRequestFullscreen));
         if (!supportsFullScreen)
@@ -29,6 +30,7 @@ var Fullscreen = Backbone.Model.extend({
         this.workspace.toolbar.fullscreen = this.show;
     },
     change_handler: function() {
+    	Saiku.logger.log("Fullscreen.change_handler");
         //The workspace is not nescessarily done resizing when event is triggered... :(
         //Had to put in a bit of delay, to wait for workspace.adjust() is done...
         //It is bad, I know. But the adjust event is thrown for so many things,
@@ -46,6 +48,7 @@ var Fullscreen = Backbone.Model.extend({
         }.bind(this), 50);
     },
     show: function() {
+    	Saiku.logger.log("Fullscreen.show");
         var elem = $('.workspace_results', this.workspace.el).get(0);
         if (elem.requestFullscreen) {
              elem.requestFullscreen();
@@ -58,6 +61,7 @@ var Fullscreen = Backbone.Model.extend({
         }
     },
     adjust: function(workspace) {
+    	Saiku.logger.log("Fullscreen.adjust");
         //This code is here, instead of in change_handler, because it is run after the workspace has made it's adjustments.
         //Put the code above, and it wil be ran before workspace adjust code, and it will put height to some unwanted value,
         //after we set it to 100%.
@@ -73,6 +77,7 @@ var Fullscreen = Backbone.Model.extend({
 
 Saiku.events.bind('session:new', function(session) {
     function new_workspace(args) {
+    	Saiku.logger.log("Fullscreen.new_workspace");
         if (typeof args.workspace.fullscreen === "undefined") {
             args.workspace.fullscreen = new Fullscreen({ workspace: args.workspace });
         }

@@ -4,7 +4,7 @@ var AMPFilters = Backbone.View.extend({
 			},
 
 			initialize : function(args) {
-				console.log("plugin.initialize");
+				Saiku.logger.log("AMPFilters.initialize");
 				var self = this;
 				this.workspace = args.workspace;
 				this.initialized = false;
@@ -47,9 +47,9 @@ var AMPFilters = Backbone.View.extend({
 			},
 			
 			parseSavedFilters: function(obj) {
+				Saiku.logger.log("AMPFilters.parseSavedFilters");
 		        if (window.currentFilter !== undefined) {
 		            window.currentFilter.loaded.done(function() {
-			            //console.log(this.get('filters'));
 			            var auxFilters = obj.workspace.query.get('filters');
 			            window.currentFilter.deserialize(auxFilters, {
 			            	silent : true
@@ -58,8 +58,8 @@ var AMPFilters = Backbone.View.extend({
 		        }
 			},
 			
-			deferredInitialization: function() {
-				console.log("plugin.deferredInitialization");
+			deferredInitialization: function() {			
+				Saiku.logger.log("AMPFilters.deferredInitialization");
 				if (typeof args.workspace.amp_filters == "undefined") {
 					args.workspace.amp_filters = new AMPFilters({
 						workspace : args.workspace
@@ -72,7 +72,7 @@ var AMPFilters = Backbone.View.extend({
 			},
 
 			add_button : function() {
-
+				Saiku.logger.log("AMPFilters.add_button");
 				this.filters_button = $(
 						'<a href="#amp_filters" class="amp_filters button i18n" title="Filters">Filters</a>')
 						.css(
@@ -86,6 +86,7 @@ var AMPFilters = Backbone.View.extend({
 			},
 
 			show : function(event, ui) {
+				Saiku.logger.log("AMPFilters.show");
 				var self = this;
 				$(this.el).toggle();
 				$(event.target).toggleClass('on');
@@ -102,18 +103,22 @@ var AMPFilters = Backbone.View.extend({
 			},
 
 			render_menu : function() {
+				Saiku.logger.log("AMPFilters.render_menu");
 				//alert("RENDERING FILTER");
 			},
 
 			render : function() {
+				Saiku.logger.log("AMPFilters.render");
 				$(this.el).empty();
 			},
 
 			add_amp_filter : function(event) {
+				Saiku.logger.log("AMPFilters.add_amp_filter");
 				var self = this;
 			},
 
 			save_amp_filter : function() {
+				Saiku.logger.log("AMPFilters.save_amp_filter");
 				var self = this;
 				alert("To be implemented")
 			},
@@ -122,6 +127,7 @@ var AMPFilters = Backbone.View.extend({
 
 Saiku.events.bind('render:end', function(session) {
 	function new_workspace(args) {
+		Saiku.logger.log("AMPFilters.new_workspace");
 		if (typeof args.workspace.amp_filters == "undefined") {
 			args.workspace.amp_filters = new AMPFilters({
 				workspace : args.workspace
@@ -134,6 +140,7 @@ Saiku.events.bind('render:end', function(session) {
 	}
 
 	function clear_workspace(args) {
+		Saiku.logger.log("AMPFilters.clear_workspace");
 		if (typeof args.workspace.amp_filters != "undefined") {
 			$(args.workspace.amp_filters.el).hide();
 		}

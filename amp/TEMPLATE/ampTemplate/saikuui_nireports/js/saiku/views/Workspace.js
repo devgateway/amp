@@ -31,6 +31,7 @@ var Workspace = Backbone.View
 			},
 
 			initialize : function(args) {
+				Saiku.logger.log("Workspace.initialize");
 				// Maintain `this` in jQuery event handlers
 				_.bindAll(this, "caption", "adjust", "toggle_sidebar",
 						"prepare", "new_query", "init_query", "update_caption",
@@ -94,6 +95,7 @@ var Workspace = Backbone.View
 			},
 
 			caption : function(increment) {
+				Saiku.logger.log("Workspace.caption");
 				if (this.query && this.query.model) {
 					if (this.query.model.mdx)
 						return this.query.model.name;
@@ -121,6 +123,7 @@ var Workspace = Backbone.View
 			},
 
 			refresh : function(e) {
+				Saiku.logger.log("Workspace.refresh");
 				if (e) {
 					e.preventDefault();
 				};
@@ -128,6 +131,7 @@ var Workspace = Backbone.View
 			},
 
 			render : function() {
+				Saiku.logger.log("Workspace.render");
 				// Load template
 				$(this.el).html(this.template());
 
@@ -155,6 +159,7 @@ var Workspace = Backbone.View
 			},
 
 			clear : function() {
+				Saiku.logger.log("Workspace.clear");
 				// Prepare the workspace for a new query
 				this.table.clearOut();
 				$(this.el).find('.workspace_results table,.connectable').html(
@@ -176,6 +181,7 @@ var Workspace = Backbone.View
 			},
 
 			adjust : function() {
+				Saiku.logger.log("Workspace.adjust");
 				// Adjust the height of the separator
 				var $separator = $(this.el).find('.sidebar_separator');
 				var heightReduction = 87;				
@@ -219,6 +225,7 @@ var Workspace = Backbone.View
 			},
 
 			toggle_sidebar : function() {
+				Saiku.logger.log("Workspace.toggle_sidebar");
 				// Toggle sidebar
 				$(this.el).find('.sidebar').toggleClass('hide');
 				$(this.toolbar.el).find('.toggle_sidebar').toggleClass('on');
@@ -232,14 +239,15 @@ var Workspace = Backbone.View
 			},
 
 			prepare : function() {
-
+				Saiku.logger.log("Workspace.prepare");
 			},
 
 			new_query : function() {
-				
+				Saiku.logger.log("Workspace.new_query");
 			},
 
 			init_query : function(isNew) {
+				Saiku.logger.log("Workspace.init_query");
 				var self = this;
 				$(this.toolbar.el).find('.auto, .toggle_fields, .query_scenario, .buckets, .non_empty, .swap_axis, .mdx, .switch_to_mdx, .zoom_mode').parent().show();
 				$(this.el).find('.run').attr('href', '#run_query');
@@ -259,27 +267,29 @@ var Workspace = Backbone.View
 			},
 
 			synchronize_query : function() {
-
+				Saiku.logger.log("Workspace.synchronize_query");
 			},
 
 			sync_query : function(dimension_el) {
-				
+				Saiku.logger.log("Workspace.sync_query");
 			},
 
 			populate_selections : function(dimlist) {
-				
+				Saiku.logger.log("Workspace.populate_selections");
 			},
 
 			update_caption : function(increment) {
+				Saiku.logger.log("Workspace.update_caption");
 				var caption = this.caption(increment);
 				this.tab.set_caption(caption);
 			},
 
 			update_parameters : function() {
-				
+				Saiku.logger.log("Workspace.update_parameters");
 			},
 
 			render_result : function(args) {
+				Saiku.logger.log("Workspace.render_result");
 				var self = this;
 				$(this.el).find(".workspace_results_info").empty();
 
@@ -299,6 +309,7 @@ var Workspace = Backbone.View
 			},
 
 			switch_view_state : function(mode, dontAnimate) {
+				Saiku.logger.log("Workspace.switch_view_state");
 				var target = mode || 'edit';
 
 				this.toolbar.toggle_fields_action('hide', dontAnimate);
@@ -313,6 +324,7 @@ var Workspace = Backbone.View
 			},
 
 			block : function(message) {
+				Saiku.logger.log("Workspace.block");
 				/*
 				 * Most probably not needed anymore. Seems ok now with fix #192
 				 * if (isIE) { var $msg = $("<span>" + message + "</span>");
@@ -324,6 +336,7 @@ var Workspace = Backbone.View
 			},
 
 			unblock : function() {
+				Saiku.logger.log("Workspace.block");
 				if (isIE) {
 					Saiku.ui.unblock();
 				} else {
@@ -333,6 +346,7 @@ var Workspace = Backbone.View
 			},
 
 			cancel : function(event) {
+				Saiku.logger.log("Workspace.cancel");
 				// AMP-19253 close windows when query is canceled
 				window.top.close();
 				/*
@@ -343,6 +357,7 @@ var Workspace = Backbone.View
 			},
 
 			cancelled : function(args) {
+				Saiku.logger.log("Workspace.cancelled");
 				this.processing
 						.html(
 								'<span class="processing_image">&nbsp;&nbsp;</span> <span class="i18n">Canceling Query...</span>')
@@ -350,11 +365,13 @@ var Workspace = Backbone.View
 			},
 
 			no_results : function(args) {
+				Saiku.logger.log("Workspace.no_results");
 				this.processing.html('<span class="i18n">No Results</span>')
 						.show();
 			},
 
 			error : function(args) {
+				Saiku.logger.log("Workspace.error");
 				this.processing.html(safe_tags_replace(args.data.error)).show();
 			}
 		});

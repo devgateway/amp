@@ -5,6 +5,7 @@ var SaikuQueryTemplate = {
 };
 
 var SaikuQueryHelper = function(query) {
+	Saiku.logger.log("SessionQueryHelper");
 	this.query = query;
 };
 

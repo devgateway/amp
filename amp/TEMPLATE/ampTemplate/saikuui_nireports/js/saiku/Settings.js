@@ -143,6 +143,7 @@ var isIE = (function(){
 
 Settings.Util = {};
 Settings.Util.numberToString = function(number, settings) {
+	Saiku.logger.log("Settings.numberToString");
 	var format = "";
 	var stringNumber = null;
 
@@ -168,6 +169,7 @@ Settings.Util.numberToString = function(number, settings) {
 };
 
 Settings.Util.stringToNumber = function(stringNumber, settings) {
+	Saiku.logger.log("Settings.stringToNumber");
 	var format = "";
 	var number = null;
 	if(settings === undefined) return new numeral().unformat(stringNumber);
@@ -191,6 +193,7 @@ Settings.Util.stringToNumber = function(stringNumber, settings) {
 };
 
 Settings.Util.createLanguage = function(auxSettings) {
+	Saiku.logger.log("Settings.createLanguage");
 	var ret = {
 		delimiters : {
 			thousands : auxSettings.currentThousandSeparator,
@@ -213,6 +216,7 @@ Settings.Util.createLanguage = function(auxSettings) {
 }
 
 Settings.Util.extractSettings = function(settings) {
+	Saiku.logger.log("Settings.extractSettings");
 	var options = {
 		currentThousandSeparator : null,
 		currentDecimalSeparator : null,

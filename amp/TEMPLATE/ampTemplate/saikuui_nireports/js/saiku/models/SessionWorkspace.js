@@ -24,7 +24,7 @@ var SessionWorkspace = Backbone.Model.extend({
 	
 	//IMPORTANT: Care with this file, some changes can cause stop loading Saiku.    
     initialize: function(args, options) {
-    	console.log("SessionWorkspace.initialize");
+    	Saiku.logger.log("SessionWorkspace.initialize");
     	Backbone.history.start();
     	
         // Attach a custom event bus to this model
@@ -36,17 +36,17 @@ var SessionWorkspace = Backbone.Model.extend({
     },
 
     refresh: function() {
-    	console.log("SessionWorkspace.refresh");
+    	Saiku.logger.log("SessionWorkspace.refresh");
         this.fetch({success:this.process_datasources},{});
     },
         
     destroy: function() {
-    	console.log("SessionWorkspace.destroy");
+    	Saiku.logger.log("SessionWorkspace.destroy");
         return false;
     },
     
     process_datasources: function(model, response) {
-    	console.log("SessionWorkspace.process_datasources");    	
+    	Saiku.logger.log("SessionWorkspace.process_datasources");    	
     	// Show UI
         $(Saiku.toolbar.el).prependTo($("#header"));
         $("#header").show();
@@ -66,7 +66,7 @@ var SessionWorkspace = Backbone.Model.extend({
     },
     
     url: function() {
-    	console.log("SessionWorkspace.url");
+    	Saiku.logger.log("SessionWorkspace.url");
     	//Always refresh
     	return "/TEMPLATE/ampTemplate/saikuui_nireports/mockData/sessionWorkspace.json";
     }

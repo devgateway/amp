@@ -26,18 +26,22 @@ var QueryRouter = Backbone.Router.extend({
         'report/run/:report_token': 'run_report'
     },
     new_query: function() {
+    	Saiku.logger.log("QueryRouter.new_query");
     	Saiku.tabs.add(new Workspace());
     },
     run_report: function(report_token) {
+    	Saiku.logger.log("QueryRouter.run_report");
     	$.getJSON(Settings.AMP_PATH + "/run/" + report_token, process_spec);	
     },    
     open_report: function(report_id) {
+    	Saiku.logger.log("QueryRouter.open_report");
         $.getJSON(Settings.AMP_PATH + "/" + report_id, process_spec);
     },
     open_query: function(query_name) {
-        console.error('code removed');
+    	Saiku.logger.log("QueryRouter.open_query");        
     },
     open_query_repository: function( ) {
+    	Saiku.logger.log("QueryRouter.open_query_repository");
         Toolbar.prototype.open_query( );
     }
 });

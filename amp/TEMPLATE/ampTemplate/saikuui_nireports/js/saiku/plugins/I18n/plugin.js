@@ -22,6 +22,7 @@ Saiku.i18n = {
         navigator.systemLanguage || navigator.userLanguage).substring(0, 2).toLowerCase(),
     po_file: {},
     translate: function (specificElement) {
+    	Saiku.logger.log("I18N.translate");
         if (specificElement) {
             $(specificElement).find('.i18n').i18n(Saiku.i18n.po_file);
         } else {
@@ -29,6 +30,7 @@ Saiku.i18n = {
         }
     },
     automatic_i18n: function () {
+    	Saiku.logger.log("I18N.automatic_i18n");
         // Load language file if it isn't English
 
         //compatible 'zh-CN' -> 'zh';
@@ -50,12 +52,14 @@ Saiku.i18n = {
     },
     elements: [],
     improve_translation: function () {
+    	Saiku.logger.log("I18N.improve_translation");
         Saiku.tabs.add(new TranslationTab());
         return false;
     }
 };
 
 function recursive_menu_translate(object, po_file) {
+	Saiku.logger.log("I18N.recursive_menu_translate");
     if (object && object.hasOwnProperty('name') && object.i18n && po_file) {
     	var translation = po_file[object.name];
     	if (typeof translation != "undefined") {
@@ -193,11 +197,13 @@ var TranslationTab = Backbone.View.extend({
         'change input': 'mark'
     },
     initialize: function() {
+    	Saiku.logger.log("TranslationTab.initialize");
         $(window).resize(this.adjust);
         $(this.el).focus(this.adjust);
         this.adjust();
     },
     render: function() {
+    	Saiku.logger.log("TranslationTab.render");
         var translation_table = {};
         for (var i = 0, len = Saiku.i18n.elements.length; i < len; i++) {
             translation_table[Saiku.i18n.elements[i]] = {
@@ -229,10 +235,12 @@ var TranslationTab = Backbone.View.extend({
     },
     
     mark: function(event) {
+    	Saiku.logger.log("TranslationTab.mark");
         $(event.target).addClass('changed');
     },
     
     submit: function() {
+    	Saiku.logger.log("TranslationTab.submit");
         var translation = { locale: Saiku.i18n.locale };
         $(this.el).find('.changed').each(function(element) {
             translation[decodeURI($(this).attr('name'))] = encodeURI($(this).val());
@@ -248,6 +256,7 @@ var TranslationTab = Backbone.View.extend({
     },
     
     adjust: function() {
+    	Saiku.logger.log("TranslationTab.adjust");
         $(this.el).height($("body").height() - 87);
     }
 });

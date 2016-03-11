@@ -9,6 +9,7 @@ var AMPSettings = Backbone.View.extend({
 			},
 
 			initialize : function(args) {
+				Saiku.logger.log("AMPSettings.initialize");
 				var self = this;
 				this.workspace = args.workspace;
 
@@ -49,11 +50,13 @@ var AMPSettings = Backbone.View.extend({
 			},
 			
 			hideContainer: function() {
+				Saiku.logger.log("AMPSettings.hideContainer");
 				this.settings_button.removeClass('on');
 				$("#settings-container").hide();
 			},
 			
 			applySettings: function() {
+				Saiku.logger.log("AMPSettings.applySettings");
 				var settings = {
 					"1": $('#amp_currency').val(),
 					"2": $('#amp_calendar').val(),
@@ -68,6 +71,7 @@ var AMPSettings = Backbone.View.extend({
 			},
 			
 			populate_dropdowns: function(data) {
+				Saiku.logger.log("AMPSettings.populateDrowpdowns");
 				var currencyValues = _.findWhere(data, {"id": this.SETTINGS["currency"]});
 				$.each(currencyValues.options, function(index, object) {   
 				     $('#amp_currency')
@@ -84,7 +88,7 @@ var AMPSettings = Backbone.View.extend({
 				});
 			},
 			add_button : function() {
-
+				Saiku.logger.log("AMPSettings.add_button");
 				this.settings_button = $(
 						'<a href="#amp_settings" class="amp_settings button i18n" title="Settings">Settings</a>')
 						.css(
@@ -98,6 +102,7 @@ var AMPSettings = Backbone.View.extend({
 			},
 
 			show : function(event, ui) {
+				Saiku.logger.log("AMPSettings.show");
 				var self = this;
 				$(this.el).toggle();
 				var settings;
@@ -116,15 +121,18 @@ var AMPSettings = Backbone.View.extend({
 			},
 
 			render : function() {
+				Saiku.logger.log("AMPSettings.render");
 				$(this.el).empty();
 			},
 
 			add_amp_settings : function(event) {
+				Saiku.logger.log("AMPSettings.add_amp_settings");
 				var self = this;
 				alert("add_amp_settings: To be implemented");
 			},
 
 			save_amp_settings : function() {
+				Saiku.logger.log("AMPSettings.save_amp_settings");
 				var self = this;
 				alert("save_amp_settings: To be implemented");
 			},
@@ -133,6 +141,7 @@ var AMPSettings = Backbone.View.extend({
 
 Saiku.events.bind('session:new', function(session) {
 	function new_workspace(args) {
+		Saiku.logger.log("AMPSettings.new_workspace");
 		if (typeof args.workspace.amp_settings == "undefined") {
 			args.workspace.amp_settings = new AMPSettings({
 				workspace : args.workspace
@@ -141,6 +150,7 @@ Saiku.events.bind('session:new', function(session) {
 	}
 
 	function clear_workspace(args) {
+		Saiku.logger.log("AMPSettings.clear_workspace");
 		if (typeof args.workspace.amp_settings != "undefined") {
 			$(args.workspace.amp_settings.el).hide();
 		}

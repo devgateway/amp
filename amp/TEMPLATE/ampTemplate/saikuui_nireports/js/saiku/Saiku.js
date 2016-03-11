@@ -18,6 +18,8 @@
  * Central object for handling global application state
  */
 var Saiku = {
+		
+	logger : new AMPCustomLogging(),
 	/**
 	 * View which manages toolbar interactions
 	 */

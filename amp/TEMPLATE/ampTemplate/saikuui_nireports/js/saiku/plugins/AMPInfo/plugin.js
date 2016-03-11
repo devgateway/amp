@@ -1,6 +1,7 @@
 var AMPInfo = Backbone.View.extend({
 
     initialize: function(args) {
+    	Saiku.logger.log("AMPInfo.initialize");
     	this.workspace = args.workspace;
         
         this.id = _.uniqueId("amp_info_");
@@ -14,6 +15,7 @@ var AMPInfo = Backbone.View.extend({
     },
     
     render: function() {
+    	Saiku.logger.log("AMPInfo.render");
 		var filters = this.workspace.query.get('filters');
 		var settings = window.currentSettings;
 		var content = this.render_info(settings);
@@ -34,6 +36,7 @@ var AMPInfo = Backbone.View.extend({
     },
     
     render_info: function(settings) {
+    	Saiku.logger.log("AMPInfo.render_info");
     	//TODO: Move all these html into a template + view.
     	var content = "<div id='amp_notification' class='amp_notification'><span class='i18n'>{0}</span></div>" 
     		+ "<div id='amp_info_filters'>";
@@ -49,6 +52,7 @@ var AMPInfo = Backbone.View.extend({
     },
     
     build_notification: function() {
+    	Saiku.logger.log("AMPInfo.build_notification");
 			switch(this.workspace.query.get('raw_settings').unitsOption) {
 				case "AMOUNTS_OPTION_THOUSANDS": return "Amounts are in thousands (000)";
 				case "AMOUNTS_OPTION_MILLIONS": return "Amounts are in millions (000 000)";
@@ -57,20 +61,24 @@ var AMPInfo = Backbone.View.extend({
     },
     
     receive_info: function(args) {
+    	Saiku.logger.log("AMPInfo.receive_info");
         return _.delay(this.process_info, 0, args);
     },
     
     process_info: function(args) {
-        
+    	Saiku.logger.log("AMPInfo.process_info");
         $(this.el).empty();
         this.render();
     },
 
     error: function(args) {
+    	Saiku.logger.log("AMPInfo.error");
         $(this.el).text(safe_tags_replace(args.data.error));
     }
 });
+
 var extract_values = function(object_value) {
+	Saiku.logger.log("AMPInfo.extract_values");
 	var values = [];
 	switch(object_value.filterType) {
     	case "VALUES":
@@ -90,7 +98,7 @@ var extract_values = function(object_value) {
 }
 
 var filtersToHtml = function(filters) {
-	console.log(filters);
+	Saiku.logger.log("AMPInfo.filtersToHtml");
 	//TODO: Move all these html into a template + view.
 	var html = "";
 	if (filters.columnFilters != undefined) {
@@ -147,6 +155,7 @@ var filtersToHtml = function(filters) {
 }
 
 var filterContentToHtml = function(content) {
+	Saiku.logger.log("AMPInfo.filterContentToHtml");
 	var html = "";
 	_.each(content, function(item) {
 		html += "<div class='round-filter'>" + item.trnName + "</div>";
@@ -160,6 +169,7 @@ var filterContentToHtml = function(content) {
  Saiku.events.bind('session:new', function(session) {
 
         function new_workspace(args) {
+        	Saiku.logger.log("AMPInfo.new_workspace");
             if (typeof args.workspace.stats == "undefined"
             	|| typeof args.workspace.amp_info == "undefined") {
                 args.workspace.amp_info = new AMPInfo({ workspace: args.workspace });
@@ -167,6 +177,7 @@ var filterContentToHtml = function(content) {
         }
 
         function clear_workspace(args) {
+        	Saiku.logger.log("AMPInfo.clear_workspace");
             if (typeof args.workspace.amp_info != "undefined" && $(args.workspace.amp_info.el).is(':visible')) {
                 $(args.workspace.amp_info.el).parents().find('.workspace_results table').show();
                 $(args.workspace.amp_info.el).hide();

@@ -5,6 +5,7 @@
 Saiku.Sorting = {
 
 	initialize : function(workspace) {
+		Saiku.logger.log("Sorting.initialize");
 		// For readability purposes lets define in one place all the fields
 		// required for Sorting to work.
 		Saiku.Sorting.initialized = true;
@@ -21,6 +22,7 @@ Saiku.Sorting = {
 	 * One place to intercept clicking on report headers.
 	 */
 	processClickOnHeader : function(event) {
+		Saiku.logger.log("Sorting.processClickOnHeader");
 		var clickedColumn = event.currentTarget;
 		var id = $(clickedColumn).attr('id');
 		
@@ -65,6 +67,7 @@ Saiku.Sorting = {
 // TODO: improve this section.
 Saiku.events.bind('session:new', function(session) {
 	function new_workspace(args) {
+		Saiku.logger.log("Sorting.new_workspace");
 		if (typeof Saiku.Sorting.initialized == "undefined"
 				|| Saiku.Sorting.initialized != true) {
 			Saiku.Sorting.initialize(args.workspace);
@@ -76,6 +79,7 @@ Saiku.events.bind('session:new', function(session) {
 	}
 
 	function clear_workspace(args) {
+		Saiku.logger.log("Sorting.clear_workspace");
 		if (typeof Saiku.Sorting.initialized != "undefined") {
 			if (args.workspace.amp_sorting != undefined) {
 				$(args.workspace.amp_sorting.el).hide();
@@ -88,6 +92,7 @@ Saiku.events.bind('session:new', function(session) {
 });
 
 function resetSorting() {
+	Saiku.logger.log("Sorting.resetSorting");
 	Saiku.Sorting.currentSorting = [];
 }
 
@@ -97,6 +102,7 @@ function resetSorting() {
  * clicking yearly totals).
  */
 function sortColumn(id, type) {
+	Saiku.logger.log("Sorting.sortColumn");
 	var sort = false;
 	// Look for this id in the list of currentSorting, if we find it then change
 	// the 'asc' param, otherwise
@@ -155,6 +161,7 @@ function sortColumn(id, type) {
 }
 
 function sortNiReportColumn(id) {
+	Saiku.logger.log("Sorting.sortNiReportColumn");
 	var foundItem = _.find(Saiku.Sorting.currentSorting, function(item) {
 		return item.id === id;
 	});
@@ -178,6 +185,7 @@ function sortNiReportColumn(id) {
  * Call the event that refresh the table.
  */
 function runQuery() {
+	Saiku.logger.log("Sorting.runQuery");
 	Saiku.Sorting.workspace.run_query();
 }
 
@@ -186,23 +194,23 @@ function runQuery() {
  * header.
  */
 function updateArrowIcon(data) {
+	Saiku.logger.log("Sorting.updateArrowIcon");
 	$('#sorting-arrow').remove();
-	_
-			.each(
-					Saiku.Sorting.currentSorting,
-					function(item) {
-						var col = $("[id='" + item.id + "']");
-						var imgHtml = "";
-						if (item.asc) {
-							imgHtml = "<img id='sorting-arrow' src='/TEMPLATE/ampTemplate/images/up.gif' />";
-						} else {
-							imgHtml = "<img id='sorting-arrow' src='/TEMPLATE/ampTemplate/images/down.gif' />";
-						}
-						$(col).find("div").append(imgHtml);
-					});
+	_.each(Saiku.Sorting.currentSorting,
+			function(item) {
+				var col = $("[id='" + item.id + "']");
+				var imgHtml = "";
+				if (item.asc) {
+					imgHtml = "<img id='sorting-arrow' src='/TEMPLATE/ampTemplate/images/up.gif' />";
+				} else {
+					imgHtml = "<img id='sorting-arrow' src='/TEMPLATE/ampTemplate/images/down.gif' />";
+				}
+				$(col).find("div").append(imgHtml);
+			});
 }
 
 function convertNiReportIdToName(id) {
+	Saiku.logger.log("Sorting.convertNiReportIdToName");
 	var name = "";
 	name = id.replace("[Funding]", '');
 	name = name.replace("[Totals]", '');
@@ -211,6 +219,7 @@ function convertNiReportIdToName(id) {
 }
 
 function convertIdToName(id, type) {
+	Saiku.logger.log("Sorting.convertIdToName");
 	var name = "";
 	switch (type) {
 	case 'HEADER_COMMON':

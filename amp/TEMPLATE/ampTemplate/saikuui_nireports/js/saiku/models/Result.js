@@ -23,11 +23,13 @@ var Result = Backbone.Model.extend({
     firstRun: false,
     
     initialize: function(args, options) {
+    	Saiku.logger.log("Result.initialize");
         // Keep reference to query
         this.query = options.query;
     },
     
     parse: function(response) {
+    	Saiku.logger.log("Result.parse");
         // Show the UI if hidden
         this.query.workspace.unblock();
         this.query.workspace.processing.hide();
@@ -52,14 +54,17 @@ var Result = Backbone.Model.extend({
     },
 
     hasRun: function() {
+    	Saiku.logger.log("Result.hasRun");
         return this.firstRun;
     },
     
     lastresult: function() {
-            return this.result;
+    	Saiku.logger.log("Result.lastresult");
+        return this.result;
     },
     
-    url: function() {    	
+    url: function() {
+    	Saiku.logger.log("Result.url");
     	if(this.query.get('report_id')){
 	    	return encodeURI("../../../rest/data/saikureport/" + this.query.get('report_id'));
     	}
@@ -71,6 +76,7 @@ var Result = Backbone.Model.extend({
     },
 
     updatePagination: function() {
+    	Saiku.logger.log("Result.updatePagination");
     	//Start Custom Code for Pagination
     	if(this.query.get('max_page_no') === 0) {
     		this.query.set('page', 0);

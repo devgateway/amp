@@ -16,6 +16,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
@@ -64,7 +65,7 @@ public class AmpDonorExpendituresFormTableFeature extends
 						new PropertyModel<AmpCategoryValue>(model,"expenditureClass"),
 						CategoryConstants.EXPENDITURE_CLASS_NAME, //fmname
 						 false, false, false, dependantModel, false);
-			expenditureClasses.getChoiceContainer().setRequired(true);
+//			expenditureClasses.getChoiceContainer().setRequired(true);
 			return expenditureClasses;
 		}catch(Exception e)
 		{
@@ -95,7 +96,21 @@ public class AmpDonorExpendituresFormTableFeature extends
 					org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {
 
 				item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
-				item.add(getExpenditureClassTypeComponent(item.getModel()));
+				
+				final AmpCategorySelectFieldPanel expenditureClass = getExpenditureClassTypeComponent(item.getModel());
+				
+	            item.add(new AmpComponentPanel("expenditureClassRequired", "Required Validator for Expenditure Class") {
+	                @Override
+	                protected void onConfigure() {
+	                    super.onConfigure();
+	                    if (this.isVisible()){
+	                    	expenditureClass.getChoiceContainer().setRequired(true);//getTextAreaContainer().setRequired(true);
+//	                    	requiredRichTextFormComponents.add(description.getTextAreaContainer());
+	                    }
+	                }
+	            });		
+	             
+				item.add(expenditureClass);
 				final AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
 				item.add(amountComponent);
 				
@@ -103,11 +118,7 @@ public class AmpDonorExpendituresFormTableFeature extends
 						"classification", new PropertyModel<String>(
 								item.getModel(), "expCategory"),
 						"Expenditure Classification", false, false);
-				
-				
-				
-				
-				
+
 				classification.getTextContainer().add(new AttributeModifier("size", new Model<String>("12")));
 				classification.setTextContainerDefaultMaxSize();
 				item.add(classification);

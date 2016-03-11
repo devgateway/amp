@@ -40,6 +40,7 @@ import org.dgfoundation.amp.reports.PartialReportArea;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
+import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
 import org.dgfoundation.amp.testmodels.NiReportModel;
 import org.dgfoundation.amp.testmodels.ReportModel;
@@ -368,6 +369,11 @@ public abstract class ReportingTestCase extends AmpTestCase {
 	
 	protected <K> K buildNiReportDigest(ReportSpecification spec, List<String> activityNames, NiReportOutputBuilder<K> outputBuilder) {
 		return getNiExecutor(activityNames).executeReport(spec, outputBuilder);
+	}
+	
+	protected ReportSpecification spec(String reportName) {
+		ReportSpecification spec = AmpReportsToReportSpecification.convert(ReportTestingUtils.loadReportByName(reportName));
+		return spec;
 	}
 	
 	protected<K> K buildDigest(ReportSpecification spec, List<String> activityNames, NiReportOutputBuilder<K> outputBuilder) {

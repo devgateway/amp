@@ -106,4 +106,9 @@ public class NiReportModel {
 		res.append(")");
 		return res.toString();
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("cor %s", name);
+	}
 }

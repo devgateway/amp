@@ -86,7 +86,7 @@ public class CurrencyConvertorTests extends ReportingTestCase {
 
 		String strDatewithTime = "2014-12-16";
 		LocalDate date = LocalDate.parse(strDatewithTime);
-		System.out.println("Date with Time: " + date);
+		//System.out.println("Date with Time: " + date);
 
 		for (AmpCurrency currencyCodeA : CurrencyUtil.getAllCurrencies(1)) {
 			for (AmpCurrency currencyCodeB : CurrencyUtil.getAllCurrencies(1)) {

@@ -1,10 +1,18 @@
 package org.dgfoundation.amp.ar.amp212;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.mondrian.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.GroupingCriteria;
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
+import org.dgfoundation.amp.testmodels.NiReportModel;
+import org.junit.Test;
 
 /**
  * 

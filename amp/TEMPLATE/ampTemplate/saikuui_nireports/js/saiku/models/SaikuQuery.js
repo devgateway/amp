@@ -1,7 +1,7 @@
 var SaikuQueryTemplate = {
   "queryModel": {}, 
-  "queryType": "OLAP",
-  "type": "QUERYMODEL"
+  "queryType": "",
+  "type": ""
 };
 
 var SaikuQueryHelper = function(query) {

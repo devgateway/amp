@@ -1,1 +1,15 @@
-{"queryModel":{"axes":{},"visualTotals":false,"visualTotalsPattern":null,"lowestLevelsOnly":false,"details":null,"calculatedMeasures":[]},"cube":{"uniqueName":"[amp].[AMP].[AMP].[Donor Funding]","name":"Donor Funding","connection":"amp","catalog":"AMP","schema":"AMP","caption":null,"visible":false},"mdx":"WITH\r\nSET [~ROWS] AS\r\n     {[Activity Texts.AMP ID].[AMP ID].Members}\r\nSELECT\r\nNON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS,\r\nNON EMPTY [~ROWS] ON ROWS\r\nFROM [Donor Funding]","name":"D1CE2041-5F65-64C6-8C21-2D15741ACB3A","parameters":{},"plugins":{},"properties":{"saiku.olap.query.automatic_execution":true,"saiku.olap.query.nonempty":true,"saiku.olap.query.nonempty.rows":true,"saiku.olap.query.nonempty.columns":true,"saiku.ui.render.mode":"table","saiku.olap.query.filter":true,"saiku.olap.result.formatter":"flat","org.saiku.query.explain":true,"org.saiku.connection.scenario":false,"saiku.olap.query.drillthrough":true},"metadata":{},"queryType":"OLAP","type":"QUERYMODEL"}
+{
+   "queryModel":{
+   },
+   "name":"D1CE2041-5F65-64C6-8C21-2D15741ACB3A",
+   "parameters":{
+   },
+   "plugins":{
+   },
+   "properties":{
+   },
+   "metadata":{
+   },
+   "queryType":"OLAP",
+   "type":"QUERYMODEL"
+}

@@ -18,52 +18,9 @@
  * Change settings here
  */
 var Settings = {
-    VERSION: "Saiku 3.0-RC2",
-    BIPLUGIN: false,
-    BIPLUGIN5: false,
     BASE_URL: "",
     TOMCAT_WEBAPP: "/saiku",
-    REST_MOUNT_POINT: "/rest/saiku/",
-    DIMENSION_PREFETCH: true,
-    DIMENSION_SHOW_ALL: true,
-    DIMENSION_SHOW_REDUCED: false,
-    ERROR_LOGGING: false,
-    // number of erroneous ajax calls in a row before UI cant recover
-    ERROR_TOLERANCE: 3,
-    QUERY_PROPERTIES: {
-        'saiku.olap.query.automatic_execution': true,
-        'saiku.olap.query.nonempty': true,
-        'saiku.olap.query.nonempty.rows': true,
-        'saiku.olap.query.nonempty.columns': true,
-        'saiku.ui.render.mode' : 'table',
-        'saiku.olap.query.filter' : true,
-        'saiku.olap.result.formatter' : "flattened"
-    },
-    TABLE_LAZY: false,          // Turn lazy loading off / on
-    TABLE_LAZY_SIZE: 100000,     // Initial number of items to be rendered
-    TABLE_LAZY_LOAD_ITEMS: 20,       // Additional item per scroll
-    TABLE_LAZY_LOAD_TIME: 20,  // throttling call of lazy loading items
-    /* Valid values for CELLSET_FORMATTER:
-     * 1) flattened
-     * 2) flat
-     */
-    CELLSET_FORMATTER: "flattened",
-    // limits the number of rows in the result
-    // 0 - no limit
-    RESULT_LIMIT: 0,
-    MEMBERS_FROM_RESULT: true,
-    MEMBERS_LIMIT: 3000,
-    MEMBERS_SEARCH_LIMIT: 75,
-    ALLOW_IMPORT_EXPORT: false,
-    ALLOW_PARAMETERS: false,
-    PLUGINS: [
-        "Chart"
-    ],
     DEFAULT_VIEW_STATE: 'view', // could be 'edit' as well
-    DEMO: false,
-    TELEMETRY_SERVER: 'http://telemetry.analytical-labs.com:7000',
-    LOCALSTORAGE_EXPIRATION: 0 /* 10 hours, in ms */,
-    UPGRADE: false,    
     AMP_PATH: '/rest/data/report',
     PAGINATION: true,
     RESULTS_PER_PAGE: 10,
@@ -113,17 +70,6 @@ Settings.REST_URL = Settings.BASE_URL
     + Settings.TOMCAT_WEBAPP 
     + Settings.REST_MOUNT_POINT;
 
-// lets assume we dont need a min width/height for table mode
-if (Settings.MODE == "table") {
-    Settings.DIMENSION_PREFETCH = false;
-    $('body, html').css('min-height',0);
-    $('body, html').css('min-width',0);
-
-}
-if (Settings.BIPLUGIN5) {
-    Settings.BIPLUGIN = true;
-}
-
 Settings.INITIAL_QUERY = true;
 if (document.location.hash) {
     var hash = document.location.hash;
@@ -131,7 +77,6 @@ if (document.location.hash) {
         Settings.INITIAL_QUERY = true;
     }
 }
-
 
 /**
  * < IE9 doesn't support Array.indexOf
@@ -180,7 +125,6 @@ if ($.blockUI) {
     $.blockUI.defaults.fadeOut = 0;
     $.blockUI.defaults.fadeIn = 0;
     $.blockUI.defaults.ignoreIfBlocked = false;
-
 }
 
 var isIE = (function(){

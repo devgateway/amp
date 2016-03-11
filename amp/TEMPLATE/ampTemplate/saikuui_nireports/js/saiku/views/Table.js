@@ -38,13 +38,14 @@ var Table = Backbone.View.extend({
     },
     
     clicked_header_cell : function(event) {
+    	// For clicks on report's header cells.
     	if(Saiku.Sorting != undefined) {
     		Saiku.Sorting.processClickOnHeader(event);
     	}
     },
     
     clicked_cell: function(event) {
-    	console.error("unimplemented");
+    	// Keep this function for processing clicks on any report's cell.
     },
 
 
@@ -53,7 +54,6 @@ var Table = Backbone.View.extend({
             ($(this.workspace.el).is(':visible') && !$(this.el).is(':visible'))) {
             return;
         }
-
         if (args.data != null && args.data.error != null) {
             return;
         }        
@@ -62,7 +62,7 @@ var Table = Backbone.View.extend({
             return;
         }
         this.clearOut();
-        $(this.el).html('Rendering ' + args.data.width + ' columns and ' + args.data.height + ' rows...');
+        $(this.el).html("<div class='i18n rendering_data'>Rendering data...</div>");
 
         // Render the table without blocking the UI thread
         _.delay(this.process_data, 2, args.data);
@@ -95,11 +95,7 @@ var Table = Backbone.View.extend({
         
         data.workspace = this.workspace;
         var contents = this.renderer.render(data, { 
-            htmlObject:         $(this.el).find('table'),
-            batch:              Settings.TABLE_LAZY, 
-            batchSize:          Settings.TABLE_LAZY_SIZE, 
-            batchIntervalSize:  Settings.TABLE_LAZY_LOAD_ITEMS,
-            batchIntervalTime:  Settings.TABLE_LAZY_LOAD_TIME 
+            htmlObject: $(this.el).find('table')
         });
         this.post_process();
     },

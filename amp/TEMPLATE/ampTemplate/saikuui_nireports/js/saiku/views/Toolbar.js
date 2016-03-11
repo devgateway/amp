@@ -73,28 +73,5 @@ var Toolbar = Backbone.View.extend({
         }
         
         return false;
-    },
-    
-    /**
-     * Clear the current session and show the login window
-     */
-    logout: function() {
-        Saiku.session.logout();
-    },
-    
-    /**
-     * Show the credits dialog
-     */
-    about: function() {
-        (new AboutModal).render().open();
-        return false;
-    },
-    
-    /**
-     * Go to the issue tracker
-     */
-    issue_tracker: function() {
-        window.open('http://jira.meteorite.bi/');
-        return false;
     }
 });

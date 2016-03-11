@@ -41,8 +41,8 @@ var AMPInfo = Backbone.View.extend({
     	content += "<div id='amp_info_filters_block'></div>";
     	content += "</div>";
     	if(settings){
-        	content += "<div id='amp_info_settings'><h4><span class='i18n'>Currency</span>: " +  settings["1"];
-        	content += "</h4></div>";
+        	content += "<div id='amp_info_settings'><h5><b><span class='i18n'>Currency</span>: " +  settings["1"];
+        	content += "</b></h5></div>";
     	}
     	content = content.replace("{0}", this.build_notification());
     	return content;

@@ -123,8 +123,7 @@ var Workspace = Backbone.View
 			refresh : function(e) {
 				if (e) {
 					e.preventDefault();
-				}
-				;
+				};
 				Saiku.session.sessionworkspace.refresh();
 			},
 
@@ -134,37 +133,9 @@ var Workspace = Backbone.View
 
 				this.processing = $(this.el).find('.query_processing');
 
-				if (this.isReadOnly
-						|| Settings.MODE
-						&& (Settings.MODE == "view" || Settings.MODE == "table")) {
-					$(this.el).find('.workspace_editor').remove();
-					this.toggle_sidebar();
-					$(this.el).find('.sidebar_separator').remove();
-					$(this.el).find('.workspace_inner').css({
-						'margin-left' : 0
-					});
-					$(this.el).find('.workspace_fields').remove();
-					$(this.el).find('.sidebar').hide();
-
-					$(this.toolbar.el)
-							.find(
-									".run, .auto, .toggle_fields, .toggle_sidebar,.switch_to_mdx, .new")
-							.parent().remove();
-
-				} else {
-
-				}
-
-				if (Settings.MODE && Settings.MODE == "table") {
-					$(this.el).find('.workspace_toolbar').remove();
-					$(this.el).find('.query_toolbar').remove();
-				} else {
-					// Show toolbar
-					$(this.el).find('.workspace_toolbar').append(
-							$(this.toolbar.el));
-					$(this.el).find('.query_toolbar').append(
-							$(this.querytoolbar.el));
-				}
+				// Show toolbar
+				$(this.el).find('.workspace_toolbar').append($(this.toolbar.el));
+				$(this.el).find('.query_toolbar').append($(this.querytoolbar.el));
 
 				this.switch_view_state(this.viewState, true);
 
@@ -207,13 +178,7 @@ var Workspace = Backbone.View
 			adjust : function() {
 				// Adjust the height of the separator
 				var $separator = $(this.el).find('.sidebar_separator');
-				var heightReduction = 87;
-				if (Settings.PLUGIN == true || Settings.BIPLUGIN == true) {
-					heightReduction = 2;
-					if (Settings.MODE == 'table') {
-						heightReduction = -5;
-					}
-				}
+				var heightReduction = 87;				
 				if ($('#header').length == 0 || $('#header').is('hidden')) {
 					heightReduction = 2;
 				}
@@ -267,12 +232,7 @@ var Workspace = Backbone.View
 			},
 
 			prepare : function() {
-				// Draw user's attention to cube navigation
-				$(this.el).find('.cubes').parent().css({
-					backgroundColor : '#AC1614'
-				}).delay(300).animate({
-					backgroundColor : '#fff'
-				}, 'slow');
+
 			},
 
 			new_query : function() {
@@ -281,136 +241,24 @@ var Workspace = Backbone.View
 
 			init_query : function(isNew) {
 				var self = this;
-				try {
-
-					// TODO: This should be refactored, the workspace should
-					// have a renderer set and always use that
-					// probably extend the Table.js with TableRenderer and make
-					// it an advanced one
-
-					var properties = this.query.model.properties ? this.query.model.properties
-							: {};
-
-					var renderMode = ('RENDER_MODE' in Settings) ? Settings.RENDER_MODE
-							: ('saiku.ui.render.mode' in properties) ? properties['saiku.ui.render.mode']
-									: null;
-					var renderType = ('RENDER_TYPE' in Settings) ? Settings.RENDER_TYPE
-							: ('saiku.ui.render.type' in properties) ? properties['saiku.ui.render.type']
-									: null;
-
-					if (typeof renderMode != "undefined" && renderMode != null) {
-						this.querytoolbar.switch_render(renderMode);
-					}
-
-					if ('chart' == renderMode) {
-						$(this.chart.el).find('.canvas_wrapper').hide();
-						this.chart.renderer.switch_chart(renderType);
-						$(this.querytoolbar.el).find(
-								'ul.chart [href="#' + renderType + '"]')
-								.parent().siblings().find('.on').removeClass(
-										'on');
-						$(this.querytoolbar.el).find(
-								'ul.chart [href="#' + renderType + '"]')
-								.addClass('on');
-
-					} else if ('table' == renderMode
-							&& renderType in this.querytoolbar) {
-						this.querytoolbar.render_mode = "table";
-						this.querytoolbar.spark_mode = renderType;
-						$(this.querytoolbar.el)
-								.find('ul.table a.' + renderType)
-								.addClass('on');
-					}
-				} catch (e) {
-					Saiku.error(this.cid, e);
-				}
-
-				if ((Settings.MODE == "table") && this.query) {
-					this.query.run(true);
-					return;
-				}
-
-				if (this.query.model.type == "MDX") {
-					this.query.setProperty("saiku.olap.result.formatter",
-							"flat");
-					if (!$(this.el).find('.sidebar').hasClass('hide')) {
-						this.toggle_sidebar();
-					}
-					$(this.el).find('.workspace_fields').addClass('hide')
-					this.toolbar.switch_to_mdx();
-				} else {
-					$(this.el).find('.workspace_editor').removeClass('hide')
-							.show();
-					$(this.el).find('.workspace_fields')
-							.removeClass('disabled').removeClass('hide');
-					$(this.el).find('.workspace_editor .mdx_input').addClass(
-							'hide');
-					$(this.el).find('.workspace_editor .editor_info').addClass(
-							'hide');
-					$(this.toolbar.el)
-							.find(
-									'.auto, .toggle_fields, .query_scenario, .buckets, .non_empty, .swap_axis, .mdx, .switch_to_mdx, .zoom_mode')
-							.parent().show();
-					$(this.el).find('.run').attr('href', '#run_query');
-					// Start Custom Code for Pagination
-					$(this.el).find('.first_page').attr('href', '#first_page');
-					$(this.el).find('.prev_page').attr('href', '#prev_page');
-					$(this.el).find('.next_page').attr('href', '#next_page');
-					$(this.el).find('.last_page').attr('href', '#last_page');
-					// End Custom Code for Pagination
-				}
-				this.adjust();
-				this.switch_view_state(this.viewState, true);
-
-				if (!$(this.el).find('.sidebar').hasClass('hide')
-						&& (Settings.MODE == "table" || Settings.MODE == "view" || this.isReadOnly)) {
-					this.toggle_sidebar();
-				}
-				if ((Settings.MODE == "view") && this.query || this.isReadOnly) {
-					this.query.run(true);
-					return;
-				}
-
-				// Find the selected cube
-				if (this.selected_cube === undefined) {
-					var schema = this.query.model.cube.schema;
-					this.selected_cube = this.query.model.cube.connection
-							+ "/"
-							+ this.query.model.cube.catalog
-							+ "/"
-							+ ((schema == "" || schema == null) ? "null"
-									: schema) + "/"
-							+ encodeURIComponent(this.query.model.cube.name);
-					$(this.el).find('.cubes').val(this.selected_cube);
-				}
-
-				if (this.selected_cube) {
+				$(this.toolbar.el).find('.auto, .toggle_fields, .query_scenario, .buckets, .non_empty, .swap_axis, .mdx, .switch_to_mdx, .zoom_mode').parent().show();
+				$(this.el).find('.run').attr('href', '#run_query');
+				
+				// Start Custom Code for Pagination
+				$(this.el).find('.first_page').attr('href', '#first_page');
+				$(this.el).find('.prev_page').attr('href', '#prev_page');
+				$(this.el).find('.next_page').attr('href', '#next_page');
+				$(this.el).find('.last_page').attr('href', '#last_page');
+				// End Custom Code for Pagination
 					
-				} else {
-					// Someone literally selected "Select a cube"
-					$(this.el).find('.calculated_measures, .addMeasure').hide();
-					$(this.el).find('.dimension_tree').html('');
-					$(this.el).find('.measure_tree').html('');
-				}
-
-				// is this a new query?
-				// Run query once the filters widget is ready.
-				/*this.query.initFiltersDeferred.done(function() {
-					// console.log(window.currentFilter.serialize());
-					self.query.run(true);
-				});*/
-				
-				self.query.run(true);
-				
+				//this.adjust();
+				//this.switch_view_state(this.viewState, true);
+					
+				self.query.run(true);			
 				Saiku.i18n.translate();
 			},
 
 			synchronize_query : function() {
-				var self = this;
-				if (!self.isReadOnly
-						&& (!Settings.hasOwnProperty('MODE') || (Settings.MODE != "table" && Settings.MODE != "view"))) {
-
-				}
 
 			},
 
@@ -427,50 +275,8 @@ var Workspace = Backbone.View
 				this.tab.set_caption(caption);
 			},
 
-			remove_dimension : function(event, ui) {
-				if (this.query.model.type == "QUERYMODEL") {
-					this.drop_zones.remove_dimension(event, ui);
-				}
-			},
-
 			update_parameters : function() {
-				var self = this;
-				if (!Settings.ALLOW_PARAMETERS)
-					return;
-
-				var paramDiv = "<span class='i18n'>Parameters</span>: ";
-				var parameters = this.query.helper.model().parameters;
-				var hasParams = false;
-				for ( var key in parameters) {
-					var val = "";
-					if (parameters[key] && parameters[key] != null) {
-						val = parameters[key];
-					}
-					paramDiv += "<b>" + key
-							+ "</b> <input type='text' placeholder='" + key
-							+ "' value='" + val + "' />";
-					hasParams = true;
-				}
-				paramDiv += "";
-
-				if (hasParams) {
-					$(this.el).find('.parameter_input').html(paramDiv);
-				} else {
-					$(this.el).find('.parameter_input').html("");
-				}
-
-				$(this.el).find('.parameter_input input').off('change');
-				$(this.el)
-						.find('.parameter_input input')
-						.on(
-								'change',
-								function(event) {
-									var paramName = $(event.target).attr(
-											'placeholder');
-									var paramVal = $(event.target).val();
-									self.query.helper.model().parameters[paramName] = paramVal;
-								});
-
+				
 			},
 
 			render_result : function(args) {
@@ -486,28 +292,6 @@ var Workspace = Backbone.View
 					return this.no_results(args);
 				}
 
-				var chour = new Date().getHours();
-				if (chour < 10)
-					chour = "0" + chour;
-
-				var cminutes = new Date().getMinutes();
-				if (cminutes < 10)
-					cminutes = "0" + cminutes;
-
-				var cdate = chour + ":" + cminutes;
-				var runtime = args.data.runtime != null ? (args.data.runtime / 1000)
-						.toFixed(2)
-						: "";
-				/*
-				 * var info = '<b>Time:</b> ' + cdate + " &emsp;<b>Rows:</b> " +
-				 * args.data.height + " &emsp;<b>Columns:</b> " +
-				 * args.data.width + " &emsp;<b>Duration:</b> " + runtime +
-				 * "s";
-				 */
-				var info = '<b><span class="i18n">Info:</span></b> &nbsp;'
-						+ cdate + "&emsp;/ &nbsp;" + args.data.width + " x "
-						+ args.data.height + "&nbsp; / &nbsp;" + runtime + "s";
-
 				this.update_parameters();
 
 				this.adjust();
@@ -517,38 +301,12 @@ var Workspace = Backbone.View
 			switch_view_state : function(mode, dontAnimate) {
 				var target = mode || 'edit';
 
-				if (target == 'edit') {
-					// $(this.el).find('.workspace_editor').show();
-					this.toolbar.toggle_fields_action('show', dontAnimate);
-					if (this.query && this.query.get('type') == "MDX") {
-						this.toolbar.editor.gotoLine(0);
-					}
-					if ($(this.el).find('.sidebar').hasClass('hide')) {
-						this.toggle_sidebar();
-					}
-					// $(this.el).find('.sidebar_separator').show();
-					// $(this.el).find('.workspace_inner').removeAttr('style');
-					$(this.toolbar.el)
-							.find(
-									".auto, .toggle_fields, .toggle_sidebar,.switch_to_mdx, .new")
-							.parent().css({
-								"display" : "block"
-							});
-				} else if (target == 'view') {
-					// $(this.el).find('.workspace_editor').hide();
-					this.toolbar.toggle_fields_action('hide', dontAnimate);
-					if (!$(this.el).find('.sidebar').hasClass('hide')) {
-						this.toggle_sidebar();
-					}
-					// $(this.el).find('.sidebar_separator').hide();
-					// $(this.el).find('.workspace_inner').css({ 'margin-left':
-					// 0 });
-
-					$(this.toolbar.el)
-							.find(
-									".auto, .toggle_fields, .toggle_sidebar,.switch_to_mdx")
-							.parent().hide();
+				this.toolbar.toggle_fields_action('hide', dontAnimate);
+				if (!$(this.el).find('.sidebar').hasClass('hide')) {
+					this.toggle_sidebar();
 				}
+
+				$(this.toolbar.el).find(".auto, .toggle_fields, .toggle_sidebar,.switch_to_mdx").parent().hide();
 				this.viewState = target;
 				$(window).trigger('resize');
 
@@ -561,12 +319,7 @@ var Workspace = Backbone.View
 				 * $msg.find('.processing_image').removeClass('processing_image');
 				 * Saiku.ui.block($msg.html()); }
 				 */
-				$(this.el)
-						.block(
-								{
-									message : '<span class="saiku_logo" style="float:left">&nbsp;&nbsp;</span> '
-											+ message
-								});
+				$(this.el).block({message : '<span class="saiku_logo" style="float:left">&nbsp;&nbsp;</span> ' + message});
 				Saiku.i18n.translate();
 			},
 

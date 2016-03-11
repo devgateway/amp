@@ -152,6 +152,8 @@ var Query = Backbone.Model.extend({
     },
     //End Custom Code for Pagination
     run: function(force, mdx, filters, settings) {
+    	console.log('END!!!');
+    	console.log(new Date().getTime() - window.saiku_time_old + "ms");
 
         var self = this;
         // Check for automatic execution

@@ -68,16 +68,6 @@ var Tab = Backbone.View.extend({
             $(this.el).find('.close_tab').hide();
             $(this.el).css('padding-right','10px')
         }
-        var menuitems = {
-            "new": {name: "New", i18n: true },
-            "duplicate": { name: "Duplicate", i18n: true},
-            "closeothers": {name: "Close Others", i18n: true },
-            "closethis": {name: "Close This", i18n: true }
-        };
-        $.each(menuitems, function(key, item){
-            recursive_menu_translate(item, Saiku.i18n.po_file);
-        });
-
         return this;
     },
 

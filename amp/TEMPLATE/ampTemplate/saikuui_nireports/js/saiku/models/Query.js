@@ -45,15 +45,15 @@ var Query = Backbone.Model.extend({
 
         //Start Custom Code for Pagination
        	this.set({page:1});
-        // Use this flag to force using the saved filters (if any) for the report the first time is loaded.
+        // Use this flag to use the saved filters (if any) for the report the only first time is loaded.
         this.firstLoad = true;
         window.currentQuery = this;
         //End Custom Code for Pagination
         
-        this.convertSavedFilters();
+        this.transformSavedFilters();
     },    
     
-    convertSavedFilters: function() {
+    transformSavedFilters: function() {
     	var self = this;
         if (this.firstLoad === true) {
         	// Get original filters from reports specs.
@@ -63,7 +63,7 @@ var Query = Backbone.Model.extend({
 	        // TODO: Review this 2-steps process completely.
 	        var extractedFiltersFromSpecs = FilterUtils.extractFilters(auxFilters);
 	        var blob = FilterUtils.convertJavaFiltersToJS(extractedFiltersFromSpecs);
-	        console.log(blob);
+	        //console.log(blob);
 	        // Set these filters reformatted. 
 	        self.set('filters', blob);	       
         }
@@ -81,9 +81,9 @@ var Query = Backbone.Model.extend({
 	            self.set('filters', undefined);
 	            // TODO: Review this 2-steps process completely.
 	            var extractedFiltersFromSpecs = FilterUtils.extractFilters(auxFilters);
-	            console.log(extractedFiltersFromSpecs);
+	            //console.log(extractedFiltersFromSpecs);
 	            var blob = FilterUtils.convertJavaFiltersToJS(extractedFiltersFromSpecs);
-	            console.log(blob);
+	            //console.log(blob);
 	                                
 	            window.currentFilter.deserialize(blob, {
 	            	silent : true
@@ -221,16 +221,10 @@ var Query = Backbone.Model.extend({
 
         // Run it
         this.workspace.table.clearOut();
-        $(this.workspace.processing).html('<span class="processing_image">&nbsp;&nbsp;</span> <span class="i18n">Running query...</span> [&nbsp;<a class="cancel i18n" href="#cancel">Cancel</a>&nbsp;]').show();
+        $(this.workspace.processing).html('<span class="processing_image">&nbsp;&nbsp;</span> <span class="i18n">Running query...</span>').show();
         this.workspace.adjust();
         this.workspace.trigger('query:fetch');
 		Saiku.i18n.translate();
-        var message = '<span class="processing_image">&nbsp;&nbsp;</span> <span class="i18n">Running query...</span> [&nbsp;<a class="cancel i18n" href="#cancel">Cancel</a>&nbsp;]';
-        this.workspace.block(message);
-/*
-        TODO: i wonder if we should clean up the model (name and captions etc.)
-        delete this.model.queryModel.axes['FILTER'].name;
-*/        
         this.result.save({},{ contentType: "application/json", data: JSON.stringify(exModel), error: function() {
             Saiku.ui.unblock();
             var errorMessage = '<span class="i18n">Error executing query. Please check the server logs or contact your administrator!</span>';

@@ -154,5 +154,8 @@
     "Table Mode":"Режим Таблица",
     "Chart Mode":"Режим Графика",
     "Revert filters to state when opened.":"Восстановить фильтры в исходное состояние",
-    "Aid Management Platform - Reports": "Помощь Management Platform - Отчеты" 
+    "Aid Management Platform - Reports": "Помощь Management Platform - Отчеты",
+    "Year Range": "Диапазон Год",
+    "From:": "Из:",
+    "To:": "к:"
 }

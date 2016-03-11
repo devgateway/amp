@@ -16,10 +16,10 @@
 					nextval('amp_columns_seq'), 'Loan Maturity Date', 'loanMaturityDate', 'org.dgfoundation.amp.ar.cell.DateCell', 'v_loan_maturity_date');
 
 				INSERT INTO amp_columns(columnid, columnname, aliasname, celltype, extractorview) VALUES (
-					nextval('amp_columns_seq'), 'Loan Interest Rate', 'loanInterestDate', 'org.dgfoundation.amp.ar.cell.TextAmountCell', 'v_loan_interest_rate');
+					nextval('amp_columns_seq'), 'Loan Interest Rate', 'loanInterestDate', 'org.dgfoundation.amp.ar.cell.TextCell', 'v_loan_interest_rate');
 
 				INSERT INTO amp_columns(columnid, columnname, aliasname, celltype, extractorview) VALUES (
-					nextval('amp_columns_seq'), 'Loan Grace Period', 'loanGracePeriod', 'org.dgfoundation.amp.ar.cell.TextAmountCell', 'v_loan_grace_period');
+					nextval('amp_columns_seq'), 'Loan Grace Period', 'loanGracePeriod', 'org.dgfoundation.amp.ar.cell.TextCell', 'v_loan_grace_period');
 					
 				UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart';
 			</lang>

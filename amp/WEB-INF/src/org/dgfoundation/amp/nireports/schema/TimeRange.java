@@ -80,6 +80,10 @@ public enum TimeRange implements Comparable<TimeRange> {
 				return categorizer.apply((DatedCell) cell.getCell());
 			}
 			
+			@Override
+			public String toString() {
+				return String.format("VSplitStrategy for %s", entityType);
+			}
 		};
 
 	}

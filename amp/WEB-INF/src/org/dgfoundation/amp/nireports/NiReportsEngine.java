@@ -376,7 +376,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		VSplitStrategy restoreMeasures = VSplitStrategy.build(
 			cell -> new ComparableValue<String>(cell.getEntity().getName(), AmpCollections.indexOf(actualMeasures, cell.getEntity().getName())),
 			cat -> behaviours.get(cat.getValue()),
-			spec.isDisplayEmptyFundingColumns() ? null : z -> getAsComparable(actualMeasures),
+			/*spec.isDisplayEmptyFundingColumns() ? null : */z -> getAsComparable(actualMeasures),
 			PSEUDOCOLUMN_MEASURE);
 		GroupColumn z = res.verticallySplitByCategory(restoreMeasures, fundingColumn.getParent());
 		return z;

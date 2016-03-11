@@ -361,34 +361,34 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 		}
 	}
 	
-//	@Test
-//	public void testDoubleHierarchiesDoNotChangeTotals() {
-//		int fails = 0;
-//		long start = System.currentTimeMillis();
-//		long reps = 0;
-//		// double-hierarchy reports
-//		for(boolean isSummary:Arrays.asList(true, false)) {
-//			for(String hier1Name:hierarchiesToTry)
-//				for(String hier2Name:hierarchiesToTry) 
-//					if (hier1Name != hier2Name) {
-//						reps ++;
-//						ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s summary: %b", hier1Name, hier2Name, isSummary), 
-//								Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name), 
-//								Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
-//								Arrays.asList(hier1Name, hier2Name), 
-//								GroupingCriteria.GROUPING_YEARLY);
-//						spec.setSummaryReport(isSummary);
-////						if (!buildDigest(spec, acts, fundingGrandTotalsDigester).toString().equals(correctTotals)) {
-////							fails ++;
-////							System.err.println("failed: " + spec.getReportName());
-////						}
-//						assertEquals(spec.getReportName(), correctTotals, buildDigest(spec, acts, fundingGrandTotalsDigester).toString());
-//			}
-//		}
-//		System.err.println("nr of failures: " + fails);
-//		long delta = System.currentTimeMillis() - start;
-//		System.err.format("I ran %d reports in %d millies (%d per second)\n", reps, delta, reps * 1000 / delta);
-//	}
+	@Test
+	public void testDoubleHierarchiesDoNotChangeTotals() {
+		int fails = 0;
+		long start = System.currentTimeMillis();
+		long reps = 0;
+		// double-hierarchy reports
+		for(boolean isSummary:Arrays.asList(true, false)) {
+			for(String hier1Name:hierarchiesToTry)
+				for(String hier2Name:hierarchiesToTry) 
+					if (hier1Name != hier2Name) {
+						reps ++;
+						ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s summary: %b", hier1Name, hier2Name, isSummary), 
+								Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name), 
+								Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+								Arrays.asList(hier1Name, hier2Name), 
+								GroupingCriteria.GROUPING_YEARLY);
+						spec.setSummaryReport(isSummary);
+//						if (!buildDigest(spec, acts, fundingGrandTotalsDigester).toString().equals(correctTotals)) {
+//							fails ++;
+//							System.err.println("failed: " + spec.getReportName());
+//						}
+						assertEquals(spec.getReportName(), correctTotals, buildDigest(spec, acts, fundingGrandTotalsDigester).toString());
+			}
+		}
+		System.err.println("nr of failures: " + fails);
+		long delta = System.currentTimeMillis() - start;
+		System.err.format("I ran %d reports in %d millies (%d per second)\n", reps, delta, reps * 1000 / delta);
+	}
 	
 //	@Test
 //	public void testTripleHierarchiesDoNotChangeTotals() {
@@ -636,5 +636,51 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 		
 		runNiTestCase(cor, spec, Arrays.asList("crazy funding 1", "activity_with_disaster_response"));
 	}
+	
+	@Test
+	public void testAllowEmptyFundingColumnsDoesNotInfluenceYearlyReports() {
+		List<String> acts = Arrays.asList("crazy funding 1", "activity_with_disaster_response");
+		ReportSpecificationImpl spec = buildSpecification("allowEmptyFundingColumns",
+			Arrays.asList(ColumnConstants.PROJECT_TITLE),
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_COMMITMENTS),
+			null,
+			GroupingCriteria.GROUPING_YEARLY);
+		
+		NiReportModel cor = new NiReportModel("allowEmptyFundingColumns")
+		.withHeaders(Arrays.asList(
+				"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 13))",
+				"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 9));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 10, colSpan: 3))",
+				"(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 3));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 3));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 3));(Actual Commitments: (startRow: 2, rowSpan: 2, totalRowSpan: 2, colStart: 10, colSpan: 1));(Actual Disbursements: (startRow: 2, rowSpan: 2, totalRowSpan: 2, colStart: 11, colSpan: 1));(Planned Commitments: (startRow: 2, rowSpan: 2, totalRowSpan: 2, colStart: 12, colSpan: 1))",
+				"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Planned Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Planned Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Planned Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1))"))
+			.withWarnings(Arrays.asList())
+			.withBody(      new ReportAreaForTests(null)
+		      .withContents("Project Title", "", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Funding-2013-Planned Commitments", "0", "Funding-2014-Actual Commitments", "33,000", "Funding-2014-Actual Disbursements", "0", "Funding-2014-Planned Commitments", "0", "Funding-2015-Actual Commitments", "117,000", "Funding-2015-Actual Disbursements", "0", "Funding-2015-Planned Commitments", "0", "Totals-Actual Commitments", "483,333", "Totals-Actual Disbursements", "0", "Totals-Planned Commitments", "0")
+		      .withChildren(
+		        new ReportAreaForTests(null, "Project Title", "crazy funding 1", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333"),
+		        new ReportAreaForTests(null, "Project Title", "activity_with_disaster_response", "Funding-2014-Actual Commitments", "33,000", "Funding-2015-Actual Commitments", "117,000", "Totals-Actual Commitments", "150,000")));
 
+		runNiTestCase(cor, spec, acts);
+		
+		spec.setDisplayEmptyFundingColumns(true);
+		runNiTestCase(cor, spec, acts);
+		
+		NiReportModel totalsCor = new NiReportModel("allowEmptyFundingColumns")
+		.withHeaders(Arrays.asList(
+				"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 4))",
+				"(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 3))",
+				"(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Planned Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1))"))
+			.withWarnings(Arrays.asList())
+			.withBody(      new ReportAreaForTests(null)
+		      .withContents("Project Title", "", "Totals-Actual Commitments", "483,333", "Totals-Actual Disbursements", "0", "Totals-Planned Commitments", "0")
+		      .withChildren(
+		        new ReportAreaForTests(null, "Project Title", "crazy funding 1", "Totals-Actual Commitments", "333,333"),
+		        new ReportAreaForTests(null, "Project Title", "activity_with_disaster_response", "Totals-Actual Commitments", "150,000")));
+		
+		spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
+		spec.setDisplayEmptyFundingColumns(false);
+		runNiTestCase(totalsCor, spec, acts);
+		
+		spec.setDisplayEmptyFundingColumns(true);
+		runNiTestCase(totalsCor, spec, acts);
+	}
 }

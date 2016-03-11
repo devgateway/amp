@@ -365,7 +365,7 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
 								GroupColumnModel.withSubColumns("2014",
 									SimpleColumnModel.withContents("Actual Commitments", "another_activity_with_expenditure_class", "11 222", "activity_with_expenditure_class_1", "67 000").setIsPledge(false), 
 									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
-									SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "79 500").setIsPledge(false)), 
+									SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "61 500").setIsPledge(false)), 
 								GroupColumnModel.withSubColumns("2015",
 									SimpleColumnModel.withContents("Actual Commitments", "activity_with_expenditure_class_1", "70 000").setIsPledge(false), 
 									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
@@ -373,8 +373,8 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
 							GroupColumnModel.withSubColumns("Total Costs",
 								SimpleColumnModel.withContents("Actual Commitments", "another_activity_with_expenditure_class", "11 222", "activity_with_expenditure_class_1", "137 000").setIsPledge(false), 
 								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
-								SimpleColumnModel.withContents("Actual Expenditures", "another_activity_with_expenditure_class", "22 111", "activity_with_expenditure_class_1", "154 500").setIsPledge(false)))
-						.withTrailCells(null, "0", "0", "75 000", "78 222", "0", "79 500", "70 000", "0", "22 111", "148 222", "0", "176 611"),
+								SimpleColumnModel.withContents("Actual Expenditures", "another_activity_with_expenditure_class", "22 111", "activity_with_expenditure_class_1", "136 500").setIsPledge(false)))
+						.withTrailCells(null, "0", "0", "75 000", "78 222", "0", "61 500", "70 000", "0", "22 111", "148 222", "0", "158 611"),
 						ColumnReportDataModel.withColumns("Expenditure Class: Compensation / Salaries",
 							SimpleColumnModel.withContents("Project Title", "activity_with_expenditure_class_1", "activity_with_expenditure_class_1").setIsPledge(false), 
 							GroupColumnModel.withSubColumns("Funding",
@@ -385,7 +385,7 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
 								GroupColumnModel.withSubColumns("2014",
 									SimpleColumnModel.withContents("Actual Commitments", "activity_with_expenditure_class_1", "67 000").setIsPledge(false), 
 									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
-									SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "79 500").setIsPledge(false)), 
+									SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "29 500").setIsPledge(false)), 
 								GroupColumnModel.withSubColumns("2015",
 									SimpleColumnModel.withContents("Actual Commitments", "activity_with_expenditure_class_1", "70 000").setIsPledge(false), 
 									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
@@ -393,8 +393,8 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
 							GroupColumnModel.withSubColumns("Total Costs",
 								SimpleColumnModel.withContents("Actual Commitments", "activity_with_expenditure_class_1", "137 000").setIsPledge(false), 
 								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
-								SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "154 500").setIsPledge(false)))
-						.withTrailCells(null, "0", "0", "75 000", "67 000", "0", "79 500", "70 000", "0", "0", "137 000", "0", "154 500"),
+								SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "104 500").setIsPledge(false)))
+						.withTrailCells(null, "0", "0", "75 000", "67 000", "0", "29 500", "70 000", "0", "0", "137 000", "0", "104 500"),
 						ColumnReportDataModel.withColumns("Expenditure Class: Expenditure Class Unallocated",
 							SimpleColumnModel.withContents("Project Title", "execution rate activity", "execution rate activity", "ptc activity 1", "ptc activity 1").setIsPledge(false), 
 							GroupColumnModel.withSubColumns("Funding",
@@ -425,7 +425,7 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
 								GroupColumnModel.withSubColumns("2014",
 									SimpleColumnModel.withContents("Actual Commitments", "activity_with_expenditure_class_1", "67 000").setIsPledge(false), 
 									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
-									SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "79 500").setIsPledge(false)), 
+									SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "11 500").setIsPledge(false)), 
 								GroupColumnModel.withSubColumns("2015",
 									SimpleColumnModel.withContents("Actual Commitments", "activity_with_expenditure_class_1", "70 000").setIsPledge(false), 
 									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
@@ -433,8 +433,8 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
 							GroupColumnModel.withSubColumns("Total Costs",
 								SimpleColumnModel.withContents("Actual Commitments", "activity_with_expenditure_class_1", "137 000").setIsPledge(false), 
 								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
-								SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "154 500").setIsPledge(false)))
-						.withTrailCells(null, "0", "0", "75 000", "67 000", "0", "79 500", "70 000", "0", "0", "137 000", "0", "154 500"))
+								SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "86 500").setIsPledge(false)))
+						.withTrailCells(null, "0", "0", "75 000", "67 000", "0", "11 500", "70 000", "0", "0", "137 000", "0", "86 500"))
 					.withTrailCells(null, "666 777", "0", "75 000", "78 222", "55 000", "79 500", "70 000", "35 000", "22 111", "814 999", "90 000", "176 611"))
 				.withTrailCells(null, "666 777", "0", "75 000", "78 222", "55 000", "79 500", "70 000", "35 000", "22 111", "814 999", "90 000", "176 611")
 				.withPositionDigest(true,

@@ -22,6 +22,7 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.AmpReportGenerator;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.CellColumn;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.FundingTypeSortedString;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.ReportContextData;
@@ -203,6 +204,11 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 			String displayedVal = decodeBoolean(val);
 			MetaInfo disasterResponseMeta = this.getCachedMetaInfo(ArConstants.DISASTER_RESPONSE_MARKER, displayedVal);
 			acc.getMetaData().add(disasterResponseMeta);
+		}
+		
+		if (columnsMetaData.containsKey("expenditure_class_id") && rs.getString("expenditure_class_name") != null) {
+			MetaInfo expenseMeta = this.getCachedMetaInfo(ColumnConstants.EXPENDITURE_CLASS, rs.getString("expenditure_class_name"));
+			acc.getMetaData().add(expenseMeta);
 		}
 		//the most important meta name, the source name (donor name, region name, component name)
 		String headMetaName=rsmd.getColumnName(4).toLowerCase();

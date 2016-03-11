@@ -86,7 +86,8 @@ public class AmpDonorFundingFormSectionFeature extends
 	private AmpOrgRoleSelectorComponent orgRoleSelector;
 	private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>>();
 	private AmpSearchOrganizationComponent<String> originalSearchOrganizationSelector;
-	final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs;
+	private final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs;
+	private final AmpSearchOrganizationComponent<String> searchOrganizationComponent;
 	private boolean isTabsView;
 
 	private final static String[] ACTIVITY_ROLE_FILTER = { Constants.FUNDING_AGENCY };
@@ -101,10 +102,6 @@ public class AmpDonorFundingFormSectionFeature extends
 		return tabsList;
 	}
 
-	
-	public void setSearchOrgsFieldVisibility(boolean visible) {
-		this.searchOrgs.setVisibilityAllowed(visible);
-	}
 	public String[] getRoleFilter() {
 		String[] roleFilter = ACTIVITY_ROLE_FILTER;
 		if (ActivityUtil.ACTIVITY_TYPE_SSC
@@ -398,10 +395,10 @@ public class AmpDonorFundingFormSectionFeature extends
 			}
 		};
 
-		AmpSearchOrganizationComponent<String> searchOrganization = new AmpSearchOrganizationComponent<String>(
+		searchOrganizationComponent = new AmpSearchOrganizationComponent<String>(
 				"searchFundingOrgs", new Model<String>(),
 				"Search Funding Organizations", searchOrgs, null);
-		add(searchOrganization);
+		add(searchOrganizationComponent);
 
 		orgRoleSelector = new AmpOrgRoleSelectorComponent("orgRoleSelector", am, getRoleFilter());
 		add(orgRoleSelector);
@@ -612,4 +609,7 @@ public class AmpDonorFundingFormSectionFeature extends
 		return isTabsView;
 	}
 	
+	public void setSearchOrgsComponentVisibility(boolean visible) {
+		this.searchOrganizationComponent.setVisibilityAllowed(visible);
+	}
 }

@@ -157,14 +157,14 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
             if (tmpList != null && tmpList.size() > 0 ) {
                 searchOrganization.setVisibilityAllowed(false);
                 if (this.getId().equals("donorOrganization")) {
-                	donorFundingSection.setSearchOrgsFieldVisibility(false);
+                	donorFundingSection.setSearchOrgsComponentVisibility(false);
                 }
                 	
             }
             else{
                 searchOrganization.setVisibilityAllowed(true);
                 if (this.getId().equals("donorOrganization")) {
-                	donorFundingSection.setSearchOrgsFieldVisibility(true);
+                	donorFundingSection.setSearchOrgsComponentVisibility(true);
                 }
             }
             if(target!=null){

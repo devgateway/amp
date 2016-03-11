@@ -1516,4 +1516,6 @@ INPUT.EditBold {
 }
 
 
-
+div#amp-header nav ul#AmpMenus.nav > li > a {
+	font-size: 12px;
+}

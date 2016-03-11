@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-22450</jira>
+	<keyword>update 'grant element' index to fix bug AMP-22450</keyword>
+	<author>gmutuhu</author>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">				
+				update amp_category_value set index_column = 2 where category_value = 'Grant Element' and amp_category_class_id = 11 and index_column = 3; 
+			</lang>
+		</script>
+	</apply>
+</tns:patch>
+

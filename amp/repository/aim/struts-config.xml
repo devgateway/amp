@@ -26,6 +26,7 @@
     <form-bean name="aimVisibilityManagerForm" type="org.digijava.module.aim.form.VisibilityManagerForm" />
     <form-bean name="aimAuditLoggerManagerForm" type="org.digijava.module.aim.form.AuditLoggerManagerForm" />
     <form-bean name="aimScorecardManagerForm" type="org.digijava.module.aim.form.ScorecardManagerForm" />
+    <form-bean name="aimDataFreezeManagerForm" type="org.digijava.module.aim.form.DataFreezeManagerForm" />
     <form-bean name="aimDesktopForm" type="org.digijava.module.aim.form.DesktopForm" />
     <form-bean name="aimViewQuickLinksForm" type="org.digijava.module.aim.form.ViewQuickLinksForm" />
     <form-bean name="aimQuickLinkForm" type="org.digijava.module.aim.form.QuickLinkForm" />
@@ -1069,6 +1070,10 @@
 
 	<action name="aimScorecardManagerForm" path="/aim/scorecardManager" scope="request" type="org.digijava.module.aim.action.ScorecardManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=scorecardManager" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+	<action name="aimDataFreezeManagerForm" path="/aim/dataFreezeManager" scope="request" type="org.digijava.module.aim.action.DataFreezeManager" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=dataFreezeManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
 

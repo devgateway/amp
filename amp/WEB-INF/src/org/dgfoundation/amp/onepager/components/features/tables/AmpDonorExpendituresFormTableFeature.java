@@ -18,6 +18,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
+import org.dgfoundation.amp.onepager.components.FundingListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
@@ -90,11 +91,11 @@ public class AmpDonorExpendituresFormTableFeature extends
 			final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
 		super(id, model, fmName, Constants.EXPENDITURE, 6);
 		
-		list = new ListEditor<AmpFundingDetail>("listExp", setModel, new AmpFundingDetail.FundingDetailComparator()) {
+		list = new FundingListEditor<AmpFundingDetail>("listExp", setModel, new AmpFundingDetail.FundingDetailComparator()) {
 			@Override
 			protected void onPopulateItem(
 					org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {
-
+				super.onPopulateItem(item);
 				item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
 				
 				final AmpCategorySelectFieldPanel expenditureClass = getExpenditureClassTypeComponent(item.getModel());

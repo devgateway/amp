@@ -1,0 +1,91 @@
+package org.dgfoundation.amp.onepager.components;
+
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.wicket.model.IModel;
+import org.dgfoundation.amp.onepager.util.ActivityUtil;
+import org.digijava.kernel.ampapi.endpoints.scorecard.model.Quarter;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.dbentity.AmpDataFreezeSettings;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.FundingInformationItem;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.joda.time.DateTime;
+
+/**
+ * Class that extends ListEditor to be able to block edit in a funding item
+ * 
+ * @author JulianEduardo
+ *
+ * @param <T>
+ */
+public class FundingListEditor<T> extends ListEditor<T> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public FundingListEditor(String id, IModel<Set<T>> model) {
+		super(id, model);
+	}
+
+	public FundingListEditor(String id, IModel<Set<T>> model, Comparator<T> comparator) {
+		super(id, model, comparator);
+	}
+
+	@Override
+	protected void onPopulateItem(ListItem<T> item) {
+		AmpDataFreezeSettings settings;
+		// we first check if the feature is enabled
+		if (TLSUtils.getThreadLocalInstance().request.getAttribute("AmpDataFreezeSettings") == null) {
+			List<AmpDataFreezeSettings> ampDataFreezeSettingsList = (List<AmpDataFreezeSettings>) DbUtil
+					.getAll(AmpDataFreezeSettings.class);
+
+			if (!ampDataFreezeSettingsList.isEmpty()) {
+				settings = ampDataFreezeSettingsList.get(0);
+			} else {
+				settings = new AmpDataFreezeSettings();
+			}
+		} else {
+			settings = (AmpDataFreezeSettings) TLSUtils.getThreadLocalInstance().request
+					.getAttribute("AmpDataFreezeSettings");
+		}
+		TLSUtils.getThreadLocalInstance().request.setAttribute("AmpDataFreezeSettings",settings); 
+		if (settings.getEnabled()) {
+			Boolean enabled = true;
+			AmpFiscalCalendar fiscalCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(
+					FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR));
+			Quarter currentQuarter = new Quarter(fiscalCalendar, new Date());
+
+			// first of all we need to see if the activity was edited during the
+			// previous quarter
+			// Since we control where we added the FundingListEditor we know for
+			// sure that its an instance of FundingInformationItem
+			FundingInformationItem fundingDetailItem = (FundingInformationItem) item.getModel().getObject();
+			DateTime itemUpdateDate = new DateTime(fundingDetailItem.getUpdatedDate());
+			DateTime previousQuarterStart = new DateTime(currentQuarter.getPreviousQuarter().getQuarterStartDate());
+			DateTime previousQuarterEnd = new DateTime(currentQuarter.getPreviousQuarter().getQuarterEndDate());
+			DateTime today = new DateTime();
+			if (itemUpdateDate.isAfter(previousQuarterStart) && itemUpdateDate.isBefore(previousQuarterEnd)) {
+				// date is within the last quarter
+				if (today.isAfter(previousQuarterEnd.plusDays(settings.getGracePeriod()))) {
+					// only if the grace period has been reached we block the
+					// edit of the item
+					enabled = false;
+				}
+
+			}
+			fundingDetailItem.setCheckSum(ActivityUtil.calculateFundingDetailCheckSum(fundingDetailItem));
+
+			item.setEnabled(enabled);
+		}
+
+	}
+}

@@ -50,6 +50,7 @@ public class AmpDonorExpendituresSubsectionFeature extends
 				AmpFundingDetail fd= new AmpFundingDetail();
 				fd.setAmpFundingId(model.getObject());
 				fd.setReportingDate(new Date(System.currentTimeMillis()));
+				fd.setUpdatedDate(new Date(System.currentTimeMillis()));
 				fd.setTransactionType(Constants.EXPENDITURE);
 				fd.setAmpCurrencyId(CurrencyUtil.getWicketWorkspaceCurrency());
 				expTableFeature.getEditorList().addItem(fd);

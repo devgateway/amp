@@ -84,6 +84,9 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	private Date transactionDate2;
 	@Interchangeable(fieldTitle="Reporting Date", importable=true)
 	private Date reportingDate;
+	@Interchangeable(fieldTitle="Updated Date", importable=false)
+	private Date updatedDate;
+		
 	@Interchangeable(fieldTitle="Transaction Amount", importable=true)
 	private Double transactionAmount;
 	@Interchangeable(fieldTitle="Thousands Transaction Amount", importable=true)
@@ -121,6 +124,7 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	private String disbOrderId;
 	private IPAContract contract;
 	private boolean iatiAdded = false; //nonpersistant
+	private Long checkSum;
 	
 	@Interchangeable(fieldTitle = "Disaster Response", importable = true, 
 			fmPath = FMVisibility.ANY_FM + ActivityEPConstants.COMMITMENTS_DISASTER_RESPONSE_FM_PATH + "|" + ActivityEPConstants.DISBURSEMENTS_DISASTER_RESPONSE_FM_PATH,
@@ -447,7 +451,17 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	public void setReportingDate(final Date reportingDate) {
 		this.reportingDate = reportingDate;
 	}
-	
+
+	@java.lang.SuppressWarnings("all")
+	public Date getUpdatedDate() {
+		return updatedDate;
+	}
+
+	@java.lang.SuppressWarnings("all")
+	public void setUpdatedDate(Date updatedDate) {
+		this.updatedDate = updatedDate;
+	}
+
 	@java.lang.SuppressWarnings("all")
 	public void setTransactionAmount(final Double transactionAmount) {
 		this.transactionAmount = transactionAmount;
@@ -556,5 +570,11 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 		this.disasterResponse = disasterResponse;
 	}
 
+	public Long getCheckSum() {
+		return checkSum;
+	}
 
+	public void setCheckSum(Long checkSum) {
+		this.checkSum = checkSum;
+	}
 }

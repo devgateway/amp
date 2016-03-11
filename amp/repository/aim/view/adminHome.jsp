@@ -105,6 +105,20 @@
                             </td>
                           </tr>
                         </module:display>
+                        <module:display name="Data Freeze Manager" parentModule="ADMINISTRATIVE SECTION">
+                          <tr>
+                            <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                            <td class="admin_box_label">
+                              <c:set var="trnDataFreezeManager">
+                                <digi:trn invisibleLinks="true">Click here to access Data Freeze Manager</digi:trn>
+                              </c:set>
+                              <digi:link href="/dataFreezeManager.do" title="${trnDataFreezeManager}" >
+                                <digi:trn>Data Freeze Manager</digi:trn>
+                              </digi:link>
+                            </td>
+                          </tr>
+                        </module:display>                        
+                        
                       </table>
                     </div></td>
                   <td width=10>&nbsp;</td>

@@ -18,6 +18,7 @@ public interface FundingInformationItem {
 	public AmpCurrency getAmpCurrencyId();
 	public Date getTransactionDate();
 	public Date getReportingDate();
+	public Date getUpdatedDate();
 	public AmpOrganisation getRecipientOrg();
 	public AmpRole getRecipientRole();
 	public Integer getTransactionType();
@@ -32,4 +33,9 @@ public interface FundingInformationItem {
 	public void setTransactionAmount(Double transactionAmount);
 	public Boolean getDisasterResponse();
 	public AmpCategoryValue getExpenditureClass();
+	
+	//method used to detect if the record has changed while editing an activity
+	public Long getCheckSum();
+	public void setCheckSum(Long checkSum);
+	public void setUpdatedDate(Date dateUpdated);
 }

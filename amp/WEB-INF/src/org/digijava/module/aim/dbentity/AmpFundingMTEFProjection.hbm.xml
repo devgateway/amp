@@ -14,6 +14,7 @@
 
 		<property name="projectionDate" column="projection_date" type="java.util.Date" />
 		<property name="reportingDate" column="reporting_date" type="java.util.Date" />
+		<property name="updatedDate" column="date_updated" type="java.util.Date" />
 		<property access="field" name="amount" column="amount" type="java.lang.Double" />
 
 		<many-to-one name="ampCurrency" column="amp_currency_id"

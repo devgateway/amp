@@ -166,12 +166,12 @@ public class ActivityUtil {
 
 				if (Hibernate.isInitialized(ampFunding.getFundingDetails())) {
 					Iterator ampFundingDetailsIterator = ampFunding.getFundingDetails().iterator();
-					removeFundingNullAmount(ampFundingDetailsIterator);
+					updateFundingDetails(ampFundingDetailsIterator);
 				}
 				if (ampFunding.getMtefProjections() != null && Hibernate.isInitialized(ampFunding.getMtefProjections())) {
 					Iterator<AmpFundingMTEFProjection> ampFundingMTEFProjectionIterator = ampFunding
 							.getMtefProjections().iterator();
-					removeFundingNullAmount(ampFundingMTEFProjectionIterator);
+					updateFundingDetails(ampFundingMTEFProjectionIterator);
 
 				}
 			}
@@ -276,15 +276,21 @@ public class ActivityUtil {
 
 	/**
 	 * Remove funding items with null amount (that means that the form is missconfigured)
+	 * set updateDate for modified records
 	 * @param ampFundingDetailsIterator
 	 */
-	private static void removeFundingNullAmount(Iterator ampFundingDetailsIterator) {
+	private static void updateFundingDetails(Iterator ampFundingDetailsIterator) {
 		while (ampFundingDetailsIterator.hasNext()) {
 			FundingInformationItem ampFundingDetail = (FundingInformationItem) ampFundingDetailsIterator.next();
 			if (ampFundingDetail.getTransactionAmount() == null) {
 				// this shouldnt be null, so we remove it
 				ampFundingDetailsIterator.remove();
+			}else{
+				if(ampFundingDetail.getCheckSum()!= null && !ampFundingDetail.getCheckSum().equals(calculateFundingDetailCheckSum(ampFundingDetail))){
+					ampFundingDetail.setUpdatedDate(new Date());
+				}
 			}
+			
 		}
 	}
 	
@@ -1017,5 +1023,34 @@ public class ActivityUtil {
 			}
 		}
 			
+	}
+
+	/**
+	 * Calculate object checksum based on HashCode of not null values to
+	 * determine if the object has been changed
+	 * 
+	 * @param item
+	 */
+	public static Long calculateFundingDetailCheckSum(FundingInformationItem item) {
+		Long checkSum = 0L;
+		checkSum += checkSum + (item.getTransactionAmount() != null ? item.getTransactionAmount().hashCode() : 0L);
+		checkSum += checkSum
+				+ (item.getAbsoluteTransactionAmount() != null ? item.getAbsoluteTransactionAmount().hashCode() : 0L);
+		checkSum += checkSum + (item.getAmpCurrencyId() != null ? item.getAmpCurrencyId().hashCode() : 0L);
+		checkSum += checkSum + (item.getTransactionDate() != null ? item.getTransactionDate().hashCode() : 0L);
+		checkSum += checkSum + (item.getRecipientOrg() != null ? item.getRecipientOrg().hashCode() : 0L);
+		checkSum += checkSum + (item.getRecipientRole() != null ? item.getRecipientRole().hashCode() : 0L);
+		checkSum += checkSum + (item.getTransactionType() != null ? item.getTransactionType().hashCode() : 0L);
+		checkSum += checkSum + (item.getAdjustmentType() != null ? item.getAdjustmentType().hashCode() : 0L);
+		checkSum += checkSum + (item.getDisbOrderId() != null ? item.getDisbOrderId().hashCode() : 0L);
+		checkSum += checkSum + (item.getFixedExchangeRate() != null ? item.getFixedExchangeRate().hashCode() : 0L);
+		checkSum += checkSum + (item.getDisbOrderId() != null ? item.getDisbOrderId().hashCode() : 0L);
+		checkSum += checkSum + (item.getFixedExchangeRate() != null ? item.getFixedExchangeRate().hashCode() : 0L);
+		checkSum += checkSum + (item.getContract() != null ? item.getContract().hashCode() : 0L);
+		checkSum += checkSum + (item.getExpCategory() != null ? item.getExpCategory().hashCode() : 0L);
+		checkSum += checkSum + (item.getPledgeid() != null ? item.getPledgeid().hashCode() : 0L);
+		checkSum += checkSum + (item.getDisasterResponse() != null ? item.getDisasterResponse().hashCode() : 0L);
+		checkSum += checkSum + (item.getExpenditureClass() != null ? item.getExpenditureClass().hashCode() : 0L);
+		return checkSum;
 	}
 }

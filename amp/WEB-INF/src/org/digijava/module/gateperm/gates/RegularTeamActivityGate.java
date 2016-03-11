@@ -54,10 +54,15 @@ public class RegularTeamActivityGate extends Gate {
 	@Override
 	public boolean logic() throws Exception {
 		
-		Object o = scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
 		AmpActivityVersion ampa = null;
+		Object o = scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
 		if (o instanceof AmpActivityVersion)
 		    ampa = (AmpActivityVersion) o;
+		
+		Object oo = scope.get(GatePermConst.ScopeKeys.ACTIVITY);
+		if (oo instanceof AmpActivityVersion)
+			ampa =  (AmpActivityVersion) oo;		
+
 		
 		TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
 		if (tm == null) {

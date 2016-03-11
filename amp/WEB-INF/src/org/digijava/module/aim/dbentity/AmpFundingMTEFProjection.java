@@ -52,10 +52,10 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 		private AmpFunding  ampFunding;
 //		@Interchangeable(fieldTitle="Reporting Date")
 		private Date reportingDate;
-		
+		private Date updatedDate;
 		private AmpOrganisation recipientOrg;
 		private AmpRole recipientRole;
-		
+		private Long checkSum;
 		public AmpFundingMTEFProjection(){
 			
 		}
@@ -73,6 +73,12 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 			this.reportingDate = reportingDate;
 		}
 		
+		public Date getUpdatedDate() {
+			return updatedDate;
+		}
+		public void setUpdatedDate(Date updatedDate) {
+			this.updatedDate = updatedDate;
+		}
 		public Double getAmount() {
 			return amount;
 		}
@@ -258,4 +264,11 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 		public AmpCategoryValue getExpenditureClass() {
 			return null;
 		}
+		public Long getCheckSum() {
+			return checkSum;
+		}
+		public void setCheckSum(Long checkSum) {
+			this.checkSum = checkSum;
+		}
+		
 }

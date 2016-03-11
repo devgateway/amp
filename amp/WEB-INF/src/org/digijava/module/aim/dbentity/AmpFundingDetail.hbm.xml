@@ -16,6 +16,7 @@
 		<property name="transactionDate" column="transaction_date" type="java.util.Date" />
 		<property name="transactionDate2" column="transaction_date2" type="java.util.Date" />
 		<property name="reportingDate" column="reporting_date" type="java.util.Date" />
+		<property name="updatedDate" column="date_updated" type="java.util.Date" />		
 		<property access="field" name="transactionAmount" column="transaction_amount" type="java.lang.Double" />
 		<property name="language" column="language" type="java.lang.String" />
 		<property name="version" column="version" type="java.lang.String" />

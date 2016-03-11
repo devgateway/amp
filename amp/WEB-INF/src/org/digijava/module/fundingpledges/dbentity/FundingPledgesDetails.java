@@ -2,31 +2,23 @@
 package org.digijava.module.fundingpledges.dbentity;
 
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.dgfoundation.amp.algo.AlgoUtils;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
-import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.FundingInformationItem;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 
 public class FundingPledgesDetails implements FundingInformationItem, Identifiable{
@@ -282,5 +274,29 @@ public class FundingPledgesDetails implements FundingInformationItem, Identifiab
 	@Override
 	public AmpCategoryValue getExpenditureClass() {
 		return null;
+	}
+
+	@Override
+	public Date getUpdatedDate() {
+		// We dont need this for now
+		return null;
+	}
+
+	@Override
+	public Long getCheckSum() {
+		// We dont need this for now
+		return null;
+	}
+
+	@Override
+	public void setCheckSum(Long checkSum) {
+		// We dont need this for now
+		
+	}
+
+	@Override
+	public void setUpdatedDate(Date dateUpdated) {
+		// We dont need this for now
+		
 	}
 }

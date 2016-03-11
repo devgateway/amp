@@ -102,6 +102,7 @@
 <module:display name="WIDGETS"></module:display>
 <module:display name="Resources"></module:display>
 <module:display name="Global Permission Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Data Freeze Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Dynamic Region Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Budget Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Indicator Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>

@@ -12,7 +12,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
-import org.dgfoundation.amp.onepager.components.ListEditor;
+import org.dgfoundation.amp.onepager.components.FundingListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
@@ -44,12 +44,12 @@ public class AmpMTEFProjectionFormTableFeature extends
 		if (setModel.getObject() == null)
 			setModel.setObject(new TreeSet<AmpFundingMTEFProjection>());
 		setTitleHeaderColSpan(5);
-		list = new ListEditor<AmpFundingMTEFProjection>("listMTEF",
+		list = new FundingListEditor<AmpFundingMTEFProjection>("listMTEF",
 				setModel, new AmpFundingMTEFProjection.FundingMTEFProjectionComparator()) {
 			@Override
 			protected void onPopulateItem(
 					org.dgfoundation.amp.onepager.components.ListItem<AmpFundingMTEFProjection> item) {
-			
+			super.onPopulateItem(item);
 				AmpCategorySelectFieldPanel projected;
 				try {
 					projected = new AmpCategorySelectFieldPanel("projected",
@@ -79,7 +79,7 @@ public class AmpMTEFProjectionFormTableFeature extends
 						target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
 					};
 				});
-				  //we create the role selector for recipient organization for commitments
+				//we create the role selector for recipient organization for commitments
  	 	 	 	item.add(OnePagerUtil.getFundingFlowRoleSelector(model, item.getModel()));
 			}
 		};

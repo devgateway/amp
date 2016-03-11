@@ -112,6 +112,7 @@ public class AmpDonorDisbOrdersSubsectionFeature extends
 				fd.setAmpFundingId(model.getObject());
 				//fd.setTransactionAmount(0d);
 				fd.setReportingDate(new Date(System.currentTimeMillis()));
+				fd.setUpdatedDate(new Date(System.currentTimeMillis()));
 		//		fd.setAdjustmentType(Constants.ACTUAL);
 		//		fd.setTransactionDate(new Date(System.currentTimeMillis()));
 				fd.setTransactionType(Constants.DISBURSEMENT_ORDER);

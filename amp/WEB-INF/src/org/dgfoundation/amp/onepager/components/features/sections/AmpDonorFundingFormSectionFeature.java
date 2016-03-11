@@ -137,9 +137,7 @@ public class AmpDonorFundingFormSectionFeature extends
 		}
 		tabsList.updateModel();
 		orgRolelist.updateModel();
-		//find the idex
-//		System.out.println("Switch orgs El indice es : "+
-//		list.items.indexOf(newOrg));
+		//find the index
 		target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(orgRolelist.getParent()));
 
 		if (isTabsView) {

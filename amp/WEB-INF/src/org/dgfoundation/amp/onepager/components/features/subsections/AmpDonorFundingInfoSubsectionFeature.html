@@ -27,7 +27,7 @@
                	</td>
             </tr>
         </wicket:fm>
-        <wicket:fm fmNames="Funding Status;Mode of Payment;Loan Terms;Funding Classification Date;Required Validator for Funding Status;Show Funding Status in summary;Show Mode of Payment in summary">
+        <wicket:fm fmNames="Funding Status;Mode of Payment;Loan Terms;Funding Classification Date;Required Validator for Funding Status;Show Funding Status in summary;Show Mode of Payment in summary;Ratification Date;Maturity">
             <tr align="left">
                 <wicket:fm fmNames="Funding Status;Required Validator for Funding Status;Show Funding Status in summary">
                     <td><span wicket:id="fundingStatus"/><span wicket:id="fundingStatusRequired"/><span wicket:id="showFundingStatus"/></td>
@@ -43,7 +43,28 @@
              <wicket:fm fmNames="Funding Classification Date">
                 	<td><span wicket:id="fundingClassificationDate"/></td>
                	</wicket:fm>
+               	
+               	 <td	>
+               	 <wicket:fm fmNames="Ratification Date">
+                    <span wicket:id="ratificationDate"/>
+                    </wicket:fm>
+                </td>
+                <td	>
+                <wicket:fm fmNames="Maturity">
+                    <span wicket:id="maturity"/>
+                    </wicket:fm>
+                </td>
             </tr>
         </wicket:fm>
-	</table>
+        <wicket:fm fmNames="Interest Rate;Grace Period">
+            <tr align="left">
+                <td	>
+                    <span wicket:id="interestRate"/>
+                </td>
+                <td	>
+                    <span wicket:id="gracePeriod"/>
+                </td>
+            </tr>
+        </wicket:fm>  
+	</table>	
 </wicket:extend>

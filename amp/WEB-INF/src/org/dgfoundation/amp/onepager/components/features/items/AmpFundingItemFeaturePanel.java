@@ -61,7 +61,6 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 
 	private AmpDonorFundingInfoSubsectionFeature fundingInfo;
 	private AmpDonorDisbursementsSubsectionFeature disbursements;
-	private AmpLoanDetailsSubsectionFeature loanDetails; 
 	private Integer item;
 	public AmpFundingItemFeaturePanel(String id, String fmName,
 			final IModel<AmpFunding> fundingModel,final IModel<AmpActivityVersion> am, final AmpDonorFundingFormSectionFeature parent,Integer item) throws Exception {
@@ -314,9 +313,6 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 				"expenditures", fundingModel,"Expenditures",Constants.EXPENDITURE);
 		wmc.add(expenditures);
 
-		loanDetails = new AmpLoanDetailsSubsectionFeature("loanDetails",fundingModel,"Loan Details", fundingSummary);
-		wmc.add(loanDetails);
-		
 		add(addNewFunding);
 		
 		
@@ -328,11 +324,6 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 
 	public AmpDonorDisbursementsSubsectionFeature getDisbursements() {
 		return disbursements;
-	}
-	
-	public AmpLoanDetailsSubsectionFeature getLoanDetails(){
-		return loanDetails;
+	}	
 		
-	}
-	
 }

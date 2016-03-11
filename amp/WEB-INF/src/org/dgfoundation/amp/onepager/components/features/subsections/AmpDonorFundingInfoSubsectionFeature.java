@@ -15,7 +15,9 @@ import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.features.items.AmpAgreementItemPanel;
@@ -43,6 +45,10 @@ implements AmpRequiredComponentContainer{
 	private AmpCategorySelectFieldPanel financingInstrument;
 	private AmpCategorySelectFieldPanel typeOfAssistance;
 	private AmpTextAreaFieldPanel loanTerms;
+	private AmpTextFieldPanel<Float> interestRate;
+	private AmpTextFieldPanel<Integer> gracePeriod;
+	private AmpDatePickerFieldPanel ratificationDate;
+	private AmpDatePickerFieldPanel maturity;
 	public void checkChoicesRequired(int size) {
 		if (size > 0) {
 			financingInstrument.getChoiceContainer().setRequired(true);
@@ -87,14 +93,37 @@ implements AmpRequiredComponentContainer{
 				          new PropertyModel<String>(model, "loanTerms"), 
 				          "Loan Terms", false, false, false);
 		
-		loanTerms.getTextAreaContainer().add(new AttributeModifier("style", "width: 225px; height: 65px;"));          	
+		loanTerms.getTextAreaContainer().add(new AttributeModifier("style", "width: 225px; height: 65px;"));
+		
+		interestRate = new AmpTextFieldPanel<Float>(
+                "interestRate",
+                new PropertyModel<Float>(model, "interestRate"), "Interest Rate", false, false);
+		interestRate.getTextContainer().add(new RangeValidator<Float>(0f, 100f));
+		interestRate.getTextContainer().add(new AttributeModifier("size", new Model<String>("5")));
+        add(interestRate);
+
+       gracePeriod =  new AmpTextFieldPanel<Integer>("gracePeriod", new PropertyModel<Integer>(model, "gracePeriod"), "Grace Period", false, false);		
+		add(gracePeriod);
+		
+		final PropertyModel<Date> ratificationDateModel = new PropertyModel<Date>(
+                model, "ratificationDate");
+        ratificationDate = new AmpDatePickerFieldPanel("ratificationDate", ratificationDateModel, null, "Ratification Date");
+        add(ratificationDate);
+        
+        
+        
+        final PropertyModel<Date> maturityModel = new PropertyModel<Date>(
+                model, "maturity");
+        maturity = new AmpDatePickerFieldPanel("maturity", maturityModel, null, "Maturity");
+        add(maturity);
+        
 			
 		AmpCategoryValue value = (AmpCategoryValue) typeOfAssistance.getChoiceContainer().getModelObject();
 		boolean isLoan = (value == null ? false : value.getValue().equals(CategoryConstants.TYPE_OF_ASSISTANCE_LOAN.getValueKey()));
 		loanTerms.getTextAreaContainer().setVisible(isLoan);
 	    loanTerms.getTitleLabel().setVisible(isLoan);  
 	    add(loanTerms);
-	    
+        toggleLoanFieldsVisibility(isLoan);	    
 		typeOfAssistance.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {        
 			private static final long serialVersionUID = -6492252081340597543L;
 			@Override
@@ -102,8 +131,13 @@ implements AmpRequiredComponentContainer{
 				AmpCategoryValue value = (AmpCategoryValue) typeOfAssistance.getChoiceContainer().getModelObject();
 				boolean isLoan = (value == null ? false : (value.getValue().equals(CategoryConstants.TYPE_OF_ASSISTANCE_LOAN.getValueKey())));
 				loanTerms.getTextAreaContainer().setVisible(isLoan);
-        	    loanTerms.getTitleLabel().setVisible(isLoan);            	
+        	    loanTerms.getTitleLabel().setVisible(isLoan); 
+        	    toggleLoanFieldsVisibility(isLoan);
             	target.add(loanTerms);
+            	target.add(interestRate);
+            	target.add(gracePeriod);
+            	target.add(ratificationDate);
+            	target.add(maturity);
             	AmpFundingSummaryPanel l=
             	findParent(AmpFundingSummaryPanel.class);
 				send(getPage(), Broadcast.BREADTH,new FundingSectionSummaryEvent(target));	
@@ -284,7 +318,18 @@ implements AmpRequiredComponentContainer{
 		
 
 	}
-
+    
+	private void toggleLoanFieldsVisibility(boolean visible){	
+		interestRate.getTextContainer().setVisible(visible);
+		interestRate.getTitleLabel().setVisible(visible);		
+		gracePeriod.getTextContainer().setVisible(visible);
+		gracePeriod.getTitleLabel().setVisible(visible);
+		ratificationDate.getDate().setVisible(visible);
+		ratificationDate.getTitleLabel().setVisible(visible);
+		maturity.getDate().setVisible(visible);	
+		maturity.getTitleLabel().setVisible(visible);		
+		
+	}
 	public List<FormComponent<?>> getRequiredFormComponents() {
 		return requiredFormComponents;
 	}

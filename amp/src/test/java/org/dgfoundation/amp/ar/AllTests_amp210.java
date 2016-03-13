@@ -47,24 +47,24 @@ public class AllTests_amp210
 		//new MoldovaTranslationsSplit().doMoldovaTranslations();
 		
 		TestSuite suite = new TestSuite(AllTests_amp210.class.getName());
-//		suite.addTest(new JUnit4TestAdapter(FiltersMondrianReportTests.class));
-//		suite.addTest(new JUnit4TestAdapter(ETLTests.class));
-//		suite.addTest(SQLUtilsTests.suite());
+		suite.addTest(new JUnit4TestAdapter(FiltersMondrianReportTests.class));
+		suite.addTest(new JUnit4TestAdapter(ETLTests.class));
+		suite.addTest(SQLUtilsTests.suite());
 		suite.addTest(new JUnit4TestAdapter(BasicMondrianReportTests.class));
-//		suite.addTest(new JUnit4TestAdapter(DateColumnsMondrianReportTests.class));
-//		suite.addTest(new JUnit4TestAdapter(MondrianSummaryReportTests.class));
-//		suite.addTest(new JUnit4TestAdapter(LocationMondrianReportTests.class));
-//		suite.addTest(new JUnit4TestAdapter(OrganisationsMondrianReportTests.class));
-//		suite.addTest(new JUnit4TestAdapter(SqlFilterUtilsTests.class));
-//		suite.addTest(new JUnit4TestAdapter(MondrianComputedMeasuresReportTests.class));
-//		suite.addTest(new JUnit4TestAdapter(ComponentReportsTests.class));
-//		suite.addTest(new JUnit4TestAdapter(org.dgfoundation.amp.ar.amp210.PledgeReportsTests.class));
-//		suite.addTest(new JUnit4TestAdapter(org.dgfoundation.amp.ar.amp210.DonorsAndPledgesReportsTests.class));
-//		suite.addTest(new JUnit4TestAdapter(TabsPaginationTests.class));
-//		suite.addTest(new JUnit4TestAdapter(PledgeFiltersMondrianReportTests.class));
-//		suite.addTest(new JUnit4TestAdapter(AgreementColumnsReportsTests.class));
-//		suite.addTest(new JUnit4TestAdapter(AmountColumnsReportTests.class));
-//		suite.addTest(new JUnit4TestAdapter(SettingsMondrianReportTests.class));
+		suite.addTest(new JUnit4TestAdapter(DateColumnsMondrianReportTests.class));
+		suite.addTest(new JUnit4TestAdapter(MondrianSummaryReportTests.class));
+		suite.addTest(new JUnit4TestAdapter(LocationMondrianReportTests.class));
+		suite.addTest(new JUnit4TestAdapter(OrganisationsMondrianReportTests.class));
+		suite.addTest(new JUnit4TestAdapter(SqlFilterUtilsTests.class));
+		suite.addTest(new JUnit4TestAdapter(MondrianComputedMeasuresReportTests.class));
+		suite.addTest(new JUnit4TestAdapter(ComponentReportsTests.class));
+		suite.addTest(new JUnit4TestAdapter(org.dgfoundation.amp.ar.amp210.PledgeReportsTests.class));
+		suite.addTest(new JUnit4TestAdapter(org.dgfoundation.amp.ar.amp210.DonorsAndPledgesReportsTests.class));
+		suite.addTest(new JUnit4TestAdapter(TabsPaginationTests.class));
+		suite.addTest(new JUnit4TestAdapter(PledgeFiltersMondrianReportTests.class));
+		suite.addTest(new JUnit4TestAdapter(AgreementColumnsReportsTests.class));
+		suite.addTest(new JUnit4TestAdapter(AmountColumnsReportTests.class));
+		suite.addTest(new JUnit4TestAdapter(SettingsMondrianReportTests.class));
 		
 		//suite.addTest(new JUnit4TestAdapter(EndpointsTests.class)); report testcases are not compatible with AMP running; while the testcases in EndpointsTests require a running AMP. please move them to a different test suite, which does not contain reports tests
 		

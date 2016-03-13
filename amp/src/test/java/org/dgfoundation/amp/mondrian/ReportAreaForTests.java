@@ -9,6 +9,8 @@ import java.util.Stack;
 import java.util.TreeMap;
 import java.util.function.Function;
 
+import junit.framework.TestCase;
+
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.NamedTypedEntity;
@@ -156,8 +158,9 @@ public class ReportAreaForTests extends ReportAreaImpl {
 		if (outCell == null || corCell == null)
 			return report_error(String.format("col %s of %s: different nullness: out %s vs cor %s", column, this.owner, outCell, corCell));
 		
-		if (!outCell.displayedValue.equals(corCell.displayedValue))
-			return report_error(String.format("col %s of %s: incorrect output: %s instead of the correct %s", column, this.owner, outCell, corCell));
+		TestCase.assertEquals(corCell.displayedValue, outCell.displayedValue);
+//		if (!outCell.displayedValue.equals(corCell.displayedValue))
+//			return report_error(String.format("col %s of %s: incorrect output: %s instead of the correct %s", column, this.owner, outCell, corCell));
 
 		return null;
 	}

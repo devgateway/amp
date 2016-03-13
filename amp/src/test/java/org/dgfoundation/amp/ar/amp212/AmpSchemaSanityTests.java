@@ -3,9 +3,13 @@ package org.dgfoundation.amp.ar.amp212;
 import java.util.Arrays;
 import java.util.List;
 
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.AreaOwner;
+import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
@@ -117,5 +121,196 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 		            new ReportAreaForTests(null, "Project Title", "activity with many MTEFs", "MTEF 2011/2012", "45 000", "MTEF 2012/2013", "56 000", "Funding-2015-Actual Disbursements", "80 000", "Totals-Actual Disbursements", "80 000", "Totals-MTEF", "101 000")          )        )      ));
 
 		runNiTestCase(cor, spec("AMP-22422-test-mtefs-hiers"), Arrays.asList("Pure MTEF Project", "activity with directed MTEFs", "Activity with both MTEFs and Act.Comms", "activity with many MTEFs", "mtef activity 1", "Test MTEF directed", "Eth Water"));
+	}
+	
+	@Test
+	public void testProjectTitleLanguages() {
+		NiReportModel correctReport = new NiReportModel("testcase EN")
+		.withHeaders(Arrays.asList(
+				"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
+				"(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 2))",
+				"(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+			.withWarnings(Arrays.asList())
+			.withBody(      new ReportAreaForTests(null)
+		      .withContents("Project Title", "", "Totals-Actual Commitments", "7,181,333", "Totals-Actual Disbursements", "1,550,111")
+		      .withChildren(
+		        new ReportAreaForTests(null, "Project Title", "pledged 2", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000"),
+		        new ReportAreaForTests(null, "Project Title", "Eth Water", "Totals-Actual Disbursements", "545,000"),
+		        new ReportAreaForTests(null, "Project Title", "SSC Project 1", "Totals-Actual Commitments", "111,333", "Totals-Actual Disbursements", "555,111")      ));
+
+		
+		runNiTestCase(
+				this.buildSpecification("testcase EN", 
+						Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+						Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+						null, GroupingCriteria.GROUPING_TOTALS_ONLY),						
+						"en", 
+						Arrays.asList("Eth Water", "SSC Project 1", "pledged 2"),
+						correctReport); 
+				
+		NiReportModel correctReportRu = new NiReportModel("testcase RU")
+		.withHeaders(Arrays.asList(
+				"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
+				"(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 2))",
+				"(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+			.withWarnings(Arrays.asList())
+			.withBody(      new ReportAreaForTests(null)
+		      .withContents("Project Title", "", "Totals-Actual Commitments", "7,181,333", "Totals-Actual Disbursements", "1,550,111")
+		      .withChildren(
+		        new ReportAreaForTests(null, "Project Title", "обещание 2", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000"),
+		        new ReportAreaForTests(null, "Project Title", "Вода Eth", "Totals-Actual Disbursements", "545,000"),
+		        new ReportAreaForTests(null, "Project Title", "Проект КЮЮ 1", "Totals-Actual Commitments", "111,333", "Totals-Actual Disbursements", "555,111")));
+		
+		runNiTestCase(
+				buildSpecification("testcase RU", 
+						Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+						Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+						null, GroupingCriteria.GROUPING_TOTALS_ONLY),
+				"ru", 
+				Arrays.asList("Eth Water", "SSC Project 1", "pledged 2"),
+				correctReportRu);
+	}
+	
+/*	
+	
+	@Test
+	public void test_AMP_18499_should_fail_for_now() {
+		// for running manually: open http://localhost:8080/aim/viewNewAdvancedReport.do~view=reset~widget=false~resetSettings=true~ampReportId=73 OR http://localhost:8080/TEMPLATE/ampTemplate/saikuui/index.html#report/open/73
+		ReportAreaForTests cor = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Actual Commitments", "666 777")
+	    .withChildren(new ReportAreaForTests().withContents("Project Title", "ptc activity 1", "Actual Commitments", "666 777")  );
+		
+		runMondrianTestCase(
+				buildSpecification("AMP-18499", Arrays.asList(ColumnConstants.PROJECT_TITLE), Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), null, GroupingCriteria.GROUPING_TOTALS_ONLY),
+				"en",
+				Arrays.asList("Proposed Project Cost 1 - USD", "Project with documents", "ptc activity 1"),
+				cor);
+	}
+	
+	@Test
+	public void test_AMP_18504_should_fail_for_now() {
+		// for running manually: http://localhost:8080/aim/viewNewAdvancedReport.do~view=reset~widget=false~resetSettings=true~ampReportId=24 or http://localhost:8080/TEMPLATE/ampTemplate/saikuui/index.html#report/open/24
+		
+		ReportAreaForTests cor = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Donor Agency", "", "2009-Actual Commitments", "100 000", "2009-Actual Disbursements", "0", "2010-Actual Commitments", "0", "2010-Actual Disbursements", "60 000", "2012-Actual Commitments", "25 000", "2012-Actual Disbursements", "12 000", "2013-Actual Commitments", "2 670 000", "2013-Actual Disbursements", "0", "2014-Actual Commitments", "4 400 000", "2014-Actual Disbursements", "450 000", "Total Measures-Actual Commitments", "7 195 000", "Total Measures-Actual Disbursements", "522 000")
+	    .withChildren(
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "date-filters-activity", "Donor Agency", "Ministry of Finance", "2009-Actual Commitments", "100 000", "2009-Actual Disbursements", "", "2010-Actual Commitments", "", "2010-Actual Disbursements", "60 000", "2012-Actual Commitments", "25 000", "2012-Actual Disbursements", "12 000", "2013-Actual Commitments", "", "2013-Actual Disbursements", "", "2014-Actual Commitments", "", "2014-Actual Disbursements", "", "Total Measures-Actual Commitments", "125 000", "Total Measures-Actual Disbursements", "72 000"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "pledged 2", "Donor Agency", "USAID", "2009-Actual Commitments", "", "2009-Actual Disbursements", "", "2010-Actual Commitments", "", "2010-Actual Disbursements", "", "2012-Actual Commitments", "", "2012-Actual Disbursements", "", "2013-Actual Commitments", "2 670 000", "2013-Actual Disbursements", "", "2014-Actual Commitments", "4 400 000", "2014-Actual Disbursements", "450 000", "Total Measures-Actual Commitments", "7 070 000", "Total Measures-Actual Disbursements", "450 000")  );
+		
+		runMondrianTestCase(
+				buildSpecification("AMP-18504",
+						Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_AGENCY),
+						Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+						null, GroupingCriteria.GROUPING_YEARLY),
+				"en",
+				Arrays.asList("date-filters-activity", "pledged 2"),
+				cor);
+	}
+*/
+	
+	@Test
+	public void test_AMP_18509() {
+		NiReportModel cor = new NiReportModel("AMP-18509")
+		.withHeaders(Arrays.asList(
+				"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 5, colStart: 0, colSpan: 24))",
+				"(Project Title: (startRow: 1, rowSpan: 4, totalRowSpan: 4, colStart: 0, colSpan: 1));(Region: (startRow: 1, rowSpan: 4, totalRowSpan: 4, colStart: 1, colSpan: 1));(AMP ID: (startRow: 1, rowSpan: 4, totalRowSpan: 4, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 4, colStart: 3, colSpan: 18));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 4, colStart: 21, colSpan: 3))",
+				"(2009: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 3));(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 6, colSpan: 3));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 9, colSpan: 6));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 15, colSpan: 3));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 18, colSpan: 3));(Actual Commitments: (startRow: 2, rowSpan: 3, totalRowSpan: 3, colStart: 21, colSpan: 1));(Actual Disbursements: (startRow: 2, rowSpan: 3, totalRowSpan: 3, colStart: 22, colSpan: 1));(Actual Expenditures: (startRow: 2, rowSpan: 3, totalRowSpan: 3, colStart: 23, colSpan: 1))",
+				"(Q1: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 3));(Q2: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 3));(Q3: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 9, colSpan: 3));(Q4: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 12, colSpan: 3));(Q4: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 15, colSpan: 3));(Q2: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 18, colSpan: 3))",
+				"(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Expenditures: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Disbursements: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Expenditures: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Disbursements: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Actual Expenditures: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Actual Disbursements: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1));(Actual Expenditures: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 15, colSpan: 1));(Actual Disbursements: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 16, colSpan: 1));(Actual Expenditures: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 17, colSpan: 1));(Actual Commitments: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 18, colSpan: 1));(Actual Disbursements: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 19, colSpan: 1));(Actual Expenditures: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 20, colSpan: 1))"))
+			.withWarnings(Arrays.asList())
+			.withBody(      new ReportAreaForTests(null)
+		      .withContents("Project Title", "", "Region", "", "AMP ID", "", "Funding-2009-Q1-Actual Commitments", "100,000", "Funding-2009-Q1-Actual Disbursements", "0", "Funding-2009-Q1-Actual Expenditures", "0", "Funding-2010-Q2-Actual Commitments", "0", "Funding-2010-Q2-Actual Disbursements", "60,000", "Funding-2010-Q2-Actual Expenditures", "0", "Funding-2012-Q3-Actual Commitments", "25,000", "Funding-2012-Q3-Actual Disbursements", "0", "Funding-2012-Q3-Actual Expenditures", "0", "Funding-2012-Q4-Actual Commitments", "0", "Funding-2012-Q4-Actual Disbursements", "12,000", "Funding-2012-Q4-Actual Expenditures", "0", "Funding-2013-Q4-Actual Commitments", "2,670,000", "Funding-2013-Q4-Actual Disbursements", "0", "Funding-2013-Q4-Actual Expenditures", "0", "Funding-2014-Q2-Actual Commitments", "4,400,000", "Funding-2014-Q2-Actual Disbursements", "450,000", "Funding-2014-Q2-Actual Expenditures", "0", "Totals-Actual Commitments", "7,195,000", "Totals-Actual Disbursements", "522,000", "Totals-Actual Expenditures", "0")
+		      .withChildren(
+		        new ReportAreaForTests(null, "Project Title", "pledged 2", "Region", "Cahul County", "AMP ID", "87211347", "Funding-2013-Q4-Actual Commitments", "2,670,000", "Funding-2014-Q2-Actual Commitments", "4,400,000", "Funding-2014-Q2-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000"),
+		        new ReportAreaForTests(null, "Project Title", "date-filters-activity", "Region", "", "AMP ID", "872113null", "Funding-2009-Q1-Actual Commitments", "100,000", "Funding-2010-Q2-Actual Disbursements", "60,000", "Funding-2012-Q3-Actual Commitments", "25,000", "Funding-2012-Q4-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000")      ));
+		
+		runNiTestCase(
+			buildSpecification("AMP-18509", 
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.AMP_ID),
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.ACTUAL_EXPENDITURES),
+				null,
+				GroupingCriteria.GROUPING_QUARTERLY),
+			"en",
+			Arrays.asList("date-filters-activity", "pledged 2"),
+			cor);
+	}
+	
+	@Test
+	public void test_AMP_18577_only_count_donor_transactions() {
+		NiReportModel cor = new NiReportModel("AMP_18577_only_count_donor_transaction")
+		.withHeaders(Arrays.asList(
+				"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 4))",
+				"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Region: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 1))",
+				"(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1));(Actual Disbursements: (startRow: 2, rowSpan: 2, totalRowSpan: 2, colStart: 3, colSpan: 1))",
+				"(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+			.withWarnings(Arrays.asList())
+			.withBody(      new ReportAreaForTests(null).withContents("Project Title", "", "Region", "", "Funding-2010-Actual Disbursements", "143,777", "Totals-Actual Disbursements", "143,777")
+		      .withChildren(
+		        new ReportAreaForTests(null, "Project Title", "Test MTEF directed", "Region", "Anenii Noi County", "Funding-2010-Actual Disbursements", "143,777", "Totals-Actual Disbursements", "143,777")));
+		
+		runNiTestCase(
+				buildSpecification("AMP_18577_only_count_donor_transaction",
+				Arrays.asList("Project Title", "Region"),
+				Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
+				null,
+				GroupingCriteria.GROUPING_YEARLY),
+			"en",
+			Arrays.asList("Test MTEF directed"),
+			cor
+		);
+	}
+	
+	@Test
+	public void test_AMP_18330_empty_rows() {
+		NiReportModel cor = new NiReportModel("test_AMP_18330_empty_rows")
+		.withHeaders(Arrays.asList(
+				"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 4))",
+				"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Region: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 1))",
+				"(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1));(Actual Disbursements: (startRow: 2, rowSpan: 2, totalRowSpan: 2, colStart: 3, colSpan: 1))",
+				"(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+			.withWarnings(Arrays.asList())
+			.withBody(      new ReportAreaForTests(null)
+		      .withContents("Project Title", "", "Region", "", "Funding-2010-Actual Disbursements", "143,777", "Totals-Actual Disbursements", "143,777")
+		      .withChildren(
+		        new ReportAreaForTests(null, "Project Title", "Test MTEF directed", "Region", "Anenii Noi County", "Funding-2010-Actual Disbursements", "143,777", "Totals-Actual Disbursements", "143,777"),
+		        new ReportAreaForTests(null, "Project Title", "activity with primary_program", "Region", "")));
+		
+		ReportSpecificationImpl spec = buildSpecification("test_AMP_18330_empty_rows",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION),
+				Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
+				null,
+				GroupingCriteria.GROUPING_YEARLY);
+		
+		spec.setDisplayEmptyFundingRows(true);
+		
+		runNiTestCase(spec, "en",
+			Arrays.asList("Test MTEF directed", "activity with primary_program"),
+			cor
+		);
+	}
+	
+	@Test
+	public void test_AMP_18748_no_data() {
+		NiReportModel cor = new NiReportModel("test_AMP_18748_no_data")
+		.withHeaders(Arrays.asList(
+				"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
+				"(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Region: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1))",
+				"(Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+			.withWarnings(Arrays.asList())
+			.withBody(      new ReportAreaForTests(null).withContents("Project Title", "", "Region", "", "Totals-Actual Disbursements", "0")
+		      .withChildren(      ));
+		
+		ReportSpecificationImpl spec = buildSpecification("test_AMP_18748_no_data",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION),
+				Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
+				null,
+				GroupingCriteria.GROUPING_YEARLY);
+		
+		runNiTestCase(spec, "en",
+				Arrays.asList("__hopefully____invalid________name____"),
+			cor
+		);
 	}
 }

@@ -2,6 +2,8 @@ package org.dgfoundation.amp.testmodels;
 
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.mondrian.ReportAreaDescriber;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
@@ -77,8 +79,9 @@ public class NiReportModel {
 		if (correctCell == null)
 			correctCell = "<null>";
 		
-		if (!correctCell.equals(cellContents))
-			return String.format("%s instead of %s", cellContents, correctCell);
+		TestCase.assertEquals(correctCell, cellContents);
+//		if (!correctCell.equals(cellContents))
+//			return String.format("%s instead of %s", cellContents, correctCell);
 		
 		return null;
 	}

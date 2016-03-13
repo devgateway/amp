@@ -93,6 +93,10 @@ public class TLSUtils {
 				throw new RuntimeException(e);
 			}
 		}
+		offlineSetForcedLanguage(langCode);
+	}
+	
+	public static void offlineSetForcedLanguage(String langCode) {
 		forcedLangCode = langCode;
 	}
 	

@@ -134,6 +134,9 @@ public class HardcodedReportsTestSchema extends AbstractReportsSchema {
 		addMeasure(new TrivialTestMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, Constants.DISBURSEMENT, "Actual", false));
 		addMeasure(new TrivialTestMeasure(MeasureConstants.PLANNED_COMMITMENTS, Constants.COMMITMENT, "Planned", false));
 		addMeasure(new TrivialTestMeasure(MeasureConstants.PLANNED_DISBURSEMENTS, Constants.DISBURSEMENT, "Planned", false));
+		
+		// empty trivial measure
+		addMeasure(new TrivialTestMeasure(MeasureConstants.PIPELINE_COMMITMENTS, Constants.COMMITMENT, "Pipeline", false));
 	}
 
 	@Override

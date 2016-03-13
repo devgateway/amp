@@ -380,8 +380,17 @@ public abstract class ReportingTestCase extends AmpTestCase {
 		nrRunReports ++;
 		return buildNiReportDigest(spec, activityNames, outputBuilder);
 	}
-
+	
+	protected void runNiTestCase(ReportSpecification spec, String locale, List<String> activityNames, NiReportModel cor) {
+		runNiTestCase(cor, spec, locale, activityNames);
+	}
+	
 	protected void runNiTestCase(NiReportModel cor, ReportSpecification spec, List<String> activityNames) {
+		runNiTestCase(cor, spec, "en", activityNames);
+	}
+		
+	protected void runNiTestCase(NiReportModel cor, ReportSpecification spec, String locale, List<String> activityNames) {
+		setLocale(locale);
 		NiReportModel out = buildDigest(spec, activityNames, new ReportModelGenerator());
 		String delta = null;
 		try {delta = cor.compare(out);}

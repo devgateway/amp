@@ -44,6 +44,6 @@ public class OffDbNiReportEngineTests extends BasicSanityChecks {
 	
 	@Override
 	public void tearDown() {
-		System.err.format("Sanity checks %s have run %d reports\n", this.getName(), nrRunReports);
+		//System.err.format("Sanity checks %s have run %d reports\n", this.getName(), nrRunReports);
 	}
 }

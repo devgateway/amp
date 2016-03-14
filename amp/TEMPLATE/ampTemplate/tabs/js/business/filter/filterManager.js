@@ -64,7 +64,7 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 	FilterManager.saveTab = function(dialogView) {
 		// If filterWidget was never opened.
 		if (app.TabsApp.serializedFilters === null) {
-			var blob = FilterUtils.convertJavaFiltersToJS(app.TabsApp.filters);
+			var blob = CommonFilterUtils.convertJavaFiltersToJS(app.TabsApp.filters);
 			app.TabsApp.filtersWidget.deserialize(blob, {
 				silent : true
 			});

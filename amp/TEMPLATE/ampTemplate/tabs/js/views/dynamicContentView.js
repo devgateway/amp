@@ -49,7 +49,12 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 					console.log('filter widget loaded');
 					
 					// Convert report filters to filterwidget filters.
-					var blob = FilterUtils.convertJavaFiltersToJS(reportFilters);
+					var blob = undefined;
+					if (app.TabsApp.serializedFilters === null) {
+						blob = CommonFilterUtils.convertJavaFiltersToJS(reportFilters);
+					} else {
+						blob = app.TabsApp.serializedFilters;
+					}
 					app.TabsApp.filtersWidget.reset({
 						silent : true
 					});

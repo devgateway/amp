@@ -22,27 +22,6 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 		return sorting;
 	}
 
-	/**
-	 * N-O-T-I-C-E: THIS FILE IS A BIG ALMOST-COPY-PASTE OFF saiku/plugins/AMPFilters/plugin.js.
-	 * MIRROR ALL CHANGES DONE HERE THERE AND VICEVERSA 
-	 */
-	
-	FilterUtils.getDateIntervalType = function(element) {
-		var min = element.attributes.min;
-		var max = element.attributes.max;
-		if (min === undefined)
-			return "max";
-		if (max === undefined)
-			return "min";
-		if (element.get('valueToName').attributes[min] === undefined) {
-			return "max";
-		}
-		if (element.get('valueToName').attributes[max] === undefined) {
-			return "min";
-		}		
-		return "both";
-	};
-	
 	FilterUtils.extractFilters = function(content) {
 		var filters = new Filters();
 		var filtersColumnsJson = content.get('columnFilterRules');
@@ -53,7 +32,7 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 				var element = subElement.models[0];
 				var content = [];
 				if (subElement.name === 'DATE') {
-					var dateIntervalType = FilterUtils.getDateIntervalType(element, item, i);
+					var dateIntervalType = CommonFilterUtils.getDateIntervalType(element, item, i);
 				}				
 				if (element.get('value') != null) {
 					var auxItem = {};
@@ -195,21 +174,21 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 	};
 
 	//copypasted from years-filter-model.js
-	  FilterUtils._dateConvert = function(input){
-		    var output = null;
-		    if(input){
-		      if(input.indexOf('/')>-1){
-		        input = input.split('/');
-		        output = input[2] + '-' + input[1] + '-' + input[0];
-		      } else if(input.indexOf('-')>-1){
-		        input = input.split('-');
-		        output = input[2] + '/' + input[1] + '/' + input[0];
-		      }
-		    }
-		    return output;
-		  };	
+	FilterUtils._dateConvert = function(input){
+		var output = null;
+		if(input){
+			if(input.indexOf('/')>-1){
+				input = input.split('/');
+				output = input[2] + '-' + input[1] + '-' + input[0];
+			} else if(input.indexOf('-')>-1){
+				input = input.split('-');
+				output = input[2] + '/' + input[1] + '/' + input[0];
+			}
+		}
+		return output;
+	};	
 	  
-  FilterUtils.pushDateLimit = function(_name, value){
+	FilterUtils.pushDateLimit = function(_name, value){
 	if(app.TabsApp.filters.models[_name] === undefined) {
 		var filter = new Filter({
 			name : _name,
@@ -247,176 +226,7 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 			//error. why doesn't it have dates
 		}
 
-	};
-	
-	FilterUtils.convertJavaFiltersToJS = function(data) {
-		// This conversion is needed only one time when we load default
-		// filters for a tab not after applying a new filter.
-		if (app.TabsApp.serializedFilters === null) {
-			// Define some basic defaults needed in the widget filter.
-			var blob = {
-				otherFilters : {
-					date : {
-						end : '',
-						start : ''
-					}
-				},
-				columnFilters : {
-					"Donor Id" : []
-				}
-			};
-			_.each(data.models, function(item, i) {
-				switch (item.get('name')) {
-
-				// cases where columnFilter matches item name
-				case 'Responsible Organization':
-				case 'Type Of Assistance':
-				case 'Financing Instrument':
-				case 'Status':
-				case 'Approval Status':
-				case 'Donor Group':
-				case 'Donor Type':
-				case 'Mode of Payment':
-				case 'On/Off/Treasury Budget':
-				case 'Zone':
-				case 'Region':
-				case 'District':
-					blob.columnFilters[item.get('name')] = _.map(item.get('values'), function(item_) {
-						return parseInt(item_.id);
-					});
-					break;
-
-				// cases where columnFilter matches item name + ' Id'
-				case 'Contracting Agency':
-				case 'Executing Agency':
-				case 'Implementing Agency':
-				case 'Beneficiary Agency':
-					blob.columnFilters[item.get('name') + ' Id'] = _.map(item.get('values'), function(item_) {
-						return parseInt(item_.id);
-					});
-					break;
-				case 'National Planning Objectives':
-					blob.columnFilters['National Planning Objectives Level 1 Id'] = _.map(item.get('values'), function(
-							item_) {
-						return parseInt(item_.id);
-					});
-					blob.columnFilters['National Planning Objectives Level 2 Id'] = blob.columnFilters['National Planning Objectives Level 1 Id'];
-					break;
-				case 'Primary Program':
-					blob.columnFilters['Primary Program Level 1 Id'] = _.map(item.get('values'), function(item_) {
-						return parseInt(item_.id);
-					});
-					break;
-				case 'Secondary Program':
-					blob.columnFilters['Secondary Program Level 3 Id'] = _.map(item.get('values'), function(item_) {
-						return parseInt(item_.id);
-					});
-					break;
-				case 'Donor Agency':
-					blob.columnFilters['Donor Id'] = _.map(item.get('values'), function(item_) {
-						return parseInt(item_.id);
-					});
-					break;
-				case 'Funding Organization':
-					blob.columnFilters['Donor Id'] = _.map(item.get('values'), function(item_) {
-						return parseInt(item_.id);
-					});
-				/*case 'Contracting Agency Groups':
-					blob.columnFilters['Contracting Agency Id'] = _.map(item.get('values'), function(item_) {
-						return parseInt(item_.id);
-					});
-					break;*/
-				case 'Primary Sector':
-					// NOTE: Since the filter widget (arbitrarily) uses 3 different fields for Primary Sectors we
-					// triplicate the values coming from the endpoint.
-					blob.columnFilters['Primary Sector Id'] = _.map(item.get('values'), function(item_) {
-						return parseInt(item_.id);
-					});
-					blob.columnFilters['Primary Sector Sub-Sector Id'] = blob.columnFilters['Primary Sector Id'];
-					blob.columnFilters['Primary Sector Sub-Sub-Sector Id'] = blob.columnFilters['Primary Sector Id'];
-					break;
-				case 'Secondary Sector':
-					// NOTE: Since the filter widget (arbitrarily) uses 3 different fields for Secondary Sectors we
-					// triplicate the values coming from the endpoint.
-					blob.columnFilters['Secondary Sector Id'] = _.map(item.get('values'), function(item_) {
-						return parseInt(item_.id);
-					});
-					blob.columnFilters['Secondary Sector Sub-Sector Id'] = blob.columnFilters['Secondary Sector Id'];
-					blob.columnFilters['Secondary Sector Sub-Sub-Sector Id'] = blob.columnFilters['Secondary Sector Id'];
-					break;
-					
-//				case 'Start Date':
-//					blob.otherFilters.date.start = '2019-12-31';
-//					break;
-//					
-//				case 'End Date':
-//					blob.otherFilters.date.end = '2029-12-31';
-//					break;
-
-				case 'DATE':
-					//FilterUtils.fillDateBlob(blob.otherFilters.date, item.attributes);
-					var newDate = {};
-					_.map(item.get('values'), function(item_, i) {						
-						if(i === 0) {
-							newDate['start'] = item_.name;
-						} else if(i === 1) {
-							newDate['end'] = item_.name;
-						}
-						return newDate;
-					});
-					blob.otherFilters['date'] = newDate;
-					break;
-				case 'Tertiary Sector':
-					blob.columnFilters['Tertiary Program Level 1 Id'] = _.map(item.get('values'), function(item_) {
-						return parseInt(item_.id);
-					});
-					break;					
-				case 'Team':
-					blob.columnFilters['Workspaces'] = _.map(item.get('values'), function(item_) {
-						return parseInt(item_.id);
-					});
-					break;
-					
-				case 'Actual Approval Date':
-				case 'Actual Completion Date':
-				case 'Actual Start Date':
-				case 'Current Completion Date':
-				case 'Donor Commitment Date':
-				case 'Final Date for Contracting':
-				case 'Final Date for Disbursements':
-				case 'Funding Classification Date':
-				case 'Funding end date':
-				case 'Funding start date':
-				case 'Original Completion Date':
-				case 'Proposed Approval Date':
-				case 'Proposed Completion Date':
-				case 'Proposed Start Date':
-					
-					var newDate = {};
-					_.map(item.get('values'), function(item_, i) {						
-						if(i === 0) {
-							newDate['start'] = item_.name;
-						} else if(i === 1) {
-							newDate['end'] = item_.name;
-						}
-						return newDate;
-					});
-					blob.otherFilters[item.get('name')] = newDate;
-					break;
-				default:
-					console.error(item);
-					break;
-				}
-			});
-			console.log("use blob");
-			console.log(blob);
-			return blob;
-		} else {
-			console.log("use serializedFilter");
-			console.log(app.TabsApp.serializedFilters);
-			return app.TabsApp.serializedFilters;
-		}
-	};
+	};	
 
 	FilterUtils.widgetFiltersToJavaFilters = function(originalFilters) {
 		/*
@@ -432,7 +242,6 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 		return originalFilters;
 	};
 	
-
 	FilterUtils.julianToDate = function(julian) {
 		var X = parseFloat(julian) + 0.5;
 		var Z = Math.floor(X); // Get day without time

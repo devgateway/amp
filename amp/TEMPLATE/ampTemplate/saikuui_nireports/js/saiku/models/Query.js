@@ -64,7 +64,7 @@ var Query = Backbone.Model.extend({
         	self.set('filters', undefined);
 	        // TODO: Review this 2-steps process completely.
 	        var extractedFiltersFromSpecs = FilterUtils.extractFilters(auxFilters);
-	        var blob = FilterUtils.convertJavaFiltersToJS(extractedFiltersFromSpecs);
+	        var blob = CommonFilterUtils.convertJavaFiltersToJS(extractedFiltersFromSpecs);
 	        Saiku.logger.log(blob);
 	        // Set these filters reformatted. 
 	        self.set('filters', blob);	       

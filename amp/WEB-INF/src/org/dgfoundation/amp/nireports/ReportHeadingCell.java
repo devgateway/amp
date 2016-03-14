@@ -92,13 +92,12 @@ public class ReportHeadingCell {
 		return getStringDigest(false);
 	}
 	
-	public String getStringDigest(boolean total)
-	{
-		if (total)
-		{
-			return String.format("RHLC %s: (startRow: %d, rowSpan: %d, totalRowSpan: %d, colStart: %d, colSpan: %d)", this.getName(), this.startRow, this.rowSpan, this.totalRowSpan, this.startColumn, this.colSpan);
-		}
-		return String.format("RHLC %s: (startRow: %d, rowSpan: %d, totalRowSpan: %d, colSpan: %d)", this.getName(), this.startRow, this.rowSpan, this.totalRowSpan, this.colSpan);
+	public String getStringDigest(boolean total) {
+		return String.format("RHLC %s: %s", this.getName(), getNumbers(total));
+	}
+	
+	public String getNumbers(boolean totals) {
+		return String.format("(startRow: %d, rowSpan: %d, totalRowSpan: %d, colSpan: %d)", this.startRow, this.rowSpan, this.totalRowSpan, this.colSpan);
 	}
 	
 }

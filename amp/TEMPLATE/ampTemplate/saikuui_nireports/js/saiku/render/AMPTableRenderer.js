@@ -227,11 +227,11 @@ function generateHeaderHtml(data) {
 
 function generateNiReportHeaderHtml(headers) {
 	var header = "<thead>"
-	
 	for(var i = 0; i < headers.length; i++) {
 		header += "<tr class='nireport_header'>";
 		for(var j = 0; j < headers[i].length; j++) {
-			if (headers[i][j].rowSpan == headers.length && isHiddenColumn(j)) {
+			if (i == 0 && headers[i][j].rowSpan == headers.length 
+					&& (headers[i][j].originalName == 'Draft' || headers[i][j].originalName == 'Approval Status')) {
 				continue;
 			}
 			

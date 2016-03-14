@@ -393,18 +393,25 @@ public abstract class ReportingTestCase extends AmpTestCase {
 		setLocale(locale);
 		NiReportModel out = buildDigest(spec, activityNames, new ReportModelGenerator());
 		String delta = null;
+		AssertionError assertionError = null;
 		try {delta = cor.compare(out);}
 		catch(Exception e) {
 			delta = e.getMessage();
 			if (delta == null || cor == null)
 				delta = "(null)";
-		};
-		if (delta != null) {
-			System.err.format("error for test %s: %s\n", spec.getReportName(), delta);
+		}
+		catch(AssertionError ass) {
+			assertionError = ass;
+		}
+		if (delta != null || assertionError != null) {
+			if (delta != null)
+				System.err.format("error for test %s: %s\n", spec.getReportName(), delta);
 			System.err.println("this is output for test " + spec.getReportName() + ": " + out.describeInCode());
 			//System.err.println("this is output for test " + spec.getReportName() + new ReportAreaDescriber().describeInCode(out.body, 2));
 		}
 		assertNull(delta);
+		if (assertionError != null)
+			throw assertionError;
 	}
 	
 //	public<K> K buildNiReportDigest(ReportSpecification spec, NiReportExecutor executor, NiReportOutputBuilder<K> outputBuilder) {

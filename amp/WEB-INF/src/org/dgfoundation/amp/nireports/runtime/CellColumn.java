@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 import static java.util.Collections.emptyList;
 
 import org.dgfoundation.amp.nireports.ComparableValue;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.ReportHeadingCell;
 import org.dgfoundation.amp.nireports.output.NiOutCell;
@@ -85,12 +86,12 @@ public class CellColumn extends Column {
 	}
 
 	@Override
-	public void calculatePositionInHeadingLayout(int totalRowSpan, int startingDepth, int startingColumn) {
+	public void calculatePositionInHeadingLayout(NiReportsEngine engine, int totalRowSpan, int startingDepth, int startingColumn) {
 		this.reportHeaderCell = new ReportHeadingCell(startingDepth, totalRowSpan, totalRowSpan, startingColumn, this.getWidth(), this.name);
 	}
 
 	@Override
-	public int calculateTotalRowSpan() {
+	public int calculateTotalRowSpan(NiReportsEngine engine) {
 		return 1;
 	}
 

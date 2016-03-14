@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
@@ -18,7 +19,6 @@ import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.nireports.NumberedCell;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
-import org.digijava.kernel.translator.TranslatorWorker;
 
 /**
  * a {@link CellVisitor} used to transform instances of {@link NiOutCell} into instances of {@link ReportCell}
@@ -31,8 +31,9 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 	final protected DecimalFormat decimalFormatter;
 	final protected OutputSettings outputSettings;
 	final protected Map<BigDecimal, String> formattedValues = new HashMap<>();
+	final protected Function<String, String> translator;
 	
-	public CellFormatter(ReportSettings settings, DecimalFormat defaultDecimalFormatter, String dateDisplayFormat, OutputSettings outputSettings) {
+	public CellFormatter(ReportSettings settings, DecimalFormat defaultDecimalFormatter, String dateDisplayFormat, Function<String, String> translator, OutputSettings outputSettings) {
 		if (settings != null && settings.getCurrencyFormat() != null) {
 			this.decimalFormatter = settings.getCurrencyFormat();
 		} else {
@@ -40,6 +41,7 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 		}
 		this.outputSettings = outputSettings;
 		this.dateFormatter = DateTimeFormatter.ofPattern(dateDisplayFormat);
+		this.translator = translator;
 	}
 
 	public String formatNumber(BigDecimal value) {
@@ -61,7 +63,7 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 	@Override
 	public ReportCell visit(NiTextCell cell, CellColumn currentColumn) {
 		String text = (StringUtils.isEmpty(cell.getDisplayedValue()) && cell.entityId > 0) ?
-				TranslatorWorker.translateText("Undefined") : cell.getDisplayedValue();  
+				translate("Undefined") : cell.getDisplayedValue();  
 			return asTextCell(text, cell.entityId, outputSettings.needsIdsValues(currentColumn) ? cell.entitiesIdsValues : null);
 	}
 
@@ -69,7 +71,7 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 	public ReportCell visit(NiSplitCell cell, CellColumn currentColumn) {
 		boolean needSubCells = outputSettings.needsIdsValues(currentColumn);
 		return asTextCell(
-			cell.undefined ? (cell.entity.name + ": " + TranslatorWorker.translateText("Undefined")) : cell.text, 
+			cell.undefined ? (cell.entity.name + ": " + translate("Undefined")) : cell.text, 
 			any(cell.entityIds, -1l), 
 			needSubCells ? cell.entityIds.stream().collect(Collectors.toMap(z -> z, z -> cell.text)) : null);
 	}
@@ -80,7 +82,10 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 		String formattedValue = String.join(", ", formattedDates);
 		return new DateCell(cell.comparableToken, formattedValue, cell.entityId, cell.entitiesIdsValues);
 	}
-
+	
+	protected String translate(String str) {
+		return translator.apply(str);
+	}
 	
 	public TextCell asTextCell(String text, long entityId, Map<Long, String> entityIdsValues) {
 		TextCell tc = new TextCell(text, entityId, entityIdsValues);

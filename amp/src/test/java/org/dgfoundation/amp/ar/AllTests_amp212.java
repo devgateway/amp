@@ -10,6 +10,7 @@ import org.apache.log4j.LogManager;
 import org.dgfoundation.amp.ar.amp212.AmpSchemaSanityTests;
 import org.dgfoundation.amp.ar.amp212.CurrencyConvertorTests;
 import org.dgfoundation.amp.ar.amp212.DimensionsFetchingTests;
+import org.dgfoundation.amp.ar.amp212.FundingFlowsTests;
 import org.dgfoundation.amp.ar.amp212.NiReportsFetchingTests;
 import org.dgfoundation.amp.ar.amp212.OfflineTests;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
@@ -39,6 +40,7 @@ public class AllTests_amp212
 		suite.addTest(OfflineTests.suite());
 		suite.addTest(new JUnit4TestAdapter(NiReportsFetchingTests.class));
 		suite.addTest(new JUnit4TestAdapter(AmpSchemaSanityTests.class));
+		suite.addTest(new JUnit4TestAdapter(FundingFlowsTests.class));
 
 		suite.addTest(new JUnit4TestAdapter(CurrencyConvertorTests.class));
 		suite.addTest(new JUnit4TestAdapter(DimensionsFetchingTests.class));

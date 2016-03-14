@@ -2,6 +2,8 @@ package org.dgfoundation.amp.nireports.runtime;
 
 import java.util.List;
 import java.util.function.Consumer;
+
+import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.ReportHeadingCell;
 
 /**
@@ -41,9 +43,9 @@ public abstract class Column {
 	 * only called once per item when initialized CRD
 	 * @return
 	 */
-	public abstract int calculateTotalRowSpan();
+	public abstract int calculateTotalRowSpan(NiReportsEngine engine);
 	
-	public abstract void calculatePositionInHeadingLayout(int totalRowSpan, int startingDepth, int startingColumn);
+	public abstract void calculatePositionInHeadingLayout(NiReportsEngine engine, int totalRowSpan, int startingDepth, int startingColumn);
 	/** returns the width of a Column in the header. Each leaf counts for one */
 	public abstract int getWidth();
 	/**

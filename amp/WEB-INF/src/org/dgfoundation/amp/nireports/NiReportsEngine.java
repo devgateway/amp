@@ -73,6 +73,7 @@ import org.dgfoundation.amp.nireports.schema.TimeRange;
 public class NiReportsEngine implements IdsAcceptorsBuilder {
 	
 	public static final Logger logger = Logger.getLogger(NiReportsEngine.class);
+	public static final String ROOT_COLUMN_NAME = "RAW";
 	public static final String FUNDING_COLUMN_NAME = "Funding";
 	public static final String TOTALS_COLUMN_NAME = "Totals";
 	
@@ -99,6 +100,11 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	 * only available once {@link #createInitialReport()} has exited
 	 */
 	public NiHeaderInfo headers;
+	
+	/**
+	 * updated during {@link #separateYears(GroupColumn)}
+	 */
+	public int premeasureSplitDepth = 0;
 	
 	/**
 	 * only available once {@link #output()} has exited - contains the full headers, including columns which have been deleted
@@ -226,7 +232,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		this.fullHeaders = headers;
 		Predicate<Column> yearRangeSetting = z -> z.splitCell != null && z.splitCell.entityType.equals(PSEUDOCOLUMN_YEAR) && !isAcceptableYear((Integer) z.splitCell.info.comparable);
 		Predicate<Column> emptyLeaf = z -> (z instanceof CellColumn) && isEmptyAndDeleteable((CellColumn) z);
-		this.headers = new NiHeaderInfo(pruneHeaders(this.headers.rootColumn, yearRangeSetting.or(emptyLeaf)), headers.nrHierarchies);
+		this.headers = new NiHeaderInfo(this, pruneHeaders(this.headers.rootColumn, yearRangeSetting.or(emptyLeaf)), headers.nrHierarchies);
 		this.reportOutput = this.reportOutput.accept(new NiReportOutputCleaner(this.headers));
 	}
 	
@@ -333,7 +339,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	
 	protected void createInitialReport() {
 		//ColumnReportData fetchedData = new ColumnReportData(this);
-		GroupColumn rawData = new GroupColumn("RAW", null, null, null);
+		GroupColumn rawData = new GroupColumn(ROOT_COLUMN_NAME, null, null, null);
 		
 		fetchedColumns.forEach((name, contents) -> rawData.addColumn(new CellColumn(name, contents, rawData, schema.getColumns().get(name), new NiColSplitCell(PSEUDOCOLUMN_COLUMN, new ComparableValue<String>(name, name))))); // regular columns
 		
@@ -343,7 +349,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		rawData.maybeAddColumn(buildTotalsColumn(TOTALS_COLUMN_NAME, rawData));
 		
 		GroupColumn catData = applyPostMeasureVerticalHierarchies(rawData);
-		this.headers = new NiHeaderInfo(catData, this.actualHierarchies.size());
+		this.headers = new NiHeaderInfo(this, catData, this.actualHierarchies.size());
 		this.rootReportData = new ColumnReportData(this, null, AmpCollections.map(catData.getLeafColumns(), cc -> cc.getContents()));
 	}
 	
@@ -372,6 +378,8 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		
 		for(VSplitStrategy splitCriteria:splitCriterias)
 			res = res.verticallySplitByCategory(splitCriteria, fundingColumn.getParent());
+		
+		this.premeasureSplitDepth = splitCriterias.size();
 		
 		VSplitStrategy restoreMeasures = VSplitStrategy.build(
 			cell -> new ComparableValue<String>(cell.getEntity().getName(), AmpCollections.indexOf(actualMeasures, cell.getEntity().getName())),

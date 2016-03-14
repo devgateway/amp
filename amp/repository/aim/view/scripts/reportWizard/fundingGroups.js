@@ -57,6 +57,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				,'Donor Type'
 				,'Credit/Donation'
 				,'Beneficiary Agency'
+				,'Beneficiary Agency Groups'
 				,'Implementing Agency'
 				,'Implementing Agency Groups'
 				,'Implementing Agency Type'

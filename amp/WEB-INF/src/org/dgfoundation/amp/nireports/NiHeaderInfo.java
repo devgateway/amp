@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.function.Predicate;
 
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
@@ -27,11 +26,11 @@ public class NiHeaderInfo {
 	 */
 	public final List<SortedMap<Integer, Column>> rasterizedHeaders;
 	
-	public NiHeaderInfo(GroupColumn rootColumn, int nrHierarchies) {
+	public NiHeaderInfo(NiReportsEngine engine, GroupColumn rootColumn, int nrHierarchies) {
 		this.rootColumn = rootColumn;
 		this.leafColumns = rootColumn.getLeafColumns();
 		this.nrHierarchies = nrHierarchies;
-		rootColumn.calculateHeaders();
+		rootColumn.calculateHeaders(engine);
 		this.rasterizedHeaders = Collections.unmodifiableList(buildRasterizedHeaders(rootColumn));
 	}
 		

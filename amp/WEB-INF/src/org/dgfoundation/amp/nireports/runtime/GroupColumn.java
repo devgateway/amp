@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.ReportHeadingCell;
 
@@ -108,20 +109,43 @@ public class GroupColumn extends Column {
 		return String.format("[%s -> %s]", name, getSubColumns().stream().map(z -> z.debugDigest(withContents)).collect(Collectors.toList()));
 	}
 
-	public void calculateHeaders() {
-		calculatePositionInHeadingLayout(calculateTotalRowSpan(), 0, 0);
+	public void calculateHeaders(NiReportsEngine engine) {
+		calculatePositionInHeadingLayout(engine, calculateTotalRowSpan(engine), 0, 0);
+	}
+	
+	protected int computeSelfRowSpanNoSplit(NiReportsEngine engine) {
+		if (this.name.equals(NiReportsEngine.ROOT_COLUMN_NAME))
+			return 1;
+
+		if (this.hierarchicalName.equals("RAW / Funding"))
+			return 1;
+
+		if (this.hierarchicalName.equals("RAW / Totals"))
+			return 1 + engine.premeasureSplitDepth;
+
+		return 1;
+	}
+	
+	protected int computeSelfRowSpan(NiReportsEngine engine, int totalRowSpan) {
+		if (this.splitCell != null)
+			if (this.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_COLUMN) || this.splitCell.entityType.equals(NiReportsEngine.PSEUDOCOLUMN_MEASURE))
+				return totalRowSpan - calculateChildrenMaxRowSpan(engine);
+		
+		return computeSelfRowSpanNoSplit(engine);
 	}
 	
 	@Override
-	public void calculatePositionInHeadingLayout(int totalRowSpan, int startingDepth, int startColumn) {
-		int selfRowSpan = /*this.isTotalColumn()*/ this.parent == null ? totalRowSpan - calculateChildrenMaxRowSpan() : 1;
+	public void calculatePositionInHeadingLayout(NiReportsEngine engine, int totalRowSpan, int startingDepth, int startColumn) {
+		//int selfRowSpan = /*this.isTotalColumn()*/ this.parent == null ? totalRowSpan - calculateChildrenMaxRowSpan() : 1;
+		int selfRowSpan = computeSelfRowSpan(engine, totalRowSpan);
+
 		//selfRowSpan = getRowSpanInHeading_internal();
 		if (selfRowSpan <= 0)
 			throw new RuntimeException("selfRowSpan should be >= 1!");
 		this.reportHeaderCell = new ReportHeadingCell(startingDepth, totalRowSpan, selfRowSpan, startColumn, this.getWidth(), this.name);
 		int startColumnSum = 0;
 		for(Column item:this.getSubColumns()) {
-			item.calculatePositionInHeadingLayout(totalRowSpan - this.reportHeaderCell.getRowSpan(), startingDepth + this.reportHeaderCell.getRowSpan(), startColumn + startColumnSum);
+			item.calculatePositionInHeadingLayout(engine, totalRowSpan - this.reportHeaderCell.getRowSpan(), startingDepth + this.reportHeaderCell.getRowSpan(), startColumn + startColumnSum);
 			startColumnSum += item.getWidth();
 		}
 	}
@@ -135,17 +159,17 @@ public class GroupColumn extends Column {
 		return Math.max(1, ret); // at least the column title
 	}
 
-    public int calculateChildrenMaxRowSpan() {    	
+    public int calculateChildrenMaxRowSpan(NiReportsEngine engine) {    	
 		int maxColSpan = 0;
 		for(Column c:this.getSubColumns()) {
-			maxColSpan = Math.max(maxColSpan, c.calculateTotalRowSpan());
+			maxColSpan = Math.max(maxColSpan, c.calculateTotalRowSpan(engine));
 		}
 		return maxColSpan;
     }
 
 	@Override
-	public int calculateTotalRowSpan() {
-		return calculateChildrenMaxRowSpan() + 1; // self + max of children
+	public int calculateTotalRowSpan(NiReportsEngine engine) {
+		return calculateChildrenMaxRowSpan(engine) + computeSelfRowSpanNoSplit(engine);
 	}
 	
 	@Override

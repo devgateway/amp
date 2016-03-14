@@ -34,6 +34,7 @@ public class AmpNiReportsFormatter extends NiReportsFormatter {
 			Supplier<ReportAreaImpl> reportAreaSupplier, OutputSettings outputSettings) {
 		super(spec, runResult, reportAreaSupplier,
 			new CellFormatter(spec.getSettings(), FormatHelper.getDefaultFormat(), MoConstants.DATE_DISPLAY_FORMAT, 
+				TranslatorWorker::translateText,
 				outputSettings == null ? defaultOutputSettings(spec) : outputSettings));
 	}
 

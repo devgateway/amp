@@ -174,7 +174,8 @@ public class WorkspaceFilter
 		//return "41, 43, 44, 45";
 		//return "20, 21"; // masha
 		//return "17041";
-//		return "SELECT amp_activity_id from amp_activity WHERE name IN ('TAC_activity_1', 'Test MTEF directed', 'Pure MTEF Project', 'mtef activity 1', 'Activity with both MTEFs and Act.Comms')";
+		return "SELECT amp_activity_id from amp_activity WHERE name IN ('activity with directed MTEFs', 'Activity with both MTEFs and Act.Comms', 'mtef activity 1', 'mtef activity 2', 'Pure MTEF Project', 'activity with MTEFs', 'activity with many MTEFs',	'Test MTEF directed', 'activity with pipeline MTEFs and act. disb', 'Eth Water', 'Activity with Zones',	'TAC_activity_2')";
+		//return "select amp_activity_id from amp_activity";
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('Proposed Project Cost 1 - USD', 'Test MTEF directed', 'Eth Water', 'activity with directed MTEFs')";
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('Proposed Project Cost 1 - USD', 'Proposed Project Cost 2 - EUR', 'SubNational no percentages', 'Project with documents')";
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('Proposed Project Cost 1 - USD', 'Test MTEF directed', 'Eth Water', 'activity with directed MTEFs')";
@@ -184,7 +185,7 @@ public class WorkspaceFilter
 		//return "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id IN (23184)";
 		//return "SELECT amp_activity_id FROM v_ni_mtef_funding where source_role_id = 1 and amp_activity_id NOT IN (175, 176)";
 		//return "SELECT amp_activity_id FROM amp_activity where name in ('AGRICULTURAL SERVICES SUPPORT PROGRAM-TO VERIFY', 'Sourthen Agriculture Corridor (SAGCOT)')";
-		return TEAM_FILTER;
+		//return TEAM_FILTER;
 	}
 	
 	/**

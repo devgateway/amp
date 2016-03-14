@@ -92,7 +92,8 @@ public class NiReportHtmlRenderer {
 				ReportHeadingCell rhc = col.getReportHeaderCell();
 				String cellHtml = col.splitCell == null ? rhc.getName() : 
 					String.format("%s<br /><font class='headermeta'>%s -> %s</font>", rhc.getName(), col.splitCell.entityType, col.splitCell.info.getComparable());
-				//cellHtml = rhc.getName(); // TODO: temp
+				// cellHtml = rhc.getName(); // TODO: temp
+				// cellHtml += "<br />" + col.getReportHeaderCell().getNumbers(true);
 				res.append(String.format("<td class='nireport_header' rowSpan='%d' colSpan='%d'>%s</td>", rhc.getRowSpan(), rhc.getColSpan(), cellHtml));
 			}
 			res.append("</tr>\n");

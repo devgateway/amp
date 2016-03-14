@@ -83,7 +83,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorFie
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpOverviewSection;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
-import org.dgfoundation.amp.onepager.components.fields.AmpProposedProjectCost;
+import org.dgfoundation.amp.onepager.components.fields.AmpProjectCost;
 import org.dgfoundation.amp.onepager.components.fields.AmpSemanticValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
@@ -249,13 +249,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					}
 				});		
 		
-		visitChildren(AmpProposedProjectCost.class,
-				new IVisitor<AmpProposedProjectCost, Void>() {
+		visitChildren(AmpProjectCost.class,
+				new IVisitor<AmpProjectCost, Void>() {
 					@Override
 					public void component(
-							AmpProposedProjectCost ifs,
+							AmpProjectCost ifs,
 							IVisit<Void> visit) {
-						toggleFormComponent (enabled,target,ifs,visit);
+						toggleFormComponent (enabled, target, ifs, visit, false);
 					}
 				});
 		visitChildren(AmpDonorFundingInfoSubsectionFeature.class,
@@ -268,7 +268,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					}
 				});		
 		
-		visitChildren(AmpProposedProjectCost.class,
+		visitChildren(AmpProjectCost.class,
 				new IVisitor<Component, Object>() {
 					@Override
 					public void component(
@@ -282,18 +282,17 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 						
 						//if it is saving as draft, disable required validator for proposed date
 						if (!enabled) {
-							proposedDate = (AmpDatePickerFieldPanel)component.get("proposedDate");
+							proposedDate = (AmpDatePickerFieldPanel) component.get("funDate");
 						}
 						//if proposed amount is not entered then, disable required validator for proposed Date
-						else if(component.getParent().getParent().getId().equalsIgnoreCase("proposedDate") && 
-                        		component.getParent().getParent().getParent().get("proposedAmount").getDefaultModel().getObject()==null){
+						else if(component.getParent().getParent().getId().equalsIgnoreCase("funDate") && 
+                        		component.getParent().getParent().getParent().get("amount").getDefaultModel().getObject()==null){
 							proposedDate = (AmpDatePickerFieldPanel)component.getParent().getParent();
 						}
 						if (proposedDate != null)  {
 							proposedDate.getDate().setRequired(false);
                     		String js = String.format("$('#%s').change();",proposedDate.getDate().getMarkupId());
     						target.appendJavaScript(js);
-    						visit.stop();
 						}
 					
 					}
@@ -310,9 +309,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	        visit.stop();
 	   }
 
-	       
 	private void toggleFormComponent (boolean enabled, final AjaxRequestTarget target,
 			AmpRequiredComponentContainer ifs, IVisit<Void> visit) {
+		toggleFormComponent(enabled, target, ifs, visit, true);
+	}
+	
+	private void toggleFormComponent (boolean enabled, final AjaxRequestTarget target,
+			AmpRequiredComponentContainer ifs, IVisit<Void> visit, boolean stopVisit) {
 		List <FormComponent<?>> requiredComponents = ifs.getRequiredFormComponents();
 		for (FormComponent<?> component : requiredComponents) {
 		String js = String.format("$('#%s').blur();",
@@ -321,7 +324,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		target.appendJavaScript(js);
 		target.add(component);
 		}
-		visit.stop();
+		// some components like AmpProjectCost do not need to stop and process all elements
+		if (stopVisit)
+			visit.stop();
 	}
 	
 	private ListView<AmpComponentPanel> featureList;

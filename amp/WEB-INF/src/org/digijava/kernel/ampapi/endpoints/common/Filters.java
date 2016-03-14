@@ -539,7 +539,7 @@ public class Filters {
 	@GET
 	@Path("/expenditureClass/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "ExpenditureClass", columns = ColumnConstants.EXPENDITURE_CLASS, name="Expenditure Class")
+	@ApiMethod(ui = true, id = "ExpenditureClassList", columns = ColumnConstants.EXPENDITURE_CLASS, name="Expenditure Class", tab=EPConstants.TAB_FINANCIALS)
 	public JsonBean getExpenditureClass() {
 		return getCategoryValue(CategoryConstants.EXPENDITURE_CLASS_KEY, ColumnConstants.EXPENDITURE_CLASS);
 	}

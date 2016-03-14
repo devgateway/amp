@@ -366,6 +366,7 @@ public class AmpARFilterConverter {
 		addCategoryValueNamesFilter(arFilter.getAidModalities(), ColumnConstants.PLEDGES_AID_MODALITY);
 		addCategoryValueNamesFilter(arFilter.getTypeOfAssistance(), ColumnConstants.TYPE_OF_ASSISTANCE);
 		addCategoryValueNamesFilter(arFilter.getModeOfPayment(), ColumnConstants.MODE_OF_PAYMENT);
+		addCategoryValueNamesFilter(arFilter.getExpenditureClass(), ColumnConstants.EXPENDITURE_CLASS);
 		//TODO capital vs Recurrent
 		//addCategoryValueNamesFilter(arFilter.get, ColumnConstants., ReportEntityType.ENTITY_TYPE_ACTIVITY);
 		addCategoryValueNamesFilter(arFilter.getBudget(), ColumnConstants.ON_OFF_TREASURY_BUDGET);

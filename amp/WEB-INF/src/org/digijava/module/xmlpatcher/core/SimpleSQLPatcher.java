@@ -376,7 +376,11 @@ public class SimpleSQLPatcher {
             // AMP-21756: it is not yet used, thus let's recreate
             addPatch(new SimpleSQLPatch("013",
             		"DROP TABLE IF EXISTS amp_inflation_rates CASCADE"
-            ));            
+            ));
+            // AMP-22428: fixing amp_activity that was deleted and then restored
+            addPatch(new SimpleSQLPatch("014",
+            		"UPDATE amp_xml_patch SET state = 0 WHERE patch_id = 'amp_activity.xml'"
+            ));
 	}};
 	DataSource dataSource;
 	

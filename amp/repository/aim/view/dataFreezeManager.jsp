@@ -86,7 +86,7 @@
 					</div>
 					<div class="settings-right">
 						<html:checkbox property="enabled"
-							onclick="handleValidationPeriodClick(this);" />
+							onclick="handleCheckboxClick(this);" />
 					</div>
 				</div>
 				<div class="settings-blocks">
@@ -119,12 +119,15 @@
 	src="/repository/aim/view/scripts/common.js"></script>
 
 <script language="JavaScript" type="text/javascript">
+function handleCheckboxClick(){
+	$('input[name="gracePeriod"]').attr('disabled',!$('input[name="enabled"]').is(':checked'));
+	$('input[name="gracePeriod"]').val('');
+}
 	function saveDataFreezeManager() {
-		var alertGracePeriod = '<digi:trn>Grace period should be between 1 and 30</digi:trn>';
-		debugger;
-		if (isEmpty($('input[name="gracePeriod"]').val())
-				|| $('input[name="gracePeriod"]').val() < 1
-				|| $('input[name="gracePeriod"]').val() > 31) {
+		var alertGracePeriod = '<digi:trn>Grace period should be between 0 and 30</digi:trn>';
+		if ($('input[name="enabled"]').is(':checked') && (  isEmpty($('input[name="gracePeriod"]').val())
+				|| $('input[name="gracePeriod"]').val() < 0
+				|| $('input[name="gracePeriod"]').val() > 31)) {
 			alert(alertGracePeriod);
 			return false;
 		}

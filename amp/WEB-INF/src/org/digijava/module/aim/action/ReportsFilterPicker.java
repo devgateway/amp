@@ -767,6 +767,9 @@ public class ReportsFilterPicker extends Action {
 			addFinancingLocationElement(filterForm, null, "All Aid Modality Values", CategoryConstants.AID_MODALITY_KEY, "Aid Modality", "filter_aid_modality_div", "selectedAidModalities");
 		
 		addFinancingLocationElement(filterForm, null, "All Type of Assistance Values", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, "Type of Assistance", "filter_type_of_assistance_div", "selectedTypeOfAssistance");
+		
+		addFinancingLocationElement(filterForm, null, "All Expenditure Class Values", CategoryConstants.EXPENDITURE_CLASS_KEY, "Expenditure Class", "filter_expenditure_class_div", "selectedExpenditureClasses");
+		
 		if (FeaturesUtil.isVisibleField("Mode of Payment") && isFalse(filterForm.getPledged())) {
 			addFinancingLocationElement(filterForm, "Mode of Payment", "All Mode of Payment Values", CategoryConstants.MODE_OF_PAYMENT_KEY, "Mode of Payment", "filter_mode_of_payment_div", "selectedModeOfPayment");
 		}else{
@@ -787,14 +790,7 @@ public class ReportsFilterPicker extends Action {
 							rootActivityStatus, "selectedStatuses");
 			filterForm.getOtherCriteriaElements().add(activityStatusElement);
 		}
-		if (true) { //Here needs to be a check to see if the field/feature is enabled
-			Collection<AmpCategoryValue> expenditureClassesValues	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.EXPENDITURE_CLASS_KEY, true);	
-			HierarchyListableImplementation rootExpenditureClass	= new HierarchyListableImplementation("All", "0", expenditureClassesValues);
-			GroupingElement<HierarchyListableImplementation> expenditureClassElement	=
-					new GroupingElement<HierarchyListableImplementation>("Expenditure Class", "filter_expenditure_class_div", 
-							rootExpenditureClass, "selectedExpenditureClasses");
-			filterForm.getOtherCriteriaElements().add(expenditureClassElement);
-		}
+		
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
 			Collection<AmpTeam> creatorsList	= TeamUtil.getAllRelatedTeams();
 			List<HierarchyListableImplementation> children	= new ArrayList<HierarchyListableImplementation>();

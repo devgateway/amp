@@ -31,6 +31,7 @@
 <module:display name="M & E" parentModule="MONITORING AND EVALUATING"></module:display>
 <module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD"></module:display>
+<module:display name="Organizations" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Paris Indicators" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Previews" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Program" parentModule="PROJECT MANAGEMENT"></module:display>

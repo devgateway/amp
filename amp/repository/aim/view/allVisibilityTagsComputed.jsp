@@ -66,6 +66,7 @@
 <feature:display name="Aid Effectiveness" module="Aid Effectiveness Section"></feature:display>
 <module:display name="PI Reports" parentModule="REPORTING"></module:display>
 <module:display name="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Organizations" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Paris Indicators" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Portfolio" parentModule="PARIS INDICATORS"></module:display> 
 <module:display name="Previews" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -140,6 +141,14 @@
 <module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 
 <feature:display name="Activity" module="M & E"></feature:display> 
+
+<feature:display name="Beneficiary Agency" module="Organizations"></feature:display> 
+<feature:display name="Contracting Agency" module="Organizations"></feature:display> 
+<feature:display name="Executing Agency" module="Organizations"></feature:display>
+<feature:display name="Implementing Agency" module="Organizations"></feature:display> 
+<feature:display name="Regional Group" module="Organizations"></feature:display> 
+<feature:display name="Responsible Organization" module="Organizations"></feature:display> 
+<feature:display name="Sector Group" module="Organizations"></feature:display> 
 
 <feature:display name="AddMessageButton" module="Messages"></feature:display> 
 <feature:display name="Admin - Component Type" module="Components"></feature:display> 
@@ -827,6 +836,30 @@
 <field:display name="Measure Commitment" feature="GIS DASHBOARD"></field:display>
 <field:display name="Measure Disbursement" feature="GIS DASHBOARD"></field:display>
 <field:display name="Measure Expenditure" feature="GIS DASHBOARD"></field:display>
+
+<field:display name="Beneficiary Agency" feature="Beneficiary Agency"></field:display> 
+<field:display name="Contracting Agency" feature="Contracting Agency"></field:display> 
+<field:display name="Executing Agency" feature="Executing Agency"></field:display>
+<field:display name="Implementing Agency" feature="Implementing Agency"></field:display>
+<field:display name="Regional Group" feature="Regional Group"></field:display>
+<field:display name="Responsible Organization" feature="Responsible Organization"></field:display> 
+<field:display name="Sector Group" feature="Sector Group"></field:display>
+<field:display name="Beneficiary Agency Groups" feature="Beneficiary Agency"></field:display> 
+<field:display name="Beneficiary Agency  Department/Division"  feature="Beneficiary Agency"></field:display>
+<field:display name="Contracting Agency Department/Division"  feature="Contracting Agency"></field:display>
+<field:display name="Contracting Agency Groups" feature="Contracting Agency"></field:display>
+<field:display name="Contracting Agency Acronym"  feature="Contracting Agency"></field:display>
+<field:display name="Executing Agency Groups" feature="Executing Agency"></field:display>
+<field:display name="Executing Agency Type" feature="Executing Agency"></field:display>   
+<field:display name="Executing Agency Department/Division" feature="Executing Agency"></field:display>
+<field:display name="Implementing Agency Groups" feature="Implementing Agency"></field:display>
+<field:display name="Implementing Agency Type" feature="Implementing Agency"></field:display>  
+<field:display name="Implementing Agency Department/Division"  feature="Implementing Agency"></field:display> 
+<field:display name="Regional Group" feature="Regional Group"></field:display>
+<field:display name="Regional Group Department/Division"  feature="Regional Group"></field:display> 
+<field:display name="Responsible Organization Groups" feature="Responsible Organization"></field:display> 
+<field:display name="Responsible Organization Department/Division"  feature="Responsible Organization"></field:display>
+<field:display name="Sector Group Department/Division"  feature="Sector Group"></field:display>
 
 <feature:display name="Use icons for Sectors in Project List" module="/GIS"></feature:display>
 

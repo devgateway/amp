@@ -129,7 +129,7 @@ $( document ).ready(function() {
 	});
 	
 	//only allow numbers
-	$('input[name="gracePeriod"]').on("click",function () {
+	$('input[name="gracePeriod"]').on("keydown",function () {
 		// Allow only backspace and delete
 		if ( event.keyCode == 46 || event.keyCode == 8 ) {
 		}

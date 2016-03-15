@@ -51,6 +51,7 @@ function resetFilter(){
        
         
         resetElement(aimReportsFilterPickerForm.selectedTypeOfAssistance);
+        resetElement(aimReportsFilterPickerForm.selectedExpenditureClasses);
         resetElement(aimReportsFilterPickerForm.selectedModeOfPayment);
         resetElement(aimReportsFilterPickerForm.selectedProjectImplUnit);
  		resetElement(aimReportsFilterPickerForm.selectedDonorGroups);

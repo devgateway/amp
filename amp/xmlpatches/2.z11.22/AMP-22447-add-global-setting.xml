@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="false"
+        xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+        <jira>AMP-20655</jira>
+        <keyword>Global settings</keyword>
+        <author>jdeanquin</author>
+        <description>Hide Word Export in Activity Preview for not logged in users true false</description>
+        <apply>
+                <script>
+                        <lang delimiter=";" type="postgres">
+                                INSERT INTO amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section)
+                                VALUES (nextval('amp_global_settings_seq'), 'Hide word export public view', 'false', 't_Boolean', 'Hide Word Export in Activity Preview for not logged in users', 'general');
+                        </lang>
+                </script>
+        </apply>
+</tns:patch>

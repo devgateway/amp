@@ -202,9 +202,14 @@ public class GlobalSettingsConstants {
     public static final String  MEASURE_B_FOR_FUNDING_GAP_NOTIFICATION ="Measure B for Funding gap notification";
     
     public static final String  DEFAULT_VALUE_FOR_ACTIVITY_BUDGET = "Default value for Activity Budget";
+    
+    public static final String  HIDE_WORD_EXPORT_PUBLIC_VIEW = "Hide word export public view";
     /**
      * fields which, although existing in the database, should be rendered with a display: none on the GlobalSettings form so that the user never has a chance of changing their value
      */
 	public final static Set<String> SETTINGS_TO_HIDE = new HashSet<>(Arrays.asList(REPORT_WIZARD_VISIBILITY_SOURCE));
+	
+	
+	
 
 }

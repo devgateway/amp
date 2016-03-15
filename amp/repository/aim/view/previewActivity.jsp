@@ -360,11 +360,17 @@ function collapseAll() {
 			<a onclick="javascript:exportToPdf(${actId})" class="l_sm" style="cursor: pointer; color:#376091;" title="${trn}">
 				<img src="img_2/ico_pdf.gif" />${trn}
 			</a>
-			
-			<a onclick="javascript:exportToWord(${actId})" class="l_sm" style="cursor: pointer; color:#376091;">
-				<img src="img_2/ico_word.gif" />
-				<digi:trn>Export to Word</digi:trn>
-			</a>
+
+			<c:set var="hideWordSetting" scope="page" value="false"/>
+			<gs:test name="<%=org.digijava.module.aim.helper.GlobalSettingsConstants.HIDE_WORD_EXPORT_PUBLIC_VIEW%>" compareWith="true" onTrueEvalBody="true">
+						<c:set var="hideWordSetting" scope="page" value="true"/>
+			</gs:test>
+			<c:if test="${(not hideWordSetting) || (hideWordSetting && sessionScope.currentMember != null)}">
+				<a onclick="javascript:exportToWord(${actId})" class="l_sm" style="cursor: pointer; color:#376091;">
+					<img src="img_2/ico_word.gif" />
+						<digi:trn>Export to Word</digi:trn>
+				</a>
+			</c:if>
 			<logic:present name="currentMember" scope="session">
 	    	<a onclick="window.open('/showPrinterFriendlyPage.do?edit=true', '_blank', '');" class="l_sm" style="cursor: pointer; color:#376091;" title="<digi:trn key="aim:print">Print</digi:trn>">
 	    		<img src="img_2/ico_print.gif" width="15" height="18" />

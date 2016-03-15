@@ -58,8 +58,8 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 		for(String transactionName:ArConstants.TRANSACTION_TYPE_NAME_TO_ID.keySet())
 			put("/Activity Form/Funding/Funding Group/Funding Item/" + transactionName, transactionName);
 			put("/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Capital Spending Percentage", CAPITAL_SPENDING_PERCENTAGE_ID_NAME);
-			put("/Activity Form/Funding/Proposed Project Cost/Annual Proposed Project Cost/Add Projection", ANNUAL_PROPOSED_PROJECT_COST_ID_NAME);
-			put("/Activity Form/Funding/Proposed Project Cost/Amount", PROPOSED_PROJECT_COST_ID_NAME);
+			put("/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost/Add Projection", ANNUAL_PROPOSED_PROJECT_COST_ID_NAME);
+			put("/Activity Form/Funding/Overview Section/Proposed Project Cost/Amount", PROPOSED_PROJECT_COST_ID_NAME);
 			put("/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Recipient Organization", DIRECTED_DISBURSEMENTS_ID_NAME);
 			put("/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections", MTEF_ID_NAME);
 	}};

@@ -428,7 +428,6 @@
 <field:display name="Add Donor Funding Button" feature="Funding Information"></field:display> 
 <field:display name="Add Donor Organization" feature="Funding Information"></field:display> 
 <field:display name="Add Expenditure Button" feature="Expenditures"></field:display> 
-<field:display name="Add Funding Button - Proposed Project Cost" feature="Proposed Project Cost"></field:display>
 <field:display name="Add IPA Contract" feature="Contracting"></field:display> 
 <field:display name="Add Indicator Button" feature="Activity"></field:display> 
 <field:display name="Add Issues Button" feature="Issues"></field:display> 
@@ -676,7 +675,6 @@ deleted 6 fields, do not reinsert
 <field:display name="Draft" feature="Identification"></field:display> 
 <field:display name="Edit Components Link" feature="Activity - Component Step"></field:display> 
 <field:display name="Edit Contract" feature="Contracting"></field:display> 
-<field:display name="Edit Funding Button- Proposed Project Cost" feature="Proposed Project Cost"></field:display> 
 <field:display name="Edit Funding Link - Donor Organization" feature="Funding Information"></field:display> 
 <field:display name="Edit Funding Link" feature="Regional Funding"></field:display> 
 <field:display name="Enable checkbox" feature="Admin - Component Type"></field:display> 
@@ -855,9 +853,6 @@ deleted 6 fields, do not reinsert
 <field:display name="Closing Dates" feature="Planning"></field:display>
 <field:display name="Proposed Project Amount" feature="Proposed Project Cost"></field:display> 
 <field:display name="Revised Project Amount" feature="Proposed Project Cost"></field:display>
-<field:display name="Proposed Project Currency" feature="Proposed Project Cost"></field:display> 
-<field:display name="Proposed Project Date" feature="Proposed Project Cost"></field:display> 
-<field:display name="Proposed Project Planned" feature="Proposed Project Cost"></field:display> 
 <field:display name="Proposed Start Date" feature="Planning"></field:display> 
 <field:display name="Purpose" feature="Identification"></field:display> 
 <field:display name="Recievers" feature="Create Message Form"></field:display>
@@ -874,7 +869,6 @@ deleted 6 fields, do not reinsert
 <field:display name="Remove Components Button" feature="Activity - Component Step"></field:display> 
 <field:display name="Remove Documents Button" feature="Related Documents"></field:display> 
 <field:display name="Remove Donor Organization" feature="Funding Information"></field:display> 
-<field:display name="Remove Funding Button - Proposed Project Cost" feature="Proposed Project Cost"></field:display> 
 <field:display name="Remove Fundings" feature="Regional Funding"></field:display> 
 <field:display name="Remove Issues Button" feature="Issues"></field:display> 
 <field:display name="Remove Location" feature="Location"></field:display> 

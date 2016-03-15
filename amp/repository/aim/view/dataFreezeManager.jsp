@@ -127,6 +127,19 @@ $( document ).ready(function() {
 		$('input[name="gracePeriod"]').attr('disabled',!$('input[name="enabled"]').is(':checked'));
 		$('input[name="gracePeriod"]').val('');
 	});
+	
+	//only allow numbers
+	$('input[name="gracePeriod"]').on("click",function () {
+		// Allow only backspace and delete
+		if ( event.keyCode == 46 || event.keyCode == 8 ) {
+		}
+		else {
+			// Ensure that it is a number and stop the keypress
+			if (event.keyCode < 48 || event.keyCode > 57 ) {
+			event.preventDefault();	
+				}	
+			}
+	});
 });	
 
 	function saveDataFreezeManager() {

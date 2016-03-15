@@ -7,6 +7,13 @@ import org.digijava.module.aim.helper.Constants;
 
 public class AmpTrivialMeasure extends NiTransactionMeasure {
 
+	/**
+	 * trivial measure which discerns between directed/nondirected
+	 * @param measureName
+	 * @param transactionType
+	 * @param adjustmentTypeName
+	 * @param directed
+	 */
 	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed) {
 		super(measureName, 
 				cac -> 
@@ -14,6 +21,20 @@ public class AmpTrivialMeasure extends NiTransactionMeasure {
 					cac.metaInfo.containsMeta(MetaCategory.ADJUSTMENT_TYPE.category, adjustmentTypeName) &&
 					(directed ? isDirected(cac) : isDonorSourced(cac)),
 					directed ? new DirectedMeasureBehaviour() : TrivialMeasureBehaviour.getInstance(),
+				AmpReportsSchema.measureDescriptions.get(measureName)
+			);
+	}
+	
+	/**
+	 * trivial measure which filters by transactionType only
+	 * @param measureName
+	 * @param transactionType
+	 */
+	public AmpTrivialMeasure(String measureName, long transactionType) {
+		super(measureName, 
+				cac -> 
+					cac.metaInfo.containsMeta(MetaCategory.TRANSACTION_TYPE.category, Long.valueOf(transactionType)),
+					TrivialMeasureBehaviour.getInstance(),
 				AmpReportsSchema.measureDescriptions.get(measureName)
 			);
 	}

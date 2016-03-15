@@ -95,7 +95,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		Map<Long, String> roles = DatabaseViewFetcher.fetchInternationalizedView("amp_role", null, "amp_role_id", "role_code");
 		
 		//Map<Long, String> currencyCodes = DatabaseViewFetcher.fetchInternationalizedView("amp_currency", null, "amp_currency_id", "currency_code");
-		VivificatingMap<Long, AmpCurrency> currencies = new VivificatingMap<Long, AmpCurrency>(new HashMap<>(), id -> CurrencyUtil.getAmpcurrency(id));
+		VivificatingMap<Long, AmpCurrency> currencies = new VivificatingMap<Long, AmpCurrency>(new HashMap<>(), CurrencyUtil::getAmpcurrency);
 		
 		AmpReportsSchema schema = (AmpReportsSchema) engine.schema;
 		AmpCurrency usedCurrency = scratchpad.getUsedCurrency();

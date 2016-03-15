@@ -37,6 +37,17 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 		"activity with pipeline MTEFs and act. disb"
 	);
 	
+	final List<String> ppcActs = Arrays.asList(
+			"Proposed Project Cost 1 - USD",
+			"Proposed Project Cost 2 - EUR",
+			"SubNational no percentages",
+			"Activity with primary_tertiary_program",
+			"activity with primary_program",
+			"activity with tertiary_program",
+			"activity 1 with agreement",
+			"activity with directed MTEFs"
+		);
+	
 	public AmpSchemaSanityTests() {
 		super("AmpReportsSchema sanity tests");
 	}
@@ -383,5 +394,74 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 		
 		runNiTestCase(spec("AMP-22322-directed-mtefs"), "en", mtefActs, corPlain);
 		runNiTestCase(spec("AMP-22322-directed-mtefs-by-beneficiary"), "en", mtefActs, corByBenf);
+	}
+	
+	@Test
+	public void testProposedProjectCost() {
+		NiReportModel corPPCUSD = new NiReportModel("Proposed-cost-USD")
+		.withHeaders(Arrays.asList(
+				"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 8))",
+				"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Proposed Project Amount: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 4));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 6, colSpan: 2))",
+				"(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2))",
+				"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1))"))
+			.withWarnings(Arrays.asList())
+			.withBody(      new ReportAreaForTests(null)
+		      .withContents("Project Title", "", "Proposed Project Amount", "4 630 902,72", "Funding-2014-Actual Commitments", "172 000", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "580 245", "Funding-2015-Actual Disbursements", "321 765", "Totals-Actual Commitments", "752 245", "Totals-Actual Disbursements", "321 765")
+		      .withChildren(
+		        new ReportAreaForTests(null, "Project Title", "activity 1 with agreement", "Funding-2015-Actual Commitments", "456 789", "Funding-2015-Actual Disbursements", "321 765", "Totals-Actual Commitments", "456 789", "Totals-Actual Disbursements", "321 765"),
+		        new ReportAreaForTests(null, "Project Title", "Proposed Project Cost 2 - EUR", "Proposed Project Amount", "3 399 510,47"),
+		        new ReportAreaForTests(null, "Project Title", "SubNational no percentages", "Proposed Project Amount", "60 000", "Funding-2014-Actual Commitments", "75 000", "Totals-Actual Commitments", "75 000"),
+		        new ReportAreaForTests(null, "Project Title", "activity with directed MTEFs", "Funding-2015-Actual Commitments", "123 456", "Totals-Actual Commitments", "123 456"),
+		        new ReportAreaForTests(null, "Project Title", "Activity with primary_tertiary_program", "Proposed Project Amount", "66 392,25", "Funding-2014-Actual Commitments", "50 000", "Totals-Actual Commitments", "50 000"),
+		        new ReportAreaForTests(null, "Project Title", "activity with primary_program", "Proposed Project Amount", "35 000", "Funding-2014-Actual Commitments", "32 000", "Totals-Actual Commitments", "32 000"),
+		        new ReportAreaForTests(null, "Project Title", "activity with tertiary_program", "Proposed Project Amount", "70 000", "Funding-2014-Actual Commitments", "15 000", "Totals-Actual Commitments", "15 000"),
+		        new ReportAreaForTests(null, "Project Title", "Proposed Project Cost 1 - USD", "Proposed Project Amount", "1 000 000")      ));
+
+		runNiTestCase(spec("Proposed-cost-USD"), "en", ppcActs, corPPCUSD);
+		
+		NiReportModel corPPCEUR = new NiReportModel("Proposed-cost-EUR")
+		.withHeaders(Arrays.asList(
+				"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 8))",
+				"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Proposed Project Amount: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 4));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 6, colSpan: 2))",
+				"(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2))",
+				"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1))"))
+			.withWarnings(Arrays.asList())
+			.withBody(      new ReportAreaForTests(null)
+		      .withContents("Project Title", "", "Proposed Project Amount", "3 444 862", "Funding-2014-Actual Commitments", "129 533", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "529 416", "Funding-2015-Actual Disbursements", "293 578", "Totals-Actual Commitments", "658 949", "Totals-Actual Disbursements", "293 578")
+		      .withChildren(
+		        new ReportAreaForTests(null, "Project Title", "activity 1 with agreement", "Funding-2015-Actual Commitments", "416 774", "Funding-2015-Actual Disbursements", "293 578", "Totals-Actual Commitments", "416 774", "Totals-Actual Disbursements", "293 578"),
+		        new ReportAreaForTests(null, "Project Title", "Proposed Project Cost 2 - EUR", "Proposed Project Amount", "2 500 000"),
+		        new ReportAreaForTests(null, "Project Title", "SubNational no percentages", "Proposed Project Amount", "45 186", "Funding-2014-Actual Commitments", "56 482", "Totals-Actual Commitments", "56 482"),
+		        new ReportAreaForTests(null, "Project Title", "activity with directed MTEFs", "Funding-2015-Actual Commitments", "112 641", "Totals-Actual Commitments", "112 641"),
+		        new ReportAreaForTests(null, "Project Title", "Activity with primary_tertiary_program", "Proposed Project Amount", "50 000", "Funding-2014-Actual Commitments", "37 655", "Totals-Actual Commitments", "37 655"),
+		        new ReportAreaForTests(null, "Project Title", "activity with primary_program", "Proposed Project Amount", "26 358", "Funding-2014-Actual Commitments", "24 099", "Totals-Actual Commitments", "24 099"),
+		        new ReportAreaForTests(null, "Project Title", "activity with tertiary_program", "Proposed Project Amount", "52 717", "Funding-2014-Actual Commitments", "11 296", "Totals-Actual Commitments", "11 296"),
+		        new ReportAreaForTests(null, "Project Title", "Proposed Project Cost 1 - USD", "Proposed Project Amount", "770 600")      ));
+
+		runNiTestCase(spec("Proposed-cost-EUR"), "en", ppcActs, corPPCEUR);
+	}
+	
+	@Test
+	public void testAnnualProposedProjectCost() {
+		NiReportModel corAnnualPPC = new NiReportModel("Annual-Proposed-Project-Cost")
+		.withHeaders(Arrays.asList(
+				"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 12))",
+				"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Proposed Project Amount: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 8));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 10, colSpan: 2))",
+				"(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 8, colSpan: 2))",
+				"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Annual Proposed Project Cost: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Annual Proposed Project Cost: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Annual Proposed Project Cost: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Annual Proposed Project Cost: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Annual Proposed Project Cost: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1))"))
+			.withWarnings(Arrays.asList())
+			.withBody(      new ReportAreaForTests(null)
+		      .withContents("Project Title", "", "Proposed Project Amount", "4 630 902,72", "Funding-2012-Actual Commitments", "0", "Funding-2012-Annual Proposed Project Cost", "350 000", "Funding-2013-Actual Commitments", "0", "Funding-2013-Annual Proposed Project Cost", "726 072,61", "Funding-2014-Actual Commitments", "172 000", "Funding-2014-Annual Proposed Project Cost", "3 382 784,49", "Funding-2015-Actual Commitments", "580 245", "Funding-2015-Annual Proposed Project Cost", "0", "Totals-Actual Commitments", "752 245", "Totals-Annual Proposed Project Cost", "4 458 857,1")
+		      .withChildren(
+		        new ReportAreaForTests(null, "Project Title", "activity 1 with agreement", "Funding-2015-Actual Commitments", "456 789", "Totals-Actual Commitments", "456 789"),
+		        new ReportAreaForTests(null, "Project Title", "Proposed Project Cost 2 - EUR", "Proposed Project Amount", "3 399 510,47", "Funding-2014-Annual Proposed Project Cost", "3 250 000", "Totals-Annual Proposed Project Cost", "3 250 000"),
+		        new ReportAreaForTests(null, "Project Title", "SubNational no percentages", "Proposed Project Amount", "60 000", "Funding-2014-Actual Commitments", "75 000", "Totals-Actual Commitments", "75 000"),
+		        new ReportAreaForTests(null, "Project Title", "activity with directed MTEFs", "Funding-2015-Actual Commitments", "123 456", "Totals-Actual Commitments", "123 456"),
+		        new ReportAreaForTests(null, "Project Title", "Activity with primary_tertiary_program", "Proposed Project Amount", "66 392,25", "Funding-2014-Actual Commitments", "50 000", "Totals-Actual Commitments", "50 000"),
+		        new ReportAreaForTests(null, "Project Title", "activity with primary_program", "Proposed Project Amount", "35 000", "Funding-2014-Actual Commitments", "32 000", "Totals-Actual Commitments", "32 000"),
+		        new ReportAreaForTests(null, "Project Title", "activity with tertiary_program", "Proposed Project Amount", "70 000", "Funding-2014-Actual Commitments", "15 000", "Totals-Actual Commitments", "15 000"),
+		        new ReportAreaForTests(null, "Project Title", "Proposed Project Cost 1 - USD", "Proposed Project Amount", "1 000 000", "Funding-2012-Annual Proposed Project Cost", "350 000", "Funding-2013-Annual Proposed Project Cost", "726 072,61", "Funding-2014-Annual Proposed Project Cost", "132 784,49", "Totals-Annual Proposed Project Cost", "1 208 857,1")      ));
+
+		runNiTestCase(spec("Annual-Proposed-Project-Cost"), "en", ppcActs, corAnnualPPC);
 	}
 }

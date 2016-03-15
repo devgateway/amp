@@ -85,8 +85,7 @@
 						<digi:trn>Enabled</digi:trn>
 					</div>
 					<div class="settings-right">
-						<html:checkbox property="enabled"
-							onclick="handleCheckboxClick(this);" />
+						<html:checkbox property="enabled"/>
 					</div>
 				</div>
 				<div class="settings-blocks">
@@ -119,10 +118,15 @@
 	src="/repository/aim/view/scripts/common.js"></script>
 
 <script language="JavaScript" type="text/javascript">
-function handleCheckboxClick(){
+$( document ).ready(function() {
 	$('input[name="gracePeriod"]').attr('disabled',!$('input[name="enabled"]').is(':checked'));
-	$('input[name="gracePeriod"]').val('');
-}
+	
+	$('input[name="enabled"]').on("click",function(){
+		$('input[name="gracePeriod"]').attr('disabled',!$('input[name="enabled"]').is(':checked'));
+		$('input[name="gracePeriod"]').val('');
+	});
+});	
+
 	function saveDataFreezeManager() {
 		var alertGracePeriod = '<digi:trn>Grace period should be between 0 and 30</digi:trn>';
 		if ($('input[name="enabled"]').is(':checked') && (  isEmpty($('input[name="gracePeriod"]').val())

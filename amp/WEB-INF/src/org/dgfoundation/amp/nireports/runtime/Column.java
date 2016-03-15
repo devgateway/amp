@@ -36,18 +36,6 @@ public abstract class Column {
 	public abstract String debugDigest(boolean withContents);
 	public abstract<K> K accept(ColumnVisitor<K> cv);
 	
-	// header-related stuff
-	/**
-	 * the total <b>rowspan</b> of this column and all of this subcolumns in the report's heading<br />
-	 * for the rowspan of this column per se (the number of columns needed to display its title), please see {@link #getNewRowSpan()} <br />
-	 * only called once per item when initialized CRD
-	 * @return
-	 */
-	public abstract int calculateTotalRowSpan(NiReportsEngine engine);
-	
-	public abstract void calculatePositionInHeadingLayout(NiReportsEngine engine, int totalRowSpan, int startingDepth, int startingColumn);
-	/** returns the width of a Column in the header. Each leaf counts for one */
-	public abstract int getWidth();
 	/**
 	 * @return an ordered list of the leaf columns
 	 */

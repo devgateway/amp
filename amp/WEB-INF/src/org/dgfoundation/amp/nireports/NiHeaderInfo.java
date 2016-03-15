@@ -9,6 +9,7 @@ import java.util.TreeMap;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
 import org.dgfoundation.amp.nireports.runtime.GroupColumn;
+import org.dgfoundation.amp.nireports.runtime.HeaderCalculator;
 
 /**
  * the header layout of a NiReport
@@ -30,7 +31,7 @@ public class NiHeaderInfo {
 		this.rootColumn = rootColumn;
 		this.leafColumns = rootColumn.getLeafColumns();
 		this.nrHierarchies = nrHierarchies;
-		rootColumn.calculateHeaders(engine);
+		new HeaderCalculator(engine).calculate(rootColumn);
 		this.rasterizedHeaders = Collections.unmodifiableList(buildRasterizedHeaders(rootColumn));
 	}
 		

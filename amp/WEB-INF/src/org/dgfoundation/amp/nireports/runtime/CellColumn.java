@@ -84,21 +84,6 @@ public class CellColumn extends Column {
 		else
 			return shortDigest;
 	}
-
-	@Override
-	public void calculatePositionInHeadingLayout(NiReportsEngine engine, int totalRowSpan, int startingDepth, int startingColumn) {
-		this.reportHeaderCell = new ReportHeadingCell(startingDepth, totalRowSpan, totalRowSpan, startingColumn, this.getWidth(), this.name);
-	}
-
-	@Override
-	public int calculateTotalRowSpan(NiReportsEngine engine) {
-		return 1;
-	}
-
-	@Override
-	public int getWidth() {
-		return 1;
-	}
 	
 	@Override
 	public List<Column> getChildrenStartingAtDepth(int depth) {

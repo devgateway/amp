@@ -77,13 +77,14 @@
 	<div class="scorecard-container">
 		<fieldset>
 			<legend>
-				<digi:trn>Data freeze Settings</digi:trn>
+				<digi:trn>Data Freeze Settings</digi:trn>
 			</legend>
 			<div>
 				<div class="settings-blocks">
 					<div class="settings-left">
 						<digi:trn>Enabled</digi:trn>
-					</div>
+						<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="admin:dataFreezeManager">Block users from editing financial information for the subsequent quarter after which it was entered</digi:trn>">
+						</div>
 					<div class="settings-right">
 						<html:checkbox property="enabled"/>
 					</div>
@@ -91,6 +92,7 @@
 				<div class="settings-blocks">
 					<div class="settings-left">
 						<digi:trn>Grace Period</digi:trn>
+						<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="admin:dataFreezeManager">Number of days after the quarter in which the user can continue to edit data. To disable grace period enter 0</digi:trn>">						
 					</div>
 					<div class="settings-right">
 						<html:text property="gracePeriod" styleClass="inp-text" />

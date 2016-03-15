@@ -19,6 +19,7 @@ module.exports = BackboneDash.Model.extend({
   },
 
   select: function(optionId, triggerChange) {
+	var self = this;
     // unselect old
     var old = _(this.attributes.options).findWhere({selected: true});
 	if(old !== null && old !== undefined) {
@@ -36,6 +37,9 @@ module.exports = BackboneDash.Model.extend({
 	    		newOpt.selected = true;
 	    	} else {
 	    		console.info('Saved currency was deleted.');
+	    		// Select default currency.
+	    		newOpt = _(this.attributes.originalAllCurrencies).findWhere({id: _.find(app.settings.models, function(item) {return item.id === "1";}).get('defaultId')});
+	    		newOpt.selected = true;
 	    	}
     	}
     }

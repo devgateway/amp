@@ -2469,11 +2469,11 @@ public class ExportActivityToWord extends Action {
                                 .addRowData(modeOfPayment));
                     }
                 }
-                if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Donor Objective")) {
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Donor Objective") && (fnd.getDonorObjective() != null)) {
                     eshDonorInfo.addRowData((new ExportSectionHelperRowData("Donor Objective", null, null, true))
                             .addRowData(fnd.getDonorObjective()));
                 }
-                if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Conditions")) {
+                if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Conditions") && (fnd.getConditions() != null)) {
                     eshDonorInfo.addRowData((new ExportSectionHelperRowData("Conditions", null, null, true))
                             .addRowData(fnd.getConditions()));
                 }

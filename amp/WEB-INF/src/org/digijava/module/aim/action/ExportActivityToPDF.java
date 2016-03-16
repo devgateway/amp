@@ -2787,13 +2787,13 @@ public class ExportActivityToPDF extends Action {
                             }
                         }
                         //Donor objective
-                        if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Donor Objective"))
-                        {
-                            addNewInfoCell(fundingTable, "Donor Objective", funding.getDonorObjective());
+                        if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Donor Objective") && (funding.getDonorObjective() != null))
+                        {                        	
+                            addNewInfoCell(fundingTable, "Donor Objective", funding.getDonorObjective());                        	
                         }
                         //Funding conditions
-                        if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Conditions")){
-                            addNewInfoCell(fundingTable, "Conditions", funding.getConditions());
+                        if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Conditions") && (funding.getConditions() != null)){                        	
+                            addNewInfoCell(fundingTable, "Conditions", funding.getConditions());                        	                           
                         }
                         //Agreement
                         if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement"))

@@ -198,6 +198,7 @@
 																</logic:notEmpty>
 																
 																<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
+																<logic:notEmpty name="funding" property="donorObjective">
 																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Donor Objective" parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 																	<tr>
 																		<td align="left" width="150"><a
@@ -210,7 +211,8 @@
 																		</td>
 																	</tr>
 																</module:display>
-
+																</logic:notEmpty>
+                                                             <logic:notEmpty name="funding" property="conditions">
                                                                 <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Conditions" parentModule="/Activity Form/Funding/Funding Group/Funding Item">
                                                                     <tr>
                                                                         <td align="left" width="150"><a
@@ -223,7 +225,7 @@
                                                                         </td>
                                                                     </tr>
                                                                 </module:display>
-
+                                                              </logic:notEmpty>
                                                                 <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement"
 																	parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																	<tr>

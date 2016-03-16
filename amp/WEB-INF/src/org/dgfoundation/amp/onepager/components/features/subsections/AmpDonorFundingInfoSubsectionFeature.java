@@ -138,6 +138,15 @@ implements AmpRequiredComponentContainer{
             	target.add(gracePeriod);
             	target.add(ratificationDate);
             	target.add(maturity);
+            	
+            	if(!isLoan){
+            		model.getObject().setLoanTerms(null);
+            		model.getObject().setInterestRate(null);
+            		model.getObject().setGracePeriod(null);
+            		model.getObject().setRatificationDate(null);
+            		model.getObject().setMaturity(null);           		
+            	}            	
+            	
             	AmpFundingSummaryPanel l=
             	findParent(AmpFundingSummaryPanel.class);
 				send(getPage(), Broadcast.BREADTH,new FundingSectionSummaryEvent(target));	

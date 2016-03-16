@@ -272,6 +272,7 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 				case 'Responsible Organization':
 				case 'Type Of Assistance':
 				case 'Financing Instrument':
+				case 'Expenditure Class':
 				case 'Status':
 				case 'Approval Status':
 				case 'Donor Group':

@@ -22,6 +22,7 @@ import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -70,7 +71,17 @@ public class AmpExistingDocumentFieldPanel extends AmpFeaturePanel {
 
             @Override
             protected String getChoiceValue(NodeWrapper choice) {
-                return choice.getTitle()+" ("+choice.getUuid().hashCode()+")";
+                String title = choice.getTitle();
+                if(title == null) {
+                    Map<String, String> allTitles = choice.getTranslatedTitle();
+                    for (Map.Entry<String, String> entry: allTitles.entrySet()){
+                        if(!entry.getKey().startsWith("jcr:")) {
+                            title = entry.getValue();
+                            break;
+                        }
+                    }
+                }
+                return title + " (" + choice.getUuid().hashCode() + ")";
             }
 
             @Override

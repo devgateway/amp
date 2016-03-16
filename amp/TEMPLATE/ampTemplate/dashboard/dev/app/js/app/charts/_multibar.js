@@ -57,6 +57,5 @@ module.exports = {
   dispatchName: 'multibar',
   countCategories: countCategories,
   dataToNv: dataToNv,
-  staggerX: staggerX,
   chart: chart
 };

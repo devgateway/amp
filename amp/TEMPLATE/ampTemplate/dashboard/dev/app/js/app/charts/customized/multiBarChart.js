@@ -85,6 +85,13 @@ nv.models.customizedMultiBarChart = function() {
           availableHeight = (height || parseInt(container.style('height')) || 400)
                              - margin.top - margin.bottom;
 
+      try{
+        if(data[0].values[0].x.length > 4){
+        	//margin.bottom += 130;
+        	margin.bottom = 130;
+        }
+      }catch(e){}
+
       chart.update = function() { container.transition().duration(transitionDuration).call(chart) };
       chart.container = this;
 
@@ -244,7 +251,17 @@ nv.models.customizedMultiBarChart = function() {
 
           xTicks
               .selectAll('line, text')
-              .style('opacity', 1)
+          	.style('opacity', 1);
+
+        try{
+          if(data[0].values[0].x.length > 4){
+            g.selectAll(".nv-x.nv-axis .nv-wrap g g text")
+              .style("text-anchor", "end")
+              .attr("dx", "-.8em")
+              .attr("dy", ".15em")
+              .attr("transform", "rotate(-65)" );
+          }
+        }catch(e){}
 
           if (staggerLabels) {
               var getTranslate = function(x,y) {

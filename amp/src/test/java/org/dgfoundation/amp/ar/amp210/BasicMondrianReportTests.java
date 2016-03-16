@@ -49,8 +49,7 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 			    .withContents("Project Title", "Report Totals", "Expenditure Class", "", "Actual Expenditures", "176 611", "Actual Commitments", "148 222")
 			    .withChildren(
 			      new ReportAreaForTests()    .withContents("Project Title", "activity_with_expenditure_class_1", "Expenditure Class", "Capital Expenditure, Compensation / Salaries", "Actual Expenditures", "154 500", "Actual Commitments", "137 000"),
-			      new ReportAreaForTests()    .withContents("Project Title", "another_activity_with_expenditure_class", "Expenditure Class", "Capital Expenditure", "Actual Expenditures", "22 111", "Actual Commitments", "11 222")  )
-;
+			      new ReportAreaForTests()    .withContents("Project Title", "another_activity_with_expenditure_class", "Expenditure Class", "Capital Expenditure", "Actual Expenditures", "22 111", "Actual Commitments", "11 222")  );
 		
 		runMondrianTestCase(
 				this.buildSpecification("testcase for AMP-22231", 

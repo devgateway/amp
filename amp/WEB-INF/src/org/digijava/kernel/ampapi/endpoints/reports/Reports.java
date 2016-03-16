@@ -482,11 +482,16 @@ public class Reports {
 		JsonBean newQueryObject = queryObject.copy();
 		LinkedHashMap<String, Object> newQueryModel = new LinkedHashMap<String, Object>((LinkedHashMap<String, Object>) queryObject.get("queryModel"));
 		newQueryModel.put("regenerate", true);
-		if (!newQueryModel.containsKey(EPConstants.SETTINGS))
-			newQueryModel.put(EPConstants.SETTINGS, new LinkedHashMap<String, Object>());
-		Map<String, Object> settings = (Map<String, Object>) newQueryModel.get(EPConstants.SETTINGS);
-		settings.put(SettingsConstants.CURRENCY_ID, ampCurrencyCode);
-
+		final HashMap<String, Object> newSettings = new LinkedHashMap<String, Object>();  // copy the settings
+		final Map<String, Object> oldSettings = (Map<String, Object>) newQueryModel.get(EPConstants.SETTINGS);
+		for (final Map.Entry<String, Object> entry: oldSettings.entrySet()){
+			if(SettingsConstants.CURRENCY_ID.equals(entry.getKey())) {
+				newSettings.put(SettingsConstants.CURRENCY_ID, ampCurrencyCode);
+			} else {
+				newSettings.put(entry.getKey(), entry.getValue());
+			}
+		}
+		newQueryModel.put(EPConstants.SETTINGS, newSettings);
 		newQueryObject.set("queryModel", newQueryModel);
 
 		JsonBean newResult = getSaikuReport(newQueryObject, ampReportId);

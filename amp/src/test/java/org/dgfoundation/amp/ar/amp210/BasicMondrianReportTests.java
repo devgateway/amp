@@ -1,7 +1,7 @@
 package org.dgfoundation.amp.ar.amp210;
 
 import java.util.Arrays;
-import java.util.List;
+
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -15,6 +15,83 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 	
 	public BasicMondrianReportTests() {
 		super("basic mondrian tests");
+	}
+	@Test
+	public void testExpenditureClass() {
+		ReportAreaForTests correctReport = new ReportAreaForTests()
+			    .withContents("Expenditure Class", "Report Totals", "Project Title", "", "Actual Expenditures", "176 611", "Actual Commitments", "148 222")
+			    .withChildren(
+			      new ReportAreaForTests()
+			          .withContents("Expenditure Class", "Capital Expenditure Totals", "Project Title", "", "Actual Expenditures", "72 111", "Actual Commitments", "0")
+			      .withChildren(
+			        new ReportAreaForTests()      .withContents("Expenditure Class", "Capital Expenditure", "Project Title", "activity_with_expenditure_class_1", "Actual Expenditures", "50 000", "Actual Commitments", "0"),
+			        new ReportAreaForTests()      .withContents("Expenditure Class", "", "Project Title", "another_activity_with_expenditure_class", "Actual Expenditures", "22 111", "Actual Commitments", "0")    ),
+			      new ReportAreaForTests()    .withContents("Expenditure Class", "Compensation / Salaries Totals", "Project Title", "", "Actual Expenditures", "18 000", "Actual Commitments", "0")
+			      .withChildren(
+			        new ReportAreaForTests()      .withContents("Expenditure Class", "Compensation / Salaries", "Project Title", "activity_with_expenditure_class_1", "Actual Expenditures", "18 000", "Actual Commitments", "0")    ),
+			      new ReportAreaForTests()
+			          .withContents("Expenditure Class", "Expenditure Class: Undefined Totals", "Project Title", "", "Actual Expenditures", "86 500", "Actual Commitments", "148 222")
+			      .withChildren(
+			        new ReportAreaForTests()      .withContents("Expenditure Class", "Expenditure Class: Undefined", "Project Title", "activity_with_expenditure_class_1", "Actual Expenditures", "86 500", "Actual Commitments", "137 000"),
+			        new ReportAreaForTests()      .withContents("Expenditure Class", "", "Project Title", "another_activity_with_expenditure_class", "Actual Expenditures", "0", "Actual Commitments", "11 222")    )  );
+		
+		runMondrianTestCase(
+				this.buildSpecification("testcase for AMP-22231", 
+						Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.EXPENDITURE_CLASS), 
+						Arrays.asList(MeasureConstants.ACTUAL_EXPENDITURES, MeasureConstants.ACTUAL_COMMITMENTS), 
+						Arrays.asList(ColumnConstants.EXPENDITURE_CLASS), 
+						GroupingCriteria.GROUPING_TOTALS_ONLY),						
+						"en", 
+						Arrays.asList("another_activity_with_expenditure_class", "activity_with_expenditure_class_1"),
+						correctReport); 
+
+		correctReport = new ReportAreaForTests()
+			    .withContents("Project Title", "Report Totals", "Expenditure Class", "", "Actual Expenditures", "176 611", "Actual Commitments", "148 222")
+			    .withChildren(
+			      new ReportAreaForTests()    .withContents("Project Title", "activity_with_expenditure_class_1", "Expenditure Class", "Capital Expenditure, Compensation / Salaries", "Actual Expenditures", "154 500", "Actual Commitments", "137 000"),
+			      new ReportAreaForTests()    .withContents("Project Title", "another_activity_with_expenditure_class", "Expenditure Class", "Capital Expenditure", "Actual Expenditures", "22 111", "Actual Commitments", "11 222")  )
+;
+		
+		runMondrianTestCase(
+				this.buildSpecification("testcase for AMP-22231", 
+						Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.EXPENDITURE_CLASS), 
+						Arrays.asList(MeasureConstants.ACTUAL_EXPENDITURES, MeasureConstants.ACTUAL_COMMITMENTS), 
+						null, 
+						GroupingCriteria.GROUPING_TOTALS_ONLY),						
+						"en", 
+						Arrays.asList("another_activity_with_expenditure_class", "activity_with_expenditure_class_1"),
+						correctReport); 
+		
+		correctReport = new ReportAreaForTests()
+			    .withContents("Expenditure Class", "Report Totals", "Project Title", "", "2014-Actual Commitments", "78 222", "2014-Actual Disbursements", "0", "2014-Actual Expenditures", "50 000", "2015-Actual Commitments", "70 000", "2015-Actual Disbursements", "0", "2015-Actual Expenditures", "22 111", "Total Measures-Actual Commitments", "148 222", "Total Measures-Actual Disbursements", "0", "Total Measures-Actual Expenditures", "72 111")
+			    .withChildren(
+			      new ReportAreaForTests()
+			          .withContents("Expenditure Class", "Capital Expenditure Totals", "Project Title", "", "2014-Actual Commitments", "0", "2014-Actual Disbursements", "0", "2014-Actual Expenditures", "50 000", "2015-Actual Commitments", "0", "2015-Actual Disbursements", "0", "2015-Actual Expenditures", "22 111", "Total Measures-Actual Commitments", "0", "Total Measures-Actual Disbursements", "0", "Total Measures-Actual Expenditures", "72 111")
+			      .withChildren(
+			        new ReportAreaForTests()      .withContents("Expenditure Class", "Capital Expenditure", "Project Title", "activity_with_expenditure_class_1", "2014-Actual Commitments", "", "2014-Actual Disbursements", "", "2014-Actual Expenditures", "50 000", "2015-Actual Commitments", "", "2015-Actual Disbursements", "", "2015-Actual Expenditures", "", "Total Measures-Actual Commitments", "0", "Total Measures-Actual Disbursements", "0", "Total Measures-Actual Expenditures", "50 000"),
+			        new ReportAreaForTests()      .withContents("Expenditure Class", "", "Project Title", "another_activity_with_expenditure_class", "2014-Actual Commitments", "", "2014-Actual Disbursements", "", "2014-Actual Expenditures", "", "2015-Actual Commitments", "", "2015-Actual Disbursements", "", "2015-Actual Expenditures", "22 111", "Total Measures-Actual Commitments", "0", "Total Measures-Actual Disbursements", "0", "Total Measures-Actual Expenditures", "22 111")    ),
+			      new ReportAreaForTests()
+			          .withContents("Expenditure Class", "Expenditure Class: Undefined Totals", "Project Title", "", "2014-Actual Commitments", "78 222", "2014-Actual Disbursements", "0", "2014-Actual Expenditures", "0", "2015-Actual Commitments", "70 000", "2015-Actual Disbursements", "0", "2015-Actual Expenditures", "0", "Total Measures-Actual Commitments", "148 222", "Total Measures-Actual Disbursements", "0", "Total Measures-Actual Expenditures", "0")
+			      .withChildren(
+			        new ReportAreaForTests()      .withContents("Expenditure Class", "Expenditure Class: Undefined", "Project Title", "activity_with_expenditure_class_1", "2014-Actual Commitments", "67 000", "2014-Actual Disbursements", "", "2014-Actual Expenditures", "", "2015-Actual Commitments", "70 000", "2015-Actual Disbursements", "", "2015-Actual Expenditures", "", "Total Measures-Actual Commitments", "137 000", "Total Measures-Actual Disbursements", "0", "Total Measures-Actual Expenditures", "0"),
+			        new ReportAreaForTests()      .withContents("Expenditure Class", "", "Project Title", "another_activity_with_expenditure_class", "2014-Actual Commitments", "11 222", "2014-Actual Disbursements", "", "2014-Actual Expenditures", "", "2015-Actual Commitments", "", "2015-Actual Disbursements", "", "2015-Actual Expenditures", "", "Total Measures-Actual Commitments", "11 222", "Total Measures-Actual Disbursements", "0", "Total Measures-Actual Expenditures", "0")    )  );		
+		runMondrianTestCase(
+				"AMP-22234-hier-filtered-by-capital-expenditure",						
+						Arrays.asList("another_activity_with_expenditure_class", "activity_with_expenditure_class_1"),
+						correctReport,
+						"en");
+		
+		correctReport =new ReportAreaForTests()
+			    .withContents("Project Title", "Report Totals", "Expenditure Class", "", "2014-Actual Commitments", "78 222", "2014-Actual Disbursements", "0", "2014-Actual Expenditures", "18 000", "2015-Actual Commitments", "70 000", "2015-Actual Disbursements", "0", "2015-Actual Expenditures", "0", "Total Measures-Actual Commitments", "148 222", "Total Measures-Actual Disbursements", "0", "Total Measures-Actual Expenditures", "18 000")
+			    .withChildren(
+			      new ReportAreaForTests()    .withContents("Project Title", "activity_with_expenditure_class_1", "Expenditure Class", "Compensation / Salaries", "2014-Actual Commitments", "67 000", "2014-Actual Disbursements", "", "2014-Actual Expenditures", "18 000", "2015-Actual Commitments", "70 000", "2015-Actual Disbursements", "", "2015-Actual Expenditures", "", "Total Measures-Actual Commitments", "137 000", "Total Measures-Actual Disbursements", "0", "Total Measures-Actual Expenditures", "18 000"),
+			      new ReportAreaForTests()    .withContents("Project Title", "another_activity_with_expenditure_class", "Expenditure Class", "", "2014-Actual Commitments", "11 222", "2014-Actual Disbursements", "", "2014-Actual Expenditures", "", "2015-Actual Commitments", "", "2015-Actual Disbursements", "", "2015-Actual Expenditures", "", "Total Measures-Actual Commitments", "11 222", "Total Measures-Actual Disbursements", "0", "Total Measures-Actual Expenditures", "0")  );
+		
+		runMondrianTestCase(
+				"AMP-22234-flat-filtered-compensation",						
+						Arrays.asList("another_activity_with_expenditure_class", "activity_with_expenditure_class_1"),
+						correctReport,
+						"en"); 		
 	}
 	
 	@Test

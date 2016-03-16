@@ -24,6 +24,7 @@ import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MondrianTablesRepository;
 import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
+import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportMeasure;
@@ -149,7 +150,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 
 		contents = contents.replaceAll("@@pipelinemtefacv@@", pipelineMtefAcv.existsInDatabase() ? pipelineMtefAcv.getIdInDatabase().toString() : "12324"); // crap code but who cares, we're dumping this stuff soon
 		contents = contents.replaceAll("@@projectionmtefacv@@", projectionMtefAcv.existsInDatabase() ? projectionMtefAcv.getIdInDatabase().toString() : "12324");
-
+		
 		// process general filters & custom filters 
 		String entityFilteringSubquery = buildFilteringSubquery(); 
 		String noDatesEntityFilteringSubquery = getNoDatesFilter(entityFilteringSubquery);

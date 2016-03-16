@@ -16,6 +16,7 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.mondrian.MondrianTablesRepository;
 import org.dgfoundation.amp.newreports.FilterRule;
+import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.reports.mondrian.ActivityFilter;
 import org.dgfoundation.amp.reports.mondrian.FiltersGroup;
@@ -50,12 +51,20 @@ public class FactTableFiltering {
 		long start = System.currentTimeMillis();
 		StringBuilder subquery = new StringBuilder();
 		if (mrf != null) {
+			String expenditureClassFragment = buildAcvStatement(ColumnConstants.EXPENDITURE_CLASS, "expenditure_class");
+			String appendedQuery = String.format(" AND ((transaction_type <> 2) OR ((transaction_type = 2) %s))", expenditureClassFragment); 
+			subquery.append(appendedQuery);			
 			// process regular columns
 			for(Entry<String, List<FilterRule>> sqlFilterRule:mrf.getSqlFilterRules().entrySet()) {
 				String mainColumnName = sqlFilterRule.getKey();
+				/*expenditure class is processed below, because it's a property of transactions and should affect
+				 * only transactiontype=2 (expenditures), which is not a working mechanism on regular columns*/
+				if (mainColumnName.equals(ColumnConstants.EXPENDITURE_CLASS))
+					continue;
 				String fragment = buildQuerySubfragment(mainColumnName, sqlFilterRule.getValue());
 				subquery.append(fragment);
 			}
+
 
 //			String dateFilteringFragment = buildDateFilteringFragment(ReportElement.ElementType.DATE, String.format("(transaction_type <> %d) AND (transaction_type <> %d)", Constants.MTEFPROJECTION, 200 + Constants.MTEFPROJECTION));
 //			String realMtefFilteringFragment = buildDateFilteringFragment(ReportElement.ElementType.REAL_MTEF_DATE, "transaction_type = " + (200 + Constants.MTEFPROJECTION));
@@ -72,6 +81,7 @@ public class FactTableFiltering {
 					dateFilteringFragment, mtefFilteringFragment, realMtefFilteringFragment, noDateFilter, 
 					DATE_FILTERS_TAG_END);
 			subquery.append(datesQuery);
+			
 		}
 		String ret = subquery.toString().trim();
 		long delta = System.currentTimeMillis() - start;
@@ -82,6 +92,22 @@ public class FactTableFiltering {
 		}
 		return ret;
 	}
+	
+	protected String buildAcvStatement(String ampColumnName, String factTableColumnName) {
+		if (mrf == null || mrf.getFilterRules() == null)
+			return "";
+		List<FilterRule> rules = mrf.getFilterRules().get(new ReportElement(new ReportColumn(ampColumnName)));
+		if (rules == null)
+			return "";
+		List<String> ruleStatements = new ArrayList<>();
+		for(FilterRule rule:rules) {
+			String statement = buildRuleStatement(rule, new IdentityExpander(factTableColumnName));
+			if (statement.length() > 0)
+				ruleStatements.add(statement);
+		}
+		return AmpARFilter.mergeStatements(ruleStatements);
+	}
+	
 	
 	/**
 	 * process the funding-date filter(s), excluding MTEFs

@@ -351,6 +351,14 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
 		runReportTest("AMP-22234-flat", "AMP-22234-flat", expenditureClassActivities, cor, null, "en");
 	}
 	
+
+	@Test
+	public void testAMP22449() {
+		GroupReportModel cor = null;
+		String[] acts = new String[] {"another_activity_with_expenditure_class"};
+		runReportTest("AMP-22449-exp-class-hier", "AMP-22449-exp-class-hier", acts, cor, null, "en");		
+	}
+	
 	@Test
 	public void testHierRawExpenditureClass() {
 		GroupReportModel cor = GroupReportModel.withGroupReports("AMP-22234-hier",

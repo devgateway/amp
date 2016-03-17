@@ -482,15 +482,14 @@ public class Reports {
 		JsonBean newQueryObject = queryObject.copy();
 		LinkedHashMap<String, Object> newQueryModel = new LinkedHashMap<String, Object>((LinkedHashMap<String, Object>) queryObject.get("queryModel"));
 		newQueryModel.put("regenerate", true);
-		final HashMap<String, Object> newSettings = new LinkedHashMap<String, Object>();  // copy the settings
+		final HashMap<String, Object> newSettings = new LinkedHashMap<>();  // copy the settings
 		final Map<String, Object> oldSettings = (Map<String, Object>) newQueryModel.get(EPConstants.SETTINGS);
-		for (final Map.Entry<String, Object> entry: oldSettings.entrySet()){
-			if(SettingsConstants.CURRENCY_ID.equals(entry.getKey())) {
-				newSettings.put(SettingsConstants.CURRENCY_ID, ampCurrencyCode);
-			} else {
+		if(oldSettings != null) {
+			for (final Map.Entry<String, Object> entry : oldSettings.entrySet()) {
 				newSettings.put(entry.getKey(), entry.getValue());
 			}
 		}
+		newSettings.put(SettingsConstants.CURRENCY_ID, ampCurrencyCode);
 		newQueryModel.put(EPConstants.SETTINGS, newSettings);
 		newQueryObject.set("queryModel", newQueryModel);
 

@@ -7,7 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
-import org.dgfoundation.amp.newreports.pagination.PartialReportArea;
+import org.dgfoundation.amp.newreports.pagination.PaginatedReportArea;
 
 public class ReportAreaDescriber {
 	
@@ -21,15 +21,16 @@ public class ReportAreaDescriber {
 	}
 	
 	public String describeInCode(ReportArea area, int depth) {
-		boolean isPartialReportArea = PartialReportArea.class.isAssignableFrom(area.getClass());
+		boolean isPartialReportArea = area instanceof PaginatedReportArea;
 		String testAreaType = isPartialReportArea ? "PaginatedReportAreaForTests" : "ReportAreaForTests"; 
 		
 		if (area.getChildren() == null) {
-			return String.format("%snew %s(%s, %s)", prefixString(depth), testAreaType, describeOwner(area), contentsMap(area));
+			return String.format("%snew %s(%s, %s)%s", prefixString(depth), testAreaType, describeOwner(area), contentsMap(area), describeCounts(area));
 		}
 		
-		return String.format("%snew %s(%s)%s%s%s", prefixString(depth), testAreaType,
+		return String.format("%snew %s(%s)%s%s%s%s", prefixString(depth), testAreaType,
 				describeOwner(area),
+				describeCounts(area),
 				(area.getChildren() != null && area.getChildren().size() > 1) ? ("\n" + prefixString(depth)) : "",
 				describeContents(area, depth, isPartialReportArea),
 				describeChildren(area, depth));
@@ -61,12 +62,15 @@ public class ReportAreaDescriber {
 	public String describeContents(ReportArea area, int depth, boolean isPartialReportArea) {
 		if (area.getContents() == null) return "";
 		StringBuffer res = new StringBuffer(String.format(/*prefixString(depth) + */".withContents(%s)", contentsMap(area)));	
-		if (isPartialReportArea) {
-			PartialReportArea pArea = (PartialReportArea) area;
-			res.append(".withCounts(").append(pArea.getCurrentLeafActivitiesCount()).append(", ")
-			.append(pArea.getTotalLeafActivitiesCount()).append(")");
-		}
 		return res.toString();
+	}
+	
+	public String describeCounts(ReportArea area) {
+		if (area instanceof PaginatedReportArea) {
+			PaginatedReportArea pArea = (PaginatedReportArea) area;
+			return String.format(".withCounts(%d, %d)", pArea.getCurrentLeafActivitiesCount(), pArea.getTotalLeafActivitiesCount());
+		}
+		return "";
 	}
 		
 	public String describeChildren(ReportArea area, int depth) {

@@ -57,8 +57,6 @@ public class PaginatedReportArea extends ReportAreaImpl {
 	 * @return the number of projects in this ReportArea paginated
 	 */
 	public int getCurrentLeafActivitiesCount() {
-		if (currentLeafActivities.size() > getTotalLeafActivitiesCount() && this.nrEntities > 0)
-			System.out.println("vasya");
 		return currentLeafActivities.size();
 	}
 }

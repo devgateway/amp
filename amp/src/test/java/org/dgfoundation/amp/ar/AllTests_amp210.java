@@ -23,7 +23,6 @@ import org.dgfoundation.amp.ar.amp210.PledgeFiltersMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.SQLUtilsTests;
 import org.dgfoundation.amp.ar.amp210.SettingsMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.SqlFilterUtilsTests;
-import org.dgfoundation.amp.ar.amp210.TabsPaginationTests;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -60,7 +59,6 @@ public class AllTests_amp210
 		suite.addTest(new JUnit4TestAdapter(ComponentReportsTests.class));
 		suite.addTest(new JUnit4TestAdapter(org.dgfoundation.amp.ar.amp210.PledgeReportsTests.class));
 		suite.addTest(new JUnit4TestAdapter(org.dgfoundation.amp.ar.amp210.DonorsAndPledgesReportsTests.class));
-		suite.addTest(new JUnit4TestAdapter(TabsPaginationTests.class));
 		suite.addTest(new JUnit4TestAdapter(PledgeFiltersMondrianReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(AgreementColumnsReportsTests.class));
 		suite.addTest(new JUnit4TestAdapter(AmountColumnsReportTests.class));

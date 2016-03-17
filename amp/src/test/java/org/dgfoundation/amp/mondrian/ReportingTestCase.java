@@ -415,6 +415,28 @@ public abstract class ReportingTestCase extends AmpTestCase {
 			throw assertionError;
 	}
 	
+	protected void compareBodies(String name, PaginatedReportAreaForTests cor, ReportArea out) {
+		String delta = null;
+		AssertionError assertionError = null;
+		try {
+			delta = cor.getDifferenceAgainst(out);
+		}
+		catch(Exception e) {
+			delta = e.getMessage();
+			if (delta == null || cor == null)
+				delta = "(null)";
+		}
+		catch(AssertionError ass) {
+			assertionError = ass;
+		}
+		if (delta != null || assertionError != null) {
+			System.err.println("this is output for test " + name + ": " + new ReportAreaDescriber(null).describeInCode(out, 2));
+		}
+		assertNull(delta);
+		if (assertionError != null)
+			throw assertionError;
+	}
+	
 //	public<K> K buildNiReportDigest(ReportSpecification spec, NiReportExecutor executor, NiReportOutputBuilder<K> outputBuilder) {
 //		return executor.executeReport(spec, outputBuilder);
 //	}

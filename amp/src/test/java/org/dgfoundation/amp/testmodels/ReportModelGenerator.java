@@ -30,7 +30,7 @@ import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import static org.dgfoundation.amp.algo.AmpCollections.relist;
 
 public class ReportModelGenerator implements NiReportOutputBuilder<NiReportModel> {
-
+	
 	@Override
 	public NiReportModel buildOutput(ReportSpecification spec, NiReportRunResult reportRun) {
 		Map<CellColumn, Integer> colToNr = indexLeaves(reportRun.headers);

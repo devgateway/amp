@@ -17,6 +17,7 @@ public class ReportAreaImpl implements ReportArea {
 	protected AreaOwner owner;
 	protected Map<ReportOutputColumn, ReportCell> contents;
 	protected List<ReportArea> children;
+	protected int nrEntities = -1;
 	
 	public ReportAreaImpl() {
 	}
@@ -58,6 +59,15 @@ public class ReportAreaImpl implements ReportArea {
 				throw new RuntimeException(e);
 			}
 		};
+	}
+	
+	@Override
+	public int getNrEntities() {
+		return this.nrEntities;
+	}
+	
+	public void setNrEntities(int nrEntities) {
+		this.nrEntities = nrEntities;
 	}
 	
 	public String toString() {

@@ -28,4 +28,10 @@ public interface ReportArea {
 	 * @return
 	 */
 	public List<ReportArea> getChildren();
+	
+	/**
+	 * the number of distinct entityIds (e.g. activityIds in AMP) in the subtree
+	 * @return
+	 */
+	public int getNrEntities();
 }

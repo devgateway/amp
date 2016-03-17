@@ -26,6 +26,8 @@ import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.newreports.pagination.PaginatedReport;
+import org.dgfoundation.amp.newreports.pagination.PartialReportArea;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
@@ -36,7 +38,6 @@ import org.dgfoundation.amp.nireports.amp.MetaCategory;
 import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
-import org.dgfoundation.amp.reports.PartialReportArea;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
@@ -149,7 +150,7 @@ public abstract class ReportingTestCase extends AmpTestCase {
 				TLSUtils.getThreadLocalInstance().request = mockRequest;
 			
 			TLSUtils.getRequest().setAttribute(ReportEnvironment.OVERRIDDEN_WORKSPACE_FILTER, new ActivityIdsFetcher(entities));
-			ReportExecutor generator = new NiReportsGenerator(AmpReportsSchema.getInstance(), ReportAreaImpl.class, false, null);
+			ReportExecutor generator = new NiReportsGenerator(AmpReportsSchema.getInstance(), false, null);
 			GeneratedReport res = generator.executeReport(spec);
 			return res;
 		}
@@ -187,7 +188,7 @@ public abstract class ReportingTestCase extends AmpTestCase {
 		//Iterator<ReportOutputColumn> bla = rep.reportContents.getChildren().get(0).getContents().keySet().iterator();
 		//ReportOutputColumn first = bla.next(), second = bla.next(), third = bla.next(), fourth = bla.next();
 		
-		ReportArea reportContents = ReportPaginationUtils.getSinglePage(rep.reportContents, page, pageSize);
+		ReportArea reportContents = PaginatedReport.getPage(rep.reportContents, page, pageSize);
 		
 		//if (cor == null) return;
 		String delta = cor == null ? null : cor.getDifferenceAgainst(reportContents);

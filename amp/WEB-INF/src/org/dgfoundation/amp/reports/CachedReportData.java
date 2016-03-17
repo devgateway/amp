@@ -4,6 +4,7 @@
 package org.dgfoundation.amp.reports;
 
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.pagination.PaginatedReport;
 
 /**
  * Report Data to be stored in the cache  
@@ -11,14 +12,15 @@ import org.dgfoundation.amp.newreports.GeneratedReport;
  * @author Nadejda Mandrescu
  */
 public class CachedReportData {
+	
 	/** Generated report data */
 	public final GeneratedReport report;
-	/** Leaf report areas list */
-	public final ReportAreaMultiLinked[] areas;
 	
-	public CachedReportData(GeneratedReport report, ReportAreaMultiLinked[] areas) {
+	public final PaginatedReport paginationInfo; 
+	
+	public CachedReportData(GeneratedReport report) {
 		this.report = report;
-		this.areas = areas;
+		this.paginationInfo = new PaginatedReport(report.reportContents);
 	}
 	
 }

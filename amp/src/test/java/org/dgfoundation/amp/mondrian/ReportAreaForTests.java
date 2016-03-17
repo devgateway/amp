@@ -84,7 +84,7 @@ public class ReportAreaForTests extends ReportAreaImpl {
 		deltaStack.add(this);
 //		System.err.format("START comparing %s against %s\n", this.owner, output.getOwner());
 		
-		if (!nullGuardEqual(this.owner, output.getOwner()))
+		if (!ownerOk(this.owner, output.getOwner()))
 			report_error(String.format("different owners: %s vs correct %s", output.getOwner(), this.owner));
 				
 		String contentsRes = compareContents(output.getContents());
@@ -99,6 +99,15 @@ public class ReportAreaForTests extends ReportAreaImpl {
 		deltaStack.pop();
 		
 		return null;
+	}
+	
+	public static boolean ownerOk(AreaOwner cor, AreaOwner out) {
+		if ((out != null && out.id > 0) && (cor == null))
+			return true; // if out is leaf while cor is null, we are ok
+		if (out == null) return cor == null;
+		if (cor == null) return out == null;
+		
+		return cor.equals(out);
 	}
 	
 	public static boolean nullGuardEqual(Object obj, Object cor) {

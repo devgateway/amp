@@ -31,6 +31,7 @@ import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
+import org.dgfoundation.amp.newreports.pagination.PartialReportArea;
 import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
@@ -40,8 +41,6 @@ import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.reports.ActivityType;
 import org.dgfoundation.amp.reports.CachedReportData;
-import org.dgfoundation.amp.reports.PartialReportArea;
-import org.dgfoundation.amp.reports.ReportAreaMultiLinked;
 import org.dgfoundation.amp.reports.ReportCacher;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
@@ -151,9 +150,7 @@ public class ReportsUtil {
 		
 		// get the report (from cache if it was cached)
 		CachedReportData cachedReportData = getCachedReportData(reportId, formParams);
-		ReportAreaMultiLinked[] areas = null;
 		if (cachedReportData != null) {
-			areas = cachedReportData.areas;
 			if (cachedReportData.report != null) {
 				result.set("headers", cachedReportData.report.leafHeaders);
 				result.set("generatedHeaders", cachedReportData.report.generatedHeaders);
@@ -164,16 +161,15 @@ public class ReportsUtil {
 		// extract data for the requested page
 		ReportArea pageArea = null;
 		if (recordsPerPage != -1) {
-			pageArea = ReportPaginationUtils.getReportArea(areas, start, recordsPerPage);
+			pageArea = cachedReportData.paginationInfo.getPage(start, recordsPerPage);
 		} else if (cachedReportData != null && cachedReportData.report !=null) {
 			pageArea = cachedReportData.report.reportContents;
 		}
 		
-		int totalPageCount = ReportPaginationUtils.getPageCount(areas, recordsPerPage);
+		int totalPageCount = cachedReportData.paginationInfo.getPageCount(recordsPerPage);
 		
 		// configure the result
-		result.set("page", new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, 
-				(areas != null ? areas.length : 0)));
+		result.set("page", new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, cachedReportData.paginationInfo.getRecordsCount()));
 		result.set(EPConstants.SETTINGS, cachedReportData != null ? 
 				SettingsUtils.getReportSettings(cachedReportData.report.spec) : null);
 		return result;

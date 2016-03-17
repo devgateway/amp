@@ -20,7 +20,11 @@ public abstract class ReportCell implements Comparable<ReportCell> {
 	
 	public final String displayedValue;
 	
-	//to facilitate the sorting, we will store the parent area
+	/**
+	 * TODO: delete this field once we are done with killing off Mondrian
+	 * to facilitate the sorting, we will store the parent area
+	 */
+	@Deprecated
 	transient public ReportArea area;
 	
 	public ReportCell(Comparable<?> value, String displayedValue) {

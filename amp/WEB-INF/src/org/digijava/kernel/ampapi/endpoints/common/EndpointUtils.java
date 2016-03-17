@@ -184,7 +184,7 @@ public class EndpointUtils {
 		Optional<Boolean> asNiReport = Optional.ofNullable((Boolean) TLSUtils.getRequest().getAttribute(EPConstants.NI_REPORT));
 		logger.info("As NiReport: " + (asNiReport.isPresent() && asNiReport.get()));
 		ReportExecutor generator = asNiReport.isPresent() && asNiReport.get() ? 
-				new NiReportsGenerator(AmpReportsSchema.getInstance(), clazz, true, outputSettings) :
+				new NiReportsGenerator(AmpReportsSchema.getInstance(), true, outputSettings) :
 				new MondrianReportGenerator(clazz, ReportEnvironment.buildFor(TLSUtils.getRequest()));
 		GeneratedReport report = null;
 		try {

@@ -51,12 +51,11 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 	protected final CellVisitor<ReportCell> cellFormatter;
 	protected final List<CellColumn> leafColumns;
 	
-	public NiReportsFormatter(ReportSpecification spec, NiReportRunResult runResult, 
-			Supplier<ReportAreaImpl> reportAreaSupplier, CellVisitor<ReportCell> cellFormatter) {
+	public NiReportsFormatter(ReportSpecification spec, NiReportRunResult runResult, CellVisitor<ReportCell> cellFormatter) {
 		this.runResult = runResult;
 		this.leafColumns = runResult.headers.leafColumns;
 		this.spec = spec;
-		this.reportAreaSupplier = reportAreaSupplier;
+		this.reportAreaSupplier = () -> new ReportAreaImpl();
 		this.cellFormatter = cellFormatter;
 		buildHeaders();
 	}
@@ -96,6 +95,7 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 
 	protected ReportAreaImpl renderCrdRow(NiColumnReportData crd, long id) {
 		ReportAreaImpl row = reportAreaSupplier.get();
+		row.setOwner(new AreaOwner(id));
 		Map<ReportOutputColumn, ReportCell> rowData = new LinkedHashMap<>();
 		for(int i = hiersStack.size(); i < runResult.headers.leafColumns.size(); i++) {
 			CellColumn niCellColumn = runResult.headers.leafColumns.get(i);
@@ -109,9 +109,7 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 	
 	@Override
 	public ReportAreaImpl visit(NiColumnReportData crd) {
-		ReportAreaImpl res = reportAreaSupplier.get();
-		res.setOwner(toAreaOwner(crd.splitter));
-		res.setContents(trailCells(crd));
+		ReportAreaImpl res = initArea(crd);
 		if (!spec.isSummaryReport())
 			res.setChildren(AmpCollections.relist(crd.getIds(), id -> renderCrdRow(crd, id)));
 		return res;
@@ -119,9 +117,7 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 
 	@Override
 	public ReportAreaImpl visit(NiGroupReportData grd) {
-		ReportAreaImpl res = reportAreaSupplier.get();
-		res.setOwner(toAreaOwner(grd.splitter));
-		res.setContents(trailCells(grd));
+		ReportAreaImpl res = initArea(grd);
 		List<ReportArea> rchildren = new ArrayList<>();
 		for(NiReportData child:grd.subreports) {
 			hiersStack.push(child.splitter);
@@ -129,6 +125,19 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 			hiersStack.pop();
 		}
 		res.setChildren(rchildren);
+		return res;
+	}
+	
+	/**
+	 * initializes a {@link ReportAreaImpl} given the configured {@link #reportAreaSupplier} and populates the fields which are common to all {@link NiReportData} subclasses
+	 * @param nrd
+	 * @return
+	 */
+	protected ReportAreaImpl initArea(NiReportData nrd) {
+		ReportAreaImpl res = reportAreaSupplier.get();
+		res.setOwner(toAreaOwner(nrd.splitter));
+		res.setContents(trailCells(nrd));
+		res.setNrEntities(nrd.ids.size());	
 		return res;
 	}
 	
@@ -155,6 +164,6 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 	}
 	
 	public static NiReportOutputBuilder<GeneratedReport> asOutputBuilder(CellVisitor<ReportCell> formatter, OutputSettings outputSettings) {
-		return (ReportSpecification spec, NiReportRunResult runResult) -> new NiReportsFormatter(spec, runResult, () -> new ReportAreaImpl(), formatter).format();
+		return (ReportSpecification spec, NiReportRunResult runResult) -> new NiReportsFormatter(spec, runResult, formatter).format();
 	}
 }

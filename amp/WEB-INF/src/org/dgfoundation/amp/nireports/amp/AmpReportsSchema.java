@@ -606,7 +606,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 * @return
 	 */
 	public static ReportExecutor getExecutor(boolean logToDb) {
-		ReportExecutor res = new NiReportsGenerator(getInstance(), ReportAreaImpl.class, logToDb, null);
+		ReportExecutor res = new NiReportsGenerator(getInstance(), logToDb, null);
 		return res;
 	}
 	

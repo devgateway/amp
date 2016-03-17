@@ -10,7 +10,7 @@ import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
-import org.dgfoundation.amp.reports.PartialReportArea;
+import org.dgfoundation.amp.newreports.pagination.PartialReportArea;
 
 /**
  * 

@@ -6,8 +6,8 @@ package org.dgfoundation.amp.ar.amp210;
 import java.util.Arrays;
 
 import org.dgfoundation.amp.mondrian.ReportingTestCase;
+import org.dgfoundation.amp.newreports.pagination.PartialReportArea;
 import org.dgfoundation.amp.mondrian.PaginatedReportAreaForTests;
-import org.dgfoundation.amp.reports.PartialReportArea;
 import org.junit.Test;
 
 /**

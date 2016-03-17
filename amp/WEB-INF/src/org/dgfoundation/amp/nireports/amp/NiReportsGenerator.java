@@ -32,10 +32,6 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
 	protected static final Logger logger = Logger.getLogger(NiReportsGenerator.class);
 	public final boolean logReport;
 	
-	/**
-	 * field to be removed once Mondrian-based reporting is done with
-	 */
-	public final Class<? extends ReportAreaImpl> reportAreaClazz;
 	public final OutputSettings outputSettings;
 	
 	public NiReportsGenerator(NiReportsSchema schema) {
@@ -43,7 +39,7 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
 	}
 
 	public NiReportsGenerator(NiReportsSchema schema, Class<? extends ReportAreaImpl> reportAreaClazz) {
-		this(schema, reportAreaClazz, true, null);
+		this(schema, true, null);
 	}
 
 	/**
@@ -52,9 +48,8 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
 	 * @param reportAreaClazz the ReportArea implementation to be used
 	 * @param logReport whether to log execution nodes to the DB
 	 */
-	public NiReportsGenerator(NiReportsSchema schema, Class<? extends ReportAreaImpl> reportAreaClazz, boolean logReport, OutputSettings outputSettings) {
+	public NiReportsGenerator(NiReportsSchema schema, boolean logReport, OutputSettings outputSettings) {
 		super(schema);
-		this.reportAreaClazz = reportAreaClazz;
 		this.logReport = logReport;
 		this.outputSettings = outputSettings;
 	}
@@ -69,7 +64,7 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
 	@Override
 	public GeneratedReport executeReport(ReportSpecification spec) {
 		GeneratedReport apiReport = executeReport(spec,
-				AmpNiReportsFormatter.asOutputBuilder(ReportAreaImpl.buildSupplier(reportAreaClazz), outputSettings));
+				AmpNiReportsFormatter.asOutputBuilder(outputSettings));
 		return apiReport;
 	}
 	

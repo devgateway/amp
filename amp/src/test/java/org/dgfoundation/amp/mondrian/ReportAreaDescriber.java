@@ -7,7 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
-import org.dgfoundation.amp.reports.PartialReportArea;
+import org.dgfoundation.amp.newreports.pagination.PartialReportArea;
 
 public class ReportAreaDescriber {
 	
@@ -38,6 +38,8 @@ public class ReportAreaDescriber {
 	public String describeOwner(ReportArea area) {
 		if (area.getOwner() == null)
 			return "null";
+		if (area.getOwner().id > 0)
+			return String.format("new AreaOwner(%s)", area.getOwner().id);
 		return String.format("new AreaOwner(\"%s\", \"%s\")", area.getOwner().columnName, area.getOwner().debugString);
 	}
 	

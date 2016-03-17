@@ -30,12 +30,11 @@ import org.digijava.module.aim.helper.FormatHelper;
  */
 public class AmpNiReportsFormatter extends NiReportsFormatter {
 	
-	public AmpNiReportsFormatter(ReportSpecification spec, NiReportRunResult runResult, 
-			Supplier<ReportAreaImpl> reportAreaSupplier, OutputSettings outputSettings) {
-		super(spec, runResult, reportAreaSupplier,
+	public AmpNiReportsFormatter(ReportSpecification spec, NiReportRunResult runResult, OutputSettings outputSettings) {
+		super(spec, runResult, 
 			new CellFormatter(spec.getSettings(), FormatHelper.getDefaultFormat(), MoConstants.DATE_DISPLAY_FORMAT, 
-				TranslatorWorker::translateText,
-				outputSettings == null ? defaultOutputSettings(spec) : outputSettings));
+			TranslatorWorker::translateText,
+			outputSettings == null ? defaultOutputSettings(spec) : outputSettings));
 	}
 
 	/**
@@ -50,8 +49,8 @@ public class AmpNiReportsFormatter extends NiReportsFormatter {
 		return new OutputSettings(idsValuesColumns);
 	}
 	
-	public static NiReportOutputBuilder<GeneratedReport> asOutputBuilder(Supplier<ReportAreaImpl> reportAreaSupplier, OutputSettings outputSettings) {
-		return (ReportSpecification spec, NiReportRunResult runResult) -> new AmpNiReportsFormatter(spec, runResult, reportAreaSupplier, outputSettings).format();
+	public static NiReportOutputBuilder<GeneratedReport> asOutputBuilder(OutputSettings outputSettings) {
+		return (ReportSpecification spec, NiReportRunResult runResult) -> new AmpNiReportsFormatter(spec, runResult, outputSettings).format();
 	}
 
 	@Override

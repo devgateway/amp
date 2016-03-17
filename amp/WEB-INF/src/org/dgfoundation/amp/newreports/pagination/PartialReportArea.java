@@ -1,26 +1,33 @@
 /**
  * 
  */
-package org.dgfoundation.amp.reports;
+package org.dgfoundation.amp.newreports.pagination;
 
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 
 /**
  * Stores partial report area, with statistical information regarding the full report area,
  * like actual total count of children  
- * 
+ * TODO: delete this class once Mondrian is finished with
  * @author Nadejda Mandrescu
  */
+@Deprecated
 public class PartialReportArea extends ReportAreaImpl {
 	// configured to -1 to mark uninitialized state
+	//@JsonIgnore
 	protected int totalChildrenCount = -1;
+	//@JsonIgnore
 	protected int totalLeafChildrenCount = -1;
-	protected int totalLeafActivitiesCount = -1;
-	protected int currentLeafActivitiesCount = -1;
+	
+	//@JsonIgnore
+	protected int totalLeafActivitiesCount = -1; // cate proiecte are toata ReportArea original
+	//@JsonIgnore
+	protected int currentLeafActivitiesCount = -1; // cate proiecte is in pagina curenta
 	transient 
 	protected Set<Long> leafActivities = new TreeSet<Long>();
 	

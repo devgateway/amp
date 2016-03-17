@@ -32,9 +32,9 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.newreports.pagination.PaginatedReport;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
-import org.dgfoundation.amp.reports.ReportAreaMultiLinked;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
@@ -124,11 +124,9 @@ public class ActivityService {
 		}
 		//if pagination is requested
 		List<ReportArea> ll=null;
-		if(page !=null && pageSize !=null && page>=0 && pageSize>0){
-			ReportAreaMultiLinked[] areasDFArray = ReportPaginationUtils.convert(report.reportContents);
-			
-			ReportArea pagedReport = ReportPaginationUtils.getReportArea(areasDFArray, page, pageSize);
-			ll=pagedReport.getChildren();
+		if (page != null && pageSize != null && page >= 0 && pageSize > 0) {
+			ReportArea pagedReport = PaginatedReport.getPage(report.reportContents, page, pageSize);
+			ll = pagedReport.getChildren();
 		}else{ 
 			ll = report.reportContents.getChildren();
 		}
@@ -228,8 +226,8 @@ public class ActivityService {
 	} catch (Exception e) {
 	    System.err.println(e.getClass().getName() + ": " + e.getMessage());
 	}
-	ReportAreaMultiLinked[] areasDFArray = ReportPaginationUtils.convert(report.reportContents);
-	ReportArea pagedReport = ReportPaginationUtils.getReportArea(areasDFArray, 0, pageSize);
+	//ReportAreaMultiLinked[] areasDFArray = ReportPaginationUtils.convert(report.reportContents);
+	ReportArea pagedReport = PaginatedReport.getPage(report.reportContents, 0, pageSize);
 	JSONArray activities = new JSONArray();
 	JSONArray headers = new JSONArray();
 	

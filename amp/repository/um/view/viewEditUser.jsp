@@ -457,14 +457,16 @@ function validateUserInfo(){
 																		</td>
 																	</tr>
 																	</module:display>
-																	<tr>
-																		<td align="right"  class="formCheckContainer">
-																			<digi:trn>Assign to Workspace</digi:trn>
-																		</td>
-																		<td class="f-names" align="left">
-																			<html:checkbox property="addWorkspace" styleClass="inp-text"></html:checkbox>
-																		</td>
-																	</tr>
+																	<c:if test="${!umViewEditUserForm.ban}">
+																		<tr>
+																			<td align="right"  class="formCheckContainer">
+																				<digi:trn>Assign to Workspace</digi:trn>
+																			</td>
+																			<td class="f-names" align="left">
+																				<html:checkbox property="addWorkspace" styleClass="inp-text"></html:checkbox>
+																			</td>
+																		</tr>
+																	</c:if>
 																	<tr>
 															            <td>&nbsp;</td>
 															          </tr>

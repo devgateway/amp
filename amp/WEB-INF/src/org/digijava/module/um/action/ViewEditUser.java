@@ -212,6 +212,7 @@ public class ViewEditUser extends Action {
                     	uForm.getOrgs().add(organization);
                     }
                 }
+                uForm.setBan(user.isBanned());
 
 
                 Locale language = null;
@@ -457,7 +458,7 @@ public class ViewEditUser extends Action {
 
     public void resetViewEditUserForm(ViewEditUserForm uForm) {
         if (uForm != null) {
-            uForm.setBan(null);
+            //uForm.setBan(null);
             uForm.setEvent(null);
             uForm.setNewPassword(null);
             uForm.setConfirmNewPassword(null);

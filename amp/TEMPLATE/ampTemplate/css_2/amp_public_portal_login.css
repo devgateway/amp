@@ -69,3 +69,6 @@ div.addnew{clear:both;padding:5px 0px;width:340px;}
 div.footer {
 	margin-top: 15px;
 }
+.fade {
+	display: none;
+}

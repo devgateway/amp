@@ -2559,7 +2559,7 @@ public class ExportActivityToWord extends Action {
 
                                    if (fndDet.getFixedExchangeRate() != null) {
                                         String exchangeRateStr = TranslatorWorker.translateText("Exchange Rate: ");
-                                        exchangeRateStr += DECIMAL_FORMAT.format(Double.parseDouble(fndDet.getFixedExchangeRate()));
+                                        exchangeRateStr += DECIMAL_FORMAT.format(FormatHelper.parseDouble(fndDet.getFixedExchangeRate()));
                                         currentRowData.addRowData(exchangeRateStr);
                                     }
                                     String rolesOrgFundingFlows=getRoleAndOrgForFundingFlows(fndDet.getRecipientOrganisation(), fndDet.getRecipientOrganisationRole(), 

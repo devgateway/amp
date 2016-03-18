@@ -2779,6 +2779,7 @@ module.exports = BackboneDash.View.extend({
 var d3 = require('d3');
 var ChartViewBase = require('./chart-view-base');
 var ModalView = require('./chart-tops-info-modal');
+var _ = require('underscore');
 
 module.exports = ChartViewBase.extend({
 
@@ -2800,9 +2801,11 @@ module.exports = ChartViewBase.extend({
   getTTContent: function(context) {
 	var ofTotal = app.translator.translateSync("amp.dashboard:of-total","of total");
 	var units = app.translator.translateSync(app.settings.numberMultiplierDescription);
+    var self = this;
+    var currencyName = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')}).value;
     return {tt: {
       heading: context.x.raw,
-      bodyText: '<b>' + context.y.fmt + '</b> ' + this.model.get('currency') + ' (' + units + ')',
+      bodyText: '<b>' + context.y.fmt + '</b> ' + currencyName + ' (' + units + ')',
       footerText: '<b>' + d3.format('%')(context.y.raw / this.model.get('total')) + '</b>&nbsp<span>' + ofTotal + '</span>'
     }};
   },
@@ -2832,7 +2835,7 @@ module.exports = ChartViewBase.extend({
 
 });
 
-},{"./chart-tops-info-modal":26,"./chart-view-base":28,"d3":"d3"}],28:[function(require,module,exports){
+},{"./chart-tops-info-modal":26,"./chart-view-base":28,"d3":"d3","underscore":"underscore"}],28:[function(require,module,exports){
 
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
@@ -30781,7 +30784,7 @@ module.exports = Backbone.View.extend({
     var self = this;
     this.$el.addClass('panel panel-primary');
     if (this.draggable) {
-      this.$el.draggable({ cancel: '.panel-body, .panel-footer', cursor: 'move'  });
+      this.$el.draggable({ cancel: '.panel-body, .panel-footer', cursor: 'move', containment: 'window' });
     }
     this.firstRender = true;
 

@@ -206,9 +206,8 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 			acc.getMetaData().add(disasterResponseMeta);
 		}
 		
-		if (columnsMetaData.containsKey("expenditure_class_id") && rs.getString("expenditure_class_name") != null) {
-			MetaInfo expenseMeta = this.getCachedMetaInfo(ColumnConstants.EXPENDITURE_CLASS, rs.getString("expenditure_class_name"));
-			acc.getMetaData().add(expenseMeta);
+		if (columnsMetaData.containsKey("expenditure_class_id")/* && tr_type == Constants.EXPENDITURE*/) {
+			addMetaIfExists(rs, acc, "expenditure_class_name", ColumnConstants.EXPENDITURE_CLASS, ColumnConstants.EXPENDITURE_CLASS + " Unallocated", false);
 		}
 		//the most important meta name, the source name (donor name, region name, component name)
 		String headMetaName=rsmd.getColumnName(4).toLowerCase();

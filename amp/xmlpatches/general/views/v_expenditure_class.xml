@@ -21,10 +21,13 @@
 			<lang delimiter=";" type="postgres">
 				DROP VIEW IF EXISTS v_expenditure_class;
 				CREATE OR REPLACE VIEW v_expenditure_class AS 
-					SELECT af.amp_activity_id, acv.category_value AS name, acv.id AS id
+					SELECT DISTINCT
+						af.amp_activity_id, 
+						COALESCE(acv.category_value, 'Expenditure Class Unallocated') AS name, 
+						COALESCE(acv.id, 0) AS id
 						FROM amp_funding af
 							JOIN amp_funding_detail afd ON afd.amp_funding_id = af.amp_funding_id
-							JOIN amp_category_value acv ON acv.id = afd.expenditure_class
+							LEFT JOIN amp_category_value acv ON acv.id = afd.expenditure_class
 	   		</lang>
 		</script>
 	</apply>

@@ -236,13 +236,16 @@ public class CellColumn<K extends Cell> extends Column<K> {
 						lc.addCell(element);
 					}*/
 					
+					if (element.toString().equals("Expenditure Class Unallocated") && this.getName().equals("Expenditure Class"))
+						continue; // this is so hacky I have no words. Luckily we're dumping LegacyReports really soon (c)
+					
 					ListCell listCell	= ownerToCells.get(element.getOwnerId());
 					if ( listCell == null ) {
 						listCell	= new ListCell();
 						ownerToCells.put(element.getOwnerId(), listCell);
 					}
 					listCell.addCell(element);
-					
+//					System.err.format("ListCell: adding cell %s to column %s\n", element, this.getName());
 				}
 			} catch (IncompatibleCellException e) {
 				logger.error(e);

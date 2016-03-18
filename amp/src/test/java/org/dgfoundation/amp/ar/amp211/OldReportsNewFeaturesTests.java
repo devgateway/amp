@@ -319,10 +319,10 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
 	public static String[] expenditureClassActivities = new String[] {"execution rate activity", "ptc activity 1", "activity_with_expenditure_class_1", "another_activity_with_expenditure_class"};
 	
 	@Test
-	public void testFlatRawExpenditureClass() {
+	public void testFlatRawExpenditureClass() { // MJAJAJAJA: CORRECT
 		GroupReportModel cor = GroupReportModel.withColumnReports("AMP-22234-flat",
 				ColumnReportDataModel.withColumns("AMP-22234-flat",
-						SimpleColumnModel.withContents("Project Title", "another_activity_with_expenditure_class", "another_activity_with_expenditure_class", "execution rate activity", "execution rate activity", "activity_with_expenditure_class_1", "activity_with_expenditure_class_1", "ptc activity 1", "ptc activity 1").setIsPledge(false), 
+						SimpleColumnModel.withContents("Project Title", "another_activity_with_expenditure_class", "another_activity_with_expenditure_class", "ptc activity 1", "ptc activity 1", "execution rate activity", "execution rate activity", "activity_with_expenditure_class_1", "activity_with_expenditure_class_1").setIsPledge(false), 
 						SimpleColumnModel.withContents("Expenditure Class", "another_activity_with_expenditure_class", "Capital Expenditure", "activity_with_expenditure_class_1", "[Capital Expenditure, Compensation / Salaries, Goods and Services]").setIsPledge(false), 
 						GroupColumnModel.withSubColumns("Funding",
 							GroupColumnModel.withSubColumns("2013",
@@ -338,7 +338,7 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
 								SimpleColumnModel.withContents("Actual Disbursements", "execution rate activity", "35 000").setIsPledge(false), 
 								SimpleColumnModel.withContents("Actual Expenditures", "another_activity_with_expenditure_class", "22 111").setIsPledge(false))), 
 						GroupColumnModel.withSubColumns("Total Costs",
-							SimpleColumnModel.withContents("Actual Commitments", "another_activity_with_expenditure_class", "11 222", "activity_with_expenditure_class_1", "137 000", "ptc activity 1", "666 777").setIsPledge(false), 
+							SimpleColumnModel.withContents("Actual Commitments", "another_activity_with_expenditure_class", "11 222", "ptc activity 1", "666 777", "activity_with_expenditure_class_1", "137 000").setIsPledge(false), 
 							SimpleColumnModel.withContents("Actual Disbursements", "execution rate activity", "90 000").setIsPledge(false), 
 							SimpleColumnModel.withContents("Actual Expenditures", "another_activity_with_expenditure_class", "22 111", "activity_with_expenditure_class_1", "154 500").setIsPledge(false)))
 					.withTrailCells(null, null, "666 777", "0", "75 000", "78 222", "55 000", "79 500", "70 000", "35 000", "22 111", "814 999", "90 000", "176 611"))
@@ -354,13 +354,29 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
 
 	@Test
 	public void testAMP22449() {
-		GroupReportModel cor = null;
+		GroupReportModel cor = GroupReportModel.withGroupReports("AMP-22449-exp-class-hier",
+				GroupReportModel.withColumnReports("AMP-22449-exp-class-hier",
+						ColumnReportDataModel.withColumns("Expenditure Class: Expenditure Class Unallocated",
+							SimpleColumnModel.withContents("Project Title", "another_activity_with_expenditure_class", "another_activity_with_expenditure_class").setIsPledge(false), 
+							GroupColumnModel.withSubColumns("Funding",
+								GroupColumnModel.withSubColumns("2015",
+									SimpleColumnModel.withContents("Planned Expenditures", "another_activity_with_expenditure_class", "44 678").setIsPledge(false))), 
+							GroupColumnModel.withSubColumns("Total Costs",
+								SimpleColumnModel.withContents("Planned Expenditures", "another_activity_with_expenditure_class", "44 678").setIsPledge(false)))
+						.withTrailCells(null, "44 678", "44 678"))
+					.withTrailCells(null, "44 678", "44 678"))
+				.withTrailCells(null, "44 678", "44 678")
+				.withPositionDigest(true,
+					"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 2, colSpan: 1))",
+					"(line 1:RHLC 2015: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 1))",
+					"(line 2:RHLC Planned Expenditures: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1), RHLC Planned Expenditures: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))");
+		
 		String[] acts = new String[] {"another_activity_with_expenditure_class"};
 		runReportTest("AMP-22449-exp-class-hier", "AMP-22449-exp-class-hier", acts, cor, null, "en");		
 	}
 	
 	@Test
-	public void testHierRawExpenditureClass() {
+	public void testHierRawExpenditureClass() { // MJAJAJAJA: CORRECT
 		GroupReportModel cor = GroupReportModel.withGroupReports("AMP-22234-hier",
 				GroupReportModel.withColumnReports("AMP-22234-hier",
 						ColumnReportDataModel.withColumns("Expenditure Class: Capital Expenditure",
@@ -369,80 +385,60 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
 								GroupColumnModel.withSubColumns("2013",
 									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(false), 
 									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
-									SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "75 000").setIsPledge(false)), 
+									SimpleColumnModel.withContents("Actual Expenditures", MUST_BE_EMPTY).setIsPledge(false)), 
 								GroupColumnModel.withSubColumns("2014",
-									SimpleColumnModel.withContents("Actual Commitments", "another_activity_with_expenditure_class", "11 222", "activity_with_expenditure_class_1", "67 000").setIsPledge(false), 
+									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(false), 
 									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
-									SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "61 500").setIsPledge(false)), 
+									SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "50 000").setIsPledge(false)), 
 								GroupColumnModel.withSubColumns("2015",
-									SimpleColumnModel.withContents("Actual Commitments", "activity_with_expenditure_class_1", "70 000").setIsPledge(false), 
+									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(false), 
 									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
 									SimpleColumnModel.withContents("Actual Expenditures", "another_activity_with_expenditure_class", "22 111").setIsPledge(false))), 
 							GroupColumnModel.withSubColumns("Total Costs",
-								SimpleColumnModel.withContents("Actual Commitments", "another_activity_with_expenditure_class", "11 222", "activity_with_expenditure_class_1", "137 000").setIsPledge(false), 
+								SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(false), 
 								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
-								SimpleColumnModel.withContents("Actual Expenditures", "another_activity_with_expenditure_class", "22 111", "activity_with_expenditure_class_1", "136 500").setIsPledge(false)))
-						.withTrailCells(null, "0", "0", "75 000", "78 222", "0", "61 500", "70 000", "0", "22 111", "148 222", "0", "158 611"),
+								SimpleColumnModel.withContents("Actual Expenditures", "another_activity_with_expenditure_class", "22 111", "activity_with_expenditure_class_1", "50 000").setIsPledge(false)))
+						.withTrailCells(null, "0", "0", "0", "0", "0", "50 000", "0", "0", "22 111", "0", "0", "72 111"),
 						ColumnReportDataModel.withColumns("Expenditure Class: Compensation / Salaries",
 							SimpleColumnModel.withContents("Project Title", "activity_with_expenditure_class_1", "activity_with_expenditure_class_1").setIsPledge(false), 
 							GroupColumnModel.withSubColumns("Funding",
 								GroupColumnModel.withSubColumns("2013",
 									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(false), 
 									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
-									SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "75 000").setIsPledge(false)), 
+									SimpleColumnModel.withContents("Actual Expenditures", MUST_BE_EMPTY).setIsPledge(false)), 
 								GroupColumnModel.withSubColumns("2014",
-									SimpleColumnModel.withContents("Actual Commitments", "activity_with_expenditure_class_1", "67 000").setIsPledge(false), 
+									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(false), 
 									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
-									SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "29 500").setIsPledge(false)), 
+									SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "18 000").setIsPledge(false)), 
 								GroupColumnModel.withSubColumns("2015",
-									SimpleColumnModel.withContents("Actual Commitments", "activity_with_expenditure_class_1", "70 000").setIsPledge(false), 
+									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(false), 
 									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
 									SimpleColumnModel.withContents("Actual Expenditures", MUST_BE_EMPTY).setIsPledge(false))), 
 							GroupColumnModel.withSubColumns("Total Costs",
-								SimpleColumnModel.withContents("Actual Commitments", "activity_with_expenditure_class_1", "137 000").setIsPledge(false), 
+								SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(false), 
 								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
-								SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "104 500").setIsPledge(false)))
-						.withTrailCells(null, "0", "0", "75 000", "67 000", "0", "29 500", "70 000", "0", "0", "137 000", "0", "104 500"),
+								SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "18 000").setIsPledge(false)))
+						.withTrailCells(null, "0", "0", "0", "0", "0", "18 000", "0", "0", "0", "0", "0", "18 000"),
 						ColumnReportDataModel.withColumns("Expenditure Class: Expenditure Class Unallocated",
-							SimpleColumnModel.withContents("Project Title", "execution rate activity", "execution rate activity", "ptc activity 1", "ptc activity 1").setIsPledge(false), 
+							SimpleColumnModel.withContents("Project Title", "another_activity_with_expenditure_class", "another_activity_with_expenditure_class", "ptc activity 1", "ptc activity 1", "execution rate activity", "execution rate activity", "activity_with_expenditure_class_1", "activity_with_expenditure_class_1").setIsPledge(false), 
 							GroupColumnModel.withSubColumns("Funding",
 								GroupColumnModel.withSubColumns("2013",
 									SimpleColumnModel.withContents("Actual Commitments", "ptc activity 1", "666 777").setIsPledge(false), 
 									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
-									SimpleColumnModel.withContents("Actual Expenditures", MUST_BE_EMPTY).setIsPledge(false)), 
-								GroupColumnModel.withSubColumns("2014",
-									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(false), 
-									SimpleColumnModel.withContents("Actual Disbursements", "execution rate activity", "55 000").setIsPledge(false), 
-									SimpleColumnModel.withContents("Actual Expenditures", MUST_BE_EMPTY).setIsPledge(false)), 
-								GroupColumnModel.withSubColumns("2015",
-									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(false), 
-									SimpleColumnModel.withContents("Actual Disbursements", "execution rate activity", "35 000").setIsPledge(false), 
-									SimpleColumnModel.withContents("Actual Expenditures", MUST_BE_EMPTY).setIsPledge(false))), 
-							GroupColumnModel.withSubColumns("Total Costs",
-								SimpleColumnModel.withContents("Actual Commitments", "ptc activity 1", "666 777").setIsPledge(false), 
-								SimpleColumnModel.withContents("Actual Disbursements", "execution rate activity", "90 000").setIsPledge(false), 
-								SimpleColumnModel.withContents("Actual Expenditures", MUST_BE_EMPTY).setIsPledge(false)))
-						.withTrailCells(null, "666 777", "0", "0", "0", "55 000", "0", "0", "35 000", "0", "666 777", "90 000", "0"),
-						ColumnReportDataModel.withColumns("Expenditure Class: Goods and Services",
-							SimpleColumnModel.withContents("Project Title", "activity_with_expenditure_class_1", "activity_with_expenditure_class_1").setIsPledge(false), 
-							GroupColumnModel.withSubColumns("Funding",
-								GroupColumnModel.withSubColumns("2013",
-									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(false), 
-									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
 									SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "75 000").setIsPledge(false)), 
 								GroupColumnModel.withSubColumns("2014",
-									SimpleColumnModel.withContents("Actual Commitments", "activity_with_expenditure_class_1", "67 000").setIsPledge(false), 
-									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
+									SimpleColumnModel.withContents("Actual Commitments", "another_activity_with_expenditure_class", "11 222", "activity_with_expenditure_class_1", "67 000").setIsPledge(false), 
+									SimpleColumnModel.withContents("Actual Disbursements", "execution rate activity", "55 000").setIsPledge(false), 
 									SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "11 500").setIsPledge(false)), 
 								GroupColumnModel.withSubColumns("2015",
 									SimpleColumnModel.withContents("Actual Commitments", "activity_with_expenditure_class_1", "70 000").setIsPledge(false), 
-									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
+									SimpleColumnModel.withContents("Actual Disbursements", "execution rate activity", "35 000").setIsPledge(false), 
 									SimpleColumnModel.withContents("Actual Expenditures", MUST_BE_EMPTY).setIsPledge(false))), 
 							GroupColumnModel.withSubColumns("Total Costs",
-								SimpleColumnModel.withContents("Actual Commitments", "activity_with_expenditure_class_1", "137 000").setIsPledge(false), 
-								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
+								SimpleColumnModel.withContents("Actual Commitments", "another_activity_with_expenditure_class", "11 222", "ptc activity 1", "666 777", "activity_with_expenditure_class_1", "137 000").setIsPledge(false), 
+								SimpleColumnModel.withContents("Actual Disbursements", "execution rate activity", "90 000").setIsPledge(false), 
 								SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "86 500").setIsPledge(false)))
-						.withTrailCells(null, "0", "0", "75 000", "67 000", "0", "11 500", "70 000", "0", "0", "137 000", "0", "86 500"))
+						.withTrailCells(null, "666 777", "0", "75 000", "78 222", "55 000", "11 500", "70 000", "35 000", "0", "814 999", "90 000", "86 500"))
 					.withTrailCells(null, "666 777", "0", "75 000", "78 222", "55 000", "79 500", "70 000", "35 000", "22 111", "814 999", "90 000", "176 611"))
 				.withTrailCells(null, "666 777", "0", "75 000", "78 222", "55 000", "79 500", "70 000", "35 000", "22 111", "814 999", "90 000", "176 611")
 				.withPositionDigest(true,
@@ -460,25 +456,49 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
 						ColumnReportDataModel.withColumns("Expenditure Class: Capital Expenditure",
 							SimpleColumnModel.withContents("Project Title", "another_activity_with_expenditure_class", "another_activity_with_expenditure_class", "activity_with_expenditure_class_1", "activity_with_expenditure_class_1").setIsPledge(false), 
 							GroupColumnModel.withSubColumns("Funding",
+								GroupColumnModel.withSubColumns("2013",
+									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(false), 
+									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
+									SimpleColumnModel.withContents("Actual Expenditures", MUST_BE_EMPTY).setIsPledge(false)), 
 								GroupColumnModel.withSubColumns("2014",
-									SimpleColumnModel.withContents("Actual Commitments", "another_activity_with_expenditure_class", "11 222", "activity_with_expenditure_class_1", "67 000").setIsPledge(false), 
+									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(false), 
 									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
 									SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "50 000").setIsPledge(false)), 
 								GroupColumnModel.withSubColumns("2015",
-									SimpleColumnModel.withContents("Actual Commitments", "activity_with_expenditure_class_1", "70 000").setIsPledge(false), 
+									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(false), 
 									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
 									SimpleColumnModel.withContents("Actual Expenditures", "another_activity_with_expenditure_class", "22 111").setIsPledge(false))), 
 							GroupColumnModel.withSubColumns("Total Costs",
-								SimpleColumnModel.withContents("Actual Commitments", "another_activity_with_expenditure_class", "11 222", "activity_with_expenditure_class_1", "137 000").setIsPledge(false), 
+								SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(false), 
 								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
 								SimpleColumnModel.withContents("Actual Expenditures", "another_activity_with_expenditure_class", "22 111", "activity_with_expenditure_class_1", "50 000").setIsPledge(false)))
-						.withTrailCells(null, "78 222", "0", "50 000", "70 000", "0", "22 111", "148 222", "0", "72 111"))
-					.withTrailCells(null, "78 222", "0", "50 000", "70 000", "0", "22 111", "148 222", "0", "72 111"))
-				.withTrailCells(null, "78 222", "0", "50 000", "70 000", "0", "22 111", "148 222", "0", "72 111")
+						.withTrailCells(null, "0", "0", "0", "0", "0", "50 000", "0", "0", "22 111", "0", "0", "72 111"),
+						ColumnReportDataModel.withColumns("Expenditure Class: Expenditure Class Unallocated",
+							SimpleColumnModel.withContents("Project Title", "another_activity_with_expenditure_class", "another_activity_with_expenditure_class", "ptc activity 1", "ptc activity 1", "execution rate activity", "execution rate activity", "activity_with_expenditure_class_1", "activity_with_expenditure_class_1").setIsPledge(false), 
+							GroupColumnModel.withSubColumns("Funding",
+								GroupColumnModel.withSubColumns("2013",
+									SimpleColumnModel.withContents("Actual Commitments", "ptc activity 1", "666 777").setIsPledge(false), 
+									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
+									SimpleColumnModel.withContents("Actual Expenditures", MUST_BE_EMPTY).setIsPledge(false)), 
+								GroupColumnModel.withSubColumns("2014",
+									SimpleColumnModel.withContents("Actual Commitments", "another_activity_with_expenditure_class", "11 222", "activity_with_expenditure_class_1", "67 000").setIsPledge(false), 
+									SimpleColumnModel.withContents("Actual Disbursements", "execution rate activity", "55 000").setIsPledge(false), 
+									SimpleColumnModel.withContents("Actual Expenditures", MUST_BE_EMPTY).setIsPledge(false)), 
+								GroupColumnModel.withSubColumns("2015",
+									SimpleColumnModel.withContents("Actual Commitments", "activity_with_expenditure_class_1", "70 000").setIsPledge(false), 
+									SimpleColumnModel.withContents("Actual Disbursements", "execution rate activity", "35 000").setIsPledge(false), 
+									SimpleColumnModel.withContents("Actual Expenditures", MUST_BE_EMPTY).setIsPledge(false))), 
+							GroupColumnModel.withSubColumns("Total Costs",
+								SimpleColumnModel.withContents("Actual Commitments", "another_activity_with_expenditure_class", "11 222", "ptc activity 1", "666 777", "activity_with_expenditure_class_1", "137 000").setIsPledge(false), 
+								SimpleColumnModel.withContents("Actual Disbursements", "execution rate activity", "90 000").setIsPledge(false), 
+								SimpleColumnModel.withContents("Actual Expenditures", MUST_BE_EMPTY).setIsPledge(false)))
+						.withTrailCells(null, "666 777", "0", "0", "78 222", "55 000", "0", "70 000", "35 000", "0", "814 999", "90 000", "0"))
+					.withTrailCells(null, "666 777", "0", "0", "78 222", "55 000", "50 000", "70 000", "35 000", "22 111", "814 999", "90 000", "72 111"))
+				.withTrailCells(null, "666 777", "0", "0", "78 222", "55 000", "50 000", "70 000", "35 000", "22 111", "814 999", "90 000", "72 111")
 				.withPositionDigest(true,
-					"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 6), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 7, colSpan: 3))",
-					"(line 1:RHLC 2014: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 3), RHLC 2015: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 3))",
-					"(line 2:RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1), RHLC Actual Expenditures: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1), RHLC Actual Expenditures: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1), RHLC Actual Expenditures: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1))");
+					"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 9), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 10, colSpan: 3))",
+					"(line 1:RHLC 2013: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 3), RHLC 2014: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 3), RHLC 2015: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 3))",
+					"(line 2:RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1), RHLC Actual Expenditures: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1), RHLC Actual Expenditures: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1), RHLC Actual Expenditures: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1), RHLC Actual Expenditures: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1))");
 
 		runReportTest("AMP-22234-hier-filtered-by-capital-expenditure", "AMP-22234-hier-filtered-by-capital-expenditure", expenditureClassActivities, cor, null, "en");
 	}
@@ -487,29 +507,87 @@ public class OldReportsNewFeaturesTests extends ReportsTestCase {
 	public void testFlatFilteredExpenditureClass() {
 		GroupReportModel cor = GroupReportModel.withColumnReports("AMP-22234-flat-filtered-compensation",
 				ColumnReportDataModel.withColumns("AMP-22234-flat-filtered-compensation",
-						SimpleColumnModel.withContents("Project Title", "activity_with_expenditure_class_1", "activity_with_expenditure_class_1").setIsPledge(false), 
+						SimpleColumnModel.withContents("Project Title", "another_activity_with_expenditure_class", "another_activity_with_expenditure_class", "ptc activity 1", "ptc activity 1", "execution rate activity", "execution rate activity", "activity_with_expenditure_class_1", "activity_with_expenditure_class_1").setIsPledge(false), 
 						SimpleColumnModel.withContents("Expenditure Class", "activity_with_expenditure_class_1", "Compensation / Salaries").setIsPledge(false), 
 						GroupColumnModel.withSubColumns("Funding",
-							GroupColumnModel.withSubColumns("2014",
-								SimpleColumnModel.withContents("Actual Commitments", "activity_with_expenditure_class_1", "67 000").setIsPledge(false), 
+							GroupColumnModel.withSubColumns("2013",
+								SimpleColumnModel.withContents("Actual Commitments", "ptc activity 1", "666 777").setIsPledge(false), 
 								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
+								SimpleColumnModel.withContents("Actual Expenditures", MUST_BE_EMPTY).setIsPledge(false)), 
+							GroupColumnModel.withSubColumns("2014",
+								SimpleColumnModel.withContents("Actual Commitments", "another_activity_with_expenditure_class", "11 222", "activity_with_expenditure_class_1", "67 000").setIsPledge(false), 
+								SimpleColumnModel.withContents("Actual Disbursements", "execution rate activity", "55 000").setIsPledge(false), 
 								SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "18 000").setIsPledge(false)), 
 							GroupColumnModel.withSubColumns("2015",
 								SimpleColumnModel.withContents("Actual Commitments", "activity_with_expenditure_class_1", "70 000").setIsPledge(false), 
-								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
+								SimpleColumnModel.withContents("Actual Disbursements", "execution rate activity", "35 000").setIsPledge(false), 
 								SimpleColumnModel.withContents("Actual Expenditures", MUST_BE_EMPTY).setIsPledge(false))), 
 						GroupColumnModel.withSubColumns("Total Costs",
-							SimpleColumnModel.withContents("Actual Commitments", "activity_with_expenditure_class_1", "137 000").setIsPledge(false), 
-							SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
+							SimpleColumnModel.withContents("Actual Commitments", "another_activity_with_expenditure_class", "11 222", "ptc activity 1", "666 777", "activity_with_expenditure_class_1", "137 000").setIsPledge(false), 
+							SimpleColumnModel.withContents("Actual Disbursements", "execution rate activity", "90 000").setIsPledge(false), 
 							SimpleColumnModel.withContents("Actual Expenditures", "activity_with_expenditure_class_1", "18 000").setIsPledge(false)))
-					.withTrailCells(null, null, "67 000", "0", "18 000", "70 000", "0", "0", "137 000", "0", "18 000"))
-				.withTrailCells(null, null, "67 000", "0", "18 000", "70 000", "0", "0", "137 000", "0", "18 000")
+					.withTrailCells(null, null, "666 777", "0", "0", "78 222", "55 000", "18 000", "70 000", "35 000", "0", "814 999", "90 000", "18 000"))
+				.withTrailCells(null, null, "666 777", "0", "0", "78 222", "55 000", "18 000", "70 000", "35 000", "0", "814 999", "90 000", "18 000")
 				.withPositionDigest(true,
-					"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Expenditure Class: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 6), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 8, colSpan: 3))",
-					"(line 1:RHLC 2014: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 3), RHLC 2015: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 3))",
-					"(line 2:RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1), RHLC Actual Expenditures: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1), RHLC Actual Expenditures: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1), RHLC Actual Expenditures: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1))");
+					"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Expenditure Class: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 9), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 11, colSpan: 3))",
+					"(line 1:RHLC 2013: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 3), RHLC 2014: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 3), RHLC 2015: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 8, colSpan: 3))",
+					"(line 2:RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1), RHLC Actual Expenditures: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1), RHLC Actual Expenditures: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1), RHLC Actual Expenditures: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1), RHLC Actual Expenditures: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1))");
 		
 		runReportTest("AMP-22234-flat-filtered-compensation", "AMP-22234-flat-filtered-compensation", expenditureClassActivities, cor, null, "en");
+	}
+	
+	@Test
+	public void testExpenditureClassHierWithManyMeasures() {
+		GroupReportModel cor = GroupReportModel.withGroupReports("AMP-22449-exp-class-hier-many-measures",
+				GroupReportModel.withColumnReports("AMP-22449-exp-class-hier-many-measures",
+						ColumnReportDataModel.withColumns("Expenditure Class: Expenditure Class Unallocated",
+							SimpleColumnModel.withContents("Project Title", "another_activity_with_expenditure_class", "another_activity_with_expenditure_class", "ptc activity 1", "ptc activity 1", "execution rate activity", "execution rate activity", "activity_with_expenditure_class_1", "activity_with_expenditure_class_1").setIsPledge(false), 
+							GroupColumnModel.withSubColumns("Funding",
+								GroupColumnModel.withSubColumns("2013",
+									SimpleColumnModel.withContents("Actual Commitments", "ptc activity 1", "666 777").setIsPledge(false), 
+									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
+									SimpleColumnModel.withContents("Planned Expenditures", MUST_BE_EMPTY).setIsPledge(false)), 
+								GroupColumnModel.withSubColumns("2014",
+									SimpleColumnModel.withContents("Actual Commitments", "another_activity_with_expenditure_class", "11 222", "activity_with_expenditure_class_1", "67 000").setIsPledge(false), 
+									SimpleColumnModel.withContents("Actual Disbursements", "execution rate activity", "55 000").setIsPledge(false), 
+									SimpleColumnModel.withContents("Planned Expenditures", MUST_BE_EMPTY).setIsPledge(false)), 
+								GroupColumnModel.withSubColumns("2015",
+									SimpleColumnModel.withContents("Actual Commitments", "activity_with_expenditure_class_1", "70 000").setIsPledge(false), 
+									SimpleColumnModel.withContents("Actual Disbursements", "execution rate activity", "35 000").setIsPledge(false), 
+									SimpleColumnModel.withContents("Planned Expenditures", "another_activity_with_expenditure_class", "44 678").setIsPledge(false))), 
+							GroupColumnModel.withSubColumns("Total Costs",
+								SimpleColumnModel.withContents("Actual Commitments", "another_activity_with_expenditure_class", "11 222", "ptc activity 1", "666 777", "activity_with_expenditure_class_1", "137 000").setIsPledge(false), 
+								SimpleColumnModel.withContents("Actual Disbursements", "execution rate activity", "90 000").setIsPledge(false), 
+								SimpleColumnModel.withContents("Planned Expenditures", "another_activity_with_expenditure_class", "44 678").setIsPledge(false)))
+						.withTrailCells(null, "666 777", "0", "0", "78 222", "55 000", "0", "70 000", "35 000", "44 678", "814 999", "90 000", "44 678"),
+						ColumnReportDataModel.withColumns("Expenditure Class: Goods and Services",
+							SimpleColumnModel.withContents("Project Title", "activity_with_expenditure_class_1", "activity_with_expenditure_class_1").setIsPledge(false), 
+							GroupColumnModel.withSubColumns("Funding",
+								GroupColumnModel.withSubColumns("2013",
+									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(false), 
+									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
+									SimpleColumnModel.withContents("Planned Expenditures", MUST_BE_EMPTY).setIsPledge(false)), 
+								GroupColumnModel.withSubColumns("2014",
+									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(false), 
+									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
+									SimpleColumnModel.withContents("Planned Expenditures", MUST_BE_EMPTY).setIsPledge(false)), 
+								GroupColumnModel.withSubColumns("2015",
+									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(false), 
+									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
+									SimpleColumnModel.withContents("Planned Expenditures", "activity_with_expenditure_class_1", "32 000").setIsPledge(false))), 
+							GroupColumnModel.withSubColumns("Total Costs",
+								SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(false), 
+								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY).setIsPledge(false), 
+								SimpleColumnModel.withContents("Planned Expenditures", "activity_with_expenditure_class_1", "32 000").setIsPledge(false)))
+						.withTrailCells(null, "0", "0", "0", "0", "0", "0", "0", "0", "32 000", "0", "0", "32 000"))
+					.withTrailCells(null, "666 777", "0", "0", "78 222", "55 000", "0", "70 000", "35 000", "76 678", "814 999", "90 000", "76 678"))
+				.withTrailCells(null, "666 777", "0", "0", "78 222", "55 000", "0", "70 000", "35 000", "76 678", "814 999", "90 000", "76 678")
+				.withPositionDigest(true,
+					"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 9), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 10, colSpan: 3))",
+					"(line 1:RHLC 2013: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 3), RHLC 2014: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 3), RHLC 2015: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 3))",
+					"(line 2:RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1), RHLC Planned Expenditures: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1), RHLC Planned Expenditures: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1), RHLC Planned Expenditures: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1), RHLC Planned Expenditures: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1))");
+		
+		runReportTest("AMP-22449-exp-class-hier-many-measures", "AMP-22449-exp-class-hier-many-measures", expenditureClassActivities, cor, null, "en");
 	}
 	
 	@Test

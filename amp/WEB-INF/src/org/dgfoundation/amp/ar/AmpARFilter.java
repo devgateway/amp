@@ -1379,7 +1379,7 @@ public class AmpARFilter extends PropertyListable {
 		String TYPE_OF_ASSISTANCE_FILTER = "SELECT amp_activity_id FROM v_terms_assist WHERE terms_assist_code IN ("
 			+ Util.toCSString(typeOfAssistance) + ")";
 		
-		String EXPENDITURE_CLASS_FILTER = "SELECT amp_activity_id FROM v_expenditure_class WHERE id IN (" + Util.toCSStringForIN(expenditureClass) + ")";
+		String EXPENDITURE_CLASS_FILTER = "SELECT amp_activity_id FROM v_expenditure_class WHERE id IN (" + Util.toCSStringForIN(getExpenditureClassForFilters()) + ")";
 
 		String MODE_OF_PAYMENT_FILTER = "SELECT amp_activity_id FROM v_mode_of_payment WHERE mode_of_payment_code IN ("
 			+ Util.toCSString(modeOfPayment) + ")";
@@ -3536,6 +3536,16 @@ public class AmpARFilter extends PropertyListable {
 		return expenditureClass;
 	}
 
+	public Set<Long> getExpenditureClassForFilters() {
+		if (expenditureClass == null) return null;
+		if (expenditureClass.isEmpty()) return new HashSet<>();
+		Set<Long> res = new HashSet<>();
+		for(AmpCategoryValue acv:expenditureClass)
+			res.add(acv.getId());
+		res.add(0l);
+		return res;
+	}
+	
 	public void setExpenditureClass(Set<AmpCategoryValue> expenditureClass) {
 		this.expenditureClass = expenditureClass;
 	}

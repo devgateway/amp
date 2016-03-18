@@ -15,7 +15,7 @@
 				INSERT INTO amp_columns_filters (id, column_id, bean_field_name, view_field_name) VALUES (
 					nextval('amp_columns_filters_seq'), 
 					(SELECT columnid FROM amp_columns WHERE columnname='Expenditure Class'), 
-					'expenditureClass', 'id');
+					'expenditureClassForFilters', 'id');
 					
 				UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart';
 			</lang>

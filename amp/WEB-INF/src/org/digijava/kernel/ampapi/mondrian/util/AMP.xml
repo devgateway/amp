@@ -809,6 +809,23 @@ ON
 			</Hierarchy>
 		</Dimension>
 
+
+
+		<Dimension name="Loan Details">
+			<Hierarchy hasAll="true" allMemberName="All Loan Maturity" primaryKey="funding_id" name="Loan Maturity Date">
+				<Level name="Loan Maturity Date" column="funding_id" nameColumn="maturity" />
+			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All Loan Grace Period" primaryKey="funding_id" name="Loan Grace Period">
+				<Level name="Loan Grace Period" column="funding_id" nameColumn="grace_period" />
+			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All Loan Ratification Date" primaryKey="funding_id" name="Loan Ratification Date">
+				<Level name="Loan Ratification Date" column="funding_id" nameColumn="ratification_date" />
+			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All Loan Interest Rate" primaryKey="funding_id" name="Loan Interest Rate">
+				<Level name="Loan Interest Rate" column="funding_id" nameColumn="interest_rate" />
+			</Hierarchy>
+		</Dimension>
+
 		<Dimension name="Pledges Detail Dates" foreignKey="entity_internal_id">
 			<Hierarchy hasAll="true" allMemberName="All Pledges Detail Start Date" primaryKey="pledge_detail_id" name="Pledges Detail Start Date">
 				<View alias='v_pledges_detail_start_date'>

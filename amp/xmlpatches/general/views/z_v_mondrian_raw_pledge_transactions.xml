@@ -34,6 +34,11 @@ SELECT <!-- pledge funding -->
 	to_char(pf.transaction_date, gs.date_format) || ' - ' || pf.transaction_end_date AS transaction_range,
 	pf.transaction_amount,
 	(999999999) AS expenditure_class,
+	'' AS ratification_date,
+	'' AS grace_period,
+	'' AS interest_rate,
+	'' AS maturity, 
+	
 	pf.currency_id,
 	pf.originating_org_id,
 	999999999 AS financing_instrument_id,

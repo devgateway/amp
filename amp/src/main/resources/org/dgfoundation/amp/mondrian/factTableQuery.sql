@@ -2,6 +2,7 @@ DELETE FROM mondrian_fact_table WHERE entity_id @@activityIdCondition@@;
 
 INSERT INTO mondrian_fact_table (entity_id, funding_id, entity_internal_id, transaction_type, adjustment_type, transaction_date, date_code, display_date_code, 
   transaction_start_date, transaction_end_date, transaction_range, transaction_amount, expenditure_class, 
+  ratification_date, grace_period, interest_rate, maturity,
   currency_id, donor_id, 
   financing_instrument_id, terms_of_assistance_id, funding_status_id, mode_of_payment_id, status_id, modality_id, type_of_cooperation_id, type_of_implementation_id, procurement_system_id,
   primary_sector_id, secondary_sector_id, tertiary_sector_id, location_id,
@@ -42,6 +43,10 @@ INSERT INTO mondrian_fact_table (entity_id, funding_id, entity_internal_id, tran
          COALESCE(sg.percentage, 1)
          ) AS transaction_amount,
 	 rawdonation.expenditure_class AS expenditure_class,
+	 COALESCE(rawdonation.ratification_date, '') AS ratification_date,
+	 COALESCE(rawdonation.grace_period, '') AS grace_period, 
+	 COALESCE(rawdonation.interest_rate, '') AS interest_rate,
+	 COALESCE(rawdonation.maturity, '') AS maturity,
      rawdonation.currency_id AS currency_id,
 	 CASE WHEN rawdonation.src_role='DN' THEN rawdonation.originating_org_id ELSE @@BUGCHOOSER@@ END AS donor_id,
      COALESCE(rawdonation.financing_instrument_id, 999999999) AS financing_instrument_id,
@@ -116,6 +121,7 @@ order by rawdonation.amp_activity_id;
 
 INSERT INTO mondrian_fact_table (entity_id, funding_id, entity_internal_id, transaction_type, adjustment_type, transaction_date, date_code, display_date_code, 
   transaction_start_date, transaction_end_date, transaction_range, transaction_amount, expenditure_class,
+  ratification_date, grace_period, interest_rate, maturity,
   currency_id, donor_id, 
   financing_instrument_id, terms_of_assistance_id, funding_status_id, mode_of_payment_id, status_id, modality_id, type_of_cooperation_id, type_of_implementation_id, procurement_system_id,
   primary_sector_id, secondary_sector_id, tertiary_sector_id, location_id,
@@ -149,7 +155,10 @@ INSERT INTO mondrian_fact_table (entity_id, funding_id, entity_internal_id, tran
          COALESCE(tert_sect.percentage, 1)
          ) AS transaction_amount,
 	 rawdonation.expenditure_class AS expenditure_class,
-	 
+	 rawdonation.ratification_date AS ratification_date,
+	 rawdonation.grace_period AS grace_period, 
+	 rawdonation.interest_rate AS interest_rate,
+	 rawdonation.maturity AS maturity,	 
      rawdonation.currency_id AS currency_id,
 	 CASE WHEN src_role='DN' THEN rawdonation.originating_org_id ELSE @@BUGCHOOSER@@ END AS donor_id,
      COALESCE(rawdonation.financing_instrument_id, 999999999) AS financing_instrument_id,

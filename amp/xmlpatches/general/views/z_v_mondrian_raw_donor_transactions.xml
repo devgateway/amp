@@ -34,6 +34,12 @@ SELECT  <!-- regular transactions -->
     vmpt.transaction_range,
 	vmpt.transaction_amount,
 	vmpt.expenditure_class,
+	
+	vmpt.ratification_date,
+	vmpt.grace_period,
+	vmpt.interest_rate,
+	vmpt.maturity,
+	
 	vmpt.currency_id,
 	vmpt.originating_org_id,
 	vmpt.financing_instrument_id,
@@ -81,6 +87,10 @@ SELECT <!-- MTEFs -->
 	
 	mf.amount AS transaction_amount,
 	(999999999) AS expenditure_class, 
+	COALESCE(to_char(f.ratification_date, 'YYYY-MM-DD'), '') AS ratification_date,
+	COALESCE(to_char(f.grace_period, '9999'), '') AS grace_period,
+	COALESCE(to_char(f.interest_rate, '999D99'), '') AS interest_rate,
+	COALESCE(to_char(f.maturity, 'YYYY-MM-DD'), '') AS maturity,
 	mf.amp_currency_id AS currency_id,	
 	
 	f.amp_donor_org_id AS originating_org_id,
@@ -128,9 +138,11 @@ SELECT <!-- undefined donor -->
 
 	100 AS transaction_amount,
 	(999999999) AS expenditure_class, 
+	COALESCE(to_char(aff.ratification_date, 'YYYY-MM-DD'), '') AS ratification_date,
+	COALESCE(to_char(aff.grace_period, '9999'), '') AS grace_period,
+	COALESCE(to_char(aff.interest_rate, '999D99'), '') AS interest_rate,
+	COALESCE(to_char(aff.maturity, 'YYYY-MM-DD'), '') AS maturity,
 	
-	
-
 	(SELECT amp_currency_id FROM amp_currency WHERE currency_code = (SELECT settingsvalue FROM amp_global_Settings WHERE settingsname = 'Base Currency')) AS currency_id,
 	(999999999) AS originating_org_id,
 	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'financing_instrument')) AS financing_instrument_id,
@@ -157,6 +169,7 @@ SELECT <!-- undefined donor -->
 	cast (999999999 as bigint) as related_entity_id
           
 	FROM amp_activity_version aav
+	JOIN amp_funding aff ON aff.amp_activity_id = aav.amp_activity_id 
 	WHERE 
 		(NOT EXISTS (
 			select * from amp_funding_detail afd 
@@ -181,7 +194,11 @@ SELECT <!-- component funding -->
     'Undefined' AS transaction_range,
 	ct.transaction_amount AS transaction_amount,
 	(999999999) AS expenditure_class, 
-	
+	'' AS ratification_date,
+	'' AS grace_period,
+	'' AS interest_rate,
+	'' AS maturity, 
+		
 	ct.currency_id AS currency_id,	
 	
 	ct.component_organisation_id AS originating_org_id,

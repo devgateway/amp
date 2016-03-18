@@ -316,10 +316,15 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		put("Description of Component Funding", ColumnConstants.DESCRIPTION_OF_COMPONENT_FUNDING);
 		put("Draft", ColumnConstants.DRAFT);
 		put("Execution Rate", ColumnConstants.EXECUTION_RATE);
+		put("Expenditure Class", ColumnConstants.EXPENDITURE_CLASS);
 		put("Final Date for Disbursements Comments", ColumnConstants.FINAL_DATE_FOR_DISBURSEMENTS_COMMENTS);
 		put("Funding end date", ColumnConstants.FUNDING_END_DATE);
 		put("Funding start date", ColumnConstants.FUNDING_START_DATE);
 		put("Grand Total Cost", ColumnConstants.GRAND_TOTAL_COST);
+		put("Loan Interest Rate", ColumnConstants.INTEREST_RATE);
+		put("Loan Grace Period", ColumnConstants.GRACE_PERIOD);
+		put("Loan Maturity Date", ColumnConstants.MATURITY);
+		put("Loan Ratification Date", ColumnConstants.RATIFICATION_DATE);
 		put("Measures Taken", ColumnConstants.MEASURES_TAKEN);
 		put("Ministry Of Finance Contact Organization", ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_ORGANIZATION);
 		put("Multi Donor", ColumnConstants.MULTI_DONOR);
@@ -356,7 +361,6 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		put("Project Period", ColumnConstants.PROJECT_PERIOD);
 		put("Related Projects", ColumnConstants.RELATED_PROJECTS);
 		put("Related Pledges", ColumnConstants.RELATED_PLEDGES);
-		put("Expenditure Class", ColumnConstants.EXPENDITURE_CLASS);
 		put("Sector Location", ColumnConstants.SECTOR_LOCATION);
 		put("Sector Tag", ColumnConstants.SECTOR_TAG);
 		put("Sector Tag Sub-Sector", ColumnConstants.SECTOR_TAG_SUB_SECTOR);

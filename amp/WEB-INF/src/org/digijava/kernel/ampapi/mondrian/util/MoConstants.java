@@ -86,6 +86,7 @@ public final class MoConstants {
 	public static final String PRIMARY_SECTOR = "Primary Sector";
 	public static final String SECONDARY_SECTOR = "Secondary Sector";
 	public static final String TERTIARY_SECTOR = "Tertiary Sector";
+	public static final String LOAN_DETAILS = "Loan Details";
 	
 	public static final String PLEDGE_PRIMARY_SECTOR = "Pledge Primary Sector";
 	public static final String PLEDGE_SECONDARY_SECTOR = "Pledge Secondary Sector";
@@ -180,6 +181,11 @@ public final class MoConstants {
 	public static final String H_MINORITIES = "Minorities";
 	public static final String H_PROGRAM_DESCRIPTION = "Program Description";
 	public static final String H_EXPENDITURE_CLASS = "Expenditure Class";
+	
+	public static final String H_LOAN_GRACE_PERIOD = "Loan Grace Period";
+	public static final String H_LOAN_MATURITY = "Loan Maturity Date";
+	public static final String H_LOAN_INTEREST_RATE = "Loan Interest Rate";
+	public static final String H_LOAN_RATIFICATION_DATE = "Loan Ratification Date";
 	
 	//Attributes/Levels
 	public static final String ATTR_PROJECT_TITLE = "Project Title";
@@ -313,6 +319,10 @@ public final class MoConstants {
 	public static final String ATTR_START_DATE = "Start Date";
 	public static final String ATTR_END_DATE = "End Date";
 	public static final String ATTR_DATE_RANGE = "Date Range";
+	public static final String ATTR_LOAN_MATURITY = "Loan Maturity Date";
+	public static final String ATTR_LOAN_RATIFICATION_DATE = "Loan Ratification Date";
+	public static final String ATTR_LOAN_GRACE_PERIOD = "Loan Grace Period";
+	public static final String ATTR_LOAN_INTEREST_RATE = "Loan Interest Rate";
 	
 	//properties
 	public static final String P_KEY = "Key";

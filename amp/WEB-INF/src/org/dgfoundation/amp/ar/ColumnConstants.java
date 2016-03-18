@@ -112,6 +112,7 @@ public class ColumnConstants {
 	public static final String GOVERNMENT_APPROVAL_PROCEDURES = "Government Approval Procedures";
 
 	public static final String GRAND_TOTAL_COST = "Grand Total Cost";
+	public static final String GRACE_PERIOD = "Loan Grace Period";
 	public static final String IMPLEMENTATION_LEVEL = "Implementation Level";
 	public static final String IMPLEMENTATION_LOCATION = "Implementation Location";
 	public static final String IMPLEMENTING_AGENCY = "Implementing Agency";
@@ -128,9 +129,11 @@ public class ColumnConstants {
 	public static final String INDIRECT_ON_BUDGET = "Indirect On Budget";
 	public static final String INSTITUTIONS = "Institutions";
 	public static final String INTERNAL_USE_ID = "Internal Use Id";
+	public static final String INTEREST_RATE = "Loan Interest Rate";
 	public static final String ISSUES = "Issues";
 	public static final String ISSUES___MEASURES___ACTORS = "Issues / Measures / Actors";
 	public static final String JOINT_CRITERIA = "Joint Criteria";
+	public static final String MATURITY = "Loan Maturity Date";
 	public static final String MEASURES_TAKEN = "Measures Taken";
 	public static final String MINISTRY_CODE = "Ministry Code";
 	public static final String MINISTRY_OF_FINANCE_CONTACT_EMAIL = "Ministry Of Finance Contact Email";
@@ -263,6 +266,7 @@ public class ColumnConstants {
 	public static final String PROPOSED_PROJECT_LIFE = "Proposed Project Life";
 	public static final String PROPOSED_START_DATE = "Proposed Start Date";
 	public static final String PURPOSE = "Purpose";
+	public static final String RATIFICATION_DATE = "Loan Ratification Date";
 	public static final String REGION = "Region";
 	public static final String REGION_ID = "Region Id";
 	public static final String REGIONAL_GROUP = "Regional Group";

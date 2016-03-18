@@ -34,9 +34,14 @@ SELECT
 	to_char(fd.transaction_date, 'J')::integer AS date_code,
 	<!-- donor transactions has no start/end/range, but exact date, this undefined -->
 	'Undefined' AS transaction_start_date,
-    'Undefined' AS transaction_end_date,
-    'Undefined' AS transaction_range,
-    COALESCE(fd.expenditure_class, 999999999) AS expenditure_class,
+	'Undefined' AS transaction_end_date,
+	'Undefined' AS transaction_range,
+	COALESCE(fd.expenditure_class, 999999999) AS expenditure_class,
+	
+	COALESCE(to_char(f.ratification_date, 'YYYY-MM-DD'), '') AS ratification_date,
+	COALESCE(to_char(f.grace_period, '9999'), '') AS grace_period,
+	COALESCE(to_char(f.interest_rate, '999D99'), '') AS interest_rate,
+	COALESCE(to_char(f.maturity, 'YYYY-MM-DD'), '') AS maturity,
 
 	CASE
 		WHEN (fd.amp_currency_id != (SELECT amp_currency_id FROM amp_currency WHERE currency_code = (SELECT settingsvalue FROM amp_global_settings WHERE settingsname = 'Base Currency'))) AND (fd.fixed_exchange_rate IS NOT NULL) AND (fd.fixed_exchange_rate > 0) THEN fd.transaction_amount / fd.fixed_exchange_rate 

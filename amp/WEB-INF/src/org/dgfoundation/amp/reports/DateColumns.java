@@ -30,6 +30,8 @@ public class DateColumns {
 		add(ColumnConstants.FUNDING_END_DATE);
 		add(ColumnConstants.FUNDING_START_DATE);
 		add(ColumnConstants.ORIGINAL_COMPLETION_DATE);
+		add(ColumnConstants.MATURITY);
+		add(ColumnConstants.RATIFICATION_DATE);
 		add(ColumnConstants.PLEDGES_DETAIL_DATE_RANGE);
 		add(ColumnConstants.PLEDGES_DETAIL_END_DATE);
 		add(ColumnConstants.PLEDGES_DETAIL_START_DATE);

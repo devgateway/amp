@@ -314,7 +314,10 @@ public class MondrianTablesRepository {
 				new DatabaseTableColumn("transaction_end_date", "varchar(20) NOT NULL", true),
 				new DatabaseTableColumn("expenditure_class", "integer", true),
 				new DatabaseTableColumn("transaction_range", "varchar(50) NOT NULL", true),
-		
+				new DatabaseTableColumn("maturity", "varchar(10) NOT NULL", true),
+				new DatabaseTableColumn("interest_rate", "varchar(10) NOT NULL", true),
+				new DatabaseTableColumn("grace_period", "varchar(10) NOT NULL", true),
+				new DatabaseTableColumn("ratification_date", "varchar(10) NOT NULL", true),
 				/**
 				 * regarding currencies: if a transaction has a fixed_exchange_rate, BASE_CURRENCY would have been written in currency_id and transaction_amount would be translated
 				 */

@@ -140,6 +140,11 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.DISASTER_RESPONSE_MARKER, new MDXLevel(MoConstants.DISASTER_RESPONSE_MARKER, MoConstants.H_HARDCODED_TEXT, MoConstants.H_HARDCODED_TEXT));
 			addColumnDefinition(ColumnConstants.EXPENDITURE_CLASS, new MDXLevel(MoConstants.EXPENDITURE_CLASS, MoConstants.H_CATEGORY_NAME, MoConstants.ATTR_EXPENDITURE_CLASS));
 
+			addColumnDefinition(ColumnConstants.GRACE_PERIOD, new MDXLevel(MoConstants.LOAN_DETAILS, MoConstants.H_LOAN_GRACE_PERIOD, MoConstants.ATTR_LOAN_GRACE_PERIOD));
+			addColumnDefinition(ColumnConstants.INTEREST_RATE, new MDXLevel(MoConstants.LOAN_DETAILS, MoConstants.H_LOAN_INTEREST_RATE, MoConstants.ATTR_LOAN_INTEREST_RATE));
+			addColumnDefinition(ColumnConstants.MATURITY, new MDXLevel(MoConstants.LOAN_DETAILS, MoConstants.H_LOAN_MATURITY, MoConstants.ATTR_LOAN_MATURITY));
+			addColumnDefinition(ColumnConstants.RATIFICATION_DATE, new MDXLevel(MoConstants.LOAN_DETAILS, MoConstants.H_LOAN_RATIFICATION_DATE, MoConstants.ATTR_LOAN_RATIFICATION_DATE));
+			
 			addColumnDefinition(ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_GOVERNMENT_APPROVAL_PROCEDURES, MoConstants.ATTR_GOVERNMENT_APPROVAL_PROCEDURES));
 			addColumnDefinition(ColumnConstants.JOINT_CRITERIA, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_JOINT_CRITERIA, MoConstants.ATTR_JOINT_CRITERIA));
 			addColumnDefinition(ColumnConstants.INDIRECT_ON_BUDGET, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.ATTR_INDIRECT_ON_BUDGET, MoConstants.ATTR_INDIRECT_ON_BUDGET));

@@ -46,18 +46,24 @@ var Saiku = {
 	 * Collection of routers for page fragments
 	 */
 	routers : [],
+	
+	totalBatches : 0 /* zero-based */,
+	
+	currentActiveBatch : 0,
 
 	/**
 	 * Convenience functions for blocking the UI
 	 */
 	ui : {
-		block : function(message) {
+		block : function(message, callback) {
 			$('.processing_message').html(message);
 			$('.processing_message').removeClass("i18n_translated").addClass(
 					"i18n");
 			Saiku.i18n.translate();
-
 			$('.processing,.processing_container').show();
+			if(callback !== undefined) {
+				callback();
+			}
 		},
 
 		unblock : function() {

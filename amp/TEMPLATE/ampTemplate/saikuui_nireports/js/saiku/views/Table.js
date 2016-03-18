@@ -65,7 +65,7 @@ var Table = Backbone.View.extend({
             return;
         }
         this.clearOut();
-        $(this.el).html('<span class="processing_image">&nbsp;&nbsp;</span> <span class="i18n rendering_data">Rendering data...</span>');
+        //$(this.el).html('<span class="processing_image">&nbsp;&nbsp;</span> <span class="i18n rendering_data">Rendering data...</span>');
 
         // Render the table without blocking the UI thread
         _.delay(this.process_data, 2, args.data);

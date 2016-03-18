@@ -203,7 +203,8 @@ var Query = Backbone.Model.extend({
 
         // Run it
         this.workspace.table.clearOut();
-        $(this.workspace.processing).html('<span class="processing_image">&nbsp;&nbsp;</span> <span class="i18n">Running query...</span>').show();
+        //$(this.workspace.processing).html('<span class="processing_image">&nbsp;&nbsp;</span> <span class="i18n">Running query...</span>').show();
+        Saiku.ui.block('Running query...');
         this.workspace.adjust();
         this.workspace.trigger('query:fetch');
 		Saiku.i18n.translate();

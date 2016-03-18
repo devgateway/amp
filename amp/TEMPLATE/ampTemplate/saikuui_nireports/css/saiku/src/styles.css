@@ -2120,3 +2120,7 @@ width:70px !important;
 #deflated-currencies-container table{
     width: 100%;
 }
+
+.hidden_row {
+	display: none;
+}

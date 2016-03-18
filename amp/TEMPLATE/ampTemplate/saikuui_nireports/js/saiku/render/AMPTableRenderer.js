@@ -30,9 +30,12 @@ this.draftColumn = undefined;
 this.approvalStatusColumn = undefined;
 this.hiddenColumns = undefined;
 this.ACTIVITY_STATUS_CODES = undefined;
-this.PLEDGE_ID_ADDER = 800000000; // java-side constant, taken MondrianETL 
+this.PLEDGE_ID_ADDER = 800000000; // java-side constant, taken MondrianETL
+this.rowsFromBatch = 50;
 
 AMPTableRenderer.prototype.render = function(data, options) {
+	Saiku.logger.log('AMPTableRenderer.render INIT');
+	window.saiku_time = new Date().getTime();
 	// When using this class to export the report we receive these extra
 	// parameters from the endpoint because are unavailable in the constructor
 	// call when using Rhino.
@@ -58,6 +61,8 @@ AMPTableRenderer.prototype.render = function(data, options) {
 			reportTotalsString : data.reportTotalsString
 		});
 		table += headerHtml + contentHtml + "</table>";
+		Saiku.logger.log('AMPTableRenderer.render END');
+		Saiku.logger.log(new Date().getTime() - window.saiku_time + "ms");
 		return table;
 	} else {
 		return "";
@@ -399,15 +404,13 @@ function generateDataRows(page, options) {
 	getNumberOfRows(page.pageArea);
 	this.contentMatrix = new Array(this.numberOfRows);
 	for (var i = 0; i < this.numberOfRows; i++) {
-		this.contentMatrix[i] = new Array(
-				this.headerMatrix[this.headerMatrix.length - 1].length);
+		this.contentMatrix[i] = new Array(this.headerMatrix[this.headerMatrix.length - 1].length);
 	}
 	this.currentContentIndexRow = 0;
 	for (var i = 0; i < page.pageArea.children.length; i++) {
-		extractDataFromTree(page.pageArea.children[i],
-				page.pageArea, 0, i === page.pageArea.children.length - 1, []);
+		extractDataFromTree(page.pageArea.children[i], page.pageArea, 0, i === page.pageArea.children.length - 1, []);
 	}
-	
+
 	// AMP-19189 fill the cell containing data with colors
 	if (this.draftColumn && this.approvalStatusColumn) {
 		fillContentsWithColors();
@@ -423,8 +426,15 @@ function generateDataRows(page, options) {
 				continue;
 			}
 		}
+
+		// Each "batch" value is used to show more rows when we scroll down the
+		// report.
+		if (i % this.rowsFromBatch === 0 && i > 0) {
+			Saiku.totalBatches++;
+		}
+
 		var applyTotalRowStyle = false;
-		var row = "<tr>";
+		var row = "<tr class='hidden_row' name='" + Saiku.totalBatches + "'>";
 		for (var j = 0; j < this.contentMatrix[i].length; j++) {
 			if (!isHiddenColumn(j)) {
 				var cell = "";
@@ -433,8 +443,7 @@ function generateDataRows(page, options) {
 						continue;
 					}
 					var group = 1;
-					if (this.type === 'csv' || this.type === 'pdf'
-							|| this.type === 'html') {
+					if (this.type === 'csv' || this.type === 'pdf' || this.type === 'html') {
 						group = findGroupVertically(this.contentMatrix, i, j);
 					}
 					var rowSpan = " rowspan='" + group + "' ";
@@ -451,82 +460,73 @@ function generateDataRows(page, options) {
 						cleanValue = cleanText(value, 60);
 						cleanTotalValue = cleanText(totalValue, 60);
 					}
-				
-				
-				var styleClass = getCellDataStyleClass(contentMatrix, cleanValue, i, j);
-				var coloredPrefix = "";
-				
-				if (cellContainsAsterisk(contentMatrix, i, j)) {
-					coloredPrefix = "*";
-				}
-				
-				// Ignore subtotal rows text and change style.
-				if (this.contentMatrix[i][j].isTotal === true) {
-					if (applyTotalRowStyle === false
-							&& cleanTotalValue.text.length > 0) {
-						// This flag indicates in which column we start applying
-						// the total style.
-						applyTotalRowStyle = true;
-					}
-					// Apply the special style for subtotal rows but
-					// starting in the right column index.
-					if (applyTotalRowStyle === true) {
-						// Trying something new here: show tooltip on the
-						// now empty "Hierarchy Value Totals" row.
-						if (cleanTotalValue.text !== undefined) {
-							styleClass = " class='row_total tooltipped i18n' data-subtotal='true' original-title='"
-									+ cleanTotalValue.text + "' ";
-						} else {
-							styleClass = " class='row_total' ";
-						}
-					} else {
-						styleClass = " class='row' ";
-					}
-					if (this.type === 'html') {
-						cleanValue.text = '';
-					}
-				}
 
-				cell = "<th" + styleClass + rowSpan + ">";
-				cell += coloredPrefix + cleanValue.text;
-				cell += "</th>";
-			} else {
-				// Change amount styles if is a subtotal.
-				if (this.contentMatrix[i][j] != null && this.contentMatrix[i][j].isTotal === true) {
-					cell = "<td class='data total'>";
-					if (this.type === 'xlsx' || this.type === 'csv') {
-						cell += this.contentMatrix[i][j].value;
-					} else if (this.type === 'pdf' || type === 'html') {
-						cell += "<div class='total'>"
-								+ this.contentMatrix[i][j].displayedValue
-								+ "</div>";
-					} else {
-						cell += this.contentMatrix[i][j].displayedValue;
+					var styleClass = getCellDataStyleClass(contentMatrix, cleanValue, i, j);
+					var coloredPrefix = "";
+
+					if (cellContainsAsterisk(contentMatrix, i, j)) {
+						coloredPrefix = "*";
 					}
-					cell += "</td>";
+
+					// Ignore subtotal rows text and change style.
+					if (this.contentMatrix[i][j].isTotal === true) {
+						if (applyTotalRowStyle === false && cleanTotalValue.text.length > 0) {
+							// This flag indicates in which column we start applying the total style.
+							applyTotalRowStyle = true;
+						}
+						// Apply the special style for subtotal rows but starting in the right column index.
+						if (applyTotalRowStyle === true) {
+							// Trying something new here: show tooltip on the now empty "Hierarchy Value Totals" row.
+							if (cleanTotalValue.text !== undefined) {
+								styleClass = " class='row_total tooltipped i18n' data-subtotal='true' original-title='" + cleanTotalValue.text + "' ";
+							} else {
+								styleClass = " class='row_total' ";
+							}
+						} else {
+							styleClass = " class='row' ";
+						}
+						if (this.type === 'html') {
+							cleanValue.text = '';
+						}
+					}
+
+					cell = "<th" + styleClass + rowSpan + ">";
+					cell += coloredPrefix + cleanValue.text;
+					cell += "</th>";
 				} else {
-					cell = "<td class='data'>";
-					// Special case we receive the word "constant" from the
-					// endpoint (summarized reports).
-					if (this.summarizedReport === true && i === 0 && j === 0) {
-						cell += options.reportTotalsString;
-					} else {
+					// Change amount styles if is a subtotal.
+					if (this.contentMatrix[i][j] != null && this.contentMatrix[i][j].isTotal === true) {
+						cell = "<td class='data total'>";
 						if (this.type === 'xlsx' || this.type === 'csv') {
 							cell += this.contentMatrix[i][j].value;
-						} else {							
-							var auxNonTotalVal = this.contentMatrix[i][j] == null ? "" : this.contentMatrix[i][j].displayedValue;
-							if (auxNonTotalVal === '' || auxNonTotalVal === null) {								
-								// This was requested on AMP-21487.
-								auxNonTotalVal = '0';
-							}
-							cell += auxNonTotalVal;
+						} else if (this.type === 'pdf' || type === 'html') {
+							cell += "<div class='total'>" + this.contentMatrix[i][j].displayedValue + "</div>";
+						} else {
+							cell += this.contentMatrix[i][j].displayedValue;
 						}
+						cell += "</td>";
+					} else {
+						cell = "<td class='data'>";
+						// Special case we receive the word "constant" from the endpoint (summarized reports).
+						if (this.summarizedReport === true && i === 0 && j === 0) {
+							cell += options.reportTotalsString;
+						} else {
+							if (this.type === 'xlsx' || this.type === 'csv') {
+								cell += this.contentMatrix[i][j].value;
+							} else {
+								var auxNonTotalVal = this.contentMatrix[i][j] == null ? "" : this.contentMatrix[i][j].displayedValue;
+								if (auxNonTotalVal === '' || auxNonTotalVal === null) {
+									// This was requested on AMP-21487.
+									auxNonTotalVal = '0';
+								}
+								cell += auxNonTotalVal;
+							}
+						}
+						cell += "</td>";
 					}
-					cell += "</td>";
 				}
+				row += cell;
 			}
-			row += cell;
-		}
 		}
 		row += "</tr>";
 		content += row;

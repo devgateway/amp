@@ -2,8 +2,7 @@
 	<span wicket:id="featureLabel"/>
 	<div style="height: 20px; width: 100%;">
 		<div style="float: left;">
-			<a href="#" onclick="qt=$(this).parent().parent().siblings('div:first');(function(){var toggle_flag=qt.css('overflow')=='hidden';if(toggle_flag){qt.slideToggle(function(){qt.css('overflow','');});}else qt.slideToggle();})(qt);return false;">
-			<b><span style="font-size:large;" wicket:id="donorOrg"/></b>
+			<a href="#" onclick="$(this).parent().parent().siblings('div:first').slideToggle();return false;">			<b><span style="font-size:large;" wicket:id="donorOrg"/></b>
 			</a>
 		</div>
 	</div>

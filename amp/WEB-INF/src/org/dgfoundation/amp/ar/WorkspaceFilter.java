@@ -183,9 +183,9 @@ public class WorkspaceFilter
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('Proposed Project Cost 1 - USD', 'Proposed Project Cost 2 - EUR', 'SubNational no percentages', 'Project with documents')";
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('Proposed Project Cost 1 - USD', 'Test MTEF directed', 'Eth Water', 'activity with directed MTEFs')";
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('TAC_activity_1', 'TAC_activity_2', 'Proposed Project Cost 2 - EUR', 'Test MTEF directed', 'Eth Water')";
-//		return "SELECT amp_activity_id from amp_activity WHERE name IN ('TAC_activity_2')";
+		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('execution rate activity', 'ptc activity 1', 'activity_with_expenditure_class_1', 'another_activity_with_expenditure_class')";
 		//return "SELECT amp_activity_id FROM amp_activity WHERE name IN ('activity with capital spending', 'Activity with planned disbursements', 'activity with pipeline MTEFs and act. disb')";
-		//return "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id >= 43";
+		//return "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id = 80";
 		return TEAM_FILTER;
 	}
 	

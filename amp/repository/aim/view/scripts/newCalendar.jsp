@@ -50,6 +50,7 @@
     .cal-div-wrapper {
         border:none;
         padding:1em;
+        height: 170px;
     }
 
     /* Datefield look/feel */

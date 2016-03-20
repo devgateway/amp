@@ -70,7 +70,6 @@ import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
 import org.digijava.kernel.ampapi.saiku.SaikuGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
-import org.digijava.kernel.ampapi.saiku.SaikuReportSorter;
 import org.digijava.kernel.ampapi.saiku.util.CellDataSetPostProcessing;
 import org.digijava.kernel.ampapi.saiku.util.CellDataSetToAmpHierarchies;
 import org.digijava.kernel.ampapi.saiku.util.CellDataSetToGeneratedReport;
@@ -244,12 +243,10 @@ public class MondrianReportGenerator implements ReportExecutor {
 				report = new SaikuGeneratedReport(
 						spec, report.generationTime, report.requestingUser,
 						(SaikuReportArea)report.reportContents, cellDataSet, report.rootHeaders, report.leafHeaders, environment);
-				SaikuReportSorter.sort(report, environment);
 				//formatSaikuDates ((SaikuGeneratedReport)report);
 				if (printMode)
 					SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST_SORT");
-			} else 
-				MondrianReportSorter.sort(report, environment);
+			}
 			logger.info("[" + spec.getReportName() + "]" +  "Report sorted.");
 			stats.postproc_time = System.currentTimeMillis() - postprocStart;
 			stats.total_time += stats.postproc_time;
@@ -445,8 +442,6 @@ public class MondrianReportGenerator implements ReportExecutor {
 		}
 		//add grouping columns for measure
 		config.getColumnAttributes().addAll(MondrianMapping.getDateElements(spec.getGroupingCriteria()));
-		//add sorting
-		configureSortingRules(config, spec, doHierarchiesTotals);
 		
 		// add empty rows and columns request configuration
 		addEmptyColRows(spec, config);
@@ -459,33 +454,6 @@ public class MondrianReportGenerator implements ReportExecutor {
 		
 		//config.setCrossJoinWithColumns(spec.getUsesFundingFlows() ? "[Flow Name].[Flow Name].Members" : null); // ugly and hacky... hopefully we're dropping the whole charade soon
 		return config;
-	}
-	
-	private void configureSortingRules(MDXConfig config, MondrianReportSpec spec, boolean doHierarchiesTotals) throws AMPException {
-		if (spec.getSorters() == null || spec.getSorters().size() == 0 ) return;
-		boolean nonBreakingSort = spec.getCalculateRowTotals() || doHierarchiesTotals;
-		
-		for (SortingInfo sortInfo : spec.getSorters()) {
-			MDXTuple tuple = new MDXTuple();
-			if (!sortInfo.isTotals) {//totals sorting will be done during post-processing
-				for (Entry<ReportElement, FilterRule> entry : sortInfo.sortByTuple.entrySet()) {
-					if (ElementType.ENTITY.equals(entry.getKey().type))
-						tuple.add(applySingleFilter(MondrianMapping.toMDXElement(entry.getKey().entity), entry.getValue()));
-					else { 
-						MDXAttribute mdxAttr = MondrianMapping.getElementByType(entry.getKey().type);
-						if (mdxAttr == null) {
-							String err = "No mapping found for Element type = " + entry.getKey().type;
-							logger.error(err);
-							throw new AMPException(err);
-						}
-						tuple.add(applySingleFilter(mdxAttr, entry.getValue()));
-					}	
-				}
-				config.getSortingOrder().put(tuple, sortInfo.ascending ? 
-													(nonBreakingSort ? SortOrder.ASC : SortOrder.BASC) : 
-													(nonBreakingSort ? SortOrder.DESC : SortOrder.BDESC));
-			}
-		}
 	}
 	
 	private MDXElement applySingleFilter(MDXElement elem, FilterRule filter) throws AMPException {

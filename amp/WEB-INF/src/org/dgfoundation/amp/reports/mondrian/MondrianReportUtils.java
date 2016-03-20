@@ -35,7 +35,6 @@ import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 import org.digijava.kernel.ampapi.saiku.SaikuGeneratedReport;
-import org.digijava.kernel.ampapi.saiku.SaikuReportSorter;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -135,19 +134,6 @@ public class MondrianReportUtils {
 			}	
 		}
 		spec.setFilters(filters);
-	}
-	
-	/**
-	 * Applies sorting over generated report
-	 * @param report
-	 * @throws AMPException
-	 */
-	public static final void sort(GeneratedReport report) throws AMPException {
-		ReportEnvironment env = ReportEnvironment.buildFor(TLSUtils.getRequest());
-		if (SaikuGeneratedReport.class.isAssignableFrom(report.getClass()))
-			SaikuReportSorter.sort(report, env);
-		else 
-			MondrianReportSorter.sort(report, env);
 	}
 	
 	/**

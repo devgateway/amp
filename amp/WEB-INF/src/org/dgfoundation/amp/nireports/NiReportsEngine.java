@@ -18,9 +18,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toMap;
-import static java.util.stream.Collectors.toList;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
@@ -35,6 +32,7 @@ import org.dgfoundation.amp.nireports.output.NiReportDataOutputter;
 import org.dgfoundation.amp.nireports.output.NiReportOutputCleaner;
 import org.dgfoundation.amp.nireports.output.NiReportRunResult;
 import org.dgfoundation.amp.nireports.output.NiReportVoidnessChecker;
+import org.dgfoundation.amp.nireports.output.sorting.NiReportSorter;
 import org.dgfoundation.amp.nireports.runtime.CacheHitsCounter;
 import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
@@ -137,7 +135,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	 * This is fully included in {@link #actualColumns}, else it's a bug
 	 */
 	public LinkedHashSet<String> actualHierarchies;
-	
+		
 	/**
 	 * do not access directly! use {@link #getDimensionSnapshot(NiDimension)} instead
 	 */
@@ -233,7 +231,13 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		Predicate<Column> yearRangeSetting = z -> z.splitCell != null && z.splitCell.entityType.equals(PSEUDOCOLUMN_YEAR) && !isAcceptableYear((Integer) z.splitCell.info.comparable);
 		Predicate<Column> emptyLeaf = z -> (z instanceof CellColumn) && isEmptyAndDeleteable((CellColumn) z);
 		this.headers = new NiHeaderInfo(this, pruneHeaders(this.headers.rootColumn, yearRangeSetting.or(emptyLeaf)), headers.nrHierarchies);
+		if (spec.getSorters() != null && !spec.getSorters().isEmpty())
+			timer.run("sorting", this::sortOutput);
 		this.reportOutput = this.reportOutput.accept(new NiReportOutputCleaner(this.headers));
+	}
+
+	protected void sortOutput() {
+		this.reportOutput = this.reportOutput.accept(NiReportSorter.buildFor(this));
 	}
 	
 	/**

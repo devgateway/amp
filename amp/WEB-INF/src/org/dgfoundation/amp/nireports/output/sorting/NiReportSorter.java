@@ -1,11 +1,13 @@
 package org.dgfoundation.amp.nireports.output.sorting;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
@@ -22,31 +24,44 @@ import org.dgfoundation.amp.nireports.runtime.CellColumn;
  */
 public class NiReportSorter implements NiReportDataVisitor<NiReportData> {
 
-	final Map<String, Boolean> hiersSorting;
-	final Map<CellColumn, Boolean> colsSorting;
+	final LinkedHashMap<String, Boolean> hiersSorting;
+	final LinkedHashMap<CellColumn, Boolean> colsSorting;
 	
-	public NiReportSorter(Map<String, Boolean> hiersSorting, Map<CellColumn, Boolean> colsSorting) {
+	public NiReportSorter(LinkedHashMap<String, Boolean> hiersSorting, LinkedHashMap<CellColumn, Boolean> colsSorting) {
 		this.hiersSorting = hiersSorting;
 		this.colsSorting = colsSorting;
+		System.err.format("sorting report by hiersSorting: %s, colsSorting: %s\n", hiersSorting, AmpCollections.remap(colsSorting, CellColumn::getHierName, z -> z, true));
 	}
 	
 	public static NiReportSorter buildFor(NiReportsEngine engine) {
 		List<SortingInfo> sInfo = Optional.ofNullable(engine.spec.getSorters()).orElse(Collections.emptyList());
-		Map<String, Boolean> hiersSorting = sInfo.stream().filter(z -> !z.isTotals && z.sortByTuple != null && z.sortByTuple.size() == 1 && engine.actualHierarchies.contains(z.getColumnName(0))).collect(Collectors.toMap(z -> z.getColumnName(0), z -> z.ascending));
-		Map<CellColumn, Boolean> colsSorting = sInfo.stream().filter(null).collect(Collectors.toMap(z -> null, z -> true));
+		LinkedHashMap<String, Boolean> hiersSorting = new LinkedHashMap<>();
+		LinkedHashMap<CellColumn, Boolean> colsSorting = new LinkedHashMap<>();
+		Map<String, CellColumn> headerToHierName = new HashMap<>();
+		for(CellColumn cc:engine.headers.leafColumns)
+				headerToHierName.put(cc.getHierName().replace(String.format("%s / ", NiReportsEngine.ROOT_COLUMN_NAME), ""), cc);
+		
+		for(SortingInfo sortItem:sInfo) {
+			if (sortItem.isHierarchySorter(engine.actualHierarchies)) {
+				hiersSorting.put(sortItem.hierPath.get(0), sortItem.ascending);
+			} else {
+				String pathName = sortItem.buildPath(" / ", NiReportsEngine.FUNDING_COLUMN_NAME, NiReportsEngine.TOTALS_COLUMN_NAME);
+				CellColumn header = headerToHierName.get(pathName);
+				if (header != null)
+					colsSorting.put(header, sortItem.ascending);
+			}
+		}
 		return new NiReportSorter(hiersSorting, colsSorting);
 	}
-
+	
 	@Override
 	public NiReportData visit(NiColumnReportData crd) {
-		// TODO Auto-generated method stub
-		return null;
+		return crd;
 	}
 
 	@Override
 	public NiReportData visit(NiGroupReportData grd) {
-		// TODO Auto-generated method stub
-		return null;
+		return grd;
 	}
 
 }

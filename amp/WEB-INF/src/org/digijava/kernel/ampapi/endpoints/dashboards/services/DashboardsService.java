@@ -205,7 +205,7 @@ public class DashboardsService {
 		spec.getHierarchies().addAll(spec.getColumns());
 		// applies settings, including funding type as a measure
 		SettingsUtils.applyExtendedSettings(spec, config);
-		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false, true));
+		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
 		
 		filterRules = FilterUtils.getFilterRules(columnFilters, otherFilter, null);
 		if (filterRules != null) {
@@ -597,7 +597,7 @@ public class DashboardsService {
 		OutputSettings outSettings = new OutputSettings(new HashSet<String>(){{add(ColumnConstants.PROJECT_TITLE);}});
 		// applies settings, including funding type as a measure
 		SettingsUtils.applyExtendedSettings(spec, config);
-		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false, true));
+		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
 		
 		MondrianReportFilters filterRules = null;
 		LinkedHashMap<String, Object> columnFilters = null;

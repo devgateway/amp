@@ -38,6 +38,7 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.reports.ActivityType;
 import org.dgfoundation.amp.reports.CachedReportData;
@@ -211,8 +212,8 @@ public class ReportsUtil {
 	}
 	
 	private static CachedReportData getCachedReportData(Long reportId, JsonBean formParams) {
-		boolean regenerate = mustRegenerate(reportId, formParams);
-		boolean resort = formParams.get(EPConstants.SORTING) != null; 
+		boolean resort = formParams.get(EPConstants.SORTING) != null;
+		boolean regenerate = mustRegenerate(reportId, formParams) || resort;
 		CachedReportData cachedReportData = null;
 		
 		// generate the report
@@ -241,18 +242,6 @@ public class ReportsUtil {
 			cachedReportData = ReportPaginationUtils.cacheReportData(reportId, generatedReport);
 		} else {
 			cachedReportData = ReportCacher.getReportData(reportId);
-			if (resort && cachedReportData != null) {
-				if (configureSorting((ReportSpecificationImpl)cachedReportData.report.spec, formParams)) {
-					// resort only when sorting configuration changed
-					try {
-						MondrianReportUtils.sort(cachedReportData.report);
-						// update cache with resorted data
-						cachedReportData = ReportPaginationUtils.cacheReportData(reportId, cachedReportData.report);
-					} catch (AMPException e) {
-						logger.error(e);
-					}
-				}
-			}
 		}
 		return cachedReportData;
 	}
@@ -496,57 +485,29 @@ public class ReportsUtil {
 		List<SortingInfo> newSorters = new ArrayList<SortingInfo>();
 		
 		if (formParams.get(EPConstants.SORTING) != null) {
-			List<Map<String, Object>> sortingConfig = 
-					(List<Map<String, Object>>)formParams.get(EPConstants.SORTING);
-			Set<String> validColumns = ConstantsUtil.getConstantsSet(ColumnConstants.class);
-			Set<String> validMeasures = ConstantsUtil.getConstantsSet(MeasureConstants.class);
+			List<Map<String, Object>> sortingConfig = (List<Map<String, Object>>)formParams.get(EPConstants.SORTING);
+			logger.error("sortingConfig is: " + sortingConfig);
 			
 			for (Map<String, Object> sort : sortingConfig) {
-				LinkedHashMap<ReportElement, FilterRule> sortByTuple = new LinkedHashMap<ReportElement, FilterRule>();
-				boolean isTotals = true;
-				
 				List<String> columns = (List<String>)sort.get("columns");
 				Boolean asc = (Boolean)sort.get("asc");
+				String id = sort.get("id").toString(); // crash if null
+				boolean isTotals = id.startsWith(String.format("[%s]", NiReportsEngine.TOTALS_COLUMN_NAME));
+				boolean isFunding = id.startsWith(String.format("[%s]", NiReportsEngine.FUNDING_COLUMN_NAME));
 				
 				List<String> errors = new ArrayList<String>();
 				if (columns == null)
 					errors.add("columns = null");
+				
 				if (asc == null)
 					errors.add("sorting order is not specified, asc = null");
-				if (errors.size() == 0) {
-					boolean hasReportColumn = false;
-					ReportOutputColumn fundingColumn = null;
-					for (Iterator<String> iter = columns.iterator(); iter.hasNext(); ) {
-						String column = iter.next();
-						if (validColumns.contains(column)) {
-							hasReportColumn = true;
-							SortingInfo.addEntityToSorting(sortByTuple, new ReportColumn(column));
-						} else if (validMeasures.contains(column)) {
-							// no totals sorting if 1st entry in tuple is funding column
-							if (sortByTuple.size() == 0 && fundingColumn != null)
-								isTotals = false;
-							fundingColumn = addFundingColumnToSorting(spec, sortByTuple, fundingColumn);
-							SortingInfo.addEntityToSorting(sortByTuple, new ReportMeasure(column));
-						} else {
-							if (GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria())) {
-								errors.add("Invalid column name = " + column);
-								break;
-							}
-							fundingColumn = new ReportOutputColumn(column, fundingColumn, null, null);
-						}
-					}
-					if (fundingColumn != null)
-						errors.add("funding column not followed by a measure");
-					// if there is only 1 entry on the tuple that is a simple column, then no totals sorting  
-					if (hasReportColumn && sortByTuple.size() == 1)
-						isTotals = false;
-				}
 					
 				if (errors.size() > 0)
 					logger.error("Ignoring invalid sorting request: " + errors);
-				else
-					newSorters.add(new SortingInfo(sortByTuple, asc, isTotals));
-					
+				else {
+					int rootType = isTotals? SortingInfo.ROOT_PATH_TOTALS : (isFunding ? SortingInfo.ROOT_PATH_FUNDING : SortingInfo.ROOT_PATH_NONE);
+					newSorters.add(new SortingInfo(columns, rootType, asc));
+				}
 			}
 		}
 		
@@ -555,23 +516,6 @@ public class ReportsUtil {
 		if (sortingChanged)
 			spec.setSorters(newSorters);
 		return sortingChanged;
-	}
-	
-	private static ReportOutputColumn addFundingColumnToSorting(ReportSpecification spec, 
-			LinkedHashMap<ReportElement, FilterRule> sortByTuple, ReportOutputColumn roc) {
-		if (roc != null) {
-			if (GroupingCriteria.GROUPING_MONTHLY.equals(spec.getGroupingCriteria())) {
-				SortingInfo.addMonthToSorting(sortByTuple, roc.columnName);
-				roc = roc.parentColumn;
-			} else if (GroupingCriteria.GROUPING_QUARTERLY.equals(spec.getGroupingCriteria())) {
-				SortingInfo.addQuarterToSorting(sortByTuple, roc.columnName);
-				roc = roc.parentColumn;
-			}
-			// both for GROUPING_YEARLY & previous groupings
-			SortingInfo.addYearToSorting(sortByTuple, roc.columnName);
-		}
-		// null to clear the reference
-		return null;
 	}
 	
 	/**

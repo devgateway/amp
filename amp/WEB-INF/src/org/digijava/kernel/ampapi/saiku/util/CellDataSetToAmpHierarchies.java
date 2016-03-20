@@ -87,18 +87,6 @@ public class CellDataSetToAmpHierarchies {
 	private void initSortedSetsList() {
 		sbList = (SortedSet<String>[]) new TreeSet<?>[noOfColumnsToMerge];
 		Boolean[] sortOrder = new Boolean[noOfColumnsToMerge];
-		if (spec.getSorters() != null)
-			for(SortingInfo sInfo : spec.getSorters())
-				//a non-hierarchical sorting has 1 entry in the sorting tuple 
-				if (sInfo.sortByTuple.entrySet().size() == 1) {
-					ReportElement elem = sInfo.sortByTuple.entrySet().iterator().next().getKey();
-					//and is a report column, not a measure (i.e. total measure)
-					if (elem.entity != null && ReportColumn.class.isAssignableFrom(elem.entity.getClass())) {
-						int colId = MondrianReportUtils.getColumnId((ReportColumn)elem.entity, spec);
-						if(colId >= startColumnIndex) 
-							sortOrder[colId - startColumnIndex] = sInfo.ascending; 
-					}
-				}
 		for (int i = 0; i < noOfColumnsToMerge; i++) {
 			final boolean asc = sortOrder[i] == null ? true : sortOrder[i]; 
 			sbList[i] = new TreeSet<String>(new Comparator<String>() {

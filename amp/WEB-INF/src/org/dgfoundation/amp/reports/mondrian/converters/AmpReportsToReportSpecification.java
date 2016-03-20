@@ -200,7 +200,7 @@ public class AmpReportsToReportSpecification {
 				else { 
 					//funding columns syntax is "{Funding|Total Costs}[--year[--{quarter|month}]]--<measure name>" 
 					String[] fundingColumns = pair.getValue()[1].split("--");
-					addFundingSorting(fundingColumns, asc, hierarchyColumn);
+					spec.addSorter(buildFundingSorting(fundingColumns, asc, hierarchyColumn));
 				}
 			}
 		}
@@ -217,47 +217,28 @@ public class AmpReportsToReportSpecification {
 				if (!spec.getHierarchies().contains(rCol)) //workaround for AMP-18205, issue #4 if column changes from non-hierarchy to hierarchy
 					spec.addSorter(new SortingInfo(rCol, arFilter.getSortByAsc()));
 			} else //use case 2) or 3) 
-				addFundingSorting(sorting, arFilter.getSortByAsc(), null);
+				spec.addSorter(buildFundingSorting(sorting, arFilter.getSortByAsc(), null));
 		} 
 	}
 	
-	private void addFundingSorting(String[] fundingColumns, boolean asc, ReportColumn hierarchyColumn) {
+	private SortingInfo buildFundingSorting(String[] fundingColumns, boolean asc, ReportColumn hierarchyColumn) {
 		String measureName = fundingColumns[fundingColumns.length - 1];
 		ReportMeasure measureCol = new ReportMeasure(measureName);
 		
 		if (ArConstants.COLUMN_FUNDING.equals(fundingColumns[0])) {
 			//this is a funding column grouped by year/quarter/month, not the total costs
-			if (isValidFundingColumn(fundingColumns)) {
-				try {
-					String year = fundingColumns[1]; 
-					String quarter = null, month = null; 
-					switch (spec.getGroupingCriteria()) {
-					case GROUPING_QUARTERLY: 
-						quarter = fundingColumns[2];
-						break;
-					case GROUPING_MONTHLY: 
-						month = fundingColumns[2];
-						break;
-					default: break; 
-					}
-					if (hierarchyColumn == null)
-						spec.addSorter(new SortingInfo(year, quarter, month, measureCol, asc));
-					else 
-						spec.addSorter(new SortingInfo(hierarchyColumn, year, quarter, month, measureCol, asc));
-				} catch(Exception e) {
-					logger.error("Skipping the problemating sorting. Please check the cause: " + e.getMessage());
-				}
-			} 
+			return new SortingInfo(Arrays.asList(fundingColumns).subList(1, fundingColumns.length), SortingInfo.ROOT_PATH_FUNDING, asc);
 		} else {
 			//this is the totals costs
-			if (hierarchyColumn == null)
-				spec.addSorter(new SortingInfo(measureCol, asc, true));
-			else {
-				LinkedHashMap<ReportElement, FilterRule> tuple = new LinkedHashMap<ReportElement, FilterRule>();
-				tuple.put(new ReportElement(hierarchyColumn), null);
-				tuple.put(new ReportElement(measureCol), null);
-				spec.addSorter(new SortingInfo(tuple, asc));
-			}
+			return new SortingInfo(Arrays.asList(fundingColumns).subList(1, fundingColumns.length), SortingInfo.ROOT_PATH_TOTALS, asc);
+//			if (hierarchyColumn == null)
+//				return new SortingInfo(measureCol, asc);
+//			else {
+//				LinkedHashMap<ReportElement, FilterRule> tuple = new LinkedHashMap<ReportElement, FilterRule>();
+//				tuple.put(new ReportElement(hierarchyColumn), null);
+//				tuple.put(new ReportElement(measureCol), null);
+//				return new SortingInfo(tuple, asc);
+//			}
 		}
 	}
 	
@@ -279,23 +260,6 @@ public class AmpReportsToReportSpecification {
 		}
 		if (err != null) {
 			logger.error(prefix + err);
-			return false;
-		}
-		return true;
-	}
-	
-	private boolean isValidFundingColumn(String[] fundingColumns) {
-		final String suffix = " thus cannot sort by " + fundingColumns;
-		String err = null;
-		switch (spec.getGroupingCriteria()) {
-		case GROUPING_TOTALS_ONLY: err = "No grouping by dates,"; break;
-		case GROUPING_YEARLY: if (fundingColumns.length != 3) err = "Grouping by years,"; break;
-		case GROUPING_QUARTERLY: if (fundingColumns.length != 4) err = "Grouping by quarters,"; break;
-		//old reports group by year + month, no quarter in between
-		case GROUPING_MONTHLY: if (fundingColumns.length != 4) err = "Grouping by months,"; break; 
-		}
-		if (err != null) {
-			logger.error(err + suffix);
 			return false;
 		}
 		return true;

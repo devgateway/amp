@@ -93,28 +93,6 @@ public class MondrianReportsTests extends AmpTestCase {
 		generateAndValidate(spec, true);
 	}
 	
-	public void testColumnSortingNoTotals() {
-		ReportSpecificationImpl spec = getDefaultSpec("testColumnSortingNoTotals", false);
-		spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.DONOR_TYPE), true)); //ascending
-		spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.PRIMARY_SECTOR), false)); //descending
-		generateAndValidate(spec, true);
-	}
-	
-	public void testColumnMeasureSortingTotals() {
-		ReportSpecificationImpl spec = getDefaultSpec("testColumnMeasureSortingTotals", true);
-		spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.DONOR_TYPE), true)); //ascending
-		spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS), false)); //descending
-		generateAndValidate(spec, true);
-	}
-
-	public void testSortingByTuplesTotals() {
-		ReportSpecificationImpl spec = getDefaultSpec("testSortingByTuplesTotals", true);
-		spec.setGroupingCriteria(GroupingCriteria.GROUPING_QUARTERLY);
-		spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.DONOR_TYPE), true)); //ascending
-		spec.addSorter(new SortingInfo("2013", "Q2", new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS), false)); //descending
-		generateAndValidate(spec, true);
-	}
-	
 	public void testMultipleDateFilters() {
 		ReportSpecificationImpl spec = getDefaultSpec("testMultipleDateFilters", true);
 		String err = null;

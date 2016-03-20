@@ -29,6 +29,20 @@ public abstract class NiReportData {
 		return ids;
 	}
 	
+	public NiSplitCell getSplitter() {
+		return splitter;
+	}
+	
+	/**
+	 * returns the column to which the splitter entity of this NRD belongs to. In case there is none, returns null
+	 * @return
+	 */
+	public String getGeneratingColumn() {
+		if (splitter != null && splitter.entity != null)
+			return splitter.entity.name;
+		return null;
+	}
+	
 	public abstract boolean isLeaf();
 	/** function will only be called once per instance and the value of the argument will not change */
 	protected abstract int computeRowSpan(boolean summaryReport);

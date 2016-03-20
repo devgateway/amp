@@ -61,6 +61,13 @@ public class NiReportSorter implements NiReportDataVisitor<NiReportData> {
 
 	@Override
 	public NiReportData visit(NiGroupReportData grd) {
+		if (grd.splitterColumn != null && hiersSorting.containsKey(grd.splitterColumn)) {
+			Boolean sortOrder = hiersSorting.get(grd.splitterColumn);
+			if (sortOrder != null)
+				grd.reorder(sortOrder);
+		}
+		for(NiReportData child:grd.subreports)
+			child.accept(this);
 		return grd;
 	}
 

@@ -231,9 +231,9 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		Predicate<Column> yearRangeSetting = z -> z.splitCell != null && z.splitCell.entityType.equals(PSEUDOCOLUMN_YEAR) && !isAcceptableYear((Integer) z.splitCell.info.comparable);
 		Predicate<Column> emptyLeaf = z -> (z instanceof CellColumn) && isEmptyAndDeleteable((CellColumn) z);
 		this.headers = new NiHeaderInfo(this, pruneHeaders(this.headers.rootColumn, yearRangeSetting.or(emptyLeaf)), headers.nrHierarchies);
+		this.reportOutput = this.reportOutput.accept(new NiReportOutputCleaner(this.headers));
 		if (spec.getSorters() != null && !spec.getSorters().isEmpty())
 			timer.run("sorting", this::sortOutput);
-		this.reportOutput = this.reportOutput.accept(new NiReportOutputCleaner(this.headers));
 	}
 
 	protected void sortOutput() {

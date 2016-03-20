@@ -166,10 +166,8 @@ public class NiReportHtmlRenderer {
 	protected StringBuilder renderColumnRD(StringBuilder bld, NiColumnReportData crd, int level) {
 		if (spec.isSummaryReport())
 			return bld; // trail cells are rendered elsewhere
-		ArrayList<Long> ids = new ArrayList<>(crd.getIds());
-		ids.sort(null);
 		boolean isFirstId = true;
-		for(Long id:ids) {
+		for(Long id:crd.orderedIds) {
 			if (level == 0 || !isFirstId)
 				bld.append("<tr>");
 			isFirstId = false;

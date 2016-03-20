@@ -39,6 +39,7 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.reports.ActivityType;
 import org.dgfoundation.amp.reports.CachedReportData;
@@ -491,9 +492,19 @@ public class ReportsUtil {
 			for (Map<String, Object> sort : sortingConfig) {
 				List<String> columns = (List<String>)sort.get("columns");
 				Boolean asc = (Boolean)sort.get("asc");
-				String id = sort.get("id").toString(); // crash if null
-				boolean isTotals = id.startsWith(String.format("[%s]", NiReportsEngine.TOTALS_COLUMN_NAME));
-				boolean isFunding = id.startsWith(String.format("[%s]", NiReportsEngine.FUNDING_COLUMN_NAME));
+				
+				boolean isTotals;
+				boolean isFunding;
+				if (sort.containsKey("id")) {
+					// SAIKU request
+					String id = sort.get("id").toString(); // crash if null
+					isTotals = id.startsWith(String.format("[%s]", NiReportsEngine.TOTALS_COLUMN_NAME));
+					isFunding = id.startsWith(String.format("[%s]", NiReportsEngine.FUNDING_COLUMN_NAME));
+				} else {
+					// tabs request - should check for general API
+					isFunding = columns.size() > 1;
+					isTotals = AmpReportsSchema.getInstance().getMeasures().containsKey(columns.get(0));
+				}
 				
 				List<String> errors = new ArrayList<String>();
 				if (columns == null)

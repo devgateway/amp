@@ -110,8 +110,9 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 	@Override
 	public ReportAreaImpl visit(NiColumnReportData crd) {
 		ReportAreaImpl res = initArea(crd);
+		//logger.error("rendering crd with orderedIds: " + crd.orderedIds);
 		if (!spec.isSummaryReport())
-			res.setChildren(AmpCollections.relist(crd.getIds(), id -> renderCrdRow(crd, id)));
+			res.setChildren(AmpCollections.relist(crd.orderedIds, id -> renderCrdRow(crd, id)));
 		return res;
 	}
 

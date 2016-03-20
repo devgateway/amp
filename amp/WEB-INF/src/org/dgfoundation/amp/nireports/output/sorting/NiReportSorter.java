@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.nireports.output.sorting;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -56,6 +57,8 @@ public class NiReportSorter implements NiReportDataVisitor<NiReportData> {
 	
 	@Override
 	public NiReportData visit(NiColumnReportData crd) {
+		IdsComparator comp = new IdsComparator(colsSorting, crd);
+		crd.reorder(comp);
 		return crd;
 	}
 

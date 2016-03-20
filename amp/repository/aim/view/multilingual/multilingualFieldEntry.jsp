@@ -35,7 +35,7 @@
             <c:forEach items="${dta.locales}" var="cur_locale">
                 <div>
                     <input type="text" name="${dta.prefix}_${cur_locale}"
-                        value="<c:out value="${dta.translations[cur_locale]}"/>"
+                        value="<c:out value="${(!dta.translations[cur_locale]).equals('') ? dta.translations[cur_locale] : dta.translations.values().toArray()[0]}"/>"
 
                         <c:if test="${not empty param.onkeyup}">
                             onkeyup="${param.onkeyup}"

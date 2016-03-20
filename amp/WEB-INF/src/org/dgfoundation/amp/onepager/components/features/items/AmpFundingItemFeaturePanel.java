@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.components.features.items;
 
 import java.util.TreeSet;
 
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -47,6 +48,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
@@ -222,11 +224,19 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 				AmpDonorFundingFormSectionFeature fundingSection = findParent(AmpDonorFundingFormSectionFeature.class);
 				AmpFunding funding = fundingModel.getObject();
 				AmpOrganisation oldOrg = funding.getAmpDonorOrgId();
+				AmpOrganisation newOrg = (AmpOrganisation) orgRoleSelector.getOrgSelect().getChoiceContainer().getModelObject();
 				AmpRole oldRole = funding.getSourceRole();
-				fundingSection.switchOrg(listItem, funding,
-						(AmpOrganisation) orgRoleSelector.getOrgSelect().getChoiceContainer().getModelObject(),
-						(AmpRole) orgRoleSelector.getRoleSelect().getChoiceContainer().getModelObject(), target);
+				parent.addToOrganisationSection(newOrg);//need to see if its not already present
+
+				AmpRole newRole = (AmpRole) orgRoleSelector.getRoleSelect().getChoiceContainer().getModelObject();
+				if(newRole == null){
+					//if new role is null then the role dropdown is off. 
+					newRole = DbUtil.getAmpRole(Constants.FUNDING_AGENCY);
+				}
+				fundingSection.switchOrg(listItem, funding,newOrg,
+						newRole, target);
 				fundingSection.updateFundingGroups(fundingSection.findAmpOrgRole(oldOrg, oldRole), target);
+				
 						
 			}
 		};

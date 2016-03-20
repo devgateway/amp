@@ -499,7 +499,7 @@ public class AmpDonorFundingFormSectionFeature extends
 		tabsList.updateModel();
 	}
 
-	private void addToOrganisationSection(AmpOrganisation org) {
+	public void addToOrganisationSection(AmpOrganisation org) {
 		// check if org has been added with the selected role to the Related
 		// Organisation section, if not then add it
 		// Only for non-ssc activities

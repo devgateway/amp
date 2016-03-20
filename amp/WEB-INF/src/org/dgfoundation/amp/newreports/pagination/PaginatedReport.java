@@ -72,7 +72,8 @@ public class PaginatedReport {
 	 */
 	protected Set<ReportArea> computeAreasToInclude(int firstRow, int lastRow) {
 		Set<ReportArea> areasToInclude = Collections.newSetFromMap(new IdentityHashMap<ReportArea, Boolean>());
-		for(int i = firstRow; i <= lastRow; i++)
+		areasToInclude.add(rootElement); // the root is always included in the output
+		for(int i = Math.max(firstRow, 0); i <= Math.min(lastRow, indexedLeaves.size() - 1); i++)
 			addAreas(indexedLeaves.get(i), areasToInclude);
 		return areasToInclude;
 	}

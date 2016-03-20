@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.newreports;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 
@@ -98,6 +99,16 @@ public class SortingInfo {
 		this.sortByTuple = sortByTuple;
 		this.ascending = ascending;
 		this.isTotals = isTotals;
+	}
+
+	/**
+	 * returns the i'th element's entity name. If the i'th element is not an entity, returns null
+	 * @param index
+	 * @return
+	 */
+	public String getColumnName(int index) {
+		return null;
+		//Map<K, V>.Entry<ReportElement, FilterRule>
 	}
 	
 	@Override

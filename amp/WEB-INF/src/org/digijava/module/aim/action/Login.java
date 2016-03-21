@@ -57,7 +57,9 @@ public class Login extends Action {
 			throws java.lang.Exception {
 
         if (true) {
-            throw new IllegalAccessException("This code must not be accessed any more");
+        	//redirecting to index.do so spring handles the access and we don't give the user an error
+        	response.sendRedirect("index.do");
+            //throw new IllegalAccessException("This code must not be accessed any more");
         }
 
 		LoginForm lForm = (LoginForm) form; // login form instance

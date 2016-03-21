@@ -360,7 +360,7 @@ function generateDataRows(page, options) {
 	}
 	
 	// AMP-19189 fill the cell containing data with colors
-	if (this.draftColumn && this.approvalStatusColumn && this.activityIdColumn) {
+	if (this.draftColumn != null && this.approvalStatusColumn != null && this.activityIdColumn != null) {
 		fillContentsWithColors();
 	}
 

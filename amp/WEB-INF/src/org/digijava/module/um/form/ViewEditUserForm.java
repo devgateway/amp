@@ -67,6 +67,7 @@ public class ViewEditUserForm extends ActionForm {
 	private Long teamId;
 	private Long role;
 	private boolean emailerror;
+	private boolean banReadOnly;
 	
 	public boolean isEmailerror() {
 		return emailerror;
@@ -374,5 +375,13 @@ public class ViewEditUserForm extends ActionForm {
 
 	public void setRegions(Collection<AmpCategoryValueLocations> regions) {
 		this.regions = regions;
+	}
+
+	public boolean isBanReadOnly() {
+		return banReadOnly;
+	}
+
+	public void setBanReadOnly(boolean banReadOnly) {
+		this.banReadOnly = banReadOnly;
 	}
 }

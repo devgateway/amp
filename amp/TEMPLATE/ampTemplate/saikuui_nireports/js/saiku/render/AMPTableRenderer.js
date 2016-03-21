@@ -28,7 +28,8 @@ this.type = undefined;
 this.summarizedReport = undefined;
 this.draftColumn = undefined;
 this.approvalStatusColumn = undefined;
-this.hiddenColumns = undefined;
+this.hiddenColumns = [];
+this.hiddenColumnNames = undefined;
 this.ACTIVITY_STATUS_CODES = undefined;
 this.PLEDGE_ID_ADDER = 800000000; // java-side constant, taken MondrianETL
 this.rowsFromBatch = 100;
@@ -52,7 +53,7 @@ AMPTableRenderer.prototype.render = function(data, options) {
 		// report.
 		preprocessHierarchies();
 		
-		hiddenColumns = data.colorSettings.hiddenColumnNames;
+		hiddenColumnNames = data.colorSettings.hiddenColumnNames;
 
 		// Create HTML table, with header + content.
 		var table = "<table>";
@@ -133,8 +134,8 @@ function generateHeaderHtml(data) {
 	this.draftColumn = getIndexOfColumn('Draft');
 	this.approvalStatusColumn = getIndexOfColumn('Approval Status');
 	
-	for (var i=0; i < hiddenColumns.length; i++) {
-		hiddenColumns[i] = getIndexOfColumn(hiddenColumns[i]);
+	for (var i=0; i < hiddenColumnNames.length; i++) {
+		hiddenColumns[i] = getIndexOfColumn(hiddenColumnNames[i]);
 	}
 
 	// Check columns metadata
@@ -236,7 +237,7 @@ function generateNiReportHeaderHtml(headers) {
 		header += "<tr class='nireport_header'>";
 		for(var j = 0; j < headers[i].length; j++) {
 			if (i == 0 && headers[i][j].rowSpan == headers.length 
-					&& (headers[i][j].originalName == 'Draft' || headers[i][j].originalName == 'Approval Status')) {
+					&& (isHiddenColumnByName(headers[i][j].originalName))) {
 				continue;
 			}
 			
@@ -412,7 +413,7 @@ function generateDataRows(page, options) {
 	}
 
 	// AMP-19189 fill the cell containing data with colors
-	if (this.draftColumn && this.approvalStatusColumn) {
+	if (this.draftColumn != null && this.approvalStatusColumn != null) {
 		fillContentsWithColors();
 	}
 
@@ -809,6 +810,10 @@ function isColoredColumn(i) {
 
 function isHiddenColumn(i) {
 	return hiddenColumns && hiddenColumns.indexOf(i) > -1;
+}
+
+function isHiddenColumnByName(columnName) {
+	return hiddenColumnNames && hiddenColumnNames.indexOf(columnName) > -1;
 }
 
 function isActivityPledge(activityIdValue) {

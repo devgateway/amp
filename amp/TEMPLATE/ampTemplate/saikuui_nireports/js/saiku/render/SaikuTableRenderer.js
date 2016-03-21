@@ -59,7 +59,8 @@ SaikuTableRenderer.prototype._render = function(data, options) {
            	       	}
            	    });                
                 Saiku.ui.unblock();                
-                data.workspace.trigger('saikuTableRender:tableRenderedInDOM', self);                
+                data.workspace.trigger('ampTableRender:tableRenderedInDOM', self);
+                data.workspace.trigger('saikuTableRender:tableRenderedInDOM', self);
                 return html;
             });
         } else {
@@ -89,10 +90,11 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
 	};
 	var ampTableRenderer = new AMPTableRenderer(metadata);
 	
-	/*allData.workspace.bind('saikuTableRender:tableRenderedInDOM', function(
+	allData.workspace.bind('ampTableRender:tableRenderedInDOM', function(
 			args) {
-		ampTableRenderer.postProcessTooltips(); //ESTO AGREGA COMO 1S (TODO ES LENTO, AUNQUE DESACTIVE EL TIPSY Y EL TRANSLATE)!!!!
-	});*/
+		ampTableRenderer.postProcessTooltips();
+		allData.workspace.unbind('ampTableRender:tableRenderedInDOM');
+	});	
 	
 	return ampTableRenderer.render(allData, options);
 }

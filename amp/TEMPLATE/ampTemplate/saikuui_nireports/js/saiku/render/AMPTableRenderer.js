@@ -720,18 +720,19 @@ function checkIfSummarizedReportWithConstant(page) {
  */
 AMPTableRenderer.prototype.postProcessTooltips = function() {
 	var totalCells = $('table').find("[data-subtotal='true']");
-	_.each(totalCells, function(cell) {
-		if ($(cell).attr('original-title') !== '') {
-			var tooltip = $(cell).attr('original-title');
+	for (var i = 0; i < totalCells.length; i++) {		
+		var cell = $(totalCells[i]); 		
+		var tooltip = $(cell).attr('original-title');
+		// Deactivated for now because it makes the rendering extra-extra-slow.
+		/*if(tooltip !== '') {
 			var row = $(cell).parent();
-			_.each(row.children(), function(th) {
-				$(th).attr('original-title', tooltip);
-				$(th).addClass('tooltipped');
-			});
-		}
-	});
+			for (var j = 0; j < row.children().length; j++) {
+				$(row.children()[j]).attr('original-title', tooltip);
+				$(row.children()[j]).addClass('tooltipped');
+			}
+		}*/
+	}	
 	$(".tooltipped").tipsy();
-	Saiku.i18n.translate();
 }
 
 /**

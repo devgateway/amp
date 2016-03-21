@@ -39,6 +39,6 @@ public class IdsComparator implements Comparator<Long> {
 			if (delta != 0)
 				return delta;
 		}
-		return 0;
+		return Long.compare(idA, idB);
 	}	
 }

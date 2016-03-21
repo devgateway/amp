@@ -75,6 +75,9 @@ var AMPSettings = Backbone.View.extend({
 			},
 			
 			applySettings: function() {
+				$('#settings-invalid-year-range').hide();
+				$('#settings-missing-values-error').hide();
+				
 				if($('#amp_currency').val() === null || $('#amp_calendar').val() === null) {
 					$('#settings-missing-values-error').show();
 					return;
@@ -152,7 +155,9 @@ var AMPSettings = Backbone.View.extend({
 				$(this.workspace.toolbar.el).find("ul").prepend($settings_li);
 			},
 
-			show : function(event, ui) {
+			show : function(event, ui) {				
+				$('#settings-invalid-year-range').hide();
+				$('#settings-missing-values-error').hide();
 				var self = this;
 				$(this.el).toggle();
 				var settings;

@@ -2121,3 +2121,7 @@ width:70px !important;
 #deflated-currencies-container table{
     width: 100%;
 }
+
+.amp_settings, .amp_filters{
+  width: auto !important;
+}

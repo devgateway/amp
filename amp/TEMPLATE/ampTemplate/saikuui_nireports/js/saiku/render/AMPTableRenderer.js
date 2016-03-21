@@ -31,7 +31,7 @@ this.approvalStatusColumn = undefined;
 this.hiddenColumns = undefined;
 this.ACTIVITY_STATUS_CODES = undefined;
 this.PLEDGE_ID_ADDER = 800000000; // java-side constant, taken MondrianETL
-this.rowsFromBatch = 50;
+this.rowsFromBatch = 100;
 
 AMPTableRenderer.prototype.render = function(data, options) {
 	Saiku.logger.log('AMPTableRenderer.render INIT');

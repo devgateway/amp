@@ -145,7 +145,9 @@ public class ActivityFundingDigest {
 		while (fundItr.hasNext()) {
 			AmpFunding ampFunding = fundItr.next();
 			AmpRole fundingSourceRole = ampFunding.getSourceRole();
-			if (fundingSourceRole != null && Constants.FUNDING_AGENCY.equals(fundingSourceRole.getRoleCode())) {
+			if (fundingSourceRole != null &&
+					(Constants.FUNDING_AGENCY.equals(fundingSourceRole.getRoleCode()) ||
+					(Constants.EXECUTING_AGENCY.equals(fundingSourceRole.getRoleCode())) && !ampFunding.getFundingDetails().isEmpty())) {
 				AmpOrganisation org = ampFunding.getAmpDonorOrgId();
 				if (org == null || org.getAmpOrgId() == null) continue;
 				FundingOrganization fundOrg = new FundingOrganization(ampFunding);
@@ -174,7 +176,7 @@ public class ActivityFundingDigest {
 		// Add missing donor organizations from activity orgrole list 
 		Set<AmpOrgRole> orgRoles = activity.getOrgrole();
 		for (AmpOrgRole aor : orgRoles) {
-			if (Constants.FUNDING_AGENCY.equals(aor.getRole().getRoleCode()) 
+			if ((Constants.FUNDING_AGENCY.equals(aor.getRole().getRoleCode()) || Constants.EXECUTING_AGENCY.equals(aor.getRole().getRoleCode()))
 					&& !fundingOrgIds.contains(aor.getOrganisation().getAmpOrgId())) {
 				
 				FundingOrganization fundingOrganization = new FundingOrganization();

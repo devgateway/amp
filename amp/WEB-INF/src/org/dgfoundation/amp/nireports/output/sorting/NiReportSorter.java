@@ -31,7 +31,7 @@ public class NiReportSorter implements NiReportDataVisitor<NiReportData> {
 	public NiReportSorter(LinkedHashMap<String, Boolean> hiersSorting, LinkedHashMap<CellColumn, Boolean> colsSorting) {
 		this.hiersSorting = hiersSorting;
 		this.colsSorting = colsSorting;
-		System.err.format("sorting report by hiersSorting: %s, colsSorting: %s\n", hiersSorting, AmpCollections.remap(colsSorting, CellColumn::getHierName, z -> z, true));
+		//System.err.format("sorting report by hiersSorting: %s, colsSorting: %s\n", hiersSorting, AmpCollections.remap(colsSorting, CellColumn::getHierName, z -> z, true));
 	}
 	
 	public static NiReportSorter buildFor(NiReportsEngine engine) {

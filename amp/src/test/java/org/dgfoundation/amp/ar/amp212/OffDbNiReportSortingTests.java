@@ -22,13 +22,13 @@ import org.junit.Test;
  * @author Alexandru Cartaleanu
  *
  */
-public class OffDbNiReportEngineTests extends BasicSanityChecks {
+public class OffDbNiReportSortingTests extends SortingSanityChecks {
 	
-	static Logger log = Logger.getLogger(OffDbNiReportEngineTests.class);
+	static Logger log = Logger.getLogger(OffDbNiReportSortingTests.class);
 	
 	HardcodedReportsTestSchema schema = new HardcodedReportsTestSchema();
-	public OffDbNiReportEngineTests() {
-		super("NiReportsEngine tests");
+	public OffDbNiReportSortingTests() {
+		super("NiReportsSorting tests");
 		nrRunReports = 0;
 	}
 	

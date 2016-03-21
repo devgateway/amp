@@ -41,6 +41,7 @@ public class OfflineTests
 		suite.addTest(new JUnit4TestAdapter(BigDecimalPrecisionTests.class));
 		suite.addTest(new JUnit4TestAdapter(HierarchyTrackingTestcases.class));
 		suite.addTest(new JUnit4TestAdapter(OffDbNiReportEngineTests.class));
+		suite.addTest(new JUnit4TestAdapter(OffDbNiReportSortingTests.class));
 		suite.addTest(new JUnit4TestAdapter(PercentagesCorrectorTests.class));
 		suite.addTest(new JUnit4TestAdapter(SummaryReportsTests.class));
 		suite.addTest(new JUnit4TestAdapter(PaginationTests.class));		

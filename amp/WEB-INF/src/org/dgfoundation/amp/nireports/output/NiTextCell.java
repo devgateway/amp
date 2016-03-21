@@ -31,7 +31,10 @@ public class NiTextCell extends NiOutCell {
 	@Override
 	public int compareTo(Object o) {
 		NiTextCell ntc = (NiTextCell) o;
-		return this.text.compareTo(ntc.text);
+		int delta = this.text.compareToIgnoreCase(ntc.text);
+		if (delta == 0)
+			delta = this.text.compareTo(ntc.text);
+		return delta;
 	}
 
 	@Override

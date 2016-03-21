@@ -54,6 +54,6 @@ public class AreaOwner {
 	
 	@Override
 	public String toString() {
-		return String.format("colName: %s, debugString: %s", columnName, debugString);
+		return String.format("colName: %s, debugString: %s, id: %d", columnName, debugString, id);
 	}
 }

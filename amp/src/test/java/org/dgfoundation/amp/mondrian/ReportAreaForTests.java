@@ -140,7 +140,7 @@ public class ReportAreaForTests extends ReportAreaImpl {
 			ReportCell outCell = sortedContents.get(column);
 			
 			if (!sortedCorrectContents.containsKey(column))
-				report_error(String.format("unneeded entry in the output of %s: %s", this.getOwner(), column));
+				report_error(String.format("unneeded entry %s in the output of %s: %s", outCell, this.getOwner(), column));
 			
 			ReportCell corCell = sortedCorrectContents.get(column);
 			String deltaRes = equalCells(column, outCell, corCell);

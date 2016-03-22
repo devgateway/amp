@@ -8,7 +8,7 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 		}
 	}
 	
-	FilterUtils.extractSorters = function(content) {
+	FilterUtils.extractSorters = function(content, columns, measures) {
 		var sorting = {};
 		if (content !== null && content.models !== null) {
 			sorting.sord = content.models[0].get('ascending') ? "asc" : "desc";
@@ -18,6 +18,20 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 					sorting.sidx = k.substring(k.indexOf("[") + 1, k.indexOf("]"));
 				}
 			}			
+		}
+		// Added for AMP-22511: We need to cleanup the sorters if they are defined over a column no longer in the report.
+		if (sorting.sidx !== undefined) {
+			var sidxColumns = sorting.sidx.split(',');
+			// Iterate saved columns for sorting.
+			_.each(sidxColumns, function(item) {
+				// Look for this column on colums and measures.
+				if (_.find(columns.models, function (item2) {return item.trim() === item2.get('entityName')}) === undefined 
+						&& _.find(measures.models, function (item2) {return item.trim() === item2.get('entityName')}) === undefined) {
+					console.log("Reset sorting.");
+					sorting.sidx = undefined;
+					sorting.sord = undefined;
+				}
+			});
 		}
 		return sorting;
 	}

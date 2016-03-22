@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -17,6 +18,8 @@ import org.dgfoundation.amp.nireports.output.NiGroupReportData;
 import org.dgfoundation.amp.nireports.output.NiReportData;
 import org.dgfoundation.amp.nireports.output.NiReportDataVisitor;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
+
+import static java.util.stream.Collectors.toMap;
 
 /**
  * a Visitor which sorts the output
@@ -38,9 +41,8 @@ public class NiReportSorter implements NiReportDataVisitor<NiReportData> {
 		List<SortingInfo> sInfo = Optional.ofNullable(engine.spec.getSorters()).orElse(Collections.emptyList());
 		LinkedHashMap<String, Boolean> hiersSorting = new LinkedHashMap<>();
 		LinkedHashMap<CellColumn, Boolean> colsSorting = new LinkedHashMap<>();
-		Map<String, CellColumn> headerToHierName = new HashMap<>();
-		for(CellColumn cc:engine.headers.leafColumns)
-				headerToHierName.put(cc.getHierName().replace(String.format("%s / ", NiReportsEngine.ROOT_COLUMN_NAME), ""), cc);
+
+		Map<String, CellColumn> headerToHierName = engine.headers.leafColumns.stream().collect(toMap(cc -> cc.getHierName().replace(String.format("%s / ", NiReportsEngine.ROOT_COLUMN_NAME), ""), cc -> cc));
 		
 		for(SortingInfo sortItem:sInfo) {
 			if (sortItem.isHierarchySorter(engine.actualHierarchies)) {

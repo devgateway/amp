@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -580,7 +581,7 @@ public class AmpARFilter extends PropertyListable {
 	
 	private String sortBy;
 	private Boolean sortByAsc;
-	private Collection<String> hierarchySorters;
+	private List<String> hierarchySorters;
 	
 	private Set<AmpCategoryValue> projectImplementingUnits; 
 	
@@ -3068,12 +3069,27 @@ public class AmpARFilter extends PropertyListable {
 		this.sortByAsc = sortByAsc;
 	}
 
-	public Collection<String> getHierarchySorters() {
-		return hierarchySorters;
+	public List<String> getHierarchySorters() {
+		return cleanupHierarchySorters(hierarchySorters);
 	}
 
-	public void setHierarchySorters(Collection<String> hierarchySorters) {
-		this.hierarchySorters = hierarchySorters;
+	public void setHierarchySorters(List<String> hierarchySorters) {
+		this.hierarchySorters = cleanupHierarchySorters(hierarchySorters);
+	}
+	
+	/** for each given sorting key only keeps the last entry */
+	protected List<String> cleanupHierarchySorters(List<String> in) {
+		if (in == null || in.isEmpty())
+			return in;
+		LinkedHashMap<String, String> entriesByHier = new LinkedHashMap<>();
+		
+		for(String entry:in) {
+			String key = entry.substring(0, entry.lastIndexOf('_'));
+			entriesByHier.put(key, entry);
+		}
+		in.clear();
+		in.addAll(entriesByHier.values());
+		return in;
 	}
 
 	public String getCRISNumber() {

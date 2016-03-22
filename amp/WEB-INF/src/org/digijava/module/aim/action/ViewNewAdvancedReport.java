@@ -317,7 +317,7 @@ public class ViewNewAdvancedReport extends Action {
 				sorters.put(Long.parseLong(arf.getLevelPicked()),new MetaInfo(arf.getLevelSorter(),arf.getLevelSortOrder()));
 				filter.getHierarchySorters().add( arf.getLevelPicked() + "_" + arf.getLevelSorter() + "_" + arf.getLevelSortOrder() );
 			}
-			
+			filter.setHierarchySorters(filter.getHierarchySorters()); // hack to force the invocation of AmpArFilter#cleanupHierarchySorters
 			rd.importLevelSorters(sorters,ar.getHierarchies().size());
 			rd.applyLevelSorter();
 						

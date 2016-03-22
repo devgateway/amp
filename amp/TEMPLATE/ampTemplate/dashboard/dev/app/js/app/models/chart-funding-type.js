@@ -9,7 +9,8 @@ module.exports = ChartModel.extend({
     limit: 3,
     title: '',
     stacked: false,
-    seriesToExclude: []
+    seriesToExclude: [],
+    yearTotals:{}
   },
 
   _prepareTranslations: function() {
@@ -77,6 +78,8 @@ module.exports = ChartModel.extend({
         };
       })
       .value();
+    
+   
 
     // group smallest contributors as "other"s
     if (this.get('limit') < data.processed.length) {
@@ -124,6 +127,14 @@ module.exports = ChartModel.extend({
       data.processed.push(othersSeries);
     }
 
+    var yearTotals = {};
+	_.each(data.processed, function(d){
+		_.each(d.values, function(value){			
+			yearTotals[value.x] = (yearTotals[value.x] || 0) + value.y;
+		});    		
+	});
+	
+	this.set('yearTotals', yearTotals);
     return data;
   }
 

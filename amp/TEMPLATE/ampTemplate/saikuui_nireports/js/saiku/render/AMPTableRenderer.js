@@ -348,7 +348,7 @@ function buildTotalsRow(page) {
 		// content.
 		
 		if (page.pageArea.contents !== null && !isHiddenColumn(j)) {
-			var td = "<td class='data total i18n' ";
+			var td = "<td class='data total i18n tooltipped' ";
 			var auxTd = "";
 			var reportTotals = "Report Totals";
 			var cell = page.pageArea.contents[this.headerMatrix[this.lastHeaderRow][j].hierarchicalName];
@@ -719,19 +719,19 @@ function checkIfSummarizedReportWithConstant(page) {
  * tooltips for all subtotal row's cell, not only for the first one.
  */
 AMPTableRenderer.prototype.postProcessTooltips = function() {
-	var totalCells = $('table').find("[data-subtotal='true']");
+	/*var totalCells = $('table').find("[data-subtotal='true']");
 	for (var i = 0; i < totalCells.length; i++) {		
 		var cell = $(totalCells[i]); 		
 		var tooltip = $(cell).attr('original-title');
 		// Deactivated for now because it makes the rendering extra-extra-slow.
-		/*if(tooltip !== '') {
+		if(tooltip !== '') {
 			var row = $(cell).parent();
 			for (var j = 0; j < row.children().length; j++) {
 				$(row.children()[j]).attr('original-title', tooltip);
 				$(row.children()[j]).addClass('tooltipped');
 			}
-		}*/
-	}	
+		}
+	}	*/
 	$(".tooltipped").tipsy();
 }
 

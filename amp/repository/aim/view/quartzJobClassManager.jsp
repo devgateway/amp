@@ -60,7 +60,7 @@ function addJc(){
       <td>
       &nbsp;&nbsp;&nbsp;
       </td>
-      <td>
+      <td align="center">
         <table>
           <tr>
             <!-- Start Navigation -->
@@ -109,6 +109,42 @@ function addJc(){
             </td>
             <td style="background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:90px;">
               <digi:trn key="aim:jc:clmCommands">Commands</digi:trn>
+            </td>
+            <td>&nbsp;</td>
+            <td valign="top" rowspan="10">
+              <table width="100" cellspacing="0" cellpadding="0">
+                <tbody>
+                <tr>
+                  <td bgcolor="#c9c9c7" class="box-title">
+                    <b style="font-size:12px; color:#000000; padding-left:5px;">
+                      <digi:trn>Other links</digi:trn>
+                    </b></td>
+                  <td width="17" height="17" background="module/aim/images/corner-r.gif">&nbsp;</td>
+                </tr>
+                </tbody>
+              </table>
+              <table width="150" cellspacing="0" cellpadding="0" class="inside">
+                <tbody>
+                <tr>
+                  <td class="inside"><img width="15" height="10"
+                                          src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif"> <digi:link
+                          module="aim" href="/admin.do"> <digi:trn
+                          key="aim:AmpAdminHome"> Admin Home </digi:trn></digi:link></td>
+                </tr>
+                <tr>
+                  <td class="inside">
+                    <img width="15" height="10" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif">
+                    <c:set var="trn"><digi:trn
+                            key="aim:viewSettings">Click here to view Job Manager</digi:trn></c:set>
+                    <digi:link module="aim" href="/quartzJobManager.do~action=all" title="${trn}">
+                      <digi:trn key="aim:jobManager">Job Manager</digi:trn>
+                    </digi:link>
+                  </td>
+                </tr>
+                <!-- end of other links -->
+                </tbody>
+              </table>
+              <!-- Other Links -->
             </td>
           </tr>
           <c:if test="${empty quartzJobClassManagerForm.clsCol}">

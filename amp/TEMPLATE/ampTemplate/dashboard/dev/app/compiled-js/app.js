@@ -1889,7 +1889,8 @@ module.exports = ChartModel.extend({
     limit: 3,
     title: '',
     stacked: false,
-    seriesToExclude: []
+    seriesToExclude: [],
+    yearTotals:{}
   },
 
   _prepareTranslations: function() {
@@ -1957,7 +1958,9 @@ module.exports = ChartModel.extend({
         };
       })
       .value();
-
+    
+ 
+	
     // group smallest contributors as "other"s
     if (this.get('limit') < data.processed.length) {
     	// Summarize each funding type and sort by total descending, create a new array only with funding types names.
@@ -2021,11 +2024,19 @@ module.exports = ChartModel.extend({
 	        disabled: (_.indexOf(self.get('seriesToExclude'), localizedOthers) != -1),
 	        values: othersSeriesValues
 	    };
-    	
-    	// Remove from the original data the funding types we grouped in 'Others' (cant use slice because the sorting in 'data.processed' is different).
+    	    	// Remove from the original data the funding types we grouped in 'Others' (cant use slice because the sorting in 'data.processed' is different).
     	data.processed = _(data.processed).filter(function(item) {return !_(othersNames).contains(item.key)});
     	data.processed.push(othersSeries);
     }
+    
+    var yearTotals = {};
+	_.each(data.processed, function(d){
+		_.each(d.values, function(value){
+			yearTotals[value.x] = (yearTotals[value.x] || 0) + value.y;
+		});    		
+	});
+	
+	this.set('yearTotals', yearTotals);
 
     return data;
   }
@@ -2703,10 +2714,13 @@ module.exports = ChartViewBase.extend({
     var activeTooltipTitles = _.filter(context.data, function(series) {
       return series.disabled !== true;
     });
-
-    var d3FormatTotal = d3.format('%')(context.y.raw / this.model.get('total'));
-    var totalSpan = '&nbsp<span>' + total + '</span>';
-
+    
+    var totalForYear = this.model.get('yearTotals') ? this.model.get('yearTotals')[context.x.raw ] : null;
+    var d3FormatTotal = '', totalSpan = '';
+    if(totalForYear && totalForYear != 0){
+    	d3FormatTotal = d3.format('%')(context.y.raw / totalForYear);
+        totalSpan = '&nbsp<span>' + total + '</span>';
+    }
     return {tt: {
       heading: context.x.raw + ' ' + activeTooltipTitles[context.series.index].key,
       bodyText: '<b>' + context.y.fmt + '</b> ' + this.model.get('currency') + ' (' + units + ')',
@@ -30784,7 +30798,7 @@ module.exports = Backbone.View.extend({
     var self = this;
     this.$el.addClass('panel panel-primary');
     if (this.draggable) {
-      this.$el.draggable({ cancel: '.panel-body, .panel-footer', cursor: 'move', containment: 'window' });
+      this.$el.draggable({ cancel: '.panel-body, .panel-footer', cursor: 'move'  });
     }
     this.firstRender = true;
 

@@ -9,7 +9,8 @@ module.exports = ChartModel.extend({
     limit: 3,
     title: '',
     stacked: false,
-    seriesToExclude: []
+    seriesToExclude: [],
+    yearTotals:{}
   },
 
   _prepareTranslations: function() {
@@ -77,7 +78,9 @@ module.exports = ChartModel.extend({
         };
       })
       .value();
-
+    
+ 
+	
     // group smallest contributors as "other"s
     if (this.get('limit') < data.processed.length) {
     	// Summarize each funding type and sort by total descending, create a new array only with funding types names.
@@ -141,11 +144,19 @@ module.exports = ChartModel.extend({
 	        disabled: (_.indexOf(self.get('seriesToExclude'), localizedOthers) != -1),
 	        values: othersSeriesValues
 	    };
-    	
-    	// Remove from the original data the funding types we grouped in 'Others' (cant use slice because the sorting in 'data.processed' is different).
+    	    	// Remove from the original data the funding types we grouped in 'Others' (cant use slice because the sorting in 'data.processed' is different).
     	data.processed = _(data.processed).filter(function(item) {return !_(othersNames).contains(item.key)});
     	data.processed.push(othersSeries);
     }
+    
+    var yearTotals = {};
+	_.each(data.processed, function(d){
+		_.each(d.values, function(value){
+			yearTotals[value.x] = (yearTotals[value.x] || 0) + value.y;
+		});    		
+	});
+	
+	this.set('yearTotals', yearTotals);
 
     return data;
   }

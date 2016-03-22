@@ -54,10 +54,13 @@ module.exports = ChartViewBase.extend({
     var activeTooltipTitles = _.filter(context.data, function(series) {
       return series.disabled !== true;
     });
-
-    var d3FormatTotal = d3.format('%')(context.y.raw / this.model.get('total'));
-    var totalSpan = '&nbsp<span>' + total + '</span>';
-
+    
+    var totalForYear = this.model.get('yearTotals') ? this.model.get('yearTotals')[context.x.raw ] : null;
+    var d3FormatTotal = '', totalSpan = '';
+    if(totalForYear && totalForYear != 0){
+    	d3FormatTotal = d3.format('%')(context.y.raw / totalForYear);
+        totalSpan = '&nbsp<span>' + total + '</span>';
+    }
     return {tt: {
       heading: context.x.raw + ' ' + activeTooltipTitles[context.series.index].key,
       bodyText: '<b>' + context.y.fmt + '</b> ' + this.model.get('currency') + ' (' + units + ')',

@@ -63,8 +63,8 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 	@Override
 	public ReportCell visit(NiTextCell cell, CellColumn currentColumn) {
 		String text = (StringUtils.isEmpty(cell.getDisplayedValue()) && cell.entityId > 0) ?
-				translate("Undefined") : cell.getDisplayedValue();  
-			return asTextCell(text, cell.entityId, outputSettings.needsIdsValues(currentColumn) ? cell.entitiesIdsValues : null);
+			translate("Undefined") : cell.getDisplayedValue();  
+		return asTextCell(text, cell.entityId, outputSettings.needsIdsValues(currentColumn) ? cell.entitiesIdsValues : null);
 	}
 
 	@Override

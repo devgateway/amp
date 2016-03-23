@@ -57,18 +57,13 @@ public class FactTableFiltering {
 			// process regular columns
 			for(Entry<String, List<FilterRule>> sqlFilterRule:mrf.getSqlFilterRules().entrySet()) {
 				String mainColumnName = sqlFilterRule.getKey();
-				/*expenditure class is processed below, because it's a property of transactions and should affect
+				/*expenditure class is processed above, because it's a property of transactions and should affect
 				 * only transactiontype=2 (expenditures), which is not a working mechanism on regular columns*/
 				if (mainColumnName.equals(ColumnConstants.EXPENDITURE_CLASS))
 					continue;
 				String fragment = buildQuerySubfragment(mainColumnName, sqlFilterRule.getValue());
 				subquery.append(fragment);
 			}
-
-
-//			String dateFilteringFragment = buildDateFilteringFragment(ReportElement.ElementType.DATE, String.format("(transaction_type <> %d) AND (transaction_type <> %d)", Constants.MTEFPROJECTION, 200 + Constants.MTEFPROJECTION));
-//			String realMtefFilteringFragment = buildDateFilteringFragment(ReportElement.ElementType.REAL_MTEF_DATE, "transaction_type = " + (200 + Constants.MTEFPROJECTION));
-//			String mtefFilteringFragment = buildDateFilteringFragment(ReportElement.ElementType.MTEF_DATE, "transaction_type = " + Constants.MTEFPROJECTION);
 			
 			String dateFilteringFragment = buildDateFilteringFragment(ReportElement.ElementType.DATE, String.format("(transaction_type <> %d) AND (transaction_type <> %d)", Constants.MTEFPROJECTION, 200 + Constants.MTEFPROJECTION));
 			String realMtefFilteringFragment = buildDateFilteringFragment(ReportElement.ElementType.REAL_MTEF_DATE, "transaction_type = " + (200 + Constants.MTEFPROJECTION));

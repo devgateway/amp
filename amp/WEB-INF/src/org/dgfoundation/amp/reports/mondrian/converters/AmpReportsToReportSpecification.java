@@ -222,23 +222,12 @@ public class AmpReportsToReportSpecification {
 	}
 	
 	private SortingInfo buildFundingSorting(String[] fundingColumns, boolean asc, ReportColumn hierarchyColumn) {
-		String measureName = fundingColumns[fundingColumns.length - 1];
-		ReportMeasure measureCol = new ReportMeasure(measureName);
-		
 		if (ArConstants.COLUMN_FUNDING.equals(fundingColumns[0])) {
 			//this is a funding column grouped by year/quarter/month, not the total costs
 			return new SortingInfo(Arrays.asList(fundingColumns).subList(1, fundingColumns.length), SortingInfo.ROOT_PATH_FUNDING, asc);
 		} else {
 			//this is the totals costs
 			return new SortingInfo(Arrays.asList(fundingColumns).subList(1, fundingColumns.length), SortingInfo.ROOT_PATH_TOTALS, asc);
-//			if (hierarchyColumn == null)
-//				return new SortingInfo(measureCol, asc);
-//			else {
-//				LinkedHashMap<ReportElement, FilterRule> tuple = new LinkedHashMap<ReportElement, FilterRule>();
-//				tuple.put(new ReportElement(hierarchyColumn), null);
-//				tuple.put(new ReportElement(measureCol), null);
-//				return new SortingInfo(tuple, asc);
-//			}
 		}
 	}
 	

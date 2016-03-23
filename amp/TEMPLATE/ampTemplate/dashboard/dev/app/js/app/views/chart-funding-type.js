@@ -61,9 +61,11 @@ module.exports = ChartViewBase.extend({
     	d3FormatTotal = d3.format('%')(context.y.raw / totalForYear);
         totalSpan = '&nbsp<span>' + total + '</span>';
     }
+    var self = this;
+    var currencyName = _.find(app.settings.get('1').get('options'), function(item) {return item.id === self.model.get('currency')}).value;  
     return {tt: {
       heading: context.x.raw + ' ' + activeTooltipTitles[context.series.index].key,
-      bodyText: '<b>' + context.y.fmt + '</b> ' + this.model.get('currency') + ' (' + units + ')',
+      bodyText: '<b>' + context.y.fmt + '</b> ' + currencyName + ' (' + units + ')',
       footerText: '<b>' + d3FormatTotal + '</b>&nbsp<span>' + of + '</span>&nbsp' + context.x.raw + totalSpan
     }};
   },

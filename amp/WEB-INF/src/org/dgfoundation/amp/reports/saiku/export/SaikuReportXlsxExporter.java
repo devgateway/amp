@@ -37,12 +37,13 @@ import org.digijava.module.aim.util.FeaturesUtil;
 public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	
 	private SaikuReportExcelTemplate template;
-	private boolean emptyAsZero = false;
 	
 	public final String reportSheetName = "Formatted";
 	public final String summarySheetName = "Summary Information";
 	
-	private static final Logger logger = Logger.getLogger(AMPReportExcelExport.class);
+	private final Map<String, Map<Integer, Integer>> cachedWidths = new HashMap<String, Map<Integer, Integer>>();
+	
+	private static final Logger logger = Logger.getLogger(SaikuReportXlsxExporter.class);
 	
 	/**
 	 * generates a workbook containing data about 1 or 2 reports. Normally you'd want both reports to actually be the
@@ -59,7 +60,6 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		Workbook wb = new XSSFWorkbook();
 		template = new SaikuReportExcelTemplate(wb);
-		emptyAsZero = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.REPORTS_EMPTY_VALUES_AS_ZERO_XLS);
 		
 		addReportSheetToWorkbook(wb, report, getReportSheetName());
 		addSummarySheetToWorkbook(wb, report, getSummarySheetName());
@@ -82,6 +82,8 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	 */
 	protected void addReportSheetToWorkbook(Workbook wb, GeneratedReport report, String sheetName) {
 		Sheet reportSheet = wb.createSheet(TranslatorWorker.translateText(sheetName));
+		cachedWidths.computeIfAbsent(reportSheet.getSheetName(), k -> new HashMap<Integer, Integer>());
+		
 		generateReportSheet(wb, reportSheet, report);
 		postProcessGeneratedSheet(reportSheet, report);
 	}
@@ -112,9 +114,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	}
 	
 	protected void postProcessGeneratedSheet(Sheet sheet, GeneratedReport report) {
-		for (int i=0; i < report.leafHeaders.size(); i++) {
-			sheet.autoSizeColumn(i, true);
-		}
+		calculateColumnsWidth(sheet, report);
 	}
 
 	protected void generateReportSheet(Workbook wb, Sheet sheet, GeneratedReport report) {
@@ -143,6 +143,8 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 				int cellColumnPos = headerCell.getStartColumn() - hiddenColumnsCnt;
 				Cell cell = row.createCell(cellColumnPos);
 				cell.setCellValue(headerCell.getName());
+				setMaxColWidth(sheet, cell, cellColumnPos);
+				
 				CellRangeAddress mergedHeaderCell = new CellRangeAddress(i, i + headerCell.getRowSpan() - 1, 
 						cellColumnPos, cellColumnPos + headerCell.getColSpan() - 1);
 				sheet.addMergedRegion(mergedHeaderCell);
@@ -186,7 +188,8 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 			IntWrapper intWrapper = new IntWrapper();
 			report.leafHeaders.stream().filter(roc -> !isHiddenColumn(roc.originalColumnName)).forEach(roc -> {	
 				if (!(report.spec.getHierarchies().size() > 0 && intWrapper.value < level - 1)) {
-					createCell(row, intWrapper.value, reportContents.getContents().get(roc));
+					ReportCell rc = reportContents.getContents().get(roc) != null ? reportContents.getContents().get(roc) : roc.emptyCell;
+					createCell(sheet, row, intWrapper.value, rc);
 				}
 				intWrapper.inc();
 			});
@@ -209,6 +212,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 				Cell cell = row.createCell(level);
 				cell.setCellValue(reportArea.getOwner().debugString);
 				cell.setCellStyle(template.getHierarchyStyle());
+				setMaxColWidth(sheet, cell, level);
 			} 
 			
 			int rowPosInit = row.getRowNum();
@@ -235,7 +239,8 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 		IntWrapper intWrapper = new IntWrapper();
 		report.leafHeaders.stream().filter(roc -> !isHiddenColumn(roc.originalColumnName)).forEach(roc -> {
 			if (intWrapper.value >= level) {
-				Cell cell = createCell(row, intWrapper.value, reportContents.getContents().get(roc));
+				ReportCell rc = reportContents.getContents().get(roc) != null ? reportContents.getContents().get(roc) : roc.emptyCell;
+				Cell cell = createCell(sheet, row, intWrapper.value, rc);
 				cell.setCellStyle(template.getSubtotalStyle(level));
 			}
 			intWrapper.inc();
@@ -251,7 +256,8 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 		IntWrapper intWrapper = new IntWrapper();
 		Row row = sheet.createRow(sheet.getLastRowNum());
 		report.leafHeaders.stream().filter(roc -> !isHiddenColumn(roc.originalColumnName)).forEach(roc -> {	
-			Cell cell = createTotalCell(row, intWrapper.value, report, reportContents.getContents().get(roc));
+			ReportCell rc = reportContents.getContents().get(roc) != null ? reportContents.getContents().get(roc) : roc.emptyCell;
+			Cell cell = createTotalCell(sheet, row, intWrapper.value, report, rc);
 			cell.setCellStyle(template.getTotalNumberStyle());
 			intWrapper.inc();
 		});
@@ -264,14 +270,14 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	 * @param rc
 	 * @return
 	 */
-	protected Cell createTotalCell(Row row, int i, GeneratedReport report, ReportCell rc) {
+	protected Cell createTotalCell(Sheet sheet, Row row, int i, GeneratedReport report, ReportCell rc) {
 		Cell cell = null;
 		if (i == 0 && report.spec.getColumns().size() > 0) {
 			cell = row.createCell(i, Cell.CELL_TYPE_STRING);
 			String value = TranslatorWorker.translateText("Report Totals");
 			cell.setCellValue(value);
 		} else {
-			return createCell(row, i, rc);
+			return createCell(sheet, row, i, rc);
 		}
 		
 		return cell;
@@ -283,7 +289,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	 * @param rc
 	 * @return
 	 */
-	protected Cell createCell(Row row, int i, ReportCell rc) {
+	protected Cell createCell(Sheet sheet, Row row, int i, ReportCell rc) {
 		int cellType = getCellType(rc);
 		Cell cell = row.createCell(i, cellType);
 		if (cellType == Cell.CELL_TYPE_NUMERIC) {
@@ -292,7 +298,24 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 			cell.setCellValue(getStringValue(rc));
 		}
 		
+		setMaxColWidth(sheet, cell, i);
+		
 		return cell;
+	}
+	
+	protected void setMaxColWidth(Sheet sheet, Cell cell, int i) {
+		Map<Integer, Integer> widths = cachedWidths.get(sheet.getSheetName());
+		IntWrapper width = new IntWrapper().inc(10);
+		switch (cell.getCellType()) {
+			case Cell.CELL_TYPE_STRING:
+				width.set(cell.getStringCellValue().length());
+				break;
+			case Cell.CELL_TYPE_NUMERIC:
+				width.set(Double.toString(cell.getNumericCellValue()).length());
+				break;
+		}
+		
+		widths.compute(i, (k, v) -> v == null ? width.value : v < width.value ? width.value : v);
 	}
 
 
@@ -468,11 +491,13 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	 * @param hierarchies
 	 * @param headers
 	 */
-	protected void calculateColumnsWidth(Sheet sheet, int totalColNumber, Map<Integer, Integer> widths) {
-		for (int i = 0; i < totalColNumber; i++) {
+	protected void calculateColumnsWidth(Sheet sheet, GeneratedReport report) {
+		Map<Integer, Integer> sheetWidths = cachedWidths.get(sheet.getSheetName());
+		
+		for (int i = 0; i < report.leafHeaders.size(); i++) {
 			try {
-				if (widths.containsKey(i)) {
-					sheet.setColumnWidth(i, (int) (widths.get(i) * template.getCharWidth()));
+				if (sheetWidths.containsKey(i)) {
+					sheet.setColumnWidth(i, (int) (sheetWidths.get(i) * template.getCharWidth()));
 				} else {
 					sheet.setColumnWidth(i, (int) (template.getDefaultColumnWidth() * template.getCharWidth()));
 				}
@@ -483,25 +508,6 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 		}
 	}
 
-	protected static void setMaxColWidth(Map<Integer, Integer> widths, Cell cell, int i) {
-		int currentWidth = 10;
-		switch (cell.getCellType()) {
-		case Cell.CELL_TYPE_STRING:
-			currentWidth = cell.getStringCellValue().length();
-			break;
-		case Cell.CELL_TYPE_NUMERIC:
-			currentWidth = Double.toString(cell.getNumericCellValue()).length();
-			break;
-		}
-		if (widths.containsKey(i)) {
-			if (currentWidth > widths.get(i)) {
-				widths.put(i, currentWidth);
-			}
-		} else {
-			widths.put(i, currentWidth);
-		}
-	}
-	
 	protected boolean isHiddenColumn(String columnName) {
 		return columnName.equals("Draft") || columnName.equals("Approval Status");
 	}

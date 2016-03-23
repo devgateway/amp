@@ -36,6 +36,7 @@ public class SaikuReportXlsxPlainExporter extends SaikuReportXlsxExporter {
 				int cellColumnPos = headerCell.getStartColumn() - hiddenColumnsCnt;
 				Cell cell = row.createCell(cellColumnPos);
 				cell.setCellValue(headerCell.getName());
+				setMaxColWidth(sheet, cell, cellColumnPos);
 				CellRangeAddress mergedHeaderCell = new CellRangeAddress(i, i + headerCell.getRowSpan() - 1, 
 						cellColumnPos, cellColumnPos + headerCell.getColSpan() - 1);
 				sheet.addMergedRegion(mergedHeaderCell);
@@ -60,6 +61,7 @@ public class SaikuReportXlsxPlainExporter extends SaikuReportXlsxExporter {
 					Row currRow = sheet.getRow(i);
 					Cell cell = currRow.createCell(level);
 					cell.setCellValue(reportArea.getOwner().debugString);
+					setMaxColWidth(sheet, cell, level);
 				} 
 			}
 			
@@ -78,7 +80,7 @@ public class SaikuReportXlsxPlainExporter extends SaikuReportXlsxExporter {
 		IntWrapper intWrapper = new IntWrapper();
 		Row row = sheet.createRow(sheet.getLastRowNum());
 		report.leafHeaders.stream().filter(roc -> !isHiddenColumn(roc.originalColumnName)).forEach(roc -> {	
-			createTotalCell(row, intWrapper.value, report, reportContents.getContents().get(roc));
+			createTotalCell(sheet, row, intWrapper.value, report, reportContents.getContents().get(roc));
 			intWrapper.inc();
 		});
 	}

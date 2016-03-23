@@ -3267,7 +3267,8 @@ module.exports = BackboneDash.View.extend({
 			    },
   initialize: function(options) {
     this.app = options.app;
-    var height = util.calculateChartHeight(this.model.get('values').length, true);
+    var valuesLength = this.model.get('values') ? this.model.get('values').length : 0;
+    var height = util.calculateChartHeight(valuesLength, true);
     this.dashChartOptions = _({}).extend(options.chartOptions, {
       height: height, //450,  // sync with css!!!
       width: $('.container').width(),	// sync with css!!!
@@ -3471,7 +3472,9 @@ module.exports = BackboneDash.View.extend({
   },
 
   makeDownloadable: function(stuff, what, ext) {
-    var fileName = this.model.get('name') + ext,
+	var messageKey = ['amp.dashboard:chart-', this.model.get('name').replace(/ /g, '')].join('')
+	var translatedName = app.translator.translateSync(messageKey, this.model.get('name'));
+    var fileName = translatedName + ext,
         dlButton = this.$('.download-chart').removeClass('disabled');
     dlButton.find('.word').text('Download ' + what).attr('data-i18n', 'amp.dashboard:download-download-' + what);
     app.translator.translateDOM(dlButton);
@@ -30798,7 +30801,7 @@ module.exports = Backbone.View.extend({
     var self = this;
     this.$el.addClass('panel panel-primary');
     if (this.draggable) {
-      this.$el.draggable({ cancel: '.panel-body, .panel-footer', cursor: 'move'  });
+      this.$el.draggable({ cancel: '.panel-body, .panel-footer', cursor: 'move', containment: 'window' });
     }
     this.firstRender = true;
 

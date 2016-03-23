@@ -31,7 +31,8 @@
 							WHEN aav.approval_status='not_approved' THEN 5 
 							WHEN aav.approval_status='rejected' THEN 6 
 							ELSE 999999999 
-						END) as approval_status FROM amp_activity_version aav ORDER BY aav.amp_activity_id
+						END) as approval_status
+					FROM amp_activity_version aav;
         	</lang>
 		</script>
 	</apply>

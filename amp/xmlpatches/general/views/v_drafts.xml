@@ -20,7 +20,9 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 				DROP VIEW IF EXISTS v_drafts;
-				CREATE OR REPLACE VIEW v_drafts AS SELECT aav.amp_activity_id, CAST(aav.draft as varchar(5)) as draft FROM amp_activity_version aav ORDER BY aav.amp_activity_id;
+				CREATE OR REPLACE VIEW v_drafts AS
+					SELECT aav.amp_activity_id, CAST(aav.draft as varchar(5)) AS draft 
+						FROM amp_activity_version aav;
         	</lang>
 		</script>
 	</apply>

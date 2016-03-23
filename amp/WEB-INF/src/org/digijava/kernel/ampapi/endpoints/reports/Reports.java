@@ -32,12 +32,15 @@ import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
+import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.pagination.PartialReportArea;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
+import org.dgfoundation.amp.reports.CachedReportData;
+import org.dgfoundation.amp.reports.ReportCacher;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
@@ -48,6 +51,7 @@ import org.dgfoundation.amp.reports.saiku.export.AMPReportCsvExport;
 import org.dgfoundation.amp.reports.saiku.export.AMPReportExcelExport;
 import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
 import org.dgfoundation.amp.reports.saiku.export.ReportGenerationInfo;
+import org.dgfoundation.amp.reports.saiku.export.SaikuReportExportType;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
@@ -400,7 +404,7 @@ public class Reports {
 	@Produces({"application/vnd.ms-excel" })
 	public final Response exportXlsSaikuReport(String query, @PathParam("report_id") Long reportId, 
 			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
-		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.XLSX, asNiReport);
+		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.XLSX, false);
 	}
 	@POST
 	@Path("/saikureport/export/xls/run/{report_token}")
@@ -413,7 +417,7 @@ public class Reports {
 	@Produces({"text/csv"})
 	public final Response exportCsvSaikuReport(String query, @PathParam("report_id") Long reportId, 
 			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
-		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.CSV, asNiReport);
+		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.CSV, false);
 
 	}
 	@POST
@@ -431,7 +435,7 @@ public class Reports {
 	public final Response exportPdfSaikuReport(String query, @PathParam("report_id") Long reportId, 
 			@DefaultValue("false") @QueryParam ("nireport") Boolean asNiReport) {
 
-		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.PDF, asNiReport);
+		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), AMPReportExportConstants.PDF, false);
 	}
 
 	@POST
@@ -466,7 +470,6 @@ public class Reports {
 	 */
 	protected ReportGenerationInfo changeReportCurrencyTo(JsonBean queryObject, ReportGenerationInfo origReport, 
 			long ampReportId, String ampCurrencyCode) {
-		System.out.println();
 		JsonBean newQueryObject = queryObject.copy();
 		LinkedHashMap<String, Object> newQueryModel = new LinkedHashMap<String, Object>((LinkedHashMap<String, Object>) queryObject.get("queryModel"));
 		newQueryModel.put("regenerate", true);
@@ -527,26 +530,34 @@ public class Reports {
 			filename = filename.replaceAll(" ", "_");
 
 			logger.info("Generate specific export...");
-			switch (type) {
-			case AMPReportExportConstants.XLSX: {
-				ReportGenerationInfo report1 = new ReportGenerationInfo(result, AMPReportExportConstants.XLSX, report, queryModel, "");
-				ReportGenerationInfo report2 = null;
-				String secondCurrencyCode = queryModel.containsKey("secondCurrency") ? queryModel.get("secondCurrency").toString() : null;
-				logger.error(String.format("setts 1 = %s, 2 = %s, secondCurrency=%s", queryModel.get("1"), queryModel.get("2"), secondCurrencyCode));
-				if (secondCurrencyCode != null) {
-					report2 = changeReportCurrencyTo(queryObject, report1, ampReport.getAmpReportId(), secondCurrencyCode);
-				}
-				doc = AMPReportExcelExport.generateExcel(report1, report2);
-				break;
-			}
-			case AMPReportExportConstants.CSV: 
-				doc = AMPReportCsvExport.generateCSV(result, AMPReportExportConstants.CSV, report, queryModel, ";");
-				break;
 			
-			case AMPReportExportConstants.PDF:
-				AMPPdfExport pdf = new AMPPdfExport();
-				doc = pdf.pdf(result, AMPReportExportConstants.PDF, report, queryModel);
-				break;
+			CachedReportData reportData = ReportCacher.getReportData(ampReport.getAmpReportId());
+			if(EndpointUtils.isNiReports()) {
+				//TODO delete the other else (Mondrian Exports)
+				doc = exportNiReport(reportData.report, queryModel, type);
+			} else {
+				switch (type) {
+				case AMPReportExportConstants.XLSX: {
+					ReportGenerationInfo report1 = new ReportGenerationInfo(result, AMPReportExportConstants.XLSX, report, queryModel, "");
+					ReportGenerationInfo report2 = null;
+					String secondCurrencyCode = queryModel.containsKey("secondCurrency") ? queryModel.get("secondCurrency").toString() : null;
+					logger.error(String.format("setts 1 = %s, 2 = %s, secondCurrency=%s", queryModel.get("1"), queryModel.get("2"), secondCurrencyCode));
+					if (secondCurrencyCode != null) {
+						report2 = changeReportCurrencyTo(queryObject, report1, ampReport.getAmpReportId(), secondCurrencyCode);
+					}
+					
+					doc = AMPReportExcelExport.generateExcel(report1, report2);
+					break;
+				}
+				case AMPReportExportConstants.CSV: 
+					doc = AMPReportCsvExport.generateCSV(result, AMPReportExportConstants.CSV, report, queryModel, ";");
+					break;
+				
+				case AMPReportExportConstants.PDF:
+					AMPPdfExport pdf = new AMPPdfExport();
+					doc = pdf.pdf(result, AMPReportExportConstants.PDF, report, queryModel);
+					break;
+				}
 			}
 
 			if (doc != null) {
@@ -561,6 +572,50 @@ public class Reports {
 			logger.error("error while generating report", e);
 			return Response.serverError().build();
 		}
+	}
+	
+	/** Method used for exporting a NiReport. 
+	 * @param report
+	 * @param queryModel
+	 * @param type
+	 * @return
+	 * @throws Exception
+	 */
+	private byte[] exportNiReport(GeneratedReport report, LinkedHashMap<String, Object> queryModel, String type) throws Exception {
+		SaikuReportExportType exporter = null;
+		GeneratedReport dualReport = null;
+		
+		switch (type) {
+			case AMPReportExportConstants.XLSX: {
+				String styleType = (String) queryModel.get(AMPReportExportConstants.EXCEL_TYPE_PARAM);
+				if ("plain".equals(styleType)) {
+					exporter = SaikuReportExportType.XLSX_PLAIN;
+				} else {
+					exporter = SaikuReportExportType.XLSX;
+				}
+							
+				String secondCurrencyCode = queryModel.containsKey("secondCurrency") ? queryModel.get("secondCurrency").toString() : null;
+				
+				logger.error(String.format("setts 1 = %s, 2 = %s, secondCurrency=%s", queryModel.get("1"), queryModel.get("2"), secondCurrencyCode));
+				if (secondCurrencyCode != null) {
+					ReportSpecificationImpl specImpl = (ReportSpecificationImpl) report.spec;
+					ReportSettingsImpl settings = (ReportSettingsImpl) specImpl.getSettings();
+					settings.setCurrencyCode(secondCurrencyCode);
+					
+					dualReport = EndpointUtils.runReport(report.spec);
+					//TODO very very ugly. We need somehow to put queryModel info in reportSpec and have the possibility of cloning the reportSpec
+				}
+				break;
+			}
+			case AMPReportExportConstants.CSV: 
+				exporter = SaikuReportExportType.CSV;
+				break;
+			case AMPReportExportConstants.PDF:
+				exporter = SaikuReportExportType.PDF;
+				break;
+		}
+		
+		return exporter.executor.newInstance().exportReport(report, dualReport);
 	}
 
 	@GET

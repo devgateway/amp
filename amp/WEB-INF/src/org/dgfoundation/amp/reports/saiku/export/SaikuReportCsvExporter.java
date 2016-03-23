@@ -2,13 +2,12 @@ package org.dgfoundation.amp.reports.saiku.export;
 
 import java.io.ByteArrayOutputStream;
 
-import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
+import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
+import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * @author Viorel Chihai
@@ -18,7 +17,6 @@ public class SaikuReportCsvExporter implements SaikuReportExporter {
 	
 	private final String separator = ";";
 	private String lineSeparator = "";
-	boolean emptyAsZero = false;
 	
 	@Override
 	public byte[] exportReport(GeneratedReport report, GeneratedReport dualReport) throws Exception {
@@ -40,7 +38,6 @@ public class SaikuReportCsvExporter implements SaikuReportExporter {
 		StringBuilder csvContent = new StringBuilder();
 		
 		lineSeparator = System.getProperty("line.separator");
-		emptyAsZero = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.REPORTS_EMPTY_VALUES_AS_ZERO_XLS);
 		
 		renderHeader(csvContent, report);
 		renderLines(csvContent, new StringBuilder(), report, report.reportContents, 0);
@@ -87,17 +84,15 @@ public class SaikuReportCsvExporter implements SaikuReportExporter {
 					continue;
 				}
 				
-				String value = reportContents.getContents().containsKey(roc) ? reportContents.getContents().get(roc).displayedValue : "";
-				String numValue = reportContents.getContents().containsKey(roc) ? reportContents.getContents().get(roc).value.toString() : "";
+				ReportCell rc = reportContents.getContents().get(roc) != null ? reportContents.getContents().get(roc) : roc.emptyCell;
 				
-				if (!report.spec.getColumnNames().contains(roc.originalColumnName)) {
-					if (StringUtils.isEmpty(numValue) && emptyAsZero) {
-						currLine.append("0");
-					}
-					currLine.append(numValue);
+				if (rc instanceof AmountCell) {
+					currLine.append(rc.displayedValue);
+					//currLine.append(rc.value.toString());
 				} else {
-					currLine.append("\"").append(value.replaceAll("\"", "'")).append("\"");
+					currLine.append("\"").append(rc.displayedValue.replaceAll("\"", "'")).append("\"");
 				}
+				
 				
 				if (i < report.leafHeaders.size() - 1) {
 					currLine.append(separator);
@@ -119,7 +114,7 @@ public class SaikuReportCsvExporter implements SaikuReportExporter {
 	private void renderGroupLines(StringBuilder csvContent, StringBuilder currLine, GeneratedReport report,  ReportArea reportContents, int level) {
 		for (ReportArea reportArea : reportContents.getChildren()) {
 			StringBuilder tmpLine = new StringBuilder(currLine);
-			if (reportArea.getNrEntities() >= 0) {
+			if (reportArea.getNrEntities() > 0) {
 				tmpLine.append("\"").append(reportArea.getOwner().debugString).append("\"");
 				tmpLine.append(separator);
 			} 

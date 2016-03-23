@@ -3027,7 +3027,9 @@ module.exports = BackboneDash.View.extend({
   },
 
   makeDownloadable: function(stuff, what, ext) {
-    var fileName = this.model.get('name') + ext,
+	var messageKey = ['amp.dashboard:chart-', this.model.get('name').replace(/ /g, '')].join('');
+    var translatedName = app.translator.translateSync(messageKey, this.model.get('name'));  
+    var fileName = translatedName + ext,
         dlButton = this.$('.download-chart').removeClass('disabled');
     dlButton.find('.word').text('Download ' + what).attr('data-i18n', 'amp.dashboard:download-download-' + what);
     app.translator.translateDOM(dlButton);

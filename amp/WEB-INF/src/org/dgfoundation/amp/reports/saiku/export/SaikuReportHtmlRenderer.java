@@ -11,6 +11,7 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.springframework.web.util.HtmlUtils;
 
 /** Renders the report to HTML used for PDF export. See {@link SaikuReportPdfExporter}
  * @author Viorel Chihai
@@ -117,19 +118,19 @@ public class SaikuReportHtmlRenderer {
 			
 			int hierCnt = report.spec.getHierarchies().size();
 			for (int i = hierCnt; i < report.leafHeaders.size(); i++) {
-				ReportOutputColumn rc = report.leafHeaders.get(i);
+				ReportOutputColumn roc = report.leafHeaders.get(i);
 				
-				if (isHiddenColumn(rc.originalColumnName)) {
+				if (isHiddenColumn(roc.originalColumnName)) {
 					continue;
 				}
 				
 				String cellClass = "data";
-				if (!report.spec.getColumnNames().contains(rc.originalColumnName)) {
+				if (!report.spec.getColumnNames().contains(roc.originalColumnName)) {
 					cellClass = "measure";
 				}
 				
 				tblData.append("<td class='" + cellClass + "'>");
-				tblData.append(reportContents.getContents().containsKey(rc) ? reportContents.getContents().get(rc).displayedValue : "");
+				tblData.append(getCellValue(reportContents, roc));
 				tblData.append("</td>");
 			}
 			tblData.append("</tr>");
@@ -137,6 +138,12 @@ public class SaikuReportHtmlRenderer {
 		}
 	}
 	
+	private String getCellValue(ReportArea reportContents, ReportOutputColumn roc) {
+		String value = reportContents.getContents().containsKey(roc) ? reportContents.getContents().get(roc).displayedValue : roc.emptyCell.displayedValue;
+		
+		return HtmlUtils.htmlEscape(value);
+	}
+
 	/**Renders the hierarchy group row
 	 * @param tableData
 	 * @param reportContents
@@ -149,7 +156,7 @@ public class SaikuReportHtmlRenderer {
 		
 		for (ReportArea reportArea : reportContents.getChildren()) {
 			if (reportArea.getNrEntities() > 0) {
-				tableData.append(String.format("<td rowspan='%d'>%s</td>", getRowsSpan(reportArea), reportArea.getOwner().debugString));
+				tableData.append(String.format("<td rowspan='%d'>%s</td>", getRowsSpan(reportArea), HtmlUtils.htmlEscape(reportArea.getOwner().debugString)));
 			} 
 			
 			renderTableRow(tableData, reportArea, level+1);
@@ -169,7 +176,7 @@ public class SaikuReportHtmlRenderer {
 		report.leafHeaders.stream().filter(roc -> !isHiddenColumn(roc.originalColumnName)).forEach(roc -> {
 			if (intWrapper.value >= level) {
 				tableData.append("<td class='total'>");
-				tableData.append(reportContents.getContents().containsKey(roc) ? reportContents.getContents().get(roc).displayedValue : "");
+				tableData.append(getCellValue(reportContents, roc));
 				tableData.append("</td>");
 			}
 			intWrapper.inc();
@@ -205,7 +212,7 @@ public class SaikuReportHtmlRenderer {
 				tableData.append("<b>" + TranslatorWorker.translateText("Report Totals") + "</b>");
 				intWrapper.inc();
 			} else {
-				tableData.append(reportContents.getContents().containsKey(roc) ? reportContents.getContents().get(roc).displayedValue : "");
+				tableData.append(getCellValue(reportContents, roc));
 			}
 			tableData.append("</td>");
 		});

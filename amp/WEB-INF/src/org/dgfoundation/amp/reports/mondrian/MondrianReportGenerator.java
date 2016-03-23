@@ -707,7 +707,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 					} else */{
 						// MTEF columns are leaves
 						
-						roc = new ReportOutputColumn(formattedValue, roc.parentColumn, roc.originalColumnName, meta);
+						roc = new ReportOutputColumn(formattedValue, roc.parentColumn, roc.originalColumnName, null, meta);
 						leafHeaders.set(i, roc);
 					}
 				}
@@ -901,7 +901,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		if (leafColumns != null && spec.getColumns() != null) {
 			for (ReportColumn reportColumn : spec.getColumns()) {
 				String originalColumnName = reportColumn.getColumnName();
-				ReportOutputColumn reportOutputColumn = ReportOutputColumn.buildTranslated(originalColumnName, environment.locale, null, null);
+				ReportOutputColumn reportOutputColumn = ReportOutputColumn.buildTranslated(originalColumnName, environment.locale, null, null, null);
 				leafColumns.add(reportOutputColumn);
 			}
 		}
@@ -921,7 +921,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 				String columnDescription = allMeasureNames.contains(originalColumnName) ? getMeasureDescription(originalColumnName) : null; 
 				
 				ReportOutputColumn reportColumn = new ReportOutputColumn(textColumn.getLevel().getCaption(), null, 
-						originalColumnName, columnDescription, null);
+						originalColumnName, columnDescription, null, null);
 				leafColumns.add(reportColumn);
 			}
 		} else if (spec.isPopulateReportHeadersIfEmpty()) {
@@ -951,7 +951,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 //						if (i == members.size() - 1 && spec.getUsesFundingFlows() && usedName.equals("Undefined")) {
 //							usedName = usedCaption = " ";
 //						}
-						reportColumn = new ReportOutputColumn(usedCaption, parent, usedName, usedDescription, null);
+						reportColumn = new ReportOutputColumn(usedCaption, parent, usedName, usedDescription, null, null);
 						reportColumnsByFullName.put(fullColumnName, reportColumn);
 					}
 					if (i == members.size() - relevantDelta) {
@@ -973,9 +973,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 		this.totalsHeaders = new ArrayList<>();
 		//add measures total columns
 		if (spec.isCalculateColumnTotals() && !GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria())) {
-			ReportOutputColumn totalMeasuresColumn = ReportOutputColumn.buildTranslated(MoConstants.TOTAL_MEASURES, environment.locale, null, null);
+			ReportOutputColumn totalMeasuresColumn = ReportOutputColumn.buildTranslated(MoConstants.TOTAL_MEASURES, environment.locale, null, null, null);
 			for (String measureName : outputtedMeasures) {
-				this.totalsHeaders.add(ReportOutputColumn.buildTranslated(measureName, getMeasureDescription(measureName), environment.locale, totalMeasuresColumn, null));
+				this.totalsHeaders.add(ReportOutputColumn.buildTranslated(measureName, getMeasureDescription(measureName), environment.locale, totalMeasuresColumn, null, null));
 			}
 		}
 				

@@ -41,5 +41,7 @@ public class NiAmountCell extends NiOutCell implements NumberedCell {
 	public <K> K accept(CellVisitor<K> visitor, CellColumn niCellColumn) {
 		return visitor.visit(this, niCellColumn);
 	}
+	
+	public final static NiAmountCell ZERO = new NiAmountCell(BigDecimal.ZERO, NiPrecisionSetting.IDENTITY_PRECISION_SETTING);
 
 }

@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.nireports.output;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.SortedMap;
 
 import org.apache.log4j.Logger;
@@ -176,7 +177,9 @@ public class NiReportHtmlRenderer {
 				CellColumn leafHeader = headers.leafColumns.get(i);
 				//BigDecimal percentage = crd.hierarchies.calculatePercentage(leafHeader.getBehaviour().getHierarchiesListener());
 				NiOutCell cell = crd.contents.get(leafHeader).get(id);
-				String contents = cell == null ? "" : ensureMaxLen(cell.getDisplayedValue(), 50);
+				String contents = cell == null ? Optional.ofNullable(leafHeader.getBehaviour().getEmptyCell(spec)).orElse(NiTextCell.EMPTY).getDisplayedValue() 
+						: ensureMaxLen(cell.getDisplayedValue(), 50);
+				
 				bld.append("<td class='nireport_data_cell'>");
 				bld.append(contents);
 				bld.append("</td>");

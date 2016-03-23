@@ -4,12 +4,14 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NumberedCell;
 import org.dgfoundation.amp.nireports.output.NiAmountCell;
+import org.dgfoundation.amp.nireports.output.NiOutCell;
 import org.dgfoundation.amp.nireports.output.NiSplitCell;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
@@ -45,7 +47,7 @@ public class TrivialMeasureBehaviour implements Behaviour<NiAmountCell> {
 
 	@Override
 	public NiAmountCell getZeroCell() {
-		return new NiAmountCell(BigDecimal.ZERO, NiPrecisionSetting.IDENTITY_PRECISION_SETTING);
+		return NiAmountCell.ZERO;
 	}
 	
 	@Override
@@ -83,6 +85,11 @@ public class TrivialMeasureBehaviour implements Behaviour<NiAmountCell> {
 	public ImmutablePair<String, ColumnContents> getTotalCells(NiReportsEngine context, NiReportedEntity<?> entity, ColumnContents fetchedContents) {
 		// trivial measures are copied verbatim to totals
 		return new ImmutablePair<String, ColumnContents>(entity.name, fetchedContents);
+	}
+
+	@Override
+	public NiOutCell getEmptyCell(ReportSpecification spec) {
+		return NiAmountCell.ZERO;
 	}
 
 }

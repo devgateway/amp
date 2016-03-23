@@ -47,4 +47,5 @@ public class NiTextCell extends NiOutCell {
 		return visitor.visit(this, niCellColumn);
 	}
 
+	public final static NiTextCell EMPTY = new NiTextCell("", -1, null);
 }

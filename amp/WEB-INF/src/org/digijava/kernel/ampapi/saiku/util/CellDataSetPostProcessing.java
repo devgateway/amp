@@ -172,7 +172,7 @@ public class CellDataSetPostProcessing {
 		for(int columnNumber = measureStartId ; columnNumber < measuresEndId; columnNumber++) {
 			ReportOutputColumn selfHeader = leafHeaders.get(columnNumber + spec.getColumnNames().size());
 			if (hasFundingFlowParent(selfHeader) && isZero(byColTotals, columnNumber)) {
-				leafHeaders.set(columnNumber + spec.getColumnNames().size(), new ReportOutputColumn(" ", selfHeader.parentColumn, " ", selfHeader.flags));
+				leafHeaders.set(columnNumber + spec.getColumnNames().size(), new ReportOutputColumn(" ", selfHeader.parentColumn, " ", null, selfHeader.flags));
 			}
 		}
 		//colsToDelete.clear();

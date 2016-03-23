@@ -11,9 +11,12 @@ import java.util.TreeSet;
 
 import static org.dgfoundation.amp.algo.AmpCollections.any;
 
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.DateCell;
 import org.dgfoundation.amp.nireports.output.NiDateCell;
+import org.dgfoundation.amp.nireports.output.NiOutCell;
+import org.dgfoundation.amp.nireports.output.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 
@@ -51,5 +54,10 @@ public class DateTokenBehaviour implements Behaviour<NiDateCell> {
 	@Override
 	public boolean isKeepingSubreports() {
 		return false;
+	}
+
+	@Override
+	public NiOutCell getEmptyCell(ReportSpecification spec) {
+		return NiTextCell.EMPTY;
 	}
 }

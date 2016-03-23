@@ -10,8 +10,10 @@ import java.util.TreeSet;
 
 import static org.dgfoundation.amp.algo.AmpCollections.any;
 
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.PercentageTextCell;
+import org.dgfoundation.amp.nireports.output.NiOutCell;
 import org.dgfoundation.amp.nireports.output.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
@@ -44,7 +46,7 @@ public class PercentageTokenBehaviour implements Behaviour<NiTextCell> {
 
 	@Override
 	public NiTextCell getZeroCell() {
-		return new NiTextCell("", -1, null);
+		return NiTextCell.EMPTY;
 	}
 
 	@Override
@@ -55,5 +57,10 @@ public class PercentageTokenBehaviour implements Behaviour<NiTextCell> {
 	@Override
 	public boolean isKeepingSubreports() {
 		return false;
+	}
+
+	@Override
+	public NiOutCell getEmptyCell(ReportSpecification spec) {
+		return null;
 	}
 }

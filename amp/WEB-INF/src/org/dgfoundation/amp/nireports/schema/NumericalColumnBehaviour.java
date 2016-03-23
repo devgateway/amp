@@ -1,7 +1,10 @@
 package org.dgfoundation.amp.nireports.schema;
 
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.output.NiOutCell;
+import org.dgfoundation.amp.nireports.output.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 
 /**
@@ -26,4 +29,8 @@ public class NumericalColumnBehaviour extends TrivialMeasureBehaviour {
 		return null;
 	}
 
+	@Override
+	public NiOutCell getEmptyCell(ReportSpecification spec) {
+		return NiTextCell.EMPTY;
+	}
 }

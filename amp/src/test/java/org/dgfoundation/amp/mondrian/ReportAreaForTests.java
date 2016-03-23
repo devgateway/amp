@@ -64,7 +64,7 @@ public class ReportAreaForTests extends ReportAreaImpl {
 		for(int i = 0; i < contents.length / 2; i++) {
 			String columnName = contents[2 * i];
 			String colCont = contents[2 * i + 1];
-			ReportOutputColumn roc = new ReportOutputColumn(columnName, null, columnName, null);
+			ReportOutputColumn roc = new ReportOutputColumn(columnName, null, columnName, null, null);
 			if (cont.containsKey(roc))
 				throw new RuntimeException("you defined the same column in output twice: " + roc.getHierarchicalName());
 			cont.put(roc, new TextCell(colCont));

@@ -22,10 +22,12 @@ import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.nireports.amp.AmpNiReportsFormatter;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
+import org.digijava.kernel.translator.TranslatorWorker;
 
 
 /**
@@ -83,8 +85,32 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 		leafHeaders = AmpCollections.relist(leafColumns, niColumn -> niColumnToROC.get(niColumn));
 	}
 	
+	/**
+	 * builds a cell to be displayed in lieu of (null) in tabs
+	 * @param cc
+	 * @return
+	 */
+	protected ReportCell buildTabsUndefinedCell(CellColumn cc) {
+		return new TextCell(String.format("(%s %s)", cc.name, "Unspecified"));
+	}
+	
+	protected ReportCell buildEmptyCell(Column niCol) {
+		if (niCol instanceof CellColumn) {
+			CellColumn cc = (CellColumn) niCol;
+			NiOutCell niEmptyCell = cc.getBehaviour().getEmptyCell(spec);
+			if (niEmptyCell == null) {
+				if (spec.isEmptyOutputForUnspecifiedData())
+					return TextCell.EMPTY;
+				return buildTabsUndefinedCell(cc);
+			} else
+				return convert(niEmptyCell, cc);
+		} else
+			return TextCell.EMPTY;
+	}
+	
 	protected ReportOutputColumn buildReportOutputColumn(Column niCol) {
-		return new ReportOutputColumn(niCol.name, niColumnToROC.get(niCol.getParent()), niCol.name, niCol.getDescription(), null);
+		ReportCell emptyCell = buildEmptyCell(niCol);
+		return new ReportOutputColumn(niCol.name, niColumnToROC.get(niCol.getParent()), niCol.name, niCol.getDescription(), emptyCell, null);
 	}
 	
 	protected ReportCell convert(NiOutCell cell, CellColumn niCellColumn) {

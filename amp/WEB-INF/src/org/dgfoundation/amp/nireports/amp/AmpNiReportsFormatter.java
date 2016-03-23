@@ -9,14 +9,17 @@ import java.util.function.Supplier;
 
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
+import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
 import org.dgfoundation.amp.nireports.output.NiReportRunResult;
 import org.dgfoundation.amp.nireports.output.NiReportsFormatter;
+import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
 import org.dgfoundation.amp.nireports.output.CellFormatter;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
@@ -54,10 +57,15 @@ public class AmpNiReportsFormatter extends NiReportsFormatter {
 	}
 
 	@Override
+	protected ReportCell buildTabsUndefinedCell(CellColumn cc) {
+		return new TextCell(String.format("(%s %s)", TranslatorWorker.translateText(cc.name), TranslatorWorker.translateText("Unspecified")));
+	}
+	
+	@Override
 	protected ReportOutputColumn buildReportOutputColumn(Column niCol) {
 		String trnName = getNameTranslation(niCol);
 		String trnDescription = getDescriptionTranslation(niCol);
-		return new ReportOutputColumn(trnName, niColumnToROC.get(niCol.getParent()), niCol.name, trnDescription, null);
+		return new ReportOutputColumn(trnName, niColumnToROC.get(niCol.getParent()), niCol.name, trnDescription, buildEmptyCell(niCol), null);
 	}
 	
 	protected String getDescriptionTranslation(Column niCol) {

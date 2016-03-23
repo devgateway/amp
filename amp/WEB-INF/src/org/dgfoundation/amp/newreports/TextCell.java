@@ -28,4 +28,6 @@ public class TextCell extends IdentifiedReportCell {
 				Normalizer.normalize(oth.displayedValue, Form.NFD));
 	}
 	
+	public final static TextCell EMPTY = new TextCell("");
+	
 }

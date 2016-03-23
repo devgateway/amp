@@ -91,6 +91,12 @@ public interface Behaviour<V extends NiOutCell> {
 	public V getZeroCell();
 	
 	/**
+	 * returns the cell to be displayed (but not output through the API) in case of missing data 
+	 * @return
+	 */
+	public NiOutCell getEmptyCell(ReportSpecification spec);
+	
+	/**
 	 * merges 1+ splitter cells with the same displayed value into one NiSplitCell
 	 * @param splitterCells
 	 * @return

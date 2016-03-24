@@ -38,7 +38,7 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
     //handler for selected items
     this.itemSelectHandler = function(sType, aArgs) {
     	this.collapseContainer();
-    	ac_show_loading(indicatorId,inputId,toggleButtonId);
+    	ac_show_loading(indicatorId, false, toggleButtonId);
     	//hidePanel();
     	var oData = aArgs[2];
     	//Function name is dynamic, ensure it exists

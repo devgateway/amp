@@ -34,7 +34,7 @@ function ac_left_padding(str,level) {
 function ac_show_loading(indicatorId,inputId,toggleButtonId) {
 	var mySpan = YAHOO.util.Dom.get(indicatorId);
 	mySpan.style.display = 'block';
-	if ( YAHOO.env.ua.ie <= 0 && /chrom(e|ium)/.test(navigator.userAgent.toLowerCase()) != true)
+	if (inputId && YAHOO.env.ua.ie <= 0 && /chrom(e|ium)/.test(navigator.userAgent.toLowerCase()) != true)
 		YAHOO.util.Dom.get(inputId).disabled=true;
 	YAHOO.util.Dom.get(toggleButtonId).disabled=true;
 	mySpan.innerHTML = '<span id="'+indicatorId+'"><img src="/TEMPLATE/ampTemplate/js_2/yui/carousel/assets/skins/sam/ajax-loader.gif" align="left" /></span>';	

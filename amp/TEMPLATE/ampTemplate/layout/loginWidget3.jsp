@@ -19,12 +19,14 @@
 				});
 
 				// AMP-14908: IE 8/9 fix in standards mode
-				$("form#loginForm").live("keyup", function(ev){
-					if ((navigator.appName == 'Microsoft Internet Explorer') && (ev.keyCode == 13))
-					{
-						$("form#loginForm").submit();
-					}
-				});
+				if ($("form#loginForm").live !== undefined) { // This check is needed after changes for AMP-22515 (jquery versions mismatch?)
+					$("form#loginForm").live("keyup", function(ev){
+						if ((navigator.appName == 'Microsoft Internet Explorer') && (ev.keyCode == 13))
+						{
+							$("form#loginForm").submit();
+						}
+					});
+				}
 
 
 				$(document).mouseup(function(e) {

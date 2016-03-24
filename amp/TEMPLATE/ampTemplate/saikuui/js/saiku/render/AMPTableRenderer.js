@@ -380,7 +380,7 @@ function generateDataRows(page, options) {
 			if (!isHiddenColumn(j)) {
 				var cell = "";
 				//var isNumericCell = isNumber(this.contentMatrix[i][j].value);
-				if (/*!isNumericCell &&*/ j < this.metadataColumns.length && !this.metadataColumns[j].measureMovedAsColumn) {
+				if (/*!isNumericCell &&*/ j < this.metadataColumns.length /*&& !this.metadataColumns[j].measureMovedAsColumn*/) {
 					if (this.contentMatrix[i][j].isGrouped === true) {
 						continue;
 					}

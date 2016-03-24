@@ -17,5 +17,6 @@
 	<entry key="AmpCommitmentsCollectionsSumComparatorValidator">Vărsămintele sunt mai mari decât suma angajamentelor</entry>
 	<entry key="AmpExpendituresCollectionsSumComparatorValidator">Plățile sunt mai mari decât suma vărsămintelor</entry>
 	<entry key="StrictPatternDateConverter">Data trebuie introdusă în formatul: ${format}</entry>
-	
+	<entry key="LowerDateOutOfRange">Vă rugăm să introduceți data și mai mică de ${year}</entry>
+	<entry key="BiggerDateOutOfRange">Vă rugăm să introduceți data și mai mare de ${year}</entry>
 </properties>

@@ -24,6 +24,13 @@ public class StrictPatternDateConverter extends PatternDateConverter {
 		conv.setVariable("format", FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT));
 		return conv;
     }
+
+	private ConversionException getOutOfRangeDateException(String type, int year) {
+		ConversionException conv = new ConversionException(type);
+		conv.setResourceKey(type);
+		conv.setVariable("year", String.valueOf(year));
+		return conv;
+	}
     
     @Override
     public Date convertToObject(String value, Locale locale) {
@@ -36,11 +43,11 @@ public class StrictPatternDateConverter extends PatternDateConverter {
 			Calendar cal = Calendar.getInstance();
 			cal.set(Calendar.YEAR, 1900);
     		if (date.before(cal.getTime())){
-				throw getException();
+				throw getOutOfRangeDateException("BiggerDateOutOfRange", 1900);
 			}
 			cal.set(Calendar.YEAR, 2099);
     		if (date.after(cal.getTime())){
-				throw getException();
+				throw getOutOfRangeDateException("LowerDateOutOfRange", 2099);
 			}
 		} catch (ParseException e) {
 			throw getException();

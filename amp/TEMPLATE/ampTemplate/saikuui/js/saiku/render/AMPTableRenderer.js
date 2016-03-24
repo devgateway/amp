@@ -379,8 +379,8 @@ function generateDataRows(page, options) {
 		for (var j = 0; j < this.contentMatrix[i].length; j++) {
 			if (!isHiddenColumn(j)) {
 				var cell = "";
-				var isNumericCell = isNumber(this.contentMatrix[i][j].value);
-				if (!isNumericCell && j < this.metadataColumns.length) {
+				//var isNumericCell = isNumber(this.contentMatrix[i][j].value);
+				if (/*!isNumericCell &&*/ j < this.metadataColumns.length && !this.metadataColumns[j].measureMovedAsColumn) {
 					if (this.contentMatrix[i][j].isGrouped === true) {
 						continue;
 					}
@@ -398,82 +398,81 @@ function generateDataRows(page, options) {
 					} else {
 						cleanValue = cleanText(value, 60);
 					}
-				
-				
-				var styleClass = getCellDataStyleClass(contentMatrix, cleanValue, i, j);
-				var coloredPrefix = "";
-				
-				if (cellContainsAsterisk(contentMatrix, i, j)) {
-					coloredPrefix = "*";
-				}
-				
-				// Ignore subtotal rows text and change style.
-				if (this.contentMatrix[i][j].isTotal === true) {
-					if (applyTotalRowStyle === false
-							&& cleanValue.text.length > 0) {
-						// This flag indicates in which column we start applying
-						// the total style.
-						applyTotalRowStyle = true;
+								
+					var styleClass = getCellDataStyleClass(contentMatrix, cleanValue, i, j);
+					var coloredPrefix = "";
+					
+					if (cellContainsAsterisk(contentMatrix, i, j)) {
+						coloredPrefix = "*";
 					}
-					// Apply the special style for subtotal rows but
-					// starting in the right column index.
-					if (applyTotalRowStyle === true) {
-						// Trying something new here: show tooltip on the
-						// now empty "Hierarchy Value Totals" row.
-						if (cleanValue.text !== undefined) {
-							styleClass = " class='row_total tooltipped i18n' data-subtotal='true' original-title='"
-									+ cleanValue.text + "' ";
-						} else {
-							styleClass = " class='row_total' ";
+					
+					// Ignore subtotal rows text and change style.
+					if (this.contentMatrix[i][j].isTotal === true) {
+						if (applyTotalRowStyle === false
+								&& cleanValue.text.length > 0) {
+							// This flag indicates in which column we start applying
+							// the total style.
+							applyTotalRowStyle = true;
 						}
-					} else {
-						styleClass = " class='row' ";
+						// Apply the special style for subtotal rows but
+						// starting in the right column index.
+						if (applyTotalRowStyle === true) {
+							// Trying something new here: show tooltip on the
+							// now empty "Hierarchy Value Totals" row.
+							if (cleanValue.text !== undefined) {
+								styleClass = " class='row_total tooltipped i18n' data-subtotal='true' original-title='"
+										+ cleanValue.text + "' ";
+							} else {
+								styleClass = " class='row_total' ";
+							}
+						} else {
+							styleClass = " class='row' ";
+						}
+						if (this.type === 'html') {
+							cleanValue.text = '';
+						}
 					}
-					if (this.type === 'html') {
-						cleanValue.text = '';
-					}
-				}
-
-				cell = "<th" + styleClass + rowSpan + ">";
-				cell += coloredPrefix + cleanValue.text;
-				cell += "</th>";
-			} else {
-				// Change amount styles if is a subtotal.
-				if (this.contentMatrix[i][j].isTotal === true) {
-					cell = "<td class='data total'>";
-					if (this.type === 'xlsx' || this.type === 'csv') {
-						cell += this.contentMatrix[i][j].value;
-					} else if (this.type === 'pdf' || type === 'html') {
-						cell += "<div class='total'>"
-								+ this.contentMatrix[i][j].displayedValue
-								+ "</div>";
-					} else {
-						cell += this.contentMatrix[i][j].displayedValue;
-					}
-					cell += "</td>";
+	
+					cell = "<th" + styleClass + rowSpan + ">";
+					cell += coloredPrefix + cleanValue.text;
+					cell += "</th>";
 				} else {
-					cell = "<td class='data'>";
-					// Special case we receive the word "constant" from the
-					// endpoint (summarized reports).
-					if (this.summarizedReport === true && i === 0 && j === 0) {
-						cell += options.reportTotalsString;
-					} else {
+					// Change amount styles if is a subtotal.
+					if (this.contentMatrix[i][j].isTotal === true) {
+						cell = "<td class='data total'>";
 						if (this.type === 'xlsx' || this.type === 'csv') {
 							cell += this.contentMatrix[i][j].value;
-						} else {							
-							var auxNonTotalVal = this.contentMatrix[i][j].displayedValue;
-							if (auxNonTotalVal === '' || auxNonTotalVal === null) {								
-								// This was requested on AMP-21487.
-								auxNonTotalVal = '0';
-							}
-							cell += auxNonTotalVal;
+						} else if (this.type === 'pdf' || type === 'html') {
+							cell += "<div class='total'>"
+									+ this.contentMatrix[i][j].displayedValue
+									+ "</div>";
+						} else {
+							cell += this.contentMatrix[i][j].displayedValue;
 						}
+						cell += "</td>";
+					} else {
+						cell = "<td class='data'>";
+						// Special case we receive the word "constant" from the
+						// endpoint (summarized reports).
+						if (this.summarizedReport === true && i === 0 && j === 0) {
+							cell += options.reportTotalsString;
+						} else {
+							if (this.type === 'xlsx' || this.type === 'csv') {
+								cell += this.contentMatrix[i][j].value;
+							} else {							
+								var auxNonTotalVal = this.contentMatrix[i][j].displayedValue;
+								if (auxNonTotalVal === '' || auxNonTotalVal === null) {								
+									// This was requested on AMP-21487.
+									auxNonTotalVal = '0';
+								}
+								cell += auxNonTotalVal;
+							}
+						}
+						cell += "</td>";
 					}
-					cell += "</td>";
 				}
+				row += cell;
 			}
-			row += cell;
-		}
 		}
 		row += "</tr>";
 		content += row;
@@ -757,4 +756,8 @@ function isActivityPledge(activityIdValue) {
 // cannot use $.isNumber during export
 function isNumber(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+function isTotalCommitments() {
+	
 }

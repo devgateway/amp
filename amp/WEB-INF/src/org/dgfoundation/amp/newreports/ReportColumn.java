@@ -5,7 +5,9 @@ package org.dgfoundation.amp.newreports;
  * @author Dolghier Constantin
  *
  */
-public class ReportColumn extends NamedTypedEntity {	
+public class ReportColumn extends NamedTypedEntity {
+	
+	private boolean measureMovedAsColumn;
 	
 	/**
 	 * equivalent to calling {@link #ReportColumn(String, ENTITY_TYPE_ALL) )}
@@ -13,9 +15,19 @@ public class ReportColumn extends NamedTypedEntity {
 	 */
 	public ReportColumn(String columnName) {
 		super(columnName);
+		this.measureMovedAsColumn = false;
 	}
 	
+	public ReportColumn(String columnName, boolean measureMovedAsColumn) {
+		super(columnName);
+		this.measureMovedAsColumn = measureMovedAsColumn;
+	}
+
 	public String getColumnName() {
 		return this.entityName;
+	}
+
+	public boolean isMeasureMovedAsColumn() {
+		return measureMovedAsColumn;
 	}
 }

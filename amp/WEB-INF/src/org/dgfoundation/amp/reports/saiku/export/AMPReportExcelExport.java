@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.record.formula.functions.NumericFunction;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -35,6 +36,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import clover.org.apache.commons.lang.NumberUtils;
 
 public class AMPReportExcelExport {
 
@@ -275,9 +278,7 @@ public class AMPReportExcelExport {
 		int hierarchies = report.getHierarchies().size();
 		boolean isSummaryReport = hierarchies == columns;
 		logger.info("Start generateSheet " + sheet.getSheetName());
-		Map<Integer, Integer> widths = new TreeMap<Integer, Integer>();
-		boolean emptyAsZero = FeaturesUtil
-				.getGlobalSettingValueBoolean(GlobalSettingsConstants.REPORTS_EMPTY_VALUES_AS_ZERO_XLS);
+		Map<Integer, Integer> widths = new TreeMap<Integer, Integer>();		
 		// Process header.
 		Element headerRows = doc.getElementsByTag("thead").first();
 		int i = 0;
@@ -354,27 +355,26 @@ public class AMPReportExcelExport {
 				boolean isNumber = false;
 				Cell cell = row.createCell(j);
 				String cellContent = ((Element) contentColElement).text();
-				if (j >= columns && !reportTotalsString.equals(cellContent)) {
+				if (contentColElement.getElementsByClass("data").size() != 0 
+						&& !reportTotalsString.equals(cellContent)) {
+					// Measure columns (in theory).
 					isNumber = true;
-					try {
-						Double doubleNumber = new Double(cellContent);
-						if (doubleNumber.equals(0d)) {
-							if (emptyAsZero) {
-								cell.setCellValue(doubleNumber);
-							} else {
-								cell.setCellValue("");
-							}
+					
+					// Workaround since we cant trust the columns variable (sometimes we have less columns in the report) we need an extra check for the last row (Totals).
+					// This problem exist because in excel sometimes we have to show "" for numbers and sometimes 0.
+					if (i == totalRows) {
+						if(detectNumericColumn(contentRows, j, headers, columns)) {
+							isNumber = true;
+							setNumericValueToCell(cellContent, cell);
 						} else {
-							cell.setCellValue(doubleNumber);
+							isNumber = false;
+							cell.setCellValue(cellContent);
 						}
-					} catch (NumberFormatException e) {
-						if (emptyAsZero) {
-							cell.setCellValue(new Double(0));
-						} else {
-							cell.setCellValue("");
-						}
+					} else {
+						setNumericValueToCell(cellContent, cell);
 					}
 				} else {
+					// Regular columns.
 					isNumber = false;
 					cell.setCellValue(cellContent);
 				}
@@ -462,6 +462,77 @@ public class AMPReportExcelExport {
 
 		calculateColumnsWidth(sheet, sheet.getRow(0).getPhysicalNumberOfCells(), widths);
 		logger.info("End generateSheet " + sheet.getSheetName());
+	}
+	
+	/**
+	 * Try to determine if a column is numeric (measure column or computed measure column) by the data on it.
+	 * If this fails another way to test it is agains the previously generated Excel cells (its data type) instead of the html.
+	 * @param contentRows
+	 * @param colIndex
+	 * @param headerRows
+	 * @param numberOfColumns
+	 * @return
+	 */
+	private static boolean detectNumericColumn(Element contentRows, int colIndex, int headerRows, int numberOfColumns) {
+		boolean isNumeric = false;
+		boolean failedBefore = false;
+		Elements rows = contentRows.getElementsByTag("tr");
+		for (int i = 0; i < rows.size(); i++) {
+			if (i >= headerRows) {
+				Element row = rows.get(i);
+				Elements columns = row.getElementsByTag("th");
+				columns.addAll(row.getElementsByTag("td"));
+				for (int j = 0; j < columns.size(); j++) {
+					if (j == colIndex) {
+						Element col = columns.get(j);
+						String text = col.text();
+						// If text is "" or "null" we still cant decide if is a number column or not, but new Double("") will fail.
+						if (!text.equals("") && !text.equals("null")) {
+							try {
+								//new Double(text); //Doesnt work for some number formats.
+								if (NumberUtils.isNumber(text)) {
+									if (!failedBefore) {
+										isNumeric = true;
+									}
+								}								
+							} catch (Exception e) {
+								isNumeric = false;
+								failedBefore = true;
+							}
+						}												
+						break;
+					}
+				}
+			}
+		}
+		// Still at this point could be a false negative due to a report with few rows. 
+		// So we will assume that after numberOfColumns is a numeric column (measure).
+		if (!failedBefore && colIndex >= numberOfColumns) {
+			isNumeric = true;
+		}
+		return isNumeric;
+	}
+	
+	private static void setNumericValueToCell(String cellContent, Cell cell) {
+		boolean emptyAsZero = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.REPORTS_EMPTY_VALUES_AS_ZERO_XLS);
+		try {
+			Double doubleNumber = new Double(cellContent);
+			if (doubleNumber.equals(0d)) {
+				if (emptyAsZero) {
+					cell.setCellValue(doubleNumber);
+				} else {
+					cell.setCellValue("");
+				}
+			} else {
+				cell.setCellValue(doubleNumber);
+			}
+		} catch (NumberFormatException e) {
+			if (emptyAsZero) {
+				cell.setCellValue(new Double(0));
+			} else {
+				cell.setCellValue("");
+			}
+		}
 	}
 
 	/**

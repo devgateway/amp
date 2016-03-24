@@ -153,7 +153,7 @@ public class AmpReportsToReportSpecification {
 			String measureName = measure.getMeasureName();
 			// TODO: if (report.getHideActivities()) {
 			if (MondrianMapping.definedColumns.contains(measureName)) {
-				spec.addColumn(new ReportColumn(measureName, true));
+				spec.addColumn(new ReportColumn(measureName));
 				measuresMovedAsColumns = true;
 			} else {
 				spec.addMeasure(new ReportMeasure(measureName));

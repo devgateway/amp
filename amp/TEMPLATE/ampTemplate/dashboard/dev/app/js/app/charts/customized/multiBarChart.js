@@ -92,6 +92,13 @@ nv.models.customizedMultiBarChart = function() {
         }
       }catch(e){}
 
+      try {
+          if (data[0].values[0].x.length > 4) {
+        	  //margin.bottom += 130;
+        	  margin.bottom = 130;
+          }
+      } catch(e) {}
+        
       chart.update = function() { container.transition().duration(transitionDuration).call(chart) };
       chart.container = this;
 

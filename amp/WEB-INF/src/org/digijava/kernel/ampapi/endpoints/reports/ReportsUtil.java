@@ -212,6 +212,16 @@ public class ReportsUtil {
 		return newParams;
 	}
 	
+	public static GeneratedReport getGeneratedReport(Long reportId, JsonBean formParams) {
+		CachedReportData cachedReportData = getCachedReportData(reportId, formParams);
+		
+		if (cachedReportData != null && cachedReportData.report != null) {
+			return cachedReportData.report;
+		}
+		
+		return null;
+	}
+	
 	private static CachedReportData getCachedReportData(Long reportId, JsonBean formParams) {
 		boolean resort = formParams.get(EPConstants.SORTING) != null;
 		boolean regenerate = mustRegenerate(reportId, formParams) || resort;

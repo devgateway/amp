@@ -32,15 +32,12 @@ import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
-import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.pagination.PartialReportArea;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
-import org.dgfoundation.amp.reports.CachedReportData;
-import org.dgfoundation.amp.reports.ReportCacher;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
@@ -482,8 +479,26 @@ public class Reports {
 	 * @param ampCurrencyCode
 	 * @return
 	 */
-	protected ReportGenerationInfo changeReportCurrencyTo(JsonBean queryObject, ReportGenerationInfo origReport, 
-			long ampReportId, String ampCurrencyCode) {
+	protected ReportGenerationInfo changeReportCurrencyTo(JsonBean queryObject, 
+			ReportGenerationInfo origReport, long ampReportId, String ampCurrencyCode) {
+		
+		JsonBean newQueryObject = updateCurrency(queryObject, ampCurrencyCode);
+		LinkedHashMap<String, Object> newQueryModel = (LinkedHashMap<String, Object>) newQueryObject.get("queryModel");
+		
+		JsonBean newResult = getSaikuReport(newQueryObject, ampReportId);
+		ReportSpecification newReport = origReport.report; // sick and tired of shitcode 
+		
+		return new ReportGenerationInfo(newResult, origReport.type, newReport, newQueryModel , String.format(" - %s", ampCurrencyCode));
+	}
+	
+	
+	protected GeneratedReport getDualCurrencyReport(JsonBean queryObject, long reportId, String ampCurrencyCode) {
+		JsonBean newQueryObject = updateCurrency(queryObject, ampCurrencyCode);
+		
+		return ReportsUtil.getGeneratedReport(reportId, ReportsUtil.convertSaikuParamsToReports(newQueryObject));
+	}
+
+	private JsonBean updateCurrency(JsonBean queryObject, String ampCurrencyCode) {
 		JsonBean newQueryObject = queryObject.copy();
 		LinkedHashMap<String, Object> newQueryModel = new LinkedHashMap<String, Object>((LinkedHashMap<String, Object>) queryObject.get("queryModel"));
 		newQueryModel.put("regenerate", true);
@@ -494,9 +509,7 @@ public class Reports {
 
 		newQueryObject.set("queryModel", newQueryModel);
 		
-		JsonBean newResult = getSaikuReport(newQueryObject, ampReportId);
-		ReportSpecification newReport = origReport.report; // sick and tired of shitcode 
-		return new ReportGenerationInfo(newResult, origReport.type, newReport, newQueryModel, String.format(" - %s", ampCurrencyCode));
+		return newQueryObject;
 	}
 	
 	private Response exportSaikuReport(String query, String type, AmpReports ampReport, Boolean isDinamic) {
@@ -541,10 +554,12 @@ public class Reports {
 
 			logger.info("Generate specific export...");
 			
-			CachedReportData reportData = ReportCacher.getReportData(ampReport.getAmpReportId());
 			if(EndpointUtils.isNiReports()) {
 				//TODO delete the other else (Mondrian Exports)
-				doc = exportNiReport(reportData.report, queryModel, type);
+				GeneratedReport genateredReport = ReportsUtil.getGeneratedReport(ampReport.getAmpReportId(), 
+						ReportsUtil.convertSaikuParamsToReports(queryObject));
+				
+				doc = exportNiReport(genateredReport, ampReport.getAmpReportId(), queryObject, type);
 			} else {
 				switch (type) {
 				case AMPReportExportConstants.XLSX: {
@@ -602,7 +617,7 @@ public class Reports {
 		
 		//TODO: refactoring should be made before 2.12 official release by merging with exportSaikuReport
 		try {
-			byte[] doc = exportNiReport(report, new LinkedHashMap<String, Object>(), type);
+			byte[] doc = exportNiReport(report, ampReport.getAmpReportId(), new JsonBean(), type);
 			if (doc != null) {
 				logger.info("Send export data to browser...");
 				return Response.ok(doc, MediaType.APPLICATION_OCTET_STREAM)
@@ -625,12 +640,14 @@ public class Reports {
 	 * @return
 	 * @throws Exception
 	 */
-	private byte[] exportNiReport(GeneratedReport report, LinkedHashMap<String, Object> queryModel, String type) throws Exception {
+	private byte[] exportNiReport(GeneratedReport report, Long reportId, JsonBean queryObject, String type) throws Exception {
+		
 		SaikuReportExportType exporter = null;
 		GeneratedReport dualReport = null;
 		
 		switch (type) {
 			case AMPReportExportConstants.XLSX: {
+				LinkedHashMap<String, Object> queryModel = (LinkedHashMap<String, Object>) queryObject.get("queryModel");
 				String styleType = (String) queryModel.get(AMPReportExportConstants.EXCEL_TYPE_PARAM);
 				if ("plain".equals(styleType)) {
 					exporter = SaikuReportExportType.XLSX_PLAIN;
@@ -640,14 +657,9 @@ public class Reports {
 							
 				String secondCurrencyCode = queryModel.containsKey("secondCurrency") ? queryModel.get("secondCurrency").toString() : null;
 				
-				logger.error(String.format("setts 1 = %s, 2 = %s, secondCurrency=%s", queryModel.get("1"), queryModel.get("2"), secondCurrencyCode));
 				if (secondCurrencyCode != null) {
-					ReportSpecificationImpl specImpl = (ReportSpecificationImpl) report.spec;
-					ReportSettingsImpl settings = (ReportSettingsImpl) specImpl.getSettings();
-					settings.setCurrencyCode(secondCurrencyCode);
-					
-					dualReport = EndpointUtils.runReport(report.spec);
-					//TODO very very ugly. We need somehow to put queryModel info in reportSpec and have the possibility of cloning the reportSpec
+					logger.info(String.format("setts 1 = %s, 2 = %s, secondCurrency=%s", queryModel.get("1"), queryModel.get("2"), secondCurrencyCode));
+					dualReport = getDualCurrencyReport(queryObject, reportId, secondCurrencyCode);
 				}
 				break;
 			}

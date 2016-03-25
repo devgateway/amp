@@ -444,6 +444,20 @@ public class Reports {
 	public final Response exportPdfSaikuReport(String query, @PathParam("report_token") Integer reportToken) {
 		return exportInMemorySaikuReport(query, reportToken,AMPReportExportConstants.PDF);
 	}
+	
+	@POST
+	@Path("/saikupublicreport/export/pdf/{report_id}")
+	@Produces({"application/pdf"})
+	public final Response exportPdfSaikuReport(@PathParam("report_id") Long reportId) {
+		return exportSaikuPublicReport(DbUtil.getAmpReport(reportId), AMPReportExportConstants.PDF);
+	}
+	
+	@POST
+	@Path("/saikupublicreport/export/xls/{report_id}")
+	@Produces({"application/vnd.ms-excel"})
+	public final Response exportExcelSaikuReport(@PathParam("report_id") Long reportId) {
+		return exportSaikuPublicReport(DbUtil.getAmpReport(reportId), AMPReportExportConstants.XLSX);
+	}
 
 	private Response exportInMemorySaikuReport(String query, Integer reportToken,String reportType) {
 		AmpReports ampReport=ReportsUtil.getAmpReportFromSession(reportToken);
@@ -483,10 +497,6 @@ public class Reports {
 		JsonBean newResult = getSaikuReport(newQueryObject, ampReportId);
 		ReportSpecification newReport = origReport.report; // sick and tired of shitcode 
 		return new ReportGenerationInfo(newResult, origReport.type, newReport, newQueryModel, String.format(" - %s", ampCurrencyCode));
-	}
-	
-	private Response exportSaikuReport(String query, String type, AmpReports ampReport) {
-		return exportSaikuReport(query, type, ampReport, false);
 	}
 	
 	private Response exportSaikuReport(String query, String type, AmpReports ampReport, Boolean isDinamic) {
@@ -567,6 +577,40 @@ public class Reports {
 						.header("content-length", doc.length).build();
 			} else {
 				throw new Exception("Empty response while exporting.");
+			}
+		} catch (Exception e) {
+			logger.error("error while generating report", e);
+			return Response.serverError().build();
+		}
+	}
+	
+	/** Method used for exporting a public NiReport. 
+	 * @param ampReport
+	 * @param type
+	 * @return Response containing the report data
+	 */
+	private Response exportSaikuPublicReport(AmpReports ampReport, String type) {
+		logger.info("Export specific public export...");
+		
+		//NIREPORTS: remove before 2.12 official release
+		EndpointUtils.useNiReports(true);
+		
+		GeneratedReport report = EndpointUtils.runReport(AmpReportsToReportSpecification.convert(ampReport));
+		String filename = ampReport.getName();
+		filename += "." + type;
+		filename = filename.replaceAll(" ", "_");
+		
+		//TODO: refactoring should be made before 2.12 official release by merging with exportSaikuReport
+		try {
+			byte[] doc = exportNiReport(report, new LinkedHashMap<String, Object>(), type);
+			if (doc != null) {
+				logger.info("Send export data to browser...");
+				return Response.ok(doc, MediaType.APPLICATION_OCTET_STREAM)
+						.header("content-disposition", "attachment; filename = " + filename)
+						.header("content-length", doc.length).build();
+			} else {
+				logger.error(type + " report export is null");
+				return Response.serverError().build();
 			}
 		} catch (Exception e) {
 			logger.error("error while generating report", e);

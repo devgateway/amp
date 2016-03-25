@@ -480,43 +480,22 @@ function submitForm(action){
 																						<c:set var="translation">
 																							<digi:trn>Get report in Excel format</digi:trn>&nbsp;
 																						</c:set>
-																						<digi:link
-																							href="/xlsExport.do?ampReportId=${report.ampReportId}"
+																						<a style="cursor:pointer" 
+																							onclick="$.downloadReport(${report.ampReportId}, 'xls')" 
 																							title="${translation}">
-																							<digi:img hspace="0" vspace="0" height="16"
-																								width="16"
-																								src="/TEMPLATE/ampTemplate/images/icons/xls.gif"
-																								border="0" />
-																						</digi:link>
+																							<digi:img hspace="0" vspace="0" height="16"	width="16" 
+																							src="/TEMPLATE/ampTemplate/images/icons/xls.gif" border="0" />
+																						</a>
 																						&nbsp;
 																						<c:set var="translation">
 																							<digi:trn>Get report in PDF format</digi:trn>&nbsp;
 																						</c:set>
-																						<digi:link
-																							href="/pdfExport.do?ampReportId=${report.ampReportId}"
+																						<a style="cursor:pointer" 
+																							onclick="$.downloadReport(${report.ampReportId}, 'pdf')" 
 																							title="${translation}">
-																							<digi:img hspace="0" vspace="0" height="16"
-																								width="16"
-																								src="/TEMPLATE/ampTemplate/images/icons/pdf.gif"
-																								border="0" />
-																						</digi:link>
-																						<feature:display
-																							name="Show Printer Friendly option"
-																							module="Public Reports">
-                         																	&nbsp;
-                         																	<c:set var="translation">
-																								<digi:trn>Get report in printer friendly version</digi:trn>&nbsp;
-																							</c:set>
-																							<a
-																								href="${reportLink}"
-																								onclick="return popup(this,'');"
-																								title="${translation}">
-																								<digi:img hspace="0" vspace="0" height="16"
-																									width="16"
-																									src="/TEMPLATE/ampTemplate/img_2/ico-print.png"
-																									border="0" />
-																							</a>
-																						</feature:display>
+																							<digi:img hspace="0" vspace="0" height="16"	width="16" 
+																							src="/TEMPLATE/ampTemplate/images/icons/pdf.gif" border="0" />
+																						</a>
 																					</p></td>
 																			</tr>
 																		</logic:iterate>
@@ -637,3 +616,17 @@ function submitForm(action){
 </gs:test>
 
 
+<script>
+
+jQuery.downloadReport = function(reportId, type){
+	//url and data options required
+	if(reportId && type){ 
+		var url = window.location.origin + '/rest/data/saikupublicreport/export/' + type + '/' + reportId;
+		var input ='<input type="hidden" name="reportId" value="'+ reportId +'" />'; 
+		
+		//send request
+		jQuery('<form action="'+ url +'" method="POST' +'">' + input + '</form>').appendTo('body').submit().remove();
+	};
+};
+
+</script>

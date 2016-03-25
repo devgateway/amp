@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 
+import java.text.NumberFormat;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -16,6 +17,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.convert.IConverter;
+import org.apache.wicket.util.convert.converter.DoubleConverter;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
@@ -25,10 +28,12 @@ import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.converters.CustomDoubleConverter;
 import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -167,7 +172,11 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 	    };
 
 	    final AmpTextFieldPanel<Double> exchangeRate = new AmpTextFieldPanel<Double>("fixedExchangeRate",
-	            fixedExchangeRateModel, "Exchange Rate", false, false);
+	            fixedExchangeRateModel, "Exchange Rate", false, false) {
+			public IConverter getInternalConverter(java.lang.Class<?> type) {
+				return CustomDoubleConverter.INSTANCE;
+			}
+		};
 		exchangeRate.getTextContainer().add(new RangeValidator<Double>(0.001d, null));
 		exchangeRate.getTextContainer().add(new AttributeModifier("size", new Model<String>("6")));
 		exchangeRate.setOutputMarkupId(true);

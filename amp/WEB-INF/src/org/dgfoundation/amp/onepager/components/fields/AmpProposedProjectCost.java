@@ -15,6 +15,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.DoubleConverter;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpComponentAnnualBudgetSubsectionFeature;
+import org.dgfoundation.amp.onepager.converters.CustomDoubleConverter;
 import org.dgfoundation.amp.onepager.events.ProposedProjectCostUpdateEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.ProposedProjectCostModel;
@@ -59,10 +60,7 @@ public class AmpProposedProjectCost extends AmpProjectCost {
 					new PropertyModel<Double>(projectCost, "funAmount"), new PropertyModel<Set<AmpAnnualProjectBudget>>(am,
 							"annualProjectBudgets")), "Amount", false) {
 				public IConverter getInternalConverter(java.lang.Class<?> type) {
-					DoubleConverter converter = (DoubleConverter) DoubleConverter.INSTANCE;
-					NumberFormat formatter = FormatHelper.getDecimalFormat(true);
-					converter.setNumberFormat(getLocale(), formatter);
-					return converter;
+					return CustomDoubleConverter.INSTANCE;
 				}
 
 				@Override

@@ -26,6 +26,7 @@ import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFea
 import org.dgfoundation.amp.onepager.components.features.items.AmpRegionalFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpComponentFormTableAnnualBudget;
 import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.converters.CustomDoubleConverter;
 import org.dgfoundation.amp.onepager.events.FundingSectionSummaryEvent;
 import org.dgfoundation.amp.onepager.events.OverallFundingTotalsEvents;
 import org.dgfoundation.amp.onepager.models.MTEFYearsModel;
@@ -122,12 +123,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
 			}
 			
 			public IConverter getInternalConverter(java.lang.Class<?> type) {
-				DoubleConverter converter = (DoubleConverter) DoubleConverter.INSTANCE;
-				NumberFormat formatter = FormatHelper.getDecimalFormat(true);
-				
-//				formatter.setMinimumFractionDigits(0);
-				converter.setNumberFormat(getLocale(), formatter);
-				return converter; 
+				return CustomDoubleConverter.INSTANCE;
 			}
 		};
 		amount.getTextContainer().setRequired(true);

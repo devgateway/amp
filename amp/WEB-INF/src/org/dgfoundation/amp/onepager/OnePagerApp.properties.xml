@@ -19,4 +19,5 @@
 	<entry key="StrictPatternDateConverter">Please enter the date in the following format: ${format}</entry>
 	<entry key="LowerDateOutOfRange">Please enter date lower than ${year}</entry>
 	<entry key="BiggerDateOutOfRange">Please enter date bigger than ${year}</entry>
+	<entry key="DoubleFormatConverter">The value "${input}" is not a valid number (${format})</entry>
 </properties>

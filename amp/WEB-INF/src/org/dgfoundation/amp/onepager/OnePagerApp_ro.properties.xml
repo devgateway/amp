@@ -19,4 +19,5 @@
 	<entry key="StrictPatternDateConverter">Data trebuie introdusă în formatul: ${format}</entry>
 	<entry key="LowerDateOutOfRange">Vă rugăm să introduceți data și mai mică de ${year}</entry>
 	<entry key="BiggerDateOutOfRange">Vă rugăm să introduceți data și mai mare de ${year}</entry>
+	<entry key="DoubleFormatConverter">Valoarea "${input}" nu este un număr valid (${format})</entry>
 </properties>

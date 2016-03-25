@@ -58,6 +58,8 @@ public class FundingListEditor<T> extends ListEditor<T> {
 					.getAttribute("AmpDataFreezeSettings");
 		}
 		TLSUtils.getThreadLocalInstance().request.setAttribute("AmpDataFreezeSettings",settings); 
+		FundingInformationItem fundingDetailItem = (FundingInformationItem) item.getModel().getObject();
+
 		if (settings.getEnabled()) {
 			Boolean enabled = true;
 			AmpFiscalCalendar fiscalCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(
@@ -65,7 +67,6 @@ public class FundingListEditor<T> extends ListEditor<T> {
 
 			Quarter currentQuarter = new Quarter(fiscalCalendar, new Date());
 			Quarter previousQuarter = currentQuarter.getPreviousQuarter();
-			FundingInformationItem fundingDetailItem = (FundingInformationItem) item.getModel().getObject();
 			DateTime itemUpdateDate = new DateTime(fundingDetailItem.getUpdatedDate());
 
 			DateTime today = new DateTime();
@@ -114,6 +115,7 @@ public class FundingListEditor<T> extends ListEditor<T> {
 
 			item.setEnabled(enabled);
 		}
+		fundingDetailItem.setCheckSum(ActivityUtil.calculateFundingDetailCheckSum(fundingDetailItem));
 
 	}
 }

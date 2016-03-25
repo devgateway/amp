@@ -80,6 +80,10 @@ module.exports = BaseControlView.extend({
                  .text(_.find(allCurrencies, function(item){return item.id === object}).name));
         	app.data.settings.get('1').get('options').push(_.find(allCurrencies, function(item){return item.id === object}));
         });
+		
+		// when calendar changes reset currency to first currency on available currencies
+		app.data.settings.get('1').set('selected', this.availableCurrenciesForCalendar[0]);
+		currencySelect.val(this.availableCurrenciesForCalendar[0]);
 	}	  
     var settingID = $(evt.currentTarget).attr('id');
     var selectedID = $(evt.currentTarget).val();
@@ -97,7 +101,7 @@ module.exports = BaseControlView.extend({
   
   applySettings: function() {
 	  // We set the selected currency here (not in optionChanged') to avoid showing something in the infowindows before hitting Apply button.
-      app.data.settings.get('1').set('selected', this.availableCurrenciesForCalendar[0]);
+     // app.data.settings.get('1').set('selected', this.availableCurrenciesForCalendar[0]);
 
 	  // Trigger update in settings-collection.js
 	  this.app.data.settings.trigger('applySettings');

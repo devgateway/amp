@@ -62,25 +62,53 @@ public class FundingListEditor<T> extends ListEditor<T> {
 			Boolean enabled = true;
 			AmpFiscalCalendar fiscalCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(
 					FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR));
-			Quarter currentQuarter = new Quarter(fiscalCalendar, new Date());
 
-			// first of all we need to see if the activity was edited during the
-			// previous quarter
-			// Since we control where we added the FundingListEditor we know for
-			// sure that its an instance of FundingInformationItem
+			Quarter currentQuarter = new Quarter(fiscalCalendar, new Date());
+			Quarter previousQuarter = currentQuarter.getPreviousQuarter();
 			FundingInformationItem fundingDetailItem = (FundingInformationItem) item.getModel().getObject();
 			DateTime itemUpdateDate = new DateTime(fundingDetailItem.getUpdatedDate());
-			DateTime previousQuarterStart = new DateTime(currentQuarter.getPreviousQuarter().getQuarterStartDate());
-			DateTime previousQuarterEnd = new DateTime(currentQuarter.getPreviousQuarter().getQuarterEndDate());
+
 			DateTime today = new DateTime();
-			if (itemUpdateDate.isAfter(previousQuarterStart) && itemUpdateDate.isBefore(previousQuarterEnd)) {
-				// date is within the last quarter
-				if (today.isAfter(previousQuarterEnd.plusDays(settings.getGracePeriod()))) {
-					// only if the grace period has been reached we block the
-					// edit of the item
+			
+			if (currentQuarter.getQuarterNumber() > 1) {
+				// we only check after 1 quarter since in first quarter we don't
+				// need to check
+				DateTime previousQuarterStart = new DateTime(previousQuarter.getQuarterStartDate());
+				DateTime previousQuarterEnd = new DateTime(previousQuarter.getQuarterEndDate());
+				if (itemUpdateDate.isAfter(previousQuarterStart) && itemUpdateDate.isBefore(previousQuarterEnd)) {
+					// date is within the last quarter
+					if (today.isAfter(previousQuarterEnd.plusDays(settings.getGracePeriod()))) {
+						// only if the grace period has been reached we block
+						// the
+						// edit of the item
+						enabled = false;
+					}
+					if (currentQuarter.getQuarterNumber() > 2) {
+						// we need to see if the item is between first quarter
+						// start and second to last quarter end
+						DateTime firstDayOfFy = new DateTime(currentQuarter.getFirstQuarter().getQuarterStartDate());
+						DateTime secondToLastQuarterEndDate = new DateTime(
+								currentQuarter.getFirstQuarter().getQuarterStartDate());
+
+						// if the activity was edited between the first day of
+						// the fy and secondToLastQuarterEndDate and we are
+						// still in the same fy we block the edit
+						if (itemUpdateDate.isAfter(firstDayOfFy)
+								&& itemUpdateDate.isBefore(secondToLastQuarterEndDate)) {
+							enabled = false;
+						}
+					}
+				}
+			} else {
+				// if we are in quarter one we need to check if the activity was
+				// edited during the last fy and block it until the grace period
+				// has been reached
+
+				DateTime firstDayOfLastFy = new DateTime(previousQuarter.getFirstQuarter().getQuarterStartDate());
+				DateTime lastDayOfLastFy = new DateTime(previousQuarter.getQuarterEndDate());
+				if (itemUpdateDate.isAfter(firstDayOfLastFy) && itemUpdateDate.isBefore(lastDayOfLastFy)) {
 					enabled = false;
 				}
-
 			}
 			fundingDetailItem.setCheckSum(ActivityUtil.calculateFundingDetailCheckSum(fundingDetailItem));
 

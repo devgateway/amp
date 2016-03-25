@@ -236,7 +236,7 @@ function generateNiReportHeaderHtml(headers) {
 	for(var i = 0; i < headers.length; i++) {
 		header += "<tr class='nireport_header'>";
 		for(var j = 0; j < headers[i].length; j++) {
-			if (i == 0 && headers[i][j].rowSpan == headers.length 
+			if (i === 0 && headers[i][j].rowSpan === headers.length 
 					&& (isHiddenColumnByName(headers[i][j].originalName))) {
 				continue;
 			}
@@ -244,7 +244,7 @@ function generateNiReportHeaderHtml(headers) {
 			header += "<th id='" + headers[i][j].fullOriginalName + "' ";
 			header += "class='col hand-pointer'";
 
-			if (i == headers.length - headers[i][j].rowSpan) {
+			if (i === headers.length - headers[i][j].rowSpan) {
 				header += " sorting='true' ";
 			}
 			
@@ -325,11 +325,11 @@ function findSameHeaderHorizontally(i, j) {
 
 /**
  * Return if the header cell can be sorted or not.
- * A header cell can be marked as not 'sortable' if entity == 'HEADER_MEASURE' 
+ * A header cell can be marked as not 'sortable' if entity === 'HEADER_MEASURE' 
  * and is not in the last row (that means it is a measure grouping other measures)
  */
 function isHeaderCellSortable(i, entityName) {
-	if (entityName == "HEADER_MEASURE" &&
+	if (entityName === "HEADER_MEASURE" &&
 			i < this.headerMatrix.length - 1) {
 		return false;
 	}
@@ -352,7 +352,7 @@ function buildTotalsRow(page) {
 			var auxTd = "";
 			var reportTotals = "Report Totals";
 			var cell = page.pageArea.contents[this.headerMatrix[this.lastHeaderRow][j].hierarchicalName];
-			if (cell == null) {
+			if (cell === null) {
 				cell = {value: null, displayedValue: ""};
 			}
 			if (this.type === 'xlsx' || this.type === 'csv') {
@@ -401,15 +401,20 @@ function generateDataRows(page, options) {
 	var self = this;
 	var content = "";
 	// Transform the tree data structure to 2d matrix.
-	this.numberOfRows = -1;
-	getNumberOfRows(page.pageArea);
+	this.numberOfRows = (page.pageArea.children !== null ? -1 : 0);
+	this.getNumberOfRows(page.pageArea);
 	this.contentMatrix = new Array(this.numberOfRows);
 	for (var i = 0; i < this.numberOfRows; i++) {
 		this.contentMatrix[i] = new Array(this.headerMatrix[this.headerMatrix.length - 1].length);
 	}
 	this.currentContentIndexRow = 0;
-	for (var i = 0; i < page.pageArea.children.length; i++) {
-		extractDataFromTree(page.pageArea.children[i], page.pageArea, 0, i === page.pageArea.children.length - 1, []);
+	if (page.pageArea.children !== null) {
+		for (var i = 0; i < page.pageArea.children.length; i++) {
+			extractDataFromTree(page.pageArea.children[i], page.pageArea, 0, i === page.pageArea.children.length - 1, []);
+		}
+	} else {
+		// Usually this is a summary report.
+		extractDataFromTree(page.pageArea, page.pageArea, 0, 1, []);
 	}
 
 	// AMP-19189 fill the cell containing data with colors
@@ -515,7 +520,7 @@ function generateDataRows(page, options) {
 							if (this.type === 'xlsx' || this.type === 'csv') {
 								cell += this.contentMatrix[i][j].value;
 							} else {
-								var auxNonTotalVal = this.contentMatrix[i][j] == null ? "" : this.contentMatrix[i][j].displayedValue;
+								var auxNonTotalVal = this.contentMatrix[i][j] === null ? "" : this.contentMatrix[i][j].displayedValue;
 								if (auxNonTotalVal === '' || auxNonTotalVal === null) {
 									// This was requested on AMP-21487.
 									auxNonTotalVal = '0';
@@ -574,7 +579,7 @@ function findGroupVertically(matrix, i, j) {
 			// with empty cells.
 			// TODO: keep only the option for Settings.NIREPORT when Mondrian Saiku is removed
 			if (Settings.NIREPORT && k > 0 && matrix[k][j].displayedValue === matrix[k-1][j].displayedValue ||
-				Settings.NIREPORT == undefined && matrix[k][j].displayedValue.length === 0) {
+				Settings.NIREPORT === undefined && matrix[k][j].displayedValue.length === 0) {
 				count++;
 				// Mark the cell so we don't draw it later.
 				matrix[k][j].isGrouped = true;
@@ -591,7 +596,7 @@ function findGroupVertically(matrix, i, j) {
  * Convert data tree to 2d matrix structure.
  */
 function extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchiesData) {
-	if (node.children == null) {
+	if (node.children === null || node.children === undefined) {
 		// Add this node to contentMatrix, the order of the cells is defined by
 		// the header's last row.
 		for (var i = 0; i < this.headerMatrix[this.lastHeaderRow].length; i++) {
@@ -606,11 +611,12 @@ function extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchies
 				}
 			}
 			// Save isTotal flag.
-			if (dataValue == null) {
+			if (dataValue === null) {
 				dataValue = {displayedValue : ""};
 			}
-			if (Settings.NIREPORT && dataValue.displayedValue === "" && i < level)
+			if (Settings.NIREPORT && dataValue.displayedValue === "" && i < level) {
 				dataValue.displayedValue = hierarchiesData[i].displayedValue;
+			}
 			dataValue.isTotal = node.isTotal;
 			this.contentMatrix[this.currentContentIndexRow][i] = dataValue;
 		}
@@ -739,10 +745,10 @@ AMPTableRenderer.prototype.postProcessTooltips = function() {
  * Populate cell with colors based on values of 'Draft' and 'Approval Status' hidden columns 
  * validated, unvalidated, draft, pledge
  * 
- * New Draft (*) => draft == 'true' && (aproval_status != 1 || approval_status != 2)
- * Existing Draft => draft == 'true' && (aproval_status == 1 || approval_status == 2)
- * Started Validated (*) => draft == 'false' && aproval_status == 3 => started validated
- * New Un-validated (*) => draft == 'false' && aproval_status == 4 => new unvalidated
+ * New Draft (*) => draft === 'true' && (aproval_status != 1 || approval_status != 2)
+ * Existing Draft => draft === 'true' && (aproval_status === 1 || approval_status === 2)
+ * Started Validated (*) => draft === 'false' && aproval_status === 3 => started validated
+ * New Un-validated (*) => draft === 'false' && aproval_status === 4 => new unvalidated
  * 
  * More details in org.dgfoundation.amp.ar.AmpArFilter.buildApprovalStatusQuery()
  * 
@@ -776,7 +782,7 @@ function fillContentsWithColors() {
 					color = 'validated'
 				} else if (this.ACTIVITY_STATUS_CODES.unvalidated.indexOf(statusValue) > -1) {
 					color = 'unvalidated';
-					if (statusValue == '4') {
+					if (statusValue === '4') {
 						asteriskPrefix = true;
 					}
 				}
@@ -794,7 +800,7 @@ function fillContentsWithColors() {
 function getIndexOfColumn(columnName) {
 	var i = this.headerMatrix.length-1;
 	for (var j=0; j<this.headerMatrix[i].length; j++) {
-		if (this.headerMatrix[i][j] && columnName == this.headerMatrix[i][j].originalColumnName) {
+		if (this.headerMatrix[i][j] && columnName === this.headerMatrix[i][j].originalColumnName) {
 			return j;
 		}
 	}

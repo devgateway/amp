@@ -36,6 +36,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 
@@ -227,29 +228,11 @@ public class Login extends Action {
 						}
 					}
 
-					TeamMember tm = new TeamMember(member);
-
-					//now teamHead is configured within TeamMember constructor, but leaving this special case here
-					//is it still needed? if yes, then should be moved within TeamMemberUtil.isHeadRole()
-					if (
-						//very ugly but we have no choice - only one team head role possible :(
-						member.getAmpMemberRole().getRole().equals("Top Management") 				
-						) {
-							tm.setTeamHead(true);
-						}
-					session.setAttribute("teamLeadFlag", String.valueOf(tm.getTeamHead()));
-
-					// Get the team members application settings
-					AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(member.getAmpTeam().getAmpTeamId());
-					ApplicationSettings appSettings = new ApplicationSettings(ampAppSettings);
-					session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
-					tm.setAppSettings(appSettings);
+					TeamMember tm = TeamUtil.setupFiltersForLoggedInUser(request, member);
 					if (usr != null) {
 						tm.setEmail(usr.getEmail());
 					}
-					AmpTeam.initializeTeamFiltersSession(member, request, session);
 					
-					session.setAttribute("currentMember", tm);
 					PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
 					
 					// Set the session infinite. i.e. session never timeouts

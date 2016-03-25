@@ -205,6 +205,9 @@ public class Constants
 	public static final Long REGION_FUNDING = new Long(3);
 
 	public static final String TEAM_ID = "TID";
+	
+	/**SESSION[this] -> IdsSource */
+	public static final String COMPLETE_TEAM_FILTER = "CompleteTeamFilter";
 
 	public static final String TEAM_Lead = "teamLead";
 	public static final String TEAM_Head = "teamHead";

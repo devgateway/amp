@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 
 
@@ -44,6 +45,8 @@ public class ReportEnvironment {
 		IdsGeneratorSource workspaceFilter;
 		if (request != null && request.getAttribute(OVERRIDDEN_WORKSPACE_FILTER) != null)
 			workspaceFilter = (IdsGeneratorSource) request.getAttribute(OVERRIDDEN_WORKSPACE_FILTER);
+		else if (request != null && request.getSession() != null && request.getSession().getAttribute(Constants.COMPLETE_TEAM_FILTER) != null)
+			workspaceFilter = (IdsGeneratorSource) request.getSession().getAttribute(Constants.COMPLETE_TEAM_FILTER);
 		else {
 			TeamMember tm = request != null && request.getSession() != null ? (TeamMember) request.getSession().getAttribute("currentMember") : null;
 			AmpARFilter ar = request != null && request.getSession() != null ? (AmpARFilter) request.getSession().getAttribute(ArConstants.TEAM_FILTER) : null;

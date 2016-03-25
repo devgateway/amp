@@ -23,9 +23,11 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -45,6 +47,7 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
+import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.ReportsCollection;
@@ -1922,5 +1925,36 @@ public class TeamUtil {
     public static AmpTeamMember getCurrentAmpTeamMember(){
     	TeamMember tm = getCurrentMember(); 
     	return tm == null ? null : getAmpTeamMember(tm.getMemberId());
+    }
+    
+    /**
+     * setup the SESSION vars for a logged-in user
+     * @param member
+     */
+    public static TeamMember setupFiltersForLoggedInUser(HttpServletRequest request, AmpTeamMember member) {
+    	HttpSession session = request.getSession();
+    	
+		TeamMember tm = new TeamMember(member);
+
+		//now teamHead is configured within TeamMember constructor, but leaving this special case here
+		//is it still needed? if yes, then should be moved within TeamMemberUtil.isHeadRole()
+		if (
+			//very ugly but we have no choice - only one team head role possible :(
+			member.getAmpMemberRole().getRole().equals("Top Management") 				
+			) {
+				tm.setTeamHead(true);
+			}
+		session.setAttribute("teamLeadFlag", String.valueOf(tm.getTeamHead()));
+
+		// Get the team members application settings
+		AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(member.getAmpTeam().getAmpTeamId());
+		ApplicationSettings appSettings = new ApplicationSettings(ampAppSettings);
+		tm.setAppSettings(appSettings);
+		session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
+		session.setAttribute("currentMember", tm);
+		AmpARFilter arFilter = AmpTeam.initializeTeamFiltersSession(member, request, session);
+		session.setAttribute(Constants.COMPLETE_TEAM_FILTER, new CompleteWorkspaceFilter(tm, arFilter));
+        session.setMaxInactiveInterval(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.MAX_INACTIVE_SESSION_INTERVAL).intValue());
+		return tm;
     }
 }

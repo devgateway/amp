@@ -76,7 +76,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
     
     
 	//Global function to initialize the team filters inside the session
-	public static void initializeTeamFiltersSession(AmpTeamMember member, HttpServletRequest request, HttpSession session){
+	public static AmpARFilter initializeTeamFiltersSession(AmpTeamMember member, HttpServletRequest request, HttpSession session){
 		//Initialize Team Filter
 		AmpTeam ampTeam = member.getAmpTeam();
 		AmpARFilter af = new AmpARFilter();
@@ -103,6 +103,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 		*/
 		af.generateFilterQuery(request, true);
 		session.setAttribute(ArConstants.TEAM_FILTER, af);
+		return af;
 	}
 	
 	@Override

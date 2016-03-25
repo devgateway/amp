@@ -17,7 +17,6 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.FiltersGroup;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
-import org.dgfoundation.amp.testutils.TestsMondrianReportGenerator;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXConfig;
 import org.junit.Test;
 

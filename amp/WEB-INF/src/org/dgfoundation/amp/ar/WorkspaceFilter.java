@@ -8,7 +8,11 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 import clover.com.google.common.base.Joiner;
+
+import org.apache.ecs.xhtml.a;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.diffcaching.ExpiringCacher;
+import org.dgfoundation.amp.diffcaching.FullEtlDetector;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -23,7 +27,7 @@ public class WorkspaceFilter
 	private Long teamMemberId;
 	private Set teamAssignedOrgs = null;
 	private Set<AmpTeam> ampTeams = null;
-	private String accessType;
+	private boolean accessTypeManagement;
 	private boolean hideDraft;
 	private boolean approved;
 	//private boolean publicView;
@@ -40,12 +44,12 @@ public class WorkspaceFilter
 	 * @param accessType
 	 * @param draft
 	 */
-	private WorkspaceFilter(Long teamMemberId, String accessType, boolean approved, boolean hideDraft)
+	private WorkspaceFilter(Long teamMemberId, boolean accessTypeManagement, boolean approved, boolean hideDraft)
 	{
 		this.teamMemberId = teamMemberId;
 		this.hideDraft = hideDraft;
 		this.approved = approved;
-		this.accessType = accessType;
+		this.accessTypeManagement = accessTypeManagement;
 		//this.publicView = publicView;
 		prepareTeams();
 	}
@@ -99,14 +103,14 @@ public class WorkspaceFilter
 //		activityStatus.add(Constants.STARTED_STATUS);
 //		String NO_MANAGEMENT_ACTIVITIES="";
 				
-		String used_approval_status = "Management".equals(this.getAccessType()) ? 
+		String used_approval_status = this.getAccessTypeManagement() ? 
 				Util.toCSString(AmpARFilter.validatedActivityStatus) :			// Management workspace: validated activities only
 				(approved ? // non-management workspace, but only validated activities wanted nevertheless
 						Util.toCSString(AmpARFilter.validatedActivityStatus) :
 						Util.toCSString(AmpARFilter.activityStatus)	// other workspaces: all kinds of activities
 				);
 		
-		if("Management".equals(this.getAccessType())) {
+		if (this.getAccessTypeManagement()) {
 			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("+used_approval_status+") AND draft<>true AND " +
 					"amp_team_id IS NOT NULL ";
 			if (ampTeams != null) {
@@ -174,7 +178,7 @@ public class WorkspaceFilter
 		//return "41, 43, 44, 45";
 		//return "20, 21"; // masha
 		//return "17041";
-//		return "SELECT amp_activity_id from amp_activity WHERE name IN ('activity with directed MTEFs', 'Activity with both MTEFs and Act.Comms', 'mtef activity 1', 'mtef activity 2', 'Pure MTEF Project', 'activity with MTEFs', 'activity with many MTEFs',	'Test MTEF directed', 'activity with pipeline MTEFs and act. disb', 'Eth Water', 'Activity with Zones',	'TAC_activity_2')";
+		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('activity with directed MTEFs', 'Activity with both MTEFs and Act.Comms', 'mtef activity 1', 'mtef activity 2', 'Pure MTEF Project', 'activity with MTEFs', 'activity with many MTEFs',	'Test MTEF directed', 'activity with pipeline MTEFs and act. disb', 'Eth Water', 'Activity with Zones',	'TAC_activity_2')";
 		//return "select amp_activity_id from amp_activity";
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('Proposed Project Cost 1 - USD', 'Test MTEF directed', 'Eth Water', 'activity with directed MTEFs')";
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('Proposed Project Cost 1 - USD', 'Proposed Project Cost 2 - EUR', 'SubNational no percentages', 'Project with documents')";
@@ -197,7 +201,7 @@ public class WorkspaceFilter
 	 */
 	private static String generateWorkspaceFilterQuery(Long teamMemberId, String accessType, boolean approved, boolean hideDraft)
 	{
-		return new WorkspaceFilter(teamMemberId, accessType, approved, hideDraft).getGeneratedQuery();
+		return new WorkspaceFilter(teamMemberId, "Management".equals(accessType), approved, hideDraft).getGeneratedQuery();
 	}
 	
 	/**
@@ -211,7 +215,7 @@ public class WorkspaceFilter
 	 */
 	public static Set getAmpTeamsSet(Long teamMemberId, String accessType, boolean approved, boolean hideDraft)
 	{
-		return new WorkspaceFilter(teamMemberId, accessType, approved, hideDraft).getAmpTeams();
+		return new WorkspaceFilter(teamMemberId, "Management".equals(accessType), approved, hideDraft).getAmpTeams();
 	}
 	
 	/**
@@ -362,9 +366,9 @@ public class WorkspaceFilter
 		this.ampTeams = ampTeams;
 	}
 	
-	public String getAccessType()
+	public boolean getAccessTypeManagement()
 	{
-		return this.accessType;
+		return this.accessTypeManagement;
 	}
 	
 	public Long getActivitiesRejectedByFilter() {

@@ -80,7 +80,7 @@ public class Fingerprint {
 	 * returns a ';'-delimited list of hashes returned by psql queries
 	 * @return
 	 */
-	protected String computeFingerprint(Connection postgresConn) {
+	public String computeFingerprint(Connection postgresConn) {
 		List<String> fps = new ArrayList<>();
 		for (String query:fingerprintQueries) {
 			List<String> fp = SQLUtils.fetchAsList(postgresConn, query, 1);

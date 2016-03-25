@@ -1,6 +1,9 @@
 package org.dgfoundation.amp.nireports.amp;
 
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,6 +13,9 @@ import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
+import org.dgfoundation.amp.mondrian.MondrianTableDescription;
+import org.dgfoundation.amp.mondrian.MondrianTablesRepository;
+import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;

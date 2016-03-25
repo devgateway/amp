@@ -611,7 +611,7 @@ function extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchies
 				}
 			}
 			// Save isTotal flag.
-			if (dataValue === null) {
+			if (dataValue === null || dataValue === undefined) {
 				dataValue = {displayedValue : ""};
 			}
 			if (Settings.NIREPORT && dataValue.displayedValue === "" && i < level) {

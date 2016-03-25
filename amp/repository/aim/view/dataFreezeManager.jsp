@@ -143,7 +143,7 @@ $( document ).ready(function() {
 });	
 
 	function saveDataFreezeManager() {
-		var alertGracePeriod = '<digi:trn>Grace period should be between 0 and 30</digi:trn>';
+		var alertGracePeriod = '<digi:trn>Grace period should be between 0 and 31</digi:trn>';
 		if ($('input[name="enabled"]').is(':checked') && (  isEmpty($('input[name="gracePeriod"]').val())
 				|| $('input[name="gracePeriod"]').val() < 0
 				|| $('input[name="gracePeriod"]').val() > 31)) {

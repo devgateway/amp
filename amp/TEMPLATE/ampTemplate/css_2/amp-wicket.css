@@ -639,3 +639,6 @@ tr.wicketFundingRowItem:nth-child(odd) {background: #FFFFFF}
 .yui-panel-container.shadow {
 	z-index:100 !important; 
 }
+input[disabled], select[disabled]{
+	color: #D3D3D3;
+}

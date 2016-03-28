@@ -121,10 +121,12 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 			}
 			@Override
 			public void onSelect(AjaxRequestTarget target, AmpObjectVisibility choice) {
-				ampTreeVisibilityBeanModel.setObject(PMUtil.buildTreeObjectFMPermissions(choice));
-				iTreeModel.setObject(PMUtil.createTreeModel(ampTreeVisibilityBeanModel));
-				tree.refreshTree(iTreeModel);
-				target.add(AmpPMAssignFieldPermissionComponentPanel.this);
+				if(choice != null) {
+					ampTreeVisibilityBeanModel.setObject(PMUtil.buildTreeObjectFMPermissions(choice));
+					iTreeModel.setObject(PMUtil.createTreeModel(ampTreeVisibilityBeanModel));
+					tree.refreshTree(iTreeModel);
+					target.add(AmpPMAssignFieldPermissionComponentPanel.this);
+				}
 			}
 			@Override
 			public Integer getChoiceLevel(AmpObjectVisibility choice) {

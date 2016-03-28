@@ -141,6 +141,10 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	 */
 	protected Map<NiDimension, DimensionSnapshot> usedDimensions = new HashMap<>();
 	
+	/**
+	 * a read-only set of the ids used in this report (the so-called 'workspace filter') 
+	 */
+	protected Set<Long> mainIds;
 
 	public InclusiveTimer timer;
 	
@@ -168,7 +172,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 			this.calendar = new CachingCalendarConverter(this.spec.getSettings() != null && this.spec.getSettings().getCalendar() != null ? this.spec.getSettings().getCalendar() : pad.getDefaultCalendar());
 			
 			this.timer = new InclusiveTimer("Report " + spec.getReportName());
-			timer.run("workspaceFilter", () -> this.filters.getActivityIds(this));
+			timer.run("workspaceFilter", () -> this.mainIds = Collections.unmodifiableSet(this.filters.getActivityIds(this)));
 			timer.run("exec", this::runReportAndCleanup);
 			//printReportWarnings();
 			NiReportRunResult runResult = new NiReportRunResult(this.reportOutput, timer.getCurrentState(), timer.getWallclockTime(), this.headers, reportWarnings);
@@ -543,7 +547,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	 * @return
 	 */
 	public Set<Long> getMainIds() {
-		return filters.getActivityIds(this);
+		return mainIds;
 	}
 	
 	@Override

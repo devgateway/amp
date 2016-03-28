@@ -577,7 +577,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 * @return
 	 */
 	private AmpReportsSchema date_column(String columnName, String viewName, LevelColumn levelColumn) {
-		return addColumn(new DateColumn(columnName, levelColumn, null, viewName));
+		return addColumn(new DateColumn(columnName, levelColumn, viewName));
 	}
 	
 	protected final CurrencyConvertor currencyConvertor = AmpCurrencyConvertor.getInstance();

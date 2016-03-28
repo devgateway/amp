@@ -22,14 +22,14 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
  * @author Dolghier Constantin
  *
  */
-public class DateColumn extends AmpSqlSourcedColumn<DateCell> {
+public class DateColumn extends AmpCachedColumn<DateCell, Boolean> {
 	
-	public DateColumn(String columnName, NiDimension.LevelColumn levelColumn, Map<String, String> fundingViewFilter, String viewName) {
-		super(columnName, levelColumn, fundingViewFilter, viewName, "amp_activity_id", DateTokenBehaviour.instance);
+	public DateColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName) {
+		super(columnName, levelColumn, viewName, "amp_activity_id", (engine, col) -> true, DateTokenBehaviour.instance);
 	}
 
 	public DateColumn(String columnName, String viewName) {
-		this(columnName, null, null, viewName);
+		this(columnName, null, viewName);
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class DateColumn extends AmpSqlSourcedColumn<DateCell> {
 	}
 		
 	public static DateColumn fromView(String columnName, String viewName, NiDimension.LevelColumn levelColumn) {
-		return new DateColumn(columnName, levelColumn, null, viewName);
+		return new DateColumn(columnName, levelColumn, viewName);
 	}
 	
 	@Override

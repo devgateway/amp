@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 
-public class FullEtlDetector implements Supplier<Boolean> {
+public class ActivityInvalidationDetector implements Supplier<Boolean> {
 	
 	protected long lastProcessedFullEtl = -1; 
 	
@@ -19,6 +19,10 @@ public class FullEtlDetector implements Supplier<Boolean> {
 	}
 	
 	protected long getLastFullEtl(Connection conn) {
-		return SQLUtils.getLong(conn, String.format("SELECT COALESCE(max(event_id), %d) FROM amp_etl_changelog WHERE event_id > %d and entity_name = 'full_etl_request'", lastProcessedFullEtl, lastProcessedFullEtl));
+		return SQLUtils.getLong(conn, String.format("SELECT COALESCE(max(event_id), %d) FROM amp_etl_changelog WHERE event_id > %d and entity_name NOT IN ('activity', 'pledge', 'etl') ", lastProcessedFullEtl, lastProcessedFullEtl));
+	}
+	
+	public long getLastProcessedFullEtl() {
+		return lastProcessedFullEtl;
 	}
 }

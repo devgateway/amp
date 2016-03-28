@@ -18,9 +18,9 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
  */
 public abstract class PsqlSourcedColumn<K extends Cell> extends SqlSourcedColumn<K> {
 	
-	public PsqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, Map<String, String> fundingViewFilter, 
+	public PsqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn,  
 			String viewName, String mainColumn, Behaviour<?> behaviour) {
-		super(columnName, levelColumn, fundingViewFilter, viewName, mainColumn, behaviour, AmpReportsSchema.columnDescriptions.get(columnName));
+		super(columnName, levelColumn, viewName, mainColumn, behaviour, AmpReportsSchema.columnDescriptions.get(columnName));
 		check();
 	}
 	
@@ -33,8 +33,6 @@ public abstract class PsqlSourcedColumn<K extends Cell> extends SqlSourcedColumn
 		NiUtils.failIf(!SQLUtils.tableExists(viewName), String.format("column %s: view %s does not exist", name, viewName));
 		Set<String> columns = SQLUtils.getTableColumns(viewName, true);
 		NiUtils.failIf(!columns.contains(mainColumn), String.format("column %s: view %s does not have mainColumn %s", name, viewName, mainColumn));
-		filtering.values().forEach(
-			colName -> NiUtils.failIf(!columns.contains(colName), String.format("view %s does not have filtered-by column %s", viewName, colName)));
 	}
 
 }

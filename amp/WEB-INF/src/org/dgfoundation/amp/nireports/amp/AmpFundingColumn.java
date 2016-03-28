@@ -11,18 +11,22 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.VivificatingMap;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.diffcaching.DatabaseChangedDetector;
+import org.dgfoundation.amp.diffcaching.ExpiringCacher;
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.MonetaryAmount;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.amp.diff.ContextKey;
 import org.dgfoundation.amp.nireports.amp.dimensions.CategoriesDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
 import org.dgfoundation.amp.nireports.meta.MetaInfoGenerator;
@@ -46,12 +50,15 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
  */
 public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 
+	public final ExpiringCacher<ContextKey<Boolean>, List<CategAmountCell>> cacher;
+	
 	public AmpFundingColumn() {
 		this("Funding", "v_ni_donor_funding", "amp_activity_id", TrivialMeasureBehaviour.getInstance());
 	}
 
 	protected AmpFundingColumn(String columnName, String viewName, String mainEntityColumn, Behaviour<?> behaviour) {
-		super(columnName, null, getFundingViewFilter(), viewName, mainEntityColumn, behaviour);
+		super(columnName, null, viewName, mainEntityColumn, behaviour);
+		this.cacher = new ExpiringCacher<>(this.name, cacheKey -> this.wrappedFetch(cacheKey.context), new DatabaseChangedDetector(), 3 * 60 * 1000);
 	}
 
 	public static Map<String, String> getFundingViewFilter() {
@@ -83,6 +90,20 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	
 	@Override
 	public List<CategAmountCell> fetch(NiReportsEngine engine) throws Exception {
+		//return cacher.buildOrGetValue(new ContextKey<Boolean>(engine, true));
+		return reallyFetch(engine);
+	}
+	
+	public List<CategAmountCell> wrappedFetch(NiReportsEngine engine) {
+		try {
+			return reallyFetch(engine);
+		}
+		catch(Exception e) {
+			throw AlgoUtils.translateException(e);
+		}
+	}
+	
+	public List<CategAmountCell> reallyFetch(NiReportsEngine engine) throws Exception {
 		AmpReportsScratchpad scratchpad = AmpReportsScratchpad.get(engine);
 
 		String query = buildQuery(engine);

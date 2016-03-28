@@ -39,7 +39,7 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	 * caching area for i18n fetchers
 	 */
 	public final Map<PropertyDescription, ColumnValuesCacher> columnCachers = new ConcurrentHashMap<>();
-	public final Map<PercentagesCorrector, PercentagesCorrector.Snapshot> percsCorrectors = new ConcurrentHashMap<>();
+	//public final Map<PercentagesCorrector, PercentagesCorrector.Snapshot> percsCorrectors = new ConcurrentHashMap<>();
 	
 	public final Connection connection;
 	
@@ -66,17 +66,17 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 		return usedCurrency;
 	}
 		
-	public PercentagesCorrector.Snapshot buildOrGetSnapshot(PercentagesCorrector corrector, Set<Long> ids) {
-		return percsCorrectors.computeIfAbsent(corrector, z -> buildSnapshot(z, ids));
-	}
+//	public PercentagesCorrector.Snapshot buildOrGetSnapshot(PercentagesCorrector corrector, Set<Long> ids) {
+//		return percsCorrectors.computeIfAbsent(corrector, z -> buildSnapshot(z, ids));
+//	}
 		
-	public Snapshot buildSnapshot(PercentagesCorrector corrector, Set<Long> ids) {
+	public Snapshot buildSnapshot(Snapshot earlyEntries, PercentagesCorrector corrector, Set<Long> ids) {
 		final ValueWrapper<Snapshot> snapshot = new ValueWrapper<>(null);
 		engine.timer.run("normalize_percentages", () -> {
 			snapshot.set(corrector.buildSnapshot(this.connection, ids));
 			engine.timer.putMetaInNode("denormal activities", snapshot.value.sumOfPercentages.size());
 		});
-		return snapshot.value;
+		return earlyEntries == null ? snapshot.value : earlyEntries.mergeWith(snapshot.value);
 	}
 	
 	public static AmpReportsScratchpad get(NiReportsEngine engine) {

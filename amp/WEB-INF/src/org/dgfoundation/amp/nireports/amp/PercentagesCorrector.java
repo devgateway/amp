@@ -69,12 +69,9 @@ public class PercentagesCorrector {
 	public static class Snapshot {
 		/** sum of percentages if each null is counted as 100 */
 		public final Map<Long, Double> sumOfPercentages;
-		/** keys are a subset of the ones of {@link #sumOfPercentages} */
-		public final Map<Long, Integer> nrOfNulls;
 		
-		public Snapshot(Map<Long, Double> sumOfPercentages/*, Map<Long, Integer> nrOfNulls*/) {
+		public Snapshot(Map<Long, Double> sumOfPercentages) {
 			this.sumOfPercentages = Collections.unmodifiableMap(sumOfPercentages);
-			this.nrOfNulls = Collections.emptyMap();//Collections.unmodifiableMap(nrOfNulls);
 		}
 		
 		public Double correctPercentage(long mainId, Double raw, int nrNulls) {
@@ -85,6 +82,17 @@ public class PercentagesCorrector {
 			}
 			double cellValue = 100 * nrNulls + (raw == null ? 0 : raw.doubleValue());
 			return 100 * cellValue / sumOfPercentages.get(mainId);
+		}
+		
+		/**
+		 * returns an another snapshot, containing old entries + new entries. New entries overwrite the existing once, in case of same-key overlap
+		 * @param newer
+		 * @return
+		 */
+		public Snapshot mergeWith(Snapshot newer) {
+			Map<Long, Double> resSop = new HashMap<>(this.sumOfPercentages);
+			resSop.putAll(newer.sumOfPercentages);
+			return new Snapshot(resSop);
 		}
 		
 		@Override

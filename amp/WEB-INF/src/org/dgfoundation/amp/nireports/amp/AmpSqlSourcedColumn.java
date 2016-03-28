@@ -5,13 +5,17 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.NiUtils;
+import org.dgfoundation.amp.nireports.amp.diff.KeyBuilder;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.digijava.kernel.request.TLSUtils;
@@ -24,15 +28,18 @@ import org.digijava.kernel.request.TLSUtils;
  */
 public abstract class AmpSqlSourcedColumn<K extends Cell> extends PsqlSourcedColumn<K> {
 
-	public AmpSqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, Map<String, String> fundingViewFilter, 
-			String viewName, String mainColumn, Behaviour<?> behaviour) {
-		super(columnName, levelColumn, fundingViewFilter, viewName, mainColumn, behaviour);
+	public AmpSqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, String mainColumn, Behaviour<?> behaviour) {
+		super(columnName, levelColumn, viewName, mainColumn, behaviour);
 	}
 	
 	@Override
-	public final List<K> fetch(NiReportsEngine engine) {
+	public List<K> fetch(NiReportsEngine engine) {
+		return fetch(engine, engine.getMainIds());
+	}
+	
+	public List<K> fetch(NiReportsEngine engine, Set<Long> mainIds) {
 		String locale = TLSUtils.getEffectiveLangCode();
-		String queryCondition = buildCondition(engine);
+		String queryCondition = String.format("WHERE (%s IN (%s))", mainColumn, Util.toCSStringForIN(mainIds));
 		ViewFetcher fetcher = DatabaseViewFetcher.getFetcherForView(viewName, queryCondition, locale, AmpReportsScratchpad.get(engine).columnCachers, AmpReportsScratchpad.get(engine).connection, "*");
 		List<K> res = new ArrayList<>();
 		try(RsInfo rs = fetcher.fetch(null)) {

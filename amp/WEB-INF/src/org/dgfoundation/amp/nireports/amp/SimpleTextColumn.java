@@ -9,6 +9,7 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.TextCell;
+import org.dgfoundation.amp.nireports.amp.diff.TextColumnKeyBuilder;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.TextualTokenBehaviour;
 
@@ -22,10 +23,10 @@ import org.dgfoundation.amp.nireports.schema.TextualTokenBehaviour;
  * @author Dolghier Constantin
  *
  */
-public class SimpleTextColumn extends AmpSqlSourcedColumn<TextCell> {
+public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
 		
-	public SimpleTextColumn(String columnName, NiDimension.LevelColumn levelColumn, Map<String, String> fundingViewFilter, String viewName) {
-		super(columnName, levelColumn, fundingViewFilter, viewName, "amp_activity_id", TextualTokenBehaviour.instance);
+	public SimpleTextColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName) {
+		super(columnName, levelColumn, viewName, "amp_activity_id", TextColumnKeyBuilder.instance, TextualTokenBehaviour.instance);
 	}
 
 	@Override
@@ -42,11 +43,11 @@ public class SimpleTextColumn extends AmpSqlSourcedColumn<TextCell> {
 	}
 		
 	public static SimpleTextColumn fromView(String columnName, String viewName, NiDimension.LevelColumn levelColumn) {
-		return new SimpleTextColumn(columnName, levelColumn, null, viewName);
+		return new SimpleTextColumn(columnName, levelColumn, viewName);
 	}
 	
 	public static SimpleTextColumn fromViewWithoutEntity(String columnName, String viewName) {
-		return new SimpleTextColumn(columnName, null, null, viewName).withoutEntity();
+		return new SimpleTextColumn(columnName, null, viewName).withoutEntity();
 	}
 	
 	private boolean withoutEntity = false;

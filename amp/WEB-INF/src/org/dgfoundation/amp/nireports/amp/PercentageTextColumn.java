@@ -15,6 +15,7 @@ import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.newreports.ReportRenderWarningType;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.PercentageTextCell;
+import org.dgfoundation.amp.nireports.amp.diff.TextColumnKeyBuilder;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.PercentageTokenBehaviour;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -31,11 +32,11 @@ import org.digijava.kernel.persistence.PersistenceManager;
  * @author Dolghier Constantin
  *
  */
-public class PercentageTextColumn extends AmpSqlSourcedColumn<PercentageTextCell> {
+public class PercentageTextColumn extends AmpDifferentialColumn<PercentageTextCell, String> {
 	
 	public final static BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
-	public PercentageTextColumn(String columnName, NiDimension.LevelColumn levelColumn, Map<String, String> fundingViewFilter, String viewName) {
-		super(columnName, levelColumn, fundingViewFilter, viewName, "amp_activity_id", PercentageTokenBehaviour.instance);
+	public PercentageTextColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName) {
+		super(columnName, levelColumn, viewName, "amp_activity_id", TextColumnKeyBuilder.instance, PercentageTokenBehaviour.instance);
 	}
 
 	@Override
@@ -50,7 +51,7 @@ public class PercentageTextColumn extends AmpSqlSourcedColumn<PercentageTextCell
 	}
 		
 	public static PercentageTextColumn fromView(String columnName, String viewName, NiDimension.LevelColumn levelColumn) {
-		return new PercentageTextColumn(columnName, levelColumn, null, viewName);
+		return new PercentageTextColumn(columnName, levelColumn, viewName);
 	}
 
 	@Override

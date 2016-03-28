@@ -37,19 +37,12 @@ public abstract class SqlSourcedColumn<K extends Cell> extends NiReportColumn<K>
 	
 	public final String viewName;
 	public final String mainColumn;
-
-	/**
-	 * never null, but might be empty
-	 */
-	public final Map<String, String> filtering;
-
 	
-	public SqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, Map<String, String> filtering, String viewName, 
+	public SqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, 
 			String mainColumn, Behaviour<?> behaviour, String description) {
 		super(columnName, levelColumn, behaviour, description);
 		this.viewName = viewName;
 		this.mainColumn = mainColumn;
-		this.filtering = filtering == null ? Collections.emptyMap() : Collections.unmodifiableMap(new TreeMap<>(filtering));
 	}
 		
 	/**
@@ -57,8 +50,8 @@ public abstract class SqlSourcedColumn<K extends Cell> extends NiReportColumn<K>
 	 * @param engine
 	 * @return
 	 */
-	protected String buildPrimaryFilteringQuery(NiReportsEngine engine) {
-		return String.format("%s IN (%s)", mainColumn, Util.toCSStringForIN(engine.getMainIds()));
+	protected String buildPrimaryFilteringQuery(Set<Long> mainIds) {
+		return String.format("%s IN (%s)", mainColumn, Util.toCSStringForIN(mainIds));
 	}
 
 	/**
@@ -67,12 +60,7 @@ public abstract class SqlSourcedColumn<K extends Cell> extends NiReportColumn<K>
 	 * @return
 	 */
 	protected String buildCondition(NiReportsEngine engine) {
-		StringBuilder columnFilters = new StringBuilder("(1 = 1)");
-		for(String filterField:filtering.keySet()) {
-			Set<Long> ids = engine.filters.getSelectedIds(engine, filterField);
-			if (ids != null) columnFilters.append(String.format(" AND (%s IN (%s))", filtering.get(filterField), Util.toCSStringForIN(ids)));
-		}
-		String condition = String.format("WHERE (%s) AND (%s)", buildPrimaryFilteringQuery(engine), columnFilters);
+		String condition = String.format("WHERE (%s)", buildPrimaryFilteringQuery(engine.getMainIds()));
 		return condition;
 	}
 	

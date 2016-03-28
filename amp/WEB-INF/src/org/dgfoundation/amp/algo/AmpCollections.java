@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -263,5 +264,18 @@ public class AmpCollections {
 	 */
 	public static<K extends Comparable<?>> Comparable<?> orderedListWrapper(List<K> col) {
 		return new ComparableList<K>(col);
+	}
+	
+	/**
+	 * returns a mutable result of (init - minus + plus)
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static<K> Set<K> minusPlus(Set<K> init, Set<K> minus, Set<K> plus) {
+		Set<K> res = new HashSet<>(init);
+		res.removeAll(minus);
+		res.addAll(plus);
+		return res;
 	}
 }

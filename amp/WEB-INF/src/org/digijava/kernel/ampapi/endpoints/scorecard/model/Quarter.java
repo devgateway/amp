@@ -78,6 +78,18 @@ public class Quarter {
 		}
 		return quarter;
 	}
+	/**
+	 * We search for the first quarter of the year
+	 * @return
+	 */
+	
+	public Quarter getFirstQuarter(){
+		if (quarterNumber == 1){
+			return this;
+		}else {
+			return (new Quarter(fiscalCalendar, Integer.valueOf(quarterNumber - 1), year)).getFirstQuarter();
+		}
+	}
 
 	/**
 	 * Gets the date on which the current quarter starts

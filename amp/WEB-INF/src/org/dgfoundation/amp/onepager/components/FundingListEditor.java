@@ -87,9 +87,9 @@ public class FundingListEditor<T> extends ListEditor<T> {
 					if (currentQuarter.getQuarterNumber() > 2) {
 						// we need to see if the item is between first quarter
 						// start and second to last quarter end
-						DateTime firstDayOfFy = new DateTime(currentQuarter.getFirstQuarter().getQuarterStartDate());
+						DateTime firstDayOfFy = new DateTime(currentQuarter.getQuarterStartDate());
 						DateTime secondToLastQuarterEndDate = new DateTime(
-								currentQuarter.getFirstQuarter().getQuarterStartDate());
+								currentQuarter.getQuarterStartDate());
 
 						// if the activity was edited between the first day of
 						// the fy and secondToLastQuarterEndDate and we are
@@ -105,7 +105,7 @@ public class FundingListEditor<T> extends ListEditor<T> {
 				// edited during the last fy and block it until the grace period
 				// has been reached
 
-				DateTime firstDayOfLastFy = new DateTime(previousQuarter.getFirstQuarter().getQuarterStartDate());
+				DateTime firstDayOfLastFy = new DateTime(previousQuarter.getQuarterStartDate());
 				DateTime lastDayOfLastFy = new DateTime(previousQuarter.getQuarterEndDate());
 				if (itemUpdateDate.isAfter(firstDayOfLastFy) && itemUpdateDate.isBefore(lastDayOfLastFy)) {
 					enabled = false;

@@ -472,6 +472,9 @@ function submitForm(action){
 																							<bean:write name="report" property="ampReportId" />
 																						</c:set>
 																						<c:set target="${urlParams}" property="event" value="edit" />
+																						<a href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}?nireport=true" 
+						                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
+						                                								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/nireport_saiku.png" border="0" /></a>
 																						<%
 																							if (!onlySaikuButton) {	
 																						%>

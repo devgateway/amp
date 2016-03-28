@@ -1,13 +1,9 @@
 var AMPTableRenderer = function(options) {
-	type = "html";
 	metadataHierarchies = new Array();
 	metadataColumns = new Array();
 	// We receive the structure metadata as parameter because Rhino will
 	// complain about missing variables when exporting to PDF.
 	if (options !== undefined) {
-		if (options.type !== undefined) {
-			type = options.type;
-		}
 		if (options.hierarchies !== undefined) {
 			metadataHierarchies = options.hierarchies;
 		}
@@ -24,7 +20,6 @@ this.contentMatrix = undefined;
 this.lastHeaderRow = undefined;
 this.currentContentIndexRow = undefined;
 this.numberOfRows = undefined;
-this.type = undefined;
 this.summarizedReport = undefined;
 this.draftColumn = undefined;
 this.approvalStatusColumn = undefined;
@@ -37,13 +32,6 @@ this.rowsFromBatch = 100;
 AMPTableRenderer.prototype.render = function(data, options) {
 	Saiku.logger.log('AMPTableRenderer.render INIT');
 	window.saiku_time = new Date().getTime();
-	// When using this class to export the report we receive these extra
-	// parameters from the endpoint because are unavailable in the constructor
-	// call when using Rhino.
-	if (type === 'pdf' || type === 'csv' || type === 'xlsx') {
-		metadataColumns = data.columns;
-		metadataHierarchies = data.hierarchies;
-	}
 
 	if (data !== undefined && data.page !== null && data.page.pageArea !== null) {
 		ACTIVITY_STATUS_CODES = data.colorSettings.activityStatusCodes;
@@ -124,13 +112,6 @@ function generateHeaderHtml(data) {
 	// Reorder matrix rows.
 	this.headerMatrix.reverse();
 
-	// Flatten header for CSV processing.
-	if (this.type === 'csv') {
-		var lastRow = this.headerMatrix.splice(maxHeaderLevel - 1, 1);
-		this.headerMatrix = lastRow;
-		maxHeaderLevel = 1;
-	}
-	
 	this.draftColumn = getIndexOfColumn('Draft');
 	this.approvalStatusColumn = getIndexOfColumn('Approval Status');
 	
@@ -167,11 +148,8 @@ function generateHeaderHtml(data) {
 					// Since groupCount is 0 when no column grouping is applicable
 					// then we don't need an extra IF for creating the 'col'
 					// variable.
-					var groupCount = 0;
-					if (this.type === 'xlsx' || this.type === 'pdf'
-							|| type === 'html') {
-						groupCount = findSameHeaderHorizontally(i, j);
-					}
+					var groupCount = findSameHeaderHorizontally(i, j);
+
 					// Define styles for the header.
 					var style = " class='col hand-pointer'";
 
@@ -188,17 +166,7 @@ function generateHeaderHtml(data) {
 					}
 	
 					// Use the full hierarchicalName when processing CSV.
-					var colName = "";
-					if (this.type === 'csv') {
-						colName = this.headerMatrix[i][j].hierarchicalName;
-						// AMP-20379
-						if (colName === null || colName === ""
-								|| colName.toLowerCase().indexOf('null') > -1) {
-							colName = this.headerMatrix[i][j].columnName
-						}
-					} else {
-						colName = this.headerMatrix[i][j].columnName
-					}
+					var colName = this.headerMatrix[i][j].columnName
 					
 					var helpIcon = "";
 					if (this.headerMatrix[i][j].description) {
@@ -355,18 +323,12 @@ function buildTotalsRow(page) {
 			if (cell === null) {
 				cell = {value: null, displayedValue: ""};
 			}
-			if (this.type === 'xlsx' || this.type === 'csv') {
-				auxTd += cell.value;
-			} else if (this.type === 'pdf') {
-				auxTd += "<div class='total'>" + cell.displayedValue + "</div>";
-			} else if (type === 'html') {
-				if (isFirstColumn) {
-					cell.displayedValue = reportTotals;
-				}
-				
-				td += "original-title='" + reportTotals + "' data-subtotal='true'";
-				auxTd += "<div class='total i18n'>" + cell.displayedValue + "</div>";
-			}
+			if (isFirstColumn) {
+				cell.displayedValue = reportTotals;
+			}			
+			
+			td += "original-title='" + reportTotals + "' data-subtotal='true'";
+			auxTd += "<div class='total i18n'>" + cell.displayedValue + "</div>";			
 			td += ">";
 			td += auxTd + "</td>";
 			totalRow += td;
@@ -423,16 +385,6 @@ function generateDataRows(page, options) {
 	}
 
 	for (var i = 0; i < this.contentMatrix.length; i++) {
-		// Skip total rows for CSV.
-		if (this.type === 'csv') {
-			var skip = _.find(this.contentMatrix[i], function(item) {
-				return (item.isTotal !== true);
-			});
-			if (skip === undefined) {
-				continue;
-			}
-		}
-
 		// Each "batch" value is used to show more rows when we scroll down the
 		// report.
 		if (i % this.rowsFromBatch === 0 && i > 0) {
@@ -448,25 +400,15 @@ function generateDataRows(page, options) {
 					if (this.contentMatrix[i][j].isGrouped === true) {
 						continue;
 					}
-					var group = 1;
-					if (this.type === 'csv' || this.type === 'pdf' || this.type === 'html') {
-						group = findGroupVertically(this.contentMatrix, i, j);
-					}
+					var group = findGroupVertically(this.contentMatrix, i, j);
+
 					var rowSpan = " rowspan='" + group + "' ";
 					var colId = j > 0 ? j - 1 : j;
 					var value = this.contentMatrix[i][j].displayedValue;
 					var totalValue = Settings.NIREPORT ? this.contentMatrix[i][colId].displayedValue : value;
-					var cleanValue = {};
-					var cleanTotalValue = {};
-					if (this.type === 'csv' || this.type === 'xlsx') {
-						value = "" + value + "";
-						cleanValue = cleanText(value);
-						cleanTotalValue = cleanText(totalValue);
-					} else {
-						cleanValue = cleanText(value, 60);
-						cleanTotalValue = cleanText(totalValue, 60);
-					}
-
+					var cleanValue = cleanText(value, 60);
+					var cleanTotalValue = cleanText(totalValue, 60);
+					
 					var styleClass = getCellDataStyleClass(contentMatrix, cleanValue, i, j);
 					var coloredPrefix = "";
 
@@ -491,9 +433,7 @@ function generateDataRows(page, options) {
 						} else {
 							styleClass = " class='row' ";
 						}
-						if (this.type === 'html') {
-							cleanValue.text = '';
-						}
+						cleanValue.text = '';
 					}
 
 					cell = "<th" + styleClass + rowSpan + ">";
@@ -503,13 +443,7 @@ function generateDataRows(page, options) {
 					// Change amount styles if is a subtotal.
 					if (this.contentMatrix[i][j] != null && this.contentMatrix[i][j].isTotal === true) {
 						cell = "<td class='data total'>";
-						if (this.type === 'xlsx' || this.type === 'csv') {
-							cell += this.contentMatrix[i][j].value;
-						} else if (this.type === 'pdf' || type === 'html') {
-							cell += "<div class='total'>" + this.contentMatrix[i][j].displayedValue + "</div>";
-						} else {
-							cell += this.contentMatrix[i][j].displayedValue;
-						}
+						cell += "<div class='total'>" + this.contentMatrix[i][j].displayedValue + "</div>";
 						cell += "</td>";
 					} else {
 						cell = "<td class='data'>";
@@ -517,16 +451,12 @@ function generateDataRows(page, options) {
 						if (this.summarizedReport === true && i === 0 && j === 0) {
 							cell += options.reportTotalsString;
 						} else {
-							if (this.type === 'xlsx' || this.type === 'csv') {
-								cell += this.contentMatrix[i][j].value;
-							} else {
-								var auxNonTotalVal = this.contentMatrix[i][j] === null ? "" : this.contentMatrix[i][j].displayedValue;
-								if (auxNonTotalVal === '' || auxNonTotalVal === null) {
-									// This was requested on AMP-21487.
-									auxNonTotalVal = '0';
-								}
-								cell += auxNonTotalVal;
+							var auxNonTotalVal = this.contentMatrix[i][j] === null ? "" : this.contentMatrix[i][j].displayedValue;
+							if (auxNonTotalVal === '' || auxNonTotalVal === null) {
+								// This was requested on AMP-21487.
+								auxNonTotalVal = '0';
 							}
+							cell += auxNonTotalVal;							
 						}
 						cell += "</td>";
 					}
@@ -601,15 +531,6 @@ function extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchies
 		// the header's last row.
 		for (var i = 0; i < this.headerMatrix[this.lastHeaderRow].length; i++) {
 			var dataValue = node.contents[this.headerMatrix[this.lastHeaderRow][i].hierarchicalName];
-			if (this.type === 'csv') {
-				// If this is a hierarchy column.
-				if (i < this.metadataHierarchies.length) {
-					// If current cell is empty then take the above cell value.
-					if (dataValue != null && dataValue.displayedValue.length === 0) {
-						dataValue = this.contentMatrix[this.currentContentIndexRow - 1][i];
-					}
-				}
-			}
 			// Save isTotal flag.
 			if (dataValue === null || dataValue === undefined) {
 				dataValue = {displayedValue : ""};

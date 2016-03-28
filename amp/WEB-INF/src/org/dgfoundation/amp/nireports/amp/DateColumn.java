@@ -22,7 +22,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
  * @author Dolghier Constantin
  *
  */
-public class DateColumn extends AmpCachedColumn<DateCell, Boolean> {
+public class DateColumn extends AmpDifferentialColumn<DateCell, Boolean> {
 	
 	public DateColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName) {
 		super(columnName, levelColumn, viewName, "amp_activity_id", (engine, col) -> true, DateTokenBehaviour.instance);

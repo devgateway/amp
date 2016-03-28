@@ -40,9 +40,7 @@ var SessionWorkspace = Backbone.Model.extend({
                 localStorage.setItem('saiku-version', Settings.VERSION);
             }
         }
-        if (!Settings.AMP_REPORT_API_BRIDGE) {
-	        Saiku.ui.block("Loading datasources....");
-	    }
+        Saiku.ui.block("Loading datasources....");
         this.fetch({success:this.process_datasources},{});
         
     },
@@ -98,9 +96,8 @@ var SessionWorkspace = Backbone.Model.extend({
             // Show UI
             $(Saiku.toolbar.el).prependTo($("#header"));
             $("#header").show();
-            if (!Settings.AMP_REPORT_API_BRIDGE) {
-            	Saiku.ui.unblock();
-            }
+           	Saiku.ui.unblock();
+
             // Add initial tab
             Saiku.tabs.render();
             //Saiku.splash.render();
@@ -141,9 +138,7 @@ var SessionWorkspace = Backbone.Model.extend({
                         } else {
                             this.cube[key] = new Cube({ key: key });
                             if (Settings.DIMENSION_PREFETCH === true) {
-                            	if (!Settings.AMP_REPORT_API_BRIDGE) {
-                                	this.cube[key].fetch();
-                                }
+                               	this.cube[key].fetch();
                             }
                         }
                     }
@@ -160,10 +155,6 @@ var SessionWorkspace = Backbone.Model.extend({
     
     url: function() {
     	//Always refresh
-    	if (Settings.AMP_REPORT_API_BRIDGE) {
-    		return "/TEMPLATE/ampTemplate/saikuui/mockData/sessionWorkspace.json";
-    	} else {
-    		return encodeURI(Saiku.session.username + "/discover/refresh");
-    	}
+    	return encodeURI(Saiku.session.username + "/discover/refresh");    	
     }
 });

@@ -28,7 +28,7 @@ var Saiku = {
 	 */
 	tabs : new TabSet(),
 	
-	splash: AMP_REPORT_API_BRIDGE === false ? new SplashScreen() : null,
+	splash: new SplashScreen(),
 
 	/**
 	 * Model which handles session and authentication
@@ -109,20 +109,13 @@ if (! Settings.BIPLUGIN) {
 							password : Settings.PASSWORD
 						});
 						
-						if (Settings.AMP_REPORT_API_BRIDGE) {
-							Saiku.session.bind("tab:add", function() {
-							});
-						} else {
-							Saiku.toolbar = new Toolbar();
-	                        Saiku.session.bind("tab:add", function () {
-	                        	_.delay(function() {
-	                        		if(!Settings.AMP_REPORT_API_BRIDGE) {
-	                        			$(".cubes").val("amp/AMP/AMP/Donor%20Funding");
-		                            	$(".cubes").change();
-	                                }
-	                        	}, 500);
-	                        });
-						}
+						Saiku.toolbar = new Toolbar();
+                        Saiku.session.bind("tab:add", function () {
+                        	_.delay(function() {
+                        		$(".cubes").val("amp/AMP/AMP/Donor%20Funding");
+	                            $(".cubes").change();
+                        	}, 500);
+                        });						
 					}
 				});
 			}

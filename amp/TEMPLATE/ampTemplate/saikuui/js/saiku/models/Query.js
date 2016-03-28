@@ -22,11 +22,7 @@ var Query = Backbone.Model.extend({
     formatter: Settings.CELLSET_FORMATTER,
     properties: null,
 
-    initialize: function(args, options) {
-    	if (Settings.AMP_REPORT_API_BRIDGE) {
-    		this.initFiltersDeferred = $.Deferred();    		
-    	}
-    	
+    initialize: function(args, options) {   	
         // Save cube
         _.extend(this, options);
         
@@ -52,11 +48,8 @@ var Query = Backbone.Model.extend({
         this.result = new Result({ limit: Settings.RESULT_LIMIT }, { query: this });
         this.scenario = new QueryScenario({}, { query: this });
         //Start Custom Code for Pagination
-        if (!Settings.AMP_REPORT_API_BRIDGE) {
-        	this.set({page:0});
-        } else {
-        	this.set({page:1});
-        }
+       	this.set({page:0});
+
         // Use this flag to force using the saved filters (if any) for the report the first time is loaded.
         this.firstLoad = true;
         window.currentQuery = this;
@@ -100,9 +93,6 @@ var Query = Backbone.Model.extend({
         }
         this.model = _.extend(this.model, response);
         this.model.properties = _.extend({}, Settings.QUERY_PROPERTIES, this.model.properties);
-        /*if (Settings.AMP_REPORT_API_BRIDGE) {
-        	this.initFilters();
-        }*/
     },
     
     setProperty: function(key, value) {
@@ -114,30 +104,16 @@ var Query = Backbone.Model.extend({
     },
 
     run_query: function(filters, settings) {
-    	if (Settings.AMP_REPORT_API_BRIDGE) {
-    		this.set({page: 1});
-    	}
     	this.run(null, null, filters, settings);
     },
 	//Start Custom Code for Pagination    
     first_page: function() {
-    	if (!Settings.AMP_REPORT_API_BRIDGE) {
-        	this.set({page:0}) ;
-        } else {
-        	if (this.get('max_page_no') > 0) {
-        		this.set({page:1}) ;
-			} else {
-				this.set({page:0}) ;
-			}
-        }
+        this.set({page:0}) ;
     	this.run(true);
     },
     prev_page: function() {
-    	if (!Settings.AMP_REPORT_API_BRIDGE) {
-    		var prev_page = this.get('page') == 0 ? 0 : (this.get('page')-1);
-        } else {
-        	var prev_page = this.get('page') > 1 ? this.get('page') - 1 : this.get('page'); 
-        }    	
+    	var prev_page = this.get('page') == 0 ? 0 : (this.get('page')-1);
+           	
     	this.set({page: prev_page});
     	this.run(true);
     },
@@ -152,9 +128,6 @@ var Query = Backbone.Model.extend({
     },
     //End Custom Code for Pagination
     run: function(force, mdx, filters, settings) {
-    	console.log('END!!!');
-    	console.log(new Date().getTime() - window.saiku_time_old + "ms");
-
         var self = this;
         // Check for automatic execution
         Saiku.ui.unblock();
@@ -174,56 +147,7 @@ var Query = Backbone.Model.extend({
 
         var exModel = this.helper.model();
 
-        if(Settings.AMP_REPORT_API_BRIDGE) {
-        	validated = true;
-
-        	if(!this.workspace.currentQueryModel)
-            	this.workspace.currentQueryModel = exModel;
-
-        	/*
-        	 * We need filters & settings to be always applied
-        	 * See AMP-19159, AMP-19135 and AMP-18826
-        	 */
-        	//if (this.firstLoad === false) {
-	        	if (filters === undefined) {
-	        		filters = this.get('filters');
-	        	}
-	        	if (settings === undefined) {
-	        		settings = this.get('settings');
-	        	}
-	        	
-	        	var filtersApplied = false;
-	        	if(filters) {
-	        		this.set('filters', filters);
-	        		filtersApplied = true;
-	        		this.set('filtersWithModels', window.currentFilter.serializeToModels());
-	        	}	        	
-        	//}
-
-        	var settingsApplied = false;
-        	if(settings) {
-        		this.set('settings', settings);
-        		settingsApplied = true;
-        	}
-        	
-        	if(Saiku.Sorting != undefined && Saiku.Sorting.currentSorting.length > 0) {
-        		this.set('sorting', Saiku.Sorting.currentSorting);
-        	}
-
-        	exModel = this.workspace.currentQueryModel;
-        	//if (this.firstLoad === false) {
-        		exModel.queryModel.filters = this.get('filters');
-        		exModel.queryModel.filtersWithModels = this.get('filtersWithModels');
-        		exModel.queryModel.filtersApplied = filtersApplied;
-        	//}
-        	exModel.queryModel.settings = this.get('settings');        	
-        	exModel.queryModel.settingsApplied = settingsApplied;
-        	if(Settings.PAGINATION) {
-        		exModel.queryModel.page = this.get('page');
-        	}
-        	exModel.queryModel.sorting = this.get('sorting');     
-        }
-        else if (exModel.queryType == "OLAP") {
+        if (exModel.queryType == "OLAP") {
             if (exModel.type == "QUERYMODEL") {
                 var columnsOk = Object.keys(exModel.queryModel.axes['COLUMNS'].hierarchies).length > 0;
                 var rowsOk = Object.keys(exModel.queryModel.axes['ROWS'].hierarchies).length > 0;
@@ -293,10 +217,6 @@ var Query = Backbone.Model.extend({
     },
     
     url: function() {
-    	if (Settings.AMP_REPORT_API_BRIDGE) {
-    		return "/TEMPLATE/ampTemplate/saikuui/mockData/query.json";
-    	} else {
-    		return "api/query/" + encodeURI(this.uuid);
-    	}
+    	return "api/query/" + encodeURI(this.uuid);    	
     }
 });

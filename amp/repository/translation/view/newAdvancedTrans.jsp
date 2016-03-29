@@ -207,8 +207,8 @@ th {
 					<c:if test="${empty newAdvancedTrnForm.resultList}"><digi:trn>Nothing found</digi:trn></c:if>
 					<c:if test="${!empty newAdvancedTrnForm.resultList}">
 						<div class="searchResulToolBar">
-                                                    <input class="expandColapse" type="button"  value="<digi:trn>Expand All</digi:trn>">
-							<div class="showhide" title="Show unsaved chnages">
+							<input class="expandColapse toggle" type="button" value="<digi:trn>Expand All</digi:trn>">
+							<div class="showhide toggle" title="Show unsaved changes">
 								&gt;&gt;
 							</div>
 						</div>
@@ -221,7 +221,7 @@ th {
 									<table>
 										<tr>
 											<td>
-												<digi:img styleClass="imgGroupToggle" src="/TEMPLATE/ampTemplate/img_2/ico_plus.gif"/>
+												<digi:img styleClass="imgGroupToggle toggle" src="/TEMPLATE/ampTemplate/img_2/ico_plus.gif"/>
 											</td>
 											<td>
 												<bean:write name="msgGroup" property="defaultText" filter="true"/>
@@ -319,7 +319,7 @@ th {
 	</c:forEach>
 
 	$(document).ready(function () {
-		
+
 		$('#btnViewAll').click(function() {
 			$('#hiddenPageNumber').val(1);
 			 $('#searchTerm').val('');
@@ -336,40 +336,46 @@ th {
 			  	return true;
 		});
 
-		$('.expandColapse').toggle(
-				function(){
-					$('div.msgGroupBodyClosed').slideUp();	
-					$('div.msgGroupBodyOpened').slideDown();	
+		$('.expandColapse').click(
+			function() {
+				if($(this).hasClass('toggle')) {
+					$('div.msgGroupBodyClosed').slideUp();
+					$('div.msgGroupBodyOpened').slideDown();
 					$('img.imgGroupToggle').attr('src',imgMinus);
 					$('.expandColapse').attr({value:'<digi:trn>Collapse All</digi:trn>', title:'Colapse all translations'});
-				},
-				function(){
-					$('div.msgGroupBodyOpened').slideUp();	
-					$('div.msgGroupBodyClosed').slideDown();	
+				} else {
+					$('div.msgGroupBodyOpened').slideUp();
+					$('div.msgGroupBodyClosed').slideDown();
 					$('img.imgGroupToggle').attr('src',imgPlus);
 					$('.expandColapse').attr({value:'<digi:trn>Expand All</digi:trn>', title:'Expand all translations'});
 				}
+				$(this).toggleClass('toggle');
+			}
 		);
 		
-		$('img.imgGroupToggle').toggle(
-				function(){
-					$(this).parents('div.msgGroup').find('div.msgGroupBodyClosed').slideUp();	
-					$(this).parents('div.msgGroup').find('div.msgGroupBodyOpened').slideDown();	
-					this.src=imgMinus;
-				},
-				function(){
-					$(this).parents('div.msgGroup').find('div.msgGroupBodyOpened').slideUp();	
-					$(this).parents('div.msgGroup').find('div.msgGroupBodyClosed').slideDown();	
-					this.src=imgPlus;
+		$('img.imgGroupToggle').click(
+			function(){
+				if($(this).hasClass('toggle')) {
+					$(this).parents('div.msgGroup').find('div.msgGroupBodyClosed').slideUp();
+					$(this).parents('div.msgGroup').find('div.msgGroupBodyOpened').slideDown();
+					$(this).attr('src', imgMinus);
+				} else {
+					$(this).parents('div.msgGroup').find('div.msgGroupBodyOpened').slideUp();
+					$(this).parents('div.msgGroup').find('div.msgGroupBodyClosed').slideDown();
+					$(this).attr('src',imgPlus);
 				}
+				$(this).toggleClass('toggle');
+			}
 		);
-		$('.showhide').toggle( 
-				function(){
+		$('.showhide').click(
+			function() {
+				if ($(this).hasClass('toggle')) {
 					openChangesList(false);
-				},
-				function(){
+				} else {
 					openChangesList(true);
 				}
+				$(this).toggleClass('toggle');
+			}
 		);
 
 		$('a.deleteTranslation').click(function(){

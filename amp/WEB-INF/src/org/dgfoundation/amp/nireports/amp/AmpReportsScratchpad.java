@@ -3,25 +3,33 @@ package org.dgfoundation.amp.nireports.amp;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 import org.dgfoundation.amp.algo.AlgoUtils;
+import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.ValueWrapper;
+import org.dgfoundation.amp.algo.timing.InclusiveTimer;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.mondrian.MondrianTableDescription;
 import org.dgfoundation.amp.mondrian.MondrianTablesRepository;
 import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
+import org.dgfoundation.amp.nireports.Cell;
+import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.SchemaSpecificScratchpad;
 import org.dgfoundation.amp.nireports.amp.PercentagesCorrector.Snapshot;
+import org.dgfoundation.amp.nireports.amp.diff.DifferentialCache;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -45,6 +53,7 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	
 	public final ReportEnvironment environment;
 	public final NiReportsEngine engine;
+	public final long lastEventId;
 	
 	/**
 	 * the currency used to render the report - do not write anything to it!
@@ -60,6 +69,7 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 		this.usedCurrency = engine.spec.getSettings() == null || engine.spec.getSettings().getCurrencyCode() == null ? AmpARFilter.getDefaultCurrency() : 
 			CurrencyUtil.getAmpcurrency(engine.spec.getSettings().getCurrencyCode());
 		this.environment = ReportEnvironment.buildFor(TLSUtils.getRequest());
+		this.lastEventId = SQLUtils.getLong(this.connection, "SELECT COALESCE(max(event_id), -1) FROM amp_etl_changelog");
 	}
 	
 	public AmpCurrency getUsedCurrency() {
@@ -78,6 +88,27 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 		});
 		return earlyEntries == null ? snapshot.value : earlyEntries.mergeWith(snapshot.value);
 	}
+	
+	public Set<Long> getChangedEntities(String mainColumn, long firstEventId) {
+		String entityType = mainColumn.equals("amp_activity_id") ? "activity" : "pledge";
+		Set<Long> changedEntityIds = new HashSet<>(SQLUtils.fetchLongs(this.connection, String.format("SELECT DISTINCT entity_id FROM amp_etl_changelog WHERE (entity_name='%s') AND (event_id > %d) AND (event_id <= %d)", entityType, firstEventId, lastEventId)));
+		return changedEntityIds;
+	}
+	
+	public<K extends Cell> Set<Long> differentiallyImportCells(InclusiveTimer timer, String mainColumn, DifferentialCache<K> cache, Function<Set<Long>, List<K>> fetcher) {
+		Set<Long> changedEntityIds = getChangedEntities(mainColumn, cache.getLastEventId());
+		Set<Long> idsToReplace = AmpCollections.minusPlus(engine.getMainIds(), cache.getCachedEntityIds(), changedEntityIds);
+		List<K> fetchedCells = fetcher.apply(idsToReplace);
+		cache.importCells(idsToReplace, fetchedCells, lastEventId);
+
+		timer.putMetaInNode("lastEventId", lastEventId);
+		timer.putMetaInNode("changedEntities", changedEntityIds.size());
+		timer.putMetaInNode("fetchedIds", idsToReplace.size());
+		timer.putMetaInNode("fetchedCells", fetchedCells.size());
+		
+		return idsToReplace;
+	}
+
 	
 	public static AmpReportsScratchpad get(NiReportsEngine engine) {
 		return (AmpReportsScratchpad) engine.schemaSpecificScratchpad;

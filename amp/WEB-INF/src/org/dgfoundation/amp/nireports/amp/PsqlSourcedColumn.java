@@ -18,8 +18,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
  */
 public abstract class PsqlSourcedColumn<K extends Cell> extends SqlSourcedColumn<K> {
 	
-	public PsqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn,  
-			String viewName, String mainColumn, Behaviour<?> behaviour) {
+	public PsqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, String mainColumn, Behaviour<?> behaviour) {
 		super(columnName, levelColumn, viewName, mainColumn, behaviour, AmpReportsSchema.columnDescriptions.get(columnName));
 		check();
 	}

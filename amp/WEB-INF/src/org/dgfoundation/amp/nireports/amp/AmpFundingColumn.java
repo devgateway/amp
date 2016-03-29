@@ -1,7 +1,6 @@
 package org.dgfoundation.amp.nireports.amp;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,30 +8,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.VivificatingMap;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.diffcaching.DatabaseChangedDetector;
+import org.dgfoundation.amp.diffcaching.ActivityInvalidationDetector;
 import org.dgfoundation.amp.diffcaching.ExpiringCacher;
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.ImmutablePair;
-import org.dgfoundation.amp.nireports.MonetaryAmount;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.amp.diff.CategAmountCellProto;
 import org.dgfoundation.amp.nireports.amp.diff.ContextKey;
-import org.dgfoundation.amp.nireports.amp.dimensions.CategoriesDimension;
-import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
+import org.dgfoundation.amp.nireports.amp.diff.DifferentialCache;
 import org.dgfoundation.amp.nireports.meta.MetaInfoGenerator;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
-import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
@@ -42,15 +38,20 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
+import static java.util.stream.Collectors.toList;
+
 /**
- * the {@link NiReportColumn} which fetches the funding
+ * the {@link NiReportColumn} which fetches a transactions' funding
  * 
  * @author Dolghier Constantin
  *
  */
 public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 
-	public final ExpiringCacher<ContextKey<Boolean>, List<CategAmountCell>> cacher;
+	protected final ExpiringCacher<ContextKey<Boolean>, FundingFetcherContext> cacher;
+	protected final ActivityInvalidationDetector invalidationDetector;
+	
+	public final static int CACHE_TTL_SECONDS = 10 * 60;
 	
 	public AmpFundingColumn() {
 		this("Funding", "v_ni_donor_funding", "amp_activity_id", TrivialMeasureBehaviour.getInstance());
@@ -58,7 +59,8 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 
 	protected AmpFundingColumn(String columnName, String viewName, String mainEntityColumn, Behaviour<?> behaviour) {
 		super(columnName, null, viewName, mainEntityColumn, behaviour);
-		this.cacher = new ExpiringCacher<>(this.name, cacheKey -> this.wrappedFetch(cacheKey.context), new DatabaseChangedDetector(), 3 * 60 * 1000);
+		this.invalidationDetector = new ActivityInvalidationDetector();
+		this.cacher = new ExpiringCacher<>("funding cacher " + columnName, cacheKey -> resetCache(cacheKey.context), invalidationDetector, CACHE_TTL_SECONDS * 1000);
 	}
 
 	public static Map<String, String> getFundingViewFilter() {
@@ -88,40 +90,53 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 			new ImmutablePair<>(MetaCategory.SOURCE_ORG, "donor_org_id")
 			);
 	
+	protected synchronized FundingFetcherContext resetCache(NiReportsEngine engine) {
+		engine.timer.putMetaInNode("resetCache", true);
+		Map<Long, String> adjTypeValue = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname = '%s'", CategoryConstants.ADJUSTMENT_TYPE_KEY));
+		Map<Long, String> roles = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("SELECT amp_role_id, role_code FROM amp_role", CategoryConstants.ADJUSTMENT_TYPE_KEY));
+		return new FundingFetcherContext(new DifferentialCache<CategAmountCellProto>(invalidationDetector.getLastProcessedFullEtl()), adjTypeValue, roles);
+	}
+
 	@Override
-	public List<CategAmountCell> fetch(NiReportsEngine engine) throws Exception {
-		//return cacher.buildOrGetValue(new ContextKey<Boolean>(engine, true));
-		return reallyFetch(engine);
+	public synchronized List<CategAmountCell> fetch(NiReportsEngine engine) {
+		boolean enableDiffing = true;
+		AmpReportsScratchpad scratchpad = AmpReportsScratchpad.get(engine);
+		AmpReportsSchema schema = (AmpReportsSchema) engine.schema;
+		AmpCurrency usedCurrency = scratchpad.getUsedCurrency();
+		if (enableDiffing) {
+			FundingFetcherContext cache = cacher.buildOrGetValue(new ContextKey<>(engine, true));
+			Set<Long> deltas = scratchpad.differentiallyImportCells(engine.timer, mainColumn, cache.cache, ids -> fetchSkeleton(engine, ids, cache));
+			return cache.cache.getCells(engine.getMainIds()).stream().map(cacp -> cacp.materialize(usedCurrency, engine.calendar, schema.currencyConvertor, scratchpad.getPrecisionSetting())).collect(toList());
+		}
+		else {
+			return fetchSkeleton(engine, engine.getMainIds(), resetCache(engine)).stream().map(cacp -> cacp.materialize(usedCurrency, engine.calendar, schema.currencyConvertor, scratchpad.getPrecisionSetting())).collect(toList());
+		}
 	}
 	
-	public List<CategAmountCell> wrappedFetch(NiReportsEngine engine) {
-		try {
-			return reallyFetch(engine);
-		}
-		catch(Exception e) {
-			throw AlgoUtils.translateException(e);
-		}
+	protected String buildSupplementalCondition(NiReportsEngine engine, Set<Long> ids, FundingFetcherContext context) {
+		return "1=1";
 	}
 	
-	public List<CategAmountCell> reallyFetch(NiReportsEngine engine) throws Exception {
+	/**
+	 * independent of report options
+	 * @param engine
+	 * @return
+	 * @throws Exception
+	 */
+	public List<CategAmountCellProto> fetchSkeleton(NiReportsEngine engine, Set<Long> ids, FundingFetcherContext context) {
 		AmpReportsScratchpad scratchpad = AmpReportsScratchpad.get(engine);
 
-		String query = buildQuery(engine);
+		String query = String.format("SELECT * FROM %s WHERE %s IN (%s) AND (%s)", this.viewName, this.mainColumn, Util.toCSStringForIN(ids), buildSupplementalCondition(engine, ids, context));
 		
 		//TODO: do not commit this uncommented
 		//query = query + " AND (transaction_date >= '2004-01-01') AND (transaction_date <= '2016-01-01')";
-		Map<Long, String> adjustmentTypes = SQLUtils.collectKeyValue(scratchpad.connection, 
-				String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname = '%s'", CategoryConstants.ADJUSTMENT_TYPE_KEY));
-		
-		Map<Long, String> roles = DatabaseViewFetcher.fetchInternationalizedView("amp_role", null, "amp_role_id", "role_code");
-		
-		//Map<Long, String> currencyCodes = DatabaseViewFetcher.fetchInternationalizedView("amp_currency", null, "amp_currency_id", "currency_code");
+						
 		VivificatingMap<Long, AmpCurrency> currencies = new VivificatingMap<Long, AmpCurrency>(new HashMap<>(), CurrencyUtil::getAmpcurrency);
 		
 		AmpReportsSchema schema = (AmpReportsSchema) engine.schema;
 		AmpCurrency usedCurrency = scratchpad.getUsedCurrency();
 		
-		List<CategAmountCell> cells = new ArrayList<>();
+		List<CategAmountCellProto> cells = new ArrayList<>();
 		MetaInfoGenerator metaGenerator = new MetaInfoGenerator();
 		CalendarConverter calendarConverter = engine.calendar;
 		Map<String, LevelColumn> optionalDimensionCols = buildOptionalDimensionCols(schema);
@@ -143,7 +158,6 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 					addCoordinateIfLongExists(coos, rs.rs, optDim.getKey(), optDim.getValue());
 
 				java.sql.Date transactionMoment = rs.rs.getDate("transaction_date");
-				LocalDate transactionDate = transactionMoment.toLocalDate();
 				BigDecimal transactionAmount = rs.rs.getBigDecimal("transaction_amount");
 				
 				long currencyId = rs.rs.getLong("currency_id");
@@ -154,9 +168,9 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 				if (capitalSpendPercent != null)
 					metaSet.add(MetaCategory.CAPITAL_SPEND_PERCENT.category, capitalSpendPercent);
 								
-				addMetaIfIdValueExists(metaSet, "recipient_role_id", MetaCategory.RECIPIENT_ROLE, rs.rs, roles);
-				addMetaIfIdValueExists(metaSet, "source_role_id", MetaCategory.SOURCE_ROLE, rs.rs, roles);
-				addMetaIfIdValueExists(metaSet, "adjustment_type", MetaCategory.ADJUSTMENT_TYPE, rs.rs, adjustmentTypes);
+				addMetaIfIdValueExists(metaSet, "recipient_role_id", MetaCategory.RECIPIENT_ROLE, rs.rs, context.roles);
+				addMetaIfIdValueExists(metaSet, "source_role_id", MetaCategory.SOURCE_ROLE, rs.rs, context.roles);
+				addMetaIfIdValueExists(metaSet, "adjustment_type", MetaCategory.ADJUSTMENT_TYPE, rs.rs, context.adjustmentTypes);
 				
 				if (metaSet.hasMetaInfo(MetaCategory.SOURCE_ROLE.category) && metaSet.hasMetaInfo(MetaCategory.RECIPIENT_ROLE.category)
 					&& metaSet.hasMetaInfo(MetaCategory.SOURCE_ORG.category) && metaSet.hasMetaInfo(MetaCategory.RECIPIENT_ORG.category)) 
@@ -167,11 +181,15 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 									ArConstants.userFriendlyNameOfRole(metaSet.getMetaInfo(MetaCategory.RECIPIENT_ROLE.category).v.toString())));
 				}
 				
-				BigDecimal usedExchangeRate = BigDecimal.valueOf(schema.currencyConvertor.getExchangeRate(srcCurrency.getCurrencyCode(), usedCurrency.getCurrencyCode(), fixed_exchange_rate == null ? null : fixed_exchange_rate.doubleValue(), transactionDate));
-				MonetaryAmount amount = new MonetaryAmount(transactionAmount.multiply(usedExchangeRate), transactionAmount, srcCurrency, transactionDate, scratchpad.getPrecisionSetting());
-				CategAmountCell cell = new CategAmountCell(ampActivityId, amount, metaSet, coos, calendarConverter.translate(transactionMoment));
+//				BigDecimal usedExchangeRate = BigDecimal.valueOf(schema.currencyConvertor.getExchangeRate(srcCurrency.getCurrencyCode(), usedCurrency.getCurrencyCode(), fixed_exchange_rate == null ? null : fixed_exchange_rate.doubleValue(), transactionDate));
+//				MonetaryAmount amount = new MonetaryAmount(transactionAmount.multiply(usedExchangeRate), transactionAmount, srcCurrency, transactionDate, scratchpad.getPrecisionSetting());
+//				CategAmountCell cell = new CategAmountCell(ampActivityId, amount, metaSet, coos, calendarConverter.translate(transactionMoment));
+				CategAmountCellProto cell = new CategAmountCellProto(ampActivityId, transactionAmount, srcCurrency, transactionMoment, metaSet, coos, fixed_exchange_rate);
 				cells.add(cell);
 			}
+		}
+		catch(Exception e) {
+			throw AlgoUtils.translateException(e);
 		}
 		ImmutablePair<Long, Long> metaCacheStats = metaGenerator.getStats();
 		engine.timer.putMetaInNode("meta_cache_calls", metaCacheStats.k);
@@ -190,5 +208,18 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	@Override
 	public List<ReportRenderWarning> performCheck() {
 		return null;
+	}
+	
+	static class FundingFetcherContext {
+		final DifferentialCache<CategAmountCellProto> cache;
+		final Map<Long, String> adjustmentTypes;
+		final Map<Long, String> roles;
+				
+		public FundingFetcherContext(DifferentialCache<CategAmountCellProto> cache, Map<Long, String> adjustmentTypes,  Map<Long, String> roles) {
+			this.cache = cache;
+			this.adjustmentTypes = adjustmentTypes;
+			this.roles = roles;
+		}
+		
 	}
 }

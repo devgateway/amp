@@ -2993,7 +2993,7 @@ module.exports = BackboneDash.View.extend({
      */
 
     textContent = baby.unparse(csvTransformed, {
-      delimiter: '\t',
+      delimiter: ';',
       encoding: 'utf-16',
     	quotes: true
     });
@@ -3098,43 +3098,46 @@ module.exports = BackboneDash.View.extend({
     'click .show-filter-details': 'showFilterDetails',
     'click .hide-filter-details': 'hideFilterDetails'
   },
-  
+
   initialize: function(options) {
     this.finishedFirstLoad = false;
-	this.app = options.app;
+    this.app = options.app;
     this.listenTo(this.app.filter, 'cancel', this.hideFilter);
     this.listenTo(this.app.filter, 'apply', this.applyFilter);
     this.app.settings.load().done(_(function() {
-    	// Extract default dates from Global Settings.
-    	var blob = {};
-    	// AMP-19254, AMP-20537: override the "date" range with the Dashboards-specific one from the settings blob (a hack...) 
-    	this.app.filter.extractDates(this.app.settings.models, blob, 'dashboard-default-min-date', 'dashboard-default-max-date');
-    	
-	    this.app.filter.loaded.done(_(function() {
-	      console.info('filters loaded');
-	      this.app.state.register(this, 'filters', {
-	        // namespace serialized filters so we can hook in extra state to store
-	        // later if desired (anything dashboards-ui related, for example)
-	        get: _(function() { 
-	        	return {filter: this.app.filter.serialize() }; 
-	        }).bind(this),
-	        set: _(function(state) {
-	        	if (state.filter.otherFilters !== undefined && state.filter.otherFilters.date !== undefined) {
-	        		filtersViewLog.log('Using saved date filters.');
-	        	} else {
-	        		filtersViewLog.log('Using default filter dates.');
-	        		// AMP-21118: Dont override all filters, just dates section.
-	        		state.filter.otherFilters = blob.otherFilters;
-	        	}
-	        	this.app.filter.deserialize(state.filter);
-	        	this.app.filter.finishedFirstLoad = true;
-	        }).bind(this),
-	        empty: {filter: {}}
-	      });
-	    }).bind(this));
+      // Extract default dates from Global Settings.
+      var blob = {};
+      // AMP-19254, AMP-20537: override the "date" range with the Dashboards-specific one from the settings blob (a hack...)
+      this.app.filter.extractDates(this.app.settings.models, blob, 'dashboard-default-min-date', 'dashboard-default-max-date');
+
+      this.app.filter.loaded.done(_(function() {
+        console.info('filters loaded');
+        this.app.state.register(this, 'filters', {
+          // namespace serialized filters so we can hook in extra state to store
+          // later if desired (anything dashboards-ui related, for example)
+          get: _(function() {
+            return {
+              filter: this.app.filter.serialize()
+            };
+          }).bind(this),
+          set: _(function(state) {
+            if (state.filter.otherFilters !== undefined && state.filter.otherFilters.date !== undefined) {
+              filtersViewLog.log('Using saved date filters.');
+            } else {
+              filtersViewLog.log('Using default filter dates.');
+              // AMP-21118: Dont override all filters, just dates section.
+              state.filter.otherFilters = blob.otherFilters;
+            }
+            this.app.filter.deserialize(state.filter);
+            this.app.filter.finishedFirstLoad = true;
+          }).bind(this),
+          empty: {
+            filter: {}
+          }
+        });
+      }).bind(this));
     }).bind(this));
   },
-
   render: function() {
     this.$el.html(template());
     this.app.filter.setElement(this.el.querySelector('#filter-popup'));
@@ -3178,16 +3181,16 @@ module.exports = BackboneDash.View.extend({
     var applied = _(filters.columnFilters).map(function(filter, key) {
       return {
         name: filter.filterName || key,
-        id: key.replace(/[^\w]/g, ''),  // remove anything non-alphanum
+        id: key.replace(/[^\w]/g, ''), // remove anything non-alphanum
         detail: _(filter).map(function(value) {
-        	if (value.attributes !== undefined) {
-        		return value.get('name');
-        	} else {       		
-        		// To fix problem with dates.
-        		if (value !== key && value !== filter.filterName) {
-        			return value;
-        		}
-        	}
+          if (value.attributes !== undefined) {
+            return value.get('name');
+          } else {
+            // To fix problem with dates.
+            if (value !== key && value !== filter.filterName) {
+              return value;
+            }
+          }
         })
       };
     });
@@ -3196,7 +3199,7 @@ module.exports = BackboneDash.View.extend({
       // ... there is no obvious way to get nice strings out.
       var dateRange = filters.otherFilters.date;
       var dateRangeText = app.translator.translateSync("amp.dashboard:date-range","Date Range");
-	  applied.push({
+      applied.push({
         name: dateRangeText,
         detail: [dateRange.start + '&mdash;' + dateRange.end]
       });
@@ -22718,7 +22721,7 @@ var jQuery = require('jquery');
 //loading jquery is colliding in GIS module, so we only load it if
 //it is not loaded or if there is a jquery loaded but version is older than 2.x.x
 if (window.$ == undefined || $.fn.jquery.split(' ')[0].split('.')[0] < 2) {
-	window.jQuery = window.$ = Backbone.$ = jQuery;
+  window.jQuery = window.$ = Backbone.$ = jQuery;
 }
 
 var bootstrap_enabled = (typeof $().modal == 'function');
@@ -22744,30 +22747,38 @@ function Widget() {
 }
 
 _.extend(Widget.prototype, Backbone.Events, {
-	initialize: function(options) {
-    options = _.defaults(options, {showFooterAdmin:true,showDGFooter:true, showLogin:true});
+  initialize: function(options) {
+    options = _.defaults(options, {
+      showFooterAdmin: true,
+      showDGFooter: true,
+      showLogin: true,
+      useSingleRowHeader: false
+    });
     if (_.has(options, 'sync')) {
       Backbone.sync = options.sync;
     }
     var defaultKeys = JSON.parse("{\n\"amp.common:footer\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF\",\n\"amp.common:title\": \"AMP Toolbar\",\n\"amp.common:title-help\": \"Help\",\n\"amp.common:subtitle-amp-help\": \"AMP Help\",\n\"amp.common:subtitle-glossary\": \"Glossary\",\n\"amp.common:subtitle-email-support-team\": \"Email Support Team\",\n\"amp.common:title-logout\": \"Log Out\",\n\"amp.common:platform\": \"Aid Management Platform (AMP)\",\n\"[title]amp.common:platform\": \"Aid Management Platform\",\n\"amp.common:platform-short\": \"AMP\",\n\"amp.common:title-login\": \"Login\",\n\"amp.dashboard:close\": \"Close\",\n\"amp.about:modal.title\": \"About AMP\",\n\"amp.about:credits\": \"Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and Development Gateway Foundation.\",\n\"amp.about:trademark\": \"The Development Gateway and the The Development Gateway logo are trademarks for The Development Gateway Foundation\",\n\"amp.about:rights\": \"All Rights Reserved\",\n\"amp.about:version\": \"Version\"\n}\n\n");
-    this.translator = new Translator({defaultKeys: defaultKeys});
+    this.translator = new Translator({
+      defaultKeys: defaultKeys
+    });
     options.translator = this.translator;
+
     this.menu = new MenuView(options);
     this.headerFooter = new HeaderFooterView(options);
-   
+
     this.listenTo(this.headerFooter, 'all', function() {
       this.trigger.apply(this, arguments);
     });
     this.listenTo(this.menu, 'all', function() {
-        this.trigger.apply(this, arguments);
-      });
+      this.trigger.apply(this, arguments);
+    });
     var self = this;
-    $.when(this.menu.menuRendered,this.headerFooter.layoutFetched).then(function() {
-    	self.headerFooter.refreshUserSection();
-    	self.translator.translateDOM(document);
-    	if ($.fn.dropdown !== undefined) {
-    		$('.dropdown-toggle').dropdown();
-    	}
+    $.when(this.menu.menuRendered, this.headerFooter.layoutFetched).then(function() {
+      self.headerFooter.refreshUserSection();
+      self.translator.translateDOM(document);
+      if ($.fn.dropdown !== undefined) {
+        $('.dropdown-toggle').dropdown();
+      }
     });
   },
 
@@ -25178,60 +25189,59 @@ var Template = "<style>\r\n    .footerText {\r\n    padding: 0;\r\n    font-fami
 var LayoutModel = require('../models/amp-layout-model.js');
 
 module.exports = Backbone.View.extend({
-	  model : null,
-	  template: _.template(Template),
-	  el: '#amp-footer',
-	  layoutFetched : new $.Deferred(),
-	  showAdminFooter:true,
-	  showDGFooter: true,
+  model: null,
+  template: _.template(Template),
+  el: '#amp-footer',
+  layoutFetched: new $.Deferred(),
+  showAdminFooter: true,
+  showDGFooter: true,
 
-	  initialize: function(options) {
-		this.showAdminFooter = options.showAdminFooter;
-		this.showDGFooter = options.showDGFooter;
-	    var layoutModel = new LayoutModel();
-	    var self = this;
-	    layoutModel.fetch().then(function(layout) {
-	    	self.model = layout;
-	    	window.buildDate = layout.buildDate;
-	    	window.ampVersion = layout.ampVersion;
-	    	self.render();
-	    	self.layoutFetched.resolve();
-	    });
-	    
-	    //AMP-20646: we need to wait until the endpoint has responded.
-	    this.layoutFetched.done(function(){
-	    	self.render();
-	    });
-	    _.bindAll(this, 'render','refreshUserSection');	 
-	  },
-	  render: function() {
-		  if (this.model) {
-			  this.refreshUserSection ();
-			  var self = this;
-			  this.$el.html(this.template({
-		       properties: self.model,
-		       showAdminLinks:self.showAdminFooter,
-		       showDGFooter: self.showDGFooter
-		      }));
-		  }
-	      return this;
-	    },
-	  refreshUserSection:function () {
-		  if (this.model.logged === true) {
-			    $('.container-fluid',$('#amp-header')).toggleClass('ampUserLoggedIn');
-		  }
-		  if (this.model.email) {
-			    $(".user-url").attr("href", "javascript:showUserProfile("+this.model.userId+")");
-		        $('#header-workspace', $('#amp-header')).text(this.model.workspace);
-		        $('#header-workspace', $('#amp-header')).prop('title',this.model.workspace);
-			    $('#header-name #header-first-name', $('#amp-header')).text(this.model.firstName);
-		        $('#header-name #header-last-name', $('#amp-header')).text(this.model.lastName);
-		  }
-	    	
-	    }
+  initialize: function(options) {
+    this.showAdminFooter = options.showAdminFooter;
+    this.showDGFooter = options.showDGFooter;
+    var layoutModel = new LayoutModel();
+    var self = this;
+    layoutModel.fetch().then(function(layout) {
+      self.model = layout;
+      window.buildDate = layout.buildDate;
+      window.ampVersion = layout.ampVersion;
+      self.render();
+      self.layoutFetched.resolve();
+    });
 
-	});
+    //AMP-20646: we need to wait until the endpoint has responded.
+    this.layoutFetched.done(function() {
+      self.render();
+    });
+    _.bindAll(this, 'render', 'refreshUserSection');
+  },
+  render: function() {
+    if (this.model) {
+      this.refreshUserSection();
+      var self = this;
+      this.$el.html(this.template({
+        properties: self.model,
+        showAdminLinks: self.showAdminFooter,
+        showDGFooter: self.showDGFooter
+      }));
+    }
+    return this;
+  },
+  refreshUserSection: function() {
+    if (this.model.logged === true) {
+      $('.container-fluid', $('#amp-header')).toggleClass('ampUserLoggedIn');
+    }
+    if (this.model.email) {
+      $(".user-url").attr("href", "javascript:showUserProfile(" + this.model.userId + ")");
+      $('#header-workspace', $('#amp-header')).text(this.model.workspace);
+      $('#header-workspace', $('#amp-header')).prop('title', this.model.workspace);
+      $('#header-name #header-first-name', $('#amp-header')).text(this.model.firstName);
+      $('#header-name #header-last-name', $('#amp-header')).text(this.model.lastName);
+    }
 
+  }
+
+});
 
 },{"../models/amp-layout-model.js":48,"backbone":"backbone","jquery":"jquery","underscore":"underscore"}],52:[function(require,module,exports){
 
@@ -25239,7 +25249,7 @@ var Backbone = require('backbone');
 require('bootstrap/dist/js/bootstrap');
 var _ = require('underscore');
 
-var Template = "\n<style>\n  /* This directory and then Dashboard & GIS need\n   * to be rebuilt with their respective browserify-processes to see\n   * changes from this filter-popup due to brfs, see readme.md\n   */\n  #amp-header {\n    font-family: \"Open Sans\",\"Helvetica Neue\",Helvetica,Arial,sans-serif;\n  }\n  #amp-header .navbar-header>button.navbar-toggle {\n    /* fix contracted menu icon to not block map*/\n    padding: 2px;\n    margin: 4px;\n  }\n\n  #amp-header .container-fluid.ampUserLoggedIn ul.ampPublic {\n    display: none !important;\n  }\n\n  #amp-header .container-fluid.ampUserLoggedIn ul.ampUserLoggedIn {\n    display: inherit !important;\n  }\n\n  #amp-header .container-fluid ul.ampPublic {\n    display: inherit !important;\n  }\n\n  #amp-header .container-fluid ul.ampUserLoggedIn {\n    display: none !important;\n  }\n\n\n  div#amp-header nav div.container-fluid, div#amp-header nav div.navbar-collapse a {\n    font-size: 12px;\n  }\n\n  div#amp-header .navbar-brand {\n    font-size: 16px !important;\n    white-space: nowrap;\n  }\n\n  /* Several places in AMP include things that will set this\n   * back to gigantic margins.\n   * 8px feels like generous padding\n   * 5px is slightly tight.\n   *\n   */\n  div#amp-header .nav > li > a {\n    padding-right: 7px;\n    padding-left: 7px;\n  }\n\n    div#amp-header .workspace-name {\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n  }\n    div#amp-header .user-url {\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n  }\n\n  /* limit size of top level menu to prevent translations that are too long\n   * Apply to a span so that that caret doesn't get chopped off.\n   */\n  /* max-width:\n   * 141px is generous, fits ÉTUDES ET DOCUMENTS\n   * 124px is minimum to include 3 words (Ministry of ??...)\n   * 117px fits TABLEAUX DE BORD\n   */\n  #amp-header ul#AmpMenus > .dropdown > a > span.dropdown-text {\n    max-width: 141px;\n    white-space: nowrap;\n    overflow: hidden;\n    display: inline-block;\n    text-overflow: ellipsis;\n  }\n\n  #amp-header ul#AmpMenus > .dropdown > a > span.caret {\n    /* bump up caret to the height of the truncate-able inline-block next to it */\n    padding-bottom: 11px;\n  }\n\n\n  /* No gutters creates space for 1 gridsquare logo.\n   * http://julienmelissas.com/no-gutter-column-trick-for-bootstrap/\n   */\n  #amp-header .container-fluid .row.no-gutters {\n    margin-right: 0;\n    margin-left: 0;\n  }\n  #amp-header .container-fluid .row.no-gutters > [class^=\"col-\"],\n  #amp-header .container-fluid .row.no-gutters > [class*=\" col-\"] {\n    padding-right: 0;\n    padding-left: 0;\n  }\n\n/* There is a second set of gutters on the navbar itself. */\n  div#amp-header .navbar-collapse {\n    padding-right: 0;\n    padding-left: 0;\n  }\n\n  /* These four styles avoids setting hard max-widths on these items */\n  #amp-header .ampLoggedInMenus {\n    width: 95%; /* account for scrollbar */\n    padding-right: 2em;\n  }\n\n  /* give a bit of extra width to workspace */\n  #amp-header ul.nav.navbar-nav.ampUserLoggedIn li:nth-child(1) {\n      width: 55%;\n      text-align: right;\n  }\n  /* user name */\n  #amp-header ul.nav.navbar-nav.ampUserLoggedIn li:nth-child(2) {\n      width: 35%;\n      text-align: center;\n  }\n  /* Logout */\n  #amp-header ul.nav.navbar-nav.ampUserLoggedIn li:nth-child(3) {\n      width: 10%;\n      white-space: nowrap; /* prevent translations of logout from wrapping */\n  }\n\n  /******/\n  .scrollable-menu {\n    height: auto;\n    max-height: 400px;\n    overflow-x: hidden;\n  }\n\n  .dropdown-submenu {\n    position: relative;\n  }\n\n  .dropdown-submenu>.dropdown-menu {\n    top: 0;\n    left: 100%;\n    margin-top: -6px;\n    margin-left: -1px;\n    -webkit-border-radius: 0 6px 6px 6px;\n    -moz-border-radius: 0 6px 6px 6px;\n    border-radius: 0 6px 6px 6px;\n  }\n\n  .dropdown-submenu:hover>.dropdown-menu {\n    display: block;\n  }\n\n  .dropdown-submenu>a:after {\n    display: block;\n    content: \" \";\n    float: right;\n    width: 0;\n    height: 0;\n    border-color: transparent;\n    border-style: solid;\n    border-width: 5px 0 5px 5px;\n    border-left-color: #cccccc;\n    margin-top: 5px;\n    margin-right: -10px;\n  }\n\n  .dropdown-submenu:hover>a:after {\n    border-left-color: #ffffff;\n  }\n\n  .dropdown-submenu.pull-left {\n    float: none;\n  }\n\n  .dropdown-submenu.pull-left>.dropdown-menu {\n    left: -100%;\n    margin-left: 10px;\n    -webkit-border-radius: 6px 0 6px 6px;\n    -moz-border-radius: 6px 0 6px 6px;\n    border-radius: 6px 0 6px 6px;\n  }\n\n  @media ( max-width : 991px) {\n    #amp-header #header-name {\n      display: none;\n    }\n  }\n\n</style>\n<script type=\"text/javascript\">\n  function switchTranslation (url) {\n    $('#backUrl').val(document.location.href);\n    document.modeSwitchForm.action = url;\n    document.modeSwitchForm.submit();\n  }\n</script>\n<form name=\"modeSwitchForm\" method=\"post\" action=\"/translation/switchMode.do\" style=\"display:none;\">\n  <input type=\"hidden\" name=\"backUrl\" id=\"backUrl\" value=\"\">\n</form>\n<nav class=\"navbar navbar-default\" role=\"navigation\">\n  <div class=\"container-fluid\">\n    <div class=\"row no-gutters\">\n      <!-- .ampUserLoggedIn hides public version-->\n\n      <!-- Brand and toggle get grouped for better mobile display -->\n      <div class=\"navbar-header col-sm-1\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\n          <span class=\"sr-only\">Toggle navigation</span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n        </button>\n        <a class=\"navbar-brand\" href=\"/aim\" data-i18n=\"[title]amp.common:platform\">\n          <span>\n            <img class=\"flag\" src=\"/aim/default/displayFlag.do\" height=\"20\" width=\"30\">\n          </span>\n          <span data-i18n=\"amp.common:platform-short\">AMP</span></a>\n      </div>\n\n      <div class=\"col-sm-11\">\n        <div class=\"collapse navbar-collapse row no-gutters\" id=\"bs-example-navbar-collapse-1\">\n          <div class=\"col-sm-8\">\n            <ul id=\"AmpMenus\" class=\"nav navbar-nav menus\">\n\n              <!-- File -->\n\n            </ul>\n            <div class=\"clearfix\"></div>\n          </div>\n          <div class=\"col-sm-4\">\n            <ul class=\"nav navbar-nav ampUserLoggedIn ampLoggedInMenus\">\n              <li id=\"header-workspace-li\"><a title=\"Workspace\" class=\"workspace-name\" id=\"header-workspace\">&nbsp;</a></li>\n              <li id=\"header-name\">\n                <a class=\"user-url\">\n                  <span id=\"header-first-name\">&nbsp;</span>&nbsp;<span id=\"header-last-name\">&nbsp;</span>\n                </a>\n              </li>\n              <li id=\"header-logout\"><a data-i18n=\"amp.common:title-logout\" href=\"/aim/j_spring_logout\" >Logout</a></li>\n            </ul>\n            <% if(showLogin) { %>\n              <% if(loginDropdown){ %>\n                <div class=\"login_here\" id=\"show_login_pop\">\n                  <div class=\"login_here_cont\">\n                    <a data-i18n=\"amp.common:title-login\" href=\"javascript:void(0)\">Login</a>\n                  </div>\n                </div>\n              <% } else { %>\n                <ul class=\"nav navbar-nav ampPublic navbar-right\">\n                  <li id=\"header-login\"><a data-i18n=\"amp.common:title-login\" href=\"/login.do\" >Login</a></li>\n                </ul>\n              <% } %>\n            <% } %>\n          </div>\n        </div>\n      </div>\n\n    </div>\n    <!-- Collect the nav links, forms, and other content for toggling -->\n  </div><!-- /.container-fluid -->\n</nav>\n";
+var Template = "<!-- inline styles used so we can relocate amp-boilerplate module-->\n<style>\n  /* This directory and then Dashboard & GIS need\n   * to be rebuilt with their respective browserify-processes to see\n   * changes from this filter-popup due to brfs, see readme.md\n   */\n  #amp-header {\n    font-family: \"Open Sans\",\"Helvetica Neue\",Helvetica,Arial,sans-serif;\n  }\n  #amp-header .navbar-header>button.navbar-toggle {\n    /* fix contracted menu icon to not block map*/\n    padding: 2px;\n    margin: 4px;\n  }\n\n  #amp-header .container-fluid.ampUserLoggedIn ul.ampPublic,\n  #amp-header .container.ampUserLoggedIn ul.ampPublic {\n    display: none !important;\n  }\n\n  #amp-header .container-fluid.ampUserLoggedIn ul.ampUserLoggedIn,\n  #amp-header .container.ampUserLoggedIn ul.ampUserLoggedIn {\n    display: inherit !important;\n  }\n\n  #amp-header .container-fluid ul.ampPublic,\n  #amp-header .container ul.ampPublic {\n    display: inherit !important;\n  }\n\n  #amp-header .container-fluid ul.ampUserLoggedIn,\n  #amp-header .container ul.ampUserLoggedIn {\n    display: none !important;\n  }\n\n\n  div#amp-header nav div.container,\n  div#amp-header nav div.navbar-collapse a,\n  div#amp-header nav div.container-fluid,\n  div#amp-header nav div.navbar-collapse a {\n    font-size: 12px;\n  }\n\n  div#amp-header .navbar-brand {\n    font-size: 16px !important;\n    color: #E69923;\n    text-shadow: 1px 1px 5px #CCC;\n    white-space: nowrap;\n    padding-bottom: 8px;\n  }\n\n  div#amp-header .double-row .navbar-brand {\n    padding-top: 8px;\n    height: 41px;\n  }\n\n  /* Several places in AMP include things that will set this\n   * back to gigantic margins.\n   * 8px feels like generous padding\n   * 5px is slightly tight.\n   *\n   */\n  div#amp-header .single-row .nav > li > a {\n    padding-right: 6px;\n    padding-left: 6px;\n  }\n  div#amp-header .double-row .nav > li > a{\n    padding-right: 10px;\n    padding-left: 10px;\n    padding-bottom: 8px;\n    padding-top: 9px;\n  }\n\n  div#amp-header .double-row #AmpMenus.nav > li:nth-child(1) > a {\n    /* For first element, eliminate padding to ensure is flush. */\n    padding-left: 0;\n  }\n\n    div#amp-header .workspace-name {\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n  }\n    div#amp-header .user-url {\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n  }\n\n  /* limit size of top level menu to prevent translations that are too long\n   * Apply to a span so that that caret doesn't get chopped off.\n   */\n  /* max-width:\n   * 141px is generous, fits ÉTUDES ET DOCUMENTS\n   * 124px is minimum to include 3 words (Ministry of ??...)\n   * 117px fits TABLEAUX DE BORD\n   *\n   * div.ampUserLoggedIn in selector makes this effective ONLY when logged in\n   * single-row selector only when using that mode\n   */\n  #amp-header div.ampUserLoggedIn .single-row ul#AmpMenus > .dropdown > a > span.dropdown-text {\n    max-width: 141px;\n  }\n\n  #amp-header ul#AmpMenus > .dropdown > a > span.dropdown-text {\n    display: inline-block;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n    color: #3E6C94;\n    text-rendering: optimizeLegibility;\n  }\n\n\n  #amp-header ul#AmpMenus > .dropdown > a > span.caret {\n    /* bump up caret to the height of the truncate-able inline-block next to it */\n    padding-bottom: 11px;\n    color: rgb(11, 12, 26);\n  }\n\n\n  #amp-header .container-fluid.no-gutters,\n  #amp-header .container.no-gutters {\n    padding-right: 0;\n    padding-left: 0;\n  }\n\n  /* No gutters creates space for 1 gridsquare logo.\n   * http://julienmelissas.com/no-gutter-column-trick-for-bootstrap/\n   */\n  #amp-header .container-fluid .row.no-gutters,\n  #amp-header .container .row.no-gutters {\n    margin-right: 0;\n    margin-left: 0;\n  }\n  #amp-header .container-fluid .row.no-gutters > [class^=\"col-\"],\n  #amp-header .container-fluid .row.no-gutters > [class*=\" col-\"],\n  #amp-header .container .row.no-gutters > [class^=\"col-\"],\n  #amp-header .container .row.no-gutters > [class*=\"col-\"] {\n    padding-right: 0;\n    padding-left: 0;\n  }\n\n  #amp-header nav > .container-fluid > div.row:nth-child(1),\n  #amp-header nav > .container > div.row:nth-child(1) {\n    background-color: #FFF;\n  }\n\n  #amp-header nav > .container > div.row:nth-child(2),\n  #amp-header nav > .container-fluid > div.row:nth-child(2) {\n    border-top: 1px solid #EDEDED;\n    background-color: #F7F7F7;\n  }\n\n  #amp-header .container-fluid,\n  #amp-header .container {\n    background-color: #FFF; /* Fixes gray area in gutter of single-row */\n  }\n\n\n/* There is a second set of gutters on the navbar itself. */\n  div#amp-header .navbar-collapse.no-gutters{\n    padding-right: 0;\n    padding-left: 0;\n  }\n\n  /* These four styles avoids setting hard max-widths on these items */\n  #amp-header .ampLoggedInMenus {\n    width: 95%; /* account for scrollbar */\n    text-shadow: 1px 1px 1px #AAA;\n  }\n\n  /* give a bit of extra width to workspace */\n  #amp-header ul.nav.navbar-nav.ampLoggedInMenus li:nth-child(1) {\n      text-align: right;\n  }\n  /* user name */\n  #amp-header ul.nav.navbar-nav.ampLoggedInMenus li:nth-child(2) {\n      text-align: center;\n  }\n  /* Logout */\n  #amp-header ul.nav.navbar-nav.ampLoggedInMenus li:nth-child(3) {\n      white-space: nowrap; /* prevent translations of logout from wrapping */\n  }\n\n  div#amp-header div#logincontainer {\n    padding-left: 140px; /* IE9 fix that works everywhere: make room for green login button */\n  }\n\n  div#amp-header .login_here {\n    margin-top: 3px !important; /* override 7 other specs in amp-wicket, and various copies of amp.css */\n  }\n\n  html.ie9 div#amp-header .login_here {\n    margin-top: -11px !important; /* override 7 other specs in amp-wicket, and various copies of amp.css */\n  }\n\n  /******/\n  .scrollable-menu {\n    height: auto;\n    max-height: 400px;\n    overflow-x: hidden;\n  }\n\n  .dropdown-submenu {\n    position: relative;\n  }\n\n  .dropdown-submenu>.dropdown-menu {\n    top: 0;\n    left: 100%;\n    margin-top: -6px;\n    margin-left: -1px;\n    -webkit-border-radius: 0 6px 6px 6px;\n    -moz-border-radius: 0 6px 6px 6px;\n    border-radius: 0 6px 6px 6px;\n  }\n\n  .dropdown-submenu:hover>.dropdown-menu {\n    display: block;\n  }\n\n  .dropdown-submenu>a:after {\n    display: block;\n    content: \" \";\n    float: right;\n    width: 0;\n    height: 0;\n    border-color: transparent;\n    border-style: solid;\n    border-width: 5px 0 5px 5px;\n    border-left-color: #cccccc;\n    margin-top: 5px;\n    margin-right: -10px;\n  }\n\n  .dropdown-submenu:hover>a:after {\n    border-left-color: #ffffff;\n  }\n\n  .dropdown-submenu.pull-left {\n    float: none;\n  }\n\n  .dropdown-submenu.pull-left>.dropdown-menu {\n    left: -100%;\n    margin-left: 10px;\n    -webkit-border-radius: 6px 0 6px 6px;\n    -moz-border-radius: 6px 0 6px 6px;\n    border-radius: 6px 0 6px 6px;\n  }\n\n</style>\n<script type=\"text/javascript\">\n  function switchTranslation (url) {\n    $('#backUrl').val(document.location.href);\n    document.modeSwitchForm.action = url;\n    document.modeSwitchForm.submit();\n  }\n</script>\n<form name=\"modeSwitchForm\" method=\"post\" action=\"/translation/switchMode.do\" style=\"display:none;\">\n  <input type=\"hidden\" name=\"backUrl\" id=\"backUrl\" value=\"\">\n</form>\n<%\n/***\n * Single Row Header Design (used when optionally requested: on GIS)\n * Useful for fixed height apps.\n *\n * Container-fluid structure:\n * row\n *  column navbar-brand (logo)\n *  column navbar-collapse\n *    nested row:\n *      columns AmpMenus (public or internal menus shown as provided by API)\n *      nested row ampUserLoggedInMenus (shown when logged in, incl: workspace, user, logout):\n *        3 columns\n *  login_here (ignores bootstrap container structure; shown when logged out)\n *  div#logincontainer: inserted by jQuery + rendered by JSP\n ***/\n\n  if (useSingleRowHeader) {\n %>\n<nav class=\"navbar navbar-default single-row\" role=\"navigation\">\n  <div class=\"container-fluid\">\n    <div class=\"row no-gutters\">\n      <!-- .ampUserLoggedIn hides public version-->\n\n      <!-- Brand and toggle get grouped for better mobile display -->\n      <div class=\"navbar-header col-sm-1\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\n          <span class=\"sr-only\">Toggle navigation</span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n        </button>\n        <a class=\"navbar-brand\" href=\"/aim\" data-i18n=\"[title]amp.common:platform\">\n          <span>\n            <img class=\"flag\" src=\"/aim/default/displayFlag.do\" height=\"20\" width=\"30\">\n          </span>\n          <span data-i18n=\"amp.common:platform-short\">AMP</span></a>\n      </div>\n\n      <div class=\"col-sm-11\">\n        <div class=\"collapse navbar-collapse row no-gutters\" id=\"bs-example-navbar-collapse-1\">\n          <div class=\"col-md-8 col-sm-10\">\n            <ul id=\"AmpMenus\" class=\"nav navbar-nav menus\">\n\n              <!-- File -->\n\n            </ul>\n            <div class=\"clearfix\"></div>\n          </div>\n          <div class=\"col-md-4 col-sm-2\">\n              <ul class=\"row no-gutters nav navbar-nav ampUserLoggedIn ampLoggedInMenus\">\n                <li id=\"header-workspace-li\" class=\"col-sm-9 col-md-6\"><a title=\"Workspace\" class=\"workspace-name\" id=\"header-workspace\">&nbsp;</a></li>\n                <li id=\"header-name\" class=\"hidden-xs hidden-sm col-md-4\">\n                  <a class=\"user-url\">\n                    <span id=\"header-first-name\">&nbsp;</span>&nbsp;<span id=\"header-last-name\">&nbsp;</span>\n                  </a>\n                </li>\n                <li id=\"header-logout\" class=\"col-sm-2\"><a data-i18n=\"amp.common:title-logout\" href=\"/aim/j_spring_logout\" >Logout</a></li>\n              </ul>\n              <% if(showLogin) { %>\n                <% if(loginDropdown){ %>\n                  <div class=\"login_here\" id=\"show_login_pop\">\n                    <div class=\"login_here_cont\">\n                      <a data-i18n=\"amp.common:title-login\" href=\"javascript:void(0)\">Login</a>\n                    </div>\n                  </div>\n                <% } else { %>\n                  <ul class=\"nav navbar-nav ampPublic navbar-right\">\n                    <li id=\"header-login\"><a data-i18n=\"amp.common:title-login\" href=\"/login.do\" >Login</a></li>\n                  </ul>\n                <% } %>\n              <% } %>\n              <!-- div#logincontainer with anchors gets appended here -->\n          </div>\n        </div>\n      </div>\n\n    </div>\n    <!-- Collect the nav links, forms, and other content for toggling -->\n  </div><!-- /.container-fluid -->\n</nav>\n <% } else { %>\n\n<% /***\n * Double Row Header Design (used by default)\n *\n * Container-Fluid structure:\n * row\n *  column navbar-brand (logo)\n *  column navbar-collapse\n *    nested row:\n *        nested row ampUserLoggedInMenus (shown when logged in, incl: workspace, user, logout):\n            3 columns\n * row\n *    columns AmpMenus (public or internal menus shown as provided by API)\n *  login_here (ignores bootstrap container structure, shown when logged out)\n *  div#logincontainer: inserted by jQuery + rendered by JSP\n ***/ %>\n<nav class=\"navbar navbar-default double-row\" role=\"navigation\">\n  <div class=\"container-fluid no-gutters\">\n    <div class=\"row no-gutters\">\n      <!-- .ampUserLoggedIn hides public version-->\n\n      <!-- Brand and toggle get grouped for better mobile display -->\n      <div class=\"navbar-header col-sm-1 col-sm-offset-1\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\">\n          <span class=\"sr-only\">Toggle navigation</span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n        </button>\n        <a class=\"navbar-brand\" href=\"/aim\" data-i18n=\"[title]amp.common:platform\">\n          <span>\n            <img class=\"flag\" src=\"/aim/default/displayFlag.do\" height=\"20\" width=\"30\">\n          </span>\n          <span data-i18n=\"amp.common:platform-short\">AMP</span></a>\n      </div>\n\n      <div class=\"col-sm-9\">\n        <div class=\"collapse navbar-collapse row no-gutters\" id=\"bs-example-navbar-collapse-1\">\n          <!-- To change workspace/user truncation length, edit the offset and grid number below:-->\n          <div class=\"col-sm-offset-5 col-sm-7\">\n            <ul class=\"row no-gutters nav navbar-nav ampUserLoggedIn ampLoggedInMenus\">\n              <li id=\"header-workspace-li\" class=\"col-sm-9 col-md-6\"><a title=\"Workspace\" class=\"workspace-name\" id=\"header-workspace\">&nbsp;</a></li>\n              <li id=\"header-name\" class=\"hidden-xs hidden-sm col-md-4\">\n                <a class=\"user-url\">\n                  <span id=\"header-first-name\">&nbsp;</span>&nbsp;<span id=\"header-last-name\">&nbsp;</span>\n                </a>\n              </li>\n              <li id=\"header-logout\" class=\"col-sm-2\"><a data-i18n=\"amp.common:title-logout\" href=\"/aim/j_spring_logout\" >Logout</a></li>\n            </ul>\n            <% if(showLogin) { %>\n              <% if(loginDropdown){ %>\n                <div class=\"login_here\" id=\"show_login_pop\">\n                  <div class=\"login_here_cont\">\n                    <a data-i18n=\"amp.common:title-login\" href=\"javascript:void(0)\">Login</a>\n                  </div>\n                </div>\n              <% } else { %>\n                <ul class=\"nav navbar-nav ampPublic navbar-right\">\n                  <li id=\"header-login\"><a data-i18n=\"amp.common:title-login\" href=\"/login.do\" >Login</a></li>\n                </ul>\n              <% } %>\n            <% } %>\n            <!-- div#logincontainer with anchors gets appended here -->\n          </div>\n        </div>\n      </div>\n\n    </div>\n\n    <div class=\"row no-gutters\">\n      <div class=\"col-sm-11 col-sm-offset-1\">\n        <ul id=\"AmpMenus\" class=\"nav navbar-nav menus\">\n\n          <!-- File -->\n\n        </ul>\n        <div class=\"clearfix\"></div>\n      </div>\n    </div>\n    <!-- Collect the nav links, forms, and other content for toggling -->\n  </div><!-- /.container-fluid -->\n</nav>\n\n<%\n  } %>\n";
 var MenuCollection = require('../collections/amp-menus-collection.js');
 var MenuModel = require('../models/amp-menus-model.js');
 
@@ -25251,7 +25261,7 @@ module.exports = Backbone.View.extend({
   el: '#amp-header',
   appendEl: '#AmpMenus',
   template: _.template(Template),
-  menuRendered : new $.Deferred(),
+  menuRendered: new $.Deferred(),
   events: {
     'click #show_login_pop': 'openLoginBox'
   },
@@ -25260,12 +25270,15 @@ module.exports = Backbone.View.extend({
     this.collection = new MenuCollection();
     this.translator = options.translator;
     this.showLogin = options.showLogin;
+    this.useSingleRowHeader = options.useSingleRowHeader;
     this.loginDropdown = !!options.loginDropdown;
     var self = this;
-    this.collection.fetch().then(function() {self.render();});
+    this.collection.fetch().then(function() {
+      self.render();
+    });
     this.firstRender = true;
     this.about = new AboutView(options);
-    _.bindAll(this, 'addOne', 'addAll','showAbout');
+    _.bindAll(this, 'addOne', 'addAll', 'showAbout');
 
   },
 
@@ -25275,7 +25288,9 @@ module.exports = Backbone.View.extend({
   },
 
   addOne: function(model) {
-    view = new SubmenuView({model: model});
+    view = new SubmenuView({
+      model: model
+    });
     this.listenTo(view, 'showAbout', this.showAbout);
     var self = this;
     this.listenTo(view, 'switchLanguage', function(lng) {
@@ -25291,8 +25306,9 @@ module.exports = Backbone.View.extend({
     var self = this;
     if (this.firstRender) {
       this.$el.html(this.template({
-        showLogin:self.showLogin,
-        loginDropdown: self.loginDropdown
+        showLogin: self.showLogin,
+        loginDropdown: self.loginDropdown,
+        useSingleRowHeader: self.useSingleRowHeader
       }));
       this.addAll();
       this.firstRender = false;
@@ -25311,17 +25327,19 @@ module.exports = Backbone.View.extend({
     if (typeof $().modal !== 'function') {
       $.noConflict();
     }
-    $('#about-popup').modal({show: true, backdrop: false});
+    $('#about-popup').modal({
+      show: true,
+      backdrop: false
+    });
     this.translator.translateDOM($('#about-popup')[0]);
     return false;
   },
 
-  openLoginBox: function(){
+  openLoginBox: function() {
     $("div#show_login_pop_box").show();
     $("#j_username").focus();
   }
 });
-
 
 },{"../collections/amp-menus-collection.js":47,"../models/amp-menus-model.js":49,"./about-view.js":50,"./submenu-compositeview.js":53,"backbone":"backbone","bootstrap/dist/js/bootstrap":46,"underscore":"underscore"}],53:[function(require,module,exports){
 
@@ -32160,35 +32178,33 @@ _.extend(Widget.prototype, Backbone.Events, {
       this.view.applyFilters();
     }
   },
-  
   /**
    * searches the settings array of models for the ones which hold the min/max values instructed to and, if found,
    * writes them in filtersOut.otherFilters.date.{start}{end}
-   * 
-   * use it as an utility function (it does not reference 'this', so 
+   *
+   * use it as an utility function (it does not reference 'this', so
    * it is safe to use it at any point in the lifecycle of the widget
    */
   extractDates: function(settings, filtersOut, minName, maxName) {
-	  filtersOut.otherFilters = filtersOut.otherFilters || {};
-	  filtersOut.otherFilters.date = filtersOut.otherFilters.date || 
-	  	{
-    		start: '',
-    		end: ''
-		}
+    filtersOut.otherFilters = filtersOut.otherFilters || {};
+    filtersOut.otherFilters.date = filtersOut.otherFilters.date || {
+        start: '',
+        end: ''
+      };
 
-  	var defaultMinDate = _.find(settings, function(item) {
-		return item.get('id') === minName;
-	});
-	if (defaultMinDate !== undefined && defaultMinDate.get('name') !== '') {
-		filtersOut.otherFilters.date.start = defaultMinDate.get('name');
-	}
-	var defaultMaxDate = _.find(settings, function(item) {
-		return item.get('id') === maxName;
-	});
-	if (defaultMaxDate !== undefined && defaultMaxDate.get('name') !== '') {
-		filtersOut.otherFilters.date.end = defaultMaxDate.get('name');
-	}
-  },
+    var defaultMinDate = _.find(settings, function(item) {
+      return item.get('id') === minName;
+    });
+    if (defaultMinDate !== undefined && defaultMinDate.get('name') !== '') {
+      filtersOut.otherFilters.date.start = defaultMinDate.get('name');
+    }
+    var defaultMaxDate = _.find(settings, function(item) {
+      return item.get('id') === maxName;
+    });
+    if (defaultMaxDate !== undefined && defaultMaxDate.get('name') !== '') {
+      filtersOut.otherFilters.date.end = defaultMaxDate.get('name');
+    }
+  }
 
 });
 
@@ -33112,16 +33128,28 @@ module.exports = Backbone.View.extend({
     }
 
     this.firstRender = true;
-
-    // Create top level views
     this._createTopLevelFilterViews();
-
     this.allFilters = new AllFilterCollection([],options);
     this._loaded =  this.allFilters._loaded;
-    this._getFilterList().then(function() {
-      self.allFilters.each(function(model) {
-        self._createFilterViews(model);
-      });
+    this._getFilterList().then(function() {    	
+        self.allFilters.each(function(model) {        	
+      	  if(model.get('empty')){      		     		  
+      		for (key in filterInstancesNames) {
+    			if (filterInstancesNames.hasOwnProperty(key)) {
+    				if(filterInstancesNames[key] == model.get('group')){
+    					// remove tab if there is no data for the tab
+    					delete filterInstancesNames[key];
+    					delete self.filterViewsInstances[key];
+    				}    				
+    				
+    			}
+    		}      		
+      	  }else{
+      		self._createFilterViews(model);  
+      	  }
+      	  
+      });        
+   
       return this;
     });
 

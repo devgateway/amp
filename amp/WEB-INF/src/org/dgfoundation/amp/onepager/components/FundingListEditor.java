@@ -103,10 +103,10 @@ public class FundingListEditor<T> extends ListEditor<T> {
 				// if we are in quarter one we need to check if the activity was
 				// edited during the last fy and block it until the grace period
 				// has been reached
-
+				
 				DateTime firstDayOfLastFy = new DateTime(previousQuarter.getFirstQuarter().getQuarterStartDate());
 				DateTime lastDayOfLastFy = new DateTime(previousQuarter.getQuarterEndDate());
-				if (itemUpdateDate.isAfter(firstDayOfLastFy) && itemUpdateDate.isBefore(lastDayOfLastFy)) {
+				if (itemUpdateDate.isAfter(firstDayOfLastFy) && itemUpdateDate.isBefore(lastDayOfLastFy) && !today.isAfter(lastDayOfLastFy.plusDays(settings.getGracePeriod())) ) {
 					enabled = false;
 				}
 			}

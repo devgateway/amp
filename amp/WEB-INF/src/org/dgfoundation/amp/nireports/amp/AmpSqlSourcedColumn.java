@@ -3,6 +3,7 @@ package org.dgfoundation.amp.nireports.amp;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,9 +39,11 @@ public abstract class AmpSqlSourcedColumn<K extends Cell> extends PsqlSourcedCol
 	}
 	
 	public List<K> fetch(NiReportsEngine engine, Set<Long> mainIds) {
+		if (mainIds.isEmpty())
+			return Collections.emptyList();
 		String locale = TLSUtils.getEffectiveLangCode();
 		String queryCondition = String.format("WHERE (%s IN (%s))", mainColumn, Util.toCSStringForIN(mainIds));
-		ViewFetcher fetcher = DatabaseViewFetcher.getFetcherForView(viewName, queryCondition, locale, AmpReportsScratchpad.get(engine).columnCachers, AmpReportsScratchpad.get(engine).connection, "*");
+		ViewFetcher fetcher = DatabaseViewFetcher.getFetcherForView(viewName, queryCondition, locale, AmpReportsScratchpad.get(engine).columnCachers, AmpReportsScratchpad.get(engine).connection, this.viewColumns.toArray(new String[0]));
 		List<K> res = new ArrayList<>();
 		try(RsInfo rs = fetcher.fetch(null)) {
 			while (rs.rs.next()) {

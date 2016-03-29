@@ -124,6 +124,8 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	 * @throws Exception
 	 */
 	public List<CategAmountCellProto> fetchSkeleton(NiReportsEngine engine, Set<Long> ids, FundingFetcherContext context) {
+		if (ids.isEmpty())
+			return Collections.emptyList();
 		AmpReportsScratchpad scratchpad = AmpReportsScratchpad.get(engine);
 
 		String query = String.format("SELECT * FROM %s WHERE %s IN (%s) AND (%s)", this.viewName, this.mainColumn, Util.toCSStringForIN(ids), buildSupplementalCondition(engine, ids, context));

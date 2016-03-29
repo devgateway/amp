@@ -1,6 +1,6 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import java.util.Map;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
@@ -18,12 +18,14 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
  */
 public abstract class PsqlSourcedColumn<K extends Cell> extends SqlSourcedColumn<K> {
 	
+	final LinkedHashSet<String> viewColumns;
+	
 	public PsqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, String mainColumn, Behaviour<?> behaviour) {
 		super(columnName, levelColumn, viewName, mainColumn, behaviour, AmpReportsSchema.columnDescriptions.get(columnName));
+		this.viewColumns = SQLUtils.getTableColumns(viewName);
 		check();
 	}
 	
-
 	/**
 	 * utility function to check 
 	 * @param col

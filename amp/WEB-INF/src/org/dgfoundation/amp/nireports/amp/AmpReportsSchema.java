@@ -186,7 +186,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	protected AmpReportsSchema() {
 		no_dimension(ColumnConstants.PROJECT_TITLE, "v_titles");
 		no_dimension(ColumnConstants.TEAM, "v_teams");
-		no_dimension(ColumnConstants.OBJECTIVE, "v_objectives");
+		no_entity(ColumnConstants.OBJECTIVE, "v_objectives");
 		no_dimension(ColumnConstants.ISSUES, "v_issues");
 		
 		no_dimension(ColumnConstants.ACTIVITY_PLEDGES_TITLE, "v_activity_pledges_title");
@@ -213,8 +213,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_dimension(ColumnConstants.DESCRIPTION_OF_COMPONENT_FUNDING, "v_component_funding_description");
 		no_dimension(ColumnConstants.DISASTER_RESPONSE_MARKER, "v_disaster_response_marker");
 		no_dimension(ColumnConstants.DONOR_CONTACT_ORGANIZATION, "v_donor_cont_org");
-		no_dimension(ColumnConstants.ENVIRONMENT, "v_environment");
-		no_dimension(ColumnConstants.EQUAL_OPPORTUNITY, "v_equalopportunity");
+		no_entity(ColumnConstants.ENVIRONMENT, "v_environment");
+		no_entity(ColumnConstants.EQUAL_OPPORTUNITY, "v_equalopportunity");
 		degenerate_dimension(ColumnConstants.FINANCIAL_INSTRUMENT, "v_financial_instrument", catsDimension);
 		degenerate_dimension(ColumnConstants.FINANCING_INSTRUMENT, "v_financing_instrument", catsDimension);
 		degenerate_dimension(ColumnConstants.FUNDING_STATUS, "v_funding_status", catsDimension);
@@ -224,7 +224,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_dimension(ColumnConstants.INDIRECT_ON_BUDGET, "v_indirect_on_budget");
 		degenerate_dimension(ColumnConstants.INSTITUTIONS, "v_institutions", catsDimension);
 		no_dimension(ColumnConstants.MEASURES_TAKEN, "v_measures_taken");
-		no_dimension(ColumnConstants.MINORITIES, "v_minorities");
+		no_entity(ColumnConstants.MINORITIES, "v_minorities");
 		degenerate_dimension(ColumnConstants.MODALITIES, "v_modalities", catsDimension);
 		degenerate_dimension(ColumnConstants.MODE_OF_PAYMENT, "v_mode_of_payment", catsDimension);
 		degenerate_dimension(ColumnConstants.ON_OFF_TREASURY_BUDGET, "v_on_off_budget", catsDimension);
@@ -232,17 +232,17 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_dimension(ColumnConstants.PAYMENT_CAPITAL___RECURRENT, "v_mode_of_payment_capital_recurrent");
 		no_dimension(ColumnConstants.PHYSICAL_PROGRESS, "v_physical_progress");
 		degenerate_dimension(ColumnConstants.PROCUREMENT_SYSTEM, "v_procurement_system", catsDimension);
-		no_dimension(ColumnConstants.PROGRAM_DESCRIPTION, "v_program_description");
 		degenerate_dimension(ColumnConstants.PROJECT_CATEGORY, "v_project_category", catsDimension);
-		no_dimension(ColumnConstants.PROJECT_COMMENTS, "v_project_comments");
-		no_dimension(ColumnConstants.PROJECT_DESCRIPTION, "v_description");
-		no_dimension(ColumnConstants.PROJECT_IMPACT, "v_proj_impact");
+		no_entity(ColumnConstants.PROJECT_COMMENTS, "v_project_comments");
+		no_entity(ColumnConstants.PROJECT_DESCRIPTION, "v_description");
+		no_entity(ColumnConstants.PROJECT_IMPACT, "v_proj_impact");
+		no_entity(ColumnConstants.RESULTS, "v_results");
+		no_entity(ColumnConstants.PURPOSE, "v_purposes");
+		no_entity(ColumnConstants.PROGRAM_DESCRIPTION, "v_program_description");
 		no_dimension(ColumnConstants.PROJECT_IMPLEMENTING_UNIT, "v_project_impl_unit");
-		no_dimension(ColumnConstants.PURPOSE, "v_purposes");
 		no_dimension(ColumnConstants.REGIONAL_OBSERVATIONS, "v_regional_observations");
 		no_dimension(ColumnConstants.RELATED_PLEDGES, "v_related_pledges");
 		no_dimension(ColumnConstants.RELATED_PROJECTS, "v_pledges_projects");
-		no_dimension(ColumnConstants.RESULTS, "v_results");
 //		addTextColumn(ColumnConstants.SECTOR_LOCATION, "v_sectorloc");
 		no_dimension(ColumnConstants.SECTOR_MINISTRY_CONTACT_ORGANIZATION, "v_sect_min_cont_org");
 		degenerate_dimension(ColumnConstants.SSC_MODALITIES, "v_ssc_modalities", catsDimension);

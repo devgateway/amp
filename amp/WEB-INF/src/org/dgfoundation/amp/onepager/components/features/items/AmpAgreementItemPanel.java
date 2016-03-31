@@ -2,11 +2,9 @@ package org.dgfoundation.amp.onepager.components.features.items;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -15,7 +13,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
-import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
@@ -175,14 +172,6 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 						return;
 					}
 				}
-				
-				Session wSession = Session.get();
-				HashSet<AmpAgreement> agItems = wSession.getMetaData(OnePagerConst.AGREEMENT_ITEMS);
-				if (agItems == null){
-					agItems = new HashSet<AmpAgreement>();
-					wSession.setMetaData(OnePagerConst.AGREEMENT_ITEMS, agItems);
-				}
-                agItems.add(ag);
 				model.getObject().setAgreement(ag);
 				target.add(agreementTextLabel);
 				editAgModel.setObject(new AmpAgreement());

@@ -16,14 +16,14 @@ function setupFileUpload(componentId, componentUrl, componentParamName){
                 //$.each(data.files, function (index, file) {
                 //    alert('Added file: ' + file.name);
                 //});
-            	if (data.files[0].size > parseFloat('${uploadMaxFileSize}')) {
-            		alert('${uploadFailedTooBigMsg}');
-            		$('#uploadLabel').text('${uploadNoFileLabel}');
+            	if (data.files[0].size > parseFloat("${uploadMaxFileSize}")) {
+            		alert("${uploadFailedTooBigMsg}");
+            		$('#uploadLabel').text("${uploadNoFileLabel}");
             		$(this).find('[role=fileUploadedMsg]').html('');
                     $(this).find('[role=fileUploadedMsg]').hide();
             	} else {
 	            	$(this).find('[role=fileUploadedMsg]').show();
-	                $(this).find('[role=fileUploadedMsg]').html(" '" + '${uploadStartedMsg}' + data.files[0].size + "' bytes");            	
+	                $(this).find('[role=fileUploadedMsg]').html(" \"" + "${uploadStartedMsg}" + data.files[0].size + "\" bytes");            	
 	                data.submit();
             	}
             },
@@ -34,8 +34,8 @@ function setupFileUpload(componentId, componentUrl, componentParamName){
             },
             fail: function (e, data){
                 //alert('upload failed! result[' + JSON.stringify(data.result) + '] status[' + data.textStatus + '] jqXHR[' + JSON.stringify(data.jqXHR) +']');
-                alert('${uploadFailedMsg}');
-                $('#uploadLabel').text('${uploadNoFileLabel}');
+                alert("${uploadFailedMsg}");
+                $('#uploadLabel').text("${uploadNoFileLabel}");
                 $(this).find('[role=fileUploadedMsg]').html('');
                 $(this).find('[role=fileUploadedMsg]').hide();
             }

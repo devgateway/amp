@@ -590,7 +590,7 @@ public class ActivityUtil {
 		Iterator<AmpAgreement> it = agreements.iterator();
 		while (it.hasNext()) {
 			AmpAgreement agg = (AmpAgreement) it.next();
-			if (agg.getId() == null || agg.getId().equals(-1L)) {
+			if (agg.getId() == null || agg.getId() < 0L) {
 				agg.setId(null);
 				session.save(agg);
 			} else {

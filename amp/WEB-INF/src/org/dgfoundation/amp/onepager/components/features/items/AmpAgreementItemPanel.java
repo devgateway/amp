@@ -1,10 +1,9 @@
 package org.dgfoundation.amp.onepager.components.features.items;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
+import java.util.*;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -13,6 +12,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
@@ -27,6 +27,7 @@ import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.util.DbUtil;
+import org.jetbrains.annotations.NotNull;
 
 public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 	private static final long serialVersionUID = 1L;
@@ -100,8 +101,15 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 			protected AmpAgreement getSelectedChoice(Long objId) {
 				if (objId.equals(-1L)){
 					AmpAgreement ag = new AmpAgreement();
-					ag.setId(-1L);
+					ag.setId(-1L * (long)(Math.random() * 10000)); // creates a tmp id.
 					return ag;
+				} else {
+					final Set<AmpAgreement> agItems = getAmpAgreements();
+					for(final AmpAgreement aa: agItems) {
+						if(aa.getId().equals(objId)) {
+							return aa;
+						}
+					}
 				}
 				return super.getSelectedChoice(objId);
 			}
@@ -172,6 +180,9 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 						return;
 					}
 				}
+
+				final Set<AmpAgreement> agItems = getAmpAgreements();
+                agItems.add(ag);
 				model.getObject().setAgreement(ag);
 				target.add(agreementTextLabel);
 				editAgModel.setObject(new AmpAgreement());
@@ -197,7 +208,18 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 		newAgreementForm.setOutputMarkupId(true);
 		add(newAgreementForm);
 	}
-	
+
+	@NotNull
+	private static Set<AmpAgreement> getAmpAgreements() {
+		Session wSession = Session.get();
+		HashSet<AmpAgreement> agItems = wSession.getMetaData(OnePagerConst.AGREEMENT_ITEMS);
+		if (agItems == null){
+            agItems = new HashSet<>();
+            wSession.setMetaData(OnePagerConst.AGREEMENT_ITEMS, agItems);
+        }
+		return agItems;
+	}
+
 	public void validateIsNewAgreementFormClosed(AjaxRequestTarget target){
 		if(this.isFormOpen){
 			//if the form is still open we reject validation

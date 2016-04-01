@@ -317,7 +317,7 @@ public class ActivityUtil {
 		AmpTeamMemberRoles role = ampCurrentMember.getAmpMemberRole();
 		boolean teamLeadFlag =  role.getTeamHead() || role.isApprover();
 		Boolean crossTeamValidation = ampCurrentMember.getAmpTeam().getCrossteamvalidation();
-		Boolean isSameWorkspace = ampCurrentMember.getAmpTeam().getAmpTeamId()==a.getTeam().getAmpTeamId();
+		Boolean isSameWorkspace = ampCurrentMember.getAmpTeam().getAmpTeamId().equals(a.getTeam().getAmpTeamId());
 		
 		// Check if validation is ON in GS and APP Settings 
 		if ("On".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION))

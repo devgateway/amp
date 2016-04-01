@@ -169,7 +169,7 @@ SELECT <!-- undefined donor -->
 	cast (999999999 as bigint) as related_entity_id
           
 	FROM amp_activity_version aav
-	JOIN amp_funding aff ON aff.amp_activity_id = aav.amp_activity_id 
+		LEFT JOIN amp_funding aff ON aff.amp_activity_id = aav.amp_activity_id 
 	WHERE 
 		(NOT EXISTS (
 			select * from amp_funding_detail afd 
@@ -180,7 +180,59 @@ SELECT <!-- undefined donor -->
 			select * from amp_funding_mtef_projection mf 
 				JOIN amp_funding af ON mf.amp_funding_id = af.amp_funding_id AND af.amp_activity_id = aav.amp_activity_id
 				JOIN amp_role src_role ON src_role.amp_role_id = af.source_role_id AND src_role.role_code='DN' ))
+	
 UNION ALL
+
+SELECT <!-- undefined transactions for all donors -->
+	aav.amp_activity_id AS amp_activity_id,
+	999888777 as funding_id,
+	900000000 + aav.amp_activity_id AS amp_fund_detail_id,
+	999 AS transaction_type,
+	(SELECT acv.id FROM amp_category_value acv WHERE acv.category_value='Actual' AND acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'adjustment_type')) AS adjustment_type,
+	'1970-01-01' AS transaction_date,
+	to_char(to_date('1970-01-01', 'YYYY-MM-DD'), 'J')::integer AS date_code,
+	
+	'Undefined' AS transaction_start_date,
+    'Undefined' AS transaction_end_date,
+    'Undefined' AS transaction_range,
+
+	100 AS transaction_amount,
+	(999999999) AS expenditure_class, 
+	'' AS ratification_date,
+	'' AS grace_period,
+	'999D99' AS interest_rate,
+	'' AS maturity,
+	
+	(SELECT amp_currency_id FROM amp_currency WHERE currency_code = (SELECT settingsvalue FROM amp_global_Settings WHERE settingsname = 'Base Currency')) AS currency_id,
+	vd.amp_donor_org_id AS originating_org_id,
+	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'financing_instrument')) AS financing_instrument_id,
+	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'type_of_assistence')) AS terms_of_assistance_id,
+	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'funding_status')) AS funding_status_id,
+	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'mode_of_payment')) AS mode_of_payment_id,
+	
+	(SELECT max(amp_status_id) FROM v_status vs WHERE vs.amp_activity_id = aav.amp_activity_id) AS status_id,
+   	(SELECT max(level_code) FROM v_modalities vm WHERE vm.amp_activity_id =aav.amp_activity_id) AS modality_id,
+	(SELECT max(level_code) FROM v_type_of_cooperation vtoc WHERE vtoc.amp_activity_id = aav.amp_activity_id) AS type_of_cooperation_id,
+	(SELECT max(level_code) FROM v_type_of_implementation vtoi WHERE vtoi.amp_activity_id = aav.amp_activity_id) AS type_of_implementation_id,
+    (SELECT max(id) FROM v_procurement_system vps WHERE vps.amp_activity_id = aav.amp_activity_id) AS procurement_system_id,
+	
+	CAST(NULL as bigint) AS component_id,
+	(999999999) AS agreement_id,
+	
+	NULL AS capital_spend_percent,
+	NULL AS disaster_response,
+     
+	'DN' AS src_role,
+	cast (NULL as text) as dest_role,
+	cast (NULL as bigint) as dest_org_id,
+	
+	cast (999999999 as bigint) as related_entity_id
+          
+	FROM amp_activity_version aav
+		JOIN v_donors vd ON vd.amp_activity_id = aav.amp_activity_id 
+	
+UNION ALL
+
 SELECT <!-- component funding -->
 	ct.amp_activity_id AS amp_activity_id,
 	999888777 AS funding_id, <!-- component funding is not linked to a funding id -->

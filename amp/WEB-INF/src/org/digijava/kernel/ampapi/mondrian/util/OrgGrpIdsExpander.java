@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.jdbc.Work;
 
@@ -24,6 +25,7 @@ public class OrgGrpIdsExpander extends IdsExpander {
 	
 	@Override public Set<Long> expandIds(final List<Long> values) {
 		final Set<Long> res = new HashSet<>();
+		//res.add(MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL);
 		PersistenceManager.getSession().doWork(new Work() {
 
 			@Override

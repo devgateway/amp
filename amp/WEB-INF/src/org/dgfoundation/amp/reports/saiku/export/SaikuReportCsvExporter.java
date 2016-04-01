@@ -87,8 +87,7 @@ public class SaikuReportCsvExporter implements SaikuReportExporter {
 				ReportCell rc = reportContents.getContents().get(roc) != null ? reportContents.getContents().get(roc) : roc.emptyCell;
 				
 				if (rc instanceof AmountCell) {
-					currLine.append(rc.displayedValue);
-					//currLine.append(rc.value.toString());
+					currLine.append(rc.value.toString());
 				} else {
 					currLine.append("\"").append(rc.displayedValue.replaceAll("\"", "'")).append("\"");
 				}

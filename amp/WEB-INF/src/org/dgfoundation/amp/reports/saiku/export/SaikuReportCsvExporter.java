@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.reports.saiku.export;
 
 import java.io.ByteArrayOutputStream;
+import java.math.BigDecimal;
 
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.newreports.AmountCell;
@@ -87,7 +88,8 @@ public class SaikuReportCsvExporter implements SaikuReportExporter {
 				ReportCell rc = reportContents.getContents().get(roc) != null ? reportContents.getContents().get(roc) : roc.emptyCell;
 				
 				if (rc instanceof AmountCell) {
-					currLine.append(rc.value.toString());
+					BigDecimal value = new BigDecimal(rc.value.toString());
+					currLine.append(value.stripTrailingZeros().toPlainString());
 				} else {
 					currLine.append("\"").append(rc.displayedValue.replaceAll("\"", "'")).append("\"");
 				}
@@ -125,4 +127,5 @@ public class SaikuReportCsvExporter implements SaikuReportExporter {
 	protected boolean isHiddenColumn(String columnName) {
 		return columnName.equals("Draft") || columnName.equals("Approval Status");
 	}
+	
 }

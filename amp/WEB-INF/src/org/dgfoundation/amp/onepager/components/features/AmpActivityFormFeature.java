@@ -1343,14 +1343,15 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			}
 		}
 		else {
-			target.add(saveAsDraft);
-			target.add(cancelSaveAsDraft);
-			onErrorSaveAsDraft(feedbackPanel, target, form);
+			// We need to re-enable the keepAlive here or it will fail to start after a failed save as submit.
 			OnePager op = this.findParent(OnePager.class);
 			op.getEditLockRefresher().setEnabled(true);
 			if(op.getTimer()!=null){
 				op.getTimer().restart(target);
-			}
+			}			
+			target.add(saveAsDraft);
+			target.add(cancelSaveAsDraft);
+			onErrorSaveAsDraft(feedbackPanel, target, form);
 			if(autoSaveTimer!=null && autoSaveTimer.isStopped()){
 				autoSaveTimer.restart(target);
 			}

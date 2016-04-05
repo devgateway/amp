@@ -1247,8 +1247,8 @@ public class LuceneUtil implements Serializable {
             String searchString = wrapKeywords(origSearchString, searchMode);
             query = parser.parse(searchString);
             TopDocs topDocs = indexSearcher.search(query, maxLuceneResults);
-            resultDocuments = new Document[topDocs.totalHits];
-
+			resultDocuments = new Document[topDocs.totalHits > topDocs.scoreDocs.length ? topDocs.scoreDocs.length
+					: topDocs.totalHits];
             for (int i = 0; i < topDocs.totalHits; i++) {
                 resultDocuments[i] = indexSearcher.doc(topDocs.scoreDocs[i].doc);
             }

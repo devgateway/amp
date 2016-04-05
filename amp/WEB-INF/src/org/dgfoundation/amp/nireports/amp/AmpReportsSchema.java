@@ -19,7 +19,7 @@ import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_6;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_7;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_8;
 
-import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
@@ -38,7 +39,7 @@ import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
 import org.dgfoundation.amp.currencyconvertor.CurrencyConvertor;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportAreaImpl;
+
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
@@ -169,6 +170,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	
 	private static AmpReportsSchema instance = new AmpReportsSchema();
 		
+	@SuppressWarnings("serial")
 	public final Map<NiDimensionUsage, PercentagesCorrector> PERCENTAGE_CORRECTORS = new HashMap<NiDimensionUsage, PercentagesCorrector>() {{
 		putAll(orgsDimension.getAllPercentagesCorrectors());
 		putAll(secsDimension.getAllPercentagesCorrectors());
@@ -448,9 +450,14 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 *  (since there's no point in backporting the column entirely). 
 	 */
 	public void synchronizeAmpColumnsBackport() {
-		synchronizeAmpReportEntityBackport("columnname", "amp_columns", this.columns, "columnid", "amp_columns_seq");
- 	}
-
+		PersistenceManager.getSession().doWork(conn -> {
+			Set<String> inDbColumns = new HashSet<>(SQLUtils.fetchAsList(conn, String.format("SELECT %s FROM %s", "columnname", "amp_columns"), 1));
+			List<Object> toBeAdded = this.columns.keySet().stream().filter(z -> !inDbColumns.contains(z)).collect(Collectors.toList());
+			List<List<Object>> values = toBeAdded.stream().map(z -> Arrays.asList(z, "TextCell", "v_empty_text_column")).collect(Collectors.toList());	
+			if (values.size() > 0)
+				SQLUtils.insert(conn, "amp_columns", "columnid", "amp_columns_seq", Arrays.asList("columnname", "celltype", "extractorview"), values);
+		}); 	
+	}
 	
 	/**
 	 * This method is created for the following scenario:
@@ -458,33 +465,21 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 * 		- this measure doesn't exist in the old reports schema (described by AmpMeasures)
 	 * 	In this scenario, opening a report with said 
 	 *  new measure in the old reports engine would probably result in a crash.
-	 *  Therefore, an empty
+	 *  Therefore, an empty row for said measure is added.
 	 */
 	public void synchronizeAmpMeasureBackport() {
-		//synchronizeAmpReportEntityBackport("measurename", "amp_measures", this.measures, "measureid", "amp_measures_seq");
-	}	
-	
-	private void synchronizeAmpReportEntityBackport(String nameColumnEntity, String tableName, Map<String, ?> niEntity, String idColumn,
-		String seqname) {
 		PersistenceManager.getSession().doWork(conn -> {
-			List<String> entityNamesList = SQLUtils.fetchAsList(conn, String.format("SELECT %s FROM %s", nameColumnEntity, tableName), 1);
-			Set<String> entityNames = new HashSet<String>(entityNamesList);
-			List<String> toBeAdded = new ArrayList<String>();
-			for (String niEntityName: niEntity.keySet())
-				if (!entityNames.contains(niEntityName)) 
-					toBeAdded.add(niEntityName);
-			//c is for columns (otherwise, it's measures)
-			boolean c = tableName.equals("amp_columns");
-			List<String> insertEntityNames = Arrays.asList(nameColumnEntity, "celltype", c ? "extractorview" : "type");
-			List<List<Object>> values = new ArrayList<List<Object>>(); 
-			for (String added: toBeAdded) 
-				values.add(Arrays.asList(added, "org.dgfoundation.amp.ar.cell.TextCell", c? "v_empty_text_column" : "A"));
-			SQLUtils.insert(conn, tableName, idColumn, "amp_columns_seq", insertEntityNames, values);
-		});
+			Set<String> inDbMeasures = new HashSet<>(SQLUtils.fetchAsList(conn, String.format("SELECT %s FROM %s", "measurename", "amp_measures"), 1));
+			List<Object> toBeAdded = this.measures.keySet().stream().filter(z -> !inDbMeasures.contains(z)).collect(Collectors.toList());
+			List<List<Object>> values = toBeAdded.stream().map(z -> Arrays.asList(z, "A")).collect(Collectors.toList());	
+			if (values.size() > 0)
+				SQLUtils.insert(conn, "amp_measures", "measureid", "amp_measures_seq", Arrays.asList("measurename", "type"), values);
+		}); 
 	}
 	
 	private AmpReportsSchema addTrivialMeasures() {
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.ACTUAL_COMMITMENTS, Constants.COMMITMENT, "Actual", false));
+
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.PLANNED_COMMITMENTS, Constants.COMMITMENT, "Planned", false));
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.PIPELINE_COMMITMENTS, Constants.COMMITMENT, "Pipeline", false));
 

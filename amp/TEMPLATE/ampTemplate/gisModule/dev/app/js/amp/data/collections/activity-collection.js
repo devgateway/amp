@@ -17,7 +17,7 @@ module.exports = Backbone.Collection
 
   initialize: function(models, options) {
     this.appData = options.appData;
-    this._pageSize = options.pageSize;
+    this.globalPageSize = options.pageSize;
     this.totalCount = null;
     this._currentStartPosition = 0;
   },
@@ -49,14 +49,14 @@ module.exports = Backbone.Collection
      * like for new filters or settings
      **/
     if (options && options.isFetchMore) {
-      this._currentStartPosition += this._pageSize;
+    	this._currentStartPosition += options.pageSize;
       isFetchMore = true;
     } else {
       this._currentStartPosition = 0;
     }
 
     /* Only use pagination if _pageSize is positive */
-    if (this._pageSize > 0) {
+    if (this.globalPageSize && this.globalPageSize > 0) {
 
       /* POST payload-specified size and start are currently ignored by API but
        * they would be cleaner than modifing and restoring the URL
@@ -70,8 +70,8 @@ module.exports = Backbone.Collection
        [
           '/rest/gis/activities?start=',
          this.getPageDetails().currentPage,
-         '&size=',
-         this._pageSize
+         '&size=', 
+         this.globalPageSize
        ].join('');
     }
 
@@ -83,17 +83,17 @@ module.exports = Backbone.Collection
     activityFetch = Backbone.Collection.prototype.fetch.call(this, options);
 
     /* If enabled, maintain the pagination state even on errors */
-    if (self._pageSize > 0) {
+    if (options.pageSize && options.pageSize > 0) {
 
       activityFetch.then(function() {
         /* On the very first page request, advance if succeeds */
         if (options && !options.isFetchMore) {
-          self._currentStartPosition += self._pageSize;
+        	self._currentStartPosition += options.pageSize;
         }
       }).fail (function() {
         /* If a page request after the first fails, revert position*/
         if (self.isFetchMore) {
-          self._currentStartPosition -= self._pageSize;
+        	self._currentStartPosition -= options.pageSize;
         }
       });
 
@@ -107,6 +107,7 @@ module.exports = Backbone.Collection
   fetchMore: function(options) {
     options = _.defaults((options || {}), {
       isFetchMore: true,
+      pageSize: this.globalPageSize,
       remove: false
     });
     return this.fetch(options);
@@ -116,25 +117,28 @@ module.exports = Backbone.Collection
   /* Used for pagination */
   getPageDetails: function() {
     var pageDetails =  {
-      isPaging: this._pageSize > 0,
-      pageSize: this._pageSize,
+      isPaging: this.globalPageSize > 0,
+      pageSize: this.globalPageSize,
       currentPosition: this._currentStartPosition,
       totalCount: this.totalCount,
       url: this.url
     };
 
     if (pageDetails.isPaging) {
-      pageDetails.currentPage = Math.floor(this._currentStartPosition / this._pageSize);
-      pageDetails.totalPageCount = Math.ceil(this.totalCount / this._pageSize);
+    	pageDetails.currentPage = Math.floor(this._currentStartPosition / pageDetails.pageSize);
+    	pageDetails.totalPageCount = Math.ceil(this.totalCount / pageDetails.pageSize);
     }
     return pageDetails;
   },
 
   /* changePaging is like reinitializing without paging, requiring everything to refetch
   * as if paging was never enabled.*/
+  /*this function is never used, commenting out to avoid confusion*/
+  /*
   changePaging: function(resultsPerPage) {
     this._pageSize = resultsPerPage || 0;
   },
+  */
 
   parse: function(apiData) {
     this.totalCount = apiData.count;

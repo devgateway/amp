@@ -126,15 +126,23 @@ public class ActivityService {
 		}
 		//if pagination is requested
 		List<ReportArea> ll=null;
+		Integer count = null;
 		if(page !=null && pageSize !=null && page>=0 && pageSize>0){
 			ReportAreaMultiLinked[] areasDFArray = ReportPaginationUtils.convert(report.reportContents);
 			
 			ReportArea pagedReport = ReportPaginationUtils.getReportArea(areasDFArray, page, pageSize);
-			ll=pagedReport.getChildren();
+			if (pagedReport != null){
+				ll=pagedReport.getChildren();
+				count=report.reportContents.getChildren().size();
+			}
+			else { //we're probably out of bounds
+				ll = new ArrayList<>();
+				count=report.reportContents.getChildren().size();
+			}
 		}else{ 
 			ll = report.reportContents.getChildren();
 		}
- 		Integer count=report.reportContents.getChildren().size();
+ 		
 
 		for (ReportArea reportArea : ll) {
 			JsonBean activity = new JsonBean();

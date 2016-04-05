@@ -272,8 +272,14 @@ public class GisEndPoints {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "ActivitiesNewLists")
 	public JsonBean getActivitiesNew(JsonBean config, @QueryParam("start") Integer page,@QueryParam("size") Integer pageSize) {
+		logger.error(String.format("Requesting %s pagesize from %s page", pageSize, page));
+		
 		try{
-			return ActivityService.getActivitiesMondrian(config,null,page * pageSize, pageSize);
+			Integer reqNumber = (pageSize == null) || (page == null) ? null : pageSize * page; 
+			
+			
+			
+			return ActivityService.getActivitiesMondrian(config,null, reqNumber, pageSize);
 		}catch(AmpApiException ex){
 			throw new WebApplicationException(ex);
 		}	

@@ -67,7 +67,7 @@ module.exports = Backbone.Collection
          */
 
         this.url = ['/rest/gis/activities?start=',
-          this.getPageDetails(options).currentPage,
+          this.getPageDetails().currentPage,
           '&size=', this.globalPageSize].join('');
       }
 

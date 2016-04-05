@@ -374,15 +374,12 @@ public class AmpDonorFundingFormSectionFeature extends
 				
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
 				send(getPage(), Broadcast.BREADTH, new OrganisationUpdateEvent(target));
-				if (isTabsView){
-					//if in tabs view we should refresh the whole section so 
-					//tabs are inplace and recreated
-					target.add(AmpDonorFundingFormSectionFeature.this);
-					int index = calculateTabIndex(choice, getSelectedAmpRole());
 
+				target.add(AmpDonorFundingFormSectionFeature.this);
+				 
+				if (isTabsView){
+					int index = calculateTabIndex(choice, getSelectedAmpRole());
 					target.appendJavaScript("switchTabs("+ index +");");
-				} else {
-					target.add(wmc);
 				}
 			}
 

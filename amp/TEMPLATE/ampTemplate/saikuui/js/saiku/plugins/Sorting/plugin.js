@@ -24,24 +24,25 @@ Saiku.Sorting = {
 		var clickedColumn = event.currentTarget;
 		var id = $(clickedColumn).attr('id');
 		var type = $(clickedColumn).data('sorting-type');
+		var name = $(clickedColumn).data('hierarchical-name');
 
 		switch (type) {
 		case 'HEADER_COMMON':
-			if (sortColumn(id, type) === true) {
+			if (sortColumn(id, name, type) === true) {
 				runQuery();
 			} else {
 				event.preventDefault();
 			}
 			break;
 		case 'HEADER_MEASURE':
-			if (sortColumn(id, type) === true) {
+			if (sortColumn(id, name, type) === true) {
 				runQuery();
 			} else {
 				event.preventDefault();
 			}
 			break;
 		case 'HEADER_HIERARCHY':
-			if (sortColumn(id, type) === true) {
+			if (sortColumn(id, name, type) === true) {
 				runQuery();
 			} else {
 				event.preventDefault();
@@ -86,7 +87,7 @@ function resetSorting() {
  * maintain a list. In some cases we need to send more than one column (ie: when
  * clicking yearly totals).
  */
-function sortColumn(id, type) {
+function sortColumn(id, name, type) {
 	var sort = false;
 	// Look for this id in the list of currentSorting, if we find it then change
 	// the 'asc' param, otherwise
@@ -103,7 +104,7 @@ function sortColumn(id, type) {
 		} else {
 			resetSorting();
 			Saiku.Sorting.currentSorting.push({
-				columns : [ convertIdToName(id, type) ],
+				columns : [ convertIdToName(name, type) ],
 				asc : true,
 				id : id
 			});
@@ -118,7 +119,7 @@ function sortColumn(id, type) {
 		} else {
 			resetSorting();
 			Saiku.Sorting.currentSorting.push({
-				columns : convertIdToName(id, type),
+				columns : convertIdToName(name, type),
 				asc : true,
 				id : id
 			});
@@ -133,7 +134,7 @@ function sortColumn(id, type) {
 		} else {
 			resetSorting();
 			Saiku.Sorting.currentSorting.push({
-				columns : convertIdToName(id, type),
+				columns : convertIdToName(name, type),
 				asc : true,
 				id : id
 			});
@@ -172,23 +173,22 @@ function updateArrowIcon(data) {
 					});
 }
 
-function convertIdToName(id, type) {
-	var name = "";
+function convertIdToName(name, type) {
 	switch (type) {
 	case 'HEADER_COMMON':
-		name = id.replace(/\-/g, '');
+		// Delete first '[' and last ']'
+		name = name.replace(/^\[|]$/g, '');
 		break;
 	case 'HEADER_MEASURE':
 		// TODO: Replace 'Total Measures' with a value from the endpoint.
-		name = id.replace("-Total Measures-", '');
-		name = name.replace(/\--/g, ',');
-		name = name.replace(/\-/g, '');
-		name = name.split(",");
+		name = name.replace("[Total Measures]", '');
+		// Delete first '[' and last ']' 
+		name = name.replace(/^\[|]$/g, '');
+		name = name.split("][");
 		break;
 	case 'HEADER_HIERARCHY':
-		name = id.replace(/\--/g, ',');
-		name = name.replace(/\-/g, '');
-		name = name.split(",");
+		name = name.replace(/^\[|]$/g, '');
+		name = name.split("][");
 		break;
 	}
 	return name;

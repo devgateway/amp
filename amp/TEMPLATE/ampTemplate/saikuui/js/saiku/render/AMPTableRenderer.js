@@ -198,6 +198,7 @@ function generateHeaderHtml(headers) {
 					
 					col = "<th" + style + id + " data-header-level='" + i + "'"
 							+ sortingType + " colspan='" + groupCount + "'"
+							+ " data-hierarchical-name='" + this.headerMatrix[i][j].hierarchicalName + "'"
 							+ "><div class = 'i18n'>"
 							+ colName + helpIcon + "</div></th>";
 	

@@ -185,10 +185,17 @@ function convertIdToName(name, type) {
 		// Delete first '[' and last ']' 
 		name = name.replace(/^\[|]$/g, '');
 		name = name.split("][");
+		// Workaround for FF columns: Remove these elements so the backend can sort properly.
+		name = _.without(name, _.findWhere(name, ' '));
+		name = _.without(name, _.findWhere(name, 'DN - DN'));
+		name = _.without(name, _.findWhere(name, 'DN - EXEC'));
+		name = _.without(name, _.findWhere(name, 'DN - IMPL'));
 		break;
 	case 'HEADER_HIERARCHY':
 		name = name.replace(/^\[|]$/g, '');
 		name = name.split("][");
+		// Workaround for FF columns: Remove these elements so the backend can sort properly.
+		name = _.without(name, _.findWhere(name, ' '));
 		break;
 	}
 	return name;

@@ -86,12 +86,15 @@ Backbone.sync = function(method, model, options) {
     }
 
     var errorLogout = function() {
-        Settings.ERRORS++;
-        if (Settings.ERRORS < Settings.ERROR_TOLERANCE) {
-          Saiku.session.logout();
-        } else {
-          Saiku.ui.block("Communication problem with the server. Please reload the application...");
-        }
+	    // In our reports we dont want to get the page reloaded because a timeout error (on big reports).
+    	if (!Settings.AMP_REPORT_API_BRIDGE) {
+	        Settings.ERRORS++;
+	        if (Settings.ERRORS < Settings.ERROR_TOLERANCE) {
+	          Saiku.session.logout();
+	        } else {
+	          Saiku.ui.block("Communication problem with the server. Please reload the application...");
+	        }
+    	}
     };
     var statuscode = {
       0: function() {
@@ -145,6 +148,7 @@ Backbone.sync = function(method, model, options) {
       success:      success,
       statusCode:   statuscode, 
       error:        failure,
+      timeout:		120000,
       async:        async//,
       //processData:  false
       /*

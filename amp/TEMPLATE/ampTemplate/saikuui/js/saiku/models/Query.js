@@ -268,9 +268,13 @@ var Query = Backbone.Model.extend({
         TODO: i wonder if we should clean up the model (name and captions etc.)
         delete this.model.queryModel.axes['FILTER'].name;
 */        
-        this.result.save({},{ contentType: "application/json", data: JSON.stringify(exModel), error: function() {
+        this.result.save({},{ contentType: "application/json", data: JSON.stringify(exModel), error: function(model, resp, options) {
             Saiku.ui.unblock();
-            var errorMessage = '<span class="i18n">Error executing query. Please check the server logs or contact your administrator!</span>';
+            if (resp.statusText === "timeout") {
+            	var errorMessage = '<span class="i18n">Your report is too large to process, please either reduce the number of fields, or use the filters to limit the amount of data being pulled, and try again.</span>';
+            } else {
+            	var errorMessage = '<span class="i18n">Error executing query. Please check the server logs or contact your administrator!</span>';
+            }
             self.workspace.table.clearOut();
             $(self.workspace.processing).html(errorMessage).show();
             self.workspace.adjust();

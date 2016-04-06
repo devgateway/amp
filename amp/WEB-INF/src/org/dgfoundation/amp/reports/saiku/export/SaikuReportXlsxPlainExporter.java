@@ -78,7 +78,7 @@ public class SaikuReportXlsxPlainExporter extends SaikuReportXlsxExporter {
 	
 	protected void renderTableTotals(Sheet sheet, GeneratedReport report, ReportArea reportContents) {
 		IntWrapper intWrapper = new IntWrapper();
-		Row row = sheet.createRow(sheet.getLastRowNum());
+		Row row = sheet.createRow(sheet.getLastRowNum() + 1);
 		report.leafHeaders.stream().filter(roc -> !isHiddenColumn(roc.originalColumnName)).forEach(roc -> {	
 			createTotalCell(sheet, row, intWrapper.value, report, reportContents.getContents().get(roc));
 			intWrapper.inc();

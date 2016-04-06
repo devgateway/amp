@@ -308,7 +308,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 		IntWrapper width = new IntWrapper().inc(10);
 		switch (cell.getCellType()) {
 			case Cell.CELL_TYPE_STRING:
-				width.set(cell.getStringCellValue().length());
+				width.set(cell.getStringCellValue().length() + 1);
 				break;
 			case Cell.CELL_TYPE_NUMERIC:
 				width.set(Double.toString(cell.getNumericCellValue()).length());

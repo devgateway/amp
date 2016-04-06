@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -104,7 +103,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	
 	protected void addSummarySheetToWorkbook(Workbook wb, GeneratedReport report, String sheetName) {
 		Sheet summarySheet = wb.createSheet(TranslatorWorker.translateText(sheetName));
-		generateSummarySheet(wb, summarySheet, report.spec, null);
+		generateSummarySheet(wb, summarySheet, report.spec);
 	}
 	
 	protected void addDualSummarySheetToWorkbook(Workbook wb, GeneratedReport dualReport) {
@@ -345,53 +344,12 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	 * @param reportSpec
 	 * @param queryObject
 	 */
-	private void generateSummarySheet(Workbook workbook, Sheet summarySheet, ReportSpecification reportSpec, Map<String, Object> queryModel) {
-		logger.info("Start generateSummarySheet.");
+	private void generateSummarySheet(Workbook workbook, Sheet summarySheet, ReportSpecification reportSpec) {
 		int i = 0;
 		int j = 0;
 		
-		Map<String, List<String>> extractedFilters = new<String, List<String>> HashMap();
-		if (queryModel!= null && queryModel.get("filtersWithModels") != null) {
-			LinkedHashMap<String, Object> filtersWithModels = (LinkedHashMap<String, Object>) queryModel
-					.get("filtersWithModels");
-			if (filtersWithModels.get("columnFilters") != null) {
-				LinkedHashMap<String, Object> columnFilters = (LinkedHashMap<String, Object>) filtersWithModels
-						.get("columnFilters");
-				for (Map.Entry<String, Object> columnFilter : columnFilters.entrySet()) {
-					String extractedFilter = TranslatorWorker.translateText(columnFilter.getKey().toString());
-					List<String> extractedValues = new ArrayList<String>();
-					for (LinkedHashMap<String, Object> columnFilterValues : (List<LinkedHashMap<String, Object>>) columnFilter
-							.getValue()) {
-						// AMP-21066
-						if (columnFilterValues != null && columnFilterValues.get("name") != null) {
-							extractedValues.add(columnFilterValues.get("name").toString());
-						} else {
-							extractedValues.add("");
-						}
-					}
-					extractedFilters.put(extractedFilter, extractedValues);
-				}
-			}
-			if (filtersWithModels.get("otherFilters") != null) {
-				LinkedHashMap<String, Object> otherFilters = (LinkedHashMap<String, Object>) filtersWithModels
-						.get("otherFilters");
-				for (Map.Entry<String, Object> otherFilter : otherFilters.entrySet()) {
-					String extractedFilter = TranslatorWorker.translateText(otherFilter.getKey().toString());
-					List<String> extractedValues = new ArrayList<String>();
-					LinkedHashMap<String, Object> columnFilterValues = (LinkedHashMap<String, Object>) otherFilter
-							.getValue();
-					for (Map.Entry<String, Object> columnFilterValue : columnFilterValues.entrySet()) {
-						// AMP-21066
-						if (columnFilterValue != null && columnFilterValue.getValue() != null) {
-							extractedValues.add(columnFilterValue.getValue().toString());
-						} else {
-							extractedValues.add("");
-						}
-					}
-					extractedFilters.put(extractedFilter, extractedValues);
-				}
-			}
-		} else if (reportSpec.getFilters() != null) {
+		Map<String, List<String>> extractedFilters = new<String, List<String>> HashMap<String, List<String>>();
+		if (reportSpec.getFilters() != null) {
 			ReportFilters filters = reportSpec.getFilters();
 			Map<ReportElement, List<FilterRule>> filterRules = filters.getFilterRules();
 			for (Map.Entry<ReportElement, List<FilterRule>> filter : filterRules.entrySet()) {
@@ -402,13 +360,8 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 					}
 					String extractedFilter = TranslatorWorker.translateText(entityName);
 					List<String> extractedValues = new ArrayList<String>();
-					for (Map.Entry<String, String> filterValue : filterRule.valueToName.entrySet()) {
-						// AMP-21066
-						if (filterValue != null) {
-							extractedValues.add(filterValue.getValue());
-						} else {
-							extractedValues.add("");
-						}
+					for (String filterValue : filterRule.values) {
+						extractedValues.add(filterValue);
 					}
 					extractedFilters.put(extractedFilter, extractedValues);
 				}
@@ -481,7 +434,6 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 		for (int l = 0; l < 3; l++) {
 			summarySheet.autoSizeColumn(l, true);
 		}
-		logger.info("End generateSummarySheet.");
 	}
 	
 	/**

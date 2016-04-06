@@ -328,7 +328,7 @@ function buildTotalsRow(page) {
 			}			
 			
 			td += "original-title='" + reportTotals + "' data-subtotal='true'";
-			auxTd += "<div class='total i18n'>" + cell.displayedValue + "</div>";			
+			auxTd += "<div class='total i18n'>" + escapeHtml(cell.displayedValue) + "</div>";			
 			td += ">";
 			td += auxTd + "</td>";
 			totalRow += td;
@@ -406,8 +406,8 @@ function generateDataRows(page, options) {
 					var colId = j > 0 ? j - 1 : j;
 					var value = this.contentMatrix[i][j].displayedValue;
 					var totalValue = Settings.NIREPORT ? this.contentMatrix[i][colId].displayedValue : value;
-					var cleanValue = cleanText(value, 60);
-					var cleanTotalValue = cleanText(totalValue, 60);
+					var cleanValue = splitText(value, 60);
+					var cleanTotalValue = splitText(totalValue, 60);
 					
 					var styleClass = getCellDataStyleClass(contentMatrix, cleanValue, i, j);
 					var coloredPrefix = "";
@@ -426,7 +426,7 @@ function generateDataRows(page, options) {
 						if (applyTotalRowStyle === true) {
 							// Trying something new here: show tooltip on the now empty "Hierarchy Value Totals" row.
 							if (cleanTotalValue.text !== undefined) {
-								styleClass = " class='row_total tooltipped i18n' data-subtotal='true' original-title='" + cleanTotalValue.text + "' ";
+								styleClass = " class='row_total tooltipped i18n' data-subtotal='true' original-title='" + escapeHtml(cleanTotalValue.text) + "' ";
 							} else {
 								styleClass = " class='row_total' ";
 							}
@@ -437,13 +437,13 @@ function generateDataRows(page, options) {
 					}
 
 					cell = "<th" + styleClass + rowSpan + ">";
-					cell += coloredPrefix + cleanValue.text;
+					cell += coloredPrefix + escapeHtml(cleanValue.text);
 					cell += "</th>";
 				} else {
 					// Change amount styles if is a subtotal.
 					if (this.contentMatrix[i][j] != null && this.contentMatrix[i][j].isTotal === true) {
 						cell = "<td class='data total'>";
-						cell += "<div class='total'>" + this.contentMatrix[i][j].displayedValue + "</div>";
+						cell += "<div class='total'>" + escapeHtml(this.contentMatrix[i][j].displayedValue) + "</div>";
 						cell += "</td>";
 					} else {
 						cell = "<td class='data'>";
@@ -456,7 +456,7 @@ function generateDataRows(page, options) {
 								// This was requested on AMP-21487.
 								auxNonTotalVal = '0';
 							}
-							cell += auxNonTotalVal;							
+							cell += escapeHtml(auxNonTotalVal);							
 						}
 						cell += "</td>";
 					}
@@ -478,7 +478,7 @@ function getCellDataStyleClass(contentMatrix, cleanValue, i, j) {
 	}
 	
 	if (cleanValue.tooltip) {
-		styleClass += "tooltipped' original-title='" + cleanValue.tooltip + "' ";
+		styleClass += "tooltipped' original-title='" + escapeHtml(cleanValue.tooltip) + "' ";
 	} else {
 		styleClass += "'";
 	}
@@ -599,11 +599,18 @@ function generateHeaderRows(column, iRow, iCol) {
 }
 
 /**
- * Remove characters that would break the html, shorten if is larger than 60
- * chars and generate a tooltip text if needed.
+ * taken from http://shebang.brandonmintern.com/foolproof-html-escaping-in-javascript/
  */
-function cleanText(text, maxLength) {
-	text = text.replace(/<(?:.|\n)*?>/gm, '').replace(/["']/g, "");
+function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+};
+
+/**
+ * generates a tooltip if needed && requested
+ */
+function splitText(text, maxLength) {
 	var tooltip = undefined;
 	if (maxLength !== undefined) {
 		if (text.length > maxLength) {
@@ -615,6 +622,16 @@ function cleanText(text, maxLength) {
 		text : text,
 		tooltip : tooltip
 	}
+}
+
+/**
+ * @DEPRECATED - DO NOT USE
+ * Remove characters that would break the html, shorten if is larger than 60
+ * chars and generate a tooltip text if needed.
+ */
+function cleanText(text, maxLength) {
+	var escapedText = text.replace(/<(?:.|\n)*?>/gm, '').replace(/["']/g, "");
+	return splitText(escapedText, maxLength);
 }
 
 /**

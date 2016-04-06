@@ -79,11 +79,15 @@ public class SaikuReportHtmlRenderer {
 		report.generatedHeaders.stream().forEach(headerCells -> {
 			tableHeader.append("<tr>");
 			headerCells.stream().filter(headerCell -> !isHiddenColumn(headerCell.originalName)).forEach(headerCell -> {
-				tableHeader.append("<th class='col'");
+				tableHeader.append("<th class='col' ");
 				tableHeader.append("rowSpan='" + headerCell.getRowSpan() + "' colSpan='" + headerCell.getColSpan() + "'>");
 				tableHeader.append(headerCell.getName());
 				tableHeader.append("</th>");
 			});
+			
+			// AMP-22554 - ugly hack in order to make iText library to render correctly the generated html table 
+			tableHeader.append("<th></th>");
+			
 			tableHeader.append("</tr>\n");
 		});
 		
@@ -133,6 +137,7 @@ public class SaikuReportHtmlRenderer {
 				tblData.append(getCellValue(reportContents, roc));
 				tblData.append("</td>");
 			}
+			
 			tblData.append("</tr>");
 			tblData.append("<tr>");
 		}

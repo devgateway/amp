@@ -57,6 +57,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	 */
 	@Override
 	public byte[] exportReport(GeneratedReport report, GeneratedReport dualReport) throws Exception {
+		logger.info("Start generating Excel Report...");
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		Workbook wb = new XSSFWorkbook();
 		template = new SaikuReportExcelTemplate(wb);
@@ -70,7 +71,8 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 		wb.write(os);
 		os.flush();
 		os.close();
-
+		
+		logger.info("Stop generating Excel Report.");
 		return os.toByteArray();
 	}	
 	
@@ -308,7 +310,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 		IntWrapper width = new IntWrapper().inc(10);
 		switch (cell.getCellType()) {
 			case Cell.CELL_TYPE_STRING:
-				width.set(cell.getStringCellValue().length() + 1);
+				width.set(cell.getStringCellValue().length());
 				break;
 			case Cell.CELL_TYPE_NUMERIC:
 				width.set(Double.toString(cell.getNumericCellValue()).length());
@@ -497,7 +499,9 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 		for (int i = 0; i < report.leafHeaders.size(); i++) {
 			try {
 				if (sheetWidths.containsKey(i)) {
-					sheet.setColumnWidth(i, (int) (sheetWidths.get(i) * template.getCharWidth()));
+					int width = (int) ((sheetWidths.get(i)) * template.getCharWidth());
+					width = width < template.getMaxColumnWidth() ? width : template.getMaxColumnWidth() - 1;
+					sheet.setColumnWidth(i, width);
 				} else {
 					sheet.setColumnWidth(i, (int) (template.getDefaultColumnWidth() * template.getCharWidth()));
 				}

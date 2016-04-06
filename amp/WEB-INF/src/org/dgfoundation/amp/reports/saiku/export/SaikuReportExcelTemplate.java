@@ -31,7 +31,8 @@ public class SaikuReportExcelTemplate {
 	private Map<Integer, CellStyle> subTotals = new HashMap<Integer, CellStyle>();
 	
 	private final short cellHeight = 300;
-	private final float charWidth = 260;
+	private final float charWidth = 300;
+	private final int maxColumnWidth = 65280; // 255 * 256
 	private final int defaultColWidth = 25;
 	
 	private Workbook wb;
@@ -165,6 +166,10 @@ public class SaikuReportExcelTemplate {
 	
 	public float getDefaultColumnWidth() {
 		return defaultColWidth;
+	}
+	
+	public int getMaxColumnWidth() {
+		return maxColumnWidth;
 	}
 	
 	

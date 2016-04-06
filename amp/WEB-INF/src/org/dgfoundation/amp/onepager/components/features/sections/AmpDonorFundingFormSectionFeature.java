@@ -158,11 +158,12 @@ public class AmpDonorFundingFormSectionFeature extends
 	protected boolean deteleItem(ListEditor<AmpOrgRole> listEditor, AmpOrgRole orgRole, AjaxRequestTarget target) {
 		int idx = -1;
 		ListItem<AmpOrgRole> delItem = null;
+		AmpOrgRole ampOrgRoleToDelete  = null;
 		for (int i = 0; i < listEditor.size(); i++) {
 			ListItem<AmpOrgRole> listItem = (ListItem<AmpOrgRole>) listEditor.get(i);
-			AmpOrgRole item = (AmpOrgRole) listItem.getModelObject();
-			if (item.getOrganisation().getIdentifier().equals(orgRole.getOrganisation().getIdentifier())
-					&& item.getRole().getIdentifier().equals(orgRole.getRole().getIdentifier())) {
+			ampOrgRoleToDelete = (AmpOrgRole) listItem.getModelObject();
+			if (ampOrgRoleToDelete.getOrganisation().getIdentifier().equals(orgRole.getOrganisation().getIdentifier())
+					&& ampOrgRoleToDelete.getRole().getIdentifier().equals(orgRole.getRole().getIdentifier())) {
 				idx = listItem.getIndex();
 				delItem = listItem;
 				break;
@@ -178,6 +179,11 @@ public class AmpDonorFundingFormSectionFeature extends
 			listEditor.remove(delItem);
 			listEditor.updateModel();
 			target.add(listEditor.getParent());
+			//item was removed, remove from orgRoles
+			if(ampOrgRoleToDelete!=null){
+				Set<AmpOrgRole> orgRoles = orgRoleModel.getObject();
+				orgRoles.remove(ampOrgRoleToDelete);
+			}
 			return true;
 		}
 		return false;

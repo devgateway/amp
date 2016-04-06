@@ -88,31 +88,34 @@ function ampet_slide_field_display_alter(&$display, $context) {
  * Implements hook_node_view_alter().
  */
 function ampet_slide_node_view_alter(&$build) {
-  $entity_langcode = entity_translation_get_existing_language('node', $build['#node']);
-  $wrapper = entity_metadata_wrapper('node', $build['#node']);
-  $wrapper->language($entity_langcode);
+  // We want to alter only the slide CT.
+  if ($build['#node']->type == 'slide') {
+    $entity_langcode = entity_translation_get_existing_language('node', $build['#node']);
+    $wrapper = entity_metadata_wrapper('node', $build['#node']);
+    $wrapper->language($entity_langcode);
 
-  // Get the link.
-  $link = $wrapper->field_slider_link->value();
-  if (!empty($link['url'])) {
-    $view['field_slider_image'][0]['#path']['path'] = $link['url'];
-    $view['field_slider_image'][0]['#path']['options']['attributes'] = $link['attributes'];
+    // Get the link.
+    $link = $wrapper->field_slider_link->value();
+    if (!empty($link['url'])) {
+      $view['field_slider_image'][0]['#path']['path'] = $link['url'];
+      $view['field_slider_image'][0]['#path']['options']['attributes'] = $link['attributes'];
 
-    $svgicon = helpertheme_get_svg_icons('add', array('width' => '3em', 'height' => '3em')) . ' ';
-    $link_title = $svgicon . '<span class="text">' . t('read more') . '</span>';
+      $svgicon = helpertheme_get_svg_icons('add', array('width' => '3em', 'height' => '3em')) . ' ';
+      $link_title = $svgicon . '<span class="text">' . t('read more') . '</span>';
 
-    $build['view_link'] = array(
-      '#theme' => 'link',
-      '#path' => $link['url'],
-      '#text' => $link_title,
-      '#options' => array(
-        'html' => TRUE,
-        'attributes' => array(
-            'class' => array('more-link'),
-            'title' => t('read more'),
-          ) + $link['attributes'],
-      ),
-      '#weight' => 50,
-    );
+      $build['view_link'] = array(
+        '#theme' => 'link',
+        '#path' => $link['url'],
+        '#text' => $link_title,
+        '#options' => array(
+          'html' => TRUE,
+          'attributes' => array(
+              'class' => array('more-link'),
+              'title' => t('read more'),
+            ) + $link['attributes'],
+        ),
+        '#weight' => 50,
+      );
+    }
   }
 }

@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * owlcarousel_colorbox.module
+ */
+
+/**
+ * Return Owl Carousel Colorbox settings.
+ */
+function _owlcarousel_colorbox_settings($instance) {
+  $function = !module_exists('variable') ? 'variable_get' : 'variable_get_value';
+
+  return array(
+    'colorbox' => (boolean)$function('owlcarousel_colorbox_' . $instance),
+    'colorbox_imagestyle' => $function('owlcarousel_colorbox_imagestyle_' . $instance)
+  );
+}

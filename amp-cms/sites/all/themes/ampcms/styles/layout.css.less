@@ -243,11 +243,21 @@
     .pane-content {
       .clearfix-mixin();
     }
-    .field-name-field-cbimage {
+    .field-name-field-cbimage,
+    .field-name-field-slider-image {
       float: right;
       margin: 0;
       margin-left: 1em;
       max-width: 50%;
+    }
+    .field-name-field-cbslides {
+      margin: 0;
+    }
+    .node.node-slide {
+      position: static;
+      .contextual-links-wrapper {
+        top: 2em;
+      }
     }
   }
 

@@ -149,6 +149,7 @@ function contentblock_cbreference_render__section($entity, $pane_conf) {
 function contentblock_cbreference_render__welcome($entity, $pane_conf) {
   $view_mode = 'default';
   $entity_type = $entity->entityType();
+
   field_attach_prepare_view($entity_type, array($entity->identifier() => $entity), $view_mode);
   $view = field_attach_view($entity_type, $entity, $view_mode);
 
@@ -157,42 +158,51 @@ function contentblock_cbreference_render__welcome($entity, $pane_conf) {
     return;
   }
 
-  // Wrap Title and body fields in a DIV.
-  // @TODO: Find a better way to do this.
-  $view['title_field'][0]['#prefix'] = '<div class="welcome-content-wrapper">';
-  $view['field_cbbody']['#suffix'] = '</div>';
+  // If there's no slider slides specified, use the default (old) rendering.
+  if (empty($entity->field_cbslides)) {
+    // Wrap Title and body fields in a DIV.
+    // @TODO: Find a better way to do this.
+    $view['title_field'][0]['#prefix'] = '<div class="welcome-content-wrapper">';
+    $view['field_cbbody']['#suffix'] = '</div>';
 
-  // Because of entity_translation, the provided $langcode is the original entity language.
-  $entity_langcode = entity_translation_get_existing_language($entity->entityType(), $entity);
+    // Because of entity_translation, the provided $langcode is the original entity language.
+    $entity_langcode = entity_translation_get_existing_language($entity->entityType(), $entity);
 
-  // Load the metadata wrapper.
-  $wrapper = entity_metadata_wrapper($entity->entityType(), $entity);
-  $wrapper->language($entity_langcode);
+    // Load the metadata wrapper.
+    $wrapper = entity_metadata_wrapper($entity->entityType(), $entity);
+    $wrapper->language($entity_langcode);
 
-  // Get the link.
-  $link = $wrapper->field_cblinks->value();
-  if (!empty($link['url'])) {
-    $view['field_cbimage'][0]['#path']['path'] = $link['url'];
-    $view['field_cbimage'][0]['#path']['options']['attributes'] = $link['attributes'];
+    // Get the link.
+    $link = $wrapper->field_cblinks->value();
+    if (!empty($link['url'])) {
+      $view['field_cbimage'][0]['#path']['path'] = $link['url'];
+      $view['field_cbimage'][0]['#path']['options']['attributes'] = $link['attributes'];
 
-    $svgicon = helpertheme_get_svg_icons('add', array('width' => '3em', 'height' => '3em')) . ' ';
-    $link_title = $svgicon . '<span class="text">' . t('read more') . '</span>';
+      $svgicon = helpertheme_get_svg_icons('add', array('width' => '3em', 'height' => '3em')) . ' ';
+      $link_title = $svgicon . '<span class="text">' . t('read more') . '</span>';
 
-    $view['view_link'] = array(
-      '#theme' => 'link',
-      '#path' => $link['url'],
-      '#text' => $link_title,
-      '#options' => array(
-        'html' => TRUE,
-        'attributes' => array(
-          'class' => array('more-link'),
-          'title' => t('read more'),
-        ) + $link['attributes'],
-      ),
-      '#weight' => 50,
-    );
+      $view['view_link'] = array(
+        '#theme' => 'link',
+        '#path' => $link['url'],
+        '#text' => $link_title,
+        '#options' => array(
+          'html' => TRUE,
+          'attributes' => array(
+              'class' => array('more-link'),
+              'title' => t('read more'),
+            ) + $link['attributes'],
+        ),
+        '#weight' => 50,
+      );
+    }
   }
-
+  else {
+    // If the slider is used, just show this field (as owl carousel) and hide the rest.
+    foreach ($children_keys as $child) {
+      $view[$child]['#access'] = FALSE;
+    }
+    $view['field_cbslides']['#access'] = TRUE;
+  }
   return $view;
 }
 

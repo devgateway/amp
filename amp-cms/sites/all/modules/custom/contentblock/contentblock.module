@@ -183,6 +183,7 @@ function contentblock_get_fixed_types($type = NULL) {
       'field_cbimage',
       'field_cblinks',
       'field_cbbody',
+      'field_cbslides',
     ),
   );
 

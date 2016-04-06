@@ -992,10 +992,10 @@ function entityqueue_widget_dragtable_element_validate($element, &$form_state) {
   // If the trigger was a remove button.
   $triggering_element = $form_state['triggering_element'];
   $offset = drupal_strlen($field_name) + 8;
-  if (drupal_substr($triggering_element['#name'], 0, $offset) == $field_name . '_remove_') {
-    $remove_key = drupal_substr($triggering_element['#name'], $offset);
-    unset($existing_values[$remove_key]);
-  }
+//  if (drupal_substr($triggering_element['#name'], 0, $offset) == $field_name . '_remove_') {
+//    $remove_key = drupal_substr($triggering_element['#name'], $offset);
+//    unset($existing_values[$remove_key]);
+//  }
   $values = array();
   $weights = array();
   foreach ($existing_values as $key => $row) {
@@ -1016,7 +1016,9 @@ function entityqueue_widget_dragtable_element_validate($element, &$form_state) {
   }
   form_set_value($element, $items, $form_state);
   // Rebuild form if ajax callback button was clicked.
-  if (current_path() == 'system/ajax') {
+  // We're also checking the belonging to the #parents just to make sure that we're applying
+  // this validation for right cases.
+  if (in_array($field_name, $triggering_element['#parents'], TRUE) && current_path() == 'system/ajax') {
     $form_state['rebuild'] = TRUE;
   }
 }

@@ -1,0 +1,30 @@
+
+/**
+ * @file
+ * owlcarousel.views.css
+ *
+ * @todo, Update selectors to be more specific to owl carousel only.
+ */
+
+/* Pager buttons */
+.view .pager {
+  margin-top: 10px;
+  text-align: center;
+}
+.view .pager li {
+  list-style: none;
+}
+.view .pager li a {
+  background: none repeat scroll 0 0 #869791;
+  border-radius: 30px;
+  color: #FFFFFF;
+  display: inline-block;
+  font-size: 12px;
+  margin: 5px;
+  opacity: 0.5;
+  padding: 3px 10px;
+  cursor: pointer;
+}
+
+/* Pager pagination 
+ @todo */

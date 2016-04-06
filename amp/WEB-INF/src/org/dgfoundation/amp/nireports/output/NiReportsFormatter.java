@@ -70,19 +70,30 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 	
 	/** build generated headers and compute ReportOutputColumn's */
 	protected void buildHeaders() {
+		boolean needToGenerateDummyColumn = spec.isSummaryReport() && (spec.getHierarchies() == null || spec.getHierarchies().isEmpty());
 		for (int i = 1; i < runResult.headers.rasterizedHeaders.size(); i++) {
 			SortedMap<Integer, Column> niHeaderRow = runResult.headers.rasterizedHeaders.get(i);
 			List<HeaderCell> ampHeaderRow = new ArrayList<HeaderCell>();
+			
+			if (needToGenerateDummyColumn && i == 1) {
+				ReportOutputColumn hdrCol = new ReportOutputColumn("-", null, "-", null, null, null);
+				rootHeaders.add(hdrCol);
+				ampHeaderRow.add(new HeaderCell(1, runResult.headers.rasterizedHeaders.size() - 1, runResult.headers.rasterizedHeaders.size() - 1, 0, 1, hdrCol));
+			}
+			
 			for (Entry<Integer, Column> entry : niHeaderRow.entrySet()) {
 				Column niCol = entry.getValue();
 				ReportOutputColumn roc = niColumnToROC.computeIfAbsent(niCol, this::buildReportOutputColumn);
-				ampHeaderRow.add(new HeaderCell(niCol.getReportHeaderCell(), roc));
+				ampHeaderRow.add(new HeaderCell(niCol.getReportHeaderCell(), roc, i == 1 && needToGenerateDummyColumn ? 1 : 0));
 				if (i == 1)
 					rootHeaders.add(roc);
 			}
 			generatedHeaders.add(ampHeaderRow);
 		}
-		leafHeaders = AmpCollections.relist(leafColumns, niColumn -> niColumnToROC.get(niColumn));
+		List<ReportOutputColumn> remappedLeaves = AmpCollections.relist(leafColumns, niColumn -> niColumnToROC.get(niColumn)); 
+		leafHeaders = needToGenerateDummyColumn ? 
+			new ArrayList<ReportOutputColumn>() {{add(rootHeaders.get(0)); addAll(remappedLeaves);}} : 
+			remappedLeaves;
 	}
 	
 	/**

@@ -320,7 +320,7 @@ function buildTotalsRow(page) {
 			var auxTd = "";
 			var reportTotals = "Report Totals";
 			var cell = page.pageArea.contents[this.headerMatrix[this.lastHeaderRow][j].hierarchicalName];
-			if (cell === null) {
+			if ((cell === null) || (typeof(cell) == 'undefined')) {
 				cell = {value: null, displayedValue: ""};
 			}
 			if (isFirstColumn) {

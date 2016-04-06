@@ -21,17 +21,16 @@ public class HeaderCell extends ReportHeadingCell {
 	
 	//public final String description;
 	
-	public HeaderCell(int startRow, int totalRowSpan, int rowSpan,
-			int startColumn, int colSpan, ReportOutputColumn roc) {
+	public HeaderCell(int startRow, int totalRowSpan, int rowSpan, int startColumn, int colSpan, ReportOutputColumn roc) {
 		super(startRow, totalRowSpan, rowSpan, startColumn, colSpan, roc.columnName);
 		this.originalName = roc.originalColumnName;
 		this.fullOriginalName = roc.getHierarchicalName();
 		//this.description  = roc.description;
 	}
 	
-	public HeaderCell(ReportHeadingCell niHeaderCell, ReportOutputColumn roc) {
+	public HeaderCell(ReportHeadingCell niHeaderCell, ReportOutputColumn roc, int colStartDelta) {
 		this(niHeaderCell.getStartRow(), niHeaderCell.getTotalRowSpan(), niHeaderCell.getRowSpan(), 
-				niHeaderCell.getStartColumn(), niHeaderCell.getColSpan(), roc);
+				niHeaderCell.getStartColumn() + colStartDelta, niHeaderCell.getColSpan(), roc);
 	}
 
 }

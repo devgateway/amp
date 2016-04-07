@@ -532,8 +532,8 @@ function extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchies
 		for (var i = 0; i < this.headerMatrix[this.lastHeaderRow].length; i++) {
 			var dataValue = node.contents[this.headerMatrix[this.lastHeaderRow][i].hierarchicalName];
 			// Save isTotal flag.
-			if (dataValue === null || dataValue === undefined) {
-				dataValue = {displayedValue : ""};
+			if (dataValue === null || dataValue === undefined) {				
+				dataValue = this.headerMatrix[this.lastHeaderRow][i].emptyCell;
 			}
 			if (Settings.NIREPORT && dataValue.displayedValue === "" && i < level) {
 				dataValue.displayedValue = hierarchiesData[i].displayedValue;

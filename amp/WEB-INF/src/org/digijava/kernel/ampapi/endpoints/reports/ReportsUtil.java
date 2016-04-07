@@ -223,6 +223,9 @@ public class ReportsUtil {
 	}
 	
 	private static CachedReportData getCachedReportData(Long reportId, JsonBean formParams) {
+		// the caching mechanism should be or deleted at all or rewrote. 
+		// During the pagination, sorting and exports the regenerate = true always, because the 'regenerate' param is not set to false
+
 		boolean resort = formParams.get(EPConstants.SORTING) != null;
 		boolean regenerate = mustRegenerate(reportId, formParams) || resort;
 		CachedReportData cachedReportData = null;

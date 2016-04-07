@@ -214,7 +214,8 @@ public class SaikuReportHtmlRenderer {
 		report.leafHeaders.stream().filter(roc -> !isHiddenColumn(roc.originalColumnName)).forEach(roc -> {
 			tableData.append("<td class='measure'>");
 			if (intWrapper.value == 0 && report.spec.getColumns().size() > 0) {
-				tableData.append("<b>" + TranslatorWorker.translateText("Report Totals") + "</b>");
+				tableData.append("<b>" + TranslatorWorker.translateText("Report Totals") + "");
+				tableData.append("(" + report.reportContents.getNrEntities() + ")</b>");
 				intWrapper.inc();
 			} else {
 				tableData.append(getCellValue(reportContents, roc));

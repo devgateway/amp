@@ -276,7 +276,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 		if (i == 0 && report.spec.getColumns().size() > 0) {
 			cell = row.createCell(i, Cell.CELL_TYPE_STRING);
 			String value = TranslatorWorker.translateText("Report Totals");
-			cell.setCellValue(value);
+			cell.setCellValue(value + " (" + report.reportContents.getNrEntities() + ")");
 		} else {
 			return createCell(sheet, row, i, rc);
 		}

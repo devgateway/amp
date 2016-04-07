@@ -43,11 +43,60 @@ function ampet_slide_form_contentblock_edit_fixed_form_alter(&$form, &$form_stat
  *
  * We check if that user has at least 2 slides.
  */
-function ampet_slide_form_contentblock_slide_count_validate($form, $form_state) {
+function ampet_slide_form_contentblock_slide_count_validate($form, &$form_state) {
   if ($form_state['values']['enable_slider'] && in_array('_contentblock_entity_form_submit', $form_state['submit_handlers'], TRUE)) {
     $ief = reset($form_state['inline_entity_form']);
     if (!empty($ief['entities']) && count($ief['entities']) < 2) {
       form_set_error('field_cbslides', t('Make sure you are using more than 1 slide, otherwise using a slider just doesn\'t make sense.'));
+    }
+  }
+  elseif ($form_state['values']['enable_slider'] == FALSE && in_array('_contentblock_entity_form_submit', $form_state['submit_handlers'], TRUE)) {
+    $ief_key = key($form_state['inline_entity_form']);
+    $form_state['inline_entity_form'][$ief_key]['entities'] = array();
+    $form_state['values']['field_cbslides'][LANGUAGE_NONE]['entities'] = array();
+  }
+}
+
+/**
+ * Implements hook_node_validate().
+ */
+function ampet_slide_node_validate($node, $form, &$form_state) {
+  if ($node->type == 'slide') {
+    $langcode = isset($form_state['entity_translation']['form_langcode']) ? $form_state['entity_translation']['form_langcode'] : LANGUAGE_NONE;
+    $values = $form_state['values'];
+    if (!empty($values['body'][$langcode][0]['value'])) {
+      $max_char_count = 320;
+      $body_char_count = _contentblock_cbreference_count_markup($values['body'][$langcode][0]['value']);
+      if ($body_char_count > $max_char_count) {
+        form_set_error('body', t('Field Description should not have more than %max characters (HTML markup does not count), %count given.', array('%max' => $max_char_count, '%count' => $body_char_count)));
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function ampet_slide_inline_entity_form_entity_form_alter(&$form, &$form_state) {
+  $entity = $form['#entity'];
+  if ($entity->type == 'slide') {
+    $form['#element_validate'][] = 'ampet_slide_ief_slide_validate';
+  }
+}
+
+/**
+ * An additional form validation.
+ */
+function ampet_slide_ief_slide_validate(&$form, &$form_state) {
+  $entity = $form['#entity'];
+  $langcode = isset($entity->language) ? $entity->language : LANGUAGE_NONE;
+  $values = drupal_array_get_nested_value($form_state['values'], $form['#array_parents']);
+  if (!empty($values['body'][$langcode][0]['value'])) {
+    $max_char_count = 320;
+    $body_char_count = _contentblock_cbreference_count_markup($values['body'][$langcode][0]['value']);
+    if ($body_char_count > $max_char_count) {
+      $keys_path = implode('][', $form['#array_parents']);
+      form_set_error($keys_path . '][body', t('Field Description should not have more than %max characters (HTML markup does not count), %count given.', array('%max' => $max_char_count, '%count' => $body_char_count)));
     }
   }
 }

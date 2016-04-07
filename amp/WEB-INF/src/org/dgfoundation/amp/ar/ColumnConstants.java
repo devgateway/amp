@@ -109,7 +109,6 @@ public class ColumnConstants {
 	public static final String FUNDING_ORGANIZATION_ID = "Funding Organization Id";
 	public static final String FUNDING_START_DATE = "Funding start date";
 	public static final String FUNDING_STATUS = "Funding Status";
-	public static final String FUNDING_YEAR = "Funding Year";
 	public static final String FY = "FY";
 	public static final String GOVERNMENT_AGREEMENT_NUMBER = "Government Agreement Number";
 	public static final String GOVERNMENT_APPROVAL_PROCEDURES = "Government Approval Procedures";

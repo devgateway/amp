@@ -50,6 +50,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 
 	protected final ExpiringCacher<ContextKey<Boolean>, FundingFetcherContext> cacher;
 	protected final ActivityInvalidationDetector invalidationDetector;
+	protected final Object CACHE_OBJ = new Object();
 	
 	public final static int CACHE_TTL_SECONDS = 10 * 60;
 	
@@ -98,15 +99,23 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	}
 
 	@Override
-	public synchronized List<CategAmountCell> fetch(NiReportsEngine engine) {
+	public List<CategAmountCell> fetch(NiReportsEngine engine) {
 		boolean enableDiffing = true;
 		AmpReportsScratchpad scratchpad = AmpReportsScratchpad.get(engine);
 		AmpReportsSchema schema = (AmpReportsSchema) engine.schema;
 		AmpCurrency usedCurrency = scratchpad.getUsedCurrency();
 		if (enableDiffing) {
-			FundingFetcherContext cache = cacher.buildOrGetValue(new ContextKey<>(engine, true));
-			Set<Long> deltas = scratchpad.differentiallyImportCells(engine.timer, mainColumn, cache.cache, ids -> fetchSkeleton(engine, ids, cache));
-			return cache.cache.getCells(engine.getMainIds()).stream().map(cacp -> cacp.materialize(usedCurrency, engine.calendar, schema.currencyConvertor, scratchpad.getPrecisionSetting())).collect(toList());
+			long start = System.currentTimeMillis();
+			List<CategAmountCellProto> protos;
+			synchronized(CACHE_OBJ) {
+				FundingFetcherContext cache = cacher.buildOrGetValue(new ContextKey<>(engine, true));
+				Set<Long> deltas = scratchpad.differentiallyImportCells(engine.timer, mainColumn, cache.cache, ids -> fetchSkeleton(engine, ids, cache));
+				protos = cache.cache.getCells(engine.getMainIds());
+				long delta = System.currentTimeMillis() - start;
+				engine.timer.putMetaInNode("hot_time", delta);
+			}
+			List<CategAmountCell> res = protos.stream().map(cacp -> cacp.materialize(usedCurrency, engine.calendar, schema.currencyConvertor, scratchpad.getPrecisionSetting())).collect(toList());
+			return res;
 		}
 		else {
 			return fetchSkeleton(engine, engine.getMainIds(), resetCache(engine)).stream().map(cacp -> cacp.materialize(usedCurrency, engine.calendar, schema.currencyConvertor, scratchpad.getPrecisionSetting())).collect(toList());

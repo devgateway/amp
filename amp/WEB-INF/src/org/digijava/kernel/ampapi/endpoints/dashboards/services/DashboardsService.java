@@ -30,6 +30,7 @@ import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.newreports.TextCell;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
@@ -457,7 +458,7 @@ public class DashboardsService {
 				}
 					
 				boolean isPlannedColumn = outputColumn.originalColumnName.equals(MoConstants.PLANNED_DISBURSEMENTS);
-				boolean isTotalColumn = outputColumn.parentColumn != null && outputColumn.parentColumn.originalColumnName.equals("Total Measures");
+				boolean isTotalColumn = outputColumn.parentColumn != null && outputColumn.parentColumn.originalColumnName.equals(NiReportsEngine.TOTALS_COLUMN_NAME);
 				String destination = isPlannedColumn ? "planned disbursements" : "actual disbursements";
 				
 				String yearValue = isTotalColumn ? "totals" : outputColumn.parentColumn.columnName;
@@ -503,16 +504,16 @@ public class DashboardsService {
 		JsonBean retlist = new JsonBean();
 		
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("fundingtype", ArConstants.DONOR_TYPE);
-		spec.addColumn(new ReportColumn(ColumnConstants.FUNDING_YEAR));
+		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
 		spec.addColumn(new ReportColumn(MoConstants.TYPE_OF_ASSISTANCE));
 		spec.getHierarchies().addAll(spec.getColumns());
+		spec.setSummaryReport(true);
 		
 		// also configures funding type
 		SettingsUtils.applyExtendedSettings(spec, filter);
 		
 		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
-		
-		
+				
 		MondrianReportFilters filterRules = null;
  		if (filter != null) {
  			LinkedHashMap<String, Object> columnFilters = (LinkedHashMap<String, Object>) filter.get("columnFilters");
@@ -521,7 +522,6 @@ public class DashboardsService {
  			if (filterRules != null) {
  				spec.setFilters(filterRules);
  			}
- 		
  		}
  		
  		// AMP-18740: For dashboards we need to use the default number formatting and leave the rest of the settings
@@ -531,54 +531,73 @@ public class DashboardsService {
  		GeneratedReport report = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
 		
 		//Get total
-		if (report.reportContents != null && report.reportContents.getContents() != null && report.reportContents.getContents().size() > 0) {
-			// NIREPORTS: exception thrown here for now because ColumnConstants.FUNDING_YEAR is not reportable yet in NiReports
-			ReportCell totals = (ReportCell) report.reportContents.getContents().get(report.leafHeaders.get(2));
-			retlist.set("total", totals.value);
-			retlist.set("sumarizedTotal", calculateSumarizedTotals(Double.valueOf(totals.value.toString()), spec));
-		} else {
-			retlist.set("total", 0);
-			retlist.set("sumarizedTotal", "");
-		}
+		AmountCell totals = (AmountCell) report.reportContents.getContents().get(report.leafHeaders.get(report.leafHeaders.size() - 1));
+		retlist.set("total", totals.value);
+		retlist.set("sumarizedTotal", calculateSumarizedTotals(totals.extractValue(), spec));
 		
 		String currcode = null;
 		currcode = spec.getSettings().getCurrencyCode();
 		retlist.set("currency", currcode);
 		
-		List<JsonBean> values = new ArrayList<JsonBean>();
-		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
-			List<JsonBean> subvalues = new ArrayList<JsonBean>();
-			ReportAreaImpl reportArea = (ReportAreaImpl) iterator.next();
-			JsonBean year = new JsonBean();
-			for (int i = 0; i < reportArea.getChildren().size(); i++) {
-				Map<ReportOutputColumn, ReportCell> row = reportArea.getChildren().get(i).getContents();
-				JsonBean amountObj = new JsonBean();
-				for (Entry<ReportOutputColumn, ReportCell> entry : row.entrySet()) {
-					ReportOutputColumn key = entry.getKey();
-					ReportCell value = entry.getValue();
-					switch (key.originalColumnName) {
-					case ColumnConstants.FUNDING_YEAR:
-						if (!"".equals(value.value)) {
-							year.set("Year", value.value);
-						}
-						break;
-					case ColumnConstants.TYPE_OF_ASSISTANCE:
-						amountObj.set("type", value.displayedValue);
-						break;
-					default:
-						amountObj.set("amount", value.value);
-						amountObj.set("formattedAmount", value.displayedValue);
-						break;
-					}
-					if (amountObj.getSize()==3){
-						subvalues.add(amountObj);
-					}
-				}
+		Map<String, List<JsonBean>> values = new TreeMap<>(); // Map<year, List<type, amount, formattedAmount>>
+		ReportOutputColumn toaCol = report.leafHeaders.get(0);
+		for(ReportArea toaArea:report.reportContents.getChildren()) {
+			String toa = toaArea.getContents().get(toaCol).displayedValue;
+			for(int i = 1; i < report.leafHeaders.size() - 1; i++) {
+				JsonBean toaBean = new JsonBean();
+				toaBean.set("type", toa);
+				ReportOutputColumn hdr = report.leafHeaders.get(i);
+				//long year = Integer.valueOf(hdr.parentColumn.originalColumnName);
+				String year = hdr.parentColumn.columnName;
+				AmountCell cell = (AmountCell) toaArea.getContents().get(hdr);
+				toaBean.set("amount", cell.extractValue());
+				toaBean.set("formattedAmount", cell.displayedValue);
+				if (!values.containsKey(year))
+					values.put(year, new ArrayList<>());
+				values.get(year).add(toaBean);
+				//values.computeIfAbsent(year, yr -> new ArrayList<>()).add(toaBean);
 			}
-			year.set("values", subvalues);
-			values.add(year);
 		}
-		retlist.set("values", values);
+		List<JsonBean> outValues = new ArrayList<>();
+		for(String year:values.keySet()) {
+			JsonBean yearBean = new JsonBean();
+			yearBean.set("Year", year);
+			yearBean.set("values", values.get(year));
+			outValues.add(yearBean);
+		}
+//		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
+//			List<JsonBean> subvalues = new ArrayList<JsonBean>();
+//			ReportAreaImpl reportArea = (ReportAreaImpl) iterator.next();
+//			JsonBean year = new JsonBean();
+//			for (int i = 0; i < reportArea.getChildren().size(); i++) {
+//				Map<ReportOutputColumn, ReportCell> row = reportArea.getChildren().get(i).getContents();
+//				JsonBean amountObj = new JsonBean();
+//				for (Entry<ReportOutputColumn, ReportCell> entry : row.entrySet()) {
+//					ReportOutputColumn key = entry.getKey();
+//					ReportCell value = entry.getValue();
+//					switch (key.originalColumnName) {
+//					case ColumnConstants.FUNDING_YEAR:
+//						if (!"".equals(value.value)) {
+//							year.set("Year", value.value);
+//						}
+//						break;
+//					case ColumnConstants.TYPE_OF_ASSISTANCE:
+//						amountObj.set("type", value.displayedValue);
+//						break;
+//					default:
+//						amountObj.set("amount", value.value);
+//						amountObj.set("formattedAmount", value.displayedValue);
+//						break;
+//					}
+//					if (amountObj.getSize()==3){
+//						subvalues.add(amountObj);
+//					}
+//				}
+//			}
+//			year.set("values", subvalues);
+//			values.add(year);
+//		}
+		retlist.set("values", outValues);
 		
 		retlist.set("name", DashboardConstants.FUNDING_TYPE);
 		retlist.set("title", TranslatorWorker.translateText(DashboardConstants.FUNDING_TYPE));

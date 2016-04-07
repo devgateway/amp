@@ -313,9 +313,6 @@ public class MondrianMapping {
 					ColumnConstants.AGREEMENT_EFFECTIVE_DATE, ColumnConstants.AGREEMENT_SIGNATURE_DATE, ColumnConstants.AGREEMENT_TITLE_CODE, ColumnConstants.AGREEMENT_PARLIAMENTARY_APPROVAL_DATE))
 				addColumnDefinition(colName, new MDXLevel(MoConstants.AGREEMENT, colName, colName));
 			
-			
-			addColumnDefinition(ColumnConstants.FUNDING_YEAR, new MDXLevel(MoConstants.DATES, MoConstants.H_YEAR, MoConstants.ATTR_YEAR));
-			
 			addColumnDefinition(ColumnConstants.PLEDGES_DETAIL_START_DATE, new MDXLevel(MoConstants.PLEDGES_DETAIL_DATES, MoConstants.PLEDGES_DETAIL_START_DATE, MoConstants.PLEDGES_DETAIL_START_DATE));
 			addColumnDefinition(ColumnConstants.PLEDGES_DETAIL_END_DATE, new MDXLevel(MoConstants.PLEDGES_DETAIL_DATES, MoConstants.PLEDGES_DETAIL_END_DATE, MoConstants.PLEDGES_DETAIL_END_DATE));
 			addColumnDefinition(ColumnConstants.PLEDGES_DETAIL_DATE_RANGE, new MDXLevel(MoConstants.PLEDGES_DETAIL_DATES, MoConstants.PLEDGES_DETAIL_DATE_RANGE, MoConstants.PLEDGES_DETAIL_DATE_RANGE));

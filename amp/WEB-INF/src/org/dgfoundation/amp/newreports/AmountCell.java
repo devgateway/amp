@@ -18,6 +18,12 @@ public final class AmountCell extends ReportCell {
 		super(value, format(formatter, value));
 	}
 
+	public double extractValue() {
+		if (value instanceof Double)
+			return ((Double) value);
+		return ((BigDecimal) value).doubleValue();
+	}
+	
 	protected static String format(DecimalFormat formatter, Double value) {
 		if (formatter == null || value == null) 
 			return value == null ? "" : String.valueOf(value);

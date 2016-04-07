@@ -30,10 +30,12 @@ public class NiReportSorter implements NiReportDataVisitor<NiReportData> {
 
 	final LinkedHashMap<String, Boolean> hiersSorting;
 	final LinkedHashMap<CellColumn, Boolean> colsSorting;
+	final ReportDataComparator reportDataComparator;
 	
 	public NiReportSorter(LinkedHashMap<String, Boolean> hiersSorting, LinkedHashMap<CellColumn, Boolean> colsSorting) {
 		this.hiersSorting = hiersSorting;
 		this.colsSorting = colsSorting;
+		this.reportDataComparator = new ReportDataComparator(colsSorting);
 		//System.err.format("sorting report by hiersSorting: %s, colsSorting: %s\n", hiersSorting, AmpCollections.remap(colsSorting, CellColumn::getHierName, z -> z, true));
 	}
 	
@@ -66,11 +68,12 @@ public class NiReportSorter implements NiReportDataVisitor<NiReportData> {
 
 	@Override
 	public NiReportData visit(NiGroupReportData grd) {
+		Boolean sortOrder = null;
 		if (grd.splitterColumn != null && hiersSorting.containsKey(grd.splitterColumn)) {
-			Boolean sortOrder = hiersSorting.get(grd.splitterColumn);
-			if (sortOrder != null)
-				grd.reorder(sortOrder);
+			sortOrder = hiersSorting.get(grd.splitterColumn);
 		}
+		if (sortOrder != null || (colsSorting != null && !colsSorting.isEmpty()))
+			grd.reorder(reportDataComparator, sortOrder);
 		for(NiReportData child:grd.subreports)
 			child.accept(this);
 		return grd;

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.dgfoundation.amp.nireports.output.sorting.ReportDataComparator;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.GroupReportData;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
@@ -52,9 +53,16 @@ public class NiGroupReportData extends NiReportData {
 		return sum;
 	}
 
-	public void reorder(boolean ascending) {
-		Comparator<NiReportData> comparator = Comparator.nullsFirst(Comparator.comparing(NiReportData::getSplitter));
-		rawSubreports.sort(ascending ? comparator : comparator.reversed());
+	public void reorder(ReportDataComparator rdc, Boolean ascending) {
+		Comparator<NiReportData> comp = ascending == null ? 
+			rdc : 
+			rdc.thenComparing(maybeAscending(Comparator.nullsFirst(Comparator.comparing(NiReportData::getSplitter)), ascending));
+		/*Comparator<NiReportData> comparator = Comparator.nullsFirst(Comparator.comparing(NiReportData::getSplitter)); */
+		rawSubreports.sort(comp);
+	}
+	
+	public final static<Z> Comparator<Z> maybeAscending(Comparator<Z> in, boolean ascending) {
+		return ascending? in : in.reversed();
 	}
 	
 	@Override

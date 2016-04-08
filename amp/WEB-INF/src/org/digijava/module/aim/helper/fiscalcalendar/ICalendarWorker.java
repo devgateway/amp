@@ -54,11 +54,21 @@ public interface ICalendarWorker  {
 	
 	public Integer getYearDiff(ICalendarWorker worker) throws Exception;
 	
-	public String getFiscalYear(boolean translate) throws Exception;
+	public String getFiscalYear(String prefix) throws Exception;
    
 	public ComparableMonth getFiscalMonth() throws Exception;
 	
-	public default String getFiscalPrefix(boolean translate) {
-		return translate ? TranslatorWorker.translateText("Fiscal Year") : "Fiscal Year";
+	public default String getFiscalYear() throws Exception {
+		return getFiscalYear(null);
+	}
+	
+	public default String getFiscalPrefix(String prefix) {
+		if (prefix == null)
+			return getDefaultFiscalPrefix();
+		return prefix;
+	}
+	
+	public default String getDefaultFiscalPrefix() {
+		return "Fiscal Year";
 	}
 }

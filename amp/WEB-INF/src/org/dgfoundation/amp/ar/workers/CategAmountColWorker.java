@@ -356,7 +356,7 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 				quarter = "Q" + worker.getQuarter();
 				year = worker.getYear();
 				
-				fiscalYear=worker.getFiscalYear(false);
+				fiscalYear=worker.getFiscalYear();
 				fiscalMonth=worker.getFiscalMonth();
 				
 				// very very very ugly workaround for AMP-19405
@@ -367,7 +367,7 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 									"Fiscal Year " + (year) : 
 									("Fiscal Year " + (year) + " - " + (year + 1))) :
 							Integer.toString(year);
-					String check = worker.getFiscalYear(false);
+					String check = worker.getFiscalYear();
 //					fiscalYear = new GregorianBasedWorker(td).getFiscalYear(); 
 //					String check = DateConversion.convertDateToFiscalYearString(td);
 					//System.err.format("FY vs Check: %s vs %s\n", fiscalYear, check);

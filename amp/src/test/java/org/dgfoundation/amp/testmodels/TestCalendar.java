@@ -13,10 +13,10 @@ import org.dgfoundation.amp.testmodels.nicolumns.GregorianTestDateGenerator;
  * @author acartaleanu
  *
  */
-public class TestCalendar implements CalendarConverter{
+public class TestCalendar implements CalendarConverter {
 
 	@Override
-	public TranslatedDate translate(Date date) {
+	public TranslatedDate translate(Date date, String prefix) {
 		Date input = new Date();
 		LocalDate ld= input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		return new GregorianTestDateGenerator(ld.getYear(), ld.getMonth()).toTranslatedDate();
@@ -35,6 +35,11 @@ public class TestCalendar implements CalendarConverter{
 	@Override
 	public Long getIdentifier() {
 		return 1l;
+	}
+
+	@Override
+	public String getDefaultFiscalYearPrefix() {
+		return "FY";
 	}
 
 }

@@ -30,8 +30,10 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.SchemaSpecificScratchpad;
 import org.dgfoundation.amp.nireports.amp.PercentagesCorrector.Snapshot;
 import org.dgfoundation.amp.nireports.amp.diff.DifferentialCache;
+import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 
@@ -122,6 +124,12 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	@Override
 	public NiPrecisionSetting getPrecisionSetting() {
 		return precisionSetting;
+	}
+
+	@Override
+	public CachingCalendarConverter buildCalendarConverter() {
+		CalendarConverter underlyingConverter = buildUnderlyingCalendarConverter(engine.spec);
+		return new CachingCalendarConverter(underlyingConverter, TranslatorWorker.translateText(underlyingConverter.getDefaultFiscalYearPrefix()));
 	}
 
 	@Override

@@ -380,7 +380,7 @@ public class MondrianUtils {
 		cal.set(Calendar.YEAR, year);
 		ICalendarWorker worker = calendar.getworker();
 		worker.setTime(cal.getTime());
-		return worker.getFiscalYear(false);
+		return worker.getFiscalYear();
 	}
 	
 	public static String getFiscalQuarter(Integer quarter, AmpFiscalCalendar calendar) throws Exception {

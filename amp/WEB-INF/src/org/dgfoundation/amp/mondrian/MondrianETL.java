@@ -644,7 +644,7 @@ private EtlResult execute() throws Exception {
 			List<Object> row = new ArrayList<>();
 			row.add(key);
 			row.add(worker.getYear());
-			row.add(worker.getFiscalYear(false));
+			row.add(worker.getFiscalYear());
 			row.add(worker.getFiscalMonth().getMonthId());
 			row.add(worker.getFiscalMonth().toString());
 			row.add(worker.getQuarter());

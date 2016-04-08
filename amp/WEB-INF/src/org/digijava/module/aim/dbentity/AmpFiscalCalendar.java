@@ -173,14 +173,19 @@ public class AmpFiscalCalendar implements Serializable, Identifiable, OrgProfile
 	}
 
 	@Override
-	public TranslatedDate translate(Date date) {
+	public TranslatedDate translate(Date date, String prefix) {
 		ICalendarWorker worker = this.getworker();
 		worker.setTime(date);
 		try {
-			return new TranslatedDate(worker.getYear(), worker.getFiscalYear(true), worker.getQuarter(), 
+			return new TranslatedDate(worker.getYear(), worker.getFiscalYear(prefix), worker.getQuarter(), 
 					worker.getMonth().getMonthId(), worker.getMonth().getMonthStr());
 		}
 		catch(Exception e) {throw AlgoUtils.translateException(e);}
+	}
+
+	@Override
+	public String getDefaultFiscalYearPrefix() {
+		return this.getworker().getDefaultFiscalPrefix();
 	}
 
 }

@@ -5,8 +5,9 @@ import java.util.Date;
 import org.dgfoundation.amp.nireports.TranslatedDate;
 
 public interface CalendarConverter {
-	public TranslatedDate translate(Date date);
+	public TranslatedDate translate(Date date, String prefix);
 	public boolean getIsFiscal();
 	public String getName();
 	public Long getIdentifier();
+	public String getDefaultFiscalYearPrefix();
 }

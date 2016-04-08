@@ -15,23 +15,34 @@ import org.dgfoundation.amp.nireports.TranslatedDate;
 public class CachingCalendarConverter implements CalendarConverter {
 
 	protected final CalendarConverter inner;
+	protected final String fiscalYearPrefix;
 	protected ConcurrentHashMap<Integer, TranslatedDate> cache = new ConcurrentHashMap<>();
 	protected int calls;
 
 	protected int nonCachedCalls;
 	
-	public CachingCalendarConverter(CalendarConverter inner) {
+	public CachingCalendarConverter(CalendarConverter inner, String fiscalYearPrefix) {
 		this.inner = inner;
+		this.fiscalYearPrefix = fiscalYearPrefix;
+	}
+	
+	/**
+	 * uses the cached translation
+	 * @param date
+	 * @return
+	 */
+	public TranslatedDate translate(Date date) {
+		return translate(date, fiscalYearPrefix);
 	}
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public TranslatedDate translate(Date date) {
+	public TranslatedDate translate(Date date, String prefix) {
 		calls ++;
 		int dayNumber = date.getYear() * 10000 + date.getMonth() * 100 + date.getDate(); // we like it safe: probably no month will ever have >100 days and no year will ever have > 100 months
 		return cache.computeIfAbsent(dayNumber, z -> {
 			nonCachedCalls ++;
-			return inner.translate(date);
+			return inner.translate(date, prefix);
 		});
 	}
 
@@ -61,6 +72,11 @@ public class CachingCalendarConverter implements CalendarConverter {
 	@Override
 	public String toString() {
 		return String.format("cached %s (named %s)", inner.toString(), inner.getName());
+	}
+
+	@Override
+	public String getDefaultFiscalYearPrefix() {
+		return fiscalYearPrefix;
 	}
 
 }

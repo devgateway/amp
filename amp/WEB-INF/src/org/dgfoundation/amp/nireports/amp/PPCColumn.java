@@ -38,7 +38,6 @@ public class PPCColumn extends PsqlSourcedColumn<CategAmountCell> {
 		
 		AmpReportsSchema schema = (AmpReportsSchema) engine.schema;
 		AmpCurrency usedCurrency = scratchpad.getUsedCurrency();
-		CalendarConverter calendarConverter = engine.calendar;
 		VivificatingMap<String, AmpCurrency> currencies = new VivificatingMap<String, AmpCurrency>(new HashMap<>(), CurrencyUtil::getAmpcurrency);
 		
 		String query = buildQuery(engine);
@@ -57,7 +56,7 @@ public class PPCColumn extends PsqlSourcedColumn<CategAmountCell> {
 				
 				BigDecimal usedExchangeRate = BigDecimal.valueOf(schema.currencyConvertor.getExchangeRate(srcCurrency.getCurrencyCode(), usedCurrency.getCurrencyCode(), null, transactionDate));
 				MonetaryAmount amount = new MonetaryAmount(transactionAmount.multiply(usedExchangeRate), transactionAmount, srcCurrency, transactionDate, scratchpad.getPrecisionSetting());
-				CategAmountCell cell = new CategAmountCell(ampActivityId, amount, MetaInfoSet.empty(), Collections.emptyMap(), calendarConverter.translate(transactionMoment));
+				CategAmountCell cell = new CategAmountCell(ampActivityId, amount, MetaInfoSet.empty(), Collections.emptyMap(), engine.calendar.translate(transactionMoment));
 				cells.add(cell);
 			}
 		}

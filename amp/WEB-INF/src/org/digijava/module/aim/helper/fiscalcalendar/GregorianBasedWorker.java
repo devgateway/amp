@@ -145,12 +145,13 @@ public class GregorianBasedWorker implements ICalendarWorker {
 		}
 	}
 
-	public String getFiscalYear(boolean translate) throws Exception {
+	@Override
+	public String getFiscalYear(String prefix) throws Exception {
 		if (this.fiscalCalendar.getIsFiscal()) {
 			if (fiscalCalendar.getStartMonthNum()==1){
-				return getFiscalPrefix(translate) + " " + (this.getYear());
+				return getFiscalPrefix(prefix) + " " + (this.getYear());
 			} else {
-				return getFiscalPrefix(translate) + " " + (this.getYear()) + " - " + (this.getYear()+1);
+				return getFiscalPrefix(prefix) + " " + (this.getYear()) + " - " + (this.getYear()+1);
 			}
 		}
 		return this.getYear().toString();

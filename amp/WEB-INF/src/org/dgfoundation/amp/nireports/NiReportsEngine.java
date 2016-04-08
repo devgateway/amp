@@ -169,7 +169,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	public NiReportRunResult execute() {
 		try(SchemaSpecificScratchpad pad = schema.getScratchpadSupplier().apply(this)) {
 			this.schemaSpecificScratchpad = pad;
-			this.calendar = new CachingCalendarConverter(this.spec.getSettings() != null && this.spec.getSettings().getCalendar() != null ? this.spec.getSettings().getCalendar() : pad.getDefaultCalendar());
+			this.calendar = pad.buildCalendarConverter();
 			
 			this.timer = new InclusiveTimer("Report " + spec.getReportName());
 			timer.run("workspaceFilter", () -> this.mainIds = Collections.unmodifiableSet(this.filters.getActivityIds(this)));

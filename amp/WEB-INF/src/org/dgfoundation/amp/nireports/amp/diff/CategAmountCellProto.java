@@ -13,6 +13,7 @@ import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.MonetaryAmount;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
+import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -40,7 +41,7 @@ public class CategAmountCellProto extends Cell {
 		this.transactionDate = transactionMoment.toLocalDate();
 	}
 	
-	public CategAmountCell materialize(AmpCurrency usedCurrency, CalendarConverter calendarConverter, CurrencyConvertor currencyConvertor, NiPrecisionSetting precisionSetting) {
+	public CategAmountCell materialize(AmpCurrency usedCurrency, CachingCalendarConverter calendarConverter, CurrencyConvertor currencyConvertor, NiPrecisionSetting precisionSetting) {
 		BigDecimal usedExchangeRate = BigDecimal.valueOf(currencyConvertor.getExchangeRate(origCurrency.getCurrencyCode(), usedCurrency.getCurrencyCode(), fixed_exchange_rate == null ? null : fixed_exchange_rate.doubleValue(), transactionDate));
 		MonetaryAmount amount = new MonetaryAmount(origAmount.multiply(usedExchangeRate), origAmount, origCurrency, transactionDate, precisionSetting);
 		CategAmountCell cell = new CategAmountCell(activityId, amount, metaInfo, coordinates, calendarConverter.translate(transactionMoment));

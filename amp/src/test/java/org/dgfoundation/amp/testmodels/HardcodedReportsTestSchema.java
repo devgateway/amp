@@ -1,17 +1,12 @@
 package org.dgfoundation.amp.testmodels;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.newreports.IdsGeneratorSource;
-import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportExecutor;
-import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.AbstractReportsSchema;
 import org.dgfoundation.amp.nireports.CategAmountCell;
@@ -21,15 +16,12 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.PercentageTextCell;
 import org.dgfoundation.amp.nireports.SchemaSpecificScratchpad;
 import org.dgfoundation.amp.nireports.TextCell;
+import org.dgfoundation.amp.nireports.amp.AmpFiltersConverter;
 import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
-import org.dgfoundation.amp.nireports.amp.TestNiFilters;
 import org.dgfoundation.amp.nireports.schema.DateTokenBehaviour;
-import org.dgfoundation.amp.nireports.schema.DimensionSnapshot;
-import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.PercentageTokenBehaviour;
 import org.dgfoundation.amp.nireports.schema.TextualTokenBehaviour;
-import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.testmodels.dimensions.CategoriesTestDimension;
 import org.dgfoundation.amp.testmodels.dimensions.LocationsTestDimension;
@@ -180,10 +172,15 @@ public class HardcodedReportsTestSchema extends AbstractReportsSchema {
 	}	
 	
 	@Override
-	public Function<ReportFilters, NiFilters> getFiltersConverter() {
-		return (ReportFilters rf) -> new TestNiFilters(workspaceFilter.stream().map(z -> activityNames.get(z)).collect(Collectors.toSet()));	
+	public NiFilters convertFilters(NiReportsEngine engine) {
+		return new AmpFiltersConverter(engine).buildNiFilters(z -> getWorkspaceFilterIds());
+		//return (ReportFilters rf) -> new TestNiFilters();	
 	}
 
+	protected Set<Long> getWorkspaceFilterIds() {
+		return workspaceFilter.stream().map(z -> activityNames.get(z)).collect(Collectors.toSet());
+	}
+	
 	public static ReportExecutor getExecutor(boolean logToDb) {
 		ReportExecutor res = new NiReportsGenerator(getInstance(), logToDb, null);
 		return res;

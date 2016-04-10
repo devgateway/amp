@@ -24,12 +24,20 @@ public abstract class NiDimension {
 
 	public final String name;
 	public final int depth;
+	public final boolean continuum;
 	
 	public NiDimension(String name, int depth) {
 		//failIf(depth < 2, "a NiDimension must have a depth of at least 2!");
 		failIf(name == null, "a NiDimension must have a name");
 		this.name = name;
 		this.depth = depth;
+		this.continuum = false;
+	}
+	
+	public NiDimension(String name) {
+		this.name = name;
+		this.depth = 1;
+		this.continuum = true;
 	}
 	
 	/**

@@ -21,6 +21,7 @@ import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_8;
 
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -39,7 +40,7 @@ import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
 import org.dgfoundation.amp.currencyconvertor.CurrencyConvertor;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
-
+import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
@@ -584,10 +585,21 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	}
 
 	@Override
-	public Function<ReportFilters, NiFilters> getFiltersConverter() {
-		return (ReportFilters rf) -> new AmpNiFilters();
+	public NiFilters convertFilters(NiReportsEngine engine) {
+		return new AmpFiltersConverter(engine).buildNiFilters(this::getWorkspaceFilter);
 	}
 
+	public Set<Long> getWorkspaceFilter(NiReportsEngine engine) {
+		//Connection conn = AmpReportsScratchpad.get(engine).connection;
+		//res = Collections.unmodifiableSet(new HashSet<Long>(SQLUtils.fetchLongs(conn, "SELECT amp_activity_id FROM amp_activity")));
+		//res = Collections.unmodifiableSet(new HashSet<Long>(SQLUtils.fetchLongs(conn, "SELECT amp_activity_id FROM amp_activity where name in ('new activity with contracting', 'activity_with_disaster_response')")));
+		//res = new HashSet<>(Arrays.asList(70l, 78l));
+		ReportEnvironment environ = AmpReportsScratchpad.get(engine).environment;
+		Set<Long> res = Collections.unmodifiableSet(environ.workspaceFilter.getIds());
+		return res;
+	}
+
+		
 	@Override
 	public Function<NiReportsEngine, SchemaSpecificScratchpad> getScratchpadSupplier() {
 		return engine -> new AmpReportsScratchpad(engine);

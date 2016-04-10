@@ -22,9 +22,11 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.Graph;
-import org.dgfoundation.amp.algo.VivificatingMap;
 import org.dgfoundation.amp.algo.timing.InclusiveTimer;
+import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
+import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportWarning;
 import org.dgfoundation.amp.nireports.output.NiReportData;
@@ -53,12 +55,15 @@ import org.dgfoundation.amp.nireports.schema.DimensionSnapshot;
 import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
+import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportMeasure;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * The NiReports engine API-independent entrypoint. A single report should be run per class instance <br />
@@ -68,7 +73,7 @@ import org.dgfoundation.amp.nireports.schema.TimeRange;
  * @author Dolghier Constantin
  *
  */
-public class NiReportsEngine implements IdsAcceptorsBuilder {
+public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListener {
 	
 	public static final Logger logger = Logger.getLogger(NiReportsEngine.class);
 	public static final String ROOT_COLUMN_NAME = "RAW";
@@ -163,7 +168,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		this.schema = schema;
 		this.spec = reportSpec;
 		this.yearRangeSettingsPredicate = spec.getSettings() == null ? (z -> true) : spec.getSettings().buildYearSettingsPredicate();
-		this.filters = schema.getFiltersConverter().apply(reportSpec.getFilters());
+		this.filters = schema.convertFilters(this);
 	}
 	 
 	public NiReportRunResult execute() {
@@ -204,6 +209,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	 * overrideable by users
 	 */
 	protected void runReport() {
+		timer.run("filtersPreproc", this::preprocFilters);
 		timer.run("fetch", this::fetchData);
 		timer.run("init", this::createInitialReport);
 		timer.run("hierarchies", this::createHierarchies);
@@ -212,6 +218,17 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		timer.run("output", this::output);
 	}
 
+	protected void preprocFilters() {
+		if (spec.getFilters() == null || spec.getFilters().getFilterRules() == null)
+			return;
+	}
+		
+	protected void addRulesIfPresent(Map<NiDimensionUsage, List<IdsAcceptor>> acceptors, LevelColumn lc, boolean positive, Set<Long> ids) {
+		if (ids == null)
+			return;
+		acceptors.computeIfAbsent(lc.dimensionUsage, ignored -> new ArrayList<>()).add(buildAcceptor(lc.dimensionUsage, ids.stream().map(z -> new Coordinate(lc.level, z)).collect(toList())));
+	}
+	
 	protected boolean isAcceptableYear(int yr) {
 		return yearRangeSettingsPredicate.test((long) yr);
 	}
@@ -329,7 +346,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	 */
 	protected<K extends Cell> List<K> selectRelevant(List<K> in) {
 		timer.putMetaInNode("fetched_raw", in.size());
-		Set<Long> ids = this.filters.getActivityIds(this);
+		Set<Long> ids = this.mainIds;
 		if (ids == null) return in;
 		List<K> res = in.stream().filter(z -> ids.contains(z.activityId)).collect(Collectors.toList());
 		return res;
@@ -519,7 +536,8 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		return allRunMeasures;
 	}
 	
-	protected void addReportWarning(ReportWarning warning) {
+	@Override
+	public void addReportWarning(ReportWarning warning) {
 		reportWarnings.computeIfAbsent(warning.entityId, ignored -> new TreeSet<>()).add(warning);
 	}
 	

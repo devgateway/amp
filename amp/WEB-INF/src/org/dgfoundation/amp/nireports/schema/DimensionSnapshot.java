@@ -16,12 +16,10 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 /**
  * a snapshot of a {@link NiDimension} at a given moment
  * 
- * TODO: undefined-yet behaviour for "get acceptable ancestors for null"
- * TODO: is "null" an acceptable descendant of null?
  * @author Dolghier Constantin
  *
  */
-public class DimensionSnapshot {
+public final class DimensionSnapshot {
 	public final List<DimensionLevel> data;
 	public final int depth;
 	

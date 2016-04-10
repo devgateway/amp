@@ -18,6 +18,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.digijava.module.aim.util.Identifiable;
@@ -276,6 +277,22 @@ public class AmpCollections {
 		Set<K> res = new HashSet<>(init);
 		res.removeAll(minus);
 		res.addAll(plus);
+		return res;
+	}
+	
+	/**
+	 * returns a predicate which is true iff all of its inputs are true. If input is empty or null, returns a "true" predicate
+	 * @param in
+	 * @return
+	 */
+	public static<K> Predicate<K> mergePredicates(List<Predicate<K>> in) {
+		if (in == null || in.isEmpty())
+			return (z -> true);
+		
+		Predicate<K> res = in.get(0);
+		for(int i = 1; i < in.size(); i++)
+			res = res.and(in.get(i));
+		
 		return res;
 	}
 }

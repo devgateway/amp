@@ -45,16 +45,13 @@ public class NiReportModel {
 	}
 
 	public String compare(NiReportModel other) {
-		String h = compare_list("headers", this.headers, other.headers);
-		if (h != null) return h;
+		report_error(compare_list("headers", this.headers, other.headers));
 		
-		String w = compare_list("warnings", this.warnings, other.warnings);
-		if (w != null) return w;
+		report_error(compare_list("warnings", this.warnings, other.warnings));
 		
 		ReportAreaForTests corBody = (ReportAreaForTests) body;
 		ReportAreaForTests.deltaStack.clear();
-		String b = corBody.getDifferenceAgainst(other.body);
-		if (b != null) return b;
+		report_error(corBody.getDifferenceAgainst(other.body));
 		
 		return null;
 	}
@@ -65,10 +62,10 @@ public class NiReportModel {
 		for(int i = 0; i < Math.min(cor.size(), out.size()); i++) {
 			String comp = compareCells(cor.get(i), out.get(i));
 			if (comp != null)
-				return String.format("%s elem %d: %s", tag, i, comp);
+				report_error(String.format("%s elem %d: %s", tag, i, comp));
 		}
 		if (cor.size() != out.size())
-			return String.format("%s has %d elems instead of %d", tag, out.size(), cor.size());
+			report_error(String.format("%s has %d elems instead of %d", tag, out.size(), cor.size()));
 		return null;
 	}
 	
@@ -108,6 +105,13 @@ public class NiReportModel {
 		};
 		res.append(")");
 		return res.toString();
+	}
+	
+	public String report_error(String str) {
+		if (str != null)
+			throw new RuntimeException(str);
+		
+		return str;
 	}
 	
 	@Override

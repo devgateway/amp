@@ -44,7 +44,7 @@ public interface NiReportsSchema {
 	 * returns a function which exposes the spec's {@link ReportFilters} instance to Ni's NiFilters
 	 * @return
 	 */
-	public Function<ReportFilters, NiFilters> getFiltersConverter();
+	public NiFilters convertFilters(NiReportsEngine engine);
 	
 	/**
 	 * gets a builder of a schema-specific scratchpad, which will be stored in {@link NiReportsEngine#schemaSpecificScratchpad} at start time

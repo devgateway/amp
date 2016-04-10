@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.nireports.schema;
 
+import java.util.function.Predicate;
+
 import mondrian.olap.MondrianDef.DimensionUsage;
 
 /**
@@ -7,6 +9,11 @@ import mondrian.olap.MondrianDef.DimensionUsage;
  * @author Dolghier Constantin
  *
  */
-public interface IdsAcceptor {
+public interface IdsAcceptor extends Predicate<NiDimension.Coordinate> {
 	public boolean isAcceptable(NiDimension.Coordinate cellCoos);
+
+	@Override
+	public default boolean test(NiDimension.Coordinate cellCoos) {
+		return isAcceptable(cellCoos);
+	}
 }

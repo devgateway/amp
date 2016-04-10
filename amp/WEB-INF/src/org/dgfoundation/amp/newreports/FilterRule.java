@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.dgfoundation.amp.algo.AmpCollections;
@@ -191,7 +192,36 @@ public class FilterRule {
 				throw new RuntimeException("unknown filter type: " + filterType);
 		}
 	}
-		
+	
+	/**
+	 * returns this filter rule as a set {@link Predicate}
+	 * @return
+	 */
+	public Set<Long> addIds(Set<Long> set) {
+		Set<Long> res = set == null ? new HashSet<>() : set;
+		switch(filterType) {
+			case RANGE : {
+				if (min != null && max != null) {
+					for(long i = Long.parseLong(min); i <= Long.parseLong(max); i++) {
+						res.add(i);
+					}
+					return res;
+				}
+				throw new RuntimeException(String.format("ranges for column filters should be closed on both ends: %s", this));
+			}
+			case SINGLE_VALUE :
+				res.add(parseStr(value));
+				return res;
+			
+			case VALUES :
+				res.addAll(values.stream().map(FilterRule::parseStr).collect(Collectors.toSet()));
+				return res;
+				
+			default:
+				throw new RuntimeException("unknown filter type: " + filterType);
+		}
+	}
+
 	@Override
 	public String toString() {
 		switch(filterType) {
@@ -236,6 +266,17 @@ public class FilterRule {
 		}
 		if (!mergedValues.isEmpty())
 			res.add(new FilterRule(new ArrayList<String>(mergedValues), true));
+		return res;
+	}
+	
+	public static Set<Long> mergeIdRules(List<FilterRule> initRules) {
+		if (initRules == null || initRules.isEmpty())
+			return null;
+		
+		Set<Long> res = new HashSet<>();
+		for(FilterRule rule:initRules) {
+			rule.addIds(res);
+		}
 		return res;
 	}
 }

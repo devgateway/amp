@@ -12,7 +12,7 @@ module.exports = BaseControlView.extend({
   title:  'Settings',
   iconClass:  'ampicon-settings',
   description:  '',
-
+  selectedCurrency: null,
   template:  _.template(Template),
   templateOption: _.template(OptionTemplate),
   events:{
@@ -82,12 +82,19 @@ module.exports = BaseControlView.extend({
         });
 		
 		// when calendar changes reset currency to first currency on available currencies
-		app.data.settings.get('1').set('selected', this.availableCurrenciesForCalendar[0]);
+		this.selectedCurrency = this.availableCurrenciesForCalendar[0];
+		//app.data.settings.get('1').set('selected', this.availableCurrenciesForCalendar[0]);
 		currencySelect.val(this.availableCurrenciesForCalendar[0]);
 	}	  
-    var settingID = $(evt.currentTarget).attr('id');
-    var selectedID = $(evt.currentTarget).val();
-    this.updateSelected(settingID, selectedID, silent);
+	
+	if ($(evt.currentTarget).attr('id') === '1') {
+		this.selectedCurrency = $(evt.currentTarget).val();
+	}else{
+		 var settingID = $(evt.currentTarget).attr('id');
+		 var selectedID = $(evt.currentTarget).val();
+		 this.updateSelected(settingID, selectedID, silent);
+	}
+   
   },
 
   updateSelected: function(settingID, selectedID, silent) {
@@ -101,9 +108,12 @@ module.exports = BaseControlView.extend({
   
   applySettings: function() {
 	  // We set the selected currency here (not in optionChanged') to avoid showing something in the infowindows before hitting Apply button.
-     // app.data.settings.get('1').set('selected', this.availableCurrenciesForCalendar[0]);
+	  if(this.selectedCurrency){
+		  app.data.settings.get('1').set('selected', this.selectedCurrency); 
+	  }     
 
 	  // Trigger update in settings-collection.js
+	  $('#map-loading').show();
 	  this.app.data.settings.trigger('applySettings');
   }
 });

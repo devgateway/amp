@@ -69,22 +69,22 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 				if (subElement.name === 'DATE') {
 					var dateIntervalType = FilterUtils.getDateIntervalType(element, item, i);
 				}				
-				if (element.get('value') != null) {
+				if (element.get('value') !== null) {
 					var auxItem = {};
 					auxItem.id = element.get('value');
 					auxItem.name = element.get('valueToName').attributes[element.get('value')];
 					content.push(auxItem);
-				} else if (element.get('valueToName') != null) {
+				} else if (element.get('valueToName') !== null) {
 					// This should be .models but the way the endpoint returns
 					// the data breaks backbone.
 					_.each(element.get('valueToName').attributes, function(item_, i) {
 						// Need to do this because of how js parses these data
 						// and adds an extra element.
-						if (i != undefined && item_ != undefined) {
+						if (i !== undefined && item_ !== undefined) {
 							var item = {};
 							item.id = i;
 							item.name = item_;
-							if (dateIntervalType != undefined)
+							if (dateIntervalType !== undefined)
 								item.dateIntervalType = dateIntervalType;
 							content.push(item);
 						}
@@ -116,18 +116,18 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 			if (subElement instanceof Backbone.Collection) {
 				var element = subElement.models[0];
 				var content = [];	
-				if (element.get('value') != null) {
+				if (element.get('value') !== null) {
 					var auxItem = {};
 					auxItem.id = element.get('value');
 					auxItem.name = element.get('valueToName').attributes[element.get('value')];
 					content.push(auxItem);
-				} else if (element.get('valueToName') != null) {
+				} else if (element.get('valueToName') !== null) {
 					// This should be .models but the way the endpoint returns
 					// the data breaks backbone.
 					_.each(element.get('valueToName').attributes, function(j, item2) {
 						// Need to do this because of how js parses these data
 						// and adds an extra element.
-						if (j != undefined) {
+						if (j !== undefined) {
 							var item_ = {};
 							item_.id = i;
 							item_.name = j;
@@ -152,40 +152,31 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 		app.TabsApp.filters.models = [];
 		app.TabsApp.dynamicContentRegion.currentView.filters.currentView.render();
 		
-		if (filtersFromWidgetWithNames.columnFilters != undefined) {
+		if (filtersFromWidgetWithNames.columnFilters !== undefined) {
 			for ( var propertyName in filtersFromWidgetWithNames.columnFilters) {
-				var auxProperty = filtersFromWidgetWithNames.columnFilters[propertyName];
-				var content = [];
-				_.each(auxProperty, function(item, i) {
-					var auxItem = {};
-					if(item.get !== undefined) {
-						auxItem.id = item.get('id');
-						auxItem.name = item.get('name');
-						if (item.get('name') === "true" || item.get('name') === "false") {
-							auxItem.trnName = TranslationManager.getTranslated(item.get('name'));
-						 }
-						else {
-							auxItem.trnName = item.get('name');
-						}
-						content.push(auxItem);
-					} else {
-						console.error(JSON.stringify(auxItem) + " not mapped, we need to check why is not a model.");
+				var auxProperty = filtersFromWidgetWithNames.columnFilters[propertyName];				
+				_.each(auxProperty.serializedToModels, function(item, i) {
+					var content = [];
+					if (item.length > 0) {
+						_.each(item, function(item2) {
+							content.push({id: 0, name: item2.name, trnName: TranslationManager.getTranslated(item2.name)});
+						});
+						var name = TranslationManager.getTranslated(item[0].levelName) || item[0].levelName;
+						var filter = new Filter({
+							trnName : name,
+							name: item[0].levelName,
+							values : content
+						});
+						app.TabsApp.filters.models.push(filter);
 					}
-				});
-				var name = TranslationManager.getTranslated(auxProperty.filterName) || TranslationManager.getTranslated(propertyName)
-				var filter = new Filter({
-					trnName : name,
-					name: propertyName,
-					values : content
-				});
-				app.TabsApp.filters.models.push(filter);
+				});				
 			}
 		}
-		if (filtersFromWidgetWithNames.otherFilters != undefined) {
+		if (filtersFromWidgetWithNames.otherFilters !== undefined) {
 			for ( var propertyName in filtersFromWidgetWithNames.otherFilters) {
 				var dateContent = filtersFromWidgetWithNames.otherFilters[propertyName];
-				if (dateContent != undefined
-						&& dateContent.start != undefined) {
+				if (dateContent !== undefined
+						&& dateContent.start !== undefined) {
 					var filter = new Filter({
 						trnName : TranslationManager.getTranslated(propertyName),
 						name : propertyName,
@@ -437,9 +428,9 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 
 	FilterUtils.widgetFiltersToJavaFilters = function(originalFilters) {
 		/*
-		 * if (originalFilters != null && originalFilters.columnFilters != undefined) { if
-		 * (originalFilters.columnFilters["Primary Sector Id"] != undefined || originalFilters.columnFilters["Primary
-		 * Sector Sub-Sector Id"] != undefined || originalFilters.columnFilters["Primary Sector Sub-Sub-Sector Id"] !=
+		 * if (originalFilters !== null && originalFilters.columnFilters !== undefined) { if
+		 * (originalFilters.columnFilters["Primary Sector Id"] !== undefined || originalFilters.columnFilters["Primary
+		 * Sector Sub-Sector Id"] !== undefined || originalFilters.columnFilters["Primary Sector Sub-Sub-Sector Id"] !=
 		 * undefined) { if (originalFilters.columnFilters["Primary Sector Id"] === undefined) {
 		 * originalFilters.columnFilters["Primary Sector Id"] = []; } originalFilters.columnFilters["Primary Sector Id"] =
 		 * originalFilters.columnFilters["Primary Sector Id"] .concat(originalFilters.columnFilters["Primary Sector

@@ -83,7 +83,45 @@ public class ConfigEndpoints {
 		return resultList;
 	}
 	
+	
+	/**
+	 * get global settings
+	 * @param globalSettings jsonBean with a settings to save
+	 * @return save's status jsonBean 
+	 */
+	@POST
+	@Path("/getGlobalSettings")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(id = "getGlobalSettings", ui = false)
+	public Collection<JsonBean> getGlobalSettings(JsonBean globalSettings) {
+		
+		ArrayList<String> list = ConfigHelper.getValidSettings();
+		Collection<JsonBean> resultList = new ArrayList<JsonBean>();
 
+		if (globalSettings.get("settings") != null) {
+			ArrayList<LinkedHashMap<String, Object>> settings = (ArrayList<LinkedHashMap<String, Object>>) globalSettings
+					.get("settings");
+
+			for (LinkedHashMap<String, Object> setting : settings) {
+				JsonBean result = new JsonBean();
+				String globalSettingName = ConfigHelper.getGlobalSettingName(setting);
+				if (list.contains(globalSettingName)) {
+					boolean isNew = false;
+					AmpGlobalSettings ampGlobalSetting = FeaturesUtil.getGlobalSetting(globalSettingName);
+
+					if (ampGlobalSetting != null) {
+						result = ConfigHelper.getGlobalSettingJson(ampGlobalSetting);
+					}
+
+				} else {
+					result.set(globalSettingName, NOT_VALID);
+				}
+				resultList.add(result);
+			}
+
+		}
+		return resultList;
+	}
 	
 	
 }

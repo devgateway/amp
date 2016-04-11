@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.config;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,42 +45,45 @@ public class ConfigEndpoints {
 	@Path("/globalSettings")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(id = "saveGlobalSettings", ui = false)
-	public JsonBean saveGlobalSettings(JsonBean globalSettings) {
-		
+	public Collection<JsonBean> saveGlobalSettings(JsonBean globalSettings) {
+
 		ArrayList<String> list = ConfigHelper.getValidSettings();
-		JsonBean result = new JsonBean();
+		Collection<JsonBean> resultList = new ArrayList<JsonBean>();
 
 		if (globalSettings.get("settings") != null) {
 			ArrayList<LinkedHashMap<String, Object>> settings = (ArrayList<LinkedHashMap<String, Object>>) globalSettings
 					.get("settings");
 
 			for (LinkedHashMap<String, Object> setting : settings) {
-
-					String globalSettingName = ConfigHelper.getGlobalSettingName(setting);
-					if (list.contains(globalSettingName)) {
+				JsonBean result = new JsonBean();
+				String globalSettingName = ConfigHelper.getGlobalSettingName(setting);
+				if (list.contains(globalSettingName)) {
 					boolean isNew = false;
 					AmpGlobalSettings ampGlobalSetting = FeaturesUtil.getGlobalSetting(globalSettingName);
 
-					if (ampGlobalSetting==null) {
+					if (ampGlobalSetting == null) {
 						ampGlobalSetting = new AmpGlobalSettings();
 						isNew = true;
 					}
-					
+
 					ConfigHelper.getGlobalSetting(ampGlobalSetting, setting);
-					
+
 					FeaturesUtil.updateGlobalSetting(ampGlobalSetting);
 
-					result.set(globalSettingName, (isNew? INSERTED : SAVED ));
-					
-					} else {
-						result.set(globalSettingName, NOT_VALID);
-					}
-					
+					result.set(globalSettingName, (isNew ? INSERTED : SAVED));
+
+				} else {
+					result.set(globalSettingName, NOT_VALID);
+				}
+				resultList.add(result);
 			}
 
 		}
 
-		return result;
+		return resultList;
 	}
+	
+
+	
 	
 }

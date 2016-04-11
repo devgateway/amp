@@ -6,9 +6,13 @@ package org.digijava.kernel.ampapi.endpoints.config.utils;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
+import org.digijava.module.aim.helper.KeyValue;
 
 
 /**
@@ -65,9 +69,45 @@ public class ConfigHelper {
 		return set;
 	}
 	
+	/**
+	 * Retrieves JsonBean from AmpGlobalSettings
+	 * @param object
+	 * @return JsonBean
+	 */
+	public static JsonBean getGlobalSettingJson(AmpGlobalSettings ampGlobalSetting) {
+		JsonBean globalSetting = new JsonBean();
+		List<KeyValue> possiblesValues = ConfigHelper.getPossibleValues(ampGlobalSetting.getGlobalSettingsPossibleValues());
+		JsonBean pValues = new JsonBean();
+		for (KeyValue value : possiblesValues) {
+			pValues.set(value.getValue(), value.getKey());
+		}
+		globalSetting.set("settingsName", ampGlobalSetting.getGlobalSettingsName());
+		globalSetting.set("settingsValue", ampGlobalSetting.getGlobalSettingsValue());
+		globalSetting.set("possibleValues", ampGlobalSetting.getGlobalSettingsPossibleValues()); 
+		globalSetting.set("description", ampGlobalSetting.getGlobalSettingsDescription()); 
+		globalSetting.set("section", ampGlobalSetting.getSection()); 
+		globalSetting.set("valueTranslatable", ampGlobalSetting.getValueTranslatable());
+		globalSetting.set("PossibleValuesIds", pValues);
+		
+		return globalSetting;
+	}
+	
 	public static String getGlobalSettingName(LinkedHashMap<String, Object> object) {
 		String name = String.valueOf(object.get(SETTINGS_NAME));
 		return name;
 	}
 	
+	public static List<KeyValue> getPossibleValues(String tableName) {
+		List<KeyValue> ret = new ArrayList<>();
+		
+		if (tableName == null || tableName.length() == 0)
+			return ret;
+
+		List<Object[]> ls 	= PersistenceManager.getSession().createSQLQuery("select id, value from " + tableName).list();
+		for(Object[] obj:ls){
+			KeyValue keyValue = new KeyValue(PersistenceManager.getString(obj[0]), PersistenceManager.getString(obj[1]));
+			ret.add( keyValue );
+		}
+		return ret;
+	}
 }

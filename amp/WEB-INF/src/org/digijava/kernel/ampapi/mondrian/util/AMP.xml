@@ -271,6 +271,11 @@
 			<Level name="Humanitarian Aid" column="humanitarian_aid_id" type="String" nameColumn="humanitarian_aid_name" /> 
 		</Hierarchy>		
 		
+		<Hierarchy hasAll="true" allMemberName="ALL A.C. Chapter" primaryKey="amp_activity_id" name="A.C. Chapter">
+			<Table name="mondrian_activity_trn_texts@@locale@@" />
+			<Level name="A.C. Chapter" column="ac_chapter_id" type="String" nameColumn="ac_chapter_name" /> 
+		</Hierarchy>
+		
 	</Dimension>
 	
 	<Dimension name="AMP Location">

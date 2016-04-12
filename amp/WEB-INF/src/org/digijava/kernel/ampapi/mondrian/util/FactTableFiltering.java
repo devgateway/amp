@@ -14,7 +14,6 @@ import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MondrianTablesRepository;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
@@ -223,6 +222,7 @@ public class FactTableFiltering {
 			add(ColumnConstants.IMPLEMENTATION_LEVEL, new ActACVIdsExpander("entity_id"));
 			add(ColumnConstants.IMPLEMENTATION_LOCATION, new ActACVIdsExpander("entity_id"));
 			add(ColumnConstants.ON_OFF_TREASURY_BUDGET, new ActACVIdsExpander("entity_id"));
+			add(ColumnConstants.AC_CHAPTER, new ActACVIdsExpander("entity_id"));
 			
 			//ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.TYPE_OF_COOPERATION, ColumnConstants.TYPE_OF_IMPLEMENTATION
 			add(ColumnConstants.FINANCING_INSTRUMENT, new IdentityExpander("financing_instrument_id"));

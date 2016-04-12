@@ -137,6 +137,7 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.IMPLEMENTATION_LOCATION, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_IMPLEMENTATION_LOCATION, MoConstants.ATTR_IMPLEMENTATION_LOCATION));
 			addColumnDefinition(ColumnConstants.ON_OFF_TREASURY_BUDGET, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_ON_OFF_TREASURY_BUDGET, MoConstants.ATTR_ON_OFF_TREASURY_BUDGET));
 			addColumnDefinition(ColumnConstants.HUMANITARIAN_AID, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_HUMANITARIAN_AID, MoConstants.ATTR_HUMANITARIAN_AID));
+			addColumnDefinition(ColumnConstants.AC_CHAPTER, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_AC_CHAPTER, MoConstants.ATTR_AC_CHAPTER));
 			addColumnDefinition(ColumnConstants.DISASTER_RESPONSE_MARKER, new MDXLevel(MoConstants.DISASTER_RESPONSE_MARKER, MoConstants.H_HARDCODED_TEXT, MoConstants.H_HARDCODED_TEXT));
 			addColumnDefinition(ColumnConstants.EXPENDITURE_CLASS, new MDXLevel(MoConstants.EXPENDITURE_CLASS, MoConstants.H_CATEGORY_NAME, MoConstants.ATTR_EXPENDITURE_CLASS));
 

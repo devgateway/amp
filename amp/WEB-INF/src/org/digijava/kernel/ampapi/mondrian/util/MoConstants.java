@@ -64,6 +64,7 @@ public final class MoConstants {
 	public static final String MODE_OF_PAYMENT = "Mode of Payment";
 	public static final String FINANCING_INSTRUMENT = "Financing Instrument";
 	public static final String TYPE_OF_ASSISTANCE = "Type Of Assistance";
+	public static final String AC_CHAPTER = "A.C. Chapter";
 	public static final String ACTIVITY_LONG_TEXTS = "Activity Long Texts";
 	public static final String ACTIVITY_TEXTS = "Activity Texts";
 	public static final String DISASTER_RESPONSE_MARKER = "Disaster Response Marker";
@@ -144,6 +145,7 @@ public final class MoConstants {
 	public static final String H_IMPLEMENTATION_LEVEL = "Implementation Level";
 	public static final String H_ON_OFF_TREASURY_BUDGET = "On/Off/Treasury Budget";
 	public static final String H_HUMANITARIAN_AID = "Humanitarian Aid";
+	public static final String H_AC_CHAPTER = "A.C. Chapter";
 	public static final String H_HARDCODED_TEXT = "Hardcoded Text";
 	public static final String H_IMPLEMENTATION_LOCATION = "Implementation Location";
 	public static final String H_GEO_CODE = "GeoCode";
@@ -268,6 +270,7 @@ public final class MoConstants {
 	public static final String ATTR_IMPLEMENTATION_LEVEL = "Implementation Level";
 	public static final String ATTR_ON_OFF_TREASURY_BUDGET = "On/Off/Treasury Budget";
 	public static final String ATTR_HUMANITARIAN_AID = "Humanitarian Aid";
+	public static final String ATTR_AC_CHAPTER = "A.C. Chapter";
 	public static final String ATTR_IMPLEMENTATION_LOCATION = "Implementation Location";
 	public static final String ATTR_COMPONENT_NAME = "Component Name";
 	public static final String ATTR_COMPONENT_DESCRIPTION = "Component Description";

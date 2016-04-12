@@ -533,10 +533,13 @@ function extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchies
 			var dataValue = node.contents[this.headerMatrix[this.lastHeaderRow][i].hierarchicalName];
 			// Save isTotal flag.
 			if (dataValue === null || dataValue === undefined) {				
-				dataValue = {displayedValue: ""};//this.headerMatrix[this.lastHeaderRow][i].emptyCell;
+				 dataValue = {displayedValue: ""};				
 			}
 			if (Settings.NIREPORT && dataValue.displayedValue === "" && i < level) {
 				dataValue.displayedValue = hierarchiesData[i].displayedValue;
+			}
+			if(dataValue.displayedValue  === "" || dataValue.displayedValue === null){
+				dataValue.displayedValue = this.headerMatrix[this.lastHeaderRow][i].emptyCell ? this.headerMatrix[this.lastHeaderRow][i].emptyCell.displayedValue : "";
 			}
 			dataValue.isTotal = node.isTotal;
 			this.contentMatrix[this.currentContentIndexRow][i] = dataValue;

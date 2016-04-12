@@ -93,7 +93,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 	public final NiReportsSchema schema;
 	public CachingCalendarConverter calendar;
 	
-	final NiFilters filters;
+	NiFilters filters;
 	
 	final Map<String, ColumnContents> fetchedColumns = new LinkedHashMap<>();
 	final Map<String, ColumnContents> fetchedMeasures = new LinkedHashMap<>();
@@ -140,7 +140,9 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 	 * This is fully included in {@link #actualColumns}, else it's a bug
 	 */
 	public LinkedHashSet<String> actualHierarchies;
-		
+			
+	public LinkedHashSet<String> orderedColumns;
+	
 	/**
 	 * do not access directly! use {@link #getDimensionSnapshot(NiDimension)} instead
 	 */
@@ -168,16 +170,16 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 		this.schema = schema;
 		this.spec = reportSpec;
 		this.yearRangeSettingsPredicate = spec.getSettings() == null ? (z -> true) : spec.getSettings().buildYearSettingsPredicate();
-		this.filters = schema.convertFilters(this);
 	}
 	 
 	public NiReportRunResult execute() {
 		try(SchemaSpecificScratchpad pad = schema.getScratchpadSupplier().apply(this)) {
 			this.schemaSpecificScratchpad = pad;
-			this.calendar = pad.buildCalendarConverter();
-			
 			this.timer = new InclusiveTimer("Report " + spec.getReportName());
-			timer.run("workspaceFilter", () -> this.mainIds = Collections.unmodifiableSet(this.filters.getActivityIds(this)));
+			this.calendar = pad.buildCalendarConverter();
+
+			timer.run("converting filters", () -> this.filters = schema.convertFilters(this));
+			timer.run("workspaceFilter", () -> this.mainIds = Collections.unmodifiableSet(this.filters.getWorkspaceActivityIds()));
 			timer.run("exec", this::runReportAndCleanup);
 			//printReportWarnings();
 			NiReportRunResult runResult = new NiReportRunResult(this.reportOutput, timer.getCurrentState(), timer.getWallclockTime(), this.headers, reportWarnings);
@@ -195,7 +197,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 		timer.putMetaInNode("calendar_translations", new HashMap<String, Integer>(){{
 			put("calls", calendar.getCalls());
 			put("noncached", calendar.getNonCachedCalls());
-			put("percent_cached", calendar.getCalls() == 0? 0 : 100 - (100 * calendar.getNonCachedCalls() / calendar.getCalls()));
+			put("percent_cached", calendar.getCalls() == 0 ? 0 : 100 - (100 * calendar.getNonCachedCalls() / calendar.getCalls()));
 		}});
 		timer.putMetaInNode("hierarchies_tracker_stats", hiersTrackerCounter.getStats());
 	}
@@ -209,18 +211,12 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 	 * overrideable by users
 	 */
 	protected void runReport() {
-		timer.run("filtersPreproc", this::preprocFilters);
 		timer.run("fetch", this::fetchData);
 		timer.run("init", this::createInitialReport);
 		timer.run("hierarchies", this::createHierarchies);
 		timer.run("posthierproc", this::postHierarchiesPostprocess);
 		timer.run("flatten", this::flatten);
 		timer.run("output", this::output);
-	}
-
-	protected void preprocFilters() {
-		if (spec.getFilters() == null || spec.getFilters().getFilterRules() == null)
-			return;
 	}
 		
 	protected void addRulesIfPresent(Map<NiDimensionUsage, List<IdsAcceptor>> acceptors, LevelColumn lc, boolean positive, Set<Long> ids) {
@@ -305,27 +301,44 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 	 * 3. fetches the measures 
 	 */
 	protected void fetchData() {
+		timer.run("filtersApply", this::applyFilters);
 		timer.run("columns", this::fetchColumns);
 		timer.run("measures", this::fetchMeasures);
 		//NiUtils.failIf(this.actualColumns.isEmpty(), "columnless reports not supported");
 		NiUtils.failIf(!this.actualColumns.containsAll(this.actualHierarchies), () -> String.format("not all hierarchies (%s) are also specified as columns (%s)", this.actualHierarchies.toString(), this.actualColumns.toString()));
 	}
 	
+	protected void applyFilters() {
+		try {
+			for(String mandatoryHier:filters.getMandatoryHierarchies()) {
+				if (columnSupported(mandatoryHier)) {
+					fetchedColumns.put(mandatoryHier, fetchEntity(schema.getColumns().get(mandatoryHier), false));
+				} else {
+					addReportWarning(new ReportWarning(String.format("asked to filter by unsupported column <%s>; ignoring", mandatoryHier)));
+				}
+			}
+		}
+		catch(Exception e) {
+			throw AlgoUtils.translateException(e);
+		}
+		this.mainIds = filters.getFilteredActivityIds(); // this will use the filtered fetchedColumns
+	}
+	
 	protected void fetchColumns() {
-		timer.run("Funding", () -> { 
-			funding = selectRelevant(schema.getFundingFetcher().fetch(this));
-			timer.putMetaInNode("cells", funding.size());
-			});
-		for(NiReportColumn<?> colToFetch:getReportColumns()) {
+		for(NiReportColumn<?> colToFetch:getReportColumns().stream().filter(z -> !fetchedColumns.containsKey(z)).collect(toList())) {
 			timer.run(colToFetch.name, () -> {
-				ColumnContents cc = fetchEntity(colToFetch);
+				ColumnContents cc = fetchEntity(colToFetch, true);
 				if (cc != null)
 					fetchedColumns.put(colToFetch.name, cc);
 			});
 		};
+		timer.run("Funding", () -> { 
+			funding = selectRelevant(schema.getFundingFetcher().fetch(this));
+			timer.putMetaInNode("cells", funding.size());
+			});
 	}
 	
-	protected ColumnContents fetchEntity(NiReportedEntity<?> colToFetch) throws Exception {
+	protected ColumnContents fetchEntity(NiReportedEntity<?> colToFetch, boolean applyFilterPercentages) throws Exception {
 		try {
 			List<? extends Cell> cells = selectRelevant(colToFetch.fetch(this));
 			timer.putMetaInNode("cells", cells.size());
@@ -348,8 +361,28 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 		timer.putMetaInNode("fetched_raw", in.size());
 		Set<Long> ids = this.mainIds;
 		if (ids == null) return in;
-		List<K> res = in.stream().filter(z -> ids.contains(z.activityId)).collect(Collectors.toList());
+//		Predicate<K> cellFilter = z -> ids.contains(z.activityId);
+//		if (alsoFilter)
+//			cellFilter = cellFilter.and(this::cellMatchesFilters);
+		List<K> res = new ArrayList<>();
+		for(K cell:in) {
+			if (ids.contains(cell.activityId) && this.cellMatchesFilters(cell))
+				res.add(cell);
+		}
 		return res;
+	}
+	
+	protected<K extends Cell> boolean cellMatchesFilters(K cell) {
+		for(Map.Entry<NiDimensionUsage, Predicate<Coordinate>> filterItem:filters.getProcessedFilters().entrySet()) {
+			Coordinate cellCoo = cell.getCoordinates().get(filterItem.getKey());
+			if (cellCoo == null) 
+				continue; // cell is indifferent to this dimension
+			if (!filterItem.getValue().test(cellCoo)) {
+				//TODO: treat nulls differently as part of the (undefined / unexistant) filtering API
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	/**
@@ -359,7 +392,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 	protected void fetchMeasures() {
 		LinkedHashSet<NiReportMeasure<?>> measuresInSortOrder = getReportMeasures();
 		for(NiReportMeasure<?> meas:measuresInSortOrder) {
-			timer.run(meas.name, () -> fetchedMeasures.put(meas.name, fetchEntity(meas)));
+			timer.run(meas.name, () -> fetchedMeasures.put(meas.name, fetchEntity(meas, true)));
 		}
 	}
 	
@@ -367,7 +400,10 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 		//ColumnReportData fetchedData = new ColumnReportData(this);
 		GroupColumn rawData = new GroupColumn(ROOT_COLUMN_NAME, null, null, null);
 		
-		fetchedColumns.forEach((name, contents) -> rawData.addColumn(new CellColumn(name, contents, rawData, schema.getColumns().get(name), new NiColSplitCell(PSEUDOCOLUMN_COLUMN, new ComparableValue<String>(name, name))))); // regular columns
+		for(String name:orderedColumns) {
+			ColumnContents contents = fetchedColumns.get(name);
+			rawData.addColumn(new CellColumn(name, contents, rawData, schema.getColumns().get(name), new NiColSplitCell(PSEUDOCOLUMN_COLUMN, new ComparableValue<String>(name, name)))); // regular columns
+		}
 		
 		TimeRange userRequestedRange = TimeRange.forCriteria(spec.getGroupingCriteria());
 		if (userRequestedRange != TimeRange.NONE)
@@ -454,9 +490,9 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 	protected Column buildTotalsColumn(String columnName, GroupColumn parentColumn) {
 		LinkedHashMap<NiReportedEntity<?>, ColumnContents> fetchedEntities = new LinkedHashMap<>();
 		
-		// step1: collect fetched entitities in a unified map, measures after columns
-		fetchedMeasures.forEach((name, contents) -> {fetchedEntities.put(schema.getMeasures().get(name), contents);});
-		fetchedColumns.forEach((name, contents) -> {fetchedEntities.put(schema.getColumns().get(name), contents);});
+		// step1: collect fetched entities in a unified map, measures after columns
+		fetchedMeasures.forEach((name, contents) -> fetchedEntities.put(schema.getMeasures().get(name), contents));
+		orderedColumns.forEach(name -> fetchedEntities.put(schema.getColumns().get(name), fetchedColumns.get(name)));
 		
 		//step2: collect/generate the totals cells
 		LinkedHashMap<String, ImmutablePair<NiReportedEntity<?>, ColumnContents>> totalsColumnsContents = new LinkedHashMap<>();
@@ -491,6 +527,10 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 		}
 	}
 		
+	protected boolean columnSupported(String columnName) {
+		return schema.getColumns().containsKey(columnName);
+	}
+	
 	/**
 	 * <strong>HAS A SIDE EFFECT</strong>: fills {@link #actualHierarchies} and {@link #actualColumns} <br />
 	 * returns a list of the supported columns of the ones mandated by the report. This function will become an one-liner when NiReports will become the reference reporting engine
@@ -498,9 +538,11 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 	 */
 	protected List<NiReportColumn<? extends Cell>> getReportColumns() {
 		List<NiReportColumn<? extends Cell>> res = new ArrayList<>();
-		this.actualHierarchies = new LinkedHashSet<>(spec.getHierarchyNames());
-		this.actualColumns = new LinkedHashSet<>(spec.getColumnNames());
-		for(String columnName:AmpCollections.union(spec.getHierarchyNames(), spec.getColumnNames())) {
+		this.actualHierarchies = new LinkedHashSet<>(spec.getHierarchyNames()); //AmpCollections.prefixUnion(filters.getMandatoryHierarchies(), spec.getHierarchyNames());
+		this.actualColumns = new LinkedHashSet<>(spec.getColumnNames()); //AmpCollections.prefixUnion(filters.getMandatoryHierarchies(), spec.getColumnNames());
+		this.orderedColumns = new LinkedHashSet<>();
+		//this.virtualHierarchies = AmpCollections.difference(filters.getMandatoryHierarchies(), spec.getHierarchyNames());
+		for(String columnName:AmpCollections.union(this.actualHierarchies, this.actualColumns)) {
 			NiReportColumn<? extends Cell> col = schema.getColumns().get(columnName);
 			if (col == null) {
 				addReportWarning(new ReportWarning(String.format("column %s not supported in NiReports", columnName)));
@@ -508,6 +550,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 				this.actualColumns.remove(columnName);
 			} else {
 				res.add(col);
+				this.orderedColumns.add(columnName);
 			}
 		}
 		return res;

@@ -1,5 +1,8 @@
 package org.dgfoundation.amp.testmodels;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -67,7 +70,10 @@ import static org.dgfoundation.amp.testmodels.TestModelConstants.*;
  *
  */
 public class HardcodedReportsTestSchema extends AbstractReportsSchema {
-		
+
+	public final static Set<String> TRANSACTION_LEVEL_HIERARCHIES = Collections.unmodifiableSet(new HashSet<>(
+			Arrays.asList(ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.FUNDING_STATUS, ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.TYPE_OF_ASSISTANCE)));
+
 	public final static OrganizationsTestDimension orgsDimension = OrganizationsTestDimension.instance;
 	public final static LocationsTestDimension locsDimension = LocationsTestDimension.instance;
 	public final static SectorsTestDimension secsDimension = SectorsTestDimension.instance;
@@ -192,7 +198,8 @@ public class HardcodedReportsTestSchema extends AbstractReportsSchema {
 	}
 	
 	@Override public HardcodedReportsTestSchema addColumn(NiReportColumn<?> col) {
+		if (TRANSACTION_LEVEL_HIERARCHIES.contains(col.name))
+			col = col.setTransactionLevelHierarchy();
 		return (HardcodedReportsTestSchema) super.addColumn(col);
 	}
-	
 }

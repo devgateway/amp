@@ -16,12 +16,14 @@ import java.util.Set;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.NamedTypedEntity;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportFilters;
+import org.dgfoundation.amp.newreports.ReportFiltersImpl;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpARFilterConverter;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
@@ -32,8 +34,8 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
  * 
  * @author Nadejda Mandrescu
  */
-public class MondrianReportFilters implements ReportFilters {
-	private Map<ReportElement, List<FilterRule>> filterRules = new HashMap<ReportElement, List<FilterRule>>();
+public class MondrianReportFilters extends AmpReportFilters {
+	
 	/**
 	 * Stores date filters to be applied over date columns.
 	 * Note: Due to slow execution via MDX with the existing schema config, 
@@ -50,12 +52,7 @@ public class MondrianReportFilters implements ReportFilters {
 	 * Map<[Column Group Name]>, List<[Rules related to it]>
 	 */
 	private Map<String, List<FilterRule>> sqlFilterRules = new HashMap<>();
-	
-	/**
-	 * The calendar to be used for retrieval of actual names for year, month, quarter
-	 */
-	protected AmpFiscalCalendar calendar = null;
-	
+		
 	protected AmpFiscalCalendar oldCalendar = null;
 	
 	/**
@@ -72,24 +69,17 @@ public class MondrianReportFilters implements ReportFilters {
 	}
 	
 	public MondrianReportFilters() {
-		this.calendar = AmpARFilter.getDefaultCalendar();
+		this(AmpARFilter.getDefaultCalendar());
 	}
 	
 	public MondrianReportFilters(Map<ReportElement, List<FilterRule>> filterRules, AmpFiscalCalendar calendar) {
-		this.filterRules = filterRules;
-		this.calendar = calendar;
+		super(filterRules, calendar);
 	}
 	
 	public MondrianReportFilters(AmpFiscalCalendar calendar) {
-		this.calendar = calendar;
+		super(calendar);
 	}
-	
-	@Override
-	@JsonIgnore
-	public Map<ReportElement, List<FilterRule>> getFilterRules() {
-		return filterRules;
-	}
-	
+		
 	@JsonIgnore
 	public Map<ReportColumn, List<FilterRule>> getDateFilterRules() {
 		return dateFilterRules;
@@ -125,7 +115,7 @@ public class MondrianReportFilters implements ReportFilters {
 	 * @param elem
 	 * @param filterRule
 	 */
-	private void addFilterRule(ReportElement elem, FilterRule filterRule) {
+	public void addFilterRule(ReportElement elem, FilterRule filterRule) {
 		Set<String> RAW_COLUMNS_WITH_NAMES_ENDING_IN_ID = new HashSet<>(Arrays.asList(ColumnConstants.ACTIVITY_ID, ColumnConstants.INTERNAL_USE_ID, ColumnConstants.AMP_ID));
 		// Check if this is a filter that must be in a group
 		if (ElementType.ENTITY.equals(elem.type) 

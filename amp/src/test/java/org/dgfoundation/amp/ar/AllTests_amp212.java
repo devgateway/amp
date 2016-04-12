@@ -7,6 +7,7 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
+import org.dgfoundation.amp.ar.amp212.AmpSchemaFilteringTests;
 import org.dgfoundation.amp.ar.amp212.AmpSchemaSanityTests;
 import org.dgfoundation.amp.ar.amp212.AmpSchemaSortingTests;
 import org.dgfoundation.amp.ar.amp212.CurrencyConvertorTests;
@@ -42,6 +43,7 @@ public class AllTests_amp212
 		suite.addTest(new JUnit4TestAdapter(NiReportsFetchingTests.class));
 		suite.addTest(new JUnit4TestAdapter(AmpSchemaSanityTests.class));
 		suite.addTest(new JUnit4TestAdapter(AmpSchemaSortingTests.class));
+		suite.addTest(new JUnit4TestAdapter(AmpSchemaFilteringTests.class));
 		suite.addTest(new JUnit4TestAdapter(FundingFlowsTests.class));
 
 		suite.addTest(new JUnit4TestAdapter(CurrencyConvertorTests.class));

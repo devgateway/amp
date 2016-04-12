@@ -21,6 +21,7 @@ import org.dgfoundation.amp.nireports.output.NiOutCell;
 import org.dgfoundation.amp.nireports.output.NiSplitCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
+import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
@@ -45,9 +46,9 @@ public interface Behaviour<V extends NiOutCell> {
 	 * @return
 	 */
 	public V doHorizontalReduce(List<NiCell> cells);
-	public default Cell filterCell(Map<NiDimensionUsage, IdsAcceptor> acceptors, NiCell oldCell, NiCell splitCell) {
+	public default Cell filterCell(Map<NiDimensionUsage, IdsAcceptor> acceptors, Cell oldCell, Cell splitCell) {
 		if (cellMeetsCoos(acceptors, oldCell, splitCell))
-			return oldCell.getCell();
+			return oldCell;
 		else
 			return null;
 	}
@@ -60,17 +61,17 @@ public interface Behaviour<V extends NiOutCell> {
 		return null;
 	}
 	
-	public default ColumnContents horizSplit(ColumnContents oldContents, Map<Long, NiCell> splitCells, Set<Long> acceptableMainIds, Map<NiDimensionUsage, IdsAcceptor> acceptors) {
+	public default ColumnContents horizSplit(ColumnContents oldContents, Map<Long, Cell> splitCells, Set<Long> acceptableMainIds, Map<NiDimensionUsage, IdsAcceptor> acceptors) {
 		Map<Long, List<NiCell>> z = new HashMap<>();
 		for(Long mainId:acceptableMainIds) {
 			List<NiCell> oldCells = oldContents.data.get(mainId);
-			NiCell splitCell = splitCells.get(mainId);
+			Cell splitCell = splitCells.get(mainId);
 			if (oldCells == null)
 				continue;
 			for(NiCell oldCell:oldCells) {
-				Cell filteredCell = filterCell(acceptors, oldCell, splitCell);
+				Cell filteredCell = filterCell(acceptors, oldCell.getCell(), splitCell);
 				if (filteredCell != null)
-					z.computeIfAbsent(mainId, id -> new ArrayList<>()).add(oldCell.advanceHierarchy(filteredCell, splitCell.getCell()));
+					z.computeIfAbsent(mainId, id -> new ArrayList<>()).add(oldCell.advanceHierarchy(filteredCell, splitCell));
 			}
 		}
 		return new ColumnContents(z);
@@ -112,15 +113,17 @@ public interface Behaviour<V extends NiOutCell> {
 		return String.format("%s", getTimeRange());
 	}
 	
-	public static boolean cellMeetsCoos(Map<NiDimensionUsage, IdsAcceptor> acceptors, NiCell oldCell, NiCell splitCell) {
-		Map<NiDimensionUsage, NiDimension.Coordinate> cellCoos = oldCell.getCell().getCoordinates();
+	public static boolean cellMeetsCoos(Map<NiDimensionUsage, IdsAcceptor> acceptors, Cell oldCell, Cell splitCell) {
+		Map<NiDimensionUsage, NiDimension.Coordinate> cellCoos = oldCell.getCoordinates();
 		NiUtils.failIf(cellCoos == null, "null cellCoos");
-		for(Entry<NiDimensionUsage, NiDimension.Coordinate> splitterElem:splitCell.getCell().getCoordinates().entrySet()) {
+		for(Entry<NiDimensionUsage, NiDimension.Coordinate> splitterElem:splitCell.getCoordinates().entrySet()) {
 			NiDimensionUsage dimUsage = splitterElem.getKey();
 //			NiDimension.Coordinate splitterCoo = splitterElem.getValue();
 			NiDimension.Coordinate cellCoo = cellCoos.get(dimUsage);
 			if (cellCoo == null)
 				continue; // cell is indifferent to this coordinate
+			if (cellCoo.id == ColumnReportData.UNALLOCATED_ID && splitterElem.getValue().id == ColumnReportData.UNALLOCATED_ID)
+				continue; // undefineds match
 			IdsAcceptor acceptor = acceptors.get(dimUsage);
 			boolean isAcceptable = acceptor.isAcceptable(cellCoo);
 			if (!isAcceptable)

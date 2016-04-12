@@ -75,6 +75,9 @@ import com.google.common.base.Function;
 public class AmpReportsSchema extends AbstractReportsSchema {
 
 	public static final Logger logger = Logger.getLogger(AmpReportsSchema.class);
+
+	public final static Set<String> TRANSACTION_LEVEL_HIERARCHIES = Collections.unmodifiableSet(new HashSet<>(
+			Arrays.asList(ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.FUNDING_STATUS, ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.TYPE_OF_ASSISTANCE)));
 	
 	public final static OrganisationsDimension orgsDimension = OrganisationsDimension.instance;
 	public final static LocationsDimension locsDimension = LocationsDimension.instance;
@@ -643,6 +646,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	
 	// ========== implementation code below ==========
 	@Override public AmpReportsSchema addColumn(NiReportColumn<?> col) {
+		if (TRANSACTION_LEVEL_HIERARCHIES.contains(col.name))
+			col = col.setTransactionLevelHierarchy();
 		return (AmpReportsSchema) super.addColumn(col);
 	}
 	
@@ -662,4 +667,5 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		}
 		return sp;
 	};
+	
 }

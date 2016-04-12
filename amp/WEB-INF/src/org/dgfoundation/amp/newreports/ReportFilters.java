@@ -11,6 +11,4 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
  */
 public interface ReportFilters {
 	public Map<ReportElement, List<FilterRule>> getFilterRules();
-	public Integer getComputedYear();
-	public AmpFiscalCalendar getCalendar();
 }

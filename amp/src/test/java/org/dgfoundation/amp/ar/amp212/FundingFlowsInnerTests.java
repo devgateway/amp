@@ -76,7 +76,7 @@ public class FundingFlowsInnerTests extends NiTestCase {
 	
 	void testFiltering(NiCell splitterCell, NiCell fundingCell, String expectedAcceptorCalls, boolean shouldPass) {
 		LoggingIdsAcceptors acceptor = new LoggingIdsAcceptors(splitterCell.getCell());
-		Cell filteredCell = beh.filterCell(acceptor.getAcceptors(), fundingCell, splitterCell);
+		Cell filteredCell = beh.filterCell(acceptor.getAcceptors(), fundingCell.getCell(), splitterCell.getCell());
 		assertEquals(expectedAcceptorCalls, acceptor.getCalls().toString());
 		
 		if (shouldPass) {

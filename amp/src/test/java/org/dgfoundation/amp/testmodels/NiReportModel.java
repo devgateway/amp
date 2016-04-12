@@ -60,7 +60,7 @@ public class NiReportModel {
 		if (cor == null)
 			return null; // cor not specified -> not checking
 		for(int i = 0; i < Math.min(cor.size(), out.size()); i++) {
-			String comp = compareCells(cor.get(i), out.get(i));
+			String comp = compareCells(out.get(i), cor.get(i));
 			if (comp != null)
 				report_error(String.format("%s elem %d: %s", tag, i, comp));
 		}

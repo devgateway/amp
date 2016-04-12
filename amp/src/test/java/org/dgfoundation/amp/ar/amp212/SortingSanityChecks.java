@@ -31,7 +31,7 @@ import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.junit.Test;
 
 /**
- * basic sanity checks common between both the offdb schema and the AmpReportsSchema-using one.
+ * sorting tests common between both the offdb schema and the AmpReportsSchema-using one.
  * These are not supposed to be exhaustive tests; instead they are concerned about "no stupid or weird things happening"
  * @author Dolghier Constantin
  *

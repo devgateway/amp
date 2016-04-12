@@ -56,29 +56,29 @@ public class DirectedMeasureBehaviour extends TrivialMeasureBehaviour {
 	}
 	
 	@Override
-	public Cell filterCell(Map<NiDimensionUsage, IdsAcceptor> acceptors, NiCell oldCell, NiCell splitCell) {
-		if ((!splitCell.getCell().mainLevel.isPresent()) || getHierarchiesListener().test(splitCell.getCell().mainLevel.get().dimensionUsage))
+	public Cell filterCell(Map<NiDimensionUsage, IdsAcceptor> acceptors, Cell oldCell, Cell splitCell) {
+		if ((!splitCell.mainLevel.isPresent()) || getHierarchiesListener().test(splitCell.mainLevel.get().dimensionUsage))
 			return super.filterCell(acceptors, oldCell, splitCell); // this is not a related-organisation hierarchy
 		
 		// gone till here -> we're doing a hierarchy by a related organisation
-		String srcRoleCode = oldCell.getCell().getMetaInfo().getMetaInfo(MetaCategory.SOURCE_ROLE.category).v.toString();
-		String recipientRoleCode = oldCell.getCell().getMetaInfo().getMetaInfo(MetaCategory.RECIPIENT_ROLE.category).v.toString();
+		String srcRoleCode = oldCell.getMetaInfo().getMetaInfo(MetaCategory.SOURCE_ROLE.category).v.toString();
+		String recipientRoleCode = oldCell.getMetaInfo().getMetaInfo(MetaCategory.RECIPIENT_ROLE.category).v.toString();
 		
-		String dimUsgRole = splitCell.getCell().mainLevel.get().dimensionUsage.instanceName;
+		String dimUsgRole = splitCell.mainLevel.get().dimensionUsage.instanceName;
 		Coordinate coordinateToCheckOn = null;
 		if (srcRoleCode.equals(dimUsgRole))
-			coordinateToCheckOn = new Coordinate(OrganisationsDimension.LEVEL_ORGANISATION, (Long) oldCell.getCell().getMetaInfo().getMetaInfo(MetaCategory.SOURCE_ORG.category).v);
+			coordinateToCheckOn = new Coordinate(OrganisationsDimension.LEVEL_ORGANISATION, (Long) oldCell.getMetaInfo().getMetaInfo(MetaCategory.SOURCE_ORG.category).v);
 
 		if (recipientRoleCode.equals(dimUsgRole))
-			coordinateToCheckOn = new Coordinate(OrganisationsDimension.LEVEL_ORGANISATION, (Long) oldCell.getCell().getMetaInfo().getMetaInfo(MetaCategory.RECIPIENT_ORG.category).v);
+			coordinateToCheckOn = new Coordinate(OrganisationsDimension.LEVEL_ORGANISATION, (Long) oldCell.getMetaInfo().getMetaInfo(MetaCategory.RECIPIENT_ORG.category).v);
 
 		if (coordinateToCheckOn == null)
 			return null; // related-org-role not implied in this kind of transaction
 		
-		NiDimensionUsage dimUsage = splitCell.getCell().mainLevel.get().dimensionUsage;
+		NiDimensionUsage dimUsage = splitCell.mainLevel.get().dimensionUsage;
 		IdsAcceptor acceptor = acceptors.get(dimUsage);
 		if (acceptor.isAcceptable(coordinateToCheckOn))
-			return oldCell.getCell();
+			return oldCell;
 		else
 			return null;
 	}

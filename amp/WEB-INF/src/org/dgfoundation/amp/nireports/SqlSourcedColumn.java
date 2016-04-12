@@ -12,6 +12,7 @@ import java.util.TreeMap;
 
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
+import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.nireports.amp.MetaCategory;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
@@ -138,7 +139,7 @@ public abstract class SqlSourcedColumn<K extends Cell> extends NiReportColumn<K>
 	protected Coordinate addCoordinateIfLongExists(Map<NiDimensionUsage, Coordinate> coos, ResultSet row, String viewColName, LevelColumn levelColumn) throws SQLException {
 		long val = row.getLong(viewColName);
 		if (row.wasNull())
-			return null;
+			val = -999999999; //MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL;
 		
 		Coordinate newVal = levelColumn.getCoordinate(val);
 		coos.put(levelColumn.dimensionUsage, newVal);

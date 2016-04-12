@@ -24,7 +24,7 @@ import org.junit.Test;
  * @author Constantin Dolghier
  *
  */
-public class AmpSchemaSanityTests extends SortingSanityChecks {
+public class AmpSchemaSanityTests extends BasicSanityChecks {
 
 	final List<String> mtefActs = Arrays.asList(
 		"mtef activity 1",

@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.nireports.runtime;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,6 +12,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.algo.AmpCollections;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
@@ -27,6 +29,7 @@ import static org.dgfoundation.amp.algo.AmpCollections.remap;
  */
 public class ColumnReportData extends ReportData {
 	final Map<CellColumn, ColumnContents> contents;
+	public final static long UNALLOCATED_ID = -999999999l;
 	
 	public ColumnReportData(NiReportsEngine context, NiSplitCell splitter, Map<CellColumn, ColumnContents> contents) {
 		super(context, splitter);
@@ -53,7 +56,7 @@ public class ColumnReportData extends ReportData {
 		
 		Map<Long, Set<Long>> actIds = new HashMap<>(); // Map<entityId, Set<mainIds-which-have-this-value>>
 		Map<Long, List<NiCell>> splitterArrays = new HashMap<>(); // Map<entityId, entity_value>
-		Map<Long, Map<Long, NiCell>> percentages = new HashMap<>(); // Map<entityId, Map<activityId, Percentage>>
+		Map<Long, Map<Long, Cell>> percentages = new HashMap<>(); // Map<entityId, Map<activityId, Percentage>>
 		
 		public SplitDigest(CellColumn cellColumn, ColumnContents contents, Supplier<Set<Long>> allIds) {
 			this.contents = contents;
@@ -68,9 +71,9 @@ public class ColumnReportData extends ReportData {
 //			splitters.put(UNALLOCATED_ID, DUMMY_UNALLOCATED_CELL);
 //			percentages.put(UNALLOCATED_ID, new HashMap<ALL_IDS_NOT_ANYWHERE_ELSE, DUMMY_UNALLOCATED_CELL>());
 
-			long UNALLOCATED_ID = -999999999;
 			Set<Long> missingActIdsInSplitterColumn = new HashSet<>(allIds.get());
-			missingActIdsInSplitterColumn.removeAll(cellColumn.contents.data.keySet());
+			if (!schemaColumn.isTransactionLevelHierarchy())
+				missingActIdsInSplitterColumn.removeAll(cellColumn.contents.data.keySet());
 			//missingActIdsInSplitterColumn.clear();
 			
 			for(long missingActId:missingActIdsInSplitterColumn) {
@@ -85,7 +88,7 @@ public class ColumnReportData extends ReportData {
 			long entityId = cell.entityId;
 			splitterArrays.computeIfAbsent(entityId, zz-> new ArrayList<>()).add(splitCell);
 			actIds.computeIfAbsent(entityId, zz -> new HashSet<>()).add(cell.activityId);
-			percentages.computeIfAbsent(entityId, zz -> new HashMap<>()).put(cell.activityId, splitCell);
+			percentages.computeIfAbsent(entityId, zz -> new HashMap<>()).put(cell.activityId, splitCell.getCell());
 		}
 		
 		public Map<Long, NiSplitCell> buildSplitters() {

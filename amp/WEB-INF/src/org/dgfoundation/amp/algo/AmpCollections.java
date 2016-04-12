@@ -113,7 +113,7 @@ public class AmpCollections {
 	}
 	
 	/**
-	 * returns an ordered set which is the union of 2 union. The elements in the result are contained in the same order as (s1 + <any in s2 which are not contained in s1>)
+	 * returns an ordered set which is the union of 2 collections. The elements in the result are contained in the same order as (s1 + <any in s2 which are not contained in s1>)
 	 * @param s1
 	 * @param s2
 	 * @return
@@ -125,6 +125,36 @@ public class AmpCollections {
 			if (!res.contains(k))
 				res.add(k);
 		}
+		return res;
+	}
+
+	/**
+	 * returns an ordered set which contains one set prefixed by all the elements in an another set which are not present in the first set
+	 * @param prefix
+	 * @param s2
+	 * @return
+	 */
+	public static<K> LinkedHashSet<K> prefixUnion(Collection<K> prefix, Set<K> s2) {
+		LinkedHashSet<K> res = new LinkedHashSet<>();
+		
+		for(K k:prefix)
+			if (!s2.contains(k))
+				res.add(k);
+		
+		res.addAll(s2);
+		return res;
+	}
+	
+	/**
+	 * returns an ordered set which is the difference of 2 collections. The elements in the result are contained in the same order as (s1 + <any in s2 which are not contained in s1>)
+	 * @param s1
+	 * @param s2
+	 * @return
+	 */
+	public static<K> LinkedHashSet<K> difference(Collection<K> s1, Collection<K> s2) {
+		LinkedHashSet<K> res = new LinkedHashSet<>();
+		res.addAll(s1);
+		res.removeAll(s2);
 		return res;
 	}
 	

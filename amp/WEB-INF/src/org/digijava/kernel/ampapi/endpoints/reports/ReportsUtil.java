@@ -24,6 +24,7 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
@@ -396,7 +397,7 @@ public class ReportsUtil {
 			}
 			
 			MondrianReportFilters formFilters = FilterUtils.getFilters(filters, newFilters);
-			MondrianReportFilters stickyFilters = copyStickyMtefEntries(spec.getFilters(), formFilters);
+			MondrianReportFilters stickyFilters = copyStickyMtefEntries((AmpReportFilters) spec.getFilters(), formFilters);
 			spec.setFilters(stickyFilters);
 		}
 	}
@@ -408,7 +409,7 @@ public class ReportsUtil {
 	 * @param newFilters
 	 * @return
 	 */
-	protected static MondrianReportFilters copyStickyMtefEntries(ReportFilters oldFilters, MondrianReportFilters newFilters) {
+	protected static MondrianReportFilters copyStickyMtefEntries(AmpReportFilters oldFilters, MondrianReportFilters newFilters) {
 		if (oldFilters == null || oldFilters.getFilterRules() == null)
 			return newFilters; // no chance of stickies
 		

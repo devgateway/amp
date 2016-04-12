@@ -61,8 +61,8 @@ public class NiReportsFetchingTests extends ReportingTestCase {
 					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);
 					assertEquals(
 						"[" 
-						+ "(actId: 40, amt: 75000 on 2014-02-05, coos: {{cats.Financing Instrument=(level: 1, id: 2120), cats.Mode of Payment=(level: 1, id: 2094), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21700)}}, meta: {MetaInfoSet: [source_org: 21700, source_role: DN, adjustment_type: Actual, transaction_type: 0]}, "
-     					+ "(actId: 64, amt: 45000 on 2015-01-06, coos: {{cats.Financing Instrument=(level: 1, id: 2125), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21695)}}, meta: {MetaInfoSet: [source_org: 21695, source_role: DN, adjustment_type: Actual, transaction_type: 0]}]",
+						+ "(actId: 40, amt: 75000 on 2014-02-05, coos: {{cats.Financing Instrument=(level: 1, id: 2120), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: 2094), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21700)}}, meta: {MetaInfoSet: [source_org: 21700, source_role: DN, adjustment_type: Actual, transaction_type: 0]}, "
+     					+ "(actId: 64, amt: 45000 on 2015-01-06, coos: {{cats.Financing Instrument=(level: 1, id: 2125), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: -999999999), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21695)}}, meta: {MetaInfoSet: [source_org: 21695, source_role: DN, adjustment_type: Actual, transaction_type: 0]}]",
 						cells.toString());
 				});
 	}
@@ -73,7 +73,7 @@ public class NiReportsFetchingTests extends ReportingTestCase {
 				Arrays.asList("Pure MTEF Project"),
 				engine -> {
 					List<?> cells = sorted(engine.schema.getColumns().get("MTEF 2011/2012").fetch(engine));
-					assertEquals("[(actId: 19, amt: 33888 on 2011-01-01, coos: {{cats.Financing Instrument=(level: 1, id: 2120), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21699)}}, meta: {MetaInfoSet: [source_org: 21699, source_role: DN]}]",
+					assertEquals("[(actId: 19, amt: 33888 on 2011-01-01, coos: {{cats.Financing Instrument=(level: 1, id: 2120), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: -999999999), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21699)}}, meta: {MetaInfoSet: [source_org: 21699, source_role: DN]}]",
 						cells.toString());
 				});
 		
@@ -93,8 +93,8 @@ public class NiReportsFetchingTests extends ReportingTestCase {
 			engine -> {
 				List<?> cells = sorted(engine.schema.getColumns().get("Real MTEF 2011/2012").fetch(engine));
 				assertEquals("[" + 
-					"(actId: 73, amt: 50000 on 2011-01-01, coos: {{cats.Financing Instrument=(level: 1, id: 2120), cats.Mode of Payment=(level: 1, id: 2096), cats.Type Of Assistance=(level: 1, id: 2124), orgs.DN=(level: 2, id: 21696)}}, meta: {MetaInfoSet: [recipient_role: BA, directed_transaction_flow: EXEC-BENF, source_org: 21696, source_role: EA, recipient_org: 21702]}, " + 
-					"(actId: 73, amt: 110500 on 2011-01-01, coos: {{cats.Financing Instrument=(level: 1, id: 2125), cats.Mode of Payment=(level: 1, id: 2094), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21698)}}, meta: {MetaInfoSet: [recipient_role: EA, directed_transaction_flow: IMPL-EXEC, source_org: 21698, source_role: IA, recipient_org: 21694]}"
+					"(actId: 73, amt: 50000 on 2011-01-01, coos: {{cats.Financing Instrument=(level: 1, id: 2120), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: 2096), cats.Type Of Assistance=(level: 1, id: 2124), orgs.DN=(level: 2, id: 21696)}}, meta: {MetaInfoSet: [recipient_role: BA, directed_transaction_flow: EXEC-BENF, source_org: 21696, source_role: EA, recipient_org: 21702]}, " + 
+					"(actId: 73, amt: 110500 on 2011-01-01, coos: {{cats.Financing Instrument=(level: 1, id: 2125), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: 2094), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21698)}}, meta: {MetaInfoSet: [recipient_role: EA, directed_transaction_flow: IMPL-EXEC, source_org: 21698, source_role: IA, recipient_org: 21694]}"
 				+ "]",
 				cells.toString());
 			});

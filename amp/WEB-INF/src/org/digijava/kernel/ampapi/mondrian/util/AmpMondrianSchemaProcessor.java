@@ -21,6 +21,7 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MondrianTablesRepository;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
@@ -172,8 +173,8 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	}
 	
 	protected int getReportSelectedYear() {
-		Integer year = currentReport.get().getFilters() == null ? 
-				null : currentReport.get().getFilters().getComputedYear();
+		AmpReportFilters filters = (AmpReportFilters) currentReport.get().getFilters();
+		Integer year = filters == null ? null : filters.getComputedYear();
 		// if not set, then it means Current Year
 		if (year == null) {
 			year = Calendar.getInstance().get(Calendar.YEAR);

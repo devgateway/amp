@@ -279,4 +279,10 @@ public class FilterRule {
 		}
 		return res;
 	}
+	
+	public static<K> Predicate<K> maybeNegated(Predicate<K> in, boolean positive) {
+		if (positive) return in;
+		return in.negate();
+	}
+
 }

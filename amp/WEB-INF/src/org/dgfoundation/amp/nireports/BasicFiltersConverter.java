@@ -51,10 +51,10 @@ public abstract class BasicFiltersConverter {
 	
 	public PassiveNiFilters buildNiFilters(Function<NiReportsEngine, Set<Long>> activityIdsSrc) {
 		rawRules.forEach((repElem, rules) -> {
-			if (rules != null && rules.isEmpty())
+			if (rules != null && !rules.isEmpty())
 				processElement(repElem, rules);
 		});
-		return new PassiveNiFilters(predicates, new LinkedHashSet<>(mandatoryHiers), activityIdsSrc);
+		return new PassiveNiFilters(engine, predicates, new LinkedHashSet<>(mandatoryHiers), activityIdsSrc);
 	}
 	
 	protected void processElement(ReportElement repElem, List<FilterRule> rules) {
@@ -90,7 +90,11 @@ public abstract class BasicFiltersConverter {
 	}
 	
 	protected void addRulesIfPresent(LevelColumn lc, boolean positive, Set<Long> ids) {
-		predicates.computeIfAbsent(lc.dimensionUsage, ignored -> new ArrayList<>()).add(engine.buildAcceptor(lc.dimensionUsage, ids.stream().map(z -> new Coordinate(lc.level, z)).collect(toList())));
+		if (ids == null)
+			return;
+		
+		Predicate<Coordinate> predicate = FilterRule.maybeNegated(engine.buildAcceptor(lc.dimensionUsage, ids.stream().map(z -> new Coordinate(lc.level, z)).collect(toList())), positive);
+		predicates.computeIfAbsent(lc.dimensionUsage, ignored -> new ArrayList<>()).add(predicate);
 	}
 	
 	protected abstract void processMiscElement(ReportElement repElem, List<FilterRule> rules);

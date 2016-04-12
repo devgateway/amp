@@ -18,12 +18,22 @@ import org.dgfoundation.amp.nireports.Cell;
 public abstract class NiReportColumn<K extends Cell> extends NiReportedEntity<K> {
 	
 	public final Optional<NiDimension.LevelColumn> levelColumn;
+	protected boolean transactionLevelHierarchy = false;
 		
 	protected NiReportColumn(String name, NiDimension.LevelColumn levelColumn, Behaviour<?> behaviour, String description) {
 		super(name, behaviour, description);
 		this.levelColumn = Optional.ofNullable(levelColumn);
 	}
 		
+	public boolean isTransactionLevelHierarchy() {
+		return this.transactionLevelHierarchy;
+	}
+	
+	public NiReportColumn<K> setTransactionLevelHierarchy() {
+		this.transactionLevelHierarchy = true;
+		return this;
+	}
+	
 	@Override public String toString() {
 		return String.format("coldef: <%s>", name);
 	}

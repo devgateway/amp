@@ -22,6 +22,7 @@ import org.dgfoundation.amp.nireports.amp.AmpPrecisionSetting;
 import org.dgfoundation.amp.nireports.meta.MetaInfo;
 import org.dgfoundation.amp.nireports.meta.MetaInfoGenerator;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
+import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
@@ -131,10 +132,8 @@ public abstract class HardcodedCells<K extends Cell> {
 	 * @param coos
 	 */
 	private void addToCoordsIfExists(LevelColumn levelColumn, String categoryName, String value, Map<NiDimensionUsage, Coordinate> coos) {
-		if (value == null)
-			return;
 		//Map<String, LevelColumn> optionalIdsMap = new FundingIdsMapper().getOptionalIdsMap();
-		Long val = fundingIds.get(categoryName).get(value);
+		Long val = value == null ? ColumnReportData.UNALLOCATED_ID : fundingIds.get(categoryName).get(value);
 		//LevelColumn levelColumn = optionalIdsMap.get(categoryName);
 		Coordinate newVal = levelColumn.getCoordinate(val);
 		coos.put(levelColumn.dimensionUsage, newVal);

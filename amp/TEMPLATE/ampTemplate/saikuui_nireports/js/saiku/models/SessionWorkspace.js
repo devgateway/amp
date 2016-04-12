@@ -22,7 +22,18 @@
  */
 var SessionWorkspace = Backbone.Model.extend({
 	
-	//IMPORTANT: Care with this file, some changes can cause stop loading Saiku.    
+
+	defaults : {
+		"queryModel" : {},
+		"name" : "D1CE2041-5F65-64C6-8C21-2D15741ACB3A",
+		"parameters" : {},
+		"plugins" : {},
+		"metadata" : {},
+		"queryType" : "OLAP",
+		"type" : "QUERYMODEL"
+	},
+	
+	// IMPORTANT: Care with this file, some changes can cause stop loading Saiku.
     initialize: function(args, options) {
     	Saiku.logger.log("SessionWorkspace.initialize");
     	Backbone.history.start();
@@ -32,7 +43,7 @@ var SessionWorkspace = Backbone.Model.extend({
         _.bindAll(this, "process_datasources");
         this.initialized = false;
         this.first = true;
-        this.fetch({success:this.process_datasources},{});        
+        this.process_datasources(this, this.attributes);
     },
 
     refresh: function() {
@@ -63,11 +74,5 @@ var SessionWorkspace = Backbone.Model.extend({
         Saiku.events.trigger('session:new', {
         	session: this
         });
-    },
-    
-    url: function() {
-    	Saiku.logger.log("SessionWorkspace.url");
-    	//Always refresh
-    	return "/TEMPLATE/ampTemplate/saikuui_nireports/mockData/sessionWorkspace.json";
     }
 });

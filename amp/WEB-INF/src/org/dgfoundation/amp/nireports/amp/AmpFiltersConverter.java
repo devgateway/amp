@@ -1,9 +1,12 @@
 package org.dgfoundation.amp.nireports.amp;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
+import org.dgfoundation.amp.newreports.FilterRule.FilterType;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.nireports.BasicFiltersConverter;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
@@ -18,8 +21,19 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 	protected void processColumnElement(String columnName, List<FilterRule> rules) {
 		if (columnName.equals(ColumnConstants.ARCHIVED))
 			return; //TODO: hack so that preexisting testcases are not broken while developing the feature
-		if (schema.getColumns().containsKey(columnName) && !schema.getColumns().get(columnName).isTransactionLevelHierarchy())
-			return; //TODO: disable all non-supported filters
+		
+		if (columnName.equals(ColumnConstants.DONOR_ID))
+			columnName = ColumnConstants.DONOR_AGENCY;
+		
+		if (columnName.equals(ColumnConstants.DONOR_AGENCY) && (rules == null || (rules.size() == 1 && rules.get(0).filterType == FilterType.VALUES && rules.get(0).values.isEmpty())))
+			return; // temporary hack for https://jira.dgfoundation.org/browse/AMP-22602
+		
+//		if (schema.getColumns().containsKey(columnName) && !schema.getColumns().get(columnName).isTransactionLevelHierarchy())
+//			return; //TODO: disable all non-supported filters
+		if (columnName.equals(ColumnConstants.ACTIVITY_ID)) {
+			this.activityIdsPredicate = AmpCollections.mergePredicates(rules.stream().map(FilterRule::buildPredicate).collect(Collectors.toList()));
+			return;
+		}
 		if (schema.getColumns().containsKey(columnName)) {
 			super.processColumnElement(columnName, rules);
 			return;

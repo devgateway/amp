@@ -312,7 +312,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 		try {
 			for(String mandatoryHier:filters.getMandatoryHierarchies()) {
 				if (columnSupported(mandatoryHier)) {
-					fetchedColumns.put(mandatoryHier, fetchEntity(schema.getColumns().get(mandatoryHier), false));
+					timer.run(mandatoryHier, () -> fetchedColumns.put(mandatoryHier, fetchEntity(schema.getColumns().get(mandatoryHier), false)));
 				} else {
 					addReportWarning(new ReportWarning(String.format("asked to filter by unsupported column <%s>; ignoring", mandatoryHier)));
 				}

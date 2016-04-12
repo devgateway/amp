@@ -28,14 +28,6 @@ public class OffDbNiReportFilteringTests extends FilteringSanityChecks {
 		nrRunReports = 0;
 	}
 	
-	@Test
-	public void testFilteringByModeOfPaymentCashNegative() {
-		NiReportModel cor = null;
-		
-		ReportSpecificationImpl spec = buildSpecForFiltering("flat mop [NOT cash]", 
-				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION), null, ColumnConstants.MODE_OF_PAYMENT, Arrays.asList(2093l), false);
-		runNiTestCase(spec, "en", Arrays.asList("pledged 2"), cor);
-	}
 	
 	@Override
 	protected NiReportExecutor getNiExecutor(List<String> activityNames) {

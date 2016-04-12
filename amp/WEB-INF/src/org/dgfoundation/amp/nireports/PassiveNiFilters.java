@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -35,16 +36,18 @@ public class PassiveNiFilters implements NiFilters {
 	//protected final BiFunction<NiFilters, NiReportsEngine, Set<Long>> activityIdsComputer;
 	protected final Function<NiReportsEngine, Set<Long>> activityIdsComputer;
 	protected final Memoizer<Set<Long>> workspaceFilter;
+	public final Predicate<Long> activityIdsPredicate; 
 	//protected final ConcurrentHashMap<NiReportsEngine, Set<Long>> activityIds = new ConcurrentHashMap<>();
 	
-	protected PassiveNiFilters(NiReportsEngine engine, Map<NiDimensionUsage, List<Predicate<Coordinate>>> predicates, LinkedHashSet<String> mandatoryHierarchies, Function<NiReportsEngine, Set<Long>> activityIdsComputer) {
+	public PassiveNiFilters(NiReportsEngine engine, Map<NiDimensionUsage, List<Predicate<Coordinate>>> predicates, LinkedHashSet<String> mandatoryHierarchies, Function<NiReportsEngine, Set<Long>> activityIdsComputer, Predicate<Long> activityIdsPredicate) {
 		Objects.requireNonNull(activityIdsComputer);
 		Objects.requireNonNull(engine);
 		this.engine = engine;
 		this.filteringCoordinates = unmodifiableMap(remap(predicates, AmpCollections::mergePredicates, null));
 		this.mandatoryHierarchies = unmodifiableSet(mandatoryHierarchies);
 		this.activityIdsComputer = activityIdsComputer;
-		this.workspaceFilter = new Memoizer<>(() -> this.activityIdsComputer.apply(this.engine));
+		this.activityIdsPredicate = Optional.ofNullable(activityIdsPredicate).orElse(ignored -> true);
+		this.workspaceFilter = new Memoizer<Set<Long>>(() -> this.activityIdsComputer.apply(this.engine).stream().filter(this.activityIdsPredicate).collect(Collectors.toSet()));
 	}
 	
 	@Override

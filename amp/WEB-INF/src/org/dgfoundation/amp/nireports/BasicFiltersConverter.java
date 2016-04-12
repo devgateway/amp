@@ -39,6 +39,7 @@ public abstract class BasicFiltersConverter {
 	protected final NiReportsSchema schema;
 	protected final Map<NiDimensionUsage, List<Predicate<NiDimension.Coordinate>>> predicates = new HashMap<>();
 	protected final Set<String> mandatoryHiers = new TreeSet<>();
+	protected Predicate<Long> activityIdsPredicate;
 	
 	public BasicFiltersConverter(NiReportsEngine engine) {
 		this.engine = engine;
@@ -54,7 +55,7 @@ public abstract class BasicFiltersConverter {
 			if (rules != null && !rules.isEmpty())
 				processElement(repElem, rules);
 		});
-		return new PassiveNiFilters(engine, predicates, new LinkedHashSet<>(mandatoryHiers), activityIdsSrc);
+		return new PassiveNiFilters(engine, predicates, new LinkedHashSet<>(mandatoryHiers), activityIdsSrc, activityIdsPredicate);
 	}
 	
 	protected void processElement(ReportElement repElem, List<FilterRule> rules) {

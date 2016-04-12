@@ -179,14 +179,14 @@ public class FilterRule {
 				Predicate<Long> res = z -> true;
 					if (min != null) res = res.and(z -> z >= Long.parseLong(min));
 					if (max != null) res = res.and(z -> z <= Long.parseLong(max));
-					return res;
+					return maybeNegated(res, this.valuesInclusive);
 			}
 			case SINGLE_VALUE : 
-				return z -> z.equals(parseStr(value));
+				return maybeNegated(z -> z.equals(parseStr(value)), this.valuesInclusive);
 			
 			case VALUES :
 				Set<Long> cor = values.stream().map(FilterRule::parseStr).collect(Collectors.toSet());
-				return cor::contains;
+				return maybeNegated(cor::contains, this.valuesInclusive);
 				
 			default:
 				throw new RuntimeException("unknown filter type: " + filterType);

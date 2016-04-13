@@ -185,11 +185,12 @@ function convertIdToName(name, type) {
 		// Delete first '[' and last ']' 
 		name = name.replace(/^\[|]$/g, '');
 		name = name.split("][");
-		// Workaround for FF columns: Remove these elements so the backend can sort properly.
+		// Workaround for FF columns: Remove these elements so the backend can sort properly. The strings where taken from CategAmountCell.java
 		name = _.without(name, _.findWhere(name, ' '));
-		name = _.without(name, _.findWhere(name, 'DN - DN'));
-		name = _.without(name, _.findWhere(name, 'DN - EXEC'));
-		name = _.without(name, _.findWhere(name, 'DN - IMPL'));
+		name = _.without(name, _.find(name, function(item) {return item.indexOf('DN') !== -1}));
+		name = _.without(name, _.find(name, function(item) {return item.indexOf('EXEC') !== -1}));
+		name = _.without(name, _.find(name, function(item) {return item.indexOf('IMPL') !== -1}));
+		name = _.without(name, _.find(name, function(item) {return item.indexOf('BENF') !== -1}));
 		break;
 	case 'HEADER_HIERARCHY':
 		name = name.replace(/^\[|]$/g, '');

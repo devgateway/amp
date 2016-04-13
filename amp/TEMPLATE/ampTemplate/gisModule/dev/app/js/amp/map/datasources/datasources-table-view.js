@@ -41,12 +41,20 @@ module.exports = Backbone.View.extend({
         app: self.app
       }).render().el;
 
+      
       self.app.translator.translateDOM(
         self.template(self.collection.getPageDetails())).then(
         function(newEl) {
           self.$el.html(newEl);
           self.updatePlannedActualUI();
         });
+      
+      if(self.collection.getPageDetails().currentPage == self.collection.getPageDetails().totalPageCount){
+    	  self.$el.find('.load-more').addClass('load-more-hide');
+      }else{
+    	  self.$el.find('.load-more').removeClass('load-more-hide');
+      }
+      
       // drs: review, inconsistant behaviour between chrome and FF
       if (!_.isEmpty(tableContent)) {
         self.$('table', self.$el).append(tableContent);
@@ -93,7 +101,7 @@ module.exports = Backbone.View.extend({
       }
       self.$el.find('.load-more').text('loading...').addClass('disabled');
     } else {
-    	self.$el.find('.load-more').hide();
+    	self.$el.find('.load-more').addClass('load-more-hide');
     }
   }
 

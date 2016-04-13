@@ -24,7 +24,7 @@ public class GregorianTestDateGenerator {
 	
 	public GregorianTestDateGenerator(int year, String month) {
 		String dateString = String.format("%d-%s-01", year, month);
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MMMM-dd");
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MMMM-dd", Locale.US);
 		date = LocalDate.parse(dateString, dtf);
 	}
 	

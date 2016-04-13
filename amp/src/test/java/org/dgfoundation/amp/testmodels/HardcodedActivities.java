@@ -1,7 +1,9 @@
 package org.dgfoundation.amp.testmodels;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class HardcodedActivities {
@@ -74,6 +76,11 @@ public class HardcodedActivities {
 	public Map<Long, String> getActNamesMap() {
 		return actNames;
 	}
+	
+	public List<String> getActNamesList() {
+		return new ArrayList<String>(actNames.values());
+	}
+	
 	
 	public Map<String, Long> getActIdsMap() {
 		return actIds;

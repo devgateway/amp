@@ -52,6 +52,8 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 	
 	public ReportCell visitNumberedCell(NumberedCell cell) {
 		BigDecimal amt = cell.getAmount();
+//		if (!amt.equals(BigDecimal.ZERO))
+//			System.out.print("!");
 		return new org.dgfoundation.amp.newreports.AmountCell(amt, formattedValues.computeIfAbsent(amt, this::formatNumber));
 	}
 	

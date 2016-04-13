@@ -74,16 +74,24 @@ Backbone.sync = function(method, model, options) {
         'update': "PUT",
         'delete': "DELETE"
     };
+    var cache = false;
     
     // Generate AJAX action
     var type = methodMap[method];
-    var url = null;
+    var url = null;        
     if ((_.isFunction(model.url) ? model.url() : model.url).indexOf(".json") === -1) {
     	url = Settings.REST_URL
         	+ (_.isFunction(model.url) ? model.url() : model.url) 
         	+ "?nireport=" + Settings.NIREPORT; // AMP-22070 temporary parameter, will be removed when Mondrian will not be used
     } else {
     	url = model.url();
+    }
+    
+    // AMP-22600: Remove timestamp argument.
+    if (url.indexOf('.json') !== -1) {
+    	Saiku.logger.log('Using cache=true for ' + url);
+    	cache = true;
+    	type = 'POST';
     }
         
     // Prepare for failure
@@ -149,7 +157,7 @@ Backbone.sync = function(method, model, options) {
     params = {
       url:          url,
       type:         type,
-      cache:        false,
+      cache:        cache,
       data:         data,
       contentType:  contentType,
       dataType:     dataType,

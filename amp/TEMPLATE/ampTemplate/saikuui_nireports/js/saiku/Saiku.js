@@ -85,6 +85,7 @@ Backbone.emulateHTTP = false;
 
 // Load plugins.
 $(document).ready(function() {
+	Saiku.logger.log('Saiku.Document Ready');
 	var plugins = new PluginCollection();
 	plugins.fetch({
 		success : function() {
@@ -95,6 +96,7 @@ $(document).ready(function() {
 				jQuery.getScript(log.attributes.path);
 
 				if (j == i) {
+					Saiku.logger.log('Saiku.Create Session');
 					Saiku.session = new Session({}, {
 						username : Settings.USERNAME,
 						password : Settings.PASSWORD

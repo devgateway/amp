@@ -43,7 +43,7 @@ var SessionWorkspace = Backbone.Model.extend({
         _.bindAll(this, "process_datasources");
         this.initialized = false;
         this.first = true;
-        this.process_datasources(this, this.attributes);
+        this.process_datasources(this, this.defaults);
     },
 
     refresh: function() {

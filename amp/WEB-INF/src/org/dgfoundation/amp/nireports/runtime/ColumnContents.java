@@ -76,6 +76,16 @@ public class ColumnContents {
 		return res;
 	}
 
+	/**
+	 * MUTABLY removes all ids from the set which are not in a given acceptable set of ids
+	 * @param ids
+	 */
+	public void retainIds(Set<Long> ids) {
+		Set<Long> idsToRemove = AmpCollections.difference(data.keySet(), ids);
+		for(Long id:idsToRemove)
+			data.remove(id);
+	}
+	
 //	public ColumnContents keepEntries(Set<Long> ids) {
 //		return new ColumnContents(AmpCollections.keepEntries(data, ids));
 //	}

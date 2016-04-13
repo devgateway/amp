@@ -3,6 +3,8 @@ package org.dgfoundation.amp.nireports;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import org.digijava.module.common.util.DateTimeUtil;
+
 
 /**
  * <strong>immutable</strong> representation of a transaction
@@ -69,6 +71,10 @@ public class MonetaryAmount implements Comparable<MonetaryAmount> {
 				return datesDelta;
 		}
 		return 0;
+	}
+	
+	public long getJulianDayCode() {
+		return DateTimeUtil.toJulianDayNumber(date);
 	}
 	
 	/**

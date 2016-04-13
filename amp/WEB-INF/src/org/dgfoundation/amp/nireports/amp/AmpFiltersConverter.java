@@ -1,13 +1,18 @@
 package org.dgfoundation.amp.nireports.amp;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.dgfoundation.amp.nireports.CategAmountCell;
+import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.FilterRule.FilterType;
 import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.nireports.BasicFiltersConverter;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 
@@ -51,7 +56,8 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 	
 	@Override
 	protected void processMiscElement(ReportElement repElem, List<FilterRule> rules) {
-		// TODO: add non-columns
+		if (repElem.type == ElementType.DATE) {
+			addCellPredicate(NiReportsEngine.FUNDING_COLUMN_NAME, cell -> ((CategAmountCell) cell).amount.getJulianDayCode(), rules);
+		}
 	}
-
 }

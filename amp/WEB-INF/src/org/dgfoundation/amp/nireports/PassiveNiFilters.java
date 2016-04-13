@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.Memoizer;
-import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
@@ -32,6 +31,7 @@ public class PassiveNiFilters implements NiFilters {
 		
 	protected final NiReportsEngine engine;
 	protected final Map<NiDimensionUsage, Predicate<NiDimension.Coordinate>> filteringCoordinates;
+	protected final Map<String, Predicate<Cell>> cellPredicates;
 	protected final Set<String> mandatoryHierarchies;
 	//protected final BiFunction<NiFilters, NiReportsEngine, Set<Long>> activityIdsComputer;
 	protected final Function<NiReportsEngine, Set<Long>> activityIdsComputer;
@@ -39,11 +39,12 @@ public class PassiveNiFilters implements NiFilters {
 	public final Predicate<Long> activityIdsPredicate; 
 	//protected final ConcurrentHashMap<NiReportsEngine, Set<Long>> activityIds = new ConcurrentHashMap<>();
 	
-	public PassiveNiFilters(NiReportsEngine engine, Map<NiDimensionUsage, List<Predicate<Coordinate>>> predicates, LinkedHashSet<String> mandatoryHierarchies, Function<NiReportsEngine, Set<Long>> activityIdsComputer, Predicate<Long> activityIdsPredicate) {
+	public PassiveNiFilters(NiReportsEngine engine, Map<NiDimensionUsage, List<Predicate<Coordinate>>> predicates, Map<String, List<Predicate<Cell>>> cellPredicates, LinkedHashSet<String> mandatoryHierarchies, Function<NiReportsEngine, Set<Long>> activityIdsComputer, Predicate<Long> activityIdsPredicate) {
 		Objects.requireNonNull(activityIdsComputer);
 		Objects.requireNonNull(engine);
 		this.engine = engine;
 		this.filteringCoordinates = unmodifiableMap(remap(predicates, AmpCollections::mergePredicates, null));
+		this.cellPredicates = unmodifiableMap(remap(cellPredicates, AmpCollections::mergePredicates, null));
 		this.mandatoryHierarchies = unmodifiableSet(mandatoryHierarchies);
 		this.activityIdsComputer = activityIdsComputer;
 		this.activityIdsPredicate = Optional.ofNullable(activityIdsPredicate).orElse(ignored -> true);
@@ -53,6 +54,11 @@ public class PassiveNiFilters implements NiFilters {
 	@Override
 	public Map<NiDimensionUsage, Predicate<NiDimension.Coordinate>> getProcessedFilters() {
 		return filteringCoordinates;
+	}
+	
+	@Override
+	public Map<String, Predicate<Cell>> getCellPredicates() {
+		return this.cellPredicates;
 	}
 	
 	@Override
@@ -85,6 +91,9 @@ public class PassiveNiFilters implements NiFilters {
 		
 		if (col == null)
 			return false;
+		 
+		if (cellPredicates.containsKey(colName))
+			return true;
 		
 		if (!col.levelColumn.isPresent())
 			return false;

@@ -15,6 +15,7 @@ import org.dgfoundation.amp.newreports.ReportWarning;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
+import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
@@ -38,6 +39,7 @@ public abstract class BasicFiltersConverter {
 	protected final NiReportsEngine engine;
 	protected final NiReportsSchema schema;
 	protected final Map<NiDimensionUsage, List<Predicate<NiDimension.Coordinate>>> predicates = new HashMap<>();
+	protected final Map<String, List<Predicate<Cell>>> cellPredicates = new HashMap<>();
 	protected final Set<String> mandatoryHiers = new TreeSet<>();
 	protected Predicate<Long> activityIdsPredicate;
 	
@@ -45,8 +47,8 @@ public abstract class BasicFiltersConverter {
 		this.engine = engine;
 		this.spec = engine.spec;
 		this.schema = engine.schema;
-		this.rawRules = (spec.getFilters() != null && spec.getFilters().getFilterRules() != null)
-			? Collections.unmodifiableMap(spec.getFilters().getFilterRules())
+		this.rawRules = (spec.getFilters() != null && spec.getFilters().getAllFilterRules() != null)
+			? Collections.unmodifiableMap(spec.getFilters().getAllFilterRules())
 			: Collections.emptyMap();
 	}
 	
@@ -55,7 +57,7 @@ public abstract class BasicFiltersConverter {
 			if (rules != null && !rules.isEmpty())
 				processElement(repElem, rules);
 		});
-		return new PassiveNiFilters(engine, predicates, new LinkedHashSet<>(mandatoryHiers), activityIdsSrc, activityIdsPredicate);
+		return new PassiveNiFilters(engine, predicates, cellPredicates, new LinkedHashSet<>(mandatoryHiers), activityIdsSrc, activityIdsPredicate);
 	}
 	
 	protected void processElement(ReportElement repElem, List<FilterRule> rules) {
@@ -75,25 +77,39 @@ public abstract class BasicFiltersConverter {
 			engine.addReportWarning(new ReportWarning(String.format("not filtering by unimplemented column %s", columnName)));
 			return;
 		}
-		if (col.levelColumn == null || !col.levelColumn.isPresent()) {
-			engine.addReportWarning(new ReportWarning(String.format("not filtering by non-level-column column %s", columnName)));
-			return;
+
+		notifySupportedColumn(columnName);
+
+		if (col.levelColumn != null && col.levelColumn.isPresent()) {
+			LevelColumn lc = col.levelColumn.get();
+			Set<Long> positiveIds = FilterRule.mergeIdRules(rules.stream().filter(rule -> rule.valuesInclusive).collect(toList()));
+			Set<Long> negativeIds = FilterRule.mergeIdRules(rules.stream().filter(rule -> !rule.valuesInclusive).collect(toList()));
+			addRulesIfPresent(lc, true, positiveIds);
+			addRulesIfPresent(lc, false, negativeIds);
+		} else {
+			addCellPredicate(columnName, cell -> cell.entityId, rules);
 		}
-		Set<Long> positiveIds = FilterRule.mergeIdRules(rules.stream().filter(rule -> rule.valuesInclusive).collect(toList()));
-		Set<Long> negativeIds = FilterRule.mergeIdRules(rules.stream().filter(rule -> !rule.valuesInclusive).collect(toList()));
-		notifySupportedColumn(columnName, positiveIds, negativeIds);
-		addRulesIfPresent(col.levelColumn.get(), true, positiveIds);
-		addRulesIfPresent(col.levelColumn.get(), false, negativeIds);
+	}
+
+	protected void addCellPredicate(String columnName, Function<Cell, Long> cellIdExtractor, List<FilterRule> rules) {
+		List<Predicate<Cell>> cellPreds = new ArrayList<>();
+		rules.stream().map(FilterRule::buildPredicate).forEach(lp -> {
+			cellPreds.add(cell -> lp.test(cellIdExtractor.apply(cell)));
+		});
+		cellPredicates.computeIfAbsent(columnName, ignored -> new ArrayList<>()).addAll(cellPreds);
 	}
 	
-	protected void notifySupportedColumn(String columnName, Set<Long> positiveIds, Set<Long> negativeIds) {
+	protected void notifySupportedColumn(String columnName) {
 		this.mandatoryHiers.add(columnName);
+	}
+	
+	protected void addRulesIfPresent(String colName, boolean positive, Set<Long> ids) {
 	}
 	
 	protected void addRulesIfPresent(LevelColumn lc, boolean positive, Set<Long> ids) {
 		if (ids == null)
 			return;
-		
+				
 		Predicate<Coordinate> predicate = FilterRule.maybeNegated(engine.buildAcceptor(lc.dimensionUsage, ids.stream().map(z -> new Coordinate(lc.level, z)).collect(toList())), positive);
 		predicates.computeIfAbsent(lc.dimensionUsage, ignored -> new ArrayList<>()).add(predicate);
 	}

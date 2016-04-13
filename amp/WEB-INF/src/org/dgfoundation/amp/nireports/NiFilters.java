@@ -28,11 +28,18 @@ public interface NiFilters {
 	public Set<Long> getFilteredActivityIds();
 	
 	/**
-	 * returns the Predicate-filters to impose on all the cells which come out of fetchers
+	 * returns the Predicate-filters to impose on all the cells which come out of fetchers IF they have the given {@link NiDimensionUsage}
 	 * @param engine
 	 * @return
 	 */
 	public Map<NiDimensionUsage, Predicate<NiDimension.Coordinate>> getProcessedFilters();
+	
+	/**
+	 * returns the predicate-filters to impuse on all the raw cells which come out of fetchers on a given column
+	 * @return
+	 */
+	public Map<String, Predicate<Cell>> getCellPredicates();
+	
 	
 	/**
 	 * returns a list of hierarchies which should be mandatorily part of the report. In case the ReportSpec does not mandate any of them, the hierarchy will be added artificially and then removed

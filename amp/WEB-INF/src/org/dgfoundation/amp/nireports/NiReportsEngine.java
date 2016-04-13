@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
@@ -304,6 +305,8 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 		timer.run("filtersApply", this::applyFilters);
 		timer.run("columns", this::fetchColumns);
 		timer.run("measures", this::fetchMeasures);
+		if (fundingFiltersIds())
+			cleanColumnsAccordingToFunding();
 		//NiUtils.failIf(this.actualColumns.isEmpty(), "columnless reports not supported");
 		NiUtils.failIf(!this.actualColumns.containsAll(this.actualHierarchies), () -> String.format("not all hierarchies (%s) are also specified as columns (%s)", this.actualHierarchies.toString(), this.actualColumns.toString()));
 	}
@@ -332,15 +335,49 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 					fetchedColumns.put(colToFetch.name, cc);
 			});
 		};
-		timer.run("Funding", () -> { 
-			funding = selectRelevant(schema.getFundingFetcher().fetch(this));
+		timer.run("Funding", () -> {
+			funding = selectRelevant(schema.getFundingFetcher().fetch(this), buildCellFilterForColumn(FUNDING_COLUMN_NAME, true));
 			timer.putMetaInNode("cells", funding.size());
 			});
 	}
 	
-	protected ColumnContents fetchEntity(NiReportedEntity<?> colToFetch, boolean applyFilterPercentages) throws Exception {
-		try {
-			List<? extends Cell> cells = selectRelevant(colToFetch.fetch(this));
+	/**
+	 * returns true IFF in this report we should exclude non-transactions-containing activities from the output
+	 * @return
+	 */
+	protected boolean fundingFiltersIds() {
+		return filters.getCellPredicates().containsKey(FUNDING_COLUMN_NAME) || filters.getMandatoryHierarchies().stream().anyMatch(z -> schema.getColumns().get(z).isTransactionLevelHierarchy());
+	}
+	
+	/**
+	 * removes any traces of entities containing no funding
+	 */
+	protected void cleanColumnsAccordingToFunding() {
+		//Set<Long> idsToKeep = funding.stream().map(cell -> cell.activityId).collect(Collectors.toSet());
+		Set<Long> idsToKeep = new HashSet<>();
+		fetchedMeasures.values().stream().map(cc -> cc.data.keySet()).forEach(ids -> idsToKeep.addAll(ids));
+		
+		fetchedColumns.forEach((colName, colContents) -> {
+			if (!colName.equals(FUNDING_COLUMN_NAME))
+				colContents.retainIds(idsToKeep);
+		});
+	}
+	
+	/**
+	 * builds a predicate for filtering the cells of a given column
+	 * @param columnName
+	 * @param enable if this is false, the returns predicate will be always-true
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	protected<K extends Cell> Predicate<K> buildCellFilterForColumn(String columnName, boolean enable) {
+		Predicate<K> extraCheck = (Predicate<K>) Optional.ofNullable(enable ? filters.getCellPredicates().get(columnName) : null).orElse(z -> true);
+		return extraCheck;
+	}
+	
+	protected<K extends Cell> ColumnContents fetchEntity(NiReportedEntity<K> colToFetch, boolean applyFilterPercentages) throws Exception {
+		try { 
+			List<K> cells = selectRelevant(colToFetch.fetch(this), buildCellFilterForColumn(colToFetch.name, colToFetch instanceof NiReportColumn));
 			timer.putMetaInNode("cells", cells.size());
 			return new ColumnContents(cells.stream().map(z -> new NiCell(z, colToFetch, rootEmptyTracker)).collect(Collectors.toList()));
 		}
@@ -357,7 +394,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 	 * @param in
 	 * @return
 	 */
-	protected<K extends Cell> List<K> selectRelevant(List<K> in) {
+	protected<K extends Cell> List<K> selectRelevant(List<K> in, Predicate<K> extraCheck) {
 		timer.putMetaInNode("fetched_raw", in.size());
 		Set<Long> ids = this.mainIds;
 		if (ids == null) return in;
@@ -366,7 +403,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 //			cellFilter = cellFilter.and(this::cellMatchesFilters);
 		List<K> res = new ArrayList<>();
 		for(K cell:in) {
-			if (ids.contains(cell.activityId) && this.cellMatchesFilters(cell))
+			if (ids.contains(cell.activityId) && extraCheck.test(cell) && this.cellMatchesFilters(cell))
 				res.add(cell);
 		}
 		return res;

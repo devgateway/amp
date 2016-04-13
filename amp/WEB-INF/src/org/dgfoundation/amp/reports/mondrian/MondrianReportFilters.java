@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
@@ -22,27 +21,20 @@ import org.dgfoundation.amp.newreports.NamedTypedEntity;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
-import org.dgfoundation.amp.newreports.ReportFilters;
-import org.dgfoundation.amp.newreports.ReportFiltersImpl;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpARFilterConverter;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 
 /**
+ * 
+ * TODO: Scheduled to be deleted while removing Mondrian from AMP and refactoring the Filters API backend to use {@link AmpReportFilters} instead
  * Mondrian Report Filters - can be used to populate it Manually, either via {@link AmpARFilterConverter} support
  * 
  * @author Nadejda Mandrescu
  */
 public class MondrianReportFilters extends AmpReportFilters {
-	
-	/**
-	 * Stores date filters to be applied over date columns.
-	 * Note: Due to slow execution via MDX with the existing schema config, 
-	 * we need to do a custom plain SQL filter for dates 
-	 */
-	private final Map<ReportColumn, List<FilterRule>> dateFilterRules = new HashMap<ReportColumn, List<FilterRule>>();
-	
+		
 //	/** stores  MondrianReportFilter that should be applied as same hierarchy filters */  
 //	private Map<String, MondrianReportFilters> groupFilterRules = null; 
 	
@@ -79,12 +71,7 @@ public class MondrianReportFilters extends AmpReportFilters {
 	public MondrianReportFilters(AmpFiscalCalendar calendar) {
 		super(calendar);
 	}
-		
-	@JsonIgnore
-	public Map<ReportColumn, List<FilterRule>> getDateFilterRules() {
-		return dateFilterRules;
-	}
-	
+			
 	public Map<String, List<FilterRule>> getColumnFilterRules() {
 		if (filterRules == null) return null; 
 		Map<String, List<FilterRule>> filters = new HashMap<String, List<FilterRule>>(filterRules.size());
@@ -96,20 +83,7 @@ public class MondrianReportFilters extends AmpReportFilters {
 		}
 		return filters;
 	}
-	
-	/**
-	 * These are basically the activity dates filters
-	 * called through reflection during json, DO NOT DELETE
-	 */
-	public Map<String, List<FilterRule>> getColumnDateFilterRules() {
-		if (filterRules == null) return null; 
-		Map<String, List<FilterRule>> filters = new HashMap<String, List<FilterRule>>(dateFilterRules.size());
-		for (Entry<ReportColumn, List<FilterRule>> entry : dateFilterRules.entrySet()) {
-			filters.put(entry.getKey().getColumnName(), entry.getValue());
-		}
-		return filters;
-	}
-	
+		
 	/**
 	 * For internal use, because we need to force the use mdx properties filters for some dates 
 	 * @param elem
@@ -134,16 +108,7 @@ public class MondrianReportFilters extends AmpReportFilters {
 		
 		addFilterRule(filterRules, elem, filterRule);
 	}
-		
-	protected <T> void addFilterRule(Map<T, List<FilterRule>> filterRules, T elem, FilterRule filterRule) {
-		List<FilterRule> filtersList = filterRules.get(elem);
-		if (filtersList == null) {
-			filtersList = new ArrayList<FilterRule>();
-			filterRules.put(elem, filtersList);
-		}
-		filtersList.add(filterRule);
-	}
-	
+			
 	/**
 	 * Add a column/measure filter
 	 * @param entity - column/measure to filter by
@@ -168,6 +133,7 @@ public class MondrianReportFilters extends AmpReportFilters {
 				MondrianUtils.getYearsRangeFilter(from, to, oldCalendar, calendar));
 	}
 	
+	@Deprecated
 	/**
 	 * Adds a measures filter for specific  [from .. to] quarters, with no year limits
 	 * @param from - from quarter limit
@@ -179,6 +145,7 @@ public class MondrianReportFilters extends AmpReportFilters {
 				MondrianUtils.getQuarterRangeFilterRule(from, to, calendar));
 	}
 	
+	@Deprecated
 	/**
 	 * Adds a measures filter for specific months in all years. Month numbers between [1..12] 
 	 * @param from - first month number of the range
@@ -233,6 +200,7 @@ public class MondrianReportFilters extends AmpReportFilters {
 		addFilterRule(new ReportElement(ElementType.YEAR), MondrianUtils.getYearsFilterRule(years, calendar, valuesToInclude));
 	}
 	
+	@Deprecated
 	/**
 	 * Adds a measures filter for a list of quarters 
 	 * @param quarters - the list of quarters [1..4]
@@ -273,6 +241,7 @@ public class MondrianReportFilters extends AmpReportFilters {
 		addFilterRule(new ReportElement(ElementType.YEAR), MondrianUtils.getSingleYearFilterRule(year, calendar, valueToInclude));
 	}
 	
+	@Deprecated
 	/**
 	 * Adds a single quarter filter over measures (no years filter) 
 	 * @param quarter
@@ -283,6 +252,7 @@ public class MondrianReportFilters extends AmpReportFilters {
 		addFilterRule(new ReportElement(ElementType.QUARTER), MondrianUtils.getSingleQuarterFilterRule(quarter, calendar, valueToInclude));
 	}
 	
+	@Deprecated
 	/**
 	 * Adds a single month filter over measures (no years filter) 
 	 * @param month

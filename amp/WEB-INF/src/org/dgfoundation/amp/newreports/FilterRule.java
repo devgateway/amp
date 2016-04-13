@@ -65,7 +65,7 @@ public class FilterRule {
 	public final String max;
 	/** list of values/id or null */
 	public final List<String> values;
-	/** list of names for associated values */
+	/** list of names for associated values - used by the front end */
 	public final Map<String, String> valueToName = new HashMap<String, String>();
 	/** true if 'min' must be an inclusive limit of the range */
 	public final boolean minInclusive;  
@@ -83,7 +83,11 @@ public class FilterRule {
 	 * @param isIdRange - whether (min,max) is a range of ids or a range of values
 	 */
 	public FilterRule(String min, String max, boolean minInclusive, boolean maxInclusive) {
-		this(min, max, null, null, minInclusive, maxInclusive);
+		this(min, max, minInclusive, maxInclusive, true);
+	}
+	
+	public FilterRule(String min, String max, boolean minInclusive, boolean maxInclusive, boolean positive) {
+		this(FilterType.RANGE, null, null, min, max, null, null, minInclusive, maxInclusive, null, null, positive);
 	}
 	
 	public FilterRule(String min, String max, String minName, String maxName, 

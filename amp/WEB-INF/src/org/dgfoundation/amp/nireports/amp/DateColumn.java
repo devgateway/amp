@@ -11,6 +11,7 @@ import org.dgfoundation.amp.nireports.DateCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.schema.DateTokenBehaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * 
@@ -40,7 +41,7 @@ public class DateColumn extends AmpDifferentialColumn<DateCell, Boolean> {
 		LocalDate date = sqlDate.toLocalDate();
 //		if (date == null)
 //			return null;
-		return new DateCell(date, rs.getLong(1), this.levelColumn.isPresent() ? rs.getLong(3) : rs.getLong(1), this.levelColumn);
+		return new DateCell(date, rs.getLong(1), this.levelColumn.isPresent() ? rs.getLong(3) : DateTimeUtil.toJulianDayNumber(date), this.levelColumn);
 	}
 		
 	public static DateColumn fromView(String columnName, String viewName, NiDimension.LevelColumn levelColumn) {

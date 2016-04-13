@@ -114,27 +114,27 @@ public class MondrianReportUtils {
 		return colId == spec.getColumns().size() ? -1 : colId; 
 	}
 	
-	/**
-	 * Filters out null dates. 
-	 * The current solution is add an explicit upper limit to filter by if no filter is already configured for the date. 
-	 * @param spec
-	 */
-	public static void filterOutNullDates(ReportSpecificationImpl spec) {
-		MondrianReportFilters filters = spec.getFilters() == null ? new MondrianReportFilters() : (MondrianReportFilters)spec.getFilters();
-		Set<ReportColumn> existingFilters = new HashSet<ReportColumn>();
-		existingFilters.addAll(filters.getDateFilterRules().keySet());
-		for(ReportColumn column : spec.getColumns()) {
-			if (DateColumns.ACTIVITY_DATES.contains(column.getColumnName()) && !existingFilters.contains(column)) {
-				try {
-					filters.addDateRangeFilterRule(column, null, new Date(MoConstants.UNDEFINED_KEY -1));
-				} catch (AmpApiException e) {
-					logger.error(e);
-				}
-				existingFilters.add(column);
-			}	
-		}
-		spec.setFilters(filters);
-	}
+//	/**
+//	 * Filters out null dates. 
+//	 * The current solution is add an explicit upper limit to filter by if no filter is already configured for the date. 
+//	 * @param spec
+//	 */
+//	public static void filterOutNullDates(ReportSpecificationImpl spec) {
+//		MondrianReportFilters filters = spec.getFilters() == null ? new MondrianReportFilters() : (MondrianReportFilters)spec.getFilters();
+//		Set<ReportColumn> existingFilters = new HashSet<ReportColumn>();
+//		existingFilters.addAll(filters.getDateFilterRules().keySet());
+//		for(ReportColumn column : spec.getColumns()) {
+//			if (DateColumns.ACTIVITY_DATES.contains(column.getColumnName()) && !existingFilters.contains(column)) {
+//				try {
+//					filters.addDateRangeFilterRule(column, null, new Date(MoConstants.UNDEFINED_KEY -1));
+//				} catch (AmpApiException e) {
+//					logger.error(e);
+//				}
+//				existingFilters.add(column);
+//			}	
+//		}
+//		spec.setFilters(filters);
+//	}
 	
 	/**
 	 * Verifies if a list of 2 sorting lists are identical

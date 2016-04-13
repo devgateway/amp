@@ -7,8 +7,11 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.AreaOwner;
+import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
@@ -64,8 +67,7 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
 					.withBody(      new ReportAreaForTests(null)
 				      .withContents("Project Title", "", "Mode of Payment", "", "AMP ID", "", "Funding-2013-Actual Commitments", "666 777", "Funding-2013-Actual Disbursements", "0", "Totals-Actual Commitments", "666 777", "Totals-Actual Disbursements", "0")
 				      .withChildren(
-				        new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Mode of Payment", "Reimbursable", "AMP ID", "8721135", "Funding-2013-Actual Commitments", "666 777", "Totals-Actual Commitments", "666 777"),
-				        new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Mode of Payment", "Non-Cash", "AMP ID", "87211372")));
+				        new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Mode of Payment", "Reimbursable", "AMP ID", "8721135", "Funding-2013-Actual Commitments", "666 777", "Totals-Actual Commitments", "666 777")));
 
 		runNiTestCase(cor, spec("simple-filtered-by-mode-of-payment"), acts);
 	}

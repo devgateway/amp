@@ -16,8 +16,13 @@ public class ReportElement {
 		 * year-range-setting
 		 */
 		YEAR,
+		
+		@Deprecated
 		QUARTER,
+		
+		@Deprecated
 		MONTH,
+		
 		/**
 		 * filter for transaction date
 		 */

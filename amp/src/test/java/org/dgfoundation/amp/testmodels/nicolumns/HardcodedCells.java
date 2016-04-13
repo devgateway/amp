@@ -30,6 +30,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.testmodels.HardcodedFundingNames;
 import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
 import org.dgfoundation.amp.testmodels.TestModelConstants;
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * Cell source for hardcoded columns (TestColumn)
@@ -56,7 +57,7 @@ public abstract class HardcodedCells<K extends Cell> {
 	protected DateCell dateCell(String activityName, String date) {
 			DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
 			LocalDate ld = LocalDate.parse(date, formatter);
-			return new DateCell(ld, activityIds.get(activityName), activityIds.get(activityName), levelColumn);
+			return new DateCell(ld, activityIds.get(activityName), levelColumn.isPresent() ? -1 : DateTimeUtil.toJulianDayNumber(ld), levelColumn);
 	}	
 	
 	public List<K> getCells() {

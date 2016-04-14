@@ -194,7 +194,7 @@ public abstract class NiDimension {
 		}
 	}
 	
-	
+	public final static int LEVEL_ALL_IDS = -999;
 	public final static int LEVEL_0 = 0;
 	public final static int LEVEL_1 = 1;
 	public final static int LEVEL_2 = 2;

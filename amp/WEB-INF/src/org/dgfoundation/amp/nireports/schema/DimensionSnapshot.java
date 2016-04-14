@@ -22,10 +22,12 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 public final class DimensionSnapshot {
 	public final List<DimensionLevel> data;
 	public final int depth;
+	public final Set<Long> allIds;
 	
 	public DimensionSnapshot(List<DimensionLevel> data) {
 		this.data = data;
 		this.depth = data.size();
+		this.allIds = data.stream().flatMap(dl -> dl.getAllIds().stream()).collect(Collectors.toSet());
 	}
 	
 	/**
@@ -101,6 +103,8 @@ public final class DimensionSnapshot {
 	 * @return
 	 */
 	public Set<Long> getAcceptableNeighbours(int level, Collection<Long> ids, int targetLevel) {
+		if (level == NiDimension.LEVEL_ALL_IDS)
+			return allIds;
 		//System.out.format("called getAcceptableNeighbours on %d, %d, %s\n", level, targetLevel, ids);
 		if (targetLevel == level) {
 			return ids.stream().filter(z -> data.get(level).parents.containsKey(z)).collect(Collectors.toSet());

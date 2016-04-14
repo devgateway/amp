@@ -663,6 +663,30 @@ public class AmpARFilter extends PropertyListable {
 			this.setCurrency(settings.getCurrency());
 		initRenderStartEndYears(settings);
 	}
+	
+	/**
+	 * computes the set of all the selected ACVL ids, including children and ascendants
+	 * @return
+	 */
+	public Set<Long> buildAllRelatedLocationsIds() {
+		if (locationSelected == null)
+			return null;
+		
+		Set<Long> allDescendantsIds = DynLocationManagerUtil.populateWithDescendantsIds(locationSelected);
+		List<AmpCategoryValueLocations> allAscendingLocations	= new ArrayList<AmpCategoryValueLocations>();
+		DynLocationManagerUtil.populateWithAscendants(allAscendingLocations, locationSelected);
+		Set<Long> allSelectedLocations = new HashSet<Long>(allDescendantsIds);
+		
+		for(AmpCategoryValueLocations ascendant:allAscendingLocations)
+			allSelectedLocations.add(ascendant.getId());
+		
+		return allSelectedLocations;
+	}
+	
+	public List<AmpCategoryValueLocations> buildAllRelatedLocations() {
+		return DynLocationManagerUtil.loadLocations(buildAllRelatedLocationsIds());
+	}
+	
 	/**
 	 * computes the current user's effective AmpApplicationSettings, searching through the hierarchy
 	 * returns null if there is no current user
@@ -1253,7 +1277,6 @@ public class AmpARFilter extends PropertyListable {
 		generateFilterQuery(params);
 	}
 	
-	
 	public void generateFilterQuery(AmpARFilterParams params) {
 		initFilterQuery(); //reinit filters or else they will grow indefinitely
 		if ( !params.getSkipPledgeCheck() &&  !params.getWorkspaceFilter() && ReportContextData.getFromRequest().isPledgeReport()){
@@ -1342,7 +1365,7 @@ public class AmpARFilter extends PropertyListable {
 			ACTUAL_APPROVAL_YEAR_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE EXTRACT (YEAR FROM actual_approval_date) = " + actualAppYear + " ";
 		}
 		
-		if (locationSelected!=null) {
+		if (locationSelected != null) {
 			long a = System.currentTimeMillis();
 			Set<Long> allDescendantsIds = DynLocationManagerUtil.populateWithDescendantsIds(locationSelected);
 			long b = System.currentTimeMillis();

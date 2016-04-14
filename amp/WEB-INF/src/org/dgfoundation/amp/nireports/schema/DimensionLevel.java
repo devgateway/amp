@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.nireports.schema;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -46,6 +47,12 @@ public class DimensionLevel {
 		this.parents = Collections.unmodifiableMap(parents);
 		this.level = level;
 		this.isLastLevel = isLastLevel;
+	}
+	
+	public Set<Long> getAllIds() {
+		Set<Long> res = new HashSet<>(parents.keySet());
+		res.addAll(children.keySet());
+		return res;
 	}
 	
 	@Override

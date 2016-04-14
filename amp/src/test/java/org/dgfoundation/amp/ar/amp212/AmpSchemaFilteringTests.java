@@ -143,4 +143,92 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
 
 		runNiTestCase(cor, spec("filtered-by-donor-group"), acts);
 	}
+	
+	@Test
+	public void testFundingFlowFilterByBENF() {
+		NiReportModel cor = new NiReportModel("flat filter flow by BENF")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 5, colStart: 0, colSpan: 20))",
+					"(Project Title: (startRow: 1, rowSpan: 4, totalRowSpan: 4, colStart: 0, colSpan: 1));(MTEF 2011/2012: (startRow: 1, rowSpan: 4, totalRowSpan: 4, colStart: 1, colSpan: 1));(MTEF 2012/2013: (startRow: 1, rowSpan: 4, totalRowSpan: 4, colStart: 2, colSpan: 1));(Real MTEF 2011/2012: (startRow: 1, rowSpan: 3, totalRowSpan: 4, colStart: 3, colSpan: 1));(Real MTEF 2012/2013: (startRow: 1, rowSpan: 3, totalRowSpan: 4, colStart: 4, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 4, colStart: 5, colSpan: 10));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 4, colStart: 15, colSpan: 5))",
+					"(2009: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 5, colSpan: 2));(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 7, colSpan: 2));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 9, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 11, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 13, colSpan: 2))",
+					"(Actual Commitments: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 5, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 7, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 8, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 9, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 10, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 11, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 12, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 13, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 14, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 15, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 16, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 17, colSpan: 1));(Real MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 18, colSpan: 2))",
+					"(EXEC-BENF: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(IMPL-BENF: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(EXEC-BENF: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 18, colSpan: 1));(IMPL-BENF: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 19, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+			      .withContents("Project Title", "", "MTEF 2011/2012", "0", "MTEF 2012/2013", "0", "Real MTEF 2011/2012-EXEC-BENF", "50,000", "Real MTEF 2012/2013-IMPL-BENF", "43,000", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "272,500", "Funding-2015-Actual Commitments", "123,456", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "248,456", "Totals-Actual Disbursements", "344,500", "Totals-MTEF", "0", "Totals-Real MTEF-EXEC-BENF", "50,000", "Totals-Real MTEF-IMPL-BENF", "43,000")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Funding-2013-Actual Disbursements", "272,500", "Totals-Actual Disbursements", "272,500"),
+			        new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Funding-2009-Actual Commitments", "100,000", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000"),
+			        new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Real MTEF 2011/2012-EXEC-BENF", "50,000", "Real MTEF 2012/2013-IMPL-BENF", "43,000", "Funding-2015-Actual Commitments", "123,456", "Totals-Actual Commitments", "123,456", "Totals-Real MTEF-EXEC-BENF", "50,000", "Totals-Real MTEF-IMPL-BENF", "43,000")      ));
+
+		
+		ReportSpecificationImpl spec = buildSpecForFiltering("flat filter flow by BENF", 
+			Arrays.asList(ColumnConstants.PROJECT_TITLE, "MTEF 2011/2012", "MTEF 2012/2013", "Real MTEF 2011/2012", "Real MTEF 2012/2013"), 
+			null, 
+			ColumnConstants.BENEFICIARY_AGENCY, Arrays.asList(21696l, 21702l), true); // USAID, Water Foundation
+		
+		runNiTestCase(cor, spec, acts);
+	}
+	
+	@Test
+	public void testFundingFlowFilterByNotBENF() {
+		NiReportModel cor = new NiReportModel("flat filter flow by not BENF")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 8))",
+					"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(MTEF 2011/2012: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(MTEF 2012/2013: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 2));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 5, colSpan: 3))",
+					"(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2))",
+					"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null).withContents("Project Title", "", "MTEF 2011/2012", "0", "MTEF 2012/2013", "0", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "272,500", "Totals-Actual Commitments", "0", "Totals-Actual Disbursements", "272,500", "Totals-MTEF", "0")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Funding-2013-Actual Disbursements", "272,500", "Totals-Actual Disbursements", "272,500")      ));
+		
+		ReportSpecificationImpl spec = buildSpecForFiltering("flat filter flow by not BENF", 
+			Arrays.asList(ColumnConstants.PROJECT_TITLE, "MTEF 2011/2012", "MTEF 2012/2013", "Real MTEF 2011/2012", "Real MTEF 2012/2013"), 
+			null, 
+			ColumnConstants.BENEFICIARY_AGENCY, Arrays.asList(21696l, 21702l), false); // USAID, Water Foundation
+		
+		runNiTestCase(cor, spec, acts);
+	}
+	
+	@Test
+	public void testFundingFlowFilterByPrimarySector() {
+		NiReportModel cor = null;
+		
+		ReportSpecificationImpl spec = buildSpecForFiltering("flat filter by PS", 
+			Arrays.asList(ColumnConstants.PROJECT_TITLE, "MTEF 2011/2012", "MTEF 2012/2013", "Real MTEF 2011/2012", "Real MTEF 2012/2013"), 
+			null, 
+			ColumnConstants.PRIMARY_SECTOR, Arrays.asList(21696l, 21702l), true);
+		
+		runNiTestCase(cor, spec, acts);
+	}
+	
+	@Test
+	public void testFundingFlowFilterByPrimarySectorStored() {
+		NiReportModel cor = new NiReportModel("AMP-22322-directed-mtefs-filter-by-110-education")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 5, colStart: 0, colSpan: 22))",
+					"(Project Title: (startRow: 1, rowSpan: 4, totalRowSpan: 4, colStart: 0, colSpan: 1));(MTEF 2011/2012: (startRow: 1, rowSpan: 4, totalRowSpan: 4, colStart: 1, colSpan: 1));(MTEF 2012/2013: (startRow: 1, rowSpan: 4, totalRowSpan: 4, colStart: 2, colSpan: 1));(Real MTEF 2011/2012: (startRow: 1, rowSpan: 3, totalRowSpan: 4, colStart: 3, colSpan: 2));(Real MTEF 2012/2013: (startRow: 1, rowSpan: 3, totalRowSpan: 4, colStart: 5, colSpan: 2));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 4, colStart: 7, colSpan: 8));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 4, colStart: 15, colSpan: 7))",
+					"(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 7, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 9, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 11, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 13, colSpan: 2))",
+					"(Actual Commitments: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 7, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 8, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 9, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 10, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 11, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 12, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 13, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 14, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 15, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 16, colSpan: 1));(MTEF: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 17, colSpan: 1));(Real MTEF: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 18, colSpan: 4))",
+					"(EXEC-BENF: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(IMPL-EXEC: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(EXEC-EXEC: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(IMPL-BENF: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(EXEC-BENF: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 18, colSpan: 1));(EXEC-EXEC: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 19, colSpan: 1));(IMPL-BENF: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 20, colSpan: 1));(IMPL-EXEC: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 21, colSpan: 1))"))
+				.withWarnings(Arrays.asList(
+					"-1: [entityId: -1, message: measure Real MTEFs not supported in NiReports]"))
+				.withBody(      new ReportAreaForTests(null)
+			      .withContents("Project Title", "", "MTEF 2011/2012", "1 438 011", "MTEF 2012/2013", "211 000", "Real MTEF 2011/2012-EXEC-BENF", "50 000", "Real MTEF 2011/2012-IMPL-EXEC", "110 500", "Real MTEF 2012/2013-EXEC-EXEC", "22 000", "Real MTEF 2012/2013-IMPL-BENF", "43 000", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "143 777", "Funding-2013-Actual Commitments", "570 000", "Funding-2013-Actual Disbursements", "580 000", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "75 000", "Funding-2015-Actual Commitments", "656 256", "Funding-2015-Actual Disbursements", "80 000", "Totals-Actual Commitments", "1 226 256", "Totals-Actual Disbursements", "878 777", "Totals-MTEF", "1 649 011", "Totals-Real MTEF-EXEC-BENF", "50 000", "Totals-Real MTEF-EXEC-EXEC", "22 000", "Totals-Real MTEF-IMPL-BENF", "43 000", "Totals-Real MTEF-IMPL-EXEC", "110 500")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "MTEF 2011/2012", "150 000", "MTEF 2012/2013", "65 000", "Funding-2010-Actual Disbursements", "143 777", "Totals-Actual Disbursements", "143 777", "Totals-MTEF", "215 000"),
+			        new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project", "MTEF 2011/2012", "33 888", "Totals-MTEF", "33 888"),
+			        new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Funding-2013-Actual Disbursements", "545 000", "Totals-Actual Disbursements", "545 000"),
+			        new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1", "MTEF 2011/2012", "789 123", "Totals-MTEF", "789 123"),
+			        new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2"),
+			        new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Funding-2013-Actual Commitments", "570 000", "Totals-Actual Commitments", "570 000"),
+			        new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "MTEF 2011/2012", "420 000", "MTEF 2012/2013", "90 000", "Funding-2015-Actual Commitments", "532 800", "Totals-Actual Commitments", "532 800", "Totals-MTEF", "510 000"),
+			        new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Real MTEF 2011/2012-EXEC-BENF", "50 000", "Real MTEF 2011/2012-IMPL-EXEC", "110 500", "Real MTEF 2012/2013-EXEC-EXEC", "22 000", "Real MTEF 2012/2013-IMPL-BENF", "43 000", "Funding-2015-Actual Commitments", "123 456", "Totals-Actual Commitments", "123 456", "Totals-Real MTEF-EXEC-BENF", "50 000", "Totals-Real MTEF-EXEC-EXEC", "22 000", "Totals-Real MTEF-IMPL-BENF", "43 000", "Totals-Real MTEF-IMPL-EXEC", "110 500"),
+			        new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Funding-2013-Actual Disbursements", "35 000", "Funding-2014-Actual Disbursements", "75 000", "Totals-Actual Disbursements", "110 000"),
+			        new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "MTEF 2011/2012", "45 000", "MTEF 2012/2013", "56 000", "Funding-2015-Actual Disbursements", "80 000", "Totals-Actual Disbursements", "80 000", "Totals-MTEF", "101 000")      ));
+		
+		runNiTestCase(cor, spec("AMP-22322-directed-mtefs-filter-by-110-education"), flowsActs);
+	}
+
 }

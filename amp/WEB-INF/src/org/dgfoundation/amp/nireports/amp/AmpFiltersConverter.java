@@ -1,7 +1,12 @@
 package org.dgfoundation.amp.nireports.amp;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.nireports.CategAmountCell;
@@ -15,9 +20,13 @@ import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.nireports.BasicFiltersConverter;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
+import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 
 public class AmpFiltersConverter extends BasicFiltersConverter {
+
+	Set<String> locationColumns = new HashSet<>(Arrays.asList(ColumnConstants.COUNTRY, ColumnConstants.REGION, ColumnConstants.ZONE, ColumnConstants.DISTRICT, ColumnConstants.LOCATION));
 
 	public AmpFiltersConverter(NiReportsEngine engine) {
 		super(engine);
@@ -36,10 +45,21 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 		
 //		if (schema.getColumns().containsKey(columnName) && !schema.getColumns().get(columnName).isTransactionLevelHierarchy())
 //			return; //TODO: disable all non-supported filters
+		
 		if (columnName.equals(ColumnConstants.ACTIVITY_ID)) {
 			this.activityIdsPredicate = AmpCollections.mergePredicates(rules.stream().map(FilterRule::buildPredicate).collect(Collectors.toList()));
 			return;
 		}
+		
+//		if (locationColumns.contains(columnName)) {
+//			LevelColumn lc = schema.getColumns().get(ColumnConstants.REGION).levelColumn.get();
+//			for(String cc:locationColumns) {
+//				Predicate<Cell> cellPred = cell -> cell.getCoordinates().get(lc.dimensionUsage).id;
+//				cellPredicates.computeIfAbsent(cc, ignored -> new ArrayList<>()).addAll(cellPred);
+//				filteringColumns.add(cc);
+//			}
+//		}
+		
 		if (schema.getColumns().containsKey(columnName)) {
 			super.processColumnElement(columnName, rules);
 			return;

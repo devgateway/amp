@@ -62,7 +62,7 @@ public class ReportHierarchiesCollapser implements ReportDataVisitor<ReportData>
 		return grd.clone(newChildren);
 	}
 		
-	protected ColumnReportData collapseCRDs(List<ColumnReportData> children) {
+	public ColumnReportData collapseCRDs(List<ColumnReportData> children) {
 		if (children.size() == 1) // make the common case fast
 			return new ColumnReportData(children.get(0).context, children.get(0).splitter, children.get(0).getContents());
 		
@@ -83,7 +83,7 @@ public class ReportHierarchiesCollapser implements ReportDataVisitor<ReportData>
 		return res;
 	}
 	
-	protected ColumnContents mergeColumnContents(List<ColumnContents> in) {
+	protected static ColumnContents mergeColumnContents(List<ColumnContents> in) {
 		Map<Long, List<NiCell>> res = new HashMap<>();
 		for(ColumnContents elem:in) {
 			for(Long id:elem.data.keySet())

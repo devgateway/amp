@@ -60,4 +60,9 @@ public class DateTokenBehaviour implements Behaviour<NiDateCell> {
 	public NiOutCell getEmptyCell(ReportSpecification spec) {
 		return NiTextCell.EMPTY;
 	}
+
+	@Override
+	public boolean hasPercentages() {
+		return false;
+	}
 }

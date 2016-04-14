@@ -20,9 +20,11 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.ObjectWriter;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.Graph;
+import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.algo.timing.InclusiveTimer;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
@@ -44,6 +46,7 @@ import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.runtime.ColumnVisitor;
 import org.dgfoundation.amp.nireports.runtime.GroupColumn;
+import org.dgfoundation.amp.nireports.runtime.GroupReportData;
 import org.dgfoundation.amp.nireports.runtime.IdsAcceptorsBuilder;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
@@ -214,6 +217,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 	protected void runReport() {
 		timer.run("fetch", this::fetchData);
 		timer.run("init", this::createInitialReport);
+		timer.run("virtual_hiers", this::createVirtualHierarchies);
 		timer.run("hierarchies", this::createHierarchies);
 		timer.run("posthierproc", this::postHierarchiesPostprocess);
 		timer.run("flatten", this::flatten);
@@ -313,7 +317,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 	
 	protected void applyFilters() {
 		try {
-			for(String mandatoryHier:filters.getMandatoryHierarchies()) {
+			for(String mandatoryHier:filters.getFilteringColumns()) {
 				if (columnSupported(mandatoryHier)) {
 					timer.run(mandatoryHier, () -> fetchedColumns.put(mandatoryHier, fetchEntity(schema.getColumns().get(mandatoryHier), false)));
 				} else {
@@ -346,7 +350,9 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 	 * @return
 	 */
 	protected boolean fundingFiltersIds() {
-		return filters.getCellPredicates().containsKey(FUNDING_COLUMN_NAME) || filters.getMandatoryHierarchies().stream().anyMatch(z -> schema.getColumns().get(z).isTransactionLevelHierarchy());
+		return filters.getCellPredicates().containsKey(FUNDING_COLUMN_NAME) // there is any predicate operating on Funding 
+				|| 
+			filters.getFilteringColumns().stream().anyMatch(z -> schema.getColumns().get(z).isTransactionLevelHierarchy()); // we are filtering on a transaction-level hierarchy
 	}
 	
 	/**
@@ -450,6 +456,24 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 		GroupColumn catData = applyPostMeasureVerticalHierarchies(rawData);
 		this.headers = new NiHeaderInfo(this, catData, this.actualHierarchies.size());
 		this.rootReportData = new ColumnReportData(this, null, AmpCollections.map(catData.getLeafColumns(), cc -> cc.getContents()));
+	}
+	
+	/**
+	 * runs and then collapses the virtual hierarchies mandated by filtering
+	 */
+	protected void createVirtualHierarchies() {
+		ValueWrapper<ColumnReportData> root = new ValueWrapper<>((ColumnReportData) this.rootReportData);
+		for(String vhier:filters.getMandatoryHiers())
+			if (!this.actualHierarchies.contains(vhier)) 
+				timer.run(vhier, () -> {
+					NiReportColumn<?> col = schema.getColumns().get(vhier);
+					GroupReportData grd = root.value.horizSplit(fetchedColumns.get(vhier), fetchedColumns.get(vhier), col.getBehaviour(), col);
+					if (grd.getSubReports().isEmpty())
+						root.value.getContents().values().forEach(cc -> cc.data.clear());
+					else
+						root.value = new ReportHierarchiesCollapser(ReportCollapsingStrategy.ALWAYS, this.headers.getLeafColumns()).collapseCRDs(AmpCollections.relist(grd.getSubReports(), z -> (ColumnReportData) z));
+				});
+		this.rootReportData = ((ColumnReportData) this.rootReportData).replaceContents(root.value.getContents());
 	}
 	
 	/**

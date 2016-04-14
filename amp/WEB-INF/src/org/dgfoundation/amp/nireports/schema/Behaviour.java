@@ -158,4 +158,10 @@ public interface Behaviour<V extends NiOutCell> {
 	public default boolean shouldDeleteLeafIfEmpty(CellColumn column) {
 		return false;
 	}
+	
+	/**
+	 * whether cells of this columns have percentages
+	 * @return
+	 */
+	public boolean hasPercentages();
 }

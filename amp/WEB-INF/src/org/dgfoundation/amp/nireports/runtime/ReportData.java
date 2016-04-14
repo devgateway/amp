@@ -26,7 +26,7 @@ public abstract class ReportData {
 	public final NiSplitCell splitter;
 
 	protected ReportData(NiReportsEngine context, NiSplitCell splitter) {
-		this.context = context;
+		this.context = context;         
 		this.splitter = splitter;
 	}
 	

@@ -92,4 +92,9 @@ public class TrivialMeasureBehaviour implements Behaviour<NiAmountCell> {
 		return NiAmountCell.ZERO;
 	}
 
+	@Override
+	public boolean hasPercentages() {
+		return false;
+	}
+
 }

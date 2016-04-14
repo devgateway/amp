@@ -45,7 +45,8 @@ public interface NiFilters {
 	 * returns a list of hierarchies which should be mandatorily part of the report. In case the ReportSpec does not mandate any of them, the hierarchy will be added artificially and then removed
 	 * @return
 	 */
-	public Set<String> getMandatoryHierarchies();
+	public Set<String> getFilteringColumns();
 	
+	public Set<String> getMandatoryHiers();
 	//public Map<NiDimensionUsage, Predicate<NiDimension.Coordinate>> getTransformedFilters();
 }

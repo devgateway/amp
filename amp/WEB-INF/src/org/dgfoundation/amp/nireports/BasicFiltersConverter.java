@@ -9,6 +9,7 @@ import java.util.TreeSet;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportWarning;
@@ -38,9 +39,9 @@ public abstract class BasicFiltersConverter {
 	protected final ReportSpecification spec;
 	protected final NiReportsEngine engine;
 	protected final NiReportsSchema schema;
-	protected final Map<NiDimensionUsage, List<Predicate<NiDimension.Coordinate>>> predicates = new HashMap<>();
+	protected final Map<NiDimensionUsage, List<Predicate<NiDimension.Coordinate>>> coosPredicates = new HashMap<>();
 	protected final Map<String, List<Predicate<Cell>>> cellPredicates = new HashMap<>();
-	protected final Set<String> mandatoryHiers = new TreeSet<>();
+	protected final Set<String> filteringColumns = new TreeSet<>();
 	protected Predicate<Long> activityIdsPredicate;
 	
 	public BasicFiltersConverter(NiReportsEngine engine) {
@@ -57,8 +58,15 @@ public abstract class BasicFiltersConverter {
 			if (rules != null && !rules.isEmpty())
 				processElement(repElem, rules);
 		});
-		return new PassiveNiFilters(engine, predicates, cellPredicates, new LinkedHashSet<>(mandatoryHiers), activityIdsSrc, activityIdsPredicate);
+		Set<String> mandatoryHiers = this.filteringColumns.stream().filter(this::shouldCreateVirtualHierarchy).collect(Collectors.toSet());
+		return new PassiveNiFilters(engine, coosPredicates, cellPredicates, filteringColumns, mandatoryHiers, activityIdsSrc, activityIdsPredicate);
 	}
+	
+	/**
+	 * returns true if a given filtering column should also be used as a virtual hierarchy (expensive operation)
+	 * @return
+	 */
+	protected abstract boolean shouldCreateVirtualHierarchy(String columnName);
 	
 	protected void processElement(ReportElement repElem, List<FilterRule> rules) {
 		if (repElem.type == ElementType.ENTITY) {
@@ -100,18 +108,15 @@ public abstract class BasicFiltersConverter {
 	}
 	
 	protected void notifySupportedColumn(String columnName) {
-		this.mandatoryHiers.add(columnName);
+		this.filteringColumns.add(columnName);
 	}
-	
-	protected void addRulesIfPresent(String colName, boolean positive, Set<Long> ids) {
-	}
-	
+		
 	protected void addRulesIfPresent(LevelColumn lc, boolean positive, Set<Long> ids) {
 		if (ids == null)
 			return;
 				
 		Predicate<Coordinate> predicate = FilterRule.maybeNegated(engine.buildAcceptor(lc.dimensionUsage, ids.stream().map(z -> new Coordinate(lc.level, z)).collect(toList())), positive);
-		predicates.computeIfAbsent(lc.dimensionUsage, ignored -> new ArrayList<>()).add(predicate);
+		coosPredicates.computeIfAbsent(lc.dimensionUsage, ignored -> new ArrayList<>()).add(predicate);
 	}
 	
 	protected abstract void processMiscElement(ReportElement repElem, List<FilterRule> rules);

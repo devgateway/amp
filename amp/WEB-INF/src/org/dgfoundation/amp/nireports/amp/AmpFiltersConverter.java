@@ -15,6 +15,7 @@ import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.nireports.BasicFiltersConverter;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 
 public class AmpFiltersConverter extends BasicFiltersConverter {
 
@@ -59,5 +60,11 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 		if (repElem.type == ElementType.DATE) {
 			addCellPredicate(NiReportsEngine.FUNDING_COLUMN_NAME, cell -> ((CategAmountCell) cell).amount.getJulianDayCode(), rules);
 		}
+	}
+
+	@Override
+	protected boolean shouldCreateVirtualHierarchy(String columnName) {
+		NiReportColumn<?> col = schema.getColumns().get(columnName);
+		return col != null && col.getBehaviour().hasPercentages();
 	}
 }

@@ -17,6 +17,7 @@ import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.output.NiSplitCell;
+import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
@@ -36,6 +37,10 @@ public class ColumnReportData extends ReportData {
 		this.contents = Collections.unmodifiableMap(contents);
 	}
 	
+	public ColumnReportData replaceContents(Map<CellColumn, ColumnContents> contents) {
+		return new ColumnReportData(this.context, this.splitter, contents);
+	}
+	
 	@Override
 	public boolean isLeaf() {
 		return true;
@@ -50,7 +55,7 @@ public class ColumnReportData extends ReportData {
 	}
 	
 	class SplitDigest {
-		final CellColumn cellColumn;
+		final Behaviour<?> behaviour;
 		final NiReportColumn<?> schemaColumn;
 		final ColumnContents contents;
 		
@@ -58,27 +63,23 @@ public class ColumnReportData extends ReportData {
 		Map<Long, List<NiCell>> splitterArrays = new HashMap<>(); // Map<entityId, entity_value>
 		Map<Long, Map<Long, Cell>> percentages = new HashMap<>(); // Map<entityId, Map<activityId, Percentage>>
 		
-		public SplitDigest(CellColumn cellColumn, ColumnContents contents, Supplier<Set<Long>> allIds) {
+		public SplitDigest(NiReportColumn<?> schemaColumn, ColumnContents contents, Behaviour<?> behaviour, ColumnContents wholeColumn, Supplier<Set<Long>> allIds) {
 			this.contents = contents;
-			this.schemaColumn = (NiReportColumn<?>) cellColumn.entity;
-			this.cellColumn = cellColumn;
+			this.schemaColumn = schemaColumn;
+			this.behaviour = behaviour;
 			
 			for(NiCell splitCell:contents.getLinearData()) {
 				processCell(splitCell);
 			}
 			
-//			actIds.put(UNALLOCATED_ID, new HashSet<>(ALL_IDS_NOT_ANYWHERE_ELSE));
-//			splitters.put(UNALLOCATED_ID, DUMMY_UNALLOCATED_CELL);
-//			percentages.put(UNALLOCATED_ID, new HashMap<ALL_IDS_NOT_ANYWHERE_ELSE, DUMMY_UNALLOCATED_CELL>());
-
 			Set<Long> missingActIdsInSplitterColumn = new HashSet<>(allIds.get());
 			if (!schemaColumn.isTransactionLevelHierarchy())
-				missingActIdsInSplitterColumn.removeAll(cellColumn.contents.data.keySet());
+				missingActIdsInSplitterColumn.removeAll(wholeColumn.data.keySet());
 			//missingActIdsInSplitterColumn.clear();
 			
 			for(long missingActId:missingActIdsInSplitterColumn) {
-				Cell unallocatedCell = cellColumn.getBehaviour().buildUnallocatedCell(missingActId, UNALLOCATED_ID, schemaColumn.levelColumn.get()); //TODO: will crash if making hierarchies on a non-same-level column 
-				NiCell unallocatedSplitterCell = new NiCell(unallocatedCell, cellColumn.entity, null);
+				Cell unallocatedCell = behaviour.buildUnallocatedCell(missingActId, UNALLOCATED_ID, schemaColumn.levelColumn.get()); //TODO: will crash if making hierarchies on a non-same-level column 
+				NiCell unallocatedSplitterCell = new NiCell(unallocatedCell, schemaColumn, null);
 				processCell(unallocatedSplitterCell);
 			}
 		}
@@ -92,16 +93,19 @@ public class ColumnReportData extends ReportData {
 		}
 		
 		public Map<Long, NiSplitCell> buildSplitters() {
-			return splitterArrays.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry-> cellColumn.behaviour.mergeSplitterCells(entry.getValue())));			
+			return splitterArrays.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry-> behaviour.mergeSplitterCells(entry.getValue())));			
 		}
 	}
-	
+
 	@Override
 	public GroupReportData horizSplit(CellColumn z) {
 		ColumnContents dataColumn = contents.get(z);
 		NiUtils.failIf(dataColumn == null, () -> String.format("could not find leaf %s in %s", z, this));
-				
-		SplitDigest splitDigest = new SplitDigest(z, dataColumn, this::getIds);
+		return horizSplit(dataColumn, z.contents, z.getBehaviour(), (NiReportColumn<?>) z.entity);
+	}
+	
+	public GroupReportData horizSplit(ColumnContents dataColumn, ColumnContents wholeColumn, Behaviour<?> behaviour, NiReportColumn<?> schemaColumn) {
+		SplitDigest splitDigest = new SplitDigest(schemaColumn, dataColumn, behaviour, wholeColumn, this::getIds);
 		
 		Map<Long, NiSplitCell> splitters = splitDigest.buildSplitters();
 				

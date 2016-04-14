@@ -62,4 +62,10 @@ public class TextualTokenBehaviour implements Behaviour<NiTextCell> {
 	public NiOutCell getEmptyCell(ReportSpecification spec) {
 		return null;
 	}
+
+
+	@Override
+	public boolean hasPercentages() {
+		return false;
+	}
 }

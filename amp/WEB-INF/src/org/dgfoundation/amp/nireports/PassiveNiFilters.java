@@ -23,7 +23,7 @@ import static java.util.Collections.unmodifiableSet;
 import static org.dgfoundation.amp.algo.AmpCollections.remap;
 
 /**
- * the NiReports faucet of filtering 
+ * the NiReports faucet of filtering
  * @author Dolghier Constantin
  *
  */
@@ -32,23 +32,23 @@ public class PassiveNiFilters implements NiFilters {
 	protected final NiReportsEngine engine;
 	protected final Map<NiDimensionUsage, Predicate<NiDimension.Coordinate>> filteringCoordinates;
 	protected final Map<String, Predicate<Cell>> cellPredicates;
-	protected final Set<String> mandatoryHierarchies;
-	//protected final BiFunction<NiFilters, NiReportsEngine, Set<Long>> activityIdsComputer;
+	protected final Set<String> filteringColumns;
 	protected final Function<NiReportsEngine, Set<Long>> activityIdsComputer;
 	protected final Memoizer<Set<Long>> workspaceFilter;
-	public final Predicate<Long> activityIdsPredicate; 
-	//protected final ConcurrentHashMap<NiReportsEngine, Set<Long>> activityIds = new ConcurrentHashMap<>();
+	protected final Predicate<Long> activityIdsPredicate;
+	protected final Set<String> mandatoryHiers;
 	
-	public PassiveNiFilters(NiReportsEngine engine, Map<NiDimensionUsage, List<Predicate<Coordinate>>> predicates, Map<String, List<Predicate<Cell>>> cellPredicates, LinkedHashSet<String> mandatoryHierarchies, Function<NiReportsEngine, Set<Long>> activityIdsComputer, Predicate<Long> activityIdsPredicate) {
+	public PassiveNiFilters(NiReportsEngine engine, Map<NiDimensionUsage, List<Predicate<Coordinate>>> filteringCoordinates, Map<String, List<Predicate<Cell>>> cellPredicates, Set<String> filteringColumns, Set<String> mandatoryHiers, Function<NiReportsEngine, Set<Long>> activityIdsComputer, Predicate<Long> activityIdsPredicate) {
 		Objects.requireNonNull(activityIdsComputer);
 		Objects.requireNonNull(engine);
 		this.engine = engine;
-		this.filteringCoordinates = unmodifiableMap(remap(predicates, AmpCollections::mergePredicates, null));
+		this.filteringCoordinates = unmodifiableMap(remap(filteringCoordinates, AmpCollections::mergePredicates, null));
 		this.cellPredicates = unmodifiableMap(remap(cellPredicates, AmpCollections::mergePredicates, null));
-		this.mandatoryHierarchies = unmodifiableSet(mandatoryHierarchies);
+		this.filteringColumns = unmodifiableSet(filteringColumns);
 		this.activityIdsComputer = activityIdsComputer;
 		this.activityIdsPredicate = Optional.ofNullable(activityIdsPredicate).orElse(ignored -> true);
 		this.workspaceFilter = new Memoizer<Set<Long>>(() -> this.activityIdsComputer.apply(this.engine).stream().filter(this.activityIdsPredicate).collect(Collectors.toSet()));
+		this.mandatoryHiers = unmodifiableSet(mandatoryHiers);
 	}
 	
 	@Override
@@ -62,8 +62,8 @@ public class PassiveNiFilters implements NiFilters {
 	}
 	
 	@Override
-	public Set<String> getMandatoryHierarchies() {
-		return mandatoryHierarchies;
+	public Set<String> getFilteringColumns() {
+		return filteringColumns;
 	}
 
 	@Override
@@ -99,6 +99,11 @@ public class PassiveNiFilters implements NiFilters {
 			return false;
 		
 		return getProcessedFilters().keySet().contains(col.levelColumn.get().dimensionUsage);
+	}
+
+	@Override
+	public Set<String> getMandatoryHiers() {
+		return this.mandatoryHiers;
 	}
 	
 }

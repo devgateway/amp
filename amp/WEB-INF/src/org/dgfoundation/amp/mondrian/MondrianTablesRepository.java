@@ -17,7 +17,6 @@ import org.dgfoundation.amp.mondrian.jobs.MondrianTableLogue;
 import org.dgfoundation.amp.mondrian.monet.DatabaseTableColumn;
 import org.dgfoundation.amp.mondrian.monet.DatabaseTableDescription;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
-import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -202,7 +201,8 @@ public class MondrianTablesRepository {
 								.addTrnColDef("jointcriteria_text", "jointcriteria_id")
 								.addTrnColDef("iob_text", "iob_id")
 								.addTrnColDef("impl_level_name", "impl_level_id")
-								.addTrnColDef("on_off_budget_name", "on_off_budget_id");
+								.addTrnColDef("on_off_budget_name", "on_off_budget_id")
+								.addTrnColDef("ac_chapter_name", "ac_chapter_id");
 					}})
 				/* no pledges addon */ ;
 	

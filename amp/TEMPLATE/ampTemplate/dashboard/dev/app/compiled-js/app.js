@@ -30214,72 +30214,71 @@ TreeNodeModel = Backbone.Model.extend({
   },
 
 
-  // merge based on filterId as we serialize....
-  // options.wholeModel returns whole Models instead of just ids
-  // options.includeUnselected returns full tree, even if nodes are not selected.
-  // Code explicitly ignores Donor Group and Donor Type.
-  //   they only have FilterIds for deserialize for backwards compatibility.
-  // TODO: consider pulling out options.includeUnselected into its own function getAllFilters()
-  serialize: function(options) {
-    var tmpSerialized = {};
-    var children = this.get('children');
+// merge based on filterId as we serialize....
+// options.wholeModel returns whole Models instead of just ids
+// options.includeUnselected returns full tree, even if nodes are not selected.
+// Code explicitly ignores Donor Group,Donor Type and the rest of the organizations.
+//   they only have FilterIds for deserialize for backwards compatibility.
+// TODO: consider pulling out options.includeUnselected into its own function getAllFilters()
+serialize: function(options) {
+	  var tmpSerialized = {};
+	  var children = this.get('children');
 
     /**
-        
-     
-  +--^----------,--------,-----,--------^-,
-  | |||||||||   `--------'     |          O
-  `+---------------------------^----------|
-    `\_,---------,---------,--------------'
-      / XXXXXX /'|       /'
-     / XXXXXX /  `\    /'                      TO INVESTIGATE: why is this function called for 4 times (!!!) per each item when pressing "apply"?
-    / XXXXXX /`-------'
-   / XXXXXX /
-  / XXXXXX /
- (________(                
-   
-    
-// 
-//    if ((this.get('name')== 'Yes') || (this.get('name') == 'No') || (this.get('name') == 'All') || this.get('name') == 'Humanitarian Aid' || this.get('name') == 'Disaster Response Marker') {
-//    	console.log('serializing node with name ' + this.get('name') + ", selected: " + this.get('selected'));
-//
-//    	debugger;
-//    }
-*/
+	        
+	     
+	  +--^----------,--------,-----,--------^-,
+	  | |||||||||   `--------'     |          O
+	  `+---------------------------^----------|
+	    `\_,---------,---------,--------------'
+	      / XXXXXX /'|       /'
+	     / XXXXXX /  `\    /'                      TO INVESTIGATE: why is this function called for 4 times (!!!) per each item when pressing "apply"?
+	    / XXXXXX /`-------'
+	   / XXXXXX /
+	  / XXXXXX /
+	 (________(                
+	   
+	    
+	// 
+	//    if ((this.get('name')== 'Yes') || (this.get('name') == 'No') || (this.get('name') == 'All') || this.get('name') == 'Humanitarian Aid' || this.get('name') == 'Disaster Response Marker') {
+	//    	console.log('serializing node with name ' + this.get('name') + ", selected: " + this.get('selected'));
+	//
+	//    	debugger;
+	//    }
+	*/
     
     if (options.includeUnselected) {
-      if(this.get('filterId') && this.get('filterId') !== 'Donor Group' && this.get('filterId') !== 'Donor Type'){
-        tmpSerialized[this.get('filterId')] = (options.wholeModel? [this]:[this.id]);
-      } else{
-        tmpSerialized.unassigned = (options.wholeModel? [this]:[this.id]);
-      }
-      this._serializeChildren(tmpSerialized, children, options);
-    } else{
-      if (children.length > 0) {
-
-        // If all children are selected, and we have our own filterId, then just use our id, don't recurse.
-        if(this.get('numSelected') >= this.get('numPossible') && this.get('filterId') && this.get('filterId') !== 'Donor Group' && this.get('filterId') !== 'Donor Type'){
-          tmpSerialized[this.get('filterId')] = (options.wholeModel? [this]:[this.id]);
-        }
-        else {
-          this._serializeChildren(tmpSerialized, children, options);
-        }
-
+    	if (this.get('filterId') && this.get('filterId') !== 'Donor Group' && this.get('filterId') !== 'Donor Type' 
+    		&& this.get('filterId') !== 'Implementing Agency' && this.get('filterId') !== 'Beneficiary Agency' && this.get('filterId') !== 'Executing Agency' && this.get('filterId') !== 'Responsible Organization') {
+    			tmpSerialized[this.get('filterId')] = (options.wholeModel? [this]:[this.id]);
+    	} else{
+    		tmpSerialized.unassigned = (options.wholeModel? [this]:[this.id]);
+    	}
+    	this._serializeChildren(tmpSerialized, children, options);
+    } else {
+    	if (children.length > 0) {
+    		// If all children are selected, and we have our own filterId, then just use our id, don't recurse.
+    		if (this.get('numSelected') >= this.get('numPossible') && this.get('filterId') && this.get('filterId') !== 'Donor Group' && this.get('filterId') !== 'Donor Type' 
+    			&& this.get('filterId') !== 'Implementing Agency' && this.get('filterId') !== 'Beneficiary Agency' && this.get('filterId') !== 'Executing Agency' && this.get('filterId') !== 'Responsible Organization') {
+    				tmpSerialized[this.get('filterId')] = (options.wholeModel? [this]:[this.id]);
+    		} else {
+    			this._serializeChildren(tmpSerialized, children, options);
+    		}
       } else {
-        //no children so just return self.
-        if (this.get('selected')) {
-          if(this.get('filterId') && this.get('filterId') !== 'Donor Group' && this.get('filterId') !== 'Donor Type'){
-            tmpSerialized[this.get('filterId')] = (options.wholeModel? [this]:[this.id]);
-          } else{
-            tmpSerialized.unassigned = (options.wholeModel? [this]:[this.id]);
-          }
-        }
+    	  //no children so just return self.
+    	  if (this.get('selected')) {
+    		  if (this.get('filterId') && this.get('filterId') !== 'Donor Group' && this.get('filterId') !== 'Donor Type' 
+    			  && this.get('filterId') !== 'Implementing Agency' && this.get('filterId') !== 'Beneficiary Agency' && this.get('filterId') !== 'Executing Agency' && this.get('filterId') !== 'Responsible Organization') {
+    			  	tmpSerialized[this.get('filterId')] = (options.wholeModel? [this]:[this.id]);
+    		  } else {
+    			  tmpSerialized.unassigned = (options.wholeModel? [this]:[this.id]);
+    		  }
+    	  }
       }
-    }
-
-    this._mergeUnassigned(tmpSerialized);
-    return tmpSerialized;
-  },
+   }
+   this._mergeUnassigned(tmpSerialized);
+   return tmpSerialized;
+},
 
   _serializeChildren: function(tmpSerialized, children, options){
     children.each(function(child) {
@@ -30953,8 +30952,45 @@ module.exports = Backbone.View.extend({
     }
 
   },
-
-
+  
+  serializeToModels: function(filter) {
+	  var _self = this;
+	  _self.values = {0: [], 1: [], 2: [], 3: []}; //TODO: Implement calculateFilterDept() function.
+	  var entryPoint = filter.get('tree').get('children');
+	  var currentLevel = 0;
+	  if (filter.get('numSelected') !== filter.get('numPossible')) {
+		  _.each(entryPoint.models, function(item) {
+			  _self.serializeLevel(item, 0, _self.values);
+		  });
+	  }
+	  return _self.values;
+  },
+    
+  serializeLevel: function(node, level, values) {
+	// When we enter here it means the parent is not 'fully selected'.
+	  var _self = this;
+	  if (node.get('children').models.length > 0) {
+		  // "Double check" because some selected middle nodes have get('selected') === false. 
+		  if (node.get('numSelected') !== node.get('numPossible') && node.get('selected') === false) {
+			  _.each(node.get('children').models, function(node2) {				  
+				  _self.serializeLevel(node2, level + 1, values);
+			  });
+		  } else {
+			  if (values[level] === undefined) {
+				  values << [];
+			  }
+			  values[level].push({'level': level, 'levelName': node.get('filterId'), name: node.get('name')});
+		  }
+	  } else { // We reached the last level..
+		  if (node.get('selected') === true) {
+			  if (values[level] === undefined) {
+				  values << [];
+			  }
+			  values[level].push({'level': level, 'levelName': node.get('filterId'), name: node.get('name')});
+		  }
+	  }	  
+  },
+  
   //TODO: move from view to all-collection
   serialize: function(options) {
     var self = this;
@@ -30974,6 +31010,7 @@ module.exports = Backbone.View.extend({
             for(var k in serialized) keys.push(k);
             if (keys[0] !== undefined && serialized[keys[0]] !== undefined) {
               serialized[keys[0]].filterName = (filter.get('displayName') || filter.get('name'));
+              serialized[keys[0]].serializedToModels = self.serializeToModels(filter);
             }
           }
           _.extend(serializedFilters.columnFilters, serialized);

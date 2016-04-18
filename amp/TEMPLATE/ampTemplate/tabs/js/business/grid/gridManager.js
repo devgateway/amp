@@ -427,25 +427,27 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 	function transformData(data, grouping, hierarchies) {
 		var rows = [];
 		partialTotals = [];
-		// Process the headers for later usage.
-		if (data.headers !== null) {
-			jQuery.each(data.headers, function(i, item) {
-				headers.push({
-					columnName : item["columnName"],
-					originalColumnName : item["originalColumnName"],
-					hierarchicalName : item["hierarchicalName"]
+		if (data.page.pageArea.children.length > 0) {
+			// Process the headers for later usage.
+			if (data.headers !== null) {
+				jQuery.each(data.headers, function(i, item) {
+					headers.push({
+						columnName : item["columnName"],
+						originalColumnName : item["originalColumnName"],
+						hierarchicalName : item["hierarchicalName"]
+					});
 				});
-			});
-
-			// If the tab has hierarchies we use this auxiliary variable to hold the current hierarchy value on each iteration of the recursive function at any level of depth.
-			var auxCurrentHierarchiesValues = [];
-			for(var k = 0; k < hierarchies.models.length; k++) {
-				auxCurrentHierarchiesValues[hierarchies.models[k].get('columnName')] = "FAKE";
+	
+				// If the tab has hierarchies we use this auxiliary variable to hold the current hierarchy value on each iteration of the recursive function at any level of depth.
+				var auxCurrentHierarchiesValues = [];
+				for(var k = 0; k < hierarchies.models.length; k++) {
+					auxCurrentHierarchiesValues[hierarchies.models[k].get('columnName')] = "FAKE";
+				}
+				getContentRecursively(data.page.pageArea, rows, null, partialTotals, -1, hierarchies, auxCurrentHierarchiesValues);
 			}
-			getContentRecursively(data.page.pageArea, rows, null, partialTotals, -1, hierarchies, auxCurrentHierarchiesValues);
+			//console.log(rows);
+			//console.log(partialTotals);
 		}
-		//console.log(rows);
-		//console.log(partialTotals);
 		return rows;
 	}
 

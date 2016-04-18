@@ -1432,7 +1432,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
 				});
 
-				String js = "$('a[href=#tab0]').parent()";
+				String js = "$(\"a[href='#tab0']\").parent()";
 				if (hasError.value) {
 					js += ".addClass('error');";
 				} else {
@@ -1461,7 +1461,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					}
 
 				});
-				String js = String.format("$('a[href=#tab%s]').parent()", fg.getTabIndex() + 1);
+				String js = String.format("$(\"a[href='#tab%s']\").parent()", fg.getTabIndex() + 1);
 				if (hasError.value) {
 					js += ".addClass('error');";
 				} else {

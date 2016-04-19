@@ -125,23 +125,45 @@ var filtersToHtml = function(filters) {
 	if (filters.otherFilters != undefined) {
 		for ( var propertyName in filters.otherFilters) {
 			var dateContent = filters.otherFilters[propertyName];
-			if (dateContent != undefined
-					&& dateContent.start != undefined) {
+			if (dateContent != undefined) {
+				dateContent.start = dateContent.start || "";
+				dateContent.end = dateContent.end || "";
 				var filter = {
 					trnName : propertyName, /*TranslationManager.getTranslated(propertyName),*/
 					name : propertyName,
-					values : [ {
+					values:[]
+				};
+				
+				
+				if(dateContent.start.length > 0 && dateContent.end.length > 0){
+					filter.values.push({
 						id : dateContent.start,
 						name : dateContent.start,
 						trnName : window.currentFilter.formatDate(dateContent.start) //doesn't need translation for now
-					},
-					{
+					});
+					
+					filter.values.push({
 						id : dateContent.end,
 						name : dateContent.end,
 						trnName : window.currentFilter.formatDate(dateContent.end) //doesn't need translation for now
 						
-					}]
-				};
+					});
+					
+				}else if(dateContent.start.length > 0 && dateContent.end.length == 0){
+					filter.values.push({
+						id : dateContent.start,
+						name : dateContent.start,
+						trnName : "from " + window.currentFilter.formatDate(dateContent.start) //doesn't need translation for now
+					});
+				}else if(dateContent.start.length == 0 && dateContent.end.length > 0){
+					filter.values.push({
+						id : dateContent.end,
+						name : dateContent.end,
+						trnName : "until " + window.currentFilter.formatDate(dateContent.end) //doesn't need translation for now
+						
+					});
+				}
+				
 				html += "<div class='round-filter-group'><b class='i18n'>" + filter.trnName + "</b><br>" + filterContentToHtml(filter.values) + "</div>";
 			}
 		}

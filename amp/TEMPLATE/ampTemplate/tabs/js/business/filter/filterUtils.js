@@ -175,24 +175,45 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 		if (filtersFromWidgetWithNames.otherFilters !== undefined) {
 			for ( var propertyName in filtersFromWidgetWithNames.otherFilters) {
 				var dateContent = filtersFromWidgetWithNames.otherFilters[propertyName];
-				if (dateContent !== undefined
-						&& dateContent.start !== undefined) {
-					var filter = new Filter({
+				if (dateContent !== undefined) {					
+					dateContent.start =  dateContent.start || "" ;
+					dateContent.end =  dateContent.end || "" ;	
+					var filterObject = {
 						trnName : TranslationManager.getTranslated(propertyName),
 						name : propertyName,
-						values : [ {
+						values: []
+					};					
+					if(dateContent.start.length > 0 && dateContent.end.length > 0){
+						filterObject.values.push({
 							id : dateContent.start,
 							name : dateContent.start,
 							trnName : app.TabsApp.filtersWidget.formatDate(dateContent.start) //doesn't need translation for now
-						},
-						{
+						});
+						
+						filterObject.values.push({
 							id : dateContent.end,
 							name : dateContent.end,
 							trnName : app.TabsApp.filtersWidget.formatDate(dateContent.end) //doesn't need translation for now
 							
-						}]
-					});
-					app.TabsApp.filters.models.push(filter);
+						});
+						
+					}else if(dateContent.start.length > 0 && dateContent.end.length == 0){
+						filterObject.values.push({
+							id : dateContent.start,
+							name : dateContent.start,
+							trnName : "from " + app.TabsApp.filtersWidget.formatDate(dateContent.start) //doesn't need translation for now
+						});
+					}else if(dateContent.start.length == 0 && dateContent.end.length > 0){
+						filterObject.values.push({
+							id : dateContent.end,
+							name : dateContent.end,
+							trnName : "until " + app.TabsApp.filtersWidget.formatDate(dateContent.end) //doesn't need translation for now
+							
+						});
+					}
+				
+				var filter = new Filter(filterObject);
+				app.TabsApp.filters.models.push(filter);
 				}
 			}
 		}

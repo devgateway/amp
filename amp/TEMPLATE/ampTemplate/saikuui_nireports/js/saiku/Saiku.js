@@ -93,7 +93,14 @@ $(document).ready(function() {
 			var j = 0;
 			plugins.each(function(log) {
 				j = j + 1;
-				jQuery.getScript(log.attributes.path);
+				
+				//Is important to make these calls sync so we continue only after loading all plugins.
+				jQuery.ajax({
+					url: log.attributes.path,
+					dataType: "script",
+					async: false,
+					cache: true
+				});
 
 				if (j == i) {
 					Saiku.logger.log('Saiku.Create Session');

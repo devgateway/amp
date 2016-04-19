@@ -30455,8 +30455,12 @@ var TreeNodeView = Backbone.View.extend({
   // },
 
   template: _.template(Template),
-
-  initialize:function() {
+  isRoot: false,
+  initialize:function(options) {
+	 if(!_.isUndefined(options) && !_.isUndefined(options.isRoot)){
+		 this.isRoot = options.isRoot;
+	 }
+	  
   },
 
 
@@ -30590,7 +30594,11 @@ var TreeNodeView = Backbone.View.extend({
 
 
   clickBox:function() {
-    this.model.set('selected', !this.model.get('selected'), {propagation: true});
+	  if(this.isRoot){
+		  this.model.set('selected', !this.model.get('selected'));		  
+	  }else{
+		  this.model.set('selected', !this.model.get('selected'), {propagation: true});  
+	  }    
   },
 
 
@@ -31141,7 +31149,7 @@ module.exports = BaseFilterView.extend({
     this.model = options.model;
     this.translator = options.translator;
     this.translate = options.translate;
-    this.treeView = new TreeNodeView();
+    this.treeView = new TreeNodeView({isRoot:true});
 
     // Create tree view
     // TODO: make tree loading content responsibility of model, not view...
@@ -31372,7 +31380,7 @@ var BaseFilterView = require('../views/base-filter-view');
 require('../lib/jquery.nouislider.min.js');
 require('jquery-ui/datepicker');
 
-var Template = "\n  <h3 class=\"title text-center\"><span class=\"start-year\">dummy</span> <strong>-</strong> <span class=\"end-year\">dummy</span></h3>\n   <div class=\"year-slider\"></div>\n\n   <span data-i18n=\"amp.gis:pane-subfilters-startdate\">Start Date:</span>&nbsp<p><input type=\"text\" id=\"start-date\" class=\"date-picker\"></p>\n   <span data-i18n=\"amp.gis:pane-subfilters-enddate\">End Date:</span>&nbsp<p><input type=\"text\" id=\"end-date\" class=\"date-picker\"></p>\n";
+var Template = "\n  <h3 class=\"title text-center\"><span class=\"dates\"></span></h3>\n   <div class=\"year-slider\"></div>\n\n   <span data-i18n=\"amp.gis:pane-subfilters-startdate\">Start Date:</span>&nbsp<p><input type=\"text\" id=\"start-date\" class=\"date-picker\"></p>\n   <span data-i18n=\"amp.gis:pane-subfilters-enddate\">End Date:</span>&nbsp<p><input type=\"text\" id=\"end-date\" class=\"date-picker\"></p>\n";
 
 module.exports = BaseFilterView.extend({
 
@@ -31474,9 +31482,16 @@ module.exports = BaseFilterView.extend({
 	$('#datePicker').datepicker({ dateFormat: this.filterView.getDateFormat() });
 	this.$('#start-date').datepicker("setDate", selectedStart);
 	this.$('#end-date').datepicker("setDate", selectedEnd);	
-	 this.$titleEl.find('.filter-count').text(selectedStart + ' - ' +  selectedEnd);	        
-	 this.$('.start-year').text(selectedStart);
-     this.$('.end-year').text(selectedEnd)
+	var dates = "";
+	if(selectedStart.length > 0 && selectedEnd.length > 0){
+		dates = selectedStart + ' - ' +  selectedEnd;		
+	}else if(selectedStart.length > 0 && selectedEnd.length == 0){
+		dates = 'from ' + selectedStart;				
+	}else if(selectedStart.length == 0 && selectedEnd.length > 0){
+		dates = 'until ' + selectedEnd;			
+	}
+	this.$titleEl.find('.filter-count').text(dates);
+	this.$('.dates').text(dates);	
   },
 
   _renderSlider: function() {

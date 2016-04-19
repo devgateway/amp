@@ -434,7 +434,8 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 					headers.push({
 						columnName : item["columnName"],
 						originalColumnName : item["originalColumnName"],
-						hierarchicalName : item["hierarchicalName"]
+						hierarchicalName : item["hierarchicalName"],
+						emptyCell : item["emptyCell"]
 					});
 				});
 	
@@ -467,25 +468,29 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 				var row = {
 					id : 0
 				};
-				jQuery.each(obj.contents, function(key, element) {
-					var colName = null;
-					var auxColumn = findInMapByColumnName(key, 'hierarchicalName'); 
-					if (auxColumn !== undefined) {
-						colName = auxColumn.originalColumnName;
-					}
-					if (colName !== undefined && colName !== null) {
+				// To match the changes on NiReports we iterate the headers, not obj.contents
+				jQuery.each(headers, function(i, column) {
+					var element = obj.contents[column.hierarchicalName];
+					if (element !== undefined) {
 						if (element !== null && element.displayedValue !== null && element.displayedValue.toString().length > 0) {
-							row[colName] = element.displayedValue;
-						} else {
-							row[colName] = getParentContent(key, parent);
+							row[column.columnName] = element.displayedValue;
+						} else {							
+							var auxContent = getParentContent(column.hierarchicalName, parent);
+							// Sometimes auxContent is undefined (from backend is "") so we show the emptyValue for this column.
+							row[column.columnName] = auxContent !== undefined ? auxContent : column.emptyCell.displayedValue;
 						}
-						row['id'] = Math.random();
+					} else {
+						// In this case the leaf node doesnt have data for this column, so we have to show the emptyValue for this column.
+						row[column.columnName] = column.emptyCell.displayedValue;
 					}
+					row['id'] = Math.random();
+					
 					// Property entityId replaced column AMP_ID on NiReports.
-					if (key === "[" + app.TabsApp.COLUMNS_WITH_IDS[0] + "]" && element.entityId !== undefined) {
+					if (column.hierarchicalName === "[" + app.TabsApp.COLUMNS_WITH_IDS[0] + "]" && element.entityId !== undefined) {
 						row[app.TabsApp.COLUMN_ACTIVITY_ID] = element.entityId;
 					}
 				});
+				
 				// To flatten the tree structure and maintain hierarchies values on every row we add the values from "auxCurrentHierarchiesValues".
 				if (hierarchies.models.length > 0) {
 					for (var k = 0; k < hierarchies.models.length; k++) {
@@ -543,7 +548,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 	 */
 	function getParentContent(key, parent) {
 		if (parent !== undefined && parent !== null) {
-			if (parent[key].displayedValue !== null && parent[key].displayedValue.indexOf(app.TabsApp.TOTAL_COLUMNS_DATA_SUFIX) > 0) {
+			if (parent[key].displayedValue !== null && parent[key].displayedValue !== undefined && parent[key].displayedValue.indexOf(app.TabsApp.TOTAL_COLUMNS_DATA_SUFIX) > 0) {
 				return parent[key].displayedValue.substring(0, parent[key].displayedValue.indexOf(app.TabsApp.TOTAL_COLUMNS_DATA_SUFIX));
 			} else {
 				getParentContent(key, parent.parent);

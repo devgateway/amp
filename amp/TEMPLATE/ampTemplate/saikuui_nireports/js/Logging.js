@@ -16,6 +16,10 @@ var AMPCustomLogging = Backbone.Model.extend({
 
 	enableGeneral : function() {
 		localStorage.setItem(this.storage, "true");
+		localStorage.setItem(this.storage + '-log', "true");
+		localStorage.setItem(this.storage + '-info', "true");
+		localStorage.setItem(this.storage + '-warn', "true");
+		localStorage.setItem(this.storage + '-error', "true");
 	},
 
 	disableGeneral : function() {

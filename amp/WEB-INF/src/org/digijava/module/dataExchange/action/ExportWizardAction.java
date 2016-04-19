@@ -25,7 +25,6 @@ import org.dgfoundation.amp.ar.ARUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityExpanded;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
@@ -87,7 +86,7 @@ public class ExportWizardAction extends DispatchAction {
 				eForm.getSelectedTeamId() != null && eForm.getSelectedTeamId().longValue()>=0){
 			// TODO: add search criteria. 
 
-			List<AmpActivityExpanded> ampActivities  = ExportUtil.getActivities(
+			List<AmpActivity> ampActivities  = ExportUtil.getActivities(
 					eForm.getSelectedTeamId(),
 					eForm.getDonorTypeSelected(),
 					eForm.getDonorGroupSelected(),
@@ -100,7 +99,7 @@ public class ExportWizardAction extends DispatchAction {
 			try {
 				eForm.setExportLog(null);
 				//log.info("START");
-				for (AmpActivityExpanded ampActivity : ampActivities) {
+				for (AmpActivity ampActivity : ampActivities) {
 					try{
 						eBuilder.addActivity(ampActivity);
 					} catch (AmpExportException e) {

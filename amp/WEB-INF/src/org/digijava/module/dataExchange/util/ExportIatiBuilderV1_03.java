@@ -9,13 +9,16 @@ import java.util.Date;
 import java.util.Deque;
 import java.util.Iterator;
 
+import javax.xml.bind.JAXBElement;
+import javax.xml.namespace.QName;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityBudgetStructure;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
-import org.digijava.module.aim.dbentity.AmpActivityExpanded;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
@@ -65,9 +68,6 @@ import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.Sector;
 import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.TextType;
 import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.Transaction;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.namespace.QName;
-
 /**
  * Transforms AMP data to IATI schema v 1.03 JAXB structure
  * 
@@ -112,7 +112,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	}
 	
 	@Override
-	protected void addIatiActivityToRoot(Object iAct, AmpActivityExpanded ampAct) throws AmpExportException {
+	protected void addIatiActivityToRoot(Object iAct, AmpActivity ampAct) throws AmpExportException {
 		IatiActivity iatiAct = (IatiActivity)iAct;
 		iatiAct.setLastUpdatedDatetime(ExportHelper.getGregorianCalendar(ampAct.getUpdatedDate()!=null ? ampAct.getUpdatedDate() : ampAct.getCreatedDate()));
 		iatiAct.setVersion(new BigDecimal("1.03"));
@@ -124,7 +124,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	}
 
 	@Override
-	protected void addElement(Object iatiActIn, AmpColumnEntry elem, AmpActivityExpanded ampAct) throws AmpExportException {
+	protected void addElement(Object iatiActIn, AmpColumnEntry elem, AmpActivity ampAct) throws AmpExportException {
 		String path = elem.getName();
 		IatiActivity iatiAct = (IatiActivity)iatiActIn;
 		
@@ -177,12 +177,12 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	 * @param act
 	 * @return IatiIdentifier String
 	 */
-	public String getIatiIdentifier(AmpActivityExpanded act) {
+	public String getIatiIdentifier(AmpActivity act) {
 		return (act==null || act.getProjectCode()==null ) ? null : act.getProjectCode();
 	}
 
 	//iati-identifier
-	protected void addActivityId(IatiActivity iatiAct, AmpActivityExpanded ampAct) {
+	protected void addActivityId(IatiActivity iatiAct, AmpActivity ampAct) {
 		String idStr = getIatiIdentifier(ampAct);
 		if (StringUtils.isNotBlank(idStr)) {
 			IatiIdentifier identifier = factory.createIatiIdentifier();
@@ -192,7 +192,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	}
 	
 	//other-identifier
-	protected void addOtherIdentifier(IatiActivity iatiAct, AmpActivityExpanded ampAct) throws AmpExportException {
+	protected void addOtherIdentifier(IatiActivity iatiAct, AmpActivity ampAct) throws AmpExportException {
 		if (ampAct.getInternalIds()!=null) {
 			AmpActivityInternalId internalId = null;
 			for (Iterator<AmpActivityInternalId> iter = ampAct.getInternalIds().iterator(); iter.hasNext(); ) {
@@ -211,7 +211,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	}
 	
 	//activity-website
-	protected void addActivityWebsite(IatiActivity iatiAct, AmpActivityExpanded ampAct) {
+	protected void addActivityWebsite(IatiActivity iatiAct, AmpActivity ampAct) {
 		//should we provide full URL to AMP activity?
 		ActivityWebsite website = factory.createActivityWebsite();
 		String url = DgUtil.getSiteUrl(this.site, TLSUtils.getRequest());
@@ -220,7 +220,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	}
 	
 	//title
-	protected void addActivityTitle(IatiActivity iatiAct, AmpActivityExpanded ampAct) throws AmpExportException {
+	protected void addActivityTitle(IatiActivity iatiAct, AmpActivity ampAct) throws AmpExportException {
 		if (ampAct.getName() != null){
 			iatiAct.getActivityWebsiteOrReportingOrgOrParticipatingOrg().add(factory.createTitle(getTextType(ampAct.getName())));
 		} else {
@@ -231,9 +231,9 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	}
 
 	//description
-	protected void addDescription(IatiActivity iatiAct, AmpActivityExpanded ampAct) throws AmpExportException {
-		if (StringUtils.isNotBlank(ampAct.getExpandedDescription())) {
-			String descStr = DgUtil.cleanHtmlTags(ampAct.getExpandedDescription());//if not using AmpActivityExpanded, then need to call org.digijava.module.editor.util.DbUtil.getEditorBodyFiltered(this.site, ampAct.getDescription(), null);
+	protected void addDescription(IatiActivity iatiAct, AmpActivity ampAct) throws AmpExportException {
+		if (StringUtils.isNotBlank(ampAct.getDescription())) {
+			String descStr = DgUtil.cleanHtmlTags(ampAct.getDescription());//if not using AmpActivity, then need to call org.digijava.module.editor.util.DbUtil.getEditorBodyFiltered(this.site, ampAct.getDescription(), null);
 			if (StringUtils.isNotBlank(descStr)) {
 				Description desc = factory.createDescription();
 				desc.getContent().add(descStr);
@@ -243,7 +243,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	}
 	
 	//activity-status
-	protected void addActivityStatus(IatiActivity iatiAct, AmpActivityExpanded ampAct) throws AmpExportException {
+	protected void addActivityStatus(IatiActivity iatiAct, AmpActivity ampAct) throws AmpExportException {
 		AmpCategoryValue categVal = findCategory(ampAct, DEConstants.CATEG_VALUE_ACTIVITY_STATUS);
 		if (categVal!=null) {
 			IatiCode iatiCode = getIatiCodeItemPair(DataExchangeConstants.IATI_ACTIVITY_STATUS, categVal.getValue(), IatiCodeTypeEnum.ActivityStatus);
@@ -253,7 +253,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	}
 
 	//activity-date
-	protected void addActivityDate(IatiActivity iatiAct, AmpActivityExpanded ampAct) throws AmpExportException {
+	protected void addActivityDate(IatiActivity iatiAct, AmpActivity ampAct) throws AmpExportException {
 		addActivityDate(iatiAct, "start-actual", ampAct.getActualStartDate());
 		addActivityDate(iatiAct, "start-planned", ampAct.getProposedStartDate());
 		addActivityDate(iatiAct, "end-actual", ampAct.getActualCompletionDate());
@@ -271,7 +271,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	}
 	
 	//contact-info
-	protected void addContactInfo(IatiActivity iatiAct, AmpActivityExpanded ampAct, AmpColumnEntry parent) {
+	protected void addContactInfo(IatiActivity iatiAct, AmpActivity ampAct, AmpColumnEntry parent) {
 		if (ampAct.getActivityContacts()!=null) {
 			AmpContact ampContact = null;
 			boolean addPhone = false;
@@ -328,7 +328,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	}
 	
 	//participating-org
-	protected void addParticipatingOrg(IatiActivity iatiAct, AmpActivityExpanded ampAct) throws AmpExportException {
+	protected void addParticipatingOrg(IatiActivity iatiAct, AmpActivity ampAct) throws AmpExportException {
 		if (ampAct.getOrgrole()!=null) {
 			for (Iterator<AmpOrgRole> iter = ampAct.getOrgrole().iterator(); iter.hasNext();) {
 				AmpOrgRole ampOrgRole = iter.next();
@@ -365,7 +365,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	}
 	
 	//activity-scope
-	protected void addActivityScope(IatiActivity iatiAct, AmpActivityExpanded ampAct) throws AmpExportException {
+	protected void addActivityScope(IatiActivity iatiAct, AmpActivity ampAct) throws AmpExportException {
 		AmpCategoryValue categVal = findCategory(ampAct, DEConstants.CATEG_VALUE_IMPLEMENTATION_LEVEL);
 		if (categVal!=null) {
 			IatiCode pair = getIatiCodeItemPair(DataExchangeConstants.IMPLEMENTATION_LEVEL_TYPE, categVal.getValue(), IatiCodeTypeEnum.ActivityScope);
@@ -374,7 +374,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	}
 	
 	//recipient-country
-	protected void addRecipientCountry(IatiActivity iatiAct, AmpActivityExpanded ampAct) {
+	protected void addRecipientCountry(IatiActivity iatiAct, AmpActivity ampAct) {
 		AmpCategoryValue categVal = findCategory(ampAct, DEConstants.CATEG_VALUE_IMPLEMENTATION_LEVEL);
 		if (categVal!=null) {
 			if (CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.getValueKey().equals(categVal.getValue())) {
@@ -402,7 +402,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	}
 	
 	//location
-	protected void addLocation(IatiActivity iatiAct, AmpActivityExpanded ampAct, AmpColumnEntry parent) {
+	protected void addLocation(IatiActivity iatiAct, AmpActivity ampAct, AmpColumnEntry parent) {
 		if (isNotEmpty(ampAct.getLocations())) {
 			for (Iterator iter = ampAct.getLocations().iterator(); iter.hasNext(); ) {
 				AmpActivityLocation location = (AmpActivityLocation) iter.next();
@@ -463,7 +463,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	}
 	
 	//sector
-	protected void addSector(IatiActivity iatiAct, AmpActivityExpanded ampAct) throws AmpExportException {
+	protected void addSector(IatiActivity iatiAct, AmpActivity ampAct) throws AmpExportException {
 		if (isNotEmpty(ampAct.getSectors())) {
 			for (Iterator iter = ampAct.getSectors().iterator(); iter.hasNext();) {
 				AmpActivitySector sector = (AmpActivitySector) iter.next();
@@ -486,7 +486,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	}
 	
 	//collaboration-type
-	protected void addCollaborationType(IatiActivity iatiAct, AmpActivityExpanded ampAct) throws AmpExportException {
+	protected void addCollaborationType(IatiActivity iatiAct, AmpActivity ampAct) throws AmpExportException {
 		AmpCategoryValue categVal = findCategory(ampAct, CategoryConstants.TYPE_OF_COOPERATION_NAME);
 		if (categVal!=null) {
 			IatiCode pair = getIatiCodeItemPair(DataExchangeConstants.IATI_COLLABORATION_TYPE, categVal.getValue(), IatiCodeTypeEnum.CollaborationType);
@@ -502,7 +502,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	 * @param ampAct
 	 * @throws AmpExportException 
 	 */
-	protected void addDefaultFinanceType(IatiActivity iatiAct, AmpActivityExpanded ampAct) throws AmpExportException {
+	protected void addDefaultFinanceType(IatiActivity iatiAct, AmpActivity ampAct) throws AmpExportException {
 		if (isNotEmpty(ampAct.getFunding())) {
 			String typeOfAssist = null;
 			for (Iterator<AmpFunding> iter = ampAct.getFunding().iterator(); iter.hasNext(); ) {
@@ -527,7 +527,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	}
 	
 	//budget
-	protected void addBudget(IatiActivity iatiAct, AmpActivityExpanded ampAct, AmpColumnEntry parent) throws AmpExportException {
+	protected void addBudget(IatiActivity iatiAct, AmpActivity ampAct, AmpColumnEntry parent) throws AmpExportException {
 		//both mandatory
 		if (ampAct.getFunAmount()!=null && ampAct.getFunDate()!=null) {
 			Budget budget = factory.createBudget();
@@ -553,7 +553,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	}
 	
 	//planned-disbursement
-	protected void addPlannedDisbursement(IatiActivity iatiAct, AmpActivityExpanded ampAct, AmpColumnEntry parent) throws AmpExportException {
+	protected void addPlannedDisbursement(IatiActivity iatiAct, AmpActivity ampAct, AmpColumnEntry parent) throws AmpExportException {
 		if (isNotEmpty(ampAct.getFunding())) {
 			for (Iterator<AmpFunding> iter = ampAct.getFunding().iterator(); iter.hasNext();) {
 				AmpFunding ampFunding  = iter.next();
@@ -592,7 +592,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	}
 	
 	//capital-spend
-	protected void addCapitalSpend(IatiActivity iatiAct, AmpActivityExpanded ampAct) {
+	protected void addCapitalSpend(IatiActivity iatiAct, AmpActivity ampAct) {
 		if(ampAct.getActBudgetStructure()!=null && ampAct.getActBudgetStructure().size()>0){
         	for (Iterator<AmpActivityBudgetStructure> iter = ampAct.getActBudgetStructure().iterator(); iter.hasNext(); ) {
         		AmpActivityBudgetStructure budgetStruct = iter.next();
@@ -606,7 +606,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	}
 	
 	//transaction
-	protected void addTransaction(IatiActivity iatiAct, AmpActivityExpanded ampAct, AmpColumnEntry parent) throws AmpExportException {
+	protected void addTransaction(IatiActivity iatiAct, AmpActivity ampAct, AmpColumnEntry parent) throws AmpExportException {
 		if (isNotEmpty(ampAct.getFunding())) {
 			for (Iterator<AmpFunding> iter = ampAct.getFunding().iterator(); iter.hasNext(); ) {
 				AmpFunding ampFunding = iter.next();
@@ -685,7 +685,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	}
 	
 	//document-link
-	protected void addDocumentLink(IatiActivity iatiAct, AmpActivityExpanded ampAct, AmpColumnEntry parent) throws AmpExportException {
+	protected void addDocumentLink(IatiActivity iatiAct, AmpActivity ampAct, AmpColumnEntry parent) throws AmpExportException {
 		if (isNotEmpty(ampAct.getDocuments())) {
 			for (Iterator iter = ampAct.getDocuments().iterator(); iter.hasNext(); ) {
 				Documents doc = (Documents) iter.next();
@@ -716,7 +716,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 		}
 	}
 	
-	protected void addRelatedActivity(IatiActivity iatiAct, AmpActivityExpanded ampAct) {
+	protected void addRelatedActivity(IatiActivity iatiAct, AmpActivity ampAct) {
 		/* linked Activities removed in 2.10
 		if (StringUtils.isNotBlank(ampAct.getExpandedLinkedActivites())) {
 			RelatedActivity relAct = factory.createRelatedActivity();

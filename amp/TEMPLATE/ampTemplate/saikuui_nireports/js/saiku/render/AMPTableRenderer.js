@@ -33,7 +33,7 @@ AMPTableRenderer.prototype.render = function(data, options) {
 	Saiku.logger.log('AMPTableRenderer.render INIT');
 	window.saiku_time = new Date().getTime();
 
-	if (data !== undefined && data.page !== null && data.page.pageArea !== null) {
+	if (data !== undefined && data.page !== null && data.page.pageArea !== null && !data.isEmpty) {
 		ACTIVITY_STATUS_CODES = data.colorSettings.activityStatusCodes;
 		
 		summarizedReport = checkIfSummarizedReportWithConstant(data.page);

@@ -187,12 +187,20 @@ public class MondrianUtils {
 				DateTimeUtil.toJulianDayNumber(gregStart), DateTimeUtil.toJulianDayNumber(gregEnd), 
 				DateTimeUtil.formatDateOrNull(start), DateTimeUtil.formatDateOrNull(end), false);
 		*/
-		return getDatesRangeFilterRule(ElementType.DATE,
-				DateTimeUtil.toJulianDayNumber(start), DateTimeUtil.toJulianDayNumber(end), false);
+	    return getDatesRangeFilterRule(ElementType.DATE,
+                DateTimeUtil.toJulianDayNumber(start), DateTimeUtil.toJulianDayNumber(end),
+                DateTimeUtil.formatDateOrNull(start, MoConstants.DATE_FORMAT), 
+                DateTimeUtil.formatDateOrNull(end, MoConstants.DATE_FORMAT), false);
+
 	}
 	
+	private static FilterRule getDatesRangeFilterRule(ElementType elemType, Integer from, Integer to, boolean bothLimits) 
+	        throws AmpApiException {
+	    return getDatesRangeFilterRule(elemType, from, to, null, null, bothLimits); 
+	}
 	
-	private static FilterRule getDatesRangeFilterRule(ElementType elemType, Integer from, Integer to, boolean bothLimits) throws AmpApiException {
+	private static FilterRule getDatesRangeFilterRule(ElementType elemType, Integer from, Integer to, 
+            String fromName, String toName, boolean bothLimits) throws AmpApiException {
 		validate (elemType, from);
 		validate (elemType, to);
 		if (from == null && to == null)
@@ -201,7 +209,7 @@ public class MondrianUtils {
 			throw new AmpApiException("The lower limit 'from' must be smaller or equal to the upper limit 'to'. Failed request for from = " + from + ", to = " + to);
 		if (to == null)
 			to = MoConstants.UNDEFINED_KEY - 1; //to skip undefined dates
-		return new FilterRule(toStringOrNull(from), toStringOrNull(to), true, true);
+		return new FilterRule(toStringOrNull(from), toStringOrNull(to), fromName, toName, true, true);
 	}
 	
 	/**
@@ -320,10 +328,16 @@ public class MondrianUtils {
 	 * @throws AmpApiException
 	 */
 	public static FilterRule getSingleDateFilterRule(Date date, boolean valueToInclude) throws AmpApiException {
-		return getSingleDateFilterRule(ElementType.DATE, DateTimeUtil.toJulianDayNumber(date), valueToInclude);
+	    return getSingleDateFilterRule(ElementType.DATE, DateTimeUtil.toJulianDayNumber(date), 
+                DateTimeUtil.formatDateOrNull(date, MoConstants.DATE_FORMAT), valueToInclude);
 	}
 	
 	private static FilterRule getSingleDateFilterRule(ElementType elemType, Integer value, boolean valueToInclude) throws AmpApiException {
+	    return getSingleDateFilterRule(elemType, value, null, valueToInclude);
+	}
+	
+	private static FilterRule getSingleDateFilterRule(ElementType elemType, Integer value, 
+	            String name, boolean valueToInclude) throws AmpApiException {
 		validate (elemType, value);
 		if (value == null)
 			throw new AmpApiException("Single value filter must have a value specified. value = " + value);

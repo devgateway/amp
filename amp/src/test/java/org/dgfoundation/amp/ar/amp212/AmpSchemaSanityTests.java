@@ -486,4 +486,28 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 
 		runNiTestCase(spec("Annual-Proposed-Project-Cost"), "en", ppcActs, corAnnualPPC);
 	}
+	
+	@Test
+	public void testRevisedProjectCost() {
+		NiReportModel cor =  new NiReportModel("AMP-22375-revised-project-cost")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 9))",
+					"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Proposed Project Amount: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Revised Project Amount: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 4));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 7, colSpan: 2))",
+					"(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 2))",
+					"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+			      .withContents("Project Title", "", "Proposed Project Amount", "4 630 902,72", "Revised Project Amount", "4 412 539,84", "Funding-2014-Actual Commitments", "172 000", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "580 245", "Funding-2015-Actual Disbursements", "321 765", "Totals-Actual Commitments", "752 245", "Totals-Actual Disbursements", "321 765")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD", "Proposed Project Amount", "1 000 000", "Revised Project Amount", "1 217 000"),
+			        new ReportAreaForTests(new AreaOwner(17), "Project Title", "Proposed Project Cost 2 - EUR", "Proposed Project Amount", "3 399 510,47", "Revised Project Amount", "3 195 539,84"),
+			        new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Proposed Project Amount", "60 000", "Funding-2014-Actual Commitments", "75 000", "Totals-Actual Commitments", "75 000"),
+			        new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Proposed Project Amount", "66 392,25", "Funding-2014-Actual Commitments", "50 000", "Totals-Actual Commitments", "50 000"),
+			        new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Proposed Project Amount", "35 000", "Funding-2014-Actual Commitments", "32 000", "Totals-Actual Commitments", "32 000"),
+			        new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Proposed Project Amount", "70 000", "Funding-2014-Actual Commitments", "15 000", "Totals-Actual Commitments", "15 000"),
+			        new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Funding-2015-Actual Commitments", "456 789", "Funding-2015-Actual Disbursements", "321 765", "Totals-Actual Commitments", "456 789", "Totals-Actual Disbursements", "321 765"),
+			        new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Funding-2015-Actual Commitments", "123 456", "Totals-Actual Commitments", "123 456")));
+
+		runNiTestCase(spec("AMP-22375-revised-project-cost"), "en", ppcActs, cor);
+	}
 }

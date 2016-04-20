@@ -135,8 +135,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		put(MeasureConstants.CURRENT_MONTH_DISBURSEMENTS , "Sum of Actual Disbursements of the current month");
 		put(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS , "Current Year Actual Disbursements Until Previous Month (not included)"); 
 		put(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS , "Selected Year Planned Disbursements");
-		put(MeasureConstants.UNCOMMITTED_BALANCE , "Proposed project cost - Cumulative commitments"); 
-		put(MeasureConstants.UNDISBURSED_BALANCE , "Cumulative Commitment - Cumulative Disbursement");
+		put(MeasureConstants.UNCOMMITTED_BALANCE , "Proposed Project Cost - Total Actual Commitments"); 
+		put(MeasureConstants.UNDISBURSED_BALANCE , "Total Actual Commitment - Total Actual Disbursement");
 		put(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS , "Actual commitments for the project / Total actual commitments * 100");
 		put(MeasureConstants.LAST_YEAR_OF_PLANNED_DISBURSEMENTS , "Previous Year Planned Disbursements");
 		put(MeasureConstants.PERCENTAGE_OF_DISBURSEMENT , "(Total Actual Disbursements for Year,Quarter,Month / Total Actual Disbursements) * 100");

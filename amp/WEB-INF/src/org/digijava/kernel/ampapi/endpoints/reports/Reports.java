@@ -474,12 +474,15 @@ public class Reports {
 	}
 
 	/**
-	 * a very very very ugly and hacky function which only exists because the filters / settings API is f...ed up
+	 * a very very very ugly and hacky function which only exists because of some hacks in Saiku/Mondrian
+	 * not used in Saiku/NiReports
+	 * @deprecated
 	 * @param queryObject
 	 * @param origReport
 	 * @param ampReportId
 	 * @param ampCurrencyCode
 	 * @return
+	 * TODO: remove function and code using it
 	 */
 	protected ReportGenerationInfo changeReportCurrencyTo(JsonBean queryObject, 
 			ReportGenerationInfo origReport, long ampReportId, String ampCurrencyCode) {
@@ -488,7 +491,7 @@ public class Reports {
 		LinkedHashMap<String, Object> newQueryModel = (LinkedHashMap<String, Object>) newQueryObject.get("queryModel");
 		
 		JsonBean newResult = getSaikuReport(newQueryObject, ampReportId);
-		ReportSpecification newReport = origReport.report; // sick and tired of shitcode 
+		ReportSpecification newReport = origReport.report; 
 		
 		return new ReportGenerationInfo(newResult, origReport.type, newReport, newQueryModel , String.format(" - %s", ampCurrencyCode));
 	}
@@ -567,28 +570,29 @@ public class Reports {
 				
 				doc = exportNiReport(genateredReport, ampReport.getAmpReportId(), queryObject, type);
 			} else {
-				switch (type) {
-				case AMPReportExportConstants.XLSX: {
-					ReportGenerationInfo report1 = new ReportGenerationInfo(result, AMPReportExportConstants.XLSX, report, queryModel, "");
-					ReportGenerationInfo report2 = null;
-					String secondCurrencyCode = queryModel.containsKey("secondCurrency") ? queryModel.get("secondCurrency").toString() : null;
-					logger.error(String.format("setts 1 = %s, 2 = %s, secondCurrency=%s", queryModel.get("1"), queryModel.get("2"), secondCurrencyCode));
-					if (secondCurrencyCode != null) {
-						report2 = changeReportCurrencyTo(queryObject, report1, ampReport.getAmpReportId(), secondCurrencyCode);
-					}
-					
-					doc = AMPReportExcelExport.generateExcel(report1, report2);
-					break;
-				}
-				case AMPReportExportConstants.CSV: 
-					doc = AMPReportCsvExport.generateCSV(result, AMPReportExportConstants.CSV, report, queryModel, ";");
-					break;
-				
-				case AMPReportExportConstants.PDF:
-					AMPPdfExport pdf = new AMPPdfExport();
-					doc = pdf.pdf(result, AMPReportExportConstants.PDF, report, queryModel);
-					break;
-				}
+				//TODO: delete this branch
+//				switch (type) {
+//				case AMPReportExportConstants.XLSX: {
+//					ReportGenerationInfo report1 = new ReportGenerationInfo(result, AMPReportExportConstants.XLSX, report, queryModel, "");
+//					ReportGenerationInfo report2 = null;
+//					String secondCurrencyCode = queryModel.containsKey("secondCurrency") ? queryModel.get("secondCurrency").toString() : null;
+//					logger.error(String.format("setts 1 = %s, 2 = %s, secondCurrency=%s", queryModel.get("1"), queryModel.get("2"), secondCurrencyCode));
+//					if (secondCurrencyCode != null) {
+//						report2 = changeReportCurrencyTo(queryObject, report1, ampReport.getAmpReportId(), secondCurrencyCode);
+//					}
+//					
+//					doc = AMPReportExcelExport.generateExcel(report1, report2);
+//					break;
+//				}
+//				case AMPReportExportConstants.CSV: 
+//					doc = AMPReportCsvExport.generateCSV(result, AMPReportExportConstants.CSV, report, queryModel, ";");
+//					break;
+//				
+//				case AMPReportExportConstants.PDF:
+//					AMPPdfExport pdf = new AMPPdfExport();
+//					doc = pdf.pdf(result, AMPReportExportConstants.PDF, report, queryModel);
+//					break;
+//				}
 			}
 
 			if (doc != null) {

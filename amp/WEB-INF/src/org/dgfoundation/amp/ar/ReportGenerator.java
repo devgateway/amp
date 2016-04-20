@@ -69,7 +69,8 @@ public abstract class ReportGenerator {
 	public final static boolean USE_FILTER_CACHING = true;
 	
 	/**
-	 * shit workaround for stupid Pledges architecture
+	 * @deprecated
+	 * hacky workaround for codegen
 	 * @return
 	 */
 	protected String getBaseEntityNameById(long actId){

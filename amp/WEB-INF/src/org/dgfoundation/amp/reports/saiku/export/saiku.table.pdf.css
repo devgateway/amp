@@ -21,16 +21,17 @@ th, td {
 	padding-left: 5px;
 	padding-right: 5px;
 	border: 1px solid #D5D5D5;
-	text-align: right;
 	border: 1px solid #D5D5D5;
-	text-align: center;
+	vertical-align: center;
+	font-size: 9px;
 }
 
 th {
 	/*border: 1px solid #D5D5D5;*/
 	margin-bottom: 0px;
-	white-space: normal;
-	font-weight: 500;
+	text-align: center;
+	font-size: 10px;
+}
 }
 
 th.all_null {
@@ -41,8 +42,7 @@ th.all_null {
 th.col {
 	border: 1px solid #D5D5D5;
 	background: #B4C0C6 none repeat scroll 0% 0%;
-	font-weight: bold;
-	text-align: center !important;
+	text-align: center;
 }
 
 th.col div {
@@ -60,12 +60,15 @@ th.row_total {
 }
 
 td.data {
+	text-align: left;
+}
+
+
+td.measure {
 	border-left: 1px solid #D5D5D5;
 	border-top: 1px solid #D5D5D5;
 	text-align: right;
-	white-space: nowrap;
 	/*This is the magic for showing the numbers correctly AND align right for totals.*/
-	width: 100%;
 }
 
 td.total {

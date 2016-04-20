@@ -19,7 +19,11 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_activity_modified_by AS SELECT a.amp_activity_id, ((((((u.first_names)::text || ' '::text) || (u.last_name)::text) || ' ('::text) || (u.email)::text) || ')'::text) AS name, atm.user_ AS user_id FROM amp_activity_version a, amp_team_member atm, dg_user u WHERE ((atm.amp_team_mem_id = a.modified_by) AND (atm.user_ = u.id)) ORDER BY a.amp_activity_id;;;
+			    	CREATE OR REPLACE VIEW v_activity_modified_by AS 
+			    		SELECT a.amp_activity_id, u.first_names || ' ' || u.last_name || ' (' || u.email || ')' AS name, atm.user_ AS user_id 
+			    		FROM amp_activity_version a 
+			    			JOIN amp_team_member atm ON atm.amp_team_mem_id = a.modified_by
+			    			JOIN dg_user u ON atm.user_ = u.id;;;
         		</lang>
 		</script>
 	</apply>

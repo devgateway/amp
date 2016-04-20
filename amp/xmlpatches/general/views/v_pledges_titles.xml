@@ -19,7 +19,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				DROP VIEW IF EXISTS v_pledges_titles CASCADE;
+				<!-- DROP VIEW IF EXISTS v_pledges_titles CASCADE;   -->
 				CREATE OR REPLACE VIEW v_pledges_titles AS 
        			(( SELECT p.id AS pledge_id, val.category_value AS title, val.id AS title_id
            				FROM amp_funding_pledges p

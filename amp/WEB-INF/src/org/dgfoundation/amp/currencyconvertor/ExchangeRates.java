@@ -29,7 +29,7 @@ public class ExchangeRates {
 	public void importRate(long date, double rate) {
 		rates.put(date, rate);
 	}
-	
+
 	public void importRates(Map<Long, Double> rates) {
 		for(Map.Entry<Long, Double> entry : rates.entrySet()) {
 			importRate(entry.getKey(), entry.getValue());

@@ -4,8 +4,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.stream.Collectors;
 
-import org.digijava.module.aim.helper.TeamMember;
 
 /**
  * this defines a report specification, e.g. the requested structure of a report. 
@@ -34,18 +34,9 @@ public interface ReportSpecification extends Cloneable {
 	public Set<ReportColumn> getColumns();
 	
 	/**
-	 * these are the simple names of the columns {@see #getColumns()}
-	 * @return the set of column names to use
-	 */
-	public Set<String> getColumnNames();
-	
-	public Set<ReportColumn> getDummyColumns();
-	public void removeDummyColumns();
-	
-	/**
 	 * @return the set of measures to use. <strong>The order of iteration of the set is meaningful</strong> - so please either use a @link {@link LinkedHashSet} or a @link {@link SortedSet} 
 	 */
-	public List<ReportMeasure> getMeasures();
+	public Set<ReportMeasure> getMeasures();
 	
 	/**
 	 * this set should be a strict subset of the one returned at {@link #getColumns()}
@@ -61,23 +52,7 @@ public interface ReportSpecification extends Cloneable {
 	public List<SortingInfo> getSorters();
 	
 	public GroupingCriteria getGroupingCriteria();
-	
-//	/**
-//	 * returns true iff the report must hide entities and only show (sub)totals
-//	 * @return
-//	 */
-//	public boolean isSummaryReport();
-	
-	/**
-	 * @return true if totals per each row must be calculated
-	 */
-	public boolean isCalculateRowTotals();
-	
-	/**
-	 * @return true if totals per each measure column must be calculated
-	 */
-	public boolean isCalculateColumnTotals();
-	
+			
 	/**
 	 * @return whether columns with no funding data should be displayed or not
 	 */
@@ -105,5 +80,38 @@ public interface ReportSpecification extends Cloneable {
      * @return
      */
     public boolean isAlsoShowPledges();
+
+    /**
+     * whether to collapse the CRDs to trail cells only when displaying
+     * @return
+     */
+    public boolean isSummaryReport();
+    
+    /**
+     * whether to collapse same-named hierarchies with different IDs
+     * @return
+     */
+    public default ReportCollapsingStrategy getSubreportsCollapsing() {
+    	return ReportCollapsingStrategy.UNKNOWNS;
+    }
+    
+	/**
+	 * these are the simple names of the columns {@see #getColumns()}
+	 * @return the set of column names to use
+	 */
+	public default Set<String> getColumnNames() {
+		return new LinkedHashSet<>(getColumns().stream().map(z -> z.getColumnName()).collect(Collectors.toList()));
+	}
+
+	/**
+	 * these are the simple names of the hierarchies {@see #getHierarchies()}
+	 * @return the set of column names to use
+	 */
+	public default Set<String> getHierarchyNames() {
+		return new LinkedHashSet<>(getHierarchies().stream().map(z -> z.getColumnName()).collect(Collectors.toList()));
+	}
 	
+	public default Set<String> getMeasureNames() {
+		return new LinkedHashSet<>(getMeasures().stream().map(z -> z.getMeasureName()).collect(Collectors.toList()));
+	}
 }

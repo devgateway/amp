@@ -128,7 +128,6 @@ var Session = Backbone.Model.extend({
     },
 
     url: function() {
-
-        return "session";
+   		return "session";
     }
 });

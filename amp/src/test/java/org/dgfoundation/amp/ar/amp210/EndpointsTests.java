@@ -46,22 +46,22 @@ public class EndpointsTests extends JerseyTest {
 
     }
 
-    @Test
-    public void testTops() {
-        WebResource webResource = Client.create(clientConfig).resource("http://localhost:8080/rest/dashboard").path("/tops");
-        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON_TYPE).accept(MediaType.APPLICATION_JSON_TYPE)
-                .get(ClientResponse.class);
-        List <Map<String,String>> json =response.getEntity(new GenericType (List.class));
-        Map <String,String>agency = (Map<String,String>)json.get(0);
-        Map <String,String>region = (Map<String,String>)json.get(1);
-        Map <String,String>sector = (Map<String,String>)json.get(2);
-        Assert.assertEquals("do",agency.get("id"));
-        Assert.assertEquals("Donor Agency",agency.get("name"));
-        Assert.assertEquals("re",region.get("id"));
-        Assert.assertEquals("Region",region.get("name"));
-        Assert.assertEquals("ps",sector.get("id"));
-        Assert.assertEquals("Primary Sector",sector.get("name"));
-    }
+//    @Test
+//    public void testTops() {
+//        WebResource webResource = Client.create(clientConfig).resource("http://localhost:8080/rest/dashboard").path("/tops");
+//        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON_TYPE).accept(MediaType.APPLICATION_JSON_TYPE)
+//                .get(ClientResponse.class);
+//        List <Map<String,String>> json  =response.getEntity(new GenericType (List.class));
+//        Map <String,String>agency = (Map<String,String>)json.get(0);
+//        Map <String,String>region = (Map<String,String>)json.get(1);
+//        Map <String,String>sector = (Map<String,String>)json.get(2);
+//        Assert.assertEquals("do",agency.get("id"));
+//        Assert.assertEquals("Donor Agency",agency.get("name"));
+//        Assert.assertEquals("re",region.get("id"));
+//        Assert.assertEquals("Region",region.get("name"));
+//        Assert.assertEquals("ps",sector.get("id"));
+//        Assert.assertEquals("Primary Sector",sector.get("name"));
+//    }
 
     @Test
     public void testAidPredictability() throws Exception {

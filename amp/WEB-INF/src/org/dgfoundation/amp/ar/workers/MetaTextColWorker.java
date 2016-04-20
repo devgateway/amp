@@ -43,6 +43,8 @@ public class MetaTextColWorker extends TextColWorker {
 	protected Cell getCellFromRow(ResultSet rs) throws SQLException
 	{
 		TextCell tc = (TextCell) super.getCellFromRow(rs);
+		if (tc == null)
+			return null;
 		MetaTextCell mtc = new MetaTextCell(tc);
 		
 		

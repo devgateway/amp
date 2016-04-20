@@ -3,18 +3,19 @@ package org.dgfoundation.amp.newreports;
 import java.util.List;
 import java.util.Map;
 
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-
 /**
- * TODO: specify a generic filters. Should we reuse AmpARFilter?
  * @author Dolghier Constantin
  *
  */
 public interface ReportFilters {
 	
-	Map<ReportElement, List<FilterRule>> getFilterRules();
+	/**
+	 * the regular filter rules, excluding dates (please see {@link #getDateFilterRules()} for an explanation) 
+	 * @return
+	 */
+	public Map<ReportElement, List<FilterRule>> getFilterRules();
 	
-	Integer getComputedYear();
-	
-	AmpFiscalCalendar getCalendar();
+	public default Map<ReportElement, List<FilterRule>> getAllFilterRules() {
+		return getFilterRules();
+	}
 }

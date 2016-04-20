@@ -59,7 +59,7 @@
  					FROM amp_category_value_location acvl LEFT JOIN amp_location l ON l.location_id = acvl.id
  					ORDER BY acvl.id@@@
 				
-				CREATE OR REPLACE FUNCTION update_location_level_caches_internal()
+				CREATE OR REPLACE FUNCTION update_location_level_caches_internal()  <!-- function changed in AMP-21453-define-location-nicache-tables -->
  				RETURNS bigint AS
 			$BODY$
 				BEGIN

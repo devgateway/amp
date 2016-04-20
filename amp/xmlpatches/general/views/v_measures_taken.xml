@@ -19,7 +19,11 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_measures_taken AS SELECT ai.amp_activity_id, m.name, m.amp_measure_id FROM amp_activity a, amp_measure m, amp_issues ai WHERE ((ai.amp_activity_id = a.amp_activity_id) AND (ai.amp_issue_id = m.amp_issue_id)) ORDER BY ai.amp_activity_id;;;
+			    	CREATE OR REPLACE VIEW v_measures_taken AS 
+			    		SELECT ai.amp_activity_id, m.name, m.amp_measure_id 
+			    			FROM amp_activity_version a 
+							JOIN amp_issues ai ON ai.amp_activity_id = a.amp_activity_id
+							JOIN amp_measure m ON ai.amp_issue_id = m.amp_issue_id;;;
         		</lang>
 		</script>
 	</apply>

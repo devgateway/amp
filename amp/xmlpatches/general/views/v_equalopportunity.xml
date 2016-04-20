@@ -22,9 +22,8 @@
 				DROP VIEW IF EXISTS v_equalopportunity;
 				CREATE OR REPLACE VIEW v_equalopportunity AS 
 			    	SELECT a.amp_activity_id, btrim(e.body) AS ebody, e.language AS locale 
-						FROM amp_activity_version a, dg_editor e 
-						WHERE (a.equalopportunity = (e.editor_key)::text) AND (btrim(e.body) != ''::text)
-						ORDER BY amp_activity_id;;;
+						FROM amp_activity_version a
+							JOIN dg_editor e ON (a.equalopportunity = e.editor_key) AND (btrim(e.body) != '');
 			</lang>
 		</script>
 	</apply>

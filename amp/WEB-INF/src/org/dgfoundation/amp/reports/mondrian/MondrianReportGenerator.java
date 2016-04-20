@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.Semaphore;
+import java.util.function.Predicate;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
@@ -31,7 +32,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.newreports.AmountCell;
-import org.dgfoundation.amp.newreports.DateCell;
+import org.dgfoundation.amp.newreports.MondrianDateCell;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.FilterRule.FilterType;
 import org.dgfoundation.amp.newreports.GeneratedReport;
@@ -42,6 +43,7 @@ import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
+import org.dgfoundation.amp.newreports.pagination.PartialReportArea;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportFilters;
@@ -63,12 +65,12 @@ import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXLevel;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXTuple;
 import org.digijava.kernel.ampapi.mondrian.util.AmpMondrianSchemaProcessor;
+import org.digijava.kernel.ampapi.mondrian.util.Connection;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
 import org.digijava.kernel.ampapi.saiku.SaikuGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
-import org.digijava.kernel.ampapi.saiku.SaikuReportSorter;
 import org.digijava.kernel.ampapi.saiku.util.CellDataSetPostProcessing;
 import org.digijava.kernel.ampapi.saiku.util.CellDataSetToAmpHierarchies;
 import org.digijava.kernel.ampapi.saiku.util.CellDataSetToGeneratedReport;
@@ -136,7 +138,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	private List<ReportOutputColumn> totalsHeaders = null; // list of output columns which are totals. they reside at the end of the output's cols list 
 	
 	// stores INTERNAL_USE_ID for each row from the CellDataSet, if this feature is required 
-	private List<Integer> cellDataSetActivities = null;
+	private List<Long> cellDataSetActivities = null;
 	
 	private final ReportEnvironment environment;
 	protected final String translatedUndefined;
@@ -153,7 +155,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 * as synchronized and initializing this field at the function entrypoint (and it is the sole function exposed by {@link org.dgfoundation.amp.reports.mondrian.ReportExecutor})
 	 * 
 	 */
-	protected ReportSpecificationImpl spec;
+	protected MondrianReportSpec spec;
 		
 	/**
 	 * Mondrian Report Generator
@@ -194,7 +196,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			for (int i = 0; i < result.length; i++) {
 				for (Integer cellIndex : dateColumnsIndexes) {
 					AbstractBaseCell cell = result[i][cellIndex];
-					cell.setFormattedValue(DateCell.parseMondrianDate(cell.getFormattedValue()).right);
+					cell.setFormattedValue(MondrianDateCell.parseMondrianDate(cell.getFormattedValue()).right);
 				}
 			}
 		}
@@ -211,11 +213,10 @@ public class MondrianReportGenerator implements ReportExecutor {
 		return waiting;
 	}
 
-	protected static ReportSpecificationImpl buildInternallyUsedReportSpec(ReportSpecification specOrig) {
-		ReportSpecificationImpl spec = (ReportSpecificationImpl) specOrig;
+	protected static MondrianReportSpec buildInternallyUsedReportSpec(ReportSpecification specOrig) {
+		MondrianReportSpec spec = new MondrianReportSpec((ReportSpecificationImpl) specOrig);
 		spec.reorderColumnsByHierarchies();
-		spec.computeUsesFundingFlows();
-		MondrianReportUtils.configureDefaults(spec);
+		spec.configureDefaults();
 		addDummyColumns(spec);
 		spec.reorderColumnsByHierarchies();
 		return spec;
@@ -244,12 +245,10 @@ public class MondrianReportGenerator implements ReportExecutor {
 				report = new SaikuGeneratedReport(
 						spec, report.generationTime, report.requestingUser,
 						(SaikuReportArea)report.reportContents, cellDataSet, report.rootHeaders, report.leafHeaders, environment);
-				SaikuReportSorter.sort(report, environment);
 				//formatSaikuDates ((SaikuGeneratedReport)report);
 				if (printMode)
 					SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST_SORT");
-			} else 
-				MondrianReportSorter.sort(report, environment);
+			}
 			logger.info("[" + spec.getReportName() + "]" +  "Report sorted.");
 			stats.postproc_time = System.currentTimeMillis() - postprocStart;
 			stats.total_time += stats.postproc_time;
@@ -351,14 +350,14 @@ public class MondrianReportGenerator implements ReportExecutor {
 	}
 	
 	private void init() {
-//		if (!Connection.IS_TESTING)
+		//if (!Connection.IS_TESTING)
 			if(MondrianETL.runETL(false).cacheInvalidated) {
 				MondrianReportUtils.flushCache();
 			}
 				
 		// if there are no leaf entries to be associated with internal use id, then we cannot collect them
-		if (!spec.isSummary() || spec.getHierarchies().contains(new ReportColumn(ColumnConstants.INTERNAL_USE_ID))) {
-			cellDataSetActivities = new ArrayList<Integer>();
+		if (spec.getHierarchies().size() < spec.getColumns().size()) {
+			cellDataSetActivities = new ArrayList<Long>();
 		}
 	}	
 	
@@ -391,7 +390,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 *  Adds a dummy hierarchy by internal id (which is entity id) to group by non-hierarchical columns,
 	 *  but only if there are non-hierarchical columns
 	 */
-	private static void addDummyColumns(ReportSpecificationImpl spec) {
+	private static void addDummyColumns(MondrianReportSpec spec) {
 		//if we have more columns than hierarchies, then add the dummy hierarchy to group non-hierarchical columns by it
 		if (spec.getHierarchies().size() < spec.getColumns().size()) {
 			ReportColumn internalId = new ReportColumn(ColumnConstants.INTERNAL_USE_ID);
@@ -400,16 +399,10 @@ public class MondrianReportGenerator implements ReportExecutor {
 		}
 		
 		for (ReportMeasure rm : spec.getMeasures()) {
-			List<String> dependecies = MondrianMapping.dependency.get(rm.getMeasureName());
-			if (dependecies != null && dependecies.size() > 0) {
-				for (String dependency : dependecies) {
-					if (!spec.getColumnNames().contains(dependency)) {
-						ReportColumn rc = new ReportColumn(dependency);
-						spec.addColumn(rc, true);
-						if (ColumnConstants.INTERNAL_USE_ID.equals(dependency))
-							spec.getHierarchies().add(rc);
-					}
-				}
+			String dependency = MondrianMapping.dependency.get(rm.getMeasureName());
+			if (dependency != null && !spec.getColumnNames().contains(dependency)) {
+				ReportColumn rc = new ReportColumn(dependency);
+				spec.addColumn(rc, true);
 			}
 		}
 	}
@@ -447,9 +440,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 				config.addColumnMeasure(elem);
 		}
 		//add grouping columns for measure
-		config.getColumnAttributes().addAll(MondrianMapping.getDateElements(spec.getGroupingCriteria(), spec.getSettings().getCalendar()));
-		//add sorting
-		configureSortingRules(config, spec, doHierarchiesTotals);
+		config.getColumnAttributes().addAll(MondrianMapping.getDateElements(spec.getGroupingCriteria()));
 		
 		// add empty rows and columns request configuration
 		addEmptyColRows(spec, config);
@@ -460,35 +451,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 		//add settings
 		addSettings(spec.getSettings(), config);
 		
-		config.setCrossJoinWithColumns(spec.getUsesFundingFlows() ? "[Flow Name].[Flow Name].Members" : null); // ugly and hacky... hopefully we're dropping the whole charade soon
+		//config.setCrossJoinWithColumns(spec.getUsesFundingFlows() ? "[Flow Name].[Flow Name].Members" : null); // ugly and hacky... hopefully we're dropping the whole charade soon
 		return config;
-	}
-	
-	private void configureSortingRules(MDXConfig config, ReportSpecification spec, boolean doHierarchiesTotals) throws AMPException {
-		if (spec.getSorters() == null || spec.getSorters().size() == 0 ) return;
-		boolean nonBreakingSort = spec.isCalculateRowTotals() || doHierarchiesTotals;
-		
-		for (SortingInfo sortInfo : spec.getSorters()) {
-			MDXTuple tuple = new MDXTuple();
-			if (!sortInfo.isTotals) {//totals sorting will be done during post-processing
-				for (Entry<ReportElement, FilterRule> entry : sortInfo.sortByTuple.entrySet()) {
-					if (ElementType.ENTITY.equals(entry.getKey().type))
-						tuple.add(applySingleFilter(MondrianMapping.toMDXElement(entry.getKey().entity), entry.getValue()));
-					else { 
-						MDXAttribute mdxAttr = MondrianMapping.getElementByType(entry.getKey().type);
-						if (mdxAttr == null) {
-							String err = "No mapping found for Element type = " + entry.getKey().type;
-							logger.error(err);
-							throw new AMPException(err);
-						}
-						tuple.add(applySingleFilter(mdxAttr, entry.getValue()));
-					}	
-				}
-				config.getSortingOrder().put(tuple, sortInfo.ascending ? 
-													(nonBreakingSort ? SortOrder.ASC : SortOrder.BASC) : 
-													(nonBreakingSort ? SortOrder.DESC : SortOrder.BDESC));
-			}
-		}
 	}
 	
 	private MDXElement applySingleFilter(MDXElement elem, FilterRule filter) throws AMPException {
@@ -630,7 +594,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		//SaikuUtils.removeColumns(cellDataSet, dummyColumnsToRemove);
 		processMtefHeaders(cellDataSet);
 		
-		boolean calculateTotalsOnRows = spec.isCalculateRowTotals()
+		boolean calculateTotalsOnRows = spec.getCalculateRowTotals()
 				//enable totals for non-hierarchical columns
 				|| spec.getHierarchies().size() < spec.getColumns().size();
 		
@@ -645,7 +609,6 @@ public class MondrianReportGenerator implements ReportExecutor {
 			}
 		}
 		CellDataSetPostProcessing postProcessor = new CellDataSetPostProcessing(spec, cellDataSet, leafHeaders, environment); 
-		postProcessor.postProcessAmountsBeforeHierarchicalMerge();
 		
 		formatSaikuDates(cellDataSet);
 		applyFilterSetting(cellDataSet);
@@ -654,26 +617,26 @@ public class MondrianReportGenerator implements ReportExecutor {
 //		SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST_FILTERING");
 		
 		postprocessUndefinedEntries(cellDataSet);
-		
 		CellDataSetToAmpHierarchies.concatenateNonHierarchicalColumns(spec, cellDataSet, leafHeaders, this.translatedUndefined, cellDataSetActivities);
 		boolean internalIdUsed = postProcessor.removeDummyColumns();
 		
 		SortedSet<Integer> columnsToDeleteFromOutput = new TreeSet<>();
 		
 //		postProcessor.removeZeroMTEFColumns(this.columnNumbersWithMtefs);
-		if (spec.getUsesFundingFlows()) {
-			columnsToDeleteFromOutput.addAll(postProcessor.getEmptyFlowsColumns(internalIdUsed));
-			if (SAIKU_TOTALS) {
-				postProcessor.nullifyFundingFlowsMeasuresTotals();
-			}
-		}
+//		if (spec.getUsesFundingFlows()) {
+//			columnsToDeleteFromOutput.addAll(postProcessor.getEmptyFlowsColumns(internalIdUsed));
+//			if (SAIKU_TOTALS) {
+//				postProcessor.nullifyFundingFlowsMeasuresTotals();
+//			}
+//		}
 		columnsToDeleteFromOutput.addAll(postProcessor.getDummyMTEFColumns());
 		postProcessor.deleteColumns(columnsToDeleteFromOutput);
 				
 		//clear totals if were enabled for non-hierarchical merges
 		if (!spec.isCalculateColumnTotals())
 			cellDataSet.setColTotalsLists(null);
-		if (!spec.isCalculateRowTotals())
+		
+		if (!spec.getCalculateRowTotals())
 			cellDataSet.setRowTotalsLists(null);
 		
 		// update coordinates after data re-shuffle
@@ -698,7 +661,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		// skim through last line
 		int yearLevelInHeader = headers.length - getYearLevelInHeader() - 1;
 				
-		int measureLevelInHeader = headers.length - 1 - (spec.getUsesFundingFlows() ? 1 : 0);
+		int measureLevelInHeader = headers.length - 1;// - (spec.getUsesFundingFlows() ? 1 : 0);
 		Map<String, String> mtefMeasures = new HashMap<String, String>() {{
 			put("[Measures].[MTEF Projections]", "MTEF");
 			put("[Measures].[Real MTEFs]", "Real MTEFs");
@@ -736,14 +699,14 @@ public class MondrianReportGenerator implements ReportExecutor {
 					measureCell.setRawValue(formattedValue);
 					//headers[lastLineNr][i] = cell;
 					ReportOutputColumn roc = leafHeaders.get(i);
-					if (spec.getUsesFundingFlows()) {
+					/*if (spec.getUsesFundingFlows()) {
 						roc.parentColumn.columnName = formattedValue;
 						roc = new ReportOutputColumn(roc.columnName, roc.parentColumn, roc.originalColumnName, meta); //replace flags. Since this is a leaf, parent holds no references
 						leafHeaders.set(i, roc);
-					} else {
+					} else */{
 						// MTEF columns are leaves
 						
-						roc = new ReportOutputColumn(formattedValue, roc.parentColumn, roc.originalColumnName, meta);
+						roc = new ReportOutputColumn(formattedValue, roc.parentColumn, roc.originalColumnName, null, meta);
 						leafHeaders.set(i, roc);
 					}
 				}
@@ -818,17 +781,11 @@ public class MondrianReportGenerator implements ReportExecutor {
 	}
 	
 	private void applyFilterSetting(CellDataSet cellDataSet) throws AMPException {
-		if (spec.getSettings() == null || spec.getSettings().getFilterRules() == null) return;
-		for (Entry<ReportElement, List<FilterRule>> pair : spec.getSettings().getFilterRules().entrySet()) {
-			switch(pair.getKey().type) {
-			case YEAR: 
-				if (!GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria())) {
-					applyYearRangeSetting(spec, pair.getValue(), cellDataSet);
-				}
-				break;
-			default: throw new AMPException("Not supported: settings behavior over " + pair.getKey().type);
-			}
-		}
+		if (spec.getSettings() == null || 
+				GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria()) || 
+				spec.getSettings().getYearRangeFilter() == null)
+			return;
+		applyYearRangeSetting(spec, spec.getSettings().buildYearSettingsPredicate(), cellDataSet);
 	}
 	
 	/**
@@ -836,7 +793,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 * @return the number of levels to skip from bottom to get upto the years level. -1 if no years level exists
 	 */
 	private int getYearLevelInHeader() {
-		int added = spec.getUsesFundingFlows() ? 1 : 0;
+		int added = 0; //spec.getUsesFundingFlows() ? 1 : 0;
 		switch(spec.getGroupingCriteria()) {
 			case GROUPING_YEARLY : return added + 1;
 
@@ -852,14 +809,12 @@ public class MondrianReportGenerator implements ReportExecutor {
 		}
 	}
 		
-	protected void applyYearRangeSetting(ReportSpecification spec, List<FilterRule> filters, CellDataSet cellDataSet) throws AMPException {
+	protected void applyYearRangeSetting(ReportSpecification spec, Predicate<Long> yearsSet, CellDataSet cellDataSet) throws AMPException {
 		if (leafHeaders == null || leafHeaders.size() == 0) return;
 
 		//detect the level where years are displayed
 		int levelsToSkip = getYearLevelInHeader();
 
-		Set<Integer> yearsSet = getYearSettings(filters);
-		
 		Iterator<ReportOutputColumn> iter = leafHeaders.iterator();
 		AlgoUtils.skipNPositions(iter, spec.getColumns().size()); // skip output cols which are not measures (e.g. they have no years)
 		
@@ -871,8 +826,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 			ReportOutputColumn leafColumn = iter.next();
 			ReportOutputColumn column = leafColumn.moveUp(levelsToSkip);
 			if (column != null) { //must not be null actually
-				int year = CalendarUtil.parseYear(spec.getSettings().getCalendar(), column.columnName);
-				boolean isAllowed = yearsSet.contains(year);				
+				long year = CalendarUtil.parseYear(spec.getSettings().getCalendar(), column.columnName);
+				boolean isAllowed = yearsSet.test(year);				
 				if (!isAllowed) {
 					leafColumnsNumberToRemove.add(pos);
 					// remove also the leaf header
@@ -924,96 +879,13 @@ public class MondrianReportGenerator implements ReportExecutor {
 		}
 	}
 	
-	private SortedSet<Integer> getYearSettings(List<FilterRule> filters) {
-		SortedSet<Integer> yearSet = new TreeSet<>();
-		//build the list of ranges and selective set of years
-		for(FilterRule rule : filters) {
-			switch(rule.filterType) {
-			case RANGE :
-				int min = rule.min == null ? ArConstants.MIN_SUPPORTED_YEAR : Integer.parseInt(rule.min);
-				int max = rule.max == null ? ArConstants.MAX_SUPPORTED_YEAR : Integer.parseInt(rule.max);
-				for(int i = min; i <= max; i++)
-					yearSet.add(i);
-				break;
-			case SINGLE_VALUE : 
-				yearSet.add(Integer.parseInt(rule.value)); 
-				break;
-			case VALUES : 
-				for (String value : rule.values) {
-					yearSet.add(Integer.parseInt(value));
-				}
-				break;
-			}
-		}
-		return yearSet;
-	}
-	
 	private GeneratedReport toGeneratedReport(CellDataSet cellDataSet, int duration) throws AMPException {
 		long start = System.currentTimeMillis();
 		CellDataSetToGeneratedReport translator = new CellDataSetToGeneratedReport(
 				spec, cellDataSet, leafHeaders, cellDataSetActivities);
 		ReportAreaImpl root = translator.transformTo(reportAreaType);
-		GeneratedReport genRep = new GeneratedReport(spec, duration + (int)(System.currentTimeMillis() - start), null, root, getRootHeaders(leafHeaders), leafHeaders); 
-		return genRep;
-	}
-	
-	@Deprecated
-	private GeneratedReport toGeneratedReport(ReportSpecification spec, CellSet cellSet, int duration) throws AMPException {
-		CellSetAxis rowAxis = cellSet.getAxes().get(Axis.ROWS.axisOrdinal());
-		CellSetAxis columnAxis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
-		ReportAreaImpl root = MondrianReportUtils.getNewReportArea(reportAreaType);
-		
-		if (rowAxis.getPositionCount() > 0 && columnAxis.getPositionCount() > 0 ) {
-			/* Build Report Areas */
-			// stack of current group of children
-			Deque<List<ReportArea>> stack = new ArrayDeque<List<ReportArea>>();
-			int maxStackSize = 1 + (spec.isCalculateRowTotals() ? rowAxis.getAxisMetaData().getHierarchies().size()  : 0); 
-			refillStack(stack, maxStackSize); //prepare the stack
-			
-			int cellOrdinal = 0; //initial position of row data from the cellSet
-			boolean wasAreaEnd = false; 
-			
-			for (Position rowPos : rowAxis.getPositions()) {
-				int columnPos = 0;
-				boolean areaEnd = false; 
-				ReportAreaImpl reportArea = MondrianReportUtils.getNewReportArea(reportAreaType);
-				Map<ReportOutputColumn, ReportCell> contents = new LinkedHashMap<ReportOutputColumn, ReportCell>();
-				
-				for (Member member : rowPos.getMembers()) {
-					TextCell text = new TextCell(member.getName());
-					contents.put(leafHeaders.get(columnPos++), text);
-					areaEnd = areaEnd || member.isAll();
-				}
-				
-				for (Position colPos : columnAxis.getPositions()) {
-					Cell cell = cellSet.getCell(cellOrdinal++);
-					if (cell.getValue() instanceof OlapException) {
-						logger.error("Unexpected cell error: " + MondrianUtils.getOlapExceptionMessage((OlapException)cell.getValue()));
-					} else {
-						if (cell.getValue() != null) {
-							AmountCell amount = new AmountCell(new BigDecimal(cell.getValue().toString()), null);
-							contents.put(leafHeaders.get(columnPos++), amount);
-						} else 
-							columnPos++; //skip column
-					} 
-				}
-				
-				reportArea.setContents(contents);
-				
-				if (areaEnd) {
-					reportArea.setChildren(stack.pop());
-				} else if (wasAreaEnd) { 
-					//was an area end but now is simple content => refill with new children lists to the stack 
-					refillStack(stack, maxStackSize);
-				}
-				stack.peek().add(reportArea);
-				wasAreaEnd = areaEnd;
-			}
-			root.setChildren(stack.pop());
-		}
-			
-		//we should have requesting user already configure in spec - spec must have all required data
-		GeneratedReport genRep = new GeneratedReport(spec, duration, null, root, getRootHeaders(leafHeaders), leafHeaders); 
+		GeneratedReport genRep = new GeneratedReport(spec, duration + (int)(System.currentTimeMillis() - start), 
+				null, root, getRootHeaders(leafHeaders), leafHeaders, null, null, null, false);
 		return genRep;
 	}
 	
@@ -1028,7 +900,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		if (leafColumns != null && spec.getColumns() != null) {
 			for (ReportColumn reportColumn : spec.getColumns()) {
 				String originalColumnName = reportColumn.getColumnName();
-				ReportOutputColumn reportOutputColumn = ReportOutputColumn.buildTranslated(originalColumnName, environment.locale, null, null);
+				ReportOutputColumn reportOutputColumn = ReportOutputColumn.buildTranslated(originalColumnName, environment.locale, null, null, null);
 				leafColumns.add(reportOutputColumn);
 			}
 		}
@@ -1048,14 +920,14 @@ public class MondrianReportGenerator implements ReportExecutor {
 				String columnDescription = allMeasureNames.contains(originalColumnName) ? getComputedMeasureDescription(originalColumnName) : null; 
 				
 				ReportOutputColumn reportColumn = new ReportOutputColumn(textColumn.getLevel().getCaption(), null, 
-						originalColumnName, columnDescription, null);
+						originalColumnName, columnDescription, null, null);
 				leafColumns.add(reportColumn);
 			}
 		} else if (spec.isPopulateReportHeadersIfEmpty()) {
 			addStaticColumnHeaders(leafColumns);
 		}
 		
-		int relevantDelta =  spec.getUsesFundingFlows() ? 2 : 1;
+		int relevantDelta =  1; //spec.getUsesFundingFlows() ? 2 : 1;
 				
 		LinkedHashSet<String> outputtedMeasures = new LinkedHashSet<>(); // the set of the measures for which saiku generated an output (and we are supposed to generate totals)
 		//int measuresLeafPos = columnAxis.getAxisMetaData().getHierarchies().size();
@@ -1075,10 +947,10 @@ public class MondrianReportGenerator implements ReportExecutor {
 						String usedCaption = measureColumn.getCaption();
 						String usedDescription = (i == members.size() - relevantDelta) && allMeasureNames.contains(measureColumn.getName()) ? 
 								getComputedMeasureDescription(measureColumn.getName()) : null;
-						if (i == members.size() - 1 && spec.getUsesFundingFlows() && usedName.equals("Undefined")) {
-							usedName = usedCaption = " ";
-						}
-						reportColumn = new ReportOutputColumn(usedCaption, parent, usedName, usedDescription, null);
+//						if (i == members.size() - 1 && spec.getUsesFundingFlows() && usedName.equals("Undefined")) {
+//							usedName = usedCaption = " ";
+//						}
+						reportColumn = new ReportOutputColumn(usedCaption, parent, usedName, usedDescription, null, null);
 						reportColumnsByFullName.put(fullColumnName, reportColumn);
 					}
 					if (i == members.size() - relevantDelta) {
@@ -1100,9 +972,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 		this.totalsHeaders = new ArrayList<>();
 		//add measures total columns
 		if (spec.isCalculateColumnTotals() && !GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria())) {
-			ReportOutputColumn totalMeasuresColumn = ReportOutputColumn.buildTranslated(MoConstants.TOTAL_MEASURES, environment.locale, null, null);
+			ReportOutputColumn totalMeasuresColumn = ReportOutputColumn.buildTranslated(MoConstants.TOTAL_MEASURES, environment.locale, null, null, null);
 			for (String measureName : outputtedMeasures) {
-				this.totalsHeaders.add(ReportOutputColumn.buildTranslated(measureName, getComputedMeasureDescription(measureName), environment.locale, totalMeasuresColumn, null));
+				this.totalsHeaders.add(ReportOutputColumn.buildTranslated(measureName, getMeasureDescription(measureName), environment.locale, totalMeasuresColumn, null, null));
 			}
 		}
 				
@@ -1165,6 +1037,18 @@ public class MondrianReportGenerator implements ReportExecutor {
 			measureDescription = computedColumn != null ? computedColumn.getDescription() : null;
 		}
 			
+		return measureDescription;
+	}
+	
+	private String getMeasureDescription(String measureName) {
+		String measureDescription = null;
+		try {
+			AmpMeasures measure = AdvancedReportUtil.getMeasureByName(measureName);
+			measureDescription = measure != null ? measure.getDescription() : null;
+		} catch (RuntimeException e) {
+			logger.info("Could not retrieve measure " + measureName);
+		}
+		
 		return measureDescription;
 	}
 	

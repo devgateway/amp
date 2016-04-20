@@ -14,7 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.apache.commons.collections.MapUtils;
 import org.digijava.module.aim.helper.Constants;
 
 /**
@@ -154,6 +156,8 @@ public final class ArConstants {
         put(ANNUAL_PROPOSED_PROJECT_COST, Constants.ANNUAL_PROPOSED_PROJECT_COST);
         put(PLEDGES_DISBURSEMENT, Constants.PLEDGES_DISBURSEMENT);
 	}};
+	
+	public final static Map<Integer, String> TRANSACTION_ID_TO_TYPE_NAME = MapUtils.invertMap(TRANSACTION_TYPE_NAME_TO_ID);
 	
 	public final static Map<String, Integer> SSC_TRANSACTION_TYPE_NAME_TO_ID = new LinkedHashMap<String, Integer>() {{
 		put(COMMITMENT, Constants.COMMITMENT);

@@ -130,7 +130,7 @@ public class EditFiscalCalendar extends Action {
 								}else{
 									editForm.setBaseCalendar(BaseCalendar.BASE_GREGORIAN.getValue());
 								}
-								if(ampFisCal.getIsFiscal()!=null && ampFisCal.getIsFiscal()){
+								if (ampFisCal.getIsFiscal()){
 									editForm.setIsFiscal("1");
 								}else{
 									editForm.setIsFiscal("0");

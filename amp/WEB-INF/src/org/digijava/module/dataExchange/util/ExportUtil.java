@@ -1,14 +1,12 @@
 package org.digijava.module.dataExchange.util;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityExpanded;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -22,9 +20,9 @@ public class ExportUtil {
     private static Logger logger = Logger.getLogger(ExportUtil.class);
 
     
-    public static List<AmpActivityExpanded> getActivities(Long teamId, Long[] donorTypes, Long[] donorGroups, Long[] donorAgences,
+    public static List<AmpActivity> getActivities(Long teamId, Long[] donorTypes, Long[] donorGroups, Long[] donorAgences,
     		Long[] primarySectors, Long[] secondarySectors) {
-    	List<AmpActivityExpanded> retValue = null;
+    	List<AmpActivity> retValue = null;
         Session session = null;    	
 
         if(teamId == null) {
@@ -34,7 +32,7 @@ public class ExportUtil {
     	
         try {
             session = PersistenceManager.getRequestDBSession();
-            StringBuffer from = new StringBuffer("select distinct act from " + AmpActivityExpanded.class.getName() + " as act, ");
+            StringBuffer from = new StringBuffer("select distinct act from " + AmpActivity.class.getName() + " as act, ");
             StringBuffer mainWhere =  new StringBuffer(" where act.team=:teamId ");
             
             if ((primarySectors != null && primarySectors.length > 0) ||

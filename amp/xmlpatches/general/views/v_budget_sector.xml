@@ -19,8 +19,11 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_budget_sector AS SELECT a.amp_activity_id, (((bs.code)::text || ' - '::text) || (bs.sector_name)::text) AS budget_sector FROM amp_activity a, amp_budget_sector bs WHERE (a.budget_sector = bs.budged_sector_id) ORDER BY a.amp_activity_id;;;
-        		</lang>
+			   	CREATE OR REPLACE VIEW v_budget_sector AS
+			   		SELECT a.amp_activity_id, (bs.code || ' - ' || bs.sector_name) AS budget_sector
+			   			FROM amp_activity_version a
+			   				JOIN amp_budget_sector bs ON a.budget_sector = bs.budged_sector_id;
+        	</lang>
 		</script>
 	</apply>
 </tns:patch>

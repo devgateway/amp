@@ -1,37 +1,36 @@
 package org.dgfoundation.amp.nireports.schema;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
+import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
-
-import clover.com.google.common.base.Predicate;
 
 /**
  * a trivial measure defined as a transaction 
  * @author Dolghier Constantin
  *
  */
-public class NiTransactionMeasure extends NiReportMeasure {
+public class NiTransactionMeasure extends NiReportMeasure<CategAmountCell> {
 	
 	public final Predicate<CategAmountCell> criterion;
 	
-	public NiTransactionMeasure(String measureName, Predicate<CategAmountCell> criterion) {
-		super(measureName);
+	public NiTransactionMeasure(String measureName, Predicate<CategAmountCell> criterion, String description) {
+		this(measureName, criterion, TrivialMeasureBehaviour.getInstance(), description);
+	}
+	
+	public NiTransactionMeasure(String measureName, Predicate<CategAmountCell> criterion, Behaviour<?> behaviour, String description) {
+		super(measureName, behaviour, description);
 		this.criterion = criterion;
 	}
 	
 	@Override
-	public List<CategAmountCell> buildCells(NiReportsEngine context) {
-		// TODO: replace by java8 awesomeness once ampdev is migrated to j8
-		List<CategAmountCell> ret = new ArrayList<>();
-		for(CategAmountCell cac:context.funding) {
-			if (criterion.apply(cac))
-				ret.add(cac);
-		}
-		return ret;
+	public List<CategAmountCell> fetch(NiReportsEngine engine) {
+		return engine.funding.stream().filter(cell -> criterion.test(cell)).collect(Collectors.toList());
 	}
 
 	/**
@@ -39,7 +38,11 @@ public class NiTransactionMeasure extends NiReportMeasure {
 	 */
 	@Override
 	public Set<String> getPrecursorMeasures() {
-		return null;
+		return Collections.emptySet();
 	}
 
+	@Override
+	public List<ReportRenderWarning> performCheck() {
+		return null;
+	}
 }

@@ -3,14 +3,14 @@
  */
 package org.dgfoundation.amp.mondrian;
 
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.Map;
 
-import org.dgfoundation.amp.newreports.NamedTypedEntity;
+import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
-import org.dgfoundation.amp.reports.PartialReportArea;
+import org.dgfoundation.amp.newreports.pagination.PaginatedReportArea;
 
 /**
  * 
@@ -20,17 +20,27 @@ public class PaginatedReportAreaForTests extends ReportAreaForTests {
 
 	protected int currentCount = -1;
 	protected int totalCount = -1;
-	
-	public PaginatedReportAreaForTests withCounts(int currentCount, int totalCount) {
-		this.currentCount = currentCount;
-		this.totalCount = totalCount;
-		return this;
+		
+	public PaginatedReportAreaForTests() {
 	}
+	
+	public PaginatedReportAreaForTests(AreaOwner owner, String...contents) {
+		this.owner = owner;
+		
+		switch(contents.length) {
+			case 0:
+				return;
+				
+			default:
+				this.contents = buildContents(contents);
+		}
+	}
+	
 	
 	@Override
 	public String getDifferenceAgainst(ReportArea output) {
 		String err = super.getDifferenceAgainst(output);
-		if (err == null && !PartialReportArea.class.isAssignableFrom(output.getClass())) {
+		if (err == null && !PaginatedReportArea.class.isAssignableFrom(output.getClass())) {
 			return "not a pagination request, expecting PartialReportArea to be used";
 		}
 		if (err == null) {
@@ -43,26 +53,20 @@ public class PaginatedReportAreaForTests extends ReportAreaForTests {
 		/* till this place children content & size are verified =>
 		 * can simplify on checks and just compare counts
 		 */
-		PartialReportArea partial = (PartialReportArea) output;
-		if (this.currentCount != partial.getCurrentLeafActivitiesCount()) {
-			return "different current count for " + partial.getContents();
-		}
-		if (this.totalCount != partial.getTotalLeafActivitiesCount()) {
-			return "different total count for " + partial.getContents();
-		}
-		String err = null;
-		if (partial.getChildren() != null && partial.getChildren().size() > 0) {
-			Iterator<ReportArea> pChild = partial.getChildren().iterator(); 
-			Iterator<ReportArea> thisChild = getChildren().iterator();
-			while (pChild.hasNext() && err != null) {
-				err = ((PaginatedReportAreaForTests) thisChild.next()).compareCounts(pChild.next());
-			}
-		}
-		return err;
+		PaginatedReportArea partial = (PaginatedReportArea) output;
+		junit.framework.TestCase.assertEquals("currentCount", this.currentCount, partial.getCurrentLeafActivitiesCount());
+		junit.framework.TestCase.assertEquals("totalCount", this.totalCount, partial.getTotalLeafActivitiesCount());
+		return null;
 	}
 	
+	public PaginatedReportAreaForTests withCounts(int currentCount, int totalCount) {
+		this.currentCount = currentCount;
+		this.totalCount = totalCount;
+		return this;
+	}
+
 	@Override
-	public PaginatedReportAreaForTests withOwner(NamedTypedEntity owner) {
+	public PaginatedReportAreaForTests withOwner(AreaOwner owner) {
 		super.withOwner(owner);
 		return this;
 	}

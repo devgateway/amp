@@ -120,7 +120,7 @@ public class ExportCalendarManager2XSL extends Action {
 				  
 				  cell=row.createCell(cellIndex++);
 				  cell.setCellStyle(cs);
-				  cell.setCellValue((calendar.getIsFiscal()==null||!calendar.getIsFiscal())? no:yes);
+				  cell.setCellValue((calendar.getIsFiscal()) ? yes : no);
 				  
 				  cell=row.createCell(cellIndex++);
 				  cell.setCellStyle(cs);

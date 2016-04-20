@@ -19,7 +19,12 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_funding_org_id AS SELECT f.amp_activity_id, f.financing_id AS funding_org_id FROM (amp_funding f JOIN amp_activity a ON ((((f.amp_activity_id = a.amp_activity_id) AND (f.financing_id IS NOT NULL)) AND ((f.financing_id)::text != ''::text)))) ORDER BY f.amp_activity_id;;;
+			    	CREATE OR REPLACE VIEW v_funding_org_id AS 
+			    		SELECT f.amp_activity_id, f.financing_id AS funding_org_id 
+			    			FROM amp_funding f 
+			    				JOIN amp_activity_version a ON f.amp_activity_id = a.amp_activity_id 
+			    					AND f.financing_id IS NOT NULL 
+			    					AND f.financing_id != '';;;
         		</lang>
 		</script>
 	</apply>

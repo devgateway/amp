@@ -1,60 +1,34 @@
-== A. runtime data structures ==
-0. Cell<Amount> or Cell<Text> - contains 0+ values
-1. Amount - immutable
-2. Column: contains either cells or subcolumns
-3. any column (measure) should be splittable by Funding Flow - at the last temporal level
-4. 3 types of hierarchies:
-	4a: percentages
-	4b: flows (make it somehow generic through attributes?)
-	4c: per-transaction attribute equaling the column
-	4d: (does it make sense?): hierarchy by something which has no percentage, no attribute, no per-transaction value
-5. ReportSubArea:
-	Map<ReportColumn
-	
-HOW TO HANDLE MULTIPLE VALUES PER CELL?
-	TEXT VALUES
-	AMOUNT VALUES
-		
-== B. fetching ==
-5. multi-level columns/hierarchies: Sectors/Programs/Locations
-	5a: should implement them as one single internal column, with different displayed fields?
-6. fetching: only fetch IDs (to minimize JOINs and over-socket traffic)
-	fundings: initially a view, maybe incrementally build a table in v.2 (relatively cheap)
-
 == C. running ==
- Column.splitByYear/Month/
- totals
-generate hierarchies:
-	column.filter(metadata = X, percentage = Y)
-		-> if cell has metadata, but different amount -> f.o.
-		->  
 	
-	
-== D. filters ==
-
-
-== E. sorting ==
-
-
-
-
-templating engine:
-https://en.wikipedia.org/wiki/Thymeleaf
- OR
-Apache Velocity
- OR
-Mustache
- OR
-http://blog.stackhunter.com/2014/01/17/10-reasons-to-replace-your-jsps-with-freemarker-templates/
-
-Calendars:
-	-> http://blog.joda.org/2009/11/why-jsr-310-isn-joda-time_4941.html
-	-> http://java-performance.info/jsr-310-java-8-datetime-library-performance-well-joda-time-2-3-j-u-calendar/
-	
-
-
 measures which are not affected by filters should be made columns
 	-> what about those which have meaning for both year and overall (e.g. Execution Rate / Forecast Execution Rate)
 	
-
+REDO *info* columns as being part of the hierarchy
+REDO *funding* columns as being part of the donor hierarchy
+REDO v_organization_projectid
+pledges sectors + programs should be somehow fixed (data model is broken)
+pledges titles: make a new view for NiReports
+v_component_funding_description, v_component_funding_organization_name - add as being part of 2 hierarchies
+v_activity_pledges_title:
+	views which link pledges to activities are... different. These have to be changed, but in an another way - for later
 	
+in case fetching a column/measure crashes -> remove said column/measure from report and add a note about it to warnings
+	-> treat the case when fetching a column which is also a hierarchy fails
+	
+filters: activities-id caching
+RELATED_PROJECTS: take care of the (id / related id) stuff
+generate the following in-memory schemas:
+	-> benchmarks schema
+	-> report wizard schema (as a tiny layer on top of testcases schema)
+
+https://jira.dgfoundation.org/browse/AMP-22006 - DO NOT MERGE THIS ONE TO AMP 2.12
+
+http://localhost:8080/rest/data/nireport/10 - report behaviour when no funding
+gross filtering-out of entries while fetching funding
+
+caching layer on top of workspace filter
+lucene indexer
+refactor workspacefilter
+format numbers, during the output stage, as BigDecimal (AmpNiReportsFormatter)
+summary reports in output stages
+refactor ReportEnvironment -> add mainIds to ReportSpecification after Mondrian would have been deleted

@@ -509,12 +509,12 @@ $(document).ready(function() {
 					                              									<c:if test="${!aimTeamReportsForm.showTabs}">
 	 																					<c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}" />
 	 																					<% if (onlySaikuButton) { %>
-																							<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}" />
+																							<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" />
 																						<% } %>
 																					    	
 	 																					  	<a href="${reportLink}" styleClass="h-box" onclick="return popup(this,'');" title="<digi:trn>Click here to view the Report</digi:trn>">
 																						  	<b>
-								                              										<p style="max-width: 400px;white-space: normal" title='<c:out value="${report.name}"/>'>
+								                              										<p style="display: inline; max-width: 400px; white-space: normal" title='<c:out value="${report.name}"/>'>
 																										<c:choose>
 																											<c:when test="${fn:length(report.name) > 25}">
 																												<c:out value="${fn:substring(report.name, 0, 25)}" />...
@@ -527,7 +527,9 @@ $(document).ready(function() {
 								                              									</b>
 	 																				    	</a>
 																						  	
-																					    
+					                              										<a href="/rest/data/nireport/${report.ampReportId}" title="Open Report in NiReports">
+					                              											<img src="/TEMPLATE/ampTemplate/nireports/nireportsicon.png" />
+					                              										</a>
 																					</c:if>
 						                          									<c:if test="${aimTeamReportsForm.showTabs}">
 						                          										<b>
@@ -656,7 +658,7 @@ $(document).ready(function() {
 					                                							</ul>
 					                              								</td>
 					                              							<%if (tm != null) {%>
-					                              								<td width="200" class="inside" style="padding-right: 10px; padding-left: 10px; font-size: 11px; width: 150px;" align="center" bgcolor="<%=color%>">  
+					                              								<td width="200" class="inside" style="padding-right: 5px; padding-left: 5px; font-size: 11px; width: 150px;" align="center" bgcolor="<%=color%>">  
 						                                							<div style='position:relative;display:none;' id='report-<bean:write name="report" property="ampReportId"/>'>
 						                                							<ul> 
 						                                  								<logic:iterate name="report" property="columns" id="column" indexId="index"  >
@@ -721,6 +723,9 @@ $(document).ready(function() {
 						                                								<c:set target="${urlParams}" property="rid">
 						                                  									<bean:write name="report" property="ampReportId" />
 						                                								</c:set>
+						                                								<a href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}?nireport=true" 
+						                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
+						                                								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/nireport_saiku.png" border="0" /></a>
 																						<%
 																							if (!report.isTab() && !onlySaikuButton) {
 																						%>

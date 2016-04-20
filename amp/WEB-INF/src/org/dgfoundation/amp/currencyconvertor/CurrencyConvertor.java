@@ -1,6 +1,6 @@
 package org.dgfoundation.amp.currencyconvertor;
 
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 
 import org.digijava.module.aim.dbentity.AmpCurrency;
 

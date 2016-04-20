@@ -3,6 +3,8 @@ package org.dgfoundation.amp.algo;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import org.digijava.module.aim.util.Identifiable;
 
@@ -164,12 +166,29 @@ public class AlgoUtils {
 	}
 	
 	/**
-     * encapsulates nonRuntimeException in runtimeerrorexceptions
-     * @param e
-     */
-    public static RuntimeException translateException(Exception e){
-        if (e instanceof RuntimeException)
-            return (RuntimeException) e;
-        return new RuntimeException(e);
-    }	
+	 * encapsulates nonRuntimeException in runtimeerrorexceptions
+	 * @param e
+	 */
+	public static RuntimeException translateException(Exception e){
+		if (e instanceof RuntimeException)
+			return (RuntimeException) e;
+		return new RuntimeException(e);
+	}
+	
+	/**
+	 * use it for inverting parent-child relationships
+	 * @return
+	 */
+	public static<K, V, Z extends Collection<K>> Map<V, Z> inverseMap(Map<K, V> inMap, Map<V, Z> initMap, Supplier<Z> inner) {
+		inMap.forEach((key, value) -> {
+			initMap.computeIfAbsent(value, z -> inner.get()).add(key);
+		});
+		return initMap;
+	}
+	
+	public static<K extends Comparable<K>> K min(K a, K b) {
+		if (a.compareTo(b) <= 0)
+			return a;
+		return b;
+	}
 }

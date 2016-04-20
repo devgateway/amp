@@ -10,17 +10,23 @@ import java.text.DecimalFormat;
  */
 public final class AmountCell extends ReportCell {
 	
-	public AmountCell(BigDecimal value, DecimalFormat formatter) {
-		super(value, format(formatter, value));
+	public AmountCell(BigDecimal value, String formattedValue) {
+		super(value, formattedValue);
 	}
 	
 	public AmountCell(Double value, DecimalFormat formatter) {
 		super(value, format(formatter, value));
 	}
 
-	protected static String format(DecimalFormat formatter, Object value) {
+	public double extractValue() {
+		if (value instanceof Double)
+			return ((Double) value);
+		return ((BigDecimal) value).doubleValue();
+	}
+	
+	protected static String format(DecimalFormat formatter, Double value) {
 		if (formatter == null || value == null) 
 			return value == null ? "" : String.valueOf(value);
-		return (formatter).format(value instanceof BigDecimal ? ((BigDecimal)value).doubleValue() : (Double)value);
+		return formatter.format(value);
 	}
 }

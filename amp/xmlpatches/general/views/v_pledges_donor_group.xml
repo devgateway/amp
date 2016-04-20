@@ -19,8 +19,12 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_pledges_donor_group AS SELECT f.id AS pledge_id, b.org_grp_name AS name, b.amp_org_grp_id FROM amp_funding_pledges f, amp_org_group b WHERE (f.amp_org_grp_id = b.amp_org_grp_id);;;
-        		</lang>
+				DROP VIEW IF EXISTS v_pledges_donor_group CASCADE;
+			   	CREATE OR REPLACE VIEW v_pledges_donor_group AS
+			   		SELECT f.id AS pledge_id, b.org_grp_name AS org_grp_name, b.amp_org_grp_id AS org_grp_id
+			   			FROM amp_funding_pledges f
+			   				JOIN amp_org_group b ON f.amp_org_grp_id = b.amp_org_grp_id;
+        	</lang>
 		</script>
 	</apply>
 </tns:patch>

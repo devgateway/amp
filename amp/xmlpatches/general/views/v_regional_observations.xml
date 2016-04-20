@@ -24,9 +24,8 @@
 							ai.name AS name, 
 							ai.amp_regional_observation_id AS amp_regional_observation_id, 
 							ai.observationDate 
-						FROM amp_regional_observation ai, amp_activity a 
-						WHERE ai.amp_activity_id = a.amp_activity_id 
-						ORDER BY ai.amp_activity_id;
+						FROM amp_activity_version a
+							JOIN amp_regional_observation ai ON ai.amp_activity_id = a.amp_activity_id;
         		</lang>
 		</script>
 	</apply>

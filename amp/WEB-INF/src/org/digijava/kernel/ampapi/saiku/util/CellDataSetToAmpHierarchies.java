@@ -18,11 +18,11 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.CustomAmounts;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportSpec;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.service.olap.totals.TotalNode;
-import org.saiku.service.olap.totals.aggregators.SumAggregator;
 import org.saiku.service.olap.totals.aggregators.TotalAggregator;
 
 /**
@@ -31,7 +31,7 @@ import org.saiku.service.olap.totals.aggregators.TotalAggregator;
  * @author Nadejda Mandrescu
  */
 public class CellDataSetToAmpHierarchies {
-	private final ReportSpecification spec;
+	private final MondrianReportSpec spec;
 	private final CellDataSet cellDataSet;
 
 	private final NumberFormat numberFormat = NumberFormat.getNumberInstance();
@@ -42,11 +42,11 @@ public class CellDataSetToAmpHierarchies {
 	private int noOfColumnsToMerge;
 	private SortedSet<String>[] sbList;
 	private final List<ReportOutputColumn> leafHeaders;
-	private final List<Integer> activities;
+	private final List<Long> activities;
 	private final String translatedUndefined;
 	
-	private CellDataSetToAmpHierarchies(ReportSpecification spec, CellDataSet cellDataSet, 
-			List<ReportOutputColumn> leafHeaders, String translatedUndefined, List<Integer> activities) {
+	private CellDataSetToAmpHierarchies(MondrianReportSpec spec, CellDataSet cellDataSet, 
+			List<ReportOutputColumn> leafHeaders, String translatedUndefined, List<Long> activities) {
 		this.spec = spec;
 		this.cellDataSet = cellDataSet;
 		this.leafHeaders = leafHeaders;
@@ -61,8 +61,8 @@ public class CellDataSetToAmpHierarchies {
 	 * @param leafHeaders - list of leaf headers 
 	 * @param activities - list of internal ids (those that are merged) 
 	 */
-	public static void concatenateNonHierarchicalColumns(ReportSpecification spec, CellDataSet cellDataSet, 
-			List<ReportOutputColumn> leafHeaders, String translatedUndefined, List<Integer> activities) {
+	public static void concatenateNonHierarchicalColumns(MondrianReportSpec spec, CellDataSet cellDataSet, 
+			List<ReportOutputColumn> leafHeaders, String translatedUndefined, List<Long> activities) {
 		(new CellDataSetToAmpHierarchies(spec, cellDataSet, leafHeaders, translatedUndefined, activities)).concatenate();
 	}
 	
@@ -88,18 +88,6 @@ public class CellDataSetToAmpHierarchies {
 	private void initSortedSetsList() {
 		sbList = (SortedSet<String>[]) new TreeSet<?>[noOfColumnsToMerge];
 		Boolean[] sortOrder = new Boolean[noOfColumnsToMerge];
-		if (spec.getSorters() != null)
-			for(SortingInfo sInfo : spec.getSorters())
-				//a non-hierarchical sorting has 1 entry in the sorting tuple 
-				if (sInfo.sortByTuple.entrySet().size() == 1) {
-					ReportElement elem = sInfo.sortByTuple.entrySet().iterator().next().getKey();
-					//and is a report column, not a measure (i.e. total measure)
-					if (elem.entity != null && ReportColumn.class.isAssignableFrom(elem.entity.getClass())) {
-						int colId = MondrianReportUtils.getColumnId((ReportColumn)elem.entity, spec);
-						if(colId >= startColumnIndex) 
-							sortOrder[colId - startColumnIndex] = sInfo.ascending; 
-					}
-				}
 		for (int i = 0; i < noOfColumnsToMerge; i++) {
 			final boolean asc = sortOrder[i] == null ? true : sortOrder[i]; 
 			sbList[i] = new TreeSet<String>(new Comparator<String>() {
@@ -163,7 +151,7 @@ public class CellDataSetToAmpHierarchies {
 				}
 				// remember the internal id
 				if (activities != null) {
-					activities.add(Integer.valueOf(cellDataSet.getCellSetBody()[groupStartRowId][startColumnIndex - 1].getFormattedValue()));
+					activities.add(Long.valueOf(cellDataSet.getCellSetBody()[groupStartRowId][startColumnIndex - 1].getFormattedValue()));
 				}
 				//update indexes
 				groupStartRowId = rowId + 1;
@@ -218,7 +206,7 @@ public class CellDataSetToAmpHierarchies {
 		cellDataSet.setCellSetHeaders(SaikuUtils.removeColumns(cellDataSet.getCellSetHeaders(), columnsToRemove));
 		
 		//update row totals to remove unneeded totals
-		if (spec.isCalculateRowTotals()) {
+		{
 			@SuppressWarnings("unchecked")
 			List<TotalNode>[] newTotalLists = (List<TotalNode>[])new ArrayList[startColumnIndex + 1];
 			for (int i = 0; i < startColumnIndex + 1; i++) {
@@ -248,8 +236,8 @@ public class CellDataSetToAmpHierarchies {
 				if (total != null) {
 					int mPos = 0;
 					for (int a = 0; a < measuresTotalsToKeep.get(newDataRowId).length; a++, mPos++) {
-						SumAggregator sa = (SumAggregator) res[a][newDataRowId];
-						sa.addData(-sa.getValue() + measuresTotalsToKeep.get(newDataRowId)[mPos]);
+						String value = numberFormat.format(measuresTotalsToKeep.get(newDataRowId)[mPos]);
+						res[a][newDataRowId].setFormattedValue(value);
 					}
 				}
 			}

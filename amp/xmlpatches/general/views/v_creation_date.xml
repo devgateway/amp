@@ -19,7 +19,9 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_creation_date AS SELECT a.amp_activity_id, a.date_created AS creation_date FROM amp_activity a ORDER BY a.amp_activity_id;;;
+			    	CREATE OR REPLACE VIEW v_creation_date AS 
+			    		SELECT a.amp_activity_id, a.date_created AS creation_date 
+			    			FROM amp_activity_version a;;;
         		</lang>
 		</script>
 	</apply>

@@ -79,7 +79,7 @@ public class GregorianBasedWorker implements ICalendarWorker {
 		ComparableMonth cm = monthCache.get(monthId);
 
 		if (cm == null) {
-			String monthStr = dateFormatSymbols.getMonths()[monthId];
+			String monthStr = dateFormatSymbols.getMonths()[internalTime.getMonth()];
 			cm = new ComparableMonth(monthId, monthStr);
 			monthCache.put(monthId, cm);
 		}
@@ -145,12 +145,13 @@ public class GregorianBasedWorker implements ICalendarWorker {
 		}
 	}
 
-	public String getFiscalYear() throws Exception {
-		if (this.fiscalCalendar.getIsFiscal() != null && this.fiscalCalendar.getIsFiscal()) {
+	@Override
+	public String getFiscalYear(String prefix) throws Exception {
+		if (this.fiscalCalendar.getIsFiscal()) {
 			if (fiscalCalendar.getStartMonthNum()==1){
-				return "Fiscal Year " + (this.getYear());
+				return getFiscalPrefix(prefix) + " " + (this.getYear());
 			} else {
-				return "Fiscal Year " + (this.getYear()) + " - " + (this.getYear()+1);
+				return getFiscalPrefix(prefix) + " " + (this.getYear()) + " - " + (this.getYear()+1);
 			}
 		}
 		return this.getYear().toString();

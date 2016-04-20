@@ -1,7 +1,6 @@
 package org.dgfoundation.amp.ar;
 
 //import org.dgfoundation.amp.testutils.LiberiaFiller;
-import org.dgfoundation.amp.esri.EsriTestCases;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -51,8 +50,9 @@ public class AllTests {
 	{
 		try
 		{ 
+			AllTests_amp212.configureLog4j();
 			HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
-			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_26_amp211";
+			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_26_amp212";
     	
 			ResourceStreamHandlerFactory.installIfNeeded();
 
@@ -61,8 +61,10 @@ public class AllTests {
 			Configuration cfg = HibernateClassLoader.getConfiguration();
 			//System.out.println("AMP started up!");
 			//TLSUtils.getThreadLocalInstance().setLocale(SiteUtils.getDefaultSite().getDefaultLanguage());
+			
 			org.apache.struts.mock.MockHttpServletRequest mockRequest = new org.apache.struts.mock.MockHttpServletRequest(new org.apache.struts.mock.MockHttpSession());
 			TLSUtils.populate(mockRequest);
+			
 			TLSUtils.getThreadLocalInstance().setForcedLangCode(SiteUtils.getDefaultSite().getDefaultLanguage().getCode());
 		}
 		catch(Exception e)

@@ -6,6 +6,7 @@ package org.digijava.kernel.ampapi.mondrian;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.digijava.kernel.ampapi.mondrian.util.Connection;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
@@ -49,7 +50,7 @@ public class AllQueryTests_amp210 {
 		try
 		{
 			//hack for ampDS initialization
-			MoConstants.CONNECTION_DS = CONNECTION_PATH;
+			MondrianETL.CONNECTION_DS = CONNECTION_PATH;
 			Connection.IS_TESTING = true;
 			MondrianUtils.PRINT_PATH = PRINT_PATH;
 	   		

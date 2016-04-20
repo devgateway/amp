@@ -343,6 +343,7 @@ function submitForm(action){
 																				<td class="report_inside" style="font-size: 11px;"
 																					bgcolor="${color}">
 																					<div class="t_sm" title="${report.name}">
+																					
 																						<c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}"/>
 																						
 																						<%
@@ -350,7 +351,7 @@ function submitForm(action){
 																						%>
 																						
 	 																					<% if (onlySaikuButton) { %>
-																							<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}" />
+																							<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" />
 																						<% } %>
 																					    
 																						<a
@@ -368,6 +369,10 @@ function submitForm(action){
 																								</c:choose>
 																							</b>
 																						</a>
+					                              										<a href="/rest/data/nireport/${report.ampReportId}" title="Open Report in NiReports">
+					                              											<img src="/TEMPLATE/ampTemplate/nireports/nireportsicon.png" />
+					                              										</a>
+																						
 																						<br>
 																						<logic:present name="report" property="reportDescription">
 																							<c:choose>
@@ -466,6 +471,9 @@ function submitForm(action){
 																							<bean:write name="report" property="ampReportId" />
 																						</c:set>
 																						<c:set target="${urlParams}" property="event" value="edit" />
+																						<a href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}?nireport=true" 
+						                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
+						                                								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/nireport_saiku.png" border="0" /></a>
 																						<%
 																							if (!onlySaikuButton) {	
 																						%>
@@ -476,20 +484,18 @@ function submitForm(action){
 																						<c:set var="translation">
 																							<digi:trn>Get report in Excel format</digi:trn>&nbsp;
 																						</c:set>
-																						<digi:link
-																							href="/xlsExport.do?ampReportId=${report.ampReportId}"
+																						<a style="cursor:pointer" 
+																							onclick="$.downloadReport(${report.ampReportId}, 'xls')" 
 																							title="${translation}">
-																							<digi:img hspace="0" vspace="0" height="16"
-																								width="16"
-																								src="/TEMPLATE/ampTemplate/images/icons/xls.gif"
-																								border="0" />
-																						</digi:link>
+																							<digi:img hspace="0" vspace="0" height="16"	width="16" 
+																							src="/TEMPLATE/ampTemplate/images/icons/xls.gif" border="0" />
+																						</a>
 																						&nbsp;
 																						<c:set var="translation">
 																							<digi:trn>Get report in PDF format</digi:trn>&nbsp;
 																						</c:set>
-																						<digi:link
-																							href="/pdfExport.do?ampReportId=${report.ampReportId}"
+																						<a style="cursor:pointer" 
+																							onclick="$.downloadReport(${report.ampReportId}, 'pdf')" 
 																							title="${translation}">
 																							<digi:img hspace="0" vspace="0" height="16"
 																								width="16"
@@ -636,3 +642,17 @@ function submitForm(action){
 </gs:test>
 
 
+<script>
+
+jQuery.downloadReport = function(reportId, type){
+	//url and data options required
+	if(reportId && type){ 
+		var url = window.location.origin + '/rest/data/saikupublicreport/export/' + type + '/' + reportId;
+		var input ='<input type="hidden" name="reportId" value="'+ reportId +'" />'; 
+		
+		//send request
+		jQuery('<form action="'+ url +'" method="POST' +'">' + input + '</form>').appendTo('body').submit().remove();
+	};
+};
+
+</script>

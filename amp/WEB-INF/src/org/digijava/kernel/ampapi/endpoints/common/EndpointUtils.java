@@ -4,17 +4,16 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +27,9 @@ import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
+import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
+import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
@@ -155,19 +157,35 @@ public class EndpointUtils {
 	 * @return GeneratedReport that stores all report info and report output
 	 */
 	public static GeneratedReport runReport(ReportSpecification spec) {
-		return runReport(spec, ReportAreaImpl.class);
+		return runReport(spec, ReportAreaImpl.class, null);
 	}
 	
 	/**
-	 * Generates a report based on a given specification and wraps the output
-	 * into the specified class
+	 * Generates report based on specification with additional output settings (if any)
+	 * 
+	 * @param spec report specification
+	 * @param outputSettings optional output settings
+	 * @return GeneratedReport that stores all report info and report output
+	 */
+	public static GeneratedReport runReport(ReportSpecification spec, OutputSettings outputSettings) {
+		return runReport(spec, ReportAreaImpl.class, null);
+	}
+	
+	/**
+	 * Generates a report based on a given specification and wraps the output into the specified class
 	 * 
 	 * @param spec report specification
 	 * @param clazz any class that extends {@link ReportAreaImpl}
 	 * @return GeneratedReport that stores all report info and report output
 	 */
-	public static GeneratedReport runReport(ReportSpecification spec, Class<? extends ReportAreaImpl> clazz) {
-		ReportExecutor generator = new MondrianReportGenerator(clazz, ReportEnvironment.buildFor(TLSUtils.getRequest()));
+	public static GeneratedReport runReport(ReportSpecification spec, Class<? extends ReportAreaImpl> clazz, 
+			OutputSettings outputSettings) {
+		//NIREPORTS: remove before 2.12 official release
+		Optional<Boolean> asNiReport = Optional.ofNullable((Boolean) TLSUtils.getRequest().getAttribute(EPConstants.NI_REPORT));
+		logger.info("As NiReport: " + (asNiReport.isPresent() && asNiReport.get()));
+		ReportExecutor generator = asNiReport.isPresent() && asNiReport.get() ? 
+				new NiReportsGenerator(AmpReportsSchema.getInstance(), true, outputSettings) :
+				new MondrianReportGenerator(clazz, ReportEnvironment.buildFor(TLSUtils.getRequest()));
 		GeneratedReport report = null;
 		try {
 			report = generator.executeReport(spec);
@@ -177,6 +195,20 @@ public class EndpointUtils {
 		return report;
 	}
 	
+	/**
+	 * Temporary: force it to use or not NiReports. Default behavior handled through AuthRequestFilter.DEFAULT_USE_NIREPORTS
+	 * @param useNiReports
+	 */
+	//NIREPORTS: remove before 2.12 official release
+	@Deprecated
+	public static void useNiReports(boolean useNiReports) {
+		TLSUtils.getRequest().setAttribute(EPConstants.NI_REPORT, useNiReports);
+	}
+	
+	@Deprecated
+	public static boolean isNiReports() {
+		return Boolean.TRUE.equals(TLSUtils.getRequest().getAttribute(EPConstants.NI_REPORT));
+	}
 	/**
 	 * Retrieves the value associated to the specified key if available 
 	 * or returns the default

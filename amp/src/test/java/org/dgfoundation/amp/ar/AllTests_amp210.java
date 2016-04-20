@@ -23,7 +23,6 @@ import org.dgfoundation.amp.ar.amp210.PledgeFiltersMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.SQLUtilsTests;
 import org.dgfoundation.amp.ar.amp210.SettingsMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.SqlFilterUtilsTests;
-import org.dgfoundation.amp.ar.amp210.TabsPaginationTests;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -60,12 +59,10 @@ public class AllTests_amp210
 		suite.addTest(new JUnit4TestAdapter(ComponentReportsTests.class));
 		suite.addTest(new JUnit4TestAdapter(org.dgfoundation.amp.ar.amp210.PledgeReportsTests.class));
 		suite.addTest(new JUnit4TestAdapter(org.dgfoundation.amp.ar.amp210.DonorsAndPledgesReportsTests.class));
-		suite.addTest(new JUnit4TestAdapter(TabsPaginationTests.class));
 		suite.addTest(new JUnit4TestAdapter(PledgeFiltersMondrianReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(AgreementColumnsReportsTests.class));
 		suite.addTest(new JUnit4TestAdapter(AmountColumnsReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(SettingsMondrianReportTests.class));
-		suite.addTest(new JUnit4TestAdapter(org.dgfoundation.amp.ar.amp210.CurrencyConvertorTests.class));
 		
 		//suite.addTest(new JUnit4TestAdapter(EndpointsTests.class)); report testcases are not compatible with AMP running; while the testcases in EndpointsTests require a running AMP. please move them to a different test suite, which does not contain reports tests
 		
@@ -90,8 +87,8 @@ public class AllTests_amp210
 		try {
 			configureLog4j();
 			HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
-			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_211";
-			MonetConnection.MONET_CFG_OVERRIDE_URL = "jdbc:monetdb://localhost/amp_tests_211";
+			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_212";
+			MonetConnection.MONET_CFG_OVERRIDE_URL = "jdbc:monetdb://localhost/amp_tests_212";
 			
 			org.digijava.kernel.ampapi.mondrian.util.Connection.IS_TESTING = true;
 			//HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_moldova_27";

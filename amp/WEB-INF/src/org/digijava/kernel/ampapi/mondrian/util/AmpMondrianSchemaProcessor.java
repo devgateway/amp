@@ -19,20 +19,20 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MondrianTablesRepository;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportMeasure;
+import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.CustomMeasures;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
 import org.dgfoundation.amp.reports.mondrian.MondrianSQLFilters;
 import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -130,7 +130,6 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		String nonAcPledgeExcluderString = isDonorReportWithPledges ? "(mondrian_fact_table.entity_id &lt; 800000000) AND " : ""; // annulate non-Actual-Commitments trivial measures IFF running an "also show pledges" report
 		String actualCommitmentsDefinition = "__" + (isDonorReportWithPledges ? "Actual Commitments United" : "Actual Commitments Usual") + "__";
 		contents = contents.replace(actualCommitmentsDefinition, "Actual Commitments");
-		contents = switchCumulativeCommitment(contents, isDonorReportWithPledges);
 		contents = contents.replace("@@non_ac_pledges_excluder@@", nonAcPledgeExcluderString);
 		
 		/*contents = contents.replace("&lt;", "<");
@@ -186,12 +185,12 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 //			return "_174";
 		if (currentReport.get().getSettings().getCalendar() == null)
 			return "";
-		return "_" + currentReport.get().getSettings().getCalendar().getAmpFiscalCalId();
+		return "_" + currentReport.get().getSettings().getCalendar().getIdentifier();
 	}
 	
 	protected int getReportSelectedYear() {
-		Integer year = currentReport.get().getFilters() == null ? 
-				null : currentReport.get().getFilters().getComputedYear();
+		AmpReportFilters filters = (AmpReportFilters) currentReport.get().getFilters();
+		Integer year = filters == null ? null : filters.getComputedYear();
 		// if not set, then it means Current Year
 		if (year == null) {
 			year = Calendar.getInstance().get(Calendar.YEAR);
@@ -296,7 +295,6 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 				dimUsage.getParentNode().replaceChild(newDimensionDefinition, dimUsage);
 			}
 			insertCommonMeasuresDefinitions(xmlSchema);
-			addCustomComputedMeasures(xmlSchema);
 			moveCalculatedMembersToEnd(xmlSchema);
 			removeDefinitionsWithMissingDependencies(xmlSchema);
 			contents = XMLGlobals.saveToString(xmlSchema);
@@ -458,44 +456,6 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		}
 	}
 	
-	protected void addCustomComputedMeasures(Document xmlSchema) {
-		fillCumulativeTemplates(xmlSchema);
-	}
-	
-	protected void fillCumulativeTemplates(Document xmlSchema) {
-		// Fill in Cumulative Commitment template having both AC United and AC Usual - the exact one picked when generating a report
-		String unitedText = getMeasureExpressionText(xmlSchema, "__Actual Commitments United__");
-		String usualText = getMeasureExpressionText(xmlSchema, "__Actual Commitments Usual__");
-		Node cumulativeCommitmentsUsualNode = XMLGlobals.selectNode(xmlSchema, "//Measure[@name='Cumulative Commitment']//MeasureExpression//SQL");
-		String expressionTemplate = String.format("@@united-start@@%s@@united-end@@@@usual-start@@%s@@usual-end@@",
-				unitedText, usualText);
-		cumulativeCommitmentsUsualNode.setTextContent(addTransactionTypeGap(expressionTemplate));
-		
-		// Fill in Cumulative Disbursement template
-		Node cumulativeDisbursmentsUsualNode = XMLGlobals.selectNode(xmlSchema, "//Measure[@name='Cumulative Disbursement']//MeasureExpression//SQL");
-		cumulativeDisbursmentsUsualNode.setTextContent(addTransactionTypeGap(getMeasureExpressionText(xmlSchema, MeasureConstants.ACTUAL_DISBURSEMENTS)));
-	}
-	
-	protected String switchCumulativeCommitment(String contents, boolean isDonorReportWithPledgesString) {
-		String keep = isDonorReportWithPledgesString ? "united" : "usual";
-		String remove = isDonorReportWithPledgesString ? "usual" : "united";
-		contents = contents.substring(0, contents.indexOf("@@" + remove + "-start@@")) 
-					+ contents.substring(contents.indexOf("@@" + remove + "-end@@") + ("@@" + remove + "-end@@").length());
-		contents = contents.replaceFirst("@@" + keep + "-start@@", "");
-		contents = contents.replaceFirst("@@" + keep + "-end@@", "");
-		return contents;
-	}
-	
-	protected String addTransactionTypeGap(String contents) {
-		return contents.replaceAll("transaction_type=", "transaction_type=" + MoConstants.TRANSACTION_TYPE_GAP + " + ");
-	}
-	
-	protected String getMeasureExpressionText(Document xmlSchema, String measureName) {
-		String nodePath = String.format("//Measure[@name='%s']//MeasureExpression//SQL", measureName);
-		Node measureNode = XMLGlobals.selectNode(xmlSchema, nodePath);
-		return measureNode.getTextContent();
-	}
-	
 	/**
 	 * Calculated members depend on existing definitions during the parsing 
 	 * and thus has to be defined after other measures
@@ -653,7 +613,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 
 	private void initDefault() {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("default", ArConstants.DONOR_TYPE);
-		MondrianReportSettings settings = new MondrianReportSettings(null);
+		ReportSettingsImpl settings = new ReportSettingsImpl(null);
 		spec.setSettings(settings);
 
 		registerReport(spec, buildReportEnvironment());
@@ -754,7 +714,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	}
 	
 	protected boolean hasMTEFs() {
-		List<ReportMeasure> measures = currentReport.get().getMeasures();
+		Set<ReportMeasure> measures = currentReport.get().getMeasures();
 		if (measures != null && measures.size() > 0) {
 			for (ReportMeasure measure : measures) {
 				if (CustomMeasures.MTEFs.contains(measure.getMeasureName())) {

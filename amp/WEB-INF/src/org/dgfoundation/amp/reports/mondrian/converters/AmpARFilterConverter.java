@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,8 +18,8 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -82,7 +83,7 @@ public class AmpARFilterConverter {
 	
 	//either transform filter by IDS, either by Names => if by IDS, then Level properties will be used
 	private MondrianReportFilters filterRules;
-	private MondrianReportSettings settings;
+	private ReportSettingsImpl settings;
 	private AmpARFilter arFilter;
 	private boolean isPledgeFilter;
 
@@ -295,33 +296,36 @@ public class AmpARFilterConverter {
 			if (arFilter.getPledgesLocations() == null || arFilter.getPledgesLocations().size() == 0) return;
 		} else if (arFilter.getLocationSelected() == null || arFilter.getLocationSelected().size() == 0) return;
 		
-		Set<AmpCategoryValueLocations> countries = new HashSet<AmpCategoryValueLocations>();
-		Set<AmpCategoryValueLocations> regions = new HashSet<AmpCategoryValueLocations>();
-		Set<AmpCategoryValueLocations> zones = new HashSet<AmpCategoryValueLocations>();
-		Set<AmpCategoryValueLocations> districts = new HashSet<AmpCategoryValueLocations>();
-		Set<AmpCategoryValueLocations> locations = new HashSet<AmpCategoryValueLocations>();
+//		Set<AmpCategoryValueLocations> countries = new HashSet<AmpCategoryValueLocations>();
+//		Set<AmpCategoryValueLocations> regions = new HashSet<AmpCategoryValueLocations>();
+//		Set<AmpCategoryValueLocations> zones = new HashSet<AmpCategoryValueLocations>();
+//		Set<AmpCategoryValueLocations> districts = new HashSet<AmpCategoryValueLocations>();
+//		Set<AmpCategoryValueLocations> locations = new HashSet<AmpCategoryValueLocations>();
+//				
+//		Collection<AmpCategoryValueLocations> filterLocations = arFilter.isPledgeFilter() ? 
+//				arFilter.getPledgesLocations() : arFilter.getLocationSelected();
+//				
+//		for(AmpCategoryValueLocations loc : filterLocations) {
+//			if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(loc.getParentCategoryValue()))
+//				countries.add(loc);
+//			else if (CategoryConstants.IMPLEMENTATION_LOCATION_REGION.equalsCategoryValue(loc.getParentCategoryValue()))
+//				regions.add(loc);
+//			else if (CategoryConstants.IMPLEMENTATION_LOCATION_ZONE.equalsCategoryValue(loc.getParentCategoryValue()))
+//				zones.add(loc);
+//			else if (CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT.equalsCategoryValue(loc.getParentCategoryValue()))
+//				districts.add(loc);
+//			else
+//				locations.add(loc);
+//		}
 		
-		Collection<AmpCategoryValueLocations> filterLocations = arFilter.isPledgeFilter() ? 
-				arFilter.getPledgesLocations() : arFilter.getLocationSelected();
-		
-		for(AmpCategoryValueLocations loc : filterLocations) {
-			if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(loc.getParentCategoryValue()))
-				countries.add(loc);
-			else if (CategoryConstants.IMPLEMENTATION_LOCATION_REGION.equalsCategoryValue(loc.getParentCategoryValue()))
-				regions.add(loc);
-			else if (CategoryConstants.IMPLEMENTATION_LOCATION_ZONE.equalsCategoryValue(loc.getParentCategoryValue()))
-				zones.add(loc);
-			else if (CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT.equalsCategoryValue(loc.getParentCategoryValue()))
-				districts.add(loc);
-			else
-				locations.add(loc);
-		}
-		
-		addFilter(countries, ColumnConstants.COUNTRY);
-		addFilter(regions, ColumnConstants.REGION);
-		addFilter(zones, ColumnConstants.ZONE);
-		addFilter(districts, ColumnConstants.DISTRICT);
-		//addIdsFilter(locations, ColumnConstants.??); //TODO:
+//		List<AmpCategoryValueLocations> filterLocations = arFilter.buildAllRelatedLocations();
+//		if (filterLocations != null) {
+//			addFilter(filterLocations, ColumnConstants.COUNTRY);
+//			addFilter(filterLocations, ColumnConstants.REGION);
+//			addFilter(filterLocations, ColumnConstants.ZONE);
+//			addFilter(filterLocations, ColumnConstants.DISTRICT);
+//		}
+		addFilter(arFilter.buildAllRelatedLocations(), ColumnConstants.REGION);
 	}
 	
 	/**
@@ -333,15 +337,17 @@ public class AmpARFilterConverter {
 	 */
 	private void addFilter(Collection<? extends NameableOrIdentifiable> set, String columnName) {
 		if (set == null || set.size() == 0) return;
-		List<String> values = new ArrayList<String>(set.size());
+		Set<String> values = new LinkedHashSet<>(set.size());
 		List<String> names = new ArrayList<String>(set.size());
-		for (NameableOrIdentifiable identifiable: set) { 
-			names.add(identifiable.getName());
-			final String value = identifiable.getIdentifier().toString();  
+		for (NameableOrIdentifiable identifiable: set) {
+			final String value = identifiable.getIdentifier().toString();
+			if (values.contains(value))
+				continue;
 			values.add(value);
+			names.add(identifiable.getName());
 		}
 		
-		addFilterRule(columnName, new FilterRule(names, values, true));
+		addFilterRule(columnName, new FilterRule(names, new ArrayList<>(values), true));
 	}
 	
 	/**
@@ -384,8 +390,8 @@ public class AmpARFilterConverter {
 		addFilterRule(columnName, new FilterRule(names, values, true));
 	}
 	
-	public MondrianReportSettings buildSettings() {
-		settings = new MondrianReportSettings();
+	public ReportSettingsImpl buildSettings() {
+		settings = new ReportSettingsImpl();
 		settings.setUnitsOption(arFilter.getUnitsOptions()); // might be null and we are ok with that - the getter will never return a null
 		addCurrencySettings();
 		addDateSettings();
@@ -407,7 +413,7 @@ public class AmpARFilterConverter {
 		settings.setCalendar(arFilter.getCalendarType());
 		try {
 			if (arFilter.getRenderStartYear() != null || arFilter.getRenderEndYear() != null) {
-				settings.addYearsRangeFilterRule(
+				settings.setYearsRangeFilterRule(
 						(arFilter.getRenderStartYear() == -1 ? 1950 : arFilter.getRenderStartYear()), // 1950 / 2150 are ugly hacks because the API does not support both NULLs (e.g. unlimited) 
 						(arFilter.getRenderEndYear() == -1 ? 2150 : arFilter.getRenderEndYear())
 						);

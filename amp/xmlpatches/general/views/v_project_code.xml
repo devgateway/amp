@@ -19,7 +19,11 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_project_code AS SELECT a.amp_activity_id, a.project_code FROM amp_activity a WHERE (btrim((a.project_code)::text) != ''::text);;;
+			    	DROP VIEW IF EXISTS v_project_code;
+			    	CREATE OR REPLACE VIEW v_project_code AS 
+			    		SELECT a.amp_activity_id, a.project_code 
+			    			FROM amp_activity_version a 
+			    				WHERE btrim(a.project_code) != '';;;
         		</lang>
 		</script>
 	</apply>

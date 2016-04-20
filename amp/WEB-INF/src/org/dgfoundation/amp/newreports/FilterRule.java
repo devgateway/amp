@@ -4,12 +4,19 @@
 package org.dgfoundation.amp.newreports;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.dgfoundation.amp.algo.AmpCollections;
 
 /**
  * Filter rule that can be of one of {@link FilterType} type
@@ -26,6 +33,11 @@ public class FilterRule {
 	/** the value to use as a filter value when filtering booleans for FALSEs */
 	public static final String FALSE_VALUE = "2";
 	
+	public final static Map<String, Long> HARDCODED_VALUES = Collections.unmodifiableMap(new HashMap<String, Long>() {{
+		put(NULL_VALUE, null);
+		put("true", Long.parseLong(TRUE_VALUE));
+		put("false", Long.parseLong(FALSE_VALUE));
+	}});
 	
 	/** 
 	 * Possible types of rules: a range filter (of values/ids), a single value filter (value/id), a list filter (of values/ids) <br>
@@ -53,7 +65,7 @@ public class FilterRule {
 	public final String max;
 	/** list of values/id or null */
 	public final List<String> values;
-	/** list of names for associated values */
+	/** list of names for associated values - used by the front end */
 	public final Map<String, String> valueToName = new HashMap<String, String>();
 	/** true if 'min' must be an inclusive limit of the range */
 	public final boolean minInclusive;  
@@ -71,7 +83,11 @@ public class FilterRule {
 	 * @param isIdRange - whether (min,max) is a range of ids or a range of values
 	 */
 	public FilterRule(String min, String max, boolean minInclusive, boolean maxInclusive) {
-		this(min, max, null, null, minInclusive, maxInclusive);
+		this(min, max, minInclusive, maxInclusive, true);
+	}
+	
+	public FilterRule(String min, String max, boolean minInclusive, boolean maxInclusive, boolean positive) {
+		this(FilterType.RANGE, null, null, min, max, null, null, minInclusive, maxInclusive, null, null, positive);
 	}
 	
 	public FilterRule(String min, String max, String minName, String maxName, 
@@ -151,6 +167,65 @@ public class FilterRule {
 		}
 	}
 	
+	public static Long parseStr(String v) {
+		if (HARDCODED_VALUES.containsKey(v))
+			return HARDCODED_VALUES.get(v);
+		return Long.valueOf(v);
+	}
+	
+	/**
+	 * returns this filter rule as a set {@link Predicate}
+	 * @return
+	 */
+	public Predicate<Long> buildPredicate() {
+		switch(filterType) {
+			case RANGE : {
+				Predicate<Long> res = z -> true;
+					if (min != null) res = res.and(z -> z >= Long.parseLong(min));
+					if (max != null) res = res.and(z -> z <= Long.parseLong(max));
+					return maybeNegated(res, this.valuesInclusive);
+			}
+			case SINGLE_VALUE : 
+				return maybeNegated(z -> z.equals(parseStr(value)), this.valuesInclusive);
+			
+			case VALUES :
+				Set<Long> cor = values.stream().map(FilterRule::parseStr).collect(Collectors.toSet());
+				return maybeNegated(cor::contains, this.valuesInclusive);
+				
+			default:
+				throw new RuntimeException("unknown filter type: " + filterType);
+		}
+	}
+	
+	/**
+	 * returns this filter rule as a set {@link Predicate}
+	 * @return
+	 */
+	public Set<Long> addIds(Set<Long> set) {
+		Set<Long> res = set == null ? new HashSet<>() : set;
+		switch(filterType) {
+			case RANGE : {
+				if (min != null && max != null) {
+					for(long i = Long.parseLong(min); i <= Long.parseLong(max); i++) {
+						res.add(i);
+					}
+					return res;
+				}
+				throw new RuntimeException(String.format("ranges for column filters should be closed on both ends: %s", this));
+			}
+			case SINGLE_VALUE :
+				res.add(parseStr(value));
+				return res;
+			
+			case VALUES :
+				res.addAll(values.stream().map(FilterRule::parseStr).collect(Collectors.toSet()));
+				return res;
+				
+			default:
+				throw new RuntimeException("unknown filter type: " + filterType);
+		}
+	}
+
 	@Override
 	public String toString() {
 		switch(filterType) {
@@ -197,4 +272,21 @@ public class FilterRule {
 			res.add(new FilterRule(new ArrayList<String>(mergedValues), true));
 		return res;
 	}
+	
+	public static Set<Long> mergeIdRules(List<FilterRule> initRules) {
+		if (initRules == null || initRules.isEmpty())
+			return null;
+		
+		Set<Long> res = new HashSet<>();
+		for(FilterRule rule:initRules) {
+			rule.addIds(res);
+		}
+		return res;
+	}
+	
+	public static<K> Predicate<K> maybeNegated(Predicate<K> in, boolean positive) {
+		if (positive) return in;
+		return in.negate();
+	}
+
 }

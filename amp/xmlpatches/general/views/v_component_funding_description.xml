@@ -22,9 +22,10 @@
 				DROP VIEW IF EXISTS v_component_funding_description;
 				CREATE OR REPLACE VIEW v_component_funding_description AS 
 					SELECT f.activity_id AS amp_activity_id, f.description AS description, f.amp_component_funding_id
-						FROM amp_component_funding f, amp_components c, amp_activity_components aac, amp_activity activ
-						WHERE f.amp_component_id = c.amp_component_id AND f.activity_id = aac.amp_activity_id AND activ.amp_activity_id = aac.amp_activity_id AND f.amp_component_id = aac.amp_component_id
-  						ORDER BY f.activity_id;
+						FROM amp_activity_components aac
+							JOIN amp_component_funding f ON f.amp_component_id = aac.amp_component_id AND f.activity_id = aac.amp_activity_id
+							JOIN amp_components c ON f.amp_component_id = c.amp_component_id
+							JOIN amp_activity_version activ ON activ.amp_activity_id = aac.amp_activity_id;
   			</lang>
 		</script>
 	</apply>

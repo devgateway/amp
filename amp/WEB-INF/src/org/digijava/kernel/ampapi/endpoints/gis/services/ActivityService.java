@@ -29,15 +29,15 @@ import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
+import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.newreports.pagination.PaginatedReport;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
-import org.dgfoundation.amp.reports.ReportAreaMultiLinked;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
@@ -101,13 +101,11 @@ public class ActivityService {
 		// apply custom settings
 		configureMeasures(spec, config);
 		
- 		spec.setCalculateColumnTotals(doTotals);
  		
  		// AMP-19772: Needed to avoid problems on GIS js. 
  		spec.setDisplayEmptyFundingRows(true);
 		
- 		spec.setCalculateRowTotals(doTotals);
- 		MondrianReportSettings mrs = (MondrianReportSettings) spec.getSettings();
+ 		ReportSettingsImpl mrs = (ReportSettingsImpl) spec.getSettings();
  		mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
 
 		MondrianReportFilters filterRules = FilterUtils.getFilterRules(
@@ -126,25 +124,15 @@ public class ActivityService {
 		}
 		//if pagination is requested
 		List<ReportArea> ll=null;
-		Integer count = null;
-		if(page !=null && pageSize !=null && page>=0 && pageSize>0){
-			ReportAreaMultiLinked[] areasDFArray = ReportPaginationUtils.convert(report.reportContents);
-			
-			ReportArea pagedReport = ReportPaginationUtils.getReportArea(areasDFArray, page, pageSize);
-			if (pagedReport != null){
-				ll=pagedReport.getChildren();
-				count=report.reportContents.getChildren().size();
-			}
-			else { //we're probably out of bounds
-				ll = new ArrayList<>();
-				count=report.reportContents.getChildren().size();
-			}
+		if (page != null && pageSize != null && page >= 0 && pageSize > 0) {
+			ReportArea pagedReport = PaginatedReport.getPage(report.reportContents, page, pageSize);
+			ll = pagedReport.getChildren();
 		}else{ 
 			ll = report.reportContents.getChildren();
 		}
- 		
+ 		Integer count=report.reportContents.getChildren().size();
 
-		for (ReportArea reportArea : ll) {
+ 		for (ReportArea reportArea : ll) {
 			JsonBean activity = new JsonBean();
 			JsonBean filters = new JsonBean();
 			Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
@@ -238,8 +226,8 @@ public class ActivityService {
 	} catch (Exception e) {
 	    System.err.println(e.getClass().getName() + ": " + e.getMessage());
 	}
-	ReportAreaMultiLinked[] areasDFArray = ReportPaginationUtils.convert(report.reportContents);
-	ReportArea pagedReport = ReportPaginationUtils.getReportArea(areasDFArray, 0, pageSize);
+	//ReportAreaMultiLinked[] areasDFArray = ReportPaginationUtils.convert(report.reportContents);
+	ReportArea pagedReport = PaginatedReport.getPage(report.reportContents, 0, pageSize);
 	JSONArray activities = new JSONArray();
 	JSONArray headers = new JSONArray();
 	

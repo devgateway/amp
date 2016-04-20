@@ -1,43 +1,37 @@
 package org.dgfoundation.amp.nireports.schema;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.dgfoundation.amp.nireports.Cell;
-import org.dgfoundation.amp.nireports.ImmutablePair;
-import org.dgfoundation.amp.nireports.NiFilters;
 
 /**
- * 
+ * a class which holds complete info for NiReports so that those know how to: 
+ * <ol>
+ * 	<li>name a column</li>
+ * 	<li>fetch a column, using filters</li> 
+ * 	<li>split a column by hierarchies</li> 
+ * 	<li>aggregate a column</li>s
+ * </ol> 
  * @author Dolghier Constantin
  *
  */
-public abstract class NiReportColumn<K extends Cell> {
+public abstract class NiReportColumn<K extends Cell> extends NiReportedEntity<K> {
 	
-	public final String name;
-	public final NiDimension.LevelColumn levelColumn;
-	
-	/**
-	 * might be null if this column is never filtered on
-	 */
-	public final ImmutablePair<String, String> fundingViewFilter;
-	
-	protected NiReportColumn(String name, NiDimension.LevelColumn levelColumn, ImmutablePair<String, String> fundingViewFilter) {
-		this.name = name;
-		this.levelColumn = levelColumn;
-		this.fundingViewFilter = fundingViewFilter;
+	public final Optional<NiDimension.LevelColumn> levelColumn;
+	protected boolean transactionLevelHierarchy = false;
+		
+	protected NiReportColumn(String name, NiDimension.LevelColumn levelColumn, Behaviour<?> behaviour, String description) {
+		super(name, behaviour, description);
+		this.levelColumn = Optional.ofNullable(levelColumn);
+	}
+		
+	public boolean isTransactionLevelHierarchy() {
+		return this.transactionLevelHierarchy;
 	}
 	
-	public abstract List<K> fetchColumn(NiFilters filters);
-	
-	@Override public int hashCode() {
-		return name.hashCode();
-	}
-	
-	@Override public boolean equals(Object oth) {
-		if (!(oth instanceof NiReportColumn))
-			return false;
-		NiReportColumn<K> o = (NiReportColumn<K>) oth;
-		return this.name.equals(o.name);
+	public NiReportColumn<K> setTransactionLevelHierarchy() {
+		this.transactionLevelHierarchy = true;
+		return this;
 	}
 	
 	@Override public String toString() {

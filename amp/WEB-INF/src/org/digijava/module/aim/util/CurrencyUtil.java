@@ -45,6 +45,8 @@ import org.hibernate.type.LongType;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.StringType;
 
+import bsh.org.objectweb.asm.Constants;
+
 public class CurrencyUtil {
 
 	private static Logger logger = Logger.getLogger(CurrencyUtil.class);
@@ -704,9 +706,8 @@ public class CurrencyUtil {
 		return col;
 	}
 
-	
 	public static AmpCurrency getBaseCurrency() {
-		return CurrencyUtil.getAmpcurrency(getBaseCurrencyCode());
+         return CurrencyUtil.getAmpcurrency(getBaseCurrencyCode());
 	}
 	
 	/*
@@ -768,12 +769,13 @@ public class CurrencyUtil {
 		return defaultCurrency;
 	}
 	
-    public static String getBaseCurrencyCode() {
-        String currCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
-        if (currCode == null)
-            currCode = BASE_CODE;
-        return currCode;
-    }	
+	public static String getBaseCurrencyCode() {
+		String currCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+		if (currCode == null)
+			currCode = BASE_CODE;
+		return currCode;
+	}
+	
 	/**
 	 * checks AMP_CURRENCY_RATE table for invalid entries
 	 * @throws AimException

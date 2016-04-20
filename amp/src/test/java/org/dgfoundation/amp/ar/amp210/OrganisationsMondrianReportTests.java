@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
+import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
@@ -19,7 +19,7 @@ import org.junit.Test;
  * @author simple
  *
  */
-public class OrganisationsMondrianReportTests extends MondrianReportsTestCase {
+public class OrganisationsMondrianReportTests extends ReportingTestCase {
 	
 	public OrganisationsMondrianReportTests() {
 		super("organisation mondrian tests");
@@ -138,8 +138,6 @@ public class OrganisationsMondrianReportTests extends MondrianReportsTestCase {
 				null,
 				GroupingCriteria.GROUPING_YEARLY);
 		spec.setDisplayEmptyFundingRows(true);
-		spec.setCalculateColumnTotals(true);
-		spec.setCalculateRowTotals(true);
 		runMondrianTestCase(spec, "en", activities, correctReport);
 	}
 	
@@ -165,8 +163,6 @@ public class OrganisationsMondrianReportTests extends MondrianReportsTestCase {
 				GroupingCriteria.GROUPING_YEARLY);
 		
 		spec.setDisplayEmptyFundingRows(true);
-		spec.setCalculateColumnTotals(true);
-		spec.setCalculateRowTotals(true);
 		
 		MondrianReportFilters filters = new MondrianReportFilters();
 		filters.addFilterRule(new ReportColumn(ColumnConstants.RESPONSIBLE_ORGANIZATION), new FilterRule("21378", true)); //72 local
@@ -203,8 +199,6 @@ public class OrganisationsMondrianReportTests extends MondrianReportsTestCase {
 				GroupingCriteria.GROUPING_YEARLY);
 		
 		spec.setDisplayEmptyFundingRows(true);
-		spec.setCalculateColumnTotals(true);
-		spec.setCalculateRowTotals(true);
 		
 		MondrianReportFilters filters = new MondrianReportFilters();
 		filters.addFilterRule(new ReportColumn(ColumnConstants.EXECUTING_AGENCY), new FilterRule("21697", true)); //world bank
@@ -256,8 +250,6 @@ public class OrganisationsMondrianReportTests extends MondrianReportsTestCase {
 				null,
 				GroupingCriteria.GROUPING_YEARLY);
 		spec.setDisplayEmptyFundingRows(true);
-		spec.setCalculateColumnTotals(true);
-		spec.setCalculateRowTotals(true);
 		
 		MondrianReportFilters filters = new MondrianReportFilters();
 		filters.addFilterRule(new ReportColumn(ColumnConstants.IMPLEMENTING_AGENCY_TYPE), new FilterRule("38", true)); // "default"

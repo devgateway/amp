@@ -39,7 +39,7 @@ var SessionWorkspace = Backbone.Model.extend({
                 localStorage.clear();
                 localStorage.setItem('saiku-version', Settings.VERSION);
             }
-        }        
+        }
         Saiku.ui.block("Loading datasources....");
         this.fetch({success:this.process_datasources},{});
         
@@ -96,7 +96,8 @@ var SessionWorkspace = Backbone.Model.extend({
             // Show UI
             $(Saiku.toolbar.el).prependTo($("#header"));
             $("#header").show();
-            Saiku.ui.unblock();
+           	Saiku.ui.unblock();
+
             // Add initial tab
             Saiku.tabs.render();
             //Saiku.splash.render();
@@ -137,7 +138,7 @@ var SessionWorkspace = Backbone.Model.extend({
                         } else {
                             this.cube[key] = new Cube({ key: key });
                             if (Settings.DIMENSION_PREFETCH === true) {
-                                this.cube[key].fetch();
+                               	this.cube[key].fetch();
                             }
                         }
                     }
@@ -154,6 +155,6 @@ var SessionWorkspace = Backbone.Model.extend({
     
     url: function() {
     	//Always refresh
-        return encodeURI(Saiku.session.username + "/discover/refresh");
+    	return encodeURI(Saiku.session.username + "/discover/refresh");    	
     }
 });

@@ -1,17 +1,30 @@
 package org.dgfoundation.amp.newreports;
 
+import java.util.Map;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.dgfoundation.amp.algo.AmpCollections;
 
 /**
  * class describing a report cell
+ * 
  * @author Dolghier Constantin
- *
  */
+@JsonSerialize(include=Inclusion.NON_NULL)
 public abstract class ReportCell implements Comparable<ReportCell> {
+	
+	@JsonIgnore
 	public final Comparable<?> value;
+	
 	public final String displayedValue;
-
-	//to facilitate the sorting, we will store the parent area
+	
+	/**
+	 * TODO: delete this field once we are done with killing off Mondrian
+	 * to facilitate the sorting, we will store the parent area
+	 */
+	@Deprecated
 	transient public ReportArea area;
 	
 	public ReportCell(Comparable<?> value, String displayedValue) {

@@ -70,6 +70,9 @@ public class ColumnConstants {
 	public static final String COUNTRY = "Country";
 	public static final String CREDIT_DONATION = "Credit/Donation";
 	public static final String CRIS_NUMBER = "Cris Number";
+	public static final String CUMULATIVE_COMMITMENT = "Cumulative Commitment";
+	public static final String CUMULATIVE_DISBURSEMENT = "Cumulative Disbursement";
+	public static final String CUMULATIVE_EXECUTION_RATE = "Cumulative Execution Rate";
 	public static final String CURRENT_COMPLETION_DATE_COMMENTS = "Current Completion Date Comments";
 	public static final String DESCRIPTION_OF_COMPONENT_FUNDING = "Description of Component Funding";
 	public static final String DISTRICT = "District";
@@ -106,7 +109,6 @@ public class ColumnConstants {
 	public static final String FUNDING_ORGANIZATION_ID = "Funding Organization Id";
 	public static final String FUNDING_START_DATE = "Funding start date";
 	public static final String FUNDING_STATUS = "Funding Status";
-	public static final String FUNDING_YEAR = "Funding Year";
 	public static final String FY = "FY";
 	public static final String GOVERNMENT_AGREEMENT_NUMBER = "Government Agreement Number";
 	public static final String GOVERNMENT_APPROVAL_PROCEDURES = "Government Approval Procedures";
@@ -356,7 +358,10 @@ public class ColumnConstants {
 	public static final String TYPE_OF_ASSISTANCE = "Type Of Assistance";
 	public static final String TYPE_OF_COOPERATION = "Type of Cooperation";
 	public static final String TYPE_OF_IMPLEMENTATION = "Type of Implementation";
+	public static final String UNCOMMITTED_BALANCE = "Uncommitted Balance";
+	public static final String UNCOMMITTED_CUMULATIVE_BALANCE = "Uncommitted Cumulative Balance";
 	public static final String FORECAST_EXECUTION_RATE = "Forecast Execution Rate";
+	public static final String UNDISBURSED_CUMULATIVE_BALANCE = "Undisbursed Cumulative Balance";
 	public static final String VARIANCE_OF_COMMITMENTS = "Variance Of Commitments";
 	public static final String VARIANCE_OF_DISBURSEMENTS = "Variance Of Disbursements";
 	public static final String VOTE = "Vote";

@@ -7,12 +7,15 @@ import org.dgfoundation.amp.testmodels.GroupColumnModel;
 import org.dgfoundation.amp.testmodels.GroupReportModel;
 import org.dgfoundation.amp.testmodels.SimpleColumnModel;
 import org.dgfoundation.amp.testutils.AmpReportModifier;
+import org.dgfoundation.amp.testutils.AmpTestCase;
+import org.dgfoundation.amp.testutils.PledgesFilterModifier;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ProgramUtil;
 
+import static org.dgfoundation.amp.testutils.ReportTestingUtils.NULL_PLACEHOLDER;
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.MUST_BE_EMPTY;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -154,7 +157,6 @@ public class PledgeReportsTests extends ReportsTestCase
 		
 		AmpReportModifier modifier = new AmpReportModifier() {
 			
-			@SuppressWarnings("serial")
 			@Override public void modifyAmpReportSettings(AmpReports report, AmpARFilter filter) {
 				filter.setSelectedPrimaryPrograms(new java.util.HashSet<AmpTheme>(){{
 					add(ProgramUtil.getThemeById(2L));

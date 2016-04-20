@@ -28,9 +28,9 @@ import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportMeasure;
+import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
@@ -216,16 +216,11 @@ public class SettingsUtils {
 		String selectedStartYearId = null;
 		String selectedEndYearId = null;
 		
-		if (spec.getSettings() != null && spec.getSettings().getFilterRules() != null
-				&& spec.getSettings().getFilterRules() != null
-				&& spec.getSettings().getFilterRules().containsKey(new ReportElement(ElementType.YEAR))) {
+		if (spec.getSettings() != null && spec.getSettings().getYearRangeFilter() != null) {
 			// not sure if the plan to use multiple year range settings is still valid AMP-17715
-			for (FilterRule filter : spec.getSettings().getFilterRules().get(new ReportElement(ElementType.YEAR))) {
-				selectedStartYearId = getSelectedYearId(filter.min); 
-				selectedEndYearId = getSelectedYearId(filter.max);
-				// now 1 range
-				break;
-			}
+			// ONE YEAR LATER: apparently not anymore :D
+			selectedStartYearId = getSelectedYearId(spec.getSettings().getYearRangeFilter().min); 
+			selectedEndYearId = getSelectedYearId(spec.getSettings().getYearRangeFilter().max);
 		} else {
 			selectedStartYearId = EndpointUtils.getDefaultReportStartYear();
 			selectedEndYearId = EndpointUtils.getDefaultReportEndYear();
@@ -571,14 +566,14 @@ public class SettingsUtils {
 	 * @see SettingsUtils#applySettings(ReportSpecificationImpl, JsonBean)
 	 */
 	public static void applySettings(ReportSpecificationImpl spec, JsonBean config, boolean setDefaults) {
-		if (spec.getSettings() != null && !MondrianReportSettings.class.isAssignableFrom(spec.getSettings().getClass())) {
+		if (spec.getSettings() != null && !ReportSettingsImpl.class.isAssignableFrom(spec.getSettings().getClass())) {
 			logger.error("Unsupported conversion for: " + spec.getSettings().getClass());
 			return;
 		}
 		
-		MondrianReportSettings reportSettings = (MondrianReportSettings) spec.getSettings();
+		ReportSettingsImpl reportSettings = (ReportSettingsImpl) spec.getSettings();
 		if (reportSettings == null) {
-			reportSettings = new MondrianReportSettings();
+			reportSettings = new ReportSettingsImpl();
 			spec.setSettings(reportSettings);
 		}
 		
@@ -597,7 +592,7 @@ public class SettingsUtils {
 	 * @param settings
 	 * @param setDefaults
 	 */
-	private static void configureCurrencyCode(MondrianReportSettings reportSettings, Map<String, Object> settings, 
+	private static void configureCurrencyCode(ReportSettingsImpl reportSettings, Map<String, Object> settings, 
 			boolean setDefaults) {
 		String currency = settings == null ? null : (String) settings.get(SettingsConstants.CURRENCY_ID);
 		if (currency != null)
@@ -613,7 +608,7 @@ public class SettingsUtils {
 	 * @param settings
 	 * @param setDefaults
 	 */
-	private static void configureNumberFormat(MondrianReportSettings reportSettings, Map<String, Object> settings, 
+	private static void configureNumberFormat(ReportSettingsImpl reportSettings, Map<String, Object> settings, 
 			boolean setDefaults) {
 		// apply numberFormat
 		Map<String, Object> amountFormat = settings == null ? null : 
@@ -646,7 +641,7 @@ public class SettingsUtils {
 	 * @param settings
 	 * @param setDefaults
 	 */
-	private static void configureCalendar(MondrianReportSettings reportSettings, Map<String, Object> settings, 
+	private static void configureCalendar(ReportSettingsImpl reportSettings, Map<String, Object> settings, 
 			boolean setDefaults) {
 		String calendarId = settings == null ? null : String.valueOf(settings.get(SettingsConstants.CALENDAR_TYPE_ID));
 		if (settings != null && StringUtils.isNumber(calendarId)) {
@@ -664,7 +659,7 @@ public class SettingsUtils {
 	 * @param settings
 	 * @param setDefaults: if true AND there is no range setting in @reportSettings, then reportSettings will be populated with the workspace/system's default 
 	 */
-	public static void configureYearRange(MondrianReportSettings reportSettings, Map<String, Object> settings, boolean setDefaults) {
+	public static void configureYearRange(ReportSettingsImpl reportSettings, Map<String, Object> settings, boolean setDefaults) {
 		ReportElement yearRangeElement = new ReportElement(ElementType.YEAR);
 		/* Disabling original workaround when year range setting was not implemented in Settings Widget
 		boolean preExistingYearRangeSetting = (reportSettings.getFilterRules().get(yearRangeElement) != null) && 
@@ -690,7 +685,7 @@ public class SettingsUtils {
 		}
 		
 		// clear previous year settings
-		reportSettings.getFilterRules().remove(yearRangeElement);
+		reportSettings.setYearRangeFilter(null);
 		reportSettings.setOldCalendar(null);
 		// TODO: update settings to store [ALL, ALL] range just to reflect
 		// the previous selection
@@ -698,7 +693,7 @@ public class SettingsUtils {
 			try {
 				start = start == -1 ? null : start;
 				end = end == -1 ? null : end;
-				reportSettings.addYearsRangeFilterRule(start, end);
+				reportSettings.setYearsRangeFilterRule(start, end);
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 			}

@@ -10,7 +10,7 @@ import java.util.Set;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
+import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -29,7 +29,7 @@ import org.junit.Test;
  * @author Constantin Dolghier
  *
  */
-public class NewFeaturesMondrianReportTests extends MondrianReportsTestCase {
+public class NewFeaturesMondrianReportTests extends ReportingTestCase {
 
 	public final static List<String> activities = Arrays.asList("activity with capital spending", "Activity with planned disbursements", "activity with pipeline MTEFs and act. disb");
 	public final static List<String> activities2 = Arrays.asList("activity with capital spending", "Activity with planned disbursements", "activity with pipeline MTEFs and act. disb", "Test MTEF directed");

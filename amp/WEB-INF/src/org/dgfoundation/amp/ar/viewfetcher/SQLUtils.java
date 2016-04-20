@@ -8,15 +8,21 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.algo.AlgoUtils;
+import org.dgfoundation.amp.algo.ExceptionConsumer;
 import org.dgfoundation.amp.ar.FilterParam;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.Criteria;
@@ -154,6 +160,41 @@ public class SQLUtils {
 		{
 			throw new RuntimeException(e);
 		}
+	}
+	
+	/**
+	 * runs a query and calls the consumer for each row of the result
+	 * @param connection
+	 * @param query
+	 * @param consumer
+	 */
+	public static void forEachRow(Connection connection, String query, Consumer<ResultSet> consumer) {
+		try(RsInfo rsInfo = rawRunQuery(connection, query, null)) {
+			rsInfo.forEach(consumer);
+		}
+		catch(SQLException ex) {
+			throw AlgoUtils.translateException(ex);
+		}
+	}
+	
+	/**
+	 * calls a given function for each row of the result and accumulates the results in a List
+	 * @param connection
+	 * @param query
+	 * @param mapper
+	 * @return
+	 */
+	public static<K> List<K> collect(Connection connection, String query, Function<ResultSet, K> mapper) {
+		List<K> res = new ArrayList<>();
+		try(RsInfo rsInfo = rawRunQuery(connection, query, null)) {
+			while(rsInfo.rs.next()) {
+				res.add(mapper.apply(rsInfo.rs));
+			}
+		}
+		catch(SQLException ex) {
+			throw AlgoUtils.translateException(ex);
+		}
+		return Collections.unmodifiableList(res);
 	}
 	
 	/**
@@ -514,5 +555,45 @@ public class SQLUtils {
 		for(int i = 0; i < rs.getMetaData().getColumnCount(); i++)
 			res.add(rs.getMetaData().getColumnName(i + 1));
 		return res;
+	}
+	
+	/**
+	 * rethrows any exception as a RunTimeException - good for lambdas
+	 * @param rs
+	 * @param columnName
+	 * @return
+	 */
+	public static Long getLong(ResultSet rs, String columnName) {
+		try {
+			Long res = rs.getLong(columnName);
+			if (rs.wasNull())
+				return null;
+			return res;
+		}
+		catch(Exception e) {
+			throw AlgoUtils.translateException(e);
+		}
+	}
+	
+	/**
+	 * this is written lambda-free so as to maximize performance
+	 * @param conn
+	 * @param query
+	 * @param idColumnName
+	 * @param payloadColumnName
+	 * @param map
+	 * @return
+	 */
+	public static Map<Long, String> collectKeyValue(Connection conn, String query) {
+		HashMap<Long, String> map = new HashMap<>();
+		try(RsInfo rsi = rawRunQuery(conn, query, null)) {
+			while (rsi.rs.next()) {
+				map.put(rsi.rs.getLong(1), rsi.rs.getString(2));
+			}
+		}
+		catch(SQLException e) {
+			throw AlgoUtils.translateException(e);
+		}
+		return map;
 	}
 }

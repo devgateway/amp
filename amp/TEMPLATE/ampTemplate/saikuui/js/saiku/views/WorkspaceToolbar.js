@@ -102,35 +102,14 @@ var WorkspaceToolbar = Backbone.View.extend({
                 .removeClass('disabled_toolbar');
         }
         
-    	if(Settings.AMP_REPORT_API_BRIDGE) { 
-            var arrButtons = $(args.workspace.toolbar.el)
-            .find('.new, .open, .save, .run, .swap_axis, .zoom_mode, .query_scenario, .edit, .auto, .non_empty,.toggle_fields,.toggle_sidebar,.switch_to_mdx, .mdx, .group_parents, .drillthrough, .drillthrough_export');
-            _.each(arrButtons, function(button) {
-            	//Hide Parent
-            	$(button.parentElement).hide();
-            });
-            $(this.workspace.el).find('.workspace_fields').addClass('hide');
-            
-            if (this.workspace.query.result.hasRun() && 
-            		this.workspace.query.result.result.page.pageArea === null) {
-            	$(this.el).find('a.export_xls').addClass('disabled_toolbar');            	
-            	$(this.el).find('a.export_csv').addClass('disabled_toolbar');
-            	$(this.el).find('a.export_pdf').addClass('disabled_toolbar');
-            	$(this.el).find('a.export_to_map').addClass('disabled_toolbar');
-            	$(this.el).find('a.fullscreen').addClass('disabled_toolbar');
-            	$(this.el).find('a.export_dual_currency').addClass('disabled_toolbar');
-            }
-    	}
-    	else {
-            var arrButtons = $(args.workspace.toolbar.el)
-            .find('.zoom_mode, .query_scenario, .swap_axis, .toggle_fields, .switch_to_mdx, .mdx, .group_parents, .drillthrough, .drillthrough_export, .first_page, .prev_page, .pagination_info, .next_page, .last_page ');
-            _.each(arrButtons, function(button) {
-            	//Hide Parent
-            	$(button.parentElement).hide();
-            });
-           	$(".export_xls_plain").hide();
-           	$(".export_dual_currency").hide();
-    	}
+        var arrButtons = $(args.workspace.toolbar.el)
+        .find('.zoom_mode, .query_scenario, .swap_axis, .toggle_fields, .switch_to_mdx, .mdx, .group_parents, .drillthrough, .drillthrough_export, .first_page, .prev_page, .pagination_info, .next_page, .last_page ');
+        _.each(arrButtons, function(button) {
+        	//Hide Parent
+        	$(button.parentElement).hide();
+        });
+       	$(".export_xls_plain").hide();
+       	$(".export_dual_currency").hide();
 
     	if (this.is_gis_enabled()) {
         	$(this.el).find('a.export_to_map').removeClass('disabled_toolbar');
@@ -536,29 +515,11 @@ var WorkspaceToolbar = Backbone.View.extend({
     },
 
     export_amp_xls: function(event) {
-    	if(Settings.AMP_REPORT_API_BRIDGE) {
-    		var auxQuery = this.workspace.currentQueryModel;
-    		auxQuery.xls_type = 'styled';
-	    	$.postDownload("/rest/data/saikureport/export/xls/" + this.calculate_url(),
-	    			{query: JSON.stringify(auxQuery)}, "post");
-    	}
-    	else
-		{
-    		this.export_xls();
-		}
+    	this.export_xls();
     },
 
     export_amp_xls_plain: function(event) {
-    	if(Settings.AMP_REPORT_API_BRIDGE) {
-    		var auxQuery = this.workspace.currentQueryModel;
-    		auxQuery.xls_type = 'plain';
-	    	$.postDownload("/rest/data/saikureport/export/xls/" + this.calculate_url(),
-	    			{query: JSON.stringify(auxQuery)}, "post");
-    	}
-    	else
-		{
-    		this.export_xls();
-		}
+    	this.export_xls();
     },
     export_csv: function(event) {
         window.location = Settings.REST_URL +
@@ -566,14 +527,7 @@ var WorkspaceToolbar = Backbone.View.extend({
     },
 
     export_amp_csv: function(event) {
-    	if(Settings.AMP_REPORT_API_BRIDGE) {
-	    	$.postDownload("/rest/data/saikureport/export/csv/" + this.calculate_url(),
-	    			{query: JSON.stringify(this.workspace.currentQueryModel)}, "post");
-    	}
-    	else
-		{
-    		this.export_csv();
-		}
+    	this.export_csv();
     },
 
     export_pdf: function(event) {
@@ -582,14 +536,7 @@ var WorkspaceToolbar = Backbone.View.extend({
     },
 
     export_amp_pdf: function(event) {
-    	if(Settings.AMP_REPORT_API_BRIDGE) {
-	    	$.postDownload("/rest/data/saikureport/export/pdf/" +  this.calculate_url(),
-	    			{query: JSON.stringify(this.workspace.currentQueryModel)}, "post");
-    	}
-    	else
-		{
-    		this.export_pdf();
-		}
+    	this.export_pdf();
     },
 
     export_amp_dual_currency: function(){
@@ -648,7 +595,7 @@ var WorkspaceToolbar = Backbone.View.extend({
         $(this.el).find('.run').attr('href','#run_mdx');
         $(this.el).find('.run, .save, .open, .new, .edit').removeClass('disabled_toolbar');
 
-        if (!Settings.AMP_REPORT_API_BRIDGE && Settings.MODE != "view" && Settings.MODE != "table" && !this.workspace.isReadOnly) {
+        if (Settings.MODE != "view" && Settings.MODE != "table" && !this.workspace.isReadOnly) {
             $mdx_editor = $(this.workspace.el).find('.mdx_input');
             //$mdx_editor.width($(this.el).width()-5);
             $(this.workspace.el).find('.workspace_editor .mdx_input, .workspace_editor .editor_info, .workspace_editor').removeClass('hide').show();
@@ -822,7 +769,7 @@ var WorkspaceToolbar = Backbone.View.extend({
         if ($(this.workspace.el).find(".mdx_input").height() > 100) {
             $(this.workspace.el).find(".mdx_input").height(100);
         }
-        if(Settings.AMP_REPORT_API_BRIDGE) return;
+
         this.editor.resize();
         var mdx = this.editor.getValue();
         this.workspace.query.model.mdx = mdx;
@@ -877,7 +824,14 @@ var WorkspaceToolbar = Backbone.View.extend({
     		runUrl='run/';
     		reportIdentification=this.workspace.query.get('report_token');
     	}
-    	return runUrl + reportIdentification;
+    	
+    	// AMP-22070 temporary parameter, will be removed when Mondrian will not be used
+    	var niReportAttr = '';
+    	if(Settings.NIREPORT) {
+    		niReportAttr = '?nireport=true';
+    	}
+    	
+    	return runUrl + reportIdentification + niReportAttr;
     },
     
     is_gis_enabled : function() {

@@ -95,10 +95,6 @@ var SavedQuery = Backbone.Model.extend({
     move_query_to_workspace_json: function(model, response) {
         var json = JSON.stringify(response);
         var filename = model.get('file');
-
-        if(model.get('report_id') || model.get('report_token')) {
-        	Settings.AMP_REPORT_API_BRIDGE = true;
-        }
         
         var query = new Query({ 
             json: json,

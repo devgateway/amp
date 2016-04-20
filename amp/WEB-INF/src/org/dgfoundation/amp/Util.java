@@ -50,7 +50,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.jdbc.ReturningWork;
 import org.hibernate.type.StringType;
-import org.joda.time.LocalDate;
 import org.springframework.beans.BeanWrapperImpl;
 
 public final class Util {
@@ -246,8 +245,9 @@ public final class Util {
 	 */
 	public static double getExchange(final String currencyCode, final java.sql.Date currencyDate) {
 		CurrencyConvertor convertor = AmpCurrencyConvertor.getInstance();
-		return convertor.getExchangeRate(CurrencyUtil.getBaseCurrencyCode(), currencyCode, null, new LocalDate(currencyDate));
+		return convertor.getExchangeRate(CurrencyUtil.getBaseCurrencyCode(), currencyCode, null, currencyDate.toLocalDate()); // WARNING: Date.toLocalDate() is jdk8 code!
 	}
+	
 	/**
 	 * As the name implies only the years are checked by this function. 
 	 * 

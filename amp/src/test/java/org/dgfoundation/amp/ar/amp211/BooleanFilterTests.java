@@ -8,7 +8,7 @@ import java.util.Set;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
+import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
@@ -23,7 +23,7 @@ import org.junit.Test;
  * @author Constantin Dolghier
  *
  */
-public class BooleanFilterTests extends MondrianReportsTestCase {
+public class BooleanFilterTests extends ReportingTestCase {
 
 	public final static List<String> activities = Arrays.asList(
 			"TAC_activity_1", "date-filters-activity", "Eth Water");

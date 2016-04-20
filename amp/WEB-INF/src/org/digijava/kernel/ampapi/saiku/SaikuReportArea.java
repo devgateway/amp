@@ -7,10 +7,12 @@ import org.dgfoundation.amp.newreports.ReportAreaImpl;
 
 /**
  * This is Saiku specific report area, that also stores the location of the data in Saiku structures, to facilitate the sorting during post-processing phase.
+ * TODO: delete when we get rid of Mondrian
  * @see ReportAreaImpl
  * @author Nadejda Mandrescu
  *
  */
+@Deprecated
 public class SaikuReportArea extends ReportAreaImpl {
 	private int origId;
 	private int origLeafId = -1; //not set

@@ -23,6 +23,7 @@ import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
+import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
@@ -34,7 +35,6 @@ import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 import org.digijava.kernel.ampapi.saiku.SaikuGeneratedReport;
-import org.digijava.kernel.ampapi.saiku.SaikuReportSorter;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -76,8 +76,8 @@ public class MondrianReportUtils {
 	/**
 	 * @return default configuration for the current user settings
 	 */
-	public static MondrianReportSettings getCurrentUserDefaultSettings() {
-		MondrianReportSettings settings = new MondrianReportSettings();
+	public static ReportSettingsImpl getCurrentUserDefaultSettings() {
+		ReportSettingsImpl settings = new ReportSettingsImpl();
 		settings.setCurrencyFormat(FormatHelper.getDefaultFormat());
 		AmpApplicationSettings ampAppSettings = AmpARFilter.getEffectiveSettings();
 		if (ampAppSettings == null) {
@@ -97,22 +97,7 @@ public class MondrianReportUtils {
 			filters.setCalendar(AmpARFilter.getDefaultCalendar());
 		}
 		return filters;
-	}
-	
-	/**
-	 * Configures default & mandatory behavior
-	 * @param spec - report specification
-	 */
-	public static void configureDefaults(ReportSpecification spec) {
-		if (spec instanceof ReportSpecificationImpl) {
-			ReportSpecificationImpl s = (ReportSpecificationImpl)spec;
-			if (s.getSettings() == null) {
-				s.setSettings(getCurrentUserDefaultSettings());
-			}
-			if (GroupingCriteria.GROUPING_TOTALS_ONLY.equals(s.getGroupingCriteria()))
-				s.setCalculateColumnTotals(false);
-		}
-	}
+	}	
 	
 	/**
 	 * Retrieves column index for the specified column from the given ReportSpecification
@@ -129,40 +114,27 @@ public class MondrianReportUtils {
 		return colId == spec.getColumns().size() ? -1 : colId; 
 	}
 	
-	/**
-	 * Filters out null dates. 
-	 * The current solution is add an explicit upper limit to filter by if no filter is already configured for the date. 
-	 * @param spec
-	 */
-	public static void filterOutNullDates(ReportSpecificationImpl spec) {
-		MondrianReportFilters filters = spec.getFilters() == null ? new MondrianReportFilters() : (MondrianReportFilters)spec.getFilters();
-		Set<ReportColumn> existingFilters = new HashSet<ReportColumn>();
-		existingFilters.addAll(filters.getDateFilterRules().keySet());
-		for(ReportColumn column : spec.getColumns()) {
-			if (DateColumns.ACTIVITY_DATES.contains(column.getColumnName()) && !existingFilters.contains(column)) {
-				try {
-					filters.addDateRangeFilterRule(column, null, new Date(MoConstants.UNDEFINED_KEY -1));
-				} catch (AmpApiException e) {
-					logger.error(e);
-				}
-				existingFilters.add(column);
-			}	
-		}
-		spec.setFilters(filters);
-	}
-	
-	/**
-	 * Applies sorting over generated report
-	 * @param report
-	 * @throws AMPException
-	 */
-	public static final void sort(GeneratedReport report) throws AMPException {
-		ReportEnvironment env = ReportEnvironment.buildFor(TLSUtils.getRequest());
-		if (SaikuGeneratedReport.class.isAssignableFrom(report.getClass()))
-			SaikuReportSorter.sort(report, env);
-		else 
-			MondrianReportSorter.sort(report, env);
-	}
+//	/**
+//	 * Filters out null dates. 
+//	 * The current solution is add an explicit upper limit to filter by if no filter is already configured for the date. 
+//	 * @param spec
+//	 */
+//	public static void filterOutNullDates(ReportSpecificationImpl spec) {
+//		MondrianReportFilters filters = spec.getFilters() == null ? new MondrianReportFilters() : (MondrianReportFilters)spec.getFilters();
+//		Set<ReportColumn> existingFilters = new HashSet<ReportColumn>();
+//		existingFilters.addAll(filters.getDateFilterRules().keySet());
+//		for(ReportColumn column : spec.getColumns()) {
+//			if (DateColumns.ACTIVITY_DATES.contains(column.getColumnName()) && !existingFilters.contains(column)) {
+//				try {
+//					filters.addDateRangeFilterRule(column, null, new Date(MoConstants.UNDEFINED_KEY -1));
+//				} catch (AmpApiException e) {
+//					logger.error(e);
+//				}
+//				existingFilters.add(column);
+//			}	
+//		}
+//		spec.setFilters(filters);
+//	}
 	
 	/**
 	 * Verifies if a list of 2 sorting lists are identical

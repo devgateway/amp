@@ -42,10 +42,10 @@ public class AllTests_amp211
 		suite.addTest(new JUnit4TestAdapter(PlainMTEFMondrianReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(InflationRatesTests.class));
 		suite.addTest(new JUnit4TestAdapter(BooleanFilterTests.class));
-		suite.addTest(new JUnit4TestAdapter(FundingFlowsMondrianReportTests.class));
+		//suite.addTest(new JUnit4TestAdapter(FundingFlowsMondrianReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(OldReportsNewFeaturesTests.class));
 		suite.addTest(new JUnit4TestAdapter(PledgeReportsTests211.class));
-		suite.addTest(new JUnit4TestAdapter(NewFeaturesMondrianReportTests.class));
+		//suite.addTest(new JUnit4TestAdapter(NewFeaturesMondrianReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(MondrianComputedMeasuresReportTests211.class));
 		suite.addTest(new JUnit4TestAdapter(ReportCalendarTests.class));
 		
@@ -67,8 +67,8 @@ public class AllTests_amp211
 		try {
 			configureLog4j();
 			HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
-			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_211";
-			MonetConnection.MONET_CFG_OVERRIDE_URL = "jdbc:monetdb://localhost/amp_tests_211";
+			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_212";
+			MonetConnection.MONET_CFG_OVERRIDE_URL = "jdbc:monetdb://localhost/amp_tests_212";
 			
 			org.digijava.kernel.ampapi.mondrian.util.Connection.IS_TESTING = true;
 			//HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_moldova_27";
@@ -81,6 +81,8 @@ public class AllTests_amp211
 //			Configuration cfg = HibernateClassLoader.getConfiguration();
 			//System.out.println("AMP started up!");
 			TLSUtils.getThreadLocalInstance().setForcedLangCode(SiteUtils.getDefaultSite().getDefaultLanguage().getCode());
+			org.apache.struts.mock.MockHttpServletRequest mockRequest = new org.apache.struts.mock.MockHttpServletRequest(new org.apache.struts.mock.MockHttpSession());
+			TLSUtils.populate(mockRequest);
 		}
 		catch(Exception e) {
 			throw new RuntimeException(e);

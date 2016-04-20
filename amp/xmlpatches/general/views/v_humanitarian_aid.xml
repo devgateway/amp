@@ -19,14 +19,14 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_humanitarian_aid AS 
-			    		SELECT aav.amp_activity_id,
-			    			CASE WHEN aav.humanitarianaid THEN 'Yes' ELSE 'No' END AS val,
-			    			CASE WHEN aav.humanitarianaid THEN 1 ELSE 2 END AS val_id
-						FROM amp_activity_version aav
-						WHERE aav.humanitarianaid IS NOT NULL
-						ORDER BY aav.amp_activity_id;
-        		</lang>
+			   	CREATE OR REPLACE VIEW v_humanitarian_aid AS 
+			   		SELECT aav.amp_activity_id,
+			   			CASE WHEN aav.humanitarianaid THEN 'Yes' ELSE 'No' END AS val,
+			   			CASE WHEN aav.humanitarianaid THEN 1 ELSE 2 END AS val_id
+					FROM amp_activity_version aav
+					WHERE aav.humanitarianaid IS NOT NULL
+					ORDER BY aav.amp_activity_id;
+        	</lang>
 		</script>
 	</apply>
 </tns:patch>

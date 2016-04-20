@@ -19,8 +19,31 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_financing_instrument AS SELECT f.amp_activity_id, val.category_value AS name, f.financing_instr_category_value AS amp_modality_id FROM amp_funding f, amp_category_value val WHERE (f.financing_instr_category_value = val.id) UNION SELECT eu.amp_activity_id, val.category_value AS name, eu_con.financing_instr_category_value AS amp_modality_id FROM amp_eu_activity eu, amp_eu_activity_contributions eu_con, amp_category_value val WHERE ((eu_con.eu_activity_id = eu.id) AND (eu_con.financing_instr_category_value = val.id)) ORDER BY 1, 2;;;
-        		</lang>
+				DROP VIEW IF EXISTS v_financing_instrument CASCADE;
+			   	CREATE OR REPLACE VIEW v_financing_instrument AS
+			   		SELECT f.amp_activity_id, val.category_value, f.financing_instr_category_value AS id
+			   			FROM amp_funding f
+			   				JOIN amp_category_value val ON f.financing_instr_category_value = val.id
+			   		UNION
+			   		SELECT eu.amp_activity_id, val.category_value, eu_con.financing_instr_category_value AS id
+			   			FROM amp_eu_activity eu 
+			   				JOIN amp_eu_activity_contributions eu_con ON eu_con.eu_activity_id = eu.id
+			   				JOIN amp_category_value val ON eu_con.financing_instr_category_value = val.id;
+			   				
+			   				
+				DROP VIEW IF EXISTS v_credit_donation CASCADE;
+			   	CREATE OR REPLACE VIEW v_credit_donation AS
+			   		SELECT v.amp_activity_id,
+			   			CASE
+			   				WHEN v.category_value = 'Donacion' THEN 'Donacion'
+			   				ELSE 'Credito'
+			   			END AS name,
+			   			CASE
+			   				WHEN v.category_value = 'Donacion' THEN 1
+			   				ELSE 2
+			   			END AS id
+			   		FROM v_financing_instrument v;
+        	</lang>
 		</script>
 	</apply>
 </tns:patch>

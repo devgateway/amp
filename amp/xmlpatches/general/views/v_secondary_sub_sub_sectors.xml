@@ -21,13 +21,13 @@
 			<lang delimiter=";" type="postgres">
 				DROP VIEW IF EXISTS v_secondary_sub_sub_sectors;
 			   	CREATE OR REPLACE VIEW v_secondary_sub_sub_sectors AS
-					SELECT sa.amp_activity_id, rs.name AS sectorname, rs.amp_sector_id AS amp_sector_id, sum(sa.sector_percentage) AS sector_percentage 
-					FROM amp_activity_sector sa
-						JOIN all_sectors_with_levels aswl ON sa.amp_sector_id = aswl.amp_sector_id
-						JOIN amp_sector rs ON rs.amp_sector_id = aswl.id2
-						WHERE aswl.sector_config_name = 'Secondary'
-					GROUP BY sa.amp_activity_id, rs.amp_sector_id
-					ORDER BY sa.amp_activity_id;
+					SELECT a.amp_activity_id, COALESCE(level.name, '#') AS name, asl.id2 AS amp_sector_id, SUM(a.sector_percentage) as percentage, COUNT(*) - COUNT(a.sector_percentage) AS cnt_nulls
+						FROM amp_activity_sector a	
+							JOIN ni_all_sectors_with_levels asl ON a.amp_sector_id = asl.amp_sector_id
+							LEFT JOIN amp_sector level ON level.amp_sector_id = asl.id2
+							JOIN amp_classification_config acc ON acc.id = a.classification_config_id
+   						WHERE acc.name = 'Secondary'
+					GROUP BY a.amp_activity_id, asl.id2, level.amp_sector_id;
 			</lang>
 		</script>
 	</apply>

@@ -1,8 +1,11 @@
 package org.dgfoundation.amp.ar.viewfetcher;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
+import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.ar.FilterParam;
 
 /**
@@ -10,7 +13,15 @@ import org.dgfoundation.amp.ar.FilterParam;
  * @author Dolghier Constantin
  *
  */
-public interface ViewFetcher 
-{
+public interface ViewFetcher {
 	public RsInfo fetch(ArrayList<FilterParam> params);
+	
+	public default void forEach(Consumer<ResultSet> c) {
+		try(RsInfo rsInfo = fetch(null)) {
+			rsInfo.forEach(c);
+		}
+		catch(SQLException e) {
+			throw AlgoUtils.translateException(e);
+		}
+	}
 }

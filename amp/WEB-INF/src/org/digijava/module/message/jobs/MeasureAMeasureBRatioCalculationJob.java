@@ -93,15 +93,8 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 		});
 
 		if (ampTeamMemberId.value != null) {
+			TeamUtil.setupFiltersForLoggedInUser(TLSUtils.getRequest(), TeamUtil.getAmpTeamMember(ampTeamMemberId.value));
 			// we first set the current member since its needed by features util
-			AmpTeamMember ampTeamMemberForReport = TeamUtil.getAmpTeamMember(ampTeamMemberId.value);
-			TLSUtils.getRequest().getSession().setAttribute(Constants.CURRENT_MEMBER,
-					new TeamMember(ampTeamMemberForReport));
-			//we build AmpARFilter for report calculation 
-			AmpARFilter af = FilterUtil.buildFilter(ampTeamMemberForReport.getAmpTeam(), null);
-			af.generateFilterQuery(TLSUtils.getRequest(), true);
-
-			TLSUtils.getRequest().getSession().setAttribute(ArConstants.TEAM_FILTER, af);
 
 			Date lowerDateReport = null;
 			Date upperDateReport = null;
@@ -158,7 +151,6 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 					spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
 					spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
 					spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
-					spec.setCalculateColumnTotals(true);
 					spec.addMeasure(new ReportMeasure(measureA));
 					spec.addMeasure(new ReportMeasure(measureB));
 					MondrianReportFilters filterRules = new MondrianReportFilters();

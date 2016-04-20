@@ -69,7 +69,7 @@ public class MiscColumnsTests extends ReportsTestCase
 		GroupReportModel mop_ub_correct = GroupReportModel.withColumnReports("AMP-15863-mode-of-payment-undisbursed-balance",
 				ColumnReportDataModel.withColumns("AMP-15863-mode-of-payment-undisbursed-balance",
 						SimpleColumnModel.withContents("Project Title", "Eth Water", "Eth Water", "mtef activity 2", "mtef activity 2", "SSC Project 1", "SSC Project 1").setIsPledge(false), 
-						SimpleColumnModel.withContents("Mode of Payment", "Eth Water", "Mode of Payment Unallocated", "mtef activity 2", "Mode of Payment Unallocated", "SSC Project 1", "Mode of Payment Unallocated").setIsPledge(false), 
+						SimpleColumnModel.withContents("Mode of Payment", MUST_BE_EMPTY), 
 						GroupColumnModel.withSubColumns("Total Costs",
 							SimpleColumnModel.withContents("Undisbursed Balance", "Eth Water", "-545 000", "mtef activity 2", "0", "SSC Project 1", "-443 778").setIsPledge(false)))
 					.withTrailCells(null, null, "-988 778"))

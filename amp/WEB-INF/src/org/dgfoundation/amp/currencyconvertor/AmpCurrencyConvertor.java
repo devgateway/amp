@@ -1,10 +1,6 @@
 package org.dgfoundation.amp.currencyconvertor;
 
-import org.hibernate.jdbc.ReturningWork;
-import org.joda.time.LocalDate;
-
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
@@ -59,22 +55,13 @@ public class AmpCurrencyConvertor implements CurrencyConvertor {
 	 * @param currency
 	 * @return
 	 */
-	protected OneCurrencyCalculator getCalculator(final String currencyCode) {
+	protected OneCurrencyCalculator getCalculator(String currencyCode) {
 		OneCurrencyCalculator res = currencyCalculators.get(currencyCode);
 		if (res != null)
 			return res;
 		
 		logger.warn(String.format("calculating currency %s exchange rates", currencyCode));
-//		conn -> new OneCurrencyCalculator(CurrencyUtil.getAmpcurrency(currencyCode), conn));
-		OneCurrencyCalculator newRes = PersistenceManager.getSession().doReturningWork(
-			new ReturningWork<OneCurrencyCalculator>() {
-				public OneCurrencyCalculator execute(Connection conn) throws SQLException {
-					String currencyLocal = currencyCode;
-					return new OneCurrencyCalculator(CurrencyUtil.getAmpcurrency(currencyLocal), conn);
-				}
-			}
-		);
-
+		OneCurrencyCalculator newRes = PersistenceManager.getSession().doReturningWork(conn -> new OneCurrencyCalculator(CurrencyUtil.getAmpcurrency(currencyCode), conn));
 		currencyCalculators.put(newRes.currency.getCurrencyCode(), newRes);
 		return newRes;
 	}
@@ -90,7 +77,7 @@ public class AmpCurrencyConvertor implements CurrencyConvertor {
 			return getExchangeRate(baseCurrencyCode, toCurrencyCode, null, date) / fixedExchangeRate; 
 		}
 		
-		Integer julianCode = DateTimeUtil.toJulianDayNumber(date);
+		long julianCode = DateTimeUtil.toJulianDayNumber(date);
 		double res = getCalculator(fromCurrencyCode).getRate(julianCode) / getCalculator(toCurrencyCode).getRate(julianCode);
 		return res;
 	}

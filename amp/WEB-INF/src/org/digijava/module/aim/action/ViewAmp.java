@@ -39,6 +39,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -234,42 +235,7 @@ public class ViewAmp
                 }
             }
 
-            TeamMember tm = new TeamMember(member);
-
-			//now teamHead is configured within TeamMember constructor, but leaving this special case here
-			//is it still needed? if yes, then should be moved within TeamMemberUtil.isHeadRole()
-            if (
-                        //very ugly but we have no choice - only one team head role possible :(
-                        member.getAmpMemberRole().getRole().equals("Top Management")
-                        ) {
-                    tm.setTeamHead(true);
-                }
-            session.setAttribute("teamLeadFlag", String.valueOf(tm.getTeamHead()));
-            
-            // Get the team members application settings
-            AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(member.getAmpTeam().getAmpTeamId());
-            ApplicationSettings appSettings = new ApplicationSettings(ampAppSettings);
-            //appSettings.setLanguage(ampAppSettings.getLanguage());
-
-            //as the users is member of only one team we mas ensure that the correct
-            //template settings are load for him
-            AmpTeam currentTeam = member.getAmpTeam();
-            AmpTemplatesVisibility currentTemplate = currentTeam.getFmTemplate();
-            if (currentTemplate == null) {
-                currentTemplate = FeaturesUtil.getDefaultAmpTemplateVisibility();
-            }
-            AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
-            ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-            FeaturesUtil.setAmpTreeVisibility(request.getServletContext(), session,ampTreeVisibility);
-            
-            session.setAttribute(Constants.TEAM_ID, tm.getTeamId());
-            tm.setAppSettings(appSettings);
-            session.setAttribute(Constants.CURRENT_MEMBER, tm);            
-            AmpTeam.initializeTeamFiltersSession(member, request, session);
-			
-            // Set the session infinite. i.e. session never timeouts
-            session.setMaxInactiveInterval(-1);
-
+            TeamMember tm = TeamUtil.setupFiltersForLoggedInUser(request, member);
             // forward to members desktop page
 
             // Users language should be selected for all his pages

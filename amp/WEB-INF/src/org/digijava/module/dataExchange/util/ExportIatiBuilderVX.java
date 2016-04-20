@@ -12,7 +12,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpActivityExpanded;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.dataExchange.Exception.AmpExportException;
 import org.digijava.module.dataExchange.dbentity.IatiCodeItem;
@@ -59,7 +59,7 @@ abstract public class ExportIatiBuilderVX {
 	 * @param act
 	 * @throws AmpExportException 
 	 */
-	public void addActivity(AmpActivityExpanded ampAct) throws AmpExportException{
+	public void addActivity(AmpActivity ampAct) throws AmpExportException{
 		Object iatiAct = getNewIatiActivity();
 		for (AmpColumnEntry elem : tree.getElements()) {
 			if (elem.canExport()){
@@ -72,9 +72,9 @@ abstract public class ExportIatiBuilderVX {
 	abstract public Object getRoot();
 	
 	abstract protected Object getNewIatiActivity();
-	abstract protected void addIatiActivityToRoot(Object iatiAct, AmpActivityExpanded ampAct) throws AmpExportException;
+	abstract protected void addIatiActivityToRoot(Object iatiAct, AmpActivity ampAct) throws AmpExportException;
 	
-	abstract protected void addElement(Object iatiAct, AmpColumnEntry elem, AmpActivityExpanded ampAct) throws AmpExportException;
+	abstract protected void addElement(Object iatiAct, AmpColumnEntry elem, AmpActivity ampAct) throws AmpExportException;
 	
 	protected String getIatiCodeItemCode(IatiCodeTypeEnum iatiCodeType, String iatiCodeName) throws AmpExportException {
 		/* caching type->name->code mapping for the current export request to reduce DB accesses on huge exports
@@ -108,7 +108,7 @@ abstract public class ExportIatiBuilderVX {
 	}
 	
 	//TODO: move to some activity util class
-	protected AmpCategoryValue findCategory(AmpActivityExpanded ampAct, String category) {
+	protected AmpCategoryValue findCategory(AmpActivity ampAct, String category) {
 		if (ampAct.getCategories()!=null && ampAct.getCategories().size()>0) {
 			for (Iterator<AmpCategoryValue> iter = ampAct.getCategories().iterator(); iter.hasNext();) {
 				AmpCategoryValue categVal = iter.next();

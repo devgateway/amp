@@ -19,11 +19,12 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_donor_commitment_date AS 
-			    	SELECT f.amp_activity_id, fd.transaction_date FROM amp_funding f, amp_funding_detail fd 
-			    	WHERE ((f.amp_funding_id = fd.amp_funding_id) AND (fd.transaction_type = 0) AND f.source_role_id = (SELECT amp_role_id FROM amp_role WHERE role_code = 'DN' ))
-			    	ORDER BY f.amp_activity_id, fd.transaction_date;;;
-        		</lang>
+				CREATE OR REPLACE VIEW v_donor_commitment_date AS 
+			   		SELECT f.amp_activity_id, fd.transaction_date, f.amp_donor_org_id 
+			   			FROM amp_funding f
+			   				JOIN amp_funding_detail fd ON fd.amp_funding_id = f.amp_funding_id 
+			   			WHERE ((fd.transaction_type = 0) AND (f.source_role_id = (SELECT amp_role_id FROM amp_role WHERE role_code = 'DN')));
+        	</lang>
 		</script>
 	</apply>
 </tns:patch>

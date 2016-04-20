@@ -40,7 +40,7 @@ public class MondrianMapping {
 		return elem==null ? null : elem.clone();
 	}
 	
-	public static List<MDXAttribute> getDateElements(GroupingCriteria grouping, AmpFiscalCalendar calendar) {
+	public static List<MDXAttribute> getDateElements(GroupingCriteria grouping) {
 		List<MDXAttribute> dateTuple = new ArrayList<MDXAttribute>();
 		
 		String dateDimension = MoConstants.DATES;
@@ -88,7 +88,7 @@ public class MondrianMapping {
 	
 	public static final Set<String> definedColumns = new HashSet<String>();
 	public static final Set<String> definedMeasures = new HashSet<String>();
-	public static final Map<String, List<String>> dependency = new HashMap<String, List<String>>();
+	public static final Map<String, String> dependency = new HashMap<String, String>();
 	
 	final static String[] idSuffixList = new String[] {"", " Id"};
 	
@@ -160,16 +160,16 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.FINANCING_INSTRUMENT, new MDXLevel(MoConstants.FINANCING_INSTRUMENT, MoConstants.H_FINANCING_INSTRUMENT, MoConstants.ATTR_FINANCING_INSTRUMENT));
 			addColumnDefinition(ColumnConstants.TYPE_OF_ASSISTANCE, new MDXLevel(MoConstants.TYPE_OF_ASSISTANCE, MoConstants.H_TYPE_OF_ASSISTANCE, MoConstants.ATTR_TYPE_OF_ASSISTANCE));
 			addColumnDefinition(ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE, new MDXLevel("Pledges " + MoConstants.TYPE_OF_ASSISTANCE, MoConstants.H_TYPE_OF_ASSISTANCE, MoConstants.ATTR_TYPE_OF_ASSISTANCE));
-			addColumnDefinition(ColumnConstants.PROJECT_DESCRIPTION, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_PROJECT_DESCRIPTION, MoConstants.ATTR_PROJECT_DESCRIPTION));
-			addColumnDefinition(ColumnConstants.OBJECTIVE, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_OBJECTIVE, MoConstants.ATTR_OBJECTIVE));
-			addColumnDefinition(ColumnConstants.RESULTS, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_RESULTS, MoConstants.ATTR_RESULTS));
-			addColumnDefinition(ColumnConstants.PURPOSE, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_PURPOSE, MoConstants.ATTR_PURPOSE));
-			addColumnDefinition(ColumnConstants.PROJECT_COMMENTS, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_PROJECT_COMMENTS, MoConstants.ATTR_PROJECT_COMMENTS));
-			addColumnDefinition(ColumnConstants.PROJECT_IMPACT, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_PROJECT_IMPACT, MoConstants.ATTR_PROJECT_IMPACT));
-			addColumnDefinition(ColumnConstants.EQUAL_OPPORTUNITY, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_EQUAL_OPPORTUNITY, MoConstants.ATTR_EQUAL_OPPORTUNITY));
-			addColumnDefinition(ColumnConstants.ENVIRONMENT, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_ENVIRONMENT, MoConstants.ATTR_ENVIRONMENT));
-			addColumnDefinition(ColumnConstants.MINORITIES, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_MINORITIES, MoConstants.ATTR_MINORITIES));
-			addColumnDefinition(ColumnConstants.PROGRAM_DESCRIPTION, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_PROGRAM_DESCRIPTION, MoConstants.ATTR_PROGRAM_DESCRIPTION));
+//			addColumnDefinition(ColumnConstants.PROJECT_DESCRIPTION, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_PROJECT_DESCRIPTION, MoConstants.ATTR_PROJECT_DESCRIPTION));
+//			addColumnDefinition(ColumnConstants.OBJECTIVE, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_OBJECTIVE, MoConstants.ATTR_OBJECTIVE));
+//			addColumnDefinition(ColumnConstants.RESULTS, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_RESULTS, MoConstants.ATTR_RESULTS));
+//			addColumnDefinition(ColumnConstants.PURPOSE, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_PURPOSE, MoConstants.ATTR_PURPOSE));
+//			addColumnDefinition(ColumnConstants.PROJECT_COMMENTS, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_PROJECT_COMMENTS, MoConstants.ATTR_PROJECT_COMMENTS));
+//			addColumnDefinition(ColumnConstants.PROJECT_IMPACT, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_PROJECT_IMPACT, MoConstants.ATTR_PROJECT_IMPACT));
+//			addColumnDefinition(ColumnConstants.EQUAL_OPPORTUNITY, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_EQUAL_OPPORTUNITY, MoConstants.ATTR_EQUAL_OPPORTUNITY));
+//			addColumnDefinition(ColumnConstants.ENVIRONMENT, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_ENVIRONMENT, MoConstants.ATTR_ENVIRONMENT));
+//			addColumnDefinition(ColumnConstants.MINORITIES, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_MINORITIES, MoConstants.ATTR_MINORITIES));
+//			addColumnDefinition(ColumnConstants.PROGRAM_DESCRIPTION, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_PROGRAM_DESCRIPTION, MoConstants.ATTR_PROGRAM_DESCRIPTION));
 			addColumnDefinition(ColumnConstants.ORIGINAL_COMPLETION_DATE, new MDXLevel(MoConstants.ACTIVITY_DATES, MoConstants.H_ORIG_COMPLETION_DATE, MoConstants.ATTR_ORIG_COMPLETION_DATE));
 			addColumnDefinition(ColumnConstants.FINAL_DATE_FOR_CONTRACTING, new MDXLevel(MoConstants.ACTIVITY_DATES, MoConstants.H_FINAL_DATE_FOR_CONTRACTING, MoConstants.ATTR_FINAL_DATE_FOR_CONTRACTING));
 			addColumnDefinition(ColumnConstants.FINAL_DATE_FOR_DISBURSEMENTS, new MDXLevel(MoConstants.ACTIVITY_DATES, MoConstants.H_FINAL_DATE_FOR_DISBURSEMENTS, MoConstants.ATTR_FINAL_DATE_FOR_DISBURSEMENTS));
@@ -293,7 +293,8 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.COMPONENT_TYPE, new MDXLevel(MoConstants.COMPONENT, MoConstants.H_COMPONENT_TYPE, MoConstants.ATTR_COMPONENT_TYPE));
 			addColumnDefinition(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION, new MDXLevel(MoConstants.COMPONENT_FUNDING_ORGANIZATION, MoConstants.H_ORG_NAME, MoConstants.ATTR_ORG_NAME));
 			addColumnDefinition(ColumnConstants.PROPOSED_PROJECT_AMOUNT, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT));
-			addColumnDefinition(ColumnConstants.REVISED_PROJECT_AMOUNT, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_REVISED_PROJECT_AMOUNT, MoConstants.ATTR_REVISED_PROJECT_AMOUNT));
+			addColumnDefinition(ColumnConstants.UNCOMMITTED_BALANCE, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_UNCOMMITTED_BALANCE, MoConstants.ATTR_UNCOMMITTED_BALANCE));
+			addColumnDefinition(ColumnConstants.UNCOMMITTED_CUMULATIVE_BALANCE, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_UNCOMMITTED_CUMULATIVE_BALANCE, MoConstants.ATTR_UNCOMMITTED_CUMULATIVE_BALANCE));
 			addColumnDefinition(ColumnConstants.FORECAST_EXECUTION_RATE, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_FORECAST_EXECUTION_RATE, MoConstants.ATTR_FORECAST_EXECUTION_RATE));
 			addColumnDefinition(ColumnConstants.PLEDGE_STATUS, new MDXLevel("Pledge Status", MoConstants.H_CATEGORY_NAME, MoConstants.ATTR_CATEGORY_NAME));
 			
@@ -310,12 +311,15 @@ public class MondrianMapping {
 				addColumnDefinition(ColumnConstants.PLEDGE_CONTACT_1___ALTERNATE_PHONE.replace("1", idx), new MDXLevel(MoConstants.PLEDGES_CONTACTS, MoConstants.ATTR_CONTACT_ALTERNAME_PHONE + idx, MoConstants.ATTR_CONTACT_ALTERNAME_PHONE + idx));
 			}
 			
+			addColumnDefinition(ColumnConstants.CUMULATIVE_COMMITMENT, new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, MoConstants.ATTR_CUMULATIVE_COMMITMENT, MoConstants.ATTR_CUMULATIVE_COMMITMENT));
+			addColumnDefinition(ColumnConstants.CUMULATIVE_DISBURSEMENT, new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, MoConstants.ATTR_CUMULATIVE_DISBURSEMENT, MoConstants.ATTR_CUMULATIVE_DISBURSEMENT));
+			addColumnDefinition(ColumnConstants.CUMULATIVE_EXECUTION_RATE, new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, MoConstants.ATTR_CUMULATIVE_EXECUTION_RATE, MoConstants.ATTR_CUMULATIVE_EXECUTION_RATE));
+			addColumnDefinition(ColumnConstants.UNDISBURSED_CUMULATIVE_BALANCE, new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, MoConstants.ATTR_UNDISBURSED_CUMULATIVE_BALANCE, MoConstants.ATTR_UNDISBURSED_CUMULATIVE_BALANCE));
+
+			
 			for(String colName: Arrays.asList(ColumnConstants.AGREEMENT_CLOSE_DATE, ColumnConstants.AGREEMENT_CODE, 
 					ColumnConstants.AGREEMENT_EFFECTIVE_DATE, ColumnConstants.AGREEMENT_SIGNATURE_DATE, ColumnConstants.AGREEMENT_TITLE_CODE, ColumnConstants.AGREEMENT_PARLIAMENTARY_APPROVAL_DATE))
 				addColumnDefinition(colName, new MDXLevel(MoConstants.AGREEMENT, colName, colName));
-			
-			
-			addColumnDefinition(ColumnConstants.FUNDING_YEAR, new MDXLevel(MoConstants.DATES, MoConstants.H_YEAR, MoConstants.ATTR_YEAR));
 			
 			addColumnDefinition(ColumnConstants.PLEDGES_DETAIL_START_DATE, new MDXLevel(MoConstants.PLEDGES_DETAIL_DATES, MoConstants.PLEDGES_DETAIL_START_DATE, MoConstants.PLEDGES_DETAIL_START_DATE));
 			addColumnDefinition(ColumnConstants.PLEDGES_DETAIL_END_DATE, new MDXLevel(MoConstants.PLEDGES_DETAIL_DATES, MoConstants.PLEDGES_DETAIL_END_DATE, MoConstants.PLEDGES_DETAIL_END_DATE));
@@ -365,11 +369,9 @@ public class MondrianMapping {
 			addMeasureDefinition(MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT);
 			addMeasureDefinition(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS);
 			addMeasureDefinition(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS);
-			dependency.put(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, Arrays.asList(ColumnConstants.TOTAL_GRAND_ACTUAL_COMMITMENTS));
-			dependency.put(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS, Arrays.asList(ColumnConstants.TOTAL_GRAND_ACTUAL_DISBURSEMENTS));
+			dependency.put(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, ColumnConstants.TOTAL_GRAND_ACTUAL_COMMITMENTS);
+			dependency.put(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS, ColumnConstants.TOTAL_GRAND_ACTUAL_DISBURSEMENTS);
 			addMeasureDefinition(MeasureConstants.UNDISBURSED_BALANCE);
-			addMeasureDefinition(MeasureConstants.UNCOMMITTED_BALANCE);
-			dependency.put(MeasureConstants.UNCOMMITTED_BALANCE, Arrays.asList(ColumnConstants.PROPOSED_PROJECT_AMOUNT, ColumnConstants.INTERNAL_USE_ID));
 			addMeasureDefinition(MeasureConstants.PLEDGES_COMMITMENT_GAP);
 			
 			addMeasureDefinition(MeasureConstants.MTEF_PROJECTIONS);
@@ -383,13 +385,6 @@ public class MondrianMapping {
 			addMeasureDefinition(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS);
 			addMeasureDefinition(MeasureConstants.CUMULATED_DISBURSEMENTS);
 			addMeasureDefinition(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS);
-			
-			addMeasureDefinition(MeasureConstants.CUMULATIVE_COMMITMENT);
-			addMeasureDefinition(MeasureConstants.CUMULATIVE_DISBURSEMENT);
-			addMeasureDefinition(MeasureConstants.CUMULATIVE_EXECUTION_RATE);
-			addMeasureDefinition(MeasureConstants.UNDISBURSED_CUMULATIVE_BALANCE);
-			addMeasureDefinition(MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE);
-			dependency.put(MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE, Arrays.asList(ColumnConstants.PROPOSED_PROJECT_AMOUNT, ColumnConstants.INTERNAL_USE_ID));
 			
 			addMeasureDefinition(MeasureConstants.ALWAYS_PRESENT);
 		}

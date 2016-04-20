@@ -7,17 +7,11 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 
-import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.currencyconvertor.OneCurrencyCalculator;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 
 /**
@@ -30,18 +24,16 @@ import org.digijava.module.aim.util.FeaturesUtil;
  *
  */
 public class CurrencyETL {
-//	public final AmpCurrency currency;	
 	public final Connection conn;
 	public final OneCurrencyCalculator currencyCalculator;
-//	public final AmpCurrency baseCurrency;
 	
 	public final static Double MINIMUM_EXCHANGE_RATE_VALUE = 0.0000000000001;
 	public final static String SQL_FORMATTER = String.format("%%.%df", (int) (Math.log10(1 / MINIMUM_EXCHANGE_RATE_VALUE) + 1));
 	
 	/**
-	 * usual constructor for production usage
 	 * constructs an instance
 	 * @param currency
+	 * @param baseCurrency
 	 * @param conn
 	 */
 	public CurrencyETL(AmpCurrency currency, Connection conn) {
@@ -58,7 +50,7 @@ public class CurrencyETL {
 	public List<List<Object>> work(SortedSet<Long> allDates) throws SQLException {
 		Map<Long, Double> values = new TreeMap<>();
 		
-		for (long date : allDates) {
+		for(long date:allDates) {
 			double value = currencyCalculator.getRate(date);
 			values.put(date, value);
 		}

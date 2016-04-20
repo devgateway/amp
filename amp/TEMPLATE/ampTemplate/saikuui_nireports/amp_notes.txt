@@ -1,0 +1,17 @@
+Purpose of this document
+========================
+Keep list of changes from Saiku. Original branched version "2.6-SNAPSHOT", only project saiku-ui, rest is managed through Maven Dependencies
+
+
+===================
+Feature: Executing MDX queries coming from AMP
+Modified files:
+saiku/routers/QueryRouter.js
+saiku/Settings.js
+saiku/Repository.js
+
+
+Feature: Deactivated Global Toolbar
+Modified files:
+saiku/Toolbar.js
+

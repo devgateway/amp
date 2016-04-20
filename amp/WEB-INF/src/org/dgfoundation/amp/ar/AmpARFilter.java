@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -583,7 +584,7 @@ public class AmpARFilter extends PropertyListable {
 	
 	private String sortBy;
 	private Boolean sortByAsc;
-	private Collection<String> hierarchySorters;
+	private List<String> hierarchySorters;
 	
 	private Set<AmpCategoryValue> projectImplementingUnits; 
 	
@@ -665,6 +666,30 @@ public class AmpARFilter extends PropertyListable {
 			this.setCurrency(settings.getCurrency());
 		initRenderStartEndYears(settings);
 	}
+	
+	/**
+	 * computes the set of all the selected ACVL ids, including children and ascendants
+	 * @return
+	 */
+	public Set<Long> buildAllRelatedLocationsIds() {
+		if (locationSelected == null)
+			return null;
+		
+		Set<Long> allDescendantsIds = DynLocationManagerUtil.populateWithDescendantsIds(locationSelected);
+		List<AmpCategoryValueLocations> allAscendingLocations	= new ArrayList<AmpCategoryValueLocations>();
+		DynLocationManagerUtil.populateWithAscendants(allAscendingLocations, locationSelected);
+		Set<Long> allSelectedLocations = new HashSet<Long>(allDescendantsIds);
+		
+		for(AmpCategoryValueLocations ascendant:allAscendingLocations)
+			allSelectedLocations.add(ascendant.getId());
+		
+		return allSelectedLocations;
+	}
+	
+	public List<AmpCategoryValueLocations> buildAllRelatedLocations() {
+		return DynLocationManagerUtil.loadLocations(buildAllRelatedLocationsIds());
+	}
+	
 	/**
 	 * computes the current user's effective AmpApplicationSettings, searching through the hierarchy
 	 * returns null if there is no current user
@@ -1187,13 +1212,13 @@ public class AmpARFilter extends PropertyListable {
 		String DONOR_TYPE_FILTER	= "SELECT v.id FROM v_pledges_donor_type v WHERE org_type_id IN ("
 			+ Util.toCSString(donorTypes) + ")";
 
-		String DONOR_GROUP_FILTER = "SELECT v.pledge_id FROM v_pledges_donor_group v WHERE amp_org_grp_id IN ("
+		String DONOR_GROUP_FILTER = "SELECT v.pledge_id FROM v_pledges_donor_group v WHERE org_grp_id IN ("
 				+ Util.toCSString(donorGroups) + ")";
 
 		String AID_MODALITIES_FILTER = "SELECT v.pledge_id FROM v_pledges_aid_modality v WHERE amp_modality_id IN ("
 			+ Util.toCSString(aidModalities) + ")";
 		
-		String TYPE_OF_ASSISTANCE_FILTER = "SELECT v.pledge_id FROM v_pledges_type_of_assistance v WHERE terms_assist_code IN ("
+		String TYPE_OF_ASSISTANCE_FILTER = "SELECT v.pledge_id FROM v_pledges_type_of_assistance v WHERE id IN ("
 			+ Util.toCSString(typeOfAssistance) + ")";
 		
 		String REGION_SELECTED_FILTER = "";
@@ -1254,7 +1279,6 @@ public class AmpARFilter extends PropertyListable {
 		AmpARFilterParams params =  org.dgfoundation.amp.ar.AmpARFilterParams.getParamsFromRequest(request, workspaceFilter, skipPledgeCheck);
 		generateFilterQuery(params);
 	}
-	
 	
 	public void generateFilterQuery(AmpARFilterParams params) {
 		initFilterQuery(); //reinit filters or else they will grow indefinitely
@@ -1319,7 +1343,7 @@ public class AmpARFilter extends PropertyListable {
 
 		String REGION_FILTER = "SELECT amp_activity_id FROM v_regions WHERE name IN ("
 				+ Util.toCSStringForIN(regions) + ")";
-		String FINANCING_INSTR_FILTER = "SELECT amp_activity_id FROM v_financing_instrument WHERE amp_modality_id IN ("
+		String FINANCING_INSTR_FILTER = "SELECT amp_activity_id FROM v_financing_instrument WHERE id IN ("
 				+ Util.toCSStringForIN(financingInstruments) + ")";
 		String AID_MODALITIES_FILTER = "SELECT amp_activity_id FROM v_modalities WHERE level_code IN (" + Util.toCSStringForIN(aidModalities) + ")";
 		String LINE_MIN_RANK_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE line_min_rank IN ("
@@ -1344,7 +1368,7 @@ public class AmpARFilter extends PropertyListable {
 			ACTUAL_APPROVAL_YEAR_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE EXTRACT (YEAR FROM actual_approval_date) = " + actualAppYear + " ";
 		}
 		
-		if (locationSelected!=null) {
+		if (locationSelected != null) {
 			long a = System.currentTimeMillis();
 			Set<Long> allDescendantsIds = DynLocationManagerUtil.populateWithDescendantsIds(locationSelected);
 			long b = System.currentTimeMillis();
@@ -1403,30 +1427,30 @@ public class AmpARFilter extends PropertyListable {
 		String DONOR_TYPE_FILTER	= "SELECT amp_activity_id FROM v_donor_type WHERE org_type_id IN ("
 			+ Util.toCSStringForIN(donorTypes) + ")";
 
-		String DONOR_GROUP_FILTER = "SELECT amp_activity_id FROM v_donor_groups WHERE amp_org_grp_id IN ("
+		String DONOR_GROUP_FILTER = "SELECT amp_activity_id FROM v_donor_groups WHERE org_grp_id IN ("
 				+ Util.toCSStringForIN(donorGroups) + ")";
 
-		String CONTRACTING_AGENCY_GROUP_FILTER = "SELECT amp_activity_id FROM v_contracting_agency_groups WHERE amp_org_grp_id IN ("
+		String CONTRACTING_AGENCY_GROUP_FILTER = "SELECT amp_activity_id FROM v_contracting_agency_groups WHERE org_grp_id IN ("
 				+ Util.toCSStringForIN(contractingAgencyGroups) + ")";
 				
 		String EXECUTING_AGENCY_FILTER = "SELECT v.amp_activity_id FROM v_executing_agency v  "
-				+ "WHERE v.amp_org_id IN ("
+				+ "WHERE v.org_id IN ("
 				+ Util.toCSStringForIN(executingAgency) + ")";
 		
 		String CONTRACTING_AGENCY_FILTER = "SELECT v.amp_activity_id FROM v_contracting_agency v  "
-				+ "WHERE v.amp_org_id IN ("
+				+ "WHERE v.org_id IN ("
 				+ Util.toCSStringForIN(contractingAgency) + ")";
 
 		
 		String BENEFICIARY_AGENCY_FILTER = "SELECT v.amp_activity_id FROM v_beneficiary_agency v  "
-				+ "WHERE v.amp_org_id IN ("
+				+ "WHERE v.org_id IN ("
 				+ Util.toCSStringForIN(beneficiaryAgency) + ")";
 		
 		String IMPLEMENTING_AGENCY_FILTER = "SELECT v.amp_activity_id FROM v_implementing_agency v  "
-				+ "WHERE v.amp_org_id IN ("
+				+ "WHERE v.org_id IN ("
 				+ Util.toCSStringForIN(implementingAgency) + ")";
 		
-		String RESPONSIBLE_ORGANIZATION_FILTER = " SELECT v.amp_activity_id FROM v_responsible_organisation v  WHERE v.amp_org_id IN ("
+		String RESPONSIBLE_ORGANIZATION_FILTER = " SELECT v.amp_activity_id FROM v_responsible_organisation v  WHERE v.org_id IN ("
 			+ Util.toCSStringForIN(responsibleorg) + ")";
 
 		String DONNOR_AGENCY_FILTER = " SELECT v.amp_activity_id FROM v_donors v  WHERE v.amp_donor_org_id IN ("
@@ -3079,12 +3103,27 @@ public class AmpARFilter extends PropertyListable {
 		this.sortByAsc = sortByAsc;
 	}
 
-	public Collection<String> getHierarchySorters() {
-		return hierarchySorters;
+	public List<String> getHierarchySorters() {
+		return cleanupHierarchySorters(hierarchySorters);
 	}
 
-	public void setHierarchySorters(Collection<String> hierarchySorters) {
-		this.hierarchySorters = hierarchySorters;
+	public void setHierarchySorters(List<String> hierarchySorters) {
+		this.hierarchySorters = cleanupHierarchySorters(hierarchySorters);
+	}
+	
+	/** for each given sorting key only keeps the last entry */
+	protected List<String> cleanupHierarchySorters(List<String> in) {
+		if (in == null || in.isEmpty())
+			return in;
+		LinkedHashMap<String, String> entriesByHier = new LinkedHashMap<>();
+		
+		for(String entry:in) {
+			String key = entry.substring(0, entry.lastIndexOf('_'));
+			entriesByHier.put(key, entry);
+		}
+		in.clear();
+		in.addAll(entriesByHier.values());
+		return in;
 	}
 
 	public String getCRISNumber() {

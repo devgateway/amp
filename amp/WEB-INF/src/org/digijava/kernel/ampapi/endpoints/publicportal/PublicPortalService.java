@@ -111,7 +111,7 @@ public class PublicPortalService {
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
 		
-		spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS), false, true));
+		spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS), false));
 	}
 	
 	/**
@@ -135,7 +135,7 @@ public class PublicPortalService {
 		// using Cumulated SSC Commitments for sorting order 
 		spec.addMeasure(new ReportMeasure(MeasureConstants.CUMULATED_SSC_COMMITMENTS));
 		
-		spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.CUMULATED_SSC_COMMITMENTS), false, true));
+		spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.CUMULATED_SSC_COMMITMENTS), false));
 	}
 	
 	
@@ -162,14 +162,13 @@ public class PublicPortalService {
 			spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
 			measureName=MeasureConstants.ACTUAL_COMMITMENTS;
 			spec.addSorter(new SortingInfo(new ReportMeasure(
-					MeasureConstants.ACTUAL_COMMITMENTS), false, true));
+					MeasureConstants.ACTUAL_COMMITMENTS), false));
 
 		}else{
 			if(fundingType==2){
 				measureName=MeasureConstants.ACTUAL_DISBURSEMENTS;
 				spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
-				spec.addSorter(new SortingInfo(new ReportMeasure(
-						MeasureConstants.ACTUAL_DISBURSEMENTS), false, true));
+				spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS), false));
 			}
 		}
 
@@ -257,8 +256,7 @@ public class PublicPortalService {
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
 
 		FilterUtils.applyFilterRules(config, spec, null);
-		spec.setCalculateColumnTotals(true);
-		spec.setCalculateRowTotals(true);
+
 		spec.setDisplayEmptyFundingRows(true);
 
 		GeneratedReport report = EndpointUtils.runReport(spec);

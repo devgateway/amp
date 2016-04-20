@@ -229,7 +229,7 @@ public class ContentTrnImportExport extends DispatchAction {
 
         Set <AmpContentTranslation> objectsForDb = new HashSet<AmpContentTranslation>();
         List<AmpContentTranslation> allTrns = ContentTranslationUtil.getContentTranslationsByTypes();
-        Set<String> allowedLocales = new HashSet<String>(TranslatorUtil.getLocaleCache(RequestUtils.getSite(TLSUtils.getRequest())));
+        Set<String> allowedLocales = new HashSet<String>(TranslatorUtil.getLanguages());
         for (int rowIdx = 1; rowIdx < RowCount; rowIdx ++) {
             HSSFRow contentRow = sheet.getRow(rowIdx);
             for (int trnColumnIdx = PERMAMENT_HEADER_ITEMS.length; trnColumnIdx < contentRow.getLastCellNum(); trnColumnIdx ++) {

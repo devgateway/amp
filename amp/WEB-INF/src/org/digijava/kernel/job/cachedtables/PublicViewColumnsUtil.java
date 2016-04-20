@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.job.CachedTableState;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.Session;
 
 /**
@@ -22,7 +23,7 @@ public class PublicViewColumnsUtil
 	 * the views/tables which should be cached for the public view even though they are not extractor columns
 	 */
 	protected static List<String> supplementalCachedViews = Arrays.<String>asList("amp_activity_group", "amp_activity", "amp_activity_version",
-				"v_donor_funding", "v_component_funding", "v_contribution_funding", "v_pledges_funding", "v_regional_funding",
+				"v_donor_funding", "v_component_funding", "v_contribution_funding", "v_regional_funding",
 				"v_pledges_funding_st");
 	
 	/**
@@ -85,6 +86,34 @@ public class PublicViewColumnsUtil
 				return CachedTableState.CACHED_TABLE_DIFFERENT_STRUCTURE;
 		}
 		return CachedTableState.CACHED_TABLE_OK;
+	}
+	
+//	/**
+//	 * checks whether cached_amp_activity_group has bazillion indices (a bug in AMP 2.6-AMP 2.11) and forces PublicViewCaches cleanup if so
+//	 * @param conn
+//	 */
+//	public static void checkPublicCaches() {
+//		try(java.sql.Connection conn = PersistenceManager.getJdbcConnection()) {
+//			long nrIndices = SQLUtils.getLong(conn, "select count(*) from pg_indexes where tablename='cached_amp_activity_group'");
+//			if (nrIndices > 4) { // normally 2, but let's leave some slack - will be cleaned up at next full run anyway
+//				PublicViewColumnsUtil.maintainPublicViewCaches(conn, true);
+//			}
+//		}
+//		catch(SQLException e) {
+//			throw new RuntimeException(e);
+//		}
+//	}
+
+	/**
+	 * unconditionally redoes all the public view caches
+	 */
+	public static void redoCaches() {
+		try(java.sql.Connection conn = PersistenceManager.getJdbcConnection()) {
+			maintainPublicViewCaches(conn, true);
+		}
+		catch(SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	/**
@@ -186,13 +215,25 @@ public class PublicViewColumnsUtil
 		logger.info(String.format("\t->creating a cache named %s for view %s...", cacheName, viewName));
 		cacheName = cacheName.toLowerCase();
 		boolean createIndices = false;
-		if (cacheName.equals("cached_amp_activity_group") && SQLUtils.tableExists(cacheName)) {
+/*		if (cacheName.equals("cached_amp_activity_group") && SQLUtils.tableExists(cacheName)) {
 			SQLUtils.executeQuery(conn, String.format("DELETE FROM %s", cacheName));
 			SQLUtils.executeQuery(conn, String.format("INSERT INTO %s SELECT * FROM %s WHERE amp_activity_last_version_id IS NOT NULL", cacheName, viewName));
 		}
-		else {
+		else */
+		{
 			SQLUtils.executeQuery(conn, String.format("DROP TABLE IF EXISTS %s", cacheName));
-			SQLUtils.executeQuery(conn, String.format("CREATE TABLE %s AS SELECT * FROM %s;", cacheName, viewName));
+			LinkedHashSet<String> cols = SQLUtils.getTableColumns(viewName);
+			
+			String condition;
+			if ((cols.size() > 0) && cols.iterator().next().toLowerCase().equals("amp_activity_id"))
+				condition = "WHERE amp_activity_id IN (SELECT amp_activity_id FROM v_activity_latest_and_validated)";
+			else {
+				if (viewName.equals("v_pledges_funding_st"))
+					condition = "WHERE (related_project_id IN (SELECT amp_activity_id FROM v_activity_latest_and_validated)) OR (pledge_id > 0)";
+				else 
+					condition = "";
+			}
+			SQLUtils.executeQuery(conn, String.format("CREATE TABLE %s AS SELECT * FROM %s %s;", cacheName, viewName, condition));
 			SQLUtils.executeQuery(conn, String.format("GRANT SELECT ON " + cacheName + " TO public")); // AMP-17052: cache tables should be world-visible
 			createIndices = true;
 		}
@@ -205,6 +246,7 @@ public class PublicViewColumnsUtil
 					SQLUtils.executeQuery(conn, String.format("CREATE INDEX ON %s(%s)", cacheName, columnName));
 				}
 		}
+		SQLUtils.flush(conn);
 	}
 	
 	/**
@@ -217,7 +259,7 @@ public class PublicViewColumnsUtil
 	protected static boolean looksLikeIndexableColumn(String viewName, String columnName)
 	{
 		columnName = columnName.toLowerCase();
-		return columnName.endsWith("id") || columnName.startsWith("id") || columnName.endsWith("_type") || columnName.endsWith("_code") || columnName.endsWith("_name");
+		return columnName.endsWith("id") || columnName.startsWith("id") || columnName.endsWith("_type") || columnName.endsWith("_code");
 	}
 	
 }

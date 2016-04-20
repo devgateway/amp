@@ -103,6 +103,7 @@ public class EthiopianBasedWorker implements ICalendarWorker {
 		return this.getYear().toString();
 	}
 
+	@Override
 	public ComparableMonth getFiscalMonth() throws Exception {
 		checkSetTimeCalled();
 		if (!this.fiscalCalendar.getIsFiscal()) {
@@ -121,9 +122,10 @@ public class EthiopianBasedWorker implements ICalendarWorker {
 		}
 	}
 
-	public String getFiscalYear() throws Exception {
+	@Override
+	public String getFiscalYear(String prefix) throws Exception {
 		if (this.fiscalCalendar.getIsFiscal()) {
-			return "Fiscal Year," + this.getYear() + " - " + (this.getYear() + 1);
+			return getFiscalPrefix(prefix) + "," + this.getYear() + " - " + (this.getYear() + 1);
 		}
 		return this.getYear().toString();
 	}

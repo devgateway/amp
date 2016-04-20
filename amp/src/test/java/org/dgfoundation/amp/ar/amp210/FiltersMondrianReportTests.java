@@ -10,7 +10,7 @@ import java.util.List;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
+import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
@@ -28,7 +28,7 @@ import org.junit.Test;
  * 
  * @author Nadejda Mandrescu
  */
-public class FiltersMondrianReportTests extends MondrianReportsTestCase {
+public class FiltersMondrianReportTests extends ReportingTestCase {
 	
 	public FiltersMondrianReportTests() {
 		super("filters mondrian tests");

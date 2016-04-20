@@ -23,13 +23,12 @@
 package org.digijava.kernel.dbentity;
 
 import java.io.Serializable;
+import java.util.function.Function;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
-
-import com.google.common.base.Function;
 
 /**
  * The value object class for the Countries. Maps to the table PL_COUNTRIES
@@ -174,11 +173,5 @@ public class Country
         this.available = available;
     }
     
-    public final static Function<Country, String> DISTRIBUTE_BY_MSGKEY = new Function<Country, String>() {
-
-		@Override public String apply(Country c) {
-			return c.messageLangKey == null ? "" : c.messageLangKey;
-		}
-    	
-    };
+    public final static Function<Country, String> DISTRIBUTE_BY_MSGKEY = c -> c.messageLangKey == null ? "" : c.messageLangKey;
 }

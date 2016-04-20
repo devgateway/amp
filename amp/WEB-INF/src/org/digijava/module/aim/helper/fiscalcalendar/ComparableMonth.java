@@ -57,7 +57,9 @@ public class ComparableMonth implements Comparable<ComparableMonth> {
 		this.monthId = monthId;
 	}
 	
-	
+	public String getMonthStr() {
+		return this.monthStr;
+	}
 	
 	
 }

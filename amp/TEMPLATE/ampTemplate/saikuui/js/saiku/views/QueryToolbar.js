@@ -70,12 +70,9 @@ var QueryToolbar = Backbone.View.extend({
     render: function() {
         $(this.el).html(this.template());
 
-        if(Settings.AMP_REPORT_API_BRIDGE){
-        	$(this.el).hide();
-        } else {
-	        $(this.el).find('render_table').addClass('on');
-	        $(this.el).find('ul.table').show();
-        }
+        $(this.el).find('render_table').addClass('on');
+        $(this.el).find('ul.table').show();
+
         return this; 
     },
     

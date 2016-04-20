@@ -96,8 +96,9 @@ public class DynLocationManagerUtil {
 	}
 
 	
-	public static List<AmpCategoryValueLocations> loadLocations(Set<Long> allSelectedLocations)
-	{
+	public static List<AmpCategoryValueLocations> loadLocations(Set<Long> allSelectedLocations) {
+		if (allSelectedLocations == null)
+			return null;
 		Session dbSession = PersistenceManager.getSession();
 		
 		String queryString = "select loc from "

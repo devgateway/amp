@@ -18,20 +18,22 @@ public class CustomAmounts {
 	public final static Set<String> ACTIVITY_SUM_AMOUNTS = new HashSet<String>() {{
 		add(MeasureConstants.TOTAL_COMMITMENTS);
 		add(MeasureConstants.TOTAL_DISBURSEMENTS);
-		add(ColumnConstants.PROPOSED_PROJECT_AMOUNT);
-		add(ColumnConstants.REVISED_PROJECT_AMOUNT);
-		add(MeasureConstants.UNCOMMITTED_BALANCE);
-		add(MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE);
 	}};
 	
 	/** columns that provide amounts and not text data */
 	public final static Set<String> ACTIVITY_AMOUNTS = new HashSet<String>() {{
 		addAll(ACTIVITY_SUM_AMOUNTS);
+		add(ColumnConstants.CUMULATIVE_COMMITMENT);
+		add(ColumnConstants.CUMULATIVE_DISBURSEMENT);
+		add(ColumnConstants.CUMULATIVE_EXECUTION_RATE);
 		// note: some measures from legacy reports are processed as columns in Mondrian 
 		add(MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS);
 		add(ColumnConstants.TOTAL_GRAND_ACTUAL_COMMITMENTS);
 		add(ColumnConstants.TOTAL_GRAND_ACTUAL_DISBURSEMENTS);
+		add(ColumnConstants.UNCOMMITTED_BALANCE);
+		add(ColumnConstants.UNCOMMITTED_CUMULATIVE_BALANCE);
 		add(ColumnConstants.FORECAST_EXECUTION_RATE);
+		add(ColumnConstants.UNDISBURSED_CUMULATIVE_BALANCE);
 		add(MeasureConstants.UNDISBURSED_BALANCE);
 	}};
 	
@@ -43,7 +45,7 @@ public class CustomAmounts {
 		add(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS);
 		add(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS);
 		add(MeasureConstants.PLEDGES_PERCENTAGE_OF_DISBURSEMENT);
-		add(MeasureConstants.CUMULATIVE_EXECUTION_RATE);
+		add(ColumnConstants.CUMULATIVE_EXECUTION_RATE);
 		add(ColumnConstants.PROJECT_AGE_RATIO);
 		add(ColumnConstants.AVERAGE_DISBURSEMENT_RATE);
 		add(ColumnConstants.FORECAST_EXECUTION_RATE);

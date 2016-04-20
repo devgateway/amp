@@ -6,6 +6,7 @@ package org.digijava.kernel.ampapi.saiku.util;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -15,37 +16,33 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.AmountsUnits;
-import org.dgfoundation.amp.newreports.DateCell;
+import org.dgfoundation.amp.newreports.MondrianDateCell;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
-import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.TextCell;
+import org.dgfoundation.amp.newreports.pagination.PartialReportArea;
 import org.dgfoundation.amp.reports.CustomAmounts;
 import org.dgfoundation.amp.reports.DateColumns;
-import org.dgfoundation.amp.reports.PartialReportArea;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportSpec;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.service.olap.totals.TotalNode;
-import org.saiku.service.olap.totals.aggregators.SumAggregator;
 import org.saiku.service.olap.totals.aggregators.TotalAggregator;
 
 /**
@@ -56,10 +53,10 @@ import org.saiku.service.olap.totals.aggregators.TotalAggregator;
 public class CellDataSetToGeneratedReport {
 	protected static final Logger logger = Logger.getLogger(CellDataSetToGeneratedReport.class);
 	
-	private ReportSpecification spec;
+	private MondrianReportSpec spec;
 	private final CellDataSet cellDataSet;
 	private final List<ReportOutputColumn> leafHeaders;
-	private final List<Integer> cellDataSetActivities;
+	private final List<Long> cellDataSetActivities;
 	private DecimalFormat numberFormat;
 	private NumberFormat readingNumberFormat;
 	
@@ -84,8 +81,8 @@ public class CellDataSetToGeneratedReport {
 	private Set<Integer> amountMultiplierColumns = new TreeSet<Integer>();
 	private final AmountsUnits unitsOption;
 	
-	public CellDataSetToGeneratedReport(ReportSpecification spec, CellDataSet cellDataSet, 
-			List<ReportOutputColumn> leafHeaders, List<Integer> cellDataSetActivities) {
+	public CellDataSetToGeneratedReport(MondrianReportSpec spec, CellDataSet cellDataSet, 
+			List<ReportOutputColumn> leafHeaders, List<Long> cellDataSetActivities) {
 		this.spec = spec;
 		this.cellDataSet = cellDataSet;
 		this.leafHeaders = leafHeaders;
@@ -111,8 +108,7 @@ public class CellDataSetToGeneratedReport {
 		Locale locale  = new Locale("en", "US");
 		readingNumberFormat = NumberFormat.getInstance(locale);
 		//init measure totals if they are available
-		if (spec.isCalculateColumnTotals() && 
-				cellDataSet.getColTotalsLists() != null && cellDataSet.getColTotalsLists().length > 0 
+		if (cellDataSet.getColTotalsLists() != null && cellDataSet.getColTotalsLists().length > 0 
 				&& cellDataSet.getColTotalsLists()[0] != null && cellDataSet.getColTotalsLists()[0].size() > 0) {
 			this.measureTotals = cellDataSet.getColTotalsLists()[0].get(0).getTotalGroups();
 			emptyColTotalsMeasuresIndexes = MondrianReportUtils.getEmptyColTotalsMeasuresIndexes(spec);
@@ -126,7 +122,8 @@ public class CellDataSetToGeneratedReport {
 		ReportAreaImpl root = MondrianReportUtils.getNewReportArea(reportAreaType);
 		boolean isSaikuReport = root instanceof SaikuReportArea;
 		boolean isPartialArea = root instanceof PartialReportArea;
-		Iterator<Integer> idIter =  cellDataSetActivities != null ? cellDataSetActivities.iterator() : null;
+		Iterator<Long> idIter =  isPartialArea && cellDataSetActivities != null 
+				? cellDataSetActivities.iterator() : null;
 		
 		Deque<List<ReportArea>> stack = new ArrayDeque<List<ReportArea>>();
 		//assumption that concatenation was done and totals are required starting for the 1st non-hierarchical column backwards
@@ -135,7 +132,7 @@ public class CellDataSetToGeneratedReport {
 			hSize--;
 		
 		int maxDepth = spec.getColumns().isEmpty() ? 1 :  
-				(spec.isCalculateRowTotals() ? Math.max(1, hSize) - (hSize / spec.getColumns().size()) : 1);
+				(spec.getCalculateRowTotals() ? Math.max(1, hSize) - (hSize / spec.getColumns().size()) : 1);
 
 		int maxStackSize = 1 + maxDepth * 2; //* 2 for totals, where maxDepth != 0 
 		
@@ -157,18 +154,11 @@ public class CellDataSetToGeneratedReport {
 			}
 			if (idIter != null) {
 				if (idIter.hasNext()) {
-					Integer internalId = idIter.next();
-					if (hasActivitySumAmounts) {
-						this.activityLeafs.put(internalId, reportArea);
-						this.reportAreaInternalId.put(reportArea, internalId);
-					}
-					if (isPartialArea)
-						((PartialReportArea) reportArea).addInternalUseId(internalId);
+					((PartialReportArea) reportArea).addInternalUseId(idIter.next());
 				} else {
 					logger.error("Abnormal case: each CellDataSet row must have an associated ID");
 				}
 			}
-			
 			boolean areaEnd = isEndOfArea(rowId, notNullColId, nextNotNullColId);
 			
 			if (areaEnd) {
@@ -197,8 +187,6 @@ public class CellDataSetToGeneratedReport {
 			((PartialReportArea) root).setTotalLeafActivitiesCount(root.getChildren().size());
 		}
 		
-		updateCustomMeasureTotals(root);
-		
 		return root;
 		//return (ReportAreaImpl) root.getChildren().get(1);
 	}
@@ -217,7 +205,7 @@ public class CellDataSetToGeneratedReport {
 			//textual columns
 			if (colId < spec.getColumns().size() && !CustomAmounts.ACTIVITY_AMOUNTS.contains(roc.originalColumnName)) { 
 				if (DateColumns.ACTIVITY_DATES.contains(roc.originalColumnName)) {
-					cellData = DateCell.buildDateFromRepOut(value);
+					cellData = MondrianDateCell.buildDateFromRepOut(value);
 				} else { 
 					// do not reformat only text cells (we rely upon formatted value == null) 
 					reformat = false;
@@ -240,19 +228,13 @@ public class CellDataSetToGeneratedReport {
 		if (measureTotals != null) {
 			int headerColId = rowLength;
 			for (int colId = 0; colId < measureTotals.length; colId ++) {
-				if (headerColId >= leafHeaders.size()) {
-					logger.error("Invalid headerColId >= leafHeaders.size()");
-					break;
-				}	
-				SumAggregator sa = (SumAggregator) measureTotals[colId][rowId];
-				double value = measureTotals[colId][rowId].getValue();
-				if (amountMultiplierColumns.contains(headerColId)) {
-					// clear & remember the new one
-					sa.addData(-value);
-					value *= unitsOption.multiplier;
-					sa.addData(value);
-				}
+				if (headerColId >= leafHeaders.size())
+					break; // AMP-20702: ugly workaround for a Saiku bug which has been previously workarounded "too toughly" via AMP-18748
+				//Unfortunately cannot use getValue() because during concatenation we override the value, but the only way to override is via formatted value
+				double value = parseValue(measureTotals[colId][rowId].getFormattedValue(), false, headerColId); 
 				contents.put(leafHeaders.get(headerColId++), new AmountCell(value, this.numberFormat));
+				//also re-format, via MDX formatting works a bit differently
+				measureTotals[colId][rowId].setFormattedValue(this.numberFormat.format(value));
 			}
 		}
 		
@@ -293,95 +275,6 @@ public class CellDataSetToGeneratedReport {
 				if (internalId != null)
 					uniqueActivities.add(internalId);
 			}
-		}
-	}
-	
-	private void updateCustomMeasureTotals(ReportArea root) {
-		Map<ReportOutputColumn, Integer> measureColToMeasurePos = new HashMap<ReportOutputColumn, Integer>();
-		int measurePos = 0;
-		for (ReportMeasure m : spec.getMeasures()) {
-			if (CustomAmounts.ACTIVITY_SUM_AMOUNTS.contains(m.getMeasureName())) {
-				for (ReportOutputColumn roc : leafHeaders) {
-					String fullOrigName = roc.toString();
-					if (fullOrigName.contains(MoConstants.TOTAL_MEASURES) && roc.originalColumnName.equals(m.getMeasureName())) {
-						measureColToMeasurePos.put(roc, measurePos);
-						break;
-					}
-				}
-			}
-			measurePos ++;
-		}
-		if (!measureColToMeasurePos.isEmpty()) {
-			updateMeasureTotals(root, measureColToMeasurePos, new TreeMap<Integer, Integer>(), 0);
-			/*
-			 * This attempt to workaround removes undesired children, but doesn't solve the totals problem
-			if ( ((ReportSpecificationImpl) spec).isSummary()) {
-				// workaround for such measures like Uncommitted Balance where we need to temporarily use dummy internal_id in summary reports
-				// remove sub-areas lower than given list of hierarchies
-				removeChildren(root, 0, Math.max(spec.getHierarchies().size() * 2 - 1, 1));
-			}
-			*/
-		}
-	}
-	
-	private int updateMeasureTotals(ReportArea current, Map<ReportOutputColumn, Integer> measureColToMeasurePos, 
-			Map<Integer, Integer> internalIdCount, int rowId) {
-		if (current.getChildren() != null && current.getChildren().size() > 0) {
-			Map<Integer, Integer> currentInternalIdCount = new TreeMap <Integer, Integer>();
-			for (ReportArea child: current.getChildren()) {
-				rowId = updateMeasureTotals(child, measureColToMeasurePos, currentInternalIdCount, rowId);
-			}
-			for (Entry<ReportOutputColumn, Integer> rocToPos: measureColToMeasurePos.entrySet()) {
-				ReportOutputColumn roc = rocToPos.getKey();
-				Integer measurePos = rocToPos.getValue();
-				// update current totals
-				AmountCell data = (AmountCell) current.getContents().get(roc);
-				Double value = (Double) data.value; 
-				
-				TotalAggregator[] cdsTotals = cellDataSet.getColTotalsLists()[0].get(0).getTotalGroups()[measurePos];
-				for (Entry<Integer, Integer> entry : currentInternalIdCount.entrySet()) {
-					if (entry.getValue() > 1) {
-						int firstRowId = cellDataSetActivities.indexOf(entry.getKey());
-						Double repeatingAmount = Double.valueOf(cdsTotals[firstRowId].getFormattedValue());
-						repeatingAmount = repeatingAmount * unitsOption.multiplier * (entry.getValue() - 1);
-						value -= repeatingAmount;
-					}
-					// merge into global
-					update(internalIdCount, entry.getKey(), entry.getValue());
-				}
-				// update total amount
-				current.getContents().put(roc, new AmountCell(value, this.numberFormat));
-			}
-		} else {
-			update(internalIdCount, cellDataSetActivities.get(rowId), 1);
-			rowId++;
-		}
-		return rowId;
-	}
-	
-	protected void update(Map<Integer, Integer> internalIdCount, Integer internalId, Integer count) {
-		Integer oldCount = internalIdCount.get(internalId);
-		internalIdCount.put(internalId, oldCount == null ? count : oldCount + count);
-	}
-	
-	protected void removeChildren(ReportArea current, int currentDepth, int maxDepth) {
-		if (current.getChildren() == null)
-			return;
-		if (currentDepth < maxDepth) {
-			for (Iterator<ReportArea> iter = current.getChildren().iterator(); iter.hasNext(); ) {
-				ReportArea child = iter.next();
-				Iterator<Entry<ReportOutputColumn, ReportCell>> cellIter = child.getContents().entrySet().iterator();
-				for(int colNo = 0; colNo < currentDepth && cellIter.hasNext(); colNo++) {
-					cellIter.next();
-				}
-				if (cellIter.hasNext() && StringUtils.isBlank((String)cellIter.next().getValue().value)) {
-					iter.remove();
-				} else {
-					removeChildren(child, currentDepth + 1, maxDepth);
-				}
-			}
-		} else {
-			current.getChildren().clear();
 		}
 	}
 
@@ -466,7 +359,7 @@ public class CellDataSetToGeneratedReport {
 		while(depth > 0) {
 			stack.peek().add(current);
 			depth --;
-			if (spec.isCalculateRowTotals() && totColId >=0) {
+			if (totColId >=0) {
 				current = MondrianReportUtils.getNewReportArea(current.getClass());
 				current.setChildren(stack.pop());
 				if(current instanceof SaikuReportArea)

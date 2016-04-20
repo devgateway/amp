@@ -80,7 +80,7 @@ define([ 'util/tabUtils' ], function(TabUtils) {
 			}
 		});
 		ret.push({
-			name : 'Activity Id',
+			name : app.TabsApp.COLUMN_ACTIVITY_ID,
 			width : 0,
 			hidden : true
 		});
@@ -150,7 +150,7 @@ define([ 'util/tabUtils' ], function(TabUtils) {
 					// get the raw value formatted from the backend.
 					return TabUtils.stringToNumber(data, app.TabsApp.numericFormatOptions);
 				},
-				reportColumnType : 'MEASURE'
+				reportColumnType : app.TabsApp.COLUMN_TYPE_MEASURE
 			});
 		});
 		console.log(ret);

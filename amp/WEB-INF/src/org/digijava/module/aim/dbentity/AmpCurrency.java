@@ -2,6 +2,7 @@ package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
 
+import org.dgfoundation.amp.nireports.NiCurrency;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
@@ -12,7 +13,7 @@ import org.digijava.module.aim.util.Identifiable;
 import org.hibernate.Query;
 
 @TranslatableClass (displayName = "Currency")
-public class AmpCurrency implements Serializable, Comparable<AmpCurrency>, Identifiable
+public class AmpCurrency implements Serializable, Comparable<AmpCurrency>, Identifiable, NiCurrency
 {
 	//IATI-check: to not be ignored. obtained from possible values 
 	@Interchangeable(fieldTitle="ID", id = true)
@@ -181,5 +182,9 @@ public class AmpCurrency implements Serializable, Comparable<AmpCurrency>, Ident
 	 */
 	public void setCalendar(AmpFiscalCalendar calendar) {
 		this.calendar = calendar;
+	}
+	@Override
+	public long getId() {
+		return ampCurrencyId;
 	}
 }	

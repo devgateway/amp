@@ -18,31 +18,32 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
-import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.newreports.ReportElement.ElementType;
+import org.dgfoundation.amp.newreports.pagination.PartialReportArea;
 import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
-import org.dgfoundation.amp.newreports.ReportElement.ElementType;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
+import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.reports.ActivityType;
 import org.dgfoundation.amp.reports.CachedReportData;
-import org.dgfoundation.amp.reports.PartialReportArea;
-import org.dgfoundation.amp.reports.ReportAreaMultiLinked;
 import org.dgfoundation.amp.reports.ReportCacher;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
@@ -70,6 +71,8 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
+
+import net.sf.json.JSONObject;
 
 public class ReportsUtil {
 	protected static final Logger logger = Logger.getLogger(ReportsUtil.class);
@@ -117,12 +120,10 @@ public class ReportsUtil {
 	 *                        		sorting will define a column list as a tuple to sort by.</dd>
 	 *   <dt>regenerate</dt>	<dd>optional, set to true for all first access and any changes and 
 	 *                        		to false for consequent page navigation. Default to true</dd>
-	 *   <dt>add_columns</dt> 	<dd>optional, a list of columns names to be added to the
-	 *                        		report configuration</dd>
-	 *   <dt>add_hierarchies</dt>  <dd>optional, a list of hierarchies to be added to the
-	 *                             	report configuration</dd>
-	 *   <dt>add_measures</dt> 	<dd>optional, a list of measures to be added to the
-	 *                         		report configuration</dd>
+	 *   <dt>add_columns</dt> 	<dd>optional, a list of columns names to be added to the report configuration</dd>
+	 *   <dt>columns_with_ids</dt> 	<dd>optional, a list of columns names that should also provide ids</dd>
+	 *   <dt>add_hierarchies</dt>  <dd>optional, a list of hierarchies to be added to the report configuration</dd>
+	 *   <dt>add_measures</dt> 	<dd>optional, a list of measures to be added to the report configuration</dd>
 	 *   <dt>show_empty_rows</dt> <dd>optional, default false, to show rows with empty measures amounts</dd>
 	 *   <dt>show_empty_cols</dt> <dd>optional, default false, to show full column groups (by quarter, year) 
 	 *   							with empty measures amounts</dd>
@@ -134,10 +135,10 @@ public class ReportsUtil {
 	 *   						Default is "D" if not provided.</dd>
 	 *   <dt>projectType</dt>   <dd>an optional list of projects, mainly used to change usual default project
 	 *   						types included in the report. The list option per report type:
-	 *   						"D" : ["A", "S", "P"], where default is ["A", "S"] if both are reachable
-	 *   						"C" : ["A", "S"], where default is ["A", "S"]
-	 *   						"P" : ["P"], where default is ["P"]
-	 *   						where "A" - standard activity, "S" - SSC Activity, "P" - pledge</dd>
+	 *   						<br>"D" : ["A", "S", "P"], where default is ["A", "S"] if both are reachable
+	 *   						<br>"C" : ["A", "S"], where default is ["A", "S"]
+	 *   						<br>"P" : ["P"], where default is ["P"]
+	 *   						<br>where "A" - standard activity, "S" - SSC Activity, "P" - pledge</dd>
 	 * </dl>
 	 * @return JsonBean result for the requested page and pagination information
 	 */
@@ -152,27 +153,26 @@ public class ReportsUtil {
 		
 		// get the report (from cache if it was cached)
 		CachedReportData cachedReportData = getCachedReportData(reportId, formParams);
-		ReportAreaMultiLinked[] areas = null;
 		if (cachedReportData != null) {
-			areas = cachedReportData.areas;
 			if (cachedReportData.report != null) {
 				result.set("headers", cachedReportData.report.leafHeaders);
+				result.set("generatedHeaders", cachedReportData.report.generatedHeaders);
+				result.set("isEmpty", cachedReportData.report.isEmpty);
 			}
 		}
 		
 		// extract data for the requested page
 		ReportArea pageArea = null;
 		if (recordsPerPage != -1) {
-			pageArea = ReportPaginationUtils.getReportArea(areas, start, recordsPerPage);
+			pageArea = cachedReportData.paginationInfo.getPage(start, recordsPerPage);
 		} else if (cachedReportData != null && cachedReportData.report !=null) {
 			pageArea = cachedReportData.report.reportContents;
 		}
 		
-		int totalPageCount = ReportPaginationUtils.getPageCount(areas, recordsPerPage);
+		int totalPageCount = cachedReportData.paginationInfo.getPageCount(recordsPerPage);
 		
 		// configure the result
-		result.set("page", new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, 
-				(areas != null ? areas.length : 0)));
+		result.set("page", new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, cachedReportData.paginationInfo.getRecordsCount()));
 		result.set(EPConstants.SETTINGS, cachedReportData != null ? 
 				SettingsUtils.getReportSettings(cachedReportData.report.spec) : null);
 		return result;
@@ -213,9 +213,22 @@ public class ReportsUtil {
 		return newParams;
 	}
 	
+	public static GeneratedReport getGeneratedReport(Long reportId, JsonBean formParams) {
+		CachedReportData cachedReportData = getCachedReportData(reportId, formParams);
+		
+		if (cachedReportData != null && cachedReportData.report != null) {
+			return cachedReportData.report;
+		}
+		
+		return null;
+	}
+	
 	private static CachedReportData getCachedReportData(Long reportId, JsonBean formParams) {
-		boolean regenerate = mustRegenerate(reportId, formParams);
-		boolean resort = formParams.get(EPConstants.SORTING) != null; 
+		// the caching mechanism should be or deleted at all or rewrote. 
+		// During the pagination, sorting and exports the regenerate = true always, because the 'regenerate' param is not set to false
+
+		boolean resort = formParams.get(EPConstants.SORTING) != null;
+		boolean regenerate = mustRegenerate(reportId, formParams) || resort;
 		CachedReportData cachedReportData = null;
 		
 		// generate the report
@@ -228,7 +241,7 @@ public class ReportsUtil {
 				if (Boolean.TRUE.equals(formParams.get(EPConstants.IS_DYNAMIC))) {
 					try {
 						spec = AmpReportsToReportSpecification.convert(ReportsUtil.getAmpReportFromSession(reportId.intValue()));
-					} catch (AMPException e) {
+					} catch (Exception e) {
 						logger.error("Cannot get report from session",e);
 						throw new RuntimeException("Cannot restore report from session: " + reportId);
 					}
@@ -239,22 +252,11 @@ public class ReportsUtil {
 			// add additional requests
 			update(spec, formParams);
 			// regenerate
-			GeneratedReport generatedReport = EndpointUtils.runReport(spec, PartialReportArea.class);
+			GeneratedReport generatedReport = EndpointUtils.runReport(spec, PartialReportArea.class, 
+					buildOutputSettings(spec, formParams));
 			cachedReportData = ReportPaginationUtils.cacheReportData(reportId, generatedReport);
 		} else {
 			cachedReportData = ReportCacher.getReportData(reportId);
-			if (resort && cachedReportData != null) {
-				if (configureSorting((ReportSpecificationImpl)cachedReportData.report.spec, formParams)) {
-					// resort only when sorting configuration changed
-					try {
-						MondrianReportUtils.sort(cachedReportData.report);
-						// update cache with resorted data
-						cachedReportData = ReportPaginationUtils.cacheReportData(reportId, cachedReportData.report);
-					} catch (AMPException e) {
-						logger.error(e);
-					}
-				}
-			}
 		}
 		return cachedReportData;
 	}
@@ -282,8 +284,7 @@ public class ReportsUtil {
 	 * @param formParams
 	 * @return the updated spec
 	 */
-	public static ReportSpecification update(ReportSpecification spec, 
-			JsonBean formParams) {
+	public static ReportSpecification update(ReportSpecification spec, JsonBean formParams) {
 		if (spec == null || formParams == null) return spec;
 		if (!(spec instanceof ReportSpecificationImpl)) {
 			logger.error("Unsupported request for "  + spec.getClass());
@@ -297,7 +298,7 @@ public class ReportsUtil {
 		addMeasures(specImpl, formParams);
 		
 		// update report data presentation
-		AmpFiscalCalendar oldCalendar = specImpl.getSettings() == null ? null : specImpl.getSettings().getCalendar(); 
+		AmpFiscalCalendar oldCalendar = specImpl.getSettings() == null ? null : (AmpFiscalCalendar) specImpl.getSettings().getCalendar(); 
 		SettingsUtils.applySettings(specImpl, formParams, false);
 		configureFilters(specImpl, formParams, oldCalendar);
 		configureSorting(specImpl, formParams);
@@ -314,14 +315,36 @@ public class ReportsUtil {
 	private static void addColumns(ReportSpecification spec, JsonBean formParams) {
 		//adding new columns if not present
 		if (formParams.get(EPConstants.ADD_COLUMNS) != null) {
-			List<String> columns = (List<String>) formParams.get(EPConstants.ADD_COLUMNS);
-			for (String columnName : columns) {
-				ReportColumn column = new ReportColumn(columnName);
-				if (!spec.getColumns().contains(column)) {
-					spec.getColumns().add(column);
-				}
+			addColumns(spec, (List<String>) formParams.get(EPConstants.ADD_COLUMNS));
+		}
+	}
+	
+	private static void addColumns(ReportSpecification spec, Collection<String> columns) {
+		for (String columnName : columns) {
+			ReportColumn column = new ReportColumn(columnName);
+			if (!spec.getColumns().contains(column)) {
+				spec.getColumns().add(column);
 			}
 		}
+	}
+	
+	/**
+	 * Builds special output settings as requested and updates spec if needed
+	 * @param spec
+	 * @param formParams
+	 * @return
+	 */
+	public static OutputSettings buildOutputSettings(ReportSpecification spec, JsonBean formParams) {
+		Set<String> idsValuesColumns = null;
+		if (EndpointUtils.isNiReports()) {
+			if (formParams.get(EPConstants.COLUMNS_WITH_IDS) != null) {
+				idsValuesColumns = new HashSet<String> ((List<String>) formParams.get(EPConstants.COLUMNS_WITH_IDS));
+				// fixing the spec if some columns were not configured
+				addColumns(spec, idsValuesColumns);
+			}
+		}
+		
+		return new OutputSettings(idsValuesColumns);
 	}
 	
 	private static void addHierarchies(ReportSpecification spec, JsonBean formParams) {
@@ -363,7 +386,7 @@ public class ReportsUtil {
 		LinkedHashMap<String, Object> requestFilters = (LinkedHashMap<String, Object>) formParams.get(EPConstants.FILTERS);
 		if (requestFilters != null) {
 			filters.any().putAll(requestFilters);
-			MondrianReportFilters newFilters = new MondrianReportFilters(spec.getSettings().getCalendar());
+			MondrianReportFilters newFilters = new MondrianReportFilters((AmpFiscalCalendar) spec.getSettings().getCalendar());
 			if (spec.getFilters() != null) {
 				// TODO: we need calendar + date to be linked in UI as well OR make same form for filters and settings
 				// for now, if this is a calendar setting, let's check if any filters still exist and needs to be converted 
@@ -374,7 +397,7 @@ public class ReportsUtil {
 			}
 			
 			MondrianReportFilters formFilters = FilterUtils.getFilters(filters, newFilters);
-			MondrianReportFilters stickyFilters = copyStickyMtefEntries(spec.getFilters(), formFilters);
+			MondrianReportFilters stickyFilters = copyStickyMtefEntries((AmpReportFilters) spec.getFilters(), formFilters);
 			spec.setFilters(stickyFilters);
 		}
 	}
@@ -386,7 +409,7 @@ public class ReportsUtil {
 	 * @param newFilters
 	 * @return
 	 */
-	protected static MondrianReportFilters copyStickyMtefEntries(ReportFilters oldFilters, MondrianReportFilters newFilters) {
+	protected static MondrianReportFilters copyStickyMtefEntries(AmpReportFilters oldFilters, MondrianReportFilters newFilters) {
 		if (oldFilters == null || oldFilters.getFilterRules() == null)
 			return newFilters; // no chance of stickies
 		
@@ -460,7 +483,7 @@ public class ReportsUtil {
 		}
 		MondrianReportFilters filters = (MondrianReportFilters) spec.getFilters();
 		if (filters == null) {
-			AmpFiscalCalendar calendar = spec.getSettings() == null ? null : spec.getSettings().getCalendar();
+			AmpFiscalCalendar calendar = spec.getSettings() == null ? null : (AmpFiscalCalendar) spec.getSettings().getCalendar();
 			filters = new MondrianReportFilters(calendar);
 			spec.setFilters(filters);
 		}
@@ -477,57 +500,39 @@ public class ReportsUtil {
 		List<SortingInfo> newSorters = new ArrayList<SortingInfo>();
 		
 		if (formParams.get(EPConstants.SORTING) != null) {
-			List<Map<String, Object>> sortingConfig = 
-					(List<Map<String, Object>>)formParams.get(EPConstants.SORTING);
-			Set<String> validColumns = ConstantsUtil.getConstantsSet(ColumnConstants.class);
-			Set<String> validMeasures = ConstantsUtil.getConstantsSet(MeasureConstants.class);
+			List<Map<String, Object>> sortingConfig = (List<Map<String, Object>>)formParams.get(EPConstants.SORTING);
+			logger.error("sortingConfig is: " + sortingConfig);
 			
 			for (Map<String, Object> sort : sortingConfig) {
-				LinkedHashMap<ReportElement, FilterRule> sortByTuple = new LinkedHashMap<ReportElement, FilterRule>();
-				boolean isTotals = true;
-				
 				List<String> columns = (List<String>)sort.get("columns");
 				Boolean asc = (Boolean)sort.get("asc");
+				
+				boolean isTotals;
+				boolean isFunding;
+				if (sort.containsKey("id")) {
+					// SAIKU request
+					String id = sort.get("id").toString(); // crash if null
+					isTotals = id.startsWith(String.format("[%s]", NiReportsEngine.TOTALS_COLUMN_NAME));
+					isFunding = id.startsWith(String.format("[%s]", NiReportsEngine.FUNDING_COLUMN_NAME));
+				} else {
+					// tabs request - should check for general API
+					isFunding = columns.size() > 1;
+					isTotals = AmpReportsSchema.getInstance().getMeasures().containsKey(columns.get(0));
+				}
 				
 				List<String> errors = new ArrayList<String>();
 				if (columns == null)
 					errors.add("columns = null");
+				
 				if (asc == null)
 					errors.add("sorting order is not specified, asc = null");
-				if (errors.size() == 0) {
-					boolean hasReportColumn = false;
-					ReportOutputColumn fundingColumn = null;
-					for (Iterator<String> iter = columns.iterator(); iter.hasNext(); ) {
-						String column = iter.next();
-						if (validColumns.contains(column)) {
-							hasReportColumn = true;
-							SortingInfo.addEntityToSorting(sortByTuple, new ReportColumn(column));
-						} else if (validMeasures.contains(column)) {
-							// no totals sorting if 1st entry in tuple is funding column
-							if (sortByTuple.size() == 0 && fundingColumn != null)
-								isTotals = false;
-							fundingColumn = addFundingColumnToSorting(spec, sortByTuple, fundingColumn);
-							SortingInfo.addEntityToSorting(sortByTuple, new ReportMeasure(column));
-						} else {
-							if (GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria())) {
-								errors.add("Invalid column name = " + column);
-								break;
-							}
-							fundingColumn = new ReportOutputColumn(column, fundingColumn, null, null);
-						}
-					}
-					if (fundingColumn != null)
-						errors.add("funding column not followed by a measure");
-					// if there is only 1 entry on the tuple that is a simple column, then no totals sorting  
-					if (hasReportColumn && sortByTuple.size() == 1)
-						isTotals = false;
-				}
 					
 				if (errors.size() > 0)
 					logger.error("Ignoring invalid sorting request: " + errors);
-				else
-					newSorters.add(new SortingInfo(sortByTuple, asc, isTotals));
-					
+				else {
+					int rootType = isTotals? SortingInfo.ROOT_PATH_TOTALS : (isFunding ? SortingInfo.ROOT_PATH_FUNDING : SortingInfo.ROOT_PATH_NONE);
+					newSorters.add(new SortingInfo(columns, rootType, asc));
+				}
 			}
 		}
 		
@@ -536,23 +541,6 @@ public class ReportsUtil {
 		if (sortingChanged)
 			spec.setSorters(newSorters);
 		return sortingChanged;
-	}
-	
-	private static ReportOutputColumn addFundingColumnToSorting(ReportSpecification spec, 
-			LinkedHashMap<ReportElement, FilterRule> sortByTuple, ReportOutputColumn roc) {
-		if (roc != null) {
-			if (GroupingCriteria.GROUPING_MONTHLY.equals(spec.getGroupingCriteria())) {
-				SortingInfo.addMonthToSorting(sortByTuple, roc.columnName);
-				roc = roc.parentColumn;
-			} else if (GroupingCriteria.GROUPING_QUARTERLY.equals(spec.getGroupingCriteria())) {
-				SortingInfo.addQuarterToSorting(sortByTuple, roc.columnName);
-				roc = roc.parentColumn;
-			}
-			// both for GROUPING_YEARLY & previous groupings
-			SortingInfo.addYearToSorting(sortByTuple, roc.columnName);
-		}
-		// null to clear the reference
-		return null;
 	}
 	
 	/**
@@ -637,10 +625,6 @@ public class ReportsUtil {
 	}
 	
 	private static void setOtherOptions(ReportSpecificationImpl spec, JsonBean formParams) {
-		Boolean doRowTotals = (Boolean) formParams.get(EPConstants.DO_ROW_TOTALS);
-		if (doRowTotals != null) {
-			spec.setCalculateRowTotals(doRowTotals);
-		}
 		
 		Boolean showEmptyRows = (Boolean) formParams.get(EPConstants.SHOW_EMPTY_ROWS);
 		if (showEmptyRows != null) {
@@ -672,7 +656,8 @@ public class ReportsUtil {
 		if (!regenerate && ReportCacher.getReportData(reportId) == null)
 				regenerate = true;
 		
-		// TODO: add here any other automatic detections for mandatory regenerate 
+		// TODO: add here any other automatic detections for mandatory regenerate
+		// e.g. check against cached spec version & new one 
 		
 		return regenerate;
 	}

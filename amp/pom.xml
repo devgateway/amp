@@ -12,7 +12,7 @@
         <springSecurityVersion>3.1.4.RELEASE</springSecurityVersion>
         <springVersion>3.0.7.RELEASE</springVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <buildVersion>2.11-SNAPSHOT</buildVersion>
+        <buildVersion>2.12-SNAPSHOT</buildVersion>
         <jersey.version>1.18</jersey.version>
         <saiku.version>3.0-RC2</saiku.version>
         <saiku3.version>3.0-RC2-DG</saiku3.version>
@@ -252,7 +252,11 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>4.2.0.Final</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.thymeleaf</groupId>
+			<artifactId>thymeleaf-spring3</artifactId>
+			<version>2.1.4.RELEASE</version>
+		</dependency>
         <!-- Hibernate spatial -->
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -1263,8 +1267,8 @@
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <configuration>
-                        <source>1.7</source>
-                        <target>1.7</target>
+                        <source>1.8</source>
+                        <target>1.8</target>
                         <compilerArgument>-XDignore.symbol.file</compilerArgument>
                         <maxmem>1024m</maxmem>
                     </configuration>

@@ -1,7 +1,16 @@
 package org.dgfoundation.amp.newreports;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import org.dgfoundation.amp.algo.timing.RunNode;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.helper.TeamMember;
 
 public class GeneratedReport {
@@ -39,15 +48,39 @@ public class GeneratedReport {
 	 */
 	public final List<ReportOutputColumn> leafHeaders;
 	
-	public GeneratedReport(ReportSpecification spec, int generationTime, TeamMember requestingUser, ReportArea reportContents, 
-			List<ReportOutputColumn> rootHeaders, List<ReportOutputColumn> leafHeaders) {
+	public final List<List<HeaderCell>> generatedHeaders;
+	
+	/**
+	 * might be null, but not putting an {@link Optional} here because we have lots of old frontend code 
+	 */
+	@JsonIgnore
+	public final RunNode timings;
+	
+	/**
+	 * Report warnings 
+	 */
+	public final SortedMap<Long, SortedSet<ReportWarning>> reportWarnings;
+	
+	public final JsonBean jsonTimings;
+	
+	public final boolean isEmpty;
+	
+	public GeneratedReport(ReportSpecification spec, int generationTime, TeamMember requestingUser, 
+			ReportArea reportContents, List<ReportOutputColumn> rootHeaders, List<ReportOutputColumn> leafHeaders, 
+			List<List<HeaderCell>> generatedHeaders, RunNode timings, SortedMap<Long, SortedSet<ReportWarning>> reportWarnings, boolean isEmpty) {
 		this.spec = spec;
 		this.generationTime = generationTime;
 		this.requestingUser = requestingUser;
 		this.reportContents = reportContents;
 		this.rootHeaders = rootHeaders;
 		this.leafHeaders = leafHeaders;
+		this.timings = timings;
+		this.jsonTimings = timings == null ? null : timings.asJsonBean(); 
+		this.generatedHeaders = generatedHeaders;
+		this.reportWarnings = reportWarnings;
+		this.isEmpty = isEmpty;
 	}
+	
 }
 
 	

@@ -19,11 +19,10 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_titles AS
-			    		SELECT amp_activity.amp_activity_id, amp_activity.name, amp_activity.amp_activity_id AS title_id, amp_activity.draft, amp_activity.approval_status AS status
-				    		FROM amp_activity
-				    		ORDER BY amp_activity.amp_activity_id;;;
-        		</lang>
+		    	CREATE OR REPLACE VIEW v_titles AS
+		    		SELECT aav.amp_activity_id, aav.name, aav.amp_activity_id AS title_id, aav.draft, aav.approval_status AS status
+			    		FROM amp_activity_version aav;
+			</lang>
 		</script>
 	</apply>
 </tns:patch>

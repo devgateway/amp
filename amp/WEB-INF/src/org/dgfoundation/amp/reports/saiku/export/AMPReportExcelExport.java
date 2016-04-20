@@ -183,14 +183,14 @@ public class AMPReportExcelExport {
 					}
 					String extractedFilter = TranslatorWorker.translateText(entityName);
 					List<String> extractedValues = new ArrayList<String>();
-					for (Map.Entry<String, String> filterValue : filterRule.valueToName.entrySet()) {
-						// AMP-21066
-						if (filterValue != null) {
-							extractedValues.add(filterValue.getValue());
-						} else {
-							extractedValues.add("");
-						}
-					}
+//					for (Map.Entry<String, String> filterValue : filterRule.valueToName.entrySet()) {
+//						// AMP-21066
+//						if (filterValue != null) {
+//							extractedValues.add(filterValue.getValue());
+//						} else {
+//							extractedValues.add("");
+//						}
+//					}
 					extractedFilters.put(extractedFilter, extractedValues);
 				}
 			}

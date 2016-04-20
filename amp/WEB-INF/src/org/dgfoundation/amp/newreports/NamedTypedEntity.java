@@ -12,8 +12,7 @@ public abstract class NamedTypedEntity {
 	 */
 	protected final String entityName;
 		
-	protected final int hashCode; 
-	
+	protected final int hashCode;
 	/**
 	 * 
 	 * @param columnName - the name of the column

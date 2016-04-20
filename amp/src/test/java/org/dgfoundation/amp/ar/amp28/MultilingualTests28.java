@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.ar.amp28;
 
+import java.util.List;
 import java.util.TreeMap;
 
 import org.apache.struts.mock.MockHttpServletRequest;
@@ -17,7 +18,6 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.Session;
 
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -28,7 +28,7 @@ import junit.framework.TestSuite;
  */
 public class MultilingualTests28 extends AmpTestCase
 {
-	protected Site site;
+	protected List<String> locales;
 	
 	private MultilingualTests28(String name)
 	{
@@ -47,7 +47,7 @@ public class MultilingualTests28 extends AmpTestCase
 	
 	public void testLoadingMultilingual()
 	{
-		MultilingualInputFieldValues mifv = new MultilingualInputFieldValues(AmpReports.class, 52L, "name", null, TranslatorUtil.getLocaleCache(site));
+		MultilingualInputFieldValues mifv = new MultilingualInputFieldValues(AmpReports.class, 52L, "name", null, locales);
 		assertEquals("AmpReports_name", mifv.getPrefix());
 		assertEquals("name", mifv.getPropertyName());
 		assertEquals("org.digijava.module.aim.dbentity.AmpReports", mifv.getClazz().getName());
@@ -58,7 +58,7 @@ public class MultilingualTests28 extends AmpTestCase
 
 	public void testLoadingMultilingualNotAllLanguages()
 	{
-		MultilingualInputFieldValues mifv = new MultilingualInputFieldValues(AmpReports.class, 53L, "name", null, TranslatorUtil.getLocaleCache(site));
+		MultilingualInputFieldValues mifv = new MultilingualInputFieldValues(AmpReports.class, 53L, "name", null, locales);
 		assertEquals("AmpReports_name", mifv.getPrefix());
 		assertEquals("name", mifv.getPropertyName());
 		assertEquals("org.digijava.module.aim.dbentity.AmpReports", mifv.getClazz().getName());
@@ -141,6 +141,6 @@ public class MultilingualTests28 extends AmpTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        this.site = SiteUtils.getSite(3L);                
+        this.locales = TranslatorUtil.getLanguages();                
     }
 }

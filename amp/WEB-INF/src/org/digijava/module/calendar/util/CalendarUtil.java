@@ -33,6 +33,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.exception.NoCategoryClassException;
@@ -321,7 +322,7 @@ public class CalendarUtil {
 	 * @return year as a number
 	 * @throws AMPException 
 	 */
-	public static int parseYear(AmpFiscalCalendar calendar, String year) throws AMPException {
+	public static int parseYear(CalendarConverter calendar, String year) throws AMPException {
 		if (calendar.getIsFiscal()) {
 			//Performs a simple match of the 1st number. 
 			//If any calendar will do a very specific Fiscal Year representation, 
@@ -330,7 +331,7 @@ public class CalendarUtil {
 			if (m.find())
 				year = m.group();
 			else 
-				throw new AMPException(String.format("Invalid year format [%s] for the given Fiscal Calendar, id=%n", year, calendar.getAmpFiscalCalId()));
+				throw new AMPException(String.format("Invalid year format [%s] for the given Fiscal Calendar %s", year, calendar));
 		}
 		return Integer.parseInt(year);
 	}

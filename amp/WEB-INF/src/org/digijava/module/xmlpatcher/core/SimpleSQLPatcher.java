@@ -1,7 +1,6 @@
 package org.digijava.module.xmlpatcher.core;
 
 import java.sql.Connection;
-import java.util.Arrays;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -11,6 +10,8 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.job.cachedtables.PublicViewColumnsUtil;
 import org.digijava.module.aim.helper.Constants;
@@ -139,7 +140,6 @@ public class SimpleSQLPatcher {
 			addPatch(new SimpleSQLPatch(
 					"006",
 					"DROP VIEW IF EXISTS amp_activity CASCADE ",
-					"DROP VIEW IF EXISTS v_amp_activity_expanded ",
 					"DROP VIEW IF EXISTS v_act_pp_details",
 					"DROP VIEW IF EXISTS v_mondrian_programs",
 					
@@ -405,18 +405,16 @@ public class SimpleSQLPatcher {
 	protected void createTrickyViewsIfNeeded(Connection conn) throws Exception {
 		boolean recreatingViews = SQLUtils.getLong(conn, "select count(*) from amp_global_settings where settingsvalue = 'true' and settingsname='Recreate the views on the next server restart'") > 0;
 		boolean ampActivityIsNotView = !SQLUtils.isView(conn, "amp_activity");
-		//boolean ampActivityExpandedIsNotView = !SQLUtils.isView(conn, "v_amp_activity_expanded");
 		boolean aaHasOtherColumnsThanAav = !SQLUtils.getTableColumnsWithTypes(conn, "amp_activity", false).toString().equals(SQLUtils.getTableColumnsWithTypes(conn, "amp_activity_version", false).toString());
 
-		logger.warn(String.format("asked to recreate views: %b, amp_activity is not view: %b, aaHasOtherColumnsThanAav: %b, v_amp_activity_expanded is not view: %b", recreatingViews, ampActivityIsNotView, aaHasOtherColumnsThanAav, false/* ampActivityExpandedIsNotView*/));
-		if (recreatingViews /*|| ampActivityExpandedIsNotView*/ || ampActivityIsNotView || aaHasOtherColumnsThanAav) {
+		logger.warn(String.format("asked to recreate views: %b, amp_activity is not view: %b, aaHasOtherColumnsThanAav: %b", recreatingViews, ampActivityIsNotView, aaHasOtherColumnsThanAav));
+		if (recreatingViews || ampActivityIsNotView || aaHasOtherColumnsThanAav) {
 			logger.error("forcing recreating views!");
 			SQLUtils.executeQuery(conn, "UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart'");
 			if (SQLUtils.isTable(conn, "amp_etl_changelog") && (recreatingViews || ampActivityIsNotView || aaHasOtherColumnsThanAav)) {
 				SQLUtils.executeQuery(conn, "INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('full_etl_request', 999)");
 			}
 			createDummyViewIfMissingOrTable(conn, "amp_activity", "SELECT aav.* from amp_activity_version aav JOIN amp_activity_group aag ON aav.amp_activity_id = aag.amp_activity_last_version_id AND (aav.deleted IS NULL or aav.deleted = false)", recreatingViews);
-			createDummyViewIfMissingOrTable(conn, "v_amp_activity_expanded", "SELECT av.*, dg_editor.body AS expanded_description FROM amp_activity av LEFT JOIN dg_editor ON av.description = dg_editor.editor_key", recreatingViews);			
 		}
 	}
 	
@@ -444,8 +442,7 @@ public class SimpleSQLPatcher {
    					executePatch(patch, conn, hashes.isEmpty());
    				}
    			}
-   			
-   			runIndicesCleanup(conn); //TODO: DELETE THIS CALL AND FUNCTION WHILE MERGING WITH AMP 2.12
+   			defineActivityVersionsViews(conn);
    			runDrcCleanup(conn);
    			createTrickyViewsIfNeeded(conn);
    			conn.setAutoCommit(false);
@@ -453,21 +450,26 @@ public class SimpleSQLPatcher {
    			conn.setAutoCommit(autoCommit);
    		}
 	}
-	
+		
 	/**
-	 * cleanup the indices accumulated on cached_amp_activity_group because of a very old bug in {@link PublicViewColumnsUtil}
+	 * (re)define the views which are concerned with activity versioning. Notice that, since some of these views are dependent on AmpARFilter constants, they are being redefined (WITHOUT DROPping) at each startup 
 	 * @param conn
 	 */
-	void runIndicesCleanup(Connection conn) {
-		for(String colName: Arrays.asList("amp_activity_group_id", "amp_activity_last_version_id")) {
-			List<String> indicesToDelete = SQLUtils.fetchAsList(conn, "select indexname from pg_indexes where tablename = 'cached_amp_activity_group' and indexdef like '%(" + colName + ")' ORDER BY indexname", 1);
-			if (indicesToDelete.size() > 2) {
-				for(int i = 1; i < indicesToDelete.size(); i++) {
-					// keep first index, delete the rest
-					SQLUtils.executeQuery(conn, String.format("DROP INDEX %s", indicesToDelete.get(i)));
-				}
-			}
-		}
+	void defineActivityVersionsViews(Connection conn) {
+		String query = String.format("CREATE OR REPLACE VIEW v_activity_versions AS " + 
+			"SELECT aag.amp_activity_group_id, max(aav.amp_activity_id) as amp_activity_latest_validated_id, aag.amp_activity_last_version_id " + 
+			"FROM amp_activity_group aag " + 
+			"LEFT JOIN amp_activity_version aav ON (aag.amp_activity_group_id = aav.amp_activity_group_id) " + 
+			"AND (aav.deleted IS NULL OR aav.deleted = false) AND (aav.draft IS NULL or aav.draft = false) " + 
+			"AND (aav.approval_status IN (%s)) " + 
+			"GROUP BY aag.amp_activity_group_id", Util.toCSString(AmpARFilter.validatedActivityStatus));
+		SQLUtils.executeQuery(conn, query);
+		
+		String query2 = "CREATE OR REPLACE VIEW v_activity_latest_and_validated AS " + 
+				"SELECT distinct amp_activity_latest_validated_id AS amp_activity_id FROM v_activity_versions WHERE amp_activity_latest_validated_id IS NOT NULL " + 
+				"UNION " + 
+				"SELECT distinct amp_activity_last_version_id AS amp_activity_id FROM v_activity_versions";
+		SQLUtils.executeQuery(conn, query2);
 	}
 	
 	/**

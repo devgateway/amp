@@ -37,13 +37,7 @@ var Result = Backbone.Model.extend({
         }
         this.firstRun = true;
 		//Start Custom Code for Pagination
-        if (Settings.AMP_REPORT_API_BRIDGE === false) {
-        	this.query.set({'total_rows': response.height});
-        } else {
-        	this.query.set({'total_rows': response.page.totalRecords});
-        	this.query.set({'page': response.page.currentPageNumber});
-        	this.query.set({'max_page_no': response.page.totalPageCount});
-        }
+       	this.query.set({'total_rows': response.height});
         this.updatePagination();
         //End Custom Code for Pagination
 
@@ -77,30 +71,22 @@ var Result = Backbone.Model.extend({
     updatePagination: function() {
     	//Start Custom Code for Pagination
     	if(Settings.PAGINATION) {
-    		if (!Settings.AMP_REPORT_API_BRIDGE) {
-	    		result_type = "paginatedresult";
-	    		var totalRows =  this.query.get('total_rows');
-	    		var page = this.query.get('page');
-	    		var maxPageNo = 0;
-	    		if (Settings.RESULTS_PER_PAGE > 0) {
-	    			maxPageNo = (((totalRows + Settings.RESULTS_PER_PAGE - 1) / Settings.RESULTS_PER_PAGE) >> 0) - 1;
-	    		}
-	    		this.query.set({'max_page_no': maxPageNo});
-	    		if (maxPageNo < page) {
-	    			page = maxPageNo;
-	    			this.query.set('page', page);
-	    		}
-	        	var start = page * Settings.RESULTS_PER_PAGE;
-	        	var end = start  + Settings.RESULTS_PER_PAGE;
-	        	this.set({'start': start});
-	        	this.set({'end': end});
-    		} else {
-    			if(this.query.get('max_page_no') === 0) {
-    				this.query.set('page', 0);
-    			}
-    			/*this.set({'start': this.query.get('page')});
-	        	this.set({'end': this.query.get('max_page_no')});*/
-    		} 
+    		result_type = "paginatedresult";
+    		var totalRows =  this.query.get('total_rows');
+    		var page = this.query.get('page');
+    		var maxPageNo = 0;
+    		if (Settings.RESULTS_PER_PAGE > 0) {
+    			maxPageNo = (((totalRows + Settings.RESULTS_PER_PAGE - 1) / Settings.RESULTS_PER_PAGE) >> 0) - 1;
+    		}
+    		this.query.set({'max_page_no': maxPageNo});
+    		if (maxPageNo < page) {
+    			page = maxPageNo;
+    			this.query.set('page', page);
+    		}
+        	var start = page * Settings.RESULTS_PER_PAGE;
+        	var end = start  + Settings.RESULTS_PER_PAGE;
+        	this.set({'start': start});
+        	this.set({'end': end});    		 
     	}
     }
 });

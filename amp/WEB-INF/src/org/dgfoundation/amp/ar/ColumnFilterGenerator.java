@@ -51,7 +51,7 @@ public class ColumnFilterGenerator {
 		}});
 		
 		put("v_pledges_type_of_assistance", new HashSet<ViewDonorFilteringInfo>(){{
-			add(new ViewDonorFilteringInfo("terms_assist_code", "typeOfAssistance"));
+			add(new ViewDonorFilteringInfo("id", "typeOfAssistance"));
 		}});
 		
 		put("v_pledges_sectors", new HashSet<ViewDonorFilteringInfo>(){{
@@ -67,15 +67,15 @@ public class ColumnFilterGenerator {
 		}});
 				
 		put("v_pledges_districts", new HashSet<ViewDonorFilteringInfo>(){{
-			add(new ViewDonorFilteringInfo("location_id", "relatedLocations"));
+			add(new ViewDonorFilteringInfo("district_id", "relatedLocations"));
 		}});
 	
 		put("v_pledges_regions", new HashSet<ViewDonorFilteringInfo>(){{
-			add(new ViewDonorFilteringInfo("location_id", "relatedLocations"));
+			add(new ViewDonorFilteringInfo("region_id", "relatedLocations"));
 		}});
 		
 		put("v_pledges_zones", new HashSet<ViewDonorFilteringInfo>(){{
-			add(new ViewDonorFilteringInfo("location_id", "relatedLocations"));
+			add(new ViewDonorFilteringInfo("zone_id", "relatedLocations"));
 		}});
 		
 		put("v_pledges_npd_objectives", new HashSet<ViewDonorFilteringInfo>(){{

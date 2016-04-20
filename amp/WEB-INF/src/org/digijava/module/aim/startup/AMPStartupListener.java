@@ -25,9 +25,12 @@ import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.importers.GazeteerCSVImporter;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MondrianUtils;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityService;
 import org.digijava.kernel.job.cachedtables.PublicViewColumnsUtil;
@@ -225,13 +228,9 @@ public class AMPStartupListener extends HttpServlet implements
 		logger.info(String.format("ETL took %.2f seconds", elapsedSecs));
 	}
 	
-	
-
-	
-	
-
-	
-	
+	protected void initNiReports() throws AMPException {
+		AmpReportsSchema.init();
+	}
 	
 	public void contextInitialized(ServletContextEvent sce) {
         logger.debug("I am running with a new code!!!!");
@@ -301,6 +300,9 @@ public class AMPStartupListener extends HttpServlet implements
 
 			//AmpBackgroundActivitiesCloser.createActivityCloserUserIfNeeded();
 			initializeQuartz(sce);
+			
+			AmpReportsSchema.getInstance().synchronizeAmpColumnsBackport();
+			AmpReportsSchema.getInstance().synchronizeAmpMeasureBackport();
 
 			logger.info("Checking if any MTEF columns need to be created...");
 			DynamicColumnsUtil.createInexistentMtefColumns(ampContext);
@@ -322,7 +324,8 @@ public class AMPStartupListener extends HttpServlet implements
 			
 			runCacheRefreshingQuery("update_location_level_caches_internal", "location");
 			runCacheRefreshingQuery("update_program_level_caches_internal", "program");
-			runCacheRefreshingQuery("update_sector_level_caches_internal", "program");
+			runCacheRefreshingQuery("update_sector_level_caches_internal", "sector");
+			runCacheRefreshingQuery("update_organisation_caches_internal", "organisation");
 			
 			PersistenceManager.getSession().getTransaction().commit();
 			
@@ -339,7 +342,8 @@ public class AMPStartupListener extends HttpServlet implements
 			checkDatabaseSanity();
 			checkMondrianETLSanity();
 			doMonetETL();
-			importGazeteer ();
+			initNiReports();
+			importGazeteer();
 		} catch (Throwable e) {
 			logger.error("Exception while initialising AMP :" + e.getMessage(), e);
 			throw new Error(e);
@@ -369,6 +373,7 @@ public class AMPStartupListener extends HttpServlet implements
 			session = PersistenceManager.getSession();
 			
 			ReportsUtil.checkDatabaseSanity(session);
+			ReportsUtil.checkFilteringConfigurationSanity(session);
 			ReportsUtil.checkPledgesViewsSanity(session);
 			ReportsUtil.checkLocationsSanity(session);
 			CurrencyUtil.checkDatabaseSanity(session);

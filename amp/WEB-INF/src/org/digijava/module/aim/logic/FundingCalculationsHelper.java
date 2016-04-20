@@ -21,8 +21,8 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.exceptions.UsedCategoryException;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.joda.time.LocalDate;
 
 import com.sun.istack.logging.Logger;
 
@@ -118,18 +118,28 @@ public class FundingCalculationsHelper {
 			
 			fundingDetail.setContract(fundDet.getContract());
 			java.sql.Date dt = new java.sql.Date(fundDet.getTransactionDate().getTime());
-
-			DecimalWraper amt = new DecimalWraper();
-//			fundDet.getTransactionDate();
 			
-
 			Double fixedExchangeRate = fundDet.getFixedExchangeRate();
-			double mulValue = AmpCurrencyConvertor.getInstance().
-					getExchangeRate(fundDet.getAmpCurrencyId().getCurrencyCode(), userCurrencyCode, fixedExchangeRate, new LocalDate(dt));
-			BigDecimal multiplier = BigDecimal.valueOf(mulValue);
-			BigDecimal wrp = BigDecimal.valueOf(fundDet.getTransactionAmount()).multiply(multiplier);
-			amt.setValue(wrp);
-			
+//			if (fixedExchangeRate != null && (Math.abs(fixedExchangeRate.doubleValue()) < 1.0E-15))
+//				fixedExchangeRate = null;
+//			double frmExRt;
+//			if (fixedExchangeRate == null) {
+//				frmExRt = Util.getExchange(fundDet.getAmpCurrencyId().getCurrencyCode(), dt);
+//			} else {
+//				frmExRt = fixedExchangeRate;
+//			}
+//			double toExRt;
+//			if (userCurrencyCode != null)
+//				toCurrCode = userCurrencyCode;
+//			if (fundDet.getAmpCurrencyId().getCurrencyCode().equalsIgnoreCase(toCurrCode)) {
+//				toExRt = frmExRt;
+//			} else {
+//				toExRt = Util.getExchange(toCurrCode, dt);
+//			}
+			//DecimalWraper amt = CurrencyWorker.convertWrapper(fundDet.getTransactionAmount().doubleValue(), frmExRt, toExRt, dt);
+			DecimalWraper amt = new DecimalWraper();
+			//fundDet.getTransactionDate();
+			amt.setValue(BigDecimal.valueOf(fundDet.getTransactionAmount()).multiply(BigDecimal.valueOf(AmpCurrencyConvertor.getInstance().getExchangeRate(fundDet.getAmpCurrencyId().getCurrencyCode(), userCurrencyCode, fixedExchangeRate, dt.toLocalDate()))));
 			if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
 				fundingDetail.setClassification(fundDet.getExpCategory());
 			}

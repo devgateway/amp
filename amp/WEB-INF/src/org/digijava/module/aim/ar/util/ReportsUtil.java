@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import org.apache.batik.gvt.renderer.DynamicRenderer;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.algo.ExceptionConsumer;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnFilterGenerator;
 import org.dgfoundation.amp.ar.ViewDonorFilteringInfo;
@@ -202,7 +203,7 @@ public class ReportsUtil {
 	 * @param session
 	 * @throws Exception
 	 */
-	public static void checkPledgesViewsSanity(Session session) throws Exception{
+	public static void checkPledgesViewsSanity(Session session) throws Exception {
 		String errMsg = "";
 		logger.debug("Checking pledges reports sanity...");
 		
@@ -217,9 +218,9 @@ public class ReportsUtil {
 			Set<String> colNames = SQLUtils.getTableColumns(viewName);
 			for(ViewDonorFilteringInfo dfi:filteredColumns){
 				if (!colNames.contains(dfi.getViewFieldName()))
-					errMsg += String.format("The view %s does not contain column %s referenced in the ColumnFiltersConf", viewName, dfi.getViewFieldName());
+					errMsg += String.format("The view %s does not contain column %s referenced in the ColumnFiltersConf\n", viewName, dfi.getViewFieldName());
 				if (!fieldsByNames.containsKey(dfi.getBeanFieldName()))
-					errMsg += String.format("AmpARFilter does not contain property %s referenced in the ColumnFiltersConf for view %s", dfi.getBeanFieldName(), dfi.getViewFieldName());
+					errMsg += String.format("AmpARFilter does not contain property %s referenced in the ColumnFiltersConf for view %s\n", dfi.getBeanFieldName(), dfi.getViewFieldName());
 			}
 		}
 		
@@ -233,5 +234,35 @@ public class ReportsUtil {
 		}
 		throwErrorIfNotEmpty(errMsg);
 		logger.debug("Pledges reports sanity - PASS");
+	}
+	
+	public static void checkFilteringConfigurationSanity(Session session) throws Exception {
+		String query = "SELECT ac.columnname, acf.bean_field_name, ac.extractorview, acf.view_field_name " + 
+					"FROM amp_columns_filters acf JOIN amp_columns ac ON ac.columnid = acf.column_id " + 
+					"ORDER BY extractorview";
+		
+		List<Object[]> l = session.createSQLQuery(query).list();
+		Map<String, List<List<String>>> res = new HashMap<>();
+		for(Object[] line:l) {
+			String ampColumnName = line[0].toString();
+			String beanFieldName = line[1].toString();
+			String extractorView = line[2].toString();
+			String viewColumnName = line[3].toString();
+			if (!SQLUtils.getTableColumns(extractorView).contains(viewColumnName))
+				res.computeIfAbsent(extractorView, s -> new ArrayList<>()).add(Arrays.asList(ampColumnName, beanFieldName, viewColumnName));
+		}
+		if (!res.isEmpty()) {
+			List<String> suggestions = new ArrayList<>();
+			res.forEach((view, lst) -> {
+				lst.forEach(info -> {
+					suggestions.add(String.format("UPDATE amp_columns_filters SET view_field_name='###' WHERE (column_id = (select columnid from amp_columns where columnname='%s')) AND (bean_field_name='%s')", info.get(0), info.get(1)));
+				});
+			});
+			String msg = "checking reports filtering AmpARFilter configuration failed. Here is a list of (view, list<missing_columns>): " + res.toString();
+			logger.fatal(msg);
+			logger.fatal("suggestions are:");
+			suggestions.forEach(z -> logger.fatal(z));
+			throw new Error(msg);
+		}
 	}
 }

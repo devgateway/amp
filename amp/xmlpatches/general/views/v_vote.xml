@@ -19,8 +19,9 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_vote AS SELECT a.amp_activity_id, a.vote FROM amp_activity a WHERE (btrim((a.vote)::text) != ''::text);;;
-        		</lang>
+			   	CREATE OR REPLACE VIEW v_vote AS
+			   		SELECT a.amp_activity_id, a.vote FROM amp_activity_version a WHERE btrim(a.vote) != '';
+        	</lang>
 		</script>
 	</apply>
 </tns:patch>

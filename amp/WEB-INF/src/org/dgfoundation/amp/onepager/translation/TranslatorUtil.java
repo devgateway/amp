@@ -15,8 +15,10 @@ import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
 
 /**
  * @author mpostelnicu@dgateway.org
@@ -77,18 +79,19 @@ public final class TranslatorUtil {
      */
     public static List<String> getLocaleCache(Site site)
     {
-        if (localeCache == null)
-        {
+        if (localeCache == null) {
         	Set<Locale> list = site.getTranslationLanguages();
         	localeCache = new ArrayList<String>();
-        	for (Locale loc: list)
-        	{
+        	for (Locale loc: list) {
         		localeCache.add(loc.getCode());
         	}
         	Collections.sort(localeCache);
         }
-
         return localeCache;
+    }
+    
+    public static List<String> getLanguages() {
+    	return getLocaleCache(SiteUtils.getDefaultSite());
     }
 
     public static String getDefaultLocaleCache(){

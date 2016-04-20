@@ -19,8 +19,12 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_pledges_zones AS SELECT ra.pledge_id, getlocationname(getlocationidbyimplloc(cvl.id, 'Zone'::character varying)) AS location_name, getlocationidbyimplloc(cvl.id, 'Zone'::character varying) AS location_id, sum(ra.location_percentage) AS location_percentage FROM (amp_funding_pledges_location ra JOIN amp_category_value_location cvl ON ((ra.location_id = cvl.id))) WHERE ((ra.location_id = cvl.id) AND (getlocationidbyimplloc(cvl.id, 'Zone'::character varying) IS NOT NULL)) GROUP BY ra.pledge_id, getlocationidbyimplloc(cvl.id, 'Zone'::character varying);;;
-        		</lang>
+				DROP VIEW IF EXISTS v_pledges_zones CASCADE;
+			   	CREATE OR REPLACE VIEW v_pledges_zones AS
+					SELECT ra.pledge_id, loc.zone_name, loc.zone_id, sum(ra.location_percentage) AS percentage, COUNT(*) - COUNT(ra.location_percentage) AS cnt_nulls
+						FROM amp_funding_pledges_location ra JOIN ni_all_locations_with_levels loc on loc.acvl_id = ra.location_id
+						GROUP BY ra.pledge_id, loc.zone_id, loc.zone_name;
+			</lang>
 		</script>
 	</apply>
 </tns:patch>

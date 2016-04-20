@@ -35,9 +35,6 @@ SaikuTableRenderer.prototype._render = function(data, options) {
 
                 var html =  self.internalRender(self._data, self._options);
                 $(self._options.htmlObject).html(html);
-                /*if(Settings.AMP_REPORT_API_BRIDGE){
-                	checkTable(self._options.htmlObject);
-                }*/
                 $(".tooltipped").tipsy();
                 _.defer(function(that) {
                     if (self._options.hasOwnProperty('batch') && self._options.hasBatchResult) {                        
@@ -133,10 +130,6 @@ SaikuTableRenderer.prototype._processData = function(data, options) {
 };
 
 function genTotalDataCells(currentIndex, cellIndex, scanSums, scanIndexes, lists) {
-    if(Settings.AMP_REPORT_API_BRIDGE) {
-		var rowOffset = this.currentQuery.get('page')*Settings.RESULTS_PER_PAGE;
-		cellIndex += rowOffset;
-    }
     var contents = '';
 	var lists = lists[ROWS];
 	for (var i = scanSums.length - 1; i >= 0; i--) {
@@ -211,12 +204,6 @@ function totalIntersectionCells(currentIndex, bottom, scanSums, scanIndexes, lis
 }
 
 function genTotalHeaderRowCells(currentIndex, scanSums, scanIndexes, totalsLists, dryrun, emptyColRowTotalsMeasures, emptyRowTotalsMeasures) {
-	// The dryrun parameter is useful to run this function that affects global variables without moving the currentIndex
-	// Used to allow correct alignment of totals by hierarchy
-    if(Settings.AMP_REPORT_API_BRIDGE && !dryrun) {
-		var rowOffset = this.currentQuery.get('page')*Settings.RESULTS_PER_PAGE;
-		currentIndex += rowOffset;
-    }
 	var colLists = totalsLists[COLUMNS];
 	var colScanSums = scanSums[COLUMNS];
 	var colScanIndexes = scanIndexes[COLUMNS];
@@ -352,22 +339,6 @@ function sanitizeRows(rowData, data) {
 }
 
 SaikuTableRenderer.prototype.internalRender = function(allData, options) {
-	if (Settings.AMP_REPORT_API_BRIDGE) {		
-		var metadata = {
-			hierarchies : Saiku.tabs._tabs[0].content.query.attributes.hierarchies,
-			columns : Saiku.tabs._tabs[0].content.query.attributes.columns,
-			type : 'html'
-		};
-		var ampTableRenderer = new AMPTableRenderer(metadata);
-		
-		allData.workspace.bind('saikuTableRender:tableRenderedInDOM', function(
-				args) {
-			ampTableRenderer.postProcessTooltips();
-		});
-		
-		return ampTableRenderer.render(allData, options);
-	}
-	
     var tableContent = "";
     var rowContent = "";
 	var data = allData.cellset;
@@ -394,15 +365,9 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
     }
 
     var totalsLists = {};
-    if(Settings.AMP_REPORT_API_BRIDGE) {
-        totalsLists[COLUMNS] = sanitizeColumns(allData.rowTotalsLists);
-        totalsLists[ROWS] = sanitizeRows(allData.colTotalsLists, data);
-    }
-    else
-	{
-        totalsLists[COLUMNS] = allData.rowTotalsLists;
-        totalsLists[ROWS] = allData.colTotalsLists;
-	}
+    totalsLists[COLUMNS] = allData.rowTotalsLists;
+    totalsLists[ROWS] = allData.colTotalsLists;
+	
     //Initializes the scanSums and scanIndexes. These are local variables that will change as the grid is rendered
     var scanSums = {};
     var scanIndexes = {};
@@ -608,16 +573,6 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
         rowContent += "</tr>";
         var totals = "";
         if (totalsLists[COLUMNS] && rowShifted >= 0) {
-            if(Settings.AMP_REPORT_API_BRIDGE) {
-	        	var currentPage = currentQuery.get('page');
-	        	if(currentPage > 0 ) { //Recalculate indexes
-	        		var prevRecCount = currentPage * Settings.RESULTS_PER_PAGE;
-	        		for(var p = 0; p < prevRecCount; p++) {
-	        			genTotalHeaderRowCells(p + 1, scanSums, scanIndexes, totalsLists, true, emptyColRowTotalsMeasures, emptyRowTotalsMeasures);
-	        		}
-	        	}
-        	}
-
             totals += genTotalHeaderRowCells(rowShifted + 1, scanSums, scanIndexes, totalsLists, false, emptyColRowTotalsMeasures, emptyRowTotalsMeasures);
         }
         

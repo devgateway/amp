@@ -65,7 +65,6 @@ var Settings = {
     LOCALSTORAGE_EXPIRATION: 0 /* 10 hours, in ms */,
     UPGRADE: false,    
     AMP_PATH: '/rest/data/report',
-    AMP_REPORT_API_BRIDGE: false,
     PAGINATION: true,
     RESULTS_PER_PAGE: 10,
     USE_AMP_LANGUAGE: true,
@@ -78,6 +77,11 @@ var Settings = {
  */
 Settings.GET = function () {
     var qs = document.location.search;
+    if (document.location.search.length == 0) {
+    	var hs = document.location.hash;
+    	qs = hs.substring(hs.indexOf('?')+1);
+    } // the attributes cannot be fetched from location.search if the url contains #
+    
     qs = qs.split("+").join(" ");
     var params = {},
         tokens,

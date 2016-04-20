@@ -21,9 +21,9 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.reports.CustomMeasures;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportSpec;
 import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.service.olap.totals.TotalNode;
-import org.saiku.service.olap.totals.aggregators.SumAggregator;
 import org.saiku.service.olap.totals.aggregators.TotalAggregator;
 
 /**
@@ -34,12 +34,12 @@ import org.saiku.service.olap.totals.aggregators.TotalAggregator;
  */
 public class CellDataSetPostProcessing {
 	
-	protected ReportSpecification spec;
+	protected MondrianReportSpec spec;
 	protected CellDataSet cellDataSet;
 	protected List<ReportOutputColumn> leafHeaders;
 	protected ReportEnvironment environment;
 	
-	public CellDataSetPostProcessing(ReportSpecification spec, CellDataSet cellDataSet, 
+	public CellDataSetPostProcessing(MondrianReportSpec spec, CellDataSet cellDataSet, 
 			List<ReportOutputColumn> leafHeaders, ReportEnvironment environment) {
 		this.spec = spec;
 		this.cellDataSet = cellDataSet;
@@ -172,7 +172,7 @@ public class CellDataSetPostProcessing {
 		for(int columnNumber = measureStartId ; columnNumber < measuresEndId; columnNumber++) {
 			ReportOutputColumn selfHeader = leafHeaders.get(columnNumber + spec.getColumnNames().size());
 			if (hasFundingFlowParent(selfHeader) && isZero(byColTotals, columnNumber)) {
-				leafHeaders.set(columnNumber + spec.getColumnNames().size(), new ReportOutputColumn(" ", selfHeader.parentColumn, " ", selfHeader.flags));
+				leafHeaders.set(columnNumber + spec.getColumnNames().size(), new ReportOutputColumn(" ", selfHeader.parentColumn, " ", null, selfHeader.flags));
 			}
 		}
 		//colsToDelete.clear();
@@ -241,16 +241,10 @@ public class CellDataSetPostProcessing {
 		for(int i = 0; i < Math.min(columnNames.length, matrix.length); i++) {
 			String columnName = columnNames[i];
 			if (ArConstants.DIRECTED_MEASURE_TO_DIRECTED_TRANSACTION_VALUE.containsKey(columnName)) {
-				for(int j = 0; j < matrix[i].length; j++) {
-					SumAggregator sa = (SumAggregator) matrix[i][j];
-					sa.addData(- sa.getValue());
-				}
+				for(int j = 0; j < matrix[i].length; j++)
+					matrix[i][j].setFormattedValue("");
 			}
 		}
-	}
-	
-	public void postProcessAmountsBeforeHierarchicalMerge() {
-		(new PPCDependentMeasuresPostProcess(spec, cellDataSet, leafHeaders)).processBeforeMergeByHierarchy();
 	}
 	
 	/**

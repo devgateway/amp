@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
+import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
@@ -17,7 +17,7 @@ import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.junit.Test;
 
-public class DateColumnsMondrianReportTests extends MondrianReportsTestCase {
+public class DateColumnsMondrianReportTests extends ReportingTestCase {
 	
 	public DateColumnsMondrianReportTests() {
 		super("mondrian date columns tests");

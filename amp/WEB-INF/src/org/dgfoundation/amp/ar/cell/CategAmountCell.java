@@ -398,6 +398,8 @@ public Cell filter(Cell metaCell, Set ids) {
 	 */
 	public boolean hasMetaInfo(MetaInfo m) 
 	{
+		if (metaData == null || m == null || m.getCategory() == null)
+			return false;
 		MetaInfo internal = metaData.getMetaInfo(m.getCategory());
 		if (internal == null ) {
 			return false;

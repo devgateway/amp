@@ -32,6 +32,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
@@ -95,26 +96,7 @@ public class SelectTeam extends Action {
 
 
 
-            TeamMember tm = new TeamMember(member);
-			//now teamHead is configured within TeamMember constructor, but leaving this special case here
-			//is it still needed? if yes, then should be moved within TeamMemberUtil.isHeadRole()
-            if (
-                        //very ugly but we have no choice - only one team head role possible :(
-                        member.getAmpMemberRole().getRole().equals("Top Management")
-                        ) {
-                    tm.setTeamHead(true);
-                }
-            session.setAttribute("teamLeadFlag", String.valueOf(tm.getTeamHead()));
-            
-            session.setMaxInactiveInterval(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.MAX_INACTIVE_SESSION_INTERVAL).intValue());
-            
-            AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(member.getAmpTeam().getAmpTeamId());
-            ApplicationSettings appSettings = new ApplicationSettings(ampAppSettings);
-            session.setAttribute(Constants.TEAM_ID, tm.getTeamId());
-            tm.setAppSettings(appSettings);
-            
-            session.setAttribute(Constants.CURRENT_MEMBER, tm);
-            AmpTeam.initializeTeamFiltersSession(member, request, session);
+            TeamMember tm = TeamUtil.setupFiltersForLoggedInUser(request, member);
             PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
             lForm.setLogin(true);
 

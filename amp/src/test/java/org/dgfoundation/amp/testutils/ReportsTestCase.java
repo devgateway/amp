@@ -43,31 +43,11 @@ public abstract class ReportsTestCase extends AmpTestCase
 		ImmutablePair<GroupReportData, String> report = ReportTestingUtils.runReportOn(reportName, modifier, activities);
 		////System.out.println(ReportTestingUtils.describeReportInCode(report, 1, true));
 //		checkThatAllCRDsHaveIdenticalReportHeadingsLayoutData(report);
-		String error = correctResult == null ? "missing Cor" : correctResult.matches(report.k);
+		String error = correctResult.matches(report.k);
 		if (error != null)
 			System.err.format("test %s, report %s, the output is: %s\n", testName, reportName, report.v);
 		assertNull(String.format("test %s, report %s: %s", testName, reportName, error), error);
 	}
-	
-//	/**
-//	 * all the CRDs of the report should have the same columns' structures, e.g. any column-removal should be done in such a way as to be reflected in all the CRD's of a report
-//	 */
-//	protected void checkThatAllCRDsHaveIdenticalReportHeadingsLayoutData(GroupReportData report)
-//	{
-//		ArrayList<ColumnReportData> crds = new ArrayList<ColumnReportData>();
-//		collectAllCRD(report, crds);
-//		
-//		if (crds.isEmpty())
-//			return;
-//		
-//		String first = crds.get(0).digestReportHeadingData(true).toString();
-//		for(int i = 1; i < crds.size(); i++)
-//		{
-//			String checked = crds.get(i).digestReportHeadingData(true).toString();
-//			assertEquals(first, checked, 
-//					"CRD " + crds.get(i).getAbsoluteReportName() + " has a different layout digest than " + crds.get(0).getAbsoluteReportName());
-//		}
-//	}
 	
 	/**
 	 * shorthand for {@link #runReportTest(String, String, String[], GroupReportModel, AmpReportModifier, null)}
@@ -81,25 +61,6 @@ public abstract class ReportsTestCase extends AmpTestCase
 	{
 		runReportTest(testName, reportName, activities, correctResult, modifier, null);
 	}
-	
-//	/**
-//	 * all the CRDs of the report should have the same columns' structures, e.g. any column-removal should be done in such a way as to be reflected in all the CRD's of a report
-//	 */
-//	protected void checkThatAllCRDsHaveIdenticalReportHeadingsLayoutData(GroupReportData report)
-//	{
-//		ArrayList<ColumnReportData> crds = new ArrayList<ColumnReportData>();
-//		collectAllCRD(report, crds);
-//		
-//		if (crds.isEmpty())
-//			return;
-//		
-//		String first = crds.get(0).digestReportHeadingData().toString();
-//		for(int i = 1; i < crds.size(); i++)
-//		{
-//			String checked = crds.get(i).digestReportHeadingData().toString();
-//			assertTrue("CRD " + crds.get(i).getAbsoluteReportName() + " has a different layout digest than " + crds.get(0).getAbsoluteReportName(), first.equals(checked));
-//		}
-//	}
 	
 	protected void collectAllCRD(GroupReportData report, List<ColumnReportData> crds)
 	{

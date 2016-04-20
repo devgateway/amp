@@ -7,8 +7,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.algo.ExceptionRunnable;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.mondrian.ExceptionRunnable;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 
@@ -80,7 +80,7 @@ public class Fingerprint {
 	 * returns a ';'-delimited list of hashes returned by psql queries
 	 * @return
 	 */
-	protected String computeFingerprint(Connection postgresConn) {
+	public String computeFingerprint(Connection postgresConn) {
 		List<String> fps = new ArrayList<>();
 		for (String query:fingerprintQueries) {
 			List<String> fp = SQLUtils.fetchAsList(postgresConn, query, 1);

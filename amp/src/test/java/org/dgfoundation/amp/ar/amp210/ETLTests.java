@@ -11,8 +11,6 @@ import org.dgfoundation.amp.currencyconvertor.DateRateInfo;
 import org.dgfoundation.amp.currencyconvertor.ExchangeRates;
 import org.dgfoundation.amp.currencyconvertor.OneCurrencyCalculator;
 import org.dgfoundation.amp.mondrian.currencies.CurrencyETL;
-//import org.dgfoundation.amp.mondrian.currencies.DateRateInfo;
-//import org.dgfoundation.amp.mondrian.currencies.ExchangeRates;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MondrianTableDescription;
 import org.dgfoundation.amp.mondrian.PercentagesDistribution;
@@ -133,21 +131,21 @@ public class ETLTests extends AmpTestCase
 	 */
 	@Test
 	public void testPercentagesDistributionWithNulls() { //[WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 2) of entity_id 1]
-		testPercentage("{2=100.0}", "[WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 2) of entity_id 1]", null,
+		testPercentage("{2=100.0}", "[perc_is_null on (primary_sector_id, 2) of entity_id 1]", null,
 			new Pair(2, null));
-		testPercentage("{2=50.0, 3=50.0}", "[WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 2) of entity_id 1, WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 3) of entity_id 1]", null,
+		testPercentage("{2=50.0, 3=50.0}", "[perc_is_null on (primary_sector_id, 2) of entity_id 1, perc_is_null on (primary_sector_id, 3) of entity_id 1]", null,
 			new Pair(2, null), new Pair(3, null));
 		
-		testPercentage("{2=50.0, 3=50.0}", "[WARNING_TYPE_ENTRY_MIXES_NULL_AND_NOT_NULL on (primary_sector_id, -1) of entity_id 1, WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 3) of entity_id 1]", null,
+		testPercentage("{2=50.0, 3=50.0}", "[mixing_nulls_nonnulls on (primary_sector_id, -1) of entity_id 1, perc_is_null on (primary_sector_id, 3) of entity_id 1]", null,
 			new Pair(2, 15.0), new Pair(3, null));
 		
-		testPercentage("{2=12.5, 3=37.5, 4=50.0}", "[WARNING_TYPE_ENTRY_MIXES_NULL_AND_NOT_NULL on (primary_sector_id, -1) of entity_id 1, WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 4) of entity_id 1]", null,
+		testPercentage("{2=12.5, 3=37.5, 4=50.0}", "[mixing_nulls_nonnulls on (primary_sector_id, -1) of entity_id 1, perc_is_null on (primary_sector_id, 4) of entity_id 1]", null,
 			new Pair(2, 15.0), new Pair(3, 45.0), new Pair(4, null));
 		
-		testPercentage("{2=100.0}", "[WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 2) of entity_id 1]", MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL, 
+		testPercentage("{2=100.0}", "[perc_is_null on (primary_sector_id, 2) of entity_id 1]", MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL, 
 			new Pair(2, null)); // test that a single null is not completed by the dummy id
 		
-		testPercentage("{2=100.0}", "[WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 2) of entity_id 1]", MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL,
+		testPercentage("{2=100.0}", "[perc_is_null on (primary_sector_id, 2) of entity_id 1]", MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL,
 			new Pair(2, null),
 			new Pair(3, 0.0));
 	}
@@ -205,7 +203,6 @@ public class ETLTests extends AmpTestCase
 
 		assertEquals(21.0, OneCurrencyCalculator.chooseBestRate(rateA, rateB));
 		assertEquals(1/21.0, OneCurrencyCalculator.chooseBestRate(rateB, rateA));
-
 		
 		rateB = new DateRateInfo(10, 0, 10);
 		assertEquals(21.0, OneCurrencyCalculator.chooseBestRate(rateA, rateB)); // should favour direct exchange rate
@@ -250,12 +247,8 @@ public class ETLTests extends AmpTestCase
 			put(700l, 1/0.22);
 		}};
 		
-//		SortedSet<Long> interestingDates = new TreeSet<>(cor.keySet());
-//		Map<Long, Double> rates = CurrencyETL.computeCurrencyRates(interestingDates, inverse, direct);
-//		System.out.println(rates.toString()); // debug output
-		
 		OneCurrencyCalculator calc = new OneCurrencyCalculator(inverse, direct);
-				
+//		System.out.println(rates.toString()); // debug output
 		
 		for (long day:cor.keySet()) {
 			assertEquals("comparing on day " + day, cor.get(day), calc.getRate(day), 0.001);

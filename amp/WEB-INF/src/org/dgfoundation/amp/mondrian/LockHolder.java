@@ -6,6 +6,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 
+import org.dgfoundation.amp.algo.AlgoUtils;
+import org.dgfoundation.amp.algo.ExceptionRunnable;
+
 /**
  * Lock utils
  * @author Constantin Dolghier
@@ -30,9 +33,7 @@ public class LockHolder {
 			r.run();
 		}
 		catch(Exception e) {
-			if (e instanceof RuntimeException)
-				throw (RuntimeException) e;
-			throw new RuntimeException(e);
+			throw AlgoUtils.translateException(e);
 		}
 		finally {
 			lock.unlock();

@@ -108,6 +108,7 @@
 
 	<http pattern="/saiku/rest/**" security="none" />
     <http pattern="/TEMPLATE/ampTemplate/saikuui/**" security="none" />
+    <http pattern="/TEMPLATE/ampTemplate/saikuui_nireports/**" security="none" />
     
   
 	<!-- match images -->

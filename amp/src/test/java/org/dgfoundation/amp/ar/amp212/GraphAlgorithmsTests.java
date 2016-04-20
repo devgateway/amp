@@ -5,16 +5,16 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Collection;
+import java.util.function.Function;
 
 import org.dgfoundation.amp.algo.Graph;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.junit.Test;
 
-import com.google.common.base.Function;
 
 /**
  * 
- * testcases for Currency Deflator (https://jira.dgfoundation.org/browse/AMP-20534)
+ * testcases for graph algorithms
  * @author Constantin Dolghier
  *
  */
@@ -58,8 +58,7 @@ public class GraphAlgorithmsTests extends AmpTestCase {
 				put("one", Arrays.asList("two"));
 				put("two", Arrays.asList("one"));
 			}}));
-		assertEquals("[five, four, three, two, one]", graph.sortTopologically().toString());
-		//shouldFail(runnable, message);
+		shouldFail(() -> {graph.sortTopologically().toString();}, new RuntimeException("cycle detected, the notoutput data is: [node one, id = 1][node two, id = 3]"));
 	}
 
 	
@@ -70,10 +69,9 @@ public class GraphAlgorithmsTests extends AmpTestCase {
 				put("one", Arrays.asList("two"));
 				put("three", Arrays.asList("three"));
 			}}));
-		assertEquals("[five, four, three, two, one]", graph.sortTopologically().toString());
+		shouldFail(() -> {graph.sortTopologically().toString();}, new RuntimeException("cycle detected, the notoutput data is: [node three, id = 3]"));
 	}
 
-	//TODO: move to jdk8
 	static class MapDrivenDepenciesSource implements Function<String, Collection<String>> {
 		final Map<String, Collection<String>> src;
 		public MapDrivenDepenciesSource(Map<String, Collection<String>> src) {

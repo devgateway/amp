@@ -41,8 +41,7 @@ CommonFilterUtils.convertJavaFiltersToJS = function(data) {
 				start : ''
 			}
 		},
-		columnFilters : {
-			"Donor Id" : []
+		columnFilters : {			
 		}
 	};
 	

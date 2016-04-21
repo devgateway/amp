@@ -42,7 +42,9 @@ FilterUtils.extractFilters = function(content) {
 							item.dateIntervalType = dateIntervalType;
 							item.type = element["min"] === i ? "min" : "max";
 						}
-						content.push(item);
+						if(_.isUndefined(_.findWhere(content,{id:item.id, name:item.name}))){
+							   content.push(item);
+						}
 					}
 				});
 			}

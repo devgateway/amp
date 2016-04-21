@@ -570,6 +570,7 @@ textarea, select {
 .ui-widget {
 	font-family: inherit !important;
 	font-size: inherit !important;
+	display: none;
 }
 .ui-widget-header {
     border: 0 !important;

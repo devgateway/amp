@@ -38,7 +38,7 @@ var AMPInfo = Backbone.View.extend({
     render_info: function(settings) {
     	//TODO: Move all these html into a template + view.
     	var content = "<div id='amp_notification' class='amp_notification'><span class='i18n'>{0}</span></div>" 
-    		+ "<div id='amp_info_filters'>";
+    		+ "<div id='amp_info_filters' style='display: block !important;'>";
     	content += "<h3><span class='i18n'>Applied filters</span></h3>";
     	content += "<div id='amp_info_filters_block'></div>";
     	content += "</div>";

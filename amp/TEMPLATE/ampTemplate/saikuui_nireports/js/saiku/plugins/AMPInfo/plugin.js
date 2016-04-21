@@ -130,23 +130,33 @@ var filtersToHtml = function(filters) {
 	if (filters.otherFilters != undefined) {
 		for ( var propertyName in filters.otherFilters) {
 			var dateContent = filters.otherFilters[propertyName];
-			if (dateContent != undefined
-					&& dateContent.start != undefined) {
+			if (dateContent != undefined) {
+				dateContent.start = dateContent.start || "";
+				dateContent.end = dateContent.end || "";
 				var filter = {
 					trnName : propertyName, /*TranslationManager.getTranslated(propertyName),*/
 					name : propertyName,
-					values : [ {
+					values:[]
+				};
+				
+				var startDatePrefix = (dateContent.start.length > 0 && dateContent.end.length === 0) ? "from " : "";
+				var endDatePrefix = (dateContent.start.length === 0 && dateContent.end.length > 0) ? "until " : "";
+				
+				if(dateContent.start.length > 0){
+					filter.values.push({
 						id : dateContent.start,
 						name : dateContent.start,
-						trnName : dateContent.start //doesn't need translation for now
-					},
-					{
+						trnName : startDatePrefix + window.currentFilter.formatDate(dateContent.start) 
+					});
+				}
+				
+				if(dateContent.end.length > 0){
+					filter.values.push({
 						id : dateContent.end,
 						name : dateContent.end,
-						trnName : dateContent.end //doesn't need translation for now
-						
-					}]
-				};
+						trnName : endDatePrefix + window.currentFilter.formatDate(dateContent.end) 					
+					});		
+				}				
 				html += "<div class='round-filter-group'><b class='i18n'>" + filter.trnName + "</b><br>" + filterContentToHtml(filter.values) + "</div>";
 			}
 		}

@@ -158,41 +158,29 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 					dateContent.start =  dateContent.start || "" ;
 					dateContent.end =  dateContent.end || "" ;	
 					var filterObject = {
-						trnName : TranslationManager.getTranslated(propertyName),
-						name : propertyName,
-						values: []
-					};					
-					if(dateContent.start.length > 0 && dateContent.end.length > 0){
+							trnName : TranslationManager.getTranslated(propertyName),
+							name : propertyName,
+							values: []
+					};		
+					var startDatePrefix = (dateContent.start.length > 0 && dateContent.end.length === 0) ? "from " : "";
+					var endDatePrefix = (dateContent.start.length === 0 && dateContent.end.length > 0) ? "until " : "";
+					if(dateContent.start.length > 0){
 						filterObject.values.push({
 							id : dateContent.start,
 							name : dateContent.start,
-							trnName : app.TabsApp.filtersWidget.formatDate(dateContent.start) //doesn't need translation for now
-						});
-						
-						filterObject.values.push({
-							id : dateContent.end,
-							name : dateContent.end,
-							trnName : app.TabsApp.filtersWidget.formatDate(dateContent.end) //doesn't need translation for now
-							
-						});
-						
-					}else if(dateContent.start.length > 0 && dateContent.end.length == 0){
-						filterObject.values.push({
-							id : dateContent.start,
-							name : dateContent.start,
-							trnName : "from " + app.TabsApp.filtersWidget.formatDate(dateContent.start) //doesn't need translation for now
-						});
-					}else if(dateContent.start.length == 0 && dateContent.end.length > 0){
-						filterObject.values.push({
-							id : dateContent.end,
-							name : dateContent.end,
-							trnName : "until " + app.TabsApp.filtersWidget.formatDate(dateContent.end) //doesn't need translation for now
-							
+							trnName : TranslationManager.getTranslated(startDatePrefix) + app.TabsApp.filtersWidget.formatDate(dateContent.start)
 						});
 					}
-				
-				var filter = new Filter(filterObject);
-				app.TabsApp.filters.models.push(filter);
+					if(dateContent.end.length > 0){
+						filterObject.values.push({
+							id : dateContent.end,
+							name : dateContent.end,
+							trnName : TranslationManager.getTranslated(endDatePrefix) + app.TabsApp.filtersWidget.formatDate(dateContent.end)
+
+						});	
+					}										
+				 var filter = new Filter(filterObject);
+				 app.TabsApp.filters.models.push(filter);
 				}
 			}
 		}

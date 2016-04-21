@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.testmodels.nicolumns;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -145,7 +146,7 @@ public abstract class HardcodedCells<K extends Cell> {
 			String pledge, String transaction_type, String agreement, String recipient_org, 
 			String recipient_role, String source_role, String adjustment_type,
 			String donor_org, String funding_status, String mode_of_payment, 
-			String terms_assist, String financing_instrument) {
+			String terms_assist, String financing_instrument, String transaction_date) {
 		
 		NiDimension cats = HardcodedReportsTestSchema.catsDimension;
 		
@@ -165,7 +166,9 @@ public abstract class HardcodedCells<K extends Cell> {
 		addToCoordsIfExists(degenerate(cats, "mode_of_payment"), TestModelConstants.MODE_OF_PAYMENT_ID, mode_of_payment, coos);
 		addToCoordsIfExists(degenerate(cats, "type_of_assistance"), TestModelConstants.TERMS_ASSIST_ID, terms_assist, coos);
 		addToCoordsIfExists(degenerate(cats, "fin_instr"), TestModelConstants.FINANCING_INSTRUMENT_ID, financing_instrument, coos);
-		return new CategAmountCell(activityIds.get(activityTitle), new MonetaryAmount(new BigDecimal(amount), new AmpPrecisionSetting()), 
+		
+		return new CategAmountCell(activityIds.get(activityTitle), 
+				new MonetaryAmount(new BigDecimal(amount), null, null, LocalDate.parse(transaction_date, DateTimeFormatter.ISO_LOCAL_DATE), new AmpPrecisionSetting()), 
 				mis, coos, td);
 	}
 	

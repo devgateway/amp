@@ -47,6 +47,7 @@ public class HardcodedActivities {
 		activity("Activity With Zones and Percentages", 36);
 		activity("activity-with-unfunded-components", 61);
 		activity("activity_with_disaster_response", 71);
+		activity("arrears test", 81);
 		activity("crazy funding 1", 32);
 		activity("date-filters-activity", 26);
 		activity("Eth Water", 24);

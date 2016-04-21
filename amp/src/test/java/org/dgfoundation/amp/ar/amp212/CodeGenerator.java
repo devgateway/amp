@@ -112,10 +112,10 @@ public class CodeGenerator  {
 	
 	public void generateCode() throws FileNotFoundException, UnsupportedEncodingException  {
 //			generateFunding();
-//			generateActivityNames();
+			generateActivityNames();
 //			generateFundingTypesNames();
 //			generateDimensions();
-			generateColumns();
+//			generateColumns();
 	}
 	
 	public static void main(String[] args)  throws AMPException, FileNotFoundException, UnsupportedEncodingException {

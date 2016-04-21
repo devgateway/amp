@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import static org.dgfoundation.amp.algo.AmpCollections.sorted;
@@ -58,10 +59,12 @@ public class FundingColumnGenerator extends ColumnGenerator {
 		public final String mode_of_payment;
 		public final String terms_assist;
 		public final String financing_instrument;
+		public final String transaction_date;
+		
 		
 		@Override
 		public String toString() {
-			return String.format("%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s", 
+			return String.format("%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s", 
 					pad(escape(amount.toString()), 20), 
 					pad(escape(activityTitle), 60),
 					year,
@@ -77,14 +80,15 @@ public class FundingColumnGenerator extends ColumnGenerator {
 					pad(escape(funding_status), 30), 
 					pad(escape(mode_of_payment), 30), 
 					pad(escape(terms_assist), 30), 
-					pad(escape(financing_instrument), 30));
+					pad(escape(financing_instrument), 30),
+					pad(escape(transaction_date), 10));
 		}
 		
 		public Entry(BigDecimal amount, String activityTitle, String year, String month, 
 					String pledge, String transaction_type, String agreement, String recipient_org, 
 					String recipient_role, String source_role, String adjustment_type,
 					String donor_org, String funding_status, String mode_of_payment, 
-					String terms_assist, String financing_instrument){
+					String terms_assist, String financing_instrument, String transaction_date){
 			this.amount = amount;
 			this.activityTitle = activityTitle;
 			this.year = year;
@@ -101,6 +105,7 @@ public class FundingColumnGenerator extends ColumnGenerator {
 			this.mode_of_payment = mode_of_payment;
 			this.terms_assist = terms_assist;
 			this.financing_instrument = financing_instrument;
+			this.transaction_date = transaction_date;
 		}
 	}
 	
@@ -148,6 +153,8 @@ public class FundingColumnGenerator extends ColumnGenerator {
 					for (CategAmountCell cell : cells) {
 						
 						BigDecimal amount = cell.getAmount();
+						String transaction_date = DateTimeFormatter.ISO_LOCAL_DATE.format(cell.amount.date);
+						
 						String activityTitle = activityNames.get(cell.activityId);
 						String year = String.format("%s", cell.getTranslatedDate().year.getValue());
 						String month = cell.getTranslatedDate().month.getValue();
@@ -163,6 +170,7 @@ public class FundingColumnGenerator extends ColumnGenerator {
 						String source_role = catValueDirectly(TestModelConstants.SOURCE_ROLE, cell.metaInfo);
 						String adjustment_type = catValueDirectly(TestModelConstants.ADJUSTMENT_TYPE, cell.metaInfo);
 						
+						
 						//these are read from the coords map
 						String donor_org = cat(TestModelConstants.DONOR_ORG_ID, cell.coordinates);
 						String funding_status = cat(TestModelConstants.FUNDING_STATUS_ID, cell.coordinates);
@@ -171,7 +179,8 @@ public class FundingColumnGenerator extends ColumnGenerator {
 						String financing_instrument = cat(TestModelConstants.FINANCING_INSTRUMENT_ID, cell.coordinates);
 						entries.add(new Entry(amount, activityTitle, year, month, pledge, transaction_type, 
 								agreement, recipient_org, recipient_role, source_role, adjustment_type, 
-								donor_org, funding_status, mode_of_payment, terms_assist, financing_instrument));
+								donor_org, funding_status, mode_of_payment, terms_assist, financing_instrument,
+								transaction_date));
 					}
 				});
 		entries.sort((Entry e1, Entry e2) -> {
@@ -246,7 +255,8 @@ public class FundingColumnGenerator extends ColumnGenerator {
 				pad("funding_status", 30),
 				pad("mode_of_payment", 30),
 				pad("terms_assist", 30),
-				pad("financing_instrument", 30));
+				pad("financing_instrument", 30),
+				pad("transaction_date", 30));
 	}
 	
 	@Override

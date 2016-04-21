@@ -4,9 +4,11 @@ package org.digijava.module.aim.logic;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 
-import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -23,6 +25,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.exceptions.UsedCategoryException;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 
 import com.sun.istack.logging.Logger;
 
@@ -35,21 +38,74 @@ public class FundingCalculationsHelper {
 	DecimalWraper totPlannedDisbOrder = new DecimalWraper();
 	DecimalWraper totPlannedReleaseOfFunds = new DecimalWraper();
 	DecimalWraper totPlannedEDD = new DecimalWraper();
+	DecimalWraper totPlannedArrears = new DecimalWraper();
 	DecimalWraper totActualComm = new DecimalWraper();
 	DecimalWraper totActualDisb = new DecimalWraper();
 	DecimalWraper totActualExp = new DecimalWraper();
 	DecimalWraper totActualDisbOrder = new DecimalWraper();
 	DecimalWraper totActualReleaseOfFunds = new DecimalWraper();
 	DecimalWraper totActualEDD = new DecimalWraper();
+	DecimalWraper totActualArrears = new DecimalWraper();
 	DecimalWraper totPipelineDisb = new DecimalWraper();
 	DecimalWraper totPipelineComm = new DecimalWraper();
 	DecimalWraper totPipelineExp = new DecimalWraper();
 	DecimalWraper totPipelineDisbOrder = new DecimalWraper();
 	DecimalWraper totPipelineReleaseOfFunds = new DecimalWraper();
 	DecimalWraper totPipelineEDD = new DecimalWraper();
+	DecimalWraper totPipelineArrears = new DecimalWraper();
 	DecimalWraper totOdaSscComm = new DecimalWraper();
 	DecimalWraper totBilateralSscComm = new DecimalWraper();
 	DecimalWraper totTriangularSscComm = new DecimalWraper();
+	
+	
+    @SuppressWarnings("serial")
+	private static Map<Integer, String> transactionTypeLabelMap = new HashMap<Integer, String>(){{
+    	put(Constants.COMMITMENT, "Commitment");
+        put(Constants.DISBURSEMENT, "Disbursement");
+        put(Constants.EXPENDITURE, "Expenditure");
+        put(Constants.RELEASE_OF_FUNDS, "Release of Funds");
+        put(Constants.ESTIMATED_DONOR_DISBURSEMENT, "Estimated Disbursement");
+        put(Constants.DISBURSEMENT_ORDER, "Disbursement Order");
+        put(Constants.MTEFPROJECTION, "MTEF Projection");
+        put(Constants.ARREARS, "Arrears");
+    }};
+    
+    public static String getTransactionTypeLabel (int type) {
+    	return transactionTypeLabelMap.get(type);
+    }
+    
+    private static String combineKeys(int transType, HardCodedCategoryValue adjKey) {
+    	return String.format("%s %s", getTransactionTypeLabel(transType), adjKey.getValueKey());
+    }
+    
+	@SuppressWarnings("serial")
+	Map<String, Supplier<DecimalWraper>> wrapperNames = new HashMap<String, Supplier<DecimalWraper>>(){{
+		put(combineKeys(Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL), () -> totActualComm);
+        put(combineKeys(Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_PLANNED), () -> totPlannedComm);
+        put(combineKeys(Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_PIPELINE), () -> totPipelineComm);
+		put(combineKeys(Constants.DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL), () -> totActualDisb);
+        put(combineKeys(Constants.DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_PLANNED), () -> totPlanDisb);
+        put(combineKeys(Constants.DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_PIPELINE), () -> totPipelineDisb);
+		put(combineKeys(Constants.ESTIMATED_DONOR_DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL), () -> totActualEDD);
+        put(combineKeys(Constants.ESTIMATED_DONOR_DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_PLANNED), () -> totPlannedEDD);
+        put(combineKeys(Constants.ESTIMATED_DONOR_DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_PIPELINE), () -> totPipelineEDD);
+		put(combineKeys(Constants.EXPENDITURE, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL), () -> totActualExp);
+        put(combineKeys(Constants.EXPENDITURE, CategoryConstants.ADJUSTMENT_TYPE_PLANNED), () -> totPlannedExp);
+        put(combineKeys(Constants.EXPENDITURE, CategoryConstants.ADJUSTMENT_TYPE_PIPELINE), () -> totPipelineExp);
+		put(combineKeys(Constants.RELEASE_OF_FUNDS, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL), () -> totActualReleaseOfFunds);
+        put(combineKeys(Constants.RELEASE_OF_FUNDS, CategoryConstants.ADJUSTMENT_TYPE_PLANNED), () -> totPlannedReleaseOfFunds);
+        put(combineKeys(Constants.RELEASE_OF_FUNDS, CategoryConstants.ADJUSTMENT_TYPE_PIPELINE), () -> totPipelineReleaseOfFunds);
+		put(combineKeys(Constants.ARREARS, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL), () -> totActualArrears);
+        put(combineKeys(Constants.ARREARS, CategoryConstants.ADJUSTMENT_TYPE_PLANNED), () -> totPlannedArrears);
+        put(combineKeys(Constants.ARREARS, CategoryConstants.ADJUSTMENT_TYPE_PIPELINE), () -> totPipelineArrears);
+		put(combineKeys(Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_ODA_SSC), () -> totOdaSscComm);
+        put(combineKeys(Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_BILATERAL_SSC), () -> totBilateralSscComm);
+        put(combineKeys(Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_TRIANGULAR_SSC), () -> totTriangularSscComm);
+	}};
+	
+	public DecimalWraper getTotalByKey(String adjKey, String transTypeKey) {
+		return wrapperNames.get(String.format("%s %s", transTypeKey, adjKey)).get();
+	}
 	
 	/**
 	 * DO NOT CALCULATE SSC STUFF HERE!
@@ -171,6 +227,9 @@ public class FundingCalculationsHelper {
 		
 	}
 	
+
+	
+	
 	protected void addToTotals(AmpCategoryValue adjType, FundingInformationItem fundDet, DecimalWraper amt) {
 		/**
 		 * no adjustment type for MTEF transactions or PLEDGED amounts, so this "if" is outside the PLANNED / ACTUAL / PIPELINE branching if's
@@ -188,188 +247,127 @@ public class FundingCalculationsHelper {
 		if (fundDet.getTransactionType() == Constants.PLEDGE){
 			totalPledged.add(amt);
 		}
-		if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-			//fundingDetail.setAdjustmentTypeName("Planned");
-			if (fundDet.getTransactionType() == Constants.DISBURSEMENT) {
-				totPlanDisb.add(amt);
-				//totPlanDisb.setCalculations(totPlanDisb.getCalculations() + " + " + amt.getCalculations());
-			} else if (fundDet.getTransactionType() == Constants.COMMITMENT) {
-				totPlannedComm.add(amt);
-				//totPlannedComm.setCalculations(totPlannedComm.getCalculations() + " + " + amt.getCalculations());
-			} else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
-				totPlannedExp.add(amt);
-				//totPlannedExp.setCalculations(totPlannedExp.getCalculations() + " + " + amt.getCalculations());
-			} else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT_ORDER) {
-				totPlannedDisbOrder.add(amt);
-				//totPlannedDisbOrder.setCalculations(totPlannedDisbOrder.getCalculations() + " + " + amt.getCalculations());
-			} else if (fundDet.getTransactionType().intValue() == Constants.RELEASE_OF_FUNDS) {
-				totPlannedReleaseOfFunds.add(amt);
-				//totPlannedReleaseOfFunds.setCalculations(totPlannedReleaseOfFunds.getCalculations() + " + " + amt.getCalculations());
-			} else if (fundDet.getTransactionType().intValue() == Constants.ESTIMATED_DONOR_DISBURSEMENT) {
-				totPlannedEDD.add(amt);
-				//totPlannedEDD.setCalculations(totPlannedEDD.getCalculations() + " + " + amt.getCalculations());
-			}
-		} else if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-			//fundingDetail.setAdjustmentTypeName("Actual");
-			if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
-				totActualComm.add(amt);
-				//totActualComm.setCalculations(totActualComm.getCalculations() + " + " + amt.getCalculations());
-			} else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
-				totActualDisb.add(amt);
-				//totActualDisb.setCalculations(totActualDisb.getCalculations() + " + " + amt.getCalculations());
-			} else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
-				totActualExp.add(amt);
-				//totActualExp.setCalculations(totActualExp.getCalculations() + " + " + amt.getCalculations());
-			} else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT_ORDER) {
-				totActualDisbOrder.add(amt);
-				//totActualDisbOrder.setCalculations(totActualDisbOrder.getCalculations() + " + " + amt.getCalculations());
-			} else if (fundDet.getTransactionType().intValue() == Constants.RELEASE_OF_FUNDS) {
-				totActualReleaseOfFunds.add(amt);
-				//totActualReleaseOfFunds.setCalculations(totActualReleaseOfFunds.getCalculations() + " + " + amt.getCalculations());
-			} else if (fundDet.getTransactionType().intValue() == Constants.ESTIMATED_DONOR_DISBURSEMENT) {
-				totActualEDD.add(amt);
-				//totActualEDD.setCalculations(totActualEDD.getCalculations() + " + " + amt.getCalculations());
-			}
-		} else if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())) {
-			// fundingDetail.setAdjustmentTypeName("Pipeline");
-			if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
-				totPipelineComm.add(amt);
-				// totPipelineComm.setCalculations(totPipelineComm.getCalculations() + " + " + amt.getCalculations());
-			} else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
-				totPipelineDisb.add(amt);
-				//totPipelineDisb.setCalculations(totPipelineDisb.getCalculations() + " + " + amt.getCalculations());
-			} else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
-				totPipelineExp.add(amt);
-				//totPipelineExp.setCalculations(totPipelineExp.getCalculations() + " + " + amt.getCalculations());
-			} else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT_ORDER) {
-				totPipelineDisbOrder.add(amt);
-				//totPipelineDisbOrder.setCalculations(totPipelineDisbOrder.getCalculations() + " + " + amt.getCalculations());
-			} else if (fundDet.getTransactionType().intValue() == Constants.RELEASE_OF_FUNDS) {
-				totPipelineReleaseOfFunds.add(amt);
-				//totPipelineReleaseOfFunds.setCalculations(totPipelineReleaseOfFunds.getCalculations() + " + " + amt.getCalculations());
-			} else if (fundDet.getTransactionType().intValue() == Constants.ESTIMATED_DONOR_DISBURSEMENT) {
-				totPipelineEDD.add(amt);
-				//totPipelineEDD.setCalculations(totPipelineEDD.getCalculations() + " + " + amt.getCalculations());
-			}
-		} else if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ODA_SSC.getValueKey())) {
-			if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) totOdaSscComm.add(amt);
-		} else if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_BILATERAL_SSC.getValueKey())) {
-			if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) totBilateralSscComm.add(amt);
-		} else if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_TRIANGULAR_SSC.getValueKey())) {
-			if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) totTriangularSscComm.add(amt);
-		}
+		
+    	DecimalWraper wrp = getTotalByKey(adjType.getLabel(), getTransactionTypeLabel(fundDet.getTransactionType()));
+    	if (wrp != null){
+    		wrp.add(amt);
+    	}
+    	else {
+    		throw new RuntimeException("Unsupported transaction + adjustment combination: " + 
+    					String.format("transType: %s, adjType: %s", fundDet.getTransactionType(), adjType.getLabel()));
+    	}
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public FundingCalculationsHelper() {
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public List<FundingDetail> getFundDetailList() {
 		return this.fundDetailList;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getTotPlanDisb() {
 		return this.totPlanDisb;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getTotPlannedComm() {
 		return this.totPlannedComm;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getTotPlannedExp() {
 		return this.totPlannedExp;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getTotPlannedDisbOrder() {
 		return this.totPlannedDisbOrder;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getTotPlannedReleaseOfFunds() {
 		return this.totPlannedReleaseOfFunds;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getTotPlannedEDD() {
 		return this.totPlannedEDD;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getTotActualComm() {
 		return this.totActualComm;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getTotActualDisb() {
 		return this.totActualDisb;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getTotActualExp() {
 		return this.totActualExp;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getTotActualDisbOrder() {
 		return this.totActualDisbOrder;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getTotActualReleaseOfFunds() {
 		return this.totActualReleaseOfFunds;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getTotActualEDD() {
 		return this.totActualEDD;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getTotPipelineDisb() {
 		return this.totPipelineDisb;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getTotPipelineComm() {
 		return this.totPipelineComm;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getTotPipelineExp() {
 		return this.totPipelineExp;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getTotPipelineDisbOrder() {
 		return this.totPipelineDisbOrder;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getTotPipelineReleaseOfFunds() {
 		return this.totPipelineReleaseOfFunds;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getTotPipelineEDD() {
 		return this.totPipelineEDD;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getTotOdaSscComm() {
 		return this.totOdaSscComm;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getTotBilateralSscComm() {
 		return this.totBilateralSscComm;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getTotTriangularSscComm() {
 		return this.totTriangularSscComm;
 	}
@@ -377,17 +375,17 @@ public class FundingCalculationsHelper {
 	/**
 	 * DO NOT CALCULATE SSC STUFF HERE!
 	 */
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getTotalCommitments() {
 		return this.totalCommitments;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getUnDisbursementsBalance() {
 		return this.unDisbursementsBalance;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public DecimalWraper getTotalMtef() {
 		return this.totalMtef;
 	}
@@ -405,297 +403,170 @@ public class FundingCalculationsHelper {
 		return this.totalPledged;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public boolean isDebug() {
 		return this.debug;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setFundDetailList(final List<FundingDetail> fundDetailList) {
 		this.fundDetailList = fundDetailList;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setTotPlanDisb(final DecimalWraper totPlanDisb) {
 		this.totPlanDisb = totPlanDisb;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setTotPlannedComm(final DecimalWraper totPlannedComm) {
 		this.totPlannedComm = totPlannedComm;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setTotPlannedExp(final DecimalWraper totPlannedExp) {
 		this.totPlannedExp = totPlannedExp;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setTotPlannedDisbOrder(final DecimalWraper totPlannedDisbOrder) {
 		this.totPlannedDisbOrder = totPlannedDisbOrder;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setTotPlannedReleaseOfFunds(final DecimalWraper totPlannedReleaseOfFunds) {
 		this.totPlannedReleaseOfFunds = totPlannedReleaseOfFunds;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setTotPlannedEDD(final DecimalWraper totPlannedEDD) {
 		this.totPlannedEDD = totPlannedEDD;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setTotActualComm(final DecimalWraper totActualComm) {
 		this.totActualComm = totActualComm;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setTotActualDisb(final DecimalWraper totActualDisb) {
 		this.totActualDisb = totActualDisb;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setTotActualExp(final DecimalWraper totActualExp) {
 		this.totActualExp = totActualExp;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setTotActualDisbOrder(final DecimalWraper totActualDisbOrder) {
 		this.totActualDisbOrder = totActualDisbOrder;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setTotActualReleaseOfFunds(final DecimalWraper totActualReleaseOfFunds) {
 		this.totActualReleaseOfFunds = totActualReleaseOfFunds;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setTotActualEDD(final DecimalWraper totActualEDD) {
 		this.totActualEDD = totActualEDD;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setTotPipelineDisb(final DecimalWraper totPipelineDisb) {
 		this.totPipelineDisb = totPipelineDisb;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setTotPipelineComm(final DecimalWraper totPipelineComm) {
 		this.totPipelineComm = totPipelineComm;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setTotPipelineExp(final DecimalWraper totPipelineExp) {
 		this.totPipelineExp = totPipelineExp;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setTotPipelineDisbOrder(final DecimalWraper totPipelineDisbOrder) {
 		this.totPipelineDisbOrder = totPipelineDisbOrder;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setTotPipelineReleaseOfFunds(final DecimalWraper totPipelineReleaseOfFunds) {
 		this.totPipelineReleaseOfFunds = totPipelineReleaseOfFunds;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setTotPipelineEDD(final DecimalWraper totPipelineEDD) {
 		this.totPipelineEDD = totPipelineEDD;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setTotOdaSscComm(final DecimalWraper totOdaSscComm) {
 		this.totOdaSscComm = totOdaSscComm;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setTotBilateralSscComm(final DecimalWraper totBilateralSscComm) {
 		this.totBilateralSscComm = totBilateralSscComm;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setTotTriangularSscComm(final DecimalWraper totTriangularSscComm) {
 		this.totTriangularSscComm = totTriangularSscComm;
 	}
+
+	public DecimalWraper getTotActualArrears() {
+		return totActualArrears;
+	}
+
+	public void setTotActualArrears(DecimalWraper totActualArrears) {
+		this.totActualArrears = totActualArrears;
+	}	
 	
 	/**
 	 * DO NOT CALCULATE SSC STUFF HERE!
 	 */
-	@java.lang.SuppressWarnings("all")
+
 	public void setTotalCommitments(final DecimalWraper totalCommitments) {
 		this.totalCommitments = totalCommitments;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setUnDisbursementsBalance(final DecimalWraper unDisbursementsBalance) {
 		this.unDisbursementsBalance = unDisbursementsBalance;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setTotalMtef(final DecimalWraper totalMtef) {
 		this.totalMtef = totalMtef;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+
 	public void setDebug(final boolean debug) {
 		this.debug = debug;
 	}
-	
-	@java.lang.Override
-	@java.lang.SuppressWarnings("all")
-	public boolean equals(final java.lang.Object o) {
-		if (o == this) return true;
-		if (!(o instanceof FundingCalculationsHelper)) return false;
-		final FundingCalculationsHelper other = (FundingCalculationsHelper)o;
-		if (!other.canEqual((java.lang.Object)this)) return false;
-		final java.lang.Object this$fundDetailList = this.getFundDetailList();
-		final java.lang.Object other$fundDetailList = other.getFundDetailList();
-		if (this$fundDetailList == null ? other$fundDetailList != null : !this$fundDetailList.equals(other$fundDetailList)) return false;
-		final java.lang.Object this$totPlanDisb = this.getTotPlanDisb();
-		final java.lang.Object other$totPlanDisb = other.getTotPlanDisb();
-		if (this$totPlanDisb == null ? other$totPlanDisb != null : !this$totPlanDisb.equals(other$totPlanDisb)) return false;
-		final java.lang.Object this$totPlannedComm = this.getTotPlannedComm();
-		final java.lang.Object other$totPlannedComm = other.getTotPlannedComm();
-		if (this$totPlannedComm == null ? other$totPlannedComm != null : !this$totPlannedComm.equals(other$totPlannedComm)) return false;
-		final java.lang.Object this$totPlannedExp = this.getTotPlannedExp();
-		final java.lang.Object other$totPlannedExp = other.getTotPlannedExp();
-		if (this$totPlannedExp == null ? other$totPlannedExp != null : !this$totPlannedExp.equals(other$totPlannedExp)) return false;
-		final java.lang.Object this$totPlannedDisbOrder = this.getTotPlannedDisbOrder();
-		final java.lang.Object other$totPlannedDisbOrder = other.getTotPlannedDisbOrder();
-		if (this$totPlannedDisbOrder == null ? other$totPlannedDisbOrder != null : !this$totPlannedDisbOrder.equals(other$totPlannedDisbOrder)) return false;
-		final java.lang.Object this$totPlannedReleaseOfFunds = this.getTotPlannedReleaseOfFunds();
-		final java.lang.Object other$totPlannedReleaseOfFunds = other.getTotPlannedReleaseOfFunds();
-		if (this$totPlannedReleaseOfFunds == null ? other$totPlannedReleaseOfFunds != null : !this$totPlannedReleaseOfFunds.equals(other$totPlannedReleaseOfFunds)) return false;
-		final java.lang.Object this$totPlannedEDD = this.getTotPlannedEDD();
-		final java.lang.Object other$totPlannedEDD = other.getTotPlannedEDD();
-		if (this$totPlannedEDD == null ? other$totPlannedEDD != null : !this$totPlannedEDD.equals(other$totPlannedEDD)) return false;
-		final java.lang.Object this$totActualComm = this.getTotActualComm();
-		final java.lang.Object other$totActualComm = other.getTotActualComm();
-		if (this$totActualComm == null ? other$totActualComm != null : !this$totActualComm.equals(other$totActualComm)) return false;
-		final java.lang.Object this$totActualDisb = this.getTotActualDisb();
-		final java.lang.Object other$totActualDisb = other.getTotActualDisb();
-		if (this$totActualDisb == null ? other$totActualDisb != null : !this$totActualDisb.equals(other$totActualDisb)) return false;
-		final java.lang.Object this$totActualExp = this.getTotActualExp();
-		final java.lang.Object other$totActualExp = other.getTotActualExp();
-		if (this$totActualExp == null ? other$totActualExp != null : !this$totActualExp.equals(other$totActualExp)) return false;
-		final java.lang.Object this$totActualDisbOrder = this.getTotActualDisbOrder();
-		final java.lang.Object other$totActualDisbOrder = other.getTotActualDisbOrder();
-		if (this$totActualDisbOrder == null ? other$totActualDisbOrder != null : !this$totActualDisbOrder.equals(other$totActualDisbOrder)) return false;
-		final java.lang.Object this$totActualReleaseOfFunds = this.getTotActualReleaseOfFunds();
-		final java.lang.Object other$totActualReleaseOfFunds = other.getTotActualReleaseOfFunds();
-		if (this$totActualReleaseOfFunds == null ? other$totActualReleaseOfFunds != null : !this$totActualReleaseOfFunds.equals(other$totActualReleaseOfFunds)) return false;
-		final java.lang.Object this$totActualEDD = this.getTotActualEDD();
-		final java.lang.Object other$totActualEDD = other.getTotActualEDD();
-		if (this$totActualEDD == null ? other$totActualEDD != null : !this$totActualEDD.equals(other$totActualEDD)) return false;
-		final java.lang.Object this$totPipelineDisb = this.getTotPipelineDisb();
-		final java.lang.Object other$totPipelineDisb = other.getTotPipelineDisb();
-		if (this$totPipelineDisb == null ? other$totPipelineDisb != null : !this$totPipelineDisb.equals(other$totPipelineDisb)) return false;
-		final java.lang.Object this$totPipelineComm = this.getTotPipelineComm();
-		final java.lang.Object other$totPipelineComm = other.getTotPipelineComm();
-		if (this$totPipelineComm == null ? other$totPipelineComm != null : !this$totPipelineComm.equals(other$totPipelineComm)) return false;
-		final java.lang.Object this$totPipelineExp = this.getTotPipelineExp();
-		final java.lang.Object other$totPipelineExp = other.getTotPipelineExp();
-		if (this$totPipelineExp == null ? other$totPipelineExp != null : !this$totPipelineExp.equals(other$totPipelineExp)) return false;
-		final java.lang.Object this$totPipelineDisbOrder = this.getTotPipelineDisbOrder();
-		final java.lang.Object other$totPipelineDisbOrder = other.getTotPipelineDisbOrder();
-		if (this$totPipelineDisbOrder == null ? other$totPipelineDisbOrder != null : !this$totPipelineDisbOrder.equals(other$totPipelineDisbOrder)) return false;
-		final java.lang.Object this$totPipelineReleaseOfFunds = this.getTotPipelineReleaseOfFunds();
-		final java.lang.Object other$totPipelineReleaseOfFunds = other.getTotPipelineReleaseOfFunds();
-		if (this$totPipelineReleaseOfFunds == null ? other$totPipelineReleaseOfFunds != null : !this$totPipelineReleaseOfFunds.equals(other$totPipelineReleaseOfFunds)) return false;
-		final java.lang.Object this$totPipelineEDD = this.getTotPipelineEDD();
-		final java.lang.Object other$totPipelineEDD = other.getTotPipelineEDD();
-		if (this$totPipelineEDD == null ? other$totPipelineEDD != null : !this$totPipelineEDD.equals(other$totPipelineEDD)) return false;
-		final java.lang.Object this$totOdaSscComm = this.getTotOdaSscComm();
-		final java.lang.Object other$totOdaSscComm = other.getTotOdaSscComm();
-		if (this$totOdaSscComm == null ? other$totOdaSscComm != null : !this$totOdaSscComm.equals(other$totOdaSscComm)) return false;
-		final java.lang.Object this$totBilateralSscComm = this.getTotBilateralSscComm();
-		final java.lang.Object other$totBilateralSscComm = other.getTotBilateralSscComm();
-		if (this$totBilateralSscComm == null ? other$totBilateralSscComm != null : !this$totBilateralSscComm.equals(other$totBilateralSscComm)) return false;
-		final java.lang.Object this$totTriangularSscComm = this.getTotTriangularSscComm();
-		final java.lang.Object other$totTriangularSscComm = other.getTotTriangularSscComm();
-		if (this$totTriangularSscComm == null ? other$totTriangularSscComm != null : !this$totTriangularSscComm.equals(other$totTriangularSscComm)) return false;
-		final java.lang.Object this$totalCommitments = this.getTotalCommitments();
-		final java.lang.Object other$totalCommitments = other.getTotalCommitments();
-		if (this$totalCommitments == null ? other$totalCommitments != null : !this$totalCommitments.equals(other$totalCommitments)) return false;
-		final java.lang.Object this$unDisbursementsBalance = this.getUnDisbursementsBalance();
-		final java.lang.Object other$unDisbursementsBalance = other.getUnDisbursementsBalance();
-		if (this$unDisbursementsBalance == null ? other$unDisbursementsBalance != null : !this$unDisbursementsBalance.equals(other$unDisbursementsBalance)) return false;
-		final java.lang.Object this$totalMtef = this.getTotalMtef();
-		final java.lang.Object other$totalMtef = other.getTotalMtef();
-		if (this$totalMtef == null ? other$totalMtef != null : !this$totalMtef.equals(other$totalMtef)) return false;
-		if (this.isDebug() != other.isDebug()) return false;
-		return true;
+
+	public DecimalWraper getTotPlannedArrears() {
+		return totPlannedArrears;
+	}
+
+	public void setTotPlannedArrears(DecimalWraper totPlannedArrears) {
+		this.totPlannedArrears = totPlannedArrears;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+	public DecimalWraper getTotPipelineArrears() {
+		return totPipelineArrears;
+	}
+
+	public void setTotPipelineArrears(DecimalWraper totPipelineArrears) {
+		this.totPipelineArrears = totPipelineArrears;
+	}
+	
+
 	public boolean canEqual(final java.lang.Object other) {
 		return other instanceof FundingCalculationsHelper;
-	}
-	
-	@java.lang.Override
-	@java.lang.SuppressWarnings("all")
-	public int hashCode() {
-		final int PRIME = 59;
-		int result = 1;
-		final java.lang.Object $fundDetailList = this.getFundDetailList();
-		result = result * PRIME + ($fundDetailList == null ? 0 : $fundDetailList.hashCode());
-		final java.lang.Object $totPlanDisb = this.getTotPlanDisb();
-		result = result * PRIME + ($totPlanDisb == null ? 0 : $totPlanDisb.hashCode());
-		final java.lang.Object $totPlannedComm = this.getTotPlannedComm();
-		result = result * PRIME + ($totPlannedComm == null ? 0 : $totPlannedComm.hashCode());
-		final java.lang.Object $totPlannedExp = this.getTotPlannedExp();
-		result = result * PRIME + ($totPlannedExp == null ? 0 : $totPlannedExp.hashCode());
-		final java.lang.Object $totPlannedDisbOrder = this.getTotPlannedDisbOrder();
-		result = result * PRIME + ($totPlannedDisbOrder == null ? 0 : $totPlannedDisbOrder.hashCode());
-		final java.lang.Object $totPlannedReleaseOfFunds = this.getTotPlannedReleaseOfFunds();
-		result = result * PRIME + ($totPlannedReleaseOfFunds == null ? 0 : $totPlannedReleaseOfFunds.hashCode());
-		final java.lang.Object $totPlannedEDD = this.getTotPlannedEDD();
-		result = result * PRIME + ($totPlannedEDD == null ? 0 : $totPlannedEDD.hashCode());
-		final java.lang.Object $totActualComm = this.getTotActualComm();
-		result = result * PRIME + ($totActualComm == null ? 0 : $totActualComm.hashCode());
-		final java.lang.Object $totActualDisb = this.getTotActualDisb();
-		result = result * PRIME + ($totActualDisb == null ? 0 : $totActualDisb.hashCode());
-		final java.lang.Object $totActualExp = this.getTotActualExp();
-		result = result * PRIME + ($totActualExp == null ? 0 : $totActualExp.hashCode());
-		final java.lang.Object $totActualDisbOrder = this.getTotActualDisbOrder();
-		result = result * PRIME + ($totActualDisbOrder == null ? 0 : $totActualDisbOrder.hashCode());
-		final java.lang.Object $totActualReleaseOfFunds = this.getTotActualReleaseOfFunds();
-		result = result * PRIME + ($totActualReleaseOfFunds == null ? 0 : $totActualReleaseOfFunds.hashCode());
-		final java.lang.Object $totActualEDD = this.getTotActualEDD();
-		result = result * PRIME + ($totActualEDD == null ? 0 : $totActualEDD.hashCode());
-		final java.lang.Object $totPipelineDisb = this.getTotPipelineDisb();
-		result = result * PRIME + ($totPipelineDisb == null ? 0 : $totPipelineDisb.hashCode());
-		final java.lang.Object $totPipelineComm = this.getTotPipelineComm();
-		result = result * PRIME + ($totPipelineComm == null ? 0 : $totPipelineComm.hashCode());
-		final java.lang.Object $totPipelineExp = this.getTotPipelineExp();
-		result = result * PRIME + ($totPipelineExp == null ? 0 : $totPipelineExp.hashCode());
-		final java.lang.Object $totPipelineDisbOrder = this.getTotPipelineDisbOrder();
-		result = result * PRIME + ($totPipelineDisbOrder == null ? 0 : $totPipelineDisbOrder.hashCode());
-		final java.lang.Object $totPipelineReleaseOfFunds = this.getTotPipelineReleaseOfFunds();
-		result = result * PRIME + ($totPipelineReleaseOfFunds == null ? 0 : $totPipelineReleaseOfFunds.hashCode());
-		final java.lang.Object $totPipelineEDD = this.getTotPipelineEDD();
-		result = result * PRIME + ($totPipelineEDD == null ? 0 : $totPipelineEDD.hashCode());
-		final java.lang.Object $totOdaSscComm = this.getTotOdaSscComm();
-		result = result * PRIME + ($totOdaSscComm == null ? 0 : $totOdaSscComm.hashCode());
-		final java.lang.Object $totBilateralSscComm = this.getTotBilateralSscComm();
-		result = result * PRIME + ($totBilateralSscComm == null ? 0 : $totBilateralSscComm.hashCode());
-		final java.lang.Object $totTriangularSscComm = this.getTotTriangularSscComm();
-		result = result * PRIME + ($totTriangularSscComm == null ? 0 : $totTriangularSscComm.hashCode());
-		final java.lang.Object $totalCommitments = this.getTotalCommitments();
-		result = result * PRIME + ($totalCommitments == null ? 0 : $totalCommitments.hashCode());
-		final java.lang.Object $unDisbursementsBalance = this.getUnDisbursementsBalance();
-		result = result * PRIME + ($unDisbursementsBalance == null ? 0 : $unDisbursementsBalance.hashCode());
-		final java.lang.Object $totalMtef = this.getTotalMtef();
-		result = result * PRIME + ($totalMtef == null ? 0 : $totalMtef.hashCode());
-		result = result * PRIME + (this.isDebug() ? 79 : 97);
-		return result;
-	}
-	
-	@java.lang.Override
-	@java.lang.SuppressWarnings("all")
-	public java.lang.String toString() {
-		return "FundingCalculationsHelper(fundDetailList=" + this.getFundDetailList() + ", totPlanDisb=" + this.getTotPlanDisb() + ", totPlannedComm=" + this.getTotPlannedComm() + ", totPlannedExp=" + this.getTotPlannedExp() + ", totPlannedDisbOrder=" + this.getTotPlannedDisbOrder() + ", totPlannedReleaseOfFunds=" + this.getTotPlannedReleaseOfFunds() + ", totPlannedEDD=" + this.getTotPlannedEDD() + ", totActualComm=" + this.getTotActualComm() + ", totActualDisb=" + this.getTotActualDisb() + ", totActualExp=" + this.getTotActualExp() + ", totActualDisbOrder=" + this.getTotActualDisbOrder() + ", totActualReleaseOfFunds=" + this.getTotActualReleaseOfFunds() + ", totActualEDD=" + this.getTotActualEDD() + ", totPipelineDisb=" + this.getTotPipelineDisb() + ", totPipelineComm=" + this.getTotPipelineComm() + ", totPipelineExp=" + this.getTotPipelineExp() + ", totPipelineDisbOrder=" + this.getTotPipelineDisbOrder() + ", totPipelineReleaseOfFunds=" + this.getTotPipelineReleaseOfFunds() + ", totPipelineEDD=" + this.getTotPipelineEDD() + ", totOdaSscComm=" + this.getTotOdaSscComm() + ", totBilateralSscComm=" + this.getTotBilateralSscComm() + ", totTriangularSscComm=" + this.getTotTriangularSscComm() + ", totalCommitments=" + this.getTotalCommitments() + ", unDisbursementsBalance=" + this.getUnDisbursementsBalance() + ", totalMtef=" + this.getTotalMtef() + ", debug=" + this.isDebug() + ")";
 	}
 }

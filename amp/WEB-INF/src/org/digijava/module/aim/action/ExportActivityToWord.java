@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -2070,7 +2071,7 @@ public class ExportActivityToWord extends Action {
 
         for (FundingDetail compFnd : listToIterate) {
             ExportSectionHelperRowData sectionHelper = new ExportSectionHelperRowData(
-                    getTransactionTypeLable(compFnd.getTransactionType()),
+                    FundingCalculationsHelper.getTransactionTypeLabel(compFnd.getTransactionType()),
                     null, null, true);
             if (FeaturesUtil.isVisibleModule(componentFMfields[0])) {
                 sectionHelper.addRowData(
@@ -2140,7 +2141,7 @@ public class ExportActivityToWord extends Action {
                     // Commitments
                     if (regFnd.getTransactionType() == Constants.COMMITMENT && visibleModuleRegCommitments) {
                         ExportSectionHelper eshRegFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
-                        eshRegFundingDetails.addRowData((new ExportSectionHelperRowData(getTransactionTypeLable(regFnd
+                        eshRegFundingDetails.addRowData((new ExportSectionHelperRowData(FundingCalculationsHelper.getTransactionTypeLabel(regFnd
                                 .getTransactionType()), null,null, true))
                                 .addRowData(regFnd.getRegionLocation().getName())
                                 .addRowData(regFnd.getAdjustmentType().getLabel(), true)
@@ -2154,7 +2155,7 @@ public class ExportActivityToWord extends Action {
                     // Disbursements
                     if (regFnd.getTransactionType() == Constants.DISBURSEMENT && visibleModuleRegDisbursements) {
                         ExportSectionHelper eshRegFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
-                        eshRegFundingDetails.addRowData((new ExportSectionHelperRowData(getTransactionTypeLable(regFnd
+                        eshRegFundingDetails.addRowData((new ExportSectionHelperRowData(FundingCalculationsHelper.getTransactionTypeLabel(regFnd
                                 .getTransactionType()), null,null, true))
                                 .addRowData(regFnd.getRegionLocation().getName())
                                 .addRowData(regFnd.getAdjustmentType().getLabel(), true)
@@ -2168,7 +2169,7 @@ public class ExportActivityToWord extends Action {
                     // Expenditures
                     if (regFnd.getTransactionType() == Constants.EXPENDITURE && visibleModuleRegExpenditures) {
                         ExportSectionHelper eshRegFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
-                        eshRegFundingDetails.addRowData((new ExportSectionHelperRowData(getTransactionTypeLable(regFnd
+                        eshRegFundingDetails.addRowData((new ExportSectionHelperRowData(FundingCalculationsHelper.getTransactionTypeLabel(regFnd
                                 .getTransactionType()), null,null, true))
                                 .addRowData(regFnd.getRegionLocation().getName())
                                 .addRowData(regFnd.getAdjustmentType().getLabel(), true)
@@ -2403,6 +2404,13 @@ public class ExportActivityToWord extends Action {
         return formatNumber(val.doubleValue());
     }
 
+    
+    
+    
+    
+    
+ 
+    
     /*
      * Donor funding section
      */
@@ -2420,6 +2428,8 @@ public class ExportActivityToWord extends Action {
                 "/Activity Form/Funding/Funding Group/Funding Item/Disbursements");
         boolean visibleModuleExpenditures = FeaturesUtil.isVisibleModule(
                 "/Activity Form/Funding/Funding Group/Funding Item/Expenditures");
+        boolean visibleModuleArrears = FeaturesUtil.isVisibleModule(
+                "/Activity Form/Funding/Funding Group/Funding Item/Arrears");
         boolean visibleModuleRoF = FeaturesUtil.isVisibleModule(
                 "/Activity Form/Funding/Funding Group/Funding Item/Release of Funds");
         boolean visibleModuleEDD = FeaturesUtil.isVisibleModule(
@@ -2543,9 +2553,12 @@ public class ExportActivityToWord extends Action {
                                         // Estimated Disbursements
                                         || (fndDet.getTransactionType() == Constants.ESTIMATED_DONOR_DISBURSEMENT && visibleModuleEDD)
                                         // DisbOrders
-                                        || (fndDet.getTransactionType() == Constants.DISBURSEMENT_ORDER && visibleModuleDisbOrders)) {
+                                        || (fndDet.getTransactionType() == Constants.DISBURSEMENT_ORDER && visibleModuleDisbOrders)
+                                        // Arrears
+                                        || (fndDet.getTransactionType() == Constants.ARREARS && visibleModuleArrears)) {
 
-                                    ExportSectionHelperRowData sectionHelperRowData = new ExportSectionHelperRowData(getTransactionTypeLable(fndDet.getTransactionType()), null, null, true);
+                                    ExportSectionHelperRowData sectionHelperRowData = new ExportSectionHelperRowData(
+                                    				FundingCalculationsHelper.getTransactionTypeLabel(fndDet.getTransactionType()), null, null, true);
 									String disasterResponse = "";
 									if (Boolean.TRUE.equals(fndDet.getDisasterResponse())) {
 										disasterResponse = TranslatorWorker.translateText("Disaster Response");
@@ -2688,6 +2701,14 @@ public class ExportActivityToWord extends Action {
 			addTotalsOutput(fundingTotalsDetails,"TOTAL ACTUAL EXPENDITURES", myForm.getFunding().getTotalExpenditures(), currencyCode);
 		}
 
+		if (visibleModuleArrears) {
+			// TOTAL PLANNED ARREARS
+			addTotalsOutput(fundingTotalsDetails,"TOTAL PLANNED ARREARS", myForm.getFunding().getTotalPlannedArrears(), currencyCode);
+	
+			// TOTAL ACTUAL ARREARS
+			addTotalsOutput(fundingTotalsDetails,"TOTAL ACTUAL ARREARS", myForm.getFunding().getTotalArrears(), currencyCode);
+		}
+		
 		if (visibleModuleRoF) {
         // Total Planned Release of Funds
 		addTotalsOutput(fundingTotalsDetails,"Total Planned Release of Funds".toUpperCase(), myForm.getFunding().getTotalPlannedRoF(), currencyCode);
@@ -3931,40 +3952,7 @@ public class ExportActivityToWord extends Action {
         return retVal;
     }
 
-    private static String getTransactionTypeLable (int type) {
-        String retVal = null;
-        switch (type) {
-            case Constants.COMMITMENT:
-                retVal = "Commitment";
-                break;
 
-            case Constants.DISBURSEMENT:
-                retVal = "Disbursement";
-                break;
-
-            case Constants.EXPENDITURE:
-                retVal = "Expenditure";
-                break;
-
-            case Constants.RELEASE_OF_FUNDS:
-                retVal = "Release of Funds";
-                break;
-
-            case Constants.ESTIMATED_DONOR_DISBURSEMENT:
-                retVal = "Estimated Disbursement";
-                break;
-
-            case Constants.DISBURSEMENT_ORDER:
-                retVal = "Disbursement Order";
-                break;
-
-            case Constants.MTEFPROJECTION:
-                retVal = "MTEF Projection";
-                break;
-
-        }
-        return retVal;
-    }
 
     private static String getContactTypeLable (String type) {
         String retVal = null;
@@ -3986,7 +3974,7 @@ public class ExportActivityToWord extends Action {
     private Map<String, Map<String, Set<AmpFundingDetail>>> getStructuredFundings (Set<AmpFundingDetail> fndDets) {
         Map<String, Map<String, Set<AmpFundingDetail>>> retVal = new HashMap<String, Map<String, Set<AmpFundingDetail>>>();
         for (AmpFundingDetail fndDet : fndDets) {
-            String transactionType = getTransactionTypeLable(fndDet.getTransactionType());
+            String transactionType = FundingCalculationsHelper.getTransactionTypeLabel(fndDet.getTransactionType());
             if (!retVal.containsKey(transactionType)) {
                 retVal.put(transactionType, new HashMap<String, Set<AmpFundingDetail>>());
             }

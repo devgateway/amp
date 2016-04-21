@@ -1445,18 +1445,14 @@ body {background:none;}
 
 																		<jsp:include page="activitypreview/previewMtefProjections.jsp" />
 
-<%--                                                                        <feature:display module="Funding" name="Expenditures">
-                                                                        	<jsp:include page="previewActivityFundingExpenditures.jsp" />
-                                                                        </feature:display>
+																		<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Arrears" 
+																		parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+                                                                       		<jsp:include page="activitypreview/previewActivityFundingArrears.jsp" />
+                                                                        </module:display>
 
-                                                                        <feature:display module="Funding" name="Expenditures">
-                                                                        	<jsp:include page="previewActivityFundingExpenditures.jsp" />
+                                                                        <feature:display module="Funding" name="Arrears">
+                                                                        	<jsp:include page="activitypreview/previewActivityFundingArrears.jsp" />
                                                                         </feature:display>
-     --%>
-                                                                        <feature:display module="Funding" name="Disbursement Orders">
-                                                                        	<jsp:include page="activitypreview/previewActivityFundingDisbursementOrders.jsp" />
-                                                                        </feature:display>
-
 
                                                                         <feature:display module="Funding" name="Undisbursed Balance">
                                                                         	<jsp:include page="activitypreview/previewActivityFundingUndisbursedBalance.jsp" />
@@ -1602,6 +1598,30 @@ body {background:none;}
 	                       </td>
                       	</tr>
                         </feature:display>
+                        <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Arrears" 
+														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+							<logic:notEmpty name="aimEditActivityForm" property="funding.totalPlannedArrears">
+                        		<tr>
+                            		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key="aim:totalActualArrears">TOTAL PLANNED ARREARS</digi:trn>:</td>
+                            		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
+		                                <bean:write name="aimEditActivityForm" property="funding.totalPlannedArrears" />
+		                                <bean:write name="aimEditActivityForm" property="currName" />
+			                      		&nbsp;
+                            		</td>
+                        		</tr>
+                        	</logic:notEmpty>
+                        	<logic:notEmpty name="aimEditActivityForm" property="funding.totalArrears">
+                        		<tr>
+                            		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key="aim:totalplannedArrears">TOTAL ACTUAL ARREARS</digi:trn>:</td>
+                            		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
+	                                	<bean:write name="aimEditActivityForm" property="funding.totalArrears" />
+	                                	<bean:write name="aimEditActivityForm" property="currName" />
+		                          		&nbsp;
+		                    		</td>
+                        		</tr>
+                        	</logic:notEmpty>
+                        </module:display>
+                        
                         <feature:display module="Funding" name="Undisbursed Balance">
                         	<logic:notEmpty name="aimEditActivityForm" property="funding.unDisbursementsBalance">
                       			<tr>

@@ -32,6 +32,7 @@ public class Constants
     public static final int PLEDGE = 7;
     public static final int RELEASE_OF_FUNDS = 8 ;
     public static final int ESTIMATED_DONOR_DISBURSEMENT = 9;
+    public static final int ARREARS = 10;
     public static final int ANNUAL_PROPOSED_PROJECT_COST = 15;
     
     /**

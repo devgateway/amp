@@ -133,6 +133,7 @@ public final class ArConstants {
 	public final static String ANNUAL_PROPOSED_PROJECT_COST = "Annual Proposed Project Cost";
 	public final static String PLEDGES_COMMITMENT = "Pledges Commitments";
 	public final static String PLEDGES_DISBURSEMENT = "Pledges Disbursements";
+	public final static String ARREARS = "Arrears";
 	public final static String PLEDGE = "Pledge";
 	public final static String FUNDING_TYPE_COMMITMENT_GAP = "Commitment Gap";
 	public final static String PLEDGES_METADATA_NAME = "Pledges ";
@@ -155,6 +156,7 @@ public final class ArConstants {
         put(PLEDGES_COMMITMENT, Constants.PLEDGES_COMMITMENT);
         put(ANNUAL_PROPOSED_PROJECT_COST, Constants.ANNUAL_PROPOSED_PROJECT_COST);
         put(PLEDGES_DISBURSEMENT, Constants.PLEDGES_DISBURSEMENT);
+        put(ARREARS, Constants.ARREARS);
 	}};
 	
 	public final static Map<Integer, String> TRANSACTION_ID_TO_TYPE_NAME = MapUtils.invertMap(TRANSACTION_TYPE_NAME_TO_ID);

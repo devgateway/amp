@@ -42,6 +42,13 @@ public class AmpOverallFundingTotalsTable extends AmpComponentPanel<Void> {
                         "Total Actual Expenditure");
 		add(totalActualExpenditures);		
 		
+		AmpLabelInformationFieldPanel totalActualArrears =
+                new AmpLabelInformationFieldPanel("totalActualArrears",
+                        new AmpOverallFundingModel(funding, null, Constants.ARREARS, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()),
+                        "Total Actual Arrears");
+		add(totalActualArrears);			
+		
+		
         AmpLabelInformationFieldPanel totalPlannedCommitments =
                 new AmpLabelInformationFieldPanel("totalPlannedCommitments",
                         new AmpOverallFundingModel(funding, null, Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()),
@@ -60,6 +67,11 @@ public class AmpOverallFundingTotalsTable extends AmpComponentPanel<Void> {
                 new AmpOverallFundingModel(funding, null, Constants.EXPENDITURE, CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()),
                 "Total Planned Expenditure");
 		add(totalPlannedExpenditures);
+				AmpLabelInformationFieldPanel totalPlannedArrears
+		        = new AmpLabelInformationFieldPanel("totalPlannedArrears",
+		        new AmpOverallFundingModel(funding, null, Constants.ARREARS, CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()),
+		        "Total Planned Arrears");
+		add(totalPlannedArrears);
 		
 		AmpLabelInformationFieldPanel totalMtefProjectionsProjection = new AmpLabelInformationFieldPanel("totalMtefProjectionsProjection",
 		        new AmpOverallFundingModel(funding, null, Constants.MTEFPROJECTION, CategoryConstants.MTEF_PROJECTION_PROJECTION.getValueKey()),
@@ -80,12 +92,14 @@ public class AmpOverallFundingTotalsTable extends AmpComponentPanel<Void> {
 			totalActualCommitments.setVisibilityAllowed(false);
 			totalActualDisbursements.setVisibilityAllowed(false);
 			totalActualExpenditures.setVisibilityAllowed(false);
+			totalActualArrears.setVisibilityAllowed(false);
 		}
 		
 		if (planned == null || !planned.isVisible()) {
 			totalPlannedCommitments.setVisibilityAllowed(false);
 			totalPlannedDisbursements.setVisibilityAllowed(false);
 			totalPlannedExpenditures.setVisibilityAllowed(false);
+			totalPlannedArrears.setVisibilityAllowed(false);
 		}
 		
 		if (projection == null || !projection.isVisible()) {

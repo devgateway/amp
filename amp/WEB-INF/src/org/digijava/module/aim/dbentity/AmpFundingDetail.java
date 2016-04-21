@@ -54,6 +54,7 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	 * public static final int EXPENDITURE = 2 ;
 	 * public static final int DISBURSEMENT_ORDER = 4 ;
 	 * public static final int MTEFPROJECTION = 3 ;
+	 * public static final int ARREAR = 10;
 	 */
 	
 	@Interchangeable(fieldTitle = ActivityFieldsConstants.TRANSACTION_TYPE, importable = true, pickIdOnly = true)

@@ -58,6 +58,9 @@ public class ActivityFundingDigest {
 	private String totalBilateralSscCommitments;
 	private double totalCommitmentsDouble;
 	private String totalDisbursements;
+	private String totalArrears;
+	private String totalPlannedArrears;
+	private String totalPipelineArrears;
 	private String totalExpenditures;
 	private String totalPlannedExpenditures;
 	private String totalPlannedDisbursements;
@@ -198,6 +201,9 @@ public class ActivityFundingDigest {
 						currFunding.setSubtotalPlannedCommitments(formatNumber(calculationsSubtotal.getTotPlannedComm().doubleValue()));
 						currFunding.setSubtotalActualCommitments(formatNumber(calculationsSubtotal.getTotActualComm().doubleValue()));
 						currFunding.setSubtotalPipelineCommitments(formatNumber(calculationsSubtotal.getTotPipelineComm().doubleValue()));
+						currFunding.setSubtotalPlannedArrears(formatNumber(calculationsSubtotal.getTotPlannedArrears().doubleValue()));
+						currFunding.setSubtotalActualArrears(formatNumber(calculationsSubtotal.getTotActualArrears().doubleValue()));
+						currFunding.setSubtotalPipelineArrears(formatNumber(calculationsSubtotal.getTotPipelineArrears().doubleValue()));
 						currFunding.setSubtotalOfficialDevelopmentAidCommitments(formatNumber(calculationsSubtotal.getTotOdaSscComm().doubleValue()));
 						currFunding.setSubtotalBilateralSscCommitments(formatNumber(calculationsSubtotal.getTotBilateralSscComm().doubleValue()));
 						currFunding.setSubtotalTriangularSscCommitments(formatNumber(calculationsSubtotal.getTotTriangularSscComm().doubleValue()));
@@ -236,6 +242,9 @@ public class ActivityFundingDigest {
 			this.setTotalPlannedEDD(activityTotalCalculations.getTotPlannedEDD().getCalculations());
 			this.setTotalPipelineCommitments(activityTotalCalculations.getTotPipelineComm().getCalculations());
 			this.setTotalPlannedExpenditures(activityTotalCalculations.getTotPlannedExp().getCalculations());
+			this.setTotalPlannedArrears(activityTotalCalculations.getTotActualArrears().getCalculations());
+			this.setTotalPlannedArrears(activityTotalCalculations.getTotPlannedArrears().getCalculations());
+			
 			this.setTotalActualDisbursementsOrders(activityTotalCalculations.getTotActualDisbOrder().getCalculations());
 			this.setTotalPlannedDisbursementsOrders(activityTotalCalculations.getTotPlannedDisbOrder().getCalculations());
 			this.setUnDisbursementsBalance(activityTotalCalculations.getUnDisbursementsBalance().getCalculations());
@@ -247,6 +256,7 @@ public class ActivityFundingDigest {
 			this.setTotalActualDisbursementsOrders(formatTotals(activityTotalCalculations.getTotActualDisbOrder()));
 			this.setTotalActualRoF(formatTotals(activityTotalCalculations.getTotActualReleaseOfFunds()));
 			this.setTotalActualEDD(formatTotals(activityTotalCalculations.getTotActualEDD()));
+			this.setTotalArrears(formatTotals(activityTotalCalculations.getTotActualArrears()));
 			// planned
 			this.setTotalPlannedDisbursements(formatTotals(activityTotalCalculations.getTotPlanDisb()));
 			this.setTotalPlannedCommitments(formatTotals(activityTotalCalculations.getTotPlannedComm()));
@@ -256,7 +266,9 @@ public class ActivityFundingDigest {
 			this.setTotalPlannedEDD(formatTotals(activityTotalCalculations.getTotPlannedEDD()));
 			this.setUnDisbursementsBalance(formatTotals(activityTotalCalculations.getUnDisbursementsBalance()));
 			this.setTotalMtefProjections(formatTotals(activityTotalCalculations.getTotalMtef()));
+			this.setTotalPlannedArrears(formatTotals(activityTotalCalculations.getTotPlannedArrears()));
 			// pipeline
+			this.setTotalPipelineArrears(formatTotals(activityTotalCalculations.getTotPipelineArrears()));
 			this.setTotalPipelineCommitments(formatTotals(activityTotalCalculations.getTotPipelineComm()));
 			// ssc
 			this.setTotalOdaSscCommitments(formatTotals(activityTotalCalculations.getTotOdaSscComm()));
@@ -546,6 +558,15 @@ public class ActivityFundingDigest {
 	@java.lang.SuppressWarnings("all")
 	public String getTotalDisbursements() {
 		return this.totalDisbursements;
+	}
+	
+
+	public String getTotalArrears() {
+		return this.totalArrears;
+	}
+	
+	public String getTotalPlannedArrears() {
+		return this.totalPlannedArrears;
 	}
 	
 	@java.lang.SuppressWarnings("all")
@@ -862,6 +883,14 @@ public class ActivityFundingDigest {
 	public void setProposedAnnualBudgets(final List<ProposedProjCost> proposedAnnualBudgets) {
 		this.proposedAnnualBudgets = proposedAnnualBudgets;
 	}
+
+	public String getTotalPipelineArrears() {
+		return totalPipelineArrears;
+	}
+
+	public void setTotalPipelineArrears(String totalPipelineArrears) {
+		this.totalPipelineArrears = totalPipelineArrears;
+	}	
 	
 	@java.lang.SuppressWarnings("all")
 	public void setFundingOrganizations(final List<FundingOrganization> fundingOrganizations) {
@@ -936,6 +965,16 @@ public class ActivityFundingDigest {
 	@java.lang.SuppressWarnings("all")
 	public void setTotalDisbursements(final String totalDisbursements) {
 		this.totalDisbursements = totalDisbursements;
+	}
+	
+	@java.lang.SuppressWarnings("all")
+	public void setTotalArrears(final String totalArrears) {
+		this.totalArrears = totalArrears;
+	}
+	
+	@java.lang.SuppressWarnings("all")
+	public void setTotalPlannedArrears(final String totalPlannedArrears) {
+		this.totalPlannedArrears = totalPlannedArrears;
 	}
 	
 	@java.lang.SuppressWarnings("all")

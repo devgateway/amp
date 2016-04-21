@@ -306,6 +306,11 @@
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 														<jsp:include page="previewActivityFundingEDD.jsp" />
 													</module:display>
+													<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Arrears" 
+														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+														<bean:define id="transaction" value="Arrears" type="java.lang.String" toScope="request"/>
+														<jsp:include page="previewActivityFundingArrears.jsp" />
+													</module:display>
 
                                                     <%-- Do not display disbursement orders for now --%>
                                                     <%--module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders"
@@ -406,6 +411,21 @@
 									<c:set var="activity_funding_amount">${aimEditActivityForm.funding.totalPipelineExpenditures}</c:set>
 									<%@include file="preview_activity_funding_detail.jspf" %>
                         		</c:if></c:if> --%>
+                        	</module:display>
+
+
+							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Arrears" 
+														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+								<c:if test="${aimEditActivityForm.funding.showPlanned}"><c:if test="${not empty aimEditActivityForm.funding.totalPlannedArrears}">
+									<c:set var="activity_funding_text"><digi:trn key='aim:totalplannedarrears'>Total Planned Arrears</digi:trn></c:set>
+									<c:set var="activity_funding_amount">${aimEditActivityForm.funding.totalPlannedArrears}</c:set>
+									<%@include file="preview_activity_funding_detail.jspf" %>
+	                        	</c:if></c:if>
+	                    		<c:if test="${aimEditActivityForm.funding.showActual}"><c:if test="${not empty aimEditActivityForm.funding.totalArrears}">
+	                    			<c:set var="activity_funding_text"><digi:trn key='aim:totalactualarrears'>Total Actual Arrears</digi:trn></c:set>
+									<c:set var="activity_funding_amount">${aimEditActivityForm.funding.totalArrears}</c:set>
+									<%@include file="preview_activity_funding_detail.jspf" %>
+	                    		</c:if></c:if>
                         	</module:display>
 
                         	<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders"

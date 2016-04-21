@@ -50,6 +50,9 @@ public class Funding implements Serializable {
 	private String subtotalActualCommitments;
 	private String subtotalPlannedCommitments;
 	private String subtotalPipelineCommitments;
+	private String subtotalActualArrears;
+	private String subtotalPlannedArrears;
+	private String subtotalPipelineArrears;	
 	private String subtotalOfficialDevelopmentAidCommitments;
 	private String subtotalBilateralSscCommitments;
 	private String subtotalTriangularSscCommitments;
@@ -213,6 +216,17 @@ public class Funding implements Serializable {
 	public Collection<FundingDetail> getPipelineEDDDetails() {
 		return filterFundings(Constants.ESTIMATED_DONOR_DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey());
 	}
+	public Collection<FundingDetail> getPlannedArrearsDetails() {
+		return filterFundings(Constants.ARREARS, CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey());
+	}
+	
+	public Collection<FundingDetail> getActualArrearsDetails() {
+		return filterFundings(Constants.ARREARS, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
+	}
+	
+	public Collection<FundingDetail> getPipelineArrearsDetails() {
+		return filterFundings(Constants.ARREARS, CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey());
+	}
 	
 	public Collection<FundingDetail> getCommitmentsDetails() {
 		return filterFundings(Constants.COMMITMENT);
@@ -237,6 +251,10 @@ public class Funding implements Serializable {
 	public Collection<FundingDetail> getEDDDetails() {
 		return filterFundings(Constants.ESTIMATED_DONOR_DISBURSEMENT);
 	}
+
+	public Collection<FundingDetail> getArrearsDetails() {
+		return filterFundings(Constants.ARREARS);
+	}	
 	
 	/**
 	 * returns a funding item built and with all its' currency Codes overwritten to a single one
@@ -429,6 +447,21 @@ public class Funding implements Serializable {
 	public String getSubtotalPipelineCommitments() {
 		return this.subtotalPipelineCommitments;
 	}
+	
+	@java.lang.SuppressWarnings("all")
+	public String getSubtotalActualArrears() {
+		return this.subtotalActualArrears;
+	}
+	
+	@java.lang.SuppressWarnings("all")
+	public String getSubtotalPlannedArrears() {
+		return this.subtotalPlannedArrears;
+	}
+	
+	@java.lang.SuppressWarnings("all")
+	public String getSubtotalPipelineArrears() {
+		return this.subtotalPipelineArrears;
+	}	
 	
 	@java.lang.SuppressWarnings("all")
 	public String getSubtotalOfficialDevelopmentAidCommitments() {
@@ -703,6 +736,21 @@ public class Funding implements Serializable {
 	public void setSubtotalPipelineCommitments(final String subtotalPipelineCommitments) {
 		this.subtotalPipelineCommitments = subtotalPipelineCommitments;
 	}
+	
+	@java.lang.SuppressWarnings("all")
+	public void setSubtotalActualArrears(final String subtotalActualArrears) {
+		this.subtotalActualArrears = subtotalActualArrears;
+	}
+	
+	@java.lang.SuppressWarnings("all")
+	public void setSubtotalPlannedArrears(final String subtotalPlannedArrears) {
+		this.subtotalPlannedArrears = subtotalPlannedArrears;
+	}
+	
+	@java.lang.SuppressWarnings("all")
+	public void setSubtotalPipelineArrears(final String subtotalPipelineArrears) {
+		this.subtotalPipelineArrears = subtotalPipelineArrears;
+	}	
 	
 	@java.lang.SuppressWarnings("all")
 	public void setSubtotalOfficialDevelopmentAidCommitments(final String subtotalOfficialDevelopmentAidCommitments) {

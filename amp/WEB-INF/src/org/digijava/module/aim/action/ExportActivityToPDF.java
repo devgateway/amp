@@ -135,6 +135,7 @@ public class ExportActivityToPDF extends Action {
 
     private static final String [] fundingCommitmentsFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Disaster Response","/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Currency","/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Exchange Rate"};
     private static final String [] fundingDisbursementsFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Disaster Response","/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Currency"};
+    private static final String [] fundingArrearsFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Arrears/Arrears Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Arrears/Arrears Table/Disaster Response","/Activity Form/Funding/Funding Group/Funding Item/Arrears/Arrears Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Arrears/Arrears Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Arrears/Arrears Table/Currency"};
     private static final String [] fundingExpendituresFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Disaster Response","/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Currency"};
     private static final String [] fundingRoFFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Release of Funds/Release of Funds Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Release of Funds/Release of Funds Table/Disaster Response","/Activity Form/Funding/Funding Group/Funding Item/Release of Funds/Release of Funds Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Release of Funds/Release of Funds Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Release of Funds/Release of Funds Table/Currency"};
     private static final String [] fundingEDDFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Disaster Response","/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Currency"};
@@ -2703,6 +2704,7 @@ public class ExportActivityToPDF extends Action {
             boolean visibleModuleCommitments = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Commitments");
             boolean visibleModuleDisbursements = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Disbursements");
             boolean visibleModuleExpenditures = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Expenditures");
+            boolean visibleModuleArrears = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Arrears");
             boolean visibleModuleRoF = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Release of Funds");
             boolean visibleModuleEDD = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements");
             boolean visibleModuleDisbOrders = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders");
@@ -2823,6 +2825,12 @@ public class ExportActivityToPDF extends Action {
                             addFundingRegion(myForm, fundingTable, funding, funding.getSubtotalDisbursements(), "ACTUAL DISBURSEMENTS", Constants.DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey(), currencyCode, true, fundingDisbursementsFMfields,session);
                             addFundingRegion(myForm, fundingTable, funding, funding.getSubtotalPipelineDisbursements(), "PIPELINE DISBURSEMENTS", Constants.DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey(), currencyCode, true, fundingDisbursementsFMfields,session);
                         }
+                        if (visibleModuleArrears)
+                        {
+                            addFundingRegion(myForm, fundingTable, funding, funding.getSubtotalPlannedArrears(), "PLANNED ARREARS", Constants.ARREARS, CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey(), currencyCode, true, fundingArrearsFMfields,session);
+                            addFundingRegion(myForm, fundingTable, funding, funding.getSubtotalActualArrears(), "ACTUAL ARREARS", Constants.ARREARS, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey(), currencyCode, true, fundingArrearsFMfields,session);
+                            addFundingRegion(myForm, fundingTable, funding, funding.getSubtotalPipelineArrears(), "PIPELINE ARREARS", Constants.ARREARS, CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey(), currencyCode, true, fundingArrearsFMfields,session);
+                        }
 
                         if (visibleModuleExpenditures)
                         {
@@ -2937,6 +2945,14 @@ public class ExportActivityToPDF extends Action {
                     addTotalsOutput(fundingTable, "TOTAL ACTUAL EXPENDITURES", myForm.getFunding().getTotalExpenditures(), currencyCode);
                 }
 
+                //TOTAL ARREARS
+                if(visibleModuleExpenditures)
+                {
+                    addTotalsOutput(fundingTable, "TOTAL PLANNED ARREARS", myForm.getFunding().getTotalPlannedArrears(), currencyCode);
+                    addTotalsOutput(fundingTable, "TOTAL ACTUAL ARREARS", myForm.getFunding().getTotalArrears(), currencyCode);
+                }
+
+                
                 //TOTAL ACTUAL DISBURSEMENT ORDERS:
                 if (visibleModuleDisbOrders) {
                     addTotalsOutput(fundingTable, "TOTAL ACTUAL DISBURSEMENT ORDERS", myForm.getFunding().getTotalActualDisbursementsOrders(), currencyCode);

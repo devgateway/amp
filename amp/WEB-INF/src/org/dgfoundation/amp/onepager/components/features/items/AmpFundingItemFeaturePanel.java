@@ -22,6 +22,7 @@ import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorArrearsSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorCommitmentsSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorDisbOrdersSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorDisbursementsSubsectionFeature;
@@ -304,6 +305,12 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		disbursements = new AmpDonorDisbursementsSubsectionFeature(
 				"disbursements", fundingModel,"Disbursements",Constants.DISBURSEMENT);
 		wmc.add(disbursements);
+
+		AmpDonorArrearsSubsectionFeature arrears = new AmpDonorArrearsSubsectionFeature(
+				"arrears", fundingModel,"Arrears",Constants.ARREARS);
+		wmc.add(arrears);
+		
+		
 		
 		AmpDonorDisbOrdersSubsectionFeature disbOrders = new AmpDonorDisbOrdersSubsectionFeature(
 				"disbOrders", fundingModel,"Disbursement Orders",Constants.DISBURSEMENT_ORDER);

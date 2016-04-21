@@ -15,6 +15,7 @@ import java.util.Map;
 public class MeasureConstants {
 	//type = A (all)
 	public static final String ACTUAL_COMMITMENTS = "Actual Commitments";
+	public static final String ACTUAL_ARREARS = "Actual Arrears";
 	public static final String ACTUAL_DISBURSEMENT_ORDERS = "Actual Disbursement Orders";
 	public static final String ACTUAL_DISBURSEMENTS = "Actual Disbursements";
 	public static final String ACTUAL_DISBURSEMENTS_CAPITAL = "Actual Disbursements - Capital";
@@ -30,6 +31,7 @@ public class MeasureConstants {
 	public static final String PLANNED_COMMITMENTS = "Planned Commitments";
 	public static final String PLANNED_DISBURSEMENT_ORDERS = "Planned Disbursement Orders";
 	public static final String PLANNED_DISBURSEMENTS = "Planned Disbursements";
+	public static final String PLANNED_ARREARS = "Planned Arrears";
 	public static final String PLANNED_DISBURSEMENTS_CAPITAL = "Planned Disbursements - Capital";
 	public static final String PLANNED_DISBURSEMENTS_EXPENDITURE = "Planned Disbursements - Expenditure";
 	public static final String PLANNED_EXPENDITURES = "Planned Expenditures";

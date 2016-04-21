@@ -97,8 +97,10 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 			break;
 		case Constants.RELEASE_OF_FUNDS:
 			transactionTypeString = "Release of Funds";
-			break;			
-
+			break;
+		case Constants.ARREARS:
+			transactionTypeString = "Arrears";
+			break;
 		default:
 			throw new RuntimeException("unsupported transaction type");
 		}

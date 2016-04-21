@@ -2539,6 +2539,16 @@ module.exports = BackboneDash.Collection.extend({
   },
 
   fromState: function(state) {
+	// Check if the saved calendar still exists.
+	if (state !== undefined) {
+		var savedCalendarId = _.find(state, function(item, key) {return key === "2"});  
+		var savedCalendar = _.find(_.find(this.models, function(item) {return item.id === "2"}).get("options"), function(item2) {return item2.id === savedCalendarId});
+		if (savedCalendar === undefined) {
+			// This calendar was deleted, select another.
+			state["2"] = _.find(this.models, function(item) {return item.id === "2"}).get("options")[0].id;
+		}
+	}
+	  
     // select options from an array with the same format we send to the api
     _(state).each(function(optId, settingId) {
       this.get(settingId).select(optId, true);

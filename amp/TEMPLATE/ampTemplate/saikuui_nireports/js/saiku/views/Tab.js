@@ -197,7 +197,7 @@ var TabSet = Backbone.View.extend({
      */
     render: function() {
     	Saiku.logger.log("TabSet.render");
-        $(this.el).html('<a href="#pager" class="pager sprite"></a><ul><li class="newtab"><a class="new">+&nbsp;&nbsp;</a></li></ul>')
+        $(this.el).html('<ul><li class="newtab"><a class="new">+&nbsp;&nbsp;</a></li></ul>')
             .appendTo($('#header'));
         this.content = $('<div id="tab_panel">').appendTo($('body'));
         this.pager = new TabPager({ tabset: this });

@@ -11,7 +11,7 @@ import mondrian.olap.MondrianDef.DimensionUsage;
  */
 public interface IdsAcceptor extends Predicate<NiDimension.Coordinate> {
 	public boolean isAcceptable(NiDimension.Coordinate cellCoos);
-
+	
 	@Override
 	public default boolean test(NiDimension.Coordinate cellCoos) {
 		return isAcceptable(cellCoos);

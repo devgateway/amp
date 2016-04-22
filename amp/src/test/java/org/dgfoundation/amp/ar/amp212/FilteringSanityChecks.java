@@ -798,15 +798,15 @@ public abstract class FilteringSanityChecks extends ReportingTestCase {
 					"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1))"))
 				.withWarnings(Arrays.asList())
 				.withBody(      new ReportAreaForTests(null)
-			      .withContents("Region", "", "Project Title", "", "Funding-2013-Actual Commitments", "1,852,000", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "37,500", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "456,789", "Funding-2015-Actual Disbursements", "321,765", "Totals-Actual Commitments", "2,346,289", "Totals-Actual Disbursements", "321,765")
+			      .withContents("Region", "", "Project Title", "", "Funding-2013-Actual Commitments", "1,282,000", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "37,500", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "456,789", "Funding-2015-Actual Disbursements", "321,765", "Totals-Actual Commitments", "1,776,289", "Totals-Actual Disbursements", "321,765")
 			      .withChildren(
-			        new ReportAreaForTests(new AreaOwner("Region", "Anenii Noi County")).withContents("Project Title", "", "Funding-2013-Actual Commitments", "570,000", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "570,000", "Totals-Actual Disbursements", "0", "Region", "Anenii Noi County")
+			        new ReportAreaForTests(new AreaOwner("Region", "Anenii Noi County")).withContents("Project Title", "", "Funding-2013-Actual Commitments", "285,000", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "285,000", "Totals-Actual Disbursements", "0", "Region", "Anenii Noi County")
 			        .withChildren(
-			          new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Funding-2013-Actual Commitments", "570,000", "Totals-Actual Commitments", "570,000")        ),
+			          new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Funding-2013-Actual Commitments", "285,000", "Totals-Actual Commitments", "285,000")        ),
 			        new ReportAreaForTests(new AreaOwner("Region", "Balti County"))
-			        .withContents("Project Title", "", "Funding-2013-Actual Commitments", "1,282,000", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "37,500", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "456,789", "Funding-2015-Actual Disbursements", "321,765", "Totals-Actual Commitments", "1,776,289", "Totals-Actual Disbursements", "321,765", "Region", "Balti County")
+			        .withContents("Project Title", "", "Funding-2013-Actual Commitments", "997,000", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "37,500", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "456,789", "Funding-2015-Actual Disbursements", "321,765", "Totals-Actual Commitments", "1,491,289", "Totals-Actual Disbursements", "321,765", "Region", "Balti County")
 			        .withChildren(
-			          new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Funding-2013-Actual Commitments", "570,000", "Totals-Actual Commitments", "570,000"),
+			          new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Funding-2013-Actual Commitments", "285,000", "Totals-Actual Commitments", "285,000"),
 			          new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Funding-2013-Actual Commitments", "712,000", "Totals-Actual Commitments", "712,000"),
 			          new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Funding-2014-Actual Commitments", "37,500", "Totals-Actual Commitments", "37,500"),
 			          new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Funding-2015-Actual Commitments", "456,789", "Funding-2015-Actual Disbursements", "321,765", "Totals-Actual Commitments", "456,789", "Totals-Actual Disbursements", "321,765")        )      ));
@@ -1062,5 +1062,160 @@ public abstract class FilteringSanityChecks extends ReportingTestCase {
 			ColumnConstants.DONOR_GROUP, Arrays.asList(19l), false); // "American"
 
 		runNiTestCase(spec, "en", acts, cor);
+	}
+	
+	@Test
+	public void testSimpleDoubleHierBySectorAndSubsector() {
+		NiReportModel cor = new NiReportModel("double-hierarchy-by-sector-by-subsector")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 5))",
+					"(Primary Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Primary Sector Sub-Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 1));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 4, colSpan: 1))",
+					"(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1))",
+					"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+			      .withContents("Primary Sector", "", "Primary Sector Sub-Sector", "", "Project Title", "", "Funding-2015-Actual Commitments", "1,344,789", "Totals-Actual Commitments", "1,344,789")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner("Primary Sector", "110 - EDUCATION")).withContents("Primary Sector Sub-Sector", "", "Project Title", "", "Funding-2015-Actual Commitments", "761,194,5", "Totals-Actual Commitments", "761,194,5", "Primary Sector", "110 - EDUCATION")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner("Primary Sector Sub-Sector", "111 - Education, level unspecified"))
+			          .withContents("Project Title", "", "Funding-2015-Actual Commitments", "761,194,5", "Totals-Actual Commitments", "761,194,5", "Primary Sector Sub-Sector", "111 - Education, level unspecified")
+			          .withChildren(
+			            new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Funding-2015-Actual Commitments", "228,394,5", "Totals-Actual Commitments", "228,394,5"),
+			            new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Funding-2015-Actual Commitments", "532,800", "Totals-Actual Commitments", "532,800")          )        ),
+			        new ReportAreaForTests(new AreaOwner("Primary Sector", "112 - BASIC EDUCATION"))
+			        .withContents("Primary Sector Sub-Sector", "", "Project Title", "", "Funding-2015-Actual Commitments", "583,594,5", "Totals-Actual Commitments", "583,594,5", "Primary Sector", "112 - BASIC EDUCATION")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner("Primary Sector Sub-Sector", "11230 - Basic life skills for youth and adults")).withContents("Project Title", "", "Funding-2015-Actual Commitments", "105,061,47", "Totals-Actual Commitments", "105,061,47", "Primary Sector Sub-Sector", "11230 - Basic life skills for youth and adults")
+			          .withChildren(
+			            new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Funding-2015-Actual Commitments", "105,061,47", "Totals-Actual Commitments", "105,061,47")          ),
+			          new ReportAreaForTests(new AreaOwner("Primary Sector Sub-Sector", "11240 - Early childhood education"))
+			          .withContents("Project Title", "", "Funding-2015-Actual Commitments", "478,533,03", "Totals-Actual Commitments", "478,533,03", "Primary Sector Sub-Sector", "11240 - Early childhood education")
+			          .withChildren(
+			            new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Funding-2015-Actual Commitments", "123,333,03", "Totals-Actual Commitments", "123,333,03"),
+			            new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Funding-2015-Actual Commitments", "355,200", "Totals-Actual Commitments", "355,200")          )        )      ));
+
+		//spec("double-hierarchy-by-sector-by-subsector")
+		ReportSpecificationImpl spec = buildSpecification("double-hierarchy-by-sector-by-subsector", 
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR), 
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+				Arrays.asList(ColumnConstants.PRIMARY_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR),
+				GroupingCriteria.GROUPING_YEARLY);
+		runNiTestCase(cor, spec, Arrays.asList("activity 1 with agreement", "Activity with both MTEFs and Act.Comms"));
+	}
+	
+	@Test
+	public void testSimpleDoubleHierBySectorAndSubsectorFilteredBySector() {
+		NiReportModel cor = new NiReportModel("double-hierarchy-by-sector-by-subsector-filtered-by-sector")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 5))",
+					"(Primary Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Primary Sector Sub-Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 1));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 4, colSpan: 1))",
+					"(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1))",
+					"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null).withContents("Primary Sector", "", "Primary Sector Sub-Sector", "", "Project Title", "", "Funding-2015-Actual Commitments", "583,594,5", "Totals-Actual Commitments", "583,594,5")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner("Primary Sector", "112 - BASIC EDUCATION"))
+			        .withContents("Primary Sector Sub-Sector", "", "Project Title", "", "Funding-2015-Actual Commitments", "583,594,5", "Totals-Actual Commitments", "583,594,5", "Primary Sector", "112 - BASIC EDUCATION")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner("Primary Sector Sub-Sector", "11230 - Basic life skills for youth and adults")).withContents("Project Title", "", "Funding-2015-Actual Commitments", "105,061,47", "Totals-Actual Commitments", "105,061,47", "Primary Sector Sub-Sector", "11230 - Basic life skills for youth and adults")
+			          .withChildren(
+			            new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Funding-2015-Actual Commitments", "105,061,47", "Totals-Actual Commitments", "105,061,47")          ),
+			          new ReportAreaForTests(new AreaOwner("Primary Sector Sub-Sector", "11240 - Early childhood education"))
+			          .withContents("Project Title", "", "Funding-2015-Actual Commitments", "478,533,03", "Totals-Actual Commitments", "478,533,03", "Primary Sector Sub-Sector", "11240 - Early childhood education")
+			          .withChildren(
+			            new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Funding-2015-Actual Commitments", "123,333,03", "Totals-Actual Commitments", "123,333,03"),
+			            new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Funding-2015-Actual Commitments", "355,200", "Totals-Actual Commitments", "355,200")          )        )      ));
+
+		//spec("double-hierarchy-by-sector-by-subsector")
+		ReportSpecificationImpl spec = buildSpecification("double-hierarchy-by-sector-by-subsector-filtered-by-sector", 
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR), 
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+				Arrays.asList(ColumnConstants.PRIMARY_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR),
+				GroupingCriteria.GROUPING_YEARLY);
+		
+		ReportFiltersImpl filters = new ReportFiltersImpl();
+		filters.addFilterRule(new ReportElement(new ReportColumn(ColumnConstants.PRIMARY_SECTOR)), new FilterRule(Arrays.asList("6242", "6243", "6244", "6245"), true));
+		spec.setFilters(filters);
+
+		runNiTestCase(cor, spec, Arrays.asList("activity 1 with agreement", "Activity with both MTEFs and Act.Comms"));
+	}
+
+	@Test
+	public void testSimpleDoubleHierBySectorAndSubsectorFilteredBySubSector() {
+		NiReportModel cor = new NiReportModel("double-hierarchy-by-sector-by-subsector-filtered-by-subsector")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 5))",
+					"(Primary Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Primary Sector Sub-Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 1));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 4, colSpan: 1))",
+					"(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1))",
+					"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null).withContents("Primary Sector", "", "Primary Sector Sub-Sector", "", "Project Title", "", "Funding-2015-Actual Commitments", "478,533,03", "Totals-Actual Commitments", "478,533,03")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner("Primary Sector", "112 - BASIC EDUCATION")).withContents("Primary Sector Sub-Sector", "", "Project Title", "", "Funding-2015-Actual Commitments", "478,533,03", "Totals-Actual Commitments", "478,533,03", "Primary Sector", "112 - BASIC EDUCATION")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner("Primary Sector Sub-Sector", "11240 - Early childhood education"))
+			          .withContents("Project Title", "", "Funding-2015-Actual Commitments", "478,533,03", "Totals-Actual Commitments", "478,533,03", "Primary Sector Sub-Sector", "11240 - Early childhood education")
+			          .withChildren(
+			            new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Funding-2015-Actual Commitments", "123,333,03", "Totals-Actual Commitments", "123,333,03"),
+			            new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Funding-2015-Actual Commitments", "355,200", "Totals-Actual Commitments", "355,200")          )        )      ));
+
+		//spec("double-hierarchy-by-sector-by-subsector")
+		ReportSpecificationImpl spec = buildSpecification("double-hierarchy-by-sector-by-subsector-filtered-by-subsector", 
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR), 
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+				Arrays.asList(ColumnConstants.PRIMARY_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR),
+				GroupingCriteria.GROUPING_YEARLY);
+		
+		ReportFiltersImpl filters = new ReportFiltersImpl();
+		filters.addFilterRule(new ReportElement(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR)), new FilterRule("6245", true));
+		spec.setFilters(filters);
+
+		runNiTestCase(cor, spec, Arrays.asList("activity 1 with agreement", "Activity with both MTEFs and Act.Comms"));
+	}
+
+	@Test
+	public void testSimpleDoubleHierBySectorAndSubsectorFilteredFictivelyBySubSector() {
+		NiReportModel cor = new NiReportModel("double-hierarchy-by-sector-by-subsector-filtered-fictively-by-subsector")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 5))",
+					"(Primary Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Primary Sector Sub-Sector: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 1));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 4, colSpan: 1))",
+					"(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1))",
+					"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+			      .withContents("Primary Sector", "", "Primary Sector Sub-Sector", "", "Project Title", "", "Funding-2015-Actual Commitments", "1,344,789", "Totals-Actual Commitments", "1,344,789")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner("Primary Sector", "110 - EDUCATION")).withContents("Primary Sector Sub-Sector", "", "Project Title", "", "Funding-2015-Actual Commitments", "761,194,5", "Totals-Actual Commitments", "761,194,5", "Primary Sector", "110 - EDUCATION")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner("Primary Sector Sub-Sector", "111 - Education, level unspecified"))
+			          .withContents("Project Title", "", "Funding-2015-Actual Commitments", "761,194,5", "Totals-Actual Commitments", "761,194,5", "Primary Sector Sub-Sector", "111 - Education, level unspecified")
+			          .withChildren(
+			            new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Funding-2015-Actual Commitments", "228,394,5", "Totals-Actual Commitments", "228,394,5"),
+			            new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Funding-2015-Actual Commitments", "532,800", "Totals-Actual Commitments", "532,800")          )        ),
+			        new ReportAreaForTests(new AreaOwner("Primary Sector", "112 - BASIC EDUCATION"))
+			        .withContents("Primary Sector Sub-Sector", "", "Project Title", "", "Funding-2015-Actual Commitments", "583,594,5", "Totals-Actual Commitments", "583,594,5", "Primary Sector", "112 - BASIC EDUCATION")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner("Primary Sector Sub-Sector", "11230 - Basic life skills for youth and adults")).withContents("Project Title", "", "Funding-2015-Actual Commitments", "105,061,47", "Totals-Actual Commitments", "105,061,47", "Primary Sector Sub-Sector", "11230 - Basic life skills for youth and adults")
+			          .withChildren(
+			            new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Funding-2015-Actual Commitments", "105,061,47", "Totals-Actual Commitments", "105,061,47")          ),
+			          new ReportAreaForTests(new AreaOwner("Primary Sector Sub-Sector", "11240 - Early childhood education"))
+			          .withContents("Project Title", "", "Funding-2015-Actual Commitments", "478,533,03", "Totals-Actual Commitments", "478,533,03", "Primary Sector Sub-Sector", "11240 - Early childhood education")
+			          .withChildren(
+			            new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Funding-2015-Actual Commitments", "123,333,03", "Totals-Actual Commitments", "123,333,03"),
+			            new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Funding-2015-Actual Commitments", "355,200", "Totals-Actual Commitments", "355,200")          )        )      ));
+
+		//spec("double-hierarchy-by-sector-by-subsector")
+		ReportSpecificationImpl spec = buildSpecification("double-hierarchy-by-sector-by-subsector-filtered-fictively-by-subsector", 
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR), 
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+				Arrays.asList(ColumnConstants.PRIMARY_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR),
+				GroupingCriteria.GROUPING_YEARLY);
+		
+		ReportFiltersImpl filters = new ReportFiltersImpl();
+		filters.addFilterRule(new ReportElement(new ReportColumn(ColumnConstants.PRIMARY_SECTOR)), new FilterRule(Arrays.asList("6236", "6237", "6238", "6239", "6240", "6241", "6242", "6243", "6244", "6245", "6246", "6247", "6248", "6249", "6250", "6251"), true));
+		spec.setFilters(filters);
+
+		runNiTestCase(cor, spec, Arrays.asList("activity 1 with agreement", "Activity with both MTEFs and Act.Comms"));
 	}
 }

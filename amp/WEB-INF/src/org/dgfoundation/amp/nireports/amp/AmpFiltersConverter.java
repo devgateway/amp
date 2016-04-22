@@ -1,31 +1,27 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.nireports.CategAmountCell;
-import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.FilterRule.FilterType;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.nireports.BasicFiltersConverter;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
-import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
+import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 
 public class AmpFiltersConverter extends BasicFiltersConverter {
 
+	Set<String> ORED_DIMENSIONS = new HashSet<>(Arrays.asList("locs", "sectors", "progs"));
+	
 	Set<String> locationColumns = new HashSet<>(Arrays.asList(ColumnConstants.COUNTRY, ColumnConstants.REGION, ColumnConstants.ZONE, ColumnConstants.DISTRICT, ColumnConstants.LOCATION));
 
 	public AmpFiltersConverter(NiReportsEngine engine) {
@@ -86,5 +82,10 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 	protected boolean shouldCreateVirtualHierarchy(String columnName) {
 		NiReportColumn<?> col = schema.getColumns().get(columnName);
 		return col != null && col.getBehaviour().hasPercentages();
+	}
+
+	@Override
+	protected boolean shouldCollapseDimension(NiDimension dimension) {
+		return dimension.depth > 1 && ORED_DIMENSIONS.contains(dimension.name);
 	}
 }

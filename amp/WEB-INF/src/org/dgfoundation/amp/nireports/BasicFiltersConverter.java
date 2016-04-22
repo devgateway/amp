@@ -59,8 +59,12 @@ public abstract class BasicFiltersConverter {
 				processElement(repElem, rules);
 		});
 		Set<String> mandatoryHiers = this.filteringColumns.stream().filter(this::shouldCreateVirtualHierarchy).collect(Collectors.toSet());
-		return new PassiveNiFilters(engine, coosPredicates, cellPredicates, filteringColumns, mandatoryHiers, activityIdsSrc, activityIdsPredicate);
+		return new PassiveNiFilters(engine, 
+				AmpCollections.remap(coosPredicates, (niDim, preds) -> shouldCollapseDimension(niDim.dimension) ? AmpCollections.orPredicates(preds) : AmpCollections.mergePredicates(preds), null), 
+				cellPredicates, filteringColumns, mandatoryHiers, activityIdsSrc, activityIdsPredicate);
 	}
+
+	protected abstract boolean shouldCollapseDimension(NiDimension dimension);
 	
 	/**
 	 * returns true if a given filtering column should also be used as a virtual hierarchy (expensive operation)
@@ -115,7 +119,10 @@ public abstract class BasicFiltersConverter {
 		if (ids == null)
 			return;
 				
-		Predicate<Coordinate> predicate = FilterRule.maybeNegated(engine.buildAcceptor(lc.dimensionUsage, ids.stream().map(z -> new Coordinate(lc.level, z)).collect(toList())), positive);
+		boolean collapseDimension = shouldCollapseDimension(lc.dimensionUsage.dimension);
+		int level = collapseDimension ? NiDimension.LEVEL_ALL_IDS : lc.level;
+		
+		Predicate<Coordinate> predicate = FilterRule.maybeNegated(engine.buildAcceptor(lc.dimensionUsage, ids.stream().map(z -> new Coordinate(level, z)).collect(toList())), positive);
 		coosPredicates.computeIfAbsent(lc.dimensionUsage, ignored -> new ArrayList<>()).add(predicate);
 	}
 	

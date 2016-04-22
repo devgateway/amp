@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.dgfoundation.amp.nireports.schema.ConstantNiDimension;
 import org.dgfoundation.amp.nireports.schema.DimensionSnapshot;
+import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
+import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.junit.Test;
 
@@ -17,6 +19,12 @@ import org.junit.Test;
  *
  */
 public class DimensionSnapshotTests extends AmpTestCase {
+	
+	public final DimensionSnapshot UNIFORM_3_LEVEL = getSnapshot("uniform", 3, Arrays.asList(
+			Arrays.asList(100l, 110l, 112l),
+			Arrays.asList(100l, 110l, 113l),
+			Arrays.asList(100l, 120l, 121l),
+			Arrays.asList(200l, 210l, 211l)));
 	
 	public DimensionSnapshotTests() {
 		super("DimensionSnapshot tests");
@@ -41,16 +49,33 @@ public class DimensionSnapshotTests extends AmpTestCase {
 	
 	@Test
 	public void testUniformDimension() {
-		DimensionSnapshot snapshot = getSnapshot("uniform", 3, Arrays.asList(
-			Arrays.asList(100l, 110l, 112l),
-			Arrays.asList(100l, 110l, 113l),
-			Arrays.asList(100l, 120l, 121l),
-			Arrays.asList(200l, 210l, 211l)));
+		DimensionSnapshot snapshot = UNIFORM_3_LEVEL;
 		assertEquals("depth = 3, data = [level 0, info: [(id: 100, parent: 0, children: [110, 120]), (id: 200, parent: 0, children: [210])], level 1, info: [(id: 110, parent: 100, children: [112, 113]), (id: 120, parent: 100, children: [121]), (id: 210, parent: 200, children: [211])], level 2, info: [(id: 112, parent: 110, children: []), (id: 113, parent: 110, children: []), (id: 121, parent: 120, children: []), (id: 211, parent: 210, children: [])]]", snapshot.toString());
 		shouldFail(() -> snapshot.getAcceptableAscendants(0, Arrays.asList(100l)));
 		shouldFail(() -> snapshot.getAcceptableDescendants(2, Arrays.asList(121l)));
 		assertColEquals("[]", snapshot.getAcceptableAscendants(1, Arrays.asList(777l)));
 		assertColEquals("[100]", snapshot.getAcceptableAscendants(1, Arrays.asList(777l, 110l, 120l, 120l, 120l)));
+	}
+	
+	@Test
+	public void testUniformDimensionWalking() {
+		DimensionSnapshot snapshot = UNIFORM_3_LEVEL;
+		
+		assertColEquals("[100]", snapshot.getAcceptableNeighbours(1, Arrays.asList(110l), 0));
+		assertColEquals("[110]", snapshot.getAcceptableNeighbours(1, Arrays.asList(110l), 1));
+		assertColEquals("[112, 113]", snapshot.getAcceptableNeighbours(1, Arrays.asList(110l), 2));
+	}
+	
+	@Test
+	public void testUniformDimensionAcceptors() {
+		DimensionSnapshot snapshot = UNIFORM_3_LEVEL;
+		IdsAcceptor acceptor = snapshot.getCachingIdsAcceptor(Arrays.asList(new NiDimension.Coordinate(2, 112l), new NiDimension.Coordinate(1, 210l)));
+		assertTrue(acceptor.isAcceptable(new NiDimension.Coordinate(2, 112l)));
+		assertTrue(acceptor.isAcceptable(new NiDimension.Coordinate(1, 210l)));
+		assertFalse(acceptor.isAcceptable(new NiDimension.Coordinate(1, 113l)));
+		assertFalse(acceptor.isAcceptable(new NiDimension.Coordinate(1, 120l)));
+		assertTrue(acceptor.isAcceptable(new NiDimension.Coordinate(0, 100l)));
+		assertTrue(acceptor.isAcceptable(new NiDimension.Coordinate(0, 200l)));
 	}
 	
 	@Test

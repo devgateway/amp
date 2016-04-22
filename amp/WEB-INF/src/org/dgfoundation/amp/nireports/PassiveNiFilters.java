@@ -38,11 +38,11 @@ public class PassiveNiFilters implements NiFilters {
 	protected final Predicate<Long> activityIdsPredicate;
 	protected final Set<String> mandatoryHiers;
 	
-	public PassiveNiFilters(NiReportsEngine engine, Map<NiDimensionUsage, List<Predicate<Coordinate>>> filteringCoordinates, Map<String, List<Predicate<Cell>>> cellPredicates, Set<String> filteringColumns, Set<String> mandatoryHiers, Function<NiReportsEngine, Set<Long>> activityIdsComputer, Predicate<Long> activityIdsPredicate) {
+	public PassiveNiFilters(NiReportsEngine engine, Map<NiDimensionUsage, Predicate<Coordinate>> filteringCoordinates, Map<String, List<Predicate<Cell>>> cellPredicates, Set<String> filteringColumns, Set<String> mandatoryHiers, Function<NiReportsEngine, Set<Long>> activityIdsComputer, Predicate<Long> activityIdsPredicate) {
 		Objects.requireNonNull(activityIdsComputer);
 		Objects.requireNonNull(engine);
 		this.engine = engine;
-		this.filteringCoordinates = unmodifiableMap(remap(filteringCoordinates, AmpCollections::mergePredicates, null));
+		this.filteringCoordinates = unmodifiableMap(filteringCoordinates);
 		this.cellPredicates = unmodifiableMap(remap(cellPredicates, AmpCollections::mergePredicates, null));
 		this.filteringColumns = unmodifiableSet(filteringColumns);
 		this.activityIdsComputer = activityIdsComputer;

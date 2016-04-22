@@ -311,6 +311,18 @@ public class AmpCollections {
 	}
 	
 	/**
+	 * returns a predicate which is true iff ANY of its inputs is true. If input is empty or null, returns a "true" predicate
+	 * @param in
+	 * @return
+	 */
+	public static<K> Predicate<K> orPredicates(List<Predicate<K>> in) {
+		if (in == null || in.isEmpty())
+			return (z -> true);
+
+		return k -> in.stream().anyMatch(p -> p.test(k));
+	}
+	
+	/**
 	 * returns a predicate which is true iff all of its inputs are true. If input is empty or null, returns a "true" predicate
 	 * @param in
 	 * @return
@@ -324,5 +336,27 @@ public class AmpCollections {
 			res = res.and(in.get(i));
 		
 		return res;
+	}
+	
+	/**
+	 * returns a list containing the elements of a list which pass a filter
+	 * @param in
+	 * @param pred
+	 * @return
+	 */
+	public static<K> List<K> filter(List<K> in, Predicate<K> pred) {
+		return in.stream().filter(pred).collect(Collectors.toList());
+	}
+	
+	/**
+	 * returns a readonly list containing the result of adding an element to a list
+	 * @param list
+	 * @param elem
+	 * @return
+	 */
+	public static<K> List<K> cat(List<K> list, K elem) {
+		List<K> res = new ArrayList<>(list);
+		res.add(elem);
+		return Collections.unmodifiableList(res);
 	}
 }

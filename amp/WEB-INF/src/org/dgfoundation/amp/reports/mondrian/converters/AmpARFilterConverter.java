@@ -12,6 +12,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -217,44 +218,29 @@ public class AmpARFilterConverter {
 		addFilter(arFilter.getImplementingAgency(), ColumnConstants.IMPLEMENTING_AGENCY);
 		addFilter(arFilter.getExecutingAgency(), ColumnConstants.EXECUTING_AGENCY);
 		addFilter(arFilter.getBeneficiaryAgency(), ColumnConstants.BENEFICIARY_AGENCY);
-		addFilter(arFilter.getImplementingAgency(), ColumnConstants.RESPONSIBLE_ORGANIZATION);
+		addFilter(arFilter.getResponsibleorg(), ColumnConstants.RESPONSIBLE_ORGANIZATION);
 		addFilter(arFilter.getContractingAgency(), ColumnConstants.CONTRACTING_AGENCY);
 		//related agencies groups
 		addFilter(arFilter.getContractingAgencyGroups(), ColumnConstants.CONTRACTING_AGENCY_GROUPS);
 	}
 	
 	/** adds primary, secondary and tertiary sectors to the filters if specified */
-	private void addSectorFilters() {
-		if (arFilter.getSelectedSectors() != null && !arFilter.getSelectedSectors().isEmpty()) {
-			Map<Long, AmpSector> sectorsByIds = new HashMap<>();
-			for (AmpSector sec : arFilter.getSelectedSectors()) {
-				sectorsByIds.put(sec.getAmpSectorId(), sec);
-			}
-			Map<String, List<NameableOrIdentifiable>> sectorsByScheme = distributeEntities(
-					SectorUtil.distributeSectorsByScheme(arFilter.getSelectedSectors()), sectorsByIds);
-			addFilter(sectorsByScheme.get("Primary"), (arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_SECTORS
-					: ColumnConstants.PRIMARY_SECTOR));
-		}
-		if (arFilter.getSelectedSecondarySectors() != null && !arFilter.getSelectedSecondarySectors().isEmpty()) {
-			Map<Long, AmpSector> sectorsByIds = new HashMap<>();
-			for (AmpSector sec : arFilter.getSelectedSecondarySectors()) {
-				sectorsByIds.put(sec.getAmpSectorId(), sec);
-			}
-			Map<String, List<NameableOrIdentifiable>> sectorsByScheme = distributeEntities(
-					SectorUtil.distributeSectorsByScheme(arFilter.getSelectedSecondarySectors()), sectorsByIds);
-			addFilter(sectorsByScheme.get("Secondary"), (arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_SECONDARY_SECTORS
-					: ColumnConstants.SECONDARY_SECTOR));
-		}
-		if (arFilter.getSelectedTertiarySectors() != null && !arFilter.getSelectedTertiarySectors().isEmpty()) {
-			Map<Long, AmpSector> sectorsByIds = new HashMap<>();
-			for (AmpSector sec : arFilter.getSelectedTertiarySectors()) {
-				sectorsByIds.put(sec.getAmpSectorId(), sec);
-			}
-			Map<String, List<NameableOrIdentifiable>> sectorsByScheme = distributeEntities(
-					SectorUtil.distributeSectorsByScheme(arFilter.getSelectedTertiarySectors()), sectorsByIds);
-			addFilter(sectorsByScheme.get("Tertiary"), (arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_TERTIARY_SECTORS
-					: ColumnConstants.TERTIARY_SECTOR));
-		}
+	protected void addSectorFilters() {
+		addSectorSchemeFilters(arFilter.getSelectedSectors(), "Primary", arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_SECTORS : ColumnConstants.PRIMARY_SECTOR);
+		addSectorSchemeFilters(arFilter.getSelectedSecondarySectors(), "Secondary", arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_SECONDARY_SECTORS : ColumnConstants.SECONDARY_SECTOR);
+		addSectorSchemeFilters(arFilter.getSelectedTertiarySectors(), "Tertiary", arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_TERTIARY_SECTORS : ColumnConstants.TERTIARY_SECTOR);
+		
+		if (!arFilter.isPledgeFilter())
+			addSectorSchemeFilters(arFilter.getSelectedTagSectors(), "Tag", ColumnConstants.SECTOR_TAG);
+	}
+
+	protected void addSectorSchemeFilters(Set<AmpSector> selectedEntries, String scheme, String columnName) {
+		if (selectedEntries == null || selectedEntries.isEmpty())
+			return;
+
+		Map<Long, AmpSector> sectorsByIds = selectedEntries.stream().collect(Collectors.toMap(z -> z.getAmpSectorId(), z -> z));
+		Map<String, List<NameableOrIdentifiable>> sectorsByScheme = distributeEntities(SectorUtil.distributeSectorsByScheme(arFilter.getSelectedSectors()), sectorsByIds);
+		addFilter(sectorsByScheme.get(scheme), columnName);
 	}
 	
 	protected Map<String, List<NameableOrIdentifiable>> distributeEntities(Map<String, List<Long>> distributedIds, Map<Long, ? extends NameableOrIdentifiable> input) {
@@ -278,7 +264,6 @@ public class AmpARFilterConverter {
 				(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_PROGRAMS : ColumnConstants.PRIMARY_PROGRAM));
 		addFilter(arFilter.getSelectedSecondaryPrograms(), 
 				(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_SECONDARY_PROGRAMS : ColumnConstants.SECONDARY_PROGRAM));
-		
 		//TODO: how to detect tertiary programs
 		//addFilter(arFilter.get(), 
 		//		(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_TERTIARY_PROGRAMS : ColumnConstants.TERTIARY_PROGRAM), entityType);
@@ -292,40 +277,33 @@ public class AmpARFilterConverter {
 	}
 	
 	private void addLocationFilters() {
-		if (arFilter.isPledgeFilter()) { 
-			if (arFilter.getPledgesLocations() == null || arFilter.getPledgesLocations().size() == 0) return;
-		} else if (arFilter.getLocationSelected() == null || arFilter.getLocationSelected().size() == 0) return;
+		Collection<AmpCategoryValueLocations> filterLocations = arFilter.isPledgeFilter() ? arFilter.getPledgesLocations() : arFilter.getLocationSelected();
+		if (filterLocations == null || filterLocations.isEmpty())
+			return;
 		
-//		Set<AmpCategoryValueLocations> countries = new HashSet<AmpCategoryValueLocations>();
-//		Set<AmpCategoryValueLocations> regions = new HashSet<AmpCategoryValueLocations>();
-//		Set<AmpCategoryValueLocations> zones = new HashSet<AmpCategoryValueLocations>();
-//		Set<AmpCategoryValueLocations> districts = new HashSet<AmpCategoryValueLocations>();
+		Set<AmpCategoryValueLocations> countries = new HashSet<AmpCategoryValueLocations>();
+		Set<AmpCategoryValueLocations> regions = new HashSet<AmpCategoryValueLocations>();
+		Set<AmpCategoryValueLocations> zones = new HashSet<AmpCategoryValueLocations>();
+		Set<AmpCategoryValueLocations> districts = new HashSet<AmpCategoryValueLocations>();
 //		Set<AmpCategoryValueLocations> locations = new HashSet<AmpCategoryValueLocations>();
-//				
-//		Collection<AmpCategoryValueLocations> filterLocations = arFilter.isPledgeFilter() ? 
-//				arFilter.getPledgesLocations() : arFilter.getLocationSelected();
-//				
-//		for(AmpCategoryValueLocations loc : filterLocations) {
-//			if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(loc.getParentCategoryValue()))
-//				countries.add(loc);
-//			else if (CategoryConstants.IMPLEMENTATION_LOCATION_REGION.equalsCategoryValue(loc.getParentCategoryValue()))
-//				regions.add(loc);
-//			else if (CategoryConstants.IMPLEMENTATION_LOCATION_ZONE.equalsCategoryValue(loc.getParentCategoryValue()))
-//				zones.add(loc);
-//			else if (CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT.equalsCategoryValue(loc.getParentCategoryValue()))
-//				districts.add(loc);
+//								
+		for(AmpCategoryValueLocations loc : filterLocations) {
+			if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(loc.getParentCategoryValue()))
+				countries.add(loc);
+			else if (CategoryConstants.IMPLEMENTATION_LOCATION_REGION.equalsCategoryValue(loc.getParentCategoryValue()))
+				regions.add(loc);
+			else if (CategoryConstants.IMPLEMENTATION_LOCATION_ZONE.equalsCategoryValue(loc.getParentCategoryValue()))
+				zones.add(loc);
+			else if (CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT.equalsCategoryValue(loc.getParentCategoryValue()))
+				districts.add(loc);
 //			else
 //				locations.add(loc);
-//		}
-		
-//		List<AmpCategoryValueLocations> filterLocations = arFilter.buildAllRelatedLocations();
-//		if (filterLocations != null) {
-//			addFilter(filterLocations, ColumnConstants.COUNTRY);
-//			addFilter(filterLocations, ColumnConstants.REGION);
-//			addFilter(filterLocations, ColumnConstants.ZONE);
-//			addFilter(filterLocations, ColumnConstants.DISTRICT);
-//		}
-		addFilter(arFilter.buildAllRelatedLocations(), ColumnConstants.REGION);
+		}
+
+		addFilter(countries, ColumnConstants.COUNTRY);
+		addFilter(regions, ColumnConstants.REGION);
+		addFilter(zones, ColumnConstants.ZONE);
+		addFilter(districts, ColumnConstants.DISTRICT);
 	}
 	
 	/**

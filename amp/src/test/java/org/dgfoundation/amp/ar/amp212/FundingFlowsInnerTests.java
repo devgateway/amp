@@ -125,10 +125,10 @@ public class FundingFlowsInnerTests extends NiTestCase {
 		testFiltering(iaSplitterCell, fundingCell, "[orgs.IA: (level: 2, id: 21696) -> true]", true);
 		testFiltering(iaGroupSplitterCell, fundingCell, "[orgs.IA: (level: 2, id: 21696) -> true]", true);
 		
-		NiCell iaAdvancedCell = fundingCell.advanceHierarchy(fundingCell.getCell(), iaSplitterCell.getCell());
+		NiCell iaAdvancedCell = fundingCell.advanceHierarchy(fundingCell.getCell(), iaSplitterCell.getCell(), Collections.emptyMap());
 		assertEquals("1", iaAdvancedCell.getHiersTracker().calculatePercentage(beh.getHierarchiesListener()).toString());
 		
-		NiCell iaGroupAdvancedCell = fundingCell.advanceHierarchy(fundingCell.getCell(), iaGroupSplitterCell.getCell());
+		NiCell iaGroupAdvancedCell = fundingCell.advanceHierarchy(fundingCell.getCell(), iaGroupSplitterCell.getCell(), Collections.emptyMap());
 		assertEquals("1", iaGroupAdvancedCell.getHiersTracker().calculatePercentage(beh.getHierarchiesListener()).toString());
 	}
 

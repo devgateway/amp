@@ -16,7 +16,7 @@ public class SectorsTestDimension extends HardcodedNiDimension {
 		super(name, depth);
 	}
 
-	public final static SectorsTestDimension instance = new SectorsTestDimension("secs", TestModelConstants.SECTORS_DIMENSION_DEPTH);
+	public final static SectorsTestDimension instance = new SectorsTestDimension("sectors", TestModelConstants.SECTORS_DIMENSION_DEPTH);
 
 	@Override
 	protected List<HNDNode> buildHardcodedElements() {

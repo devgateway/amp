@@ -61,7 +61,7 @@ public interface Behaviour<V extends NiOutCell> {
 		return null;
 	}
 	
-	public default ColumnContents horizSplit(ColumnContents oldContents, Map<Long, Cell> splitCells, Set<Long> acceptableMainIds, Map<NiDimensionUsage, IdsAcceptor> acceptors) {
+	public default ColumnContents horizSplit(ColumnContents oldContents, Map<Long, Cell> splitCells, Set<Long> acceptableMainIds, Map<NiDimensionUsage, IdsAcceptor> acceptors, boolean enqueueAcceptors) {
 		Map<Long, List<NiCell>> z = new HashMap<>();
 		for(Long mainId:acceptableMainIds) {
 			List<NiCell> oldCells = oldContents.data.get(mainId);
@@ -70,8 +70,8 @@ public interface Behaviour<V extends NiOutCell> {
 				continue;
 			for(NiCell oldCell:oldCells) {
 				Cell filteredCell = filterCell(acceptors, oldCell.getCell(), splitCell);
-				if (filteredCell != null)
-					z.computeIfAbsent(mainId, id -> new ArrayList<>()).add(oldCell.advanceHierarchy(filteredCell, splitCell));
+				if (filteredCell != null && oldCell.passesFilters(splitCell))
+					z.computeIfAbsent(mainId, id -> new ArrayList<>()).add(oldCell.advanceHierarchy(filteredCell, splitCell, enqueueAcceptors ? acceptors : null));
 			}
 		}
 		return new ColumnContents(z);

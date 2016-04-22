@@ -397,39 +397,39 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 		System.err.format("I ran %d double-hier reports in %d millies (%d per second, relativeSpeed: %.2f)\n", reps, delta, speed, relativeSpeed);
 	}
 	
-//	@Test
-//	public void testTripleHierarchiesDoNotChangeTotals() {
-//		if (this.getClass().getSimpleName().equals("AmpSchemaSanityTests"))
-//			return; // these are too slow if backed by DB
-//		long start = System.currentTimeMillis();
-//		int fails = 0;
-//		long reps = 0;
-//		// triple-hierarchy reports
-//		for(boolean isSummary:Arrays.asList(true, false)) {
-//			for(String hier1Name:hierarchiesToTry)
-//				for(String hier2Name:hierarchiesToTry)
-//					for(String hier3Name:hierarchiesToTry)
-//					if (hier1Name != hier2Name && hier2Name != hier3Name && hier1Name != hier3Name) {
-//						reps ++;
-//						ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s, %s summary: %b", hier1Name, hier2Name, hier3Name, isSummary), 
-//								Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name, hier3Name), 
-//								Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
-//								Arrays.asList(hier1Name, hier2Name, hier3Name), 
-//								GroupingCriteria.GROUPING_YEARLY);
-//						spec.setSummaryReport(isSummary);
-////						if (!buildDigest(spec, acts, fundingGrandTotalsDigester).toString().equals(correctTotals)) {
-////							fails ++;
-////							System.err.println("failed: " + spec.getReportName());
-////						}
-//						assertEquals(spec.getReportName(), correctTotals, buildDigest(spec, acts, fundingGrandTotalsDigester).toString());
-//			}
-//		}
-//		//System.err.println("nr of failures: " + fails);
-//		long delta = System.currentTimeMillis() - start;
-//		long speed = reps * 1000 / delta;
-//		double relativeSpeed = speed / 409.0;
-//		System.err.format("I ran %d triple-hier reports in %d millies (%d per second, relativeSpeed: %.2f)\n", reps, delta, speed, relativeSpeed);
-//	}
+	@Test
+	public void testTripleHierarchiesDoNotChangeTotals() {
+		if (this.getClass().getSimpleName().equals("AmpSchemaSanityTests"))
+			return; // these are too slow if backed by DB
+		long start = System.currentTimeMillis();
+		int fails = 0;
+		long reps = 0;
+		// triple-hierarchy reports
+		for(boolean isSummary:Arrays.asList(true, false)) {
+			for(String hier1Name:hierarchiesToTry)
+				for(String hier2Name:hierarchiesToTry)
+					for(String hier3Name:hierarchiesToTry)
+					if (hier1Name != hier2Name && hier2Name != hier3Name && hier1Name != hier3Name) {
+						reps ++;
+						ReportSpecificationImpl spec = buildSpecification(String.format("%s, %s, %s summary: %b", hier1Name, hier2Name, hier3Name, isSummary), 
+								Arrays.asList(ColumnConstants.PROJECT_TITLE, hier1Name, hier2Name, hier3Name), 
+								Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+								Arrays.asList(hier1Name, hier2Name, hier3Name), 
+								GroupingCriteria.GROUPING_YEARLY);
+						spec.setSummaryReport(isSummary);
+//						if (!buildDigest(spec, acts, fundingGrandTotalsDigester).toString().equals(correctTotals)) {
+//							fails ++;
+//							System.err.println("failed: " + spec.getReportName());
+//						}
+						assertEquals(spec.getReportName(), correctTotals, buildDigest(spec, acts, fundingGrandTotalsDigester).toString());
+			}
+		}
+		//System.err.println("nr of failures: " + fails);
+		long delta = System.currentTimeMillis() - start;
+		long speed = reps * 1000 / delta;
+		double relativeSpeed = speed / 409.0;
+		System.err.format("I ran %d triple-hier reports in %d millies (%d per second, relativeSpeed: %.2f)\n", reps, delta, speed, relativeSpeed);
+	}
 	
 	
 	

@@ -309,8 +309,9 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 		timer.run("filtersApply", this::applyFilters);
 		timer.run("columns", this::fetchColumns);
 		timer.run("measures", this::fetchMeasures);
-		if (fundingFiltersIds())
+		if (fundingFiltersIds()) {
 			cleanColumnsAccordingToFunding();
+		}
 		//NiUtils.failIf(this.actualColumns.isEmpty(), "columnless reports not supported");
 		NiUtils.failIf(!this.actualColumns.containsAll(this.actualHierarchies), () -> String.format("not all hierarchies (%s) are also specified as columns (%s)", this.actualHierarchies.toString(), this.actualColumns.toString()));
 	}
@@ -467,7 +468,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 			if (!this.actualHierarchies.contains(vhier)) 
 				timer.run(vhier, () -> {
 					NiReportColumn<?> col = schema.getColumns().get(vhier);
-					GroupReportData grd = root.value.horizSplit(fetchedColumns.get(vhier), fetchedColumns.get(vhier), col.getBehaviour(), col);
+					GroupReportData grd = root.value.horizSplit(fetchedColumns.get(vhier), fetchedColumns.get(vhier), col.getBehaviour(), col, true);
 					if (grd.getSubReports().isEmpty())
 						root.value.getContents().values().forEach(cc -> cc.data.clear());
 					else

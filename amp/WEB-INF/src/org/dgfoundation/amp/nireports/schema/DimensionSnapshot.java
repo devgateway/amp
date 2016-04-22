@@ -22,12 +22,20 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 public final class DimensionSnapshot {
 	public final List<DimensionLevel> data;
 	public final int depth;
-	public final Set<Long> allIds;
+	public final Map<Long, Integer> idToLevel;
 	
 	public DimensionSnapshot(List<DimensionLevel> data) {
 		this.data = data;
 		this.depth = data.size();
-		this.allIds = data.stream().flatMap(dl -> dl.getAllIds().stream()).collect(Collectors.toSet());
+		this.idToLevel = indexNodesByLevel(data);
+	}
+	
+	protected static Map<Long, Integer> indexNodesByLevel(List<DimensionLevel> data) {
+		Map<Long, Integer> res = new HashMap<>();
+		for(int level = 0; level < data.size(); level++)
+			for(long id:data.get(level).getAllIds())
+				res.put(id, level);
+		return res;
 	}
 	
 	/**
@@ -103,8 +111,6 @@ public final class DimensionSnapshot {
 	 * @return
 	 */
 	public Set<Long> getAcceptableNeighbours(int level, Collection<Long> ids, int targetLevel) {
-		if (level == NiDimension.LEVEL_ALL_IDS)
-			return allIds;
 		//System.out.format("called getAcceptableNeighbours on %d, %d, %s\n", level, targetLevel, ids);
 		if (targetLevel == level) {
 			return ids.stream().filter(z -> data.get(level).parents.containsKey(z)).collect(Collectors.toSet());
@@ -115,6 +121,12 @@ public final class DimensionSnapshot {
 		return getAcceptableDescendants(level, ids, targetLevel);
 	}
 	
+	public int getLevelOf(Coordinate coo) {
+		int level = coo.level == NiDimension.LEVEL_ALL_IDS ?
+				idToLevel.getOrDefault(coo.id, 0) : coo.level;
+		return level;
+	}
+	
 	/**
 	 * returns an {@link IdsAcceptor} which filters based on given coordinates in this Dimension Snapshot
 	 * @param splitterCell
@@ -123,7 +135,7 @@ public final class DimensionSnapshot {
 	public IdsAcceptor getCachingIdsAcceptor(List<Coordinate> splitters) {
 		Map<Integer, Set<Long>> splitterCells = new HashMap<>();
 		for(Coordinate coo:splitters) {
-			splitterCells.computeIfAbsent(coo.level, lev -> new HashSet<>()).add(coo.id);
+			splitterCells.computeIfAbsent(getLevelOf(coo), lev -> new HashSet<>()).add(coo.id);
 		}
 		if (depth == 1)
 			return new IdentityIdsAcceptor(splitterCells);
@@ -154,7 +166,7 @@ public final class DimensionSnapshot {
 		
 		@Override
 		public boolean isAcceptable(Coordinate cellCoos) {
-			Set<Long> acceptables = levelCaches.computeIfAbsent(cellCoos.level, this::buildAcceptableNeighbours);
+			Set<Long> acceptables = levelCaches.computeIfAbsent(getLevelOf(cellCoos), this::buildAcceptableNeighbours);
 			return acceptables.contains(cellCoos.id);
 		}
 		

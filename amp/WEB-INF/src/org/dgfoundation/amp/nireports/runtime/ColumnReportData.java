@@ -101,10 +101,10 @@ public class ColumnReportData extends ReportData {
 	public GroupReportData horizSplit(CellColumn z) {
 		ColumnContents dataColumn = contents.get(z);
 		NiUtils.failIf(dataColumn == null, () -> String.format("could not find leaf %s in %s", z, this));
-		return horizSplit(dataColumn, z.contents, z.getBehaviour(), (NiReportColumn<?>) z.entity);
+		return horizSplit(dataColumn, z.contents, z.getBehaviour(), (NiReportColumn<?>) z.entity, false); //setting this to true should NOT change the output of the report, but triple-hier would run 7% slower
 	}
 	
-	public GroupReportData horizSplit(ColumnContents dataColumn, ColumnContents wholeColumn, Behaviour<?> behaviour, NiReportColumn<?> schemaColumn) {
+	public GroupReportData horizSplit(ColumnContents dataColumn, ColumnContents wholeColumn, Behaviour<?> behaviour, NiReportColumn<?> schemaColumn, boolean enqueueAcceptors) {
 		SplitDigest splitDigest = new SplitDigest(schemaColumn, dataColumn, behaviour, wholeColumn, this::getIds);
 		
 		Map<Long, NiSplitCell> splitters = splitDigest.buildSplitters();
@@ -129,7 +129,7 @@ public class ColumnReportData extends ReportData {
 			Map<CellColumn, ColumnContents> subContents = new HashMap<>();
 			for(CellColumn cc:contents.keySet()) {
 				ColumnContents oldContents = contents.get(cc);
-				ColumnContents newContents = cc.getBehaviour().horizSplit(oldContents, splitDigest.percentages.get(catId), splitDigest.actIds.get(catId), acceptors);
+				ColumnContents newContents = cc.getBehaviour().horizSplit(oldContents, splitDigest.percentages.get(catId), splitDigest.actIds.get(catId), acceptors, enqueueAcceptors);
 //				if (cc.getHierName().equals("RAW / Funding / 2006 / Actual Commitments"))
 //					System.err.format("splitting %s.%s by %s.%s; %d cells became %d: %s\n", this, cc.getHierName(), z.getHierName(), splitCell.toString(), oldContents.countCells(), newContents.countCells(), newContents);
 				subContents.put(cc, newContents);

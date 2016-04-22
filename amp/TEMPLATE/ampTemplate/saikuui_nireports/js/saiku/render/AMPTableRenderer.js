@@ -451,10 +451,9 @@ function generateDataRows(page, options) {
 						if (this.summarizedReport === true && i === 0 && j === 0) {
 							cell += options.reportTotalsString;
 						} else {
-							var auxNonTotalVal = this.contentMatrix[i][j] === null ? "" : this.contentMatrix[i][j].displayedValue;
-							if (auxNonTotalVal === '' || auxNonTotalVal === null) {
-								// This was requested on AMP-21487.
-								auxNonTotalVal = '0';
+							var auxNonTotalVal = this.contentMatrix[i][j] === null ? null : this.contentMatrix[i][j].displayedValue;
+							if (auxNonTotalVal === null) {
+								auxNonTotalVal = this.headerMatrix[this.lastHeaderRow][j].emptyCell.displayedValue;
 							}
 							cell += escapeHtml(auxNonTotalVal);							
 						}

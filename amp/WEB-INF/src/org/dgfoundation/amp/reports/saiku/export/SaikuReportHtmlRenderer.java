@@ -85,7 +85,7 @@ public class SaikuReportHtmlRenderer {
 				tableHeader.append("</th>");
 			});
 			
-			// AMP-22554 - ugly hack in order to make iText library to render correctly the generated html table 
+			// AMP-22554 - ugly hack in order to make iText library render the generated html table correctly 
 			tableHeader.append("<th></th>");
 			
 			tableHeader.append("</tr>\n");

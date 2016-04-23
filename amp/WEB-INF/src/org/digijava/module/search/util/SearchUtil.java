@@ -430,7 +430,8 @@ public class SearchUtil {
 		query.append(")");
 		query.append(" and roleCode.roleCode=:roleCode ");
 		if (!hasComputedOrgs) {
-			query.append(" and " + buildLike(keyword,orgNameHql) + " ");
+			query.append(" and " + orgNameHql + " like :name");
+			//query.append(" and " + buildLike(keyword,orgNameHql) + " ");
 			if (tm.getTeamAccessType().equals("Management")) {
 				query.append(String.format(
 						" and (act.draft=false or act.draft is null) and act.approvalStatus in ('%s', '%s') ",

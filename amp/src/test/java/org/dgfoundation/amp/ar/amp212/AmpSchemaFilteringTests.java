@@ -407,4 +407,111 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
 		runNiTestCase(cor, spec("AMP-22322-all-directed-entities-filtered-by-ia-minfin-usaid"), Arrays.asList("Eth Water", "activity with directed MTEFs", "Test MTEF directed"));
 	}
 	
+	@Test
+	public void testPositiveByApprovalStatusNewUnvalidated() {
+		NiReportModel cor = new NiReportModel("testPositiveByApprovalStatusNewUnvalidated")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 8))",
+						"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Approval Status: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Draft: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Filtered Approval Status: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 3, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 4, colSpan: 2));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 6, colSpan: 2))",
+						"(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2))",
+						"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1))"))
+					.withWarnings(Arrays.asList())
+					.withBody(      new ReportAreaForTests(null).withContents("Project Title", "", "Approval Status", "", "Draft", "", "Filtered Approval Status", "", "Funding-2015-Actual Commitments", "45,000", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "45,000", "Totals-Actual Disbursements", "0")
+				      .withChildren(
+				        new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Approval Status", "4", "Draft", "false", "Filtered Approval Status", "2", "Funding-2015-Actual Commitments", "45,000", "Totals-Actual Commitments", "45,000")      ));
+		
+		ReportSpecificationImpl spec = buildSpecForFiltering("testPositiveByApprovalStatusNewUnvalidated", 
+			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.APPROVAL_STATUS, ColumnConstants.DRAFT, ColumnConstants.FILTERED_APPROVAL_STATUS), 
+			null, 
+			ColumnConstants.APPROVAL_STATUS, Arrays.asList(2l), true); // All New Unvalidated. See AmpARFilter.activityApprovalStatus 
+		
+		runNiTestCase(cor, spec, acts);
+	}
+	
+	@Test
+	public void testNegativeByApprovalStatusNewUnvalidated() {
+		NiReportModel cor = new NiReportModel("testNegativeByApprovalStatusNewUnvalidated")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 22))",
+					"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Approval Status: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Draft: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Filtered Approval Status: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 3, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 4, colSpan: 16));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 20, colSpan: 2))",
+					"(2006: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2));(2009: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 2));(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 8, colSpan: 2));(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 10, colSpan: 2));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 12, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 14, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 16, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 18, colSpan: 2))",
+					"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 15, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 16, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 17, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 18, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 19, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 20, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 21, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+			      .withContents("Project Title", "", "Approval Status", "", "Draft", "", "Filtered Approval Status", "", "Funding-2006-Actual Commitments", "96,840,58", "Funding-2006-Actual Disbursements", "0", "Funding-2009-Actual Commitments", "100,000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "780,311", "Funding-2011-Actual Commitments", "1,213,119", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Funding-2013-Actual Commitments", "7,842,086", "Funding-2013-Actual Disbursements", "1,266,956", "Funding-2014-Actual Commitments", "8,159,813,77", "Funding-2014-Actual Disbursements", "710,200", "Funding-2015-Actual Commitments", "1,926,831,84", "Funding-2015-Actual Disbursements", "437,335", "Totals-Actual Commitments", "19,363,691,19", "Totals-Actual Disbursements", "3,206,802")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2010-Actual Disbursements", "123,321", "Funding-2011-Actual Commitments", "213,231", "Totals-Actual Commitments", "213,231", "Totals-Actual Disbursements", "123,321"),
+			        new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2010-Actual Disbursements", "453,213", "Funding-2011-Actual Commitments", "999,888", "Totals-Actual Commitments", "999,888", "Totals-Actual Disbursements", "453,213"),
+			        new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4"),
+			        new ReportAreaForTests(new AreaOwner(17), "Project Title", "Proposed Project Cost 2 - EUR", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4"),
+			        new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2010-Actual Disbursements", "143,777", "Totals-Actual Disbursements", "143,777"),
+			        new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4"),
+			        new ReportAreaForTests(new AreaOwner(21), "Project Title", "activity with components", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4"),
+			        new ReportAreaForTests(new AreaOwner(23), "Project Title", "Project with documents", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4"),
+			        new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2013-Actual Disbursements", "545,000", "Totals-Actual Disbursements", "545,000"),
+			        new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4"),
+			        new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2009-Actual Commitments", "100,000", "Funding-2010-Actual Disbursements", "60,000", "Funding-2012-Actual Commitments", "25,000", "Funding-2012-Actual Disbursements", "12,000", "Totals-Actual Commitments", "125,000", "Totals-Actual Disbursements", "72,000"),
+			        new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4"),
+			        new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2013-Actual Commitments", "666,777", "Totals-Actual Commitments", "666,777"),
+			        new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2013-Actual Commitments", "333,222", "Totals-Actual Commitments", "333,222"),
+			        new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2013-Actual Commitments", "111,333", "Funding-2013-Actual Disbursements", "555,111", "Totals-Actual Commitments", "111,333", "Totals-Actual Disbursements", "555,111"),
+			        new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2013-Actual Commitments", "567,421", "Funding-2013-Actual Disbursements", "131,845", "Totals-Actual Commitments", "567,421", "Totals-Actual Disbursements", "131,845"),
+			        new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333"),
+			        new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2013-Actual Commitments", "570,000", "Totals-Actual Commitments", "570,000"),
+			        new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2013-Actual Commitments", "890,000", "Totals-Actual Commitments", "890,000"),
+			        new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2014-Actual Commitments", "75,000", "Totals-Actual Commitments", "75,000"),
+			        new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2014-Actual Commitments", "50,000", "Totals-Actual Commitments", "50,000"),
+			        new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2014-Actual Commitments", "50,000", "Totals-Actual Commitments", "50,000"),
+			        new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2014-Actual Commitments", "32,000", "Totals-Actual Commitments", "32,000"),
+			        new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2014-Actual Commitments", "15,000", "Totals-Actual Commitments", "15,000"),
+			        new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2013-Actual Commitments", "1,700,000", "Funding-2014-Actual Commitments", "3,300,000", "Totals-Actual Commitments", "5,000,000"),
+			        new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2013-Actual Commitments", "2,670,000", "Funding-2014-Actual Commitments", "4,400,000", "Funding-2014-Actual Disbursements", "450,000", "Totals-Actual Commitments", "7,070,000", "Totals-Actual Disbursements", "450,000"),
+			        new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2014-Actual Commitments", "65,760,63", "Funding-2014-Actual Disbursements", "80,000", "Totals-Actual Commitments", "65,760,63", "Totals-Actual Disbursements", "80,000"),
+			        new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2006-Actual Commitments", "96,840,58", "Funding-2014-Actual Disbursements", "50,000", "Totals-Actual Commitments", "96,840,58", "Totals-Actual Disbursements", "50,000"),
+			        new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Approval Status", "3", "Draft", "true", "Filtered Approval Status", "1", "Funding-2014-Actual Commitments", "12,000", "Totals-Actual Commitments", "12,000"),
+			        new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2014-Actual Commitments", "123,321", "Totals-Actual Commitments", "123,321"),
+			        new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2014-Actual Commitments", "100", "Totals-Actual Commitments", "100"),
+			        new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Approval Status", "3", "Draft", "false", "Filtered Approval Status", "4", "Funding-2015-Actual Commitments", "456,789", "Funding-2015-Actual Disbursements", "321,765", "Totals-Actual Commitments", "456,789", "Totals-Actual Disbursements", "321,765"),
+			        new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements", "Approval Status", "3", "Draft", "false", "Filtered Approval Status", "4", "Funding-2015-Actual Commitments", "1,200", "Totals-Actual Commitments", "1,200"),
+			        new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Approval Status", "3", "Draft", "false", "Filtered Approval Status", "4", "Funding-2015-Actual Commitments", "123,456", "Totals-Actual Commitments", "123,456"),
+			        new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement", "Approval Status", "3", "Draft", "false", "Filtered Approval Status", "4", "Funding-2015-Actual Commitments", "123,000", "Totals-Actual Commitments", "123,000"),
+			        new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Approval Status", "3", "Draft", "false", "Filtered Approval Status", "4", "Funding-2014-Actual Disbursements", "200", "Funding-2015-Actual Disbursements", "570", "Totals-Actual Disbursements", "770"),
+			        new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Approval Status", "3", "Draft", "false", "Filtered Approval Status", "4", "Funding-2015-Actual Commitments", "888,000", "Totals-Actual Commitments", "888,000"),
+			        new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Approval Status", "3", "Draft", "false", "Filtered Approval Status", "4", "Funding-2014-Actual Commitments", "33,000", "Funding-2015-Actual Commitments", "117,000", "Totals-Actual Commitments", "150,000"),
+			        new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2015-Actual Commitments", "123,456", "Totals-Actual Commitments", "123,456"),
+			        new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Approval Status", "1", "Draft", "false", "Filtered Approval Status", "4", "Funding-2013-Actual Disbursements", "35,000", "Funding-2014-Actual Disbursements", "75,000", "Totals-Actual Disbursements", "110,000"),
+			        new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Approval Status", "3", "Draft", "false", "Filtered Approval Status", "4", "Funding-2014-Actual Disbursements", "55,000", "Funding-2015-Actual Disbursements", "35,000", "Totals-Actual Disbursements", "90,000"),
+			        new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Approval Status", "3", "Draft", "false", "Filtered Approval Status", "4", "Funding-2015-Actual Disbursements", "80,000", "Totals-Actual Disbursements", "80,000"),
+			        new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Approval Status", "3", "Draft", "false", "Filtered Approval Status", "4", "Funding-2014-Actual Commitments", "3,632,14", "Funding-2015-Actual Commitments", "93,930,84", "Totals-Actual Commitments", "97,562,98")      ));;
+	
+		ReportSpecificationImpl spec = buildSpecForFiltering("testNegativeByApprovalStatusNewUnvalidated", 
+			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.APPROVAL_STATUS, ColumnConstants.DRAFT, ColumnConstants.FILTERED_APPROVAL_STATUS), 
+			null, 
+			ColumnConstants.APPROVAL_STATUS, Arrays.asList(2l), false); // All but "New Unvalidated"
+		
+		runNiTestCase(cor, spec, acts);
+	}
+	
+	@Test
+	public void testNegativeByApprovalStatusValidated() {
+		NiReportModel cor = new NiReportModel("testNegativeByApprovalStatusValidated")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 10))",
+						"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Approval Status: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Draft: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Filtered Approval Status: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 3, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 4, colSpan: 4));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 8, colSpan: 2))",
+						"(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 2))",
+						"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1))"))
+					.withWarnings(Arrays.asList())
+					.withBody(      new ReportAreaForTests(null)
+				      .withContents("Project Title", "", "Approval Status", "", "Draft", "", "Filtered Approval Status", "", "Funding-2014-Actual Commitments", "12,000", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "45,000", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "57,000", "Totals-Actual Disbursements", "0")
+				      .withChildren(
+				        new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Approval Status", "3", "Draft", "true", "Filtered Approval Status", "1", "Funding-2014-Actual Commitments", "12,000", "Totals-Actual Commitments", "12,000"),
+				        new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Approval Status", "4", "Draft", "false", "Filtered Approval Status", "2", "Funding-2015-Actual Commitments", "45,000", "Totals-Actual Commitments", "45,000")      ));
+
+		ReportSpecificationImpl spec = buildSpecForFiltering("testNegativeByApprovalStatusValidated", 
+			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.APPROVAL_STATUS, ColumnConstants.DRAFT, ColumnConstants.FILTERED_APPROVAL_STATUS), 
+			null, 
+			ColumnConstants.APPROVAL_STATUS, Arrays.asList(4l), false); // All but Validated
+		
+		runNiTestCase(cor, spec, acts);
+	}
 }

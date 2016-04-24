@@ -27,7 +27,7 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
 	/**
 	 * whether to log normal report runs (those not specifically flagged as 'unlogged') to amp_nireports_log
 	 */
-	public static boolean ENABLE_NIREPORTS_LOGGING = true;
+	public static boolean ENABLE_NIREPORTS_LOGGING = false;
 	
 	protected static final Logger logger = Logger.getLogger(NiReportsGenerator.class);
 	public final boolean logReport;

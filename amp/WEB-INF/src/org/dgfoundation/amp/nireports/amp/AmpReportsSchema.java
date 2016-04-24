@@ -19,7 +19,6 @@ import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_6;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_7;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_8;
 
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -42,7 +41,6 @@ import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportExecutor;
-import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -258,10 +256,11 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		degenerate_dimension(ColumnConstants.TYPE_OF_ASSISTANCE, "v_terms_assist", catsDimension);
 		degenerate_dimension(ColumnConstants.TYPE_OF_COOPERATION, "v_type_of_cooperation", catsDimension);
 		degenerate_dimension(ColumnConstants.TYPE_OF_IMPLEMENTATION, "v_type_of_implementation", catsDimension);
+		no_dimension(ColumnConstants.APPROVAL_STATUS, "v_approval_status");
+		no_dimension(ColumnConstants.FILTERED_APPROVAL_STATUS, "v_filtered_approval_status");
 		
 		// views with only 2 columns
 		no_entity(ColumnConstants.DRAFT, "v_drafts");
-		no_entity(ColumnConstants.APPROVAL_STATUS, "v_approval_status");
 		no_entity(ColumnConstants.AC_CHAPTER, "v_ac_chapters");
 		no_entity(ColumnConstants.ACCESSION_INSTRUMENT, "v_accession_instruments");
 		no_entity(ColumnConstants.ACTIVITY_CREATED_BY, "v_activity_creator");

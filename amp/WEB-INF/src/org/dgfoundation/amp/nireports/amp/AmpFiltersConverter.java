@@ -47,6 +47,9 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 			return;
 		}
 		
+		if (columnName.equals(ColumnConstants.APPROVAL_STATUS))
+			columnName = ColumnConstants.FILTERED_APPROVAL_STATUS;
+		
 //		if (locationColumns.contains(columnName)) {
 //			LevelColumn lc = schema.getColumns().get(ColumnConstants.REGION).levelColumn.get();
 //			for(String cc:locationColumns) {

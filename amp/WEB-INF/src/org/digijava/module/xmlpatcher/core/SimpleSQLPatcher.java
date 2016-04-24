@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.digijava.kernel.job.cachedtables.PublicViewColumnsUtil;
 import org.digijava.module.aim.helper.Constants;
 
 /**
@@ -428,6 +427,13 @@ public class SimpleSQLPatcher {
    			boolean autoCommit = conn.getAutoCommit();
    			
    			conn.setAutoCommit(true);
+   			
+   			if (SQLUtils.isView(conn, "v_amp_activity_expanded"))
+   				SQLUtils.executeQuery(conn, "DROP VIEW v_amp_activity_expanded");
+   			
+   			if (SQLUtils.isTable(conn, "v_amp_activity_expanded"))
+   				SQLUtils.executeQuery(conn, "DROP TABLE v_amp_activity_expanded CASCADE");
+
    			SQLUtils.executeQuery(conn, "UPDATE amp_xml_patch SET state = 0 WHERE state != 0 AND state != 4 AND location = 'xmlpatches/general/views/'");
    			createTrickyViewsIfNeeded(conn);
    			SQLUtils.executeQuery(conn, 

@@ -36,6 +36,9 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	public final String reportSheetName = "Formatted";
 	public final String summarySheetName = "Summary Information";
 	
+	/**
+	 * Map<String sheetName, Map<Integer header-column-number, Integer columnWidth>> 
+	 */
 	private final Map<String, Map<Integer, Integer>> cachedWidths = new HashMap<String, Map<Integer, Integer>>();
 	
 	private static final Logger logger = Logger.getLogger(SaikuReportXlsxExporter.class);
@@ -364,7 +367,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 			filterCategoryCell.setCellValue(filter.getKey());
 			filterCategoryCell.setCellStyle(template.getFilterSettingsStyle());
 			for (String filterValue : filter.getValue()) {
-				// Check if the row 'i' exists so we dont add an extra row for the first filter result.
+				// Check if the row 'i' exists so we don't add an extra row for the first filter result.
 				if (summarySheet.getRow(i) != null) {
 					summarySheet.getRow(i).createCell(j + 1).setCellValue(filterValue);
 				} else {

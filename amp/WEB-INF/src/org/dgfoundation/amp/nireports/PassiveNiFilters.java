@@ -23,19 +23,50 @@ import static java.util.Collections.unmodifiableSet;
 import static org.dgfoundation.amp.algo.AmpCollections.remap;
 
 /**
- * the NiReports faucet of filtering
+ * a {@link NiFilters} instance which holds the result of computations done elsewhere
  * @author Dolghier Constantin
  *
  */
 public class PassiveNiFilters implements NiFilters {
 		
+	/**
+	 * the {@link NiReportsEngine} instance used as a context to generate this instance
+	 */
 	protected final NiReportsEngine engine;
+	
+	/**
+	 * the predicates on coordinates applied to all the cells of the report which respond to a given coordinate
+	 */
 	protected final Map<NiDimensionUsage, Predicate<NiDimension.Coordinate>> filteringCoordinates;
+	
+	/**
+	 * the predicates on cells applied to the cells of given columns
+	 */
 	protected final Map<String, Predicate<Cell>> cellPredicates;
+	
+	/**
+	 * the columns whose filtered-out ids are to be used to filter out the ids eligible for the report
+	 */
 	protected final Set<String> filteringColumns;
+	
+	/**
+	 * the function used to generate the initial activity ids 
+	 */
 	protected final Function<NiReportsEngine, Set<Long>> activityIdsComputer;
+	
+	/**
+	 * the memoized set of ids of the initial workspace filter
+	 */
 	protected final Memoizer<Set<Long>> workspaceFilter;
+	
+	/**
+	 * the supplemental Predicate to be applied on the activity ids
+	 */
 	protected final Predicate<Long> activityIdsPredicate;
+	
+	/**
+	 * the hierarchies which the generated report MUST have. They will be generated virtually and then removed in case the ReportSpec happens to not specify them
+	 */
 	protected final Set<String> mandatoryHiers;
 	
 	public PassiveNiFilters(NiReportsEngine engine, Map<NiDimensionUsage, Predicate<Coordinate>> filteringCoordinates, Map<String, List<Predicate<Cell>>> cellPredicates, Set<String> filteringColumns, Set<String> mandatoryHiers, Function<NiReportsEngine, Set<Long>> activityIdsComputer, 

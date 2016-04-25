@@ -10,6 +10,11 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 
+/**
+ * an AMP-specific extension of {@link ReportFilters}
+ * @author Dolghier Constantin
+ *
+ */
 public class AmpReportFilters extends ReportFiltersImpl {
 
 	protected final Map<ReportColumn, List<FilterRule>> dateFilterRules = new HashMap<ReportColumn, List<FilterRule>>();
@@ -48,6 +53,9 @@ public class AmpReportFilters extends ReportFiltersImpl {
 		return this.dateFilterRules;
 	}
 
+	/**
+	 * concatenates {@link #getFilterRules()} with {@link #getDateFilterRules()}
+	 */
 	@JsonIgnore
 	@Override
 	public Map<ReportElement, List<FilterRule>> getAllFilterRules() {

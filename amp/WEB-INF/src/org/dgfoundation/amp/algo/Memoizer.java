@@ -2,6 +2,12 @@ package org.dgfoundation.amp.algo;
 
 import java.util.function.Supplier;
 
+/**
+ * a lazy synchronized memoizer for an expensive-to-calculate value
+ * @author Dolghier Constantin
+ *
+ * @param <V>
+ */
 public class Memoizer<V> {
 	final protected Supplier<V> src;
 	protected V value;

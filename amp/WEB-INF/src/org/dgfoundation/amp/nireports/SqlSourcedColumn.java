@@ -15,6 +15,7 @@ import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.nireports.amp.MetaCategory;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
+import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
@@ -139,7 +140,7 @@ public abstract class SqlSourcedColumn<K extends Cell> extends NiReportColumn<K>
 	protected Coordinate addCoordinateIfLongExists(Map<NiDimensionUsage, Coordinate> coos, ResultSet row, String viewColName, LevelColumn levelColumn) throws SQLException {
 		long val = row.getLong(viewColName);
 		if (row.wasNull())
-			val = -999999999; //MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL;
+			val = ColumnReportData.UNALLOCATED_ID;
 		
 		Coordinate newVal = levelColumn.getCoordinate(val);
 		coos.put(levelColumn.dimensionUsage, newVal);

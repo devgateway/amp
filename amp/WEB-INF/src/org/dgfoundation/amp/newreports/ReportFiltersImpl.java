@@ -7,6 +7,11 @@ import java.util.Map;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+/**
+ * a concrete implementation of {@link ReportFilters}
+ * @author Dolghier Constantin
+ *
+ */
 public class ReportFiltersImpl implements ReportFilters {
 	protected final Map<ReportElement, List<FilterRule>> filterRules = new HashMap<ReportElement, List<FilterRule>>();
 	

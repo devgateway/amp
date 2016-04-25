@@ -5,12 +5,12 @@ import java.util.Optional;
 import org.dgfoundation.amp.nireports.Cell;
 
 /**
- * a class which holds complete info for NiReports so that those know how to: 
+ * a NiReports definition of a column 
  * <ol>
- * 	<li>name a column</li>
- * 	<li>fetch a column, using filters</li> 
- * 	<li>split a column by hierarchies</li> 
- * 	<li>aggregate a column</li>s
+ * 	<li>name</li>
+ * 	<li>fetching</li> 
+ * 	<li>use as a hierarchy</li> 
+ * 	<li>behaviour under aggregation, filters, etc</li>s
  * </ol> 
  * @author Dolghier Constantin
  *
@@ -25,6 +25,9 @@ public abstract class NiReportColumn<K extends Cell> extends NiReportedEntity<K>
 		this.levelColumn = Optional.ofNullable(levelColumn);
 	}
 		
+	/** 
+	 * @return whether hierarchies by these columns should filter at a transaction level
+	 */
 	public boolean isTransactionLevelHierarchy() {
 		return this.transactionLevelHierarchy;
 	}

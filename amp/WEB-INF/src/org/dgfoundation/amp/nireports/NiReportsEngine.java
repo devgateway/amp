@@ -77,7 +77,7 @@ import static java.util.stream.Collectors.toList;
  * @author Dolghier Constantin
  *
  */
-public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListener {
+public class NiReportsEngine implements IdsAcceptorsBuilder {
 	
 	public static final Logger logger = Logger.getLogger(NiReportsEngine.class);
 	public static final String ROOT_COLUMN_NAME = "RAW";
@@ -641,7 +641,6 @@ public class NiReportsEngine implements IdsAcceptorsBuilder, ReportWarningListen
 		return allRunMeasures;
 	}
 	
-	@Override
 	public void addReportWarning(ReportWarning warning) {
 		reportWarnings.computeIfAbsent(warning.entityId, ignored -> new TreeSet<>()).add(warning);
 	}

@@ -174,7 +174,7 @@ public class FilterRule {
 	}
 	
 	/**
-	 * returns this filter rule as a set {@link Predicate}
+	 * returns this filter rule as a {@link Predicate}
 	 * @return
 	 */
 	public Predicate<Long> buildPredicate() {
@@ -198,7 +198,7 @@ public class FilterRule {
 	}
 	
 	/**
-	 * returns this filter rule as a set {@link Predicate}
+	 * returns this filter rule as a set
 	 * @return
 	 */
 	public Set<Long> addIds(Set<Long> set) {

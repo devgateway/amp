@@ -600,10 +600,15 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
 	@Override
 	public NiFilters convertFilters(NiReportsEngine engine) {
-		return new AmpFiltersConverter(engine).buildNiFilters(this::getWorkspaceFilter);
+		return new AmpFiltersConverter(engine).buildNiFilters(this::getWorkspaceActivities);
 	}
 
-	public Set<Long> getWorkspaceFilter(NiReportsEngine engine) {
+	/**
+	 * returns the set of activities selected by the workspace filter. Any filtering specified in the ReportSpec will return a subset of these ids
+	 * @param engine
+	 * @return
+	 */
+	public Set<Long> getWorkspaceActivities(NiReportsEngine engine) {
 		//Connection conn = AmpReportsScratchpad.get(engine).connection;
 		//res = Collections.unmodifiableSet(new HashSet<Long>(SQLUtils.fetchLongs(conn, "SELECT amp_activity_id FROM amp_activity")));
 		//res = Collections.unmodifiableSet(new HashSet<Long>(SQLUtils.fetchLongs(conn, "SELECT amp_activity_id FROM amp_activity where name in ('new activity with contracting', 'activity_with_disaster_response')")));

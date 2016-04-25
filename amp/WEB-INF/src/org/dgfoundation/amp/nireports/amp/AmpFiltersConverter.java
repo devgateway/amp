@@ -3,11 +3,10 @@ package org.dgfoundation.amp.nireports.amp;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.nireports.CategAmountCell;
-import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.FilterRule.FilterType;
@@ -16,10 +15,23 @@ import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.nireports.BasicFiltersConverter;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
+import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
+import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
 
+import static java.util.stream.Collectors.toList;
+import static org.dgfoundation.amp.algo.AmpCollections.mergePredicates;
+
+/**
+ * the AMP filtering rules, used jointly by {@link AmpReportsSchema} and {@link HardcodedReportsTestSchema}
+ * @author Dolghier Constantin
+ *
+ */
 public class AmpFiltersConverter extends BasicFiltersConverter {
 
+	/**
+	 * the dimensions whose {@link NiDimensionUsage} instances are ORed between themselves while filtering (please see the contract for {@link #shouldCollapseDimension(NiDimension)}
+	 */
 	Set<String> ORED_DIMENSIONS = new HashSet<>(Arrays.asList("locs", "sectors", "progs"));
 	
 	Set<String> locationColumns = new HashSet<>(Arrays.asList(ColumnConstants.COUNTRY, ColumnConstants.REGION, ColumnConstants.ZONE, ColumnConstants.DISTRICT, ColumnConstants.LOCATION));
@@ -38,32 +50,22 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 		
 		if (columnName.equals(ColumnConstants.DONOR_AGENCY) && (rules == null || (rules.size() == 1 && rules.get(0).filterType == FilterType.VALUES && rules.get(0).values.isEmpty())))
 			return; // temporary hack for https://jira.dgfoundation.org/browse/AMP-22602
-		
-//		if (schema.getColumns().containsKey(columnName) && !schema.getColumns().get(columnName).isTransactionLevelHierarchy())
-//			return; //TODO: disable all non-supported filters
-		
+				
 		if (columnName.equals(ColumnConstants.ACTIVITY_ID)) {
-			this.activityIdsPredicate = AmpCollections.mergePredicates(rules.stream().map(FilterRule::buildPredicate).collect(Collectors.toList()));
+			this.activityIdsPredicate = Optional.of(mergePredicates(rules.stream().map(FilterRule::buildPredicate).collect(toList())));
 			return;
 		}
 		
 		if (columnName.equals(ColumnConstants.APPROVAL_STATUS))
 			columnName = ColumnConstants.FILTERED_APPROVAL_STATUS;
-		
-//		if (locationColumns.contains(columnName)) {
-//			LevelColumn lc = schema.getColumns().get(ColumnConstants.REGION).levelColumn.get();
-//			for(String cc:locationColumns) {
-//				Predicate<Cell> cellPred = cell -> cell.getCoordinates().get(lc.dimensionUsage).id;
-//				cellPredicates.computeIfAbsent(cc, ignored -> new ArrayList<>()).addAll(cellPred);
-//				filteringColumns.add(cc);
-//			}
-//		}
-		
+				
 		if (schema.getColumns().containsKey(columnName)) {
 			super.processColumnElement(columnName, rules);
 			return;
 		}
+		
 		if (columnName.endsWith(" Id")) {
+			// cleanup the post-Mondrian mess: if filtering by a "XXX Id" column, treat it as filtering by "XXX", since in Mondrian the "XXX" and "XXX id" columns were distinct entities
 			String newColumnName = columnName.substring(0, columnName.length() - 3);
 			if (schema.getColumns().containsKey(newColumnName)) {
 				super.processColumnElement(newColumnName, rules);

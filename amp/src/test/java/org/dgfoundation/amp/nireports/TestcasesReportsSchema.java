@@ -14,7 +14,7 @@ public class TestcasesReportsSchema extends AmpReportsSchema {
 	}
 
 	@Override
-	public Set<Long> getWorkspaceFilter(NiReportsEngine engine) {
+	public Set<Long> getWorkspaceActivities(NiReportsEngine engine) {
 		return workspaceFilter.getIds();
 	}
 }

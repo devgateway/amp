@@ -38,7 +38,8 @@ public class PassiveNiFilters implements NiFilters {
 	protected final Predicate<Long> activityIdsPredicate;
 	protected final Set<String> mandatoryHiers;
 	
-	public PassiveNiFilters(NiReportsEngine engine, Map<NiDimensionUsage, Predicate<Coordinate>> filteringCoordinates, Map<String, List<Predicate<Cell>>> cellPredicates, Set<String> filteringColumns, Set<String> mandatoryHiers, Function<NiReportsEngine, Set<Long>> activityIdsComputer, Predicate<Long> activityIdsPredicate) {
+	public PassiveNiFilters(NiReportsEngine engine, Map<NiDimensionUsage, Predicate<Coordinate>> filteringCoordinates, Map<String, List<Predicate<Cell>>> cellPredicates, Set<String> filteringColumns, Set<String> mandatoryHiers, Function<NiReportsEngine, Set<Long>> activityIdsComputer, 
+			Optional<Predicate<Long>> activityIdsPredicate) {
 		Objects.requireNonNull(activityIdsComputer);
 		Objects.requireNonNull(engine);
 		this.engine = engine;
@@ -46,7 +47,7 @@ public class PassiveNiFilters implements NiFilters {
 		this.cellPredicates = unmodifiableMap(remap(cellPredicates, AmpCollections::mergePredicates, null));
 		this.filteringColumns = unmodifiableSet(filteringColumns);
 		this.activityIdsComputer = activityIdsComputer;
-		this.activityIdsPredicate = Optional.ofNullable(activityIdsPredicate).orElse(ignored -> true);
+		this.activityIdsPredicate = activityIdsPredicate.orElse(ignored -> true);
 		this.workspaceFilter = new Memoizer<Set<Long>>(() -> this.activityIdsComputer.apply(this.engine).stream().filter(this.activityIdsPredicate).collect(Collectors.toSet()));
 		this.mandatoryHiers = unmodifiableSet(mandatoryHiers);
 	}

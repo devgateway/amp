@@ -17,7 +17,6 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
-import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
 
 import static java.util.stream.Collectors.toList;
 import static org.dgfoundation.amp.algo.AmpCollections.mergePredicates;

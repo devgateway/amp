@@ -7,8 +7,8 @@ import java.util.function.Supplier;
 import org.apache.log4j.Logger;
 
 /**
- * a cache which clears itself every time a timeout happens OR one of the resetting queries happens
- * @author simple
+ * a cache which invalidates every time a timeout happens OR one of the resetting queries happens
+ * @author Dolghier Constantin
  *
  * @param <K>
  * @param <V>

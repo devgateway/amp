@@ -10,7 +10,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 
 /**
- * an WorkspaceFilter which takes into account both the team and the team filters (if any)
+ * a cached, etl_log-invalidated, WorkspaceFilter which takes into account both the team and the team filters (if any)
  * @author Dolghier Constantin
  *
  */

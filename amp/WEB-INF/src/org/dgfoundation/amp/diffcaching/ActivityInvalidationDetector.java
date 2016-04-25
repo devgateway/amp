@@ -6,6 +6,11 @@ import java.util.function.Supplier;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 
+/**
+ * a supplier for {@link ExpiringCacher} which triggers a cache invalidate when any kind of non-incremental mutating event is logged in the AMP in-db changelog
+ * @author Dolghier Constantin
+ *
+ */
 public class ActivityInvalidationDetector implements Supplier<Boolean> {
 	
 	protected long lastProcessedFullEtl = -1; 

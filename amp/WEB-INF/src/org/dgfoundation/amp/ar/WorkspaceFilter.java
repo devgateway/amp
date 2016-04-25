@@ -9,10 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import clover.com.google.common.base.Joiner;
 
-import org.apache.ecs.xhtml.a;
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.diffcaching.ExpiringCacher;
-import org.dgfoundation.amp.diffcaching.ActivityInvalidationDetector;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpTeam;

@@ -161,6 +161,23 @@ public class DateTimeUtil {
 		return (int) (date.toEpochDay() + 2440588);
 	}
 	
+	public static Date fromJulianNumberToDate(String julianNumber) {
+		if (julianNumber != null && !"999999998".equals(julianNumber)) {
+			try {
+				int day = Integer.parseInt(julianNumber) - 2440587; 
+				julianNumber = Integer.toString(day);
+				Date date = new SimpleDateFormat("D").parse(julianNumber);
+				
+				return date;
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		
+		return null;
+	}
+	
 	public static Integer toJulianDayNumber(Date date){
 		if (date == null) return null;
 		Calendar cal = Calendar.getInstance();

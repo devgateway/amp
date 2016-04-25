@@ -679,4 +679,46 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		return sp;
 	};
 	
+	/**
+	 * used for filters (to retrieve names for summary sheet in excel report)
+	 */
+	public enum NamedElemType {SECTOR, LOCATION, PROGRAM, ORGANISATION, ORG_GROUP, ORG_TYPE, ACV, DATE, UNKNOWN}
+	
+	public NamedElemType getNamedElemType(String colName) {
+		NiReportColumn<?> niCol = getColumns().get(colName);
+		if (niCol == null)
+			return NamedElemType.UNKNOWN;
+		
+		if (niCol instanceof DateColumn)
+			return NamedElemType.DATE;
+	
+		if (!niCol.levelColumn.isPresent())
+			return NamedElemType.UNKNOWN;
+		
+		LevelColumn lc = niCol.levelColumn.get();
+		switch(lc.dimensionUsage.dimension.name) {
+			case "sectors":
+				return NamedElemType.SECTOR;
+			case "progs":
+				return NamedElemType.PROGRAM;
+			case "locs":
+				return NamedElemType.LOCATION;
+			case "orgs": {
+				switch(lc.level) {
+				case 0:
+					return NamedElemType.ORG_TYPE;
+				case 1:
+					return NamedElemType.ORG_GROUP;
+				case 2:
+					return NamedElemType.ORGANISATION;
+				default:
+					return NamedElemType.UNKNOWN;
+				}
+			}
+			case "cats":
+				return NamedElemType.ACV;
+			default:
+				return NamedElemType.UNKNOWN;
+		}
+	}
 }

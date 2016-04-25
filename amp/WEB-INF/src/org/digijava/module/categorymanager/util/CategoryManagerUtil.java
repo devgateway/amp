@@ -904,5 +904,28 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 	{
 		return id == null ? null : getAmpCategoryValueFromDb(id);
 	}
+	
+	
+	/**
+	 *
+	 * @return A collection of all AmpCategoryValues from DB
+	 */
+	public static List<AmpCategoryValue> getAllCategoryValues()  {
+		Session session = null;
+    	Query qry = null;
+    	List<AmpCategoryValue> cvs = new ArrayList<AmpCategoryValue>();
+    	
+    	try  {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = " from " + AmpCategoryValue.class.getName() + " cv";
+			qry = session.createQuery(queryString);
+			cvs = qry.list();
+    	} catch(Exception ex) {
+			throw new RuntimeException("Cannot get cvs, ", ex);
+    	}
+    	
+    	return cvs;
+	}
+		
 }
 

@@ -1179,15 +1179,10 @@ public class DataExchangeUtils {
 	public static TreeMap<Long, String> getNameIdAllLocations() {
 		// TODO Auto-generated method stub
 		TreeMap<Long,String> result = new TreeMap<Long,String>();
-		try {
-			List<AmpCategoryValueLocations> allLocations = LocationUtil.getAllCountriesAndRegions();
-			for (Iterator<AmpCategoryValueLocations> iterator = allLocations.iterator(); iterator.hasNext();) {
-				AmpCategoryValueLocations acv = (AmpCategoryValueLocations) iterator.next();
-				result.put(acv.getId(), acv.getLabel());
-			}
-		} catch (DgException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		List<AmpCategoryValueLocations> allLocations = LocationUtil.getAllCountriesAndRegions();
+		for (Iterator<AmpCategoryValueLocations> iterator = allLocations.iterator(); iterator.hasNext();) {
+			AmpCategoryValueLocations acv = (AmpCategoryValueLocations) iterator.next();
+			result.put(acv.getId(), acv.getLabel());
 		}
 		return result;
 	}

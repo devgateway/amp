@@ -14,6 +14,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
@@ -26,10 +27,7 @@ import org.digijava.kernel.ampapi.endpoints.common.Filters;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.search.util.SearchUtil;
 
@@ -213,30 +211,17 @@ public class FilterUtils {
 	}
 	
 	/**
-	 * TODO: why are the items here renumbered compared to AmpARFilter.activityStatusToNr? Why is element "startedApproved" missing?
 	 * @param status
 	 * @return
 	 */
-	public static String getApprovalStatusStrings(Integer status){
-		String result = "";
-		switch (status) {
-		case 1:
-			result = TranslatorWorker.translateText("Validated activities");
-			break;
-		case 2:
-			result = TranslatorWorker.translateText("Existing Unvalidated");
-			break;
-		case 3:
-			result = TranslatorWorker.translateText("New Unvalidated");
-			break;
-		case 5:
-			result = TranslatorWorker.translateText("Not Approved");
-			break;
-		case 6:
-			result = TranslatorWorker.translateText("Rejected");
-			break;
+	public static String getApprovalStatusByNumber(Integer status){
+		for (Entry<String, Integer> entry : AmpARFilter.activityApprovalStatus.entrySet()) {
+			if (entry.getValue().equals(status)) {
+				return entry.getKey();
+			}
 		}
-		return result;
+		
+		return "";
 	}
 	
 	/**

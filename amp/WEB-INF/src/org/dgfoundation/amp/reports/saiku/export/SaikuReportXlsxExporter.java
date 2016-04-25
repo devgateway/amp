@@ -1,7 +1,6 @@
 package org.dgfoundation.amp.reports.saiku.export;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -17,13 +16,10 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.newreports.AmountCell;
-import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.HeaderCell;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportCell;
-import org.dgfoundation.amp.newreports.ReportElement;
-import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -336,6 +332,8 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 		return reportCell != null ? reportCell.displayedValue : "";
 	}
 	
+	
+	
 	/**
 	 * Add extra info about filters applied, currency and settings.
 	 * 
@@ -348,26 +346,10 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 		int i = 0;
 		int j = 0;
 		
-		Map<String, List<String>> extractedFilters = new<String, List<String>> HashMap<String, List<String>>();
-		if (reportSpec.getFilters() != null) {
-			ReportFilters filters = reportSpec.getFilters();
-			Map<ReportElement, List<FilterRule>> filterRules = filters.getFilterRules();
-			for (Map.Entry<ReportElement, List<FilterRule>> filter : filterRules.entrySet()) {
-				for (FilterRule filterRule : filter.getValue()) {
-					String entityName = filter.getKey().type.name();
-					if (filter.getKey().entity != null) {
-						entityName = filter.getKey().entity.getEntityName();
-					}
-					String extractedFilter = TranslatorWorker.translateText(entityName);
-					List<String> extractedValues = new ArrayList<String>();
-					for (String filterValue : filterRule.values) {
-						extractedValues.add(filterValue);
-					}
-					extractedFilters.put(extractedFilter, extractedValues);
-				}
-			}
-		}
-
+		// the report specification contains only IDs in filter rules. 
+		// we need to export in the summary sheet the names instead of ids
+		Map<String, List<String>> extractedFilters = SaikuExportFilterUtils.getFilterValuesForIds(reportSpec.getFilters());
+		
 		// Create header row for filters.
 		int group = 0;
 		Row filterRowTitle = summarySheet.createRow(i);
@@ -402,7 +384,6 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 		j = 0;
 		String currency = reportSpec.getSettings().getCurrencyCode();
 		if (currency == null) {
-			// we get the default currency
 			currency = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
 		}		
 		String calendar = reportSpec.getSettings().getCalendar().getName();
@@ -436,6 +417,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 		}
 	}
 	
+
 	/**
 	 * We need an alternative way to calculate the column's width because sheet.autoSizeColumn can add several minutes
 	 * to the process.

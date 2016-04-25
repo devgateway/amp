@@ -124,7 +124,7 @@ public class LocationUtil {
 		return col;
 	}
         
-        public static List<AmpCategoryValueLocations> getAllCountriesAndRegions() throws DgException{
+        public static List<AmpCategoryValueLocations> getAllCountriesAndRegions() {
     		Session session = null;
     		 List<AmpCategoryValueLocations> col = null;
 
@@ -138,7 +138,7 @@ public class LocationUtil {
     		} catch (Exception e) {
     			logger.error("Unable to get locations from database "
     					+ e.getMessage());
-                            throw new DgException(e);
+                            throw new RuntimeException(e);
     		} 
     		return col;
     	}

@@ -12,7 +12,13 @@ import java.util.Set;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.Constants;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 /**
  * @author Nadejda Mandrescu
@@ -42,5 +48,68 @@ public class OrganisationUtil {
 			if (visibleColumns.contains(roleColumn.getValue()))
 				roles.add(roleColumn.getKey());
 		return roles;
+	}
+	
+	/**
+	 * Get all organisations
+	 * 
+	 */
+	public static List<AmpOrganisation> getAllOrganisations() {
+		Session session = null;
+    	Query qry = null;
+    	List<AmpOrganisation> orgs = new ArrayList<AmpOrganisation>();
+    	
+    	try  {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = " from " + AmpOrganisation.class.getName() + " org";
+			qry = session.createQuery(queryString);
+			orgs = qry.list();
+    	} catch(Exception ex) {
+			throw new RuntimeException("Cannot get organizations, ", ex);
+    	}
+    	
+    	return orgs;
+	}
+	
+	/**
+	 * Get all organization groups
+	 * 
+	 */
+	public static List<AmpOrgGroup> getAllOrgGroups() {
+		Session session = null;
+    	Query qry = null;
+    	List<AmpOrgGroup> orgGroups = new ArrayList<AmpOrgGroup>();
+    	
+    	try  {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = " from " + AmpOrgGroup.class.getName() + " orggrp";
+			qry = session.createQuery(queryString);
+			orgGroups = qry.list();
+    	} catch(Exception ex) {
+			throw new RuntimeException("Cannot get organization groups, ", ex);
+    	}
+    	
+    	return orgGroups;
+	}
+	
+	/**
+	 * Get all organisations
+	 * 
+	 */
+	public static List<AmpOrgType> getAllOrgTypes() {
+		Session session = null;
+    	Query qry = null;
+    	List<AmpOrgType> orgGroups = new ArrayList<AmpOrgType>();
+    	
+    	try  {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = " from " + AmpOrgType.class.getName() + " orgtype";
+			qry = session.createQuery(queryString);
+			orgGroups = qry.list();
+    	} catch(Exception ex) {
+			throw new RuntimeException("Cannot get organization types, ", ex);
+    	}
+    	
+    	return orgGroups;
 	}
 }

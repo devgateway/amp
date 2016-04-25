@@ -442,25 +442,22 @@ public class ProgramUtil {
         }
 
 
-        public static Collection getAllPrograms() throws AimException
-        {
+        public static List<AmpTheme> getAllPrograms() {
         	Session session = null;
         	Query qry = null;
-        	Collection colPrg = null;
-        	try
-        	{
-        		session = PersistenceManager.getRequestDBSession();
-    			String queryString = " from "
-    								+ AmpTheme.class.getName() + " th";
-    			qry = session.createQuery(queryString);
-    			colPrg = qry.list();
-        	}
-        	catch(Exception ex)
-        	{
+        	List<AmpTheme> colPrg = new ArrayList<AmpTheme>();
+        	
+        	try  {
+				session = PersistenceManager.getRequestDBSession();
+				String queryString = " from " + AmpTheme.class.getName() + " th";
+				qry = session.createQuery(queryString);
+				colPrg = qry.list();
+        	} catch(Exception ex) {
         		logger.error("Unable to get all the Themes");
     			logger.debug("Exception " + ex);
-    			throw new AimException(ex);
+    			throw new RuntimeException("Cannot get programs, ", ex);
         	}
+        	
         	return colPrg;
         }
 

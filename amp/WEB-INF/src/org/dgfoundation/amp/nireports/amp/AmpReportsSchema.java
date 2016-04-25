@@ -704,24 +704,28 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		switch(lc.dimensionUsage.dimension.name) {
 			case "sectors":
 				return NamedElemType.SECTOR;
+				
 			case "progs":
 				return NamedElemType.PROGRAM;
+				
 			case "locs":
 				return NamedElemType.LOCATION;
+				
 			case "orgs": {
 				switch(lc.level) {
-				case 0:
-					return NamedElemType.ORG_TYPE;
-				case 1:
-					return NamedElemType.ORG_GROUP;
-				case 2:
-					return NamedElemType.ORGANISATION;
-				default:
-					return NamedElemType.UNKNOWN;
+					case 0:
+						return NamedElemType.ORG_TYPE;
+					case 1:
+						return NamedElemType.ORG_GROUP;
+					case 2:
+						return NamedElemType.ORGANISATION;
+					default:
+						return NamedElemType.UNKNOWN;
 				}
 			}
 			case "cats":
 				return NamedElemType.ACV;
+				
 			default:
 				return NamedElemType.UNKNOWN;
 		}

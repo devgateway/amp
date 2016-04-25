@@ -36,6 +36,9 @@ import org.digijava.module.common.util.DateTimeUtil;
 public class SaikuExportFilterUtils {
 	protected static Logger logger = Logger.getLogger(SaikuExportFilterUtils.class);
 	
+	/**
+	 * TODO: this should be deducted from {@link AmpReportsSchema} when we add support for proper boolean fields in NiReports
+	 */
 	private static Set<String> BOOLEAN_COLUMNS = new HashSet<String>() {{
 		add(ColumnConstants.HUMANITARIAN_AID);
 		add(ColumnConstants.DISASTER_RESPONSE_MARKER);

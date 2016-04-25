@@ -7,12 +7,9 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +23,6 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
-import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.Versionable;
@@ -34,11 +30,8 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.version.exception.CannotGetLastVersionForVersionException;
-import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
-
-import java.util.Collections;
 
 public class ActivityVersionUtil {
 
@@ -189,8 +182,9 @@ public class ActivityVersionUtil {
 	}
 
 	public static int numberOfVersions() {
-		return 999999; //AMP-17263: no good reason to have this feature, so effectively disabling it
-		/*int aux = 5; // Default value after apply patch if no redeployed.
+		//AMP-17263: no good reason to have this feature, so effectively disabling it.
+		//per issue AMP-18412 i've reverted the changes of AMP-17263.
+		int aux = 999999; //if the queue size doesn't exists we show all.
 		String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.VERSION_QUEUE_SIZE);
 		if (gsValue != null) {
 			try {
@@ -199,7 +193,7 @@ public class ActivityVersionUtil {
 				logger.error(e);
 			}
 		}
-		return aux;*/
+		return aux;
 	}
 	
 	public static boolean isVersioningEnabled(){

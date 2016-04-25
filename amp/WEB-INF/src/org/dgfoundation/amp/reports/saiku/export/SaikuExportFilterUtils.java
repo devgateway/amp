@@ -62,7 +62,11 @@ public class SaikuExportFilterUtils {
 							columnName = ColumnConstants.DONOR_AGENCY;
 						
 						if (columnName.endsWith(" Id")) {
-							columnName = columnName.substring(0, columnName.length() - 3); // Delete " Id"
+							String tmpName = columnName.substring(0, columnName.length() - 3); // Delete " Id"
+							
+							if (AmpReportsSchema.getInstance().getColumns().containsKey(tmpName)) {
+								columnName = tmpName;
+							}
 						}
 						extractedFilters.put(TranslatorWorker.translateText(columnName), getEntityValuesNames(filter, columnName));
 					} 

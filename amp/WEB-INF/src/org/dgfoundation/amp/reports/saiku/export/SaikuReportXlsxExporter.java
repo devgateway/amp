@@ -346,78 +346,79 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	 * @param queryObject
 	 */
 	private void generateSummarySheet(Workbook workbook, Sheet summarySheet, ReportSpecification reportSpec) {
-		int i = 0;
-		int j = 0;
+		IntWrapper currLine = new IntWrapper();
 		
+		renderSummaryFilters(summarySheet, reportSpec, currLine);
+		renderSummarySettings(summarySheet, reportSpec, currLine);
+		
+		for (int l = 0; l < 3; l++) {
+			summarySheet.autoSizeColumn(l, true);
+		}
+	}
+	
+	private void renderSummaryFilters(Sheet summarySheet, ReportSpecification reportSpec, IntWrapper currLine) {
 		// the report specification contains only IDs in filter rules. 
 		// we need to export in the summary sheet the names instead of ids
 		Map<String, List<String>> extractedFilters = SaikuExportFilterUtils.getFilterValuesForIds(reportSpec.getFilters());
 		
 		// Create header row for filters.
 		int group = 0;
-		Row filterRowTitle = summarySheet.createRow(i);
+		Row filterRowTitle = summarySheet.createRow(currLine.intValue());
 		Cell filterTitleCell = filterRowTitle.createCell(0);
 		filterTitleCell.setCellValue(TranslatorWorker.translateText("Applied Filters"));
 		filterTitleCell.setCellStyle(template.getOptionSettingsStyle());
+		
 		for (Map.Entry<String, List<String>> filter : extractedFilters.entrySet()) {
 			group = 0;
-			i++;
-			Row filterCategoryRow = summarySheet.createRow(i);
-			Cell filterCategoryCell = filterCategoryRow.createCell(j);
+			currLine.inc();
+			Row filterCategoryRow = summarySheet.createRow(currLine.intValue());
+			Cell filterCategoryCell = filterCategoryRow.createCell(0);
 			filterCategoryCell.setCellValue(filter.getKey());
 			filterCategoryCell.setCellStyle(template.getFilterSettingsStyle());
+			
 			for (String filterValue : filter.getValue()) {
 				// Check if the row 'i' exists so we don't add an extra row for the first filter result.
-				if (summarySheet.getRow(i) != null) {
-					summarySheet.getRow(i).createCell(j + 1).setCellValue(filterValue);
+				if (summarySheet.getRow(currLine.intValue()) != null) {
+					summarySheet.getRow(currLine.intValue()).createCell(1).setCellValue(filterValue);
 				} else {
-					summarySheet.createRow(i).createCell(j + 1).setCellValue(filterValue);
+					summarySheet.createRow(currLine.intValue()).createCell(1).setCellValue(filterValue);
 				}
-				i++;
+				
+				currLine.inc();
 				group++;
 			}
+			
 			if (group > 0) {
-				summarySheet.addMergedRegion(new CellRangeAddress(i - group, i - 1, 0, 0));
-				summarySheet.getRow(i - group).getCell(j).setCellStyle(template.getHierarchyStyle());
+				summarySheet.addMergedRegion(new CellRangeAddress(currLine.intValue() - group, currLine.intValue() - 1, 0, 0));
+				summarySheet.getRow(currLine.intValue() - group).getCell(0).setCellStyle(template.getHierarchyStyle());
 			}
-			i--;
+			
+			currLine.dec();
 		}
-
-		i += 2;
-		j = 0;
+				
+	}
+	
+	private void renderSummarySettings(Sheet summarySheet, ReportSpecification reportSpec, IntWrapper currLine) {
 		String currency = reportSpec.getSettings().getCurrencyCode();
 		if (currency == null) {
 			currency = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
 		}		
 		String calendar = reportSpec.getSettings().getCalendar().getName();
-		currency = reportSpec.getSettings().getCurrencyCode();
-		
-		Row currencyRow = summarySheet.createRow(i);
-		Cell currencyTitleCell = currencyRow.createCell(j);
-		currencyTitleCell.setCellValue(TranslatorWorker.translateText("Currency"));
-		currencyTitleCell.setCellStyle(template.getOptionSettingsStyle());
-		currencyRow.createCell(j + 1).setCellValue(currency);
-
-		i += 2;
-		j = 0;
-		Row calendarRow = summarySheet.createRow(i);
-		Cell calendarTitleCell = calendarRow.createCell(j);
-		calendarTitleCell.setCellValue(TranslatorWorker.translateText("Calendar"));
-		calendarTitleCell.setCellStyle(template.getOptionSettingsStyle());
-		calendarRow.createCell(j + 1).setCellValue(calendar);
-
-		i += 2;
-		j = 0;
-		Row unitsRow = summarySheet.createRow(i);
-		Cell unitsTitleCell = unitsRow.createCell(j);
-		unitsTitleCell.setCellValue(TranslatorWorker.translateText("Units"));
-		unitsTitleCell.setCellStyle(template.getOptionSettingsStyle());
 		String units = reportSpec.getSettings().getUnitsOption().userMessage;
-		unitsRow.createCell(j + 1).setCellValue(TranslatorWorker.translateText(units));
+			
+		renderSummaryLine(summarySheet, currLine, TranslatorWorker.translateText("Currency"), currency);
+		renderSummaryLine(summarySheet, currLine, TranslatorWorker.translateText("Calendar"), calendar);
+		renderSummaryLine(summarySheet, currLine, TranslatorWorker.translateText("Units"), units);
+	}
 
-		for (int l = 0; l < 3; l++) {
-			summarySheet.autoSizeColumn(l, true);
-		}
+
+	public void renderSummaryLine(Sheet summarySheet, IntWrapper currLine, String title, String value) {
+		currLine.inc(2);
+		Row calendarRow = summarySheet.createRow(currLine.intValue());
+		Cell calendarTitleCell = calendarRow.createCell(0);
+		calendarTitleCell.setCellValue(TranslatorWorker.translateText(title));
+		calendarTitleCell.setCellStyle(template.getOptionSettingsStyle());
+		calendarRow.createCell(1).setCellValue(value);
 	}
 	
 

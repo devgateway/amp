@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.digijava.kernel.ampapi.endpoints.config.utils.ConfigHelper;
+import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
@@ -44,7 +45,7 @@ public class ConfigEndpoints {
 	@POST
 	@Path("/globalSettings")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(id = "saveGlobalSettings", ui = false)
+	@ApiMethod(id = "saveGlobalSettings", authTypes = {AuthRule.IN_ADMIN}, ui = false)
 	public Collection<JsonBean> saveGlobalSettings(JsonBean globalSettings) {
 
 		ArrayList<String> list = ConfigHelper.getValidSettings();
@@ -92,16 +93,19 @@ public class ConfigEndpoints {
 	@POST
 	@Path("/getGlobalSettings")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(id = "getGlobalSettings", ui = false)
+	@ApiMethod(id = "getGlobalSettings", authTypes = {AuthRule.IN_ADMIN}, ui = false)
 	public Collection<JsonBean> getGlobalSettings(JsonBean globalSettings) {
 		
-		ArrayList<String> list = ConfigHelper.getValidSettings();
 		Collection<JsonBean> resultList = new ArrayList<JsonBean>();
-
+		ArrayList<LinkedHashMap<String, Object>> settings = null;
+		ArrayList<String> list = null;
+		
 		if (globalSettings.get("settings") != null) {
-			ArrayList<LinkedHashMap<String, Object>> settings = (ArrayList<LinkedHashMap<String, Object>>) globalSettings
-					.get("settings");
-
+			list = ConfigHelper.getValidSettings();
+			settings = (ArrayList<LinkedHashMap<String, Object>>) globalSettings.get("settings");
+		}
+		
+		if (settings != null && settings.size()>0) {
 			for (LinkedHashMap<String, Object> setting : settings) {
 				JsonBean result = new JsonBean();
 				String globalSettingName = ConfigHelper.getGlobalSettingName(setting);
@@ -118,8 +122,15 @@ public class ConfigEndpoints {
 				}
 				resultList.add(result);
 			}
-
+		}else{
+			Collection<AmpGlobalSettings> ampGlobalSettings = FeaturesUtil.getGlobalSettings();
+			for (AmpGlobalSettings sett : ampGlobalSettings) {
+				JsonBean result = new JsonBean();
+	            result = ConfigHelper.getGlobalSettingJson(sett);
+	            resultList.add(result);
+	        }
 		}
+
 		return resultList;
 	}
 	

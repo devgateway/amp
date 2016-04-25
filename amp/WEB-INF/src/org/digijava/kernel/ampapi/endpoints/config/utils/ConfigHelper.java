@@ -78,8 +78,10 @@ public class ConfigHelper {
 		JsonBean globalSetting = new JsonBean();
 		List<KeyValue> possiblesValues = ConfigHelper.getPossibleValues(ampGlobalSetting.getGlobalSettingsPossibleValues());
 		JsonBean pValues = new JsonBean();
-		for (KeyValue value : possiblesValues) {
-			pValues.set(value.getValue(), value.getKey());
+		if (possiblesValues!=null) {
+			for (KeyValue value : possiblesValues) {
+				pValues.set(value.getValue(), value.getKey());
+			}
 		}
 		globalSetting.set("settingsName", ampGlobalSetting.getGlobalSettingsName());
 		globalSetting.set("settingsValue", ampGlobalSetting.getGlobalSettingsValue());
@@ -99,14 +101,19 @@ public class ConfigHelper {
 	
 	public static List<KeyValue> getPossibleValues(String tableName) {
 		List<KeyValue> ret = new ArrayList<>();
-		
-		if (tableName == null || tableName.length() == 0)
+
+		if (tableName == null || tableName.length() == 0 || tableName.startsWith("t_") )
 			return ret;
 
-		List<Object[]> ls 	= PersistenceManager.getSession().createSQLQuery("select id, value from " + tableName).list();
-		for(Object[] obj:ls){
+		List<Object[]> ls = null;
+		try {
+			ls = PersistenceManager.getSession().createSQLQuery("select id, value from " + tableName).list();
+		} catch (Exception e) {
+			return null;
+		}
+		for (Object[] obj : ls) {
 			KeyValue keyValue = new KeyValue(PersistenceManager.getString(obj[0]), PersistenceManager.getString(obj[1]));
-			ret.add( keyValue );
+			ret.add(keyValue);
 		}
 		return ret;
 	}

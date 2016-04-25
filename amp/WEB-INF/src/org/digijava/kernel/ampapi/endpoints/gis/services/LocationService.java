@@ -34,6 +34,7 @@ import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.IdentifiedReportCell;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
@@ -44,6 +45,7 @@ import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
@@ -642,7 +644,6 @@ public class LocationService {
 		}
 		
 		final String usedAdminLevel = adminLevel;
-		//fetch activities filtered by mondrian
 		Set<Long> activitiesId = getActivitiesForFiltering(config, adminLevel);
 		
 		final Double countryLatitude=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LATITUDE);
@@ -723,15 +724,16 @@ public class LocationService {
 	}
 	private static Set<Long> getActivitiesForFiltering(JsonBean config, String adminLevel)
 			throws AmpApiException {
+	    EndpointUtils.useNiReports(true);
 		Set<Long> activitiesId = new HashSet<Long>();
 		 
-		ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
-		GeneratedReport report = null;
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("ActivityIdsForCluster", ArConstants.DONOR_TYPE);
 
-		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
+		spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
 		// AMP-20903 - In order to not have inconsistency with data used in gis map, DONOR_ID was added 
-		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_ID));
+		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+		
+		OutputSettings outSettings = new OutputSettings(new HashSet<String>() {{add(ColumnConstants.AMP_ID);}});
 		
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
@@ -770,12 +772,8 @@ public class LocationService {
 			spec.setFilters(filterRules);
 		}
 
-		try {
-			report = generator.executeReport(spec);
-		} catch (AMPException e) {
-			logger.error("Cannot execute report", e);
-			throw new AmpApiException(e);
-		}
+		GeneratedReport report = EndpointUtils.runReport(spec, ReportAreaImpl.class, outSettings);
+		
 		List<ReportArea> ll = null;
 		ll = report.reportContents.getChildren();
 		if (ll != null) {
@@ -787,8 +785,8 @@ public class LocationService {
 						Map<ReportOutputColumn, ReportCell> row = reportAreachi.getContents();
 						Set<ReportOutputColumn> col = row.keySet();
 						for (ReportOutputColumn reportOutputColumn : col) {
-							if (reportOutputColumn.originalColumnName.equals(ColumnConstants.ACTIVITY_ID)) {
-								activitiesId.add(new Long(row.get(reportOutputColumn).value.toString()));
+							if (reportOutputColumn.originalColumnName.equals(ColumnConstants.AMP_ID)) {
+								activitiesId.add(((IdentifiedReportCell) row.get(reportOutputColumn)).entityId);
 							}
 						}
 					}
@@ -798,8 +796,8 @@ public class LocationService {
 					Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
 					Set<ReportOutputColumn> col = row.keySet();
 					for (ReportOutputColumn reportOutputColumn : col) {
-						if (reportOutputColumn.originalColumnName.equals(ColumnConstants.ACTIVITY_ID)) {
-							activitiesId.add(new Long(row.get(reportOutputColumn).value.toString()));
+						if (reportOutputColumn.originalColumnName.equals(ColumnConstants.AMP_ID)) {
+							activitiesId.add(((IdentifiedReportCell) row.get(reportOutputColumn)).entityId);
 						}
 					}
 				}

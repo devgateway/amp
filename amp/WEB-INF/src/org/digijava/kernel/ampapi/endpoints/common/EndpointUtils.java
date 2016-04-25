@@ -191,6 +191,7 @@ public class EndpointUtils {
 			report = generator.executeReport(spec);
 		} catch (Exception e) {
 			logger.error("error running report", e);
+			throw new RuntimeException(e);
 		}
 		return report;
 	}

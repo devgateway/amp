@@ -20,6 +20,7 @@ import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.IdentifiedReportCell;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
@@ -33,12 +34,14 @@ import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.newreports.pagination.PaginatedReport;
+import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
@@ -60,7 +63,7 @@ public class ActivityService {
 		 columnHeaders.put(ColumnConstants.ACTIVITY_UPDATED_ON, "Date");
 		 
 		 columnsToProvide = new HashSet<String>();
-		 columnsToProvide.add(ColumnConstants.ACTIVITY_ID);
+		 columnsToProvide.add(ColumnConstants.AMP_ID);
 		 columnsToProvide.add(ColumnConstants.PROJECT_TITLE);
 		 columnsToProvide.add(MeasureConstants.ACTUAL_COMMITMENTS);
 		 columnsToProvide.add(MeasureConstants.ACTUAL_DISBURSEMENTS);
@@ -68,7 +71,9 @@ public class ActivityService {
 		 columnsToProvide.add(MeasureConstants.PLANNED_DISBURSEMENTS);
 	    }
 	
-	public static JsonBean getActivitiesMondrian(JsonBean config,List<String>activitIds, Integer page, Integer pageSize) throws AmpApiException {
+	public static JsonBean getActivities(JsonBean config, List<String>activitIds, Integer page, Integer pageSize) 
+	        throws AmpApiException {
+	    EndpointUtils.useNiReports(true);
 		boolean applyFilter=false;
 		List<JsonBean> activities=new ArrayList<JsonBean>();
 		
@@ -87,13 +92,15 @@ public class ActivityService {
 		boolean doTotals=true;
  		ReportSpecificationImpl spec = new ReportSpecificationImpl(name, ArConstants.DONOR_TYPE);
 
-		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
-		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
-		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_ID));
-		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_ID));
-		//for now we are going to return the donor_id as matchesfilters
 		spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
-
+		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
+		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
+		
+		OutputSettings outSettings = new OutputSettings(new HashSet<String>() {{add(ColumnConstants.AMP_ID);}});
+		
+		//for now we are going to return the donor_id as matchesfilters
+		
 		//then we have to fetch all other matchesfilters outisde mondrian
 
 		// apply default settings
@@ -114,14 +121,7 @@ public class ActivityService {
 		if(filterRules!=null){
 			spec.setFilters(filterRules);
 		}
-		ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class,ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
-		GeneratedReport report = null;		
-		try {
-			report = generator.executeReport(spec);
-		} catch (AMPException e) {
-			logger.error("Cannot execute report", e);
-			throw new AmpApiException(e);
-		}
+		GeneratedReport report = EndpointUtils.runReport(spec, ReportAreaImpl.class, outSettings);
 		//if pagination is requested
 		List<ReportArea> ll=null;
 		if (page != null && pageSize != null && page >= 0 && pageSize > 0) {
@@ -141,21 +141,20 @@ public class ActivityService {
 				//Filters should be grouped together.
 				
 				if (columnsToProvide.contains(reportOutputColumn.originalColumnName)) {
-					activity.set(reportOutputColumn.originalColumnName,row.get(reportOutputColumn).value);
-					if(reportOutputColumn.originalColumnName.equals(ColumnConstants.ACTIVITY_ID)){
-						activity.set("ampUrl",ActivityGatekeeper.buildPreviewUrl(String.valueOf(row.get(reportOutputColumn).value)));
+					activity.set(reportOutputColumn.originalColumnName, row.get(reportOutputColumn).value);
+					if (reportOutputColumn.originalColumnName.equals(ColumnConstants.AMP_ID)) {
+					    long activityId = ((IdentifiedReportCell) row.get(reportOutputColumn)).entityId;
+					    activity.set(ColumnConstants.ACTIVITY_ID, activityId);
+						activity.set("ampUrl", ActivityGatekeeper.buildPreviewUrl(String.valueOf(activityId)));
 					}
-				}else{
-					//we exclude undefineds or value 999999999 for ids
-						//if(!"999999999".equals(row.get(reportOutputColumn).value) ){
-							filters.set(reportOutputColumn.originalColumnName,row.get(reportOutputColumn).value);
-						//}
+				} else {
+					filters.set(reportOutputColumn.originalColumnName, row.get(reportOutputColumn).value);
 				}
 			}
-			activity.set("matchesFilters",filters);
+			activity.set("matchesFilters", filters);
 			activities.add(activity);
 		}
-		JsonBean list=new JsonBean();
+		JsonBean list = new JsonBean();
 		list.set("count", count);
 		list.set("activities", activities);
 		return list;

@@ -20,6 +20,10 @@ public class OutputSettings {
 	/** columns for which to provide ids/values map (expensive operation) */
 	protected final Set<String> idsValuesColumns;
 	
+	/**
+	 * Output settings
+	 * @param idsValuesColumns columns for which to provide ids/values map
+	 */
 	public OutputSettings(Set<String> idsValuesColumns) {
 		this.idsValuesColumns = Collections.unmodifiableSet(idsValuesColumns == null ? new HashSet<>() : new HashSet<>(idsValuesColumns));
 	}

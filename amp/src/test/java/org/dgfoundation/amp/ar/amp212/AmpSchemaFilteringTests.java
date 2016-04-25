@@ -46,6 +46,15 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
 		"TAC_activity_2"
 	);
 	
+	final List<String> humanitarianAidActs = Arrays.asList(
+			"TAC_activity_1", 
+			"crazy funding 1", 
+			"date-filters-activity", 
+			"Activity with planned disbursements", 
+			"TAC_activity_2", 
+			"pledged 2"
+		);
+	
 	public AmpSchemaFilteringTests() {
 		super("AmpSchemaFilteringTests sanity tests");
 	}
@@ -512,6 +521,100 @@ public class AmpSchemaFilteringTests extends FilteringSanityChecks {
 			null, 
 			ColumnConstants.APPROVAL_STATUS, Arrays.asList(4l), false); // All but Validated
 		
+		runNiTestCase(cor, spec, acts);
+	}
+	
+	@Test
+	public void testFilterFlatByHumanitarianAid() {
+		NiReportModel cor = new NiReportModel("testFilterFlatByHumanitarianAid")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 10))",
+					"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Humanitarian Aid: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 6));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 8, colSpan: 2))",
+					"(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2));(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 2))",
+					"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+			      .withContents("Project Title", "", "Humanitarian Aid", "", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "123,321", "Funding-2011-Actual Commitments", "213,231", "Funding-2011-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Totals-Actual Commitments", "546,564", "Totals-Actual Disbursements", "123,321")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Humanitarian Aid", "Yes", "Funding-2010-Actual Disbursements", "123,321", "Funding-2011-Actual Commitments", "213,231", "Totals-Actual Commitments", "213,231", "Totals-Actual Disbursements", "123,321"),
+			        new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Humanitarian Aid", "Yes", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333")      ));
+
+		
+		ReportSpecificationImpl spec = buildSpecForFiltering("testFilterFlatByHumanitarianAid", 
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.HUMANITARIAN_AID), 
+				null, 
+				ColumnConstants.HUMANITARIAN_AID, Arrays.asList(1l), true); // yes
+			
+		runNiTestCase(cor, spec, acts);
+	}
+	
+	@Test
+	public void testFilterHierByHumanitarianAid() {
+		NiReportModel cor = new NiReportModel("testFilterHierByHumanitarianAidYes")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 10))",
+					"(Humanitarian Aid: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 6));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 8, colSpan: 2))",
+					"(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2));(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 2))",
+					"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null).withContents("Humanitarian Aid", "", "Project Title", "", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "123,321", "Funding-2011-Actual Commitments", "213,231", "Funding-2011-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Totals-Actual Commitments", "546,564", "Totals-Actual Disbursements", "123,321")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner("Humanitarian Aid", "Yes"))
+			        .withContents("Project Title", "", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "123,321", "Funding-2011-Actual Commitments", "213,231", "Funding-2011-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "333,333", "Funding-2013-Actual Disbursements", "0", "Totals-Actual Commitments", "546,564", "Totals-Actual Disbursements", "123,321", "Humanitarian Aid", "Yes")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Funding-2010-Actual Disbursements", "123,321", "Funding-2011-Actual Commitments", "213,231", "Totals-Actual Commitments", "213,231", "Totals-Actual Disbursements", "123,321"),
+			          new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Funding-2013-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333")        )      ));
+		
+		ReportSpecificationImpl spec = buildSpecForFiltering("testFilterHierByHumanitarianAidYes", 
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.HUMANITARIAN_AID), 
+				Arrays.asList(ColumnConstants.HUMANITARIAN_AID), 
+				ColumnConstants.HUMANITARIAN_AID, Arrays.asList(1l), true); // yes
+			
+		runNiTestCase(cor, spec, acts);
+	}
+	
+	@Test
+	public void testFilterHierByDisasterResponseFilterYes() {
+		NiReportModel cor = new NiReportModel("testFilterHierByDisasterResponseFilterYes")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 6))",
+					"(Disaster Response Marker: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 2));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 4, colSpan: 2))",
+					"(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2))",
+					"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null).withContents("Disaster Response Marker", "", "Project Title", "", "Funding-2015-Actual Commitments", "67,000", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "67,000", "Totals-Actual Disbursements", "0")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner("Disaster Response Marker", "Yes")).withContents("Project Title", "", "Funding-2015-Actual Commitments", "67,000", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "67,000", "Totals-Actual Disbursements", "0", "Disaster Response Marker", "Yes")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Funding-2015-Actual Commitments", "67,000", "Totals-Actual Commitments", "67,000")        )      ));
+
+		ReportSpecificationImpl spec = buildSpecForFiltering("testFilterHierByDisasterResponseFilterYes", 
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DISASTER_RESPONSE_MARKER), 
+				Arrays.asList(ColumnConstants.DISASTER_RESPONSE_MARKER), 
+				ColumnConstants.DISASTER_RESPONSE_MARKER, Arrays.asList(1l), true); // yes
+			
+		runNiTestCase(cor, spec, acts);
+	}
+	
+	@Test
+	public void testFilterFlatByDisasterResponseNo() {
+		NiReportModel cor = new NiReportModel("testFilterFlatByDisasterResponseNo")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 6))",
+					"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Disaster Response Marker: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 2));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 4, colSpan: 2))",
+					"(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2))",
+					"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null).withContents("Project Title", "", "Disaster Response Marker", "", "Funding-2014-Actual Commitments", "33,000", "Funding-2014-Actual Disbursements", "0", "Totals-Actual Commitments", "33,000", "Totals-Actual Disbursements", "0")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Disaster Response Marker", "No", "Funding-2014-Actual Commitments", "33,000", "Totals-Actual Commitments", "33,000")      ));
+
+
+		ReportSpecificationImpl spec = buildSpecForFiltering("testFilterFlatByDisasterResponseNo", 
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DISASTER_RESPONSE_MARKER), 
+				null, 
+				ColumnConstants.DISASTER_RESPONSE_MARKER, Arrays.asList(2l), true); // no
+			
 		runNiTestCase(cor, spec, acts);
 	}
 }

@@ -28,7 +28,7 @@
          CASE 
           WHEN fd.disaster_response IS TRUE THEN 1
           WHEN fd.disaster_response IS FALSE THEN 2
-          ELSE 999999999
+          ELSE NULL
          END AS disaster_response_code,
          fd.recipient_org_id AS recipient_org_id, fd.recipient_role_id AS recipient_role_id,
          f.source_role_id AS source_role_id

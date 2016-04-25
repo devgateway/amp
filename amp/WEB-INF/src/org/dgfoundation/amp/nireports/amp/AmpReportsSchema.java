@@ -55,6 +55,7 @@ import org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.ProgramsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension;
+import org.dgfoundation.amp.nireports.schema.BooleanDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
@@ -75,13 +76,14 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public static final Logger logger = Logger.getLogger(AmpReportsSchema.class);
 
 	public final static Set<String> TRANSACTION_LEVEL_HIERARCHIES = Collections.unmodifiableSet(new HashSet<>(
-			Arrays.asList(ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.FUNDING_STATUS, ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.TYPE_OF_ASSISTANCE)));
+			Arrays.asList(ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.FUNDING_STATUS, ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.DISASTER_RESPONSE_MARKER)));
 	
 	public final static OrganisationsDimension orgsDimension = OrganisationsDimension.instance;
 	public final static LocationsDimension locsDimension = LocationsDimension.instance;
 	public final static SectorsDimension secsDimension = SectorsDimension.instance;
 	public final static ProgramsDimension progsDimension = ProgramsDimension.instance;
 	public final static CategoriesDimension catsDimension = CategoriesDimension.instance;
+	public final static BooleanDimension boolDimension = new BooleanDimension("bool", 1l, 2l); // corroborate with FilterRule.TRUE_VALUE
 	public final static NiDimension agreementsDimension = SqlSourcedNiDimension.buildDegenerateDimension("agrs", "amp_agreement", "id");
 	
 	/**
@@ -217,14 +219,14 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_dimension(ColumnConstants.COSTING_DONOR, "v_costing_donors");
 		no_dimension(ColumnConstants.CREDIT_DONATION, "v_credit_donation");
 		no_dimension(ColumnConstants.DESCRIPTION_OF_COMPONENT_FUNDING, "v_component_funding_description");
-		no_dimension(ColumnConstants.DISASTER_RESPONSE_MARKER, "v_disaster_response_marker");
+		degenerate_dimension(ColumnConstants.DISASTER_RESPONSE_MARKER, "v_disaster_response_marker", boolDimension);
 		no_dimension(ColumnConstants.DONOR_CONTACT_ORGANIZATION, "v_donor_cont_org");
 		no_entity(ColumnConstants.ENVIRONMENT, "v_environment");
 		no_entity(ColumnConstants.EQUAL_OPPORTUNITY, "v_equalopportunity");
 		degenerate_dimension(ColumnConstants.FINANCIAL_INSTRUMENT, "v_financial_instrument", catsDimension);
 		degenerate_dimension(ColumnConstants.FINANCING_INSTRUMENT, "v_financing_instrument", catsDimension);
 		degenerate_dimension(ColumnConstants.FUNDING_STATUS, "v_funding_status", catsDimension);
-		no_dimension(ColumnConstants.HUMANITARIAN_AID, "v_humanitarian_aid");
+		degenerate_dimension(ColumnConstants.HUMANITARIAN_AID, "v_humanitarian_aid", boolDimension);
 		degenerate_dimension(ColumnConstants.IMPLEMENTATION_LEVEL, "v_implementation_level", catsDimension);
 //		addTextColumn(ColumnConstants.IMPLEMENTING_AGENCY_DEPARTMENT_DIVISION, "v_implementing_agency_info");
 		no_dimension(ColumnConstants.INDIRECT_ON_BUDGET, "v_indirect_on_budget");
@@ -287,7 +289,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_entity(ColumnConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT_PHONE, "v_impl_ex_cont_phone");
 		no_entity(ColumnConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT_TITLE, "v_impl_ex_cont_title");
 		no_entity(ColumnConstants.ISSUES___MEASURES___ACTORS, "v_issues_measure_actors");
-		no_entity(ColumnConstants.JOINT_CRITERIA, "v_yes_no_joint_criteria");
+		degenerate_dimension(ColumnConstants.JOINT_CRITERIA, "v_yes_no_joint_criteria", boolDimension);
+		degenerate_dimension(ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES, "v_yes_no_government_approval_proc", boolDimension);
 		no_entity(ColumnConstants.MINISTRY_CODE, "v_minsitry_code");
 		no_entity(ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_EMAIL, "v_mofed_cont_email");
 		no_entity(ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_FAX, "v_mofed_cont_fax");
@@ -547,7 +550,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 * @return
 	 */
 	private AmpReportsSchema degenerate_dimension(String columnName, String view, NiDimension dimension) {
-		NiUtils.failIf(dimension != catsDimension && dimension != agreementsDimension, String.format(dimension.toString() + " is not whitelisted as a shortcut degenerate dimension"));
+		NiUtils.failIf(dimension != catsDimension && dimension != agreementsDimension && dimension != boolDimension, String.format(dimension.toString() + " is not whitelisted as a shortcut degenerate dimension"));
 		return single_dimension(columnName, view, dimension.getLevelColumn(columnName, dimension.depth - 1)); // taking the leaves
 	}
 	
@@ -683,6 +686,16 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		}
 		return sp;
 	};
+	
+	/**
+	 * returns true iff a given column is defined and denoting a boolean column
+	 * @param columnName
+	 * @return
+	 */
+	public boolean isBooleanColumn(String columnName) {
+		NiReportColumn<?> col = getColumns().get(columnName);
+		return col != null && col.levelColumn.isPresent() && col.levelColumn.get().dimensionUsage.dimension == boolDimension;
+	}
 	
 	/**
 	 * used for filters (to retrieve names for summary sheet in excel report)

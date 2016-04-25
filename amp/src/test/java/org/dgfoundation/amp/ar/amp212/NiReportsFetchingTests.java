@@ -61,8 +61,8 @@ public class NiReportsFetchingTests extends ReportingTestCase {
 					List<CategAmountCell> cells = sorted(engine.schema.getFundingFetcher().fetch(engine));
 					assertEquals(
 						"[" 
-     					+ "(actId: 64, amt: 45000 on 2015-01-06, coos: {{cats.Financing Instrument=(level: 1, id: 2125), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: -999999999), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21695)}}, meta: {MetaInfoSet: [source_org: 21695, source_role: DN, adjustment_type: Actual, transaction_type: 0]}, "
-						+ "(actId: 40, amt: 75000 on 2014-02-05, coos: {{cats.Financing Instrument=(level: 1, id: 2120), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: 2094), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21700)}}, meta: {MetaInfoSet: [source_org: 21700, source_role: DN, adjustment_type: Actual, transaction_type: 0]}"
+     					+ "(actId: 64, amt: 45000 on 2015-01-06, coos: {{bool.Disaster Response Marker=(level: 0, id: -999999999), cats.Financing Instrument=(level: 1, id: 2125), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: -999999999), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21695)}}, meta: {MetaInfoSet: [source_org: 21695, source_role: DN, adjustment_type: Actual, transaction_type: 0]}, "
+						+ "(actId: 40, amt: 75000 on 2014-02-05, coos: {{bool.Disaster Response Marker=(level: 0, id: -999999999), cats.Financing Instrument=(level: 1, id: 2120), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: 2094), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21700)}}, meta: {MetaInfoSet: [source_org: 21700, source_role: DN, adjustment_type: Actual, transaction_type: 0]}"
 						+ "]",
 						cells.toString());
 				});
@@ -198,7 +198,7 @@ public class NiReportsFetchingTests extends ReportingTestCase {
 	public void testJointCriteria() throws Exception {
 		runInEngineContext(Arrays.asList("Unvalidated activity", "execution rate activity", "Activity with Zones"), engine -> {
 			List<? extends Cell> cells = sorted(engine.schema.getColumns().get(ColumnConstants.JOINT_CRITERIA).fetch(engine));
-			assertEquals("[Yes (id: 33, eid: 33)]", cells.toString());
+			assertEquals("[Yes (id: 33, eid: 1, coos: {bool.Joint Criteria=(level: 0, id: 1)})]", cells.toString());
 		});
 	}
 	

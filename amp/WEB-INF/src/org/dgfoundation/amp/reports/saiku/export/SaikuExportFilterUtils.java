@@ -36,17 +36,6 @@ import org.digijava.module.common.util.DateTimeUtil;
 public class SaikuExportFilterUtils {
 	protected static Logger logger = Logger.getLogger(SaikuExportFilterUtils.class);
 	
-	/**
-	 * TODO: this should be deducted from {@link AmpReportsSchema} when we add support for proper boolean fields in NiReports
-	 */
-	private static Set<String> BOOLEAN_COLUMNS = new HashSet<String>() {{
-		add(ColumnConstants.HUMANITARIAN_AID);
-		add(ColumnConstants.DISASTER_RESPONSE_MARKER);
-		add(ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES);
-		add(ColumnConstants.JOINT_CRITERIA);
-		add(ColumnConstants.ARCHIVED);
-	}};
-
 	public static Map<String, List<String>> getFilterValuesForIds(ReportFilters filters) {
 		Map<String, List<String>> extractedFilters = new HashMap<String, List<String>>();
 		if (filters != null) {
@@ -112,7 +101,7 @@ public class SaikuExportFilterUtils {
 			return new ArrayList<String>(entities.values());
 		} 
 		
-		if (BOOLEAN_COLUMNS.contains(columnName)) {
+		if (AmpReportsSchema.getInstance().isBooleanColumn(columnName)) {
 			return getBooleanValues(filter.getValue());
 		}
 		

@@ -38,6 +38,6 @@ public class MtefColumn extends AmpFundingColumn {
 	
 	@Override
 	protected Set<String> getIgnoredColumns() {
-		return new HashSet<>(Arrays.asList("pledge_id", "transaction_type"));
+		return new HashSet<>(Arrays.asList("pledge_id", "transaction_type", "disaster_response_code"));
 	}
 }

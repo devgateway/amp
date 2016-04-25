@@ -71,7 +71,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		res.put(ColumnConstants.DONOR_AGENCY, "donor_org_id");
 		res.put(ColumnConstants.MODE_OF_PAYMENT, "mode_of_payment_id");
 		res.put(ColumnConstants.FUNDING_STATUS, "funding_status_id");
-		//res.put(ColumnConstants.DISASTER_RESPONSE_MARKER, "disaster_response_code");
+		res.put(ColumnConstants.DISASTER_RESPONSE_MARKER, "disaster_response_code");
 		return res;
 	}
 		
@@ -145,11 +145,9 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		VivificatingMap<Long, AmpCurrency> currencies = new VivificatingMap<Long, AmpCurrency>(new HashMap<>(), CurrencyUtil::getAmpcurrency);
 		
 		AmpReportsSchema schema = (AmpReportsSchema) engine.schema;
-		AmpCurrency usedCurrency = scratchpad.getUsedCurrency();
 		
 		List<CategAmountCellProto> cells = new ArrayList<>();
 		MetaInfoGenerator metaGenerator = new MetaInfoGenerator();
-		CalendarConverter calendarConverter = engine.calendar;
 		Map<String, LevelColumn> optionalDimensionCols = buildOptionalDimensionCols(schema);
 		
 		Set<String> ignoredColumns = getIgnoredColumns();
@@ -166,7 +164,8 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 						addMetaIfLongExists(metaSet, longOptionalColumn.k, rs.rs, longOptionalColumn.v);
 				
 				for(Map.Entry<String, LevelColumn> optDim:optionalDimensionCols.entrySet())
-					addCoordinateIfLongExists(coos, rs.rs, optDim.getKey(), optDim.getValue());
+					if (!ignoredColumns.contains(optDim.getKey()))
+						addCoordinateIfLongExists(coos, rs.rs, optDim.getKey(), optDim.getValue());
 
 				java.sql.Date transactionMoment = rs.rs.getDate("transaction_date");
 				BigDecimal transactionAmount = rs.rs.getBigDecimal("transaction_amount");
@@ -192,9 +191,6 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 									ArConstants.userFriendlyNameOfRole(metaSet.getMetaInfo(MetaCategory.RECIPIENT_ROLE.category).v.toString())));
 				}
 				
-//				BigDecimal usedExchangeRate = BigDecimal.valueOf(schema.currencyConvertor.getExchangeRate(srcCurrency.getCurrencyCode(), usedCurrency.getCurrencyCode(), fixed_exchange_rate == null ? null : fixed_exchange_rate.doubleValue(), transactionDate));
-//				MonetaryAmount amount = new MonetaryAmount(transactionAmount.multiply(usedExchangeRate), transactionAmount, srcCurrency, transactionDate, scratchpad.getPrecisionSetting());
-//				CategAmountCell cell = new CategAmountCell(ampActivityId, amount, metaSet, coos, calendarConverter.translate(transactionMoment));
 				CategAmountCellProto cell = new CategAmountCellProto(ampActivityId, transactionAmount, srcCurrency, transactionMoment, metaSet, coos, fixed_exchange_rate);
 				cells.add(cell);
 			}

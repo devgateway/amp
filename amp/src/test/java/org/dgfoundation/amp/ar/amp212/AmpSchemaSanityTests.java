@@ -49,6 +49,15 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 			"activity with directed MTEFs"
 		);
 	
+	final List<String> humanitarianAidActs = Arrays.asList(
+			"TAC_activity_1", 
+			"crazy funding 1", 
+			"date-filters-activity", 
+			"Activity with planned disbursements", 
+			"TAC_activity_2", 
+			"pledged 2"
+		);
+	
 	public AmpSchemaSanityTests() {
 		super("AmpReportsSchema sanity tests");
 	}
@@ -509,5 +518,90 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 			        new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Funding-2015-Actual Commitments", "123 456", "Totals-Actual Commitments", "123 456")));
 
 		runNiTestCase(spec("AMP-22375-revised-project-cost"), "en", ppcActs, cor);
+	}
+	
+	@Test
+	public void testHierByHumanitarianAid() {
+		NiReportModel cor = new NiReportModel("AMP-20325-by-humanitarian-aid")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 18))",
+					"(Humanitarian Aid: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 14));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 16, colSpan: 2))",
+					"(2009: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2));(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2));(2011: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 2));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 8, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 10, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 12, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 14, colSpan: 2))",
+					"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 15, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 16, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 17, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+			      .withContents("Humanitarian Aid", "", "Project Title", "", "Funding-2009-Actual Commitments", "100 000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "636 534", "Funding-2011-Actual Commitments", "1 213 119", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "25 000", "Funding-2012-Actual Disbursements", "12 000", "Funding-2013-Actual Commitments", "3 003 333", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "4 400 000", "Funding-2014-Actual Disbursements", "450 200", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "570", "Totals-Actual Commitments", "8 741 452", "Totals-Actual Disbursements", "1 099 304")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner("Humanitarian Aid", "No"))
+			        .withContents("Project Title", "", "Funding-2009-Actual Commitments", "100 000", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "60 000", "Funding-2011-Actual Commitments", "0", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "25 000", "Funding-2012-Actual Disbursements", "12 000", "Funding-2013-Actual Commitments", "0", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "200", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "570", "Totals-Actual Commitments", "125 000", "Totals-Actual Disbursements", "72 770", "Humanitarian Aid", "No")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Funding-2009-Actual Commitments", "100 000", "Funding-2010-Actual Disbursements", "60 000", "Funding-2012-Actual Commitments", "25 000", "Funding-2012-Actual Disbursements", "12 000", "Totals-Actual Commitments", "125 000", "Totals-Actual Disbursements", "72 000"),
+			          new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Funding-2014-Actual Disbursements", "200", "Funding-2015-Actual Disbursements", "570", "Totals-Actual Disbursements", "770")        ),
+			        new ReportAreaForTests(new AreaOwner("Humanitarian Aid", "Yes"))
+			        .withContents("Project Title", "", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "123 321", "Funding-2011-Actual Commitments", "213 231", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "333 333", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "0", "Funding-2014-Actual Disbursements", "0", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "546 564", "Totals-Actual Disbursements", "123 321", "Humanitarian Aid", "Yes")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Funding-2010-Actual Disbursements", "123 321", "Funding-2011-Actual Commitments", "213 231", "Totals-Actual Commitments", "213 231", "Totals-Actual Disbursements", "123 321"),
+			          new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Funding-2013-Actual Commitments", "333 333", "Totals-Actual Commitments", "333 333")        ),
+			        new ReportAreaForTests(new AreaOwner("Humanitarian Aid", "Humanitarian Aid: Undefined"))
+			        .withContents("Project Title", "", "Funding-2009-Actual Commitments", "0", "Funding-2009-Actual Disbursements", "0", "Funding-2010-Actual Commitments", "0", "Funding-2010-Actual Disbursements", "453 213", "Funding-2011-Actual Commitments", "999 888", "Funding-2011-Actual Disbursements", "0", "Funding-2012-Actual Commitments", "0", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Commitments", "2 670 000", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Commitments", "4 400 000", "Funding-2014-Actual Disbursements", "450 000", "Funding-2015-Actual Commitments", "0", "Funding-2015-Actual Disbursements", "0", "Totals-Actual Commitments", "8 069 888", "Totals-Actual Disbursements", "903 213", "Humanitarian Aid", "Humanitarian Aid: Undefined")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Funding-2010-Actual Disbursements", "453 213", "Funding-2011-Actual Commitments", "999 888", "Totals-Actual Commitments", "999 888", "Totals-Actual Disbursements", "453 213"),
+			          new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Funding-2013-Actual Commitments", "2 670 000", "Funding-2014-Actual Commitments", "4 400 000", "Funding-2014-Actual Disbursements", "450 000", "Totals-Actual Commitments", "7 070 000", "Totals-Actual Disbursements", "450 000")        )      ));
+
+		
+		runNiTestCase(spec("AMP-20325-by-humanitarian-aid"), "en", 
+			humanitarianAidActs, cor);
+	}
+	
+	@Test
+	public void testHierByDisasterResponseMarker() {
+		NiReportModel cor = new NiReportModel("AMP-20980-disaster-response-marker-hier")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 8))",
+					"(Disaster Response Marker: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 5));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 7, colSpan: 1))",
+					"(2009: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 1));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 1));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 1))",
+					"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+			      .withContents("Disaster Response Marker", "", "Project Title", "", "Funding-2009-Actual Commitments", "100 000", "Funding-2012-Actual Commitments", "25 000", "Funding-2013-Actual Commitments", "2 670 000", "Funding-2014-Actual Commitments", "4 433 000", "Funding-2015-Actual Commitments", "117 000", "Totals-Actual Commitments", "7 345 000")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner("Disaster Response Marker", "No")).withContents("Project Title", "", "Funding-2009-Actual Commitments", "0", "Funding-2012-Actual Commitments", "0", "Funding-2013-Actual Commitments", "0", "Funding-2014-Actual Commitments", "33 000", "Funding-2015-Actual Commitments", "0", "Totals-Actual Commitments", "33 000", "Disaster Response Marker", "No")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Funding-2014-Actual Commitments", "33 000", "Totals-Actual Commitments", "33 000")        ),
+			        new ReportAreaForTests(new AreaOwner("Disaster Response Marker", "Yes")).withContents("Project Title", "", "Funding-2009-Actual Commitments", "0", "Funding-2012-Actual Commitments", "0", "Funding-2013-Actual Commitments", "0", "Funding-2014-Actual Commitments", "0", "Funding-2015-Actual Commitments", "67 000", "Totals-Actual Commitments", "67 000", "Disaster Response Marker", "Yes")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Funding-2015-Actual Commitments", "67 000", "Totals-Actual Commitments", "67 000")        ),
+			        new ReportAreaForTests(new AreaOwner("Disaster Response Marker", "Disaster Response Marker: Undefined"))
+			        .withContents("Project Title", "", "Funding-2009-Actual Commitments", "100 000", "Funding-2012-Actual Commitments", "25 000", "Funding-2013-Actual Commitments", "2 670 000", "Funding-2014-Actual Commitments", "4 400 000", "Funding-2015-Actual Commitments", "50 000", "Totals-Actual Commitments", "7 245 000", "Disaster Response Marker", "Disaster Response Marker: Undefined")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Funding-2009-Actual Commitments", "100 000", "Funding-2012-Actual Commitments", "25 000", "Totals-Actual Commitments", "125 000"),
+			          new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Funding-2013-Actual Commitments", "2 670 000", "Funding-2014-Actual Commitments", "4 400 000", "Totals-Actual Commitments", "7 070 000"),
+			          new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Funding-2015-Actual Commitments", "50 000", "Totals-Actual Commitments", "50 000")        )      ));
+
+		
+		runNiTestCase(spec("AMP-20980-disaster-response-marker-hier"), "en",
+			Arrays.asList("activity_with_disaster_response", "date-filters-activity", "pledged 2"), 
+			cor);
+	}
+	
+	@Test
+	public void testPlainDisasterResponseMarker() {
+		NiReportModel cor = new NiReportModel("AMP-20980-disaster-response-marker")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 8))",
+					"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Disaster Response Marker: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 5));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 7, colSpan: 1))",
+					"(2009: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1));(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 1));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 1));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 1))",
+					"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+			      .withContents("Project Title", "", "Disaster Response Marker", "", "Funding-2009-Actual Commitments", "100 000", "Funding-2012-Actual Commitments", "25 000", "Funding-2013-Actual Commitments", "2 670 000", "Funding-2014-Actual Commitments", "4 433 000", "Funding-2015-Actual Commitments", "117 000", "Totals-Actual Commitments", "7 345 000")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Funding-2009-Actual Commitments", "100 000", "Funding-2012-Actual Commitments", "25 000", "Totals-Actual Commitments", "125 000"),
+			        new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Funding-2013-Actual Commitments", "2 670 000", "Funding-2014-Actual Commitments", "4 400 000", "Totals-Actual Commitments", "7 070 000"),
+			        new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Disaster Response Marker", "No, Yes", "Funding-2014-Actual Commitments", "33 000", "Funding-2015-Actual Commitments", "117 000", "Totals-Actual Commitments", "150 000")      ));
+		
+		runNiTestCase(spec("AMP-20980-disaster-response-marker"), "en",
+			Arrays.asList("activity_with_disaster_response", "date-filters-activity", "pledged 2"), 
+			cor);
 	}
 }

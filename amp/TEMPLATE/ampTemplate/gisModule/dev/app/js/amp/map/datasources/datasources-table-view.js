@@ -49,7 +49,7 @@ module.exports = Backbone.View.extend({
           self.updatePlannedActualUI();
         });
       
-      if(self.collection.getPageDetails().currentPage >= self.collection.getPageDetails().totalPageCount){
+      if((self.collection.getPageDetails().currentPage + 1) >= self.collection.getPageDetails().totalPageCount){
     	  self.$el.find('.load-more').addClass('load-more-hide');
       }else{    	  
     	  self.$el.find('.load-more').removeClass('load-more-hide');

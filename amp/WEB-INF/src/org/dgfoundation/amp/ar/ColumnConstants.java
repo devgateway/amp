@@ -40,6 +40,7 @@ public class ColumnConstants {
 	public static final String CONSTANT = "Constant";
 	
 	public static final String APPROVAL_STATUS = "Approval Status";
+	public static final String FILTERED_APPROVAL_STATUS = "Filtered Approval Status";
 	public static final String ARCHIVED = "Archived";
 	public static final String AUDIT_SYSTEM = "Audit System";
 	public static final String AVERAGE_DISBURSEMENT_RATE = "Average Disbursement Rate";

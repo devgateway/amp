@@ -69,14 +69,36 @@ public class DimensionSnapshotTests extends AmpTestCase {
 	@Test
 	public void testUniformDimensionAcceptors() {
 		DimensionSnapshot snapshot = UNIFORM_3_LEVEL;
-		IdsAcceptor acceptor = snapshot.getCachingIdsAcceptor(Arrays.asList(new NiDimension.Coordinate(2, 112l), new NiDimension.Coordinate(1, 210l)));
-		assertTrue(acceptor.isAcceptable(new NiDimension.Coordinate(2, 112l)));
-		assertTrue(acceptor.isAcceptable(new NiDimension.Coordinate(1, 210l)));
-		assertFalse(acceptor.isAcceptable(new NiDimension.Coordinate(1, 113l)));
-		assertFalse(acceptor.isAcceptable(new NiDimension.Coordinate(1, 120l)));
-		assertTrue(acceptor.isAcceptable(new NiDimension.Coordinate(0, 100l)));
-		assertTrue(acceptor.isAcceptable(new NiDimension.Coordinate(0, 200l)));
+		
+		for(NiDimension.Coordinate coo1:Arrays.asList(new NiDimension.Coordinate(2, 112l), new NiDimension.Coordinate(NiDimension.LEVEL_ALL_IDS, 112l)))
+			for(NiDimension.Coordinate coo2:Arrays.asList(new NiDimension.Coordinate(1, 210l), new NiDimension.Coordinate(NiDimension.LEVEL_ALL_IDS, 210l))) {
+		
+				IdsAcceptor acceptor = snapshot.getCachingIdsAcceptor(Arrays.asList(coo1, coo2));
+				assertTrue(acceptor.isAcceptable(new NiDimension.Coordinate(2, 112l)));
+				assertTrue(acceptor.isAcceptable(new NiDimension.Coordinate(NiDimension.LEVEL_ALL_IDS, 112l)));
+		
+				assertTrue(acceptor.isAcceptable(new NiDimension.Coordinate(1, 210l)));
+				assertTrue(acceptor.isAcceptable(new NiDimension.Coordinate(NiDimension.LEVEL_ALL_IDS, 210l)));
+		
+				assertFalse(acceptor.isAcceptable(new NiDimension.Coordinate(1, 113l)));
+				assertFalse(acceptor.isAcceptable(new NiDimension.Coordinate(NiDimension.LEVEL_ALL_IDS, 113l)));
+		
+				assertFalse(acceptor.isAcceptable(new NiDimension.Coordinate(1, 120l)));
+				assertFalse(acceptor.isAcceptable(new NiDimension.Coordinate(NiDimension.LEVEL_ALL_IDS, 120l)));
+		
+				assertTrue(acceptor.isAcceptable(new NiDimension.Coordinate(0, 100l)));
+				assertTrue(acceptor.isAcceptable(new NiDimension.Coordinate(NiDimension.LEVEL_ALL_IDS, 100l)));
+		
+				assertTrue(acceptor.isAcceptable(new NiDimension.Coordinate(0, 200l)));
+				assertTrue(acceptor.isAcceptable(new NiDimension.Coordinate(NiDimension.LEVEL_ALL_IDS, 200l)));
+			}
 	}
+	
+//	@Test
+//	public void testUniformDimensionUnspecifiedLevelAcceptors() {
+//		DimensionSnapshot snapshot = UNIFORM_3_LEVEL;
+//		IdsAcceptor acceptor = sna
+//	}
 	
 	@Test
 	public void testNegativeIds() {

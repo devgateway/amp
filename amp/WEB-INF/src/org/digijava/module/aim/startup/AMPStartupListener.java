@@ -341,7 +341,7 @@ public class AMPStartupListener extends HttpServlet implements
 			
 			checkDatabaseSanity();
 			checkMondrianETLSanity();
-			doMonetETL();
+			//doMonetETL();
 			initNiReports();
 			importGazeteer();
 		} catch (Throwable e) {

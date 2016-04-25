@@ -445,7 +445,7 @@ public class SearchUtil {
 			qry.setString("roleCode", "DN");
 		} else {
 			qry.setString("roleCode", roleCode);
-			qry.setString("name", '%' + keyword + '%');
+			qry.setString("keyword", '%' + keyword + '%');
 		}
 
 		List<AmpActivity> result = qry.list();

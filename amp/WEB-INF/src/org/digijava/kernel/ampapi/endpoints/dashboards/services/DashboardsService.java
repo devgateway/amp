@@ -566,38 +566,6 @@ public class DashboardsService {
 			yearBean.set("values", values.get(year));
 			outValues.add(yearBean);
 		}
-//		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
-//			List<JsonBean> subvalues = new ArrayList<JsonBean>();
-//			ReportAreaImpl reportArea = (ReportAreaImpl) iterator.next();
-//			JsonBean year = new JsonBean();
-//			for (int i = 0; i < reportArea.getChildren().size(); i++) {
-//				Map<ReportOutputColumn, ReportCell> row = reportArea.getChildren().get(i).getContents();
-//				JsonBean amountObj = new JsonBean();
-//				for (Entry<ReportOutputColumn, ReportCell> entry : row.entrySet()) {
-//					ReportOutputColumn key = entry.getKey();
-//					ReportCell value = entry.getValue();
-//					switch (key.originalColumnName) {
-//					case ColumnConstants.FUNDING_YEAR:
-//						if (!"".equals(value.value)) {
-//							year.set("Year", value.value);
-//						}
-//						break;
-//					case ColumnConstants.TYPE_OF_ASSISTANCE:
-//						amountObj.set("type", value.displayedValue);
-//						break;
-//					default:
-//						amountObj.set("amount", value.value);
-//						amountObj.set("formattedAmount", value.displayedValue);
-//						break;
-//					}
-//					if (amountObj.getSize()==3){
-//						subvalues.add(amountObj);
-//					}
-//				}
-//			}
-//			year.set("values", subvalues);
-//			values.add(year);
-//		}
 		retlist.set("values", outValues);
 		
 		retlist.set("name", DashboardConstants.FUNDING_TYPE);

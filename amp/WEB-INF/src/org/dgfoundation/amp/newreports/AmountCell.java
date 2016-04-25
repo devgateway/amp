@@ -4,7 +4,8 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 /**
- * a @link {@link ReportCell} containing an amount 
+ * a @link {@link ReportCell} containing an amount
+ * TODO: change to only have BigDecimal as values after Mondrian has been removed from AMP. Change {@link #extractValue()} accordingly 
  * @author Dolghier Constantin, Nadejda Mandrescu
  *
  */

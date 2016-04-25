@@ -50,7 +50,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 
 	protected final ExpiringCacher<ContextKey<Boolean>, FundingFetcherContext> cacher;
 	protected final ActivityInvalidationDetector invalidationDetector;
-	protected final Object CACHE_OBJ = new Object();
+	protected final Object CACHE_SYNC_OBJ = new Object();
 	
 	public final static int CACHE_TTL_SECONDS = 10 * 60;
 	
@@ -107,7 +107,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		if (enableDiffing) {
 			long start = System.currentTimeMillis();
 			List<CategAmountCellProto> protos;
-			synchronized(CACHE_OBJ) {
+			synchronized(CACHE_SYNC_OBJ) {
 				FundingFetcherContext cache = cacher.buildOrGetValue(new ContextKey<>(engine, true));
 				Set<Long> deltas = scratchpad.differentiallyImportCells(engine.timer, mainColumn, cache.cache, ids -> fetchSkeleton(engine, ids, cache));
 				protos = cache.cache.getCells(engine.getMainIds());

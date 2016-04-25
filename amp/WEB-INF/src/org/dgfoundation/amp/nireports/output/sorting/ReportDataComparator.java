@@ -4,13 +4,12 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.dgfoundation.amp.nireports.output.NiColumnReportData;
 import org.dgfoundation.amp.nireports.output.NiOutCell;
 import org.dgfoundation.amp.nireports.output.NiReportData;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 
 /**
- * a class which knows how to compare two ids which denote two entitites (e.g. activities) 
+ * a class which knows how to compare two {@link NiReportData} instances according to the trail cell values in given leaf headers
  * @author Dolghier Constantin
  *
  */

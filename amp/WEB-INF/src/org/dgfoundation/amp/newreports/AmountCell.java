@@ -15,6 +15,7 @@ public final class AmountCell extends ReportCell {
 		super(value, formattedValue);
 	}
 	
+	// NIREPORTS: remove this when cleaning up Mondrian
 	public AmountCell(Double value, DecimalFormat formatter) {
 		super(value, format(formatter, value));
 	}

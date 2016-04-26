@@ -55,7 +55,7 @@ public class PublicEndpoint {
 	 */
 	public JsonBean getDonorFunding(JsonBean config, 
 			 @QueryParam("count") Integer count, 
-			@QueryParam("months") Integer months,@DefaultValue("1") @QueryParam("fundingType") Integer fundingType) {
+			@QueryParam("months") Integer months, @DefaultValue("1") @QueryParam("fundingType") Integer fundingType) {
 		return PublicPortalService.getDonorFunding(config, count, months,fundingType);
 	}	
 	

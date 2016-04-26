@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.publicportal;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,8 +37,8 @@ import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * Public Portal Service
+ * 
  * @author Nadejda Mandrescu
- *
  */
 public class PublicPortalService {
 	protected static final Logger logger = Logger.getLogger(PublicPortalService.class);
@@ -52,7 +53,7 @@ public class PublicPortalService {
 	 * 
 	 */
 	public static JsonBean getTopProjects(JsonBean config, Integer count, Integer months) {
-		JsonBean result = ReportsUtil.validateReportConfig(config, false);
+	    JsonBean result = ReportsUtil.validateReportConfig(config, false);
 		if (result != null) {
 			return result;
 		} else {
@@ -193,7 +194,7 @@ public class PublicPortalService {
 	private static void getPublicReport(Integer count, JsonBean result, List<JsonBean> content, 
 			ReportSpecificationImpl spec, boolean calculateSubTotal, String measureName,
 			Set<String> columnsToIgnore) {
-		
+	    EndpointUtils.useNiReports(true);
 		GeneratedReport report = EndpointUtils.runReport(spec); 
 		
 		result.set("numberformat", FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT));
@@ -222,9 +223,10 @@ public class PublicPortalService {
 				count = report.reportContents.getChildren().size();
 			}
 			
-			Double total = 0D;
+			BigDecimal total = new BigDecimal(0);
 			Iterator<ReportArea> iter = report.reportContents.getChildren().iterator();
-			while (count > 0) {
+			int countCounter = count;
+			while (countCounter > 0) {
 				ReportArea data = iter.next();
 				JsonBean jsonData = new JsonBean();
 				if (data.getContents().size() > 1) {
@@ -233,14 +235,14 @@ public class PublicPortalService {
 							jsonData.set(headersToId.get(cell.getKey().columnName), cell.getValue().displayedValue);
 							if (calculateSubTotal) {
 								if (cell.getKey().columnName.equals(measureName)) {
-									total += (Double) cell.getValue().value;
+								    total = total.add((BigDecimal) cell.getValue().value);
 								}
 							}
 						}
 					}
 				}
 				content.add(jsonData);
-				count--;
+				countCounter--;
 			}
 			result.set("Total " + measureName, total);
 		}
@@ -248,6 +250,7 @@ public class PublicPortalService {
 	}
 
 	public static JsonBean getActivitiesPledgesCount(JsonBean config) {
+	    EndpointUtils.useNiReports(true);
 		JsonBean activitiesPledgesCount = new JsonBean();
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_activitiesPledgesCount",
 				ArConstants.DONOR_TYPE);

@@ -246,16 +246,16 @@ public class FundingCalculationsHelper {
 		}
 		if (fundDet.getTransactionType() == Constants.PLEDGE){
 			totalPledged.add(amt);
-		}
-		
-    	DecimalWraper wrp = getTotalByKey(adjType.getLabel(), getTransactionTypeLabel(fundDet.getTransactionType()));
-    	if (wrp != null){
-    		wrp.add(amt);
-    	}
-    	else {
-    		throw new RuntimeException("Unsupported transaction + adjustment combination: " + 
+		} else {
+			DecimalWraper wrp = getTotalByKey(adjType.getLabel(), getTransactionTypeLabel(fundDet.getTransactionType()));
+			if (wrp != null){
+				wrp.add(amt);
+			}
+			else {
+				throw new RuntimeException("Unsupported transaction + adjustment combination: " + 
     					String.format("transType: %s, adjType: %s", fundDet.getTransactionType(), adjType.getLabel()));
-    	}
+			}
+		}
 	}
 	
 

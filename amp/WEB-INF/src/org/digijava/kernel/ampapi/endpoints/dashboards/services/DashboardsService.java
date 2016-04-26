@@ -58,7 +58,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
  */
 
 public class DashboardsService {
-	protected final static double EPSILON = 0.0001;
+    protected final static double EPSILON = 1d;
 
 	private static Logger logger = Logger.getLogger(DashboardsService.class);
 
@@ -316,6 +316,8 @@ public class DashboardsService {
 		} else { 
 			numberFormat = MondrianReportUtils.getCurrentUserDefaultSettings().getCurrencyFormat();
 		}
+		int divider = spec.getSettings() != null ? spec.getSettings().getUnitsOption().divider :
+		    MondrianReportUtils.getCurrentUserDefaultSettings().getUnitsOption().divider;
 		
 		ReportOutputColumn locationCol = undefinedRegion.rootHeaders.get(2);
 		ReportOutputColumn amountCol = undefinedRegion.rootHeaders.get(3);
@@ -350,7 +352,7 @@ public class DashboardsService {
 			intlAmount -= (Double) uRegion.getContents().get(amountCol).value;
 			mainDataIter.add(uRegion);
 		}
-		if (Math.abs(intlAmount) > EPSILON) {
+		if (Math.abs(intlAmount) > (EPSILON / divider)) {
 			mainDataIter.add(createAreaTotals(report, TranslatorWorker.translateText(MoConstants.INTERNATIONAL), "-2", 
 					intlAmount, numberFormat));
 		}

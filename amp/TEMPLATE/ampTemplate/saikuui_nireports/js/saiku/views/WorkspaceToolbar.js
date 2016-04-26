@@ -112,8 +112,7 @@ var WorkspaceToolbar = Backbone.View.extend({
         });
         $(this.workspace.el).find('.workspace_fields').addClass('hide');
         
-        if (this.workspace.query.result.hasRun() && 
-        		this.workspace.query.result.result.page.pageArea === null) {
+        if (this.workspace.query.result.hasRun() && (this.workspace.query.result.result.page.pageArea === null || this.workspace.query.result.result.isEmpty == true)) {
         	$(this.el).find('a.export_xls').addClass('disabled_toolbar');            	
         	$(this.el).find('a.export_csv').addClass('disabled_toolbar');
         	$(this.el).find('a.export_pdf').addClass('disabled_toolbar');

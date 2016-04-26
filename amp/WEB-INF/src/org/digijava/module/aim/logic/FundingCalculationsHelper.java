@@ -227,9 +227,6 @@ public class FundingCalculationsHelper {
 		
 	}
 	
-
-	
-	
 	protected void addToTotals(AmpCategoryValue adjType, FundingInformationItem fundDet, DecimalWraper amt) {
 		/**
 		 * no adjustment type for MTEF transactions or PLEDGED amounts, so this "if" is outside the PLANNED / ACTUAL / PIPELINE branching if's

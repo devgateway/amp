@@ -675,7 +675,7 @@ public class SettingsUtils {
 		// apply year range settings
 		Integer start = null;
 		Integer end = null;
-		if (settings!= null && settings.get(SettingsConstants.YEAR_RANGE_ID) != null) {
+		if (settings != null && settings.get(SettingsConstants.YEAR_RANGE_ID) != null) {
 			Map<String, Object> yearRange = (Map<String, Object>) settings.get(SettingsConstants.YEAR_RANGE_ID);
 			start = Integer.valueOf((String) yearRange.get(SettingsConstants.YEAR_FROM));
 			end = Integer.valueOf((String) yearRange.get(SettingsConstants.YEAR_TO));

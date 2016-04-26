@@ -215,6 +215,7 @@ public class Reports {
 	 * @see ReportsUtil#getReportResultByPage
 	 */
 	public final JsonBean getCustomReport(JsonBean formParams) {
+	    EndpointUtils.useNiReports(true);
 		JsonBean result = ReportsUtil.validateReportConfig(formParams, true);
 		if (result != null) {
 			return result;

@@ -1375,7 +1375,7 @@
      <action name="quartzJobClassManagerForm" path="/aim/quartzJobClassManager" type="org.digijava.module.aim.action.QuartzJobClassManager" validate="false">
        <forward name="forward" path="/showLayout.do?layout=quartzJobClassManager" />
        <forward name="addJobClass" path="/showLayout.do?layout=addQuartzJobClass" />
-       <forward name="editJobClass" path="/showLayout.do?layout=editQuartzJobClass" />
+       <forward name="editJobClass" path="/showLayout.do?layout=addQuartzJobClass" />
      </action>
 
     <action forward="/showLayout.do?layout=invalidDataDashboard" path="/aim/invalidDataDashboard" />

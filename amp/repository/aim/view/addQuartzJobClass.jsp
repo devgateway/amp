@@ -11,6 +11,15 @@
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
 <script type="text/javascript">
+function showValidationmsg(){
+    <logic:equal name="quartzJobClassManagerForm" property="errorCode" value="1">
+        <c:set var="invalidClassName">
+            <digi:trn>The Job class name is invalid</digi:trn>
+        </c:set>
+        alert("${invalidClassName}");
+    </logic:equal>
+}
+
 function setAction(action){
   var act=document.getElementById("hdnAction");
   if(act!=null){
@@ -38,7 +47,7 @@ function saveJc(){
     return false;
   }
 
-  if(setAction("saveJc")){
+  if(setAction("saveJc") || setAction("updateJc")){
     document.quartzJobClassManagerForm.submit();
   }
 }
@@ -47,18 +56,12 @@ function cancel()
 {
 	window.location.replace("/aim/quartzJobClassManager.do~action=all");
 }
-function showValidationmsg(){
-	<logic:equal name="quartzJobClassManagerForm" property="errorCode" value="1">
-		<c:set var="invalidClassName">
-			<digi:trn>The Job class name is invalid</digi:trn>
-		</c:set> 
-		alert("${invalidClassName}");
-	</logic:equal>		
-}
+
 $(document).ready(function() {showValidationmsg();});
 </script>
 
 <digi:form action="/quartzJobClassManager.do" method="post">
+  <html:hidden name="quartzJobClassManagerForm" property="id" styleId="hdnId" />
   <html:hidden name="quartzJobClassManagerForm" property="action" styleId="hdnAction" />
   <table>
     <tr>
@@ -66,7 +69,7 @@ $(document).ready(function() {showValidationmsg();});
       &nbsp;&nbsp;&nbsp;
       </td>
       <td>
-        <table >
+        <table>
           <tr>
             <!-- Start Navigation -->
             <td>
@@ -76,6 +79,9 @@ $(document).ready(function() {showValidationmsg();});
                 </c:set>
                 <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
                   <digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
+                </digi:link>&nbsp;&gt;&nbsp;
+                <digi:link href="/msgSettings.do~actionType=getSettings" styleClass="comment" title="${translation}" >
+                  <digi:trn key="message:messageSettings">Message Settings</digi:trn>
                 </digi:link>&nbsp;&gt;&nbsp;
                 <digi:link href="/quartzJobClassManager.do" styleClass="comment" title="${translation}" >
                   <digi:trn key="aim:jc:jobManager">Job Class Manager</digi:trn>
@@ -118,24 +124,20 @@ $(document).ready(function() {showValidationmsg();});
             </td>
           </tr>
           <tr>
-            <td colspan="6">&nbsp;
-            
-            </td>
+            <td colspan="6">&nbsp;</td>
           </tr>
           <tr>
-            <td colspan="6">&nbsp;
-            
-            </td>
+            <td colspan="6">&nbsp;</td>
           </tr>
           <tr>
             <td colspan="6">
             	<table>
             		<tr>
             			<td>
-            				<c:set var="trn">
-                				<digi:trn key="aim:job:btnSave">Save</digi:trn>
-              				</c:set>
-              				<input type="button" value="${trn}" onclick="saveJc()"/>
+                            <c:set var="trn">
+                                <digi:trn key="aim:job:btnSave">Save</digi:trn>
+                            </c:set>
+                            <input type="button" value="${trn}" onclick="saveJc()"/>
             			</td>
             			<td>
             				<c:set var="btnCancel">

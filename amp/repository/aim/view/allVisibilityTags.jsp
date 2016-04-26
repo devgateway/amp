@@ -37,7 +37,6 @@
 <module:display name="Custom Fields" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Content Repository" parentModule="Resources"></module:display>
 
-<module:display name="Public Documents" parentModule="Resources"></module:display>
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Pledges" parentModule="PROJECT MANAGEMENT"/> 
@@ -46,7 +45,7 @@
 
 <module:display  name="/Dashboards"></module:display>
 <feature:display name="Top Donors" module="/Dashboards"/>
-<field:display name="Show Names As Acronyms" feature="/Top Donors"/>
+<field:display name="Show Names As Acronyms" feature="Top Donors"/>
 <feature:display name="Top Regions" module="/Dashboards"/>
 <feature:display name="Top Sectors" module="/Dashboards"/>
 <feature:display name="Top Donor Group" module="/Dashboards"/>
@@ -1139,9 +1138,9 @@ deleted 6 fields, do not reinsert
 <field:display name="Contracting Add Amendments" feature="Contracting"></field:display>
 <field:display name="Contracting Remove Amendments" feature="Contracting"></field:display>
 
-<field:display name="Measure Commitment" feature="GIS DASHBOARD"></field:display>
-<field:display name="Measure Disbursement" feature="GIS DASHBOARD"></field:display>
-<field:display name="Measure Expenditure" feature="GIS DASHBOARD"></field:display>
+<field:display name="Measure Commitment" feature="Widgets"></field:display>
+<field:display name="Measure Disbursement" feature="Widgets"></field:display>
+<field:display name="Measure Expenditure" feature="Widgets"></field:display>
 <field:display name="Mandatory Indicator For Organization Primary Purpose" feature="NGO Form"></field:display>
 <field:display name="Mandatory Indicator For Sector Preferences" feature="NGO Form"></field:display>
 <field:display name="Mandatory Indicator For Organization Headquarters Address" feature="NGO Form"></field:display>

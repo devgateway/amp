@@ -484,17 +484,17 @@ function submitForm(action){
 																						<c:set var="translation">
 																							<digi:trn>Get report in Excel format</digi:trn>&nbsp;
 																						</c:set>
-																						<a style="cursor:pointer" 
+																						<digi:link style="cursor:pointer"
 																							onclick="$.downloadReport(${report.ampReportId}, 'xls')" 
 																							title="${translation}">
 																							<digi:img hspace="0" vspace="0" height="16"	width="16" 
 																							src="/TEMPLATE/ampTemplate/images/icons/xls.gif" border="0" />
-																						</a>
+																						</digi:link>
 																						&nbsp;
 																						<c:set var="translation">
 																							<digi:trn>Get report in PDF format</digi:trn>&nbsp;
 																						</c:set>
-																						<a style="cursor:pointer" 
+																						<digi:link style="cursor:pointer"
 																							onclick="$.downloadReport(${report.ampReportId}, 'pdf')" 
 																							title="${translation}">
 																							<digi:img hspace="0" vspace="0" height="16"

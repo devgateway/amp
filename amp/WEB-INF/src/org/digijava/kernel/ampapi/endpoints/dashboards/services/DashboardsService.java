@@ -2,7 +2,6 @@ package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -20,7 +19,6 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.AmountsUnits;
-import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
@@ -45,8 +43,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -60,7 +57,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
  */
 
 public class DashboardsService {
-	protected final static double EPSILON = 0.0001;
+    protected final static double EPSILON = 1d;
 
 	private static Logger logger = Logger.getLogger(DashboardsService.class);
 
@@ -321,18 +318,18 @@ public class DashboardsService {
 		} else { 
 			numberFormat = MondrianReportUtils.getCurrentUserDefaultSettings().getCurrencyFormat();
 		}
+		int divider = spec.getSettings() != null ? spec.getSettings().getUnitsOption().divider :
+		    MondrianReportUtils.getCurrentUserDefaultSettings().getUnitsOption().divider;
 		
 		ReportOutputColumn locationCol = undefinedRegion.rootHeaders.get(2);
 		ReportOutputColumn amountCol = undefinedRegion.rootHeaders.get(3);
 		
-		String currentCountry = TranslatorWorker.translateText(FeaturesUtil.getCurrentCountryName());
-		 
+		String currentCountry = DynLocationManagerUtil.getDefaultCountry().getName();
 		
 		ReportArea actualUndefiend = getUndefinedRegionArea(undefinedRegion.reportContents.getChildren().iterator(), 
 				undefinedStr);
 		
-		Iterator<ReportArea> undefinedDataIter = actualUndefiend.getChildren().iterator().next().getChildren()
-				.iterator();
+		Iterator<ReportArea> undefinedDataIter = actualUndefiend.getChildren().iterator().next().getChildren().iterator();
 		ReportArea national = null;
 		ReportArea uRegion = null;
 		while (undefinedDataIter.hasNext() && (national == null || uRegion == null)) {
@@ -357,7 +354,7 @@ public class DashboardsService {
 			intlAmount -= (Double) uRegion.getContents().get(amountCol).value;
 			mainDataIter.add(uRegion);
 		}
-		if (Math.abs(intlAmount) > EPSILON) {
+		if (Math.abs(intlAmount) > (EPSILON / divider)) {
 			mainDataIter.add(createAreaTotals(report, TranslatorWorker.translateText(MoConstants.INTERNATIONAL), "-2", 
 					intlAmount, numberFormat));
 		}

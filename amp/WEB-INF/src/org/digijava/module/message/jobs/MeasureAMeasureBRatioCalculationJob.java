@@ -1,9 +1,10 @@
 package org.digijava.module.message.jobs;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -11,40 +12,31 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.ValueWrapper;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportEnvironment;
-import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.Quarter;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.message.triggers.ActivityMeassureComparisonTrigger;
 import org.hibernate.jdbc.Work;
@@ -57,6 +49,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 
 	protected static Logger logger = Logger.getLogger(MeasureAMeasureBRatioCalculationJob.class);
 	private static Double DEFAULT_PERCENTAGE = 1D;
+	private static BigDecimal HUNDRED = new BigDecimal(100);
 	private DateTime previousFireTime;
 
 	@Override
@@ -139,15 +132,14 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 
 					String name = "MeasureAMeasureBRatioCalculationJob";
 					ReportSpecificationImpl spec = new ReportSpecificationImpl(name, ArConstants.DONOR_TYPE);
-					GeneratedReport report = null;
 					List<AmpActivityVersion> activitiesToNofity = new ArrayList<AmpActivityVersion>();
 
-					Double percentage = FeaturesUtil
+					BigDecimal percentage = BigDecimal.valueOf(FeaturesUtil
 							.getGlobalSettingDouble(GlobalSettingsConstants.FUNDING_GAP_NOTIFICATION_THRESHOLD) != null
 									? FeaturesUtil.getGlobalSettingDouble(
 											GlobalSettingsConstants.FUNDING_GAP_NOTIFICATION_THRESHOLD)
-									: DEFAULT_PERCENTAGE;
-
+									: DEFAULT_PERCENTAGE);
+					
 					spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
 					spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
 					spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
@@ -164,27 +156,26 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 						logger.error(e1);
 					}
 					 spec.setFilters(filterRules);
-					ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class,
-							ReportEnvironment.buildFor(TLSUtils.getRequest()), true);
-
+					
 					try {
-						report = generator.executeReport(spec);
+						EndpointUtils.useNiReports(true);
+						GeneratedReport report = EndpointUtils.runReport(spec, ReportAreaImpl.class, null); 
 						List<ReportArea> ll = report.reportContents.getChildren();
-
+						
 						for (ReportArea reportArea : ll) {
 							AmpActivityVersion activityToNotify = new AmpActivityVersion();
-							Double dblMeasureA = 0D;
-							Double dblMeasureB = 0D;
+							BigDecimal dblMeasureA = new BigDecimal(0);
+							BigDecimal dblMeasureB = new BigDecimal(0);
 							Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
 							Set<ReportOutputColumn> col = row.keySet();
 
 							for (ReportOutputColumn reportOutputColumn : col) {
 
 								if (reportOutputColumn.originalColumnName.equals(measureA)) {
-									dblMeasureA = (Double) row.get(reportOutputColumn).value;
+									dblMeasureA = dblMeasureA.add((BigDecimal) row.get(reportOutputColumn).value);
 								} else {
 									if (reportOutputColumn.originalColumnName.equals(measureB)) {
-										dblMeasureB = (Double) row.get(reportOutputColumn).value;
+										dblMeasureB = dblMeasureB.add((BigDecimal) row.get(reportOutputColumn).value);
 									} else {
 										if (reportOutputColumn.originalColumnName.equals(ColumnConstants.ACTIVITY_ID)) {
 											activityToNotify.setAmpActivityId(
@@ -206,12 +197,15 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 
 								}
 							}
-							if (!dblMeasureA.equals(0D) && !dblMeasureB.equals(0D)
-									&& (100 - (( dblMeasureA * 100) / dblMeasureB)) >= percentage) {
+							if (dblMeasureA.compareTo(BigDecimal.ZERO) != 0 
+							        && dblMeasureB.compareTo(BigDecimal.ZERO) != 0
+									&& (100 - dblMeasureA.multiply(HUNDRED).divide(dblMeasureB, 6, RoundingMode.HALF_EVEN)
+									        .compareTo(percentage)) >= 0) {
 
 								activitiesToNofity.add(activityToNotify);
 							} else {
-								if ((dblMeasureA.equals(0D) ^ dblMeasureB.equals(0D)) && dblMeasureA.equals(0D)) {
+								if (dblMeasureA.compareTo(BigDecimal.ZERO) == 0
+								        && dblMeasureB.compareTo(BigDecimal.ZERO) != 0) {
 									activitiesToNofity.add(activityToNotify);
 								}
 							}
@@ -223,7 +217,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 							}
 						}
 						TLSUtils.getThreadLocalInstance().request = null;
-					} catch (AMPException e) {
+					} catch (Exception e) {
 						logger.error("Cannot execute JOB", e);
 					}
 				} else {

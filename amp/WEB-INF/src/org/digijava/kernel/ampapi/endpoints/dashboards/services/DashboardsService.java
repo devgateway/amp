@@ -59,7 +59,7 @@ import net.sf.json.JSONObject;
  */
 
 public class DashboardsService {
-	protected final static double EPSILON = 0.0001;
+    protected final static double EPSILON = 1d;
 
 	private static Logger logger = Logger.getLogger(DashboardsService.class);
 
@@ -310,6 +310,8 @@ public class DashboardsService {
 		} else { 
 			numberFormat = MondrianReportUtils.getCurrentUserDefaultSettings().getCurrencyFormat();
 		}
+		int divider = spec.getSettings() != null ? spec.getSettings().getUnitsOption().divider :
+		    MondrianReportUtils.getCurrentUserDefaultSettings().getUnitsOption().divider;
 		
 		ReportOutputColumn locationCol = undefinedRegion.leafHeaders.get(0);
 		ReportOutputColumn amountCol = undefinedRegion.leafHeaders.get(1);
@@ -344,7 +346,7 @@ public class DashboardsService {
 			intlAmount = intlAmount.subtract((BigDecimal) uRegion.getContents().get(amountCol).value);
 			mainDataIter.add(uRegion);
 		}
-		if (intlAmount.abs().doubleValue() > EPSILON) {
+		if (intlAmount.abs().doubleValue() > (EPSILON / divider)) {
 			mainDataIter.add(createAreaTotals(report, TranslatorWorker.translateText(MoConstants.INTERNATIONAL), -2l, 
 					intlAmount, numberFormat));
 		}

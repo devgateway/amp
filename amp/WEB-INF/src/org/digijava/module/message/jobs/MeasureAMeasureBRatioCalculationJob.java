@@ -246,7 +246,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 		Quarter currentQuarter = new Quarter(fiscalCalendar, new Date());
 
 		DateTime lastQuarterStartDayPlus25 = new DateTime(currentQuarter.getPreviousQuarter().getQuarterEndDate());
-		lastQuarterStartDayPlus25.plusDays(25);
+		lastQuarterStartDayPlus25 = lastQuarterStartDayPlus25.plusDays(25);
 
 		// we at least have
 		if (previousFireTime == null || previousFireTime.isBefore(lastQuarterStartDayPlus25)) {

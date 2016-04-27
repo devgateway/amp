@@ -2,7 +2,6 @@ package org.dgfoundation.amp.reports.saiku.export;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -36,6 +35,11 @@ import org.digijava.module.common.util.DateTimeUtil;
 public class SaikuExportFilterUtils {
 	protected static Logger logger = Logger.getLogger(SaikuExportFilterUtils.class);
 	
+	
+	/**
+	 * @param filters
+	 * @return Map<String, List<String>> containing the filter names and values (no ids)
+	 */
 	public static Map<String, List<String>> getFilterValuesForIds(ReportFilters filters) {
 		Map<String, List<String>> extractedFilters = new HashMap<String, List<String>>();
 		if (filters != null) {
@@ -108,6 +112,13 @@ public class SaikuExportFilterUtils {
 		return null;
 	}
 
+	/**
+	 * Get the values having the entity ids (sectors, programs, category values, etc.)
+	 * @param elemType
+	 * @param elemName
+	 * @param allIds
+	 * @return
+	 */
 	private static Map<Long, String> fetchEntities(NamedElemType elemType, String elemName, Set<Long> allIds) {
 		Map<Long, String> entities = new HashMap<Long, String>();
 

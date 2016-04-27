@@ -356,6 +356,13 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 		}
 	}
 	
+	/**
+	 * Add information about applied filters in the summary sheet 
+	 * 
+	 * @param summarySheet
+	 * @param reportSpec
+	 * @param currLine
+	 */
 	private void renderSummaryFilters(Sheet summarySheet, ReportSpecification reportSpec, IntWrapper currLine) {
 		// the report specification contains only IDs in filter rules. 
 		// we need to export in the summary sheet the names instead of ids
@@ -398,6 +405,14 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 				
 	}
 	
+	/**
+	 * 
+	 * Add report settings information (currency, calendar, units) in the summary sheet 
+	 *
+	 * @param summarySheet
+	 * @param reportSpec
+	 * @param currLine
+	 */
 	private void renderSummarySettings(Sheet summarySheet, ReportSpecification reportSpec, IntWrapper currLine) {
 		String currency = reportSpec.getSettings().getCurrencyCode();
 		if (currency == null) {

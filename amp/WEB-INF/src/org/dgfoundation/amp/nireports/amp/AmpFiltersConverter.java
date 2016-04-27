@@ -1,25 +1,27 @@
 package org.dgfoundation.amp.nireports.amp;
 
+import static java.util.stream.Collectors.toList;
+import static org.dgfoundation.amp.algo.AmpCollections.mergePredicates;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.FilterRule.FilterType;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.nireports.BasicFiltersConverter;
+import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
-
-import static java.util.stream.Collectors.toList;
-import static org.dgfoundation.amp.algo.AmpCollections.mergePredicates;
+import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
+import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
 
 /**
  * the AMP filtering rules, used jointly by {@link AmpReportsSchema} and {@link HardcodedReportsTestSchema}
@@ -63,17 +65,24 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 			return;
 		}
 		
+		columnName = removeIdSuffixIfNeeded(schema, columnName);
+		
+		// gone till here -> we're going to fail anyway, but using the superclass
+		super.processColumnElement(columnName, rules);
+	}
+	
+	public static String removeIdSuffixIfNeeded(NiReportsSchema schema, String columnName) {
 		if (columnName.endsWith(" Id")) {
 			// cleanup the post-Mondrian mess: if filtering by a "XXX Id" column, treat it as filtering by "XXX", since in Mondrian the "XXX" and "XXX id" columns were distinct entities
 			String newColumnName = columnName.substring(0, columnName.length() - 3);
 			if (schema.getColumns().containsKey(newColumnName)) {
-				super.processColumnElement(newColumnName, rules);
-				return;
+				return newColumnName;
 			}
 		}
-		// gone till here -> we're going to fail anyway, but using the superclass
-		super.processColumnElement(columnName, rules);
+		
+		return columnName;
 	}
+	
 	
 	@Override
 	protected void processMiscElement(ReportElement repElem, List<FilterRule> rules) {

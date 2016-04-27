@@ -14,6 +14,7 @@ import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportFilters;
+import org.dgfoundation.amp.nireports.amp.AmpFiltersConverter;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema.NamedElemType;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
@@ -46,30 +47,27 @@ public class SaikuExportFilterUtils {
 			Map<ReportElement, List<FilterRule>> filterRules = filters.getAllFilterRules();
 			
 			for (Map.Entry<ReportElement, List<FilterRule>> filter : filterRules.entrySet()) {
-				switch(filter.getKey().type) {
-					case ENTITY: {
-						ReportColumn col = (ReportColumn) filter.getKey().entity;
-						String columnName = col.getColumnName();
-						
-						if (columnName.equals(ColumnConstants.DONOR_ID))
-							columnName = ColumnConstants.DONOR_AGENCY;
-						
-						if (columnName.endsWith(" Id")) {
-							String tmpName = columnName.substring(0, columnName.length() - 3); // Delete " Id"
+				if (filter.getValue() != null) {
+					switch(filter.getKey().type) {
+						case ENTITY: {
+							ReportColumn col = (ReportColumn) filter.getKey().entity;
+							String columnName = col.getColumnName();
 							
-							if (AmpReportsSchema.getInstance().getColumns().containsKey(tmpName)) {
-								columnName = tmpName;
-							}
+							if (columnName.equals(ColumnConstants.DONOR_ID))
+								columnName = ColumnConstants.DONOR_AGENCY;
+							
+							columnName = AmpFiltersConverter.removeIdSuffixIfNeeded(AmpReportsSchema.getInstance(), columnName);
+							
+							extractedFilters.put(TranslatorWorker.translateText(columnName), getEntityValuesNames(filter, columnName));
+						} 
+						break;
+						case DATE: {
+							extractedFilters.put(TranslatorWorker.translateText("Date"), getDateValues(filter.getValue()));
 						}
-						extractedFilters.put(TranslatorWorker.translateText(columnName), getEntityValuesNames(filter, columnName));
-					} 
-					break;
-					case DATE: {
-						extractedFilters.put(TranslatorWorker.translateText("Date"), getDateValues(filter.getValue()));
-					}
-					break;
-					default: {
-						
+						break;
+						default: {
+							
+						}
 					}
 				}
 			}
@@ -109,7 +107,7 @@ public class SaikuExportFilterUtils {
 			return getBooleanValues(filter.getValue());
 		}
 		
-		return null;
+		return filter.getValue().stream().flatMap(fr -> fr.values.stream()).collect(Collectors.toList());
 	}
 
 	/**

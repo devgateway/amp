@@ -30,6 +30,12 @@ function setAction(action){
   return true;
 }
 
+function isEditable() {
+  var hdnId=document.getElementById("hdnId");
+  debugger;
+  return hdnId != null && hdnId.value !== ''
+}
+
 function saveJc(){
   var txt=null;
 
@@ -47,7 +53,7 @@ function saveJc(){
     return false;
   }
 
-  if(setAction("saveJc") || setAction("updateJc")){
+  if((isEditable() && setAction("updateJc")) || setAction("saveJc")){
     document.quartzJobClassManagerForm.submit();
   }
 }

@@ -70,7 +70,7 @@ public class CurrencyConvertorTests extends ReportingTestCase {
 		runInEngineContext(
 			Arrays.asList("with weird currencies"),
 			engine -> {
-				List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);
+				List<CategAmountCell> cells = engine.schema.getFundingFetcher(engine).fetch(engine);
 				assertEquals(
 					"["
 						+ "(actId: 79, 87680.841736 on 2015-10-06, adjustment_type: Actual, transaction_type: 0), "

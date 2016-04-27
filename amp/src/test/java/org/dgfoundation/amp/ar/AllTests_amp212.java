@@ -8,6 +8,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.dgfoundation.amp.ar.amp212.AmpSchemaFilteringTests;
+import org.dgfoundation.amp.ar.amp212.AmpSchemaPledgesTests;
 import org.dgfoundation.amp.ar.amp212.AmpSchemaSanityTests;
 import org.dgfoundation.amp.ar.amp212.AmpSchemaSortingTests;
 import org.dgfoundation.amp.ar.amp212.CurrencyConvertorTests;
@@ -44,6 +45,7 @@ public class AllTests_amp212
 		suite.addTest(new JUnit4TestAdapter(AmpSchemaSanityTests.class));
 		suite.addTest(new JUnit4TestAdapter(AmpSchemaSortingTests.class));
 		suite.addTest(new JUnit4TestAdapter(AmpSchemaFilteringTests.class));
+		suite.addTest(new JUnit4TestAdapter(AmpSchemaPledgesTests.class));
 		suite.addTest(new JUnit4TestAdapter(FundingFlowsTests.class));
 
 		suite.addTest(new JUnit4TestAdapter(CurrencyConvertorTests.class));
@@ -67,7 +69,7 @@ public class AllTests_amp212
 		try {
 			configureLog4j();
 			HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
-			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost:5432/amp_tests_212";
+			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost:5433/amp_tests_212";
 			MonetConnection.MONET_CFG_OVERRIDE_URL = "jdbc:monetdb://localhost/amp_tests_212";
 			
 			org.digijava.kernel.ampapi.mondrian.util.Connection.IS_TESTING = true;

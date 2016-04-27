@@ -145,7 +145,7 @@ public class HardcodedReportsTestSchema extends AbstractReportsSchema {
 	}
 
 	@Override
-	public NiReportColumn<CategAmountCell> getFundingFetcher() {
+	public NiReportColumn<CategAmountCell> getFundingFetcher(NiReportsEngine engine) {
 		return new TestFundingFetcher(activityNames);
 	}
 	

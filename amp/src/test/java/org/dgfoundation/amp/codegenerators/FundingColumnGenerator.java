@@ -148,7 +148,7 @@ public class FundingColumnGenerator extends ColumnGenerator {
 		runInEngineContext( 
 				new ArrayList<String>(getActivityNames().values()), 
 				eng -> {
-					List<CategAmountCell> cells = sorted((List<CategAmountCell>) eng.schema.getFundingFetcher().fetch(eng));
+					List<CategAmountCell> cells = sorted((List<CategAmountCell>) eng.schema.getFundingFetcher(eng).fetch(eng));
 					Map<Long, String> activityNames = getActivityNames();
 					for (CategAmountCell cell : cells) {
 						

@@ -58,7 +58,7 @@ public class NiReportsFetchingTests extends ReportingTestCase {
 		runInEngineContext(
 				Arrays.asList("SubNational no percentages", "Unvalidated activity"),
 				engine -> {
-					List<CategAmountCell> cells = sorted(engine.schema.getFundingFetcher().fetch(engine));
+					List<CategAmountCell> cells = sorted(engine.schema.getFundingFetcher(engine).fetch(engine));
 					assertEquals(
 						"[" 
      					+ "(actId: 64, amt: 45000 on 2015-01-06, coos: {{bool.Disaster Response Marker=(level: 0, id: -999999999), cats.Financing Instrument=(level: 1, id: 2125), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: -999999999), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21695)}}, meta: {MetaInfoSet: [source_org: 21695, source_role: DN, adjustment_type: Actual, transaction_type: 0]}, "
@@ -106,7 +106,7 @@ public class NiReportsFetchingTests extends ReportingTestCase {
 		runInEngineContext(
 				Arrays.asList("with weird currencies"),
 				engine -> {
-					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);
+					List<CategAmountCell> cells = engine.schema.getFundingFetcher(engine).fetch(engine);
 					assertEquals(
 						"["
 							+ "(actId: 79, 87680.841736 on 2015-10-06, adjustment_type: Actual, transaction_type: 0), "
@@ -123,7 +123,7 @@ public class NiReportsFetchingTests extends ReportingTestCase {
 				Arrays.asList("with weird currencies"),
 				rep -> changeReportCurrency(rep, "EUR"),
 				engine -> {
-					List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);
+					List<CategAmountCell> cells = engine.schema.getFundingFetcher(engine).fetch(engine);
 					assertEquals(
 						"["
 							+ "(actId: 79, 80000 on 2015-10-06, adjustment_type: Actual, transaction_type: 0), "
@@ -140,7 +140,7 @@ public class NiReportsFetchingTests extends ReportingTestCase {
 			Arrays.asList("with weird currencies"),
 			rep -> changeReportCurrency(rep, "MDL"),
 			engine -> {
-				List<CategAmountCell> cells = engine.schema.getFundingFetcher().fetch(engine);
+				List<CategAmountCell> cells = engine.schema.getFundingFetcher(engine).fetch(engine);
 				assertEquals(
 					"["
 						+ "(actId: 79, 1728189.390618 on 2015-10-06, adjustment_type: Actual, transaction_type: 0), "

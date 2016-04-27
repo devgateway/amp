@@ -404,9 +404,6 @@ public class InternationalizedViewsRepository {
 				addViewDef(this, new I18nViewDescription("v_sector_group").
 						addColumnDef(new I18nViewColumnDescription("org_name", "org_id", AmpOrganisation.class, "name")));
 
-				addViewDef(this, new I18nViewDescription("v_sectorloc").
-						addColumnDef(new I18nViewColumnDescription("location_name", "location_id", AmpCategoryValueLocations.class, "name")));
-
 				addViewDef(this, new I18nViewDescription("v_sectors").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_sector_id", AmpSector.class, "name")));
 						//.addColumnDef(new I18nViewColumnDescription("sec_scheme_name", "amp_sector_scheme_id", AmpSectorScheme.class, "secSchemeName")));

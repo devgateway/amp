@@ -318,13 +318,10 @@ public final class ArConstants {
 	public final static String COLUMN_PLEDGE_ZONE = "Pledges Zones";
 	public final static String COLUMN_PLEDGE_DISTRICT = "Pledges Districts";
 	
-	public final static String COLUMN_SECTOR_LOCATION="Sector Location";
-	
 	public final static List<String> LOCATION_COLUMNS_LIST = Arrays.asList(new String[]{
 			ArConstants.COLUMN_REGION, ArConstants.COLUMN_PLEDGE_REGION,
 			ArConstants.COLUMN_ZONE, ArConstants.COLUMN_PLEDGE_ZONE,
-			ArConstants.COLUMN_DISTRICT, ArConstants.COLUMN_PLEDGE_DISTRICT,
-			ArConstants.COLUMN_SECTOR_LOCATION});
+			ArConstants.COLUMN_DISTRICT, ArConstants.COLUMN_PLEDGE_DISTRICT});
 	
 	public final static Set<String> LOCATION_COLUMNS = new HashSet<String>(LOCATION_COLUMNS_LIST);
 	

@@ -362,7 +362,6 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		put("Project Period", ColumnConstants.PROJECT_PERIOD);
 		put("Related Projects", ColumnConstants.RELATED_PROJECTS);
 		put("Related Pledges", ColumnConstants.RELATED_PLEDGES);
-		put("Sector Location", ColumnConstants.SECTOR_LOCATION);
 		put("Sector Tag", ColumnConstants.SECTOR_TAG);
 		put("Sector Tag Sub-Sector", ColumnConstants.SECTOR_TAG_SUB_SECTOR);
 		put("Sector Tag Sub-Sub-Sector", ColumnConstants.SECTOR_TAG_SUB_SUB_SECTOR);

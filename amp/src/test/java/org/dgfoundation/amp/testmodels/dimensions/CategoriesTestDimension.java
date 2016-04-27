@@ -83,7 +83,6 @@ public class CategoriesTestDimension extends HardcodedNiDimension {
 						element(77, "Region" ), 
 						element(78, "Zone" ), 
 						element(79, "District" ), 
-						element(250, "Sector Location" ), 
 						element(252, "Groupement" ) ), 
 					element(394, "Type of Cooperation", 
 						element(2109, "Official Development Aid (ODA)" ), 

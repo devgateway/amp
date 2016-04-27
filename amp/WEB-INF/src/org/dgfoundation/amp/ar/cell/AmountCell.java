@@ -522,8 +522,6 @@ public class AmountCell extends Cell {
 			keyName	= ArConstants.COLUMN_REGION;
 		else if ( keyName.contains(ArConstants.COLUMN_DISTRICT) )
 			keyName	= ArConstants.COLUMN_REGION;
-		else if ( keyName.contains(ArConstants.COLUMN_SECTOR_LOCATION) )
-			keyName	= ArConstants.COLUMN_REGION;
 		
 		
 		columnCellValue.put(keyName, source.getValue().toString(), source.getId(), percentage, dimensionClass, hierarchyPurpose);
@@ -575,9 +573,6 @@ public class AmountCell extends Cell {
 //		this.replacePercentage(ArConstants.COLUMN_ZONE, ArConstants.COLUMN_DISTRICT, source, sourceCol, percentage);
 //		this.replacePercentage(ArConstants.COLUMN_REGION, ArConstants.COLUMN_DISTRICT, source, sourceCol, percentage);
 //		
-//		this.replacePercentage(ArConstants.COLUMN_ZONE, ArConstants.COLUMN_SECTOR_LOCATION, source, sourceCol, percentage);
-//		this.replacePercentage(ArConstants.COLUMN_DISTRICT, ArConstants.COLUMN_SECTOR_LOCATION, source, sourceCol, percentage);
-//		this.replacePercentage(ArConstants.COLUMN_REGION, ArConstants.COLUMN_SECTOR_LOCATION, source, sourceCol, percentage);
 		
 //		columnPercent.put(sourceCol.getName(), percentage);
 //		columnCellValue

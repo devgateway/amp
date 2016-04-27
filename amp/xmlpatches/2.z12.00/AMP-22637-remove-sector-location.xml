@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-22637</jira>
+	<keyword>sector location</keyword>
+	<author>acartaleanu</author>
+	<description>make triggers and caches for locations</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">				
+				DELETE FROM amp_fields_templates WHERE field IN (SELECT id FROM amp_fields_visibility WHERE name = 'Sector Location');
+				DELETE FROM amp_fields_visibility WHERE name = 'Sector Location';
+				DELETE FROM amp_category_value WHERE 
+					(category_value = 'Sector Location') AND
+					amp_category_class_id IN (SELECT id FROM amp_category_class WHERE keyname = 'implementation_location');
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

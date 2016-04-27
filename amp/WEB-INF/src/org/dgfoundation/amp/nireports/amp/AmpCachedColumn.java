@@ -26,8 +26,8 @@ public abstract class AmpCachedColumn<K extends Cell, T> extends AmpSqlSourcedCo
 	public final KeyBuilder<T> cacheKeyBuilder;
 	public final ExpiringCacher<ContextKey<T>, List<K>> cacher;
 	
-	public AmpCachedColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, String mainColumnId, KeyBuilder<T> cacheKeyBuilder, Behaviour<?> behaviour) {
-		super(columnName, levelColumn, viewName, mainColumnId, behaviour);
+	public AmpCachedColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, KeyBuilder<T> cacheKeyBuilder, Behaviour<?> behaviour) {
+		super(columnName, levelColumn, viewName, behaviour);
 		this.cacheKeyBuilder = cacheKeyBuilder;
 		this.cacher = new ExpiringCacher<>(String.format("column %s cacher", columnName), cacheKey -> origFetch(cacheKey.context, cacheKey.key), new DatabaseChangedDetector(), 3 * 60 * 1000);
 	}

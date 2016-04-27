@@ -36,7 +36,7 @@ public class PercentageTextColumn extends AmpDifferentialColumn<PercentageTextCe
 	
 	public final static BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
 	public PercentageTextColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName) {
-		super(columnName, levelColumn, viewName, "amp_activity_id", TextColumnKeyBuilder.instance, PercentageTokenBehaviour.instance);
+		super(columnName, levelColumn, viewName, TextColumnKeyBuilder.instance, PercentageTokenBehaviour.instance);
 	}
 
 	@Override

@@ -29,8 +29,8 @@ import org.digijava.kernel.request.TLSUtils;
  */
 public abstract class AmpSqlSourcedColumn<K extends Cell> extends PsqlSourcedColumn<K> {
 
-	public AmpSqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, String mainColumn, Behaviour<?> behaviour) {
-		super(columnName, levelColumn, viewName, mainColumn, behaviour);
+	public AmpSqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, Behaviour<?> behaviour) {
+		super(columnName, levelColumn, viewName, behaviour);
 	}
 	
 	@Override

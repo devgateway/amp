@@ -35,8 +35,8 @@ public abstract class AmpDifferentialColumn<K extends Cell, T> extends AmpSqlSou
 	protected final ExpiringCacher<ContextKey<T>, DifferentialCache<K>> cacher;
 	protected final ActivityInvalidationDetector invalidationDetector;
 	
-	public AmpDifferentialColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, String mainColumnId, KeyBuilder<T> cacheKeyBuilder, Behaviour<?> behaviour) {
-		super(columnName, levelColumn, viewName, mainColumnId, behaviour);
+	public AmpDifferentialColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, KeyBuilder<T> cacheKeyBuilder, Behaviour<?> behaviour) {
+		super(columnName, levelColumn, viewName, behaviour);
 		this.cacheKeyBuilder = cacheKeyBuilder;
 		this.invalidationDetector = new ActivityInvalidationDetector();
 		this.cacher = new ExpiringCacher<>(String.format("column %s cacher", columnName), cacheKey -> origFetch(cacheKey.context, cacheKey.key), this.invalidationDetector, CACHE_TTL_SECONDS * 1000);

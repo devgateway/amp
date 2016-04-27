@@ -53,7 +53,6 @@ public class CategoryConstants {
 	
 	public static final String FINANCING_INSTRUMENT_NAME		= "Financing Instrument";
 	public static final String FINANCING_INSTRUMENT_KEY		= "financing_instrument";
-	public static final String AID_MODALITY_KEY = "modalities";
 	
 	public static final String PROGRAM_TYPE_NAME				= "Program Type";
 	public static final String PROGRAM_TYPE_KEY				= "program_type";

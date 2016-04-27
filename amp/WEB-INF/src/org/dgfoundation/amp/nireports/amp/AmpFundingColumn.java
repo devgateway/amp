@@ -1,16 +1,20 @@
 package org.dgfoundation.amp.nireports.amp;
 
 import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
+import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.VivificatingMap;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -21,6 +25,7 @@ import org.dgfoundation.amp.diffcaching.ExpiringCacher;
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.CategAmountCell;
+import org.dgfoundation.amp.nireports.IdValuePair;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.diff.CategAmountCellProto;
@@ -51,16 +56,25 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	protected final ExpiringCacher<ContextKey<Boolean>, FundingFetcherContext> cacher;
 	protected final ActivityInvalidationDetector invalidationDetector;
 	protected final Object CACHE_SYNC_OBJ = new Object();
+	protected final Set<String> ignoredColumns;
 	
 	public final static int CACHE_TTL_SECONDS = 10 * 60;
 	
 	public AmpFundingColumn() {
-		this("Funding", "v_ni_donor_funding", "amp_activity_id", TrivialMeasureBehaviour.getInstance());
+		this("Funding", "v_ni_donor_funding", TrivialMeasureBehaviour.getInstance(), new HashSet<>(Arrays.asList("aid_modality_id")));
 	}
 
-	protected AmpFundingColumn(String columnName, String viewName, String mainEntityColumn, Behaviour<?> behaviour) {
-		super(columnName, null, viewName, mainEntityColumn, behaviour);
+	protected AmpFundingColumn(String columnName, String viewName, Behaviour<?> behaviour, Set<String> ignoredColumns) {
+		super(columnName, null, viewName, behaviour);
 		this.invalidationDetector = new ActivityInvalidationDetector();
+		Set<String> ic = new HashSet<>(ignoredColumns);
+		for(String col:getFundingViewFilter().values())
+			if (!this.viewColumns.contains(col))
+				ic.add(col);
+		for(String col:AmpCollections.relist(longColumnsToFetch, z -> z.v))
+			if (!this.viewColumns.contains(col))
+				ic.add(col);
+		this.ignoredColumns = Collections.unmodifiableSet(ic); // specified-generic columns minus columns which do not exist in the view
 		this.cacher = new ExpiringCacher<>("funding cacher " + columnName, cacheKey -> resetCache(cacheKey.context), invalidationDetector, CACHE_TTL_SECONDS * 1000);
 	}
 
@@ -72,6 +86,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		res.put(ColumnConstants.MODE_OF_PAYMENT, "mode_of_payment_id");
 		res.put(ColumnConstants.FUNDING_STATUS, "funding_status_id");
 		res.put(ColumnConstants.DISASTER_RESPONSE_MARKER, "disaster_response_code");
+		res.put(ColumnConstants.PLEDGES_AID_MODALITY, "aid_modality_id");
 		return res;
 	}
 		
@@ -149,9 +164,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		List<CategAmountCellProto> cells = new ArrayList<>();
 		MetaInfoGenerator metaGenerator = new MetaInfoGenerator();
 		Map<String, LevelColumn> optionalDimensionCols = buildOptionalDimensionCols(schema);
-		
-		Set<String> ignoredColumns = getIgnoredColumns();
-		
+				
 		try(RsInfo rs = SQLUtils.rawRunQuery(scratchpad.connection, query, null)) {
 			while (rs.rs.next()) {
 				MetaInfoSet metaSet = new MetaInfoSet(metaGenerator);
@@ -172,9 +185,9 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 				
 				long currencyId = rs.rs.getLong("currency_id");
 				AmpCurrency srcCurrency = currencies.getOrCreate(currencyId);
-				BigDecimal fixed_exchange_rate = rs.rs.getBigDecimal("fixed_exchange_rate");
+				BigDecimal fixed_exchange_rate = getBigDecimal(rs.rs, "fixed_exchange_rate");
 												 				
-				BigDecimal capitalSpendPercent = rs.rs.getBigDecimal("capital_spend_percent");
+				BigDecimal capitalSpendPercent = getBigDecimal(rs.rs, "capital_spend_percent");
 				if (capitalSpendPercent != null)
 					metaSet.add(MetaCategory.CAPITAL_SPEND_PERCENT.category, capitalSpendPercent);
 								
@@ -204,14 +217,20 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		return cells;
 	}
 	
-	/**
-	 * returns a set of ColumnNames to ignore (for subclasses which only supply a subset of the data)
-	 * @return
-	 */
-	protected Set<String> getIgnoredColumns() {
-		return Collections.emptySet();
+	@Override
+	protected IdValuePair addMetaIfIdValueExists(MetaInfoSet set, String idColumnName, MetaCategory categ, ResultSet row, Map<Long, String> map) throws SQLException {
+		if (viewColumns.contains(idColumnName))
+			return super.addMetaIfIdValueExists(set, idColumnName, categ, row, map);
+		return null;
 	}
 
+	protected BigDecimal getBigDecimal(ResultSet rs, String colName) throws SQLException {
+		if (viewColumns.contains(colName))
+			return rs.getBigDecimal(colName);
+		
+		return null;
+	}
+	
 	@Override
 	public List<ReportRenderWarning> performCheck() {
 		return null;

@@ -86,7 +86,6 @@ public class AmpARFilterConverter {
 	private MondrianReportFilters filterRules;
 	private ReportSettingsImpl settings;
 	private AmpARFilter arFilter;
-	private boolean isPledgeFilter;
 
 	/**
 	 * Translates report filters from ARFilters to a configuration that is applicable for Mondrian Reports API.
@@ -113,8 +112,6 @@ public class AmpARFilterConverter {
 	}
 	
 	private void buildCurrentFilters() {
-		this.isPledgeFilter = arFilter.isPledgeFilter();
-
 		addProjectFilters();
 		
 		addOrganizationsFilters();

@@ -39,8 +39,8 @@ public class NormalizedPercentagesColumn extends AmpDifferentialColumn<Percentag
 	final BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100l);
 	
 	public NormalizedPercentagesColumn(String columnName, NiDimension.LevelColumn levelColumn, Map<String, String> fundingViewFilter, 
-			String viewName, String mainColumn, PercentagesCorrector percentagesCorrector) {
-		super(columnName, levelColumn, viewName, mainColumn, TextColumnKeyBuilder.instance, PercentageTokenBehaviour.instance);
+			String viewName, PercentagesCorrector percentagesCorrector) {
+		super(columnName, levelColumn, viewName, TextColumnKeyBuilder.instance, PercentageTokenBehaviour.instance);
 		this.percentagesCorrector = percentagesCorrector;
 	}
 	

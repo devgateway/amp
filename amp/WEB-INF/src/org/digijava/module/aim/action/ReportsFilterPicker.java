@@ -764,7 +764,7 @@ public class ReportsFilterPicker extends Action {
 		addFinancingLocationElement(filterForm, null, "All "+ TranslatorWorker.translateText(CategoryConstants.FUNDING_STATUS_NAME) +" Values", CategoryConstants.FUNDING_STATUS_KEY, "Funding Status", "filter_funding_status_div", "selectedFundingStatus");
 		
 		if (filterForm.getPledged() != null && filterForm.getPledged() && FeaturesUtil.isVisibleField("Pledge Funding - Aid Modality"))
-			addFinancingLocationElement(filterForm, null, "All Aid Modality Values", CategoryConstants.AID_MODALITY_KEY, "Aid Modality", "filter_aid_modality_div", "selectedAidModalities");
+			addFinancingLocationElement(filterForm, null, "All Aid Modality Values", CategoryConstants.MODALITIES_KEY, "Aid Modality", "filter_aid_modality_div", "selectedAidModalities");
 		
 		addFinancingLocationElement(filterForm, null, "All Type of Assistance Values", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, "Type of Assistance", "filter_type_of_assistance_div", "selectedTypeOfAssistance");
 		

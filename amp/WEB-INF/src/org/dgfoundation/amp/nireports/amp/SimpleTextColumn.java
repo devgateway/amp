@@ -28,11 +28,11 @@ import org.dgfoundation.amp.nireports.schema.TextualTokenBehaviour;
 public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
 		
 	public SimpleTextColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName) {
-		super(columnName, levelColumn, viewName, "amp_activity_id", TextColumnKeyBuilder.instance, TextualTokenBehaviour.instance);
+		super(columnName, levelColumn, viewName, TextColumnKeyBuilder.instance, TextualTokenBehaviour.instance);
 	}
 
 	public SimpleTextColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, Behaviour<NiTextCell> behaviour) {
-		super(columnName, levelColumn, viewName, "amp_activity_id", TextColumnKeyBuilder.instance, behaviour);
+		super(columnName, levelColumn, viewName, TextColumnKeyBuilder.instance, behaviour);
 	}
 	
 	

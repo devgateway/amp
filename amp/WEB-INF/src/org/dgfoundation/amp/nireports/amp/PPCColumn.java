@@ -29,7 +29,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 public class PPCColumn extends PsqlSourcedColumn<CategAmountCell> {
 
 	public PPCColumn(String columnName, String extractorViewName) {
-		super(columnName, null, extractorViewName, "amp_activity_id", NumericalColumnBehaviour.getInstance());
+		super(columnName, null, extractorViewName, NumericalColumnBehaviour.getInstance());
 	}
 		
 	@Override

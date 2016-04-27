@@ -38,7 +38,7 @@ public interface NiReportsSchema {
 	 * returns the fetcher of funding
 	 * @return
 	 */
-	public NiReportColumn<CategAmountCell> getFundingFetcher();
+	public NiReportColumn<CategAmountCell> getFundingFetcher(NiReportsEngine engine);
 
 	/**
 	 * returns a function which exposes the spec's {@link ReportFilters} instance to Ni's NiFilters

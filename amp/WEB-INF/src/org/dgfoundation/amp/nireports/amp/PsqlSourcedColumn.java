@@ -20,8 +20,8 @@ public abstract class PsqlSourcedColumn<K extends Cell> extends SqlSourcedColumn
 	
 	final LinkedHashSet<String> viewColumns;
 	
-	public PsqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, String mainColumn, Behaviour<?> behaviour) {
-		super(columnName, levelColumn, viewName, mainColumn, behaviour, AmpReportsSchema.columnDescriptions.get(columnName));
+	public PsqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, Behaviour<?> behaviour) {
+		super(columnName, levelColumn, viewName, SQLUtils.getTableColumns(viewName).iterator().next(), behaviour, AmpReportsSchema.columnDescriptions.get(columnName));
 		this.viewColumns = SQLUtils.getTableColumns(viewName);
 		check();
 	}
@@ -31,9 +31,8 @@ public abstract class PsqlSourcedColumn<K extends Cell> extends SqlSourcedColumn
 	 * @param col
 	 */
 	protected void check() {
-		NiUtils.failIf(!SQLUtils.tableExists(viewName), String.format("column %s: view %s does not exist", name, viewName));
-		Set<String> columns = SQLUtils.getTableColumns(viewName, true);
-		NiUtils.failIf(!columns.contains(mainColumn), String.format("column %s: view %s does not have mainColumn %s", name, viewName, mainColumn));
+		NiUtils.failIf(viewColumns.isEmpty(), String.format("column %s: view %s does not exist", name, viewName));
+		NiUtils.failIf(!viewColumns.contains(mainColumn), String.format("column %s: view %s does not have mainColumn %s", name, viewName, mainColumn));
 	}
 
 }

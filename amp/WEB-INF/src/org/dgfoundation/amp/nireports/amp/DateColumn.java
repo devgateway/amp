@@ -26,7 +26,7 @@ import org.digijava.module.common.util.DateTimeUtil;
 public class DateColumn extends AmpDifferentialColumn<DateCell, Boolean> {
 	
 	public DateColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName) {
-		super(columnName, levelColumn, viewName, "amp_activity_id", (engine, col) -> true, DateTokenBehaviour.instance);
+		super(columnName, levelColumn, viewName, (engine, col) -> true, DateTokenBehaviour.instance);
 	}
 
 	public DateColumn(String columnName, String viewName) {

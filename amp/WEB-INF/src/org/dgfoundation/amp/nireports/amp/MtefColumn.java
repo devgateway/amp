@@ -21,7 +21,9 @@ public class MtefColumn extends AmpFundingColumn {
 	final boolean directed;
 
 	public MtefColumn(String columnName, int mtefYear, String totalColumnName, boolean directed, Optional<HardCodedCategoryValue> adjustmentType) {
-		super(columnName, "v_ni_mtef_funding", "amp_activity_id", directed ? new DirectedMeasureBehaviour(totalColumnName) : new MtefBehaviour(totalColumnName));
+		super(columnName, "v_ni_mtef_funding",
+				directed ? new DirectedMeasureBehaviour(totalColumnName) : new MtefBehaviour(totalColumnName), 
+				new HashSet<>(Arrays.asList("pledge_id", "transaction_type", "disaster_response_code", "aid_modality_id")));
 		this.mtefYear = mtefYear;
 		this.adjustmentTypeCode = adjustmentType.map(z -> z.existsInDatabase() ? z.getIdInDatabase() : -1);
 		this.directed = directed;
@@ -34,10 +36,5 @@ public class MtefColumn extends AmpFundingColumn {
 		
 		return String.format("(%s) AND (mtef_year = %d)%s", directedCond, mtefYear,
 			adjustmentTypeCode.isPresent() ? String.format(" AND (adjustment_type = %d)", adjustmentTypeCode.get()) : "");
-	}
-	
-	@Override
-	protected Set<String> getIgnoredColumns() {
-		return new HashSet<>(Arrays.asList("pledge_id", "transaction_type", "disaster_response_code"));
 	}
 }

@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
@@ -192,7 +193,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		return instance;
 	}
 	
-	protected final static NiReportColumn<CategAmountCell> fundingColumn = new AmpFundingColumn();
+	protected final static NiReportColumn<CategAmountCell> donorFundingColumn = new AmpFundingColumn();
+	protected final static NiReportColumn<CategAmountCell> pledgeFundingColumn = new PledgeFundingColumn("Pledge Funding");
 	
 	protected AmpReportsSchema() {
 		no_dimension(ColumnConstants.PROJECT_TITLE, "v_titles");
@@ -449,6 +451,12 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		date_column(ColumnConstants.PROPOSED_COMPLETION_DATE, "v_proposed_completion_date"); 
 		date_column(ColumnConstants.PROPOSED_START_DATE, "v_proposed_start_date");
 		
+		
+		// pledge columns
+		no_entity(ColumnConstants.PLEDGES_TITLES, "v_ni_pledges_titles");
+		with_percentage(ColumnConstants.PLEDGES_SECTORS, "v_pledges_sectors", PS_DIM_USG, LEVEL_ROOT);
+		degenerate_dimension(ColumnConstants.PLEDGES_AID_MODALITY, "v_pledges_aid_modality", catsDimension);
+		
 		addTrivialMeasures();
 		addFundingFlowMeasures();
 	}
@@ -536,6 +544,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 //		addMeasure(new AmpTrivialMeasure(MeasureConstants.PIPELINE_ESTIMATED_DISBURSEMENTS, Constants.PIPELINE, "Pipeline", false));
 //		addMeasure(new AmpTrivialMeasure(MeasureConstants.PIPELINE_RELEASE_OF_FUNDS, Constants.PIPELINE, "Pipeline", false));
 		
+		addMeasure(new AmpTrivialMeasure(MeasureConstants.PLEDGES_ACTUAL_PLEDGE, Constants.PLEDGE));
 		return this;
 	}
 	
@@ -583,7 +592,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	private AmpReportsSchema with_percentage(String columnName, String viewName, NiDimensionUsage dimUsg, int level) {
 		PercentagesCorrector cor = PERCENTAGE_CORRECTORS.get(dimUsg);
 		NiUtils.failIf(cor == null, String.format("%s: you forgot to configure percentage correctors for %s", columnName, dimUsg));
-		return addColumn(new NormalizedPercentagesColumn(columnName, dimUsg.getLevelColumn(level), null, viewName, "amp_activity_id", cor));
+		return addColumn(new NormalizedPercentagesColumn(columnName, dimUsg.getLevelColumn(level), null, viewName, cor));
 	}
 			
 	/**
@@ -610,15 +619,29 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	protected final CurrencyConvertor currencyConvertor = AmpCurrencyConvertor.getInstance();
 	
 	@Override
-	public NiReportColumn<CategAmountCell> getFundingFetcher() {
-		return fundingColumn;
+	public NiReportColumn<CategAmountCell> getFundingFetcher(NiReportsEngine engine) {
+		switch(engine.spec.getReportType()) {
+			
+			case ArConstants.DONOR_TYPE: 
+				return donorFundingColumn;
+				
+			case ArConstants.PLEDGES_TYPE:
+				return pledgeFundingColumn;
+				
+			default:
+				throw new RuntimeException(String.format("report type %d not implemented in NiReports yet", engine.spec.getReportType()));
+		}
 	}
 
 	@Override
 	public NiFilters convertFilters(NiReportsEngine engine) {
-		return new AmpFiltersConverter(engine).buildNiFilters(this::getWorkspaceActivities);
+		return new AmpFiltersConverter(engine).buildNiFilters(engine.spec.getReportType() == ArConstants.PLEDGES_TYPE ? this::getWorkspacePledges : this::getWorkspaceActivities);
 	}
 
+	public Set<Long> getWorkspacePledges(NiReportsEngine engine) {
+		return new HashSet<>(SQLUtils.fetchLongs(AmpReportsScratchpad.get(engine).connection, "SELECT id FROM amp_funding_pledges"));
+	}
+	
 	/**
 	 * returns the set of activities selected by the workspace filter. Any filtering specified in the ReportSpec will return a subset of these ids
 	 * @param engine

@@ -80,7 +80,7 @@ public class AmpReportsToReportSpecification {
 		configureSorting();
 		
 		spec.setEmptyOutputForUnspecifiedData(report.getDrilldownTab() == null || !report.getDrilldownTab());
-		spec.setAlsoShowPledges(report.getAlsoShowPledges() == null ? false : report.getAlsoShowPledges());
+		spec.setAlsoShowPledges(report.shouldInjectPledgeColumnsAsProjectColumns());
 		
 		//configure filters & settings
 		AmpARFilterConverter arFilterTranslator = new AmpARFilterConverter(arFilter);

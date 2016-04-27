@@ -125,10 +125,10 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 						"(Actual Arrears: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Planned Arrears: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
 					.withWarnings(Arrays.asList())
 					.withBody(      new ReportAreaForTests(null)
-				      .withContents("Project Title", "", "Totals-Actual Arrears", "96", "Totals-Planned Arrears", "69")
+				      .withContents("Project Title", "", "Totals-Actual Arrears", "96", "Totals-Planned Arrears", "36")
 				      .withChildren(
 				        new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs"),
-				        new ReportAreaForTests(new AreaOwner(81), "Project Title", "arrears test", "Totals-Actual Arrears", "66", "Totals-Planned Arrears", "69")      ));
+				        new ReportAreaForTests(new AreaOwner(80), "Project Title", "arrears test", "Totals-Actual Arrears", "96", "Totals-Planned Arrears", "36")      ));
 		runNiTestCase(
 				buildSpecification("Testcase for Actual and Planned Arrears", 
 						Arrays.asList(ColumnConstants.PROJECT_TITLE), 

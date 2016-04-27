@@ -95,7 +95,7 @@ var Table = Backbone.View.extend({
     	if (data.page.pageArea !== null && !data.isEmpty ) {
     		$(this.el).html('<div class="results_container"></div>');
     	} else {
-    		$(this.el).html("<br><div class='i18n no_results'>The specified filtered report does not hold any data. Either pick a different filter criteria or use another report.</div><br><table></table>");
+    		$(this.el).html("<br><div class='i18n no_results'>The specified filtered report does not hold any data. Either pick a different filter criteria or use another report.</div><br><div class='results_container'></div>");
     	}
         
         data.workspace = this.workspace;

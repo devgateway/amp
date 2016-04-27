@@ -68,7 +68,6 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 	}
 	@Test
 	public void testActivityIds() {
-		
 		NiReportModel cor =new NiReportModel("testcase amp activity ids")
 				.withHeaders(Arrays.asList(
 						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 4))",
@@ -89,7 +88,57 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 				"en", 
 				Arrays.asList("Pure MTEF Project", "activity with directed MTEFs", "Activity with both MTEFs and Act.Comms"),
 				cor);
-	}	
+	}
+	
+	@Test
+	public void testProjectImplementationDelay() {
+		NiReportModel cor = new NiReportModel("testcase for Project Implementation Delay")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
+						"(Project Implementation Delay: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1))",
+						"(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+					.withWarnings(Arrays.asList())
+					.withBody(      new ReportAreaForTests(null)
+				      .withContents("Project Implementation Delay", "", "Project Title", "", "Totals-Actual Commitments", "0")
+				      .withChildren(
+				        new ReportAreaForTests(new AreaOwner(81), "Project Implementation Delay", "20 days", "Project Title", "PID: original, proposed, actual"),
+				        new ReportAreaForTests(new AreaOwner(82), "Project Implementation Delay", "6 years 21 days", "Project Title", "PID: original, actual"),
+				        new ReportAreaForTests(new AreaOwner(83), "Project Title", "PID: original > actual"),
+				        new ReportAreaForTests(new AreaOwner(84), "Project Implementation Delay", "7 days", "Project Title", "PID: original"),
+				        new ReportAreaForTests(new AreaOwner(85), "Project Implementation Delay", "20 days", "Project Title", "PID: original, proposed")      ));
+		runNiTestCase(
+				buildSpecification("testcase for Project Implementation Delay", 
+						Arrays.asList(ColumnConstants.PROJECT_IMPLEMENTATION_DELAY, ColumnConstants.PROJECT_TITLE), 
+						Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+						null, GroupingCriteria.GROUPING_TOTALS_ONLY),
+				"en", 
+				Arrays.asList("PID: original, proposed, actual", "PID: original, actual", "PID: original > actual", "PID: original", "PID: original, proposed"),
+				cor);
+	}
+	
+	@Test
+	public void testPlannedActualArrears() {
+		NiReportModel cor = new NiReportModel("Testcase for Actual and Planned Arrears")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
+						"(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 2))",
+						"(Actual Arrears: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Planned Arrears: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+					.withWarnings(Arrays.asList())
+					.withBody(      new ReportAreaForTests(null)
+				      .withContents("Project Title", "", "Totals-Actual Arrears", "96", "Totals-Planned Arrears", "69")
+				      .withChildren(
+				        new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs"),
+				        new ReportAreaForTests(new AreaOwner(81), "Project Title", "arrears test", "Totals-Actual Arrears", "66", "Totals-Planned Arrears", "69")      ));
+		runNiTestCase(
+				buildSpecification("Testcase for Actual and Planned Arrears", 
+						Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+						Arrays.asList(MeasureConstants.ACTUAL_ARREARS, MeasureConstants.PLANNED_ARREARS), 
+						null, GroupingCriteria.GROUPING_TOTALS_ONLY),
+				"en", 
+				Arrays.asList("activity with many MTEFs", "arrears test"),
+				cor);
+	}
+	
 	@Test
 	public void testMtefColumnsPlain() {
 		assertEquals("{RAW / Project Title=, RAW / MTEF 2011/2012=1283182.4159, RAW / MTEF 2012/2013=202437, RAW / MTEF 2013/2014=120180.405, RAW / Funding / 2006 / Actual Commitments=80000, RAW / Funding / 2006 / Actual Disbursements=0, RAW / Funding / 2009 / Actual Commitments=78470, RAW / Funding / 2009 / Actual Disbursements=0, RAW / Funding / 2010 / Actual Commitments=0, RAW / Funding / 2010 / Actual Disbursements=613561.3161, RAW / Funding / 2011 / Actual Commitments=896327.2977, RAW / Funding / 2011 / Actual Disbursements=0, RAW / Funding / 2012 / Actual Commitments=19577.5, RAW / Funding / 2012 / Actual Disbursements=9162, RAW / Funding / 2013 / Actual Commitments=5905874.9666, RAW / Funding / 2013 / Actual Disbursements=954144.5636, RAW / Funding / 2014 / Actual Commitments=7409649.482335, RAW / Funding / 2014 / Actual Disbursements=576269.62, RAW / Funding / 2015 / Actual Commitments=1803396.8724, RAW / Funding / 2015 / Actual Disbursements=399024.454, RAW / Totals / Actual Commitments=16193296.119035, RAW / Totals / Actual Disbursements=2552161.9537, RAW / Totals / MTEF=1605799.8209}", 

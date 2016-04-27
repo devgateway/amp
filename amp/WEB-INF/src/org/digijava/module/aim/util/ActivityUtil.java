@@ -1878,28 +1878,15 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
 	public static Period getProjectImplementationDelay(AmpActivityVersion activity) {
 		Date fromDate = activity.getOriginalCompDate();
+		Date toDate;
 		if (fromDate == null)
 			return null;
-		// OPTION 1 - start
-		if (activity.getProposedCompletionDate() != null)
-			fromDate = activity.getProposedCompletionDate();
-		// OPTION 1 - end
 		
-		Date toDate = activity.getActualCompletionDate();
-		
-		if (toDate == null) {
-			// OPTION 1 - start
-			toDate = new Date(System.currentTimeMillis()); 
-			// OPTION 1 - end
-			/*
-			// OPTION 2 - start
+		if (activity.getActualCompletionDate() != null)
+			toDate = activity.getActualCompletionDate();
+		else if (activity.getProposedCompletionDate() != null)
 			toDate = activity.getProposedCompletionDate();
-			if (toDate == null || System.currentTimeMillis() > toDate.getTime())
-				toDate = new Date(System.currentTimeMillis());
-			// OPTION 2 - end
-			*/
-		}
-		
+		else toDate = new Date();
 		if (fromDate.before(toDate))
 			return DateConversion.getPeriod(fromDate, toDate);
 		return null;

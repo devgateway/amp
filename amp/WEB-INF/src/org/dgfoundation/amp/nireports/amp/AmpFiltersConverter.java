@@ -21,7 +21,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
-import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
+//import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
 
 /**
  * the AMP filtering rules, used jointly by {@link AmpReportsSchema} and {@link HardcodedReportsTestSchema}

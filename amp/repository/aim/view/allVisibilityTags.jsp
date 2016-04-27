@@ -407,6 +407,7 @@
 <field:display name="Actual Approval Date" feature="Planning" ></field:display>
 <field:display name="Actual Completion Date" feature="Planning"></field:display>
 <field:display name="Original Completion Date" feature="Planning"></field:display>
+<field:display name="Project Implementation Delay" feature="Planning"></field:display>
 <field:display name="Final Date for Disbursements Comments" feature="Planning"></field:display>
 <field:display name="Current Completion Date Comments" feature="Planning"></field:display> 
 <field:display name="Actual Disbursement Orders" feature="Disbursement Orders"></field:display> 

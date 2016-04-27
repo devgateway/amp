@@ -259,12 +259,12 @@ public class ColumnConstants {
 	public static final String PROJECT_COORDINATOR_CONTACT_TITLE = "Project Coordinator Contact Title";
 	public static final String PROJECT_DESCRIPTION = "Project Description";
 	public static final String PROJECT_IMPACT = "Project Impact";
-	//public static final String PROJECT_IMPLEMENTATION_DELAY = "Project Implementation Delay";
 	public static final String PROJECT_IMPLEMENTING_UNIT = "Project Implementing Unit";
 	public static final String PROJECT_PERIOD = "Project Period";
 	public static final String PROJECT_TITLE = "Project Title";
 	public static final String PROPOSED_APPROVAL_DATE = "Proposed Approval Date";
 	public static final String PROPOSED_COMPLETION_DATE = "Proposed Completion Date";
+	public static final String PROJECT_IMPLEMENTATION_DELAY = "Project Implementation Delay";
 	public static final String PROPOSED_PROJECT_AMOUNT = "Proposed Project Amount";
 	public static final String PROPOSED_PROJECT_LIFE = "Proposed Project Life";
 	public static final String PROPOSED_START_DATE = "Proposed Start Date";

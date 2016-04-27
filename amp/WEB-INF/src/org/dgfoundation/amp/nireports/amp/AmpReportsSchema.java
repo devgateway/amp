@@ -55,11 +55,15 @@ import org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.ProgramsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension;
+import org.dgfoundation.amp.nireports.output.NiOutCell;
+import org.dgfoundation.amp.nireports.output.NiTextCell;
+import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.BooleanDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
+import org.dgfoundation.amp.nireports.schema.PidTextualTokenBehaviour;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -317,14 +321,13 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_entity(ColumnConstants.SECTOR_MINISTRY_CONTACT_TITLE, "v_sect_min_cont_title");
 		no_entity(ColumnConstants.SUB_VOTE, "v_subvote");
 		no_entity(ColumnConstants.VOTE, "v_vote");
+		//Project Implementation Delay uses a separate behaviour
+		no_entity(ColumnConstants.PROJECT_IMPLEMENTATION_DELAY, "v_project_impl_delay", PidTextualTokenBehaviour.instance);
 		
 		single_dimension(ColumnConstants.DONOR_AGENCY, "v_ni_donor_orgs", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
 		single_dimension(ColumnConstants.DONOR_GROUP, "v_ni_donor_orgsgroups", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION_GROUP));
 		single_dimension(ColumnConstants.DONOR_TYPE, "v_ni_donor_orgstypes", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION_TYPE));
 		single_dimension(ColumnConstants.DONOR_ACRONYM, "v_ni_donor_orgsacronyms", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
-		
-
-		
 		
 		with_percentage(ColumnConstants.IMPLEMENTING_AGENCY, "v_implementing_agency", IA_DIM_USG, LEVEL_ORGANISATION);
 		with_percentage(ColumnConstants.IMPLEMENTING_AGENCY_GROUPS, "v_implementing_agency_groups", IA_DIM_USG, LEVEL_ORGANISATION_GROUP);
@@ -472,7 +475,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		PersistenceManager.getSession().doWork(conn -> {
 			Set<String> inDbColumns = new HashSet<>(SQLUtils.fetchAsList(conn, String.format("SELECT %s FROM %s", "columnname", "amp_columns"), 1));
 			List<Object> toBeAdded = this.columns.keySet().stream().filter(z -> !inDbColumns.contains(z)).collect(Collectors.toList());
-			List<List<Object>> values = toBeAdded.stream().map(z -> Arrays.asList(z, "TextCell", "v_empty_text_column")).collect(Collectors.toList());	
+			List<List<Object>> values = toBeAdded.stream().map(z -> Arrays.asList(z, "org.dgfoundation.amp.ar.cell.TextCell", "v_empty_text_column")).collect(Collectors.toList());	
 			if (values.size() > 0)
 				SQLUtils.insert(conn, "amp_columns", "columnid", "amp_columns_seq", Arrays.asList("columnname", "celltype", "extractorview"), values);
 		}); 	
@@ -517,6 +520,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.ACTUAL_RELEASE_OF_FUNDS, Constants.DISBURSEMENT, "Actual", false));
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.PLANNED_RELEASE_OF_FUNDS, Constants.DISBURSEMENT, "Planned", false));
 
+		addMeasure(new AmpTrivialMeasure(MeasureConstants.PLANNED_ARREARS, Constants.ARREARS, "Planned", false));
+		addMeasure(new AmpTrivialMeasure(MeasureConstants.ACTUAL_ARREARS, Constants.ARREARS, "Pipeline", false));
+		
+		
 		//addMeasure(new AmpTrivialMeasure(MeasureConstants.OFFICIAL_DEVELOPMENT_AID_COMMITMENTS, Constants.COMMITMENT, "Actual", false));
 
 		//addMeasure(new AmpTrivialMeasure(MeasureConstants.BILATERAL_SSC_COMMITMENTS, Constants.COMMITMENT, "Actual", false));
@@ -557,6 +564,12 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	private AmpReportsSchema single_dimension(String columnName, String view, LevelColumn levelColumn) {
 		return addColumn(SimpleTextColumn.fromView(columnName, view, levelColumn));
 	}
+
+	
+	private AmpReportsSchema no_entity(String columnName, String view, Behaviour<NiTextCell> behaviour) {
+		return addColumn(SimpleTextColumn.fromViewWithoutEntity(columnName, view, behaviour));
+	}
+	
 	
 	private AmpReportsSchema no_entity(String columnName, String view) {
 		return addColumn(SimpleTextColumn.fromViewWithoutEntity(columnName, view));

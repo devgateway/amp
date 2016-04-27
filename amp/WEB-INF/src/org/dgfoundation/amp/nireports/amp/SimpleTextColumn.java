@@ -10,6 +10,8 @@ import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.TextCell;
 import org.dgfoundation.amp.nireports.amp.diff.TextColumnKeyBuilder;
+import org.dgfoundation.amp.nireports.output.NiTextCell;
+import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.TextualTokenBehaviour;
 
@@ -29,6 +31,11 @@ public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
 		super(columnName, levelColumn, viewName, "amp_activity_id", TextColumnKeyBuilder.instance, TextualTokenBehaviour.instance);
 	}
 
+	public SimpleTextColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, Behaviour<NiTextCell> behaviour) {
+		super(columnName, levelColumn, viewName, "amp_activity_id", TextColumnKeyBuilder.instance, behaviour);
+	}
+	
+	
 	@Override
 	protected TextCell extractCell(NiReportsEngine engine, ResultSet rs) throws SQLException {
 		String text = rs.getString(2);
@@ -42,13 +49,21 @@ public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
 			return new TextCell(text, rs.getLong(1), rs.getLong(3), this.levelColumn);
 	}
 		
-	public static SimpleTextColumn fromView(String columnName, String viewName, NiDimension.LevelColumn levelColumn) {
-		return new SimpleTextColumn(columnName, levelColumn, viewName);
+	public static SimpleTextColumn fromView(String columnName, String viewName, NiDimension.LevelColumn levelColumn, Behaviour<NiTextCell> behaviour) {
+		return new SimpleTextColumn(columnName, levelColumn, viewName, behaviour);
 	}
 	
-	public static SimpleTextColumn fromViewWithoutEntity(String columnName, String viewName) {
-		return new SimpleTextColumn(columnName, null, viewName).withoutEntity();
+	public static SimpleTextColumn fromView(String columnName, String viewName, NiDimension.LevelColumn levelColumn) {
+		return new SimpleTextColumn(columnName, levelColumn, viewName, TextualTokenBehaviour.instance);
 	}
+	
+	public static SimpleTextColumn fromViewWithoutEntity(String columnName, String viewName, Behaviour<NiTextCell> behaviour) {
+		return new SimpleTextColumn(columnName, null, viewName, behaviour).withoutEntity();
+	}
+
+	public static SimpleTextColumn fromViewWithoutEntity(String columnName, String viewName) {
+		return new SimpleTextColumn(columnName, null, viewName, TextualTokenBehaviour.instance).withoutEntity();
+	}	
 	
 	private boolean withoutEntity = false;
 	

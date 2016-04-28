@@ -529,7 +529,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.PLANNED_RELEASE_OF_FUNDS, Constants.DISBURSEMENT, "Planned", false));
 
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.PLANNED_ARREARS, Constants.ARREARS, "Planned", false));
-		addMeasure(new AmpTrivialMeasure(MeasureConstants.ACTUAL_ARREARS, Constants.ARREARS, "Pipeline", false));
+		addMeasure(new AmpTrivialMeasure(MeasureConstants.ACTUAL_ARREARS, Constants.ARREARS, "Actual", false));
 		
 		
 		//addMeasure(new AmpTrivialMeasure(MeasureConstants.OFFICIAL_DEVELOPMENT_AID_COMMITMENTS, Constants.COMMITMENT, "Actual", false));

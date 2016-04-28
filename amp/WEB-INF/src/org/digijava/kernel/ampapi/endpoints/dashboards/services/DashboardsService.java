@@ -3,13 +3,13 @@ package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
@@ -304,6 +304,9 @@ public class DashboardsService {
 			return;
 		}
 		
+		ReportOutputColumn locationCol = undefinedRegion.leafHeaders.get(1);
+		ReportOutputColumn amountCol = undefinedRegion.leafHeaders.get(2);
+		
 		DecimalFormat numberFormat = null;
 		if (spec.getSettings() != null && spec.getSettings().getCurrencyFormat() != null ) {
 			numberFormat = spec.getSettings().getCurrencyFormat();
@@ -312,9 +315,6 @@ public class DashboardsService {
 		}
 		int divider = spec.getSettings() != null ? spec.getSettings().getUnitsOption().divider :
 		    MondrianReportUtils.getCurrentUserDefaultSettings().getUnitsOption().divider;
-		
-		ReportOutputColumn locationCol = undefinedRegion.leafHeaders.get(0);
-		ReportOutputColumn amountCol = undefinedRegion.leafHeaders.get(1);
 		
 		String currentCountry = DynLocationManagerUtil.getDefaultCountry().getName();
 		
@@ -326,13 +326,13 @@ public class DashboardsService {
 		ReportArea uRegion = null;
 		while (undefinedDataIter.hasNext() && (national == null || uRegion == null)) {
 			ReportArea ra = undefinedDataIter.next();
-			ReportCell location = ra.getContents().get(locationCol);
+			IdentifiedReportCell location = (IdentifiedReportCell) ra.getContents().get(locationCol);
 			if (location != null && currentCountry.equals(location.value)) {
-				national = createAreaTotals(report, TranslatorWorker.translateText(MoConstants.NATIONAL), -1l, 
+				national = createAreaTotals(report, TranslatorWorker.translateText(MoConstants.NATIONAL), location.entityId, 
 						(BigDecimal) ra.getContents().get(amountCol).value, numberFormat);
 			} else if (location != null && location.value != null && ((String) location.value).contains(undefinedStr)) {
 				uRegion = createAreaTotals(report, TranslatorWorker.translateText("Region") + ": " + undefinedStr, 
-						MoConstants.UNDEFINED_KEY, (BigDecimal) ra.getContents().get(amountCol).value, 
+				        location.entityId, (BigDecimal) ra.getContents().get(amountCol).value, 
 						numberFormat);
 			}
 		}
@@ -352,14 +352,17 @@ public class DashboardsService {
 		}
 		report.reportContents.getChildren().remove(undefinedTotals);
 		
-		// NIREPORTS: update once sorting is done for NiReports
-//		try {
-//			// resort
-//			MondrianReportSorter.sort(report, ReportEnvironment.buildFor(TLSUtils.getRequest()));
-//		} catch (AMPException e) {
-//			logger.error(e.getMessage());
-//			throw new RuntimeException(e);
-//		}
+		/*
+		 * 1. Since there is no way to generate a unique NiReport with totals per International, National, Undefined
+		 * and Defined Regions, we need 2 separate reports and combine the result
+		 * 2. There is no predefined option to resort a report after it was generated as of now
+		 * => due to 1 + 2 we resort it manually
+		 */
+		final ReportOutputColumn reportAmountCol = report.leafHeaders.get(1);
+		Collections.sort(report.reportContents.getChildren(), (ra1, ra2) -> 
+		    - ((BigDecimal) ra1.getContents().get(reportAmountCol).value).compareTo(
+		            (BigDecimal) ra2.getContents().get(reportAmountCol).value)); 
+		
 	}
 	
 	protected static ReportArea createAreaTotals(GeneratedReport report, String name, long id, BigDecimal value, 
@@ -394,7 +397,7 @@ public class DashboardsService {
 		 * 		International - allocated for other countries
 		 * 		Region: Undefined - what indeed is not allocated for a given region 
 		 */
-		spec.addColumn(new ReportColumn(ColumnConstants.LOCATION));
+		spec.addColumn(new ReportColumn(ColumnConstants.COUNTRY));
 		spec.setHierarchies(spec.getColumns());
 		MondrianReportFilters filters = (MondrianReportFilters) spec.getFilters();
 		if (filters == null) {

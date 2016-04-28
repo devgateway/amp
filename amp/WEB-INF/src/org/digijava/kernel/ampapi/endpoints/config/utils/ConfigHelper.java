@@ -24,9 +24,9 @@ public class ConfigHelper {
 	
 	private static final String SECTION = "section";
 	private static final String DESCRIPTION = "description";
-	private static final String SETTINGS_VALUE = "settingsValue";
+	private static final String SETTINGS_VALUE = "settingValue";
 	private static final String POSSIBLE_VALUES = "possibleValues";
-	private static final String SETTINGS_NAME = "settingsName";
+	private static final String SETTINGS_NAME = "settingName";
 	private static final String ORG_DIGIJAVA_MODULE_AIM_HELPER_GLOBAL_SETTINGS_CONSTANTS = "org.digijava.module.aim.helper.GlobalSettingsConstants";
 	private static final Logger logger = Logger.getLogger(ConfigHelper.class);
 	/**
@@ -78,18 +78,41 @@ public class ConfigHelper {
 		JsonBean globalSetting = new JsonBean();
 		List<KeyValue> possiblesValues = ConfigHelper.getPossibleValues(ampGlobalSetting.getGlobalSettingsPossibleValues());
 		JsonBean pValues = new JsonBean();
-		for (KeyValue value : possiblesValues) {
-			pValues.set(value.getValue(), value.getKey());
+		if (possiblesValues!=null) {
+			for (KeyValue value : possiblesValues) {
+				pValues.set(value.getValue(), value.getKey());
+			}
 		}
-		globalSetting.set("settingsName", ampGlobalSetting.getGlobalSettingsName());
-		globalSetting.set("settingsValue", ampGlobalSetting.getGlobalSettingsValue());
+		globalSetting.set("settingName", ampGlobalSetting.getGlobalSettingsName());
+		globalSetting.set("settingValue", ampGlobalSetting.getGlobalSettingsValue());
 		globalSetting.set("possibleValues", ampGlobalSetting.getGlobalSettingsPossibleValues()); 
 		globalSetting.set("description", ampGlobalSetting.getGlobalSettingsDescription()); 
 		globalSetting.set("section", ampGlobalSetting.getSection()); 
 		globalSetting.set("valueTranslatable", ampGlobalSetting.getValueTranslatable());
-		globalSetting.set("PossibleValuesIds", pValues);
+		globalSetting.set("possibleValuesIds", pValues);
 		
 		return globalSetting;
+	}
+	
+	/**
+	 * Validate settingValue
+	 * @param object
+	 * @return boolean
+	 */
+	public static boolean validateGlobalSetting(AmpGlobalSettings ampGlobalSetting) {
+		boolean isValid = false;
+		List<KeyValue> possiblesValues = ConfigHelper.getPossibleValues(ampGlobalSetting.getGlobalSettingsPossibleValues());
+		if (possiblesValues!=null) {
+			for (KeyValue value : possiblesValues) {
+				if (ampGlobalSetting.getGlobalSettingsValue().equals(value.getKey()) ) {
+					isValid = true;
+				}
+			}
+		} else {
+			isValid = true;
+		}
+		
+		return isValid;
 	}
 	
 	public static String getGlobalSettingName(LinkedHashMap<String, Object> object) {
@@ -99,14 +122,19 @@ public class ConfigHelper {
 	
 	public static List<KeyValue> getPossibleValues(String tableName) {
 		List<KeyValue> ret = new ArrayList<>();
-		
-		if (tableName == null || tableName.length() == 0)
+
+		if (tableName == null || tableName.length() == 0 || tableName.startsWith("t_") )
 			return ret;
 
-		List<Object[]> ls 	= PersistenceManager.getSession().createSQLQuery("select id, value from " + tableName).list();
-		for(Object[] obj:ls){
+		List<Object[]> ls = null;
+		try {
+			ls = PersistenceManager.getSession().createSQLQuery("select id, value from " + tableName).list();
+		} catch (Exception e) {
+			return null;
+		}
+		for (Object[] obj : ls) {
 			KeyValue keyValue = new KeyValue(PersistenceManager.getString(obj[0]), PersistenceManager.getString(obj[1]));
-			ret.add( keyValue );
+			ret.add(keyValue);
 		}
 		return ret;
 	}

@@ -9,8 +9,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			UPDATE amp_columns SET celltype = 'org.dgfoundation.amp.ar.cell.TextCell' WHERE celltype = 'TextCell';
-			
+				UPDATE amp_columns SET celltype = 'org.dgfoundation.amp.ar.cell.TextCell' WHERE celltype = 'TextCell';
 			</lang>
 		</script>
 	</apply>

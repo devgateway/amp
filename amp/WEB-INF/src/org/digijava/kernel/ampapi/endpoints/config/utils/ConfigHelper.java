@@ -24,9 +24,9 @@ public class ConfigHelper {
 	
 	private static final String SECTION = "section";
 	private static final String DESCRIPTION = "description";
-	private static final String SETTINGS_VALUE = "settingsValue";
+	private static final String SETTINGS_VALUE = "settingValue";
 	private static final String POSSIBLE_VALUES = "possibleValues";
-	private static final String SETTINGS_NAME = "settingsName";
+	private static final String SETTINGS_NAME = "settingName";
 	private static final String ORG_DIGIJAVA_MODULE_AIM_HELPER_GLOBAL_SETTINGS_CONSTANTS = "org.digijava.module.aim.helper.GlobalSettingsConstants";
 	private static final Logger logger = Logger.getLogger(ConfigHelper.class);
 	/**
@@ -83,15 +83,36 @@ public class ConfigHelper {
 				pValues.set(value.getValue(), value.getKey());
 			}
 		}
-		globalSetting.set("settingsName", ampGlobalSetting.getGlobalSettingsName());
-		globalSetting.set("settingsValue", ampGlobalSetting.getGlobalSettingsValue());
+		globalSetting.set("settingName", ampGlobalSetting.getGlobalSettingsName());
+		globalSetting.set("settingValue", ampGlobalSetting.getGlobalSettingsValue());
 		globalSetting.set("possibleValues", ampGlobalSetting.getGlobalSettingsPossibleValues()); 
 		globalSetting.set("description", ampGlobalSetting.getGlobalSettingsDescription()); 
 		globalSetting.set("section", ampGlobalSetting.getSection()); 
 		globalSetting.set("valueTranslatable", ampGlobalSetting.getValueTranslatable());
-		globalSetting.set("PossibleValuesIds", pValues);
+		globalSetting.set("possibleValuesIds", pValues);
 		
 		return globalSetting;
+	}
+	
+	/**
+	 * Validate settingValue
+	 * @param object
+	 * @return boolean
+	 */
+	public static boolean validateGlobalSetting(AmpGlobalSettings ampGlobalSetting) {
+		boolean isValid = false;
+		List<KeyValue> possiblesValues = ConfigHelper.getPossibleValues(ampGlobalSetting.getGlobalSettingsPossibleValues());
+		if (possiblesValues!=null) {
+			for (KeyValue value : possiblesValues) {
+				if (ampGlobalSetting.getGlobalSettingsValue().equals(value.getKey()) ) {
+					isValid = true;
+				}
+			}
+		} else {
+			isValid = true;
+		}
+		
+		return isValid;
 	}
 	
 	public static String getGlobalSettingName(LinkedHashMap<String, Object> object) {

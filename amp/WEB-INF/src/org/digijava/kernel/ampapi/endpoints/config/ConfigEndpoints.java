@@ -37,6 +37,7 @@ public class ConfigEndpoints {
     private static final String SAVED = "SAVED";
     private static final String INSERTED = "INSERTED";
     private static final String NOT_VALID = "NOT A VALID GLOBAL SETTING";
+    private static final String NOT_VALID_VALUE = "NOT A VALID VALUE";
 	/**
 	 * Save global settings
 	 * @param globalSettings jsonBean with a settings to save
@@ -50,7 +51,6 @@ public class ConfigEndpoints {
 
 		ArrayList<String> list = ConfigHelper.getValidSettings();
 		Collection<JsonBean> resultList = new ArrayList<JsonBean>();
-
 		if (globalSettings.get("settings") != null) {
 			ArrayList<LinkedHashMap<String, Object>> settings = (ArrayList<LinkedHashMap<String, Object>>) globalSettings
 					.get("settings");
@@ -68,11 +68,11 @@ public class ConfigEndpoints {
 					}
 
 					ConfigHelper.getGlobalSetting(ampGlobalSetting, setting);
-
-					FeaturesUtil.updateGlobalSetting(ampGlobalSetting);
-
-					result.set(globalSettingName, (isNew ? INSERTED : SAVED));
-
+					
+						FeaturesUtil.updateGlobalSetting(ampGlobalSetting);
+	
+						result.set(globalSettingName, (isNew ? INSERTED : SAVED));
+					
 				} else {
 					result.set(globalSettingName, NOT_VALID);
 				}
@@ -80,7 +80,7 @@ public class ConfigEndpoints {
 			}
 
 		}
-
+		
 		return resultList;
 	}
 	
@@ -94,9 +94,10 @@ public class ConfigEndpoints {
 	@Path("/getGlobalSettings")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(id = "getGlobalSettings", authTypes = {AuthRule.IN_ADMIN}, ui = false)
-	public Collection<JsonBean> getGlobalSettings(JsonBean globalSettings) {
+	public JsonBean getGlobalSettings(JsonBean globalSettings) {
 		
 		Collection<JsonBean> resultList = new ArrayList<JsonBean>();
+		JsonBean finalFormatResult = new JsonBean();
 		ArrayList<LinkedHashMap<String, Object>> settings = null;
 		ArrayList<String> list = null;
 		
@@ -130,8 +131,10 @@ public class ConfigEndpoints {
 	            resultList.add(result);
 	        }
 		}
-
-		return resultList;
+		
+		finalFormatResult.set("settings", resultList);
+		 
+		return finalFormatResult;
 	}
 	
 	

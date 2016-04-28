@@ -61,7 +61,7 @@ public class SearchUtil {
 	public static Collection<? extends LoggerIdentifiable> getReports(TeamMember tm,
 			String string) {
 		// TODO: Unify this with getTabs()
-		string	= string.replace("*", "");
+		string	= string.replace("*", "").toLowerCase();
 		
 		List<AmpReports> col;
 
@@ -91,7 +91,8 @@ public class SearchUtil {
 
 				qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
 				qry.setParameter("teamid", tm.getTeamId());
-				qry.setParameter("keyword", "%" + string + "%");
+				addParameter(qry,string);
+				
 				col = qry.list();
 			} else {
 				queryString = "select distinct r from "
@@ -105,7 +106,7 @@ public class SearchUtil {
 				qry = session.createQuery(queryString);
 				qry.setLong("ampTeamMemId", tm.getMemberId());
 				qry.setLong("teamId", tm.getTeamId());
-				qry.setParameter("keyword", "%" + string + "%");
+				addParameter(qry,string);
 				col = qry.list();
 
 			}
@@ -122,18 +123,27 @@ public class SearchUtil {
 	public static String buildLike(String string, String field) {
 		String query = "";
 		String[] str = string.split(" ");
-		
-		 for (String s : str) {
-			 query += (query != "" ? " OR ": "") + " lower(" + field + ") LIKE :keyword ";
-		 }
-		 query = "( " + query + ")";
-		 
+		int index = 1;
+		for (String s : str) {
+			query += (query != "" ? " OR " : "") + " lower(" + field + ") LIKE :keyword" + index++ + " ";
+		}
+		query = "( " + query + ")";
+
 		return query;
 	}
 	
+	public static void addParameter(Query qry, String string) {
+		int index = 1;
+		String[] str = string.split(" ");
+		for (String s : str) {
+			qry.setParameter("keyword" + index++, "%" + s + "%");
+		}
+
+	}
+
 	public static Collection<? extends LoggerIdentifiable> getTabs(TeamMember tm, String string) {
 
-		string = string.replace("*", "");
+		string = string.replace("*", "").toLowerCase();
 
 		List<AmpReports> col;
 
@@ -161,7 +171,7 @@ public class SearchUtil {
 
 				qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
 				qry.setParameter("teamid", tm.getTeamId());
-				qry.setParameter("keyword", "%" + string + "%");
+				addParameter(qry,string);
 				col = qry.list();
 			} else {
 				queryString = "select distinct r from " + AmpReports.class.getName() + "  r left join r.members m where "
@@ -173,7 +183,7 @@ public class SearchUtil {
 				qry = session.createQuery(queryString);
 				qry.setLong("ampTeamMemId", tm.getMemberId());
 				qry.setLong("teamId", tm.getTeamId());
-				qry.setParameter("keyword", "%" + string + "%");
+				addParameter(qry,string);
 				col = qry.list();
 
 			}
@@ -430,8 +440,7 @@ public class SearchUtil {
 		query.append(")");
 		query.append(" and roleCode.roleCode=:roleCode ");
 		if (!hasComputedOrgs) {
-			query.append(" and " + orgNameHql + " like :name");
-			//query.append(" and " + buildLike(keyword,orgNameHql) + " ");
+			query.append(" and " + buildLike(keyword,orgNameHql) + " ");
 			if (tm.getTeamAccessType().equals("Management")) {
 				query.append(String.format(
 						" and (act.draft=false or act.draft is null) and act.approvalStatus in ('%s', '%s') ",
@@ -446,7 +455,7 @@ public class SearchUtil {
 			qry.setString("roleCode", "DN");
 		} else {
 			qry.setString("roleCode", roleCode);
-			qry.setString("name", '%' + keyword + '%');
+			addParameter(qry,keyword.toLowerCase());
 		}
 
 		List<AmpActivity> result = qry.list();
@@ -468,7 +477,7 @@ public class SearchUtil {
 				queryString.append(" and " + orgNameHql + " like :name");
 				qry = session.createQuery(queryString.toString());
 				qry.setString("roleCode", roleCode);
-				qry.setString("name", '%' + keyword + '%');
+				qry.setString("name", '%' + keyword.toLowerCase() + '%');
 				result = qry.list();
 				if (result != null && !result.isEmpty()) {
 					activities.addAll(result);

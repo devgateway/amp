@@ -320,17 +320,6 @@ public class DashboardsService {
 		}
 	}
 	
-	protected static ReportArea createAreaTotals(GeneratedReport report, String name, long id, BigDecimal value, 
-			DecimalFormat numberFormat) {
-		ReportAreaImpl area = new ReportAreaImpl();
-		Map<ReportOutputColumn, ReportCell> contents = new LinkedHashMap<ReportOutputColumn, ReportCell>();
-		contents.put(report.leafHeaders.get(0), new TextCell(name, id, null));
-		contents.put(report.leafHeaders.get(1), new AmountCell(value, numberFormat.format(value)));
-		area.setContents(contents);
-		
-		return area;
-	}
-	
 	protected static List<ReportArea> getUndefinedRegionAreas(Iterator<ReportArea> iter, String undefinedStr, 
 			ReportOutputColumn criteriaCol) {
 		List<ReportArea> undefinedAreas = new ArrayList<>();
@@ -342,28 +331,6 @@ public class DashboardsService {
 			}
 		}
 		return undefinedAreas;
-	}
-	
-	protected static GeneratedReport drillDownUndefinedRegionByLocation(ReportSpecificationImpl spec, 
-			OutputSettings outSettings) {
-		/*
-		 * Drill down report data by location for undefined region:
-		 * 		National - allocated for the current country
-		 * 		International - allocated for other countries
-		 * 		Region: Undefined - what indeed is not allocated for a given region 
-		 */
-		spec.addColumn(new ReportColumn(ColumnConstants.COUNTRY));
-		spec.setHierarchies(spec.getColumns());
-		MondrianReportFilters filters = (MondrianReportFilters) spec.getFilters();
-		if (filters == null) {
-			filters = new MondrianReportFilters();
-			spec.setFilters(filters);
-		}
-		/* not possible, is not working, we'll have to manually find the undefined region in the results
-		filters.addFilterRule(new ReportColumn(ColumnConstants.REGION),
-				new FilterRule(MoConstants.UNDEFINED_KEY.toString(), true));
-				*/
-		return EndpointUtils.runReport(spec, ReportAreaImpl.class, outSettings);
 	}
 	
 	protected static JSONObject buildEmptyJSon(String...keys) {

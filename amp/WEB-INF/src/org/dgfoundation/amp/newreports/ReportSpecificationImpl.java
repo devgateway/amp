@@ -31,6 +31,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	protected boolean emptyOutputForUnspecifiedData = true;
 	protected boolean alsoShowPledges = false;
 	protected boolean summaryReport = false;
+	protected ReportCollapsingStrategy reportCollapsingStrategy = ReportCollapsingStrategy.UNKNOWNS; 
 	
     /**
      * If the report query results in empty data
@@ -238,7 +239,14 @@ public class ReportSpecificationImpl implements ReportSpecification {
     public void setAlsoShowPledges(boolean alsoShowPledges) {
     	this.alsoShowPledges = alsoShowPledges;
     }
-   
+    
+    public void setReportCollapsingStrategy(ReportCollapsingStrategy reportCollapsingStrategy) {
+        this.reportCollapsingStrategy = reportCollapsingStrategy;
+    }
+    
+    public ReportCollapsingStrategy getSubreportsCollapsing() {
+        return reportCollapsingStrategy;
+    }
 
 	public static ReportSpecificationImpl buildFor(String reportName, List<String> columns, List<String> measures, List<String> hierarchies, GroupingCriteria groupingCriteria) {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl(reportName, ArConstants.DONOR_TYPE);

@@ -3,7 +3,6 @@ package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -23,6 +22,7 @@ import org.dgfoundation.amp.newreports.IdentifiedReportCell;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
+import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
@@ -42,6 +42,7 @@ import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
@@ -59,7 +60,6 @@ import net.sf.json.JSONObject;
  */
 
 public class DashboardsService {
-    protected final static double EPSILON = 1d;
 
 	private static Logger logger = Logger.getLogger(DashboardsService.class);
 
@@ -162,6 +162,7 @@ public class DashboardsService {
 			spec.addColumn(new ReportColumn(ColumnConstants.REGION));
 			title = TranslatorWorker.translateText(DashboardConstants.TOP_REGIONS);
 			name = DashboardConstants.TOP_REGIONS;
+			spec.setReportCollapsingStrategy(ReportCollapsingStrategy.NEVER);
 			break;
 		case "PS":
 			spec.addColumn(new ReportColumn(MoConstants.PRIMARY_SECTOR));
@@ -287,83 +288,36 @@ public class DashboardsService {
 	 * @param spec
 	 * @param generator
 	 */
-	protected static void postProcessRE(GeneratedReport report, ReportSpecificationImpl spec, 
+	protected static void postProcessRE(GeneratedReport report, ReportSpecificationImpl spec,
 			OutputSettings outSettings) {
 		String undefinedStr = TranslatorWorker.translateText("Undefined");
 		// lookup the Undefined region
 		ListIterator<ReportArea> mainDataIter = report.reportContents.getChildren().listIterator();
-		ReportArea undefinedTotals = getUndefinedRegionArea(mainDataIter, undefinedStr, report.leafHeaders.get(0));
+		List<ReportArea> undefinedAreas = getUndefinedRegionAreas(mainDataIter, undefinedStr, report.leafHeaders.get(0));
 		// if undefined region is not found, then nothing to drill down
-		if (undefinedTotals == null) {
+		if (undefinedAreas == null || undefinedAreas.size() == 0) {
 			return;
 		}
-		
-		GeneratedReport undefinedRegion = drillDownUndefinedRegionByLocation(spec, outSettings);
-		if (undefinedRegion == null || undefinedRegion.reportContents == null 
-				|| undefinedRegion.reportContents.getChildren().size() == 0) {
-			return;
+		ReportOutputColumn regionCol = report.leafHeaders.get(0);
+        AmpCategoryValueLocations currentCountry = DynLocationManagerUtil.getDefaultCountry();
+        
+		for (ReportArea undefined : undefinedAreas) {
+		    IdentifiedReportCell uRegion = (IdentifiedReportCell) undefined.getContents().get(regionCol);
+		    // the not real undefined regions
+		    if (uRegion.entityId != -MoConstants.UNDEFINED_KEY) {
+		        if (uRegion.entityId == -currentCountry.getId()) {
+		            // national
+		            uRegion = new TextCell(TranslatorWorker.translateText(MoConstants.NATIONAL), uRegion.entityId, uRegion.entitiesIdsValues);
+		        } else {
+		            // international
+		            uRegion = new TextCell(TranslatorWorker.translateText(MoConstants.INTERNATIONAL), uRegion.entityId, uRegion.entitiesIdsValues);
+		        }
+		        undefined.getContents().put(regionCol, uRegion);
+		        for (ReportArea child : undefined.getChildren()) {
+		            child.getContents().put(regionCol, uRegion);
+		        }
+		    }
 		}
-		
-		ReportOutputColumn locationCol = undefinedRegion.leafHeaders.get(1);
-		ReportOutputColumn amountCol = undefinedRegion.leafHeaders.get(2);
-		
-		DecimalFormat numberFormat = null;
-		if (spec.getSettings() != null && spec.getSettings().getCurrencyFormat() != null ) {
-			numberFormat = spec.getSettings().getCurrencyFormat();
-		} else { 
-			numberFormat = MondrianReportUtils.getCurrentUserDefaultSettings().getCurrencyFormat();
-		}
-		int divider = spec.getSettings() != null ? spec.getSettings().getUnitsOption().divider :
-		    MondrianReportUtils.getCurrentUserDefaultSettings().getUnitsOption().divider;
-		
-		String currentCountry = DynLocationManagerUtil.getDefaultCountry().getName();
-		
-		ReportArea actualUndefiend = getUndefinedRegionArea(undefinedRegion.reportContents.getChildren().iterator(), 
-				undefinedStr, report.leafHeaders.get(0));
-		
-		Iterator<ReportArea> undefinedDataIter = actualUndefiend.getChildren().iterator();
-		ReportArea national = null;
-		ReportArea uRegion = null;
-		while (undefinedDataIter.hasNext() && (national == null || uRegion == null)) {
-			ReportArea ra = undefinedDataIter.next();
-			IdentifiedReportCell location = (IdentifiedReportCell) ra.getContents().get(locationCol);
-			if (location != null && currentCountry.equals(location.value)) {
-				national = createAreaTotals(report, TranslatorWorker.translateText(MoConstants.NATIONAL), location.entityId, 
-						(BigDecimal) ra.getContents().get(amountCol).value, numberFormat);
-			} else if (location != null && location.value != null && ((String) location.value).contains(undefinedStr)) {
-				uRegion = createAreaTotals(report, TranslatorWorker.translateText("Region") + ": " + undefinedStr, 
-				        location.entityId, (BigDecimal) ra.getContents().get(amountCol).value, 
-						numberFormat);
-			}
-		}
-		// transform original Undefined into International, i.e. subtract National and actual Region: Undefined
-		BigDecimal intlAmount = (BigDecimal) undefinedTotals.getContents().get(amountCol).value;
-		if (national != null) {
-			intlAmount = intlAmount.subtract((BigDecimal) national.getContents().get(amountCol).value);
-			mainDataIter.add(national);
-		}
-		if (uRegion != null) {
-			intlAmount = intlAmount.subtract((BigDecimal) uRegion.getContents().get(amountCol).value);
-			mainDataIter.add(uRegion);
-		}
-		if (intlAmount.abs().doubleValue() > (EPSILON / divider)) {
-			mainDataIter.add(createAreaTotals(report, TranslatorWorker.translateText(MoConstants.INTERNATIONAL), -2l, 
-					intlAmount, numberFormat));
-		}
-		report.reportContents.getChildren().remove(undefinedTotals);
-		
-		/*
-		 * 1. Since there is no way to generate a unique NiReport with totals per International, National, Undefined
-		 * and Defined Regions, we need 2 separate reports and combine the result
-		 * 2. There is no predefined option to resort a report after it was generated as of now
-		 * => due to 1 + 2 we resort it manually
-		 */
-		final ReportOutputColumn reportAmountCol = report.leafHeaders.get(1);
-		
-//		Collections.sort(report.reportContents.getChildren(), (ra1, ra2) -> 
-//		    - ((BigDecimal) ra1.getContents().get(reportAmountCol).value).compareTo(
-//		            (BigDecimal) ra2.getContents().get(reportAmountCol).value)); 
-		
 	}
 	
 	protected static ReportArea createAreaTotals(GeneratedReport report, String name, long id, BigDecimal value, 
@@ -377,17 +331,17 @@ public class DashboardsService {
 		return area;
 	}
 	
-	protected static ReportArea getUndefinedRegionArea(Iterator<ReportArea> iter, String undefinedStr, 
+	protected static List<ReportArea> getUndefinedRegionAreas(Iterator<ReportArea> iter, String undefinedStr, 
 			ReportOutputColumn criteriaCol) {
-		ReportArea undefined = null;
-		while (iter.hasNext() && undefined == null) {
-			undefined = iter.next();
+		List<ReportArea> undefinedAreas = new ArrayList<>();
+		while (iter.hasNext()) {
+			ReportArea undefined = iter.next();
 			ReportCell cell = undefined.getContents().get(criteriaCol);
-			if (cell.value == null || !((String) cell.value).contains(undefinedStr)) {
-				undefined = null;
+			if (cell.value != null && ((String) cell.value).contains(undefinedStr)) {
+			    undefinedAreas.add(undefined);
 			}
 		}
-		return undefined;
+		return undefinedAreas;
 	}
 	
 	protected static GeneratedReport drillDownUndefinedRegionByLocation(ReportSpecificationImpl spec, 

@@ -359,9 +359,10 @@ public class DashboardsService {
 		 * => due to 1 + 2 we resort it manually
 		 */
 		final ReportOutputColumn reportAmountCol = report.leafHeaders.get(1);
-		Collections.sort(report.reportContents.getChildren(), (ra1, ra2) -> 
-		    - ((BigDecimal) ra1.getContents().get(reportAmountCol).value).compareTo(
-		            (BigDecimal) ra2.getContents().get(reportAmountCol).value)); 
+		
+//		Collections.sort(report.reportContents.getChildren(), (ra1, ra2) -> 
+//		    - ((BigDecimal) ra1.getContents().get(reportAmountCol).value).compareTo(
+//		            (BigDecimal) ra2.getContents().get(reportAmountCol).value)); 
 		
 	}
 	

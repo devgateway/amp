@@ -38,6 +38,18 @@ public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation
 	public ListEditor<AmpFunding> getList() {
 		return list;
 	}
+	
+	public Integer getMaxFundingItemIndexFromList() {
+		Integer max = null;
+		for (AmpFunding af : list.items) {
+			if (max == null)
+				max = af.getIndex();
+			if (max < af.getIndex()) 
+				max = af.getIndex();
+		}
+		return max;
+	}
+	
 
 	@Override
 	protected void onConfigure() {

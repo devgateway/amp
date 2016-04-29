@@ -128,6 +128,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	private Date maturity;
 	
 	private Integer orderNumber;
+	private Integer index;
 	
 	@Override
 	public boolean equalsForVersioning(Object obj) {
@@ -797,5 +798,13 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 
 	public void setMaturity(Date maturity) {
 		this.maturity = maturity;
+	}
+
+	public Integer getIndex() {
+		return index;
+	}
+
+	public void setIndex(Integer index) {
+		this.index = index;
 	}
 }

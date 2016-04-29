@@ -477,6 +477,7 @@ public class AmpDonorFundingFormSectionFeature extends
 		funding.setMtefProjections(new HashSet<AmpFundingMTEFProjection>());
 		funding.setFundingDetails(new HashSet<AmpFundingDetail>());
 		funding.setGroupVersionedFunding(System.currentTimeMillis());
+		
 		// if it is a ssc activity we set a default type of assistance
 		if (ActivityUtil.ACTIVITY_TYPE_SSC.equals(((AmpAuthWebSession) getSession()).getFormType())) {
 			Collection<AmpCategoryValue> categoryValues = CategoryManagerUtil
@@ -486,6 +487,7 @@ public class AmpDonorFundingFormSectionFeature extends
 		
 		AmpFundingGroupFeaturePanel existingFundingGroup = getExistingFundingGroup(funding);
 		if (existingFundingGroup != null) {
+			funding.setIndex(existingFundingGroup.getMaxFundingItemIndexFromList() + 1);
 			existingFundingGroup.getList().addItem(funding);
 		} else {
 			if (fundingModel.getObject() == null) {
@@ -494,6 +496,7 @@ public class AmpDonorFundingFormSectionFeature extends
 			}
 			int order = fundingModel.getObject().size();
 			funding.setOrderNumber(order);
+			funding.setIndex(0);
 			fundingModel.getObject().add(funding);
 			tabsList.addItem(ampOrgRole);
 			orgRolelist.origAddItem(ampOrgRole);

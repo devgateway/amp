@@ -44,6 +44,7 @@
         <property name="loanTerms" column="loan_terms" type="text" />
         
         <property name="orderNumber" column="order_number" type="java.lang.Integer" />
+        <property name="index" column="index" type="java.lang.Integer" />
         
         <property name="ratificationDate" column="ratification_date" type="java.util.Date" />
         <property name="gracePeriod" column="grace_period" type="java.lang.Integer" />

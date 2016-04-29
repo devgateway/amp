@@ -8,6 +8,7 @@ import org.apache.wicket.model.IModel;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -31,7 +32,7 @@ public abstract class AbstractMixedSetModel<T> implements IModel<Set<T>> {
         if (originalModel.getObject() == null)
             return null;
 
-        Set<T> ret = new HashSet<T>();
+        Set<T> ret = new LinkedHashSet<T>();
         //retrieve from the original model only the items that respect the condition
         for (T item: originalModel.getObject()){
             if (condition(item))

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -79,7 +80,7 @@ public abstract class ListEditor<T> extends RepeatingView implements IFormModelU
 	public void updateModel(){
 		Set<T> set = model.getObject();
 		if (set == null)
-			set = new HashSet<T>();
+			set = new LinkedHashSet<T>();
 		set.clear();
 		if(items != null)
 		   set.addAll(items);

@@ -8,7 +8,8 @@
 	<description>make triggers and caches for locations</description>
 	<apply>
 		<script>
-			<lang delimiter=";" type="postgres">				
+			<lang delimiter=";" type="postgres">	
+				DROP VIEW IF EXISTS v_sectorloc;			
 				DELETE FROM amp_fields_templates WHERE field IN (SELECT id FROM amp_fields_visibility WHERE name = 'Sector Location');
 				DELETE FROM amp_fields_visibility WHERE name = 'Sector Location';
 				DELETE FROM amp_category_value WHERE 

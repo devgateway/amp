@@ -107,7 +107,11 @@ public class ReportAreaForTests extends ReportAreaImpl {
 		if (out == null) return cor == null;
 		if (cor == null) return out == null;
 		
-		return cor.equals(out);
+		if (cor.id != -1 && cor.id != out.id)
+			return false;
+		
+		return cor.columnName.equals(out.columnName) && cor.debugString.equals(out.debugString);
+//		return cor.equals(out);
 	}
 	
 	public static boolean nullGuardEqual(Object obj, Object cor) {

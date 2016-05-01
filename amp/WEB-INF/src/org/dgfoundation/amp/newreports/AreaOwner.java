@@ -19,16 +19,21 @@ public class AreaOwner {
 	 * the activityId of the row, if this is a leaf
 	 */
 	public final long id;
-	
+
 	/**
 	 * builds an {@link AreaOwner} for a CRD / GRD 
-	 * @param columnName
-	 * @param debugString
 	 */
-	public AreaOwner(String columnName, String debugString) {
+	public AreaOwner(String columnName, String debugString, long id) {
 		this.columnName = columnName;
 		this.debugString = debugString;
-		this.id = -1;
+		this.id = id;
+	}
+
+	/**
+	 * builds an {@link AreaOwner} for a CRD / GRD 
+	 */
+	public AreaOwner(String columnName, String debugString) {
+		this(columnName, debugString, -1);
 	}
 	
 	public AreaOwner(long id) {

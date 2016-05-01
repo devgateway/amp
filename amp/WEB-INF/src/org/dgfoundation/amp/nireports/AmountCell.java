@@ -59,4 +59,9 @@ public final class AmountCell extends Cell implements CategCell, NumberedCell {
 	public NiPrecisionSetting getPrecision() {
 		return amount.precisionSetting;
 	}
+
+	@Override
+	public boolean isScalableByUnits() {
+		return true;
+	}
 }

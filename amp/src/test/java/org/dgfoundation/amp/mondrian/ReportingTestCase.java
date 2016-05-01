@@ -13,6 +13,7 @@ import org.dgfoundation.amp.algo.ExceptionConsumer;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
@@ -435,6 +436,11 @@ public abstract class ReportingTestCase extends AmpTestCase {
 		assertNull(delta);
 		if (assertionError != null)
 			throw assertionError;
+	}
+	
+	protected ReportSpecificationImpl withUnits(ReportSpecificationImpl spec, AmountsUnits unitsOption) {
+		spec.getOrCreateSettings().setUnitsOption(unitsOption);
+		return spec;
 	}
 	
 //	public<K> K buildNiReportDigest(ReportSpecification spec, NiReportExecutor executor, NiReportOutputBuilder<K> outputBuilder) {

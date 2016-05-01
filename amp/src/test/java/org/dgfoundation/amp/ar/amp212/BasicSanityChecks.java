@@ -1165,5 +1165,4 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 
 		runNiTestCase(spec, "en", acts, cor);
 	}
-
 }

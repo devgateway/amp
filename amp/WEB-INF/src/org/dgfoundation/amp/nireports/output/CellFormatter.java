@@ -12,6 +12,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.DateCell;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportSettings;
@@ -32,19 +33,20 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 	final protected OutputSettings outputSettings;
 	final protected Map<BigDecimal, String> formattedValues = new HashMap<>();
 	final protected Function<String, String> translator;
+	final protected AmountsUnits amountsUnits;
+	final protected BigDecimal unitsDivider;
 	
 	public CellFormatter(ReportSettings settings, DecimalFormat defaultDecimalFormatter, String dateDisplayFormat, Function<String, String> translator, OutputSettings outputSettings) {
-		if (settings != null && settings.getCurrencyFormat() != null) {
-			this.decimalFormatter = settings.getCurrencyFormat();
-		} else {
-			this.decimalFormatter = defaultDecimalFormatter;
-		}
+		this.decimalFormatter = (settings != null && settings.getCurrencyFormat() != null) ? settings.getCurrencyFormat() : defaultDecimalFormatter;
+		this.amountsUnits = (settings != null && settings.getUnitsOption() != null) ? settings.getUnitsOption() : AmountsUnits.AMOUNTS_OPTION_UNITS;
+		this.unitsDivider = BigDecimal.valueOf(this.amountsUnits.divider);
 		this.outputSettings = outputSettings;
 		this.dateFormatter = DateTimeFormatter.ofPattern(dateDisplayFormat);
 		this.translator = translator;
 	}
 
-	public String formatNumber(BigDecimal value) {
+	public String formatScalableAmount(BigDecimal value) {
+		value = value.divide(unitsDivider);
 		if (decimalFormatter == null || value == null) 
 			return value == null ? "" : String.valueOf(value);
 		return decimalFormatter.format(value);
@@ -52,9 +54,10 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 	
 	public ReportCell visitNumberedCell(NumberedCell cell) {
 		BigDecimal amt = cell.getAmount();
-//		if (!amt.equals(BigDecimal.ZERO))
-//			System.out.print("!");
-		return new org.dgfoundation.amp.newreports.AmountCell(amt, formattedValues.computeIfAbsent(amt, this::formatNumber));
+		if (cell.isScalableByUnits()) {
+			return new org.dgfoundation.amp.newreports.AmountCell(amt, formattedValues.computeIfAbsent(amt, this::formatScalableAmount));
+		}
+		return new org.dgfoundation.amp.newreports.AmountCell(amt, String.valueOf(amt));
 	}
 	
 	@Override

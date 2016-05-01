@@ -45,6 +45,7 @@ public class OfflineTests
 		suite.addTest(new JUnit4TestAdapter(PercentagesCorrectorTests.class));
 		suite.addTest(new JUnit4TestAdapter(SummaryReportsTests.class));
 		suite.addTest(new JUnit4TestAdapter(PaginationTests.class));
+		suite.addTest(new JUnit4TestAdapter(FormattingTests.class));
 		suite.addTest(new JUnit4TestAdapter(OffDbNiReportFilteringTests.class));
 		
 		return suite;

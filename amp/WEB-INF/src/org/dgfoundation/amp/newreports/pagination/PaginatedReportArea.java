@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 
@@ -38,7 +39,7 @@ public class PaginatedReportArea extends ReportAreaImpl {
 	 * @return
 	 */
 	protected Set<Long> collectIds() {
-		if (this.getOwner() != null && this.getOwner().id > 0)
+		if (this.getOwner() != null && this.getOwner().columnName.equals(AreaOwner.LEAF))
 			return new HashSet<>(Arrays.asList(this.getOwner().id)); // this is a leaf with no children
 		if (this.children != null) {
 			return this.children.stream().map(z -> (PaginatedReportArea) z).flatMap(z -> z.currentLeafActivities.stream()).collect(toSet());

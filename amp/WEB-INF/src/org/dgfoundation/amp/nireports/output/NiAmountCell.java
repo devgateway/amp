@@ -44,4 +44,9 @@ public class NiAmountCell extends NiOutCell implements NumberedCell {
 	
 	public final static NiAmountCell ZERO = new NiAmountCell(BigDecimal.ZERO, NiPrecisionSetting.IDENTITY_PRECISION_SETTING);
 
+	@Override
+	public boolean isScalableByUnits() {
+		return true;
+	}
+
 }

@@ -181,7 +181,9 @@ public class NiReportsFormatter implements NiReportDataVisitor<ReportAreaImpl> {
 	
 	protected AreaOwner toAreaOwner(NiSplitCell cell) {
 		if (cell == null) return null;
-		return new AreaOwner(cell.entity.name, convert(cell, null).displayedValue);
+		return new AreaOwner(cell.entity.name, 
+				convert(cell, null).displayedValue,
+				cell.entityIds == null || cell.entityIds.isEmpty() ? -1 : cell.entityIds.iterator().next()); // choose any of the ids if there is a multitude of them
 	}
 	
 	protected Map<ReportOutputColumn, ReportCell> trailCells(NiReportData niReportData) {

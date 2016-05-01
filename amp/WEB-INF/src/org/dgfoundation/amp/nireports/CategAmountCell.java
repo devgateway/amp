@@ -65,4 +65,9 @@ public final class CategAmountCell extends Cell implements CategCell, DatedCell,
 	public NiPrecisionSetting getPrecision() {
 		return amount.precisionSetting;
 	}
+
+	@Override
+	public boolean isScalableByUnits() {
+		return true;
+	}
 }

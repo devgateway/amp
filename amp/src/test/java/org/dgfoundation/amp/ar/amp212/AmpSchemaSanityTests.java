@@ -6,6 +6,7 @@ import java.util.List;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -66,6 +67,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 	protected NiReportExecutor getNiExecutor(List<String> activityNames) {
 		return getDbExecutor(activityNames);
 	}
+	
 	@Test
 	public void testActivityIds() {
 		NiReportModel cor =new NiReportModel("testcase amp activity ids")
@@ -263,6 +265,34 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 				correctReportRu);
 	}
 	
+	@Test
+	public void testMtefColumnsInMillions() {
+		NiReportModel cor =  new NiReportModel("MTEF millions")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 4))",
+					"(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(MTEF 2011/2012: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2))",
+					"(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(MTEF: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+			      .withContents("Project Title", "", "MTEF 2011/2012", "1,72", "Totals-Actual Commitments", "0,89", "Totals-MTEF", "1,72")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "MTEF 2011/2012", "0,15", "Totals-MTEF", "0,15"),
+			        new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project", "MTEF 2011/2012", "0,03", "Totals-MTEF", "0,03"),
+			        new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1", "MTEF 2011/2012", "0,79", "Totals-MTEF", "0,79"),
+			        new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2"),
+			        new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "MTEF 2011/2012", "0,7", "Totals-Actual Commitments", "0,89", "Totals-MTEF", "0,7"),
+			        new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb"),
+			        new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "MTEF 2011/2012", "0,04", "Totals-MTEF", "0,04")      ));
+
+		ReportSpecificationImpl spec = buildSpecification("MTEF millions",
+			Arrays.asList(ColumnConstants.PROJECT_TITLE, "MTEF 2011/2012"), 
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+			null,
+			GroupingCriteria.GROUPING_TOTALS_ONLY);
+		
+		spec.getOrCreateSettings().setUnitsOption(AmountsUnits.AMOUNTS_OPTION_MILLIONS);
+		runNiTestCase(cor, spec, mtefActs);
+	}
 /*	
 	
 	@Test
@@ -519,6 +549,36 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 			        new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Funding-2015-Actual Commitments", "112 641", "Totals-Actual Commitments", "112 641")      ));
 
 		runNiTestCase(spec("Proposed-cost-EUR"), "en", ppcActs, corPPCEUR);
+	}
+	
+	@Test
+	public void testProposedProjectCostMillions() {
+		NiReportModel cor =  new NiReportModel("PPCMillions")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
+					"(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Proposed Project Amount: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1))",
+					"(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+			      .withContents("Project Title", "", "Proposed Project Amount", "4,63", "Totals-Actual Commitments", "0,75")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD", "Proposed Project Amount", "1"),
+			        new ReportAreaForTests(new AreaOwner(17), "Project Title", "Proposed Project Cost 2 - EUR", "Proposed Project Amount", "3,4"),
+			        new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Proposed Project Amount", "0,06", "Totals-Actual Commitments", "0,08"),
+			        new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Proposed Project Amount", "0,07", "Totals-Actual Commitments", "0,05"),
+			        new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Proposed Project Amount", "0,04", "Totals-Actual Commitments", "0,03"),
+			        new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Proposed Project Amount", "0,07", "Totals-Actual Commitments", "0,02"),
+			        new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Totals-Actual Commitments", "0,46"),
+			        new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Totals-Actual Commitments", "0,12")      ));
+		
+		ReportSpecificationImpl spec = buildSpecification("PPCMillions", 
+			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PROPOSED_PROJECT_AMOUNT),
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+			null,
+			GroupingCriteria.GROUPING_TOTALS_ONLY);
+		spec.getOrCreateSettings().setUnitsOption(AmountsUnits.AMOUNTS_OPTION_MILLIONS);
+		
+		runNiTestCase(spec, "en", ppcActs, cor);
 	}
 	
 	@Test

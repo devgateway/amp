@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -288,14 +289,13 @@ public class DashboardsService {
 	 * @param spec
 	 * @param generator
 	 */
-	protected static void postProcessRE(GeneratedReport report, ReportSpecificationImpl spec,
-			OutputSettings outSettings) {
-		String undefinedStr = TranslatorWorker.translateText("Undefined");
-		// lookup the Undefined region
-		ListIterator<ReportArea> mainDataIter = report.reportContents.getChildren().listIterator();
-		List<ReportArea> undefinedAreas = getUndefinedRegionAreas(mainDataIter, undefinedStr, report.leafHeaders.get(0));
+	protected static void postProcessRE(GeneratedReport report, ReportSpecificationImpl spec, OutputSettings outSettings) {
+		List<ReportArea> undefinedAreas = new ArrayList<>();
+		for(ReportArea ra:report.reportContents.getChildren())
+			if (ra.getOwner() != null && ra.getOwner().id < 0)
+				undefinedAreas.add(ra);
 		// if undefined region is not found, then nothing to drill down
-		if (undefinedAreas == null || undefinedAreas.size() == 0) {
+		if (undefinedAreas.isEmpty()) {
 			return;
 		}
 		ReportOutputColumn regionCol = report.leafHeaders.get(0);
@@ -318,19 +318,6 @@ public class DashboardsService {
 		        }
 		    }
 		}
-	}
-	
-	protected static List<ReportArea> getUndefinedRegionAreas(Iterator<ReportArea> iter, String undefinedStr, 
-			ReportOutputColumn criteriaCol) {
-		List<ReportArea> undefinedAreas = new ArrayList<>();
-		while (iter.hasNext()) {
-			ReportArea undefined = iter.next();
-			ReportCell cell = undefined.getContents().get(criteriaCol);
-			if (cell.value != null && ((String) cell.value).contains(undefinedStr)) {
-			    undefinedAreas.add(undefined);
-			}
-		}
-		return undefinedAreas;
 	}
 	
 	protected static JSONObject buildEmptyJSon(String...keys) {

@@ -66,7 +66,7 @@ function popup(mylink, windowname)
 			<logic:notEmpty name="lastViewedReports" scope="session">
 			<logic:iterate name="lastViewedReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" length="5">
 				<li class="tri">
-					<digi:link  title="${report.name}" href="/viewNewAdvancedReport.do?view=reset&widget=false" paramName="report"  paramId="ampReportId" paramProperty="ampReportId" onclick="return popup(this,'');">
+					<a title="${report.name}" href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" onclick="return popup(this,'');">
 						<c:choose>
 	                    	<c:when test="${fn:length(report.name) > 50}" >
 	                    	    <c:out value="${fn:substring(report.name, 0, 50)}"/>...
@@ -75,7 +75,7 @@ function popup(mylink, windowname)
 	                    	    <c:out value="${report.name}"/>
 	                    	</c:otherwise>
 	                    </c:choose>
-					</digi:link>
+					</a>
 				</li>
 			</logic:iterate>
 			<bean:size id="repCount" name="lastViewedReports" scope="session" />

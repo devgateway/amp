@@ -40,7 +40,7 @@
 						JOIN amp_funding_detail afd ON afd.pledge_id = f.id
 						JOIN amp_funding ampf ON ampf.amp_funding_id = afd.amp_funding_id
 						JOIN amp_currency c ON c.amp_currency_id = afd.amp_currency_id
-						JOIN amp_activity_version a ON (a.amp_activity_id = ampf.amp_activity_id) AND (a.draft != true) AND (a.deleted != true)
+						JOIN amp_activity a ON (a.amp_activity_id = ampf.amp_activity_id) AND (a.draft != true) AND (a.deleted != true)
 					WHERE (a.amp_team_id IS NOT NULL)
 					
 				UNION ALL 

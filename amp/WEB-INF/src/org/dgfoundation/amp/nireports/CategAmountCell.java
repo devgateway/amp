@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.meta.CategCell;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
-import org.dgfoundation.amp.nireports.output.CellVisitor;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
@@ -30,6 +29,10 @@ public final class CategAmountCell extends Cell implements CategCell, DatedCell,
 		this.translatedDate = translatedDate;
 	}
 
+	public CategAmountCell multiply(BigDecimal multipland) {
+		return new CategAmountCell(this.activityId, this.amount.multiplyBy(multipland), this.metaInfo, this.coordinates, this.translatedDate);
+	}
+	
 	@Override
 	public String toString() {
 		return String.format("(actId: %d, amt: %s, coos: {%s}, meta: {%s}", this.activityId, amount, AmpCollections.sortedMap(coordinates, (a, b) -> a.toString().compareTo(b.toString())), metaInfo);

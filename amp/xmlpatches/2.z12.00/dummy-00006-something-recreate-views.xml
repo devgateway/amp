@@ -2,9 +2,9 @@
 <tns:patch closeOnSuccess="true" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-	<jira>AMP-22639</jira>
+	<jira>AMP-22348</jira>
 	<keyword>Views</keyword>
-	<author>cdolghier</author>
+	<author>vchihai</author>
 	<description>recreate view, this will always be the last version of the view</description>
 	<apply>
 		<script>

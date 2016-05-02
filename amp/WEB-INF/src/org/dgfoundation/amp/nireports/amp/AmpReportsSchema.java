@@ -456,8 +456,16 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		date_column(ColumnConstants.PROPOSED_APPROVAL_DATE, "v_actual_proposed_date"); 
 		date_column(ColumnConstants.PROPOSED_COMPLETION_DATE, "v_proposed_completion_date"); 
 		date_column(ColumnConstants.PROPOSED_START_DATE, "v_proposed_start_date");
+			
+		addPledgeColumns();
 		
-		
+		addTrivialMeasures();
+		addFundingFlowMeasures();
+		addTaggedMeasures();
+		addComputedLinearMeasures();
+	}
+	
+	protected void addPledgeColumns() {
 		// pledge columns
 		no_entity(ColumnConstants.PLEDGES_TITLES, "v_ni_pledges_titles");
 		single_dimension(ColumnConstants.PLEDGES_DONOR_GROUP, "v_pledges_donor_group", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION_GROUP));
@@ -490,10 +498,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_entity(ColumnConstants.PLEDGES_DETAIL_DATE_RANGE, "v_pledges_funding_range_date");
 		no_entity(ColumnConstants.PLEDGES_DETAIL_START_DATE, "v_pledges_funding_start_date");
 		no_entity(ColumnConstants.PLEDGES_DETAIL_END_DATE, "v_pledges_funding_end_date");
-		
-		addTrivialMeasures();
-		addFundingFlowMeasures();
-		addTaggedMeasures();
 	}
 		
 	protected void addMtefColumns() {
@@ -503,6 +507,16 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 			addColumn(new MtefColumn("Projection MTEF Projections " + mtefYear + "/" + (mtefYear + 1), mtefYear, "Projection MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PROJECTION)));
 			addColumn(new MtefColumn("Real MTEF " + mtefYear + "/" + (mtefYear + 1), mtefYear, "Real MTEF", true, Optional.empty()));
 		}
+	}
+	
+	protected void addComputedLinearMeasures() {
+		addTrivialFilterMeasure(MeasureConstants.PLEDGES_COMMITMENT_GAP, 
+			MeasureConstants.ACTUAL_COMMITMENTS, -1,
+			MeasureConstants.PLEDGES_ACTUAL_PLEDGE, +1);
+	}
+
+	protected void addTrivialFilterMeasure(String measureName, Object...def) {
+		addLinearFilterMeasure(measureName, measureDescriptions.get(measureName), def);
 	}
 	
 	/**
@@ -582,11 +596,13 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.PLEDGES_ACTUAL_PLEDGE, Constants.PLEDGE));
 		return this;
 	}
+	
 	private AmpReportsSchema addTaggedMeasures() {
 		addMeasure(new TaggedMeasure(MeasureConstants.ACTUAL_CLASSIFIED_EXPENDITURES, Constants.EXPENDITURE, "Actual", MetaCategory.EXPENDITURE_CLASS, PSEUDOCOLUMN_EXP_CLASS));
 		addMeasure(new TaggedMeasure(MeasureConstants.PLANNED_CLASSIFIED_EXPENDITURES, Constants.EXPENDITURE, "Planned", MetaCategory.EXPENDITURE_CLASS, PSEUDOCOLUMN_EXP_CLASS));
 		return this;
-	}	
+	}
+	
 	private AmpReportsSchema addFundingFlowMeasures() {
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.REAL_DISBURSEMENTS, Constants.DISBURSEMENT, "Actual", true));
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.REAL_COMMITMENTS, Constants.COMMITMENT, "Actual", true));
@@ -678,6 +694,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	}
 
 	public Set<Long> getWorkspacePledges(NiReportsEngine engine) {
+		//return new HashSet<>(Arrays.asList(6l));
 		return new HashSet<>(SQLUtils.fetchLongs(AmpReportsScratchpad.get(engine).connection, "SELECT id FROM amp_funding_pledges"));
 	}
 	

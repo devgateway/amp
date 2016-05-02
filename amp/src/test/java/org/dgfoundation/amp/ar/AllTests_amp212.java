@@ -13,6 +13,7 @@ import org.dgfoundation.amp.ar.amp212.AmpSchemaSanityTests;
 import org.dgfoundation.amp.ar.amp212.AmpSchemaSortingTests;
 import org.dgfoundation.amp.ar.amp212.CurrencyConvertorTests;
 import org.dgfoundation.amp.ar.amp212.DimensionsFetchingTests;
+import org.dgfoundation.amp.ar.amp212.ExpenditureClassTests;
 import org.dgfoundation.amp.ar.amp212.FundingFlowsTests;
 import org.dgfoundation.amp.ar.amp212.NiReportsFetchingTests;
 import org.dgfoundation.amp.ar.amp212.OfflineTests;
@@ -47,6 +48,7 @@ public class AllTests_amp212
 		suite.addTest(new JUnit4TestAdapter(AmpSchemaFilteringTests.class));
 		suite.addTest(new JUnit4TestAdapter(AmpSchemaPledgesTests.class));
 		suite.addTest(new JUnit4TestAdapter(FundingFlowsTests.class));
+		suite.addTest(new JUnit4TestAdapter(ExpenditureClassTests.class));
 
 		suite.addTest(new JUnit4TestAdapter(CurrencyConvertorTests.class));
 		suite.addTest(new JUnit4TestAdapter(DimensionsFetchingTests.class));

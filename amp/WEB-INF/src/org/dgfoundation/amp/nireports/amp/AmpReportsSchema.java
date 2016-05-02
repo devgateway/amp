@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -454,8 +455,36 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		
 		// pledge columns
 		no_entity(ColumnConstants.PLEDGES_TITLES, "v_ni_pledges_titles");
+		single_dimension(ColumnConstants.PLEDGES_DONOR_GROUP, "v_pledges_donor_group", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION_GROUP));
+		with_percentage(ColumnConstants.PLEDGES_PROGRAMS, "v_pledges_programs", PP_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS, "v_pledges_secondary_programs", SP_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.PLEDGES_TERTIARY_PROGRAMS, "v_pledges_tertiary_programs", TP_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES, "v_pledges_npd_objectives", NPO_DIM_USG, LEVEL_ROOT);
 		with_percentage(ColumnConstants.PLEDGES_SECTORS, "v_pledges_sectors", PS_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.PLEDGES_SECONDARY_SECTORS, "v_pledges_secondary_sectors", SS_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.PLEDGES_TERTIARY_SECTORS, "v_pledges_tertiary_sectors", TS_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.PLEDGES_REGIONS, "v_pledges_regions", LOC_DIM_USG, LEVEL_REGION);
+		with_percentage(ColumnConstants.PLEDGES_ZONES, "v_pledges_zones", LOC_DIM_USG, LEVEL_ZONE);
+		with_percentage(ColumnConstants.PLEDGES_DISTRICTS, "v_pledges_districts", LOC_DIM_USG, LEVEL_DISTRICT);
 		degenerate_dimension(ColumnConstants.PLEDGES_AID_MODALITY, "v_pledges_aid_modality", catsDimension);
+		degenerate_dimension(ColumnConstants.PLEDGE_STATUS, "v_pledges_status", catsDimension);
+		degenerate_dimension(ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE, "v_pledges_type_of_assistance", catsDimension);
+		Map<String, String> pledgeContacts = new HashMap<String, String>() {{
+		    put(ColumnConstants.PLEDGE_CONTACT_1___ADDRESS, "v_pledges_contact1_address");
+		    put(ColumnConstants.PLEDGE_CONTACT_1___ALTERNATE_CONTACT, "v_pledges_contact1_alternate");
+		    put(ColumnConstants.PLEDGE_CONTACT_1___EMAIL, "v_pledges_contact1_email");
+	        put(ColumnConstants.PLEDGE_CONTACT_1___MINISTRY, "v_pledges_contact1_ministry");
+		    put(ColumnConstants.PLEDGE_CONTACT_1___NAME, "v_pledges_contact1_name");
+		    put(ColumnConstants.PLEDGE_CONTACT_1___TELEPHONE, "v_pledges_contact1_telephone");
+		    put(ColumnConstants.PLEDGE_CONTACT_1___TITLE, "v_pledges_contact1_title");
+		}};
+		for(Entry<String, String> entry: pledgeContacts.entrySet()) {
+		    no_entity(entry.getKey(), entry.getValue());
+		    no_entity(entry.getKey().replace("1", "2"), entry.getValue().replace("1", "2"));
+		}
+		no_entity(ColumnConstants.PLEDGES_DETAIL_DATE_RANGE, "v_pledges_funding_range_date");
+		no_entity(ColumnConstants.PLEDGES_DETAIL_START_DATE, "v_pledges_funding_start_date");
+		no_entity(ColumnConstants.PLEDGES_DETAIL_END_DATE, "v_pledges_funding_end_date");
 		
 		addTrivialMeasures();
 		addFundingFlowMeasures();

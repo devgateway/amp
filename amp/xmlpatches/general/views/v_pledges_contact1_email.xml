@@ -19,7 +19,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_pledges_contact1_email AS SELECT pf.id AS pledge_id, pf.contactalternativeemail AS email, pf.id AS contactname_id FROM amp_funding_pledges pf ORDER BY pf.id;;;
+			    	CREATE OR REPLACE VIEW v_pledges_contact1_email AS SELECT pf.id AS pledge_id, pf.contactemail AS email, pf.id AS contactname_id FROM amp_funding_pledges pf ORDER BY pf.id;;;
         		</lang>
 		</script>
 	</apply>

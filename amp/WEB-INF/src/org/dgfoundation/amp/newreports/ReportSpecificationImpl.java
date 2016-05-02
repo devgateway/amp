@@ -247,9 +247,15 @@ public class ReportSpecificationImpl implements ReportSpecification {
     public ReportCollapsingStrategy getSubreportsCollapsing() {
         return reportCollapsingStrategy;
     }
+    
+    public static ReportSpecificationImpl buildFor(String reportName, List<String> columns, List<String> measures, 
+            List<String> hierarchies, GroupingCriteria groupingCriteria) {
+        return buildFor(reportName, columns, measures, hierarchies, groupingCriteria, ArConstants.DONOR_TYPE);
+    }
 
-	public static ReportSpecificationImpl buildFor(String reportName, List<String> columns, List<String> measures, List<String> hierarchies, GroupingCriteria groupingCriteria) {
-		ReportSpecificationImpl spec = new ReportSpecificationImpl(reportName, ArConstants.DONOR_TYPE);
+	public static ReportSpecificationImpl buildFor(String reportName, List<String> columns, List<String> measures, 
+	        List<String> hierarchies, GroupingCriteria groupingCriteria, int reportType) {
+		ReportSpecificationImpl spec = new ReportSpecificationImpl(reportName, reportType);
 		
 		for(String columnName:columns)
 			spec.addColumn(new ReportColumn(columnName));

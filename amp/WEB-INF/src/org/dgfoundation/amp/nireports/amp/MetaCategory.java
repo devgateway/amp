@@ -17,7 +17,7 @@ public enum MetaCategory {
 	PLEDGE_ID("pledge_id"),
 	FUNDING_STATUS("funding_status"),
 	MODE_OF_PAYMENT("mode_of_payment"),
-	
+	EXPENDITURE_CLASS("expenditure_class"),
 	SOURCE_ROLE("source_role"),
 	SOURCE_ORG("source_org"),
 	RECIPIENT_ROLE("recipient_role"),

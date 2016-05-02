@@ -51,6 +51,8 @@ public class MeasureConstants {
 	public static final String PERCENTAGE_OF_TOTAL_DISBURSEMENTS = "Percentage Of Total Disbursements";
 	public static final String LAST_YEAR_OF_PLANNED_DISBURSEMENTS = "Last Year of Planned Disbursements";
 	public static final String PERCENTAGE_OF_DISBURSEMENT = "Percentage of Disbursement";
+	public static final String ACTUAL_CLASSIFIED_EXPENDITURES  = "Actual Classified Expenditures";
+	public static final String PLANNED_CLASSIFIED_EXPENDITURES  = "Planned Classified Expenditures";
 	
 	 
 	//type = D (?)

@@ -39,6 +39,8 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 	protected static final Logger logger = Logger.getLogger(MeasuresVisibility.class);
 	
 	protected final static String CAPITAL_SPENDING_PERCENTAGE_ID_NAME = "Capital";
+	protected final static String EXPENDITURE_CLASS_ID_NAME = "Expenditure Class";
+	
 	protected final static String ANNUAL_PROPOSED_PROJECT_COST_ID_NAME = "AnnualPropProjCost";
 	protected final static String DIRECTED_DISBURSEMENTS_ID_NAME = "DirectedDisbursements";
 	protected final static String PROPOSED_PROJECT_COST_ID_NAME = "ProposedProjectCost";
@@ -55,13 +57,16 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 	 * Map<FM Module full path, name of said path as an Element>
 	 */
 	protected static final Map<String, String> modulesToMeasuresMap = new HashMap<String, String>() {{
+		
+		
 		for(String transactionName:ArConstants.TRANSACTION_TYPE_NAME_TO_ID.keySet())
 			put("/Activity Form/Funding/Funding Group/Funding Item/" + transactionName, transactionName);
-			put("/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Capital Spending Percentage", CAPITAL_SPENDING_PERCENTAGE_ID_NAME);
-			put("/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost/Add Projection", ANNUAL_PROPOSED_PROJECT_COST_ID_NAME);
-			put("/Activity Form/Funding/Overview Section/Proposed Project Cost/Amount", PROPOSED_PROJECT_COST_ID_NAME);
-			put("/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Recipient Organization", DIRECTED_DISBURSEMENTS_ID_NAME);
-			put("/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections", MTEF_ID_NAME);
+		put("/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Capital Spending Percentage", CAPITAL_SPENDING_PERCENTAGE_ID_NAME);
+		put("/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Expenditure Class", EXPENDITURE_CLASS_ID_NAME);
+		put("/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost/Add Projection", ANNUAL_PROPOSED_PROJECT_COST_ID_NAME);
+		put("/Activity Form/Funding/Overview Section/Proposed Project Cost/Amount", PROPOSED_PROJECT_COST_ID_NAME);
+		put("/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Recipient Organization", DIRECTED_DISBURSEMENTS_ID_NAME);
+		put("/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections", MTEF_ID_NAME);
 	}};
 	
 	@SuppressWarnings("serial")
@@ -75,6 +80,10 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 				put(adj.getValue() + " " + trType, Arrays.asList(trType, ADJUSTMENT_PREFIX + adj.getValue()));
 			}
 		}
+		
+		put(MeasureConstants.ACTUAL_CLASSIFIED_EXPENDITURES, Arrays.asList(ArConstants.EXPENDITURE,  EXPENDITURE_CLASS_ID_NAME, ADJUSTMENT_PREFIX + "Actual"));
+		put(MeasureConstants.PLANNED_CLASSIFIED_EXPENDITURES, Arrays.asList(ArConstants.EXPENDITURE, EXPENDITURE_CLASS_ID_NAME, ADJUSTMENT_PREFIX + "Planned"));
+		
 		put(MeasureConstants.ACTUAL_DISBURSEMENTS_CAPITAL, Arrays.asList(ArConstants.DISBURSEMENT, CAPITAL_SPENDING_PERCENTAGE_ID_NAME, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT, Arrays.asList(ArConstants.DISBURSEMENT, CAPITAL_SPENDING_PERCENTAGE_ID_NAME, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL, Arrays.asList(ArConstants.DISBURSEMENT, CAPITAL_SPENDING_PERCENTAGE_ID_NAME, ADJUSTMENT_PREFIX + "Planned"));

@@ -103,14 +103,18 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 			new ImmutablePair<>(MetaCategory.TRANSACTION_TYPE, "transaction_type"),			
 			new ImmutablePair<>(MetaCategory.AGREEMENT_ID, "agreement_id"),
 			new ImmutablePair<>(MetaCategory.RECIPIENT_ORG, "recipient_org_id"),
-			new ImmutablePair<>(MetaCategory.SOURCE_ORG, "donor_org_id")
+			new ImmutablePair<>(MetaCategory.SOURCE_ORG, "donor_org_id"),
+			new ImmutablePair<>(MetaCategory.EXPENDITURE_CLASS, "expenditure_class_id")
+			
 			);
 	
 	protected synchronized FundingFetcherContext resetCache(NiReportsEngine engine) {
 		engine.timer.putMetaInNode("resetCache", true);
 		Map<Long, String> adjTypeValue = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname = '%s'", CategoryConstants.ADJUSTMENT_TYPE_KEY));
+		Map<Long, String> expClassValues = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname = '%s'", CategoryConstants.EXPENDITURE_CLASS_KEY));
 		Map<Long, String> roles = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("SELECT amp_role_id, role_code FROM amp_role", CategoryConstants.ADJUSTMENT_TYPE_KEY));
-		return new FundingFetcherContext(new DifferentialCache<CategAmountCellProto>(invalidationDetector.getLastProcessedFullEtl()), adjTypeValue, roles);
+		
+		return new FundingFetcherContext(new DifferentialCache<CategAmountCellProto>(invalidationDetector.getLastProcessedFullEtl()), adjTypeValue, roles, expClassValues);
 	}
 
 	@Override
@@ -194,6 +198,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 				addMetaIfIdValueExists(metaSet, "recipient_role_id", MetaCategory.RECIPIENT_ROLE, rs.rs, context.roles);
 				addMetaIfIdValueExists(metaSet, "source_role_id", MetaCategory.SOURCE_ROLE, rs.rs, context.roles);
 				addMetaIfIdValueExists(metaSet, "adjustment_type", MetaCategory.ADJUSTMENT_TYPE, rs.rs, context.adjustmentTypes);
+				addMetaIfIdValueExists(metaSet, "expenditure_class_id", MetaCategory.EXPENDITURE_CLASS, rs.rs, context.expenditureClasses);
 				
 				if (metaSet.hasMetaInfo(MetaCategory.SOURCE_ROLE.category) && metaSet.hasMetaInfo(MetaCategory.RECIPIENT_ROLE.category)
 					&& metaSet.hasMetaInfo(MetaCategory.SOURCE_ORG.category) && metaSet.hasMetaInfo(MetaCategory.RECIPIENT_ORG.category)) 
@@ -240,11 +245,14 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		final DifferentialCache<CategAmountCellProto> cache;
 		final Map<Long, String> adjustmentTypes;
 		final Map<Long, String> roles;
+		final Map<Long, String> expenditureClasses;
 				
-		public FundingFetcherContext(DifferentialCache<CategAmountCellProto> cache, Map<Long, String> adjustmentTypes,  Map<Long, String> roles) {
+		public FundingFetcherContext(DifferentialCache<CategAmountCellProto> cache, 
+				Map<Long, String> adjustmentTypes,  Map<Long, String> roles, Map<Long, String> expenditureClasses) {
 			this.cache = cache;
 			this.adjustmentTypes = adjustmentTypes;
 			this.roles = roles;
+			this.expenditureClasses = expenditureClasses;
 		}
 		
 	}

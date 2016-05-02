@@ -96,6 +96,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 * the pseudocolumn of the header Splitter for cells which are funding flows
 	 */
 	public final static String PSEUDOCOLUMN_FLOW = "#amp#FundingFlow";
+	public final static String PSEUDOCOLUMN_EXP_CLASS = "#amp#ExpClass";
+	
+	public final static String UNDEFINED_CATEGORY = "Unassigned";
+	
 
 	@SuppressWarnings("serial")
 	public final static Map<String, String> columnDescriptions = new HashMap<String, String>() {{
@@ -230,6 +234,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_dimension(ColumnConstants.DONOR_CONTACT_ORGANIZATION, "v_donor_cont_org");
 		no_entity(ColumnConstants.ENVIRONMENT, "v_environment");
 		no_entity(ColumnConstants.EQUAL_OPPORTUNITY, "v_equalopportunity");
+		degenerate_dimension(ColumnConstants.EXPENDITURE_CLASS, "v_expenditure_class", catsDimension);
 		degenerate_dimension(ColumnConstants.FINANCIAL_INSTRUMENT, "v_financial_instrument", catsDimension);
 		degenerate_dimension(ColumnConstants.FINANCING_INSTRUMENT, "v_financing_instrument", catsDimension);
 		degenerate_dimension(ColumnConstants.FUNDING_STATUS, "v_funding_status", catsDimension);
@@ -488,6 +493,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		
 		addTrivialMeasures();
 		addFundingFlowMeasures();
+		addTaggedMeasures();
 	}
 		
 	protected void addMtefColumns() {
@@ -576,7 +582,11 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.PLEDGES_ACTUAL_PLEDGE, Constants.PLEDGE));
 		return this;
 	}
-	
+	private AmpReportsSchema addTaggedMeasures() {
+		addMeasure(new TaggedMeasure(MeasureConstants.ACTUAL_CLASSIFIED_EXPENDITURES, Constants.EXPENDITURE, "Actual", MetaCategory.EXPENDITURE_CLASS, PSEUDOCOLUMN_EXP_CLASS));
+		addMeasure(new TaggedMeasure(MeasureConstants.PLANNED_CLASSIFIED_EXPENDITURES, Constants.EXPENDITURE, "Planned", MetaCategory.EXPENDITURE_CLASS, PSEUDOCOLUMN_EXP_CLASS));
+		return this;
+	}	
 	private AmpReportsSchema addFundingFlowMeasures() {
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.REAL_DISBURSEMENTS, Constants.DISBURSEMENT, "Actual", true));
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.REAL_COMMITMENTS, Constants.COMMITMENT, "Actual", true));

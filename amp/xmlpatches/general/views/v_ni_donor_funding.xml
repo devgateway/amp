@@ -31,7 +31,8 @@
           ELSE NULL
          END AS disaster_response_code,
          fd.recipient_org_id AS recipient_org_id, fd.recipient_role_id AS recipient_role_id,
-         f.source_role_id AS source_role_id
+         f.source_role_id AS source_role_id,
+         fd.expenditure_class AS expenditure_class_id
 	FROM amp_funding f
 		JOIN amp_funding_detail fd ON fd.amp_funding_id = f.amp_funding_id
      
@@ -45,7 +46,8 @@
      NULL as capital_spend_percent, NULL as agreement_id,
      NULL AS disaster_response,
      NULL as recipient_org_id, NULL as recipient_role_id,
-     (SELECT amp_role_id FROM amp_role WHERE role_code='DN')
+     (SELECT amp_role_id FROM amp_role WHERE role_code='DN'),
+     NULL as expenditure_class_id
     FROM amp_annual_project_budget apb;
 
  <!-- now here it comes the debug counterpart -->
@@ -72,7 +74,8 @@
 			vdf.disaster_response_code,
 			vdf.recipient_org_id, recipient.name AS recipient_org_name,
 			vdf.recipient_role_id, recipient_role.name AS recipient_role_name,
-			vdf.source_role_id, source_role.name AS source_role_name
+			vdf.source_role_id, source_role.name AS source_role_name,
+			vdf.expenditure_class_id, ec.category_value AS expenditure_class_name
 			
 		FROM v_ni_donor_funding vdf 
 			JOIN amp_activity_version aa ON aa.amp_activity_id = vdf.amp_activity_id
@@ -90,6 +93,7 @@
 			LEFT JOIN amp_organisation recipient ON recipient.amp_org_id = vdf.recipient_org_id
 			LEFT JOIN amp_role recipient_role ON recipient_role.amp_role_id = vdf.recipient_role_id
 			LEFT JOIN amp_role source_role ON source_role.amp_role_id = vdf.source_role_id
+			LEFT JOIN amp_category_value ec ON ec.id = vdf.expenditure_class_id
 			
 		ORDER BY amp_activity_id;
         	</lang>

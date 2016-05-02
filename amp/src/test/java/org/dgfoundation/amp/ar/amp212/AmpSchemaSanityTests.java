@@ -1,6 +1,8 @@
 package org.dgfoundation.amp.ar.amp212;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -9,14 +11,11 @@ import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
-import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
-import org.dgfoundation.amp.testmodels.HardcodedActivities;
 import org.dgfoundation.amp.testmodels.NiReportModel;
-import org.dgfoundation.amp.testutils.ReportTestingUtils;
+import org.digijava.module.aim.helper.DateConversion;
 import org.junit.Test;
 
 /**
@@ -94,6 +93,10 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 	
 	@Test
 	public void testProjectImplementationDelay() {
+		Date toDate = new Timestamp(1461099600000l);
+		String corNowCalculation = String.format("%s", (DateConversion.getFormattedPeriod(
+				DateConversion.getPeriod(toDate, new Date())))).toLowerCase();
+		
 		NiReportModel cor = new NiReportModel("testcase for Project Implementation Delay")
 				.withHeaders(Arrays.asList(
 						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
@@ -106,7 +109,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 				        new ReportAreaForTests(new AreaOwner(81), "Project Implementation Delay", "20 days", "Project Title", "PID: original, proposed, actual"),
 				        new ReportAreaForTests(new AreaOwner(82), "Project Implementation Delay", "6 years 21 days", "Project Title", "PID: original, actual"),
 				        new ReportAreaForTests(new AreaOwner(83), "Project Title", "PID: original > actual"),
-				        new ReportAreaForTests(new AreaOwner(84), "Project Implementation Delay", "7 days", "Project Title", "PID: original"),
+				        new ReportAreaForTests(new AreaOwner(84), "Project Implementation Delay", corNowCalculation, "Project Title", "PID: original"),
 				        new ReportAreaForTests(new AreaOwner(85), "Project Implementation Delay", "20 days", "Project Title", "PID: original, proposed")      ));
 		runNiTestCase(
 				buildSpecification("testcase for Project Implementation Delay", 
@@ -127,10 +130,10 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 						"(Actual Arrears: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Planned Arrears: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
 					.withWarnings(Arrays.asList())
 					.withBody(      new ReportAreaForTests(null)
-				      .withContents("Project Title", "", "Totals-Actual Arrears", "96", "Totals-Planned Arrears", "36")
+				      .withContents("Project Title", "", "Totals-Actual Arrears", "66", "Totals-Planned Arrears", "36")
 				      .withChildren(
 				        new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs"),
-				        new ReportAreaForTests(new AreaOwner(80), "Project Title", "arrears test", "Totals-Actual Arrears", "96", "Totals-Planned Arrears", "36")      ));
+				        new ReportAreaForTests(new AreaOwner(80), "Project Title", "arrears test", "Totals-Actual Arrears", "66", "Totals-Planned Arrears", "36")      ));
 		runNiTestCase(
 				buildSpecification("Testcase for Actual and Planned Arrears", 
 						Arrays.asList(ColumnConstants.PROJECT_TITLE), 

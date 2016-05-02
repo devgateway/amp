@@ -693,12 +693,6 @@ public class EditActivity extends Action {
         /* End - Insert Categories */
 
         /* Injecting documents into session */
-
-        // Since this action is used for previews only
-        // We can set this flag to true
-        String[] tmp = {"true"};
-        //request.getParameterMap().put("viewAllRights", tmp);
-
         SelectDocumentDM.clearContentRepositoryHashMap(request);
         
         if (false) // debug code for AMP-17265
@@ -715,13 +709,7 @@ public class EditActivity extends Action {
         	logger.error("done scanning DB");
         	//Node documentNode	= DocumentManagerUtil.getReadNode(uuid, myRequest);
         }
-        //Added because of a problem with the save as draft and redirect; also because of problem with logframe link from activity form
-        try {
-        	//this does not work, throws java.lang.IllegalStateException: No modifications are allowed to a locked ParameterMap
-        	request.getParameterMap().put("viewAllRights", tmp);
-		} catch (Exception e) {
-			addErrorMessageToForm(eaForm, e);
-		}
+
 
         if (activity.getActivityDocuments() != null && activity.getActivityDocuments().size() > 0) {
         	ActivityDocumentsUtil.injectActivityDocuments(request, activity.getActivityDocuments());

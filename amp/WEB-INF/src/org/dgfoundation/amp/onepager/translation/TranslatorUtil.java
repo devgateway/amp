@@ -59,17 +59,9 @@ public final class TranslatorUtil {
 	 * only works if called from within Wicket
 	 * @return
 	 */
-    public static List<String> getLocaleCache(){
-        if (localeCache == null){
-            try{
-                AmpAuthWebSession session = (AmpAuthWebSession) Session.get();
-                Site site = session.getSite();
-                localeCache = getLocaleCache(site);
-            } finally {
-            }
-        }
-
-        return localeCache;
+    public static List<String> getLocaleCache() {
+    	AmpAuthWebSession session = (AmpAuthWebSession) Session.get();
+    	return getLocaleCache(session.getSite());
     }
 
     /**
@@ -77,8 +69,7 @@ public final class TranslatorUtil {
      * @param site
      * @return
      */
-    public static List<String> getLocaleCache(Site site)
-    {
+    public synchronized static List<String> getLocaleCache(Site site) {
         if (localeCache == null) {
         	Set<Locale> list = site.getTranslationLanguages();
         	localeCache = new ArrayList<String>();

@@ -90,4 +90,9 @@ public class Locale implements Serializable {
         }
         return leftToRight.booleanValue() ? "ltr": "rtl";
     }
+    
+    @Override
+    public String toString() {
+    	return this.code;
+    }
 }

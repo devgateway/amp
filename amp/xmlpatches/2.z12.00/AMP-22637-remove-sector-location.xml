@@ -11,6 +11,8 @@
 			<lang delimiter=";" type="postgres">	
 				DROP VIEW IF EXISTS v_sectorloc;
 				DELETE FROM amp_columns_filters WHERE column_id IN (SELECT columnid FROM amp_columns WHERE extractorview = 'v_sectorloc');
+				DELETE FROM amp_report_column WHERE columnid IN (SELECT columnid FROM amp_columns WHERE extractorview = 'v_sectorloc');
+				DELETE FROM amp_report_hierarchy WHERE columnid IN (SELECT columnid FROM amp_columns WHERE extractorview = 'v_sectorloc');
 				DELETE FROM amp_columns WHERE extractorview = 'v_sectorloc';
 				DELETE FROM amp_fields_templates WHERE field IN (SELECT id FROM amp_fields_visibility WHERE name = 'Sector Location');
 				DELETE FROM amp_fields_visibility WHERE name = 'Sector Location';

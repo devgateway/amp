@@ -189,13 +189,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	}
 	
 	protected int getReportSelectedYear() {
-		AmpReportFilters filters = (AmpReportFilters) currentReport.get().getFilters();
-		Integer year = filters == null ? null : filters.getComputedYear();
-		// if not set, then it means Current Year
-		if (year == null) {
-			year = Calendar.getInstance().get(Calendar.YEAR);
-		}
-		return year;
+		return AmpReportFilters.getReportSelectedYear(currentReport.get());
 	}
 	
 	/**

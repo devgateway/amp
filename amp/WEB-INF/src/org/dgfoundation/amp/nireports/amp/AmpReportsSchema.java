@@ -28,6 +28,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
@@ -65,12 +67,13 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
+import org.dgfoundation.amp.nireports.schema.NiTransactionContextMeasure;
+import org.dgfoundation.amp.nireports.schema.NiTransactionMeasure;
 import org.dgfoundation.amp.nireports.schema.PidTextualTokenBehaviour;
+import org.dgfoundation.amp.nireports.schema.TrivialMeasureBehaviour;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-
-import com.google.common.base.Function;
 
 /**
  * the big, glorious, immaculate, AMP Reports schema
@@ -522,11 +525,43 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	}
 	
 	protected void addComputedLinearMeasures() {
+		addDerivedMeasure(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS,
+				AmpReportsScratchpad::getComputedMeasuresBlock, 
+				(syb, cell) -> isBetween(cell.amount.getJulianDayCode(), syb.currentYearStartJulian, syb.previousMonthStartJulian - 1),
+				TrivialMeasureBehaviour.getTotalsOnlyInstance());
+		
+		addDerivedMeasure(MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS,
+				AmpReportsScratchpad::getComputedMeasuresBlock,
+				(syb, cell) -> isBetween(cell.amount.getJulianDayCode(), syb.previousMonthStartJulian, syb.previousMonthEndJulian),
+				TrivialMeasureBehaviour.getTotalsOnlyInstance());
+		
 		addTrivialFilterMeasure(MeasureConstants.PLEDGES_COMMITMENT_GAP, 
 			MeasureConstants.ACTUAL_COMMITMENTS, -1,
 			MeasureConstants.PLEDGES_ACTUAL_PLEDGE, +1);
 	}
 
+	/**
+	 * adds a computed-filtering measure which is derived from an another measure by the means of supplementarily filtering by a given function
+	 * @param measureName the measure you are creating
+	 * @param baseMeasureName the measure based on which you are creating
+	 * @param contextBuilder the per-fetch context to build (precalculated info for the supplemental filterer)
+	 * @param extraFilter the per-cell filterer
+	 * @param behaviour the behaviour of the column
+	 */
+	protected<K> void addDerivedMeasure(String measureName, String baseMeasureName, 
+			Function<NiReportsEngine, K> contextBuilder, 
+			BiFunction<K, CategAmountCell, Boolean> extraFilter,
+			Behaviour<?> behaviour) {
+		
+		NiTransactionMeasure baseMeasure = (NiTransactionMeasure) getMeasures().get(baseMeasureName);
+		NiUtils.failIf(baseMeasure == null, String.format("you are trying to define measure %s based on nonexistant base measure %s", measureName, baseMeasureName));
+		NiUtils.failIf(extraFilter == null, String.format("you are trying to define measure %s based on null extraFilter", measureName));
+		
+		BiFunction<K, CategAmountCell, Boolean> crit = (context, cell) -> baseMeasure.criterion.test(cell) && extraFilter.apply(context, cell);
+		
+		addMeasure(new NiTransactionContextMeasure<K>(measureName, contextBuilder, crit, behaviour, measureDescriptions.get(measureName)));
+	}
+	
 	protected void addTrivialFilterMeasure(String measureName, Object...def) {
 		addLinearFilterMeasure(measureName, measureDescriptions.get(measureName), def);
 	}
@@ -846,5 +881,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 			default:
 				return NamedElemType.UNKNOWN;
 		}
+	}
+	
+	public final static boolean isBetween(long value, long min, long max) {
+		return value >= min && value <= max;
 	}
 }

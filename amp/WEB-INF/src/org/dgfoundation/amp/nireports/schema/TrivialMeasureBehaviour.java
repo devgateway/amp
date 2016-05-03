@@ -24,12 +24,24 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
  */
 public class TrivialMeasureBehaviour implements Behaviour<NiAmountCell> {
 	public static TrivialMeasureBehaviour getInstance() {return instance;}
+	public static TrivialMeasureBehaviour getTotalsOnlyInstance() {return totalsOnlyInstance;}
+	
+	protected final TimeRange timeRange;
+	
 	private final static TrivialMeasureBehaviour instance = new TrivialMeasureBehaviour();
-	protected TrivialMeasureBehaviour() {}
+	private final static TrivialMeasureBehaviour totalsOnlyInstance = new TrivialMeasureBehaviour(TimeRange.NONE);
+	
+	protected TrivialMeasureBehaviour() {
+		this(TimeRange.MONTH);
+	}
+	
+	protected TrivialMeasureBehaviour(TimeRange timeRange) {
+		this.timeRange = timeRange;
+	}
 	
 	@Override
 	public TimeRange getTimeRange() {
-		return TimeRange.MONTH;
+		return /*TimeRange.MONTH; */ timeRange;
 	}
 	
 	@Override

@@ -126,16 +126,17 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 	@Test
 	public void testPlannedActualArrears() {
 		NiReportModel cor = new NiReportModel("Testcase for Actual and Planned Arrears")
-				.withHeaders(Arrays.asList(
-						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
-						"(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 2))",
-						"(Actual Arrears: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Planned Arrears: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
-					.withWarnings(Arrays.asList())
-					.withBody(      new ReportAreaForTests(null)
-				      .withContents("Project Title", "", "Totals-Actual Arrears", "66", "Totals-Planned Arrears", "36")
-				      .withChildren(
-				        new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs"),
-				        new ReportAreaForTests(new AreaOwner(80), "Project Title", "arrears test", "Totals-Actual Arrears", "66", "Totals-Planned Arrears", "36")      ));
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
+					"(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 2))",
+					"(Actual Arrears: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Planned Arrears: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+			      .withContents("Project Title", "", "Totals-Actual Arrears", "132,000", "Totals-Planned Arrears", "72,000")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs"),
+			        new ReportAreaForTests(new AreaOwner(80), "Project Title", "arrears test", "Totals-Actual Arrears", "132,000", "Totals-Planned Arrears", "72,000")      ));
+
 		runNiTestCase(
 				buildSpecification("Testcase for Actual and Planned Arrears", 
 						Arrays.asList(ColumnConstants.PROJECT_TITLE), 

@@ -33,7 +33,7 @@ public class OfflineTests
 		
 		TestSuite suite = new TestSuite(OfflineTests.class.getName());
 		
-		suite.addTest(new JUnit4TestAdapter(GraphAlgorithmsTests.class));	
+		suite.addTest(new JUnit4TestAdapter(GraphAlgorithmsTests.class));
 		suite.addTest(new JUnit4TestAdapter(InclusiveRunnerTests.class));
 		suite.addTest(new JUnit4TestAdapter(MetaInfoTests.class)); 
 		suite.addTest(new JUnit4TestAdapter(FundingFlowsInnerTests.class));
@@ -47,6 +47,7 @@ public class OfflineTests
 		suite.addTest(new JUnit4TestAdapter(PaginationTests.class));
 		suite.addTest(new JUnit4TestAdapter(FormattingTests.class));
 		suite.addTest(new JUnit4TestAdapter(OffDbNiReportFilteringTests.class));
+		suite.addTest(new JUnit4TestAdapter(UtilsTests.class));
 		
 		return suite;
 	}

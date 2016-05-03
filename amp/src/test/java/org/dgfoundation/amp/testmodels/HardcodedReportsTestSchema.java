@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -59,8 +60,6 @@ import org.dgfoundation.amp.testmodels.nicolumns.StatusCells;
 import org.dgfoundation.amp.testmodels.nicolumns.TypeOfAssistanceCells;
 import org.dgfoundation.amp.testmodels.nicolumns.ZoneCells;
 import org.digijava.module.aim.helper.Constants;
-
-import com.google.common.base.Function;
 
 import static org.dgfoundation.amp.testmodels.TestModelConstants.*;
 

@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.newreports;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,5 +78,15 @@ public class AmpReportFilters extends ReportFiltersImpl {
 	
 	protected <T> void addFilterRule(Map<T, List<FilterRule>> filterRules, T elem, FilterRule filterRule) {
 		filterRules.computeIfAbsent(elem, ignored -> new ArrayList<>()).add(filterRule);
+	}
+	
+	public static int getReportSelectedYear(ReportSpecification spec) {
+		AmpReportFilters filters = (AmpReportFilters) spec.getFilters();
+		Integer year = filters == null ? null : filters.getComputedYear();
+		// if not set, then it means Current Year
+		if (year == null) {
+			year = Calendar.getInstance().get(Calendar.YEAR);
+		}
+		return year;
 	}
 }

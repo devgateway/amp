@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.nireports.amp;
 
 import java.sql.Connection;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -10,12 +11,14 @@ import java.util.function.Function;
 
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
+import org.dgfoundation.amp.algo.Memoizer;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.algo.timing.InclusiveTimer;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.nireports.Cell;
@@ -38,7 +41,12 @@ import org.digijava.module.aim.util.CurrencyUtil;
  *
  */
 public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
-	 
+	
+	/**
+	 * FOR TESTCASES ONLY. In case it is non-null, for computed measures this value will be used in lieu of LocalDate.now()
+	 */
+	public static LocalDate forcedNowDate;
+	
 	/**
 	 * caching area for i18n fetchers
 	 */
@@ -50,6 +58,7 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	public final ReportEnvironment environment;
 	public final NiReportsEngine engine;
 	public final long lastEventId;
+	public final Memoizer<SelectedYearBlock> computedMeasuresBlock;
 	
 	/**
 	 * the currency used to render the report - do not write anything to it!
@@ -60,6 +69,8 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 
 	public AmpReportsScratchpad(NiReportsEngine engine) {
 		this.engine = engine;
+		this.computedMeasuresBlock =  new Memoizer<>(() -> SelectedYearBlock.buildFor(this.engine.spec, forcedNowDate == null ? LocalDate.now() : forcedNowDate));
+		
 		try {this.connection = PersistenceManager.getJdbcConnection();}
 		catch(Exception e) {throw AlgoUtils.translateException(e);}
 		this.usedCurrency = engine.spec.getSettings() == null || engine.spec.getSettings().getCurrencyCode() == null ? AmpARFilter.getDefaultCurrency() : 
@@ -108,6 +119,10 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	
 	public static AmpReportsScratchpad get(NiReportsEngine engine) {
 		return (AmpReportsScratchpad) engine.schemaSpecificScratchpad;
+	}
+	
+	public static SelectedYearBlock getComputedMeasuresBlock(NiReportsEngine engine) {
+		return get(engine).computedMeasuresBlock.get();
 	}
 	
 	@Override

@@ -2,6 +2,7 @@ package org.dgfoundation.amp.nireports;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -508,7 +509,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		VSplitStrategy restoreMeasures = VSplitStrategy.build(
 			cell -> new ComparableValue<String>(cell.getEntity().getName(), AmpCollections.indexOf(actualMeasures, cell.getEntity().getName())),
 			cat -> behaviours.get(cat.getValue()),
-			/*spec.isDisplayEmptyFundingColumns() ? null : */z -> getAsComparable(actualMeasures),
+			/*spec.isDisplayEmptyFundingColumns() ? null : */z -> getAsComparable(actualMeasures.stream().filter(zz -> behaviours.containsKey(zz) && behaviours.get(zz).getTimeRange() != TimeRange.NONE).collect(Collectors.toList())),
 			PSEUDOCOLUMN_MEASURE);
 		GroupColumn z = res.verticallySplitByCategory(restoreMeasures, fundingColumn.getParent());
 		return z;
@@ -522,7 +523,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	 * gets a set as a list of ComparableValue(elem, index-of-elem-in-set)
 	 * @return
 	 */
-	protected<K> List<ComparableValue<K>> getAsComparable(Set<K> in) {
+	protected<K> List<ComparableValue<K>> getAsComparable(Collection<K> in) {
 		List<ComparableValue<K>> res = new ArrayList<>();
 		int i = 0;
 		for(K item:in) {

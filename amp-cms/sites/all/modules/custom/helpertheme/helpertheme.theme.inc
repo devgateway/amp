@@ -356,16 +356,20 @@ function theme_amp_report_info($variables) {
 
   $actions = array();
 
-  $svgicon = helpertheme_get_svg_icons('export', array('width' => '1.2em', 'height' => '1.2em'));
-  $l_args = array(
-    'html' => TRUE,
-    'external' => TRUE,
-    'fragment' => 'export',
-    'attributes' => array(
-      'class' => array('action-link', 'action-export'),
-    ),
-  );
-  $actions[] = l($svgicon . t('Export'), '', $l_args);
+  // Use export by default, but check the settings from Generic / Misc section.
+  $use_export = variable_get('misc_use_export_buttons', 1);
+  if ($use_export) {
+    $svgicon = helpertheme_get_svg_icons('export', array('width' => '1.2em', 'height' => '1.2em'));
+    $l_args = array(
+      'html' => TRUE,
+      'external' => TRUE,
+      'fragment' => 'export',
+      'attributes' => array(
+        'class' => array('action-link', 'action-export'),
+      ),
+    );
+    $actions[] = l($svgicon . t('Export'), '', $l_args);
+  }
 
   $svgicon = helpertheme_get_svg_icons('link', array('width' => '1.2em', 'height' => '1.2em'));
   $l_args = array(

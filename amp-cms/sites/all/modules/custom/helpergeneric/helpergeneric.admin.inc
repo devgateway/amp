@@ -264,6 +264,21 @@ function helpergeneric_settings_form($form, &$form_state) {
     '#tree' => FALSE,
   );
 
+  // Miscellaneous settings go here.
+  // Just to have the right vars, prefix all with misc_.
+  $form['misc'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Miscellaneous'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['misc']['misc_use_export_buttons'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show Export Buttons'),
+    '#description' => t('If you want to hide the export functionality, uncheck this option.'),
+    '#default_value' => variable_get('misc_use_export_buttons', 1),
+  );
+
   $form['#validate'][] = 'helpergeneric_settings_form_validate';
   $form['#submit'][] = 'helpergeneric_settings_form_submit';
 
@@ -334,7 +349,7 @@ function helpergeneric_settings_form_clear_cache_submit($form, &$form_state) {
 function helpergeneric_settings_form_submit($form, &$form_state) {
   global $theme;
 
-  foreach (array('site_name', 'site_mail') as $var) {
+  foreach (array('site_name', 'site_mail', 'misc_use_export_buttons') as $var) {
     if (isset($form_state['values'][$var]))
     variable_set($var, $form_state['values'][$var]);
   }

@@ -37,8 +37,7 @@ var AMPSettings = Backbone.View.extend({
 						"1": raw_settings.currencyCode,
 						"2": raw_settings.calendar.ampFiscalCalId,
 						"3": raw_settings.unitsMultiplier						
-					};
-				
+					};				
 				
 				if(raw_settings.columnFilterRules.YEAR !== null && raw_settings.columnFilterRules.YEAR !== undefined ){
 					settings.yearRange = {};
@@ -57,6 +56,12 @@ var AMPSettings = Backbone.View.extend({
 						var foundCurrency = _.find(data, function(item) {return item.id === '1'});
 						window.currentSettings["1"] = _.find(foundCurrency.options, function(item) { return item.id === foundCurrency.defaultId}).id;
 					}
+					
+					var hideEditableFormats = _.findWhere(data, {"id": Settings.AMP_GLOBAL_SETTINGS.HIDE_EDITABLE_EXPORTS})
+					if(hideEditableFormats){
+						window.currentSettings[Settings.AMP_GLOBAL_SETTINGS.HIDE_EDITABLE_EXPORTS] = hideEditableFormats.defaultId;
+					}
+					
 					
 					// Keep link between calendars and currencies.
 					var calendarCurrencies = _.findWhere(data, {"id": self.SETTINGS["calendarCurrencies"]});

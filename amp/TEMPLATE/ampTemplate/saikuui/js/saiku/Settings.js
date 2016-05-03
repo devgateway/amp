@@ -73,6 +73,9 @@ var Settings = {
     DEFAULT_PAGE_TITLE: 'Aid Management Platform - Reports'
 };
 
+Settings.AMP_GLOBAL_SETTINGS = {
+		HIDE_EDITABLE_EXPORTS: 'hide-editable-export-formats-public-view'
+};
 /**
  * Extend settings with query parameters
  */

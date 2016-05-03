@@ -29,18 +29,31 @@ module.exports = BaseControlView.extend({
   },
 
   render: function() {
+	var self = this;
     BaseControlView.prototype.render.apply(this);
     var renderedTemplate = $(this.template({title: this.title}));
 
     // needed to wait until 'el' exists before creating and rendering, or events break.
-    this.exportMapToolView = new ExportMapToolView({app: this.app, el:renderedTemplate.find('.form-group')});
-    this.exportMapToolView.render();
+    
+    
+	  this.app.data.settings.load().then(function(){
+		  self.app.data.user.load().then(function() {		   
+			  var hideEditableFormatSetting = _.find(self.app.data.settings.models, function(item) {
+				  return item.get('id') === 'hide-editable-export-formats-public-view';
+			  });
+			  if(!(hideEditableFormatSetting !== undefined && hideEditableFormatSetting.get('defaultId') == "true" && self.app.data.user.get("logged") == false)){
+				  self.exportMapToolView = new ExportMapToolView({app: self.app, el:renderedTemplate.find('.form-group')});
+				  self.exportMapToolView.render();
+			  }  
+		  });
+		});
+	  
+    
 
     this.$('.content').html(renderedTemplate);
 
     return this;
-  },
-
+  },  
   loadSerialized: function(serializedState) {
     var stateBlob = this.savedMaps.model.deserializese(serializedState);
     this.app.state.load(stateBlob);

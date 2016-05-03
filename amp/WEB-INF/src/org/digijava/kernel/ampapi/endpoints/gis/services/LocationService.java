@@ -88,6 +88,7 @@ public class LocationService {
 	 * @return
 	 */
 	public JsonBean getTotals(String admlevel, JsonBean config) {
+	    EndpointUtils.useNiReports(true);
 		JsonBean retlist = new JsonBean();
 		HardCodedCategoryValue admLevelCV = null;
 		switch (admlevel) {

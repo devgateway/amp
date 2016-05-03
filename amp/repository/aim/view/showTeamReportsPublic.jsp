@@ -484,24 +484,24 @@ function submitForm(action){
 																						<c:set var="translation">
 																							<digi:trn>Get report in Excel format</digi:trn>&nbsp;
 																						</c:set>
-																						<digi:link style="cursor:pointer"
+																						<a style="cursor:pointer"
 																							onclick="$.downloadReport(${report.ampReportId}, 'xls')" 
 																							title="${translation}">
 																							<digi:img hspace="0" vspace="0" height="16"	width="16" 
 																							src="/TEMPLATE/ampTemplate/images/icons/xls.gif" border="0" />
-																						</digi:link>
+																						</a>
 																						&nbsp;
 																						<c:set var="translation">
 																							<digi:trn>Get report in PDF format</digi:trn>&nbsp;
 																						</c:set>
-																						<digi:link style="cursor:pointer"
+																						<a style="cursor:pointer"
 																							onclick="$.downloadReport(${report.ampReportId}, 'pdf')" 
 																							title="${translation}">
 																							<digi:img hspace="0" vspace="0" height="16"
 																								width="16"
 																								src="/TEMPLATE/ampTemplate/images/icons/pdf.gif"
 																								border="0" />
-																						</digi:link>
+																						</a>
 																						-->
 																						<!-- Show Printer Friendly icon removed with AMP-22055 -->
 																						<!--  
@@ -587,7 +587,7 @@ function submitForm(action){
 																</c:if>
 																<c:if test="${pageidx < maxpages}">&nbsp;|&nbsp;</c:if>
 															</logic:iterate>
-														</c:if> 
+														</c:if>
 														<c:if test="${aimTeamReportsForm.currentPage+1 != aimTeamReportsForm.totalPages}">
 															<c:if test="${aimTeamReportsForm.currentPage+1 > aimTeamReportsForm.totalPages}">
 																<c:set target="${urlParamsNext}" property="page" value="${aimTeamReportsForm.currentPage}" />

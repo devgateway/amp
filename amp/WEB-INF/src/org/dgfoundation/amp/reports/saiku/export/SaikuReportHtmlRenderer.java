@@ -117,7 +117,7 @@ public class SaikuReportHtmlRenderer {
 		} else {
 			// Totals are rendered in another renderTableTotals
 			if (level == 0) {
-				return;
+				tblData.append("<tr>");
 			}
 			
 			int hierCnt = report.spec.getHierarchies().size();
@@ -206,14 +206,10 @@ public class SaikuReportHtmlRenderer {
 	 * @param reportContents
 	 */
 	private void renderTableTotals(StringBuilder tableData, ReportArea reportContents) {
-		if (reportContents.getChildren() == null) {
-			tableData.append("<tr>");
-		}
-		
 		IntWrapper intWrapper = new IntWrapper();
 		report.leafHeaders.stream().filter(roc -> !isHiddenColumn(roc.originalColumnName)).forEach(roc -> {
-			tableData.append("<td class='measure'>");
-			if (intWrapper.value == 0 && report.spec.getColumns().size() > 0) {
+			tableData.append("<td class='total measure'>");
+			if (intWrapper.value == 0) {
 				tableData.append("<b>" + TranslatorWorker.translateText("Report Totals") + "");
 				tableData.append("(" + report.reportContents.getNrEntities() + ")</b>");
 				intWrapper.inc();

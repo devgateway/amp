@@ -362,7 +362,7 @@ function collapseAll() {
 			</a>
 
 			<c:set var="hideWordSetting" scope="page" value="false"/>
-			<gs:test name="<%=org.digijava.module.aim.helper.GlobalSettingsConstants.HIDE_WORD_EXPORT_PUBLIC_VIEW%>" compareWith="true" onTrueEvalBody="true">
+			<gs:test name="<%=org.digijava.module.aim.helper.GlobalSettingsConstants.HIDE_EDITABLE_EXPORT_FORMATS_PUBLIC_VIEW%>" compareWith="true" onTrueEvalBody="true">
 						<c:set var="hideWordSetting" scope="page" value="true"/>
 			</gs:test>
 			<c:if test="${(not hideWordSetting) || (hideWordSetting && sessionScope.currentMember != null)}">

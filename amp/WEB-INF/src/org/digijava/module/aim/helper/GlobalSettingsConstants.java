@@ -203,7 +203,7 @@ public class GlobalSettingsConstants {
     
     public static final String  DEFAULT_VALUE_FOR_ACTIVITY_BUDGET = "Default value for Activity Budget";
     
-    public static final String  HIDE_WORD_EXPORT_PUBLIC_VIEW = "Hide word export public view";
+    public static final String  HIDE_EDITABLE_EXPORT_FORMATS_PUBLIC_VIEW = "Hide editable export formats public view";
     /**
      * fields which, although existing in the database, should be rendered with a display: none on the GlobalSettings form so that the user never has a chance of changing their value
      */

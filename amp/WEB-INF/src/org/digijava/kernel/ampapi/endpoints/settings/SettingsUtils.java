@@ -433,6 +433,13 @@ public class SettingsUtils {
 				GlobalSettingsConstants.DEFAULT_DATE_FORMAT,
 				new SettingOptions.Option(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT))));
 
+		settings.add(new SettingOptions(
+				"hide-editable-export-formats-public-view",
+				GlobalSettingsConstants.HIDE_EDITABLE_EXPORT_FORMATS_PUBLIC_VIEW,
+				new SettingOptions.Option(
+						FeaturesUtil
+								.getGlobalSettingValue(GlobalSettingsConstants.HIDE_EDITABLE_EXPORT_FORMATS_PUBLIC_VIEW))));
+		
 		// Workspace Settings
 		if (MenuUtils.getCurrentView() == AmpView.TEAM) {
 			settings.add(new SettingOptions("team-id", "team-id", new SettingOptions.Option(EndpointUtils

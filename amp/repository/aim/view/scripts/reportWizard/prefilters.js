@@ -51,7 +51,17 @@ function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessa
 }
 
 Filters.prototype.success	= function (o) {
+	debugger;
 	if ( o.responseText.length > 2 ) {
+		try {
+			var errorObj = JSON.parse(o.responseText);
+		} catch (err) {
+			console.log(err);
+		}
+		if(typeof errorObj == 'object') {
+			this.filterPanel.destroy();
+			window.location.assign(window.location.origin+"/aim");
+		}
 		//this.filterPanel.hide();
 		this.filterPanel.setBody( o.responseText );
 		this.filterTabs	= new YAHOO.widget.TabView('tabview_container');

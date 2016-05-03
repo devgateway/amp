@@ -3,6 +3,9 @@
  */
 package org.digijava.module.aim.action;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -18,6 +21,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -86,6 +90,9 @@ import org.hibernate.Session;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
+import static org.dgfoundation.amp.ar.ReportContextData.getCurrentReportContextId;
+import static org.dgfoundation.amp.ar.ReportContextData.getReportContextMap;
+
 /**
  * @author mihai
  * 
@@ -119,6 +126,21 @@ public class ReportsFilterPicker extends Action {
 		//filterForm.setAmpReportId(ReportContextData.getFromRequest().getAmp);
         boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));
         boolean showWorkspaceFilter = true;
+
+		String reportId = getCurrentReportContextId(request, false);
+		Map<String, ReportContextData> map = getReportContextMap(request.getSession());
+		if(reportId == null || !map.containsKey(reportId)) {
+			response.setContentType("text/plain");
+			PrintWriter out = response.getWriter();
+			try {
+				out.print("{\"error\": {\"code\": 401, \"message\": \"Report id not found or invalid\"}}");
+				out.flush();
+			} finally {
+				out.close();
+			}
+			return null;
+		}
+
         TeamMember teamMember = (TeamMember) request.getSession().getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
         AmpTeam ampTeam = null;
         if (teamMember != null) {

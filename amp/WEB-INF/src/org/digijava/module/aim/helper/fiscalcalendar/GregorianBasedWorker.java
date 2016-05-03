@@ -136,8 +136,9 @@ public class GregorianBasedWorker implements ICalendarWorker {
 			ComparableMonth cm = monthCache.get(fiscalMonth);
 
 			if (cm == null) {
+			    int actualFiscalMonth = internalCalendar.get(GregorianCalendar.MONTH);
 				String monthStr = dateFormatSymbols.getMonths()[fiscalMonth];
-				cm = new ComparableMonth(fiscalMonth, monthStr);
+				cm = new ComparableMonth(actualFiscalMonth, monthStr);
 				monthCache.put(fiscalMonth, cm);
 			}
 

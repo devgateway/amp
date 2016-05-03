@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-22700</jira>
+	<keyword>Views</keyword>
+	<author>acartaleanu</author>
+	<description>recreate view, this will always be the last version of the view</description>
+	<trigger type="all">
+		<condition type="custom">
+			<script returnVar="val">
+				<lang type="sql">
+					SELECT settingsvalue FROM amp_global_settings where settingsname='Recreate the views on the next server restart';
+				</lang>
+			</script>
+ 			<test>val.equalsIgnoreCase("true")</test>
+		</condition>
+	</trigger> 
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+			DROP VIEW IF EXISTS v_calculated_project_life;
+			
+			CREATE OR REPLACE VIEW v_calculated_project_life AS
+				SELECT
+					amp_activity_id, rawval AS calculated_project_life 
+				FROM 
+					(SELECT 
+						amp_activity_id, 
+						To_char(actual_completion_date, 'J') :: Integer 
+						- To_char(proposed_start_date, 'J') :: Integer
+							AS rawval 
+					FROM amp_activity_version) 
+				AS rawvals
+				WHERE rawval IS NOT NULL;
+
+        </lang>
+		</script>
+	</apply>
+</tns:patch>

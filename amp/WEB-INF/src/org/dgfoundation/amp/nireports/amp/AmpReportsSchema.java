@@ -329,8 +329,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_entity(ColumnConstants.SECTOR_MINISTRY_CONTACT_TITLE, "v_sect_min_cont_title");
 		no_entity(ColumnConstants.SUB_VOTE, "v_subvote");
 		no_entity(ColumnConstants.VOTE, "v_vote");
-		//Project Implementation Delay uses a separate behaviour
-		no_entity(ColumnConstants.PROJECT_IMPLEMENTATION_DELAY, "v_project_impl_delay", PidTextualTokenBehaviour.instance);
 		
 		single_dimension(ColumnConstants.DONOR_AGENCY, "v_ni_donor_orgs", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
 		single_dimension(ColumnConstants.DONOR_GROUP, "v_ni_donor_orgsgroups", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION_GROUP));
@@ -434,6 +432,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		with_percentage(ColumnConstants.DISTRICT, "v_districts", LOC_DIM_USG, LEVEL_DISTRICT);
 		
 		addMtefColumns();
+		addPseudoComputedColumns();
 		addColumn(new PPCColumn(ColumnConstants.PROPOSED_PROJECT_AMOUNT, "v_proposed_cost"));
 		addColumn(new PPCColumn(ColumnConstants.REVISED_PROJECT_AMOUNT, "v_revised_project_cost"));
 		
@@ -499,7 +498,20 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_entity(ColumnConstants.PLEDGES_DETAIL_START_DATE, "v_pledges_funding_start_date");
 		no_entity(ColumnConstants.PLEDGES_DETAIL_END_DATE, "v_pledges_funding_end_date");
 	}
-		
+	/**
+	 * Adds pseudocomputed columns -- calculations are done in SQL, but the data isn't extracted from a table directly
+	 */
+	protected void addPseudoComputedColumns() {
+		no_entity(ColumnConstants.AGE_OF_PROJECT_MONTHS, "v_project_age");
+		no_entity(ColumnConstants.CALCULATED_PROJECT_LIFE, "v_calculated_project_life");
+		no_entity(ColumnConstants.OVERAGE, "v_overage");
+		no_entity(ColumnConstants.OVERAGE_PROJECT, "v_project_overage");
+		no_entity(ColumnConstants.PROJECT_AGE_RATIO, "v_project_age_ratio");
+		no_entity(ColumnConstants.PROJECT_PERIOD, "v_project_period");
+		//Project Implementation Delay uses a separate behaviour: '0' instead of '' for empty cells
+		no_entity(ColumnConstants.PROJECT_IMPLEMENTATION_DELAY, "v_project_impl_delay", PidTextualTokenBehaviour.instance);
+	}
+	
 	protected void addMtefColumns() {
 		for(int mtefYear:DynamicColumnsUtil.getMtefYears()) {
 			addColumn(new MtefColumn("MTEF " + mtefYear + "/" + (mtefYear + 1), mtefYear, "MTEF", false, Optional.empty()));

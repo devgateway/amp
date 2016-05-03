@@ -23,6 +23,7 @@ var StateLoadError = require('amp-state/index').StateLoadError;
 var Translator = require('amp-translate');
 var Filter = require('amp-filter/src/main');
 var Settings = require('./models/settings-collection');
+var UserModel = require('./models/amp-user.js');
 var SavedDashes = require('./models/saved-dashes-collection.js');
 
 var MainView = require('./views/main');
@@ -48,6 +49,7 @@ _.extend(App.prototype, BackboneDash.Events, {
 
     try {
     	this.settings = new Settings([], { app: this });
+    	this.user = new UserModel()
 
       // check our support level
       this.browserIssues = supportCheck();
@@ -198,7 +200,7 @@ _.extend(App.prototype, BackboneDash.Events, {
 
 module.exports = App;
 
-},{"./backbone-dash":3,"./check-support":12,"./models/saved-dashes-collection.js":21,"./models/settings-collection":23,"./views/fail":32,"./views/main":34,"amp-filter/src/main":64,"amp-state/index":78,"amp-translate":79,"amp-url/index":80,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
+},{"./backbone-dash":3,"./check-support":12,"./models/amp-user.js":13,"./models/saved-dashes-collection.js":21,"./models/settings-collection":23,"./views/fail":32,"./views/main":34,"amp-filter/src/main":64,"amp-state/index":78,"amp-translate":79,"amp-url/index":80,"jquery":"jquery","underscore":"underscore"}],3:[function(require,module,exports){
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -1792,7 +1794,7 @@ module.exports = function() {
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
-  url: '/rest/security/user',
+  url: '/rest/security/layout',
 
   /************
    * email is null from server when not logged in or when workspace not set yet.
@@ -2925,7 +2927,7 @@ module.exports = BackboneDash.View.extend({
       empty: null
     });
 
-    _.bindAll(this, 'showChart', 'failLoading');
+    _.bindAll(this, 'showChart', 'failLoading','hideExportInPublicView');
     if (this.getTTContent) { _.bindAll(this, 'getTTContent'); }
     if (this.chartClickHandler) { _.bindAll(this, 'chartClickHandler'); }
   },
@@ -2938,6 +2940,7 @@ module.exports = BackboneDash.View.extend({
       util: util
     };
     this.$el.html(template(renderOptions));
+    this.hideExportInPublicView();
     this.message = this.$('.dash-chart-diagnostic');
     this.chartContainer = this.$('.dash-chart-wrap');
 
@@ -3077,13 +3080,20 @@ module.exports = BackboneDash.View.extend({
   changeChartView: function(e) {
     var view = util.data(e.currentTarget, 'view');
     this.model.set('view', view);
+    this.hideExportInPublicView();
   },
-
+  hideExportInPublicView: function(){
+	  var editableDataExportSetting = this.app.settings.get('hide-editable-export-formats-public-view');
+	  if(this.model.get('view') === 'table' && editableDataExportSetting && editableDataExportSetting.get('defaultId') == "true" && this.app.user.get('logged') == false ){
+		  this.$el.find('.download').hide();
+	  }else{
+		  this.$el.find('.download').show();
+	  }  
+  },  
   big: function() {
     // toggle big/small charts on large screens
     this.model.set('big', !this.model.get('big'));
   },
-
   setClear: function(shouldBreak) {
     // layout hints, should only be called by ./charts.js
     this.$el[shouldBreak ? 'addClass' : 'removeClass']('clearfix');
@@ -3712,6 +3722,7 @@ module.exports = BackboneDash.View.extend({
         
     this.app.settings.load();  // maybe should go in render or something
                                // but we already do other fetches on init so...
+    this.app.user.fetch();
     this.controls = new Controls({ app: this.app });
 
     // AMP-19545: We instantiate the collection of enabled charts (from FM) and use it to enable or not each chart.

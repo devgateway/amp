@@ -1,7 +1,7 @@
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
-  url: '/rest/security/user',
+  url: '/rest/security/layout',
 
   /************
    * email is null from server when not logged in or when workspace not set yet.

@@ -7,6 +7,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -21,7 +23,7 @@ import org.digijava.module.aim.helper.KeyValue;
  * @author apicca
  */
 public class ConfigHelper {
-	
+
 	private static final String SECTION = "section";
 	private static final String DESCRIPTION = "description";
 	private static final String SETTINGS_VALUE = "settingValue";
@@ -36,8 +38,15 @@ public class ConfigHelper {
 	private static final String T_YEAR_DEFAULT_END = "t_year_default_end";
 	private static final String T_STATIC_RANGE = "t_static_range";
 	private static final String T_DOUBLE = "t_Double";
+	private static final String T_STATIC_YEAR = "t_static_year";
+	private static final String T_AUDIT_TRIAL_CLENAUP = "t_audit_trial_clenaup";
+	private static final String T_COMPONENTS_SORT = "t_components_sort";
+	private static final String T_DAILY_CURRENCY_UPDATE_HOUR = "t_daily_currency_update_hour";
+	private static final String T_SECURE_VALUES = "t_secure_values";
+	private static final String T_TIMEOUT_CURRENCY_UPDATE = "t_timeout_currency_update";
+
 	private static final String NULL_VALUE = "null";
-	
+	private static final String TIMEOUT_CURRENCY_UPDATE_PATTERN = "(1[012]|0[1-9]):[0-5][0-9](\\s)?(?i)(am|pm)";
 	private static final Logger logger = Logger.getLogger(ConfigHelper.class);
 	/**
 	 * Retrieves the class specified as type for Generics
@@ -120,21 +129,31 @@ public class ConfigHelper {
         case T_BOOLEAN:
         	isValid = "true".equalsIgnoreCase(ampGlobalSetting.getGlobalSettingsValue()) || "false".equalsIgnoreCase(ampGlobalSetting.getGlobalSettingsValue());
         	break;
-        case T_INTEGER: case T_STATIC_RANGE:
+        case T_SECURE_VALUES:
+        	isValid = "on".equalsIgnoreCase(ampGlobalSetting.getGlobalSettingsValue()) || "off".equalsIgnoreCase(ampGlobalSetting.getGlobalSettingsValue());
+        	break;        	
+        case T_INTEGER: case T_TIMEOUT_CURRENCY_UPDATE: case T_AUDIT_TRIAL_CLENAUP: case T_STATIC_RANGE: 
         	isValid = isValidNumber(Integer.class,ampGlobalSetting.getGlobalSettingsValue());
+        	break;
+        case T_YEAR_DEFAULT_START: case T_YEAR_DEFAULT_END: case T_STATIC_YEAR:
+        	isValid = isValidNumber(Integer.class,ampGlobalSetting.getGlobalSettingsValue());
+        	int currentValue = Integer.parseInt(ampGlobalSetting.getGlobalSettingsValue());
+        	if (isValid && currentValue!=-1 && (currentValue < 1000 || currentValue > 2999  )) {
+        		isValid = false;
+        	} else {
+        		isValid = true;
+        	}
         	break;
         case T_DOUBLE:
         	isValid = isValidNumber(Double.class,ampGlobalSetting.getGlobalSettingsValue());
         	break;
-        case T_YEAR_DEFAULT_START: case T_YEAR_DEFAULT_END:
-        	isValid = isValidNumber(Integer.class,ampGlobalSetting.getGlobalSettingsValue());
-        	if (isValid) {
-        		int value = Integer.parseInt(ampGlobalSetting.getGlobalSettingsValue()); 
-        		isValid = isValid && (value>1900 && value<2099);
-        	}
-        	break;
-        case NULL_VALUE: case "":
+        case NULL_VALUE: case "": case T_COMPONENTS_SORT: 
         	isValid = true;
+        	break;
+        case T_DAILY_CURRENCY_UPDATE_HOUR:
+        	Pattern pattern = Pattern.compile(TIMEOUT_CURRENCY_UPDATE_PATTERN);
+			Matcher matcher = pattern.matcher(ampGlobalSetting.getGlobalSettingsValue());
+			isValid = matcher.matches();
         	break;
         default:
     		if (possiblesValues!=null) {

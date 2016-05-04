@@ -49,7 +49,7 @@ public class ConfigEndpoints {
 	@ApiMethod(id = "saveGlobalSettings", authTypes = {AuthRule.IN_ADMIN}, ui = false)
 	public Collection<JsonBean> saveGlobalSettings(JsonBean globalSettings) {
 
-		ArrayList<String> list = ConfigHelper.getValidSettings();
+		//ArrayList<String> list = ConfigHelper.getValidSettings();
 		Collection<JsonBean> resultList = new ArrayList<JsonBean>();
 		if (globalSettings.get("settings") != null) {
 			ArrayList<LinkedHashMap<String, Object>> settings = (ArrayList<LinkedHashMap<String, Object>>) globalSettings
@@ -58,7 +58,7 @@ public class ConfigEndpoints {
 			for (LinkedHashMap<String, Object> setting : settings) {
 				JsonBean result = new JsonBean();
 				String globalSettingName = ConfigHelper.getGlobalSettingName(setting);
-				if (list.contains(globalSettingName)) {
+				//if (list.contains(globalSettingName)) {
 					boolean isNew = false;
 					AmpGlobalSettings ampGlobalSetting = FeaturesUtil.getGlobalSetting(globalSettingName);
 
@@ -77,9 +77,9 @@ public class ConfigEndpoints {
 						result.set(globalSettingName, NOT_VALID_VALUE);
 					}
 					
-				} else {
-					result.set(globalSettingName, NOT_VALID);
-				}
+				//} else {
+					//	result.set(globalSettingName, NOT_VALID);
+					//}
 				resultList.add(result);
 			}
 
@@ -103,10 +103,10 @@ public class ConfigEndpoints {
 		Collection<JsonBean> resultList = new ArrayList<JsonBean>();
 		JsonBean finalFormatResult = new JsonBean();
 		ArrayList<LinkedHashMap<String, Object>> settings = null;
-		ArrayList<String> list = null;
+		//ArrayList<String> list = null;
 		
 		if (globalSettings.get("settings") != null) {
-			list = ConfigHelper.getValidSettings();
+			//list = ConfigHelper.getValidSettings();
 			settings = (ArrayList<LinkedHashMap<String, Object>>) globalSettings.get("settings");
 		}
 		
@@ -114,7 +114,7 @@ public class ConfigEndpoints {
 			for (LinkedHashMap<String, Object> setting : settings) {
 				JsonBean result = new JsonBean();
 				String globalSettingName = ConfigHelper.getGlobalSettingName(setting);
-				if (list.contains(globalSettingName)) {
+				//if (list.contains(globalSettingName)) {
 					boolean isNew = false;
 					AmpGlobalSettings ampGlobalSetting = FeaturesUtil.getGlobalSetting(globalSettingName);
 
@@ -122,9 +122,9 @@ public class ConfigEndpoints {
 						result = ConfigHelper.getGlobalSettingJson(ampGlobalSetting);
 					}
 
-				} else {
-					result.set(globalSettingName, NOT_VALID);
-				}
+					//} else {
+					//result.set(globalSettingName, NOT_VALID);
+					//}
 				resultList.add(result);
 			}
 		}else{

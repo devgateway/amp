@@ -477,4 +477,51 @@ public class AmpSchemaPledgesTests extends ReportingTestCase {
       runNiTestCase(spec, "en", acts, cor);
 	}
 	
+	@Test
+    public void testPledgesActualDisbursements() {
+	    NiReportModel cor = new NiReportModel("AMP-22686-pledges-actual-disbursements")
+	            .withHeaders(Arrays.asList(
+	                    "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 10))",
+	                    "(Pledges Titles: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Related Projects: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 6));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 8, colSpan: 2))",
+	                    "(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 2))",
+	                    "(Actual Pledge: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Pledge: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Pledge: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Pledge: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1))"))
+	                .withWarnings(Arrays.asList())
+	                .withBody(      new ReportAreaForTests(null)
+	                  .withContents("Pledges Titles", "", "Related Projects", "", "Funding-2012-Actual Pledge", "1 041 111,77", "Funding-2012-Actual Disbursements", "0", "Funding-2013-Actual Pledge", "1 800 000", "Funding-2013-Actual Disbursements", "0", "Funding-2014-Actual Pledge", "9 186 878,1", "Funding-2014-Actual Disbursements", "450 000", "Totals-Actual Pledge", "12 966 059,62", "Totals-Actual Disbursements", "450 000")
+	                  .withChildren(
+	                    new ReportAreaForTests(new AreaOwner(3), "Pledges Titles", "Test pledge 1", "Funding-2012-Actual Pledge", "1,25", "Funding-2014-Actual Pledge", "986 878,1", "Totals-Actual Pledge", "986 879,35"),
+	                    new ReportAreaForTests(new AreaOwner(4), "Pledges Titles", "ACVL Pledge Name 2", "Related Projects", "Activity Linked With Pledge", "Totals-Actual Pledge", "938 069,75"),
+	                    new ReportAreaForTests(new AreaOwner(5), "Pledges Titles", "free text name 2", "Funding-2012-Actual Pledge", "1 041 110,52", "Totals-Actual Pledge", "1 041 110,52"),
+	                    new ReportAreaForTests(new AreaOwner(6), "Pledges Titles", "Heavily used pledge", "Related Projects", "pledged 2, pledged education activity 1", "Funding-2013-Actual Pledge", "1 800 000", "Funding-2014-Actual Pledge", "8 200 000", "Funding-2014-Actual Disbursements", "450 000", "Totals-Actual Pledge", "10 000 000", "Totals-Actual Disbursements", "450 000")      ));
+	    
+	    runNiTestCase(spec("AMP-22686-pledges-actual-disbursements"), "en", acts, cor);
+	}
+	
+	@Test
+    public void testPledgesPlannedAmounts() {
+        NiReportModel cor = new NiReportModel("AMP-22686-planned-pledge-amounts")
+                .withHeaders(Arrays.asList(
+                        "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 8))",
+                        "(Pledges Titles: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Related Projects: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 3));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 5, colSpan: 3))",
+                        "(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 3))",
+                        "(Planned Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Pledge: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Planned Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Pledge: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1))"))
+                    .withWarnings(Arrays.asList())
+                    .withBody(      new ReportAreaForTests(null)
+                      .withContents("Pledges Titles", "", "Related Projects", "", "Funding-2014-Planned Commitments", "65 000 000", "Funding-2014-Planned Disbursements", "0", "Funding-2014-Actual Pledge", "9 186 878,1", "Totals-Planned Commitments", "65 000 000", "Totals-Planned Disbursements", "0", "Totals-Actual Pledge", "12 966 059,62")
+                      .withChildren(
+                        new ReportAreaForTests(new AreaOwner(3), "Pledges Titles", "Test pledge 1", "Funding-2014-Actual Pledge", "986 878,1", "Totals-Actual Pledge", "986 879,35"),
+                        new ReportAreaForTests(new AreaOwner(4), "Pledges Titles", "ACVL Pledge Name 2", "Related Projects", "Activity Linked With Pledge", "Totals-Actual Pledge", "938 069,75"),
+                        new ReportAreaForTests(new AreaOwner(5), "Pledges Titles", "free text name 2", "Totals-Actual Pledge", "1 041 110,52"),
+                        new ReportAreaForTests(new AreaOwner(6), "Pledges Titles", "Heavily used pledge", "Related Projects", "pledged 2, pledged education activity 1", "Funding-2014-Planned Commitments", "65 000 000", "Funding-2014-Actual Pledge", "8 200 000", "Totals-Planned Commitments", "65 000 000", "Totals-Actual Pledge", "10 000 000")      ));
+        
+        runNiTestCase(spec("AMP-22686-planned-pledge-amounts"), "en", acts, cor);
+    }
+	
+	@Test
+    public void test_NOT_IMPLEMENTED_YET_PledgesPercentageOfDisbursement() {
+	    NiReportModel cor = null;
+        
+        runNiTestCase(spec("AMP-22686-Pledge-Percentage-of-Disbursement"), "en", acts, cor);
+    }
+	
 }

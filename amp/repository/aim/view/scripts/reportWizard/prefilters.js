@@ -51,7 +51,7 @@ function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessa
 }
 
 Filters.prototype.success	= function (o) {
-	debugger;
+	//debugger;
 	if ( o.responseText.length > 2 ) {
 		try {
 			var errorObj = JSON.parse(o.responseText);
@@ -99,6 +99,9 @@ Filters.prototype.showFilters	= function(reportContextId) {
 	this.filterPanel.show();
 	YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do?sourceIsReportWizard=true&reportContextId=" + reportContextId + avoidIECacheParam +this.resetString+this.additionalParameter, this);
 	this.resetString		= "";
+	
+	// Fix z-index problem on Public Report Generator without changing css loading order.
+	$("#new_mask").attr('style', function(i,s) { return s + 'z-index: 3 !important;' });
 };
 
 Filters.prototype.showSettings	= function() {

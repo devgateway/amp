@@ -4,11 +4,14 @@ import static java.util.stream.Collectors.toList;
 import static org.dgfoundation.amp.algo.AmpCollections.mergePredicates;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.FilterRule.FilterType;
@@ -22,6 +25,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 //import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
+import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
 
 /**
  * the AMP filtering rules, used jointly by {@link AmpReportsSchema} and {@link HardcodedReportsTestSchema}
@@ -29,6 +33,23 @@ import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
  *
  */
 public class AmpFiltersConverter extends BasicFiltersConverter {
+    
+    final static Map<String, String> TO_PLEDGE_COLUMNS = new HashMap<String, String>() {{
+        put(ColumnConstants.STATUS, ColumnConstants.PLEDGE_STATUS);
+        put(ColumnConstants.MODALITIES, ColumnConstants.PLEDGES_AID_MODALITY);
+        put(ColumnConstants.DISTRICT, ColumnConstants.PLEDGES_DISTRICTS);
+        put(ColumnConstants.DONOR_GROUP, ColumnConstants.PLEDGES_DONOR_GROUP);
+        put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES);
+        put(ColumnConstants.PRIMARY_PROGRAM, ColumnConstants.PLEDGES_PROGRAMS);
+        put(ColumnConstants.REGION, ColumnConstants.PLEDGES_REGIONS);
+        put(ColumnConstants.SECONDARY_PROGRAM, ColumnConstants.PLEDGES_SECONDARY_PROGRAMS);
+        put(ColumnConstants.SECONDARY_SECTOR, ColumnConstants.PLEDGES_SECONDARY_SECTORS);
+        put(ColumnConstants.PRIMARY_SECTOR, ColumnConstants.PLEDGES_SECTORS);
+        put(ColumnConstants.TERTIARY_PROGRAM, ColumnConstants.PLEDGES_TERTIARY_PROGRAMS);
+        put(ColumnConstants.TERTIARY_SECTOR, ColumnConstants.PLEDGES_TERTIARY_SECTORS);
+        put(ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE);
+        put(ColumnConstants.ZONE, ColumnConstants.PLEDGES_ZONES);
+    }};
 
 	/**
 	 * the dimensions whose {@link NiDimensionUsage} instances are ORed between themselves while filtering (please see the contract for {@link #shouldCollapseDimension(NiDimension)}
@@ -43,6 +64,9 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 
 	@Override
 	protected void processColumnElement(String columnName, List<FilterRule> rules) {
+	    if (this.spec.getReportType() == ArConstants.PLEDGES_TYPE)
+	        columnName = TO_PLEDGE_COLUMNS.getOrDefault(columnName, columnName);
+	    
 		if (columnName.equals(ColumnConstants.ARCHIVED))
 			return; //TODO: hack so that preexisting testcases are not broken while developing the feature
 		

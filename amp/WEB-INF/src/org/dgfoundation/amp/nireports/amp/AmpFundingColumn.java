@@ -183,7 +183,10 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 				for(Map.Entry<String, LevelColumn> optDim:optionalDimensionCols.entrySet())
 					if (!ignoredColumns.contains(optDim.getKey()))
 						addCoordinateIfLongExists(coos, rs.rs, optDim.getKey(), optDim.getValue());
-
+				
+				if (this.name.equals("Pledge Funding"))
+				    addCoordinateIfLongExists(coos, rs.rs, "related_project_id", schema.ACT_LEVEL_COLUMN);
+				
 				java.sql.Date transactionMoment = rs.rs.getDate("transaction_date");
 				BigDecimal transactionAmount = rs.rs.getBigDecimal("transaction_amount");
 				

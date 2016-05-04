@@ -59,7 +59,6 @@ import org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.ProgramsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension;
-import org.dgfoundation.amp.nireports.output.NiOutCell;
 import org.dgfoundation.amp.nireports.output.NiTextCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.BooleanDimension;
@@ -85,7 +84,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public static final Logger logger = Logger.getLogger(AmpReportsSchema.class);
 
 	public final static Set<String> TRANSACTION_LEVEL_HIERARCHIES = Collections.unmodifiableSet(new HashSet<>(
-			Arrays.asList(ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.FUNDING_STATUS, ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.DISASTER_RESPONSE_MARKER)));
+			Arrays.asList(ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.FUNDING_STATUS, ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.DISASTER_RESPONSE_MARKER, ColumnConstants.RELATED_PROJECTS)));
 	
 	public final static OrganisationsDimension orgsDimension = OrganisationsDimension.instance;
 	public final static LocationsDimension locsDimension = LocationsDimension.instance;
@@ -94,6 +93,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static CategoriesDimension catsDimension = CategoriesDimension.instance;
 	public final static BooleanDimension boolDimension = new BooleanDimension("bool", 1l, 2l); // corroborate with FilterRule.TRUE_VALUE
 	public final static NiDimension agreementsDimension = SqlSourcedNiDimension.buildDegenerateDimension("agrs", "amp_agreement", "id");
+	public final static NiDimension activitiesDimension = SqlSourcedNiDimension.buildDegenerateDimension("acts", "amp_activity_version", "amp_activity_id");
 	
 	/**
 	 * the pseudocolumn of the header Splitter for cells which are funding flows
@@ -186,6 +186,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static NiDimensionUsage AGR_DIM_USG = agreementsDimension.getDimensionUsage("agr");
 	public final static LevelColumn AGR_LEVEL_COLUMN = AGR_DIM_USG.getLevelColumn(0);
 	
+	public final static NiDimensionUsage ACT_DIM_USG = activitiesDimension.getDimensionUsage("acts");
+	public final static LevelColumn ACT_LEVEL_COLUMN = ACT_DIM_USG.getLevelColumn(0);
+	
 	private static AmpReportsSchema instance = new AmpReportsSchema();
 		
 	@SuppressWarnings("serial")
@@ -265,7 +268,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_dimension(ColumnConstants.PROJECT_IMPLEMENTING_UNIT, "v_project_impl_unit");
 		no_dimension(ColumnConstants.REGIONAL_OBSERVATIONS, "v_regional_observations");
 		no_dimension(ColumnConstants.RELATED_PLEDGES, "v_related_pledges");
-		no_dimension(ColumnConstants.RELATED_PROJECTS, "v_pledges_projects");
+		single_dimension(ColumnConstants.RELATED_PROJECTS, "v_ni_pledges_projects", ACT_LEVEL_COLUMN);
 		no_dimension(ColumnConstants.SECTOR_MINISTRY_CONTACT_ORGANIZATION, "v_sect_min_cont_org");
 		degenerate_dimension(ColumnConstants.SSC_MODALITIES, "v_ssc_modalities", catsDimension);
 		degenerate_dimension(ColumnConstants.STATUS, "v_status", catsDimension);

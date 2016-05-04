@@ -57,16 +57,11 @@
 					f.amp_org_grp_id AS donor_org_grp_id,
 					NULL AS financing_instrument_id,			             
 					fd.aid_modality AS aid_modality_id, 
-					a.amp_activity_id AS related_project_id,
+					NULL AS related_project_id,
 					NULL as recipient_org_id, NULL as recipient_role_id, NULL as source_role_id
 					
 				FROM amp_funding_pledges f
-					JOIN amp_funding_pledges_details fd ON f.id = fd.pledge_id
-					LEFT JOIN 
-						(SELECT pledge_id, max(amp_funding_id) AS amp_funding_id FROM amp_funding_detail GROUP BY pledge_id) afd ON afd.pledge_id = f.id
-					LEFT JOIN amp_funding ampf ON ampf.amp_funding_id = afd.amp_funding_id
-					LEFT JOIN amp_activity_version a ON (a.amp_activity_id = ampf.amp_activity_id) AND (a.draft != true) AND (a.deleted != true);
-					
+					JOIN amp_funding_pledges_details fd ON f.id = fd.pledge_id;
 				
 				DROP VIEW IF EXISTS v_ni_pledges_funding_debug;
 			

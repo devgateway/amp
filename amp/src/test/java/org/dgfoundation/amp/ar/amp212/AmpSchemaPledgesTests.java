@@ -9,16 +9,14 @@ import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.mondrian.ReportingTestCase;
 import org.dgfoundation.amp.newreports.AreaOwner;
+import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.newreports.ReportFiltersImpl;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.newreports.SortingInfo;
-import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
-import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.dgfoundation.amp.testmodels.NiReportModel;
-import org.dgfoundation.amp.testutils.ReportTestingUtils;
 import org.junit.Test;
 
 /**
@@ -90,6 +88,17 @@ public class AmpSchemaPledgesTests extends ReportingTestCase {
             List<String> hierarchies, GroupingCriteria groupingCriteria) {
         return ReportSpecificationImpl.buildFor(reportName, columns, measures, hierarchies, groupingCriteria, 
                 ArConstants.PLEDGES_TYPE);
+    }
+	
+	protected ReportSpecificationImpl buildPledgeReportFilter(String reportName, List<String> columns, List<String> measures, 
+            List<String> hierarchies, GroupingCriteria groupingCriteria, ReportElement elem, FilterRule rule) {
+	    ReportSpecificationImpl spec = ReportSpecificationImpl.buildFor(reportName, columns, measures, hierarchies, groupingCriteria, 
+                ArConstants.PLEDGES_TYPE);
+	    
+	    ReportFiltersImpl filters = new ReportFiltersImpl();
+        filters.addFilterRule(elem, rule);
+        spec.setFilters(filters);
+	    return spec;
     }
 	
 	@Test
@@ -287,7 +296,7 @@ public class AmpSchemaPledgesTests extends ReportingTestCase {
 	
 	@Test
     public void testActualPledgeByAidModality() {
-	    // current result not matches old reports -> to re-check once Related Projects changed
+	    // current result not matches old reports -> to re-check once actual pledge sum by hierarchy is fixed
         NiReportModel cor = new NiReportModel("AMP-17153-aid-modality-hier")
                 .withHeaders(Arrays.asList(
                         "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 7))",
@@ -391,5 +400,81 @@ public class AmpSchemaPledgesTests extends ReportingTestCase {
         
         runNiTestCase(spec, "en", acts, cor);
     }
+	
+	@Test
+    public void testByRelatedProject() {
+	    NiReportModel cor = new NiReportModel("AMP-22686-Related-Projects-Hierarchy-AC-AP")
+	            .withHeaders(Arrays.asList(
+	                    "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 10))",
+	                    "(Related Projects: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Pledges Titles: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 6));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 8, colSpan: 2))",
+	                    "(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 2))",
+	                    "(Actual Pledge: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Pledge: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Pledge: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Pledge: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1))"))
+	                .withWarnings(Arrays.asList())
+	                .withBody(      new ReportAreaForTests(null)
+	                  .withContents("Related Projects", "", "Pledges Titles", "", "Funding-2012-Actual Pledge", "1 041 111,77", "Funding-2012-Actual Commitments", "0", "Funding-2013-Actual Pledge", "1 800 000", "Funding-2013-Actual Commitments", "2 670 000", "Funding-2014-Actual Pledge", "9 186 878,1", "Funding-2014-Actual Commitments", "3 350 000", "Totals-Actual Pledge", "12 966 059,62", "Totals-Actual Commitments", "6 020 000")
+	                  .withChildren(
+	                    new ReportAreaForTests(new AreaOwner("Related Projects", "Activity Linked With Pledge", 41)).withContents("Pledges Titles", "", "Funding-2012-Actual Pledge", "0", "Funding-2012-Actual Commitments", "0", "Funding-2013-Actual Pledge", "0", "Funding-2013-Actual Commitments", "0", "Funding-2014-Actual Pledge", "0", "Funding-2014-Actual Commitments", "50 000", "Totals-Actual Pledge", "0", "Totals-Actual Commitments", "50 000", "Related Projects", "Activity Linked With Pledge")
+	                    .withChildren(
+	                      new ReportAreaForTests(new AreaOwner(4), "Pledges Titles", "ACVL Pledge Name 2", "Funding-2014-Actual Commitments", "50 000", "Totals-Actual Commitments", "50 000")        ),
+	                    new ReportAreaForTests(new AreaOwner("Related Projects", "pledged 2", 48)).withContents("Pledges Titles", "", "Funding-2012-Actual Pledge", "0", "Funding-2012-Actual Commitments", "0", "Funding-2013-Actual Pledge", "0", "Funding-2013-Actual Commitments", "2 670 000", "Funding-2014-Actual Pledge", "0", "Funding-2014-Actual Commitments", "0", "Totals-Actual Pledge", "0", "Totals-Actual Commitments", "2 670 000", "Related Projects", "pledged 2")
+	                    .withChildren(
+	                      new ReportAreaForTests(new AreaOwner(6), "Pledges Titles", "Heavily used pledge", "Funding-2013-Actual Commitments", "2 670 000", "Totals-Actual Commitments", "2 670 000")        ),
+	                    new ReportAreaForTests(new AreaOwner("Related Projects", "pledged education activity 1", 46)).withContents("Pledges Titles", "", "Funding-2012-Actual Pledge", "0", "Funding-2012-Actual Commitments", "0", "Funding-2013-Actual Pledge", "0", "Funding-2013-Actual Commitments", "0", "Funding-2014-Actual Pledge", "0", "Funding-2014-Actual Commitments", "3 300 000", "Totals-Actual Pledge", "0", "Totals-Actual Commitments", "3 300 000", "Related Projects", "pledged education activity 1")
+	                    .withChildren(
+	                      new ReportAreaForTests(new AreaOwner(6), "Pledges Titles", "Heavily used pledge", "Funding-2014-Actual Commitments", "3 300 000", "Totals-Actual Commitments", "3 300 000")        ),
+	                    new ReportAreaForTests(new AreaOwner("Related Projects", "Related Projects: Undefined", -999999999))
+	                    .withContents("Pledges Titles", "", "Funding-2012-Actual Pledge", "1 041 111,77", "Funding-2012-Actual Commitments", "0", "Funding-2013-Actual Pledge", "1 800 000", "Funding-2013-Actual Commitments", "0", "Funding-2014-Actual Pledge", "9 186 878,1", "Funding-2014-Actual Commitments", "0", "Totals-Actual Pledge", "12 966 059,62", "Totals-Actual Commitments", "0", "Related Projects", "Related Projects: Undefined")
+	                    .withChildren(
+	                      new ReportAreaForTests(new AreaOwner(3), "Pledges Titles", "Test pledge 1", "Funding-2012-Actual Pledge", "1,25", "Funding-2014-Actual Pledge", "986 878,1", "Totals-Actual Pledge", "986 879,35"),
+	                      new ReportAreaForTests(new AreaOwner(4), "Pledges Titles", "ACVL Pledge Name 2", "Totals-Actual Pledge", "938 069,75"),
+	                      new ReportAreaForTests(new AreaOwner(5), "Pledges Titles", "free text name 2", "Funding-2012-Actual Pledge", "1 041 110,52", "Totals-Actual Pledge", "1 041 110,52"),
+	                      new ReportAreaForTests(new AreaOwner(6), "Pledges Titles", "Heavily used pledge", "Funding-2013-Actual Pledge", "1 800 000", "Funding-2014-Actual Pledge", "8 200 000", "Totals-Actual Pledge", "10 000 000")        )      ));;
+	    
+	    runNiTestCase(spec("AMP-22686-Related-Projects-Hierarchy-AC-AP"), "en", acts, cor);
+	}
+	
+	@Test
+    public void testFilterByDonorGroup() {
+        NiReportModel cor = new NiReportModel("AMP-22686 Filter by Donor Group")
+                .withHeaders(Arrays.asList(
+                        "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 6))",
+                        "(Pledges Donor Group: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Pledges Titles: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 3));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 5, colSpan: 1))",
+                        "(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1));(2013: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 1))",
+                        "(Actual Pledge: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Pledge: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Pledge: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Pledge: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1))"))
+                    .withWarnings(Arrays.asList())
+                    .withBody(      new ReportAreaForTests(null)
+                      .withContents("Pledges Donor Group", "", "Pledges Titles", "", "Funding-2012-Actual Pledge", "1,25", "Funding-2013-Actual Pledge", "1 800 000", "Funding-2014-Actual Pledge", "9 186 878,1", "Totals-Actual Pledge", "10 986 879,35")
+                      .withChildren(
+                        new ReportAreaForTests(new AreaOwner("Pledges Donor Group", "American", 19)).withContents("Pledges Titles", "", "Funding-2012-Actual Pledge", "0", "Funding-2013-Actual Pledge", "1 800 000", "Funding-2014-Actual Pledge", "8 200 000", "Totals-Actual Pledge", "10 000 000", "Pledges Donor Group", "American")
+                        .withChildren(
+                          new ReportAreaForTests(new AreaOwner(6), "Pledges Titles", "Heavily used pledge", "Funding-2013-Actual Pledge", "1 800 000", "Funding-2014-Actual Pledge", "8 200 000", "Totals-Actual Pledge", "10 000 000")        ),
+                        new ReportAreaForTests(new AreaOwner("Pledges Donor Group", "European", 18)).withContents("Pledges Titles", "", "Funding-2012-Actual Pledge", "1,25", "Funding-2013-Actual Pledge", "0", "Funding-2014-Actual Pledge", "986 878,1", "Totals-Actual Pledge", "986 879,35", "Pledges Donor Group", "European")
+                        .withChildren(
+                          new ReportAreaForTests(new AreaOwner(3), "Pledges Titles", "Test pledge 1", "Funding-2012-Actual Pledge", "1,25", "Funding-2014-Actual Pledge", "986 878,1", "Totals-Actual Pledge", "986 879,35")        )      ));
+        runNiTestCase(spec("AMP-22686 Filter by Donor Group"), "en", acts, cor);
+	}
+	
+	@Test
+    public void testFilterByAidModality() {
+	    NiReportModel cor = new NiReportModel("Filter Pledges by Aid Modality")
+	            .withHeaders(Arrays.asList(
+	                    "(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 6))",
+	                    "(Pledges Aid Modality: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Pledges Titles: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 2));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 4, colSpan: 2))",
+	                    "(2012: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2))",
+	                    "(Actual Pledge: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Actual Pledge: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1))"))
+	                .withWarnings(Arrays.asList())
+	                .withBody(      new ReportAreaForTests(null).withContents("Pledges Aid Modality", "", "Pledges Titles", "", "Funding-2012-Actual Pledge", "1,25", "Funding-2012-Actual Commitments", "0", "Totals-Actual Pledge", "1,25", "Totals-Actual Commitments", "0")
+	                  .withChildren(
+	                    new ReportAreaForTests(new AreaOwner(3), "Pledges Aid Modality", "Development of shared analytical studies", "Pledges Titles", "Test pledge 1", "Funding-2012-Actual Pledge", "1,25", "Totals-Actual Pledge", "1,25")      ));
+	    
+	    ReportSpecificationImpl spec = buildPledgeReportFilter("Filter Pledges by Aid Modality", 
+              Arrays.asList(ColumnConstants.PLEDGES_AID_MODALITY, ColumnConstants.PLEDGES_TITLES), 
+              Arrays.asList(MeasureConstants.PLEDGES_ACTUAL_PLEDGE, MeasureConstants.PLEDGES_ACTUAL_COMMITMENTS),
+              null, GroupingCriteria.GROUPING_YEARLY,
+              new ReportElement(new ReportColumn(ColumnConstants.PLEDGES_AID_MODALITY)), 
+              new FilterRule("2107", true)); // "Development of shared analytical studies"
+      
+      runNiTestCase(spec, "en", acts, cor);
+	}
 	
 }

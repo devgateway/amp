@@ -52,6 +52,27 @@ var EnabledGisCollection = Backbone.Collection.extend({
 var enabledGisFM = new EnabledGisCollection();
 enabledGisFM.fetchData();
 
+var UserModel = Backbone.Model.extend({
+	  url: '/rest/security/layout',
+
+	  /************
+	   * email is null from server when not logged in or when workspace not set yet.
+	   * Before it is fetched, default to undefined.
+	   */
+	  defaults: {
+	    email: undefined
+	  },
+	  fetch: function(options) {
+	    options = options || {};
+	    options.cache = false;
+	    return Backbone.Model.prototype.fetch.call(this, options);
+	  }
+
+
+});
+var user = new UserModel();
+user.fetch();
+
 var WorkspaceToolbar = Backbone.View.extend({
     enabled: false,
     events: {
@@ -120,7 +141,7 @@ var WorkspaceToolbar = Backbone.View.extend({
         	$(this.el).find('a.fullscreen').addClass('disabled_toolbar');
         	$(this.el).find('a.export_dual_currency').addClass('disabled_toolbar');
         }
-
+        this.hideEditableFormatsPublicView();
     	if (this.is_gis_enabled()) {
         	$(this.el).find('a.export_to_map').removeClass('disabled_toolbar');
         } else {
@@ -130,7 +151,14 @@ var WorkspaceToolbar = Backbone.View.extend({
         this.reflect_properties();
 
     },
-
+    hideEditableFormatsPublicView: function(){
+        if(window.currentSettings[Settings.AMP_GLOBAL_SETTINGS.HIDE_EDITABLE_EXPORTS] !== undefined && window.currentSettings[Settings.AMP_GLOBAL_SETTINGS.HIDE_EDITABLE_EXPORTS] == 'true' && user.get('logged') == false){
+       	$(this.el).find('a.export_xls').addClass('disabled_toolbar');            	
+        	$(this.el).find('a.export_csv').addClass('disabled_toolbar');
+        	$(this.el).find('a.export_dual_currency').addClass('disabled_toolbar');
+        }
+       	
+       },
     template: function() {
         var template = $("#template-workspace-toolbar").html() || "";
         return _.template(template)();

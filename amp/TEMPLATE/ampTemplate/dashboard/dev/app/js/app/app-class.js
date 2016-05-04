@@ -10,6 +10,7 @@ var fs = require('fs');
 var Translator = require('amp-translate');
 var Filter = require('amp-filter/src/main');
 var Settings = require('./models/settings-collection');
+var UserModel = require('./models/amp-user.js');
 var SavedDashes = require('./models/saved-dashes-collection.js');
 
 var MainView = require('./views/main');
@@ -35,6 +36,7 @@ _.extend(App.prototype, BackboneDash.Events, {
 
     try {
     	this.settings = new Settings([], { app: this });
+    	this.user = new UserModel()
 
       // check our support level
       this.browserIssues = supportCheck();

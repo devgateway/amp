@@ -21,6 +21,7 @@ var HilightFundingCollection = require('./collections/hilight-funding-collection
 var Settings = require('./collections/settings-collection');
 
 var Structures = require('./collections/structures-collection'); /*a.k.a. structures */
+var User = require('./models/amp-user-model.js');
 
 var GISData = function() {
   this.initialize.apply(this, arguments);
@@ -48,6 +49,7 @@ _.extend(GISData.prototype, Backbone.Events, {
 
     this.boundaries = new Boundaries();
     this.settings = new Settings();
+    this.user = new User();
     this.activities = new Activities([], {
       settings: this.settings,
       filter: this.filter,

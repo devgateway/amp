@@ -3,7 +3,7 @@ var LoadOnceMixin = require('../../mixins/load-once-mixin');
 
 module.exports = Backbone.Model
 .extend(LoadOnceMixin).extend({
-  url: '/rest/security/user',
+  url: '/rest/security/layout',
 
   /************
    * email is null from server when not logged in or when workspace not set yet.

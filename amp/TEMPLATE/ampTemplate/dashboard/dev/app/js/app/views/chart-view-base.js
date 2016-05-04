@@ -61,7 +61,7 @@ module.exports = BackboneDash.View.extend({
       empty: null
     });
 
-    _.bindAll(this, 'showChart', 'failLoading');
+    _.bindAll(this, 'showChart', 'failLoading','hideExportInPublicView');
     if (this.getTTContent) { _.bindAll(this, 'getTTContent'); }
     if (this.chartClickHandler) { _.bindAll(this, 'chartClickHandler'); }
   },
@@ -74,6 +74,7 @@ module.exports = BackboneDash.View.extend({
       util: util
     };
     this.$el.html(template(renderOptions));
+    this.hideExportInPublicView();
     this.message = this.$('.dash-chart-diagnostic');
     this.chartContainer = this.$('.dash-chart-wrap');
 
@@ -213,13 +214,20 @@ module.exports = BackboneDash.View.extend({
   changeChartView: function(e) {
     var view = util.data(e.currentTarget, 'view');
     this.model.set('view', view);
+    this.hideExportInPublicView();
   },
-
+  hideExportInPublicView: function(){
+	  var editableDataExportSetting = this.app.settings.get('hide-editable-export-formats-public-view');
+	  if(this.model.get('view') === 'table' && editableDataExportSetting && editableDataExportSetting.get('defaultId') == "true" && this.app.user.get('logged') == false ){
+		  this.$el.find('.download').hide();
+	  }else{
+		  this.$el.find('.download').show();
+	  }  
+  },  
   big: function() {
     // toggle big/small charts on large screens
     this.model.set('big', !this.model.get('big'));
   },
-
   setClear: function(shouldBreak) {
     // layout hints, should only be called by ./charts.js
     this.$el[shouldBreak ? 'addClass' : 'removeClass']('clearfix');

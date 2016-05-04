@@ -45,6 +45,10 @@ var AMPSettings = Backbone.View.extend({
 					if (window.currentSettings["1"] === null) {
 						var foundCurrency = _.find(data, function(item) {return item.id === '1'});
 						window.currentSettings["1"] = _.find(foundCurrency.options, function(item) { return item.id === foundCurrency.defaultId}).value;
+						var hideEditableFormats = _.findWhere(data, {"id": Settings.AMP_GLOBAL_SETTINGS.HIDE_EDITABLE_EXPORTS})
+						if(hideEditableFormats){
+							window.currentSettings[Settings.AMP_GLOBAL_SETTINGS.HIDE_EDITABLE_EXPORTS] = hideEditableFormats.defaultId;
+						}
 					}
 				});
 			},

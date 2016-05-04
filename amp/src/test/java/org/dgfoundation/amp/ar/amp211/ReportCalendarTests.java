@@ -42,4 +42,20 @@ public class ReportCalendarTests extends ReportingTestCase {
 			Arrays.asList("Test pledge 1", "ptc activity 1", "activity with contracting agency", "activity with capital spending"), 
 			correctReportEn, "en");
 	}
+	
+	@Test
+    public void test_AMP_22733_gregorian_fiscal() {
+	    ReportAreaForTests correctReportEn = new ReportAreaForTests()
+	            .withContents("Project Title", "Report Totals", "Fiscal Year 2013 - 2014-February-Actual Commitments", "75.000", "Fiscal Year 2014 - 2015-March-Actual Commitments", "32.000", "Fiscal Year 2014 - 2015-January-Actual Commitments", "45.000", "Fiscal Year 2015 - 2016-March-Actual Commitments", "456.789", "Total Measures-Actual Commitments", "608.789")
+	            .withChildren(
+	              new ReportAreaForTests()    .withContents("Project Title", "SubNational no percentages", "Fiscal Year 2013 - 2014-February-Actual Commitments", "75.000", "Fiscal Year 2014 - 2015-March-Actual Commitments", "", "Fiscal Year 2014 - 2015-January-Actual Commitments", "", "Fiscal Year 2015 - 2016-March-Actual Commitments", "", "Total Measures-Actual Commitments", "75.000"),
+	              new ReportAreaForTests()    .withContents("Project Title", "activity with primary_program", "Fiscal Year 2013 - 2014-February-Actual Commitments", "", "Fiscal Year 2014 - 2015-March-Actual Commitments", "32.000", "Fiscal Year 2014 - 2015-January-Actual Commitments", "", "Fiscal Year 2015 - 2016-March-Actual Commitments", "", "Total Measures-Actual Commitments", "32.000"),
+	              new ReportAreaForTests()    .withContents("Project Title", "Unvalidated activity", "Fiscal Year 2013 - 2014-February-Actual Commitments", "", "Fiscal Year 2014 - 2015-March-Actual Commitments", "", "Fiscal Year 2014 - 2015-January-Actual Commitments", "45.000", "Fiscal Year 2015 - 2016-March-Actual Commitments", "", "Total Measures-Actual Commitments", "45.000"),
+	              new ReportAreaForTests()    .withContents("Project Title", "activity 1 with agreement", "Fiscal Year 2013 - 2014-February-Actual Commitments", "", "Fiscal Year 2014 - 2015-March-Actual Commitments", "", "Fiscal Year 2014 - 2015-January-Actual Commitments", "", "Fiscal Year 2015 - 2016-March-Actual Commitments", "456.789", "Total Measures-Actual Commitments", "456.789")  );
+	    
+	    runMondrianTestCase("AMP-22733 Monthly Gergorian Fiscal March",
+	            Arrays.asList("activity with primary_program", "SubNational no percentages", "Unvalidated activity", "activity 1 with agreement"), 
+	            correctReportEn, "en");
+	    
+	}
 }

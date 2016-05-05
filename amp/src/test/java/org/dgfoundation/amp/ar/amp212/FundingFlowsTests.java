@@ -397,4 +397,30 @@ public class FundingFlowsTests extends ReportingTestCase {
 		
 		runNiTestCase(cor, spec("AMP-22322-all-flows-totals-only"), flowsActs);
 	}
+	
+	@Test
+	public void testPlannedDisbursements() {
+		NiReportModel cor = new NiReportModel("testRealPlannedDisbursements")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 5, colStart: 0, colSpan: 13))",
+					"(Project Title: (startRow: 1, rowSpan: 4, totalRowSpan: 4, colStart: 0, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 4, colStart: 1, colSpan: 7));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 4, colStart: 8, colSpan: 5))",
+					"(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 2));(2015: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 3));(2016: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 6, colSpan: 2))",
+					"(Planned Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Real Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1));(Planned Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 3, colSpan: 1));(Real Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2));(Planned Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 6, colSpan: 1));(Real Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 1));(Planned Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 8, colSpan: 1));(Real Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 9, colSpan: 4))",
+					"(IMPL-EXEC: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(EXEC-BENF: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(IMPL-BENF: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(DN-EXEC: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(DN-EXEC: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(EXEC-BENF: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(IMPL-BENF: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(IMPL-EXEC: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+			      .withContents("Project Title", "", "Funding-2014-Planned Disbursements", "300", "Funding-2014-Real Planned Disbursements-IMPL-EXEC", "44,555", "Funding-2015-Planned Disbursements", "500", "Funding-2015-Real Planned Disbursements-EXEC-BENF", "88,777", "Funding-2015-Real Planned Disbursements-IMPL-BENF", "77,444", "Funding-2016-Planned Disbursements", "123,321", "Funding-2016-Real Planned Disbursements-DN-EXEC", "123,321", "Totals-Planned Disbursements", "124,121", "Totals-Real Planned Disbursements-DN-EXEC", "123,321", "Totals-Real Planned Disbursements-EXEC-BENF", "88,777", "Totals-Real Planned Disbursements-IMPL-BENF", "77,444", "Totals-Real Planned Disbursements-IMPL-EXEC", "44,555")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water"),
+			        new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Funding-2014-Planned Disbursements", "300", "Funding-2015-Planned Disbursements", "500", "Totals-Planned Disbursements", "800"),
+			        new ReportAreaForTests(new AreaOwner(88), "Project Title", "activity-weird-funding", "Funding-2014-Real Planned Disbursements-IMPL-EXEC", "44,555", "Funding-2015-Real Planned Disbursements-EXEC-BENF", "88,777", "Funding-2015-Real Planned Disbursements-IMPL-BENF", "77,444", "Funding-2016-Planned Disbursements", "123,321", "Funding-2016-Real Planned Disbursements-DN-EXEC", "123,321", "Totals-Planned Disbursements", "123,321", "Totals-Real Planned Disbursements-DN-EXEC", "123,321", "Totals-Real Planned Disbursements-EXEC-BENF", "88,777", "Totals-Real Planned Disbursements-IMPL-BENF", "77,444", "Totals-Real Planned Disbursements-IMPL-EXEC", "44,555")      ));
+
+		
+		runNiTestCase(cor, 
+			buildSpecification("testRealPlannedDisbursements", 
+			Arrays.asList(ColumnConstants.PROJECT_TITLE),
+			Arrays.asList(MeasureConstants.PLANNED_DISBURSEMENTS, MeasureConstants.REAL_PLANNED_DISBURSEMENTS), null, GroupingCriteria.GROUPING_YEARLY), 
+			
+			Arrays.asList("Eth Water", "activity-weird-funding", "Activity with planned disbursements"));
+	}
 }

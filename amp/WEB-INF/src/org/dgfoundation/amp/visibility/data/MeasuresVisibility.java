@@ -111,8 +111,16 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 		put(MeasureConstants.UNDISBURSED_BALANCE, Arrays.asList(ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual", ArConstants.DISBURSEMENT));
 	}};
 
-	@SuppressWarnings("serial")
-	public static final Set<String> allMeasures = Collections.unmodifiableSet(new HashSet<String>(PersistenceManager.getSession().createSQLQuery("select distinct(measurename) from amp_measures").list()));	
+	public static Set<String> allMeasures = _getAllMeasures();	
+	
+	public static void resetMeasuresList() {
+		allMeasures = _getAllMeasures();
+	}
+
+	@SuppressWarnings("unchecked")
+	private static Set<String> _getAllMeasures() {
+		return Collections.unmodifiableSet(new HashSet<String>(PersistenceManager.getSession().createSQLQuery("select distinct(measurename) from amp_measures").list()));
+	}
 	
 	/**
 	 * this should be {@link #detectVisibleData()} in case AF is taken into account

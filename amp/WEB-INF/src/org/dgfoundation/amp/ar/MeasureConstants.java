@@ -44,6 +44,7 @@ public class MeasureConstants {
 	public static final String TRIANGULAR_SSC_COMMITMENTS = "Triangular SSC Commitments";
 	public static final String UNCOMMITTED_BALANCE = "Uncommitted Balance";
 	public static final String UNDISBURSED_BALANCE = "Undisbursed Balance";
+	public static final String REAL_PLANNED_DISBURSEMENTS = "Real Planned Disbursements";
 	public static final String REAL_DISBURSEMENTS = "Real Disbursements";
 	public static final String REAL_COMMITMENTS = "Real Commitments";
 	public static final String REAL_MTEFS = "Real MTEFs";

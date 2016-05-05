@@ -70,6 +70,7 @@ import org.dgfoundation.amp.nireports.schema.NiTransactionContextMeasure;
 import org.dgfoundation.amp.nireports.schema.NiTransactionMeasure;
 import org.dgfoundation.amp.nireports.schema.PidTextualTokenBehaviour;
 import org.dgfoundation.amp.nireports.schema.TrivialMeasureBehaviour;
+import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -600,9 +601,11 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		PersistenceManager.getSession().doWork(conn -> {
 			Set<String> inDbMeasures = new HashSet<>(SQLUtils.fetchAsList(conn, String.format("SELECT %s FROM %s", "measurename", "amp_measures"), 1));
 			List<Object> toBeAdded = this.measures.keySet().stream().filter(z -> !inDbMeasures.contains(z)).collect(Collectors.toList());
-			List<List<Object>> values = toBeAdded.stream().map(z -> Arrays.asList(z, "A")).collect(Collectors.toList());	
-			if (values.size() > 0)
-				SQLUtils.insert(conn, "amp_measures", "measureid", "amp_measures_seq", Arrays.asList("measurename", "type"), values);
+			List<List<Object>> values = toBeAdded.stream().map(z -> Arrays.asList(z, z, "A")).collect(Collectors.toList());	
+			if (values.size() > 0) {
+				SQLUtils.insert(conn, "amp_measures", "measureid", "amp_measures_seq", Arrays.asList("measurename", "aliasname", "type"), values);
+				MeasuresVisibility.resetMeasuresList();
+			}
 		}); 
 	}
 	
@@ -654,6 +657,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	}
 	
 	private AmpReportsSchema addFundingFlowMeasures() {
+		addMeasure(new AmpTrivialMeasure(MeasureConstants.REAL_PLANNED_DISBURSEMENTS, Constants.DISBURSEMENT, "Planned", true));
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.REAL_DISBURSEMENTS, Constants.DISBURSEMENT, "Actual", true));
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.REAL_COMMITMENTS, Constants.COMMITMENT, "Actual", true));
 		return this;

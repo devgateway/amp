@@ -24,8 +24,6 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
-//import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
-import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
 
 /**
  * the AMP filtering rules, used jointly by {@link AmpReportsSchema} and {@link HardcodedReportsTestSchema}
@@ -64,9 +62,6 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 
 	@Override
 	protected void processColumnElement(String columnName, List<FilterRule> rules) {
-	    if (this.spec.getReportType() == ArConstants.PLEDGES_TYPE)
-	        columnName = TO_PLEDGE_COLUMNS.getOrDefault(columnName, columnName);
-	    
 		if (columnName.equals(ColumnConstants.ARCHIVED))
 			return; //TODO: hack so that preexisting testcases are not broken while developing the feature
 		
@@ -83,14 +78,17 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 		
 		if (columnName.equals(ColumnConstants.APPROVAL_STATUS))
 			columnName = ColumnConstants.FILTERED_APPROVAL_STATUS;
-				
+
+		columnName = removeIdSuffixIfNeeded(schema, columnName);
+
+		if (this.spec.getReportType() == ArConstants.PLEDGES_TYPE)
+	        columnName = TO_PLEDGE_COLUMNS.getOrDefault(columnName, columnName);
+
 		if (schema.getColumns().containsKey(columnName)) {
 			super.processColumnElement(columnName, rules);
 			return;
 		}
-		
-		columnName = removeIdSuffixIfNeeded(schema, columnName);
-		
+				
 		// gone till here -> we're going to fail anyway, but using the superclass
 		super.processColumnElement(columnName, rules);
 	}

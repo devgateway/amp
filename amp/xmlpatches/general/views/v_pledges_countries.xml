@@ -2,7 +2,7 @@
 <tns:patch closeOnSuccess="false" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-	<jira>AMP-17153</jira>
+	<jira>AMP-14167</jira>
 	<keyword>Views</keyword>
 	<author>Alexandru Artimon</author>
 	<description>recreate view, this will always be the last version of the view</description>
@@ -19,19 +19,11 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				DROP VIEW IF EXISTS v_pledges_programs CASCADE;
-			    CREATE OR REPLACE VIEW v_pledges_programs AS 
-			    	SELECT afpp.pledge_id,
-    					COALESCE(level.name, '#') AS name,
-    					apl.id1 AS amp_program_id,
-    					sum(afpp.program_percentage) AS percentage,
-    					COUNT(*) - COUNT(afpp.program_percentage) AS cnt_nulls
-   					FROM amp_funding_pledges_program afpp
-     					JOIN ni_all_programs_with_levels apl ON afpp.amp_program_id = apl.amp_theme_id
-     					JOIN all_programs_with_levels oapl ON afpp.amp_program_id = oapl.amp_theme_id
-     					LEFT JOIN amp_theme level ON level.amp_theme_id = apl.id1
-  					WHERE oapl.program_setting_name = 'Primary Program'
-  					GROUP BY afpp.pledge_id, apl.id1, level.amp_theme_id;
+				DROP VIEW IF EXISTS v_pledges_countries CASCADE;
+			   	CREATE OR REPLACE VIEW v_pledges_countries AS 
+		    		SELECT ra.pledge_id, loc.country_name, loc.country_id, sum(ra.location_percentage) AS percentage, COUNT(*) - COUNT(ra.location_percentage) AS cnt_nulls
+						FROM amp_funding_pledges_location ra JOIN ni_all_locations_with_levels loc on loc.acvl_id = ra.location_id
+						GROUP BY ra.pledge_id, loc.country_id, loc.country_name;
         	</lang>
 		</script>
 	</apply>

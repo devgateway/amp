@@ -19,19 +19,19 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				DROP VIEW IF EXISTS v_pledges_npd_objectives CASCADE;
-			    CREATE OR REPLACE VIEW v_pledges_npd_objectives AS 
+				DROP VIEW IF EXISTS v_pledges_npd_objectives_level_3 CASCADE;
+			    CREATE OR REPLACE VIEW v_pledges_npd_objectives_level_3 AS 
 			    	SELECT afpp.pledge_id,
     					COALESCE(level.name, '#') AS name,
-    					apl.id1 AS amp_program_id,
+    					apl.id3 AS amp_program_id,
     					sum(afpp.program_percentage) AS percentage,
     					COUNT(*) - COUNT(afpp.program_percentage) AS cnt_nulls
    					FROM amp_funding_pledges_program afpp
      					JOIN ni_all_programs_with_levels apl ON afpp.amp_program_id = apl.amp_theme_id
      					JOIN all_programs_with_levels oapl ON afpp.amp_program_id = oapl.amp_theme_id
-     					LEFT JOIN amp_theme level ON level.amp_theme_id = apl.id1
+     					LEFT JOIN amp_theme level ON level.amp_theme_id = apl.id3
   					WHERE oapl.program_setting_name = 'National Plan Objective'
-  					GROUP BY afpp.pledge_id, apl.id1, level.amp_theme_id;
+  					GROUP BY afpp.pledge_id, apl.id3, level.amp_theme_id;
        		</lang>
 		</script>
 	</apply>

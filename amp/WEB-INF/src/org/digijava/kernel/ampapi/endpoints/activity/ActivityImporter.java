@@ -1072,8 +1072,9 @@ public class ActivityImporter {
         	for(AmpAnnualProjectBudget apb : newActivity.getAnnualProjectBudgets()) {
         		funAmount += InterchangeUtils.doPPCCalculations(apb, ppc.getCurrencyCode());
         	}
-        	
-        	ppc.setFunAmount(funAmount * AmountsUnits.getDefaultValue().multiplier);
+			if (ppc != null) {
+				ppc.setFunAmount(funAmount * AmountsUnits.getDefaultValue().multiplier);
+			}
         }
 	}
 	

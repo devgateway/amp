@@ -241,7 +241,7 @@ Settings.Util.extractSettings = function(settings) {
 	options.currentThousandSeparator = groupSeparator;
 
 	return options;
-}
+};
 
 Settings.AMP_GLOBAL_SETTINGS = {
 		HIDE_EDITABLE_EXPORTS: 'hide-editable-export-formats-public-view'

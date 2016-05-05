@@ -319,10 +319,11 @@
 	<div id="settings-container" class='panel panel-primary'
 		style="display: none; width: 400px;">
 		<div class="panel-heading">
-			<button type="button" class="close cancel" aria-hidden="true">Ã—</button>
+			<button type="button" class="close cancel" aria-hidden="true">×</button>
 			<h3 class="panel-title i18n">Settings</h3>
 		</div>
 		<div class="panel-body">
+		    <span style="color: red; font-weight: bold; display: none;" class="i18n" id="settings-invalid-year-range">Error: Year Range To should not be greater than From.</span>
 			<table width="100%" align="center">
 				<tbody>
 					<tr>
@@ -333,6 +334,12 @@
 					<tr>
 						<td class="i18n">Calendar</td>
 						<td><select name="amp_calendar" id="amp_calendar">
+						</select></td>
+					</tr>
+					<tr>
+						<td class="i18n">Year Range *</td>
+						<td> <span style="margin-left: 5px;" class="i18n">From:</span><select name="amp_year_range_from" id="amp_year_range_from" style="margin-left: 5px;">
+						</select><span style="margin-left: 5px;" class="i18n">To:</span><select name="amp_year_range_to" id="amp_year_range_to" style="margin-left: 5px;">
 						</select></td>
 					</tr>
 				</tbody>
@@ -348,10 +355,10 @@
 	<!-- End of changes for AMP Filters -->
     <div id="deflated-currencies-container" class="panel panel-primary">
         <div class="panel-heading">
-            <button type="button" class="close cancel" aria-hidden="true">Ã—</button>
+            <button type="button" class="close cancel" aria-hidden="true">×</button>
             <h3 class="panel-title i18n">Settings</h3>
         </div>
-        <div class="panel-body">
+        <div class="panel-body">        
             <table align="center">
                 <tbody>
                     <tr>

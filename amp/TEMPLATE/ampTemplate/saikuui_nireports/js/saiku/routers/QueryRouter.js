@@ -71,7 +71,8 @@ var process_spec = function(data) {
 		settings: data.reportMetadata.reportSpec.settings,
 		hierarchies : data.reportMetadata.reportSpec.hierarchies,
 		columns : data.reportMetadata.reportSpec.columns,
-		report_type : data.reportMetadata.reportSpec.reportType
+		report_type : data.reportMetadata.reportSpec.reportType,
+		settings_data: data.reportMetadata.settings
 	};
 	defaults[report_fieldname] = report_identifier;
 	var model = Backbone.Model.extend({

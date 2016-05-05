@@ -12,14 +12,14 @@ var AMPSettings = Backbone.View.extend({
 				Saiku.logger.log("AMPSettings.initialize");
 				var self = this;
 				this.workspace = args.workspace;
-
+				this.settings_data = this.workspace.query.get('settings_data');
 				this.id = _.uniqueId("amp_settings_");
 				$(this.el).attr({
 					id : this.id
 				});
 
 				_.bindAll(this, "render", "show", "add_amp_settings", "hideContainer", "applySettings");
-
+				
 				this.add_button();
 				this.workspace.toolbar.amp_settings = this.show;
 
@@ -35,6 +35,12 @@ var AMPSettings = Backbone.View.extend({
 						"2": raw_settings.calendar.ampFiscalCalId,
 						"3": raw_settings.unitsMultiplier
 					};
+				
+				if(raw_settings.yearRangeFilter !== null && raw_settings.yearRangeFilter !== undefined ){
+					settings.yearRange = {};
+					settings.yearRange.yearFrom = raw_settings.yearRangeFilter.min;
+					settings.yearRange.yearTo = raw_settings.yearRangeFilter.max;
+				}
 				window.currentSettings = settings;
 
 				$.ajax({
@@ -44,13 +50,15 @@ var AMPSettings = Backbone.View.extend({
 					self.populate_dropdowns(data);
 					if (window.currentSettings["1"] === null) {
 						var foundCurrency = _.find(data, function(item) {return item.id === '1'});
-						window.currentSettings["1"] = _.find(foundCurrency.options, function(item) { return item.id === foundCurrency.defaultId}).value;
-						var hideEditableFormats = _.findWhere(data, {"id": Settings.AMP_GLOBAL_SETTINGS.HIDE_EDITABLE_EXPORTS})
-						if(hideEditableFormats){
-							window.currentSettings[Settings.AMP_GLOBAL_SETTINGS.HIDE_EDITABLE_EXPORTS] = hideEditableFormats.defaultId;
-						}
+						window.currentSettings["1"] = _.find(foundCurrency.options, function(item) { return item.id === foundCurrency.defaultId}).value;						
+					}
+					var hideEditableFormats = _.findWhere(data, {"id": Settings.AMP_GLOBAL_SETTINGS.HIDE_EDITABLE_EXPORTS})
+					if(hideEditableFormats){
+						window.currentSettings[Settings.AMP_GLOBAL_SETTINGS.HIDE_EDITABLE_EXPORTS] = hideEditableFormats.defaultId;
 					}
 				});
+			
+				
 			},
 			
 			hideContainer: function() {
@@ -61,10 +69,20 @@ var AMPSettings = Backbone.View.extend({
 			
 			applySettings: function() {
 				Saiku.logger.log("AMPSettings.applySettings");
+				$('#settings-invalid-year-range').hide();				
+				if(parseInt($('#amp_year_range_from').val()) > parseInt($('#amp_year_range_to').val())){
+					$('#settings-invalid-year-range').show();
+					return;
+					
+				}
 				var settings = {
 					"1": $('#amp_currency').val(),
 					"2": $('#amp_calendar').val(),
-					"3": (window.currentSettings !== undefined ? window.currentSettings["3"] : '')
+					"3": (window.currentSettings !== undefined ? window.currentSettings["3"] : ''),
+					"yearRange":{
+						 "yearFrom":$('#amp_year_range_from').val(),
+						 "yearTo": $('#amp_year_range_to').val()
+						}
 				};
 				this.workspace.query.set('settings', settings);
 				window.currentSettings = settings;
@@ -90,6 +108,26 @@ var AMPSettings = Backbone.View.extend({
 				         .attr("value", object.value)
 				         .text(object.name)); 
 				});
+				
+				var yearRangeSettings = _.findWhere(this.settings_data, {id:'yearRange'});
+				if(yearRangeSettings){
+					var fromOptions = yearRangeSettings.value ? _.findWhere(yearRangeSettings.value, {id:'yearFrom'}).value.options : [];
+					var toOptions = yearRangeSettings.value ? _.findWhere(yearRangeSettings.value, {id:'yearTo'}).value.options : [];
+					
+					_.each(fromOptions,function(option ){
+						$('#amp_year_range_from')
+				         .append($("<option></option>")
+				         .attr("value", option.value)
+				         .text(option.name));
+					});
+					_.each(toOptions,function(option ){
+						$('#amp_year_range_to')
+				         .append($("<option></option>")
+				         .attr("value", option.value)
+				         .text(option.name));
+					});
+				}  
+					
 			},
 			add_button : function() {
 				Saiku.logger.log("AMPSettings.add_button");
@@ -107,15 +145,18 @@ var AMPSettings = Backbone.View.extend({
 
 			show : function(event, ui) {
 				Saiku.logger.log("AMPSettings.show");
+				$('#settings-invalid-year-range').hide();
 				var self = this;
 				$(this.el).toggle();
 				var settings;
 				settings = window.currentSettings;
 				$('#amp_currency').val(settings["1"]);
 				$('#amp_calendar').val(settings["2"]);
-
+				if(settings.yearRange){
+					$('#amp_year_range_from').val(settings.yearRange.yearFrom)
+					$('#amp_year_range_to').val(settings.yearRange.yearTo)
+				}				
 				$(event.target).toggleClass('on');
-
 				if ($(event.target).hasClass('on')) {
 					$('#settings-container').show();
 				} else {

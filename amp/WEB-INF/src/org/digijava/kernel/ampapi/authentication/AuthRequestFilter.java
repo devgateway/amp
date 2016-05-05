@@ -36,7 +36,7 @@ public class AuthRequestFilter implements ContainerRequestFilter {
 	// use it to disable temporarily the authorization
 	private static final boolean AUTHORIZE = true;
 	//NIREPORTS: remove this when we finally switch to NiReports
-	private static final boolean DEFAULT_USE_NIREPORTS = false;
+	private static final boolean DEFAULT_USE_NIREPORTS = true;
 	// Inject request into the filter
 	@Context
 	private HttpServletRequest httpRequest;

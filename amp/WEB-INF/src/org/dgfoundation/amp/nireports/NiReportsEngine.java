@@ -205,6 +205,9 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 			put("percent_cached", calendar.getCalls() == 0 ? 0 : 100 - (100 * calendar.getNonCachedCalls() / calendar.getCalls()));
 		}});
 		timer.putMetaInNode("hierarchies_tracker_stats", hiersTrackerCounter.getStats());
+		if (!reportWarnings.isEmpty()) {
+			timer.putMetaInNode("warnings", reportWarnings);
+		}
 	}
 	
 	protected void runReportAndCleanup() {
@@ -342,7 +345,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 			});
 		};
 		timer.run("Funding", () -> {
-			funding = selectRelevant(schema.getFundingFetcher(this).fetch(this), buildCellFilterForColumn(FUNDING_COLUMN_NAME, true));
+			funding = selectRelevant(schema.fetchEntity(this, schema.getFundingFetcher(this)), buildCellFilterForColumn(FUNDING_COLUMN_NAME, true));
 			timer.putMetaInNode("cells", funding.size());
 			});
 	}
@@ -385,7 +388,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	
 	protected<K extends Cell> ColumnContents fetchEntity(NiReportedEntity<K> colToFetch, boolean applyFilterPercentages) throws Exception {
 		try { 
-			List<K> cells = selectRelevant(colToFetch.fetch(this), buildCellFilterForColumn(colToFetch.name, colToFetch instanceof NiReportColumn));
+			List<K> cells = selectRelevant(schema.fetchEntity(this, colToFetch), buildCellFilterForColumn(colToFetch.name, colToFetch instanceof NiReportColumn));
 			timer.putMetaInNode("cells", cells.size());
 			return new ColumnContents(cells.stream().map(z -> new NiCell(z, colToFetch, rootEmptyTracker)).collect(Collectors.toList()));
 		}

@@ -53,8 +53,12 @@ public abstract class AmpDifferentialColumn<K extends Cell, T> extends AmpSqlSou
 	
 	@Override
 	public synchronized List<K> fetch(NiReportsEngine engine) {
-		DifferentialCache<K> cache = differentiallyImportCells(engine, idsToReplace -> super.fetch(engine, idsToReplace)).v;
-		return cache.getCells(engine.getMainIds());
+		if (((AmpReportsSchema) engine.schema).ENABLE_CACHING) {
+			DifferentialCache<K> cache = differentiallyImportCells(engine, idsToReplace -> super.fetch(engine, idsToReplace)).v;
+			return cache.getCells(engine.schemaSpecificScratchpad.getMainIds(engine, this));
+		}
+		else
+			return super.fetch(engine);
 	}
 	
 	protected synchronized DifferentialCache<K> origFetch(NiReportsEngine engine, T key) {

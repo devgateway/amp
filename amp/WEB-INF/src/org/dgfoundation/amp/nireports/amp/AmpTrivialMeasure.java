@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.nireports.amp;
 
+import java.util.function.Predicate;
+
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.schema.NiTransactionMeasure;
 import org.dgfoundation.amp.nireports.schema.TrivialMeasureBehaviour;
@@ -15,11 +17,17 @@ public class AmpTrivialMeasure extends NiTransactionMeasure {
 	 * @param directed
 	 */
 	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed) {
+		this(measureName, transactionType, adjustmentTypeName, directed, cac -> false);
+	}
+	
+	public AmpTrivialMeasure(String measureName, long transactionType, String adjustmentTypeName, boolean directed, Predicate<CategAmountCell> or) {
 		super(measureName, 
 				cac -> 
-					cac.metaInfo.containsMeta(MetaCategory.TRANSACTION_TYPE.category, Long.valueOf(transactionType)) &&
-					cac.metaInfo.containsMeta(MetaCategory.ADJUSTMENT_TYPE.category, adjustmentTypeName) &&
-					(directed ? isDirected(cac) : isDonorSourced(cac)),
+					or.test(cac) || (
+							cac.metaInfo.containsMeta(MetaCategory.TRANSACTION_TYPE.category, Long.valueOf(transactionType)) &&
+							cac.metaInfo.containsMeta(MetaCategory.ADJUSTMENT_TYPE.category, adjustmentTypeName) &&
+							(directed ? isDirected(cac) : isDonorSourced(cac))
+						),
 				directed ? new DirectedMeasureBehaviour() : TrivialMeasureBehaviour.getInstance(),
 				AmpReportsSchema.measureDescriptions.get(measureName)
 			);

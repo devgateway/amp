@@ -32,7 +32,12 @@ public final class CategAmountCell extends Cell implements CategCell, DatedCell,
 	public CategAmountCell multiply(BigDecimal multipland) {
 		return new CategAmountCell(this.activityId, this.amount.multiplyBy(multipland), this.metaInfo, this.coordinates, this.translatedDate);
 	}
-	
+
+	@Override
+	public Cell changeOwnerId(long newActivityId) {
+		return new CategAmountCell(newActivityId, this.amount, this.metaInfo, this.coordinates, this.translatedDate);
+	}
+
 	@Override
 	public String toString() {
 		return String.format("(actId: %d, amt: %s, coos: {%s}, meta: {%s}", this.activityId, amount, AmpCollections.sortedMap(coordinates, (a, b) -> a.toString().compareTo(b.toString())), metaInfo);
@@ -73,4 +78,5 @@ public final class CategAmountCell extends Cell implements CategCell, DatedCell,
 	public boolean isScalableByUnits() {
 		return true;
 	}
+
 }

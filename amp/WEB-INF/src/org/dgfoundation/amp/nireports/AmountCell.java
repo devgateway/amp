@@ -25,6 +25,11 @@ public final class AmountCell extends Cell implements CategCell, NumberedCell {
 	}
 	
 	@Override
+	public AmountCell changeOwnerId(long newActivityId) {
+		return new AmountCell(newActivityId, amount);
+	}
+
+	@Override
 	public BigDecimal getAmount() {
 		return amount.amount;
 	}

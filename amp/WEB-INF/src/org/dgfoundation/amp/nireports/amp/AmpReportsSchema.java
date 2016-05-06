@@ -19,6 +19,7 @@ import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_6;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_7;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_8;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
+import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -42,6 +44,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
 import org.dgfoundation.amp.currencyconvertor.CurrencyConvertor;
 import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportExecutor;
@@ -50,6 +53,7 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.AbstractReportsSchema;
 import org.dgfoundation.amp.nireports.CategAmountCell;
+import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiFilters;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
@@ -65,7 +69,9 @@ import org.dgfoundation.amp.nireports.schema.BooleanDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
+import org.dgfoundation.amp.nireports.schema.NiLinearCombinationTransactionMeasure;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
+import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 import org.dgfoundation.amp.nireports.schema.NiTransactionContextMeasure;
 import org.dgfoundation.amp.nireports.schema.NiTransactionMeasure;
 import org.dgfoundation.amp.nireports.schema.PidTextualTokenBehaviour;
@@ -83,7 +89,9 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 public class AmpReportsSchema extends AbstractReportsSchema {
 
 	public static final Logger logger = Logger.getLogger(AmpReportsSchema.class);
-
+	
+	public boolean ENABLE_CACHING = true;
+	
 	public final static Set<String> TRANSACTION_LEVEL_HIERARCHIES = Collections.unmodifiableSet(new HashSet<>(
 			Arrays.asList(ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.FUNDING_STATUS, ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.DISASTER_RESPONSE_MARKER, ColumnConstants.RELATED_PROJECTS)));
 	
@@ -95,7 +103,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static BooleanDimension boolDimension = new BooleanDimension("bool", 1l, 2l); // corroborate with FilterRule.TRUE_VALUE
 	public final static NiDimension agreementsDimension = SqlSourcedNiDimension.buildDegenerateDimension("agrs", "amp_agreement", "id");
 	public final static NiDimension activitiesDimension = SqlSourcedNiDimension.buildDegenerateDimension("acts", "amp_activity_version", "amp_activity_id");
-	
+	    
 	/**
 	 * the pseudocolumn of the header Splitter for cells which are funding flows
 	 */
@@ -139,8 +147,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		
 	}};
 	@SuppressWarnings("serial")
-	public final static Map<String, String> measureDescriptions = new HashMap<String, String>(){{
-
+	public final static Map<String, String> measureDescriptions = new HashMap<String, String>() {{
 
 		put(MeasureConstants.CONSUMPTION_RATE , "(Selected Year Cumulated Disbursements / Selected Year of Planned Disbursements) * 100"); 
 		put(MeasureConstants.CUMULATED_DISBURSEMENTS , "Prior Actual Disbursements + Previous Month Disbursements"); 
@@ -206,7 +213,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	}
 	
 	protected final static NiReportColumn<CategAmountCell> donorFundingColumn = new AmpFundingColumn();
-	protected final static NiReportColumn<CategAmountCell> pledgeFundingColumn = new PledgeFundingColumn("Pledge Funding");
+	protected final static NiReportColumn<CategAmountCell> pledgeFundingColumn = new PledgeFundingColumn();
 	
 	protected AmpReportsSchema() {
 		no_dimension(ColumnConstants.PROJECT_TITLE, "v_titles");
@@ -475,19 +482,45 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		// pledge columns
 		no_entity(ColumnConstants.PLEDGES_TITLES, "v_ni_pledges_titles");
 		single_dimension(ColumnConstants.PLEDGES_DONOR_GROUP, "v_pledges_donor_group", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION_GROUP));
-		with_percentage(ColumnConstants.PLEDGES_PROGRAMS, "v_pledges_programs", PP_DIM_USG, LEVEL_ROOT);
-		with_percentage(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS, "v_pledges_secondary_programs", SP_DIM_USG, LEVEL_ROOT);
-		with_percentage(ColumnConstants.PLEDGES_TERTIARY_PROGRAMS, "v_pledges_tertiary_programs", TP_DIM_USG, LEVEL_ROOT);
-		with_percentage(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES, "v_pledges_npd_objectives", NPO_DIM_USG, LEVEL_ROOT);
+		single_dimension(ColumnConstants.PLEDGES_DONOR_TYPE, "v_pledges_donor_type", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION_TYPE));
+		
+		with_percentage(ColumnConstants.PLEDGES_PROGRAMS, "v_pledges_programs", PP_DIM_USG, LEVEL_1);
+		with_percentage(ColumnConstants.PLEDGES_PROGRAMS_LEVEL_2, "v_pledges_programs_level_2", PP_DIM_USG, LEVEL_2);
+		with_percentage(ColumnConstants.PLEDGES_PROGRAMS_LEVEL_3, "v_pledges_programs_level_3", PP_DIM_USG, LEVEL_3);
+		
+		with_percentage(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS, "v_pledges_secondary_programs", SP_DIM_USG, LEVEL_1);
+		with_percentage(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_2, "v_pledges_secondary_programs_level_2", SP_DIM_USG, LEVEL_2);
+		with_percentage(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_3, "v_pledges_secondary_programs_level_3", SP_DIM_USG, LEVEL_3);
+		
+		with_percentage(ColumnConstants.PLEDGES_TERTIARY_PROGRAMS, "v_pledges_tertiary_programs", TP_DIM_USG, LEVEL_1);
+		with_percentage(ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_2, "v_pledges_tertiary_programs_level_2", TP_DIM_USG, LEVEL_2);
+		with_percentage(ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_3, "v_pledges_tertiary_programs_level_3", TP_DIM_USG, LEVEL_3);
+		
+		with_percentage(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES, "v_pledges_npd_objectives", NPO_DIM_USG, LEVEL_1);
+		with_percentage(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_2, "v_pledges_npd_objectives_level_2", NPO_DIM_USG, LEVEL_2);
+		with_percentage(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_3, "v_pledges_npd_objectives_level_3", NPO_DIM_USG, LEVEL_3);
+		
 		with_percentage(ColumnConstants.PLEDGES_SECTORS, "v_pledges_sectors", PS_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.PLEDGES_SECTORS_SUBSECTORS, "v_pledges_sectors_subsectors", PS_DIM_USG, LEVEL_SUBSECTOR);
+		with_percentage(ColumnConstants.PLEDGES_SECTORS_SUBSUBSECTORS, "v_pledges_sectors_subsubsectors", PS_DIM_USG, LEVEL_SUBSUBSECTOR);
+		
 		with_percentage(ColumnConstants.PLEDGES_SECONDARY_SECTORS, "v_pledges_secondary_sectors", SS_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.PLEDGES_SECONDARY_SUBSECTORS, "v_pledges_secondary_sectors_subsectors", SS_DIM_USG, LEVEL_SUBSECTOR);
+		with_percentage(ColumnConstants.PLEDGES_SECONDARY_SUBSUBSECTORS, "v_pledges_secondary_sectors_subsubsectors", SS_DIM_USG, LEVEL_SUBSUBSECTOR);
+		
 		with_percentage(ColumnConstants.PLEDGES_TERTIARY_SECTORS, "v_pledges_tertiary_sectors", TS_DIM_USG, LEVEL_ROOT);
+		with_percentage(ColumnConstants.PLEDGES_TERTIARY_SUBSECTORS, "v_pledges_tertiary_sectors_subsectors", TS_DIM_USG, LEVEL_SUBSECTOR);
+		with_percentage(ColumnConstants.PLEDGES_TERTIARY_SUBSUBSECTORS, "v_pledges_tertiary_sectors_subsubsectors", TS_DIM_USG, LEVEL_SUBSUBSECTOR);
+		
+		with_percentage(ColumnConstants.PLEDGES_COUNTRIES, "v_pledges_countries", LOC_DIM_USG, LEVEL_COUNTRY);
 		with_percentage(ColumnConstants.PLEDGES_REGIONS, "v_pledges_regions", LOC_DIM_USG, LEVEL_REGION);
 		with_percentage(ColumnConstants.PLEDGES_ZONES, "v_pledges_zones", LOC_DIM_USG, LEVEL_ZONE);
 		with_percentage(ColumnConstants.PLEDGES_DISTRICTS, "v_pledges_districts", LOC_DIM_USG, LEVEL_DISTRICT);
+		
 		degenerate_dimension(ColumnConstants.PLEDGES_AID_MODALITY, "v_pledges_aid_modality", catsDimension);
 		degenerate_dimension(ColumnConstants.PLEDGE_STATUS, "v_pledges_status", catsDimension);
-		degenerate_dimension(ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE, "v_pledges_type_of_assistance", catsDimension);
+		single_dimension(ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE, "v_pledges_type_of_assistance", catsDimension.getLevelColumn(ColumnConstants.TYPE_OF_ASSISTANCE, 1));
+		
 		Map<String, String> pledgeContacts = new HashMap<String, String>() {{
 		    put(ColumnConstants.PLEDGE_CONTACT_1___ADDRESS, "v_pledges_contact1_address");
 		    put(ColumnConstants.PLEDGE_CONTACT_1___ALTERNATE_CONTACT, "v_pledges_contact1_alternate");
@@ -610,7 +643,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	}
 	
 	private AmpReportsSchema addTrivialMeasures() {
-		addMeasure(new AmpTrivialMeasure(MeasureConstants.ACTUAL_COMMITMENTS, Constants.COMMITMENT, "Actual", false));
+		addMeasure(new AmpTrivialMeasure(MeasureConstants.ACTUAL_COMMITMENTS, Constants.COMMITMENT, "Actual", false, cac -> cac.activityId > MondrianETL.PLEDGE_ID_ADDER));
 
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.PLANNED_COMMITMENTS, Constants.COMMITMENT, "Planned", false));
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.PIPELINE_COMMITMENTS, Constants.COMMITMENT, "Pipeline", false));
@@ -748,8 +781,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	}
 
 	public Set<Long> getWorkspacePledges(NiReportsEngine engine) {
-		//return new HashSet<>(Arrays.asList(6l));
-		return new HashSet<>(SQLUtils.fetchLongs(AmpReportsScratchpad.get(engine).connection, "SELECT id FROM amp_funding_pledges"));
+		//return new HashSet<>(SQLUtils.fetchLongs(AmpReportsScratchpad.get(engine).connection, "SELECT id FROM amp_funding_pledges"));
+		return AmpReportsScratchpad.get(engine).computedPledgeIds.get();
 	}
 	
 	/**
@@ -763,8 +796,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		//res = Collections.unmodifiableSet(new HashSet<Long>(SQLUtils.fetchLongs(conn, "SELECT amp_activity_id FROM amp_activity where name in ('new activity with contracting', 'activity_with_disaster_response')")));
 		//res = new HashSet<>(Arrays.asList(70l, 78l));
 		ReportEnvironment environ = AmpReportsScratchpad.get(engine).environment;
-		Set<Long> res = Collections.unmodifiableSet(environ.workspaceFilter.getIds());
-		return res;
+		if (engine.spec.isAlsoShowPledges())
+			return AmpCollections.union(environ.workspaceFilter.getIds(), getWorkspacePledges(engine).stream().map(z -> z + MondrianETL.PLEDGE_ID_ADDER).collect(Collectors.toSet()));
+		else
+			return Collections.unmodifiableSet(environ.workspaceFilter.getIds());
 	}
 
 		
@@ -832,6 +867,43 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		}
 		return sp;
 	};
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public<K extends Cell> List<K> fetchEntity(NiReportsEngine engine, NiReportedEntity<K> entity) throws Exception {
+		List<K> origResult = entity.fetch(engine);
+		
+		String pledgeCompanion = AmpFiltersConverter.DONOR_COLUMNS_TO_PLEDGE_COLUMNS.get(entity.name);
+		
+		if (engine.spec.getReportType() == ArConstants.DONOR_TYPE && engine.spec.isAlsoShowPledges() && entity instanceof NiReportColumn) {
+			if (pledgeCompanion != null) {
+				List<K> pledgesResult = new ArrayList<>();
+				engine.timer.run("pledgeCompanion: " + pledgeCompanion, () -> {
+					pledgesResult.addAll((List<K>) columns.get(pledgeCompanion).fetch(engine));
+				});
+				List<K> pledgeCellsAsDonorCells = AmpCollections.relist(pledgesResult, this::pledgeCellToDonorCell);
+				return AmpCollections.mergeLists(origResult, pledgeCellsAsDonorCells);
+			}
+			
+			if (entity.name.equals(AmpFundingColumn.ENTITY_DONOR_FUNDING)) {
+				List<CategAmountCell> pledgeFunding = new ArrayList<>();
+				engine.timer.run("pledge funding", () -> {
+					pledgeFunding.addAll(pledgeFundingColumn.fetch(engine));
+				});
+				
+				NiLinearCombinationTransactionMeasure commitmentGap = (NiLinearCombinationTransactionMeasure) getMeasures().get(MeasureConstants.PLEDGES_COMMITMENT_GAP);
+				List<CategAmountCell> commitmentGapCells = commitmentGap.fetch(pledgeFunding);
+				List<K> commitmentGapAsActualCommitments = (List<K>) AmpCollections.relist(commitmentGapCells, this::pledgeCellToDonorCell);
+				return AmpCollections.mergeLists(origResult, commitmentGapAsActualCommitments);
+			}
+		};
+		return origResult;
+	}
+		
+	@SuppressWarnings("unchecked")
+	protected<K extends Cell> K pledgeCellToDonorCell(K pledgeCell) {
+		return (K) pledgeCell.changeOwnerId(pledgeCell.activityId + MondrianETL.PLEDGE_ID_ADDER);
+	}
 	
 	/**
 	 * returns true iff a given column is defined and denoting a boolean column

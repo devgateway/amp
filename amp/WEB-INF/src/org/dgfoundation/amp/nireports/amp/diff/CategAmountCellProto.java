@@ -49,6 +49,11 @@ public class CategAmountCellProto extends Cell {
 	}
 
 	@Override
+	public CategAmountCellProto changeOwnerId(long newActivityId) {
+		return new CategAmountCellProto(newActivityId, origAmount, origCurrency, transactionMoment, metaInfo, this.coordinates, fixed_exchange_rate);
+	}
+
+	@Override
 	public int compareTo(Object o) {
 		throw new RuntimeException("not implemented");
 	}

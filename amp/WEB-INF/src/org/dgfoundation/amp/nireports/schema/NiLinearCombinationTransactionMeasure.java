@@ -39,10 +39,9 @@ public class NiLinearCombinationTransactionMeasure extends NiReportMeasure<Categ
 		this(measureName, terms, TrivialMeasureBehaviour.getInstance(), description);
 	}
 	
-	@Override
-	public List<CategAmountCell> fetch(NiReportsEngine engine) {
+	public List<CategAmountCell> fetch(List<CategAmountCell> funding) {
 		List<CategAmountCell> res = new ArrayList<>();
-		for(CategAmountCell cell:engine.funding) {
+		for(CategAmountCell cell:funding) {
 			for(int i = 0; i < measures.length; i++) {
 				if (measures[i].criterion.test(cell)) {
 					CategAmountCell c = multiply(cell, prods[i]);
@@ -53,6 +52,11 @@ public class NiLinearCombinationTransactionMeasure extends NiReportMeasure<Categ
 			}
 		}
 		return res;
+	}
+	
+	@Override
+	public List<CategAmountCell> fetch(NiReportsEngine engine) {
+		return fetch(engine.funding);
 	}
 	
 	protected CategAmountCell multiply(CategAmountCell cell, BigDecimal multiplier) {

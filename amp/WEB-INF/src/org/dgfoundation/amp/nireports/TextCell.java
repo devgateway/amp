@@ -21,6 +21,11 @@ public final class TextCell extends Cell {
 	}
 	
 	@Override
+	public TextCell changeOwnerId(long newActivityId) {
+		return new TextCell(this.text, newActivityId, this.entityId, this.mainLevel);
+	}
+
+	@Override
 	public MetaInfoSet getMetaInfo() {
 		return MetaInfoSet.empty();
 	}

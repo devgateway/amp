@@ -20,7 +20,12 @@ public final class DateCell extends Cell {
 		Objects.requireNonNull(date);
 		this.date = date;
 	}
-	
+
+	@Override
+	public DateCell changeOwnerId(long newActivityId) {
+		return new DateCell(this.date, newActivityId, this.entityId, this.mainLevel);
+	}
+
 	@Override
 	public MetaInfoSet getMetaInfo() {
 		return MetaInfoSet.empty();
@@ -42,4 +47,5 @@ public final class DateCell extends Cell {
 	public String getDisplayedValue() {
 		return date.toString();
 	}
+
 }

@@ -31,22 +31,50 @@ import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
  *
  */
 public class AmpFiltersConverter extends BasicFiltersConverter {
-    
-    final static Map<String, String> TO_PLEDGE_COLUMNS = new HashMap<String, String>() {{
+
+    final static Map<String, String> DONOR_COLUMNS_TO_PLEDGE_COLUMNS = new HashMap<String, String>() {{
+    	put(ColumnConstants.PROJECT_TITLE, ColumnConstants.PLEDGES_TITLES);
         put(ColumnConstants.STATUS, ColumnConstants.PLEDGE_STATUS);
         put(ColumnConstants.MODALITIES, ColumnConstants.PLEDGES_AID_MODALITY);
-        put(ColumnConstants.DISTRICT, ColumnConstants.PLEDGES_DISTRICTS);
+        
         put(ColumnConstants.DONOR_GROUP, ColumnConstants.PLEDGES_DONOR_GROUP);
+        put(ColumnConstants.DONOR_TYPE, ColumnConstants.PLEDGES_DONOR_TYPE);
+        
         put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES);
+        
         put(ColumnConstants.PRIMARY_PROGRAM, ColumnConstants.PLEDGES_PROGRAMS);
-        put(ColumnConstants.REGION, ColumnConstants.PLEDGES_REGIONS);
+        put(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1, ColumnConstants.PLEDGES_PROGRAMS);
+        put(ColumnConstants.PRIMARY_PROGRAM_LEVEL_2, ColumnConstants.PLEDGES_PROGRAMS_LEVEL_2);
+        put(ColumnConstants.PRIMARY_PROGRAM_LEVEL_3, ColumnConstants.PLEDGES_PROGRAMS_LEVEL_3);
+        
         put(ColumnConstants.SECONDARY_PROGRAM, ColumnConstants.PLEDGES_SECONDARY_PROGRAMS);
-        put(ColumnConstants.SECONDARY_SECTOR, ColumnConstants.PLEDGES_SECONDARY_SECTORS);
-        put(ColumnConstants.PRIMARY_SECTOR, ColumnConstants.PLEDGES_SECTORS);
+        put(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1, ColumnConstants.PLEDGES_SECONDARY_PROGRAMS);
+        put(ColumnConstants.SECONDARY_PROGRAM_LEVEL_2, ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_2);
+        put(ColumnConstants.SECONDARY_PROGRAM_LEVEL_3, ColumnConstants.PLEDGES_SECONDARY_PROGRAMS_LEVEL_3);
+        
         put(ColumnConstants.TERTIARY_PROGRAM, ColumnConstants.PLEDGES_TERTIARY_PROGRAMS);
+        put(ColumnConstants.TERTIARY_PROGRAM_LEVEL_1, ColumnConstants.PLEDGES_TERTIARY_PROGRAMS);
+        put(ColumnConstants.TERTIARY_PROGRAM_LEVEL_2, ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_2);
+        put(ColumnConstants.TERTIARY_PROGRAM_LEVEL_3, ColumnConstants.PLEDGES_TERTIARY_PROGRAMS_LEVEL_3);
+
+        put(ColumnConstants.PRIMARY_SECTOR, ColumnConstants.PLEDGES_SECTORS);
+        put(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, ColumnConstants.PLEDGES_SECTORS_SUBSECTORS);
+        put(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.PLEDGES_SECTORS_SUBSUBSECTORS);
+        
+        put(ColumnConstants.SECONDARY_SECTOR, ColumnConstants.PLEDGES_SECONDARY_SECTORS);
+        put(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, ColumnConstants.PLEDGES_SECONDARY_SUBSECTORS);
+        put(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.PLEDGES_SECONDARY_SUBSUBSECTORS);
+        
         put(ColumnConstants.TERTIARY_SECTOR, ColumnConstants.PLEDGES_TERTIARY_SECTORS);
+        put(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, ColumnConstants.PLEDGES_TERTIARY_SUBSECTORS);
+        put(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.PLEDGES_TERTIARY_SUBSUBSECTORS);
+        
         put(ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE);
+        
         put(ColumnConstants.ZONE, ColumnConstants.PLEDGES_ZONES);
+        put(ColumnConstants.REGION, ColumnConstants.PLEDGES_REGIONS);
+        put(ColumnConstants.DISTRICT, ColumnConstants.PLEDGES_DISTRICTS);
+        put(ColumnConstants.COUNTRY, ColumnConstants.PLEDGES_COUNTRIES);
     }};
 
 	/**
@@ -82,7 +110,7 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 		columnName = removeIdSuffixIfNeeded(schema, columnName);
 
 		if (this.spec.getReportType() == ArConstants.PLEDGES_TYPE)
-	        columnName = TO_PLEDGE_COLUMNS.getOrDefault(columnName, columnName);
+	        columnName = DONOR_COLUMNS_TO_PLEDGE_COLUMNS.getOrDefault(columnName, columnName);
 
 		if (schema.getColumns().containsKey(columnName)) {
 			super.processColumnElement(columnName, rules);
@@ -122,5 +150,14 @@ public class AmpFiltersConverter extends BasicFiltersConverter {
 	@Override
 	protected boolean shouldCollapseDimension(NiDimension dimension) {
 		return dimension.depth > 1 && ORED_DIMENSIONS.contains(dimension.name);
+	}
+
+	@Override
+	protected boolean shouldIgnoreFilteringColumn(String columnName) {
+		if (spec.isAlsoShowPledges() || spec.getReportType() == ArConstants.PLEDGES_TYPE) {
+			boolean supported = columnName.startsWith("Pledge") || columnName.equals(ColumnConstants.RELATED_PROJECTS) || DONOR_COLUMNS_TO_PLEDGE_COLUMNS.containsKey(columnName);
+			return !supported;
+		}
+		return false;
 	}
 }

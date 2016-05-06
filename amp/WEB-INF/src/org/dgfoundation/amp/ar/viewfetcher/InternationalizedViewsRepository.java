@@ -324,11 +324,26 @@ public class InternationalizedViewsRepository {
 						addColumnDef(new I18nViewColumnDescription("related_project", "related_project_id", AmpActivityVersion.class, "name")).
 						addTrnColDef("terms_assist_name", "terms_assist_id").
 						addTrnColDef("financing_instrument_name", "financing_instrument_id"));
-				
+
+				addViewDef(this, new I18nViewDescription("v_ni_pledges_projects").
+						addColumnDef(new I18nViewColumnDescription("title", "related_project_id", AmpActivityVersion.class, "name")));
+
 				addViewDef(this, new I18nViewDescription("v_pledges_programs").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
 
+				addViewDef(this, new I18nViewDescription("v_pledges_programs_level_2").
+						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
+
+				addViewDef(this, new I18nViewDescription("v_pledges_programs_level_3").
+						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
+
 				addViewDef(this, new I18nViewDescription("v_pledges_secondary_programs").
+						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
+
+				addViewDef(this, new I18nViewDescription("v_pledges_secondary_programs_level_2").
+						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
+
+				addViewDef(this, new I18nViewDescription("v_pledges_secondary_programs_level_3").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
 
 				addSimpleTranslatedView(this, "v_pledges_status", "name", "amp_status_id");
@@ -336,37 +351,59 @@ public class InternationalizedViewsRepository {
 				addViewDef(this, new I18nViewDescription("v_pledges_tertiary_programs").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
 
+				addViewDef(this, new I18nViewDescription("v_pledges_tertiary_programs_level_2").
+						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
+
+				addViewDef(this, new I18nViewDescription("v_pledges_tertiary_programs_level_3").
+						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
+
 				addSimpleTranslatedView(this, "v_pledges_type_of_assistance", "category_value", "id");
 				
 				addViewDef(this, new I18nViewDescription("v_pledges_npd_objectives").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
 
+				addViewDef(this, new I18nViewDescription("v_pledges_npd_objectives_level_2").
+						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
+
+				addViewDef(this, new I18nViewDescription("v_pledges_npd_objectives_level_3").
+						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
+
 				addViewDef(this, new I18nViewDescription("v_pledges_projects").
 						addColumnDef(new I18nViewColumnDescription("title", "amp_activity_id", AmpActivityVersion.class, "name")));
 				
+
+				addViewDef(this, new I18nViewDescription("v_pledges_countries").
+						addColumnDef(new I18nViewColumnDescription("country_name", "country_id", AmpCategoryValueLocations.class, "name")));
+
 				addViewDef(this, new I18nViewDescription("v_pledges_regions").
 						addColumnDef(new I18nViewColumnDescription("region_name", "region_id", AmpCategoryValueLocations.class, "name")));
 				
 				addViewDef(this, new I18nViewDescription("v_pledges_districts").
 						addColumnDef(new I18nViewColumnDescription("district_name", "district_id", AmpCategoryValueLocations.class, "name")));				
 				
-				addViewDef(this, new I18nViewDescription("v_pledges_sectors").
-						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name"))
-						//.addColumnDef(new I18nViewColumnDescription("sec_scheme_name", "amp_sector_scheme_id", AmpSectorScheme.class, "secSchemeName"))
-						);
-
-				addViewDef(this, new I18nViewDescription("v_pledges_secondary_sectors").
-						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name"))
-						//.addColumnDef(new I18nViewColumnDescription("sec_scheme_name", "amp_sector_scheme_id", AmpSectorScheme.class, "secSchemeName"))
-						);
-
-				addViewDef(this, new I18nViewDescription("v_pledges_tertiary_sectors").
-						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name"))
-						//.addColumnDef(new I18nViewColumnDescription("sec_scheme_name", "amp_sector_scheme_id", AmpSectorScheme.class, "secSchemeName"))
-						);
-
 				addViewDef(this, new I18nViewDescription("v_pledges_zones").
 						addColumnDef(new I18nViewColumnDescription("zone_name", "zone_id", AmpCategoryValueLocations.class, "name")));
+
+				addViewDef(this, new I18nViewDescription("v_pledges_sectors").
+						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")));
+				addViewDef(this, new I18nViewDescription("v_pledges_sectors_subsectors").
+						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")));
+				addViewDef(this, new I18nViewDescription("v_pledges_sectors_subsubsectors").
+						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")));
+
+				addViewDef(this, new I18nViewDescription("v_pledges_secondary_sectors").
+						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")));
+				addViewDef(this, new I18nViewDescription("v_pledges_secondary_sectors_subsectors").
+						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")));
+				addViewDef(this, new I18nViewDescription("v_pledges_secondary_sectors_subsubsectors").
+						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")));
+
+				addViewDef(this, new I18nViewDescription("v_pledges_tertiary_sectors").
+						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")));
+				addViewDef(this, new I18nViewDescription("v_pledges_tertiary_sectors_subsectors").
+						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")));
+				addViewDef(this, new I18nViewDescription("v_pledges_tertiary_sectors_subsubsectors").
+						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")));
 								
 				addSimpleTranslatedView(this, "v_procurement_system", "name", "id");
 								

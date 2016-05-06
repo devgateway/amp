@@ -205,20 +205,45 @@ public class ColumnConstants {
 	public static final String PLEDGES_DETAIL_DATE_RANGE = "Pledges Detail Date Range";
 	public static final String PLEDGES_DETAIL_END_DATE = "Pledges Detail End Date";
 	public static final String PLEDGES_DETAIL_START_DATE = "Pledges Detail Start Date";
-	public static final String PLEDGES_DISTRICTS = "Pledges Districts";
 	public static final String PLEDGES_DONOR_GROUP = "Pledges Donor Group";
+	public static final String PLEDGES_DONOR_TYPE = "Pledges Donor Type";
+	
 	public static final String PLEDGES_NATIONAL_PLAN_OBJECTIVES = "Pledges National Plan Objectives";
+	public static final String PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_2 = "Pledges National Plan Objectives Level 2";
+	public static final String PLEDGES_NATIONAL_PLAN_OBJECTIVES_LEVEL_3 = "Pledges National Plan Objectives Level 3";
+	
 	public static final String PLEDGES_PROGRAMS = "Pledges Programs";
+	public static final String PLEDGES_PROGRAMS_LEVEL_2 = "Pledges Programs Level 2";
+	public static final String PLEDGES_PROGRAMS_LEVEL_3 = "Pledges Programs Level 3";
+	
+	public static final String PLEDGES_COUNTRIES = "Pledges Countries";
 	public static final String PLEDGES_REGIONS = "Pledges Regions";
+	public static final String PLEDGES_ZONES = "Pledges Zones";
+	public static final String PLEDGES_DISTRICTS = "Pledges Districts";
+	
 	public static final String PLEDGES_SECONDARY_PROGRAMS = "Pledges Secondary Programs";
+	public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_2 = "Pledges Secondary Programs Level 2";
+	public static final String PLEDGES_SECONDARY_PROGRAMS_LEVEL_3 = "Pledges Secondary Programs Level 3";
+	
 	public static final String PLEDGES_SECONDARY_SECTORS = "Pledges Secondary Sectors";
+	public static final String PLEDGES_SECONDARY_SUBSECTORS = "Pledges Secondary Sub-Sectors";
+	public static final String PLEDGES_SECONDARY_SUBSUBSECTORS = "Pledges Secondary Sub-Sub-Sectors";
+	
 	public static final String PLEDGES_SECTORS = "Pledges sectors";
+	public static final String PLEDGES_SECTORS_SUBSECTORS = "Pledges sectors sub-sectors";
+	public static final String PLEDGES_SECTORS_SUBSUBSECTORS = "Pledges sectors sub-sub-sectors";
+
+	public static final String PLEDGES_TERTIARY_SECTORS = "Pledges Tertiary Sectors";
+	public static final String PLEDGES_TERTIARY_SUBSECTORS = "Pledges Tertiary Sub-Sectors";
+	public static final String PLEDGES_TERTIARY_SUBSUBSECTORS = "Pledges Tertiary Sub-Sub-Sectors";
+
 	public static final String PLEDGE_STATUS = "Pledge Status";
 	public static final String PLEDGES_TERTIARY_PROGRAMS = "Pledges Tertiary Programs";
-	public static final String PLEDGES_TERTIARY_SECTORS = "Pledges Tertiary Sectors";
+	public static final String PLEDGES_TERTIARY_PROGRAMS_LEVEL_2 = "Pledges Tertiary Programs Level 2";
+	public static final String PLEDGES_TERTIARY_PROGRAMS_LEVEL_3 = "Pledges Tertiary Programs Level 3";
+	
 	public static final String PLEDGES_TITLES = "Pledges Titles";
 	public static final String PLEDGES_TYPE_OF_ASSISTANCE = "Pledges Type Of Assistance";
-	public static final String PLEDGES_ZONES = "Pledges Zones";
 	public static final String RELATED_PROJECTS = "Related Projects";
 	public static final String PREDICTABILITY_OF_FUNDING = "Predictability of Funding";
 	public static final String PRIMARY_PROGRAM = "Primary Program";

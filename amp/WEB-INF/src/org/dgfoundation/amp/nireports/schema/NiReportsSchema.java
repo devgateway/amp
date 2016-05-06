@@ -59,4 +59,15 @@ public interface NiReportsSchema {
 		}
 		return res;
 	}
+	
+	/**
+	 * fetches an entity. By default it just forwards to the entity
+	 * @param engine
+	 * @param entity
+	 * @return
+	 * @throws Exception
+	 */
+	public default<K extends Cell> List<K> fetchEntity(NiReportsEngine engine, NiReportedEntity<K> entity) throws Exception {
+		return entity.fetch(engine);
+	}
 }

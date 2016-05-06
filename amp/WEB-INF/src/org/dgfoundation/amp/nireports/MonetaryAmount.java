@@ -46,7 +46,7 @@ public class MonetaryAmount implements Comparable<MonetaryAmount> {
 	}
 	
 	public MonetaryAmount multiplyBy(BigDecimal other) {
-		return new MonetaryAmount(amount.multiply(other), origAmount, origCurrency, null, precisionSetting);
+		return new MonetaryAmount(amount.multiply(other), origAmount, origCurrency, this.date, precisionSetting);
 	}
 	
 	public MonetaryAmount add(MonetaryAmount other) {

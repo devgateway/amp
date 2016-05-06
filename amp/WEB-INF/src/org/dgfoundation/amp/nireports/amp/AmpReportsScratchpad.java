@@ -15,6 +15,7 @@ import org.dgfoundation.amp.algo.Memoizer;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.algo.timing.InclusiveTimer;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
@@ -25,9 +26,11 @@ import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.SchemaSpecificScratchpad;
+import org.dgfoundation.amp.nireports.SqlSourcedColumn;
 import org.dgfoundation.amp.nireports.amp.PercentagesCorrector.Snapshot;
 import org.dgfoundation.amp.nireports.amp.diff.DifferentialCache;
 import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
+import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -59,6 +62,7 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	public final NiReportsEngine engine;
 	public final long lastEventId;
 	public final Memoizer<SelectedYearBlock> computedMeasuresBlock;
+	public final Memoizer<Set<Long>> computedPledgeIds;
 	
 	/**
 	 * the currency used to render the report - do not write anything to it!
@@ -70,6 +74,7 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	public AmpReportsScratchpad(NiReportsEngine engine) {
 		this.engine = engine;
 		this.computedMeasuresBlock =  new Memoizer<>(() -> SelectedYearBlock.buildFor(this.engine.spec, forcedNowDate == null ? LocalDate.now() : forcedNowDate));
+		this.computedPledgeIds = new Memoizer<>(() -> new HashSet<>(SQLUtils.fetchLongs(AmpReportsScratchpad.get(engine).connection, "SELECT id FROM amp_funding_pledges")));
 		
 		try {this.connection = PersistenceManager.getJdbcConnection();}
 		catch(Exception e) {throw AlgoUtils.translateException(e);}
@@ -96,15 +101,36 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 		return earlyEntries == null ? snapshot.value : earlyEntries.mergeWith(snapshot.value);
 	}
 	
-	public Set<Long> getChangedEntities(String mainColumn, long firstEventId) {
-		String entityType = mainColumn.equals("amp_activity_id") ? "activity" : "pledge";
+	public Set<Long> getChangedEntities(String entityType, long firstEventId) {
 		Set<Long> changedEntityIds = new HashSet<>(SQLUtils.fetchLongs(this.connection, String.format("SELECT DISTINCT entity_id FROM amp_etl_changelog WHERE (entity_name='%s') AND (event_id > %d) AND (event_id <= %d)", entityType, firstEventId, lastEventId)));
 		return changedEntityIds;
 	}
 	
+	public Set<Long> getRequestedEntityIds(String entityType) {
+		if (entityType.equals("pledge") && engine.spec.getReportType() == ArConstants.DONOR_TYPE)
+			return computedPledgeIds.get();
+
+		return engine.getMainIds();
+	}
+	
+	public String getEntityType(String mainColumn) {
+		return mainColumn.equals("amp_activity_id") ? "activity" : "pledge";
+	}
+	
+	@Override
+	public Set<Long> getMainIds(NiReportsEngine engine, NiReportColumn<?> col) {
+		if (!(col instanceof SqlSourcedColumn))
+			return engine.getMainIds();
+		SqlSourcedColumn<?> ssc = (SqlSourcedColumn<?>) col;
+		return getRequestedEntityIds(getEntityType(ssc.mainColumn));
+	}
+	
 	public<K extends Cell> Set<Long> differentiallyImportCells(InclusiveTimer timer, String mainColumn, DifferentialCache<K> cache, Function<Set<Long>, List<K>> fetcher) {
-		Set<Long> changedEntityIds = getChangedEntities(mainColumn, cache.getLastEventId());
-		Set<Long> idsToReplace = AmpCollections.minusPlus(engine.getMainIds(), cache.getCachedEntityIds(), changedEntityIds);
+		String entityType = getEntityType(mainColumn);
+		Set<Long> changedEntityIds = getChangedEntities(entityType, cache.getLastEventId());
+		Set<Long> requestedEntityIds = getRequestedEntityIds(entityType);
+		Set<Long> idsToReplace = AmpCollections.minusPlus(requestedEntityIds, cache.getCachedEntityIds(), changedEntityIds);
+		
 		List<K> fetchedCells = fetcher.apply(idsToReplace);
 		cache.importCells(idsToReplace, fetchedCells, lastEventId);
 

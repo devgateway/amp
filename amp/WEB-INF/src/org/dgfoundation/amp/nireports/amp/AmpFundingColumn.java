@@ -53,6 +53,9 @@ import static java.util.stream.Collectors.toList;
  */
 public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 
+	public final static String ENTITY_DONOR_FUNDING = "Funding";
+	public final static String ENTITY_PLEDGE_FUNDING = "Pledge Funding";
+	
 	protected final ExpiringCacher<ContextKey<Boolean>, FundingFetcherContext> cacher;
 	protected final ActivityInvalidationDetector invalidationDetector;
 	protected final Object CACHE_SYNC_OBJ = new Object();
@@ -61,7 +64,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	public final static int CACHE_TTL_SECONDS = 10 * 60;
 	
 	public AmpFundingColumn() {
-		this("Funding", "v_ni_donor_funding", TrivialMeasureBehaviour.getInstance(), new HashSet<>(Arrays.asList("aid_modality_id")));
+		this(ENTITY_DONOR_FUNDING, "v_ni_donor_funding", TrivialMeasureBehaviour.getInstance(), new HashSet<>(Arrays.asList("aid_modality_id")));
 	}
 
 	protected AmpFundingColumn(String columnName, String viewName, Behaviour<?> behaviour, Set<String> ignoredColumns) {
@@ -119,9 +122,9 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 
 	@Override
 	public List<CategAmountCell> fetch(NiReportsEngine engine) {
-		boolean enableDiffing = true;
 		AmpReportsScratchpad scratchpad = AmpReportsScratchpad.get(engine);
 		AmpReportsSchema schema = (AmpReportsSchema) engine.schema;
+		boolean enableDiffing = schema.ENABLE_CACHING;
 		AmpCurrency usedCurrency = scratchpad.getUsedCurrency();
 		if (enableDiffing) {
 			long start = System.currentTimeMillis();
@@ -129,7 +132,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 			synchronized(CACHE_SYNC_OBJ) {
 				FundingFetcherContext cache = cacher.buildOrGetValue(new ContextKey<>(engine, true));
 				Set<Long> deltas = scratchpad.differentiallyImportCells(engine.timer, mainColumn, cache.cache, ids -> fetchSkeleton(engine, ids, cache));
-				protos = cache.cache.getCells(engine.getMainIds());
+				protos = cache.cache.getCells(scratchpad.getMainIds(engine, this));
 				long delta = System.currentTimeMillis() - start;
 				engine.timer.putMetaInNode("hot_time", delta);
 			}
@@ -137,7 +140,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 			return res;
 		}
 		else {
-			return fetchSkeleton(engine, engine.getMainIds(), resetCache(engine)).stream().map(cacp -> cacp.materialize(usedCurrency, engine.calendar, schema.currencyConvertor, scratchpad.getPrecisionSetting())).collect(toList());
+			return fetchSkeleton(engine, scratchpad.getMainIds(engine, this), resetCache(engine)).stream().map(cacp -> cacp.materialize(usedCurrency, engine.calendar, schema.currencyConvertor, scratchpad.getPrecisionSetting())).collect(toList());
 		}
 	}
 	
@@ -184,7 +187,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 					if (!ignoredColumns.contains(optDim.getKey()))
 						addCoordinateIfLongExists(coos, rs.rs, optDim.getKey(), optDim.getValue());
 				
-				if (this.name.equals("Pledge Funding"))
+				if (this.name.equals(ENTITY_PLEDGE_FUNDING))
 				    addCoordinateIfLongExists(coos, rs.rs, "related_project_id", schema.ACT_LEVEL_COLUMN);
 				
 				java.sql.Date transactionMoment = rs.rs.getDate("transaction_date");

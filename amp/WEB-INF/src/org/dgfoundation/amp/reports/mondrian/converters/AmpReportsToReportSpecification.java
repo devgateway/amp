@@ -69,6 +69,7 @@ public class AmpReportsToReportSpecification {
 	}
 	
 	private ReportSpecificationImpl convert() {
+		logger.info("converting report " + report.getName() + " to ReportSpec");
 		//init data
 		arFilter = FilterUtil.buildFilterFromSource(report);
 		spec = new ReportSpecificationImpl(report.getName(), report.getType().intValue());

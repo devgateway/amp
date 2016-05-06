@@ -35,7 +35,7 @@ public abstract class AmpSqlSourcedColumn<K extends Cell> extends PsqlSourcedCol
 	
 	@Override
 	public List<K> fetch(NiReportsEngine engine) {
-		return fetch(engine, engine.getMainIds());
+		return fetch(engine, engine.schemaSpecificScratchpad.getMainIds(engine, this));
 	}
 	
 	public List<K> fetch(NiReportsEngine engine, Set<Long> mainIds) {

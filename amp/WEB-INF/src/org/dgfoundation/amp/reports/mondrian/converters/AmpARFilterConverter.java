@@ -236,7 +236,7 @@ public class AmpARFilterConverter {
 			return;
 
 		Map<Long, AmpSector> sectorsByIds = selectedEntries.stream().collect(Collectors.toMap(z -> z.getAmpSectorId(), z -> z));
-		Map<String, List<NameableOrIdentifiable>> sectorsByScheme = distributeEntities(SectorUtil.distributeSectorsByScheme(arFilter.getSelectedSectors()), sectorsByIds);
+		Map<String, List<NameableOrIdentifiable>> sectorsByScheme = distributeEntities(SectorUtil.distributeSectorsByScheme(selectedEntries), sectorsByIds);
 		addFilter(sectorsByScheme.get(scheme), columnName);
 	}
 	

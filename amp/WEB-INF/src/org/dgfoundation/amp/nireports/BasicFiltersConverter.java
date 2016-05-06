@@ -125,7 +125,12 @@ public abstract class BasicFiltersConverter {
 			engine.addReportWarning(new ReportWarning(String.format("not filtering by unimplemented column %s", columnName)));
 			return;
 		}
-
+		
+		if (shouldIgnoreFilteringColumn(columnName)) {
+			engine.addReportWarning(new ReportWarning(String.format("not filtering by nonfilterable column %s", columnName)));
+			return;
+		}
+		
 		notifySupportedColumn(columnName);
 
 		if (col.levelColumn != null && col.levelColumn.isPresent()) {
@@ -186,4 +191,11 @@ public abstract class BasicFiltersConverter {
 	 * @param rules
 	 */
 	protected abstract void processMiscElement(ReportElement repElem, List<FilterRule> rules);
+	
+	/**
+	 * callback to instruct the filter converter to ignore some filter-by-column elements altogether, even though they are present in the schema
+	 * @param columnName
+	 * @return
+	 */
+	protected abstract boolean shouldIgnoreFilteringColumn(String columnName);
 }

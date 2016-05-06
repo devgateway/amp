@@ -11,8 +11,8 @@ import org.dgfoundation.amp.nireports.schema.TrivialMeasureBehaviour;
  */
 public class PledgeFundingColumn extends AmpFundingColumn {
 
-	public PledgeFundingColumn(String columnName) {
-		super(columnName, "v_ni_pledges_funding",
+	public PledgeFundingColumn() {
+		super(ENTITY_PLEDGE_FUNDING, "v_ni_pledges_funding",
 			TrivialMeasureBehaviour.getInstance(), 
 			new HashSet<>(Arrays.asList("disaster_response_code")));
 	}

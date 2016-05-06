@@ -51,6 +51,7 @@ public abstract class Cell implements Comparable, CategCell {
 	}
 	
 	public abstract String getDisplayedValue();
+	public abstract Cell changeOwnerId(long newActivityId);
 	
 	public Map<NiDimensionUsage, Coordinate> getCoordinates() {
 		return coordinates;

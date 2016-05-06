@@ -54,7 +54,7 @@ public abstract class SqlSourcedColumn<K extends Cell> extends NiReportColumn<K>
 	 * @return
 	 */
 	protected String buildCondition(NiReportsEngine engine) {
-		String condition = String.format("WHERE (%s)", buildPrimaryFilteringQuery(engine.getMainIds()));
+		String condition = String.format("WHERE (%s)", buildPrimaryFilteringQuery(engine.schemaSpecificScratchpad.getMainIds(engine, this)));
 		return condition;
 	}
 	

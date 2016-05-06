@@ -190,7 +190,7 @@ public class WorkspaceFilter
 		//return "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id IN (41763)";
 		//return "SELECT amp_activity_id FROM v_ni_mtef_funding where source_role_id = 1 and amp_activity_id NOT IN (175, 176)";
 		//return "SELECT amp_activity_id FROM amp_activity where name in ('activity 1 with agreement', 'Activity with both MTEFs and Act.Comms')";
-		//return "SELECT amp_activity_id FROM amp_activity where name in ('Eth Water', 'activity with directed MTEFs', 'Test MTEF directed')";
+		//return "SELECT amp_activity_id FROM amp_activity where name in ('Eth Water', 'activity with directed MTEFs', 'expenditure class')";
 		return TEAM_FILTER;
 	}
 	

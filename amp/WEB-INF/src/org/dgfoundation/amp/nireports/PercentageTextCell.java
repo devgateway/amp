@@ -28,6 +28,11 @@ public final class PercentageTextCell extends Cell {
 	}
 
 	@Override
+	public PercentageTextCell changeOwnerId(long newActivityId) {
+		return new PercentageTextCell(this.text, newActivityId, this.entityId, this.mainLevel, this.percentage);
+	}
+	
+	@Override
 	public MetaInfoSet getMetaInfo() {
 		return MetaInfoSet.empty();
 	}

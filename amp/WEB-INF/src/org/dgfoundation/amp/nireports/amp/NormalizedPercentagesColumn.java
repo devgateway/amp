@@ -47,7 +47,7 @@ public class NormalizedPercentagesColumn extends AmpDifferentialColumn<Percentag
 	@Override
 	public final synchronized List<PercentageTextCell> fetch(NiReportsEngine engine) {
 		ImmutablePair<Set<Long>, DifferentialCache<PercentageTextCell>> pair = differentiallyImportCells(engine, ids -> fetchIds(engine, ids));
-		return pair.v.getCells(engine.getMainIds());
+		return pair.v.getCells(engine.schemaSpecificScratchpad.getMainIds(engine, this));
 	}
 	
 	protected synchronized List<PercentageTextCell> fetchIds(NiReportsEngine engine, Set<Long> ids) {

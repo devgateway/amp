@@ -793,28 +793,68 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 * hacky, but doing it cleanly (via ETL + schema + MDX generator) would be a huge pain for little gain
 	 */
 	protected void postprocessUndefinedEntries(CellDataSet cellDataSet) {
-		String translatedUnspecified = TranslatorWorker.translateText("Unspecified", environment.locale, 3l);		
-		
+		String translatedUnspecified = TranslatorWorker.translateText("Unspecified", environment.locale, 3l);
+
 		for (int rowId = 0; rowId < cellDataSet.getCellSetBody().length; rowId++) {
 			AbstractBaseCell[] row = cellDataSet.getCellSetBody()[rowId];
-			if (row == null) continue; // who knows, let's be defensive
-			
-			for(int i = 0; i < row.length; i++) {
-				if (row[i] != null && 
-						(translatedUndefined.equals(row[i].getFormattedValue()))
-						|| ("#null").equals(row[i].getFormattedValue()) // this is for nontranslateable columns
-						) {
-					boolean isHierarchy = i < spec.getHierarchies().size();
-					String newValue = isHierarchy ? 
-											String.format("%s: %s", leafHeaders.get(i).columnName, translatedUndefined) :
-											spec.isEmptyOutputForUnspecifiedData() ? "" : 
-											"(" + leafHeaders.get(i).columnName + " " + translatedUnspecified + ")";
+			if (row == null)
+				continue; // who knows, let's be defensive
 
-					row[i].setRawValue(newValue);
-					row[i].setFormattedValue(newValue);
+			for (int i = 0; i < row.length; i++) {
+				if (row[i] != null) {
+					// this is for nontranslateable columns
+					if (translatedUndefined.equals(row[i].getFormattedValue())
+							|| ("#null").equals(row[i].getFormattedValue())) {
+						boolean isHierarchy = i < spec.getHierarchies().size();
+						String newValue = null;
+						if (isHierarchy) {
+							newValue = String.format("%s: %s", leafHeaders.get(i).columnName, translatedUndefined);
+						} else {
+							// Reports.
+							if (spec.isEmptyOutputForUnspecifiedData()) {
+								newValue = "";
+							} else {
+								// Tabs.
+								if (translatedUndefined.equals(row[i].getFormattedValue())
+										|| translatedUnspecified.equals(row[i].getFormattedValue())) {
+									AbstractBaseCell[] previousRow = cellDataSet.getCellSetBody()[rowId > 0 ? rowId - 1 : 0];
+									String currentId = getProjectIdFromCell(row);
+									String previousId = getProjectIdFromCell(previousRow);
+									// If this row and the previous one belong to the same activity we check the value of column i in the previous row.
+									if (currentId.equals(previousId)) {
+										if (previousRow[i].getFormattedValue() == null
+												|| previousRow[i].getFormattedValue().isEmpty()
+												|| translatedUndefined.equals(previousRow[i].getFormattedValue())
+												|| translatedUnspecified.equals(previousRow[i].getFormattedValue())) {
+											newValue = "(" + leafHeaders.get(i).columnName + " "
+													+ translatedUnspecified + ")";
+										} else {
+											newValue = "";
+										}
+									} else {
+										newValue = "(" + leafHeaders.get(i).columnName + " "
+												+ translatedUnspecified + ")";
+									}
+								}
+							}
+						}
+						row[i].setRawValue(newValue);
+						row[i].setFormattedValue(newValue);
+					}
 				}
 			}
 		}
+	}
+	
+	private String getProjectIdFromCell(AbstractBaseCell[] row) {
+		String id = null;
+		String idColumnName = "[Activity Fixed Texts.Activity Id].[";
+		for (int i = 0; i < row.length; i++) {
+			if (row[i] != null && row[i].getRawValue() != null && row[i].getRawValue().startsWith(idColumnName)) {
+				id = row[i].getFormattedValue();
+			}
+		}
+		return id;
 	}
 	
 	private void applyFilterSetting(CellDataSet cellDataSet) throws AMPException {

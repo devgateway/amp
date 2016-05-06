@@ -97,5 +97,21 @@ public class MondrianComputedMeasuresReportTests211 extends MondrianReportsTestC
 				correctReport,
 				"en");
 	}
+	
+	public void test_AMP_19723_ExecutionRateMergeTotalsOnly() {
+	    ReportAreaForTests correctReport = new ReportAreaForTests()
+	            .withContents("Project Title", "Report Totals", "Region", "", "Actual Disbursements", "220 770", "Planned Disbursements", "182 800", "Execution Rate", "")
+	            .withChildren(
+	              new ReportAreaForTests()    .withContents("Project Title", "activity with capital spending", "Region", "Chisinau County", "Actual Disbursements", "80 000", "Planned Disbursements", "90 000", "Execution Rate", "88,89"),
+	              new ReportAreaForTests()    .withContents("Project Title", "activity with contracting agency", "Region", "Balti County, Transnistrian Region", "Actual Disbursements", "50 000", "Planned Disbursements", "0", "Execution Rate", "0"),
+	              new ReportAreaForTests()    .withContents("Project Title", "Activity with planned disbursements", "Region", "", "Actual Disbursements", "770", "Planned Disbursements", "800", "Execution Rate", "96,25"),
+	              new ReportAreaForTests()    .withContents("Project Title", "execution rate activity", "Region", "Chisinau City, Dubasari County", "Actual Disbursements", "90 000", "Planned Disbursements", "92 000", "Execution Rate", "97,83")  );
+	    
+	    List<String> activities = Arrays.asList("execution rate activity", "activity with capital spending", "Activity with planned disbursements", "activity with contracting agency");
+        runMondrianTestCase("AMP-19723-Execution-Rate-Totals-Only-Merging",
+                activities,
+                correctReport,
+                "en");
+	}
 
 }

@@ -45,6 +45,8 @@ public class CellDataSetToAmpHierarchies {
 	private final List<Integer> activities;
 	private final String translatedUndefined;
 	
+	private final CellDataSetRowsCollsIntersectTotals intersectTotals;
+	
 	private CellDataSetToAmpHierarchies(ReportSpecification spec, CellDataSet cellDataSet, 
 			List<ReportOutputColumn> leafHeaders, String translatedUndefined, List<Integer> activities) {
 		this.spec = spec;
@@ -52,6 +54,7 @@ public class CellDataSetToAmpHierarchies {
 		this.leafHeaders = leafHeaders;
 		this.translatedUndefined = translatedUndefined;
 		this.activities = activities;
+		this.intersectTotals = new CellDataSetRowsCollsIntersectTotals(spec, cellDataSet, leafHeaders, activities);
 	}
 
 	/**
@@ -150,7 +153,9 @@ public class CellDataSetToAmpHierarchies {
 					TotalAggregator[][] totals = rowTotals[startColumnIndex].get(currentSubGroupIndex).getTotalGroups();
 					//b) update data with totals
 					for (int a = cellDataSet.getLeftOffset(); a < cellDataSet.getCellSetBody()[groupStartRowId].length; a++) {
-						Double totalAmount = getValidAmount(totals[0][a - cellDataSet.getLeftOffset()].getValue(), a, groupStartRowId, rowId);
+					    // fix intersect totals first for special computed measures
+					    Double totalAmount = intersectTotals.getActualMeasureIntersectTotal(totals, a, groupStartRowId, rowId);
+					    totalAmount = getValidAmount(totalAmount, a, groupStartRowId, rowId);
 						String newVal = totalAmount == null ? "" : numberFormat.format(totalAmount);
 						cellDataSet.getCellSetBody()[groupStartRowId][a].setRawValue(String.valueOf(totalAmount));
 						cellDataSet.getCellSetBody()[groupStartRowId][a].setFormattedValue(newVal);

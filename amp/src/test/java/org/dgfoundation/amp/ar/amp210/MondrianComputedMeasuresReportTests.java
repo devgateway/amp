@@ -43,16 +43,12 @@ public class MondrianComputedMeasuresReportTests extends MondrianReportsTestCase
 	@Test
 	public void test_UndisbursedBalance() {
 		ReportAreaForTests correctReport = new ReportAreaForTests()
-	    .withContents("Project Title", "Report Totals", "Mode of Payment", "", "2010-Undisbursed Balance", "-267 098", "2011-Undisbursed Balance", "213 231", "2013-Undisbursed Balance", "-443 778", "Total Measures-Undisbursed Balance", "-497 645")
-	    .withChildren(
-	      new ReportAreaForTests()
-	          .withContents("Project Title", "TAC_activity_1", "Mode of Payment", "", "2010-Undisbursed Balance", "-123 321", "2011-Undisbursed Balance", "213 231", "2013-Undisbursed Balance", "", "Total Measures-Undisbursed Balance", "89 910"),
-	      new ReportAreaForTests()
-	          .withContents("Project Title", "Test MTEF directed", "Mode of Payment", "Cash", "2010-Undisbursed Balance", "-143 777", "2011-Undisbursed Balance", "", "2013-Undisbursed Balance", "", "Total Measures-Undisbursed Balance", "-143 777"),
-	      new ReportAreaForTests()
-	          .withContents("Project Title", "Project with documents", "Mode of Payment", "Cash", "2010-Undisbursed Balance", "", "2011-Undisbursed Balance", "", "2013-Undisbursed Balance", "", "Total Measures-Undisbursed Balance", "0"),
-	      new ReportAreaForTests()
-	          .withContents("Project Title", "SSC Project 1", "Mode of Payment", "Direct payment", "2010-Undisbursed Balance", "", "2011-Undisbursed Balance", "", "2013-Undisbursed Balance", "-443 778", "Total Measures-Undisbursed Balance", "-443 778")  );
+		        .withContents("Project Title", "Report Totals", "Mode of Payment", "", "2010-Undisbursed Balance", "-267 098", "2011-Undisbursed Balance", "213 231", "2013-Undisbursed Balance", "-443 778", "Total Measures-Undisbursed Balance", "-497 645")
+		        .withChildren(
+		          new ReportAreaForTests()    .withContents("Project Title", "TAC_activity_1", "Mode of Payment", "Cash", "2010-Undisbursed Balance", "-123 321", "2011-Undisbursed Balance", "213 231", "2013-Undisbursed Balance", "", "Total Measures-Undisbursed Balance", "89 910"),
+		          new ReportAreaForTests()    .withContents("Project Title", "Test MTEF directed", "Mode of Payment", "Cash", "2010-Undisbursed Balance", "-143 777", "2011-Undisbursed Balance", "", "2013-Undisbursed Balance", "", "Total Measures-Undisbursed Balance", "-143 777"),
+		          new ReportAreaForTests()    .withContents("Project Title", "Project with documents", "Mode of Payment", "Cash", "2010-Undisbursed Balance", "", "2011-Undisbursed Balance", "", "2013-Undisbursed Balance", "", "Total Measures-Undisbursed Balance", "0"),
+		          new ReportAreaForTests()    .withContents("Project Title", "SSC Project 1", "Mode of Payment", "Cash, Direct payment", "2010-Undisbursed Balance", "", "2011-Undisbursed Balance", "", "2013-Undisbursed Balance", "-443 778", "Total Measures-Undisbursed Balance", "-443 778")  );
 		
 		List<String> activities = Arrays.asList("TAC_activity_1", "Test MTEF directed", "SSC Project 1", "Project with documents");
 		runMondrianTestCase("AMP-15863-mode-of-payment-undisbursed-balance",

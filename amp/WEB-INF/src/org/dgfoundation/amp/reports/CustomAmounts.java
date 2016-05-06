@@ -3,7 +3,11 @@
  */
 package org.dgfoundation.amp.reports;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -47,8 +51,13 @@ public class CustomAmounts {
 		add(ColumnConstants.PROJECT_AGE_RATIO);
 		add(ColumnConstants.AVERAGE_DISBURSEMENT_RATE);
 		add(ColumnConstants.FORECAST_EXECUTION_RATE);
-		
 	}};
+	
+	/** custom intersect totals calculation for % measures: numerator, denominator columns*/
+	public final static Map<String, List<String>> PERCENTAGE_AMOUNTS_NUMERATOR_DENOMINATOR = new HashMap<String, List<String>>() {{
+        put(MeasureConstants.EXECUTION_RATE, Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS));
+        put(MeasureConstants.CUMULATIVE_EXECUTION_RATE, Arrays.asList(MeasureConstants.CUMULATIVE_DISBURSEMENT, MeasureConstants.CUMULATIVE_COMMITMENT));
+    }};
 	
 	/** all amount Columns and Measures for which Amount Unit setting is not applicable */ 
 	public final static Set<String> UNIT_MULTIPLIER_NOT_APPLICABLE = new HashSet<String>() {{

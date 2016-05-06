@@ -1179,6 +1179,7 @@ ON
 		</CalculatedMember>
 		
 		<CalculatedMember name="Execution Rate" dimension="Measures">
+		    <!-- (Actual Disbursements / Planned Disbursements) * 100 -->
 		 	<Formula>
 				IIf((Measures.[Total Filtered Planned Disbursements]=0) 
 				OR IsEmpty(Measures.[Total Filtered Planned Disbursements])

@@ -432,8 +432,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 			if (data.headers !== null) {
 				jQuery.each(data.headers, function(i, item) {
 					headers.push({
-						columnName : item["columnName"],
-						originalColumnName : item["originalColumnName"],
+						columnName : item["originalColumnName"],
 						hierarchicalName : item["hierarchicalName"],
 						emptyCell : item["emptyCell"]
 					});

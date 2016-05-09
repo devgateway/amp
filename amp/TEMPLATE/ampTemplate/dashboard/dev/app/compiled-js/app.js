@@ -27845,6 +27845,9 @@ module.exports = BaseFilterModel.extend({
 	  this.set('selectedStart', this._dateConvert(obj[key].start));
 	  this.set('selectedEnd', this._dateConvert(obj[key].end));
       this.postprocess();
+	}else{
+		this.set('selectedStart', this.get('startYear'));
+	    this.set('selectedEnd', this.get('endYear'));
 	}
   },
 
@@ -28365,7 +28368,9 @@ var extractDates = function(settings, filtersOut, minName, maxName) {
     if (defaultMaxDate !== undefined && defaultMaxDate.get('name') !== '') {
       filtersOut.otherFilters.date.end = defaultMaxDate.get('name');
     }
+    return filtersOut;
   }
+
 
 module.exports = {
 		extractDates: extractDates
@@ -28463,6 +28468,7 @@ module.exports = Backbone.View.extend({
   initialize:function(options) {
     var self = this;
     this.draggable = options.draggable;
+    this.caller = options.caller;
     this.settings = new SettingsCollection();
     this.settings.fetch();
     
@@ -28762,13 +28768,18 @@ module.exports = Backbone.View.extend({
 
     return serializedFilters;
   },
-
-  deserialize: function(blob, options) {
+ deserialize: function(blob, options) {
     if (blob) {
+      if(_.isUndefined(this.initialFilters)){
+    	  this.initialFilters = blob;
+      }     
       var that = this;
       that.allFilters.each(function(filter) {
         if (filter.get('id') || filter.url) {
-          if(filter.get('name').indexOf('Date')!=-1 || (filter.get('column') != undefined && filter.get('column').indexOf('Date') != -1)) {
+          if(filter.get('name').indexOf('Date')!=-1 || (filter.get('column') != undefined && filter.get('column').indexOf('Date') != -1)) {        	
+            if (_.isEmpty(blob.otherFilters)){ 
+            	that.setDefaultDates(blob);
+            }            
             filter.deserialize(blob.otherFilters);
           } else{
             filter.deserialize(blob.columnFilters);
@@ -28791,11 +28802,12 @@ module.exports = Backbone.View.extend({
 
   resetFilters: function() {
 	var self = this;
+	 var blob = !_.isUndefined(this.initialFilters) ? JSON.parse(JSON.stringify(this.initialFilters)) : {};//clone initial filters
     this.allFilters.each(function(filter) {
-    if(filter.get('name').indexOf('Date')!=-1 || (filter.get('column') != undefined && filter.get('column').indexOf('Date') != -1)) {   	 
-    	 var blob = {};
-    	 //this.app.filter.extractDates(this.app.settings.models, blob, 'dashboard-default-min-date', 'dashboard-default-max-date');
-    	 DateUtils.extractDates(self.settings.models, blob, 'dashboard-default-min-date', 'dashboard-default-max-date');
+    if(filter.get('name').indexOf('Date')!=-1 || (filter.get('column') != undefined && filter.get('column').indexOf('Date') != -1)) {
+    	 if (_.isEmpty(blob.otherFilters)){ 
+    		 self.setDefaultDates(blob);
+         }   	 
     	 filter.deserialize(blob.otherFilters);
      }else{
     	 filter.reset();
@@ -28831,7 +28843,15 @@ module.exports = Backbone.View.extend({
    formatDate: function(date){
 	   return $.datepicker.formatDate(this.getDateFormat(), ($.datepicker.parseDate(this.PARAMS_DATE_FORMAT,date)));
    }, 
-   
+   setDefaultDates: function(blob){
+	 var self = this;
+  	 if(self.caller === "DASHBOARD"){
+  		 return DateUtils.extractDates(self.settings.models, blob, 'dashboard-default-min-date', 'dashboard-default-max-date'); 	 
+  	 }else if(self.caller === "GIS"){
+  		return DateUtils.extractDates(self.settings.models, blob, 'gis-default-min-date', 'gis-default-max-date');
+  	 }
+  	 return blob
+   },
   cancel: function() {
     if(this.filterStash){
       this.resetFilters();

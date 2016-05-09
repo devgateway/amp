@@ -849,9 +849,14 @@ public class MondrianReportGenerator implements ReportExecutor {
 	private String getProjectIdFromCell(AbstractBaseCell[] row) {
 		String id = null;
 		String idColumnName = "[Activity Fixed Texts.Activity Id].[";
+		String idColumnNameAlternative = "[Activity Fixed Texts.Internal Use Id].[";
 		for (int i = 0; i < row.length; i++) {
-			if (row[i] != null && row[i].getRawValue() != null && row[i].getRawValue().startsWith(idColumnName)) {
+			if (row[i] != null
+					&& row[i].getRawValue() != null
+					&& (row[i].getRawValue().startsWith(idColumnName) || row[i].getRawValue()
+							.startsWith(idColumnNameAlternative))) {
 				id = row[i].getFormattedValue();
+				break;
 			}
 		}
 		return id;

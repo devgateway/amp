@@ -24,6 +24,9 @@ import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersBuilder;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingField;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
 import org.digijava.kernel.ampapi.endpoints.util.FilterType;
@@ -892,6 +895,11 @@ public class Filters {
 		
 	}
 	
-
-	
+	@GET
+    @Path("/computed-year")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = true, id = FiltersConstants.COMPUTED_YEAR, name = "Computed Year", tab = EPConstants.TAB_OTHER)
+    public SettingField getComputedYear() {
+	    return FiltersBuilder.buildComputedYears();
+	}
 }

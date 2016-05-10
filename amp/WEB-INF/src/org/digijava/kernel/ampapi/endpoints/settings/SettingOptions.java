@@ -3,7 +3,6 @@
  */
 package org.digijava.kernel.ampapi.endpoints.settings;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -68,10 +67,12 @@ public class SettingOptions {
 	
 	
 	/** Setting id */
+	@Deprecated
 	public final String id;
 	/** Specifies if multiple options can be selected */
 	public final Boolean multi;
 	/** Setting name */
+	@Deprecated
 	public final String name;
 	/** Default setting option id */
 	public final String defaultId;
@@ -80,11 +81,12 @@ public class SettingOptions {
 	
 	/**
 	 * Configures a GIS Setting
-	 * @param id - setting id
-	 * @param name - setting name
+	 * @param id - (deprecated) setting id
+	 * @param name - (deprecated) setting name
 	 * @param defaultId - default setting option id
 	 * @param options - list of available setting options
 	 */
+	@Deprecated
 	public SettingOptions(String id, boolean multi, String name, String defaultId, List<Option> options, boolean translate) {
 		this.id = id;
 		this.multi = multi;
@@ -93,6 +95,12 @@ public class SettingOptions {
 		this.options = options;
 	}
 	
+	/**
+	 * Simple list of options
+	 * 
+	 * @param defaultId
+	 * @param options
+	 */
 	public SettingOptions(String defaultId, List<Option> options) {
 		this(null, false, null, defaultId, options, false);
 	}
@@ -103,6 +111,7 @@ public class SettingOptions {
 	 * @param name
 	 * @param option
 	 */
+	@Deprecated
 	public SettingOptions(String id, String name, Option option) {
 		this(id, false, name, option.id, Arrays.asList(option), true);
 	}

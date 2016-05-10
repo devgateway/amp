@@ -610,7 +610,6 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 		//this.virtualHierarchies = AmpCollections.difference(filters.getMandatoryHierarchies(), spec.getHierarchyNames());
 		for(String columnName:AmpCollections.union(this.actualHierarchies, this.actualColumns)) {
 			NiReportColumn<? extends Cell> col = schema.getColumns().get(columnName);
-			;
 			if (col == null) {
 				addReportWarning(new ReportWarning(String.format("column %s not supported in NiReports", columnName)));
 				this.actualHierarchies.remove(columnName);

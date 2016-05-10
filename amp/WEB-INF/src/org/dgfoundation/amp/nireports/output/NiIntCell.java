@@ -3,7 +3,7 @@ package org.dgfoundation.amp.nireports.output;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 
 /**
- * a cell which holds a text
+ * a cell which holds an integer
  * @author Dolghier Constantin
  *
  */

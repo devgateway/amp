@@ -800,6 +800,11 @@ public class MondrianReportGenerator implements ReportExecutor {
 			if (row == null)
 				continue; // who knows, let's be defensive
 
+			// For AMP-22696.
+			String currentId = getProjectIdFromCell(row);
+			AbstractBaseCell[] previousRow = cellDataSet.getCellSetBody()[rowId > 0 ? rowId - 1 : 0];
+			String previousId = getProjectIdFromCell(previousRow);
+			
 			for (int i = 0; i < row.length; i++) {
 				if (row[i] != null) {
 					// this is for nontranslateable columns
@@ -817,9 +822,6 @@ public class MondrianReportGenerator implements ReportExecutor {
 								// Tabs.
 								if (translatedUndefined.equals(row[i].getFormattedValue())
 										|| translatedUnspecified.equals(row[i].getFormattedValue())) {
-									AbstractBaseCell[] previousRow = cellDataSet.getCellSetBody()[rowId > 0 ? rowId - 1 : 0];
-									String currentId = getProjectIdFromCell(row);
-									String previousId = getProjectIdFromCell(previousRow);
 									// If this row and the previous one belong to the same activity we check the value of column i in the previous row.
 									if (currentId.equals(previousId)) {
 										if (previousRow[i].getFormattedValue() == null

@@ -96,6 +96,10 @@ public class AmpReportsToReportSpecification {
 			//this is a summary report
 			for (AmpReportHierarchy hierarchy : report.getHierarchies())
 				spec.addColumn(new ReportColumn(hierarchy.getColumn().getColumnName()));
+			Set<String> hierNames = spec.getHierarchyNames();
+			for(AmpColumns col:getOrderedColumns())
+				if (!hierNames.contains(col.getColumnName()))
+					spec.addColumn(new ReportColumn(col.getColumnName()));
 		} else {
 			for (AmpColumns column : getOrderedColumns())
 				spec.addColumn(new ReportColumn(column.getColumnName()));

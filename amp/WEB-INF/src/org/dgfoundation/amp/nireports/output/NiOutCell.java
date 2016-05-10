@@ -7,6 +7,7 @@ import org.dgfoundation.amp.nireports.runtime.CellColumn;
  * @author Dolghier Constantin
  *
  */
+@SuppressWarnings("rawtypes")
 public abstract class NiOutCell implements Comparable {
 	
 	/**

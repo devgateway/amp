@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.DatedCell;
@@ -18,10 +19,12 @@ import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.output.NiOutCell;
+import org.dgfoundation.amp.nireports.output.NiReportData;
 import org.dgfoundation.amp.nireports.output.NiSplitCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
+import org.dgfoundation.amp.nireports.runtime.GroupReportData;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
@@ -136,6 +139,26 @@ public interface Behaviour<V extends NiOutCell> {
 		return getZeroCell();
 	}
 	
+	/**
+	 * builds the trail cells for GroupReportData
+	 * @param grd
+	 * @param cc
+	 * @param visitedChildren
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")	
+	public default V buildGroupTrailCell(GroupReportData grd, CellColumn cc, List<NiReportData> visitedChildren) {
+		return doVerticalReduce(AmpCollections.relist(visitedChildren, child -> (V) child.trailCells.get(cc)));
+	}
+	
+	/**
+	 * builds the trail cells for ColumnReportData 
+	 */
+	@SuppressWarnings("unchecked")
+	public default V buildColumnTrailCell(ColumnReportData crd, CellColumn cc, Map<CellColumn, Map<Long, NiOutCell>> mappedContents) {
+		return doVerticalReduce((Collection<V>) mappedContents.get(cc).values());
+	}
+
 	/**
 	 * whether this CellColumn having a value in a given subreport means keeping the subreport in case {@link ReportSpecification#isDisplayEmptyFundingRows()} is true and we are running a report with hierarchies
 	 * @return

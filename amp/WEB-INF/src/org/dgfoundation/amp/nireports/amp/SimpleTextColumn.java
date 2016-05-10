@@ -25,7 +25,9 @@ import org.dgfoundation.amp.nireports.schema.TextualTokenBehaviour;
  *
  */
 public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
-		
+
+	protected Function<String, String> postprocessor = Function.identity();
+
 	public SimpleTextColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName) {
 		super(columnName, levelColumn, viewName, TextColumnKeyBuilder.instance, TextualTokenBehaviour.instance);
 	}
@@ -70,12 +72,15 @@ public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
 		this.withoutEntity = true;
 		return this;
 	}
-	
-	private Function<String, String> postprocessor = Function.identity();
-	
+	 	
 	public SimpleTextColumn withPostprocessor(Function<String, String> postprocessor) {
-		this.postprocessor = postprocessor;
-		return this;
+	 		this.postprocessor = postprocessor;
+	 		return this;
+	}
+	
+	@Override
+	public boolean getKeptInSummaryReports() {
+		return false;
 	}
 
 	@Override

@@ -84,6 +84,11 @@ public class PercentageTextColumn extends AmpDifferentialColumn<PercentageTextCe
         return res;
 	}
 	
+	@Override
+	public boolean getKeptInSummaryReports() {
+		return false;
+	}
+
 	private static final int AMP_ACTIVITY_ID = 0;
 	private static final int PERCENTAGE = 1;
 }

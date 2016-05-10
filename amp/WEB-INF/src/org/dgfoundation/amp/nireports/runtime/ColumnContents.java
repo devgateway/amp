@@ -2,6 +2,7 @@ package org.dgfoundation.amp.nireports.runtime;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -30,19 +31,26 @@ public class ColumnContents {
 		this.data.putAll(data);
 	}
 	
-	/**
-	 * creates an instance which only keeps the lines with the given ids
-	 * @param data
-	 * @param idsToKeep
-	 */
-	public ColumnContents(Map<Long, ? extends List<NiCell>> rawData, Set<Long> idsToKeep) {
-		Objects.requireNonNull(rawData);
-		for(Long id:idsToKeep) {
-			List<NiCell> idCells = rawData.get(id);
-			if(idCells != null)
-				this.data.put(id, idCells);
-		}
-	}	
+	public void keepEntries(Set<Long> idsToKeep) {
+		Set<Long> keysToDelete = new HashSet<>(data.keySet());
+		keysToDelete.removeAll(idsToKeep);
+		for(Long key:keysToDelete)
+			data.remove(key);
+	}
+	
+//	/**
+//	 * creates an instance which only keeps the lines with the given ids
+//	 * @param data
+//	 * @param idsToKeep
+//	 */
+//	public ColumnContents(Map<Long, ? extends List<NiCell>> rawData, Set<Long> idsToKeep) {
+//		Objects.requireNonNull(rawData);
+//		for(Long id:idsToKeep) {
+//			List<NiCell> idCells = rawData.get(id);
+//			if(idCells != null)
+//				this.data.put(id, idCells);
+//		}
+//	}	
 	
 	public ColumnContents(List<NiCell> items) {
 		this(items.stream().collect(Collectors.groupingBy(z -> z.getMainId())));

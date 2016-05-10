@@ -23,6 +23,8 @@ import org.dgfoundation.amp.nireports.TextCell;
 import org.dgfoundation.amp.nireports.amp.AmpFiltersConverter;
 import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
 import org.dgfoundation.amp.nireports.schema.DateTokenBehaviour;
+import org.dgfoundation.amp.nireports.schema.GeneratedIntegerBehaviour;
+import org.dgfoundation.amp.nireports.schema.NiComputedColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.PercentageTokenBehaviour;
 import org.dgfoundation.amp.nireports.schema.TextualTokenBehaviour;
@@ -141,6 +143,8 @@ public class HardcodedReportsTestSchema extends AbstractReportsSchema {
 		
 		// empty trivial measure
 		addMeasure(new TrivialTestMeasure(MeasureConstants.PIPELINE_COMMITMENTS, Constants.COMMITMENT, "Pipeline", false));
+		
+		addColumn(new NiComputedColumn<>(ColumnConstants.ACTIVITY_COUNT, null, GeneratedIntegerBehaviour.ENTITIES_COUNT_BEHAVIOUR, null));
 	}
 
 	@Override

@@ -18,7 +18,7 @@ import org.dgfoundation.amp.nireports.Cell;
 public abstract class NiReportColumn<K extends Cell> extends NiReportedEntity<K> {
 	
 	public final Optional<NiDimension.LevelColumn> levelColumn;
-	protected boolean transactionLevelHierarchy = false;
+	protected boolean transactionLevelHierarchy = false; 
 		
 	protected NiReportColumn(String name, NiDimension.LevelColumn levelColumn, Behaviour<?> behaviour, String description) {
 		super(name, behaviour, description);
@@ -35,6 +35,14 @@ public abstract class NiReportColumn<K extends Cell> extends NiReportedEntity<K>
 	public NiReportColumn<K> setTransactionLevelHierarchy() {
 		this.transactionLevelHierarchy = true;
 		return this;
+	}
+	
+	/**
+	 * if false, then these columns when non-hier will be ignored in summary reports
+	 * @return
+	 */
+	public boolean getKeptInSummaryReports() {
+		return true;
 	}
 	
 	@Override public String toString() {

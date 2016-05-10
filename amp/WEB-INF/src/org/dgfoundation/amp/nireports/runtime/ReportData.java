@@ -1,11 +1,9 @@
 package org.dgfoundation.amp.nireports.runtime;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
+import org.dgfoundation.amp.algo.Memoizer;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.output.NiSplitCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
@@ -24,15 +22,25 @@ public abstract class ReportData {
 	 * the value cell which generated this subreport during horizSplit
 	 */
 	public final NiSplitCell splitter;
+	
+	/**
+	 * memoized set of ids
+	 */
+	protected final Memoizer<Set<Long>> _memoIds;
 
 	protected ReportData(NiReportsEngine context, NiSplitCell splitter) {
 		this.context = context;         
 		this.splitter = splitter;
+		this._memoIds = new Memoizer<>(this::_getIds);
 	}
 	
 	public GroupReportData clone(List<? extends ReportData> children) {
 		GroupReportData res = new GroupReportData(context, splitter, children);
 		return res;
+	}
+	
+	public Set<Long> getIds() {
+		return _memoIds.get();
 	}
 	
 	/**
@@ -41,7 +49,7 @@ public abstract class ReportData {
 	 * @return
 	 */
 	public abstract GroupReportData horizSplit(CellColumn column);
-	public abstract Set<Long> getIds();
+	public abstract Set<Long> _getIds();
 	public abstract boolean isLeaf();
 	public abstract<K> K accept(ReportDataVisitor<K> visitor);
 		

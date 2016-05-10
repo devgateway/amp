@@ -11,9 +11,9 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.DateCell;
+import org.dgfoundation.amp.newreports.IntCell;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.newreports.TextCell;
@@ -94,5 +94,11 @@ public class CellFormatter implements CellVisitor<ReportCell> {
 	public TextCell asTextCell(String text, long entityId, Map<Long, String> entityIdsValues) {
 		TextCell tc = new TextCell(text, entityId, entityIdsValues);
 		return tc;
+	}
+
+	@Override
+	public IntCell visit(NiIntCell cell, CellColumn currentColumn) {
+		IntCell res = new IntCell(cell.value, cell.entityId);
+		return res;
 	}
 }

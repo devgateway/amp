@@ -11,10 +11,16 @@ import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 
 public  class HardcodedColumn<K extends Cell> extends NiReportColumn<K> {
 	protected List<K> cells;
+	protected boolean keptInSummaryReports = false;
 	
 	public HardcodedColumn(String name, HardcodedCells<K> cells, LevelColumn levelColumn, Behaviour<?> behaviour) {
 		super(name, levelColumn, behaviour, null);
 		this.cells = cells.getCells();
+	}
+	
+	public HardcodedColumn<K> keptInSummaryReports() {
+		this.keptInSummaryReports = true;
+		return this;
 	}
 	
 	@Override
@@ -25,5 +31,10 @@ public  class HardcodedColumn<K extends Cell> extends NiReportColumn<K> {
 	@Override
 	public List<ReportRenderWarning> performCheck() {
 		return null;
+	}
+	
+	@Override
+	public boolean getKeptInSummaryReports() {
+		return this.keptInSummaryReports;
 	}
 }

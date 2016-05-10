@@ -387,7 +387,8 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 //							fails ++;
 //							System.err.println("failed: " + spec.getReportName());
 //						}
-						assertEquals(spec.getReportName(), correctTotals, buildDigest(spec, acts, fundingGrandTotalsDigester).toString());
+						String digest = buildDigest(spec, acts, fundingGrandTotalsDigester).toString();
+						assertEquals(spec.getReportName(), correctTotals, digest);
 			}
 		}
 		//System.err.println("nr of failures: " + fails);
@@ -421,7 +422,8 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 //							fails ++;
 //							System.err.println("failed: " + spec.getReportName());
 //						}
-						assertEquals(spec.getReportName(), correctTotals, buildDigest(spec, acts, fundingGrandTotalsDigester).toString());
+						String digest = buildDigest(spec, acts, fundingGrandTotalsDigester).toString();
+						assertEquals(spec.getReportName(), correctTotals, digest);
 			}
 		}
 		//System.err.println("nr of failures: " + fails);
@@ -1158,11 +1160,198 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 				          new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Region", "Transnistrian Region", "Funding-2014-Actual Commitments", "123,321", "Totals-Actual Commitments", "123,321"))));
 		
 		ReportSpecificationImpl spec = buildSpecification("test_by_type_of_assistance",
-				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.TYPE_OF_ASSISTANCE),
-				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-				Arrays.asList(ColumnConstants.TYPE_OF_ASSISTANCE),
-				GroupingCriteria.GROUPING_YEARLY);
+			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.TYPE_OF_ASSISTANCE),
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+			Arrays.asList(ColumnConstants.TYPE_OF_ASSISTANCE),
+			GroupingCriteria.GROUPING_YEARLY);
 
 		runNiTestCase(spec, "en", acts, cor);
 	}
+	
+	@Test
+	public void testActivityCountSpecFlat() {
+		NiReportModel cor = new NiReportModel("testActivityCountFlat")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 4))",
+					"(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Region: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Activity Count: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 2, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1))",
+					"(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+			      .withContents("Project Title", "", "Region", "", "Activity Count", "44", "Totals-Actual Commitments", "19,408,691,19")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Region", "Dubasari County", "Totals-Actual Commitments", "213,231"),
+			        new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Region", "Falesti County", "Totals-Actual Commitments", "999,888"),
+			        new ReportAreaForTests(new AreaOwner(15), "Project Title", "Proposed Project Cost 1 - USD", "Region", "Drochia County"),
+			        new ReportAreaForTests(new AreaOwner(17), "Project Title", "Proposed Project Cost 2 - EUR", "Region", "Anenii Noi County"),
+			        new ReportAreaForTests(new AreaOwner(18), "Project Title", "Test MTEF directed", "Region", "Anenii Noi County"),
+			        new ReportAreaForTests(new AreaOwner(19), "Project Title", "Pure MTEF Project", "Region", "Cahul County"),
+			        new ReportAreaForTests(new AreaOwner(21), "Project Title", "activity with components", "Region", "Anenii Noi County"),
+			        new ReportAreaForTests(new AreaOwner(23), "Project Title", "Project with documents", "Region", "Balti County"),
+			        new ReportAreaForTests(new AreaOwner(24), "Project Title", "Eth Water", "Region", "Anenii Noi County"),
+			        new ReportAreaForTests(new AreaOwner(25), "Project Title", "mtef activity 1", "Region", ""),
+			        new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Region", "", "Totals-Actual Commitments", "125,000"),
+			        new ReportAreaForTests(new AreaOwner(27), "Project Title", "mtef activity 2", "Region", "Anenii Noi County"),
+			        new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Region", "Anenii Noi County", "Totals-Actual Commitments", "666,777"),
+			        new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2", "Region", "Anenii Noi County", "Totals-Actual Commitments", "333,222"),
+			        new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1", "Region", "Anenii Noi County", "Totals-Actual Commitments", "111,333"),
+			        new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2", "Region", "Edinet County", "Totals-Actual Commitments", "567,421"),
+			        new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Region", "Balti County", "Totals-Actual Commitments", "333,333"),
+			        new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Region", "Anenii Noi County, Balti County", "Totals-Actual Commitments", "570,000"),
+			        new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Region", "Anenii Noi County, Balti County", "Totals-Actual Commitments", "890,000"),
+			        new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Region", "Anenii Noi County, Balti County", "Totals-Actual Commitments", "75,000"),
+			        new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge", "Region", "Chisinau City", "Totals-Actual Commitments", "50,000"),
+			        new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Region", "", "Totals-Actual Commitments", "50,000"),
+			        new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Region", "", "Totals-Actual Commitments", "32,000"),
+			        new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Region", "", "Totals-Actual Commitments", "15,000"),
+			        new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1", "Region", "Chisinau County", "Totals-Actual Commitments", "5,000,000"),
+			        new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Region", "Cahul County", "Totals-Actual Commitments", "7,070,000"),
+			        new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Region", "Chisinau County", "Totals-Actual Commitments", "65,760,63"),
+			        new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Region", "Balti County, Transnistrian Region", "Totals-Actual Commitments", "96,840,58"),
+			        new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Totals-Actual Commitments", "12,000"),
+			        new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Region", "Transnistrian Region", "Totals-Actual Commitments", "123,321"),
+			        new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Region", "", "Totals-Actual Commitments", "100"),
+			        new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Region", "", "Totals-Actual Commitments", "45,000"),
+			        new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Region", "Balti County", "Totals-Actual Commitments", "456,789"),
+			        new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements", "Region", "Chisinau County", "Totals-Actual Commitments", "1,200"),
+			        new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Region", "Chisinau City", "Totals-Actual Commitments", "123,456"),
+			        new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement", "Region", "", "Totals-Actual Commitments", "123,000"),
+			        new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Region", ""),
+			        new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Region", "Balti County, Drochia County", "Totals-Actual Commitments", "888,000"),
+			        new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Region", "", "Totals-Actual Commitments", "150,000"),
+			        new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Region", "Chisinau City", "Totals-Actual Commitments", "123,456"),
+			        new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Region", "Chisinau County"),
+			        new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Region", "Chisinau City, Dubasari County"),
+			        new ReportAreaForTests(new AreaOwner(78), "Project Title", "activity with many MTEFs", "Region", "Drochia County"),
+			        new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Region", "", "Totals-Actual Commitments", "97,562,98")      ));
+
+		
+		ReportSpecificationImpl spec = buildSpecification("testActivityCountFlat",
+			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.ACTIVITY_COUNT),
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+			null,
+			GroupingCriteria.GROUPING_TOTALS_ONLY);
+		
+		runNiTestCase(spec, "en", acts, cor);
+	}
+	
+	@Test
+	public void testActivityCountSpecHier() {
+		NiReportModel cor = new NiReportModel("testActivityCountSpecHier")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 4))",
+					"(Region: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Activity Count: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 2, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1))",
+					"(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+			      .withContents("Region", "", "Project Title", "", "Activity Count", "31", "Totals-Actual Commitments", "19,408,691,19")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner("Region", "Anenii Noi County", 9085))
+			        .withContents("Project Title", "", "Activity Count", "6", "Totals-Actual Commitments", "1,611,832", "Region", "Anenii Noi County")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner(28), "Project Title", "ptc activity 1", "Totals-Actual Commitments", "666,777"),
+			          new ReportAreaForTests(new AreaOwner(29), "Project Title", "ptc activity 2", "Totals-Actual Commitments", "333,222"),
+			          new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1", "Totals-Actual Commitments", "111,333"),
+			          new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Totals-Actual Commitments", "285,000"),
+			          new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Totals-Actual Commitments", "178,000"),
+			          new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Totals-Actual Commitments", "37,500")        ),
+			        new ReportAreaForTests(new AreaOwner("Region", "Balti County", 9086))
+			        .withContents("Project Title", "", "Activity Count", "7", "Totals-Actual Commitments", "2,144,284,32", "Region", "Balti County")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner(32), "Project Title", "crazy funding 1", "Totals-Actual Commitments", "333,333"),
+			          new ReportAreaForTests(new AreaOwner(33), "Project Title", "Activity with Zones", "Totals-Actual Commitments", "285,000"),
+			          new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Totals-Actual Commitments", "712,000"),
+			          new ReportAreaForTests(new AreaOwner(40), "Project Title", "SubNational no percentages", "Totals-Actual Commitments", "37,500"),
+			          new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Totals-Actual Commitments", "53,262,32"),
+			          new ReportAreaForTests(new AreaOwner(65), "Project Title", "activity 1 with agreement", "Totals-Actual Commitments", "456,789"),
+			          new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Totals-Actual Commitments", "266,400")        ),
+			        new ReportAreaForTests(new AreaOwner("Region", "Cahul County", 9087)).withContents("Project Title", "", "Activity Count", "1", "Totals-Actual Commitments", "7,070,000", "Region", "Cahul County")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner(48), "Project Title", "pledged 2", "Totals-Actual Commitments", "7,070,000")        ),
+			        new ReportAreaForTests(new AreaOwner("Region", "Chisinau City", 9088))
+			        .withContents("Project Title", "", "Activity Count", "3", "Totals-Actual Commitments", "296,912", "Region", "Chisinau City")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner(41), "Project Title", "Activity Linked With Pledge", "Totals-Actual Commitments", "50,000"),
+			          new ReportAreaForTests(new AreaOwner(67), "Project Title", "third activity with agreements", "Totals-Actual Commitments", "123,456"),
+			          new ReportAreaForTests(new AreaOwner(73), "Project Title", "activity with directed MTEFs", "Totals-Actual Commitments", "123,456")        ),
+			        new ReportAreaForTests(new AreaOwner("Region", "Chisinau County", 9089))
+			        .withContents("Project Title", "", "Activity Count", "3", "Totals-Actual Commitments", "5,066,960,63", "Region", "Chisinau County")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner(46), "Project Title", "pledged education activity 1", "Totals-Actual Commitments", "5,000,000"),
+			          new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Totals-Actual Commitments", "65,760,63"),
+			          new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements", "Totals-Actual Commitments", "1,200")        ),
+			        new ReportAreaForTests(new AreaOwner("Region", "Drochia County", 9090)).withContents("Project Title", "", "Activity Count", "1", "Totals-Actual Commitments", "621,600", "Region", "Drochia County")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner(70), "Project Title", "Activity with both MTEFs and Act.Comms", "Totals-Actual Commitments", "621,600")        ),
+			        new ReportAreaForTests(new AreaOwner("Region", "Dubasari County", 9091)).withContents("Project Title", "", "Activity Count", "1", "Totals-Actual Commitments", "213,231", "Region", "Dubasari County")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Totals-Actual Commitments", "213,231")        ),
+			        new ReportAreaForTests(new AreaOwner("Region", "Edinet County", 9092)).withContents("Project Title", "", "Activity Count", "1", "Totals-Actual Commitments", "567,421", "Region", "Edinet County")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner(31), "Project Title", "SSC Project 2", "Totals-Actual Commitments", "567,421")        ),
+			        new ReportAreaForTests(new AreaOwner("Region", "Falesti County", 9093)).withContents("Project Title", "", "Activity Count", "1", "Totals-Actual Commitments", "999,888", "Region", "Falesti County")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner(13), "Project Title", "TAC_activity_2", "Totals-Actual Commitments", "999,888")        ),
+			        new ReportAreaForTests(new AreaOwner("Region", "Transnistrian Region", 9105))
+			        .withContents("Project Title", "", "Activity Count", "2", "Totals-Actual Commitments", "166,899,26", "Region", "Transnistrian Region")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Totals-Actual Commitments", "43,578,26"),
+			          new ReportAreaForTests(new AreaOwner(61), "Project Title", "activity-with-unfunded-components", "Totals-Actual Commitments", "123,321")        ),
+			        new ReportAreaForTests(new AreaOwner("Region", "Region: Undefined", -8977))
+			        .withContents("Project Title", "", "Activity Count", "10", "Totals-Actual Commitments", "649,662,98", "Region", "Region: Undefined")
+			        .withChildren(
+			          new ReportAreaForTests(new AreaOwner(26), "Project Title", "date-filters-activity", "Totals-Actual Commitments", "125,000"),
+			          new ReportAreaForTests(new AreaOwner(43), "Project Title", "Activity with primary_tertiary_program", "Totals-Actual Commitments", "50,000"),
+			          new ReportAreaForTests(new AreaOwner(44), "Project Title", "activity with primary_program", "Totals-Actual Commitments", "32,000"),
+			          new ReportAreaForTests(new AreaOwner(45), "Project Title", "activity with tertiary_program", "Totals-Actual Commitments", "15,000"),
+			          new ReportAreaForTests(new AreaOwner(53), "Project Title", "new activity with contracting", "Totals-Actual Commitments", "12,000"),
+			          new ReportAreaForTests(new AreaOwner(63), "Project Title", "activity with funded components", "Totals-Actual Commitments", "100"),
+			          new ReportAreaForTests(new AreaOwner(64), "Project Title", "Unvalidated activity", "Totals-Actual Commitments", "45,000"),
+			          new ReportAreaForTests(new AreaOwner(68), "Project Title", "activity with incomplete agreement", "Totals-Actual Commitments", "123,000"),
+			          new ReportAreaForTests(new AreaOwner(71), "Project Title", "activity_with_disaster_response", "Totals-Actual Commitments", "150,000"),
+			          new ReportAreaForTests(new AreaOwner(79), "Project Title", "with weird currencies", "Totals-Actual Commitments", "97,562,98")        )      ));
+
+		
+		ReportSpecificationImpl spec = buildSpecification("testActivityCountSpecHier",
+			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.ACTIVITY_COUNT),
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+			Arrays.asList(ColumnConstants.REGION),
+			GroupingCriteria.GROUPING_TOTALS_ONLY);
+		
+		runNiTestCase(spec, "en", acts, cor);
+	}
+
+	@Test
+	public void testActivityCountSpecHierSummary() {
+		NiReportModel cor = new NiReportModel("testActivityCountSpecHierSummary")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
+					"(Region: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Activity Count: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1))",
+					"(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+			      .withContents("Region", "", "Activity Count", "31", "Totals-Actual Commitments", "19,408,691,19")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner("Region", "Anenii Noi County", 9085), "Activity Count", "6", "Totals-Actual Commitments", "1,611,832", "Region", "Anenii Noi County"),
+			        new ReportAreaForTests(new AreaOwner("Region", "Balti County", 9086), "Activity Count", "7", "Totals-Actual Commitments", "2,144,284,32", "Region", "Balti County"),
+			        new ReportAreaForTests(new AreaOwner("Region", "Cahul County", 9087), "Activity Count", "1", "Totals-Actual Commitments", "7,070,000", "Region", "Cahul County"),
+			        new ReportAreaForTests(new AreaOwner("Region", "Chisinau City", 9088), "Activity Count", "3", "Totals-Actual Commitments", "296,912", "Region", "Chisinau City"),
+			        new ReportAreaForTests(new AreaOwner("Region", "Chisinau County", 9089), "Activity Count", "3", "Totals-Actual Commitments", "5,066,960,63", "Region", "Chisinau County"),
+			        new ReportAreaForTests(new AreaOwner("Region", "Drochia County", 9090), "Activity Count", "1", "Totals-Actual Commitments", "621,600", "Region", "Drochia County"),
+			        new ReportAreaForTests(new AreaOwner("Region", "Dubasari County", 9091), "Activity Count", "1", "Totals-Actual Commitments", "213,231", "Region", "Dubasari County"),
+			        new ReportAreaForTests(new AreaOwner("Region", "Edinet County", 9092), "Activity Count", "1", "Totals-Actual Commitments", "567,421", "Region", "Edinet County"),
+			        new ReportAreaForTests(new AreaOwner("Region", "Falesti County", 9093), "Activity Count", "1", "Totals-Actual Commitments", "999,888", "Region", "Falesti County"),
+			        new ReportAreaForTests(new AreaOwner("Region", "Transnistrian Region", 9105), "Activity Count", "2", "Totals-Actual Commitments", "166,899,26", "Region", "Transnistrian Region"),
+			        new ReportAreaForTests(new AreaOwner("Region", "Region: Undefined", -8977), "Activity Count", "10", "Totals-Actual Commitments", "649,662,98", "Region", "Region: Undefined")      ));
+		
+		ReportSpecificationImpl spec = buildSpecification("testActivityCountSpecHierSummary",
+			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.ACTIVITY_COUNT),
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+			Arrays.asList(ColumnConstants.REGION),
+			GroupingCriteria.GROUPING_TOTALS_ONLY);
+		
+		spec.setSummaryReport(true);
+		
+		runNiTestCase(spec, "en", acts, cor);
+	}
+
 }

@@ -66,6 +66,9 @@ import org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension;
 import org.dgfoundation.amp.nireports.output.NiTextCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.BooleanDimension;
+import org.dgfoundation.amp.nireports.schema.GeneratedColumnBehaviour;
+import org.dgfoundation.amp.nireports.schema.GeneratedIntegerBehaviour;
+import org.dgfoundation.amp.nireports.schema.NiComputedColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
@@ -479,6 +482,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addFundingFlowMeasures();
 		addTaggedMeasures();
 		addComputedLinearMeasures();
+		
+		addColumn(new NiComputedColumn<>(ColumnConstants.ACTIVITY_COUNT, null, GeneratedIntegerBehaviour.ENTITIES_COUNT_BEHAVIOUR, columnDescriptions.get(ColumnConstants.ACTIVITY_COUNT)));
 	}
 	
 	protected void addPledgeColumns() {

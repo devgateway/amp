@@ -43,7 +43,12 @@ public class DateColumn extends AmpDifferentialColumn<DateCell, Boolean> {
 //			return null;
 		return new DateCell(date, rs.getLong(1), this.levelColumn.isPresent() ? rs.getLong(3) : DateTimeUtil.toJulianDayNumber(date), this.levelColumn);
 	}
-		
+	
+	@Override
+	public boolean getKeptInSummaryReports() {
+		return false;
+	}
+	
 	public static DateColumn fromView(String columnName, String viewName, NiDimension.LevelColumn levelColumn) {
 		return new DateColumn(columnName, levelColumn, viewName);
 	}

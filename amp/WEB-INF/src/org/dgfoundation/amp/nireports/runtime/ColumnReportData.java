@@ -47,7 +47,7 @@ public class ColumnReportData extends ReportData {
 	}
 
 	@Override
-	public Set<Long> getIds() {
+	public Set<Long> _getIds() {
 		Set<Long> res = new HashSet<>();
 		for(ColumnContents col:contents.values())
 			res.addAll(col.data.keySet());
@@ -137,11 +137,10 @@ public class ColumnReportData extends ReportData {
 				if (cc.getBehaviour().isKeepingSubreports())
 					entitiesWithFunding.addAll(newContents.data.keySet());
 			}
+			if (!keepEmptyFundingRows)
+				subContents.values().forEach(cc -> cc.keepEntries(entitiesWithFunding));
 			if (keepEmptyFundingRows || (!entitiesWithFunding.isEmpty())) {
-				ColumnReportData sub = new ColumnReportData(context, splitCell, 
-					keepEmptyFundingRows ? 
-						subContents : 
-						remap(subContents, zz -> new ColumnContents(zz.data, entitiesWithFunding), null));
+				ColumnReportData sub = new ColumnReportData(context, splitCell, subContents);
 				newChildren.add(sub);
 			}
 		}

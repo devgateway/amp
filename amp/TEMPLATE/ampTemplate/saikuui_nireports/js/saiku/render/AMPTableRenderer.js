@@ -433,7 +433,7 @@ function generateDataRows(page, options) {
 						} else {
 							styleClass = " class='row' ";
 						}
-						cleanValue.text = '';
+						//cleanValue.text = '';
 					}
 
 					cell = "<th" + styleClass + rowSpan + ">";

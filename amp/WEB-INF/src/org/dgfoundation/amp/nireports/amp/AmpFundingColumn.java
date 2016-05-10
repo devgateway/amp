@@ -260,6 +260,5 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 			this.roles = roles;
 			this.expenditureClasses = expenditureClasses;
 		}
-		
 	}
 }

@@ -37,7 +37,7 @@ public class GroupReportData extends ReportData {
 	}
 
 	@Override
-	public Set<Long> getIds() {
+	public Set<Long> _getIds() {
 		Set<Long> res = new HashSet<>();
 		for(ReportData rd:subreports)
 			res.addAll(rd.getIds());

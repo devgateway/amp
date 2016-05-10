@@ -85,6 +85,11 @@ public class NormalizedPercentagesColumn extends AmpDifferentialColumn<Percentag
 	}
 
 	@Override
+	public boolean getKeptInSummaryReports() {
+		return false;
+	}
+
+	@Override
 	public List<ReportRenderWarning> performCheck() {
 		// do nothing here, as underlying m2m tables are checked as part of AmpReportsSchema.performColumnChecks()
 		return null;

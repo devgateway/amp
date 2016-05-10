@@ -24,6 +24,7 @@ import org.dgfoundation.amp.reports.mondrian.MondrianSQLFilters;
 import org.dgfoundation.amp.utils.ConstantsUtil;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.Filters;
+import org.digijava.kernel.ampapi.endpoints.filters.FiltersProcessor;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.request.TLSUtils;
@@ -194,10 +195,10 @@ public class FilterUtils {
 			MondrianReportFilters filters) {
 		
 		//we check if we have filter by keyword
-		LinkedHashMap<String, Object> otherFilter=null;
+		LinkedHashMap<String, Object> otherFilter = null;
 		if (filtersConfig != null) {
 			otherFilter = (LinkedHashMap<String, Object>) filtersConfig.get("otherFilters");
-			if(activitIds == null){
+			if (activitIds == null) {
 				activitIds = new ArrayList<String>();
 			}
 			activitIds.addAll(FilterUtils.applyKeywordSearch( otherFilter));
@@ -207,7 +208,9 @@ public class FilterUtils {
 				(LinkedHashMap<String, Object>) filtersConfig.get("columnFilters"),
 				otherFilter, activitIds, filters);
 		
-		return filters;
+		FiltersProcessor fProcessor = new FiltersProcessor(filtersConfig, filters);
+		
+		return (MondrianReportFilters) fProcessor.getFilters();
 	}
 	
 	/**

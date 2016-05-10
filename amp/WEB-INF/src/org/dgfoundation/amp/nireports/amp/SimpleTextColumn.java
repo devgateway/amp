@@ -3,9 +3,8 @@ package org.dgfoundation.amp.nireports.amp;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
+import java.util.function.Function;
 
-import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.TextCell;
@@ -38,7 +37,7 @@ public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
 	
 	@Override
 	protected TextCell extractCell(NiReportsEngine engine, ResultSet rs) throws SQLException {
-		String text = rs.getString(2);
+		String text = postprocessor.apply(rs.getString(2));
 		
 		if (text == null)
 			return null;
@@ -69,6 +68,13 @@ public class SimpleTextColumn extends AmpDifferentialColumn<TextCell, String> {
 	
 	private SimpleTextColumn withoutEntity() {
 		this.withoutEntity = true;
+		return this;
+	}
+	
+	private Function<String, String> postprocessor = Function.identity();
+	
+	public SimpleTextColumn withPostprocessor(Function<String, String> postprocessor) {
+		this.postprocessor = postprocessor;
 		return this;
 	}
 

@@ -45,10 +45,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.digijava.module.aim.util.DbUtil;
-import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.struts.tiles.ComponentContext;
@@ -77,6 +73,10 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.DbUtil;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 public class DgUtil {
 	
@@ -1901,10 +1901,11 @@ public class DgUtil {
 	}
 
 	public static String cleanHtmlTags(String content) {
-		if (content!=null) {
+		if (content != null) {
 			RegexBatch batch = new RegexBatch(HTML_STRIP_REGEXES,REGEX_FLAGS);
 			content = batch.replaceAll(content, " ");
 		}
+		
 		return content;
 	}
 }

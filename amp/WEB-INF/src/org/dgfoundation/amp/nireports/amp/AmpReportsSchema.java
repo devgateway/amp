@@ -78,6 +78,7 @@ import org.dgfoundation.amp.nireports.schema.PidTextualTokenBehaviour;
 import org.dgfoundation.amp.nireports.schema.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -197,6 +198,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static NiDimensionUsage ACT_DIM_USG = activitiesDimension.getDimensionUsage("acts");
 	public final static LevelColumn ACT_LEVEL_COLUMN = ACT_DIM_USG.getLevelColumn(0);
 	
+	public final static Function<String, String> DG_EDITOR_POSTPROCESSOR = DgUtil::cleanHtmlTags;
+	
 	private static AmpReportsSchema instance = new AmpReportsSchema();
 		
 	@SuppressWarnings("serial")
@@ -219,7 +222,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_dimension(ColumnConstants.PROJECT_TITLE, "v_titles");
 		no_dimension(ColumnConstants.ACTIVITY_ID, "v_activity_ids");
 		no_dimension(ColumnConstants.TEAM, "v_teams");
-		no_entity(ColumnConstants.OBJECTIVE, "v_objectives");
+		no_entity(ColumnConstants.OBJECTIVE, "v_objectives", DG_EDITOR_POSTPROCESSOR);
 		no_dimension(ColumnConstants.ISSUES, "v_issues");
 		
 		no_dimension(ColumnConstants.ACTIVITY_PLEDGES_TITLE, "v_activity_pledges_title");
@@ -246,8 +249,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_dimension(ColumnConstants.DESCRIPTION_OF_COMPONENT_FUNDING, "v_component_funding_description");
 		degenerate_dimension(ColumnConstants.DISASTER_RESPONSE_MARKER, "v_disaster_response_marker", boolDimension);
 		no_dimension(ColumnConstants.DONOR_CONTACT_ORGANIZATION, "v_donor_cont_org");
-		no_entity(ColumnConstants.ENVIRONMENT, "v_environment");
-		no_entity(ColumnConstants.EQUAL_OPPORTUNITY, "v_equalopportunity");
+		no_entity(ColumnConstants.ENVIRONMENT, "v_environment", DG_EDITOR_POSTPROCESSOR);
+		no_entity(ColumnConstants.EQUAL_OPPORTUNITY, "v_equalopportunity", DG_EDITOR_POSTPROCESSOR);
 		degenerate_dimension(ColumnConstants.EXPENDITURE_CLASS, "v_expenditure_class", catsDimension);
 		degenerate_dimension(ColumnConstants.FINANCIAL_INSTRUMENT, "v_financial_instrument", catsDimension);
 		degenerate_dimension(ColumnConstants.FINANCING_INSTRUMENT, "v_financing_instrument", catsDimension);
@@ -258,7 +261,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_dimension(ColumnConstants.INDIRECT_ON_BUDGET, "v_indirect_on_budget");
 		degenerate_dimension(ColumnConstants.INSTITUTIONS, "v_institutions", catsDimension);
 		no_dimension(ColumnConstants.MEASURES_TAKEN, "v_measures_taken");
-		no_entity(ColumnConstants.MINORITIES, "v_minorities");
+		no_entity(ColumnConstants.MINORITIES, "v_minorities", DG_EDITOR_POSTPROCESSOR);
 		degenerate_dimension(ColumnConstants.MODALITIES, "v_modalities", catsDimension);
 		degenerate_dimension(ColumnConstants.MODE_OF_PAYMENT, "v_mode_of_payment", catsDimension);
 		degenerate_dimension(ColumnConstants.ON_OFF_TREASURY_BUDGET, "v_on_off_budget", catsDimension);
@@ -267,12 +270,12 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_dimension(ColumnConstants.PHYSICAL_PROGRESS, "v_physical_progress");
 		degenerate_dimension(ColumnConstants.PROCUREMENT_SYSTEM, "v_procurement_system", catsDimension);
 		degenerate_dimension(ColumnConstants.PROJECT_CATEGORY, "v_project_category", catsDimension);
-		no_entity(ColumnConstants.PROJECT_COMMENTS, "v_project_comments");
-		no_entity(ColumnConstants.PROJECT_DESCRIPTION, "v_description");
-		no_entity(ColumnConstants.PROJECT_IMPACT, "v_proj_impact");
-		no_entity(ColumnConstants.RESULTS, "v_results");
-		no_entity(ColumnConstants.PURPOSE, "v_purposes");
-		no_entity(ColumnConstants.PROGRAM_DESCRIPTION, "v_program_description");
+		no_entity(ColumnConstants.PROJECT_COMMENTS, "v_project_comments", DG_EDITOR_POSTPROCESSOR);
+		no_entity(ColumnConstants.PROJECT_DESCRIPTION, "v_description", DG_EDITOR_POSTPROCESSOR);
+		no_entity(ColumnConstants.PROJECT_IMPACT, "v_proj_impact", DG_EDITOR_POSTPROCESSOR);
+		no_entity(ColumnConstants.RESULTS, "v_results", DG_EDITOR_POSTPROCESSOR);
+		no_entity(ColumnConstants.PURPOSE, "v_purposes", DG_EDITOR_POSTPROCESSOR);
+		no_entity(ColumnConstants.PROGRAM_DESCRIPTION, "v_program_description", DG_EDITOR_POSTPROCESSOR);
 		no_dimension(ColumnConstants.PROJECT_IMPLEMENTING_UNIT, "v_project_impl_unit");
 		no_dimension(ColumnConstants.REGIONAL_OBSERVATIONS, "v_regional_observations");
 		no_dimension(ColumnConstants.RELATED_PLEDGES, "v_related_pledges");
@@ -716,6 +719,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		return addColumn(SimpleTextColumn.fromView(columnName, view, levelColumn));
 	}
 
+	private AmpReportsSchema single_dimension(String columnName, String view, LevelColumn levelColumn, Function<String, String> postprocessor) {
+		return addColumn(SimpleTextColumn.fromView(columnName, view, levelColumn).withPostprocessor(postprocessor));
+	}
 	
 	private AmpReportsSchema no_entity(String columnName, String view, Behaviour<NiTextCell> behaviour) {
 		return addColumn(SimpleTextColumn.fromViewWithoutEntity(columnName, view, behaviour));
@@ -725,6 +731,11 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	private AmpReportsSchema no_entity(String columnName, String view) {
 		return addColumn(SimpleTextColumn.fromViewWithoutEntity(columnName, view));
 	}
+	
+	private AmpReportsSchema no_entity(String columnName, String view, Function<String, String> postprocessor) {
+		return addColumn(SimpleTextColumn.fromViewWithoutEntity(columnName, view).withPostprocessor(postprocessor));
+	}
+
 	
 //	private AmpReportsSchema with_percentage(String columnName, String viewName, LevelColumn levelColumn) {
 //		logger.error(String.format("(column %s) NiDimension %s has no percentages corrector, using raw percentages", columnName, levelColumn.dimensionUsage));

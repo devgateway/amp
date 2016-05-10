@@ -541,7 +541,6 @@ function extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchies
 				dataValue.displayedValue = this.headerMatrix[this.lastHeaderRow][i].emptyCell ? this.headerMatrix[this.lastHeaderRow][i].emptyCell.displayedValue : "";
 			}
 			
-			dataValue.displayedValue = stripHtml(dataValue.displayedValue);
 			dataValue.isTotal = node.isTotal;
 			this.contentMatrix[this.currentContentIndexRow][i] = dataValue;
 		}
@@ -610,16 +609,6 @@ function escapeHtml(str) {
     div.appendChild(document.createTextNode(str));
     return div.innerHTML;
 };
-
-/**
- * Remove html tags and Entities. escapeHtml does not remove entities 
- */
-function stripHtml(str){
-	if(str){
-	   return $("<p>" + str + "</p>").text();
-	}
-	return str	  
-}
 
 /**
  * generates a tooltip if needed && requested

@@ -1574,11 +1574,11 @@ LoggerIdentifiable, Cloneable {
 			return actPrograms;
 		}
 		
-		public Set getActBudgetStructure(){
+		public Set<AmpActivityBudgetStructure> getActBudgetStructure(){
 			return actBudgetStructure;
 		}
 		
-		public void setActBudgetStructure(Set actBudgetStructure){
+		public void setActBudgetStructure(Set<AmpActivityBudgetStructure> actBudgetStructure){
 			this.actBudgetStructure = actBudgetStructure;
 		}
 

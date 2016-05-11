@@ -495,8 +495,7 @@ public class SettingsUtils {
 			Date date = FiscalCalendarUtil.convertDate(gsCalendar, gsDate, currentCalendar);
 			*/
 			Date date = gsDate;
-				
-			settings.add(new SettingOptions(dateSettingsName, false, DateTimeUtil.parseDateForPicker2(date, Constants.CALENDAR_DATE_PICKER), null, null, true));
+			settings.add(new SettingOptions(dateSettingsName, false, DateTimeUtil.parseDateForPicker2(date, Constants.CALENDAR_DATE_PICKER), null, null, false));
 		}
 	}
 	

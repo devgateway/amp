@@ -27,7 +27,7 @@
                         </c:if>
     
                         <c:if test="${currentLevel != 1}">
-                            <li id="limodule:<bean:write name="moduleAux" property="root.id"/>" title="<digi:trn key='<%="fm:tooltip:"+moduleAux.getRoot().getNameTrimmed() %>'><bean:write name="moduleAux" property="root.name"/></digi:trn>">
+                            <li id="limodule:<bean:write name="moduleAux" property="root.id"/>" title="<bean:write name="moduleAux" property="root.name"/>">
                         </c:if>
     
                         <logic:equal name="aimVisibilityManagerForm" property="mode" value="addNew">

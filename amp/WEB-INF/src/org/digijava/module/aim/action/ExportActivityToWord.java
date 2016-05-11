@@ -3912,8 +3912,8 @@ public class ExportActivityToWord extends Action {
                 idx ++;
 
                 if(visKey == null || (visKey != null && FeaturesUtil.isVisibleField(visKey))) {
-                    String trnVal = (rowData !=null && rd.getTranslateValues().containsKey(rowData)) ?
-                            TranslatorWorker.translateText(rowData) : rowData;
+                	boolean shouldTranslate = Boolean.TRUE.equals(rd.getTranslateValues().get(rowData));
+                	String trnVal = shouldTranslate ? TranslatorWorker.translateText(rowData) : rowData;
                     RtfCell dataValCell = new RtfCell(new Paragraph(trnVal != null ? trnVal : "-", PLAINFONT));
                     if (rd.getValues().size() < (maxCols - 1) && rowCounter == rd.getValues().size()) {
                         dataValCell.setColspan(maxCols - rowCounter);

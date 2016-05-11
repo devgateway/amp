@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.NiLinearCombinationTransactionMeasure;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportMeasure;
@@ -51,10 +52,10 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 	 * @param def
 	 * @return
 	 */
-	public AbstractReportsSchema addLinearFilterMeasure(String compMeasureName, String description, Object...def) {
+	public AbstractReportsSchema addLinearFilterMeasure(String compMeasureName, String description, Behaviour<?> behaviour, Object...def) {
 		failIf(def.length % 2 != 0, "you should supply an even number of arguments");
 		Map<NiTransactionMeasure, BigDecimal> defMap = parseMap(String.format("while defining measure %s", compMeasureName), def);
-		return addMeasure(new NiLinearCombinationTransactionMeasure(compMeasureName, defMap, description));
+		return addMeasure(new NiLinearCombinationTransactionMeasure(compMeasureName, defMap, behaviour, description));
 	}
 	
 	public Map<NiTransactionMeasure, BigDecimal> parseMap(String errPrefix, Object...def) {

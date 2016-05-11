@@ -20,6 +20,18 @@ public class SelectedYearBlock {
 	
 	/** the Julian code of the ending day of the year */
 	public final long selectedYearEndJulian;
+
+	/** the Julian code of the starting day of the previous year */
+	public final long previousYearStartJulian;
+	
+	/** the Julian code of the ending day of the previous year */
+	public final long previousYearEndJulian;	
+	
+	/** the Julian code of the starting day of the selected month */
+	public final long selectedMonthStartJulian;
+	
+	/** the Julian code of the ending day of the selected month */
+	public final long selectedMonthEndJulian;
 	
 	/** the Julian code of the first day of the previous month */
 	public final long previousMonthStartJulian;
@@ -39,25 +51,38 @@ public class SelectedYearBlock {
 	public static SelectedYearBlock buildFor(int selectedYear, LocalDate now) {
 		long selectedYearStart = DateTimeUtil.toJulianDayNumber(LocalDate.ofYearDay(selectedYear, 1));
 		long selectedYearEnd = DateTimeUtil.toJulianDayNumber(LocalDate.ofYearDay(selectedYear + 1, 1)) - 1;
-		LocalDate thisMonthStart = now.withDayOfMonth(1);
-		LocalDate previousMonthEndD = thisMonthStart.minusDays(1);
+		long previousYearStart = DateTimeUtil.toJulianDayNumber(LocalDate.ofYearDay(now.getYear() - 1, 1));
+		long previousYearEnd = DateTimeUtil.toJulianDayNumber(LocalDate.ofYearDay(now.getYear(), 1)) - 1;
+		
+		LocalDate thisMonthStartD = now.withDayOfMonth(1);
+		LocalDate thisMonthEndD = now.withDayOfMonth(now.lengthOfMonth());
+		LocalDate previousMonthEndD = thisMonthStartD.minusDays(1);
 		LocalDate previousMonthStartD = previousMonthEndD.withDayOfMonth(1);
+		long thisMonthStart = DateTimeUtil.toJulianDayNumber(thisMonthStartD);
+		long thisMonthEnd = DateTimeUtil.toJulianDayNumber(thisMonthEndD);
 		long previousMonthStart = DateTimeUtil.toJulianDayNumber(previousMonthStartD);
 		long previousMonthEnd = DateTimeUtil.toJulianDayNumber(previousMonthEndD);
-		return new SelectedYearBlock(selectedYear, selectedYearStart, selectedYearEnd, previousMonthStart, previousMonthEnd, now.getYear());
+		return new SelectedYearBlock(selectedYear, selectedYearStart, selectedYearEnd, previousYearStart, previousYearEnd, 
+				thisMonthStart, thisMonthEnd, previousMonthStart, previousMonthEnd, now.getYear());
 	}
 	
 	public static SelectedYearBlock buildFor(ReportSpecification spec, LocalDate now) {
 		return buildFor(AmpReportFilters.getReportSelectedYear(spec), now);
 	}
 	
-	public SelectedYearBlock(int selectedYear, long selectedYearStartJulian, long selectedYearEndJulian, long previousMonthStartJulian, long previousMonthEndJulian,
+	public SelectedYearBlock(int selectedYear, long selectedYearStartJulian, long selectedYearEndJulian, 
+			long previousYearStartJulian, long previousYearEndJulian, 
+			long selectedMonthStartJulian, long selectedMonthEndJulian, long previousMonthStartJulian, long previousMonthEndJulian,
 			int currentYear) {
 		this.selectedYear = selectedYear;
 		this.selectedYearStartJulian = selectedYearStartJulian;
 		this.selectedYearEndJulian = selectedYearEndJulian;
+		this.previousYearStartJulian = previousYearStartJulian;
+		this.previousYearEndJulian = previousYearEndJulian;
 		this.previousMonthStartJulian = previousMonthStartJulian;
 		this.previousMonthEndJulian = previousMonthEndJulian;
+		this.selectedMonthStartJulian = selectedMonthStartJulian;
+		this.selectedMonthEndJulian = selectedMonthEndJulian;
 		this.currentYear = currentYear;
 		this.currentYearStartJulian = DateTimeUtil.toJulianDayNumber(LocalDate.of(currentYear, 1, 1));
 		this.currentYearEndJulian = DateTimeUtil.toJulianDayNumber(LocalDate.of(currentYear, 12, 31));

@@ -90,8 +90,6 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 				Arrays.asList("Pure MTEF Project", "activity with directed MTEFs", "Activity with both MTEFs and Act.Comms"),
 				cor);
 	}
-
-
 	
 	@Test
 	public void testProjectImplementationDelay() {
@@ -749,7 +747,6 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 			          new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Zone", "", "Totals-Actual Commitments", "65 760,63", "Totals-Actual Disbursements", "80 000"),
 			          new ReportAreaForTests(new AreaOwner(66), "Project Title", "Activity 2 with multiple agreements", "Zone", "", "Totals-Actual Commitments", "1 200"),
 			          new ReportAreaForTests(new AreaOwner(76), "Project Title", "activity with pipeline MTEFs and act. disb", "Zone", "", "Totals-Actual Disbursements", "110 000")        )      ));
-
 		
 		runNiTestCase(spec("ActivityCountReport"), "en", acts, cor);
 	}
@@ -775,7 +772,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 		
 		runNiTestCase(spec("activity-count-summary"), "en", acts, cor);
 	}
-
+	
 	@Test
 	public void testActivityCountDoubleSummary() {
 		NiReportModel cor = new NiReportModel("activity-count-summary-dual")
@@ -840,7 +837,6 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 		
 		runNiTestCase(spec("activity-count-summary-dual"), "en", acts, cor);
 	}
-	
 	@Test
 	public void testCapitalExpenditurePercentages() {
 		NiReportModel cor = new NiReportModel("testCapitalExpenditurePercentages")

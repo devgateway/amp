@@ -15,13 +15,16 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
  *
  */
 public abstract class NiPredicateTransactionMeasure extends NiReportMeasure<CategAmountCell> {
-		
-	public NiPredicateTransactionMeasure(String measureName, Behaviour<?> behaviour, String description) {
+	
+	protected final boolean ignoreFilters;
+	
+	public NiPredicateTransactionMeasure(String measureName, Behaviour<?> behaviour, String description, boolean ignoreFilters) {
 		super(measureName, behaviour, description);
+		this.ignoreFilters = ignoreFilters;
 	}
 	
 	public NiPredicateTransactionMeasure(String measureName, String description) {
-		this(measureName, TrivialMeasureBehaviour.getInstance(), description);
+		this(measureName, TrivialMeasureBehaviour.getInstance(), description, false);
 	}
 	
 	public List<CategAmountCell> fetch(List<CategAmountCell> funding) {
@@ -32,7 +35,11 @@ public abstract class NiPredicateTransactionMeasure extends NiReportMeasure<Cate
 	
 	@Override
 	public List<CategAmountCell> fetch(NiReportsEngine engine) {
-		return fetch(engine.funding);
+		if (ignoreFilters) {
+			return fetch(engine.unfilteredFunding);
+		} else {
+			return fetch(engine.funding);
+		}		
 	}
 	
 	/**

@@ -67,7 +67,6 @@ import org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension;
 import org.dgfoundation.amp.nireports.output.NiTextCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
 import org.dgfoundation.amp.nireports.schema.BooleanDimension;
-import org.dgfoundation.amp.nireports.schema.GeneratedColumnBehaviour;
 import org.dgfoundation.amp.nireports.schema.GeneratedIntegerBehaviour;
 import org.dgfoundation.amp.nireports.schema.NiComputedColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
@@ -118,11 +117,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	
 	public final static String UNDEFINED_CATEGORY = "Unassigned";
 	
-
 	@SuppressWarnings("serial")
 	public final static Map<String, String> columnDescriptions = new HashMap<String, String>() {{
-		put(ColumnConstants.CUMULATIVE_COMMITMENT,  "Sum of all ACTUAL COMMITMENTS independent of filters");
-		put(ColumnConstants.CUMULATIVE_DISBURSEMENT,  "Sum of all ACTUAL DISBURSEMENTS independent of filters");
 		put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES,  "Level-1 subprogram of the selected national objective");
 		put(ColumnConstants.PROJECT_PERIOD,  "Project Period (months),  Proposed Completion Date - Actual Start date");
 		put(ColumnConstants.OVERAGE,  "Overage (months),  Age of project - Project period");
@@ -147,28 +143,29 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		put(ColumnConstants.TERTIARY_PROGRAM,  "Level-1 subprogram of the selected tertiary program");
 		put(ColumnConstants.CALCULATED_PROJECT_LIFE,  "Difference in days between Planned Start Date and Actual Completion Date");
 		put(ColumnConstants.CUMULATIVE_EXECUTION_RATE,  "(Cumulative Disbursement/ Cumulative Commitment) * 100 ");
-		put(ColumnConstants.UNCOMMITTED_CUMULATIVE_BALANCE,  "Proposed project cost - Cummalative Commitments");
-		put(ColumnConstants.UNDISBURSED_CUMULATIVE_BALANCE,  "Cumulative Commitment - Cumulative Disbursement");	
 		
 		
 	}};
 	@SuppressWarnings("serial")
 	public final static Map<String, String> measureDescriptions = new HashMap<String, String>() {{
-
-		put(MeasureConstants.CONSUMPTION_RATE , "(Selected Year Cumulated Disbursements / Selected Year of Planned Disbursements) * 100"); 
-		put(MeasureConstants.CUMULATED_DISBURSEMENTS , "Prior Actual Disbursements + Previous Month Disbursements"); 
-		put(MeasureConstants.DISBURSMENT_RATIO , "Sum of actual disbursment / Total actual disb * 100"); 
-		put(MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS , "Actual Disbursements Of Previous Month");
+		put(MeasureConstants.CONSUMPTION_RATE , "(Selected Year Cumulated Disbursements / Selected Year of Planned Disbursements) * 100");
+		put(MeasureConstants.CUMULATED_DISBURSEMENTS , "Prior Actual Disbursements + Previous Month Disbursements");
+		put(MeasureConstants.CUMULATIVE_COMMITMENT,  "Sum of all ACTUAL COMMITMENTS independent of filters");
+		put(MeasureConstants.CUMULATIVE_DISBURSEMENT,  "Sum of all ACTUAL DISBURSEMENTS independent of filters");
 		put(MeasureConstants.CURRENT_MONTH_DISBURSEMENTS , "Sum of Actual Disbursements of the current month");
-		put(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS , "Current Year Actual Disbursements Until Previous Month (not included)"); 
-		put(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS , "Selected Year Planned Disbursements");
-		put(MeasureConstants.UNCOMMITTED_BALANCE , "Proposed Project Cost - Total Actual Commitments"); 
-		put(MeasureConstants.UNDISBURSED_BALANCE , "Total Actual Commitment - Total Actual Disbursement");
-		put(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS , "Actual commitments for the project / Total actual commitments * 100");
+		put(MeasureConstants.DISBURSMENT_RATIO , "Sum of actual disbursment / Total actual disb * 100");
+		put(MeasureConstants.EXECUTION_RATE , "Sum Of Actual Disb (Dependent on Filter) / Sum Of Planned Disb (Dependent on Filter) * 100");
 		put(MeasureConstants.LAST_YEAR_OF_PLANNED_DISBURSEMENTS , "Previous Year Planned Disbursements");
 		put(MeasureConstants.PERCENTAGE_OF_DISBURSEMENT , "(Total Actual Disbursements for Year,Quarter,Month / Total Actual Disbursements) * 100");
+		put(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS , "Actual commitments for the project / Total actual commitments * 100");
 		put(MeasureConstants.PLEDGES_COMMITMENT_GAP , "Total Pledge - Total Actual Commitments");
-		put(MeasureConstants.EXECUTION_RATE , "Sum Of Actual Disb (Dependent on Filter) / Sum Of Planned Disb (Dependent on Filter) * 100");
+		put(MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS , "Actual Disbursements Of Previous Month");
+		put(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS , "Current Year Actual Disbursements Until Previous Month (not included)");
+		put(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS , "Selected Year Planned Disbursements");
+		put(MeasureConstants.UNCOMMITTED_BALANCE , "Proposed Project Cost - Total Actual Commitments");
+		put(MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE,  "Proposed project cost - Cummalative Commitments");
+		put(MeasureConstants.UNDISBURSED_BALANCE , "Total Actual Commitment - Total Actual Disbursement");
+		put(MeasureConstants.UNDISBURSED_CUMULATIVE_BALANCE,  "Cumulative Commitment - Cumulative Disbursement");	
 //		put(MeasureConstants.FORECAST_EXECUTION_RATE , "Actual Disbursements / (Most recent of (Pipeline MTEF for the year, Projection MTEF for the year)). "
 //					+ "Measure only makes sense in Annual and Totals-only reports");
 		
@@ -481,6 +478,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addPledgeColumns();
 		
 		addTrivialMeasures();
+		addUnfilteredTrivialMeasures();
 		addFundingFlowMeasures();
 		addTaggedMeasures();
 		addComputedLinearMeasures();
@@ -531,6 +529,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		degenerate_dimension(ColumnConstants.PLEDGE_STATUS, "v_pledges_status", catsDimension);
 		single_dimension(ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE, "v_pledges_type_of_assistance", catsDimension.getLevelColumn(ColumnConstants.TYPE_OF_ASSISTANCE, 1));
 		
+		
+		@SuppressWarnings("serial")
 		Map<String, String> pledgeContacts = new HashMap<String, String>() {{
 		    put(ColumnConstants.PLEDGE_CONTACT_1___ADDRESS, "v_pledges_contact1_address");
 		    put(ColumnConstants.PLEDGE_CONTACT_1___ALTERNATE_CONTACT, "v_pledges_contact1_alternate");
@@ -581,17 +581,56 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 				AmpReportsScratchpad::getComputedMeasuresBlock,
 				(syb, cell) -> isBetween(cell.amount.getJulianDayCode(), syb.previousMonthStartJulian, syb.previousMonthEndJulian),
 				TrivialMeasureBehaviour.getTotalsOnlyInstance());
+
+		addDerivedMeasure(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS,
+				AmpReportsScratchpad::getComputedMeasuresBlock,
+				(syb, cell) -> isBetween(cell.amount.getJulianDayCode(), syb.selectedYearStartJulian, syb.selectedYearEndJulian),
+				TrivialMeasureBehaviour.getTotalsOnlyInstance());	
 		
-		addTrivialFilterMeasure(MeasureConstants.PLEDGES_COMMITMENT_GAP, 
+		addDerivedMeasure(MeasureConstants.CURRENT_MONTH_DISBURSEMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS,
+				AmpReportsScratchpad::getComputedMeasuresBlock,
+				(syb, cell) -> isBetween(cell.amount.getJulianDayCode(), syb.selectedMonthStartJulian, syb.selectedMonthEndJulian),
+				TrivialMeasureBehaviour.getTotalsOnlyInstance());	
+		
+		addDerivedMeasure(MeasureConstants.LAST_YEAR_OF_PLANNED_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS,
+				AmpReportsScratchpad::getComputedMeasuresBlock,
+				(syb, cell) -> isBetween(cell.amount.getJulianDayCode(), syb.previousYearStartJulian, syb.previousYearEndJulian),
+				TrivialMeasureBehaviour.getTotalsOnlyInstance());
+
+		addTrivialFilterMeasure(MeasureConstants.UNCOMMITTED_BALANCE,
+				TrivialMeasureBehaviour.getTotalsOnlyInstance(),
+				MeasureConstants.PROPOSED_PROJECT_AMOUNT_PER_PROJECT, +1,
+				MeasureConstants.ACTUAL_COMMITMENTS, -1);
+
+		addTrivialFilterMeasure(MeasureConstants.UNDISBURSED_BALANCE,
+				TrivialMeasureBehaviour.getTotalsOnlyInstance(),
+				MeasureConstants.ACTUAL_COMMITMENTS, +1,
+				MeasureConstants.ACTUAL_DISBURSEMENTS, -1);
+
+		
+		
+		addTrivialFilterMeasure(MeasureConstants.PLEDGES_COMMITMENT_GAP,
+			TrivialMeasureBehaviour.getInstance(),
 			MeasureConstants.ACTUAL_COMMITMENTS, -1,
 			MeasureConstants.PLEDGES_ACTUAL_PLEDGE, +1);
 		
+		addTrivialFilterMeasure(MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE, 
+				TrivialMeasureBehaviour.getTotalsOnlyInstance(),
+				MeasureConstants.PROPOSED_PROJECT_AMOUNT_PER_PROJECT, +1,
+				MeasureConstants.CUMULATIVE_COMMITMENT, -1);
+		
+		addTrivialFilterMeasure(MeasureConstants.UNDISBURSED_CUMULATIVE_BALANCE,
+				TrivialMeasureBehaviour.getTotalsOnlyInstance(),
+				MeasureConstants.CUMULATIVE_COMMITMENT, +1,
+				MeasureConstants.CUMULATIVE_DISBURSEMENT, -1);
+				
 		addMultipliedFilterTransactionMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS_CAPITAL, MeasureConstants.ACTUAL_DISBURSEMENTS, AmpFundingColumn::getCapitalMultiplier);
 		addMultipliedFilterTransactionMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT, MeasureConstants.ACTUAL_DISBURSEMENTS, AmpFundingColumn::getRecurrentMultiplier);
 		addMultipliedFilterTransactionMeasure(MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL, MeasureConstants.PLANNED_DISBURSEMENTS, AmpFundingColumn::getCapitalMultiplier);
-		addMultipliedFilterTransactionMeasure(MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE, MeasureConstants.PLANNED_DISBURSEMENTS, AmpFundingColumn::getRecurrentMultiplier);		
+		addMultipliedFilterTransactionMeasure(MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE, MeasureConstants.PLANNED_DISBURSEMENTS, AmpFundingColumn::getRecurrentMultiplier);				
+		
 	}
-
+	
 	protected void addMultipliedFilterTransactionMeasure(String measureName, String baseMeasureName, Function<CategAmountCell, BigDecimal> fMultCalculator) {
 		NiTransactionMeasure baseMeasure = (NiTransactionMeasure) getMeasures().get(baseMeasureName);
 		NiUtils.failIf(baseMeasure == null, () -> String.format("you are trying to define measure %s based on nonexistant base measure %s", measureName, baseMeasureName));
@@ -620,8 +659,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addMeasure(new NiTransactionContextMeasure<K>(measureName, contextBuilder, crit, behaviour, measureDescriptions.get(measureName)));
 	}
 	
-	protected void addTrivialFilterMeasure(String measureName, Object...def) {
-		addLinearFilterMeasure(measureName, measureDescriptions.get(measureName), def);
+	protected void addTrivialFilterMeasure(String measureName, Behaviour<?> behaviour,  Object...def) {
+		addLinearFilterMeasure(measureName, measureDescriptions.get(measureName), behaviour, def);
 	}
 	
 	/**
@@ -663,6 +702,12 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		}); 
 	}
 	
+	private AmpReportsSchema addUnfilteredTrivialMeasures() {
+		addMeasure(new AmpTrivialMeasure(MeasureConstants.CUMULATIVE_DISBURSEMENT, Constants.DISBURSEMENT, "Actual", false, true, TrivialMeasureBehaviour.getTotalsOnlyInstance()));
+		addMeasure(new AmpTrivialMeasure(MeasureConstants.CUMULATIVE_COMMITMENT, Constants.COMMITMENT, "Actual", false, true, TrivialMeasureBehaviour.getTotalsOnlyInstance()));
+		return this;
+	}
+	
 	private AmpReportsSchema addTrivialMeasures() {
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.ACTUAL_COMMITMENTS, Constants.COMMITMENT, "Actual", false, cac -> cac.activityId > MondrianETL.PLEDGE_ID_ADDER));
 
@@ -694,6 +739,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		//addMeasure(new AmpTrivialMeasure(MeasureConstants.TRIANGULAR_SSC_COMMITMENTS, Constants.COMMITMENT, "Actual", false));
 
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.ANNUAL_PROPOSED_PROJECT_COST, Constants.ANNUAL_PROPOSED_PROJECT_COST));
+		addMeasure(new AmpTrivialMeasure(MeasureConstants.PROPOSED_PROJECT_AMOUNT_PER_PROJECT, Constants.PROPOSED_PROJECT_AMOUNT_PER_PROJECT));
 		//addMeasure(new AmpTrivialMeasure(MeasureConstants.PROJECTION_MTEF_PROJECTIONS, Constants.COMMITMENT, "Actual", false));
 		
 //		addMeasure(new AmpTrivialMeasure(MeasureConstants.PIPELINE_MTEF_PROJECTIONS, Constants.PIPELINE, "Pipeline", false));

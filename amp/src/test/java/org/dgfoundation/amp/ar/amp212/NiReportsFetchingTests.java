@@ -59,12 +59,14 @@ public class NiReportsFetchingTests extends ReportingTestCase {
 				Arrays.asList("SubNational no percentages", "Unvalidated activity"),
 				engine -> {
 					List<CategAmountCell> cells = sorted(engine.schema.getFundingFetcher(engine).fetch(engine));
+					String cor = "[" 
+	     					+ "(actId: 64, amt: 45000 on 2015-01-06, coos: {{bool.Disaster Response Marker=(level: 0, id: -999999999), cats.Financing Instrument=(level: 1, id: 2125), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: -999999999), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21695)}}, meta: {MetaInfoSet: [source_org: 21695, source_role: DN, adjustment_type: Actual, transaction_type: 0]}, "
+							+ "(actId: 40, amt: 60000 on 2014-02-12, coos: {{bool.Disaster Response Marker=(level: 0, id: -999999999), cats.Financing Instrument=(level: 1, id: -999999999), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: -999999999), cats.Type Of Assistance=(level: 1, id: -999999999), orgs.DN=(level: 2, id: -999999999)}}, meta: {MetaInfoSet: [source_role: DN, adjustment_type: Actual, transaction_type: 11]}, "
+	     					+ "(actId: 40, amt: 75000 on 2014-02-05, coos: {{bool.Disaster Response Marker=(level: 0, id: -999999999), cats.Financing Instrument=(level: 1, id: 2120), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: 2094), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21700)}}, meta: {MetaInfoSet: [source_org: 21700, source_role: DN, adjustment_type: Actual, transaction_type: 0]}"
+							+ "]";
 					assertEquals(
-						"[" 
-     					+ "(actId: 64, amt: 45000 on 2015-01-06, coos: {{bool.Disaster Response Marker=(level: 0, id: -999999999), cats.Financing Instrument=(level: 1, id: 2125), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: -999999999), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21695)}}, meta: {MetaInfoSet: [source_org: 21695, source_role: DN, adjustment_type: Actual, transaction_type: 0]}, "
-						+ "(actId: 40, amt: 75000 on 2014-02-05, coos: {{bool.Disaster Response Marker=(level: 0, id: -999999999), cats.Financing Instrument=(level: 1, id: 2120), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: 2094), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21700)}}, meta: {MetaInfoSet: [source_org: 21700, source_role: DN, adjustment_type: Actual, transaction_type: 0]}"
-						+ "]",
-						cells.toString());
+						cells.toString(),
+						cor);
 				});
 	}
 

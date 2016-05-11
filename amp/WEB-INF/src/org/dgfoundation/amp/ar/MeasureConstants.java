@@ -3,9 +3,6 @@
  */
 package org.dgfoundation.amp.ar;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Constants for Measure Names. <b>
  * Values are pulled from amp_measures.measurename 
@@ -24,6 +21,8 @@ public class MeasureConstants {
 	public static final String BILATERAL_SSC_COMMITMENTS = "Bilateral SSC Commitments";
 	public static final String CONSUMPTION_RATE = "Consumption Rate";
 	public static final String CUMULATED_DISBURSEMENTS = "Cumulated Disbursements"; 
+	public static final String CUMULATIVE_COMMITMENT = "Cumulative Commitment";
+	public static final String CUMULATIVE_DISBURSEMENT = "Cumulative Disbursement";
 	public static final String CUMULATED_SSC_COMMITMENTS = "Cumulated SSC Commitments";
 	public static final String DISBURSMENT_RATIO = "Disbursment Ratio";
 	public static final String OFFICIAL_DEVELOPMENT_AID_COMMITMENTS = "Official Development Aid Commitments";
@@ -54,10 +53,14 @@ public class MeasureConstants {
 	public static final String PERCENTAGE_OF_DISBURSEMENT = "Percentage of Disbursement";
 	public static final String ACTUAL_CLASSIFIED_EXPENDITURES  = "Actual Classified Expenditures";
 	public static final String PLANNED_CLASSIFIED_EXPENDITURES  = "Planned Classified Expenditures";
+	public static final String UNCOMMITTED_CUMULATIVE_BALANCE = "Uncommitted Cumulative Balance";
+	public static final String UNDISBURSED_CUMULATIVE_BALANCE = "Undisbursed Cumulative Balance";
 	
 	 
 	//type = D (?)
 	public static final String ANNUAL_PROPOSED_PROJECT_COST = "Annual Proposed Project Cost";
+	//PPC is for internal NiReports use only
+	public static final String PROPOSED_PROJECT_AMOUNT_PER_PROJECT = "Proposed Project Cost Amount Per Project";
 	public static final String ACTUAL_ESTIMATED_DISBURSEMENTS = "Actual Estimated Disbursements";
 	public static final String ACTUAL_RELEASE_OF_FUNDS = "Actual Release of Funds";
 	public static final String PIPELINE_ESTIMATED_DISBURSEMENTS = "pipeline Estimated Disbursements";

@@ -18,7 +18,7 @@ public class NiMultipliedFilterTransactionMeasure extends NiPredicateTransaction
 	}
 	
 	public NiMultipliedFilterTransactionMeasure(String measureName, Function<CategAmountCell, BigDecimal> multiplierCalculator, Behaviour<?> behaviour, String description) {
-		super(measureName, behaviour, description);
+		super(measureName, behaviour, description, false);
 		this.multiplierCalculator = multiplierCalculator;
 	}
 

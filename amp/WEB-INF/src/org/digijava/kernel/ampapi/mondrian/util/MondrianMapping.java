@@ -24,7 +24,6 @@ import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXAttribute;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXElement;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXLevel;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -294,7 +293,6 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION, new MDXLevel(MoConstants.COMPONENT_FUNDING_ORGANIZATION, MoConstants.H_ORG_NAME, MoConstants.ATTR_ORG_NAME));
 			addColumnDefinition(ColumnConstants.PROPOSED_PROJECT_AMOUNT, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT));
 			addColumnDefinition(ColumnConstants.UNCOMMITTED_BALANCE, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_UNCOMMITTED_BALANCE, MoConstants.ATTR_UNCOMMITTED_BALANCE));
-			addColumnDefinition(ColumnConstants.UNCOMMITTED_CUMULATIVE_BALANCE, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_UNCOMMITTED_CUMULATIVE_BALANCE, MoConstants.ATTR_UNCOMMITTED_CUMULATIVE_BALANCE));
 			addColumnDefinition(ColumnConstants.FORECAST_EXECUTION_RATE, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_FORECAST_EXECUTION_RATE, MoConstants.ATTR_FORECAST_EXECUTION_RATE));
 			addColumnDefinition(ColumnConstants.PLEDGE_STATUS, new MDXLevel("Pledge Status", MoConstants.H_CATEGORY_NAME, MoConstants.ATTR_CATEGORY_NAME));
 			
@@ -311,10 +309,7 @@ public class MondrianMapping {
 				addColumnDefinition(ColumnConstants.PLEDGE_CONTACT_1___ALTERNATE_PHONE.replace("1", idx), new MDXLevel(MoConstants.PLEDGES_CONTACTS, MoConstants.ATTR_CONTACT_ALTERNAME_PHONE + idx, MoConstants.ATTR_CONTACT_ALTERNAME_PHONE + idx));
 			}
 			
-			addColumnDefinition(ColumnConstants.CUMULATIVE_COMMITMENT, new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, MoConstants.ATTR_CUMULATIVE_COMMITMENT, MoConstants.ATTR_CUMULATIVE_COMMITMENT));
-			addColumnDefinition(ColumnConstants.CUMULATIVE_DISBURSEMENT, new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, MoConstants.ATTR_CUMULATIVE_DISBURSEMENT, MoConstants.ATTR_CUMULATIVE_DISBURSEMENT));
 			addColumnDefinition(ColumnConstants.CUMULATIVE_EXECUTION_RATE, new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, MoConstants.ATTR_CUMULATIVE_EXECUTION_RATE, MoConstants.ATTR_CUMULATIVE_EXECUTION_RATE));
-			addColumnDefinition(ColumnConstants.UNDISBURSED_CUMULATIVE_BALANCE, new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, MoConstants.ATTR_UNDISBURSED_CUMULATIVE_BALANCE, MoConstants.ATTR_UNDISBURSED_CUMULATIVE_BALANCE));
 
 			
 			for(String colName: Arrays.asList(ColumnConstants.AGREEMENT_CLOSE_DATE, ColumnConstants.AGREEMENT_CODE, 

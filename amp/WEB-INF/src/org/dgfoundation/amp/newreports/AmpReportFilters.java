@@ -21,6 +21,9 @@ public class AmpReportFilters extends ReportFiltersImpl {
 	protected final Map<ReportColumn, List<FilterRule>> dateFilterRules = new HashMap<ReportColumn, List<FilterRule>>();
 
 	protected AmpFiscalCalendar calendar;
+	/**
+	 * also known as selected year
+	 */
 	protected Integer computedYear;
 
 	public AmpReportFilters(Map<ReportElement, List<FilterRule>> filterRules) {
@@ -31,8 +34,20 @@ public class AmpReportFilters extends ReportFiltersImpl {
 		this.calendar = calendar;
 	}
 	
+	/**
+	 * Also known as "selected year" across AMP
+	 * @return
+	 */
 	public Integer getComputedYear() {
 		return computedYear;
+	}
+
+	/**
+	 * Also known as "selected year" across AMP
+	 * @return
+	 */
+	public void setComputedYear(Integer computedYear) {
+		this.computedYear = computedYear;
 	}
 	
  	public AmpFiscalCalendar getCalendar() {

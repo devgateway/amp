@@ -13,11 +13,11 @@ public class NiTransactionMeasure extends NiPredicateTransactionMeasure {
 	public final Predicate<CategAmountCell> criterion;
 	
 	public NiTransactionMeasure(String measureName, Predicate<CategAmountCell> criterion, String description) {
-		this(measureName, criterion, TrivialMeasureBehaviour.getInstance(), description);
+		this(measureName, criterion, TrivialMeasureBehaviour.getInstance(), description, false);
 	}
 	
-	public NiTransactionMeasure(String measureName, Predicate<CategAmountCell> criterion, Behaviour<?> behaviour, String description) {
-		super(measureName, behaviour, description);
+	public NiTransactionMeasure(String measureName, Predicate<CategAmountCell> criterion, Behaviour<?> behaviour, String description, boolean ignoreFilters) {
+		super(measureName, behaviour, description, ignoreFilters);
 		this.criterion = criterion;
 	}
 

@@ -38,7 +38,7 @@ public class Constants
     /**
      * only present in v_mondrian_raw_donor_transactions
      */
-    public static final int PROPOSED_PROJECT_AMOUNT_PER_PROJECT = 10;
+    public static final int PROPOSED_PROJECT_AMOUNT_PER_PROJECT = 11;
     
     /**
      * dummy transaction type for the ESRI option "commitments + disbursements"

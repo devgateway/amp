@@ -21,7 +21,6 @@ import org.dgfoundation.amp.ar.MeasureConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
-import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -83,7 +82,6 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 		
 		put(MeasureConstants.ACTUAL_CLASSIFIED_EXPENDITURES, Arrays.asList(ArConstants.EXPENDITURE,  EXPENDITURE_CLASS_ID_NAME, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.PLANNED_CLASSIFIED_EXPENDITURES, Arrays.asList(ArConstants.EXPENDITURE, EXPENDITURE_CLASS_ID_NAME, ADJUSTMENT_PREFIX + "Planned"));
-		
 		put(MeasureConstants.ACTUAL_DISBURSEMENTS_CAPITAL, Arrays.asList(ArConstants.DISBURSEMENT, CAPITAL_SPENDING_PERCENTAGE_ID_NAME, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT, Arrays.asList(ArConstants.DISBURSEMENT, CAPITAL_SPENDING_PERCENTAGE_ID_NAME, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL, Arrays.asList(ArConstants.DISBURSEMENT, CAPITAL_SPENDING_PERCENTAGE_ID_NAME, ADJUSTMENT_PREFIX + "Planned"));
@@ -109,6 +107,12 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 		put(MeasureConstants.TOTAL_COMMITMENTS, Arrays.asList(ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual"));
 		put(MeasureConstants.UNCOMMITTED_BALANCE, Arrays.asList(ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual", PROPOSED_PROJECT_COST_ID_NAME));
 		put(MeasureConstants.UNDISBURSED_BALANCE, Arrays.asList(ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual", ArConstants.DISBURSEMENT));
+		put(MeasureConstants.CUMULATIVE_COMMITMENT, Arrays.asList(ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual"));
+		put(MeasureConstants.CUMULATIVE_DISBURSEMENT, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
+		put(MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE, Arrays.asList(ANNUAL_PROPOSED_PROJECT_COST_ID_NAME, ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual"));
+		put(MeasureConstants.UNDISBURSED_CUMULATIVE_BALANCE, Arrays.asList(ArConstants.DISBURSEMENT, ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual"));
+		
+		
 	}};
 
 	public static Set<String> allMeasures = _getAllMeasures();	

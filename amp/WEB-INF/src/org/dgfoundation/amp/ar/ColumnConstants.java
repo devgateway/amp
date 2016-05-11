@@ -71,8 +71,6 @@ public class ColumnConstants {
 	public static final String COUNTRY = "Country";
 	public static final String CREDIT_DONATION = "Credit/Donation";
 	public static final String CRIS_NUMBER = "Cris Number";
-	public static final String CUMULATIVE_COMMITMENT = "Cumulative Commitment";
-	public static final String CUMULATIVE_DISBURSEMENT = "Cumulative Disbursement";
 	public static final String CUMULATIVE_EXECUTION_RATE = "Cumulative Execution Rate";
 	public static final String CURRENT_COMPLETION_DATE_COMMENTS = "Current Completion Date Comments";
 	public static final String DESCRIPTION_OF_COMPONENT_FUNDING = "Description of Component Funding";
@@ -146,7 +144,6 @@ public class ColumnConstants {
 	public static final String MINISTRY_OF_FINANCE_CONTACT_PHONE = "Ministry Of Finance Contact Phone";
 	public static final String MINISTRY_OF_FINANCE_CONTACT_TITLE = "Ministry Of Finance Contact Title";
 	public static final String MINORITIES = "Minorities";
-	//public static final String MODALITIES = "Modalities";
 	public static final String MODE_OF_PAYMENT = "Mode of Payment";
 	public static final String MULTI_DONOR = "Multi Donor";
 	public static final String NATIONAL_PLANNING_OBJECTIVES = "National Planning Objectives";
@@ -384,9 +381,7 @@ public class ColumnConstants {
 	public static final String TYPE_OF_COOPERATION = "Type of Cooperation";
 	public static final String TYPE_OF_IMPLEMENTATION = "Type of Implementation";
 	public static final String UNCOMMITTED_BALANCE = "Uncommitted Balance";
-	public static final String UNCOMMITTED_CUMULATIVE_BALANCE = "Uncommitted Cumulative Balance";
 	public static final String FORECAST_EXECUTION_RATE = "Forecast Execution Rate";
-	public static final String UNDISBURSED_CUMULATIVE_BALANCE = "Undisbursed Cumulative Balance";
 	public static final String VARIANCE_OF_COMMITMENTS = "Variance Of Commitments";
 	public static final String VARIANCE_OF_DISBURSEMENTS = "Variance Of Disbursements";
 	public static final String VOTE = "Vote";

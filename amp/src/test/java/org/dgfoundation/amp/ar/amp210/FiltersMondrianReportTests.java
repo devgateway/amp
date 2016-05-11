@@ -4,7 +4,6 @@
 package org.dgfoundation.amp.ar.amp210;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -15,12 +14,8 @@ import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
-import org.digijava.kernel.ampapi.exception.AmpApiException;
-import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
 import org.junit.Test;
 
 /**

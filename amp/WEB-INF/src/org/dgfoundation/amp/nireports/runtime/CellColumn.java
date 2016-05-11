@@ -53,13 +53,15 @@ public class CellColumn extends Column {
 		this.forEachCell(cell -> values.computeIfAbsent(strategy.categorize(cell), z -> new ArrayList<>()).add(cell));
 		GroupColumn res = this.asGroupColumn(null, newParent);
 		List<ComparableValue<String>> subColumnNames = strategy.getSubcolumnsNames(values.keySet());
-		subColumnNames.forEach(key -> res.addColumn(
-			new CellColumn(key.getValue(), 
-				new ColumnContents(Optional.ofNullable(values.get(key)).orElse(emptyList())), 
-				res, 
-				this.entity,
-				strategy.getBehaviour(key, this),
-				strategy.getEntityType() == null ? null : new NiColSplitCell(strategy.getEntityType(), key))));
+		for(ComparableValue<String> key:subColumnNames) {
+			res.addColumn(
+				new CellColumn(key.getValue(), 
+					new ColumnContents(Optional.ofNullable(values.get(key)).orElse(emptyList())), 
+					res, 
+					this.entity,
+					strategy.getBehaviour(key, this),
+					strategy.getEntityType() == null ? null : new NiColSplitCell(strategy.getEntityType(), key)));
+		};
 		return res;
 	}
 

@@ -310,8 +310,6 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		put("Component Type", ColumnConstants.COMPONENT_TYPE);
 		put("Costing Total Contribution", ColumnConstants.COSTING_DONOR);
 		put("Credit/Donation", ColumnConstants.CREDIT_DONATION);
-		put("Cumulative Commitment", ColumnConstants.CUMULATIVE_COMMITMENT);
-		put("Cumulative Disbursement", ColumnConstants.CUMULATIVE_DISBURSEMENT);
 		put("Current Completion Date Comments", ColumnConstants.CURRENT_COMPLETION_DATE_COMMENTS);
 		put("Description of Component Funding", ColumnConstants.DESCRIPTION_OF_COMPONENT_FUNDING);
 		put("Draft", ColumnConstants.DRAFT);
@@ -368,8 +366,6 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		put("SSC Modalities", ColumnConstants.SSC_MODALITIES);
 		put("Variance Of Commitments", ColumnConstants.VARIANCE_OF_COMMITMENTS);
 		put("Variance Of Disbursements", ColumnConstants.VARIANCE_OF_DISBURSEMENTS);
-		put(ColumnConstants.UNCOMMITTED_CUMULATIVE_BALANCE, ColumnConstants.UNCOMMITTED_CUMULATIVE_BALANCE);
-		put(ColumnConstants.UNDISBURSED_CUMULATIVE_BALANCE, ColumnConstants.UNDISBURSED_CUMULATIVE_BALANCE);
 		put(ColumnConstants.FORECAST_EXECUTION_RATE, ColumnConstants.FORECAST_EXECUTION_RATE);
 		put("Disaster Response Marker", ColumnConstants.DISASTER_RESPONSE_MARKER);
 	}};

@@ -1,7 +1,6 @@
 package org.dgfoundation.amp.nireports;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,16 +20,12 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.map.ObjectWriter;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.Graph;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.algo.timing.InclusiveTimer;
-import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
-import org.dgfoundation.amp.newreports.ReportElement;
-import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportWarning;
 import org.dgfoundation.amp.nireports.output.NiReportData;
@@ -45,7 +40,6 @@ import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
-import org.dgfoundation.amp.nireports.runtime.ColumnVisitor;
 import org.dgfoundation.amp.nireports.runtime.GroupColumn;
 import org.dgfoundation.amp.nireports.runtime.GroupReportData;
 import org.dgfoundation.amp.nireports.runtime.IdsAcceptorsBuilder;
@@ -123,6 +117,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	public NiReportData reportOutput;
 	
 	public List<CategAmountCell> funding;
+	public List<CategAmountCell> unfilteredFunding;
 	public final ReportSpecification spec;
 	
 	/**
@@ -198,6 +193,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 	
 	/** writes statistics in the {@link InclusiveTimer} instance */
+	@SuppressWarnings("serial")
 	protected void writeStatistics() {
 		timer.putMetaInNode("calendar_translations", new HashMap<String, Integer>(){{
 			put("calls", calendar.getCalls());
@@ -345,7 +341,8 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 			});
 		};
 		timer.run("Funding", () -> {
-			funding = selectRelevant(schema.fetchEntity(this, schema.getFundingFetcher(this)), buildCellFilterForColumn(FUNDING_COLUMN_NAME, true));
+			unfilteredFunding = schema.fetchEntity(this, schema.getFundingFetcher(this));
+			funding = selectRelevant(unfilteredFunding, buildCellFilterForColumn(FUNDING_COLUMN_NAME, true));
 			timer.putMetaInNode("cells", funding.size());
 			});
 	}
@@ -387,8 +384,9 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 	
 	protected<K extends Cell> ColumnContents fetchEntity(NiReportedEntity<K> colToFetch, boolean applyFilterPercentages) throws Exception {
-		try { 
-			List<K> cells = selectRelevant(schema.fetchEntity(this, colToFetch), buildCellFilterForColumn(colToFetch.name, colToFetch instanceof NiReportColumn));
+		try {
+			List<K> rawCells = schema.fetchEntity(this, colToFetch);
+			List<K> cells = (colToFetch instanceof NiReportColumn) ? selectRelevant(rawCells, buildCellFilterForColumn(colToFetch.name, true)) : rawCells;
 			timer.putMetaInNode("cells", cells.size());
 			return new ColumnContents(cells.stream().map(z -> new NiCell(z, colToFetch, rootEmptyTracker)).collect(Collectors.toList()));
 		}
@@ -508,11 +506,12 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 			res = res.verticallySplitByCategory(splitCriteria, fundingColumn.getParent());
 		
 		this.premeasureSplitDepth = splitCriterias.size();
+		List<String> relevantMeasures = actualMeasures.stream().filter(zz -> behaviours.containsKey(zz) && behaviours.get(zz).getTimeRange() != TimeRange.NONE).collect(Collectors.toList());
 		
 		VSplitStrategy restoreMeasures = VSplitStrategy.build(
-			cell -> new ComparableValue<String>(cell.getEntity().getName(), AmpCollections.indexOf(actualMeasures, cell.getEntity().getName())),
+			cell -> new ComparableValue<String>(cell.getEntity().getName(), AmpCollections.indexOf(relevantMeasures, cell.getEntity().getName())),
 			cat -> behaviours.get(cat.getValue()),
-			/*spec.isDisplayEmptyFundingColumns() ? null : */z -> getAsComparable(actualMeasures.stream().filter(zz -> behaviours.containsKey(zz) && behaviours.get(zz).getTimeRange() != TimeRange.NONE).collect(Collectors.toList())),
+			/*spec.isDisplayEmptyFundingColumns() ? null : */z -> getAsComparable(relevantMeasures),
 			PSEUDOCOLUMN_MEASURE);
 		GroupColumn z = res.verticallySplitByCategory(restoreMeasures, fundingColumn.getParent());
 		return z;

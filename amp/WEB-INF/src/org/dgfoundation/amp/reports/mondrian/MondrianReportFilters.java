@@ -301,12 +301,6 @@ public class MondrianReportFilters extends AmpReportFilters {
 		return computedYear;
 	}
 
-	/**
-	 * @param computedYear the computedYear to set
-	 */
-	public void setComputedYear(Integer computedYear) {
-		this.computedYear = computedYear;
-	}
 	
 	public AmpFiscalCalendar getCalendar() {
 		return calendar;

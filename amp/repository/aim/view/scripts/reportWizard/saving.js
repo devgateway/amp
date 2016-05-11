@@ -301,11 +301,19 @@ SaveReportEngine.prototype.saveAndOrOpenReport = function (openReport) {
 							noReportNameSupplied + 
 							//"&reportContextId="+getReportContextId()+
 							"&allowEmptyFundingColumns="+getAllowEmptyFundingColumns()+
-							"&" + getSelectedFields ("dest_measures_ul","selectedMeasures")+ "&" + getSelectedFields("dest_hierarchies_ul","selectedHierarchies");
+							"&" + getSelectedFields ("dest_measures_ul","selectedMeasures")+ "&" + getSelectedFields("dest_hierarchies_ul","selectedHierarchies");		
 		
-		//alert(postString);
-		YAHOO.util.Connect.asyncRequest("POST", "/aim/reportWizard.do", this, postString);
-        //popup(this, "/TEMPLATE/ampTemplate/saikuui/index.html#report/open/1261");
+		//YAHOO.util.Connect.asyncRequest("POST", "/aim/reportWizard.do", this, postString);
+		//uses synchronous request as a workaround for popup issues - AMP-22717 
+		var self = this;
+		$.ajax({
+			url:"/aim/reportWizard.do",
+			async:false,		   
+			data: postString,
+			success:  function(data) {
+				self.success({responseText:data});
+			}
+		});
 	} else {
 		
 	}

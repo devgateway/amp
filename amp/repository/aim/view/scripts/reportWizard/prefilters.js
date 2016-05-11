@@ -91,7 +91,7 @@ Filters.prototype.showFilters	= function(reportContextId) {
 	this.resetString		= "";
 	
 	// Fix z-index problem on Public Report Generator without changing css loading order.
-	$(".mask").attr('style', function(i,s) { return s + 'z-index: 3 !important;' });
+	this.fixZIndex(".mask", 3);
 };
 
 Filters.prototype.showSettings	= function() {
@@ -109,8 +109,12 @@ Filters.prototype.showSettings	= function() {
 	YAHOO.util.Event.addListener("applyFormatBtn", "click", this.saveFilters.validateAndSaveFilters, this.saveFilters, this.saveFilters);
 	
 	// Fix z-index problem on Public Report Generator without changing css loading order.
-	$(".mask").attr('style', function(i,s) { return s + 'z-index: 3 !important;' });
+	this.fixZIndex(".mask", 3);
 };
+
+Filters.prototype.fixZIndex = function(_class, index) {
+	$(_class).attr('style', function(i,s) { return s + "z-index: " + index + " !important;" });
+}
 
 function SaveFilters (filterObj, showSettings) {
 	this.filterObj		= filterObj;

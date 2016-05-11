@@ -841,4 +841,28 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 		runNiTestCase(spec("activity-count-summary-dual"), "en", acts, cor);
 	}
 	
+	@Test
+	public void testCapitalExpenditurePercentages() {
+		NiReportModel cor = new NiReportModel("testCapitalExpenditurePercentages")
+			.withHeaders(Arrays.asList(
+					"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 19))",
+					"(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 12));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 13, colSpan: 6))",
+					"(2010: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 6));(2014: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 6))",
+					"(Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Planned Disbursements - Capital: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Planned Disbursements - Expenditure: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Disbursements - Capital: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Actual Disbursements - Recurrent: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1));(Planned Disbursements - Capital: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1));(Planned Disbursements - Expenditure: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1));(Actual Disbursements - Capital: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1));(Actual Disbursements - Recurrent: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1));(Planned Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1));(Planned Disbursements - Capital: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 15, colSpan: 1));(Planned Disbursements - Expenditure: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 16, colSpan: 1));(Actual Disbursements - Capital: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 17, colSpan: 1));(Actual Disbursements - Recurrent: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 18, colSpan: 1))"))
+				.withWarnings(Arrays.asList())
+				.withBody(      new ReportAreaForTests(null)
+			      .withContents("Project Title", "", "Funding-2010-Planned Disbursements", "0", "Funding-2010-Actual Disbursements", "123,321", "Funding-2010-Planned Disbursements - Capital", "0", "Funding-2010-Planned Disbursements - Expenditure", "0", "Funding-2010-Actual Disbursements - Capital", "0", "Funding-2010-Actual Disbursements - Recurrent", "0", "Funding-2014-Planned Disbursements", "90,000", "Funding-2014-Actual Disbursements", "80,000", "Funding-2014-Planned Disbursements - Capital", "10,800", "Funding-2014-Planned Disbursements - Expenditure", "79,200", "Funding-2014-Actual Disbursements - Capital", "27,200", "Funding-2014-Actual Disbursements - Recurrent", "52,800", "Totals-Planned Disbursements", "90,000", "Totals-Actual Disbursements", "203,321", "Totals-Planned Disbursements - Capital", "10,800", "Totals-Planned Disbursements - Expenditure", "79,200", "Totals-Actual Disbursements - Capital", "27,200", "Totals-Actual Disbursements - Recurrent", "52,800")
+			      .withChildren(
+			        new ReportAreaForTests(new AreaOwner(12), "Project Title", "TAC_activity_1", "Funding-2010-Actual Disbursements", "123,321", "Totals-Actual Disbursements", "123,321"),
+			        new ReportAreaForTests(new AreaOwner(50), "Project Title", "activity with capital spending", "Funding-2014-Planned Disbursements", "90,000", "Funding-2014-Actual Disbursements", "80,000", "Funding-2014-Planned Disbursements - Capital", "10,800", "Funding-2014-Planned Disbursements - Expenditure", "79,200", "Funding-2014-Actual Disbursements - Capital", "27,200", "Funding-2014-Actual Disbursements - Recurrent", "52,800", "Totals-Planned Disbursements", "90,000", "Totals-Actual Disbursements", "80,000", "Totals-Planned Disbursements - Capital", "10,800", "Totals-Planned Disbursements - Expenditure", "79,200", "Totals-Actual Disbursements - Capital", "27,200", "Totals-Actual Disbursements - Recurrent", "52,800")      ));
+
+		
+		ReportSpecificationImpl spec = buildSpecification("testCapitalExpenditurePercentages", 
+			Arrays.asList(ColumnConstants.PROJECT_TITLE),
+			Arrays.asList(MeasureConstants.PLANNED_DISBURSEMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL, MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE, MeasureConstants.ACTUAL_DISBURSEMENTS_CAPITAL, MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT), 
+			null, 
+			GroupingCriteria.GROUPING_YEARLY);
+		
+		runNiTestCase(spec, "en", Arrays.asList("activity with capital spending", "TAC_activity_1"), cor);
+	}
 }

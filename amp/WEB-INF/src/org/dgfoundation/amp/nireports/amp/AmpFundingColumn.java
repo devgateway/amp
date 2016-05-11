@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
@@ -31,6 +32,7 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.diff.CategAmountCellProto;
 import org.dgfoundation.amp.nireports.amp.diff.ContextKey;
 import org.dgfoundation.amp.nireports.amp.diff.DifferentialCache;
+import org.dgfoundation.amp.nireports.meta.MetaInfo;
 import org.dgfoundation.amp.nireports.meta.MetaInfoGenerator;
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
@@ -55,7 +57,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 
 	public final static String ENTITY_DONOR_FUNDING = "Funding";
 	public final static String ENTITY_PLEDGE_FUNDING = "Pledge Funding";
-	
+		
 	protected final ExpiringCacher<ContextKey<Boolean>, FundingFetcherContext> cacher;
 	protected final ActivityInvalidationDetector invalidationDetector;
 	protected final Object CACHE_SYNC_OBJ = new Object();
@@ -171,6 +173,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		List<CategAmountCellProto> cells = new ArrayList<>();
 		MetaInfoGenerator metaGenerator = new MetaInfoGenerator();
 		Map<String, LevelColumn> optionalDimensionCols = buildOptionalDimensionCols(schema);
+		BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100l);
 				
 		try(RsInfo rs = SQLUtils.rawRunQuery(scratchpad.connection, query, null)) {
 			while (rs.rs.next()) {
@@ -199,7 +202,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 												 				
 				BigDecimal capitalSpendPercent = getBigDecimal(rs.rs, "capital_spend_percent");
 				if (capitalSpendPercent != null)
-					metaSet.add(MetaCategory.CAPITAL_SPEND_PERCENT.category, capitalSpendPercent);
+					metaSet.add(MetaCategory.CAPITAL_SPEND_PERCENT.category, capitalSpendPercent.divide(ONE_HUNDRED));
 								
 				addMetaIfIdValueExists(metaSet, "recipient_role_id", MetaCategory.RECIPIENT_ROLE, rs.rs, context.roles);
 				addMetaIfIdValueExists(metaSet, "source_role_id", MetaCategory.SOURCE_ROLE, rs.rs, context.roles);
@@ -261,4 +264,25 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 			this.expenditureClasses = expenditureClasses;
 		}
 	}
+	
+	/**
+	 * extracts the CapitalMultiplier off a cell
+	 * @param cell
+	 * @return
+	 */
+	public final static BigDecimal getCapitalMultiplier(CategAmountCell cell) {
+		MetaInfo mInfo = cell.getMetaInfo().getMetaInfo(MetaCategory.CAPITAL_SPEND_PERCENT.category);
+		return mInfo == null ? null : (BigDecimal) mInfo.v; 
+	}
+	
+	/**
+	 * extracts the RecurrentMultiplier off a cell
+	 * @param cell
+	 * @return
+	 */
+	public final static BigDecimal getRecurrentMultiplier(CategAmountCell cell) {
+		BigDecimal capMult = getCapitalMultiplier(cell);
+		return capMult == null ? null : BigDecimal.ONE.subtract(capMult);
+	}
+
 }

@@ -19,6 +19,7 @@ import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_6;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_7;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_8;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -73,6 +74,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiLinearCombinationTransactionMeasure;
+import org.dgfoundation.amp.nireports.schema.NiMultipliedFilterTransactionMeasure;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 import org.dgfoundation.amp.nireports.schema.NiTransactionContextMeasure;
@@ -583,8 +585,19 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addTrivialFilterMeasure(MeasureConstants.PLEDGES_COMMITMENT_GAP, 
 			MeasureConstants.ACTUAL_COMMITMENTS, -1,
 			MeasureConstants.PLEDGES_ACTUAL_PLEDGE, +1);
+		
+		addMultipliedFilterTransactionMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS_CAPITAL, MeasureConstants.ACTUAL_DISBURSEMENTS, AmpFundingColumn::getCapitalMultiplier);
+		addMultipliedFilterTransactionMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT, MeasureConstants.ACTUAL_DISBURSEMENTS, AmpFundingColumn::getRecurrentMultiplier);
+		addMultipliedFilterTransactionMeasure(MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL, MeasureConstants.PLANNED_DISBURSEMENTS, AmpFundingColumn::getCapitalMultiplier);
+		addMultipliedFilterTransactionMeasure(MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE, MeasureConstants.PLANNED_DISBURSEMENTS, AmpFundingColumn::getRecurrentMultiplier);		
 	}
 
+	protected void addMultipliedFilterTransactionMeasure(String measureName, String baseMeasureName, Function<CategAmountCell, BigDecimal> fMultCalculator) {
+		NiTransactionMeasure baseMeasure = (NiTransactionMeasure) getMeasures().get(baseMeasureName);
+		NiUtils.failIf(baseMeasure == null, () -> String.format("you are trying to define measure %s based on nonexistant base measure %s", measureName, baseMeasureName));
+		addMeasure(new NiMultipliedFilterTransactionMeasure(measureName, cell -> baseMeasure.criterion.test(cell) ? fMultCalculator.apply(cell) : null, measureDescriptions.get(measureName)));
+	}
+	
 	/**
 	 * adds a computed-filtering measure which is derived from an another measure by the means of supplementarily filtering by a given function
 	 * @param measureName the measure you are creating

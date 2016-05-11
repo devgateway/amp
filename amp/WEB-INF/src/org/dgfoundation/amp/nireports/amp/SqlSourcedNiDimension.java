@@ -12,6 +12,9 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.diffcaching.ActivityInvalidationDetector;
+import org.dgfoundation.amp.diffcaching.ExpiringCacher;
+import org.dgfoundation.amp.nireports.schema.DimensionSnapshot;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.TabularSourcedNiDimension;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -23,8 +26,14 @@ import org.digijava.kernel.persistence.PersistenceManager;
  */
 public class SqlSourcedNiDimension extends TabularSourcedNiDimension {
 
+	/**
+	 * the timeout, in seconds, of a dimension
+	 */
+	public int DIMENSION_INVALIDATOR_TIMEOUT = 30 * 60;
+	
 	public final String sourceViewName;
 	public final List<String> idColumnsNames;
+	public final ExpiringCacher<Boolean, DimensionSnapshot> cacher; 
 	
 	/**
 	 * @param name
@@ -35,6 +44,7 @@ public class SqlSourcedNiDimension extends TabularSourcedNiDimension {
 		super(name, idColumnsNames.size());
 		this.sourceViewName = sourceViewName;
 		this.idColumnsNames = Collections.unmodifiableList(new ArrayList<>(idColumnsNames));
+		this.cacher = new ExpiringCacher<>("ds_cache: " + name, bool -> super.getDimensionData(), new ActivityInvalidationDetector(), DIMENSION_INVALIDATOR_TIMEOUT * 1000);
 		check();
 	}
 	
@@ -49,6 +59,11 @@ public class SqlSourcedNiDimension extends TabularSourcedNiDimension {
 		return new SqlSourcedNiDimension(name, sourceViewName, Arrays.asList(idColumnName));
 	}
 
+	@Override
+	public DimensionSnapshot getDimensionData() {
+		return cacher.buildOrGetValue(true);
+	}
+	
 	@Override
 	protected List<List<Long>> getTabularData() {
 		return PersistenceManager.getSession().doReturningWork(connection -> {

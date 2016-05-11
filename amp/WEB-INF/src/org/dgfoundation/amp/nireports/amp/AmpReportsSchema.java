@@ -221,7 +221,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	protected final static NiReportColumn<CategAmountCell> pledgeFundingColumn = new PledgeFundingColumn();
 	
 	protected AmpReportsSchema() {
-		no_dimension(ColumnConstants.PROJECT_TITLE, "v_titles");
+		single_dimension(ColumnConstants.PROJECT_TITLE, "v_titles", ACT_LEVEL_COLUMN);
 		no_dimension(ColumnConstants.ACTIVITY_ID, "v_activity_ids");
 		no_dimension(ColumnConstants.TEAM, "v_teams");
 		no_entity(ColumnConstants.OBJECTIVE, "v_objectives", DG_EDITOR_POSTPROCESSOR);

@@ -49,7 +49,7 @@ public class NiReportsFetchingTests extends ReportingTestCase {
 	public void testProjectTitle() throws Exception {
 		runInEngineContext(Arrays.asList("Unvalidated activity", "execution rate activity"), engine -> {
 			List<? extends Cell> cells = engine.schema.getColumns().get(ColumnConstants.PROJECT_TITLE).fetch(engine);
-			assertEquals("[Unvalidated activity (id: 64, eid: 64), execution rate activity (id: 77, eid: 77)]", cells.toString());
+			assertEquals("[Unvalidated activity (id: 64, eid: 64, coos: {acts.acts=(level: 0, id: 64)}), execution rate activity (id: 77, eid: 77, coos: {acts.acts=(level: 0, id: 77)})]", cells.toString());
 		});
 	}
 

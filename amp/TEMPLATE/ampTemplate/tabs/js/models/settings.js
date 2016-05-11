@@ -42,6 +42,11 @@ define([ 'underscore', 'backbone', 'business/translations/translationManager' ],
 					} else {
 						_self.numberMultiplierDescription = TranslationManager.getTranslated('Amounts in millions');
 					}
+					
+					var foundWorskpacePrefix =_.find(collection.attributes, function(item) {return item && item.id === 'workspace-prefix'});
+					if(foundWorskpacePrefix){
+						_self.workspacePrefix = _.find(foundWorskpacePrefix.options, function(item) { return item.id === foundWorskpacePrefix.defaultId}).name;
+					}					
 				}
 			});
 		}

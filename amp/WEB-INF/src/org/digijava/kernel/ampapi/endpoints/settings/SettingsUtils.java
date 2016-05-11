@@ -449,6 +449,11 @@ public class SettingsUtils {
 							.getCrossteamvalidation()))));
 			settings.add(new SettingOptions("workspace_type", "workspace_type", new SettingOptions.Option(String
 					.valueOf(EndpointUtils.getAppSettings().getTeam().getAccessType()))));
+			
+			if(EndpointUtils.getAppSettings().getTeam().getWorkspacePrefix() != null){
+				settings.add(new SettingOptions("workspace-prefix", "workspace-prefix", new SettingOptions.Option(EndpointUtils.getAppSettings().getTeam().getWorkspacePrefix().getValue())));
+			}
+			
 		}
 
 		// Dashboard / GIS specific date range settings

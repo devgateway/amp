@@ -181,8 +181,8 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 								validator = (app.TabsApp.settings.validator === 'true');
 								teamtype = app.TabsApp.settings.accessType;
 							}
-							if(app.TabsApp.settings.workspacePrefix && app.TabsApp.settings.workspacePrefix.defaultId ){
-								onePagerParameter = app.TabsApp.settings.workspacePrefix.defaultId.toLowerCase();
+							if(app.TabsApp.settings.workspacePrefix){
+								onePagerParameter = app.TabsApp.settings.workspacePrefix.replace('_', '').toLowerCase();
 							}
 
 							for (iRow = 0; iRow < cRows; iRow++) {

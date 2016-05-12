@@ -53,7 +53,9 @@ import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgRoleBudget;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.Identifiable;
@@ -934,6 +936,7 @@ public class ActivityImporter {
         initContacts();
         postprocessActivityReferences();
         updatePPCAmount();
+        updateRoleFundings();
 	}
 	
 
@@ -1076,6 +1079,24 @@ public class ActivityImporter {
         	ppc.setFunAmount(funAmount * AmountsUnits.getDefaultValue().multiplier);
         }
 	}
+	
+	 
+    /**
+	 * Updates activity fundings with a default source role if the item is disabled from FM (or is null)
+	 */
+	protected void updateRoleFundings() {
+		boolean isSourceRoleEnalbed = FMVisibility.isVisible("/Activity Form/Funding/Funding Group/Funding Item/Source Role", null);
+
+		if (!isSourceRoleEnalbed) {
+			AmpRole role = org.digijava.module.aim.util.DbUtil.getAmpRole(Constants.FUNDING_AGENCY);
+			for (AmpFunding f : newActivity.getFunding()) {
+				if (f.getSourceRole() == null) {
+					f.setSourceRole(role);
+				}
+			}
+        }
+	}
+	
 	
 	/**
 	 * Execute custom configurations that is not worth to define generic for single use cases

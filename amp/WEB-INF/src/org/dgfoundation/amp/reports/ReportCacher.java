@@ -20,39 +20,39 @@ public class ReportCacher {
 	public final static int MAX_CACHED_REPORTS_PER_USER = 7;
 	public final static String REPORT_CACHER_SESSION_ATTRIBUTE = "report_cache";
 	
-	private Map<Long, CachedReportData> lru = Collections.synchronizedMap(
+	private Map<String, CachedReportData> lru = Collections.synchronizedMap(
 			new LRUMap(MAX_CACHED_REPORTS_PER_USER));
 	
 	public ReportCacher() {
 	}
 	
-	public void addCachedReportData(Long reportId, CachedReportData cachedReportData) {
+	public void addCachedReportData(String reportToken, CachedReportData cachedReportData) {
 		if (cachedReportData != null) {
-			lru.put(reportId, cachedReportData);
+			lru.put(reportToken, cachedReportData);
 		}
 	}
 	
-	public CachedReportData getCachedReportData(Long reportId) {
-		return lru.get(reportId);
+	public CachedReportData getCachedReportData(String reportToken) {
+		return lru.get(reportToken);
 	}
 	
-	public CachedReportData deleteCachedReportData(Long reportId) {
-		return lru.remove(reportId);
+	public CachedReportData deleteCachedReportData(String reportToken) {
+		return lru.remove(reportToken);
 	}
 	
-	public static CachedReportData getReportData(Long reportId) {
+	public static CachedReportData getReportData(String reportToken) {
 		ReportCacher cacher = getOrCreateCacher();
-		return cacher.getCachedReportData(reportId);
+		return cacher.getCachedReportData(reportToken);
 	}
 	
-	public static void addReportData(Long reportId, CachedReportData cachedReportData) {
+	public static void addReportData(String reportToken, CachedReportData cachedReportData) {
 		ReportCacher cacher = getOrCreateCacher();
-		cacher.addCachedReportData(reportId, cachedReportData);
+		cacher.addCachedReportData(reportToken, cachedReportData);
 	}
 	
-	public static void deleteReportData(Long reportId) {
+	public static void deleteReportData(String reportToken) {
 		ReportCacher cacher = getOrCreateCacher();
-		cacher.deleteCachedReportData(reportId);
+		cacher.deleteCachedReportData(reportToken);
 	}
 	
 	private static ReportCacher getOrCreateCacher()

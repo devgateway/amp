@@ -42,6 +42,7 @@ public class EPConstants {
     public static final String PROJECT_TYPE = "projectType";
     public static final String REPORT_TYPE = "reportType";
     public static final String NI_REPORT = "nireport";
+    public static final String MD5_TOKEN = "MD5";
     
     // report type & activities configurations
     public static final String DEFAULT_REPORT_TYPE = "D";

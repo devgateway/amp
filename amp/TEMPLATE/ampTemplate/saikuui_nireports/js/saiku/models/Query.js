@@ -235,10 +235,10 @@ var Query = Backbone.Model.extend({
      */
     calculateMD5FromParameters: function (model, id) {
     	Saiku.logger.log("QueryRouter.calculateMD5FromParameters");
-    	var parameters = {filters: {}, settings: {}, page: null, id: null};
+    	var parameters = {filters: {}, settings: {}, id: null, lang : null};
     	
-    	parameters.page = model.queryModel.page;
     	parameters.id = id;
+    	parameters.lang = Saiku.i18n.locale;
     	
     	if (model.queryModel.filters) {
     		// Everything non-date filters.

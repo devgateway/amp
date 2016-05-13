@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -43,9 +44,6 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.dgfoundation.amp.reports.mondrian.converters.MondrianReportFiltersConverter;
-import org.dgfoundation.amp.reports.saiku.export.AMPPdfExport;
-import org.dgfoundation.amp.reports.saiku.export.AMPReportCsvExport;
-import org.dgfoundation.amp.reports.saiku.export.AMPReportExcelExport;
 import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
 import org.dgfoundation.amp.reports.saiku.export.ReportGenerationInfo;
 import org.dgfoundation.amp.reports.saiku.export.SaikuReportExportType;
@@ -507,7 +505,7 @@ public class Reports {
 	private JsonBean updateCurrency(JsonBean queryObject, String ampCurrencyCode) {
 		JsonBean newQueryObject = queryObject.copy();
 		LinkedHashMap<String, Object> newQueryModel = new LinkedHashMap<String, Object>((LinkedHashMap<String, Object>) queryObject.get("queryModel"));
-		newQueryModel.put("regenerate", true);
+		newQueryObject.set(EPConstants.MD5_TOKEN, Long.toString(Calendar.getInstance().getTimeInMillis()));
 		final HashMap<String, Object> newSettings = new LinkedHashMap<>();  // copy the settings
 		final Map<String, Object> oldSettings = (Map<String, Object>) newQueryModel.get(EPConstants.SETTINGS);
 		if(oldSettings != null) {

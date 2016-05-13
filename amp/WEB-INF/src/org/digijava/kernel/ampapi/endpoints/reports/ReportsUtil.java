@@ -2,11 +2,11 @@ package org.digijava.kernel.ampapi.endpoints.reports;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -22,23 +22,19 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
-import org.dgfoundation.amp.newreports.pagination.PartialReportArea;
-import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportMeasure;
-import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.newreports.pagination.PartialReportArea;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
@@ -51,7 +47,6 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter;
 import org.dgfoundation.amp.utils.BoundedList;
-import org.dgfoundation.amp.utils.ConstantsUtil;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
@@ -198,9 +193,6 @@ public class ReportsUtil {
 			if (queryModel.get(EPConstants.SORTING) != null) {
 				newParams.set(EPConstants.SORTING, queryModel.get(EPConstants.SORTING));
 			}
-			if (queryModel.get("regenerate") != null) {
-				newParams.set("regenerate", queryModel.get("regenerate"));
-			}
 			if (original.get(EPConstants.IS_DYNAMIC) != null) {
 				newParams.set(EPConstants.IS_DYNAMIC, true);
 			}
@@ -208,6 +200,10 @@ public class ReportsUtil {
 		
 		if (original.get(EPConstants.ADD_COLUMNS) != null) {
 			newParams.set(EPConstants.ADD_COLUMNS, original.get(EPConstants.ADD_COLUMNS));
+		}
+		
+		if (original.get(EPConstants.MD5_TOKEN) != null) {
+			newParams.set(EPConstants.MD5_TOKEN, original.get(EPConstants.MD5_TOKEN));
 		}
 		
 		return newParams;
@@ -227,8 +223,9 @@ public class ReportsUtil {
 		// the caching mechanism should be or deleted at all or rewrote. 
 		// During the pagination, sorting and exports the regenerate = true always, because the 'regenerate' param is not set to false
 
-		boolean resort = formParams.get(EPConstants.SORTING) != null;
-		boolean regenerate = mustRegenerate(reportId, formParams) || resort;
+		String reportToken = EndpointUtils.getSingleValue(formParams, EPConstants.MD5_TOKEN, Long.toString(Calendar.getInstance().getTimeInMillis()));
+		
+		boolean regenerate = ReportCacher.getReportData(reportToken) == null;
 		CachedReportData cachedReportData = null;
 		
 		// generate the report
@@ -254,9 +251,9 @@ public class ReportsUtil {
 			// regenerate
 			GeneratedReport generatedReport = EndpointUtils.runReport(spec, PartialReportArea.class, 
 					buildOutputSettings(spec, formParams));
-			cachedReportData = ReportPaginationUtils.cacheReportData(reportId, generatedReport);
+			cachedReportData = ReportPaginationUtils.cacheReportData(reportToken, generatedReport);
 		} else {
-			cachedReportData = ReportCacher.getReportData(reportId);
+			cachedReportData = ReportCacher.getReportData(reportToken);
 		}
 		return cachedReportData;
 	}
@@ -640,26 +637,6 @@ public class ReportsUtil {
         if (forceHeaders != null) {
         	spec.setPopulateReportHeadersIfEmpty(forceHeaders);
         }
-	}
-	
-	/**
-	 * Verifies report must be (re)generated during pagination request
-	 * 
-	 * @param reportId     report Id
-	 * @param formParams   json request parameters
-	 * @return true if the report must be (re)generated 
-	 */
-	public static boolean mustRegenerate(Long reportId, JsonBean formParams) {
-		boolean regenerate = (Boolean) EndpointUtils.getSingleValue(formParams, EPConstants.REGENERATE, Boolean.TRUE);
-		
-		// check if we need to force the regeneration, due to session timeout
-		if (!regenerate && ReportCacher.getReportData(reportId) == null)
-				regenerate = true;
-		
-		// TODO: add here any other automatic detections for mandatory regenerate
-		// e.g. check against cached spec version & new one 
-		
-		return regenerate;
 	}
 	
 	/**

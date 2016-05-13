@@ -73,9 +73,14 @@ public class SqlSourcedNiDimension extends TabularSourcedNiDimension {
 	}	
 	
 	protected List<Long> fetchLine(ResultSet row) {
-		return idColumnsNames.stream().map(z -> SQLUtils.getLong(row, z)).collect(Collectors.toList());
+		return idColumnsNames.stream().map(z -> coalesce(SQLUtils.getLong(row, z), 999999999l)).collect(Collectors.toList());
 	}
 	
+	private static Long coalesce(Long a, Long b) {
+		if (a != null)
+			return a;
+		return b;
+	}
 	/**
 	 * dies if the view does not exist or does not contain the said columns;
 	 */

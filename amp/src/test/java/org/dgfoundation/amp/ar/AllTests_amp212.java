@@ -7,6 +7,7 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
+import org.dgfoundation.amp.ar.amp212.AmpSchemaComponentsTests;
 import org.dgfoundation.amp.ar.amp212.AmpSchemaFilteringTests;
 import org.dgfoundation.amp.ar.amp212.AmpSchemaPledgesTests;
 import org.dgfoundation.amp.ar.amp212.AmpSchemaSanityTests;
@@ -48,6 +49,7 @@ public class AllTests_amp212
 		suite.addTest(new JUnit4TestAdapter(AmpSchemaSortingTests.class));
 		suite.addTest(new JUnit4TestAdapter(AmpSchemaFilteringTests.class));
 		suite.addTest(new JUnit4TestAdapter(AmpSchemaPledgesTests.class));
+		suite.addTest(new JUnit4TestAdapter(AmpSchemaComponentsTests.class));
 		suite.addTest(new JUnit4TestAdapter(FundingFlowsTests.class));
 		suite.addTest(new JUnit4TestAdapter(ExpenditureClassTests.class));
 		suite.addTest(new JUnit4TestAdapter(NiComputedMeasuresTests.class));
@@ -68,12 +70,18 @@ public class AllTests_amp212
 		LogManager.getRootLogger().setLevel(Level.ERROR);
 	}
 	
+	/**
+	 * set to true once hibernate has been initialized
+	 */
+	private static boolean SETUP = false;
 	
 	public static void setUp() {
 		try {
+			if (SETUP)
+				return;
 			configureLog4j();
 			HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
-			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost:5432/amp_tests_212";
+			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost:5433/amp_tests_212";
 			MonetConnection.MONET_CFG_OVERRIDE_URL = "jdbc:monetdb://localhost/amp_tests_212";
 			
 			org.digijava.kernel.ampapi.mondrian.util.Connection.IS_TESTING = true;
@@ -90,6 +98,7 @@ public class AllTests_amp212
 			InternationalizedViewsRepository.i18Models.size(); // force init outside of testcases
 			org.apache.struts.mock.MockHttpServletRequest mockRequest = new org.apache.struts.mock.MockHttpServletRequest(new org.apache.struts.mock.MockHttpSession());
 			TLSUtils.populate(mockRequest);
+			SETUP = true;
 		}
 		catch(Exception e) {
 			throw new RuntimeException(e);

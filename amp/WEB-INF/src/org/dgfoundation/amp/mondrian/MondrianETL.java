@@ -187,6 +187,15 @@ public class MondrianETL {
 		}
 		pledges.remove(0l);
 		activities.remove(0l);
+
+//TODO: delete this code once the ETL becomes a non-issue on Honduras DB		
+//		// dummy code to make Honduras bearable
+//		// delete from mondrian_fact_table where entity_id IN (18142, 18769, 18826)
+//		activities.remove(18142l);
+//		activities.remove(18769l);
+//		activities.remove(18826l);
+//		// end
+//		
 		components.remove(0l);
 		agreements.remove(0l);
 		if (etlFromScratch) {

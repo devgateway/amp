@@ -139,7 +139,7 @@ public class FundingColumnGenerator extends ColumnGenerator {
 	protected Map<String, LevelColumn> buildOptionalDimensionCols(HardcodedReportsTestSchema schema) {
 		Map<String, NiReportColumn<?>> cols = schema.getColumns();
 		Map<String, LevelColumn> res = new HashMap<>();
-		AmpFundingColumn.getFundingViewFilter().forEach((colName, viewColName) -> res.put(viewColName, cols.get(colName).levelColumn.get()));
+		AmpFundingColumn.FUNDING_VIEW_COLUMNS.forEach((colName, viewColName) -> res.put(viewColName, cols.get(colName).levelColumn.get()));
 		return res;
 	}
 	

@@ -73,7 +73,7 @@ public class ColumnReportData extends ReportData {
 			}
 			
 			Set<Long> missingActIdsInSplitterColumn = new HashSet<>(allIds.get());
-			if (!schemaColumn.isTransactionLevelHierarchy())
+			if (!context.schema.isTransactionLevelHierarchy(schemaColumn, context))
 				missingActIdsInSplitterColumn.removeAll(wholeColumn.data.keySet());
 			//missingActIdsInSplitterColumn.clear();
 			

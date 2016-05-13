@@ -8,6 +8,7 @@ import java.util.Set;
 
 import static org.dgfoundation.amp.algo.AmpCollections.sorted;
 
+import org.dgfoundation.amp.ar.AllTests_amp212;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
@@ -60,13 +61,11 @@ public class NiReportsFetchingTests extends ReportingTestCase {
 				engine -> {
 					List<CategAmountCell> cells = sorted(engine.schema.getFundingFetcher(engine).fetch(engine));
 					String cor = "[" 
-	     					+ "(actId: 64, amt: 45000 on 2015-01-06, coos: {{bool.Disaster Response Marker=(level: 0, id: -999999999), cats.Financing Instrument=(level: 1, id: 2125), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: -999999999), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21695)}}, meta: {MetaInfoSet: [source_org: 21695, source_role: DN, adjustment_type: Actual, transaction_type: 0]}, "
-							+ "(actId: 40, amt: 60000 on 2014-02-12, coos: {{bool.Disaster Response Marker=(level: 0, id: -999999999), cats.Financing Instrument=(level: 1, id: -999999999), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: -999999999), cats.Type Of Assistance=(level: 1, id: -999999999), orgs.DN=(level: 2, id: -999999999)}}, meta: {MetaInfoSet: [source_role: DN, adjustment_type: Actual, transaction_type: 11]}, "
-	     					+ "(actId: 40, amt: 75000 on 2014-02-05, coos: {{bool.Disaster Response Marker=(level: 0, id: -999999999), cats.Financing Instrument=(level: 1, id: 2120), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: 2094), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21700)}}, meta: {MetaInfoSet: [source_org: 21700, source_role: DN, adjustment_type: Actual, transaction_type: 0]}"
+	     					+ "(actId: 64, amt: 45000 on 2015-01-06, coos: {{bool.Disaster Response Marker=(level: 0, id: -999999999), cats.Financing Instrument=(level: 1, id: 2125), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: -999999999), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21695), pledges.pledges=(level: 0, id: -999999999)}}, meta: {MetaInfoSet: [source_org: 21695, source_role: DN, adjustment_type: Actual, transaction_type: 0]}, "
+							+ "(actId: 40, amt: 60000 on 2014-02-12, coos: {{bool.Disaster Response Marker=(level: 0, id: -999999999), cats.Financing Instrument=(level: 1, id: -999999999), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: -999999999), cats.Type Of Assistance=(level: 1, id: -999999999), orgs.DN=(level: 2, id: -999999999), pledges.pledges=(level: 0, id: -999999999)}}, meta: {MetaInfoSet: [source_role: DN, adjustment_type: Actual, transaction_type: 11]}, "
+	     					+ "(actId: 40, amt: 75000 on 2014-02-05, coos: {{bool.Disaster Response Marker=(level: 0, id: -999999999), cats.Financing Instrument=(level: 1, id: 2120), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: 2094), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21700), pledges.pledges=(level: 0, id: -999999999)}}, meta: {MetaInfoSet: [source_org: 21700, source_role: DN, adjustment_type: Actual, transaction_type: 0]}"
 							+ "]";
-					assertEquals(
-						cells.toString(),
-						cor);
+					assertEquals(cor, cells.toString());
 				});
 	}
 
@@ -229,5 +228,22 @@ public class NiReportsFetchingTests extends ReportingTestCase {
 			assertEquals("sumOfPercs: {33=200.0, 40=200.0}", schema.PERCENTAGE_CORRECTORS.get(schema.LOC_DIM_USG).buildSnapshot(conn, ids).toString());
 			assertEquals("sumOfPercs: {}", schema.PERCENTAGE_CORRECTORS.get(schema.PP_DIM_USG).buildSnapshot(conn, ids).toString());
 		}
+	}
+	
+	@Test
+	public void testRelatedPledgeFetching() throws Exception {
+		List<String> acts = Arrays.asList("Activity Linked With Pledge");
+		runInEngineContext(acts, engine -> {
+			List<? extends Cell> cells = sorted(engine.schema.getFundingFetcher(engine).fetch(engine));
+			String cor = "[" + 
+				"(actId: 41, amt: 50000 on 2014-03-05, coos: {{bool.Disaster Response Marker=(level: 0, id: -999999999), cats.Financing Instrument=(level: 1, id: 2120), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: -999999999), cats.Type Of Assistance=(level: 1, id: 2119), orgs.DN=(level: 2, id: 21698), pledges.pledges=(level: 0, id: 4)}}, meta: {MetaInfoSet: [source_org: 21698, source_role: DN, adjustment_type: Actual, transaction_type: 0]}, " + 
+				"(actId: 41, amt: 150999 on 2014-03-04, coos: {{bool.Disaster Response Marker=(level: 0, id: -999999999), cats.Financing Instrument=(level: 1, id: -999999999), cats.Funding Status=(level: 1, id: -999999999), cats.Mode of Payment=(level: 1, id: -999999999), cats.Type Of Assistance=(level: 1, id: -999999999), orgs.DN=(level: 2, id: -999999999), pledges.pledges=(level: 0, id: -999999999)}}, meta: {MetaInfoSet: [source_role: DN, adjustment_type: Actual, transaction_type: 11]}"
+			+ "]";
+			assertEquals(cor, cells.toString());
+		});
+	}
+	@Override
+	public void setUp() {
+		AllTests_amp212.setUp();
 	}
 }

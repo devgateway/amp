@@ -11,11 +11,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
+import org.dgfoundation.amp.algo.Memoizer;
 import org.dgfoundation.amp.algo.VivificatingMap;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -23,7 +23,6 @@ import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.diffcaching.ActivityInvalidationDetector;
 import org.dgfoundation.amp.diffcaching.ExpiringCacher;
-import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.IdValuePair;
@@ -42,6 +41,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.TrivialMeasureBehaviour;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -57,6 +57,9 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 
 	public final static String ENTITY_DONOR_FUNDING = "Funding";
 	public final static String ENTITY_PLEDGE_FUNDING = "Pledge Funding";
+	public final static String ENTITY_COMPONENT_FUNDING = "Component Funding";
+	
+	public final static Map<String, String> FUNDING_VIEW_COLUMNS = Collections.unmodifiableMap(_buildFundingViewFilter());
 		
 	protected final ExpiringCacher<ContextKey<Boolean>, FundingFetcherContext> cacher;
 	protected final ActivityInvalidationDetector invalidationDetector;
@@ -65,15 +68,15 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	
 	public final static int CACHE_TTL_SECONDS = 10 * 60;
 	
-	public AmpFundingColumn() {
-		this(ENTITY_DONOR_FUNDING, "v_ni_donor_funding", TrivialMeasureBehaviour.getInstance(), new HashSet<>(Arrays.asList("aid_modality_id")));
+	public AmpFundingColumn(String columnName, String viewName) {
+		this(columnName, viewName, TrivialMeasureBehaviour.getInstance());
 	}
 
-	protected AmpFundingColumn(String columnName, String viewName, Behaviour<?> behaviour, Set<String> ignoredColumns) {
+	protected AmpFundingColumn(String columnName, String viewName, Behaviour<?> behaviour) {
 		super(columnName, null, viewName, behaviour);
 		this.invalidationDetector = new ActivityInvalidationDetector();
-		Set<String> ic = new HashSet<>(ignoredColumns);
-		for(String col:getFundingViewFilter().values())
+		Set<String> ic = new HashSet<>();
+		for(String col:FUNDING_VIEW_COLUMNS.values())
 			if (!this.viewColumns.contains(col))
 				ic.add(col);
 		for(String col:AmpCollections.relist(longColumnsToFetch, z -> z.v))
@@ -83,7 +86,8 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		this.cacher = new ExpiringCacher<>("funding cacher " + columnName, cacheKey -> resetCache(cacheKey.context), invalidationDetector, CACHE_TTL_SECONDS * 1000);
 	}
 
-	public static Map<String, String> getFundingViewFilter() {
+	
+	public static Map<String, String> _buildFundingViewFilter() {
 		Map<String, String> res = new HashMap<>();
 		res.put(ColumnConstants.TYPE_OF_ASSISTANCE, "terms_assist_id");
 		res.put(ColumnConstants.FINANCING_INSTRUMENT, "financing_instrument_id");
@@ -92,19 +96,34 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		res.put(ColumnConstants.FUNDING_STATUS, "funding_status_id");
 		res.put(ColumnConstants.DISASTER_RESPONSE_MARKER, "disaster_response_code");
 		res.put(ColumnConstants.PLEDGES_AID_MODALITY, "aid_modality_id");
+		res.put(ColumnConstants.RELATED_PLEDGES, "pledge_id");
 		return res;
 	}
 		
+	/**
+	 * returns true IFF the column has been specified as being transaction-level and the current funding view has not it blacklisted.
+	 * This is a hack to accommodate AMP's "multiple schemas per schema"
+	 * @param col
+	 * @return
+	 */
+	public boolean isTransactionLevelHierarchy(NiReportColumn<?> col) {
+		if (!col.isTransactionLevelHierarchy())
+			return false;
+		String viewName = FUNDING_VIEW_COLUMNS.get(col.name);
+		if (viewName == null)
+			return true;
+		return !ignoredColumns.contains(viewName);
+	}
+	
 	protected Map<String, LevelColumn> buildOptionalDimensionCols(AmpReportsSchema schema) {
 		Map<String, NiReportColumn<?>> cols = schema.getColumns();
 		Map<String, LevelColumn> res = new HashMap<>();
-		getFundingViewFilter().forEach((colName, viewColName) -> res.put(viewColName, cols.get(colName).levelColumn.get()));
+		FUNDING_VIEW_COLUMNS.forEach((colName, viewColName) -> res.put(viewColName, cols.get(colName).levelColumn.get()));
 		return res;
 	}
 	
 	// columns of type long which are optional
 	protected static List<ImmutablePair<MetaCategory, String>> longColumnsToFetch = Arrays.asList(
-			new ImmutablePair<>(MetaCategory.PLEDGE_ID, "pledge_id"),
 			new ImmutablePair<>(MetaCategory.TRANSACTION_TYPE, "transaction_type"),			
 			new ImmutablePair<>(MetaCategory.AGREEMENT_ID, "agreement_id"),
 			new ImmutablePair<>(MetaCategory.RECIPIENT_ORG, "recipient_org_id"),
@@ -192,6 +211,11 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 				
 				if (this.name.equals(ENTITY_PLEDGE_FUNDING))
 				    addCoordinateIfLongExists(coos, rs.rs, "related_project_id", schema.ACT_LEVEL_COLUMN);
+				
+				if (this.name.equals(ENTITY_COMPONENT_FUNDING)) {
+					addCoordinateIfLongExists(coos, rs.rs, "amp_component_id", schema.COMPONENT_LEVEL_COLUMN);
+					metaSet.add(MetaCategory.SOURCE_ROLE.category, Constants.FUNDING_AGENCY);
+				}
 				
 				java.sql.Date transactionMoment = rs.rs.getDate("transaction_date");
 				BigDecimal transactionAmount = rs.rs.getBigDecimal("transaction_amount");

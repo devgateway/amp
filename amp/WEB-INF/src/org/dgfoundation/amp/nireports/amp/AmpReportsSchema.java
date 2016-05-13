@@ -32,6 +32,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
@@ -60,6 +61,7 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.NiUtils;
 import org.dgfoundation.amp.nireports.SchemaSpecificScratchpad;
 import org.dgfoundation.amp.nireports.amp.dimensions.CategoriesDimension;
+import org.dgfoundation.amp.nireports.amp.dimensions.ComponentsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
 import org.dgfoundation.amp.nireports.amp.dimensions.ProgramsDimension;
@@ -98,16 +100,20 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public boolean ENABLE_CACHING = true;
 	
 	public final static Set<String> TRANSACTION_LEVEL_HIERARCHIES = Collections.unmodifiableSet(new HashSet<>(
-			Arrays.asList(ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.FUNDING_STATUS, ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.DISASTER_RESPONSE_MARKER, ColumnConstants.RELATED_PROJECTS)));
+			Arrays.asList(
+				ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.FUNDING_STATUS, ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.DISASTER_RESPONSE_MARKER, ColumnConstants.RELATED_PROJECTS, 
+				ColumnConstants.PLEDGES_AID_MODALITY, ColumnConstants.RELATED_PLEDGES, ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE)));
 	
 	public final static OrganisationsDimension orgsDimension = OrganisationsDimension.instance;
 	public final static LocationsDimension locsDimension = LocationsDimension.instance;
 	public final static SectorsDimension secsDimension = SectorsDimension.instance;
 	public final static ProgramsDimension progsDimension = ProgramsDimension.instance;
 	public final static CategoriesDimension catsDimension = CategoriesDimension.instance;
+	public final static ComponentsDimension compsDimension = ComponentsDimension.instance;
 	public final static BooleanDimension boolDimension = new BooleanDimension("bool", 1l, 2l); // corroborate with FilterRule.TRUE_VALUE
 	public final static NiDimension agreementsDimension = SqlSourcedNiDimension.buildDegenerateDimension("agrs", "amp_agreement", "id");
 	public final static NiDimension activitiesDimension = SqlSourcedNiDimension.buildDegenerateDimension("acts", "amp_activity_version", "amp_activity_id");
+	public final static NiDimension pledgesDimension = SqlSourcedNiDimension.buildDegenerateDimension("pledges", "amp_funding_pledges", "id");
 	    
 	/**
 	 * the pseudocolumn of the header Splitter for cells which are funding flows
@@ -182,6 +188,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static NiDimensionUsage CA_DIM_USG = orgsDimension.getDimensionUsage(Constants.CONTRACTING_AGENCY);
 	public final static NiDimensionUsage RG_DIM_USG = orgsDimension.getDimensionUsage(Constants.REGIONAL_GROUP);
 	public final static NiDimensionUsage SG_DIM_USG = orgsDimension.getDimensionUsage(Constants.SECTOR_GROUP);	
+	public final static NiDimensionUsage CF_DIM_USG = orgsDimension.getDimensionUsage("ComponentFunding");
 	
 	public final static NiDimensionUsage PS_DIM_USG = secsDimension.getDimensionUsage("Primary");
 	public final static NiDimensionUsage SS_DIM_USG = secsDimension.getDimensionUsage("Secondary");	
@@ -200,6 +207,15 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static NiDimensionUsage ACT_DIM_USG = activitiesDimension.getDimensionUsage("acts");
 	public final static LevelColumn ACT_LEVEL_COLUMN = ACT_DIM_USG.getLevelColumn(0);
 	
+	public final static NiDimensionUsage COMPS_DIM_USG = compsDimension.getDimensionUsage("comps");
+	public final static LevelColumn COMPONENT_LEVEL_COLUMN = COMPS_DIM_USG.getLevelColumn(ComponentsDimension.LEVEL_COMPONENT);
+	
+	public final static NiDimensionUsage PLEDGES_DIM_USG = pledgesDimension.getDimensionUsage("pledges");
+	public final static LevelColumn PLEDGES_LEVEL_COLUMN = PLEDGES_DIM_USG.getLevelColumn(0);
+	
+	/**
+	 * the callback called on DG_EDITOR-backed text columns
+	 */
 	public final static Function<String, String> DG_EDITOR_POSTPROCESSOR = DgUtil::cleanHtmlTags;
 	
 	private static AmpReportsSchema instance = new AmpReportsSchema();
@@ -217,8 +233,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		return instance;
 	}
 	
-	protected final static NiReportColumn<CategAmountCell> donorFundingColumn = new AmpFundingColumn();
-	protected final static NiReportColumn<CategAmountCell> pledgeFundingColumn = new PledgeFundingColumn();
+	protected final static AmpFundingColumn donorFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_DONOR_FUNDING, "v_ni_donor_funding");
+	protected final static AmpFundingColumn pledgeFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_PLEDGE_FUNDING, "v_ni_pledges_funding");
+	protected final static AmpFundingColumn componentFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_COMPONENT_FUNDING, "v_ni_component_funding");
 	
 	protected AmpReportsSchema() {
 		single_dimension(ColumnConstants.PROJECT_TITLE, "v_titles", ACT_LEVEL_COLUMN);
@@ -242,13 +259,16 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_dimension(ColumnConstants.BUDGET_ORGANIZATION, "v_budget_organization");
 		no_dimension(ColumnConstants.BUDGET_PROGRAM, "v_budget_program");
 		no_dimension(ColumnConstants.BUDGET_STRUCTURE, "v_budget_structure");
-		no_dimension(ColumnConstants.COMPONENT_DESCRIPTION, "v_component_description");
-		no_dimension(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION, "v_component_funding_organization_name");
-		no_dimension(ColumnConstants.COMPONENT_NAME, "v_components");
-		no_dimension(ColumnConstants.COMPONENT_TYPE, "v_component_type");
+		
+		single_dimension(ColumnConstants.COMPONENT_DESCRIPTION, "v_component_description", COMPONENT_LEVEL_COLUMN);
+		single_dimension(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION, "v_component_funding_organization_name", CF_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+		single_dimension(ColumnConstants.COMPONENT_NAME, "v_components", COMPONENT_LEVEL_COLUMN);
+		single_dimension(ColumnConstants.COMPONENT_TYPE, "v_component_type", COMPS_DIM_USG.getLevelColumn(ComponentsDimension.LEVEL_COMPONENT_TYPE));
+		single_dimension(ColumnConstants.DESCRIPTION_OF_COMPONENT_FUNDING, "v_component_funding_description", COMPONENT_LEVEL_COLUMN);
+		
 		no_dimension(ColumnConstants.COSTING_DONOR, "v_costing_donors");
 		no_dimension(ColumnConstants.CREDIT_DONATION, "v_credit_donation");
-		no_dimension(ColumnConstants.DESCRIPTION_OF_COMPONENT_FUNDING, "v_component_funding_description");
+		
 		degenerate_dimension(ColumnConstants.DISASTER_RESPONSE_MARKER, "v_disaster_response_marker", boolDimension);
 		no_dimension(ColumnConstants.DONOR_CONTACT_ORGANIZATION, "v_donor_cont_org");
 		no_entity(ColumnConstants.ENVIRONMENT, "v_environment", DG_EDITOR_POSTPROCESSOR);
@@ -280,7 +300,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_entity(ColumnConstants.PROGRAM_DESCRIPTION, "v_program_description", DG_EDITOR_POSTPROCESSOR);
 		no_dimension(ColumnConstants.PROJECT_IMPLEMENTING_UNIT, "v_project_impl_unit");
 		no_dimension(ColumnConstants.REGIONAL_OBSERVATIONS, "v_regional_observations");
-		no_dimension(ColumnConstants.RELATED_PLEDGES, "v_related_pledges");
+		
+		single_dimension(ColumnConstants.RELATED_PLEDGES, "v_related_pledges", PLEDGES_LEVEL_COLUMN);
+		
 		single_dimension(ColumnConstants.RELATED_PROJECTS, "v_ni_pledges_projects", ACT_LEVEL_COLUMN);
 		no_dimension(ColumnConstants.SECTOR_MINISTRY_CONTACT_ORGANIZATION, "v_sect_min_cont_org");
 		degenerate_dimension(ColumnConstants.SSC_MODALITIES, "v_ssc_modalities", catsDimension);
@@ -836,7 +858,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	protected final CurrencyConvertor currencyConvertor = AmpCurrencyConvertor.getInstance();
 	
 	@Override
-	public NiReportColumn<CategAmountCell> getFundingFetcher(NiReportsEngine engine) {
+	public AmpFundingColumn getFundingFetcher(NiReportsEngine engine) {
 		switch(engine.spec.getReportType()) {
 			
 			case ArConstants.DONOR_TYPE: 
@@ -844,6 +866,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 				
 			case ArConstants.PLEDGES_TYPE:
 				return pledgeFundingColumn;
+				
+			case ArConstants.COMPONENT_TYPE:
+				return componentFundingColumn;
 				
 			default:
 				throw new RuntimeException(String.format("report type %d not implemented in NiReports yet", engine.spec.getReportType()));
@@ -857,7 +882,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
 	public Set<Long> getWorkspacePledges(NiReportsEngine engine) {
 		//return new HashSet<>(SQLUtils.fetchLongs(AmpReportsScratchpad.get(engine).connection, "SELECT id FROM amp_funding_pledges"));
-		return AmpReportsScratchpad.get(engine).computedPledgeIds.get();
+		return AmpReportsScratchpad.get(engine).computedPledgeIds.get(); //TODO: remove this comment!!!
+		//return new HashSet<>(Arrays.asList(4l));
 	}
 	
 	/**
@@ -866,17 +892,26 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 * @return
 	 */
 	public Set<Long> getWorkspaceActivities(NiReportsEngine engine) {
-		//Connection conn = AmpReportsScratchpad.get(engine).connection;
-		//res = Collections.unmodifiableSet(new HashSet<Long>(SQLUtils.fetchLongs(conn, "SELECT amp_activity_id FROM amp_activity")));
-		//res = Collections.unmodifiableSet(new HashSet<Long>(SQLUtils.fetchLongs(conn, "SELECT amp_activity_id FROM amp_activity where name in ('new activity with contracting', 'activity_with_disaster_response')")));
-		//res = new HashSet<>(Arrays.asList(70l, 78l));
-		ReportEnvironment environ = AmpReportsScratchpad.get(engine).environment;
+		AmpReportsScratchpad pad = AmpReportsScratchpad.get(engine);
 		if (engine.spec.isAlsoShowPledges())
-			return AmpCollections.union(environ.workspaceFilter.getIds(), getWorkspacePledges(engine).stream().map(z -> z + MondrianETL.PLEDGE_ID_ADDER).collect(Collectors.toSet()));
+			return AmpCollections.union(_getWorkspaceActivities(engine), getWorkspacePledges(engine).stream().map(z -> z + MondrianETL.PLEDGE_ID_ADDER).collect(Collectors.toSet()));
+		else if (engine.spec.getReportType() == ArConstants.COMPONENT_TYPE) {
+			Set<Long> wf = new HashSet<>(_getWorkspaceActivities(engine));
+			wf.retainAll(SQLUtils.fetchLongs(pad.connection, "SELECT DISTINCT amp_activity_id FROM amp_activity_components"));
+			return Collections.unmodifiableSet(wf);
+		}
 		else
-			return Collections.unmodifiableSet(environ.workspaceFilter.getIds());
+			return Collections.unmodifiableSet(_getWorkspaceActivities(engine));
 	}
 
+	/**
+	 * uses the WorkspaceFilter to fetch the names of the activities. Overrideable for testcases reasons in subclass
+	 * @param engine
+	 * @return
+	 */
+	protected Set<Long> _getWorkspaceActivities(NiReportsEngine engine) {
+		return AmpReportsScratchpad.get(engine).environment.workspaceFilter.getIds();
+	}
 		
 	@Override
 	public Function<NiReportsEngine, SchemaSpecificScratchpad> getScratchpadSupplier() {
@@ -988,6 +1023,14 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public boolean isBooleanColumn(String columnName) {
 		NiReportColumn<?> col = getColumns().get(columnName);
 		return col != null && col.levelColumn.isPresent() && col.levelColumn.get().dimensionUsage.dimension == boolDimension;
+	}
+
+	@Override
+	public boolean isTransactionLevelHierarchy(NiReportColumn<?> col, NiReportsEngine engine) {
+		//return col.isTransactionLevelHierarchy();
+		AmpFundingColumn funding = this.getFundingFetcher(engine);
+		return funding.isTransactionLevelHierarchy(col);
+		//return super.isTransactionLevelHierarchy(col, engine);
 	}
 	
 	/**

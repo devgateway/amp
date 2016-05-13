@@ -70,4 +70,14 @@ public interface NiReportsSchema {
 	public default<K extends Cell> List<K> fetchEntity(NiReportsEngine engine, NiReportedEntity<K> entity) throws Exception {
 		return entity.fetch(engine);
 	}
+
+	/**
+	 * returns true if an entity is a transaction-level hierarchy
+	 * @param col
+	 * @param engine
+	 * @return
+	 */
+	public default boolean isTransactionLevelHierarchy(NiReportColumn<?> col, NiReportsEngine engine) {
+		return col.isTransactionLevelHierarchy();
+	}
 }

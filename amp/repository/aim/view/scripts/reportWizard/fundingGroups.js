@@ -127,9 +127,6 @@ YAHOO.amp.reportwizard.fundingGroups["pledge"]= new Array(
 	);
 
 YAHOO.amp.reportwizard.fundingGroups["incompatible_hierarchies"]= new Array(
-		 'Primary Sector', 
-		 'Secondary Sector'
-		
 	);
 
 function insertColInfo (id, name) {

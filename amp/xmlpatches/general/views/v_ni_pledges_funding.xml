@@ -22,17 +22,17 @@
 				<!-- if you are changing this view to eliminate a.draft != true, also eliminate it from v_pledges_projects!
 					else you will get inconsistent results when doing pledges reports with hierarchies by related_project
 			 	-->
-				DROP VIEW IF EXISTS v_ni_pledges_funding;
+				DROP VIEW IF EXISTS v_ni_pledges_funding CASCADE;
 			
 				CREATE OR REPLACE VIEW v_ni_pledges_funding AS 
 	    			SELECT
 						f.id AS pledge_id, afd.amp_fund_detail_id, afd.amp_fund_detail_id as id,
 						afd.transaction_type, afd.adjustment_type, 
 						afd.transaction_date, afd.transaction_amount, afd.amp_currency_id AS currency_id, 
-						ampf.type_of_assistance_category_va AS terms_assist_id, 
+						NULL::bigint AS terms_assist_id, <!-- ampf.type_of_assistance_category_va AS terms_assist_id,  --> 
 						f.amp_org_grp_id AS donor_org_grp_id,
-						ampf.financing_instr_category_value AS financing_instrument_id,
-						(SELECT MAX(vm.level_code) FROM v_modalities vm WHERE vm.amp_activity_id = a.amp_activity_id) AS aid_modality_id,
+						NULL::bigint AS financing_instrument_id, <!-- ampf.financing_instr_category_value AS financing_instrument_id, -->
+						NULL AS aid_modality_id,
 						a.amp_activity_id AS related_project_id,
 						afd.recipient_org_id AS recipient_org_id, afd.recipient_role_id AS recipient_role_id,
          				ampf.source_role_id AS source_role_id

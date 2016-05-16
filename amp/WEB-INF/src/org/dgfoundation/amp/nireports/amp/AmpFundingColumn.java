@@ -134,7 +134,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	
 	protected synchronized FundingFetcherContext resetCache(NiReportsEngine engine) {
 		engine.timer.putMetaInNode("resetCache", true);
-		Map<Long, String> adjTypeValue = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname = '%s'", CategoryConstants.ADJUSTMENT_TYPE_KEY));
+		Map<Long, String> adjTypeValue = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname IN ('%s', '%s')", CategoryConstants.ADJUSTMENT_TYPE_KEY, CategoryConstants.SSC_ADJUSTMENT_TYPE_KEY));
 		Map<Long, String> expClassValues = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("select acv_id, acv_name from v_ni_category_values where acc_keyname = '%s'", CategoryConstants.EXPENDITURE_CLASS_KEY));
 		Map<Long, String> roles = SQLUtils.collectKeyValue(AmpReportsScratchpad.get(engine).connection, String.format("SELECT amp_role_id, role_code FROM amp_role", CategoryConstants.ADJUSTMENT_TYPE_KEY));
 		

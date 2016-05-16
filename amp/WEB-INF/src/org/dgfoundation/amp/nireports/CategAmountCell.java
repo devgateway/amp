@@ -30,6 +30,8 @@ public final class CategAmountCell extends Cell implements CategCell, DatedCell,
 	}
 
 	public CategAmountCell multiply(BigDecimal multipland) {
+		if (multipland.equals(BigDecimal.ONE))
+			return this;
 		return new CategAmountCell(this.activityId, this.amount.multiplyBy(multipland), this.metaInfo, this.coordinates, this.translatedDate);
 	}
 

@@ -22,6 +22,7 @@ import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_8;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -86,7 +87,9 @@ import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
  * the big, glorious, immaculate, AMP Reports schema
@@ -504,6 +507,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addFundingFlowMeasures();
 		addTaggedMeasures();
 		addComputedLinearMeasures();
+		addSscMeasures();
 		
 		addColumn(new NiComputedColumn<>(ColumnConstants.ACTIVITY_COUNT, null, GeneratedIntegerBehaviour.ENTITIES_COUNT_BEHAVIOUR, columnDescriptions.get(ColumnConstants.ACTIVITY_COUNT)));
 	}
@@ -628,8 +632,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 				TrivialMeasureBehaviour.getTotalsOnlyInstance(),
 				MeasureConstants.ACTUAL_COMMITMENTS, +1,
 				MeasureConstants.ACTUAL_DISBURSEMENTS, -1);
-
-		
 		
 		addTrivialFilterMeasure(MeasureConstants.PLEDGES_COMMITMENT_GAP,
 			TrivialMeasureBehaviour.getInstance(),
@@ -769,6 +771,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 //		addMeasure(new AmpTrivialMeasure(MeasureConstants.PIPELINE_RELEASE_OF_FUNDS, Constants.PIPELINE, "Pipeline", false));
 		
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.PLEDGES_ACTUAL_PLEDGE, Constants.PLEDGE));
+		
 		return this;
 	}
 	
@@ -783,6 +786,24 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.REAL_DISBURSEMENTS, Constants.DISBURSEMENT, "Actual", true));
 		addMeasure(new AmpTrivialMeasure(MeasureConstants.REAL_COMMITMENTS, Constants.COMMITMENT, "Actual", true));
 		return this;
+	}
+	
+	protected void addSscMeasures() {
+		Collection<AmpCategoryValue> sscAdjTypes = CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.SSC_ADJUSTMENT_TYPE_KEY);
+		 
+		for (Entry<String, Integer> pair : ArConstants.SSC_TRANSACTION_TYPE_NAME_TO_ID.entrySet()) {
+			String transactionType = pair.getKey();
+			Integer trTypeId = pair.getValue();
+			for (AmpCategoryValue adj : sscAdjTypes) {
+				String measureName = adj.getValue() + " " + transactionType;
+				addMeasure(new AmpTrivialMeasure(measureName, trTypeId, adj.getValue(), false));
+			}
+		}
+		
+		addTrivialFilterMeasure(MeasureConstants.CUMULATED_SSC_COMMITMENTS,
+			TrivialMeasureBehaviour.getInstance(),
+			MeasureConstants.BILATERAL_SSC_COMMITMENTS, +1,
+			MeasureConstants.TRIANGULAR_SSC_COMMITMENTS, +1);
 	}
 	
 	private AmpReportsSchema no_dimension(String columnName, String view) {

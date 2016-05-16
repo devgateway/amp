@@ -240,7 +240,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
 			// this has been added here instead of an XML patch because this code has to be run before the XML patches have been discovered
 			// DO NOT CHANGE THIS TO USE PersistenceManager.getSession().createSQLQuery(), as this leads to AMP hanging (Postgres hangs when having the same UPDATE in 2 different transactions open - there is a patch which does the same)
 			java.sql.Connection conn = PersistenceManager.getJdbcConnection();
-			conn.prepareStatement("UPDATE amp_xml_patch set state=0 WHERE patch_id like 'v_%' AND location ='xmlpatches/general/views/' AND state=4;").executeUpdate();
+			conn.prepareStatement("UPDATE amp_xml_patch set state=0 WHERE patch_id similar to '(v|z|zz)\\_%' AND location ='xmlpatches/general/views/' AND state=4;").executeUpdate();
 			conn.close();
 			
 			//discover newly added patches

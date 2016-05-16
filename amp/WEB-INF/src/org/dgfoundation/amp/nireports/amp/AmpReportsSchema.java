@@ -800,10 +800,12 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 			}
 		}
 		
-		addTrivialFilterMeasure(MeasureConstants.CUMULATED_SSC_COMMITMENTS,
-			TrivialMeasureBehaviour.getInstance(),
-			MeasureConstants.BILATERAL_SSC_COMMITMENTS, +1,
-			MeasureConstants.TRIANGULAR_SSC_COMMITMENTS, +1);
+		if (measures.containsKey(MeasureConstants.BILATERAL_SSC_COMMITMENTS) && measures.containsKey(MeasureConstants.TRIANGULAR_SSC_COMMITMENTS)) {
+			addTrivialFilterMeasure(MeasureConstants.CUMULATED_SSC_COMMITMENTS,
+					TrivialMeasureBehaviour.getInstance(),
+					MeasureConstants.BILATERAL_SSC_COMMITMENTS, +1,
+					MeasureConstants.TRIANGULAR_SSC_COMMITMENTS, +1);
+		};
 	}
 	
 	private AmpReportsSchema no_dimension(String columnName, String view) {

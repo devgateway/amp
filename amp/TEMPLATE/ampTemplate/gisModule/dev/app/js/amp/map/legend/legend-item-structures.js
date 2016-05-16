@@ -50,7 +50,7 @@ module.exports = Backbone.View.extend({
 
       // render icons if available
       if (self.model.structuresCollection.length < MAX_NUM_FOR_ICONS &&
-        self.model.get('filterVertical') === 'Primary Sector Id') {
+        self.model.get('filterVertical') === 'Primary Sector') {
         renderObject.imageBuckets = self.model.iconMappings;
         renderObject.palletteElements = self.model.structuresCollection.palette.get('elements');
       }

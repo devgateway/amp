@@ -145,7 +145,7 @@ module.exports = Backbone.View
       console.log('MAX_NUM_FOR_ICONS: ' + self.MAX_NUM_FOR_ICONS);
     }
     if (self.rawData.features.length < self.MAX_NUM_FOR_ICONS &&
-      self.structureMenuModel.get('filterVertical') === 'Primary Sector Id') {
+      self.structureMenuModel.get('filterVertical') === 'Primary Sector') {
       // create icon
       marker = self._createSectorMarker(latlng, feature);
     } else {

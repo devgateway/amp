@@ -14,7 +14,7 @@ module.exports = Backbone.Model
     title: 'Project Sites',
     value: '',
     helpText: '',
-    filterVertical: 'Primary Sector Id'
+    filterVertical: 'Primary Sector'
   },
 
   initialize: function(things, options) {

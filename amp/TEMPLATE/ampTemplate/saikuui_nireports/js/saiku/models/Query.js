@@ -43,6 +43,7 @@ var Query = Backbone.Model.extend({
         this.model = _.extend({ name: this.uuid }, SaikuQueryTemplate);
         this.helper = new SaikuQueryHelper(this);
         this.result = new Result({ limit: Settings.RESULT_LIMIT }, { query: this });
+        this.timestamp = new Date().getTime();
 
         //Start Custom Code for Pagination
        	this.set({page:1});
@@ -235,10 +236,11 @@ var Query = Backbone.Model.extend({
      */
     calculateMD5FromParameters: function (model, id) {
     	Saiku.logger.log("QueryRouter.calculateMD5FromParameters");
-    	var parameters = {filters: {}, settings: {}, id: null, lang : null};
+    	var parameters = {filters: {}, settings: {}, id: null, lang : null, timestamp : null};
     	
     	parameters.id = id;
     	parameters.lang = Saiku.i18n.locale;
+    	parameters.timestamp = this.timestamp;
     	
     	if (model.queryModel.filters) {
     		// Everything non-date filters.

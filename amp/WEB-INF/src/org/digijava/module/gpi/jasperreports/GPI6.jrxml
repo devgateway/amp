@@ -171,7 +171,7 @@
 			</line>
 			<line>
 				<reportElement x="1" y="17" width="117" height="1">
-					<printWhenExpression><![CDATA[($F{year}).equals($P{GPI_LAST_YEAR}) ? Boolean.TRUE : Boolean.FALSE]]></printWhenExpression>
+					<printWhenExpression><![CDATA[($F{year}).equalsIgnoreCase($P{GPI_LAST_YEAR}) ? Boolean.TRUE : Boolean.FALSE]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.5"/>

@@ -155,9 +155,9 @@
     "Chart Mode":"Режим Графика",
     "Revert filters to state when opened.":"Восстановить фильтры в исходное состояние",    
     "Aid Management Platform - Reports": "Помощь Management Platform - Отчеты",
-    "Year Range *": "Год Диапазон *",
+    "Year Range ": "Год Диапазон ",
     "From:": " От: ",
     "To:": " До: ",
     "* The range selected does not affect Totals or Computed amounts.":"* Выбираемый интервал не влияет на итоговые или вычисленные суммы",
-    "Error: Year Range To should not be greater than From.": "Диапазон годов: Год \"До\" должен быть после года \"От\""
+    "Error: Year Range To should be greater than From.": "Диапазон годов: Год \"До\" должен быть после года \"От\""
 }

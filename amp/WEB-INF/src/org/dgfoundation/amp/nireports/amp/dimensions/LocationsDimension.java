@@ -25,7 +25,9 @@ public final class LocationsDimension extends SqlSourcedNiDimension {
 	public final static int LEVEL_DISTRICT = 3;
 
 	@Override
-	protected PercentagesCorrector buildPercentagesCorrector(NiDimensionUsage dimUsg) {
+	protected PercentagesCorrector buildPercentagesCorrector(NiDimensionUsage dimUsg, boolean pledgeColumn) {
+		if (pledgeColumn)
+			return new PercentagesCorrector("v_pledges_location_percentages", "pledge_id", "location_percentage", null);
 		return new PercentagesCorrector("amp_activity_location", "amp_activity_id", "location_percentage", null);
 	}
 }

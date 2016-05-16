@@ -24,7 +24,9 @@ public final class OrganisationsDimension extends SqlSourcedNiDimension {
 	}
 
 	@Override
-	protected PercentagesCorrector buildPercentagesCorrector(NiDimensionUsage dimUsg) {
+	protected PercentagesCorrector buildPercentagesCorrector(NiDimensionUsage dimUsg, boolean pledgeColumn) {
+		if (pledgeColumn)
+			return null;
 		String roleCode = dimUsg.instanceName;
 		return new PercentagesCorrector("amp_org_role", "activity", "percentage", () -> String.format("role = (SELECT amp_role_id FROM amp_role WHERE role_code='%s')", roleCode));
 	}

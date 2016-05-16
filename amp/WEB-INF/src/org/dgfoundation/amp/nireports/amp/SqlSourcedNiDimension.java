@@ -94,14 +94,14 @@ public class SqlSourcedNiDimension extends TabularSourcedNiDimension {
 	}
 	
 	/** override in children if this dimension has unsure percentages */
-	protected PercentagesCorrector buildPercentagesCorrector(NiDimensionUsage dimUsg) {
+	protected PercentagesCorrector buildPercentagesCorrector(NiDimensionUsage dimUsg, boolean pledgeColumn) {
 		return null;
 	}
 	
-	protected Map<NiDimensionUsage, PercentagesCorrector> getAllPercentagesCorrectors() {
+	protected Map<NiDimensionUsage, PercentagesCorrector> getAllPercentagesCorrectors(boolean pledgeColumn) {
 		Map<NiDimensionUsage, PercentagesCorrector> res = new HashMap<>();
 		for(NiDimensionUsage dimUsg:this.getDUs()) {
-			PercentagesCorrector cor = buildPercentagesCorrector(dimUsg);
+			PercentagesCorrector cor = buildPercentagesCorrector(dimUsg, pledgeColumn);
 			if (cor != null)
 				res.put(dimUsg, cor);
 		}

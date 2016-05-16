@@ -225,13 +225,20 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		
 	@SuppressWarnings("serial")
 	public final Map<NiDimensionUsage, PercentagesCorrector> PERCENTAGE_CORRECTORS = new HashMap<NiDimensionUsage, PercentagesCorrector>() {{
-		putAll(orgsDimension.getAllPercentagesCorrectors());
-		putAll(secsDimension.getAllPercentagesCorrectors());
-		putAll(progsDimension.getAllPercentagesCorrectors());
-		putAll(locsDimension.getAllPercentagesCorrectors());
-		putAll(locsDimension.getAllPercentagesCorrectors());
+		putAll(orgsDimension.getAllPercentagesCorrectors(false));
+		putAll(secsDimension.getAllPercentagesCorrectors(false));
+		putAll(progsDimension.getAllPercentagesCorrectors(false));
+		putAll(locsDimension.getAllPercentagesCorrectors(false));
 	}};
 	
+	@SuppressWarnings("serial")
+	public final Map<NiDimensionUsage, PercentagesCorrector> PLEDGES_PERCENTAGE_CORRECTORS = new HashMap<NiDimensionUsage, PercentagesCorrector>() {{
+		putAll(orgsDimension.getAllPercentagesCorrectors(true));
+		putAll(secsDimension.getAllPercentagesCorrectors(true));
+		putAll(progsDimension.getAllPercentagesCorrectors(true));
+		putAll(locsDimension.getAllPercentagesCorrectors(true));
+	}};
+
 	public static AmpReportsSchema getInstance() {
 		return instance;
 	}
@@ -846,13 +853,14 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	}
 
 	
-//	private AmpReportsSchema with_percentage(String columnName, String viewName, LevelColumn levelColumn) {
-//		logger.error(String.format("(column %s) NiDimension %s has no percentages corrector, using raw percentages", columnName, levelColumn.dimensionUsage));
-//		return addColumn(PercentageTextColumn.fromView(columnName, viewName, levelColumn));
-//	}
-		
 	private AmpReportsSchema with_percentage(String columnName, String viewName, NiDimensionUsage dimUsg, int level) {
-		PercentagesCorrector cor = PERCENTAGE_CORRECTORS.get(dimUsg);
+		Map<NiDimensionUsage, PercentagesCorrector> correctors = 
+			PsqlSourcedColumn.keyColumnName(viewName, "amp_activity_id").equals("amp_activity_id") ? PERCENTAGE_CORRECTORS : PLEDGES_PERCENTAGE_CORRECTORS;
+		return with_percentage(columnName, viewName, dimUsg, level, correctors);
+	}
+
+	private AmpReportsSchema with_percentage(String columnName, String viewName, NiDimensionUsage dimUsg, int level, Map<NiDimensionUsage, PercentagesCorrector> correctors) {
+		PercentagesCorrector cor = correctors.get(dimUsg);
 		NiUtils.failIf(cor == null, String.format("%s: you forgot to configure percentage correctors for %s", columnName, dimUsg));
 		return addColumn(new NormalizedPercentagesColumn(columnName, dimUsg.getLevelColumn(level), null, viewName, cor));
 	}
@@ -993,6 +1001,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		try(java.sql.Connection conn = PersistenceManager.getJdbcConnection()) {
 			for(Map.Entry<NiDimensionUsage, PercentagesCorrector> z:PERCENTAGE_CORRECTORS.entrySet()) {
 				sp.put(z.getKey().toString(), z.getValue().validateDb(z.getKey().toString(), conn));
+			}
+			for(Map.Entry<NiDimensionUsage, PercentagesCorrector> z:PLEDGES_PERCENTAGE_CORRECTORS.entrySet()) {
+				sp.put("Pledges " + z.getKey().toString(), z.getValue().validateDb(z.getKey().toString(), conn));
 			}
 		}
 		catch(Exception e) {

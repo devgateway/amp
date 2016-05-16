@@ -18,6 +18,7 @@ import org.dgfoundation.amp.newreports.ReportFiltersImpl;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.testmodels.NiReportModel;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.junit.Test;
 
 /**
@@ -1130,5 +1131,5 @@ public class AmpSchemaPledgesTests extends ReportingTestCase {
 	@Override
 	public void setUp() {
 		AllTests_amp212.setUp();
-	}	
+	}
 }

@@ -20,8 +20,12 @@ public final class ProgramsDimension extends SqlSourcedNiDimension {
 	}
 
 	@Override
-	protected PercentagesCorrector buildPercentagesCorrector(NiDimensionUsage dimUsg) {
+	protected PercentagesCorrector buildPercentagesCorrector(NiDimensionUsage dimUsg, boolean pledgeColumn) {
 		String schemeName = dimUsg.instanceName;
+
+		if (pledgeColumn)
+			return new PercentagesCorrector("amp_funding_pledges_program", "pledge_id", "program_percentage", () -> String.format("amp_program_id IN (select amp_theme_id FROM all_programs_with_levels WHERE program_setting_name='%s')", schemeName));
+		
 		return new PercentagesCorrector("amp_activity_program", "amp_activity_id", "program_percentage", () -> String.format("program_setting = (SELECT amp_program_settings_id FROM amp_program_settings WHERE name='%s')", schemeName));
 	}
 }

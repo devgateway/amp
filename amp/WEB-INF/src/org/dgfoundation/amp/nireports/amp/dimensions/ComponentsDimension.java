@@ -2,7 +2,6 @@ package org.dgfoundation.amp.nireports.amp.dimensions;
 
 import java.util.Arrays;
 
-import org.dgfoundation.amp.nireports.amp.PercentagesCorrector;
 import org.dgfoundation.amp.nireports.amp.SqlSourcedNiDimension;
 
 /**
@@ -20,9 +19,4 @@ public class ComponentsDimension extends SqlSourcedNiDimension {
 	
 	public final static int LEVEL_COMPONENT_TYPE = 0;
 	public final static int LEVEL_COMPONENT = 1;
-
-	@Override
-	protected PercentagesCorrector buildPercentagesCorrector(NiDimensionUsage dimUsg) {
-		return null;
-	}
 }

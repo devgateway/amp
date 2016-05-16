@@ -20,9 +20,4 @@ public class CategoriesDimension extends SqlSourcedNiDimension {
 	
 	public final static int LEVEL_CAT_CLASS = 0;
 	public final static int LEVEL_CAT_VALUE = 1;
-
-	@Override
-	protected PercentagesCorrector buildPercentagesCorrector(NiDimensionUsage dimUsg) {
-		return null;
-	}
 }

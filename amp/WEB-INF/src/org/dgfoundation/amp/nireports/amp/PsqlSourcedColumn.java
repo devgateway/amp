@@ -21,9 +21,14 @@ public abstract class PsqlSourcedColumn<K extends Cell> extends SqlSourcedColumn
 	final LinkedHashSet<String> viewColumns;
 	
 	public PsqlSourcedColumn(String columnName, NiDimension.LevelColumn levelColumn, String viewName, Behaviour<?> behaviour) {
-		super(columnName, levelColumn, viewName, SQLUtils.getTableColumns(viewName).iterator().next(), behaviour, AmpReportsSchema.columnDescriptions.get(columnName));
+		super(columnName, levelColumn, viewName, keyColumnName(viewName, "amp_activity_id"), behaviour, AmpReportsSchema.columnDescriptions.get(columnName));
 		this.viewColumns = SQLUtils.getTableColumns(viewName);
 		check();
+	}
+	
+	public static String keyColumnName(String viewName, String defaultValue) {
+		Set<String> cols = SQLUtils.getTableColumns(viewName);
+		return cols.isEmpty() ? defaultValue : cols.iterator().next();
 	}
 	
 	/**

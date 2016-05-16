@@ -3,7 +3,6 @@ package org.digijava.module.search.action;
 import java.util.ArrayList;
 import java.util.Collection;
 
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
@@ -12,13 +11,13 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.search.form.SearchForm;
 import org.digijava.module.search.util.SearchUtil;
-import org.digijava.module.aim.helper.Constants;
 
 public class Search extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -32,7 +31,7 @@ public class Search extends Action {
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 
 		if (request.getParameter("desksearch") != null){
-			String keyword = new String(request.getParameter("keyword").getBytes(), "UTF-8");
+			String keyword = new String(request.getParameter("keyword"));
 			int querytype = Integer.parseInt(request.getParameter("type"));
 			searchForm.setKeyword(keyword);
 			searchForm.setQueryType(querytype);

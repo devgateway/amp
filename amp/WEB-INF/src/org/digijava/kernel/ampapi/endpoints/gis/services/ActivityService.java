@@ -9,23 +9,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.AmountsUnits;
-import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.IdentifiedReportCell;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportMeasure;
@@ -35,9 +29,7 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.newreports.pagination.PaginatedReport;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
-import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
-import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
@@ -47,9 +39,11 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
-import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 public class ActivityService {
 	protected static Logger logger = Logger.getLogger(ActivityService.class);
@@ -97,7 +91,11 @@ public class ActivityService {
 		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
 		
-		OutputSettings outSettings = new OutputSettings(new HashSet<String>() {{add(ColumnConstants.AMP_ID);}});
+		OutputSettings outSettings = new OutputSettings(new HashSet<String>() {{
+		    add(ColumnConstants.AMP_ID);
+		    add(ColumnConstants.DONOR_AGENCY);
+		    add(ColumnConstants.PRIMARY_SECTOR);
+		}});
 		
 		//for now we are going to return the donor_id as matchesfilters
 		
@@ -148,7 +146,9 @@ public class ActivityService {
 						activity.set("ampUrl", ActivityGatekeeper.buildPreviewUrl(String.valueOf(activityId)));
 					}
 				} else {
-					filters.set(reportOutputColumn.originalColumnName, row.get(reportOutputColumn).value);
+				    IdentifiedReportCell idReportCell = (IdentifiedReportCell) row.get(reportOutputColumn);
+				    Set<Long> ids = idReportCell.entitiesIdsValues == null ? null : idReportCell.entitiesIdsValues.keySet();
+					filters.set(reportOutputColumn.originalColumnName, ids);
 				}
 			}
 			activity.set("matchesFilters", filters);

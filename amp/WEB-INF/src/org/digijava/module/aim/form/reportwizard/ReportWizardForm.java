@@ -73,6 +73,17 @@ public class ReportWizardForm extends ActionForm {
 	public Collection<AmpMeasures> getAmpMeasures() {
 		return this.ampMeasures;
 	}
+
+	public Collection<AmpMeasures> getSortedAmpMeasures() {
+		final TreeSet<AmpMeasures> sorted = new TreeSet<>(new Comparator<AmpMeasures>() {
+			@Override
+			public int compare(AmpMeasures o1, AmpMeasures o2) {
+				return o1.getMeasureName().compareToIgnoreCase(o2.getMeasureName());
+			}
+		});
+		sorted.addAll(this.ampMeasures);
+		return sorted;
+	}
 	
 	@java.lang.SuppressWarnings("all")
 	public String getReportType() {

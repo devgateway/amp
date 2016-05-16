@@ -54,7 +54,8 @@ define([ 'marionette', 'text!views/html/saveTabDialogTemplate.html', 'models/tab
 				close: function(event, ui) 
 		        { 
 					jQuery(this).remove();
-		        } 
+		        },
+		        position: { my: "center bottom", at: "center center", of: window }
 			});
 			jQuery(".buttonify").button();
 			TranslationManager.searchAndTranslate();

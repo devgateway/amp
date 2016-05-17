@@ -13,7 +13,8 @@ import java.util.Set;
 import org.digijava.kernel.translator.TranslatorWorker;
 
 /**
- * class holding metadata about a report-output-column. It also holds  A "column" in this context might be either a Measure or a Column - anything which sits on the X axis, actually
+ * class holding metadata about a report-output-column. It also holds  
+ * A "column" in this context might be either a Measure or a Column - anything which sits on the X axis, actually
  * @author Dolghier Constantin
  *
  */

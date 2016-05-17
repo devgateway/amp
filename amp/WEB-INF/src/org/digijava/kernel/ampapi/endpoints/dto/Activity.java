@@ -8,7 +8,8 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 /**
- * Class that holds the activitiy data to be serialized as a JsonObject we ignore an object if its null
+ * Class that holds the activitiy data to be serialized as a JsonObject.
+ * We ignore an object if it's null
  * 
  * @author jdeanquin
  *
@@ -42,7 +43,32 @@ public class Activity {
 	public Activity() {
 
 	}
-
+	
+	/**
+	 * copy constructor
+	 * @param o The other activity
+	 */
+	public Activity(Activity o) {
+		this.id = o.id;
+		this.name = o.name;
+		this.ampId = o.ampId;
+		this.description = o.description;
+		this.ampUrl = o.ampUrl;
+		this.donorAgency = o.donorAgency;
+		this.implementationLevel = o.implementationLevel;
+		this.totalCommitments = o.totalCommitments;
+		this.totalDisbursments = o.totalDisbursments;
+		this.totalCommitmentsForActivity = o.totalCommitmentsForActivity;
+		this.totalDisbursmentsForActivity = o.totalDisbursmentsForActivity;
+		this.geoCode = o.geoCode;
+		this.locationName = o.locationName;
+		this.structureName = o.structureName;
+		this.latitude = o.latitude;
+		this.longitude = o.longitude;
+		this.primarySector = o.primarySector;
+	}
+	
+	
 	public Long getId() {
 		return id;
 	}
@@ -188,5 +214,29 @@ public class Activity {
 	public void setLocationName(String locationName) {
 		this.locationName = locationName;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder bld = new StringBuilder();
+		if (ampId != null) bld.append("ampId: [" + ampId + "], ");
+		if (geoCode != null) bld.append("geocode: [" + geoCode + "], ");
+		if (implementationLevel != null) bld.append("impl. level: [" + implementationLevel + "], ");
+		if (name != null) bld.append("name: [" + name + "], ");
+		if (id != null) bld.append("id: ["+ id + "], ");
+		if (description != null) bld.append("description: [" + description + "], ");
+		if (ampUrl != null) bld.append("ampUrl: [" + ampUrl + "], ");
+		if (donorAgency != null) bld.append("donorAgency: [" + donorAgency + "], ");
 
+		if (totalCommitments != null) bld.append("totalCommitments: [" + totalCommitments + "], ");
+		if (totalDisbursments != null) bld.append("totalDisbursements: [" + totalDisbursments + "], ");
+		if (totalCommitmentsForActivity != null) bld.append("totalcommforact: [" + totalCommitmentsForActivity + "], ");
+		if (totalDisbursmentsForActivity != null) bld.append("totaldisbforact: [" + totalDisbursmentsForActivity + "], ");
+		
+		if (locationName != null) bld.append("locname: [" + locationName + "], ");
+		if (structureName != null) bld.append("structname: [" + structureName + "], ");
+		if (latitude != null) bld.append("lat: [" + latitude + "], ");
+		if (longitude != null) bld.append("long: [" + longitude + "], ");
+		if (primarySector != null) bld.append("prisect: [" + primarySector + "], ");
+		return bld.toString();
+	}
 }

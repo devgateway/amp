@@ -90,8 +90,9 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	 * Refer to {@link #getColumns()} for more details
 	 * @param column - {@link ReportColumn}  
 	 */
-	public void addColumn(ReportColumn column) {
-		addColumn(column, false);;
+	public ReportSpecificationImpl addColumn(ReportColumn column) {
+		addColumn(column, false);
+		return this;
 	}
 	
 	@Override

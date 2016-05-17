@@ -36,6 +36,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import javax.servlet.ServletContext;
+
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
@@ -86,6 +88,7 @@ import org.dgfoundation.amp.nireports.schema.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -597,10 +600,15 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	
 	protected void addMtefColumns() {
 		for(int mtefYear:DynamicColumnsUtil.getMtefYears()) {
-			addColumn(new MtefColumn("MTEF " + mtefYear + "/" + (mtefYear + 1), mtefYear, "MTEF", false, Optional.empty()));
-			addColumn(new MtefColumn("Pipeline MTEF Projections " + mtefYear + "/" + (mtefYear + 1), mtefYear, "Pipeline MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PIPELINE)));
-			addColumn(new MtefColumn("Projection MTEF Projections " + mtefYear + "/" + (mtefYear + 1), mtefYear, "Projection MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PROJECTION)));
-			addColumn(new MtefColumn("Real MTEF " + mtefYear + "/" + (mtefYear + 1), mtefYear, "Real MTEF", true, Optional.empty()));
+			
+			addColumn(new MtefColumn("MTEF " + mtefYear + "/" + (mtefYear + 1), mtefYear, 
+					"MTEF", false, Optional.empty()).withGroup("Funding Information"));
+			addColumn(new MtefColumn("Pipeline MTEF Projections " + mtefYear + "/" + (mtefYear + 1), mtefYear, 
+					"Pipeline MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PIPELINE)).withGroup("Funding Information"));
+			addColumn(new MtefColumn("Projection MTEF Projections " + mtefYear + "/" + (mtefYear + 1), mtefYear, 
+					"Projection MTEF", false, Optional.of(CategoryConstants.MTEF_PROJECTION_PROJECTION)).withGroup("Funding Information"));
+			addColumn(new MtefColumn("Real MTEF " + mtefYear + "/" + (mtefYear + 1), mtefYear, 
+					"Real MTEF", true, Optional.empty()).withGroup("Funding Information"));
 		}
 	}
 	
@@ -703,14 +711,33 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 *  To avoid this, an entry referring to an empty view is added -- so that the column is shown having no data
 	 *  (since there's no point in backporting the column entirely). 
 	 */
-	public void synchronizeAmpColumnsBackport() {
+	@SuppressWarnings("deprecation")
+	public void synchronizeAmpColumnsBackport(ServletContext sCtx) {
 		PersistenceManager.getSession().doWork(conn -> {
 			Set<String> inDbColumns = new HashSet<>(SQLUtils.fetchAsList(conn, String.format("SELECT %s FROM %s", "columnname", "amp_columns"), 1));
-			List<Object> toBeAdded = this.columns.keySet().stream().filter(z -> !inDbColumns.contains(z)).collect(Collectors.toList());
-			List<List<Object>> values = toBeAdded.stream().map(z -> Arrays.asList(z, "org.dgfoundation.amp.ar.cell.TextCell", "v_empty_text_column")).collect(Collectors.toList());	
-			if (values.size() > 0)
-				SQLUtils.insert(conn, "amp_columns", "columnid", "amp_columns_seq", Arrays.asList("columnname", "celltype", "extractorview"), values);
-		}); 	
+			List<String> toBeAdded = this.columns.keySet().stream().filter(z -> !inDbColumns.contains(z)).collect(Collectors.toList());
+			for (String newColumnName : toBeAdded) {
+				AmpColumns col= new AmpColumns();
+				col.setColumnName(newColumnName);
+				col.setExtractorView("v_empty_text_column");
+				col.setCellType("org.dgfoundation.amp.ar.cell.TextCell");
+				String group = null;
+//				if (PsqlSourcedColumn.class.isAssignableFrom(this.columns.get(newColumnName).getClass()))
+				if (this.columns.get(newColumnName) instanceof PsqlSourcedColumn)
+					group = ((PsqlSourcedColumn<?>)this.columns.get(newColumnName)).getGroup();
+				//group should be non-null only for MTEF columns
+				DynamicColumnsUtil.dynamicallyCreateNewColumn(col, group, sCtx);
+
+			}
+		});
+
+//		PersistenceManager.getSession().doWork(conn -> {
+//			Set<String> inDbColumns = new HashSet<>(SQLUtils.fetchAsList(conn, String.format("SELECT %s FROM %s", "columnname", "amp_columns"), 1));
+//			List<String> toBeAdded = this.columns.keySet().stream().filter(z -> !inDbColumns.contains(z)).collect(Collectors.toList());
+//			List<List<Object>> values = toBeAdded.stream().map(z -> Arrays.asList(z, "org.dgfoundation.amp.ar.cell.TextCell", "v_empty_text_column")).collect(Collectors.toList());	
+//			if (values.size() > 0)
+//				SQLUtils.insert(conn, "amp_columns", "columnid", "amp_columns_seq", Arrays.asList("columnname", "celltype", "extractorview"), values);
+//		}); 	
 	}
 	
 	/**

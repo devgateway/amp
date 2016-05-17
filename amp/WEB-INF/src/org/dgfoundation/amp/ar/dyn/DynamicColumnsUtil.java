@@ -41,6 +41,8 @@ public class DynamicColumnsUtil {
 	private static List<AmpColumns> cachedAllMtefColumnList = null;
 	private static List<AmpMeasures> cachedMtefMeasureList = null;
 	
+	
+	@Deprecated //AmpReportsSchema.synchronizeAmpColumnsBackport
 	public static void createInexistentMtefColumns (ServletContext sCtx) {
 		List<Integer> mtefFundingYears = getMtefYears();
 		
@@ -163,7 +165,8 @@ public class DynamicColumnsUtil {
     			return retList;
     		
     		int minYear = rawList.get(0) - 3;
-    		int maxYear = rawList.get(rawList.size() - 1) + 3;
+//    		int maxYear = rawList.get(rawList.size() - 1) + 3;
+    		int maxYear = rawList.get(rawList.size() - 1) + 13;
     		
     		for(int i = minYear; i <= maxYear; i++)
     			retList.add(i);

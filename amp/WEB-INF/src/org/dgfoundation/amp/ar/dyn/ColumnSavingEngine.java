@@ -138,9 +138,9 @@ public class ColumnSavingEngine {
 	}
 	
 	public void startSavingProcess() {
-		boolean fieldSaved	= this.saveField(null);
+		boolean fieldSaved	= (this.featureName == null) || this.saveField(null);
 		
-		if ( fieldSaved ) 
+		if (fieldSaved ) 
 			this.saveColumn();
 		else
 			logger.error("There was an error saving the field for column " + newColumn.getColumnName() + ". So the AmpColumns object was not saved either" );

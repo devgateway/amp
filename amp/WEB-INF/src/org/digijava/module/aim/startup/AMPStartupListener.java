@@ -301,11 +301,11 @@ public class AMPStartupListener extends HttpServlet implements
 			//AmpBackgroundActivitiesCloser.createActivityCloserUserIfNeeded();
 			initializeQuartz(sce);
 			
-			AmpReportsSchema.getInstance().synchronizeAmpColumnsBackport();
+			AmpReportsSchema.getInstance().synchronizeAmpColumnsBackport(ampContext);
 			AmpReportsSchema.getInstance().synchronizeAmpMeasureBackport();
 
-			logger.info("Checking if any MTEF columns need to be created...");
-			DynamicColumnsUtil.createInexistentMtefColumns(ampContext);
+//			logger.info("Checking if any MTEF columns need to be created...");
+//			DynamicColumnsUtil.createInexistentMtefColumns(ampContext);
 			
 			logger.info("loading the i18ned views description and checking for consistency with the database...");
 			for(String viewName:InternationalizedViewsRepository.i18Models.keySet())

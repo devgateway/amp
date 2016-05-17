@@ -3912,7 +3912,7 @@ module.exports = BackboneDash.View.extend({
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 var ModalView = require('./settings-modal');
-var template = _.template("<div class=\"col-xs-12 col-sm-6 col-md-3\">\n  <div class=\"panel\">\n    <div class=\"panel-body\">\n      <h3 data-i18n=\"amp.dashboard:dashboard-settings\" class=\"inline-heading\">Settings</h3>\n      <button type=\"button\" class=\"btn btn-sm btn-default pull-right dash-settings-button\">\n        <span class=\"glyphicon glyphicon-edit\"></span>\n        <span data-i18n=\"amp.dashboard:settings-edit\">edit settings</span>\n      </button>\n    </div>\n  </div>\n</div>\n");
+var template = _.template("<div class=\"col-xs-12 col-sm-6 col-md-3\">\n  <div class=\"panel\">\n    <div class=\"panel-body\">\n      <h3 data-i18n=\"amp.dashboard:dashboard-settings\" class=\"inline-heading\" style=\"max-width: 50px;overflow-x: visible\">Settings</h3>\n      <button type=\"button\" class=\"btn btn-sm btn-default pull-right dash-settings-button\">\n        <span class=\"glyphicon glyphicon-edit\"></span>\n        <span data-i18n=\"amp.dashboard:settings-edit\">edit settings</span>\n      </button>\n    </div>\n  </div>\n</div>\n");
 
 
 module.exports = BackboneDash.View.extend({
@@ -22959,7 +22959,7 @@ module.exports = Backbone.View.extend({
 
 },{"backbone":"backbone","underscore":"underscore"}],55:[function(require,module,exports){
 module.exports=require(47)
-},{"C:\\Users\\gerald\\amp\\AMP_2_12_RELEASE\\amp\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":47}],56:[function(require,module,exports){
+},{"/home/esoliani/amp-workspace/AMP_2_12_RELEASE/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules/bootstrap/dist/js/bootstrap.js":47}],56:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -28368,9 +28368,7 @@ var extractDates = function(settings, filtersOut, minName, maxName) {
     if (defaultMaxDate !== undefined && defaultMaxDate.get('name') !== '') {
       filtersOut.otherFilters.date.end = defaultMaxDate.get('name');
     }
-    return filtersOut;
   }
-
 
 module.exports = {
 		extractDates: extractDates

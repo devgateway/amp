@@ -41,6 +41,7 @@ import org.codehaus.jackson.node.TextNode;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
+import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityLocationExporter;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
@@ -438,10 +439,11 @@ public class GisEndPoints {
 		LinkedHashMap<String, Object> filters=(LinkedHashMap<String, Object>)filter.get("filters");
 		if(exportType==1){
 			name="map-export-project-sites.xls";
-			wb=LocationService.generateExcelExportByStructure(filters);	
+			wb =LocationService.generateExcelExportByStructure(filters);	
 		}else{
 			name="map-export-administrative-Locations.xls";
-			wb=LocationService.generateExcelExportByLocation(filters);
+			wb = new ActivityLocationExporter(filters).export(name);
+//			wb=LocationService.generateExcelExportByLocation(filters);
 		}
 		webResponse.setHeader("Content-Disposition","attachment; filename=" + name);
 

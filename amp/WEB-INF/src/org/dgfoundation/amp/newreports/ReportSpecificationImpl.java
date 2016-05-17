@@ -65,10 +65,12 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	 * Adds a column to the columns set. 
 	 * Order is important, i.e. first column added will be the first one displayed.
 	 * Refer to {@link #getColumns()} for more details
-	 * @param column - {@link ReportColumn}  
+	 * @param column - {@link ReportColumn}
+	 * @return itself for chaining  
 	 */
-	public void addColumn(ReportColumn column) {
+	public ReportSpecificationImpl addColumn(ReportColumn column) {
 		this.columns.add(column);
+		return this;
 	}
 		
 	@Override

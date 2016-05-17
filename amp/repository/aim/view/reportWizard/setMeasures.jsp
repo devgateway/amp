@@ -11,7 +11,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-				<logic:iterate name="myForm" id="ampMeasures" property="sortedAmpMeasuresv" type="org.digijava.module.aim.dbentity.AmpMeasures">
+				<logic:iterate name="myForm" id="ampMeasures" property="sortedAmpMeasures" type="org.digijava.module.aim.dbentity.AmpMeasures">
 						<feature:display name="${ampMeasures.measureName}" module="Measures">
 							<li class="list1" id="measure_${ampMeasures.measureId}">
 								<input type="checkbox" value="${ampMeasures.measureId}" style='line-height:15px; margin-top:6px;'/>

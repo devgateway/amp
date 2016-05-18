@@ -41,7 +41,7 @@ public class TrivialMeasureBehaviour implements Behaviour<NiAmountCell> {
 	
 	@Override
 	public TimeRange getTimeRange() {
-		return /*TimeRange.MONTH; */ timeRange;
+		return timeRange;
 	}
 	
 	@Override

@@ -90,44 +90,26 @@ public class AmpOverviewSection extends AmpComponentPanel<Void> implements AmpRe
 		fundingSourcesNumberPanel.getTextContainer().add(attributeModifier);
 		wmc.add(fundingSourcesNumberPanel);
 
-		String sscKeyPrefix = "";
-        String sscModalitiesPathPrefix = "";
-        if (ActivityUtil.ACTIVITY_TYPE_SSC.equals(((AmpAuthWebSession) getSession()).getFormType())) {
-        	sscKeyPrefix = "SSC_";
-        	sscModalitiesPathPrefix = "SSC ";
-        }
-
-		AmpCategorySelectFieldPanel typeOfCooperation = new AmpCategorySelectFieldPanel(
-				"typeOfCooperation", 
-				sscKeyPrefix + CategoryConstants.TYPE_OF_COOPERATION_KEY,
-				new AmpCategoryValueByKeyModel(
-						new PropertyModel<Set<AmpCategoryValue>>(am,
-								"categories"),
-						sscKeyPrefix + CategoryConstants.TYPE_OF_COOPERATION_KEY),
-				CategoryConstants.TYPE_OF_COOPERATION_NAME, true, false, null,
-				AmpFMTypes.MODULE);
+		AmpCategorySelectFieldPanel typeOfCooperation = new AmpCategorySelectFieldPanel("typeOfCooperation",
+				CategoryConstants.TYPE_OF_COOPERATION_KEY,
+				new AmpCategoryValueByKeyModel(new PropertyModel<Set<AmpCategoryValue>>(am, "categories"),
+						CategoryConstants.TYPE_OF_COOPERATION_KEY),
+				CategoryConstants.TYPE_OF_COOPERATION_NAME, true, false, null, AmpFMTypes.MODULE);
 		wmc.add(typeOfCooperation);
 
-		AmpCategorySelectFieldPanel typeOfImplementation = new AmpCategorySelectFieldPanel(
-				"typeOfImplementation",
-				sscKeyPrefix + CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY,
-				new AmpCategoryValueByKeyModel(
-						new PropertyModel<Set<AmpCategoryValue>>(am,
-								"categories"),
-						sscKeyPrefix + CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY),
-				CategoryConstants.TYPE_OF_IMPLEMENTATION_NAME, true, false,
-				null, AmpFMTypes.MODULE);
+		AmpCategorySelectFieldPanel typeOfImplementation = new AmpCategorySelectFieldPanel("typeOfImplementation",
+				CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY,
+				new AmpCategoryValueByKeyModel(new PropertyModel<Set<AmpCategoryValue>>(am, "categories"),
+						CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY),
+				CategoryConstants.TYPE_OF_IMPLEMENTATION_NAME, true, false, null, AmpFMTypes.MODULE);
 		wmc.add(typeOfImplementation);
 
-		AmpCategorySelectFieldPanel modalities = new AmpCategorySelectFieldPanel(
-				"modalities",
-				sscKeyPrefix + CategoryConstants.MODALITIES_KEY,
-				new AmpCategoryValueByKeyModel(
-						new PropertyModel<Set<AmpCategoryValue>>(am,
-								"categories"), sscKeyPrefix + CategoryConstants.MODALITIES_KEY),
-				sscModalitiesPathPrefix + CategoryConstants.MODALITIES_NAME, true, false, null,
-				AmpFMTypes.MODULE);
-		wmc.add(modalities);						
+		AmpCategorySelectFieldPanel modalities = new AmpCategorySelectFieldPanel("modalities",
+				CategoryConstants.MODALITIES_KEY,
+				new AmpCategoryValueByKeyModel(new PropertyModel<Set<AmpCategoryValue>>(am, "categories"),
+						CategoryConstants.MODALITIES_KEY),
+				CategoryConstants.MODALITIES_NAME, true, false, null, AmpFMTypes.MODULE);
+		wmc.add(modalities);					
 		
 		AmpOverallFundingTotalsTable overallFunding = new AmpOverallFundingTotalsTable(
 				"overallFunding", "Overall Funding Totals", new PropertyModel<Set<AmpFunding>>(am, "funding"));

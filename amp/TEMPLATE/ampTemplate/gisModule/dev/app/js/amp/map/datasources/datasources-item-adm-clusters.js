@@ -51,8 +51,8 @@ module.exports = Backbone.View.extend({
             // put them on the page.
             self.$el.append(self.template({
               activity: project.toJSON(),
-              formattedCommitments: [formattedCommitments, ' ', currencyCode].join(''),
-              formattedDisbursements: [formattedDisbursements, ' ', currencyCode].join('')
+              formattedCommitments: [formattedCommitments ? formattedCommitments : 0, ' ', currencyCode].join(''),
+              formattedDisbursements: [formattedDisbursements ? formattedDisbursements : 0, ' ', currencyCode].join('')
             }));
           });
         });

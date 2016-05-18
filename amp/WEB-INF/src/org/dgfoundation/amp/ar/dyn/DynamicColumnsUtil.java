@@ -165,8 +165,7 @@ public class DynamicColumnsUtil {
     			return retList;
     		
     		int minYear = rawList.get(0) - 3;
-//    		int maxYear = rawList.get(rawList.size() - 1) + 3;
-    		int maxYear = rawList.get(rawList.size() - 1) + 13;
+    		int maxYear = rawList.get(rawList.size() - 1) + 3;
     		
     		for(int i = minYear; i <= maxYear; i++)
     			retList.add(i);

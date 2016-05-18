@@ -47,6 +47,7 @@ var Query = Backbone.Model.extend({
 
         //Start Custom Code for Pagination
        	this.set({page:1});
+       	this.set({info: ["generatedHeaders"]});
         // Use this flag to use the saved filters (if any) for the report the only first time is loaded.
         this.firstLoad = true;
         window.currentQuery = this;
@@ -182,6 +183,7 @@ var Query = Backbone.Model.extend({
     	}
 
     	exModel = this.workspace.currentQueryModel;
+    	exModel.querySettings = {};
     	//if (this.firstLoad === false) {
     		exModel.queryModel.filters = this.get('filters');
     		exModel.queryModel.filtersWithModels = this.get('filtersWithModels');
@@ -203,6 +205,7 @@ var Query = Backbone.Model.extend({
         this.firstLoad = false;
         
         exModel.MD5 = this.calculateMD5FromParameters(exModel, this.get('report_id'));
+        exModel.querySettings.info = this.get('info');
 
         // Run it
         this.workspace.table.clearOut();

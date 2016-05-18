@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,6 +13,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
@@ -134,6 +136,8 @@ public class ReportsUtil {
 	 *   						<br>"C" : ["A", "S"], where default is ["A", "S"]
 	 *   						<br>"P" : ["P"], where default is ["P"]
 	 *   						<br>where "A" - standard activity, "S" - SSC Activity, "P" - pledge</dd>
+	 *   <dt>info</dt>          <dd>optional, list of additional information to include 
+	 *                          <br>["stats", "warnings", "generatedHeaders"], default is [] (none) 
 	 * </dl>
 	 * @return JsonBean result for the requested page and pagination information
 	 */
@@ -149,11 +153,7 @@ public class ReportsUtil {
 		// get the report (from cache if it was cached)
 		CachedReportData cachedReportData = getCachedReportData(reportId, formParams);
 		if (cachedReportData != null) {
-			if (cachedReportData.report != null) {
-				result.set("headers", cachedReportData.report.leafHeaders);
-				result.set("generatedHeaders", cachedReportData.report.generatedHeaders);
-				result.set("isEmpty", cachedReportData.report.isEmpty);
-			}
+		    fillReportInfo(cachedReportData.report, result, formParams);
 		}
 		
 		// extract data for the requested page
@@ -171,6 +171,22 @@ public class ReportsUtil {
 		result.set(EPConstants.SETTINGS, cachedReportData != null ? 
 				SettingsUtils.getReportSettings(cachedReportData.report.spec) : null);
 		return result;
+	}
+	
+	protected static void fillReportInfo(GeneratedReport report, JsonBean result, JsonBean formParams) {
+	    if (report == null) return;
+	    result.set("isEmpty", report.isEmpty);
+	    result.set("headers", report.leafHeaders);
+	    List<String> addInfo = EndpointUtils.getSingleValue(formParams, EPConstants.INFO, Collections.EMPTY_LIST);
+	    for (String infoToAdd : addInfo) {
+	        if (EPConstants.GENERATED_HEADERS.equalsIgnoreCase(infoToAdd)) {
+	            result.set(EPConstants.GENERATED_HEADERS, report.generatedHeaders);
+	        } else if (EPConstants.WARNINGS.equalsIgnoreCase(infoToAdd)) {
+	            result.set(EPConstants.WARNINGS, report.reportWarnings);
+	        } else if (EPConstants.STATS.equalsIgnoreCase(infoToAdd)) {
+                result.set(EPConstants.STATS, report.jsonTimings);
+            }
+	    }
 	}
 	
 	protected static JsonBean convertSaikuParamsToReports(JsonBean original) {
@@ -204,6 +220,11 @@ public class ReportsUtil {
 		
 		if (original.get(EPConstants.MD5_TOKEN) != null) {
 			newParams.set(EPConstants.MD5_TOKEN, original.get(EPConstants.MD5_TOKEN));
+		}
+		
+		Map<String, Object> querySettings = (Map<String, Object>) original.get("querySettings");  
+		if (querySettings != null && !querySettings.isEmpty()) {
+		    newParams.any().putAll(querySettings);
 		}
 		
 		return newParams;

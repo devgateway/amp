@@ -643,7 +643,6 @@ public class ActivityUtil {
                             String fileName = nw.getName();
                             Bytes fileSize = null;
                             InputStream fileData = null;
-                            String asd = "";
                             try {
                             	if (nw.getNode().hasProperty(CrConstants.PROPERTY_DATA))
                             		fileData = nw.getNode().getProperty(CrConstants.PROPERTY_DATA).getStream();
@@ -669,79 +668,71 @@ public class ActivityUtil {
                                 }
                                 @Override
                                 public InputStream getInputStream() throws IOException {
-                                    return fileData;  //To change body of implemented methods use File | Settings | File Templates.
+                                    return fileData;
                                 }
 
                                 @Override
                                 public String getContentType() {
-                                    return contentType;  //To change body of implemented methods use File | Settings | File Templates.
+                                    return contentType;
                                 }
 
                                 @Override
                                 public String getName() {
-                                    return fileName;  //To change body of implemented methods use File | Settings | File Templates.
+                                    return fileName;
                                 }
 
                                 @Override
                                 public boolean isInMemory() {
-                                    return false;  //To change body of implemented methods use File | Settings | File Templates.
+                                    return false;
                                 }
 
                                 @Override
                                 public long getSize() {
                                 	if (fileSize == null)
                                 		return 0;
-                                    return fileSize.bytes();  //To change body of implemented methods use File | Settings | File Templates.
+                                    return fileSize.bytes();
                                 }
 
                                 @Override
                                 public byte[] get() {
-                                    return new byte[0];  //To change body of implemented methods use File | Settings | File Templates.
+                                    return new byte[0];
                                 }
 
                                 @Override
                                 public String getString(String s) throws UnsupportedEncodingException {
-                                    return null;  //To change body of implemented methods use File | Settings | File Templates.
+                                    return null;
                                 }
 
                                 @Override
                                 public String getString() {
-                                    return null;  //To change body of implemented methods use File | Settings | File Templates.
+                                    return null;
                                 }
 
                                 @Override
-                                public void write(File file) {
-                                    //To change body of implemented methods use File | Settings | File Templates.
-                                }
+                                public void write(File file) {}
 
                                 @Override
-                                public void delete() {
-                                    //To change body of implemented methods use File | Settings | File Templates.
-                                }
+                                public void delete() {}
 
                                 @Override
                                 public String getFieldName() {
-                                    return null;  //To change body of implemented methods use File | Settings | File Templates.
+                                    return null;
                                 }
 
                                 @Override
-                                public void setFieldName(String s) {
-                                    //To change body of implemented methods use File | Settings | File Templates.
-                                }
+                                public void setFieldName(String s) {}
 
                                 @Override
                                 public boolean isFormField() {
-                                    return false;  //To change body of implemented methods use File | Settings | File Templates.
+                                    return false;
                                 }
 
                                 @Override
-                                public void setFormField(boolean b) {
-                                    //To change body of implemented methods use File | Settings | File Templates.
-                                }
+                                public void setFormField(boolean b) {}
 
                                 @Override
                                 public OutputStream getOutputStream() throws IOException {
-                                    return null;  //To change body of implemented methods use File | Settings | File Templates.
+                                    return null;
                                 }
                             }
 

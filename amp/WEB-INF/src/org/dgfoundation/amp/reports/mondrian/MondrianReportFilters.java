@@ -46,12 +46,7 @@ public class MondrianReportFilters extends AmpReportFilters {
 	private Map<String, List<FilterRule>> sqlFilterRules = new HashMap<>();
 		
 	protected AmpFiscalCalendar oldCalendar = null;
-	
-	/**
-	 * The computed year filter to be used in some fundings filtering for computed measures like "Selected Year Planned Disbursements"
-	 */
-	private Integer computedYear = null;
-	
+		
 	/**
 	 * Initialized report filters with a map of elements to filter by a list of filters each
 	 * @param filterRules
@@ -292,15 +287,6 @@ public class MondrianReportFilters extends AmpReportFilters {
 	public void setSqlFilterRules(Map<String, List<FilterRule>> sqlFilterRules) {
 		this.sqlFilterRules = sqlFilterRules;
 	}
-
-	/**
-	 * @return the computedYear, if not set (null), then it means Current Year - this number vary over years
-	 */
-	@Override
-	public Integer getComputedYear() {
-		return computedYear;
-	}
-
 	
 	public AmpFiscalCalendar getCalendar() {
 		return calendar;

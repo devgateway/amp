@@ -24,6 +24,10 @@ public class EPConstants {
     // the request attribute name to set response status
     public static final String RESPONSE_STATUS = "response_status_marker";
     public static final String RESPONSE_HEADERS_MAP = "response_headers_map";
+    
+    // JSON Filters
+    public static final String JSON_FILTERS = "jsonFilters";
+    public static final String JSON_FILTER_AMOUNT_CELL = "jsonFilter.AmountCell";
 	
 	// config update
 	public static final String REPORT_NAME = "name";
@@ -34,6 +38,7 @@ public class EPConstants {
 	public static final String COLUMNS_WITH_IDS = "columns_with_ids";
 	public static final String ADD_HIERARCHIES = "add_hierarchies";
 	public static final String ADD_MEASURES = "add_measures";
+	public static final String RAW_VALUES = "raw_values";
 	public static final String SORTING = "sorting";
 	public static final String SHOW_EMPTY_ROWS = "show_empty_rows";
 	public static final String SHOW_EMPTY_COLUMNS = "show_empty_cols"; // this is for column groups (quarter, year)

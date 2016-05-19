@@ -1,8 +1,6 @@
 package org.dgfoundation.amp.newreports;
 
-import java.util.Map;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.dgfoundation.amp.algo.AmpCollections;
@@ -13,10 +11,10 @@ import org.dgfoundation.amp.algo.AmpCollections;
  * @author Dolghier Constantin
  */
 @JsonSerialize(include=Inclusion.NON_NULL)
+@JsonIgnoreProperties(value = "value")
 public abstract class ReportCell implements Comparable<ReportCell> {
-	
-	@JsonIgnore
-	public final Comparable<?> value;
+    
+    public final Comparable<?> value;
 	
 	public final String displayedValue;
 	

@@ -121,6 +121,9 @@ public class ReportsUtil {
 	 *   <dt>columns_with_ids</dt> 	<dd>optional, a list of columns names that should also provide ids</dd>
 	 *   <dt>add_hierarchies</dt>  <dd>optional, a list of hierarchies to be added to the report configuration</dd>
 	 *   <dt>add_measures</dt> 	<dd>optional, a list of measures to be added to the report configuration</dd>
+	 *   <dt>raw_values</dt>       <dd>optional, a list that configures which elements must provide raw (unformatted) 
+	 *                             values, with possible options (default []):
+	 *                             "M": measures </dd>
 	 *   <dt>show_empty_rows</dt> <dd>optional, default false, to show rows with empty measures amounts</dd>
 	 *   <dt>show_empty_cols</dt> <dd>optional, default false, to show full column groups (by quarter, year) 
 	 *   							with empty measures amounts</dd>
@@ -170,6 +173,9 @@ public class ReportsUtil {
 		result.set("page", new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, cachedReportData.paginationInfo.getRecordsCount()));
 		result.set(EPConstants.SETTINGS, cachedReportData != null ? 
 				SettingsUtils.getReportSettings(cachedReportData.report.spec) : null);
+		
+		processRawValues(formParams);
+		
 		return result;
 	}
 	
@@ -186,6 +192,20 @@ public class ReportsUtil {
 	        } else if (EPConstants.STATS.equalsIgnoreCase(infoToAdd)) {
                 result.set(EPConstants.STATS, report.jsonTimings);
             }
+	    }
+	}
+	
+	protected static void processRawValues(JsonBean formParams) {
+	    List<String> rawValuesElements = EndpointUtils.getSingleValue(formParams, EPConstants.RAW_VALUES, Collections.emptyList());
+	    boolean keepRawValuesForMeasures = false;
+	    for (String elemType : rawValuesElements) {
+	        // the only supported for now
+	        if ("M".equalsIgnoreCase(elemType)) {
+	            keepRawValuesForMeasures = true;
+	        }
+	    }
+	    if (!keepRawValuesForMeasures) {
+	        EndpointUtils.applyJsonFilter(EPConstants.JSON_FILTER_AMOUNT_CELL, "value");
 	    }
 	}
 	

@@ -7,9 +7,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -508,6 +510,34 @@ public class EndpointUtils {
 			error = new ApiErrorMessage(existing, error.value);
 		}
 		generalErrors.put(error.id, error);
+	}
+	
+	/**
+	 * Dynamic configuration of fields to filter out from Beans annotated with @JsonFilter('jsonFilterName')
+	 * 
+	 * @param jsonFilterName the @JsonFilter id
+	 * @param fields fields to filter out
+	 */
+	public static void applyJsonFilter(String jsonFilterName, String... fields) {
+	    // if ever needed to remove filters, then let's define an explicit method
+	    if (fields == null || fields.length == 0) return;
+	    Map<String, Set<String>> filtersDef = (Map<String, Set<String>>) TLSUtils.getRequest().getAttribute(EPConstants.JSON_FILTERS);
+	    if (filtersDef == null) {
+	        filtersDef = new HashMap<String, Set<String>>();
+	        TLSUtils.getRequest().setAttribute(EPConstants.JSON_FILTERS, filtersDef);
+	    }
+	    Set<String> existingFields = filtersDef.getOrDefault(jsonFilterName, new HashSet<String>());
+	    existingFields.addAll(Arrays.asList(fields));
+	    filtersDef.put(jsonFilterName, existingFields);
+	}
+	
+	/**
+	 * @return requested JsonFilters and clears their reference from request
+	 */
+	public static Map<String, Set<String>> getAndClearJsonFilters() {
+	    Map<String, Set<String>> filtersDef = (Map<String, Set<String>>) TLSUtils.getRequest().getAttribute(EPConstants.JSON_FILTERS);
+	    TLSUtils.getRequest().removeAttribute(EPConstants.JSON_FILTERS);
+	    return filtersDef;
 	}
 
 }

@@ -2611,10 +2611,10 @@ function collapseAll() {
 				</c:forEach>
 			</c:if> 
 		</module:display>	
-		<hr>
 		<module:display name="/Activity Form/Contacts/Mofed Contact Information" parentModule="/Activity Form/Contacts">
 			<digi:trn>MOFED contact information</digi:trn>:&nbsp;
 			<c:if test="${not empty aimEditActivityForm.contactInformation.mofedContacts}">
+				<hr>
 				<c:forEach var="mofedContact" items="${aimEditActivityForm.contactInformation.mofedContacts}">
 					<div>
 						<b><c:out value="${mofedContact.contact.name}" /></b> 
@@ -2628,10 +2628,11 @@ function collapseAll() {
 				</c:forEach>
 			</c:if> 
 		</module:display>
-		<hr>
+		
 		<module:display name="/Activity Form/Contacts/Project Coordinator Contact Information" parentModule="/Activity Form/Contacts">
 			<digi:trn>Project Coordinator Contact Information</digi:trn>:&nbsp;
 				<c:if test="${not empty aimEditActivityForm.contactInformation.projCoordinatorContacts}">
+					<hr>
 					<c:forEach var="projCoordinatorContact" items="${aimEditActivityForm.contactInformation.projCoordinatorContacts}">
 						<div>
 							<b><c:out value="${projCoordinatorContact.contact.name}"/></b> 
@@ -2644,10 +2645,11 @@ function collapseAll() {
 					</c:forEach>
 				</c:if>
 		</module:display>
-		<hr>		
+				
 		<module:display name="/Activity Form/Contacts/Sector Ministry Contact Information" parentModule="/Activity Form/Contacts">
 			<digi:trn>Sector Ministry Contact Information</digi:trn>:&nbsp;
 			<c:if test="${not empty aimEditActivityForm.contactInformation.sectorMinistryContacts}">
+				<hr>
 				<c:forEach var="sectorMinistryContact" items="${aimEditActivityForm.contactInformation.sectorMinistryContacts}">
 					<div>
 						<b><c:out value="${sectorMinistryContact.contact.name}" /></b>
@@ -2660,11 +2662,12 @@ function collapseAll() {
 				</c:forEach>
 			</c:if> 
 		</module:display>
-		<hr>			
+					
 		<module:display name="/Activity Form/Contacts/Implementing Executing Agency Contact Information" 
 			parentModule="/Activity Form/Contacts">
 			<digi:trn>Implementing/Executing Agency Contact Information</digi:trn>:&nbsp;
 				<c:if test="${not empty aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
+					<hr>
 					<c:forEach var="implExecAgencyContact" items="${aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
 						<div>
 							<b><c:out value="${implExecAgencyContact.contact.name}" /></b>

@@ -105,22 +105,18 @@ public class FiltersGroup {
 		//filterGroupMap.put(ColumnConstants.PLEDGES_D, ColumnConstants.DONOR_TYPE);
 		
 		addIdentityMapping(filterGroupMap, ColumnConstants.EXECUTING_AGENCY);
-		filterGroupMap.put(ColumnConstants.EXECUTING_AGENCY_ID, ColumnConstants.EXECUTING_AGENCY);
 		addIdentityMapping(filterGroupMap, ColumnConstants.EXECUTING_AGENCY_GROUPS);
 		addIdentityMapping(filterGroupMap, ColumnConstants.EXECUTING_AGENCY_TYPE);
 		
 		addIdentityMapping(filterGroupMap, ColumnConstants.BENEFICIARY_AGENCY);
-		filterGroupMap.put(ColumnConstants.BENEFICIARY_AGENCY_ID, ColumnConstants.BENEFICIARY_AGENCY);
 		addIdentityMapping(filterGroupMap, ColumnConstants.BENEFICIARY_AGENCY_GROUPS);
 
 
 		addIdentityMapping(filterGroupMap, ColumnConstants.IMPLEMENTING_AGENCY);
-		filterGroupMap.put(ColumnConstants.IMPLEMENTING_AGENCY_ID, ColumnConstants.IMPLEMENTING_AGENCY);
 		addIdentityMapping(filterGroupMap, ColumnConstants.IMPLEMENTING_AGENCY_GROUPS);
 		addIdentityMapping(filterGroupMap, ColumnConstants.IMPLEMENTING_AGENCY_TYPE);
 		
 		addIdentityMapping(filterGroupMap, ColumnConstants.RESPONSIBLE_ORGANIZATION);
-		filterGroupMap.put(ColumnConstants.RESPONSIBLE_ORGANIZATION_ID, ColumnConstants.RESPONSIBLE_ORGANIZATION);
 		addIdentityMapping(filterGroupMap, ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS);
 		
 		addIdentityMapping(filterGroupMap, ColumnConstants.IMPLEMENTATION_LEVEL);
@@ -149,20 +145,16 @@ public class FiltersGroup {
 		filterGroupMap.put(ColumnConstants.PLEDGE_STATUS, ColumnConstants.STATUS);
 		
 		addIdentityMapping(filterGroupMap, ColumnConstants.CONTRACTING_AGENCY);
-		filterGroupMap.put(ColumnConstants.CONTRACTING_AGENCY_ID, ColumnConstants.CONTRACTING_AGENCY);
 		addIdentityMapping(filterGroupMap, ColumnConstants.CONTRACTING_AGENCY_GROUPS);
 		
 		
 		addIdentityMapping(filterGroupMap, ColumnConstants.CONTRACTING_AGENCY);
-		filterGroupMap.put(ColumnConstants.CONTRACTING_AGENCY_ID, ColumnConstants.CONTRACTING_AGENCY);
 		addIdentityMapping(filterGroupMap, ColumnConstants.CONTRACTING_AGENCY_GROUPS);
 		
 		addIdentityMapping(filterGroupMap, ColumnConstants.SECTOR_GROUP);
-		filterGroupMap.put(ColumnConstants.SECTOR_GROUP_ID, ColumnConstants.SECTOR_GROUP);
 		addIdentityMapping(filterGroupMap, ColumnConstants.SECTOR_GROUP_GROUP);
 
 		addIdentityMapping(filterGroupMap, ColumnConstants.REGIONAL_GROUP);
-		filterGroupMap.put(ColumnConstants.REGIONAL_GROUP_ID, ColumnConstants.REGIONAL_GROUP);
 		addIdentityMapping(filterGroupMap, ColumnConstants.REGIONAL_GROUP_GROUP);		
 
 		addIdentityMapping(filterGroupMap, ColumnConstants.ACTIVITY_ID);
@@ -171,7 +163,6 @@ public class FiltersGroup {
 		addIdentityMapping(filterGroupMap, ColumnConstants.DISASTER_RESPONSE_MARKER);
 		
 		addIdentityMapping(filterGroupMap, ColumnConstants.TEAM);
-		filterGroupMap.put(ColumnConstants.TEAM_ID, ColumnConstants.TEAM);
 		
 		addIdentityMapping(filterGroupMap, ColumnConstants.ACTIVITY_APPROVED_BY);
 		addIdentityMapping(filterGroupMap, ColumnConstants.ACTIVITY_CREATED_BY);

@@ -43,7 +43,7 @@ define([ 'util/tabUtils' ], function(TabUtils) {
 		ret.push(''); // activity id.
 		ret.push(''); // approval status.
 		ret.push(''); // Draft.
-		ret.push(''); // Team Id.
+		ret.push(''); // Team.
 		$(metadata.columns.models).each(
 				function(i, item) {
 					var colName = item.get('columnName');
@@ -93,7 +93,7 @@ define([ 'util/tabUtils' ], function(TabUtils) {
 			hidden : true
 		});
 		ret.push({
-			name : 'Team Id',
+			name : 'Team',
 			hidden : true
 		});
 		$(metadata.columns.models).each(function(i, item) {
@@ -192,14 +192,6 @@ define([ 'util/tabUtils' ], function(TabUtils) {
 	};
 
 	ColumnsMapping.recalculateColumnsWidth = function(grid, widthText) {
-		/*
-		 * var width = widthText.substring(0, widthText.length - 2); var columns =
-		 * $(grid).jqGrid('getGridParam', 'colModel'); // Recalculate 1st column
-		 * (edit icon), the desired width is 23px to // 25px. var newWidth =
-		 * $(grid).jqGrid('setColProp', 'editColumn', { widthOrg : newWidth });
-		 * var gw = $(grid).jqGrid('getGridParam', 'width');
-		 * $(grid).jqGrid('setGridWidth', gw);
-		 */
 	};
 
 	ColumnsMapping.prototype = {

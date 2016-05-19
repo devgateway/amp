@@ -36,42 +36,7 @@
 						END) as approval_status_key,
 						
 						aav.amp_id, 
-						aav.gov_agreement_number, aav.budget_code_project_id,CAST(aav.draft as varchar(5)) as draft, aav.fy, aav.vote, aav.subvote, aav.subprogram, aav.project_code, aav.ministry_code, aav.cris_number,
-						aav.prj_implementation_unit, aav.proposed_project_life, 
-						
-						aav.original_comp_date,
-						to_char(aav.original_comp_date, 'J')::integer AS original_comp_date_code,
-						
-						aav.contracting_date,
-						to_char(aav.contracting_date, 'J')::integer AS contracting_date_code,
-						
-						aav.disbursments_date,
-						to_char(aav.disbursments_date, 'J')::integer AS disbursments_date_code,
-						
-						aav.proposed_start_date,
-						to_char(aav.proposed_start_date, 'J')::integer AS proposed_start_date_code,
-						
-						aav.actual_start_date,
-						to_char(aav.actual_start_date, 'J')::integer AS actual_start_date_code,
-						
-						aav.proposed_approval_date,
-						to_char(aav.proposed_approval_date, 'J')::integer AS proposed_approval_date_code,
-						
-						aav.actual_approval_date,
-						to_char(aav.actual_approval_date, 'J')::integer AS actual_approval_date_code,
-						
-						aav.actual_completion_date,
-						to_char(aav.actual_completion_date, 'J')::integer AS actual_completion_date_code,
-						
-						aav.proposed_completion_date,
-						to_char(aav.proposed_completion_date, 'J')::integer AS proposed_completion_date_code,
-						
-						aav.date_created,
-						to_char(aav.date_created, 'J')::integer AS date_created_code,
-						
-						aav.date_updated,
-						to_char(aav.date_updated, 'J')::integer AS date_updated_code
-						
+						aav.gov_agreement_number, CAST(aav.draft as varchar(5)) as draft
 					FROM amp_activity_version aav;
 			</lang>
 		</script>

@@ -255,7 +255,7 @@ public class Reports {
 		extraColumns.add(ColumnConstants.ACTIVITY_ID);
 		extraColumns.add(ColumnConstants.APPROVAL_STATUS);
 		extraColumns.add(ColumnConstants.DRAFT);
-		extraColumns.add(ColumnConstants.TEAM_ID);
+		//extraColumns.add(ColumnConstants.TEAM_ID);  // TODO: this column never worked in NiReports - is it needed by Tabs now?
 		formParams.set(EPConstants.ADD_COLUMNS, extraColumns);
 		//NIREPORTS: remove above when switching to NiReports only if possible!
 		

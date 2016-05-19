@@ -62,21 +62,21 @@ public class MondrianReportFiltersConverter {
 		addFilter(ColumnConstants.DONOR_ID, AmpOrganisation.class, "donnorgAgency", true);
 
 		// Related organizations section.
-		addFilter(ColumnConstants.BENEFICIARY_AGENCY_ID, AmpOrganisation.class, "beneficiaryAgency", true);
-		addFilter(ColumnConstants.EXECUTING_AGENCY_ID, AmpOrganisation.class, "executingAgency", true);
-		addFilter(ColumnConstants.CONTRACTING_AGENCY_ID, AmpOrganisation.class, "contractingAgency", true);
-		addFilter(ColumnConstants.IMPLEMENTING_AGENCY_ID, AmpOrganisation.class, "implementingAgency", true);
+		addFilter(ColumnConstants.BENEFICIARY_AGENCY, AmpOrganisation.class, "beneficiaryAgency", true);
+		addFilter(ColumnConstants.EXECUTING_AGENCY, AmpOrganisation.class, "executingAgency", true);
+		addFilter(ColumnConstants.CONTRACTING_AGENCY, AmpOrganisation.class, "contractingAgency", true);
+		addFilter(ColumnConstants.IMPLEMENTING_AGENCY, AmpOrganisation.class, "implementingAgency", true);
 
 		// Sector´s section.
-		addFilter(ColumnConstants.PRIMARY_SECTOR_ID, AmpSector.class, "selectedSectors", true);
-		addFilter(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR_ID, AmpSector.class, "selectedSectors", false);
-		addFilter(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR_ID, AmpSector.class, "selectedSectors", false);
+		addFilter(ColumnConstants.PRIMARY_SECTOR, AmpSector.class, "selectedSectors", true);
+		addFilter(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, AmpSector.class, "selectedSectors", false);
+		addFilter(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, AmpSector.class, "selectedSectors", false);
 		addFilter(ColumnConstants.SECONDARY_SECTOR_ID, AmpSector.class, "selectedSecondarySectors", true);
-		addFilter(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR_ID, AmpSector.class, "selectedSecondarySectors", false);
-		addFilter(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR_ID, AmpSector.class, "selectedSecondarySectors", false);
-		addFilter(ColumnConstants.TERTIARY_SECTOR_ID, AmpSector.class, "selectedTertiarySectors", true);
-		addFilter(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR_ID, AmpSector.class, "selectedTertiarySectors", false);
-		addFilter(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR_ID, AmpSector.class, "selectedTertiarySectors", false);
+		addFilter(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, AmpSector.class, "selectedSecondarySectors", false);
+		addFilter(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, AmpSector.class, "selectedSecondarySectors", false);
+		addFilter(ColumnConstants.TERTIARY_SECTOR, AmpSector.class, "selectedTertiarySectors", true);
+		addFilter(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, AmpSector.class, "selectedTertiarySectors", false);
+		addFilter(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, AmpSector.class, "selectedTertiarySectors", false);
 
 		// Programs and national objectives section.
 		addFilter(ColumnConstants.PRIMARY_PROGRAM, AmpTheme.class, "selectedPrimaryPrograms", true);

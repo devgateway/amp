@@ -707,13 +707,13 @@ public class Filters {
 		if(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME.equals(sectorConfigName)){
 			switch (level) {
 			case 1:
-				columnName=ColumnConstants.PRIMARY_SECTOR_ID;
+				columnName=ColumnConstants.PRIMARY_SECTOR;
 				break;
 			case 2:
-				columnName=ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR_ID;
+				columnName=ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR;
 				break;
 			case 3:
-				columnName=ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR_ID;				
+				columnName=ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR;				
 				break;
 			}
 		}else{
@@ -723,10 +723,10 @@ public class Filters {
 					columnName=ColumnConstants.SECONDARY_SECTOR_ID;
 					break;
 				case 2:
-					columnName=ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR_ID;
+					columnName=ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR;
 					break;
 				case 3:
-					columnName=ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR_ID;				
+					columnName=ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR;				
 					break;
 				}
 			}else{
@@ -734,13 +734,13 @@ public class Filters {
 						.equals(sectorConfigName)) {
 					switch (level) {
 					case 1:
-						columnName = ColumnConstants.TERTIARY_SECTOR_ID;
+						columnName = ColumnConstants.TERTIARY_SECTOR;
 						break;
 					case 2:
-						columnName = ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR_ID;
+						columnName = ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR;
 						break;
 					case 3:
-						columnName = ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR_ID;
+						columnName = ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR;
 						break;
 					}
 				}
@@ -764,7 +764,7 @@ public class Filters {
 	@GET
 	@Path("/workspaces")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = "Workspaces", id = "Workspaces", columns = ColumnConstants.TEAM_ID, 
+	@ApiMethod(ui = true, name = "Workspaces", id = "Workspaces", columns = ColumnConstants.TEAM, 
 				visibilityCheck = "hasToShowWorkspaceFilter", tab = EPConstants.TAB_OTHER)
 	public JsonBean getWorkspaces() {
 		List<SimpleJsonBean> teamsListJson = new ArrayList<SimpleJsonBean>();
@@ -805,7 +805,7 @@ public class Filters {
 			teamsListJson = orderByProperty(teamsListJson, NAME_PROPERTY);
 		}
 		JsonBean js = new JsonBean();
-		js.set("filterId", ColumnConstants.TEAM_ID);
+		js.set("filterId", ColumnConstants.TEAM);
 		js.set("name", TranslatorWorker.translateText("Workspaces"));
 		js.set("values", teamsListJson);
 		

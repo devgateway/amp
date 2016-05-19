@@ -151,7 +151,6 @@ public class DashboardsService {
 			break;
 		case "IA":
 			spec.addColumn(new ReportColumn(MoConstants.IMPLEMENTING_AGENCY));
-			spec.addColumn(new ReportColumn(ColumnConstants.IMPLEMENTING_AGENCY_ID));
 			title = TranslatorWorker.translateText(DashboardConstants.TOP_IMPLEMENTING_ORGS);
 			name = DashboardConstants.TOP_IMPLEMENTING_ORGS;
 			break;

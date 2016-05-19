@@ -189,21 +189,13 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 	public static final Map<String, String> dependencyMap= new HashMap<String, String>() {{
 		put(ColumnConstants.ACTIVITY_ID, ColumnConstants.PROJECT_TITLE);
 		put(ColumnConstants.INTERNAL_USE_ID, ColumnConstants.PROJECT_TITLE);
-		put(ColumnConstants.PRIMARY_SECTOR_ID, ColumnConstants.PRIMARY_SECTOR);
 		put(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR);
-		put(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR_ID, ColumnConstants.PRIMARY_SECTOR);
 		put(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR);
-		put(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR_ID, ColumnConstants.PRIMARY_SECTOR);
 		put(ColumnConstants.SECONDARY_SECTOR_ID, ColumnConstants.SECONDARY_SECTOR);
 		put(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, ColumnConstants.SECONDARY_SECTOR);
-		put(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR_ID, ColumnConstants.SECONDARY_SECTOR);
 		put(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.SECONDARY_SECTOR);
-		put(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR_ID, ColumnConstants.SECONDARY_SECTOR);
-		put(ColumnConstants.TERTIARY_SECTOR_ID, ColumnConstants.TERTIARY_SECTOR);
 		put(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR);
-		put(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR_ID, ColumnConstants.TERTIARY_SECTOR);
 		put(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.TERTIARY_SECTOR);
-		put(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR_ID, ColumnConstants.TERTIARY_SECTOR);
 		put(ColumnConstants.AGREEMENT_CLOSE_DATE, ColumnConstants.AGREEMENT_CODE);
 		put(ColumnConstants.AGREEMENT_EFFECTIVE_DATE, ColumnConstants.AGREEMENT_CODE);
 		put(ColumnConstants.AGREEMENT_SIGNATURE_DATE, ColumnConstants.AGREEMENT_CODE);
@@ -222,7 +214,6 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		for (String[] colPrefix : colPrefixList) {
 			for (int i = 1; i < 9 ; i++) {
 				put(colPrefix[0] + " " + i, colPrefix[1]);
-				put(colPrefix[0] + " " + i + " Id", colPrefix[1]);
 			}
 		}
 		
@@ -230,24 +221,19 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		put(ColumnConstants.DONOR_GROUP, ColumnConstants.DONOR_AGENCY);
 		put(ColumnConstants.DONOR_TYPE, ColumnConstants.DONOR_AGENCY);
 		put(ColumnConstants.DONOR_COMMITMENT_DATE, ColumnConstants.DONOR_AGENCY);
-		put(ColumnConstants.RESPONSIBLE_ORGANIZATION_ID, ColumnConstants.RESPONSIBLE_ORGANIZATION);
 		put(ColumnConstants.RESPONSIBLE_ORGANIZATION_DEPARTMENT_DIVISION, ColumnConstants.RESPONSIBLE_ORGANIZATION);
 		put(ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS, ColumnConstants.RESPONSIBLE_ORGANIZATION);
-		put(ColumnConstants.EXECUTING_AGENCY_ID, ColumnConstants.EXECUTING_AGENCY);
 		put(ColumnConstants.EXECUTING_AGENCY_DEPARTMENT_DIVISION, ColumnConstants.EXECUTING_AGENCY);
 		put(ColumnConstants.EXECUTING_AGENCY_GROUPS, ColumnConstants.EXECUTING_AGENCY);
 		put(ColumnConstants.EXECUTING_AGENCY_TYPE, ColumnConstants.EXECUTING_AGENCY);
 		put(ColumnConstants.IMPLEMENTING_AGENCY_DEPARTMENT_DIVISION, ColumnConstants.IMPLEMENTING_AGENCY);
 		put(ColumnConstants.IMPLEMENTING_AGENCY_GROUPS, ColumnConstants.IMPLEMENTING_AGENCY);
-		put(ColumnConstants.IMPLEMENTING_AGENCY_ID, ColumnConstants.IMPLEMENTING_AGENCY);
 		put(ColumnConstants.IMPLEMENTING_AGENCY_TYPE, ColumnConstants.IMPLEMENTING_AGENCY);
 		put(ColumnConstants.BENEFICIARY_AGENCY__DEPARTMENT_DIVISION, ColumnConstants.BENEFICIARY_AGENCY);
 		put(ColumnConstants.BENEFICIARY_AGENCY_GROUPS, ColumnConstants.BENEFICIARY_AGENCY);
-		put(ColumnConstants.BENEFICIARY_AGENCY_ID, ColumnConstants.BENEFICIARY_AGENCY);
 		put(ColumnConstants.CONTRACTING_AGENCY_ACRONYM, ColumnConstants.CONTRACTING_AGENCY);
 		put(ColumnConstants.CONTRACTING_AGENCY_DEPARTMENT_DIVISION, ColumnConstants.CONTRACTING_AGENCY);
 		put(ColumnConstants.CONTRACTING_AGENCY_GROUPS, ColumnConstants.CONTRACTING_AGENCY);
-		put(ColumnConstants.CONTRACTING_AGENCY_ID, ColumnConstants.CONTRACTING_AGENCY);
 		put(ColumnConstants.SECTOR_GROUP_DEPARTMENT_DIVISION, ColumnConstants.SECTOR_GROUP);
 		put(ColumnConstants.REGIONAL_GROUP_DEPARTMENT_DIVISION, ColumnConstants.REGIONAL_GROUP);
 		
@@ -372,7 +358,6 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 	
 	protected static final List<String> visibleByDefault = Arrays.asList(
 			ColumnConstants.ACTIVITY_COUNT,
-			ColumnConstants.TEAM_ID,
 			ColumnConstants.TEAM,
 			ColumnConstants.DONOR_AGENCY,
 			ColumnConstants.RELATED_PLEDGES,

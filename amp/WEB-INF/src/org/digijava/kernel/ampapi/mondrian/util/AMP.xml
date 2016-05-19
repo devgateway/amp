@@ -7,29 +7,15 @@
 			<SectorViewDefinition />
 			<Level name="Level 0 Sector" type="Integer" column="level0_sector_id" nameColumn="level0_sector_name" />
 		</Hierarchy>
-		<!-- adding temporarily support for ID sectors => need to revise if a better approach, like automatically generate ids instead of names based on a flag, can be done -->
-		<Hierarchy hasAll="true" allMemberName="All Level 0 Sectors" primaryKey="amp_sector_id" name="Level 0 Sector Id">
-			<SectorViewDefinition />
-			<Level name="Level 0 Sector Id" type="Integer" column="level0_sector_id"/>
-		</Hierarchy>
-		
 		<Hierarchy hasAll="true" allMemberName="All Level 1 Sectors" primaryKey="amp_sector_id" name="Level 1 Sector">
 			<SectorViewDefinition />
 			<Level name="Level 1 Sector" type="Integer" column="level1_sector_id" nameColumn="level1_sector_name" />
-		</Hierarchy>
-		<Hierarchy hasAll="true" allMemberName="All Level 1 Sectors" primaryKey="amp_sector_id" name="Level 1 Sector Id">
-			<SectorViewDefinition />
-			<Level name="Level 1 Sector Id" type="Integer" column="level1_sector_id" />
 		</Hierarchy>
 		
 		<Hierarchy hasAll="true" allMemberName="All Level 2 Sectors" primaryKey="amp_sector_id" name="Level 2 Sector">
 			<SectorViewDefinition />
 			<Level name="Level 2 Sector" type="Integer" column="level2_sector_id" nameColumn="level2_sector_name" />
 		</Hierarchy>
-		<Hierarchy hasAll="true" allMemberName="All Level 2 Sectors" primaryKey="amp_sector_id" name="Level 2 Sector Id">
-			<SectorViewDefinition />
-			<Level name="Level 2 Sector Id" type="Integer" column="level2_sector_id"/>
-		</Hierarchy>				
 	</Dimension>
 
 	<Dimension name="AMP Organization" >
@@ -40,10 +26,10 @@
 			<Level name="Organization Acronym" type="Integer" column="amp_org_id" nameColumn="org_acronym" translated="false"/>
 		</Hierarchy>
 		
-		<Hierarchy hasAll="true" allMemberName="All Orgs" primaryKey="amp_org_id" name="Organization Id">
+<!-- 		<Hierarchy hasAll="true" allMemberName="All Orgs" primaryKey="amp_org_id" name="Organization Id">
 			<Table name="mondrian_organizations@@locale@@@@nopledges@@" />
 			<Level name="Organization Id" uniqueMembers="true" type="Integer" column="amp_org_id"/>
-		</Hierarchy>
+		</Hierarchy>  -->
 		
 		<Hierarchy hasAll="true" allMemberName="All Types" primaryKey="amp_org_id" name="Organization Type Name">
 			<Table name="mondrian_organizations@@locale@@@@nopledges@@" />
@@ -62,29 +48,14 @@
 			<Level name="Level 0 Name" type="Integer" column="id0" nameColumn="name0" translated="false"/>
 		</Hierarchy>
 		
-		<Hierarchy hasAll="true" allMemberName="All Level 0" primaryKey="amp_theme_id" name="Level 0 Id">
-			<ProgramViewDefinition />
-			<Level name="Level 0 Id" type="Integer" column="id0" translated="false"/>
-		</Hierarchy>
-
 		<Hierarchy hasAll="true" allMemberName="All Normal" primaryKey="amp_theme_id" name="Normal">
 			<ProgramViewDefinition />
 			<Level name="Level 1 Name" type="Integer" column="id1" nameColumn="name1" />
 		</Hierarchy>
 
-		<Hierarchy hasAll="true" allMemberName="All Normal" primaryKey="amp_theme_id" name="Normal Id">
-			<ProgramViewDefinition />
-			<Level name="Level 1 Id" type="Integer" column="id1"/>
-		</Hierarchy>
-
 		<Hierarchy hasAll="true" allMemberName="All Detail" primaryKey="amp_theme_id" name="Detail">
 			<ProgramViewDefinition />
 			<Level name="Detail Name" type="Integer" column="amp_theme_id" nameColumn="name" />
-		</Hierarchy>
-
-		<Hierarchy hasAll="true" allMemberName="All Detail" primaryKey="amp_theme_id" name="Detail Id">
-			<ProgramViewDefinition />
-			<Level name="Detail Id" type="Integer" column="amp_theme_id"/>
 		</Hierarchy>
 		
 		<Hierarchy hasAll="true" allMemberName="All Level 1" primaryKey="amp_theme_id" name="Level 1">
@@ -92,29 +63,14 @@
 			<Level name="Level 1 Name" type="Integer" column="id1" nameColumn="name1" />
 		</Hierarchy>
 		
-		<Hierarchy hasAll="true" allMemberName="All Level 1" primaryKey="amp_theme_id" name="Level 1 Id">
-			<ProgramViewDefinition />
-			<Level name="Level 1 Id" type="Integer" column="id1"/>
-		</Hierarchy>
-
 		<Hierarchy hasAll="true" allMemberName="All Level 2" primaryKey="amp_theme_id" name="Level 2">
 			<ProgramViewDefinition />
 			<Level name="Level 2 Name" type="Integer" column="id2" nameColumn="name2" />
 		</Hierarchy>
 
-		<Hierarchy hasAll="true" allMemberName="All Level 2" primaryKey="amp_theme_id" name="Level 2 Id">
-			<ProgramViewDefinition />
-			<Level name="Level 2 Id" type="Integer" column="id2"/>
-		</Hierarchy>
-
 		<Hierarchy hasAll="true" allMemberName="All Level 3" primaryKey="amp_theme_id" name="Level 3">
 			<ProgramViewDefinition />
 			<Level name="Level 3 Name" type="Integer" column="id3" nameColumn="name3" />
-		</Hierarchy>
-
-		<Hierarchy hasAll="true" allMemberName="All Level 3" primaryKey="amp_theme_id" name="Level 3 Id">
-			<ProgramViewDefinition />
-			<Level name="Level 3 Id" type="Integer" column="id3"/>
 		</Hierarchy>
 		
 		<Hierarchy hasAll="true" allMemberName="All Level 4" primaryKey="amp_theme_id" name="Level 4">
@@ -122,49 +78,24 @@
 			<Level name="Level 4 Name" type="Integer" column="id4" nameColumn="name4" />
 		</Hierarchy>
 		
-		<Hierarchy hasAll="true" allMemberName="All Level 4" primaryKey="amp_theme_id" name="Level 4 Id">
-			<ProgramViewDefinition />
-			<Level name="Level 4 Id" type="Integer" column="id4"/>
-		</Hierarchy>
-
 		<Hierarchy hasAll="true" allMemberName="All Level 5" primaryKey="amp_theme_id" name="Level 5">
 			<ProgramViewDefinition />
 			<Level name="Level 5 Name" type="Integer" column="id5" nameColumn="name5" />
 		</Hierarchy>
 		
-		<Hierarchy hasAll="true" allMemberName="All Level 5" primaryKey="amp_theme_id" name="Level 5 Id">
-			<ProgramViewDefinition />
-			<Level name="Level 5 Id" type="Integer" column="id5"/>
-		</Hierarchy>
-
 		<Hierarchy hasAll="true" allMemberName="All Level 6" primaryKey="amp_theme_id" name="Level 6">
 			<ProgramViewDefinition />
 			<Level name="Level 6 Name" type="Integer" column="id6" nameColumn="name6" />
 		</Hierarchy>
 		
-		<Hierarchy hasAll="true" allMemberName="All Level 6" primaryKey="amp_theme_id" name="Level 6 Id">
-			<ProgramViewDefinition />
-			<Level name="Level 6 Id" type="Integer" column="id6"/>
-		</Hierarchy>
-
 		<Hierarchy hasAll="true" allMemberName="All Level 7" primaryKey="amp_theme_id" name="Level 7">
 			<ProgramViewDefinition />
 			<Level name="Level 7 Name" type="Integer" column="id7" nameColumn="name7" />
 		</Hierarchy>
 		
-		<Hierarchy hasAll="true" allMemberName="All Level 7" primaryKey="amp_theme_id" name="Level 7 Id">
-			<ProgramViewDefinition />
-			<Level name="Level 7 Id" type="Integer" column="id7"/>
-		</Hierarchy>
-
 		<Hierarchy hasAll="true" allMemberName="All Level 8" primaryKey="amp_theme_id" name="Level 8">
 			<ProgramViewDefinition />
 			<Level name="Level 8 Name" type="Integer" column="id8" nameColumn="name8" />
-		</Hierarchy>
-		
-		<Hierarchy hasAll="true" allMemberName="All Level 8" primaryKey="amp_theme_id" name="Level 8 Id">
-			<ProgramViewDefinition />
-			<Level name="Level 8 Id" type="Integer" column="id8"/>
 		</Hierarchy>
 		
 	</Dimension>
@@ -346,69 +277,6 @@
 				<Level name="Related Pledges" column="amp_activity_id" type="Integer" nameColumn="name" />
 			</Hierarchy>
 		</Dimension>
-
-		<Dimension name="Activity Dates" foreignKey="entity_id">
-			<Hierarchy hasAll="true" allMemberName="All Original Completion Date" primaryKey="amp_activity_id" name="Original Completion Date">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Original Completion Date" column="original_comp_date_code" type="Integer" nameColumn="original_comp_date" />
-			</Hierarchy>
-			
-			<Hierarchy hasAll="true" allMemberName="All Final Date for Contracting" primaryKey="amp_activity_id" name="Final Date for Contracting">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Final Date for Contracting" column="contracting_date_code" type="Integer" nameColumn="contracting_date" />
-			</Hierarchy>
-			
-			<Hierarchy hasAll="true" allMemberName="All Final Date for Disbursements" primaryKey="amp_activity_id" name="Final Date for Disbursements">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Final Date for Disbursements" column="disbursments_date_code" type="Integer" nameColumn="disbursments_date" />
-			</Hierarchy>
-			
-			<Hierarchy hasAll="true" allMemberName="All Proposed Start Date" primaryKey="amp_activity_id" name="Proposed Start Date">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Proposed Start Date" column="proposed_start_date_code" type="Integer" nameColumn="proposed_start_date" />
-			</Hierarchy>
-			
-			<Hierarchy hasAll="true" allMemberName="All Actual Start Date" primaryKey="amp_activity_id" name="Actual Start Date">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Actual Start Date" column="actual_start_date_code" type="Integer" nameColumn="actual_start_date" />
-			</Hierarchy>
-			
-			<Hierarchy hasAll="true" allMemberName="All Proposed Approval Date" primaryKey="amp_activity_id" name="Proposed Approval Date">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Proposed Approval Date" column="proposed_approval_date_code" type="Integer" nameColumn="proposed_approval_date" />
-			</Hierarchy>
-			
-			<Hierarchy hasAll="true" allMemberName="All Actual Approval Date" primaryKey="amp_activity_id" name="Actual Approval Date">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Actual Approval Date" column="actual_approval_date_code" type="Integer" nameColumn="actual_approval_date" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Actual Completion Date" primaryKey="amp_activity_id" name="Actual Completion Date">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Actual Completion Date" column="actual_completion_date_code" type="Integer" nameColumn="actual_completion_date" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Current Completion Date" primaryKey="amp_activity_id" name="Current Completion Date"> <!-- synonym for Actual Completion Date -->
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Current Completion Date" column="actual_completion_date_code" type="Integer" nameColumn="actual_completion_date" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Proposed Completion Date" primaryKey="amp_activity_id" name="Proposed Completion Date">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Proposed Completion Date" column="proposed_completion_date_code" type="Integer" nameColumn="proposed_completion_date" />
-			</Hierarchy>
-			
-			<Hierarchy hasAll="true" allMemberName="All Activity Created On" primaryKey="amp_activity_id" name="Activity Created On">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Activity Created On" column="date_created_code" type="Integer" nameColumn="date_created" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Activity Updated On" primaryKey="amp_activity_id" name="Activity Updated On">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Activity Updated On" column="date_updated_code" type="Integer" nameColumn="date_updated" />
-			</Hierarchy>
-			
-		</Dimension>
 		
 		<Dimension name="Activity Fixed Texts" foreignKey="entity_id">
 			<Hierarchy hasAll="true" allMemberName="All Activity Id" primaryKey="amp_activity_id" name="Activity Id">
@@ -431,104 +299,9 @@
 				<Level name="Approval Status" columnName="approval_status" column="approval_status_key" />
 			</Hierarchy>
 
-			<Hierarchy hasAll="true" allMemberName="All AMP IDs" primaryKey="amp_activity_id" name="AMP ID">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="AMP ID" column="amp_activity_id" type="String" nameColumn="amp_id" />
-			</Hierarchy>
-			
-			<Hierarchy hasAll="true" allMemberName="All Government Agreement Number" primaryKey="amp_activity_id" name="Government Agreement Number">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Government Agreement Number" column="amp_activity_id" type="String" nameColumn="gov_agreement_number" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Budget Code Project Id" primaryKey="amp_activity_id" name="Budget Code Project Id">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Budget Code Project Id" column="amp_activity_id" type="String" nameColumn="budget_code_project_id" />
-			</Hierarchy>
-
 			<Hierarchy hasAll="true" allMemberName="All Draft" primaryKey="amp_activity_id" name="Draft">
 				<Table name="mondrian_activity_fixed_texts" />
 				<Level name="Draft" column="amp_activity_id" type="String" nameColumn="draft" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All FY" primaryKey="amp_activity_id" name="FY">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="FY" column="amp_activity_id" type="String" nameColumn="fy" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Vote" primaryKey="amp_activity_id" name="Vote">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Vote" column="amp_activity_id" type="String" nameColumn="vote" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Sub-Vote" primaryKey="amp_activity_id" name="Sub-Vote">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Sub-Vote" column="amp_activity_id" type="String" nameColumn="subvote" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Project Code" primaryKey="amp_activity_id" name="Project Code">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Project Code" column="amp_activity_id" type="String" nameColumn="project_code" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Ministry Code" primaryKey="amp_activity_id" name="Ministry Code">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Ministry Code" column="amp_activity_id" type="String" nameColumn="ministry_code" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Cris Number" primaryKey="amp_activity_id" name="Cris Number">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Cris Number" column="amp_activity_id" type="String" nameColumn="cris_number" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Project Implementing Unit" primaryKey="amp_activity_id" name="Project Implementing Unit">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Project Implementing Unit" column="amp_activity_id" type="String" nameColumn="prj_implementation_unit" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Project has been approved by IMAC" primaryKey="amp_activity_id" name="Project has been approved by IMAC">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Project has been approved by IMAC" column="amp_activity_id" type="String" nameColumn="imac_approved" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Government is member of project steering committee" primaryKey="amp_activity_id" name="Government is member of project steering committee">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Government is member of project steering committee" column="amp_activity_id" type="String" nameColumn="national_oversight" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Project is on budget" primaryKey="amp_activity_id" name="Project is on budget">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Project is on budget" column="amp_activity_id" type="String" nameColumn="on_budget" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="Project is on parliament" primaryKey="amp_activity_id" name="Project is on parliament">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Project is on parliament" column="amp_activity_id" type="String" nameColumn="on_parliament" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="Project disburses directly into the Government single treasury account" primaryKey="amp_activity_id" name="Project disburses directly into the Government single treasury account">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Project disburses directly into the Government single treasury account" column="amp_activity_id" type="String" nameColumn="on_treasure" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="Project uses national financial management systems" primaryKey="amp_activity_id" name="Project uses national financial management systems">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Project uses national financial management systems" column="amp_activity_id" type="String" nameColumn="national_financial_management" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="Project uses national procurement systems" primaryKey="amp_activity_id" name="Project uses national procurement systems">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Project uses national procurement systems" column="amp_activity_id" type="String" nameColumn="national_procurement" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="Project uses national audit systems" primaryKey="amp_activity_id" name="Project uses national audit systems">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Project uses national audit systems" column="amp_activity_id" type="String" nameColumn="national_audit" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="Proposed Project Life" primaryKey="amp_activity_id" name="Proposed Project Life">
-				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Proposed Project Life" column="amp_activity_id" type="Integer" nameColumn="proposed_project_life" />
 			</Hierarchy>
 		</Dimension>
 		

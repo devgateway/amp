@@ -225,12 +225,6 @@ public class MondrianTablesRepository {
 						.addTrnColDef("val", "id");
 				}
 			});
-
-			
-	public final static MondrianTableDescription MONDRIAN_PLEDGE_CONTACTS = 
-			new MondrianTableDescription("mondrian_activity_contacts", "amp_activity_id", Arrays.asList("amp_activity_id"))
-				.withSupplementalRows(1)
-				.withPledgeView("v_mondrian_pledge_contacts");
 	
 	public final static MondrianTableDescription MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE = 
 			new MondrianTableDescription("mondrian_raw_donor_transactions", "amp_fund_detail_id", Arrays.asList("amp_activity_id", "amp_fund_detail_id", "donor_id"))
@@ -255,8 +249,7 @@ public class MondrianTablesRepository {
 			MONDRIAN_ACTIVITY_FIXED_TEXTS,
 			//MONDRIAN_LONG_TEXTS, 
 			MONDRIAN_ACTIVITY_TRN_TEXTS,
-			MONDRIAN_ACTIVITY_CURRENCY_NUMBERS,
-			MONDRIAN_PLEDGE_CONTACTS);
+			MONDRIAN_ACTIVITY_CURRENCY_NUMBERS);
 	
 	public final static List<MondrianTableDescription> MONDRIAN_RAW_TRANSACTIONS_TABLES = Arrays.asList(MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE/*, MONDRIAN_RAW_COMPONENT_TRANSACTIONS_TABLE*/);
 	

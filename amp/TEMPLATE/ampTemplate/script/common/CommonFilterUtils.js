@@ -73,7 +73,7 @@ CommonFilterUtils.convertJavaFiltersToJS = function(data) {
 			case 'Executing Agency':
 			case 'Implementing Agency':
 			case 'Beneficiary Agency':
-				blob.columnFilters[item.name + ' Id'] = _.map(item.values, function(item_) {
+				blob.columnFilters[item.name] = _.map(item.values, function(item_) {
 					return parseInt(item_.id);
 				});
 				break;
@@ -82,11 +82,11 @@ CommonFilterUtils.convertJavaFiltersToJS = function(data) {
 			case 'Primary Program':
 			case 'Secondary Program':
 			case 'Tertiary Program':
-				blob.columnFilters[item.name + ' Level 1 Id'] = _.map(item.values, function(
+				blob.columnFilters[item.name + ' Level 1'] = _.map(item.values, function(
 						item_) {
 					return parseInt(item_.id);
 				});
-				blob.columnFilters[item.name + ' Level 2 Id'] = blob.columnFilters[item.name + ' Level 1 Id'];
+				blob.columnFilters[item.name + ' Level 2'] = blob.columnFilters[item.name + ' Level 1'];
 				break;
 				
 			case 'Donor Agency':
@@ -103,11 +103,11 @@ CommonFilterUtils.convertJavaFiltersToJS = function(data) {
 			case 'Primary Sector':
 			case 'Secondary Sector':
 			case 'Tertiary Sector':	
-				blob.columnFilters[item.name + ' Id'] = _.map(item.values, function(item_) {
+				blob.columnFilters[item.name] = _.map(item.values, function(item_) {
 					return parseInt(item_.id);
 				});
-				blob.columnFilters[item.name + ' Sub-Sector Id'] = blob.columnFilters[item.name + ' Id'];
-				blob.columnFilters[item.name + ' Sub-Sub-Sector Id'] = blob.columnFilters[item.name + ' Id'];
+				blob.columnFilters[item.name + ' Sub-Sector'] = blob.columnFilters[item.name];
+				blob.columnFilters[item.name + ' Sub-Sub-Sector'] = blob.columnFilters[item.name];
 				break;
 				
 			case 'DATE':

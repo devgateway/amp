@@ -243,16 +243,6 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 	};	
 
 	FilterUtils.widgetFiltersToJavaFilters = function(originalFilters) {
-		/*
-		 * if (originalFilters !== null && originalFilters.columnFilters !== undefined) { if
-		 * (originalFilters.columnFilters["Primary Sector Id"] !== undefined || originalFilters.columnFilters["Primary
-		 * Sector Sub-Sector Id"] !== undefined || originalFilters.columnFilters["Primary Sector Sub-Sub-Sector Id"] !=
-		 * undefined) { if (originalFilters.columnFilters["Primary Sector Id"] === undefined) {
-		 * originalFilters.columnFilters["Primary Sector Id"] = []; } originalFilters.columnFilters["Primary Sector Id"] =
-		 * originalFilters.columnFilters["Primary Sector Id"] .concat(originalFilters.columnFilters["Primary Sector
-		 * Sub-Sector Id"]); originalFilters.columnFilters["Primary Sector Id"] = originalFilters.columnFilters["Primary
-		 * Sector Id"] .concat(originalFilters.columnFilters["Primary Sector Sub-Sub-Sector Id"]); } }
-		 */
 		return originalFilters;
 	};
 	

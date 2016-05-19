@@ -46,24 +46,9 @@ public class FiltersMondrianReportTests extends ReportingTestCase {
 				Arrays.asList(ColumnConstants.PRIMARY_SECTOR),
 				GroupingCriteria.GROUPING_YEARLY);
 		
-		// test filtering by the value of the id field
-		MondrianReportFilters filters = new MondrianReportFilters();
-		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR_ID), new FilterRule("6237", true));
-		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR_ID), new FilterRule("6257", true));
-		spec.setFilters(filters);
-		
-		runMondrianTestCase(spec, "en", Arrays.asList("activity with primary_program"), cor);
-		
-		// test filtering by the id of the id field
-		filters = new MondrianReportFilters();
-		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR_ID), new FilterRule("6237", true));
-		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR_ID), new FilterRule("6257", true));
-		spec.setFilters(filters);
-		
-		runMondrianTestCase(spec, "en", Arrays.asList("activity with primary_program"), cor);
 
 		// test filtering by the id of the value field
-		filters = new MondrianReportFilters();
+		MondrianReportFilters filters = new MondrianReportFilters();
 		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR), new FilterRule("6237", true));
 		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR), new FilterRule("6257", true));
 		spec.setFilters(filters);
@@ -199,22 +184,6 @@ public class FiltersMondrianReportTests extends ReportingTestCase {
 
 		filters = new MondrianReportFilters();
 		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1), new FilterRule(Arrays.asList("3", "3"), true));
-		spec.setFilters(filters);
-		
-		runMondrianTestCase(spec, "en", 
-				Arrays.asList("Activity with primary_tertiary_program", "activity with primary_program", "activity with tertiary_program", "pledged 2"), 
-				correctResult3);
-
-		filters = new MondrianReportFilters();
-		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1_ID), new FilterRule("3", true));
-		spec.setFilters(filters);
-		
-		runMondrianTestCase(spec, "en", 
-				Arrays.asList("Activity with primary_tertiary_program", "activity with primary_program", "activity with tertiary_program", "pledged 2"), 
-				correctResult3);
-
-		filters = new MondrianReportFilters();
-		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1_ID), new FilterRule("3", true));
 		spec.setFilters(filters);
 		
 		runMondrianTestCase(spec, "en", 
@@ -492,7 +461,7 @@ public class FiltersMondrianReportTests extends ReportingTestCase {
 	      new ReportAreaForTests().withContents("Project Title", "Real SSC Activity 1", "Actual Commitments", "0", "Actual Disbursements", "0"));	
 		runMondrianTestCase(spec, "en", activities, cr1);
 		
-		spec.setFilters(buildSimpleFilter(ColumnConstants.TEAM_ID, teamid, false));
+		spec.setFilters(buildSimpleFilter(ColumnConstants.TEAM, teamid, false));
 		ReportAreaForTests cr2 = new ReportAreaForTests()
 	    .withContents("Project Title", "Report Totals", "Actual Commitments", "783 231", "Actual Disbursements", "123 321")
 	    .withChildren(

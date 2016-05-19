@@ -28,41 +28,8 @@
 						999999999 AS approval_status_key,
 						
 						'Undefined' AS amp_id, 
-						'Undefined' AS gov_agreement_number, 'Undefined' AS budget_code_project_id, 'Undefined' as draft, 'Undefined' AS fy, 'Undefined' AS vote, 'Undefined' AS subvote, 'Undefined' AS subprogram, 'Undefined' AS project_code, 'Undefined' AS ministry_code, 'Undefined'  AS cris_number,
-						'Undefined' AS prj_implementation_unit, CAST (NULL as int) AS proposed_project_life, 
-						
-						CAST (NULL AS DATE) AS original_comp_date,
-						999999999 AS original_comp_date_code,
-						
-						CAST (NULL AS DATE) AS contracting_date,
-						999999999 AS contracting_date_code,
-						
-						CAST (NULL AS DATE) AS disbursments_date,
-						999999999 AS disbursments_date_code,
-						
-						CAST (NULL AS DATE) AS proposed_start_date,
-						999999999 AS proposed_start_date_code,
-						
-						CAST (NULL AS DATE) AS actual_start_date,
-						999999999 AS actual_start_date_code,
-						
-						CAST (NULL AS DATE) AS proposed_approval_date,
-						999999999 AS proposed_approval_date_code,
-						
-						CAST (NULL AS DATE) AS actual_approval_date,
-						999999999 AS actual_approval_date_code,
-						
-						CAST (NULL AS DATE) AS actual_completion_date,
-						999999999 AS actual_completion_date_code,
-						
-						CAST (NULL AS DATE) AS proposed_completion_date,
-						999999999 AS proposed_completion_date_code,
-						
-						CAST (NULL AS DATE) AS date_created,
-						999999999 AS date_created_code,
-						
-						CAST (NULL AS DATE) AS date_updated,
-						999999999 AS date_updated_code
+						'Undefined' AS gov_agreement_number, 
+						'Undefined' as draft
 						
 					FROM amp_funding_pledges p;
 			</lang>

@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.reports;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -20,6 +21,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import mondrian.util.Pair;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -42,8 +45,10 @@ import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
 import org.dgfoundation.amp.reports.saiku.export.ReportGenerationInfo;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
+import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -71,8 +76,6 @@ import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.Session;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
-
-import mondrian.util.Pair;
 
 /***
  * 
@@ -805,4 +808,32 @@ public class Reports {
 		}
 		return sorting;
 	}
+	
+	
+	@POST
+	@Path("/report/saveReport")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(id = "saveReport", authTypes = {AuthRule.IN_ADMIN}, ui = false)
+	public Collection<JsonBean> saveReport(JsonBean rList) {
+		
+		Collection<JsonBean> resultList = new ArrayList<JsonBean>();
+
+		if (rList.get("reports") != null) {
+			ArrayList<LinkedHashMap<String, Object>> reports = (ArrayList<LinkedHashMap<String, Object>>) rList
+					.get("reports");
+
+			for (LinkedHashMap<String, Object> report : reports) {
+				JsonBean result = new JsonBean();
+				AmpReports ampReport = new AmpReports();
+
+				ReportsUtil.getAmpReports(ampReport, report,httpRequest);
+				
+				result.set(ampReport.getName(), ampReport.getId());
+				
+				resultList.add(result);
+			}
+		}
+		return resultList;
+	}
+	
 }

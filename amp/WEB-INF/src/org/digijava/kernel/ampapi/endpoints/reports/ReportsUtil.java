@@ -1,5 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Field;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,6 +18,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -32,13 +37,13 @@ import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
-import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.reports.ActivityType;
 import org.dgfoundation.amp.reports.CachedReportData;
 import org.dgfoundation.amp.reports.PartialReportArea;
@@ -64,12 +69,27 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.MaxSizeLinkedHashMap;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.annotations.reports.ColumnLike;
+import org.digijava.module.aim.annotations.reports.Identificator;
+import org.digijava.module.aim.annotations.reports.Level;
+import org.digijava.module.aim.annotations.reports.Order;
+import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpMeasures;
+import org.digijava.module.aim.dbentity.AmpReportColumn;
+import org.digijava.module.aim.dbentity.AmpReportHierarchy;
+import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class ReportsUtil {
 	protected static final Logger logger = Logger.getLogger(ReportsUtil.class);
@@ -809,5 +829,179 @@ public class ReportsUtil {
 		return ampReport;
 	}
 	
+	/**
+	 * Retrieves AmpGlobalSettings from request
+	 * @param object
+	 * @return AmpReports
+	 */
+	public static AmpReports getAmpReports(AmpReports ampReport,LinkedHashMap<String, Object> object,HttpServletRequest httpRequest) {
+		
+        TeamMember teamMember = (TeamMember) httpRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
+        
+        AmpTeamMember ampTeamMember = null;
+        if (teamMember != null) {
+        	ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
+        }
+        Collection<AmpColumns> availableCols	= AdvancedReportUtil.getColumnList();
+        Collection<AmpMeasures> availableMeas	= AdvancedReportUtil.getMeasureList();
+
+        ampReport.setType(Long.valueOf(String.valueOf(object.get("type"))));
+        ampReport.setDrilldownTab(Boolean.valueOf(String.valueOf(object.get("drillDownTab"))));
+        String newName = String.valueOf(object.get("name"));        
+
+        boolean updatingPublishedDate = ampReport.getPublicReport() == null || (!ampReport.getPublicReport()); // report was NOT public but is public now
+        if (updatingPublishedDate){
+           ampReport.setPublishedDate(new Date(System.currentTimeMillis()));
+        }
+
+        ampReport.setUpdatedDate( new Date(System.currentTimeMillis()) );
+        
+        ampReport.setName(newName);
+        ampReport.setWorkspaceLinked(Boolean.valueOf(String.valueOf(object.get("workspaceLinked"))) );
+        ampReport.setAlsoShowPledges(Boolean.valueOf(String.valueOf(object.get("alsoShowPledges"))) );
+        ampReport.setOwnerId(ampTeamMember);
+        ampReport.setHideActivities( Boolean.valueOf(String.valueOf(object.get("hideActivities"))) );
+        ampReport.setOptions(String.valueOf(object.get("reportPeriod")) );
+        ampReport.setReportDescription( String.valueOf(object.get("reportDescription")) );
+        ampReport.setPublicReport(Boolean.valueOf(String.valueOf(object.get("publicReport"))));
+        ampReport.setReportCategory(CategoryManagerUtil.getAmpCategoryValueFromDb(Long.valueOf(String.valueOf(object.get("reportCategory")))));
+		
+        ampReport.setAllowEmptyFundingColumns( Boolean.valueOf(String.valueOf(object.get("allowEmptyFundingColumns"))));
+        ampReport.setBudgetExporter(Boolean.valueOf(String.valueOf(object.get("budgetExporter"))));
+
+        ampReport.setColumns( new HashSet<AmpReportColumn>() );
+        ampReport.setHierarchies( new HashSet<AmpReportHierarchy>() );
+        ampReport.setMeasures( new HashSet<AmpReportMeasures>() );
+
+		if (object.get("columns")!=null) {
+			ArrayList<String> columns = (ArrayList<String>) object.get("columns");
+			int i = 1;
+			for (String column : columns) {
+				ampReport.getColumns().add(ampReportColumnForColName(column.toString() , i++));
+			}
+		}
+		
+		AmpCategoryValue level1	= CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.ACTIVITY_LEVEL_KEY , 0L);
+		if (object.get("hierarchies")!=null) {
+			ArrayList<String> hierarchies = (ArrayList<String>) object.get("hierarchies");
+			int i = 1;
+			for (String hierarchy : hierarchies) {
+				ampReport.getHierarchies().add(ampReportHierarchyForColName(hierarchy.toString() , level1));
+			}
+		}
+
+		if (object.get("measures")!=null) {
+			ArrayList<String> measures = (ArrayList<String>) object.get("measures");
+			int i = 1;
+			for (String measure : measures) {
+				ampReport.getMeasures().add(ampReportMeasureForColName(measure.toString() , i++));
+			}
+		}
+				
+        if (ampReport.getOwnerId() == null)
+            throw new RuntimeException("should not save a report without an ownerId!");
+
+        if (ampReport.getHideActivities() == null)
+            throw new RuntimeException("should not save a report with a null hideActivities");
+
+        AdvancedReportUtil.saveReport(ampReport, ampTeamMember.getAmpTeam().getAmpTeamId(), teamMember.getMemberId(), teamMember.getTeamHead() );
+
+		return ampReport;
+	}
+
+	private void addFields(Long[] sourceVector, Collection<?> availableFields, Collection container,
+			Class<?> reportFieldClass, AmpCategoryValue level) throws Exception {
+		if (sourceVector == null)
+			return;
+		for (int i = 0; i < sourceVector.length; i++) {
+			Object reportField = reportFieldClass.newInstance();
+			Object[] param1 = new Object[1];
+			param1[0] = level;
+			invokeSetterForBeanPropertyWithAnnotation(reportField, Level.class, param1);
+			// rc.setLevel(level);
+			Object[] param2 = new Object[1];
+			param2[0] = new Long(i + 1);
+			invokeSetterForBeanPropertyWithAnnotation(reportField, Order.class, param2);
+			// rc.setOrderId(""+i);
+
+			Iterator<?> iter = availableFields.iterator();
+			boolean foundCol = false;
+			while (iter.hasNext()) {
+				Object field = iter.next();
+				if (sourceVector[i].equals(invokeGetterForBeanPropertyWithAnnotation(field, Identificator.class,
+						new Object[0]))) {
+					Object[] param3 = new Object[1];
+					param3[0] = field;
+					invokeSetterForBeanPropertyWithAnnotation(reportField, ColumnLike.class, param3);
+					foundCol = true;
+					break;
+				}
+			}
+			if (foundCol)
+				container.add(reportField);
+		}
+	}
+
+    public static Object invokeGetterForBeanPropertyWithAnnotation (Object beanObj, Class annotationClass, Object [] params ) throws Exception {
+        Class myClass		= beanObj.getClass();
+        Field[] fields		= myClass.getDeclaredFields();
+        for (int i=0; i<fields.length; i++) {
+            if ( fields[i].getAnnotation(annotationClass) != null) {
+                PropertyDescriptor beanProperty	= new PropertyDescriptor(fields[i].getName(), myClass);
+                return beanProperty.getReadMethod().invoke(beanObj, params);
+            }
+        }
+        throw new IntrospectionException("No property was found in bean of class '" + myClass.getCanonicalName() +
+                "' with annotation '" + annotationClass.getCanonicalName()
+                + "'");
+    }
+	
+    public static void invokeSetterForBeanPropertyWithAnnotation (Object beanObj, Class annotationClass, Object [] params ) throws Exception {
+        Class myClass		= beanObj.getClass();
+        Field[] fields		= myClass.getDeclaredFields();
+        for (int i=0; i<fields.length; i++) {
+            if ( fields[i].getAnnotation(annotationClass) != null) {
+                PropertyDescriptor beanProperty	= new PropertyDescriptor(fields[i].getName(), myClass);
+                beanProperty.getWriteMethod().invoke(beanObj, params);
+                return;
+            }
+        }
+        throw new IntrospectionException("No property was found in bean of class '" + myClass.getCanonicalName() +
+                "' with annotation '" + annotationClass.getCanonicalName()
+                + "'");
+    }
+    
+	public static AmpReportColumn ampReportColumnForColName(String colName, long order) {
+		AmpColumns col = (AmpColumns) PersistenceManager.getSession().createQuery("FROM " + AmpColumns.class.getName() + " c WHERE c.columnName=:colName").setString("colName", colName).uniqueResult();
+		if (col == null)
+			throw new RuntimeException("column with name <" + colName + "> not found!");
+		
+		AmpReportColumn res = new AmpReportColumn();
+		res.setColumn(col);
+		res.setOrderId(order);
+		return res;
+	}
+    
+	public static AmpReportHierarchy ampReportHierarchyForColName(String colName, AmpCategoryValue level) {
+		AmpColumns col = (AmpColumns) PersistenceManager.getSession().createQuery("FROM " + AmpColumns.class.getName() + " c WHERE c.columnName=:colName").setString("colName", colName).uniqueResult();
+		if (col == null)
+			throw new RuntimeException("column with name <" + colName + "> not found!");
+		
+		AmpReportHierarchy res = new AmpReportHierarchy();
+		res.setColumn(col);
+		res.setLevel(level);
+		res.setLevelId(level.getId());
+		return res;
+	}    
+	public static AmpReportMeasures ampReportMeasureForColName(String colName, long order) {
+		AmpMeasures col = (AmpMeasures) PersistenceManager.getSession().createQuery("FROM " + AmpMeasures.class.getName() + " c WHERE c.type = 'A' and c.measureName=:colName").setString("colName", colName).uniqueResult();
+		if (col == null)
+			throw new RuntimeException("column with name <" + colName + "> not found!");
+		
+		AmpReportMeasures res = new AmpReportMeasures();
+		res.setMeasure(col);
+		res.setOrderId(order);
+		return res;
+	}
 	
 }

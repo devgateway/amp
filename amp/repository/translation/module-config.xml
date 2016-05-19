@@ -16,7 +16,7 @@
 		<action login-required="true" pattern="/saveUserPermissions" /> 
 		<action login-required="true" pattern="/addPermission" /> 
 		<action login-required="true" pattern="/deletePermission" /> 
-		<action login-required="true" pattern="/importexport" /> 
+		<action login-required="true" pattern="/importexport">ADMIN</action>
 		<action login-required="true" pattern="/contentTrnImportExport" /> 
 		<action login-required="true" pattern="/contentTrnExport" /> 
 		<action login-required="true" pattern="/contentTrnImport" />

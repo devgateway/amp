@@ -2,6 +2,11 @@
 <module-config>
 	<name>categorymanager</name>
 
+
+	<security login-required="true" default="READ">
+		<action login-required="true" pattern="/categoryManager">ADMIN</action>
+	</security>
+
 	<hibernate-classes required="true">
 		<hibernate-class>
 			org.digijava.module.categorymanager.dbentity.AmpCategoryClass

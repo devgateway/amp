@@ -9,27 +9,18 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.dgfoundation.amp.ar.amp210.AgreementColumnsReportsTests;
-import org.dgfoundation.amp.ar.amp210.AmountColumnsReportTests;
 import org.dgfoundation.amp.ar.amp210.BasicMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.ComponentReportsTests;
-import org.dgfoundation.amp.ar.amp210.DateColumnsMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.ETLTests;
 import org.dgfoundation.amp.ar.amp210.FiltersMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.LocationMondrianReportTests;
-import org.dgfoundation.amp.ar.amp210.MondrianComputedMeasuresReportTests;
 import org.dgfoundation.amp.ar.amp210.MondrianSummaryReportTests;
 import org.dgfoundation.amp.ar.amp210.OrganisationsMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.PledgeFiltersMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.SQLUtilsTests;
 import org.dgfoundation.amp.ar.amp210.SettingsMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.SqlFilterUtilsTests;
-import org.dgfoundation.amp.mondrian.monet.MonetConnection;
-import org.digijava.kernel.persistence.HibernateClassLoader;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.util.DigiConfigManager;
-import org.digijava.kernel.util.SiteUtils;
-import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
+
 
 /**
  * entry point for AMP 2.10 tests. Initializes standalone AMP as part of the discovery process.
@@ -50,18 +41,15 @@ public class AllTests_amp210
 		suite.addTest(new JUnit4TestAdapter(ETLTests.class));
 		suite.addTest(SQLUtilsTests.suite());
 		suite.addTest(new JUnit4TestAdapter(BasicMondrianReportTests.class));
-		suite.addTest(new JUnit4TestAdapter(DateColumnsMondrianReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(MondrianSummaryReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(LocationMondrianReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(OrganisationsMondrianReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(SqlFilterUtilsTests.class));
-		suite.addTest(new JUnit4TestAdapter(MondrianComputedMeasuresReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(ComponentReportsTests.class));
 		suite.addTest(new JUnit4TestAdapter(org.dgfoundation.amp.ar.amp210.PledgeReportsTests.class));
 		suite.addTest(new JUnit4TestAdapter(org.dgfoundation.amp.ar.amp210.DonorsAndPledgesReportsTests.class));
 		suite.addTest(new JUnit4TestAdapter(PledgeFiltersMondrianReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(AgreementColumnsReportsTests.class));
-		suite.addTest(new JUnit4TestAdapter(AmountColumnsReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(SettingsMondrianReportTests.class));
 		
 		//suite.addTest(new JUnit4TestAdapter(EndpointsTests.class)); report testcases are not compatible with AMP running; while the testcases in EndpointsTests require a running AMP. please move them to a different test suite, which does not contain reports tests

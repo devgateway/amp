@@ -80,44 +80,6 @@ public class MondrianSummaryReportTests extends ReportingTestCase {
 	}
 
 	@Test
-	public void testSummaryReportsDepth1Yearly() {
-		ReportAreaForTests correctReport = new ReportAreaForTests()
-	    .withContents("Region", "Report Totals", "2009-Actual Commitments", "100 000", "2009-Actual Disbursements", "0", "2010-Actual Commitments", "0", "2010-Actual Disbursements", "513 213", "2011-Actual Commitments", "999 888", "2011-Actual Disbursements", "0", "2012-Actual Commitments", "25 000", "2012-Actual Disbursements", "12 000", "2013-Actual Commitments", "333 333", "2013-Actual Disbursements", "0", "Total Measures-Actual Commitments", "1 458 221", "Total Measures-Actual Disbursements", "525 213")
-	    .withChildren(
-	      new ReportAreaForTests()
-	          .withContents("Region", "Balti County", "2009-Actual Commitments", "", "2009-Actual Disbursements", "", "2010-Actual Commitments", "", "2010-Actual Disbursements", "", "2011-Actual Commitments", "", "2011-Actual Disbursements", "", "2012-Actual Commitments", "", "2012-Actual Disbursements", "", "2013-Actual Commitments", "333 333", "2013-Actual Disbursements", "", "Total Measures-Actual Commitments", "333 333", "Total Measures-Actual Disbursements", "0"),
-	      new ReportAreaForTests()
-	          .withContents("Region", "Falesti County", "2009-Actual Commitments", "", "2009-Actual Disbursements", "", "2010-Actual Commitments", "", "2010-Actual Disbursements", "453 213", "2011-Actual Commitments", "999 888", "2011-Actual Disbursements", "", "2012-Actual Commitments", "", "2012-Actual Disbursements", "", "2013-Actual Commitments", "", "2013-Actual Disbursements", "", "Total Measures-Actual Commitments", "999 888", "Total Measures-Actual Disbursements", "453 213"),
-	      new ReportAreaForTests()
-	          .withContents("Region", "Region: Undefined", "2009-Actual Commitments", "100 000", "2009-Actual Disbursements", "", "2010-Actual Commitments", "", "2010-Actual Disbursements", "60 000", "2011-Actual Commitments", "", "2011-Actual Disbursements", "", "2012-Actual Commitments", "25 000", "2012-Actual Disbursements", "12 000", "2013-Actual Commitments", "", "2013-Actual Disbursements", "", "Total Measures-Actual Commitments", "125 000", "Total Measures-Actual Disbursements", "72 000")  );
-		// String testName, String reportName, List<String> activities, GeneratedReport correctResult, String locale
-		runMondrianTestCase("AMP-18558-one-hier-yearly",
-				"AMP-18558-one-hier-yearly",
-				activities,
-				correctReport,
-				"en");
-	}
-
-	@Test
-	public void testSummaryReportsDepth1TotalsOnly() {
-		ReportAreaForTests correctReport =  new ReportAreaForTests()
-	    .withContents("Region", "Report Totals", "Actual Commitments", "1 458 221", "Actual Disbursements", "525 213")
-	    .withChildren(
-	      new ReportAreaForTests()
-	          .withContents("Region", "Balti County", "Actual Commitments", "333 333", "Actual Disbursements", "0"),
-	      new ReportAreaForTests()
-	          .withContents("Region", "Falesti County", "Actual Commitments", "999 888", "Actual Disbursements", "453 213"),
-	      new ReportAreaForTests()
-	          .withContents("Region", "Region: Undefined", "Actual Commitments", "125 000", "Actual Disbursements", "72 000"));
-		// String testName, String reportName, List<String> activities, GeneratedReport correctResult, String locale
-		runMondrianTestCase("AMP-18558-one-hier-totals",
-				"AMP-18558-one-hier-totals",
-				activities,
-				correctReport,
-				"en");
-	}
-
-	@Test
 	public void testSummaryReportGauge() {
 		ReportAreaForTests correctReport = new ReportAreaForTests()
 	    .withContents("Project Title", "Report Totals", "Region", "", "Primary Sector", "", "2009-Actual Commitments", "100 000", "2009-Actual Disbursements", "0", "2010-Actual Commitments", "0", "2010-Actual Disbursements", "513 213", "2011-Actual Commitments", "999 888", "2011-Actual Disbursements", "0", "2012-Actual Commitments", "25 000", "2012-Actual Disbursements", "12 000", "2013-Actual Commitments", "333 333", "2013-Actual Disbursements", "0", "Total Measures-Actual Commitments", "1 458 221", "Total Measures-Actual Disbursements", "525 213")
@@ -132,34 +94,6 @@ public class MondrianSummaryReportTests extends ReportingTestCase {
 		// String testName, String reportName, List<String> activities, GeneratedReport correctResult, String locale
 		runMondrianTestCase("AMP-18558-raw",
 				"AMP-18558-raw",
-				activities,
-				correctReport,
-				"en"); 
-	}
-	
-	@Test
-	public void testSummaryReportsNoHierTotalsOnly() {
-		ReportAreaForTests correctReport = new ReportAreaForTests()
-		  .withChildren(
-		    new ReportAreaForTests().withContents("Constant", "constant", "Actual Commitments", "1 458 221", "Actual Disbursements", "525 213"));
-		// String testName, String reportName, List<String> activities, GeneratedReport correctResult, String locale
-		runMondrianTestCase("AMP-18558-no-hier-totals",
-				"AMP-18558-no-hier-totals",
-				activities,
-				correctReport,
-				"en"); 
-	}
-	
-	@Test
-	public void testSummaryReportsNoHierYearly() {
-		ReportAreaForTests correctReport = new ReportAreaForTests()
-		  
-		  .withChildren(
-		    new ReportAreaForTests()
-		        .withContents("Constant", "constant", "2009-Actual Commitments", "100 000", "2009-Actual Disbursements", "", "2010-Actual Commitments", "", "2010-Actual Disbursements", "513 213", "2011-Actual Commitments", "999 888", "2011-Actual Disbursements", "", "2012-Actual Commitments", "25 000", "2012-Actual Disbursements", "12 000", "2013-Actual Commitments", "333 333", "2013-Actual Disbursements", "", "Total Measures-Actual Commitments", "1 458 221", "Total Measures-Actual Disbursements", "525 213")  );
-
-		runMondrianTestCase("AMP-18558-no-hier-yearly",
-				"AMP-18558-no-hier-yearly",
 				activities,
 				correctReport,
 				"en"); 

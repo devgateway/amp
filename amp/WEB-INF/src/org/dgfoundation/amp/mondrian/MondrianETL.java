@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -26,6 +27,7 @@ import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.BooleanWrapper;
 import org.dgfoundation.amp.algo.ExceptionRunnable;
+import org.dgfoundation.amp.algo.Memoizer;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
@@ -57,6 +59,8 @@ import com.google.common.base.Predicate;
  */
 public class MondrianETL {
 		
+	public static int IDS_BATCH_SIZE = 200;
+	
 	public static String CONNECTION_DS = String.format("jdbc:mondrian:JdbcDrivers=nl.cwi.monetdb.jdbc.MonetDriver;Jdbc=%s;JdbcUser=monetdb;JdbcPassword=monetdb;PoolNeeded=false", MonetConnection.getJdbcUrl());
 
 	public final static String MONDRIAN_EXCHANGE_RATES_TABLE = "mondrian_exchange_rates";
@@ -889,15 +893,30 @@ private EtlResult execute() throws Exception {
 	 * @throws SQLException
 	 */
 	protected void generateFactTable() throws SQLException {
-		logger.warn("running the fact-table-generating cartesian...");
-		List<String> factTableQueries = generateFactTableQueries();
-		//monetConn.dropTable(FACT_TABLE.tableName);
-		for(int i = 0; i < factTableQueries.size(); i++) {
-			logger.warn("\texecuting query #" + (i + 1) + "...");
-			String query = factTableQueries.get(i);
-			monetConn.executeQuery(query);
-			logger.warn("\t...executing query #" + (i + 1) + " done");
+		List<Long> allEntities = new ArrayList<>(etlConfig.getAllEntityIds());
+		Collections.sort(allEntities);
+		logger.warn(String.format("running the fact-table-generating cartesian on %d ids...", allEntities.size()));
+		
+		int nrBatches = allEntities.size() / IDS_BATCH_SIZE + (allEntities.size() % IDS_BATCH_SIZE == 0 ? 0 : 1);
+		
+		for(int batchNr = 0; batchNr < nrBatches; batchNr++) {
+			int start = batchNr * IDS_BATCH_SIZE;
+			int end = Math.min(start + IDS_BATCH_SIZE, allEntities.size());
+			if (start >= end)
+				break;
+			
+			logger.info(String.format("\texecuting batch %d / %d (ids: %d...%d)...", batchNr + 1, nrBatches, start, end));
+			List<Long> currentBatch = allEntities.subList(start, end);
+			
+			List<String> factTableQueries = generateFactTableQueries(new HashSet<>(currentBatch));
+			for(int i = 0; i < factTableQueries.size(); i++) {
+				//logger.warn("\texecuting query #" + (i + 1) + "...");
+				String query = factTableQueries.get(i);
+				monetConn.executeQuery(query);
+				//logger.warn("\t...executing query #" + (i + 1) + " done");
+			}
 		}
+		
 		logger.warn("...running the fact-table-generating cartesian done");
 		long factTableSize = SQLUtils.countRows(monetConn.conn, "mondrian_fact_table");
 		long nrTransactions = SQLUtils.countRows(monetConn.conn, "mondrian_raw_donor_transactions");
@@ -1061,14 +1080,10 @@ private EtlResult execute() throws Exception {
 		return res.toString();
 	}
 	
-	/**
-	 * reads from factTableQuery the list of queries, inserts entity IDs in it and then filtering out those queries which would do nothing anyway
-	 * @return
-	 */
-	protected List<String> generateFactTableQueries() {
+	Memoizer<List<String>> factTableSql = new Memoizer<>(this::readFactTableQuery);
+	
+	protected List<String> readFactTableQuery() {
 		try {
-			logger.info("The path for the factTabelQuery.sql is:");
-			logger.info(this.getClass().getResource("").getPath());
 			BufferedReader reader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("factTableQuery.sql"), "utf-8"));
 			StringBuilder builder = new StringBuilder();
 			while (true) {
@@ -1081,22 +1096,33 @@ private EtlResult execute() throws Exception {
 			};
 			reader.close();
 			String str = builder.toString().trim();
+			
 			StringTokenizer stok = new StringTokenizer(str, ";");
 			List<String> res = new ArrayList<>();
-			Set<Long> allEntities = etlConfig.getAllEntityIds();
-			while (stok.hasMoreTokens()) {
-				String q = stok.nextToken();
-				q = q.replace("@@BUGCHOOSER@@", BUG_CHOOSER ? "999888777" : "999999999");
-				if (q.indexOf("@@activityIdCondition@@") != 0 && allEntities.isEmpty())
-					continue; // query references activities, but these are empty -> it is useless
-				String activityCondition = etlConfig.fullEtl ? " >0 " : (" IN (" +Util.toCSStringForIN(allEntities) + ")");
-				res.add(q.replace("@@activityIdCondition@@", activityCondition).replace("@@src_role@@", buildRoleCase("src_role")).replace("@@dest_role@@", buildRoleCase("dest_role")));
-			}
-			return res;
+			while (stok.hasMoreTokens())
+				res.add(stok.nextToken());
+			return Collections.unmodifiableList(res);
 		}
 		catch(Exception e) {
-			throw new RuntimeException(e);
+			throw AlgoUtils.translateException(e);
 		}
+	}
+	
+	/**
+	 * reads from factTableQuery the list of queries, inserts entity IDs in it and then filtering out those queries which would do nothing anyway
+	 * @return
+	 */
+	protected List<String> generateFactTableQueries(Set<Long> allEntities) {
+		List<String> res = new ArrayList<>();
+		for(String query:factTableSql.get()) {
+			String q = query;
+			q = q.replace("@@BUGCHOOSER@@", BUG_CHOOSER ? "999888777" : "999999999");
+			if (q.indexOf("@@activityIdCondition@@") != 0 && allEntities.isEmpty())
+				continue; // query references activities, but these are empty -> it is useless
+			String activityCondition = " IN (" +Util.toCSStringForIN(allEntities) + ")";
+			res.add(q.replace("@@activityIdCondition@@", activityCondition).replace("@@src_role@@", buildRoleCase("src_role")).replace("@@dest_role@@", buildRoleCase("dest_role")));
+		}
+		return res;
 	}
 	
 	/**

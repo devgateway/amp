@@ -112,8 +112,8 @@ public abstract class ReportingTestCase extends AmpTestCase {
 	}
 		
 	protected void runMondrianTestCase(String reportName, List<String> activities, ReportAreaForTests correctResult, String locale,
-			Class<? extends ReportAreaImpl> areaType, Integer page, Integer pageSize) {
-			runMondrianTestCase(getReportSpecification(reportName), locale, activities, correctResult, areaType, page, pageSize);
+			Class<? extends ReportAreaImpl> areaTyp) {
+			runMondrianTestCase(getReportSpecification(reportName), locale, activities, correctResult, areaTyp);
 	}
 	
 	protected void runMondrianTestCase(String reportName, List<String> activities, ReportAreaForTests correctResult, String locale) {
@@ -169,7 +169,7 @@ public abstract class ReportingTestCase extends AmpTestCase {
 	 * @param cor
 	 */
 	protected void runMondrianTestCase(ReportSpecification spec, String locale, List<String> entities, ReportAreaForTests cor) {
-		runMondrianTestCase(spec, locale, entities, cor, ReportAreaImpl.class, null, null);
+		runMondrianTestCase(spec, locale, entities, cor, ReportAreaImpl.class);
 	}
 	
 	/**
@@ -184,12 +184,12 @@ public abstract class ReportingTestCase extends AmpTestCase {
 	 * @param pageSize number of leaf records per page or null to use the default config (not recommended)
 	 */
 	protected void runMondrianTestCase(ReportSpecification spec, String locale, List<String> entities, 
-			ReportAreaForTests cor, Class<? extends ReportAreaImpl> areaType, Integer page, Integer pageSize) {
+			ReportAreaForTests cor, Class<? extends ReportAreaImpl> areaType) {
 		GeneratedReport rep = this.runReportOn(spec, locale, entities, areaType);
 		//Iterator<ReportOutputColumn> bla = rep.reportContents.getChildren().get(0).getContents().keySet().iterator();
 		//ReportOutputColumn first = bla.next(), second = bla.next(), third = bla.next(), fourth = bla.next();
 		
-		ReportArea reportContents = PaginatedReport.getPage(rep.reportContents, page, pageSize);
+		ReportArea reportContents = rep.reportContents;
 		
 		//if (cor == null) return;
 		String delta = cor == null ? null : cor.getDifferenceAgainst(reportContents);

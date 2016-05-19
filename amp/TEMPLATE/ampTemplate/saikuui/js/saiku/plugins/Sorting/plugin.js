@@ -31,13 +31,6 @@ Saiku.Sorting = {
 			} else {
 				event.preventDefault();
 			}
-		
-		if (Settings.NIREPORT) {
-			sortNiReportColumn(id);
-			if ($(clickedColumn).attr('sorting')) {
-				runQuery();
-			} else {
-				event.preventDefault();
 		} else {
 			var type = $(clickedColumn).data('sorting-type');
 

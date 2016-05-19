@@ -9,8 +9,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.ExceptionRunnable;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.mondrian.MondrianETL;
-import org.dgfoundation.amp.mondrian.monet.MonetConnection;
+import org.dgfoundation.amp.mondrian.monet.OlapDbConnection;
 
 import com.google.common.base.Predicate;
 
@@ -68,7 +67,7 @@ public class Fingerprint {
 	 * @return
 	 * @throws SQLException
 	 */
-	public boolean changesDetected(Connection postgresConn, MonetConnection monetConn) throws SQLException {
+	public boolean changesDetected(Connection postgresConn, OlapDbConnection monetConn) throws SQLException {
 		String currentFingerprint = computeFingerprint(postgresConn);
 		String etlFingerprint = readMonetFingerprint(monetConn);
 		boolean res = !currentFingerprint.equals(etlFingerprint);
@@ -93,7 +92,7 @@ public class Fingerprint {
 	 * computes the current fingerprint and serializes it
 	 * @throws SQLException
 	 */
-	public void saveFingerprint(Connection postgresConn, MonetConnection monetConn) throws SQLException {
+	public void saveFingerprint(Connection postgresConn, OlapDbConnection monetConn) throws SQLException {
 		readOrReturnDefaultFingerprint(monetConn);
 		serializeFingerprint(monetConn, computeFingerprint(postgresConn));
 	}
@@ -102,7 +101,7 @@ public class Fingerprint {
 	 * <strong>assumes</b> that the fingerprints table exists
 	 * @param fp
 	 */
-	public void serializeFingerprint(MonetConnection monetConn, String fp) {
+	public void serializeFingerprint(OlapDbConnection monetConn, String fp) {
 		monetConn.executeQuery(String.format("DELETE FROM %s where key='%s'", FINGERPRINT_TABLE, keyName));
 		monetConn.executeQuery(String.format("INSERT INTO %s(key,value) VALUES ('%s', '%s')", FINGERPRINT_TABLE, keyName, fp));
 		//logger.info(String.format("serializing fingerprint, key=%s, value=%s", keyName, fp));
@@ -113,7 +112,7 @@ public class Fingerprint {
 	 * @return
 	 * @throws SQLException
 	 */
-	protected String readMonetFingerprint(MonetConnection monetConn) throws SQLException {
+	protected String readMonetFingerprint(OlapDbConnection monetConn) throws SQLException {
 		return readOrReturnDefaultFingerprint(monetConn);
 	}
 	
@@ -121,12 +120,12 @@ public class Fingerprint {
 	 * DROPs and then recreates the etl_fingerprints table
 	 * @param monetConn
 	 */
-	public static void redoFingerprintTable(MonetConnection monetConn) {
+	public static void redoFingerprintTable(OlapDbConnection monetConn) {
 		monetConn.dropTable(FINGERPRINT_TABLE);
 //		if (!monetConn.tableExists(FINGERPRINT_TABLE)) 
 		{
 			monetConn.executeQuery(String.format("CREATE TABLE %s (key %s, value %s)", FINGERPRINT_TABLE,
-					MonetConnection.getMapper().mapSqlTypeToName(java.sql.Types.VARCHAR, 255), MonetConnection.getMapper().mapSqlTypeToName(java.sql.Types.LONGVARCHAR, 999999)));
+					monetConn.mapper.mapSqlTypeToName(java.sql.Types.VARCHAR, 255), monetConn.mapper.mapSqlTypeToName(java.sql.Types.LONGVARCHAR, 999999)));
 			monetConn.flush();
 		}
 	}
@@ -136,7 +135,7 @@ public class Fingerprint {
 	 * @param monetConn
 	 * @return
 	 */
-	public String readOrReturnDefaultFingerprint(MonetConnection monetConn) {
+	public String readOrReturnDefaultFingerprint(OlapDbConnection monetConn) {
 		//ensureFingerprintTableExists(monetConn);
 		
 		List<?> hashes = SQLUtils.fetchAsList(monetConn.conn, String.format("SELECT value FROM %s WHERE key='%s'", FINGERPRINT_TABLE, keyName), 1);
@@ -163,7 +162,7 @@ public class Fingerprint {
 		return obj.toString();		
 	}
 	
-	public void runIfFingerprintChangedOr(Connection postgresConn, MonetConnection monetConn, boolean or, Predicate<Fingerprint> onNothingChanged, ExceptionRunnable<SQLException> r) throws SQLException {
+	public void runIfFingerprintChangedOr(Connection postgresConn, OlapDbConnection monetConn, boolean or, Predicate<Fingerprint> onNothingChanged, ExceptionRunnable<SQLException> r) throws SQLException {
 		this.changeDetected = changesDetected(postgresConn, monetConn);
 		if (or || this.changeDetected) {
 			r.run();

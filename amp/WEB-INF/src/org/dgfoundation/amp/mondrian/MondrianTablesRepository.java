@@ -17,6 +17,7 @@ import org.dgfoundation.amp.mondrian.jobs.MondrianTableLogue;
 import org.dgfoundation.amp.mondrian.monet.DatabaseTableColumn;
 import org.dgfoundation.amp.mondrian.monet.DatabaseTableDescription;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
+import org.dgfoundation.amp.mondrian.monet.OlapDbConnection;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -124,7 +125,7 @@ public class MondrianTablesRepository {
 					}})
 				.withEpilogue(new MondrianTableLogue() {
 
-					@Override public void run(EtlConfiguration etlConfiguration, Connection conn, MonetConnection monetConn, LinkedHashSet<String> locales) throws SQLException {
+					@Override public void run(EtlConfiguration etlConfiguration, Connection conn, OlapDbConnection monetConn, LinkedHashSet<String> locales) throws SQLException {
 						for(String locale:locales) {
 							String viewName = String.format("mondrian_organizations_%s_no_pledges", locale);
 							if (!monetConn.tableExists(viewName)) {

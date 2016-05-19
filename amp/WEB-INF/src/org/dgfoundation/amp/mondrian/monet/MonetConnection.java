@@ -17,6 +17,7 @@ import javax.sql.DataSource;
 
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.nireports.schema.GeneratedColumnBehaviour;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.helper.Constants;
 
@@ -25,18 +26,15 @@ import org.digijava.module.aim.helper.Constants;
  * @author Dolghier Constantin
  *
  */
-public class MonetConnection implements AutoCloseable {
+public class MonetConnection extends OlapDbConnection {
 
-    public final Connection conn;
     public static String MONET_CFG_OVERRIDE_URL = null;
 
     //private static DataSource dataSource = null;
 
     private MonetConnection() throws SQLException {
-        //this.conn = dataSource.getConnection();
-        this.conn = getDirectConnection();
+    	super(getDirectConnection(), getMapper());
         //this.conn = DriverManager.getConnection("jdbc:monetdb://localhost/amp_moldova_210", "monetdb", "monetdb");
-        this.conn.setAutoCommit(false);
     }
 
     /**
@@ -44,12 +42,17 @@ public class MonetConnection implements AutoCloseable {
      * @return
      */
     private static Connection getDirectConnection() throws SQLException {
-        return DriverManager.getConnection(getJdbcUrl(), "monetdb", "monetdb");
+        return DriverManager.getConnection(_getJdbcUrl(), "monetdb", "monetdb");
     }
 
     private static String url = null;
 
-    public static String getJdbcUrl() {
+    @Override
+    public String getJdbcUrl() {
+    	return _getJdbcUrl();
+    }
+    
+    public static String _getJdbcUrl() {
         try{Class.forName("nl.cwi.monetdb.jdbc.MonetDriver");}catch(Exception e){throw new RuntimeException(e);}
 
         if (MONET_CFG_OVERRIDE_URL != null)
@@ -71,77 +74,22 @@ public class MonetConnection implements AutoCloseable {
         catch(SQLException e) {throw new RuntimeException(e);}
     }
 
-    @Override public void finalize() {
-        close();
-    }
 
-    @Override public void close(){
-        PersistenceManager.closeQuietly(conn);
-    }
-
-    /**
-     * returns the list of all the columns of a table / view, in the same order as they appear in the table/view definition
-     * @param tableName - the table / view whose columns to fetch
-     * @param crashOnDuplicates - whether to throw exception in case the table/view has duplicate names
-     * @return
-     * @throws SQLException
-     */
+    @Override
     public LinkedHashSet<String> getTableColumns(final String tableName, boolean crashOnDuplicates){
-        return new LinkedHashSet<String>(getTableColumnsWithTypes(tableName, crashOnDuplicates).keySet());
+        return new LinkedHashSet<>(getTableColumnsWithTypes(tableName, crashOnDuplicates).keySet());
     }
 
-    /**
-     * returns the list of all the columns of a table / view, in the same order as they appear in the table/view definition
-     * @param tableName - the table / view whose columns to fetch
-     * @param crashOnDuplicates - whether to throw exception in case the table/view has duplicate names
-     * @return Map<ColumnName, data_type>
-     */
+
+    @Override
     public LinkedHashMap<String, String> getTableColumnsWithTypes(final String tableName, boolean crashOnDuplicates){
         String query = String.format("SELECT c.name, c.type FROM sys.columns c WHERE c.table_id = (SELECT t.id FROM sys.tables t WHERE t.name='%s') ORDER BY c.number", tableName.toLowerCase());
         return SQLUtils.getStringToStringMap(this.conn, tableName, query, crashOnDuplicates);
     }
 
+    @Override
     public Set<String> getTablesWithNameMatching(String begin) {
         return SQLUtils.getTablesWithNameMatching(this.conn, "SELECT t.name FROM sys.tables t WHERE NOT t.system", begin);
-    }
-
-    /**
-     * equivalent to calling {@link #getTableColumns(String, false)}
-     * @param tableName
-     * @return
-     */
-    public LinkedHashSet<String> getTableColumns(final String tableName) {
-        return getTableColumns(tableName, false);
-    }
-
-    public boolean tableExists(String tableName) {
-        return !getTableColumns(tableName).isEmpty();
-    }
-
-    public void flush() {
-        try {
-            SQLUtils.flush(conn);
-        }
-        catch(Exception e) {}
-    }
-
-    public boolean dropTable(String tableName) {
-    	return dropTableOrView(tableName, "TABLE");
-    }
-    
-    public boolean dropView(String viewName) {
-    	return dropTableOrView(viewName, "VIEW");
-    }
-    
-    private boolean dropTableOrView(String entityName, String type) {
-        try {
-            flush();
-            if (tableExists(entityName)) {
-                SQLUtils.executeQuery(this.conn, "DROP " + type + " "+ entityName + " CASCADE");
-                flush();
-            }
-        } catch (Exception e) {return false;}
-        return true;
     }
 
     /**
@@ -165,6 +113,7 @@ public class MonetConnection implements AutoCloseable {
         }
     }
 
+    @Override
     public void copyTableFromPostgres(java.sql.Connection srcConn, String tableName) throws SQLException {
         createTableFromPostgresQuery(tableName, srcConn, "select * from " + tableName);
     }
@@ -178,38 +127,6 @@ public class MonetConnection implements AutoCloseable {
     protected void createTableFromPostgresQuery(String tableName, java.sql.Connection srcConn, String tableCreationQuery) throws SQLException {
         dropTable(tableName);
         createTableFromQuery(srcConn, tableCreationQuery, tableName);
-    }
-
-    /**
-     * copies entries contained in a RS to the Monet DB
-     * @param destTableName
-     * @param rs
-     */
-    public void copyEntries(String destTableName, ResultSet rs) throws SQLException {
-        List<List<Object>> rows = new ArrayList<>();
-        int nrColumns = rs.getMetaData().getColumnCount();
-        while (rs.next()) {
-            List<Object> line = new ArrayList<>();
-            for(int i = 1; i <= nrColumns; i++)
-                line.add(rs.getObject(i));
-            rows.add(line);
-        }
-        if (rows.isEmpty())
-            return; // nothing to do
-        Collection<String> colNames = new ArrayList<String>(this.getTableColumns(destTableName)).subList(0, nrColumns);
-        SQLUtils.insert(this.conn, destTableName, null, null, colNames, rows);
-    }
-
-    public void copyTableStructureFromPostgres(Connection srcConn, String srcTable, String destTable) throws SQLException {
-        try(RsInfo rs = SQLUtils.rawRunQuery(srcConn, "select * from " + srcTable, null)) {
-            DatabaseTableDescription tableDescription = DatabaseTableDescription.describeResultSet(destTable, getMapper(), rs.rs);
-            dropTable(tableDescription.tableName);
-            tableDescription.create(this.conn, false);
-        }
-    }
-
-    public void executeQuery(String query){
-        SQLUtils.executeQuery(conn, query);
     }
 
     private static DataSource getMonetDataSource() {
@@ -269,5 +186,21 @@ public class MonetConnection implements AutoCloseable {
                 }
             }
         };
+    }
+    
+    public static EtlStrategy buildStrategy() {
+    	return new EtlStrategy() {
+			
+			@Override
+			public OlapDbConnection getOlapConnection() {
+				return getConnection();
+			}
+			
+			@Override
+			public String getDataSourceString() {
+				return String.format("jdbc:mondrian:JdbcDrivers=nl.cwi.monetdb.jdbc.MonetDriver;Jdbc=%s;JdbcUser=monetdb;JdbcPassword=monetdb;PoolNeeded=false", 
+						_getJdbcUrl());
+			}
+		};
     }
 }

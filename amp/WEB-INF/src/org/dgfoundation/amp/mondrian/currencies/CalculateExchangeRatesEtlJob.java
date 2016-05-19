@@ -15,6 +15,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.mondrian.EtlConfiguration;
 import org.dgfoundation.amp.mondrian.MondrianTablesRepository;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
+import org.dgfoundation.amp.mondrian.monet.OlapDbConnection;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -29,7 +30,7 @@ import static org.dgfoundation.amp.mondrian.MondrianETL.MONDRIAN_EXCHANGE_RATES_
 public class CalculateExchangeRatesEtlJob {
 	
 	protected final Connection conn;
-	protected final MonetConnection monetConn;
+	protected final OlapDbConnection monetConn;
 	protected final List<Long> currencyIds;
 	
 	/**
@@ -41,7 +42,7 @@ public class CalculateExchangeRatesEtlJob {
 	
 	protected static Logger logger = Logger.getLogger(CalculateExchangeRatesEtlJob.class);
 	
-	public CalculateExchangeRatesEtlJob(List<Long> currencyIds, Connection conn, MonetConnection monetConn, EtlConfiguration etlConfig) {
+	public CalculateExchangeRatesEtlJob(List<Long> currencyIds, Connection conn, OlapDbConnection monetConn, EtlConfiguration etlConfig) {
 		this.conn = conn;
 		this.monetConn = monetConn;
 		this.currencyIds = Collections.unmodifiableList(currencyIds == null ? SQLUtils.fetchLongs(monetConn.conn, "SELECT amp_currency_id FROM amp_currency") : currencyIds);

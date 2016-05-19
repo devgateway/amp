@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.LinkedHashSet;
 
 import org.dgfoundation.amp.mondrian.EtlConfiguration;
-import org.dgfoundation.amp.mondrian.monet.MonetConnection;
+import org.dgfoundation.amp.mondrian.monet.OlapDbConnection;
 
 /**
  * a callback to be called as an prologue / epilogue to processing a Mondrian table
@@ -13,5 +13,5 @@ import org.dgfoundation.amp.mondrian.monet.MonetConnection;
  *
  */
 public interface MondrianTableLogue {
-	public void run(EtlConfiguration etlConfiguration, Connection conn, MonetConnection monetConn, LinkedHashSet<String> locales) throws SQLException;
+	public void run(EtlConfiguration etlConfiguration, Connection conn, OlapDbConnection monetConn, LinkedHashSet<String> locales) throws SQLException;
 }

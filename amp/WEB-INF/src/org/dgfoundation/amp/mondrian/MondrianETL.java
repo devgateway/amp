@@ -17,7 +17,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
@@ -28,17 +27,17 @@ import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.BooleanWrapper;
 import org.dgfoundation.amp.algo.ExceptionRunnable;
 import org.dgfoundation.amp.algo.Memoizer;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.mondrian.currencies.CalculateExchangeRatesEtlJob;
 import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
+import org.dgfoundation.amp.mondrian.monet.EtlStrategy;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
+import org.dgfoundation.amp.mondrian.monet.OlapDbConnection;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
-import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter;
+import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
@@ -60,8 +59,8 @@ import com.google.common.base.Predicate;
 public class MondrianETL {
 		
 	public static int IDS_BATCH_SIZE = 200;
-	
-	public static String CONNECTION_DS = String.format("jdbc:mondrian:JdbcDrivers=nl.cwi.monetdb.jdbc.MonetDriver;Jdbc=%s;JdbcUser=monetdb;JdbcPassword=monetdb;PoolNeeded=false", MonetConnection.getJdbcUrl());
+	public static EtlStrategy ETL_STRATEGY = MonetConnection.buildStrategy();
+	public static String CONNECTION_DS = ETL_STRATEGY.getDataSourceString();
 
 	public final static String MONDRIAN_EXCHANGE_RATES_TABLE = "mondrian_exchange_rates";
 	public final static String MONDRIAN_DATE_TABLE = "mondrian_dates";
@@ -103,7 +102,7 @@ public class MondrianETL {
 	 */
 	protected final java.sql.Connection conn;
 	
-	protected final MonetConnection monetConn;
+	protected final OlapDbConnection olapConn;
 	
 	protected EtlConfiguration etlConfig;
 	
@@ -156,11 +155,11 @@ public class MondrianETL {
 	 * @param activities
 	 * @param activitiesToRemove
 	 */
-	public MondrianETL(java.sql.Connection postgresConn, MonetConnection monetConn, boolean forceFullEtl) {
+	public MondrianETL(java.sql.Connection postgresConn, OlapDbConnection monetConn, boolean forceFullEtl) {
 		logger.warn("Mondrian ETL started");
 		
 		this.conn = postgresConn;
-		this.monetConn = monetConn;
+		this.olapConn = monetConn;
 		this.forceFullEtl = forceFullEtl | !monetConn.tableExists(Fingerprint.FINGERPRINT_TABLE);
 		this.locales = new LinkedHashSet<>(TranslatorUtil.getLanguages());
 	}
@@ -275,16 +274,16 @@ public class MondrianETL {
 			for(String suffix:suffixes) {
 				String t = mtd.tableName + suffix;
 				//logger.info("Full ETL: dropping table " + t);
-				monetConn.dropTable(t);
+				olapConn.dropTable(t);
 				SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + t);
 			}
 		}
-		Set<String> etlTablesMonet = monetConn.getTablesWithNameMatching("etl_");
+		Set<String> etlTablesMonet = olapConn.getTablesWithNameMatching("etl_");
 		logger.info("Full ETL: dropping monet tables " + etlTablesMonet);
 		for(String t:etlTablesMonet) 
 		 if (!t.equals(Fingerprint.FINGERPRINT_TABLE)){
 			 //logger.info("Full ETL: dropping monet table " + t);
-			 monetConn.dropTable(t);
+			 olapConn.dropTable(t);
 		}
 		
 		Set<String> etlTablesPostgres = SQLUtils.getTablesWithNameMatching(conn, "etl_");
@@ -293,7 +292,7 @@ public class MondrianETL {
 			//logger.info("Full ETL: dropping pg table " + t);
 			SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + t);
 		}
-		monetConn.dropTable(FACT_TABLE.tableName);
+		olapConn.dropTable(FACT_TABLE.tableName);
 		SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + FACT_TABLE.tableName);
 	}
 	
@@ -312,12 +311,12 @@ private EtlResult execute() throws Exception {
 		StopWatch.reset(MONDRIAN_ETL);
 		StopWatch.next(MONDRIAN_ETL, true, "start");
 				
-		if (!monetConn.tableExists(Fingerprint.FINGERPRINT_TABLE))
-			Fingerprint.redoFingerprintTable(monetConn);
+		if (!olapConn.tableExists(Fingerprint.FINGERPRINT_TABLE))
+			Fingerprint.redoFingerprintTable(olapConn);
 		
 		previousEtlEventId = Long.valueOf(
-				monetConn.tableExists(Fingerprint.FINGERPRINT_TABLE) ? 
-					ETL_TIME_FINGERPRINT.readOrReturnDefaultFingerprint(monetConn) : ETL_TIME_FINGERPRINT.defaultValue);
+				olapConn.tableExists(Fingerprint.FINGERPRINT_TABLE) ? 
+					ETL_TIME_FINGERPRINT.readOrReturnDefaultFingerprint(olapConn) : ETL_TIME_FINGERPRINT.defaultValue);
 		
 		List<ExceptionRunnable<? extends Exception>> fullEtlJobs = new ArrayList<>(); // will collect all "FULL ETL" pieces of code to run under the FULL ETL lock
 				
@@ -337,7 +336,7 @@ private EtlResult execute() throws Exception {
 		}
 				
 		if (forceFullEtl) {
-			Fingerprint.redoFingerprintTable(monetConn);
+			Fingerprint.redoFingerprintTable(olapConn);
 			fullEtlJobs.add(new ExceptionRunnable<Exception>(){
 				@Override public void run() throws Exception {
 					cleanupTables();
@@ -385,11 +384,11 @@ private EtlResult execute() throws Exception {
 
 			generateActivitiesEntries(); // update/generate all the per-activity tables
 		
-			new CalculateExchangeRatesEtlJob(null, conn, monetConn, etlConfig).work();
+			new CalculateExchangeRatesEtlJob(null, conn, olapConn, etlConfig).work();
 			StopWatch.next(MONDRIAN_ETL, true, "generateExchangeRates");
 					
 			if (etlConfig.fullEtl) {
-				MonetDBView.createFactTableViewForNoDatesFilters(monetConn);
+				createFactTableViewForNoDatesFilters();
 				checkMondrianSanity();
 				StopWatch.next(MONDRIAN_ETL, true, "checkMondrianSanity");
 			}
@@ -404,7 +403,7 @@ private EtlResult execute() throws Exception {
 		processAutonomousTable(MondrianTablesRepository.MONDRIAN_COMPONENTS, etlConfig.componentIdsIn("amp_component_id"));
 		processAutonomousTable(MondrianTablesRepository.MONDRIAN_AGREEMENTS, etlConfig.agreementIdsIn("amp_agreement_id"));		
 				
-		ETL_TIME_FINGERPRINT.serializeFingerprint(monetConn, Long.toString(currentEtlEventId));
+		ETL_TIME_FINGERPRINT.serializeFingerprint(olapConn, Long.toString(currentEtlEventId));
 
 		long end = System.currentTimeMillis();
 		double secs = (end - start) / 1000.0;
@@ -433,14 +432,14 @@ private EtlResult execute() throws Exception {
 	 */
 	protected void checkMondrianSanity() {
 		String query = "SELECT DISTINCT(mft.date_code) FROM mondrian_fact_table mft WHERE NOT EXISTS (SELECT exchange_rate FROM mondrian_exchange_rates mer WHERE mer.day_code = mft.date_code)";
-		List<Long> days = SQLUtils.fetchLongs(monetConn.conn, query);
+		List<Long> days = SQLUtils.fetchLongs(olapConn.conn, query);
 		if (!days.isEmpty()) {
 			logger.error("after having run the ETL, some days do not have a corresponding exchange rate entry: " + days.toString());
 			throw new RuntimeException("MONDRIAN ETL BUG: some days have missing exchange rate entries and will not exist in the generated reports: " + days);
 		}
 		
 		query = "SELECT DISTINCT(mft.date_code) FROM mondrian_fact_table mft WHERE NOT EXISTS (SELECT full_date FROM " + MONDRIAN_DATE_TABLE + " mdt WHERE mdt.day_code = mft.date_code)";
-		days = SQLUtils.fetchLongs(monetConn.conn, query);
+		days = SQLUtils.fetchLongs(olapConn.conn, query);
 		if (!days.isEmpty()) {
 			logger.error("after having run the ETL, some days do not have a corresponding DATE entry: " + days.toString());
 			throw new RuntimeException("MONDRIAN ETL BUG: some days have missing date entries and will not exist in the generated reports: " + days);
@@ -481,7 +480,7 @@ private EtlResult execute() throws Exception {
 	protected boolean shouldMakeFullEtl(final List<ExceptionRunnable<? extends Exception>> fullEtlJobs) throws SQLException {
 		final BooleanWrapper res = new BooleanWrapper(forceFullEtl);
 		for(final Fingerprint fingerprint:FULL_ETL_TRIGGERING_FINGERPRINTS) {
-			fingerprint.runIfFingerprintChangedOr(conn, monetConn, false, stepSkipped, new ExceptionRunnable<SQLException>() {
+			fingerprint.runIfFingerprintChangedOr(conn, olapConn, false, stepSkipped, new ExceptionRunnable<SQLException>() {
 				@Override public void run() throws SQLException {
 					res.or(true);
 					if (fingerprint.hasChangeBeenDetected()) {
@@ -503,7 +502,7 @@ private EtlResult execute() throws Exception {
 		
 		// if any of the dimension tables changed -> redo the whole thing
 		for (final MondrianTableDescription mondrianTable:MondrianTablesRepository.MONDRIAN_DIMENSION_TABLES)
-			mondrianTable.fingerprint.runIfFingerprintChangedOr(conn, monetConn, res.value, stepSkipped, new ExceptionRunnable<SQLException>() {
+			mondrianTable.fingerprint.runIfFingerprintChangedOr(conn, olapConn, res.value, stepSkipped, new ExceptionRunnable<SQLException>() {
 				@Override public void run() throws SQLException {
 					res.or(true);
 					fullEtlJobs.add(new ExceptionRunnable<SQLException>() {
@@ -527,12 +526,12 @@ private EtlResult execute() throws Exception {
 	 */
 	protected void pumpTableIfChanged(final BooleanWrapper needed, final List<ExceptionRunnable<? extends Exception>> fullEtlJobs, final String tableName, final String orderBy) throws SQLException {
 		final Fingerprint fingerprint = new Fingerprint("table_" + tableName, Arrays.asList(Fingerprint.buildTableHashingQuery(tableName, orderBy)));
-		fingerprint.runIfFingerprintChangedOr(conn, monetConn, needed.value, stepSkipped, new ExceptionRunnable<SQLException>() {
+		fingerprint.runIfFingerprintChangedOr(conn, olapConn, needed.value, stepSkipped, new ExceptionRunnable<SQLException>() {
 			@Override public void run() throws SQLException {
 				needed.or(true);
 				fullEtlJobs.add(new ExceptionRunnable<SQLException>() {
 					@Override public void run() throws SQLException {
-						monetConn.copyTableFromPostgres(conn, tableName);
+						olapConn.copyTableFromPostgres(conn, tableName);
 					}
 					@Override public String toString() {
 						return "copying table " + tableName + " from PSQL to Monet";
@@ -571,7 +570,7 @@ private EtlResult execute() throws Exception {
 		for (AmpFiscalCalendar calendar:allCalendars) {
 			generateFiscalCalendarColumns(calendar);
 		}
-		monetConn.copyTableFromPostgres(conn, MONDRIAN_DATE_TABLE);
+		olapConn.copyTableFromPostgres(conn, MONDRIAN_DATE_TABLE);
 	}
 	
 	protected void generateFiscalCalendarColumns(AmpFiscalCalendar calendar) throws SQLException {
@@ -639,10 +638,10 @@ private EtlResult execute() throws Exception {
 			for (String locale:locales)
 				cloneMondrianTableForLocale(mondrianTable, locale);
 		} else {
-			monetConn.createTableFromQuery(conn, query, mondrianTable.tableName);
+			olapConn.createTableFromQuery(conn, query, mondrianTable.tableName);
 		}
 		if (mondrianTable.epilogue != null)
-			mondrianTable.epilogue.run(etlConfig, conn, monetConn, locales);
+			mondrianTable.epilogue.run(etlConfig, conn, olapConn, locales);
 	}
 	
 	/**
@@ -658,8 +657,8 @@ private EtlResult execute() throws Exception {
 		String localizedTableName = mondrianTable.tableName + "_" + locale;
 		
 		List<List<Object>> vals = mondrianTable.readTranslatedTable(this.conn, locale, null);
-		monetConn.copyTableStructureFromPostgres(this.conn, mondrianTable.tableName, localizedTableName);
-		SQLUtils.insert(monetConn.conn, localizedTableName, null, null, monetConn.getTableColumns(localizedTableName), vals);
+		olapConn.copyTableStructureFromPostgres(this.conn, mondrianTable.tableName, localizedTableName);
+		SQLUtils.insert(olapConn.conn, localizedTableName, null, null, olapConn.getTableColumns(localizedTableName), vals);
 
 		
 		// -> cannot check sanity because a write to the db might have just happened during the ETL, thus invalidating the cloning <-
@@ -687,8 +686,8 @@ private EtlResult execute() throws Exception {
 		
 		List<List<Object>> vals = mondrianTable.readTranslatedTable(this.conn, locale, " WHERE " + incrementalQuery);
 //		monetConn.copyTableStructureFromPostgres(this.conn, mondrianTable.tableName, localizedTableName);
-		monetConn.executeQuery("DELETE FROM " + localizedTableName + " WHERE " + incrementalQuery);
-		SQLUtils.insert(monetConn.conn, localizedTableName, null, null, monetConn.getTableColumns(localizedTableName), vals);
+		olapConn.executeQuery("DELETE FROM " + localizedTableName + " WHERE " + incrementalQuery);
+		SQLUtils.insert(olapConn.conn, localizedTableName, null, null, olapConn.getTableColumns(localizedTableName), vals);
 		
 		// -> cannot check sanity because a write to the db might have just happened during the ETL, thus un-consistenting the cloning <-
 		
@@ -747,9 +746,9 @@ private EtlResult execute() throws Exception {
 	 * drops preexisting fact table and creates an empty one
 	 */
 	protected void recreateFactTable() throws SQLException {
-		monetConn.dropView(MondrianTablesRepository.FACT_TABLE_VIEW_NO_DATE_FILTER);
-		monetConn.dropTable(FACT_TABLE.tableName);
-		FACT_TABLE.create(monetConn.conn, false);
+		olapConn.dropView(MondrianTablesRepository.FACT_TABLE_VIEW_NO_DATE_FILTER);
+		olapConn.dropTable(FACT_TABLE.tableName);
+		FACT_TABLE.create(olapConn.conn, false);
 	}
 	
 	/**
@@ -773,7 +772,7 @@ private EtlResult execute() throws Exception {
 		generateFactTable();
 		
 		generateActivitiesDimensionsTables();
-		monetConn.flush();
+		olapConn.flush();
 	}
 
 	/**
@@ -819,7 +818,7 @@ private EtlResult execute() throws Exception {
 			long start = System.currentTimeMillis();
 			
 			if (!mondrianTable.isTranslated()) {
-				monetConn.createTableFromQuery(this.conn, fullQuery, mondrianTable.tableName);				
+				olapConn.createTableFromQuery(this.conn, fullQuery, mondrianTable.tableName);				
 			} else {
 				generateStarTableWithQueryInPostgres(mondrianTable.tableName, mondrianTable.primaryKeyColumnName, fullQuery, mondrianTable.indexedColumns);
 			}
@@ -837,9 +836,9 @@ private EtlResult execute() throws Exception {
 				for (String locale:locales)
 					incrementallyCloneMondrianTableForLocale(mondrianTable, locale, idFilterSubquery);
 			} else {
-				monetConn.executeQuery("DELETE FROM " + mondrianTable.tableName + " WHERE " + idFilterSubquery);
+				olapConn.executeQuery("DELETE FROM " + mondrianTable.tableName + " WHERE " + idFilterSubquery);
 				try(RsInfo rs = SQLUtils.rawRunQuery(conn, incrementalQuery, null)) {
-					monetConn.copyEntries(mondrianTable.tableName, rs.rs);
+					olapConn.copyEntries(mondrianTable.tableName, rs.rs);
 				}
 			}
 		}
@@ -878,8 +877,8 @@ private EtlResult execute() throws Exception {
 			for(String suffix:localeSuffixes) {
 				String usedSuffix = suffix.isEmpty() ? "" : ("_" + suffix);
 				String localizedTableName = mondrianTable.tableName + usedSuffix;
-				monetConn.executeQuery("DELETE FROM " + localizedTableName + " WHERE " + etlConfig.pledgeIdsIn("amp_activity_id - " + PLEDGE_ID_ADDER));
-				SQLUtils.insert(monetConn.conn, localizedTableName, null, null, monetConn.getTableColumns(localizedTableName), entries);
+				olapConn.executeQuery("DELETE FROM " + localizedTableName + " WHERE " + etlConfig.pledgeIdsIn("amp_activity_id - " + PLEDGE_ID_ADDER));
+				SQLUtils.insert(olapConn.conn, localizedTableName, null, null, olapConn.getTableColumns(localizedTableName), entries);
 			}
 		}
 		//monetConn.executeQuery("DELETE FROM " + mondrianTable.);
@@ -912,14 +911,14 @@ private EtlResult execute() throws Exception {
 			for(int i = 0; i < factTableQueries.size(); i++) {
 				//logger.warn("\texecuting query #" + (i + 1) + "...");
 				String query = factTableQueries.get(i);
-				monetConn.executeQuery(query);
+				olapConn.executeQuery(query);
 				//logger.warn("\t...executing query #" + (i + 1) + " done");
 			}
 		}
 		
 		logger.warn("...running the fact-table-generating cartesian done");
-		long factTableSize = SQLUtils.countRows(monetConn.conn, "mondrian_fact_table");
-		long nrTransactions = SQLUtils.countRows(monetConn.conn, "mondrian_raw_donor_transactions");
+		long factTableSize = SQLUtils.countRows(olapConn.conn, "mondrian_fact_table");
+		long nrTransactions = SQLUtils.countRows(olapConn.conn, "mondrian_raw_donor_transactions");
 		double explosionFactor = nrTransactions > 0 ? ((1.0 * factTableSize) / nrTransactions) : 1.0;
 		logger.warn(
 				String.format("fact table generated %d fact table entries using %d initial transactions (multiplication factor: %.2f)", factTableSize, nrTransactions, explosionFactor));
@@ -1033,10 +1032,10 @@ private EtlResult execute() throws Exception {
 		boolean recreateTable = etlConfig.fullEtl && (!forceIncremental);
 		
 		if (recreateTable) {
-			monetConn.dropTable(tableName);
-			monetConn.executeQuery("CREATE TABLE " + tableName + " (act_id integer, ent_id integer, percentage double)");
+			olapConn.dropTable(tableName);
+			olapConn.executeQuery("CREATE TABLE " + tableName + " (act_id integer, ent_id integer, percentage double)");
 		} else {
-			monetConn.executeQuery("DELETE FROM " + tableName + " WHERE act_id IN (" + Util.toCSStringForIN(percs.keySet()) + ")");
+			olapConn.executeQuery("DELETE FROM " + tableName + " WHERE act_id IN (" + Util.toCSStringForIN(percs.keySet()) + ")");
 		}
 				
 		List<List<Object>> entries = new ArrayList<>();
@@ -1046,7 +1045,7 @@ private EtlResult execute() throws Exception {
 			for (Map.Entry<Long, Double> entry:pd.getPercentages().entrySet())
 				entries.add(Arrays.<Object>asList(actId, entry.getKey(), entry.getValue() / 100.0));
 		}
-		SQLUtils.insert(monetConn.conn, tableName, null, null, Arrays.asList("act_id", "ent_id", "percentage"), entries);
+		SQLUtils.insert(olapConn.conn, tableName, null, null, Arrays.asList("act_id", "ent_id", "percentage"), entries);
 
 		createIndices &= recreateTable;
 		if (createIndices) {
@@ -1054,7 +1053,7 @@ private EtlResult execute() throws Exception {
 			SQLUtils.executeQuery(conn, String.format("CREATE INDEX %s_ent_id_idx ON %s(ent_id)", tableName, tableName)); // create index on entityId (entity=sector/program/org)
 			SQLUtils.executeQuery(conn, String.format("CREATE INDEX %s_act_ent_id_idx ON %s(act_id, ent_id)", tableName, tableName)); // create index on entityId (entity=sector/program/org)
 		}
-		monetConn.flush();
+		olapConn.flush();
 	}
 	
 //	/**
@@ -1125,6 +1124,31 @@ private EtlResult execute() throws Exception {
 		return res;
 	}
 	
+	public void createFactTableViewForNoDatesFilters() throws SQLException {
+		List<String> columnsList = new ArrayList<String>(olapConn.getTableColumns(MondrianTablesRepository.FACT_TABLE.tableName));
+		
+		if (columnsList.isEmpty())
+			throw new RuntimeException("Unable to create '" + MondrianTablesRepository.FACT_TABLE_VIEW_NO_DATE_FILTER + 
+					"': missing fact table itself");
+		
+		// drop view first, if exists
+		olapConn.dropView(MondrianTablesRepository.FACT_TABLE_VIEW_NO_DATE_FILTER);
+		
+		String mirrorTransactionType = String.format("%1$s + %2$s as \"%1$s\"", MondrianTablesRepository.TRANSACTION_TYPE, 
+				MoConstants.TRANSACTION_TYPE_GAP);
+		Collections.replaceAll(columnsList, MondrianTablesRepository.TRANSACTION_TYPE, mirrorTransactionType);
+		String columns = Util.collectionAsString(columnsList);
+		
+		String viewQuery = String.format("CREATE VIEW %1$s AS "
+				+ "SELECT mf.* FROM %2$s mf "
+				+ "UNION ALL "
+				+ "SELECT %3$s FROM %2$s",
+				MondrianTablesRepository.FACT_TABLE_VIEW_NO_DATE_FILTER, MondrianTablesRepository.FACT_TABLE.tableName, 
+				columns);
+		
+		olapConn.executeQuery(viewQuery);
+	}
+	
 	/**
 	 * inserts a FULL ETL request into amp_etl_changelog. This is done in a completely separate PostgreSQL connection, because this function is normally called when the ETL has failed.
 	 * We don't know the reason the ETL has failed - it can be anything, including a bug in the ETL which leads to the JDBC conn having been invalidated - thus the separate SQL conn
@@ -1143,11 +1167,11 @@ private EtlResult execute() throws Exception {
 		synchronized(ETL_LOCK) {
 			Session session = PersistenceManager.getSession();
 			try(Connection conn = PersistenceManager.getJdbcConnection()) {
-				try(MonetConnection monetConn = MonetConnection.getConnection()) {
-					MondrianETL etl = new MondrianETL(conn, monetConn, forceFull);
+				try(OlapDbConnection olapConn = ETL_STRATEGY.getOlapConnection()) {
+					MondrianETL etl = new MondrianETL(conn, olapConn, forceFull);
 					EtlResult etlResult = etl.execute();
 					logger.info("Mondrian ETL result: " + etlResult);
-					SQLUtils.flush(monetConn.conn);
+					olapConn.flush();
 					SQLUtils.flush(conn);
 					return etlResult;
 				}

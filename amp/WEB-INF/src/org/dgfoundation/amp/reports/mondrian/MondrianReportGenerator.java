@@ -794,6 +794,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 */
 	protected void postprocessUndefinedEntries(CellDataSet cellDataSet) {
 		String translatedUnspecified = TranslatorWorker.translateText("Unspecified", environment.locale, 3l);
+		String currentId = null;
+		String previousId = null;
+		AbstractBaseCell[] previousRow = null; 
 
 		for (int rowId = 0; rowId < cellDataSet.getCellSetBody().length; rowId++) {
 			AbstractBaseCell[] row = cellDataSet.getCellSetBody()[rowId];
@@ -801,10 +804,16 @@ public class MondrianReportGenerator implements ReportExecutor {
 				continue; // who knows, let's be defensive
 
 			// For AMP-22696.
-			String currentId = getProjectIdFromCell(row);
-			AbstractBaseCell[] previousRow = cellDataSet.getCellSetBody()[rowId > 0 ? rowId - 1 : 0];
-			String previousId = getProjectIdFromCell(previousRow);
-			
+			if (rowId == 0) {
+				currentId = getProjectIdFromCell(row);
+				previousId = currentId;
+				previousRow = row;
+			} else {
+				previousId = currentId;
+				previousRow = cellDataSet.getCellSetBody()[rowId - 1];
+				currentId = getProjectIdFromCell(row);
+			}
+					
 			for (int i = 0; i < row.length; i++) {
 				if (row[i] != null) {
 					// this is for nontranslateable columns

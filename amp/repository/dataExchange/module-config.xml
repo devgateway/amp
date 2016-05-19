@@ -3,7 +3,11 @@
 	<name>dataExchange</name>
 	<default-instance>admin</default-instance>
 	<security login-required="true" default="READ">
-		<action login-required="true" pattern="/exportWizard"/>  
+		<action login-required="true" pattern="/manageSource">ADMIN</action>
+		<action login-required="true" pattern="/exportWizard">ADMIN</action>
+		<action login-required="true" pattern="/importChapters">ADMIN</action>
+		
+		   
 		<action login-required="true" pattern="/export"/> 
 		<action login-required="ture" pattern="/importWizard"/>  
 		<action login-required="true" pattern="/import"/> 

@@ -33,7 +33,7 @@
 
 /* The icons used by jquery on Tabs. */
 .ui-state-default .ui-icon {
-    background-image: url("images/ui-icons_FF6000_256x240.png");
+    background-image: url("images/ui-icons_3383bb_256x240.png");
 }
 
 .noTabsMessage {
@@ -217,7 +217,8 @@ table.dynamic-content-table th,td {
 
 /* Overriding jQueryUI section */
 .ui-widget-header {
-	color: orange;
+	color: #2d5379;
+    background: #ededed;
 }
 
 /* Overriding jqGrid section */
@@ -518,9 +519,9 @@ th.ui-th-column div {
 
 .save-tab {
 	border-collapse: separate;
-	border: 1px solid #999;
+	/*border: 1px solid #999;*/
 	padding: .25em .5em;
-	background: #edf5ff;
+	/*background: #edf5ff;*/
 }
 
 .save-text {

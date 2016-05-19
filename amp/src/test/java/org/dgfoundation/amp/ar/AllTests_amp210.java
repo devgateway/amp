@@ -84,26 +84,6 @@ public class AllTests_amp210
 	
 	
 	public static void setUp() {
-		try {
-			configureLog4j();
-			HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
-			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_212";
-			MonetConnection.MONET_CFG_OVERRIDE_URL = "jdbc:monetdb://localhost/amp_tests_212";
-			
-			org.digijava.kernel.ampapi.mondrian.util.Connection.IS_TESTING = true;
-			//HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_moldova_27";
-			//HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost:15434/amp_moldova";
-    	
-			ResourceStreamHandlerFactory.installIfNeeded();
-
-			DigiConfigManager.initialize("./repository");
-			PersistenceManager.initialize(false, null);
-//			Configuration cfg = HibernateClassLoader.getConfiguration();
-			//System.out.println("AMP started up!");
-			TLSUtils.getThreadLocalInstance().setForcedLangCode(SiteUtils.getDefaultSite().getDefaultLanguage().getCode());
-		}
-		catch(Exception e) {
-			throw new RuntimeException(e);
-		}
+		AllTests_amp212.setUp();
 	}
 }

@@ -225,27 +225,7 @@ public class MondrianTablesRepository {
 						.addTrnColDef("val", "id");
 				}
 			});
-	
-//	public final static MondrianTableDescription MONDRIAN_LONG_TEXTS = 
-//			new MondrianTableDescription("mondrian_activity_long_texts", "amp_activity_id", Arrays.asList("amp_activity_id", "language")) {
-//				{
-//					isFiltering = true;
-//				}
-//				@Override public boolean rowIsRelevant(java.sql.ResultSet rs, String locale) throws java.sql.SQLException {
-//					return rs.getString("language").equals(locale);
-//				}}
-//			//.withFingerprintedJob(Arrays.asList("SELECT 1"))
-//			.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
-//				@Override public I18nViewDescription getObject() {
-//					I18nViewDescription res = new I18nViewDescription("mondrian_activity_long_texts");
-//					for(String col:Arrays.asList("descr", "lessons_learned", "objectives", "results", "purpose", "projectcomments", "project_impact",
-//							"activity_summary", "conditionality", "project_management", "equalopportunity", "environment", "minorities", "program_description")) {
-//						res.addDgEditorColumnDef(col + "_body", "language");
-//					}
-//					return res;
-//				}
-//			})
-//			/* no pledges addon */;
+
 			
 	public final static MondrianTableDescription MONDRIAN_PLEDGE_CONTACTS = 
 			new MondrianTableDescription("mondrian_activity_contacts", "amp_activity_id", Arrays.asList("amp_activity_id"))
@@ -308,20 +288,14 @@ public class MondrianTablesRepository {
 				new DatabaseTableColumn("adjustment_type", "integer NOT NULL", true),  // ACV
 				new DatabaseTableColumn("transaction_date", "date NOT NULL", true),
 				new DatabaseTableColumn("date_code", "integer NOT NULL", true), // for currency reasons
-				new DatabaseTableColumn("display_date_code", "integer NOT NULL", true), // for display reasons
-				// using string pre discussion with Constantin to be consistent with old reports that are not following calendar settings
-				new DatabaseTableColumn("transaction_start_date", "varchar(20) NOT NULL", true),
-				new DatabaseTableColumn("transaction_end_date", "varchar(20) NOT NULL", true),
-				new DatabaseTableColumn("expenditure_class", "integer", true),
-				new DatabaseTableColumn("transaction_range", "varchar(50) NOT NULL", true),
-				new DatabaseTableColumn("maturity", "varchar(10) NOT NULL", true),
-				new DatabaseTableColumn("interest_rate", "varchar(10) NOT NULL", true),
-				new DatabaseTableColumn("grace_period", "varchar(10) NOT NULL", true),
-				new DatabaseTableColumn("ratification_date", "varchar(10) NOT NULL", true),
+				
 				/**
 				 * regarding currencies: if a transaction has a fixed_exchange_rate, BASE_CURRENCY would have been written in currency_id and transaction_amount would be translated
 				 */
-				new DatabaseTableColumn("transaction_amount", "double NOT NULL", false), // comment 
+				new DatabaseTableColumn("transaction_amount", "double NOT NULL", false), // comment
+				
+				new DatabaseTableColumn("expenditure_class", "integer", true),
+
 				new DatabaseTableColumn("currency_id", "integer NOT NULL", true), // comment 
 		
 				new DatabaseTableColumn("donor_id", "integer", true), // amp_org_id, might be null for example for pledges (which originate in donor groups)
@@ -359,7 +333,7 @@ public class MondrianTablesRepository {
 						
 				new DatabaseTableColumn("capital_spend_percent", "double", true),
 				new DatabaseTableColumn("disaster_response", "integer NOT NULL", true), // 1 - yes, 2 - no, UNDEFINED - undefined
-				
+								
 				new DatabaseTableColumn("src_role", "varchar(10)", true),  // amp_role.role_name
 				new DatabaseTableColumn("dest_role", "varchar(10)", true), // amp_role.role_name
 				new DatabaseTableColumn("dest_org_id", "integer", true),   // amp_org_id
@@ -376,84 +350,3 @@ public class MondrianTablesRepository {
 			new CurrencyAmountGroup(MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE.tableName, FACT_TABLE.tableName, "amp_activity_id", "entity_id", ""));
 }
 
-/**
- * to cleanup the mess:
- * 
-DROP TABLE etl_fingerprints;
-DROP TABLE IF EXISTS mondrian_raw_donor_transactions;
-DROP TABLE IF EXISTS mondrian_locations;
-DROP TABLE IF EXISTS mondrian_sectors;
-DROP TABLE IF EXISTS mondrian_programs;
-DROP TABLE IF EXISTS mondrian_organizations;
-DROP TABLE IF EXISTS mondrian_activity_texts;
-DROP TABLE IF EXISTS mondrian_raw_donor_transactions;
-DROP TABLE IF EXISTS etl_executing_agencies;
-DROP TABLE IF EXISTS etl_beneficiary_agencies;
-DROP TABLE IF EXISTS etl_implementing_agencies;
-DROP TABLE IF EXISTS etl_responsible_agencies;
-DROP TABLE IF EXISTS etl_locations;
-DROP TABLE IF EXISTS etl_activity_program_national_plan_objective;
-DROP TABLE IF EXISTS etl_activity_program_primary_program;
-DROP TABLE IF EXISTS etl_activity_program_secondary_program;
-DROP TABLE IF EXISTS etl_activity_program_tertiary_program;
-DROP TABLE IF EXISTS etl_activity_sector_primary;
-DROP TABLE IF EXISTS etl_activity_sector_secondary;
-DROP TABLE IF EXISTS etl_activity_sector_tertiary;
-DROP TABLE IF EXISTS etl_locations;
-DROP TABLE IF EXISTS etl_locations;
-DROP TABLE IF EXISTS etl_locations;
-DROP TABLE IF EXISTS etl_locations;
-DROP TABLE IF EXISTS etl_locations;
-DROP TABLE IF EXISTS etl_locations;
-DROP TABLE IF EXISTS mondrian_dates;
-DROP TABLE IF EXISTS mondrian_fact_table;
-DROP TABLE IF EXISTS mondrian_exchange_rates;
-
-to get columns of table in monetdb: select c.* from sys.columns c where c.table_id = (select t.id from sys.tables t where t.name='mondrian_fact_table')
-INSERT INTO mondrian_fact_table (entity_type, entity_id, entity_internal_id, transaction_type, adjustment_type, transaction_date, date_code, transaction_amount,    currency_id, donor_id, financing_instrument_id, terms_of_assistance_id, primary_sector_id, secondary_sector_id, tertiary_sector_id, location_id,   primary_program_id, secondary_program_id, tertiary_program_id, national_objectives_program_id,   ea_org_id, ba_org_id, ia_org_id, ro_org_id, src_role_id, dest_role_id, dest_org_id)   SELECT  	'A' as entity_type, 	rawdonation.amp_activity_id AS entity_id, 	rawdonation.amp_fund_detail_id AS entity_internal_id,     rawdonation.transaction_type AS transaction_type,     rawdonation.adjustment_type AS adjustment_type,     rawdonation.transaction_date AS transaction_date,     rawdonation.date_code AS date_code,  	rawdonation.transaction_amount * (          COALESCE(location.percentage, 1) *          COALESCE(prim_prog.percentage, 1) *          COALESCE(sec_prog.percentage, 1) * 		 COALESCE(tert_prog.percentage, 1) *          COALESCE(npo_prog.percentage, 1) *          COALESCE(prim_sect.percentage, 1) * 		 COALESCE(sec_sect.percentage, 1) *          COALESCE(tert_sect.percentage, 1) *          COALESCE(ra.percentage, 1) *          COALESCE(ba.percentage, 1) *          COALESCE(ia.percentage, 1) *          COALESCE(ea.percentage, 1)          ) AS transaction_amount,       rawdonation.currency_id AS currency_id, 	 rawdonation.donor_id AS donor_id,      rawdonation.financing_instrument_id AS financing_instrument_id,      rawdonation.terms_of_assistance_id AS terms_of_assistance_id,       COALESCE(prim_sect.ent_id, 999999999) AS primary_sector_id,      COALESCE(sec_sect.ent_id, 999999999) AS secondary_sector_id,      COALESCE(tert_sect.ent_id, 999999999) AS tertiary_sector_id,       COALESCE(location.ent_id, 999999999) AS location_id,       COALESCE(prim_prog.ent_id, 999999999) AS primary_program_id,      COALESCE(sec_prog.ent_id, 999999999) AS secondary_program_id,      COALESCE(tert_prog.ent_id, 999999999) AS tertiary_program_id,      COALESCE(npo_prog.ent_id, 999999999) AS national_objectives_program_id,       COALESCE(ea.ent_id, 999999999) AS ea_org_id,      COALESCE(ba.ent_id, 999999999) AS ba_org_id,      COALESCE(ia.ent_id, 999999999) AS ia_org_id,      COALESCE(ra.ent_id, 999999999) AS ro_org_id,            rawdonation.src_role_id AS src_role_id,      rawdonation.dest_role_id AS dest_role_id,      rawdonation.dest_org_id AS dest_org_id            	FROM mondrian_raw_donor_transactions rawdonation     LEFT JOIN etl_activity_sector_primary prim_sect ON prim_sect.act_id = rawdonation.amp_activity_id     LEFT JOIN etl_activity_sector_secondary sec_sect ON sec_sect.act_id = rawdonation.amp_activity_id     LEFT JOIN etl_activity_sector_tertiary tert_sect ON tert_sect.act_id = rawdonation.amp_activity_id          LEFT JOIN etl_activity_program_national_plan_objective npo_prog ON npo_prog.act_id = rawdonation.amp_activity_id     LEFT JOIN etl_activity_program_primary_program prim_prog ON prim_prog.act_id = rawdonation.amp_activity_id     LEFT JOIN etl_activity_program_secondary_program sec_prog ON sec_prog.act_id = rawdonation.amp_activity_id     LEFT JOIN etl_activity_program_tertiary_program tert_prog ON tert_prog.act_id = rawdonation.amp_activity_id      LEFT JOIN etl_locations location ON location.act_id = rawdonation.amp_activity_id      LEFT JOIN etl_executing_agencies ea ON ea.act_id = rawdonation.amp_activity_id     LEFT JOIN etl_beneficiary_agencies ba ON ba.act_id = rawdonation.amp_activity_id     LEFT JOIN etl_implementing_agencies ia ON ia.act_id = rawdonation.amp_activity_id     LEFT JOIN etl_responsible_agencies ra ON ra.act_id = rawdonation.amp_activity_id  order by rawdonation.amp_activity_id
-
-CREATE TABLE "mondrian_fact_table" (
-	"entity_type"                    CHAR(1)       NOT NULL,
-	"entity_id"                      INTEGER       NOT NULL,
-	"entity_internal_id"             INTEGER       NOT NULL,
-	"transaction_type"               INTEGER       NOT NULL,
-	"adjustment_type"                INTEGER       NOT NULL,
-	"transaction_date"               DATE          NOT NULL,
-	"date_code"                      INTEGER       NOT NULL,
-	"transaction_amount"             DOUBLE        NOT NULL,
-	"currency_id"                    INTEGER       NOT NULL,
-	"donor_id"                       INTEGER,
-	"financing_instrument_id"        INTEGER,
-	"terms_of_assistance_id"         INTEGER,
-	"primary_sector_id"              INTEGER       NOT NULL,
-	"secondary_sector_id"            INTEGER       NOT NULL,
-	"tertiary_sector_id"             INTEGER       NOT NULL,
-	"location_id"                    INTEGER       NOT NULL,
-	"primary_program_id"             INTEGER       NOT NULL,
-	"secondary_program_id"           INTEGER       NOT NULL,
-	"tertiary_program_id"            INTEGER       NOT NULL,
-	"national_objectives_program_id" INTEGER       NOT NULL,
-	"ea_org_id"                      INTEGER       NOT NULL,
-	"ba_org_id"                      INTEGER       NOT NULL,
-	"ia_org_id"                      INTEGER       NOT NULL,
-	"ro_org_id"                      INTEGER       NOT NULL,
-	"src_role_id"                    INTEGER,
-	"dest_role_id"                   INTEGER,
-	"dest_org_id"                    INTEGER,
-	"exch_rate_1"                    DOUBLE,
-	"exch_rate_2"                    DOUBLE,
-	"exch_rate_3"                    DOUBLE,
-	"exch_rate_4"                    DOUBLE,
-	"exch_rate_5"                    DOUBLE,
-	"exch_rate_6"                    DOUBLE,
-	"exch_rate_7"                    DOUBLE,
-	"exch_rate_8"                    DOUBLE,
-	"exch_rate_9"                    DOUBLE,
-	"exch_rate_10"                   DOUBLE,
-	"exch_rate_11"                   DOUBLE,
-	"exch_rate_12"                   DOUBLE,
-	"exch_rate_13"                   DOUBLE,
-	"exch_rate_14"                   DOUBLE,
-	"exch_rate_15"                   DOUBLE
-);
-*/

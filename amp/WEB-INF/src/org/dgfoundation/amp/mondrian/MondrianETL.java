@@ -35,7 +35,6 @@ import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter;
-import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter.YearMtefInfo;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -74,10 +73,6 @@ public class MondrianETL {
 	 */
 	public final static Long PLEDGE_ID_ADDER = 800000000l;
 	
-	/**
-	 * for MTEFs there are only year codes, mapped in (10k + yr). These don't clash with normal dates, because those start at ~2.4M
-	 */
-	public final static int MTEF_RANGES_START_DAY_CODE = 10000;
 	
 	//public final static ReadWriteLockHolder MONDRIAN_LOCK = new ReadWriteLockHolder("Mondrian reports/etl lock");
 	
@@ -553,50 +548,6 @@ private EtlResult execute() throws Exception {
 		colNames.add("quarter_name" + suffix);
 	}
 	
-	/**
-	 * generates MTEF entries in the day_code interval 10k...15k (e.g. 10k + YEAR_NUMBER) for all calendars
-	 * @param allCalendars
-	 * @throws SQLException
-	 */
-	protected void generateMtefCalendarEntries(List<AmpFiscalCalendar> allCalendars) throws SQLException {
-		List<String> columnNames = new ArrayList<>();
-		columnNames.add("day_code");
-		columnNames.add("full_date");
-		addSuffixedColumns(columnNames, "");
-		for(AmpFiscalCalendar cal:allCalendars)
-			addSuffixedColumns(columnNames, "_" + cal.getAmpFiscalCalId());
-		
-		List<List<Object>> mtefDatesRowsToInsert = new ArrayList<>();
-		for (int year:MtefConverter.instance.mtefInfos.keySet()) {
-			YearMtefInfo mtefInfo = MtefConverter.instance.mtefInfos.get(year);
-			List<Object> row = new ArrayList<>();
-			long day_code = mtefInfo.periodStartDayCode; // in the current implementation periodStart = periodEnd, thus can take any of them
-			String full_date = String.format("%d-01-01", year);
-			row.add(day_code);
-			row.add(full_date);
-//			calendar.set(Calendar.YEAR, year);
-			long yearCode = year;
-			// he who loves Mondrian should shoot himself. I have to write crap code like this because of YOU. Yes, I am looking at ==> YOU <==
-			
-			String yearNamePlain = Long.toString(yearCode);//String.format("MTEF %s", kv.getValue());
-			String yearNameFiscalJanuary = String.format("Fiscal Year %d", yearCode);//String.format("MTEF %s", kv.getValue());
-			String yearNameFiscalRange = String.format("Fiscal Year %d - %d", yearCode, yearCode + 1);//String.format("MTEF %s", kv.getValue());
-			
-			long monthCode = 1;
-			String monthName = "January";
-			long quarterCode = 1;
-			String quarterName = "Q1";
-			List<Object> plainDatesColumns = (List) Arrays.asList(yearCode, yearNamePlain, monthCode, monthName, quarterCode, quarterName);
-			List<Object> fiscalJanuaryDatesColumns = (List) Arrays.asList(yearCode, yearNameFiscalJanuary, monthCode, monthName, quarterCode, quarterName);
-			List<Object> fiscalRangeDatesColumns = (List) Arrays.asList(yearCode, yearNameFiscalRange, monthCode, monthName, quarterCode, quarterName);
-			row.addAll(plainDatesColumns);
-			for(AmpFiscalCalendar dummyCal:allCalendars) {
-				row.addAll(dummyCal.getIsFiscal() ? (dummyCal.getStartMonthNum() == 1 ? fiscalJanuaryDatesColumns : fiscalRangeDatesColumns) : plainDatesColumns);
-			}
-			mtefDatesRowsToInsert.add(row);
-		}
-		SQLUtils.insert(conn, MONDRIAN_DATE_TABLE, null, null, columnNames, mtefDatesRowsToInsert);
-	}
 	
 	/**
 	 * generates the Mondrian Date Table into MonetDB. Since Monet lacks the needed features, the table construction is done in postgres and then pumped into monet
@@ -616,7 +567,6 @@ private EtlResult execute() throws Exception {
 		for (AmpFiscalCalendar calendar:allCalendars) {
 			generateFiscalCalendarColumns(calendar);
 		}
-		generateMtefCalendarEntries(allCalendars);
 		monetConn.copyTableFromPostgres(conn, MONDRIAN_DATE_TABLE);
 	}
 	
@@ -1137,7 +1087,6 @@ private EtlResult execute() throws Exception {
 			while (stok.hasMoreTokens()) {
 				String q = stok.nextToken();
 				q = q.replace("@@BUGCHOOSER@@", BUG_CHOOSER ? "999888777" : "999999999");
-				q = q.replace("@@MTEF_START@@", Integer.toString(MTEF_RANGES_START_DAY_CODE));
 				if (q.indexOf("@@activityIdCondition@@") != 0 && allEntities.isEmpty())
 					continue; // query references activities, but these are empty -> it is useless
 				String activityCondition = etlConfig.fullEtl ? " >0 " : (" IN (" +Util.toCSStringForIN(allEntities) + ")");

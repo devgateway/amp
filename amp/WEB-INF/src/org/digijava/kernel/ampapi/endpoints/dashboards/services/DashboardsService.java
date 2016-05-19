@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.GeneratedReport;
@@ -340,8 +341,8 @@ public class DashboardsService {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetAidPredictability", ArConstants.DONOR_TYPE);
 		spec.addColumn(new ReportColumn(ColumnConstants.COUNTRY));
 		spec.getHierarchies().add(new ReportColumn(ColumnConstants.COUNTRY));
-		spec.addMeasure(new ReportMeasure(MoConstants.PLANNED_DISBURSEMENTS));
-		spec.addMeasure(new ReportMeasure(MoConstants.ACTUAL_DISBURSEMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
 		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
 		
 		MondrianReportFilters filterRules = null;
@@ -372,7 +373,7 @@ public class DashboardsService {
 					continue;
 				}
 					
-				boolean isPlannedColumn = outputColumn.originalColumnName.equals(MoConstants.PLANNED_DISBURSEMENTS);
+				boolean isPlannedColumn = outputColumn.originalColumnName.equals(MeasureConstants.PLANNED_DISBURSEMENTS);
 				boolean isTotalColumn = outputColumn.parentColumn != null && outputColumn.parentColumn.originalColumnName.equals(NiReportsEngine.TOTALS_COLUMN_NAME);
 				String destination = isPlannedColumn ? "planned disbursements" : "actual disbursements";
 				

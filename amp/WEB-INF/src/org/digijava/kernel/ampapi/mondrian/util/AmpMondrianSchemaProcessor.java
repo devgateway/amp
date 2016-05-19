@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MondrianTablesRepository;
@@ -124,7 +125,6 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		contents = contents.replace("@@nopledges@@", pledgesRelevant ? "" : "_no_pledges");
 		
 		contents = updateDateLimits(contents, getReportSelectedYear());
-		contents = configureDatesSource(contents);
 		
 		// area for (pledges + activities) reports hacks. Holding my nose while writing this - let whatever genius wanted Mondrian as a report engine maintain this PoS :D
 		String nonAcPledgeExcluderString = isDonorReportWithPledges ? "(mondrian_fact_table.entity_id &lt; 800000000) AND " : ""; // annulate non-Actual-Commitments trivial measures IFF running an "also show pledges" report
@@ -152,17 +152,11 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		
 		// process general filters & custom filters 
 		String entityFilteringSubquery = buildFilteringSubquery(); 
-		String noDatesEntityFilteringSubquery = getNoDatesFilter(entityFilteringSubquery);
 		// order is important, keep it here, do not move up; these date filters tags solution will be soon removed
 		entityFilteringSubquery = entityFilteringSubquery.replaceAll(FactTableFiltering.DATE_FILTERS_TAG_START + "|" + FactTableFiltering.DATE_FILTERS_TAG_END, "");
-		String computedTotalsFilter = getComputedTotalsFilter();
 		
 		logger.info("the entity filtering subquery is: " + entityFilteringSubquery);
-		logger.info("the noDatesEntityFiltering subquery is: " + noDatesEntityFilteringSubquery);
-		logger.info("the computedTotalsFilter subquery is: " + computedTotalsFilter);
 		contents = contents.replaceAll("@@filteredActivities@@", entityFilteringSubquery);
-		contents = contents.replaceAll("@@filteredActivitiesWithoutDateFilters@@", noDatesEntityFilteringSubquery);
-		contents = contents.replaceAll("@@report_totals_filter@@", computedTotalsFilter);
 		
 		//contents = contents.replaceAll("@@filteredActivities@@", "mondrian_fact_table.entity_id > 0");
 		int pos = contents.indexOf("@@");
@@ -294,8 +288,6 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			contents = XMLGlobals.saveToString(xmlSchema);
 			contents = contents.replaceAll("@@undefined_amount@@", MoConstants.UNDEFINED_AMOUNT_STR);
 			contents = contents.replaceAll("@@transaction_type_gap@@", MoConstants.TRANSACTION_TYPE_GAP);
-			contents = updatePledgeContacts(contents);
-			contents = configurePledgeDetailDates(contents);
 			expandedSchema = contents;
 			//System.err.println("the expanded schema is: " + expandedSchema);
 		}
@@ -329,8 +321,6 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	
 	protected void insertCommonMeasuresDefinitions(Document xmlSchema) {
 		Node trivialMeasureDefinitionNode = XMLGlobals.selectNode(xmlSchema, "//Measure[@name='@@trivial_measure@@']");
-		Node computedTotDefNode = XMLGlobals.selectNode(xmlSchema, "//Hierarchy[@name='Total Amounts']");
-		Node grandTotFilteredDefNode = XMLGlobals.selectNode(xmlSchema, "//Hierarchy[@name='Grand Total Filtered Amounts']");
 		
 		//String trivialMeasureString = XMLGlobals.saveToString(trivialMeasureDefinitionNode);
 		
@@ -341,11 +331,8 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 				continue; // MTEFs are handled elsewhere
 			for (AmpCategoryValue adj: CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.ADJUSTMENT_TYPE_KEY)) {
 				String measureName = adj.getValue() + " " + transactionType;
-				
-				insertComputedTotals(computedTotDefNode, adj, trTypeId, transactionType, measureName, false);
-				insertComputedTotals(grandTotFilteredDefNode, adj, trTypeId, transactionType, measureName, true);
-				
-				if (measureName.equals(MoConstants.ACTUAL_COMMITMENTS))
+								
+				if (measureName.equals(MeasureConstants.ACTUAL_COMMITMENTS))
 					continue; // this one is hardcoded in AMP.xml for the sake of "pledges + activities" reports				
 				
 				addTrivialMeasure(trivialMeasureDefinitionNode, measureName, adj, trTypeId);
@@ -378,8 +365,6 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		}
 		
 		trivialMeasureDefinitionNode.getParentNode().removeChild(trivialMeasureDefinitionNode);
-		computedTotDefNode.getParentNode().removeChild(computedTotDefNode);
-		grandTotFilteredDefNode.getParentNode().removeChild(grandTotFilteredDefNode);
 	}
 	
 	protected void insertComputedTotals(Node computedTotalsDefinitionNode, AmpCategoryValue adj, 
@@ -414,17 +399,6 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		levelNode.setAttribute("column", name.replace(" ", "_"));
 		
 		computedTotalsDefinitionNode.getParentNode().appendChild(newComputedTotals);
-	}
-	
-	protected String getComputedTotalsFilter() {
-		String filter = "(" + getFilterByReportType(currentReport.get().getReportType()) + ")";
-		switch(currentReport.get().getReportType()) {
-			case ArConstants.DONOR_TYPE:
-			case ArConstants.COMPONENT_TYPE:
-				filter += " AND (src_role='DN')";
-			break;
-		}
-		return filter;
 	}
 	
 	private void addTrivialMeasure(Node trivialMeasureDefinitionNode, String measureName, AmpCategoryValue adj,
@@ -584,19 +558,6 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	}
 	
 	/**
-	 * Removes dates filters
-	 * @param entityFilteringSubquery
-	 * @return
-	 */
-	protected String getNoDatesFilter(String entityFilteringSubquery) {
-		String noDatesFilter = entityFilteringSubquery.replaceAll(FactTableFiltering.DATE_FILTERS_PATTERN, "");
-		if ("()".equals(noDatesFilter.trim())) {
-			noDatesFilter = "(1 = 1)";
-		}
-		return noDatesFilter;
-	}
-	
-	/**
 	 * this should be called before each and every report run using Mondrian
 	 * @param spec
 	 */
@@ -655,16 +616,6 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		return contents;
 	}
 	
-	protected String updatePledgeContacts(String contents) {
-		String startStr = "<!-- Pledge Contacts - START -->";
-		String endStr = "<!-- Pledge Contacts - END -->";
-		String contactsGeneric = contents.substring(contents.indexOf(startStr), contents.indexOf(endStr) + endStr.length());
-		String contacts1 = contactsGeneric.replace("@@nr@@", "1");
-		String contacts2 = contactsGeneric.replace("@@nr@@", "2");		
-		contents = contents.replace(contactsGeneric, (contacts1 + contacts2).replace(startStr, "").replace(endStr, ""));
-		return contents;
-	}
-	
 	/**
 	 * @return the actual name of the fact table or fact view
 	 */
@@ -683,56 +634,5 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			factTable = MondrianTablesRepository.FACT_TABLE_VIEW_NO_DATE_FILTER;
 		}
 		return factTable;
-	}
-	
-	protected String configureDatesSource(String contents) {
-		String mondrian_date_source = "@@mondrian_date_source%d@@";
-		String datesSource = null;
-		if (hasMTEFs()) {
-			datesSource = "<Table name=\"mondrian_dates\" />";
-		} else {
-			String minCode = String.valueOf(MtefConverter.getMtefStartDayCode());
-			String maxCode = String.valueOf(MtefConverter.getMtefEndDayCode());
-			datesSource = "<View alias=\"v_mondrian_dates_%d\">"
-				+ "				<SQL dialect=\"generic\">"
-				+ "					<![CDATA["
-				+ "					SELECT * FROM mondrian_dates WHERE NOT (day_code >=" + minCode + " AND day_code <= " + maxCode +")"
-				+ "					]]>"
-				+ "				</SQL>"
-				+ "			</View>";
-		}
-		for (int refId = 1; refId <= 4; refId++) {
-			contents = contents.replaceAll(String.format(mondrian_date_source, refId), String.format(datesSource, refId));
-		}
-		return contents;
-	}
-	
-	protected boolean hasMTEFs() {
-		Set<ReportMeasure> measures = currentReport.get().getMeasures();
-		if (measures != null && measures.size() > 0) {
-			for (ReportMeasure measure : measures) {
-				if (CustomMeasures.MTEFs.contains(measure.getMeasureName())) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	protected String configurePledgeDetailDates(String contents) {
-		String template = "SELECT DISTINCT mft_internal.entity_internal_id as pledge_detail_id, @@pledge_detail_date_type@@ "
-					+ " FROM @@mondrian_fact_table@@ mft_internal"
-					+ " WHERE mft_internal.entity_id > 800000000 AND mft_internal.transaction_type=7" 
-					+ " UNION " 
-					+ " SELECT DISTINCT mft_internal.entity_internal_id as pledge_detail_id, '' as @@pledge_detail_date_type@@"
-					+ " FROM mondrian_fact_table mft_internal " 
-					+ " WHERE mft_internal.entity_internal_id not in" 
-						+ " (SELECT DISTINCT mft2.entity_internal_id FROM mondrian_fact_table mft2"
-					    + " WHERE mft2.entity_id > 800000000 AND mft2.transaction_type=7)"; 
-		
-		contents = contents.replace("@@transaction_start_date@@", template.replace("@@pledge_detail_date_type@@", "transaction_start_date"));
-		contents = contents.replace("@@transaction_end_date@@", template.replace("@@pledge_detail_date_type@@", "transaction_end_date"));
-		contents = contents.replace("@@transaction_range@@", template.replace("@@pledge_detail_date_type@@", "transaction_range"));
-		return contents;
 	}
 }

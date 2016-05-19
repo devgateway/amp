@@ -1,34 +1,20 @@
 == C. running ==
 	
-measures which are not affected by filters should be made columns
-	-> what about those which have meaning for both year and overall (e.g. Execution Rate / Forecast Execution Rate)
-	
-REDO *info* columns as being part of the hierarchy
-REDO *funding* columns as being part of the donor hierarchy
-REDO v_organization_projectid
-pledges sectors + programs should be somehow fixed (data model is broken)
-pledges titles: make a new view for NiReports
-v_component_funding_description, v_component_funding_organization_name - add as being part of 2 hierarchies
-v_activity_pledges_title:
-	views which link pledges to activities are... different. These have to be changed, but in an another way - for later
-	
 in case fetching a column/measure crashes -> remove said column/measure from report and add a note about it to warnings
 	-> treat the case when fetching a column which is also a hierarchy fails
 	
-filters: activities-id caching
-RELATED_PROJECTS: take care of the (id / related id) stuff
-generate the following in-memory schemas:
-	-> benchmarks schema
-	-> report wizard schema (as a tiny layer on top of testcases schema)
-
-https://jira.dgfoundation.org/browse/AMP-22006 - DO NOT MERGE THIS ONE TO AMP 2.12
-
-http://localhost:8080/rest/data/nireport/10 - report behaviour when no funding
-gross filtering-out of entries while fetching funding
-
-caching layer on top of workspace filter
 lucene indexer
 refactor workspacefilter
-format numbers, during the output stage, as BigDecimal (AmpNiReportsFormatter)
-summary reports in output stages
-refactor ReportEnvironment -> add mainIds to ReportSpecification after Mondrian would have been deleted
+
+removing monet / mondrian engine:
+1. 
+				new DatabaseTableColumn("transaction_start_date", "varchar(20) NOT NULL", true),
+				new DatabaseTableColumn("transaction_end_date", "varchar(20) NOT NULL", true),
+				new DatabaseTableColumn("transaction_range", "varchar(50) NOT NULL", true),
+				new DatabaseTableColumn("maturity", "varchar(10) NOT NULL", true),
+				new DatabaseTableColumn("interest_rate", "varchar(10) NOT NULL", true),
+				new DatabaseTableColumn("grace_period", "varchar(10) NOT NULL", true),
+				new DatabaseTableColumn("ratification_date", "varchar(10) NOT NULL", true),
+
+
+2. on FULL ETL, create indices only after the fact table has been constructed

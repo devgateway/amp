@@ -1,8 +1,7 @@
 DELETE FROM mondrian_fact_table WHERE entity_id @@activityIdCondition@@;
 
-INSERT INTO mondrian_fact_table (entity_id, funding_id, entity_internal_id, transaction_type, adjustment_type, transaction_date, date_code, display_date_code, 
-  transaction_start_date, transaction_end_date, transaction_range, transaction_amount, expenditure_class, 
-  ratification_date, grace_period, interest_rate, maturity,
+INSERT INTO mondrian_fact_table (entity_id, funding_id, entity_internal_id, transaction_type, adjustment_type, transaction_date, date_code, 
+  transaction_amount, expenditure_class, 
   currency_id, donor_id, 
   financing_instrument_id, terms_of_assistance_id, funding_status_id, mode_of_payment_id, status_id, modality_id, type_of_cooperation_id, type_of_implementation_id, procurement_system_id,
   primary_sector_id, secondary_sector_id, tertiary_sector_id, location_id,
@@ -20,10 +19,6 @@ INSERT INTO mondrian_fact_table (entity_id, funding_id, entity_internal_id, tran
     rawdonation.adjustment_type AS adjustment_type,
     rawdonation.transaction_date AS transaction_date,
     rawdonation.date_code AS date_code,
-    CASE WHEN transaction_type = 3 THEN @@MTEF_START@@ + (extract (year from transaction_date)) ELSE rawdonation.date_code END AS display_date_code,
-    rawdonation.transaction_start_date AS transaction_start_date,
-    rawdonation.transaction_end_date AS transaction_end_date,
-    rawdonation.transaction_range AS transaction_range,
 
 	rawdonation.transaction_amount * (
          COALESCE(location.percentage, 1) *
@@ -43,10 +38,6 @@ INSERT INTO mondrian_fact_table (entity_id, funding_id, entity_internal_id, tran
          COALESCE(sg.percentage, 1)
          ) AS transaction_amount,
 	 rawdonation.expenditure_class AS expenditure_class,
-	 COALESCE(rawdonation.ratification_date, '') AS ratification_date,
-	 COALESCE(rawdonation.grace_period, '') AS grace_period, 
-	 COALESCE(rawdonation.interest_rate, '') AS interest_rate,
-	 COALESCE(rawdonation.maturity, '') AS maturity,
      rawdonation.currency_id AS currency_id,
 	 CASE WHEN rawdonation.src_role='DN' THEN rawdonation.originating_org_id ELSE @@BUGCHOOSER@@ END AS donor_id,
      COALESCE(rawdonation.financing_instrument_id, 999999999) AS financing_instrument_id,
@@ -89,11 +80,11 @@ INSERT INTO mondrian_fact_table (entity_id, funding_id, entity_internal_id, tran
      	ELSE 999999999 
      END AS disaster_response_id,
      
-     rawdonation.src_role AS src_role,
-     rawdonation.dest_role AS dest_role,
-     rawdonation.dest_org_id AS dest_org_id,
-     'Undefined' AS flow_name, 
-     rawdonation.related_entity_id AS related_entity_id
+    rawdonation.src_role AS src_role,
+    rawdonation.dest_role AS dest_role,
+    rawdonation.dest_org_id AS dest_org_id,
+    'Undefined' AS flow_name, 
+    rawdonation.related_entity_id AS related_entity_id
           
 	FROM mondrian_raw_donor_transactions rawdonation
     LEFT JOIN etl_activity_sector_primary prim_sect ON prim_sect.act_id = rawdonation.amp_activity_id
@@ -115,13 +106,11 @@ INSERT INTO mondrian_fact_table (entity_id, funding_id, entity_internal_id, tran
     LEFT JOIN etl_regional_groups rg ON rg.act_id = rawdonation.amp_activity_id
     LEFT JOIN etl_sector_groups sg ON sg.act_id = rawdonation.amp_activity_id
 
-    WHERE (rawdonation.transaction_amount IS NOT NULL) AND (rawdonation.amp_activity_id @@activityIdCondition@@)
-order by rawdonation.amp_activity_id;
+    WHERE (rawdonation.transaction_amount IS NOT NULL) AND (rawdonation.amp_activity_id @@activityIdCondition@@);
 
 
-INSERT INTO mondrian_fact_table (entity_id, funding_id, entity_internal_id, transaction_type, adjustment_type, transaction_date, date_code, display_date_code, 
-  transaction_start_date, transaction_end_date, transaction_range, transaction_amount, expenditure_class,
-  ratification_date, grace_period, interest_rate, maturity,
+INSERT INTO mondrian_fact_table (entity_id, funding_id, entity_internal_id, transaction_type, adjustment_type, transaction_date, date_code,  
+  transaction_amount, expenditure_class,
   currency_id, donor_id, 
   financing_instrument_id, terms_of_assistance_id, funding_status_id, mode_of_payment_id, status_id, modality_id, type_of_cooperation_id, type_of_implementation_id, procurement_system_id,
   primary_sector_id, secondary_sector_id, tertiary_sector_id, location_id,
@@ -139,10 +128,6 @@ INSERT INTO mondrian_fact_table (entity_id, funding_id, entity_internal_id, tran
     rawdonation.adjustment_type AS adjustment_type,
     rawdonation.transaction_date AS transaction_date,
     rawdonation.date_code AS date_code,
-    CASE WHEN transaction_type = 3 THEN @@MTEF_START@@ + (extract (year from transaction_date)) ELSE rawdonation.date_code END AS display_date_code,
-    rawdonation.transaction_start_date AS transaction_start_date,
-    rawdonation.transaction_end_date AS transaction_end_date,
-    rawdonation.transaction_range AS transaction_range,
 
 	rawdonation.transaction_amount * (
          COALESCE(location.percentage, 1) *
@@ -154,13 +139,12 @@ INSERT INTO mondrian_fact_table (entity_id, funding_id, entity_internal_id, tran
 		 COALESCE(sec_sect.percentage, 1) *
          COALESCE(tert_sect.percentage, 1)
          ) AS transaction_amount,
+         
 	 rawdonation.expenditure_class AS expenditure_class,
-	 rawdonation.ratification_date AS ratification_date,
-	 rawdonation.grace_period AS grace_period, 
-	 rawdonation.interest_rate AS interest_rate,
-	 rawdonation.maturity AS maturity,	 
+	 
      rawdonation.currency_id AS currency_id,
 	 CASE WHEN src_role='DN' THEN rawdonation.originating_org_id ELSE @@BUGCHOOSER@@ END AS donor_id,
+	 
      COALESCE(rawdonation.financing_instrument_id, 999999999) AS financing_instrument_id,
      COALESCE(rawdonation.terms_of_assistance_id, 999999999) AS terms_of_assistance_id,
      COALESCE(rawdonation.funding_status_id, 999999999) AS funding_status_id,
@@ -200,12 +184,12 @@ INSERT INTO mondrian_fact_table (entity_id, funding_id, entity_internal_id, tran
      	WHEN NOT rawdonation.disaster_response THEN 2
      	ELSE 999999999 
      END AS disaster_response_id,
-     
-     rawdonation.src_role AS src_role,
-     rawdonation.dest_role AS dest_role,
-     rawdonation.dest_org_id AS dest_org_id,
-     'Undefined' AS flow_name, 
-     rawdonation.related_entity_id AS related_entity_id
+    
+    rawdonation.src_role AS src_role,
+    rawdonation.dest_role AS dest_role,
+    rawdonation.dest_org_id AS dest_org_id,
+    'Undefined' AS flow_name, 
+    rawdonation.related_entity_id AS related_entity_id
           
 	FROM mondrian_raw_donor_transactions rawdonation
     LEFT JOIN etl_activity_sector_primary prim_sect ON prim_sect.act_id = rawdonation.amp_activity_id
@@ -219,8 +203,9 @@ INSERT INTO mondrian_fact_table (entity_id, funding_id, entity_internal_id, tran
 
     LEFT JOIN etl_locations location ON location.act_id = rawdonation.amp_activity_id
 
-    WHERE (rawdonation.transaction_amount IS NOT NULL) AND (rawdonation.amp_activity_id @@activityIdCondition@@) AND (rawdonation.transaction_type IN (0, 1, 2, 3)) AND (src_role IS NOT NULL) AND (dest_role IS NOT NULL)
-order by rawdonation.amp_activity_id;
+    WHERE (rawdonation.transaction_amount IS NOT NULL) AND (rawdonation.amp_activity_id @@activityIdCondition@@) AND (rawdonation.transaction_type IN (0, 1, 2, 3)) AND (src_role IS NOT NULL) AND (dest_role IS NOT NULL);
+    
+
 
 UPDATE mondrian_fact_table SET flow_name = ((@@src_role@@) || ' - ' || (@@dest_role@@)) 
 	WHERE ((transaction_type >= 200) AND (transaction_type <= 215)) AND (src_role IS NOT NULL) AND (dest_role IS NOT NULL) AND (entity_id @@activityIdCondition@@);

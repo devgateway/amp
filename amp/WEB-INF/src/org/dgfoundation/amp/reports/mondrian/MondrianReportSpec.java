@@ -147,25 +147,6 @@ public class MondrianReportSpec implements ReportSpecification {
 		}
 	}
 	
-	protected void addMeasureIfMandatedByColumn(ReportSpecificationImpl spec, SortedSet<Integer> years, ElementType elementType, String measureToAdd, boolean addMeasureAtBeginning) {
-		List<FilterRule> rules = MtefConverter.instance.buildRulesFor(years);
-		if (rules == null)
-			return;
-		
-		// we have to add MTEF info to filters -> ensure that a filters instance exists
-		if (spec.getFilters() == null)
-			spec.setFilters(new MondrianReportFilters());
-
-		spec.getFilters().getFilterRules().put(new ReportElement(elementType), rules);
-		ReportMeasure measure = new ReportMeasure(measureToAdd);
-		if (!spec.getMeasures().contains(measure)) {
-//			if (addMeasureAtBeginning)
-//				spec.getMeasures().add(0, measure);
-//			else
-				spec.getMeasures().add(measure);
-		}
-	}
-	
 	/**
 	 * scans the report for MTEF columns and converts them to "mtef" measure reference + filter entries <br />
 	 * this function is thread-safe, because it has no off-stack state <br />
@@ -180,11 +161,6 @@ public class MondrianReportSpec implements ReportSpecification {
 			addIfMtef(arc, pipelineMtefYears, "pipelinemtef");
 			addIfMtef(arc, projectionMtefYears, "projectionmtef");
 		}
-						
-		addMeasureIfMandatedByColumn(emb, mtefYears, ElementType.MTEF_DATE, MeasureConstants.MTEF_PROJECTIONS, true);
-		addMeasureIfMandatedByColumn(emb, realMtefYears, ElementType.REAL_MTEF_DATE, MeasureConstants.REAL_MTEFS, false);
-		addMeasureIfMandatedByColumn(emb, pipelineMtefYears, ElementType.PIPELINE_MTEF_DATE, MeasureConstants.PIPELINE_MTEF_PROJECTIONS, false);
-		addMeasureIfMandatedByColumn(emb, projectionMtefYears, ElementType.PROJECTION_MTEF_DATE, MeasureConstants.PROJECTION_MTEF_PROJECTIONS, false);
 		
 		allowedYearsPerMeasure.put("MTEF", mtefYears);
 		allowedYearsPerMeasure.put(MeasureConstants.REAL_MTEFS, realMtefYears);

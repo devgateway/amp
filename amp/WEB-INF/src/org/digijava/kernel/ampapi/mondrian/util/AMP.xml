@@ -185,7 +185,7 @@
 		
 	<Dimension name="AMP Date" type="TimeDimension">
 		<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day_code" name="Dates">
-			@@mondrian_date_source1@@
+			<Table name="mondrian_dates" />
 			<Level name="Year" column="year_code@@calendar@@" nameColumn="year_name@@calendar@@" levelType="TimeYears" type="Integer" translated="false" />
 			<Level name="Quarter" column="quarter_code@@calendar@@" ordinalColumn="quarter_code@@calendar@@" nameColumn="quarter_name@@calendar@@" levelType="TimeQuarters" type="Integer" translated="false" />
 			<Level name="Month" column="month_code@@calendar@@" ordinalColumn="month_code@@calendar@@" nameColumn="month_name@@calendar@@" levelType="TimeMonths" type="Integer"  translated="false" />
@@ -196,15 +196,15 @@
 			</Level>
 		</Hierarchy>
 		<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day_code" name="Year">
-		  @@mondrian_date_source2@@
+		 <Table name="mondrian_dates" />
 		  <Level name="Year" column="year_code@@calendar@@" nameColumn="year_name@@calendar@@" levelType="TimeYears" type="Integer" translated="false" />
 		</Hierarchy>
 		<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day_code" name="Quarter">
-		  @@mondrian_date_source3@@
+		 <Table name="mondrian_dates" />
 		  <Level name="Quarter" column="quarter_code@@calendar@@" ordinalColumn="quarter_code@@calendar@@" nameColumn="quarter_name@@calendar@@" levelType="TimeQuarters" type="Integer" translated="false" />
 		</Hierarchy>
 		<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day_code" name="Month">
-		  @@mondrian_date_source4@@
+		  <Table name="mondrian_dates" />
 		  <Level name="Month" column="month_code@@calendar@@" ordinalColumn="month_code@@calendar@@" nameColumn="month_name@@calendar@@" levelType="TimeMonths" type="Integer" translated="false" />
 		</Hierarchy>
 	</Dimension>
@@ -531,59 +531,6 @@
 				<Level name="Proposed Project Life" column="amp_activity_id" type="Integer" nameColumn="proposed_project_life" />
 			</Hierarchy>
 		</Dimension>
-
-<!-- <Dimension name="Activity Long Texts" foreignKey="entity_id">
-			<Hierarchy hasAll="true" allMemberName="All Project Description" primaryKey="amp_activity_id" name="Project Description">
-				<Table name="mondrian_activity_long_texts@@locale@@" />
-				<Level name="Project Description" column="amp_activity_id" type="String" nameColumn="descr_body" />
-			</Hierarchy>
-			
-			<Hierarchy hasAll="true" allMemberName="All Objective" primaryKey="amp_activity_id" name="Objective">
-				<Table name="mondrian_activity_long_texts@@locale@@" />
-				<Level name="Objective" column="amp_activity_id" type="String" nameColumn="objectives_body" />
-			</Hierarchy>
-			
-			<Hierarchy hasAll="true" allMemberName="All Results" primaryKey="amp_activity_id" name="Results">
-				<Table name="mondrian_activity_long_texts@@locale@@" />
-				<Level name="Results" column="amp_activity_id" type="String" nameColumn="results_body" />
-			</Hierarchy>
-			
-			<Hierarchy hasAll="true" allMemberName="All Purpose" primaryKey="amp_activity_id" name="Purpose">
-				<Table name="mondrian_activity_long_texts@@locale@@" />
-				<Level name="Purpose" column="amp_activity_id" type="String" nameColumn="purpose_body" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Project Comments" primaryKey="amp_activity_id" name="Project Comments">
-				<Table name="mondrian_activity_long_texts@@locale@@" />
-				<Level name="Project Comments" column="amp_activity_id" type="String" nameColumn="projectcomments_body" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Project Impact" primaryKey="amp_activity_id" name="Project Impact">
-				<Table name="mondrian_activity_long_texts@@locale@@" />
-				<Level name="Project Impact" column="amp_activity_id" type="String" nameColumn="project_impact_body" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Equal Opportunity" primaryKey="amp_activity_id" name="Equal Opportunity">
-				<Table name="mondrian_activity_long_texts@@locale@@" />
-				<Level name="Equal Opportunity" column="amp_activity_id" type="String" nameColumn="equalopportunity_body" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Environment" primaryKey="amp_activity_id" name="Environment">
-				<Table name="mondrian_activity_long_texts@@locale@@" />
-				<Level name="Environment" column="amp_activity_id" type="String" nameColumn="environment_body" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Minorities" primaryKey="amp_activity_id" name="Minorities">
-				<Table name="mondrian_activity_long_texts@@locale@@" />
-				<Level name="Minorities" column="amp_activity_id" type="String" nameColumn="minorities_body" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Program Description" primaryKey="amp_activity_id" name="Program Description">
-				<Table name="mondrian_activity_long_texts@@locale@@" />
-				<Level name="Program Description" column="amp_activity_id" type="String" nameColumn="program_description_body" />
-			</Hierarchy>
-			
-		</Dimension> -->
 		
 		<Dimension name="Component" foreignKey="component_id">
 			<Hierarchy hasAll="true" allMemberName="All Component Names" name="Component Name" primaryKey="amp_component_id">
@@ -644,216 +591,8 @@
 				<Table name="mondrian_activity_currency_numbers" />
 				<Level name="Proposed Project Amount" type="Numeric" column="ppc_transaction_exch_@@currency@@" />
 			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Uncommitted Balance" primaryKey="amp_activity_id" name="Uncommitted Balance">
-				<View alias="v_uncommitted_balance">
-					<SQL dialect="generic">
-						<![CDATA[
-						SELECT mondrian_activity_currency_numbers.amp_activity_id, 
-							CASE WHEN mondrian_activity_currency_numbers.ppc_transaction_amount IS NULL THEN @@undefined_amount@@
-							ELSE 
-							(mondrian_activity_currency_numbers.ppc_transaction_exch_@@currency@@-
-								COALESCE((
-									SELECT sum("@@mondrian_fact_table@@".transaction_exch_@@currency@@)
-												FROM "@@mondrian_fact_table@@"
-												WHERE (@@mondrian_fact_table@@.transaction_type=0) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) 
-												AND @@filteredActivities@@
-												AND "@@mondrian_fact_table@@"."entity_id" = "mondrian_activity_currency_numbers"."amp_activity_id"
-								), 0)
-							) END
-							AS "Uncommitted_Balance"
-						FROM mondrian_activity_currency_numbers
-						]]>
-					</SQL>
-				</View>
-				<Level name="Uncommitted Balance" type="Numeric" column="Uncommitted_Balance" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Uncommited Cumulative Balance" primaryKey="amp_activity_id" name="Uncommitted Cumulative Balance">
-				<View alias="v_uncommitted_cumulative_balance">
-					<SQL dialect="generic">
-						<![CDATA[
-						SELECT mondrian_activity_currency_numbers.amp_activity_id,
-							CASE WHEN mondrian_activity_currency_numbers.ppc_transaction_amount IS NULL THEN @@undefined_amount@@
-							ELSE  
-							(mondrian_activity_currency_numbers.ppc_transaction_exch_@@currency@@-
-								COALESCE((SELECT sum("@@mondrian_fact_table@@".transaction_exch_@@currency@@)
-												FROM "@@mondrian_fact_table@@"
-												WHERE (@@mondrian_fact_table@@.transaction_type=0) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (src_role='DN') 
-												AND (@@filteredActivitiesWithoutDateFilters@@)
-												AND "@@mondrian_fact_table@@"."entity_id" = "mondrian_activity_currency_numbers"."amp_activity_id"), 
-										 0)
-							 ) END AS "uncommitted_cumulative_balance"
-						FROM mondrian_activity_currency_numbers
-						]]>
-					</SQL>
-				</View>
-				<Level name="Uncommitted Cumulative Balance" type="Numeric" column="uncommitted_cumulative_balance" />
-			</Hierarchy>
-			
-			<Hierarchy hasAll="true" allMemberName="All Forecast Execution Rate" primaryKey="entity_id" name="Forecast Execution Rate">
-				<View alias="v_forecast_execution_rate">
-					<SQL dialect="generic">
-						<![CDATA[
-							SELECT v_actual_disbursements_by_entity_id.amp_activity_id AS entity_id,
-								CASE WHEN v_actual_disbursements_by_entity_id.total_actual_disbursements IS NULL OR v_most_recent_mtef_by_entity_id.total_most_recent_mtef IS NULL OR v_most_recent_mtef_by_entity_id.total_most_recent_mtef = 0 THEN @@undefined_amount@@ ELSE
-									100.0 * v_actual_disbursements_by_entity_id.total_actual_disbursements / v_most_recent_mtef_by_entity_id.total_most_recent_mtef END
-								AS fer
-							FROM
-(SELECT macn.amp_activity_id, SUM(mft.transaction_exch_@@currency@@) AS total_actual_disbursements 
-FROM 
-	mondrian_activity_currency_numbers macn
-		JOIN @@mondrian_fact_table@@ mft ON 
-			mft.entity_id = macn.amp_activity_id 
-			AND transaction_type = 1 + @@transaction_type_gap@@
-			AND adjustment_type = @@actual@@ AND src_role = 'DN'
-		GROUP BY macn.amp_activity_id) 
-	AS v_actual_disbursements_by_entity_id LEFT JOIN
-(select entity_id, SUM(most_recent_mtef) AS total_most_recent_mtef FROM
-(select entity_id, funding_id, display_date_code, CASE WHEN pipeline IS NULL THEN projection ELSE pipeline END AS most_recent_mtef FROM 
-(SELECT entity_id, funding_id, display_date_code, 
-	(SELECT sum(transaction_exch_@@currency@@) FROM @@mondrian_fact_table@@ temp WHERE temp.entity_id = v_mtef_by_type_funding_id.entity_id AND temp.funding_id = v_mtef_by_type_funding_id.funding_id AND temp.display_date_code = v_mtef_by_type_funding_id.display_date_code AND src_role='DN' AND temp.transaction_type = 3 + @@transaction_type_gap@@ AND temp.adjustment_type = @@pipelinemtefacv@@) AS pipeline,
-	(SELECT sum(transaction_exch_@@currency@@) FROM @@mondrian_fact_table@@ temp2 WHERE temp2.entity_id = v_mtef_by_type_funding_id.entity_id AND temp2.funding_id = v_mtef_by_type_funding_id.funding_id AND temp2.display_date_code = v_mtef_by_type_funding_id.display_date_code AND src_role='DN' AND temp2.transaction_type = 3 + @@transaction_type_gap@@ AND temp2.adjustment_type = @@projectionmtefacv@@) AS projection
-	FROM 
-(select distinct entity_id, funding_id, display_date_code from @@mondrian_fact_table@@ WHERE transaction_type = 3 + @@transaction_type_gap@@) AS v_mtef_by_type_funding_id
-) AS v_mtef_by_funding_id_year_type
-) AS v_mtef_by_funding_id_year
-GROUP BY entity_id) AS v_most_recent_mtef_by_entity_id
-ON 
-	v_actual_disbursements_by_entity_id.amp_activity_id = v_most_recent_mtef_by_entity_id.entity_id 
-	AND v_most_recent_mtef_by_entity_id.total_most_recent_mtef > 0
-						]]>
-					</SQL>
-				</View>
-				<Level name="Forecast Execution Rate" type="Numeric" column="fer" />
-			</Hierarchy>
 		</Dimension>
-			
-		<Dimension name="Activity Total Amounts" foreignKey="entity_id">
-			<Hierarchy hasAll="true" allMemberName="All" primaryKey="amp_activity_id" 
-						name="Total Amounts">
-				<View alias='v_total_@@adj_name@@_@@trn_name@@'>
-					<!-- full outer join or union are not working properly in MonetDB -->
-					<SQL dialect="generic">
-						<![CDATA[
-						SELECT "mondrian_activity_fixed_texts"."amp_activity_id", COALESCE((
-							SELECT sum("@@mondrian_fact_table@@".transaction_exch_@@currency@@)
-												FROM "@@mondrian_fact_table@@"
-												WHERE (@@mondrian_fact_table@@.transaction_type=@@trn_type@@) AND (@@mondrian_fact_table@@.adjustment_type=@@adj_id@@) 
-												AND @@report_totals_filter@@
-												AND "@@mondrian_fact_table@@"."entity_id" = "mondrian_activity_fixed_texts"."amp_activity_id"), 0) AS "Total_@@adj_name@@_@@trn_name@@"
-						FROM "mondrian_activity_fixed_texts"
-						]]>
-					</SQL>
-				</View>
-				<Level name="Total Amount" type="Numeric" column="Total_Amount" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All" primaryKey="amp_activity_id" 
-						name="Grand Total Filtered Amounts" visible="false">
-				<View alias='v_grand_total_@@adj_name@@_@@trn_name@@'>
-					<SQL dialect="generic">
-						<![CDATA[
-						SELECT "mondrian_activity_fixed_texts"."amp_activity_id", (
-							SELECT sum("@@mondrian_fact_table@@".transaction_exch_@@currency@@)
-												FROM "@@mondrian_fact_table@@"
-												WHERE (@@mondrian_fact_table@@.transaction_type=@@trn_type@@) AND (@@mondrian_fact_table@@.adjustment_type=@@adj_id@@)
-												AND (src_role='DN') 
-												AND (@@filteredActivities@@) 
-												) AS "Total_Grand_@@adj_name@@_@@trn_name@@"
-						FROM "mondrian_activity_fixed_texts"
-						]]>
-					</SQL>
-				</View>
-				<Level name="Grand Total Amount" type="Numeric" column="Grand_Total_Amount" />
-			</Hierarchy>
-			
-			<Hierarchy hasAll="true" allMemberName="All" primaryKey="amp_activity_id" name="Cumulative Commitment">
-				<View alias='v_cumulative_commitment'>
-					<SQL dialect="generic">
-						<![CDATA[
-						SELECT "mondrian_activity_fixed_texts"."amp_activity_id", 
-								COALESCE((SELECT sum("@@mondrian_fact_table@@".transaction_exch_@@currency@@)
-												FROM "@@mondrian_fact_table@@"
-												WHERE (@@mondrian_fact_table@@.transaction_type=0) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (src_role='DN') 
-												AND (@@filteredActivitiesWithoutDateFilters@@)
-												AND "@@mondrian_fact_table@@"."entity_id" = "mondrian_activity_fixed_texts"."amp_activity_id"), 
-										 0) AS "cumulative_commitment"
-						FROM "mondrian_activity_fixed_texts"
-						]]>
-					</SQL>
-				</View>
-				<!-- actual commitment affected by hierarchy & filters percentage but not affected by dates filters -->
-				<Level name="Cumulative Commitment" type="Numeric" column="cumulative_commitment" />
-			</Hierarchy>
-			
-			<Hierarchy hasAll="true" allMemberName="All" primaryKey="amp_activity_id" name="Cumulative Disbursement">
-				<View alias='v_cumulative_disbursement'>
-					<SQL dialect="generic">
-						<![CDATA[
-						SELECT "mondrian_activity_fixed_texts"."amp_activity_id", 
-								COALESCE((SELECT sum("@@mondrian_fact_table@@".transaction_exch_@@currency@@)
-												FROM "@@mondrian_fact_table@@"
-												WHERE (@@mondrian_fact_table@@.transaction_type=1) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (src_role='DN') 
-												AND (@@filteredActivitiesWithoutDateFilters@@)
-												AND "@@mondrian_fact_table@@"."entity_id" = "mondrian_activity_fixed_texts"."amp_activity_id"), 
-										 0) AS "cumulative_disbursement"
-						FROM "mondrian_activity_fixed_texts"
-						]]>
-					</SQL>
-				</View>
-				<!-- actual disbursement affected by hierarchy & filters percentage but not affected by dates filters -->
-				<Level name="Cumulative Disbursement" type="Numeric" column="cumulative_disbursement" />
-			</Hierarchy>
-			
-			<Hierarchy hasAll="true" allMemberName="All" primaryKey="amp_activity_id" name="Undisbursed Cumulative Balance">
-				<View alias='v_undisbursed_cumulative_balance'>
-					<SQL dialect="generic">
-						<![CDATA[
-						SELECT "mondrian_activity_fixed_texts"."amp_activity_id", 
-								COALESCE((SELECT sum("@@mondrian_fact_table@@".transaction_exch_@@currency@@)
-												FROM "@@mondrian_fact_table@@"
-												WHERE (@@mondrian_fact_table@@.transaction_type=0) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (src_role='DN') 
-												AND (@@filteredActivitiesWithoutDateFilters@@)
-												AND "@@mondrian_fact_table@@"."entity_id" = "mondrian_activity_fixed_texts"."amp_activity_id"), 
-										 0) - 
-								COALESCE((SELECT sum("@@mondrian_fact_table@@".transaction_exch_@@currency@@)
-												FROM "@@mondrian_fact_table@@"
-												WHERE (@@mondrian_fact_table@@.transaction_type=1) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (src_role='DN') 
-												AND (@@filteredActivitiesWithoutDateFilters@@)
-												AND "@@mondrian_fact_table@@"."entity_id" = "mondrian_activity_fixed_texts"."amp_activity_id"), 
-										 0) AS "undisbursed_cumulative_balance"
-						FROM "mondrian_activity_fixed_texts"
-						]]>
-					</SQL>
-				</View>
-				<!-- Cumulative Commitment - Cumulative Disbursement -->
-				<Level name="Undisbursed Cumulative Balance" type="Numeric" column="undisbursed_cumulative_balance"/>
-			</Hierarchy>
-			
-			<Hierarchy hasAll="true" allMemberName="All" primaryKey="amp_activity_id" name="Cumulative Execution Rate">
-				<View alias='v_cumulative_execution_rate'>
-					<SQL dialect="generic">
-						<![CDATA[
-						SELECT cumulative_amounts.amp_activity_id, 
-							CASE 
-								WHEN ("cumulative_amounts"."cc" IS NULL) OR ("cumulative_amounts"."cd" IS NULL) OR ("cumulative_amounts"."cc"=0) THEN @@undefined_amount@@
-								ELSE "cumulative_amounts"."cd" / "cumulative_amounts"."cc" * 100 
-							END as "cumulative_execution_rate"
-						FROM (SELECT "mondrian_activity_fixed_texts"."amp_activity_id", 
-									sum(CASE @@mondrian_fact_table@@.transaction_type WHEN 0 THEN @@mondrian_fact_table@@.transaction_exch_@@currency@@ ELSE 0 END) as "cc", 
-									sum(CASE @@mondrian_fact_table@@.transaction_type WHEN 1 THEN @@mondrian_fact_table@@.transaction_exch_@@currency@@ ELSE 0 END) as "cd"
-							FROM "mondrian_activity_fixed_texts", "@@mondrian_fact_table@@"
-							WHERE ("@@mondrian_fact_table@@"."src_role"='DN') 
-							AND "@@mondrian_fact_table@@"."adjustment_type"=@@actual@@ AND "@@mondrian_fact_table@@"."transaction_type" in (0, 1)
-							AND "mondrian_activity_fixed_texts"."amp_activity_id" = "@@mondrian_fact_table@@"."entity_id"
-							GROUP BY "mondrian_activity_fixed_texts"."amp_activity_id") as "cumulative_amounts"
-						]]>
-					</SQL>
-				</View>
-				<!-- (Cumulative Disbursement / Cumulative Commitment) * 100 -->
-				<Level name="Cumulative Execution Rate" type="Numeric" column="cumulative_execution_rate" >
-				</Level>
-			</Hierarchy>
-		</Dimension>
-		
+	
 		<DimensionUsage name="Location" source="AMP Location" foreignKey="location_id" />
 		<DimensionUsage name="Pledges Location" source="AMP Location" foreignKey="location_id" />
 		
@@ -887,52 +626,7 @@ ON
 		<DimensionUsage name="Pledge Secondary Sector"	source="AMP Sector" foreignKey="secondary_sector_id" typeName="Secondary" />
 		<DimensionUsage name="Pledge Tertiary Sector"	source="AMP Sector" foreignKey="tertiary_sector_id" typeName="Tertiary" />
 		
-		<Dimension name="Pledge Contacts" foreignKey="entity_id">
-		   <!-- Pledge Contacts - START -->
-		   <Hierarchy hasAll="true" allMemberName="All Contact Title@@nr@@" primaryKey="amp_activity_id" name="Contact Title@@nr@@">
-				<Table name="mondrian_activity_contacts" />
-				<Level name="Contact Title@@nr@@" type="Integer" column="amp_activity_id" nameColumn="title@@nr@@" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Contact Name@@nr@@" primaryKey="amp_activity_id" name="Contact Name@@nr@@">
-				<Table name="mondrian_activity_contacts" />
-				<Level name="Contact Name@@nr@@" type="Integer" column="amp_activity_id" nameColumn="name@@nr@@" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Contact Address@@nr@@" primaryKey="amp_activity_id" name="Contact Address@@nr@@">
-				<Table name="mondrian_activity_contacts" />
-				<Level name="Contact Address@@nr@@" type="Integer" column="amp_activity_id" nameColumn="address@@nr@@" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Contact Email@@nr@@" primaryKey="amp_activity_id" name="Contact Email@@nr@@">
-				<Table name="mondrian_activity_contacts" />
-				<Level name="Contact Email@@nr@@" type="Integer" column="amp_activity_id" nameColumn="email@@nr@@" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Contact Ministry@@nr@@" primaryKey="amp_activity_id" name="Contact Ministry@@nr@@">
-				<Table name="mondrian_activity_contacts" />
-				<Level name="Contact Ministry@@nr@@" type="Integer" column="amp_activity_id" nameColumn="ministry@@nr@@" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Contact Phone@@nr@@" primaryKey="amp_activity_id" name="Contact Phone@@nr@@">
-				<Table name="mondrian_activity_contacts" />
-				<Level name="Contact Phone@@nr@@" type="Integer" column="amp_activity_id" nameColumn="phone@@nr@@" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Contact Fax@@nr@@" primaryKey="amp_activity_id" name="Contact Fax@@nr@@">
-				<Table name="mondrian_activity_contacts" />
-				<Level name="Contact Fax@@nr@@" type="Integer" column="amp_activity_id" nameColumn="fax@@nr@@" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Contact Alternate Name@@nr@@" primaryKey="amp_activity_id" name="Contact Alternate Name@@nr@@">
-				<Table name="mondrian_activity_contacts" />
-				<Level name="Contact Alternate Name@@nr@@" type="Integer" column="amp_activity_id" nameColumn="alternate_name@@nr@@" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Contact Alternate Email@@nr@@" primaryKey="amp_activity_id" name="Contact Alternate Email@@nr@@">
-				<Table name="mondrian_activity_contacts" />
-				<Level name="Contact Alternate Email@@nr@@" type="Integer" column="amp_activity_id" nameColumn="alternate_email@@nr@@" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Contact Alternate Phone@@nr@@" primaryKey="amp_activity_id" name="Contact Alternate Phone@@nr@@">
-				<Table name="mondrian_activity_contacts" />
-				<Level name="Contact Alternate Phone@@nr@@" type="Integer" column="amp_activity_id" nameColumn="alternate_phone@@nr@@" />
-			</Hierarchy>
-		<!-- Pledge Contacts - END -->
-		</Dimension>
-		
-		<DimensionUsage name="Dates" source="AMP Date" foreignKey="display_date_code" />
+		<DimensionUsage name="Dates" source="AMP Date" foreignKey="date_code" />
 		
 		<Dimension name="Flow Name">
 		<!-- degenerate dimension; not used in filtering or other complicated ways but for displaying only, so no key column -->
@@ -940,58 +634,7 @@ ON
 				<Level name="Flow Name" column="flow_name" />
 			</Hierarchy>
 		</Dimension>
-
-
-
-		<Dimension name="Loan Details">
-			<Hierarchy hasAll="true" allMemberName="All Loan Maturity" primaryKey="funding_id" name="Loan Maturity Date">
-				<Level name="Loan Maturity Date" column="funding_id" nameColumn="maturity" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Loan Grace Period" primaryKey="funding_id" name="Loan Grace Period">
-				<Level name="Loan Grace Period" column="funding_id" nameColumn="grace_period" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Loan Ratification Date" primaryKey="funding_id" name="Loan Ratification Date">
-				<Level name="Loan Ratification Date" column="funding_id" nameColumn="ratification_date" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Loan Interest Rate" primaryKey="funding_id" name="Loan Interest Rate">
-				<Level name="Loan Interest Rate" column="funding_id" nameColumn="interest_rate" />
-			</Hierarchy>
-		</Dimension>
-
-		<Dimension name="Pledges Detail Dates" foreignKey="entity_internal_id">
-			<Hierarchy hasAll="true" allMemberName="All Pledges Detail Start Date" primaryKey="pledge_detail_id" name="Pledges Detail Start Date">
-				<View alias='v_pledges_detail_start_date'>
-					<SQL dialect="generic">
-						<!-- also keeping empty result for non-pledge transaction for the proper cross joins -->
-						<![CDATA[
-						@@transaction_start_date@@
-						]]>
-					</SQL>
-				</View>
-				<Level name="Pledges Detail Start Date" column="pledge_detail_id" nameColumn="transaction_start_date" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Pledges Detail End Date" primaryKey="pledge_detail_id" name="Pledges Detail End Date">
-				<View alias='v_pledges_detail_end_date'>
-					<SQL dialect="generic">
-						<![CDATA[
-						@@transaction_end_date@@
-						]]>
-					</SQL>
-				</View>
-				<Level name="Pledges Detail End Date" column="pledge_detail_id" nameColumn="transaction_end_date" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Pledges Detail Date Range" primaryKey="pledge_detail_id" name="Pledges Detail Date Range">
-			<View alias='v_pledges_detail_date_range'>
-					<SQL dialect="generic">
-						<![CDATA[
-						@@transaction_range@@
-						]]>
-					</SQL>
-				</View>
-				<Level name="Pledges Detail Date Range" column="pledge_detail_id" nameColumn="transaction_range" />
-			</Hierarchy>
-		</Dimension>
-		
+				
 		<Measure name="@@trivial_measure@@" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic" aggregator="sum">
@@ -1213,14 +856,6 @@ ON
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-				
-		<Measure name="Always Present" aggregator="sum">
-			<MeasureExpression>
-				<SQL dialect="generic" aggregator="sum">
-					0
-				</SQL>
-			</MeasureExpression>
-		</Measure>
 		
 		<!-- For SSC specific calculated members please include SSC in the name 
 		or define a special attr/tag to exclude them for AMP without SSC config (see AmpMondrianSchemaProcessor.removeSSCComputedMembers) 
@@ -1241,60 +876,6 @@ ON
 				but it is not used anyway in Saiku display
 				-->
 			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>			
-		</CalculatedMember>
-
-		<CalculatedMember name="Total Grand Commitments" dimension="Measures" visible="false">
-		 	<Formula>
-				Cast([Activity Total Amounts.Total Grand Actual Commitments].[Total Grand Actual Commitments].CurrentMember.name as Numeric)
-			</Formula>
-			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>			
-		</CalculatedMember>
-		
-		<CalculatedMember name="Percentage of Total Commitments" dimension="Measures">
-		 	<Formula>
-				IIf(Measures.[Total Grand Commitments]=0, null, [Measures].[Actual Commitments] / Measures.[Total Grand Commitments] * 100)
-			</Formula>
-			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>			
-		</CalculatedMember>
-
-		<CalculatedMember name="Total Grand Disbursements" dimension="Measures" visible="false">
-		 	<Formula>
-				Cast([Activity Total Amounts.Total Grand Actual Disbursements].[Total Grand Actual Disbursements].CurrentMember.name as Numeric)
-			</Formula>
-			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>			
-		</CalculatedMember>
- 
-		<CalculatedMember name="Percentage Of Total Disbursements" dimension="Measures">
-		 	<Formula>
-				IIf(Measures.[Total Grand Disbursements]=0, null, [Measures].[Actual Disbursements] / Measures.[Total Grand Disbursements] * 100)
-			</Formula>
-			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>
-		</CalculatedMember>
-		
-		<CalculatedMember name="Total Filtered Actual Disbursements" dimension="Measures" visible="false">
-			<Formula>
-				SUM (NonEmptyCrossJoin([Dates.Year].[All Periods], {Measures.[Actual Disbursements]}))
-			</Formula>
-			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>
-		</CalculatedMember>
-		
-		<CalculatedMember name="Total Filtered Planned Disbursements" dimension="Measures" visible="false">
-			<Formula>
-				SUM (NonEmptyCrossJoin([Dates.Year].[All Periods], {Measures.[Planned Disbursements]}))
-			</Formula>
-			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>
-		</CalculatedMember>
-		
-		<CalculatedMember name="Execution Rate" dimension="Measures">
-		 	<Formula>
-				IIf((Measures.[Total Filtered Planned Disbursements]=0) 
-				OR IsEmpty(Measures.[Total Filtered Planned Disbursements])
-				OR IsEmpty([Measures].[Actual Disbursements]),
-				null, 
-				[Measures].[Actual Disbursements] / Measures.[Total Filtered Planned Disbursements] * 100)
-			</Formula>
-			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>
-		</CalculatedMember>
-				
+		</CalculatedMember>						
 	</Cube>
  </Schema>

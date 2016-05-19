@@ -139,11 +139,6 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.AC_CHAPTER, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_AC_CHAPTER, MoConstants.ATTR_AC_CHAPTER));
 			addColumnDefinition(ColumnConstants.DISASTER_RESPONSE_MARKER, new MDXLevel(MoConstants.DISASTER_RESPONSE_MARKER, MoConstants.H_HARDCODED_TEXT, MoConstants.H_HARDCODED_TEXT));
 			addColumnDefinition(ColumnConstants.EXPENDITURE_CLASS, new MDXLevel(MoConstants.EXPENDITURE_CLASS, MoConstants.H_CATEGORY_NAME, MoConstants.ATTR_EXPENDITURE_CLASS));
-
-			addColumnDefinition(ColumnConstants.GRACE_PERIOD, new MDXLevel(MoConstants.LOAN_DETAILS, MoConstants.H_LOAN_GRACE_PERIOD, MoConstants.ATTR_LOAN_GRACE_PERIOD));
-			addColumnDefinition(ColumnConstants.INTEREST_RATE, new MDXLevel(MoConstants.LOAN_DETAILS, MoConstants.H_LOAN_INTEREST_RATE, MoConstants.ATTR_LOAN_INTEREST_RATE));
-			addColumnDefinition(ColumnConstants.MATURITY, new MDXLevel(MoConstants.LOAN_DETAILS, MoConstants.H_LOAN_MATURITY, MoConstants.ATTR_LOAN_MATURITY));
-			addColumnDefinition(ColumnConstants.RATIFICATION_DATE, new MDXLevel(MoConstants.LOAN_DETAILS, MoConstants.H_LOAN_RATIFICATION_DATE, MoConstants.ATTR_LOAN_RATIFICATION_DATE));
 			
 			addColumnDefinition(ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_GOVERNMENT_APPROVAL_PROCEDURES, MoConstants.ATTR_GOVERNMENT_APPROVAL_PROCEDURES));
 			addColumnDefinition(ColumnConstants.JOINT_CRITERIA, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_JOINT_CRITERIA, MoConstants.ATTR_JOINT_CRITERIA));
@@ -292,36 +287,12 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.COMPONENT_TYPE, new MDXLevel(MoConstants.COMPONENT, MoConstants.H_COMPONENT_TYPE, MoConstants.ATTR_COMPONENT_TYPE));
 			addColumnDefinition(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION, new MDXLevel(MoConstants.COMPONENT_FUNDING_ORGANIZATION, MoConstants.H_ORG_NAME, MoConstants.ATTR_ORG_NAME));
 			addColumnDefinition(ColumnConstants.PROPOSED_PROJECT_AMOUNT, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT));
-			addColumnDefinition(ColumnConstants.UNCOMMITTED_BALANCE, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_UNCOMMITTED_BALANCE, MoConstants.ATTR_UNCOMMITTED_BALANCE));
-			addColumnDefinition(ColumnConstants.FORECAST_EXECUTION_RATE, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_FORECAST_EXECUTION_RATE, MoConstants.ATTR_FORECAST_EXECUTION_RATE));
 			addColumnDefinition(ColumnConstants.PLEDGE_STATUS, new MDXLevel("Pledge Status", MoConstants.H_CATEGORY_NAME, MoConstants.ATTR_CATEGORY_NAME));
-			
-			for (String idx : new String[]{"1", "2"}) {
-				addColumnDefinition(ColumnConstants.PLEDGE_CONTACT_1___NAME.replace("1", idx), new MDXLevel(MoConstants.PLEDGES_CONTACTS, MoConstants.ATTR_CONTACT_NAME + idx, MoConstants.ATTR_CONTACT_NAME + idx));
-				addColumnDefinition(ColumnConstants.PLEDGE_CONTACT_1___TITLE.replace("1", idx), new MDXLevel(MoConstants.PLEDGES_CONTACTS, MoConstants.ATTR_CONTACT_TITLE + idx, MoConstants.ATTR_CONTACT_TITLE + idx));
-				addColumnDefinition(ColumnConstants.PLEDGE_CONTACT_1___ADDRESS.replace("1", idx), new MDXLevel(MoConstants.PLEDGES_CONTACTS, MoConstants.ATTR_CONTACT_ADDRESS + idx, MoConstants.ATTR_CONTACT_ADDRESS + idx));
-				addColumnDefinition(ColumnConstants.PLEDGE_CONTACT_1___EMAIL.replace("1", idx), new MDXLevel(MoConstants.PLEDGES_CONTACTS, MoConstants.ATTR_CONTACT_EMAIL + idx, MoConstants.ATTR_CONTACT_EMAIL + idx));
-				addColumnDefinition(ColumnConstants.PLEDGE_CONTACT_1___MINISTRY.replace("1", idx), new MDXLevel(MoConstants.PLEDGES_CONTACTS, MoConstants.ATTR_CONTACT_MINISTRY + idx, MoConstants.ATTR_CONTACT_MINISTRY + idx));
-				addColumnDefinition(ColumnConstants.PLEDGE_CONTACT_1___TELEPHONE.replace("1", idx), new MDXLevel(MoConstants.PLEDGES_CONTACTS, MoConstants.ATTR_CONTACT_PHONE + idx, MoConstants.ATTR_CONTACT_PHONE + idx));
-				addColumnDefinition(ColumnConstants.PLEDGE_CONTACT_1___FAX.replace("1", idx), new MDXLevel(MoConstants.PLEDGES_CONTACTS, MoConstants.ATTR_CONTACT_FAX + idx, MoConstants.ATTR_CONTACT_FAX + idx));
-				addColumnDefinition(ColumnConstants.PLEDGE_CONTACT_1___ALTERNATE_CONTACT.replace("1", idx), new MDXLevel(MoConstants.PLEDGES_CONTACTS, MoConstants.ATTR_CONTACT_ALTERNAME_NAME + idx, MoConstants.ATTR_CONTACT_ALTERNAME_NAME + idx));
-				addColumnDefinition(ColumnConstants.PLEDGE_CONTACT_1___ALTERNATE_EMAIL.replace("1", idx), new MDXLevel(MoConstants.PLEDGES_CONTACTS, MoConstants.ATTR_CONTACT_ALTERNAME_EMAIL + idx, MoConstants.ATTR_CONTACT_ALTERNAME_EMAIL + idx));
-				addColumnDefinition(ColumnConstants.PLEDGE_CONTACT_1___ALTERNATE_PHONE.replace("1", idx), new MDXLevel(MoConstants.PLEDGES_CONTACTS, MoConstants.ATTR_CONTACT_ALTERNAME_PHONE + idx, MoConstants.ATTR_CONTACT_ALTERNAME_PHONE + idx));
-			}
-			
-			addColumnDefinition(ColumnConstants.CUMULATIVE_EXECUTION_RATE, new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, MoConstants.ATTR_CUMULATIVE_EXECUTION_RATE, MoConstants.ATTR_CUMULATIVE_EXECUTION_RATE));
-
-			
+						
 			for(String colName: Arrays.asList(ColumnConstants.AGREEMENT_CLOSE_DATE, ColumnConstants.AGREEMENT_CODE, 
 					ColumnConstants.AGREEMENT_EFFECTIVE_DATE, ColumnConstants.AGREEMENT_SIGNATURE_DATE, ColumnConstants.AGREEMENT_TITLE_CODE, ColumnConstants.AGREEMENT_PARLIAMENTARY_APPROVAL_DATE))
 				addColumnDefinition(colName, new MDXLevel(MoConstants.AGREEMENT, colName, colName));
-			
-			addColumnDefinition(ColumnConstants.PLEDGES_DETAIL_START_DATE, new MDXLevel(MoConstants.PLEDGES_DETAIL_DATES, MoConstants.PLEDGES_DETAIL_START_DATE, MoConstants.PLEDGES_DETAIL_START_DATE));
-			addColumnDefinition(ColumnConstants.PLEDGES_DETAIL_END_DATE, new MDXLevel(MoConstants.PLEDGES_DETAIL_DATES, MoConstants.PLEDGES_DETAIL_END_DATE, MoConstants.PLEDGES_DETAIL_END_DATE));
-			addColumnDefinition(ColumnConstants.PLEDGES_DETAIL_DATE_RANGE, new MDXLevel(MoConstants.PLEDGES_DETAIL_DATES, MoConstants.PLEDGES_DETAIL_DATE_RANGE, MoConstants.PLEDGES_DETAIL_DATE_RANGE));
-			
-			//Measures - Entity type - All
-			AmpCategoryValue actualAdjType = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getAmpCategoryValueFromDB();
+						
 			// standard trivial measures
 			for (String transactionType:ArConstants.TRANSACTION_TYPE_NAME_TO_ID.keySet())
 				for (AmpCategoryValue adj: CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.ADJUSTMENT_TYPE_KEY)) {
@@ -330,19 +301,6 @@ public class MondrianMapping {
 					
 					String measureName = adj.getValue() + " " + transactionType;
 					addMeasureDefinition(measureName);
-					
-					// adding Totals (unaffected by filters or % distribution)
-					// full name computed columns
-					String[] prefixList = {"Total ", "Total Grand "};
-					for (String prefix : prefixList) {
-						String computedTotals = prefix + measureName;
-						MDXLevel level = new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, computedTotals, computedTotals);
-						if (adj.equals(actualAdjType) && prefix.equals("Total ")) {
-							// current measures names for compatibility with old reports
-							computedTotals = "Total "  + transactionType;
-						}
-						addColumnDefinition(computedTotals, level);
-					}
 				}
 			
 			// ssc custom trivial measures

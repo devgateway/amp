@@ -1,6 +1,5 @@
 package org.digijava.kernel.ampapi.mondrian.util;
 
-import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -318,33 +317,16 @@ public final class MoConstants {
 	public static final String ATTR_CONTACT_ALTERNAME_NAME = "Contact Alternate Name";
 	public static final String ATTR_CONTACT_ALTERNAME_EMAIL = "Contact Alternate Email";
 	public static final String ATTR_CONTACT_ALTERNAME_PHONE = "Contact Alternate Phone";
-	public static final String ATTR_START_DATE = "Start Date";
-	public static final String ATTR_END_DATE = "End Date";
-	public static final String ATTR_DATE_RANGE = "Date Range";
-	public static final String ATTR_LOAN_MATURITY = "Loan Maturity Date";
-	public static final String ATTR_LOAN_RATIFICATION_DATE = "Loan Ratification Date";
-	public static final String ATTR_LOAN_GRACE_PERIOD = "Loan Grace Period";
-	public static final String ATTR_LOAN_INTEREST_RATE = "Loan Interest Rate";
+
 	
 	//properties
 	public static final String P_KEY = "Key";
-	
-	//Measures
-	public static final String ACTUAL_COMMITMENTS = "Actual Commitments";
-	public static final String ACTUAL_DISBURSEMENTS = "Actual Disbursements";
-	public static final String ACTUAL_EXPENDITURES = "Actual Expenditures";
-	public static final String PLANNED_COMMITMENTS = "Planned Commitments";
-	public static final String PLANNED_DISBURSEMENTS = "Planned Disbursements";
-	public static final String PLANNED_EXPENDITURES = "Planned Expenditures";
-	public static final String ALWAYS_PRESENT = "Always Present";
 	
 	public static final String TOTAL_MEASURES = "Total Measures";
 	
 	//Values
 	public static final String BOOLEAN_TRUE_KEY = "2";
 	public static final String BOOLEAN_FALSE_KEY = "1";
-	public static final String REGION_UNDEFINED = "Region: Undefined";
-	public static final String LOCATION_UNDEFINED = "Location: Undefined";
 	public static final String NATIONAL = "National";
 	public static final String INTERNATIONAL = "International";
 	public static final Integer UNDEFINED_KEY = 999999999;
@@ -353,11 +335,6 @@ public final class MoConstants {
 	public static final Integer UNDEFINED_MONTH_KEY = 99;
 	public static final String FILTER_UNDEFINED_MAX = String.valueOf(UNDEFINED_KEY - 1);
 	public static final Integer ALWAYS_PRESENT_YEAR = 1970;
-	
-	//Pledges Constant
-	public static String PLEDGE_PLEDGES_COMMITMENTS = "Pledges Actual Commitments";
-	public static String PLEDGE_PLEDGES_DISBURSEMENTS = "Pledges Actual Disbursements";
-	public static String PLEDGE_PLEDGES_COMMITMENTS_GAP = "Commitment Gap";
 	
 	//Quarters
 	public static final String Q1 = "Q1";

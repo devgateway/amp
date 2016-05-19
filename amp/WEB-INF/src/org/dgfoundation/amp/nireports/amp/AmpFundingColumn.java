@@ -145,7 +145,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	public List<CategAmountCell> fetch(NiReportsEngine engine) {
 		AmpReportsScratchpad scratchpad = AmpReportsScratchpad.get(engine);
 		AmpReportsSchema schema = (AmpReportsSchema) engine.schema;
-		boolean enableDiffing = schema.ENABLE_CACHING;
+		boolean enableDiffing = false && schema.ENABLE_CACHING;
 		AmpCurrency usedCurrency = scratchpad.getUsedCurrency();
 		if (enableDiffing) {
 			long start = System.currentTimeMillis();

@@ -1,8 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
-import java.beans.IntrospectionException;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Field;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,10 +66,6 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.MaxSizeLinkedHashMap;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.annotations.reports.ColumnLike;
-import org.digijava.module.aim.annotations.reports.Identificator;
-import org.digijava.module.aim.annotations.reports.Level;
-import org.digijava.module.aim.annotations.reports.Order;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpMeasures;
@@ -908,68 +901,6 @@ public class ReportsUtil {
 
 		return ampReport;
 	}
-
-	private void addFields(Long[] sourceVector, Collection<?> availableFields, Collection container,
-			Class<?> reportFieldClass, AmpCategoryValue level) throws Exception {
-		if (sourceVector == null)
-			return;
-		for (int i = 0; i < sourceVector.length; i++) {
-			Object reportField = reportFieldClass.newInstance();
-			Object[] param1 = new Object[1];
-			param1[0] = level;
-			invokeSetterForBeanPropertyWithAnnotation(reportField, Level.class, param1);
-			// rc.setLevel(level);
-			Object[] param2 = new Object[1];
-			param2[0] = new Long(i + 1);
-			invokeSetterForBeanPropertyWithAnnotation(reportField, Order.class, param2);
-			// rc.setOrderId(""+i);
-
-			Iterator<?> iter = availableFields.iterator();
-			boolean foundCol = false;
-			while (iter.hasNext()) {
-				Object field = iter.next();
-				if (sourceVector[i].equals(invokeGetterForBeanPropertyWithAnnotation(field, Identificator.class,
-						new Object[0]))) {
-					Object[] param3 = new Object[1];
-					param3[0] = field;
-					invokeSetterForBeanPropertyWithAnnotation(reportField, ColumnLike.class, param3);
-					foundCol = true;
-					break;
-				}
-			}
-			if (foundCol)
-				container.add(reportField);
-		}
-	}
-
-    public static Object invokeGetterForBeanPropertyWithAnnotation (Object beanObj, Class annotationClass, Object [] params ) throws Exception {
-        Class myClass		= beanObj.getClass();
-        Field[] fields		= myClass.getDeclaredFields();
-        for (int i=0; i<fields.length; i++) {
-            if ( fields[i].getAnnotation(annotationClass) != null) {
-                PropertyDescriptor beanProperty	= new PropertyDescriptor(fields[i].getName(), myClass);
-                return beanProperty.getReadMethod().invoke(beanObj, params);
-            }
-        }
-        throw new IntrospectionException("No property was found in bean of class '" + myClass.getCanonicalName() +
-                "' with annotation '" + annotationClass.getCanonicalName()
-                + "'");
-    }
-	
-    public static void invokeSetterForBeanPropertyWithAnnotation (Object beanObj, Class annotationClass, Object [] params ) throws Exception {
-        Class myClass		= beanObj.getClass();
-        Field[] fields		= myClass.getDeclaredFields();
-        for (int i=0; i<fields.length; i++) {
-            if ( fields[i].getAnnotation(annotationClass) != null) {
-                PropertyDescriptor beanProperty	= new PropertyDescriptor(fields[i].getName(), myClass);
-                beanProperty.getWriteMethod().invoke(beanObj, params);
-                return;
-            }
-        }
-        throw new IntrospectionException("No property was found in bean of class '" + myClass.getCanonicalName() +
-                "' with annotation '" + annotationClass.getCanonicalName()
-                + "'");
-    }
     
 	public static AmpReportColumn ampReportColumnForColName(String colName, long order) {
 		AmpColumns col = (AmpColumns) PersistenceManager.getSession().createQuery("FROM " + AmpColumns.class.getName() + " c WHERE c.columnName=:colName").setString("colName", colName).uniqueResult();

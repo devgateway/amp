@@ -3206,9 +3206,6 @@ function collapseAll() {
 			  		$("#collapseall_1").attr('value','<digi:trn>Collapse All</digi:trn>');
 			  		showOrHide=true;
 		  	  }
-		  	if($("#ashowmap").exists()){
-				showMapInTooltipDialog(ashowmap,true);
-		  	}
 		  	$(".toggleDiv").toggle(showOrHide);
 		  
 	});
@@ -3229,9 +3226,6 @@ function collapseAll() {
 			  		$(event.target).attr('value','<digi:trn>Collapse All</digi:trn>');
 			  		showOrHide=true;
 		  	  }
-			  if($("#ashowmap").exists()){
-				  showMapInTooltipDialog(ashowmap,true);
-			  }
 			  $(".toggleDiv").toggle(showOrHide);
 			  document.body.scrollTop = document.documentElement.scrollTop = 0;	
 		}

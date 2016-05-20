@@ -42,7 +42,11 @@ public class DynamicColumnsUtil {
 	private static List<AmpMeasures> cachedMtefMeasureList = null;
 	
 	
-	@Deprecated //AmpReportsSchema.synchronizeAmpColumnsBackport
+	/**
+	 * replaced by AmpReportsSchema.synchronizeAmpColumnsBackport
+	 * @param sCtx
+	 */
+	@Deprecated
 	public static void createInexistentMtefColumns (ServletContext sCtx) {
 		List<Integer> mtefFundingYears = getMtefYears();
 		
@@ -66,6 +70,7 @@ public class DynamicColumnsUtil {
 		}
 	}
 
+	@Deprecated
 	private static void buildMtefColumns(ServletContext sCtx, String namePrefix, String aliasPrefix, Set<Integer> mtefYears) {
 		for (Integer year: mtefYears) {
 			AmpColumns	col		= new AmpColumns();

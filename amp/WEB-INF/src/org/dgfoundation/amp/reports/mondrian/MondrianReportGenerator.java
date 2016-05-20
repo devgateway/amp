@@ -351,9 +351,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 	
 	private void init() {
 		//if (!Connection.IS_TESTING)
-			if(MondrianETL.runETL(false).cacheInvalidated) {
-				MondrianReportUtils.flushCache();
-			}
+//			if(MondrianETL.runETL(false).cacheInvalidated) {
+//				MondrianReportUtils.flushCache();
+//			}
 				
 		// if there are no leaf entries to be associated with internal use id, then we cannot collect them
 		if (spec.getHierarchies().size() < spec.getColumns().size()) {

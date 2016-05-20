@@ -222,8 +222,8 @@ public class AMPStartupListener extends HttpServlet implements
 		
 	}
 
-	protected void doMonetETL() throws SQLException {
-		logger.info("running MonetETL");
+	protected void doMondrianETL() throws SQLException {
+		logger.info("running Mondrian ETL");
 		double elapsedSecs = MondrianETL.runETL(false).duration;
 		logger.info(String.format("ETL took %.2f seconds", elapsedSecs));
 	}

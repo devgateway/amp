@@ -918,11 +918,11 @@
             <artifactId>saiku-query</artifactId>
             <version>0.1-SNAPSHOT-DG</version>
         </dependency>
-        <dependency>
+<!--    <dependency>
             <groupId>nl.cwi</groupId>
             <artifactId>monetdb-jdbc</artifactId>
             <version>2.11</version>
-        </dependency>
+        </dependency>  -->
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-core</artifactId>

@@ -33,7 +33,7 @@ clearReferencesThreadLocals="true" jndiExceptionOnFailedWrite="false" processTld
   
   <!-- MonetDB connection. IT IS A DUMMY, DO NOT USE IT (now only used to shut up Saiku during AMP startup - will be removed in the near future -->
    
-  <Resource factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" defaultTransactionIsolation="READ_COMMITTED" driverClassName="nl.cwi.monetdb.jdbc.MonetDriver" 
+<!-- <Resource factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" defaultTransactionIsolation="READ_COMMITTED" driverClassName="nl.cwi.monetdb.jdbc.MonetDriver" 
   		maxActive="10" maxIdle="8" maxWait="500" jmxEnabled="true" name="monetDS" removeAbandoned="true" removeAbandonedTimeout="3600" suspectTimeout="1800" logAbandoned="true" 
   		type="javax.sql.DataSource" 
   		monetUrl="" 
@@ -41,7 +41,7 @@ clearReferencesThreadLocals="true" jndiExceptionOnFailedWrite="false" processTld
   		validationQuery="SELECT 1" validationInterval="10000" testOnBorrow="true" testWhileIdle="false" timeBetweenEvictionRunsMillis="20000" 
   		useDisposableConnectionFacade="true" 
   		jdbcInterceptors="ConnectionState;StatementFinalizer;ResetAbandonedTimer;SlowQueryReport(threshold=60000)" />
-  
+   -->
   <Manager className="org.apache.catalina.session.PersistentManager" debug="0" distributable="false" saveOnRestart="false">
   	<Store className="org.apache.catalina.session.FileStore"/>
   </Manager>

@@ -22,17 +22,13 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.helper.Constants;
 
 /**
- * this class wraps a connection to MonetDB
+ * this class wraps a connection to PostgreSQL
  * @author Dolghier Constantin
  *
  */
-public class MonetConnection extends OlapDbConnection {
+public class PostgresConnection extends OlapDbConnection {
 
-    public static String MONET_CFG_OVERRIDE_URL = null;
-
-    //private static DataSource dataSource = null;
-
-    private MonetConnection() throws SQLException {
+    private PostgresConnection() throws SQLException {
     	super(getDirectConnection(), getMapper());
         //this.conn = DriverManager.getConnection("jdbc:monetdb://localhost/amp_moldova_210", "monetdb", "monetdb");
     }
@@ -42,54 +38,49 @@ public class MonetConnection extends OlapDbConnection {
      * @return
      */
     private static Connection getDirectConnection() throws SQLException {
-        return DriverManager.getConnection(_getJdbcUrl(), "monetdb", "monetdb");
+        return PersistenceManager.getJdbcConnection();
     }
 
-    private static String url = null;
-    
-    public static String _getJdbcUrl() {
-        try{Class.forName("nl.cwi.monetdb.jdbc.MonetDriver");}catch(Exception e){throw new RuntimeException(e);}
-
-        if (MONET_CFG_OVERRIDE_URL != null)
-            return MONET_CFG_OVERRIDE_URL;
-        if (url == null) {
-            DataSource dataSource = getMonetDataSource();
-            org.apache.tomcat.jdbc.pool.DataSource src = (org.apache.tomcat.jdbc.pool.DataSource) dataSource;
-            String postgresUrl = src.getUrl().substring(0, src.getUrl().indexOf('?')); // jdbc:postgresql://localhost:5432/amp_moldova_210?useUnicode=true&characterEncoding=UTF-8&jdbcCompliantTruncation=false
-            String dbName = postgresUrl.substring(postgresUrl.lastIndexOf('/') + 1);
-            url = String.format("jdbc:monetdb://localhost/%s", dbName);
-        }
-        return url;
-    }
-
-    public static MonetConnection getConnection() {
+    public static PostgresConnection getConnection() {
         try {
-            return new MonetConnection();
+            return new PostgresConnection();
         }
         catch(SQLException e) {throw new RuntimeException(e);}
     }
 
-
     @Override
     public LinkedHashSet<String> getTableColumns(final String tableName, boolean crashOnDuplicates){
-        return new LinkedHashSet<>(getTableColumnsWithTypes(tableName, crashOnDuplicates).keySet());
+        return SQLUtils.getTableColumns(tableName, crashOnDuplicates);
     }
 
 
     @Override
     public LinkedHashMap<String, String> getTableColumnsWithTypes(final String tableName, boolean crashOnDuplicates){
-        String query = String.format("SELECT c.name, c.type FROM sys.columns c WHERE c.table_id = (SELECT t.id FROM sys.tables t WHERE t.name='%s') ORDER BY c.number", tableName.toLowerCase());
-        return SQLUtils.getStringToStringMap(this.conn, tableName, query, crashOnDuplicates);
+        return SQLUtils.getTableColumnsWithTypes(conn, tableName, crashOnDuplicates);
     }
 
     @Override
     public Set<String> getTablesWithNameMatching(String begin) {
-        return SQLUtils.getTablesWithNameMatching(this.conn, "SELECT t.name FROM sys.tables t WHERE NOT t.system", begin);
+        return SQLUtils.getTablesWithNameMatching(conn, begin);
     }
+
+//    /**
+//     * pumps the result of running a query on a database in the enclosed Monet DB
+//     * @param srcConn
+//     * @param srcQuery
+//     * @param destTableName
+//     * @throws SQLException
+//     */
+//    public void createTableFromQuery(java.sql.Connection srcConn, String srcQuery, String destTableName) throws SQLException {
+//        if (tableExists(destTableName)) {
+//            dropTable(destTableName);
+//        };
+//    	SQLUtils.executeQuery(conn, "CREATE TABLE " + destTableName + " AS " + srcQuery);
+//    }
 
     @Override
     public void copyTableFromPostgres(java.sql.Connection srcConn, String tableName) throws SQLException {
-        createTableFromPostgresQuery(tableName, srcConn, "select * from " + tableName);
+        // do nothing as the table already exists
     }
 
     /**
@@ -103,7 +94,7 @@ public class MonetConnection extends OlapDbConnection {
         createTableFromQuery(srcConn, tableCreationQuery, tableName);
     }
 
-    private static DataSource getMonetDataSource() {
+    private static DataSource getPostgreSQLDataSource() {
         try {
             Context initialContext = new InitialContext();
             //DataSource res = (javax.sql.DataSource) initialContext.lookup(Constants.MONETDB_JNDI_ALIAS);
@@ -134,7 +125,7 @@ public class MonetConnection extends OlapDbConnection {
                     case java.sql.Types.DOUBLE:
                     case java.sql.Types.NUMERIC:
                     case java.sql.Types.DECIMAL:
-                        return "double";
+                        return "double precision";
 
                     case java.sql.Types.CHAR:
                     case java.sql.Types.VARCHAR:
@@ -172,8 +163,7 @@ public class MonetConnection extends OlapDbConnection {
 			
 			@Override
 			public String getDataSourceString() {
-				return String.format("jdbc:mondrian:JdbcDrivers=nl.cwi.monetdb.jdbc.MonetDriver;Jdbc=%s;JdbcUser=monetdb;JdbcPassword=monetdb;PoolNeeded=false", 
-						_getJdbcUrl());
+				return String.format("jdbc:mondrian:DataSource=java:comp/env/ampDS");
 			}
 
 			@Override
@@ -183,7 +173,7 @@ public class MonetConnection extends OlapDbConnection {
 
 			@Override
 			public boolean isColumnarDatabase() {
-				return true;
+				return false;
 			}
 		};
     }

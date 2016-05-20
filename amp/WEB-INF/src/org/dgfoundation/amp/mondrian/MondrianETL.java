@@ -35,6 +35,7 @@ import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
 import org.dgfoundation.amp.mondrian.monet.EtlStrategy;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.dgfoundation.amp.mondrian.monet.OlapDbConnection;
+import org.dgfoundation.amp.mondrian.monet.PostgresConnection;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -59,7 +60,13 @@ import com.google.common.base.Predicate;
 public class MondrianETL {
 		
 	public static int IDS_BATCH_SIZE = 200;
-	public static EtlStrategy ETL_STRATEGY = MonetConnection.buildStrategy();
+	public static boolean ENABLE_DIRECTED_DISBURSEMENTS = false;
+	
+	//public static EtlStrategy ETL_STRATEGY = MonetConnection.buildStrategy();
+	public static EtlStrategy ETL_STRATEGY = PostgresConnection.buildStrategy();
+
+	public final static boolean IS_COLUMNAR = ETL_STRATEGY.isColumnarDatabase();
+	public final static String DOUBLE_COLUMN_NAME = MondrianETL.ETL_STRATEGY.getColumnTypesMapper().mapSqlTypeToName(java.sql.Types.DOUBLE, -1);
 	public static String CONNECTION_DS = ETL_STRATEGY.getDataSourceString();
 
 	public final static String MONDRIAN_EXCHANGE_RATES_TABLE = "mondrian_exchange_rates";
@@ -275,7 +282,7 @@ public class MondrianETL {
 				String t = mtd.tableName + suffix;
 				//logger.info("Full ETL: dropping table " + t);
 				olapConn.dropTable(t);
-				SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + t);
+				SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + t + " CASCADE");
 			}
 		}
 		Set<String> etlTablesMonet = olapConn.getTablesWithNameMatching("etl_");
@@ -290,10 +297,12 @@ public class MondrianETL {
 		logger.info("Full ETL: dropping pg tables " + etlTablesPostgres);
 		for(String t:etlTablesPostgres) {
 			//logger.info("Full ETL: dropping pg table " + t);
-			SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + t);
+			if (!t.equals(Fingerprint.FINGERPRINT_TABLE)) {
+				SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + t + " CASCADE");
+			}
 		}
 		olapConn.dropTable(FACT_TABLE.tableName);
-		SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + FACT_TABLE.tableName);
+		SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + FACT_TABLE.tableName + " CASCADE");
 	}
 	
 	protected void processAutonomousTable(MondrianTableDescription mondrianTable, String filteringSubquery) throws SQLException {
@@ -557,7 +566,7 @@ private EtlResult execute() throws Exception {
 	 * @throws SQLException
 	 */
 	protected void generateMondrianDateTable() throws SQLException {
-		generateStarTableWithQueryInPostgres(MONDRIAN_DATE_TABLE, "date_code", 
+		generateStarTableWithQueryInPostgres(MONDRIAN_DATE_TABLE, "day_code", 
 			String.format("SELECT to_char(transaction_date, 'J')::integer AS day_code, (CAST (transaction_date as date)) AS full_date, date_part('year'::text, (CAST (transaction_date as date)))::integer AS year_code, date_part('year'::text, (CAST (transaction_date as date)))::text AS year_name, date_part('month'::text, (CAST (transaction_date as date)))::integer AS month_code, to_char((CAST (transaction_date as date)), 'Month'::text) AS month_name, date_part('quarter'::text, (CAST (transaction_date as date)))::integer AS quarter_code, ('Q'::text || date_part('quarter'::text, (CAST (transaction_date as date)))) AS quarter_name " + 
 			" FROM generate_series('%d-1-1', '%d-1-1', interval '1 day') transaction_date " + 
 			" UNION ALL " + 
@@ -660,14 +669,9 @@ private EtlResult execute() throws Exception {
 		olapConn.copyTableStructureFromPostgres(this.conn, mondrianTable.tableName, localizedTableName);
 		SQLUtils.insert(olapConn.conn, localizedTableName, null, null, olapConn.getTableColumns(localizedTableName), vals);
 
-		
-		// -> cannot check sanity because a write to the db might have just happened during the ETL, thus invalidating the cloning <-
-		
-/*		// checking sanity
-		long initTableSz = SQLUtils.countRows(conn, mondrianTable.tableName);
-		long createdTableSz = SQLUtils.countRows(monetConn.conn, localizedTableName);
-		if (initTableSz != createdTableSz && !mondrianTable.isFiltering)
-			throw new RuntimeException(String.format("HUGE BUG: multilingual-cloned dimension table has a size of %d, while the original dimension table has a size of %d", createdTableSz, initTableSz));*/
+		if (etlConfig.fullEtl) {
+			mondrianTable.createIndices(olapConn, localizedTableName);
+		}
 	}
 	
 	/**
@@ -720,26 +724,30 @@ private EtlResult execute() throws Exception {
 	 */
 	protected void postprocessDimensionTable(String tableName, String primaryKey, Collection<String> columnsToIndex) {
 //		// change text column types' collation to C -> 7x faster GROUP BY / ORDER BY for stupid Mondrian
-//		Map<String, String> tableColumns = SQLUtils.getTableColumnsWithTypes(tableName, true);
-//		Set<String> textColumnTypes = new HashSet<>(Arrays.asList("text", "character varying", "varchar"));
-//		for (String columnName:tableColumns.keySet()) {
-//			String columnType = tableColumns.get(columnName);
-//			if (textColumnTypes.contains(columnType)) {
-//				String q = String.format("ALTER TABLE %s ALTER COLUMN %s SET DATA TYPE text COLLATE \"C\"", tableName, columnName);
-//				SQLUtils.executeQuery(conn, q);
-//			}
-//		}
+		if (!IS_COLUMNAR) {
+			Map<String, String> tableColumns = SQLUtils.getTableColumnsWithTypes(tableName, true);
+			Set<String> textColumnTypes = new HashSet<>(Arrays.asList("text", "character varying", "varchar"));
+			for (String columnName:tableColumns.keySet()) {
+				String columnType = tableColumns.get(columnName);
+				if (textColumnTypes.contains(columnType)) {
+					String q = String.format("ALTER TABLE %s ALTER COLUMN %s SET DATA TYPE text COLLATE \"C\"", tableName, columnName);
+					SQLUtils.executeQuery(conn, q);
+				}
+			}
+		}
 		
 		// create indices
 		for (String columnToIndex:columnsToIndex) {
 			String indexCreationQuery = String.format("CREATE INDEX %s_%s ON %s(%s)", tableName, columnToIndex, tableName, columnToIndex);
 			SQLUtils.executeQuery(conn, indexCreationQuery);
 		}
-		
-//		// create primary key
-//		if (primaryKey != null) {
-//			SQLUtils.executeQuery(conn, String.format("ALTER TABLE %s ADD CONSTRAINT %s_PK PRIMARY KEY (%s)", tableName, tableName, primaryKey));
-//		}
+
+		if (!IS_COLUMNAR) {
+			// create primary key
+			if (primaryKey != null && (primaryKey.indexOf(',') < 0)) {
+				SQLUtils.executeQuery(conn, String.format("ALTER TABLE %s ADD CONSTRAINT %s_PK PRIMARY KEY (%s)", tableName, tableName, primaryKey));
+			}
+		}
 	}
 
 	/**
@@ -748,7 +756,7 @@ private EtlResult execute() throws Exception {
 	protected void recreateFactTable() throws SQLException {
 		olapConn.dropView(MondrianTablesRepository.FACT_TABLE_VIEW_NO_DATE_FILTER);
 		olapConn.dropTable(FACT_TABLE.tableName);
-		FACT_TABLE.create(olapConn.conn, false);
+		FACT_TABLE.create(olapConn.conn, etlConfig.fullEtl && !IS_COLUMNAR);
 	}
 	
 	/**
@@ -825,6 +833,10 @@ private EtlResult execute() throws Exception {
 			long baseDone = System.currentTimeMillis();
 			for (String locale:locales)
 				cloneMondrianTableForLocale(mondrianTable, locale);
+			
+			mondrianTable.createIndices(olapConn, mondrianTable.tableName);
+			
+			olapConn.flush();
 			long cloningDone = System.currentTimeMillis();
 			logger.info("full ETL on " + mondrianTable.tableName + ", base table took " + (baseDone - start) + " ms");
 			logger.info("\tfull ETL on " + mondrianTable.tableName + ", cloning for locales " + locales + " took " + (cloningDone - baseDone) + " ms");
@@ -914,6 +926,7 @@ private EtlResult execute() throws Exception {
 				olapConn.executeQuery(query);
 				//logger.warn("\t...executing query #" + (i + 1) + " done");
 			}
+			olapConn.flush();
 		}
 		
 		logger.warn("...running the fact-table-generating cartesian done");
@@ -934,7 +947,7 @@ private EtlResult execute() throws Exception {
 		try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
 			// Map<activityId, percentages_on_sector_scheme
 			Map<Long, PercentagesDistribution> secs = PercentagesDistribution.readInput(rsi.rs);
-			serializeETLTable(secs, tableName, false, forceIncremental);
+			serializeETLTable(secs, tableName, etlConfig.fullEtl, forceIncremental);
 		}
 	}
 
@@ -1033,7 +1046,7 @@ private EtlResult execute() throws Exception {
 		
 		if (recreateTable) {
 			olapConn.dropTable(tableName);
-			olapConn.executeQuery("CREATE TABLE " + tableName + " (act_id integer, ent_id integer, percentage double)");
+			olapConn.executeQuery("CREATE TABLE " + tableName + " (act_id integer, ent_id integer, percentage " + DOUBLE_COLUMN_NAME + ")");
 		} else {
 			olapConn.executeQuery("DELETE FROM " + tableName + " WHERE act_id IN (" + Util.toCSStringForIN(percs.keySet()) + ")");
 		}
@@ -1049,9 +1062,9 @@ private EtlResult execute() throws Exception {
 
 		createIndices &= recreateTable;
 		if (createIndices) {
-			SQLUtils.executeQuery(conn, String.format("CREATE INDEX %s_act_id_idx ON %s(act_id)", tableName, tableName)); // create index on activityId
-			SQLUtils.executeQuery(conn, String.format("CREATE INDEX %s_ent_id_idx ON %s(ent_id)", tableName, tableName)); // create index on entityId (entity=sector/program/org)
-			SQLUtils.executeQuery(conn, String.format("CREATE INDEX %s_act_ent_id_idx ON %s(act_id, ent_id)", tableName, tableName)); // create index on entityId (entity=sector/program/org)
+			SQLUtils.executeQuery(olapConn.conn, String.format("CREATE INDEX %s_act_id_idx ON %s(act_id)", tableName, tableName)); // create index on activityId
+			SQLUtils.executeQuery(olapConn.conn, String.format("CREATE INDEX %s_ent_id_idx ON %s(ent_id)", tableName, tableName)); // create index on entityId (entity=sector/program/org)
+			SQLUtils.executeQuery(olapConn.conn, String.format("CREATE INDEX %s_act_ent_id_idx ON %s(act_id, ent_id)", tableName, tableName)); // create index on entityId (entity=sector/program/org)
 		}
 		olapConn.flush();
 	}
@@ -1116,6 +1129,7 @@ private EtlResult execute() throws Exception {
 		for(String query:factTableSql.get()) {
 			String q = query;
 			q = q.replace("@@BUGCHOOSER@@", BUG_CHOOSER ? "999888777" : "999999999");
+			q = q.replace("@@directed_disbursements_condition@@", ENABLE_DIRECTED_DISBURSEMENTS ? "1=1" : "1=0");
 			if (q.indexOf("@@activityIdCondition@@") != 0 && allEntities.isEmpty())
 				continue; // query references activities, but these are empty -> it is useless
 			String activityCondition = " IN (" +Util.toCSStringForIN(allEntities) + ")";

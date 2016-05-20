@@ -118,15 +118,16 @@ public class Fingerprint {
 	
 	/**
 	 * DROPs and then recreates the etl_fingerprints table
-	 * @param monetConn
+	 * @param olapConnection
 	 */
-	public static void redoFingerprintTable(OlapDbConnection monetConn) {
-		monetConn.dropTable(FINGERPRINT_TABLE);
+	public static void redoFingerprintTable(OlapDbConnection olapConnection) {
+		olapConnection.dropTable(FINGERPRINT_TABLE);
 //		if (!monetConn.tableExists(FINGERPRINT_TABLE)) 
 		{
-			monetConn.executeQuery(String.format("CREATE TABLE %s (key %s, value %s)", FINGERPRINT_TABLE,
-					monetConn.mapper.mapSqlTypeToName(java.sql.Types.VARCHAR, 255), monetConn.mapper.mapSqlTypeToName(java.sql.Types.LONGVARCHAR, 999999)));
-			monetConn.flush();
+			olapConnection.executeQuery(String.format("CREATE TABLE %s (key %s, value %s)", FINGERPRINT_TABLE,
+					olapConnection.mapper.mapSqlTypeToName(java.sql.Types.VARCHAR, 255), olapConnection.mapper.mapSqlTypeToName(java.sql.Types.LONGVARCHAR, 999999)));
+			olapConnection.executeQuery(String.format("CREATE INDEX ON %s(%s)", FINGERPRINT_TABLE, "key"));
+			olapConnection.flush();
 		}
 	}
 	

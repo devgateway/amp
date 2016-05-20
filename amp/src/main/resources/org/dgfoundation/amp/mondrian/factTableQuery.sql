@@ -203,7 +203,7 @@ INSERT INTO mondrian_fact_table (entity_id, funding_id, entity_internal_id, tran
 
     LEFT JOIN etl_locations location ON location.act_id = rawdonation.amp_activity_id
 
-    WHERE (rawdonation.transaction_amount IS NOT NULL) AND (rawdonation.amp_activity_id @@activityIdCondition@@) AND (rawdonation.transaction_type IN (0, 1, 2, 3)) AND (src_role IS NOT NULL) AND (dest_role IS NOT NULL);
+    WHERE (@@directed_disbursements_condition@@) AND (rawdonation.transaction_amount IS NOT NULL) AND (rawdonation.amp_activity_id @@activityIdCondition@@) AND (rawdonation.transaction_type IN (0, 1, 2, 3)) AND (src_role IS NOT NULL) AND (dest_role IS NOT NULL);
     
 
 

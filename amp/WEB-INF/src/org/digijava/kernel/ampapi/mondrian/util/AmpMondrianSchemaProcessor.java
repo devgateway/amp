@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.mondrian.util;
 
+import static org.dgfoundation.amp.mondrian.MondrianETL.MONDRIAN_EXCHANGE_RATES_TABLE;
+
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -62,7 +64,6 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	
 	protected static final Logger logger = Logger.getLogger(AmpMondrianSchemaProcessor.class);
 	protected static String expandedSchema;
-	protected String mondrianFactTable;
 	
 	protected static final String SECTOR_VIEW_TEMPLATE = "<View alias=\"v_mondrian_sectors_@@typenameescaped@@_@@instancenr@@\">\n" + 
 			"<SQL dialect=\"generic\">\n" + 
@@ -73,6 +74,8 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			"</View>";
 			
 	protected static final String PROGRAM_VIEW_TEMPLATE = SECTOR_VIEW_TEMPLATE.replace("mondrian_sectors", "mondrian_programs").replace("typename=", "program_setting_name=");
+	
+	protected final String mondrianFactTable = MondrianTablesRepository.FACT_TABLE.tableName;
 	
 	/**
 	 * whether this is the first, e.g. expanding, run of the processor
@@ -98,7 +101,6 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			// by default DonorReport will be run
 			currentReport.set(null);
 		}
-		mondrianFactTable = getCubeFactTableName();
 		return processContents(contents);
 	}
 	finally {
@@ -288,6 +290,29 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			contents = XMLGlobals.saveToString(xmlSchema);
 			contents = contents.replaceAll("@@undefined_amount@@", MoConstants.UNDEFINED_AMOUNT_STR);
 			contents = contents.replaceAll("@@transaction_type_gap@@", MoConstants.TRANSACTION_TYPE_GAP);
+			String mft = "\"@@mondrian_fact_table@@\"";
+			contents = contents.replaceAll("@@trivial_column@@", 
+					MondrianETL.IS_COLUMNAR ? "\"@@mondrian_fact_table@@\".transaction_exch_@@currency@@" : 
+						String.format("%s.transaction_amount * (select mer.exchange_rate from %s mer WHERE mer.day_code = %s.date_code AND mer.currency_id = %s.currency_id) / (select mer2.exchange_rate from %s mer2 WHERE mer2.day_code = %s.date_code AND mer2.currency_id = @@currency@@)",
+							mft,
+							MONDRIAN_EXCHANGE_RATES_TABLE,
+							mft,
+							mft,
+							MONDRIAN_EXCHANGE_RATES_TABLE,
+							mft));
+			/**
+			 * 		String query = String.format(
+					"UPDATE %s SET %s = COALESCE(%stransaction_amount * (select mer.exchange_rate from %s mer WHERE mer.day_code = %s AND mer.currency_id = %s.%scurrency_id) / (select mer2.exchange_rate from %s mer2 WHERE mer2.day_code = %s AND mer2.currency_id = %s) , %s) %s",
+					cag.destinationTable, cag.getColumnName(currId),
+					cag.prefix, MONDRIAN_EXCHANGE_RATES_TABLE, 
+					nullAvoidingCase(cag.destinationTable, cag.prefix),
+					cag.destinationTable, cag.prefix,
+					MONDRIAN_EXCHANGE_RATES_TABLE, 
+					nullAvoidingCase(cag.destinationTable, cag.prefix),
+					currId, MoConstants.UNDEFINED_AMOUNT_STR, condition);
+				olapConnection.executeQuery(query);
+
+			 */
 			expandedSchema = contents;
 			//System.err.println("the expanded schema is: " + expandedSchema);
 		}
@@ -336,7 +361,6 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 					continue; // this one is hardcoded in AMP.xml for the sake of "pledges + activities" reports				
 				
 				addTrivialMeasure(trivialMeasureDefinitionNode, measureName, adj, trTypeId);
-				addTrivialMeasure(trivialMeasureDefinitionNode, measureName + MoConstants.UNFILTERED_DATE_SUFFIX, adj, trTypeId + Integer.parseInt(MoConstants.TRANSACTION_TYPE_GAP));
 			}
 		}
 		
@@ -614,25 +638,5 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		contents = contents.replaceAll("@@selected_year_end@@", DateTimeUtil.toJulianDayString(c.getTime()));
 		
 		return contents;
-	}
-	
-	/**
-	 * @return the actual name of the fact table or fact view
-	 */
-	protected String getCubeFactTableName() {
-		ReportSpecification spec = currentReport.get();
-		String factTable = spec == null ? MondrianTablesRepository.FACT_TABLE_VIEW_NO_DATE_FILTER : MondrianTablesRepository.FACT_TABLE.tableName; // so that Saiku report wizard can use all the fancy hacky no-date-filters measures
-		if (spec != null && spec.getMeasures() != null) {
-			for (ReportMeasure m : spec.getMeasures()) {
-				if (CustomMeasures.NO_DATE_FILTERS.contains(m.getMeasureName())) {
-					factTable = MondrianTablesRepository.FACT_TABLE_VIEW_NO_DATE_FILTER;
-					break;
-				}
-			}
-		}
-		if (spec != null && spec.getColumnNames().contains(ColumnConstants.FORECAST_EXECUTION_RATE)) {
-			factTable = MondrianTablesRepository.FACT_TABLE_VIEW_NO_DATE_FILTER;
-		}
-		return factTable;
 	}
 }

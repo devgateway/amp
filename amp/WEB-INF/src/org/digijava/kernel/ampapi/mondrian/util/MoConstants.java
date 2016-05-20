@@ -356,17 +356,11 @@ public final class MoConstants {
 	 * Undefined amount as minimum value supported by MonetDB, that is almost "-Double.MAX_VALUE".
 	 * Must be defined explicitly instead of null, otherwise measures data will also be empty even if it exists.
 	 * */ 
-	public static final String UNDEFINED_AMOUNT_STR = "-1.7976931348623155E308";
+	public static final String UNDEFINED_AMOUNT_STR = "-999888777666";
 	
 	/** 
 	 * AMP-19721
 	 * The gap between actual transaction type and virtual transaction type that bypasses date filters
 	 */
-	public static final String TRANSACTION_TYPE_GAP = "1000000";
-	
-	/**
-	 * AMP-21526 - the prefix to add to trivial measures to generate non-filtered-by-date companion measures
-	 */
-	public static final String UNFILTERED_DATE_SUFFIX = " - Unfiltered by date";
-	
+	public static final String TRANSACTION_TYPE_GAP = "1000000";	
 }

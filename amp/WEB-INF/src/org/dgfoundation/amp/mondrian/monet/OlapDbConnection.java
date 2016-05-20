@@ -36,7 +36,7 @@ public abstract class OlapDbConnection implements AutoCloseable {
     	}
     }
 
-    public abstract String getJdbcUrl();
+    //public abstract String getJdbcUrl();
     
     @Override public void finalize() {
         close();
@@ -111,7 +111,17 @@ public abstract class OlapDbConnection implements AutoCloseable {
      * @param destTableName
      * @throws SQLException
      */
-    public abstract void createTableFromQuery(java.sql.Connection srcConn, String srcQuery, String destTableName) throws SQLException;
+    public void createTableFromQuery(java.sql.Connection srcConn, String srcQuery, String destTableName) throws SQLException {
+        try(RsInfo rs = SQLUtils.rawRunQuery(srcConn, srcQuery, null)) {
+            if (tableExists(destTableName)) {
+                dropTable(destTableName);
+            }
+            // create table based on the results structure
+            DatabaseTableDescription tableDescription = DatabaseTableDescription.describeResultSet(destTableName, mapper, rs.rs);
+            tableDescription.create(this.conn, false);
+            copyEntries(destTableName, rs.rs);
+        }
+    }
 
     public abstract void copyTableFromPostgres(java.sql.Connection srcConn, String tableName) throws SQLException;
 

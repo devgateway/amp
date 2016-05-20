@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.mondrian.EtlConfiguration;
+import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MondrianTablesRepository;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.dgfoundation.amp.mondrian.monet.OlapDbConnection;
@@ -30,7 +31,7 @@ import static org.dgfoundation.amp.mondrian.MondrianETL.MONDRIAN_EXCHANGE_RATES_
 public class CalculateExchangeRatesEtlJob {
 	
 	protected final Connection conn;
-	protected final OlapDbConnection monetConn;
+	protected final OlapDbConnection olapConnection;
 	protected final List<Long> currencyIds;
 	
 	/**
@@ -44,7 +45,7 @@ public class CalculateExchangeRatesEtlJob {
 	
 	public CalculateExchangeRatesEtlJob(List<Long> currencyIds, Connection conn, OlapDbConnection monetConn, EtlConfiguration etlConfig) {
 		this.conn = conn;
-		this.monetConn = monetConn;
+		this.olapConnection = monetConn;
 		this.currencyIds = Collections.unmodifiableList(currencyIds == null ? SQLUtils.fetchLongs(monetConn.conn, "SELECT amp_currency_id FROM amp_currency") : currencyIds);
 		this.etlConfig = etlConfig;
 		this.usedDates = getCurrencyDates();
@@ -65,10 +66,12 @@ public class CalculateExchangeRatesEtlJob {
 	 * @param cag
 	 */
 	private void generateExchangeRatesColumns(CurrencyAmountGroup cag) {
-		Set<String> destTableColumns = monetConn.getTableColumns(cag.destinationTable);
+		if (!MondrianETL.IS_COLUMNAR)
+			return;
+		Set<String> destTableColumns = olapConnection.getTableColumns(cag.destinationTable);
 		for (long currId:currencyIds) {
 			if (!destTableColumns.contains(cag.getColumnName(currId)))
-				monetConn.executeQuery(String.format("ALTER TABLE %s ADD %s DOUBLE", cag.destinationTable, cag.getColumnName(currId)));
+				olapConnection.executeQuery(String.format("ALTER TABLE %s ADD %s " + MondrianETL.DOUBLE_COLUMN_NAME, cag.destinationTable, cag.getColumnName(currId)));
 		}
 		
 		/**
@@ -83,9 +86,9 @@ public class CalculateExchangeRatesEtlJob {
 		if (currencyIds.size() > 2) {
 			// smart
 			if (!destTableColumns.contains(cag.prefix + "amount_base_currency")) {
-				monetConn.executeQuery(String.format("ALTER TABLE %s ADD %s DOUBLE", cag.destinationTable, cag.prefix + "amount_base_currency"));
+				olapConnection.executeQuery(String.format("ALTER TABLE %s ADD %s " + MondrianETL.DOUBLE_COLUMN_NAME, cag.destinationTable, cag.prefix + "amount_base_currency"));
 			}
-			monetConn.executeQuery(String.format("UPDATE %s SET %samount_base_currency = "
+			olapConnection.executeQuery(String.format("UPDATE %s SET %samount_base_currency = "
 					+ "%stransaction_amount * (select mer.exchange_rate from mondrian_exchange_rates mer WHERE mer.day_code = %s AND mer.currency_id = %s.%scurrency_id) %s",
 					cag.destinationTable, cag.prefix, cag.prefix, nullAvoidingCase(cag.destinationTable, cag.prefix), cag.destinationTable, cag.prefix,
 					condition));
@@ -96,8 +99,8 @@ public class CalculateExchangeRatesEtlJob {
 						cag.destinationTable, cag.getColumnName(currId), cag.prefix,
 						nullAvoidingCase(cag.destinationTable, cag.prefix),
 						currId, MoConstants.UNDEFINED_AMOUNT_STR, condition); 
-				monetConn.executeQuery(query);
-				monetConn.flush();
+				olapConnection.executeQuery(query);
+				olapConnection.flush();
 			}
 		} else {
 			// stupid
@@ -111,7 +114,7 @@ public class CalculateExchangeRatesEtlJob {
 					MONDRIAN_EXCHANGE_RATES_TABLE, 
 					nullAvoidingCase(cag.destinationTable, cag.prefix),
 					currId, MoConstants.UNDEFINED_AMOUNT_STR, condition);
-				monetConn.executeQuery(query);
+				olapConnection.executeQuery(query);
 			}
 			return;
 		}
@@ -143,19 +146,22 @@ public class CalculateExchangeRatesEtlJob {
 	protected void generateExchangeRatesTable() throws SQLException {
 		logger.warn("generating exchange rates ETL...");
 		if (etlConfig.fullEtl) {
-			monetConn.dropTable(MONDRIAN_EXCHANGE_RATES_TABLE);
-			monetConn.executeQuery("CREATE TABLE " + MONDRIAN_EXCHANGE_RATES_TABLE + "(" + 
+			olapConnection.dropTable(MONDRIAN_EXCHANGE_RATES_TABLE);
+			olapConnection.executeQuery("CREATE TABLE " + MONDRIAN_EXCHANGE_RATES_TABLE + "(" + 
 										"day_code integer NOT NULL," + 
 										"currency_id bigint NOT NULL," + 
-										"exchange_rate double)");
+										"exchange_rate " + MondrianETL.DOUBLE_COLUMN_NAME + ")");
+			olapConnection.executeQuery(String.format("CREATE INDEX ON %s(%s)", MONDRIAN_EXCHANGE_RATES_TABLE, "day_code"));
+			olapConnection.executeQuery(String.format("CREATE INDEX ON %s(%s)", MONDRIAN_EXCHANGE_RATES_TABLE, "currency_id"));
+			olapConnection.executeQuery(String.format("CREATE INDEX ON %s(%s, %s)", MONDRIAN_EXCHANGE_RATES_TABLE, "day_code", "currency_id"));
 		}
 		
 		if (usedDates.isEmpty())
 			return; // no dates to ETL
-		List<Long> allCurrencies = SQLUtils.fetchLongs(monetConn.conn, "SELECT amp_currency_id FROM amp_currency");
+		List<Long> allCurrencies = SQLUtils.fetchLongs(olapConnection.conn, "SELECT amp_currency_id FROM amp_currency");
 		for (Long currency:allCurrencies) {
 			generateExchangeRateEntriesForCurrency(CurrencyUtil.getAmpcurrency(currency), usedDates);
-			monetConn.flush();
+			olapConnection.flush();
 		}		
 		logger.warn("... done generating exchange rates ETL...");
 		//monetConn.copyTableFromPostgres(this.conn, MONDRIAN_EXCHANGE_RATES_TABLE);
@@ -174,7 +180,7 @@ public class CalculateExchangeRatesEtlJob {
 		for (CurrencyAmountGroup cag:MondrianTablesRepository.CURRENCY_GROUPS) {
 			String where = etlConfig.fullEtl ? "" : ("WHERE " + etlConfig.entityIdsIn(cag.containingEntityIdColumn));
 			String query = String.format("select distinct(%sdate_code) as day_code from %s %s", cag.prefix, cag.containingTable, where);
-			res.addAll(SQLUtils.fetchLongs(monetConn.conn, query));
+			res.addAll(SQLUtils.fetchLongs(olapConnection.conn, query));
 		}
 		res.remove(0l);
 		return res;
@@ -189,8 +195,8 @@ public class CalculateExchangeRatesEtlJob {
 	protected void generateExchangeRateEntriesForCurrency(AmpCurrency currency, SortedSet<Long> usedDates) throws SQLException {
 		List<List<Object>> entries = new CurrencyETL(currency, conn).work(usedDates);
 		if (!etlConfig.fullEtl) {
-			monetConn.executeQuery("DELETE FROM " + MONDRIAN_EXCHANGE_RATES_TABLE + " WHERE (currency_id = " + currency.getAmpCurrencyId() + ") AND (day_code IN (" + Util.toCSStringForIN(usedDates) + "))");
+			olapConnection.executeQuery("DELETE FROM " + MONDRIAN_EXCHANGE_RATES_TABLE + " WHERE (currency_id = " + currency.getAmpCurrencyId() + ") AND (day_code IN (" + Util.toCSStringForIN(usedDates) + "))");
 		}
-		SQLUtils.insert(monetConn.conn, MONDRIAN_EXCHANGE_RATES_TABLE, null, null, Arrays.asList("day_code", "currency_id", "exchange_rate"), entries);
+		SQLUtils.insert(olapConnection.conn, MONDRIAN_EXCHANGE_RATES_TABLE, null, null, Arrays.asList("day_code", "currency_id", "exchange_rate"), entries);
 	}
 }

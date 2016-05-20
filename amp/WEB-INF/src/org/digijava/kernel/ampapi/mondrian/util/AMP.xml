@@ -412,7 +412,7 @@
 			<MeasureExpression>
 				<SQL dialect="generic" aggregator="sum">
 					CASE 
-						WHEN @@non_ac_pledges_excluder@@ (@@mondrian_fact_table@@.transaction_type=@@trivial_measure_transaction_type@@) AND (@@mondrian_fact_table@@.adjustment_type=@@trivial_measure_adjustment_type@@) AND (src_role='DN') THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@ 
+						WHEN @@non_ac_pledges_excluder@@ (@@mondrian_fact_table@@.transaction_type=@@trivial_measure_transaction_type@@) AND (@@mondrian_fact_table@@.adjustment_type=@@trivial_measure_adjustment_type@@) AND (src_role='DN') THEN @@trivial_column@@ 
 						ELSE null
 					END
 				</SQL>
@@ -424,13 +424,13 @@
 				<SQL dialect="generic" aggregator="sum">
 					CASE
 						WHEN (@@mondrian_fact_table@@.entity_id &gt; 800000000) AND (@@mondrian_fact_table@@.entity_id &lt; 900000000) AND (@@mondrian_fact_table@@.transaction_type=0) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (src_role='DN')
-							THEN - "@@mondrian_fact_table@@".transaction_exch_@@currency@@
+							THEN - @@trivial_column@@
 							
 						WHEN (@@mondrian_fact_table@@.entity_id &gt; 800000000) AND (@@mondrian_fact_table@@.entity_id &lt; 900000000) AND ("@@mondrian_fact_table@@".transaction_type=7)
-							THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@
+							THEN @@trivial_column@@
 						 						 
 						WHEN (@@mondrian_fact_table@@.entity_id &lt; 800000000) AND (@@mondrian_fact_table@@.transaction_type=0) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (src_role='DN')
-							THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@
+							THEN @@trivial_column@@
 							
 						ELSE null
 					END
@@ -443,7 +443,7 @@
 				<SQL dialect="generic" aggregator="sum">
 					CASE
 						WHEN (@@mondrian_fact_table@@.transaction_type=0) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (src_role='DN')
-							THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@
+							THEN @@trivial_column@@
 						ELSE null
 					END
 				</SQL>
@@ -455,7 +455,7 @@
 				<SQL dialect="generic" aggregator="sum">
 					CASE
 						WHEN (@@mondrian_fact_table@@.transaction_type = 200) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (flow_name &lt;&gt; 'Undefined')
-							THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@
+							THEN @@trivial_column@@
 						ELSE null
 					END
 				</SQL>
@@ -467,7 +467,7 @@
 				<SQL dialect="generic" aggregator="sum">
 					CASE
 						WHEN (@@mondrian_fact_table@@.transaction_type = 201) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (flow_name &lt;&gt; 'Undefined')
-							THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@
+							THEN @@trivial_column@@
 						ELSE null
 					END
 				</SQL>
@@ -479,7 +479,7 @@
 				<SQL dialect="generic" aggregator="sum">
 					CASE
 						WHEN (@@mondrian_fact_table@@.transaction_type = 203) AND (flow_name &lt;&gt; 'Undefined')
-							THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@
+							THEN @@trivial_column@@
 						ELSE null
 					END
 				</SQL>
@@ -490,7 +490,7 @@
 			<MeasureExpression>
 				<SQL dialect="generic">
 					CASE WHEN @@mondrian_fact_table@@.transaction_type=1 AND @@mondrian_fact_table@@.adjustment_type=@@planned@@ AND src_role='DN' AND capital_spend_percent IS NOT NULL
-					THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@ * capital_spend_percent / 100.0 ELSE null END
+					THEN @@trivial_column@@ * capital_spend_percent / 100.0 ELSE null END
 				</SQL>
 			</MeasureExpression>
 		</Measure>
@@ -499,7 +499,7 @@
 			<MeasureExpression>
 				<SQL dialect="generic"> 
 					CASE WHEN @@mondrian_fact_table@@.transaction_type=1 AND @@mondrian_fact_table@@.adjustment_type=@@planned@@ AND src_role='DN' AND capital_spend_percent IS NOT NULL
-					THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@ * (100 - capital_spend_percent) / 100.0 ELSE null END
+					THEN @@trivial_column@@ * (100 - capital_spend_percent) / 100.0 ELSE null END
 				</SQL>
 			</MeasureExpression>
 		</Measure>
@@ -508,7 +508,7 @@
 			<MeasureExpression>
 				<SQL dialect="generic"> 
 					CASE WHEN @@mondrian_fact_table@@.transaction_type=1 AND @@mondrian_fact_table@@.adjustment_type=@@actual@@ AND src_role='DN' AND capital_spend_percent IS NOT NULL
-					THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@ * capital_spend_percent / 100.0 ELSE null END
+					THEN @@trivial_column@@ * capital_spend_percent / 100.0 ELSE null END
 				</SQL>
 			</MeasureExpression>
 		</Measure>
@@ -517,7 +517,7 @@
 			<MeasureExpression>
 				<SQL dialect="generic">
 					CASE WHEN @@mondrian_fact_table@@.transaction_type=1 AND @@mondrian_fact_table@@.adjustment_type=@@actual@@ AND src_role='DN' AND capital_spend_percent IS NOT NULL
-					THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@ * (100 - capital_spend_percent) / 100.0 ELSE null END
+					THEN @@trivial_column@@ * (100 - capital_spend_percent) / 100.0 ELSE null END
 				</SQL>
 			</MeasureExpression>
 		</Measure>
@@ -527,9 +527,9 @@
 				<SQL dialect="generic">
 					CASE 
 						WHEN @@mondrian_fact_table@@.transaction_type=0 AND @@mondrian_fact_table@@.adjustment_type=@@actual@@ AND src_role='DN'
-							THEN - "@@mondrian_fact_table@@".transaction_exch_@@currency@@ 
+							THEN - @@trivial_column@@ 
 						WHEN "@@mondrian_fact_table@@".transaction_type=7
-							THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@
+							THEN @@trivial_column@@
 					END					
 				</SQL>
 			</MeasureExpression>
@@ -539,7 +539,7 @@
 			<MeasureExpression>
 				<SQL dialect="generic"><![CDATA[
 					CASE WHEN (@@mondrian_fact_table@@.transaction_type=3) AND (src_role='DN') AND (@@mteffilter@@)
-					THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@ ELSE null END
+					THEN @@trivial_column@@ ELSE null END
 				]]>	
 				</SQL>
 			</MeasureExpression>
@@ -549,7 +549,7 @@
 			<MeasureExpression>
 				<SQL dialect="generic"><![CDATA[
 					CASE WHEN (@@mondrian_fact_table@@.transaction_type=3) AND (src_role='DN') AND (@@pipelinemteffilter@@)
-					THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@ ELSE null END
+					THEN @@trivial_column@@ ELSE null END
 				]]>
 				</SQL>
 			</MeasureExpression>
@@ -559,7 +559,7 @@
 			<MeasureExpression>
 				<SQL dialect="generic"><![CDATA[
 					CASE WHEN (@@mondrian_fact_table@@.transaction_type=3) AND (src_role='DN') AND (@@projectionmteffilter@@)
-					THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@ ELSE null END
+					THEN @@trivial_column@@ ELSE null END
 				]]>
 				</SQL>
 			</MeasureExpression>
@@ -569,7 +569,7 @@
 			<MeasureExpression>
 				<SQL dialect="generic"><![CDATA[
 					CASE WHEN (@@mondrian_fact_table@@.transaction_type = 3 + @@transaction_type_gap@@) AND (src_role='DN') AND (@@pipelinemteffilternodate@@)
-					THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@ ELSE null END
+					THEN @@trivial_column@@ ELSE null END
 				]]>
 				</SQL>
 			</MeasureExpression>
@@ -579,7 +579,7 @@
 			<MeasureExpression>
 				<SQL dialect="generic"><![CDATA[
 					CASE WHEN (@@mondrian_fact_table@@.transaction_type = 3 + @@transaction_type_gap@@) AND (src_role='DN') AND (@@projectionmteffilternodate@@)
-					THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@ ELSE null END
+					THEN @@trivial_column@@ ELSE null END
 				]]>
 				</SQL>
 			</MeasureExpression>
@@ -593,7 +593,7 @@
 					CASE 
 						WHEN (@@mondrian_fact_table@@.transaction_type=1 + @@transaction_type_gap@@) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (src_role='DN')
 						AND (@@mondrian_fact_table@@.date_code >=@@current_year_start@@) AND (@@mondrian_fact_table@@.date_code <=@@month_before_last_month_end@@) 
-						THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@
+						THEN @@trivial_column@@
 						ELSE null
 					END]]>
 				</SQL>
@@ -608,7 +608,7 @@
 					CASE 
 						WHEN (@@mondrian_fact_table@@.transaction_type=1 + @@transaction_type_gap@@) AND (@@mondrian_fact_table@@.adjustment_type=@@actual@@) AND (src_role='DN') 
 						AND (@@mondrian_fact_table@@.date_code >=@@current_year_start@@) AND (@@mondrian_fact_table@@.date_code <=@@last_month_end@@)
-						THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@
+						THEN @@trivial_column@@
 						ELSE null
 					END]]>
 				</SQL>
@@ -623,7 +623,7 @@
 					CASE 
 						WHEN (@@mondrian_fact_table@@.transaction_type=1 + @@transaction_type_gap@@) AND (@@mondrian_fact_table@@.adjustment_type=@@planned@@) AND (src_role='DN') 
 						AND (@@mondrian_fact_table@@.date_code >=@@selected_year_start@@) AND (@@mondrian_fact_table@@.date_code <=@@selected_year_end@@)
-						THEN "@@mondrian_fact_table@@".transaction_exch_@@currency@@
+						THEN @@trivial_column@@
 						ELSE null
 					END]]>
 				</SQL>

@@ -73,7 +73,7 @@ public class DatabaseTableDescription {
 		SQLUtils.executeQuery(conn, query.toString());
 		
 		if (createIndices) {
-			logger.warn("Creating Mondrian indices");
+			logger.warn(String.format("Creating %d indices for Mondrian table %s", columns.values().stream().filter(z -> z.indexed).count(), this.tableName));
 			for(DatabaseTableColumn col:columns.values())
 				if (col.indexed) {
 					String q = String.format("CREATE INDEX %s_%s_idx ON %s(%s)", tableName, col.columnName, tableName, col.columnName);

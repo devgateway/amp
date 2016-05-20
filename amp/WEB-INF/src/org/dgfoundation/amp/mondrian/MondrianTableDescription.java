@@ -21,6 +21,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.mondrian.currencies.CurrencyAmountGroup;
 import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
 import org.dgfoundation.amp.mondrian.jobs.MondrianTableLogue;
+import org.dgfoundation.amp.mondrian.monet.OlapDbConnection;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.SiteUtils;
 
@@ -177,6 +178,10 @@ public class MondrianTableDescription {
 		}
 	}
 	
+	public void createIndices(OlapDbConnection conn, String tableName) {
+		for(String ic:this.indexedColumns)
+			conn.executeQuery(String.format("CREATE INDEX ON %s(%s)", tableName, ic));
+	}
 	/**
 	 * to be overridden in filtered tables
 	 * @param rs

@@ -40,6 +40,8 @@ import org.digijava.module.aim.dbentity.AmpTheme;
  *
  */
 public class MondrianTablesRepository {
+	public final static String DOUBLE_COLUMN_NAME = MondrianETL.DOUBLE_COLUMN_NAME;
+	
 	public final static MondrianTableDescription MONDRIAN_LOCATIONS_DIMENSION_TABLE = 
 			new MondrianTableDescription("mondrian_locations", "id", Arrays.asList("id", "parent_location", "country_id", "region_id", "zone_id", "district_id"))
 				.withFingerprintedJob(Arrays.asList(
@@ -56,7 +58,7 @@ public class MondrianTablesRepository {
 					}});
 
 	public final static MondrianTableDescription MONDRIAN_SECTORS_DIMENSION_TABLE = 
-			new MondrianTableDescription("mondrian_sectors", "amp_sector_id", Arrays.asList("amp_sector_id", "parent_sector_id", "level0_sector_id", "level1_sector_id", "level2_sector_id", "amp_sec_scheme_id"))
+			new MondrianTableDescription("mondrian_sectors", "amp_sector_id, amp_sec_scheme_id", Arrays.asList("amp_sector_id", "parent_sector_id", "level0_sector_id", "level1_sector_id", "level2_sector_id", "amp_sec_scheme_id"))
 				.withFingerprintedJob(Arrays.asList(
 						Fingerprint.buildTableHashingQuery("v_mondrian_sectors", "amp_sector_id"),
 						//Fingerprint.buildTableHashingQuery("amp_sector_scheme"),
@@ -76,7 +78,7 @@ public class MondrianTablesRepository {
 					}});
 	
 	public final static MondrianTableDescription MONDRIAN_PROGRAMS_DIMENSION_TABLE = 
-			new MondrianTableDescription("mondrian_programs", "amp_theme_id",
+			new MondrianTableDescription("mondrian_programs", "amp_theme_id, program_setting_id",
 					Arrays.asList("amp_theme_id", "parent_theme_id", "program_setting_id", "program_setting_name", "id2", "id3", "id4", "id5", "id6", "id7", "id8"))
 				.withFingerprintedJob(Arrays.asList(
 						Fingerprint.buildTableHashingQuery("v_mondrian_programs", "amp_theme_id"),
@@ -228,7 +230,7 @@ public class MondrianTablesRepository {
 			});
 	
 	public final static MondrianTableDescription MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE = 
-			new MondrianTableDescription("mondrian_raw_donor_transactions", "amp_fund_detail_id", Arrays.asList("amp_activity_id", "amp_fund_detail_id", "donor_id"))
+			new MondrianTableDescription("mondrian_raw_donor_transactions", "amp_fund_detail_id", Arrays.asList("amp_activity_id", "date_code"))
 				.withPledgeView("v_mondrian_raw_pledge_transactions");
 	
 	public final static List<MondrianTableDescription> MONDRIAN_DIMENSION_TABLES = Arrays.asList(
@@ -271,69 +273,71 @@ public class MondrianTablesRepository {
 	 */
 	public static final String TRANSACTION_TYPE = "transaction_type";
 		
+	public final static boolean INDEX_FACT_TABLE = false;
+	
 	/**
 	 * order of iteration is important, thus LinkedHashSet
 	 */
 	public final static DatabaseTableDescription FACT_TABLE = new DatabaseTableDescription("mondrian_fact_table", Arrays.asList(
 				new DatabaseTableColumn("entity_id", "integer NOT NULL", true), // P/A id 
-				new DatabaseTableColumn("funding_id", "integer NOT NULL", true), // P/A id
-				new DatabaseTableColumn("entity_internal_id", "integer NOT NULL", true), // amp_funding_detail_id, amp_mtef_detail_id, amp_funding_pledges_detail_id
-				new DatabaseTableColumn(TRANSACTION_TYPE, "integer NOT NULL", true), // ACV
-				new DatabaseTableColumn("adjustment_type", "integer NOT NULL", true),  // ACV
-				new DatabaseTableColumn("transaction_date", "date NOT NULL", true),
-				new DatabaseTableColumn("date_code", "integer NOT NULL", true), // for currency reasons
+				new DatabaseTableColumn("funding_id", "integer NOT NULL", INDEX_FACT_TABLE), // P/A id
+				new DatabaseTableColumn("entity_internal_id", "integer NOT NULL", INDEX_FACT_TABLE), // amp_funding_detail_id, amp_mtef_detail_id, amp_funding_pledges_detail_id
+				new DatabaseTableColumn(TRANSACTION_TYPE, "integer NOT NULL", INDEX_FACT_TABLE), // ACV
+				new DatabaseTableColumn("adjustment_type", "integer NOT NULL", INDEX_FACT_TABLE),  // ACV
+				new DatabaseTableColumn("transaction_date", "date NOT NULL", INDEX_FACT_TABLE),
+				new DatabaseTableColumn("date_code", "integer NOT NULL", INDEX_FACT_TABLE), // for currency reasons
 				
 				/**
 				 * regarding currencies: if a transaction has a fixed_exchange_rate, BASE_CURRENCY would have been written in currency_id and transaction_amount would be translated
 				 */
-				new DatabaseTableColumn("transaction_amount", "double NOT NULL", false), // comment
+				new DatabaseTableColumn("transaction_amount", DOUBLE_COLUMN_NAME + " NOT NULL", false), // comment
 				
-				new DatabaseTableColumn("expenditure_class", "integer", true),
+				new DatabaseTableColumn("expenditure_class", "integer", INDEX_FACT_TABLE),
 
-				new DatabaseTableColumn("currency_id", "integer NOT NULL", true), // comment 
+				new DatabaseTableColumn("currency_id", "integer NOT NULL", INDEX_FACT_TABLE), // comment 
 		
-				new DatabaseTableColumn("donor_id", "integer", true), // amp_org_id, might be null for example for pledges (which originate in donor groups)
-				new DatabaseTableColumn("financing_instrument_id", "integer", true), // ACV
-				new DatabaseTableColumn("terms_of_assistance_id", "integer", true),  // ACV
-				new DatabaseTableColumn("funding_status_id", "integer", true),  // ACV
-				new DatabaseTableColumn("mode_of_payment_id", "integer", true),  // ACV
-				new DatabaseTableColumn("status_id", "integer", true),  // ACV
-				new DatabaseTableColumn("modality_id", "integer", true),  // ACV
-				new DatabaseTableColumn("type_of_cooperation_id", "integer", true),  // ACV
-				new DatabaseTableColumn("type_of_implementation_id", "integer", true),  // ACV
-				new DatabaseTableColumn("procurement_system_id", "integer", true),  // ACV
+				new DatabaseTableColumn("donor_id", "integer", INDEX_FACT_TABLE), // amp_org_id, might be null for example for pledges (which originate in donor groups)
+				new DatabaseTableColumn("financing_instrument_id", "integer", INDEX_FACT_TABLE), // ACV
+				new DatabaseTableColumn("terms_of_assistance_id", "integer", INDEX_FACT_TABLE),  // ACV
+				new DatabaseTableColumn("funding_status_id", "integer", INDEX_FACT_TABLE),  // ACV
+				new DatabaseTableColumn("mode_of_payment_id", "integer", INDEX_FACT_TABLE),  // ACV
+				new DatabaseTableColumn("status_id", "integer", INDEX_FACT_TABLE),  // ACV
+				new DatabaseTableColumn("modality_id", "integer", INDEX_FACT_TABLE),  // ACV
+				new DatabaseTableColumn("type_of_cooperation_id", "integer", INDEX_FACT_TABLE),  // ACV
+				new DatabaseTableColumn("type_of_implementation_id", "integer", INDEX_FACT_TABLE),  // ACV
+				new DatabaseTableColumn("procurement_system_id", "integer", INDEX_FACT_TABLE),  // ACV
 		
-				new DatabaseTableColumn("primary_sector_id", "integer NOT NULL", true),   // amp_sector_id, subject to Cartesian product
-				new DatabaseTableColumn("secondary_sector_id", "integer NOT NULL", true), // amp_sector_id, subject to Cartesian product
-				new DatabaseTableColumn("tertiary_sector_id", "integer NOT NULL", true),  // amp_sector_id, subject to Cartesian product
+				new DatabaseTableColumn("primary_sector_id", "integer NOT NULL", INDEX_FACT_TABLE),   // amp_sector_id, subject to Cartesian product
+				new DatabaseTableColumn("secondary_sector_id", "integer NOT NULL", INDEX_FACT_TABLE), // amp_sector_id, subject to Cartesian product
+				new DatabaseTableColumn("tertiary_sector_id", "integer NOT NULL", INDEX_FACT_TABLE),  // amp_sector_id, subject to Cartesian product
 		
-				new DatabaseTableColumn("location_id", "integer NOT NULL", true), // amp_category_value_location_id, subject to Cartesian product
+				new DatabaseTableColumn("location_id", "integer NOT NULL", INDEX_FACT_TABLE), // amp_category_value_location_id, subject to Cartesian product
 		
-				new DatabaseTableColumn("primary_program_id", "integer NOT NULL", true),   // amp_theme_id, subject to Cartesian product
-				new DatabaseTableColumn("secondary_program_id", "integer NOT NULL", true), // amp_theme_id, subject to Cartesian product
-				new DatabaseTableColumn("tertiary_program_id", "integer NOT NULL", true),  // amp_theme_id, subject to Cartesian product
-				new DatabaseTableColumn("national_objectives_program_id", "integer NOT NULL", true),  // amp_theme_id, subject to Cartesian product
+				new DatabaseTableColumn("primary_program_id", "integer NOT NULL", INDEX_FACT_TABLE),   // amp_theme_id, subject to Cartesian product
+				new DatabaseTableColumn("secondary_program_id", "integer NOT NULL", INDEX_FACT_TABLE), // amp_theme_id, subject to Cartesian product
+				new DatabaseTableColumn("tertiary_program_id", "integer NOT NULL", INDEX_FACT_TABLE),  // amp_theme_id, subject to Cartesian product
+				new DatabaseTableColumn("national_objectives_program_id", "integer NOT NULL", INDEX_FACT_TABLE),  // amp_theme_id, subject to Cartesian product
 		
-				new DatabaseTableColumn("ea_org_id", "integer NOT NULL", true), // EXEC amp_org_id, subject to Cartesian product
-				new DatabaseTableColumn("ba_org_id", "integer NOT NULL", true), // BENF amp_org_id, subject to Cartesian product
-				new DatabaseTableColumn("ia_org_id", "integer NOT NULL", true), // IMPL amp_org_id, subject to Cartesian product
-				new DatabaseTableColumn("ro_org_id", "integer NOT NULL", true), // RESP amp_org_id, subject to Cartesian product
-				new DatabaseTableColumn("ca_org_id", "integer NOT NULL", true), // contracting agency, subject to Cartesian product
-				new DatabaseTableColumn("rg_org_id", "integer NOT NULL", true), // regional group amp_org_id, subject to Cartesian product
-				new DatabaseTableColumn("sg_org_id", "integer NOT NULL", true), // sector group amp_org_id, subject to Cartesian product
+				new DatabaseTableColumn("ea_org_id", "integer NOT NULL", INDEX_FACT_TABLE), // EXEC amp_org_id, subject to Cartesian product
+				new DatabaseTableColumn("ba_org_id", "integer NOT NULL", INDEX_FACT_TABLE), // BENF amp_org_id, subject to Cartesian product
+				new DatabaseTableColumn("ia_org_id", "integer NOT NULL", INDEX_FACT_TABLE), // IMPL amp_org_id, subject to Cartesian product
+				new DatabaseTableColumn("ro_org_id", "integer NOT NULL", INDEX_FACT_TABLE), // RESP amp_org_id, subject to Cartesian product
+				new DatabaseTableColumn("ca_org_id", "integer NOT NULL", INDEX_FACT_TABLE), // contracting agency, subject to Cartesian product
+				new DatabaseTableColumn("rg_org_id", "integer NOT NULL", INDEX_FACT_TABLE), // regional group amp_org_id, subject to Cartesian product
+				new DatabaseTableColumn("sg_org_id", "integer NOT NULL", INDEX_FACT_TABLE), // sector group amp_org_id, subject to Cartesian product
 				
-				new DatabaseTableColumn("component_id", "integer NOT NULL", true), // amp_component_id
-				new DatabaseTableColumn("agreement_id", "integer NOT NULL", true), // amp_agreement_id
+				new DatabaseTableColumn("component_id", "integer NOT NULL", INDEX_FACT_TABLE), // amp_component_id
+				new DatabaseTableColumn("agreement_id", "integer NOT NULL", INDEX_FACT_TABLE), // amp_agreement_id
 						
-				new DatabaseTableColumn("capital_spend_percent", "double", true),
-				new DatabaseTableColumn("disaster_response", "integer NOT NULL", true), // 1 - yes, 2 - no, UNDEFINED - undefined
+				new DatabaseTableColumn("capital_spend_percent", DOUBLE_COLUMN_NAME, false),
+				new DatabaseTableColumn("disaster_response", "integer NOT NULL", INDEX_FACT_TABLE), // 1 - yes, 2 - no, UNDEFINED - undefined
 								
-				new DatabaseTableColumn("src_role", "varchar(10)", true),  // amp_role.role_name
-				new DatabaseTableColumn("dest_role", "varchar(10)", true), // amp_role.role_name
-				new DatabaseTableColumn("dest_org_id", "integer", true),   // amp_org_id
-				new DatabaseTableColumn("flow_name", "varchar(25)", true),
+				new DatabaseTableColumn("src_role", "varchar(10)", false),  // amp_role.role_name
+				new DatabaseTableColumn("dest_role", "varchar(10)", false), // amp_role.role_name
+				new DatabaseTableColumn("dest_org_id", "integer", INDEX_FACT_TABLE),   // amp_org_id
+				new DatabaseTableColumn("flow_name", "varchar(25)", false),
 				
-				new DatabaseTableColumn("related_entity_id", "integer", true) // mondrian_activity_texts id
+				new DatabaseTableColumn("related_entity_id", "integer", INDEX_FACT_TABLE) // mondrian_activity_texts id
 		));
 	
 	public final static String FACT_TABLE_VIEW_NO_DATE_FILTER = "v_" + FACT_TABLE.tableName + "_no_date_filter";

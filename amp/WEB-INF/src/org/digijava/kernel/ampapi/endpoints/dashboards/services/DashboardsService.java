@@ -1,16 +1,13 @@
 package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -107,7 +104,6 @@ public class DashboardsService {
 	 * @return
 	 */
 	public static JsonBean getTops(String type, Integer n, JsonBean config) {
-		EndpointUtils.useNiReports(true);
 		String err = null;
 		JsonBean retlist = new JsonBean();
 		String name = "";
@@ -334,7 +330,6 @@ public class DashboardsService {
 	 */
 	
 	public static JSONObject getAidPredictability(JsonBean filter) throws Exception {
-		EndpointUtils.useNiReports(true);
 		JSONObject retlist = new JSONObject();
 		String err = null;
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetAidPredictability", ArConstants.DONOR_TYPE);
@@ -414,7 +409,6 @@ public class DashboardsService {
 	 */
 	
 	public static JsonBean fundingtype(String adjtype, JsonBean filter) {
-		EndpointUtils.useNiReports(true);
 		String err = null;
 		JsonBean retlist = new JsonBean();
 		

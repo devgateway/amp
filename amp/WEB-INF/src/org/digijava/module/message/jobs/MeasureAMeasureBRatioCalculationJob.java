@@ -158,7 +158,6 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 					 spec.setFilters(filterRules);
 					
 					try {
-						EndpointUtils.useNiReports(true);
 						GeneratedReport report = EndpointUtils.runReport(spec, ReportAreaImpl.class, null); 
 						List<ReportArea> ll = report.reportContents.getChildren();
 						

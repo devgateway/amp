@@ -194,8 +194,7 @@ public class PublicPortalService {
 	private static void getPublicReport(Integer count, JsonBean result, List<JsonBean> content, 
 			ReportSpecificationImpl spec, boolean calculateSubTotal, String measureName,
 			Set<String> columnsToIgnore) {
-	    EndpointUtils.useNiReports(true);
-		GeneratedReport report = EndpointUtils.runReport(spec); 
+	    GeneratedReport report = EndpointUtils.runReport(spec); 
 		
 		result.set("numberformat", FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT));
 		result.set("Currency", spec.getSettings().getCurrencyCode());
@@ -250,8 +249,7 @@ public class PublicPortalService {
 	}
 
 	public static JsonBean getActivitiesPledgesCount(JsonBean config) {
-	    EndpointUtils.useNiReports(true);
-		JsonBean activitiesPledgesCount = new JsonBean();
+	    JsonBean activitiesPledgesCount = new JsonBean();
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_activitiesPledgesCount",
 				ArConstants.DONOR_TYPE);
 		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));

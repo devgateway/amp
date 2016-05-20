@@ -182,12 +182,7 @@ public class EndpointUtils {
 	 */
 	public static GeneratedReport runReport(ReportSpecification spec, Class<? extends ReportAreaImpl> clazz, 
 			OutputSettings outputSettings) {
-		//NIREPORTS: remove before 2.12 official release
-		Optional<Boolean> asNiReport = Optional.ofNullable((Boolean) TLSUtils.getRequest().getAttribute(EPConstants.NI_REPORT));
-		logger.info("As NiReport: " + (asNiReport.isPresent() && asNiReport.get()));
-		ReportExecutor generator = asNiReport.isPresent() && asNiReport.get() ? 
-				new NiReportsGenerator(AmpReportsSchema.getInstance(), true, outputSettings) :
-				new MondrianReportGenerator(clazz, ReportEnvironment.buildFor(TLSUtils.getRequest()));
+		ReportExecutor generator = new NiReportsGenerator(AmpReportsSchema.getInstance(), true, outputSettings);
 		GeneratedReport report = null;
 		try {
 			report = generator.executeReport(spec);
@@ -198,20 +193,6 @@ public class EndpointUtils {
 		return report;
 	}
 	
-	/**
-	 * Temporary: force it to use or not NiReports. Default behavior handled through AuthRequestFilter.DEFAULT_USE_NIREPORTS
-	 * @param useNiReports
-	 */
-	//NIREPORTS: remove before 2.12 official release
-	@Deprecated
-	public static void useNiReports(boolean useNiReports) {
-		TLSUtils.getRequest().setAttribute(EPConstants.NI_REPORT, useNiReports);
-	}
-	
-	@Deprecated
-	public static boolean isNiReports() {
-		return Boolean.TRUE.equals(TLSUtils.getRequest().getAttribute(EPConstants.NI_REPORT));
-	}
 	/**
 	 * Retrieves the value associated to the specified key if available 
 	 * or returns the default

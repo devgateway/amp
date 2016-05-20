@@ -184,17 +184,6 @@ public class Reports {
 	}
 	
 	@GET
-	@Path("/nireport-to-amp-reports-api/{report_id}")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@Deprecated
-	//NIREPORTS: temporarily for debugging purpose only
-	public GeneratedReport geteneratedReport(@PathParam("report_id") Long reportId) {
-		ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
-		NiReportsGenerator generator = new NiReportsGenerator(AmpReportsSchema.getInstance(), PartialReportArea.class);
-		return generator.executeReport(spec);
-	}
-	
-	@GET
 	@Path("/report/{report_id}/result")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final GeneratedReport getReportResult(@PathParam("report_id") Long reportId) {
@@ -213,7 +202,6 @@ public class Reports {
 	 * @see ReportsUtil#getReportResultByPage
 	 */
 	public final JsonBean getCustomReport(JsonBean formParams) {
-	    EndpointUtils.useNiReports(true);
 		JsonBean result = ReportsUtil.validateReportConfig(formParams, true);
 		if (result != null) {
 			return result;
@@ -257,7 +245,6 @@ public class Reports {
 		extraColumns.add(ColumnConstants.DRAFT);
 		//extraColumns.add(ColumnConstants.TEAM_ID);  // TODO: this column never worked in NiReports - is it needed by Tabs now?
 		formParams.set(EPConstants.ADD_COLUMNS, extraColumns);
-		//NIREPORTS: remove above when switching to NiReports only if possible!
 		
 		// Convert jqgrid sorting params into ReportUtils sorting params.
 		if (formParams.getString("sidx") != null) {			
@@ -562,37 +549,9 @@ public class Reports {
 
 			logger.info("Generate specific export...");
 			
-			if(EndpointUtils.isNiReports()) {
-				//TODO delete the other else (Mondrian Exports)
-				GeneratedReport genateredReport = ReportsUtil.getGeneratedReport(ampReport.getAmpReportId(), 
-						ReportsUtil.convertSaikuParamsToReports(queryObject));
-				
-				doc = exportNiReport(genateredReport, ampReport.getAmpReportId(), queryObject, type);
-			} else {
-				//TODO: delete this branch
-//				switch (type) {
-//				case AMPReportExportConstants.XLSX: {
-//					ReportGenerationInfo report1 = new ReportGenerationInfo(result, AMPReportExportConstants.XLSX, report, queryModel, "");
-//					ReportGenerationInfo report2 = null;
-//					String secondCurrencyCode = queryModel.containsKey("secondCurrency") ? queryModel.get("secondCurrency").toString() : null;
-//					logger.error(String.format("setts 1 = %s, 2 = %s, secondCurrency=%s", queryModel.get("1"), queryModel.get("2"), secondCurrencyCode));
-//					if (secondCurrencyCode != null) {
-//						report2 = changeReportCurrencyTo(queryObject, report1, ampReport.getAmpReportId(), secondCurrencyCode);
-//					}
-//					
-//					doc = AMPReportExcelExport.generateExcel(report1, report2);
-//					break;
-//				}
-//				case AMPReportExportConstants.CSV: 
-//					doc = AMPReportCsvExport.generateCSV(result, AMPReportExportConstants.CSV, report, queryModel, ";");
-//					break;
-//				
-//				case AMPReportExportConstants.PDF:
-//					AMPPdfExport pdf = new AMPPdfExport();
-//					doc = pdf.pdf(result, AMPReportExportConstants.PDF, report, queryModel);
-//					break;
-//				}
-			}
+			GeneratedReport genateredReport = ReportsUtil.getGeneratedReport(ampReport.getAmpReportId(),
+			        ReportsUtil.convertSaikuParamsToReports(queryObject));
+			doc = exportNiReport(genateredReport, ampReport.getAmpReportId(), queryObject, type);
 
 			if (doc != null) {
 				logger.info("Send export data to browser...");
@@ -615,9 +574,6 @@ public class Reports {
 	 */
 	private Response exportSaikuPublicReport(AmpReports ampReport, String type) {
 		logger.info("Export specific public export...");
-		
-		//NIREPORTS: remove before 2.12 official release
-		EndpointUtils.useNiReports(true);
 		
 		GeneratedReport report = EndpointUtils.runReport(AmpReportsToReportSpecification.convert(ampReport));
 		String filename = ampReport.getName();

@@ -67,7 +67,6 @@ public class ActivityService {
 	
 	public static JsonBean getActivities(JsonBean config, List<String>activitIds, Integer page, Integer pageSize) 
 	        throws AmpApiException {
-	    EndpointUtils.useNiReports(true);
 		boolean applyFilter=false;
 		List<JsonBean> activities=new ArrayList<JsonBean>();
 		
@@ -218,13 +217,8 @@ public class ActivityService {
 	    SettingsUtils.applySettings(spec, config, true);
 	}
 	FilterUtils.applyFilterRules(config, spec,null);	
-	GeneratedReport report = null;
-	ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), true);
-	try {
-	    report = generator.executeReport(spec);
-	} catch (Exception e) {
-	    System.err.println(e.getClass().getName() + ": " + e.getMessage());
-	}
+	GeneratedReport report = EndpointUtils.runReport(spec);
+	
 	//ReportAreaMultiLinked[] areasDFArray = ReportPaginationUtils.convert(report.reportContents);
 	ReportArea pagedReport = PaginatedReport.getPage(report.reportContents, 0, pageSize);
 	JSONArray activities = new JSONArray();

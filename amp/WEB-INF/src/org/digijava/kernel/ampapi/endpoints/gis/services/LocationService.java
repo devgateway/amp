@@ -30,7 +30,6 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
@@ -39,15 +38,12 @@ import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportEnvironment;
-import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
@@ -58,7 +54,6 @@ import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -88,8 +83,7 @@ public class LocationService {
 	 * @return
 	 */
 	public JsonBean getTotals(String admlevel, JsonBean config) {
-	    EndpointUtils.useNiReports(true);
-		JsonBean retlist = new JsonBean();
+	    JsonBean retlist = new JsonBean();
 		HardCodedCategoryValue admLevelCV = null;
 		switch (admlevel) {
 		case "adm0":
@@ -342,17 +336,10 @@ public class LocationService {
 
 		getCommonSpecForExport(spec);
 
-		ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
-		GeneratedReport report = null;
-		
-		
 		applyFilters((LinkedHashMap<String, Object>)filters.get("otherFilters"),(LinkedHashMap<String, Object>)filters.get("columnFilters"), spec);
-		try {
-			report = generator.executeReport(spec);
-		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			e.printStackTrace();
-		}
+		
+		GeneratedReport report = EndpointUtils.runReport(spec);
+		
 		if (report != null && report.reportContents != null
 				&& report.reportContents.getChildren() != null) {
 			for (ReportArea reportArea : report.reportContents.getChildren()) {
@@ -455,15 +442,10 @@ public class LocationService {
 		spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
 		getCommonSpecForExport(spec);
 
-		ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()),false);
-		GeneratedReport report = null;
 		applyFilters((LinkedHashMap<String, Object>)filters.get("otherFilters"),(LinkedHashMap<String, Object>)filters.get("columnFilters"), spec);
-		try {
-			report = generator.executeReport(spec);
-		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			e.printStackTrace();
-		}
+		
+		GeneratedReport report = EndpointUtils.runReport(spec);
+		
 		final Map<Long,Activity>activities=new LinkedHashMap<Long,Activity>();
 
 		if (report != null && report.reportContents != null
@@ -725,7 +707,6 @@ public class LocationService {
 	}
 	private static Set<Long> getActivitiesForFiltering(JsonBean config, String adminLevel)
 			throws AmpApiException {
-	    EndpointUtils.useNiReports(true);
 		Set<Long> activitiesId = new HashSet<Long>();
 		 
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("ActivityIdsForCluster", ArConstants.DONOR_TYPE);

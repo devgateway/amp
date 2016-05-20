@@ -21,17 +21,13 @@ import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportEnvironment;
-import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
 import org.hibernate.jdbc.ReturningWork;
 
 public class ActivityLocationExporter extends ActivityExporter {
@@ -205,14 +201,8 @@ public class ActivityLocationExporter extends ActivityExporter {
 	@Override
 	protected List<Activity> generateActivities() {
 		ReportSpecificationImpl spec = generateSpec();
-		ReportExecutor generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
-		GeneratedReport report = null;
-		try {
-			report = generator.executeReport(spec);
-		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			e.printStackTrace();
-		}
+		GeneratedReport report = EndpointUtils.runReport(spec);
+		
 		if (report != null && report.reportContents != null
 				&& report.reportContents.getChildren() != null) {
 			extractActivitiesFromReport(report.reportContents, new Activity());

@@ -3,7 +3,6 @@ package org.digijava.kernel.ampapi.authentication;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,8 +34,7 @@ import com.sun.jersey.spi.container.ContainerRequestFilter;
 public class AuthRequestFilter implements ContainerRequestFilter {
 	// use it to disable temporarily the authorization
 	private static final boolean AUTHORIZE = true;
-	//NIREPORTS: remove this when we finally switch to NiReports
-	private static final boolean DEFAULT_USE_NIREPORTS = true;
+	
 	// Inject request into the filter
 	@Context
 	private HttpServletRequest httpRequest;
@@ -56,9 +54,6 @@ public class AuthRequestFilter implements ContainerRequestFilter {
         
         // configure translastions if exist
         addTranslations(siteDomain);
-        
-        //NIREPORTS: temporary, remove later
-        configureNiReports(containerReq);
         
         TLSUtils.populate(httpRequest);
         
@@ -130,18 +125,4 @@ public class AuthRequestFilter implements ContainerRequestFilter {
 		}
 	}
 	
-	//NIREPORTS: remove this when final switch to NiReports
-	private void configureNiReports(ContainerRequest containerReq) {
-		Optional<List<String>> qParams = Optional.ofNullable(containerReq.getQueryParameters().get(EPConstants.NI_REPORT));
-		String useNiReportSrt = qParams.isPresent() && qParams.get().size() > 0 ? qParams.get().get(0).toLowerCase() : null;
-		// configure only if "false" or "true" is set
-		Boolean useNiReport = "false".equals(useNiReportSrt) || "true".equals(useNiReportSrt) ? Boolean.valueOf(useNiReportSrt) : null;
-		if (useNiReport == null && DEFAULT_USE_NIREPORTS) {
-			useNiReport = Boolean.TRUE;
-		}
-		// configure useNiReportFlag only if needed
-		if (useNiReport != null) {
-			httpRequest.setAttribute(EPConstants.NI_REPORT, useNiReport);
-		}
-	}
 }

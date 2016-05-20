@@ -30,7 +30,7 @@ public class FiltersProcessor {
     public AmpReportFilters getFilters() {
         readComputedYear();
         
-        return filters.get();
+        return filters.orElse(null);
     }
     
     private void readComputedYear() {

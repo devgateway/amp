@@ -3,6 +3,7 @@ package org.digijava.module.aim.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
@@ -15,7 +16,6 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.QuartzJobForm;
 import org.digijava.module.aim.form.QuartzJobManagerForm;
 import org.digijava.module.aim.util.QuartzJobClassUtils;
-import org.quartz.SchedulerException;
 
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -23,11 +23,15 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+
+
 public class QuartzJobManager extends Action {
 	private static SimpleDateFormat dateFormatOnly = new SimpleDateFormat(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
 	private static SimpleDateFormat fullDateFormat = new SimpleDateFormat(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT) + " HH:mm:ss");
 	private static java.text.DecimalFormat formatHM = new DecimalFormat("00");
-
+	
+	public static final Logger logger = Logger.getLogger(QuartzJobManager.class);
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 
 		QuartzJobManagerForm qmform = (QuartzJobManagerForm) form;
@@ -100,11 +104,11 @@ public class QuartzJobManager extends Action {
 				qmform.reset();
 			} catch (ClassNotFoundException exc)  {
 				qmform.setInvalidClass(true);
-//				exc.printStackTrace();
+				logger.error("Class not found", exc);
 				return mapping.findForward("addJob");
 			} catch (Exception e) {
 				qmform.setInvalidTrigger(true);
-				e.printStackTrace();
+				logger.error("Some other error", e);
 				return mapping.findForward("addJob");
 			}
 

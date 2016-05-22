@@ -92,14 +92,12 @@ Backbone.sync = function(method, model, options) {
 
     var errorLogout = function() {
 	    // In our reports we dont want to get the page reloaded because a timeout error (on big reports).
-    	if (!Settings.AMP_REPORT_API_BRIDGE) {
-	        Settings.ERRORS++;
-	        if (Settings.ERRORS < Settings.ERROR_TOLERANCE) {
-	          Saiku.session.logout();
-	        } else {
-	          Saiku.ui.block("Communication problem with the server. Please reload the application...");
-	        }
-    	}
+        Settings.ERRORS++;
+        if (Settings.ERRORS < Settings.ERROR_TOLERANCE) {
+          Saiku.session.logout();
+        } else {
+          Saiku.ui.block("Communication problem with the server. Please reload the application...");
+        }
     };
     var statuscode = {
       0: function() {

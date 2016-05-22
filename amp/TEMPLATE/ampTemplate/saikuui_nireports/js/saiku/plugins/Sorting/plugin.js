@@ -26,42 +26,13 @@ Saiku.Sorting = {
 		var clickedColumn = event.currentTarget;
 		var id = $(clickedColumn).attr('id');
 		
-		if (Settings.NIREPORT) {
-			sortNiReportColumn(id);
-			if ($(clickedColumn).attr('sorting')) {
-				runQuery();
-			} else {
-				event.preventDefault();
-			}
+		sortNiReportColumn(id);
+		if ($(clickedColumn).attr('sorting')) {
+			runQuery();
 		} else {
-			var type = $(clickedColumn).data('sorting-type');
-
-			switch (type) {
-			case 'HEADER_COMMON':
-				if (sortColumn(id, type) === true) {
-					runQuery();
-				} else {
-					event.preventDefault();
-				}
-				break;
-			case 'HEADER_MEASURE':
-				if (sortColumn(id, type) === true) {
-					runQuery();
-				} else {
-					event.preventDefault();
-				}
-				break;
-			case 'HEADER_HIERARCHY':
-				if (sortColumn(id, type) === true) {
-					runQuery();
-				} else {
-					event.preventDefault();
-				}
-				break;
-			}
+			event.preventDefault();
 		}
 	},
-
 };
 
 // TODO: improve this section.

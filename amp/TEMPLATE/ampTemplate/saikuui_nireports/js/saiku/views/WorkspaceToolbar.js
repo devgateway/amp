@@ -428,13 +428,7 @@ var WorkspaceToolbar = Backbone.View.extend({
     		reportIdentification=this.workspace.query.get('report_token');
     	}
     	
-    	// AMP-22070 temporary parameter, will be removed when Mondrian will not be used
-    	var niReportAttr = '';
-    	if(Settings.NIREPORT) {
-    		niReportAttr = '?nireport=true';
-    	}
-    	
-    	return runUrl + reportIdentification + niReportAttr;
+    	return runUrl + reportIdentification;
     },
     
     is_gis_enabled : function() {

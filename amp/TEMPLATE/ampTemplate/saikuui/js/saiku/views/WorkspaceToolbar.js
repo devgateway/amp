@@ -79,9 +79,6 @@ var WorkspaceToolbar = Backbone.View.extend({
         // Activate buttons when a new query is created or run
         this.workspace.bind('query:new', this.activate_buttons);
         this.workspace.bind('query:result', this.activate_buttons);
-        
-        Saiku.Sorting.initialize(this);
-        
     },
     
     activate_buttons: function(args) {
@@ -824,14 +821,8 @@ var WorkspaceToolbar = Backbone.View.extend({
     		runUrl='run/';
     		reportIdentification=this.workspace.query.get('report_token');
     	}
-    	
-    	// AMP-22070 temporary parameter, will be removed when Mondrian will not be used
-    	var niReportAttr = '';
-    	if(Settings.NIREPORT) {
-    		niReportAttr = '?nireport=true';
-    	}
-    	
-    	return runUrl + reportIdentification + niReportAttr;
+
+    	return runUrl + reportIdentification;
     },
     
     is_gis_enabled : function() {

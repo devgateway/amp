@@ -121,82 +121,9 @@ function generateHeaderHtml(data) {
 
 	// Check columns metadata
 	calculateColumnsDisposition();
-	// Generate header HTML.
 	
-	if (Settings.NIREPORT) {
-		return generateNiReportHeaderHtml(data.generatedHeaders);
-	} 
-	
-	var header = "<thead>";
-	for (var i = 0; i < this.headerMatrix.length; i++) {
-		var row = "<tr>";
-		for (var j = 0; j < this.headerMatrix[i].length; j++) {
-			if (!isHiddenColumn(j)) {
-				var col = "";
-				var entityType = getEntityTypeByColumnNumber(i, j);
-				if (entityType !== undefined) {
-					// Add sorting info: HEADER_HIERARCHY for first columns that
-					// define a hierarchy (if any), HEADER_COMMON for non
-					// hierarchical columns and HEADER_MEASURE for measures (only in
-					// the last header row).
-					var sortingType = "";
-					
-					if (isHeaderCellSortable(i, entityType)) {
-						sortingType = "data-sorting-type='" + entityType + "'";
-					}
-					
-					// Since groupCount is 0 when no column grouping is applicable
-					// then we don't need an extra IF for creating the 'col'
-					// variable.
-					var groupCount = findSameHeaderHorizontally(i, j);
-
-					// Define styles for the header.
-					var style = " class='col hand-pointer'";
-
-					// Define id based on its hierarchy.
-					var id = " id='"
-							+ convertHierarchicalNameToId(this.headerMatrix[i][j].hierarchicalName)
-							+ "'";
-	
-					// Change columnName when the endpoint sends "Constant" in a
-					// summarized report.
-					if (this.summarizedReport === true
-							&& this.headerMatrix[i][j].hierarchicalName === "[Constant]") {
-						this.headerMatrix[i][j].columnName = "-";
-					}
-	
-					// Use the full hierarchicalName when processing CSV.
-					var colName = this.headerMatrix[i][j].columnName
-					
-					var helpIcon = "";
-					if (this.headerMatrix[i][j].description) {
-						helpIcon = "<img src='/TEMPLATE/ampTemplate/images/help.gif'" +
-								" style= 'padding-left:5px'" +
-								" title='" + this.headerMatrix[i][j].description + "'>"
-					}
-					
-					col = "<th" + style + id + " data-header-level='" + i + "'"
-							+ sortingType + " colspan='" + groupCount + "'"
-							+ "><div class = 'i18n'>"
-							+ colName + helpIcon + "</div></th>";
-	
-					// We change 'j' in order to skip the next N columns.
-					j += groupCount;
-					if (groupCount > 0) {
-						// Decrement by 1 to adjust the column index correctly.
-						j -= 1;
-					}
-				} else {
-					col = "<th class='all_null'>&nbsp;</th>";
-				}
-				row += col;
-			}
-		}
-		row += "</tr>";
-		header += row;
-	}
-	header += "</thead>";
-	return header;
+	// Generate header HTML.	
+	return generateNiReportHeaderHtml(data.generatedHeaders);
 }
 
 function generateNiReportHeaderHtml(headers) {
@@ -405,7 +332,7 @@ function generateDataRows(page, options) {
 					var rowSpan = " rowspan='" + group + "' ";
 					var colId = j > 0 ? j - 1 : j;
 					var value = this.contentMatrix[i][j].displayedValue;
-					var totalValue = Settings.NIREPORT ? this.contentMatrix[i][colId].displayedValue : value;
+					var totalValue = this.contentMatrix[i][colId].displayedValue;
 					var cleanValue = splitText(value, 60);
 					var cleanTotalValue = splitText(totalValue, 60);
 					
@@ -506,9 +433,7 @@ function findGroupVertically(matrix, i, j) {
 			// Due to the way the tree data is structured we don't need to check
 			// for cells with the same value than the one being compared but
 			// with empty cells.
-			// TODO: keep only the option for Settings.NIREPORT when Mondrian Saiku is removed
-			if (Settings.NIREPORT && k > 0 && matrix[k][j].displayedValue === matrix[k-1][j].displayedValue ||
-				Settings.NIREPORT === undefined && matrix[k][j].displayedValue.length === 0) {
+			if (k > 0 && matrix[k][j].displayedValue === matrix[k-1][j].displayedValue) {
 				count++;
 				// Mark the cell so we don't draw it later.
 				matrix[k][j].isGrouped = true;
@@ -534,7 +459,7 @@ function extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchies
 			if (dataValue === null || dataValue === undefined) {				
 				 dataValue = {displayedValue: ""};				
 			}
-			if (Settings.NIREPORT && dataValue.displayedValue === "" && i < level) {
+			if (dataValue.displayedValue === "" && i < level) {
 				dataValue.displayedValue = hierarchiesData[i].displayedValue;
 			}
 			if(dataValue.displayedValue  === "" || dataValue.displayedValue === null){
@@ -554,7 +479,7 @@ function extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchies
 		// Add the node that represents the subtotal.
 		node.children = null;
 		node.isTotal = true;
-		if (Settings.NIREPORT && isLastSubNode) {
+		if (isLastSubNode) {
 			node.contents[colName].isGrouped = true;
 		}
 		extractDataFromTree(node, parentNode, level, isLastSubNode, hierarchiesData);

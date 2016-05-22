@@ -18,8 +18,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 	}
 
 	function getURL(id) {
-		// NIREPORTS: use nireport flag as needed. When ready, notify to finish full migration from backend.
-		return '/rest/data/report/' + id + '/result/jqGrid?nireport=true';
+		return '/rest/data/report/' + id + '/result/jqGrid';
 	}
 
 	GridManager.prototype = {

@@ -503,33 +503,28 @@ $(document).ready(function() {
 					                              								</td>
 					                              								
 					                              								<%
-																					boolean onlySaikuButton = report.isImplementedInMondrian() && FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS);
+																					boolean onlySaikuButton = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS);
 																				%>
 					                              								<td class="inside" style="padding-right: 15px; padding-left: 15px;" bgcolor="<%=color%>">
 					                              									<c:if test="${!aimTeamReportsForm.showTabs}">
-	 																					<c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}" />
-	 																					<% if (onlySaikuButton) { %>
-																							<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}?nireport=false" />
-																						<% } %>
-																					    	
-	 																					  	<a href="${reportLink}" styleClass="h-box" onclick="return popup(this,'');" title="<digi:trn>Click here to view the Report</digi:trn>">
-																						  	<b>
-								                              										<p style="display: inline; max-width: 400px; white-space: normal" title='<c:out value="${report.name}"/>'>
-																										<c:choose>
-																											<c:when test="${fn:length(report.name) > 25}">
-																												<c:out value="${fn:substring(report.name, 0, 25)}" />...
-																											</c:when>
-																											<c:otherwise>
-																												<c:out value="${report.name}"/>
-																											</c:otherwise>
-																										</c:choose>
-								                     	         									</p>  
-								                              									</b>
-	 																				    	</a>
-																						  	
-					                              										<a href="/rest/data/nireport/${report.ampReportId}" title="Open Report in NiReports">
-					                              											<img src="/TEMPLATE/ampTemplate/nireports/nireportsicon.png" />
-					                              										</a>
+					                              										<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" />
+					                              										<% if (!onlySaikuButton) { %>
+					                              											<c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}" />
+					                              										<% } %>																																								    	
+ 																					  	<a href="${reportLink}" styleClass="h-box" onclick="return popup(this,'');" title="<digi:trn>Click here to view the Report</digi:trn>">
+																					  	<b>
+							                              										<p style="display: inline; max-width: 400px; white-space: normal" title='<c:out value="${report.name}"/>'>
+																									<c:choose>
+																										<c:when test="${fn:length(report.name) > 25}">
+																											<c:out value="${fn:substring(report.name, 0, 25)}" />...
+																										</c:when>
+																										<c:otherwise>
+																											<c:out value="${report.name}"/>
+																										</c:otherwise>
+																									</c:choose>
+							                     	         									</p>  
+							                              									</b>
+ 																				    	</a>		                              										
 																					</c:if>
 						                          									<c:if test="${aimTeamReportsForm.showTabs}">
 						                          										<b>
@@ -723,7 +718,7 @@ $(document).ready(function() {
 						                                								<c:set target="${urlParams}" property="rid">
 						                                  									<bean:write name="report" property="ampReportId" />
 						                                								</c:set>
-						                                								<a href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}?nireport=true" 
+						                                								<a href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" 
 						                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
 						                                								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/nireport_saiku.png" border="0" /></a>
 																						<%

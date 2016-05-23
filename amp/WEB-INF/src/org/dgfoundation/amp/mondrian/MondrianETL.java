@@ -1176,9 +1176,40 @@ private EtlResult execute() throws Exception {
 			logger.error(e);
 		}
 	}
+
+	/**
+	 * cleans the changelog older than deltaDays of:
+	 *  - changelog events
+	 *  - etl events
+	 * @param deltaDays
+	 */
+	public static void cleanIrrelevantEtlLogEntries(int deltaDays, boolean alsoCleanEtlLog) {
+		try(Connection conn = PersistenceManager.getJdbcConnection()) {
+			Long fullEtlEventId = SQLUtils.getLong(conn,
+				String.format("SELECT max(event_id) FROM amp_etl_changelog WHERE entity_name='full_etl_request' AND event_date_raw < (now() - INTERVAL '%d days')::date", deltaDays));
+			if (fullEtlEventId == null || fullEtlEventId <= 0)
+				return; // nothing to do, the etl log is clean
+			
+			Long minEtlId = alsoCleanEtlLog ? 
+				SQLUtils.getLong(conn, String.format("SELECT min(entity_id) FROM amp_etl_changelog WHERE entity_name='etl' AND event_id > %d", fullEtlEventId)) 
+				: null;
+			
+			SQLUtils.executeQuery(conn, "DELETE FROM amp_etl_changelog WHERE event_id < " + fullEtlEventId);
+			if (minEtlId != null && minEtlId > 0)
+				SQLUtils.executeQuery(conn, "DELETE FROM amp_etl_log WHERE etl_id < " + minEtlId);
+		}
+		catch(Exception e) {
+			throw AlgoUtils.translateException(e);
+		}
+	}
+
+	public static void cleanIrrelevantEtlLogEntries() {
+		cleanIrrelevantEtlLogEntries(90, false);
+	}
 	
 	public static EtlResult runETL(boolean forceFull) {
 		synchronized(ETL_LOCK) {
+			cleanIrrelevantEtlLogEntries();
 			Session session = PersistenceManager.getSession();
 			try(Connection conn = PersistenceManager.getJdbcConnection()) {
 				try(OlapDbConnection olapConn = ETL_STRATEGY.getOlapConnection()) {

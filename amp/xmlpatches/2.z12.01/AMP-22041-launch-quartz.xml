@@ -8,7 +8,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="bsh">
-				org.dgfoundation.amp.mondrian.MondrianETLQuartzJob.enableQuartzJob();)
+				org.dgfoundation.amp.mondrian.MondrianETLQuartzJob.enableQuartzJob();
 			</lang>
 		</script>
 	</apply>

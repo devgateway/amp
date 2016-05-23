@@ -26,4 +26,9 @@ public class NiColSplitCell {
 		this.entityType = entityType;
 		this.info = info;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("type: %s, info: %s", entityType, info);
+	}
 }

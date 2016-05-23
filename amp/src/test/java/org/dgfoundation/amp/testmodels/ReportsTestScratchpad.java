@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.testmodels;
 
+import java.util.function.Function;
+
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
@@ -34,6 +36,6 @@ public class ReportsTestScratchpad implements SchemaSpecificScratchpad {
 	@Override
 	public CachingCalendarConverter buildCalendarConverter() {
 		CalendarConverter cc = this.buildUnderlyingCalendarConverter(engine.spec);
-		return new CachingCalendarConverter(cc, cc.getDefaultFiscalYearPrefix());
+		return new CachingCalendarConverter(cc, cc.getDefaultFiscalYearPrefix(), Function.identity());
 	}
 }

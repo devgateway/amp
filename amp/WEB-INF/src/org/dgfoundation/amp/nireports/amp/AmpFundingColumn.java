@@ -145,7 +145,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 	public List<CategAmountCell> fetch(NiReportsEngine engine) {
 		AmpReportsScratchpad scratchpad = AmpReportsScratchpad.get(engine);
 		AmpReportsSchema schema = (AmpReportsSchema) engine.schema;
-		boolean enableDiffing = false && schema.ENABLE_CACHING;
+		boolean enableDiffing = schema.ENABLE_CACHING;
 		AmpCurrency usedCurrency = scratchpad.getUsedCurrency();
 		if (enableDiffing) {
 			long start = System.currentTimeMillis();
@@ -183,7 +183,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		String query = String.format("SELECT * FROM %s WHERE %s IN (%s) AND (%s)", this.viewName, this.mainColumn, Util.toCSStringForIN(ids), buildSupplementalCondition(engine, ids, context));
 		
 		//TODO: do not commit this uncommented
-		//query = query + " AND (transaction_date >= '2004-01-01') AND (transaction_date <= '2016-01-01')";
+		//query = query + " AND (transaction_date >= '2006-05-01') AND (transaction_date <= '2007-06-01')";
 						
 		VivificatingMap<Long, AmpCurrency> currencies = new VivificatingMap<Long, AmpCurrency>(new HashMap<>(), CurrencyUtil::getAmpcurrency);
 		

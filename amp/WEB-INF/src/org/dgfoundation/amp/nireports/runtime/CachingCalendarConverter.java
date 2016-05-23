@@ -2,9 +2,12 @@ package org.dgfoundation.amp.nireports.runtime;
 
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 import org.dgfoundation.amp.newreports.CalendarConverter;
+import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.TranslatedDate;
+import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 
 /**
  * a wrapper for a {@link CalendarConverter} which caches the result of calling an underlying {@link CalendarConverter}.<br />
@@ -16,14 +19,18 @@ public class CachingCalendarConverter implements CalendarConverter {
 
 	protected final CalendarConverter inner;
 	protected final String fiscalYearPrefix;
-	protected ConcurrentHashMap<Integer, TranslatedDate> cache = new ConcurrentHashMap<>();
+	protected final Function<TranslatedDate, TranslatedDate> postprocessor;
+	
+	public final ConcurrentHashMap<Integer, TranslatedDate> cache = new ConcurrentHashMap<>();
+	
 	protected int calls;
 
 	protected int nonCachedCalls;
 	
-	public CachingCalendarConverter(CalendarConverter inner, String fiscalYearPrefix) {
+	public CachingCalendarConverter(CalendarConverter inner, String fiscalYearPrefix, Function<TranslatedDate, TranslatedDate> postprocessor) {
 		this.inner = inner;
 		this.fiscalYearPrefix = fiscalYearPrefix;
+		this.postprocessor = postprocessor;
 	}
 	
 	/**
@@ -42,10 +49,10 @@ public class CachingCalendarConverter implements CalendarConverter {
 		int dayNumber = date.getYear() * 10000 + date.getMonth() * 100 + date.getDate(); // we like it safe: probably no month will ever have >100 days and no year will ever have > 100 months
 		return cache.computeIfAbsent(dayNumber, z -> {
 			nonCachedCalls ++;
-			return inner.translate(date, prefix);
+			return postprocessor.apply(inner.translate(date, prefix));
 		});
 	}
-
+	
 	@Override
 	public boolean getIsFiscal() {
 		return inner.getIsFiscal();

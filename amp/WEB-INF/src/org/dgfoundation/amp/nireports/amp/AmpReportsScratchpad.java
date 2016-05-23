@@ -23,10 +23,12 @@ import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.nireports.Cell;
+import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.SchemaSpecificScratchpad;
 import org.dgfoundation.amp.nireports.SqlSourcedColumn;
+import org.dgfoundation.amp.nireports.TranslatedDate;
 import org.dgfoundation.amp.nireports.amp.PercentagesCorrector.Snapshot;
 import org.dgfoundation.amp.nireports.amp.diff.DifferentialCache;
 import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
@@ -54,6 +56,16 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	 * caching area for i18n fetchers
 	 */
 	public final Map<PropertyDescription, ColumnValuesCacher> columnCachers = new ConcurrentHashMap<>();
+	
+	/**
+	 * AMP-22850: fiscal calendars which start in the middle of a month have a maledefined behaviour regarding "what is the month number of month X?".
+	 * For example, if FY starts on the 16th of August, then the 2008-era workers will consider "September 15th" as being the first month, while "September 17th" as being the 2nd month.
+	 * This leads to problems (e.g. crashes) later in the engine, as inconsistent ComparableValue<String> entries (one with id=1, an another with id=2) are equal by displayed value but different by ids. <br />
+	 * What this map does is make sure all the TranslatedDate instances for a calendar map a given month to the same id, during the lifetime of a report. The right place to fix it would be a complete rewrite of {@link ICalendarWorker} 
+	 * with its awful interface and bugs, but that's nontrivial and bug-prone
+	 */
+	public final ConcurrentHashMap<String, Integer> monthNumbersCache = new ConcurrentHashMap<>();
+
 	//public final Map<PercentagesCorrector, PercentagesCorrector.Snapshot> percsCorrectors = new ConcurrentHashMap<>();
 	
 	public final Connection connection;
@@ -164,11 +176,24 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
 	@Override
 	public CachingCalendarConverter buildCalendarConverter() {
 		CalendarConverter underlyingConverter = buildUnderlyingCalendarConverter(engine.spec);
-		return new CachingCalendarConverter(underlyingConverter, TranslatorWorker.translateText(underlyingConverter.getDefaultFiscalYearPrefix()));
+		return new CachingCalendarConverter(underlyingConverter, TranslatorWorker.translateText(underlyingConverter.getDefaultFiscalYearPrefix()), this::postprocessTranslatedDate);
 	}
 
 	@Override
 	public CalendarConverter getDefaultCalendar() {
 		return AmpARFilter.getDefaultCalendar();
+	}
+	
+	/**
+	 * postprocesses funding column's transaction dates
+	 * @param in
+	 * @return
+	 */
+	public TranslatedDate postprocessTranslatedDate(TranslatedDate in) {
+		int preexistantMonthNumber = (Integer) in.month.getComparable();
+		int monthNumber = monthNumbersCache.computeIfAbsent(in.month.getValue(), z -> preexistantMonthNumber);
+		if (preexistantMonthNumber != monthNumber)
+			return in.withMonth(new ComparableValue<>(in.month.getValue(), monthNumber));
+		return in;
 	}
 }

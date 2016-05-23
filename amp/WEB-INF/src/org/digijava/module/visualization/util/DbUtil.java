@@ -35,7 +35,6 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.visualization.dbentity.AmpDashboard;
 import org.digijava.module.visualization.dbentity.AmpDashboardGraph;
 import org.digijava.module.visualization.dbentity.AmpGraph;
-import org.digijava.module.visualization.helper.DashboardFilter;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -88,44 +87,6 @@ public class DbUtil {
         Collections.sort(organizations);
         return organizations;
     }	
-	
-	public static List<AmpOrganisation> getDonorOrganisationByGroupId(
-			Long orgGroupId, boolean publicView, DashboardFilter filter) {
-        Session session = null;
-        Query q = null;
-        List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
-        StringBuilder queryString = new StringBuilder("select distinct org from " + AmpOrgRole.class.getName() + " orgRole inner join orgRole.role role inner join orgRole.organisation org ");
-        if (publicView) {
-            queryString.append(" inner join orgRole.activity act  inner join act.team tm ");
-        }
-        if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY)
-        	queryString.append(" where  role.roleCode='EA' ");
-        else if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-        	queryString.append(" where  role.roleCode='BA' ");
-        else if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
-        	queryString.append(" where  role.roleCode='RO' ");
-        else
-			queryString.append(" where  role.roleCode='DN' ");
-         if (orgGroupId != null&&orgGroupId !=-1) {
-            queryString.append(" and org.orgGrpId=:orgGroupId ");
-        }
-        if (publicView) {
-            queryString.append(String.format(" and (act.draft is null or act.draft=false) and act.approvalStatus IN ('%s', '%s') and tm.parentTeamId is not null ", Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS));
-        }
-
-        queryString.append("order by org.name asc");
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            q = session.createQuery(queryString.toString());
-            if (orgGroupId != null&&orgGroupId !=-1) {
-                q.setLong("orgGroupId", orgGroupId);
-            }
-            organizations = q.list();
-        } catch (Exception ex) {
-            logger.error("Unable to get Amp organization names from database ", ex);
-        }
-        return organizations;
-    }
 	
 	public static List<AmpSector> getParentSectorsFromConfig(Long configId) throws DgException{
 		  	Session session = null;
@@ -338,20 +299,6 @@ public class DbUtil {
     	throw new RuntimeException("unknown / unsupported transaction type " + transactionType);
     }
     
-    
-    public static DecimalWraper calculateDetails(DashboardFilter filter, List<AmpFundingDetail> fundingDets,
-            int transactionType,String adjustmentType){
-
-        String currCode = "USD";
-        if (filter.getCurrencyId()!=null) {
-        	currCode = CurrencyUtil.getCurrency(filter.getCurrencyId()).getCurrencyCode();
-		} 
-        FundingCalculationsHelper cal = new FundingCalculationsHelper();
-        cal.doCalculations(fundingDets, currCode, true);
-        DecimalWraper total = extractTotals(cal, transactionType, adjustmentType);
-        
-        return total;
-    }
 	
     public static AmpOrganisation getOrganisation(Long id) {
         Session session = null;

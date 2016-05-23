@@ -2,6 +2,7 @@ package org.dgfoundation.amp.ar.amp212;
 
 import java.time.LocalDate;
 
+import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.nireports.amp.SelectedYearBlock;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.digijava.module.common.util.DateTimeUtil;
@@ -10,7 +11,7 @@ import org.junit.Test;
 
 /**
  * 
- * testcases for graph algorithms
+ * testcases for various offline utility functions / classes
  * @author Constantin Dolghier
  *
  */
@@ -39,4 +40,12 @@ public class UtilsTests extends AmpTestCase {
 		assertEquals(DateTimeUtil.toJulianDayNumber(LocalDate.of(2014, 12, 31)), block.previousMonthEndJulian); //31st of december 2014
 	}
 
+	@Test
+	public void testKeepNDecimals() {
+		assertEquals(0.001, AlgoUtils.keepNDecimals(0.001, 3));
+		assertEquals(0.001, AlgoUtils.keepNDecimals(0.0013, 3));
+		assertEquals(0.001, AlgoUtils.keepNDecimals(0.0008, 3));
+		assertEquals(0.001, AlgoUtils.keepNDecimals(0.0000001, 3));
+		assertEquals(0.0001, AlgoUtils.keepNDecimals(0.0000001, 4));
+	}	
 }

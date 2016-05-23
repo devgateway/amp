@@ -48,6 +48,9 @@ public class OfflineTests
 		suite.addTest(new JUnit4TestAdapter(FormattingTests.class));
 		suite.addTest(new JUnit4TestAdapter(OffDbNiReportFilteringTests.class));
 		suite.addTest(new JUnit4TestAdapter(UtilsTests.class));
+		suite.addTest(new JUnit4TestAdapter(UnitsSettingsUtilityTests.class));
+		suite.addTest(new JUnit4TestAdapter(ETLTests.class));
+		suite.addTest(new JUnit4TestAdapter(FilterRuleTests.class));
 		
 		return suite;
 	}

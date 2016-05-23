@@ -40,6 +40,11 @@ import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 import org.dgfoundation.amp.testmodels.HardcodedReportsTestSchema;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 
+/**
+ * a testcase of the inner structures of NiReports
+ * @author Dolghier Constantin
+ *
+ */
 public class NiTestCase extends AmpTestCase {
 	
 	final String TCN = "TotalColumnsName";

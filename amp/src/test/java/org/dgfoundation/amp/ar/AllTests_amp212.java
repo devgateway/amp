@@ -16,9 +16,12 @@ import org.dgfoundation.amp.ar.amp212.CurrencyConvertorTests;
 import org.dgfoundation.amp.ar.amp212.DimensionsFetchingTests;
 import org.dgfoundation.amp.ar.amp212.ExpenditureClassTests;
 import org.dgfoundation.amp.ar.amp212.FundingFlowsTests;
+import org.dgfoundation.amp.ar.amp212.InflationRatesTests;
 import org.dgfoundation.amp.ar.amp212.NiComputedMeasuresTests;
 import org.dgfoundation.amp.ar.amp212.NiReportsFetchingTests;
 import org.dgfoundation.amp.ar.amp212.OfflineTests;
+import org.dgfoundation.amp.ar.amp212.SQLUtilsTests;
+import org.dgfoundation.amp.ar.amp212.UnitsSettingsUtilityTests;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.digijava.kernel.persistence.HibernateClassLoader;
@@ -55,8 +58,11 @@ public class AllTests_amp212
 		suite.addTest(new JUnit4TestAdapter(NiComputedMeasuresTests.class));
 
 		suite.addTest(new JUnit4TestAdapter(CurrencyConvertorTests.class));
+		suite.addTest(new JUnit4TestAdapter(UnitsSettingsUtilityTests.class));
 		suite.addTest(new JUnit4TestAdapter(DimensionsFetchingTests.class));
-
+		suite.addTest(new JUnit4TestAdapter(SQLUtilsTests.class));
+		suite.addTest(new JUnit4TestAdapter(InflationRatesTests.class));
+		
 		return suite;
 	}
 	

@@ -15,7 +15,7 @@ import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.StringGenerator;
-import org.dgfoundation.amp.ar.amp210.Pair;
+import org.dgfoundation.amp.ar.amp212.Pair;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.newreports.GroupingCriteria;

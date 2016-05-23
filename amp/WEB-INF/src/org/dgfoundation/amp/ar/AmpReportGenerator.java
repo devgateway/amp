@@ -707,7 +707,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		reportMetadata.getOrderedColumns().add(arc);
 		
 		if (ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,reportMetadata.getMeasures()) 
-			|| ARUtil.containsColumn(ArConstants.COLUMN_UNCOMM_CUMULATIVE_BALANCE, reportMetadata.getShowAblesColumns())) 
+//			|| ARUtil.containsColumn(ArConstants.COLUMN_UNCOMM_CUMULATIVE_BALANCE, reportMetadata.getShowAblesColumns())
+			) 
 		{
 			AmpReportColumn arcProp = new AmpReportColumn();
 			AmpColumns acProp = new AmpColumns();

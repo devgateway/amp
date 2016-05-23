@@ -172,7 +172,6 @@ public class ReportWizardAction extends MultiAction {
 		/* If there's no report title in the request then we decide to show the wizard */
         if (request.getParameter("reportTitle") == null){
             if ( "true".equals( request.getParameter("tab") ) )
-
                 myForm.setDesktopTab(true);
             else
                 myForm.setDesktopTab(false);
@@ -536,26 +535,6 @@ public class ReportWizardAction extends MultiAction {
             if (  ampReport.getColumns() != null && ampReport.getHierarchies() != null ) {
                 int numOfCols		= ampReport.getColumns().size();
                 int numOfHiers		= ampReport.getHierarchies().size();
-				/* "Cumulative Commitment", and "Cumulative Disbursement" are not treated as columns so if they appear 
-				 * we need to substract them from the total number of cols */
-                for ( AmpReportColumn tempRepCol: ampReport.getColumns() ) {
-                    if ( ArConstants.COLUMN_CUMULATIVE_COMMITMENT.equals(tempRepCol.getColumn().getColumnName()) ) {
-                        numOfCols--;
-                        continue;
-                    }
-                    if ( ArConstants.COLUMN_CUMULATIVE_DISBURSEMENT.equals(tempRepCol.getColumn().getColumnName()) ) {
-                        numOfCols--;
-                        continue;
-                    }
-                    if ( ArConstants.COLUMN_UNDISB_CUMULATIVE_BALANCE.equals(tempRepCol.getColumn().getColumnName()) ) {
-                        numOfCols--;
-                        continue;
-                    }
-                    if ( ArConstants.COLUMN_UNCOMM_CUMULATIVE_BALANCE.equals(tempRepCol.getColumn().getColumnName()) ) {
-                        numOfCols--;
-                        continue;
-                    }
-                }
                 if ( numOfCols == numOfHiers && (ampReport.getHideActivities() == null || !ampReport.getHideActivities()) ) {
                     for ( AmpColumns tempCol: availableCols ) {
                         if ( ArConstants.COLUMN_PROJECT_TITLE.equals(tempCol.getColumnName()) ) {
@@ -599,7 +578,6 @@ public class ReportWizardAction extends MultiAction {
         if ((request.getParameter("runReport") != null) && request.getParameter("runReport").equals("true")) {
         	return runReport(ampReport,request,response);
         }else{
-
         	return serializeReportAndOpen(ampReport, teamMember, request, response);
         }
     }

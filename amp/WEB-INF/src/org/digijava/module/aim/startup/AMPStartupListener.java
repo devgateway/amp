@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -300,9 +301,8 @@ public class AMPStartupListener extends HttpServlet implements
 
 			//AmpBackgroundActivitiesCloser.createActivityCloserUserIfNeeded();
 			initializeQuartz(sce);
-			
-			AmpReportsSchema.getInstance().synchronizeAmpColumnsBackport(ampContext);
-			AmpReportsSchema.getInstance().synchronizeAmpMeasureBackport();
+
+			performSanityOperationsOnSchema(ampContext);
 
 //			logger.info("Checking if any MTEF columns need to be created...");
 //			DynamicColumnsUtil.createInexistentMtefColumns(ampContext);
@@ -350,6 +350,21 @@ public class AMPStartupListener extends HttpServlet implements
 		}
 	}
 	
+	private void printResultIfNonVoid(Set<String> result) {
+		if (result.size() > 0) {
+			logger.info(String.format("Result: %d items, {%s}", result.size(), String.join(", ", result)));
+		}
+	}
+	
+	private void performSanityOperationsOnSchema(ServletContext ampContext) {
+		logger.info("Checking for new columns in AmpReportSchema to be backported...");
+		printResultIfNonVoid(AmpReportsSchema.getInstance().synchronizeAmpColumnsBackport(ampContext));
+		logger.info("Checking for new measures in AmpReportSchema to be backported...");
+		printResultIfNonVoid(AmpReportsSchema.getInstance().synchronizeAmpMeasureBackport());
+		logger.info("Checking for columns in AmpReportSchema to be migrated to measures...");
+		printResultIfNonVoid(AmpReportsSchema.getInstance().migrateColumns());
+	}
+
 	/**
 	 * runs a "cache refresh" function and checks that it returned ok
 	 * @param funcName

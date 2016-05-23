@@ -20,6 +20,7 @@ import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_7;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_8;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -33,7 +34,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletContext;
@@ -51,7 +51,6 @@ import org.dgfoundation.amp.currencyconvertor.CurrencyConvertor;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -175,7 +174,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		put(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS , "Current Year Actual Disbursements Until Previous Month (not included)");
 		put(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS , "Selected Year Planned Disbursements");
 		put(MeasureConstants.UNCOMMITTED_BALANCE , "Proposed Project Cost - Total Actual Commitments");
-		put(MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE,  "Proposed project cost - Cummalative Commitments");
+		put(MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE,  "Proposed project cost - Cummulative Commitments");
 		put(MeasureConstants.UNDISBURSED_BALANCE , "Total Actual Commitment - Total Actual Disbursement");
 		put(MeasureConstants.UNDISBURSED_CUMULATIVE_BALANCE,  "Cumulative Commitment - Cumulative Disbursement");	
 //		put(MeasureConstants.FORECAST_EXECUTION_RATE , "Actual Disbursements / (Most recent of (Pipeline MTEF for the year, Projection MTEF for the year)). "
@@ -702,6 +701,36 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addLinearFilterMeasure(measureName, measureDescriptions.get(measureName), behaviour, def);
 	}
 	
+	public Set<String> migrateColumns() {
+		return PersistenceManager.getSession().doReturningWork(conn -> {
+			Map<Long, String> dbColumns = SQLUtils.collectKeyValue(conn, "SELECT columnid, columnname FROM amp_columns");
+			Set<String> columnNamestoBeMigrated = dbColumns.values().stream()
+					.filter(z -> this.measures.containsKey(z) && !this.columns.containsKey(z)).collect(Collectors.toSet());
+			if (columnNamestoBeMigrated.size() > 0) {
+				List<String> columnNames = Arrays.asList("amp_report_id", "measureid", "order_id");
+				String columnNamesJoined = SQLUtils.generateCSV(columnNamestoBeMigrated.stream().map(z -> String.format("'%s'", z)).collect(Collectors.toList()));
+				String query = String.format("SELECT arc.amp_report_id, am.measureid, counts.order_id FROM amp_report_column arc " +
+						"JOIN amp_columns ac ON arc.columnid = ac.columnid JOIN amp_measures am ON am.measurename = ac.columnname "
+						+ "JOIN (SELECT amp_report_id, max(order_id) + 1 AS order_id FROM amp_report_measures  GROUP BY amp_report_id ) "
+						+ "AS counts ON counts.amp_report_id = arc.amp_report_id "
+						+ "WHERE ac.columnname IN (%s)"
+						+ "AND arc.amp_report_id NOT IN ( " 
+						+ "SELECT amp_report_id FROM amp_report_measures arm "
+						+ "JOIN amp_measures am2 ON arm.measureid = am2.measureid "
+						+ "WHERE measurename IN (%s))", columnNamesJoined, columnNamesJoined);
+				List<List<Object>> reportEntriesMigrated = SQLUtils.collect(conn, query, rs -> AmpCollections.relist(columnNames, colName -> SQLUtils.getLong(rs, colName)));
+				SQLUtils.insert(conn, "amp_report_measures", null, null, columnNames, reportEntriesMigrated);
+				String columnIdsJoined = SQLUtils.generateCSV(SQLUtils.fetchLongs(conn, String.format("SELECT columnid FROM amp_columns WHERE columnname IN (%s)", columnNamesJoined)));
+				SQLUtils.executeQuery(conn, String.format("DELETE FROM amp_report_column WHERE columnid IN (%s)", columnIdsJoined));
+				SQLUtils.executeQuery(conn, String.format("DELETE FROM amp_report_hierarchy  WHERE columnid IN (%s)", columnIdsJoined));
+				SQLUtils.executeQuery(conn, String.format("DELETE FROM amp_columns WHERE columnid IN (%s)", columnIdsJoined));
+			}
+			return columnNamestoBeMigrated;
+		});
+	}
+	
+	
+	
 	/**
 	 * This method is created for the following scenario:
 	 * 		- a column was added to AmpReportsSchema
@@ -712,23 +741,22 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 *  (since there's no point in backporting the column entirely). 
 	 */
 	@SuppressWarnings("deprecation")
-	public void synchronizeAmpColumnsBackport(ServletContext sCtx) {
-		PersistenceManager.getSession().doWork(conn -> {
+	public Set<String> synchronizeAmpColumnsBackport(ServletContext sCtx) {
+		return PersistenceManager.getSession().doReturningWork(conn -> {
 			Set<String> inDbColumns = new HashSet<>(SQLUtils.fetchAsList(conn, String.format("SELECT %s FROM %s", "columnname", "amp_columns"), 1));
-			List<String> toBeAdded = this.columns.keySet().stream().filter(z -> !inDbColumns.contains(z)).collect(Collectors.toList());
+			Set<String> toBeAdded = this.columns.keySet().stream().filter(z -> !inDbColumns.contains(z)).collect(Collectors.toSet());
 			for (String newColumnName : toBeAdded) {
 				AmpColumns col= new AmpColumns();
 				col.setColumnName(newColumnName);
 				col.setExtractorView("v_empty_text_column");
 				col.setCellType("org.dgfoundation.amp.ar.cell.TextCell");
 				String group = null;
-//				if (PsqlSourcedColumn.class.isAssignableFrom(this.columns.get(newColumnName).getClass()))
 				if (this.columns.get(newColumnName) instanceof PsqlSourcedColumn)
 					group = ((PsqlSourcedColumn<?>)this.columns.get(newColumnName)).getGroup();
 				//group should be non-null only for MTEF columns
 				DynamicColumnsUtil.dynamicallyCreateNewColumn(col, group, sCtx);
-
 			}
+			return toBeAdded;
 		});
 
 //		PersistenceManager.getSession().doWork(conn -> {
@@ -748,15 +776,16 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 *  new measure in the old reports engine would probably result in a crash.
 	 *  Therefore, an empty row for said measure is added.
 	 */
-	public void synchronizeAmpMeasureBackport() {
-		PersistenceManager.getSession().doWork(conn -> {
+	public Set<String> synchronizeAmpMeasureBackport() {
+		return PersistenceManager.getSession().doReturningWork(conn -> {
 			Set<String> inDbMeasures = new HashSet<>(SQLUtils.fetchAsList(conn, String.format("SELECT %s FROM %s", "measurename", "amp_measures"), 1));
-			List<Object> toBeAdded = this.measures.keySet().stream().filter(z -> !inDbMeasures.contains(z)).collect(Collectors.toList());
+			Set<Object> toBeAdded = this.measures.keySet().stream().filter(z -> !inDbMeasures.contains(z)).collect(Collectors.toSet());
 			List<List<Object>> values = toBeAdded.stream().map(z -> Arrays.asList(z, z, "A")).collect(Collectors.toList());	
 			if (values.size() > 0) {
 				SQLUtils.insert(conn, "amp_measures", "measureid", "amp_measures_seq", Arrays.asList("measurename", "aliasname", "type"), values);
 				MeasuresVisibility.resetMeasuresList();
 			}
+			return toBeAdded.stream().map(z -> z.toString()).collect(Collectors.toSet());
 		}); 
 	}
 	

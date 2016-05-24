@@ -67,6 +67,7 @@ function contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_set
     $request_body['recordsPerPage'] = 1;
     $request_body['regenerate'] = TRUE;
     $request_body['rowTotals'] = TRUE;
+    $request_body['raw_values'] = array('M');
     $request_body['name'] = 'api:totalactivities';
 
     // Include Activities with empty funding in the total activities count.
@@ -160,7 +161,7 @@ function contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_set
 
   foreach ($response_data->headers as $h_info) {
     // @TODO: use mappers.
-    if (!in_array($h_info->hierarchicalName, array('[Actual Commitments]', '[Actual Disbursements]'))) {
+    if (!in_array($h_info->hierarchicalName, array('[Totals][Actual Commitments]', '[Totals][Actual Disbursements]'))) {
       continue;
     }
 
@@ -182,10 +183,10 @@ function contentwidget_totalactivities_widget_retrieve_data($plugin, $widget_set
     }
 
     switch ($h_info->hierarchicalName) {
-      case '[Actual Commitments]':
+      case '[Totals][Actual Commitments]':
         $report_totals['actual_commitments'] = $amount;
         break;
-      case '[Actual Disbursements]':
+      case '[Totals][Actual Disbursements]':
         $report_totals['actual_disbursements'] = $amount;
         break;
     }

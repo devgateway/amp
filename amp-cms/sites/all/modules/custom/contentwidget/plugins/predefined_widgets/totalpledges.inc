@@ -78,6 +78,7 @@ function contentwidget_totalpledges_widget_retrieve_report_data($plugin, $widget
     $request_body['recordsPerPage'] = -1;
     $request_body['regenerate'] = TRUE;
     $request_body['rowTotals'] = TRUE;
+    $request_body['raw_values'] = array('M');
     $request_body['reportType'] = 'P';
     $request_body['name'] = 'api:totalpledges';
 
@@ -111,7 +112,6 @@ function contentwidget_totalpledges_widget_retrieve_report_data($plugin, $widget
       $drm_value = $handler->getMatchedValue($disaster_response_marker_plugin, TRUE);
       $request_body['filters']['columnFilters'][$drm_key] = array($drm_value);
     }
-
     $variables['body'] = empty($request_body) ? '{}' : json_encode($request_body);
 
     // Set the API Resource Endpoint.
@@ -175,7 +175,7 @@ function contentwidget_totalpledges_widget_retrieve_report_data($plugin, $widget
   if (isset($response_data->headers)) {
     foreach ($response_data->headers as $h_info) {
       // @TODO: use mappers.
-      if (!in_array($h_info->hierarchicalName, array('[Actual Pledge]', '[Actual Commitments]', '[Actual Disbursements]'))) {
+      if (!in_array($h_info->hierarchicalName, array('[Totals][Actual Pledge]', '[Totals][Actual Commitments]', '[Totals][Actual Disbursements]'))) {
         continue;
       }
 
@@ -197,13 +197,13 @@ function contentwidget_totalpledges_widget_retrieve_report_data($plugin, $widget
       }
 
       switch ($h_info->hierarchicalName) {
-        case '[Actual Pledge]':
+        case '[Totals][Actual Pledge]':
           $report_totals['actual_pledge'] = $amount;
           break;
-        case '[Actual Commitments]':
+        case '[Totals][Actual Commitments]':
           $report_totals['actual_commitments'] = $amount;
           break;
-        case '[Actual Disbursements]':
+        case '[Totals][Actual Disbursements]':
           $report_totals['actual_disbursements'] = $amount;
           break;
       }
@@ -285,7 +285,6 @@ function contentwidget_totalpledges_widget_retrieve_activities_data($plugin, $wi
       $drm_value = $handler->getMatchedValue($disaster_response_marker_plugin, TRUE);
       $request_body['filters']['columnFilters'][$drm_key] = array($drm_value);
     }
-
     $variables['body'] = empty($request_body) ? '{}' : json_encode($request_body);
 
     // Set the API Resource Endpoint.
@@ -344,7 +343,7 @@ function contentwidget_totalpledges_widget_render($plugin, $widget_settings, $en
   if (empty($data)) {
     return;
   }
-  else {
+  elseif (!empty($data_activities)) {
     $data = array_merge($data, $data_activities);
   }
 

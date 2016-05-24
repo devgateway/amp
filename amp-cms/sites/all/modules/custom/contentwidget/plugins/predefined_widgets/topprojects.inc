@@ -332,24 +332,36 @@ function _contentwidget_topprojects_get_data_rows($visible_columns, $items, $num
   foreach ($items as $delta => $values) {
     $row = array();
     foreach ($visible_columns as $key) {
+      // If the value is empty, we don't just skip it, but we add an empty cell.
       if (!isset($values->$key)) {
-        continue;
-      }
-
-      // Update amounts according to the AMP number format pattern.
-      if (is_numeric($values->$key) && in_array($key, array('actual-commitments', 'actual-disbursements'))) {
-        if ($formatter) {
-          $values->$key = $formatter->format($values->$key);
+        $empty_value = '';
+        // The key will tell us whether the value should be 0 or empty string.
+        if (in_array($key, array('actual-commitments', 'actual-disbursements'))) {
+          $empty_value = 0;
         }
+        $row[$key] = array(
+          'data' => $empty_value,
+          'class' => array(
+            drupal_html_class('col-' . $key)
+          ),
+        );
       }
+      else {
+        // Update amounts according to the AMP number format pattern.
+        if (is_numeric($values->$key) && in_array($key, array('actual-commitments', 'actual-disbursements'))) {
+          if ($formatter) {
+            $values->$key = $formatter->format($values->$key);
+          }
+        }
 
-      $row_value = check_plain($values->$key);
-      $row[$key] = array(
-        'data' => $row_value,
-        'class' => array(
-          drupal_html_class('col-' . $key)
-        ),
-      );
+        $row_value = check_plain($values->$key);
+        $row[$key] = array(
+          'data' => $row_value,
+          'class' => array(
+            drupal_html_class('col-' . $key)
+          ),
+        );
+      }
     }
 
     if (!empty($row)) {

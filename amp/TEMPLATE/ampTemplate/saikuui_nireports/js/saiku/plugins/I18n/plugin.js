@@ -99,6 +99,14 @@ function recursive_menu_translate(object, po_file) {
 			}
 		};		
 
+		//translate page title
+        var translatedPageTitle = translate(Settings.DEFAULT_PAGE_TITLE, po_file );
+        if(translatedPageTitle.length > 0){
+                document.title = translatedPageTitle;
+        }else{
+                document.title = Settings.DEFAULT_PAGE_TITLE;   
+        }
+        
 		// Iterate over UI elements that need to be translated
 		return $.each(this, function() {
 			element = $(this);

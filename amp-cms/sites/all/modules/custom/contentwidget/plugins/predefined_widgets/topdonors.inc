@@ -166,7 +166,7 @@ function contentwidget_topdonors_widget_render($plugin, $widget_settings, $entit
   $rows = array();
   if (isset($data->donorFunding)) {
     $number_format = isset($data->numberformat) ? $data->numberformat : NULL;
-    $rows = _contentwidget_topdonors_get_data_rows($data->donorFunding, $number_format);
+    $rows = _contentwidget_topdonors_get_data_rows(array_keys($header), $data->donorFunding, $number_format);
   }
 
   $build = array();
@@ -237,7 +237,7 @@ function contentwidget_topdonors_widget_settings(&$element, &$form_state, $plugi
 /**
  * Returns a list of rows for theme_table().
  */
-function _contentwidget_topdonors_get_data_rows($items, $number_format = NULL) {
+function _contentwidget_topdonors_get_data_rows($header_columns, $items, $number_format = NULL) {
   $rows = array();
 
   // @see https://php.net/manual/en/numberformatter.create.php
@@ -247,7 +247,7 @@ function _contentwidget_topdonors_get_data_rows($items, $number_format = NULL) {
 
   foreach ($items as $delta => $values) {
     $row = array();
-    foreach (array_keys((array) $values) as $key) {
+    foreach ($header_columns as $key) {
 
       // Update amounts according to the AMP number format pattern.
       if (is_numeric($values->$key) && in_array($key, array('actual-commitments', 'actual-disbursements'))) {

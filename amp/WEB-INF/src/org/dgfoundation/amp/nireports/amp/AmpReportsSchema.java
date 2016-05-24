@@ -721,7 +721,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 				String columnNamesJoined = SQLUtils.generateCSV(columnNamestoBeMigrated.stream().map(z -> String.format("'%s'", z)).collect(Collectors.toList()));
 				String query = String.format("SELECT arc.amp_report_id, am.measureid, counts.order_id FROM amp_report_column arc " +
 						"JOIN amp_columns ac ON arc.columnid = ac.columnid JOIN amp_measures am ON am.measurename = ac.columnname "
-						+ "JOIN (SELECT amp_report_id, max(to_number(order_id, '9999999999')) + 1 AS order_id FROM amp_report_measures  GROUP BY amp_report_id ) "
+						+ "JOIN (SELECT amp_report_id, max(order_id) + 1 AS order_id FROM amp_report_measures  GROUP BY amp_report_id ) "
 						+ "AS counts ON counts.amp_report_id = arc.amp_report_id "
 						+ "WHERE ac.columnname IN (%s)"
 						+ "AND arc.amp_report_id NOT IN ( " 

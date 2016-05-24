@@ -36,9 +36,7 @@ module.exports = Backbone.Model.extend({
       if (allFilters && allFilters.columnFilters && matchesFilters) {
         _.each(matchesFilters, function(v, k) {
           var filterKey = k;
-      	  if('Primary Sector' === k){
-      		  filterKey = 'Primary Sector Id';
-      	  }else if('Donor Agency' === k){
+      	 if('Donor Agency' === k){
       		  filterKey = 'Donor Id';
       	  }  
           //make sure it's a valid filter

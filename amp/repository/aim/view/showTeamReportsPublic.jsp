@@ -470,7 +470,7 @@ function submitForm(action){
 																						<%if (!onlySaikuButton) {%>
 																							<a href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" 
 							                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
-							                                								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/nireport_saiku.png" border="0" /></a>
+							                                								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/saiku.png" border="0" /></a>
 							                                							<% } %>
 																						<%
 																							if (!onlySaikuButton) {	

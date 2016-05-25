@@ -401,7 +401,7 @@ public class GPIUseCase {
 	 */
 	private int[] getYearRange() {
 		Integer startRange = FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.YEAR_RANGE_START);
-		Integer rangeSize = FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.NUMBER_OF_YEARS_IN_RANGE);
+		Integer rangeSize = FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.NUMBER_OF_YEARS_IN_RANGE) + 1;
 		int[] years = new int[rangeSize];
 		for (int idx = 0; idx < rangeSize; idx++) {
 			years[idx] = startRange + idx;

@@ -63,6 +63,7 @@ CommonFilterUtils.convertJavaFiltersToJS = function(data) {
 			case 'District':
 			case 'Humanitarian Aid':
 			case 'Disaster Response Marker':
+			case 'Expenditure Class':
 				blob.columnFilters[item.name] = _.map(item.values, function(item_) {
 					return parseInt(item_.id);
 				});

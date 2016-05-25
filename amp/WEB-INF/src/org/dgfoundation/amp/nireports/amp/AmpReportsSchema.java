@@ -108,7 +108,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static Set<String> TRANSACTION_LEVEL_HIERARCHIES = Collections.unmodifiableSet(new HashSet<>(
 			Arrays.asList(
 				ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.FUNDING_STATUS, ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.DISASTER_RESPONSE_MARKER, ColumnConstants.RELATED_PROJECTS, 
-				ColumnConstants.PLEDGES_AID_MODALITY, ColumnConstants.RELATED_PLEDGES, ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE)));
+				ColumnConstants.PLEDGES_AID_MODALITY, ColumnConstants.RELATED_PLEDGES, ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE, ColumnConstants.EXPENDITURE_CLASS)));
 	
 	public final static OrganisationsDimension orgsDimension = OrganisationsDimension.instance;
 	public final static LocationsDimension locsDimension = LocationsDimension.instance;

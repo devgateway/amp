@@ -3,6 +3,7 @@ package org.dgfoundation.amp.ar.amp212;
 import java.util.Arrays;
 import java.util.List;
 
+import org.dgfoundation.amp.ar.AllTests_amp212;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
@@ -20,7 +21,7 @@ import org.junit.Test;
 
 /**
  * 
- * testcases for the fetching states of AMP + the AMP schema
+ * testcases for expenditure class
  * 
  * @author Constantin Dolghier
  *
@@ -28,6 +29,58 @@ import org.junit.Test;
 public class ExpenditureClassTests extends ReportingTestCase {
 
 	final List<String> expClassActs = Arrays.asList("expenditure class", "Eth Water", "Test MTEF directed");
+	
+	final List<String> acts = Arrays.asList(
+			"Activity 2 with multiple agreements",
+			"Activity with both MTEFs and Act.Comms",
+			"activity with capital spending",
+			"activity with components",
+			"activity with contracting agency",
+			"activity with directed MTEFs",
+			"activity_with_disaster_response",
+			"activity with funded components",
+			"activity with incomplete agreement",
+			"activity with many MTEFs",
+			"activity with pipeline MTEFs and act. disb",
+			"Activity with planned disbursements",
+			"activity with primary_program",
+			"Activity with primary_tertiary_program",
+			"activity with tertiary_program",
+			"activity-with-unfunded-components",
+			"Activity with Zones",
+			"Activity With Zones and Percentages",
+			"crazy funding 1",
+			"date-filters-activity",
+			"Eth Water",
+			"execution rate activity",
+			"mtef activity 1",
+			"mtef activity 2",
+			"pledged education activity 1",
+			"Project with documents",
+			"Proposed Project Cost 1 - USD",
+			"ptc activity 1",
+			"ptc activity 2",
+			"SubNational no percentages",
+			"TAC_activity_2",
+			"Test MTEF directed",
+			"third activity with agreements",
+			"Unvalidated activity",
+			"with weird currencies",
+			"expenditure class"
+		);
+	
+	final static List<String> hierarchiesToTry = Arrays.asList(
+			ColumnConstants.STATUS, ColumnConstants.IMPLEMENTATION_LEVEL, 
+			ColumnConstants.PRIMARY_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, 
+			ColumnConstants.SECONDARY_SECTOR, ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR,
+			ColumnConstants.PRIMARY_PROGRAM_LEVEL_1, ColumnConstants.PRIMARY_PROGRAM_LEVEL_2,
+			ColumnConstants.COUNTRY, ColumnConstants.REGION, ColumnConstants.ZONE, ColumnConstants.DISTRICT,
+			ColumnConstants.IMPLEMENTING_AGENCY, ColumnConstants.IMPLEMENTING_AGENCY_GROUPS, ColumnConstants.IMPLEMENTING_AGENCY_TYPE,
+			ColumnConstants.DONOR_AGENCY, ColumnConstants.DONOR_GROUP, ColumnConstants.DONOR_TYPE,
+			ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.FUNDING_STATUS,
+			ColumnConstants.EXPENDITURE_CLASS);
+
+	final static String correctTotals = "{RAW / Funding / 2006 / Actual Expenditures=0, RAW / Funding / 2006 / Actual Commitments=96840.576201, RAW / Funding / 2006 / Actual Disbursements=0, RAW / Funding / 2006 / Planned Expenditures=0, RAW / Funding / 2009 / Actual Expenditures=0, RAW / Funding / 2009 / Actual Commitments=100000, RAW / Funding / 2009 / Actual Disbursements=0, RAW / Funding / 2009 / Planned Expenditures=0, RAW / Funding / 2010 / Actual Expenditures=0, RAW / Funding / 2010 / Actual Commitments=0, RAW / Funding / 2010 / Actual Disbursements=656990, RAW / Funding / 2010 / Planned Expenditures=0, RAW / Funding / 2011 / Actual Expenditures=0, RAW / Funding / 2011 / Actual Commitments=999888, RAW / Funding / 2011 / Actual Disbursements=0, RAW / Funding / 2011 / Planned Expenditures=0, RAW / Funding / 2012 / Actual Expenditures=0, RAW / Funding / 2012 / Actual Commitments=25000, RAW / Funding / 2012 / Actual Disbursements=12000, RAW / Funding / 2012 / Planned Expenditures=0, RAW / Funding / 2013 / Actual Expenditures=0, RAW / Funding / 2013 / Actual Commitments=4493332, RAW / Funding / 2013 / Actual Disbursements=580000, RAW / Funding / 2013 / Planned Expenditures=0, RAW / Funding / 2014 / Actual Expenditures=0, RAW / Funding / 2014 / Actual Commitments=3697813.768451, RAW / Funding / 2014 / Actual Disbursements=260200, RAW / Funding / 2014 / Planned Expenditures=0, RAW / Funding / 2015 / Actual Expenditures=0, RAW / Funding / 2015 / Actual Commitments=1515042.841736, RAW / Funding / 2015 / Actual Disbursements=115570, RAW / Funding / 2015 / Planned Expenditures=0, RAW / Funding / 2016 / Actual Expenditures=72000, RAW / Funding / 2016 / Actual Commitments=62000, RAW / Funding / 2016 / Actual Disbursements=253700, RAW / Funding / 2016 / Planned Expenditures=230000, RAW / Funding / 2016 / Actual Classified Expenditures / Capital Expenditure=22000, RAW / Funding / 2016 / Actual Classified Expenditures / Compensation / Salaries=24000, RAW / Funding / 2016 / Actual Classified Expenditures / Unassigned=26000, RAW / Funding / 2016 / Planned Classified Expenditures / Capital Expenditure=42000, RAW / Funding / 2016 / Planned Classified Expenditures / Compensation / Salaries=44000, RAW / Funding / 2016 / Planned Classified Expenditures / Goods and Services=46000, RAW / Funding / 2016 / Planned Classified Expenditures / Others=48000, RAW / Funding / 2016 / Planned Classified Expenditures / Unassigned=50000, RAW / Totals / Actual Expenditures=72000, RAW / Totals / Actual Commitments=10989917.186388, RAW / Totals / Actual Disbursements=1878460, RAW / Totals / Planned Expenditures=230000, RAW / Totals / Total Actual Classified Expenditures / Capital Expenditure=22000, RAW / Totals / Total Actual Classified Expenditures / Compensation / Salaries=24000, RAW / Totals / Total Actual Classified Expenditures / Unassigned=26000, RAW / Totals / Total Planned Classified Expenditures / Capital Expenditure=42000, RAW / Totals / Total Planned Classified Expenditures / Compensation / Salaries=44000, RAW / Totals / Total Planned Classified Expenditures / Goods and Services=46000, RAW / Totals / Total Planned Classified Expenditures / Others=48000, RAW / Totals / Total Planned Classified Expenditures / Unassigned=50000}";
 	
 	public ExpenditureClassTests() {
 		super("ExpenditureClass tests");
@@ -164,5 +217,74 @@ public class ExpenditureClassTests extends ReportingTestCase {
 				Arrays.asList(ColumnConstants.TYPE_OF_ASSISTANCE), 
 				GroupingCriteria.GROUPING_TOTALS_ONLY),
 				"en", expClassActs, cor);	
+	}
+	
+	@Test
+	public void testHierarchiesDoNotChangeTotals() throws Exception {
+		List<String> measures = Arrays.asList(MeasureConstants.ACTUAL_EXPENDITURES, MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PLANNED_EXPENDITURES,
+				MeasureConstants.ACTUAL_CLASSIFIED_EXPENDITURES, MeasureConstants.PLANNED_CLASSIFIED_EXPENDITURES);
+		
+		ReportSpecificationImpl initSpec = buildSpecification("initSpec",
+			Arrays.asList(ColumnConstants.PROJECT_TITLE),
+			measures,
+			null,
+			GroupingCriteria.GROUPING_YEARLY);
+		 		
+		assertEquals(correctTotals, buildDigest(initSpec, acts, BasicSanityChecks.fundingGrandTotalsDigester).toString());
+				
+		// single-hierarchy reports
+		for(boolean isSummary:Arrays.asList(true, false)) {
+			for(String hierName:hierarchiesToTry) {
+				ReportSpecificationImpl spec = buildSpecification(String.format("%s summary: %b", hierName, isSummary), 
+					Arrays.asList(ColumnConstants.PROJECT_TITLE, hierName), 
+					measures, 
+					Arrays.asList(hierName), 
+					GroupingCriteria.GROUPING_YEARLY);
+				spec.setSummaryReport(isSummary);
+				assertEquals(spec.getReportName(), correctTotals, buildDigest(spec, acts, BasicSanityChecks.fundingGrandTotalsDigester).toString());
+			}
+		}
+	}
+	
+	@Test
+	public void testExpenditureClassFiltering() {
+		NiReportModel cor = new NiReportModel("expenditure class-filtered-by-exp-class")
+		.withHeaders(Arrays.asList(
+				"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 5, colStart: 0, colSpan: 12))",
+				"(Expenditure Class: (startRow: 1, rowSpan: 4, totalRowSpan: 4, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 4, totalRowSpan: 4, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 4, colStart: 2, colSpan: 5));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 4, colStart: 7, colSpan: 5))",
+				"(2016: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 5))",
+				"(Actual Expenditures: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 2, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 4, colSpan: 1));(Planned Expenditures: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 5, colSpan: 1));(Planned Classified Expenditures: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 1));(Actual Expenditures: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 7, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 8, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 9, colSpan: 1));(Planned Expenditures: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 10, colSpan: 1));(Total Planned Classified Expenditures: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 11, colSpan: 1))",
+				"(Goods and Services: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Goods and Services: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1))"))
+			.withWarnings(Arrays.asList())
+			.withBody(      new ReportAreaForTests(null).withContents("Expenditure Class", "", "Project Title", "", "Funding-2016-Actual Expenditures", "0", "Funding-2016-Actual Commitments", "0", "Funding-2016-Actual Disbursements", "0", "Funding-2016-Planned Expenditures", "46 000", "Funding-2016-Planned Classified Expenditures-Goods and Services", "46 000", "Totals-Actual Expenditures", "0", "Totals-Actual Commitments", "0", "Totals-Actual Disbursements", "0", "Totals-Planned Expenditures", "46 000", "Totals-Total Planned Classified Expenditures-Goods and Services", "46 000")
+		      .withChildren(
+		        new ReportAreaForTests(new AreaOwner("Expenditure Class", "Goods and Services", 2142)).withContents("Project Title", "", "Funding-2016-Actual Expenditures", "0", "Funding-2016-Actual Commitments", "0", "Funding-2016-Actual Disbursements", "0", "Funding-2016-Planned Expenditures", "46 000", "Funding-2016-Planned Classified Expenditures-Goods and Services", "46 000", "Totals-Actual Expenditures", "0", "Totals-Actual Commitments", "0", "Totals-Actual Disbursements", "0", "Totals-Planned Expenditures", "46 000", "Totals-Total Planned Classified Expenditures-Goods and Services", "46 000", "Expenditure Class", "Goods and Services")
+		        .withChildren(
+		          new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Funding-2016-Planned Expenditures", "46 000", "Funding-2016-Planned Classified Expenditures-Goods and Services", "46 000", "Totals-Planned Expenditures", "46 000", "Totals-Total Planned Classified Expenditures-Goods and Services", "46 000")        )      ));
+
+		
+		runNiTestCase(spec("expenditure class-filtered-by-exp-class"), "en", acts, cor);
+	}
+	
+	@Test
+	public void testExpenditureClassFilteringFlat() {
+		NiReportModel cor = new NiReportModel("expenditure class-filtered-by-exp-class-flat")
+		.withHeaders(Arrays.asList(
+				"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 5, colStart: 0, colSpan: 12))",
+				"(Project Title: (startRow: 1, rowSpan: 4, totalRowSpan: 4, colStart: 0, colSpan: 1));(Expenditure Class: (startRow: 1, rowSpan: 4, totalRowSpan: 4, colStart: 1, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 4, colStart: 2, colSpan: 5));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 4, colStart: 7, colSpan: 5))",
+				"(2016: (startRow: 2, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 5))",
+				"(Actual Expenditures: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 2, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 3, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 4, colSpan: 1));(Planned Expenditures: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 5, colSpan: 1));(Planned Classified Expenditures: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 1));(Actual Expenditures: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 7, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 8, colSpan: 1));(Actual Disbursements: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 9, colSpan: 1));(Planned Expenditures: (startRow: 3, rowSpan: 2, totalRowSpan: 2, colStart: 10, colSpan: 1));(Total Planned Classified Expenditures: (startRow: 3, rowSpan: 1, totalRowSpan: 2, colStart: 11, colSpan: 1))",
+				"(Goods and Services: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Goods and Services: (startRow: 4, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1))"))
+			.withWarnings(Arrays.asList())
+			.withBody(      new ReportAreaForTests(null).withContents("Project Title", "", "Expenditure Class", "", "Funding-2016-Actual Expenditures", "0", "Funding-2016-Actual Commitments", "0", "Funding-2016-Actual Disbursements", "0", "Funding-2016-Planned Expenditures", "46 000", "Funding-2016-Planned Classified Expenditures-Goods and Services", "46 000", "Totals-Actual Expenditures", "0", "Totals-Actual Commitments", "0", "Totals-Actual Disbursements", "0", "Totals-Planned Expenditures", "46 000", "Totals-Total Planned Classified Expenditures-Goods and Services", "46 000")
+		      .withChildren(
+		        new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Expenditure Class", "Goods and Services", "Funding-2016-Planned Expenditures", "46 000", "Funding-2016-Planned Classified Expenditures-Goods and Services", "46 000", "Totals-Planned Expenditures", "46 000", "Totals-Total Planned Classified Expenditures-Goods and Services", "46 000")      ));
+		
+		runNiTestCase(spec("expenditure class-filtered-by-exp-class-flat"), "en", acts, cor);
+	}
+	
+	@Override
+	public void setUp() {
+		AllTests_amp212.setUp();
 	}
 }

@@ -97,6 +97,7 @@ public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
 		res.put(ColumnConstants.DISASTER_RESPONSE_MARKER, "disaster_response_code");
 		res.put(ColumnConstants.PLEDGES_AID_MODALITY, "aid_modality_id");
 		res.put(ColumnConstants.RELATED_PLEDGES, "pledge_id");
+		res.put(ColumnConstants.EXPENDITURE_CLASS, "expenditure_class_id");
 		return res;
 	}
 		

@@ -31,49 +31,6 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
-/**********************
-The status for the Report Filters tab from: 
-https://docs.google.com/a/developmentgateway.org/spreadsheets/d/14k8GFwiacYZ6su_TOSdPxNj2StxlSeixFbXbhumu32c/edit#gid=128056684
-**********************
-* Mapped:
-* **********************
-Donor Type
-Donor Group
-Donor Agency
-Executing Agencies
-Implementing Agencies
-Responsible Agencies
-Contracting Agencies
-Primary Sectors
-Secondary Sectors
-Financing Instrument
-Type of Assistance
-Mode of Payment
-On/Off Budget
-Regions
-Status
-Workspace
-Actual Start Date
-Date Filter
-Beneficiary Agency 
-Contracting Agency Groups
-Primary Programs
-Secondary Programs
-Approval Status
-**********************
-* pending schema / column constants clarifications:
-* **********************
-Pledges Titles
-Archived
-**********************
-* need to detect where these filters are stored:
-* **********************
-Extension Date 2
-Planned Completion Date
-Date of Agreement
-Municipality
-* */
-
 /**
  * Translates report filters from ARFilters to a configuration that is applicable for Mondrian Reports API.
  * Old AmpARFilter structure stores multiple information like the actual report filters, report settings, sorting info...  

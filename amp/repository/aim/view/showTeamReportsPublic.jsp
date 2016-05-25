@@ -467,13 +467,15 @@ function submitForm(action){
 																							<bean:write name="report" property="ampReportId" />
 																						</c:set>
 																						<c:set target="${urlParams}" property="event" value="edit" />
-																						<a href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" 
-						                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
-						                                								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/nireport_saiku.png" border="0" /></a>
+																						<%if (!onlySaikuButton) {%>
+																							<a href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" 
+							                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
+							                                								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/nireport_saiku.png" border="0" /></a>
+							                                							<% } %>
 																						<%
 																							if (!onlySaikuButton) {	
 																						%>
-																							<%@ include file="saiku_button.jspf" %> 
+																							<%-- <%@ include file="saiku_button.jspf" %> --%> 
 																						<% } %>
 																						<!-- Show XML, PDF and Printer Friendly icon removed with AMP-20044 -->
 																						<!--  

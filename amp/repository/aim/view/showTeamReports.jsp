@@ -718,13 +718,15 @@ $(document).ready(function() {
 						                                								<c:set target="${urlParams}" property="rid">
 						                                  									<bean:write name="report" property="ampReportId" />
 						                                								</c:set>
-						                                								<a href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" 
-						                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
-						                                								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/nireport_saiku.png" border="0" /></a>
+						                                								<%if (!onlySaikuButton) {%>
+							                                								<a href="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" 
+							                                								onclick="return popup(this,'');" style="padding-right: 5px;" title="<digi:trn>Click here to view the NiReport in Saiku</digi:trn>">
+							                                								<img src= "/TEMPLATE/ampTemplate/saikuui_nireports/images/nireport_saiku.png" border="0" /></a>
+						                                								<% } %>
 																						<%
 																							if (!report.isTab() && !onlySaikuButton) {
 																						%>
-																							<%@ include file="saiku_button.jspf" %> 
+																							<%-- <%@ include file="saiku_button.jspf" %> --%> 
 																						<% } %>
 																						
 						                                								<c:set target="${urlParams}" property="event" value="edit" />

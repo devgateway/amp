@@ -1885,7 +1885,7 @@ function collapseAll() {
 										<table width="100%" cellSpacing="1" cellPadding="0" class="box-border-nopadding">
 											<tr>
 												<td width="100" style="padding-left:5px;" bgcolor="#f0f0f0">
-													<digi:trn key="aim:commitments">Commitments</digi:trn>												
+													<digi:trn key="aim:commitments">Commitments</digi:trn>
 												</td>
 												<td class="prv_right">
 												<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee" class="component-funding-table">
@@ -1893,7 +1893,7 @@ function collapseAll() {
 														<tr>
 															<module:display name="/Activity Form/Components/Component/Components Commitments" 
 																parentModule="/Activity Form/Components/Component">
-															<td width="50" bgcolor="#f0f0f0">
+															<td width="50">
 																<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
 																	<b><c:out value="${fd.adjustmentTypeName}" /></b>
 																</digi:trn>															
@@ -1901,7 +1901,7 @@ function collapseAll() {
 															</module:display>
 															<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Amount" 
 																parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">	
-																<td align="right" width="100" bgcolor="#f0f0f0">
+																<td align="right" width="100">
 																	<b><c:out value="${fd.transactionAmount}"/></b>																
 																</td>
 															</module:display>
@@ -1923,7 +1923,7 @@ function collapseAll() {
 															
 															<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Transaction Date"
 																parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
-																<td bgcolor="#f0f0f0" width="70">
+																<td width="70">
 																	<b><c:out value="${fd.transactionDate}"/></b>																
 															   </td>
 															</module:display>
@@ -1931,10 +1931,10 @@ function collapseAll() {
 														<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Description"
 																parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
 																<tr>
-																	<td width="50" bgcolor="#f0f0f0">
+																	<td width="50">
 																		<b><digi:trn>Description</digi:trn></b>
 																	</td>
-																	<td colspan="5" style="padding-left: 15px" bgcolor="white">
+																	<td colspan="5" style="padding-left: 15px">
 																		<b><c:out value="${fd.componentTransactionDescription}" /></b>
 																	</td>
 																</tr>
@@ -1962,7 +1962,7 @@ function collapseAll() {
 													<tr>
 														<module:display name="/Activity Form/Components/Component/Components Disbursements"
 																parentModule="/Activity Form/Components/Component">
-															<td width="50" bgcolor="#f0f0f0"> 
+															<td width="50">
 																<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
 																	<b><c:out value="${fd.adjustmentTypeName}" /></b>
 																</digi:trn>															
@@ -1970,7 +1970,7 @@ function collapseAll() {
 														</module:display>
 														<module:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Amount"
 																	parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
-															<td align="right" width="100" bgcolor="#f0f0f0">
+															<td align="right" width="100">
 																<b><c:out value="${fd.transactionAmount}"/></b>															
 															</td>
 														</module:display>
@@ -1983,7 +1983,7 @@ function collapseAll() {
 														</module:display>
 														<module:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Transaction Date"
 															parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
-															<td bgcolor="#f0f0f0" width="70">
+															<td width="70">
 																<b><c:out value="${fd.transactionDate}"/></b>
 															</td>
 														</module:display>
@@ -2009,10 +2009,10 @@ function collapseAll() {
 									<td class="prv_right">
 									<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 										<c:forEach var="fd" items="${comp.expenditures}">
-											<tr bgcolor="#f0f0f0">
+											<tr>
 												<module:display name="/Activity Form/Components/Component/Components Expeditures" 
 													parentModule="/Activity Form/Components/Component">
-													<td width="50" bgcolor="#f0f0f0">
+													<td width="50">
 														<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
 															<b><c:out value="${fd.adjustmentTypeName}" /></b>
 														</digi:trn>													
@@ -2020,7 +2020,7 @@ function collapseAll() {
 												</module:display>
 												<module:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Amount"
 													parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
-													<td align="right" width="100" bgcolor="#f0f0f0">
+													<td align="right" width="100">
 														<b><c:out value="${fd.transactionAmount}"/></b>				
 													</td>
 												</module:display>
@@ -2032,7 +2032,7 @@ function collapseAll() {
 												</module:display>
 												<module:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Transaction Date"
 													parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
-													<td bgcolor="#f0f0f0" width="70">
+													<td width="70">
 														<b><c:out value="${fd.transactionDate}"/></b>
 													</td>
 												</module:display>

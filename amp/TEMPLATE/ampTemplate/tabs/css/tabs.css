@@ -519,9 +519,9 @@ th.ui-th-column div {
 
 .save-tab {
 	border-collapse: separate;
-	/*border: 1px solid #999;*/
+	border: 1px solid #999;
 	padding: .25em .5em;
-	/*background: #edf5ff;*/
+	background: #edf5ff;
 }
 
 .save-text {

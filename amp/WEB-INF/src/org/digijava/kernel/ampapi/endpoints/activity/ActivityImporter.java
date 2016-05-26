@@ -46,6 +46,7 @@ import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
@@ -405,6 +406,16 @@ public class ActivityImporter {
 				throw new RuntimeException(e);
 			}
 			
+			if (newFieldValue != null && AmpAgreement.class.isAssignableFrom(newFieldValue.getClass()) && childrenNewValues.size() == 1) {
+				Map<String, Object> agreementMap = childrenNewValues.get(0);
+				childrenNewValues.clear();
+				for (String key : agreementMap.keySet()) {
+					HashMap<String, Object> kv = new HashMap<String, Object>();
+					kv.put(key, agreementMap.get(key));
+					childrenNewValues.add(kv);
+				}
+			}
+			
 			// process children 
 			Iterator<Map<String, Object>> iterNew = childrenNewValues.iterator();
 			while (iterNew.hasNext()) {
@@ -746,10 +757,18 @@ public class ActivityImporter {
 						break;
 					}
 				}
-			} else {
-				// REFACTOR: seems nothing todo here
+			}
+		} else {
+			try {
+				if (AmpAgreement.class.equals(field.getType())) {
+					value = field.get(parentObj);
+				}
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				logger.error(e.getMessage());
+				throw new RuntimeException(e);
 			}
 		}
+		
 		return value;
 	}
 	

@@ -172,7 +172,17 @@ public class ActivityUtil {
 					Iterator<AmpFundingMTEFProjection> ampFundingMTEFProjectionIterator = ampFunding
 							.getMtefProjections().iterator();
 					updateFundingDetails(ampFundingMTEFProjectionIterator);
-
+				}
+				if (Hibernate.isInitialized(ampFunding.getAgreement())) {
+					AmpAgreement agg = ampFunding.getAgreement();
+					if (agg != null) {
+						if ((agg.getId() == null || agg.getId() < 0L)) {
+							agg.setId(null);
+							session.save(agg);
+						} else {
+							session.merge(agg);
+						}
+					}
 				}
 			}
 

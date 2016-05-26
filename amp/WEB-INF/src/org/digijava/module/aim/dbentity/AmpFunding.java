@@ -111,7 +111,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	private Long groupVersionedFunding;
 	@Interchangeable(fieldTitle="Capital Spending Percentage",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Capital Spending Percentage", importable=true)
 	private Float capitalSpendingPercentage;
-//	@Interchangeable(fieldTitle="Agreement",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement", importable=true)
+	@Interchangeable(fieldTitle="Agreement",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement", importable=true)
 	private AmpAgreement agreement;
 	@Interchangeable(fieldTitle="Source Role",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Source Role", importable=true, pickIdOnly=true)
 	private AmpRole sourceRole;

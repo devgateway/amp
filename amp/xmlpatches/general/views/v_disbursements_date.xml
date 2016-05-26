@@ -19,8 +19,10 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_disbursements_date AS SELECT amp_activity.amp_activity_id, amp_activity.disbursments_date FROM amp_activity ORDER BY amp_activity.amp_activity_id;;;
-        		</lang>
+			   	CREATE OR REPLACE VIEW v_disbursements_date AS
+			   		SELECT amp_activity_id, disbursments_date
+			   			FROM amp_activity_version;
+        	</lang>
 		</script>
 	</apply>
 </tns:patch>

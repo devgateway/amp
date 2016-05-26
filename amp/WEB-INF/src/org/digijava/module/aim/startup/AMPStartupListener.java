@@ -302,7 +302,7 @@ public class AMPStartupListener extends HttpServlet implements
 			//AmpBackgroundActivitiesCloser.createActivityCloserUserIfNeeded();
 			initializeQuartz(sce);
 
-//			performSanityOperationsOnSchema(ampContext);
+			performSanityOperationsOnSchema(ampContext);
 
 //			logger.info("Checking if any MTEF columns need to be created...");
 //			DynamicColumnsUtil.createInexistentMtefColumns(ampContext);
@@ -361,8 +361,8 @@ public class AMPStartupListener extends HttpServlet implements
 		printResultIfNonVoid(AmpReportsSchema.getInstance().synchronizeAmpColumnsBackport(ampContext));
 		logger.info("Checking for new measures in AmpReportSchema to be backported...");
 		printResultIfNonVoid(AmpReportsSchema.getInstance().synchronizeAmpMeasureBackport());
-		logger.info("Checking for columns in AmpReportSchema to be migrated to measures...");
-		printResultIfNonVoid(AmpReportsSchema.getInstance().migrateColumns());
+//		logger.info("Checking for columns in AmpReportSchema to be migrated to measures...");
+//		printResultIfNonVoid(AmpReportsSchema.getInstance().migrateColumns());
 	}
 
 	/**

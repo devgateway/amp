@@ -196,8 +196,8 @@ public class HardcodedReportsTestSchema extends AbstractReportsSchema {
 	}	
 	
 	@Override
-	public Function<NiReportsEngine, SchemaSpecificScratchpad> getScratchpadSupplier() {
-		return engine -> new ReportsTestScratchpad(engine);
+	public SchemaSpecificScratchpad generateScratchpad(NiReportsEngine engine) {
+		return new ReportsTestScratchpad(engine);
 	}
 	
 	@Override public HardcodedReportsTestSchema addColumn(NiReportColumn<?> col) {

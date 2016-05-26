@@ -19,8 +19,9 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_actual_completion_date_comments AS SELECT amp_comments.amp_activity_id, amp_comments.comment_ FROM amp_comments WHERE (amp_comments.amp_field_id = 1);;;
-        		</lang>
+			   	CREATE OR REPLACE VIEW v_actual_completion_date_comments AS
+			   		SELECT amp_comments.amp_activity_id, amp_comments.comment_ FROM amp_comments WHERE (amp_comments.amp_field_id = 1);
+        	</lang>
 		</script>
 	</apply>
 </tns:patch>

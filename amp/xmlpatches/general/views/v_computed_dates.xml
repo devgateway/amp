@@ -5,14 +5,12 @@
 	<jira>AMP-14167</jira>
 	<keyword>Views</keyword>
 	<author>Alexandru Artimon</author>
-	<description>recreate view, this will always be the last version of the
-		view</description>
+	<description>recreate view, this will always be the last version of the view</description>
 	<trigger type="all">
 		<condition type="custom">
 			<script returnVar="val">
 				<lang type="sql">
-					SELECT settingsvalue FROM amp_global_settings where
-					settingsname='Recreate the views on the next server restart';
+					SELECT settingsvalue FROM amp_global_settings where settingsname='Recreate the views on the next server restart';
 				</lang>
 			</script>
 			<test>val.equalsIgnoreCase("true")</test>
@@ -22,15 +20,15 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 				CREATE OR REPLACE VIEW v_computed_dates AS
-				SELECT amp_activity.amp_activity_id, 
-				amp_activity.actual_start_date, 
-				amp_activity.actual_approval_date,
-				amp_activity.proposed_start_date,
-				amp_activity.actual_completion_date,
-				amp_activity.proposed_completion_date,
-				amp_activity.original_comp_date
-				FROM amp_activity
-				ORDER BY amp_activity.amp_activity_id;
+					SELECT
+						aav.amp_activity_id, 
+						aav.actual_start_date, 
+						aav.actual_approval_date,
+						aav.proposed_start_date,
+						aav.actual_completion_date,
+						aav.proposed_completion_date,
+						aav.original_comp_date
+						FROM amp_activity_version aav;
 			</lang>
 		</script>
 	</apply>

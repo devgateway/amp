@@ -46,10 +46,10 @@ public interface NiReportsSchema {
 	public NiFilters convertFilters(NiReportsEngine engine);
 	
 	/**
-	 * gets a builder of a schema-specific scratchpad, which will be stored in {@link NiReportsEngine#schemaSpecificScratchpad} at start time
+	 * builds the schema-specific scratchpad, which will be stored in {@link NiReportsEngine#schemaSpecificScratchpad} at start time
 	 * @return
 	 */
-	public Function<NiReportsEngine, SchemaSpecificScratchpad> getScratchpadSupplier();
+	public SchemaSpecificScratchpad generateScratchpad(NiReportsEngine engine);
 	
 	public default Map<String, List<ReportRenderWarning>> performColumnChecks(Optional<Set<String>> columns) {
 		Set<String> checkedColumns = columns.isPresent() ? columns.get() : getColumns().keySet();

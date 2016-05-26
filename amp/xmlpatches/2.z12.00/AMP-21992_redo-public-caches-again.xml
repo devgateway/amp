@@ -9,7 +9,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="bsh">
-				org.digijava.kernel.job.cachedtables.PublicViewColumnsUtil.redoCaches();
+				//org.digijava.kernel.job.cachedtables.PublicViewColumnsUtil.redoCaches();
 			</lang>
 		</script>
 	</apply>

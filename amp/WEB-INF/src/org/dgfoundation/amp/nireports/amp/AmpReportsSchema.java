@@ -1011,8 +1011,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	}
 		
 	@Override
-	public Function<NiReportsEngine, SchemaSpecificScratchpad> getScratchpadSupplier() {
-		return engine -> new AmpReportsScratchpad(engine);
+	public SchemaSpecificScratchpad generateScratchpad(NiReportsEngine engine) {
+		return new AmpReportsScratchpad(engine);
 	}
 	
 	public static ReportExecutor getExecutor() {

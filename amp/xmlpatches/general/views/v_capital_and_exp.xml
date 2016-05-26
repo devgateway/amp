@@ -22,9 +22,9 @@
 			<lang delimiter=";" type="postgres">
 				DROP VIEW IF EXISTS v_capital_and_exp;
 				CREATE OR REPLACE VIEW v_capital_and_exp AS 
-					SELECT amp_activity_id, 'Capital' AS type FROM amp_activity 
+					SELECT amp_activity_id, 'Capital' AS type FROM amp_activity_version
 						UNION 
-					SELECT amp_activity_id, 'Expenditure' AS type FROM amp_activity ORDER BY amp_activity_id;
+					SELECT amp_activity_id, 'Expenditure' AS type FROM amp_activity_version;
 			</lang>
 		</script>
 	</apply>

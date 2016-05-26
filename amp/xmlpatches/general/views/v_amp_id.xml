@@ -20,8 +20,8 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 				CREATE OR REPLACE VIEW v_amp_id AS 
-				SELECT amp_activity.amp_activity_id, amp_activity.amp_id, amp_activity.amp_activity_id AS act_id, amp_activity.draft, amp_activity.approval_status AS status
-				FROM amp_activity;
+					SELECT amp_activity_id, amp_id, amp_activity_id AS act_id, draft, approval_status AS status
+						FROM amp_activity_version;
         	</lang>
 		</script>
 	</apply>

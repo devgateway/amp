@@ -173,7 +173,7 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
 	}
 	 
 	public NiReportRunResult execute() {
-		try(SchemaSpecificScratchpad pad = schema.getScratchpadSupplier().apply(this)) {
+		try(SchemaSpecificScratchpad pad = schema.generateScratchpad(this)) {
 			this.schemaSpecificScratchpad = pad;
 			this.timer = new InclusiveTimer("Report " + spec.getReportName());
 			this.calendar = pad.buildCalendarConverter();

@@ -22,11 +22,10 @@
 				DROP VIEW IF EXISTS v_nationalobjectives;
 			    CREATE OR REPLACE VIEW v_nationalobjectives AS 
 			    SELECT a.amp_activity_id, t.name, t.amp_theme_id, ap.program_percentage 
-					FROM amp_activity a 
+					FROM amp_activity_version a 
 					JOIN amp_activity_program ap ON (a.amp_activity_id = ap.amp_activity_id) 
 					JOIN amp_program_settings aps ON (aps.amp_program_settings_id = ap.program_setting) AND (aps.name='National Planning Objective')
-					JOIN amp_theme t ON (t.amp_theme_id = ap.amp_program_id)
-					ORDER BY a.amp_activity_id, t.name;;;
+					JOIN amp_theme t ON (t.amp_theme_id = ap.amp_program_id);
 			</lang>
 		</script>
 	</apply>

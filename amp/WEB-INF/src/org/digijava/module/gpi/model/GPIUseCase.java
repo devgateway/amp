@@ -289,7 +289,8 @@ public class GPIUseCase {
 			session = PersistenceManager.getRequestDBSession();
 			String selectQueryString = new StringBuilder()
 					.append("SELECT aa.amp_activity_id, af.amp_funding_id, afd.amp_fund_detail_id, afd.transaction_date, aog.amp_org_grp_id, aog.org_grp_name, ")
-					.append( "(SELECT COUNT(*) FROM amp_gpi_survey ags WHERE ags.amp_activity_id = aa.amp_activity_id) AS surveys, afd.transaction_amount, afd.transaction_type, ac.currency_code, acv.category_value, acv.id ")
+					.append(" 1 AS surveys, afd.transaction_amount, afd.transaction_type, ac.currency_code, acv.category_value, acv.id,")
+					.append(" array_to_string((SELECT ARRAY (SELECT COALESCE(agsr.amp_question_id, '0') || ':' || COALESCE(agsr.response, '') FROM amp_gpi_survey ags, amp_gpi_survey_response agsr WHERE ags.amp_activity_id = aa.amp_activity_id AND ags.amp_gpisurvey_id = agsr.amp_gpisurvey_id ORDER BY agsr.amp_question_id)), ',')")
 					.append(" FROM amp_activity aa JOIN amp_funding af ON aa.amp_activity_id = af.amp_activity_id")
 					.append(" JOIN amp_funding_detail afd ON af.amp_funding_id = afd.amp_funding_id")
 					.append(" JOIN amp_organisation ao ON af.amp_donor_org_id = ao.amp_org_id")
@@ -359,7 +360,7 @@ public class GPIUseCase {
 			}
 
 			Query query = session.createSQLQuery(selectQueryString + where + endQueryString);
-//			logger.warn(query.getQueryString());
+			logger.debug(query.getQueryString());
 			commonData = query.list();
 		} catch (Exception e) {
 			logger.error(e, e);

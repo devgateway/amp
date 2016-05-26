@@ -256,15 +256,7 @@ public class GPIUtils {
 
 	// TODO: Now the questions/answers are hardcoded, lets change it by
 	// selecting the right answer for the current question.
-	public static boolean[] getSurveyAnswers(String reportCode, AmpGPISurvey survey) throws Exception {
-		
-		Comparator<AmpGPISurveyResponse> comparator = new Comparator<AmpGPISurveyResponse>() {
-			public int compare(AmpGPISurveyResponse a, AmpGPISurveyResponse b) {
-				return a.getAmpQuestionId().getQuestionNumber()
-						.compareTo(b.getAmpQuestionId().getQuestionNumber());
-			}
-		};
-		
+	public static boolean[] getSurveyAnswers(String reportCode, String[] arrayResponses) throws Exception {			
 		// Set the number of columns for each report.
 		boolean[] columns = null;
 		if (GPIConstants.GPI_REPORT_1.equals(reportCode)) {
@@ -280,18 +272,13 @@ public class GPIUtils {
 		// Prepare an array with all the responses (no problem if its not
 		// sorted).
 		String[] answers = new String[GPIConstants.NUMBER_OF_SURVEY_QUESTIONS];
-		if(survey != null) {
-			// First sort the responses by its query order.
-			List<AmpGPISurveyResponse> responses = new ArrayList<AmpGPISurveyResponse>(survey.getResponses());
-			Collections.sort(responses, comparator);
-			Iterator<AmpGPISurveyResponse> iter = responses.iterator();
-			while (iter.hasNext()) {
-				AmpGPISurveyResponse auxResponse = iter.next();
-				int quesNum = auxResponse.getAmpQuestionId().getQuestionNumber().intValue() - 1;
-				String auxString = (auxResponse.getResponse() == null) ? "" : auxResponse.getResponse();
-				answers[quesNum] = new String(auxString);
+		if(arrayResponses != null && arrayResponses.length > 1) {
+			for (int i = 0; i < arrayResponses.length; i++) {
+				String[] auxResponse = arrayResponses[i].split(":");
+				int questNum = Integer.valueOf(auxResponse[0]) - 1;
+				answers[questNum] = new String((auxResponse.length == 2 && !auxResponse[1].equals("")) ? auxResponse[1] : "");
 			}
-			
+					
 			// Check if the general question (AMP-18209) is visible.
 			boolean GM1Active = false;
 			boolean GM1Answer = false;

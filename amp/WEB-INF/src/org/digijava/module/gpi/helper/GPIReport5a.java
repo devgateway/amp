@@ -181,18 +181,9 @@ public class GPIReport5a extends GPIAbstractReport {
 						}
 					}
 
-					// Check survey answers for this
-					// AmpGPISurvey.
-					AmpGPISurvey auxSurvey = null;
-					if (((BigInteger) data[6]).intValue() != 0) {
-						Query query = session.createQuery("SELECT a FROM " + AmpActivity.class.getName()
-								+ " a WHERE a.ampActivityId=:id");
-						query.setLong("id", Long.valueOf(data[0].toString()));
-						AmpActivity auxActivity = (AmpActivity) query.uniqueResult();
-						auxSurvey = (auxActivity.getGpiSurvey() != null && auxActivity.getGpiSurvey().size() != 0 ? auxActivity
-								.getGpiSurvey().iterator().next() : null);
-					}
-					boolean[] answers = GPIUtils.getSurveyAnswers(GPIConstants.GPI_REPORT_5a, auxSurvey);
+					// Check survey answers for thisAmpGPISurvey.
+					String[] arrayResponses = ((String) data[12]).split(",");
+					boolean[] answers = GPIUtils.getSurveyAnswers(GPIConstants.GPI_REPORT_5a, arrayResponses);
 					if (answers != null && answers[0]) {
 						auxRow.setColumn1(null);
 						auxRow.setColumn2(null);

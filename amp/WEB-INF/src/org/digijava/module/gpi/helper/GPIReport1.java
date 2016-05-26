@@ -122,21 +122,13 @@ public class GPIReport1 extends GPIAbstractReport {
 					yearsFromFunding.add(auxYear);
 
 					auxRow = new GPIReport1Row();
-					// Check survey answers for this
-					// AmpGPISurvey.
-
+					// Check survey answers for thisAmpGPISurvey.
 					// Big time saved by only looking for valid responses.
-					if (((BigInteger) data[6]).intValue() != 0) {
-						Query query = session.createQuery("SELECT a FROM " + AmpActivity.class.getName() + " a WHERE a.ampActivityId=:id");
-						query.setLong("id", Long.valueOf(data[0].toString()));
-						AmpActivity auxActivity = (AmpActivity) query.uniqueResult();
-						AmpGPISurvey auxSurvey = (auxActivity.getGpiSurvey() != null && auxActivity.getGpiSurvey().size() != 0 ? auxActivity
-								.getGpiSurvey().iterator().next()
-								: null);
-						boolean[] showColumn = GPIUtils.getSurveyAnswers(GPIConstants.GPI_REPORT_1, auxSurvey);
+					if (!data[12].equals("")) {					
+						String[] arrayResponses = ((String) data[12]).split(",");					
+						boolean[] showColumn = GPIUtils.getSurveyAnswers(GPIConstants.GPI_REPORT_1, arrayResponses);
 						// If there was an answer (yes or no).
-						if (auxSurvey != null && auxSurvey.getResponses() != null && auxSurvey.getResponses().size() > 0
-								&& showColumn != null) {
+						if (arrayResponses.length > 1 && showColumn != null) {
 							if (showColumn[0]) {
 								auxRow.setColumn1(new Integer(1));
 							} else {

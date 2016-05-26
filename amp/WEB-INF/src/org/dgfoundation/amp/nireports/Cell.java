@@ -13,7 +13,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 /**
- * an internal consumption Cell, which roughly corresponds to an API ReportCell.
+ * an immutable piece of data used for the disaggregated phases of the report
  * When subclassing, make sure you subclass {@link #buildCopy()}
  * @author Dolghier Constantin
  *

@@ -34,8 +34,7 @@ public interface NiReportsSchema {
 	public Map<String, NiReportMeasure<?>> getMeasures();
 	
 	/**
-	 * returns the fetcher of funding
-	 * @return
+	 * returns the funding column definition
 	 */
 	public NiReportColumn<CategAmountCell> getFundingFetcher(NiReportsEngine engine);
 

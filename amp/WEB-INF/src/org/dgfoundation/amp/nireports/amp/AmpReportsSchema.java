@@ -638,10 +638,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 				(syb, cell) -> isBetween(cell.amount.getJulianDayCode(), syb.previousYearStartJulian, syb.previousYearEndJulian),
 				TrivialMeasureBehaviour.getTotalsOnlyInstance());
 
-//		addDerivedFilterMeasure(MeasureConstants.CUMULATED_DISBURSEMENTS,
-//				TrivialMeasureBehaviour.getTotalsOnlyInstance(),
-//				MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS, +1,
-//				MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS, +1);		
+		addDerivedFilterMeasure(MeasureConstants.CUMULATED_DISBURSEMENTS,
+				TrivialMeasureBehaviour.getTotalsOnlyInstance(),
+				MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS, +1,
+				MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS, +1);		
 		
 		addTrivialFilterMeasure(MeasureConstants.UNCOMMITTED_BALANCE,
 				TrivialMeasureBehaviour.getTotalsOnlyInstance(),
@@ -708,7 +708,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	}
 	
 	protected void addDerivedFilterMeasure(String measureName, Behaviour<?> behaviour,  Object...def) {
-		addLinearFilterMeasure(measureName, measureDescriptions.get(measureName), behaviour, def);
+		addDerivedLinearFilterMeasure(measureName, measureDescriptions.get(measureName), behaviour, def);
 	}
 	
 	public Set<String> migrateColumns() {

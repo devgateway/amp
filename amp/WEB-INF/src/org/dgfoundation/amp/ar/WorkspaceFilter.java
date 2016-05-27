@@ -189,8 +189,6 @@ public class WorkspaceFilter
 		//return "SELECT amp_activity_id FROM amp_activity WHERE name IN ('activity with capital spending', 'Activity with planned disbursements', 'activity with pipeline MTEFs and act. disb')";
 		//return "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id IN (13755, 9790)";
 		//return "SELECT amp_activity_id FROM v_ni_mtef_funding where source_role_id = 1 and amp_activity_id NOT IN (175, 176)";
-		//return "SELECT amp_activity_id FROM amp_activity where name in ('activity with capital spending', 'TAC_activity_1')";
-		//return "SELECT amp_activity_id FROM amp_activity where name in ('Eth Water', 'activity with directed MTEFs', 'expenditure class')";
 		return TEAM_FILTER;
 	}
 	

@@ -6,10 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.dgfoundation.amp.nireports.schema.Behaviour;
+import org.dgfoundation.amp.nireports.schema.NiCombinationContextTransactionMeasure;
 import org.dgfoundation.amp.nireports.schema.NiLinearCombinationTransactionMeasure;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportMeasure;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
+import org.dgfoundation.amp.nireports.schema.NiTransactionContextMeasure;
 import org.dgfoundation.amp.nireports.schema.NiTransactionMeasure;
 
 import static org.dgfoundation.amp.nireports.NiUtils.failIf;
@@ -46,7 +48,19 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 		measures.put(meas.name, meas);
 		return this;
 	}
-
+	
+	/**
+	 * accepts an array of (measureName, Number)
+	 * @param def
+	 * @return
+	 */
+	public AbstractReportsSchema addDerivedLinearFilterMeasure(String compMeasureName, String description, Behaviour<?> behaviour, Object...def) {
+		failIf(def.length % 2 != 0, "you should supply an even number of arguments");
+		@SuppressWarnings("rawtypes")
+		Map<NiTransactionContextMeasure, BigDecimal> defMap = parseContextFilterMap(String.format("while defining measure %s", compMeasureName), def);
+		return addMeasure(new NiCombinationContextTransactionMeasure(compMeasureName, defMap, behaviour, description));
+	}
+	
 	/**
 	 * accepts an array of (measureName, Number)
 	 * @param def
@@ -56,6 +70,20 @@ public abstract class AbstractReportsSchema implements NiReportsSchema {
 		failIf(def.length % 2 != 0, "you should supply an even number of arguments");
 		Map<NiTransactionMeasure, BigDecimal> defMap = parseMap(String.format("while defining measure %s", compMeasureName), def);
 		return addMeasure(new NiLinearCombinationTransactionMeasure(compMeasureName, defMap, behaviour, description));
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public Map<NiTransactionContextMeasure, BigDecimal> parseContextFilterMap(String errPrefix, Object...def) {
+		Map<NiTransactionContextMeasure, BigDecimal> res = new HashMap<>();
+		for(int i = 0; i < def.length / 2; i++) {
+			String measureName = (String) def[i * 2];
+			Number factor = (Number) def[i * 2 + 1];
+			
+			NiReportMeasure meas = (NiTransactionContextMeasure) getMeasures().get(measureName);
+			failIf(meas == null, () -> String.format("%s: measure %s not found in the schema", errPrefix, measureName));
+			res.put((NiTransactionContextMeasure) meas, toBigDecimal(factor));
+		}
+		return res;
 	}
 	
 	public Map<NiTransactionMeasure, BigDecimal> parseMap(String errPrefix, Object...def) {

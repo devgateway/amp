@@ -13,18 +13,10 @@ import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportElement;
-import org.dgfoundation.amp.newreports.ReportElement.ElementType;
-import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.newreports.SortingInfo;
-import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.amp.AmpReportsScratchpad;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
-import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.dgfoundation.amp.testmodels.NiReportModel;
-import org.dgfoundation.amp.testutils.ReportTestingUtils;
 import org.junit.Test;
 
 /**
@@ -162,18 +154,18 @@ public class NiComputedMeasuresTests extends ReportingTestCase {
 	public void testTimeboundMeasures() {
 		NiReportModel cor = new NiReportModel("Timebound computed measures (timelocked)")
 				.withHeaders(Arrays.asList(
-						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 6))",
-						"(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 5))",
-						"(Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Previous Month Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Selected Year Planned Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Current Month Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Last Year of Planned Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1))"))
-					.withWarnings(Arrays.asList(
-						"-1: [entityId: -1, message: measure Cumulated Disbursements not supported in NiReports]"))
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 8))",
+						"(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 7))",
+						"(Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Previous Month Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Selected Year Planned Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Current Month Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Last Year of Planned Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1));(Prior Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1));(Cumulated Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1))"))
+					.withWarnings(Arrays.asList())
 					.withBody(      new ReportAreaForTests(null)
-				      .withContents("Project Title", "", "Totals-Actual Disbursements", "400,036", "Totals-Previous Month Disbursements", "84,200", "Totals-Selected Year Planned Disbursements", "123,321", "Totals-Current Month Disbursements", "82,000", "Totals-Last Year of Planned Disbursements", "36,500")
+				      .withContents("Project Title", "", "Totals-Actual Disbursements", "400,036", "Totals-Previous Month Disbursements", "84,200", "Totals-Selected Year Planned Disbursements", "123,321", "Totals-Current Month Disbursements", "82,000", "Totals-Last Year of Planned Disbursements", "36,500", "Totals-Prior Actual Disbursements", "87,500", "Totals-Cumulated Disbursements", "171,700")
 				      .withChildren(
 				        new ReportAreaForTests(new AreaOwner(69), "Project Title", "Activity with planned disbursements", "Totals-Actual Disbursements", "770", "Totals-Last Year of Planned Disbursements", "500"),
 				        new ReportAreaForTests(new AreaOwner(77), "Project Title", "execution rate activity", "Totals-Actual Disbursements", "90,000", "Totals-Last Year of Planned Disbursements", "36,000"),
-				        new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Totals-Actual Disbursements", "253,700", "Totals-Previous Month Disbursements", "84,200", "Totals-Current Month Disbursements", "82,000"),
-				        new ReportAreaForTests(new AreaOwner(88), "Project Title", "activity-weird-funding", "Totals-Actual Disbursements", "55,566", "Totals-Selected Year Planned Disbursements", "123,321")      ));		
+				        new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Totals-Actual Disbursements", "253,700", "Totals-Previous Month Disbursements", "84,200", "Totals-Current Month Disbursements", "82,000", "Totals-Prior Actual Disbursements", "87,500", "Totals-Cumulated Disbursements", "171,700"),
+				        new ReportAreaForTests(new AreaOwner(88), "Project Title", "activity-weird-funding", "Totals-Actual Disbursements", "55,566", "Totals-Selected Year Planned Disbursements", "123,321")      ));
+				
 		ReportSpecificationImpl spec = buildSpecification("Timebound computed measures (timelocked)", 
 				Arrays.asList(ColumnConstants.PROJECT_TITLE),
 				Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS, 
@@ -228,6 +220,29 @@ public class NiComputedMeasuresTests extends ReportingTestCase {
 		runNiTestCase(spec, "en", Arrays.asList("activity_with_disaster_response"), cor);
 		
 	}
+	
+	@Test
+	public void testCumulatedDisbursements(){
+		NiReportModel cor = new NiReportModel("Cumulated Disbursements")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 5))",
+						"(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 4))",
+						"(Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1));(Previous Month Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Prior Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1));(Cumulated Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1))"))
+					.withWarnings(Arrays.asList())
+					.withBody(      new ReportAreaForTests(null).withContents("Project Title", "", "Totals-Actual Disbursements", "253,700", "Totals-Previous Month Disbursements", "84,200", "Totals-Prior Actual Disbursements", "87,500", "Totals-Cumulated Disbursements", "171,700")
+				      .withChildren(
+				        new ReportAreaForTests(new AreaOwner(87), "Project Title", "expenditure class", "Totals-Actual Disbursements", "253,700", "Totals-Previous Month Disbursements", "84,200", "Totals-Prior Actual Disbursements", "87,500", "Totals-Cumulated Disbursements", "171,700")      ));
+		
+		ReportSpecificationImpl spec = buildSpecification("Cumulated Disbursements",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE),
+				Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS,
+						MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS, MeasureConstants.CUMULATED_DISBURSEMENTS),
+				null,
+				GroupingCriteria.GROUPING_TOTALS_ONLY);
+		runNiTestCase(spec, "en", Arrays.asList("expenditure class"), cor);
+		
+	}
+	
 	
 	@Override
 	public void tearDown() {

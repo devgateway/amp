@@ -19,16 +19,18 @@ public class NiLinearCombinationTransactionMeasure extends NiPredicateTransactio
 	protected final NiTransactionMeasure[] measures;
 	protected final BigDecimal[] prods;
 	
-	public NiLinearCombinationTransactionMeasure(String measureName, Map<NiTransactionMeasure, BigDecimal> terms, Behaviour<?> behaviour, String description) {
-		super(measureName,  behaviour, description, false);
+	public NiLinearCombinationTransactionMeasure(String measureName, Map<NiTransactionMeasure, BigDecimal> terms,  
+			Behaviour<?> behaviour, boolean ignoreFilters, String description) {
+		super(measureName,  behaviour, description, ignoreFilters);
 		NiUtils.failIf(terms.isEmpty(), () -> String.format("while defining measure %s: you supplied an empty terms list", measureName));
 		this.terms = Collections.unmodifiableMap(new LinkedHashMap<>(terms));
 		this.measures = terms.keySet().toArray(new NiTransactionMeasure[0]);
 		this.prods = terms.values().toArray(new BigDecimal[0]);
 	}
 	
-	public NiLinearCombinationTransactionMeasure(String measureName, Map<NiTransactionMeasure, BigDecimal> terms, String description) {
-		this(measureName, terms, TrivialMeasureBehaviour.getInstance(), description);
+	public NiLinearCombinationTransactionMeasure(String measureName, Map<NiTransactionMeasure, BigDecimal> terms, 
+			boolean ignoreFilters, String description) {
+		this(measureName, terms, TrivialMeasureBehaviour.getInstance(), ignoreFilters, description);
 	}
 	
 	@Override

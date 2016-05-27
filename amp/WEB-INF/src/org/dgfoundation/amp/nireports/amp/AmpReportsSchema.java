@@ -658,12 +658,12 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 			MeasureConstants.ACTUAL_COMMITMENTS, -1,
 			MeasureConstants.PLEDGES_ACTUAL_PLEDGE, +1);
 		
-		addTrivialFilterMeasure(MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE, 
+		addUnfilteredTrivialFilterMeasure(MeasureConstants.UNCOMMITTED_CUMULATIVE_BALANCE, 
 				TrivialMeasureBehaviour.getTotalsOnlyInstance(),
 				MeasureConstants.PROPOSED_PROJECT_AMOUNT_PER_PROJECT, +1,
 				MeasureConstants.CUMULATIVE_COMMITMENT, -1);
 		
-		addTrivialFilterMeasure(MeasureConstants.UNDISBURSED_CUMULATIVE_BALANCE,
+		addUnfilteredTrivialFilterMeasure(MeasureConstants.UNDISBURSED_CUMULATIVE_BALANCE,
 				TrivialMeasureBehaviour.getTotalsOnlyInstance(),
 				MeasureConstants.CUMULATIVE_COMMITMENT, +1,
 				MeasureConstants.CUMULATIVE_DISBURSEMENT, -1);
@@ -703,11 +703,15 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		addMeasure(new NiTransactionContextMeasure<K>(measureName, contextBuilder, crit, behaviour, measureDescriptions.get(measureName)));
 	}
 	
-	protected void addTrivialFilterMeasure(String measureName, Behaviour<?> behaviour,  Object...def) {
-		addLinearFilterMeasure(measureName, measureDescriptions.get(measureName), behaviour, def);
+	protected void addUnfilteredTrivialFilterMeasure(String measureName, Behaviour<?> behaviour, Object...def) {
+		addLinearFilterMeasure(measureName, measureDescriptions.get(measureName), behaviour, true, def);
 	}
 	
-	protected void addDerivedFilterMeasure(String measureName, Behaviour<?> behaviour,  Object...def) {
+	protected void addTrivialFilterMeasure(String measureName, Behaviour<?> behaviour, Object...def) {
+		addLinearFilterMeasure(measureName, measureDescriptions.get(measureName), behaviour, false, def);
+	}
+	
+	protected void addDerivedFilterMeasure(String measureName, Behaviour<?> behaviour, Object...def) {
 		addDerivedLinearFilterMeasure(measureName, measureDescriptions.get(measureName), behaviour, def);
 	}
 	

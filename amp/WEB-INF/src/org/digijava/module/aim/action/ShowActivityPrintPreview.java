@@ -994,6 +994,8 @@ public class ShowActivityPrintPreview
 			ppcCurrency = CurrencyUtil.getCurrencyByCode(eaForm.getCurrCode());
 		}
 		java.sql.Date ppcDate = ppc != null && ppc.getFunDate() != null ? new java.sql.Date(ppc.getFunDate().getTime()) : null;
+		if (ppcDate == null)
+			return null;
 		double frmExRt = Util.getExchange(ppcCurrency.getCurrencyCode(), ppcDate);
 		double toExRt = Util.getExchange(eaForm.getCurrCode(), ppcDate);
 		double funAmount = ppc != null && ppc.getFunAmount() != null ? ppc.getFunAmount() : 0; 

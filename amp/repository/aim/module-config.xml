@@ -3,58 +3,62 @@
 
 	<name>aim</name>
 	<security login-required="true" default="READ">
-		<action login-required="true" pattern="/quartzJobManager">ADMIN</action>
-		<action login-required="true" pattern="/flagUploader">ADMIN</action>
+				<action login-required="true" pattern="/activityManager">ADMIN</action>
+		<action login-required="true" pattern="/admin">ADMIN</action>
+		<action login-required="true" pattern="/aidEffectivenessIndicatorsManager">ADMIN</action>
+		<action login-required="true" pattern="/auditLoggerManager">ADMIN</action>
+		<action login-required="true" pattern="/BudgetManager">ADMIN</action>
+		<action login-required="true" pattern="/contentManager">ADMIN</action>
+		<action login-required="true" pattern="/currencyManager">ADMIN</action>
 		<action login-required="true" pattern="/dataFreezeManager">ADMIN</action>
 		<action login-required="true" pattern="/dynLocationManager">ADMIN</action>
-		<action login-required="true" pattern="/organisationManager">ADMIN</action>
-		<action login-required="true" pattern="/workspaceManager">ADMIN</action>
-		<action login-required="true" pattern="/getSectorSchemes">ADMIN</action>
-		<action login-required="true" pattern="/fiscalCalendarManager">ADMIN</action>
-		<action login-required="true" pattern="/organisationManager">ADMIN</action>
-		<action login-required="true" pattern="/themeManager">ADMIN</action>
-		<action login-required="true" pattern="/programConfigurationPage">ADMIN</action>
-		<action login-required="true" pattern="/viewIndicators">ADMIN</action>
-		<action login-required="true" pattern="/aidEffectivenessIndicatorsManager">ADMIN</action>
-		<action login-required="true" pattern="/BudgetManager">ADMIN</action>
-		<action login-required="true" pattern="/currencyManager">ADMIN</action>
-		<action login-required="true" pattern="/showCurrencyRates">ADMIN</action>
-		<action login-required="true" pattern="/auditLoggerManager">ADMIN</action>
-		<action login-required="true" pattern="/activityManager">ADMIN</action>
-		<action login-required="true" pattern="/scorecardManager">ADMIN</action>
-		<action login-required="true" pattern="/contentManager">ADMIN</action>
-		<action login-required="true" pattern="/manageGPI">ADMIN</action>
 		<action login-required="true" pattern="/export">ADMIN</action>
-		<action login-required="false" pattern="/showEmailForm" />
-		<action login-required="false" pattern="/showChangePassword" />
-		<action login-required="false" pattern="/showRegisterUser" />
-		<action login-required="false" pattern="/registerUser" />
+		<action login-required="true" pattern="/fiscalCalendarManager">ADMIN</action>
+		<action login-required="true" pattern="/flagUploader">ADMIN</action>
+		<action login-required="true" pattern="/getSectorSchemes">ADMIN</action>
+		<action login-required="true" pattern="/GlobalSettings">ADMIN</action>
+		<action login-required="true" pattern="/manageGPI">ADMIN</action>
+		<action login-required="true" pattern="/organisationManager">ADMIN</action>
+		<action login-required="true" pattern="/organisationManager">ADMIN</action>
+		<action login-required="true" pattern="/programConfigurationPage">ADMIN</action>
+		<action login-required="true" pattern="/quartzJobManager">ADMIN</action>
+		<action login-required="true" pattern="/scorecardManager">ADMIN</action>
+		<action login-required="true" pattern="/showCurrencyRates">ADMIN</action>
+		<action login-required="true" pattern="/themeManager">ADMIN</action>
+		<action login-required="true" pattern="/viewIndicators">ADMIN</action>
+		<action login-required="true" pattern="/visibilityManager">ADMIN</action>
+		<action login-required="true" pattern="/workspaceManager">ADMIN</action>		
 		<action login-required="false" pattern="/changePassword" />
-		<action login-required="false" pattern="/resetUserPassword" />
-		<action login-required="false" pattern="/logout" />
-		<action login-required="false" pattern="/logoutAction" />
+		<action login-required="false" pattern="/confirmRegisteration" />
+		<action login-required="false" pattern="/csvExport" />
 		<action login-required="false" pattern="/displayFlag" />
-		<action login-required="false" pattern="/postLogin" />
 		<action login-required="false" pattern="/displayThumbnail" />
  	 	<action login-required="false" pattern="/downloadFileFromHome" />
-		<action login-required="false" pattern="/viewNewAdvancedReport" />
-		<action login-required="false" pattern="/reportsFilterPicker" />
-		<action login-required="false" pattern="/pdfExport" />
-		<action login-required="false" pattern="/xlsExport" />
-		<action login-required="false" pattern="/csvExport" />
-		<action login-required="false" pattern="/reportsPublicView" />
-		<action login-required="false" pattern="/getDesktopReports" />
-		<action login-required="false" pattern="/viewActivityPreview" />
-		<action login-required="false" pattern="/viewActivityHistory" />
-		<action login-required="false" pattern="/previewActivity" />
-		<action login-required="false" pattern="/viewTeamReports" />
-		<action login-required="false" pattern="/feedback" />
-		<action login-required="false" pattern="/confirmRegisteration" />
-		<action login-required="true" pattern="/saveFMDescription" />
-		<action login-required="false" pattern="/getLoginStatus" />
-		<action login-required="false" pattern="/reportTableProxy" />
 		<action login-required="false" pattern="/exportActToPDF" />
 		<action login-required="false" pattern="/exportActToWord" />
+		<action login-required="false" pattern="/feedback" />
+		<action login-required="false" pattern="/getDesktopReports" />
+		<action login-required="false" pattern="/getLoginStatus" />
+		<action login-required="false" pattern="/logout" />
+		<action login-required="false" pattern="/logoutAction" />
+		<action login-required="false" pattern="/pdfExport" />
+		<action login-required="false" pattern="/postLogin" />
+		<action login-required="false" pattern="/previewActivity" />
+		<action login-required="false" pattern="/registerUser" />
+		<action login-required="false" pattern="/reportsFilterPicker" />
+		<action login-required="false" pattern="/reportsPublicView" />
+		<action login-required="false" pattern="/reportTableProxy" />
+		<action login-required="false" pattern="/reportWizard" />
+		<action login-required="false" pattern="/resetUserPassword" />
+		<action login-required="false" pattern="/showChangePassword" />
+		<action login-required="false" pattern="/showEmailForm" />
+		<action login-required="false" pattern="/showRegisterUser" />
+		<action login-required="false" pattern="/viewActivityHistory" />
+		<action login-required="false" pattern="/viewActivityPreview" />
+		<action login-required="false" pattern="/viewNewAdvancedReport" />
+		<action login-required="false" pattern="/viewTeamReports" />
+		<action login-required="false" pattern="/xlsExport" />
+		<action login-required="true" pattern="/saveFMDescription" />
 </security>
 
 	<!-- AIM classes Begin-->

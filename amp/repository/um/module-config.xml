@@ -3,6 +3,9 @@
 	<name>um</name>
 	<default-instance>user</default-instance>
 	<security>
+		<action login-required="true" pattern="/viewAllUsers">ADMIN</action>
+		<action login-required="true" pattern="/addUser">ADMIN</action>
+		<action login-required="true" pattern="/suspendLoginManager">ADMIN</action>
   		<action login-required="true" pattern="/userChangePassword" />
 		<action login-required="true" pattern="/showUserUpdateGateway" />
 		<action login-required="true" pattern="/showUserAccount" />

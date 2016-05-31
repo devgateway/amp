@@ -12,7 +12,13 @@ public @interface Interchangeable {
 	String fieldTitle();
 	
 	/**
+	 * <pre>
 	 * Path in the Feature Manager, corresponding to enabling / disabling said field in AF
+	 * Usage examples:
+	 * fmPath = "/Activity Form/Organization/Donor Organization"  
+	 * fmPath = FMVisibility.ANY_FM + "/Activity Form/Organizations/Donor Organization|/Activity Form/Donor Funding/Search Funding Organizations/Search Organizations"
+	 * fmPath = FMVisibility.PARENT_FM + "/sectorPercentage"
+	 * </pre>   
 	 */
 	String fmPath() default "";
 	

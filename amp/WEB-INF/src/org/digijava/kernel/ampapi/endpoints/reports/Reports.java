@@ -57,6 +57,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
@@ -600,7 +601,8 @@ public class Reports {
 	
 	/** Method used for exporting a NiReport. 
 	 * @param report
-	 * @param queryModel
+	 * @param reportId
+	 * @param queryObject
 	 * @param type
 	 * @return
 	 * @throws Exception
@@ -746,9 +748,9 @@ public class Reports {
 			Session session = PersistenceManager.getSession();			
 			List<Map<String, String>> reportData = (List<Map<String, String>>) formParams.get("reportData");
 			boolean emptyDefaultName = true;
-            Locale defaultLang = SiteUtils.getDefaultLanguages(RequestUtils.getSite(httpRequest));
+            String defaultLang = TLSUtils.getEffectiveLangCode();
 			for (Map<String, String> name : reportData) {
-				if (defaultLang != null && defaultLang.getCode().equals(name.get("lang")) && !"".equals(name.get("name"))) {
+				if (defaultLang != null && defaultLang.equals(name.get("lang")) && !"".equals(name.get("name"))) {
 					emptyDefaultName = false;
 				}
 			}

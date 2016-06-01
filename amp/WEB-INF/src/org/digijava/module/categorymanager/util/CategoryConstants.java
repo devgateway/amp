@@ -213,6 +213,9 @@ public class CategoryConstants {
 	 
 	 public static final HardCodedCategoryValue ADJUSTMENT_TYPE_TRIANGULAR_SSC = 
 			 new CategoryConstants.HardCodedCategoryValue(SSC_ADJUSTMENT_TYPE_KEY, "Triangular SSC", true);
+
+	 public static final HardCodedCategoryValue ADJUSTMENT_TYPE_OFFICIAL_DEV_AID =
+			new CategoryConstants.HardCodedCategoryValue(SSC_ADJUSTMENT_TYPE_KEY, "Official Development Aid", true);
 	 
 	 public static final HardCodedCategoryValue MODE_OF_PAYMENT_SALARIES_WAGES = 
 			 new CategoryConstants.HardCodedCategoryValue("mode_of_payment", "Salaries and Wages", false);

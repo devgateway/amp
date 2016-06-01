@@ -53,6 +53,9 @@ public class FundingCalculationsHelper {
 	DecimalWraper totPipelineReleaseOfFunds = new DecimalWraper();
 	DecimalWraper totPipelineEDD = new DecimalWraper();
 	DecimalWraper totPipelineArrears = new DecimalWraper();
+	DecimalWraper totBilateralSscArrears = new DecimalWraper();
+	DecimalWraper totTriangularSscArrears = new DecimalWraper();
+	DecimalWraper totOfficialDevAidArrears = new DecimalWraper();
 	DecimalWraper totOdaSscComm = new DecimalWraper();
 	DecimalWraper totBilateralSscComm = new DecimalWraper();
 	DecimalWraper totTriangularSscComm = new DecimalWraper();
@@ -98,13 +101,20 @@ public class FundingCalculationsHelper {
 		put(combineKeys(Constants.ARREARS, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL), () -> totActualArrears);
         put(combineKeys(Constants.ARREARS, CategoryConstants.ADJUSTMENT_TYPE_PLANNED), () -> totPlannedArrears);
         put(combineKeys(Constants.ARREARS, CategoryConstants.ADJUSTMENT_TYPE_PIPELINE), () -> totPipelineArrears);
+		put(combineKeys(Constants.ARREARS, CategoryConstants.ADJUSTMENT_TYPE_BILATERAL_SSC), () -> totBilateralSscArrears);
+		put(combineKeys(Constants.ARREARS, CategoryConstants.ADJUSTMENT_TYPE_TRIANGULAR_SSC), () -> totTriangularSscArrears);
+		put(combineKeys(Constants.ARREARS, CategoryConstants.ADJUSTMENT_TYPE_OFFICIAL_DEV_AID), () -> totOfficialDevAidArrears);
 		put(combineKeys(Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_ODA_SSC), () -> totOdaSscComm);
         put(combineKeys(Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_BILATERAL_SSC), () -> totBilateralSscComm);
         put(combineKeys(Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_TRIANGULAR_SSC), () -> totTriangularSscComm);
 	}};
 	
 	public DecimalWraper getTotalByKey(String adjKey, String transTypeKey) {
-		return wrapperNames.get(String.format("%s %s", transTypeKey, adjKey)).get();
+		Supplier<DecimalWraper> supplier = wrapperNames.get(String.format("%s %s", transTypeKey, adjKey));
+		if(supplier != null) {
+			return supplier.get();
+		}
+		return null;
 	}
 	
 	/**

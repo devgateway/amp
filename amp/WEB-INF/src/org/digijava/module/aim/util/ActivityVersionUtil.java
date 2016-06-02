@@ -189,8 +189,9 @@ public class ActivityVersionUtil {
 	}
 
 	public static int numberOfVersions() {
-		return 999999; //AMP-17263: no good reason to have this feature, so effectively disabling it
-		/*int aux = 5; // Default value after apply patch if no redeployed.
+		//AMP-17263: no good reason to have this feature, so effectively disabling it.
+		//per issue AMP-18412 i've reverted the changes of AMP-17263.
+		int aux = 999999; //if the queue size doesn't exists we show all.
 		String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.VERSION_QUEUE_SIZE);
 		if (gsValue != null) {
 			try {
@@ -199,7 +200,7 @@ public class ActivityVersionUtil {
 				logger.error(e);
 			}
 		}
-		return aux;*/
+		return aux;
 	}
 	
 	public static boolean isVersioningEnabled(){

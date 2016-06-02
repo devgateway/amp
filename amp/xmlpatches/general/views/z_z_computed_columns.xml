@@ -21,7 +21,6 @@
 			<lang delimiter=";" type="postgres">
 
 			DROP VIEW IF EXISTS v_calculated_project_life CASCADE;
-			DROP VIEW IF EXISTS v_overage CASCADE;
 			DROP VIEW IF EXISTS v_project_age CASCADE;
 			DROP VIEW IF EXISTS v_project_overage CASCADE;
 			DROP VIEW IF EXISTS v_project_period CASCADE;
@@ -101,14 +100,6 @@
 				FROM v_project_age vpa 
 				JOIN v_project_period vpp 
 					ON vpa.amp_activity_id = vpp.amp_activity_id;
-
-				
-				CREATE OR REPLACE VIEW v_overage AS
-				SELECT vaop.amp_activity_id,
-					vaop.project_age - vpp.project_period AS overage
-				FROM v_project_age vaop
-				JOIN v_project_period vpp ON vaop.amp_activity_id = vpp.amp_activity_id;
-					
         </lang>
 		</script>
 	</apply>

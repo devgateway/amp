@@ -309,7 +309,6 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		put("Ministry Of Finance Contact Organization", ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_ORGANIZATION);
 		put("Multi Donor", ColumnConstants.MULTI_DONOR);
 		put("Organizations and Project ID", ColumnConstants.ORGANIZATIONS_AND_PROJECT_ID);
-		put("Overage", ColumnConstants.OVERAGE);
 		put("Overage Project", ColumnConstants.OVERAGE_PROJECT);
 		put("Payment Capital - Recurrent", ColumnConstants.PAYMENT_CAPITAL___RECURRENT);
 		put("Physical progress description", ColumnConstants.PHYSICAL_PROGRESS_DESCRIPTION);

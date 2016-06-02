@@ -159,7 +159,6 @@ public class ColumnConstants {
 	public static final String ORGANIZATIONS_AND_PROJECT_ID = "Organizations and Project ID";
 	public static final String ORIGINAL_COMPLETION_DATE = "Original Completion Date";
 	public static final String MODALITIES = "Modalities";
-	public static final String OVERAGE = "Overage";
 	public static final String OVERAGE_PROJECT = "Overage Project";
 	public static final String PAYMENT_CAPITAL___RECURRENT = "Payment Capital - Recurrent";
 	public static final String PHYSICAL_PROGRESS = "Physical Progress";

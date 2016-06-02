@@ -133,7 +133,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static Map<String, String> columnDescriptions = new HashMap<String, String>() {{
 		put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES,  "Level-1 subprogram of the selected national objective");
 		put(ColumnConstants.PROJECT_PERIOD,  "Project Period (months),  Proposed Completion Date - Actual Start date");
-		put(ColumnConstants.OVERAGE,  "Overage (months),  Age of project - Project period");
 		put(ColumnConstants.OVERAGE_PROJECT,  "Current date - Date of Planned Completion");
 		put(ColumnConstants.AGE_OF_PROJECT_MONTHS,  "Current date - Date of Agreement Effective");
 		put(ColumnConstants.PREDICTABILITY_OF_FUNDING ,  "((Planned Disbursements - Actual Disbursements) / Planned Disbursements) X 100");
@@ -582,7 +581,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	protected void addPseudoComputedColumns() {
 		no_entity(ColumnConstants.AGE_OF_PROJECT_MONTHS, "v_project_age");
 		no_entity(ColumnConstants.CALCULATED_PROJECT_LIFE, "v_calculated_project_life");
-		no_entity(ColumnConstants.OVERAGE, "v_overage");
 		no_entity(ColumnConstants.OVERAGE_PROJECT, "v_project_overage");
 		no_entity(ColumnConstants.PROJECT_AGE_RATIO, "v_project_age_ratio");
 		no_entity(ColumnConstants.PROJECT_PERIOD, "v_project_period");

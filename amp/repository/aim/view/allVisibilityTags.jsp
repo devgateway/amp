@@ -749,7 +749,6 @@ deleted 6 fields, do not reinsert
 
 
 <field:display name="National Planning Objectives" feature="NPD Programs"></field:display>
-<field:display name="National Planning Objectives Detail" feature="NPD Programs"></field:display> 
 <field:display name="National Planning Objectives Level 1" feature="NPD Programs"></field:display> 
 <field:display name="National Planning Objectives Level 2" feature="NPD Programs"></field:display> 
 <field:display name="National Planning Objectives Level 3" feature="NPD Programs"></field:display> 
@@ -812,9 +811,6 @@ deleted 6 fields, do not reinsert
 <field:display name="Physical progress title" feature="Physical Progress"></field:display> 
 <field:display name="Planned Disbursement Preview" feature="Disbursement"></field:display> 
 <field:display name="Primary Program" feature="NPD Programs"></field:display>
-<field:display name="Primary Program Detail" feature="NPD Programs"></field:display>
-<field:display name="Secondary Program Detail" feature="NPD Programs"></field:display>
-<field:display name="Tertiary Program Detail" feature="NPD Programs"></field:display>
 <field:display name="Primary Sector Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Primary Sector Sub-Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Primary Sector" feature="Sectors"></field:display> 
@@ -1005,7 +1001,6 @@ deleted 6 fields, do not reinsert
 <field:display name="Variance Of Disbursements" feature="Computed Fields"></field:display>
 <field:display name="Cumulative Execution Rate" feature="Computed Fields"></field:display>
 <field:display name="Project Period" feature="Computed Fields"></field:display>
-<field:display name="Overage" feature="Computed Fields"></field:display>
 <field:display name="Percentage Of Total Disbursements" feature="Computed Fields"></field:display> 
 <field:display name="Average Size of Disbursements" feature="Computed Fields"></field:display> 
 <field:display name="Average Disbursement Rate" feature="Computed Fields"></field:display>

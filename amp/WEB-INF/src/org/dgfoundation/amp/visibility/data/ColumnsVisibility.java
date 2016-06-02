@@ -200,10 +200,6 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		put(ColumnConstants.AGREEMENT_EFFECTIVE_DATE, ColumnConstants.AGREEMENT_CODE);
 		put(ColumnConstants.AGREEMENT_SIGNATURE_DATE, ColumnConstants.AGREEMENT_CODE);
 		put(ColumnConstants.AGREEMENT_TITLE_CODE, ColumnConstants.AGREEMENT_CODE);
-		put(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_DETAIL, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES);
-		put(ColumnConstants.PRIMARY_PROGRAM_DETAIL, ColumnConstants.PRIMARY_PROGRAM);
-		put(ColumnConstants.SECONDARY_PROGRAM_DETAIL, ColumnConstants.SECONDARY_PROGRAM);
-		put(ColumnConstants.TERTIARY_PROGRAM_DETAIL, ColumnConstants.TERTIARY_PROGRAM);
 		
 		String[][] colPrefixList = new String[][]{
 			{"National Planning Objectives Level", ColumnConstants.NATIONAL_PLANNING_OBJECTIVES},

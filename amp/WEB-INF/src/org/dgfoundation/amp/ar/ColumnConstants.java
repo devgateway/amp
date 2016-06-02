@@ -143,7 +143,6 @@ public class ColumnConstants {
 	public static final String MODE_OF_PAYMENT = "Mode of Payment";
 	public static final String MULTI_DONOR = "Multi Donor";
 	public static final String NATIONAL_PLANNING_OBJECTIVES = "National Planning Objectives";
-	public static final String NATIONAL_PLANNING_OBJECTIVES_DETAIL = "National Planning Objectives Detail";
 	public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_1 = "National Planning Objectives Level 1";
 	public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_2 = "National Planning Objectives Level 2";
 	public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_3 = "National Planning Objectives Level 3";
@@ -232,7 +231,6 @@ public class ColumnConstants {
 	public static final String RELATED_PROJECTS = "Related Projects";
 	public static final String PREDICTABILITY_OF_FUNDING = "Predictability of Funding";
 	public static final String PRIMARY_PROGRAM = "Primary Program";
-	public static final String PRIMARY_PROGRAM_DETAIL = "Primary Program Detail";
 	public static final String PRIMARY_PROGRAM_LEVEL_1 = "Primary Program Level 1";
 	public static final String PRIMARY_PROGRAM_LEVEL_2 = "Primary Program Level 2";
 	public static final String PRIMARY_PROGRAM_LEVEL_3 = "Primary Program Level 3";
@@ -282,7 +280,6 @@ public class ColumnConstants {
 	public static final String RESULTS = "Results";
 	public static final String REVISED_PROJECT_AMOUNT = "Revised Project Amount";
 	public static final String SECONDARY_PROGRAM = "Secondary Program";
-	public static final String SECONDARY_PROGRAM_DETAIL = "Secondary Program Detail";
 	public static final String SECONDARY_PROGRAM_LEVEL_1 = "Secondary Program Level 1";
 	public static final String SECONDARY_PROGRAM_LEVEL_2 = "Secondary Program Level 2";
 	public static final String SECONDARY_PROGRAM_LEVEL_3 = "Secondary Program Level 3";
@@ -314,7 +311,6 @@ public class ColumnConstants {
 	public static final String SUB_VOTE = "Sub-Vote";
 	public static final String TEAM = "Team";
 	public static final String TERTIARY_PROGRAM = "Tertiary Program";
-	public static final String TERTIARY_PROGRAM_DETAIL = "Tertiary Program Detail";
 	public static final String TERTIARY_PROGRAM_LEVEL_1 = "Tertiary Program Level 1";
 	public static final String TERTIARY_PROGRAM_LEVEL_2 = "Tertiary Program Level 2";
 	public static final String TERTIARY_PROGRAM_LEVEL_3 = "Tertiary Program Level 3";

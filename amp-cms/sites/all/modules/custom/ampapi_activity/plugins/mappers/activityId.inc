@@ -7,15 +7,12 @@
 $plugin = array(
   'title' => t('Activity Id'),
   'description' => t(''),
-
   'property name' => 'id',
   'property info' => array(
     'type' => 'int',
   ),
-
   'report field group' => 'columns',
   'report field key' => 'Activity Id',
-
   'handler' => 'activityIdMapper',
 );
 
@@ -33,6 +30,14 @@ class activityIdMapper extends activityMapperBase {
   // }
 
   public static function getValue($plugin, $column) {
-    return intval($column->value);
+    if (isset($column->displayedValue)) {
+      return $column->displayedValue;
+    }
+    elseif (isset($column->value)) {
+      return intval($column->value);
+    }
+    else {
+      return NULL;
+    }
   }
 }

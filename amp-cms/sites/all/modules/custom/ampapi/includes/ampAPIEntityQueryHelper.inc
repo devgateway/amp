@@ -411,7 +411,14 @@ class ampAPIEntityQueryHelper {
 
         $request_body['add_measures'][] = $plugin['report field key'];
         if ($hierarchical_name && $class_name = ctools_plugin_get_class($plugin, 'handler')) {
-          $values[$plugin['property name']] = call_user_func_array(array($class_name, 'getValue'), array($plugin, $row->contents->$hierarchical_name, $formatter));
+          if (array_key_exists($hierarchical_name, $row->contents)) {
+            $values[$plugin['property name']] = call_user_func_array(array($class_name, 'getValue'), array($plugin, $row->contents->$hierarchical_name, $formatter));
+          }
+          else {
+            if ($plugin['report field group'] == 'measures') {
+              $values[$plugin['property name']] = 0;
+            }
+          }
         }
       }
 

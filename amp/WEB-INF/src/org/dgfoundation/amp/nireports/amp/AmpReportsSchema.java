@@ -286,6 +286,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_dimension(ColumnConstants.DONOR_CONTACT_ORGANIZATION, "v_donor_cont_org");
 		no_entity(ColumnConstants.ENVIRONMENT, "v_environment", DG_EDITOR_POSTPROCESSOR);
 		no_entity(ColumnConstants.EQUAL_OPPORTUNITY, "v_equalopportunity", DG_EDITOR_POSTPROCESSOR);
+		no_entity(ColumnConstants.ISSUES___MEASURES___ACTORS, "v_issues_measure_actors", DG_EDITOR_POSTPROCESSOR);
 		degenerate_dimension(ColumnConstants.EXPENDITURE_CLASS, "v_expenditure_class", catsDimension);
 		degenerate_dimension(ColumnConstants.FINANCIAL_INSTRUMENT, "v_financial_instrument", catsDimension);
 		degenerate_dimension(ColumnConstants.FINANCING_INSTRUMENT, "v_financing_instrument", catsDimension);
@@ -354,7 +355,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_entity(ColumnConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT_ORGANIZATION, "v_impl_ex_cont_org");
 		no_entity(ColumnConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT_PHONE, "v_impl_ex_cont_phone");
 		no_entity(ColumnConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT_TITLE, "v_impl_ex_cont_title");
-		no_entity(ColumnConstants.ISSUES___MEASURES___ACTORS, "v_issues_measure_actors");
 		degenerate_dimension(ColumnConstants.JOINT_CRITERIA, "v_yes_no_joint_criteria", boolDimension);
 		degenerate_dimension(ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES, "v_yes_no_government_approval_proc", boolDimension);
 		no_entity(ColumnConstants.MINISTRY_CODE, "v_minsitry_code");

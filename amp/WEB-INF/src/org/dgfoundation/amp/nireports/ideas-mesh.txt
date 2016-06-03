@@ -1,5 +1,4 @@
-== C. running ==
-	
+
 in case fetching a column/measure crashes -> remove said column/measure from report and add a note about it to warnings
 	-> treat the case when fetching a column which is also a hierarchy fails
 	
@@ -7,14 +6,3 @@ lucene indexer
 refactor workspacefilter
 
 removing monet / mondrian engine:
-1. 
-				new DatabaseTableColumn("transaction_start_date", "varchar(20) NOT NULL", true),
-				new DatabaseTableColumn("transaction_end_date", "varchar(20) NOT NULL", true),
-				new DatabaseTableColumn("transaction_range", "varchar(50) NOT NULL", true),
-				new DatabaseTableColumn("maturity", "varchar(10) NOT NULL", true),
-				new DatabaseTableColumn("interest_rate", "varchar(10) NOT NULL", true),
-				new DatabaseTableColumn("grace_period", "varchar(10) NOT NULL", true),
-				new DatabaseTableColumn("ratification_date", "varchar(10) NOT NULL", true),
-
-
-2. on FULL ETL, create indices only after the fact table has been constructed

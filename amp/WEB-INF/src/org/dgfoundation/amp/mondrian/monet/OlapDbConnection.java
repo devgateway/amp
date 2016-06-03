@@ -16,7 +16,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 
 /**
- * this class wraps a connection to MonetDB
+ * this class wraps a connection to a database which would host the Star Schema and the connected artefacts of the Mondrian Schema
  * @author Dolghier Constantin
  *
  */

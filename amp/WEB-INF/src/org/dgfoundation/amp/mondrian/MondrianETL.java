@@ -397,7 +397,6 @@ private EtlResult execute() throws Exception {
 			StopWatch.next(MONDRIAN_ETL, true, "generateExchangeRates");
 					
 			if (etlConfig.fullEtl) {
-				createFactTableViewForNoDatesFilters();
 				checkMondrianSanity();
 				StopWatch.next(MONDRIAN_ETL, true, "checkMondrianSanity");
 			}
@@ -754,7 +753,7 @@ private EtlResult execute() throws Exception {
 	 * drops preexisting fact table and creates an empty one
 	 */
 	protected void recreateFactTable() throws SQLException {
-		olapConn.dropView(MondrianTablesRepository.FACT_TABLE_VIEW_NO_DATE_FILTER);
+		olapConn.dropView("v_mondrian_fact_table_no_date_filter"); // to be deleted in AMP 2.13+
 		olapConn.dropTable(FACT_TABLE.tableName);
 		FACT_TABLE.create(olapConn.conn, etlConfig.fullEtl && !IS_COLUMNAR);
 	}
@@ -1136,31 +1135,6 @@ private EtlResult execute() throws Exception {
 			res.add(q.replace("@@activityIdCondition@@", activityCondition).replace("@@src_role@@", buildRoleCase("src_role")).replace("@@dest_role@@", buildRoleCase("dest_role")));
 		}
 		return res;
-	}
-	
-	public void createFactTableViewForNoDatesFilters() throws SQLException {
-		List<String> columnsList = new ArrayList<String>(olapConn.getTableColumns(MondrianTablesRepository.FACT_TABLE.tableName));
-		
-		if (columnsList.isEmpty())
-			throw new RuntimeException("Unable to create '" + MondrianTablesRepository.FACT_TABLE_VIEW_NO_DATE_FILTER + 
-					"': missing fact table itself");
-		
-		// drop view first, if exists
-		olapConn.dropView(MondrianTablesRepository.FACT_TABLE_VIEW_NO_DATE_FILTER);
-		
-		String mirrorTransactionType = String.format("%1$s + %2$s as \"%1$s\"", MondrianTablesRepository.TRANSACTION_TYPE, 
-				MoConstants.TRANSACTION_TYPE_GAP);
-		Collections.replaceAll(columnsList, MondrianTablesRepository.TRANSACTION_TYPE, mirrorTransactionType);
-		String columns = Util.collectionAsString(columnsList);
-		
-		String viewQuery = String.format("CREATE VIEW %1$s AS "
-				+ "SELECT mf.* FROM %2$s mf "
-				+ "UNION ALL "
-				+ "SELECT %3$s FROM %2$s",
-				MondrianTablesRepository.FACT_TABLE_VIEW_NO_DATE_FILTER, MondrianTablesRepository.FACT_TABLE.tableName, 
-				columns);
-		
-		olapConn.executeQuery(viewQuery);
 	}
 	
 	/**

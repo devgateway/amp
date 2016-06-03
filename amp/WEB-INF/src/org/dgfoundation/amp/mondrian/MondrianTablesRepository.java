@@ -340,8 +340,6 @@ public class MondrianTablesRepository {
 				new DatabaseTableColumn("related_entity_id", "integer", INDEX_FACT_TABLE) // mondrian_activity_texts id
 		));
 	
-	public final static String FACT_TABLE_VIEW_NO_DATE_FILTER = "v_" + FACT_TABLE.tableName + "_no_date_filter";
-	
 	public final static List<CurrencyAmountGroup> CURRENCY_GROUPS = Arrays.asList(
 			MONDRIAN_ACTIVITY_CURRENCY_NUMBERS.getCurrencyBlock("ppc_"),
 			MONDRIAN_ACTIVITY_CURRENCY_NUMBERS.getCurrencyBlock("rpc_"),

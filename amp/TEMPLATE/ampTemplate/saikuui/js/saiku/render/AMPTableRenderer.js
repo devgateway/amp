@@ -188,7 +188,7 @@ function generateHeaderHtml(headers) {
 					} else {
 						colName = this.headerMatrix[i][j].columnName
 						// AMP-22492: Reports with funding flows have empty columName in JSON.
-						if (colName.trim() === '') {
+						if (colName.replace(/^\s+|\s+$/g, "") === '') {
 							colName = ' - ';
 						}
 					}

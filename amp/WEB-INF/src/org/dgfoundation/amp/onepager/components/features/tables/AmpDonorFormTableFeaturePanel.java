@@ -196,6 +196,14 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 	            exchangeRate.setEnabled(!state);
 	            target.add(exchangeRate.getParent().getParent().getParent());
 	        }
+			
+			@Override
+			protected void onConfigure() {
+				super.onConfigure();
+				if (this.isVisible()) {
+					exchangeRate.setVisible(true);
+				}
+			}
 	    };
 	    item.add(enableFixedRate);
 	    return item;

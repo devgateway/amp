@@ -344,13 +344,13 @@ function submitForm(action){
 																					bgcolor="${color}">
 																					<div class="t_sm" title="${report.name}">
 																					
-																						<c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}"/>
+																						<%-- <c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}"/> --%>
 																						
 																						<%
 																							boolean onlySaikuButton = report.isImplementedInMondrian() && FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS);
 																						%>
 																						
-	 																					<% if (onlySaikuButton) { %>
+	 																					<% if (true/*onlySaikuButton*/) { %>
 																							<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui_nireports/index_reports.html#report/open/${report.ampReportId}" />
 																						<% } %>
 																					    

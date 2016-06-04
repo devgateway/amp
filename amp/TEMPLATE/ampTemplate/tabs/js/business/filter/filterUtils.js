@@ -12,12 +12,13 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 		var sorting = {};
 		if (content !== null && content.models !== null) {
 			sorting.sord = content.models[0].get('ascending') ? "asc" : "desc";
-			var auxTuple = content.models[0].get('sortByTuple');
-			for (var k in auxTuple.attributes) {
-				if (k !== "id") {
-					sorting.sidx = k.substring(k.indexOf("[") + 1, k.indexOf("]"));
+			var auxTuple = content.models[0].get('hierPath');
+			if (_.isUndefined(auxTuple) === false) {
+				for (var k in auxTuple.models) {
+					var value = auxTuple.models[k].get('value');
+					sorting.sidx = value;
 				}
-			}			
+			}
 		}
 		// Added for AMP-22511: We need to cleanup the sorters if they are defined over a column no longer in the report.
 		if (sorting.sidx !== undefined) {

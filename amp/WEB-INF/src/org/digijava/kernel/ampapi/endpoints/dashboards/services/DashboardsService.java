@@ -15,6 +15,7 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.AmountsUnits;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.IdentifiedReportCell;
@@ -31,7 +32,6 @@ import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
@@ -111,7 +111,7 @@ public class DashboardsService {
 		List<JsonBean> values = new ArrayList<JsonBean>();
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetTops", ArConstants.DONOR_TYPE);
 
-		MondrianReportFilters filterRules = null;
+		AmpReportFilters filterRules = null;
 		LinkedHashMap<String, Object> columnFilters = null;
 		LinkedHashMap<String, Object> otherFilter = null;
 		if (config != null) {
@@ -339,7 +339,7 @@ public class DashboardsService {
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
 		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
 		
-		MondrianReportFilters filterRules = null;
+		AmpReportFilters filterRules = null;
  		if(filter!=null){
  			LinkedHashMap<String, Object> columnFilters=(LinkedHashMap<String, Object>)filter.get("columnFilters");
  			LinkedHashMap<String, Object> otherFilter=(LinkedHashMap<String, Object>)filter.get("otherFilters");
@@ -423,7 +423,7 @@ public class DashboardsService {
 		
 		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
 				
-		MondrianReportFilters filterRules = null;
+		AmpReportFilters filterRules = null;
  		if (filter != null) {
  			LinkedHashMap<String, Object> columnFilters = (LinkedHashMap<String, Object>) filter.get("columnFilters");
  			LinkedHashMap<String, Object> otherFilter = (LinkedHashMap<String, Object>) filter.get("otherFilters");
@@ -495,7 +495,7 @@ public class DashboardsService {
 		SettingsUtils.applyExtendedSettings(spec, config);
 		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
 		
-		MondrianReportFilters filterRules = null;
+		AmpReportFilters filterRules = null;
 		LinkedHashMap<String, Object> columnFilters = null;
 		LinkedHashMap<String, Object> otherFilter = null;
 		if (config != null) {

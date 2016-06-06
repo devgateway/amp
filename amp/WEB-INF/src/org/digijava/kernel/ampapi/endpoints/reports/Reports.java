@@ -30,20 +30,18 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.newreports.pagination.PartialReportArea;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
-import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
+import org.dgfoundation.amp.reports.converters.AmpReportFiltersConverter;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
-import org.dgfoundation.amp.reports.mondrian.converters.MondrianReportFiltersConverter;
 import org.dgfoundation.amp.reports.saiku.export.AMPReportExportConstants;
 import org.dgfoundation.amp.reports.saiku.export.ReportGenerationInfo;
 import org.dgfoundation.amp.reports.saiku.export.SaikuReportExportType;
@@ -705,14 +703,14 @@ public class Reports {
 			if (formParams.get("filters") != null) {
 				JsonBean filters = new JsonBean();
 				LinkedHashMap<String, Object> requestFilters = (LinkedHashMap<String, Object>) formParams.get("filters");
-				MondrianReportFilters mondrianReportFilters = null;
+				AmpReportFilters reportFilters = null;
 				if (requestFilters != null) {
 					filters.any().putAll(requestFilters);
-					mondrianReportFilters = FilterUtils.getFilters(filters,
-							MondrianReportUtils.getCurrentUserDefaultFilters(null));
+					reportFilters = FilterUtils.getFilters(filters,
+							new AmpReportFilters());
 
 					// Transform back to legacy AmpARFilters.
-					MondrianReportFiltersConverter converter = new MondrianReportFiltersConverter(mondrianReportFilters);
+					AmpReportFiltersConverter converter = new AmpReportFiltersConverter(reportFilters);
 					newFilters = converter.buildFilters();
 					// converter.mergeWithOldFilters(oldFilters);
 					

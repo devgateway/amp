@@ -16,10 +16,10 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -70,14 +70,14 @@ public abstract class ActivityExporter {
 		LinkedHashMap<String, Object> otherFilters = (LinkedHashMap<String, Object>)filters.get("otherFilters");
 		@SuppressWarnings("unchecked")
 		LinkedHashMap<String, Object> colFilters = (LinkedHashMap<String, Object>)filters.get("columnFilters");
-		MondrianReportFilters mrf = getFilterRules(otherFilters, colFilters);
+		AmpReportFilters mrf = getFilterRules(otherFilters, colFilters);
 		if (mrf != null)
 			spec.setFilters(mrf);
 		return spec;
 	}
 	
 	
-	protected MondrianReportFilters getFilterRules(LinkedHashMap<String, Object> otherFilter, 
+	protected AmpReportFilters getFilterRules(LinkedHashMap<String, Object> otherFilter, 
 			LinkedHashMap <String, Object> columnFilters) {
 		List<String> activityIds = otherFilter != null ? FilterUtils.applyKeywordSearch(otherFilter) : null;
  		return FilterUtils.getFilterRules(columnFilters, otherFilter, activityIds);

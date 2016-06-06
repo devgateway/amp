@@ -27,8 +27,22 @@ public class ReportFiltersImpl implements ReportFilters {
 		return filterRules;
 	}
 	
+	/**
+	 * Adds Report Entity Filter
+	 * @param elem
+	 * @param filterRule
+	 */
 	public void addFilterRule(ReportElement elem, FilterRule filterRule) {
 		filterRules.computeIfAbsent(elem, z -> new ArrayList<>()).add(filterRule);
 	}
+	
+	/**
+     * Adds a column/measure filter
+     * @param entity - column/measure to filter by
+     * @param filterRule - the filter rule to apply
+     */
+    public void addFilterRule(NamedTypedEntity entity,  FilterRule filterRule) {
+        addFilterRule(new ReportElement(entity), filterRule);
+    }
 
 }

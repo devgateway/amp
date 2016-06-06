@@ -16,10 +16,10 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianSQLFilters;
 import org.dgfoundation.amp.utils.ConstantsUtil;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
@@ -37,7 +37,7 @@ public class FilterUtils {
 	
 	private static List<String> COLUMN_DATES_FILTER = Collections.unmodifiableList(new ArrayList<>(MondrianSQLFilters.DATE_COLUMNS));
 	
-	public static MondrianReportFilters getApiOtherFilters(Map<String, Object> filter, MondrianReportFilters filterRules) {
+	public static AmpReportFilters getApiOtherFilters(Map<String, Object> filter, AmpReportFilters filterRules) {
 		for (String columnName : COLUMN_DATES_FILTER) {
 			if (filter.get(columnName) != null) {
 				filterRules = addDateFilterRule(columnName, filter, filterRules);
@@ -50,11 +50,11 @@ public class FilterUtils {
 		return filterRules;
 	}
 
-	private static MondrianReportFilters addDateFilterRule(String dateColumn, Map<String, Object> filter,
-			MondrianReportFilters filterRules) {
+	private static AmpReportFilters addDateFilterRule(String dateColumn, Map<String, Object> filter,
+	        AmpReportFilters filterRules) {
 		try {
 			if (filterRules == null) {
-				filterRules = new MondrianReportFilters();
+				filterRules = new AmpReportFilters();
 			}
 			Map<String, Object> date = (Map<String, Object>) filter.get(dateColumn);
 			String start = denull(String.valueOf(date.get("start")));
@@ -93,13 +93,13 @@ public class FilterUtils {
 	 * @param filter
 	 * @return
 	 */
-	public static MondrianReportFilters getApiColumnFilter(LinkedHashMap<String, Object> filter, 
-			MondrianReportFilters filterRules) {
+	public static AmpReportFilters getApiColumnFilter(LinkedHashMap<String, Object> filter, 
+	        AmpReportFilters filterRules) {
 		if (filter == null) {
 			return filterRules;
 		}
 		if (filterRules == null) {
-			filterRules = new MondrianReportFilters();
+			filterRules = new AmpReportFilters();
 		}
 		Set<String> validColumns = ConstantsUtil.getConstantsSet(ColumnConstants.class);
 		for (Entry<String, Object> entry : filter.entrySet()) {
@@ -150,13 +150,13 @@ public class FilterUtils {
 		return activitIds;
 	}
 	
-	public static MondrianReportFilters getFilterRules(LinkedHashMap<String, Object> columnFilter, 
+	public static AmpReportFilters getFilterRules(LinkedHashMap<String, Object> columnFilter, 
 			LinkedHashMap<String, Object> otherFilter, List<String> activityIds) {
 		return getFilterRules(columnFilter, otherFilter, activityIds, null);
 	}
 			
-	public static MondrianReportFilters getFilterRules(LinkedHashMap<String, Object> columnFilter, 
-			LinkedHashMap<String, Object> otherFilter, List<String> activityIds, MondrianReportFilters filterRules) {
+	public static AmpReportFilters getFilterRules(LinkedHashMap<String, Object> columnFilter, 
+			LinkedHashMap<String, Object> otherFilter, List<String> activityIds, AmpReportFilters filterRules) {
 			if(columnFilter!=null){
 				filterRules = FilterUtils.getApiColumnFilter(columnFilter, filterRules);	
 			}
@@ -166,7 +166,7 @@ public class FilterUtils {
 		if(activityIds!=null && activityIds.size()>0){
 			//if we have activityIds to add to the filter comming from the search by keyworkd
 			if(filterRules==null){
-				filterRules = new MondrianReportFilters();
+				filterRules = new AmpReportFilters();
 			}
 
 			filterRules.addFilterRule(new ReportColumn(ColumnConstants.ACTIVITY_ID), new FilterRule(activityIds, true)); 
@@ -181,7 +181,7 @@ public class FilterUtils {
 	 * @return MondrianReportFilters
 	 * @see #getFilters(JsonBean, List)
 	 */
-	public static MondrianReportFilters getFilters(JsonBean filtersConfig, MondrianReportFilters filters) {
+	public static AmpReportFilters getFilters(JsonBean filtersConfig, AmpReportFilters filters) {
 		return getFilters(filtersConfig, null, filters);
 	}
 	
@@ -191,8 +191,8 @@ public class FilterUtils {
 	 * @param activitIds    the list of activities to filter by
 	 * @return MondrianReportFilters
 	 */
-	public static MondrianReportFilters getFilters(JsonBean filtersConfig, List<String> activitIds,
-			MondrianReportFilters filters) {
+	public static AmpReportFilters getFilters(JsonBean filtersConfig, List<String> activitIds,
+			AmpReportFilters filters) {
 		
 		//we check if we have filter by keyword
 		LinkedHashMap<String, Object> otherFilter = null;
@@ -210,7 +210,7 @@ public class FilterUtils {
 		
 		FiltersProcessor fProcessor = new FiltersProcessor(filtersConfig, filters);
 		
-		return (MondrianReportFilters) fProcessor.getFilters();
+		return (AmpReportFilters) fProcessor.getFilters();
 	}
 	
 	/**
@@ -246,7 +246,7 @@ public class FilterUtils {
 	 * @param spec
 	 */
 	public static void applyFilterRules(JsonBean config, ReportSpecificationImpl spec, Integer months) {
-		MondrianReportFilters filterRules = FilterUtils.getFilters(config, (MondrianReportFilters) spec.getFilters());
+	    AmpReportFilters filterRules = FilterUtils.getFilters(config, (AmpReportFilters) spec.getFilters());
 		if (months != null) {
 			Calendar cal = Calendar.getInstance();
 			Calendar currentCal = Calendar.getInstance();
@@ -254,7 +254,7 @@ public class FilterUtils {
 
 			try {
 				if (filterRules == null) {
-					filterRules = new MondrianReportFilters();
+					filterRules = new AmpReportFilters();
 				}
 				filterRules.addDateRangeFilterRule(cal.getTime(), currentCal.getTime());
 			} catch (AmpApiException e) {

@@ -44,7 +44,6 @@ import org.dgfoundation.amp.reports.ActivityType;
 import org.dgfoundation.amp.reports.CachedReportData;
 import org.dgfoundation.amp.reports.ReportCacher;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.dgfoundation.amp.reports.mondrian.converters.MtefConverter;
@@ -423,18 +422,19 @@ public class ReportsUtil {
 		LinkedHashMap<String, Object> requestFilters = (LinkedHashMap<String, Object>) formParams.get(EPConstants.FILTERS);
 		if (requestFilters != null) {
 			filters.any().putAll(requestFilters);
-			MondrianReportFilters newFilters = new MondrianReportFilters((AmpFiscalCalendar) spec.getSettings().getCalendar());
+			AmpReportFilters newFilters = new AmpReportFilters((AmpFiscalCalendar) spec.getSettings().getCalendar());
 			if (spec.getFilters() != null) {
 				// TODO: we need calendar + date to be linked in UI as well OR make same form for filters and settings
 				// for now, if this is a calendar setting, let's check if any filters still exist and needs to be converted 
 				if (spec.getSettings().getCalendar() != oldCalendar
 						&& newFilters.getFilterRules().get(new ReportElement(ElementType.DATE)) != null) {
-					newFilters.setOldCalendar(oldCalendar);
+				    // for now we always use Gregorian, we'll update workflow when we'll add "calendar per date" support 
+					//newFilters.setOldCalendar(oldCalendar);
 				}
 			}
 			
-			MondrianReportFilters formFilters = FilterUtils.getFilters(filters, newFilters);
-			MondrianReportFilters stickyFilters = copyStickyMtefEntries((AmpReportFilters) spec.getFilters(), formFilters);
+			AmpReportFilters formFilters = FilterUtils.getFilters(filters, newFilters);
+			AmpReportFilters stickyFilters = copyStickyMtefEntries((AmpReportFilters) spec.getFilters(), formFilters);
 			spec.setFilters(stickyFilters);
 		}
 	}
@@ -446,11 +446,11 @@ public class ReportsUtil {
 	 * @param newFilters
 	 * @return
 	 */
-	protected static MondrianReportFilters copyStickyMtefEntries(AmpReportFilters oldFilters, MondrianReportFilters newFilters) {
+	protected static AmpReportFilters copyStickyMtefEntries(AmpReportFilters oldFilters, AmpReportFilters newFilters) {
 		if (oldFilters == null || oldFilters.getFilterRules() == null)
 			return newFilters; // no chance of stickies
 		
-		MondrianReportFilters result = newFilters == null ? new MondrianReportFilters() : newFilters;
+		AmpReportFilters result = newFilters == null ? new AmpReportFilters() : newFilters;
 		
 		boolean somethingAdded = oldFilters.getComputedYear() != null;
 		result.setComputedYear(oldFilters.getComputedYear());
@@ -518,10 +518,10 @@ public class ReportsUtil {
 		for (AmpTeam sscWs : sscWorkspaces) {
 			sscWorkspacesIds.add(sscWs.getIdentifier().toString());
 		}
-		MondrianReportFilters filters = (MondrianReportFilters) spec.getFilters();
+		AmpReportFilters filters = (AmpReportFilters) spec.getFilters();
 		if (filters == null) {
 			AmpFiscalCalendar calendar = spec.getSettings() == null ? null : (AmpFiscalCalendar) spec.getSettings().getCalendar();
-			filters = new MondrianReportFilters(calendar);
+			filters = new AmpReportFilters(calendar);
 			spec.setFilters(filters);
 		}
 		filters.addFilterRule(new ReportColumn(ColumnConstants.TEAM), new FilterRule(sscWorkspacesIds, add));

@@ -31,6 +31,7 @@ import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.AmountsUnits;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.IdentifiedReportCell;
@@ -43,7 +44,6 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
@@ -117,7 +117,7 @@ public class LocationService {
 		ReportSettingsImpl mrs = (ReportSettingsImpl) spec.getSettings();
 		mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
 		
-		MondrianReportFilters filterRules = new MondrianReportFilters((AmpFiscalCalendar) spec.getSettings().getCalendar());
+		AmpReportFilters filterRules = new AmpReportFilters((AmpFiscalCalendar) spec.getSettings().getCalendar());
 		
 		if(config != null){
 			Object columnFilters = config.get("columnFilters");
@@ -387,7 +387,7 @@ public class LocationService {
 			activitIds = FilterUtils.applyKeywordSearch( otherFilter);
 		}
 		
- 		MondrianReportFilters filterRules = FilterUtils.getFilterRules(columnFilters,
+		AmpReportFilters filterRules = FilterUtils.getFilterRules(columnFilters,
 				otherFilter, activitIds);
 		if(filterRules!=null){
 			spec.setFilters(filterRules);
@@ -749,7 +749,7 @@ public class LocationService {
 		ReportSettingsImpl mrs = (ReportSettingsImpl) spec.getSettings();
 		mrs.setUnitsOption(AmountsUnits.AMOUNTS_OPTION_UNITS);
 		
-		MondrianReportFilters filterRules = FilterUtils.getFilters(config, new MondrianReportFilters((AmpFiscalCalendar) mrs.getCalendar()));
+		AmpReportFilters filterRules = FilterUtils.getFilters(config, new AmpReportFilters((AmpFiscalCalendar) mrs.getCalendar()));
 		if (filterRules != null) {
 			spec.setFilters(filterRules);
 		}

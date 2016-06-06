@@ -5,7 +5,7 @@ package org.dgfoundation.amp.newreports;
 
 import java.text.DecimalFormat;
 
-import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
+import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 
 /**
@@ -84,7 +84,7 @@ public class ReportSettingsImpl implements ReportSettings {
 	}
 	
 	public void setYearsRangeFilterRule(Integer from, Integer to) throws Exception {
-		this.yearRangeFilter = MondrianUtils.getYearsRangeFilter(from, to, oldCalendar, calendar);
+		this.yearRangeFilter = DateFilterUtils.getYearsRangeFilter(from, to, oldCalendar, calendar);
 	}
 
 	public AmpFiscalCalendar getOldCalendar() {

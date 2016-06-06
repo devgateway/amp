@@ -325,8 +325,6 @@ public final class MoConstants {
 	public static final String TOTAL_MEASURES = "Total Measures";
 	
 	//Values
-	public static final String BOOLEAN_TRUE_KEY = "2";
-	public static final String BOOLEAN_FALSE_KEY = "1";
 	public static final String NATIONAL = "National";
 	public static final String INTERNATIONAL = "International";
 	public static final Integer UNDEFINED_KEY = 999999999;

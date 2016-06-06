@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.dgfoundation.amp.reports.mondrian.converters;
+package org.dgfoundation.amp.reports.converters;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,13 +16,13 @@ import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
-import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.util.Identifiable;
@@ -32,7 +32,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
 /**
- * Translates report filters from ARFilters to a configuration that is applicable for Mondrian Reports API.
+ * Translates report filters from ARFilters to a configuration that is applicable for Reports API.
  * Old AmpARFilter structure stores multiple information like the actual report filters, report settings, sorting info...  
  * @author Nadejda Mandrescu
  */
@@ -40,12 +40,12 @@ public class AmpARFilterConverter {
 	protected static final Logger logger = Logger.getLogger(AmpARFilterConverter.class);
 	
 	//either transform filter by IDS, either by Names => if by IDS, then Level properties will be used
-	private MondrianReportFilters filterRules;
+	private AmpReportFilters filterRules;
 	private ReportSettingsImpl settings;
 	private AmpARFilter arFilter;
 
 	/**
-	 * Translates report filters from ARFilters to a configuration that is applicable for Mondrian Reports API.
+	 * Translates report filters from ARFilters to a configuration that is applicable for Reports API.
 	 * Old AmpARFilter structure stores multiple information: the actual report filters, report settings, sorting info...
 	 * @param arFilter - old configuration of the reports filters {@link AmpARFilter}
 	 */
@@ -53,9 +53,8 @@ public class AmpARFilterConverter {
 		this.setArFilter(arFilter);
 	}
 	
-	public MondrianReportFilters buildFilters() {
-		filterRules = new MondrianReportFilters();
-		filterRules.setCalendar(arFilter.getCalendarType());
+	public AmpReportFilters buildFilters() {
+		filterRules = new AmpReportFilters(arFilter.getCalendarType());
 		buildCurrentFilters();
 		//TODO: to clarify how pledge specific filters should be applied, e.g. if "include pledges" is selected, then translate current filter into pledge filter?
 		/*
@@ -290,7 +289,7 @@ public class AmpARFilterConverter {
 	private void addBooleanFilter(Boolean flag, String columnName) {
 		if(flag == null) return;
 		addFilterRule(columnName, 
-				new FilterRule(flag ? MoConstants.BOOLEAN_TRUE_KEY : MoConstants.BOOLEAN_FALSE_KEY, 
+				new FilterRule(flag ? ArConstants.BOOLEAN_TRUE_KEY : ArConstants.BOOLEAN_FALSE_KEY, 
 						flag.toString(), true));
 	}
 	

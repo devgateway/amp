@@ -46,8 +46,8 @@ public class FiltersProcessor {
         }
     }
     
-    private MondrianReportFilters getOrCreateFilters() {
-        return (MondrianReportFilters) filters.orElse(new MondrianReportFilters());
+    private AmpReportFilters getOrCreateFilters() {
+        return (AmpReportFilters) filters.orElse(new AmpReportFilters());
     }
 
 }

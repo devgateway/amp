@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.reports.mondrian.converters;
+package org.dgfoundation.amp.reports.converters;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -8,49 +8,42 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.metamodel.source.annotations.entity.EntityClass;
-import org.hibernate.type.LongType;
 
-public class MondrianReportFiltersConverter {
+public class AmpReportFiltersConverter {
 
-	protected static final Logger logger = Logger.getLogger(MondrianReportFiltersConverter.class);
-	private MondrianReportFilters mondrianFilters;
+	protected static final Logger logger = Logger.getLogger(AmpReportFiltersConverter.class);
+	private AmpReportFilters filters;
 	private AmpARFilter ampARFilter;
 
-	public MondrianReportFiltersConverter(MondrianReportFilters mondrianFilters) {
-		if (mondrianFilters == null) {
-			mondrianFilters = new MondrianReportFilters();
+	public AmpReportFiltersConverter(AmpReportFilters filters) {
+		if (filters == null) {
+		    filters = new AmpReportFilters();
 		}
-		this.mondrianFilters = mondrianFilters;
+		this.filters = filters;
 	}
 
-	public MondrianReportFiltersConverter(MondrianReportFilters mondrianFilters, AmpARFilter ampARFilter) {
-		this.mondrianFilters = mondrianFilters;
+	public AmpReportFiltersConverter(AmpReportFilters filters, AmpARFilter ampARFilter) {
+		this.filters = filters;
 		this.ampARFilter = ampARFilter;
 	}
 
-	public void setMondrianReportFilters(MondrianReportFilters mondrianFilters) {
-		this.mondrianFilters = mondrianFilters;
+	public void setReportFilters(AmpReportFilters filters) {
+		this.filters = filters;
 	}
 
 	public AmpARFilter buildFilters() {
@@ -91,7 +84,7 @@ public class MondrianReportFiltersConverter {
 		addFilter(ColumnConstants.STATUS, AmpCategoryValue.class, "statuses", true);
 		addFilter(ColumnConstants.APPROVAL_STATUS, String.class, "approvalStatusSelected", true);
 		
-		this.ampARFilter.setComputedYear(this.mondrianFilters.getComputedYear());
+		this.ampARFilter.setComputedYear(this.filters.getComputedYear());
 		
 		// System.out.println(this.ampARFilter.toString());
 		return this.ampARFilter;
@@ -121,11 +114,7 @@ public class MondrianReportFiltersConverter {
 			Method setterMethod = AmpARFilter.class.getDeclaredMethod(getSetterName(ampARFilterFieldName), param);
 
 			// Get values from mondrian filters.
-			List<FilterRule> filterRules = this.mondrianFilters.getColumnFilterRules().get(mondrianFilterColumnName);
-			if (filterRules == null) {
-				// Check sqlFilters.
-				filterRules = this.mondrianFilters.getSqlFilterRules().get(mondrianFilterColumnName);
-			}
+			List<FilterRule> filterRules = this.filters.getAllFilterRules().get(new ReportColumn(mondrianFilterColumnName));
 
 			if (filterRules != null) {
 				if (paramClass.getName().equals("java.util.Set") || paramClass.getName().equals("java.util.Collection")) {

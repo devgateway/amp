@@ -171,7 +171,16 @@ public final class ArConstants {
 
 	//public final static String PLEDGES_TOTAL_PLEDGED="Total Pledged";
 	public final static java.sql.Date PLEDGE_FAKE_YEAR = new java.sql.Date(0);
-    
+	
+	/**
+     * fixed date format used for unformatted input/output
+     */
+	public static final String DATE_FORMAT = "yyyy-MM-dd";
+	
+	public static final Integer UNDEFINED_KEY = 999999999;
+	public static final String BOOLEAN_TRUE_KEY = "2";
+    public static final String BOOLEAN_FALSE_KEY = "1";
+        
 	//Computed Field Constants
     //
     public final static String MAX_ACTUAL_COMMITMENT="MAX_ACTUAL_COMMITMENT";

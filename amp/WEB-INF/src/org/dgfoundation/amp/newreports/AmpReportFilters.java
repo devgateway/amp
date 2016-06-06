@@ -2,13 +2,19 @@ package org.dgfoundation.amp.newreports;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.Function;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.dgfoundation.amp.algo.AmpCollections;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.newreports.ReportElement.ElementType;
+import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
+import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 
 /**
@@ -30,6 +36,10 @@ public class AmpReportFilters extends ReportFiltersImpl {
 	public AmpReportFilters(Map<ReportElement, List<FilterRule>> filterRules) {
 		super(filterRules);
 	}
+	
+	public AmpReportFilters() {
+        this(AmpARFilter.getDefaultCalendar());
+    }
 
 	public AmpReportFilters(AmpFiscalCalendar calendar) {
 		this.calendar = calendar;
@@ -61,6 +71,23 @@ public class AmpReportFilters extends ReportFiltersImpl {
 	public Map<ReportColumn, List<FilterRule>> getDateFilterRules() {
 		return this.dateFilterRules;
 	}
+	
+	/**
+	 * Column Filters currently used by Filters Widget
+	 * TODO: refactor once Filters v2 implemented
+	 * @return
+	 */
+	public Map<String, List<FilterRule>> getColumnFilterRules() {
+        if (filterRules == null) return null; 
+        Map<String, List<FilterRule>> filters = new HashMap<String, List<FilterRule>>(filterRules.size());
+        for (Entry<ReportElement, List<FilterRule>> entry : filterRules.entrySet()) {
+            if (ElementType.ENTITY.equals(entry.getKey().type))
+                filters.put(entry.getKey().entity.getEntityName(), entry.getValue());
+            else 
+                filters.put(entry.getKey().type.toString(), entry.getValue());
+        }
+        return filters;
+    }
 
 	/**
 	 * concatenates {@link #getFilterRules()} with {@link #getDateFilterRules()}
@@ -97,4 +124,58 @@ public class AmpReportFilters extends ReportFiltersImpl {
 		}
 		return year;
 	}
+	
+	/**
+     * Adds a date range filter [from .. to] or [from .. infinite ) or (infinite .. to]
+     * @param from - the date to start from or null
+     * @param to - the date to end with or null
+     * @throws AmpApiException if range is invalid
+     */
+    public void addDateRangeFilterRule(Date from, Date to) throws AmpApiException {
+        addFilterRule(new ReportElement(ElementType.DATE), DateFilterUtils.getDateRangeFilterRule(from, to, calendar, null));
+    }
+    
+    /**
+     * Adds a date range filter [from .. to] or [from .. infinite ) or (infinite .. to],
+     * over the specified report column
+     * @param column - the column to filter by (may not be present in the report)
+     * @param from - the date to start from or null
+     * @param to - the date to end with or null
+     * @throws AmpApiException if range is invalid
+     */
+    public void addDateRangeFilterRule(ReportColumn column, Date from, Date to) throws AmpApiException {
+        //validate
+        addFilterRule(dateFilterRules, column, DateFilterUtils.getDateRangeFilterRule(from, to, calendar, null));
+    }
+    
+    /**
+     * Adds a single year filter over measures
+     * @param year
+     * @param valueToInclude
+     * @throws Exception 
+     */
+    public void addSingleYearFilterRule(Integer year, boolean valueToInclude) throws Exception {
+        addFilterRule(new ReportElement(ElementType.YEAR), DateFilterUtils.getSingleYearFilterRule(year, calendar, valueToInclude));
+    }
+    
+    /**
+     * Adds a measures filter between [from .. to] or [from .. infinite) or (-infinite .. to] year ranges.
+     * @param from - the year to start from or null
+     * @param to - the year to end with or null
+     * @throws Exception 
+     */
+    public void addYearsRangeFilterRule(Integer from, Integer to) throws Exception {
+        addFilterRule(new ReportElement(ElementType.YEAR), 
+                DateFilterUtils.getYearsRangeFilter(from, to, null, calendar));
+    }
+    
+    /**
+     * Adds a single date filter over measures
+     * @param date
+     * @param valueToInclude
+     * @throws AmpApiException
+     */
+    public void addSingleDateFilterRule(Date date, boolean valueToInclude) throws AmpApiException {
+        addFilterRule(new ReportElement(ElementType.DATE), DateFilterUtils.getSingleDateFilterRule(date, valueToInclude));
+    }
 }

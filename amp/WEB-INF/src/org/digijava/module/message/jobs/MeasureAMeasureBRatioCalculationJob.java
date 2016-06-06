@@ -17,6 +17,7 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
@@ -25,7 +26,6 @@ import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.Quarter;
@@ -145,7 +145,7 @@ public class MeasureAMeasureBRatioCalculationJob extends ConnectionCleaningJob i
 					spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
 					spec.addMeasure(new ReportMeasure(measureA));
 					spec.addMeasure(new ReportMeasure(measureB));
-					MondrianReportFilters filterRules = new MondrianReportFilters();
+					AmpReportFilters filterRules = new AmpReportFilters();
 
 					try {
 						filterRules.addDateRangeFilterRule(lowerDateReport, upperDateReport);

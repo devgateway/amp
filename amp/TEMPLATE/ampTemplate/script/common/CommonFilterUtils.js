@@ -2,7 +2,8 @@ var CommonFilterUtils = {};
 
 CommonFilterUtils.getDateIntervalType = function(element) {
 	console.log("CommonFilterUtils.getDateIntervalType");
-	// Since this function now is common for Tabs and Saiku we need to transform backbone objects from tabs to plain js objects.
+	// Since this function now is common for Tabs and Saiku we need to transform
+	// backbone objects from tabs to plain js objects.
 	if (element.attributes !== undefined) {
 		element = _.pluck(element, 'attributes');
 	}
@@ -28,7 +29,8 @@ CommonFilterUtils.convertJavaFiltersToJS = function(data) {
 	if (data === undefined) {
 		return
 	}
-	// Since this function now is common for Tabs and Saiku we need to transform backbone objects from tabs to plain js objects.
+	// Since this function now is common for Tabs and Saiku we need to transform
+	// backbone objects from tabs to plain js objects.
 	if (data.models !== undefined) {
 		data = _.pluck(data.models, 'attributes');
 	}	
@@ -112,7 +114,8 @@ CommonFilterUtils.convertJavaFiltersToJS = function(data) {
 				break;
 				
 			case 'DATE':
-				//FilterUtils.fillDateBlob(blob.otherFilters.date, item.attributes);
+				// FilterUtils.fillDateBlob(blob.otherFilters.date,
+				// item.attributes);
 				var newDate = {};
 				_.map(item.values, function(item_, i) {						
 					if (item_.type === "min") {
@@ -156,10 +159,29 @@ CommonFilterUtils.convertJavaFiltersToJS = function(data) {
 				});
 				blob.otherFilters[item.name] = newDate;
 				break;
+			case 'computedYear':
+				var year = _.isEmpty(item.values) ? null : item.values[0].id; 
+				blob.otherFilters['computedYear'] = {year: year, displayName: year};
+				break;
 			default:
 				console.info(item);
 				break;
 		}
 	});
 	return blob;
+};
+
+/**
+ * We will use this function to change the structure of the filters sent to the
+ * backend until we make a refactor of the Filter Widget to match the structure
+ * the EPs expects.
+ */
+CommonFilterUtils.transformParametersForBackend = function(filters) {
+	if (filters) {
+		if (filters.otherFilters && filters.otherFilters['computedYear']) {
+			// Computed Year is a new filter option and it has a structure
+			// different to the rest of the filters.
+			filters.computedYear = filters.otherFilters['computedYear'].year
+		}
+	}
 };

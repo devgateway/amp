@@ -35,10 +35,14 @@ var AMPFilters = Backbone.View.extend({
 					$('#filter-popup').hide();
 				});
 				Saiku.events.listenTo(window.currentFilter, 'apply', function(data) {
-					//if(data.columnFilters || data.otherFilters) {
-						self.workspace.query.run_query(window.currentFilter.serialize(), null);
-						self.filters_button.removeClass('on');
-					//}
+					var filters = window.currentFilter.serialize();
+					
+					// Until we refactor the Filter Widget we will transform some filters here before sending the params to the backend.
+					CommonFilterUtils.transformParametersForBackend(filters);
+										
+					self.workspace.query.run_query(filters, null);
+					self.filters_button.removeClass('on');
+
 					$('#filter-popup').hide();
 				});
 				

@@ -90,7 +90,9 @@ public class MondrianReportFiltersConverter {
 		addFilter(ColumnConstants.WORKSPACES, AmpTeam.class, "workspaces", true);
 		addFilter(ColumnConstants.STATUS, AmpCategoryValue.class, "statuses", true);
 		addFilter(ColumnConstants.APPROVAL_STATUS, String.class, "approvalStatusSelected", true);
-
+		
+		this.ampARFilter.setComputedYear(this.mondrianFilters.getComputedYear());
+		
 		// System.out.println(this.ampARFilter.toString());
 		return this.ampARFilter;
 	}

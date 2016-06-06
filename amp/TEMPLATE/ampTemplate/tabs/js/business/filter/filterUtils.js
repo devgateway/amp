@@ -37,6 +37,7 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 		return sorting;
 	}
 
+	//TODO: move to CommonFilterUtils.js and merge with the same function on Saiku.
 	FilterUtils.extractFilters = function(content) {
 		var filters = new Filters();
 		var filtersColumnsJson = content.get('columnFilterRules');
@@ -123,6 +124,23 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 				filters.add(auxFilter);
 			}
 		});
+		
+		//Process filters that dont come inside the previous categories (ie: computed year).
+		if (content.get('computedYear')) {
+			var values = [];
+			values.push({
+				id : content.get('computedYear'),
+				name : content.get('computedYear'),
+				trnName : content.get('computedYear')
+			});
+			var auxFilter = new Filter({
+				trnName : TranslationManager.getTranslated('Computed Year'),
+				name: 'computedYear',
+				values : values
+			}); 
+			filters.add(auxFilter);
+		}
+		
 		return filters;
 	};
 
@@ -155,33 +173,44 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 		if (filtersFromWidgetWithNames.otherFilters !== undefined) {
 			for ( var propertyName in filtersFromWidgetWithNames.otherFilters) {
 				var dateContent = filtersFromWidgetWithNames.otherFilters[propertyName];
-				if (dateContent !== undefined) {					
-					dateContent.start =  dateContent.start || "" ;
-					dateContent.end =  dateContent.end || "" ;	
+				if (dateContent !== undefined) {
 					var filterObject = {
 							trnName : TranslationManager.getTranslated(propertyName),
 							name : propertyName,
 							values: []
-					};		
-					var startDatePrefix = (dateContent.start.length > 0 && dateContent.end.length === 0) ? "from " : "";
-					var endDatePrefix = (dateContent.start.length === 0 && dateContent.end.length > 0) ? "until " : "";
-					if(dateContent.start.length > 0){
+					};
+					if (dateContent.modelType === 'DATE-RANGE-VALUES') {
+						dateContent.start =  dateContent.start || "" ;
+						dateContent.end =  dateContent.end || "" ;	
+	
+						var startDatePrefix = (dateContent.start.length > 0 && dateContent.end.length === 0) ? "from " : "";
+						var endDatePrefix = (dateContent.start.length === 0 && dateContent.end.length > 0) ? "until " : "";
+						if(dateContent.start.length > 0){
+							filterObject.values.push({
+								id : dateContent.start,
+								name : dateContent.start,
+								trnName : TranslationManager.getTranslated(startDatePrefix) + app.TabsApp.filtersWidget.formatDate(dateContent.start)
+							});
+						}
+						if(dateContent.end.length > 0){
+							filterObject.values.push({
+								id : dateContent.end,
+								name : dateContent.end,
+								trnName : TranslationManager.getTranslated(endDatePrefix) + app.TabsApp.filtersWidget.formatDate(dateContent.end)
+	
+							});	
+						}															 
+					} else if (dateContent.modelType === 'YEAR-SINGLE-VALUE') {
+						dateContent.year = dateContent.year || '';
 						filterObject.values.push({
-							id : dateContent.start,
-							name : dateContent.start,
-							trnName : TranslationManager.getTranslated(startDatePrefix) + app.TabsApp.filtersWidget.formatDate(dateContent.start)
+							id : dateContent.year,
+							name : dateContent.year,
+							trnName : dateContent.year
 						});
+						filterObject.trnName = dateContent.displayName;
 					}
-					if(dateContent.end.length > 0){
-						filterObject.values.push({
-							id : dateContent.end,
-							name : dateContent.end,
-							trnName : TranslationManager.getTranslated(endDatePrefix) + app.TabsApp.filtersWidget.formatDate(dateContent.end)
-
-						});	
-					}										
-				 var filter = new Filter(filterObject);
-				 app.TabsApp.filters.models.push(filter);
+					var filter = new Filter(filterObject);
+					app.TabsApp.filters.models.push(filter);
 				}
 			}
 		}

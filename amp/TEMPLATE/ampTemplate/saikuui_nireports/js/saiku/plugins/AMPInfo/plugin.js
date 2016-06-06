@@ -131,32 +131,42 @@ var filtersToHtml = function(filters) {
 		for ( var propertyName in filters.otherFilters) {
 			var dateContent = filters.otherFilters[propertyName];
 			if (dateContent != undefined) {
-				dateContent.start = dateContent.start || "";
-				dateContent.end = dateContent.end || "";
 				var filter = {
 					trnName : propertyName, /*TranslationManager.getTranslated(propertyName),*/
 					name : propertyName,
 					values:[]
 				};
-				
-				var startDatePrefix = (dateContent.start.length > 0 && dateContent.end.length === 0) ? "from " : "";
-				var endDatePrefix = (dateContent.start.length === 0 && dateContent.end.length > 0) ? "until " : "";
-				
-				if(dateContent.start.length > 0){
+				if (dateContent.modelType === 'DATE-RANGE-VALUES') {
+					dateContent.start = dateContent.start || "";
+					dateContent.end = dateContent.end || "";
+									
+					var startDatePrefix = (dateContent.start.length > 0 && dateContent.end.length === 0) ? "from " : "";
+					var endDatePrefix = (dateContent.start.length === 0 && dateContent.end.length > 0) ? "until " : "";
+					
+					if(dateContent.start.length > 0){
+						filter.values.push({
+							id : dateContent.start,
+							name : dateContent.start,
+							trnName : startDatePrefix + window.currentFilter.formatDate(dateContent.start) 
+						});
+					}
+					
+					if(dateContent.end.length > 0){
+						filter.values.push({
+							id : dateContent.end,
+							name : dateContent.end,
+							trnName : endDatePrefix + window.currentFilter.formatDate(dateContent.end) 					
+						});		
+					}									
+				} else if (dateContent.modelType === 'YEAR-SINGLE-VALUE') {
+					dateContent.year = dateContent.year || '';
 					filter.values.push({
-						id : dateContent.start,
-						name : dateContent.start,
-						trnName : startDatePrefix + window.currentFilter.formatDate(dateContent.start) 
+						id : dateContent.year,
+						name : dateContent.year,
+						trnName : dateContent.year
 					});
+					filter.trnName = dateContent.displayName;
 				}
-				
-				if(dateContent.end.length > 0){
-					filter.values.push({
-						id : dateContent.end,
-						name : dateContent.end,
-						trnName : endDatePrefix + window.currentFilter.formatDate(dateContent.end) 					
-					});		
-				}				
 				html += "<div class='round-filter-group'><b class='i18n'>" + filter.trnName + "</b><br>" + filterContentToHtml(filter.values) + "</div>";
 			}
 		}

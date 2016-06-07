@@ -103,28 +103,26 @@ a {
 		map = L.map('locationPopupMap').setView([<%=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LATITUDE)%>,<%=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LONGITUDE)%> ], 7);
 		var tileLayer;
 		if (isOsm) {
-			var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-			tileLayer = new L.TileLayer(basemapurl, {minZoom: 0, maxZoom: 16, attribution: osmAttrib,
-					 subdomains: ['otile1','otile2','otile3','otile4']});	
+			var osmAttrib='Map data ï¿½ <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+			tileLayer = new L.TileLayer(basemapurl, {minZoom: 0, maxZoom: 16, attribution: osmAttrib});
 		}
 		else {
-			tileLayer = new L.TileLayer(basemapurl, {minZoom: 0, maxZoom: 16});	
-
+			tileLayer = new L.TileLayer(basemapurl, {minZoom: 0, maxZoom: 16});
 		}
 		map.addLayer(tileLayer);
-    	for ( var i = 0; i < coordinates.length; i++) {
-    		 		coord = coordinates[i].split(";");
-    		 		console.log (coord);
-    		 		var circle =L.circleMarker([coord[0], coord[1]], 500, {
-    		 		    color: 'red',
-    		 		    fillColor: 'red',
-    		 		    fillOpacity: 0.5
-    		 		}).addTo(map);
-    		 		circle.bindPopup("<b>Location Information</b>:<br>Location: "+coord[2]);
-    
-    	}
-         
-	}
+        for ( var i = 0; i < coordinates.length; i++) {
+            coord = coordinates[i].split(";");
+            if (coord[0] != '' && coord[1] != '') {
+                var circle = L.circleMarker([coord[0], coord[1]], 500, {
+                    color: 'red',
+                    fillColor: 'red',
+                    fillOpacity: 0.5
+                }).addTo(map);
+                circle.bindPopup("<b>Location Information</b>:<br>Location: " + coord[2]);
+            }
+        }
+
+    }
 	
 	YAHOO.amptab.initPanels	= function () {
 		createMap ();

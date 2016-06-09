@@ -4,17 +4,7 @@ import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
@@ -3972,15 +3962,15 @@ public class ExportActivityToWord extends Action {
     }
 
     private Map<String, Map<String, Set<AmpFundingDetail>>> getStructuredFundings (Set<AmpFundingDetail> fndDets) {
-        Map<String, Map<String, Set<AmpFundingDetail>>> retVal = new HashMap<String, Map<String, Set<AmpFundingDetail>>>();
+        Map<String, Map<String, Set<AmpFundingDetail>>> retVal = new HashMap<>();
         for (AmpFundingDetail fndDet : fndDets) {
             String transactionType = FundingCalculationsHelper.getTransactionTypeLabel(fndDet.getTransactionType());
             if (!retVal.containsKey(transactionType)) {
-                retVal.put(transactionType, new HashMap<String, Set<AmpFundingDetail>>());
+                retVal.put(transactionType, new HashMap<>());
             }
 
             if (!retVal.get(transactionType).containsKey(fndDet.getAdjustmentType().getLabel())) {
-                retVal.get(transactionType).put(fndDet.getAdjustmentType().getLabel(), new HashSet<AmpFundingDetail>());
+                retVal.get(transactionType).put(fndDet.getAdjustmentType().getLabel(), new TreeSet<>(new AmpFundingDetail.FundingDetailComparator()));
             }
             retVal.get(transactionType).get(fndDet.getAdjustmentType().getLabel()).add(fndDet);
         }

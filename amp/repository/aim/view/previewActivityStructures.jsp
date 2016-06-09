@@ -128,7 +128,7 @@ function moveDisplayedImages(structureId, imgCount, next){
 
 		<logic:iterate id="structure" name="aimEditActivityForm"
 			property="structures">
-			<table style="cellspacing:1; cellPadding:3; bgcolor:#aaaaaa; width:100%;">
+			<table style="cellspacing:1; cellPadding:3; width:100%;">
 				<tr bgcolor="#f0f0f0">
 					<td colspan="2" align="center">
 						<b>
@@ -140,40 +140,40 @@ function moveDisplayedImages(structureId, imgCount, next){
 				<module:display
 					name="/Activity Form/Structures/Structure Type"
 					parentModule="/Activity Form/Structures">
-					<tr bgcolor="#f0f0f0">
-						<td align="right" width="15%"><digi:trn key="trn:type">Type</digi:trn></td>
+					<tr>
+						<td bgcolor="#f0f0f0" style="padding-left:5px;" width="15%"><digi:trn key="trn:type">Type</digi:trn></td>
 						<td align="left"><b> ${structure.type.name} </b></td>
 					</tr>
 				</module:display>
 				<module:display
 					name="/Activity Form/Structures/Structure Title"
 					parentModule="/Activity Form/Structures">
-					<tr bgcolor="#f0f0f0">
-						<td align="right"><digi:trn key="trn:title">Title</digi:trn></td>
+					<tr>
+						<td bgcolor="#f0f0f0" style="padding-left:5px;"><digi:trn key="trn:title">Title</digi:trn></td>
 						<td align="left"> <b> ${structure.title} </b></td>
 					</tr>
 				</module:display>
 				<module:display
 					name="/Activity Form/Structures/Structure Description"
 					parentModule="/Activity Form/Structures">
-					<tr bgcolor="#f0f0f0">
-						<td align="right"><digi:trn key="trn:description">Description</digi:trn></td>
+					<tr>
+						<td bgcolor="#f0f0f0" style="padding-left:5px;"><digi:trn key="trn:description">Description</digi:trn></td>
 						<td align="left"><b> ${structure.description} </b></td>
 					</tr>
 				</module:display>
 				<module:display
 					name="/Activity Form/Structures/Structure Latitude"
 					parentModule="/Activity Form/Structures">
-					<tr bgcolor="#f0f0f0">
-						<td align="right"><digi:trn key="trn:latitude">Latitude</digi:trn></td>
+					<tr>
+						<td bgcolor="#f0f0f0" style="padding-left:5px;"><digi:trn key="trn:latitude">Latitude</digi:trn></td>
 						<td align="left"> <b> ${structure.latitude} </b></td>
 					</tr>
 				</module:display>
 				<module:display
 					name="/Activity Form/Structures/Structure Longitude"
 					parentModule="/Activity Form/Structures">
-					<tr bgcolor="#f0f0f0">
-						<td align="right"><digi:trn key="trn:longitude">Longitude</digi:trn></td>
+					<tr>
+						<td bgcolor="#f0f0f0" style="padding-left:5px;"><digi:trn key="trn:longitude">Longitude</digi:trn></td>
 						<td align="left"><b> ${structure.longitude} </b></td>
 					</tr>
 				</module:display>

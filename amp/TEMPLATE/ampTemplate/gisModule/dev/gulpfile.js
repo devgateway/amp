@@ -63,7 +63,7 @@ var paths = {
       libs: ['./node_modules/leaflet/dist/**/*.css',
             './node_modules/leaflet.markercluster/dist/**/*.css',
             '../../node_modules/amp-filter/dist/amp-filter.css',
-            '../../node_modules/gis-layers-manager/dist/gis-layer-manager.css',
+            '../../node_modules/gis-layers-manager/dist/gis-layers-manager.css',
             './app/js/libs/local/slider/**/*.css'],
       compiledDest: './app/compiled-css/',
       compiled: './app/compiled-css/main.css'

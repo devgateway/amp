@@ -318,14 +318,14 @@
                               </digi:link>
                             </td>
                           </tr>
-                           <!--  
+                            
                           <tr>
                           <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                           <td>
-                          <a href="#" onclick="showLayerManager();return false;"> <digi:trn>GIS Layer Manager</digi:trn></a>
+                          <a href="#" onclick="showLayerManager();return false;"> <digi:trn>GIS Layers Manager</digi:trn></a>
                            </td>                          
                           </tr>
-                          -->
+                          
 
                         </module:display>
                         <module:display name="Budget Manager" parentModule="ADMINISTRATIVE SECTION">
@@ -798,22 +798,22 @@
     </td>
   </tr>
 </table>
-<div id="layer-manager-popup" style="dispaly:none;"></div>
+<div id="layers-manager-popup" style="dispaly:none;"></div>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist/gis-layers-manager.js"/>"></script>
 <script language="JavaScript">
 
-       var gisLayerManager = new window.gisLayerManager({
+       var gisLayersManager = new window.gisLayersManager({
      		draggable: true,
 	        caller: 'ADMIN',
-	        el: $('#layer-manager-popup')
+	        el: $('#layers-manager-popup')
 		  });
               
-        gisLayerManager.on('cancel', function() { 	      
- 	       $('#layer-manager-popup').hide();
+        gisLayersManager.on('cancel', function() { 	      
+ 	       $('#layers-manager-popup').hide();
  	    });
        
        function showLayerManager() {
-    	     gisLayerManager.show(); 
-    	     $('#layer-manager-popup').show();
+    	     gisLayersManager.show(); 
+    	     $('#layers-manager-popup').show();
     	}
 </script>

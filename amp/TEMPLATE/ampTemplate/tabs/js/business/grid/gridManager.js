@@ -109,6 +109,9 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 							filters : null
 						},
 						serializeGridData : function(postData) {
+							if (postData.sidx && postData.sord) {
+								postData.sidx = postData.sidx.replace(/ asc/g, ' ' + postData.sord);
+							}
 							return JSON.stringify(postData);
 						},
 						jsonReader : {

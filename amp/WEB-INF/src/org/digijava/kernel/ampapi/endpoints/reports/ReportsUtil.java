@@ -538,7 +538,7 @@ public class ReportsUtil {
 		
 		if (formParams.get(EPConstants.SORTING) != null) {
 			List<Map<String, Object>> sortingConfig = (List<Map<String, Object>>)formParams.get(EPConstants.SORTING);
-			logger.error("sortingConfig is: " + sortingConfig);
+			logger.info("sortingConfig is: " + sortingConfig);
 			
 			for (Map<String, Object> sort : sortingConfig) {
 				List<String> columns = (List<String>)sort.get("columns");
@@ -574,7 +574,7 @@ public class ReportsUtil {
 		}
 		
 		// check if sorting config indeed changed
-		boolean sortingChanged = !MondrianReportUtils.equals(newSorters, spec.getSorters());
+		boolean sortingChanged = true; /*!MondrianReportUtils.equals(newSorters, spec.getSorters());*/
 		if (sortingChanged)
 			spec.setSorters(newSorters);
 		return sortingChanged;

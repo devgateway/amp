@@ -718,13 +718,14 @@ public class Reports {
 						formParams.set(EPConstants.SORTING, convertJQgridSortingParams(formParams));									
 						logger.info(formParams.get(EPConstants.SORTING));
 						newFilters.setSortByAsc(formParams.getString("sord").equals("asc") ? true : false);
-						StringBuffer columns = new StringBuffer();
-						((List<Map>) formParams.get(EPConstants.SORTING)).stream().forEachOrdered((map) -> {
+						
+						String columns = "";
+						for (Map map : ((List<Map>) formParams.get(EPConstants.SORTING))) {
 							String column = map.get("columns").toString();
 							column = column.substring(column.indexOf("[") + 1, column.indexOf("]"));
-							columns.append("/" + column);							
-						});
-						newFilters.setSortBy(columns.toString());
+							columns += ("/" + column);
+						}
+						newFilters.setSortBy(columns);
 					}
 					
 					if (formParams.get(EPConstants.SETTINGS) != null) {

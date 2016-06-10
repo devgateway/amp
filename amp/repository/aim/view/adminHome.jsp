@@ -8,9 +8,9 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-
 <jsp:include page="teamPagesHeader.jsp"  />
 <jsp:include page="allVisibilityTags.jsp" />
+
 <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="1000" align="center">
   <tr>
     <td align="left" class="r-dotted-lg" vAlign="top">
@@ -318,6 +318,14 @@
                               </digi:link>
                             </td>
                           </tr>
+                           <!--  
+                          <tr>
+                          <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                          <td>
+                          <a href="#" onclick="showLayerManager();return false;"> <digi:trn>GIS Layer Manager</digi:trn></a>
+                           </td>                          
+                          </tr>
+                          -->
 
                         </module:display>
                         <module:display name="Budget Manager" parentModule="ADMINISTRATIVE SECTION">
@@ -790,3 +798,22 @@
     </td>
   </tr>
 </table>
+<div id="layer-manager-popup" style="dispaly:none;"></div>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist/gis-layers-manager.js"/>"></script>
+<script language="JavaScript">
+
+       var gisLayerManager = new window.gisLayerManager({
+     		draggable: true,
+	        caller: 'ADMIN',
+	        el: $('#layer-manager-popup')
+		  });
+              
+        gisLayerManager.on('cancel', function() { 	      
+ 	       $('#layer-manager-popup').hide();
+ 	    });
+       
+       function showLayerManager() {
+    	     gisLayerManager.show(); 
+    	     $('#layer-manager-popup').show();
+    	}
+</script>

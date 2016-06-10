@@ -1170,3 +1170,16 @@ table.component-funding-table tr
 div.footer {
 	margin-top:15px;
 }
+
+#layer-manager-popup {
+  z-index: 1020;
+  position: fixed !important;
+  top: 20%;
+  left: 50%;
+  min-width: 805px;
+  max-width: 900px;
+  /* original -- width: 805px; now dynamic*/
+  margin-left: -415px;
+  /* left margin compromise between 875 and 805 */
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}

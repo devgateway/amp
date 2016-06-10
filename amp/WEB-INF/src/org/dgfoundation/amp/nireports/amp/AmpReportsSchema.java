@@ -189,6 +189,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static NiDimensionUsage CA_DIM_USG = orgsDimension.getDimensionUsage(Constants.CONTRACTING_AGENCY);
 	public final static NiDimensionUsage RG_DIM_USG = orgsDimension.getDimensionUsage(Constants.REGIONAL_GROUP);
 	public final static NiDimensionUsage SG_DIM_USG = orgsDimension.getDimensionUsage(Constants.SECTOR_GROUP);	
+	
 	public final static NiDimensionUsage CF_DIM_USG = orgsDimension.getDimensionUsage("ComponentFunding");
 	
 	public final static NiDimensionUsage PS_DIM_USG = secsDimension.getDimensionUsage("Primary");
@@ -288,7 +289,6 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		degenerate_dimension(ColumnConstants.FUNDING_STATUS, "v_funding_status", catsDimension);
 		degenerate_dimension(ColumnConstants.HUMANITARIAN_AID, "v_humanitarian_aid", boolDimension);
 		degenerate_dimension(ColumnConstants.IMPLEMENTATION_LEVEL, "v_implementation_level", catsDimension);
-//		addTextColumn(ColumnConstants.IMPLEMENTING_AGENCY_DEPARTMENT_DIVISION, "v_implementing_agency_info");
 		no_dimension(ColumnConstants.INDIRECT_ON_BUDGET, "v_indirect_on_budget");
 		degenerate_dimension(ColumnConstants.INSTITUTIONS, "v_institutions", catsDimension);
 		no_dimension(ColumnConstants.MEASURES_TAKEN, "v_measures_taken");
@@ -378,6 +378,13 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_entity(ColumnConstants.SECTOR_MINISTRY_CONTACT_TITLE, "v_sect_min_cont_title");
 		no_entity(ColumnConstants.SUB_VOTE, "v_subvote");
 		no_entity(ColumnConstants.VOTE, "v_vote");
+		
+		single_dimension(ColumnConstants.RESPONSIBLE_ORGANIZATION_DEPARTMENT_DIVISION, "v_responsible_org_info", RO_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+		single_dimension(ColumnConstants.IMPLEMENTING_AGENCY_DEPARTMENT_DIVISION, "v_implementing_agency_info", IA_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+		single_dimension(ColumnConstants.BENEFICIARY_AGENCY__DEPARTMENT_DIVISION, "v_beneficiary_agency_info", BA_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+		single_dimension(ColumnConstants.CONTRACTING_AGENCY_DEPARTMENT_DIVISION, "v_contracting_agency_info", CA_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+		single_dimension(ColumnConstants.SECTOR_GROUP_DEPARTMENT_DIVISION, "v_sector_group_info", SG_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+		single_dimension(ColumnConstants.REGIONAL_GROUP_DEPARTMENT_DIVISION, "v_regional_group_info", RG_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
 		
 		single_dimension(ColumnConstants.DONOR_AGENCY, "v_ni_donor_orgs", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
 		single_dimension(ColumnConstants.DONOR_GROUP, "v_ni_donor_orgsgroups", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION_GROUP));

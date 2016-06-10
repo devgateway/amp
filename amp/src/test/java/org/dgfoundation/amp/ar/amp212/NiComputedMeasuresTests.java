@@ -1,7 +1,9 @@
 package org.dgfoundation.amp.ar.amp212;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,6 +20,7 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.amp.AmpReportsScratchpad;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.testmodels.NiReportModel;
+import org.digijava.module.aim.helper.DateConversion;
 import org.junit.Test;
 
 /**

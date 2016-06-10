@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.ar.amp212;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.dgfoundation.amp.newreports.AreaOwner;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.GrandTotalsDigest;
+import org.dgfoundation.amp.nireports.amp.AmpReportsScratchpad;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.testmodels.NiReportModel;
 import org.digijava.module.aim.helper.DateConversion;
@@ -75,7 +77,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 	
 	@Test
 	public void testActivityIds() {
-		NiReportModel cor =new NiReportModel("testcase amp activity ids")
+		NiReportModel cor = new NiReportModel("testcase amp activity ids")
 				.withHeaders(Arrays.asList(
 						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 4))",
 						"(Activity Id: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2))",
@@ -87,6 +89,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 				        new ReportAreaForTests(new AreaOwner(19), "Activity Id", "19", "Project Title", "Pure MTEF Project"),
 				        new ReportAreaForTests(new AreaOwner(70), "Activity Id", "70", "Project Title", "Activity with both MTEFs and Act.Comms", "Totals-Actual Commitments", "888,000"),
 				        new ReportAreaForTests(new AreaOwner(73), "Activity Id", "73", "Project Title", "activity with directed MTEFs", "Totals-Actual Commitments", "123,456")      ));
+		AmpReportsScratchpad.forcedNowDate = LocalDate.of(2016, 5, 3);
 		runNiTestCase(
 				buildSpecification("testcase amp activity ids", 
 						Arrays.asList(ColumnConstants.ACTIVITY_ID, ColumnConstants.PROJECT_TITLE), 
@@ -95,19 +98,17 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 				"en", 
 				Arrays.asList("Pure MTEF Project", "activity with directed MTEFs", "Activity with both MTEFs and Act.Comms"),
 				cor);
+		AmpReportsScratchpad.forcedNowDate = null;
 	}
 	
 	@Test
 	public void testProjectImplementationDelay() {
-		Date toDate = new Timestamp(1461099600000l);
-		String corNowCalculation = String.format("%s", (DateConversion.getFormattedPeriod(
-				DateConversion.getPeriod(toDate, new Date())))).toLowerCase();
-		
 		NiReportModel cor = new NiReportModel("testcase for Project Implementation Delay")
 				.withHeaders(Arrays.asList(
-						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
-						"(Project Implementation Delay: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1))",
-						"(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 3))",
+						"(Project Implementation Delay: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 2, colSpan: 1))",
+						"",
+						"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
 					.withWarnings(Arrays.asList())
 					.withBody(      new ReportAreaForTests(null)
 				      .withContents("Project Implementation Delay", "", "Project Title", "", "Totals-Actual Commitments", "0")
@@ -115,15 +116,42 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 				        new ReportAreaForTests(new AreaOwner(81), "Project Implementation Delay", "20 days", "Project Title", "PID: original, proposed, actual"),
 				        new ReportAreaForTests(new AreaOwner(82), "Project Implementation Delay", "6 years 21 days", "Project Title", "PID: original, actual"),
 				        new ReportAreaForTests(new AreaOwner(83), "Project Title", "PID: original > actual"),
-				        new ReportAreaForTests(new AreaOwner(84), "Project Implementation Delay", corNowCalculation, "Project Title", "PID: original"),
+				        new ReportAreaForTests(new AreaOwner(84), "Project Implementation Delay", "1 month 20 days", "Project Title", "PID: original"),
 				        new ReportAreaForTests(new AreaOwner(85), "Project Implementation Delay", "20 days", "Project Title", "PID: original, proposed")      ));
+		
 		runNiTestCase(
 				buildSpecification("testcase for Project Implementation Delay", 
 						Arrays.asList(ColumnConstants.PROJECT_IMPLEMENTATION_DELAY, ColumnConstants.PROJECT_TITLE), 
 						Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
-						null, GroupingCriteria.GROUPING_TOTALS_ONLY),
+						null, GroupingCriteria.GROUPING_YEARLY),
 				"en", 
 				Arrays.asList("PID: original, proposed, actual", "PID: original, actual", "PID: original > actual", "PID: original", "PID: original, proposed"),
+				cor);
+	}
+
+	@Test
+	public void testDepartmentDivisions() {
+		NiReportModel cor = new NiReportModel("testcase for Department Division")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 0, colSpan: 6))",
+						"(Beneficiary Agency: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1));(Beneficiary Agency  Department/Division: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1));(Implementing Agency Department/Division: (startRow: 1, rowSpan: 3, totalRowSpan: 3, colStart: 3, colSpan: 1));(Funding: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 4, colSpan: 1));(Totals: (startRow: 1, rowSpan: 2, totalRowSpan: 3, colStart: 5, colSpan: 1))",
+						"(2016: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 1))",
+						"(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1));(Actual Commitments: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1))"))
+					.withWarnings(Arrays.asList())
+					.withBody(      new ReportAreaForTests(null).withContents("Beneficiary Agency", "", "Project Title", "", "Beneficiary Agency  Department/Division", "", "Implementing Agency Department/Division", "", "Funding-2016-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333")
+				      .withChildren(
+				        new ReportAreaForTests(new AreaOwner("Beneficiary Agency", "Norway", 21694)).withContents("Project Title", "", "Beneficiary Agency  Department/Division", "", "Implementing Agency Department/Division", "", "Funding-2016-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333", "Beneficiary Agency", "Norway")
+				        .withChildren(
+				          new ReportAreaForTests(new AreaOwner(90), "Project Title", "department/division", "Beneficiary Agency  Department/Division", "norway benef dep", "Implementing Agency Department/Division", "minfin impl ag dep", "Funding-2016-Actual Commitments", "333,333", "Totals-Actual Commitments", "333,333")        )      ));
+		
+		runNiTestCase(
+				buildSpecification("testcase for Department Division", 
+						Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.BENEFICIARY_AGENCY__DEPARTMENT_DIVISION, ColumnConstants.IMPLEMENTING_AGENCY_DEPARTMENT_DIVISION, ColumnConstants.BENEFICIARY_AGENCY), 
+						Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+						Arrays.asList(ColumnConstants.BENEFICIARY_AGENCY), 
+						GroupingCriteria.GROUPING_YEARLY),
+				"en", 
+				Arrays.asList("department/division", "Test MTEF directed"),
 				cor);
 	}
 	

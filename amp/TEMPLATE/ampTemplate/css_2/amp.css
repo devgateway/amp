@@ -1171,7 +1171,7 @@ div.footer {
 	margin-top:15px;
 }
 
-#layer-manager-popup {
+#layers-manager-popup {
   z-index: 1020;
   position: fixed !important;
   top: 20%;

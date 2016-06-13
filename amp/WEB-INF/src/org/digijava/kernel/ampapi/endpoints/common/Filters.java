@@ -642,7 +642,7 @@ public class Filters {
 		SimpleJsonBean res = new SimpleJsonBean();
 		res.setId(loc.getId());
 		res.setName(loc.getName());		
-		res.setFilterId(programName + " Level " + level + " Id");
+		res.setFilterId(programName + " Level " + level );
 		ArrayList<SimpleJsonBean> children = new ArrayList<SimpleJsonBean>();
 		for(AmpThemeSkeleton child:loc.getChildLocations())
 			children.add(buildProgramsJsonBean(child, programName, level + 1));
@@ -665,16 +665,16 @@ public class Filters {
 		String columnName=null;
 		if(level>0){
 			if(programName.equals(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)){
-				columnName=ColumnConstants.NATIONAL_PLANNING_OBJECTIVES +" Level " +level+ " Id";
+				columnName=ColumnConstants.NATIONAL_PLANNING_OBJECTIVES +" Level " +level;
 			}else{
 				if(programName.equals(ProgramUtil.PRIMARY_PROGRAM)){
-					columnName=ColumnConstants.PRIMARY_PROGRAM +" Level " +level+ " Id";
+					columnName=ColumnConstants.PRIMARY_PROGRAM +" Level " +level;
 				}else{
 					if(programName.equals(ProgramUtil.SECONDARY_PROGRAM)){
-						columnName=ColumnConstants.SECONDARY_PROGRAM +" Level " +level+ " Id";
+						columnName=ColumnConstants.SECONDARY_PROGRAM +" Level " +level;
 					}else{
 						if(programName.equals(ProgramUtil.TERTIARY_PROGRAM)){
-							columnName=ColumnConstants.TERTIARY_PROGRAM +" Level " +level+ " Id";
+							columnName=ColumnConstants.TERTIARY_PROGRAM +" Level " +level;
 						}
 					}
 				}

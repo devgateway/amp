@@ -6,7 +6,6 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
-import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -17,13 +16,11 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.usermodel.contrib.HSSFRegionUtil;
-import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.hssf.util.Region;
-import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.dgfoundation.amp.ar.Exporter;
-import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -359,8 +356,8 @@ public abstract class XLSExporter extends Exporter {
 	public void makeColSpan(int size, Boolean border) {
 		size--;
 		if(size<0) size=0;
-	
-		Region r=new Region(rowId.intValue(), colId.shortValue(),rowId.intValue(), (short) (colId.shortValue() + size));
+		CellRangeAddress r = new CellRangeAddress(rowId.intValue(), colId.intValue(), rowId.intValue(), colId.intValue() + size);
+//		Region r=new Region(rowId.intValue(), colId.shortValue(),rowId.intValue(), (short) (colId.shortValue() + size));
 		try {
 			if (border){
 				HSSFRegionUtil.setBorderBottom(HSSFCellStyle.BORDER_THIN,r,sheet,wb);
@@ -404,8 +401,9 @@ public abstract class XLSExporter extends Exporter {
 	}
 
 	public void makeRowSpan(int size, boolean border) {
-		Region r=new Region(rowId.intValue(), colId.shortValue(),
-				rowId.intValue() + size, colId.shortValue());
+		CellRangeAddress r = new CellRangeAddress(rowId.intValue(), colId.intValue(), rowId.intValue() + size, colId.intValue());
+//		Region r=new Region(rowId.intValue(), colId.shortValue(),
+//				rowId.intValue() + size, colId.shortValue());
 		try {
 			if (border){
 				HSSFRegionUtil.setBorderBottom(HSSFCellStyle.BORDER_THIN,r,sheet,wb);

@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
-import org.apache.poi.hssf.record.formula.functions.NumericFunction;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -37,7 +37,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import clover.org.apache.commons.lang.NumberUtils;
 
 public class AMPReportExcelExport {
 
@@ -494,12 +493,12 @@ public class AMPReportExcelExport {
 									if (!failedBefore) {
 										isNumeric = true;
 									}
-								}								
+								}
 							} catch (Exception e) {
 								isNumeric = false;
 								failedBefore = true;
 							}
-						}												
+						}
 						break;
 					}
 				}

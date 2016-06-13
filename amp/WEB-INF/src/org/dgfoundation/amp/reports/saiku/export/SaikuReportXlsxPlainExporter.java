@@ -1,15 +1,21 @@
 package org.dgfoundation.amp.reports.saiku.export;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.HeaderCell;
 import org.dgfoundation.amp.newreports.ReportArea;
+import org.dgfoundation.amp.newreports.ReportCell;
+import org.dgfoundation.amp.newreports.ReportOutputColumn;
 
 /** renders the result of report to a plain Excel. See {@link SaikuReportXlsxExporter}
  * @author Viorel Chihai
@@ -20,6 +26,18 @@ public class SaikuReportXlsxPlainExporter extends SaikuReportXlsxExporter {
 	private final String reportSheetName = "Plain";
 	
 	private static final Logger logger = Logger.getLogger(SaikuReportXlsxPlainExporter.class);
+
+	/**
+	 * @param sheet
+	 * @param report
+	 */
+	@Override
+	protected void renderReportData(SXSSFSheet sheet, GeneratedReport report) {
+		Row row = sheet.createRow(report.generatedHeaders.size());
+		renderTableRow(sheet, report, report.reportContents, 0, row, new ArrayList<>());
+		renderTableTotals(sheet, report, report.reportContents);
+	}
+	
 	
 	@Override
 	protected void renderReportTableHeader(Workbook wb, Sheet sheet, GeneratedReport report) {
@@ -39,50 +57,99 @@ public class SaikuReportXlsxPlainExporter extends SaikuReportXlsxExporter {
 				setMaxColWidth(sheet, cell, cellColumnPos);
 				CellRangeAddress mergedHeaderCell = new CellRangeAddress(i, i + headerCell.getRowSpan() - 1, 
 						cellColumnPos, cellColumnPos + headerCell.getColSpan() - 1);
-				sheet.addMergedRegion(mergedHeaderCell);
+				if (mergedHeaderCell.getNumberOfCells()  > 1)
+					sheet.addMergedRegion(mergedHeaderCell);
 			}
 		}
 	}
 	
+
 	
-	protected int renderGroupRow(Sheet sheet, GeneratedReport report, ReportArea reportContents, int level, Row row) {
-		for (ReportArea reportArea : reportContents.getChildren()) {
-			if (reportArea.getNrEntities() > 0) {
-				Cell cell = row.createCell(level);
-				cell.setCellValue(reportArea.getOwner().debugString);
-			} 
-			
-			int rowPosInit = row.getRowNum();
-			int rowPos = renderTableRow(sheet, report, reportArea, level+1, row);
-			
-			// populate all cells of the hierarchy column with the name of the hierarchy
-			for (int i = rowPosInit; i <= rowPos; i++) {
-				if (reportArea.getNrEntities() > 0) {
-					Row currRow = sheet.getRow(i);
-					Cell cell = currRow.createCell(level);
-					cell.setCellValue(reportArea.getOwner().debugString);
-					setMaxColWidth(sheet, cell, level);
-				} 
+	/**
+	 * @param sheet
+	 * @param report
+	 * @param reportContents
+	 * @param level
+	 * @param row
+	 * @return
+	 */
+	protected int renderTableRow(SXSSFSheet sheet, GeneratedReport report, ReportArea reportContents, int level, Row row, List<ReportCell> _hierarchies) {
+		System.out.println("Rendering row: " + reportContents.getContents().values());
+		this.flushCounter++;
+		List<ReportCell> hierarchies = new ArrayList<>(_hierarchies);
+		if (reportContents.getChildren() != null ) {
+			if (reportContents.getOwner() != null) {
+				reportContents.getContents().entrySet().stream().filter(e -> e.getKey().originalColumnName.equals(reportContents.getOwner().columnName)).
+					findFirst().ifPresent(p -> hierarchies.add(p.getValue()));
+			}
+			return renderGroupRow(sheet, report, reportContents, level, row, hierarchies);
+		} else {
+			// Totals are rendered in renderTableTotals method()
+			if (level == 0) {
+				return row.getRowNum();
 			}
 			
+			IntWrapper intWrapper = new IntWrapper();
+			
+			for (ReportOutputColumn roc : report.leafHeaders) {
+				if (isHiddenColumn(roc.originalColumnName))
+					continue;
+				ReportCell rc = null;
+				if ((report.spec.getHierarchies().size() > 0) && (intWrapper.value < level - 1)) {
+					rc = hierarchies.get(intWrapper.intValue()) != null ? hierarchies.get(intWrapper.intValue()) : roc.emptyCell;
+				} else {
+					rc = reportContents.getContents().get(roc) != null ? reportContents.getContents().get(roc) : roc.emptyCell;
+				}
+				createCell(sheet, row, intWrapper.value, rc);
+				intWrapper.inc();
+			}
+			if (flushCounter % flushBatchSize == 0) {
+				flushCounter = 0;
+				try {
+					((SXSSFSheet)sheet).flushRows(2);
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			}
+		}
+		return row.getRowNum();
+	}
+	
+	@SuppressWarnings("unused")
+	protected int renderGroupRow(SXSSFSheet sheet, GeneratedReport report, ReportArea reportContents, int level, Row row, List<ReportCell> _hierarchies) {
+		System.out.println("Rendering group: " + reportContents.getContents().values());
+		List<ReportCell> hierarchies = new ArrayList<>();
+		//hierarchies are kind of immutable in this implementation
+		hierarchies.addAll(_hierarchies);
+		for (int i = 0; i < reportContents.getChildren().size(); i++) {
+			ReportArea reportArea = reportContents.getChildren().get(i);
+			List<ReportCell> roclist = new ArrayList<ReportCell>(reportArea.getContents().values());
+			int rowPosInit = row.getRowNum();
+			//the first row will contain the actual values, which will be pushed to the list of already existing hierarchies
+			int rowPos = renderTableRow(sheet, report, reportArea, level+1, row, hierarchies);
 			// Do not generate the row for sub-totals
 			if (reportArea == reportContents.getChildren().get(reportContents.getChildren().size() - 1)) {
 				return rowPos;
 			}
-			
 			row = sheet.createRow(rowPos + 1);
 		}
-		
 		return row.getRowNum();
 	}
 	
-	protected void renderTableTotals(Sheet sheet, GeneratedReport report, ReportArea reportContents) {
+	protected void renderTableTotals(SXSSFSheet sheet, GeneratedReport report, ReportArea reportContents) {
 		IntWrapper intWrapper = new IntWrapper();
 		Row row = sheet.createRow(sheet.getLastRowNum() + 1);
 		report.leafHeaders.stream().filter(roc -> !isHiddenColumn(roc.originalColumnName)).forEach(roc -> {	
 			createTotalCell(sheet, row, intWrapper.value, report, reportContents.getContents().get(roc));
 			intWrapper.inc();
+			
 		});
+		try {
+			sheet.flushRows(10);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		
 	}
 	
 	protected String getReportSheetName() {

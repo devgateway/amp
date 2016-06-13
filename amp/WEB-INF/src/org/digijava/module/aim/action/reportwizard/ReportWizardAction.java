@@ -254,9 +254,9 @@ public class ReportWizardAction extends MultiAction {
 
         ReportWizardForm myForm		= (ReportWizardForm) form;
 
-        String onePager				= "";
+        String onePager = "";
         if ( myForm.getOnePager() )
-            onePager	= "_onepager";
+            onePager = "_onepager";
 
         //Add pledges reports support, the goals is to remove all not pledges columns
         Integer typereport=0;
@@ -363,13 +363,13 @@ public class ReportWizardAction extends MultiAction {
         modeReset(mapping, form, request, response);
 
         ReportWizardForm myForm		= (ReportWizardForm) form;
-        Session session				= PersistenceManager.getRequestDBSession();
+        Session session = PersistenceManager.getRequestDBSession();
 
-        Long reportId		= Long.parseLong( request.getParameter("editReportId") );
+        Long reportId = Long.parseLong( request.getParameter("editReportId") );
 
-        AmpReports ampReport	= (AmpReports) session.load(AmpReports.class, reportId );
+        AmpReports ampReport = (AmpReports) session.load(AmpReports.class, reportId );
 
-        myForm.setReportId( reportId );
+        myForm.setReportId(reportId);
 
         myForm.setReportTitle( ampReport.getName() );
         myForm.setReportDescription( ampReport.getReportDescription() );
@@ -385,7 +385,7 @@ public class ReportWizardAction extends MultiAction {
             myForm.setReportCategory(ampReport.getReportCategory().getId());
         }
 
-        TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
+        TeamMember teamMember = (TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
         AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
         myForm.setAmpTeamMember(ampTeamMember);
 

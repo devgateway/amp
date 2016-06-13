@@ -5,6 +5,7 @@ import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.L
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_DISTRICT;
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_REGION;
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_ZONE;
+import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_RAW;
 import static org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension.LEVEL_ORGANISATION;
 import static org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension.LEVEL_ORGANISATION_GROUP;
 import static org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension.LEVEL_ORGANISATION_TYPE;
@@ -482,6 +483,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		with_percentage(ColumnConstants.REGION, "v_regions", LOC_DIM_USG, LEVEL_REGION);
 		with_percentage(ColumnConstants.ZONE, "v_zones", LOC_DIM_USG, LEVEL_ZONE);
 		with_percentage(ColumnConstants.DISTRICT, "v_districts", LOC_DIM_USG, LEVEL_DISTRICT);
+		with_percentage(ColumnConstants.LOCATION, "v_raw_locations", LOC_DIM_USG, LEVEL_RAW);
 		
 		addMtefColumns();
 		addPseudoComputedColumns();

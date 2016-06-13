@@ -89,7 +89,6 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 				        new ReportAreaForTests(new AreaOwner(19), "Activity Id", "19", "Project Title", "Pure MTEF Project"),
 				        new ReportAreaForTests(new AreaOwner(70), "Activity Id", "70", "Project Title", "Activity with both MTEFs and Act.Comms", "Totals-Actual Commitments", "888,000"),
 				        new ReportAreaForTests(new AreaOwner(73), "Activity Id", "73", "Project Title", "activity with directed MTEFs", "Totals-Actual Commitments", "123,456")      ));
-		AmpReportsScratchpad.forcedNowDate = LocalDate.of(2016, 5, 3);
 		runNiTestCase(
 				buildSpecification("testcase amp activity ids", 
 						Arrays.asList(ColumnConstants.ACTIVITY_ID, ColumnConstants.PROJECT_TITLE), 
@@ -98,7 +97,64 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 				"en", 
 				Arrays.asList("Pure MTEF Project", "activity with directed MTEFs", "Activity with both MTEFs and Act.Comms"),
 				cor);
-		AmpReportsScratchpad.forcedNowDate = null;
+	}
+	
+	@Test
+	public void testRawLocations() {
+		NiReportModel cor = new NiReportModel("testcase raw locations (for pp), hier")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
+						"(Location: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1))",
+						"(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+					.withWarnings(Arrays.asList())
+					.withBody(      new ReportAreaForTests(null)
+				      .withContents("Location", "", "Project Title", "", "Totals-Actual Commitments", "1,098,173,58")
+				      .withChildren(
+				        new ReportAreaForTests(new AreaOwner("Location", "Anenii Noi County", 9085)).withContents("Project Title", "", "Totals-Actual Commitments", "111,333", "Location", "Anenii Noi County")
+				        .withChildren(
+				          new ReportAreaForTests(new AreaOwner(30), "Project Title", "SSC Project 1", "Totals-Actual Commitments", "111,333")        ),
+				        new ReportAreaForTests(new AreaOwner("Location", "Apareni", 9113)).withContents("Project Title", "", "Totals-Actual Commitments", "53,262,32", "Location", "Apareni")
+				        .withChildren(
+				          new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Totals-Actual Commitments", "53,262,32")        ),
+				        new ReportAreaForTests(new AreaOwner("Location", "Dolboaca", 9110)).withContents("Project Title", "", "Totals-Actual Commitments", "178,000", "Location", "Dolboaca")
+				        .withChildren(
+				          new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Totals-Actual Commitments", "178,000")        ),
+				        new ReportAreaForTests(new AreaOwner("Location", "Glodeni", 9111)).withContents("Project Title", "", "Totals-Actual Commitments", "712,000", "Location", "Glodeni")
+				        .withChildren(
+				          new ReportAreaForTests(new AreaOwner(36), "Project Title", "Activity With Zones and Percentages", "Totals-Actual Commitments", "712,000")        ),
+				        new ReportAreaForTests(new AreaOwner("Location", "Slobozia", 9115)).withContents("Project Title", "", "Totals-Actual Commitments", "43,578,26", "Location", "Slobozia")
+				        .withChildren(
+				          new ReportAreaForTests(new AreaOwner(52), "Project Title", "activity with contracting agency", "Totals-Actual Commitments", "43,578,26")        )      ));
+		runNiTestCase(
+				buildSpecification("testcase raw locations (for pp), hier", 
+						Arrays.asList(ColumnConstants.LOCATION, ColumnConstants.PROJECT_TITLE), 
+						Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+						Arrays.asList(ColumnConstants.LOCATION), 
+						GroupingCriteria.GROUPING_TOTALS_ONLY),
+				"en", 
+				Arrays.asList("SSC Project 1", "activity with contracting agency", "Activity With Zones and Percentages"),
+				cor);
+		cor = new NiReportModel("testcase raw locations (for pp), flat")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 3))",
+						"(Location: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1))",
+						"(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))"))
+					.withWarnings(Arrays.asList())
+					.withBody(      new ReportAreaForTests(null)
+				      .withContents("Location", "", "Project Title", "", "Totals-Actual Commitments", "1,098,173,58")
+				      .withChildren(
+				        new ReportAreaForTests(new AreaOwner(30), "Location", "Anenii Noi County", "Project Title", "SSC Project 1", "Totals-Actual Commitments", "111,333"),
+				        new ReportAreaForTests(new AreaOwner(36), "Location", "Dolboaca, Glodeni", "Project Title", "Activity With Zones and Percentages", "Totals-Actual Commitments", "890,000"),
+				        new ReportAreaForTests(new AreaOwner(52), "Location", "Apareni, Slobozia", "Project Title", "activity with contracting agency", "Totals-Actual Commitments", "96,840,58") ));
+		runNiTestCase(
+				buildSpecification("testcase raw locations (for pp), flat", 
+						Arrays.asList(ColumnConstants.LOCATION, ColumnConstants.PROJECT_TITLE), 
+						Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), 
+						null, 
+						GroupingCriteria.GROUPING_TOTALS_ONLY),
+				"en", 
+				Arrays.asList("SSC Project 1", "activity with contracting agency", "Activity With Zones and Percentages"),
+				cor);
 	}
 	
 	@Test
@@ -116,9 +172,10 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 				        new ReportAreaForTests(new AreaOwner(81), "Project Implementation Delay", "20 days", "Project Title", "PID: original, proposed, actual"),
 				        new ReportAreaForTests(new AreaOwner(82), "Project Implementation Delay", "6 years 21 days", "Project Title", "PID: original, actual"),
 				        new ReportAreaForTests(new AreaOwner(83), "Project Title", "PID: original > actual"),
-				        new ReportAreaForTests(new AreaOwner(84), "Project Implementation Delay", "1 month 20 days", "Project Title", "PID: original"),
+				        new ReportAreaForTests(new AreaOwner(84), "Project Implementation Delay", "1 month 23 days", "Project Title", "PID: original"),
 				        new ReportAreaForTests(new AreaOwner(85), "Project Implementation Delay", "20 days", "Project Title", "PID: original, proposed")      ));
-		
+		AmpReportsScratchpad.forcedNowDate = LocalDate.of(2016, 5, 3);
+
 		runNiTestCase(
 				buildSpecification("testcase for Project Implementation Delay", 
 						Arrays.asList(ColumnConstants.PROJECT_IMPLEMENTATION_DELAY, ColumnConstants.PROJECT_TITLE), 
@@ -127,6 +184,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 				"en", 
 				Arrays.asList("PID: original, proposed, actual", "PID: original, actual", "PID: original > actual", "PID: original", "PID: original, proposed"),
 				cor);
+		AmpReportsScratchpad.forcedNowDate = null;
 	}
 
 	@Test

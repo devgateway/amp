@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.dgfoundation.amp.nireports.amp.PercentagesCorrector;
 import org.dgfoundation.amp.nireports.amp.SqlSourcedNiDimension;
+import org.dgfoundation.amp.nireports.schema.NiDimension;
 
 /**
  * 
@@ -23,6 +24,8 @@ public final class LocationsDimension extends SqlSourcedNiDimension {
 	public final static int LEVEL_REGION = 1;
 	public final static int LEVEL_ZONE = 2;
 	public final static int LEVEL_DISTRICT = 3;
+	public final static int LEVEL_RAW = NiDimension.LEVEL_ALL_IDS;
+	
 
 	@Override
 	protected PercentagesCorrector buildPercentagesCorrector(NiDimensionUsage dimUsg, boolean pledgeColumn) {

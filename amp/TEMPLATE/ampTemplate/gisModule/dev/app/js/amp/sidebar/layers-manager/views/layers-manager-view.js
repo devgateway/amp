@@ -1,4 +1,4 @@
-var fs = require('fs');
+/*var fs = require('fs');
 var $ = require('jquery');
 var _ = require('underscore');
 require('jquery-ui/draggable');
@@ -49,3 +49,4 @@ module.exports = BaseControlView.extend({
    }
 
 });
+*/

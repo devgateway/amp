@@ -4,6 +4,7 @@
 	<security login-required="false" default="READ">
 		<action login-required="true" pattern="/structureTypeManager">ADMIN</action>
 		<action login-required="true" pattern="/StructuresImporter">ADMIN</action>
+		<action login-required="true" pattern="/MapsConfiguration">ADMIN</action>
 		<action login-required="false" pattern="/mainmap" />
 	</security>
 	

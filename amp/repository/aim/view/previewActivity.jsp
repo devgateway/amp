@@ -2597,7 +2597,7 @@ function collapseAll() {
 	<div id="contactdiv" class="toggleDiv">
 		<module:display name="/Activity Form/Contacts/Donor Contact Information" parentModule="/Activity Form/Contacts">
 			<c:if test="${not empty aimEditActivityForm.contactInformation.donorContacts}">
-			<digi:trn>Donor funding contact information</digi:trn>:&nbsp;
+				<digi:trn>Donor funding contact information</digi:trn>:&nbsp;
 				<c:forEach var="donorContact" items="${aimEditActivityForm.contactInformation.donorContacts}">
 					<div>		
 						<b><c:out value="${donorContact.contact.name}" /></b> 
@@ -2609,12 +2609,12 @@ function collapseAll() {
 						</c:forEach>
 					</div>
 				</c:forEach>
+				<hr>
 			</c:if> 
 		</module:display>	
 		<module:display name="/Activity Form/Contacts/Mofed Contact Information" parentModule="/Activity Form/Contacts">
 			<c:if test="${not empty aimEditActivityForm.contactInformation.mofedContacts}">
-			<hr>
-			<digi:trn>MOFED contact information</digi:trn>:&nbsp;
+				<digi:trn>MOFED contact information</digi:trn>:&nbsp;
 				<c:forEach var="mofedContact" items="${aimEditActivityForm.contactInformation.mofedContacts}">
 					<div>
 						<b><c:out value="${mofedContact.contact.name}" /></b> 
@@ -2626,29 +2626,30 @@ function collapseAll() {
 						</c:forEach>
 					</div>
 				</c:forEach>
+				<hr>
 			</c:if> 
 		</module:display>
 		
 		<module:display name="/Activity Form/Contacts/Project Coordinator Contact Information" parentModule="/Activity Form/Contacts">
-				<c:if test="${not empty aimEditActivityForm.contactInformation.projCoordinatorContacts}">
-					<hr>
-					<digi:trn>Project Coordinator Contact Information</digi:trn>:&nbsp;
-					<c:forEach var="projCoordinatorContact" items="${aimEditActivityForm.contactInformation.projCoordinatorContacts}">
-						<div>
-							<b><c:out value="${projCoordinatorContact.contact.name}"/></b> 
-							<b><c:out value="${projCoordinatorContact.contact.lastname}" /></b>- 
-							<c:forEach var="property" items="${projCoordinatorContact.contact.properties}">
-								<c:if test="${property.name=='contact email'}">
-									<b><c:out value="${property.value}" /></b> ;								</c:if>
-							</c:forEach>
-						</div>
-					</c:forEach>
-				</c:if>
+			<c:if test="${not empty aimEditActivityForm.contactInformation.projCoordinatorContacts}">
+				<digi:trn>Project Coordinator Contact Information</digi:trn>:&nbsp;
+				<c:forEach var="projCoordinatorContact" items="${aimEditActivityForm.contactInformation.projCoordinatorContacts}">
+					<div>
+						<b><c:out value="${projCoordinatorContact.contact.name}"/></b>
+						<b><c:out value="${projCoordinatorContact.contact.lastname}" /></b>-
+						<c:forEach var="property" items="${projCoordinatorContact.contact.properties}">
+							<c:if test="${property.name=='contact email'}">
+								<b><c:out value="${property.value}" /></b> ;
+							</c:if>
+						</c:forEach>
+					</div>
+				</c:forEach>
+				<hr>
+			</c:if>
 		</module:display>
 				
 		<module:display name="/Activity Form/Contacts/Sector Ministry Contact Information" parentModule="/Activity Form/Contacts">
 			<c:if test="${not empty aimEditActivityForm.contactInformation.sectorMinistryContacts}">
-				<hr>
 				<digi:trn>Sector Ministry Contact Information</digi:trn>:&nbsp;
 				<c:forEach var="sectorMinistryContact" items="${aimEditActivityForm.contactInformation.sectorMinistryContacts}">
 					<div>
@@ -2656,17 +2657,18 @@ function collapseAll() {
 						<b><c:out value="${sectorMinistryContact.contact.lastname}" /></b> -
 						<c:forEach var="property" items="${sectorMinistryContact.contact.properties}">
 							<c:if test="${property.name=='contact email'}">
-								<b><c:out value="${property.value}" /></b>;							</c:if>
+								<b><c:out value="${property.value}" /></b>;
+							</c:if>
 						</c:forEach>
 					</div>
 				</c:forEach>
+				<hr>
 			</c:if> 
 		</module:display>
 					
 		<module:display name="/Activity Form/Contacts/Implementing Executing Agency Contact Information" 
 			parentModule="/Activity Form/Contacts">
 				<c:if test="${not empty aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
-					<hr>
 					<digi:trn>Implementing/Executing Agency Contact Information</digi:trn>:&nbsp;
 					<c:forEach var="implExecAgencyContact" items="${aimEditActivityForm.contactInformation.implExecutingAgencyContacts}">
 						<div>
@@ -2674,7 +2676,8 @@ function collapseAll() {
 							<b><c:out value="${implExecAgencyContact.contact.lastname}" /></b> -
 							<c:forEach var="property" items="${implExecAgencyContact.contact.properties}">
 								<c:if test="${property.name=='contact email'}">
-									<b><c:out value="${property.value}" /></b> ;								</c:if>
+									<b><c:out value="${property.value}" /></b> ;
+								</c:if>
 							</c:forEach>
 						</div>
 					</c:forEach>

@@ -1,6 +1,5 @@
 package org.dgfoundation.amp.reports.saiku.export;
 
-import org.apache.poi.ss.usermodel.Workbook;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 
 /**
@@ -21,5 +20,4 @@ public interface SaikuReportExporter {
 	 * @throws Exception
 	 */
 	public abstract byte[] exportReport(GeneratedReport report, GeneratedReport dualReport) throws Exception;
-	
 }

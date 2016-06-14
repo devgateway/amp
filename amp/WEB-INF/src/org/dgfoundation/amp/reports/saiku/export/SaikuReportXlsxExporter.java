@@ -45,38 +45,20 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	private static final Logger logger = Logger.getLogger(SaikuReportXlsxExporter.class);
 
 	/**
-	 * Cutoff threshold above which a report is considered large, and the SXSSF API is employed
-	 * (flushing to disk instead of keeping all rows in memory)
-	 */
-	private static int SXSSF_THRESHOLD = 1000*1000;
-	/**
 	 * counter of rows written to output before being flushed (SXSSF behaviour)
 	 */
+
 	protected int flushCounter = 0;
 	/**
 	 * size of a batch of rows being accumulated until being flushed
 	 */
 	protected int flushBatchSize = 100;
-
-	
-//	protected boolean requiresMemoryCare = false;
 	
 	private static int countReportRows(ReportArea area) {
 		if (area.getChildren() == null)
 			return 1;
 		else 
 			return area.getChildren().stream().mapToInt(z -> countReportRows(z)).sum();
-	}
-	
-	/**
-	 * Decides whether a report is large (requires XSSF) or not. 
-	 * @param report the report to be converted
-	 * @return whether SXSSF API is going to be used
-	 */
-	protected boolean requiresMemoryCare(GeneratedReport report) {
-		int cols = report.leafHeaders.size();
-		int rows = countReportRows(report.reportContents);
-		return cols * rows > SXSSF_THRESHOLD;
 	}
 	
 	/**
@@ -232,7 +214,7 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 				intWrapper.inc();
 			});
 			try {
-				((SXSSFSheet)sheet).flushRows(10);
+				sheet.flushRows(10);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}

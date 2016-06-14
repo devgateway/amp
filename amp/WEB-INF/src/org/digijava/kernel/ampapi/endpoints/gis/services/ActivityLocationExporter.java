@@ -64,9 +64,6 @@ public class ActivityLocationExporter extends ActivityExporter {
 		return value == null || value.equals("Undefined") || value.equals("GeoId: Undefined");
 	}
 	
-	
- 
-	
 	private Activity setActivityField(String key, String value, Activity a) {
 		switch(key) {
 			case ColumnConstants.GEOCODE:
@@ -182,8 +179,8 @@ public class ActivityLocationExporter extends ActivityExporter {
 		return PersistenceManager.getSession().doReturningWork(new ReturningWork<Map<String, GeoDataSkeleton>>() {
 			public Map<String, GeoDataSkeleton> execute(Connection conn) throws SQLException {
 				Map<String, GeoDataSkeleton> res = new HashMap<>();
-				String query = String.format("select geo_code,location_name,gs_lat,gs_long from amp_category_value_location "
-						+ "where  geo_code in (%s)", geoCodesJoined);
+				String query = "select geo_code,location_name,gs_lat,gs_long from amp_category_value_location "
+					+ String.format("where  geo_code in (%s)", geoCodesJoined);
 				try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
 					ResultSet rs = rsi.rs;
 					while (rs.next()) {
@@ -207,15 +204,17 @@ public class ActivityLocationExporter extends ActivityExporter {
 				&& report.reportContents.getChildren() != null) {
 			extractActivitiesFromReport(report.reportContents, new Activity());
 			//postprocess: expand geocodes into latitude/longitude
-			//has to be done outside of the recursive since implies a DB request
-			String preparedGeoCodes = org.dgfoundation.amp.Util.toCSString(geoCodes);
-			Map<String, GeoDataSkeleton> geoDataExpanded = getGeoInfoFromDb(preparedGeoCodes);
-			for (Activity act : activities) {
-				if (geoDataExpanded.containsKey(act.getGeoCode())) {
-					GeoDataSkeleton gds = geoDataExpanded.get(act.getGeoCode());
-					act.setLocationName(gds.locationName);
-					act.setLatitude(gds.latitude);
-					act.setLongitude(gds.longitude);
+			//has to be done outside of the recursive part since it implies a DB request
+			if (geoCodes.size() > 0) {
+				String preparedGeoCodes = org.dgfoundation.amp.Util.toCSString(geoCodes);
+				Map<String, GeoDataSkeleton> geoDataExpanded = getGeoInfoFromDb(preparedGeoCodes);
+				for (Activity act : activities) {
+					if (geoDataExpanded.containsKey(act.getGeoCode())) {
+						GeoDataSkeleton gds = geoDataExpanded.get(act.getGeoCode());
+						act.setLocationName(gds.locationName);
+						act.setLatitude(gds.latitude);
+						act.setLongitude(gds.longitude);
+					}
 				}
 			}
 		}

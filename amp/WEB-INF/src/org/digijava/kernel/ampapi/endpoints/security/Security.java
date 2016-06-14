@@ -1,22 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.security;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import javax.security.auth.Subject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.apache.commons.httpclient.HttpStatus;
+import com.sun.jersey.spi.container.ContainerRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.util.AmpApiToken;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -39,19 +27,28 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
-import org.digijava.module.um.dbentity.SuspendLogin;
-import org.digijava.module.um.util.UmUtil;
 import org.jetbrains.annotations.NotNull;
-import org.joda.time.DateTime;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.codec.Base64;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.xml.sax.SAXException;
 
-import com.sun.jersey.spi.container.ContainerRequest;
+import javax.security.auth.Subject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
-import static org.apache.commons.codec.digest.DigestUtils.md5Hex;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
 /**
  * This class should have all security / permissions related methods
@@ -62,11 +59,6 @@ import static org.apache.commons.codec.digest.DigestUtils.md5Hex;
 @Path("security")
 public class Security {
 	private static final Logger logger = Logger.getLogger(Security.class);
-	private static final String KEY = "testNonce"; // hardcoded value, it must be exactly as application-context.xml
-	private static final String REAL_NAME = "AMP-Realm";
-	private static final String QOP = "auth";
-	private static final String NONCE_COUNTER = "00000001";
-	private static final String CNONCE = "testCnonce";
 	private static String SITE_CONFIG_PATH = "TEMPLATE" + System.getProperty("file.separator") + "ampTemplate"
 			+ System.getProperty("file.separator") + "site-config.xml";
 
@@ -127,7 +119,8 @@ public class Security {
 	private JsonBean createResponse(boolean isAdmin, AmpApiToken apiToken, String username, String team, boolean addActivity) {
 		String port = getPort();
 		final JsonBean authenticationResult = new JsonBean();
-		authenticationResult.set("token", apiToken!=null && apiToken.getToken()!=null?apiToken.getToken():null);
+		authenticationResult.set("token", apiToken != null && apiToken.getToken() != null ? apiToken.getToken() : null);
+		authenticationResult.set("token-expiration", apiToken != null && apiToken.getExpirationTime() != null ? apiToken.getExpirationTime().getMillis() : null);
 		authenticationResult.set("url", "http"+ (TLSUtils.getRequest().isSecure()?"s":"") +"://"+ TLSUtils.getRequest().getServerName() + port +"/showLayout.do?layout=login");
 		authenticationResult.set("team", team);
 		authenticationResult.set("user-name", username);
@@ -146,83 +139,47 @@ public class Security {
 	@POST
 	@Path("/user/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public JsonBean authenticate(JsonBean authentication) {
-		String username = authentication.getString("j_username");
-		String password = authentication.getString("j_password");
-		Integer workspaceId = (Integer) authentication.get("j_autoWorkspaceId");
-		if(StringUtils.isBlank(username) || StringUtils.isBlank(password) || workspaceId == null) {
-			return getErrorResponse(400, "Invalid Parameters");
+	public JsonBean authenticate(final JsonBean authentication) {
+		final String username = authentication.getString("username");
+		final String password = authentication.getString("password");
+		final Integer workspaceId = (Integer) authentication.get("workspaceId");
+		if (StringUtils.isBlank(username) || StringUtils.isBlank(password) || workspaceId == null) {
+			ApiErrorResponse.reportError(BAD_REQUEST, SecurityErrors.INVALID_REQUEST);
 		}
 		try {
-			User user = UserUtils.getUserByEmail(username);
-			if(user == null || !user.getPassword().equals(password)) {
-				return getErrorResponse(401, "UNAUTHORIZED");
-			}
-			if(user.isBanned()) { // user is banned
-				SecurityContextHolder.getContext().setAuthentication(null);
-				return getErrorResponse(401, "userBanned");
-			}
-			List<SuspendLogin> su = UmUtil.getUserSuspendReasons (user);
-			if (su != null && !su.isEmpty()) {
-				StringBuilder suReasons = new StringBuilder("userSuspended=");
-				for (SuspendLogin suObject : su) {
-					suReasons.append("'").append(suObject.getReasonText()).append("'");
-				}
-				SecurityContextHolder.getContext().setAuthentication(null);
-				return getErrorResponse(401, suReasons.toString());
-			}
-			AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(new Long(workspaceId));
-			if (teamMember == null || teamMember.getUser().getId() != user.getId()){
-				return getErrorResponse(401, "The user is not part of Workspace ");
+			final User user = UserUtils.getUserByEmail(username);
+			if (user == null || !user.getPassword().equals(password)) {
+				ApiErrorResponse.reportForbiddenAccess(SecurityErrors.INVALID_TOKEN);
 			}
 
-			String token = generateDigest(username, password);
-			UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
-			authRequest.setDetails(new WebAuthenticationDetails(this.httpRequest));
-			SecurityContextHolder.getContext().setAuthentication(authRequest);
-
-			AmpApiToken apiToken = new AmpApiToken();
-			apiToken.setToken(token);
-			apiToken.setTeamMember(teamMember.toTeamMember());
-			apiToken.setExpirationTime(new DateTime().plusHours(1));
-
-			// setting to session
-			HttpSession session = this.httpRequest.getSession();
-			PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
-			Map<String, AmpApiToken> tokens = (Map<String, AmpApiToken>) this.httpRequest.getServletContext().getAttribute(SecurityUtil.TOKENS);
-			if(tokens == null) {
-				tokens = new HashMap<>();
-				this.httpRequest.getServletContext().setAttribute(SecurityUtil.TOKENS, tokens);
+			final ApiErrorMessage result = ApiAuthentication.login(user, this.httpRequest);
+			if (result != null) {
+				ApiErrorResponse.reportForbiddenAccess(result);
 			}
-			tokens.put(token, apiToken);
-			return createResponse(user.isGlobalAdmin(), apiToken, username, teamMember.getAmpTeam().getName(), true);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return getErrorResponse(500, "Internal Server Error");
+
+			final AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(new Long(workspaceId));
+			if (teamMember == null) {
+				ApiErrorResponse.reportError(BAD_REQUEST, SecurityErrors.INVALID_REQUEST);
+			}
+			storeInSession(username, password, teamMember);
+
+			final AmpApiToken ampApiToken = SecurityUtil.generateToken();
+
+			return createResponse(user.isGlobalAdmin(), ampApiToken, username, teamMember.getAmpTeam().getName(), true);
+		} catch (final Exception e) {
+			logger.error("Error trying to login the user", e);
+			ApiErrorResponse.reportError(INTERNAL_SERVER_ERROR, SecurityErrors.INVALID_REQUEST);
 		}
+		return null;
 	}
 
-	private String generateDigest(String username, String password) throws IllegalArgumentException {
-		long expiryTime = System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1);
-		String signatureValue = md5Hex(expiryTime + ":" + KEY);
-		String nonceValue = expiryTime + ":" + signatureValue;
-		String nonceValueBase64 = new String(Base64.encode(nonceValue.getBytes()));
-		String a2 = this.httpRequest.getMethod() + ":" + this.httpRequest.getRequestURI();
-		String a2Md5 = md5Hex(a2);
-		String a1 = username + ":" + REAL_NAME + ":" + password;
-		String a1Md5 = md5Hex(a1);
-
-		String digest = a1Md5 + ":" + nonceValueBase64 + ":" + NONCE_COUNTER + ":" + CNONCE + ":" + QOP + ":" + a2Md5;
-
-		return md5Hex(digest);
-	}
-
-	@NotNull
-	private JsonBean getErrorResponse(int code, String message) {
-		JsonBean response = new JsonBean();
-		response.set("errorCode", code);
-		response.set("errorMgs", message);
-		return response;
+	private void storeInSession(final String username, final String password, final AmpTeamMember teamMember) {
+		final UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
+		authRequest.setDetails(new WebAuthenticationDetails(this.httpRequest));
+		SecurityContextHolder.getContext().setAuthentication(authRequest);
+		final HttpSession session = this.httpRequest.getSession();
+		PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
+		session.setAttribute(Constants.CURRENT_MEMBER, teamMember.toTeamMember());
 	}
 
 	/**

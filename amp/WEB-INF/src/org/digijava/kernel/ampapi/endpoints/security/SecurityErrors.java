@@ -26,4 +26,9 @@ public class SecurityErrors {
 	public static final ApiErrorMessage TOKEN_EXPIRED = new ApiErrorMessage(6, "Token expired");
 	/** Invalid Request */
 	public static final ApiErrorMessage INVALID_REQUEST = new ApiErrorMessage(7, "Invalid request");
+	/** User Banned */
+	public static final ApiErrorMessage USER_BANNED = new ApiErrorMessage(8, "User Banned");
+	/** User is not part of any team */
+	public static final ApiErrorMessage NO_TEAM = new ApiErrorMessage(9, "User is not part of any team");
+
 }

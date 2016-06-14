@@ -107,6 +107,9 @@ public class FundingCalculationsHelper {
 		put(combineKeys(Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_ODA_SSC), () -> totOdaSscComm);
         put(combineKeys(Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_BILATERAL_SSC), () -> totBilateralSscComm);
         put(combineKeys(Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_TRIANGULAR_SSC), () -> totTriangularSscComm);
+		put(combineKeys(Constants.DISBURSEMENT_ORDER, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL), () -> totActualDisbOrder);
+		put(combineKeys(Constants.DISBURSEMENT_ORDER, CategoryConstants.ADJUSTMENT_TYPE_PIPELINE), () -> totPipelineDisbOrder);
+		put(combineKeys(Constants.DISBURSEMENT_ORDER, CategoryConstants.ADJUSTMENT_TYPE_PLANNED), () -> totPlannedDisbOrder);
 	}};
 	
 	public DecimalWraper getTotalByKey(String adjKey, String transTypeKey) {
@@ -409,7 +412,14 @@ public class FundingCalculationsHelper {
     public DecimalWraper getTotalPledged(){
 		return this.totalPledged;
 	}
-	
+
+	public DecimalWraper getTotBilateralSscArrears() {
+		return totBilateralSscArrears;
+	}
+
+	public DecimalWraper getTotTriangularSscArrears() {
+		return totTriangularSscArrears;
+	}
 
 	public boolean isDebug() {
 		return this.debug;
@@ -575,5 +585,13 @@ public class FundingCalculationsHelper {
 
 	public boolean canEqual(final java.lang.Object other) {
 		return other instanceof FundingCalculationsHelper;
+	}
+
+	public void setTotBilateralSscArrears(DecimalWraper totBilateralSscArrears) {
+		this.totBilateralSscArrears = totBilateralSscArrears;
+	}
+
+	public void setTotTriangularSscArrears(DecimalWraper totTriangularSscArrears) {
+		this.totTriangularSscArrears = totTriangularSscArrears;
 	}
 }

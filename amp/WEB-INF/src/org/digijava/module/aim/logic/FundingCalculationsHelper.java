@@ -54,12 +54,13 @@ public class FundingCalculationsHelper {
 	DecimalWraper totPipelineEDD = new DecimalWraper();
 	DecimalWraper totPipelineArrears = new DecimalWraper();
 	DecimalWraper totBilateralSscArrears = new DecimalWraper();
+	DecimalWraper totBilateralSscDisbOrder = new DecimalWraper();
+	DecimalWraper totBilateralSscComm = new DecimalWraper();
 	DecimalWraper totTriangularSscArrears = new DecimalWraper();
+	DecimalWraper totTriangularSscComm = new DecimalWraper();
+	DecimalWraper totTriangularSscDisbOrder = new DecimalWraper();
 	DecimalWraper totOfficialDevAidArrears = new DecimalWraper();
 	DecimalWraper totOdaSscComm = new DecimalWraper();
-	DecimalWraper totBilateralSscComm = new DecimalWraper();
-	DecimalWraper totTriangularSscComm = new DecimalWraper();
-	
 	
     @SuppressWarnings("serial")
 	private static Map<Integer, String> transactionTypeLabelMap = new HashMap<Integer, String>(){{
@@ -110,6 +111,8 @@ public class FundingCalculationsHelper {
 		put(combineKeys(Constants.DISBURSEMENT_ORDER, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL), () -> totActualDisbOrder);
 		put(combineKeys(Constants.DISBURSEMENT_ORDER, CategoryConstants.ADJUSTMENT_TYPE_PIPELINE), () -> totPipelineDisbOrder);
 		put(combineKeys(Constants.DISBURSEMENT_ORDER, CategoryConstants.ADJUSTMENT_TYPE_PLANNED), () -> totPlannedDisbOrder);
+		put(combineKeys(Constants.DISBURSEMENT_ORDER, CategoryConstants.ADJUSTMENT_TYPE_BILATERAL_SSC), () -> totBilateralSscDisbOrder);
+		put(combineKeys(Constants.DISBURSEMENT_ORDER, CategoryConstants.ADJUSTMENT_TYPE_TRIANGULAR_SSC), () -> totTriangularSscDisbOrder);
 	}};
 	
 	public DecimalWraper getTotalByKey(String adjKey, String transTypeKey) {
@@ -421,6 +424,18 @@ public class FundingCalculationsHelper {
 		return totTriangularSscArrears;
 	}
 
+	public DecimalWraper getTotBilateralSscDisbOrder() {
+		return totBilateralSscDisbOrder;
+	}
+
+	public DecimalWraper getTotTriangularSscDisbOrder() {
+		return totTriangularSscDisbOrder;
+	}
+
+	public DecimalWraper getTotOfficialDevAidArrears() {
+		return totOfficialDevAidArrears;
+	}
+
 	public boolean isDebug() {
 		return this.debug;
 	}
@@ -581,7 +596,18 @@ public class FundingCalculationsHelper {
 	public void setTotPipelineArrears(DecimalWraper totPipelineArrears) {
 		this.totPipelineArrears = totPipelineArrears;
 	}
-	
+
+	public void setTotBilateralSscDisbOrder(DecimalWraper totBilateralSscDisbOrder) {
+		this.totBilateralSscDisbOrder = totBilateralSscDisbOrder;
+	}
+
+	public void setTotTriangularSscDisbOrder(DecimalWraper totTriangularSscDisbOrder) {
+		this.totTriangularSscDisbOrder = totTriangularSscDisbOrder;
+	}
+
+	public void setTotOfficialDevAidArrears(DecimalWraper totOfficialDevAidArrears) {
+		this.totOfficialDevAidArrears = totOfficialDevAidArrears;
+	}
 
 	public boolean canEqual(final java.lang.Object other) {
 		return other instanceof FundingCalculationsHelper;

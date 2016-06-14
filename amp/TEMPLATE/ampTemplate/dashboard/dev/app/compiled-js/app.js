@@ -22959,7 +22959,7 @@ module.exports = Backbone.View.extend({
 
 },{"backbone":"backbone","underscore":"underscore"}],55:[function(require,module,exports){
 module.exports=require(47)
-},{"C:\\Users\\Gabriel\\workspace-luna\\amp-2.12-release-2\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":47}],56:[function(require,module,exports){
+},{"C:\\Users\\JulianEduardo\\workspace_dg_new\\amp-2.12-release\\TEMPLATE\\ampTemplate\\node_modules\\amp-boilerplate\\node_modules\\bootstrap\\dist\\js\\bootstrap.js":47}],56:[function(require,module,exports){
 var jQuery = require('jquery');
 
 /*!
@@ -27172,6 +27172,7 @@ module.exports = Backbone.Collection.extend({
     return this._fetchOrgCollections().then(function() {
 
       // jsonify orgs and set them as children in groups.
+
       self.makeTreeHelper(self.orgGroupCollection, self.orgCollection, 'orgIds', 'children');
 
 
@@ -27208,7 +27209,8 @@ module.exports = Backbone.Collection.extend({
         }
 
         if (tmpJSON.data.length > 0) {
-          var currentFilterId = role.get('name') + " Id";
+        	//The role name is Donor and the back end, for donor, is expecting either Donor Id or Donor Agency
+          var currentFilterId = role.get('name') + (role.get('name') === 'Donor'? " Agency":"");
           tmpJSON.data = self._setFilterId(tmpJSON.data, currentFilterId);
           self.add(new OrgRoleFilterModel(tmpJSON));
         }

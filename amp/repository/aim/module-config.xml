@@ -9,25 +9,36 @@
 		<action login-required="true" pattern="/auditLoggerManager">ADMIN</action>
 		<action login-required="true" pattern="/BudgetManager">ADMIN</action>
 		<action login-required="true" pattern="/contentManager">ADMIN</action>
+		<action login-required="true" pattern="/createWorkspace">ADMIN</action>
 		<action login-required="true" pattern="/currencyManager">ADMIN</action>
 		<action login-required="true" pattern="/dataFreezeManager">ADMIN</action>
 		<action login-required="true" pattern="/dynLocationManager">ADMIN</action>
+		<action login-required="true" pattern="/editFiscalCalendar">ADMIN</action>
+		<action login-required="true" pattern="/editOrganisation">ADMIN</action>
 		<action login-required="true" pattern="/export">ADMIN</action>
 		<action login-required="true" pattern="/fiscalCalendarManager">ADMIN</action>
 		<action login-required="true" pattern="/flagUploader">ADMIN</action>
 		<action login-required="true" pattern="/getSectorSchemes">ADMIN</action>
+		<action login-required="true" pattern="/getSectorClassConfig">ADMIN</action>
 		<action login-required="true" pattern="/GlobalSettings">ADMIN</action>
+		<action login-required="true" pattern="/importLocationIndicatorValuesXLS">ADMIN</action>
+		<action login-required="true" pattern="/indicatorLayerManager">ADMIN</action>
 		<action login-required="true" pattern="/manageGPI">ADMIN</action>
 		<action login-required="true" pattern="/organisationManager">ADMIN</action>
 		<action login-required="true" pattern="/organisationManager">ADMIN</action>
+		<action login-required="true" pattern="/orgGroupManager">ADMIN</action>
+		<action login-required="true" pattern="/orgTypeManager">ADMIN</action>
 		<action login-required="true" pattern="/programConfigurationPage">ADMIN</action>
 		<action login-required="true" pattern="/quartzJobManager">ADMIN</action>
 		<action login-required="true" pattern="/scorecardManager">ADMIN</action>
+		<action login-required="true" pattern="/selectFilteredRates">ADMIN</action>		
 		<action login-required="true" pattern="/showCurrencyRates">ADMIN</action>
 		<action login-required="true" pattern="/themeManager">ADMIN</action>
+		<action login-required="true" pattern="/updateSectorClassConfig">ADMIN</action>
+		<action login-required="true" pattern="/updateSectorSchemes">ADMIN</action>
 		<action login-required="true" pattern="/viewIndicators">ADMIN</action>
 		<action login-required="true" pattern="/visibilityManager">ADMIN</action>
-		<action login-required="true" pattern="/workspaceManager">ADMIN</action>		
+		<action login-required="true" pattern="/workspaceManager">ADMIN</action>
 		<action login-required="false" pattern="/changePassword" />
 		<action login-required="false" pattern="/confirmRegisteration" />
 		<action login-required="false" pattern="/csvExport" />

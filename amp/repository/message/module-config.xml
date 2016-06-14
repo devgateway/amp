@@ -4,6 +4,8 @@
 	<security login-required="true" default="READ">
 		<action login-required="true" pattern="/messageActions" />
 		<action login-required="true" pattern="/msgSettings">ADMIN</action>
+		<action login-required="true" pattern="/templatesManager">ADMIN</action>
+		<action login-required="true" pattern="/exportImportTemplates">ADMIN</action>
 	</security>
 		<hibernate-classes required="false">
 			<hibernate-class>

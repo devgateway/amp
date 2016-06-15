@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-22943</jira>
+	<keyword>Hide proposed project cost measure in FM</keyword>
+	<author>apicca</author>
+	<description>Hide "Proposed Project Cost Amount Per Project" measure in FM</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				delete from amp_features_templates where feature = (select id from amp_features_visibility  where name = 'Proposed Project Cost Amount Per Project');
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

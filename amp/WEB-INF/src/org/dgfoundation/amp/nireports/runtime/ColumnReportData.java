@@ -78,14 +78,10 @@ public class ColumnReportData extends ReportData {
 			//missingActIdsInSplitterColumn.clear();
 			
 			for(long missingActId:missingActIdsInSplitterColumn) {
-				try {
 				Cell unallocatedCell = behaviour.buildUnallocatedCell(missingActId, UNALLOCATED_ID, schemaColumn.levelColumn.get()); //TODO: will crash if making hierarchies on a non-same-level column
 				
 				NiCell unallocatedSplitterCell = new NiCell(unallocatedCell, schemaColumn, null);
 				processCell(unallocatedSplitterCell);
-				} catch (Exception ex) {
-					throw new RuntimeException(ex);
-				}
 			}
 		}
 		

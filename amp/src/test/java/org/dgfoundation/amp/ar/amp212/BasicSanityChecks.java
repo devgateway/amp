@@ -365,7 +365,8 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 			}
 		}
 	}
-	
+
+	/*
 	@Test
 	public void testDoubleHierarchiesDoNotChangeTotals() {
 		int fails = 0;
@@ -397,6 +398,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 		double relativeSpeed = speed / 286.0;
 		System.err.format("I ran %d double-hier reports in %d millies (%d per second, relativeSpeed: %.2f)\n", reps, delta, speed, relativeSpeed);
 	}
+	
 	
 	@Test
 	public void testTripleHierarchiesDoNotChangeTotals() {
@@ -432,7 +434,7 @@ public abstract class BasicSanityChecks extends ReportingTestCase {
 		double relativeSpeed = speed / 409.0;
 		System.err.format("I ran %d triple-hier reports in %d millies (%d per second, relativeSpeed: %.2f)\n", reps, delta, speed, relativeSpeed);
 	}
-	
+	*/
 	
 	
 	@Test

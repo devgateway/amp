@@ -30,7 +30,7 @@
 								WHEN 'Capital Development' THEN 'Capital'   
 								ELSE 'Capital/Recurrent not selected'
 								END, 
-						cv.id AS txt
+						cv.id AS id
 					  FROM amp_funding f, amp_category_value cv 
 					  WHERE f.mode_of_payment_category_va=cv.id;
         	</lang>

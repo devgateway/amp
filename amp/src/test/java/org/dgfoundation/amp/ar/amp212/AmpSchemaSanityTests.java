@@ -78,18 +78,7 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 	
 	@Test
 	public void testHierarchiesWithEverything() {
-		NiReportModel cor = new NiReportModel("testcase amp activity ids")
-				.withHeaders(Arrays.asList(
-						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 4))",
-						"(Activity Id: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2))",
-						"(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1))"))
-					.withWarnings(Arrays.asList())
-					.withBody(      new ReportAreaForTests(null)
-				      .withContents("Activity Id", "", "Project Title", "", "Totals-Actual Commitments", "1,011,456", "Totals-Actual Disbursements", "0")
-				      .withChildren(
-				        new ReportAreaForTests(new AreaOwner(19), "Activity Id", "19", "Project Title", "Pure MTEF Project"),
-				        new ReportAreaForTests(new AreaOwner(70), "Activity Id", "70", "Project Title", "Activity with both MTEFs and Act.Comms", "Totals-Actual Commitments", "888,000"),
-				        new ReportAreaForTests(new AreaOwner(73), "Activity Id", "73", "Project Title", "activity with directed MTEFs", "Totals-Actual Commitments", "123,456")      ));
+		NiReportModel cor = null;
 		
 		List<String> columns = Arrays.asList(ColumnConstants.AC_CHAPTER, ColumnConstants.IMPLEMENTATION_LEVEL, ColumnConstants.IMPLEMENTATION_LOCATION, 
 				ColumnConstants.ACCESSION_INSTRUMENT, ColumnConstants.STATUS, ColumnConstants.TYPE_OF_ASSISTANCE, 
@@ -429,7 +418,6 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 		spec.getOrCreateSettings().setUnitsOption(AmountsUnits.AMOUNTS_OPTION_MILLIONS);
 		runNiTestCase(cor, spec, mtefActs);
 	}
-/*	
 	
 	@Test
 	public void test_AMP_18499_should_fail_for_now() {
@@ -466,7 +454,6 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 				Arrays.asList("date-filters-activity", "pledged 2"),
 				cor);
 	}
-*/
 	
 	@Test
 	public void test_AMP_18509() {

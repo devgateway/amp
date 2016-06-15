@@ -17,6 +17,7 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.GrandTotalsDigest;
 import org.dgfoundation.amp.nireports.amp.AmpReportsScratchpad;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
+import org.dgfoundation.amp.testmodels.HardcodedActivities;
 import org.dgfoundation.amp.testmodels.NiReportModel;
 import org.digijava.module.aim.helper.DateConversion;
 import org.junit.Test;
@@ -73,6 +74,45 @@ public class AmpSchemaSanityTests extends BasicSanityChecks {
 	@Override
 	protected NiReportExecutor getNiExecutor(List<String> activityNames) {
 		return getDbExecutor(activityNames);
+	}
+	
+	@Test
+	public void testHierarchiesWithEverything() {
+		NiReportModel cor = new NiReportModel("testcase amp activity ids")
+				.withHeaders(Arrays.asList(
+						"(RAW: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 0, colSpan: 4))",
+						"(Activity Id: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1));(Project Title: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1));(Totals: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2))",
+						"(Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1));(Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1))"))
+					.withWarnings(Arrays.asList())
+					.withBody(      new ReportAreaForTests(null)
+				      .withContents("Activity Id", "", "Project Title", "", "Totals-Actual Commitments", "1,011,456", "Totals-Actual Disbursements", "0")
+				      .withChildren(
+				        new ReportAreaForTests(new AreaOwner(19), "Activity Id", "19", "Project Title", "Pure MTEF Project"),
+				        new ReportAreaForTests(new AreaOwner(70), "Activity Id", "70", "Project Title", "Activity with both MTEFs and Act.Comms", "Totals-Actual Commitments", "888,000"),
+				        new ReportAreaForTests(new AreaOwner(73), "Activity Id", "73", "Project Title", "activity with directed MTEFs", "Totals-Actual Commitments", "123,456")      ));
+		
+		List<String> columns = Arrays.asList(ColumnConstants.AC_CHAPTER, ColumnConstants.IMPLEMENTATION_LEVEL, ColumnConstants.IMPLEMENTATION_LOCATION, 
+				ColumnConstants.ACCESSION_INSTRUMENT, ColumnConstants.STATUS, ColumnConstants.TYPE_OF_ASSISTANCE, 
+				ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.DONOR_TYPE, ColumnConstants.CREDIT_DONATION, 
+				ColumnConstants.INSTITUTIONS, ColumnConstants.COMPONENT_TYPE, ColumnConstants.ACTIVITY_CREATED_BY, 
+				ColumnConstants.PROJECT_CATEGORY, ColumnConstants.FUNDING_STATUS, ColumnConstants.MODE_OF_PAYMENT,
+				ColumnConstants.PAYMENT_CAPITAL___RECURRENT, ColumnConstants.BUDGET_DEPARTMENT, ColumnConstants.BUDGET_ORGANIZATION,
+				ColumnConstants.BUDGET_SECTOR, ColumnConstants.BUDGET_PROGRAM, ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES, 
+				ColumnConstants.JOINT_CRITERIA, ColumnConstants.ON_OFF_TREASURY_BUDGET, ColumnConstants.MULTI_DONOR, 
+				ColumnConstants.AGREEMENT_TITLE_CODE, ColumnConstants.AGREEMENT_CODE, ColumnConstants.PROJECT_IMPLEMENTING_UNIT,
+				ColumnConstants.TYPE_OF_COOPERATION, ColumnConstants.TYPE_OF_IMPLEMENTATION, ColumnConstants.MODALITIES, 
+				ColumnConstants.BUDGET_STRUCTURE, ColumnConstants.INDIRECT_ON_BUDGET, ColumnConstants.HUMANITARIAN_AID,
+				ColumnConstants.DISASTER_RESPONSE_MARKER);
+		
+		runNiTestCase(
+				buildSpecification("testcase with all unusual hierarchies", 
+						columns, 
+						Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+						columns, 
+						GroupingCriteria.GROUPING_TOTALS_ONLY),
+				"en", 
+				new HardcodedActivities().getActNamesList(),
+				cor);
 	}
 	
 	@Test

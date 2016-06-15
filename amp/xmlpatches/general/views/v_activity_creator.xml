@@ -19,7 +19,15 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_activity_creator AS SELECT a.amp_activity_id, ((((((u.first_names)::text || ' '::text) || (u.last_name)::text) || ' ('::text) || (u.email)::text) || ')'::text) AS user_id FROM ((amp_activity_version a JOIN amp_team_member atm ON ((atm.amp_team_mem_id = a.activity_creator))) JOIN dg_user u ON ((atm.user_ = u.id))) ORDER BY a.amp_activity_id;;;
+			DROP VIEW IF EXISTS v_activity_creator CASCADE;
+			
+			    	CREATE OR REPLACE VIEW v_activity_creator AS 
+			    		SELECT a.amp_activity_id, 
+			    		((((((u.first_names)::text || ' '::text) || (u.last_name)::text) || ' ('::text) || (u.email)::text) || ')'::text) 
+			    		AS user_text,
+			    		u.id AS user_id
+			    		FROM ((amp_activity_version a JOIN amp_team_member atm ON ((atm.amp_team_mem_id = a.activity_creator))) 
+			    		JOIN dg_user u ON ((atm.user_ = u.id))) ORDER BY a.amp_activity_id;;;
         		</lang>
 		</script>
 	</apply>

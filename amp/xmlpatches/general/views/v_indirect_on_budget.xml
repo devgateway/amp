@@ -22,8 +22,14 @@
 				DROP VIEW IF EXISTS v_indirect_on_budget;
 			   	CREATE OR REPLACE VIEW v_indirect_on_budget AS 
 			   		SELECT a.amp_activity_id, 
-			   			CASE WHEN (a.indirect_on_budget) THEN 'Indirect On Budget' ELSE '' END AS iob_text,
-			   			CASE WHEN (a.indirect_on_budget) THEN 1 ELSE 2 END AS iob_id
+			   			CASE a.indirect_on_budget
+			   				WHEN true THEN 'Indirect On Budget'::text
+			   				ELSE ''::text
+			   			END AS iob_text, 
+			   			CASE a.indirect_on_budget 
+			   				WHEN true THEN 1
+			   				ELSE 2
+			   			END as iob_id
 			   		FROM amp_activity_version a WHERE indirect_on_budget IS NOT NULL;
 			</lang>
 		</script>

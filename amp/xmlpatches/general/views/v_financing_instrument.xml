@@ -34,12 +34,12 @@
 				DROP VIEW IF EXISTS v_credit_donation CASCADE;
 			   	CREATE OR REPLACE VIEW v_credit_donation AS
 			   		SELECT v.amp_activity_id,
-			   			CASE
-			   				WHEN v.category_value = 'Donacion' THEN 'Donacion'
-			   				ELSE 'Credito'
+			   			CASE v.category_value
+			   				WHEN 'Donacion' THEN 'Donacion'::text
+			   				ELSE 'Credito'::text
 			   			END AS name,
-			   			CASE
-			   				WHEN v.category_value = 'Donacion' THEN 1
+			   			CASE v.category_value
+			   				WHEN 'Donacion' THEN 1
 			   				ELSE 2
 			   			END AS id
 			   		FROM v_financing_instrument v;

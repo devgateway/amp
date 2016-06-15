@@ -20,9 +20,12 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 			   	CREATE OR REPLACE VIEW v_budget_department AS
-			   		SELECT a.amp_activity_id, (dep.code || ' - ' || dep.name) AS budget_sector
-			   			FROM amp_activity_version a
-			   				JOIN amp_departments dep ON a.budget_department = dep.id_department;
+			   		SELECT 
+			   			a.amp_activity_id, 
+			   			(dep.code || ' - ' || dep.name) AS budget_sector,
+			   			COALESCE(a.budget_department, -1) AS department_id
+			   		FROM amp_activity_version a
+			   		JOIN amp_departments dep ON a.budget_department = dep.id_department;
         	</lang>
 		</script>
 	</apply>

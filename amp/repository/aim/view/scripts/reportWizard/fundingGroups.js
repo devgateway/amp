@@ -13,7 +13,6 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				,'Donor'
 				,'Donor Group'
 				,'Donor Agency'
-				,'Expenditure Class'
 				,'Primary Sector'
 				,'Status', 'Region', 'Country', 'District','Zone'
 				,'Type Of Assistance'
@@ -100,7 +99,6 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 , 'Indirect On Budget'
                 , 'Humanitarian Aid'
                 , 'Disaster Response Marker'
-                , 'Expenditure Class'
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(

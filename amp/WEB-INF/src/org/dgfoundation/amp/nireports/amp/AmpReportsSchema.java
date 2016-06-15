@@ -12,6 +12,8 @@ import static org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimensi
 import static org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension.LEVEL_ROOT;
 import static org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension.LEVEL_SUBSECTOR;
 import static org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension.LEVEL_SUBSUBSECTOR;
+//import static org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension.LEVEL_ALL_SECTORS;
+import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_ALL_IDS;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_1;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_2;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_3;
@@ -22,7 +24,6 @@ import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_7;
 import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_8;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -117,10 +118,13 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static ProgramsDimension progsDimension = ProgramsDimension.instance;
 	public final static CategoriesDimension catsDimension = CategoriesDimension.instance;
 	public final static ComponentsDimension compsDimension = ComponentsDimension.instance;
+//	public final static UsersDimension usersDimension = UsersDimension.instance;
 	public final static BooleanDimension boolDimension = new BooleanDimension("bool", 1l, 2l); // corroborate with FilterRule.TRUE_VALUE
 	public final static NiDimension agreementsDimension = SqlSourcedNiDimension.buildDegenerateDimension("agrs", "amp_agreement", "id");
 	public final static NiDimension activitiesDimension = SqlSourcedNiDimension.buildDegenerateDimension("acts", "amp_activity_version", "amp_activity_id");
 	public final static NiDimension pledgesDimension = SqlSourcedNiDimension.buildDegenerateDimension("pledges", "amp_funding_pledges", "id");
+	public final static NiDimension usersDimension = SqlSourcedNiDimension.buildDegenerateDimension("users", "dg_user", "id");
+	public final static NiDimension departmentsDimension = SqlSourcedNiDimension.buildDegenerateDimension("departments", "amp_departments", "id_department");
 	    
 	/**
 	 * the pseudocolumn of the header Splitter for cells which are funding flows
@@ -190,6 +194,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static NiDimensionUsage CA_DIM_USG = orgsDimension.getDimensionUsage(Constants.CONTRACTING_AGENCY);
 	public final static NiDimensionUsage RG_DIM_USG = orgsDimension.getDimensionUsage(Constants.REGIONAL_GROUP);
 	public final static NiDimensionUsage SG_DIM_USG = orgsDimension.getDimensionUsage(Constants.SECTOR_GROUP);	
+	public final static NiDimensionUsage RAW_ORG_DIM_USG = orgsDimension.getDimensionUsage(Constants.ORGANIZATION);
+	public final static LevelColumn RAW_ORG_LEVEL_COLUMN = RAW_ORG_DIM_USG.getLevelColumn(LEVEL_ORGANISATION);
+
+	
 	
 	public final static NiDimensionUsage CF_DIM_USG = orgsDimension.getDimensionUsage("ComponentFunding");
 	
@@ -197,11 +205,16 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	public final static NiDimensionUsage SS_DIM_USG = secsDimension.getDimensionUsage("Secondary");	
 	public final static NiDimensionUsage TS_DIM_USG = secsDimension.getDimensionUsage("Tertiary");	
 	public final static NiDimensionUsage TAG_S_DIM_USG = secsDimension.getDimensionUsage("Tag");
+	public final static NiDimensionUsage RAW_SCT_DIM_USG = secsDimension.getDimensionUsage("Any");
+	public final static LevelColumn RAW_SCT_LEVEL_COLUMN = RAW_SCT_DIM_USG.getLevelColumn(LEVEL_ALL_IDS);
 	
 	public final static NiDimensionUsage PP_DIM_USG = progsDimension.getDimensionUsage("Primary Program");
 	public final static NiDimensionUsage SP_DIM_USG = progsDimension.getDimensionUsage("Secondary Program");	
 	public final static NiDimensionUsage TP_DIM_USG = progsDimension.getDimensionUsage("Tertiary Program");
 	public final static NiDimensionUsage NPO_DIM_USG = progsDimension.getDimensionUsage("National Plan Objective");
+	public final static NiDimensionUsage RAW_PRG_DIM_USG = orgsDimension.getDimensionUsage("Any Program");
+	public final static LevelColumn RAW_PRG_LEVEL_COLUMN = RAW_PRG_DIM_USG.getLevelColumn(LEVEL_ALL_IDS);
+
 
 	public final static NiDimensionUsage LOC_DIM_USG = locsDimension.getDimensionUsage("LOCS");
 	public final static NiDimensionUsage AGR_DIM_USG = agreementsDimension.getDimensionUsage("agr");
@@ -266,9 +279,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		date_column(ColumnConstants.AGREEMENT_PARLIAMENTARY_APPROVAL_DATE, "v_agreement_parlimentary_date", AGR_LEVEL_COLUMN);
 		
 		no_dimension(ColumnConstants.AMP_ID, "v_amp_id");
-		no_dimension(ColumnConstants.BUDGET_ORGANIZATION, "v_budget_organization");
-		no_dimension(ColumnConstants.BUDGET_PROGRAM, "v_budget_program");
-		no_dimension(ColumnConstants.BUDGET_STRUCTURE, "v_budget_structure");
+		single_dimension(ColumnConstants.BUDGET_ORGANIZATION, "v_budget_organization", RAW_ORG_LEVEL_COLUMN);
+		single_dimension(ColumnConstants.BUDGET_PROGRAM, "v_budget_program", RAW_PRG_LEVEL_COLUMN);
+		degenerate_dimension(ColumnConstants.BUDGET_STRUCTURE, "v_budget_structure", boolDimension);
 		
 		single_dimension(ColumnConstants.COMPONENT_DESCRIPTION, "v_component_description", COMPONENT_LEVEL_COLUMN);
 		single_dimension(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION, "v_component_funding_organization_name", CF_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
@@ -277,7 +290,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		single_dimension(ColumnConstants.DESCRIPTION_OF_COMPONENT_FUNDING, "v_component_funding_description", COMPONENT_LEVEL_COLUMN);
 		
 		no_dimension(ColumnConstants.COSTING_DONOR, "v_costing_donors");
-		no_dimension(ColumnConstants.CREDIT_DONATION, "v_credit_donation");
+		degenerate_dimension(ColumnConstants.CREDIT_DONATION, "v_credit_donation", boolDimension);
 		
 		degenerate_dimension(ColumnConstants.DISASTER_RESPONSE_MARKER, "v_disaster_response_marker", boolDimension);
 		no_dimension(ColumnConstants.DONOR_CONTACT_ORGANIZATION, "v_donor_cont_org");
@@ -290,7 +303,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		degenerate_dimension(ColumnConstants.FUNDING_STATUS, "v_funding_status", catsDimension);
 		degenerate_dimension(ColumnConstants.HUMANITARIAN_AID, "v_humanitarian_aid", boolDimension);
 		degenerate_dimension(ColumnConstants.IMPLEMENTATION_LEVEL, "v_implementation_level", catsDimension);
-		no_dimension(ColumnConstants.INDIRECT_ON_BUDGET, "v_indirect_on_budget");
+		degenerate_dimension(ColumnConstants.INDIRECT_ON_BUDGET, "v_indirect_on_budget", boolDimension);
 		degenerate_dimension(ColumnConstants.INSTITUTIONS, "v_institutions", catsDimension);
 		no_dimension(ColumnConstants.MEASURES_TAKEN, "v_measures_taken");
 		no_entity(ColumnConstants.MINORITIES, "v_minorities", DG_EDITOR_POSTPROCESSOR);
@@ -308,7 +321,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_entity(ColumnConstants.RESULTS, "v_results", DG_EDITOR_POSTPROCESSOR);
 		no_entity(ColumnConstants.PURPOSE, "v_purposes", DG_EDITOR_POSTPROCESSOR);
 		no_entity(ColumnConstants.PROGRAM_DESCRIPTION, "v_program_description", DG_EDITOR_POSTPROCESSOR);
-		no_dimension(ColumnConstants.PROJECT_IMPLEMENTING_UNIT, "v_project_impl_unit");
+		degenerate_dimension(ColumnConstants.PROJECT_IMPLEMENTING_UNIT, "v_project_impl_unit", catsDimension);
 		no_dimension(ColumnConstants.REGIONAL_OBSERVATIONS, "v_regional_observations");
 		
 		single_dimension(ColumnConstants.RELATED_PLEDGES, "v_related_pledges", PLEDGES_LEVEL_COLUMN);
@@ -326,14 +339,14 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		
 		// views with only 2 columns
 		no_entity(ColumnConstants.DRAFT, "v_drafts");
-		no_entity(ColumnConstants.AC_CHAPTER, "v_ac_chapters");
-		no_entity(ColumnConstants.ACCESSION_INSTRUMENT, "v_accession_instruments");
-		no_entity(ColumnConstants.ACTIVITY_CREATED_BY, "v_activity_creator");
+		degenerate_dimension(ColumnConstants.AC_CHAPTER, "v_ac_chapters", catsDimension);
+		degenerate_dimension(ColumnConstants.ACCESSION_INSTRUMENT, "v_accession_instruments", catsDimension);
+		degenerate_dimension(ColumnConstants.ACTIVITY_CREATED_BY, "v_activity_creator", usersDimension);
 		no_entity(ColumnConstants.AUDIT_SYSTEM, "v_audit_system"); // catsDimension.getLevelColumn("audit_system", LEVEL_CAT_VALUE));
 		no_entity(ColumnConstants.BUDGET_CODE_PROJECT_ID, "v_budget_code_project_id");
-		no_entity(ColumnConstants.BUDGET_DEPARTMENT, "v_budget_department");
-		no_entity(ColumnConstants.BUDGET_SECTOR, "v_budget_sector");
-		no_entity(ColumnConstants.CAPITAL___EXPENDITURE, "v_capital_and_exp");
+		degenerate_dimension(ColumnConstants.BUDGET_DEPARTMENT, "v_budget_department", departmentsDimension);
+		single_dimension(ColumnConstants.BUDGET_SECTOR, "v_budget_sector", RAW_SCT_LEVEL_COLUMN);
+		degenerate_dimension(ColumnConstants.CAPITAL___EXPENDITURE, "v_capital_and_exp", boolDimension);
 		no_entity(ColumnConstants.CRIS_NUMBER, "v_cris_number");
 		no_entity(ColumnConstants.CURRENT_COMPLETION_DATE_COMMENTS, "v_actual_completion_date_comments");
 		no_entity(ColumnConstants.DONOR_CONTACT_EMAIL, "v_donor_cont_email");
@@ -360,7 +373,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		no_entity(ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_ORGANIZATION, "v_mofed_cont_org");
 		no_entity(ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_PHONE, "v_mofed_cont_phone");
 		no_entity(ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_TITLE, "v_mofed_cont_title");
-		no_entity(ColumnConstants.MULTI_DONOR, "v_multi_donor");
+		degenerate_dimension(ColumnConstants.MULTI_DONOR, "v_multi_donor", boolDimension);
 		no_entity(ColumnConstants.PHYSICAL_PROGRESS_DESCRIPTION, "v_physical_description");
 		no_entity(ColumnConstants.PHYSICAL_PROGRESS_TITLE, "v_physical_title");
 		no_entity(ColumnConstants.PROJECT_CODE, "v_project_code");
@@ -890,6 +903,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		return single_dimension(columnName, view, (LevelColumn) null);
 	}
 
+	List<NiDimension> whitelistedDegenerateDimensions = 
+			Arrays.asList(catsDimension, agreementsDimension, boolDimension, usersDimension, departmentsDimension);
+	
+	
 	/**
 	 * adds a single-dimension column belonging to a degenerate dimension. The dimension must be whitelisted!
 	 * @param columnName
@@ -898,7 +915,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 * @return
 	 */
 	private AmpReportsSchema degenerate_dimension(String columnName, String view, NiDimension dimension) {
-		NiUtils.failIf(dimension != catsDimension && dimension != agreementsDimension && dimension != boolDimension, String.format(dimension.toString() + " is not whitelisted as a shortcut degenerate dimension"));
+		NiUtils.failIf(!whitelistedDegenerateDimensions.contains(dimension), dimension.toString() + " is not whitelisted as a shortcut degenerate dimension");
 		return single_dimension(columnName, view, dimension.getLevelColumn(columnName, dimension.depth - 1)); // taking the leaves
 	}
 	

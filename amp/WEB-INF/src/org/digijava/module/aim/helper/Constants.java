@@ -65,6 +65,7 @@ public class Constants
 	public static final String INACTIVE_MAIN_TAB_CLASS = "sub-nav" ;
 	public static final String ACTIVE_SUB_TAB_CLASS = "sub-nav2-selected" ;
 	public static final String INACTIVE_SUB_TAB_CLASS = "sub-nav2" ;
+	public static final String ORGANIZATION = "OG" ;
 	public static final String REPORTING_AGENCY = "RA" ;
 	public static final String FUNDING_AGENCY = "DN" ;
 	public static final String IMPLEMENTING_AGENCY = "IA" ;

@@ -19,12 +19,16 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-					drop view IF EXISTS v_budget_structure;
-					create or replace view v_budget_structure as (SELECT bs.amp_activity_id,
-					bs.budget_structure_name,
-			 		cv.id,bs.budget_structure_percentage 
-					from amp_activity_budget_structure bs,amp_category_value cv where bs.budget_structure_name = cv.category_value order by bs.amp_activity_id,cv.id);
-</lang>
+					DROP VIEW IF EXISTS v_budget_structure;
+					CREATE OR REPLACE VIEW v_budget_structure AS 
+						SELECT 	bs.amp_activity_id,
+								bs.budget_structure_name,
+			 					cv.id, 
+			 					bs.budget_structure_percentage 
+						FROM amp_activity_budget_structure bs, amp_category_value cv 
+						WHERE bs.budget_structure_name = cv.category_value 
+						ORDER BY bs.amp_activity_id, cv.id;
+			</lang>
 		</script>
 	</apply>
 </tns:patch>

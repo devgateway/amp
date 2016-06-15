@@ -33,6 +33,8 @@ public class NiSplitCell extends NiOutCell {
 	}
 	
 	public LevelColumn getLevelColumn() {
+		if (!entity.levelColumn.isPresent())
+			System.out.println("");
 		return entity.levelColumn.get(); // will crash if somehow we have tried to create a splitcell on a cell without a main entity
 	}
 	

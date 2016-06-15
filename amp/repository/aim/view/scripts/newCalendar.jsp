@@ -23,6 +23,9 @@
 
 <style type="text/css">
     /* Clear calendar's float, using dialog inbuilt form element */
+	.yui-dialog {
+		position: fixed;
+	}
    .yui-dialog .bd form {
         clear:left;
     }
@@ -257,7 +260,7 @@
 	
 	function pickDateById2(buttonId,objectId,calendarUp,overrideObjectCorner)
 	{
-		
+
 		var localCalendarUp	= true;
 		var calendarCorner = "bl";
 		var objectCorner = "tr";

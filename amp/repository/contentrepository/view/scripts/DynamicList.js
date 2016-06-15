@@ -179,8 +179,7 @@ AbstractDynamicList.prototype.sendRequest		= function (shouldRetrieveFilters) {
 	//alert(this.reqString);
 	YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/documentManager.do?ajaxDocumentList=true&dynamicList='+this.thisObjName+
 			this.reqString, callbackObj );
-	if ( this.fPanel != null)
-		this.fPanel.hide();
+	this.closeAll();
 	
 	if ( this.filterInfoDivId != null ) {
 		var divEl	= document.getElementById( this.filterInfoDivId );
@@ -316,7 +315,7 @@ AbstractDynamicList.prototype.getFilterPanel = function (buttonId, divId, hide) 
 		
 		var panel 		= 
 			new YAHOO.widget.Panel("FilterPanel"+divId, { width:"400px", 
-				visible:true, draggable:true, close:true, 
+				visible:true, draggable:true, close: true,
 				modal:false,
 				effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 				context:[buttonId,"tl","bl"]} );
@@ -333,7 +332,9 @@ AbstractDynamicList.prototype.getFilterPanel = function (buttonId, divId, hide) 
 		var buttonEls	= divEl.getElementsByTagName("button");
 		YAHOO.util.Event.on(buttonEls[0], "click", this.sendRequest, this, true);
 		YAHOO.util.Event.on(buttonEls[1], "click", this.sendResetRequest, this, true);
-		YAHOO.util.Event.on(buttonEls[2], "click", this.fPanel.hide, this.fPanel, true);
+		YAHOO.util.Event.on(buttonEls[2], "click", this.closeAll, this, true);
+		var closeButtons = panel.element.getElementsByClassName("container-close");
+		YAHOO.util.Event.on(closeButtons[0], "click", this.closeAll, this, true);
 	} else if (hide == true) {
 //		var isVisible = this.fPanel.get("visible");
 //		alert (isVisible);
@@ -354,6 +355,18 @@ AbstractDynamicList.prototype.getFilterPanel = function (buttonId, divId, hide) 
 	return this.fPanel;
 }
 
+AbstractDynamicList.prototype.closeAll = function (e) {
+	if(this.fPanel != null) {
+		var children = this.fPanel.getFocusableElements();
+		for(var i = 0; children && i < children.length; i++) {
+			if(children[i].className == 'container-close') {
+				children[i].click();
+			}
+		}
+		this.fPanel.hide();
+
+	}
+}
 AbstractDynamicList.prototype.emptyLabels			= function () {
 	this.filterWrapper.filterLabels	= new Array();
 }

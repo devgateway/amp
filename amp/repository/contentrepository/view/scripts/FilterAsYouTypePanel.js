@@ -285,7 +285,7 @@ FilterAsYouTypePanel.prototype.initLabelArray	= function (shouldShow) {
 		FilterAsYouTypePanel.globalLabelArray	= new Array();
 		var callbackObj	= {
 				success: function (o) {
-					if ( o.responseText.length > 0) {
+					if ( o.responseText.length > 0 && o.responseText.indexOf('<') == -1) {
 						var tempLabelArray				= eval( o.responseText );
 						this.fPanel.labelArray			= tempLabelArray;
 						for (var i=0; i<this.fPanel.labelArray.length; i++) {

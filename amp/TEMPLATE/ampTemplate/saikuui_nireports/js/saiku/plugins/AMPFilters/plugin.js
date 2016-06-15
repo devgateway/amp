@@ -99,6 +99,7 @@ var AMPFilters = Backbone.View.extend({
 					// AMP-18921: workaround to the filters until they will be properly initialized, 
 					// that should be done as part of filters widget improvement as a whole
 					//this.workspace.query.initFilters();
+                    window.currentFilter.setStash();
 					$('#filter-popup').show();
 				} else {
 					$('#filter-popup').hide();

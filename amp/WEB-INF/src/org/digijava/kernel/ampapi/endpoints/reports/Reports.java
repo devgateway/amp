@@ -545,6 +545,7 @@ public class Reports {
 			}
 			filename += "." + type;
 			filename = filename.replaceAll(" ", "_");
+			filename = String.format("\"%s\"", filename);
 
 			logger.info("Generate specific export...");
 			

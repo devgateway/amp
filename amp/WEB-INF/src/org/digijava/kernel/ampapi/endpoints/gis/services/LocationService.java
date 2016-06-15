@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.gis.services;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -176,11 +177,11 @@ public class LocationService {
 			for (ReportArea reportArea : report.reportContents.getChildren()) {
 				JsonBean item = new JsonBean();
 				Iterator<ReportCell> iter = reportArea.getContents().values().iterator();
-				String displayedValue=iter.next().displayedValue;
-				String admid = admLevelToGeoCode.get(displayedValue);
-				item.set("admID", admid);
+				BigDecimal value=(BigDecimal) iter.next().value;				
 				ReportCell reportcell = (ReportCell) iter.next();
-				item.set("amount", reportcell.value);
+				String admid = admLevelToGeoCode.get(reportcell.value);
+				item.set("admID", admid);
+				item.set("amount", value);
 				if (admid!=null){
 					values.add(item);
 				}

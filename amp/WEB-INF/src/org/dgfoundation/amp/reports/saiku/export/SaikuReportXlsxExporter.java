@@ -54,13 +54,6 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 	 */
 	protected int flushBatchSize = 100;
 	
-	private static int countReportRows(ReportArea area) {
-		if (area.getChildren() == null)
-			return 1;
-		else 
-			return area.getChildren().stream().mapToInt(z -> countReportRows(z)).sum();
-	}
-	
 	/**
 	 * generates a workbook containing data about 1 or 2 reports. Normally you'd want both reports to actually be the
 	 * same one generated in different currencies, but the code does not care and you can put as different reports as

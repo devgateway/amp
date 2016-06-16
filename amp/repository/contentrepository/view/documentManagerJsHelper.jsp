@@ -496,7 +496,7 @@ myTable.enhanceMarkup = function(markupName) {
 	    this.columnHeaders.push({key:"yearOfPublication", type:"number",label:"${trans_headerYearofPubl}",sortable:true, width:70});
 	    this.columnHeaders.push({key:"cm_doc_type",label:"${trans_cmDocType}", sortable:true});
 	    if (show_index)
-	    	this.columnHeaders.push({key:"resource_index",label:"${trans_headerResourceIndex}", sortable:true, width: 70});
+	    	this.columnHeaders.push({key:"resource_index",label:"${trans_headerResourceIndex}", sortable:true, width: 100});
 	    if (show_category)
 	    	this.columnHeaders.push({key:"resource_category",label:"${trans_headerResourceCategory}", sortable:true, width:70});
 	    if (show_organisations)

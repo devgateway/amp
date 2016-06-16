@@ -37,7 +37,7 @@ public class ImportProcessorCallJob implements StatefulJob{
                     .header("Cache-Control", "no-cache")
                     .asJson();
         } catch (UnirestException e) {
-            e.printStackTrace();
+            logger.error("Unirest call failed", e);
         }
 
         logger.info(jsonResponse.getBody());

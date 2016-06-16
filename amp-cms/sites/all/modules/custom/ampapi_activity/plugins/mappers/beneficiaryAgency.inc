@@ -15,7 +15,9 @@ $plugin = array(
 
   'report field group' => 'columns',
   'report field key' => 'Beneficiary Agency',
-  'report filter key' => 'Beneficiary Agency Id',
+  // Changed in 2.12.
+  // @TODO: Make things simpler.
+  'report filter key' => 'Beneficiary Agency',
 
   'report filter endpoint' => 'filters/orgs',
   'report filter endpoint extra' => 'filters/org-roles',

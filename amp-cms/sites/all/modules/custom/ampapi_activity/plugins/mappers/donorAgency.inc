@@ -15,8 +15,9 @@ $plugin = array(
 
   'report field group' => 'columns',
   'report field key' => 'Donor Agency',
-  // 'report filter key' => 'Donor Agency Id',
-  'report filter key' => 'Donor Id', // No need for consistency.
+  // Changed in 2.12.
+  // @TODO: Make things simpler.
+  'report filter key' => 'Donor Agency',
 
   'report filter endpoint' => 'filters/orgs',
   'report filter endpoint extra' => 'filters/org-roles',

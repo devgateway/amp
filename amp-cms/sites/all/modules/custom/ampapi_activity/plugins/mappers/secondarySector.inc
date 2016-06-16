@@ -15,7 +15,9 @@ $plugin = array(
 
   'report field group' => 'columns',
   'report field key' => 'Secondary Sector',
-  'report filter key' => 'Secondary Sector Id',
+  // Changed in 2.12.
+  // @TODO: Make things simpler.
+  'report filter key' => 'Secondary Sector',
 
   'report filter endpoint' => 'filters/sectors',
   // These are used to filter out entries:

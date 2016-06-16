@@ -15,7 +15,9 @@ $plugin = array(
 
   'report field group' => 'columns',
   'report field key' => 'National Plan Objective',
-  'report filter key' => 'National Planning Objectives Level 1 Id',  // Not sure if this is the one to use!
+  // Changed in 2.12.
+  // @TODO: Make things simpler.
+  'report filter key' => 'National Planning Objectives Level 1',
 
   'report filter endpoint' => 'filters/programs',
   'report sub-filter filter-id' => 'National Plan Objective',

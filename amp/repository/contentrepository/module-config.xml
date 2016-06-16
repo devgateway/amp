@@ -3,7 +3,6 @@
 	<name>contentrepository</name>
 	<security>
 		<action login-required="true" pattern="/tempDocManager">ADMIN</action>
-		<action login-required="true" pattern="/publicDocTabManager">ADMIN</action>
 		<action login-required="true" pattern="/labelManager">ADMIN</action>
 		
 	</security>

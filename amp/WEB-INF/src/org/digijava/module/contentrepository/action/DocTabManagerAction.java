@@ -37,34 +37,31 @@ public class DocTabManagerAction extends MultiAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		
-		DocTabManagerForm myForm	= (DocTabManagerForm) form;
-		String action				= request.getParameter("action");
-		if ( "show".equals( action ) )
-			return modeShow(mapping, myForm, request, response);
-		else if ( "save".equals(action) ) {
-			return modeSave(mapping, myForm, request, response);
+		DocTabManagerForm myForm = (DocTabManagerForm) form;
+		String action = request.getParameter("action");
+		switch(action) {
+			case "show" : 			return modeShow(mapping, myForm, request, response);
+			case "jsonfilter" : 	return modeGetJSONFilters(mapping, myForm, request, response);
+			case "savePositions" : 	return modeSavePositions(mapping, myForm, request, response);
+			case "publicShow" : 	return modePublicShow(mapping, myForm, request, response);
+			case "delete" : 		return modeDelete(mapping, myForm, request, response);
+			default : return null;
 		}
-		else if ( "jsonfilter".equals(action) ) {
-			return modeGetJSONFilters(mapping, myForm, request, response);
-		}
-		else if ("savePositions".equals(action)) {
-			return modeSavePositions(mapping, myForm, request, response);
-		}
-		else if ("publicShow".equals(action) ) {
-			return modePublicShow(mapping, myForm, request, response);
-		}
-		else if ("delete".equals(action) ) {
-			return modeDelete(mapping, myForm, request, response);
-		}
-		
-		
-		return null;
 	}
 	
 	public ActionForward modeShow(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		
+		HttpSession session = request.getSession();
+		if (session.getAttribute("ampAdmin") == null) {
+			return mapping.findForward("index");
+		} else {
+			String str = (String) session.getAttribute("ampAdmin");
+			if (str.equals("no")) {
+				return mapping.findForward("index");
+			}
+		}
+
 		DocTabManagerForm myForm	= (DocTabManagerForm) form;
 		
 		DocumentFilterDAO dfDAO	= new DocumentFilterDAO();
@@ -78,9 +75,16 @@ public class DocTabManagerAction extends MultiAction {
 	public ActionForward modeSave(ActionMapping mapping, DocTabManagerForm myForm,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		
-		HttpSession session		= request.getSession();
-		DocumentFilter df		= (DocumentFilter) session.getAttribute(DocumentFilter.SESSION_LAST_APPLIED_PUBLIC_FILTER );
+		HttpSession session = request.getSession();
+		if (session.getAttribute("ampAdmin") == null) {
+			return mapping.findForward("index");
+		} else {
+			String str = (String) session.getAttribute("ampAdmin");
+			if (str.equals("no")) {
+				return mapping.findForward("index");
+			}
+		}
+		DocumentFilter df = (DocumentFilter) session.getAttribute(DocumentFilter.SESSION_LAST_APPLIED_PUBLIC_FILTER );
 		if ( myForm.getSavingFilterName() != null) {
 			df.setName(myForm.getSavingFilterName() );
 			DocumentFilterDAO dfDAO	= new DocumentFilterDAO();
@@ -93,6 +97,15 @@ public class DocTabManagerAction extends MultiAction {
 	public ActionForward modeSavePositions(ActionMapping mapping, DocTabManagerForm myForm,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+		HttpSession session = request.getSession();
+		if (session.getAttribute("ampAdmin") == null) {
+			return mapping.findForward("index");
+		} else {
+			String str = (String) session.getAttribute("ampAdmin");
+			if (str.equals("no")) {
+				return mapping.findForward("index");
+			}
+		}		
 		if (myForm.getPublicViewPosition() != null) {
 			DocumentFilterDAO dfDAO		= new DocumentFilterDAO();
 			List<DocumentFilter> dfList	= dfDAO.getAll();
@@ -186,7 +199,15 @@ public class DocTabManagerAction extends MultiAction {
 	public ActionForward modeDelete(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		
+		HttpSession session = request.getSession();
+		if (session.getAttribute("ampAdmin") == null) {
+			return mapping.findForward("index");
+		} else {
+			String str = (String) session.getAttribute("ampAdmin");
+			if (str.equals("no")) {
+				return mapping.findForward("index");
+			}
+		}
 		DocTabManagerForm myForm	= (DocTabManagerForm) form;
 		String filterIdStr		= request.getParameter("filterId");
 		if ( filterIdStr != null ) {

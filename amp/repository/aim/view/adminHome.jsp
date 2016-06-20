@@ -798,7 +798,7 @@
     </td>
   </tr>
 </table>
-<div id="layers-manager-popup" style="dispaly:none;"></div>
+<div id="layers-manager-popup" style="display:none;"></div>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist/gis-layers-manager.js"/>"></script>
 <script language="JavaScript">
 

@@ -196,12 +196,14 @@ function ampapi_activity_views_pre_build(View &$view) {
   $view->get_exposed_input();
 
   // Determine if the current search is a SSC search.
-  $ssc_search_enabled = FALSE;
+
+  $ssc_search_applied = FALSE;
   if (ampapi_activity_ssc_status()) {
     if (isset($view->exposed_input['stype']) && $view->exposed_input['stype'] == 'ssc') {
-      $ssc_search_enabled = TRUE;
+      $ssc_search_applied = TRUE;
     }
   }
+
   $search_settings = ampapi_activity_get_search_settings();
 
   foreach ($view->field as $field_name => $field_handler) {
@@ -211,7 +213,7 @@ function ampapi_activity_views_pre_build(View &$view) {
     // Only display fields that are enabled in the Activities Search settings
     // and in the API. (AMP calls these "columns")
     if (in_array($field_name, $search_settings['enabled_columns'])) {
-      $field_enabled = _ampapi_activity_get_field_status($field_name, $field_handler, $ssc_search_enabled);
+      $field_enabled = _ampapi_activity_get_field_status($field_name, $field_handler, $ssc_search_applied );
     }
 
     if (!$field_enabled) {
@@ -227,7 +229,7 @@ function ampapi_activity_views_pre_build(View &$view) {
     // Only display filters that are enabled in the Activities Search settings
     // and in the API.
     if (in_array($filter_name, $search_settings['enabled_filters'])) {
-      $filter_enabled = _ampapi_activity_get_filter_status($filter_name, $filter_handler, $ssc_search_enabled);
+      $filter_enabled = _ampapi_activity_get_filter_status($filter_name, $filter_handler, $ssc_search_applied );
     }
 
     if (!$filter_enabled) {
@@ -309,7 +311,8 @@ function _ampapi_activity_get_filter_status($name, $handler, $ssc_status) {
   $measures_data = ampapi_request('get', 'data/report/measures', TRUE);
 
   // Hide Search type selector for SSC activities.
-  if ($name == 'activities_search_type' && !$ssc_status) {
+  $ssc_search_enabled = ampapi_activity_ssc_status();
+  if ($name == 'activities_search_type' && !$ssc_search_enabled) {
     return FALSE;
   }
 

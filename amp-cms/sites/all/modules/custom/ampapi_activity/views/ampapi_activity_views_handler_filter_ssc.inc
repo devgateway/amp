@@ -9,6 +9,9 @@ class ampapi_activity_views_handler_filter_ssc extends views_handler_filter_in_o
     if (!ampapi_activity_ssc_status()) {
       $this->options['exposed'] = FALSE;
     }
+    else {
+      $this->options['exposed'] = TRUE;
+    }
   }
 
   /**

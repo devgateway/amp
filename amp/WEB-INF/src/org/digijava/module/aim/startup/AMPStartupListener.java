@@ -74,12 +74,7 @@ public class AMPStartupListener extends HttpServlet implements
 	 * READ ONLY, the result of calling ServletContext.getRealPath("/")
 	 */
 	public static String SERVLET_CONTEXT_ROOT_REAL_PATH = null;
-	
-
-	
-	
-
-	
+		
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		ServletContext ampContext = sce.getServletContext();
@@ -256,6 +251,8 @@ public class AMPStartupListener extends HttpServlet implements
 			if (FeaturesUtil.getDefaultFlag() != null)
 				ampContext.setAttribute(Constants.DEF_FLAG_EXIST, new Boolean(true));
 
+			AmpReportsSchema.getInstance().maintainDescriptions();
+			
 			AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
 			// get the default amp template
 			AmpTemplatesVisibility currentTemplate = FeaturesUtil.getDefaultAmpTemplateVisibility();

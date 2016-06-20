@@ -82,6 +82,7 @@ import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiLinearCombinationTransactionMeasure;
 import org.dgfoundation.amp.nireports.schema.NiMultipliedFilterTransactionMeasure;
 import org.dgfoundation.amp.nireports.schema.NiReportColumn;
+import org.dgfoundation.amp.nireports.schema.NiReportMeasure;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 import org.dgfoundation.amp.nireports.schema.NiTransactionContextMeasure;
 import org.dgfoundation.amp.nireports.schema.NiTransactionMeasure;
@@ -155,9 +156,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		put(ColumnConstants.TERTIARY_PROGRAM,  "Level-1 subprogram of the selected tertiary program");
 		put(ColumnConstants.CALCULATED_PROJECT_LIFE,  "Difference in days between Planned Start Date and Actual Completion Date");
 		put(ColumnConstants.CUMULATIVE_EXECUTION_RATE,  "(Cumulative Disbursement/ Cumulative Commitment) * 100 ");
-		
-		
 	}};
+	
 	@SuppressWarnings("serial")
 	public final static Map<String, String> measureDescriptions = new HashMap<String, String>() {{
 		put(MeasureConstants.CONSUMPTION_RATE , "(Selected Year Cumulated Disbursements / Selected Year of Planned Disbursements) * 100");
@@ -770,14 +770,22 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	 */
 	@SuppressWarnings("deprecation")
 	public Set<String> synchronizeAmpColumnsBackport(ServletContext sCtx) {
+		final Set<String> notSerializedColumns = new HashSet<>(Arrays.asList(
+			ColumnConstants.DRAFT, 
+			ColumnConstants.ACTIVITY_ID,
+			ColumnConstants.GEOCODE,
+			ColumnConstants.LOCATION,
+			ColumnConstants.DONOR_ID
+		));
 		return PersistenceManager.getSession().doReturningWork(conn -> {
 			Set<String> inDbColumns = new HashSet<>(SQLUtils.fetchAsList(conn, String.format("SELECT %s FROM %s", "columnname", "amp_columns"), 1));
-			Set<String> toBeAdded = this.columns.keySet().stream().filter(z -> !inDbColumns.contains(z)).collect(Collectors.toSet());
+			Set<String> toBeAdded = this.columns.keySet().stream().filter(z -> !inDbColumns.contains(z)).filter(z -> !notSerializedColumns.contains(z)).collect(Collectors.toSet());
 			for (String newColumnName : toBeAdded) {
 				AmpColumns col= new AmpColumns();
 				col.setColumnName(newColumnName);
 				col.setExtractorView("v_empty_text_column");
 				col.setCellType("org.dgfoundation.amp.ar.cell.TextCell");
+				col.setDescription(this.columns.get(newColumnName).description);
 				String group = null;
 				if (this.columns.get(newColumnName) instanceof PsqlSourcedColumn)
 					group = ((PsqlSourcedColumn<?>)this.columns.get(newColumnName)).getGroup();
@@ -797,20 +805,19 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 	}
 	
 	/**
-	 * This method is created for the following scenario:
-	 * 		- a measure was added to AmpReportsSchema
-	 * 		- this measure doesn't exist in the old reports schema (described by AmpMeasures)
-	 * 	In this scenario, opening a report with said 
-	 *  new measure in the old reports engine would probably result in a crash.
+	 * This method is created for the following scenario: <br />
+	 * 		- a measure was added to AmpReportsSchema <br />
+	 * 		- this measure doesn't exist in the old reports schema (described by AmpMeasures) <br />
+	 * 	In this scenario, opening a report with said new measure in the old reports engine would probably result in a crash. <br />
 	 *  Therefore, an empty row for said measure is added.
 	 */
 	public Set<String> synchronizeAmpMeasureBackport() {
 		return PersistenceManager.getSession().doReturningWork(conn -> {
 			Set<String> inDbMeasures = new HashSet<>(SQLUtils.fetchAsList(conn, String.format("SELECT %s FROM %s", "measurename", "amp_measures"), 1));
 			Set<Object> toBeAdded = this.measures.keySet().stream().filter(z -> !inDbMeasures.contains(z)).collect(Collectors.toSet());
-			List<List<Object>> values = toBeAdded.stream().map(z -> Arrays.asList(z, z, "A")).collect(Collectors.toList());	
+			List<List<Object>> values = toBeAdded.stream().map(z -> Arrays.asList(z, z, "A", this.measures.get(z).description)).collect(Collectors.toList());	
 			if (values.size() > 0) {
-				SQLUtils.insert(conn, "amp_measures", "measureid", "amp_measures_seq", Arrays.asList("measurename", "aliasname", "type"), values);
+				SQLUtils.insert(conn, "amp_measures", "measureid", "amp_measures_seq", Arrays.asList("measurename", "aliasname", "type", "description"), values);
 				MeasuresVisibility.resetMeasuresList();
 			}
 			return toBeAdded.stream().map(z -> z.toString()).collect(Collectors.toSet());
@@ -1001,7 +1008,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
 	public Set<Long> getWorkspacePledges(NiReportsEngine engine) {
 		//return new HashSet<>(SQLUtils.fetchLongs(AmpReportsScratchpad.get(engine).connection, "SELECT id FROM amp_funding_pledges"));
-		return AmpReportsScratchpad.get(engine).computedPledgeIds.get(); //TODO: remove this comment!!!
+		return AmpReportsScratchpad.get(engine).computedPledgeIds.get();
 		//return new HashSet<>(Arrays.asList(4l));
 	}
 	
@@ -1078,6 +1085,28 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		if (TRANSACTION_LEVEL_HIERARCHIES.contains(col.name))
 			col = col.setTransactionLevelHierarchy();
 		return (AmpReportsSchema) super.addColumn(col);
+	}
+	
+	/**
+	 * temporary stub until amp_columns.description and amp_measures.description are done with
+	 */
+	public void maintainDescriptions() {
+		try(java.sql.Connection conn = PersistenceManager.getJdbcConnection()) {
+			for(String measureName:this.measures.keySet()) {
+				NiReportMeasure<?> meas = this.measures.get(measureName);
+				SQLUtils.executeQuery(conn, String.format("UPDATE amp_measures SET description = %s WHERE measurename = %s AND description <> %s", 
+					SQLUtils.stringifyObject(meas.description), SQLUtils.stringifyObject(meas.name), SQLUtils.stringifyObject(meas.description)));
+			}
+			for(String columnName:this.columns.keySet()) {
+				NiReportColumn<?> col = this.columns.get(columnName);
+				SQLUtils.executeQuery(conn, String.format("UPDATE amp_columns SET description = %s WHERE columnname = %s AND description <> %s", 
+					SQLUtils.stringifyObject(col.description), SQLUtils.stringifyObject(col.name), SQLUtils.stringifyObject(col.description)));
+			}
+			SQLUtils.flush(conn);
+		}
+		catch(Exception e) {
+			throw AlgoUtils.translateException(e);
+		}
 	}
 	
 	/**

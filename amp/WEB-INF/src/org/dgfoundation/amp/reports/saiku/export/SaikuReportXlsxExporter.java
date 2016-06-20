@@ -410,19 +410,17 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 				} else {
 					summarySheet.createRow(currLine.intValue()).createCell(1).setCellValue(filterValue);
 				}
-				
 				currLine.inc();
 				group++;
 			}
-			
 			if (group > 0) {
-				summarySheet.addMergedRegion(new CellRangeAddress(currLine.intValue() - group, currLine.intValue() - 1, 0, 0));
+				if (currLine.intValue() - group > 1) {
+					summarySheet.addMergedRegion(new CellRangeAddress(currLine.intValue() - group, currLine.intValue() - 1, 0, 0));
+				}
 				summarySheet.getRow(currLine.intValue() - group).getCell(0).setCellStyle(template.getHierarchyStyle());
 			}
-			
 			currLine.dec();
 		}
-				
 	}
 	
 	/**
@@ -437,10 +435,9 @@ public class SaikuReportXlsxExporter implements SaikuReportExporter {
 		String currency = reportSpec.getSettings().getCurrencyCode();
 		if (currency == null) {
 			currency = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
-		}		
+		}
 		String calendar = reportSpec.getSettings().getCalendar().getName();
 		String units = reportSpec.getSettings().getUnitsOption().userMessage;
-			
 		renderSummaryLine(summarySheet, currLine, TranslatorWorker.translateText("Currency"), currency);
 		renderSummaryLine(summarySheet, currLine, TranslatorWorker.translateText("Calendar"), calendar);
 		renderSummaryLine(summarySheet, currLine, TranslatorWorker.translateText("Units"), units);

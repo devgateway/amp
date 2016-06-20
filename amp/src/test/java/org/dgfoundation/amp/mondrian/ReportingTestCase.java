@@ -107,15 +107,18 @@ public abstract class ReportingTestCase extends AmpTestCase {
 	 * @param correctResult - a model (sketch) of the expected result
 	 * @param modifier - the modifier (might be null) to postprocess AmpReports and AmpARFilter after being loaded from the DB
 	 */
+	@Deprecated
 	protected void runMondrianTestCase(String testName, String reportName, List<String> activities, ReportAreaForTests correctResult, String locale) {
 		runMondrianTestCase(getReportSpecification(reportName), locale, activities, correctResult);
 	}
 		
+	@Deprecated
 	protected void runMondrianTestCase(String reportName, List<String> activities, ReportAreaForTests correctResult, String locale,
 			Class<? extends ReportAreaImpl> areaTyp) {
 			runMondrianTestCase(getReportSpecification(reportName), locale, activities, correctResult, areaTyp);
 	}
 	
+	@Deprecated
 	protected void runMondrianTestCase(String reportName, List<String> activities, ReportAreaForTests correctResult, String locale) {
 		runMondrianTestCase(reportName, reportName, activities, correctResult, locale);
 	}
@@ -168,6 +171,7 @@ public abstract class ReportingTestCase extends AmpTestCase {
 	 * @param entities
 	 * @param cor
 	 */
+	@Deprecated
 	protected void runMondrianTestCase(ReportSpecification spec, String locale, List<String> entities, ReportAreaForTests cor) {
 		runMondrianTestCase(spec, locale, entities, cor, ReportAreaImpl.class);
 	}
@@ -183,6 +187,7 @@ public abstract class ReportingTestCase extends AmpTestCase {
 	 * @param page page number starting from 1 (as if it is selected by the user in the UI)
 	 * @param pageSize number of leaf records per page or null to use the default config (not recommended)
 	 */
+	@Deprecated
 	protected void runMondrianTestCase(ReportSpecification spec, String locale, List<String> entities, 
 			ReportAreaForTests cor, Class<? extends ReportAreaImpl> areaType) {
 		GeneratedReport rep = this.runReportOn(spec, locale, entities, areaType);

@@ -92,6 +92,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 			var colModel = columnsMapping.createJQGridColumnModel(tableStructure);
 			var grandTotals = null;
 			var numberOfPages = null;
+			var na = TranslationManager.getTranslated('N/A');
 			jQuery(grid).jqGrid(
 					{
 						caption : false,
@@ -121,8 +122,9 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 								jQuery(grid).jqGrid('setGridParam', {
 									rowNum : obj.page.recordsPerPage
 								});
+								processSecondEPHeaders(obj);
 								grandTotals = extractGrandTotals(obj, colModel);
-								return transformData(obj, grouping, tableStructure.hierarchies);
+								return transformData(obj, grouping, tableStructure.hierarchies, colModel);
 							},
 							page : function(obj) {
 								return obj.page.currentPageNumber;
@@ -389,7 +391,11 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 									jQuery(item.firstChild).attr("colspan", numberOfColumns);
 									jQuery.each(tableStructure.measures.models, function(j, measure) {
 										var auxTD = jQuery(item.firstChild).clone().html("").attr("colspan", 0).css("text-align", "right");
-										var content = partialTotals[i].contents[app.TabsApp.TOTAL_COLUMNS_NAME_SUFIX + "[" + measure.get('measureName') + "]"].displayedValue;
+										var content = na;
+										if (partialTotals[i].contents[app.TabsApp.TOTAL_COLUMNS_NAME_SUFIX + "[" + measure.get('measureName') + "]"] !== undefined) {
+											// This check is needed for Funding Flow columns because their name is different than expected, ie: "[Totals][Real Disbursements][DN-IMPL]". 
+											content = partialTotals[i].contents[app.TabsApp.TOTAL_COLUMNS_NAME_SUFIX + "[" + measure.get('measureName') + "]"].displayedValue;
+										}
 										jQuery(auxTD).html("<span><b>" + content + "</b></span>");
 										jQuery(item).append(auxTD);
 
@@ -429,20 +435,11 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 	 * Before trying to render the data from server we need to make some
 	 * transformations and cleanups.
 	 */
-	function transformData(data, grouping, hierarchies) {
+	function transformData(data, grouping, hierarchies, colModel) {
 		var rows = [];
 		partialTotals = [];
 		if (data.page.pageArea.children.length > 0) {
-			// Process the headers for later usage.
 			if (data.headers !== null) {
-				jQuery.each(data.headers, function(i, item) {
-					headers.push({
-						columnName : item["originalColumnName"],
-						hierarchicalName : item["hierarchicalName"],
-						emptyCell : item["emptyCell"]
-					});
-				});
-	
 				// If the tab has hierarchies we use this auxiliary variable to hold the current hierarchy value on each iteration of the recursive function at any level of depth.
 				var auxCurrentHierarchiesValues = [];
 				for(var k = 0; k < hierarchies.models.length; k++) {
@@ -450,18 +447,38 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 				}
 				getContentRecursively(data.page.pageArea, rows, null, partialTotals, -1, hierarchies, auxCurrentHierarchiesValues);
 			}
+			rows = postProcessToFixFundingFlowColumns(rows, headers, colModel);
 			//console.log(rows);
 			//console.log(partialTotals);
 		}
 		return rows;
 	}
-
-	function findInMapByColumnName(name, property) {
-		var ret = undefined;
-		ret = _.find(headers, function(item) {
-			return item[property] === name;
-		});
-		return ret;
+	
+	function postProcessToFixFundingFlowColumns(rows, headers, colModel) {
+        var na = TranslationManager.getTranslated('N/A');
+        jQuery.each(rows, function(i, row) {
+        	jQuery.each(colModel, function(j, column) {
+        		if (column.reportColumnType === 'MEASURE') {
+        			if (row[column.name] === undefined) {
+        				row[column.name] = na;
+        			}
+        		}
+        	});
+        });
+        return rows;
+	}
+	
+	function processSecondEPHeaders(data) {
+        // Process the headers for later usage.
+        if (data.headers != null) {
+        	jQuery.each(data.headers, function(i, item) {
+        		headers.push({
+        			columnName : item["originalColumnName"],
+					hierarchicalName : item["hierarchicalName"],
+					emptyCell : item["emptyCell"]
+        		});
+        	});
+        }
 	}
 
 	function getContentRecursively(obj, rows, parent, partialTotals, level, hierarchies, auxCurrentHierarchiesValues) {
@@ -577,7 +594,8 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 						col.displayedValue = data.page.pageArea.contents[app.TabsApp.TOTAL_COLUMNS_NAME_SUFIX + "[" + item.name + "]"].displayedValue;
 						ret.push(col);
 					} catch (err) {
-						console.error(err + item.name);
+						console.log(err + item.name);
+						ret.push({value: 0, displayedValue: TranslationManager.getTranslated('N/A')});
 					}
 				}
 			}

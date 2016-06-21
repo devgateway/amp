@@ -112,8 +112,9 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 								jQuery(grid).jqGrid('setGridParam', {
 									rowNum : obj.page.recordsPerPage
 								});
+								processSecondEPHeaders(obj);
 								grandTotals = extractGrandTotals(obj, colModel);
-								return transformData(obj, grouping, tableStructure.hierarchies);
+								return transformData(obj, grouping, tableStructure.hierarchies, colModel);
 							},
 							page : function(obj) {
 								return obj.page.currentPageNumber;
@@ -383,6 +384,10 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 										var content = "";
 										if (measure.get('measureName') && partialTotals[i].contents["[" + measure.get('measureName') + "]"]) {
 											content = partialTotals[i].contents["[" + measure.get('measureName') + "]"].displayedValue;
+										} else if (measure.get('measureName') && partialTotals[i].contents["[" + measure.get('measureName') + "][ ]"]) {
+											// This hack is for tabs that return funding flows columns (like Real Disbursements) that are one column
+											// in the Tab definition but several when the report runs, also regular measures (like Actual Disbursements) change their name, so we use this hack.
+											content = partialTotals[i].contents["[" + measure.get('measureName') + "][ ]"].displayedValue;
 										}
 										
 										jQuery(auxTD).html("<span><b>" + content + "</b></span>");
@@ -424,9 +429,36 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 	 * Before trying to render the data from server we need to make some
 	 * transformations and cleanups.
 	 */
-	function transformData(data, grouping, hierarchies) {
+	function transformData(data, grouping, hierarchies, colModel) {
 		var rows = [];
 		partialTotals = [];
+
+		if (data.headers != null) {
+			getContentRecursively(data.page.pageArea, rows, null, partialTotals, -1);
+			if (grouping) {
+				postProcessHierarchies(rows, hierarchies);
+			}
+		}					
+		rows = postProcessToFixFundingFlowColumns(rows, headers, colModel);
+		//console.log(rows);
+		return rows;
+	}
+	
+	function postProcessToFixFundingFlowColumns(rows, headers, colModel) {
+		var na = TranslationManager.getTranslated('N/A');
+		jQuery.each(rows, function(i, row) {
+			jQuery.each(colModel, function(j, column) {
+				if (column.reportColumnType === 'MEASURE') {
+					if (row[column.name] === undefined) {
+						row[column.name] = na;
+					}
+				}
+			});
+		});
+		return rows;
+	}
+	
+	function processSecondEPHeaders(data) {
 		// Process the headers for later usage.
 		if (data.headers != null) {
 			jQuery.each(data.headers, function(i, item) {
@@ -436,15 +468,8 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 					hierarchicalName : item["hierarchicalName"]
 				});
 			});
-
-			getContentRecursively(data.page.pageArea, rows, null, partialTotals, -1);
-			if (grouping) {
-				postProcessHierarchies(rows, hierarchies);
-			}
 		}
-		// console.log(rows);
-		// console.warn(partialTotals);
-		return rows;
+		//console.log(headers);
 	}
 
 	/*
@@ -471,6 +496,11 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 				ret = item;
 			}
 		});
+		if (ret !== undefined && ret.originalColumnName.trim() === "") {
+			// Ugly hack: When this is a report with funding flows so the name of the measure is empty (it comes that way from the EP).
+			ret.originalColumnName = ret.hierarchicalName.replace(/\[|\]/g, "").trim();
+			ret.columnName = ret.originalColumnName;
+		}
 		return ret;
 	}
 
@@ -484,10 +514,11 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 				};
 				jQuery.each(obj.contents, function(key, element) {
 					var colName = null;
-					if (findInMapByColumnName(key, 'hierarchicalName') != undefined) {
+					var auxCol = findInMapByColumnName(key, 'hierarchicalName');
+					if (auxCol !== undefined) {
 						// TODO: compare the 3 options with the values from
 						// hierarchies to see if one matches and use that.
-						colName = findInMapByColumnName(key, 'hierarchicalName').originalColumnName;
+						colName = auxCol.originalColumnName;
 					}
 					if (colName != undefined && colName != null) {
 						if (element.displayedValue != null && element.displayedValue.toString().length > 0) {
@@ -544,16 +575,25 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 	function extractGrandTotals(data, colModel) {
 		var ret = [];
 		jQuery.each(colModel, function(i, item) {
-			if (item.reportColumnType == 'MEASURE') {
+			if (item.reportColumnType === 'MEASURE') {
 				var col = {};
 				col.columnName = item.name;
-				if (data.page != null && data.page.pageArea != null && data.page.pageArea.contents["[" + item.name + "]"]) {
+				if (data.page !== null && data.page.pageArea !== null) {
 					try {
-						col.value = data.page.pageArea.contents["[" + item.name + "]"].value;
-						col.displayedValue = data.page.pageArea.contents["[" + item.name + "]"].displayedValue;
-						ret.push(col);
+						if (data.page.pageArea.contents["[" + item.name + "]"]) {
+							col.value = data.page.pageArea.contents["[" + item.name + "]"].value;
+							col.displayedValue = data.page.pageArea.contents["[" + item.name + "]"].displayedValue;
+							ret.push(col);
+						} else {
+							// This hack is for tabs that return funding flows columns (like Real Disbursements) that are one column
+							// in the Tab definition but several when the report runs, also regular measures (like Actual Disbursements) change their name, so we use this hack.
+							col.value = data.page.pageArea.contents["[" + item.name + "][ ]"].value;
+							col.displayedValue = data.page.pageArea.contents["[" + item.name + "][ ]"].displayedValue;
+							ret.push(col);
+						}						
 					} catch (err) {
-						console.error(err + item.name);
+						console.log(err + item.name);
+						ret.push({value: 0, displayedValue: TranslationManager.getTranslated('N/A')});
 					}
 				}
 			}

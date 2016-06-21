@@ -591,12 +591,13 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 				if (data.page !== null && data.page.pageArea !== null) {
 					try {
 						col.value = data.page.pageArea.contents[app.TabsApp.TOTAL_COLUMNS_NAME_SUFIX + "[" + item.name + "]"].displayedValue;
-						col.displayedValue = data.page.pageArea.contents[app.TabsApp.TOTAL_COLUMNS_NAME_SUFIX + "[" + item.name + "]"].displayedValue;
-						ret.push(col);
+						col.displayedValue = data.page.pageArea.contents[app.TabsApp.TOTAL_COLUMNS_NAME_SUFIX + "[" + item.name + "]"].displayedValue;						
 					} catch (err) {
 						console.log(err + item.name);
-						ret.push({value: 0, displayedValue: TranslationManager.getTranslated('N/A')});
+						col.value = 0;
+						col.displayedValue = TranslationManager.getTranslated('N/A');
 					}
+					ret.push(col);
 				}
 			}
 		});

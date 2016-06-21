@@ -19,6 +19,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.UserUtils;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -44,7 +45,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
@@ -156,16 +157,24 @@ public class Security {
 			if (result != null) {
 				ApiErrorResponse.reportForbiddenAccess(result);
 			}
+			final AmpTeam ampTeam = TeamUtil.getAmpTeam(new Long(workspaceId));
+			final Collection<AmpTeamMember> allAmpTeamMembersByUser = TeamMemberUtil.getTeamMembers(user.getEmail());
+			AmpTeamMember teamMember = null;
+			for (final AmpTeamMember atm :
+					allAmpTeamMembersByUser) {
+				if (atm.getAmpTeam().getAmpTeamId().equals(ampTeam.getAmpTeamId())) {
+					teamMember = atm;
+				}
+			}
 
-			final AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(new Long(workspaceId));
-			if (teamMember == null) {
+			if (ampTeam == null || (teamMember == null && !user.isGlobalAdmin())) {
 				ApiErrorResponse.reportError(BAD_REQUEST, SecurityErrors.INVALID_REQUEST);
 			}
-			storeInSession(username, password, teamMember);
+			storeInSession(username, password, teamMember, user);
 
 			final AmpApiToken ampApiToken = SecurityUtil.generateToken();
 
-			return createResponse(user.isGlobalAdmin(), ampApiToken, username, teamMember.getAmpTeam().getName(), true);
+			return createResponse(user.isGlobalAdmin(), ampApiToken, username, ampTeam.getName(), true);
 		} catch (final Exception e) {
 			logger.error("Error trying to login the user", e);
 			ApiErrorResponse.reportError(INTERNAL_SERVER_ERROR, SecurityErrors.INVALID_REQUEST);
@@ -173,13 +182,16 @@ public class Security {
 		return null;
 	}
 
-	private void storeInSession(final String username, final String password, final AmpTeamMember teamMember) {
+	private void storeInSession(final String username, final String password, final AmpTeamMember teamMember, final User user) {
 		final UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
 		authRequest.setDetails(new WebAuthenticationDetails(this.httpRequest));
 		SecurityContextHolder.getContext().setAuthentication(authRequest);
 		final HttpSession session = this.httpRequest.getSession();
 		PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
-		session.setAttribute(Constants.CURRENT_MEMBER, teamMember.toTeamMember());
+		if(teamMember != null) {
+			session.setAttribute(Constants.CURRENT_MEMBER, teamMember.toTeamMember());
+		}
+		session.setAttribute("ampAdmin", user.isGlobalAdmin() ? "yes": "no");
 	}
 
 	/**

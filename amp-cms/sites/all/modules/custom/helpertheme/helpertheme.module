@@ -123,6 +123,23 @@ function helpertheme_libraries_info() {
     ),
   );
 
+  // Tipsy.
+  $libraries['tipsy'] = array(
+    'name' => 'jQuery Tipsy',
+    'vendor url' => 'https://github.com/jaz303/tipsy',
+    'download url' => 'https://github.com/jaz303/tipsy/archive/master.zip',
+    'version arguments' => array(
+      'file' => 'src/javascripts/jquery.tipsy.js',
+      'pattern' => '/version\s([0-9a-zA-Z\.-]+)?/',
+      'lines' => 2,
+      'cols' => 100,
+    ),
+    'files' => array(
+      'js' => array('src/javascripts/jquery.tipsy.js'),
+      'css' => array('src/stylesheets/tipsy.css')
+    ),
+  );
+
   return $libraries;
 }
 
@@ -542,5 +559,29 @@ function helpertheme_form_menu_edit_item_save_icon($form, &$form_state) {
 function helpertheme_ctools_plugin_directory($module, $plugin) {
   if ($module == 'panels' && $plugin == 'layouts') {
     return 'plugins/' . $plugin;
+  }
+}
+
+/**
+ * Small function that decides if we want to apply the tipsy library for the
+ * fields or not.
+ */
+function helpertheme_apply_tipsy($field_name, $field_handler) {
+  // Define here fields you want to enable tipsy on.
+  $opt_in_fields = array(
+    'location',
+  );
+
+  // If this is the case, load the defined library and init it with some settings.
+  if (in_array($field_name, $opt_in_fields)) {
+    $lib = libraries_load('tipsy');
+    if ($lib) {
+      $path = drupal_get_path('module', 'helpertheme');
+      $settings = array($field_name);
+      drupal_add_js(array('tipsyFields' => $settings), 'setting');
+      drupal_add_js($path . '/scripts/tipsy.init.js');
+
+      $field_handler->options['element_class'] = drupal_html_class('self-tipsy');
+    }
   }
 }

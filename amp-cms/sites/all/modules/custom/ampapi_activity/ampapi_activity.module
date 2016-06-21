@@ -220,6 +220,10 @@ function ampapi_activity_views_pre_build(View &$view) {
       unset($view->field[$field_name]);
       unset($view->display_handler->handlers['field'][$field_name]);
     }
+    else {
+      // Check if we want to use tipsy tooltips to show the full text.
+      helpertheme_apply_tipsy($field_name, $field_handler);
+    }
   }
 
   foreach ($view->filter as $filter_name => $filter_handler) {

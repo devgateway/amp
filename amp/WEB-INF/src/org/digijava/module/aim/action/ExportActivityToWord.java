@@ -147,7 +147,10 @@ public class ExportActivityToWord extends Action {
         ServletContext ampContext = getServlet().getServletContext();
         //to know whether print happens from Public View or not
         HttpSession session = request.getSession();
-        //TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+        TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+        if(teamMember == null) {
+            return mapping.findForward("index");
+        }
         Long actId=null;
         AmpActivityVersion activity=null;
         if(request.getParameter("activityid")!=null){

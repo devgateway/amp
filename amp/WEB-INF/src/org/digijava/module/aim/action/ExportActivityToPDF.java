@@ -116,6 +116,8 @@ import com.lowagie.text.pdf.PdfPTableEvent;
 import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.pdf.draw.LineSeparator;
 
+import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
+
 /**
  * Export Activity to PDF
  * @author Dare
@@ -184,7 +186,10 @@ public class ExportActivityToPDF extends Action {
         ampContext = getServlet().getServletContext();
         //to know whether print happens from Public View or not
         HttpSession session = request.getSession();
-        //TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+        TeamMember teamMember = (TeamMember) session.getAttribute(CURRENT_MEMBER);
+        if(teamMember == null) {
+            return mapping.findForward("index");
+        }
         Long actId=null;
         AmpActivityVersion activity=null;
         if(request.getParameter("activityid")!=null){
@@ -1737,7 +1742,7 @@ public class ExportActivityToPDF extends Action {
             Collection euActs = EUActivityUtil.getEUActivities(actId); //costs
             if(euActs!=null && euActs.size()>0){
 
-                TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+                TeamMember tm = (TeamMember) session.getAttribute(CURRENT_MEMBER);
                 Long defaultCurrency=null;
                 if(tm.getAppSettings().getCurrencyId()!=null){
                     defaultCurrency=tm.getAppSettings().getCurrencyId();

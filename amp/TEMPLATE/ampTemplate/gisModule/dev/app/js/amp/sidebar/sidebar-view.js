@@ -4,7 +4,7 @@ var Backbone = require('backbone');
 var ProjectsView = require('./layers/views/projects-view');
 var StatisticalDataView = require('./layers/views/statistical-data-view');
 var FiltersView = require('./filters/views/sidebar-filters-view');
-//var LayerManager = require('./layers-manager/views/layers-manager-view');
+var LayerManager = require('./layers-manager/views/layers-manager-view');
 //var SearchView = require('./search/views/search-view');
 var ToolsView = require('./tools/views/tools-view');
 var SettingsView = require('./settings/views/settings-view');
@@ -13,7 +13,7 @@ var SettingsView = require('./settings/views/settings-view');
 var controlViews = [
   ProjectsView,
   StatisticalDataView,
- // LayerManager,
+  LayerManager,
   FiltersView,
 //  SearchView, //disabled for 2.10
   ToolsView,

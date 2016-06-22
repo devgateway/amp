@@ -13,7 +13,7 @@ var SettingsView = require('./settings/views/settings-view');
 var controlViews = [
   ProjectsView,
   StatisticalDataView,
-  LayerManager,
+  //LayerManager,
   FiltersView,
 //  SearchView, //disabled for 2.10
   ToolsView,

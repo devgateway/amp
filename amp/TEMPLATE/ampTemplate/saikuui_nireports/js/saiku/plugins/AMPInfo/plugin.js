@@ -44,8 +44,9 @@ var AMPInfo = Backbone.View.extend({
     	content += "<div id='amp_info_filters_block'></div>";
     	content += "</div>";
     	if(settings){
-        	content += "<div id='amp_info_settings'><h5><b><span class='i18n'>Currency</span>: " +  settings["1"];
-        	content += "</b></h5></div>";
+    		var currencyValue = _.findWhere(_.findWhere(this.workspace.amp_settings.settings_data, {id: '1'}).value.options, {id: settings['1']}).value;
+        	content += "<div id='amp_info_settings'><h5><span class='i18n'>Currency</span>: " + currencyValue;
+        	content += "</h5></div>";
     	}
     	content = content.replace("{0}", this.build_notification());
     	return content;

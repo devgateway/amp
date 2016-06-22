@@ -98,7 +98,7 @@ var AMPSettings = Backbone.View.extend({
 				$.each(currencyValues.options, function(index, object) {   
 				     $('#amp_currency')
 				         .append($("<option></option>")
-				         .attr("value", object.value)
+				         .attr("value", object.id)
 				         .text(object.name)); 
 				});
 				var calendarValues = _.findWhere(data, {"id": this.SETTINGS["calendar"]});

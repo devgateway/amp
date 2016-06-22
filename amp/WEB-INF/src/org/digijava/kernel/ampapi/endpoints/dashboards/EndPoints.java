@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.DashboardsService;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigs;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapService;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -157,7 +158,33 @@ public class EndPoints {
     @Path("/heat-map")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "heatMap")
-    public JsonBean getAdminLevelsTotals(JsonBean config) {
+    public JsonBean getHeatMap(JsonBean config) {
         return new HeatMapService(config).buildHeatMap();
+    }
+	
+	/**
+	 * OUTPUT:
+	 * {
+	 *     “columns” : [{“name” : “Donor Group”, “origName”: “Donor Group”},
+	 *                  {“name” : “Primary Sector”, “origName”: “...”},
+	 *                  {“name” : “Primary Sector Sub-Sector”, ...},
+	 *                  …
+	 *                  {“name” : “Secondary Program Level 8”, ...}
+	 *                  ],
+	 *     “charts” : [{
+	 *                 “type” : “S”, // other options: “P”, “L”
+	 *                 “name” : “Fragmentation by Donor and Sector”,
+	 *                 “yColumns” : [0], xColumns : [1, 2, 3] // indexes ref of all used columns
+	 *                 }, ....],
+	 *     “colors” :  [ {“#C20C0C” : 0}, {“#FF7F7F” : 1}, ...] // i.e. use #FF7F7F color for values >= 1
+	 * }
+	 * @return existing HeatMap configurations
+	 */
+	@GET
+    @Path("/heat-map/configs")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "heatMapConfigs")
+    public JsonBean getHeatMapConfigs() {
+        return new HeatMapConfigs().getHeatMapConfigs();
     }
 }

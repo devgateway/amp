@@ -36,17 +36,16 @@ module.exports = Backbone.View.extend({
     // TODO: find a better way to keep our proxy collection up to date
     // Thad do you know a good pattern for this?
     this.collection.reset(this.app.data.indicators.models);
-
-    this.$el.html(this.template({title: this.title}));
-    this.app.translator.translateDOM(this.el); /* After to catch disabled */
-
-    this.$('.layer-selector', this).html(this.collection.map(function(indicator) {
-      return (new OptionView({
-        model: indicator,
-        app: this.app
-      })).render().el;
-    }));
-
+    if(this.collection.length > 0){
+    	this.$el.html(this.template({title: this.title}));
+        this.app.translator.translateDOM(this.el); /* After to catch disabled */
+        this.$('.layer-selector', this).html(this.collection.map(function(indicator) {
+          return (new OptionView({
+            model: indicator,
+            app: this.app
+          })).render().el;
+        }));
+    }
     return this;
   },
 

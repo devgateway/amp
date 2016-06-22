@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.DashboardsService;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapService;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
@@ -125,4 +126,38 @@ public class EndPoints {
 		// and send the type of chart and category id as params. 
 		return DashboardsService.getPeaceMarkerProjectsByCategory(config, id);
 	}
+	
+	/**
+     * <pre>
+     * Build Heat Map based on the expected input format:
+     * INPUT:
+     * {
+     *  “count” : 25, // omit for no limit
+     *  “xColumn” : “Primary Sector”, // must be OrigName
+     *  “yColumn” : “Donor Group”, // must be origName
+     *  “filters”: { ... }, // usual filters input
+     *  “settings” : { ... } // usual settings input, and Dashboard specific with Measure selection
+     * }
+     * OUTPUT:
+     * {
+     *  “summary” : [“Primary Sector”, “Donor Group”, “Actual Commitments”],
+     *  “xDataSet” : [“Education”, “Health”, ...],
+     *  “yDataSet” : [“World Bank Group”, “ADB”, ...],
+     *  “xPTotals” : [100, ...], // percentage, 100 for each X per current rules
+     *  “xTotals” : [“5 000”, …], // formatted abmounts
+     *  “yPTotals” : [17, ...],
+     *  “yTotals”: [“800”, …],
+     *  “matrix” : [[100, ...], null, [...], ...],
+     * } 
+     * </pre> 
+     * @param config exp
+     * @return
+     */
+	@POST
+    @Path("/heat-map")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "heatMap")
+    public JsonBean getAdminLevelsTotals(JsonBean config) {
+        return new HeatMapService(config).buildHeatMap();
+    }
 }

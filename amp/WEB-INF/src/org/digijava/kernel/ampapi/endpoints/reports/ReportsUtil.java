@@ -416,6 +416,11 @@ public class ReportsUtil {
 		}
 	}
 	
+	// TODO: refactor once date filters per calendar are  handled
+	public static void configureFilters(ReportSpecificationImpl spec, JsonBean formParams) {
+	    configureFilters(spec, formParams, null);
+	}
+	
 	public static void configureFilters(ReportSpecificationImpl spec, JsonBean formParams, 
 			AmpFiscalCalendar oldCalendar) {
 		JsonBean filters = new JsonBean();

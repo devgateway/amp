@@ -16,6 +16,7 @@
 		<page name="de_showLogItemDetails" page="showLogItemDetails" title="" />
 		<page name="uploadMultiactionNew" title="" />
 		<page name="codeImporter" title="IATI Code Importer" />
+		<page name="de_interchangeResult" page="interchangeableResultList" title="Data Import Manager Results" />
 	</secondary-pages>
 	<module>
 	</module>

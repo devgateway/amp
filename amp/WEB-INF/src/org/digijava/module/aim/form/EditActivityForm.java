@@ -1329,9 +1329,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setActAthLastName(final String actAthLastName) {
 			this.actAthLastName = actAthLastName;
 		}
-		
 
-		
+
+
 		@java.lang.SuppressWarnings("all")
 		public void setSsc_typeOfCooperation(final String ssc_typeOfCooperation) {
 			this.ssc_typeOfCooperation = ssc_typeOfCooperation;

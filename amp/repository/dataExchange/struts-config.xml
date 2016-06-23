@@ -11,6 +11,7 @@
 		<form-bean name="manageSourceForm" type="org.digijava.module.dataExchange.form.ManageSourceForm"/>
 		<form-bean name="importFormNew" type="org.digijava.module.dataExchange.form.ImportFormNew"/>
 		<form-bean name="codeImporterForm" type="org.digijava.module.dataExchange.form.CodeImporterForm"/>
+		<form-bean name="interchangeResultForm" type="org.digijava.module.dataExchange.form.InterchangeResultForm"/>
 
 	</form-beans>
 	<action-mappings>
@@ -57,7 +58,9 @@
 			<forward name="forward" path="/showLayout.do?layout=de_createSourceWizard"/>
 			<forward name="showSources" redirect="true" path="/dataExchange/manageSource.do" />
 		</action>
-		
+		<action path="/dataExchange/interchangeResult" scope="request" type="org.digijava.module.dataExchange.action.InterchangeResultAction" name="interchangeResultForm" validate="false" parameter="action">
+			<forward name="forward" path="/showLayout.do?layout=de_interchangeResult"/>
+		</action>
 
 
 

@@ -1,18 +1,18 @@
 package org.digijava.module.dataExchange.util;
 
 import java.math.BigInteger;
+import java.sql.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import javax.persistence.NonUniqueResultException;
-import javax.persistence.Persistence;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.AMPException;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpInterchangeableResult;
 import org.digijava.module.dataExchange.dbentity.AmpDEUploadSession;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
 import org.digijava.module.dataExchange.dbentity.IatiCodeItem;
@@ -191,5 +191,43 @@ public class DbUtil {
 		}
     	return retVal;
     }
-    
+
+    public static List<AmpInterchangeableResult> getInterchangeResult(Date date, Integer offset, Integer pageSize, String order) {
+        String query = "SELECT r from " + AmpInterchangeableResult.class.getName() + " r ";
+        if(date != null) {
+            query += "WHERE r.date = :date ";
+        }
+        if(order != null) {
+            query += "order by r." + order;
+        }
+        Query qry = PersistenceManager.getRequestDBSession().createQuery(query);
+        if(date != null) {
+            qry.setParameter("date", date);
+        }
+        if(pageSize != -1) {
+            qry.setMaxResults(pageSize);
+        }
+        qry.setFirstResult(offset);
+
+        return qry.list();
+    }
+
+    public static Integer getInterchangeResultCount(Date date) {
+        String query = "SELECT count(r) from " + AmpInterchangeableResult.class.getName() + " r ";
+        if(date != null) {
+            query += "WHERE r.date = :date";
+        }
+        Query qry = PersistenceManager.getRequestDBSession().createQuery(query);
+        if(date != null) {
+            qry.setParameter("date", date);
+        }
+        return (Integer) qry.list().get(0);
+    }
+
+    public static void deleteResult(Set<AmpInterchangeableResult> results) {
+        for (AmpInterchangeableResult result: results) {
+            PersistenceManager.getRequestDBSession().delete(result);
+        }
+
+    }
 }

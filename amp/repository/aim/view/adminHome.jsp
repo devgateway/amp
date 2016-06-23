@@ -459,6 +459,19 @@
                             </td>
                           </tr>
                         </module:display>
+                        <%--<module:display name="Interchange Result" parentModule="ADMINISTRATIVE SECTION">--%>
+                        <tr>
+                          <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+                          <td class="admin_box_label">
+                            <c:set var="translation">
+                              <digi:trn key="aim:clickToViewInterchangeResult" invisibleLinks="true">Click here to view Interchange Result</digi:trn>
+                            </c:set>
+                            <digi:link module="dataExchange" href="/interchangeResult.do" title="${translation}">
+                              <digi:trn key="aim:interchangeResult">Data Import Manager Results</digi:trn>
+                            </digi:link>
+                          </td>
+                        </tr>
+                        <%--</module:display>--%>
                       </table>
 
                     </div></td>

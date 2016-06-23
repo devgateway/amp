@@ -40,5 +40,9 @@ public class ApiEMGroup {
 	public int size() {
 		return errorGroups.size();
 	}
+	
+	public boolean isEmpty() {
+	    return errorGroups.isEmpty();
+	}
 
 }

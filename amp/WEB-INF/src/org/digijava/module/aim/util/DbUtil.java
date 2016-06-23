@@ -406,6 +406,10 @@ public class DbUtil {
 	public static Object getObject(Class<?> c, Serializable id) {
 		return PersistenceManager.getSession().load(c, id);
 	}
+	
+	public static <T> T getObjectOrNull(Class<T> c, Serializable id) {
+	    return (T) PersistenceManager.getSession().get(c, id);
+	}
 
 	public static EUActivity getEuActivity(Long id) {
 		Session session = null;
@@ -3261,5 +3265,14 @@ public class DbUtil {
 			logger.debug("Exceptiion " + e);
 		}
 		return image;
-	}	
+	}
+	
+	public static void saveOrUpdate(List<?> list) throws Exception {
+	    for (Object obj : list)
+            saveOrUpdateObject(obj);
+	}
+	
+	public static void clearPendingChanges() {
+	    PersistenceManager.getSession().clear();
+	}
 }

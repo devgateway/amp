@@ -15,6 +15,7 @@ import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.DashboardsService;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigs;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapService;
+import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
@@ -163,6 +164,7 @@ public class EndPoints {
     }
 	
 	/**
+	 * Provides possible HeatMap Configurations
 	 * OUTPUT:
 	 * {
 	 *     “columns” : [{“name” : “Donor Group”, “origName”: “Donor Group”},
@@ -176,7 +178,7 @@ public class EndPoints {
 	 *                 “name” : “Fragmentation by Donor and Sector”,
 	 *                 “yColumns” : [0], xColumns : [1, 2, 3] // indexes ref of all used columns
 	 *                 }, ....],
-	 *     “colors” :  [ {“#C20C0C” : 0}, {“#FF7F7F” : 1}, ...] // i.e. use #FF7F7F color for values >= 1
+	 *     “amountColors” :  [ {0 : “#d05151”}, {1 : #e68787}, ...] // i.e. for values >= 1, use #e68787 color
 	 * }
 	 * @return existing HeatMap configurations
 	 */
@@ -186,5 +188,53 @@ public class EndPoints {
     @ApiMethod(ui = false, id = "heatMapConfigs")
     public JsonBean getHeatMapConfigs() {
         return new HeatMapConfigs().getHeatMapConfigs();
+    }
+	
+	/**
+	 * Provides HeatMap Admin Settings
+	 * OUTPUT:
+	 * {
+	 *     “amountColors” :[ {       // i.e. for values >= 0, use #d05151 color
+	 *     “id” : 1,
+	 *     “amountFrom” : 0, // a floating point number
+	 *     “color” : “#d05151”,
+	 *     “name” : “Dark Red” // translated name
+	 *     }, …
+	 *     ]
+	 * }
+	 * @return JSON structure of HeatMap Administrative Settings
+	 */
+	@GET
+    @Path("/heat-map/settings")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "readHeatMapSettings", authTypes = {AuthRule.IN_ADMIN})
+    public JsonBean getHeatMapSettings() {
+        return new HeatMapConfigs().getHeatMapAdminSettings();
+    }
+	
+	/**
+	 * Updates HeatMapSettings with new configuration
+	 * INPUT:
+	 * {
+	 *     “amountColors” : [{ “id”: 1, “color” : “#d05151”, “amountFrom” : 0}, ...] 
+	 * }
+	 * Note: for now we have a fixed set, but in future we may want to allow different number of colors and nuances
+	 * OUTPUT: empty {} on success, or result with errors
+	 * {
+	 *     “error” : {
+	 *         “1234” : [“Invalid color threshold”]
+	 *         ...
+	 *     }
+	 * }
+	 * @param config
+	 * @return
+	 * @throws Exception 
+	 */
+	@POST
+    @Path("/heat-map/settings")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "readHeatMapSettings", authTypes = {AuthRule.IN_ADMIN})
+    public JsonBean setHeatMapSettings(JsonBean config) throws Exception {
+        return new HeatMapConfigs().saveHeatMapAdminSettings(config);
     }
 }

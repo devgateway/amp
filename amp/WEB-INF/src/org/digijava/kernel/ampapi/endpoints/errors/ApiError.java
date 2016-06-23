@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeEndpoints;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.currency.Currencies;
+import org.digijava.kernel.ampapi.endpoints.dashboards.EndPoints;
 import org.digijava.kernel.ampapi.endpoints.reports.Reports;
 import org.digijava.kernel.ampapi.endpoints.security.Security;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -39,6 +40,7 @@ public class ApiError {
 		put(Security.class.getName(), 2);
         put(Reports.class.getName(), 3);
         put(Currencies.class.getName(), 4);
+        put(EndPoints.class.getName(), 5);
 	}};
 	
 	/**

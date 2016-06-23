@@ -30,6 +30,9 @@ public class EPConstants {
     public static final String JSON_FILTER_AMOUNT_CELL = "jsonFilter.AmountCell";
 	
 	// config update
+    public static final String ID = "id";
+    public static final String NAME = "name";
+    public static final String TYPE = "type";
 	public static final String REPORT_NAME = "name";
 	public static final String IS_CUSTOM = "custom";
 	public static final String IS_DYNAMIC = "dinamic";
@@ -53,6 +56,7 @@ public class EPConstants {
     public static final String WARNINGS = "warnings";
     public static final String MD5_TOKEN = "MD5";
     public static final String COUNT = "count";
+    public static final String SUMMARY = "summary";
     
     // report type & activities configurations
     public static final String DEFAULT_REPORT_TYPE = "D";

@@ -47,6 +47,7 @@ public class HeatMapService {
     
     private static final Logger LOGGER = Logger.getLogger(HeatMapService.class);
     
+    private static final int DEFAULT_COUNT = 25;
     private static final BigDecimal HUNDRED = new BigDecimal(100);
     private static final MathContext MCTX = new MathContext(2, RoundingMode.HALF_EVEN);
     
@@ -244,7 +245,7 @@ public class HeatMapService {
         // TODO add validation
         this.xCol = config.getString(DashboardConstants.X_COLUMN);
         this.yCol = config.getString(DashboardConstants.Y_COLUMN);
-        this.count = EndpointUtils.getSingleValue(config, EPConstants.COUNT, -1);
+        this.count = EndpointUtils.getSingleValue(config, EPConstants.COUNT, DEFAULT_COUNT);
         if (count < 0) count = null;
         
         String rName = String.format("HeatMap by %s and %s%s", xCol, yCol, (count == null ? "" : ", top " + count));

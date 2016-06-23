@@ -15,6 +15,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpColorThreshold;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
@@ -39,6 +40,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
 import org.hibernate.type.LongType;
 
 public class DbUtil {
@@ -727,4 +729,13 @@ public class DbUtil {
 		ArrayList<BigInteger> result = (ArrayList<BigInteger>) session.createSQLQuery("select amp_activity_id from amp_activity where " + query).list();
 		return result;
 	}
+	
+	/**
+	 * @return list of color thresholds, ordered by threshold ascending 
+	 */
+	public static List<AmpColorThreshold> getColorThresholds() {
+	    return PersistenceManager.getSession().createCriteria(AmpColorThreshold.class)
+	            .addOrder(Order.asc("thresholdStart")).list();
+	}
+	 
 }

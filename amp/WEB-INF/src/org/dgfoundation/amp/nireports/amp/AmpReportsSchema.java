@@ -499,8 +499,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 		with_percentage(ColumnConstants.GEOCODE, "v_geocodes", LOC_DIM_USG, LEVEL_RAW);
 		
 		single_dimension(ColumnConstants.GRACE_PERIOD, "v_grace_period", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
-		single_dimension(ColumnConstants.MATURITY, "v_maturity", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
-		single_dimension(ColumnConstants.RATIFICATION_DATE, "v_ratification_date", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+		date_column(ColumnConstants.MATURITY, "v_maturity", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+		date_column(ColumnConstants.RATIFICATION_DATE, "v_ratification_date", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
 		single_dimension(ColumnConstants.INTEREST_RATE, "v_interest_rate", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
 		
 		addMtefColumns();
